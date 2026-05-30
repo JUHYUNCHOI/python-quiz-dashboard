@@ -17,8 +17,10 @@ export const lesson18Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "✂️ 문자열을 리스트로!",
-          content: `여러 값을 한 번에 처리하고 싶을 때가 있어요!
+          title: "✂️ split (쪼개기) — 문자열을 리스트로",
+          content: `**split = 쪼개다**. 한 덩어리 문자열을 작은 조각으로 잘라 리스트로 만들어요.
+
+🍫 비유: 막대 초콜릿을 칸칸이 끊어서 접시에 줄세우기.
 
 \`\`\`python
 text = "사과 바나나 딸기"
@@ -26,16 +28,13 @@ fruits = text.split()
 print(fruits)  # ['사과', '바나나', '딸기']
 \`\`\`
 
-**split()** = 문자열 → 리스트!
+### 어디서 만나요?
 
-### 어디서 자주 만나요?
+- \`input()\` 한 줄에 여러 값이 들어왔을 때
+- \`"2024-01-15"\` 같은 날짜를 \`-\` 로 쪼개기
+- 코딩 테스트의 \`"3 5 7"\` 형태 입력
 
-- 사용자 입력 — \`input()\` 받은 한 줄에서 여러 값 분리
-- CSV 데이터 — 쉼표 구분된 데이터 한 줄씩 파싱
-- 날짜/시간 — \`"2024-01-15"\` 처럼 구분자로 묶인 값
-- 코딩 테스트 — 입력 형식이 \`"3 5 7"\` 같이 들어옴
-
-쪼개기는 거의 모든 입력 처리의 첫 단계예요.`
+쪼개기는 거의 모든 입력 처리의 **첫 단계**.`
         },
         {
           id: "split-explain",
@@ -195,42 +194,28 @@ print(nums)  # [10, 20, 30] (정수!)
           id: "input-pattern",
           type: "explain",
           title: "⌨️ 코딩 테스트 단골 — input().split()",
-          content: `코딩 테스트 (백준, 코드포스 등) 에서 입력이 **한 줄에 여러 숫자** 형태로 자주 와요.
-
-\`\`\`
-입력 예시:
-3 5 7
-\`\`\`
-
-이걸 받아서 정수 리스트로 변환:
+          content: `코딩 테스트 입력은 한 줄에 **여러 숫자** 가 자주 와요. 예: \`3 5 7\`.
 
 \`\`\`python
-# 정석 — 모두 같은 결과
+# 모든 수를 정수 리스트로
 nums = list(map(int, input().split()))
 
-# 변수에 한 번에 받기 (개수 알 때)
+# 개수 알 때 — 변수에 한 번에
 a, b, c = map(int, input().split())
 print(a + b + c)
 \`\`\`
 
-### 자주 쓰는 패턴 모음
+### 자주 쓰는 패턴
 
 \`\`\`python
-# 1) 첫 줄에 N, 다음 줄에 N 개의 수
-n = int(input())
-nums = list(map(int, input().split()))
-
-# 2) 두 정수 받기
+# 두 정수
 a, b = map(int, input().split())
 
-# 3) 실수도 OK
-xs = list(map(float, input().split()))
-
-# 4) 문자열 그대로
+# 문자열 그대로 (정수 변환 X)
 words = input().split()
 \`\`\`
 
-> 💡 \`map\` 은 list() 로 감싸야 리스트가 돼요. 안 감싸면 map 객체 (이상한 거).`
+> 💡 \`map\` 은 꼭 \`list()\` 로 감싸야 리스트가 돼요.`
         },
         {
           id: "try-input-pattern",
@@ -262,22 +247,24 @@ words = input().split()
         {
           id: "join-explain",
           type: "explain",
-          title: "🔗 리스트를 문자열로!",
-          content: `**join()** = 리스트 → 문자열 (split의 반대!)
+          title: "🔗 join (이어붙이기) — 리스트를 문자열로",
+          content: `**join = 이어붙이다**. \`split\` 의 정반대! 박스들을 다시 풀로 붙여 한 문자열로 만들어요.
+
+🪡 비유: 구슬 (리스트 요소들) 사이사이에 실 (구분자) 을 끼워 한 줄로 꿰기.
 
 \`\`\`python
 fruits = ['사과', '바나나', '딸기']
 
-# 공백으로 합치기
+# 공백으로 이어붙이기
 result = ' '.join(fruits)
 print(result)  # "사과 바나나 딸기"
 
-# 쉼표로 합치기
+# 쉼표로
 result = ','.join(fruits)
 print(result)  # "사과,바나나,딸기"
 \`\`\`
 
-**'구분자'.join(리스트)** 형태!`
+형식: **\`'구분자'.join(리스트)\`** — 구분자가 앞에, 리스트가 인자!`
         },
         {
           id: "try4",

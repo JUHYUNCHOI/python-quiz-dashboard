@@ -58,7 +58,7 @@ Without editing the code, if Alice runs it she sees "Hello, Alice!", if Bob runs
         {
           id: "quiz1",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — input()'s return type",
           content: "What type does `input()` always return?",
           options: ["int (integer)", "float (decimal)", "str (string)", "Depends on input"],
           answer: 2,
@@ -129,23 +129,35 @@ print(a)   # "3"  ← string!
 print(b)   # "5"  ← string!
 \`\`\`
 
-\`.split()\` cuts the input by spaces. **Each piece is still a string** — wrap with \`int()\` to use as numbers.
+\`.split()\` cuts the input by spaces. **Each piece is still a string.**
 
-\`\`\`python
-a, b = input().split()
-print(int(a) + int(b))   # 8
-\`\`\``
+> 📦 **\`a, b = ...\` quick box — assigning two variables at once**
+>
+> If the right side has two items, the two variables on the left each grab one.
+> \`a, b = input().split()\` → \`a\` gets the first, \`b\` gets the second.
+> (Formal name: "tuple unpacking" — no need to memorize the term now.)`
         },
         {
           id: "try-multi-input",
           type: "tryit",
-          title: "🖥️ Try — multiply two numbers",
-          task: "Read two integers on one line and print their product. (input: 7 8)",
-          initialCode: "a, b = input().___()\nprint(f\"{a} x {b} = {int(a) * int(b)}\")",
+          title: "🖥️ Follow along — read two values & print",
+          task: "Read two values on one line and print each. (input: 7 8) — no conversion yet",
+          initialCode: "a, b = input().___()\nprint(f\"a = {a}, b = {b}\")",
+          expectedOutput: "a = 7, b = 8",
+          stdin: "7 8",
+          hint: ".split() cuts by whitespace.",
+          hint2: "split"
+        },
+        {
+          id: "multi-input-int",
+          type: "tryit",
+          title: "🖥️ Try — multiply two numbers (int conversion)",
+          task: "The pieces are strings! Wrap with `int()` to multiply. (input: 7 8)",
+          initialCode: "a, b = input().split()\nprint(f\"{a} x {b} = {___(a) * ___(b)}\")",
           expectedOutput: "7 x 8 = 56",
           stdin: "7 8",
-          hint: ".split() to cut by whitespace.",
-          hint2: "split"
+          hint: "Wrap each with int().",
+          hint2: "int"
         },
         {
           id: "input-strip",
@@ -154,24 +166,35 @@ print(int(a) + int(b))   # 8
           content: `Users may accidentally add extra spaces around their input.
 
 \`\`\`python
-# User types "  Alice  " (extra spaces)
+# User types "  Walnut  " (extra spaces)
 name = input()
-print(f"[{name}]")     # [  Alice  ]   ← spaces stay!
+print(f"[{name}]")     # [  Walnut  ]   ← spaces stay!
 \`\`\`
 
 \`.strip()\` removes leading/trailing whitespace.
 
 \`\`\`python
 name = input().strip()
-print(f"[{name}]")     # [Alice]   ← clean
+print(f"[{name}]")     # [Walnut]   ← clean
 \`\`\`
 
 > 💡 \`.strip()\` was in lesson 6 (string methods). Classic move for name/ID inputs.`
         },
         {
+          id: "try-strip",
+          type: "tryit",
+          title: "🖥️ Try — see .strip() in action",
+          task: "Wrap input in [ ] when printed. Without .strip() spaces stay. (input: `  Walnut  `)",
+          initialCode: "name = input().___()\nprint(f\"[{name}]\")",
+          expectedOutput: "[Walnut]",
+          stdin: "  Walnut  ",
+          hint: "Add .strip() after input().",
+          hint2: "strip"
+        },
+        {
           id: "quiz2",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — result of int('123')",
           content: "What is the result of `int('123')`?",
           options: ["'123' (string)", "123 (integer)", "Error", "123.0 (float)"],
           answer: 1,
@@ -214,7 +237,7 @@ print(f"Height: {height}cm")
         {
           id: "quiz3",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — result of int('3.14')",
           content: "What is the result of `int('3.14')`?",
           options: ["3", "3.14", "Error (ValueError)", "'3'"],
           answer: 2,
@@ -223,12 +246,12 @@ print(f"Height: {height}cm")
         {
           id: "float-trap",
           type: "explain",
-          title: "⚠️ float ↔ int traps",
-          content: `\`int("3.14")\` is an **error**. You need two steps:
+          title: "⚠️ Decimal string → int — two steps",
+          content: `\`int("3.14")\` **doesn't work directly**. You need to go through \`float()\` first.
 
 \`\`\`python
-int("3.14")          # ❌ ValueError
-int(float("3.14"))   # ✅ 3 — decimal is truncated (NOT rounded!)
+int("3.14")          # ❌ error
+int(float("3.14"))   # ✅ 3 — decimal is simply chopped off!
 \`\`\`
 
 ### Truncate vs round
@@ -238,15 +261,29 @@ int(float("3.14"))   # ✅ 3 — decimal is truncated (NOT rounded!)
 | "3.14" | 3 | 3 |
 | "3.78" | **3** (truncate) | **4** (round) |
 
-> 🎯 \`int\` chops the decimal off. Use \`round()\` when you actually want rounding.
-
-### What if it's not a number?
+> 🎯 \`int\` chops the decimal off. Use \`round()\` when you actually want rounding.`
+        },
+        {
+          id: "try-int-float",
+          type: "tryit",
+          title: "🖥️ Try — predict int(float('3.78'))",
+          task: "Predict the output, then run to check. Is it 3 or 4?",
+          initialCode: "x = \"3.78\"\nprint(int(float(x)))",
+          expectedOutput: "3",
+          hint: "int just chops off the decimal — no rounding!",
+          hint2: "3"
+        },
+        {
+          id: "float-trap-letters",
+          type: "explain",
+          title: "⚠️ What if it's not a number?",
+          content: `If real letters reach \`int()\` / \`float()\`, the program stops.
 
 \`\`\`python
-int("hello")   # ❌ ValueError — program stops
+int("hello")   # ❌ error — "I can't turn letters into a number!"
 \`\`\`
 
-> 💡 For now, trust the user types numbers only. Catching these errors is lesson 37 (try/except).`
+> 💡 For now, just trust the user types numbers. You'll learn how to catch these errors later.`
         }
       ]
     },
@@ -257,25 +294,25 @@ int("hello")   # ❌ ValueError — program stops
       steps: [
         {
           id: "mission1",
-          type: "mission",
-          title: "🏆 Mission 1 — My greeting card",
-          task: "Read a name and a favorite color, then print a greeting card!",
-          initialCode: "name = input(\"Name: \").___()         # clean whitespace\ncolor = input(\"Favorite color: \").strip()\n\nprint(f\"Hello, {name}!\")\nprint(f\"{name}'s power color is {color} 😎\")",
-          expectedOutput: "Hello, Walnut!\nWalnut's power color is purple 😎",
-          stdin: "Walnut\npurple",
-          hint: ".strip() after input() to clean spaces.",
+          type: "tryit",
+          title: "🏆 Mission 1 — Greeting card (.strip() first use)",
+          task: "Read a name, clean it with `.strip()`, then greet. (input: `  Walnut  `)",
+          initialCode: "name = input(\"Name: \").___()    # blank = strip\nprint(f\"Hello, {name}!\")",
+          expectedOutput: "Hello, Walnut!",
+          stdin: "  Walnut  ",
+          hint: "Add .strip() after input() to remove surrounding spaces.",
           hint2: "strip"
         },
         {
           id: "mission2",
           type: "mission",
-          title: "🏆 Mission 2 — Self-introduction card",
-          task: "Read name, age, height and print a self-intro card. (3 stdin lines)",
-          initialCode: "name = input(\"Name: \").strip()          # string\nage = ___(input(\"Age: \"))               # int\nheight = ___(input(\"Height(cm): \"))     # float\n\nprint(\"=\" * 20)\nprint(f\"Name: {name}\")\nprint(f\"Age: {age} (next year: {age + 1})\")\nprint(f\"Height: {height}cm ({height/100:.2f}m)\")\nprint(\"=\" * 20)",
-          expectedOutput: "====================\nName: Alice\nAge: 15 (next year: 16)\nHeight: 175.5cm (1.76m)\n====================",
-          stdin: "Alice\n15\n175.5",
-          hint: "age = int(), height = float().",
-          hint2: "int / float"
+          title: "🏆 Mission 2 — Self-intro card (name + age)",
+          task: "Read name and age, print a card. Two blanks: name uses .strip(), age uses int().",
+          initialCode: "name = input(\"Name: \").___()      # blank 1: clean whitespace\nage = ___(input(\"Age: \"))         # blank 2: convert to int\n\nprint(f\"Name: {name}\")\nprint(f\"Age: {age} (next year: {age + 1})\")",
+          expectedOutput: "Name: Alice\nAge: 15 (next year: 16)",
+          stdin: "Alice\n15",
+          hint: "blank 1 = strip, blank 2 = int",
+          hint2: "strip / int"
         },
         {
           id: "mission3",

@@ -58,7 +58,7 @@ print(f"안녕, {name}!")
         {
           id: "quiz1",
           type: "quiz",
-          title: "❓ 퀴즈!",
+          title: "❓ 퀴즈 — input() 의 결과 타입",
           content: "`input()` 의 결과는 항상 어떤 타입일까요?",
           options: ["int (정수)", "float (실수)", "str (문자열)", "입력에 따라 다름"],
           answer: 2,
@@ -129,23 +129,35 @@ print(a)   # "3"  ← 문자열!
 print(b)   # "5"  ← 문자열!
 \`\`\`
 
-\`.split()\` 이 공백으로 잘라줘요. **각각 문자열** — 숫자로 쓰려면 \`int()\` 한 번 더.
+\`.split()\` 이 공백으로 잘라줘요. **각각 문자열로** 들어와요.
 
-\`\`\`python
-a, b = input().split()
-print(int(a) + int(b))   # 8
-\`\`\``
+> 📦 **\`a, b = ...\` 한 줄 박스 — 동시에 두 변수에 담기**
+>
+> 오른쪽이 두 개짜리면, 왼쪽 변수 두 개에 **하나씩 자동으로** 들어가요.
+> \`a, b = input().split()\` → \`a\` 에 첫 번째, \`b\` 에 두 번째.
+> (정식 이름은 "튜플 언패킹" — 이름은 지금 외울 필요 없음.)`
         },
         {
           id: "try-multi-input",
           type: "tryit",
-          title: "🖥️ 직접 — 두 수 곱하기",
-          task: "한 줄에 두 정수 받아 곱한 결과 출력. (입력: 7 8)",
-          initialCode: "a, b = input().___()\nprint(f\"{a} x {b} = {int(a) * int(b)}\")",
-          expectedOutput: "7 x 8 = 56",
+          title: "🖥️ 따라치기 — 두 값 받아 그대로 출력",
+          task: "한 줄에 두 값 받아서 각각 출력. (입력: 7 8) — 아직 변환 X",
+          initialCode: "a, b = input().___()\nprint(f\"a = {a}, b = {b}\")",
+          expectedOutput: "a = 7, b = 8",
           stdin: "7 8",
           hint: ".split() 으로 공백 기준 쪼개기.",
           hint2: "split"
+        },
+        {
+          id: "multi-input-int",
+          type: "tryit",
+          title: "🖥️ 직접 — 두 수 곱하기 (int 변환)",
+          task: "받은 값은 문자열! `int()` 로 바꿔서 곱하기. (입력: 7 8)",
+          initialCode: "a, b = input().split()\nprint(f\"{a} x {b} = {___(a) * ___(b)}\")",
+          expectedOutput: "7 x 8 = 56",
+          stdin: "7 8",
+          hint: "각각 int() 로 감싸기.",
+          hint2: "int"
         },
         {
           id: "input-strip",
@@ -154,24 +166,35 @@ print(int(a) + int(b))   # 8
           content: `사용자가 실수로 앞뒤에 공백을 끼우면 곤란해요.
 
 \`\`\`python
-# 사용자가 "  철수  " 입력 (앞뒤 공백)
+# 사용자가 "  호두  " 입력 (앞뒤 공백)
 name = input()
-print(f"[{name}]")         # [  철수  ]   ← 공백 그대로!
+print(f"[{name}]")         # [  호두  ]   ← 공백 그대로!
 \`\`\`
 
 \`.strip()\` 으로 앞뒤 공백 제거.
 
 \`\`\`python
 name = input().strip()
-print(f"[{name}]")         # [철수]   ← 깔끔
+print(f"[{name}]")         # [호두]   ← 깔끔
 \`\`\`
 
 > 💡 \`.strip()\` 은 레슨 6 (문자열 메서드) 에서 본 거. 이름·아이디 같은 입력에 단골.`
         },
         {
+          id: "try-strip",
+          type: "tryit",
+          title: "🖥️ 직접 — 공백 정리 효과 보기",
+          task: "입력값을 [ ] 로 감싸 출력. .strip() 빼면 공백이 보임. (입력: `  호두  `)",
+          initialCode: "name = input().___()\nprint(f\"[{name}]\")",
+          expectedOutput: "[호두]",
+          stdin: "  호두  ",
+          hint: "input() 뒤에 .strip() 붙이기.",
+          hint2: "strip"
+        },
+        {
           id: "quiz2",
           type: "quiz",
-          title: "❓ 퀴즈!",
+          title: "❓ 퀴즈 — int('123') 의 결과",
           content: "`int('123')` 의 결과는?",
           options: ["'123' (문자열)", "123 (정수)", "에러", "123.0 (실수)"],
           answer: 1,
@@ -214,7 +237,7 @@ print(f"키: {height}cm")
         {
           id: "quiz3",
           type: "quiz",
-          title: "❓ 퀴즈!",
+          title: "❓ 퀴즈 — int('3.14') 의 결과",
           content: "`int('3.14')` 의 결과는?",
           options: ["3", "3.14", "에러 (ValueError)", "'3'"],
           answer: 2,
@@ -223,12 +246,12 @@ print(f"키: {height}cm")
         {
           id: "float-trap",
           type: "explain",
-          title: "⚠️ float ↔ int 함정",
-          content: `\`int("3.14")\` 는 **에러**. 두 단계 필요:
+          title: "⚠️ 소수점 문자열 → int — 두 단계",
+          content: `\`int("3.14")\` 는 **바로 안 돼요**. 먼저 \`float()\` 을 거쳐야 해요.
 
 \`\`\`python
-int("3.14")          # ❌ ValueError
-int(float("3.14"))   # ✅ 3 — 소수점이 잘림 (반올림 아님!)
+int("3.14")          # ❌ 에러
+int(float("3.14"))   # ✅ 3 — 소수점이 그냥 잘림!
 \`\`\`
 
 ### 잘림 vs 반올림
@@ -238,15 +261,29 @@ int(float("3.14"))   # ✅ 3 — 소수점이 잘림 (반올림 아님!)
 | "3.14" | 3 | 3 |
 | "3.78" | **3** (잘림) | **4** (반올림) |
 
-> 🎯 \`int\` 는 소수점을 떼버려요. 반올림이 필요하면 \`round()\`.
-
-### 숫자 아닌 글자가 오면?
+> 🎯 \`int\` 는 소수점을 그냥 떼버려요. 반올림이 필요하면 \`round()\`.`
+        },
+        {
+          id: "try-int-float",
+          type: "tryit",
+          title: "🖥️ 직접 — int(float('3.78')) 결과 예측",
+          task: "출력을 예측한 다음 실행해서 확인. 3 일까 4 일까?",
+          initialCode: "x = \"3.78\"\nprint(int(float(x)))",
+          expectedOutput: "3",
+          hint: "int 는 그냥 소수점을 떼버려요 — 반올림 아님!",
+          hint2: "3"
+        },
+        {
+          id: "float-trap-letters",
+          type: "explain",
+          title: "⚠️ 숫자 아닌 글자가 오면?",
+          content: `\`int()\` / \`float()\` 에 진짜 글자가 들어오면 프로그램이 멈춰요.
 
 \`\`\`python
-int("hello")   # ❌ ValueError — 프로그램 멈춤
+int("hello")   # ❌ 에러 — "글자는 숫자로 못 바꾸겠어!"
 \`\`\`
 
-> 💡 지금은 "사용자가 숫자만 친다" 고 믿고 코딩. 에러 잡는 방법은 레슨 37 (try/except).`
+> 💡 지금은 "사용자가 숫자만 친다" 고 믿고 코딩해도 OK. 에러 잡는 방법은 나중에 배워요.`
         }
       ]
     },
@@ -257,25 +294,25 @@ int("hello")   # ❌ ValueError — 프로그램 멈춤
       steps: [
         {
           id: "mission1",
-          type: "mission",
-          title: "🏆 미션 1 — 나의 인사 카드",
-          task: "이름과 좋아하는 색을 받아서 인사 카드를 만드세요!",
-          initialCode: "name = input(\"이름: \").___()        # 앞뒤 공백 정리\ncolor = input(\"좋아하는 색: \").strip()\n\nprint(f\"안녕, {name}!\")\nprint(f\"{name} 의 인생 색은 {color} 😎\")",
-          expectedOutput: "안녕, 호두!\n호두 의 인생 색은 보라색 😎",
-          stdin: "호두\n보라색",
-          hint: "input() 뒤에 .strip() 붙이면 앞뒤 공백 제거.",
+          type: "tryit",
+          title: "🏆 미션 1 — 인사 카드 (.strip() 첫 적용)",
+          task: "이름 받기 — `.strip()` 으로 공백 정리 후 인사. (입력: `  호두  `)",
+          initialCode: "name = input(\"이름: \").___()    # 빈칸에 strip\nprint(f\"안녕, {name}!\")",
+          expectedOutput: "안녕, 호두!",
+          stdin: "  호두  ",
+          hint: "input() 뒤에 .strip() 붙이면 앞뒤 공백이 사라져요.",
           hint2: "strip"
         },
         {
           id: "mission2",
           type: "mission",
-          title: "🏆 미션 2 — 자기소개 카드",
-          task: "이름, 나이, 키를 받아 자기소개 카드를 출력. (입력은 stdin 3 줄)",
-          initialCode: "name = input(\"이름: \").strip()         # 문자열\nage = ___(input(\"나이: \"))             # 정수\nheight = ___(input(\"키(cm): \"))        # 실수\n\nprint(\"=\" * 20)\nprint(f\"이름: {name}\")\nprint(f\"나이: {age}살 (내년: {age + 1}살)\")\nprint(f\"키: {height}cm ({height/100:.2f}m)\")\nprint(\"=\" * 20)",
-          expectedOutput: "====================\n이름: 철수\n나이: 15살 (내년: 16살)\n키: 175.5cm (1.76m)\n====================",
-          stdin: "철수\n15\n175.5",
-          hint: "나이는 int(), 키는 float().",
-          hint2: "int / float"
+          title: "🏆 미션 2 — 자기소개 카드 (이름 + 나이)",
+          task: "이름과 나이를 받아 카드 출력. 빈칸 2 개: 이름은 .strip(), 나이는 int().",
+          initialCode: "name = input(\"이름: \").___()      # 빈칸 1: 공백 정리\nage = ___(input(\"나이: \"))         # 빈칸 2: 정수로\n\nprint(f\"이름: {name}\")\nprint(f\"나이: {age}살 (내년: {age + 1}살)\")",
+          expectedOutput: "이름: 철수\n나이: 15살 (내년: 16살)",
+          stdin: "철수\n15",
+          hint: "빈칸 1 = strip, 빈칸 2 = int",
+          hint2: "strip / int"
         },
         {
           id: "mission3",

@@ -60,8 +60,8 @@ Pictured:
         {
           id: "concept-builder",
           type: "interactive",
-          title: "🎬 Build a Variable — Syntax Assembly",
-          description: "Click through to see how \`variable = value\` is put together.",
+          title: "🎬 Build a Variable — Click Through!",
+          description: "Click through to see how \`variable = value\` comes together, one piece at a time.",
           component: "pyVariableBuilder",
         },
         {
@@ -120,7 +120,7 @@ Picture it as an arrow: \`10 → x\` 📥`
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Try It — Store 15 in age and print",
           task: "Store 15 in the variable age and print it!",
           initialCode: "age = ___\nprint(age)",
           expectedOutput: "15",
@@ -130,7 +130,7 @@ Picture it as an arrow: \`10 → x\` 📥`
         {
           id: "quiz1",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — What does `=` mean in `x = 10`?",
           content: "What does `=` mean in `x = 10`?",
           options: [
             "x and 10 are equal",
@@ -184,7 +184,7 @@ print(price + 2000)
         {
           id: "use-explain-mistake",
           type: "explain",
-          title: "⚠️ Common Mistake — Quotes",
+          title: "🤔 What's the Difference — With or Without Quotes?",
           content: `\`\`\`python
 print('price')   # → price (literally the letters!)
 print(price)     # → 19000 (the value in the box!)
@@ -197,7 +197,7 @@ With quotes \`'\` → literal text. Variable name only (no quotes) → value in 
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Try It — Print chicken + 2000",
           task: "Store 19000 in chicken, then print chicken + 2000!",
           initialCode: "chicken = ___\nprint(chicken + 2000)",
           expectedOutput: "21000",
@@ -207,7 +207,7 @@ With quotes \`'\` → literal text. Variable name only (no quotes) → value in 
         {
           id: "label-explain",
           type: "explain",
-          title: "🏷️ Printing Text and Variables Together",
+          title: "🏷️ Printing Words and Variables Together",
           content: `Just printing a variable value can be confusing — what does it mean?
 
 > 💡 Remember **lesson 1** where \`print('Result:', 100)\` printed multiple values with **commas (,)**? The same trick works for variables.
@@ -227,7 +227,7 @@ Comma-separated values automatically get a **space** between them (same as in le
         {
           id: "try_label1",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Try It — Print 'Name: Alice'",
           task: "Use a comma to print 'Name: Alice'!",
           initialCode: "name = 'Alice'\nprint(___, name)",
           expectedOutput: "Name: Alice",
@@ -249,10 +249,10 @@ Comma-separated values automatically get a **space** between them (same as in le
         {
           id: "change-explain",
           type: "explain",
-          title: "🔄 Putting a New Value In",
+          title: "🔄 Putting a New Value in the Same Box",
           content: `The value in the box can **change anytime**. Assign a new value to the same variable → the old value **disappears** and is overwritten.
 
-> 💡 The fancy word for this is **reassignment**. Just remembering it as **"putting in a new value"** is plenty.
+> 💡 Grown-up books call this **"reassignment"**. Just remembering it as **"putting in a new value"** is plenty.
 
 \`\`\`python
 hp = 100
@@ -277,7 +277,7 @@ hp = 80         →   [ 80 ]      ← 100 is overwritten and gone
         {
           id: "change-explain-self",
           type: "explain",
-          title: "♻️ Using a Variable to Update Itself",
+          title: "♻️ Adding to Yourself — `x = x + 3`",
           content: `\`x = x + 3\` looks weird (in math, \`x = x + 3\` → \`0 = 3\`?), but in Python it's natural.
 
 \`\`\`python
@@ -331,7 +331,7 @@ print(money)
         {
           id: "change-explain-error",
           type: "explain",
-          title: "⚠️ Doesn't Work — Using a Variable You Never Made",
+          title: "💬 What Does Python Actually Say?",
           content: `As expected, you get an error.
 
 \`\`\`python
@@ -357,7 +357,7 @@ NameError: name 'money' is not defined
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Try It — Change score from 0 to 100",
           task: "Start score at 0, change it to 100, and print it!",
           initialCode: "score = 0\nscore = ___\nprint(score)",
           expectedOutput: "100",
@@ -374,7 +374,7 @@ NameError: name 'money' is not defined
         {
           id: "try-self-update",
           type: "tryit",
-          title: "🖥️ Try It — Self Update",
+          title: "🖥️ Try It — Add 3 to x and store back",
           task: "Same pattern you just saw! Start x at 5, add 3, store back into x, then print.",
           initialCode: "x = 5\nx = ___ + 3\nprint(x)",
           expectedOutput: "8",
@@ -384,7 +384,7 @@ NameError: name 'money' is not defined
         {
           id: "quiz2",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — What is x after `x = x + 3`?",
           content: "What is the value of x after `x = 5`, `x = x + 3`?",
           options: ["5", "3", "8", "Error"],
           answer: 2,
@@ -452,26 +452,45 @@ _temp = 0      # ✅ leading _ is fine
 \`\`\``
         },
         {
-          id: "rules-explain-keywords",
-          type: "explain",
-          title: "🚫 Detail — Python Special Words + Case",
-          content: `### Python's special words (keywords)
-
-Words **Python has already taken** for itself. Can't be variable names.
+          id: "predict-bad-name",
+          type: "predict",
+          title: "💭 Which One is NOT a Valid Variable Name?",
+          content: `They look similar, but Python will refuse one of them. Which?
 
 \`\`\`python
-if = 10        # ❌ if is one of Python's special words
+score2 = 100     # A
+2score = 100     # B
+\`\`\``,
+          options: [
+            "Only A is bad",
+            "Only B is bad",
+            "Both are fine",
+            "Both are bad"
+          ],
+          answer: 1,
+          explanation: "B is bad! Variable names **can't start with a digit**. \`score2\` (digit at the end) is totally fine."
+        },
+        {
+          id: "rules-explain-keywords",
+          type: "explain",
+          title: "🚫 Words Python Already Took + Case Matters",
+          content: `### Words Python already grabbed for itself
+
+A few words **Python keeps for its own jobs**. You can't use them as variable names.
+
+\`\`\`python
+if = 10        # ❌ if is one of Python's own words
 for = 5        # ❌ so is for
 \`\`\`
 
-> 💡 There are about 14 of them (\`if\`, \`for\`, \`def\`, \`class\`, etc). **No need to memorize** — you'll meet them naturally in later lessons.
+> 💡 There are only a few of these. **Don't memorize them** — you'll meet \`if\`, \`for\`, etc. naturally in later lessons by actually using them.
 
-**For now, just know:**
+**For now:**
 - Plain English words like \`print\` → OK as variable names
-- Python special words like \`if\` → ❌
-- If you hit an error, that's when you'll learn "ah, that one's special"
+- Python's own words like \`if\` → ❌
+- If you hit an error, that's when you'll learn "ah, can't use that one"
 
-### UPPER / lower case (in detail)
+### UPPER / lower case
 
 \`\`\`python
 age = 15
@@ -484,17 +503,17 @@ print(Age)   # ❌ Error! Age was never created (capital A!)
           id: "rules-explain-style",
           type: "explain",
           title: "🐍 Joining Two Words Together",
-          content: `Want to combine \`player\` and \`hp\` into one variable name? There are two styles.
+          content: `Want to combine \`player\` and \`hp\` into one variable name? There are two shapes.
 
-### 🐍 Underscore style — \`player_hp\`
+### 🐍 Underscore — \`player_hp\`
 
 Connect words with \`_\`. **Python recommends this one!**
-(Official name: snake_case — the letters stretched out by \`_\` look like a snake.)
+(Grown-ups call it *snake_case* — letters stretched out by \`_\` look like a snake.)
 
-### 🐪 Camel style — \`playerHp\`
+### 🐪 Middle Capital — \`playerHp\`
 
-Capitalize the first letter of later words. **Common in other languages like JavaScript.**
-(Official name: camelCase — the middle capital sticks up like a camel's hump.)
+Capitalize the first letter of later words. **Common in other languages.**
+(Grown-ups call it *camelCase* — the middle capital sticks up like a camel's hump.)
 
 \`\`\`python
 player_hp = 100   # ✅ underscore — Python style
@@ -516,7 +535,7 @@ latte_price = 5500   # ✅ Still understandable a month later
         {
           id: "quiz3",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — Which is a valid variable name?",
           content: "Which is a valid variable name?",
           options: ["1st_place", "my-score", "player_name", "my name"],
           answer: 2,
@@ -525,7 +544,7 @@ latte_price = 5500   # ✅ Still understandable a month later
         {
           id: "quiz_naming",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — Which is the best variable name?",
           content: "Which is the best variable name?",
           options: ["a", "n1", "student_score", "XVALUE"],
           answer: 2,
@@ -683,7 +702,7 @@ A \`#\` inside quotes is **just a character**. Only \`#\` outside string quotes 
         {
           id: "comment-quiz",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — What's the comment symbol?",
           content: "Which symbol is used for comments in Python?",
           options: ["//", "#", "/* */", "--"],
           answer: 1,
@@ -692,7 +711,7 @@ A \`#\` inside quotes is **just a character**. Only \`#\` outside string quotes 
         {
           id: "comment-tryit",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Try It — Add the comment symbol",
           task: "Fill in the blank with the comment symbol!\nComments don't affect how the code runs.",
           initialCode: "___ code to print name and age\nname = 'Alice'\nage = 15\nprint(name)\nprint(age)",
           expectedOutput: "Alice\n15",
@@ -710,7 +729,7 @@ A \`#\` inside quotes is **just a character**. Only \`#\` outside string quotes 
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 Final Mission!",
+          title: "🏆 Final Mission — Build an About-Me Card",
           task: "Use 3 variables to build an introduction card! (Name: Alice, Age: 15, Hobby: gaming)",
           initialCode: "name = 'Alice'\nage = ___\nhobby = 'gaming'\n\n# Use a comma to chain text and variables in print\nprint('=== About Me ===')\nprint('Name:', name)\nprint('Age:', ___)\nprint('Hobby:', hobby)",
           expectedOutput: "=== About Me ===\nName: Alice\nAge: 15\nHobby: gaming",

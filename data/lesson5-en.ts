@@ -86,7 +86,7 @@ We'll see how to handle this in Chapter 3!`
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Build a greeting with a variable",
           task: "Fill the blank with a variable NAME (not the value) so it prints \"Hey, Mike!\"",
           initialCode: "name = \"Mike\"\n# Put the variable name in the blank (NOT the value)\ngreeting = \"Hey, \" + ___ + \"!\"\nprint(greeting)",
           expectedOutput: "Hey, Mike!",
@@ -96,7 +96,7 @@ We'll see how to handle this in Chapter 3!`
         {
           id: "quiz1",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — what does \"Hello\" + \"World\" produce?",
           content: "What is the result of \"Hello\" + \"World\"?",
           options: ["Hello World", "HelloWorld", "Hello + World", "Error"],
           answer: 1,
@@ -256,9 +256,9 @@ print(word[-2])
         {
           id: "try-len-index",
           type: "tryit",
-          title: "🖥️ Try It — Length and Index",
-          task: "Print the first character, last character, and length of a name!\n💡 The comma (,) inside print prints multiple values on one line — full details in Ch3!",
-          initialCode: "name = \"Python\"\n\n# First character\nfirst = name[___]\n# Last character (negative index)\nlast = name[___]\n# Length\nlength = ___(name)\n\n# 💡 print(a, b, c) — comma prints multiple values; Ch3 explains why\nprint(\"first:\", first)\nprint(\"last:\", last)\nprint(\"length:\", length)",
+          title: "🖥️ Print first / last / length",
+          task: "Fill 3 blanks to print the first character, last character, and length of the name!",
+          initialCode: "name = \"Python\"\n\n# First character\nfirst = name[___]\n# Last character (negative index)\nlast = name[___]\n# Length\nlength = ___(name)\n\n# (commas — Ch3 explains; just leave them and fill the blanks!)\nprint(\"first:\", first)\nprint(\"last:\", last)\nprint(\"length:\", length)",
           expectedOutput: "first: P\nlast: n\nlength: 6",
           hint: "First character is index 0. Use a negative index for the last one. There's a built-in for length too.",
           hint2: "0 / -1 / len"
@@ -330,7 +330,7 @@ print("Ha" * 2.5)    # TypeError — no floats, integers only!
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Print 5 stars",
           task: "Print 5 asterisks (*)! Fill the blank with a NUMBER (repeat count).",
           initialCode: "# Put the repeat count (a number) in the blank\nprint(\"*\" * ___)",
           expectedOutput: "*****",
@@ -350,7 +350,7 @@ print("Ha" * 2.5)    # TypeError — no floats, integers only!
         {
           id: "quiz2",
           type: "quiz",
-          title: "❓ Quiz!",
+          title: "❓ Quiz — what does \"AB\" * 3 produce?",
           content: "What is the result of \"AB\" * 3?",
           options: ["AB3", "ABABAB", "AB AB AB", "Error"],
           answer: 1,
@@ -468,21 +468,18 @@ print(a == c)
 
 \`\`\`python
 print("apple" < "banana")   # True — 'a' comes before 'b'
-print("a" < "b")            # True
 print("kiwi" < "apple")     # False — 'k' comes after 'a'
 \`\`\`
 
 Useful for sorting names later!
 
-### ⚠️ Uppercase vs lowercase — surprise
+### Uppercase vs lowercase
 
 \`\`\`python
-print("apple" < "Apple")    # False — uppercase is "smaller"!
+print("apple" < "Apple")    # False
 \`\`\`
 
-The computer gives every character a hidden number, and **uppercase letters get smaller numbers** than lowercase ones. So \`"Z" < "a"\` is \`True\` — weird but true. Mix cases carefully when sorting.
-
-> 💡 The exact numbers (\`A\` = 65, etc.) come later in **lesson 9**. For now, just remember: "uppercase < lowercase."
+One rule to remember: **uppercase < lowercase**. (The exact why comes later in lesson 9.)
 
 ### Use case — show answer comparison
 
@@ -495,16 +492,10 @@ print("is n?:", answer == "n")
         {
           id: "compare-explain-trap",
           type: "explain",
-          title: "🪤 Looks like numbers, but it's a string…",
-          content: `### ❌ Easy to misread
+          title: "📌 Heads-up — quoted digits compare like text",
+          content: `\`"10" < "9"\` returns \`True\` — because the first character \`'1'\` comes before \`'9'\` in dictionary order.
 
-\`\`\`python
-print("10" < "9")    # True (?!) — first char '1' < '9'
-\`\`\`
-
-Strings are compared **character by character**. The first char of \`"10"\` is \`'1'\`, the first char of \`"9"\` is \`'9'\` — and \`'1'\` comes before \`'9'\` in the dictionary, so the result is \`True\`.
-
-If it's inside quotes, it's a **string** — even when it looks like a number. Real number comparison comes later (lesson 9).`
+> If it's inside quotes, it's **text**. Real number comparison comes later in lesson 9!`
         },
         {
           id: "try-in-compare",
@@ -577,7 +568,7 @@ For now, **comma-print** is all you need. 🎯`
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
+          title: "🖥️ Print a variable next to a label",
           task: "Fill the blank with a VARIABLE NAME (not the value 100) to print \"Score: 100\".",
           initialCode: "score = 100\n# Variable NAME in the blank (NOT the value 100)\nprint(\"Score:\", ___)",
           expectedOutput: "Score: 100",
@@ -624,23 +615,29 @@ The \`\\"\` is "an actual quote character, not the end of the string."`
         {
           id: "escape-explain-table",
           type: "explain",
-          title: "📋 Common escapes",
-          content: `| Notation | Meaning | Example |
-|---|---|---|
-| \`\\n\` | newline | \`"a\\nb"\` → \`a\` then \`b\` on next line |
-| \`\\t\` | tab | \`"a\\tb"\` → \`a    b\` |
-| \`\\"\` | double quote | inside \`"..."\` |
-| \`\\'\` | single quote | inside \`'...'\` |
-| \`\\\\\` | backslash itself | \`"C:\\\\folder"\` → \`C:\\folder\` |
+          title: "📋 \\n and \\t — the two you'll actually use",
+          content: `### Just two to remember
 
-### Common uses
+\`\`\`python
+print("first line\\nsecond line")   # \\n = newline
+print("name\\tscore")                # \\t = tab (multi-space)
+\`\`\`
 
-- **Multi-line output** — one \`print\` with \`\\n\` between sections
-- **Tab-aligned columns** — \`"name\\tscore"\`
-- **Quoted text inside strings** — \`"\\"hello\\""\`
-- **Windows file paths** — \`"C:\\\\Users\\\\..."\`
+Output:
+\`\`\`
+first line
+second line
+\`\`\`
+\`\`\`
+name    score
+\`\`\`
 
-> 💡 Memorize **\`\\n\`** and **\`\\t\`** — those are the ones you'll really use.`
+### Where you'll use them
+
+- **\`\\n\`** — split output into multiple lines (most common!)
+- **\`\\t\`** — line up columns / indent items
+
+> 💡 Other escapes like \`\\"\` and \`\\'\` exist, but the next step shows a cleaner way!`
         },
         {
           id: "escape-explain-tricks",
@@ -666,24 +663,17 @@ Third line"""
 print(text)
 \`\`\`
 
-### ❌ Don't get confused
-
-\`\`\`python
-print("a\\nb")    # two lines
-print("a\\\\nb")   # literal: a\\nb (showing the backslash itself)
-\`\`\`
-
-You need two \`\\\\\` to print one backslash.`
+Perfect for poems, menus, long messages.`
         },
         {
           id: "try-escape",
           type: "tryit",
-          title: "🖥️ Try It — Place \\n and \\t",
-          task: "Fill the blanks with \\n (newline) or \\t (tab) so the output matches!\nExpected:\nTitle\n\titem 1\n\titem 2",
-          initialCode: "# Blank 1: between Title and item 1 — newline?\n# Blank 2: in front of item 2 — indentation?\nprint(\"Title___\\titem 1\\n___item 2\")",
-          expectedOutput: "Title\n\titem 1\n\titem 2",
-          hint: "Newline is \\\\n, tab is \\\\t. First blank = newline, second blank = tab.",
-          hint2: "\\n / \\t"
+          title: "🖥️ Insert \\n to break a line",
+          task: "Fill the blank with \\n (newline) so \"Title\" appears on its own line above the item!",
+          initialCode: "# Blank: between Title and item 1 — newline (\\n)\nprint(\"Title___item 1\")",
+          expectedOutput: "Title\nitem 1",
+          hint: "Newline is \\\\n. Two characters: backslash + n.",
+          hint2: "\\n"
         }
       ]
     },
@@ -720,7 +710,7 @@ print("Score:", score)   # Score: 100
           id: "mission2",
           type: "mission",
           title: "🏆 Mission 1 — Menu board",
-          task: "Fill 4 blanks: top 2 = divider repeat count (8 each), bottom 2 = prices (18000, 19000).\n\n📋 Output should look like this:\n========\n  🍗 Chicken Shop  \n========\nFried: 18000\nSpicy: 19000",
+          task: "Fill 4 blanks:\n• Top 2 = divider repeat count (both the same number!)\n• Bottom 2 = prices (18000, 19000)\n\n📋 Output should look like this:\n========\n  🍗 Chicken Shop  \n========\nFried: 18000\nSpicy: 19000",
           initialCode: "# Blanks 1,2: = repeat count (number)\nprint(\"=\" * ___)\nprint(\"  🍗 Chicken Shop  \")\nprint(\"=\" * ___)\n# Blanks 3,4: prices (numbers)\nprint(\"Fried:\", ___)\nprint(\"Spicy:\", ___)",
           expectedOutput: "========\n  🍗 Chicken Shop  \n========\nFried: 18000\nSpicy: 19000",
           hint: "Divider needs 8 of =. Fried 18000, Spicy 19000.",
@@ -740,7 +730,7 @@ print("Score:", score)   # Score: 100
           id: "mission4",
           type: "mission",
           title: "🏆 Mission 3 — My initial card",
-          task: "Make an initial card from your English name! Both blanks are INDEX NUMBERS — the index pointing to the first character.\n\n💡 Feel free to change first / last to your own name! (First letter should be uppercase for a clean initial.)",
+          task: "Fill both blanks with the INDEX (number) that grabs the first character of first / last. (Both blanks are the same number!)\n\n💡 Feel free to change first / last to your own name (first letter uppercase for a clean initial).",
           initialCode: "first = \"Minsu\"\nlast = \"Kim\"\n\n# Blanks: index (number) pointing to the first character\n# (Names already start with capitals, so the initials come out right)\ninitials = first[___] + last[___]\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
           expectedOutput: "========\n  MK\nMinsu Kim\n========",
           hint: "What's the index of the first character? (counting from 0)",

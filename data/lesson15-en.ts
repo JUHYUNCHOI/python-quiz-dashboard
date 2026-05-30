@@ -17,8 +17,8 @@ export const lesson15EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "📦 Ways to Organize Data",
-          content: `You want to store student names!
+          title: "📦 100 students → 100 variables? 😱",
+          content: `You want to save your classmates' names!
 
 \`\`\`python
 name1 = "Alice"
@@ -26,27 +26,27 @@ name2 = "Bob"
 name3 = "Charlie"
 \`\`\`
 
-What if there are 100 students? **100 variables?** 😱
+3 names is fine. But **100 students**? Creating 100 variables? Your fingers will fall off 🤚
 
-With **data structures**, you can manage them all at once!`
+→ **Data structures** to the rescue! One variable, many values bundled together.`
         },
         {
           id: "solution",
           type: "explain",
-          title: "✅ One List Is All You Need!",
+          title: "✅ One variable, many values — preview of the 4 types",
           content: `\`\`\`python
 students = ["Alice", "Bob", "Charlie"]
 \`\`\`
 
-You can store multiple items in **a single variable** like this!
+One variable now holds **many students**! Even 100 fits in one line.
 
 Python has **4 data structures**:
-- **List [ ]** - the most commonly used!
-- **Tuple ( )** - cannot be modified
-- **Dictionary { }** - look up by name
-- **Set { }** - no duplicates
+- 🧊 **List** \`[ ]\` — most used!
+- 🔒 **Tuple** \`( )\` — can't be changed
+- 🏷️ **Dictionary (dict)** \`{ }\` — name tag → value
+- ✋ **Set** \`{ }\` — auto-removes duplicates
 
-Next up: a one-table comparison 👇`
+Today is just an **overview**. **Lessons 16–21** cover each one in detail. Next up: a one-table comparison 👇`
         },
         {
           id: "compare-table",
@@ -113,8 +113,8 @@ empty = set()                  # empty set (⚠️ NOT {})
         {
           id: "tryit-list-basic",
           type: "tryit",
-          title: "💻 Compare the 4 Data Structures!",
-          task: "Run the code to compare Python's 4 data structures!",
+          title: "💻 Try it — run all 4 data structures in one go",
+          task: "Run the code as-is and see the 4 different outputs side by side!",
           initialCode: `# 1. List - ordered and modifiable!
 fruits = ['apple', 'banana', 'grape']
 print(f'List: {fruits}')
@@ -147,28 +147,28 @@ print(f'\\nSet: {numbers}')`,
         {
           id: "interactive-intro",
           type: "explain",
-          title: "🎮 Learn by Clicking Around!",
-          content: `Let's experience **why each data structure is needed**!
+          title: "🎮 4 data structures — feel them with everyday analogies",
+          content: `Each data structure with a real-life analogy. Next page lets you click around!
 
-- 🧊 **List** - Fridge (store multiple items)
-- 🔒 **Tuple** - RGB Color (must not change)
-- 🏷️ **Dict** - Locker (find by name)
-- ✋ **Set** - Attendance (no duplicates)
+- 🧊 **List** — Fridge shelves (stack many items in order)
+- 🔒 **Tuple** — RGB color (set once, can't change)
+- 🏷️ **Dict** — Locker (find by name tag)
+- ✋ **Set** — Attendance sheet (no duplicates, fast lookup)
 
-On the next screen, **click each tab** to feel the difference!`
+On the next screen, **click each tab** and feel the difference!`
         },
         {
           id: "interactive",
           type: "interactive",
-          title: "🎮 Try It Yourself!",
+          title: "🎮 Click to feel it — List / Tuple / Dict / Set",
           component: "dataStructures",
           description: "Click each tab to experience the differences between List, Tuple, Dict, and Set!"
         },
         {
           id: "coding-dict",
           type: "coding",
-          title: "📝 Build a Dictionary Yourself",
-          description: "Create a dictionary that works like a locker where you look up items by name!",
+          title: "📝 Build it — a locker dictionary",
+          description: "Make a locker dictionary where you look up items by name!",
           starterCode: `# Create a locker dictionary!\n# Alice: soccer ball, Bob: backpack\n\nlocker = {\n    # Write your code here\n}\n\nprint(locker["Alice"])`,
           testCases: [
             {
@@ -290,8 +290,8 @@ Empty \`{}\` was claimed by **dict**. For empty set, write \`set()\`.
         {
           id: "tryit-when",
           type: "tryit",
-          title: "💻 When to Use What?",
-          task: "Run the examples to see which data structure fits each situation!",
+          title: "💻 Try it — all 4 in real situations",
+          task: "Shopping → coordinates → student scores → attendance: run each and see why!",
           initialCode: `# Situation 1: Shopping list → List! (ordered, modifiable)
 shopping = ['milk', 'bread', 'eggs']
 shopping.append('cheese')
@@ -315,35 +315,35 @@ print(f'Attendance: {attendance} ({len(attendance)} people)')`,
         {
           id: "quiz1",
           type: "quiz",
-          title: "❓ Quiz!",
-          content: "Which data structure is ordered AND modifiable?",
+          title: "❓ Quiz — which is ordered AND modifiable?",
+          content: "Which data structure is ordered AND lets you freely add/remove/change items?",
           options: ["Tuple ()", "List []", "Set {}", "Dictionary {}"],
           answer: 1,
-          explanation: "Lists are ordered, allow duplicates, and are modifiable! They're the most commonly used."
+          explanation: "**List** = ordered, duplicates OK, modifiable. The most-used data structure!"
         },
         {
           id: "quiz2",
           type: "quiz",
-          title: "❓ Quiz!",
-          content: "Which one should you use for values that must NEVER change, like RGB colors?",
+          title: "❓ Quiz — \"values that must never change\"?",
+          content: "RGB colors or coordinates — values that **must NEVER change** — go in which?",
           options: ["List []", "Tuple ()", "Set {}", "Dictionary {}"],
           answer: 1,
-          explanation: "Tuples cannot be modified, so you can't accidentally change them!"
+          explanation: "**Tuple** can't be modified at all, so you can never change it by accident. Perfect for fixed bundles like coords / RGB!"
         },
         {
           id: "quiz3",
           type: "quiz",
-          title: "❓ Quiz!",
-          content: "When you want to look up something by name, like 'What's Alice's score?'",
+          title: "❓ Quiz — \"look up by name\"?",
+          content: "\"What's Alice's score?\" — look up a value by a **name tag**. Which one?",
           options: ["List []", "Tuple ()", "Set {}", "Dictionary {}"],
           answer: 3,
-          explanation: "Dictionaries let you find values instantly by their key (name)!"
+          explanation: "**Dictionary** lets you grab a value by its **key** (name tag) — fast and direct!"
         },
         {
           id: "mission1",
           type: "mission",
-          title: "🎯 Mission 1: Pick the Right Data Structure!",
-          task: "Fill in the 3 blanks to complete the data structures!",
+          title: "🎯 Mission 1 — Fill 3 blanks across all 4 types",
+          task: "List opening bracket / dict key / count function — fill all 3 blanks!",
           initialCode: `# 1. Fruit list → List!
 fruits = ___'strawberry', 'grape', 'mango']
 print(f'Fruits: {fruits}')
@@ -363,8 +363,8 @@ print(f'Color types: {___(colors)} types')`,
         {
           id: "mission2",
           type: "mission",
-          title: "🎯 Mission 2: Use all 4 data structures",
-          task: "Organize one student's info using all 4 data structures. Pick the right type for each slot!",
+          title: "🎯 Mission 2 — Organize school info with all 4 types",
+          task: "Organize the school data with all 4 data structures:\n- Student names → list\n- School coordinates (unchanging) → tuple\n- Students → scores → dict\n- Joined clubs (no duplicates) → set\n\nJust remove the ___ wrappers and keep the data structure as-is.",
           initialCode: `# Organize student info
 # 1) Student names (ordered, modifiable) → ?
 students = ___["Alice", "Bob", "Charlie"]___
@@ -390,23 +390,23 @@ print(f"Number of clubs: {len(clubs)}")
         {
           id: "complete",
           type: "explain",
-          title: "🎉 Complete!",
-          content: `## What We Learned Today
+          title: "🎉 What You Learned — 4 data structures at a glance",
+          content: `## What You Learned Today
 
-✅ **List 🧊 \`[ ]\`** — Fridge (ordered, duplicates OK, modifiable)
-✅ **Tuple 🔒 \`( )\`** — Coordinate / RGB (cannot modify!)
-✅ **Dict 🏷️ \`{"key": value}\`** — Locker (find by name)
-✅ **Set ✋ \`{1, 2, 3}\`** — Attendance (no duplicates, fast lookup)
-✅ **Decision flow** — key? → duplicates? → modify? in order
-✅ **\`{ }\` trap** — empty \`{}\` is dict; empty set is \`set()\`
+✅ 🧊 **List \`[ ]\`** — Fridge: ordered, duplicates OK, modifiable
+✅ 🔒 **Tuple \`( )\`** — Coordinates / RGB: cannot be modified!
+✅ 🏷️ **Dict \`{"key": value}\`** — Locker: look up by name
+✅ ✋ **Set \`{1, 2, 3}\`** — Attendance: no duplicates, fast lookup
+✅ **Decision flow** — key? → duplicates? → modify often? in that order
+✅ **\`{ }\` trap** — empty \`{}\` is a dict; empty set must be \`set()\`
 
-Coming up over the next 4 lessons:
+Coming up — one lesson per structure! 🚀
 - Lesson 16: **List** in depth
 - Lesson 19: **Tuple** in depth
 - Lesson 20: **Dictionary** in depth
 - Lesson 21: **Set** in depth
 
-🚀 Next up — Lists!`
+Next time — Lists for real! 🧊`
         }
       ]
     }

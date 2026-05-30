@@ -17,66 +17,52 @@ export const lesson16Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "📋 리스트란?",
-          content: `**리스트** = 여러 값을 순서대로 저장하는 자료구조
+          title: "📋 리스트 (list) 란? — 줄지어 있는 박스",
+          content: `**리스트 (list = 목록)** = 여러 값을 **순서대로** 담는 상자들 묶음.
+
+🎒 비유: 학교 사물함이 1번, 2번, 3번... 줄지어 있는 것. 각 박스에 물건 하나씩.
 
 \`\`\`python
 fruits = ["사과", "바나나", "딸기"]
 numbers = [1, 2, 3, 4, 5]
-mixed = [1, "hello", True, 3.14]
 \`\`\`
 
-- **대괄호 [ ]** 사용
-- **쉼표(,)**로 구분
-- **다양한 타입** 섞어서 저장 가능!
+- **대괄호 \`[ ]\`** 로 시작과 끝
+- **쉼표 \`,\`** 로 박스 구분
+- 숫자, 글자, 섞어서도 OK
 
-### 어디서 자주 쓰여요?
+### 어디서 만나요?
 
-- 학생 명단, 점수 기록 — **순서대로** 줄 세우기
-- 장바구니, 댓글 — **추가/삭제** 가 잦음
-- 게임 인벤토리 — 들어오고 나가고
-- 입력 받은 여러 값 모음 — \`input().split()\` 결과
-- 자료 처리의 가장 기본 단위
+- 반 친구 명단, 점수 목록 — 순서대로
+- 장바구니, 게임 인벤토리 — 넣고 빼고
+- \`input().split()\` 결과
 
-> 🎯 자료구조 4 종 중 **가장 많이 쓰는** 게 리스트예요. 익혀두면 평생 사용.`
+> 🎯 자료구조 중 **제일 많이 쓰는 친구**. 익혀두면 평생.`
+        },
+        {
+          id: "viz-builder",
+          type: "interactive",
+          title: "🎬 시뮬: 리스트 만드는 모습 보기",
+          component: "pyListBuilder",
+          description: "리스트가 한 단계씩 만들어지는 모습을 봐요. 각 버튼을 눌러서 진행!"
         },
         {
           id: "creation-ways",
           type: "explain",
-          title: "🛠️ 리스트 만드는 다양한 방법",
+          title: "🛠️ 리스트 만드는 3 가지 방법",
           content: `\`\`\`python
 # 1) 대괄호 — 가장 흔함
 fruits = ["사과", "바나나"]
 empty = []
 
-# 2) list() 함수 — 다른 자료구조를 리스트로
-chars = list("hello")        # ['h', 'e', 'l', 'l', 'o']
-nums  = list(range(5))       # [0, 1, 2, 3, 4]
-empty = list()               # []
-
-# 3) 같은 값 여러 번 — *
+# 2) [0] * n — 같은 값으로 가득
 zeros = [0] * 5              # [0, 0, 0, 0, 0]
-hello = ["hi"] * 3           # ['hi', 'hi', 'hi']
 
-# 4) 리스트 컴프리헨션 (다음 레슨에서 자세히)
-squares = [n * n for n in range(1, 6)]
-# [1, 4, 9, 16, 25]
+# 3) list(range(...)) — 숫자 줄세우기
+nums = list(range(1, 6))     # [1, 2, 3, 4, 5]
 \`\`\`
 
-### range 와 함께 — 자주 쓰는 패턴
-
-\`\`\`python
-# 0 부터 9 까지
-list(range(10))         # [0, 1, ..., 9]
-
-# 1 부터 10 까지
-list(range(1, 11))      # [1, 2, ..., 10]
-
-# 짝수만 (1~20)
-list(range(2, 21, 2))   # [2, 4, 6, ..., 20]
-\`\`\`
-
-> 💡 **\`[0] * n\`** 은 게임 점수판 / 카운터 초기화에 유용. **\`list(range(...))\`** 는 코딩 테스트에서 자주.`
+> 💡 \`[0] * n\` 은 점수판 초기화 (5 명 분 점수 0 으로). \`list(range(...))\` 는 1~100 같은 숫자 명단.`
         },
         {
           id: "try1",
@@ -189,42 +175,29 @@ fruits.pop(0)  # 첫 번째 삭제
         {
           id: "insert-explain",
           type: "explain",
-          title: "📍 insert — 특정 위치에 끼워넣기",
-          content: `\`append\` 는 끝에만 추가. **insert(위치, 값)** 으로 원하는 위치에 끼워넣을 수 있어요.
+          title: "📍 insert (끼워넣기) — 줄 사이에 끼워넣기",
+          content: `\`append\` 는 항상 **끝에만**. 줄 가운데에 끼워넣고 싶으면 **\`insert(위치, 값)\`**.
 
 \`\`\`python
 fruits = ["사과", "딸기", "포도"]
 
-# 인덱스 1 자리에 '바나나' 끼워넣기 (뒤에 있던 건 한 칸씩 밀림)
+# 1 번 자리에 '바나나' 끼워넣기 (뒤의 박스들은 한 칸씩 밀림)
 fruits.insert(1, "바나나")
 print(fruits)
 # ['사과', '바나나', '딸기', '포도']
-
-# 맨 앞에 추가 (인덱스 0)
-fruits.insert(0, "오렌지")
-print(fruits)
-# ['오렌지', '사과', '바나나', '딸기', '포도']
 \`\`\`
 
-### remove vs pop 다시
+### pop (꺼내기) vs remove (지우기)
 
 \`\`\`python
-nums = [10, 20, 30, 20, 40]
+nums = [10, 20, 30]
 
-# remove(값) — 값으로 첫 등장만 삭제
-nums.remove(20)
-print(nums)   # [10, 30, 20, 40] ← 첫 20 만
-
-# pop(인덱스) — 위치로 삭제 + 그 값 반환
-val = nums.pop(0)
-print(val, nums)   # 10 [30, 20, 40]
-
-# pop() — 마지막 (인덱스 생략)
-last = nums.pop()
-print(last, nums)  # 40 [30, 20]
+last = nums.pop()        # 마지막 꺼내기 → last = 30
+nums.remove(10)          # 값 10 을 지우기
+print(nums)              # [20]
 \`\`\`
 
-> 🎯 한 줄: **append=뒤에, insert=원하는 위치, remove=값으로 삭제, pop=위치로 삭제+꺼내기.**`
+> 🎯 **append=뒤에, insert=원하는 자리, pop=꺼내기, remove=값으로 지우기.**`
         },
         {
           id: "try-insert",
@@ -347,44 +320,28 @@ print(fruits[-2])  # 바나나 (뒤에서 두 번째)
         {
           id: "sort-explain",
           type: "explain",
-          title: "🔢 정렬과 뒤집기 — sort / sorted / reverse",
-          content: `**sort()** — 리스트 자체를 정렬 (원본 변경)
-**sorted()** — 정렬된 **새 리스트** 반환 (원본 그대로)
-**reverse()** — 순서 뒤집기
+          title: "🔢 정렬 (sort) — 줄 세우기",
+          content: `**sort()** — 리스트 **자체** 를 줄 세움 (원본 변함!)
+**sorted()** — 줄 선 **새 리스트** 를 돌려줌 (원본 그대로)
 
 \`\`\`python
-nums = [3, 1, 4, 1, 5, 9, 2, 6]
+nums = [3, 1, 4, 1, 5]
 
-# sort() — 자체 정렬
 nums.sort()
-print(nums)    # [1, 1, 2, 3, 4, 5, 6, 9]
+print(nums)         # [1, 1, 3, 4, 5]
 
-# 내림차순
+# 내림차순 (큰 것부터)
 nums.sort(reverse=True)
-print(nums)    # [9, 6, 5, 4, 3, 2, 1, 1]
+print(nums)         # [5, 4, 3, 1, 1]
 
-# sorted() — 원본 보존
+# sorted() — 원본 안 건드림
 original = [3, 1, 4]
 new_list = sorted(original)
-print(new_list)   # [1, 3, 4]
-print(original)   # [3, 1, 4] — 그대로!
-
-# reverse() — 정렬 안 하고 단순히 뒤집기
-fruits = ["사과", "배", "감"]
-fruits.reverse()
-print(fruits)  # ['감', '배', '사과']
+print(new_list)     # [1, 3, 4]
+print(original)     # [3, 1, 4] — 그대로!
 \`\`\`
 
-### 키 함수 — 길이순/특정 기준 정렬
-
-\`\`\`python
-words = ["apple", "kiwi", "banana"]
-
-words.sort(key=len)        # 길이순
-print(words)               # ['kiwi', 'apple', 'banana']
-\`\`\`
-
-> 🎯 **자체 변경 vs 새 리스트** — sort vs sorted 의 가장 큰 차이.`
+> 🎯 **sort = 자체 변경, sorted = 새 리스트.** 가장 큰 차이.`
         },
         {
           id: "try-sort",
@@ -426,44 +383,31 @@ print(winner)   # 'A'
         {
           id: "comprehension",
           type: "explain",
-          title: "✨ 리스트 컴프리헨션 — 한 줄로 만들기",
-          content: `for 루프로 만들던 리스트를 **한 줄에**.
+          title: "✨ 리스트 컴프리헨션 — 한 줄로 만드는 마법",
+          content: `for 루프로 만들던 리스트를 **한 줄**로!
 
 \`\`\`python
-# 기존 방식 — 4 줄
+# 4 줄짜리
 squares = []
 for n in range(1, 6):
     squares.append(n * n)
 # [1, 4, 9, 16, 25]
 
-# 컴프리헨션 — 1 줄
+# 한 줄짜리 (같은 결과!)
 squares = [n * n for n in range(1, 6)]
-# [1, 4, 9, 16, 25]
 \`\`\`
 
-### 조건 추가 (if 필터)
+### if 로 거르기
 
 \`\`\`python
-nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+nums = [1, 2, 3, 4, 5, 6]
 
 # 짝수만
 even = [n for n in nums if n % 2 == 0]
-# [2, 4, 6, 8, 10]
-
-# 짝수의 제곱
-even_sq = [n*n for n in nums if n % 2 == 0]
-# [4, 16, 36, 64, 100]
+# [2, 4, 6]
 \`\`\`
 
-### 학생 점수 → 합격 명단
-
-\`\`\`python
-scores = [("철수", 85), ("영희", 55), ("민수", 70)]
-passed = [name for name, s in scores if s >= 60]
-# ['철수', '민수']
-\`\`\`
-
-> 🎯 익숙해지면 매우 강력. 처음엔 어려우면 그냥 for 루프 써도 OK — 점차 익숙해져요.`
+> 🎯 처음엔 어려우면 그냥 for 써도 OK. 다음 레슨 (L17) 에서도 또 나와요.`
         },
         {
           id: "try-comprehension",

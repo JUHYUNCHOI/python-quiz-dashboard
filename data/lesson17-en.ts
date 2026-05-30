@@ -17,20 +17,20 @@ export const lesson17EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🔄 List + for = Ultimate Combo!",
-          content: `You can take out each element of a list one by one:
+          title: "🔄 List + for = open one box at a time",
+          content: `Take out each box from the list **one by one** — like opening lockers in order.
 
 \`\`\`python
 fruits = ["apple", "banana", "strawberry"]
 
-for fruit in fruits:
+for fruit in fruits:        # for (each) var in (list) :
     print(fruit)
 # apple
 # banana
 # strawberry
 \`\`\`
 
-Use the **for variable in list:** pattern!`
+Pattern: **for var in list:** — each box's value flows into \`fruit\` in turn.`
         },
         {
           id: "try1",
@@ -83,20 +83,20 @@ total = sum(prices)  # 6000
         {
           id: "enumerate-explain",
           type: "explain",
-          title: "🔢 enumerate() - When You Need Indexes Too",
-          content: `What if you also need the index number?
+          title: "🔢 enumerate (with numbers) — when position matters",
+          content: `**enumerate = number the items**. When you need not just the value but **which position** it's at.
 
 \`\`\`python
 fruits = ["apple", "banana", "strawberry"]
 
-for i, fruit in enumerate(fruits):
+for i, fruit in enumerate(fruits):    # i = number, fruit = value
     print(f"#{i}: {fruit}")
 # #0: apple
 # #1: banana
 # #2: strawberry
 \`\`\`
 
-**enumerate(list)** = (index, value) pairs!`
+\`enumerate(list)\` gives back (index, value) pairs one by one.`
         },
         {
           id: "try3",
@@ -214,8 +214,8 @@ for num in numbers:
         {
           id: "zip-explain",
           type: "explain",
-          title: "🤝 zip() — Pair Two Lists Together!",
-          content: `When you want to combine two lists into pairs:
+          title: "🤝 zip (like a zipper) — pair two lists",
+          content: `**zip = zip them together**. Two lists get paired by position so you can take both at once.
 
 \`\`\`python
 names = ["Alice", "Bob", "Charlie"]
@@ -228,12 +228,9 @@ for name, score in zip(names, scores):
 # Charlie: 78 pts
 \`\`\`
 
-| Method | Code | Feel |
-|--------|------|------|
-| range(len()) | \`for i in range(len(names)): names[i], scores[i]\` | Messy 😵 |
-| **zip()** | \`for name, score in zip(names, scores)\` | Clean! ✨ |
+🎒 Picture: a name list and a score list closed together by a **zipper**.
 
-💡 zip = like a zipper that "zips" two lists together!`
+> 💡 \`range(len())\` works too, but \`zip\` is much cleaner.`
         },
         {
           id: "zip-pred1",
@@ -279,32 +276,24 @@ for name, score in zip(names, scores):
         {
           id: "comp-explain",
           type: "explain",
-          title: "⚡ List Comprehension — One-Line Magic!",
-          content: `You've been making new lists with for loops like this:
+          title: "⚡ List comprehension — build a list in one line",
+          content: `You saw a peek of this in L16. Let's go deeper.
 
 \`\`\`python
-# Old way: 4 lines 😐
+# Old way: 4 lines
 numbers = [1, 2, 3, 4, 5]
 doubled = []
 for num in numbers:
     doubled.append(num * 2)
 # [2, 4, 6, 8, 10]
-\`\`\`
 
-**List comprehension does it in one line!** 🚀
-\`\`\`python
-# Comprehension: 1 line! ⚡
+# Comprehension: 1 line!
 doubled = [num * 2 for num in numbers]
-# [2, 4, 6, 8, 10]
 \`\`\`
 
 **Formula:** \`[expression for variable in list]\`
 
-| Old Way | Comprehension |
-|---------|--------------|
-| 4 lines of code | 1 line of code |
-| Slower | Faster |
-| Explicit | Pythonic! ✨ |`
+> 💡 Read it as "for each num in numbers, collect num * 2" — it flows naturally.`
         },
         {
           id: "comp-pred1",

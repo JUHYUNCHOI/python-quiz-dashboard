@@ -17,20 +17,20 @@ export const lesson17Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🔄 리스트 + for = 최강 조합!",
-          content: `리스트의 각 요소를 하나씩 꺼낼 수 있어요:
+          title: "🔄 리스트 + for = 박스 하나씩 꺼내기",
+          content: `리스트의 박스를 **하나씩** 꺼내서 들여다 볼 수 있어요. 학교 사물함을 차례로 여는 느낌!
 
 \`\`\`python
 fruits = ["사과", "바나나", "딸기"]
 
-for fruit in fruits:
+for fruit in fruits:        # for (각각) 변수 in (리스트) :
     print(fruit)
 # 사과
 # 바나나
 # 딸기
 \`\`\`
 
-**for 변수 in 리스트:** 형태!`
+**for 변수 in 리스트:** 형태 — \`fruit\` 에 각 박스 값이 차례로 들어가요.`
         },
         {
           id: "try1",
@@ -83,20 +83,20 @@ total = sum(prices)  # 6000
         {
           id: "enumerate-explain",
           type: "explain",
-          title: "🔢 enumerate() - 인덱스도 필요할 때",
-          content: `순서 번호(인덱스)도 같이 필요하면?
+          title: "🔢 enumerate (번호도 같이) — 순서 번호 필요할 때",
+          content: `**enumerate = 번호 매기기**. 값뿐 아니라 **몇 번째인지** 도 필요할 때 써요.
 
 \`\`\`python
 fruits = ["사과", "바나나", "딸기"]
 
-for i, fruit in enumerate(fruits):
+for i, fruit in enumerate(fruits):    # i = 번호, fruit = 값
     print(f"{i}번: {fruit}")
 # 0번: 사과
 # 1번: 바나나
 # 2번: 딸기
 \`\`\`
 
-**enumerate(리스트)** = (인덱스, 값) 쌍!`
+\`enumerate(리스트)\` 가 (번호, 값) 한 묶음씩 돌려줘요.`
         },
         {
           id: "try3",
@@ -214,8 +214,8 @@ for num in numbers:
         {
           id: "zip-explain",
           type: "explain",
-          title: "🤝 zip() — 두 리스트를 짝짓기!",
-          content: `두 개의 리스트를 하나로 묶고 싶을 때:
+          title: "🤝 zip (지퍼) — 두 리스트를 짝지어 묶기",
+          content: `**zip = 지퍼처럼 묶기**. 두 리스트를 같은 자리끼리 짝지어 한 번에 꺼낼 수 있어요.
 
 \`\`\`python
 names = ["철수", "영희", "민수"]
@@ -228,12 +228,9 @@ for name, score in zip(names, scores):
 # 민수: 78점
 \`\`\`
 
-| 방법 | 코드 | 느낌 |
-|------|------|------|
-| range(len()) | \`for i in range(len(names)): names[i], scores[i]\` | 복잡 😵 |
-| **zip()** | \`for name, score in zip(names, scores)\` | 깔끔! ✨ |
+🎒 비유: 이름표 줄과 점수표 줄을 **지퍼** 로 쭉 닫는 모습.
 
-💡 zip = 지퍼처럼 두 리스트를 "쭉" 묶는 거예요!`
+> 💡 \`range(len())\` 로도 가능하지만 \`zip\` 이 훨씬 깔끔.`
         },
         {
           id: "zip-pred1",
@@ -279,32 +276,24 @@ for name, score in zip(names, scores):
         {
           id: "comp-explain",
           type: "explain",
-          title: "⚡ 리스트 컴프리헨션 — 한 줄의 마법!",
-          content: `for문으로 새 리스트 만들기, 이렇게 하고 있었죠?
+          title: "⚡ 리스트 컴프리헨션 (comprehension) — 한 줄로 만들기",
+          content: `L16 에서 살짝 봤죠? 좀 더 깊이 들어가요.
 
 \`\`\`python
-# 기존 방법: 4줄 😐
+# 기존 방법: 4 줄
 numbers = [1, 2, 3, 4, 5]
 doubled = []
 for num in numbers:
     doubled.append(num * 2)
 # [2, 4, 6, 8, 10]
-\`\`\`
 
-**리스트 컴프리헨션으로 한 줄!** 🚀
-\`\`\`python
-# 컴프리헨션: 1줄! ⚡
+# 컴프리헨션: 1 줄!
 doubled = [num * 2 for num in numbers]
-# [2, 4, 6, 8, 10]
 \`\`\`
 
 **공식:** \`[표현식 for 변수 in 리스트]\`
 
-| 기존 | 컴프리헨션 |
-|------|-----------|
-| 4줄 코드 | 1줄 코드 |
-| 느림 | 빠름 |
-| 명확 | 파이썬스러움! ✨ |`
+> 💡 영어로 "for each num in numbers, 2 배 한 걸 모아라" 라고 읽으면 자연스러워요.`
         },
         {
           id: "comp-pred1",

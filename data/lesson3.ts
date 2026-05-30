@@ -60,8 +60,8 @@ gold = 5000
         {
           id: "concept-builder",
           type: "interactive",
-          title: "🎬 변수 만들기 — 문법 조립",
-          description: "변수 = 값 문법이 어떻게 조립되는지 직접 눌러봐요.",
+          title: "🎬 변수 만들기 — 직접 눌러봐!",
+          description: "변수 = 값 이 어떻게 만들어지는지 한 칸씩 눌러서 확인해봐요.",
           component: "pyVariableBuilder",
         },
         {
@@ -120,7 +120,7 @@ x = 10
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
+          title: "🖥️ 직접 — age 에 15 넣고 출력하기",
           task: "변수 age에 15를 저장하고 출력해보세요!",
           initialCode: "age = ___\nprint(age)",
           expectedOutput: "15",
@@ -130,7 +130,7 @@ x = 10
         {
           id: "quiz1",
           type: "quiz",
-          title: "❓ 퀴즈!",
+          title: "❓ 퀴즈 — `x = 10` 의 `=` 는?",
           content: "`x = 10` 에서 `=` 의 의미는?",
           options: [
             "x와 10이 같다",
@@ -184,7 +184,7 @@ print(price + 2000)
         {
           id: "use-explain-mistake",
           type: "explain",
-          title: "⚠️ 자주 하는 실수 — 따옴표",
+          title: "🤔 따옴표가 있고 없고, 뭐가 달라?",
           content: `\`\`\`python
 print('price')   # → price (글자 그대로!)
 print(price)     # → 19000 (상자 안의 값!)
@@ -192,12 +192,12 @@ print(price)     # → 19000 (상자 안의 값!)
 
 따옴표 \`'\` 가 있으면 그냥 **글자 그대로**. 따옴표 없이 변수 이름만 쓰면 **상자 안의 값**.
 
-> 🎯 한 줄 요약: **따옴표 있으면 글자, 없으면 상자 속 값.**`
+> 🎯 한 줄로: **따옴표 있으면 글자, 없으면 상자 속 값.**`
         },
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
+          title: "🖥️ 직접 — chicken + 2000 출력하기",
           task: "chicken에 19000을 저장하고, chicken + 2000을 출력하세요!",
           initialCode: "chicken = ___\nprint(chicken + 2000)",
           expectedOutput: "21000",
@@ -207,7 +207,7 @@ print(price)     # → 19000 (상자 안의 값!)
         {
           id: "label-explain",
           type: "explain",
-          title: "🏷️ 텍스트와 변수 함께 출력하기",
+          title: "🏷️ 글자와 변수 같이 출력하기",
           content: `변수 값만 출력하면 뭔지 모를 수 있어요.
 
 > 💡 **레슨 1** 에서 \`print('결과:', 100)\` 처럼 **쉼표(,)** 로 값 여러 개 출력한 거 기억나죠? 같은 방식이 변수에도 그대로 통해요.
@@ -227,7 +227,7 @@ print("점수:", score, "점")  # 점수: 95 점
         {
           id: "try_label1",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
+          title: "🖥️ 직접 — '이름: 홍길동' 출력하기",
           task: "쉼표를 이용해 '이름: 홍길동'을 출력해보세요!",
           initialCode: "name = '홍길동'\nprint(___, name)",
           expectedOutput: "이름: 홍길동",
@@ -249,10 +249,10 @@ print("점수:", score, "점")  # 점수: 95 점
         {
           id: "change-explain",
           type: "explain",
-          title: "🔄 변수 값 다시 넣기",
+          title: "🔄 같은 상자에 새 값 넣기",
           content: `상자 안의 값은 **언제든 바꿀 수 있어요**. 같은 변수에 새 값을 넣으면 **이전 값은 사라지고** 새 값으로 덮어써져요.
 
-> 💡 이걸 어려운 말로 **재할당** 이라고 해요. 그냥 **"다시 넣기"** 라고 기억해도 충분.
+> 💡 어른 책에서는 이걸 **"재할당"** 이라고 해요. 그냥 **"다시 넣기"** 라고 기억해도 충분.
 
 \`\`\`python
 hp = 100
@@ -277,7 +277,7 @@ hp = 80         →   [ 80 ]      ← 100 은 덮어써져서 사라짐
         {
           id: "change-explain-self",
           type: "explain",
-          title: "♻️ 자기 자신을 써서 갱신하기",
+          title: "♻️ 자기 자신 더하기 — `x = x + 3`",
           content: `\`x = x + 3\` 같은 코드도 가능해요. 수학에서는 이상하지만 (\`x = x + 3\` → \`0 = 3\`?), 파이썬에서는 자연스러워요.
 
 \`\`\`python
@@ -331,7 +331,7 @@ print(money)
         {
           id: "change-explain-error",
           type: "explain",
-          title: "⚠️ 안 되는 것 — 만든 적 없는 변수",
+          title: "💬 파이썬이 뭐라고 말할까?",
           content: `예상대로 에러가 나요.
 
 \`\`\`python
@@ -357,7 +357,7 @@ NameError: name 'money' is not defined
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
+          title: "🖥️ 직접 — score 0 → 100 으로 바꾸기",
           task: "score를 0으로 시작해서 100으로 바꾸고 출력하세요!",
           initialCode: "score = 0\nscore = ___\nprint(score)",
           expectedOutput: "100",
@@ -374,7 +374,7 @@ NameError: name 'money' is not defined
         {
           id: "try-self-update",
           type: "tryit",
-          title: "🖥️ 따라 해보기 — x 값 갱신",
+          title: "🖥️ 따라 — x 에 3 더해서 다시 넣기",
           task: "방금 본 패턴 그대로! x 를 5 로 시작해서 3 을 더해 다시 x 에 저장하고 출력해봐요.",
           initialCode: "x = 5\nx = ___ + 3\nprint(x)",
           expectedOutput: "8",
@@ -384,7 +384,7 @@ NameError: name 'money' is not defined
         {
           id: "quiz2",
           type: "quiz",
-          title: "❓ 퀴즈!",
+          title: "❓ 퀴즈 — `x = x + 3` 후 x 는?",
           content: "`x = 5`, `x = x + 3` 후 x의 값은?",
           options: ["5", "3", "8", "에러"],
           answer: 2,
@@ -452,26 +452,45 @@ _temp = 0      # ✅ _ 로 시작해도 OK
 \`\`\``
         },
         {
-          id: "rules-explain-keywords",
-          type: "explain",
-          title: "🚫 자세히 — 파이썬 특별 단어 + 대소문자",
-          content: `### 파이썬 특별 단어 (예약어)
-
-파이썬이 **미리 가져간 단어들**. 변수 이름으로 못 써요.
+          id: "predict-bad-name",
+          type: "predict",
+          title: "💭 둘 중 어느 게 변수 이름 안 돼?",
+          content: `둘 다 비슷해 보이는데, 한 쪽은 파이썬이 에러를 낼 거예요. 어느 쪽일까요?
 
 \`\`\`python
-if = 10        # ❌ if 는 파이썬이 미리 가져간 단어
+score2 = 100     # A
+2score = 100     # B
+\`\`\``,
+          options: [
+            "A 만 안 돼요",
+            "B 만 안 돼요",
+            "둘 다 돼요",
+            "둘 다 안 돼요"
+          ],
+          answer: 1,
+          explanation: "B 안 돼요! 변수 이름 **첫 글자에 숫자가 오면 안** 돼요. `score2` 처럼 숫자가 뒤에 있는 건 OK."
+        },
+        {
+          id: "rules-explain-keywords",
+          type: "explain",
+          title: "🚫 파이썬이 미리 가져간 단어 + 대소문자",
+          content: `### 파이썬이 미리 가져간 단어
+
+파이썬이 **자기 일에 쓰려고 미리 챙겨둔 단어들**. 변수 이름으로 못 써요.
+
+\`\`\`python
+if = 10        # ❌ if 는 파이썬이 챙겨둔 단어
 for = 5        # ❌ for 도
 \`\`\`
 
-> 💡 \`if\`, \`for\`, \`def\`, \`class\` 같은 단어 14 개 정도 있어요. **외울 필요 X** — 나중에 레슨에서 하나씩 다 자연스럽게 배워요.
+> 💡 이런 단어 몇 개 안 돼요. **외우지 마요** — 다음 레슨에서 \`if\` \`for\` 같은 거 하나씩 직접 써보면서 자연스럽게 알게 돼요.
 
-**지금은 이 정도만 알면 충분:**
+**지금은 이 정도만:**
 - \`print\` 같은 평범한 영어 단어 → 변수 이름 OK
-- \`if\` 같은 파이썬 특별 단어 → ❌
-- 에러 나면 그때 "아 이거 특별 단어구나" 알게 돼요
+- \`if\` 같은 파이썬 단어 → ❌
+- 에러 나면 그때 "아 이건 못 쓰는 단어구나" 알아채면 돼요
 
-### 대문자 / 소문자 (자세히)
+### 대문자 / 소문자
 
 \`\`\`python
 age = 15
@@ -484,17 +503,17 @@ print(Age)   # ❌ 에러! Age 는 만든 적 없음 (대문자 A!)
           id: "rules-explain-style",
           type: "explain",
           title: "🐍 두 단어 이상 이어 붙이는 법",
-          content: `\`player\` 와 \`hp\` 를 합쳐서 한 변수 이름으로 만들고 싶을 때, 두 가지 스타일이 있어요.
+          content: `\`player\` 와 \`hp\` 를 합쳐서 한 변수 이름으로 만들고 싶을 때, 두 가지 모양이 있어요.
 
-### 🐍 언더바 스타일 — \`player_hp\`
+### 🐍 언더바로 잇기 — \`player_hp\`
 
 단어 사이를 \`_\` 로 연결. **파이썬은 이걸 추천!**
-(공식 이름: snake_case — 글자가 \`_\` 로 길게 늘어진 모양이 뱀 같다고)
+(어른들은 *snake_case* 라고 불러요 — \`_\` 로 길게 늘어진 모양이 뱀 같다고.)
 
-### 🐪 낙타 스타일 — \`playerHp\`
+### 🐪 가운데 대문자 — \`playerHp\`
 
-뒷 단어 첫 글자만 대문자. **자바스크립트 같은 다른 언어에서 많이 써요.**
-(공식 이름: camelCase — 중간 글자가 낙타 등의 혹처럼 솟아 있다고)
+뒷 단어 첫 글자만 대문자. **다른 언어에서 많이 써요.**
+(어른들은 *camelCase* 라고 불러요 — 중간 대문자가 낙타 등 혹처럼 솟아 있다고.)
 
 \`\`\`python
 player_hp = 100   # ✅ 언더바 — 파이썬 스타일
@@ -516,7 +535,7 @@ latte_price = 5500   # ✅ 한 달 후에 봐도 알 수 있음
         {
           id: "quiz3",
           type: "quiz",
-          title: "❓ 퀴즈!",
+          title: "❓ 퀴즈 — 올바른 변수 이름은?",
           content: "올바른 변수 이름은?",
           options: ["1st_place", "my-score", "player_name", "my name"],
           answer: 2,
@@ -525,7 +544,7 @@ latte_price = 5500   # ✅ 한 달 후에 봐도 알 수 있음
         {
           id: "quiz_naming",
           type: "quiz",
-          title: "❓ 퀴즈!",
+          title: "❓ 퀴즈 — 가장 좋은 변수 이름은?",
           content: "다음 중 가장 좋은 변수 이름은?",
           options: ["a", "n1", "student_score", "XVALUE"],
           answer: 2,
@@ -683,7 +702,7 @@ print('#안녕')   # → #안녕 (따옴표 안의 # 은 주석 아님!)
         {
           id: "comment-quiz",
           type: "quiz",
-          title: "❓ 퀴즈!",
+          title: "❓ 퀴즈 — 주석 기호는?",
           content: "파이썬에서 주석을 만들 때 쓰는 기호는?",
           options: ["//", "#", "/* */", "--"],
           answer: 1,
@@ -692,7 +711,7 @@ print('#안녕')   # → #안녕 (따옴표 안의 # 은 주석 아님!)
         {
           id: "comment-tryit",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
+          title: "🖥️ 직접 — 주석 기호 넣어보기",
           task: "빈칸에 주석 기호를 넣어보세요!\n주석은 실행에 영향을 주지 않아요.",
           initialCode: "___ 이름과 나이를 출력하는 코드\nname = '홍길동'\nage = 15\nprint(name)\nprint(age)",
           expectedOutput: "홍길동\n15",
@@ -710,7 +729,7 @@ print('#안녕')   # → #안녕 (따옴표 안의 # 은 주석 아님!)
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 최종 미션!",
+          title: "🏆 최종 미션 — 자기소개 카드 만들기",
           task: "변수 3 개로 자기소개 카드를 완성하세요! (이름: 홍길동, 나이: 15, 취미: 게임)",
           initialCode: "name = '홍길동'\nage = ___\nhobby = '게임'\n\n# 쉼표로 변수와 글자를 이어서 출력해 보세요\nprint('=== 자기소개 ===')\nprint('이름:', name)\nprint('나이:', ___, '살')\nprint('취미:', hobby)",
           expectedOutput: "=== 자기소개 ===\n이름: 홍길동\n나이: 15 살\n취미: 게임",
