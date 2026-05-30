@@ -17,8 +17,8 @@ export const lesson23Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "📚 책을 쌓아보자!",
-          content: `책을 쌓으면 어떻게 될까요?
+          title: "📚 스택은 쌓아놓은 책!",
+          content: `책을 위로 쌓아 올리면:
 
 \`\`\`
     [책3] ← 마지막에 올린 책
@@ -27,10 +27,10 @@ export const lesson23Data: LessonData = {
    ======
 \`\`\`
 
-**마지막에 올린 책3을 먼저 빼야 해요!**
+**위에 있는 책3 부터 꺼내요.** 책1 부터 못 꺼내요 (무너짐!)
 
-이게 바로 **스택(Stack)**!
-- **LIFO**: Last In, First Out
+이게 **스택(Stack)**!
+- **LIFO** = Last In, First Out
 - 마지막에 넣은 게 먼저 나옴`
         },
         {
@@ -145,41 +145,34 @@ print(stack[-1])  # 2 (제거 안 됨)
         {
           id: "class-stack",
           type: "explain",
-          title: "🏗️ 클래스로 스택 만들기",
-          content: `더 깔끔하게 클래스로 만들 수도 있어요:
+          title: "🔎 peek — 보기만 하고 안 빼기",
+          content: `**peek** = 맨 위 값을 **보기만**, 안 빼기.
 
 \`\`\`python
-class Stack:
-    def __init__(self):
-        self.items = []
-    
-    def push(self, item):
-        self.items.append(item)
-    
-    def pop(self):
-        if not self.is_empty():
-            return self.items.pop()
-    
-    def peek(self):
-        if not self.is_empty():
-            return self.items[-1]
-    
-    def is_empty(self):
-        return len(self.items) == 0
-    
-    def size(self):
-        return len(self.items)
-\`\`\``
+stack = []
+stack.append("A")
+stack.append("B")
+stack.append("C")
+
+# peek — [-1] 로 맨 위 보기
+print(stack[-1])    # C (아직 안 빠짐)
+print(stack[-1])    # C (또 봐도 그대로)
+print(stack)        # ['A', 'B', 'C']
+\`\`\`
+
+**규칙:**
+- 보기만: \`stack[-1]\`
+- 빼기: \`stack.pop()\``
         },
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ 스택 클래스 사용!",
-          task: "Stack 클래스를 사용해보세요!",
-          initialCode: "class Stack:\n    def __init__(self):\n        self.items = []\n    def push(self, item):\n        self.items.append(item)\n    def pop(self):\n        return self.items.pop() if self.items else None\n    def peek(self):\n        return self.items[-1] if self.items else None\n    def is_empty(self):\n        return len(self.items) == 0\n\n# 사용\ns = Stack()\ns.push(\"A\")\ns.push(\"B\")\ns.push(\"C\")\nprint(\"peek:\", s.peek())\nprint(\"pop:\", s.pop())\nprint(\"pop:\", s.pop())",
+          title: "🖥️ 직접 — peek vs pop",
+          task: "A, B, C 를 차례로 push 한 다음, peek 한 번 / pop 두 번 해 보세요.",
+          initialCode: "stack = []\n\nstack.append(\"A\")\nstack.append(\"B\")\nstack.append(\"C\")\n\n# peek — 맨 위를 보기만 (인덱스 ___)\nprint(\"peek:\", stack[___])\n\n# pop 두 번\nprint(\"pop:\", stack.___())\nprint(\"pop:\", stack.___())",
           expectedOutput: "peek: C\npop: C\npop: B",
-          hint: "peek()은 보기만, pop()은 제거까지!",
-          hint2: "C가 마지막에 들어갔으니 먼저 나옴"
+          hint: "맨 위 보기 = 인덱스 -1, 빼기 = .pop()",
+          hint2: "-1 / pop / pop"
         }
       ]
     },
@@ -208,12 +201,12 @@ class Stack:
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ 괄호 검사 구현!",
-          task: "괄호가 올바른지 검사하세요!",
-          initialCode: "def check_parentheses(s):\n    stack = []\n    for char in s:\n        if char == '(':\n            stack.append(char)\n        elif char == ')':\n            if not stack:\n                return False\n            stack.pop()\n    return len(stack) == 0\n\n# 테스트\nprint(check_parentheses(\"(())\"))   # True\nprint(check_parentheses(\"(()\"))    # False\nprint(check_parentheses(\"())\"))    # False\nprint(check_parentheses(\"()()\"))   # True",
-          expectedOutput: "True\nFalse\nFalse\nTrue",
-          hint: "'(' 만나면 push, ')' 만나면 pop",
-          hint2: "pop할 때 스택이 비어있으면 False"
+          title: "🖥️ 직접 — 괄호 한 줄 검사하기",
+          task: "문자열 '(())' 의 괄호가 짝이 맞는지 스택으로 확인하세요!",
+          initialCode: "s = \"(())\"\nstack = []\nok = True\n\nfor char in s:\n    if char == '(':\n        stack.___(char)        # 여는 괄호 → push\n    elif char == ')':\n        if not stack:\n            ok = False\n            break\n        stack.___()             # 닫는 괄호 → pop\n\n# 끝났을 때 스택이 비어있으면 ✅\nif ok and len(stack) == 0:\n    print(\"True\")\nelse:\n    print(\"False\")",
+          expectedOutput: "True",
+          hint: "'(' 만나면 .append, ')' 만나면 .pop. 마지막에 스택이 비어야 ✅",
+          hint2: "append / pop"
         },
         {
           id: "problem2-explain",
@@ -233,12 +226,12 @@ LIFO 특성을 활용한 뒤집기!`
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ 문자열 뒤집기!",
-          task: "스택으로 문자열을 뒤집으세요!",
-          initialCode: "def reverse_string(s):\n    stack = []\n    # 모든 문자 push\n    for char in s:\n        stack.append(char)\n    \n    # 모두 pop해서 결과 만들기\n    result = \"\"\n    while stack:\n        result += stack.pop()\n    \n    return result\n\nprint(reverse_string(\"hello\"))\nprint(reverse_string(\"Python\"))\nprint(reverse_string(\"12345\"))",
-          expectedOutput: "olleh\nnohtyP\n54321",
-          hint: "push 순서의 역순으로 pop!",
-          hint2: "물론 s[::-1]이 더 간단하지만, 스택 원리 이해용!"
+          title: "🖥️ 직접 — 'hello' 를 스택으로 뒤집기",
+          task: "'hello' 를 스택에 한 글자씩 넣고, 모두 빼서 뒤집힌 문자열을 만들어 보세요!",
+          initialCode: "s = \"hello\"\nstack = []\n\n# 모든 글자를 스택에 push\nfor char in s:\n    stack.___(char)\n\n# 모두 pop 해서 result 에 이어 붙이기\nresult = \"\"\nwhile stack:\n    result += stack.___()\n\nprint(result)",
+          expectedOutput: "olleh",
+          hint: "넣을 땐 .append, 뺄 땐 .pop. LIFO 라서 자동으로 뒤집힘!",
+          hint2: "append / pop"
         }
       ]
     },
@@ -250,12 +243,12 @@ LIFO 특성을 활용한 뒤집기!`
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 최종 미션: 브라우저 뒤로가기!",
-          task: "브라우저 히스토리를 스택으로 구현하세요!",
-          initialCode: "class Browser:\n    def __init__(self):\n        self.history = []\n        self.current = \"홈\"\n    \n    def visit(self, page):\n        self.history.___(self.current)\n        self.current = page\n        print(f\"방문: {page}\")\n    \n    def back(self):\n        if self.history:\n            self.current = self.history.___()\n            print(f\"뒤로가기: {self.current}\")\n        else:\n            print(\"더 이상 뒤로 갈 수 없습니다\")\n    \n    def show(self):\n        print(f\"현재 페이지: {self.current}\")\n\n# 테스트\nbrowser = Browser()\nbrowser.visit(\"네이버\")\nbrowser.visit(\"구글\")\nbrowser.visit(\"유튜브\")\nbrowser.show()\nbrowser.back()\nbrowser.back()\nbrowser.show()",
+          title: "🏆 최종 미션: 브라우저 뒤로가기 시뮬",
+          task: "스택(리스트) 으로 브라우저 히스토리 시뮬레이션을 완성하세요! 빈칸 채우기.",
+          initialCode: "history = []           # 방문 기록 스택\ncurrent = \"홈\"\n\n# 방문 1: 네이버\nhistory.___(current)   # 지금 페이지를 history 에 push\ncurrent = \"네이버\"\nprint(\"방문:\", current)\n\n# 방문 2: 구글\nhistory.___(current)\ncurrent = \"구글\"\nprint(\"방문:\", current)\n\n# 방문 3: 유튜브\nhistory.___(current)\ncurrent = \"유튜브\"\nprint(\"방문:\", current)\n\nprint(\"현재 페이지:\", current)\n\n# 뒤로가기 2 번 — history 맨 위 페이지로 돌아감\ncurrent = history.___()\nprint(\"뒤로가기:\", current)\ncurrent = history.___()\nprint(\"뒤로가기:\", current)\n\nprint(\"현재 페이지:\", current)",
           expectedOutput: "방문: 네이버\n방문: 구글\n방문: 유튜브\n현재 페이지: 유튜브\n뒤로가기: 구글\n뒤로가기: 네이버\n현재 페이지: 네이버",
-          hint: "스택은 append()로 push하고 pop()으로 꺼내요!",
-          hint2: "visit에는 append, back에는 pop을 넣으세요!"
+          hint: "방문할 때 = 지금 페이지를 .append, 뒤로가기 = .pop 으로 마지막 페이지 꺼내기!",
+          hint2: "append / append / append / pop / pop"
         },
         {
           id: "complete",

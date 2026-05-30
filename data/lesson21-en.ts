@@ -17,28 +17,30 @@ export const lesson21EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🎯 Want to Remove Duplicates?",
-          content: `**Set** = a data structure with no duplicates and no order
+          title: "🎯 Set — A Group With No Duplicates",
+          content: `**Set** = a group with **no duplicates and no order**.
+
+🎒 Think: a student council roster. You can't list the same person twice, and the seating order doesn't matter.
 
 \`\`\`python
 numbers = {1, 2, 2, 3, 3, 3}
-print(numbers)  # {1, 2, 3} - duplicates removed!
+print(numbers)  # {1, 2, 3} — duplicates auto-removed!
 
 names = {"Alice", "Bob", "Alice"}
-print(names)  # {'Alice', 'Bob'}
+print(names)    # {'Alice', 'Bob'}
 \`\`\`
 
-**Features:**
-- ❌ No duplicates — same value can't appear twice
-- ❌ No order — no \`s[0]\` indexing
-- ⭕ Fast lookup — \`in\` is much faster than on lists
+**3 features:**
+- ❌ **No duplicates** — same value can't appear twice
+- ❌ **No order** — no \`s[0]\` indexing
+- ⭕ **Fast lookup** — \`in\` is much faster than on a list
 
 ### Where do you meet this?
 
-- **Deduplication**: from a user-ID log, who connected at least once
-- **Tags**: tags on a post (no repeats)
-- **Quick membership check**: "did this user sign up?" — instant answer
-- **Comparing two groups**: common friends, students only in class A, etc. (next chapter)`
+- **Deduplication**: visitor log → unique visitors
+- **Tags**: post tags (no repeats)
+- **Quick membership check**: "did this user sign up?" — instant
+- **Comparing two groups**: common friends, only-in-A students (next chapter)`
         },
         {
           id: "creation-ways",
@@ -113,8 +115,8 @@ empty2 = set()     # ✅ actual empty set
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
-          task: "Remove duplicates and count the unique elements!",
+          title: "🖥️ Dedupe — count unique with set",
+          task: "Convert a list with duplicates to a set and count the unique elements!",
           initialCode: "numbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\nunique = set(numbers)\nprint(f\"Count after removing duplicates: {len(unique)}\")",
           expectedOutput: "Count after removing duplicates: 4",
           hint: "Use set() to convert a list to a set!",
@@ -123,8 +125,8 @@ empty2 = set()     # ✅ actual empty set
         {
           id: "try-dedupe-list",
           type: "tryit",
-          title: "🖥️ Try It — Dedupe and back to a sorted list",
-          task: "From a visitor log, build a sorted list with duplicates removed!",
+          title: "🖥️ Dedupe + Sort — clean visitor log",
+          task: "From a visitor log, remove duplicates and sort into a list!",
           initialCode: "visitors = [\"Alice\", \"Bob\", \"Alice\", \"Charlie\", \"Bob\", \"Dora\", \"Alice\"]\n\n# 1) set → drop duplicates\n# 2) sorted() → sorted list\nunique_sorted = ___\n\nprint(unique_sorted)",
           expectedOutput: "['Alice', 'Bob', 'Charlie', 'Dora']",
           hint: "sorted(set(visitors)) — set drops dupes, sorted returns a list.",
@@ -149,25 +151,34 @@ empty2 = set()     # ✅ actual empty set
         {
           id: "add-remove",
           type: "explain",
-          title: "➕➖ Add and Remove",
-          content: `**add()** - add an element
-**remove()** - remove (error if not found)
-**discard()** - remove (OK if not found)
+          title: "➕➖ Add / Remove — add / remove / discard",
+          content: `Three methods cover most cases.
 
 \`\`\`python
 fruits = {"apple", "banana"}
 
-fruits.add("strawberry")
+fruits.add("strawberry")     # add
 print(fruits)  # {'apple', 'banana', 'strawberry'}
 
-fruits.remove("banana")
+fruits.remove("banana")      # remove — errors if missing!
 print(fruits)  # {'apple', 'strawberry'}
-\`\`\``
+
+fruits.discard("grape")      # remove — silent if missing
+print(fruits)  # {'apple', 'strawberry'}
+\`\`\`
+
+| Method | What it does | If missing? |
+|---|---|---|
+| \`add(x)\` | inserts x | already-there is silent |
+| \`remove(x)\` | removes x | ❌ \`KeyError\` |
+| \`discard(x)\` | removes x | ✅ quietly ignored |
+
+> 🎯 **remove only when sure, discard when uncertain.**`
         },
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Add an Element!",
+          title: "🖥️ Add — slot in 'orange'",
           task: "Add 'orange' to the set and check the count!",
           initialCode: "fruits = {\"apple\", \"banana\"}\nfruits.add(\"orange\")\nprint(f\"Number of fruits: {len(fruits)}\")",
           expectedOutput: "Number of fruits: 3",
@@ -177,8 +188,8 @@ print(fruits)  # {'apple', 'strawberry'}
         {
           id: "in-explain",
           type: "explain",
-          title: "🔍 Checking Membership",
-          content: `Use the **in** operator for fast lookup!
+          title: "🔍 in — Is it in the group? (fast lookup)",
+          content: `Use \`in\` to check instantly if a value is in the set.
 
 \`\`\`python
 fruits = {"apple", "banana", "strawberry"}
@@ -187,13 +198,15 @@ print("apple" in fruits)   # True
 print("grape" in fruits)   # False
 \`\`\`
 
-💡 Sets search **much faster** than lists!`
+🎒 Think: searching a long club roster — a list scans top to bottom person by person, but a set answers **almost instantly**.
+
+> 💡 As sizes grow into hundreds and thousands, the gap widens. If you just need "is this in there?", set is the tool.`
         },
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ Check Membership!",
-          task: "Check if 'banana' is in the set!",
+          title: "🖥️ Membership — 'banana' in fruits",
+          task: "Check whether 'banana' is in the set with in!",
           initialCode: "fruits = {\"apple\", \"banana\", \"strawberry\"}\nprint(\"banana\" in fruits)",
           expectedOutput: "True",
           hint: "Use the in operator!",
@@ -238,7 +251,7 @@ s.discard(99)   # ✅ silently skips
         {
           id: "try-update",
           type: "tryit",
-          title: "🖥️ Try It — update with many",
+          title: "🖥️ update — Merge a list of new students",
           task: "Merge a list of new students into the existing set with update!",
           initialCode: "current = {\"Alice\", \"Bob\", \"Charlie\"}\nnew_students = [\"Dora\", \"Eve\", \"Bob\"]   # Bob already there\n\n# Merge with update\ncurrent.___(new_students)\nprint(f\"total: {len(current)}\")",
           expectedOutput: "total: 5",
@@ -273,8 +286,8 @@ print(grades)  # {'A', 'B', 'C'} — grades that appeared
         {
           id: "try-comprehension",
           type: "tryit",
-          title: "🖥️ Try It — Set comprehension",
-          task: "From a word list, build a set of words with **3+ characters**!",
+          title: "🖥️ set comprehension — words of length 3+",
+          task: "From a word list, build a set of **3+ character** words with a set comp!",
           initialCode: "words = [\"cat\", \"banana\", \"on\", \"pineapple\", \"a\", \"orange\"]\n\n# Set comp filtering by len >= 3\nlong_words = ___\n\nprint(sorted(long_words))  # sorted for reproducibility",
           expectedOutput: "['banana', 'orange', 'pineapple']",
           hint: "{w for w in words if len(w) >= 3}",
@@ -290,26 +303,33 @@ print(grades)  # {'A', 'B', 'C'} — grades that appeared
         {
           id: "set-ops",
           type: "explain",
-          title: "🧮 Mathematical Set Operations!",
-          content: `\`\`\`python
+          title: "🧮 Union / Intersection / Difference — compare groups",
+          content: `Three tools to compare two groups. The math-class classics!
+
+\`\`\`python
 A = {1, 2, 3, 4}
 B = {3, 4, 5, 6}
 
-# Union (A or B)
+# Union (A or B) — combine both
 print(A | B)  # {1, 2, 3, 4, 5, 6}
 
-# Intersection (A and B)
+# Intersection (A and B) — common
 print(A & B)  # {3, 4}
 
 # Difference (only in A)
 print(A - B)  # {1, 2}
-\`\`\``
+\`\`\`
+
+🎒 Picture:
+- \`|\` = put both classes together for **field day**
+- \`&\` = the **common friends** between two classes
+- \`-\` = students only in class A (not in B)`
         },
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ Find the Intersection!",
-          task: "Find the number of common elements between two sets!",
+          title: "🖥️ Intersection (&) — count common items",
+          task: "Use & to count how many elements two sets share!",
           initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\ncommon = A & B\nprint(f\"Number of common elements: {len(common)}\")",
           expectedOutput: "Number of common elements: 2",
           hint: "Use the & operator for intersection!",
@@ -318,8 +338,8 @@ print(A - B)  # {1, 2}
         {
           id: "try5",
           type: "tryit",
-          title: "🖥️ Find the Difference!",
-          task: "Find the number of elements only in A!",
+          title: "🖥️ Difference (-) — elements only in A",
+          task: "Use - to count elements in A but not in B!",
           initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\nonly_A = A - B\nprint(f\"Elements only in A: {len(only_A)}\")",
           expectedOutput: "Elements only in A: 3",
           hint: "Use the - operator for difference!",
@@ -328,8 +348,8 @@ print(A - B)  # {1, 2}
         {
           id: "mission-ops",
           type: "mission",
-          title: "🎯 Mission: Master Set Operations!",
-          task: "Fill in the 3 blanks to complete the set operations!",
+          title: "🎯 Compare two fruit stores — fill in &, -, |",
+          task: "Fill in 3 blanks to compare fruit stores!",
           initialCode: "fruits_a = {'apple', 'banana', 'grape', 'strawberry'}\nfruits_b = {'banana', 'strawberry', 'mango', 'kiwi'}\n\n# Fruits sold by both stores (intersection)\nboth = fruits_a ___ fruits_b\nprint(f'Both: {both}')\n\n# Fruits sold only by store A (difference)\nonly_a = fruits_a ___ fruits_b\nprint(f'Only A: {only_a}')\n\n# All fruits (union)\nall_fruits = fruits_a ___ fruits_b\nprint(f'Total: {len(all_fruits)} kinds')",
           expectedOutput: "Both: {'banana', 'strawberry'}\nOnly A: {'apple', 'grape'}\nTotal: 6 kinds",
           hint: "Intersection &, Difference -, Union |",

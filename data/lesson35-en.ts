@@ -22,16 +22,18 @@ export const lesson35EnData: LessonData = {
         {
           id: "ch1-1",
           type: "explain",
-          title: "Essential Built-in Functions!",
-          content: `## ⭐ Master These 5!
+          title: "💭 Python has functions ready for you to use!",
+          content: `💭 You don't have to write every function yourself! Python comes with **commonly-used functions** built in — called **built-in functions**.
 
-1. \`len()\` - Length
-2. \`sum()\` - Sum total
-3. \`max()\`, \`min()\` - Maximum/Minimum
-4. \`sorted()\` - Sort
-5. \`map()\` - Transform
+Let's master the **5 most useful** ones:
 
-Know these 5 well and you're set!`
+1. \`len()\` — **length** 📏
+2. \`sum()\` — **total** ➕
+3. \`max()\`, \`min()\` — **max/min** 🔝
+4. \`sorted()\` — **sort** 📊
+5. \`map()\` — **transform** 🔄
+
+@key: Built-in functions = functions **Python made for you**! Just call \`len()\`, \`sum()\` etc — no def needed.`
         },
         {
           id: "ch1-2",
@@ -189,19 +191,21 @@ print(sorted([3, 1, 4, 1, 5], reverse=True))
         {
           id: "ch3-3",
           type: "explain",
-          title: "⭐ Sort with key",
-          content: `## Common Exam Pattern!
+          title: "💭 Sort by length instead of alphabet?",
+          content: `💭 Plain \`sorted()\` on words = **alphabetical**. How do I sort by **length** instead?
 
 \`\`\`python
 words = ['apple', 'pie', 'banana']
 
-# Sort by length
+# Sort by length!
 print(sorted(words, key=len))
 # ['pie', 'apple', 'banana']
 \`\`\`
 
 Each word's length: apple=5, pie=3, banana=6
-Sorted by length: 3, 5, 6 → pie, apple, banana`
+Sorted by length: 3, 5, 6 → pie, apple, banana
+
+@key: \`key=function\` lets you pick the **sort criteria**! \`key=len\` = by length.`
         },
         {
           id: "ch3-4",
@@ -243,12 +247,12 @@ print(result[0][0])`,
         {
           id: "ch4-1",
           type: "explain",
-          title: "What is map()?",
-          content: `## 🔄 Apply function to all elements!
+          title: "💭 Can I transform every list item at once?",
+          content: `💭 To change \`['1', '2', '3']\` into a list of integers, do you have to convert each one yourself? Too tedious!
 
 \`\`\`
 ['1', '2', '3']  ── map(int, ...) ──→  [1, 2, 3]
-   strings              transform!      integers
+   strings           transform all!     integers
 \`\`\`
 
 **Basic usage:**
@@ -259,8 +263,9 @@ numbers = list(map(int, strings))
 print(numbers)  # [1, 2, 3]
 \`\`\`
 
-🚨 **Note!** \`map()\` returns a map object!
-Wrap with \`list()\` to get a list.`
+🚨 **Note!** \`map()\` returns a map object. **Wrap with \`list()\`** to make it a list.
+
+@key: \`map(function, list)\` = apply the function to **every** item! Don't forget \`list()\` wrap.`
         },
         {
           id: "ch4-2",
@@ -295,18 +300,25 @@ print(sum(result))
         {
           id: "ch4-4",
           type: "explain",
-          title: "⭐⭐ map() for Input (Essential!)",
-          content: `## Reading Multiple Numbers
+          title: "💭 How do I read multiple numbers on one line?",
+          content: `💭 If a user types \`10 20 30\` on **one line**, how do you read them all as integers?
 
 \`\`\`python
-# Read multiple numbers on one line
+# Multiple numbers on one line (into variables)
 a, b, c = map(int, input().split())
 
-# Read as list
+# Or as a list
 numbers = list(map(int, input().split()))
 \`\`\`
 
-💡 This pattern appears on almost every exam!`
+**Step-by-step:**
+1. \`input()\` = "10 20 30" (string)
+2. \`.split()\` = ['10', '20', '30'] (list of strings)
+3. \`map(int, ...)\` = converts each to int
+
+💡 This pattern appears on **almost every exam!**
+
+@key: \`map(int, input().split())\` — the magic one-liner for multiple-number input!`
         },
         {
           id: "ch4-5",

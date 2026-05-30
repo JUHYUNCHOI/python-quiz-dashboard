@@ -50,6 +50,8 @@ except:
 - Prints \`Please enter a number!\`
 - The program doesn't crash!
 
+🛟 **Think of it like a safety net!** Acrobats can fall, but the net catches them so they don't get hurt. try-except is the same -- if your code falls into an error, except catches it!
+
 @Key point: Wrap it in **try-except** and the program won't stop even when errors happen!`
         },
         {

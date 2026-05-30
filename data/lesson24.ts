@@ -17,19 +17,18 @@ export const lesson24Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🚶‍♂️ 줄 서기를 생각해봐요!",
-          content: `은행에서 줄을 서면 어떻게 될까요?
+          title: "🚶‍♂️ 큐는 줄 서기!",
+          content: `편의점 계산대 앞 줄을 떠올려요:
 
 \`\`\`
 입구 → [1번] [2번] [3번] → 출구
-       먼저온    나중온
-       사람      사람
+       먼저 옴          나중 옴
 \`\`\`
 
-**먼저 온 1번이 먼저 처리돼요!**
+**제일 먼저 줄 선 1번 부터 처리.** 새치기 없음!
 
-이게 바로 **큐(Queue)**!
-- **FIFO**: First In, First Out
+이게 **큐(Queue)**!
+- **FIFO** = First In, First Out
 - 먼저 넣은 게 먼저 나옴`
         },
         {
@@ -170,43 +169,38 @@ queue.popleft()     # dequeue - O(1) 빠름!
         {
           id: "class-queue",
           type: "explain",
-          title: "🏗️ Queue 클래스",
-          content: `클래스로 깔끔하게 만들기:
+          title: "🖨️ 프린터 대기열 시뮬",
+          content: `프린터 대기열 = 전형적인 큐!
+파일을 인쇄 요청한 **순서대로** 출력돼요.
 
 \`\`\`python
 from collections import deque
 
-class Queue:
-    def __init__(self):
-        self.items = deque()
-    
-    def enqueue(self, item):
-        self.items.append(item)
-    
-    def dequeue(self):
-        if not self.is_empty():
-            return self.items.popleft()
-    
-    def front(self):
-        if not self.is_empty():
-            return self.items[0]
-    
-    def is_empty(self):
-        return len(self.items) == 0
-    
-    def size(self):
-        return len(self.items)
-\`\`\``
+printer = deque()
+
+# 인쇄 요청 (큐 뒤에 enqueue)
+printer.append("문서1.pdf")
+printer.append("사진.jpg")
+printer.append("보고서.docx")
+
+print("대기:", len(printer), "개")
+
+# 빌 때까지 한 장씩 출력 (앞에서 dequeue)
+while printer:
+    print("인쇄 중:", printer.popleft())
+\`\`\`
+
+**문서1.pdf 가 가장 먼저 들어왔으니 가장 먼저 인쇄돼요.**`
         },
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Queue 클래스 사용!",
-          task: "Queue 클래스를 테스트해보세요!",
-          initialCode: "from collections import deque\n\nclass Queue:\n    def __init__(self):\n        self.items = deque()\n    def enqueue(self, item):\n        self.items.append(item)\n    def dequeue(self):\n        return self.items.popleft() if self.items else None\n    def front(self):\n        return self.items[0] if self.items else None\n    def is_empty(self):\n        return len(self.items) == 0\n\n# 프린터 대기열 시뮬레이션\nprinter = Queue()\nprinter.enqueue(\"문서1.pdf\")\nprinter.enqueue(\"사진.jpg\")\nprinter.enqueue(\"보고서.docx\")\n\nprint(\"대기 중인 작업:\", printer.size(), \"개\")\nwhile not printer.is_empty():\n    print(\"인쇄 중:\", printer.dequeue())",
+          title: "🖥️ 직접 — 프린터 대기열 처리",
+          task: "deque 로 인쇄 대기열을 만들고, 빌 때까지 한 장씩 출력하세요!",
+          initialCode: "from collections import deque\n\nprinter = deque()\n\n# 3 개 인쇄 요청 (큐 뒤에 추가)\nprinter.___(\"문서1.pdf\")\nprinter.___(\"사진.jpg\")\nprinter.___(\"보고서.docx\")\n\nprint(\"대기 중인 작업:\", len(printer), \"개\")\n\n# 빌 때까지 한 장씩 인쇄 (앞에서 빼기)\nwhile printer:\n    print(\"인쇄 중:\", printer.___())",
           expectedOutput: "대기 중인 작업: 3 개\n인쇄 중: 문서1.pdf\n인쇄 중: 사진.jpg\n인쇄 중: 보고서.docx",
-          hint: "먼저 추가한 문서1.pdf가 먼저 인쇄됨!",
-          hint2: "is_empty()로 큐가 빌 때까지 반복"
+          hint: "큐 뒤에 추가 = .append, 큐 앞에서 빼기 = .popleft",
+          hint2: "append / append / append / popleft"
         }
       ]
     },
@@ -237,12 +231,12 @@ N=7, K=3일 때:
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ 요세푸스 문제 풀기!",
-          task: "요세푸스 문제를 큐로 해결하세요!",
-          initialCode: "from collections import deque\n\ndef josephus(n, k):\n    queue = deque(range(1, n + 1))\n    result = []\n    \n    while queue:\n        # k-1명을 뒤로 보냄\n        for _ in range(k - 1):\n            queue.append(queue.popleft())\n        # k번째 사람 제거\n        result.append(queue.popleft())\n    \n    return result\n\nprint(\"제거 순서:\", josephus(7, 3))",
+          title: "🖥️ 직접 — N=7, K=3 요세푸스 풀기",
+          task: "7 명이 원으로 앉아 매 3 번째 사람을 제거하는 순서를 큐로 시뮬레이션하세요!",
+          initialCode: "from collections import deque\n\nn, k = 7, 3\nqueue = deque(range(1, n + 1))\nresult = []\n\nwhile queue:\n    # k-1 명을 뒤로 돌려보냄 (popleft → append)\n    for _ in range(k - 1):\n        queue.___(queue.___())\n    # k 번째 사람 제거\n    result.append(queue.___())\n\nprint(\"제거 순서:\", result)",
           expectedOutput: "제거 순서: [3, 6, 2, 7, 5, 1, 4]",
-          hint: "k-1명을 뒤로 보내고, k번째를 제거!",
-          hint2: "원형 구조를 큐로 시뮬레이션"
+          hint: "앞에서 빼서 뒤로 보내기 = popleft 한 값을 append. 마지막은 popleft 로 제거.",
+          hint2: "append / popleft / popleft"
         },
         {
           id: "problem2-explain",
@@ -261,12 +255,12 @@ N=7, K=3일 때:
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ 카드 섞기!",
-          task: "마지막에 남는 카드를 찾으세요!",
-          initialCode: "from collections import deque\n\ndef last_card(n):\n    cards = deque(range(1, n + 1))\n    \n    while len(cards) > 1:\n        # 맨 위 카드 버리기\n        discarded = cards.popleft()\n        print(f\"버림: {discarded}\")\n        # 그 다음 카드를 맨 아래로\n        cards.append(cards.popleft())\n    \n    return cards[0]\n\nprint(f\"마지막 카드: {last_card(6)}\")",
+          title: "🖥️ 직접 — 카드 6 장으로 마지막 남는 카드 찾기",
+          task: "카드 [1, 2, 3, 4, 5, 6] 으로 시작! 맨 위 1 장 버리고, 다음 1 장은 맨 아래로 보내요. 마지막에 남는 카드는?",
+          initialCode: "from collections import deque\n\ncards = deque(range(1, 7))   # [1, 2, 3, 4, 5, 6]\n\nwhile len(cards) > 1:\n    # 맨 위 카드 버리기 (앞에서 빼기)\n    discarded = cards.___()\n    print(\"버림:\", discarded)\n    # 다음 카드는 맨 아래로 (앞에서 빼서 뒤에 추가)\n    cards.___(cards.___())\n\nprint(\"마지막 카드:\", cards[0])",
           expectedOutput: "버림: 1\n버림: 3\n버림: 5\n버림: 2\n버림: 6\n마지막 카드: 4",
-          hint: "popleft()로 버리고, popleft() + append()로 아래로!",
-          hint2: "len(cards) > 1일 동안 반복"
+          hint: "버리기 = popleft. 아래로 보내기 = popleft 한 값을 append.",
+          hint2: "popleft / append / popleft"
         }
       ]
     },
@@ -278,12 +272,12 @@ N=7, K=3일 때:
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 최종 미션: 콜센터 시뮬레이션!",
-          task: "콜센터 대기열을 시뮬레이션하세요!",
-          initialCode: "from collections import deque\n\nclass CallCenter:\n    def __init__(self):\n        self.queue = ___()\n        self.call_id = 0\n    \n    def receive_call(self, caller):\n        self.call_id += 1\n        self.queue.___(( self.call_id, caller))\n        print(f\"📞 {caller}님 전화 접수 (대기번호: {self.call_id})\")\n    \n    def handle_call(self):\n        if self.queue:\n            call_id, caller = self.queue.___()\n            print(f\"✅ {caller}님 상담 시작 (대기번호: {call_id})\")\n        else:\n            print(\"대기 중인 전화가 없습니다\")\n    \n    def waiting_count(self):\n        return len(self.queue)\n\n# 시뮬레이션\ncall_center = CallCenter()\ncall_center.receive_call(\"김철수\")\ncall_center.receive_call(\"이영희\")\ncall_center.receive_call(\"박민수\")\nprint(f\"\\n대기 인원: {call_center.waiting_count()}명\\n\")\ncall_center.handle_call()\ncall_center.handle_call()\nprint(f\"\\n대기 인원: {call_center.waiting_count()}명\")",
+          title: "🏆 최종 미션: 콜센터 대기열 시뮬",
+          task: "전화 3 건이 들어오고 2 건 상담 처리되는 콜센터를 deque 로 시뮬레이션하세요!",
+          initialCode: "from collections import deque\n\nqueue = ___()       # 대기열 큐\ncall_id = 0\n\n# 김철수 전화 접수\ncall_id += 1\nqueue.___((call_id, \"김철수\"))\nprint(f\"📞 김철수님 전화 접수 (대기번호: {call_id})\")\n\n# 이영희 전화 접수\ncall_id += 1\nqueue.___((call_id, \"이영희\"))\nprint(f\"📞 이영희님 전화 접수 (대기번호: {call_id})\")\n\n# 박민수 전화 접수\ncall_id += 1\nqueue.___((call_id, \"박민수\"))\nprint(f\"📞 박민수님 전화 접수 (대기번호: {call_id})\")\n\nprint(f\"\\n대기 인원: {len(queue)}명\\n\")\n\n# 첫 두 명 상담 시작 (앞에서 빼기)\nfor _ in range(2):\n    cid, caller = queue.___()\n    print(f\"✅ {caller}님 상담 시작 (대기번호: {cid})\")\n\nprint(f\"\\n대기 인원: {len(queue)}명\")",
           expectedOutput: "📞 김철수님 전화 접수 (대기번호: 1)\n📞 이영희님 전화 접수 (대기번호: 2)\n📞 박민수님 전화 접수 (대기번호: 3)\n\n대기 인원: 3명\n\n✅ 김철수님 상담 시작 (대기번호: 1)\n✅ 이영희님 상담 시작 (대기번호: 2)\n\n대기 인원: 1명",
-          hint: "큐는 deque()로 만들고, 뒤에 넣고 앞에서 빼요!",
-          hint2: "deque, append, popleft를 넣으세요!"
+          hint: "큐 = deque(). 전화 접수 = .append, 상담 시작 = .popleft (먼저 온 사람부터)",
+          hint2: "deque / append / append / append / popleft"
         },
         {
           id: "complete",

@@ -22,15 +22,23 @@ export const lesson33EnData: LessonData = {
         {
           id: "ch1-1",
           type: "explain",
-          title: "What We'll Make!",
-          content: `## 🧮 Let's make Calculator Functions!
+          title: "💭 Can we make functions even smarter?",
+          content: `💭 Last time you made add/subtract functions. But each call needs all the values, and you only get one result back. **Any way to make functions smarter?**
 
 \`\`\`
 === Calculator ===
 3 + 5 = 8
 10 - 4 = 6
 6 * 7 = 42
-\`\`\``
+20 / 4 = 5.0
+\`\`\`
+
+Today we'll upgrade functions with:
+- **Default values** — skip common arguments
+- **Multiple returns** — get more than one result
+- **Keyword arguments** — clear name tags
+
+@key: Add **defaults, multiple returns, keyword args** to make functions more convenient!`
         },
         {
           id: "ch1-2",
@@ -84,14 +92,10 @@ print(subtract(20, 8))`,
         {
           id: "ch2-1",
           type: "explain",
-          title: "What are Default Values?",
-          content: `## 🤔 Think About It
+          title: "💭 Tired of typing the same value every time?",
+          content: `💭 You greet 5 friends and each time pass \`'Hello'\` as the message. Can we make Python **automatically use** 'Hello' when no message is given?
 
-You made a greeting function.
-Usually you say "Hello", but sometimes you want "Hi".
-Typing "Hello" every time is annoying...
-
-**Default Value = Value that's automatically used!**
+**Default Value = automatic value when none is given!**
 
 \`\`\`python
 def greet(name, message='Hello'):  # ← Default value
@@ -99,7 +103,9 @@ def greet(name, message='Hello'):  # ← Default value
 
 greet('Tom')             # "Hello, Tom!" (uses default)
 greet('Jane', 'Hi')      # "Hi, Jane!" (custom value)
-\`\`\``
+\`\`\`
+
+@key: Write \`=value\` after a parameter to set a **default**. If the caller doesn't pass it, the default is used.`
         },
         {
           id: "ch2-2",
@@ -195,21 +201,23 @@ print(discount(10000, 20))   # 20% off = 8000`,
         {
           id: "ch3-1",
           type: "explain",
-          title: "Returning Multiple Values",
-          content: `## 📤 Functions can return multiple values at once!
+          title: "💭 What if I need 2 results at once?",
+          content: `💭 17 ÷ 5 — you want **both** the quotient and remainder. But a function only returns one value... or does it?
 
 \`\`\`python
 def divide(num, divisor):
     quotient = num // divisor
     remainder = num % divisor
-    return quotient, remainder    # Returns 2 values!
+    return quotient, remainder    # 👈 Comma = 2 values!
 
 q, r = divide(17, 5)  # Receive each!
 \`\`\`
 
-**Think of it as:**
-- Receive as one → becomes **tuple**
-- Receive separately → stored in each variable!`
+**Two ways to receive:**
+- Receive as one → becomes **tuple** \`(3, 2)\`
+- Receive separately → stored in each variable!
+
+@key: Use **commas** in \`return\` to send multiple values. Receive with matching commas: \`a, b = func()\`.`
         },
         {
           id: "ch3-2",
@@ -292,23 +300,23 @@ print(f'Sum: {total}, Average: {avg}')`,
         {
           id: "ch4-1",
           type: "explain",
-          title: "What are Keyword Arguments?",
-          content: `## 🏷️ Pass by name, order doesn't matter!
+          title: "💭 5 parameters... which value goes where?",
+          content: `💭 With many parameters, passing values by position is confusing — which number is age? Which is grade? Is there a way to use **name tags** to be clear?
 
 \`\`\`python
 def introduce(name, age, school):
     print(f'{name}, {age} years old, {school}')
 
-# By position (positional arguments)
+# By position
 introduce('Tom', 15, 'Python High')
 
-# By name (keyword arguments) - order doesn't matter!
+# By name (keyword arguments) — order doesn't matter!
 introduce(school='Python High', name='Tom', age=15)
 \`\`\`
 
-Both give same result: \`Tom, 15 years old, Python High\`
+Both give: \`Tom, 15 years old, Python High\`
 
-**Benefit:** Clear which value is which parameter!`
+@key: Write \`name=value\` (keyword arguments) and **order doesn't matter** — Python uses the name tag to match.`
         },
         {
           id: "ch4-2",

@@ -17,26 +17,28 @@ export const lesson19Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "📦 튜플 = 수정 불가 리스트",
-          content: `**튜플(Tuple)** = 한 번 만들면 수정할 수 없는 리스트
+          title: "📦 튜플 (tuple = 묶음) — 안 바뀌는 모임",
+          content: `**튜플 (tuple = 묶음)** = 한 번 만들면 **안 바뀌는** 리스트.
+
+🎒 비유: 생일 정보 \`(2014, 3, 15)\`. 태어난 날짜는 평생 안 바뀌죠? 그런 "고정된 묶음"이 튜플.
 
 \`\`\`python
-# 리스트 - 수정 가능
+# 리스트 — 바꿀 수 있음
 fruits = ["사과", "바나나"]
 fruits[0] = "포도"  # OK!
 
-# 튜플 - 수정 불가
+# 튜플 — 못 바꿈
 colors = ("빨강", "파랑")
 colors[0] = "녹색"  # ❌ 에러!
 \`\`\`
 
-**소괄호 ( )** 또는 그냥 쉼표로 만들어요!
+**소괄호 \`( )\`** 또는 그냥 쉼표로 만들어요.
 
-### 왜 굳이 수정 못 하게?
+### 왜 굳이 못 바꾸게 해요?
 
-생각해봐요 — 좌표 \`(x, y)\`, RGB \`(255, 128, 0)\`, 학생 \`(이름, 점수)\` 같은 건 **하나의 묶음** 이에요. 한 부분만 바꾸면 의미가 깨져요. ("점수만 따로 바꾼 학생" 이라는 게 뭐죠?)
+좌표 \`(x, y)\`, RGB \`(255, 128, 0)\`, 학생 \`(이름, 점수)\` — 이런 건 **한 묶음** 이에요. 한 부분만 바꾸면 의미가 깨져요. ("점수만 따로 바꾼 학생" 이라는 게 뭐죠?)
 
-→ "이건 수정하면 안 되는 묶음" 이라고 명시하는 도구 = 튜플.`
+→ "이건 바꾸면 안 되는 묶음" 이라고 표시하는 도구 = 튜플.`
         },
         {
           id: "creation-ways",
@@ -94,7 +96,7 @@ print((1))       # 1 — 튜플 아님!
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 좌표 튜플",
+          title: "🖥️ 좌표 튜플 — point 만들고 x, y 꺼내기",
           task: "좌표를 튜플로 만들고 인덱스로 꺼내보세요!",
           initialCode: "point = (100, 200)\nprint(point)\nprint(f\"x: {point[0]}, y: {point[1]}\")",
           expectedOutput: "(100, 200)\nx: 100, y: 200",
@@ -104,7 +106,7 @@ print((1))       # 1 — 튜플 아님!
         {
           id: "try-creation",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 다양한 만들기",
+          title: "🖥️ 다양한 만들기 — tuple() / (x,) / 쉼표만",
           task: "tuple() 로 문자열을 튜플로 변환하고, 단일 요소 튜플도 만들어보세요!",
           initialCode: "# 1) 문자열 → 튜플\nt1 = tuple(\"hello\")\nprint(t1)\n\n# 2) 단일 요소 튜플 (쉼표 잊지 말기!)\nsingle = (42,)\nprint(single, type(single).__name__)\n\n# 3) 괄호 없이 쉼표만\nt2 = 10, 20, 30\nprint(t2)",
           expectedOutput: "('h', 'e', 'l', 'l', 'o')\n(42,) tuple\n(10, 20, 30)",
@@ -114,7 +116,7 @@ print((1))       # 1 — 튜플 아님!
         {
           id: "try1b",
           type: "tryit",
-          title: "🖥️ 리스트 vs 튜플!",
+          title: "🖥️ 리스트 vs 튜플 — 직접 비교",
           task: "리스트와 튜플의 차이를 직접 확인해보세요!",
           initialCode: "# 리스트 - 수정 가능!\nfruits = ['사과', '바나나', '포도']\nfruits[0] = '딸기'\nfruits.append('망고')\nprint(f'리스트: {fruits}')\n\n# 튜플 - 수정 불가! (하지만 안전!)\ncolors = ('빨강', '파랑', '초록')\nprint(f'튜플: {colors}')\nprint(f'길이: {len(colors)}')\nprint(f'포함? {\"파랑\" in colors}')\n\n# 여러 타입도 OK!\nmixed = ('철수', 15, True, 3.14)\nfor item in mixed:\n    print(f'  {item} ({type(item).__name__})')",
           expectedOutput: "리스트: ['딸기', '바나나', '포도', '망고']\n튜플: ('빨강', '파랑', '초록')\n길이: 3\n포함? True\n  철수 (str)\n  15 (int)\n  True (bool)\n  3.14 (float)",
@@ -171,8 +173,8 @@ else:
         {
           id: "try-methods",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — count / index",
-          task: "주어진 점수 튜플에서 90점이 몇 번 나오는지, 처음 80점이 어느 위치인지 출력하세요!",
+          title: "🖥️ count / index — 90 점 몇 번? 80 점 위치?",
+          task: "점수 튜플에서 90점이 몇 번 나오는지, 처음 80점이 어느 위치인지 출력하세요!",
           initialCode: "scores = (75, 80, 90, 85, 90, 80, 95, 90, 70)\n\n# 1) 90 점이 몇 번 나오는지 → 'count: ___' 출력\n\n\n# 2) 처음 80 점이 나오는 위치 → 'index: ___' 출력\n",
           expectedOutput: "count: 3\nindex: 1",
           hint: "scores.count(90) 와 scores.index(80) 를 print 안에 f-string 으로!",
@@ -197,21 +199,25 @@ else:
         {
           id: "unpack-explain",
           type: "explain",
-          title: "📤 언패킹 (Unpacking)",
-          content: `튜플의 값을 한 번에 여러 변수에 할당!
+          title: "📤 언패킹 (unpacking = 풀어서 받기)",
+          content: `**언패킹 = 묶음 풀기**. 튜플의 값을 **한 번에** 여러 변수에 나눠 담아요.
+
+🎒 비유: 도시락 통(튜플)을 열어서 밥, 반찬, 김치를 각각 그릇에 옮기는 느낌.
 
 \`\`\`python
 point = (10, 20)
 x, y = point  # 언패킹!
 print(x)  # 10
 print(y)  # 20
-\`\`\``
+\`\`\`
+
+좌변 변수 개수 = 우변 튜플 요소 개수. 안 맞으면 에러.`
         },
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ 언패킹 해보기!",
-          task: "RGB 값을 언패킹하세요!",
+          title: "🖥️ 언패킹 해보기 — RGB 풀어 받기",
+          task: "RGB 튜플을 r, g, b 세 변수에 언패킹하세요!",
           initialCode: "rgb = (255, 128, 0)\nr, g, b = rgb\nprint(f\"R: {r}, G: {g}, B: {b}\")",
           expectedOutput: "R: 255, G: 128, B: 0",
           hint: "변수 개수와 요소 개수가 같아야 해요",
@@ -220,8 +226,10 @@ print(y)  # 20
         {
           id: "swap-explain",
           type: "explain",
-          title: "🔄 값 교환 (Swap)",
-          content: `튜플로 값 교환이 쉬워요!
+          title: "🔄 값 바꿔치기 (swap) — 한 줄로 교환",
+          content: `튜플 덕분에 두 변수 값 **바꿔치기** 가 한 줄에 돼요!
+
+🎒 비유: 두 손에 든 물건을 동시에 휙 — 임시로 어디 둘 필요 없음.
 
 \`\`\`python
 a = 10
@@ -229,13 +237,15 @@ b = 20
 a, b = b, a  # 한 줄로 교환!
 print(a)  # 20
 print(b)  # 10
-\`\`\``
+\`\`\`
+
+> 💡 우변에서 \`(b, a)\` 튜플을 먼저 만들어 두고, 좌변에서 풀어 담아요. 그래서 안 꼬임.`
         },
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ 값 교환!",
-          task: "x와 y의 값을 교환하세요!",
+          title: "🖥️ 값 바꿔치기 — x ↔ y",
+          task: "x와 y의 값을 한 줄로 바꿔치세요!",
           initialCode: "x = 100\ny = 200\nprint(f\"교환 전: x={x}, y={y}\")\nx, y = y, x\nprint(f\"교환 후: x={x}, y={y}\")",
           expectedOutput: "교환 전: x=100, y=200\n교환 후: x=200, y=100",
           hint: "임시 변수 없이 교환!",
@@ -274,8 +284,8 @@ print(last)    # 5
         {
           id: "try-star",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 별표 언패킹",
-          task: "점수 5 개에서 1등 점수 + 나머지 + 꼴등 점수 분리하기. 'top: ___, mid: ___, bot: ___' 형식 출력!",
+          title: "🖥️ 별표 언패킹 — top/mid/bot 분리",
+          task: "점수 5 개에서 1 등 점수 + 가운데 + 꼴등 점수 분리하기. 'top: ___, mid: ___, bot: ___' 형식 출력!",
           initialCode: "scores = (98, 85, 76, 90, 62)\n\n# top, *mid, bot 형태로 언패킹\n\n\n# 'top: 98, mid: [85, 76, 90], bot: 62' 형식 출력\n",
           expectedOutput: "top: 98, mid: [85, 76, 90], bot: 62",
           hint: "top, *mid, bot = scores 한 줄!",
@@ -321,7 +331,7 @@ for i, fruit in enumerate(fruits):
         {
           id: "try-iter-unpack",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — for 안 언패킹",
+          title: "🖥️ for 안 언패킹 — 도시 이름/인구 출력",
           task: "도시 데이터 (이름, 인구) 를 for 루프에서 언패킹하면서 출력하세요!",
           initialCode: "cities = [\n    (\"서울\", 950),\n    (\"부산\", 340),\n    (\"인천\", 295),\n]\n\n# for 안에서 (이름, 인구) 풀어쓰기\nfor ___, ___ in cities:\n    print(f\"{name}: {pop}만 명\")",
           expectedOutput: "서울: 950만 명\n부산: 340만 명\n인천: 295만 명",
@@ -373,7 +383,7 @@ s1 = ("철수", 85)
         {
           id: "try-two-values",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 두 값 묶기",
+          title: "🖥️ 두 값 묶기 — 원의 둘레+넓이",
           task: "원의 반지름이 5 일 때, 둘레와 넓이를 튜플로 묶어 출력하세요. (π = 3.14)",
           initialCode: "r = 5\n# 둘레 = 2 * π * r\n# 넓이 = π * r * r\n# 둘을 튜플로 묶기\ncircle = (___, ___)\n\nperi, area = circle\nprint(f\"둘레: {peri}, 넓이: {area}\")",
           expectedOutput: "둘레: 31.400000000000002, 넓이: 78.5",
@@ -428,7 +438,7 @@ print(board[(0, 0)])  # "X"
         {
           id: "try-coord",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 좌표 거리",
+          title: "🖥️ 좌표 거리 — 두 점 사이 맨해튼 거리",
           task: "두 점 사이의 맨해튼 거리 (|x1-x2| + |y1-y2|) 를 계산하세요!",
           initialCode: "p1 = (1, 2)\np2 = (4, 6)\n\n# 언패킹 후 거리 계산\nx1, y1 = p1\nx2, y2 = p2\n\ndist = ___\nprint(f\"거리: {dist}\")",
           expectedOutput: "거리: 7",
@@ -477,8 +487,8 @@ for name, age in zip(names, ages):
         {
           id: "try-enumerate",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — enumerate 언패킹",
-          task: "메뉴 리스트의 각 항목에 1 부터 번호를 붙여 출력하세요. (enumerate 의 시작 인자 활용 가능)",
+          title: "🖥️ enumerate 언패킹 — 메뉴에 1 번부터 번호",
+          task: "메뉴 리스트의 각 항목에 1 부터 번호를 붙여 출력하세요. (enumerate 의 start 인자 활용)",
           initialCode: "menu = [\"라떼\", \"아메리카노\", \"카푸치노\"]\n\nfor i, name in enumerate(menu, start=1):\n    print(f\"{i}. {name}\")",
           expectedOutput: "1. 라떼\n2. 아메리카노\n3. 카푸치노",
           hint: "그대로 실행하세요 — enumerate(menu, start=1) 이면 인덱스가 1 부터 시작.",
@@ -487,8 +497,8 @@ for name, age in zip(names, ages):
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 최종 미션!",
-          task: "학생 정보를 튜플로 관리하세요!",
+          title: "🏆 학생 정보 출력 — for 안에서 언패킹",
+          task: "학생 명단 (이름, 점수) 을 for 안에서 언패킹해 출력하세요!",
           initialCode: "students = [\n    (\"철수\", 85),\n    (\"영희\", 92),\n    (\"민수\", 78)\n]\n\nfor ___, ___ in students:\n    print(f\"{name}: {score}점\")",
           expectedOutput: "철수: 85점\n영희: 92점\n민수: 78점",
           hint: "for문에서 바로 언패킹!",
@@ -497,8 +507,8 @@ for name, age in zip(names, ages):
         {
           id: "mission2",
           type: "mission",
-          title: "🏆 미션 2 — 학생 명단에서 평균과 최고 점수",
-          task: "(이름, 점수) 튜플로 된 학생 4 명에서 **평균 점수** 와 **1 등 이름** 을 찾아 출력하세요. for-언패킹만 사용하세요.",
+          title: "🏆 미션 — 평균 점수 + 1 등 이름 찾기",
+          task: "(이름, 점수) 튜플 학생 4 명에서 **평균 점수** 와 **1 등 이름** 을 찾아 출력하세요. for-언패킹만 사용.",
           initialCode: "students = [\n    (\"철수\", 75),\n    (\"영희\", 92),\n    (\"민수\", 80),\n    (\"수지\", 88),\n]\n\n# 1) 평균 점수 — 점수들의 합 / 사람 수\ntotal = 0\nfor name, score in students:\n    total += ___\navg = total / len(students)\n\n# 2) 1 등 이름 — 가장 높은 점수의 학생 이름\ntop_name = \"\"\ntop_score = -1\nfor name, score in students:\n    if score > ___:\n        top_score = score\n        top_name = name\n\nprint(f\"평균: {avg}\")\nprint(f\"1 등: {top_name}\")",
           expectedOutput: "평균: 83.75\n1 등: 영희",
           hint: "평균: total += score. 1 등: if score > top_score 이면 갱신.",

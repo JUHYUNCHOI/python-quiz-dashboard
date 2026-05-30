@@ -17,8 +17,8 @@ export const lesson23EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "📚 Let's Stack Some Books!",
-          content: `What happens when you stack books?
+          title: "📚 A Stack Is Books Piled Up!",
+          content: `Stack books one on top of another:
 
 \`\`\`
     [Book3] ← Last book placed
@@ -27,11 +27,11 @@ export const lesson23EnData: LessonData = {
    ======
 \`\`\`
 
-**You have to remove Book3 (the last one placed) first!**
+**You take Book3 off first.** You can't pull Book1 from the bottom (the pile falls!).
 
-This is exactly what a **Stack** is!
-- **LIFO**: Last In, First Out
-- The last item added comes out first`
+This is a **Stack**!
+- **LIFO** = Last In, First Out
+- The last item in comes out first`
         },
         {
           id: "realworld",
@@ -145,41 +145,34 @@ print(stack[-1])  # 2 (not removed)
         {
           id: "class-stack",
           type: "explain",
-          title: "🏗️ Building a Stack with a Class",
-          content: `You can also make it cleaner using a class:
+          title: "🔎 peek — Look Without Removing",
+          content: `**peek** = look at the top, but don't take it off.
 
 \`\`\`python
-class Stack:
-    def __init__(self):
-        self.items = []
+stack = []
+stack.append("A")
+stack.append("B")
+stack.append("C")
 
-    def push(self, item):
-        self.items.append(item)
+# peek — use [-1] to see the top
+print(stack[-1])    # C (still on the stack)
+print(stack[-1])    # C (looking again — still there)
+print(stack)        # ['A', 'B', 'C']
+\`\`\`
 
-    def pop(self):
-        if not self.is_empty():
-            return self.items.pop()
-
-    def peek(self):
-        if not self.is_empty():
-            return self.items[-1]
-
-    def is_empty(self):
-        return len(self.items) == 0
-
-    def size(self):
-        return len(self.items)
-\`\`\``
+**Rules:**
+- Look only: \`stack[-1]\`
+- Take off: \`stack.pop()\``
         },
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Using the Stack Class!",
-          task: "Try using the Stack class!",
-          initialCode: "class Stack:\n    def __init__(self):\n        self.items = []\n    def push(self, item):\n        self.items.append(item)\n    def pop(self):\n        return self.items.pop() if self.items else None\n    def peek(self):\n        return self.items[-1] if self.items else None\n    def is_empty(self):\n        return len(self.items) == 0\n\n# Usage\ns = Stack()\ns.push(\"A\")\ns.push(\"B\")\ns.push(\"C\")\nprint(\"peek:\", s.peek())\nprint(\"pop:\", s.pop())\nprint(\"pop:\", s.pop())",
+          title: "🖥️ Try it — peek vs pop",
+          task: "Push A, B, C in order, then peek once and pop twice.",
+          initialCode: "stack = []\n\nstack.append(\"A\")\nstack.append(\"B\")\nstack.append(\"C\")\n\n# peek — look at the top (use index ___)\nprint(\"peek:\", stack[___])\n\n# pop twice\nprint(\"pop:\", stack.___())\nprint(\"pop:\", stack.___())",
           expectedOutput: "peek: C\npop: C\npop: B",
-          hint: "peek() only looks, pop() also removes!",
-          hint2: "C was added last, so it comes out first"
+          hint: "Peek with index -1, remove with .pop().",
+          hint2: "-1 / pop / pop"
         }
       ]
     },
@@ -208,12 +201,12 @@ class Stack:
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ Implement Parentheses Checker!",
-          task: "Check whether parentheses are valid!",
-          initialCode: "def check_parentheses(s):\n    stack = []\n    for char in s:\n        if char == '(':\n            stack.append(char)\n        elif char == ')':\n            if not stack:\n                return False\n            stack.pop()\n    return len(stack) == 0\n\n# Test\nprint(check_parentheses(\"(())\"))   # True\nprint(check_parentheses(\"(()\"))    # False\nprint(check_parentheses(\"())\"))    # False\nprint(check_parentheses(\"()()\"))   # True",
-          expectedOutput: "True\nFalse\nFalse\nTrue",
-          hint: "Push when you see '(', pop when you see ')'",
-          hint2: "If the stack is empty when you try to pop, return False"
+          title: "🖥️ Try it — check one string of parentheses",
+          task: "Use a stack to check if the parentheses in '(())' match up!",
+          initialCode: "s = \"(())\"\nstack = []\nok = True\n\nfor char in s:\n    if char == '(':\n        stack.___(char)        # open → push\n    elif char == ')':\n        if not stack:\n            ok = False\n            break\n        stack.___()             # close → pop\n\n# Valid if stack is empty at the end\nif ok and len(stack) == 0:\n    print(\"True\")\nelse:\n    print(\"False\")",
+          expectedOutput: "True",
+          hint: "Push on '(', pop on ')'. Stack must be empty at the end to be valid.",
+          hint2: "append / pop"
         },
         {
           id: "problem2-explain",
@@ -233,12 +226,12 @@ Reversing by leveraging the LIFO property!`
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ Reverse a String!",
-          task: "Reverse a string using a stack!",
-          initialCode: "def reverse_string(s):\n    stack = []\n    # Push all characters\n    for char in s:\n        stack.append(char)\n    \n    # Pop all to build result\n    result = \"\"\n    while stack:\n        result += stack.pop()\n    \n    return result\n\nprint(reverse_string(\"hello\"))\nprint(reverse_string(\"Python\"))\nprint(reverse_string(\"12345\"))",
-          expectedOutput: "olleh\nnohtyP\n54321",
-          hint: "Items pop in reverse order of how they were pushed!",
-          hint2: "Of course s[::-1] is simpler, but this is to understand the stack concept!"
+          title: "🖥️ Try it — reverse 'hello' with a stack",
+          task: "Push each letter of 'hello' onto a stack, then pop them all to build the reversed string!",
+          initialCode: "s = \"hello\"\nstack = []\n\n# Push every character\nfor char in s:\n    stack.___(char)\n\n# Pop all and append into result\nresult = \"\"\nwhile stack:\n    result += stack.___()\n\nprint(result)",
+          expectedOutput: "olleh",
+          hint: "Add with .append, remove with .pop. LIFO reverses the order for free!",
+          hint2: "append / pop"
         }
       ]
     },
@@ -250,12 +243,12 @@ Reversing by leveraging the LIFO property!`
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 Final Mission: Browser Back Button!",
-          task: "Implement browser history using a stack!",
-          initialCode: "class Browser:\n    def __init__(self):\n        self.history = []\n        self.current = \"Home\"\n    \n    def visit(self, page):\n        self.history.___(self.current)\n        self.current = page\n        print(f\"Visit: {page}\")\n    \n    def back(self):\n        if self.history:\n            self.current = self.history.___()\n            print(f\"Back: {self.current}\")\n        else:\n            print(\"Cannot go back any further\")\n    \n    def show(self):\n        print(f\"Current page: {self.current}\")\n\n# Test\nbrowser = Browser()\nbrowser.visit(\"Google\")\nbrowser.visit(\"GitHub\")\nbrowser.visit(\"YouTube\")\nbrowser.show()\nbrowser.back()\nbrowser.back()\nbrowser.show()",
+          title: "🏆 Final Mission: Browser Back-Button Sim",
+          task: "Simulate browser history using a stack (a list)! Fill in the blanks.",
+          initialCode: "history = []           # the back stack\ncurrent = \"Home\"\n\n# Visit 1: Google\nhistory.___(current)   # push current page onto history\ncurrent = \"Google\"\nprint(\"Visit:\", current)\n\n# Visit 2: GitHub\nhistory.___(current)\ncurrent = \"GitHub\"\nprint(\"Visit:\", current)\n\n# Visit 3: YouTube\nhistory.___(current)\ncurrent = \"YouTube\"\nprint(\"Visit:\", current)\n\nprint(\"Current page:\", current)\n\n# Back twice — pop returns the most recent page\ncurrent = history.___()\nprint(\"Back:\", current)\ncurrent = history.___()\nprint(\"Back:\", current)\n\nprint(\"Current page:\", current)",
           expectedOutput: "Visit: Google\nVisit: GitHub\nVisit: YouTube\nCurrent page: YouTube\nBack: GitHub\nBack: Google\nCurrent page: Google",
-          hint: "A stack uses append() to push and pop() to remove!",
-          hint2: "Use append in visit and pop in back!"
+          hint: "Visit = .append the current page. Back = .pop the most recent.",
+          hint2: "append / append / append / pop / pop"
         },
         {
           id: "complete",

@@ -22,15 +22,14 @@ export const lesson32EnData: LessonData = {
         {
           id: "ch1-1",
           type: "explain",
-          title: "Why Do We Need Functions?",
-          content: `## 🤔 Think About It
+          title: "💭 Saying the same thing 10 times?",
+          content: `💭 You need to send **birthday messages** to 10 friends. Copy-pasting the same text 10 times...? Isn't there a better way?
 
-You need to send birthday messages to 10 friends.
+> "Happy birthday! Have a great day!"
 
-Copying **"Happy birthday! Have a great day!"** and changing just the name each time... so tedious!
+Sending this to **10 people**... 🤯
 
-**Function = Automatic Message Machine!**
-Just put in a name and it creates the message for you.`
+@key: We want to **box up repeating code** and just swap the parts that change!`
         },
         {
           id: "ch1-2",

@@ -17,27 +17,29 @@ export const lesson22Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🔪 원하는 부분만 쏙!",
-          content: `리스트나 문자열의 **일부분**만 가져올 수 있어요!
+          title: "🔪 슬라이싱 (slicing) — 쿠키 자르듯 일부만 쏙!",
+          content: `🍪 길게 구워 놓은 쿠키 반죽을 칼로 잘라서 원하는 만큼만 가져오는 것 — 그게 **슬라이싱 (slicing, 자르기)**.
+
+리스트나 문자열의 **일부분**만 새로 가져올 수 있어요!
 
 \`\`\`python
 fruits = ["사과", "바나나", "딸기", "포도", "수박"]
 
-# 1번부터 3번 전까지
+# 1 번부터 3 번 전까지
 print(fruits[1:3])  # ['바나나', '딸기']
 \`\`\`
 
-**[시작:끝]** - 시작부터 끝 **전**까지!
+**[시작:끝]** = 시작부터 끝 **바로 전** 까지.
 
-### 어디서 쓰여요?
+### 어디서 써요?
 
-- **일부 출력** — 점수 상위 5 명, 최근 댓글 10 개
-- **머리/꼬리 자르기** — 헤더 한 줄 제외, 마지막 \\n 제거
-- **페이지 분할** — \`items[page*10:(page+1)*10]\`
+- **위 N 개만 보기** — 점수 상위 5 명, 최근 댓글 10 개
+- **머리/꼬리 잘라내기** — 헤더 한 줄 빼고, 끝의 줄바꿈 제거
+- **페이지 나누기** — \`items[page*10:(page+1)*10]\`
 - **뒤집기** — \`text[::-1]\`
-- **복사** — \`new = old[:]\` 로 깊지 않은 복사
+- **복사** — \`new = old[:]\` 로 새 리스트 만들기
 
-리스트, 문자열, 튜플 모두 같은 문법으로 잘려요.`
+리스트, 문자열, 튜플 모두 **똑같은 문법** 으로 잘려요.`
         },
         {
           id: "index-recap",
@@ -64,14 +66,21 @@ print(fruits[1:1])    # [] — 같은 위치, 빈 리스트
 > 🎯 한 줄: **시작 포함, 끝 제외.**`
         },
         {
+          id: "index-visualizer",
+          type: "interactive",
+          title: "🎬 인덱스 직접 눌러보기 — 양수/음수",
+          component: "pyStringIndexVisualizer",
+          componentProps: { initialText: "Python" },
+        },
+        {
           id: "try1",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
-          task: "인덱스 1~3을 출력하세요!",
+          title: "🖥️ 자르기 — 인덱스 1, 2, 3 만 가져오기",
+          task: "nums 에서 1, 2, 3 만 잘라서 출력해보세요!",
           initialCode: "nums = [0, 1, 2, 3, 4, 5]\nprint(nums[1:4])",
           expectedOutput: "[1, 2, 3]",
-          hint: "[1:4]는 인덱스 1, 2, 3!",
-          hint2: "끝 인덱스는 포함 안 됨!"
+          hint: "[1:4] 는 인덱스 1, 2, 3 (끝 4 는 포함 X)!",
+          hint2: "끝 숫자는 포함 안 됨! / nums[1:4]"
         },
         {
           id: "quiz1",
@@ -105,8 +114,8 @@ print(t[1:3])         # (20, 30) — 튜플도 잘림
         {
           id: "try-string-slice",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 문자열 슬라이싱",
-          task: "이메일 'user.name@gmail.com' 에서 도메인 부분 ('gmail.com') 만 슬라이싱으로 잘라내세요.",
+          title: "🖥️ 이메일에서 도메인만 잘라내기",
+          task: "이메일 'user.name@gmail.com' 에서 도메인 'gmail.com' 만 슬라이싱으로 잘라내세요.",
           initialCode: "email = \"user.name@gmail.com\"\n\n# @ 의 위치를 찾고 그 이후 잘라내기\nat_pos = email.index(\"@\")\ndomain = email[___:]\nprint(domain)",
           expectedOutput: "gmail.com",
           hint: "email[at_pos + 1:] — @ 다음 위치부터 끝까지.",
@@ -142,11 +151,11 @@ print(nums[:])    # [0, 1, 2, 3, 4]
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ 처음 3개!",
-          task: "처음 3개 요소를 가져오세요!",
+          title: "🖥️ 처음 3 개만 잘라내기",
+          task: "리스트에서 처음 3 개 요소만 가져와 출력하세요!",
           initialCode: "nums = [10, 20, 30, 40, 50]\nprint(nums[:3])",
           expectedOutput: "[10, 20, 30]",
-          hint: "[:3]은 처음부터 3개!",
+          hint: "시작을 생략하면 처음부터! [:3] → 0, 1, 2.",
           hint2: "nums[:3]"
         },
         {
@@ -166,11 +175,11 @@ print(nums[:-1])    # [0, 1, 2, 3] (마지막 제외)
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ 마지막 2개!",
-          task: "마지막 2개 요소를 가져오세요!",
+          title: "🖥️ 마지막 2 개만 — 꼬리 두 개 가져오기",
+          task: "fruits 의 마지막 2 개 요소만 출력하세요!",
           initialCode: "fruits = [\"사과\", \"바나나\", \"딸기\", \"포도\", \"수박\"]\nprint(fruits[-2:])",
           expectedOutput: "['포도', '수박']",
-          hint: "[-2:]는 뒤에서 2번째부터!",
+          hint: "음수 인덱스는 '뒤에서 N 번째'. [-2:] = 뒤에서 두 번째부터 끝까지.",
           hint2: "fruits[-2:]"
         },
         {
@@ -235,8 +244,8 @@ print(data)  # [10, 40, 50]
         {
           id: "try-slice-assign",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 슬라이스로 교체",
-          task: "리스트 가운데 3 개를 한 번에 ['X', 'Y'] 로 바꾸세요. 길이가 줄어드는 걸 확인.",
+          title: "🖥️ 슬라이스로 한 번에 교체 — 가운데 3 개 → 2 개",
+          task: "letters 가운데 3 개 (b, c, d) 를 한 번에 ['X', 'Y'] 로 바꿔보세요. 길이가 줄어드는 것도 확인!",
           initialCode: "letters = ['a', 'b', 'c', 'd', 'e', 'f']\n\n# 인덱스 1, 2, 3 (b, c, d) 를 ['X', 'Y'] 로 교체\nletters[___:___] = [___, ___]\n\nprint(letters)\nprint(f\"길이: {len(letters)}\")",
           expectedOutput: "['a', 'X', 'Y', 'e', 'f']\n길이: 5",
           hint: "letters[1:4] = ['X', 'Y']",
@@ -270,11 +279,11 @@ print(nums[::-1])   # [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ 리스트 뒤집기!",
-          task: "리스트를 뒤집어서 출력하세요!",
+          title: "🖥️ 리스트 뒤집기 — [::-1] 마법",
+          task: "리스트를 뒤집어 (역순으로) 출력하세요!",
           initialCode: "nums = [1, 2, 3, 4, 5]\nprint(nums[::-1])",
           expectedOutput: "[5, 4, 3, 2, 1]",
-          hint: "[::-1]은 역순!",
+          hint: "스텝이 -1 이면 뒤에서 앞으로! [::-1].",
           hint2: "nums[::-1]"
         },
         {
@@ -294,11 +303,11 @@ print(text[::-1])   # "dlroW olleH"
         {
           id: "try5",
           type: "tryit",
-          title: "🖥️ 문자열 뒤집기!",
-          task: "문자열을 뒤집어서 회문인지 확인하세요!",
+          title: "🖥️ 회문 (palindrome) 검사 — level 거꾸로도 level?",
+          task: "문자열을 뒤집어서 거꾸로 읽어도 똑같은지 (회문인지) 확인하세요!",
           initialCode: "word = \"level\"\nreversed_word = word[::-1]\nprint(f\"원본: {word}\")\nprint(f\"뒤집기: {reversed_word}\")\nprint(f\"회문? {word == reversed_word}\")",
           expectedOutput: "원본: level\n뒤집기: level\n회문? True",
-          hint: "[::-1]로 뒤집고 비교!",
+          hint: "문자열도 [::-1] 로 뒤집기. 원본 == 뒤집은 거 = 회문.",
           hint2: "word == word[::-1]"
         },
         {
@@ -367,7 +376,7 @@ print(nums)        # [1, 2, 3, 4, 5] — 원본 안 바뀜
         {
           id: "try-copy",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — = vs [:] 차이 확인",
+          title: "🖥️ = 와 [:] 차이 — 직접 비교해보기",
           task: "두 변수의 차이를 직접 확인. \`=\` 와 \`[:]\` 의 결과가 어떻게 다른지.",
           initialCode: "original = [1, 2, 3]\nsame = original          # 같은 리스트\ncopy = original[:]       # 새 리스트\n\noriginal.append(99)\n\n# 결과 출력 — 코드 그대로 실행!\nprint(f\"original: {original}\")\nprint(f\"same:     {same}\")\nprint(f\"copy:     {copy}\")",
           expectedOutput: "original: [1, 2, 3, 99]\nsame:     [1, 2, 3, 99]\ncopy:     [1, 2, 3]",
@@ -384,18 +393,18 @@ print(nums)        # [1, 2, 3, 4, 5] — 원본 안 바뀜
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 미션 1 — 전화번호 분리",
-          task: "전화번호에서 앞자리, 중간, 뒷자리를 분리하세요!",
+          title: "🏆 미션 1 — 전화번호 앞/중/뒷자리 분리",
+          task: "전화번호 '010-1234-5678' 에서 앞자리/중간/뒷자리를 슬라이싱으로 잘라내세요!",
           initialCode: "phone = \"010-1234-5678\"\n\narea = phone[:___]\nmiddle = phone[___:___]\nlast = phone[-___:]\n\nprint(f\"전체: {phone}\")\nprint(f\"앞자리: {area}\")\nprint(f\"중간: {middle}\")\nprint(f\"뒷자리: {last}\")",
           expectedOutput: "전체: 010-1234-5678\n앞자리: 010\n중간: 1234\n뒷자리: 5678",
-          hint: "[:3], [4:8], [-4:]",
-          hint2: "문자열도 슬라이싱 가능!"
+          hint: "앞 3 글자 → [:3], 중간 (-) 두 개 사이 → [4:8], 끝 4 글자 → [-4:].",
+          hint2: "3 / 4 / 8 / 4"
         },
         {
           id: "mission2",
           type: "mission",
-          title: "🏆 미션 2 — 페이지 단위로 점수 보기",
-          task: "30 명 점수에서 **3 페이지째** (인덱스 20~29 = 10 명) 만 보여주세요. 페이지당 10 명, 페이지 1 부터 셈.",
+          title: "🏆 미션 2 — 점수 3 페이지 (페이지당 10 명) 만 보기",
+          task: "30 명 점수에서 **3 페이지째** (인덱스 20~29 = 10 명) 만 슬라이싱으로 잘라 보여주세요. 페이지당 10 명, 페이지는 1 부터 셈.",
           initialCode: "scores = list(range(100, 70, -1))   # 30 개: 100, 99, ..., 71\nprint(f\"전체 인원: {len(scores)}명\")\n\nPAGE_SIZE = 10\npage = 3   # 3 페이지\n\n# 슬라이싱으로 3 페이지 (인덱스 20~29) 만\npage_data = scores[___:___]\n\nprint(f\"3 페이지: {page_data}\")\nprint(f\"개수: {len(page_data)}명\")",
           expectedOutput: "전체 인원: 30명\n3 페이지: [80, 79, 78, 77, 76, 75, 74, 73, 72, 71]\n개수: 10명",
           hint: "페이지 N 의 시작 = (N-1) * PAGE_SIZE, 끝 = N * PAGE_SIZE",
@@ -404,12 +413,12 @@ print(nums)        # [1, 2, 3, 4, 5] — 원본 안 바뀜
         {
           id: "mission3",
           type: "mission",
-          title: "🏆 미션 3 — 단어 회문 검사 (대소문자 무시)",
-          task: "대소문자, 공백 무시하고 회문 (앞뒤 같음) 인지 검사하는 함수를 만드세요!",
-          initialCode: "def is_palindrome(text):\n    # 1) 소문자로 통일 + 공백 제거\n    cleaned = text.lower().replace(\" \", \"\")\n    # 2) 슬라이싱으로 뒤집어서 비교\n    return cleaned == cleaned[___]\n\nprint(is_palindrome(\"level\"))         # True\nprint(is_palindrome(\"Race Car\"))      # True\nprint(is_palindrome(\"hello\"))         # False\nprint(is_palindrome(\"A man a plan\"))  # False",
+          title: "🏆 미션 3 — 회문 검사 (대소문자/공백 무시)",
+          task: "대소문자와 공백을 무시하고 회문 (앞뒤 똑같음) 인지 확인하는 함수의 빈칸을 채우세요!",
+          initialCode: "# 4 개 단어를 검사 — 대소문자/공백 무시\nwords = [\"level\", \"Race Car\", \"hello\", \"A man a plan\"]\n\nfor word in words:\n    # 1) 소문자로 통일 + 공백 제거\n    cleaned = word.lower().replace(\" \", \"\")\n    # 2) 슬라이싱으로 뒤집어서 비교\n    print(cleaned == cleaned[___])",
           expectedOutput: "True\nTrue\nFalse\nFalse",
-          hint: "cleaned[::-1] 로 뒤집어 비교.",
-          hint2: "return cleaned == cleaned[::-1]"
+          hint: "[::-1] 로 뒤집고 == 로 비교.",
+          hint2: "::-1"
         },
         {
           id: "complete",

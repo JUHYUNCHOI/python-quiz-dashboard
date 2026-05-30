@@ -17,18 +17,18 @@ export const lesson26Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "⏱️ 왜 자료구조 선택이 중요할까?",
-          content: `**같은 문제, 다른 성능!**
+          title: "⏱️ 자료구조 선택이 왜 중요해?",
+          content: `**같은 일, 다른 속도!**
 
-10만 개 데이터에서 검색:
-- 리스트: 최대 10만 번 비교 😰
-- 집합: 1번이면 끝! 😎
+10 만 개 데이터에서 'X 가 있나?' 찾기:
+- 리스트: 최대 10 만 번 비교 😰
+- 집합(set): 1 번이면 끝 😎
 
-**자료구조 선택이 성능을 결정해요!**
+**자료구조를 잘못 고르면 코드가 100,000 배 느려져요.**
 
 코딩테스트에서:
-- 시간 초과 = 틀린 자료구조
-- 통과 = 올바른 자료구조`
+- 시간 초과 = 자료구조를 잘못 고른 것
+- 통과 = 알맞게 고른 것`
         },
         {
           id: "bigO",
@@ -186,12 +186,12 @@ b = [4, 5, 6, 7, 8]
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ 공통 요소 찾기!",
-          task: "두 가지 방법을 비교하세요!",
-          initialCode: "# 방법 1: 이중 for문 - O(n²)\ndef common_slow(a, b):\n    result = []\n    for x in a:\n        if x in b:  # O(n)\n            result.append(x)\n    return result\n\n# 방법 2: 집합 - O(n)\ndef common_fast(a, b):\n    return list(set(a) & set(b))\n\na = [1, 2, 3, 4, 5]\nb = [4, 5, 6, 7, 8]\n\nprint(\"느린 방법:\", common_slow(a, b))\nprint(\"빠른 방법:\", sorted(common_fast(a, b)))",
+          title: "🖥️ 직접 — 두 리스트의 공통 요소",
+          task: "두 리스트 a, b 의 공통 요소를 (1) 이중 for 문, (2) set 교집합 두 방법으로 구해 보세요!",
+          initialCode: "a = [1, 2, 3, 4, 5]\nb = [4, 5, 6, 7, 8]\n\n# 방법 1: 이중 for 문 — O(n²) 느림\nslow = []\nfor x in a:\n    if x in b:\n        slow.append(x)\nprint(\"느린 방법:\", slow)\n\n# 방법 2: set 교집합 — O(n) 빠름\nfast = list(set(a) ___ set(b))    # 교집합 연산자\nprint(\"빠른 방법:\", sorted(fast))",
           expectedOutput: "느린 방법: [4, 5]\n빠른 방법: [4, 5]",
-          hint: "집합의 & 연산은 O(n)!",
-          hint2: "데이터가 많으면 차이가 엄청남"
+          hint: "집합 교집합 연산자는 `&`. 데이터 많으면 set 이 압도적으로 빠름.",
+          hint2: "&"
         },
         {
           id: "problem2",
