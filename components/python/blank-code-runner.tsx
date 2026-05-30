@@ -9,6 +9,7 @@ import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { renderInlineMarkdown } from "@/components/learn/render-content"
 import { translatePythonError } from "@/lib/python-error-friendly"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 
 // Pyodide 타입 정의
 declare global {
@@ -208,6 +209,8 @@ export function BlankCodeRunner({
   const { getSubmission, saveSubmission, loaded: dbLoaded, lessonId: dbLessonId } = useCodeSubmission()
   const { user } = useAuth()
   const { t, lang } = useLanguage()
+  // 선생님 뷰: 친근 메시지는 그대로 띄우되 원본 영어 에러를 펼친 상태로 (디버깅용).
+  const isTeacher = useEffectiveIsTeacher()
 
   // 최신 값을 ref로 동기 추적 (unmount cleanup에서 사용)
   const latestFilledValues = useRef(filledValues)
@@ -319,21 +322,9 @@ export function BlankCodeRunner({
         if (storageKey) saveSubmission(storageKey, JSON.stringify({ values: filledValues, assembled: code }))
       }
     } catch (err: any) {
-      let errorMsg = err.message || "에러!"
-
-      if (errorMsg.includes("SyntaxError")) {
-        errorMsg = "❌ 문법 오류! 빈칸에 올바른 값을 넣었는지 확인해보세요!"
-      } else if (errorMsg.includes("NameError")) {
-        const match = errorMsg.match(/name '(\w+)' is not defined/)
-        if (match) {
-          errorMsg = `❌ '${match[1]}'를 확인해보세요!`
-        } else {
-          errorMsg = "❌ 변수/함수 이름을 확인해보세요!"
-        }
-      } else if (errorMsg.includes("TypeError")) {
-        errorMsg = "❌ 타입 오류! 빈칸 값을 확인해보세요!"
-      }
-
+      // ⚠️ 원본 에러 그대로 — 친근 변환은 렌더 단계 translatePythonError() 가 담당.
+      // 여기서 미리 가공하면 정규식 매칭이 깨짐.
+      const errorMsg = err.message || "에러!"
       setError(errorMsg)
       setIsCorrect(false)
       setAttempts(prev => prev + 1)
@@ -675,9 +666,11 @@ export function BlankCodeRunner({
                       ))}
                     </ul>
                   )}
-                  <details className="mt-1">
+                  <details className="mt-1" open={isTeacher}>
                     <summary className="text-[11px] text-red-600/70 cursor-pointer hover:text-red-700 select-none">
-                      {t("자세한 에러 메시지 보기", "Show technical details")}
+                      {isTeacher
+                        ? t("원본 에러 (선생님 뷰)", "Raw error (teacher view)")
+                        : t("자세한 에러 메시지 보기", "Show technical details")}
                     </summary>
                     <pre className="font-mono text-[11px] md:text-xs whitespace-pre-wrap text-red-700/80 bg-red-100/50 rounded px-2 py-1.5 mt-1 overflow-x-auto">
                       {friendly.original}

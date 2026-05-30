@@ -22,25 +22,24 @@ export const lessonP4EnData: LessonData = {
         {
           id: "ch1-0",
           type: "explain",
-          title: "🐍 What We're Making Today!",
-          content: `## Let's Make a Snake Game!
+          title: "💭 Can you really build a game with Python?",
+          content: `💭 WASD controls a snake. Eat food → tail grows. **A real graphics game** in Python?
 
 ![Snake Game Preview](/lessons/p4/game-preview.svg)
 
-Control the snake with WASD keys — eat food and the tail gets longer!
-Your score goes up, and if you hit a wall, it resets!
-
 **What you'll learn by building this:**
 - \`turtle\` library (graphics)
-- \`class\` (classes) – Head, Tail, Tails, Food
-- \`import\` (modules) – splitting code into files
+- \`class\` – Head, Tail, Tails, Food
+- \`import\` – splitting code into files
 
-💻 **Follow along by typing in VS Code!**`
+💻 **Follow along by typing in VS Code!**
+
+@key: **turtle + class + import** → build a real Snake Game yourself!`
         },
         {
           id: "ch1-1",
           type: "explain",
-          title: "📦 What is turtle?",
+          title: "💭 What do I import to draw on the screen?",
           content: `## turtle = A tool that draws on the screen!
 
 It's a library that comes built into Python.
@@ -60,7 +59,7 @@ It's perfect for making games!`
         {
           id: "ch1-2",
           type: "explain",
-          title: "🖥️ Step 1: Creating the Screen",
+          title: "💭 How do I make a 600×600 light-blue game screen?",
           content: `## Try typing this in VS Code!
 
 📁 Create a new folder \`snake_game\`, then create \`main.py\` inside it.
@@ -104,7 +103,7 @@ If you see a light blue 600×600 window, it works! ✅ (Nothing shows on screen 
         {
           id: "ch1-3",
           type: "explain",
-          title: "📐 Understanding the Coordinate System",
+          title: "💭 In turtle, where is (0, 0)?",
           content: `## The center of the screen is (0, 0)!
 
 ![turtle Coordinate System](/lessons/p4/coordinate.svg)
@@ -134,7 +133,7 @@ We'll use them to check if the snake went outside the walls.`
         {
           id: "ch2-0",
           type: "explain",
-          title: "🤔 Why Do We Need Classes?",
+          title: "💭 How do I organize head, tail, food into pieces?",
           content: `## What happens if we put everything in main.py?
 
 Head, tail, food, score...
@@ -153,7 +152,7 @@ Head, tail, food, score...
         {
           id: "ch2-1",
           type: "explain",
-          title: "🏗️ Head Class - Basic Setup",
+          title: "💭 How do I build the snake head as a class?",
           content: `## Type this in snake.py!
 
 \`\`\`python
@@ -192,7 +191,7 @@ You'll see a **green circle** slightly above center — that's the snake head! �
         {
           id: "ch2-2",
           type: "explain",
-          title: "🚀 Head's move() Method",
+          title: "💭 How do I move 20 pixels per direction?",
           content: `## Move based on direction!
 
 ![Grid Movement Explained](/lessons/p4/grid-move.svg)
@@ -235,7 +234,7 @@ We directly manipulate the x, y coordinates so it moves in a grid-like pattern!`
         {
           id: "ch2-3",
           type: "explain",
-          title: "⌨️ Direction Change Methods",
+          title: "💭 Going right — what if you press left?",
           content: `## Preventing reverse direction is the key!
 
 Add this to the Head class:
@@ -275,7 +274,7 @@ What if the snake is going right and you press left?
         {
           id: "ch2-4",
           type: "explain",
-          title: "📍 Remaining Head Methods",
+          title: "💭 How do I get the head's position and distance?",
           content: `## Position-related methods!
 
 Add this to the Head class:
@@ -317,7 +316,7 @@ No need to write the Pythagorean formula yourself — it calculates the distance
         {
           id: "ch3-0",
           type: "explain",
-          title: "🟢 Understanding the Tail Structure",
+          title: "💭 Why split the tail into 2 classes?",
           content: `## There are 2 classes for the tail!
 
 **Why 2?**
@@ -336,7 +335,7 @@ Splitting it like this keeps the roles clean:
         {
           id: "ch3-1",
           type: "explain",
-          title: "🏗️ Tail Class (One Segment)",
+          title: "💭 What does one tail segment look like?",
           content: `## Add this below Head in snake.py!
 
 \`\`\`python
@@ -372,7 +371,7 @@ class Tail:
         {
           id: "ch3-2",
           type: "explain",
-          title: "🏗️ Tails Class (Managing All Tails)",
+          title: "💭 How do I manage many tail segments at once?",
           content: `## Add this below Tail in snake.py!
 
 \`\`\`python
@@ -405,7 +404,7 @@ Sending them off-screen is one way to hide them!`
         {
           id: "ch3-3",
           type: "explain",
-          title: "🔄 followHead() – Follow the Leader!",
+          title: "💭 In what order should the tail follow the head?",
           content: `## Add this to the Tails class!
 
 ![Tail Follow Mechanism](/lessons/p4/tail-follow.svg)
@@ -452,7 +451,7 @@ Movement order (with 3 tail segments):
         {
           id: "ch4-0",
           type: "explain",
-          title: "⭐ We Need Food!",
+          title: "💭 What should happen when the snake eats food?",
           content: `## Let's make something for the snake to eat!
 
 **Food rules:**
@@ -468,7 +467,7 @@ Movement order (with 3 tail segments):
         {
           id: "ch4-1",
           type: "explain",
-          title: "🏗️ Food Class",
+          title: "💭 How do I drop food at a random spot?",
           content: `## Type this in food.py!
 
 \`\`\`python
@@ -525,7 +524,7 @@ So main.py can pass in the range based on the screen size!`
         {
           id: "ch5-0",
           type: "explain",
-          title: "📦 What is a Module?",
+          title: "💭 Wait — a .py file IS a module?",
           content: `## Module = a .py file!
 
 The \`snake.py\` and \`food.py\` files we made are modules themselves!
@@ -543,7 +542,7 @@ You can \`import\` them from other files to use them.
         {
           id: "ch5-1",
           type: "explain",
-          title: "🔗 Connecting with import!",
+          title: "💭 How do I use classes from another file?",
           content: `## Using modules in main.py!
 
 ![Connecting Files with import](/lessons/p4/import-flow.svg)
@@ -587,7 +586,7 @@ That's why you might use \`my_food\` as the variable name. (In our code, we use 
         {
           id: "ch6-0",
           type: "explain",
-          title: "⌨️ Connecting the Keyboard",
+          title: "💭 How do I make a keypress trigger a function?",
           content: `## Continue adding to main.py!
 
 \`\`\`python
@@ -626,7 +625,7 @@ The **green circle moves 20 pixels at a time with WASD!** ⌨️
         {
           id: "ch6-1",
           type: "explain",
-          title: "🔄 Starting the Game Loop!",
+          title: "💭 How do I keep the game running forever?",
           content: `## The heart of the game: the while True loop!
 
 Add this at the bottom of main.py:
@@ -676,7 +675,7 @@ Eating it won't do anything yet — we'll add that in the next chapter!`
         {
           id: "ch7-0",
           type: "explain",
-          title: "📊 Creating the Score System",
+          title: "💭 How do I show the score on screen?",
           content: `## main.py – Add above the game loop!
 
 \`\`\`python
@@ -709,7 +708,7 @@ pen.write('score: 0, High Score: 0',
         {
           id: "ch7-1",
           type: "explain",
-          title: "🍽️ Food Eating Detection",
+          title: "💭 How do I know the head touched the food?",
           content: `## Add inside the while True loop!
 
 ![Distance Check Explained](/lessons/p4/distance-check.svg)
@@ -756,7 +755,7 @@ pen.write('score: 0, High Score: 0',
         {
           id: "ch7-2",
           type: "explain",
-          title: "🧱 Wall Collision Handling",
+          title: "💭 How do I know the snake left the screen?",
           content: `## Add inside the while True loop!
 
 \`\`\`python
@@ -813,7 +812,7 @@ That's what makes the game fun! 🎯
         {
           id: "ch8-0",
           type: "explain",
-          title: "📁 Final snake.py",
+          title: "💭 What does snake.py look like all together?",
           content: `## snake.py Complete Code!
 
 Check the combined Head, Tail, and Tails we've built so far:
@@ -916,7 +915,7 @@ class Tails:
         {
           id: "ch8-1",
           type: "explain",
-          title: "📁 Final food.py",
+          title: "💭 What does the final food.py look like?",
           content: `## food.py Complete Code!
 
 \`\`\`python
@@ -952,7 +951,7 @@ class Food:
         {
           id: "ch8-2",
           type: "explain",
-          title: "📁 Final main.py",
+          title: "💭 How does main.py tie it all together?",
           content: `## main.py Complete Code!
 
 \`\`\`python
@@ -1053,7 +1052,7 @@ screen.mainloop()
         {
           id: "ch8-3",
           type: "explain",
-          title: "🎉 Snake Game Complete!",
+          title: "💭 What did we just build, exactly?",
           content: `## Congratulations! 🎉 The Snake Game is complete!
 
 **Run main.py in VS Code!**

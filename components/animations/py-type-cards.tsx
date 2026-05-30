@@ -70,7 +70,7 @@ const TYPES: TypeMeta[] = [
   },
   {
     key: "bool",
-    koName: "참거짓",
+    koName: "참/거짓",
     enName: "Boolean",
     abbr: "bool",
     icon: "💡",
@@ -203,7 +203,7 @@ export function PyTypeCards({ lang = "ko", initialValue = "" }: PyTypeCardsProps
         <label className="block text-sm md:text-base font-bold text-slate-700 mb-2">
           {isEn
             ? "Type a value — I'll tell you which type it is"
-            : "값을 적어 보세요 — 어느 타입인지 알려줄게요"}
+            : "값을 적어봐요 — 어느 종류인지 알려줄게요 ✨"}
         </label>
         <div className="flex items-center gap-2 font-mono text-sm md:text-base">
           <span className="text-slate-400">{">>>"}</span>
@@ -242,7 +242,7 @@ export function PyTypeCards({ lang = "ko", initialValue = "" }: PyTypeCardsProps
                   >
                     {isEn
                       ? `It's a ${detectedMeta.enName} (${detectedMeta.abbr})!`
-                      : `이건 ${detectedMeta.koName} (${detectedMeta.abbr}) 이에요!`}
+                      : `🎉 ${detectedMeta.koName} (${detectedMeta.abbr}) 이에요!`}
                   </div>
                   <div className="text-xs md:text-sm font-mono text-slate-600 mt-0.5">
                     {`<class '${detectedMeta.abbr}'>`}
@@ -260,7 +260,7 @@ export function PyTypeCards({ lang = "ko", initialValue = "" }: PyTypeCardsProps
               >
                 {isEn
                   ? 'Hmm — wrap text in quotes! Like "hello" or "world"'
-                  : '글자라면 따옴표로 감싸 보세요! 예: "안녕", "hello"'}
+                  : '💭 글자라면 따옴표로 감싸 봐요! 예: "안녕", "hello"'}
               </motion.div>
             ) : (
               <motion.div
@@ -272,7 +272,7 @@ export function PyTypeCards({ lang = "ko", initialValue = "" }: PyTypeCardsProps
               >
                 {isEn
                   ? "Try typing a number, text, or True/False"
-                  : "숫자, 글자, 참/거짓 중 하나를 적어 보세요"}
+                  : "👆 숫자, 글자, True/False 중 하나를 적어봐요"}
               </motion.div>
             )}
           </AnimatePresence>

@@ -35,7 +35,7 @@ function compute(mode: Mode, a: boolean, b: boolean): boolean {
 
 function formatBool(v: boolean, isEn: boolean) {
   if (isEn) return v ? "True" : "False"
-  return v ? "True (참)" : "False (거짓)"
+  return v ? "True (켜짐 💡)" : "False (꺼짐 🌑)"
 }
 
 export function AndOrCircuit({
@@ -50,25 +50,25 @@ export function AndOrCircuit({
   const result = useMemo(() => compute(mode, a, b), [mode, a, b])
 
   const labels = {
-    title: isEn ? "Logic Gate Circuit" : "논리 회로 시뮬레이터",
+    title: isEn ? "Logic Gate Circuit" : "💡 전구 켜기 회로",
     sub: isEn
       ? "Click a switch to toggle. Watch the bulb."
-      : "스위치를 눌러서 켜고 꺼봐요. 전구를 관찰!",
+      : "스위치를 눌러봐요! 전구가 어떻게 되는지 봐요 👀",
     switchA: isEn ? "Switch A" : "스위치 A",
     switchB: isEn ? "Switch B" : "스위치 B",
-    on: isEn ? "ON" : "ON",
-    off: isEn ? "OFF" : "OFF",
+    on: isEn ? "ON" : "켬",
+    off: isEn ? "OFF" : "끔",
     result: isEn ? "Result" : "결과",
     explanation: {
       and: isEn
         ? "AND — both switches must be ON (series circuit)."
-        : "AND — 두 스위치가 모두 ON 이어야 전구가 켜짐 (직렬 회로).",
+        : "and — 두 스위치 모두 켜져야 전구가 켜져요 (한 줄로 연결된 회로) 🔗",
       or: isEn
         ? "OR — any one switch ON is enough (parallel circuit)."
-        : "OR — 한 쪽만 ON 이어도 전구가 켜짐 (병렬 회로).",
+        : "or — 한 쪽만 켜도 전구가 켜져요 (두 줄로 갈라진 회로) 🔀",
       not: isEn
         ? "NOT — flips the switch. ON makes the bulb OFF."
-        : "NOT — 스위치를 뒤집어요. ON 이면 전구는 OFF.",
+        : "not — 거꾸로 뒤집어요. 켜면 전구는 꺼져요 🔄",
     },
     code: {
       and: isEn ? "a and b" : "a and b",
@@ -520,8 +520,8 @@ function Bulb({ on }: { on: boolean }) {
           <rect x={28} y={66} width={8} height={4} fill="#334155" />
         </svg>
       </motion.div>
-      <div className="text-xs font-semibold mt-1" style={{ color: on ? "#ca8a04" : "#94a3b8" }}>
-        {on ? "ON" : "OFF"}
+      <div className="text-xs font-bold mt-1" style={{ color: on ? "#ca8a04" : "#94a3b8" }}>
+        {on ? "켜짐 💡" : "꺼짐 🌑"}
       </div>
     </div>
   )

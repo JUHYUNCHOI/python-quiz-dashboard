@@ -10,6 +10,7 @@ import { createSmartKeyHandler } from "@/components/cpp/editor-key-handler"
 import { renderInlineMarkdown } from "@/components/learn/render-content"
 import { CodeSymbolToolbar } from "./code-symbol-toolbar"
 import { translatePythonError } from "@/lib/python-error-friendly"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 
 // Pyodide 타입 정의
 declare global {
@@ -89,6 +90,8 @@ export function PythonRunner({
   requireCorrect = true,
 }: PythonRunnerProps) {
   const { t, lang } = useLanguage()
+  // 선생님 뷰: 친근 메시지는 그대로 띄우되 원본 영어 에러를 펼친 상태로 (디버깅용).
+  const isTeacher = useEffectiveIsTeacher()
   const lsKey = storageKey ? `python-runner-${storageKey}` : null
 
   // localStorage에서 저장된 상태 복원
@@ -274,27 +277,10 @@ export function PythonRunner({
         if (storageKey) saveSubmission(storageKey, code)
       }
     } catch (err: any) {
-      let errorMsg = err.message || "에러!"
-      
-      if (errorMsg.includes("SyntaxError")) {
-        if (errorMsg.includes("EOL while scanning string")) {
-          errorMsg = "❌ 따옴표를 닫지 않았어요!"
-        } else if (errorMsg.includes("unexpected EOF")) {
-          errorMsg = "❌ 괄호가 안 닫혔어요!"
-        } else {
-          errorMsg = "❌ 문법 오류! 오타 확인해보세요!"
-        }
-      } else if (errorMsg.includes("NameError")) {
-        const match = errorMsg.match(/name '(\w+)' is not defined/)
-        if (match) {
-          errorMsg = `❌ '${match[1]}'에 따옴표를 붙여보세요!`
-        } else {
-          errorMsg = "❌ 변수/함수 이름을 확인해보세요!"
-        }
-      } else if (errorMsg.includes("TypeError")) {
-        errorMsg = "❌ 타입 오류!"
-      }
-      
+      // ⚠️ 원본 에러 메시지를 그대로 setError 에 저장.
+      // 친근 변환은 렌더 단계의 translatePythonError() 가 담당 — 여기서 미리 가공하면
+      // 정규식 매칭이 깨져서 변환기가 fallback("에러가 발생했어요") 으로 떨어짐.
+      const errorMsg = err.message || "에러!"
       setError(errorMsg)
       setIsCorrect(false)
       setAttempts(prev => prev + 1)
@@ -478,9 +464,11 @@ export function PythonRunner({
                       ))}
                     </ul>
                   )}
-                  <details className="mt-1">
+                  <details className="mt-1" open={isTeacher}>
                     <summary className="text-[11px] text-red-600/70 cursor-pointer hover:text-red-700 select-none">
-                      {t("자세한 에러 메시지 보기", "Show technical details")}
+                      {isTeacher
+                        ? t("원본 에러 (선생님 뷰)", "Raw error (teacher view)")
+                        : t("자세한 에러 메시지 보기", "Show technical details")}
                     </summary>
                     <pre className="font-mono text-[11px] md:text-xs whitespace-pre-wrap text-red-700/80 bg-red-100/50 rounded px-2 py-1.5 mt-1 overflow-x-auto">
                       {friendly.original}

@@ -58,12 +58,12 @@ function opLabel(op: CompareOp, isEn: boolean): string {
     }
   }
   switch (op) {
-    case ">": return "보다 크다"
-    case "<": return "보다 작다"
-    case ">=": return "크거나 같다"
-    case "<=": return "작거나 같다"
-    case "==": return "같다"
-    case "!=": return "다르다"
+    case ">": return "왼쪽이 더 커요"
+    case "<": return "왼쪽이 더 작아요"
+    case ">=": return "왼쪽이 크거나 같아요"
+    case "<=": return "왼쪽이 작거나 같아요"
+    case "==": return "둘이 똑같아요"
+    case "!=": return "둘이 달라요"
   }
 }
 
@@ -93,21 +93,21 @@ export function CompareSeesaw({
   }, [diff, min, max])
 
   const isEqual = left === right
-  const labelHeader = isEn ? "Compare Seesaw" : "비교 시소"
+  const labelHeader = isEn ? "Compare Seesaw" : "숫자 비교 시소"
   const labelLeft = isEn ? "Left number" : "왼쪽 숫자"
   const labelRight = isEn ? "Right number" : "오른쪽 숫자"
-  const labelOp = isEn ? "Operator" : "연산자"
+  const labelOp = isEn ? "Operator" : "비교 기호"
   const labelResult = isEn ? "Result" : "결과"
 
   // 같을 때 >= vs > 차이 강조 문구
   const equalNote = useMemo(() => {
     if (!isEqual) return null
-    if (op === ">") return isEn ? "Equal → not strictly greater → False" : "같음 → '더 크지' 않음 → False"
-    if (op === "<") return isEn ? "Equal → not strictly less → False" : "같음 → '더 작지' 않음 → False"
-    if (op === ">=") return isEn ? "Equal counts as 'or equal' → True" : "'같음' 도 인정 → True"
-    if (op === "<=") return isEn ? "Equal counts as 'or equal' → True" : "'같음' 도 인정 → True"
-    if (op === "==") return isEn ? "Equal → True" : "같음 → True"
-    if (op === "!=") return isEn ? "Equal → 'not equal' fails → False" : "같음 → '다르다' 가 아님 → False"
+    if (op === ">") return isEn ? "Equal → not strictly greater → False" : "둘이 똑같아요 → '더' 크진 않으니까 → False"
+    if (op === "<") return isEn ? "Equal → not strictly less → False" : "둘이 똑같아요 → '더' 작진 않으니까 → False"
+    if (op === ">=") return isEn ? "Equal counts as 'or equal' → True" : "'같아도 OK' 라서 → True"
+    if (op === "<=") return isEn ? "Equal counts as 'or equal' → True" : "'같아도 OK' 라서 → True"
+    if (op === "==") return isEn ? "Equal → True" : "똑같으니까 → True"
+    if (op === "!=") return isEn ? "Equal → 'not equal' fails → False" : "똑같은데 '다르다' 는 아니죠 → False"
     return null
   }, [isEqual, op, isEn])
 
@@ -225,10 +225,10 @@ export function CompareSeesaw({
           {/* 수평/기울기 힌트 (왼쪽 위) */}
           <div className="absolute top-2 left-2 text-[10px] font-mono font-bold text-slate-400">
             {isEqual
-              ? (isEn ? "balanced" : "수평")
+              ? (isEn ? "balanced" : "⚖️ 똑같아요")
               : diff > 0
-                ? (isEn ? "left heavier" : "왼쪽 무거움")
-                : (isEn ? "right heavier" : "오른쪽 무거움")}
+                ? (isEn ? "left heavier" : "👈 왼쪽이 무거움")
+                : (isEn ? "right heavier" : "오른쪽이 무거움 👉")}
           </div>
         </div>
 

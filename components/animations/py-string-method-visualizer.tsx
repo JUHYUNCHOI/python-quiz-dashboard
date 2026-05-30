@@ -169,19 +169,19 @@ export function PythonStringMethodVisualizer({
   const [subStr, setSubStr] = useState("l")
 
   const labels = {
-    header: isEn ? "String Methods" : "문자열 메서드",
-    textInput: isEn ? "Original string:" : "원본 문자열:",
-    original: isEn ? "Original" : "원본",
+    header: isEn ? "String Methods" : "문자열 마법",
+    textInput: isEn ? "Original string:" : "원래 글:",
+    original: isEn ? "Original" : "원래",
     result: isEn ? "Result" : "결과",
     immutable: isEn
       ? "Original is unchanged. Methods return a new string."
-      : "원본은 그대로! 메서드는 새 문자열을 돌려줘.",
+      : "원래 글은 그대로! 메서드는 새 글을 만들어 줘요 ✨",
     oldLabel: isEn ? "Find:" : "찾을 글자:",
     newLabel: isEn ? "Replace with:" : "바꿀 글자:",
-    subLabel: isEn ? "Substring:" : "찾을 문자열:",
-    foundAt: isEn ? "Found at index" : "찾은 인덱스",
-    notFound: isEn ? "Not found → -1" : "못 찾음 → -1",
-    countResult: isEn ? "Occurrences" : "등장 횟수",
+    subLabel: isEn ? "Substring:" : "찾을 글자:",
+    foundAt: isEn ? "Found at index" : "찾았어요! 위치",
+    notFound: isEn ? "Not found → -1" : "못 찾았어요 → -1",
+    countResult: isEn ? "Occurrences" : "몇 번 나왔나",
   } as const
 
   // 원본 글자 cells
@@ -313,7 +313,7 @@ export function PythonStringMethodVisualizer({
           <div className="text-xs text-slate-500 mt-1">
             {isEn
               ? `${matches.length} match${matches.length === 1 ? "" : "es"} replaced`
-              : `${matches.length} 군데 바뀜`}
+              : `🔁 ${matches.length}군데 바뀌었어요`}
           </div>
         ),
       }

@@ -28,13 +28,13 @@ interface ModuloClockProps {
 
 const TXT = {
   ko: {
-    title: "모듈로 (%) 시계",
-    modeClock: "시계 (% N)",
-    modeEvenOdd: "짝/홀 (% 2)",
-    modeLastDigit: "일의 자리 (% 10)",
-    modeMultiple: "배수 확인 (% N)",
-    start: "시작",
-    add: "더하기",
+    title: "🕐 나머지(%) 시계",
+    modeClock: "🕐 시계",
+    modeEvenOdd: "짝/홀",
+    modeLastDigit: "끝자리",
+    modeMultiple: "배수 확인",
+    start: "시작 숫자",
+    add: "더할 숫자",
     number: "숫자",
     divisor: "나누는 수",
     result: "결과",
@@ -42,13 +42,13 @@ const TXT = {
     quotient: "몫",
     remainder: "나머지",
     rotations: "바퀴",
-    isEven: "짝수",
-    isOdd: "홀수",
-    isMultiple: "배수 맞음",
-    notMultiple: "배수 아님",
+    isEven: "짝수예요 ✨",
+    isOdd: "홀수예요 🔥",
+    isMultiple: "배수 맞아요",
+    notMultiple: "배수 아니에요",
     formula: "식",
     play: "한 칸씩 돌리기",
-    reset: "리셋",
+    reset: "다시",
     hour: "시",
   },
   en: {
@@ -182,7 +182,7 @@ function ClockMode({
           </div>
           {laps > 0 && (
             <div className="text-xs text-gray-500">
-              ({laps} {t.rotations} + {result})
+              🔄 시계 {laps}바퀴 돌고 + {result} 칸 더
             </div>
           )}
         </div>
