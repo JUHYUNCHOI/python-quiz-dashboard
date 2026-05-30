@@ -103,13 +103,19 @@ print(name, 'has 5000 gold')
           id: "concept-equals",
           type: "explain",
           title: "🧮 What Does \`=\` Actually Mean?",
-          content: `In math class, \`=\` meant "is equal to" — but in Python it's different.
+          content: `> 📌 **Remember just one line!**
+> \`=\` doesn't mean "equals" — it means **"put into the box on the left!"**
 
-| Math | Python |
-|---|---|
-| \`x = 10\` → "x equals 10" | \`x = 10\` → "**store** 10 into x" |
+\`\`\`
+x = 10
+   ↑
+   "put 10 into the box named x!"
+\`\`\`
 
-> 🎯 Read it as an arrow: \`x = 10\` → \`10 → x\` ("put 10 into the box named x!")`
+- Math: \`x = 10\` → "x equals 10"
+- Python: \`x = 10\` → **"put 10 into x"**
+
+Picture it as an arrow: \`10 → x\` 📥`
         },
         {
           id: "try1",
@@ -243,8 +249,10 @@ Comma-separated values automatically get a **space** between them (same as in le
         {
           id: "change-explain",
           type: "explain",
-          title: "🔄 Changing the Value (Reassignment)",
+          title: "🔄 Putting a New Value In",
           content: `The value in the box can **change anytime**. Assign a new value to the same variable → the old value **disappears** and is overwritten.
+
+> 💡 The fancy word for this is **reassignment**. Just remembering it as **"putting in a new value"** is plenty.
 
 \`\`\`python
 hp = 100
@@ -324,21 +332,27 @@ print(money)
           id: "change-explain-error",
           type: "explain",
           title: "⚠️ Doesn't Work — Using a Variable You Never Made",
-          content: `Right — you get a \`NameError\`.
+          content: `As expected, you get an error.
 
 \`\`\`python
-print(money)   # ❌ NameError — no box named money was ever created
+print(money)   # ❌ no box named money was ever created
 \`\`\`
 
-The actual red message Python shows:
+### 💁 What Python is really saying (in plain English)
+
+> "Wait — I can't find a box called \`money\`! You haven't made one yet?" 😵
+
+The actual red text on screen:
 
 \`\`\`
 NameError: name 'money' is not defined
 \`\`\`
 
+→ \`NameError\` literally means "name error" = "no box with that name!"
+
 > 🚨 See this red text? → **you used a variable you never created.** Make it first with \`money = 1000\`, then use it.
 
-> 💡 Variables: **store first → then read.** Break that order → NameError.`
+> 💡 Variables: **store first → then read.**`
         },
         {
           id: "try3",
@@ -386,17 +400,28 @@ NameError: name 'money' is not defined
         {
           id: "rules-explain",
           type: "explain",
-          title: "📋 Variable Naming Rules — At a Glance",
-          content: `### 4-row summary (memorize just this!)
+          title: "📋 Variable Naming Rules — Just 4!",
+          content: `### 1️⃣ **Letters, digits, \`_\` only**
 
-| | Rule | OK | NG |
-|---|---|---|---|
-| 1 | **Letters, digits, \`_\`** only | \`player_hp\`, \`name1\` | \`my-name\` (hyphen) / \`my name\` (space) |
-| 2 | **First char must be letter or \`_\`** | \`_temp\`, \`score\` | \`2score\` (digit first) |
-| 3 | **No reserved keywords** | \`my_if\` | \`if\`, \`for\`, \`print\` |
-| 4 | **Case-sensitive** | \`age\` ≠ \`Age\` | (mistake → different var) |
+- ✅ \`age\`, \`score_1\`, \`my_hp\`
+- ❌ \`이름\` (non-English) / \`my hp\` (space) / \`my-hp\` (hyphen)
 
-> 🎯 One-liner: **letters/digits/_, first char a letter or _, no keywords.**`
+### 2️⃣ **First char must be a letter or \`_\`**
+
+- ✅ \`name\`, \`_temp\`
+- ❌ \`1name\` (starts with a digit)
+
+### 3️⃣ **Python's special words are off-limits**
+
+- ✅ \`my_if\`
+- ❌ \`if\`, \`for\`, \`print\` (more on this next step)
+
+### 4️⃣ **UPPER and lower are different letters**
+
+- \`age\` and \`Age\` are **completely different boxes**
+- Mix up the case by accident → different variable!
+
+> 🎯 One-liner: **letters/digits/\`_\`, first char a letter or \`_\`.**`
         },
         {
           id: "rules-explain-chars",
@@ -429,43 +454,52 @@ _temp = 0      # ✅ leading _ is fine
         {
           id: "rules-explain-keywords",
           type: "explain",
-          title: "🚫 Detail — Rules 3·4: Keywords + Case",
-          content: `### Rule 3: no reserved keywords
+          title: "🚫 Detail — Python Special Words + Case",
+          content: `### Python's special words (keywords)
 
-Words Python already uses for syntax. Can't be variable names.
+Words **Python has already taken** for itself. Can't be variable names.
 
 \`\`\`python
-if = 10        # ❌ if is a conditional keyword
-for = 5        # ❌ for is a loop keyword
-print = 3      # ❌ built-in function — possible but never do this
+if = 10        # ❌ if is one of Python's special words
+for = 5        # ❌ so is for
 \`\`\`
 
-**Common keywords**: \`if\`, \`else\`, \`for\`, \`while\`, \`and\`, \`or\`, \`not\`, \`True\`, \`False\`, \`None\`, \`return\`, \`def\`, \`class\`, \`import\`
+> 💡 There are about 14 of them (\`if\`, \`for\`, \`def\`, \`class\`, etc). **No need to memorize** — you'll meet them naturally in later lessons.
 
-> 💡 No need to memorize them now. You'll learn each one in upcoming lessons. For now, just remember: **"don't use these as variable names"** — that's enough.
+**For now, just know:**
+- Plain English words like \`print\` → OK as variable names
+- Python special words like \`if\` → ❌
+- If you hit an error, that's when you'll learn "ah, that one's special"
 
-### Rule 4: case sensitive
+### UPPER / lower case (in detail)
 
 \`\`\`python
 age = 15
-print(Age)   # ❌ NameError — Age was never created (capital A!)
+print(Age)   # ❌ Error! Age was never created (capital A!)
 \`\`\`
 
-→ \`age\` and \`Age\` are **completely different variables**. A typo in case creates a different variable.`
+\`age\`, \`Age\`, \`AGE\` → to Python they're **all different boxes**. One capital letter changes the variable.`
         },
         {
           id: "rules-explain-style",
           type: "explain",
-          title: "🐍 Convention — snake_case + Meaningful Names",
-          content: `The rules are met, but for **readability** there's a Python style guide.
+          title: "🐍 Joining Two Words Together",
+          content: `Want to combine \`player\` and \`hp\` into one variable name? There are two styles.
+
+### 🐍 Underscore style — \`player_hp\`
+
+Connect words with \`_\`. **Python recommends this one!**
+(Official name: snake_case — the letters stretched out by \`_\` look like a snake.)
+
+### 🐪 Camel style — \`playerHp\`
+
+Capitalize the first letter of later words. **Common in other languages like JavaScript.**
+(Official name: camelCase — the middle capital sticks up like a camel's hump.)
 
 \`\`\`python
-player_name = 'Alice'   # ✅ snake_case — Python style
-playerName = 'Alice'    # △ camelCase — works, but not Pythonic
-PLAYERNAME = 'Alice'    # △ ALL CAPS = "constant, never changes"
+player_hp = 100   # ✅ underscore — Python style
+playerHp = 100    # △ camel — works, but not common in Python
 \`\`\`
-
-For multi-word names, use **lowercase + \`_\`**.
 
 ### 💡 Use Meaningful Names
 
@@ -477,7 +511,7 @@ a = 5500
 latte_price = 5500   # ✅ Still understandable a month later
 \`\`\`
 
-> 🎯 The computer treats \`x\` and \`player_hp\` the same. The convention is **for the human (you, a month from now) reading it**.`
+> 🎯 The computer treats \`x\` and \`player_hp\` the same. The convention is **for the human (you, a month from now)**.`
         },
         {
           id: "quiz3",
@@ -692,8 +726,8 @@ A \`#\` inside quotes is **just a character**. Only \`#\` outside string quotes 
 ✅ **Variable** = a **labeled box** that holds data
 ✅ Store with \`variable = value\` (\`=\` means "put into")
 ✅ Retrieve by using the variable name (no quotes!)
-✅ **Reassignment** — assigning a new value overwrites the old (\`x = x + 3\` works)
-✅ **Naming rules** — letters/digits/_, first char letter or _, no keywords, snake_case, meaningful names
+✅ **Putting a new value in** (reassignment) — assigning a new value overwrites the old (\`x = x + 3\` works)
+✅ **Naming rules** — letters/digits/_, first char letter or _, no Python special words, underscore style (snake_case), meaningful names
 ✅ **Comments (\`#\`)** — notes Python ignores, also handy for debugging
 ✅ Print variables chained with \`,\` (auto space)
 

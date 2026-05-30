@@ -44,7 +44,9 @@ Let's look at each one!`
           id: "types-explain",
           type: "explain",
           title: "📋 4 Basic Types",
-          content: `### 1️⃣ Integer (int) — whole numbers, no decimal
+          content: `> 💡 **A quick heads-up on the short names** — Python's type names are short English abbreviations. Don't worry about them — focus on the **everyday name** first!
+
+### 1️⃣ **Integer** <span style="font-size:0.85em; opacity:0.7">(short name: int)</span> — whole numbers, no decimal
 
 \`\`\`python
 10, -5, 0, 1000
@@ -54,7 +56,7 @@ Let's look at each one!`
 
 ---
 
-### 2️⃣ Float — numbers with a decimal point
+### 2️⃣ **Float** <span style="font-size:0.85em; opacity:0.7">(short name: float)</span> — numbers with a decimal point
 
 \`\`\`python
 3.14, -0.5, 2.0
@@ -66,7 +68,7 @@ Let's look at each one!`
 
 ---
 
-### 3️⃣ String (str) — letters
+### 3️⃣ **String** <span style="font-size:0.85em; opacity:0.7">(short name: str)</span> — letters
 
 \`\`\`python
 "hello", 'python', "123"
@@ -80,7 +82,7 @@ Let's look at each one!`
 
 ---
 
-### 4️⃣ Boolean (bool) — True or False
+### 4️⃣ **Boolean** <span style="font-size:0.85em; opacity:0.7">(short name: bool)</span> — True or False
 
 \`\`\`python
 True, False
@@ -94,7 +96,7 @@ True, False
           id: "try-type-print",
           type: "tryit",
           title: "🖥️ Type it out!",
-          task: "Run the code below as-is. See how the type of integer 10 shows up!",
+          task: "Run the code below as-is.\n\n💡 The output will look a bit busy — something like `<class 'int'>`. **Just look at the word inside the quotes (`int`)!** The rest is automatic packaging Python adds for you.",
           initialCode: "print(type(10))",
           expectedOutput: "<class 'int'>",
           hint: "Just hit ▶ Run.",
@@ -123,20 +125,24 @@ True, False
           content: `When you're **not sure what type a value is**, drop it inside \`type()\` to find out!
 
 \`\`\`python
-print(type(10))       # <class 'int'>
-print(type(3.14))     # <class 'float'>
-print(type('hello'))  # <class 'str'>
-print(type(True))     # <class 'bool'>
+print(type(10))       # <class 'int'>   ← integer (int) type
+print(type(3.14))     # <class 'float'> ← float type
+print(type('hello'))  # <class 'str'>   ← string (str) type
+print(type(True))     # <class 'bool'>  ← boolean (bool) type
 \`\`\`
 
-### How to read the output
+### 📌 How to read the output — don't be scared by the length!
 
-\`<class 'int'>\` looks long, but the only part that matters is the **word inside the quotes**.
+\`<class 'int'>\` looks long, but you only need to look at **one word — the one inside the quotes**!
 
-- \`<class 'int'>\` → it's an int!
-- \`<class 'str'>\` → it's a str!
-- \`<class 'float'>\` → it's a float!
-- \`<class 'bool'>\` → it's a bool!
+> **Rule: in \`<class 'X'>\`, only X matters.**
+
+- \`<class 'int'>\` → **int** (integer)
+- \`<class 'str'>\` → **str** (string)
+- \`<class 'float'>\` → **float**
+- \`<class 'bool'>\` → **bool** (boolean)
+
+The rest of \`<class '...'>\` is just packaging Python adds automatically.
 
 > 💡 The word \`class\` shows up later (lesson 41). For now just treat it as "the label that tells me the type."
 
@@ -206,8 +212,10 @@ print(False)  # False
 ### ⚠️ Must start with a capital letter!
 
 - ✅ \`True\`, \`False\`
-- ❌ \`true\`, \`false\` → NameError!
-- ❌ \`TRUE\`, \`FALSE\` → NameError!
+- ❌ \`true\`, \`false\` → **NameError** ("name not found")
+- ❌ \`TRUE\`, \`FALSE\` → **NameError** ("name not found")
+
+> 💡 **NameError** = Python yelling "I've never heard of that name!" The word \`true\` isn't in Python's dictionary, so it can't find it.
 
 ### Compare two values and a bool pops out
 
@@ -262,8 +270,10 @@ print("True")       # prints True, but this is a str, not a bool!
           content: `If you write a phone number without quotes, Python reads the hyphens as **subtraction**!
 
 \`\`\`python
-555-867-5309   # ❌ SyntaxError! (555 minus 867 minus 5309)
+555-867-5309   # ❌ SyntaxError! (read as 555 minus 867 minus 5309)
 \`\`\`
+
+> 💡 **SyntaxError** = "grammar error". Python yells this when it reads your code and something doesn't make grammatical sense.
 
 Wrap it in quotes to store it as a string:
 
@@ -294,12 +304,14 @@ Quotes always determine the type!`
           id: "str-int-explain",
           type: "explain",
           title: "⚠️ String + Number = Error!",
-          content: `**Mixing different types causes a TypeError!**
+          content: `**Mixing different types causes a TypeError ("type mismatch")!**
 
 \`\`\`python
-'Score: ' + 95     # ❌ TypeError!
-'3.2' + 1.0        # ❌ TypeError!
+'Score: ' + 95     # ❌ TypeError (type mismatch)
+'3.2' + 1.0        # ❌ TypeError (type mismatch)
 \`\`\`
+
+> 💡 **TypeError** = "type mismatch". Happens when you mix data of different types — like str (text) + int (number).
 
 Only the same types can be combined:
 \`\`\`python
@@ -376,23 +388,7 @@ You'll learn how to combine strings with numbers in a **later lesson**. For now,
 - Strings **require quotes**
 - Booleans **start with a capital letter**
 
----
-
-### 💡 Nice to know (optional)
-
-A little outside today's main topic, but worth keeping in mind:
-
-**The float gotcha** — computers can't store decimals with perfect accuracy.
-\`\`\`python
-print(0.1 + 0.2)   # 0.30000000000000004 😱
-\`\`\`
-Not getting exactly 0.3 is normal! For exact math you'd handle it specially, but for now just "this can happen."
-
-**True / False actually behave like numbers** — \`True\` is 1, \`False\` is 0.
-\`\`\`python
-print(True + True)   # 2
-\`\`\`
-A curious fact. You'll see it again in the conditionals lesson.`
+Now let's wrap up with the final mission! 🏆`
         },
         {
           id: "mission1",
@@ -404,6 +400,40 @@ A curious fact. You'll see it again in the conditionals lesson.`
           hint: "Blank 1 → 42, Blank 2 → 3.14, Blank 3 → 'Hello', Blank 4 → True",
           hint2: "42",
           choices: ["42", "3.14", "'Hello'", "True"]
+        },
+        {
+          id: "bonus-facts",
+          type: "explain",
+          title: "📌 Bonus — fun facts (optional)",
+          content: `Mission complete! 🎉 Below are **optional** bonus facts — just go "huh, neat" and move on. No need to memorize.
+
+---
+
+### 🤔 Fun fact 1: the float gotcha
+
+Computers can't store decimals with perfect accuracy.
+
+\`\`\`python
+print(0.1 + 0.2)   # 0.30000000000000004 😱
+\`\`\`
+
+Not getting exactly 0.3 is **normal**! There are ways to handle this when you need exact math, but for now just "this can happen."
+
+---
+
+### 🤔 Fun fact 2: True / False behave like numbers
+
+\`True\` is 1, \`False\` is 0.
+
+\`\`\`python
+print(True + True)   # 2
+\`\`\`
+
+Fun fact. You'll meet this again in the conditionals lesson (lesson 11).
+
+---
+
+> 💡 Don't memorize! Just "huh, that exists" — totally fine to move on to the next lesson.`
         },
         {
           id: "complete",

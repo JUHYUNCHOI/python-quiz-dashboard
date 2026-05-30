@@ -27,6 +27,8 @@ print(text.upper())  # HELLO
 
 위 코드의 의미: "text 야, 너 자신을 대문자로 만들어줘 (upper)" 라고 시키는 거예요.
 
+> 🎒 **일상 비유 —** \`len()\` 같은 **함수** 는 **자(尺) 같은 도구**. 누구든 들고 와서 재줘요. \`text.upper()\` 같은 **메서드** 는 **그 글자에만 박혀있는 손잡이**. 그 글자한테만 작동해요. 그래서 모양도 달라요 — 도구는 밖에서 (\`len(text)\`), 손잡이는 점 찍고 (\`text.upper()\`).
+
 ### 모양 외우기
 
 \`\`\`
@@ -114,18 +116,20 @@ text.upper()         # 결과는 HELLO 지만 어디로?
 print(text)          # Hello (그대로!)
 \`\`\`
 
-upper() 가 새 문자열을 돌려주는데, 우리가 그걸 어디에도 안 받았어요. 그래서 그냥 사라짐.
+upper() 가 새 문자열을 돌려줬는데, 우리가 어디에도 안 받았어요.
+
+> 🎒 **일상 비유 —** 친구한테 "Hello 를 대문자로 말해줘" 라고 부탁했는데, 친구가 "HELLO" 라고 *대답한 걸 메모지에 안 적으면* 그냥 잊혀져요. **귀로만 듣고 사라짐.** 메모지에 받아 적어야 (변수에 저장해야) 나중에 쓸 수 있어요.
 
 **받아두려면 변수에 저장:**
 
 \`\`\`python
 text = "Hello"
-big = text.upper()   # 새 문자열을 big 에 저장
-print(text)          # Hello
+big = text.upper()   # 새 문자열을 big 에 저장 (= 메모지에 적음)
+print(text)          # Hello (원본은 안 바뀜)
 print(big)           # HELLO
 \`\`\`
 
-> 💡 문자열은 한번 만들면 못 바꿔요 (**불변**). 메서드는 항상 **새 문자열을 돌려줘요.**`
+> 💡 문자열은 한번 만들면 **원본이 안 바뀌어요.** 메서드는 항상 **새 문자열을 돌려줘요.** (어려운 말로 "불변" — 일단 외우지 말고 느낌만.)`
         },
         {
           id: "try-immutable-trap",
@@ -387,7 +391,7 @@ text = "Hello"
 print(text.find("Python"))  # -1
 \`\`\`
 
-\`-1\` 은 "못 찾았다" 라는 약속된 신호. 왜 하필 -1? — 자리 번호는 0 부터 시작해서 0 도 진짜 자리예요. 음수 자리는 없으니까 *못 찾았다* 신호로 쓰기 안전해서 -1 로 정했어요. (조건문 배우면 "있나 없나" 검사에 쓸 거예요.)`
+**못 찾으면 \`-1\` 이 와요. 그냥 약속이에요.**`
         },
         {
           id: "predict-find-position",
@@ -556,8 +560,10 @@ text.len()   # ❌ AttributeError — 문자열엔 .len() 없음!
         {
           id: "more-methods",
           type: "explain",
-          title: "📝 startswith / endswith / isdigit",
-          content: `자주 쓰는 친구들 몇 개 더. 결과가 **True / False** 인 것에 주목하세요 — 나중에 조건문에서 진가가 나와요.
+          title: "📌 보너스 — startswith / endswith / isdigit",
+          content: `> 💡 **핵심 메서드 (upper / lower / strip / replace / find / count) 익히면 충분해요!** 이 페이지부터는 *더 알고 싶을 때 봐도 되는* 보너스. 지금 다 외우려고 하지 마세요.
+
+자주 쓰는 친구들 몇 개 더. 결과가 **True / False** 인 것에 주목하세요 — 나중에 조건문 (lesson 11) 에서 진가가 나와요.
 
 ### startswith() / endswith() — "이걸로 시작/끝나?"
 
@@ -587,7 +593,7 @@ print("3.14".isdigit())  # False (점이 끼어서)
         {
           id: "predict-endswith-png",
           type: "predict",
-          title: "💭 결과 예측 — endswith() 로 파일 검사",
+          title: "📌 (보너스) 결과 예측 — endswith() 로 파일 검사",
           content: `이 코드 결과는?
 
 \`\`\`python
@@ -602,7 +608,7 @@ print("hello.png".endswith(".png"))
         {
           id: "predict-isdigit-mixed",
           type: "predict",
-          title: "💭 결과 예측 — isdigit() 검사",
+          title: "📌 (보너스) 결과 예측 — isdigit() 검사",
           content: `이 코드 두 줄 결과는?
 
 \`\`\`python
@@ -618,8 +624,10 @@ print("12a".isdigit())
         {
           id: "more-methods-case",
           type: "explain",
-          title: "🅰️ capitalize / title + 메서드 정리",
-          content: `### capitalize() — "첫 글자만 대문자"
+          title: "📌 보너스 — capitalize / title + 메서드 정리",
+          content: `> 💡 여기도 *보너스*. capitalize / title 은 "필요할 때 다시 찾아 쓰는" 메서드라 외울 필요 없어요. 마지막 정리 표만 한 번 훑어보면 충분.
+
+### capitalize() — "첫 글자만 대문자"
 
 \`\`\`python
 print("hello world".capitalize())  # Hello world
@@ -643,12 +651,12 @@ print("hello world".title())  # Hello World
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 최종 미션!",
-          task: "아이디 검사기를 완성하세요! `user_id` 의 ① 양쪽 공백을 제거하고 ② 소문자로 만든 다음 ③ 그 결과의 길이를 구해서 아래처럼 출력해요. 어떤 메서드/함수가 어디 들어가야 할지 직접 생각해보세요.",
-          initialCode: "user_id = \"  PyThOn_User  \"\n\n# 1.\nclean_id = user_id.___\n# 2.\nlower_id = clean_id.___\n# 3.\nlength = ___\n\nprint(\"원본:\", user_id)\nprint(\"정리:\", lower_id)\nprint(\"길이:\", length)",
-          expectedOutput: "원본:   PyThOn_User  \n정리: python_user\n길이: 11",
-          hint: "1번은 공백 제거, 2번은 대소문자 변환, 3번은 길이 — 어떤 게 점 찍는 메서드고 어떤 게 함수일까?",
-          hint2: "user_id.strip(), clean_id.lower(), len(lower_id)"
+          title: "🏆 최종 미션 — 친구 닉네임 정리기!",
+          task: "친구가 카톡으로 닉네임을 보냈는데 앞뒤 공백도 있고 대소문자도 막 섞여있어요. ① 양쪽 공백을 잘라내고 ② 전부 소문자로 통일한 다음 ③ 글자가 몇 개인지 세서 아래처럼 출력해요. 어떤 게 점 찍는 메서드고 어떤 게 함수일지 직접 생각해보세요.",
+          initialCode: "nickname = \"  MinSu_Kim  \"   # ← 너의 닉네임으로 바꿔봐도 돼!\n\n# 1. 양쪽 공백 제거\nclean = nickname.___\n# 2. 소문자로 통일\nlower = clean.___\n# 3. 글자 개수\nlength = ___\n\nprint(\"원본:\", nickname)\nprint(\"정리:\", lower)\nprint(\"길이:\", length)",
+          expectedOutput: "원본:   MinSu_Kim  \n정리: minsu_kim\n길이: 9",
+          hint: "1번은 공백 제거 (strip), 2번은 소문자 (lower), 3번은 길이 — 어떤 게 점 찍는 메서드고 어떤 게 함수일까?",
+          hint2: "nickname.strip(), clean.lower(), len(lower)"
         },
         {
           id: "complete",

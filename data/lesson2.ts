@@ -44,7 +44,9 @@ export const lesson2Data: LessonData = {
           id: "types-explain",
           type: "explain",
           title: "📋 4가지 기본 타입",
-          content: `### 1️⃣ 정수 (int) — 소수점 없는 숫자
+          content: `> 💡 **영어 약자 미리 한 번 보기** — 파이썬은 외국에서 만들어져서 타입 이름이 영어 약자예요. 무서워 말고 **한국어 이름** 만 먼저 외우면 충분해요!
+
+### 1️⃣ **정수** <span style="font-size:0.85em; opacity:0.7">(영어: int)</span> — 소수점 없는 숫자
 
 \`\`\`python
 10, -5, 0, 1000
@@ -54,19 +56,19 @@ export const lesson2Data: LessonData = {
 
 ---
 
-### 2️⃣ 실수 (float) — 소수점 있는 숫자
+### 2️⃣ **실수** <span style="font-size:0.85em; opacity:0.7">(영어: float)</span> — 소수점 있는 숫자
 
 \`\`\`python
 3.14, -0.5, 2.0
 \`\`\`
 
-> 💡 \`2.0\` 도 float 이에요! **.0 만 붙여도** float 으로 바뀜.
+> 💡 \`2.0\` 도 실수(float) 예요! **.0 만 붙여도** 실수로 바뀜.
 
 **자주 쓰는 곳:** 키, 무게, 가격(원 단위가 아닐 때), 평균 점수, 확률
 
 ---
 
-### 3️⃣ 문자열 (str) — 글자
+### 3️⃣ **문자열** <span style="font-size:0.85em; opacity:0.7">(영어: str)</span> — 글자
 
 \`\`\`python
 "안녕", '파이썬', "123"
@@ -80,7 +82,7 @@ export const lesson2Data: LessonData = {
 
 ---
 
-### 4️⃣ 불리언 (bool) — 참 또는 거짓
+### 4️⃣ **불리언** <span style="font-size:0.85em; opacity:0.7">(영어: bool)</span> — 참 또는 거짓
 
 \`\`\`python
 True, False
@@ -94,7 +96,7 @@ True, False
           id: "try-type-print",
           type: "tryit",
           title: "🖥️ 따라쳐 보기!",
-          task: "아래 코드를 그대로 실행해 보세요. 정수 10 의 타입이 어떻게 나오는지 확인!",
+          task: "아래 코드를 그대로 실행해 보세요.\n\n💡 곧 결과가 좀 복잡하게 보일 거예요 — `<class 'int'>` 같은 거. **따옴표 안 단어 (`int`) 만 보면 돼요!** 나머지는 파이썬이 알아서 적어주는 거예요.",
           initialCode: "print(type(10))",
           expectedOutput: "<class 'int'>",
           hint: "그대로 ▶ 실행 누르면 돼요.",
@@ -123,20 +125,24 @@ True, False
           content: `값이 **어떤 타입인지 모를 때**, \`type()\` 안에 넣어서 확인할 수 있어요!
 
 \`\`\`python
-print(type(10))       # <class 'int'>
-print(type(3.14))     # <class 'float'>
-print(type('안녕'))   # <class 'str'>
-print(type(True))     # <class 'bool'>
+print(type(10))       # <class 'int'>   ← 정수(int) 종류
+print(type(3.14))     # <class 'float'> ← 실수(float) 종류
+print(type('안녕'))   # <class 'str'>   ← 문자열(str) 종류
+print(type(True))     # <class 'bool'>  ← 불리언(bool) 종류
 \`\`\`
 
-### 출력 해석법
+### 📌 출력 해석법 — 길어 보여도 겁먹지 마요!
 
-\`<class 'int'>\` 이 길게 나오는데, 핵심은 **따옴표 안의 단어** 만 보면 돼요.
+\`<class 'int'>\` 이 길어 보이지만, 학생은 **따옴표 안의 단어 한 개** 만 보면 끝!
 
-- \`<class 'int'>\` → int 야!
-- \`<class 'str'>\` → str 야!
-- \`<class 'float'>\` → float 야!
-- \`<class 'bool'>\` → bool 야!
+> **공식: \`<class 'X'>\` 의 X 만 보면 종류**
+
+- \`<class 'int'>\` → **int** (정수)
+- \`<class 'str'>\` → **str** (문자열)
+- \`<class 'float'>\` → **float** (실수)
+- \`<class 'bool'>\` → **bool** (불리언)
+
+나머지 \`<class '...'>\` 는 파이썬이 자동으로 붙여주는 포장지일 뿐이에요.
 
 > 💡 \`class\` 라는 단어는 나중 (lesson 41) 에 배워요. 지금은 그냥 "타입 알려주는 표시" 정도로 생각.
 
@@ -206,8 +212,10 @@ print(False)  # False
 ### ⚠️ 반드시 대문자로 시작!
 
 - ✅ \`True\`, \`False\`
-- ❌ \`true\`, \`false\` → NameError!
-- ❌ \`TRUE\`, \`FALSE\` → NameError!
+- ❌ \`true\`, \`false\` → **이름 못 찾음 에러** (NameError)
+- ❌ \`TRUE\`, \`FALSE\` → **이름 못 찾음 에러** (NameError)
+
+> 💡 **NameError** = "그런 이름은 처음 봐!" 라는 파이썬의 비명. \`true\` 라는 단어는 파이썬 사전에 없어서 못 찾는 거예요.
 
 ### 비교하면 자동으로 bool 이 튀어나와요
 
@@ -262,8 +270,10 @@ print("True")       # 출력은 True 지만, 이건 str 이지 bool 아님!
           content: `전화번호를 따옴표 없이 쓰면 파이썬은 **빼기**로 읽어요!
 
 \`\`\`python
-010-1234-5678   # ❌ SyntaxError! (0 빼기 1234 빼기 5678)
+010-1234-5678   # ❌ 문법 에러! (SyntaxError) — 0 빼기 1234 빼기 5678 로 읽힘
 \`\`\`
+
+> 💡 **SyntaxError** = "문법 에러". 파이썬이 코드를 읽는데 말이 안 되는 부분이 있을 때 나오는 비명이에요.
 
 따옴표로 감싸야 문자열로 저장돼요:
 
@@ -294,12 +304,14 @@ print("True")       # 출력은 True 지만, 이건 str 이지 bool 아님!
           id: "str-int-explain",
           type: "explain",
           title: "⚠️ 문자열 + 숫자는 에러!",
-          content: `**다른 타입끼리 더하면 TypeError가 나요!**
+          content: `**다른 타입끼리 더하면 타입 안 맞음 에러 (TypeError) 가 나요!**
 
 \`\`\`python
-'나이: ' + 15      # ❌ TypeError!
-'3.2' + 1.0        # ❌ TypeError!
+'나이: ' + 15      # ❌ 타입 안 맞음 에러 (TypeError)
+'3.2' + 1.0        # ❌ 타입 안 맞음 에러 (TypeError)
 \`\`\`
+
+> 💡 **TypeError** = "타입 안 맞음 에러". str (글자) + int (숫자) 처럼 종류가 다른 데이터를 섞을 때 나와요.
 
 같은 타입끼리만 가능해요:
 \`\`\`python
@@ -376,23 +388,7 @@ print("True")       # 출력은 True 지만, 이건 str 이지 bool 아님!
 - 문자열은 **따옴표** 필수
 - 불리언은 **대문자**로 시작
 
----
-
-### 💡 알아두면 좋은 것 (선택)
-
-레슨 본 주제에서 살짝 벗어나지만, 알아두면 나중에 도움 되는 것들:
-
-**float 의 작은 함정** — 컴퓨터는 소수를 완벽히 정확하게 저장 못 해요.
-\`\`\`python
-print(0.1 + 0.2)   # 0.30000000000000004 😱
-\`\`\`
-0.3 이 안 나오는 게 정상! 정확한 계산이 필요하면 따로 처리해야 하지만, 지금은 "그런 게 있다" 만 기억.
-
-**True / False 는 사실 숫자처럼 동작** — \`True\` 는 1, \`False\` 는 0.
-\`\`\`python
-print(True + True)   # 2
-\`\`\`
-신기한 사실이에요. 나중에 조건문에서 다시 만나요.`
+이제 최종 미션 한 판으로 마무리해요! 🏆`
         },
         {
           id: "mission1",
@@ -404,6 +400,40 @@ print(True + True)   # 2
           hint: "첫 번째 빈칸에는 42, 두 번째에는 3.14 ...",
           hint2: "42",
           choices: ["42", "3.14", "'Hello'", "True"]
+        },
+        {
+          id: "bonus-facts",
+          type: "explain",
+          title: "📌 보너스 — 신기한 사실 (선택)",
+          content: `미션 끝났어요! 🎉 아래는 **꼭 외울 필요 없는** 보너스 — 그냥 "와 신기하다" 하고 넘어가도 OK.
+
+---
+
+### 🤔 신기한 사실 1: float 의 작은 함정
+
+컴퓨터는 소수를 완벽히 정확하게 저장 못 해요.
+
+\`\`\`python
+print(0.1 + 0.2)   # 0.30000000000000004 😱
+\`\`\`
+
+0.3 이 정확히 안 나오는 게 **정상**! 정확한 계산이 필요할 땐 따로 처리하는 방법이 있는데, 지금은 "그런 게 있다" 만 기억.
+
+---
+
+### 🤔 신기한 사실 2: True / False 는 사실 숫자처럼 동작
+
+\`True\` 는 1, \`False\` 는 0 으로 쓸 수 있어요.
+
+\`\`\`python
+print(True + True)   # 2
+\`\`\`
+
+신기한 사실. 나중에 조건문 (lesson 11) 에서 다시 만나요.
+
+---
+
+> 💡 외우지 말기! 그냥 "이런 게 있구나" 하고 다음 레슨 가도 충분해요.`
         },
         {
           id: "complete",

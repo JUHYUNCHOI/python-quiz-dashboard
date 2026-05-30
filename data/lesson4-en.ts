@@ -174,6 +174,10 @@ print(7 % 2)    # 1 — 1 if odd
 print(8 % 2)    # 0 — 0 if even
 \`\`\`
 
+> 👀 **See it — pairing up in 2s:**
+> - Even (8): \`■■  ■■  ■■  ■■\` → all paired, 0 left over
+> - Odd (7): \`■■  ■■  ■■  ■\` → one loner, 1 left over
+
 → Any number's \`% 2\` is **0 (even) or 1 (odd)**. Once you learn conditionals (lesson 11), you'll use this to branch.
 
 ### Another use — last digit
@@ -202,6 +206,18 @@ print(20 % 5)   # 0 — 20 is a multiple of 5
 ### 🕒 Clock-style wraparound
 
 3 o'clock + 5 hours = 8. But 22 o'clock + 5 hours = **3 (24-hour clock wraps around)**.
+
+> 👀 **See it — round 24-hour clock:**
+> \`\`\`
+>          0
+>    23         1
+>  22             2
+>  ...     →   ...
+>  19             5
+>    18         6
+>          ...
+> \`\`\`
+> Move the hand 5 ticks from 22 → past 24 → back to 0 → 1 → 2 → **3 o'clock!**
 
 \`\`\`python
 print((3 + 5) % 24)    # 8
@@ -310,16 +326,14 @@ print((10 - 6) / 2)   # 2.0
 
 ### Precedence (high → low)
 
-> 💡 **For now, just memorize 1~4.** 5~8 are coming soon (Ch2, Ch3) — *just note their spots* for now.
+> 💡 **For now, just memorize these 4!**
 
 1. \`( )\` — parentheses (highest)
 2. \`**\` — exponent
 3. \`*\`, \`/\`, \`//\`, \`%\` — multiplication/division
 4. \`+\`, \`-\` — addition/subtraction
-5. \`<\`, \`>\`, \`==\` etc. — comparison
-6. \`not\`
-7. \`and\`
-8. \`or\` — lowest
+
+> 📌 **Coming soon (just note the spots)** — comparison \`<\`, \`>\`, \`==\` (Ch2) → \`not\` → \`and\` → \`or\` (Ch3). They run *after* arithmetic.
 
 > 💡 **When unsure, use parentheses generously.** Clearer for both computer and humans.
 
@@ -614,7 +628,7 @@ print(not False)   # True   ← opposite of False
         {
           id: "is-not-explain",
           type: "explain",
-          title: "📌 For reference — is / is not / None check",
+          title: "📌 For reference (skip OK) — is / is not / None check",
           content: `> 💡 This part comes back naturally in lesson 11 (conditionals). **It's OK to just skim it for now!**
 
 While \`==\` checks if **values are equal**, \`is\` checks if it's **the very same object**.
@@ -633,7 +647,7 @@ print(x is not None)    # opposite — "x is not None"
         {
           id: "predict-is-none",
           type: "predict",
-          title: "📌 For reference — Predict: is None",
+          title: "📌 For reference (skip OK) — Predict: is None",
           content: "💡 This comes back naturally in lesson 11 (conditionals). OK to just skim for now!\n\nWhen x is None, what do these two checks return?",
           code: "x = None\nprint(x is None)\nprint(x is not None)",
           options: ["True\nFalse", "False\nTrue", "True\nTrue", "False\nFalse"],
@@ -643,7 +657,7 @@ print(x is not None)    # opposite — "x is not None"
         {
           id: "is-not-explain-rest",
           type: "explain",
-          title: "🔁 not alone (+ 📌 for-reference not in)",
+          title: "🔁 not alone (+ 📌 for-reference (skip OK) not in)",
           content: `### not — flip in front
 
 Put \`not\` **in front** of a value to flip True/False.
@@ -670,7 +684,7 @@ print('e' not in 'hello')   # False  ← 'e' is in 'hello'
         {
           id: "try-is-not",
           type: "tryit",
-          title: "📌 For reference — Try It: None check + flip",
+          title: "📌 For reference (skip OK) — Try It: None check + flip",
           task: "💡 This comes back naturally in lesson 11 (conditionals). OK to just skim for now!\n\nCheck whether name is None, then flip that result. Print both!",
           initialCode: "name = None\ncheck = name ___ None\nopposite = ___ check\nprint('None?', check)\nprint('not?', opposite)",
           expectedOutput: "None? True\nnot? False",
@@ -823,8 +837,8 @@ score += 10   # earned points → score goes up
           id: "mission2",
           type: "mission",
           title: "🏆 Mission 2 — BMI calculation",
-          task: "Compute BMI for weight 60kg, height 1.65m using exponent. (BMI = weight / height²)",
-          initialCode: "weight = 60      # kg\nheight = 1.65    # m\n\n# Use exponent (two stars) for height squared\nbmi = weight / (height ___ 2)\n\nprint(\"BMI:\", round(bmi, 1))",
+          task: "Compute BMI for weight 60kg, height 1.65m using exponent. (BMI = weight / height²)\n\n💡 `round(value, 1)` rounds to 1 decimal place (22.038... → 22.0). New function — just copy it.",
+          initialCode: "weight = 60      # kg\nheight = 1.65    # m\n\n# Use exponent (two stars) for height squared\nbmi = weight / (height ___ 2)\n\nprint(\"BMI:\", round(bmi, 1))   # round(value, 1) = 1 decimal place",
           expectedOutput: "BMI: 22.0",
           hint: "height ** 2 for the square.",
           hint2: "bmi = weight / (height ** 2)"
@@ -834,10 +848,10 @@ score += 10   # earned points → score goes up
           type: "mission",
           title: "🏆 Mission 3 — Break seconds into h/m/s",
           task: "Break 5425 seconds into hours, minutes, seconds and print each. (use // and %)",
-          initialCode: "total_sec = 5425\n\n# // and %\nhours = total_sec ___ 3600        # hours (quotient)\nminutes = (total_sec % 3600) ___ 60   # remaining seconds → minutes (quotient)\nseconds = total_sec ___ 60        # final seconds (remainder)\n\nprint(\"hours:\", hours)\nprint(\"minutes:\", minutes)\nprint(\"seconds:\", seconds)",
+          initialCode: "total_sec = 5425\n\n# One operator per line — slow and steady!\nhours = total_sec // 3600         # hours = quotient (filled in for you)\nremaining = total_sec ___ 3600    # leftover seconds = remainder\nminutes = remaining // 60         # minutes = quotient (filled in for you)\nseconds = remaining ___ 60        # seconds = remainder\n\nprint(\"hours:\", hours)\nprint(\"minutes:\", minutes)\nprint(\"seconds:\", seconds)",
           expectedOutput: "hours: 1\nminutes: 30\nseconds: 25",
-          hint: "1 hour = 3600 sec. // for quotient, % for remainder.",
-          hint2: "hours = total_sec // 3600\nminutes = (total_sec % 3600) // 60\nseconds = total_sec % 60"
+          hint: "Both blanks use the 'remainder' operator.",
+          hint2: "remaining = total_sec % 3600\nseconds = remaining % 60"
         },
         {
           id: "complete",
