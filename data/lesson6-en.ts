@@ -129,6 +129,16 @@ print(big)           # HELLO
 > 💡 Strings can't be changed once made (**immutable**). Methods always return a **new string**.`
         },
         {
+          id: "try-immutable-trap",
+          type: "tryit",
+          title: "✋ See the trap yourself — does the original really stay?",
+          task: "Test the immutability you just learned. If you call `text.upper()` but then just print `text`, what do you get? Run it and see.",
+          initialCode: "text = \"Hello\"\ntext.upper()\nprint(text)   # what do you expect?",
+          expectedOutput: "Hello",
+          hint: "If you don't catch the result in a variable, it just disappears!",
+          hint2: "upper() made a new string but nothing caught it. So text is still the same."
+        },
+        {
           id: "try1",
           type: "tryit",
           title: "🖥️ Try It Yourself!",
@@ -378,7 +388,7 @@ text = "Hello"
 print(text.find("Python"))  # -1
 \`\`\`
 
-\`-1\` is the agreed-upon "not found" signal. (Once you learn if-statements, this is great for "exists?" checks.)`
+\`-1\` is the agreed-upon "not found" signal. Why -1? — positions start at 0, so 0 is a real position. Negative positions don't exist, which makes -1 a safe "not found" signal. (Once you learn if-statements, this is great for "exists?" checks.)`
         },
         {
           id: "predict-find-position",
@@ -516,7 +526,7 @@ len(text)    # ✅ function — string goes inside parens
 text.len()   # ❌ AttributeError — strings don't have .len()
 \`\`\`
 
-Why the difference? — \`len()\` is an all-purpose function that works on **strings, lists, dictionaries**, and more. You'll meet it again when you learn those.`
+Why the difference? — \`len()\` is an all-purpose tool that works on several kinds of values, so it doesn't attach with a dot. You'll meet it again later with other kinds of values.`
         },
         {
           id: "try6",
@@ -576,6 +586,37 @@ print("3.14".isdigit())  # False (a dot is not a digit)
 Handy for checking whether input is really numeric. (You'll use it more with lesson 9's type conversions.)`
         },
         {
+          id: "predict-endswith-png",
+          type: "predict",
+          title: "💭 Predict — endswith() file check",
+          content: `What does this print?
+
+\`\`\`python
+print("hello.png".endswith(".png"))
+\`\`\`
+
+Hint: it asks "does it end with this?" Answer is True or False.`,
+          options: ["True", "False", ".png", "Error"],
+          answer: 0,
+          explanation: "\"hello.png\" really does end with \".png\". → True."
+        },
+        {
+          id: "predict-isdigit-mixed",
+          type: "predict",
+          title: "💭 Predict — isdigit() check",
+          content: `What does this print (two lines)?
+
+\`\`\`python
+print("123".isdigit())
+print("12a".isdigit())
+\`\`\`
+
+Hint: needs to be **only digits** to be True.`,
+          options: ["True / True", "True / False", "False / True", "False / False"],
+          answer: 1,
+          explanation: "\"123\" is all digits → True. \"12a\" has an 'a' mixed in → False."
+        },
+        {
           id: "more-methods-case",
           type: "explain",
           title: "🅰️ capitalize / title + summary",
@@ -602,11 +643,11 @@ print("hello world".title())  # Hello World
           id: "mission1",
           type: "mission",
           title: "🏆 Final Mission!",
-          task: "Complete the ID validator!",
-          initialCode: "user_id = \"  PyThOn_User  \"\n\n# 1. Remove whitespace\nclean_id = user_id.___()\n# 2. Convert to lowercase\nlower_id = clean_id.___()\n# 3. Check length\nlength = ___(lower_id)\n\nprint(\"Original:\", user_id)\nprint(\"Cleaned:\", lower_id)\nprint(\"Length:\", length)",
+          task: "Complete the ID validator! Take `user_id` and ① trim both-end whitespace, ② convert to lowercase, ③ get the length of that result. Print as shown below. Figure out which method/function goes where on your own.",
+          initialCode: "user_id = \"  PyThOn_User  \"\n\n# 1.\nclean_id = user_id.___\n# 2.\nlower_id = clean_id.___\n# 3.\nlength = ___\n\nprint(\"Original:\", user_id)\nprint(\"Cleaned:\", lower_id)\nprint(\"Length:\", length)",
           expectedOutput: "Original:   PyThOn_User  \nCleaned: python_user\nLength: 11",
-          hint: "Use strip() → lower() → len() in order!",
-          hint2: "strip(), lower(), len()"
+          hint: "1 trims whitespace, 2 changes case, 3 gets length — which ones attach with a dot, and which one is a function?",
+          hint2: "user_id.strip(), clean_id.lower(), len(lower_id)"
         },
         {
           id: "complete",
@@ -614,11 +655,21 @@ print("hello world".title())  # Hello World
           title: "🎉 Complete!",
           content: `## What We Learned Today
 
-✅ **upper(), lower()** - Case conversion
-✅ **strip()** - Remove whitespace
-✅ **replace()** - Replace characters
-✅ **find(), count()** - Searching
-✅ **len()** - Get length
+### Transformers (return a new string)
+✅ **upper(), lower()** — case conversion
+✅ **capitalize(), title()** — first letter / each word's first letter uppercase
+✅ **strip()** — trim whitespace
+✅ **replace()** — swap text
+
+### Searchers (return a number)
+✅ **find()** — position (or -1 if missing)
+✅ **count()** — how many times
+
+### Checkers (return True/False)
+✅ **startswith(), endswith(), isdigit()** — starts/ends with / all digits
+
+### Function (no dot)
+✅ **len()** — get length
 
 Next time, we'll learn about **print() options** to make our output look even better! 🚀`
         }

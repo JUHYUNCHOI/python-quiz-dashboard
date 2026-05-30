@@ -34,7 +34,9 @@ print(10 * 3)   # 30
 print(10 / 3)   # 3.3333333333333335
 \`\`\`
 
-곱하기는 반드시 **별표 \`*\`** — \`×\` 나 \`x\` 가 아니에요.`
+곱하기는 반드시 **별표 \`*\`** — \`×\` 나 \`x\` 가 아니에요.
+
+> 💡 \`10 / 3\` 결과 끝에 \`...5\` 가 살짝 이상하게 붙어있죠? 컴퓨터가 소수를 저장하는 방식 때문이에요. **곧 Ch2 (소수 함정)** 에서 자세히 설명할게요 — 지금은 "원래 그런가보다" 하고 넘어가도 OK!`
         },
         {
           id: "intro-warnings",
@@ -99,7 +101,9 @@ print(10 % 3)    # 1           ← 나머지만! (퍼센트)
 |---|---|---|---|
 | \`/\` | 나누기 | \`10 / 3\` → 3.33... | 소수까지 나눔 |
 | \`//\` | 몫 | \`10 // 3\` → 3 | 한 명당 받는 수 |
-| \`%\` | 나머지 | \`10 % 3\` → 1 | 남는 수 |`
+| \`%\` | 나머지 | \`10 % 3\` → 1 | 남는 수 |
+
+> 💡 **왜 \`/\` 와 \`//\` 둘 다 필요해?** 케이크는 잘라 나눌 수 있으니까 \`/\` (소수 OK). 사람·개수처럼 쪼갤 수 없는 건 \`//\` (정수만). 상황에 따라 골라 써요.`
         },
         {
           id: "predict-slash-vs-doubleslash",
@@ -306,6 +310,8 @@ print((10 - 6) / 2)   # 2.0
 
 ### 우선순위 표 (높음 → 낮음)
 
+> 💡 **지금은 1~4 번까지만 외우세요.** 5~8 번은 곧 (Ch2, Ch3) 배우니까 *자리만 봐둬요*.
+
 1. \`( )\` — 괄호 (가장 우선)
 2. \`**\` — 거듭제곱
 3. \`*\`, \`/\`, \`//\`, \`%\` — 곱셈/나눗셈류
@@ -324,6 +330,16 @@ x = a + b * c < 100
 # 명확 ✅
 x = (a + (b * c)) < 100
 \`\`\``
+        },
+        {
+          id: "predict-priority",
+          type: "predict",
+          title: "💭 결과 예측 — 우선순위 적용",
+          content: "괄호 없으면 누가 먼저 계산될까요?",
+          code: "print(2 + 3 ** 2)",
+          options: ["11", "25", "13", "에러"],
+          answer: 0,
+          explanation: "거듭제곱 ** 이 덧셈 + 보다 먼저. 3 ** 2 = 9 → 2 + 9 = 11. 우선순위 2 번 (**) 이 4 번 (+) 보다 위라서."
         }
       ]
     },
@@ -447,7 +463,7 @@ print("hi" != "bye")       # True — 다름
           code: "print(0.1 + 0.2 == 0.3)",
           options: ["False", "True", "에러", "0.3"],
           answer: 0,
-          explanation: "컴퓨터가 0.1 + 0.2 를 저장할 때 살짝 오차가 생겨서 0.30000000000000004. 그래서 0.3 과 != → False. 소수 == 비교는 조심!"
+          explanation: "컴퓨터가 0.1 + 0.2 를 저장할 때 살짝 오차가 생겨서 0.30000000000000004. 그래서 0.3 과 != → False. 소수 == 비교는 조심! (기억나? Ch1 첫 step \`10 / 3 = 3.3333333333333335\` 끝의 5 도 같은 이유)"
         },
         {
           id: "try-equal",
@@ -583,8 +599,10 @@ print(not False)   # True
         {
           id: "is-not-explain",
           type: "explain",
-          title: "🔎 is / is not — None 검사",
-          content: `\`==\` 가 **값이 같은지** 묻는다면, \`is\` 는 **완전히 같은 것인지** 검사해요.
+          title: "📌 참고용 — is / is not / None 검사",
+          content: `> 💡 이 부분은 lesson 11 (조건문) 에서 자연스럽게 다시 나와요. **지금은 살짝만 알아두고 넘어가도 OK!**
+
+\`==\` 가 **값이 같은지** 묻는다면, \`is\` 는 **완전히 같은 것인지** 검사해요.
 
 가장 자주 쓰는 곳: **\`None\` 인지 확인할 때**.
 
@@ -600,8 +618,8 @@ print(x is not None)    # 반대 — 'x 가 None 이 아니다'
         {
           id: "predict-is-none",
           type: "predict",
-          title: "💭 결과 예측 — is None",
-          content: "x 가 None 일 때, 두 검사의 결과는?",
+          title: "📌 참고용 — 결과 예측: is None",
+          content: "💡 이 문제는 lesson 11 (조건문) 에서 자연스럽게 다시 나와요. 지금은 살짝만 알아두고 넘어가도 OK!\n\nx 가 None 일 때, 두 검사의 결과는?",
           code: "x = None\nprint(x is None)\nprint(x is not None)",
           options: ["True\nFalse", "False\nTrue", "True\nTrue", "False\nFalse"],
           answer: 0,
@@ -610,7 +628,7 @@ print(x is not None)    # 반대 — 'x 가 None 이 아니다'
         {
           id: "is-not-explain-rest",
           type: "explain",
-          title: "🔁 not 단독 + not in 미리보기",
+          title: "🔁 not 단독 (+ 📌 참고용 not in)",
           content: `### not — 앞에 붙여서 뒤집기
 
 \`not\` 은 한 값 **앞에** 붙어서 True/False 를 뒤집어요.
@@ -621,7 +639,9 @@ print(not False)        # True
 print(not (5 > 3))      # False  ← 5 > 3 = True 의 반대
 \`\`\`
 
-### not in — 살짝 미리보기 (lesson 5 에서 자세히)
+### 📌 참고용 — not in (lesson 5 에서 자세히)
+
+> 💡 이 부분은 lesson 5 (문자열 연산) 에서 자연스럽게 다시 나와요. 지금은 살짝만 알아두고 넘어가도 OK!
 
 문자열 안에 어떤 글자가 **없는지** 검사. (\`in\` 의 반대 — \`in\` 은 다음 레슨에서 정식 소개)
 
@@ -635,8 +655,8 @@ print('e' not in 'hello')   # False  ← 'hello' 안에 'e' 있음
         {
           id: "try-is-not",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — None 검사 + 뒤집기",
-          task: "name 이 None 인지 검사하고, 그 결과를 뒤집어 출력하세요!",
+          title: "📌 참고용 — 직접 해보기: None 검사 + 뒤집기",
+          task: "💡 이 문제는 lesson 11 (조건문) 에서 자연스럽게 다시 나와요. 지금은 살짝만 알아두고 넘어가도 OK!\n\nname 이 None 인지 검사하고, 그 결과를 뒤집어 출력하세요!",
           initialCode: "name = None\ncheck = name ___ None\nopposite = ___ check\nprint('None?', check)\nprint('아님?', opposite)",
           expectedOutput: "None? True\n아님? False",
           hint: "첫 빈칸은 None 검사용 두 글자, 둘째는 뒤집는 한 단어.",
@@ -712,6 +732,17 @@ score += 10          # 짧은 방법 — 같은 뜻!
           title: "🎬 += 가 실제로 어떻게 동작하는지 보기",
           description: "x = x + 2 와 같은 변수 업데이트를 단계별로 시각화해봐요. += 도 똑같은 동작이에요.",
           component: "variableUpdateVisualizer",
+        },
+        {
+          id: "try-compound-after-visual",
+          type: "tryit",
+          title: "🖥️ 직접 해보기 — += 따라치기",
+          task: "방금 본 동작 그대로 — x 를 5 로 시작해서 3 을 더해 다시 저장 후 출력!",
+          initialCode: "x = 5\nx ___ 3\nprint(x)",
+          expectedOutput: "8",
+          hint: "더해서 다시 저장하는 짧은 표기!",
+          hint2: "+=",
+          choices: ["+=", "-=", "*=", "=", "=="]
         },
         {
           id: "compound-explain-table",

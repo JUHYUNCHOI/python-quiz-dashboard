@@ -128,6 +128,16 @@ print(big)           # HELLO
 > 💡 문자열은 한번 만들면 못 바꿔요 (**불변**). 메서드는 항상 **새 문자열을 돌려줘요.**`
         },
         {
+          id: "try-immutable-trap",
+          type: "tryit",
+          title: "✋ 직접 함정 체험 — 원본은 정말 안 바뀌나?",
+          task: "방금 배운 불변성을 직접 봐요. `text.upper()` 만 하고 `text` 를 그대로 출력하면 뭐가 나올까요? 코드를 실행해보세요.",
+          initialCode: "text = \"Hello\"\ntext.upper()\nprint(text)   # 어떤 결과가 나올까?",
+          expectedOutput: "Hello",
+          hint: "결과를 변수에 받지 않으면 사라져요!",
+          hint2: "upper() 가 만든 새 문자열은 어디에도 저장 안 됐어요. 그래서 text 는 그대로."
+        },
+        {
           id: "try1",
           type: "tryit",
           title: "🖥️ 직접 해보기!",
@@ -377,7 +387,7 @@ text = "Hello"
 print(text.find("Python"))  # -1
 \`\`\`
 
-\`-1\` 은 "못 찾았다" 라는 약속된 신호. (조건문 배우면 "있나 없나" 검사에 쓸 거예요.)`
+\`-1\` 은 "못 찾았다" 라는 약속된 신호. 왜 하필 -1? — 자리 번호는 0 부터 시작해서 0 도 진짜 자리예요. 음수 자리는 없으니까 *못 찾았다* 신호로 쓰기 안전해서 -1 로 정했어요. (조건문 배우면 "있나 없나" 검사에 쓸 거예요.)`
         },
         {
           id: "predict-find-position",
@@ -515,7 +525,7 @@ len(text)    # ✅ 함수 — 괄호 안에 문자열을 넣음
 text.len()   # ❌ AttributeError — 문자열엔 .len() 없음!
 \`\`\`
 
-왜 다른가? — 파이썬에서 \`len()\` 은 **문자열뿐 아니라 다른 것 (리스트, 딕셔너리 등)** 길이도 잴 수 있는 만능 함수라서요. 나중에 다른 자료구조 배울 때도 다시 만나요.`
+왜 다른가? — \`len()\` 은 여러 종류의 값에 다 쓸 수 있는 만능 도구라서 점 안 찍어요. 나중에 다른 종류의 값들도 배우면 거기서도 같이 써요.`
         },
         {
           id: "try6",
@@ -575,6 +585,37 @@ print("3.14".isdigit())  # False (점이 끼어서)
 입력값이 진짜 숫자인지 검사할 때 유용. (lesson 9 에서 타입 변환 배우면 더 자주 써요.)`
         },
         {
+          id: "predict-endswith-png",
+          type: "predict",
+          title: "💭 결과 예측 — endswith() 로 파일 검사",
+          content: `이 코드 결과는?
+
+\`\`\`python
+print("hello.png".endswith(".png"))
+\`\`\`
+
+힌트: "이걸로 끝나?" 묻는 거예요. 답은 True 또는 False.`,
+          options: ["True", "False", ".png", "에러"],
+          answer: 0,
+          explanation: "\"hello.png\" 는 진짜 \".png\" 로 끝나요. → True."
+        },
+        {
+          id: "predict-isdigit-mixed",
+          type: "predict",
+          title: "💭 결과 예측 — isdigit() 검사",
+          content: `이 코드 두 줄 결과는?
+
+\`\`\`python
+print("123".isdigit())
+print("12a".isdigit())
+\`\`\`
+
+힌트: \"숫자로만\" 돼있어야 True.`,
+          options: ["True / True", "True / False", "False / True", "False / False"],
+          answer: 1,
+          explanation: "\"123\" 은 다 숫자 → True. \"12a\" 는 a 가 끼어서 → False."
+        },
+        {
           id: "more-methods-case",
           type: "explain",
           title: "🅰️ capitalize / title + 메서드 정리",
@@ -603,11 +644,11 @@ print("hello world".title())  # Hello World
           id: "mission1",
           type: "mission",
           title: "🏆 최종 미션!",
-          task: "아이디 검사기를 완성하세요!",
-          initialCode: "user_id = \"  PyThOn_User  \"\n\n# 1. 공백 제거\nclean_id = user_id.___()\n# 2. 소문자로 변환\nlower_id = clean_id.___()\n# 3. 길이 확인\nlength = ___(lower_id)\n\nprint(\"원본:\", user_id)\nprint(\"정리:\", lower_id)\nprint(\"길이:\", length)",
+          task: "아이디 검사기를 완성하세요! `user_id` 의 ① 양쪽 공백을 제거하고 ② 소문자로 만든 다음 ③ 그 결과의 길이를 구해서 아래처럼 출력해요. 어떤 메서드/함수가 어디 들어가야 할지 직접 생각해보세요.",
+          initialCode: "user_id = \"  PyThOn_User  \"\n\n# 1.\nclean_id = user_id.___\n# 2.\nlower_id = clean_id.___\n# 3.\nlength = ___\n\nprint(\"원본:\", user_id)\nprint(\"정리:\", lower_id)\nprint(\"길이:\", length)",
           expectedOutput: "원본:   PyThOn_User  \n정리: python_user\n길이: 11",
-          hint: "strip() → lower() → len() 순서로!",
-          hint2: "strip(), lower(), len()"
+          hint: "1번은 공백 제거, 2번은 대소문자 변환, 3번은 길이 — 어떤 게 점 찍는 메서드고 어떤 게 함수일까?",
+          hint2: "user_id.strip(), clean_id.lower(), len(lower_id)"
         },
         {
           id: "complete",
@@ -615,11 +656,21 @@ print("hello world".title())  # Hello World
           title: "🎉 완료!",
           content: `## 오늘 배운 것
 
-✅ **upper(), lower()** - 대소문자 변환
-✅ **strip()** - 공백 제거
-✅ **replace()** - 문자 치환
-✅ **find(), count()** - 검색
-✅ **len()** - 길이 구하기
+### 변환 (새 문자열 반환)
+✅ **upper(), lower()** — 대소문자 변환
+✅ **capitalize(), title()** — 첫 글자만 / 단어마다 첫 글자 대문자
+✅ **strip()** — 양쪽 공백 제거
+✅ **replace()** — 문자 치환
+
+### 검색 (숫자 반환)
+✅ **find()** — 자리 번호 (없으면 -1)
+✅ **count()** — 몇 번 나오는지
+
+### 검사 (True/False 반환)
+✅ **startswith(), endswith(), isdigit()** — 시작/끝/숫자만 검사
+
+### 함수 (점 안 찍음)
+✅ **len()** — 길이
 
 다음 시간에는 **print() 옵션**을 배워서 출력을 더 멋지게 꾸밀 거예요! 🚀`
         }

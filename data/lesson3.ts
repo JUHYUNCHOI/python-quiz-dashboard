@@ -53,7 +53,9 @@ gold = 5000
 
 - \`name\` 이라는 이름표가 붙은 상자에 \`'용사'\` 를 넣었어요
 - \`hp\` 라는 이름표가 붙은 상자에 \`100\` 을 넣었어요
-- \`gold\` 라는 이름표가 붙은 상자에 \`5000\` 을 넣었어요`
+- \`gold\` 라는 이름표가 붙은 상자에 \`5000\` 을 넣었어요
+
+> 💡 \`=\` 는 **수학의 '같다' 가 아니에요!** 오른쪽 값을 왼쪽 상자에 **넣는다** 는 뜻. 자세한 건 곧 나올 \`= 기호의 의미\` 에서 다시 정리해요.`
         },
         {
           id: "concept-builder",
@@ -61,6 +63,16 @@ gold = 5000
           title: "🎬 변수 만들기 — 문법 조립",
           description: "변수 = 값 문법이 어떻게 조립되는지 직접 눌러봐요.",
           component: "pyVariableBuilder",
+        },
+        {
+          id: "try-builder-followup",
+          type: "tryit",
+          title: "🖥️ 따라 만들어보기 — age 상자",
+          task: "방금 조립한 문법대로 age 변수에 15 를 넣고 출력해봐요!",
+          initialCode: "age = 15\nprint(___)",
+          expectedOutput: "15",
+          hint: "상자에서 값을 꺼낼 땐 변수 이름만 적어요 (따옴표 X).",
+          hint2: "age"
         },
         {
           id: "concept-why",
@@ -318,7 +330,13 @@ print(money)
 print(money)   # ❌ NameError — money 라는 상자 만든 적 없음
 \`\`\`
 
-먼저 \`money = 1000\` 처럼 **만들고** 써야 해요.
+실제 파이썬이 보여주는 빨간 글씨:
+
+\`\`\`
+NameError: name 'money' is not defined
+\`\`\`
+
+> 🚨 이 빨간 글씨 보이면 = **변수 안 만들고 쓴 거.** 먼저 \`money = 1000\` 처럼 **만들고** 써야 해요.
 
 > 💡 변수는 **먼저 저장 → 그 다음 꺼내기.** 순서를 어기면 NameError.`
         },
@@ -338,6 +356,16 @@ print(money)   # ❌ NameError — money 라는 상자 만든 적 없음
           title: "🎬 x = x + 2 애니메이션으로 이해하기",
           description: "탭을 눌러서 x 값이 어떻게 바뀌는지(혹은 안 바뀌는지!) 확인해봐요.",
           component: "variableUpdateVisualizer",
+        },
+        {
+          id: "try-self-update",
+          type: "tryit",
+          title: "🖥️ 따라 해보기 — x 값 갱신",
+          task: "방금 본 패턴 그대로! x 를 5 로 시작해서 3 을 더해 다시 x 에 저장하고 출력해봐요.",
+          initialCode: "x = 5\nx = ___ + 3\nprint(x)",
+          expectedOutput: "8",
+          hint: "오른쪽 먼저 계산 — 5 + 3 = 8. 빈칸엔 변수 이름 (따옴표 X).",
+          hint2: "x"
         },
         {
           id: "quiz2",
@@ -383,14 +411,14 @@ player_hp = 100
 score2 = 50
 
 # ❌ NG
-my-name = '홍'   # 하이픈은 빼기 연산자랑 헷갈려요
+my-name = '홍'   # 하이픈은 나중에 배울 빼기 (-) 기호와 같아서 헷갈려요
 my name = '홍'   # 띄어쓰기는 두 단어로 인식됨
 my@name = '홍'   # @ 같은 특수문자 X
 \`\`\`
 
 ### 규칙 2: 첫 글자
 
-숫자가 맨 앞에 오면 안 돼요. 컴파일러가 "이게 변수야 숫자야?" 헷갈려요.
+숫자가 맨 앞에 오면 안 돼요. 파이썬이 "이게 변수야 숫자야?" 헷갈려요.
 
 \`\`\`python
 2score = 50    # ❌
@@ -413,6 +441,8 @@ print = 3      # ❌ 내장 함수 — 가능은 하지만 절대 X
 \`\`\`
 
 **대표 예약어**: \`if\`, \`else\`, \`for\`, \`while\`, \`and\`, \`or\`, \`not\`, \`True\`, \`False\`, \`None\`, \`return\`, \`def\`, \`class\`, \`import\`
+
+> 💡 지금 다 외울 필요 X. 나중에 하나씩 다 배울 단어들이에요. 일단 **"이런 단어들은 변수 이름으로 쓰지 말자"** 정도만 기억하면 충분해요.
 
 ### 규칙 4: 대소문자 구분
 

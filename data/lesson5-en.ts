@@ -238,6 +238,16 @@ Safe range: \`0 ~ len(text)-1\` (from front), \`-len(text) ~ -1\` (from back).`
           componentProps: { initialText: "Python" },
         },
         {
+          id: "try-index-after-viz",
+          type: "tryit",
+          title: "🖥️ Lock in indexing — your turn",
+          task: "Print the first and last character of \"Hello\"! (Blanks: index numbers.)",
+          initialCode: "text = \"Hello\"\n# Blank: first-character index\nprint(text[___])\n# Blank: last-character index (use a negative one!)\nprint(text[___])",
+          expectedOutput: "H\no",
+          hint: "First is index 0, last is -1.",
+          hint2: "0 / -1"
+        },
+        {
           id: "predict-neg-index",
           type: "predict",
           title: "💭 What character will appear?",
@@ -255,8 +265,8 @@ print(word[-2])
           id: "try-len-index",
           type: "tryit",
           title: "🖥️ Try It — Length and Index",
-          task: "Print the first character, last character, and length of a name!",
-          initialCode: "name = \"Python\"\n\n# First character\nfirst = name[___]\n# Last character (negative index)\nlast = name[___]\n# Length\nlength = ___(name)\n\nprint(\"first:\", first)\nprint(\"last:\", last)\nprint(\"length:\", length)",
+          task: "Print the first character, last character, and length of a name!\n💡 The comma (,) inside print prints multiple values on one line — full details in Ch3!",
+          initialCode: "name = \"Python\"\n\n# First character\nfirst = name[___]\n# Last character (negative index)\nlast = name[___]\n# Length\nlength = ___(name)\n\n# 💡 print(a, b, c) — comma prints multiple values; Ch3 explains why\nprint(\"first:\", first)\nprint(\"last:\", last)\nprint(\"length:\", length)",
           expectedOutput: "first: P\nlast: n\nlength: 6",
           hint: "First character is index 0. Use a negative index for the last one. There's a built-in for length too.",
           hint2: "0 / -1 / len"
@@ -491,6 +501,8 @@ print("apple" < "Apple")    # False — uppercase is "smaller"!
 
 Python uses character codes (ASCII) where every uppercase letter is smaller than every lowercase letter. \`"Z" < "a"\` is \`True\` — weird but true. Mix cases carefully when sorting.
 
+> 💡 **ASCII** = a **number tag** the computer assigns to every character. \`A\` is 65, \`a\` is 97, and so on. For now, just remember: "each character has a hidden number behind it."
+
 ### Use case — show answer comparison
 
 \`\`\`python
@@ -691,12 +703,12 @@ You need two \`\\\\\` to print one backslash.`
         {
           id: "try-escape",
           type: "tryit",
-          title: "🖥️ Try It — Escape and newline",
-          task: "No blanks — just run it to see how \\n and \\t render!",
-          initialCode: "# No blanks — just press Run\nprint(\"Title\\n\\titem 1\\n\\titem 2\")",
+          title: "🖥️ Try It — Place \\n and \\t",
+          task: "Fill the blanks with \\n (newline) or \\t (tab) so the output matches!\nExpected:\nTitle\n\titem 1\n\titem 2",
+          initialCode: "# Blank 1: between Title and item 1 — newline?\n# Blank 2: in front of item 2 — indentation?\nprint(\"Title___\\titem 1\\n___item 2\")",
           expectedOutput: "Title\n\titem 1\n\titem 2",
-          hint: "Press Run — \\n becomes a newline, \\t becomes a tab.",
-          hint2: ""
+          hint: "Newline is \\\\n, tab is \\\\t. First blank = newline, second blank = tab.",
+          hint2: "\\n / \\t"
         }
       ]
     },
@@ -754,7 +766,7 @@ print("Score:", score)   # Score: 100
           type: "mission",
           title: "🏆 Mission 3 — Initial card",
           task: "Both blanks are INDEX NUMBERS — the index pointing to the first character.",
-          initialCode: "first = \"Alice\"\nlast = \"Choi\"\n\n# Blanks: index (number) pointing to the first character\ninitials = (first[___] + last[___]).upper()\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
+          initialCode: "first = \"Alice\"\nlast = \"Choi\"\n\n# Blanks: index (number) pointing to the first character\n# (Names already start with capitals, so the initials come out right)\ninitials = first[___] + last[___]\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
           expectedOutput: "========\n  AC\nAlice Choi\n========",
           hint: "What's the index of the first character? (counting from 0)",
           hint2: "0 / 0"

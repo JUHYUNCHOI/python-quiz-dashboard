@@ -53,7 +53,9 @@ Pictured:
 
 - The box labeled \`name\` holds \`'Hero'\`
 - The box labeled \`hp\` holds \`100\`
-- The box labeled \`gold\` holds \`5000\``
+- The box labeled \`gold\` holds \`5000\`
+
+> 💡 \`=\` is **NOT math's "equals"!** It means **put** the right-side value into the left-side box. We'll dig into this next in \`What Does = Actually Mean?\`.`
         },
         {
           id: "concept-builder",
@@ -61,6 +63,16 @@ Pictured:
           title: "🎬 Build a Variable — Syntax Assembly",
           description: "Click through to see how \`variable = value\` is put together.",
           component: "pyVariableBuilder",
+        },
+        {
+          id: "try-builder-followup",
+          type: "tryit",
+          title: "🖥️ Try It — Build the age Box",
+          task: "Follow the syntax you just assembled — store 15 in age and print it!",
+          initialCode: "age = 15\nprint(___)",
+          expectedOutput: "15",
+          hint: "To get the value out, just write the variable name (no quotes).",
+          hint2: "age"
         },
         {
           id: "concept-why",
@@ -318,7 +330,13 @@ print(money)
 print(money)   # ❌ NameError — no box named money was ever created
 \`\`\`
 
-You have to **create** it first with \`money = 1000\`, then use it.
+The actual red message Python shows:
+
+\`\`\`
+NameError: name 'money' is not defined
+\`\`\`
+
+> 🚨 See this red text? → **you used a variable you never created.** Make it first with \`money = 1000\`, then use it.
 
 > 💡 Variables: **store first → then read.** Break that order → NameError.`
         },
@@ -338,6 +356,16 @@ You have to **create** it first with \`money = 1000\`, then use it.
           title: "🎬 See x = x + 2 in Action",
           description: "Click through the tabs to see exactly how x changes — or doesn't!",
           component: "variableUpdateVisualizer",
+        },
+        {
+          id: "try-self-update",
+          type: "tryit",
+          title: "🖥️ Try It — Self Update",
+          task: "Same pattern you just saw! Start x at 5, add 3, store back into x, then print.",
+          initialCode: "x = 5\nx = ___ + 3\nprint(x)",
+          expectedOutput: "8",
+          hint: "Right side first: 5 + 3 = 8. The blank takes a variable name (no quotes).",
+          hint2: "x"
         },
         {
           id: "quiz2",
@@ -383,14 +411,14 @@ player_hp = 100
 score2 = 50
 
 # ❌ NG
-my-name = 'Lee'   # hyphen looks like minus operator
+my-name = 'Lee'   # hyphen looks like the minus (-) sign you'll learn later
 my name = 'Lee'   # space splits into two words
 my@name = 'Lee'   # special chars like @ not allowed
 \`\`\`
 
 ### Rule 2: first character
 
-A digit can't lead. The interpreter would be confused: "is this a variable or a number?"
+A digit can't lead. Python would be confused: "is this a variable or a number?"
 
 \`\`\`python
 2score = 50    # ❌
@@ -413,6 +441,8 @@ print = 3      # ❌ built-in function — possible but never do this
 \`\`\`
 
 **Common keywords**: \`if\`, \`else\`, \`for\`, \`while\`, \`and\`, \`or\`, \`not\`, \`True\`, \`False\`, \`None\`, \`return\`, \`def\`, \`class\`, \`import\`
+
+> 💡 No need to memorize them now. You'll learn each one in upcoming lessons. For now, just remember: **"don't use these as variable names"** — that's enough.
 
 ### Rule 4: case sensitive
 

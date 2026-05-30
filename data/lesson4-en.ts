@@ -34,7 +34,9 @@ print(10 * 3)   # 30
 print(10 / 3)   # 3.3333333333333335
 \`\`\`
 
-Multiplication is the **asterisk \`*\`** — not \`×\` and not the letter \`x\`.`
+Multiplication is the **asterisk \`*\`** — not \`×\` and not the letter \`x\`.
+
+> 💡 Notice that weird \`...5\` at the end of \`10 / 3\`? That's how computers store decimals — tiny rounding errors. **We'll cover this in detail in Ch2 (the float gotcha)** — for now, just know "decimals look slightly off sometimes".`
         },
         {
           id: "intro-warnings",
@@ -99,7 +101,9 @@ print(10 % 3)    # 1           ← remainder only (percent)
 |---|---|---|---|
 | \`/\` | division | \`10 / 3\` → 3.33... | full decimal |
 | \`//\` | quotient | \`10 // 3\` → 3 | how many each |
-| \`%\` | remainder | \`10 % 3\` → 1 | how many left |`
+| \`%\` | remainder | \`10 % 3\` → 1 | how many left |
+
+> 💡 **Why have both \`/\` and \`//\`?** Cake can be sliced into fractions, so \`/\` (decimal OK). People or items can't be split, so \`//\` (whole numbers only). Pick the right one for the situation.`
         },
         {
           id: "predict-slash-vs-doubleslash",
@@ -306,6 +310,8 @@ print((10 - 6) / 2)   # 2.0
 
 ### Precedence (high → low)
 
+> 💡 **For now, just memorize 1~4.** 5~8 are coming soon (Ch2, Ch3) — *just note their spots* for now.
+
 1. \`( )\` — parentheses (highest)
 2. \`**\` — exponent
 3. \`*\`, \`/\`, \`//\`, \`%\` — multiplication/division
@@ -324,6 +330,16 @@ x = a + b * c < 100
 # Clear ✅
 x = (a + (b * c)) < 100
 \`\`\``
+        },
+        {
+          id: "predict-priority",
+          type: "predict",
+          title: "💭 Predict — Precedence in action",
+          content: "Without parentheses, who runs first?",
+          code: "print(2 + 3 ** 2)",
+          options: ["11", "25", "13", "Error"],
+          answer: 0,
+          explanation: "Exponent ** runs before addition +. 3 ** 2 = 9 → 2 + 9 = 11. Rank 2 (**) beats rank 4 (+)."
         }
       ]
     },
@@ -447,7 +463,7 @@ Computers store decimals with tiny rounding errors. **Integer \`==\` is safe; fl
           code: "print(0.1 + 0.2 == 0.3)",
           options: ["False", "True", "Error", "0.3"],
           answer: 0,
-          explanation: "Python stores 0.1 + 0.2 with a tiny rounding error: 0.30000000000000004. So it's NOT exactly 0.3 → False. Float == needs care!"
+          explanation: "Python stores 0.1 + 0.2 with a tiny rounding error: 0.30000000000000004. So it's NOT exactly 0.3 → False. Float == needs care! (Remember? The trailing 5 in Ch1's first step \`10 / 3 = 3.3333333333333335\` is the same reason.)"
         },
         {
           id: "try-equal",
@@ -598,8 +614,10 @@ print(not False)   # True   ← opposite of False
         {
           id: "is-not-explain",
           type: "explain",
-          title: "🔎 is / is not — None check",
-          content: `While \`==\` checks if **values are equal**, \`is\` checks if it's **the very same object**.
+          title: "📌 For reference — is / is not / None check",
+          content: `> 💡 This part comes back naturally in lesson 11 (conditionals). **It's OK to just skim it for now!**
+
+While \`==\` checks if **values are equal**, \`is\` checks if it's **the very same object**.
 
 The most common use: **checking for \`None\`**.
 
@@ -615,8 +633,8 @@ print(x is not None)    # opposite — "x is not None"
         {
           id: "predict-is-none",
           type: "predict",
-          title: "💭 Predict — is None",
-          content: "When x is None, what do these two checks return?",
+          title: "📌 For reference — Predict: is None",
+          content: "💡 This comes back naturally in lesson 11 (conditionals). OK to just skim for now!\n\nWhen x is None, what do these two checks return?",
           code: "x = None\nprint(x is None)\nprint(x is not None)",
           options: ["True\nFalse", "False\nTrue", "True\nTrue", "False\nFalse"],
           answer: 0,
@@ -625,7 +643,7 @@ print(x is not None)    # opposite — "x is not None"
         {
           id: "is-not-explain-rest",
           type: "explain",
-          title: "🔁 not alone + not in preview",
+          title: "🔁 not alone (+ 📌 for-reference not in)",
           content: `### not — flip in front
 
 Put \`not\` **in front** of a value to flip True/False.
@@ -636,7 +654,9 @@ print(not False)        # True
 print(not (5 > 3))      # False  ← opposite of (5 > 3) which is True
 \`\`\`
 
-### not in — quick preview (lesson 5 covers this properly)
+### 📌 For reference — not in (lesson 5 covers this properly)
+
+> 💡 This comes back naturally in lesson 5 (string operations). OK to just skim for now!
 
 Check if a character is **not in** a string. (opposite of \`in\` — \`in\` is introduced next lesson.)
 
@@ -650,8 +670,8 @@ print('e' not in 'hello')   # False  ← 'e' is in 'hello'
         {
           id: "try-is-not",
           type: "tryit",
-          title: "🖥️ Try It — None check + flip",
-          task: "Check whether name is None, then flip that result. Print both!",
+          title: "📌 For reference — Try It: None check + flip",
+          task: "💡 This comes back naturally in lesson 11 (conditionals). OK to just skim for now!\n\nCheck whether name is None, then flip that result. Print both!",
           initialCode: "name = None\ncheck = name ___ None\nopposite = ___ check\nprint('None?', check)\nprint('not?', opposite)",
           expectedOutput: "None? True\nnot? False",
           hint: "First blank: 2-letter None check. Second: one word to flip.",
@@ -727,6 +747,17 @@ Read \`+=\` as: "**add 10 to the current value and store it back**".`
           title: "🎬 See how += actually works",
           description: "Step through a variable update like x = x + 2 visually. += is doing the same thing under the hood.",
           component: "variableUpdateVisualizer",
+        },
+        {
+          id: "try-compound-after-visual",
+          type: "tryit",
+          title: "🖥️ Try It — Type out the += you just saw",
+          task: "Same thing you just watched — start with x = 5, add 3, store back, then print!",
+          initialCode: "x = 5\nx ___ 3\nprint(x)",
+          expectedOutput: "8",
+          hint: "Short form for 'add and store back'!",
+          hint2: "+=",
+          choices: ["+=", "-=", "*=", "=", "=="]
         },
         {
           id: "compound-explain-table",

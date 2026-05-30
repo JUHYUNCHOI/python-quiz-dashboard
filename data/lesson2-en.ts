@@ -64,12 +64,6 @@ Let's look at each one!`
 
 **Often used for:** height, weight, prices that aren't whole units, average scores, probability
 
-⚠️ **The float gotcha** — computers can't store decimals with **perfect accuracy**.
-\`\`\`python
-print(0.1 + 0.2)   # 0.30000000000000004 😱
-\`\`\`
-> Not getting exactly 0.3 is normal! If you need exact math, you have to handle it specially. For now, just remember "this can happen."
-
 ---
 
 ### 3️⃣ String (str) — letters
@@ -94,10 +88,17 @@ True, False
 
 ⚠️ **Must start with a capital letter!** \`true\` ❌, \`True\` ✅
 
-**Often used for:** logged in or not, pass/fail, comparison results — anything that's **one of exactly two options**
-
-> 💡 **Fun fact:** Inside Python, \`True\` actually acts like the number **1**, and \`False\` acts like **0**.
-> Try \`print(True + True)\` — it prints **2**! (For now just keep this as a curiosity; you'll see more in the conditionals lesson.)`
+**Often used for:** logged in or not, pass/fail, comparison results — anything that's **one of exactly two options**`
+        },
+        {
+          id: "try-type-print",
+          type: "tryit",
+          title: "🖥️ Type it out!",
+          task: "Run the code below as-is. See how the type of integer 10 shows up!",
+          initialCode: "print(type(10))",
+          expectedOutput: "<class 'int'>",
+          hint: "Just hit ▶ Run.",
+          hint2: "print(type(10))"
         },
         {
           id: "quiz1",
@@ -212,12 +213,9 @@ print(False)  # False
 
 \`\`\`python
 print(10 > 5)    # True   (10 is greater than 5)
-print(10 < 5)    # False  (10 is not less than 5)
-print(7 == 7)    # True   (they're equal)
-print(3 != 3)    # False  (they're not different)
 \`\`\`
 
-> 💡 \`==\` asks "are they equal?", \`!=\` asks "are they different?". The answer is always \`True\` or \`False\`.
+> 💡 Besides \`>\`, there are more comparisons: \`<\`, \`==\`, \`!=\`. You'll see them in detail in **lesson 4 (operators)**. For now, just remember "comparison result = bool".
 
 ### ❌ Things that don't work
 
@@ -309,7 +307,22 @@ Only the same types can be combined:
 3.2 + 1.0          # ✅ 4.2
 \`\`\`
 
-To combine a string with a number, use **f-strings** — you'll learn that soon!`
+You'll learn how to combine strings with numbers in a **later lesson**. For now, just remember "different types + each other → error".`
+        },
+        {
+          id: "predict-type-error",
+          type: "predict",
+          title: "💭 Predict the result!",
+          content: "What happens when this code runs? Guess first, then pick.",
+          code: "print(\"Score: \" + 95)",
+          options: [
+            "Prints: Score: 95",
+            "Prints Score: and drops the 95",
+            "Throws a TypeError",
+            "Prints 95 Score"
+          ],
+          answer: 2,
+          explanation: "The string \"Score: \" and the integer 95 are different types, so + can't combine them. Red error message: `TypeError: can only concatenate str (not \"int\") to str`. Once you've seen this message, you'll recognize it instantly the next time it happens."
         },
         {
           id: "quiz-error1",
@@ -320,7 +333,7 @@ To combine a string with a number, use **f-strings** — you'll learn that soon!
             "phone = 555-867-5309",
             "phone = '555-867-5309'",
             "phone = 555.867.5309",
-            "phone = [555, 867, 5309]"
+            "phone = 555 867 5309"
           ],
           answer: 1,
           explanation: "Hyphens (-) mean subtraction in Python! Wrap it in quotes to store it as a string."
@@ -361,7 +374,25 @@ To combine a string with a number, use **f-strings** — you'll learn that soon!
 
 **Remember!**
 - Strings **require quotes**
-- Booleans **start with a capital letter**`
+- Booleans **start with a capital letter**
+
+---
+
+### 💡 Nice to know (optional)
+
+A little outside today's main topic, but worth keeping in mind:
+
+**The float gotcha** — computers can't store decimals with perfect accuracy.
+\`\`\`python
+print(0.1 + 0.2)   # 0.30000000000000004 😱
+\`\`\`
+Not getting exactly 0.3 is normal! For exact math you'd handle it specially, but for now just "this can happen."
+
+**True / False actually behave like numbers** — \`True\` is 1, \`False\` is 0.
+\`\`\`python
+print(True + True)   # 2
+\`\`\`
+A curious fact. You'll see it again in the conditionals lesson.`
         },
         {
           id: "mission1",

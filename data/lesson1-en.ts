@@ -63,6 +63,16 @@ Let's break it down piece by piece:
           component: "pyPrintBuilder"
         },
         {
+          id: "try-print-builder",
+          type: "tryit",
+          title: "🖥️ Type What You Just Saw",
+          task: "Type out `print('Hi')` exactly as you saw it in the visualization!",
+          initialCode: "print(___)",
+          expectedOutput: "Hi",
+          hint: "The blank takes 'Hi' wrapped in quotes.",
+          hint2: "'Hi'"
+        },
+        {
           id: "print-explain-uses",
           type: "explain",
           title: "🖨️ print() — More Examples & Pitfalls",
@@ -86,6 +96,8 @@ print('🍕🍕🍕')        # 🍕🍕🍕 (emojis work too)
 print(Hello)         # NameError — without quotes the computer gets confused
 Print('Hello')       # NameError — capital P doesn't work. All lowercase!
 \`\`\`
+
+> 💡 **NameError** literally means "name error" — the computer is saying "I don't know any name like that." Without quotes, the computer thinks \`Hello\` is some name you defined, and it can't find it.
 
 \`print\` must be **all lowercase**, and text must be **wrapped in quotes**.`
         },
@@ -144,7 +156,9 @@ Result:
 
 Why do strings need quotes but numbers don't?
 → The computer **recognizes numbers directly.** When it sees \`123\`, it instantly knows "that's one hundred twenty-three."
-→ But \`Hello\` without quotes? The computer can't tell if you mean text or some name you defined.`
+→ But \`Hello\` without quotes? The computer can't tell if you mean **text** or **some name** you defined.
+
+> 💡 What "some name" means — you'll learn that **later** (variables). For now, just remember: "text needs quotes, numbers don't."`
         },
         {
           id: "number-explain-math",
@@ -245,6 +259,16 @@ print(20)   # Mid-line — everything from # to end of line is a comment
 - **Mid-line** — everything from \`#\` to the end of the line is a comment. Good for short notes attached to that code line.
 
 > 💡 You'll see \`#\` a lot in lesson code. **When you see \`#\`, just read it as "ah, this is a note"** and move on.`
+        },
+        {
+          id: "predict-comment-output",
+          type: "predict",
+          title: "💭 Predict — Code with Comments",
+          content: "We said anything after `#` is ignored by the computer. So what does this code print?",
+          code: "# Hello there\nprint(10)   # print the number 10",
+          options: ["10", "Hello there\n10", "10\nprint the number 10", "Error"],
+          answer: 0,
+          explanation: "Everything from `#` to the end of the line is ignored. The first line disappears entirely; on the second line, `# print the number 10` is ignored. Only `print(10)` actually runs, so the screen shows just `10`."
         },
         {
           id: "quiz2",

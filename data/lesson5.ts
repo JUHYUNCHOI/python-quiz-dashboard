@@ -234,6 +234,16 @@ print(text[5])   # IndexError
           componentProps: { initialText: "Python" },
         },
         {
+          id: "try-index-after-viz",
+          type: "tryit",
+          title: "🖥️ 인덱싱 바로 손에 익히기",
+          task: "Hello 의 첫 글자와 마지막 글자를 출력하세요! (빈칸: 인덱스 숫자)",
+          initialCode: "text = \"Hello\"\n# 빈칸: 첫 글자 인덱스\nprint(text[___])\n# 빈칸: 마지막 글자 인덱스 (음수로 한 번에!)\nprint(text[___])",
+          expectedOutput: "H\no",
+          hint: "첫 글자는 0번, 마지막은 -1.",
+          hint2: "0 / -1"
+        },
+        {
           id: "predict-neg-index",
           type: "predict",
           title: "💭 어떤 글자가 나올까?",
@@ -251,8 +261,8 @@ print(word[-2])
           id: "try-len-index",
           type: "tryit",
           title: "🖥️ 직접 해보기 — 길이와 인덱스",
-          task: "이름의 첫 글자, 마지막 글자, 길이를 출력하세요!",
-          initialCode: "name = \"Python\"\n\n# 첫 글자\nfirst = name[___]\n# 마지막 글자 (음수 인덱스)\nlast = name[___]\n# 길이\nlength = ___(name)\n\nprint(\"첫:\", first)\nprint(\"끝:\", last)\nprint(\"길이:\", length)",
+          task: "이름의 첫 글자, 마지막 글자, 길이를 출력하세요!\n💡 print 안의 콤마(,) 는 \"여러 값을 한 줄에 같이 출력\" 하는 방법 — 자세한 건 Ch3 에서!",
+          initialCode: "name = \"Python\"\n\n# 첫 글자\nfirst = name[___]\n# 마지막 글자 (음수 인덱스)\nlast = name[___]\n# 길이\nlength = ___(name)\n\n# 💡 콤마(,) 로 여러 값 한 줄에 — Ch3 에서 자세히\nprint(\"첫:\", first)\nprint(\"끝:\", last)\nprint(\"길이:\", length)",
           expectedOutput: "첫: P\n끝: n\n길이: 6",
           hint: "첫 글자는 0번. 마지막 글자는 음수 인덱스로 한 번에. 길이 구하는 내장함수도 기억나죠?",
           hint2: "0 / -1 / len"
@@ -474,6 +484,8 @@ print("kiwi" < "apple")     # False — k 가 a 보다 뒤
 
 **왜 그래요?** 컴퓨터는 글자마다 숫자 코드 (ASCII) 를 매겨두고, 그 숫자로 비교해요. 대문자 \`A\` (65) < 소문자 \`a\` (97). 그래서 \`"Apple" < "apple"\` 이 \`True\`.
 
+> 💡 **ASCII** = 컴퓨터가 글자에 매긴 **번호표**. \`A\` 는 65 번, \`a\` 는 97 번 같은 식. 지금은 "글자마다 숨겨진 번호가 있다" 정도만 알면 충분해요!
+
 사전 순서 = 첫 글자부터 한 글자씩 비교. 첫 글자가 같으면 다음 글자로 넘어가요. 사전 찾는 방법과 똑같아요.
 
 ### 활용 — 답 검사
@@ -673,12 +685,12 @@ print("a\\\\nb")   # 글자 그대로: a\\nb (백슬래시 자체를 표현)
         {
           id: "try-escape",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 이스케이프와 줄바꿈",
-          task: "코드를 그대로 실행해 \\n 과 \\t 가 실제로 어떻게 보이는지 확인하세요!",
-          initialCode: "# 빈칸 없음 — 그대로 실행 버튼 누르기\nprint(\"제목\\n\\t항목 1\\n\\t항목 2\")",
+          title: "🖥️ 직접 해보기 — 줄바꿈과 탭 끼우기",
+          task: "빈칸에 \\n (줄바꿈) 또는 \\t (탭) 을 넣어 아래 결과가 나오게 하세요!\n출력 예:\n제목\n\t항목 1\n\t항목 2",
+          initialCode: "# 빈칸 1: 제목과 항목 사이 — 줄바꿈?\n# 빈칸 2: \"항목 1\" 앞 — 들여쓰기?\n# 빈칸 3,4: 항목 1 과 항목 2 사이도 똑같이\nprint(\"제목___\\t항목 1\\n___항목 2\")",
           expectedOutput: "제목\n\t항목 1\n\t항목 2",
-          hint: "그대로 실행 — \\n 은 줄바꿈, \\t 는 탭 으로 바뀝니다.",
-          hint2: ""
+          hint: "줄바꿈은 \\\\n, 탭은 \\\\t. 첫 빈칸은 줄바꿈, 둘째 빈칸은 탭.",
+          hint2: "\\n / \\t"
         }
       ]
     },
@@ -749,7 +761,7 @@ print("점수:", score)   # 점수: 100
           type: "mission",
           title: "🏆 미션 3 — 이름 이니셜 카드",
           task: "두 빈칸 모두 인덱스 번호 (숫자) — 첫 글자를 가리키는 번호를 넣으세요!",
-          initialCode: "first = \"Alice\"\nlast = \"Choi\"\n\n# 빈칸: 첫 글자를 가리키는 인덱스 (숫자)\ninitials = (first[___] + last[___]).upper()\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
+          initialCode: "first = \"Alice\"\nlast = \"Choi\"\n\n# 빈칸: 첫 글자를 가리키는 인덱스 (숫자)\n# (이름이 이미 대문자로 시작하니 그대로 이니셜이 됨)\ninitials = first[___] + last[___]\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
           expectedOutput: "========\n  AC\nAlice Choi\n========",
           hint: "첫 글자의 인덱스는? (0부터 셈)",
           hint2: "0 / 0"
