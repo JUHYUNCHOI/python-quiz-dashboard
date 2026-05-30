@@ -118,9 +118,9 @@ print("나이: " + 15)   # TypeError — 문자열 + 숫자는 불가!
 
 \`\`\`python
 text = "hello"
-print(len(text))     # 5
+print(len(text))
 
-print(len("안녕"))   # 2 — 한글 한 글자도 1개로 셈
+print(len("안녕"))   # 한글 한 글자도 1개로 셈
 \`\`\`
 
 ### 왜 필요해요?
@@ -132,6 +132,20 @@ print(len("안녕"))   # 2 — 한글 한 글자도 1개로 셈
 - **비밀번호 길이 체크** — 8 자 이상인가?
 - **빈 입력 확인** — \`len(text) == 0\` 이면 비었음
 - **글자 수 제한** — 트위터 280 자, SMS 90 자`
+        },
+        {
+          id: "predict-len-hello",
+          type: "predict",
+          title: "💭 결과 예측 — len()",
+          content: `이 코드를 실행하면 어떤 결과가 나올까요?
+
+\`\`\`python
+text = "hello"
+print(len(text))
+\`\`\``,
+          options: ["4", "5", "6", "에러"],
+          answer: 1,
+          explanation: "hello 는 h-e-l-l-o 다섯 글자. len() 은 글자 수를 세요."
         },
         {
           id: "len-explain-edges",
@@ -211,6 +225,13 @@ print(text[5])   # IndexError
 \`\`\`
 
 안전한 범위: \`0 ~ len(text)-1\` (앞에서), \`-len(text) ~ -1\` (뒤에서).`
+        },
+        {
+          id: "indexing-visualizer",
+          type: "interactive",
+          title: "🎬 직접 인덱스 눌러보기",
+          component: "pyStringIndexVisualizer",
+          componentProps: { initialText: "Python" },
         },
         {
           id: "predict-neg-index",
@@ -357,6 +378,20 @@ print("LOVE" in text)
 - **확장자 확인** — \`".jpg" in filename\``
         },
         {
+          id: "predict-in-case",
+          type: "predict",
+          title: "💭 결과 예측 — 대소문자 in",
+          content: `이 코드 결과는?
+
+\`\`\`python
+text = "I love Python"
+print("LOVE" in text)
+\`\`\``,
+          options: ["True", "False", "에러", "love"],
+          answer: 1,
+          explanation: "\`in\` 은 대소문자를 구분해요. text 안에는 소문자 \`love\` 만 있고 \`LOVE\` 는 없어요 → False.\n\n대소문자 무시 검사는 lesson 6 에서 \`.lower()\` 같은 메서드로 배워요."
+        },
+        {
           id: "in-explain-detail",
           type: "explain",
           title: "🔧 in — not in / 대소문자 주의",
@@ -409,6 +444,21 @@ print(a != c)
 - **답 확인** — \`answer == "y"\`
 - **상태 비교** — \`status == "OK"\`
 - **명령어 매칭** — \`cmd == "quit"\``
+        },
+        {
+          id: "predict-compare-case",
+          type: "predict",
+          title: "💭 결과 예측 — == 대소문자",
+          content: `이 코드 결과는?
+
+\`\`\`python
+a = "hello"
+c = "Hello"
+print(a == c)
+\`\`\``,
+          options: ["True", "False", "에러", "hello"],
+          answer: 1,
+          explanation: "\`==\` 는 글자가 **완전히 같아야** True. \`a\` (소문자 h) 와 \`c\` (대문자 H) 는 다른 글자라 False.\n\n대소문자 무시하고 비교하려면 lesson 6 에서 배울 \`.lower()\` 가 필요해요."
         },
         {
           id: "compare-explain-order",

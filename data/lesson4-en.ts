@@ -102,14 +102,20 @@ print(10 % 3)    # 1           ← remainder only (percent)
 | \`%\` | remainder | \`10 % 3\` → 1 | how many left |`
         },
         {
+          id: "predict-slash-vs-doubleslash",
+          type: "predict",
+          title: "💭 Predict — / vs //",
+          content: "What's the difference between these two outputs?",
+          code: "print(5 / 2)\nprint(5 // 2)",
+          options: ["2.5\n2", "2\n2.5", "2.5\n2.5", "2\n2"],
+          answer: 0,
+          explanation: "/ goes to decimal → 2.5. // is quotient only → 2. Same 5÷2 but different shape."
+        },
+        {
           id: "special-explain-examples",
           type: "explain",
           title: "🍬 More // and % examples",
           content: `\`\`\`python
-# 7 candies for 2 people
-print(7 // 2)    # 3 — 3 each
-print(7 % 2)     # 1 — 1 left
-
 # Minutes → hours:minutes
 print(75 // 60)  # 1 — 1 hour
 print(75 % 60)   # 15 — 15 minutes
@@ -120,6 +126,16 @@ print(100 % 7)   # 2 — 2 pages left
 \`\`\`
 
 > 🎯 \`//\` = "how many each?", \`%\` = "how many left?"`
+        },
+        {
+          id: "predict-candy-modulo",
+          type: "predict",
+          title: "💭 Predict — Sharing candies",
+          content: "7 candies for 2 people. What's the output?",
+          code: "print(7 // 2)\nprint(7 % 2)",
+          options: ["3\n1", "1\n3", "3.5\n0", "2\n3"],
+          answer: 0,
+          explanation: "3 each (quotient) + 1 left (remainder). // and % often appear as a pair."
         },
         {
           id: "try2",
@@ -191,6 +207,16 @@ print((22 + 5) % 24)   # 3  ← remainder of 27 divided by 24
 \`% N\` says "when a number goes past N, start back at 0" — clocks, days-of-week, circular seating all use this.
 
 > 🎯 One-liner: **% 2 = parity, % N = multiple-of-N (0 = yes), or wraps around every N.**`
+        },
+        {
+          id: "predict-clock-wrap",
+          type: "predict",
+          title: "💭 Predict — Clock wraparound",
+          content: "What time is it 5 hours after 23:00? (24-hour clock)",
+          code: "print((23 + 5) % 24)",
+          options: ["4", "28", "0", "5"],
+          answer: 0,
+          explanation: "23 + 5 = 28. 28 % 24 = 4. So 4 AM. % N wraps back to 0 once you pass N."
         },
         {
           id: "try-modulo",
@@ -334,8 +360,6 @@ Every comparison gives one of **two answers — True (yes) or False (no).**
           content: `\`\`\`python
 print(10 > 5)     # True   ← 10 is greater than 5
 print(3 > 7)      # False  ← 3 is less than 7
-print(10 >= 10)   # True   ← "or equal" counts equal too
-print(10 > 10)    # False  ← "greater than" excludes equal
 \`\`\`
 
 ### \`>=\` vs \`>\` — the subtle difference
@@ -344,6 +368,16 @@ print(10 > 10)    # False  ← "greater than" excludes equal
 - \`>\` (greater than): "**strictly larger**" — equal is NOT OK
 
 They look similar but flip the answer when the two values are equal.`
+        },
+        {
+          id: "predict-gte-vs-gt",
+          type: "predict",
+          title: "💭 Predict — >= vs > when equal",
+          content: "Two values are **exactly equal**. What do these print?",
+          code: "print(10 >= 10)\nprint(10 > 10)",
+          options: ["True\nFalse", "True\nTrue", "False\nTrue", "False\nFalse"],
+          answer: 0,
+          explanation: ">= accepts 'equal' → True. > rejects 'equal' → False. The difference shows up only when the values match."
         },
         {
           id: "try3",
@@ -403,12 +437,17 @@ print("hi" != "bye")       # True — different
 
 ### ⚠️ Float comparison gotcha — looks weird!
 
-\`\`\`python
-print(0.1 + 0.2 == 0.3)   # False (?!)
-print(0.1 + 0.2)          # 0.30000000000000004 — tiny error
-\`\`\`
-
 Computers store decimals with tiny rounding errors. **Integer \`==\` is safe; float \`==\` needs care.** For now, just know this trap exists.`
+        },
+        {
+          id: "predict-float-trap",
+          type: "predict",
+          title: "💭 Predict — 0.1 + 0.2 == 0.3 ?",
+          content: "Math says yes... but what does Python say?",
+          code: "print(0.1 + 0.2 == 0.3)",
+          options: ["False", "True", "Error", "0.3"],
+          answer: 0,
+          explanation: "Python stores 0.1 + 0.2 with a tiny rounding error: 0.30000000000000004. So it's NOT exactly 0.3 → False. Float == needs care!"
         },
         {
           id: "try-equal",
@@ -536,6 +575,16 @@ print(not False)   # True   ← opposite of False
 > 🎯 Just remember the highlighted cell in each table.`
         },
         {
+          id: "predict-and-or-mix",
+          type: "predict",
+          title: "💭 Predict — and vs or",
+          content: "What do these two lines print?",
+          code: "print(True and False)\nprint(True or False)",
+          options: ["False\nTrue", "True\nFalse", "True\nTrue", "False\nFalse"],
+          answer: 0,
+          explanation: "and is strict — one False breaks it → False. or is generous — one True is enough → True."
+        },
+        {
           id: "try4",
           type: "tryit",
           title: "🖥️ Try It — and connector",
@@ -557,13 +606,21 @@ The most common use: **checking for \`None\`**.
 \`\`\`python
 x = None
 
-print(x is None)        # True   ← "x is None" check — recommended
-print(x is not None)    # False  ← opposite — "x is not None"
-
-print(x == None)        # True too — but 'is' is more precise
+print(x is None)        # "x is None" check — recommended
+print(x is not None)    # opposite — "x is not None"
 \`\`\`
 
 > 💡 \`x is None\` is the Pythonic style. \`== None\` works but \`is None\` is clearer.`
+        },
+        {
+          id: "predict-is-none",
+          type: "predict",
+          title: "💭 Predict — is None",
+          content: "When x is None, what do these two checks return?",
+          code: "x = None\nprint(x is None)\nprint(x is not None)",
+          options: ["True\nFalse", "False\nTrue", "True\nTrue", "False\nFalse"],
+          answer: 0,
+          explanation: "x really IS None → 'is None' returns True; 'is not None' returns False. They're exact opposites."
         },
         {
           id: "is-not-explain-rest",
@@ -693,12 +750,22 @@ Read \`+=\` as: "**add 10 to the current value and store it back**".`
           title: "🎮 Common in games — += / -=",
           content: `\`\`\`python
 hp = 100
-hp -= 20      # took 20 damage → hp = 80
+hp -= 20      # took 20 damage → hp goes down
 score = 0
-score += 10   # +10 points → score = 10
+score += 10   # earned points → score goes up
 \`\`\`
 
 > 💡 \`+=\` shows up most often in **counters (score, count)** and **HP/resource updates**. You'll see it a lot in upcoming lessons.`
+        },
+        {
+          id: "predict-hp-compound",
+          type: "predict",
+          title: "💭 Predict — HP after two hits",
+          content: "What's hp after taking damage twice?",
+          code: "hp = 100\nhp -= 30\nhp -= 15\nprint(hp)",
+          options: ["55", "85", "70", "45"],
+          answer: 0,
+          explanation: "100 → (-30) → 70 → (-15) → 55. -= subtracts from the current value and stores it back, so the effect stacks."
         },
         {
           id: "try5",

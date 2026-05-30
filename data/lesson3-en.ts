@@ -140,19 +140,28 @@ print(name, 'has 5000 gold')
 
 \`\`\`python
 price = 19000
-print(price)        # 19000
-print(price + 2000) # 21000
+print(price)
+print(price + 2000)
 \`\`\`
 
-### Line-by-line in Python's head
+Predict what this prints in the next step 👇
 
-| Line | What Python thinks | Output |
-|---|---|---|
-| \`price = 19000\` | Store 19000 in the price box | (nothing) |
-| \`print(price)\` | Look in price → 19000 → print it | \`19000\` |
-| \`print(price + 2000)\` | price (19000) + 2000 = 21000 → print | \`21000\` |
+> 💡 Even after \`print(price + 2000)\`, the **price box still holds the same value**. We pulled the value out and did math with it — we didn't change what's in the box.`
+        },
+        {
+          id: "predict-use-price",
+          type: "predict",
+          title: "💭 Predict — price + 2000",
+          content: `What does the second line, \`print(price + 2000)\`, output?
 
-> 💡 We did \`print(price + 2000)\` but the **price box still holds 19000**. We pulled the value out and did math with it — we didn't change what's in the box.`
+\`\`\`python
+price = 19000
+print(price)
+print(price + 2000)
+\`\`\``,
+          options: ["19000", "20002000", "21000", "Error"],
+          answer: 2,
+          explanation: "Python pulls the value from the price box (19000) and adds 2000 → 21000. The box itself doesn't change — we just used the value."
         },
         {
           id: "use-explain-mistake",
@@ -254,23 +263,58 @@ hp = 80         →   [ 80 ]      ← 100 is overwritten and gone
 \`\`\`python
 score = 5
 score = score + 3
-print(score)   # 8
+print(score)
 \`\`\`
 
 Remember the order: **right side first** → **then store on the left**.
 
 \`\`\`
-Step 1 (compute right):  score + 3  →  5 + 3  →  8
-Step 2 (store):          score = 8
+Step 1 (compute right):  score + 3  →  5 + 3  →  ?
+Step 2 (store):          score = ?
 \`\`\`
 
-> 🎯 You'll click through these two steps in the next sim.`
+Predict the result in the next step. 🎯 Then click through the two stages in the sim that follows.`
+        },
+        {
+          id: "predict-self-update",
+          type: "predict",
+          title: "💭 Predict — score = score + 3",
+          content: `\`score\` starts at 5. What does this code print?
+
+\`\`\`python
+score = 5
+score = score + 3
+print(score)
+\`\`\``,
+          options: ["5", "3", "8", "Error"],
+          answer: 2,
+          explanation: "Right side first: score + 3 = 5 + 3 = 8. Then store 8 back into score. print(score) → 8."
+        },
+        {
+          id: "predict-no-var",
+          type: "predict",
+          title: "💭 Predict — A Variable You Never Made",
+          content: `The variable \`money\` was **never created**. What happens when you try to print it?
+
+\`\`\`python
+print(money)
+\`\`\``,
+          options: [
+            "Prints 0",
+            "Prints the word money",
+            "NameError (crash)",
+            "Prints nothing"
+          ],
+          answer: 2,
+          explanation: "Python looks for a box named 'money', but you never made one → NameError. Variables: **store first → then read.**"
         },
         {
           id: "change-explain-error",
           type: "explain",
           title: "⚠️ Doesn't Work — Using a Variable You Never Made",
-          content: `\`\`\`python
+          content: `Right — you get a \`NameError\`.
+
+\`\`\`python
 print(money)   # ❌ NameError — no box named money was ever created
 \`\`\`
 
@@ -454,16 +498,27 @@ print('Name:', name, 'Age:', age)    # Name: Alice Age: 15
 |---|---|
 | Space | **automatic** between values |
 | Number var | works directly (no conversion!) |
-| Mix text + numbers | totally free |
+| Mix text + numbers | totally free |`
+        },
+        {
+          id: "predict-concat-mix",
+          type: "predict",
+          title: "💭 Predict — Mixing Text and Variables",
+          content: `What does this code print? (Remember: commas auto-add one space.)
 
 \`\`\`python
 name = 'Alice'
 hp = 100
-
-print('Name:', name)         # Name: Alice
-print('HP:', hp)             # HP: 100
-print(name, "'s HP:", hp)    # Alice 's HP: 100
-\`\`\``
+print(name, "'s HP:", hp)
+\`\`\``,
+          options: [
+            "Alice'sHP:100",
+            "Alice 's HP: 100",
+            "name 's HP: hp",
+            "Alice, 's HP:, 100"
+          ],
+          answer: 1,
+          explanation: "Comma-separated values get **one space between each**. name value → space → 's HP:' → space → hp value."
         },
         {
           id: "concat-explain-future",

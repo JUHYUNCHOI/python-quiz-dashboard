@@ -89,6 +89,20 @@ print("안녕".upper())   # 안녕 (한글은 대소문자가 없음)
 한글, 숫자, 기호 같은 건 그대로. 영문 글자만 바뀌어요.`
         },
         {
+          id: "predict-upper-result",
+          type: "predict",
+          title: "💭 결과 예측 — upper()",
+          content: `이 코드 결과는?
+
+\`\`\`python
+name = "Hello"
+print(name.upper())
+\`\`\``,
+          options: ["Hello", "HELLO", "hello", "에러"],
+          answer: 1,
+          explanation: "upper() 는 모든 글자를 대문자로 바꿔요. H→H, e→E, l→L, l→L, o→O → HELLO."
+        },
+        {
           id: "upper-lower-immutable",
           type: "explain",
           title: "⚠️ 원본은 안 바뀌어요",
@@ -176,6 +190,22 @@ print(text.strip())  # "안녕 친구"  (가운데 공백은 그대로!)
 \`\`\``
         },
         {
+          id: "predict-strip-middle",
+          type: "predict",
+          title: "💭 결과 예측 — strip() 가운데 공백은?",
+          content: `이 코드 결과는?
+
+\`\`\`python
+text = "   안녕 친구   "
+print(text.strip())
+\`\`\`
+
+힌트: strip() 은 **양쪽 끝** 만 잘라요.`,
+          options: ["안녕친구", "안녕 친구", "   안녕 친구   ", "안녕"],
+          answer: 1,
+          explanation: "양쪽 끝 공백만 잘려요. 가운데 공백은 그대로! → \"안녕 친구\""
+        },
+        {
           id: "strip-variants",
           type: "explain",
           title: "↔️ lstrip / rstrip + 보이지 않는 글자",
@@ -241,6 +271,22 @@ print(text.replace("바나나", "사과"))
 text = "안 녕 하 세 요"
 print(text.replace(" ", ""))  # 안녕하세요  (공백 다 지움)
 \`\`\``
+        },
+        {
+          id: "predict-replace-all",
+          type: "predict",
+          title: "💭 결과 예측 — replace() 몇 군데 바뀔까?",
+          content: `이 코드 결과는?
+
+\`\`\`python
+text = "바나나 바나나 바나나"
+print(text.replace("바나나", "사과"))
+\`\`\`
+
+힌트: 일치하는 거 **하나만** 바꿀까, **다** 바꿀까?`,
+          options: ["사과 바나나 바나나", "바나나 바나나 사과", "사과 사과 사과", "바나나 바나나 바나나"],
+          answer: 2,
+          explanation: "replace() 는 첫 매칭에서 멈추지 않고 **다 찾아서 다 바꿔요.** 세 개 모두 \"사과\" 로 변환."
         },
         {
           id: "replace-chain",
@@ -334,6 +380,26 @@ print(text.find("Python"))  # -1
 \`-1\` 은 "못 찾았다" 라는 약속된 신호. (조건문 배우면 "있나 없나" 검사에 쓸 거예요.)`
         },
         {
+          id: "predict-find-position",
+          type: "predict",
+          title: "💭 결과 예측 — find() 몇 번 자리?",
+          content: `이 코드 결과는?
+
+\`\`\`python
+text = "Python is fun"
+print(text.find("is"))
+\`\`\`
+
+자리 표:
+\`\`\`
+P y t h o n   i s   f u n
+0 1 2 3 4 5 6 7 8 9 ...
+\`\`\``,
+          options: ["6", "7", "8", "-1"],
+          answer: 1,
+          explanation: "\"is\" 는 7번 자리에서 시작 (i=7, s=8). find() 는 시작 위치를 돌려줘요 → 7."
+        },
+        {
           id: "find-count",
           type: "explain",
           title: "🔢 count() — \"몇 번 나와?\"",
@@ -359,6 +425,22 @@ print(text.count("z"))   # 0
 print("Hello".find("h"))   # -1  (소문자 h 는 없음)
 print("Hello".find("H"))   # 0
 \`\`\``
+        },
+        {
+          id: "predict-count-banana",
+          type: "predict",
+          title: "💭 결과 예측 — count() 몇 개?",
+          content: `이 코드 결과는?
+
+\`\`\`python
+text = "banana"
+print(text.count("an"))
+\`\`\`
+
+힌트: \`b-a-n-a-n-a\` — \"an\" 이 어디 어디 들어있는지 손으로 찾아보세요.`,
+          options: ["1", "2", "3", "0"],
+          answer: 1,
+          explanation: "banana 안에 \"an\" 은 b**an**ana 한 번, ban**an**a 한 번 → 총 2개."
         },
         {
           id: "try5",

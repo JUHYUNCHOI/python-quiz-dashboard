@@ -153,10 +153,10 @@ Why do strings need quotes but numbers don't?
           content: `If you put math inside \`print()\`, Python **does the calculation** and shows the result!
 
 \`\`\`python
-print(100 + 50)    # 150
-print(10 * 5)      # 50
-print(20 - 7)      # 13
-print(8 / 2)       # 4.0
+print(100 + 50)
+print(10 * 5)
+print(20 - 7)
+print(8 / 2)
 \`\`\`
 
 Like a calculator! Inside \`print()\` you can use \`+ - * /\`.
@@ -166,6 +166,16 @@ Like a calculator! Inside \`print()\` you can use \`+ - * /\`.
 - Check a value — "what's the score right now?"
 - Show a result — "the discounted price is …"
 - Count things — 1, 2, 3, 4, 5 …`
+        },
+        {
+          id: "predict-number-math",
+          type: "predict",
+          title: "💭 Predict the output",
+          content: "What happens with math inside print()?",
+          code: "print(100 + 50)",
+          options: ["150", "100 + 50", "100, 50", "Error"],
+          answer: 0,
+          explanation: "The expression inside print() is calculated first, then only the result (150) shows on screen."
         },
         {
           id: "number-explain-types",
@@ -283,6 +293,16 @@ Third line
 You don't need to press Enter or do anything special — it handles the line break for you.`
         },
         {
+          id: "predict-multi-lines",
+          type: "predict",
+          title: "💭 Predict the output",
+          content: "Three print() calls in a row — how does the screen look?",
+          code: "print('A')\nprint('B')\nprint('C')",
+          options: ["A\nB\nC  (three lines)", "A B C  (one line with spaces)", "ABC  (one line stuck together)", "Error"],
+          answer: 0,
+          explanation: "print() adds a line break at the end. Three calls → three lines."
+        },
+        {
           id: "multi-explain-card",
           type: "explain",
           title: "📝 Where It's Useful & Name Card Example",
@@ -377,33 +397,35 @@ The way: **commas (\`,\`)** between the values.
 
 \`\`\`python
 print('Name:', 'Alice')
-# Result: Name: Alice
-
 print('Age:', 15, 'years old')
-# Result: Age: 15 years old
-
 print('Score:', 100)
-# Result: Score: 100
-\`\`\``
+\`\`\`
+
+Each line shows two or more things side by side. On the next page we'll look at **how the spacing works**.`
+        },
+        {
+          id: "predict-comma-space",
+          type: "predict",
+          title: "💭 Predict the output",
+          content: "When you separate values with commas, what does the spacing look like?",
+          code: "print('a', 'b', 'c')",
+          options: ["a b c  (one space between each)", "abc  (stuck together)", "a,b,c  (commas show up)", "a\nb\nc  (three lines)"],
+          answer: 0,
+          explanation: "Commas tell Python to **add a single space between values automatically.** So it shows as 'a b c'."
         },
         {
           id: "comma-explain-space",
           type: "explain",
           title: "💡 The comma's magic — automatic space",
-          content: `**When you separate values with commas, a space is added between them automatically.** You don't have to add it!
-
-\`\`\`python
-print('a', 'b', 'c')
-# Result: a b c   (← spaces appear between them automatically)
-\`\`\`
+          content: `As you just saw, **when you separate values with commas, a space is added between them automatically.** You don't have to add it!
 
 ### You can mix text and numbers
 
 With commas you can put **text + numbers** on one line — this is the really handy part!
 
 \`\`\`python
-print('Age:', 15)         # Age: 15
-print('Total:', 100 + 50) # Total: 150
+print('Age:', 15)
+print('Total:', 100 + 50)
 \`\`\`
 
 ### Where it's useful
@@ -411,6 +433,16 @@ print('Total:', 100 + 50) # Total: 150
 - **Label + value** — \`print('Score:', 95)\`
 - **Several values at once** — \`print('a', 'b', 'c')\`
 - **Text + a calculation result** — \`print('Sum:', 10 + 20)\``
+        },
+        {
+          id: "predict-comma-mix",
+          type: "predict",
+          title: "💭 Predict — text + math",
+          content: "What happens when you mix text and a calculation with a comma?",
+          code: "print('Total:', 100 + 50)",
+          options: ["Total: 150", "Total: 100 + 50", "Total:, 150", "Error"],
+          answer: 0,
+          explanation: "The expression 100 + 50 is calculated to 150 first, then printed with the label 'Total:' separated by one auto-space."
         },
         {
           id: "comma-explain-vs",
