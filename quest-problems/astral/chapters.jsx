@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getAstralSections, AstralComposite } from "./components";
+import { getAstralSections, AstralComposite, AstralChainDiscovery, AstralDpSim } from "./components";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 export function makeAstralCh1(E) {
@@ -132,6 +132,15 @@ GGG`}
       content: (<AstralComposite E={E} />),
     },
 
+    /* 1-3.5 — Chain discovery: from single-star demo to chain insight. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Why does the A=B=0 trick (#G + #B) fail when (A, B) ≠ (0, 0)? Because cells get LINKED — a star at (r, c) lands at (r+B, c+A) in photo 2, so those two cells share the same star. Follow the link repeatedly → CHAIN.",
+        "A=B=0 일 땐 #G + #B 가 답인데 (A, B) ≠ (0, 0) 면 왜 안 될까? 칸들이 연결되거든. (r, c) 의 별이 사진 2 의 (r+B, c+A) 로 가니까 두 칸이 같은 별을 공유. 계속 따라가면 → 체인."),
+      content: (<AstralChainDiscovery E={E} />),
+    },
+
     /* 1-4 — Quiz: when is -1? */
     {
       type: "quiz",
@@ -170,16 +179,42 @@ GGG`}
 }
 
 export function makeAstralCh2(E, lang = "py") {
+  const sections = getAstralSections(E);
+  const sectionStep = (sec, narr = "") => ({
+    type: "reveal",
+    narr,
+    content: (<CodeSectionView section={sec} lang={lang} E={E} />),
+  });
+
   return [
-    /* 2-1..2-N — sections directly. */
-    ...getAstralSections(E).map((sec, i) => ({
+    /* 2-1 — Read input. */
+    sectionStep(sections[0], t(E,
+      "Stars travel (r, c) → (r+B, c+A), so cells form CHAINS along (B, A).  Per-chain DP picks min stars (or -1 if no consistent assignment).  Sections build it one piece at a time.",
+      "별이 (r, c) → (r+B, c+A) 로 이동하니 칸들이 (B, A) 방향 체인을 형성. 체인별 DP 로 최소 별 (또는 -1) 결정. 아래 섹션이 한 단락씩 쌓아요.")),
+
+    /* 2-2 — Special case A=B=0. */
+    sectionStep(sections[1]),
+
+    /* 2-3 — Walk chains. */
+    sectionStep(sections[2], t(E,
+      "Now the general case (A, B) ≠ (0, 0). Cells form chains along (B, A). Each chain is independent — solve them one at a time.",
+      "이제 일반 케이스 (A, B) ≠ (0, 0). 칸들이 (B, A) 방향 체인 형성. 체인끼리 독립 — 하나씩 풀어요.")),
+
+    /* 2-3.5 — DP intuition + live sim BEFORE reading the DP code. */
+    {
       type: "reveal",
-      narr: i === 0
-        ? t(E,
-            "Stars travel (r, c) → (r+B, c+A), so cells form CHAINS along (B, A).  Per-chain DP picks min stars (or -1 if no consistent assignment).  Sections build it one piece at a time.",
-            "별이 (r, c) → (r+B, c+A) 로 이동하니 칸들이 (B, A) 방향 체인을 형성. 체인별 DP 로 최소 별 (또는 -1) 결정. 아래 섹션이 한 단락씩 쌓아요.")
-        : "",
-      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
-    })),
+      narr: t(E,
+        "Before the DP code: try changing W/G/B cells in this chain. The two rows below are state[0] (outgoing pin = 0) and state[1] (outgoing pin = 1). Watch what makes ∞ appear — that's when the chain is impossible.",
+        "DP 코드 보기 전에 직접 만져보기: 체인 칸들의 W/G/B 를 바꿔봐요. 아래 두 줄이 state[0] (나가는 별 X) 과 state[1] (나가는 별 O). ∞ 가 언제 뜨는지 — 그게 체인이 불가능할 때."),
+      content: (<AstralDpSim E={E} />),
+    },
+
+    /* 2-4 — Per-chain DP code. */
+    sectionStep(sections[3], t(E,
+      "The code below implements exactly what you saw in the simulator. Two states per cell, transitions per W/G/B.",
+      "위 시뮬에서 본 걸 코드로. 칸마다 state 두 개, W/G/B 마다 전이 규칙.")),
+
+    /* 2-5 — Full code. */
+    sectionStep(sections[4]),
   ];
 }

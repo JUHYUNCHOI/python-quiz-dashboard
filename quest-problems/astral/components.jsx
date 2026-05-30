@@ -106,6 +106,310 @@ export function AstralSim({ E }) { return <AstralComposite E={E} />; }
 export function AstralRunner() { return null; }
 
 /* ════════════════════════════════════════════════════════════════════
+   AstralDpSim — chain DP state machine live visualizer.
+   체인을 W/G/B 로 토글하면서 state[0], state[1] 이 어떻게 갱신되는지 본다.
+   INF (불가능) 은 빨간색. 최종 답은 min(state[0], state[1]).
+   ════════════════════════════════════════════════════════════════════ */
+const DP_PRESETS = [
+  { name: "G→W→G→G", chain: ["G", "W", "G", "G"] },
+  { name: "G→B→G→W", chain: ["G", "B", "G", "W"] },
+  { name: "W→B (불가)", chain: ["W", "B"] },
+  { name: "G→B→B→G", chain: ["G", "B", "B", "G"] },
+  { name: "W→W→W→W", chain: ["W", "W", "W", "W"] },
+];
+
+function dpRun(chain) {
+  const INF = Infinity;
+  const trace = [];
+  let state = [INF, INF];
+  const c0 = chain[0];
+  if (c0 === "W") state = [0, INF];
+  else if (c0 === "G") state = [1, 1];
+  // B 일 때 state 그대로 [INF, INF] — 첫 칸 in=0 이라 B 불가
+  trace.push({ comp: c0, state: [...state], note: c0 === "W" ? "in=0, s=0, out=0" : c0 === "G" ? "s=1, out 자유" : "❌ in=0 이라 B 불가" });
+
+  for (let k = 1; k < chain.length; k++) {
+    const c = chain[k];
+    const ns = [INF, INF];
+    const s0 = state[0], s1 = state[1];
+    let note = "";
+    if (c === "W") {
+      if (s0 !== INF) ns[0] = s0;
+      note = "in=0 필요 → state[0]만 이어짐";
+    } else if (c === "B") {
+      if (s1 !== INF) { ns[0] = s1 + 1; ns[1] = s1 + 1; }
+      note = "in=1 필요 (이전 out=1) → +1 별";
+    } else {
+      if (s0 !== INF) { ns[0] = Math.min(ns[0], s0 + 1); ns[1] = Math.min(ns[1], s0 + 1); }
+      if (s1 !== INF) { ns[0] = Math.min(ns[0], s1); }
+      note = "in=0면 새 별(+1), in=1면 그대로";
+    }
+    state = ns;
+    trace.push({ comp: c, state: [...state], note });
+  }
+  return { trace, final: Math.min(state[0], state[1]) };
+}
+
+const dpFmt = (v) => v === Infinity ? "∞" : String(v);
+
+export function AstralDpSim({ E }) {
+  const [chain, setChain] = useState(["G", "W", "G", "G"]);
+  const cycle = (i) => {
+    const nx = { W: "G", G: "B", B: "W" };
+    setChain(chain.map((c, j) => j === i ? nx[c] : c));
+  };
+  const addCell = () => chain.length < 6 && setChain([...chain, "W"]);
+  const popCell = () => chain.length > 2 && setChain(chain.slice(0, -1));
+
+  const { trace, final } = dpRun(chain);
+  const impossible = final === Infinity;
+
+  const cellColor = (ch) => {
+    if (ch === "W") return { bg: "#fff", fg: "#cbd5e1", border: C.border };
+    if (ch === "G") return { bg: "#cbd5e1", fg: "#1e293b", border: "#94a3b8" };
+    return { bg: "#1e293b", fg: "#fff", border: "#0f172a" };
+  };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ fontSize: 11, color: C.dim, marginBottom: 8, textAlign: "center" }}>
+        {t(E, "Click cells to cycle W → G → B. Watch state[0] / state[1] update live.",
+              "칸 클릭하면 W → G → B 순환. state[0] / state[1] 이 어떻게 갱신되는지 보세요.")}
+      </div>
+
+      {/* 프리셋 */}
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center", marginBottom: 12 }}>
+        {DP_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => setChain([...p.chain])} style={{
+            padding: "3px 8px", borderRadius: 6, fontSize: 11, fontWeight: 600,
+            border: `1.5px solid ${C.border}`, background: "#fff", color: C.text, cursor: "pointer",
+            fontFamily: "'JetBrains Mono',monospace",
+          }}>{p.name}</button>
+        ))}
+        <button onClick={addCell} disabled={chain.length >= 6} style={{
+          padding: "3px 8px", borderRadius: 6, fontSize: 11, fontWeight: 700,
+          border: `1.5px solid ${A_COLOR}`, background: "#fff", color: A_COLOR, cursor: "pointer",
+          opacity: chain.length >= 6 ? 0.4 : 1,
+        }}>＋ {t(E, "cell", "칸")}</button>
+        <button onClick={popCell} disabled={chain.length <= 2} style={{
+          padding: "3px 8px", borderRadius: 6, fontSize: 11, fontWeight: 700,
+          border: `1.5px solid ${C.border}`, background: "#fff", color: C.text, cursor: "pointer",
+          opacity: chain.length <= 2 ? 0.4 : 1,
+        }}>－</button>
+      </div>
+
+      {/* 체인 가로 + DP 표 */}
+      <div style={{ overflowX: "auto", marginBottom: 12 }}>
+        <table style={{ margin: "0 auto", borderCollapse: "separate", borderSpacing: 4, fontFamily: "'JetBrains Mono',monospace" }}>
+          <tbody>
+            {/* 칸 인덱스 */}
+            <tr>
+              <td style={{ width: 70, fontSize: 11, color: C.dim, textAlign: "right", padding: "2px 6px" }}>cell</td>
+              {chain.map((_, i) => (
+                <td key={i} style={{ width: 64, textAlign: "center", fontSize: 11, color: C.dim }}>k={i}</td>
+              ))}
+            </tr>
+            {/* 합성 (클릭) */}
+            <tr>
+              <td style={{ fontSize: 11, color: C.dim, textAlign: "right", padding: "2px 6px" }}>{t(E, "composite", "합성")}</td>
+              {chain.map((ch, i) => {
+                const c = cellColor(ch);
+                return (
+                  <td key={i} style={{ textAlign: "center" }}>
+                    <button onClick={() => cycle(i)} style={{
+                      width: 50, height: 50, fontSize: 22, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+                      background: c.bg, color: c.fg, border: `2px solid ${c.border}`,
+                      borderRadius: 6, cursor: "pointer", padding: 0,
+                    }}>{ch}</button>
+                  </td>
+                );
+              })}
+            </tr>
+            {/* state[0] */}
+            <tr>
+              <td style={{ fontSize: 11, color: C.dim, textAlign: "right", padding: "2px 6px" }}>state[0]</td>
+              {trace.map((tr, i) => {
+                const v = tr.state[0];
+                const inf = v === Infinity;
+                return (
+                  <td key={i} style={{
+                    textAlign: "center", padding: "8px 4px", fontSize: 14, fontWeight: 700,
+                    background: inf ? "#fee2e2" : "#dcfce7", color: inf ? "#dc2626" : "#15803d",
+                    border: `1px solid ${inf ? "#fca5a5" : "#86efac"}`, borderRadius: 4,
+                  }}>{dpFmt(v)}</td>
+                );
+              })}
+            </tr>
+            {/* state[1] */}
+            <tr>
+              <td style={{ fontSize: 11, color: C.dim, textAlign: "right", padding: "2px 6px" }}>state[1]</td>
+              {trace.map((tr, i) => {
+                const v = tr.state[1];
+                const inf = v === Infinity;
+                return (
+                  <td key={i} style={{
+                    textAlign: "center", padding: "8px 4px", fontSize: 14, fontWeight: 700,
+                    background: inf ? "#fee2e2" : "#dcfce7", color: inf ? "#dc2626" : "#15803d",
+                    border: `1px solid ${inf ? "#fca5a5" : "#86efac"}`, borderRadius: 4,
+                  }}>{dpFmt(v)}</td>
+                );
+              })}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* 마지막 칸 설명 */}
+      <div style={{ background: "#eef2ff", border: `1.5px solid ${A_COLOR}`, borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#312e81", marginBottom: 10, lineHeight: 1.6 }}>
+        <div style={{ fontWeight: 700, marginBottom: 4 }}>
+          📌 {t(E, "Last cell", "마지막 칸")} (k={trace.length - 1}, comp={trace[trace.length - 1].comp})
+        </div>
+        <div style={{ fontSize: 11.5 }}>{trace[trace.length - 1].note}</div>
+      </div>
+
+      {/* 최종 답 */}
+      <div style={{
+        textAlign: "center", padding: "10px 14px", borderRadius: 10, fontSize: 14, fontWeight: 800,
+        background: impossible ? "#fee2e2" : "#dcfce7",
+        color: impossible ? "#991b1b" : "#14532d",
+        border: `2px solid ${impossible ? "#dc2626" : "#16a34a"}`,
+      }}>
+        {impossible
+          ? t(E, "❌ Chain min = ∞ → IMPOSSIBLE (-1)", "❌ 체인 최소 = ∞ → 불가능 (-1)")
+          : t(E, `✅ Chain min = min(state[0], state[1]) = ${final}`, `✅ 체인 최소 = min(state[0], state[1]) = ${final}`)}
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   AstralChainDiscovery — small 3×3 demo showing how (A, B) shift
+   creates a chain.  Shows photo 1 → photo 2 → composite for 1 star.
+   ════════════════════════════════════════════════════════════════════ */
+const CD_PRESETS = [
+  { name: "A=1 B=0", A: 1, B: 0 },
+  { name: "A=0 B=1", A: 0, B: 1 },
+  { name: "A=1 B=1", A: 1, B: 1 },
+];
+export function AstralChainDiscovery({ E }) {
+  const [pi, setPi] = useState(0);
+  const [moves, setMoves] = useState(true); // true: 별이 이동, false: 사라짐
+  const { A, B } = CD_PRESETS[pi];
+  const N = 3;
+  const startR = 0, startC = 0;
+  const endR = startR + B, endC = startC + A;
+  const inside = endR >= 0 && endR < N && endC >= 0 && endC < N;
+
+  const cellSize = 44;
+  const makeGrid = (markers) => (
+    <div style={{ display: "grid", gap: 2, gridTemplateColumns: `repeat(${N}, ${cellSize}px)` }}>
+      {Array.from({ length: N * N }).map((_, idx) => {
+        const r = Math.floor(idx / N), c = idx % N;
+        const mk = markers[`${r},${c}`];
+        return (
+          <div key={idx} style={{
+            width: cellSize, height: cellSize,
+            background: mk ? mk.bg : "#fff", color: mk ? mk.fg : "#cbd5e1",
+            border: `${mk?.bold ? 2 : 1}px solid ${mk ? mk.border : C.border}`,
+            borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 700,
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>{mk?.label ?? ""}</div>
+        );
+      })}
+    </div>
+  );
+
+  // Photo 1: star at (0,0)
+  const ph1 = { [`${startR},${startC}`]: { label: "★", bg: "#fef3c7", fg: "#d97706", border: "#fbbf24", bold: true } };
+  // Photo 2: star at (endR, endC) if moves and inside, else nothing
+  const ph2 = (moves && inside)
+    ? { [`${endR},${endC}`]: { label: "★", bg: "#fef3c7", fg: "#d97706", border: "#fbbf24", bold: true } }
+    : {};
+  // Composite
+  const comp = {};
+  comp[`${startR},${startC}`] = (moves && inside)
+    ? { label: "G", bg: "#cbd5e1", fg: "#1e293b", border: "#94a3b8", bold: true }
+    : (moves && !inside)
+      ? { label: "G", bg: "#cbd5e1", fg: "#1e293b", border: "#94a3b8", bold: true }
+      : { label: "G", bg: "#cbd5e1", fg: "#1e293b", border: "#94a3b8", bold: true };
+  if (moves && inside) comp[`${endR},${endC}`] = { label: "G", bg: "#cbd5e1", fg: "#1e293b", border: "#94a3b8", bold: true };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center", marginBottom: 10 }}>
+        {CD_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => setPi(i)} style={{
+            padding: "4px 10px", borderRadius: 6, fontSize: 11, fontWeight: 700,
+            border: `1.5px solid ${pi === i ? A_COLOR : C.border}`,
+            background: pi === i ? "#e0e7ff" : "#fff", color: pi === i ? A_COLOR : C.text, cursor: "pointer",
+            fontFamily: "'JetBrains Mono',monospace",
+          }}>{p.name}</button>
+        ))}
+        <button onClick={() => setMoves(!moves)} style={{
+          padding: "4px 10px", borderRadius: 6, fontSize: 11, fontWeight: 700,
+          border: `1.5px solid #d97706`, background: moves ? "#fef3c7" : "#fff",
+          color: "#92400e", cursor: "pointer",
+        }}>
+          {moves ? t(E, "★ moves", "★ 이동") : t(E, "★ disappears", "★ 사라짐")}
+        </button>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, alignItems: "start" }}>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 6 }}>{t(E, "Photo 1", "사진 1")}</div>
+          <div style={{ display: "flex", justifyContent: "center" }}>{makeGrid(ph1)}</div>
+          <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>★ (0,0)</div>
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 6 }}>{t(E, "Photo 2", "사진 2")}</div>
+          <div style={{ display: "flex", justifyContent: "center" }}>{makeGrid(ph2)}</div>
+          <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>
+            {moves ? (inside ? `★ (${endR},${endC})` : t(E, "★ off-grid (lost)", "★ 격자 밖 (사라짐)")) : t(E, "(empty)", "(없음)")}
+          </div>
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: A_COLOR, marginBottom: 6 }}>{t(E, "Composite", "합성")}</div>
+          <div style={{ display: "flex", justifyContent: "center" }}>{makeGrid(comp)}</div>
+          <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>
+            {moves && inside
+              ? t(E, "2 G cells linked", "G 두 칸이 연결")
+              : t(E, "1 G cell", "G 1 칸")}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 12, background: "#eef2ff", border: `1.5px solid ${A_COLOR}`, borderRadius: 8, padding: "10px 12px", fontSize: 12, color: "#312e81", lineHeight: 1.6 }}>
+        {moves && inside ? (
+          <>
+            <b>🔗 {t(E, "Chain discovery", "체인 발견")}:</b>{" "}
+            {t(E, `Star at (0,0) lands at (${endR},${endC}) in photo 2. The composite has G at BOTH (0,0) and (${endR},${endC}) — these two cells are LINKED by (A=${A}, B=${B}). Following the link repeatedly forms a CHAIN.`,
+                  `(0,0) 의 별이 사진 2 의 (${endR},${endC}) 로 옮겨감. 합성은 (0,0) 과 (${endR},${endC}) 둘 다 G — 이 두 칸이 (A=${A}, B=${B}) 로 연결됨. 계속 따라가면 체인.`)}
+          </>
+        ) : moves && !inside ? (
+          <>
+            <b>{t(E, "Star lost off-grid", "별이 격자 밖으로")}:</b>{" "}
+            {t(E, "Composite only shows G at the source — single isolated cell, no chain link.",
+                  "합성은 출발지에만 G — 외톨이 칸, 체인 연결 없음.")}
+          </>
+        ) : (
+          <>
+            <b>{t(E, "Star disappeared", "별 사라짐")}:</b>{" "}
+            {t(E, "Composite shows G only at the source — no chain.",
+                  "합성은 출발지에만 G — 체인 없음.")}
+          </>
+        )}
+      </div>
+
+      <div style={{ marginTop: 8, padding: "8px 12px", background: "#fffbeb", border: "1px dashed #fbbf24", borderRadius: 8, fontSize: 11.5, color: "#78350f", lineHeight: 1.55 }}>
+        💡 {t(E,
+          "When A=B=0, every star 'shifts' to its own cell → no link → cells are independent → just count G + B. But when (A,B)≠(0,0), cells form chains → DP along each chain.",
+          "A=B=0 면 '이동' 도 같은 자리 → 연결 없음 → 칸 독립 → 그냥 G+B 카운트. 하지만 (A,B)≠(0,0) 이면 칸들이 체인 → 체인별 DP 필요.")}
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════
    Progressive code: 5 sections.
    ════════════════════════════════════════════════════════════════════ */
 
