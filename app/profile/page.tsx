@@ -15,6 +15,43 @@ import { getQuizScores, getWrongBank } from "@/lib/mark-lesson-complete"
 import { getLessonName } from "@/lib/curriculum-data"
 import { cn } from "@/lib/utils"
 
+// 선생님 모드 토글 — localStorage `teacher-as-student` 플래그 제어
+// "true" = 학생 뷰 강제, "false" = 선생님 뷰 강제, 없음 = default
+function TeacherModeToggle({ t }: { t: (kr: string, en: string) => string }) {
+  const [asStudent, setAsStudent] = useState<boolean | null>(null)
+  useEffect(() => {
+    const flag = localStorage.getItem("teacher-as-student")
+    // default: owner (julia) 는 학생 뷰, 일반 teacher 는 선생님 뷰
+    // null 일 때 어느 default 인지 알 수 없으니 일단 "true" (학생 뷰) 가 default 라고 표시
+    setAsStudent(flag === "true" || flag === null)
+  }, [])
+  if (asStudent === null) return null
+  const toggle = () => {
+    const next = !asStudent
+    localStorage.setItem("teacher-as-student", next ? "true" : "false")
+    setAsStudent(next)
+    // 헤더 / 다른 컴포넌트 다시 읽도록 페이지 reload
+    window.location.reload()
+  }
+  return (
+    <div className="mt-3 flex items-center justify-center gap-2">
+      <button
+        onClick={toggle}
+        className={cn(
+          "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border-2 transition-colors",
+          asStudent
+            ? "bg-gray-100 border-gray-300 text-gray-600 hover:bg-gray-200"
+            : "bg-amber-100 border-amber-300 text-amber-800 hover:bg-amber-200"
+        )}
+        title={t("선생님 모드 전환", "Toggle teacher mode")}
+      >
+        <span>{asStudent ? "🎒" : "👨‍🏫"}</span>
+        <span>{asStudent ? t("학생 뷰 (클릭 → 선생님)", "Student view (click → teacher)") : t("선생님 뷰 (클릭 → 학생)", "Teacher view (click → student)")}</span>
+      </button>
+    </div>
+  )
+}
+
 export default function ProfilePage() {
   const { user, profile, isAuthenticated, isLoading, refreshProfile } = useAuth()
   const { level, totalXp, dailyStreak, xpInCurrentLevel, isStreakAtRisk } = useGamification()
@@ -220,7 +257,10 @@ export default function ProfilePage() {
           )}
           <h2 className="text-xl font-bold text-gray-800">{profile?.display_name || t("학습자", "Learner")}</h2>
           <p className="text-sm text-gray-500 mt-1">{user?.email || ""}</p>
-          {/* 선생님 뱃지 제거 (2026-05 단순화) — 선생님도 학생 UI */}
+          {/* 선생님 모드 토글 — DB role=teacher 인 계정만 노출 */}
+          {profile?.role === "teacher" && (
+            <TeacherModeToggle t={t} />
+          )}
         </Card>
 
         {/* 통계 카드 */}
