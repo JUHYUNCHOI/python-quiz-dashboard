@@ -105,8 +105,9 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
     if (!authLoading && !user) router.replace("/login")
   }, [user, authLoading, router])
 
+  // 선생님도 학생 UI 로 통일 (2026-05 단순화) — effectiveTeacher 항상 false
   const teacherAsStudent = typeof window !== "undefined" && localStorage.getItem("teacher-as-student") === "true"
-  const effectiveTeacher = isTeacher && !teacherAsStudent
+  const effectiveTeacher = false  // (was: isTeacher && !teacherAsStudent)
   const { play } = useSoundEffect()
 
   // 복습 레슨 데이터 로드

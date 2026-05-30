@@ -220,11 +220,7 @@ export default function ProfilePage() {
           )}
           <h2 className="text-xl font-bold text-gray-800">{profile?.display_name || t("학습자", "Learner")}</h2>
           <p className="text-sm text-gray-500 mt-1">{user?.email || ""}</p>
-          {profile?.role === "teacher" && (
-            <span className="inline-flex items-center gap-1 mt-2 px-3 py-1 rounded-full bg-purple-100 text-sm font-medium text-purple-700">
-              <ShieldCheck className="w-3.5 h-3.5" /> {t("선생님", "Teacher")}
-            </span>
-          )}
+          {/* 선생님 뱃지 제거 (2026-05 단순화) — 선생님도 학생 UI */}
         </Card>
 
         {/* 통계 카드 */}
@@ -512,72 +508,11 @@ export default function ProfilePage() {
                   </Card>
                 </Link>
               )}
-              <Link href="/teacher/register">
-                <Card className="p-4 border border-gray-100 hover:border-purple-200 transition-all cursor-pointer">
-                  <div className="flex items-center gap-3">
-                    <ShieldCheck className="w-5 h-5 text-purple-400" />
-                    <span className="font-medium text-gray-700">{t("선생님으로 전환하기", "Switch to Teacher")}</span>
-                  </div>
-                </Card>
-              </Link>
+              {/* 선생님 전환 link 제거 (2026-05 단순화) */}
             </>
           )}
 
-          {profile?.role === "teacher" && (
-            <>
-              <Card className={`p-5 border-2 ${
-                typeof window !== "undefined" && localStorage.getItem("teacher-as-student") === "true"
-                  ? "border-blue-200 bg-blue-50/50"
-                  : "border-purple-200 bg-purple-50/50"
-              }`}>
-                <div className="flex items-center gap-3 mb-3">
-                  <ShieldCheck className="w-5 h-5 text-purple-500" />
-                  <span className="font-bold text-gray-700">{t("수업 모드", "Lesson Mode")}</span>
-                </div>
-                <p className="text-sm text-gray-500 mb-3">
-                  {typeof window !== "undefined" && localStorage.getItem("teacher-as-student") === "true"
-                    ? t("현재 학생 모드: 진도가 저장되고, 퀴즈를 풀어야 넘어갈 수 있어요", "Student mode: progress saved, must solve quizzes")
-                    : t("현재 선생님 모드: 자유롭게 이동 가능, 진도 저장 안 됨", "Teacher mode: free navigation, progress not saved")}
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => {
-                      localStorage.setItem("teacher-as-student", "false")
-                      window.location.reload()
-                    }}
-                    className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-sm transition-all ${
-                      typeof window !== "undefined" && localStorage.getItem("teacher-as-student") !== "true"
-                        ? "bg-purple-600 text-white shadow-md ring-2 ring-purple-300"
-                        : "bg-white text-purple-600 border-2 border-purple-200 hover:bg-purple-50"
-                    }`}
-                  >
-                    👨‍🏫 {t("선생님 모드", "Teacher")}
-                  </button>
-                  <button
-                    onClick={() => {
-                      localStorage.setItem("teacher-as-student", "true")
-                      window.location.reload()
-                    }}
-                    className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-sm transition-all ${
-                      typeof window !== "undefined" && localStorage.getItem("teacher-as-student") === "true"
-                        ? "bg-blue-600 text-white shadow-md ring-2 ring-blue-300"
-                        : "bg-white text-blue-600 border-2 border-blue-200 hover:bg-blue-50"
-                    }`}
-                  >
-                    👨‍🎓 {t("학생 모드", "Student")}
-                  </button>
-                </div>
-              </Card>
-              <Link href="/teacher">
-                <Card className="p-4 border border-gray-100 hover:border-purple-200 transition-all cursor-pointer">
-                  <div className="flex items-center gap-3">
-                    <ShieldCheck className="w-5 h-5 text-purple-500" />
-                    <span className="font-medium text-gray-700">{t("선생님 대시보드", "Teacher Dashboard")}</span>
-                  </div>
-                </Card>
-              </Link>
-            </>
-          )}
+          {/* 선생님 전용 UI 제거 (2026-05 단순화) — 모두 학생 view */}
 
         </div>
         </div>

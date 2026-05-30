@@ -1731,11 +1731,6 @@ export default function CurriculumPage() {
                                               ) : (
                                                 <span className="px-2 py-1.5 rounded-lg border-2 border-gray-300 font-bold text-gray-400 text-xs cursor-not-allowed">🔒</span>
                                               )
-                                            ) : isTeacher ? (
-                                              // 선생님 모드: 레슨 보기 버튼만
-                                              <Link href={`/learn/${lesson.id}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 hover:border-gray-400 transition-colors">
-                                                📖 {t("레슨 보기", "View Lesson")}
-                                              </Link>
                                             ) : step1Done ? (
                                               <div className="flex items-center gap-2 flex-wrap">
                                                 <span className={cn("font-black text-emerald-600", sz("text-sm", "text-base"))}>✅ {t("수업완료", "Done")}</span>
@@ -1768,16 +1763,6 @@ export default function CurriculumPage() {
                                       <div className="flex flex-row md:flex-col gap-2 md:w-56 lg:w-64">
                                         {/* 복습 mini-box (보라 톤 — 도전 amber 와 색 구분) */}
                                         {hasReview && (() => {
-                                          if (isTeacher) {
-                                            return (
-                                              <Link href={getReviewPath(lesson.id)} className="flex-1 rounded-xl border-2 border-purple-200 bg-purple-50 hover:bg-purple-100 px-3 py-2.5 transition-colors">
-                                                <div className="flex items-center gap-1.5">
-                                                  <span className="text-base">📝</span>
-                                                  <span className="text-xs font-black text-purple-700">{t("복습 문제", "Quiz")}</span>
-                                                </div>
-                                              </Link>
-                                            )
-                                          }
                                           if (step2Done) {
                                             const rawScore = quizScores[String(lesson.id)]
                                             const myScore = typeof rawScore === "number" ? rawScore : 100
@@ -1824,16 +1809,6 @@ export default function CurriculumPage() {
 
                                         {/* 도전 mini-box */}
                                         {cluster && (() => {
-                                          if (isTeacher) {
-                                            return (
-                                              <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`} className="flex-1 rounded-xl border-2 border-amber-200 bg-amber-50 hover:bg-amber-100 px-3 py-2.5 transition-colors">
-                                                <div className="flex items-center gap-1.5">
-                                                  <span className="text-base">{cluster.emoji}</span>
-                                                  <span className="text-xs font-black text-amber-700">{t("연습 문제", "Practice")} <span className="text-amber-400 font-normal">({cluster.problems.length})</span></span>
-                                                </div>
-                                              </Link>
-                                            )
-                                          }
                                           if (step3Done) {
                                             return (
                                               <div className="flex-1 rounded-xl border-2 border-amber-200 bg-amber-50/60 px-3 py-2.5">

@@ -62,20 +62,9 @@ export default function AuthCallbackPage() {
       const raw = localStorage.getItem("loginReturnTo")
       localStorage.removeItem("loginReturnTo")
 
-      // 역할 확인: teacher면 /teacher, 그 외(신규 포함)는 /journey
-      // /journey 가 학생의 단일 home — 일러스트 지도 + 다음 할 일 CTA
-      const { data: { session } } = await supabase.auth.getSession()
-      let defaultDest = "/journey"
-      if (session?.user) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", session.user.id)
-          .single()
-        // owner (julia.juhyun) 는 학생 view 가 default → /journey
-        const { shouldRouteAsTeacher } = await import("@/lib/effective-role")
-        if (shouldRouteAsTeacher(session.user.email, profile?.role)) defaultDest = "/teacher"
-      }
+      // 모두 /journey 로 — 선생님도 학생 UI 로 통일 (단순화, 2026-05)
+      // 선생님 전용 기능 (대시보드/숙제/반관리) 은 수업 콘텐츠 완성 후 재도입 예정
+      const defaultDest = "/journey"
 
       const returnTo = raw && raw.startsWith("/") && !raw.startsWith("//") ? raw : defaultDest
       router.replace(returnTo)
