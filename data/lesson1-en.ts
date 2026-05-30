@@ -18,31 +18,66 @@ export const lesson1EnData: LessonData = {
           id: "intro",
           type: "explain",
           title: "🎉 Welcome to the World of Python!",
-          content: `The very first step of programming!
-Let's start by **printing text to the screen**.
+          content: `Programming is basically **"telling a computer what to do."**
 
-Every programmer's first code:
+But how do we know the computer actually did what we asked?
+→ It **shows us the result on the screen.**
+
+That's why almost every programming class starts with **"display text on the screen."** It's the most basic, and one of the most-used, things you'll do.
+
+The famous first code that every programmer writes:
 \`\`\`python
 print('Hello, World!')
 \`\`\`
 
-Run it and \`Hello, World!\` appears on the screen! ✨`
+When you run it, the screen shows:
+\`\`\`
+Hello, World!
+\`\`\`
+
+On the next page we'll break this single line down piece by piece. ✨`
         },
         {
           id: "print-explain",
           type: "explain",
           title: "🖨️ The print() Function",
-          content: `**print()** = a function that outputs to the screen
+          content: `**\`print()\`** is how you tell the computer **"please show this on the screen."**
 
 \`\`\`python
 print('Hello!')
 \`\`\`
 
-- \`print\` = the command that says "display this!"
-- \`( )\` = put what you want to display inside the parentheses
-- \`' '\` = wrap strings in quotes
+Let's break it down piece by piece:
 
-**Single quotes '** or **double quotes "** — both work!`
+- **\`print\`** — the command name. Literally means "print it out."
+- **\`( )\`** — parentheses. **Whatever you put inside them gets displayed.**
+- **\`' '\`** — quotes. Text (called a "string") must be wrapped in quotes so the computer knows "ah, this is text."
+
+> 💡 **Single quotes \`'\`** and **double quotes \`"\`** both work the same way. Pick whichever you like!
+> \`print('Hi')\` = \`print("Hi")\`
+
+### More examples
+
+\`\`\`python
+print('hi')            # hi
+print("Python is fun") # Python is fun
+print('🍕🍕🍕')        # 🍕🍕🍕 (emojis work too)
+\`\`\`
+
+### Where it's useful
+
+- Check your work — "did my code do what I expected?"
+- Greet the user — "Welcome!", "Game start!"
+- Debug — print intermediate values to see what's happening
+
+### ❌ Things that go wrong
+
+\`\`\`python
+print(Hello)         # NameError — without quotes the computer gets confused
+Print('Hello')       # NameError — capital P doesn't work. All lowercase!
+\`\`\`
+
+\`print\` must be **all lowercase**, and text must be **wrapped in quotes**.`
         },
         {
           id: "try1",
@@ -51,8 +86,8 @@ print('Hello!')
           task: "Print Hello, World!",
           initialCode: "print(___)",
           expectedOutput: "Hello, World!",
-          hint: "Put a string inside print()",
-          hint2: "print('Hello, World!')"
+          hint: "The blank takes a string wrapped in quotes.",
+          hint2: "'Hello, World!'"
         },
         {
           id: "try2",
@@ -62,7 +97,7 @@ print('Hello!')
           initialCode: "print(___)",
           expectedOutput: "Bonjour!",
           hint: "Any language works inside quotes!",
-          hint2: "print('Bonjour!')"
+          hint2: "'Bonjour!'"
         },
         {
           id: "quiz1",
@@ -84,15 +119,54 @@ print('Hello!')
           id: "number-explain",
           type: "explain",
           title: "🔢 Printing Numbers",
-          content: `Numbers are printed **without quotes**!
+          content: `Text needed quotes. But **numbers don't need quotes!**
 
 \`\`\`python
-print(123)      # integer
-print(3.14)     # decimal
-print(100 + 50) # math works too!
+print(123)
+print(3.14)
 \`\`\`
 
-Python automatically calculates and displays the result! 🧮`
+Result:
+\`\`\`
+123
+3.14
+\`\`\`
+
+Why do strings need quotes but numbers don't?
+→ The computer **recognizes numbers directly.** When it sees \`123\`, it instantly knows "that's one hundred twenty-three."
+→ But \`Hello\` without quotes? The computer can't tell if you mean text or some name you defined.
+
+### 💡 Cool thing — Python calculates for you
+
+If you put math inside \`print()\`, Python **does the calculation** and shows the result!
+
+\`\`\`python
+print(100 + 50)    # 150
+print(10 * 5)      # 50
+print(20 - 7)      # 13
+print(8 / 2)       # 4.0
+\`\`\`
+
+Like a calculator! Inside \`print()\` you can use \`+ - * /\`.
+
+### Where it's useful
+
+- Check a value — "what's the score right now?"
+- Show a result — "the discounted price is …"
+- Count things — 1, 2, 3, 4, 5 …
+
+### ⚠️ Quotes matter — text vs number
+
+\`\`\`python
+print(100)       # 100  (a real number → math works)
+print('100')     # 100  (text — looks the same, but math won't work)
+\`\`\`
+
+On screen they look identical, but inside the computer they're different kinds.
+**\`100\`** is a real number → \`100 + 50\` works fine.
+**\`'100'\`** is three characters \`1\`, \`0\`, \`0\` → trying to do math on it causes problems.
+
+For now, just notice this difference. Next lesson covers it in detail!`
         },
         {
           id: "try3",
@@ -101,8 +175,8 @@ Python automatically calculates and displays the result! 🧮`
           task: "Print the number 2024!",
           initialCode: "print(___)",
           expectedOutput: "2024",
-          hint: "No quotes for numbers!",
-          hint2: "print(2024)"
+          hint: "No quotes — numbers go in as-is.",
+          hint2: "2024"
         },
         {
           id: "try4",
@@ -111,25 +185,36 @@ Python automatically calculates and displays the result! 🧮`
           task: "Print the result of 100 + 200!",
           initialCode: "# Calculate and print 100 + 200\nprint(___)",
           expectedOutput: "300",
-          hint: "Calculate directly inside print()!",
-          hint2: "print(100 + 200)"
+          hint: "Do the math directly inside print(). No quotes — numbers!",
+          hint2: "100 + 200"
         },
         {
           id: "comment-explain",
           type: "explain",
           title: "💬 What is that # symbol?",
-          content: `Did you spot the **#** symbol in the code? That's a **comment**!
+          content: `Did you spot the **\`#\`** symbol in the code? That's called a **comment**.
 
 \`\`\`python
 # Calculate and print 100 + 200
 print(100 + 200)   # Result: 300
 \`\`\`
 
-- Anything after **#** is **completely ignored** by Python
-- It doesn't run, doesn't print
-- It's a **note for humans** reading the code 📝
+### Comments = notes for humans
 
-You'll see this often in lesson code. **When you see \`#\`, just read it as "this is a note!"** and move on!`
+- **Anything after \`#\` is completely ignored by Python.** It doesn't run, doesn't show on screen.
+- **They help you remember "what was this code for?"** when you come back later 📝
+- They also help other people read your code.
+
+### Two places you'll see #
+
+\`\`\`python
+# At the start of a line — the whole line is a comment
+print(10)
+
+print(20)   # Mid-line — everything from # to end of line is a comment
+\`\`\`
+
+> 💡 You'll see \`#\` a lot in lesson code. **When you see \`#\`, just read it as "ah, this is a note"** and move on.`
         },
         {
           id: "quiz2",
@@ -156,7 +241,8 @@ You'll see this often in lesson code. **When you see \`#\`, just read it as "thi
           id: "multi-explain",
           type: "explain",
           title: "📝 Printing Multiple Lines",
-          content: `Use print() multiple times to output multiple lines!
+          content: `What if you want to show several pieces of information at once?
+→ **Just use \`print()\` multiple times.** Each \`print()\` gets its own line.
 
 \`\`\`python
 print('First line')
@@ -169,6 +255,34 @@ Result:
 First line
 Second line
 Third line
+\`\`\`
+
+### The key promise
+
+**\`print()\` automatically adds a line break after each output.** So the next \`print()\` starts on a fresh line.
+You don't need to press Enter or do anything special — it handles the line break for you.
+
+### Where it's useful
+
+- **Multi-line messages** — welcome greeting, menus, help text
+- **Report-style output** — name, age, score on separate lines
+- **ASCII art** — stars, character drawings
+
+### Example — a simple name card
+
+\`\`\`python
+print('===== Name Card =====')
+print('Name: Alex')
+print('Job: Coder')
+print('=====================')
+\`\`\`
+
+Result:
+\`\`\`
+===== Name Card =====
+Name: Alex
+Job: Coder
+=====================
 \`\`\``
         },
         {
@@ -178,14 +292,16 @@ Third line
           task: "Print 'Age: 15' and 'Hobby: Gaming'!",
           initialCode: "print('Name: John')\n# Print age and hobby too\nprint(___)\nprint(___)",
           expectedOutput: "Name: John\nAge: 15\nHobby: Gaming",
-          hint: "Put what you want to print inside the quotes!",
-          hint2: "print('Age: 15')\nprint('Hobby: Gaming')"
+          hint: "Each blank takes a quoted string. First blank is age, second is hobby.",
+          hint2: "'Age: 15' / 'Hobby: Gaming'"
         },
         {
           id: "empty-print-explain",
           type: "explain",
           title: "✨ Making a Blank Line — print() with Nothing Inside",
-          content: `**print() with nothing inside the parentheses prints a single blank line.** Useful for spacing.
+          content: `When you print several lines, you sometimes want **a blank line between them** for breathing room. Text that's too crammed is hard to read.
+
+The trick is simple. **\`print()\` with nothing inside the parentheses prints a blank line.**
 
 \`\`\`python
 print('First line')
@@ -200,7 +316,17 @@ First line
 Third line
 \`\`\`
 
-> 💡 **print() can be called with no arguments — no error!** It just prints a single newline.`
+> 💡 **\`print()\` with no arguments doesn't cause an error.** It just prints a single newline.
+
+### Why does it make a blank line?
+
+\`print()\` always adds a line break at the end. With nothing inside → **just the line break gets printed** → on screen it looks like a blank line.
+
+### Where it's useful
+
+- **Separating paragraphs** — greeting, blank line, main message
+- **Cleaning up output** — space between groups of results
+- **Visual polish** — give the reader room to breathe`
         },
         {
           id: "try-empty-print",
@@ -216,7 +342,10 @@ Third line
           id: "comma-explain",
           type: "explain",
           title: "📎 Printing Multiple Values with Commas",
-          content: `Use **commas (,)** to print multiple values on one line!
+          content: `Sometimes you want **several things on the same line** in one \`print()\`.
+For example: "Name is Alice" — putting **text + another value** together on one line.
+
+The way: **commas (\`,\`)** between the values.
 
 \`\`\`python
 print('Name:', 'Alice')
@@ -224,9 +353,44 @@ print('Name:', 'Alice')
 
 print('Age:', 15, 'years old')
 # Result: Age: 15 years old
+
+print('Score:', 100)
+# Result: Score: 100
 \`\`\`
 
-Commas automatically add a **space** between values!`
+### 💡 The comma's magic — automatic space
+
+**When you separate values with commas, a space is added between them automatically.** You don't have to add it!
+
+\`\`\`python
+print('a', 'b', 'c')
+# Result: a b c   (← spaces appear between them automatically)
+\`\`\`
+
+### You can mix text and numbers
+
+With commas you can put **text + numbers** on one line — this is the really handy part!
+
+\`\`\`python
+print('Age:', 15)         # Age: 15
+print('Total:', 100 + 50) # Total: 150
+\`\`\`
+
+### Where it's useful
+
+- **Label + value** — \`print('Score:', 95)\`
+- **Several values at once** — \`print('a', 'b', 'c')\`
+- **Text + a calculation result** — \`print('Sum:', 10 + 20)\`
+
+### ❓ Commas vs multiple print() calls — what's the difference?
+
+\`\`\`python
+print('a', 'b')    # a b       ← one line, space between
+print('a')         # a
+print('b')         # b         ← split into two lines
+\`\`\`
+
+**Same line → use commas. Split lines → use multiple \`print()\`.**`
         },
         {
           id: "try6",
@@ -235,8 +399,8 @@ Commas automatically add a **space** between values!`
           task: "Use a comma to print 'Result:' and 100!",
           initialCode: "# Use a comma to print 'Result:' and 100\nprint('Result:', ___)",
           expectedOutput: "Result: 100",
-          hint: "Connect text and numbers with a comma!",
-          hint2: "print('Result:', 100)"
+          hint: "The blank takes a single number. No quotes.",
+          hint2: "100"
         }
       ]
     },
@@ -252,8 +416,8 @@ Commas automatically add a **space** between values!`
           task: "Complete the game character info!",
           initialCode: "print('=== 🎮 Character Info ===')\nprint('Name: ___')\nprint('Level: ___')\nprint('HP: ___')\nprint('Attack: 25')\nprint('=== Let the adventure begin! ===')",
           expectedOutput: "=== 🎮 Character Info ===\nName: Hero\nLevel: 5\nHP: 100\nAttack: 25\n=== Let the adventure begin! ===",
-          hint: "Fill in the name, level, and HP inside print()!",
-          hint2: "print('Name: Hero')\nprint('Level: 5')\nprint('HP: 100')"
+          hint: "Each blank takes one thing — the name, the level number, the HP number.",
+          hint2: "Hero / 5 / 100"
         },
         {
           id: "complete",
@@ -261,12 +425,19 @@ Commas automatically add a **space** between values!`
           title: "🎉 Complete!",
           content: `## What You Learned Today
 
-✅ **print()** — display output on the screen
-✅ **Quotes** — wrap strings in them
-✅ **Numbers** — no quotes needed
-✅ **Commas** — multiple values on one line
+✅ **\`print()\`** — the command for showing output on screen
+✅ **Quotes** — wrap text (strings) with \`'\` or \`"\`
+✅ **Numbers** — no quotes needed (math works too!)
+✅ **\`#\` comments** — notes for humans, ignored by the computer
+✅ **Multi-line output** — call \`print()\` several times
+✅ **Blank line** — empty \`print()\`
+✅ **Commas** — multiple values on one line + automatic spaces
 
-Next time we'll learn about **data types**! 🚀`
+### You really did button up the first step 🎯
+
+Now you can tell the computer **"show this on the screen."** Every program eventually has to show its results — and this is how. It all starts here.
+
+Next time we'll learn about **data types** — the different **kinds of values** the computer handles, like text, numbers, and true/false. 🚀`
         }
       ]
     }

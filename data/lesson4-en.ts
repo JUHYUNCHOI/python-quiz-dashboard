@@ -18,21 +18,49 @@ export const lesson4EnData: LessonData = {
           id: "intro",
           type: "explain",
           title: "Arithmetic Operators",
-          content: `**Operators** are symbols used to perform calculations on numbers.
+          content: `**Operators** are symbols used to do math on numbers. The same symbols you've seen in math class — almost.
 
-| Operator | Meaning | Example |
-|----------|---------|---------|
-| \`+\` | Addition | \`10 + 3\` → 13 |
-| \`-\` | Subtraction | \`10 - 3\` → 7 |
-| \`*\` | Multiplication | \`10 * 3\` → 30 |
-| \`/\` | Division | \`10 / 3\` → 3.333... |
+| Operator | Meaning | Example | Result |
+|----------|---------|---------|--------|
+| \`+\` | Addition | \`10 + 3\` | 13 |
+| \`-\` | Subtraction | \`10 - 3\` | 7 |
+| \`*\` | Multiplication (one star) | \`10 * 3\` | 30 |
+| \`/\` | Division (slash) | \`10 / 3\` | 3.333... |
 
 \`\`\`python
 print(10 + 3)   # 13
 print(10 - 3)   # 7
 print(10 * 3)   # 30
 print(10 / 3)   # 3.3333333333333335
-\`\`\``
+\`\`\`
+
+### 💡 Two small heads-ups
+
+**1. \`/\` always returns a float (decimal)**
+
+\`\`\`python
+print(10 / 2)   # 5.0   ← Even when it divides evenly, you get 5.0 not 5!
+print(10 / 3)   # 3.3333333333333335
+\`\`\`
+
+→ Think "division turns the answer into a decimal on the spot".
+
+**2. Dividing by 0 is an error**
+
+\`\`\`python
+print(10 / 0)    # ❌ ZeroDivisionError
+\`\`\`
+
+Just like in math — you can't divide by zero. Python raises an error.
+
+### ❌ What doesn't work
+
+\`\`\`python
+print(10 + "3")   # ❌ TypeError — number + string is not allowed
+print(10 × 3)     # ❌ SyntaxError — × is not a Python symbol (use \`*\`)
+\`\`\`
+
+Multiplication is the **asterisk \`*\`** — not \`×\` and not the letter \`x\`.`
         },
         {
           id: "try1",
@@ -47,44 +75,49 @@ print(10 / 3)   # 3.3333333333333335
         {
           id: "special-explain",
           type: "explain",
-          title: "🔢 Special Operators — //, %, **",
-          content: `Beyond \`+ - * /\`, there are **3 more** common operators.
+          title: "🔢 Quotient and remainder — // and %",
+          content: `Remember learning long division in elementary school?
 
-### Division partners — quotient and remainder
+> 🍪 **10 cookies, 3 friends sharing.** How many each? How many left over?
 
-While \`/\` gives the full division result, two separate operators split it into **quotient** and **remainder**.
-
-\`\`\`python
-print(10 / 3)   # 3.333...   ← regular division (decimal)
-print(10 // 3)  # 3           ← quotient only (double slash //)
-print(10 % 3)   # 1           ← remainder only (%)
+\`\`\`
+Each: 3   ← quotient
+Left: 1   ← remainder
 \`\`\`
 
-10 ÷ 3 = 3 remainder 1.
-- Double slash \`//\` is that "3" (quotient)
-- Percent \`%\` is that "1" (remainder)
-
-### Exponent (two stars)
-
-Math's **power**. Stick two stars together.
+Python has separate operators for **quotient** and **remainder**.
 
 \`\`\`python
-print(2 ** 3)   # 8     ← 2 × 2 × 2
-print(2 ** 4)   # 16    ← 2 × 2 × 2 × 2
-print(5 ** 2)   # 25    ← 5 × 5
-print(10 ** 3)  # 1000  ← 10 × 10 × 10
+print(10 / 3)    # 3.333...   ← regular division (decimal)
+print(10 // 3)   # 3           ← quotient only (double slash)
+print(10 % 3)    # 1           ← remainder only (percent)
 \`\`\`
 
-How to read: \`2 ** 3\` means "multiply 2 by itself 3 times" — i.e. \`2 × 2 × 2 = 8\`.
+### Summary
 
-> 🎯 One-liner: **Two stars** together = exponent. Multiply the left number by itself N times (N = right number).
+| Operator | Name | Example | Meaning |
+|---|---|---|---|
+| \`/\` | division | \`10 / 3\` → 3.33... | full decimal |
+| \`//\` | quotient | \`10 // 3\` → 3 | how many each |
+| \`%\` | remainder | \`10 % 3\` → 1 | how many left |
 
-⚠️ **One** star = multiply, **two** stars = exponent. Easy to mix up!
+### More examples
 
 \`\`\`python
-2 * 4    # 8   ← multiply (once)
-2 ** 4   # 16  ← exponent (four times)
-\`\`\``
+# 7 candies for 2 people
+print(7 // 2)    # 3 — 3 each
+print(7 % 2)     # 1 — 1 left
+
+# Minutes → hours:minutes
+print(75 // 60)  # 1 — 1 hour
+print(75 % 60)   # 15 — 15 minutes
+
+# 100 pages over 7 days
+print(100 // 7)  # 14 — 14 pages/day
+print(100 % 7)   # 2 — 2 pages left
+\`\`\`
+
+> 🎯 \`//\` = "how many each?", \`%\` = "how many left?"`
         },
         {
           id: "try2",
@@ -140,7 +173,18 @@ print(20 % 5)   # 0 — 20 is a multiple of 5
 
 \`% N == 0\` means "multiple of N"; non-zero means "not a multiple".
 
-> 🎯 One-liner: **% 2 = parity signal, % N = multiple-of-N signal (0 = yes).**`
+### 🕒 Clock-style wraparound — another % charm
+
+3 o'clock + 5 hours = 8. But 22 o'clock + 5 hours = **3 (24-hour clock wraps around)**.
+
+\`\`\`python
+print((3 + 5) % 24)    # 8
+print((22 + 5) % 24)   # 3  ← remainder of 27 divided by 24
+\`\`\`
+
+\`% N\` says "when a number goes past N, start back at 0" — clocks, days-of-week, circular seating all use this.
+
+> 🎯 One-liner: **% 2 = parity signal, % N = multiple-of-N signal (0 = yes), or wraps around every N.**`
         },
         {
           id: "try-modulo",
@@ -255,15 +299,39 @@ x = (a + (b * c)) < 100
         {
           id: "compare-explain",
           type: "explain",
-          title: "⚖️ Comparing Values",
-          content: `When you compare two values, you get **True** or **False**!
+          title: "⚖️ Comparing two values",
+          content: `Programs constantly need to **decide**:
+
+> 🎮 "Is HP greater than 0? → still alive"
+> 🛒 "Is price ≤ 5000? → can buy it"
+> 📝 "Is score ≥ 80? → grade A"
+
+Every comparison gives one of **two answers — True (yes) or False (no).**
+
+### Four comparison operators
+
+| Symbol | Meaning | Example |
+|---|---|---|
+| \`>\` | greater than | \`10 > 5\` → True |
+| \`<\` | less than | \`10 < 5\` → False |
+| \`>=\` | greater or equal | \`10 >= 10\` → True |
+| \`<=\` | less or equal | \`10 <= 5\` → False |
+
+### Try them out
 
 \`\`\`python
-print(10 > 5)    # Greater than → True
-print(10 < 5)    # Less than → False
-print(10 >= 10)  # Greater or equal → True
-print(10 <= 5)   # Less or equal → False
-\`\`\``
+print(10 > 5)     # True   ← 10 is greater than 5
+print(3 > 7)      # False  ← 3 is less than 7
+print(10 >= 10)   # True   ← "or equal" counts equal too
+print(10 > 10)    # False  ← "greater than" excludes equal
+\`\`\`
+
+### 💡 \`>=\` vs \`>\` — the subtle difference
+
+- \`>=\` (greater or equal): "**equal OR** larger" — equal is OK
+- \`>\` (greater than): "**strictly larger**" — equal is NOT OK
+
+They look similar but flip the answer when the two values are equal.`
         },
         {
           id: "try3",
@@ -313,7 +381,16 @@ print(x == 10)    # compare — is x equal to 10? → True
 print("apple" == "apple")  # True
 print("apple" == "Apple")  # False — case differs
 print("hi" != "bye")       # True — different
-\`\`\``
+\`\`\`
+
+### ⚠️ Float comparison gotcha — looks weird!
+
+\`\`\`python
+print(0.1 + 0.2 == 0.3)   # False (?!)
+print(0.1 + 0.2)          # 0.30000000000000004 — tiny error
+\`\`\`
+
+Computers store decimals with tiny rounding errors. **Integer \`==\` is safe; float \`==\` needs care.** For now, just know this trap exists.`
         },
         {
           id: "try-equal",
@@ -499,13 +576,13 @@ print(not False)        # True
 print(not (5 > 3))      # False  ← opposite of (5 > 3) which is True
 \`\`\`
 
-### not in — preview (covered more in lesson 5+)
+### not in — quick preview (lesson 5 covers this properly)
 
-Check if something is **not in** a string or list. (opposite of in)
+Check if a character is **not in** a string. (opposite of \`in\` — \`in\` is introduced next lesson.)
 
 \`\`\`python
-print('a' not in 'hello')   # True   ← no 'a'
-print(7 not in [1, 2, 3])   # True   ← no 7
+print('a' not in 'hello')   # True   ← no 'a' in 'hello'
+print('e' not in 'hello')   # False  ← 'e' is in 'hello'
 \`\`\`
 
 > 🎯 Summary: **is = "the very same?", not = "opposite", not in = "opposite of in".**`
@@ -573,16 +650,39 @@ Each comparison gives True/False, then \`and\` / \`or\` combines them into a sin
         {
           id: "compound-explain",
           type: "explain",
-          title: "📝 Compound Assignment Operators",
-          content: `You can use a shorthand when updating variable values!
+          title: "📝 Compound assignment operators",
+          content: `When you re-use the same variable, there's a shorthand. It's such a common pattern that Python gave it a shorter name.
 
 \`\`\`python
 score = 100
-score = score + 10  # Long way
-score += 10         # Short way (same meaning!)
+score = score + 10   # Long way — "set score to score+10"
+score += 10          # Short way — same meaning!
 \`\`\`
 
-\`+=\`, \`-=\`, \`*=\`, \`/=\` and more are available!`
+Read \`+=\` as: "**add 10 to the current value and store it back**".
+
+### All variants — any arithmetic operator + \`=\`
+
+| Short | Long | Meaning |
+|---|---|---|
+| \`x += 1\` | \`x = x + 1\` | add 1 |
+| \`x -= 1\` | \`x = x - 1\` | subtract 1 |
+| \`x *= 2\` | \`x = x * 2\` | double |
+| \`x /= 2\` | \`x = x / 2\` | halve |
+| \`x //= 2\` | \`x = x // 2\` | halve (quotient) |
+| \`x %= 10\` | \`x = x % 10\` | remainder by 10 |
+| \`x **= 2\` | \`x = x ** 2\` | square |
+
+### Common in games
+
+\`\`\`python
+hp = 100
+hp -= 20      # took 20 damage → hp = 80
+score = 0
+score += 10   # +10 points → score = 10
+\`\`\`
+
+> 💡 \`+=\` shows up most often in **counters (score, count)** and **HP/resource updates**. You'll see it a lot in upcoming lessons.`
         },
         {
           id: "try5",

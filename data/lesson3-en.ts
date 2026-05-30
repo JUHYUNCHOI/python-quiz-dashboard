@@ -34,7 +34,7 @@ We store it in **variables**! 📦`
           id: "concept",
           type: "explain",
           title: "📦 Variable = A Labeled Box",
-          content: `A **variable** is a box that holds data!
+          content: `A **variable** is a **labeled box** that holds data.
 
 \`\`\`python
 name = 'Hero'
@@ -42,9 +42,51 @@ hp = 100
 gold = 5000
 \`\`\`
 
-- Put 'Hero' into the box called \`name\`
-- Put 100 into the box called \`hp\`
-- Put 5000 into the box called \`gold\`!`
+Pictured:
+
+\`\`\`
+┌──────────┐  ┌──────┐  ┌──────┐
+│  'Hero'  │  │ 100  │  │ 5000 │
+└──────────┘  └──────┘  └──────┘
+   name         hp        gold
+\`\`\`
+
+- The box labeled \`name\` holds \`'Hero'\`
+- The box labeled \`hp\` holds \`100\`
+- The box labeled \`gold\` holds \`5000\`
+
+### Why do we need variables?
+
+Without variables:
+
+\`\`\`python
+print('Hero')
+print("Hero's HP is 100")
+print('Hero has 5000 gold')
+\`\`\`
+
+If the player's name becomes \`'Mage'\`, you'd have to edit \`'Hero'\` in **all three lines** 😩
+
+With variables:
+
+\`\`\`python
+name = 'Hero'   # change just this one line
+print(name)
+print(name, "'s HP is 100")
+print(name, 'has 5000 gold')
+\`\`\`
+
+→ Just swap \`name = 'Hero'\` for \`name = 'Mage'\` and you're done!
+
+### What does \`=\` actually mean?
+
+In math class, \`=\` meant "is equal to" — but in Python it's different.
+
+| Math | Python |
+|---|---|
+| \`x = 10\` → "x equals 10" | \`x = 10\` → "**store** 10 into x" |
+
+> 🎯 Read it as an arrow: \`x = 10\` → \`10 → x\` ("put 10 into the box named x!")`
         },
         {
           id: "try1",
@@ -53,8 +95,8 @@ gold = 5000
           task: "Store 15 in the variable age and print it!",
           initialCode: "age = ___\nprint(age)",
           expectedOutput: "15",
-          hint: "Store it using: variable_name = value",
-          hint2: "age = 15\nprint(age)"
+          hint: "Use: variable_name = value. The blank takes a number.",
+          hint2: "15"
         },
         {
           id: "quiz1",
@@ -80,8 +122,10 @@ gold = 5000
         {
           id: "use-explain",
           type: "explain",
-          title: "📝 Using Variable Values",
-          content: `You can retrieve a stored value by using the variable name!
+          title: "📝 Taking Values Back Out",
+          content: `You stored something in the box — now let's use it.
+
+**Just write the variable name** and the value inside comes out.
 
 \`\`\`python
 price = 19000
@@ -89,7 +133,24 @@ print(price)        # 19000
 print(price + 2000) # 21000
 \`\`\`
 
-When you use the variable name, the value inside comes out!`
+### Line-by-line in Python's head
+
+| Line | What Python thinks | Output |
+|---|---|---|
+| \`price = 19000\` | Store 19000 in the price box | (nothing) |
+| \`print(price)\` | Look in price → 19000 → print it | \`19000\` |
+| \`print(price + 2000)\` | price (19000) + 2000 = 21000 → print | \`21000\` |
+
+> 💡 We did \`print(price + 2000)\` but the **price box still holds 19000**. We pulled the value out and did math with it — we didn't change what's in the box.
+
+### ⚠️ Common mistake
+
+\`\`\`python
+print('price')   # → price (literally the letters!)
+print(price)     # → 19000 (the value in the box!)
+\`\`\`
+
+With quotes \`'\` → literal text. Variable name only (no quotes) → value in the box.`
         },
         {
           id: "try2",
@@ -98,8 +159,8 @@ When you use the variable name, the value inside comes out!`
           task: "Store 19000 in chicken, then print chicken + 2000!",
           initialCode: "chicken = ___\nprint(chicken + 2000)",
           expectedOutput: "21000",
-          hint: "Store the value in the variable, then calculate",
-          hint2: "chicken = 19000\nprint(chicken + 2000)"
+          hint: "21000 - 2000 = the value to put in chicken.",
+          hint2: "19000"
         },
         {
           id: "label-explain",
@@ -146,18 +207,53 @@ Comma-separated values automatically get a **space** between them (same as in le
         {
           id: "change-explain",
           type: "explain",
-          title: "🔄 Changing Variable Values",
-          content: `You can change a variable's value anytime!
+          title: "🔄 Changing the Value (Reassignment)",
+          content: `The value in the box can **change anytime**. Assign a new value to the same variable → the old value **disappears** and is overwritten.
 
 \`\`\`python
 hp = 100
 print(hp)  # 100
 
-hp = 80    # took damage!
+hp = 80    # took 20 damage from a monster!
 print(hp)  # 80
 \`\`\`
 
-When you assign a new value to the same variable, it gets overwritten!`
+### Inside the box
+
+\`\`\`
+hp = 100        →   [ 100 ]
+                       hp
+
+hp = 80         →   [ 80 ]      ← 100 is overwritten and gone
+                       hp
+\`\`\`
+
+> 💡 The **label \`hp\` stays the same**. Only the value inside changed.
+
+### Using a variable to update itself
+
+\`x = x + 3\` looks weird (in math, \`x = x + 3\` → \`0 = 3\`?), but in Python it's natural.
+
+\`\`\`python
+score = 5
+score = score + 3
+print(score)   # 8
+\`\`\`
+
+Remember the order: **right side first** → **then store on the left**.
+
+\`\`\`
+Step 1 (compute right):  score + 3  →  5 + 3  →  8
+Step 2 (store):          score = 8
+\`\`\`
+
+### ⚠️ What doesn't work — using a variable you never made
+
+\`\`\`python
+print(money)   # ❌ NameError — no box named money was ever created
+\`\`\`
+
+You have to **create** it first with \`money = 1000\`, then use it.`
         },
         {
           id: "try3",
@@ -166,8 +262,8 @@ When you assign a new value to the same variable, it gets overwritten!`
           task: "Start score at 0, change it to 100, and print it!",
           initialCode: "score = 0\nscore = ___\nprint(score)",
           expectedOutput: "100",
-          hint: "Just assign a new value to the same variable",
-          hint2: "score = 0\nscore = 100\nprint(score)"
+          hint: "Assign a new value to overwrite. The blank takes a number.",
+          hint2: "100"
         },
         {
           id: "x-update-visual",
@@ -312,57 +408,58 @@ latte_price = 5500   # ✅ Still understandable a month later
         {
           id: "concat-explain",
           type: "explain",
-          title: "🔗 Another way to print — \\+ concatenation",
-          content: `In the previous chapter you saw printing text + variables with **commas (,)** (\`print("Name:", name)\`).
-
-Here's **another option** — \`+\` for concatenation. Knowing both lets you pick the right tool.
+          title: "🔗 Variables + Text — Comma Recap",
+          content: `In this lesson, **the safest way to print variables is the comma (,)**. Let's lock it in.
 
 \`\`\`python
 name = 'Alice'
-print("Hello, " + name + "!")   # Hello, Alice!
+age = 15
+
+print('Hello,', name)                # Hello, Alice
+print('Name:', name, 'Age:', age)    # Name: Alice Age: 15
 \`\`\`
 
-### Comma vs \\+ — differences
+### Why commas are great
 
-| | Comma \`,\` | Plus \`+\` |
-|---|---|---|
-| Space | **automatic** between values | you add \`" "\` yourself |
-| Number var | OK | ❌ Error (need str()) |
-| Common use | quick debug print | precise message building |
-
-\`\`\`python
-name = 'Alice'; hp = 100
-
-# Comma — auto space
-print("Name:", name)        # Name: Alice (space between)
-
-# + concat — manual space
-print("Name: " + name)      # Name: Alice (space inside ": ")
-\`\`\`
-
-### ⚠️ \\+ trap — strings only!
-
-> 💡 Remember from **lesson 2** that \`'Score: ' + 95\` raised \`TypeError\`? Same applies to variables. A number variable can't be \\+ to a string directly → use \`str()\`.
+| | Comma \`,\` |
+|---|---|
+| Space | **automatic** between values |
+| Number var | works directly (no conversion!) |
+| Mix text + numbers | totally free |
 
 \`\`\`python
+name = 'Alice'
 hp = 100
-print("HP: " + hp)        # ❌ TypeError! Can't add number directly
-print("HP: " + str(hp))   # ✅ Convert with str() first
-print("HP:", hp)          # ✅ Comma takes numbers fine
+
+print('Name:', name)         # Name: Alice
+print('HP:', hp)             # HP: 100
+print(name, "'s HP:", hp)    # Alice 's HP: 100
 \`\`\`
 
-> 🎯 One-liner: **Quick print → comma; precise message → \\+ (don't forget str()).**
+### 💭 "What if I want text and variable glued tight together?"
 
-(Later in lesson 8 you'll learn **f-string** which is even cleaner than both.)`
+\`\`\`
+Name: Alice        ← comma (one space after colon)
+Name:Alice         ← no space — possible?
+\`\`\`
+
+For now, commas are enough. **Gluing text and variable with no space** comes:
+
+- **lesson 5** — string \`+\` concatenation
+- **lesson 8** — f-string (the cleanest!)
+
+Coming soon — hang tight 🙂
+
+> 🎯 For now, just get comfortable **printing variables with a comma (,)**.`
         },
         {
           id: "try_concat",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
-          task: "Use the name variable to print 'Hello, Alice!'",
-          initialCode: "name = 'Alice'\nprint(\"Hello, \" + ___ + \"!\")",
-          expectedOutput: "Hello, Alice!",
-          hint: "Put the variable name in the blank",
+          title: "🖥️ Try It — Greeting!",
+          task: "Use the name variable to print 'Hello, Alice' (use comma)",
+          initialCode: "name = 'Alice'\nprint('Hello,', ___)",
+          expectedOutput: "Hello, Alice",
+          hint: "Put the variable name in the blank. No quotes.",
           hint2: "name",
           choices: ["name", "'Alice'", "greeting", "age"]
         },
@@ -373,8 +470,8 @@ print("HP:", hp)          # ✅ Comma takes numbers fine
           task: "Use the name and age variables to print \"Alice 15\" on one line.",
           initialCode: "name = 'Alice'\nage = 15\n# Use a comma to print two values with a space between them\nprint(___, ___)",
           expectedOutput: "Alice 15",
-          hint: "Separating values with a comma in print adds a space automatically.",
-          hint2: "print(name, age)"
+          hint: "Both blanks take variable names. No quotes.",
+          hint2: "name / age"
         }
       ]
     },
@@ -386,24 +483,48 @@ print("HP:", hp)          # ✅ Comma takes numbers fine
         {
           id: "comment-explain",
           type: "explain",
-          title: "💬 What Are Comments?",
-          content: `**Comments** are notes that Python ignores!
+          title: "💬 Comments — Notes Python Ignores",
+          content: `A **comment** is a **note Python doesn't read**. It's there for humans only.
 
-Anything after the \`#\` symbol doesn't affect the program.
+Anything after the \`#\` symbol on a line is skipped.
 
 \`\`\`python
-# This is a comment — Python skips it
-print('Hello!')  # You can put comments at the end of a line too
+# This whole line is a comment — Python skips it
+print('Hello!')  # End-of-line comments work too (only after the #)
 
-# Use comments to explain your code:
+# Often used to label variables
 hp = 100       # starting health
 score = 0      # starting score
 \`\`\`
 
-### Why Use Comments?
-- **Memory aid**: Come back later and instantly understand the code
-- **Teamwork**: Help others understand your code
-- **Debugging**: Temporarily disable a line by commenting it out`
+### Two positions
+
+| Position | Example |
+|---|---|
+| **Whole line** | \`# Greet the user next\` |
+| **End of line** | \`hp = 100  # starting health\` |
+
+### Why bother with comments?
+
+1. **Future-you** — "What does this do?" Comments answer it instantly
+2. **Sharing with friends** — easier for others to read
+3. **Temporarily disabling code (debugging)** — add \`#\` in front and it stops running
+
+\`\`\`python
+print('A')
+# print('B')   ← skipped, won't run
+print('C')
+\`\`\`
+
+Output: \`A\` and \`C\` (B is commented out)
+
+### ⚠️ Watch out
+
+\`\`\`python
+print('#hello')   # → #hello (# inside quotes is NOT a comment!)
+\`\`\`
+
+A \`#\` inside quotes is **just a character**. Only \`#\` outside string quotes acts as a comment.`
         },
         {
           id: "comment-quiz",
@@ -439,8 +560,8 @@ score = 0      # starting score
           task: "Use 3 variables to build an introduction card! (Name: Alice, Age: 15, Hobby: gaming)",
           initialCode: "name = 'Alice'\nage = ___\nhobby = 'gaming'\n\n# Use a comma to chain text and variables in print\nprint('=== About Me ===')\nprint('Name:', name)\nprint('Age:', ___)\nprint('Hobby:', hobby)",
           expectedOutput: "=== About Me ===\nName: Alice\nAge: 15\nHobby: gaming",
-          hint: "Store 15 in age, then drop the age variable into the second print blank.",
-          hint2: "age = 15 / age"
+          hint: "First blank takes the age value (a number), second takes the age variable (no quotes).",
+          hint2: "15 / age"
         },
         {
           id: "complete",
@@ -448,15 +569,16 @@ score = 0      # starting score
           title: "🎉 Complete!",
           content: `## What We Learned Today
 
-✅ **Variable** = A labeled box that holds data
-✅ Store with \`variable = value\`
-✅ Use the variable name to retrieve its value
-✅ **Naming rules** — snake_case, no reserved words, use meaningful names
-✅ **Comments** — add notes to code with \`#\`
-✅ Print variables by chaining with \`,\`
+✅ **Variable** = a **labeled box** that holds data
+✅ Store with \`variable = value\` (\`=\` means "put into")
+✅ Retrieve by using the variable name (no quotes!)
+✅ **Reassignment** — assigning a new value overwrites the old (\`x = x + 3\` works)
+✅ **Naming rules** — letters/digits/_, first char letter or _, no keywords, snake_case, meaningful names
+✅ **Comments (\`#\`)** — notes Python ignores, also handy for debugging
+✅ Print variables chained with \`,\` (auto space)
 
-Next up: **operators** for calculation and comparison! 🚀
-(A neater way to print, \`f-string\`, is coming in lesson 8.)`
+Next up: **operators** (\`+ - * / %\` etc.) for calculation and comparison! 🚀
+(Gluing text and variable without space comes in lessons 5 and 8.)`
         }
       ]
     }
