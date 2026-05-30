@@ -1092,5 +1092,527 @@ Input: name1 hp1 atk1, then name2 hp2 atk2`,
       },
       language: "python",
     },
+    {
+      id: "pyoop-013",
+      cluster: "py-oop",
+      unlockAfter: "42",
+      difficulty: "쉬움",
+      title: "책 클래스",
+      description: `Book(title, author, pages) 클래스를 구현하세요.
+- info(): "{title} - {author} ({pages}쪽)" 형식의 문자열을 반환
+- is_long(): pages가 300 이상이면 True, 아니면 False
+
+입력: 첫 줄에 title author pages (공백 구분), 둘째 줄에 호출할 메서드 이름 (info 또는 long)`,
+      constraints: "1 ≤ pages ≤ 10000",
+      initialCode: `class Book:
+    def __init__(self, title, author, pages):
+        # 인스턴스 변수 설정
+        pass
+
+    def info(self):
+        pass
+
+    def is_long(self):
+        pass
+
+title, author, pages = input().split()
+method = input().strip()
+book = Book(title, author, int(pages))
+if method == "info":
+    print(book.info())
+else:
+    print(book.is_long())`,
+      testCases: [
+        { stdin: "파이썬 김코딩 250\ninfo", expectedOutput: "파이썬 - 김코딩 (250쪽)", label: "info 출력" },
+        { stdin: "파이썬 김코딩 250\nlong", expectedOutput: "False", label: "짧은 책" },
+        { stdin: "알고리즘 이박사 500\nlong", expectedOutput: "True", label: "긴 책" },
+        { stdin: "수학 박교수 320\ninfo", expectedOutput: "수학 - 박교수 (320쪽)", label: "info 다른 책" },
+      ],
+      hints: [
+        "__init__에서 self.title, self.author, self.pages에 값을 저장하세요.",
+        "info()는 f-string으로 형식을 만드세요: f'{self.title} - {self.author} ({self.pages}쪽)'",
+        "is_long()은 self.pages >= 300을 그대로 반환하면 됩니다.",
+      ],
+      solutionCode: `class Book:
+    def __init__(self, title, author, pages):
+        self.title = title
+        self.author = author
+        self.pages = pages
+
+    def info(self):
+        return f'{self.title} - {self.author} ({self.pages}쪽)'
+
+    def is_long(self):
+        return self.pages >= 300
+
+title, author, pages = input().split()
+method = input().strip()
+book = Book(title, author, int(pages))
+if method == "info":
+    print(book.info())
+else:
+    print(book.is_long())`,
+      solutionExplanation: "객체의 속성(title, author, pages)을 __init__에서 저장하고, 메서드에서 self.속성으로 사용합니다. is_long처럼 비교식 결과를 그대로 return하면 True/False가 반환됩니다.",
+      en: {
+        title: "Book Class",
+        description: `Implement a Book(title, author, pages) class.
+- info(): returns "{title} - {author} ({pages}쪽)" formatted string
+- is_long(): returns True if pages >= 300, else False
+
+Input: title author pages on the first line (space-separated), then the method name (info or long)`,
+        constraints: "1 ≤ pages ≤ 10000",
+        hints: [
+          "Store self.title, self.author, self.pages in __init__.",
+          "info() uses f-string: f'{self.title} - {self.author} ({self.pages}쪽)'",
+          "is_long() can simply return self.pages >= 300.",
+        ],
+        solutionExplanation: "Store attributes in __init__ and access them via self.attribute in methods. Returning a comparison expression directly yields True/False.",
+      },
+      language: "python",
+    },
+    {
+      id: "pyoop-014",
+      cluster: "py-oop",
+      unlockAfter: "42",
+      difficulty: "쉬움",
+      title: "입장권 클래스",
+      description: `Ticket(kind, price) 클래스를 구현하세요.
+- discount(rate): 가격을 rate(%)만큼 할인 (예: rate=20이면 20% 할인)
+- final_price(): 현재 가격을 정수로 반환
+
+입력: 첫 줄에 kind price, 둘째 줄에 할인율(rate). 할인 후 최종 가격을 출력하세요.`,
+      constraints: "1 ≤ price ≤ 100000, 0 ≤ rate ≤ 100",
+      initialCode: `class Ticket:
+    def __init__(self, kind, price):
+        pass
+
+    def discount(self, rate):
+        # self.price를 rate% 할인
+        pass
+
+    def final_price(self):
+        pass
+
+kind, price = input().split()
+rate = int(input())
+t = Ticket(kind, int(price))
+t.discount(rate)
+print(t.final_price())`,
+      testCases: [
+        { stdin: "어린이 10000\n20", expectedOutput: "8000", label: "20% 할인" },
+        { stdin: "어른 15000\n0", expectedOutput: "15000", label: "할인 없음" },
+        { stdin: "노인 12000\n50", expectedOutput: "6000", label: "50% 할인" },
+        { stdin: "학생 8000\n10", expectedOutput: "7200", label: "10% 할인" },
+      ],
+      hints: [
+        "__init__에서 self.kind, self.price를 저장하세요.",
+        "discount는 self.price = self.price * (100 - rate) // 100 이렇게 계산할 수 있어요.",
+        "final_price는 int(self.price)를 반환하세요.",
+      ],
+      solutionCode: `class Ticket:
+    def __init__(self, kind, price):
+        self.kind = kind
+        self.price = price
+
+    def discount(self, rate):
+        self.price = self.price * (100 - rate) // 100
+
+    def final_price(self):
+        return int(self.price)
+
+kind, price = input().split()
+rate = int(input())
+t = Ticket(kind, int(price))
+t.discount(rate)
+print(t.final_price())`,
+      solutionExplanation: "메서드 안에서 self.price를 직접 바꾸면 객체의 상태가 변경됩니다. 이후 다른 메서드(final_price)에서도 바뀐 값이 그대로 보입니다.",
+      en: {
+        title: "Ticket Class",
+        description: `Implement a Ticket(kind, price) class.
+- discount(rate): apply rate(%) discount to price (e.g. rate=20 means 20% off)
+- final_price(): return current price as integer
+
+Input: kind price on first line, then rate. Print the final price after discount.`,
+        constraints: "1 ≤ price ≤ 100000, 0 ≤ rate ≤ 100",
+        hints: [
+          "Store self.kind and self.price in __init__.",
+          "discount: self.price = self.price * (100 - rate) // 100",
+          "final_price returns int(self.price).",
+        ],
+        solutionExplanation: "Modifying self.price inside a method changes the object's state, and later calls (like final_price) see the updated value.",
+      },
+      language: "python",
+    },
+    {
+      id: "pyoop-015",
+      cluster: "py-oop",
+      unlockAfter: "42",
+      difficulty: "보통",
+      title: "자동차 클래스",
+      description: `Car(fuel) 클래스를 구현하세요. (fuel: 시작 연료, 주행거리는 0으로 시작)
+- refuel(amount): 연료를 amount만큼 추가
+- drive(km): km만큼 달림. 1km당 연료 1을 소모. 연료 부족하면 갈 수 있는 만큼만 가고 "연료 부족" 출력
+- status(): "연료:{fuel}, 거리:{distance}" 출력
+
+입력: 첫 줄에 시작 연료, 둘째 줄에 명령어 개수 n, 이후 n개 명령어 (refuel X / drive X / status)`,
+      constraints: "0 ≤ fuel ≤ 100, 1 ≤ n ≤ 20",
+      initialCode: `class Car:
+    def __init__(self, fuel):
+        self.fuel = fuel
+        self.distance = 0
+
+    def refuel(self, amount):
+        pass
+
+    def drive(self, km):
+        # 연료가 km보다 적으면 fuel만큼만 가고 "연료 부족" 출력
+        pass
+
+    def status(self):
+        print(f'연료:{self.fuel}, 거리:{self.distance}')
+
+fuel = int(input())
+n = int(input())
+car = Car(fuel)
+for _ in range(n):
+    parts = input().split()
+    cmd = parts[0]
+    if cmd == "refuel":
+        car.refuel(int(parts[1]))
+    elif cmd == "drive":
+        car.drive(int(parts[1]))
+    else:
+        car.status()`,
+      testCases: [
+        { stdin: "10\n3\ndrive 5\ndrive 3\nstatus", expectedOutput: "연료:2, 거리:8", label: "기본 주행" },
+        { stdin: "5\n3\ndrive 10\nstatus\nrefuel 7", expectedOutput: "연료 부족\n연료:0, 거리:5", label: "연료 부족" },
+        { stdin: "0\n2\nrefuel 20\nstatus", expectedOutput: "연료:20, 거리:0", label: "주유만" },
+        { stdin: "8\n4\ndrive 3\nrefuel 5\ndrive 6\nstatus", expectedOutput: "연료:4, 거리:9", label: "주유 후 주행" },
+      ],
+      hints: [
+        "refuel은 self.fuel += amount.",
+        "drive는 if km <= self.fuel: 모든 km를 갈 수 있고, else: 갈 수 있는 만큼만 가고 '연료 부족' 출력.",
+        "drive 후 self.fuel과 self.distance를 잊지 말고 업데이트하세요.",
+      ],
+      solutionCode: `class Car:
+    def __init__(self, fuel):
+        self.fuel = fuel
+        self.distance = 0
+
+    def refuel(self, amount):
+        self.fuel += amount
+
+    def drive(self, km):
+        if km <= self.fuel:
+            self.fuel -= km
+            self.distance += km
+        else:
+            self.distance += self.fuel
+            self.fuel = 0
+            print("연료 부족")
+
+    def status(self):
+        print(f'연료:{self.fuel}, 거리:{self.distance}')
+
+fuel = int(input())
+n = int(input())
+car = Car(fuel)
+for _ in range(n):
+    parts = input().split()
+    cmd = parts[0]
+    if cmd == "refuel":
+        car.refuel(int(parts[1]))
+    elif cmd == "drive":
+        car.drive(int(parts[1]))
+    else:
+        car.status()`,
+      solutionExplanation: "객체는 fuel과 distance 두 개의 상태를 가집니다. drive 메서드는 연료가 충분한지 먼저 확인하고, 부족하면 갈 수 있는 만큼만 가고 fuel을 0으로 만듭니다.",
+      en: {
+        title: "Car Class",
+        description: `Implement a Car(fuel) class. (fuel: starting fuel, distance starts at 0)
+- refuel(amount): add amount to fuel
+- drive(km): drive km. Consumes 1 fuel per km. If not enough fuel, drive only what's possible and print "연료 부족"
+- status(): print "연료:{fuel}, 거리:{distance}"
+
+Input: starting fuel on first line, n on second line, then n commands (refuel X / drive X / status)`,
+        constraints: "0 ≤ fuel ≤ 100, 1 ≤ n ≤ 20",
+        hints: [
+          "refuel: self.fuel += amount.",
+          "drive: if km <= self.fuel, drive all km; else drive only fuel km and print '연료 부족'.",
+          "Don't forget to update self.fuel and self.distance after driving.",
+        ],
+        solutionExplanation: "The object holds two states: fuel and distance. drive() first checks if there's enough fuel, otherwise drives the remaining fuel and sets fuel to 0.",
+      },
+      language: "python",
+    },
+    {
+      id: "pyoop-016",
+      cluster: "py-oop",
+      unlockAfter: "42",
+      difficulty: "보통",
+      title: "시계 클래스",
+      description: `Clock(h, m, s) 클래스를 구현하세요.
+- tick(): 1초 진행. 60초 = 1분, 60분 = 1시간, 24시간이 되면 0시로 돌아감
+- show(): "HH:MM:SS" 형식으로 출력 (2자리, 0으로 채움)
+
+입력: 첫 줄에 h m s, 둘째 줄에 tick 횟수 n. 모든 tick 후 show() 결과 출력`,
+      constraints: "0 ≤ h ≤ 23, 0 ≤ m, s ≤ 59, 1 ≤ n ≤ 100000",
+      initialCode: `class Clock:
+    def __init__(self, h, m, s):
+        self.h = h
+        self.m = m
+        self.s = s
+
+    def tick(self):
+        # 1초 진행. 자리올림 처리 + 24시 → 0시
+        pass
+
+    def show(self):
+        print(f'{self.h:02d}:{self.m:02d}:{self.s:02d}')
+
+h, m, s = map(int, input().split())
+n = int(input())
+clock = Clock(h, m, s)
+for _ in range(n):
+    clock.tick()
+clock.show()`,
+      testCases: [
+        { stdin: "10 30 0\n60", expectedOutput: "10:31:00", label: "1분 진행" },
+        { stdin: "23 59 59\n1", expectedOutput: "00:00:00", label: "자정 넘기기" },
+        { stdin: "0 0 0\n3661", expectedOutput: "01:01:01", label: "1시간 1분 1초" },
+        { stdin: "12 0 0\n3600", expectedOutput: "13:00:00", label: "1시간 진행" },
+      ],
+      hints: [
+        "self.s += 1 후 if self.s == 60: self.s = 0; self.m += 1",
+        "m도 60이 되면 0으로 돌리고 self.h += 1",
+        "h가 24가 되면 self.h = 0으로 돌립니다.",
+        "f-string의 {x:02d}는 2자리 0으로 채운 정수 형식입니다.",
+      ],
+      solutionCode: `class Clock:
+    def __init__(self, h, m, s):
+        self.h = h
+        self.m = m
+        self.s = s
+
+    def tick(self):
+        self.s += 1
+        if self.s == 60:
+            self.s = 0
+            self.m += 1
+            if self.m == 60:
+                self.m = 0
+                self.h += 1
+                if self.h == 24:
+                    self.h = 0
+
+    def show(self):
+        print(f'{self.h:02d}:{self.m:02d}:{self.s:02d}')
+
+h, m, s = map(int, input().split())
+n = int(input())
+clock = Clock(h, m, s)
+for _ in range(n):
+    clock.tick()
+clock.show()`,
+      solutionExplanation: "시·분·초의 자리올림을 if 중첩으로 처리합니다. 객체의 상태(h, m, s)는 tick할 때마다 변하고, 마지막 show에서 한꺼번에 출력됩니다.",
+      en: {
+        title: "Clock Class",
+        description: `Implement a Clock(h, m, s) class.
+- tick(): advance 1 second. 60s = 1min, 60min = 1h, after 24h wraps to 0.
+- show(): print "HH:MM:SS" (2 digits, zero-padded)
+
+Input: h m s on first line, then number of ticks n. Print show() after all ticks.`,
+        constraints: "0 ≤ h ≤ 23, 0 ≤ m, s ≤ 59, 1 ≤ n ≤ 100000",
+        hints: [
+          "self.s += 1, then if self.s == 60: self.s = 0; self.m += 1",
+          "Do the same carry for minutes to hours.",
+          "When h reaches 24, wrap back to 0.",
+          "f-string {x:02d} zero-pads to 2 digits.",
+        ],
+        solutionExplanation: "Handle the second→minute→hour carry with nested ifs. Object state (h, m, s) updates each tick; show() prints all at once.",
+      },
+      language: "python",
+    },
+    {
+      id: "pyoop-017",
+      cluster: "py-oop",
+      unlockAfter: "42",
+      difficulty: "어려움",
+      title: "분수 클래스",
+      description: `Fraction(num, den) 클래스를 구현하세요. (num: 분자, den: 분모)
+- add(other): 두 분수를 더하고, 결과를 약분해서 새 Fraction을 반환
+- show(): "분자/분모" 형식 출력 (분모가 1이면 분자만 출력)
+
+약분: 분자/분모의 최대공약수(GCD)로 나눕니다.
+입력: 첫 줄에 a b (첫 분수), 둘째 줄에 c d (둘째 분수). a/b + c/d를 약분 후 출력.`,
+      constraints: "1 ≤ a, c ≤ 100, 1 ≤ b, d ≤ 100",
+      initialCode: `def gcd(x, y):
+    while y:
+        x, y = y, x % y
+    return x
+
+class Fraction:
+    def __init__(self, num, den):
+        self.num = num
+        self.den = den
+
+    def add(self, other):
+        # self/d1 + other/d2 = (self.num*other.den + other.num*self.den) / (self.den*other.den)
+        # 그 후 gcd로 약분해서 새 Fraction 반환
+        pass
+
+    def show(self):
+        if self.den == 1:
+            print(self.num)
+        else:
+            print(f'{self.num}/{self.den}')
+
+a, b = map(int, input().split())
+c, d = map(int, input().split())
+f1 = Fraction(a, b)
+f2 = Fraction(c, d)
+result = f1.add(f2)
+result.show()`,
+      testCases: [
+        { stdin: "1 2\n1 3", expectedOutput: "5/6", label: "1/2 + 1/3" },
+        { stdin: "1 4\n1 4", expectedOutput: "1/2", label: "1/4 + 1/4 (약분)" },
+        { stdin: "2 3\n1 3", expectedOutput: "1", label: "2/3 + 1/3 = 1" },
+        { stdin: "3 8\n5 8", expectedOutput: "1", label: "3/8 + 5/8" },
+      ],
+      hints: [
+        "통분: 새 분자 = self.num*other.den + other.num*self.den, 새 분모 = self.den*other.den",
+        "약분: g = gcd(새 분자, 새 분모) 후 둘 다 g로 나눕니다.",
+        "Fraction(new_num // g, new_den // g)를 return합니다.",
+      ],
+      solutionCode: `def gcd(x, y):
+    while y:
+        x, y = y, x % y
+    return x
+
+class Fraction:
+    def __init__(self, num, den):
+        self.num = num
+        self.den = den
+
+    def add(self, other):
+        new_num = self.num * other.den + other.num * self.den
+        new_den = self.den * other.den
+        g = gcd(new_num, new_den)
+        return Fraction(new_num // g, new_den // g)
+
+    def show(self):
+        if self.den == 1:
+            print(self.num)
+        else:
+            print(f'{self.num}/{self.den}')
+
+a, b = map(int, input().split())
+c, d = map(int, input().split())
+f1 = Fraction(a, b)
+f2 = Fraction(c, d)
+result = f1.add(f2)
+result.show()`,
+      solutionExplanation: "분수 덧셈은 통분(분모를 같게 만들기) 후 약분(GCD로 나누기)이 필요합니다. add 메서드는 새 Fraction 객체를 만들어 반환하므로 원본은 변하지 않습니다.",
+      en: {
+        title: "Fraction Class",
+        description: `Implement a Fraction(num, den) class.
+- add(other): add two fractions, simplify with GCD, return a new Fraction
+- show(): print "num/den" (or just num if den is 1)
+
+Input: a b (first fraction), then c d (second). Print a/b + c/d simplified.`,
+        constraints: "1 ≤ a, c ≤ 100, 1 ≤ b, d ≤ 100",
+        hints: [
+          "Common denominator: new_num = self.num*other.den + other.num*self.den, new_den = self.den*other.den",
+          "Simplify: g = gcd(new_num, new_den), divide both by g.",
+          "Return Fraction(new_num // g, new_den // g).",
+        ],
+        solutionExplanation: "Fraction addition requires a common denominator then simplification via GCD. add() returns a new Fraction, leaving the originals unchanged.",
+      },
+      language: "python",
+    },
+    {
+      id: "pyoop-018",
+      cluster: "py-oop",
+      unlockAfter: "42",
+      difficulty: "어려움",
+      title: "적금 통장 클래스",
+      description: `Savings(monthly, rate) 클래스를 구현하세요.
+- monthly: 매월 입금액, rate: 연 이율(%, 정수)
+- deposit(): 1개월 입금 — 잔액에 monthly를 더하고, 그 잔액에 월이율(rate/12%)을 적용해 이자를 더함 (소수점 버림, 정수만 보관)
+- balance(): 현재 잔액 출력
+
+입력: 첫 줄에 monthly rate, 둘째 줄에 개월 수 n. n번 deposit 후 balance 출력`,
+      constraints: "1000 ≤ monthly ≤ 1000000, 0 ≤ rate ≤ 12, 1 ≤ n ≤ 60",
+      initialCode: `class Savings:
+    def __init__(self, monthly, rate):
+        self.monthly = monthly
+        self.rate = rate  # 연이율 %
+        self.bal = 0
+
+    def deposit(self):
+        # 1) 잔액에 monthly 더함
+        # 2) 새 잔액에 월이율 적용: bal = bal + bal * rate / 12 / 100 (정수로 버림)
+        pass
+
+    def balance(self):
+        print(self.bal)
+
+monthly, rate = map(int, input().split())
+n = int(input())
+s = Savings(monthly, rate)
+for _ in range(n):
+    s.deposit()
+s.balance()`,
+      testCases: [
+        { stdin: "10000 0\n3", expectedOutput: "30000", label: "이자 0%" },
+        { stdin: "100000 12\n1", expectedOutput: "101000", label: "1개월 12%" },
+        { stdin: "100000 12\n2", expectedOutput: "203010", label: "2개월 복리" },
+        { stdin: "50000 6\n4", expectedOutput: "202511", label: "4개월 6%" },
+      ],
+      hints: [
+        "deposit 안: self.bal += self.monthly",
+        "그 후 self.bal = self.bal + self.bal * self.rate // 12 // 100",
+        "또는 self.bal = self.bal * (1200 + self.rate) // 1200 처럼 한 번에. // 는 정수 나눗셈입니다.",
+        "복리이므로 매월 새 잔액에 이자가 붙습니다.",
+      ],
+      solutionCode: `class Savings:
+    def __init__(self, monthly, rate):
+        self.monthly = monthly
+        self.rate = rate
+        self.bal = 0
+
+    def deposit(self):
+        self.bal += self.monthly
+        self.bal = self.bal + self.bal * self.rate // 12 // 100
+
+    def balance(self):
+        print(self.bal)
+
+monthly, rate = map(int, input().split())
+n = int(input())
+s = Savings(monthly, rate)
+for _ in range(n):
+    s.deposit()
+s.balance()`,
+      solutionExplanation: "객체 안에 bal(잔액)을 누적 상태로 보관합니다. 매월 입금 → 월이율(연이율/12) 적용 순서로 처리하며, 복리이기 때문에 매월 새 잔액에 이자가 붙어 점점 더 빨리 늘어납니다. // 는 소수점을 버리는 정수 나눗셈입니다.",
+      en: {
+        title: "Savings Account Class",
+        description: `Implement a Savings(monthly, rate) class.
+- monthly: monthly deposit, rate: annual interest rate (%, integer)
+- deposit(): one month — add monthly to balance, then apply monthly rate (rate/12%) as interest (integer floor)
+- balance(): print current balance
+
+Input: monthly rate on first line, n months on second. Print balance after n deposits.`,
+        constraints: "1000 ≤ monthly ≤ 1000000, 0 ≤ rate ≤ 12, 1 ≤ n ≤ 60",
+        hints: [
+          "Inside deposit: self.bal += self.monthly",
+          "Then self.bal = self.bal + self.bal * self.rate // 12 // 100",
+          "Or compactly: self.bal = self.bal * (1200 + self.rate) // 1200. // is integer division.",
+          "Compound interest — each month's interest applies to the new balance.",
+        ],
+        solutionExplanation: "The object keeps bal as a running state. Each month: deposit then apply monthly rate. Compound interest means balance grows faster over time. // is floor division.",
+      },
+      language: "python",
+    },
   ],
 }

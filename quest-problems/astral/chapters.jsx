@@ -1,15 +1,38 @@
 import { C, t } from "@/components/quest/theme";
-import { getAstralSections, AstralComposite } from "./components";
+import { getAstralSections, AstralComposite, AstralChainDiscovery, AstralDpSim } from "./components";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 export function makeAstralCh1(E) {
   return [
+    /* 1-0 — Hook: visual story first (before any formal text). */
+    {
+      type: "reveal",
+      narr: t(E,
+        "First, watch ONE star move between two photos. Bessie the cow took a night-sky photo, waited, then took another. Stars either disappear OR slide by (A right, B down). Try the toggles — see what the COMPOSITE looks like.",
+        "먼저 그림으로 봐요. 별 한 개가 두 사진 사이에서 어떻게 움직이는지. Bessie 라는 소가 밤하늘을 두 번 찍었어요. 별은 사라지거나 (A 오른쪽, B 아래) 로 슬쩍 이동. 아래 토글 눌러보면서 합성이 어떻게 만들어지는지 봐요."),
+      content: (
+        <div>
+          <div style={{ padding: "12px 16px 0", textAlign: "center" }}>
+            <div style={{ fontSize: 28, marginBottom: 2 }}>🔭🐄</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: "#4f46e5" }}>
+              {t(E, "Bessie's two telescope photos", "Bessie 의 두 망원경 사진")}
+            </div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
+              {t(E, "Click ★ moves / disappears, change (A,B) presets",
+                    "★ 이동/사라짐 토글, (A,B) 프리셋 변경 가능")}
+            </div>
+          </div>
+          <AstralChainDiscovery E={E} />
+        </div>
+      ),
+    },
+
     /* 1-1 — Problem statement. */
     {
       type: "reveal",
       narr: t(E,
-        "Two telescope photos taken back-to-back. Between them, every star EITHER disappeared OR shifted by (A right, B down). We see the COMPOSITE: W (empty in both), G (in exactly one), B (in both). Find the minimum stars in the original photo, or -1 if impossible.",
-        "두 망원경 사진을 연달아 찍음. 사이에 별마다 사라지거나 (A 오른쪽, B 아래) 로 이동. 합쳐진 결과: W (둘 다 없음), G (한 곳만), B (둘 다). 처음 사진의 최소 별 수, 불가능하면 -1."),
+        "Now the formal rules. We see the COMPOSITE (the merged picture): W (empty in both photos), G (star in exactly one), B (star in both). Find the minimum stars in the original photo, or -1 if impossible.",
+        "이제 정식 규칙. 합성 (두 사진 합친 그림) 의 각 칸: W (둘 다 없음), G (한 사진에만), B (둘 다). 처음 사진의 *최소* 별 수를 출력, 불가능하면 -1."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -170,16 +193,42 @@ GGG`}
 }
 
 export function makeAstralCh2(E, lang = "py") {
+  const sections = getAstralSections(E);
+  const sectionStep = (sec, narr = "") => ({
+    type: "reveal",
+    narr,
+    content: (<CodeSectionView section={sec} lang={lang} E={E} />),
+  });
+
   return [
-    /* 2-1..2-N — sections directly. */
-    ...getAstralSections(E).map((sec, i) => ({
+    /* 2-1 — Read input. */
+    sectionStep(sections[0], t(E,
+      "Stars travel (r, c) → (r+B, c+A), so cells form CHAINS along (B, A).  Per-chain DP picks min stars (or -1 if no consistent assignment).  Sections build it one piece at a time.",
+      "별이 (r, c) → (r+B, c+A) 로 이동하니 칸들이 (B, A) 방향 체인을 형성. 체인별 DP 로 최소 별 (또는 -1) 결정. 아래 섹션이 한 단락씩 쌓아요.")),
+
+    /* 2-2 — Special case A=B=0. */
+    sectionStep(sections[1]),
+
+    /* 2-3 — Walk chains. */
+    sectionStep(sections[2], t(E,
+      "Now the general case (A, B) ≠ (0, 0). Cells form chains along (B, A). Each chain is independent — solve them one at a time.",
+      "이제 일반 케이스 (A, B) ≠ (0, 0). 칸들이 (B, A) 방향 체인 형성. 체인끼리 독립 — 하나씩 풀어요.")),
+
+    /* 2-3.5 — DP intuition + live sim BEFORE reading the DP code. */
+    {
       type: "reveal",
-      narr: i === 0
-        ? t(E,
-            "Stars travel (r, c) → (r+B, c+A), so cells form CHAINS along (B, A).  Per-chain DP picks min stars (or -1 if no consistent assignment).  Sections build it one piece at a time.",
-            "별이 (r, c) → (r+B, c+A) 로 이동하니 칸들이 (B, A) 방향 체인을 형성. 체인별 DP 로 최소 별 (또는 -1) 결정. 아래 섹션이 한 단락씩 쌓아요.")
-        : "",
-      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
-    })),
+      narr: t(E,
+        "Before the DP code: try changing W/G/B cells in this chain. The two rows below are state[0] (outgoing pin = 0) and state[1] (outgoing pin = 1). Watch what makes ∞ appear — that's when the chain is impossible.",
+        "DP 코드 보기 전에 직접 만져보기: 체인 칸들의 W/G/B 를 바꿔봐요. 아래 두 줄이 state[0] (나가는 별 X) 과 state[1] (나가는 별 O). ∞ 가 언제 뜨는지 — 그게 체인이 불가능할 때."),
+      content: (<AstralDpSim E={E} />),
+    },
+
+    /* 2-4 — Per-chain DP code. */
+    sectionStep(sections[3], t(E,
+      "The code below implements exactly what you saw in the simulator. Two states per cell, transitions per W/G/B.",
+      "위 시뮬에서 본 걸 코드로. 칸마다 state 두 개, W/G/B 마다 전이 규칙.")),
+
+    /* 2-5 — Full code. */
+    sectionStep(sections[4]),
   ];
 }
