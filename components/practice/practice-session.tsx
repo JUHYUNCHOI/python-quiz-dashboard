@@ -834,6 +834,17 @@ export function PracticeSession({
               ? (isSaving ? t("저장 중...", "Saving...") : t("🏁 결과 보기", "🏁 See results"))
               : t("다음 문제 →", "Next →")}
           </button>
+        ) : isTeacher ? (
+          // 선생님: 풀이 여부 상관없이 자유 이동 (MCQ 포함)
+          <button
+            onClick={handleNext}
+            disabled={isSaving}
+            className="flex-1 py-3 rounded-xl bg-orange-100 hover:bg-orange-200 text-orange-700 border-2 border-orange-300 hover:border-orange-400 font-bold text-sm transition-colors disabled:opacity-50"
+          >
+            👨‍🏫 {index + 1 >= roundProblems.length
+              ? t("끝으로", "To end")
+              : t("다음 문제 →", "Next →")}
+          </button>
         ) : !isMcq && (
           <button
             onClick={handleNext}

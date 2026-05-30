@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { useGamification } from "@/hooks/use-gamification"
 import { useLanguage } from "@/contexts/language-context"
 import { getWrongBank, syncWrongBankFromSupabase } from "@/lib/mark-lesson-complete"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -15,6 +16,7 @@ export function Header() {
   const { level, dailyStreak } = useGamification()
   const { lang, setLang, t } = useLanguage()
   const pathname = usePathname()
+  const isTeacher = useEffectiveIsTeacher()
 
   // 창고 카운트 — 어디서든 자기 틀린 문제 빠른 접근
   const [bankRemaining, setBankRemaining] = useState(0)
@@ -81,6 +83,16 @@ export function Header() {
             </Link>
           ) : (
             <>
+              {/* 선생님 모드 인디케이터 — 학생/선생님 상태 명확히 보이게 */}
+              {isTeacher && (
+                <div
+                  className="flex items-center gap-1.5 rounded-full bg-amber-100 border border-amber-300 px-3 py-2 min-h-[44px]"
+                  title={t("선생님 모드 — 어디든 접근 가능, 문제 안 풀고도 다음 가능", "Teacher mode — full access, can advance without solving")}
+                >
+                  <span className="text-base leading-none">👨‍🏫</span>
+                  <span className="text-sm font-bold text-amber-800">{t("선생님", "Teacher")}</span>
+                </div>
+              )}
               <div className="flex items-center gap-1.5 rounded-full bg-orange-100 px-3 py-2 min-h-[44px]">
                 <Trophy className="h-4 w-4 text-orange-600" />
                 <span className="text-sm font-semibold text-orange-700">Lv.{level}</span>

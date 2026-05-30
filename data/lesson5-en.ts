@@ -97,8 +97,8 @@ print(len(""))     # 0 — empty string
 
 \`\`\`python
 pwd = "secret12"
-print("length: " + str(len(pwd)) + " chars")
-# length: 8 chars
+print("length:", len(pwd))
+# length: 8
 \`\`\`
 
 > 💡 \`len\` works on strings, lists, tuples, dicts, sets — useful everywhere.`
@@ -109,41 +109,78 @@ print("length: " + str(len(pwd)) + " chars")
           title: "🔢 Indexing — grab a single character",
           content: `Strings support \`[index]\` like lists do, one character at a time.
 
+### From the front — 0, 1, 2, ...
+
 \`\`\`python
 text = "Python"
-#       P y t h o n
+#       P  y  t  h  o  n
 #      [0][1][2][3][4][5]
 
 print(text[0])    # P (first)
 print(text[3])    # h
+\`\`\`
+
+> The first character is \`[0]\`, not \`[1]\` — computers count from 0!
+
+### From the back — -1, -2, ...
+
+We often need the **last** character. But \`text[5]\` requires knowing the length — annoying.
+
+**Negative indices** let you count **from the back**!
+
+\`\`\`python
+text = "Python"
+#        P  y  t  h  o  n
+#      [-6][-5][-4][-3][-2][-1]   ← from the back
+
 print(text[-1])   # n (last)
 print(text[-2])   # o (second from end)
 \`\`\`
+
+\`text[-1]\` is **always the last character** — no need to know the length! Used everywhere.
 
 ### Quick first / last extraction
 
 \`\`\`python
 name = "Alice"
 initial = name[0]      # 'A' — initial
-print(f"{name}'s initial: {initial}")
+last = name[-1]        # 'e' — last character
+print(name, "initial:", initial)
+# Alice initial: A
 \`\`\`
 
-> ⚠️ **Index out of range = error!**
-> \`\`\`python
-> text = "hi"
-> print(text[5])   # IndexError
-> \`\`\`
-> Stick to indices smaller than \`len(text)\`.`
+### ⚠️ Index out of range = error!
+
+\`\`\`python
+text = "hi"
+print(text[5])   # IndexError
+\`\`\`
+
+Safe range: \`0 ~ len(text)-1\` (from front), \`-len(text) ~ -1\` (from back).`
+        },
+        {
+          id: "predict-neg-index",
+          type: "predict",
+          title: "💭 What character will appear?",
+          content: `What does this code print?
+
+\`\`\`python
+word = "MONKEY"
+print(word[-2])
+\`\`\``,
+          options: ["M", "K", "E", "Y"],
+          answer: 2,
+          explanation: "MONKEY's last letter is Y (index -1). Just before it is E (index -2). So word[-2] = E.\n\nM(0/-6) O(1/-5) N(2/-4) K(3/-3) E(4/-2) Y(5/-1) — positive and negative indices point to the same character."
         },
         {
           id: "try-len-index",
           type: "tryit",
           title: "🖥️ Try It — Length and Index",
           task: "Print the first character, last character, and length of a name!",
-          initialCode: "name = \"Python\"\n\n# First character\nfirst = name[___]\n# Last character (negative index)\nlast = name[___]\n# Length\nlength = ___(name)\n\nprint(f\"first: {first}, last: {last}, length: {length}\")",
-          expectedOutput: "first: P, last: n, length: 6",
-          hint: "name[0], name[-1], len(name)",
-          hint2: "first = name[0]\nlast = name[-1]\nlength = len(name)"
+          initialCode: "name = \"Python\"\n\n# First character\nfirst = name[___]\n# Last character (negative index)\nlast = name[___]\n# Length\nlength = ___(name)\n\nprint(\"first:\", first)\nprint(\"last:\", last)\nprint(\"length:\", length)",
+          expectedOutput: "first: P\nlast: n\nlength: 6",
+          hint: "First character is index 0. Use a negative index for the last one. There's a built-in for length too.",
+          hint2: "0 / -1 / len"
         }
       ]
     },
