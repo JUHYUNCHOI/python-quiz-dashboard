@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { ArrowLeft, Play } from "lucide-react"
 import { ALGO_TOPICS } from "@/data/algo/topics"
 import { LanguageToggle } from "@/components/language-toggle"
+import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
 import { cn } from "@/lib/utils"
 import { createClient } from "@/lib/supabase/client"
@@ -50,7 +51,7 @@ export default function AlgoPage() {
   const isFreshStart = completedIds.size === 0
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pb-24">
       {/* 헤더 */}
       <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-lg border-b border-gray-200">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-3 flex items-center gap-3">
@@ -172,6 +173,7 @@ export default function AlgoPage() {
           )
         })}
       </div>
+      <BottomNav />
     </div>
   )
 }

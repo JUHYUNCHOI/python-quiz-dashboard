@@ -636,6 +636,22 @@ export function PracticeSession({
           </p>
         </div>
 
+        {/* 첫 진입 안내 — 수업 tryit/practice 와의 차이 명확히 (모든 진입 시 표시, 부담 적음) */}
+        {currentSet === 1 && (
+          <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl px-5 py-3.5 w-full text-left space-y-1.5">
+            <p className="text-sm font-black text-amber-800 flex items-center gap-1.5">
+              <span>🎓</span>
+              <span>{t("이건 단원 졸업 미션이에요", "This is the unit graduation mission")}</span>
+            </p>
+            <p className="text-xs text-amber-700 leading-relaxed">
+              {t(
+                "수업 안의 tryit/practice 는 템플릿이 있었지만, 여기는 처음부터 직접 코드를 짜요. 손에 진짜 익었나 점검하는 단계예요.",
+                "In-lesson tryit/practice gives templates. Here you write code from scratch — to check if it's really in your hands."
+              )}
+            </p>
+          </div>
+        )}
+
         <div className="flex flex-col gap-3 w-full">
           <button onClick={() => startSet(currentSet)} className="w-full py-4 rounded-2xl bg-purple-500 hover:bg-purple-600 text-white font-bold text-sm transition-colors">
             {t("시작하기 →", "Start →")}

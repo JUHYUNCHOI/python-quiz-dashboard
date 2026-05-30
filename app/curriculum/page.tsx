@@ -382,6 +382,16 @@ export default function CurriculumPage() {
   const [loaded, setLoaded] = useState(false)
   // P2 민준: 건너뛰기 확인 상태 (어떤 레슨 ID를 건너뛸지)
   const [skipConfirmId, setSkipConfirmId] = useState<number | string | null>(null)
+  // 도전 mini-box 펼침 상태 — clusterId 단위
+  const [expandedChallenges, setExpandedChallenges] = useState<Set<string>>(new Set())
+  const toggleChallengeExpand = (clusterId: string) => {
+    setExpandedChallenges(prev => {
+      const next = new Set(prev)
+      if (next.has(clusterId)) next.delete(clusterId)
+      else next.add(clusterId)
+      return next
+    })
+  }
   const [cppNudge, setCppNudge] = useState(false)
   const [showCppModal, setShowCppModal] = useState(false)
   // 레슨별 진행 중 상태: lessonId → { visitedSteps, totalSteps }
@@ -1626,7 +1636,38 @@ export default function CurriculumPage() {
 
                               return (
                                 <>
-                                  <div className="flex flex-col md:flex-row md:items-stretch gap-2 md:gap-3">
+                                  {/* 수업 row — 좌측 timeline rail (연속선) + 좌/우 박스 */}
+                                  <div className="relative flex items-stretch gap-2 md:gap-3">
+                                  {/* 좌측 timeline rail — full-height 세로선. 인접 row 와 자연스럽게 이어짐. 노드는 lesson title 라인 (상단) 에 정렬 */}
+                                  <div className="relative flex flex-col items-center w-5 md:w-6 shrink-0 py-2">
+                                    {/* 위쪽 선 — 첫 수업이면 숨김 (높이 고정 — 노드를 lesson title 에 align) */}
+                                    {lessonIdx > 0 ? (
+                                      <div className="w-0.5 h-6 md:h-8 bg-gray-300" />
+                                    ) : (
+                                      <div className="h-6 md:h-8" />
+                                    )}
+                                    {/* 노드 — 완료/현재/잠금 표시 (크게: 16px) */}
+                                    <div className={cn(
+                                      "w-4 h-4 rounded-full border-2 shrink-0 z-10",
+                                      isCompleted
+                                        ? "bg-emerald-400 border-emerald-500"
+                                        : isNextLesson
+                                          ? "bg-white border-orange-400 ring-2 ring-orange-200"
+                                          : "bg-gray-100 border-gray-300"
+                                    )} />
+                                    {/* 아래쪽 선 — 마지막 수업이면 숨김 */}
+                                    {!isLastLesson ? (
+                                      <div className="w-0.5 flex-1 bg-gray-300" />
+                                    ) : (
+                                      <div className="flex-1" />
+                                    )}
+                                  </div>
+                                  {/* 우측 컨텐츠 — 그룹 박스 bg/ring 제거 (회색 사각형이 빈 공간처럼 보였던 문제 해결). 좌측 lesson + 우측 mini-box 가 자유롭게 자기 크기 */}
+                                  <div className={cn(
+                                    "flex-1 my-2",
+                                    isNextLesson ? "rounded-2xl p-1.5 md:p-2 bg-orange-50/30 ring-1 ring-orange-100" : ""
+                                  )}>
+                                  <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-3">
                                     {/* 수업 박스 — 자체 border + id (학생들에게 *그룹의 주인공*) */}
                                     <div
                                       id={`lesson-${lesson.id}`}
@@ -1744,12 +1785,10 @@ export default function CurriculumPage() {
                                                 <span className="px-2 py-1.5 rounded-lg border-2 border-gray-300 font-bold text-gray-400 text-xs cursor-not-allowed">🔒</span>
                                               )
                                             ) : step1Done ? (
-                                              <div className="flex items-center gap-2 flex-wrap">
-                                                <span className={cn("font-black text-emerald-600", sz("text-sm", "text-base"))}>✅ {t("수업완료", "Done")}</span>
-                                                <Link href={`/learn/${lesson.id}`} className={cn("font-bold text-blue-500 hover:text-blue-700 underline underline-offset-2 decoration-dotted transition-colors", sz("text-sm", "text-base"))}>
-                                                  {t("다시보기 →", "Re-watch →")}
-                                                </Link>
-                                              </div>
+                                              // 수업 완료 시 — Done 표시는 우측 점수 박스에 있으니 좌측은 다시보기 링크만 (secondary 톤)
+                                              <Link href={`/learn/${lesson.id}`} className={cn("inline-flex items-center gap-1 font-semibold text-gray-500 hover:text-gray-700 transition-colors", sz("text-xs", "text-sm"))}>
+                                                {t("다시보기 →", "Re-watch →")}
+                                              </Link>
                                             ) : (
                                               <Link href={`/learn/${lesson.id}`} className={cn(
                                                 "inline-flex items-center justify-center px-3 py-1.5 rounded-lg border border-gray-200 font-bold text-sm shadow-sm transition-colors text-white",
@@ -1763,12 +1802,7 @@ export default function CurriculumPage() {
                                       </div>
                                     </div>
 
-                                    {/* 가운데 연결선 (데스크탑) — 수업 박스 ↔ 복습/도전 박스 */}
-                                    {showRight && (
-                                      <div className="hidden md:flex items-center justify-center px-0.5">
-                                        <div className="w-4 h-0.5 bg-gray-300" />
-                                      </div>
-                                    )}
+                                    {/* 가로 연결선 제거 — 그룹 박스 (gray bg + ring) 가 이미 좌↔우 묶음을 시각화 */}
 
                                     {/* RIGHT — 복습 + 도전 mini-boxes (수업 옆에 떠 있는, 별도 박스 아님) */}
                                     {showRight && (
@@ -1818,23 +1852,71 @@ export default function CurriculumPage() {
                                           )
                                         })()}
 
-                                        {/* 도전 mini-box */}
+                                        {/* 도전 mini-box — 졸업 미션 (처음부터 코드) */}
                                         {cluster && (() => {
+                                          const isExpanded = expandedChallenges.has(cluster.id)
+                                          const set1Problems = cluster.problems.slice(0, set1Total)
+                                          // 펼침 preview (공통)
+                                          const renderPreview = () => (
+                                            <div className="rounded-lg bg-white/80 border border-amber-200/70 px-2 py-1.5 space-y-0.5">
+                                              {set1Problems.map((p, idx) => {
+                                                const done = practiceSolvedSet.has(p.id)
+                                                const localTitle = (lang === "en" && p.en?.title) ? p.en.title : p.title
+                                                const diffEmoji = p.difficulty === "쉬움" ? "🟢" : p.difficulty === "보통" ? "🟡" : "🔴"
+                                                return (
+                                                  <Link
+                                                    key={p.id}
+                                                    href={`/practice?cluster=${cluster.id}&problem=${p.id}&from=curriculum`}
+                                                    className={cn(
+                                                      "flex items-center gap-1.5 px-1.5 py-1 rounded text-xs transition-colors group",
+                                                      done ? "text-emerald-700" : "text-gray-700 hover:bg-amber-50"
+                                                    )}
+                                                    title={localTitle}
+                                                  >
+                                                    <span className="shrink-0">{done ? "✅" : "⬜"}</span>
+                                                    <span className="text-[10px] shrink-0 opacity-70">{diffEmoji}</span>
+                                                    <span className="text-[11px] font-semibold truncate flex-1">{idx + 1}. {localTitle}</span>
+                                                    <span className="text-[10px] opacity-0 group-hover:opacity-60 shrink-0">→</span>
+                                                  </Link>
+                                                )
+                                              })}
+                                            </div>
+                                          )
+                                          const toggleBtn = (
+                                            <button
+                                              type="button"
+                                              onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleChallengeExpand(cluster.id) }}
+                                              className="inline-flex items-center gap-0.5 text-[10px] font-bold text-amber-700/70 hover:text-amber-900 transition-colors whitespace-nowrap"
+                                              title={isExpanded ? t("접기", "Collapse") : t(`${set1Total}문제 미리보기`, `Preview ${set1Total} problems`)}
+                                            >
+                                              {isExpanded
+                                                ? t("▴ 접기", "▴ Collapse")
+                                                : t(`▾ 문제 ${set1Total}개`, `▾ ${set1Total} problems`)}
+                                            </button>
+                                          )
+
                                           if (step3Done) {
                                             return (
                                               <div className="flex-1 flex flex-col gap-1">
-                                                <div className="rounded-xl border-2 border-amber-200 bg-amber-50/60 px-3 py-2 flex items-center gap-2 flex-wrap">
-                                                  <span className="text-base shrink-0">{step3FullyDone ? "🌟" : "⭐"}</span>
-                                                  <span className={cn("font-black text-amber-700 shrink-0", sz("text-sm", "text-base"))}>{t("도전 완료!", "Done!")}</span>
-                                                  <div className="flex items-baseline gap-0.5 shrink-0">
-                                                    <span className="text-xl font-black tabular-nums leading-none text-emerald-600">100</span>
-                                                    <span className="text-xs font-bold text-emerald-600">{t("점", "pt")}</span>
+                                                <div className="rounded-xl border-2 border-amber-200 bg-amber-50/60 px-3 py-2 flex flex-col gap-1">
+                                                  <div className="flex items-center gap-2 flex-wrap">
+                                                    <span className="text-base shrink-0">{step3FullyDone ? "🌟" : "⭐"}</span>
+                                                    <span className={cn("font-black text-amber-700 shrink-0", sz("text-sm", "text-base"))}>{t("졸업 미션 완료!", "Graduated!")}</span>
+                                                    <div className="flex items-baseline gap-0.5 shrink-0">
+                                                      <span className="text-xl font-black tabular-nums leading-none text-emerald-600">100</span>
+                                                      <span className="text-xs font-bold text-emerald-600">{t("점", "pt")}</span>
+                                                    </div>
+                                                    <span className="text-[11px] font-bold text-emerald-700/70 shrink-0">
+                                                      ({set1Total}/{set1Total})
+                                                    </span>
                                                   </div>
-                                                  <span className="text-[11px] font-bold text-emerald-700/70 shrink-0">
-                                                    ({set1Total}/{set1Total})
-                                                  </span>
+                                                  <div className="flex items-center justify-between gap-2">
+                                                    <span className="inline-flex items-center gap-1 text-[10px] text-amber-700/80 font-bold bg-amber-100/60 rounded px-1.5 py-0.5">✏️ {t("처음부터 코드", "From scratch")}</span>
+                                                    {toggleBtn}
+                                                  </div>
                                                 </div>
-                                                {bonusTotal > 0 && (
+                                                {isExpanded && renderPreview()}
+                                                {bonusTotal > 0 && !isExpanded && (
                                                   bonusRemaining > 0 ? (
                                                     <Link href={`/practice?cluster=${cluster.id}&from=curriculum`} className="text-xs text-amber-700 hover:text-amber-900 font-bold underline underline-offset-2 decoration-dotted px-2">
                                                       🔥 {t(`보너스 ${bonusRemaining}문제 (어려움) →`, `Bonus ${bonusRemaining} (harder) →`)}
@@ -1851,26 +1933,33 @@ export default function CurriculumPage() {
                                             const pct = isStarted ? Math.round((solvedInSet1 / set1Total) * 100) : 0
                                             return (
                                               <div className="flex-1 flex flex-col gap-1">
-                                                <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`} className="group rounded-xl bg-amber-400 hover:bg-amber-500 active:scale-[0.98] text-white px-3 py-2 shadow-sm transition-all flex items-center gap-2 flex-wrap">
-                                                  <span className="text-base shrink-0">{cluster.emoji}</span>
-                                                  <span className={cn("font-black shrink-0", sz("text-sm", "text-base"))}>{t("도전", "Challenge")}</span>
-                                                  {isStarted ? (
-                                                    <>
-                                                      <div className="flex items-baseline gap-0.5 shrink-0">
-                                                        <span className="text-xl font-black tabular-nums leading-none">{pct}</span>
-                                                        <span className="text-xs font-bold opacity-95">{t("점", "pt")}</span>
-                                                      </div>
-                                                      <span className="text-[11px] font-bold opacity-90 shrink-0">({solvedInSet1}/{set1Total})</span>
-                                                    </>
-                                                  ) : (
-                                                    <span className="text-xs font-bold opacity-95 shrink-0">{t(`처음 풀기 (${set1Total})`, `Start (${set1Total})`)}</span>
-                                                  )}
+                                                <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`} className="group rounded-xl bg-amber-400 hover:bg-amber-500 active:scale-[0.98] text-white px-3 py-2 shadow-sm transition-all flex flex-col gap-0.5">
+                                                  <div className="flex items-center gap-2 flex-wrap">
+                                                    <span className="text-base shrink-0">{cluster.emoji}</span>
+                                                    <span className={cn("font-black shrink-0", sz("text-sm", "text-base"))}>{t("졸업 미션", "Graduation")}</span>
+                                                    {isStarted ? (
+                                                      <>
+                                                        <div className="flex items-baseline gap-0.5 shrink-0">
+                                                          <span className="text-xl font-black tabular-nums leading-none">{pct}</span>
+                                                          <span className="text-xs font-bold opacity-95">{t("점", "pt")}</span>
+                                                        </div>
+                                                        <span className="text-[11px] font-bold opacity-90 shrink-0">({solvedInSet1}/{set1Total})</span>
+                                                      </>
+                                                    ) : (
+                                                      <span className="text-xs font-bold opacity-95 shrink-0">{t(`처음 풀기 (${set1Total})`, `Start (${set1Total})`)}</span>
+                                                    )}
+                                                  </div>
+                                                  <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-white/25 rounded px-1.5 py-0.5 self-start">✏️ {t("처음부터 코드", "From scratch")}</span>
                                                 </Link>
-                                                {bonusTotal > 0 && (
-                                                  <Link href={`/practice?cluster=${cluster.id}&from=curriculum`} className="text-xs text-amber-700 hover:text-amber-900 font-bold underline underline-offset-2 decoration-dotted px-2">
-                                                    🔥 {t(`보너스 ${bonusTotal}문제 (어려움) →`, `Bonus ${bonusTotal} (harder) →`)}
-                                                  </Link>
-                                                )}
+                                                <div className="flex items-center justify-between gap-2 px-1">
+                                                  {bonusTotal > 0 && !isExpanded ? (
+                                                    <Link href={`/practice?cluster=${cluster.id}&from=curriculum`} className="text-xs text-amber-700 hover:text-amber-900 font-bold underline underline-offset-2 decoration-dotted">
+                                                      🔥 {t(`보너스 ${bonusTotal}`, `Bonus ${bonusTotal}`)}
+                                                    </Link>
+                                                  ) : <span />}
+                                                  {toggleBtn}
+                                                </div>
+                                                {isExpanded && renderPreview()}
                                               </div>
                                             )
                                           }
@@ -1878,7 +1967,7 @@ export default function CurriculumPage() {
                                             <div className="flex-1 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50/50 px-3 py-2.5 opacity-70">
                                               <div className="flex items-center gap-1.5">
                                                 <span className="text-base grayscale opacity-60">{cluster.emoji}</span>
-                                                <span className={cn("font-bold text-gray-400", sz("text-sm", "text-base"))}>{t("도전", "Challenge")}</span>
+                                                <span className={cn("font-bold text-gray-400", sz("text-sm", "text-base"))}>{t("졸업 미션", "Graduation")}</span>
                                               </div>
                                               <span className={cn("text-gray-400 mt-0.5 inline-block font-bold", sz("text-xs", "text-sm"))}>{t("수업 후 열림", "After lesson")}</span>
                                             </div>
@@ -1887,17 +1976,9 @@ export default function CurriculumPage() {
                                       </div>
                                     )}
                                   </div>
-
-                                  {/* 수업 박스끼리 잇는 세로 연결선 — 수업 박스 column 에 맞춰 정렬 */}
-                                  {!isLastLesson && (
-                                    <div className="flex flex-col md:flex-row md:items-stretch gap-2 md:gap-3 py-1">
-                                      <div className="flex-1 flex justify-center">
-                                        <div className="w-0.5 h-4 bg-gradient-to-b from-gray-300 to-gray-200 rounded-full" />
-                                      </div>
-                                      {/* 우측 column 만큼 빈 공간 — 데스크탑에서 연결선이 lesson box 와 정렬되게 */}
-                                      <div className="hidden md:block md:w-56 lg:w-64" />
-                                    </div>
-                                  )}
+                                  </div>
+                                  </div>
+                                  {/* row 종료 (timeline rail + 그룹 박스) — 별도 연결선 X. rail 이 row 간 연속성 담당 */}
                                 </>
                               )
                             })()}
