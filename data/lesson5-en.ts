@@ -193,7 +193,9 @@ print(word[-2])
           id: "multiply-explain",
           type: "explain",
           title: "✖️ String × Number",
-          content: `When you multiply a string by a number, it **repeats**!
+          content: `When you multiply a string by a number, **the same string repeats that many times**!
+
+\`"Ha" * 3\` is exactly the same as \`"Ha" + "Ha" + "Ha"\` — just a **shorter way to write it**.
 
 \`\`\`python
 print("Ha" * 3)       # HaHaHa
@@ -201,11 +203,44 @@ print("=" * 5)        # =====
 print("Hi! " * 2)     # Hi! Hi!
 \`\`\`
 
-**Usage example:**
+> 💡 You can write it as \`5 * "="\` too — **order doesn't matter**!
+
+### Common uses
+
+- **Separators / borders** — \`"=" * 50\`
+- **Indentation / spacing** — \`" " * 4\`
+- **Visual scoring** — \`"⭐" * 5\`
+- **Repeating patterns** — \`"-=" * 10\`
+
+### Usage example — menu border
+
 \`\`\`python
 print("=" * 8)
 print(" Menu ")
 print("=" * 8)
+\`\`\`
+
+Result:
+\`\`\`
+========
+ Menu
+========
+\`\`\`
+
+### ⚠️ What about 0 or negative?
+
+\`\`\`python
+print("Ha" * 0)    # (empty string — nothing prints)
+print("Ha" * -3)   # (also empty, no error)
+\`\`\`
+
+Surprising! Try it yourself.
+
+### ❌ What doesn't work
+
+\`\`\`python
+print("3" * "Ha")    # TypeError — string × string not allowed
+print("Ha" * 2.5)    # TypeError — no floats, integers only!
 \`\`\``
         },
         {
