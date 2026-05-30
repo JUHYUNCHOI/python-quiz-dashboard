@@ -60,22 +60,26 @@ a = "Py"
 b = "th"
 c = "on"
 print(a + b + c)   # Python
+\`\`\``
+        },
+        {
+          id: "concat-explain-spaces",
+          type: "explain",
+          title: "⚠️ Spaces and Numbers — Watch out",
+          content: `### No automatic spaces!
+
+\`\`\`python
+print("Hello" + "World")         # HelloWorld  ← stuck together!
+print("Hello" + " " + "World")   # Hello World
 \`\`\`
+
+If you want a space, you have to add \`" "\` yourself. Python won't guess.
 
 ### Common uses
 
 - **Greetings** — \`"Hi, " + name\`
 - **File paths** — \`folder + "/" + filename\`
 - **Sentences from variables** — title + " by " + author
-
-### ⚠️ Watch out — no automatic spaces!
-
-\`\`\`python
-print("Hello" + "World")    # HelloWorld  ← stuck together!
-print("Hello" + " " + "World")   # Hello World
-\`\`\`
-
-If you want a space, you have to add \`" "\` yourself. Python won't guess.
 
 ### ❌ What doesn't work
 
@@ -127,11 +131,14 @@ print(len("a b"))  # 3 — the space counts too
 ### Common uses
 
 - **Password length check** — is it at least 8?
-- **Show message length** — character count display
 - **Detect empty input** — is \`len(name) == 0\`?
-- **Last index** — \`len(s) - 1\` is the last position
-
-### Edge case — empty string
+- **Last index** — \`len(s) - 1\` is the last position`
+        },
+        {
+          id: "len-explain-edges",
+          type: "explain",
+          title: "🪤 len() — Tricky cases",
+          content: `### Edge case — empty string
 
 \`\`\`python
 print(len(""))    # 0 — nothing inside, length 0
@@ -170,11 +177,13 @@ print(text[0])    # P (first)
 print(text[3])    # h
 \`\`\`
 
-> The first character is \`[0]\`, not \`[1]\` — computers count from 0!
-
-### From the back — -1, -2, ...
-
-We often need the **last** character. But \`text[5]\` requires knowing the length — annoying.
+> The first character is \`[0]\`, not \`[1]\` — computers count from 0!`
+        },
+        {
+          id: "indexing-neg",
+          type: "explain",
+          title: "🔄 From the back — negative indices",
+          content: `We often need the **last** character. But \`text[5]\` requires knowing the length — annoying.
 
 **Negative indices** let you count **from the back**!
 
@@ -193,10 +202,9 @@ print(text[-2])   # o (second from end)
 
 \`\`\`python
 name = "Alice"
-initial = name[0]      # 'A' — initial
-last = name[-1]        # 'e' — last character
+initial = name[0]      # 'A'
+last = name[-1]        # 'e'
 print(name, "initial:", initial)
-# Alice initial: A
 \`\`\`
 
 ### ⚠️ Index out of range = error!
@@ -259,10 +267,13 @@ print("Hi! " * 2)     # Hi! Hi!
 
 - **Separators / borders** — \`"=" * 50\`
 - **Indentation / spacing** — \`" " * 4\`
-- **Visual scoring** — \`"⭐" * 5\`
-- **Repeating patterns** — \`"-=" * 10\`
-
-### Usage example — menu border
+- **Visual scoring** — \`"⭐" * 5\``
+        },
+        {
+          id: "multiply-explain-uses",
+          type: "explain",
+          title: "🎨 Usage + Pitfalls",
+          content: `### Usage example — menu border
 
 \`\`\`python
 print("=" * 8)
@@ -341,23 +352,17 @@ print("Java" in text)
 
 > Try to predict: which line prints True, which prints False?
 
-### ⚠️ Case-sensitive!
-
-\`\`\`python
-print("Python" in "I love Python")   # True
-print("python" in "I love Python")   # False — capital P matters!
-\`\`\`
-
-\`P\` and \`p\` are different characters to Python.
-
 ### Common uses
 
 - **Search** — does this comment contain a keyword?
-- **Filter** — show only messages with "urgent" in them
 - **Validation** — does the email contain \`"@"\`?
-- **Tag check** — is "python" in the post tags?
-
-### Use case — show whether a word appears
+- **Tag check** — is "python" in the post tags?`
+        },
+        {
+          id: "in-explain-detail",
+          type: "explain",
+          title: "🔧 in — not in / case sensitivity",
+          content: `### Use case — show whether a word appears
 
 \`\`\`python
 text = "I love Python"
@@ -374,12 +379,21 @@ print("foo" not in "hello")    # True — "foo" really isn't there
 print("ell" not in "hello")    # False — "ell" IS there
 \`\`\`
 
+### ⚠️ Case-sensitive!
+
+\`\`\`python
+print("Python" in "I love Python")   # True
+print("python" in "I love Python")   # False — capital P matters!
+\`\`\`
+
+\`P\` and \`p\` are different characters to Python.
+
 > 💡 Want to ignore case? You'll learn \`text.lower()\` in lesson 6.`
         },
         {
           id: "compare-explain",
           type: "explain",
-          title: "📊 String comparison — ==, <, >",
+          title: "📊 String comparison — ==",
           content: `Strings can be **compared** just like numbers — equal, not equal, smaller, bigger.
 
 ### == and != — exact match check
@@ -403,9 +417,13 @@ print(a != c)
 - **Password check** — \`entered == real\`
 - **Yes/no answers** — \`answer == "y"\`
 - **Menu choices** — \`choice == "1"\`
-- **State check** — \`status == "done"\`
-
-### Alphabetical / dictionary order — < and >
+- **State check** — \`status == "done"\``
+        },
+        {
+          id: "compare-explain-order",
+          type: "explain",
+          title: "🔤 Dictionary order — <, >",
+          content: `\`<\` and \`>\` work on strings too. Words that come **earlier in the dictionary** are "smaller".
 
 \`\`\`python
 print("apple" < "banana")   # True — 'a' comes before 'b'
@@ -413,7 +431,7 @@ print("a" < "b")            # True
 print("kiwi" < "apple")     # False — 'k' comes after 'a'
 \`\`\`
 
-→ Words that come **earlier in the dictionary** are "smaller". Useful for sorting names later!
+Useful for sorting names later!
 
 ### ⚠️ Uppercase vs lowercase — surprise
 
@@ -432,6 +450,20 @@ print("is n?:", answer == "n")
 \`\`\`
 
 Comma-print again — handy for showing a label next to a True/False result.`
+        },
+        {
+          id: "compare-explain-trap",
+          type: "explain",
+          title: "🪤 Looks like numbers, but it's a string…",
+          content: `### ❌ Easy to misread
+
+\`\`\`python
+print("10" < "9")    # True (?!) — first char '1' < '9'
+\`\`\`
+
+Strings are compared **character by character**. The first char of \`"10"\` is \`'1'\`, the first char of \`"9"\` is \`'9'\` — and \`'1'\` comes before \`'9'\` in the dictionary, so the result is \`True\`.
+
+If you want to compare as numbers, you need **type conversion** (lesson 9) — like \`int("10") < int("9")\`.`
         },
         {
           id: "try-in-compare",
@@ -473,11 +505,13 @@ But **string + number**? Python doesn't guess. Some languages would auto-convert
 
 \`\`\`text
 TypeError: can only concatenate str (not "int") to str
-\`\`\`
-
-### ✅ The easy way — use print()'s comma
-
-\`print()\` is smart. Give it a **comma** between things, and it handles any type — string, number, True/False — automatically.
+\`\`\``
+        },
+        {
+          id: "error-explain-solution",
+          type: "explain",
+          title: "✅ The fix — print() comma",
+          content: `\`print()\` is smart. Give it a **comma** between things, and it handles any type — string, number, True/False — automatically.
 
 \`\`\`python
 age = 15
@@ -528,7 +562,7 @@ For now, **comma-print** is all you need. 🎯`
         {
           id: "escape-explain",
           type: "explain",
-          title: "🔧 Escape characters — special chars",
+          title: "🔧 Escape — the backslash signal",
           content: `What if you want a **newline** inside a string? Or a **quote** inside a string that's already wrapped in quotes? You need a trick.
 
 ### The problem — quote conflict
@@ -548,11 +582,13 @@ text = "He said \\"hi\\""
 print(text)
 \`\`\`
 
-The \`\\"\` is "an actual quote character, not the end of the string."
-
-### Common escapes
-
-| Notation | Meaning | Example |
+The \`\\"\` is "an actual quote character, not the end of the string."`
+        },
+        {
+          id: "escape-explain-table",
+          type: "explain",
+          title: "📋 Common escapes",
+          content: `| Notation | Meaning | Example |
 |---|---|---|
 | \`\\n\` | newline | \`"a\\nb"\` → \`a\` then \`b\` on next line |
 | \`\\t\` | tab | \`"a\\tb"\` → \`a    b\` |
@@ -567,7 +603,13 @@ The \`\\"\` is "an actual quote character, not the end of the string."
 - **Quoted text inside strings** — \`"\\"hello\\""\`
 - **Windows file paths** — \`"C:\\\\Users\\\\..."\`
 
-### Easier trick — mix quote types
+> 💡 Memorize **\`\\n\`** and **\`\\t\`** — those are the ones you'll really use.`
+        },
+        {
+          id: "escape-explain-tricks",
+          type: "explain",
+          title: "💡 Cleaner ways — quote swap / triple quotes",
+          content: `### Mix quote types
 
 If your text contains \`"\`, wrap it in \`'\` (and vice versa). No backslash needed!
 
@@ -587,7 +629,14 @@ Third line"""
 print(text)
 \`\`\`
 
-> 💡 Memorize **\`\\n\`** and **\`\\t\`** — those are the ones you'll really use.`
+### ❌ Don't get confused
+
+\`\`\`python
+print("a\\nb")    # two lines
+print("a\\\\nb")   # literal: a\\nb (showing the backslash itself)
+\`\`\`
+
+You need two \`\\\\\` to print one backslash.`
         },
         {
           id: "try-escape",

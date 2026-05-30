@@ -54,9 +54,19 @@ Let's break it down piece by piece:
 - **\`' '\`** — quotes. Text (called a "string") must be wrapped in quotes so the computer knows "ah, this is text."
 
 > 💡 **Single quotes \`'\`** and **double quotes \`"\`** both work the same way. Pick whichever you like!
-> \`print('Hi')\` = \`print("Hi")\`
-
-### More examples
+> \`print('Hi')\` = \`print("Hi")\``
+        },
+        {
+          id: "print-builder-interactive",
+          type: "interactive",
+          title: "🎬 Build print() Piece by Piece",
+          component: "pyPrintBuilder"
+        },
+        {
+          id: "print-explain-uses",
+          type: "explain",
+          title: "🖨️ print() — More Examples & Pitfalls",
+          content: `### More examples
 
 \`\`\`python
 print('hi')            # hi
@@ -134,11 +144,13 @@ Result:
 
 Why do strings need quotes but numbers don't?
 → The computer **recognizes numbers directly.** When it sees \`123\`, it instantly knows "that's one hundred twenty-three."
-→ But \`Hello\` without quotes? The computer can't tell if you mean text or some name you defined.
-
-### 💡 Cool thing — Python calculates for you
-
-If you put math inside \`print()\`, Python **does the calculation** and shows the result!
+→ But \`Hello\` without quotes? The computer can't tell if you mean text or some name you defined.`
+        },
+        {
+          id: "number-explain-math",
+          type: "explain",
+          title: "💡 Cool thing — Python calculates for you",
+          content: `If you put math inside \`print()\`, Python **does the calculation** and shows the result!
 
 \`\`\`python
 print(100 + 50)    # 150
@@ -153,18 +165,21 @@ Like a calculator! Inside \`print()\` you can use \`+ - * /\`.
 
 - Check a value — "what's the score right now?"
 - Show a result — "the discounted price is …"
-- Count things — 1, 2, 3, 4, 5 …
-
-### ⚠️ Quotes matter — text vs number
-
-\`\`\`python
+- Count things — 1, 2, 3, 4, 5 …`
+        },
+        {
+          id: "number-explain-types",
+          type: "explain",
+          title: "⚠️ Quotes matter — text vs number",
+          content: `\`\`\`python
 print(100)       # 100  (a real number → math works)
 print('100')     # 100  (text — looks the same, but math won't work)
 \`\`\`
 
 On screen they look identical, but inside the computer they're different kinds.
-**\`100\`** is a real number → \`100 + 50\` works fine.
-**\`'100'\`** is three characters \`1\`, \`0\`, \`0\` → trying to do math on it causes problems.
+
+- **\`100\`** is a real number → \`100 + 50\` works fine.
+- **\`'100'\`** is three characters \`1\`, \`0\`, \`0\` → trying to do math on it causes problems.
 
 For now, just notice this difference. Next lesson covers it in detail!`
         },
@@ -203,16 +218,21 @@ print(100 + 200)   # Result: 300
 
 - **Anything after \`#\` is completely ignored by Python.** It doesn't run, doesn't show on screen.
 - **They help you remember "what was this code for?"** when you come back later 📝
-- They also help other people read your code.
-
-### Two places you'll see #
-
-\`\`\`python
+- They also help other people read your code.`
+        },
+        {
+          id: "comment-explain-where",
+          type: "explain",
+          title: "💬 Two places you'll see #",
+          content: `\`\`\`python
 # At the start of a line — the whole line is a comment
 print(10)
 
 print(20)   # Mid-line — everything from # to end of line is a comment
 \`\`\`
+
+- **Start of a line** — the whole line is a comment. Usually used to describe the next line of code.
+- **Mid-line** — everything from \`#\` to the end of the line is a comment. Good for short notes attached to that code line.
 
 > 💡 You'll see \`#\` a lot in lesson code. **When you see \`#\`, just read it as "ah, this is a note"** and move on.`
         },
@@ -260,9 +280,13 @@ Third line
 ### The key promise
 
 **\`print()\` automatically adds a line break after each output.** So the next \`print()\` starts on a fresh line.
-You don't need to press Enter or do anything special — it handles the line break for you.
-
-### Where it's useful
+You don't need to press Enter or do anything special — it handles the line break for you.`
+        },
+        {
+          id: "multi-explain-card",
+          type: "explain",
+          title: "📝 Where It's Useful & Name Card Example",
+          content: `### Where it's useful
 
 - **Multi-line messages** — welcome greeting, menus, help text
 - **Report-style output** — name, age, score on separate lines
@@ -316,9 +340,13 @@ First line
 Third line
 \`\`\`
 
-> 💡 **\`print()\` with no arguments doesn't cause an error.** It just prints a single newline.
-
-### Why does it make a blank line?
+> 💡 **\`print()\` with no arguments doesn't cause an error.** It just prints a single newline.`
+        },
+        {
+          id: "empty-print-explain-why",
+          type: "explain",
+          title: "✨ Why It Works & Where to Use It",
+          content: `### Why does it make a blank line?
 
 \`print()\` always adds a line break at the end. With nothing inside → **just the line break gets printed** → on screen it looks like a blank line.
 
@@ -356,11 +384,13 @@ print('Age:', 15, 'years old')
 
 print('Score:', 100)
 # Result: Score: 100
-\`\`\`
-
-### 💡 The comma's magic — automatic space
-
-**When you separate values with commas, a space is added between them automatically.** You don't have to add it!
+\`\`\``
+        },
+        {
+          id: "comma-explain-space",
+          type: "explain",
+          title: "💡 The comma's magic — automatic space",
+          content: `**When you separate values with commas, a space is added between them automatically.** You don't have to add it!
 
 \`\`\`python
 print('a', 'b', 'c')
@@ -380,11 +410,13 @@ print('Total:', 100 + 50) # Total: 150
 
 - **Label + value** — \`print('Score:', 95)\`
 - **Several values at once** — \`print('a', 'b', 'c')\`
-- **Text + a calculation result** — \`print('Sum:', 10 + 20)\`
-
-### ❓ Commas vs multiple print() calls — what's the difference?
-
-\`\`\`python
+- **Text + a calculation result** — \`print('Sum:', 10 + 20)\``
+        },
+        {
+          id: "comma-explain-vs",
+          type: "explain",
+          title: "❓ Commas vs multiple print() — what's the difference?",
+          content: `\`\`\`python
 print('a', 'b')    # a b       ← one line, space between
 print('a')         # a
 print('b')         # b         ← split into two lines

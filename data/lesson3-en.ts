@@ -53,11 +53,20 @@ Pictured:
 
 - The box labeled \`name\` holds \`'Hero'\`
 - The box labeled \`hp\` holds \`100\`
-- The box labeled \`gold\` holds \`5000\`
-
-### Why do we need variables?
-
-Without variables:
+- The box labeled \`gold\` holds \`5000\``
+        },
+        {
+          id: "concept-builder",
+          type: "interactive",
+          title: "🎬 Build a Variable — Syntax Assembly",
+          description: "Click through to see how \`variable = value\` is put together.",
+          component: "pyVariableBuilder",
+        },
+        {
+          id: "concept-why",
+          type: "explain",
+          title: "🤔 Why Do We Need Variables?",
+          content: `Without variables:
 
 \`\`\`python
 print('Hero')
@@ -76,11 +85,13 @@ print(name, "'s HP is 100")
 print(name, 'has 5000 gold')
 \`\`\`
 
-→ Just swap \`name = 'Hero'\` for \`name = 'Mage'\` and you're done!
-
-### What does \`=\` actually mean?
-
-In math class, \`=\` meant "is equal to" — but in Python it's different.
+→ Just swap \`name = 'Hero'\` for \`name = 'Mage'\` and you're done!`
+        },
+        {
+          id: "concept-equals",
+          type: "explain",
+          title: "🧮 What Does \`=\` Actually Mean?",
+          content: `In math class, \`=\` meant "is equal to" — but in Python it's different.
 
 | Math | Python |
 |---|---|
@@ -141,16 +152,20 @@ print(price + 2000) # 21000
 | \`print(price)\` | Look in price → 19000 → print it | \`19000\` |
 | \`print(price + 2000)\` | price (19000) + 2000 = 21000 → print | \`21000\` |
 
-> 💡 We did \`print(price + 2000)\` but the **price box still holds 19000**. We pulled the value out and did math with it — we didn't change what's in the box.
-
-### ⚠️ Common mistake
-
-\`\`\`python
+> 💡 We did \`print(price + 2000)\` but the **price box still holds 19000**. We pulled the value out and did math with it — we didn't change what's in the box.`
+        },
+        {
+          id: "use-explain-mistake",
+          type: "explain",
+          title: "⚠️ Common Mistake — Quotes",
+          content: `\`\`\`python
 print('price')   # → price (literally the letters!)
 print(price)     # → 19000 (the value in the box!)
 \`\`\`
 
-With quotes \`'\` → literal text. Variable name only (no quotes) → value in the box.`
+With quotes \`'\` → literal text. Variable name only (no quotes) → value in the box.
+
+> 🎯 One line: **with quotes = letters, without quotes = value in the box.**`
         },
         {
           id: "try2",
@@ -228,11 +243,13 @@ hp = 80         →   [ 80 ]      ← 100 is overwritten and gone
                        hp
 \`\`\`
 
-> 💡 The **label \`hp\` stays the same**. Only the value inside changed.
-
-### Using a variable to update itself
-
-\`x = x + 3\` looks weird (in math, \`x = x + 3\` → \`0 = 3\`?), but in Python it's natural.
+> 💡 The **label \`hp\` stays the same**. Only the value inside changed.`
+        },
+        {
+          id: "change-explain-self",
+          type: "explain",
+          title: "♻️ Using a Variable to Update Itself",
+          content: `\`x = x + 3\` looks weird (in math, \`x = x + 3\` → \`0 = 3\`?), but in Python it's natural.
 
 \`\`\`python
 score = 5
@@ -247,13 +264,19 @@ Step 1 (compute right):  score + 3  →  5 + 3  →  8
 Step 2 (store):          score = 8
 \`\`\`
 
-### ⚠️ What doesn't work — using a variable you never made
-
-\`\`\`python
+> 🎯 You'll click through these two steps in the next sim.`
+        },
+        {
+          id: "change-explain-error",
+          type: "explain",
+          title: "⚠️ Doesn't Work — Using a Variable You Never Made",
+          content: `\`\`\`python
 print(money)   # ❌ NameError — no box named money was ever created
 \`\`\`
 
-You have to **create** it first with \`money = 1000\`, then use it.`
+You have to **create** it first with \`money = 1000\`, then use it.
+
+> 💡 Variables: **store first → then read.** Break that order → NameError.`
         },
         {
           id: "try3",
@@ -301,11 +324,13 @@ You have to **create** it first with \`money = 1000\`, then use it.`
 | 3 | **No reserved keywords** | \`my_if\` | \`if\`, \`for\`, \`print\` |
 | 4 | **Case-sensitive** | \`age\` ≠ \`Age\` | (mistake → different var) |
 
-> 🎯 One-liner: **letters/digits/_, first char a letter or _, no keywords.**
-
----
-
-### Detail — Rule 1: allowed characters
+> 🎯 One-liner: **letters/digits/_, first char a letter or _, no keywords.**`
+        },
+        {
+          id: "rules-explain-chars",
+          type: "explain",
+          title: "🔤 Detail — Rules 1·2: Characters and First Char",
+          content: `### Rule 1: allowed characters
 
 \`\`\`python
 # ✅ OK — only letters, digits, _
@@ -319,7 +344,7 @@ my name = 'Lee'   # space splits into two words
 my@name = 'Lee'   # special chars like @ not allowed
 \`\`\`
 
-### Detail — Rule 2: first character
+### Rule 2: first character
 
 A digit can't lead. The interpreter would be confused: "is this a variable or a number?"
 
@@ -327,9 +352,13 @@ A digit can't lead. The interpreter would be confused: "is this a variable or a 
 2score = 50    # ❌
 score2 = 50    # ✅ digit AFTER a letter is fine
 _temp = 0      # ✅ leading _ is fine
-\`\`\`
-
-### Detail — Rule 3: no reserved keywords
+\`\`\``
+        },
+        {
+          id: "rules-explain-keywords",
+          type: "explain",
+          title: "🚫 Detail — Rules 3·4: Keywords + Case",
+          content: `### Rule 3: no reserved keywords
 
 Words Python already uses for syntax. Can't be variable names.
 
@@ -341,20 +370,20 @@ print = 3      # ❌ built-in function — possible but never do this
 
 **Common keywords**: \`if\`, \`else\`, \`for\`, \`while\`, \`and\`, \`or\`, \`not\`, \`True\`, \`False\`, \`None\`, \`return\`, \`def\`, \`class\`, \`import\`
 
-### Detail — Rule 4: case sensitive
+### Rule 4: case sensitive
 
 \`\`\`python
 age = 15
 print(Age)   # ❌ NameError — Age was never created (capital A!)
 \`\`\`
 
-→ \`age\` and \`Age\` are **completely different variables**. A typo in case creates a different variable.
-
----
-
-### 🐍 Convention (not a rule but recommended) — snake_case
-
-The rules are met, but for **readability** there's a Python style guide.
+→ \`age\` and \`Age\` are **completely different variables**. A typo in case creates a different variable.`
+        },
+        {
+          id: "rules-explain-style",
+          type: "explain",
+          title: "🐍 Convention — snake_case + Meaningful Names",
+          content: `The rules are met, but for **readability** there's a Python style guide.
 
 \`\`\`python
 player_name = 'Alice'   # ✅ snake_case — Python style
@@ -434,11 +463,13 @@ hp = 100
 print('Name:', name)         # Name: Alice
 print('HP:', hp)             # HP: 100
 print(name, "'s HP:", hp)    # Alice 's HP: 100
-\`\`\`
-
-### 💭 "What if I want text and variable glued tight together?"
-
-\`\`\`
+\`\`\``
+        },
+        {
+          id: "concat-explain-future",
+          type: "explain",
+          title: "💭 What If I Want No Space Between Them?",
+          content: `\`\`\`
 Name: Alice        ← comma (one space after colon)
 Name:Alice         ← no space — possible?
 \`\`\`
@@ -502,9 +533,13 @@ score = 0      # starting score
 | Position | Example |
 |---|---|
 | **Whole line** | \`# Greet the user next\` |
-| **End of line** | \`hp = 100  # starting health\` |
-
-### Why bother with comments?
+| **End of line** | \`hp = 100  # starting health\` |`
+        },
+        {
+          id: "comment-explain-why",
+          type: "explain",
+          title: "🤔 Why Comments + Watch-Out",
+          content: `### Why bother with comments?
 
 1. **Future-you** — "What does this do?" Comments answer it instantly
 2. **Sharing with friends** — easier for others to read
