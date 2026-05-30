@@ -90,6 +90,20 @@ print("héllo".upper())     # HÉLLO    (accents handled)
 Only letters change. Digits, symbols, spaces — all stay the same.`
         },
         {
+          id: "predict-upper-result",
+          type: "predict",
+          title: "💭 Predict — upper()",
+          content: `What does this code print?
+
+\`\`\`python
+name = "Hello"
+print(name.upper())
+\`\`\``,
+          options: ["Hello", "HELLO", "hello", "Error"],
+          answer: 1,
+          explanation: "upper() turns every letter uppercase. H→H, e→E, l→L, l→L, o→O → HELLO."
+        },
+        {
           id: "upper-lower-immutable",
           type: "explain",
           title: "⚠️ The original doesn't change",
@@ -177,6 +191,22 @@ print(text.strip())  # "Hello friend"  (middle space kept!)
 \`\`\``
         },
         {
+          id: "predict-strip-middle",
+          type: "predict",
+          title: "💭 Predict — strip() and middle space",
+          content: `What does this code print?
+
+\`\`\`python
+text = "   Hello friend   "
+print(text.strip())
+\`\`\`
+
+Hint: strip() only trims **both ends.**`,
+          options: ["Hellofriend", "Hello friend", "   Hello friend   ", "Hello"],
+          answer: 1,
+          explanation: "Only end whitespace is trimmed. The middle space stays! → \"Hello friend\""
+        },
+        {
           id: "strip-variants",
           type: "explain",
           title: "↔️ lstrip / rstrip + invisible chars",
@@ -242,6 +272,22 @@ Pass \`""\` (empty string) as the new value to **delete** the matches.
 text = "H e l l o"
 print(text.replace(" ", ""))  # Hello  (all spaces removed)
 \`\`\``
+        },
+        {
+          id: "predict-replace-all",
+          type: "predict",
+          title: "💭 Predict — how many replacements?",
+          content: `What does this code print?
+
+\`\`\`python
+text = "banana banana banana"
+print(text.replace("banana", "apple"))
+\`\`\`
+
+Hint: does replace() change just **one** match, or **all** of them?`,
+          options: ["apple banana banana", "banana banana apple", "apple apple apple", "banana banana banana"],
+          answer: 2,
+          explanation: "replace() doesn't stop at the first match — it finds and replaces **all** matches. All three become \"apple\"."
         },
         {
           id: "replace-chain",
@@ -335,6 +381,26 @@ print(text.find("Python"))  # -1
 \`-1\` is the agreed-upon "not found" signal. (Once you learn if-statements, this is great for "exists?" checks.)`
         },
         {
+          id: "predict-find-position",
+          type: "predict",
+          title: "💭 Predict — find() position",
+          content: `What does this code print?
+
+\`\`\`python
+text = "Python is fun"
+print(text.find("is"))
+\`\`\`
+
+Position map:
+\`\`\`
+P y t h o n   i s   f u n
+0 1 2 3 4 5 6 7 8 9 ...
+\`\`\``,
+          options: ["6", "7", "8", "-1"],
+          answer: 1,
+          explanation: "\"is\" starts at index 7 (i=7, s=8). find() returns the starting position → 7."
+        },
+        {
           id: "find-count",
           type: "explain",
           title: "🔢 count() — \"how many?\"",
@@ -360,6 +426,22 @@ Both return numbers, but they mean very different things!
 print("Hello".find("h"))   # -1  (no lowercase h here)
 print("Hello".find("H"))   # 0
 \`\`\``
+        },
+        {
+          id: "predict-count-banana",
+          type: "predict",
+          title: "💭 Predict — count() how many?",
+          content: `What does this code print?
+
+\`\`\`python
+text = "banana"
+print(text.count("an"))
+\`\`\`
+
+Hint: \`b-a-n-a-n-a\` — trace through and find where \"an\" appears.`,
+          options: ["1", "2", "3", "0"],
+          answer: 1,
+          explanation: "Inside banana, \"an\" appears in b**an**ana once and ban**an**a once → 2 total."
         },
         {
           id: "try5",

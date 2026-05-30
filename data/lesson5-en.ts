@@ -122,10 +122,10 @@ You hand the string to \`len()\` like passing it to a counter. It counts every c
 
 \`\`\`python
 text = "hello"
-print(len(text))   # 5
+print(len(text))
 
-print(len("hi!"))  # 3 — the ! counts too
-print(len("a b"))  # 3 — the space counts too
+print(len("hi!"))  # the ! counts too
+print(len("a b"))  # the space counts too
 \`\`\`
 
 ### Common uses
@@ -133,6 +133,20 @@ print(len("a b"))  # 3 — the space counts too
 - **Password length check** — is it at least 8?
 - **Detect empty input** — is \`len(name) == 0\`?
 - **Last index** — \`len(s) - 1\` is the last position`
+        },
+        {
+          id: "predict-len-hello",
+          type: "predict",
+          title: "💭 Predict — len()",
+          content: `What does this code print?
+
+\`\`\`python
+text = "hello"
+print(len(text))
+\`\`\``,
+          options: ["4", "5", "6", "Error"],
+          answer: 1,
+          explanation: "hello has 5 letters: h-e-l-l-o. len() counts the characters."
         },
         {
           id: "len-explain-edges",
@@ -215,6 +229,13 @@ print(text[5])   # IndexError
 \`\`\`
 
 Safe range: \`0 ~ len(text)-1\` (from front), \`-len(text) ~ -1\` (from back).`
+        },
+        {
+          id: "indexing-visualizer",
+          type: "interactive",
+          title: "🎬 Click the indices yourself",
+          component: "pyStringIndexVisualizer",
+          componentProps: { initialText: "Python" },
         },
         {
           id: "predict-neg-index",
@@ -359,6 +380,20 @@ print("Java" in text)
 - **Tag check** — is "python" in the post tags?`
         },
         {
+          id: "predict-in-case",
+          type: "predict",
+          title: "💭 Predict — case-sensitive in",
+          content: `What does this code print?
+
+\`\`\`python
+text = "I love Python"
+print("python" in text)
+\`\`\``,
+          options: ["True", "False", "Error", "love"],
+          answer: 1,
+          explanation: "\`in\` is **case-sensitive**. The text has \`Python\` (capital P) but not lowercase \`python\` → False.\n\nFor case-insensitive checks, you'll learn \`.lower()\` in lesson 6."
+        },
+        {
           id: "in-explain-detail",
           type: "explain",
           title: "🔧 in — not in / case sensitivity",
@@ -418,6 +453,21 @@ print(a != c)
 - **Yes/no answers** — \`answer == "y"\`
 - **Menu choices** — \`choice == "1"\`
 - **State check** — \`status == "done"\``
+        },
+        {
+          id: "predict-compare-case",
+          type: "predict",
+          title: "💭 Predict — == with case",
+          content: `What does this code print?
+
+\`\`\`python
+a = "hello"
+c = "Hello"
+print(a == c)
+\`\`\``,
+          options: ["True", "False", "Error", "hello"],
+          answer: 1,
+          explanation: "\`==\` requires an **exact match**. \`a\` starts with lowercase \`h\`, \`c\` with uppercase \`H\` — different characters, so False.\n\nFor case-insensitive comparison, you'll learn \`.lower()\` in lesson 6."
         },
         {
           id: "compare-explain-order",

@@ -140,19 +140,28 @@ print(name, '가 5000 골드를 가지고 있다')
 
 \`\`\`python
 price = 19000
-print(price)        # 19000
-print(price + 2000) # 21000
+print(price)
+print(price + 2000)
 \`\`\`
 
-### 줄 단위로 어떻게 동작하는지
+다음 스텝에서 이 코드 결과를 직접 예측해봐요 👇
 
-| 줄 | 파이썬의 머릿속 | 출력 |
-|---|---|---|
-| \`price = 19000\` | price 상자에 19000 저장 | (없음) |
-| \`print(price)\` | price 꺼내 보니 19000 → 출력 | \`19000\` |
-| \`print(price + 2000)\` | price (19000) + 2000 = 21000 → 출력 | \`21000\` |
+> 💡 \`print(price + 2000)\` 을 해도 **price 상자 안 값은 그대로**. 꺼내서 계산만 한 거지, 상자 안을 바꾼 게 아니에요.`
+        },
+        {
+          id: "predict-use-price",
+          type: "predict",
+          title: "💭 결과 예측 — price + 2000",
+          content: `위 코드 두 번째 줄, \`print(price + 2000)\` 의 출력은?
 
-> 💡 \`print(price + 2000)\` 을 했지만 **price 상자 안 값은 그대로 19000**. 꺼내서 계산만 한 거지, 상자 안을 바꾼 게 아니에요.`
+\`\`\`python
+price = 19000
+print(price)
+print(price + 2000)
+\`\`\``,
+          options: ["19000", "20002000", "21000", "에러"],
+          answer: 2,
+          explanation: "price 상자 안 값(19000) 을 꺼내서 + 2000 → 21000. 상자 안 값은 바뀌지 않고, 꺼내서 계산만 한 거예요."
         },
         {
           id: "use-explain-mistake",
@@ -254,23 +263,58 @@ hp = 80         →   [ 80 ]      ← 100 은 덮어써져서 사라짐
 \`\`\`python
 score = 5
 score = score + 3
-print(score)   # 8
+print(score)
 \`\`\`
 
 **오른쪽 먼저 계산** → **왼쪽에 저장** 순서를 기억해요.
 
 \`\`\`
-1단계 (오른쪽 계산):  score + 3  →  5 + 3  →  8
-2단계 (저장):          score = 8
+1단계 (오른쪽 계산):  score + 3  →  5 + 3  →  ?
+2단계 (저장):          score = ?
 \`\`\`
 
-> 🎯 다음 시뮬에서 이 두 단계를 직접 눌러볼 거예요.`
+다음 스텝에서 결과를 예측해봐요. 🎯 그 다음 시뮬에서 두 단계를 직접 눌러볼 거예요.`
+        },
+        {
+          id: "predict-self-update",
+          type: "predict",
+          title: "💭 결과 예측 — score = score + 3",
+          content: `\`score\` 의 시작 값은 5. 이 코드 결과는?
+
+\`\`\`python
+score = 5
+score = score + 3
+print(score)
+\`\`\``,
+          options: ["5", "3", "8", "에러"],
+          answer: 2,
+          explanation: "오른쪽 먼저 계산: score + 3 = 5 + 3 = 8. 그 다음 왼쪽 score 상자에 8 을 저장. print(score) 는 8."
+        },
+        {
+          id: "predict-no-var",
+          type: "predict",
+          title: "💭 결과 예측 — 만든 적 없는 변수",
+          content: `\`money\` 라는 변수는 **한 번도 만들지 않았어요**. 그런데 바로 출력하면?
+
+\`\`\`python
+print(money)
+\`\`\``,
+          options: [
+            "0 출력",
+            "money 글자 출력",
+            "NameError (에러)",
+            "아무것도 안 나옴"
+          ],
+          answer: 2,
+          explanation: "파이썬은 'money 라는 이름의 상자' 를 찾는데, 만든 적이 없으니 NameError. 변수는 **먼저 저장 → 그 다음 꺼내기** 순서."
         },
         {
           id: "change-explain-error",
           type: "explain",
           title: "⚠️ 안 되는 것 — 만든 적 없는 변수",
-          content: `\`\`\`python
+          content: `예상대로 \`NameError\` 가 나요.
+
+\`\`\`python
 print(money)   # ❌ NameError — money 라는 상자 만든 적 없음
 \`\`\`
 
@@ -454,16 +498,27 @@ print('이름:', name, '나이:', age)   # 이름: 홍길동 나이: 15
 |---|---|
 | 공백 | **자동** 으로 한 칸 들어감 |
 | 숫자 변수 | 그대로 OK (변환 필요 X) |
-| 글자 / 숫자 섞기 | 자유롭게 가능 |
+| 글자 / 숫자 섞기 | 자유롭게 가능 |`
+        },
+        {
+          id: "predict-concat-mix",
+          type: "predict",
+          title: "💭 결과 예측 — 글자와 변수 섞어 출력",
+          content: `이 코드의 출력은? (쉼표는 자동으로 공백 한 칸을 넣어요)
 
 \`\`\`python
 name = '홍길동'
 hp = 100
-
-print('이름:', name)        # 이름: 홍길동
-print('체력:', hp)          # 체력: 100
-print(name, '의 체력:', hp) # 홍길동 의 체력: 100
-\`\`\``
+print(name, '의 체력:', hp)
+\`\`\``,
+          options: [
+            "홍길동의 체력:100",
+            "홍길동 의 체력: 100",
+            "name 의 체력: hp",
+            "홍길동, 의 체력:, 100"
+          ],
+          answer: 1,
+          explanation: "쉼표(,) 로 구분된 값 사이에 **공백 한 칸씩 자동**으로 들어가요. name 값 → 공백 → '의 체력:' → 공백 → hp 값."
         },
         {
           id: "concat-explain-future",

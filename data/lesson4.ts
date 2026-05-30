@@ -102,14 +102,20 @@ print(10 % 3)    # 1           ← 나머지만! (퍼센트)
 | \`%\` | 나머지 | \`10 % 3\` → 1 | 남는 수 |`
         },
         {
+          id: "predict-slash-vs-doubleslash",
+          type: "predict",
+          title: "💭 결과 예측 — / 와 //",
+          content: "두 코드의 출력 차이를 생각해봐요!",
+          code: "print(5 / 2)\nprint(5 // 2)",
+          options: ["2.5\n2", "2\n2.5", "2.5\n2.5", "2\n2"],
+          answer: 0,
+          explanation: "/ 는 소수까지 → 2.5. // 는 몫만 → 2. 같은 5÷2 라도 결과 형태가 달라요."
+        },
+        {
           id: "special-explain-examples",
           type: "explain",
           title: "🍬 // 와 % 더 많은 예시",
           content: `\`\`\`python
-# 사탕 7 개를 2 명에게
-print(7 // 2)    # 3 — 한 명당 3 개씩
-print(7 % 2)     # 1 — 한 개 남음
-
 # 분 단위 → 시간:분
 print(75 // 60)  # 1 — 1 시간
 print(75 % 60)   # 15 — 15 분
@@ -120,6 +126,16 @@ print(100 % 7)   # 2 — 2 페이지 남음
 \`\`\`
 
 > 🎯 \`//\` = "몇 개씩 줄 수 있나?", \`%\` = "몇 개 남나?"`
+        },
+        {
+          id: "predict-candy-modulo",
+          type: "predict",
+          title: "💭 결과 예측 — 사탕 나누기",
+          content: "사탕 7 개를 2 명이 나누면? 코드 결과는?",
+          code: "print(7 // 2)\nprint(7 % 2)",
+          options: ["3\n1", "1\n3", "3.5\n0", "2\n3"],
+          answer: 0,
+          explanation: "한 명당 3 개 (몫) + 1 개 남음 (나머지). // 와 % 가 짝꿍처럼 같이 자주 나와요."
         },
         {
           id: "try2",
@@ -191,6 +207,16 @@ print((22 + 5) % 24)   # 3  ← 27 을 24 로 나눈 나머지
 \`% N\` 은 "수가 N 을 넘으면 0 부터 다시 시작" — 시계, 요일, 원형 자리 배치에 자주 등장.
 
 > 🎯 한 줄: **% 2 는 짝/홀 신호, % N 은 N 의 배수 신호 (결과 0 = 배수), 또는 N 단위 순환.**`
+        },
+        {
+          id: "predict-clock-wrap",
+          type: "predict",
+          title: "💭 결과 예측 — 시계 순환",
+          content: "23 시에서 5 시간 지나면 몇 시? 24 시간 시계로!",
+          code: "print((23 + 5) % 24)",
+          options: ["4", "28", "0", "5"],
+          answer: 0,
+          explanation: "23 + 5 = 28. 28 을 24 로 나눈 나머지는 4. → 새벽 4 시. % N 은 N 을 넘으면 0 부터 다시 세는 마법."
         },
         {
           id: "try-modulo",
@@ -334,8 +360,6 @@ x = (a + (b * c)) < 100
           content: `\`\`\`python
 print(10 > 5)     # True   ← 10 이 5 보다 크니까
 print(3 > 7)      # False  ← 3 은 7 보다 작으니까
-print(10 >= 10)   # True   ← 같은 것도 '이상' 에 들어감
-print(10 > 10)    # False  ← '크다' 는 같은 건 안 됨
 \`\`\`
 
 ### \`>=\` 와 \`>\` 차이
@@ -343,7 +367,17 @@ print(10 > 10)    # False  ← '크다' 는 같은 건 안 됨
 - \`>=\` (이상): "**같거나** 더 큰" — 같은 것 OK
 - \`>\` (초과): "**더 큰**" — 같은 것 X
 
-비슷하지만 같은 값일 때 결과가 달라요.`
+비슷하지만 같은 값일 때 결과가 달라져요.`
+        },
+        {
+          id: "predict-gte-vs-gt",
+          type: "predict",
+          title: "💭 결과 예측 — >= 와 > 가 같으면?",
+          content: "두 수가 **딱 같을 때**, 두 비교의 결과는?",
+          code: "print(10 >= 10)\nprint(10 > 10)",
+          options: ["True\nFalse", "True\nTrue", "False\nTrue", "False\nFalse"],
+          answer: 0,
+          explanation: ">= 는 '같아도 OK' → True. > 는 '딱 같으면 안 됨' → False. 같은 값일 때 갈리는 게 핵심."
         },
         {
           id: "try3",
@@ -403,12 +437,17 @@ print("hi" != "bye")       # True — 다름
 
 ### ⚠️ 소수 비교 함정 — 신기한 결과
 
-\`\`\`python
-print(0.1 + 0.2 == 0.3)   # False (?!)
-print(0.1 + 0.2)          # 0.30000000000000004 — 살짝 다름
-\`\`\`
-
 컴퓨터가 소수를 저장하는 방식 때문에 아주 작은 오차가 생겨요. **정수 비교는 안전, 소수 \`==\` 비교는 조심.** 지금은 "이런 게 있구나" 만 알아두면 OK.`
+        },
+        {
+          id: "predict-float-trap",
+          type: "predict",
+          title: "💭 결과 예측 — 0.1 + 0.2 == 0.3 ?",
+          content: "수학으로는 당연히 같지만... 파이썬은?",
+          code: "print(0.1 + 0.2 == 0.3)",
+          options: ["False", "True", "에러", "0.3"],
+          answer: 0,
+          explanation: "컴퓨터가 0.1 + 0.2 를 저장할 때 살짝 오차가 생겨서 0.30000000000000004. 그래서 0.3 과 != → False. 소수 == 비교는 조심!"
         },
         {
           id: "try-equal",
@@ -521,6 +560,16 @@ print(not False)   # True
 **그 한 칸만 기억하면 끝.**`
         },
         {
+          id: "predict-and-or-mix",
+          type: "predict",
+          title: "💭 결과 예측 — and 와 or",
+          content: "두 식의 결과는?",
+          code: "print(True and False)\nprint(True or False)",
+          options: ["False\nTrue", "True\nFalse", "True\nTrue", "False\nFalse"],
+          answer: 0,
+          explanation: "and 는 까다로워서 한 명이라도 False 면 False. or 는 너그러워서 한 명만 True 여도 True."
+        },
+        {
           id: "try4",
           type: "tryit",
           title: "🖥️ 직접 해보기 — and 연결",
@@ -542,13 +591,21 @@ print(not False)   # True
 \`\`\`python
 x = None
 
-print(x is None)        # True   ← 'x 가 None 이다' 검사 — 권장
-print(x is not None)    # False  ← 반대 — 'x 가 None 이 아니다'
-
-print(x == None)        # True 도 됨 — 다만 is 가 더 정확
+print(x is None)        # 'x 가 None 이다' 검사 — 권장
+print(x is not None)    # 반대 — 'x 가 None 이 아니다'
 \`\`\`
 
 > 💡 \`x is None\` 가 파이썬 권장 스타일. \`== None\` 도 동작은 하지만 \`is None\` 이 더 명확.`
+        },
+        {
+          id: "predict-is-none",
+          type: "predict",
+          title: "💭 결과 예측 — is None",
+          content: "x 가 None 일 때, 두 검사의 결과는?",
+          code: "x = None\nprint(x is None)\nprint(x is not None)",
+          options: ["True\nFalse", "False\nTrue", "True\nTrue", "False\nFalse"],
+          answer: 0,
+          explanation: "x 가 정말 None 이니까 'is None' → True, 'is not None' → False. 둘은 정확히 반대."
         },
         {
           id: "is-not-explain-rest",
@@ -678,12 +735,22 @@ score += 10          # 짧은 방법 — 같은 뜻!
           title: "🎮 게임에서 자주 만나는 += / -=",
           content: `\`\`\`python
 hp = 100
-hp -= 20      # 데미지 20 → hp = 80
+hp -= 20      # 데미지 20 → hp 가 줄어요
 score = 0
-score += 10   # 점수 +10 → score = 10
+score += 10   # 점수 획득 → score 가 늘어요
 \`\`\`
 
 > 💡 \`+=\` 는 **카운터 (점수, 횟수)** 와 **체력/자원 변경** 에 가장 많이 등장. 다음 레슨들에서 계속 만날 거예요.`
+        },
+        {
+          id: "predict-hp-compound",
+          type: "predict",
+          title: "💭 결과 예측 — hp 변화",
+          content: "데미지 두 번 받은 후 hp 는?",
+          code: "hp = 100\nhp -= 30\nhp -= 15\nprint(hp)",
+          options: ["55", "85", "70", "45"],
+          answer: 0,
+          explanation: "100 → (-30) → 70 → (-15) → 55. -= 는 '현재 값에서 빼서 다시 저장' 이라 누적돼요."
         },
         {
           id: "try5",
