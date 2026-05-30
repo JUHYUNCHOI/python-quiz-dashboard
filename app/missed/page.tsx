@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
-import { getWrongBank, type WrongQuestionEntry } from "@/lib/mark-lesson-complete"
+import { getWrongBank, markWrongQuestionMastered, type WrongQuestionEntry } from "@/lib/mark-lesson-complete"
 import { lessonsData } from "../review/[lessonId]/data/lessons"
 import type { StepContent, LessonData } from "../review/[lessonId]/data/types"
 import { ArrowLeft } from "lucide-react"
@@ -171,28 +171,44 @@ export default function MissedPage() {
                     })()}
                   </div>
                 </div>
-                {/* 각 문제 chip — 클릭 시 단일 문제 풀이 페이지로. title 에 문제 미리보기. */}
+                {/* 각 문제 chip + 제거 버튼 — 풀어보기 또는 수동 제거 */}
                 {(() => {
                   const lesson = lessonsData[lessonId]
                   const steps = lesson ? extractStepsForLesson(lesson) : []
+                  const handleDismiss = (e: WrongQuestionEntry) => {
+                    if (window.confirm(t("이 문제를 창고에서 제거할까요?", "Remove this question from the bank?"))) {
+                      markWrongQuestionMastered(e.lessonId, e.stepIndex)
+                      // re-read
+                      setBank(getWrongBank())
+                    }
+                  }
                   return (
                     <div className="flex flex-wrap gap-2">
                       {entries.map((e, i) => {
                         const preview = previewOfStep(steps[e.stepIndex], lang === "en")
                         const previewShort = preview.length > 80 ? preview.slice(0, 80) + "…" : preview
                         return (
-                          <Link
-                            key={`${e.lessonId}-${e.stepIndex}-${i}`}
-                            href={`/missed/practice?lesson=${encodeURIComponent(e.lessonId)}&q=${e.stepIndex}`}
-                            title={previewShort || `Q${e.stepIndex + 1}`}
-                            className={cn(
-                              "inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg text-sm font-black shadow-sm transition-all",
-                              "bg-rose-500 hover:bg-rose-600 text-white active:scale-95 min-w-[60px] justify-center"
-                            )}
-                          >
-                            <span>Q{e.stepIndex + 1}</span>
-                            <span className="opacity-80">→</span>
-                          </Link>
+                          <div key={`${e.lessonId}-${e.stepIndex}-${i}`} className="inline-flex items-stretch rounded-lg overflow-hidden shadow-sm">
+                            <Link
+                              href={`/missed/practice?lesson=${encodeURIComponent(e.lessonId)}&q=${e.stepIndex}`}
+                              title={previewShort || `Q${e.stepIndex + 1}`}
+                              className={cn(
+                                "inline-flex items-center gap-1.5 px-3.5 py-2.5 text-sm font-black transition-all",
+                                "bg-rose-500 hover:bg-rose-600 text-white active:scale-95 min-w-[60px] justify-center"
+                              )}
+                            >
+                              <span>Q{e.stepIndex + 1}</span>
+                              <span className="opacity-80">→</span>
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => handleDismiss(e)}
+                              title={t("창고서 제거 (안 풀고)", "Remove (without solving)")}
+                              className="px-2.5 py-2.5 bg-rose-400 hover:bg-rose-600 text-white border-l border-rose-300 active:scale-95 transition-all text-xs font-black"
+                            >
+                              ✕
+                            </button>
+                          </div>
                         )
                       })}
                     </div>
@@ -207,7 +223,7 @@ export default function MissedPage() {
         {loaded && grouped.length > 0 && (
           <div className="mt-6 rounded-xl bg-amber-50 border border-amber-200 p-3">
             <p className="text-xs text-amber-700 leading-relaxed break-keep">
-              💡 {t("팁: 각 문제 (Q1, Q2 …) 누르면 그 문제 하나만 풀 수 있어요. 맞히면 창고에서 빠져요.", "Tip: Click each question (Q1, Q2 …) to practice it alone. Master to remove.")}
+              💡 {t("두 가지 길: (1) Q1, Q2 클릭 → 풀어보기 (맞히면 자동 제거). (2) ✕ 버튼 → 이미 이해했으면 안 풀고 제거.", "Two ways: (1) Click Q1, Q2 → practice (auto-remove if correct). (2) ✕ button → remove without solving (if you already get it).")}
             </p>
           </div>
         )}
