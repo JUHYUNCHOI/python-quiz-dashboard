@@ -89,11 +89,11 @@ We'll see how to handle this in Chapter 3!`
           id: "try1",
           type: "tryit",
           title: "🖥️ Try It Yourself!",
-          task: "Connect the name and greeting, then print the result!",
-          initialCode: "name = \"Mike\"\n# Use + to connect strings\ngreeting = \"Hey, \" + ___ + \"!\"\nprint(greeting)",
+          task: "Fill the blank with a variable NAME (not the value) so it prints \"Hey, Mike!\"",
+          initialCode: "name = \"Mike\"\n# Put the variable name in the blank (NOT the value)\ngreeting = \"Hey, \" + ___ + \"!\"\nprint(greeting)",
           expectedOutput: "Hey, Mike!",
-          hint: "Use the + operator to connect strings",
-          hint2: "\"Hey, \" + name + \"!\""
+          hint: "What's the name of the variable that holds \"Mike\"?",
+          hint2: "name"
         },
         {
           id: "quiz1",
@@ -297,21 +297,21 @@ print("Ha" * 2.5)    # TypeError — no floats, integers only!
           id: "try2",
           type: "tryit",
           title: "🖥️ Try It Yourself!",
-          task: "Print 5 asterisks (*)!",
-          initialCode: "# Repeat a string with *!\nprint(\"*\" * ___)",
+          task: "Print 5 asterisks (*)! Fill the blank with a NUMBER (repeat count).",
+          initialCode: "# Put the repeat count (a number) in the blank\nprint(\"*\" * ___)",
           expectedOutput: "*****",
-          hint: "String * number = repeat!",
-          hint2: "\"*\" * 5"
+          hint: "How many stars should there be? That's your number.",
+          hint2: "5"
         },
         {
           id: "try3",
           type: "tryit",
           title: "🖥️ Make a Divider Line!",
-          task: "Print 8 equal signs (=) to make a divider line!",
-          initialCode: "print(\"=\" * ___)",
+          task: "Print 8 equal signs (=) to make a divider! Blank is a NUMBER.",
+          initialCode: "# Put the repeat count (number) in the blank\nprint(\"=\" * ___)",
           expectedOutput: "========",
-          hint: "\"=\" * 8",
-          hint2: "print(\"=\" * 8)"
+          hint: "How many = signs do you need? That's the number.",
+          hint2: "8"
         },
         {
           id: "quiz2",
@@ -437,11 +437,11 @@ Comma-print again — handy for showing a label next to a True/False result.`
           id: "try-in-compare",
           type: "tryit",
           title: "🖥️ Try It — in and ==",
-          task: "Check if 'good' is in the comment + status equals exactly 'OK'!",
-          initialCode: "comment = \"This is good!\"\nstatus = \"OK\"\n\n# 'good' contained?\nhas_good = \"good\" ___ comment\n\n# status exactly 'OK'?\nis_ok = status == ___\n\nprint(\"has 'good':\", has_good)\nprint(\"OK:\", is_ok)",
+          task: "Blank 1: the keyword between \"good\" and comment. Blank 2: the string to compare with status (include quotes!).",
+          initialCode: "comment = \"This is good!\"\nstatus = \"OK\"\n\n# Blank: containment keyword\nhas_good = \"good\" ___ comment\n\n# Blank: the string to compare (with quotes)\nis_ok = status == ___\n\nprint(\"has 'good':\", has_good)\nprint(\"OK:\", is_ok)",
           expectedOutput: "has 'good': True\nOK: True",
-          hint: "in for substring, == for full equality.",
-          hint2: "has_good = \"good\" in comment\nis_ok = status == \"OK\""
+          hint: "Blank 1: containment keyword (2 letters). Blank 2: the full \"OK\" string with quotes.",
+          hint2: "in / \"OK\""
         }
       ]
     },
@@ -509,21 +509,21 @@ For now, **comma-print** is all you need. 🎯`
           id: "try4",
           type: "tryit",
           title: "🖥️ Try It Yourself!",
-          task: "Print the score with a label using print() comma!",
-          initialCode: "score = 100\n# Use a comma to print label and number together\nprint(\"Score:\", ___)",
+          task: "Fill the blank with a VARIABLE NAME (not the value 100) to print \"Score: 100\".",
+          initialCode: "score = 100\n# Variable NAME in the blank (NOT the value 100)\nprint(\"Score:\", ___)",
           expectedOutput: "Score: 100",
-          hint: "Comma between the label and the variable — print() handles the rest!",
-          hint2: "print(\"Score:\", score)"
+          hint: "What's the name of the variable holding 100?",
+          hint2: "score"
         },
         {
           id: "mission1",
           type: "mission",
           title: "🎯 Mission!",
-          task: "Use print() comma to show: Tom is 15",
-          initialCode: "name = \"Tom\"\nage = 15\n# Use commas — print() prints them separated by spaces\nprint(___, \"is\", ___)",
+          task: "Fill both blanks with VARIABLE NAMES (not values \"Tom\" or 15) to print \"Tom is 15\".",
+          initialCode: "name = \"Tom\"\nage = 15\n# Both blanks are variable NAMES (NOT \"Tom\" or 15 directly)\nprint(___, \"is\", ___)",
           expectedOutput: "Tom is 15",
-          hint: "Three things separated by commas: name, \"is\", age",
-          hint2: "print(name, \"is\", age)"
+          hint: "Blank 1: variable holding \"Tom\". Blank 2: variable holding 15.",
+          hint2: "name / age"
         },
         {
           id: "escape-explain",
@@ -593,11 +593,11 @@ print(text)
           id: "try-escape",
           type: "tryit",
           title: "🖥️ Try It — Escape and newline",
-          task: "Build output with \\n for newline and \\t for tab indent in one print!",
-          initialCode: "# One print, two lines, tab-indented items\nprint(\"Title\\n\\titem 1\\n\\titem 2\")",
+          task: "No blanks — just run it to see how \\n and \\t render!",
+          initialCode: "# No blanks — just press Run\nprint(\"Title\\n\\titem 1\\n\\titem 2\")",
           expectedOutput: "Title\n\titem 1\n\titem 2",
-          hint: "Run as-is — \\n newline, \\t tab.",
-          hint2: "Just run it."
+          hint: "Press Run — \\n becomes a newline, \\t becomes a tab.",
+          hint2: ""
         }
       ]
     },
@@ -634,11 +634,11 @@ print("Score:", score)   # Score: 100
           id: "mission2",
           type: "mission",
           title: "🏆 Mission 1 — Menu board",
-          task: "Build a nice-looking menu board! (divider = 8 chars). Use print() comma to show prices.",
-          initialCode: "print(\"=\" * ___)\nprint(\"  🍗 Chicken Shop  \")\nprint(\"=\" * ___)\nprint(\"Fried:\", ___)\nprint(\"Spicy:\", ___)",
+          task: "Fill 4 blanks: top 2 = divider repeat count (8 each), bottom 2 = prices (18000, 19000).",
+          initialCode: "# Blanks 1,2: = repeat count (number)\nprint(\"=\" * ___)\nprint(\"  🍗 Chicken Shop  \")\nprint(\"=\" * ___)\n# Blanks 3,4: prices (numbers)\nprint(\"Fried:\", ___)\nprint(\"Spicy:\", ___)",
           expectedOutput: "========\n  🍗 Chicken Shop  \n========\nFried: 18000\nSpicy: 19000",
-          hint: "Repeat = 8 times for the divider. Use a comma between label and price.",
-          hint2: "8 / 18000 / 19000"
+          hint: "Divider needs 8 of =. Fried 18000, Spicy 19000.",
+          hint2: "8 / 8 / 18000 / 19000"
         },
         {
           id: "mission3",
@@ -654,11 +654,11 @@ print("Score:", score)   # Score: 100
           id: "mission4",
           type: "mission",
           title: "🏆 Mission 3 — Initial card",
-          task: "Build initials (first letters of first + last name), output uppercase!",
-          initialCode: "first = \"Alice\"\nlast = \"Choi\"\n\n# First char + first char, uppercase (lesson 6 .upper() preview)\ninitials = (first[___] + last[___]).upper()\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
+          task: "Both blanks are INDEX NUMBERS — the index pointing to the first character.",
+          initialCode: "first = \"Alice\"\nlast = \"Choi\"\n\n# Blanks: index (number) pointing to the first character\ninitials = (first[___] + last[___]).upper()\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
           expectedOutput: "========\n  AC\nAlice Choi\n========",
-          hint: "first[0] and last[0] joined, then .upper()",
-          hint2: "initials = (first[0] + last[0]).upper()"
+          hint: "What's the index of the first character? (counting from 0)",
+          hint2: "0 / 0"
         },
         {
           id: "complete",

@@ -90,11 +90,11 @@ print("나이: " + 15)   # TypeError — 문자열 + 숫자는 불가!
           id: "try1",
           type: "tryit",
           title: "🖥️ 직접 해보기!",
-          task: "이름과 인사를 연결해서 출력하세요!",
-          initialCode: "name = \"민수\"\n# + 로 문자열을 연결하세요\ngreeting = \"반가워, \" + ___ + \"!\"\nprint(greeting)",
+          task: "빈칸에 변수 이름을 넣어 \"반가워, 민수!\" 가 출력되게 하세요!",
+          initialCode: "name = \"민수\"\n# 빈칸에 변수 이름을 넣으세요 (값 X)\ngreeting = \"반가워, \" + ___ + \"!\"\nprint(greeting)",
           expectedOutput: "반가워, 민수!",
-          hint: "+ 연산자로 문자열을 연결해요",
-          hint2: "\"반가워, \" + name + \"!\""
+          hint: "위에서 만든 변수 이름이 뭐였죠? \"민수\" 라는 값을 가진 변수.",
+          hint2: "name"
         },
         {
           id: "quiz1",
@@ -294,21 +294,21 @@ print("하" * 2.5)    # TypeError — 소수는 불가, 정수만!
           id: "try2",
           type: "tryit",
           title: "🖥️ 직접 해보기!",
-          task: "별(*)을 5개 출력하세요!",
-          initialCode: "# 문자열 * 숫자로 반복!\nprint(\"*\" * ___)",
+          task: "별(*)을 5개 출력하세요! (빈칸엔 반복 횟수 = 숫자)",
+          initialCode: "# 빈칸에 반복할 횟수 (숫자) 를 넣으세요\nprint(\"*\" * ___)",
           expectedOutput: "*****",
-          hint: "문자열 * 숫자 = 반복!",
-          hint2: "\"*\" * 5"
+          hint: "별이 몇 개 나와야 하나요? 그 숫자를 빈칸에.",
+          hint2: "5"
         },
         {
           id: "try3",
           type: "tryit",
           title: "🖥️ 구분선 만들기!",
-          task: "=를 8개 출력해서 구분선을 만드세요!",
-          initialCode: "print(\"=\" * ___)",
+          task: "=를 8개 출력해서 구분선을 만드세요! (빈칸엔 숫자)",
+          initialCode: "# 빈칸에 반복 횟수 (숫자)\nprint(\"=\" * ___)",
           expectedOutput: "========",
-          hint: "\"=\" * 8",
-          hint2: "print(\"=\" * 8)"
+          hint: "= 가 몇 개 필요한가요? 그 숫자.",
+          hint2: "8"
         },
         {
           id: "quiz2",
@@ -431,11 +431,11 @@ print("10" < "9")    # True (?!) — 첫 글자 '1' < '9' 라서
           id: "try-in-compare",
           type: "tryit",
           title: "🖥️ 직접 해보기 — in 과 == 검사",
-          task: "댓글에 '좋아' 가 들어있는지 + 정확히 'OK' 인지 확인하세요!",
-          initialCode: "comment = \"이거 좋아요!\"\nstatus = \"OK\"\n\n# '좋아' 포함 여부\nhas_good = \"좋아\" ___ comment\n\n# 정확히 'OK' 인지\nis_ok = status == ___\n\nprint(\"좋아 있음:\", has_good)\nprint(\"OK:\", is_ok)",
+          task: "빈칸 1: '좋아' 와 comment 사이에 들어갈 키워드. 빈칸 2: status 와 비교할 문자열 (따옴표 포함).",
+          initialCode: "comment = \"이거 좋아요!\"\nstatus = \"OK\"\n\n# 빈칸: 포함 여부 검사 키워드\nhas_good = \"좋아\" ___ comment\n\n# 빈칸: 비교할 문자열 (따옴표 포함)\nis_ok = status == ___\n\nprint(\"좋아 있음:\", has_good)\nprint(\"OK:\", is_ok)",
           expectedOutput: "좋아 있음: True\nOK: True",
-          hint: "in 으로 부분 검사, == 으로 완전 일치.",
-          hint2: "has_good = \"좋아\" in comment\nis_ok = status == \"OK\""
+          hint: "첫 빈칸: 포함 검사 키워드 (영어 2글자). 둘째 빈칸: \"OK\" 문자열 통째.",
+          hint2: "in / \"OK\""
         }
       ]
     },
@@ -496,21 +496,21 @@ print(name, "의 점수는", score, "점")
           id: "try4",
           type: "tryit",
           title: "🖥️ 직접 해보기!",
-          task: "콤마로 점수를 출력하세요! (출력: 점수: 100)",
-          initialCode: "score = 100\n# print() 콤마로 문자열과 숫자 한 줄에!\nprint(\"점수:\", ___)",
+          task: "빈칸에 변수 이름을 넣어 \"점수: 100\" 을 출력하세요! (값 100 X)",
+          initialCode: "score = 100\n# 빈칸엔 변수 이름 (값 100 직접 X)\nprint(\"점수:\", ___)",
           expectedOutput: "점수: 100",
-          hint: "print() 안에서 콤마로 \"점수:\" 와 score 를 나란히!",
-          hint2: "print(\"점수:\", score)"
+          hint: "100 이라는 값을 가진 변수의 이름이 뭐였죠?",
+          hint2: "score"
         },
         {
           id: "mission1",
           type: "mission",
           title: "🎯 미션!",
-          task: "이름과 나이를 한 줄에 출력하세요!\n출력 예: 이름: 철수 나이: 15",
-          initialCode: "name = \"철수\"\nage = 15\n# print() 콤마로 글자/숫자 자유롭게 한 줄에!\nprint(\"이름:\", ___, \"나이:\", ___)",
+          task: "두 빈칸에 변수 이름을 넣어 \"이름: 철수 나이: 15\" 가 출력되게 하세요! (값 X)",
+          initialCode: "name = \"철수\"\nage = 15\n# 빈칸 둘 다 변수 이름 (값 \"철수\", 15 직접 X)\nprint(\"이름:\", ___, \"나이:\", ___)",
           expectedOutput: "이름: 철수 나이: 15",
-          hint: "콤마로 \"이름:\", name, \"나이:\", age 순서대로 나열!",
-          hint2: "print(\"이름:\", name, \"나이:\", age)"
+          hint: "첫 빈칸엔 \"철수\" 가진 변수, 둘째 빈칸엔 15 가진 변수.",
+          hint2: "name / age"
         },
         {
           id: "escape-explain",
@@ -593,11 +593,11 @@ print("a\\\\nb")   # 글자 그대로: a\\nb (백슬래시 자체를 표현)
           id: "try-escape",
           type: "tryit",
           title: "🖥️ 직접 해보기 — 이스케이프와 줄바꿈",
-          task: "한 줄에 \\n 으로 줄바꿈, \\t 로 탭 들어간 출력 만들기!",
-          initialCode: "# 한 print 문으로 두 줄 + 탭으로 들여쓰기\nprint(\"제목\\n\\t항목 1\\n\\t항목 2\")",
+          task: "코드를 그대로 실행해 \\n 과 \\t 가 실제로 어떻게 보이는지 확인하세요!",
+          initialCode: "# 빈칸 없음 — 그대로 실행 버튼 누르기\nprint(\"제목\\n\\t항목 1\\n\\t항목 2\")",
           expectedOutput: "제목\n\t항목 1\n\t항목 2",
-          hint: "코드 그대로 실행 — \\n 줄바꿈, \\t 탭.",
-          hint2: "그대로 실행하세요."
+          hint: "그대로 실행 — \\n 은 줄바꿈, \\t 는 탭 으로 바뀝니다.",
+          hint2: ""
         }
       ]
     },
@@ -647,11 +647,11 @@ print("점수:", score)   # 점수: 100
           id: "mission2",
           type: "mission",
           title: "🏆 미션 1 — 예쁜 메뉴판",
-          task: "예쁜 메뉴판을 만들어보세요! 구분선은 = 8개. 가격은 print() 콤마로 출력!",
-          initialCode: "print(\"=\" * ___)\nprint(\"  🍗 치킨집  \")\nprint(\"=\" * ___)\n# 콤마로 글자와 숫자 한 줄에\nprint(\"후라이드:\", ___)\nprint(\"양념:\", ___)",
+          task: "빈칸 4개 채우기: 위 2개는 구분선 반복 횟수 (=8개), 아래 2개는 가격 숫자 (18000, 19000).",
+          initialCode: "# 빈칸 1,2: = 반복 횟수 (숫자)\nprint(\"=\" * ___)\nprint(\"  🍗 치킨집  \")\nprint(\"=\" * ___)\n# 빈칸 3,4: 가격 (숫자)\nprint(\"후라이드:\", ___)\nprint(\"양념:\", ___)",
           expectedOutput: "========\n  🍗 치킨집  \n========\n후라이드: 18000\n양념: 19000",
-          hint: "= * 8 로 구분선. 가격은 print(\"후라이드:\", 18000) 처럼 콤마!",
-          hint2: "8 / 18000 / 19000"
+          hint: "구분선은 = 가 8개. 후라이드 18000원, 양념 19000원.",
+          hint2: "8 / 8 / 18000 / 19000"
         },
         {
           id: "mission3",
@@ -667,11 +667,11 @@ print("점수:", score)   # 점수: 100
           id: "mission4",
           type: "mission",
           title: "🏆 미션 3 — 이름 이니셜 카드",
-          task: "성과 이름의 첫 글자 두 개로 이니셜 카드 만들기. 대문자로 출력!",
-          initialCode: "first = \"Alice\"\nlast = \"Choi\"\n\n# 첫 글자 + 첫 글자, 대문자로 (lesson 6 메서드 .upper() 미리)\ninitials = (first[___] + last[___]).upper()\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
+          task: "두 빈칸 모두 인덱스 번호 (숫자) — 첫 글자를 가리키는 번호를 넣으세요!",
+          initialCode: "first = \"Alice\"\nlast = \"Choi\"\n\n# 빈칸: 첫 글자를 가리키는 인덱스 (숫자)\ninitials = (first[___] + last[___]).upper()\n\nprint(\"=\" * 8)\nprint(\"  \" + initials)\nprint(first + \" \" + last)\nprint(\"=\" * 8)",
           expectedOutput: "========\n  AC\nAlice Choi\n========",
-          hint: "first[0] 과 last[0] 합쳐 .upper()",
-          hint2: "initials = (first[0] + last[0]).upper()"
+          hint: "첫 글자의 인덱스는? (0부터 셈)",
+          hint2: "0 / 0"
         },
         {
           id: "complete",
