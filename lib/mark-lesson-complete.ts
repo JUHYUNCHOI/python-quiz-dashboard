@@ -100,11 +100,12 @@ const WRONG_BANK_KEY = "wrong-question-bank-v1"
 export function addToWrongBank(lessonId: string | number, stepIndices: number[]) {
   if (stepIndices.length === 0) return
   const normalizedId = String(lessonId)
+  const now = Date.now()
+  // localStorage 즉시 업데이트
   try {
     const raw = localStorage.getItem(WRONG_BANK_KEY)
     const bank: WrongQuestionEntry[] = raw ? JSON.parse(raw) : []
     const existingKeys = new Set(bank.map(e => `${e.lessonId}|${e.stepIndex}`))
-    const now = Date.now()
     for (const idx of stepIndices) {
       const key = `${normalizedId}|${idx}`
       if (!existingKeys.has(key)) {
@@ -114,6 +115,26 @@ export function addToWrongBank(lessonId: string | number, stepIndices: number[])
     }
     localStorage.setItem(WRONG_BANK_KEY, JSON.stringify(bank))
   } catch {}
+  // Supabase 동기화 — 백그라운드 (실패해도 학습 흐름 안 끊김)
+  import("./supabase/client").then(({ createClient }) => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return
+      const rows = stepIndices.map(idx => ({
+        user_id: user.id,
+        lesson_id: normalizedId,
+        step_index: idx,
+        added_at: new Date(now).toISOString(),
+        mastered: false,
+      }))
+      supabase
+        .from("wrong_question_bank")
+        .upsert(rows, { onConflict: "user_id,lesson_id,step_index", ignoreDuplicates: true })
+        .then(({ error }) => {
+          if (error) console.error("[addToWrongBank] supabase upsert failed:", error.message)
+        })
+    })
+  }).catch(() => {})
 }
 
 export function getWrongBank(): WrongQuestionEntry[] {
@@ -123,8 +144,54 @@ export function getWrongBank(): WrongQuestionEntry[] {
   } catch { return [] }
 }
 
+/**
+ * Supabase 에서 창고 동기화 — 로그인 시 호출.
+ * DB 와 localStorage merge: 양쪽 합집합, mastered 는 OR (한 쪽이라도 마스터면 마스터)
+ */
+export async function syncWrongBankFromSupabase(): Promise<WrongQuestionEntry[]> {
+  if (typeof window === "undefined") return []
+  try {
+    const { createClient } = await import("./supabase/client")
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return getWrongBank()
+    const { data: dbRows, error } = await supabase
+      .from("wrong_question_bank")
+      .select("lesson_id, step_index, added_at, mastered")
+      .eq("user_id", user.id)
+    if (error || !dbRows) return getWrongBank()
+    // localStorage 와 merge
+    const localBank = getWrongBank()
+    const merged = new Map<string, WrongQuestionEntry>()
+    for (const e of localBank) {
+      merged.set(`${e.lessonId}|${e.stepIndex}`, { ...e })
+    }
+    for (const row of dbRows) {
+      const key = `${row.lesson_id}|${row.step_index}`
+      const ex = merged.get(key)
+      if (!ex) {
+        merged.set(key, {
+          lessonId: row.lesson_id,
+          stepIndex: row.step_index,
+          addedAt: new Date(row.added_at).getTime(),
+          mastered: row.mastered,
+        })
+      } else {
+        // mastered = OR (한 쪽이라도 마스터면 마스터)
+        ex.mastered = ex.mastered || row.mastered
+      }
+    }
+    const result = [...merged.values()]
+    localStorage.setItem(WRONG_BANK_KEY, JSON.stringify(result))
+    return result
+  } catch {
+    return getWrongBank()
+  }
+}
+
 export function markWrongQuestionMastered(lessonId: string | number, stepIndex: number) {
   const normalizedId = String(lessonId)
+  // localStorage 즉시 업데이트
   try {
     const raw = localStorage.getItem(WRONG_BANK_KEY)
     const bank: WrongQuestionEntry[] = raw ? JSON.parse(raw) : []
@@ -134,6 +201,26 @@ export function markWrongQuestionMastered(lessonId: string | number, stepIndex: 
       localStorage.setItem(WRONG_BANK_KEY, JSON.stringify(bank))
     }
   } catch {}
+  // Supabase 동기화 — 백그라운드
+  import("./supabase/client").then(({ createClient }) => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return
+      // upsert (없으면 mastered=true 로 새로 추가, 있으면 update)
+      supabase
+        .from("wrong_question_bank")
+        .upsert({
+          user_id: user.id,
+          lesson_id: normalizedId,
+          step_index: stepIndex,
+          added_at: new Date().toISOString(),
+          mastered: true,
+        }, { onConflict: "user_id,lesson_id,step_index" })
+        .then(({ error }) => {
+          if (error) console.error("[markWrongQuestionMastered] supabase upsert failed:", error.message)
+        })
+    })
+  }).catch(() => {})
 }
 
 /** completedQuizzes 읽기 */

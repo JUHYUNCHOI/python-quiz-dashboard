@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
-import { getWrongBank, markWrongQuestionMastered, type WrongQuestionEntry } from "@/lib/mark-lesson-complete"
+import { getWrongBank, markWrongQuestionMastered, syncWrongBankFromSupabase, type WrongQuestionEntry } from "@/lib/mark-lesson-complete"
 import { lessonsData } from "../review/[lessonId]/data/lessons"
 import type { StepContent, LessonData } from "../review/[lessonId]/data/types"
 import { ArrowLeft } from "lucide-react"
@@ -57,8 +57,13 @@ export default function MissedPage() {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
+    // 1) localStorage 즉시 표시 (빠른 paint)
     setBank(getWrongBank())
     setLoaded(true)
+    // 2) Supabase 동기화 백그라운드 — 다른 기기에서 추가/마스터한 항목 merge
+    syncWrongBankFromSupabase().then(synced => {
+      setBank(synced)
+    })
   }, [])
 
   // lessonId 별 group

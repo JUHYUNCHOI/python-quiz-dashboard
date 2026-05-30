@@ -5,7 +5,7 @@ import { Trophy, Flame, LogIn } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { useGamification } from "@/hooks/use-gamification"
 import { useLanguage } from "@/contexts/language-context"
-import { getWrongBank } from "@/lib/mark-lesson-complete"
+import { getWrongBank, syncWrongBankFromSupabase } from "@/lib/mark-lesson-complete"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -19,13 +19,19 @@ export function Header() {
   const [bankRemaining, setBankRemaining] = useState(0)
   useEffect(() => {
     if (!isAuthenticated) return
-    const update = () => {
-      const bank = getWrongBank()
-      setBankRemaining(bank.filter(e => !e.mastered).length)
-    }
-    update()
+    // localStorage 즉시 read
+    const local = getWrongBank()
+    setBankRemaining(local.filter(e => !e.mastered).length)
     // pathname 변경 시 (페이지 이동 마다) 다시 read
   }, [isAuthenticated, pathname])
+
+  // Supabase 동기화 — 로그인 시 한 번만 (전체 페이지 대상)
+  useEffect(() => {
+    if (!isAuthenticated) return
+    syncWrongBankFromSupabase().then(synced => {
+      setBankRemaining(synced.filter(e => !e.mastered).length)
+    })
+  }, [isAuthenticated])
 
   const displayName = profile?.display_name || t("학습자", "Learner")
 
