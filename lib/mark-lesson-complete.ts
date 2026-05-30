@@ -92,7 +92,127 @@ export interface WrongQuestionEntry {
   lessonId: string
   stepIndex: number
   addedAt: number
-  mastered?: boolean   // 창고에서 다시 풀어 맞히면 true
+  mastered?: boolean        // 마스터 (자동 또는 수동) 시 true
+  correctStreak?: number    // 연속 정답 수 (오답 시 0 리셋)
+  lastCorrectAt?: number    // 마지막 정답 시각 (24h gap 체크용)
+}
+
+// 마스터 기준 — spaced repetition
+const MASTERY_STREAK_REQUIRED = 2
+const MASTERY_GAP_MS = 24 * 60 * 60 * 1000  // 24 시간
+
+/**
+ * 정답 시 호출. streak 증가 + 시간 경과 충족 시 자동 마스터.
+ * 반환: { mastered: 이번에 마스터됐는지, streak: 현재 streak, needsGap: 시간 부족 여부 }
+ */
+export function recordCorrectAttempt(lessonId: string | number, stepIndex: number): {
+  mastered: boolean
+  streak: number
+  needsGap: boolean
+} {
+  const normalizedId = String(lessonId)
+  const now = Date.now()
+  let resultMastered = false
+  let resultStreak = 1
+  let resultNeedsGap = false
+
+  // localStorage 업데이트
+  try {
+    const raw = localStorage.getItem(WRONG_BANK_KEY)
+    const bank: WrongQuestionEntry[] = raw ? JSON.parse(raw) : []
+    const idx = bank.findIndex(e => e.lessonId === normalizedId && e.stepIndex === stepIndex)
+    if (idx >= 0) {
+      const ex = bank[idx]
+      const prevStreak = ex.correctStreak ?? 0
+      const prevLast = ex.lastCorrectAt
+      const newStreak = prevStreak + 1
+      const gapOk = prevLast ? (now - prevLast) >= MASTERY_GAP_MS : false
+      const shouldMaster = newStreak >= MASTERY_STREAK_REQUIRED && gapOk
+      bank[idx] = {
+        ...ex,
+        correctStreak: shouldMaster ? newStreak : newStreak,
+        lastCorrectAt: now,
+        mastered: shouldMaster || ex.mastered,
+      }
+      resultMastered = shouldMaster
+      resultStreak = newStreak
+      resultNeedsGap = newStreak >= MASTERY_STREAK_REQUIRED && !gapOk
+      localStorage.setItem(WRONG_BANK_KEY, JSON.stringify(bank))
+    }
+  } catch {}
+
+  // Supabase 동기화
+  import("./supabase/client").then(({ createClient }) => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return
+      // 먼저 현재 streak/last_correct_at 읽기 (race condition 회피 위해 RPC 가 이상적이지만 간소화)
+      supabase
+        .from("wrong_question_bank")
+        .select("correct_streak, last_correct_at, mastered")
+        .eq("user_id", user.id)
+        .eq("lesson_id", normalizedId)
+        .eq("step_index", stepIndex)
+        .single()
+        .then(({ data: row }) => {
+          const prevStreak = row?.correct_streak ?? 0
+          const prevLastIso = row?.last_correct_at
+          const prevLast = prevLastIso ? new Date(prevLastIso).getTime() : null
+          const newStreak = prevStreak + 1
+          const gapOk = prevLast ? (now - prevLast) >= MASTERY_GAP_MS : false
+          const shouldMaster = newStreak >= MASTERY_STREAK_REQUIRED && gapOk
+          supabase
+            .from("wrong_question_bank")
+            .upsert({
+              user_id: user.id,
+              lesson_id: normalizedId,
+              step_index: stepIndex,
+              added_at: new Date(now).toISOString(),
+              mastered: shouldMaster || row?.mastered || false,
+              correct_streak: newStreak,
+              last_correct_at: new Date(now).toISOString(),
+            }, { onConflict: "user_id,lesson_id,step_index" })
+            .then(({ error }) => {
+              if (error) console.error("[recordCorrectAttempt] supabase upsert failed:", error.message)
+            })
+        })
+    })
+  }).catch(() => {})
+
+  return { mastered: resultMastered, streak: resultStreak, needsGap: resultNeedsGap }
+}
+
+/**
+ * 오답 시 호출. streak 0 리셋.
+ */
+export function recordWrongAttempt(lessonId: string | number, stepIndex: number) {
+  const normalizedId = String(lessonId)
+  // localStorage
+  try {
+    const raw = localStorage.getItem(WRONG_BANK_KEY)
+    const bank: WrongQuestionEntry[] = raw ? JSON.parse(raw) : []
+    const idx = bank.findIndex(e => e.lessonId === normalizedId && e.stepIndex === stepIndex)
+    if (idx >= 0) {
+      bank[idx] = { ...bank[idx], correctStreak: 0 }
+      localStorage.setItem(WRONG_BANK_KEY, JSON.stringify(bank))
+    }
+  } catch {}
+  // Supabase
+  import("./supabase/client").then(({ createClient }) => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return
+      supabase
+        .from("wrong_question_bank")
+        .update({ correct_streak: 0 })
+        .eq("user_id", user.id)
+        .eq("lesson_id", normalizedId)
+        .eq("step_index", stepIndex)
+        .then(({ error }) => {
+          if (error) console.error("[recordWrongAttempt] update failed:", error.message)
+        })
+    })
+  }).catch(() => {})
 }
 
 const WRONG_BANK_KEY = "wrong-question-bank-v1"
@@ -157,7 +277,7 @@ export async function syncWrongBankFromSupabase(): Promise<WrongQuestionEntry[]>
     if (!user) return getWrongBank()
     const { data: dbRows, error } = await supabase
       .from("wrong_question_bank")
-      .select("lesson_id, step_index, added_at, mastered")
+      .select("lesson_id, step_index, added_at, mastered, correct_streak, last_correct_at")
       .eq("user_id", user.id)
     if (error || !dbRows) return getWrongBank()
     // localStorage 와 merge
@@ -169,16 +289,24 @@ export async function syncWrongBankFromSupabase(): Promise<WrongQuestionEntry[]>
     for (const row of dbRows) {
       const key = `${row.lesson_id}|${row.step_index}`
       const ex = merged.get(key)
+      const dbStreak = row.correct_streak ?? 0
+      const dbLastCorrect = row.last_correct_at ? new Date(row.last_correct_at).getTime() : undefined
       if (!ex) {
         merged.set(key, {
           lessonId: row.lesson_id,
           stepIndex: row.step_index,
           addedAt: new Date(row.added_at).getTime(),
           mastered: row.mastered,
+          correctStreak: dbStreak,
+          lastCorrectAt: dbLastCorrect,
         })
       } else {
         // mastered = OR (한 쪽이라도 마스터면 마스터)
         ex.mastered = ex.mastered || row.mastered
+        // streak/lastCorrect = 더 큰/최신 값
+        ex.correctStreak = Math.max(ex.correctStreak ?? 0, dbStreak)
+        const localLast = ex.lastCorrectAt ?? 0
+        if (dbLastCorrect && dbLastCorrect > localLast) ex.lastCorrectAt = dbLastCorrect
       }
     }
     const result = [...merged.values()]

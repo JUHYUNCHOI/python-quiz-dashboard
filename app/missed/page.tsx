@@ -203,6 +203,12 @@ export default function MissedPage() {
                               )}
                             >
                               <span>Q{e.stepIndex + 1}</span>
+                              {/* streak 진행 표시 — 1번 맞은 상태 (마스터 직전) */}
+                              {(e.correctStreak ?? 0) >= 1 && (
+                                <span className="text-[10px] bg-white/30 rounded px-1 font-bold">
+                                  {e.correctStreak}/2
+                                </span>
+                              )}
                               <span className="opacity-80">→</span>
                             </Link>
                             <button
@@ -228,7 +234,7 @@ export default function MissedPage() {
         {loaded && grouped.length > 0 && (
           <div className="mt-6 rounded-xl bg-amber-50 border border-amber-200 p-3">
             <p className="text-xs text-amber-700 leading-relaxed break-keep">
-              💡 {t("두 가지 길: (1) Q1, Q2 클릭 → 풀어보기 (맞히면 자동 제거). (2) ✕ 버튼 → 이미 이해했으면 안 풀고 제거.", "Two ways: (1) Click Q1, Q2 → practice (auto-remove if correct). (2) ✕ button → remove without solving (if you already get it).")}
+              💡 {t("마스터 기준: 두 번 연속 정답 + 24시간 간격 (우연/암기 방지). 또는 ✕ 클릭 — 이미 안다고 자기 선언.", "Mastery: 2 correct in a row + 24h gap (anti-luck/cramming). Or ✕ — declare you know it.")}
             </p>
           </div>
         )}

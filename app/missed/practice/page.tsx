@@ -8,7 +8,7 @@ import { useLanguage } from "@/contexts/language-context"
 import { ReviewStepRenderer } from "../../review/[lessonId]/ReviewStepRenderer"
 import { lessonsData } from "../../review/[lessonId]/data/lessons"
 import type { StepContent, LessonData } from "../../review/[lessonId]/data/types"
-import { markWrongQuestionMastered, getWrongBank } from "@/lib/mark-lesson-complete"
+import { markWrongQuestionMastered, getWrongBank, recordCorrectAttempt, recordWrongAttempt } from "@/lib/mark-lesson-complete"
 import { useGamification } from "@/hooks/use-gamification"
 import { Confetti } from "@/components/learn/confetti"
 import { ArrowLeft } from "lucide-react"
@@ -85,24 +85,35 @@ function PracticeInner() {
   }, [status, lessonId, stepIndex])
 
   const [milestoneCount, setMilestoneCount] = useState<number | null>(null)
+  const [attemptResult, setAttemptResult] = useState<{
+    mastered: boolean
+    streak: number
+    needsGap: boolean
+  } | null>(null)
 
   const handleCorrect = useCallback(() => {
     setStatus("correct")
-    // 창고에서 마스터 처리 + XP 보상 (+15 XP per master)
-    markWrongQuestionMastered(lessonId, stepIndex)
-    addDirectXp(15)
-    // milestone 축하 — 5/10/25/50/100 마스터 시
-    const bank = getWrongBank()
-    const newMasteredCount = bank.filter(e => e.mastered).length + 1  // +1 for this one
-    const milestones = [5, 10, 25, 50, 100]
-    if (milestones.includes(newMasteredCount)) {
-      setMilestoneCount(newMasteredCount)
+    // Spaced repetition — streak 증가 + 시간 경과 체크
+    const result = recordCorrectAttempt(lessonId, stepIndex)
+    setAttemptResult(result)
+    // XP — 첫 정답 +5, 마스터 +15
+    addDirectXp(result.mastered ? 15 : 5)
+    // milestone 축하 — 마스터된 경우만
+    if (result.mastered) {
+      const bank = getWrongBank()
+      const newMasteredCount = bank.filter(e => e.mastered).length  // 이미 update 됨
+      const milestones = [5, 10, 25, 50, 100]
+      if (milestones.includes(newMasteredCount)) {
+        setMilestoneCount(newMasteredCount)
+      }
     }
   }, [lessonId, stepIndex, addDirectXp])
 
   const handleWrong = useCallback(() => {
     setStatus("wrong")
-  }, [])
+    // streak 0 리셋
+    recordWrongAttempt(lessonId, stepIndex)
+  }, [lessonId, stepIndex])
 
   const handleRetry = useCallback(() => {
     setStatus("idle")
@@ -136,7 +147,8 @@ function PracticeInner() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50/30 via-white to-amber-50/20">
       {/* 마스터 시 confetti */}
-      <Confetti show={status === "correct"} />
+      {/* Confetti — 진짜 마스터 시만 (단순 정답 X) */}
+      <Confetti show={status === "correct" && !!attemptResult?.mastered} />
 
       {/* milestone 축하 toast — 5/10/25/50/100 마스터 */}
       {milestoneCount !== null && (
@@ -185,22 +197,46 @@ function PracticeInner() {
           />
         </div>
 
-        {/* 결과 액션 */}
-        {status === "correct" && (
-          <div className="mt-5 rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100 border-2 border-emerald-300 p-5 text-center">
-            <p className="text-5xl mb-2">🌟</p>
-            <p className="text-xl font-black text-emerald-700 mb-1">
-              {t("마스터!", "Mastered!")}
+        {/* 결과 액션 — streak/mastered 상태별 메시지 */}
+        {status === "correct" && attemptResult && (
+          <div className={cn(
+            "mt-5 rounded-2xl border-2 p-5 text-center",
+            attemptResult.mastered
+              ? "bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-300"
+              : "bg-gradient-to-br from-purple-50 to-purple-100 border-purple-300"
+          )}>
+            <p className="text-5xl mb-2">
+              {attemptResult.mastered ? "🌟" : attemptResult.needsGap ? "🎯" : "✨"}
+            </p>
+            <p className={cn(
+              "text-xl font-black mb-1",
+              attemptResult.mastered ? "text-emerald-700" : "text-purple-700"
+            )}>
+              {attemptResult.mastered
+                ? t("마스터!", "Mastered!")
+                : attemptResult.needsGap
+                  ? t("내일 다시 와서 마스터!", "Come back tomorrow!")
+                  : t("좋아요! 한 번 더 (24시간 후)", "Great! One more (24h later)")}
             </p>
             {/* XP 보상 표시 */}
             <div className="inline-flex items-center gap-1.5 mb-3 px-3 py-1.5 rounded-full bg-amber-100 border-2 border-amber-300 shadow-sm">
               <span className="text-base">⚡</span>
-              <span className="text-sm font-black text-amber-700">+15 XP</span>
+              <span className="text-sm font-black text-amber-700">
+                +{attemptResult.mastered ? 15 : 5} XP
+              </span>
             </div>
-            <p className={cn("text-emerald-600 mb-4 break-keep", sz("text-xs", "text-sm"))}>
-              {nextEntry
-                ? t("이 문제 끝! 다음 문제 계속할까요?", "Done! Try the next one?")
-                : t("이 문제는 창고에서 빠졌어요. 모든 문제 마스터!", "Bank cleared. All mastered!")}
+            <p className={cn(
+              "mb-4 break-keep",
+              sz("text-xs", "text-sm"),
+              attemptResult.mastered ? "text-emerald-600" : "text-purple-600"
+            )}>
+              {attemptResult.mastered
+                ? (nextEntry
+                  ? t("이 문제 끝! 다음 문제 계속할까요?", "Done! Try the next one?")
+                  : t("이 문제는 창고에서 빠졌어요. 모든 문제 마스터!", "Bank cleared. All mastered!"))
+                : attemptResult.needsGap
+                  ? t(`연속 ${attemptResult.streak}번 맞음! 24시간 이내라 마스터 보류 — 단순 암기 방지`, `${attemptResult.streak} in a row! Held (within 24h) — anti-cramming`)
+                  : t("우연 한 번은 마스터 X. 내일 한 번 더 맞히면 진짜 마스터!", "One could be luck. Come back tomorrow for true master!")}
             </p>
             <div className="flex flex-col gap-2">
               {nextEntry && (
