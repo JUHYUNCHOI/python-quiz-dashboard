@@ -1770,18 +1770,16 @@ export default function CurriculumPage() {
                                               : myScore >= 70 ? "text-purple-700"
                                               : "text-rose-600"
                                             return (
-                                              <div className="flex-1 rounded-xl border-2 border-purple-200 bg-purple-50/60 px-3 py-2.5">
-                                                <div className="flex items-center gap-1.5">
-                                                  <span className="text-base">{myScore === 100 ? "🎉" : myScore >= 70 ? "👍" : "💪"}</span>
-                                                  <span className={cn("font-black text-purple-700", sz("text-base", "text-lg"))}>{t("복습완료", "Done")}</span>
+                                              <div className="flex-1 rounded-xl border-2 border-purple-200 bg-purple-50/60 px-3 py-2 flex items-center gap-2 flex-wrap">
+                                                <span className="text-base shrink-0">{myScore === 100 ? "🎉" : myScore >= 70 ? "👍" : "💪"}</span>
+                                                <span className={cn("font-black text-purple-700 shrink-0", sz("text-sm", "text-base"))}>{t("복습완료", "Done")}</span>
+                                                <div className="flex items-baseline gap-0.5 shrink-0">
+                                                  <span className={cn("text-xl font-black tabular-nums leading-none", scoreColor)}>{myScore}</span>
+                                                  <span className={cn("text-xs font-bold", scoreColor)}>{t("점", "pt")}</span>
                                                 </div>
-                                                <div className="mt-1.5 flex items-baseline gap-1">
-                                                  <span className={cn("text-2xl font-black tabular-nums leading-none", scoreColor)}>{myScore}</span>
-                                                  <span className={cn("text-sm font-bold", scoreColor)}>{t("점", " pt")}</span>
-                                                  <Link href={getReviewPath(lesson.id)} className="ml-auto text-xs font-bold text-purple-500 hover:text-purple-700 underline underline-offset-2 decoration-dotted transition-colors">
-                                                    {t("결과 보기", "Results")}
-                                                  </Link>
-                                                </div>
+                                                <Link href={getReviewPath(lesson.id)} className="ml-auto text-xs font-bold text-purple-500 hover:text-purple-700 underline underline-offset-2 decoration-dotted transition-colors shrink-0">
+                                                  {t("결과 →", "Results →")}
+                                                </Link>
                                               </div>
                                             )
                                           }
@@ -1811,58 +1809,50 @@ export default function CurriculumPage() {
                                         {cluster && (() => {
                                           if (step3Done) {
                                             return (
-                                              <div className="flex-1 rounded-xl border-2 border-amber-200 bg-amber-50/60 px-3 py-2.5">
-                                                <div className="flex items-center gap-1.5">
-                                                  <span className="text-base">{step3FullyDone ? "🌟" : "⭐"}</span>
-                                                  <span className={cn("font-black text-amber-700", sz("text-base", "text-lg"))}>{t("도전 완료!", "Set 1 done!")}</span>
-                                                </div>
-                                                <div className="mt-1.5">
-                                                  <div className="flex items-baseline gap-1">
-                                                    <span className="text-2xl font-black tabular-nums leading-none text-emerald-600">100</span>
-                                                    <span className="text-sm font-bold text-emerald-600">{t("점", " pt")}</span>
+                                              <div className="flex-1 flex flex-col gap-1">
+                                                <div className="rounded-xl border-2 border-amber-200 bg-amber-50/60 px-3 py-2 flex items-center gap-2 flex-wrap">
+                                                  <span className="text-base shrink-0">{step3FullyDone ? "🌟" : "⭐"}</span>
+                                                  <span className={cn("font-black text-amber-700 shrink-0", sz("text-sm", "text-base"))}>{t("도전 완료!", "Done!")}</span>
+                                                  <div className="flex items-baseline gap-0.5 shrink-0">
+                                                    <span className="text-xl font-black tabular-nums leading-none text-emerald-600">100</span>
+                                                    <span className="text-xs font-bold text-emerald-600">{t("점", "pt")}</span>
                                                   </div>
-                                                  <p className="text-[11px] font-bold text-emerald-700/80 mt-0.5">
-                                                    {set1Total}/{set1Total} {t("문제", "questions")}
-                                                  </p>
+                                                  <span className="text-[11px] font-bold text-emerald-700/70 shrink-0">
+                                                    ({set1Total}/{set1Total})
+                                                  </span>
                                                 </div>
                                                 {bonusTotal > 0 && (
-                                                  <div className="mt-1.5">
-                                                    {bonusRemaining > 0 ? (
-                                                      <Link href={`/practice?cluster=${cluster.id}&from=curriculum`} className="text-xs text-amber-700 hover:text-amber-900 font-bold underline underline-offset-2 decoration-dotted">
-                                                        🔥 {t(`보너스 ${bonusRemaining}문제 (어려움) →`, `Bonus ${bonusRemaining} (harder) →`)}
-                                                      </Link>
-                                                    ) : (
-                                                      <span className="text-xs text-emerald-700 font-bold">{t("🌟 보너스 만점!", "🌟 Bonus perfect!")}</span>
-                                                    )}
-                                                  </div>
+                                                  bonusRemaining > 0 ? (
+                                                    <Link href={`/practice?cluster=${cluster.id}&from=curriculum`} className="text-xs text-amber-700 hover:text-amber-900 font-bold underline underline-offset-2 decoration-dotted px-2">
+                                                      🔥 {t(`보너스 ${bonusRemaining}문제 (어려움) →`, `Bonus ${bonusRemaining} (harder) →`)}
+                                                    </Link>
+                                                  ) : (
+                                                    <span className="text-xs text-emerald-700 font-bold px-2">{t("🌟 보너스 만점!", "🌟 Bonus perfect!")}</span>
+                                                  )
                                                 )}
                                               </div>
                                             )
                                           }
                                           if (step1Done) {
                                             const isStarted = solvedInSet1 > 0
+                                            const pct = isStarted ? Math.round((solvedInSet1 / set1Total) * 100) : 0
                                             return (
                                               <div className="flex-1 flex flex-col gap-1">
-                                                <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`} className="group flex flex-col rounded-xl bg-amber-400 hover:bg-amber-500 active:scale-[0.98] text-white px-3 py-2.5 shadow-sm transition-all">
-                                                  <div className="flex items-center gap-1.5">
-                                                    <span className="text-lg">{cluster.emoji}</span>
-                                                    <span className={cn("font-black", sz("text-base", "text-lg"))}>{t("도전", "Challenge")}</span>
-                                                  </div>
+                                                <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`} className="group rounded-xl bg-amber-400 hover:bg-amber-500 active:scale-[0.98] text-white px-3 py-2 shadow-sm transition-all flex items-center gap-2 flex-wrap">
+                                                  <span className="text-base shrink-0">{cluster.emoji}</span>
+                                                  <span className={cn("font-black shrink-0", sz("text-sm", "text-base"))}>{t("도전", "Challenge")}</span>
                                                   {isStarted ? (
-                                                    <div className="mt-1.5">
-                                                      <div className="flex items-baseline gap-1">
-                                                        <span className="text-2xl font-black tabular-nums leading-none">{Math.round((solvedInSet1 / set1Total) * 100)}</span>
-                                                        <span className="text-sm font-bold opacity-95">{t("점", " pt")}</span>
+                                                    <>
+                                                      <div className="flex items-baseline gap-0.5 shrink-0">
+                                                        <span className="text-xl font-black tabular-nums leading-none">{pct}</span>
+                                                        <span className="text-xs font-bold opacity-95">{t("점", "pt")}</span>
                                                       </div>
-                                                      <p className="text-[11px] font-bold opacity-90 mt-0.5">
-                                                        {solvedInSet1}/{set1Total} {t("문제", "questions")}
-                                                      </p>
-                                                    </div>
+                                                      <span className="text-[11px] font-bold opacity-90 shrink-0">({solvedInSet1}/{set1Total})</span>
+                                                    </>
                                                   ) : (
-                                                    <span className="text-xs font-bold opacity-95 mt-0.5">{t(`처음 풀기 (${set1Total}문제)`, `Start (${set1Total} problems)`)}</span>
+                                                    <span className="text-xs font-bold opacity-95 shrink-0">{t(`처음 풀기 (${set1Total})`, `Start (${set1Total})`)}</span>
                                                   )}
                                                 </Link>
-                                                {/* 보너스 — 1 세트 외에 추가 문제 안내 (active 상태에서도) */}
                                                 {bonusTotal > 0 && (
                                                   <Link href={`/practice?cluster=${cluster.id}&from=curriculum`} className="text-xs text-amber-700 hover:text-amber-900 font-bold underline underline-offset-2 decoration-dotted px-2">
                                                     🔥 {t(`보너스 ${bonusTotal}문제 (어려움) →`, `Bonus ${bonusTotal} (harder) →`)}
