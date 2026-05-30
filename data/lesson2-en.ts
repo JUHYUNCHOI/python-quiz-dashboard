@@ -18,50 +18,86 @@ export const lesson2EnData: LessonData = {
           id: "intro",
           type: "explain",
           title: "📊 Data comes in different types!",
-          content: `In real life, data comes in different forms, right?
+          content: `Data in the real world comes in different forms too.
 
-- **Numbers**: 100, 3.14, -5
-- **Text**: "hello", "python"
-- **Yes/No**: True, False
+- **Numbers**: 100, 3.14, -5 → you can calculate with them
+- **Text**: "hello", "python" → you can print or join them
+- **Yes/No**: True, False → you can use them to decide things
 
-Python also distinguishes between these **data types**!`
+> 💡 **Why split data into types?**
+> Even the same \`5\` behaves differently as a **number 5** vs. text **"5"**.
+> - \`5 + 3\` → 8 (addition)
+> - \`"5" + "3"\` → "53" (joining text!)
+>
+> Python looks at the **type** of a value to decide "how should I handle this?"
+
+### Everyday analogies
+
+- **int (integer)** — apples in a basket, students in class — **things you can count**
+- **float (real number)** — height 1.75m, temperature 36.5°C — **things you measure**
+- **str (string)** — names, messages — **information made of letters**
+- **bool (boolean)** — light on/off, pass/fail — **one of two choices**
+
+Let's look at each one!`
         },
         {
           id: "types-explain",
           type: "explain",
           title: "📋 4 Basic Types",
-          content: `**1. Integer (int)** - Whole numbers, no decimal point
+          content: `### 1️⃣ Integer (int) — whole numbers, no decimal
+
 \`\`\`python
 10, -5, 0, 1000
 \`\`\`
-Use this for counting things: age, score, number of items.
+
+**Often used for:** age, score, number of people, item counts — **anything you can count**
 
 ---
 
-**2. Float (float)** - Numbers with a decimal point
+### 2️⃣ Float — numbers with a decimal point
+
 \`\`\`python
 3.14, -0.5, 2.0
 \`\`\`
-Even \`2.0\` is a float — the \`.0\` makes it one!
 
----
+> 💡 \`2.0\` is also a float! Just adding **.0** turns it into a float.
 
-**3. String (str)** - Text wrapped in quotes
+**Often used for:** height, weight, prices that aren't whole units, average scores, probability
+
+⚠️ **The float gotcha** — computers can't store decimals with **perfect accuracy**.
 \`\`\`python
-"hello"    # double quotes ✅
-'python'   # single quotes ✅
-"123"      # looks like a number, but it's text! ✅
+print(0.1 + 0.2)   # 0.30000000000000004 😱
 \`\`\`
-⚠️ **Quotes make it a string!** \`123\` is a number, but \`"123"\` is text.
-Both \`"double"\` and \`'single'\` quotes work — just be consistent!
+> Not getting exactly 0.3 is normal! If you need exact math, you have to handle it specially. For now, just remember "this can happen."
 
 ---
 
-**4. Boolean (bool)** - Only two possible values
+### 3️⃣ String (str) — letters
+
+\`\`\`python
+"hello", 'python', "123"
+\`\`\`
+
+⚠️ **If it has quotes, it's a string — always!** \`123\` is a number, but \`"123"\` is the text "123".
+- \`"double quotes"\` ✅
+- \`'single quotes'\` ✅ — both fine, just match the pair
+
+**Often used for:** names, messages, addresses, phone numbers, passwords — **anything made of letters**
+
+---
+
+### 4️⃣ Boolean (bool) — True or False
+
 \`\`\`python
 True, False
 \`\`\`
-⚠️ Must start with a **capital letter**: \`True\` ✅, \`true\` ❌`
+
+⚠️ **Must start with a capital letter!** \`true\` ❌, \`True\` ✅
+
+**Often used for:** logged in or not, pass/fail, comparison results — anything that's **one of exactly two options**
+
+> 💡 **Fun fact:** Inside Python, \`True\` actually acts like the number **1**, and \`False\` acts like **0**.
+> Try \`print(True + True)\` — it prints **2**! (For now just keep this as a curiosity; you'll see more in the conditionals lesson.)`
         },
         {
           id: "quiz1",
@@ -83,7 +119,7 @@ True, False
           id: "type-explain",
           type: "explain",
           title: "🔍 The type() Function",
-          content: `Want to know what type a value is? Use **type()**!
+          content: `When you're **not sure what type a value is**, drop it inside \`type()\` to find out!
 
 \`\`\`python
 print(type(10))       # <class 'int'>
@@ -92,13 +128,22 @@ print(type('hello'))  # <class 'str'>
 print(type(True))     # <class 'bool'>
 \`\`\`
 
-How to read the output:
-- \`<class 'int'>\` → it's an integer
-- \`<class 'str'>\` → it's a string
-- \`<class 'float'>\` → it's a decimal number
-- \`<class 'bool'>\` → it's True or False
+### How to read the output
 
-Just wrap any value with \`type()\` and Python tells you exactly what type it is!`
+\`<class 'int'>\` looks long, but the only part that matters is the **word inside the quotes**.
+
+- \`<class 'int'>\` → it's an int!
+- \`<class 'str'>\` → it's a str!
+- \`<class 'float'>\` → it's a float!
+- \`<class 'bool'>\` → it's a bool!
+
+> 💡 The word \`class\` shows up later (lesson 41). For now just treat it as "the label that tells me the type."
+
+### When you'll actually use this
+
+- A friend's code has a value and you can't tell its type
+- Checking whether some input is a number or text
+- Debugging an error — "wait, maybe the type is wrong?"`
         },
         {
           id: "try1",
@@ -142,22 +187,46 @@ Just wrap any value with \`type()\` and Python tells you exactly what type it is
           id: "bool-explain",
           type: "explain",
           title: "✅ True and False",
-          content: `**Boolean (bool)** has only two values: True and False!
+          content: `**Boolean (bool)** can hold only two values — \`True\` or \`False\`.
 
 \`\`\`python
 print(True)   # True
 print(False)  # False
 \`\`\`
 
-⚠️ They must **start with a capital letter**!
-- ✅ True, False
-- ❌ true, false
+### Everyday analogies
 
-**Comparisons return booleans:**
+- Is the light on? → True / False
+- Did you pass the test? → True / False
+- Are you logged in? → True / False
+
+**Anything with exactly one of two answers** belongs to bool.
+
+### ⚠️ Must start with a capital letter!
+
+- ✅ \`True\`, \`False\`
+- ❌ \`true\`, \`false\` → NameError!
+- ❌ \`TRUE\`, \`FALSE\` → NameError!
+
+### Compare two values and a bool pops out
+
 \`\`\`python
-print(10 > 5)   # True
-print(10 < 5)   # False
-\`\`\``
+print(10 > 5)    # True   (10 is greater than 5)
+print(10 < 5)    # False  (10 is not less than 5)
+print(7 == 7)    # True   (they're equal)
+print(3 != 3)    # False  (they're not different)
+\`\`\`
+
+> 💡 \`==\` asks "are they equal?", \`!=\` asks "are they different?". The answer is always \`True\` or \`False\`.
+
+### ❌ Things that don't work
+
+\`\`\`python
+print(true)         # NameError — lowercase is not allowed
+print("True")       # prints True, but this is a str, not a bool!
+\`\`\`
+
+> ⚠️ Once you wrap it in quotes like \`"True"\`, it's a **string**. The real bool is just \`True\` with no quotes!`
         },
         {
           id: "try3",
