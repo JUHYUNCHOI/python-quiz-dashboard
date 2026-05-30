@@ -17,33 +17,51 @@ export const lesson11EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🎮 Conditionals in Games",
-          content: `Have you seen situations like these in games?
+          title: "🎮 Building a Fork in the Road",
+          content: `Seen these in games?
 
 - If HP is 0 → Game Over!
-- If score is 100 or more → Level Up!
+- If score ≥ 100 → Level Up!
 - If you have an item → You can use it!
 
-Making these **"if ~ then ~"** rules is what **conditionals** are all about!`
+All of them follow the **"if ~ then ~"** shape. They're **forks in your code**.
+
+\`\`\`
+       ┌── (condition true)  → run this code
+─ if ──┤
+       └── (condition false) → skip
+\`\`\`
+
+The thing that builds this fork is the **conditional (if statement)**.`
         },
         {
           id: "syntax-explain",
           type: "explain",
-          title: "📝 if Statement Syntax",
+          title: "📝 if Syntax — Two Rules",
           content: `\`\`\`python
 if condition:
     code to run
 \`\`\`
 
-**Important!**
-- A **colon (:)** after the condition is required!
-- The code to run must be **indented (Tab)**!
+Python's \`if\` only needs **two rules**:
+
+1. A **colon \`:\`** after the condition (miss it → SyntaxError)
+2. The next line must be **indented 4 spaces**
 
 \`\`\`python
 score = 100
 if score >= 100:
-    print('Level up!')
-\`\`\``
+    print('Level up!')   ← indented 4 spaces
+\`\`\`
+
+> 💡 No indent? **\`IndentationError\`**! Other languages group blocks with \`{}\`, but in Python the indent itself IS the group.`
+        },
+        {
+          id: "syntax-builder",
+          type: "explain",
+          title: "🧱 Build an if Statement",
+          content: `Watch an if statement get assembled piece by piece. Press **▶ Play** and follow along!`,
+          component: "pyIfBuilder",
         },
         {
           id: "try1",
@@ -145,15 +163,16 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
         {
           id: "elif-explain",
           type: "explain",
-          title: "🔢 elif: When You Have Multiple Conditions",
-          content: `When you have 3 or more conditions, use **elif**!
+          title: "🔢 elif: Multiple Forks",
+          content: `Got 3+ forks? Use **elif**!
+
+> 💡 \`elif\` is short for \`else if\` — "if not that, then maybe this"
 
 \`\`\`python
 score = 85
-
 if score >= 90:
     print('A')
-elif score >= 80:
+elif score >= 80:   ← not 90? then 80?
     print('B')
 elif score >= 70:
     print('C')
@@ -161,7 +180,9 @@ else:
     print('F')
 \`\`\`
 
-→ 85 is 80 or above, so 'B' is printed!`
+**Rule: top to bottom** check → run **only the first True branch** → skip the rest.
+
+→ 85 isn't ≥ 90 but IS ≥ 80, so **'B'** prints and we're done!`
         },
         {
           id: "elif-sim",
@@ -219,12 +240,12 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 Final Mission!",
-          task: "Print the fare based on age! (age 8: Child $5)",
-          initialCode: "age = 8\nif age <= 7:\n    print('Free')\nelif ___:\n    print('Child $5')\nelif ___:\n    print('Teen $10')\nelse:\n    print('Adult $15')",
-          expectedOutput: "Child $5",
-          hint: "Write conditions that match the age ranges!",
-          hint2: "age <= 12 / age <= 18"
+          title: "🏆 Final Mission — RPG Health System!",
+          task: "Print a status message based on the hero's HP! (hp=30 should show '⚠️ Danger!')\n\n• 0 or below → '💀 Game Over!'\n• 1~30 → '⚠️ Danger! Heal up!'\n• 31~70 → '🟢 OK'\n• Otherwise → '💪 Full health!'",
+          initialCode: "hp = 30\nif hp <= 0:\n    print('💀 Game Over!')\nelif ___:\n    print('⚠️ Danger! Heal up!')\nelif ___:\n    print('🟢 OK')\nelse:\n    print('💪 Full health!')",
+          expectedOutput: "⚠️ Danger! Heal up!",
+          hint: "elif checks top-down — after hp <= 0, where does 'Danger' end?",
+          hint2: "hp <= 30 / hp <= 70"
         },
         {
           id: "complete",

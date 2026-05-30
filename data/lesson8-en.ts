@@ -18,36 +18,63 @@ export const lesson8EnData: LessonData = {
           id: "intro",
           type: "explain",
           title: "✨ Strings + Variables, So Annoying!",
-          content: `So far, we've been doing this:
+          content: `When you want to print a name along with text, you'd glue them with \`+\`:
 
 \`\`\`python
 name = "Alice"
-age = 15
-print("Name: " + name + ", Age: " + str(age))
+print("Name: " + name + " here!")
+# Name: Alice here!
 \`\`\`
 
-Way too complicated, right? 😩
+Quotes opening and closing, multiple \`+\` — the longer it gets, the messier it looks. 😩
 
-With **f-strings**, it's much easier!`
+And glue \`+\` doesn't even work with numbers:
+
+\`\`\`python
+age = 15
+print("Age: " + age)   # 💥 Error!
+\`\`\`
+
+**Today's tool, the f-string**, handles it all in one clean line:
+
+\`\`\`python
+print(f"Name: {name}, Age: {age}")
+# Name: Alice, Age: 15
+\`\`\``
         },
         {
           id: "fstring-explain",
           type: "explain",
-          title: "✨ How to Use f-strings",
-          content: `Put **f** before the string, and variables inside **{ }**!
+          title: "✨ f-string — Pull Variables Inside Quotes",
+          content: `The **f** stands for "format" — formatting a string. Just put **f** in front of the quotes.
 
 \`\`\`python
 name = "Alice"
 age = 15
-print(f"Name: {name}, Age: {age}")
-# Name: Alice, Age: 15
+print(f"Hi {name}, age {age}!")
+# Hi Alice, age 15!
 \`\`\`
 
-**No need for str() conversion!**
+Two rules:
+
+1. **\`f\` before the quotes** → \`f"..."\`
+2. **Variables go inside \`{ }\` windows** — Python drops the value in at that spot
+
+\`{name}\` is a little window. When Python runs the line, it peeks behind the window, grabs the value from the \`name\` box, and slides it in.
+
+**Numbers work too** — no error like \`+\` gives:
+
 \`\`\`python
 price = 19000
-print(f"Price: {price} won")  # Price: 19000 won
+print(f"Price: {price}")   # Price: 19000
 \`\`\``
+        },
+        {
+          id: "fstring-viz",
+          type: "interactive",
+          title: "🎬 Watch Each Slot Get Filled",
+          description: "Step through how each {var} window gets replaced by the real value. A peek at format specs too!",
+          component: "pyFstringVisualizer",
         },
         {
           id: "try1",
@@ -70,6 +97,20 @@ print(f"Price: {price} won")  # Price: 19000 won
           hint2: "f\"{name} is {age} years old\""
         },
         {
+          id: "predict-no-f",
+          type: "predict",
+          title: "💭 Predict — What If You Forget the f?",
+          content: `Someone forgot the \`f\` and just used regular quotes. What prints?
+
+\`\`\`python
+name = "Bob"
+print("Hello, {name}!")
+\`\`\``,
+          options: ["Hello, Bob!", "Hello, {name}!", "Error", "Hello, !"],
+          answer: 1,
+          explanation: "Without `f`, Python treats \`{name}\` as plain characters. The window doesn't open. To pull in a variable, the \`f\` in front is required."
+        },
+        {
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
@@ -88,18 +129,21 @@ print(f"Price: {price} won")  # Price: 19000 won
         {
           id: "calc-explain",
           type: "explain",
-          title: "🧮 You Can Calculate Inside { }!",
-          content: `You can do calculations inside the { } of an f-string:
+          title: "🧮 You Can Put Expressions in the { } Window",
+          content: `\`{ }\` isn't limited to variable names. You can drop in a **whole expression**.
 
 \`\`\`python
 a = 10
 b = 3
 print(f"{a} + {b} = {a + b}")
 # 10 + 3 = 13
+\`\`\`
 
-print(f"{a} × {b} = {a * b}")
-# 10 × 3 = 30
-\`\`\``
+When Python hits a \`{ }\`, it:
+1. **Computes** the expression inside first
+2. Drops the result into that spot
+
+\`{a + b}\` → compute \`10 + 3 = 13\` first → \`13\` slides into place.`
         },
         {
           id: "try3",
@@ -114,8 +158,8 @@ print(f"{a} × {b} = {a * b}")
         {
           id: "method-explain",
           type: "explain",
-          title: "🔧 Methods Inside { } Too!",
-          content: `You can also call methods:
+          title: "🔧 Methods Inside { } Too",
+          content: `The methods you learned last time — \`.upper()\`, \`.strip()\`, etc. — work right inside \`{ }\`.
 
 \`\`\`python
 name = "python"
@@ -125,7 +169,9 @@ print(f"Uppercase: {name.upper()}")
 text = "  hello  "
 print(f"Stripped: '{text.strip()}'")
 # Stripped: 'hello'
-\`\`\``
+\`\`\`
+
+Same rule: Python runs \`name.upper()\` inside \`{ }\` first → the result \`"PYTHON"\` lands in the slot.`
         },
         {
           id: "try4",
@@ -304,12 +350,12 @@ f"{n:05d}"       # 5 digits, zero-padded
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 Final Mission!",
-          task: "Create a cafe menu using f-strings!",
+          title: "🏆 Final Mission — Cafe Menu",
+          task: "It's a cafe menu. Right-align prices in a width of 8 with a thousands comma — all in one slot! Fill both blanks with the same number 8.",
           initialCode: "items = ['Americano', 'Cafe Latte', 'Choco Cake']\nprices = [4500, 5000, 6500]\ncount = len(items)\n\nprint('=' * 25)\nprint(f'{\"☕ Cafe Menu\":^25}')\nprint('=' * 25)\n\nfor i in range(count):\n    print(f'{items[i]:<12} {prices[i]:>___,}')\n\nprint('-' * 25)\ntotal = sum(prices)\nprint(f'{\"Total\":<12} {total:>___,}')\nprint('=' * 25)",
           expectedOutput: "=========================\n       ☕ Cafe Menu       \n=========================\nAmericano       4,500\nCafe Latte      5,000\nChoco Cake      6,500\n-------------------------\nTotal          16,000\n=========================",
-          hint: "Specify the number alignment width!",
-          hint2: "8"
+          hint: "Both blanks get the same number. Prices have 4-5 digits, so the width needs to be bigger to line up.",
+          hint2: "Both blanks are `8` (e.g. `{prices[i]:>8,}`)."
         },
         {
           id: "complete",

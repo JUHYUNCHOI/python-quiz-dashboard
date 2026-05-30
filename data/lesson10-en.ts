@@ -17,211 +17,156 @@ export const lesson10EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🎮 Interactive Programs!",
-          content: `So far, we've only been printing output one way.
-
-Now we're going to **receive input from the user**!
+          title: "🎮 Let the user answer your code!",
+          content: `So far, **we** wrote the values into the code ourselves.
 
 \`\`\`python
-name = input('What is your name? ')
-print(f'Hello, {name}!')
+name = "Alice"
+print(f"Hello, {name}!")
 \`\`\`
 
-When you run it:
+Now let's make code that picks up **whoever runs it**.
+
+\`\`\`python
+name = input("What is your name? ")
+print(f"Hello, {name}!")
 \`\`\`
-What is your name? Alice
-Hello, Alice!
-\`\`\`
 
-### Why is this important?
-
-Programs we've built so far used **fixed values** — \`name = "Alice"\` was hardcoded, so anyone else needed to edit the code to use it.
-
-**With \`input()\`**, the same code works for everyone. It starts feeling like a real "program".`
+Without editing the code, if Alice runs it she sees "Hello, Alice!", if Bob runs it he sees "Hello, Bob!" — feels like a real program!`
         },
         {
           id: "concept",
-          type: "explain",
-          title: "📥 The input() Function",
-          content: `\`input()\` waits until the user types something!
+          type: "interactive",
+          title: "🎬 Watch input() catch a value",
+          component: "inputVisualizer",
+          componentProps: { lang: "en", presetIds: ["basic", "int-trap"] },
+          description: `\`input()\` puts whatever the user types into a variable.
 
-\`\`\`python
-answer = input('Your question here')
-\`\`\`
-
-1. 'Your question here' appears on screen
-2. The user types something and presses Enter
-3. The typed value is stored in the answer variable!
-
-⚠️ **Note:** input() doesn't work in web environments!
-So in our exercises, we'll practice by assigning values directly to variables, or use the stdin (input) panel.
-
-### Prompt options
-
-\`\`\`python
-# Option 1) no prompt
-data = input()           # user types
-
-# Option 2) with prompt
-data = input('Name: ')   # shows "Name: " inline
-
-# Option 3) prompt + newline (readability)
-data = input('Enter your name:\\n')
-\`\`\`
-
-> 💡 The most common style is ending with \`': '\` (colon + space).`
+⚠️ **Important:** The value is **always a string (str)** — even if they type digits!`
         },
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ Simulating input()!",
-          task: "Store 'Alice' in name and greet them!",
-          initialCode: "# Instead of input(), we assign the value directly\nname = ___\nprint(f'Hello, {name}!')",
-          expectedOutput: "Hello, Alice!",
-          hint: "Store a name with name = 'name'!",
-          hint2: "name = 'Alice'"
+          title: "🖥️ Follow along — greet the user",
+          task: "Use input() to read a name, then greet them!",
+          initialCode: "name = input(\"What is your name? \")\nprint(f'Hello, {___}!')",
+          expectedOutput: "Hello, Walnut!",
+          stdin: "Walnut",
+          hint: "The typed name is in the `name` variable.",
+          hint2: "name"
         },
         {
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
           content: "What type does `input()` always return?",
-          options: ["int (integer)", "float (decimal)", "str (string)", "It depends on the input"],
+          options: ["int (integer)", "float (decimal)", "str (string)", "Depends on input"],
           answer: 2,
-          explanation: "input() always returns a string (str)!"
+          explanation: "input() always returns a string (str), no matter what the user types. Convert with int() if you need a number."
         }
       ]
     },
     {
       id: "ch2",
-      title: "Receiving Number Input",
+      title: "Reading numbers",
       emoji: "🔢",
       steps: [
         {
           id: "problem-explain",
           type: "explain",
-          title: "⚠️ Houston, We Have a Problem!",
-          content: `Let's try getting an age and doing math with it:
+          title: "⚠️ string + 1 = error!",
+          content: `Let's try reading an age and computing next year:
 
 \`\`\`python
-age = input('Age: ')
-print(age + 1)  # Error!!! 😱
+age = input("Age: ")   # "15" — a STRING!
+print(age + 1)         # ❌ TypeError
 \`\`\`
 
-Why does it throw an error?
-→ input() **always returns a string**!
-→ '15' + 1 can't be calculated!`
+\`age\` is \`"15"\` (string). You can't add a number to a string.`
         },
         {
           id: "solution-explain",
-          type: "explain",
-          title: "✅ Solution: Convert with int()!",
-          content: `We need to convert the string to a number!
+          type: "interactive",
+          title: "✅ Wrap with int() for a real number!",
+          component: "inputVisualizer",
+          componentProps: { lang: "en", presetIds: ["int-input", "float-input"] },
+          description: `\`int(input(...))\` — wrap the input result with \`int()\` to get a real integer. Now math works!
 
-\`\`\`python
-age = input('Age: ')        # '15' (string)
-age = int(age)              # 15 (converted to integer!)
-print(age + 1)              # 16 ✅
-\`\`\`
-
-Shorter version:
-\`\`\`python
-age = int(input('Age: '))
-\`\`\``
+For decimals, use \`float()\`.`
         },
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ String to Number Conversion!",
-          task: "Convert a string number to an integer and do math!",
-          initialCode: "# Assume we received this from input()\nage_str = '15'\n\n# Convert to integer\nage = ___(age_str)\n\n# Age next year\nprint(f'Age next year: {age + 1}')",
-          expectedOutput: "Age next year: 16",
-          hint: "Use int() to convert a string to a number!",
-          hint2: "age = int(age_str)"
+          title: "🖥️ Follow along — next year's age",
+          task: "Read an age and print next year's age.",
+          initialCode: "age = ___(input(\"Age: \"))\nprint(f\"Next year: {age + 1}\")",
+          expectedOutput: "Next year: 16",
+          stdin: "15",
+          hint: "Wrap input() with int().",
+          hint2: "int"
         },
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ Adding Two Numbers!",
-          task: "Add two numbers and print the result!",
-          initialCode: "# Assume we received these from input()\na_str = '25'\nb_str = '17'\n\n# Convert to integers\na = ___(a_str)\nb = ___(b_str)\n\nprint(f'{a} + {b} = {a + b}')",
-          expectedOutput: "25 + 17 = 42",
-          hint: "Use int() to convert strings to integers!",
-          hint2: "a = int(a_str)"
+          title: "🖥️ Try — double your favorite number",
+          task: "Read one number and print double it. (input: 7)",
+          initialCode: "n = ___(input(\"Number: \"))\nprint(f\"Double: {___}\")",
+          expectedOutput: "Double: 14",
+          stdin: "7",
+          hint: "int() to convert, then n * 2.",
+          hint2: "int / n * 2"
         },
         {
           id: "multi-input",
           type: "explain",
-          title: "🎯 Multiple values on one line — input().split()",
-          content: `For input like \`3 5 7\` on one line:
+          title: "🎯 Two values on one line — input().split()",
+          content: `For input like \`3 5\` on one line (two values, space between):
 
 \`\`\`python
-# Input: 3 5 7
-data = input().split()
-print(data)        # ['3', '5', '7']  ← list of strings
+# Input: 3 5
+a, b = input().split()
+print(a)   # "3"  ← string!
+print(b)   # "5"  ← string!
 \`\`\`
 
-\`split()\` separates by whitespace (covered in lesson 18).
-
-### Read as integers — map(int, ...)
+\`.split()\` cuts the input by spaces. **Each piece is still a string** — wrap with \`int()\` to use as numbers.
 
 \`\`\`python
-# Input: 3 5 7
-nums = list(map(int, input().split()))
-print(nums)        # [3, 5, 7]  ← list of ints!
-print(sum(nums))   # 15
-\`\`\`
-
-### Receive into known variables
-
-\`\`\`python
-# Input: 25 17
-a, b = map(int, input().split())
-print(a + b)       # 42 — sum directly
-\`\`\`
-
-> 🎯 Almost all coding-test inputs use this. Memorize the pattern — it's a lifelong tool.`
+a, b = input().split()
+print(int(a) + int(b))   # 8
+\`\`\``
         },
         {
           id: "try-multi-input",
           type: "tryit",
-          title: "🖥️ Try It — Two ints, multiplied",
-          task: "Read two ints on one line and print their product. (input: 7 8)",
-          initialCode: "# Two ints on one line\na, b = map(int, input().___())\n\nprint(f\"{a} x {b} = {a * b}\")",
+          title: "🖥️ Try — multiply two numbers",
+          task: "Read two integers on one line and print their product. (input: 7 8)",
+          initialCode: "a, b = input().___()\nprint(f\"{a} x {b} = {int(a) * int(b)}\")",
           expectedOutput: "7 x 8 = 56",
           stdin: "7 8",
-          hint: "input().split() then map(int, ...).",
-          hint2: "a, b = map(int, input().split())"
+          hint: ".split() to cut by whitespace.",
+          hint2: "split"
         },
         {
           id: "input-strip",
           type: "explain",
-          title: "🧹 Hidden whitespace in user input",
-          content: `Users may accidentally add spaces around their input.
+          title: "🧹 Clean hidden whitespace — .strip()",
+          content: `Users may accidentally add extra spaces around their input.
 
 \`\`\`python
 # User types "  Alice  " (extra spaces)
 name = input()
-print(f"[{name}]")   # [  Alice  ]   ← spaces kept
+print(f"[{name}]")     # [  Alice  ]   ← spaces stay!
 \`\`\`
 
-\`.strip()\` removes leading/trailing whitespace — safer.
+\`.strip()\` removes leading/trailing whitespace.
 
 \`\`\`python
 name = input().strip()
-print(f"[{name}]")   # [Alice]   ← clean
+print(f"[{name}]")     # [Alice]   ← clean
 \`\`\`
 
-### Common input cleanup patterns
-
-\`\`\`python
-name  = input("Name: ").strip()       # string + cleanup
-age   = int(input("Age: "))            # int
-score = float(input("Score: "))        # float
-nums  = list(map(int, input().split()))  # multiple ints
-\`\`\`
-
-> 💡 \`strip()\` was covered in lesson 6 (string methods). Pairs well with \`.lower()\` / \`.upper()\` for input normalization.`
+> 💡 \`.strip()\` was in lesson 6 (string methods). Classic move for name/ID inputs.`
         },
         {
           id: "quiz2",
@@ -236,88 +181,72 @@ nums  = list(map(int, input().split()))  # multiple ints
     },
     {
       id: "ch3",
-      title: "Receiving Float Input",
+      title: "Floats & traps",
       emoji: "🔄",
       steps: [
         {
           id: "float-explain",
           type: "explain",
-          title: "🔢 Receiving Float Input",
-          content: `For numbers with decimal points, use \`float()\`!
+          title: "🔢 Decimals use float()",
+          content: `For height, score, price — anything with a decimal — use \`float()\`.
 
 \`\`\`python
-height = float(input('Height (cm): '))
-print(f'Height: {height}cm')
+height = float(input("Height (cm): "))
+print(f"Height: {height}cm")
 \`\`\`
 
-**Type conversion summary:**
-- \`int()\`: convert to integer
-- \`float()\`: convert to float
-- \`str()\`: convert to string`
+**Quick summary:**
+- \`int()\` — integer
+- \`float()\` — decimal
+- \`str()\` — string`
         },
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ Float Conversion Practice!",
-          task: "Convert height from cm to m and print it!",
-          initialCode: "# Assume we received this from input()\nheight_str = '175.5'\n\n# Convert to float\ncm = ___(height_str)\n\n# Convert to meters (divide by 100)\nm = cm / 100\n\nprint(f'{cm}cm = {m}m')",
+          title: "🖥️ Try — height cm → m",
+          task: "Read height in cm and convert to meters. (input: 175.5)",
+          initialCode: "cm = ___(input(\"Height(cm): \"))\nm = cm / 100\nprint(f\"{cm}cm = {m}m\")",
           expectedOutput: "175.5cm = 1.755m",
-          hint: "Use float() to convert, then divide by 100",
-          hint2: "cm / 100"
+          stdin: "175.5",
+          hint: "Decimal value → float().",
+          hint2: "float"
         },
         {
           id: "quiz3",
           type: "quiz",
           title: "❓ Quiz!",
           content: "What is the result of `int('3.14')`?",
-          options: ["3", "3.14", "Error", "'3'"],
+          options: ["3", "3.14", "Error (ValueError)", "'3'"],
           answer: 2,
-          explanation: "int() can't directly convert a decimal string! You need to use float() first."
+          explanation: "int() can't directly handle a decimal string! Convert via float() first: `int(float('3.14'))` → 3."
         },
         {
           id: "float-trap",
           type: "explain",
-          title: "⚠️ float ↔ int conversion traps",
-          content: `\`int(input())\` errors on \`"3.14"\`. Two-step:
+          title: "⚠️ float ↔ int traps",
+          content: `\`int("3.14")\` is an **error**. You need two steps:
 
 \`\`\`python
-# ❌ Direct int doesn't work
-int("3.14")        # ValueError
-
-# ✅ Through float to int
-int(float("3.14"))  # 3 — decimal truncated (NOT rounded!)
-
-# To round properly
-round(float("3.14"))   # 3
-round(float("3.78"))   # 4
+int("3.14")          # ❌ ValueError
+int(float("3.14"))   # ✅ 3 — decimal is truncated (NOT rounded!)
 \`\`\`
 
-### int truncation vs round
+### Truncate vs round
 
-| Value | int(float(x)) | round(float(x)) |
+| Value | \`int(float(x))\` | \`round(float(x))\` |
 |---|---|---|
 | "3.14" | 3 | 3 |
 | "3.78" | **3** (truncate) | **4** (round) |
-| "-2.5" | -2 (toward 0) | -2 (banker's) |
-| "2.5"  | 2 (truncate) | 2 (banker's) |
 
-> 🎯 **int truncates toward zero**, round does proper rounding. Pick based on intent.
+> 🎯 \`int\` chops the decimal off. Use \`round()\` when you actually want rounding.
 
-### Safe int conversion function
+### What if it's not a number?
 
 \`\`\`python
-def safe_int(s, default=0):
-    try:
-        return int(float(s))
-    except ValueError:
-        return default
-
-print(safe_int("42"))        # 42
-print(safe_int("3.14"))      # 3
-print(safe_int("hello"))     # 0 (fallback)
+int("hello")   # ❌ ValueError — program stops
 \`\`\`
 
-(try/except is covered in detail in lesson 37)`
+> 💡 For now, trust the user types numbers only. Catching these errors is lesson 37 (try/except).`
         }
       ]
     },
@@ -329,55 +258,52 @@ print(safe_int("hello"))     # 0 (fallback)
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 Mission 1 — Total price",
-          task: "Calculate the total price from item price and quantity!",
-          initialCode: "# Assume we received these from input()\nprice_str = '12'\ncount_str = '3'\n\n# Convert to integers\nprice = ___(price_str)\ncount = ___(count_str)\n\n# Calculate total price\ntotal = ___\n\nprint(f'{count} pizzas')\nprint(f'Total price: ${total}')",
-          expectedOutput: "3 pizzas\nTotal price: $36",
-          hint: "Convert with int() then multiply!",
-          hint2: "int(price_str) / price * count"
+          title: "🏆 Mission 1 — My greeting card",
+          task: "Read a name and a favorite color, then print a greeting card!",
+          initialCode: "name = input(\"Name: \").___()         # clean whitespace\ncolor = input(\"Favorite color: \").strip()\n\nprint(f\"Hello, {name}!\")\nprint(f\"{name}'s power color is {color} 😎\")",
+          expectedOutput: "Hello, Walnut!\nWalnut's power color is purple 😎",
+          stdin: "Walnut\npurple",
+          hint: ".strip() after input() to clean spaces.",
+          hint2: "strip"
         },
         {
           id: "mission2",
           type: "mission",
           title: "🏆 Mission 2 — Self-introduction card",
-          task: "Read name, age, height with input() and print a card. (input is 3 stdin lines)",
-          initialCode: "name = input(\"Name: \").___()       # cleanup spaces\nage = ___(input(\"Age: \"))           # int\nheight = ___(input(\"Height(cm): \"))  # float\n\n# Print card\nprint(\"=\" * 20)\nprint(f\"Name: {name}\")\nprint(f\"Age: {age} (next year: {age + 1})\")\nprint(f\"Height: {height}cm ({height/100:.2f}m)\")\nprint(\"=\" * 20)",
+          task: "Read name, age, height and print a self-intro card. (3 stdin lines)",
+          initialCode: "name = input(\"Name: \").strip()          # string\nage = ___(input(\"Age: \"))               # int\nheight = ___(input(\"Height(cm): \"))     # float\n\nprint(\"=\" * 20)\nprint(f\"Name: {name}\")\nprint(f\"Age: {age} (next year: {age + 1})\")\nprint(f\"Height: {height}cm ({height/100:.2f}m)\")\nprint(\"=\" * 20)",
           expectedOutput: "====================\nName: Alice\nAge: 15 (next year: 16)\nHeight: 175.5cm (1.76m)\n====================",
           stdin: "Alice\n15\n175.5",
-          hint: "name uses strip(), age int(), height float().",
-          hint2: "name = input().strip()\nage = int(input())\nheight = float(input())"
+          hint: "age = int(), height = float().",
+          hint2: "int / float"
         },
         {
           id: "mission3",
           type: "mission",
-          title: "🏆 Mission 3 — Score average",
-          task: "Read 5 space-separated scores and print **average, max, min**.",
-          initialCode: "# map + split pattern\nscores = list(map(___, input().split()))\n\nprint(f\"input: {scores}\")\nprint(f\"avg: {sum(scores) / len(scores):.1f}\")\nprint(f\"max: {max(scores)}\")\nprint(f\"min: {min(scores)}\")",
-          expectedOutput: "input: [85, 92, 78, 95, 67]\navg: 83.4\nmax: 95\nmin: 67",
-          stdin: "85 92 78 95 67",
-          hint: "list(map(int, input().split())) pattern.",
-          hint2: "scores = list(map(int, input().split()))"
+          title: "🏆 Mission 3 — Three-subject average",
+          task: "Read three subject scores (one per line) and print the average.",
+          initialCode: "kor = ___(input(\"Korean: \"))\nmath = ___(input(\"Math: \"))\neng = ___(input(\"English: \"))\n\navg = (kor + math + eng) / 3\nprint(f\"Average: {avg:.1f}\")",
+          expectedOutput: "Average: 83.3",
+          stdin: "85\n90\n75",
+          hint: "Wrap each input() with int().",
+          hint2: "int"
         },
         {
           id: "complete",
           type: "explain",
           title: "🎉 Complete!",
-          content: `## What We Learned Today
+          content: `## What we learned today
 
-✅ Getting user input with \`input()\`
-✅ input() **always returns a string**
-✅ Converting to numbers with \`int()\` / \`float()\`
-✅ **input().split()** for multiple values on one line
-✅ **map(int, input().split())** — coding-test classic
-✅ \`a, b = map(int, input().split())\` — direct unpacking
-✅ \`.strip()\` for input cleanup
-✅ float ↔ int conversion traps (use \`int(float(s))\` for decimal strings)
-✅ \`int\` truncate vs \`round\` proper rounding
+✅ \`input()\` — read what the user types into a variable
+✅ The value is **always a string** (str)
+✅ \`int()\`, \`float()\` to convert to numbers
+✅ \`input().split()\` — two values on one line (a, b = ...)
+✅ \`.strip()\` — clean leading/trailing whitespace
+✅ \`int(float("3.14"))\` — decimal string → integer (truncates)
 
-💡 **Tip:** Try running real input() code in a terminal or IDE!
+💡 Run real \`input()\` in a terminal or IDE. In the Coderin web, use the stdin panel!
 
-🎉 **Part 1 Complete!**
-In the next Part, we'll learn about **conditionals**! 🧠`
+🎉 **Part 1 Complete!** Next up — **conditionals (if/else)** — telling code "do this when… otherwise that"! 🧠`
         }
       ]
     }

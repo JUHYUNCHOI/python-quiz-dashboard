@@ -18,36 +18,63 @@ export const lesson8Data: LessonData = {
           id: "intro",
           type: "explain",
           title: "✨ 문자열 + 변수, 불편해!",
-          content: `지금까지 이렇게 했어요:
+          content: `이름과 나이를 같이 출력하고 싶을 때, 지금까지 \`+\` 로 이어붙였죠:
 
 \`\`\`python
 name = "철수"
-age = 15
-print("이름: " + name + ", 나이: " + str(age))
+print("이름: " + name + " 입니다")
+# 이름: 철수 입니다
 \`\`\`
 
-너무 복잡하죠? 😩
+따옴표 켰다 껐다, \`+\` 여러 번 — 글자가 늘어날수록 복잡해져요. 😩
 
-**f-string**을 쓰면 훨씬 쉬워요!`
+게다가 숫자랑 같이 쓰면 \`+\` 가 아예 안 돼요:
+
+\`\`\`python
+age = 15
+print("나이: " + age)   # 💥 에러!
+\`\`\`
+
+**오늘 배우는 f-string** 으로 한 줄에 깔끔하게:
+
+\`\`\`python
+print(f"이름: {name}, 나이: {age}")
+# 이름: 철수, 나이: 15
+\`\`\``
         },
         {
           id: "fstring-explain",
           type: "explain",
-          title: "✨ f-string 사용법",
-          content: `문자열 앞에 **f**를 붙이고, 변수는 **{ }** 안에!
+          title: "✨ f-string — 따옴표 안에 변수 꺼내기",
+          content: `**f** 는 "format(포맷, 모양 맞추기)" 의 f. 따옴표 앞에 **f** 만 붙이면 됩니다.
 
 \`\`\`python
 name = "철수"
 age = 15
-print(f"이름: {name}, 나이: {age}")
-# 이름: 철수, 나이: 15
+print(f"안녕 {name}, {age}살!")
+# 안녕 철수, 15살!
 \`\`\`
 
-**str() 변환도 필요 없어요!**
+규칙은 두 개:
+
+1. **따옴표 앞에 \`f\`** 붙이기 → \`f"..."\`
+2. **변수는 \`{ }\` 창문** 안에 — 그 자리에 변수 값이 쏙 들어와요
+
+\`{name}\` 은 작은 창문. 실행할 때 파이썬이 창문 뒤에서 \`name\` 상자 값을 꺼내 그 자리에 넣어줘요.
+
+**숫자도 그냥 들어가요** — \`+\` 처럼 에러 안 남:
+
 \`\`\`python
 price = 19000
-print(f"가격: {price}원")  # 가격: 19000원
+print(f"가격: {price}원")   # 가격: 19000원
 \`\`\``
+        },
+        {
+          id: "fstring-viz",
+          type: "interactive",
+          title: "🎬 슬롯이 값으로 바뀌는 순서",
+          description: "{변수} 창문이 어떻게 실제 값으로 채워지는지 한 단계씩 눌러봐요. 포맷 스펙도 살짝 미리보기!",
+          component: "pyFstringVisualizer",
         },
         {
           id: "try1",
@@ -70,6 +97,20 @@ print(f"가격: {price}원")  # 가격: 19000원
           hint2: "f\"{name}는 {age}살입니다\""
         },
         {
+          id: "predict-no-f",
+          type: "predict",
+          title: "💭 결과 예측 — f 를 깜빡하면?",
+          content: `\`f\` 를 빼먹고 그냥 따옴표만 썼어요. 결과는?
+
+\`\`\`python
+name = "민지"
+print("안녕, {name}!")
+\`\`\``,
+          options: ["안녕, 민지!", "안녕, {name}!", "에러", "안녕, !"],
+          answer: 1,
+          explanation: "`f` 가 없으면 파이썬은 \`{name}\` 을 그냥 글자로 봐요. 창문이 안 열려요. 변수를 꺼내고 싶으면 따옴표 앞에 꼭 \`f\`."
+        },
+        {
           id: "quiz1",
           type: "quiz",
           title: "❓ 퀴즈!",
@@ -88,18 +129,21 @@ print(f"가격: {price}원")  # 가격: 19000원
         {
           id: "calc-explain",
           type: "explain",
-          title: "🧮 { } 안에서 계산도 돼요!",
-          content: `f-string의 { } 안에서 계산할 수 있어요:
+          title: "🧮 { } 창문 안에 식을 넣어도 OK",
+          content: `\`{ }\` 안에는 변수만 넣어야 하는 게 아니에요. **계산식** 도 그대로 들어가요.
 
 \`\`\`python
 a = 10
 b = 3
 print(f"{a} + {b} = {a + b}")
 # 10 + 3 = 13
+\`\`\`
 
-print(f"{a} × {b} = {a * b}")
-# 10 × 3 = 30
-\`\`\``
+파이썬이 \`{ }\` 를 만나면:
+1. 안에 있는 식을 먼저 **계산** 하고
+2. 그 결과를 그 자리에 넣어요
+
+\`{a + b}\` → 먼저 \`10 + 3 = 13\` 계산 → \`13\` 이 자리에 쏙.`
         },
         {
           id: "try3",
@@ -114,8 +158,8 @@ print(f"{a} × {b} = {a * b}")
         {
           id: "method-explain",
           type: "explain",
-          title: "🔧 { } 안에서 메서드도!",
-          content: `메서드 호출도 가능해요:
+          title: "🔧 { } 안에 메서드 호출도 OK",
+          content: `지난 시간에 배운 \`.upper()\`, \`.strip()\` 같은 메서드도 \`{ }\` 안에서 바로 부를 수 있어요.
 
 \`\`\`python
 name = "python"
@@ -125,7 +169,9 @@ print(f"대문자: {name.upper()}")
 text = "  hello  "
 print(f"정리: '{text.strip()}'")
 # 정리: 'hello'
-\`\`\``
+\`\`\`
+
+원리는 똑같음: \`{ }\` 안의 \`name.upper()\` 를 먼저 실행 → 결과 \`"PYTHON"\` 이 자리에 들어가요.`
         },
         {
           id: "try4",
@@ -304,12 +350,12 @@ f"{n:05d}"       # 5자리, 빈 자리는 0
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 최종 미션!",
-          task: "카페 메뉴판을 f-string으로 만들어보세요!",
+          title: "🏆 최종 미션 — 카페 메뉴판",
+          task: "카페 메뉴판이에요. 가격을 8칸 너비로 오른쪽 정렬 + 천 단위 콤마 까지 한 번에! 빈칸 두 곳에 같은 숫자 8 을 채워보세요.",
           initialCode: "items = ['아메리카노', '카페라떼', '초코케이크']\nprices = [4500, 5000, 6500]\ncount = len(items)\n\nprint('=' * 25)\nprint(f'{\"☕ 카페 메뉴\":^25}')\nprint('=' * 25)\n\nfor i in range(count):\n    print(f'{items[i]:<12} {prices[i]:>___,}원')\n\nprint('-' * 25)\ntotal = sum(prices)\nprint(f'{\"합계\":<12} {total:>___,}원')\nprint('=' * 25)",
-          expectedOutput: "=========================\n       ☕ 카페 메뉴       \n=========================\n아메리카노          4,500원\n카페라떼           5,000원\n초코케이크          6,500원\n-------------------------\n합계            16,000원\n=========================",
-          hint: "숫자 정렬 너비를 지정하세요!",
-          hint2: "8"
+          expectedOutput: "=========================\n         ☕ 카페 메뉴         \n=========================\n아메리카노           4,500원\n카페라떼            5,000원\n초코케이크           6,500원\n-------------------------\n합계             16,000원\n=========================",
+          hint: "두 빈칸에 같은 숫자가 들어가요. 가격이 4 자리/5 자리이니 그것보다는 커야 줄이 맞아요.",
+          hint2: "두 빈칸 모두 `8` (예: `{prices[i]:>8,}`)."
         },
         {
           id: "complete",

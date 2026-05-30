@@ -17,33 +17,51 @@ export const lesson11Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🎮 게임 속 조건문",
+          title: "🎮 갈림길 만들기",
           content: `게임에서 이런 상황 본 적 있죠?
 
-- HP가 0이면 → 게임 오버!
-- 점수가 100점 이상이면 → 레벨업!
+- HP 가 0 이면 → 게임 오버!
+- 점수가 100 점 이상이면 → 레벨업!
 - 아이템이 있으면 → 사용 가능!
 
-이런 **"~하면 ~한다"**를 만드는 게 **조건문**이에요!`
+전부 **"~ 면 ~ 한다"** 모양. 코드의 **갈림길** 이에요.
+
+\`\`\`
+       ┌── (조건 참) → 이쪽 코드 실행
+─ if ──┤
+       └── (조건 거짓) → 건너뜀
+\`\`\`
+
+이 갈림길을 만드는 게 **조건문 (if 문)**.`
         },
         {
           id: "syntax-explain",
           type: "explain",
-          title: "📝 if문 문법",
+          title: "📝 if 문 문법 — 두 가지 약속",
           content: `\`\`\`python
 if 조건:
     실행할 코드
 \`\`\`
 
-**중요!** 
-- 조건 뒤에 **콜론(:)** 필수!
-- 실행할 코드는 **들여쓰기(Tab)** 필수!
+파이썬 if 는 **두 가지 약속** 만 지키면 끝!
+
+1. 조건 뒤에 **콜론 \`:\`** (잊으면 SyntaxError)
+2. 실행할 줄은 **4 칸 들여쓰기** (스페이스 4 번)
 
 \`\`\`python
 score = 100
 if score >= 100:
-    print('레벨업!')
-\`\`\``
+    print('레벨업!')   ← 4 칸 들여쓰기
+\`\`\`
+
+> 💡 들여쓰기 안 하면? **\`IndentationError\`** 발생! 다른 언어는 \`{}\` 로 묶지만 파이썬은 들여쓰기 자체가 묶음이에요.`
+        },
+        {
+          id: "syntax-builder",
+          type: "explain",
+          title: "🧱 if 문 조립해보기",
+          content: `if 문이 어떻게 한 조각씩 쌓이는지 봐요. **▶ 재생** 누르고 따라가요!`,
+          component: "pyIfBuilder",
         },
         {
           id: "try1",
@@ -146,14 +164,15 @@ else:
           id: "elif-explain",
           type: "explain",
           title: "🔢 elif: 조건이 여러 개일 때",
-          content: `조건이 3개 이상이면 **elif**를 써요!
+          content: `갈림길이 3 개 이상이면 **elif**!
+
+> 💡 \`elif\` 는 \`else if\` 의 줄임말 — "그게 아니라면 또 다른 if"
 
 \`\`\`python
 score = 85
-
 if score >= 90:
     print('A')
-elif score >= 80:
+elif score >= 80:   ← 90 아니야? 그럼 80 이상?
     print('B')
 elif score >= 70:
     print('C')
@@ -161,7 +180,9 @@ else:
     print('F')
 \`\`\`
 
-→ 85점은 80 이상이니까 'B' 출력!`
+**규칙: 위에서 아래로** 검사 → **처음 참인 가지만** 실행 → 나머지는 건너뜀.
+
+→ 85 점은 90 미만이지만 80 이상이니까 **'B'** 출력 후 끝!`
         },
         {
           id: "elif-sim",
@@ -219,12 +240,12 @@ else:
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 최종 미션!",
-          task: "나이에 따른 요금을 출력하세요! (8세: 어린이 500원)",
-          initialCode: "age = 8\nif age <= 7:\n    print('무료')\nelif ___:\n    print('어린이 500원')\nelif ___:\n    print('청소년 1000원')\nelse:\n    print('성인 1500원')",
-          expectedOutput: "어린이 500원",
-          hint: "나이 범위에 맞는 조건을 쓰세요!",
-          hint2: "age <= 12 / age <= 18"
+          title: "🏆 최종 미션 — RPG 체력 시스템!",
+          task: "주인공 체력에 따라 상태 메시지를 출력하세요! (hp=30 일 때 '⚠️ 위험!' 이 떠야 해요)\n\n• 0 이하 → '💀 게임 오버!'\n• 1~30 → '⚠️ 위험! 회복 필요!'\n• 31~70 → '🟢 양호'\n• 그 외 → '💪 풀 컨디션!'",
+          initialCode: "hp = 30\nif hp <= 0:\n    print('💀 게임 오버!')\nelif ___:\n    print('⚠️ 위험! 회복 필요!')\nelif ___:\n    print('🟢 양호')\nelse:\n    print('💪 풀 컨디션!')",
+          expectedOutput: "⚠️ 위험! 회복 필요!",
+          hint: "elif 는 위에서부터 검사 — hp <= 0 다음은 어디까지가 '위험' 일까요?",
+          hint2: "hp <= 30 / hp <= 70"
         },
         {
           id: "complete",

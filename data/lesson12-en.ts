@@ -7,7 +7,7 @@ export const lesson12EnData: LessonData = {
   id: "12",
   title: "Advanced Conditionals",
   emoji: "🔀",
-  description: "Learn nested conditionals and logical operators!",
+  description: "Combine conditions with and / or / not!",
   chapters: [
     {
       id: "ch1",
@@ -17,164 +17,212 @@ export const lesson12EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🔗 Multiple Conditions at Once!",
-          content: `Sometimes you want to combine conditions like
-"age is 13 or older **and** less than 19"!
+          title: "🔗 When One Condition Isn't Enough",
+          content: `Some amusement-park rides need you to be **140cm or taller AND 8 or older**. Two conditions!
 
-**Logical operators** connect conditions:
-- **and** - True only if both are true
-- **or** - True if at least one is true
-- **not** - Reverses the value`
+Meet the three connectors:
+- **and** — both must be true
+- **or** — at least one is true
+- **not** — flips true/false
+
+Today we make friends with all three!`
         },
         {
           id: "and-explain",
           type: "explain",
-          title: "🔗 and - Both Must Be True",
-          content: `**and** = Both must be True for the result to be True!
+          title: "🔗 and — Both Must Be True",
+          content: `Both sides must be **True** for the whole thing to be True.
 
 \`\`\`python
 age = 15
-# Teenager: 13 or older and less than 19
+# Teenager: 13 or older AND under 19
 if age >= 13 and age < 19:
     print("You are a teenager")
 \`\`\`
 
-**and truth table:**
-- True and True → True
-- True and False → False
-- False and True → False
-- False and False → False`
-        },
-        {
-          id: "try1",
-          type: "tryit",
-          title: "🖥️ Try It Yourself!",
-          task: "Check if the score is between 80 and 100 (inclusive)!",
-          initialCode: "score = 85\n\n# Pass only when both conditions are true\nif score >= 80 ___ score <= 100:\n    print(\"Pass!\")\nelse:\n    print(\"Fail\")",
-          expectedOutput: "Pass!",
-          hint: "Connect the two conditions with and!",
-          hint2: "score >= 80 and score <= 100"
+| Left | and | Right | Result |
+|---|---|---|---|
+| True | and | True | **True** ✅ |
+| True | and | False | False ❌ |
+| False | and | True | False ❌ |
+| False | and | False | False ❌ |
+
+➡️ **One False makes the whole thing False.**`
         },
         {
           id: "or-explain",
           type: "explain",
-          title: "🔗 or - At Least One",
-          content: `**or** = True if at least one is True!
+          title: "🔗 or — At Least One",
+          content: `Only **one** side needs to be True.
 
 \`\`\`python
 day = "Saturday"
 # Weekend: Saturday or Sunday
 if day == "Saturday" or day == "Sunday":
-    print("It's the weekend!")
+    print("Weekend!")
 \`\`\`
 
-**or truth table:**
-- True or True → True
-- True or False → True
-- False or True → True
-- False or False → False`
+| Left | or | Right | Result |
+|---|---|---|---|
+| True | or | True | True ✅ |
+| True | or | False | True ✅ |
+| False | or | True | True ✅ |
+| False | or | False | **False** ❌ |
+
+➡️ **One True makes the whole thing True.**`
+        },
+        {
+          id: "circuit-andor",
+          type: "interactive",
+          title: "🎬 Feel It with Switches — and / or",
+          description: "Flip switches A and B. With AND both must be ON; with OR even one ON lights the bulb!",
+          component: "pyAndOrCircuit",
+          componentProps: { initialMode: "and" }
+        },
+        {
+          id: "try1",
+          type: "tryit",
+          title: "🖥️ Try It — and",
+          task: "Pass if the score is 80 or above AND 100 or below!",
+          initialCode: "score = 85\n\n# Pass only when both are true\nif score >= 80 ___ score <= 100:\n    print(\"Pass!\")\nelse:\n    print(\"Fail\")",
+          expectedOutput: "Pass!",
+          hint: "Both true? → and!",
+          hint2: "and"
         },
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
-          task: "If VIP or has a coupon, give a discount!",
-          initialCode: "is_vip = False\nhas_coupon = True\n\n# Discount applies if either is true\nif is_vip ___ has_coupon:\n    print(\"10% discount!\")\nelse:\n    print(\"Full price\")",
+          title: "🖥️ Try It — or",
+          task: "Discount if VIP OR has a coupon!",
+          initialCode: "is_vip = False\nhas_coupon = True\n\n# Either one true → discount\nif is_vip ___ has_coupon:\n    print(\"10% discount!\")\nelse:\n    print(\"Full price\")",
           expectedOutput: "10% discount!",
-          hint: "With or, only one condition needs to be true!",
-          hint2: "is_vip or has_coupon"
+          hint: "Either one? → or!",
+          hint2: "or"
         },
         {
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What is the result of True and False?",
+          content: "What is `True and False`?",
           options: ["True", "False", "Error", "None"],
           answer: 1,
-          explanation: "With and, both must be True! If either is False, the result is False."
+          explanation: "With and, **both** must be True. One False → False!"
         }
       ]
     },
     {
       id: "ch2",
-      title: "not and Compound Conditions",
+      title: "not and Precedence",
       emoji: "🔄",
       steps: [
         {
           id: "not-explain",
           type: "explain",
-          title: "🔄 not - Reverse It",
-          content: `**not** = Turns True into False, and False into True!
+          title: "🔄 not — Flip It",
+          content: `**not** flips True ↔ False.
 
 \`\`\`python
 is_raining = False
 
 if not is_raining:
-    print("Let's go for a walk!")  # This prints!
+    print("Let's go for a walk!")  # Not raining → prints ✅
 \`\`\`
 
-**not truth table:**
-- not True → False
-- not False → True`
+| Original | → | not |
+|---|---|---|
+| True | → | False |
+| False | → | True |
+
+💡 Use **not** when you mean "**if NOT ...**".`
+        },
+        {
+          id: "circuit-not",
+          type: "interactive",
+          title: "🎬 Feel It with Switches — not",
+          description: "Click the NOT mode button above. ON makes the bulb OFF — that's a flip!",
+          component: "pyAndOrCircuit",
+          componentProps: { initialMode: "not" }
         },
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
-          task: "If not logged in, print a message!",
-          initialCode: "is_logged_in = False\n\n# Recall the operator that flips a condition\nif ___ is_logged_in:\n    print(\"Please log in\")",
+          title: "🖥️ Try It — not",
+          task: "If NOT logged in, print a message!",
+          initialCode: "is_logged_in = False\n\n# Think of the operator that flips a condition\nif ___ is_logged_in:\n    print(\"Please log in\")",
           expectedOutput: "Please log in",
-          hint: "Use the operator that reverses a condition!",
+          hint: "The operator that flips true/false!",
           hint2: "not is_logged_in"
         },
         {
           id: "complex-explain",
           type: "explain",
-          title: "🧩 Compound Conditions",
-          content: `You can combine multiple operators:
+          title: "🧩 Combining All Three — Parentheses are Safe",
+          content: `You can mix all three:
 
 \`\`\`python
 age = 25
 has_license = True
 
-# Adult with a license can drive
+# 18 or older AND has a license
 if age >= 18 and has_license:
     print("You can drive!")
-
-# Minor or no license
-if age < 18 or not has_license:
-    print("You cannot drive!")
 \`\`\`
 
-**Precedence:** not > and > or
-It's best to use parentheses for clarity!`
+**Precedence:** \`not\` → \`and\` → \`or\`
+
+Like × runs before + in math, **and runs before or**.
+If you're unsure, **wrap with parentheses \`( )\`** — always safe!
+
+\`\`\`python
+# Teen (13-19) OR student → discount
+if (age >= 13 and age <= 19) or is_student:
+    print("Discount!")
+\`\`\``
+        },
+        {
+          id: "predict-precedence",
+          type: "predict",
+          title: "💭 Precedence — Which Runs First?",
+          content: "What does this print?\n\n```python\na = True\nb = False\nc = True\n\nif a or b and c:\n    print(\"yes\")\nelse:\n    print(\"no\")\n```",
+          options: ["yes", "no", "Error", "None"],
+          answer: 0,
+          explanation: "**and runs before or!** So `b and c` first → `False and True` → `False`. Then `a or False` → `True or False` → **True** → prints 'yes'. To avoid confusion, write it as `a or (b and c)`."
+        },
+        {
+          id: "predict-short-circuit",
+          type: "predict",
+          title: "💭 How Far Does or Look?",
+          content: "What does this print?\n\n```python\nis_vip = True\nhas_coupon = False\n\nif is_vip or has_coupon:\n    print(\"Discount!\")\n```",
+          options: ["Discount!", "Nothing prints", "Error", "True"],
+          answer: 0,
+          explanation: "**or stops early if the left side is already True** — the answer can't change. This is called **short-circuit evaluation**. and works the same way — if the left is False, it skips the right. Python is smart about quitting early!"
         },
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
-          task: "If aged 13-19 or a student, print 'Discount applied!'",
-          initialCode: "age = 20\nis_student = True\n\n# Teen (13-19) or student gets a discount\nif (age >= 13 ___ age <= 19) ___ is_student:\n    print(\"Discount applied!\")\nelse:\n    print(\"Full price\")",
+          title: "🖥️ Try It — Use Parentheses",
+          task: "If aged 13-19 OR a student, print 'Discount applied!'",
+          initialCode: "age = 20\nis_student = True\n\n# (teenager) OR (student)\nif (age >= 13 ___ age <= 19) ___ is_student:\n    print(\"Discount applied!\")\nelse:\n    print(\"Full price\")",
           expectedOutput: "Discount applied!",
-          hint: "Use parentheses to group conditions clearly!",
-          hint2: "(age >= 13 and age <= 19) or is_student"
+          hint: "Inside parentheses both must hold / outside, either side is fine.",
+          hint2: "and / or"
         }
       ]
     },
     {
       id: "ch3",
-      title: "Nested Conditionals and in",
+      title: "Nested if and in",
       emoji: "📦",
       steps: [
         {
           id: "nested-explain",
           type: "explain",
           title: "📦 if Inside if",
-          content: `You can put an if statement inside another if:
+          content: `You can put an if inside another if. **Match the indentation like stairs!**
 
 \`\`\`python
-age = 15
 has_ticket = True
+age = 15
 
 if has_ticket:
     if age >= 18:
@@ -185,49 +233,46 @@ else:
     print("Please buy a ticket")
 \`\`\`
 
-⚠️ Make sure to match the indentation!`
+💡 Too deep (3, 4 levels) gets hard to read. **2 levels is comfortable.**`
         },
         {
           id: "in-explain",
           type: "explain",
-          title: "📝 The in Operator",
-          content: `**in** = Check if something is contained
+          title: "📝 in — Is It Inside?",
+          content: `**in** checks whether something is contained.
 
 \`\`\`python
-# In a string
 if "a" in "apple":
-    print("a is found!")  # This prints
-
-if "python" in "I love python":
-    print("Found it!")  # This prints
+    print("'a' is in there!")  # ✅
 \`\`\`
 
-**not in** = Not contained
+**not in** is the opposite — "not contained":
+
 \`\`\`python
 if "z" not in "hello":
-    print("z is not here!")  # This prints
+    print("no 'z'!")  # ✅
 \`\`\`
 
-💡 \`in\` also works with lists! We'll learn about lists in a future lesson.`
+💡 \`in\` also works with lists — **we'll learn lists in a later lesson!**`
         },
         {
           id: "try5",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
-          task: "Use the in operator to check if a character is contained!",
-          initialCode: "word = \"python\"\n\n# Check whether the character belongs in the string\nif \"y\" ___ word:\n    print(\"y is in the word!\")\nelse:\n    print(\"y is not here\")",
-          expectedOutput: "y is in the word!",
-          hint: "Use in to check if a character is in the string!",
-          hint2: "\"y\" in word"
+          title: "🖥️ Try It — in",
+          task: "Check if \"y\" is inside the word!",
+          initialCode: "word = \"python\"\n\n# The operator that checks containment!\nif \"y\" ___ word:\n    print(\"y is in there!\")\nelse:\n    print(\"no y\")",
+          expectedOutput: "y is in there!",
+          hint: "The contains operator!",
+          hint2: "in"
         },
         {
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What is the result of \"abc\" in \"abcdef\"?",
+          content: "What is `\"abc\" in \"abcdef\"`?",
           options: ["True", "False", "Error", "\"abc\""],
           answer: 0,
-          explanation: "\"abcdef\" contains \"abc\", so the result is True!"
+          explanation: "\"abcdef\" contains \"abc\", so → True!"
         }
       ]
     },
@@ -239,26 +284,26 @@ if "z" not in "hello":
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 Final Mission!",
-          task: "Build a login system!",
-          initialCode: "username = \"admin\"\npassword = \"1234\"\nis_active = True\n\n# Condition: correct username, correct password, and active account\nif username == \"admin\" ___ password == \"1234\" ___ is_active:\n    print(\"Login successful!\")\nelse:\n    print(\"Login failed\")",
+          title: "🏆 Final Mission — Login System",
+          task: "Username right, password right, account active — all three must be true to log in!",
+          initialCode: "username = \"admin\"\npassword = \"1234\"\nis_active = True\n\n# All three must be true!\nif username == \"admin\" ___ password == \"1234\" ___ is_active:\n    print(\"Login successful!\")\nelse:\n    print(\"Login failed\")",
           expectedOutput: "Login successful!",
-          hint: "All three conditions must be true, so use and to connect them!",
-          hint2: "and"
+          hint: "All three? → same connector twice!",
+          hint2: "and / and"
         },
         {
           id: "complete",
           type: "explain",
-          title: "🎉 Complete!",
-          content: `## What We Learned Today
+          title: "🎉 What We Learned",
+          content: `✅ **and** — both must be true
+✅ **or** — at least one true
+✅ **not** — flip true/false
+✅ **Precedence:** not → and → or. Use **parentheses** when unsure!
+✅ **Short-circuit** — and / or stop early once the answer is decided
+✅ **Nested if** — if inside if (2 levels feels best)
+✅ **in** — is it contained?
 
-✅ **and** - True only if both are true
-✅ **or** - True if at least one is true
-✅ **not** - Reverses the value
-✅ **Nested if** - if inside if
-✅ **in** - Check if something is contained
-
-Next time, we'll learn about **loops (for)**! 🚀`
+Next time: **loops (for)** — do the same thing many times! 🚀`
         }
       ]
     }

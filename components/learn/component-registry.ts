@@ -267,6 +267,86 @@ const registry: Record<string, ComponentEntry> = {
     }),
   },
 
+  // Python 모듈로(%) 시계 순환 시각화 (시계/짝홀/일의자리/배수 모드)
+  pyModuloClock: {
+    load: () => import("@/components/animations/modulo-clock"),
+    exportName: "ModuloClock",
+    props: (step: any, lang: string) => ({
+      lang,
+      ...(step?.componentProps || {}),
+    }),
+  },
+
+  // Python 논리 연산자 회로 (and / or / not) — 전기 회로 비유
+  pyAndOrCircuit: {
+    load: () => import("@/components/animations/and-or-circuit"),
+    exportName: "AndOrCircuit",
+    props: (step: any, lang: string) => ({
+      lang,
+      ...(step?.componentProps || {}),
+    }),
+  },
+
+  // Python 데이터 타입 4 카드 + type() 시뮬레이터 (lesson 2)
+  pyTypeCards: {
+    load: () => import("@/components/animations/py-type-cards"),
+    exportName: "PyTypeCards",
+    props: (step: any, lang: string) => ({
+      lang,
+      ...(step?.componentProps || {}),
+    }),
+  },
+
+  // Python 문자열 메서드 시뮬레이터 (upper/lower/strip/replace/find/count 탭)
+  pyStringMethodVisualizer: {
+    load: () => import("@/components/animations/py-string-method-visualizer"),
+    exportName: "PythonStringMethodVisualizer",
+    props: (step: any, lang: string) => ({
+      lang,
+      ...(step?.componentProps || {}),
+    }),
+  },
+
+  // 비교 연산자 시소 시각화 (>, <, >=, <=, ==, !=)
+  pyCompareSeesaw: {
+    load: () => import("@/components/animations/compare-seesaw"),
+    exportName: "CompareSeesaw",
+    props: (step: any, lang: string) => ({
+      lang,
+      ...(step?.componentProps || {}),
+    }),
+  },
+
+  // Python print() 옵션 (sep/end) 시각화
+  pyPrintOptionsVisualizer: {
+    load: () => import("@/components/animations/print-options-visualizer"),
+    exportName: "PrintOptionsVisualizer",
+    props: (step: any, lang: string) => ({
+      lang,
+      ...(step?.componentProps || {}),
+    }),
+  },
+
+  // Python 타입 변환 시각화 (lesson 9) — int/float/str/bool 값 변환 단계
+  typeConversionVisualizer: {
+    load: () => import("@/components/animations/type-conversion-visualizer"),
+    exportName: "TypeConversionVisualizer",
+    props: (step: any, lang: string) => ({
+      lang,
+      ...(step?.componentProps || {}),
+    }),
+  },
+
+  // Python f-string {var} 슬롯 치환 + 포맷 스펙 시각화
+  pyFstringVisualizer: {
+    load: () => import("@/components/animations/fstring-visualizer"),
+    exportName: "FStringVisualizer",
+    props: (step: any, lang: string) => ({
+      lang,
+      ...(step?.componentProps || {}),
+    }),
+  },
+
   // pair vs 두 vector 비교 시각화 (cpp-15 lesson)
   pairVsTwoVectors: {
     load: () => import("@/components/animations/pair-vs-vectors"),
@@ -375,6 +455,11 @@ const registry: Record<string, ComponentEntry> = {
   pyInputBuilder: {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "PyInputBuilder",
+  },
+  inputVisualizer: {
+    load: () => import("@/components/animations/input-visualizer"),
+    exportName: "InputVisualizer",
+    props: (step, lang) => ({ lang, ...(step.componentProps || {}) }),
   },
   cppEscapeBuilder: {
     load: () => import("@/components/animations/syntax-builder"),
