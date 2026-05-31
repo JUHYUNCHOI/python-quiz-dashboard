@@ -72,6 +72,13 @@ if day == "Saturday" or day == "Sunday":
 ➡️ **One True makes the whole thing True.**`
         },
         {
+          id: "match-game",
+          type: "interactive",
+          title: "🎮 English → and / or / not — Speed Round!",
+          description: "Read each sentence and pick and (both) / or (either) / not (flip). 10 quick rounds — make it automatic in your head!",
+          component: "pyAndOrNotMatcher"
+        },
+        {
           id: "circuit-andor",
           type: "interactive",
           title: "🎬 Feel It with Switches — and / or",
@@ -80,21 +87,39 @@ if day == "Saturday" or day == "Sunday":
           componentProps: { initialMode: "and" }
         },
         {
+          id: "pre-try1",
+          type: "quiz",
+          title: "🤔 Which kind?",
+          content: "**Pass if the score is 80+ *AND* 100 or below!** — What kind of condition is this?",
+          options: ["Both must be true (and)", "Either one (or)", "Flip / negate (not)"],
+          answer: 0,
+          explanation: "Both must be true! → The blank takes **and**."
+        },
+        {
           id: "try1",
           type: "tryit",
           title: "🖥️ Try It — and",
-          task: "Pass if the score is 80 or above AND 100 or below!",
-          initialCode: "score = 85\n\n# Pass only when both are true\nif score >= 80 ___ score <= 100:\n    print(\"Pass!\")\nelse:\n    print(\"Fail\")",
+          task: "Pass if the test score is between 80 and 100! Which operator goes in for *AND*?",
+          initialCode: "score = 85\n\n# Both true? = and ✨ Type it in!\nif score >= 80 ___ score <= 100:\n    print(\"Pass!\")\nelse:\n    print(\"Fail\")",
           expectedOutput: "Pass!",
           hint: "Both true? → and!",
           hint2: "and"
         },
         {
+          id: "pre-try2",
+          type: "quiz",
+          title: "🤔 Which kind?",
+          content: "**10% discount if a friend *OR* family member comes along!** — What kind of condition is this?",
+          options: ["Both must be true (and)", "Either one (or)", "Flip / negate (not)"],
+          answer: 1,
+          explanation: "Either one! → The blank takes **or**."
+        },
+        {
           id: "try2",
           type: "tryit",
           title: "🖥️ Try It — or",
-          task: "Discount if VIP OR has a coupon!",
-          initialCode: "is_vip = False\nhas_coupon = True\n\n# Either one true → discount\nif is_vip ___ has_coupon:\n    print(\"10% discount!\")\nelse:\n    print(\"Full price\")",
+          task: "10% off if a friend *OR* family member comes! Which operator goes in for *OR*?",
+          initialCode: "friend = True\nfamily = False\n\n# Either one true → discount ✨ Type it in!\nif friend ___ family:\n    print(\"10% discount!\")\nelse:\n    print(\"Full price\")",
           expectedOutput: "10% discount!",
           hint: "Either one? → or!",
           hint2: "or"
@@ -144,11 +169,20 @@ if not is_raining:
           componentProps: { initialMode: "not" }
         },
         {
+          id: "pre-try3",
+          type: "quiz",
+          title: "🤔 Which kind?",
+          content: "**If *NOT* logged in, print a message!** — What kind of condition is this?",
+          options: ["Both must be true (and)", "Either one (or)", "Flip / negate (not)"],
+          answer: 2,
+          explanation: "Negation! → The blank takes **not**."
+        },
+        {
           id: "try3",
           type: "tryit",
           title: "🖥️ Try It — not",
-          task: "If NOT logged in, print a message!",
-          initialCode: "is_logged_in = False\n\n# Think of the operator that flips a condition\nif ___ is_logged_in:\n    print(\"Please log in\")",
+          task: "If *NOT* logged in, print a message! Which operator does the *flip*?",
+          initialCode: "is_logged_in = False\n\n# The operator that flips a condition ✨ Type it in!\nif ___ is_logged_in:\n    print(\"Please log in\")",
           expectedOutput: "Please log in",
           hint: "The operator that flips true/false!",
           hint2: "not is_logged_in"
