@@ -88,8 +88,23 @@ function ClusterList({
   // '다음 예고' 섹션은 더 이상 필요 X — 모두 노출
   const nextLockedCluster = null
 
-  const nextCluster = activeClusters[0]
-  const otherActive = activeClusters.slice(1)
+  // 다음 클러스터 선택: 학생이 *이미 진행 중* 인 클러스터 우선 (가장 많이 푼 순).
+  // 그게 없으면 unlockAfter 순서 (배열 첫 번째 = py-io 등).
+  // 버그: 이전엔 activeClusters[0] 만 골라서, 학생이 lesson 졸업미션으로 다른
+  // 클러스터를 시작했어도 항상 py-io (입출력 기초) 가 "다음" 으로 떠서 헷갈렸음.
+  const withProgress = activeClusters
+    .map(c => ({ c, solved: c.problems.filter(p => solvedSet.has(p.id)).length }))
+    .sort((a, b) => {
+      // 진행 중 (solved > 0) > 시작 안 함 (solved = 0)
+      if (a.solved > 0 && b.solved === 0) return -1
+      if (b.solved > 0 && a.solved === 0) return 1
+      // 진행 중끼리: 더 많이 푼 순 (마무리 가까운 거 우선)
+      if (a.solved > 0 && b.solved > 0) return b.solved - a.solved
+      // 둘 다 0: 원래 순서 유지 (unlockAfter)
+      return 0
+    })
+  const nextCluster = withProgress[0]?.c
+  const otherActive = activeClusters.filter(c => c !== nextCluster)
   const [showAllActive, setShowAllActive] = useState(false)
   const visibleOtherActive = showAllActive ? otherActive : otherActive.slice(0, 2)
 
