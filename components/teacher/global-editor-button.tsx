@@ -1,25 +1,38 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Code2, X } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
+import { OWNER_EMAIL } from "@/components/owner-only-guard"
 import { TeacherLiveEditor } from "./live-editor"
 
 export function GlobalTeacherEditorButton() {
-  const { profile, isLoading } = useAuth()
+  const { user, profile, isLoading } = useAuth()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const [isMirror, setIsMirror] = useState(false)
+
+  // 미러 창에서는 에디터 버튼 숨김 (메인 창에서만 사용)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsMirror(new URLSearchParams(window.location.search).get("mirror") === "1")
+    }
+  }, [])
 
   const isTeacher = profile?.role === "teacher"
-  // /learn 페이지는 헤더에 전용 버튼이 있으므로 중복 제외.
-  // /teach 페이지는 선생님 자료(스크립트) 전용이라 에디터 필요 없음 — 화면 깨끗하게.
-  // /quest/[problemId] 도 학생용 화면이라 에디터 floating 버튼이 콘텐츠와 겹쳐 혼동 유발 → 제외.
+  const isOwner = user?.email === OWNER_EMAIL
+  // /learn, /teach, /quest/[id] 는 일반 선생님에겐 가림 (콘텐츠 충돌).
+  // 단, owner (julia) 는 *어디서든* 에디터 필요 → 예외 없이 모든 페이지 허용.
   const isLearnPage = pathname?.startsWith("/learn")
   const isTeachPage = pathname?.startsWith("/teach")
   const isQuestProblemPage = pathname?.startsWith("/quest/") && pathname !== "/quest"
+  const restrictedForOthers = isLearnPage || isTeachPage || isQuestProblemPage
 
-  if (isLoading || !isTeacher || isLearnPage || isTeachPage || isQuestProblemPage) return null
+  if (isLoading) return null
+  if (isMirror) return null  // 미러 창에는 표시 안 함
+  if (!isTeacher) return null  // 학생은 표시 안 함
+  if (!isOwner && restrictedForOthers) return null  // 일반 선생님은 제외 페이지에서 가림
 
   return (
     <>

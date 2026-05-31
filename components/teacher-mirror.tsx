@@ -105,7 +105,7 @@ export function TeacherMirror() {
   return (
     <button
       onClick={openMirror}
-      className="fixed bottom-24 right-4 z-50 bg-purple-600 hover:bg-purple-700 active:scale-95 text-white rounded-full px-4 py-2.5 shadow-lg flex items-center gap-2 text-sm font-bold transition-all"
+      className="fixed bottom-36 right-4 z-50 bg-amber-500 hover:bg-amber-600 active:scale-95 text-white rounded-full px-4 py-2.5 shadow-lg flex items-center gap-2 text-sm font-bold transition-all"
       title="한글 미러 창 열기 (수업창 따라 같이 이동)"
     >
       <span className="text-base">🪟</span>
