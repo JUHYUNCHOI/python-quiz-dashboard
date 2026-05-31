@@ -106,12 +106,12 @@ print((1))       # 1 — 튜플 아님!
         {
           id: "try-creation",
           type: "tryit",
-          title: "🖥️ 다양한 만들기 — tuple() / (x,) / 쉼표만",
-          task: "tuple() 로 문자열을 튜플로 변환하고, 단일 요소 튜플도 만들어보세요!",
-          initialCode: "# 1) 문자열 → 튜플\nt1 = tuple(\"hello\")\nprint(t1)\n\n# 2) 단일 요소 튜플 (쉼표 잊지 말기!)\nsingle = (42,)\nprint(single, type(single).__name__)\n\n# 3) 괄호 없이 쉼표만\nt2 = 10, 20, 30\nprint(t2)",
+          title: "🖥️ 다양한 만들기 — 글자별 / 단일 / 괄호 없이",
+          task: "튜플을 *3가지 방법* 으로 만들어보세요! (글자별 / 단일 / 괄호 없이)",
+          initialCode: "# 1) \"hello\" 를 글자별 튜플로\nt1 = ___(\"hello\")\nprint(t1)\n\n# 2) 단일 요소 튜플 (쉼표 잊지 말기!)\nsingle = (42,)\nprint(single, type(single).__name__)\n\n# 3) 괄호 없이 쉼표만\nt2 = 10, 20, 30\nprint(t2)",
           expectedOutput: "('h', 'e', 'l', 'l', 'o')\n(42,) tuple\n(10, 20, 30)",
-          hint: "tuple(\"abc\") 는 각 글자를 요소로 나눠요.",
-          hint2: "그대로 실행해보세요 — 세 가지 만들기 방식 동시에 확인."
+          hint: "문자열을 *글자 단위* 묶음으로 만들어주는 변환 함수가 있어요.",
+          hint2: "t1 = tuple(\"hello\") — tuple() 이 각 글자를 요소로 나눠요."
         },
         {
           id: "try1b",
@@ -175,9 +175,9 @@ else:
           type: "tryit",
           title: "🖥️ count / index — 90 점 몇 번? 80 점 위치?",
           task: "점수 튜플에서 90점이 몇 번 나오는지, 처음 80점이 어느 위치인지 출력하세요!",
-          initialCode: "scores = (75, 80, 90, 85, 90, 80, 95, 90, 70)\n\n# 1) 90 점이 몇 번 나오는지 → 'count: ___' 출력\n\n\n# 2) 처음 80 점이 나오는 위치 → 'index: ___' 출력\n",
+          initialCode: "scores = (75, 80, 90, 85, 90, 80, 95, 90, 70)\n\n# 1) 90 점이 몇 번 나오는지 → print('count:', ___)\n\n\n# 2) 처음 80 점이 나오는 위치 → print('index:', ___)\n",
           expectedOutput: "count: 3\nindex: 1",
-          hint: "scores.count(90) 와 scores.index(80) 를 print 안에 f-string 으로!",
+          hint: "*몇 번* 나오는지 세는 메서드 / *어디* 있는지 알려주는 메서드, 둘이 짝!",
           hint2: "print(f\"count: {scores.count(90)}\")\nprint(f\"index: {scores.index(80)}\")"
         },
         {

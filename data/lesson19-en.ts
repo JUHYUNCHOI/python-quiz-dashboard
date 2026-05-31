@@ -106,12 +106,12 @@ print((1))       # 1 — not a tuple!
         {
           id: "try-creation",
           type: "tryit",
-          title: "🖥️ Different Ways — tuple() / (x,) / commas only",
-          task: "Convert a string to a tuple with tuple(), and create a single-element tuple!",
-          initialCode: "# 1) String → tuple\nt1 = tuple(\"hello\")\nprint(t1)\n\n# 2) Single-element tuple (don't forget the comma!)\nsingle = (42,)\nprint(single, type(single).__name__)\n\n# 3) Just commas, no parens\nt2 = 10, 20, 30\nprint(t2)",
+          title: "🖥️ Different Ways — per-char / single / no parens",
+          task: "Make a tuple *3 different ways*! (per-character / single-element / no parens)",
+          initialCode: "# 1) \"hello\" → per-character tuple\nt1 = ___(\"hello\")\nprint(t1)\n\n# 2) Single-element tuple (don't forget the comma!)\nsingle = (42,)\nprint(single, type(single).__name__)\n\n# 3) Just commas, no parens\nt2 = 10, 20, 30\nprint(t2)",
           expectedOutput: "('h', 'e', 'l', 'l', 'o')\n(42,) tuple\n(10, 20, 30)",
-          hint: "tuple(\"abc\") splits each character into an element.",
-          hint2: "Run as-is — confirm 3 creation forms at once."
+          hint: "There's a conversion function that turns a string into a *per-character* bundle.",
+          hint2: "t1 = tuple(\"hello\") — tuple() splits each character into an element."
         },
         {
           id: "try1b",
@@ -182,9 +182,9 @@ else:
           type: "tryit",
           title: "🖥️ count / index — How many 90s? Where's 80?",
           task: "From a tuple of scores, print how many times 90 appears and the position of the first 80!",
-          initialCode: "scores = (75, 80, 90, 85, 90, 80, 95, 90, 70)\n\n# 1) Count of 90 → print 'count: ___'\n\n\n# 2) Position of first 80 → print 'index: ___'\n",
+          initialCode: "scores = (75, 80, 90, 85, 90, 80, 95, 90, 70)\n\n# 1) Count of 90 → print('count:', ___)\n\n\n# 2) Position of first 80 → print('index:', ___)\n",
           expectedOutput: "count: 3\nindex: 1",
-          hint: "scores.count(90) and scores.index(80) inside print f-strings!",
+          hint: "One method tells you *how many times* something appears, another tells you *where* — a matched pair!",
           hint2: "print(f\"count: {scores.count(90)}\")\nprint(f\"index: {scores.index(80)}\")"
         },
         {

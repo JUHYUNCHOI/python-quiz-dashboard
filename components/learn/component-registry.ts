@@ -287,6 +287,16 @@ const registry: Record<string, ComponentEntry> = {
     }),
   },
 
+  // Python 한국말 → and/or/not 매칭 게임 (lesson 12)
+  pyAndOrNotMatcher: {
+    load: () => import("@/components/animations/and-or-not-matcher"),
+    exportName: "AndOrNotMatcher",
+    props: (step: any, lang: string) => ({
+      lang,
+      ...(step?.componentProps || {}),
+    }),
+  },
+
   // Python 데이터 타입 4 카드 + type() 시뮬레이터 (lesson 2)
   pyTypeCards: {
     load: () => import("@/components/animations/py-type-cards"),

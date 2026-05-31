@@ -358,13 +358,22 @@ print("\\n".join(items))
       emoji: "🏆",
       steps: [
         {
+          id: "pre-mission1-strjoin",
+          type: "quiz",
+          title: "❓ 미션 전 체크 — 나누기 / 합치기",
+          content: "**문장을 단어로 *나누기*: 어떤 메서드? 그리고 다시 *합치기*: 어떤 메서드?**",
+          options: ["나누기 split, 합치기 join", "나누기 join, 합치기 split", "둘 다 split", "둘 다 join"],
+          answer: 0,
+          explanation: "*나누기* → `text.split(\" \")` 는 *문자열* 에 `.split()`. *합치기* → `\" \".join(리스트)` 는 *구분자* 에 `.join(리스트)` (헷갈리기 쉬워요!)."
+        },
+        {
           id: "mission1",
           type: "mission",
           title: "🏆 미션 1 — 단어 순서 뒤집기",
           task: "단어 순서를 뒤집어서 출력하세요!",
           initialCode: "text = \"Hello World Python\"\nwords = text.___()\nwords.___()\nresult = ' '.___(words)\nprint(result)",
           expectedOutput: "Python World Hello",
-          hint: "split() → reverse() → join()",
+          hint: "쪼개고 → 뒤집고 → 다시 합치는 3 단계!",
           hint2: "words.reverse()로 순서 뒤집기!"
         },
         {
@@ -372,9 +381,9 @@ print("\\n".join(items))
           type: "mission",
           title: "🏆 미션 2 — CSV 한 줄 파싱 + 합계",
           task: "쉼표로 구분된 점수 한 줄을 받아 정수로 변환 후 **합계와 평균** 둘 다 출력하세요!",
-          initialCode: "line = \"75,90,82,88,95\"\n\n# 쉼표로 쪼개고 → int 변환 → 리스트로\nnums = ___\n\ntotal = sum(nums)\navg = total / len(nums)\nprint(f\"합계: {total}\")\nprint(f\"평균: {avg}\")",
+          initialCode: "line = \"75,90,82,88,95\"\n\n# 1) line.split(\",\") 로 ['75', '90', ...] 만들기\n# 2) 각 원소를 int 로 변환 (map 또는 컴프리헨션)\n# 3) 결과를 list 로 감싸기\nnums = ___\n\ntotal = sum(nums)\navg = total / len(nums)\nprint(f\"합계: {total}\")\nprint(f\"평균: {avg}\")",
           expectedOutput: "합계: 430\n평균: 86.0",
-          hint: "list(map(int, line.split(\",\")))",
+          hint: "쪼개기 → 각 조각을 숫자로 → 리스트로 감싸기.",
           hint2: "nums = list(map(int, line.split(\",\")))"
         },
         {
@@ -382,10 +391,10 @@ print("\\n".join(items))
           type: "mission",
           title: "🏆 미션 3 — 입력 받은 단어들로 인사 만들기",
           task: "한 줄에 공백 구분으로 이름 여러 개 입력받아 '안녕 A, B, C!' 형태로 출력하세요. (마지막엔 ! 표)",
-          initialCode: "# input() → split() 으로 이름 리스트 받기\nnames = input().___()\n\n# ', ' 로 join 하고 앞뒤 꾸미기\ngreeting = f\"안녕 {___}!\"\nprint(greeting)",
+          initialCode: "# 1) input() 으로 한 줄 받기\n# 2) .split() 으로 공백 기준 리스트 만들기\nnames = input().___()\n\n# 3) ', ' 로 합쳐서 f-string 안에 넣기\ngreeting = f\"안녕 {___}!\"\nprint(greeting)",
           expectedOutput: "안녕 철수, 영희, 민수!",
           stdin: "철수 영희 민수",
-          hint: "names = input().split() / ', '.join(names)",
+          hint: "입력을 쪼개 리스트로, 그 다음 구분자로 다시 합치기.",
           hint2: "names = input().split()\ngreeting = f\"안녕 {', '.join(names)}!\""
         },
         {

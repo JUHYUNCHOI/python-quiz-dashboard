@@ -229,14 +229,23 @@ N=7, K=3:
 3. Repeat`
         },
         {
+          id: "pre-queue-vs-stack",
+          type: "quiz",
+          title: "❓ Decide — queue vs stack",
+          content: "**Printer waiting line — 'whatever was sent first prints first'. Which structure?**",
+          options: ["Stack (last in = first out = LIFO)", "Queue (first in = first out = FIFO)", "Either works"],
+          answer: 1,
+          explanation: "*First in = first out* = FIFO = *queue*. A stack (LIFO) would print the latest job first → unfair!"
+        },
+        {
           id: "try3",
           type: "tryit",
           title: "🖥️ Try it — Josephus with N=7, K=3",
           task: "Simulate 7 people in a circle, eliminating every 3rd person using a queue!",
-          initialCode: "from collections import deque\n\nn, k = 7, 3\nqueue = deque(range(1, n + 1))\nresult = []\n\nwhile queue:\n    # Send k-1 people to the back (popleft then append)\n    for _ in range(k - 1):\n        queue.___(queue.___())\n    # Eliminate the k-th person\n    result.append(queue.___())\n\nprint(\"Elimination order:\", result)",
+          initialCode: "from collections import deque\n\nn, k = 7, 3\nqueue = deque(range(1, n + 1))\nresult = []\n\nwhile queue:\n    # 1) Take k-1 people from the front and send them to the back (which method pair?)\n    for _ in range(k - 1):\n        queue.___(queue.___())\n    # 2) Eliminate the k-th person (which method?)\n    result.append(queue.___())\n\nprint(\"Elimination order:\", result)",
           expectedOutput: "Elimination order: [3, 6, 2, 7, 5, 1, 4]",
-          hint: "Cycle: popleft the value, then append it. Eliminate by popleft.",
-          hint2: "append / popleft / popleft"
+          hint: "The pair that takes from the *front* and adds to the *back*",
+          hint2: "popleft + append"
         },
         {
           id: "problem2-explain",

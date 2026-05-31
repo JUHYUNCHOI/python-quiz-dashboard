@@ -737,7 +737,11 @@ function PracticeStep({
                       const val = e.target.value
                       setInputs(prev => { const next = [...prev]; next[i] = val; return next })
                     }}
-                    onKeyDown={e => { if (e.key === "Enter" && i === blankCount - 1) check() }}
+                    onKeyDown={e => {
+                      // IME composition 중에는 skip — 한글 조합 완료 Enter 가 check() 트리거 안 하게
+                      if ((e.nativeEvent as KeyboardEvent)?.isComposing || e.keyCode === 229) return
+                      if (e.key === "Enter" && i === blankCount - 1) check()
+                    }}
                     className="inline-block bg-[#2a2b3e] border-2 border-purple-400 text-purple-200 font-mono text-sm px-1.5 py-0.5 mx-0.5 focus:outline-none focus:border-purple-300 focus:bg-[#32345a] rounded transition-colors align-baseline"
                     style={{ width: `${Math.max(getChWidth(inputs[i] ?? "") + 2, 7)}ch`, minWidth: "7ch" }}
                   />

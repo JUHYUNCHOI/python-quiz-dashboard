@@ -135,6 +135,15 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
           hint2: "if logged_in:"
         },
         {
+          id: "pre-try-nested",
+          type: "quiz",
+          title: "❓ Decide — Checking two conditions at once",
+          content: "**Like 'student AND has license → discount' — checking *both conditions* together. Which structure?**",
+          options: ["if inside if (nested)", "Two separate if statements", "elif"],
+          answer: 0,
+          explanation: "Nested if checks the *outer condition* first, then the *inner one*. Similar to `and`, but easier to debug."
+        },
+        {
           id: "try-nested",
           type: "tryit",
           title: "🖥️ Nested if Ladder 2 — Fill Both",
@@ -218,6 +227,15 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
           explanation: "75 is below 90 and below 80, but 70 or above! So the third elif is the first to be true → prints 'C'. elif checks each branch top-down and stops at the first True one."
         },
         {
+          id: "pre-try3-elif",
+          type: "quiz",
+          title: "❓ Decide — How does the 'B' condition start?",
+          content: "**Score >= 90 → 'A', >= 80 → 'B', otherwise 'C'. How does the *second line* (the 'B' condition) start?**",
+          options: ["if (first condition)", "elif (another condition)", "else (the rest)", "for (a loop)"],
+          answer: 1,
+          explanation: "*Another condition* after the *first one* is `elif`. `else` is only for *everything that didn't match any condition*!"
+        },
+        {
           id: "try3",
           type: "tryit",
           title: "🖥️ Fill in elif — Print the Grade",
@@ -243,6 +261,15 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
       title: "Final Mission",
       emoji: "🏆",
       steps: [
+        {
+          id: "pre-mission1-elif",
+          type: "quiz",
+          title: "❓ Decide — How to write the 'hp <= 30' check?",
+          content: "**hp <= 0 (dead), hp <= 30 (danger), hp <= 70 (ok), otherwise (healthy). How do you write the *second 'hp <= 30'* check?**",
+          options: ["A fresh new if again", "elif — only what's left after the earlier check", "else (no condition)"],
+          answer: 1,
+          explanation: "elif only looks at *what's left after the earlier check filtered things out*. After 'hp <= 0' passes (so hp > 0), only then we ask hp <= 30 — so it automatically means *0 < hp <= 30*."
+        },
         {
           id: "mission1",
           type: "mission",

@@ -319,18 +319,20 @@ print(outer())
           id: "ch2-5",
           type: "mission",
           title: "Problem 15: Counter",
-          task: "Increase counter without using global",
+          task: "Get count to 3 using only function returns (no global!)",
           initialCode: `count = 0
 
 def increase(n):
-    return n + 1
+    # Return n + 1
+    return ___
 
 count = increase(count)
 count = increase(count)
-count = increase(count)
+count = ___  # increase once more!
 print(count)`,
           expectedOutput: "3",
-          hint: "Return value and reassign!"
+          hint: "Return the new value, then reassign it to count.",
+          hint2: "return n + 1, count = increase(count)"
         }
       ]
     },
@@ -453,14 +455,15 @@ print(result[0][0])
           id: "ch3-6",
           type: "mission",
           title: "Problem 21: Sort by Length",
-          task: "Sort words by their length",
+          task: "Sort the words from shortest to longest",
           initialCode: `words = ['apple', 'hi', 'banana', 'cat']
 
-# Sort by length using key=lambda
-result = sorted(words, key=lambda x: len(x))
+# Fill in the sort key!
+result = sorted(words, key=___)
 print(result)`,
           expectedOutput: "['hi', 'cat', 'apple', 'banana']",
-          hint: "Just run it!"
+          hint: "Sort key = each word's length. Which built-in measures length?",
+          hint2: "key=len  (or  key=lambda x: len(x))"
         },
         {
           id: "ch3-7",
@@ -573,56 +576,64 @@ print(sum(result))
           id: "ch4-5",
           type: "mission",
           title: "Problem 27: Average",
-          task: "Calculate average with sum() and len()",
+          task: "Print the average of the score list",
           initialCode: `scores = [80, 90, 70, 85, 95]
 
-average = sum(scores) / len(scores)
+# average = total / count
+average = ___ / ___
 print(average)`,
           expectedOutput: "84.0",
-          hint: "Just run the code as is!"
+          hint: "Think of the built-ins for total and length.",
+          hint2: "average = sum(scores) / len(scores)"
         },
         {
           id: "ch4-6",
           type: "mission",
           title: "Problem 28: Range",
-          task: "Find the difference between max and min",
+          task: "Print the difference between the largest and smallest number",
           initialCode: `numbers = [3, 7, 1, 9, 4]
 
-range_val = max(numbers) - min(numbers)
+# range = (largest) - (smallest)
+range_val = ___(numbers) - ___(numbers)
 print(range_val)`,
           expectedOutput: "8",
-          hint: "9 - 1 = 8"
+          hint: "Which built-ins find the largest and smallest values?",
+          hint2: "range_val = max(numbers) - min(numbers) → 9 - 1 = 8"
         },
         {
           id: "ch4-7",
           type: "mission",
           title: "Problem 29: String to Number",
-          task: "Convert strings to integers with map()",
+          task: "Turn a list of strings into a list of integers, then print the total too",
           initialCode: `strings = ['10', '20', '30']
 
-numbers = list(map(int, strings))
+# Convert every item to int → wrap as list
+numbers = list(___(___, strings))
 print(numbers)
-print(sum(numbers))`,
+# Print the total
+print(___(numbers))`,
           expectedOutput: "[10, 20, 30]\n60",
-          hint: "Just run it!"
+          hint: "Apply a function to every item = map. Total = sum.",
+          hint2: "list(map(int, strings)), print(sum(numbers))"
         },
         {
           id: "ch4-8",
           type: "mission",
           title: "Problem 30: Comprehensive",
-          task: "Filter passing scores (≥60) and find their average",
+          task: "Keep only the scores ≥ 60, then print their average",
           initialCode: `scores = [85, 45, 92, 55, 78, 30]
 
-# 1. Filter 60 or above
-passing = list(filter(lambda x: x >= 60, scores))
+# 1. Keep only 60 or above (which built-in keeps items matching a condition?)
+passing = list(___(lambda x: ___, scores))
 
-# 2. Calculate average
-avg = sum(passing) / len(passing)
+# 2. Average = total / count
+avg = ___ / ___
 
 print(f'Passing: {passing}')
 print(f'Average: {avg}')`,
           expectedOutput: "Passing: [85, 92, 78]\nAverage: 85.0",
-          hint: "Just run it!"
+          hint: "Keep items matching a condition = filter. The lambda condition is 'x is at least 60'.",
+          hint2: "filter(lambda x: x >= 60, scores), avg = sum(passing) / len(passing)"
         }
       ]
     }

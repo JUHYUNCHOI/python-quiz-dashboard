@@ -135,6 +135,15 @@ else:
           hint2: "if logged_in:"
         },
         {
+          id: "pre-try-nested",
+          type: "quiz",
+          title: "❓ 결정 — 두 조건 모두 확인할 때",
+          content: "**'학생이면서 면허 있음 → 할인' 같은 *두 조건 모두* 확인 — 어떤 구조?**",
+          options: ["if 안에 if (중첩)", "if 두 개 따로", "elif"],
+          answer: 0,
+          explanation: "중첩 if 는 *바깥 조건* 통과 후 *안쪽 조건* 도 확인. `and` 와 비슷하지만 디버깅에 좋아요."
+        },
+        {
           id: "try-nested",
           type: "tryit",
           title: "🖥️ 중첩 if 사다리 2 — 양쪽 다 채우기",
@@ -218,6 +227,15 @@ else:
           explanation: "75 는 90 미만, 80 미만이지만 70 이상! 그래서 세 번째 elif 가 처음으로 참 → 'C' 출력. elif 는 위에서부터 순서대로 검사하다가 처음 참이 되는 가지에서 멈춰요."
         },
         {
+          id: "pre-try3-elif",
+          type: "quiz",
+          title: "❓ 결정 — 'B' 조건은 어떻게 시작?",
+          content: "**점수가 90 이상 → 'A', 80 이상 → 'B', 그 외 → 'C'. *두 번째 줄* 'B' 조건은 어떻게 시작?**",
+          options: ["if (첫 조건)", "elif (또 다른 조건)", "else (나머지)", "for (반복)"],
+          answer: 1,
+          explanation: "*첫 조건* 다음 *또 다른 조건* 은 `elif`. else 는 *모든 조건 외 나머지* 일 때만!"
+        },
+        {
           id: "try3",
           type: "tryit",
           title: "🖥️ elif 빈칸 채우기 — 등급 출력",
@@ -243,6 +261,15 @@ else:
       title: "최종 미션",
       emoji: "🏆",
       steps: [
+        {
+          id: "pre-mission1-elif",
+          type: "quiz",
+          title: "❓ 결정 — 'hp <= 30' 조건은?",
+          content: "**hp <= 0 (사망), hp <= 30 (위험), hp <= 70 (보통), 그 외 (건강). *두 번째 'hp <= 30'* 조건은?**",
+          options: ["또 다른 if 로 다시 시작", "elif — 위에서 이미 걸러진 거 빼고", "else (조건 없음)"],
+          answer: 1,
+          explanation: "elif 는 *위 조건에서 이미 걸러진 거 빼고* 만 봐요. 'hp <= 0' 통과한 거 (즉 hp > 0) 중에서만 hp <= 30 인지 확인 — 그래서 자동으로 *0 < hp <= 30* 범위."
+        },
         {
           id: "mission1",
           type: "mission",

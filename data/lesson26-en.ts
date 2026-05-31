@@ -49,6 +49,15 @@ In coding contests:
 - Lots of front/back operations → deque`
         },
         {
+          id: "pred-bigO-lookup",
+          type: "predict",
+          title: "💭 Finding 'Charlie' in 1000 students — who wins?",
+          content: "Don't just read the table — *guess* first.\n\n```python\nstudents_list = [\"Mia\", \"Jun\", ..., \"Charlie\"]  # 1000 names\nstudents_set  = {\"Mia\", \"Jun\", ..., \"Charlie\"}\n\n\"Charlie\" in students_list  # ?\n\"Charlie\" in students_set   # ?\n```\n\n**Which one is faster?**",
+          options: ["list is way faster", "set is way faster", "About the same"],
+          answer: 1,
+          explanation: "List's `in` *compares one by one* (O(n)) — up to 1000 checks. Set uses a *hash, one shot* (O(1)) — 1 check. The gap grows with size."
+        },
+        {
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
@@ -70,6 +79,15 @@ In coding contests:
           ],
           answer: 2,
           explanation: "set! O(1) average. list / tuple are O(n) — too slow at scale. set is hash-based, near-instant lookup."
+        },
+        {
+          id: "quiz-pick-dict",
+          type: "quiz",
+          title: "🎯 Different scenario — which structure?",
+          content: "**Pair up *student name → score* and look them up fast — which structure?**",
+          options: ["list", "dict", "set", "tuple"],
+          answer: 1,
+          explanation: "*Key-value pairs* + *fast lookup* = `dict`. Doing this with a list means scanning from the front every time (O(n))."
         },
         {
           id: "try-pick-ds",
@@ -153,6 +171,24 @@ recent = deque(maxlen=N)
 \`\`\``
         },
         {
+          id: "quiz-pick-stack",
+          type: "quiz",
+          title: "🎯 Which structure?",
+          content: "**Like a *back button* (browser / Ctrl+Z) — undo *the most recent* thing first. Which structure?**",
+          options: ["Stack (LIFO)", "Queue (FIFO)", "Dictionary", "Set"],
+          answer: 0,
+          explanation: "*Most recent first* = *Last In First Out* = `stack`. Think of a stack of books — you take from the top."
+        },
+        {
+          id: "quiz-pick-deque",
+          type: "quiz",
+          title: "🎯 Both ends fast — which structure?",
+          content: "**Push and pop *fast* from *both ends* — which structure?**",
+          options: ["list", "stack", "queue", "deque"],
+          answer: 3,
+          explanation: "*Both ends O(1)* is `deque`. List's `pop(0)` / `insert(0, x)` are O(n) — too slow."
+        },
+        {
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
@@ -160,6 +196,15 @@ recent = deque(maxlen=N)
           options: ["List", "Tuple", "Set", "Deque"],
           answer: 2,
           explanation: "Duplicate checking requires lots of 'in' lookups → a set does it in O(1), the fastest!"
+        },
+        {
+          id: "quiz-pick-tuple",
+          type: "quiz",
+          title: "🎯 Values that shouldn't change — which structure?",
+          content: "**Coordinates like (x, y) — *fixed values that must not change*. Which structure?**",
+          options: ["list", "tuple", "dict", "set"],
+          answer: 1,
+          explanation: "*Immutable* = `tuple`. Great for fixed bundles like coordinates, dates, RGB triples."
         }
       ]
     },
@@ -223,25 +268,57 @@ counts = Counter(text)
           hint2: "Use most_common() to get rankings"
         },
         {
-          id: "problem3",
+          id: "problem3-intro",
           type: "explain",
           title: "🧩 Problem 3: Data Structure Selection Practice",
-          content: `**Which data structure for each scenario?**
+          content: `**This time — *no answers up front*. Guess each of five scenarios yourself.**
 
-1. **Student attendance check** (present or not by name)
-   → Set or dictionary
-
-2. **Browser history** (back button)
-   → Stack (implemented with deque)
-
-3. **Printer queue**
-   → Queue (implemented with deque)
-
-4. **Last 5 viewed products**
-   → Deque (maxlen=5)
-
-5. **Vocabulary book** (English → Spanish)
-   → Dictionary`
+For each one, decide on a structure *before* checking the answer, then move to the next. Five in a row!`
+        },
+        {
+          id: "problem3-pick1",
+          type: "predict",
+          title: "💭 Scenario 1 — student attendance check",
+          content: "**Student attendance** — just need to check *present or not* by name (in or out).\n\nWhich structure?",
+          options: ["list", "dict / set", "stack", "tuple"],
+          answer: 1,
+          explanation: "*In or out* = membership check → `set` is cleanest (O(1)). If you also want to store the check-in time, use a `dict`."
+        },
+        {
+          id: "problem3-pick2",
+          type: "predict",
+          title: "💭 Scenario 2 — browser back button",
+          content: "**Browser history** — go back to *the most recently* visited page (back button).\n\nWhich structure?",
+          options: ["Queue (FIFO)", "Stack (LIFO)", "Set", "Dict"],
+          answer: 1,
+          explanation: "*Most recent first* = LIFO = `stack`. In Python: a list with `append`/`pop`, or a `deque`."
+        },
+        {
+          id: "problem3-pick3",
+          type: "predict",
+          title: "💭 Scenario 3 — printer queue",
+          content: "**Printer queue** — *first job submitted* prints first.\n\nWhich structure?",
+          options: ["Stack (LIFO)", "Queue (FIFO)", "Dict", "List"],
+          answer: 1,
+          explanation: "*First in, first out* = `queue`. `deque`'s `append` + `popleft` are O(1) — perfect fit."
+        },
+        {
+          id: "problem3-pick4",
+          type: "predict",
+          title: "💭 Scenario 4 — last 5 viewed products",
+          content: "**Keep only the last 5 viewed products** — when a 6th one comes in, the oldest *drops out automatically*.\n\nWhich structure?",
+          options: ["list + pop(0)", "deque(maxlen=5)", "set", "dict"],
+          answer: 1,
+          explanation: "`deque(maxlen=5)` does it in one line — overflow drops the front automatically. Doing it with a list means calling `pop(0)` (O(n)) every time. Why bother?"
+        },
+        {
+          id: "problem3-pick5",
+          type: "predict",
+          title: "💭 Scenario 5 — English → Spanish vocabulary",
+          content: "**Vocabulary book** — look up an English word, get the Spanish meaning.\n\nWhich structure?",
+          options: ["list", "dict", "set", "tuple"],
+          answer: 1,
+          explanation: "*Key* (English) → *value* (Spanish) pair → `dict`. Lookup is O(1)."
         },
         {
           id: "try-recent",
@@ -265,10 +342,10 @@ counts = Counter(text)
           type: "mission",
           title: "🏆 Final Mission: Comprehensive Challenge!",
           task: "Choose the right data structure to solve each problem!",
-          initialCode: "from collections import deque, Counter\n\n# Problem 1: Remove duplicates\nnumbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\nunique = list(___(numbers))  # Which data structure?\nprint(\"1. Remove duplicates:\", sorted(unique))\n\n# Problem 2: Top 3 word frequency\nwords = \"apple banana apple cherry banana apple\".split()\nword_count = ___(words)  # Which tool?\nprint(\"2. Top 3:\", word_count.most_common(3))\n\n# Problem 3: Difference of two sets\nset_a = {1, 2, 3, 4, 5}\nset_b = {4, 5, 6, 7, 8}\nonly_a = set_a ___ set_b  # Which operator?\nprint(\"3. Only in A:\", sorted(only_a))\n\n# Problem 4: Keep only the 3 most recent searches\nrecent = deque(___=3)  # Which option?\nfor query in [\"Python\", \"Java\", \"C++\", \"JavaScript\", \"Go\"]:\n    recent.append(query)\nprint(\"4. Recent searches:\", list(recent))",
+          initialCode: "from collections import deque, Counter\n\n# Problem 1: Remove duplicates — which structure to wrap with?\nnumbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\nunique = list(___(numbers))\nprint(\"1. Remove duplicates:\", sorted(unique))\n\n# Problem 2: Top 3 word frequency — which tool?\nwords = \"apple banana apple cherry banana apple\".split()\nword_count = ___(words)\nprint(\"2. Top 3:\", word_count.most_common(3))\n\n# Problem 3: Items only in A — what to wrap each *group* with? Then which operator?\ngroup_a = ___({1, 2, 3, 4, 5})    # Which structure?\ngroup_b = ___({4, 5, 6, 7, 8})    # Same structure!\nonly_a = group_a ___ group_b      # Difference operator\nprint(\"3. Only in A:\", sorted(only_a))\n\n# Problem 4: Keep only the 3 most recent searches — which structure + which option?\nrecent = ___(___=3)\nfor query in [\"Python\", \"Java\", \"C++\", \"JavaScript\", \"Go\"]:\n    recent.append(query)\nprint(\"4. Recent searches:\", list(recent))",
           expectedOutput: "1. Remove duplicates: [1, 2, 3, 4]\n2. Top 3: [('apple', 3), ('banana', 2), ('cherry', 1)]\n3. Only in A: [1, 2, 3]\n4. Recent searches: ['C++', 'JavaScript', 'Go']",
-          hint: "Duplicates → set, counting → Counter, set difference → -, last N → deque's maxlen!",
-          hint2: "Fill in: set, Counter, -, maxlen!"
+          hint: "1: set / 2: Counter / 3: set, set, - / 4: deque, maxlen — *write the structure names yourself*!",
+          hint2: "set, Counter, set, set, -, deque, maxlen"
         },
         {
           id: "cheatsheet",

@@ -72,6 +72,13 @@ if day == "토요일" or day == "일요일":
 ➡️ **하나라도 True 면 전체 True.**`
         },
         {
+          id: "match-game",
+          type: "interactive",
+          title: "🎮 한국말 → and / or / not 빠르게!",
+          description: "한국말 문장을 보고 and(둘 다) / or(하나만) / not(반대) 중 하나 골라봐요. 10문제 빠르게 풀고 머릿속에 자동화!",
+          component: "pyAndOrNotMatcher"
+        },
+        {
           id: "circuit-andor",
           type: "interactive",
           title: "🎬 스위치로 느껴보기 — and / or",
@@ -80,21 +87,39 @@ if day == "토요일" or day == "일요일":
           componentProps: { initialMode: "and" }
         },
         {
+          id: "pre-try1",
+          type: "quiz",
+          title: "🤔 어떤 종류?",
+          content: "**점수가 80 이상 *그리고* 100 이하면 합격!** — 이건 어떤 종류 조건?",
+          options: ["둘 다 만족 (and)", "하나만 만족 (or)", "반대 (not)"],
+          answer: 0,
+          explanation: "둘 다 만족! → 다음 빈칸엔 **and** 가 들어가."
+        },
+        {
           id: "try1",
           type: "tryit",
           title: "🖥️ 직접 해보기 — and",
-          task: "점수가 80 이상 그리고 100 이하면 합격!",
-          initialCode: "score = 85\n\n# 두 조건이 모두 참일 때만 합격\nif score >= 80 ___ score <= 100:\n    print(\"합격!\")\nelse:\n    print(\"불합격\")",
+          task: "시험 점수가 80~100점 사이면 합격! *그리고* 가 어디 들어갈까?",
+          initialCode: "score = 85\n\n# 둘 다 만족? = and ✨ 빈칸에 직접 써봐!\nif score >= 80 ___ score <= 100:\n    print(\"합격!\")\nelse:\n    print(\"불합격\")",
           expectedOutput: "합격!",
           hint: "둘 다 만족? → and!",
           hint2: "and"
         },
         {
+          id: "pre-try2",
+          type: "quiz",
+          title: "🤔 어떤 종류?",
+          content: "**VIP *이거나* 쿠폰이 있으면 할인!** — 이건 어떤 종류 조건?",
+          options: ["둘 다 만족 (and)", "하나만 만족 (or)", "반대 (not)"],
+          answer: 1,
+          explanation: "하나만 만족! → 빈칸엔 **or** 가 들어가."
+        },
+        {
           id: "try2",
           type: "tryit",
           title: "🖥️ 직접 해보기 — or",
-          task: "VIP 이거나 쿠폰이 있으면 할인!",
-          initialCode: "is_vip = False\nhas_coupon = True\n\n# 하나만 참이어도 할인\nif is_vip ___ has_coupon:\n    print(\"10% 할인!\")\nelse:\n    print(\"정가\")",
+          task: "친구 *또는* 가족 데려가면 10% 할인! *또는* 가 어디 들어갈까?",
+          initialCode: "friend = True\nfamily = False\n\n# 하나만 참이어도 할인 ✨ 빈칸에 직접 써봐!\nif friend ___ family:\n    print(\"10% 할인!\")\nelse:\n    print(\"정가\")",
           expectedOutput: "10% 할인!",
           hint: "둘 중 하나만? → or!",
           hint2: "or"
@@ -144,11 +169,20 @@ if not is_raining:
           componentProps: { initialMode: "not" }
         },
         {
+          id: "pre-try3",
+          type: "quiz",
+          title: "🤔 어떤 종류?",
+          content: "**로그인 *안* 했으면 메시지 출력!** — 이건 어떤 종류 조건?",
+          options: ["둘 다 만족 (and)", "하나만 만족 (or)", "반대 (not)"],
+          answer: 2,
+          explanation: "반대! → 빈칸엔 **not** 이 들어가."
+        },
+        {
           id: "try3",
           type: "tryit",
           title: "🖥️ 직접 해보기 — not",
-          task: "로그인 안 했으면 메시지 출력!",
-          initialCode: "is_logged_in = False\n\n# 조건을 뒤집는 연산자를 떠올려봐\nif ___ is_logged_in:\n    print(\"로그인이 필요합니다\")",
+          task: "로그인 *안* 했으면 메시지 출력! *반대* 를 만드는 친구는?",
+          initialCode: "is_logged_in = False\n\n# 조건을 뒤집는 연산자 ✨ 빈칸에 직접 써봐!\nif ___ is_logged_in:\n    print(\"로그인이 필요합니다\")",
           expectedOutput: "로그인이 필요합니다",
           hint: "참/거짓을 뒤집는 친구!",
           hint2: "not is_logged_in"

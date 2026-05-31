@@ -130,6 +130,15 @@ print(numbers)  # [2, 4, 6]
 \`\`\``
         },
         {
+          id: "pre-for-pattern",
+          type: "quiz",
+          title: "❓ 결정 — 리스트 값을 수정하려면?",
+          content: "**리스트 *값을 수정* 해야 한다면 어느 패턴?**",
+          options: ["for x in lst (값만 받음)", "for i, x in enumerate(lst)", "for i in range(len(lst))"],
+          answer: 2,
+          explanation: "값만 받으면 *복사본* — 수정 안 됨. *위치 (인덱스)* 가 필요하니 `range(len(lst))` 또는 `enumerate` (둘 다 OK)."
+        },
+        {
           id: "try4",
           type: "tryit",
           title: "🖥️ 값 수정하기!",
@@ -375,6 +384,15 @@ for n in numbers:
       title: "최종 미션",
       emoji: "🏆",
       steps: [
+        {
+          id: "pre-mission2-loop",
+          type: "quiz",
+          title: "❓ 결정 — 학생 리스트를 어떻게 돌릴까?",
+          content: "**학생 리스트를 *돌면서* 점수별 등급 출력 — 어떤 패턴?**",
+          options: ["for-each (값만)", "enumerate (값+번호)", "range(len) (위치 직접)"],
+          answer: 0,
+          explanation: "값만 보면 되니 `for name in names:` 가 제일 깔끔! enumerate 는 번호도 같이 필요할 때."
+        },
         {
           id: "mission2",
           type: "mission",

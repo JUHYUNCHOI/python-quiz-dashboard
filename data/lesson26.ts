@@ -49,6 +49,15 @@ export const lesson26Data: LessonData = {
 - 앞뒤 작업이 많으면 → 덱`
         },
         {
+          id: "pred-bigO-lookup",
+          type: "predict",
+          title: "💭 1000 명 중 '철수' 찾기 — 누가 빠를까?",
+          content: "표만 보고 끝내지 말고 *직접 추측* 해 봐요.\n\n```python\nstudents_list = [\"민지\", \"준호\", ..., \"철수\"]  # 1000명\nstudents_set  = {\"민지\", \"준호\", ..., \"철수\"}\n\n\"철수\" in students_list  # ?\n\"철수\" in students_set   # ?\n```\n\n**둘 중 어느 게 더 빠를까?**",
+          options: ["list 가 훨씬 빠름", "set 이 훨씬 빠름", "둘이 비슷"],
+          answer: 1,
+          explanation: "list 의 `in` 은 *처음부터 끝까지 비교* (O(n)) → 최악 1000 번. set 은 *해시로 단번에* (O(1)) → 1 번. 데이터 많을수록 차이 큼."
+        },
+        {
           id: "quiz1",
           type: "quiz",
           title: "❓ 퀴즈!",
@@ -70,6 +79,15 @@ export const lesson26Data: LessonData = {
           ],
           answer: 2,
           explanation: "set! O(1) 평균. 리스트/튜플은 O(n) 이라 큰 사전에선 느림. set 은 hash 기반이라 즉시 확인 가능."
+        },
+        {
+          id: "quiz-pick-dict",
+          type: "quiz",
+          title: "🎯 다른 상황 — 어떤 자료구조?",
+          content: "**'학생 이름 → 점수' 짝지어서 빠르게 찾기 — 어떤 자료구조?**",
+          options: ["리스트 (list)", "딕셔너리 (dict)", "셋 (set)", "튜플 (tuple)"],
+          answer: 1,
+          explanation: "*키-값 짝* + *빠른 검색* = `dict`. list 로 하면 매번 처음부터 훑어야 해서 느림 (O(n))."
         },
         {
           id: "try-pick-ds",
@@ -153,6 +171,24 @@ recent = deque(maxlen=N)
 \`\`\``
         },
         {
+          id: "quiz-pick-stack",
+          type: "quiz",
+          title: "🎯 어떤 구조?",
+          content: "**'뒤로가기' (브라우저 / Ctrl+Z) 처럼 *가장 최근 것* 부터 되돌리기 — 어떤 구조?**",
+          options: ["스택 (LIFO)", "큐 (FIFO)", "딕셔너리", "셋"],
+          answer: 0,
+          explanation: "*가장 최근* 부터 = *Last In First Out* = `stack`. 책 쌓아둔 거 위에서부터 꺼내는 느낌."
+        },
+        {
+          id: "quiz-pick-deque",
+          type: "quiz",
+          title: "🎯 양쪽 빠르게 — 어떤 구조?",
+          content: "**'앞뒤 양쪽에서 빠르게 빼고 넣기' — 어떤 자료구조?**",
+          options: ["리스트 (list)", "스택 (stack)", "큐 (queue)", "덱 (deque)"],
+          answer: 3,
+          explanation: "*양쪽 모두 O(1)* 은 `deque`. list 의 `pop(0)`/`insert(0, x)` 는 O(n) 으로 느림."
+        },
+        {
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
@@ -160,6 +196,15 @@ recent = deque(maxlen=N)
           options: ["리스트", "튜플", "집합", "덱"],
           answer: 2,
           explanation: "중복 체크 = 'in' 검색이 많음 → 집합이 O(1)로 가장 빠름!"
+        },
+        {
+          id: "quiz-pick-tuple",
+          type: "quiz",
+          title: "🎯 바뀌면 안 되는 값 — 어떤 구조?",
+          content: "**'좌표 (x, y) 같이 *바뀌면 안 되는 고정값*' — 어떤 자료구조?**",
+          options: ["리스트", "튜플", "딕셔너리", "셋"],
+          answer: 1,
+          explanation: "*변경 불가* (immutable) = `tuple`. 좌표/날짜/RGB 처럼 묶음으로 다니는 *고정값* 표현에 좋음."
         }
       ]
     },
@@ -223,25 +268,57 @@ counts = Counter(text)
           hint2: "most_common()으로 순위 확인 가능"
         },
         {
-          id: "problem3",
+          id: "problem3-intro",
           type: "explain",
           title: "🧩 문제3: 자료구조 선택 연습",
-          content: `**다음 상황에 어떤 자료구조?**
+          content: `**이번엔 *답 없이* 다섯 상황을 하나씩 추측해 봐요.**
 
-1. **학생 출석 체크** (이름으로 출석 여부)
-   → 집합 또는 딕셔너리
-
-2. **브라우저 방문 기록** (뒤로가기)
-   → 스택 (덱으로 구현)
-
-3. **프린터 대기열**
-   → 큐 (덱으로 구현)
-
-4. **최근 본 상품 5개**
-   → 덱 (maxlen=5)
-
-5. **단어장** (영어 → 한국어)
-   → 딕셔너리`
+각 상황을 보고 — 답을 보기 전에 — *직접* 자료구조를 고른 다음 다음으로 넘어가요. 5 문제 연속!`
+        },
+        {
+          id: "problem3-pick1",
+          type: "predict",
+          title: "💭 상황 1 — 학생 출석 체크",
+          content: "**학생 출석 체크** — 이름으로 *출석 여부* 만 빠르게 확인 (있냐 없냐).\n\n어떤 자료구조?",
+          options: ["리스트", "딕셔너리/셋", "스택", "튜플"],
+          answer: 1,
+          explanation: "*있냐 없냐* = 멤버십 검사 → `set` 이 가장 깔끔 (O(1)). 이름→출석시각 까지 저장하고 싶으면 `dict`."
+        },
+        {
+          id: "problem3-pick2",
+          type: "predict",
+          title: "💭 상황 2 — 브라우저 뒤로가기",
+          content: "**브라우저 방문 기록** — *가장 최근* 방문한 페이지부터 되돌아가기 (뒤로가기 버튼).\n\n어떤 자료구조?",
+          options: ["큐 (FIFO)", "스택 (LIFO)", "셋", "딕셔너리"],
+          answer: 1,
+          explanation: "*가장 최근* = LIFO = `stack`. 파이썬에선 list 의 `append`/`pop` 또는 `deque` 로 구현."
+        },
+        {
+          id: "problem3-pick3",
+          type: "predict",
+          title: "💭 상황 3 — 프린터 대기열",
+          content: "**프린터 대기열** — *먼저 보낸 작업* 부터 차례로 인쇄.\n\n어떤 자료구조?",
+          options: ["스택 (LIFO)", "큐 (FIFO)", "딕셔너리", "리스트"],
+          answer: 1,
+          explanation: "*먼저 온 게 먼저* = FIFO = `queue`. `deque` 의 `append` + `popleft` 가 O(1) 이라 가장 적합."
+        },
+        {
+          id: "problem3-pick4",
+          type: "predict",
+          title: "💭 상황 4 — 최근 본 상품 5 개",
+          content: "**최근 본 상품 5 개만 유지** — 6 번째 상품을 보면 가장 오래된 1 개는 *자동으로 사라져야* 함.\n\n어떤 자료구조?",
+          options: ["리스트 + pop(0)", "deque(maxlen=5)", "set", "dict"],
+          answer: 1,
+          explanation: "`deque(maxlen=5)` 한 줄로 끝. 넘치면 *알아서* 앞에서 빠짐. list 로 하면 매번 `pop(0)` 호출해서 O(n) — 굳이?"
+        },
+        {
+          id: "problem3-pick5",
+          type: "predict",
+          title: "💭 상황 5 — 영한 단어장",
+          content: "**단어장** — 영어 단어로 검색하면 한국어 뜻이 나옴.\n\n어떤 자료구조?",
+          options: ["리스트", "딕셔너리", "셋", "튜플"],
+          answer: 1,
+          explanation: "*키* (영어) → *값* (한국어) 짝 → `dict`. 검색 O(1)."
         },
         {
           id: "try-recent",
@@ -265,10 +342,10 @@ counts = Counter(text)
           type: "mission",
           title: "🏆 최종 미션: 종합 문제!",
           task: "적절한 자료구조를 선택해서 문제를 해결하세요!",
-          initialCode: "from collections import deque, Counter\n\n# 문제 1: 중복 제거\nnumbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\nunique = list(___(numbers))  # 어떤 자료구조?\nprint(\"1. 중복 제거:\", sorted(unique))\n\n# 문제 2: 단어 빈도수 Top 3\nwords = \"apple banana apple cherry banana apple\".split()\nword_count = ___(words)  # 어떤 도구?\nprint(\"2. Top 3:\", word_count.most_common(3))\n\n# 문제 3: 두 집합의 차이\nset_a = {1, 2, 3, 4, 5}\nset_b = {4, 5, 6, 7, 8}\nonly_a = set_a ___ set_b  # 어떤 연산?\nprint(\"3. A에만 있는 것:\", sorted(only_a))\n\n# 문제 4: 최근 검색어 3개 유지\nrecent = deque(___=3)  # 어떤 옵션?\nfor query in [\"파이썬\", \"자바\", \"C++\", \"자바스크립트\", \"Go\"]:\n    recent.append(query)\nprint(\"4. 최근 검색어:\", list(recent))",
+          initialCode: "from collections import deque, Counter\n\n# 문제 1: 중복 제거 — 어떤 자료구조로 감쌀까?\nnumbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\nunique = list(___(numbers))\nprint(\"1. 중복 제거:\", sorted(unique))\n\n# 문제 2: 단어 빈도수 Top 3 — 어떤 도구?\nwords = \"apple banana apple cherry banana apple\".split()\nword_count = ___(words)\nprint(\"2. Top 3:\", word_count.most_common(3))\n\n# 문제 3: A 에만 있는 것 — 두 *그룹* 을 무엇으로 만들까? 그리고 연산자는?\ngroup_a = ___({1, 2, 3, 4, 5})    # 어떤 자료구조?\ngroup_b = ___({4, 5, 6, 7, 8})    # 같은 자료구조!\nonly_a = group_a ___ group_b      # 차집합 연산자\nprint(\"3. A에만 있는 것:\", sorted(only_a))\n\n# 문제 4: 최근 검색어 3 개만 — 어떤 자료구조 + 어떤 옵션?\nrecent = ___(___=3)\nfor query in [\"파이썬\", \"자바\", \"C++\", \"자바스크립트\", \"Go\"]:\n    recent.append(query)\nprint(\"4. 최근 검색어:\", list(recent))",
           expectedOutput: "1. 중복 제거: [1, 2, 3, 4]\n2. Top 3: [('apple', 3), ('banana', 2), ('cherry', 1)]\n3. A에만 있는 것: [1, 2, 3]\n4. 최근 검색어: ['C++', '자바스크립트', 'Go']",
-          hint: "중복 제거는 set, 개수 세기는 Counter, 차집합은 -, 최근 N개는 deque의 maxlen!",
-          hint2: "set, Counter, -, maxlen을 넣으세요!"
+          hint: "1: set / 2: Counter / 3: set, set, - / 4: deque, maxlen — *자료구조 이름까지* 직접 쓰세요!",
+          hint2: "set, Counter, set, set, -, deque, maxlen"
         },
         {
           id: "cheatsheet",

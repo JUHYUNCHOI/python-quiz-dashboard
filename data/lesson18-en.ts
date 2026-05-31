@@ -358,13 +358,22 @@ strawberry
       emoji: "🏆",
       steps: [
         {
+          id: "pre-mission1-strjoin",
+          type: "quiz",
+          title: "❓ Pre-mission check — split vs join",
+          content: "**To *split* a sentence into words: which method? And to *join* them back: which method?**",
+          options: ["split to break apart, join to combine", "join to break apart, split to combine", "split for both", "join for both"],
+          answer: 0,
+          explanation: "*Split* → `text.split(\" \")` — call `.split()` on the *string*. *Join* → `\" \".join(list)` — call `.join(list)` on the *separator* (easy to mix up!)."
+        },
+        {
           id: "mission1",
           type: "mission",
           title: "🏆 Mission 1 — Reverse word order",
           task: "Reverse the order of the words and print the result!",
           initialCode: "text = \"Hello World Python\"\nwords = text.___()\nwords.___()\nresult = ' '.___(words)\nprint(result)",
           expectedOutput: "Python World Hello",
-          hint: "split() → reverse() → join()",
+          hint: "Break apart → reverse order → join back. 3 steps!",
           hint2: "Use words.reverse() to reverse the order!"
         },
         {
@@ -372,9 +381,9 @@ strawberry
           type: "mission",
           title: "🏆 Mission 2 — CSV one-liner: total + average",
           task: "Read a comma-separated score line, convert to ints, then print BOTH total and average!",
-          initialCode: "line = \"75,90,82,88,95\"\n\n# Split by comma → int convert → list\nnums = ___\n\ntotal = sum(nums)\navg = total / len(nums)\nprint(f\"Total: {total}\")\nprint(f\"Average: {avg}\")",
+          initialCode: "line = \"75,90,82,88,95\"\n\n# 1) line.split(\",\") makes ['75', '90', ...]\n# 2) convert each element to int (map or comprehension)\n# 3) wrap the result in list\nnums = ___\n\ntotal = sum(nums)\navg = total / len(nums)\nprint(f\"Total: {total}\")\nprint(f\"Average: {avg}\")",
           expectedOutput: "Total: 430\nAverage: 86.0",
-          hint: "list(map(int, line.split(\",\")))",
+          hint: "Split → convert each piece to number → wrap in list.",
           hint2: "nums = list(map(int, line.split(\",\")))"
         },
         {
@@ -382,10 +391,10 @@ strawberry
           type: "mission",
           title: "🏆 Mission 3 — Build greeting from input",
           task: "Read multiple names (space-separated) on one line and print 'Hi A, B, C!' format. (! at end)",
-          initialCode: "# input() → split() to get names list\nnames = input().___()\n\n# Join with ', ' and wrap with greeting\ngreeting = f\"Hi {___}!\"\nprint(greeting)",
+          initialCode: "# 1) read one line with input()\n# 2) use .split() to make a list, splitting on whitespace\nnames = input().___()\n\n# 3) join with ', ' inside the f-string\ngreeting = f\"Hi {___}!\"\nprint(greeting)",
           expectedOutput: "Hi Alice, Bob, Charlie!",
           stdin: "Alice Bob Charlie",
-          hint: "names = input().split() / ', '.join(names)",
+          hint: "Split input into a list, then join with a separator.",
           hint2: "names = input().split()\ngreeting = f\"Hi {', '.join(names)}!\""
         },
         {

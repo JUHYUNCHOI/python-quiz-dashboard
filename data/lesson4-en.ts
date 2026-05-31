@@ -480,6 +480,15 @@ Computers store decimals with tiny rounding errors. **Integer \`==\` is safe; fl
           explanation: "Python stores 0.1 + 0.2 with a tiny rounding error: 0.30000000000000004. So it's NOT exactly 0.3 → False. Float == needs care! (Remember? The trailing 5 in Ch1's first step \`10 / 3 = 3.3333333333333335\` is the same reason.)"
         },
         {
+          id: "pre-try-equal",
+          type: "quiz",
+          title: "🤔 Which symbol?",
+          content: "**To *compare whether a password matches*, which one?**",
+          options: ["= to assign", "== to compare", "!= to check different"],
+          answer: 1,
+          explanation: "*Comparison* uses `==` (two!). `=` (one) is *assignment*, not comparison."
+        },
+        {
           id: "try-equal",
           type: "tryit",
           title: "🖥️ Try It — Equal?",
@@ -518,6 +527,24 @@ print(0 < x < 10)   # True — math inequality directly
 > 🎯 Typical use: **range checks** like "is the score between 70 and 90?".
 
 ⚠️ For now, just **know it exists**. You'll see it in action in **lesson 11 (conditionals)** with \`if\`.`
+        },
+        {
+          id: "pre-try-chained",
+          type: "quiz",
+          title: "🤔 Which symbol?",
+          content: "**When you say '60 *or higher*', which symbol?**",
+          options: ["> (greater than)", ">= (greater or equal)", "== (equal)", "= (assign)"],
+          answer: 1,
+          explanation: "'or higher' includes the same value too → `>=`. Don't confuse with '*greater than*' (>)!"
+        },
+        {
+          id: "pre-try-chained-eq",
+          type: "quiz",
+          title: "🤔 Which symbol?",
+          content: "**When you say '*exactly* 100', which symbol?**",
+          options: ["= (assign)", "== (equal)", ">= (greater or equal)", "!= (not equal)"],
+          answer: 1,
+          explanation: "'exactly equal' = `==`. `=` is *assignment*, not comparison!"
         },
         {
           id: "try-chained",
@@ -811,6 +838,15 @@ score += 10   # earned points → score goes up
           options: ["55", "85", "70", "45"],
           answer: 0,
           explanation: "100 → (-30) → 70 → (-15) → 55. -= subtracts from the current value and stores it back, so the effect stacks."
+        },
+        {
+          id: "pre-try5",
+          type: "quiz",
+          title: "🤔 Which compound assignment?",
+          content: "**'Took damage = subtract and store' — which compound assignment?**",
+          options: ["+= (add and store)", "-= (subtract and store)", "*= (multiply and store)", "= (just assign)"],
+          answer: 1,
+          explanation: "*Subtract and store* = `-=`. Same pattern: `*=`, `+=`, `/=` work identically."
         },
         {
           id: "try5",

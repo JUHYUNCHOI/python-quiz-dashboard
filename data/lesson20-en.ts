@@ -329,6 +329,24 @@ print(person.get("job", "none"))    # "none" — default value
           hint2: "Just run the code as-is!"
         },
         {
+          id: "pre-mission-method",
+          type: "quiz",
+          title: "❓ Decide — which method?",
+          content: "**Situation: I just want to see my friends' names (not scores) — which method?**",
+          options: [".keys() — keys only", ".values() — values only", ".items() — both pairs", ".get(key) — safe single value"],
+          answer: 0,
+          explanation: "Names only = *keys only* → `.keys()`. Scores only → `.values()`. Both paired → `.items()`. Safely fetching *one value by key* → `.get(key)`."
+        },
+        {
+          id: "pre-mission-method-2",
+          type: "quiz",
+          title: "❓ Decide — safe access",
+          content: "**'Look up a missing key and get None instead of an error' — which method?**",
+          options: [".keys()", ".values()", ".items()", ".get(key)"],
+          answer: 3,
+          explanation: "`dict[missing_key]` raises a *KeyError*. `.get(missing_key)` *silently returns None*. The *safe access* pattern!"
+        },
+        {
           id: "mission-method",
           type: "mission",
           title: "🎯 Grade Analysis — fill keys/values/get",
@@ -468,6 +486,15 @@ The dict version of list comprehension. Powerful once you're used to it.`
       title: "Final Mission",
       emoji: "🏆",
       steps: [
+        {
+          id: "pre-mission1-in-get",
+          type: "quiz",
+          title: "❓ Decide — in vs get",
+          content: "**'Is apple in the cart?' — which tool?**",
+          options: ["apple in cart (True/False)", "cart.get(apple) (value or None)", "cart[apple] (value or error)"],
+          answer: 0,
+          explanation: "If you only want to know *whether it's there*, `in` is cleanest. Use `.get()` when you also want the *value*."
+        },
         {
           id: "mission1",
           type: "mission",
