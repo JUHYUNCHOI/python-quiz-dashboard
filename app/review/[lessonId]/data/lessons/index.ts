@@ -25,6 +25,11 @@ import { lesson23 } from './lesson23';
 import { lesson24 } from './lesson24';
 import { lesson25 } from './lesson25';
 import { lesson26 } from './lesson26';
+import { lesson27 } from './lesson27';
+import { lesson28 } from './lesson28';
+import { lesson29 } from './lesson29';
+import { lesson30 } from './lesson30';
+import { lesson31 } from './lesson31';
 import { lesson32 } from './lesson32';
 import { lesson33 } from './lesson33';
 import { lesson34 } from './lesson34';
@@ -35,6 +40,17 @@ import { lesson38 } from './lesson38';
 import { lesson39 } from './lesson39';
 import { lesson40 } from './lesson40';
 import { lesson41 } from './lesson41';
+import { lesson42 } from './lesson42';
+import { lesson43 } from './lesson43';
+import { lesson44 } from './lesson44';
+import { lesson45 } from './lesson45';
+import { lesson46 } from './lesson46';
+import { lesson47 } from './lesson47';
+import { lesson48 } from './lesson48';
+import { lesson49 } from './lesson49';
+import { lesson50 } from './lesson50';
+import { lesson51 } from './lesson51';
+import { lesson52 } from './lesson52';
 import { lessonCpp1 } from './lessonCpp1';
 import { lessonCpp2 } from './lessonCpp2';
 import { lessonCpp3 } from './lessonCpp3';
@@ -110,6 +126,12 @@ export const lessonsData: Record<string, LessonData> = {
   "24": lesson24,
   "25": lesson25,
   "26": lesson26,
+  // Part 4: 종합 프로젝트
+  "27": lesson27,
+  "28": lesson28,
+  "29": lesson29,
+  "30": lesson30,
+  "31": lesson31,
   // Part 5: 함수
   "32": lesson32,
   "33": lesson33,
@@ -123,6 +145,19 @@ export const lessonsData: Record<string, LessonData> = {
   "40": lesson40,
   // Part 7: 클래스
   "41": lesson41,
+  "42": lesson42,
+  // Part 7-8: 클래스 + 모듈 + 패키지
+  "43": lesson43,
+  "44": lesson44,
+  "45": lesson45,
+  "46": lesson46,
+  "47": lesson47,
+  "48": lesson48,
+  // Part 9: 텍스트 RPG
+  "49": lesson49,
+  "50": lesson50,
+  "51": lesson51,
+  "52": lesson52,
   // C++ 레슨
   "cpp-21": lessonCpp21,
   "cpp-22": lessonCpp22,
