@@ -127,9 +127,9 @@ empty2 = set()     # ✅ actual empty set
           type: "tryit",
           title: "🖥️ Dedupe + Sort — clean visitor log",
           task: "From a visitor log, remove duplicates and sort into a list!",
-          initialCode: "visitors = [\"Alice\", \"Bob\", \"Alice\", \"Charlie\", \"Bob\", \"Dora\", \"Alice\"]\n\n# 1) set → drop duplicates\n# 2) sorted() → sorted list\nunique_sorted = ___\n\nprint(unique_sorted)",
+          initialCode: "visitors = [\"Alice\", \"Bob\", \"Alice\", \"Charlie\", \"Bob\", \"Dora\", \"Alice\"]\n\n# 1) What data structure auto-removes duplicates?\n# 2) Then sort it back into a list and you're done!\nunique_sorted = ___\n\nprint(unique_sorted)",
           expectedOutput: "['Alice', 'Bob', 'Charlie', 'Dora']",
-          hint: "sorted(set(visitors)) — set drops dupes, sorted returns a list.",
+          hint: "A duplicate-killing data structure + a function that sorts into a *list* — stack them!",
           hint2: "unique_sorted = sorted(set(visitors))"
         },
         {

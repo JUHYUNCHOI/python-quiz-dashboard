@@ -127,9 +127,9 @@ empty2 = set()     # ✅ 진짜 빈 집합
           type: "tryit",
           title: "🖥️ 중복 제거 + 정렬 — 방문자 명단 정리",
           task: "방문자 명단에서 중복을 제거하고 정렬된 리스트로 바꿔보세요!",
-          initialCode: "visitors = [\"철수\", \"영희\", \"철수\", \"민수\", \"영희\", \"수지\", \"철수\"]\n\n# 1) set 으로 변환 → 중복 제거\n# 2) sorted() 로 정렬해 리스트로 다시\nunique_sorted = ___\n\nprint(unique_sorted)",
+          initialCode: "visitors = [\"철수\", \"영희\", \"철수\", \"민수\", \"영희\", \"수지\", \"철수\"]\n\n# 1) 중복을 빼려면 어떤 자료구조로 바꿔야 할까?\n# 2) 그 다음 정렬된 리스트로 다시 만들면 끝!\nunique_sorted = ___\n\nprint(unique_sorted)",
           expectedOutput: "['민수', '수지', '영희', '철수']",
-          hint: "sorted(set(visitors)) — set 거치면서 중복 제거, sorted 가 자동 list 반환.",
+          hint: "중복 제거에 강한 자료구조 + 정렬해 *리스트* 로 돌려주는 함수, 두 개를 겹쳐서!",
           hint2: "unique_sorted = sorted(set(visitors))"
         },
         {

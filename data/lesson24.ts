@@ -229,14 +229,23 @@ N=7, K=3일 때:
 3. 반복`
         },
         {
+          id: "pre-queue-vs-stack",
+          type: "quiz",
+          title: "❓ 결정 — 큐 vs 스택",
+          content: "**프린터 인쇄 대기 — '먼저 보낸 거 먼저 출력'. 어떤 구조?**",
+          options: ["스택 (마지막에 넣은 게 먼저 = LIFO)", "큐 (먼저 넣은 게 먼저 = FIFO)", "둘 다 가능"],
+          answer: 1,
+          explanation: "*먼저 온 게 먼저* = FIFO = *큐*. 스택 (LIFO) 으로 하면 늦게 보낸 게 먼저 출력 → 부당!"
+        },
+        {
           id: "try3",
           type: "tryit",
           title: "🖥️ 직접 — N=7, K=3 요세푸스 풀기",
           task: "7 명이 원으로 앉아 매 3 번째 사람을 제거하는 순서를 큐로 시뮬레이션하세요!",
-          initialCode: "from collections import deque\n\nn, k = 7, 3\nqueue = deque(range(1, n + 1))\nresult = []\n\nwhile queue:\n    # k-1 명을 뒤로 돌려보냄 (popleft → append)\n    for _ in range(k - 1):\n        queue.___(queue.___())\n    # k 번째 사람 제거\n    result.append(queue.___())\n\nprint(\"제거 순서:\", result)",
+          initialCode: "from collections import deque\n\nn, k = 7, 3\nqueue = deque(range(1, n + 1))\nresult = []\n\nwhile queue:\n    # 1) 앞에서 k-1 명을 꺼내서 뒤로 보내기 (어느 메서드 짝?)\n    for _ in range(k - 1):\n        queue.___(queue.___())\n    # 2) 그 다음 k번째 사람 제거 (어느 메서드?)\n    result.append(queue.___())\n\nprint(\"제거 순서:\", result)",
           expectedOutput: "제거 순서: [3, 6, 2, 7, 5, 1, 4]",
-          hint: "앞에서 빼서 뒤로 보내기 = popleft 한 값을 append. 마지막은 popleft 로 제거.",
-          hint2: "append / popleft / popleft"
+          hint: "큐 *앞* 에서 꺼내고 *뒤* 에 추가하는 짝",
+          hint2: "popleft + append"
         },
         {
           id: "problem2-explain",
