@@ -13,7 +13,8 @@
  * - setCode: textarea 의 value 를 업데이트하는 setter (React state 동기화)
  * - variant: 'python' 또는 'cpp' (cpp 면 ; << >> 추가)
  *
- * 보임 조건: 기본은 모든 사이즈 (코딩에 도움). md+ 에서 숨기고 싶으면 className 으로 제어.
+ * 보임 조건: 터치가 *주* 입력 수단인 경우만 (= `(pointer: coarse) and (hover: none)` + width ≤ 900).
+ *   Windows 터치스크린 노트북·태블릿 모드 등 키보드 위주 환경에선 안 뜸.
  */
 
 import { useState, useEffect } from "react"
@@ -65,16 +66,20 @@ const CPP_SYMBOLS = [
 ]
 
 export function CodeSymbolToolbar({ textareaRef, setCode, variant = "python", className }: CodeSymbolToolbarProps) {
-  const [isTouch, setIsTouch] = useState(false)
+  const [show, setShow] = useState(false)
 
   useEffect(() => {
-    // 터치 가능한 디바이스 (모바일/태블릿) 에서만 노출.
-    // 데스크탑 사용자는 실제 키보드 쓰는 게 빠름.
-    const supportsTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0
-    setIsTouch(supportsTouch)
+    // 터치가 *주* 입력 수단인 경우에만 (= 진짜 모바일/태블릿).
+    // Windows 터치스크린 노트북은 touch 가능하지만 키보드 위주라 제외.
+    //   - (pointer: coarse) → 손가락 / 스타일러스 (정밀하지 않은 포인터)
+    //   - (hover: none) → 호버 불가 (마우스 없음)
+    // 화면 폭도 보조 조건: ≤ 900 으로 데스크탑 큰 화면에선 안 뜨게.
+    const mq = window.matchMedia("(pointer: coarse) and (hover: none)")
+    const smallScreen = window.innerWidth <= 900
+    setShow(mq.matches && smallScreen)
   }, [])
 
-  if (!isTouch) return null
+  if (!show) return null
 
   const symbols = variant === "cpp" ? CPP_SYMBOLS : PY_SYMBOLS
 
