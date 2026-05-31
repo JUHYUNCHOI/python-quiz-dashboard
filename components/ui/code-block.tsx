@@ -145,8 +145,11 @@ export function highlightPython(code: string, dark: boolean = false, highlightLi
       : isDimmed
         ? 'opacity-30'
         : ''
+    // ⚠️ leading 은 부모 (pre) 에서 상속받게 — 부모와 다른 leading 을 주면
+    //    PythonRunner 의 투명 textarea (leading-[1.8]) 와 줄 높이가 어긋나서
+    //    줄 내려갈수록 커서 위치 ≠ 실제 글자 위치 버그 발생.
     return (
-      <div key={lineIndex} className={`leading-relaxed ${marginClass} ${accentClass}`}>
+      <div key={lineIndex} className={`${marginClass} ${accentClass}`}>
         {tokens.length > 0 ? tokens : <span>&nbsp;</span>}
       </div>
     )
