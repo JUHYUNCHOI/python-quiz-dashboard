@@ -20,14 +20,23 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>('en')
   const [isLoaded, setIsLoaded] = useState(false)
 
+  // ?mirror=1 미러 창 감지 — teacher mirror 용. 항상 한글 강제.
+  const isMirror = typeof window !== 'undefined'
+    && new URLSearchParams(window.location.search).get('mirror') === '1'
+
   useEffect(() => {
     try {
-      // 우선순위: URL ?lang=ko|en > localStorage > 기본값(en)
-      // 기본 영어 — 글로벌 학습자 대상. 한국 학생은 localStorage 한 번 'ko' 토글하면 유지.
+      // 우선순위: ?mirror=1 (한글 강제) > URL ?lang=ko|en > localStorage > 기본값(en)
       let resolved: Language | null = null
 
       if (typeof window !== 'undefined') {
         const params = new URLSearchParams(window.location.search)
+        // 미러 창은 토글/저장 무시하고 항상 한글
+        if (params.get('mirror') === '1') {
+          setLangState('ko')
+          setIsLoaded(true)
+          return
+        }
         const fromUrl = params.get('lang')
         if (fromUrl === 'ko' || fromUrl === 'en') {
           resolved = fromUrl
@@ -49,6 +58,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const setLang = (newLang: Language) => {
+    // 미러 창에서는 토글 무시 (한글 고정)
+    if (isMirror) return
     setLangState(newLang)
     try { localStorage.setItem('language', newLang) } catch {}
 
