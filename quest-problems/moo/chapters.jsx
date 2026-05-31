@@ -146,6 +146,37 @@ export function makeMooCh2(E) {
         </div>
       </div>),
     },
+    // 2-4 (NEW): edge cases — corners have fewer windows
+    { type: "reveal",
+      narr: t(E, "Wait — what about positions at the edge?\nPosition 0 can ONLY be the 1st letter of a window (nothing to its left).\nPosition N-1 can ONLY be the 3rd letter (nothing to its right).\nSo edges have FEWER than 3 windows.", "잠깐 — 가장자리 위치는 어때요?\n위치 0 은 윈도우의 1 번째 글자만 가능 (왼쪽에 글자 없음).\n위치 N-1 은 3 번째 글자만 가능 (오른쪽에 글자 없음).\n그래서 가장자리는 윈도우가 3 개보다 적어요."),
+      content: (<div style={{ padding: 16 }}>
+        <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, textAlign: "center", marginBottom: 10, color: C.dim }}>
+          {t(E, "Example: N=10 string", "예시: N=10 문자열")}
+        </div>
+        <div style={{ fontSize: 12, lineHeight: 1.9, color: C.text }}>
+          {[
+            ["pos = 0", t(E, "1 window — [0,1,2] only", "윈도우 1 개 — [0,1,2] 만"), "#fef3c7", "#fbbf24"],
+            ["pos = 1", t(E, "2 windows — [0,1,2], [1,2,3]", "윈도우 2 개 — [0,1,2], [1,2,3]"), "#fff7ed", "#fdba74"],
+            ["pos = 2 ~ N-3", t(E, "3 windows (full case)", "윈도우 3 개 (꽉 찬 경우)"), "#ede9fe", "#c4b5fd"],
+            ["pos = N-2", t(E, "2 windows — [N-4,N-3,N-2], [N-3,N-2,N-1]", "윈도우 2 개 — [N-4..N-2], [N-3..N-1]"), "#fff7ed", "#fdba74"],
+            ["pos = N-1", t(E, "1 window — [N-3,N-2,N-1] only", "윈도우 1 개 — [N-3,N-2,N-1] 만"), "#fef3c7", "#fbbf24"],
+          ].map(([lbl, txt, bg, bd], i) => (
+            <div key={i} style={{ display: "flex", gap: 10, alignItems: "center", padding: "6px 10px", marginBottom: 4, borderRadius: 8, background: bg, border: `1.5px solid ${bd}` }}>
+              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 900, color: C.text, minWidth: 110 }}>{lbl}</span>
+              <span>{txt}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: 10, padding: "10px 12px", background: "#0f172a", borderRadius: 10, color: "#f8fafc", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.8 }}>
+          <div style={{ color: "#94a3b8", fontSize: 11 }}>{t(E, "// One formula handles all cases", "// 한 식이 모든 경우 처리")}</div>
+          <div>minIdx = <span style={{ color: "#fbbf24" }}>max</span>(pos - 2, 0)</div>
+          <div>maxIdx = <span style={{ color: "#fbbf24" }}>min</span>(pos, N - 3)</div>
+        </div>
+        <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center" }}>
+          {t(E, "Same formula appears in the smart code (Ch5). max/min clip to valid window range.", "이 식이 그대로 스마트 코드(Ch5)에 등장. max/min 으로 유효한 윈도우 범위로 자름.")}
+        </div>
+      </div>),
+    },
   ];
 }
 
@@ -165,6 +196,35 @@ export function makeMooCh3(E) {
       question: t(E, "10.4 billion ÷ 100 million = ? seconds", "104억 ÷ 1억 = ? 초"),
       hint: t(E, "10,400,000,000 ÷ 100,000,000 = ?", "10,400,000,000 ÷ 100,000,000 = ?"),
       answer: 104,
+    },
+    // 3-NEW: brute 가 매번 무엇을 하는지 — TLE 직관 강화
+    { type: "reveal",
+      narr: t(E, "Where does the N² come from?\nWatch ONE position carefully.\nThe brute tries 26 letters at pos=0, and for EACH try it scans the entire string (N-2 windows) to count moos from scratch.\nThen it repeats for pos=1, pos=2, ... all N positions.\nNothing is reused.", "N² 이 어디서 나오는지?\n한 위치를 자세히 봐요.\n브루트는 pos=0 에서 26 글자를 시도하고, 시도마다 전체 문자열(N-2 윈도우) 을 처음부터 다시 훑어 moo 를 세요.\n그다음 pos=1, pos=2, ... N 개 위치 모두 반복.\n아무것도 재사용 안 함."),
+      content: (<div style={{ padding: 16 }}>
+        <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: 12, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+          <div style={{ color: "#dc2626", fontWeight: 800 }}>pos = 0:</div>
+          <div style={{ paddingLeft: 12, color: C.text }}>
+            <div>{t(E, "try 'a' → scan all N-2 windows → count moos", "'a' 시도 → N-2 윈도우 전부 훑기 → moo 세기")}</div>
+            <div>{t(E, "try 'b' → scan all N-2 windows AGAIN", "'b' 시도 → N-2 윈도우 또 전부 훑기")}</div>
+            <div>{t(E, "try 'c' → scan all N-2 windows AGAIN", "'c' 시도 → 또 전부 훑기")}</div>
+            <div style={{ color: C.dim }}>{t(E, "... 26 times (a, b, c, ..., z)", "... 26 번 (a, b, c, ..., z)")}</div>
+          </div>
+          <div style={{ color: "#dc2626", fontWeight: 800, marginTop: 6 }}>pos = 1:</div>
+          <div style={{ paddingLeft: 12, color: C.dim }}>
+            <div>{t(E, "another 26 full scans...", "또 26 번 전체 훑기...")}</div>
+          </div>
+          <div style={{ color: "#dc2626", fontWeight: 800, marginTop: 6 }}>pos = 2, 3, ..., N-1:</div>
+          <div style={{ paddingLeft: 12, color: C.dim }}>
+            <div>{t(E, "same — 26 full scans per position", "동일 — 위치마다 26 번 전체 훑기")}</div>
+          </div>
+        </div>
+        <div style={{ marginTop: 10, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 700, color: C.no, textAlign: "center" }}>
+          N <span style={{ fontWeight: 400 }}>positions</span> × 26 <span style={{ fontWeight: 400 }}>letters</span> × (N-2) <span style={{ fontWeight: 400 }}>windows</span> ≈ 26·N²
+        </div>
+        <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.6 }}>
+          {t(E, "The wasted work: 25 of the 26 trials at the SAME position keep re-counting the exact same far-away moos that didn't change.", "낭비 포인트: 같은 위치의 26 시도 중 25 번이 변하지도 않은 먼 곳의 moo 를 또 세고 있음.")}
+        </div>
+      </div>),
     },
     // 브루트 코드 — 섹션 1 개 = 페이지 1 개 (라이브 수업 흐름)
     ...getMooBruteSections(E).map((sec, i, arr) => ({
@@ -250,6 +310,41 @@ export function makeMooCh4(E) {
           <div>🟡 {t(E, "TRY 'o': window becomes 'oom' → not moo (o=o, first=second!)", "시도 'o': 윈도우가 'oom' → moo 아님 (o=o, 첫째=둘째!)")}</div>
           <div>🟡 {t(E, "TRY 'z': window becomes 'zom' → not moo (o≠m)", "시도 'z': 윈도우가 'zom' → moo 아님 (o≠m)")}</div>
           <div>🟢 {t(E, "RESTORE: nothing was removed, nothing to restore!", "복원: 뺀 게 없으니 복원할 것도 없음!")}</div>
+        </div>
+      </div>),
+    },
+    // 4-NEW: 중간 위치 손-trace (3 windows 다 활성 — 가장자리와 대비)
+    { type: "reveal",
+      narr: t(E, "Now a middle position — all 3 windows active.\nString = 'mommoo', pos = 3 (the second 'm').\nminIdx = max(1, 0) = 1, maxIdx = min(3, 3) = 3.\nSo windows are idx = 1, 2, 3.", "이번엔 가운데 위치 — 3 윈도우 다 활성.\n문자열 = 'mommoo', pos = 3 (두 번째 'm').\nminIdx = max(1, 0) = 1, maxIdx = min(3, 3) = 3.\n윈도우는 idx = 1, 2, 3."),
+      content: (<div style={{ padding: 16 }}>
+        <div style={{ fontFamily: "'JetBrains Mono',monospace", textAlign: "center", marginBottom: 12 }}>
+          {["m","o","m","m","o","o"].map((ch,i) => (
+            <span key={i} style={{ display: "inline-block", width: 28, height: 28, lineHeight: "28px", textAlign: "center", borderRadius: 6, margin: "0 2px", fontWeight: 800, background: i===3 ? "#fde68a" : (i>=1 && i<=5) ? "#ede9fe" : "#f8f9fc", border: `2px solid ${i===3 ? "#f59e0b" : (i>=1 && i<=5) ? "#c4b5fd" : C.border}`, color: i===3 ? "#92400e" : C.text, fontSize: 14 }}>{ch}</span>
+          ))}
+          <div style={{ fontSize: 10, color: C.dimLight, marginTop: 4 }}>
+            {["0","1","2","3","4","5"].map((n,i) => <span key={i} style={{ display: "inline-block", width: 32, textAlign: "center" }}>{n}</span>)}
+          </div>
+        </div>
+        <div style={{ fontSize: 12, lineHeight: 1.9, color: C.dim }}>
+          <div style={{ color: C.no, fontWeight: 700 }}>🔴 REMOVE</div>
+          <div>{t(E, "idx=1 → 'omm': o≠m, m=m → IS moo → mydict['omm'] -= 1", "idx=1 → 'omm': o≠m, m=m → moo 맞음 → mydict['omm'] -= 1")}</div>
+          <div>{t(E, "idx=2 → 'mmo': m=m → not moo → skip", "idx=2 → 'mmo': m=m → moo 아님 → 패스")}</div>
+          <div>{t(E, "idx=3 → 'moo': m≠o, o=o → IS moo → mydict['moo'] -= 1", "idx=3 → 'moo': m≠o, o=o → moo 맞음 → mydict['moo'] -= 1")}</div>
+
+          <div style={{ color: "#92400e", fontWeight: 700, marginTop: 6 }}>🟡 TRY (3 examples out of 26)</div>
+          <div><b>'a'</b>: {t(E, "windows → 'oma' (no), 'mao' (no), 'aoo' (YES, a≠o, o=o) → mydict['aoo'] +=1, check ≥ F, -=1",
+                              "윈도우 → 'oma' (X), 'mao' (X), 'aoo' (O, a≠o, o=o) → mydict['aoo'] +=1, ≥ F 확인, -=1")}</div>
+          <div><b>'o'</b>: {t(E, "windows → 'omo' (no), 'moo' (YES!) → mydict['moo'] +=1, check, -=1; 'ooo' (no)",
+                              "윈도우 → 'omo' (X), 'moo' (O!) → mydict['moo'] +=1, 확인, -=1; 'ooo' (X)")}</div>
+          <div><b>'m'</b> {t(E, "(same as original)", "(원본과 같음)")}: {t(E, "'omm' (YES) +=1/check/-=1; 'mmo' (no); 'moo' (YES) +=1/check/-=1",
+                              "'omm' (O) +=1/확인/-=1; 'mmo' (X); 'moo' (O) +=1/확인/-=1")}</div>
+          <div style={{ color: C.dim, fontSize: 11 }}>{t(E, "... and 23 more letters, each tested in all 3 windows", "... 나머지 23 글자도 각각 3 윈도우에서 테스트")}</div>
+
+          <div style={{ color: C.ok, fontWeight: 700, marginTop: 6 }}>🟢 RESTORE</div>
+          <div>{t(E, "mydict['omm'] += 1, mydict['moo'] += 1 → counter is exactly as it was", "mydict['omm'] += 1, mydict['moo'] += 1 → 카운터가 시작 전과 정확히 같아짐")}</div>
+        </div>
+        <div style={{ marginTop: 10, padding: "8px 12px", background: "#ede9fe", border: "1.5px solid #c4b5fd", borderRadius: 8, fontSize: 11, color: "#5b21b6", textAlign: "center", fontWeight: 600 }}>
+          {t(E, "Notice: only windows [1,2,3], [2,3,4], [3,4,5] are touched. 'mo' at [0,1] never moves.", "관찰: [1,2,3], [2,3,4], [3,4,5] 만 건드림. [0,1] 의 'mo' 는 절대 안 움직임.")}
         </div>
       </div>),
     },
@@ -400,6 +495,54 @@ export function makeMooCh5(E, lang = "py") {
         : "",
       section: sec,
     })),
+    // 5-NEW: 왜 sorted(result) + distinct
+    { type: "reveal",
+      narr: lang === "cpp"
+        ? t(E, "Last detail: the output format.\nThe judge expects DISTINCT moos in ALPHABETICAL order.\nC++ set<string> handles both for free — it dedupes AND iterates sorted.\nWe just print result.size() then iterate.",
+              "마지막 디테일: 출력 형식.\n채점기는 distinct moo 들을 알파벳순으로 요구.\nC++ set<string> 은 둘 다 공짜 — 중복 제거 + 정렬 순회.\nresult.size() 출력 후 그냥 순회하면 됨.")
+        : t(E, "Last detail: the output format.\nThe judge expects DISTINCT moos in ALPHABETICAL order.\nresult is a Python set → already distinct, but in RANDOM order!\nSo we MUST call sorted(result) before printing.",
+              "마지막 디테일: 출력 형식.\n채점기는 distinct moo 들을 알파벳순으로 요구.\nresult 는 Python set → 중복은 없지만 순서가 무작위!\n그래서 print 전에 반드시 sorted(result) 호출."),
+      content: (<div style={{ padding: 12 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          <div style={{ background: C.noBg, border: `2px solid ${C.noBd}`, borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.no, marginBottom: 4 }}>{t(E, "❌ Without sort", "❌ 정렬 없이")}</div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+              <div>3</div>
+              <div>moo</div>
+              <div>baa</div>
+              <div>tee</div>
+              <div style={{ color: C.no, fontSize: 10, marginTop: 4 }}>{t(E, "→ WA (wrong order)", "→ WA (순서 틀림)")}</div>
+            </div>
+          </div>
+          <div style={{ background: C.okBg, border: `2px solid ${C.okBd}`, borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.ok, marginBottom: 4 }}>{t(E, "✅ Sorted", "✅ 정렬됨")}</div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+              <div>3</div>
+              <div>baa</div>
+              <div>moo</div>
+              <div>tee</div>
+              <div style={{ color: C.ok, fontSize: 10, marginTop: 4 }}>{t(E, "→ AC", "→ AC")}</div>
+            </div>
+          </div>
+        </div>
+        <div style={{ marginTop: 10, padding: "10px 12px", background: "#0f172a", borderRadius: 10, color: "#f8fafc", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.8 }}>
+          {lang === "cpp" ? (<>
+            <div><span style={{ color: "#c084fc" }}>cout</span> &lt;&lt; result.size() &lt;&lt; <span style={{ color: "#34d399" }}>"\n"</span>;</div>
+            <div><span style={{ color: "#c084fc" }}>for</span> (<span style={{ color: "#c084fc" }}>auto</span>&amp; m : result)</div>
+            <div>  <span style={{ color: "#c084fc" }}>cout</span> &lt;&lt; m &lt;&lt; <span style={{ color: "#34d399" }}>"\n"</span>;</div>
+            <div style={{ color: "#94a3b8", fontSize: 10, marginTop: 4 }}>{t(E, "// set iterates alphabetically — no sort needed", "// set 은 알파벳순 순회 — 정렬 불필요")}</div>
+          </>) : (<>
+            <div>result = <span style={{ color: "#fbbf24" }}>sorted</span>(result)</div>
+            <div><span style={{ color: "#c084fc" }}>print</span>(<span style={{ color: "#fbbf24" }}>len</span>(result))</div>
+            <div><span style={{ color: "#c084fc" }}>print</span>(<span style={{ color: "#34d399" }}>'\n'</span>.join(result))</div>
+            <div style={{ color: "#94a3b8", fontSize: 10, marginTop: 4 }}>{t(E, "# set has no order — sorted() makes a list", "# set 은 순서 없음 — sorted() 로 리스트 만듦")}</div>
+          </>)}
+        </div>
+        <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center" }}>
+          {t(E, "Distinct: result is a set, so duplicate moos found via different positions count once.", "Distinct: result 는 set 이라 다른 위치에서 같은 moo 가 나와도 1 번만 셈.")}
+        </div>
+      </div>),
+    },
     { type: "reveal",
       narr: t(E, "That's it!\nThe whole insight: don't rescan everything — only update the 3 windows that actually changed.\nRemove → Try → Restore!\n🎉", "이게 전부예요! 핵심: 전부 다시 스캔하지 마 — 실제로 바뀐 3개 윈도우만 업데이트. 빼기 → 시도 → 복원! 🎉"),
       content: (<div style={{ textAlign: "center", padding: 8 }}>
