@@ -130,6 +130,15 @@ print(numbers)  # [2, 4, 6]
 \`\`\``
         },
         {
+          id: "pre-for-pattern",
+          type: "quiz",
+          title: "❓ Decide — How to modify list values?",
+          content: "**If you need to *modify* the list's values, which pattern?**",
+          options: ["for x in lst (value only)", "for i, x in enumerate(lst)", "for i in range(len(lst))"],
+          answer: 2,
+          explanation: "Receiving just the value gives you a *copy* — can't modify the list. You need the *position (index)*, so `range(len(lst))` or `enumerate` (both work)."
+        },
+        {
           id: "try4",
           type: "tryit",
           title: "🖥️ Modify Values!",
@@ -375,6 +384,15 @@ for n in numbers:
       title: "Final Mission",
       emoji: "🏆",
       steps: [
+        {
+          id: "pre-mission2-loop",
+          type: "quiz",
+          title: "❓ Decide — How to loop the student list?",
+          content: "**You're *looping through* a student list and printing a grade for each — which pattern?**",
+          options: ["for-each (value only)", "enumerate (value + index)", "range(len) (index directly)"],
+          answer: 0,
+          explanation: "If you only need the value, `for name in names:` is cleanest! Use enumerate when you also need the position number."
+        },
         {
           id: "mission2",
           type: "mission",

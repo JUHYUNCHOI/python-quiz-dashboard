@@ -61,6 +61,15 @@ print(score + 10)     # ❌ TypeError!
           component: "typeConversionVisualizer",
         },
         {
+          id: "pre-try1",
+          type: "quiz",
+          title: "🤔 어떤 옷으로?",
+          content: "**`'85'` 같은 *문자열을 더하기* 하려면 — 어떤 옷으로 갈아입혀야?**",
+          options: ["int() — 정수", "float() — 소수", "str() — 문자열", "bool() — 참/거짓"],
+          answer: 0,
+          explanation: "더하기/빼기 같은 *수학* 계산 → `int()` (정수) 또는 `float()` (소수). 그냥 글자(`str()`) 면 계산 못 해요."
+        },
+        {
           id: "try1",
           type: "tryit",
           title: "🖥️ 먼저 손으로 — 문자열을 더하기 전에 변환!",
@@ -68,7 +77,8 @@ print(score + 10)     # ❌ TypeError!
           initialCode: "score = \"85\"\n# score 를 정수로 바꿔서 10 더하기\nprint(___(score) + 10)",
           expectedOutput: "95",
           hint: "int() 안에 score 를 넣어요.",
-          hint2: "int(score)"
+          hint2: "int(score)",
+          choices: ["int()", "float()", "str()", "bool()"]
         },
         {
           id: "int-explain",
@@ -155,6 +165,15 @@ float(10)         # 10.0
 > 💡 \`int\` 와 차이: \`float("3.14")\` 는 ✅ 동작! 점이 있어도 OK.`
         },
         {
+          id: "pre-try3",
+          type: "quiz",
+          title: "🤔 어떤 옷으로?",
+          content: "**`'3.14'` 처럼 *소수점이 있는* 문자열을 숫자로?**",
+          options: ["int()", "float()", "str()", "bool()"],
+          answer: 1,
+          explanation: "소수점 있는 문자열은 `int()` 가 *거부* 해요. `float()` (소수) 만 받음."
+        },
+        {
           id: "try3",
           type: "tryit",
           title: "🖥️ 직접 해보기 — float()",
@@ -162,7 +181,8 @@ float(10)         # 10.0
           initialCode: "text = \"3.14\"\nnum = ___(text)\nprint(num * 2)",
           expectedOutput: "6.28",
           hint: "float() 로 변환!",
-          hint2: "float(text)"
+          hint2: "float(text)",
+          choices: ["int()", "float()", "str()", "bool()"]
         },
         {
           id: "str-explain",
@@ -189,6 +209,15 @@ print("점수: " + str(score) + "점")
 > 💡 lesson 8 의 **f-string** 을 쓰면 \`str()\` 안 써도 돼요: \`f"점수: {score}점"\` — 자동으로 변환해줘요.`
         },
         {
+          id: "pre-try4",
+          type: "quiz",
+          title: "🤔 어떤 옷으로?",
+          content: "**숫자를 *글자로 합쳐서* 출력하려면?**",
+          options: ["int()", "float()", "str()", "bool()"],
+          answer: 2,
+          explanation: "숫자 + 글자 합칠 땐 숫자를 `str()` 로 *글자화* 해야 `+` 로 이어붙일 수 있어요."
+        },
+        {
           id: "try4",
           type: "tryit",
           title: "🖥️ 직접 해보기 — str()",
@@ -196,7 +225,8 @@ print("점수: " + str(score) + "점")
           initialCode: "score = 95\ntext = ___(score)\nprint(\"점수: \" + text + \"점\")",
           expectedOutput: "점수: 95점",
           hint: "str() 로 숫자에 따옴표 옷을 입혀요.",
-          hint2: "str(score)"
+          hint2: "str(score)",
+          choices: ["int()", "float()", "str()", "bool()"]
         },
         {
           id: "predict-str-concat",
@@ -338,7 +368,8 @@ print(int("abc"))
           initialCode: "a = '25'\nb = '17'\n\n# 문자열을 숫자로 변환\nnum_a = ___(a)\nnum_b = ___(b)\n\nprint(f'{num_a} + {num_b} = {num_a + num_b}')\nprint(f'{num_a} × {num_b} = {num_a * num_b}')\nprint(f'합계의 타입: {type(num_a + num_b)}')",
           expectedOutput: "25 + 17 = 42\n25 × 17 = 425\n합계의 타입: <class 'int'>",
           hint: "두 빈칸 모두 int() 로 변환.",
-          hint2: "int(a) / int(b)"
+          hint2: "int(a) / int(b)",
+          choices: ["int()", "float()", "str()"]
         },
         {
           id: "complete",

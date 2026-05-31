@@ -61,6 +61,15 @@ The *meaning* of the value stays the same — \`"85"\` and \`85\` both mean "eig
           component: "typeConversionVisualizer",
         },
         {
+          id: "pre-try1",
+          type: "quiz",
+          title: "🤔 Which outfit?",
+          content: "**To *add* a string like `'85'` — which outfit to change into?**",
+          options: ["int() — integer", "float() — decimal", "str() — string", "bool() — true/false"],
+          answer: 0,
+          explanation: "For *math* like add/subtract → `int()` (integer) or `float()` (decimal). Plain text (`str()`) can't do math."
+        },
+        {
           id: "try1",
           type: "tryit",
           title: "🖥️ Now your turn — convert before adding!",
@@ -68,7 +77,8 @@ The *meaning* of the value stays the same — \`"85"\` and \`85\` both mean "eig
           initialCode: "score = \"85\"\n# convert score to an integer and add 10\nprint(___(score) + 10)",
           expectedOutput: "95",
           hint: "Put score inside int().",
-          hint2: "int(score)"
+          hint2: "int(score)",
+          choices: ["int()", "float()", "str()", "bool()"]
         },
         {
           id: "int-explain",
@@ -155,6 +165,15 @@ float(10)         # 10.0
 > 💡 Difference from \`int\`: \`float("3.14")\` ✅ works! The dot is fine.`
         },
         {
+          id: "pre-try3",
+          type: "quiz",
+          title: "🤔 Which outfit?",
+          content: "**For a string like `'3.14'` that has a *decimal point* — convert to a number how?**",
+          options: ["int()", "float()", "str()", "bool()"],
+          answer: 1,
+          explanation: "`int()` *rejects* strings with a decimal point. Only `float()` (decimal) accepts them."
+        },
+        {
           id: "try3",
           type: "tryit",
           title: "🖥️ Try It — float()",
@@ -162,7 +181,8 @@ float(10)         # 10.0
           initialCode: "text = \"3.14\"\nnum = ___(text)\nprint(num * 2)",
           expectedOutput: "6.28",
           hint: "Use float() to convert.",
-          hint2: "float(text)"
+          hint2: "float(text)",
+          choices: ["int()", "float()", "str()", "bool()"]
         },
         {
           id: "str-explain",
@@ -189,6 +209,15 @@ Without str()? — \`"Score: " + 95\` ❌ TypeError!
 > 💡 With **f-strings** from lesson 8 you don't need \`str()\`: \`f"Score: {score} points"\` — it converts automatically.`
         },
         {
+          id: "pre-try4",
+          type: "quiz",
+          title: "🤔 Which outfit?",
+          content: "**To *glue a number into text* for output, which?**",
+          options: ["int()", "float()", "str()", "bool()"],
+          answer: 2,
+          explanation: "To glue numbers with text, wrap the number in `str()` so `+` can join them as text."
+        },
+        {
           id: "try4",
           type: "tryit",
           title: "🖥️ Try It — str()",
@@ -196,7 +225,8 @@ Without str()? — \`"Score: " + 95\` ❌ TypeError!
           initialCode: "score = 95\ntext = ___(score)\nprint(\"Score: \" + text + \" points\")",
           expectedOutput: "Score: 95 points",
           hint: "str() wraps the number in a string outfit.",
-          hint2: "str(score)"
+          hint2: "str(score)",
+          choices: ["int()", "float()", "str()", "bool()"]
         },
         {
           id: "predict-str-concat",
@@ -338,7 +368,8 @@ print(int("abc"))
           initialCode: "a = '25'\nb = '17'\n\n# Convert strings to numbers\nnum_a = ___(a)\nnum_b = ___(b)\n\nprint(f'{num_a} + {num_b} = {num_a + num_b}')\nprint(f'{num_a} × {num_b} = {num_a * num_b}')\nprint(f'Type of sum: {type(num_a + num_b)}')",
           expectedOutput: "25 + 17 = 42\n25 × 17 = 425\nType of sum: <class 'int'>",
           hint: "Both blanks: int().",
-          hint2: "int(a) / int(b)"
+          hint2: "int(a) / int(b)",
+          choices: ["int()", "float()", "str()"]
         },
         {
           id: "complete",

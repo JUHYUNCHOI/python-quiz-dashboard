@@ -329,6 +329,24 @@ print(person.get("직업", "없음")) # "없음" — 기본값
           hint2: "코드를 그대로 실행하세요!"
         },
         {
+          id: "pre-mission-method",
+          type: "quiz",
+          title: "❓ 결정 — 어떤 메서드?",
+          content: "**상황: 친구들 이름만 보고 싶다 (점수는 X) — 어떤 메서드?**",
+          options: [".keys() — 키만", ".values() — 값만", ".items() — 둘 다", ".get(키) — 값 1개 안전"],
+          answer: 0,
+          explanation: "이름만 보고 싶으면 *키만* — `.keys()`. 점수만 보려면 `.values()`. 둘 다 짝지어서면 `.items()`. *특정 키의 값* 만 안전하게 가져올 땐 `.get(key)`."
+        },
+        {
+          id: "pre-mission-method-2",
+          type: "quiz",
+          title: "❓ 결정 — 안전 접근",
+          content: "**'없는 키를 찾았는데 에러 없이 None 받기' — 어떤 메서드?**",
+          options: [".keys()", ".values()", ".items()", ".get(key)"],
+          answer: 3,
+          explanation: "`dict[없는키]` 는 *KeyError 에러*. `.get(없는키)` 는 *조용히 None* 반환. *안전 접근* 패턴!"
+        },
+        {
           id: "mission-method",
           type: "mission",
           title: "🎯 성적 분석 — keys/values/get 메서드 채우기",
@@ -468,6 +486,15 @@ print(flipped)
       title: "최종 미션",
       emoji: "🏆",
       steps: [
+        {
+          id: "pre-mission1-in-get",
+          type: "quiz",
+          title: "❓ 결정 — in vs get",
+          content: "**'장바구니에 사과 있나?' 확인 — 어떤 도구?**",
+          options: ["사과 in 장바구니 (True/False)", "장바구니.get(사과) (값 또는 None)", "장바구니[사과] (값 또는 에러)"],
+          answer: 0,
+          explanation: "*있나 없나만* 알고 싶으면 `in` 이 가장 깔끔. `.get()` 은 *값* 도 같이 받고 싶을 때."
+        },
         {
           id: "mission1",
           type: "mission",
