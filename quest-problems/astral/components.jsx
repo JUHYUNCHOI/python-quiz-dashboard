@@ -110,15 +110,15 @@ export function AstralRunner() { return null; }
    체인을 W/G/B 로 토글하면서 state[0], state[1] 이 어떻게 갱신되는지 본다.
    INF (불가능) 은 빨간색. 최종 답은 min(state[0], state[1]).
    ════════════════════════════════════════════════════════════════════ */
-const DP_PRESETS = [
+const dpPresets = (E) => [
   { name: "G→W→G→G", chain: ["G", "W", "G", "G"] },
   { name: "G→B→G→W", chain: ["G", "B", "G", "W"] },
-  { name: "W→B (불가)", chain: ["W", "B"] },
+  { name: t(E, "W→B (impossible)", "W→B (불가)"), chain: ["W", "B"] },
   { name: "G→B→B→G", chain: ["G", "B", "B", "G"] },
   { name: "W→W→W→W", chain: ["W", "W", "W", "W"] },
 ];
 
-function dpRun(chain) {
+function dpRun(chain, E) {
   const INF = Infinity;
   const trace = [];
   let state = [INF, INF];
@@ -126,7 +126,15 @@ function dpRun(chain) {
   if (c0 === "W") state = [0, INF];
   else if (c0 === "G") state = [1, 1];
   // B 일 때 state 그대로 [INF, INF] — 첫 칸 in=0 이라 B 불가
-  trace.push({ comp: c0, state: [...state], note: c0 === "W" ? "in=0, s=0, out=0" : c0 === "G" ? "s=1, out 자유" : "❌ in=0 이라 B 불가" });
+  trace.push({
+    comp: c0,
+    state: [...state],
+    note: c0 === "W"
+      ? t(E, "in=0, s=0, out=0", "in=0, s=0, out=0")
+      : c0 === "G"
+        ? t(E, "s=1, out free (0 or 1)", "s=1, out 자유")
+        : t(E, "❌ in=0 here → B impossible", "❌ in=0 이라 B 불가")
+  });
 
   for (let k = 1; k < chain.length; k++) {
     const c = chain[k];
@@ -135,14 +143,14 @@ function dpRun(chain) {
     let note = "";
     if (c === "W") {
       if (s0 !== INF) ns[0] = s0;
-      note = "in=0 필요 → state[0]만 이어짐";
+      note = t(E, "Needs in=0 → only state[0] carries forward", "in=0 필요 → state[0]만 이어짐");
     } else if (c === "B") {
       if (s1 !== INF) { ns[0] = s1 + 1; ns[1] = s1 + 1; }
-      note = "in=1 필요 (이전 out=1) → +1 별";
+      note = t(E, "Needs in=1 (prev out=1) → +1 star", "in=1 필요 (이전 out=1) → +1 별");
     } else {
       if (s0 !== INF) { ns[0] = Math.min(ns[0], s0 + 1); ns[1] = Math.min(ns[1], s0 + 1); }
       if (s1 !== INF) { ns[0] = Math.min(ns[0], s1); }
-      note = "in=0면 새 별(+1), in=1면 그대로";
+      note = t(E, "in=0 → new star (+1); in=1 → no new star", "in=0면 새 별(+1), in=1면 그대로");
     }
     state = ns;
     trace.push({ comp: c, state: [...state], note });
@@ -161,8 +169,9 @@ export function AstralDpSim({ E }) {
   const addCell = () => chain.length < 6 && setChain([...chain, "W"]);
   const popCell = () => chain.length > 2 && setChain(chain.slice(0, -1));
 
-  const { trace, final } = dpRun(chain);
+  const { trace, final } = dpRun(chain, E);
   const impossible = final === Infinity;
+  const presets = dpPresets(E);
 
   const cellColor = (ch) => {
     if (ch === "W") return { bg: "#fff", fg: "#cbd5e1", border: C.border };
@@ -179,7 +188,7 @@ export function AstralDpSim({ E }) {
 
       {/* 프리셋 */}
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center", marginBottom: 12 }}>
-        {DP_PRESETS.map((p, i) => (
+        {presets.map((p, i) => (
           <button key={i} onClick={() => setChain([...p.chain])} style={{
             padding: "3px 8px", borderRadius: 6, fontSize: 11, fontWeight: 600,
             border: `1.5px solid ${C.border}`, background: "#fff", color: C.text, cursor: "pointer",
