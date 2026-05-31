@@ -163,7 +163,10 @@ export function NumInput({ question, hint, answer, E, onSolve }: NumInputProps) 
         <input
           value={val}
           onChange={e => setVal(e.target.value)}
-          onKeyDown={e => e.key === "Enter" && submit()}
+          onKeyDown={e => {
+            if ((e.nativeEvent as KeyboardEvent)?.isComposing || e.keyCode === 229) return
+            if (e.key === "Enter") submit()
+          }}
           disabled={correct}
           className={`w-20 px-3 py-2 rounded-lg border-2 text-lg font-black text-center font-mono outline-none ${inputBorder}`}
         />
@@ -224,7 +227,10 @@ export function TextInput({ question, hint, answer, E, onSolve }: TextInputProps
         <input
           value={val}
           onChange={e => setVal(e.target.value.toLowerCase())}
-          onKeyDown={e => e.key === "Enter" && submit()}
+          onKeyDown={e => {
+            if ((e.nativeEvent as KeyboardEvent)?.isComposing || e.keyCode === 229) return
+            if (e.key === "Enter") submit()
+          }}
           disabled={correct}
           className={`w-24 px-3 py-2 rounded-lg border-2 text-lg font-black text-center font-mono outline-none ${inputBorder}`}
         />

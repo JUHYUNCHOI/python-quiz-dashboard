@@ -24,6 +24,11 @@ export function createSmartKeyHandler(
   // 일반 <textarea> 는 HTMLTextAreaElement 로 좁혀. 런타임에 실제로 쓰는 건
   // textarea 의 selection/value API 뿐이라 둘 다 안전하게 동작해.
   return (e: React.KeyboardEvent<any>) => {
+    // IME composition 중에는 모든 키 가로채기 skip — 한글 조합 완료 Enter 가
+    // run/submit/auto-indent 같은 의도치 않은 동작 일으키지 않게.
+    // (nativeEvent.isComposing: 표준, keyCode 229: 구형 Safari/IME fallback)
+    if ((e.nativeEvent as KeyboardEvent)?.isComposing || e.keyCode === 229) return
+
     const textarea = e.currentTarget as HTMLTextAreaElement
     const start = textarea.selectionStart
     const end = textarea.selectionEnd

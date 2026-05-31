@@ -429,6 +429,8 @@ export function BlankCodeRunner({
               }}
               onFocus={() => setFocusedBlank(currentBlankId)}
               onKeyDown={(e) => {
+                // IME composition 중에는 skip — 한글 조합 완료 Enter 가 다음 빈칸 이동/실행 트리거 안 하게
+                if ((e.nativeEvent as KeyboardEvent)?.isComposing || e.keyCode === 229) return
                 if (e.key === "Enter") {
                   e.preventDefault()
                   // 다음 빈칸으로 이동하거나, 마지막이면 실행

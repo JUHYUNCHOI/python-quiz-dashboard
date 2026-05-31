@@ -334,7 +334,11 @@ export function TypeAlongPractice({
                     : "border-gray-300 bg-gray-900"
             )}>
               {/* Ghost text: 남은 코드를 흐리게 표시 */}
-              <div className="absolute inset-0 p-4 font-mono text-[14px] md:text-[15px] leading-[1.8] pointer-events-none whitespace-pre-wrap" aria-hidden="true">
+              <div
+                className="absolute inset-0 p-4 font-mono text-[14px] md:text-[15px] leading-[1.8] pointer-events-none whitespace-pre-wrap break-words"
+                aria-hidden="true"
+                style={{ fontFeatureSettings: '"liga" 0, "calt" 0', tabSize: 4 }}
+              >
                 <span className="invisible">{userCode}</span>
                 <span className="text-gray-600 opacity-40">{ghostText}</span>
               </div>
@@ -342,10 +346,15 @@ export function TypeAlongPractice({
                 ref={textareaRef}
                 value={userCode}
                 onChange={(e) => setUserCode(e.target.value)}
+                onKeyDown={(e) => {
+                  // IME composition 중에는 skip — 한글 조합 완료 키가 의도치 않게 처리되지 않게
+                  if ((e.nativeEvent as KeyboardEvent)?.isComposing || e.keyCode === 229) return
+                }}
                 className={cn(
-                  "w-full p-4 font-mono text-[14px] md:text-[15px] leading-[1.8] bg-transparent outline-none resize-none relative z-10",
+                  "w-full p-4 font-mono text-[14px] md:text-[15px] leading-[1.8] bg-transparent outline-none resize-none relative z-10 whitespace-pre-wrap break-words",
                   isFullMatch ? "text-green-300" : "text-yellow-300"
                 )}
+                style={{ fontFeatureSettings: '"liga" 0, "calt" 0', tabSize: 4 }}
                 placeholder=""
                 spellCheck={false}
                 autoCapitalize="off"
@@ -378,7 +387,11 @@ export function TypeAlongPractice({
                   : "border-gray-300 bg-gray-900"
           )}>
             {/* Ghost text: 남은 코드를 흐리게 표시 */}
-            <div className="absolute inset-0 p-3 font-mono text-[14px] leading-[1.8] pointer-events-none whitespace-pre-wrap" aria-hidden="true">
+            <div
+              className="absolute inset-0 p-3 font-mono text-[14px] leading-[1.8] pointer-events-none whitespace-pre-wrap break-words"
+              aria-hidden="true"
+              style={{ fontFeatureSettings: '"liga" 0, "calt" 0', tabSize: 4 }}
+            >
               <span className="invisible">{userCode}</span>
               <span className="text-gray-600 opacity-40">{ghostText}</span>
             </div>
@@ -386,10 +399,15 @@ export function TypeAlongPractice({
               ref={textareaRef}
               value={userCode}
               onChange={(e) => setUserCode(e.target.value)}
+              onKeyDown={(e) => {
+                // IME composition 중에는 skip — 한글 조합 완료 키가 의도치 않게 처리되지 않게
+                if ((e.nativeEvent as KeyboardEvent)?.isComposing || e.keyCode === 229) return
+              }}
               className={cn(
-                "w-full p-3 font-mono text-[14px] leading-[1.8] bg-transparent outline-none resize-none relative z-10",
+                "w-full p-3 font-mono text-[14px] leading-[1.8] bg-transparent outline-none resize-none relative z-10 whitespace-pre-wrap break-words",
                 isFullMatch ? "text-green-300" : "text-yellow-300"
               )}
+              style={{ fontFeatureSettings: '"liga" 0, "calt" 0', tabSize: 4 }}
               placeholder=""
               spellCheck={false}
               autoCapitalize="off"

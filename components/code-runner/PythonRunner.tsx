@@ -143,6 +143,8 @@ sys.stdout = StringIO()
 
   // Tab 키 처리 (들여쓰기)
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // IME composition 중에는 skip — 한글 조합 완료 키가 Tab/Enter 로 잘못 잡히지 않게
+    if ((e.nativeEvent as KeyboardEvent)?.isComposing || e.keyCode === 229) return
     if (e.key === 'Tab') {
       e.preventDefault()
       const start = e.currentTarget.selectionStart
