@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "@/contexts/auth-context"
 import { LanguageProvider } from "@/contexts/language-context"
+import { TeacherMirror } from "@/components/teacher-mirror"
 import { GlobalEditorProvider } from "@/components/teacher/global-editor-provider"
 import { SiteFooter } from "@/components/site-footer"
 import { ADSENSE_ENABLED, ADSENSE_PUBLISHER_ID } from "@/lib/adsense-config"
@@ -60,6 +61,7 @@ export default function RootLayout({
             <GlobalEditorProvider>
               {children}
               <SiteFooter />
+              <TeacherMirror />
             </GlobalEditorProvider>
           </LanguageProvider>
         </AuthProvider>
