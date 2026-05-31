@@ -80,16 +80,18 @@ print(sum([1, 2, 3, 4, 5]))
           id: "ch1-5",
           type: "mission",
           title: "Calculate Average",
-          task: "Use sum() and len() to calculate average",
+          task: "Print the average of the list! Total ÷ count.",
           initialCode: `numbers = [80, 90, 70, 85, 95]
 
-# average = sum / count
-average = # Write code here
-
-print(f'Average: {average}')`,
+# 1) Find the total (which built-in?)
+total = ___
+# 2) Find the count (which built-in?)
+count = ___
+# 3) Print the average
+print(f'Average: {___}')`,
           expectedOutput: "Average: 84.0",
-          hint: "sum(numbers) / len(numbers)",
-          hint2: "sum(numbers) / len(numbers)"
+          hint: "Total → the function that adds them up. Count → the function for length.",
+          hint2: "total = sum(numbers), count = len(numbers), average = total/count"
         }
       ]
     },
@@ -136,18 +138,21 @@ print(max([3, 7, 1, 9, 2]))
           id: "ch2-3",
           type: "mission",
           title: "Score Analysis",
-          task: "Use max(), min(), sum(), len() to analyze",
+          task: "Analyze the score data! Print the highest, lowest, total, count, and average.",
           initialCode: `scores = [85, 92, 78, 95, 88]
 
-highest = max(scores)
-lowest = min(scores)
-average = sum(scores) / len(scores)
+highest = ___(scores)
+lowest = ___(scores)
+total = ___(scores)
+count = ___(scores)
+average = ___ / ___
 
 print(f'Highest: {highest}')
 print(f'Lowest: {lowest}')
 print(f'Average: {average}')`,
           expectedOutput: "Highest: 95\nLowest: 78\nAverage: 87.6",
-          hint: "Just run the code as is!"
+          hint: "Pick the right built-in for each blank: max, min, total, count, then the average formula.",
+          hint2: "max, min, sum, len. average = total / count."
         }
       ]
     },
@@ -223,16 +228,17 @@ print(sorted(students, key=lambda x: x[1]))`,
           id: "ch3-5",
           type: "mission",
           title: "Find Top Student",
-          task: "Sort by score descending and print the top student's name",
+          task: "Print the name of the student with the highest score",
           initialCode: `students = [('Tom', 85), ('Jane', 92), ('Mike', 78)]
 
-# Sort by score descending
-result = sorted(students, key=lambda x: x[1], reverse=True)
+# Sort by score descending (fill in key and reverse!)
+result = sorted(students, key=___, reverse=___)
 
-# Print top student's name
-print(result[0][0])`,
+# Print the top student's name
+print(___)`,
           expectedOutput: "Jane",
-          hint: "result[0] is top student, result[0][0] is their name"
+          hint: "key = a lambda that grabs the score (second element). Top = result[0]; the name is the first item of that.",
+          hint2: "key=lambda x: x[1], reverse=True. print(result[0][0])"
         }
       ]
     },
@@ -324,16 +330,17 @@ numbers = list(map(int, input().split()))
           id: "ch4-5",
           type: "mission",
           title: "Convert and Sum",
-          task: "Combine map() and sum()",
+          task: "Convert a list of string-scores into integers, then print the total!",
           initialCode: `string_nums = ['10', '20', '30', '40']
 
-# 1. Convert to integers
-numbers = list(map(int, string_nums))
+# 1. Convert every item to int (as a list!)
+numbers = list(___(___, string_nums))
 
-# 2. Print sum
-print(sum(numbers))`,
+# 2. Print the total
+print(___(numbers))`,
           expectedOutput: "100",
-          hint: "10 + 20 + 30 + 40 = 100"
+          hint: "Transformer = applies a function to every item. Totaler = adds them up.",
+          hint2: "list(map(int, string_nums)), then sum(numbers)"
         }
       ]
     },

@@ -319,18 +319,20 @@ print(outer())
           id: "ch2-5",
           type: "mission",
           title: "문제 15: 카운터",
-          task: "global을 사용하지 않고 카운터를 증가시키세요",
+          task: "global 없이 함수만으로 count 를 3 으로 만드세요",
           initialCode: `count = 0
 
 def increase(n):
-    return n + 1
+    # n 보다 1 큰 값을 돌려줘!
+    return ___
 
 count = increase(count)
 count = increase(count)
-count = increase(count)
+count = ___  # 한 번 더 증가!
 print(count)`,
           expectedOutput: "3",
-          hint: "return으로 값을 돌려받아 다시 저장하면 돼요!"
+          hint: "return 으로 새 값을 돌려받아 count 에 다시 대입.",
+          hint2: "return n + 1, count = increase(count)"
         }
       ]
     },
@@ -453,14 +455,15 @@ print(결과[0][0])
           id: "ch3-6",
           type: "mission",
           title: "문제 21: 길이로 정렬",
-          task: "단어들을 길이 기준으로 정렬하세요",
+          task: "단어들을 짧은 것부터 긴 것 순서로 정렬하세요",
           initialCode: `단어 = ['apple', 'hi', 'banana', 'cat']
 
-# key=lambda로 길이 기준 정렬
-결과 = sorted(단어, key=lambda x: len(x))
+# 정렬 기준을 채워봐!
+결과 = sorted(단어, key=___)
 print(결과)`,
           expectedOutput: "['hi', 'cat', 'apple', 'banana']",
-          hint: "코드를 그대로 실행하면 돼요!"
+          hint: "정렬 기준 = 각 단어의 길이. 길이 재는 함수가 뭐였지?",
+          hint2: "key=len 또는 key=lambda x: len(x)"
         },
         {
           id: "ch3-7",
@@ -573,56 +576,64 @@ print(sum(결과))
           id: "ch4-5",
           type: "mission",
           title: "문제 27: 평균 구하기",
-          task: "sum()과 len()으로 평균을 구하세요",
+          task: "점수 리스트의 평균을 출력하세요",
           initialCode: `점수 = [80, 90, 70, 85, 95]
 
-평균 = sum(점수) / len(점수)
+# 평균 = 합 / 개수
+평균 = ___ / ___
 print(평균)`,
           expectedOutput: "84.0",
-          hint: "코드를 그대로 실행!"
+          hint: "리스트의 합을 구하는 함수와 길이를 구하는 함수를 떠올려봐.",
+          hint2: "평균 = sum(점수) / len(점수)"
         },
         {
           id: "ch4-6",
           type: "mission",
           title: "문제 28: 최대-최소",
-          task: "최대값과 최소값의 차이를 구하세요",
+          task: "리스트에서 가장 큰 수와 가장 작은 수의 차이를 출력하세요",
           initialCode: `숫자 = [3, 7, 1, 9, 4]
 
-차이 = max(숫자) - min(숫자)
+# 차이 = (가장 큰 수) - (가장 작은 수)
+차이 = ___(숫자) - ___(숫자)
 print(차이)`,
           expectedOutput: "8",
-          hint: "9 - 1 = 8"
+          hint: "큰 수를 찾는 함수, 작은 수를 찾는 함수가 뭐였지?",
+          hint2: "차이 = max(숫자) - min(숫자) → 9 - 1 = 8"
         },
         {
           id: "ch4-7",
           type: "mission",
           title: "문제 29: 문자→숫자 변환",
-          task: "map()으로 문자열을 정수로 변환하세요",
+          task: "문자열 리스트를 정수 리스트로 바꾼 뒤, 합도 출력하세요",
           initialCode: `문자들 = ['10', '20', '30']
 
-숫자들 = list(map(int, 문자들))
+# 모든 원소를 정수로 변환 → 리스트로 감싸기
+숫자들 = list(___(___, 문자들))
 print(숫자들)
-print(sum(숫자들))`,
+# 합 출력
+print(___(숫자들))`,
           expectedOutput: "[10, 20, 30]\n60",
-          hint: "코드를 그대로 실행!"
+          hint: "모든 원소에 함수 적용 = map. 합 = sum.",
+          hint2: "list(map(int, 문자들)), print(sum(숫자들))"
         },
         {
           id: "ch4-8",
           type: "mission",
           title: "문제 30: 종합 문제",
-          task: "점수에서 합격자(60점 이상)만 골라 평균을 구하세요",
+          task: "점수에서 60점 이상만 골라낸 뒤, 그 점수들의 평균을 출력하세요",
           initialCode: `점수 = [85, 45, 92, 55, 78, 30]
 
-# 1. 60점 이상만 필터
-합격 = list(filter(lambda x: x >= 60, 점수))
+# 1. 60점 이상만 골라내기 (조건에 맞는 것만 남기는 함수!)
+합격 = list(___(lambda x: ___, 점수))
 
-# 2. 평균 계산
-평균 = sum(합격) / len(합격)
+# 2. 평균 계산 (합 / 개수)
+평균 = ___ / ___
 
 print(f'합격자: {합격}')
 print(f'평균: {평균}')`,
           expectedOutput: "합격자: [85, 92, 78]\n평균: 85.0",
-          hint: "코드를 그대로 실행!"
+          hint: "조건에 맞는 것만 남기기 = filter. 람다 조건은 'x 가 60 이상'.",
+          hint2: "filter(lambda x: x >= 60, 점수), 평균 = sum(합격) / len(합격)"
         }
       ]
     }
