@@ -78,7 +78,7 @@ The *meaning* of the value stays the same — \`"85"\` and \`85\` both mean "eig
           expectedOutput: "95",
           hint: "Put score inside int().",
           hint2: "int(score)",
-          choices: ["int()", "float()", "str()", "bool()"]
+          choices: ["int", "float", "str", "bool"]
         },
         {
           id: "int-explain",
@@ -182,7 +182,7 @@ float(10)         # 10.0
           expectedOutput: "6.28",
           hint: "Use float() to convert.",
           hint2: "float(text)",
-          choices: ["int()", "float()", "str()", "bool()"]
+          choices: ["int", "float", "str", "bool"]
         },
         {
           id: "str-explain",
@@ -226,7 +226,7 @@ Without str()? — \`"Score: " + 95\` ❌ TypeError!
           expectedOutput: "Score: 95 points",
           hint: "str() wraps the number in a string outfit.",
           hint2: "str(score)",
-          choices: ["int()", "float()", "str()", "bool()"]
+          choices: ["int", "float", "str", "bool"]
         },
         {
           id: "predict-str-concat",
@@ -369,7 +369,7 @@ print(int("abc"))
           expectedOutput: "25 + 17 = 42\n25 × 17 = 425\nType of sum: <class 'int'>",
           hint: "Both blanks: int().",
           hint2: "int(a) / int(b)",
-          choices: ["int()", "float()", "str()"]
+          choices: ["int", "float", "str"]
         },
         {
           id: "complete",

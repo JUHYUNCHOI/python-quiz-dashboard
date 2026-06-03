@@ -78,7 +78,7 @@ print(score + 10)     # ❌ TypeError!
           expectedOutput: "95",
           hint: "int() 안에 score 를 넣어요.",
           hint2: "int(score)",
-          choices: ["int()", "float()", "str()", "bool()"]
+          choices: ["int", "float", "str", "bool"]
         },
         {
           id: "int-explain",
@@ -182,7 +182,7 @@ float(10)         # 10.0
           expectedOutput: "6.28",
           hint: "float() 로 변환!",
           hint2: "float(text)",
-          choices: ["int()", "float()", "str()", "bool()"]
+          choices: ["int", "float", "str", "bool"]
         },
         {
           id: "str-explain",
@@ -226,7 +226,7 @@ print("점수: " + str(score) + "점")
           expectedOutput: "점수: 95점",
           hint: "str() 로 숫자에 따옴표 옷을 입혀요.",
           hint2: "str(score)",
-          choices: ["int()", "float()", "str()", "bool()"]
+          choices: ["int", "float", "str", "bool"]
         },
         {
           id: "predict-str-concat",
@@ -369,7 +369,7 @@ print(int("abc"))
           expectedOutput: "25 + 17 = 42\n25 × 17 = 425\n합계의 타입: <class 'int'>",
           hint: "두 빈칸 모두 int() 로 변환.",
           hint2: "int(a) / int(b)",
-          choices: ["int()", "float()", "str()"]
+          choices: ["int", "float", "str"]
         },
         {
           id: "complete",
