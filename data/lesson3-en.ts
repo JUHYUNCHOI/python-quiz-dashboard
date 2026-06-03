@@ -190,7 +190,7 @@ print('price')
 print(price)
 \`\`\`
 
-(`price` holds 19000 from the previous step.) How do the two outputs differ?
+(\`price\` holds 19000 from the previous step.) How do the two outputs differ?
 
 {output}
 price
