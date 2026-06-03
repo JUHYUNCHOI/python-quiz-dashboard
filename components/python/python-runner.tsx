@@ -126,6 +126,10 @@ export function PythonRunner({
   const highlightRef = useRef<HTMLDivElement>(null)
   const highlightedCode = useMemo(() => highlightPython(code, true), [code])
   const isInitialMount = useRef(true)
+  // 한글(IME) 조합 중인지 추적. 조합 중에는 결과-리셋 effect 의 setState 로
+  // 추가 리렌더가 일어나면 React 가 selection 을 건드려 조합 글자가 괄호 밖으로
+  // 튕겨나감 → 조합 끝(compositionend)까지 그 churn 을 막는다.
+  const composingRef = useRef(false)
 
   useEffect(() => {
     loadPyodideInstance()
@@ -142,6 +146,9 @@ export function PythonRunner({
       isInitialMount.current = false
       return
     }
+    // 조합 중에는 리렌더를 일으키지 않는다 (IME 깨짐 방지). 조합이 끝나면
+    // onCompositionEnd 의 setCode 로 code 가 다시 바뀌어 이 effect 가 실행됨.
+    if (composingRef.current) return
     setIsCorrect(null)
     setOutput("")
     setError("")
@@ -373,6 +380,19 @@ export function PythonRunner({
               if (e.target.value !== initialCode) {
                 setHasEdited(true)
               }
+            }}
+            onCompositionStart={() => { composingRef.current = true }}
+            onCompositionEnd={(e) => {
+              composingRef.current = false
+              // 조합 종료 후 React 가 selection 을 끝으로 튕기는 것을 보정 —
+              // 조합 직전 커서 위치(괄호 안)를 유지시킨다.
+              const ta = e.currentTarget
+              const pos = ta.selectionStart
+              setCode(ta.value)
+              if (ta.value !== initialCode) setHasEdited(true)
+              requestAnimationFrame(() => {
+                try { ta.selectionStart = ta.selectionEnd = pos } catch { /* ignore */ }
+              })
             }}
             onKeyDown={handleKeyDown}
             onScroll={handleScroll}
