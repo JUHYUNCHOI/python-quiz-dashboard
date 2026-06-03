@@ -1,4 +1,5 @@
 import { t } from "@/components/quest/theme";
+import { SubarraySumSim } from "./components";
 
 const TEAL  = "#0891b2";
 const TEAL_L = "#e0f2fe";
@@ -115,50 +116,13 @@ export function makeChapters(E) {
       ),
     },
 
-    /* ── 4. Hashmap walkthrough ───────────────────────────────── */
+    /* ── 4. Hashmap walkthrough (interactive, step by step) ───── */
     {
       type: "reveal",
       narr: t(E,
-        "Use a hashmap to count how many times each prefix sum has appeared so far. Walk left to right: at each step, add seen[prefix − k] to the answer, then record the current prefix.",
-        "해시맵으로 지금까지 각 누계가 몇 번 등장했는지 세요. 왼→오른쪽으로 걸으며: 매 스텝에서 seen[현재누계 − k] 를 정답에 더하고, 현재 누계를 기록."),
-      content: (
-        <div style={{ padding: 14 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: "#374151", marginBottom: 10 }}>
-            {t(E, "nums=[1,1,1], k=2 — step by step:", "nums=[1,1,1], k=2 — 단계별:")}
-          </div>
-          {[
-            { i: "init",  prefix: 0,  lookup: "—",   found: 0, count: 0, seen: "{0:1}" },
-            { i: 0,       prefix: 1,  lookup: "1−2=−1", found: 0, count: 0, seen: "{0:1, 1:1}" },
-            { i: 1,       prefix: 2,  lookup: "2−2=0",  found: 1, count: 1, seen: "{0:1, 1:1, 2:1}" },
-            { i: 2,       prefix: 3,  lookup: "3−2=1",  found: 1, count: 2, seen: "{0:1, 1:1, 2:1, 3:1}" },
-          ].map((step, si) => (
-            <div key={si} style={{
-              display: "grid", gridTemplateColumns: "40px 1fr 1fr 40px",
-              gap: 4, alignItems: "center", marginBottom: 6,
-              padding: "6px 8px", borderRadius: 7,
-              background: step.found > 0 ? "#f0fdf4" : "#f8fafc",
-              border: `1px solid ${step.found > 0 ? "#86efac" : "#e2e8f0"}`,
-              fontSize: 11,
-            }}>
-              <span style={{ fontFamily: "monospace", color: "#64748b", textAlign: "center" }}>
-                {step.i === "init" ? "init" : `[${step.i}]`}
-              </span>
-              <span style={{ fontFamily: "monospace", color: "#374151" }}>
-                prefix={step.prefix}  look:{step.lookup}
-              </span>
-              <span style={{ fontFamily: "monospace", color: "#64748b", fontSize: 10 }}>
-                {step.seen}
-              </span>
-              <span style={{ fontWeight: 700, color: step.found > 0 ? "#15803d" : "#94a3b8", textAlign: "right" }}>
-                +{step.found}
-              </span>
-            </div>
-          ))}
-          <div style={{ marginTop: 8, fontSize: 12.5, fontWeight: 700, color: TEAL_D, textAlign: "right" }}>
-            {t(E, "Total count = 2 ✓", "총 개수 = 2 ✓")}
-          </div>
-        </div>
-      ),
+        "Now trace it one step at a time. Press \"Next step\" to walk the array: watch the running prefix sum, the partner we look up (prefix − k), the seen counter, and the answer growing. Try the negatives case too — that's where counting (not a yes/no set) matters.",
+        "이제 한 스텝씩 직접 따라가 봐요. \"다음 스텝\" 을 누르며 배열을 걸으면: 누계(prefix), 찾는 짝(prefix − k), 출석부(seen), 그리고 정답이 커지는 걸 볼 수 있어요. 음수 케이스도 눌러봐요 — 거기서 \"있다/없다\"가 아니라 \"횟수\"를 세야 하는 이유가 드러나요."),
+      content: <SubarraySumSim E={E} />,
     },
 
     /* ── 5. Quiz ─────────────────────────────────────────────── */
