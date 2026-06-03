@@ -183,5 +183,10 @@ export const PROBLEM_LOADERS: Record<string, AppLoader> = {
   'makedistinct': () => import('@/quest-problems/makedistinct/MakeDistinctApp'),
   'strangefn': () => import('@/quest-problems/strangefn/StrangeFnApp'),
   'swaptowin': () => import('@/quest-problems/swaptowin/SwapToWinApp'),
+  // LeetCode — Prefix Sum Series
+  'lc1480': () => import('@/quest-problems/lc1480/Lc1480App'),
+  'lc303':  () => import('@/quest-problems/lc303/Lc303App'),
+  'lc560':  () => import('@/quest-problems/lc560/Lc560App'),
+  'lc974':  () => import('@/quest-problems/lc974/Lc974App'),
 }
 

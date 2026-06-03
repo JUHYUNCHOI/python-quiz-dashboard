@@ -201,6 +201,11 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"mco15bitcoin",emoji:"₿",title:"Bitcoin",sub:"MCO 2015 P3",section:"MCO"},
   {id:"mco15trains",emoji:"🚂",title:"Trains",sub:"MCO 2015 P4",section:"MCO"},
   {id:"mco15secret",emoji:"🔐",title:"Secret",sub:"MCO 2015 P5",section:"MCO"},
+  // LeetCode — Prefix Sum Series
+  {id:"lc1480",emoji:"➕",title:"Running Sum of 1d Array",sub:"LeetCode #1480 · Easy",section:"LeetCode",url:"https://leetcode.com/problems/running-sum-of-1d-array/"},
+  {id:"lc303", emoji:"📏",title:"Range Sum Query - Immutable",sub:"LeetCode #303 · Easy",section:"LeetCode",url:"https://leetcode.com/problems/range-sum-query-immutable/"},
+  {id:"lc560", emoji:"🎯",title:"Subarray Sum Equals K",sub:"LeetCode #560 · Medium",section:"LeetCode",url:"https://leetcode.com/problems/subarray-sum-equals-k/"},
+  {id:"lc974", emoji:"🔢",title:"Subarray Sums Divisible by K",sub:"LeetCode #974 · Medium",section:"LeetCode",url:"https://leetcode.com/problems/subarray-sums-divisible-by-k/"},
 ]
 
 export const PROBLEM_MAP = new Map(ALL_PROBLEMS.map(p => [p.id, p]))
