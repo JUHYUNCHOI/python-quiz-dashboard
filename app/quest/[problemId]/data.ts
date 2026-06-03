@@ -206,6 +206,8 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"lc303", emoji:"📏",title:"Range Sum Query - Immutable",sub:"LeetCode #303 · Easy",section:"LeetCode",url:"https://leetcode.com/problems/range-sum-query-immutable/"},
   {id:"lc560", emoji:"🎯",title:"Subarray Sum Equals K",sub:"LeetCode #560 · Medium",section:"LeetCode",url:"https://leetcode.com/problems/subarray-sum-equals-k/"},
   {id:"lc974", emoji:"🔢",title:"Subarray Sums Divisible by K",sub:"LeetCode #974 · Medium",section:"LeetCode",url:"https://leetcode.com/problems/subarray-sums-divisible-by-k/"},
+  // LeetCode — Sliding Window
+  {id:"lc3",   emoji:"🪟",title:"Longest Substring Without Repeating Characters",sub:"LeetCode #3 · Medium",section:"LeetCode",url:"https://leetcode.com/problems/longest-substring-without-repeating-characters/"},
 ]
 
 export const PROBLEM_MAP = new Map(ALL_PROBLEMS.map(p => [p.id, p]))

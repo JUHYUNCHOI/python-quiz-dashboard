@@ -242,6 +242,7 @@ const SECTIONS: Section[] = [
       { id: "lc303",  emoji: "📏", title: "Range Sum Query - Immutable", sub: "LeetCode #303 · Easy" },
       { id: "lc560",  emoji: "🎯", title: "Subarray Sum Equals K", sub: "LeetCode #560 · Medium" },
       { id: "lc974",  emoji: "🔢", title: "Subarray Sums Divisible by K", sub: "LeetCode #974 · Medium" },
+      { id: "lc3",    emoji: "🪟", title: "Longest Substring Without Repeating Characters", sub: "LeetCode #3 · Medium" },
     ],
   },
 ]
