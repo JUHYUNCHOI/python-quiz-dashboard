@@ -1,4 +1,5 @@
 import { t } from "@/components/quest/theme";
+import { CodeBlock } from "@/components/quest/shared";
 import { SubarraySumSim } from "./components";
 
 const TEAL  = "#0891b2";
@@ -66,15 +67,16 @@ export function makeChapters(E) {
         "완전탐색: 모든 (i, j) 쌍 시도. 시작 인덱스 i 마다 j 를 오른쪽으로 늘리며 합 확인. O(n²) — n=2×10^4 이면 4×10^8 연산. 시간 초과."),
       content: (
         <div style={{ padding: 14 }}>
-          <div style={{ background: "#fff7ed", border: "1.5px solid #fb923c", borderRadius: 10, padding: "10px 14px", marginBottom: 12 }}>
-            <div style={{ fontFamily: "monospace", fontSize: 12, color: "#1e293b", lineHeight: 1.8 }}>
-              <div>{"for i in range(len(nums)):  # start"}</div>
-              <div>{"    total = 0"}</div>
-              <div>{"    for j in range(i, len(nums)):  # end"}</div>
-              <div>{"        total += nums[j]"}</div>
-              <div>{"        if total == k:"}</div>
-              <div>{"            count += 1"}</div>
-            </div>
+          <div style={{ marginBottom: 12 }}>
+            <CodeBlock lang="py" lines={[
+              "count = 0",
+              "for i in range(len(nums)):          # start",
+              "    total = 0",
+              "    for j in range(i, len(nums)):   # end",
+              "        total += nums[j]",
+              "        if total == k:",
+              "            count += 1",
+            ]} />
           </div>
           <div style={{ fontSize: 12, color: "#374151", lineHeight: 1.6, background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 8, padding: "8px 12px" }}>
             {t(E,
