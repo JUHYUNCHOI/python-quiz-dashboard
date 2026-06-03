@@ -23,8 +23,12 @@ export const lesson5Data: LessonData = {
 \`\`\`python
 first = "안녕"
 second = "하세요"
-print(first + second)  # 안녕하세요
+print(first + second)
 \`\`\`
+
+{output}
+안녕하세요
+{/output}
 
 문자열 + 문자열 = **이어붙이기!**
 
@@ -59,8 +63,12 @@ print(greeting)
 a = "파"
 b = "이"
 c = "썬"
-print(a + b + c)   # 파이썬
-\`\`\``
+print(a + b + c)
+\`\`\`
+
+{output}
+파이썬
+{/output}`
         },
         {
           id: "concat-explain-spaces",
@@ -69,9 +77,14 @@ print(a + b + c)   # 파이썬
           content: `### 공백은 직접 챙겨야 해요
 
 \`\`\`python
-print("Hello" + "World")        # HelloWorld — 공백 없이 딱 붙음!
-print("Hello" + " " + "World")  # Hello World
+print("Hello" + "World")
+print("Hello" + " " + "World")
 \`\`\`
+
+{output}
+HelloWorld
+Hello World
+{/output}
 
 \`+\` 는 **두 문자열을 글자 그대로** 이어붙여요. 공백이 필요하면 \`" "\` 를 직접 끼워넣어요.
 
@@ -142,9 +155,14 @@ print(len(text))
           content: `### 엣지 케이스 — 빈 문자열
 
 \`\`\`python
-print(len(""))      # 0 — 글자가 0개
-print(len(" "))     # 1 — 공백도 한 글자!
+print(len(""))
+print(len(" "))
 \`\`\`
+
+{output}
+0
+1
+{/output}
 
 빈 따옴표 \`""\` 는 진짜 비어있는 거. 공백 \`" "\` 은 보이지 않지만 1 글자예요. 헷갈리기 쉬워요.
 
@@ -171,9 +189,14 @@ text = "Python"
 #       P  y  t  h  o  n
 #      [0][1][2][3][4][5]
 
-print(text[0])    # P (첫 글자)
-print(text[3])    # h
+print(text[0])
+print(text[3])
 \`\`\`
+
+{output}
+P
+h
+{/output}
 
 > 첫 글자가 \`[1]\` 이 아니라 \`[0]\` 인 거 잊지 말기! 컴퓨터는 0부터 세요.`
         },
@@ -190,9 +213,14 @@ text = "Python"
 #        P   y   t   h   o   n
 #      [-6][-5][-4][-3][-2][-1]   ← 뒤에서부터
 
-print(text[-1])   # n (마지막)
-print(text[-2])   # o (뒤에서 두 번째)
+print(text[-1])
+print(text[-2])
 \`\`\`
+
+{output}
+n
+o
+{/output}
 
 \`text[-1]\` 은 **항상 마지막 글자** — 문자열 길이를 몰라도 됨! 매우 자주 쓰여요.
 
@@ -200,10 +228,14 @@ print(text[-2])   # o (뒤에서 두 번째)
 
 \`\`\`python
 name = "Alice"
-initial = name[0]      # 'A'
-last = name[-1]        # 'e'
+initial = name[0]
+last = name[-1]
 print(name, "의 이니셜:", initial)
 \`\`\`
+
+{output}
+Alice 의 이니셜: A
+{/output}
 
 ### ⚠️ 인덱스가 범위 밖이면 에러!
 
@@ -271,10 +303,16 @@ print(word[-2])
 \`"하" * 3\` 은 \`"하" + "하" + "하"\` 와 똑같아요 — 그냥 **더 짧게 쓰는 방법**.
 
 \`\`\`python
-print("하" * 3)       # 하하하
-print("=" * 5)        # =====
-print("안녕! " * 2)   # 안녕! 안녕!
+print("하" * 3)
+print("=" * 5)
+print("안녕! " * 2)
 \`\`\`
+
+{output}
+하하하
+=====
+안녕! 안녕!
+{/output}
 
 > 💡 \`5 * "="\` 처럼 **순서 바꿔도** 똑같이 동작해요!
 
@@ -400,9 +438,14 @@ print("바보 포함?:", "바보" in comment)
 ### not in — 반대
 
 \`\`\`python
-print("foo" not in "hello")   # True (포함 안 됨)
-print("h" not in "hello")     # False (h 가 있으므로)
+print("foo" not in "hello")
+print("h" not in "hello")
 \`\`\`
+
+{output}
+True
+False
+{/output}
 
 ### ⚠️ 대소문자 구분
 
@@ -452,17 +495,26 @@ print(a == c)
           content: `\`<\` 와 \`>\` 도 문자열에 통해요. **사전에서 앞에 있는 단어** 가 더 작다고 봐요.
 
 \`\`\`python
-print("apple" < "banana")   # True — a 가 b 보다 사전에서 앞
-print("kiwi" < "apple")     # False — k 가 a 보다 뒤
+print("apple" < "banana")
+print("kiwi" < "apple")
 \`\`\`
+
+{output}
+True
+False
+{/output}
 
 사전 순서 = 첫 글자부터 한 글자씩 비교. 첫 글자가 같으면 다음 글자로 넘어가요. 사전 찾는 방법과 똑같아요.
 
 ### 대문자 vs 소문자
 
 \`\`\`python
-print("apple" < "Apple")    # False
+print("apple" < "Apple")
 \`\`\`
+
+{output}
+False
+{/output}
 
 규칙 하나만 기억: **대문자 < 소문자**. (정확한 원리는 lesson 9 에서.)
 
@@ -472,7 +524,12 @@ print("apple" < "Apple")    # False
 answer = "y"
 print("y 인가?:", answer == "y")
 print("n 인가?:", answer == "n")
-\`\`\``
+\`\`\`
+
+{output}
+y 인가?: True
+n 인가?: False
+{/output}`
         },
         {
           id: "compare-explain-trap",
@@ -540,8 +597,11 @@ print("나이:", age)
 name = "민수"
 score = 95
 print(name, "의 점수는", score, "점")
-# 민수 의 점수는 95 점
 \`\`\`
+
+{output}
+민수 의 점수는 95 점
+{/output}
 
 지금은 콤마만 알면 충분해요!`
         },
@@ -587,8 +647,12 @@ text = "He said "hi""   # ❌ SyntaxError
 
 \`\`\`python
 text = "He said \\"hi\\""
-print(text)   # He said "hi"
+print(text)
 \`\`\`
+
+{output}
+He said "hi"
+{/output}
 
 \`\\"\` 는 "이건 문자열을 끝내는 따옴표가 아니라, 그냥 큰따옴표 글자야" 라는 뜻.`
         },
@@ -696,8 +760,12 @@ len("Python")    # 6
 **숫자와 같이 출력** — \`print()\` 콤마 사용 (이 단원에서 배운 방법)
 \`\`\`python
 score = 100
-print("점수:", score)   # 점수: 100
+print("점수:", score)
 \`\`\`
+
+{output}
+점수: 100
+{/output}
 
 > 💡 이번 레슨에서 미뤘던 것들 (대소문자 무시 비교, \`+\` 로 숫자 합치기, \`int("10")\` 같은 변환) 은 다음 레슨들에서 차근차근 배워요. 지금은 위 도구들 손에 익히는 데 집중!`
         },

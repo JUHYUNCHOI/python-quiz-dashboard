@@ -125,9 +125,16 @@ print(age + 1)           # ❌ TypeError
 \`\`\`python
 # 입력: 3 5
 a, b = input().split()
-print(a)   # "3"  ← 문자열!
-print(b)   # "5"  ← 문자열!
+print(a)   # ← 문자열!
+print(b)   # ← 문자열!
 \`\`\`
+
+각각 어떤 값이 나올까요? 먼저 생각해 보고 눌러요.
+
+{output}
+3
+5
+{/output}
 
 \`.split()\` 이 공백으로 잘라줘요. **각각 문자열로** 들어와요.
 
@@ -168,15 +175,27 @@ print(b)   # "5"  ← 문자열!
 \`\`\`python
 # 사용자가 "  호두  " 입력 (앞뒤 공백)
 name = input()
-print(f"[{name}]")         # [  호두  ]   ← 공백 그대로!
+print(f"[{name}]")
 \`\`\`
+
+공백이 그대로 살아있을까요? 눌러서 확인해요.
+
+{output}
+[  호두  ]
+{/output}
 
 \`.strip()\` 으로 앞뒤 공백 제거.
 
 \`\`\`python
 name = input().strip()
-print(f"[{name}]")         # [호두]   ← 깔끔
+print(f"[{name}]")
 \`\`\`
+
+이번엔 어떻게 나올까요?
+
+{output}
+[호두]
+{/output}
 
 > 💡 \`.strip()\` 은 레슨 6 (문자열 메서드) 에서 본 거. 이름·아이디 같은 입력에 단골.`
         },

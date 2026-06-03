@@ -211,9 +211,16 @@ The rest of \`<class '...'>\` is just packaging Python adds automatically.
           content: `**Boolean (bool)** can hold only two values — \`True\` or \`False\`.
 
 \`\`\`python
-print(True)   # True
-print(False)  # False
+print(True)
+print(False)
 \`\`\`
+
+What do you think this prints?
+
+{output}
+True
+False
+{/output}
 
 ### Everyday analogies
 
@@ -230,8 +237,14 @@ print(False)  # False
 ### Compare two values and a bool pops out
 
 \`\`\`python
-print(10 > 5)    # True   (10 is greater than 5)
+print(10 > 5)
 \`\`\`
+
+10 is greater than 5 — what bool value comes out?
+
+{output}
+True
+{/output}
 
 > 💡 You'll learn comparison operators like \`>\` in detail in **lesson 4**. For now, just remember "comparison result = bool".`
         },
@@ -429,8 +442,14 @@ Next time, we'll learn about **variables**! 📦`
 Computers can't store decimals with perfect accuracy.
 
 \`\`\`python
-print(0.1 + 0.2)   # 0.30000000000000004 😱
+print(0.1 + 0.2)
 \`\`\`
+
+You might expect 0.3, but the actual output is:
+
+{output}
+0.30000000000000004
+{/output}
 
 Not getting exactly 0.3 is **normal**! Just "this can happen" for now.
 
@@ -441,8 +460,12 @@ Not getting exactly 0.3 is **normal**! Just "this can happen" for now.
 \`True\` is 1, \`False\` is 0.
 
 \`\`\`python
-print(True + True)   # 2
+print(True + True)
 \`\`\`
+
+{output}
+2
+{/output}
 
 You'll meet this again in the conditionals lesson (lesson 11).
 

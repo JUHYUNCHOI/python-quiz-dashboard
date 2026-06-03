@@ -21,7 +21,7 @@ export async function restoreFromCloud(userId: string) {
         .limit(100),
       supabase
         .from("lesson_progress")
-        .select("lesson_id, completed, progress_type, updated_at")
+        .select("lesson_id, completed, progress_type, updated_at, score")
         .eq("user_id", userId)
         .eq("completed", true)
         .or("progress_type.eq.learn,progress_type.eq.quiz,progress_type.is.null"),
@@ -48,7 +48,10 @@ export async function restoreFromCloud(userId: string) {
         const learnLessons = data.filter(l => l.progress_type === "learn" || !l.progress_type)
         const quizLessons = data.filter(l => l.progress_type === "quiz")
         if (learnLessons.length) restoreCompletedLessons(learnLessons)
-        if (quizLessons.length) restoreCompletedQuizzes(quizLessons)
+        if (quizLessons.length) {
+          restoreCompletedQuizzes(quizLessons)
+          restoreQuizScores(quizLessons)
+        }
       } else if (lessonResult.value.error) {
         console.error("[RestoreFromCloud] lesson_progress 쿼리 에러:",
           lessonResult.value.error.message, lessonResult.value.error.code)
@@ -179,6 +182,27 @@ function restoreCompletedQuizzes(lessons: Record<string, unknown>[]) {
     localStorage.setItem("completedQuizzes", JSON.stringify(Array.from(existingSet)))
   } catch (e) {
     console.error("[RestoreFromCloud] completedQuizzes 저장 실패:", e)
+  }
+}
+
+/** lesson_progress (quiz) 의 score → quiz-scores localStorage
+ *  복습 점수 복원. 다른 기기/재로그인 시 학생 화면에 점수가 안 뜨던 버그 수정.
+ *  merge: DB 점수를 항상 반영 (기존 로컬 점수는 같은 lesson_id 면 DB 값으로 덮어씀 —
+ *  DB 가 markQuizComplete 시점에 같이 upsert 되므로 항상 최신/동등).
+ */
+function restoreQuizScores(quizLessons: Record<string, unknown>[]) {
+  try {
+    const existingRaw = localStorage.getItem("quiz-scores")
+    const scores: Record<string, number> = existingRaw ? JSON.parse(existingRaw) : {}
+    for (const l of quizLessons) {
+      const raw = l.score
+      if (typeof raw !== "number") continue
+      const clamped = Math.max(0, Math.min(100, Math.round(raw)))
+      scores[String(l.lesson_id)] = clamped
+    }
+    localStorage.setItem("quiz-scores", JSON.stringify(scores))
+  } catch (e) {
+    console.error("[RestoreFromCloud] quiz-scores 저장 실패:", e)
   }
 }
 

@@ -21,8 +21,12 @@ export const lesson7Data: LessonData = {
           content: `\`print()\` 안에 값을 여러 개 넣으면 사이에 **공백** 이 들어가요:
 
 \`\`\`python
-print("A", "B", "C")  # A B C
+print("A", "B", "C")
 \`\`\`
+
+{output}
+A B C
+{/output}
 
 그런데 "공백 말고 \`-\` 로 붙이고 싶은데?" 같은 순간이 생겨요.
 이럴 때 쓰는 게 **옵션** 이에요. 오늘은 두 가지를 배워요:
@@ -40,14 +44,27 @@ print("A", "B", "C")  # A B C
 
 \`\`\`python
 print("A", "B", "C", sep="-")
-# A-B-C
-
-print("2024", "01", "15", sep="/")
-# 2024/01/15
-
-print("철수", "영희", "민수", sep=", ")
-# 철수, 영희, 민수
 \`\`\`
+
+{output}
+A-B-C
+{/output}
+
+\`\`\`python
+print("2024", "01", "15", sep="/")
+\`\`\`
+
+{output}
+2024/01/15
+{/output}
+
+\`\`\`python
+print("철수", "영희", "민수", sep=", ")
+\`\`\`
+
+{output}
+철수, 영희, 민수
+{/output}
 
 **기본값은 \`sep=" "\` (공백 한 칸)** — 그래서 평소엔 띄어쓰기로 나와요.
 
@@ -128,17 +145,23 @@ print("python", "java", "c++", sep=" | ")
 \`\`\`python
 print("안녕")
 print("하세요")
-# 안녕
-# 하세요
 \`\`\`
+
+{output}
+안녕
+하세요
+{/output}
 
 **end** 옵션으로 그 끝 글자를 바꿀 수 있어요. 줄바꿈 대신 공백을 넣으면 한 줄로 이어져요:
 
 \`\`\`python
 print("안녕", end=" ")
 print("하세요")
-# 안녕 하세요
 \`\`\`
+
+{output}
+안녕 하세요
+{/output}
 
 **어디 쓰나?**
 - 두 \`print\` 를 한 줄로 붙이고 싶을 때 → \`end=" "\`
@@ -218,15 +241,22 @@ print("냠")
 \`\`\`python
 print("A", "B", "C", sep="-", end="!")
 print("끝")
-# A-B-C!끝
 \`\`\`
+
+{output}
+A-B-C!끝
+{/output}
 
 위 결과를 보면 — \`A-B-C\` 까지는 \`sep\` 이 만들고, \`!\` 는 \`end\` 가 만들고, 그 뒤에 \`끝\` 이 *줄바꿈 없이* 바로 붙었죠.
 
 **순서는 상관없어요** — 이름으로 알려주니까 어디 써도 같은 결과:
 \`\`\`python
-print("A", "B", end="!", sep="-")  # 똑같이 A-B!
-\`\`\``
+print("A", "B", end="!", sep="-")
+\`\`\`
+
+{output}
+A-B!
+{/output}`
         },
         {
           id: "try5",

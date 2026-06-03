@@ -125,9 +125,16 @@ For decimals, use \`float()\`.`
 \`\`\`python
 # Input: 3 5
 a, b = input().split()
-print(a)   # "3"  ← string!
-print(b)   # "5"  ← string!
+print(a)   # ← string!
+print(b)   # ← string!
 \`\`\`
+
+What value does each line print? Think first, then reveal.
+
+{output}
+3
+5
+{/output}
 
 \`.split()\` cuts the input by spaces. **Each piece is still a string.**
 
@@ -168,15 +175,27 @@ print(b)   # "5"  ← string!
 \`\`\`python
 # User types "  Walnut  " (extra spaces)
 name = input()
-print(f"[{name}]")     # [  Walnut  ]   ← spaces stay!
+print(f"[{name}]")
 \`\`\`
+
+Do the spaces survive? Reveal to check.
+
+{output}
+[  Walnut  ]
+{/output}
 
 \`.strip()\` removes leading/trailing whitespace.
 
 \`\`\`python
 name = input().strip()
-print(f"[{name}]")     # [Walnut]   ← clean
+print(f"[{name}]")
 \`\`\`
+
+What about now?
+
+{output}
+[Walnut]
+{/output}
 
 > 💡 \`.strip()\` was in lesson 6 (string methods). Classic move for name/ID inputs.`
         },

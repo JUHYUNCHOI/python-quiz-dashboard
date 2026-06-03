@@ -150,7 +150,6 @@ export function makeChapters(E) {
 
               {/* minus sign */}
               <text x="4" y="75" fontSize="14" fontWeight="800" fill="#374151">−</text>
-              <text x="4" y="75" fontSize="14" fontWeight="800" fill="#374151" x="4" y="75">−</text>
             </svg>
           </div>
 

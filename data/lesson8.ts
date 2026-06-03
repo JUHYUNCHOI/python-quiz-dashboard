@@ -23,8 +23,11 @@ export const lesson8Data: LessonData = {
 \`\`\`python
 name = "철수"
 print("이름: " + name + " 입니다")
-# 이름: 철수 입니다
 \`\`\`
+
+{output}
+이름: 철수 입니다
+{/output}
 
 따옴표 켰다 껐다, \`+\` 여러 번 — 글자가 늘어날수록 복잡해져요. 😩
 
@@ -39,8 +42,11 @@ print("나이: " + age)   # 💥 에러!
 
 \`\`\`python
 print(f"이름: {name}, 나이: {age}")
-# 이름: 철수, 나이: 15
-\`\`\``
+\`\`\`
+
+{output}
+이름: 철수, 나이: 15
+{/output}`
         },
         {
           id: "fstring-explain",
@@ -52,8 +58,13 @@ print(f"이름: {name}, 나이: {age}")
 name = "철수"
 age = 15
 print(f"안녕 {name}, {age}살!")
-# 안녕 철수, 15살!
 \`\`\`
+
+출력하면 뭐가 나올까요? 먼저 생각해 보고 눌러요.
+
+{output}
+안녕 철수, 15살!
+{/output}
 
 규칙은 두 개:
 
@@ -66,8 +77,12 @@ print(f"안녕 {name}, {age}살!")
 
 \`\`\`python
 price = 19000
-print(f"가격: {price}원")   # 가격: 19000원
-\`\`\``
+print(f"가격: {price}원")
+\`\`\`
+
+{output}
+가격: 19000원
+{/output}`
         },
         {
           id: "fstring-viz",
@@ -141,8 +156,11 @@ print("안녕, {name}!")
 a = 10
 b = 3
 print(f"{a} + {b} = {a + b}")
-# 10 + 3 = 13
 \`\`\`
+
+{output}
+10 + 3 = 13
+{/output}
 
 파이썬이 \`{ }\` 를 만나면:
 1. 안에 있는 식을 먼저 **계산** 하고
@@ -169,12 +187,15 @@ print(f"{a} + {b} = {a + b}")
 \`\`\`python
 name = "python"
 print(f"대문자: {name.upper()}")
-# 대문자: PYTHON
 
 text = "  hello  "
 print(f"정리: '{text.strip()}'")
-# 정리: 'hello'
 \`\`\`
+
+{output}
+대문자: PYTHON
+정리: 'hello'
+{/output}
 
 원리는 똑같음: \`{ }\` 안의 \`name.upper()\` 를 먼저 실행 → 결과 \`"PYTHON"\` 이 자리에 들어가요.`
         },
@@ -236,12 +257,15 @@ print(f"원주율: {pi:.4f}")   # 3.1416 (소수점 4자리)
 \`\`\`python
 price = 1000000
 print(f"가격: {price:,}원")
-# 가격: 1,000,000원
 
 salary = 3500000
 print(f"월급: {salary:,}원")
-# 월급: 3,500,000원
 \`\`\`
+
+{output}
+가격: 1,000,000원
+월급: 3,500,000원
+{/output}
 
 **{변수:,}** = 천 단위 쉼표!`
         },
@@ -262,8 +286,12 @@ print(f"월급: {salary:,}원")
           content: `글자나 숫자를 **정해진 칸** 안에 넣을 수 있어요. 빈 자리는 공백으로 채워져요.
 
 \`\`\`python
-print(f"|{'cat':<10}|")   # |cat       |
+print(f"|{'cat':<10}|")
 \`\`\`
+
+{output}
+|cat       |
+{/output}
 
 - \`:<10\` = "10칸 안에 — **왼쪽**부터 채워". 남는 자리는 오른쪽에 공백 7칸.
 - \`|\` 막대기는 칸 경계를 보여주려고 글자 그대로 찍은 거예요 (특별한 기능 없음).
@@ -287,8 +315,12 @@ print(f"|{'cat':<10}|")   # |cat       |
           content: `이번엔 반대로 — 빈 자리를 **앞쪽**에 두고 글자는 오른쪽 끝에 붙여요.
 
 \`\`\`python
-print(f"|{'cat':>10}|")   # |       cat|
+print(f"|{'cat':>10}|")
 \`\`\`
+
+{output}
+|       cat|
+{/output}
 
 \`:>10\` = "10칸 안에 — **오른쪽** 끝에 붙여". 가격처럼 자릿수가 맞아야 할 때 자주 써요.`
         },
@@ -309,8 +341,12 @@ print(f"|{'cat':>10}|")   # |       cat|
           content: `\`^\` 는 위로 뾰족한 화살표 — "**가운데**" 라고 외워요.
 
 \`\`\`python
-print(f"|{'cat':^10}|")   # |   cat    |
+print(f"|{'cat':^10}|")
 \`\`\`
+
+{output}
+|   cat    |
+{/output}
 
 빈 자리를 양쪽에 나눠서 채워줘요. 제목/헤더에 잘 어울림.
 

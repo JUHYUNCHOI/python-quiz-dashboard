@@ -45,9 +45,14 @@ Multiplication is the **asterisk \`*\`** — not \`×\` and not the letter \`x\`
           content: `**1. \`/\` always returns a float (decimal)**
 
 \`\`\`python
-print(10 / 2)   # 5.0   ← Even when it divides evenly, you get 5.0 not 5!
-print(10 / 3)   # 3.3333333333333335
+print(10 / 2)
+print(10 / 3)
 \`\`\`
+
+{output}
+5.0
+3.3333333333333335
+{/output}
 
 → Think "division turns the answer into a decimal on the spot".
 
@@ -91,11 +96,19 @@ Left: 1   ← remainder
 
 Python has separate operators for **quotient** and **remainder**.
 
+What do you think each line prints?
+
 \`\`\`python
-print(10 / 3)    # 3.333...   ← regular division (decimal)
-print(10 // 3)   # 3           ← quotient only (double slash)
-print(10 % 3)    # 1           ← remainder only (percent)
+print(10 / 3)
+print(10 // 3)
+print(10 % 3)
 \`\`\`
+
+{output}
+3.3333333333333335
+3
+1
+{/output}
 
 | Operator | Name | Example | Meaning |
 |---|---|---|---|
@@ -170,9 +183,14 @@ print(100 % 7)   # 2 — 2 pages left
           content: `\`%\` (modulo) shines beyond simple division — it's the classic **parity signal**.
 
 \`\`\`python
-print(7 % 2)    # 1 — 1 if odd
-print(8 % 2)    # 0 — 0 if even
+print(7 % 2)
+print(8 % 2)
 \`\`\`
+
+{output}
+1
+0
+{/output}
 
 > 👀 **See it — pairing up in 2s:**
 > - Even (8): \`■■  ■■  ■■  ■■\` → all paired, 0 left over
@@ -183,9 +201,14 @@ print(8 % 2)    # 0 — 0 if even
 ### Another use — last digit
 
 \`\`\`python
-print(1234 % 10)   # 4 — ones-digit of 1234
-print(567 % 10)    # 7 — ones-digit of 567
+print(1234 % 10)
+print(567 % 10)
 \`\`\`
+
+{output}
+4
+7
+{/output}
 
 \`% 10\` = "remainder when divided by 10" = "the ones digit".`
         },
@@ -196,10 +219,16 @@ print(567 % 10)    # 7 — ones-digit of 567
           content: `### Multiple-of-N signal
 
 \`\`\`python
-print(15 % 3)   # 0 — 15 is a multiple of 3
-print(15 % 4)   # 3 — 15 is NOT a multiple of 4
-print(20 % 5)   # 0 — 20 is a multiple of 5
+print(15 % 3)
+print(15 % 4)
+print(20 % 5)
 \`\`\`
+
+{output}
+0
+3
+0
+{/output}
 
 \`% N == 0\` means "multiple of N"; non-zero means "not a multiple".
 
@@ -220,9 +249,14 @@ print(20 % 5)   # 0 — 20 is a multiple of 5
 > Move the hand 5 ticks from 22 → past 24 → back to 0 → 1 → 2 → **3 o'clock!**
 
 \`\`\`python
-print((3 + 5) % 24)    # 8
-print((22 + 5) % 24)   # 3  ← remainder of 27 divided by 24
+print((3 + 5) % 24)
+print((22 + 5) % 24)
 \`\`\`
+
+{output}
+8
+3
+{/output}
 
 \`% N\` says "when a number goes past N, start back at 0" — clocks, days-of-week, circular seating all use this.
 
@@ -262,11 +296,18 @@ Answer: 2 multiplied 10 times = **1024 layers**!
 That's an **exponent** — written with two stars.
 
 \`\`\`python
-print(2 ** 1)   # 2     ← 2 once
-print(2 ** 2)   # 4     ← 2 × 2 (twice)
-print(2 ** 3)   # 8     ← 2 × 2 × 2 (three times)
-print(2 ** 10)  # 1024  ← 2 multiplied 10 times!
+print(2 ** 1)
+print(2 ** 2)
+print(2 ** 3)
+print(2 ** 10)
 \`\`\`
+
+{output}
+2
+4
+8
+1024
+{/output}
 
 How to read: \`a ** b\` is "a multiplied by itself b times". Same as math's \`a^b\`.`
         },
@@ -277,17 +318,30 @@ How to read: \`a ** b\` is "a multiplied by itself b times". Same as math's \`a^
           content: `### Other numbers
 
 \`\`\`python
-print(5 ** 2)    # 25    ← 5 × 5
-print(3 ** 4)    # 81    ← 3 × 3 × 3 × 3
-print(10 ** 3)   # 1000  ← 10 × 10 × 10 (10 cubed)
+print(5 ** 2)
+print(3 ** 4)
+print(10 ** 3)
 \`\`\`
+
+{output}
+25
+81
+1000
+{/output}
 
 ### One star vs two stars — totally different
 
 \`\`\`python
-print(2 * 4)    # 8   ← multiply (once)
-print(2 ** 4)   # 16  ← exponent (4 times)
+print(2 * 4)
+print(2 ** 4)
 \`\`\`
+
+One star vs two — see how different the results are!
+
+{output}
+8
+16
+{/output}
 
 One star = multiply. Two stars = exponent.`
         },
@@ -318,11 +372,20 @@ One star = multiply. Two stars = exponent.`
           content: `Just like math. Multiplication / division before addition / subtraction.
 
 \`\`\`python
-print(2 + 3 * 4)      # 14 (multiplication first)
-print((2 + 3) * 4)    # 20 (parentheses first)
-print(10 - 6 / 2)     # 7.0  (division first)
-print((10 - 6) / 2)   # 2.0
+print(2 + 3 * 4)
+print((2 + 3) * 4)
+print(10 - 6 / 2)
+print((10 - 6) / 2)
 \`\`\`
+
+See how one pair of parentheses changes everything!
+
+{output}
+14
+20
+7.0
+2.0
+{/output}
 
 ### Precedence (high → low)
 
@@ -388,9 +451,14 @@ Every comparison gives one of **two answers — True (yes) or False (no).**
           type: "explain",
           title: "💡 Try them + > vs >= difference",
           content: `\`\`\`python
-print(10 > 5)     # True   ← 10 is greater than 5
-print(3 > 7)      # False  ← 3 is less than 7
+print(10 > 5)
+print(3 > 7)
 \`\`\`
+
+{output}
+True
+False
+{/output}
 
 ### \`>=\` vs \`>\` — the subtle difference
 
@@ -431,11 +499,18 @@ They look similar but flip the answer when the two values are equal.`
 > 🚪 "Is the answer equal to 'apple'?"
 
 \`\`\`python
-print(10 == 10)   # True   ← equal
-print(10 == 5)    # False  ← not equal
-print(10 != 5)    # True   ← different
-print(10 != 10)   # False  ← not different (equal)
-\`\`\``
+print(10 == 10)
+print(10 == 5)
+print(10 != 5)
+print(10 != 10)
+\`\`\`
+
+{output}
+True
+False
+True
+False
+{/output}`
         },
         {
           id: "equal-explain-trap",
@@ -447,9 +522,13 @@ print(10 != 10)   # False  ← not different (equal)
 | \`==\` | **Comparison** — ask if equal (\`x == 10\`) |
 
 \`\`\`python
-x = 10            # assign — put 10 in x
-print(x == 10)    # compare — is x equal to 10? → True
+x = 10
+print(x == 10)
 \`\`\`
+
+{output}
+True
+{/output}
 
 **Rule: one equals = "put", two equals = "ask".** Easy mnemonic!`
         },
@@ -460,10 +539,16 @@ print(x == 10)    # compare — is x equal to 10? → True
           content: `### String comparison too
 
 \`\`\`python
-print("apple" == "apple")  # True
-print("apple" == "Apple")  # False — case differs
-print("hi" != "bye")       # True — different
+print("apple" == "apple")
+print("apple" == "Apple")
+print("hi" != "bye")
 \`\`\`
+
+{output}
+True
+False
+True
+{/output}
 
 ### ⚠️ Float comparison gotcha — looks weird!
 
@@ -521,8 +606,12 @@ Computers store decimals with tiny rounding errors. **Integer \`==\` is safe; fl
 
 \`\`\`python
 x = 5
-print(0 < x < 10)   # True — math inequality directly
+print(0 < x < 10)
 \`\`\`
+
+{output}
+True
+{/output}
 
 > 🎯 Typical use: **range checks** like "is the score between 70 and 90?".
 
@@ -578,8 +667,12 @@ If only Alice washes, that's not enough. Both must wash.
 alice_washed = True
 bob_washed = False
 
-print(alice_washed and bob_washed)   # False ← Bob didn't wash
+print(alice_washed and bob_washed)
 \`\`\`
+
+{output}
+False
+{/output}
 
 > 💡 **and is strict** — needs **both True** to be True.`
         },
@@ -597,8 +690,12 @@ Either can do it. Just one is enough.
 alice_closed = False
 bob_closed = True
 
-print(alice_closed or bob_closed)    # True ← Bob did it, OK
+print(alice_closed or bob_closed)
 \`\`\`
+
+{output}
+True
+{/output}
 
 > 💡 **or is generous** — only False if **both False**.
 
@@ -607,9 +704,14 @@ print(alice_closed or bob_closed)    # True ← Bob did it, OK
 > 🌙 "If it's **not** dark, let's go for a walk!"
 
 \`\`\`python
-print(not True)    # False  ← opposite of True
-print(not False)   # True   ← opposite of False
-\`\`\``
+print(not True)
+print(not False)
+\`\`\`
+
+{output}
+False
+True
+{/output}`
         },
         {
           id: "logic-explain-table",
@@ -665,9 +767,14 @@ The most common use: **checking for \`None\`**.
 \`\`\`python
 x = None
 
-print(x is None)        # "x is None" check — recommended
-print(x is not None)    # opposite — "x is not None"
+print(x is None)
+print(x is not None)
 \`\`\`
+
+{output}
+True
+False
+{/output}
 
 > 💡 \`x is None\` is the Pythonic style. \`== None\` works but \`is None\` is clearer.`
         },
@@ -690,10 +797,16 @@ print(x is not None)    # opposite — "x is not None"
 Put \`not\` **in front** of a value to flip True/False.
 
 \`\`\`python
-print(not True)         # False
-print(not False)        # True
-print(not (5 > 3))      # False  ← opposite of (5 > 3) which is True
+print(not True)
+print(not False)
+print(not (5 > 3))
 \`\`\`
+
+{output}
+False
+True
+False
+{/output}
 
 ### 📌 For reference — not in (lesson 5 covers this properly)
 
@@ -702,9 +815,14 @@ print(not (5 > 3))      # False  ← opposite of (5 > 3) which is True
 Check if a character is **not in** a string. (opposite of \`in\` — \`in\` is introduced next lesson.)
 
 \`\`\`python
-print('a' not in 'hello')   # True   ← no 'a' in 'hello'
-print('e' not in 'hello')   # False  ← 'e' is in 'hello'
+print('a' not in 'hello')
+print('e' not in 'hello')
 \`\`\`
+
+{output}
+True
+False
+{/output}
 
 > 🎯 Summary: **is = "the very same?", not = "opposite", not in = "opposite of in".**`
         },
@@ -739,12 +857,17 @@ age = 16
 height = 140
 
 # Ride: 13 or older AND 130cm+ (both)
-print(age >= 13 and height >= 130)   # True
+print(age >= 13 and height >= 130)
 
 # Holiday: Saturday OR Sunday (either)
 day = "Sat"
-print(day == "Sat" or day == "Sun")  # True
+print(day == "Sat" or day == "Sun")
 \`\`\`
+
+{output}
+True
+True
+{/output}
 
 Each comparison gives True/False, then \`and\` / \`or\` combines them into a single check.
 

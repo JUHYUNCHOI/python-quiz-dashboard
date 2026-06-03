@@ -537,6 +537,11 @@ export default function CurriculumPage() {
       const arr: (string | number)[] = JSON.parse(savedQ)
       setCompletedQuizzes(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
     }
+    // 복습 점수도 다시 읽기 (클라우드 복원으로 quiz-scores 가 갱신됐을 수 있음)
+    try {
+      const scoresRaw = localStorage.getItem("quiz-scores")
+      if (scoresRaw) setQuizScores(JSON.parse(scoresRaw))
+    } catch {}
   }, [])
 
   // 클라우드 복원 완료 시 진도 갱신

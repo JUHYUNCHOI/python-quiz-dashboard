@@ -66,10 +66,18 @@ print('Hello!')
           type: "explain",
           title: "🖨️ More Examples",
           content: `\`\`\`python
-print('hi')             # hi
-print("Python is fun")  # Python is fun
-print('🍕🍕🍕')         # 🍕🍕🍕  (emojis work too!)
+print('hi')
+print("Python is fun")
+print('🍕🍕🍕')         # emojis work too!
 \`\`\`
+
+What prints when you run all three lines? Take a guess first.
+
+{output}
+hi
+Python is fun
+🍕🍕🍕
+{/output}
 
 Anything inside the quotes shows up exactly on screen.`
         },
@@ -184,9 +192,16 @@ Like a calculator! Inside \`print()\` you can use \`+ - * /\`.
           type: "explain",
           title: "⚠️ Quotes matter — text vs number",
           content: `\`\`\`python
-print(100)       # 100  (a real number → math works)
-print('100')     # 100  (text — looks the same, but math won't work)
+print(100)       # a real number → math works
+print('100')     # text — looks the same on screen, but math won't work
 \`\`\`
+
+Both lines print — what do you think you'll see? Guess first.
+
+{output}
+100
+100
+{/output}
 
 On screen they look identical, but inside the computer they're different kinds.
 

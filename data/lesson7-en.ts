@@ -21,8 +21,12 @@ export const lesson7EnData: LessonData = {
           content: `When you give \`print()\` several values, it puts a **space** between them:
 
 \`\`\`python
-print("A", "B", "C")  # A B C
+print("A", "B", "C")
 \`\`\`
+
+{output}
+A B C
+{/output}
 
 But sometimes you want "no space, please — use \`-\` instead!"
 That's what **options** are for. Today we'll learn two of them:
@@ -40,14 +44,27 @@ You add options inside \`print()\` as \`name=value\`.`
 
 \`\`\`python
 print("A", "B", "C", sep="-")
-# A-B-C
-
-print("2024", "01", "15", sep="/")
-# 2024/01/15
-
-print("Alice", "Bob", "Charlie", sep=", ")
-# Alice, Bob, Charlie
 \`\`\`
+
+{output}
+A-B-C
+{/output}
+
+\`\`\`python
+print("2024", "01", "15", sep="/")
+\`\`\`
+
+{output}
+2024/01/15
+{/output}
+
+\`\`\`python
+print("Alice", "Bob", "Charlie", sep=", ")
+\`\`\`
+
+{output}
+Alice, Bob, Charlie
+{/output}
 
 **The default is \`sep=" "\` (one space)** — that's why you normally see spaces.
 
@@ -128,17 +145,23 @@ print("python", "java", "c++", sep=" | ")
 \`\`\`python
 print("Hello")
 print("World")
-# Hello
-# World
 \`\`\`
+
+{output}
+Hello
+World
+{/output}
 
 Use **end** to change that ending character. Replace the newline with a space, and the two prints sit on one line:
 
 \`\`\`python
 print("Hello", end=" ")
 print("World")
-# Hello World
 \`\`\`
+
+{output}
+Hello World
+{/output}
 
 **When to use it?**
 - Glue two \`print\` calls onto one line → \`end=" "\`
@@ -218,15 +241,22 @@ print("yum")
 \`\`\`python
 print("A", "B", "C", sep="-", end="!")
 print("Done")
-# A-B-C!Done
 \`\`\`
+
+{output}
+A-B-C!Done
+{/output}
 
 Look at the output — \`A-B-C\` came from \`sep\`, \`!\` came from \`end\`, and then \`Done\` got stuck right after *with no newline*.
 
 **Order doesn't matter** — options are named, so you can write them in any order:
 \`\`\`python
-print("A", "B", end="!", sep="-")  # Same A-B!
-\`\`\``
+print("A", "B", end="!", sep="-")
+\`\`\`
+
+{output}
+A-B!
+{/output}`
         },
         {
           id: "try5",
