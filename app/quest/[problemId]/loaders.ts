@@ -188,5 +188,7 @@ export const PROBLEM_LOADERS: Record<string, AppLoader> = {
   'lc303':  () => import('@/quest-problems/lc303/Lc303App'),
   'lc560':  () => import('@/quest-problems/lc560/Lc560App'),
   'lc974':  () => import('@/quest-problems/lc974/Lc974App'),
+  // LeetCode — Sliding Window
+  'lc3':    () => import('@/quest-problems/lc3/Lc3App'),
 }
 
