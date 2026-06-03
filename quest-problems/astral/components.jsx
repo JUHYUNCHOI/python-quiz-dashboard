@@ -499,7 +499,7 @@ export function AstralCellPlayground({ E }) {
         }}>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: s ? "#92400e" : C.text }}>
-              {t(E, "원래 별 있었나? (s)", "원래 별 있었나? (s)")}
+              {t(E, "Had a star originally? (s)", "원래 별 있었나? (s)")}
             </div>
             <div style={{ fontSize: 10, color: s ? "#92400e" : C.dim, marginTop: 2 }}>
               {s ? t(E, "✓ Yes — original star", "✓ 응 — 원래 있음") : t(E, "✗ No", "✗ 없음")}
@@ -531,7 +531,7 @@ export function AstralCellPlayground({ E }) {
         }}>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: inb ? "#155e75" : C.text }}>
-              {t(E, "다른 곳에서 들어왔나? (in)", "다른 곳에서 들어왔나? (in)")}
+              {t(E, "Came in from elsewhere? (in)", "다른 곳에서 들어왔나? (in)")}
             </div>
             <div style={{ fontSize: 10, color: inb ? "#155e75" : C.dim, marginTop: 2 }}>
               {inb ? t(E, "✓ Yes — arrived", "✓ 응 — 들어옴") : t(E, "✗ No", "✗ 없음")}
@@ -786,7 +786,7 @@ export function AstralAlgoTrace({ E }) {
     // Helper — describes the destination of a move: outside / star here / empty here
     const describeDest = (destR, destC) => {
       const insideGrid = destR >= 0 && destR < N && destC >= 0 && destC < N;
-      if (!insideGrid) return { kind: "outside", text: t(E, "Outside! 밖이야!", "밖이야!") };
+      if (!insideGrid) return { kind: "outside", text: t(E, "Outside!", "밖이야!") };
       const m = marks[`${destR},${destC}`];
       if (m?.kind === "chain") return { kind: "star", text: t(E, "Star here! ✨", "여기 별 있어! ✨") };
       return { kind: "empty", text: t(E, "Empty here — no star", "여기 별 없어 (빈 칸)") };
