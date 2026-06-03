@@ -1,4 +1,5 @@
 import { t } from "@/components/quest/theme";
+import { CodeBlock } from "@/components/quest/shared";
 import { SlidingWindowSim } from "./components";
 
 const ACC   = "#7c3aed";
@@ -72,15 +73,15 @@ export function makeChapters(E) {
         "완전탐색: 모든 시작 i, 모든 끝 j 를 잡고, s[i..j] 에 중복이 있는지 매번 검사. 세 가지가 겹쳐서 O(n³) (창문마다 set 쓰면 O(n²)). n 이 최대 5×10^4 이면 너무 느려요."),
       content: (
         <div style={{ padding: 14 }}>
-          <div style={{ background: "#fff7ed", border: "1.5px solid #fb923c", borderRadius: 10, padding: "10px 14px", marginBottom: 12 }}>
-            <div style={{ fontFamily: "monospace", fontSize: 12, color: "#1e293b", lineHeight: 1.8 }}>
-              <div>{"best = 0"}</div>
-              <div>{"for i in range(len(s)):        # start"}</div>
-              <div>{"    for j in range(i, len(s)):  # end"}</div>
-              <div>{"        window = s[i:j+1]"}</div>
-              <div>{"        if len(set(window)) == len(window):  # no repeats?"}</div>
-              <div>{"            best = max(best, j - i + 1)"}</div>
-            </div>
+          <div style={{ marginBottom: 12 }}>
+            <CodeBlock lang="py" lines={[
+              "best = 0",
+              "for i in range(len(s)):          # start",
+              "    for j in range(i, len(s)):   # end",
+              "        window = s[i:j+1]",
+              "        if len(set(window)) == len(window):   # no repeats?",
+              "            best = max(best, j - i + 1)",
+            ]} />
           </div>
           <div style={{ fontSize: 12, color: "#374151", lineHeight: 1.6, background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 8, padding: "8px 12px" }}>
             {t(E,
