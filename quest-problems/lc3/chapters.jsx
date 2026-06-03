@@ -1,6 +1,5 @@
 import { t } from "@/components/quest/theme";
-import { CodeBlock } from "@/components/quest/shared";
-import { SlidingWindowSim } from "./components";
+import { SlidingWindowSim, SpeedRaceSim, CodeJourney } from "./components";
 
 const ACC   = "#7c3aed";
 const ACC_L = "#ede9fe";
@@ -8,7 +7,7 @@ const ACC_D = "#5b21b6";
 
 export function makeChapters(E) {
   return [
-    /* ── 1. Problem ─────────────────────────────────────────── */
+    /* ── 1. Problem (observe) ────────────────────────────────── */
     {
       type: "reveal",
       narr: t(E,
@@ -58,46 +57,99 @@ export function makeChapters(E) {
           </div>
           <div style={{ fontSize: 12, color: "#374151", lineHeight: 1.6, background: "#fff", border: "1px solid #e2e8f0", borderRadius: 8, padding: "8px 12px" }}>
             {t(E,
-              "Note: \"substring\" means contiguous — the letters must be next to each other. \"acb\" picked out of \"abcb\" is NOT a substring. We return the length, not the string itself.",
-              "주의: \"부분 문자열(substring)\"은 연속이어야 해요 — 글자들이 서로 붙어 있어야 해요. \"abcb\"에서 띄엄띄엄 고른 \"acb\"는 부분 문자열이 아니에요. 그리고 글자가 아니라 길이를 반환해요.")}
+              "\"Substring\" = contiguous — the letters must be next to each other. \"acb\" picked out of \"abcb\" is NOT a substring. We return the length, not the string. Constraint: the string can be up to n = 50,000 letters long.",
+              "\"부분 문자열(substring)\"은 연속이어야 해요 — 글자들이 서로 붙어 있어야 해요. \"abcb\"에서 띄엄띄엄 고른 \"acb\"는 부분 문자열이 아니에요. 글자가 아니라 길이를 반환해요. 제약: 문자열 길이는 최대 n = 50,000 글자.")}
           </div>
         </div>
       ),
     },
 
-    /* ── 2. Brute force ──────────────────────────────────────── */
+    /* ── 2. First idea: brute (progressive code) ─────────────── */
     {
       type: "reveal",
       narr: t(E,
-        "Brute force: try every start i and every end j, then check whether s[i..j] has any repeats. Three things stacked — that's O(n³) (or O(n²) with a set per window). With n up to 5×10^4, far too slow.",
-        "완전탐색: 모든 시작 i, 모든 끝 j 를 잡고, s[i..j] 에 중복이 있는지 매번 검사. 세 가지가 겹쳐서 O(n³) (창문마다 set 쓰면 O(n²)). n 이 최대 5×10^4 이면 너무 느려요."),
+        "First, the idea you'd reach for right away: try every starting point. From each start, keep adding letters to the right until you hit one you've already seen — that's the longest clean run from that start. Take the best.",
+        "먼저, 누구나 가장 먼저 떠올릴 방법: 모든 시작점을 다 해보자. 각 시작점에서 오른쪽으로 글자를 계속 더하다가, 이미 본 글자를 만나면 멈춰요 — 거기까지가 그 시작점에서의 가장 긴 깨끗한 구간. 그중 제일 긴 걸 답으로."),
       content: (
-        <div style={{ padding: 14 }}>
-          <div style={{ marginBottom: 12 }}>
-            <CodeBlock lang="py" lines={[
-              "best = 0",
-              "for i in range(len(s)):          # start",
-              "    for j in range(i, len(s)):   # end",
-              "        window = s[i:j+1]",
-              "        if len(set(window)) == len(window):   # no repeats?",
-              "            best = max(best, j - i + 1)",
-            ]} />
-          </div>
-          <div style={{ fontSize: 12, color: "#374151", lineHeight: 1.6, background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 8, padding: "8px 12px" }}>
-            {t(E,
-              "Every (i, j) pair, and re-checking the whole window each time. Tons of repeated work — every time we extend the window we re-scan letters we already knew were fine.",
-              "모든 (i, j) 쌍에 매번 창문 전체를 다시 검사. 낭비가 엄청나요 — 창문을 늘릴 때마다 이미 괜찮다고 확인한 글자들을 또 훑어요.")}
-          </div>
-        </div>
+        <CodeJourney
+          E={E}
+          sections={[
+            {
+              label: t(E, "Try every start", "모든 시작점 시도"),
+              color: ACC,
+              why: [
+                t(E, "best keeps the longest clean run found so far.", "best 에 지금까지 찾은 가장 긴 깨끗한 구간 길이를 보관."),
+                t(E, "For each start i, seen tracks letters used in this run.", "각 시작점 i 마다 seen 으로 이 구간에서 쓴 글자를 추적."),
+              ],
+              py: [
+                "best = 0",
+                "n = len(s)",
+                "for i in range(n):          # window start",
+                "    seen = set()            # letters used from i",
+              ],
+              cpp: [
+                "int best = 0, n = s.size();",
+                "for (int i = 0; i < n; i++) {     // window start",
+                "    set<char> seen;              // letters used from i",
+              ],
+            },
+            {
+              label: t(E, "Extend the end until a repeat", "끝을 늘리다 중복이면 멈춤"),
+              color: ACC,
+              why: [
+                t(E, "Push the end j forward, adding each new letter.", "끝 j 를 앞으로 밀며 새 글자를 추가."),
+                t(E, "The moment a letter repeats, this start is done — stop.", "글자가 중복되는 순간, 이 시작점은 끝 — 멈춰요."),
+                t(E, "Length of the current run is j - i + 1.", "현재 구간 길이는 j - i + 1."),
+              ],
+              py: [
+                "    for j in range(i, n):       # window end",
+                "        if s[j] in seen:        # repeat → stop",
+                "            break",
+                "        seen.add(s[j])",
+                "        best = max(best, j - i + 1)",
+                "",
+                "# best is the answer",
+              ],
+              cpp: [
+                "    for (int j = i; j < n; j++) {    // window end",
+                "        if (seen.count(s[j])) break; // repeat → stop",
+                "        seen.insert(s[j]);",
+                "        best = max(best, j - i + 1);",
+                "    }",
+                "}",
+                "// best is the answer",
+              ],
+            },
+          ]}
+          doneNote={t(E, "✓ Correct — it tries every start and finds the answer.", "✓ 정답은 맞아요 — 모든 시작점을 다 해보고 답을 찾아요.")}
+        />
       ),
     },
 
-    /* ── 3. Sliding window angle ─────────────────────────────── */
+    /* ── 3. Felt limit (interactive) ─────────────────────────── */
     {
       type: "reveal",
       narr: t(E,
-        "Key idea: don't restart. Keep ONE window [left, right] that always has no repeats. Push right forward; if the new letter is already inside the window, slide left just past the old copy. A dictionary remembers where we last saw each letter, so left can jump instantly.",
-        "핵심 아이디어: 매번 처음부터 다시 하지 말자. 항상 중복이 없는 창문 [left, right] 하나만 유지해요. right 를 앞으로 밀고, 새 글자가 이미 창문 안에 있으면 left 를 그 옛날 글자 바로 다음으로 밀어요. 딕셔너리가 각 글자를 마지막으로 본 위치를 기억하니까 left 가 한 번에 점프할 수 있어요."),
+        "It works on \"abcabcbb\". But the string can be 50,000 letters long. \"Every start × every end\" is about n²/2 steps. Drag the slider and watch — how slow does brute get on a big input?",
+        "\"abcabcbb\" 에선 잘 돼요. 그런데 문자열이 5만 글자까지 길어질 수 있어요. \"모든 시작 × 모든 끝\" 은 약 n²/2 번. 슬라이더를 끌어보세요 — 큰 입력에서 완전탐색은 얼마나 느려질까요?"),
+      content: <SpeedRaceSim E={E} nMax={50000} nStart={200} constraintN={50000} />,
+    },
+
+    /* ── 4. Discover: sliding window (interactive) ───────────── */
+    {
+      type: "reveal",
+      narr: t(E,
+        "The waste: every time brute restarts at a new start, it re-checks letters it already knew were fine. What if we never restart — keep ONE window that always has no repeats, and only slide its edges? Try it: push \"Next step\", then switch to \"abba\" — that case hides a subtle trap.",
+        "낭비의 정체: 완전탐색은 새 시작점마다 이미 괜찮다고 확인한 글자를 또 검사해요. 아예 다시 시작하지 말고 — 항상 중복 없는 창문(window) 하나만 두고, 그 양 끝만 밀면 어떨까요? 직접 해봐요: \"다음 스텝\" 을 누르고, \"abba\" 케이스도 눌러봐요 — 거기에 미묘한 함정이 숨어 있어요."),
+      content: <SlidingWindowSim E={E} />,
+    },
+
+    /* ── 5. Insight: name what you just saw ──────────────────── */
+    {
+      type: "reveal",
+      narr: t(E,
+        "What you just watched has a name: the sliding window. Three moves, repeated.",
+        "방금 본 게 바로 슬라이딩 윈도우예요. 세 가지 동작의 반복."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ background: ACC_L, border: `2px solid ${ACC}`, borderRadius: 10, padding: "12px 16px", marginBottom: 12 }}>
@@ -105,8 +157,8 @@ export function makeChapters(E) {
               {t(E, "Window rule", "창문 규칙")}
             </div>
             {[
-              { label: t(E, "Expand:", "넓히기:"), formula: "right += 1  (read next letter)" },
-              { label: t(E, "Shrink:", "줄이기:"), formula: "if dup inside → left = last[ch] + 1" },
+              { label: t(E, "Expand:", "넓히기:"), formula: "right += 1   (read next letter)" },
+              { label: t(E, "Shrink:", "줄이기:"), formula: "dup inside → left = last[ch] + 1" },
               { label: t(E, "Track:", "기록:"), formula: "best = max(best, right − left + 1)" },
             ].map((row, i) => (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
@@ -117,23 +169,14 @@ export function makeChapters(E) {
           </div>
           <div style={{ fontSize: 12, color: "#374151", lineHeight: 1.7, background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 8, padding: "8px 12px" }}>
             {t(E,
-              "left and right both only move RIGHT, never back. Each letter is visited at most twice (once by right, once by left). That's O(n) — one smooth pass instead of restarting from every index.",
-              "left 와 right 둘 다 오른쪽으로만 움직이고 절대 뒤로 안 가요. 각 글자는 많아야 두 번만 방문돼요 (right 한 번, left 한 번). 그래서 O(n) — 매 인덱스마다 다시 시작하는 대신 한 번에 매끄럽게 훑어요.")}
+              "left and right both only move RIGHT, never back. Each letter is visited at most twice (once by right, once by left). That's O(n) — one smooth pass instead of restarting from every index. Back on the speed slider, this is the flat green bar.",
+              "left 와 right 둘 다 오른쪽으로만 움직이고 절대 뒤로 안 가요. 각 글자는 많아야 두 번만 방문돼요 (right 한 번, left 한 번). 그래서 O(n) — 매 인덱스마다 다시 시작하는 대신 한 번에 매끄럽게 훑어요. 앞의 속도 슬라이더에서 평평하던 초록 막대가 바로 이거예요.")}
           </div>
         </div>
       ),
     },
 
-    /* ── 4. Sliding window walkthrough (interactive) ─────────── */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Now slide it yourself, one step at a time. Watch the window [L, R] grow and snap. Press \"Next step\". Then try the \"abba\" case — that's where the subtle check prevIdx ≥ left matters: a letter seen earlier but already OUTSIDE the window must not drag left backwards.",
-        "이제 한 스텝씩 직접 밀어 봐요. 창문 [L, R] 이 늘어나고 줄어드는 걸 보세요. \"다음 스텝\" 을 누르며 진행해요. 그다음 \"abba\" 케이스를 눌러봐요 — 거기서 prevIdx ≥ left 검사가 왜 필요한지 드러나요: 예전에 봤지만 이미 창문 밖인 글자가 left 를 뒤로 끌면 안 돼요."),
-      content: <SlidingWindowSim E={E} />,
-    },
-
-    /* ── 5. Quiz ─────────────────────────────────────────────── */
+    /* ── 6. Quiz (the gotcha) ────────────────────────────────── */
     {
       type: "quiz",
       narr: t(E,
@@ -159,30 +202,85 @@ export function makeChapters(E) {
         "last[ch] 는 (창문 밖이라도) 가장 마지막 위치를 기억해요. 창문 안 중복(last[ch] >= left)일 때만 left 를 앞으로 밀어야 해요. 이 검사가 없으면 인덱스 0 의 'a' 가 left 를 1 로 되돌려서 올바른 창문을 줄이고 틀린 답을 줘요."),
     },
 
-    /* ── 6. Code ─────────────────────────────────────────────── */
+    /* ── 7. Final code (progressive) ─────────────────────────── */
     {
-      type: "code",
+      type: "reveal",
       narr: t(E,
-        "One pass, O(n) time. The dictionary lets left jump instantly past any duplicate — no inner loop needed.",
-        "한 번 스캔, 시간 O(n). 딕셔너리 덕분에 left 가 중복 글자 다음으로 한 번에 점프해요 — 내부 루프가 필요 없어요."),
-      code: [
-        "def lengthOfLongestSubstring(s: str) -> int:",
-        "    last = {}          # letter -> last index we saw it",
-        "    left = 0",
-        "    best = 0",
-        "",
-        "    for right in range(len(s)):",
-        "        ch = s[right]",
-        "        if ch in last and last[ch] >= left:",
-        "            left = last[ch] + 1     # jump past the duplicate",
-        "        last[ch] = right",
-        "        best = max(best, right - left + 1)",
-        "",
-        "    return best",
-        "",
-        "# lengthOfLongestSubstring(\"abcabcbb\")  ->  3  (\"abc\")",
-        "# lengthOfLongestSubstring(\"abba\")      ->  2  (\"ab\", then \"ba\")",
-      ],
+        "Now the whole thing in one O(n) pass. The dictionary lets left jump instantly past any duplicate — no inner loop at all.",
+        "이제 전체를 한 번 O(n) 스캔으로. 딕셔너리 덕분에 left 가 중복 글자 다음으로 한 번에 점프해요 — 내부 루프가 아예 없어요."),
+      content: (
+        <CodeJourney
+          E={E}
+          sections={[
+            {
+              label: t(E, "1. Setup", "1. 준비"),
+              color: ACC,
+              why: [
+                t(E, "last: each letter → the last index we saw it.", "last: 각 글자 → 마지막으로 본 위치."),
+                t(E, "left: the left edge of the current window.", "left: 현재 창문의 왼쪽 끝."),
+                t(E, "best: longest window length so far.", "best: 지금까지 가장 긴 창문 길이."),
+              ],
+              py: [
+                "def lengthOfLongestSubstring(s: str) -> int:",
+                "    last = {}      # letter -> last index seen",
+                "    left = 0",
+                "    best = 0",
+              ],
+              cpp: [
+                "int lengthOfLongestSubstring(string s) {",
+                "    unordered_map<char,int> last;  // letter -> last index",
+                "    int left = 0, best = 0;",
+              ],
+            },
+            {
+              label: t(E, "2. Slide the right edge", "2. 오른쪽 끝을 민다"),
+              color: ACC,
+              why: [
+                t(E, "Move right one letter at a time.", "right 를 한 글자씩 앞으로."),
+                t(E, "If that letter is a duplicate INSIDE the window (last[ch] >= left), jump left just past the old copy.", "그 글자가 창문 안 중복이면(last[ch] >= left) left 를 옛 글자 바로 다음으로 점프."),
+                t(E, "Seen before but already dropped? Ignore it — that's the abba trap.", "본 적 있지만 이미 버린 글자면? 무시 — 그게 abba 함정."),
+              ],
+              pyOnly: [t(E, "`ch in last` checks whether we've ever seen it.", "`ch in last` 로 본 적 있는지 확인.")],
+              cppOnly: [t(E, "last.count(ch) checks whether the key exists.", "last.count(ch) 로 키가 있는지 확인.")],
+              py: [
+                "    for right in range(len(s)):",
+                "        ch = s[right]",
+                "        if ch in last and last[ch] >= left:",
+                "            left = last[ch] + 1   # jump past old copy",
+              ],
+              cpp: [
+                "    for (int right = 0; right < (int)s.size(); right++) {",
+                "        char ch = s[right];",
+                "        if (last.count(ch) && last[ch] >= left)",
+                "            left = last[ch] + 1;  // jump past old copy",
+              ],
+            },
+            {
+              label: t(E, "3. Record & return", "3. 기록하고 반환"),
+              color: ACC,
+              why: [
+                t(E, "Update this letter's position to right.", "이 글자의 위치를 right 로 갱신."),
+                t(E, "Update best with the current window length.", "현재 창문 길이로 best 갱신."),
+                t(E, "After the pass, best is the answer.", "끝까지 돌면 best 가 정답."),
+              ],
+              py: [
+                "        last[ch] = right",
+                "        best = max(best, right - left + 1)",
+                "",
+                "    return best",
+              ],
+              cpp: [
+                "        last[ch] = right;",
+                "        best = max(best, right - left + 1);",
+                "    }",
+                "    return best;",
+                "}",
+              ],
+            },
+          ]}
+          doneNote={t(E, "O(n) time, O(min(n, charset)) space. \"abcabcbb\" → 3, \"abba\" → 2.", "시간 O(n), 공간 O(min(n, 글자종류)). \"abcabcbb\" → 3, \"abba\" → 2.")}
+        />
+      ),
     },
   ];
 }
