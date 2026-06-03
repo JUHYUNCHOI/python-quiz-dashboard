@@ -233,6 +233,17 @@ const SECTIONS: Section[] = [
       { id: "mco15secret", emoji: "🔐", title: "Secret", sub: "MCO 2015 P5" },
     ],
   },
+  {
+    label: "LeetCode",
+    icon: "💻",
+    color: "#0891b2",
+    problems: [
+      { id: "lc1480", emoji: "➕", title: "Running Sum of 1d Array", sub: "LeetCode #1480 · Easy" },
+      { id: "lc303",  emoji: "📏", title: "Range Sum Query - Immutable", sub: "LeetCode #303 · Easy" },
+      { id: "lc560",  emoji: "🎯", title: "Subarray Sum Equals K", sub: "LeetCode #560 · Medium" },
+      { id: "lc974",  emoji: "🔢", title: "Subarray Sums Divisible by K", sub: "LeetCode #974 · Medium" },
+    ],
+  },
 ]
 
 const ALGO_UNLOCK_THRESHOLD = 8
@@ -245,7 +256,7 @@ export default function QuestPage() {
   const [loaded, setLoaded] = useState(false)
   const [algoTopicsDone, setAlgoTopicsDone] = useState(0)
   const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set())
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(["USACO", "MCC", "MCO"]))
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(["USACO", "MCC", "MCO", "LeetCode"]))
   const [betaOptIn, setBetaOptIn] = useReleasePref()
 
   // Phase 5: Filter helper. A quest is visible if:
