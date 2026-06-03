@@ -22,8 +22,12 @@ export const lesson6Data: LessonData = {
 
 \`\`\`python
 text = "hello"
-print(text.upper())  # HELLO
+print(text.upper())
 \`\`\`
+
+{output}
+HELLO
+{/output}
 
 위 코드의 의미: "text 야, 너 자신을 대문자로 만들어줘 (upper)" 라고 시키는 거예요.
 
@@ -72,9 +76,16 @@ text.uper()     # ❌ 오타 — AttributeError
 \`\`\`python
 text = "Hello World"
 
-print(text.upper())  # HELLO WORLD
-print(text.lower())  # hello world
+print(text.upper())
+print(text.lower())
 \`\`\`
+
+각각 뭐가 나올지 예상해보고 눌러요.
+
+{output}
+HELLO WORLD
+hello world
+{/output}
 
 ### 왜 필요해?
 
@@ -85,8 +96,14 @@ print(text.lower())  # hello world
 ### 한글에는 어떻게?
 
 \`\`\`python
-print("안녕".upper())   # 안녕 (한글은 대소문자가 없음)
+print("안녕".upper())
 \`\`\`
+
+한글에 upper() 를 부르면 뭐가 나올까요?
+
+{output}
+안녕
+{/output}
 
 한글, 숫자, 기호 같은 건 그대로. 영문 글자만 바뀌어요.`
         },
@@ -112,34 +129,50 @@ print(name.upper())
 
 \`\`\`python
 text = "Hello"
-text.upper()         # 결과는 HELLO 지만 어디로?
-print(text)          # Hello (그대로!)
+text.upper()         # 결과를 아무 데도 안 받았어요
+print(text)
 \`\`\`
 
-upper() 가 새 문자열을 돌려줬는데, 우리가 어디에도 안 받았어요.
+이 코드, \`text\` 를 출력하면 뭐가 나올까요? 먼저 생각해 보고 눌러요.
 
-> 🎒 **일상 비유 —** 친구한테 "Hello 를 대문자로 말해줘" 라고 부탁했는데, 친구가 "HELLO" 라고 *대답한 걸 메모지에 안 적으면* 그냥 잊혀져요. **귀로만 듣고 사라짐.** 메모지에 받아 적어야 (변수에 저장해야) 나중에 쓸 수 있어요.
+{output}
+Hello
+{/output}
+
+upper() 가 새 문자열을 돌려줬는데, 우리가 어디에도 안 받았어요. 그래서 원본 \`text\` 는 그대로!
+
+> 🎒 **일상 비유 —** 친구한테 "Hello 를 대문자로 말해줘" 라고 부탁했는데, 친구가 "HELLO" 라고 대답한 걸 *메모지에 안 적으면* 그냥 잊혀져요. **귀로만 듣고 사라짐.** 메모지에 받아 적어야 (변수에 저장해야) 나중에 쓸 수 있어요.
 
 **받아두려면 변수에 저장:**
 
 \`\`\`python
 text = "Hello"
 big = text.upper()   # 새 문자열을 big 에 저장 (= 메모지에 적음)
-print(text)          # Hello (원본은 안 바뀜)
-print(big)           # HELLO
+print(text)
+print(big)
 \`\`\`
+
+{output}
+Hello
+HELLO
+{/output}
 
 > 💡 문자열은 한번 만들면 **원본이 안 바뀌어요.** 메서드는 항상 **새 문자열을 돌려줘요.** (어려운 말로 "불변" — 일단 외우지 말고 느낌만.)`
         },
         {
           id: "try-immutable-trap",
-          type: "tryit",
-          title: "✋ 직접 함정 체험 — 원본은 정말 안 바뀌나?",
-          task: "방금 배운 불변성을 직접 봐요. `text.upper()` 만 하고 `text` 를 그대로 출력하면 뭐가 나올까요? 코드를 실행해보세요.",
-          initialCode: "text = \"Hello\"\ntext.upper()\nprint(text)   # 어떤 결과가 나올까?",
-          expectedOutput: "Hello",
-          hint: "결과를 변수에 받지 않으면 사라져요!",
-          hint2: "upper() 가 만든 새 문자열은 어디에도 저장 안 됐어요. 그래서 text 는 그대로."
+          type: "predict",
+          title: "💭 함정 예측 — 원본은 바뀔까?",
+          content: `\`text.upper()\` 만 부르고 그 결과를 **아무 데도 안 받았어요.** 바로 다음 줄에서 \`text\` 를 출력하면?
+
+\`\`\`python
+text = "Hello"
+text.upper()
+print(text)
+\`\`\``,
+          options: ["Hello", "HELLO", "hello", "에러"],
+          answer: 0,
+          explanation: "upper() 가 새 문자열 HELLO 를 만들긴 했지만 어디에도 안 받아서 그냥 사라져요. 원본 text 는 그대로 Hello! 바꾸려면 big = text.upper() 처럼 변수에 받아야 해요."
         },
         {
           id: "try1",
@@ -185,8 +218,14 @@ print(big)           # HELLO
 
 \`\`\`python
 text = "   안녕하세요   "
-print(text.strip())  # "안녕하세요"
+print(text.strip())
 \`\`\`
+
+앞뒤 공백이 사라지면 뭐가 남을까요?
+
+{output}
+안녕하세요
+{/output}
 
 ### 왜 필요해?
 
@@ -200,8 +239,12 @@ print(text.strip())  # "안녕하세요"
 
 \`\`\`python
 text = "   안녕 친구   "
-print(text.strip())  # "안녕 친구"  (가운데 공백은 그대로!)
-\`\`\``
+print(text.strip())
+\`\`\`
+
+{output}
+안녕 친구
+{/output}`
         },
         {
           id: "predict-strip-middle",
@@ -214,10 +257,10 @@ text = "   안녕 친구   "
 print(text.strip())
 \`\`\`
 
-힌트: strip() 은 **양쪽 끝** 만 잘라요.`,
-          options: ["안녕친구", "안녕 친구", "   안녕 친구   ", "안녕"],
+힌트: strip() 은 **양쪽 끝** 만 잘라요. (보기의 ␣ 는 공백 한 칸이에요.)`,
+          options: ["안녕친구", "안녕 친구", "␣␣␣안녕 친구␣␣␣", "안녕"],
           answer: 1,
-          explanation: "양쪽 끝 공백만 잘려요. 가운데 공백은 그대로! → \"안녕 친구\""
+          explanation: "양쪽 끝 공백만 잘려요. 가운데 공백은 그대로! → \"안녕 친구\" (␣␣␣안녕 친구␣␣␣ 는 strip 을 안 한 원본이에요.)"
         },
         {
           id: "strip-variants",
@@ -230,9 +273,14 @@ print(text.strip())
 
 \`\`\`python
 text = "   Hello   "
-print(text.lstrip())  # "Hello   "
-print(text.rstrip())  # "   Hello"
+print(text.lstrip())
+print(text.rstrip())
 \`\`\`
+
+{output}
+Hello
+   Hello
+{/output}
 
 ### 공백 말고도 잘라줘요
 
@@ -240,8 +288,12 @@ strip() 은 **공백, 탭 \\t, 줄바꿈 \\n** 같은 "보이지 않는 글자" 
 
 \`\`\`python
 text = "\\n\\t  안녕  \\n"
-print(text.strip())  # "안녕"
+print(text.strip())
 \`\`\`
+
+{output}
+안녕
+{/output}
 
 > 💡 원본은 그대로. 항상 새 문자열이 돌아와요.`
         },
@@ -264,16 +316,24 @@ print(text.strip())  # "안녕"
 \`\`\`python
 text = "Hello World"
 print(text.replace("World", "Python"))
-# Hello Python
 \`\`\`
+
+{output}
+Hello Python
+{/output}
 
 ### 일치하는 거 **모두** 바꿔요
 
 \`\`\`python
 text = "바나나 바나나 바나나"
 print(text.replace("바나나", "사과"))
-# 사과 사과 사과
 \`\`\`
+
+하나만 보고 멈출까요, 다 바꿀까요?
+
+{output}
+사과 사과 사과
+{/output}
 
 하나만 보고 멈추는 게 아니라 **다 찾아서 다 바꿔요.**
 
@@ -283,8 +343,12 @@ print(text.replace("바나나", "사과"))
 
 \`\`\`python
 text = "안 녕 하 세 요"
-print(text.replace(" ", ""))  # 안녕하세요  (공백 다 지움)
-\`\`\``
+print(text.replace(" ", ""))
+\`\`\`
+
+{output}
+안녕하세요
+{/output}`
         },
         {
           id: "predict-replace-all",
@@ -313,16 +377,23 @@ print(text.replace("바나나", "사과"))
 \`\`\`python
 text = "고양이와 소"
 print(text.replace("고양이", "강아지").replace("소", "토끼"))
-# 강아지와 토끼
 \`\`\`
+
+{output}
+강아지와 토끼
+{/output}
 
 > 💡 메서드를 점으로 줄줄이 잇는 걸 **체이닝 (chaining)** 이라고 해요. 자주 써요!
 
 ### ⚠️ 대소문자 구별해요
 
 \`\`\`python
-print("Hello".replace("hello", "안녕"))  # Hello  (안 바뀜!)
+print("Hello".replace("hello", "안녕"))  # 소문자 hello 를 찾는데 — 바뀔까?
 \`\`\`
+
+{output}
+Hello
+{/output}
 
 \`"Hello"\` 와 \`"hello"\` 는 다른 문자열. 정확히 일치해야 바꿔져요.`
         },
@@ -630,17 +701,26 @@ print("12a".isdigit())
 ### capitalize() — "첫 글자만 대문자"
 
 \`\`\`python
-print("hello world".capitalize())  # Hello world
-print("PYTHON".capitalize())       # Python
+print("hello world".capitalize())
+print("PYTHON".capitalize())
 \`\`\`
+
+{output}
+Hello world
+Python
+{/output}
 
 이름 같은 거 정리할 때.
 
 ### title() — "단어마다 첫 글자 대문자"
 
 \`\`\`python
-print("hello world".title())  # Hello World
+print("hello world".title())
 \`\`\`
+
+{output}
+Hello World
+{/output}
 
 ### 정리 — 메서드 종류별
 

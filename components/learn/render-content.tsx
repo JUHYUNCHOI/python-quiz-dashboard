@@ -217,6 +217,49 @@ function CollapsibleCode({ label, code, language }: { label: string; code: strin
 }
 
 // ============================================
+// 결과 보기 — 클릭하면 출력이 터미널 박스로 공개되는 컴포넌트
+// (주석으로 답을 미리 보여주지 않고, "뭐 나올까?" 물어본 뒤 공개)
+// ============================================
+function RevealOutput({ lines }: { lines: string }) {
+  const [open, setOpen] = React.useState(false)
+  const { t } = useLanguage()
+
+  if (!open) {
+    return (
+      <div className="my-3">
+        <button
+          onClick={() => setOpen(true)}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 active:scale-[0.98] text-gray-100 text-sm font-semibold shadow-sm transition-all"
+        >
+          <span className="text-xs">▶</span>
+          {t("결과 보기", "Show output")}
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="my-3 rounded-xl overflow-hidden border border-gray-700 shadow-sm">
+      <div className="flex items-center gap-1.5 px-3 py-2 bg-gray-800">
+        <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
+        <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+        <span className="w-2.5 h-2.5 rounded-full bg-green-400" />
+        <span className="ml-2 text-xs text-gray-400 font-mono">{t("출력 결과", "output")}</span>
+        <button
+          onClick={() => setOpen(false)}
+          className="ml-auto text-xs text-gray-400 hover:text-gray-200 font-medium"
+        >
+          {t("숨기기", "Hide")}
+        </button>
+      </div>
+      <pre className="bg-gray-900 text-emerald-300 px-4 py-3 text-sm md:text-[15px] font-mono whitespace-pre-wrap leading-relaxed overflow-x-auto">
+        {lines}
+      </pre>
+    </div>
+  )
+}
+
+// ============================================
 // 접을 수 있는 일반 콘텐츠 (오른쪽 슬라이드 패널)
 // ============================================
 function CollapsibleContent({ label, children }: { label: string; children: React.ReactNode }) {
@@ -350,6 +393,19 @@ export function renderContent(content: string) {
           {diagLines.join('\n')}
         </pre>
       )
+      continue
+    }
+
+    // ── 결과 보기: {output} ... {/output} (클릭하면 터미널 박스로 공개) ──
+    if (line.trim() === '{output}') {
+      i++
+      const outLines: string[] = []
+      while (i < lines.length && lines[i].trim() !== '{/output}') {
+        outLines.push(lines[i])
+        i++
+      }
+      i++ // skip {/output}
+      elements.push(<RevealOutput key={key++} lines={outLines.join('\n')} />)
       continue
     }
 

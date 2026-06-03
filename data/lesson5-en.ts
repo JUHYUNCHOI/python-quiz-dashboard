@@ -23,8 +23,12 @@ export const lesson5EnData: LessonData = {
 \`\`\`python
 first = "Hello"
 second = " there"
-print(first + second)  # Hello there
+print(first + second)
 \`\`\`
+
+{output}
+Hello there
+{/output}
 
 String + String = **glued together!**
 
@@ -59,8 +63,12 @@ You can join as many as you want — Python reads them left to right:
 a = "Py"
 b = "th"
 c = "on"
-print(a + b + c)   # Python
-\`\`\``
+print(a + b + c)
+\`\`\`
+
+{output}
+Python
+{/output}`
         },
         {
           id: "concat-explain-spaces",
@@ -69,9 +77,14 @@ print(a + b + c)   # Python
           content: `### No automatic spaces!
 
 \`\`\`python
-print("Hello" + "World")         # HelloWorld  ← stuck together!
-print("Hello" + " " + "World")   # Hello World
+print("Hello" + "World")
+print("Hello" + " " + "World")
 \`\`\`
+
+{output}
+HelloWorld
+Hello World
+{/output}
 
 If you want a space, you have to add \`" "\` yourself. Python won't guess.
 
@@ -147,9 +160,14 @@ print(len(text))
           content: `### Edge case — empty string
 
 \`\`\`python
-print(len(""))    # 0 — nothing inside, length 0
-print(len(" "))   # 1 — one space, still counts!
+print(len(""))
+print(len(" "))
 \`\`\`
+
+{output}
+0
+1
+{/output}
 
 ### ❌ What doesn't work
 
@@ -179,9 +197,14 @@ text = "Python"
 #       P  y  t  h  o  n
 #      [0][1][2][3][4][5]
 
-print(text[0])    # P (first)
-print(text[3])    # h
+print(text[0])
+print(text[3])
 \`\`\`
+
+{output}
+P
+h
+{/output}
 
 > The first character is \`[0]\`, not \`[1]\` — computers count from 0!`
         },
@@ -198,9 +221,14 @@ text = "Python"
 #        P   y   t   h   o   n
 #      [-6][-5][-4][-3][-2][-1]   ← from the back
 
-print(text[-1])   # n (last)
-print(text[-2])   # o (second from end)
+print(text[-1])
+print(text[-2])
 \`\`\`
+
+{output}
+n
+o
+{/output}
 
 \`text[-1]\` is **always the last character** — no need to know the length! Used everywhere.
 
@@ -208,10 +236,14 @@ print(text[-2])   # o (second from end)
 
 \`\`\`python
 name = "Alice"
-initial = name[0]      # 'A'
-last = name[-1]        # 'e'
+initial = name[0]
+last = name[-1]
 print(name, "initial:", initial)
 \`\`\`
+
+{output}
+Alice initial: A
+{/output}
 
 ### ⚠️ Index out of range = error!
 
@@ -279,10 +311,16 @@ print(word[-2])
 \`"Ha" * 3\` is exactly the same as \`"Ha" + "Ha" + "Ha"\` — just a **shorter way to write it**.
 
 \`\`\`python
-print("Ha" * 3)       # HaHaHa
-print("=" * 5)        # =====
-print("Hi! " * 2)     # Hi! Hi!
+print("Ha" * 3)
+print("=" * 5)
+print("Hi! " * 2)
 \`\`\`
+
+{output}
+HaHaHa
+=====
+Hi! Hi!
+{/output}
 
 > 💡 You can write it as \`5 * "="\` too — **order doesn't matter**!
 
@@ -406,16 +444,26 @@ Notice the **comma** in \`print\` — that's how we print a label and a True/Fal
 ### not in — the opposite
 
 \`\`\`python
-print("foo" not in "hello")    # True — "foo" really isn't there
-print("ell" not in "hello")    # False — "ell" IS there
+print("foo" not in "hello")
+print("ell" not in "hello")
 \`\`\`
+
+{output}
+True
+False
+{/output}
 
 ### ⚠️ Case-sensitive!
 
 \`\`\`python
-print("Python" in "I love Python")   # True
-print("python" in "I love Python")   # False — capital P matters!
+print("Python" in "I love Python")
+print("python" in "I love Python")
 \`\`\`
+
+{output}
+True
+False
+{/output}
 
 \`P\` and \`p\` are different characters to Python.`
         },
@@ -467,17 +515,26 @@ print(a == c)
           content: `\`<\` and \`>\` work on strings too. Words that come **earlier in the dictionary** are "smaller".
 
 \`\`\`python
-print("apple" < "banana")   # True — 'a' comes before 'b'
-print("kiwi" < "apple")     # False — 'k' comes after 'a'
+print("apple" < "banana")
+print("kiwi" < "apple")
 \`\`\`
+
+{output}
+True
+False
+{/output}
 
 Useful for sorting names later!
 
 ### Uppercase vs lowercase
 
 \`\`\`python
-print("apple" < "Apple")    # False
+print("apple" < "Apple")
 \`\`\`
+
+{output}
+False
+{/output}
 
 One rule to remember: **uppercase < lowercase**. (The exact why comes later in lesson 9.)
 
@@ -487,7 +544,12 @@ One rule to remember: **uppercase < lowercase**. (The exact why comes later in l
 answer = "y"
 print("is y?:", answer == "y")
 print("is n?:", answer == "n")
-\`\`\``
+\`\`\`
+
+{output}
+is y?: True
+is n?: False
+{/output}`
         },
         {
           id: "compare-explain-trap",
@@ -701,8 +763,12 @@ Perfect for poems, menus, long messages.`
 **Printing with numbers** — use \`print()\` comma (today's lesson!)
 \`\`\`python
 score = 100
-print("Score:", score)   # Score: 100
+print("Score:", score)
 \`\`\`
+
+{output}
+Score: 100
+{/output}
 
 > 💡 Things we postponed this lesson (case-insensitive compare, joining \`+\` a number into one string, \`int("10")\`-style conversion) come up in the next lessons. For now, focus on getting today's tools into your hands.`
         },

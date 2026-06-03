@@ -186,9 +186,16 @@ print(price + 2000)
           type: "explain",
           title: "🤔 What's the Difference — With or Without Quotes?",
           content: `\`\`\`python
-print('price')   # → price (literally the letters!)
-print(price)     # → 19000 (the value in the box!)
+print('price')
+print(price)
 \`\`\`
+
+(`price` holds 19000 from the previous step.) How do the two outputs differ?
+
+{output}
+price
+19000
+{/output}
 
 With quotes \`'\` → literal text. Variable name only (no quotes) → value in the box.
 
@@ -256,11 +263,18 @@ Comma-separated values automatically get a **space** between them (same as in le
 
 \`\`\`python
 hp = 100
-print(hp)  # 100
+print(hp)
 
 hp = 80    # took 20 damage from a monster!
-print(hp)  # 80
+print(hp)
 \`\`\`
+
+The first print gives 100 — what does the second one give?
+
+{output}
+100
+80
+{/output}
 
 ### Inside the box
 

@@ -22,8 +22,12 @@ export const lesson6EnData: LessonData = {
 
 \`\`\`python
 text = "hello"
-print(text.upper())  # HELLO
+print(text.upper())
 \`\`\`
+
+{output}
+HELLO
+{/output}
 
 What this says: "Hey text, turn yourself into uppercase (upper)."
 
@@ -72,9 +76,16 @@ text.uper()     # ❌ Typo — AttributeError
 \`\`\`python
 text = "Hello World"
 
-print(text.upper())  # HELLO WORLD
-print(text.lower())  # hello world
+print(text.upper())
+print(text.lower())
 \`\`\`
+
+What do you think each line prints?
+
+{output}
+HELLO WORLD
+hello world
+{/output}
 
 ### Why bother?
 
@@ -85,9 +96,14 @@ print(text.lower())  # hello world
 ### What about non-letters?
 
 \`\`\`python
-print("123 abc".upper())   # 123 ABC  (digits unchanged)
-print("héllo".upper())     # HÉLLO    (accents handled)
+print("123 abc".upper())
+print("héllo".upper())
 \`\`\`
+
+{output}
+123 ABC
+HÉLLO
+{/output}
 
 Only letters change. Digits, symbols, spaces — all stay the same.`
         },
@@ -113,9 +129,15 @@ print(name.upper())
 
 \`\`\`python
 text = "Hello"
-text.upper()         # gives back HELLO — but where to?
-print(text)          # Hello (unchanged!)
+text.upper()         # gives back a new string — but where does it go?
+print(text)
 \`\`\`
+
+What do you think \`text\` prints? Think first, then reveal.
+
+{output}
+Hello
+{/output}
 
 upper() returned a new string, but we didn't catch it anywhere.
 
@@ -126,21 +148,31 @@ upper() returned a new string, but we didn't catch it anywhere.
 \`\`\`python
 text = "Hello"
 big = text.upper()   # save the new string into big (= write on notepad)
-print(text)          # Hello (original didn't change)
-print(big)           # HELLO
+print(text)
+print(big)
 \`\`\`
+
+{output}
+Hello
+HELLO
+{/output}
 
 > 💡 The **original string doesn't change** once made. Methods always return a **new string**. (The fancy word for this is "immutable" — don't memorize it, just feel it.)`
         },
         {
           id: "try-immutable-trap",
-          type: "tryit",
-          title: "✋ See the trap yourself — does the original really stay?",
-          task: "Test the immutability you just learned. If you call `text.upper()` but then just print `text`, what do you get? Run it and see.",
-          initialCode: "text = \"Hello\"\ntext.upper()\nprint(text)   # what do you expect?",
-          expectedOutput: "Hello",
-          hint: "If you don't catch the result in a variable, it just disappears!",
-          hint2: "upper() made a new string but nothing caught it. So text is still the same."
+          type: "predict",
+          title: "💭 Predict the trap — will the original change?",
+          content: `We call \`text.upper()\` but **catch the result nowhere.** On the very next line we print \`text\` — what shows?
+
+\`\`\`python
+text = "Hello"
+text.upper()
+print(text)
+\`\`\``,
+          options: ["Hello", "HELLO", "hello", "Error"],
+          answer: 0,
+          explanation: "upper() did make a new string HELLO — but nothing caught it, so it just disappears. The original text stays Hello! To change it, catch it like big = text.upper()."
         },
         {
           id: "try1",
@@ -186,8 +218,14 @@ print(big)           # HELLO
 
 \`\`\`python
 text = "   Hello   "
-print(text.strip())  # "Hello"
+print(text.strip())
 \`\`\`
+
+What's left after trimming both ends?
+
+{output}
+Hello
+{/output}
 
 ### Why bother?
 
@@ -201,8 +239,12 @@ People's input often comes with accidental spaces.
 
 \`\`\`python
 text = "   Hello friend   "
-print(text.strip())  # "Hello friend"  (middle space kept!)
-\`\`\``
+print(text.strip())
+\`\`\`
+
+{output}
+Hello friend
+{/output}`
         },
         {
           id: "predict-strip-middle",
@@ -215,10 +257,10 @@ text = "   Hello friend   "
 print(text.strip())
 \`\`\`
 
-Hint: strip() only trims **both ends.**`,
-          options: ["Hellofriend", "Hello friend", "   Hello friend   ", "Hello"],
+Hint: strip() only trims **both ends.** (␣ in the choices means one space.)`,
+          options: ["Hellofriend", "Hello friend", "␣␣␣Hello friend␣␣␣", "Hello"],
           answer: 1,
-          explanation: "Only end whitespace is trimmed. The middle space stays! → \"Hello friend\""
+          explanation: "Only end whitespace is trimmed. The middle space stays! → \"Hello friend\" (␣␣␣Hello friend␣␣␣ is the original, before strip.)"
         },
         {
           id: "strip-variants",
@@ -231,9 +273,14 @@ Hint: strip() only trims **both ends.**`,
 
 \`\`\`python
 text = "   Hello   "
-print(text.lstrip())  # "Hello   "
-print(text.rstrip())  # "   Hello"
+print(text.lstrip())
+print(text.rstrip())
 \`\`\`
+
+{output}
+Hello
+   Hello
+{/output}
 
 ### It removes more than spaces
 
@@ -241,8 +288,12 @@ strip() also clears **tabs \\t, newlines \\n,** and other invisible whitespace.
 
 \`\`\`python
 text = "\\n\\t  Hello  \\n"
-print(text.strip())  # "Hello"
+print(text.strip())
 \`\`\`
+
+{output}
+Hello
+{/output}
 
 > 💡 The original stays the same. You always get a new string back.`
         },
@@ -265,16 +316,24 @@ print(text.strip())  # "Hello"
 \`\`\`python
 text = "Hello World"
 print(text.replace("World", "Python"))
-# Hello Python
 \`\`\`
+
+{output}
+Hello Python
+{/output}
 
 ### **All** matches get swapped
 
 \`\`\`python
 text = "banana banana banana"
 print(text.replace("banana", "apple"))
-# apple apple apple
 \`\`\`
+
+Does it stop at the first match, or replace all?
+
+{output}
+apple apple apple
+{/output}
 
 It doesn't stop at the first one — every match is replaced.
 
@@ -284,8 +343,12 @@ Pass \`""\` (empty string) as the new value to **delete** the matches.
 
 \`\`\`python
 text = "H e l l o"
-print(text.replace(" ", ""))  # Hello  (all spaces removed)
-\`\`\``
+print(text.replace(" ", ""))
+\`\`\`
+
+{output}
+Hello
+{/output}`
         },
         {
           id: "predict-replace-all",
@@ -314,16 +377,23 @@ The result is still a string, so you can call another method right on it.
 \`\`\`python
 text = "cat and cow"
 print(text.replace("cat", "dog").replace("cow", "rabbit"))
-# dog and rabbit
 \`\`\`
+
+{output}
+dog and rabbit
+{/output}
 
 > 💡 Stringing methods together with dots is called **chaining**. You'll use it a lot!
 
 ### ⚠️ Case-sensitive
 
 \`\`\`python
-print("Hello".replace("hello", "Hi"))  # Hello  (no change!)
+print("Hello".replace("hello", "Hi"))  # looking for lowercase hello — will it match?
 \`\`\`
+
+{output}
+Hello
+{/output}
 
 \`"Hello"\` and \`"hello"\` are different strings. The match must be exact.`
         },
@@ -631,15 +701,24 @@ Hint: needs to be **only digits** to be True.`,
 ### capitalize() — "uppercase the first letter"
 
 \`\`\`python
-print("hello world".capitalize())  # Hello world
-print("PYTHON".capitalize())       # Python
+print("hello world".capitalize())
+print("PYTHON".capitalize())
 \`\`\`
+
+{output}
+Hello world
+Python
+{/output}
 
 ### title() — "uppercase the first letter of every word"
 
 \`\`\`python
-print("hello world".title())  # Hello World
+print("hello world".title())
 \`\`\`
+
+{output}
+Hello World
+{/output}
 
 ### Summary — by what they return
 

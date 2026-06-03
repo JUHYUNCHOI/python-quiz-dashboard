@@ -201,8 +201,11 @@ str(True)         # "True"
 \`\`\`python
 score = 95
 print("점수: " + str(score) + "점")
-# 점수: 95점
 \`\`\`
+
+{output}
+점수: 95점
+{/output}
 
 \`str()\` 안 쓰면? — \`"점수: " + 95\` ❌ TypeError!
 
@@ -302,8 +305,12 @@ float("hello")    # ❌ ValueError: 숫자 아님
 \`\`\`python
 text = "3.14"
 num = int(float(text))    # float 거쳐서 int 로
-print(num)                # 3
+print(num)
 \`\`\`
+
+{output}
+3
+{/output}
 
 (int 와 float 의 안쪽-바깥쪽 순서 주의!)`
         },

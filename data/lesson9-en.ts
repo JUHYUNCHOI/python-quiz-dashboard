@@ -201,8 +201,11 @@ str(True)         # "True"
 \`\`\`python
 score = 95
 print("Score: " + str(score) + " points")
-# Score: 95 points
 \`\`\`
+
+{output}
+Score: 95 points
+{/output}
 
 Without str()? — \`"Score: " + 95\` ❌ TypeError!
 
@@ -302,8 +305,12 @@ float("hello")    # ❌ ValueError: not a number
 \`\`\`python
 text = "3.14"
 num = int(float(text))    # float first, then int
-print(num)                # 3
+print(num)
 \`\`\`
+
+{output}
+3
+{/output}
 
 (Mind the order: inner = float, outer = int.)`
         },

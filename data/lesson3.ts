@@ -186,9 +186,16 @@ print(price + 2000)
           type: "explain",
           title: "🤔 따옴표가 있고 없고, 뭐가 달라?",
           content: `\`\`\`python
-print('price')   # → price (글자 그대로!)
-print(price)     # → 19000 (상자 안의 값!)
+print('price')
+print(price)
 \`\`\`
+
+(`price` 는 위 스텝에서 19000 으로 저장한 변수예요.) 두 줄의 출력이 어떻게 다를까요?
+
+{output}
+price
+19000
+{/output}
 
 따옴표 \`'\` 가 있으면 그냥 **글자 그대로**. 따옴표 없이 변수 이름만 쓰면 **상자 안의 값**.
 
@@ -256,11 +263,18 @@ print("점수:", score, "점")  # 점수: 95 점
 
 \`\`\`python
 hp = 100
-print(hp)  # 100
+print(hp)
 
 hp = 80    # 몬스터한테 20 데미지!
-print(hp)  # 80
+print(hp)
 \`\`\`
+
+처음 print 는 100, 두 번째 print 는 뭐가 나올까요?
+
+{output}
+100
+80
+{/output}
 
 ### 상자 안에서 무슨 일이?
 

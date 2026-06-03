@@ -211,9 +211,16 @@ print(type(True))     # <class 'bool'>  ← 불리언(bool) 종류
           content: `**불리언(bool)** 은 두 가지 값만 가질 수 있어요 — \`True\` 또는 \`False\`.
 
 \`\`\`python
-print(True)   # True
-print(False)  # False
+print(True)
+print(False)
 \`\`\`
+
+출력하면 뭐가 나올까요?
+
+{output}
+True
+False
+{/output}
 
 ### 일상 비유
 
@@ -230,8 +237,14 @@ print(False)  # False
 ### 비교하면 자동으로 bool 이 튀어나와요
 
 \`\`\`python
-print(10 > 5)    # True   (10이 5보다 크니까)
+print(10 > 5)
 \`\`\`
+
+10이 5보다 크면 어떤 bool 값이 나올까요?
+
+{output}
+True
+{/output}
 
 > 💡 \`>\` 같은 비교 연산자는 **lesson 4** 에서 자세히 배워요. 지금은 "비교 결과 = bool" 만 기억!`
         },
@@ -429,8 +442,14 @@ print(10 > 5)    # True   (10이 5보다 크니까)
 컴퓨터는 소수를 완벽히 정확하게 저장 못 해요.
 
 \`\`\`python
-print(0.1 + 0.2)   # 0.30000000000000004 😱
+print(0.1 + 0.2)
 \`\`\`
+
+0.3 이 나올 것 같지만, 실제로는?
+
+{output}
+0.30000000000000004
+{/output}
 
 0.3 이 정확히 안 나오는 게 **정상**! 지금은 "그런 게 있다" 만 기억.
 
@@ -441,8 +460,12 @@ print(0.1 + 0.2)   # 0.30000000000000004 😱
 \`True\` 는 1, \`False\` 는 0 으로 쓸 수 있어요.
 
 \`\`\`python
-print(True + True)   # 2
+print(True + True)
 \`\`\`
+
+{output}
+2
+{/output}
 
 나중에 조건문 (lesson 11) 에서 다시 만나요.
 

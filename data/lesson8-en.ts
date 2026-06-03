@@ -23,8 +23,11 @@ export const lesson8EnData: LessonData = {
 \`\`\`python
 name = "Alice"
 print("Name: " + name + " here!")
-# Name: Alice here!
 \`\`\`
+
+{output}
+Name: Alice here!
+{/output}
 
 Quotes opening and closing, multiple \`+\` — the longer it gets, the messier it looks. 😩
 
@@ -39,8 +42,11 @@ print("Age: " + age)   # 💥 Error!
 
 \`\`\`python
 print(f"Name: {name}, Age: {age}")
-# Name: Alice, Age: 15
-\`\`\``
+\`\`\`
+
+{output}
+Name: Alice, Age: 15
+{/output}`
         },
         {
           id: "fstring-explain",
@@ -52,8 +58,13 @@ print(f"Name: {name}, Age: {age}")
 name = "Alice"
 age = 15
 print(f"Hi {name}, age {age}!")
-# Hi Alice, age 15!
 \`\`\`
+
+What do you think this prints? Think first, then reveal.
+
+{output}
+Hi Alice, age 15!
+{/output}
 
 Two rules:
 
@@ -66,8 +77,12 @@ Two rules:
 
 \`\`\`python
 price = 19000
-print(f"Price: {price}")   # Price: 19000
-\`\`\``
+print(f"Price: {price}")
+\`\`\`
+
+{output}
+Price: 19000
+{/output}`
         },
         {
           id: "fstring-viz",
@@ -141,8 +156,11 @@ print("Hello, {name}!")
 a = 10
 b = 3
 print(f"{a} + {b} = {a + b}")
-# 10 + 3 = 13
 \`\`\`
+
+{output}
+10 + 3 = 13
+{/output}
 
 When Python hits a \`{ }\`, it:
 1. **Computes** the expression inside first
@@ -169,12 +187,15 @@ When Python hits a \`{ }\`, it:
 \`\`\`python
 name = "python"
 print(f"Uppercase: {name.upper()}")
-# Uppercase: PYTHON
 
 text = "  hello  "
 print(f"Stripped: '{text.strip()}'")
-# Stripped: 'hello'
 \`\`\`
+
+{output}
+Uppercase: PYTHON
+Stripped: 'hello'
+{/output}
 
 Same rule: Python runs \`name.upper()\` inside \`{ }\` first → the result \`"PYTHON"\` lands in the slot.`
         },
@@ -236,12 +257,15 @@ The \`f\` stands for "float" (a number with a decimal point). So \`.2f\` = "floa
 \`\`\`python
 price = 1000000
 print(f"Price: {price:,}")
-# Price: 1,000,000
 
 salary = 3500000
 print(f"Salary: {salary:,}")
-# Salary: 3,500,000
 \`\`\`
+
+{output}
+Price: 1,000,000
+Salary: 3,500,000
+{/output}
 
 **{variable:,}** = thousands separator comma!`
         },
@@ -262,8 +286,12 @@ print(f"Salary: {salary:,}")
           content: `You can drop text or numbers into a **fixed-width slot**. The empty space gets filled with spaces.
 
 \`\`\`python
-print(f"|{'cat':<10}|")   # |cat       |
+print(f"|{'cat':<10}|")
 \`\`\`
+
+{output}
+|cat       |
+{/output}
 
 - \`:<10\` = "in 10 chars — fill from the **left**". The 7 empty chars go on the right.
 - The \`|\` bars are just literal pipe characters to show the slot edges (no special meaning).
@@ -287,8 +315,12 @@ Think of it as a tool for **lining up columns** in a table.`
           content: `Now the opposite — empty space goes on the **front**, the text sticks to the right end.
 
 \`\`\`python
-print(f"|{'cat':>10}|")   # |       cat|
+print(f"|{'cat':>10}|")
 \`\`\`
+
+{output}
+|       cat|
+{/output}
 
 \`:>10\` = "in 10 chars — stick to the **right** end". Great for prices and other things where digits need to line up.`
         },
@@ -309,8 +341,12 @@ print(f"|{'cat':>10}|")   # |       cat|
           content: `\`^\` is an upward arrow — remember it as "**center**".
 
 \`\`\`python
-print(f"|{'cat':^10}|")   # |   cat    |
+print(f"|{'cat':^10}|")
 \`\`\`
+
+{output}
+|   cat    |
+{/output}
 
 Empty space gets split on both sides. Perfect for titles/headers.
 
