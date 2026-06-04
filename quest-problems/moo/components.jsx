@@ -15,7 +15,7 @@ const A = "#7c5cfc";
    MooSim — Interactive moo pattern finder
    ═══════════════════════════════════════════════════════════════ */
 export function MooSim({ E }) {
-  const PRESETS = ["zzmoozzmoo", "momoobaaaaaqqqcqq", "ooo", "aabbcc"];
+  const PRESETS = ["zzmoozzmoo", "moooo", "ooo", "aabbcc"];
   const [str, setStr] = useState("zzmoozzmoo");
   const [editPos, setEditPos] = useState(null);
 
@@ -28,6 +28,24 @@ export function MooSim({ E }) {
     if (isMoo(arr[i], arr[i + 1], arr[i + 2])) {
       highlights.add(i); highlights.add(i + 1); highlights.add(i + 2);
     }
+  }
+
+  // ≤3 windows that contain the selected cell — this is the overlap students must see
+  const affected = new Set();
+  const affectedStarts = [];
+  if (editPos !== null) {
+    const lo = Math.max(editPos - 2, 0);
+    const hi = Math.min(editPos, arr.length - 3);
+    for (let s = lo; s <= hi; s++) {
+      affectedStarts.push(s);
+      affected.add(s); affected.add(s + 1); affected.add(s + 2);
+    }
+  }
+
+  // run of 3+ identical letters → windows pile up & overlap (the "ooo" trap)
+  let hasRun = false;
+  for (let i = 0; i + 2 < arr.length; i++) {
+    if (arr[i] === arr[i + 1] && arr[i + 1] === arr[i + 2]) { hasRun = true; break; }
   }
 
   const applyEdit = (c) => {
@@ -63,29 +81,59 @@ export function MooSim({ E }) {
           }} />
       </div>
 
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 3, justifyContent: "center", marginBottom: 12, padding: "0 4px" }}>
-        {arr.map((ch, i) => (
-          <div key={i} style={{ position: "relative" }}>
-            <button onClick={() => setEditPos(i)} style={{
-              width: 26, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
-              borderRadius: 5, cursor: "pointer", fontSize: 14, fontWeight: 800,
-              fontFamily: "'JetBrains Mono',monospace",
-              background: editPos === i ? "#fde68a" : highlights.has(i) ? C.accentBg : "#f8f9fc",
-              border: `2px solid ${editPos === i ? "#f59e0b" : highlights.has(i) ? C.accentBd : C.border}`,
-              color: editPos === i ? "#92400e" : highlights.has(i) ? C.accent : C.text,
-            }}>{ch}</button>
-            <div style={{ fontSize: 8, textAlign: "center", color: C.dimLight, marginTop: 1 }}>{i}</div>
-          </div>
-        ))}
+      {hasRun && (
+        <div style={{
+          background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10,
+          padding: "8px 12px", marginBottom: 10, fontSize: 11.5, color: "#9a3412",
+          lineHeight: 1.7, textAlign: "center", fontWeight: 600,
+        }}>
+          🔍 {t(E,
+            "Same letter repeated! The 3-letter windows pile up and overlap here. Click a square inside the run — watch how ONE change lights up several windows at once.",
+            "같은 글자가 연달아 있어요! 여기선 3글자 윈도우가 빽빽이 겹쳐요. 연속 구간 안의 칸을 하나 눌러봐 — 한 번의 변경이 여러 윈도우를 한꺼번에 밝히는 게 보여요.")}
+        </div>
+      )}
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 3, justifyContent: "center", marginBottom: editPos !== null ? 6 : 12, padding: "0 4px" }}>
+        {arr.map((ch, i) => {
+          const isEdit = editPos === i;
+          const isAff = editPos !== null && affected.has(i);
+          const isMooCell = highlights.has(i);
+          // precedence: selected (yellow) > affected window (orange) > existing moo (purple) > plain
+          const bg = isEdit ? "#fde68a" : isAff ? "#ffedd5" : isMooCell ? C.accentBg : "#f8f9fc";
+          const bd = isEdit ? "#f59e0b" : isAff ? "#fb923c" : isMooCell ? C.accentBd : C.border;
+          const fg = isEdit ? "#92400e" : isAff ? "#9a3412" : isMooCell ? C.accent : C.text;
+          return (
+            <div key={i} style={{ position: "relative" }}>
+              <button onClick={() => setEditPos(i)} style={{
+                width: 26, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
+                borderRadius: 5, cursor: "pointer", fontSize: 14, fontWeight: 800,
+                fontFamily: "'JetBrains Mono',monospace",
+                background: bg, border: `2px solid ${bd}`, color: fg,
+              }}>{ch}</button>
+              <div style={{ fontSize: 8, textAlign: "center", color: C.dimLight, marginTop: 1 }}>{i}</div>
+            </div>
+          );
+        })}
       </div>
+
+      {editPos !== null && (
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", marginBottom: 10, fontSize: 10.5, color: C.dim, flexWrap: "wrap" }}>
+          <span><span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 2, background: "#ffedd5", border: "1.5px solid #fb923c", verticalAlign: "middle", marginRight: 3 }} />{t(E, "windows this change touches", "이 변경이 건드리는 윈도우")}</span>
+          <span><span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 2, background: C.accentBg, border: `1.5px solid ${C.accentBd}`, verticalAlign: "middle", marginRight: 3 }} />{t(E, "far moos — untouched", "멀리 있어 안 변하는 moo")}</span>
+        </div>
+      )}
 
       {editPos !== null && (
         <div style={{
           background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10,
           padding: "10px 14px", marginBottom: 12, textAlign: "center",
         }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>
             {t(E, `Change position ${editPos} (${arr[editPos]}):`, `위치 ${editPos} (${arr[editPos]}) 바꾸기:`)}
+          </div>
+          <div style={{ fontSize: 10.5, color: "#b45309", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, `→ sits in ${affectedStarts.length} overlapping window${affectedStarts.length > 1 ? "s" : ""}: `, `→ 겹치는 윈도우 ${affectedStarts.length}개에 걸침: `)}
+            {affectedStarts.map(s => `[${s},${s + 1},${s + 2}]`).join(" ")}
           </div>
           <div style={{ display: "flex", gap: 3, flexWrap: "wrap", justifyContent: "center" }}>
             {"abcdefghijklmnopqrstuvwxyz".split("").map(c => (
