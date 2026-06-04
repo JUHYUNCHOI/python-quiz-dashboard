@@ -44,7 +44,10 @@ export function makeMooCh1(E) {
       content: (<div style={{ padding: 16, textAlign: "center" }}>
         <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 14, padding: 14 }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: C.carry, marginBottom: 8 }}>{t(E, "Key Constraint", "핵심 조건")}</div>
-          <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8 }}>{t(E, "Original string + change at most 1 letter → find ALL moo patterns appearing ≥ F times", "원래 문자열 + 최대 1글자 변경 → F번 이상 나오는 모든 moo 패턴 찾기")}</div>
+          <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8 }}>{t(E, "Original string + change at most 1 letter → find ALL moo patterns appearing at least F times", "원래 문자열 + 최대 1글자 변경 → F번 이상 나오는 모든 moo 패턴 찾기")}</div>
+          <div style={{ marginTop: 8, padding: "6px 10px", background: "#fff", border: `1.5px solid ${C.carry}`, borderRadius: 8, fontSize: 12, color: "#92400e", fontWeight: 600 }}>
+            {t(E, "💡 F is just a target count the problem gives us. F=2 means \"appears 2 or more times.\"", "💡 F 는 문제에서 정해주는 '기준 횟수' 예요. F=2 면 \"2번 이상 나온다\"는 뜻.")}
+          </div>
         </div>
       </div>),
     },
@@ -334,20 +337,18 @@ export function makeMooCh4(E) {
           <div>{t(E, "idx=2 → 'mmo': m=m → not moo → skip", "idx=2 → 'mmo': m=m → moo 아님 → 패스")}</div>
           <div>{t(E, "idx=3 → 'moo': m≠o, o=o → IS moo → mydict['moo'] -= 1", "idx=3 → 'moo': m≠o, o=o → moo 맞음 → mydict['moo'] -= 1")}</div>
 
-          <div style={{ color: "#92400e", fontWeight: 700, marginTop: 6 }}>🟡 TRY (3 examples out of 26)</div>
-          <div><b>'a'</b>: {t(E, "windows → 'oma' (no), 'mao' (no), 'aoo' (YES, a≠o, o=o) → mydict['aoo'] +=1, check ≥ F, -=1",
-                              "윈도우 → 'oma' (X), 'mao' (X), 'aoo' (O, a≠o, o=o) → mydict['aoo'] +=1, ≥ F 확인, -=1")}</div>
-          <div><b>'o'</b>: {t(E, "windows → 'omo' (no), 'moo' (YES!) → mydict['moo'] +=1, check, -=1; 'ooo' (no)",
-                              "윈도우 → 'omo' (X), 'moo' (O!) → mydict['moo'] +=1, 확인, -=1; 'ooo' (X)")}</div>
-          <div><b>'m'</b> {t(E, "(same as original)", "(원본과 같음)")}: {t(E, "'omm' (YES) +=1/check/-=1; 'mmo' (no); 'moo' (YES) +=1/check/-=1",
-                              "'omm' (O) +=1/확인/-=1; 'mmo' (X); 'moo' (O) +=1/확인/-=1")}</div>
-          <div style={{ color: C.dim, fontSize: 11 }}>{t(E, "... and 23 more letters, each tested in all 3 windows", "... 나머지 23 글자도 각각 3 윈도우에서 테스트")}</div>
+          <div style={{ color: "#92400e", fontWeight: 700, marginTop: 6 }}>🟡 TRY {t(E, "— just watch ONE letter, 'a'", "— 한 글자 'a' 만 보자")}</div>
+          <div>{t(E, "3 windows become → 'oma' (no), 'mao' (no), 'aoo' (YES! a≠o, o=o)", "3 윈도우가 → 'oma' (X), 'mao' (X), 'aoo' (O! a≠o, o=o)")}</div>
+          <div style={{ paddingLeft: 14, color: C.accent, fontWeight: 600 }}>{t(E, "→ mydict['aoo'] +=1 → check ≥ F → -=1", "→ mydict['aoo'] +=1 → ≥ F 확인 → -=1")}</div>
 
           <div style={{ color: C.ok, fontWeight: 700, marginTop: 6 }}>🟢 RESTORE</div>
           <div>{t(E, "mydict['omm'] += 1, mydict['moo'] += 1 → counter is exactly as it was", "mydict['omm'] += 1, mydict['moo'] += 1 → 카운터가 시작 전과 정확히 같아짐")}</div>
         </div>
         <div style={{ marginTop: 10, padding: "8px 12px", background: "#ede9fe", border: "1.5px solid #c4b5fd", borderRadius: 8, fontSize: 11, color: "#5b21b6", textAlign: "center", fontWeight: 600 }}>
           {t(E, "Notice: only windows [1,2,3], [2,3,4], [3,4,5] are touched. 'mo' at [0,1] never moves.", "관찰: [1,2,3], [2,3,4], [3,4,5] 만 건드림. [0,1] 의 'mo' 는 절대 안 움직임.")}
+        </div>
+        <div style={{ marginTop: 6, fontSize: 11, color: C.dim, textAlign: "center" }}>
+          {t(E, "The other 25 letters work the same way — play through all of them in the next step's simulator. 👇", "나머지 25 글자도 똑같아요 — 다음 스텝 시뮬레이터에서 전부 직접 돌려봐요. 👇")}
         </div>
       </div>),
     },
