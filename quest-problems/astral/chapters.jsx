@@ -102,7 +102,7 @@ function OrbitGridStepSim({ rows, cols, orbit, stepData, caption }) {
     }}>{label}</button>
   );
 
-  const CELL = 34;
+  const CELL = 40;
   const GAP = 6;
   const gridW = cols * CELL + (cols - 1) * GAP;
   const gridH = rows * CELL + (rows - 1) * GAP;
@@ -130,7 +130,12 @@ function OrbitGridStepSim({ rows, cols, orbit, stepData, caption }) {
   const failing = isLast && cur.result && !cur.ok;
   const passing = isLast && cur.result && cur.ok;
   const bubBg = failing ? "#fef2f2" : passing ? "#f0fdf4" : "#ffffff";
-  const bubBorder = failing ? "#fca5a5" : passing ? "#86efac" : "#cbd5e1";
+  const bubBorder = failing ? "#ef4444" : passing ? "#22c55e" : "#6366f1";
+  const bubShadow = failing
+    ? "0 10px 28px rgba(220,38,38,0.22)"
+    : passing
+      ? "0 10px 28px rgba(22,163,74,0.22)"
+      : "0 10px 28px rgba(79,70,229,0.22)";
   const bubLeft = placeRight ? ax + CELL / 2 + 14 : ax - CELL / 2 - 14 - BUB_W;
 
   return (
@@ -197,10 +202,10 @@ function OrbitGridStepSim({ rows, cols, orbit, stepData, caption }) {
                     {cell.star && (
                       <div style={{ position: "absolute", top: -11, fontSize: 15, color: "#d97706", fontWeight: 800 }}>★</div>
                     )}
-                    <div style={{ fontSize: 15, fontWeight: 800, color: cell.active ? "#1e40af" : cell.star ? "#92400e" : "#6366f1" }}>
+                    <div style={{ fontSize: 16, fontWeight: 800, lineHeight: 1, color: cell.active ? "#1e40af" : cell.star ? "#92400e" : "#6366f1" }}>
                       {cell.letter}
                     </div>
-                    <div style={{ fontSize: 9.5, color: "#94a3b8", lineHeight: 1 }}>({oi})</div>
+                    <div style={{ fontSize: 10, lineHeight: 1, marginTop: 2, color: "#94a3b8" }}>({oi})</div>
                   </div>
                 );
               })
@@ -211,8 +216,8 @@ function OrbitGridStepSim({ rows, cols, orbit, stepData, caption }) {
           <div style={{
             position: "absolute", left: bubLeft, width: BUB_W,
             ...(anchorBottom ? { bottom: containerH - (ay + CELL / 2 + 6) } : { top: ay - 22 }),
-            background: bubBg, border: `1.5px solid ${bubBorder}`, borderRadius: 10,
-            padding: "9px 11px", boxShadow: "0 6px 18px rgba(15,23,42,0.13)", zIndex: 5,
+            background: bubBg, border: `2px solid ${bubBorder}`, borderRadius: 11,
+            padding: "10px 12px", boxShadow: bubShadow, zIndex: 5,
           }}>
             {/* pointer toward the active cell */}
             <div style={{
@@ -223,7 +228,7 @@ function OrbitGridStepSim({ rows, cols, orbit, stepData, caption }) {
               borderTop: "7px solid transparent", borderBottom: "7px solid transparent",
               ...(placeRight ? { borderRight: `8px solid ${bubBg}` } : { borderLeft: `8px solid ${bubBg}` }),
             }} />
-            <div style={{ fontSize: 12, color: "#374151", lineHeight: 1.5 }}>{cur.note}</div>
+            <div style={{ fontSize: 12.5, fontWeight: 500, color: "#1f2937", lineHeight: 1.55 }}>{cur.note}</div>
             {cur.why && (
               <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px dashed #e2e8f0", fontSize: 11.5, color: "#6b7280", lineHeight: 1.5, whiteSpace: "pre-line" }}>
                 {cur.why}
@@ -401,6 +406,12 @@ GGG`}
         "봐요 — 모서리 칸 (0,0) 이 G. 별 이동: 오른쪽 1, 아래 1. 별이 여기로 들어오려면 위 1, 왼쪽 1 = (-1,-1) 에서 와야 해요. 근데 그건 사진 밖. 그래서 (0,0) 에 별이 들어올 길 자체가 없어요."),
       content: (
         <div style={{ padding: 16 }}>
+          {/* Bridge: Sample 1 was easy (no move). Now stars move → G becomes ambiguous. */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "9px 13px", marginBottom: 12, fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
+            💡 {t(E,
+              "Sample 1 was easy because stars didn't move — a G could only be a star that left. Now stars MOVE, and that makes G tricky: a G could be a star that left, OR a star that slid in from another cell.",
+              "Sample 1은 별이 안 움직여서 쉬웠어요 — G는 '떠난 별'일 수밖에 없었거든요. 이제 별이 움직이면 G가 까다로워져요: G는 '떠난 별'일 수도, '옆 칸에서 슬쩍 들어온 별'일 수도 있어요.")}
+          </div>
           <div style={{ textAlign: "center", marginBottom: 12 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: "#4f46e5" }}>
               📍 {t(E, "Corner G — predecessor off-grid", "모서리 G — 이전 칸 사진 밖")}
@@ -553,7 +564,7 @@ GGG`}
               fontFamily: "'JetBrains Mono',monospace",
             }}>
               {outside ? (
-                <div style={{ fontSize: 9, color: "#94a3b8", fontWeight: 700 }}>밖</div>
+                <div style={{ fontSize: 9, color: "#94a3b8", fontWeight: 700 }}>{t(E, "off-grid", "밖")}</div>
               ) : (
                 <>
                   {hasStar && <div style={{ fontSize: 18, lineHeight: 1, color: "#d97706", fontWeight: 900 }}>★</div>}
@@ -605,8 +616,8 @@ GGG`}
 
             {/* G scene 1 — predecessor has star → moved-in */}
             <SceneRow
-              predCell={<Cell hasStar={true} label="거꾸로" />}
-              currentCell={<Cell letter="G" hasStar={true} label="여기" />}
+              predCell={<Cell hasStar={true} label={t(E, "one step back", "거꾸로")} />}
+              currentCell={<Cell letter="G" hasStar={true} label={t(E, "here", "여기")} />}
               verdict={t(E, "G — moved-in ✨", "G → 들어온 별 ✨")}
               verdictColor="#7c3aed"
               bg="#faf5ff"
@@ -615,8 +626,8 @@ GGG`}
 
             {/* G scene 2 — predecessor outside grid → original here */}
             <SceneRow
-              predCell={<Cell outside label="거꾸로" />}
-              currentCell={<Cell letter="G" hasStar={true} label="여기" />}
+              predCell={<Cell outside label={t(E, "one step back", "거꾸로")} />}
+              currentCell={<Cell letter="G" hasStar={true} label={t(E, "here", "여기")} />}
               verdict={t(E, "G — original here 🌱", "G → 원래 여기 별 🌱")}
               verdictColor="#7c3aed"
               bg="#faf5ff"
@@ -625,8 +636,8 @@ GGG`}
 
             {/* G scene 3 — predecessor inside grid but W (empty) → also original here */}
             <SceneRow
-              predCell={<Cell letter="W" hasStar={false} dim label="거꾸로" />}
-              currentCell={<Cell letter="G" hasStar={true} label="여기" />}
+              predCell={<Cell letter="W" hasStar={false} dim label={t(E, "one step back", "거꾸로")} />}
+              currentCell={<Cell letter="G" hasStar={true} label={t(E, "here", "여기")} />}
               verdict={t(E, "G — also original here 🌱", "G → 똑같이 원래 여기 별 🌱")}
               verdictColor="#7c3aed"
               bg="#faf5ff"
@@ -635,8 +646,8 @@ GGG`}
 
             {/* B scene — both have star → OK */}
             <SceneRow
-              predCell={<Cell hasStar={true} label="거꾸로" />}
-              currentCell={<Cell letter="B" hasStar={true} label="여기" />}
+              predCell={<Cell hasStar={true} label={t(E, "one step back", "거꾸로")} />}
+              currentCell={<Cell letter="B" hasStar={true} label={t(E, "here", "여기")} />}
               verdict={t(E, "B — both ★ ✓ OK", "B → 양쪽 다 별 ✓ OK")}
               verdictColor="#16a34a"
               bg="#f0fdf4"
@@ -645,8 +656,8 @@ GGG`}
 
             {/* B scene invalid — pred outside grid → EMPTY */}
             <SceneRow
-              predCell={<Cell outside label="거꾸로" />}
-              currentCell={<Cell letter="B" hasStar={true} label="여기" />}
+              predCell={<Cell outside label={t(E, "one step back", "거꾸로")} />}
+              currentCell={<Cell letter="B" hasStar={true} label={t(E, "here", "여기")} />}
               verdict={t(E, "B — pred ★ missing ❌", "B → 거꾸로 별 없음 ❌")}
               verdictColor="#dc2626"
               bg="#fef2f2"
@@ -655,8 +666,8 @@ GGG`}
 
             {/* B scene invalid — pred W (empty) → also EMPTY */}
             <SceneRow
-              predCell={<Cell letter="W" hasStar={false} dim label="거꾸로" />}
-              currentCell={<Cell letter="B" hasStar={true} label="여기" />}
+              predCell={<Cell letter="W" hasStar={false} dim label={t(E, "one step back", "거꾸로")} />}
+              currentCell={<Cell letter="B" hasStar={true} label={t(E, "here", "여기")} />}
               verdict={t(E, "B — pred is W, still ★ missing ❌", "B → 거꾸로 W 라도 별 없음 ❌")}
               verdictColor="#dc2626"
               bg="#fef2f2"
