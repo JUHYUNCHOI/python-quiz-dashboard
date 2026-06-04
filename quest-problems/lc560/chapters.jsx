@@ -99,7 +99,7 @@ export function makeChapters(E) {
               label: t(E, "① Pick a start", "① 시작 칸을 하나씩"),
               color: TEAL,
               why: [
-                t(E, "count is our tally — bump it up by one each time we find a slice that sums to k.", "count 는 답을 세는 통이에요 — 합이 k 인 토막을 찾을 때마다 1 늘려요."),
+                t(E, "count is the variable that counts the answer — bump it up by one each time we find a slice that sums to k.", "count 는 답 개수를 세는 변수예요 — 합이 k 인 토막을 찾을 때마다 1 늘려요."),
                 t(E, "i is the start. From there, total begins at 0.", "i 는 시작 칸. 거기서부터 더한 합 total 을 0 으로 시작해요."),
               ],
               cppOnly: [t(E, "A sum can get big, so total is long long.", "합이 커질 수 있어서 total 은 long long 으로 둬요.")],
