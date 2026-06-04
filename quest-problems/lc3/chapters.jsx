@@ -266,6 +266,35 @@ export function makeChapters(E) {
               ],
             },
           ]}
+          fullCode={{
+            py: [
+              "def lengthOfLongestSubstring(s: str) -> int:",
+              "    last = {}      # letter -> last index seen",
+              "    left = 0",
+              "    best = 0",
+              "    for right in range(len(s)):",
+              "        ch = s[right]",
+              "        if ch in last and last[ch] >= left:",
+              "            left = last[ch] + 1   # jump past old copy",
+              "        last[ch] = right",
+              "        best = max(best, right - left + 1)",
+              "    return best",
+            ],
+            cpp: [
+              "int lengthOfLongestSubstring(string s) {",
+              "    unordered_map<char,int> last;  // letter -> last index",
+              "    int left = 0, best = 0;",
+              "    for (int right = 0; right < (int)s.size(); right++) {",
+              "        char ch = s[right];",
+              "        if (last.count(ch) && last[ch] >= left)",
+              "            left = last[ch] + 1;  // jump past old copy",
+              "        last[ch] = right;",
+              "        best = max(best, right - left + 1);",
+              "    }",
+              "    return best;",
+              "}",
+            ],
+          }}
           doneNote={t(E, "O(n) time, O(min(n, charset)) space. \"abcabcbb\" → 3, \"abba\" → 2.", "시간 O(n), 공간 O(min(n, 글자종류)). \"abcabcbb\" → 3, \"abba\" → 2.")}
         />
       ),

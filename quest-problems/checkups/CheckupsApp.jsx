@@ -3,7 +3,7 @@ import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
 import { CheckupsProgressiveCode, downloadCheckupsPDF, getCheckupsSections, CheckupsSim, CheckupsRunner } from "./components";
-import { makeCheckupsCh1, makeCheckupsCh2 } from "./chapters";
+import { makeCheckupsCh1, makeCheckupsCh2, makeCheckupsCh3, makeCheckupsCh4 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
 const A = "#dc2626";
@@ -33,9 +33,13 @@ export default function CheckupsApp(props = {}) {
 
   const [ch1Q, setCh1Q] = useState(() => makeCheckupsCh1(lang === "en"));
   const [ch2Q, setCh2Q] = useState(() => makeCheckupsCh2(lang === "en", "py"));
+  const [ch3Q, setCh3Q] = useState(() => makeCheckupsCh3(lang === "en"));
+  const [ch4Q, setCh4Q] = useState(() => makeCheckupsCh4(lang === "en", "py"));
 
+  // codeLang change → rebuild Ch2 (brute code) + Ch4 (smart code) preserving answered/solved
   useEffect(() => {
     setCh2Q(prev => makeCheckupsCh2(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
+    setCh4Q(prev => makeCheckupsCh4(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   }, [codeLang, E]);
 
   useEffect(() => {
@@ -48,14 +52,21 @@ export default function CheckupsApp(props = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propLang]);
 
-  const TABS = E ? ["📋 Problem", "⚡ Code"] : ["📋 문제", "⚡ 코드"];
-  const setters = { 0: setCh1Q, 1: setCh2Q };
-  const states  = { 0: ch1Q,    1: ch2Q };
-  const makers  = { 0: makeCheckupsCh1, 1: (e) => makeCheckupsCh2(e, codeLang) };
+  const TABS = E
+    ? ["📋 Problem", "🐢 First Try", "💡 Fast Idea", "⚡ Code"]
+    : ["📋 문제", "🐢 첫 시도", "💡 빠른 풀이", "⚡ 코드"];
+  const setters = { 0: setCh1Q, 1: setCh2Q, 2: setCh3Q, 3: setCh4Q };
+  const states  = { 0: ch1Q,    1: ch2Q,    2: ch3Q,    3: ch4Q };
+  const makers  = {
+    0: makeCheckupsCh1,
+    1: (e) => makeCheckupsCh2(e, codeLang),
+    2: makeCheckupsCh3,
+    3: (e) => makeCheckupsCh4(e, codeLang),
+  };
 
   const switchLang = nl => {
     const ne = nl === "en"; setLang(nl);
-    for (const k of [0,1]) setters[k](prev => makers[k](ne).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
+    for (const k of [0,1,2,3]) setters[k](prev => makers[k](ne).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   };
 
   const steps = states[tab], cur = Math.min(si, steps.length - 1), step = steps[cur];
@@ -72,6 +83,7 @@ export default function CheckupsApp(props = {}) {
 
   const showAnswerHint = (step.type === "quiz" && step.answered == null) || (step.type === "input" && !step.solved);
   const canNext = cur < steps.length - 1 || tab < TABS.length - 1;
+  const canPrev = cur > 0 || tab > 0;
   const next = () => {
     if (cur < steps.length - 1) {
       setSi(cur + 1);
@@ -83,9 +95,23 @@ export default function CheckupsApp(props = {}) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
-  const prev = () => { setSi(Math.max(0, cur - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const prev = () => {
+    if (cur > 0) {
+      setSi(cur - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (tab > 0) {
+      const prevTab = tab - 1;
+      const prevSteps = states[prevTab];
+      setTab(prevTab);
+      setSi(prevSteps.length - 1);
+      setVisitedTabs(p => { const n = new Set(p); n.add(prevTab); return n; });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
-  const showCodeControls = tab === 1;
+  const showCodeControls = tab === 1 || tab === 3;
 
   const renderContent = () => {
     if (step.type === "quiz") return <Quiz {...step} onAnswer={handleAnswer} />;
@@ -160,6 +186,7 @@ export default function CheckupsApp(props = {}) {
 
       <QuestBottomNav
         cur={cur}
+        canPrev={canPrev}
         canNext={canNext}
         accent={A}
         E={E}

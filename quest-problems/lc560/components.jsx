@@ -13,33 +13,46 @@ const NO      = "#b91c1c";
 const NO_BG   = "#fef2f2";
 const NO_BD   = "#fca5a5";
 
-/* 한 케이스의 전체 추적(trace)을 미리 계산한다.
-   순서가 핵심: 조회(seen[need]) → 기록(seen[prefix]+1). 이 순서가 바뀌면 답이 꼬인다. */
-function buildTrace(nums, k) {
+/* 누적합 리스트: prefix[i] = 앞 i 개 숫자의 합. prefix[0] = 0 (빈 누적합). */
+function prefixList(nums) {
+  const p = [0];
+  for (const x of nums) p.push(p[p.length - 1] + x);
+  return p;
+}
+
+/* 모드 ①: 배운 대로 — 누적합 '리스트' 를 한 칸씩 만든다.
+   prefix = [0] 에서 시작해 prefix[-1] + nums[i] 를 계속 덧붙인다. */
+function buildPrefixTrace(nums) {
   const steps = [];
-  let prefix = 0;
-  let count = 0;
-  const seen = { 0: 1 };
-
-  steps.push({
-    phase: "init",
-    i: -1, x: null, prefix: 0, need: null, found: null, count: 0,
-    seen: { ...seen },
-    hlKey: null,
-  });
-
+  const p = [0];
+  steps.push({ phase: "init", i: -1, x: null, prefix: [...p], added: 0 });
   for (let i = 0; i < nums.length; i++) {
     const x = nums[i];
-    prefix += x;                       // ① 누계 갱신
-    const need = prefix - k;           // ② 짝(시작점 누계) 계산
-    const found = seen[need] || 0;     // ③ 그 짝이 앞에 나온 횟수 조회
+    const prev = p[p.length - 1];
+    p.push(prev + x);
+    steps.push({ phase: "step", i, x, prev, prefix: [...p], added: prev + x });
+  }
+  return steps;
+}
+
+/* 모드 ②: 만든 누적합 리스트를 왼→오 훑으며 (prefix[r] − prefix[l] = k) 쌍을 센다.
+   값마다: 짝(p − k) 이 앞에 몇 번 나왔나 조회 → count 에 더하기 → 이 값을 seen 에 기록.
+   순서가 핵심: 조회 → 기록 (자기 자신을 짝으로 세지 않도록). */
+function buildCountTrace(nums, k) {
+  const p = prefixList(nums);
+  const steps = [];
+  const seen = {};
+  let count = 0;
+  steps.push({ phase: "init", pi: -1, p: null, need: null, found: null, count: 0, seen: {}, prefix: p, hlKey: null });
+  for (let pi = 0; pi < p.length; pi++) {
+    const val = p[pi];
+    const need = val - k;
+    const found = seen[need] || 0;
     count += found;
-    seen[prefix] = (seen[prefix] || 0) + 1;  // ④ 지금 누계 기록(+1)
+    seen[val] = (seen[val] || 0) + 1;
     steps.push({
-      phase: "step",
-      i, x, prefix, need, found, count,
-      seen: { ...seen },
-      hlKey: found > 0 ? need : null,   // 조회 성공 시 하이라이트할 key
+      phase: "step", pi, p: val, need, found, count,
+      seen: { ...seen }, prefix: p, hlKey: found > 0 ? need : null,
     });
   }
   return steps;
@@ -50,42 +63,81 @@ const CASES = [
   { id: "neg",   nums: [1, -1, 1], k: 1 },
 ];
 
-function Chip({ label, value, hot, E }) {
+/* seen 항목 — 딕셔너리처럼 보이게 `key: value` 한 줄로. (배열 칸으로 오해하지 않도록) */
+function DictEntry({ k, v, hot }) {
   return (
-    <div style={{
-      display: "flex", flexDirection: "column", alignItems: "center",
-      borderRadius: 8, padding: "4px 10px", minWidth: 38,
+    <span style={{
+      display: "inline-flex", alignItems: "center", gap: 3,
+      borderRadius: 8, padding: "4px 10px",
       background: hot ? OK_BG : "#fff",
       border: `2px solid ${hot ? OK_BD : "#e2e8f0"}`,
       boxShadow: hot ? `0 0 0 3px ${OK_BG}` : "none",
-      transition: "all .15s",
+      fontFamily: "monospace", transition: "all .15s",
     }}>
-      <span style={{ fontSize: 10, color: hot ? OK : "#94a3b8", fontFamily: "monospace" }}>{label}</span>
-      <span style={{ fontSize: 14, fontWeight: 800, color: hot ? OK : "#334155", fontFamily: "monospace" }}>{value}</span>
-    </div>
+      <span style={{ fontSize: 13.5, fontWeight: 800, color: hot ? OK : "#334155" }}>{k}</span>
+      <span style={{ fontSize: 12, color: "#94a3b8" }}>:</span>
+      <span style={{ fontSize: 13.5, fontWeight: 800, color: hot ? OK : TEAL_D }}>{v}</span>
+    </span>
   );
 }
 
 export function SubarraySumSim({ E }) {
+  const [lang] = useCodeLang();                 // 위쪽 🐍 Py / 💻 C++ 토글과 동기화
+  const py = lang === "py";
+  const [mode, setMode] = useState("prefix");   // "prefix" = 리스트 만들기, "count" = 쌍 세기
   const [caseId, setCaseId] = useState("basic");
   const [si, setSi] = useState(0);
 
   const cur = CASES.find(c => c.id === caseId);
-  const trace = buildTrace(cur.nums, cur.k);
+  const trace = mode === "prefix" ? buildPrefixTrace(cur.nums) : buildCountTrace(cur.nums, cur.k);
   const step = trace[Math.min(si, trace.length - 1)];
   const last = si >= trace.length - 1;
-  const final = trace[trace.length - 1].count;
+  const final = mode === "count" ? trace[trace.length - 1].count : null;
+  const totalSteps = trace.length - 1;
 
+  const pickMode = (m) => { setMode(m); setSi(0); };
   const pick = (id) => { setCaseId(id); setSi(0); };
   const next = () => setSi(s => Math.min(s + 1, trace.length - 1));
   const prev = () => setSi(s => Math.max(s - 1, 0));
   const reset = () => setSi(0);
 
-  const seenEntries = Object.entries(step.seen).sort((a, b) => Number(a[0]) - Number(b[0]));
+  const seenEntries = mode === "count"
+    ? Object.entries(step.seen).sort((a, b) => Number(a[0]) - Number(b[0]))
+    : [];
   const isStep = step.phase === "step";
+
+  const MODES = [
+    { id: "prefix", label: t(E, "① Build the prefix list", "① 누적합 리스트 만들기") },
+    { id: "count",  label: t(E, "② Count the pairs", "② 차이가 k 인 쌍 세기") },
+  ];
+
+  // 누적합 리스트 셀들 — 두 모드 공통으로 보여준다.
+  const prefixCells = step.prefix;
+  // 모드 ②에서 짝(need)으로 강조할 리스트 위치(가장 최근에 그 값이 기록된 칸)
+  const partnerIdx = (mode === "count" && isStep && step.found > 0)
+    ? prefixCells.slice(0, step.pi).lastIndexOf(step.need)
+    : -1;
 
   return (
     <div style={{ padding: 14, fontFamily: "inherit" }}>
+      {/* 모드 선택 — 먼저 누적합 리스트를 만들고, 그다음 쌍을 센다 */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
+        {MODES.map(m => {
+          const on = m.id === mode;
+          return (
+            <button key={m.id} onClick={() => pickMode(m.id)} style={{
+              cursor: "pointer", borderRadius: 999, padding: "6px 14px",
+              fontSize: 12, fontWeight: 800,
+              border: `2px solid ${on ? TEAL_D : "#cbd5e1"}`,
+              background: on ? TEAL_D : "#fff",
+              color: on ? "#fff" : "#475569",
+            }}>
+              {m.label}
+            </button>
+          );
+        })}
+      </div>
+
       {/* 케이스 선택 */}
       <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
         {CASES.map(c => {
@@ -105,22 +157,56 @@ export function SubarraySumSim({ E }) {
         })}
       </div>
 
-      {/* 배열 + 현재 위치 포인터 */}
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 14 }}>
-        {cur.nums.map((v, idx) => {
-          const here = isStep && idx === step.i;
-          const done = isStep && idx < step.i;
+      {/* nums 배열 — 모드 ① 에서 어떤 숫자를 더하는지 가리킨다 */}
+      {mode === "prefix" && (
+        <>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 5 }}>nums</div>
+          <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
+            {cur.nums.map((v, idx) => {
+              const here = isStep && idx === step.i;
+              const done = isStep && idx < step.i;
+              return (
+                <div key={idx} style={{
+                  width: 44, height: 52, borderRadius: 8,
+                  border: `2px solid ${here ? TEAL : done ? "#94a3b8" : "#e2e8f0"}`,
+                  background: here ? TEAL_L : "#fff",
+                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                  transform: here ? "translateY(-4px)" : "none",
+                  transition: "all .15s",
+                }}>
+                  <span style={{ fontSize: 9, color: "#94a3b8" }}>[{idx}]</span>
+                  <span style={{ fontSize: 16, fontWeight: 800, color: here ? TEAL_D : done ? "#64748b" : "#334155" }}>{v}</span>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {/* 누적합 리스트 prefix — 두 모드 공통. 모드 ② 에선 훑는 위치/짝을 강조 */}
+      <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 5 }}>
+        prefix {t(E, "(the prefix-sum list)", "(누적합 리스트)")}
+      </div>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 14, flexWrap: "wrap" }}>
+        {prefixCells.map((v, idx) => {
+          // 모드 ①: 방금 추가한 칸 강조. 모드 ②: 현재 훑는 칸(TEAL) / 짝으로 찾은 칸(초록)
+          const justAdded = mode === "prefix" && isStep && idx === prefixCells.length - 1;
+          const cursorHere = mode === "count" && isStep && idx === step.pi;
+          const isPartner = mode === "count" && idx === partnerIdx;
+          const future = mode === "count" && isStep && idx > step.pi;
+          const border = cursorHere ? TEAL : isPartner ? OK_BD : justAdded ? TEAL : "#e2e8f0";
+          const bg = cursorHere ? TEAL_L : isPartner ? OK_BG : justAdded ? TEAL_L : "#fff";
           return (
             <div key={idx} style={{
-              width: 44, height: 52, borderRadius: 8,
-              border: `2px solid ${here ? TEAL : done ? "#94a3b8" : "#e2e8f0"}`,
-              background: here ? TEAL_L : "#fff",
+              width: 40, height: 48, borderRadius: 8,
+              border: `2px solid ${border}`, background: bg,
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-              transform: here ? "translateY(-4px)" : "none",
+              opacity: future ? 0.4 : 1,
+              transform: cursorHere || justAdded ? "translateY(-4px)" : "none",
               transition: "all .15s",
             }}>
               <span style={{ fontSize: 9, color: "#94a3b8" }}>[{idx}]</span>
-              <span style={{ fontSize: 16, fontWeight: 800, color: here ? TEAL_D : done ? "#64748b" : "#334155" }}>{v}</span>
+              <span style={{ fontSize: 15, fontWeight: 800, color: isPartner ? OK : TEAL_D }}>{v}</span>
             </div>
           );
         })}
@@ -134,50 +220,76 @@ export function SubarraySumSim({ E }) {
         {step.phase === "init" ? (
           <div style={{ fontSize: 12.5, color: TEAL_D, lineHeight: 1.7 }}>
             <b>{t(E, "Start.", "시작.")}</b>{" "}
-            {t(E,
-              "Nothing added yet, so prefix = 0. We pre-record prefix 0 once in seen — this lets us catch subarrays that start at index 0.",
-              "아직 아무것도 안 더했으니 누계 prefix = 0. 출석부 seen 에 누계 0 을 미리 1번 기록해 둬요 — 그래야 인덱스 0 부터 시작하는 구간을 잡을 수 있어요.")}
+            {mode === "prefix"
+              ? t(E,
+                  "prefix is a list. It starts as [0] — the sum before adding anything (the empty prefix). We'll append one running sum per number.",
+                  "prefix 는 리스트예요. [0] 으로 시작해요 — 아무것도 더하기 전의 합(빈 누적합)이에요. 숫자마다 누적합을 하나씩 뒤에 붙여 가요.")
+              : py
+                ? t(E,
+                    "Now sweep the prefix list left to right. A subarray sum = prefix[r] − prefix[l], so we count pairs whose difference is k — using a dictionary seen to look up partners fast.",
+                    "이제 누적합 리스트를 왼→오로 훑어요. 토막 합 = prefix[r] − prefix[l] 이니까, 차이가 k 인 쌍을 세면 돼요 — 딕셔너리 seen 으로 짝을 빠르게 찾으면서요.")
+                : t(E,
+                    "Now sweep the prefix list left to right. A subarray sum = prefix[r] − prefix[l], so we count pairs whose difference is k — using a map seen to look up partners fast.",
+                    "이제 누적합 리스트를 왼→오로 훑어요. 토막 합 = prefix[r] − prefix[l] 이니까, 차이가 k 인 쌍을 세면 돼요 — 맵(map) seen 으로 짝을 빠르게 찾으면서요.")}
+          </div>
+        ) : mode === "prefix" ? (
+          <div style={{ display: "grid", gap: 7 }}>
+            <Row n="①" code={py
+                   ? `prefix[-1] + nums[${step.i}] = ${step.prev} + ${step.x} = ${step.added}`
+                   : `prefix[${step.i}] + nums[${step.i}] = ${step.prev} + ${step.x} = ${step.added}`}
+                 desc={t(E, "the new running sum", "새 누적합")} E={E} />
+            <Row n="②" code={py
+                   ? `prefix.append(${step.added})`
+                   : `prefix.push_back(${step.added})`}
+                 desc={t(E, "tack it onto the list", "리스트 뒤에 붙이기")} E={E} />
           </div>
         ) : (
           <div style={{ display: "grid", gap: 7 }}>
-            <Row n="①" code={`prefix += ${step.x}`}
-                 desc={t(E, `running sum → ${step.prefix}`, `누계 → ${step.prefix}`)} E={E} />
-            <Row n="②" code={`need = prefix − k = ${step.prefix} − ${cur.k} = ${step.need}`}
-                 desc={t(E, "the partner start-sum we want", "찾고 싶은 짝(시작점 누계)")} E={E} />
+            <Row n="①" code={`p = prefix[${step.pi}] = ${step.p}`}
+                 desc={t(E, "current running sum", "지금 누적합 값")} E={E} />
+            <Row n="②" code={`need = p − k = ${step.p} − ${cur.k} = ${step.need}`}
+                 desc={t(E, "partner value we look for", "찾는 짝 값")} E={E} />
             <Row n="③" code={`seen[${step.need}] = ${step.found}`}
                  desc={step.found > 0
-                   ? t(E, `found! +${step.found} to count`, `있다! count 에 +${step.found}`)
+                   ? t(E, `found ${step.found} earlier → +${step.found}`, `앞에 ${step.found} 번 있음 → +${step.found}`)
                    : t(E, "not seen before → +0", "본 적 없음 → +0")}
                  ok={step.found > 0} no={step.found === 0} E={E} />
-            <Row n="④" code={`seen[${step.prefix}] += 1`}
-                 desc={t(E, "record current prefix", "지금 누계를 출석부에 기록")} E={E} />
+            <Row n="④" code={`seen[${step.p}] += 1`}
+                 desc={t(E, "record this prefix value", "이 누적합 값을 기록")} E={E} />
           </div>
         )}
       </div>
 
-      {/* seen 출석부 + count */}
-      <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "flex-start", marginBottom: 12 }}>
-        <div style={{ flex: "1 1 260px" }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 6 }}>
-            seen {t(E, "(prefix → count)", "(누계 → 횟수)")}
+      {/* seen 딕셔너리 + count — 모드 ② 에서만 */}
+      {mode === "count" && (
+        <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "flex-start", marginBottom: 12 }}>
+          <div style={{ flex: "1 1 260px" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 6 }}>
+              seen {py
+                ? t(E, "— a dictionary { prefix value : count }", "— 딕셔너리 { 누적합 값 : 횟수 }")
+                : t(E, "— a map { prefix value : count }", "— 맵(map) { 누적합 값 : 횟수 }")}
+            </div>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center", fontFamily: "monospace" }}>
+              <span style={{ fontSize: 22, fontWeight: 800, color: "#94a3b8" }}>{"{"}</span>
+              {seenEntries.length === 0 && <span style={{ fontSize: 12, color: "#94a3b8" }}>{t(E, "empty", "비어 있음")}</span>}
+              {seenEntries.map(([key, val]) => (
+                <DictEntry key={key} k={key} v={val} hot={String(step.hlKey) === key} />
+              ))}
+              <span style={{ fontSize: 22, fontWeight: 800, color: "#94a3b8" }}>{"}"}</span>
+            </div>
           </div>
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-            {seenEntries.map(([key, val]) => (
-              <Chip key={key} label={key} value={val} hot={String(step.hlKey) === key} E={E} />
-            ))}
+          <div style={{ textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 6 }}>count</div>
+            <div style={{
+              fontSize: 26, fontWeight: 900, fontFamily: "monospace",
+              color: TEAL_D, background: "#fff", border: `2px solid ${TEAL}`,
+              borderRadius: 10, padding: "2px 18px", minWidth: 56,
+            }}>
+              {step.count}
+            </div>
           </div>
         </div>
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 6 }}>count</div>
-          <div style={{
-            fontSize: 26, fontWeight: 900, fontFamily: "monospace",
-            color: TEAL_D, background: "#fff", border: `2px solid ${TEAL}`,
-            borderRadius: 10, padding: "2px 18px", minWidth: 56,
-          }}>
-            {step.count}
-          </div>
-        </div>
-      </div>
+      )}
 
       {/* 컨트롤 */}
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -191,12 +303,23 @@ export function SubarraySumSim({ E }) {
           ↺ {t(E, "Restart", "처음으로")}
         </button>
         <span style={{ marginLeft: "auto", fontSize: 12, fontWeight: 700, color: "#94a3b8", fontFamily: "monospace" }}>
-          {step.phase === "init" ? t(E, "start", "시작") : `${t(E, "step", "스텝")} ${step.i + 1}`} / {cur.nums.length}
+          {step.phase === "init" ? t(E, "start", "시작") : `${t(E, "step", "스텝")} ${si}`} / {totalSteps}
         </span>
       </div>
 
-      {/* 마지막 스텝이면 정답 배너 */}
-      {last && (
+      {/* 마지막 스텝 — 모드별 마무리 배너 */}
+      {last && mode === "prefix" && (
+        <div style={{
+          marginTop: 12, background: TEAL_L, border: `2px solid ${TEAL}`,
+          borderRadius: 10, padding: "10px 14px", textAlign: "center",
+          fontSize: 12.5, fontWeight: 700, color: TEAL_D, lineHeight: 1.6,
+        }}>
+          {t(E,
+            "The prefix list is built. Now switch to ② Count the pairs to find slices whose two prefix sums differ by k.",
+            "누적합 리스트 완성. 이제 ② 차이가 k 인 쌍 세기 로 바꿔서, 두 누적합의 차이가 k 인 토막을 찾아봐요.")}
+        </div>
+      )}
+      {last && mode === "count" && (
         <div style={{
           marginTop: 12, background: OK_BG, border: `2px solid ${OK_BD}`,
           borderRadius: 10, padding: "10px 14px", textAlign: "center",
@@ -206,8 +329,8 @@ export function SubarraySumSim({ E }) {
           {caseId === "neg" && (
             <div style={{ fontSize: 11.5, fontWeight: 600, color: "#15803d", marginTop: 4 }}>
               {t(E,
-                "Prefix 0 appeared twice → last step added +2. A boolean set would have missed one!",
-                "누계 0 이 두 번 나와서 마지막에 +2. set(있다/없다)이었다면 하나를 놓쳤어요!")}
+                "Prefix value 0 appeared twice in the list → seen[0] reached 2, so a later step added +2. Counting (not just yes/no) is what catches both.",
+                "누적합 값 0 이 리스트에 두 번 나와서 seen[0] 이 2 가 됐고, 뒤에서 +2. '있다/없다' 가 아니라 '몇 번' 을 세야 둘 다 잡혀요.")}
             </div>
           )}
         </div>
@@ -323,7 +446,7 @@ export function SpeedRaceSim({ E, nMax = 20000, nStart = 200, constraintN = 2000
 
 /* ── 단계별 코드 (Python/C++ 토글) ───────────────────────────────
    sections: [{ label, color, py:[], cpp:[], why:[], pyOnly:[], cppOnly:[] }] */
-export function CodeJourney({ E, sections, doneNote }) {
+export function CodeJourney({ E, sections, doneNote, fullCode }) {
   // Single source of truth: the header 🐍 Py / 💻 C++ toggle (shared via localStorage).
   const [lang] = useCodeLang();
   return (
@@ -351,6 +474,17 @@ export function CodeJourney({ E, sections, doneNote }) {
           </div>
         );
       })}
+
+      {fullCode && (
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ display: "inline-block", fontSize: 12, fontWeight: 800, color: "#fff", background: TEAL_D, borderRadius: "8px 8px 0 0", padding: "5px 12px" }}>
+            {t(E, "✓ Full solution", "✓ 전체 코드")}
+          </div>
+          <div style={{ border: `2px solid ${TEAL_D}`, borderRadius: "0 8px 8px 8px", padding: 10, background: "#fff" }}>
+            <CodeBlock lang={lang} lines={lang === "py" ? fullCode.py : fullCode.cpp} />
+          </div>
+        </div>
+      )}
 
       {doneNote && (
         <div style={{ background: OK_BG, border: `2px solid ${OK_BD}`, borderRadius: 10, padding: "10px 14px", fontSize: 13, fontWeight: 700, color: OK, textAlign: "center" }}>
