@@ -75,11 +75,11 @@ export function makeChapters(E) {
           E={E}
           sections={[
             {
-              label: t(E, "Try every start", "모든 시작점 시도"),
+              label: t(E, "① Pick a start", "① 시작 칸을 하나씩"),
               color: ACC,
               why: [
-                t(E, "best keeps the longest clean run found so far.", "best 에 지금까지 찾은 가장 긴 깨끗한 구간 길이를 보관."),
-                t(E, "For each start i, seen tracks letters used in this run.", "각 시작점 i 마다 seen 으로 이 구간에서 쓴 글자를 추적."),
+                t(E, "best holds the longest no-repeat run we've found so far.", "best 는 지금까지 찾은 가장 긴 '겹침 없는 구간' 길이를 담아둬요."),
+                t(E, "For each start i, seen is the bag of letters used in this run.", "각 시작점 i 마다 seen 에 이 구간에서 쓴 글자를 모아둬요."),
               ],
               py: [
                 "best = 0",
@@ -94,12 +94,12 @@ export function makeChapters(E) {
               ],
             },
             {
-              label: t(E, "Extend the end until a repeat", "끝을 늘리다 중복이면 멈춤"),
+              label: t(E, "② Stretch the end until a letter repeats", "② 끝을 늘리다 같은 글자 나오면 멈춤"),
               color: ACC,
               why: [
-                t(E, "Push the end j forward, adding each new letter.", "끝 j 를 앞으로 밀며 새 글자를 추가."),
-                t(E, "The moment a letter repeats, this start is done — stop.", "글자가 중복되는 순간, 이 시작점은 끝 — 멈춰요."),
-                t(E, "Length of the current run is j - i + 1.", "현재 구간 길이는 j - i + 1."),
+                t(E, "Move the end j right, dropping each new letter into seen.", "끝 j 를 오른쪽으로 옮기며 새 글자를 seen 에 넣어요."),
+                t(E, "The moment a letter shows up again, this start is done — stop.", "같은 글자가 또 나오는 순간, 이 시작점은 여기까지 — 멈춰요."),
+                t(E, "The run from i to j is j − i + 1 squares long.", "i 부터 j 까지 구간 길이는 j − i + 1 칸."),
               ],
               py: [
                 "    for j in range(i, n):       # window end",
@@ -121,7 +121,7 @@ export function makeChapters(E) {
               ],
             },
           ]}
-          doneNote={t(E, "✓ Correct — it tries every start and finds the answer.", "✓ 정답은 맞아요 — 모든 시작점을 다 해보고 답을 찾아요.")}
+          doneNote={t(E, "✓ The answer is right — it tries every start, nothing skipped.", "✓ 답은 맞아요 — 모든 시작점을 하나도 빠짐없이 해보니까요.")}
         />
       ),
     },
@@ -130,8 +130,8 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "It works on \"abcabcbb\". But the string can be 50,000 letters long. \"Every start × every end\" is about n²/2 steps. Drag the slider and watch — how slow does brute get on a big input?",
-        "\"abcabcbb\" 에선 잘 돼요. 그런데 문자열이 5만 글자까지 길어질 수 있어요. \"모든 시작 × 모든 끝\" 은 약 n²/2 번. 슬라이더를 끌어보세요 — 큰 입력에서 완전탐색은 얼마나 느려질까요?"),
+        "It works on \"abcabcbb\". But the string can be 50,000 letters long, and trying \"every start × every end\" is about n × n ÷ 2 steps. Drag the slider — watch how slow that gets when the input grows.",
+        "\"abcabcbb\" 같은 작은 입력은 잘 돼요. 그런데 문자열이 5만 글자까지 길어질 수 있어요. \"모든 시작 × 모든 끝\" 을 다 해보면 대략 n × n ÷ 2 번이에요. 슬라이더를 끌어보세요 — 입력이 커지면 얼마나 느려지는지 보세요."),
       content: <SpeedRaceSim E={E} nMax={50000} nStart={200} constraintN={50000} />,
     },
 
@@ -157,13 +157,13 @@ export function makeChapters(E) {
               {t(E, "Window rule", "창문 규칙")}
             </div>
             {[
-              { label: t(E, "Expand:", "넓히기:"), formula: "right += 1   (read next letter)" },
-              { label: t(E, "Shrink:", "줄이기:"), formula: "dup inside → left = last[ch] + 1" },
-              { label: t(E, "Track:", "기록:"), formula: "best = max(best, right − left + 1)" },
+              { label: t(E, "Widen:", "넓히기:"), formula: t(E, "move the right edge over to read the next letter", "오른쪽 끝을 한 칸 옮겨 다음 글자를 읽어요") },
+              { label: t(E, "Shrink:", "줄이기:"), formula: t(E, "a repeat inside? jump the left edge past the old copy", "안에 중복이 있으면? 왼쪽 끝을 옛 글자 다음으로 점프") },
+              { label: t(E, "Track:", "기록:"), formula: t(E, "keep the longest window length in best", "가장 긴 창문 길이를 best 에 기록") },
             ].map((row, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-                <div style={{ fontSize: 11.5, color: "#374151", width: 64, flexShrink: 0 }}>{row.label}</div>
-                <div style={{ fontFamily: "monospace", fontSize: 12.5, fontWeight: 700, color: ACC_D }}>{row.formula}</div>
+              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 6 }}>
+                <div style={{ fontSize: 11.5, color: "#374151", width: 58, flexShrink: 0, fontWeight: 700 }}>{row.label}</div>
+                <div style={{ fontSize: 12, fontWeight: 600, color: ACC_D }}>{row.formula}</div>
               </div>
             ))}
           </div>
@@ -259,9 +259,9 @@ export function makeChapters(E) {
               label: t(E, "3. Record & return", "3. 기록하고 반환"),
               color: ACC,
               why: [
-                t(E, "Update this letter's position to right.", "이 글자의 위치를 right 로 갱신."),
-                t(E, "Update best with the current window length.", "현재 창문 길이로 best 갱신."),
-                t(E, "After the pass, best is the answer.", "끝까지 돌면 best 가 정답."),
+                t(E, "Write down this letter's newest position (right).", "이 글자의 마지막 위치를 right 로 새로 적어요."),
+                t(E, "Update best with the current window length.", "지금 창문 길이로 best 를 갱신해요."),
+                t(E, "Once the sweep is done, best is the answer.", "끝까지 다 돌면 best 가 정답이에요."),
               ],
               py: [
                 "        last[ch] = right",
