@@ -75,33 +75,18 @@ export function makeChapters(E) {
           E={E}
           sections={[
             {
-              label: t(E, "① Pick a start", "① 시작 칸을 하나씩"),
+              label: t(E, "Brute force — every start, stretch the end", "완전탐색 — 모든 시작에서 끝을 늘려보기"),
               color: ACC,
               why: [
                 t(E, "best holds the longest no-repeat run we've found so far.", "best 는 지금까지 찾은 가장 긴 '겹침 없는 구간' 길이를 담아둬요."),
-                t(E, "For each start i, seen is the bag of letters used in this run.", "각 시작점 i 마다 seen 에 이 구간에서 쓴 글자를 모아둬요."),
+                t(E, "For each start i, seen collects the letters used from i, and end j moves right adding each new letter.", "각 시작점 i 마다 seen 에 그 구간에서 쓴 글자를 모으고, 끝 j 를 오른쪽으로 옮기며 새 글자를 넣어요."),
+                t(E, "The moment a letter repeats, this start is done — stop and try the next start.", "같은 글자가 또 나오는 순간, 이 시작점은 여기까지 — 멈추고 다음 시작점으로."),
               ],
               py: [
                 "best = 0",
                 "n = len(s)",
-                "for i in range(n):          # window start",
-                "    seen = set()            # letters used from i",
-              ],
-              cpp: [
-                "int best = 0, n = s.size();",
-                "for (int i = 0; i < n; i++) {     // window start",
-                "    set<char> seen;              // letters used from i",
-              ],
-            },
-            {
-              label: t(E, "② Stretch the end until a letter repeats", "② 끝을 늘리다 같은 글자 나오면 멈춤"),
-              color: ACC,
-              why: [
-                t(E, "Move the end j right, dropping each new letter into seen.", "끝 j 를 오른쪽으로 옮기며 새 글자를 seen 에 넣어요."),
-                t(E, "The moment a letter shows up again, this start is done — stop.", "같은 글자가 또 나오는 순간, 이 시작점은 여기까지 — 멈춰요."),
-                t(E, "The run from i to j is j − i + 1 squares long.", "i 부터 j 까지 구간 길이는 j − i + 1 칸."),
-              ],
-              py: [
+                "for i in range(n):              # window start",
+                "    seen = set()                # letters used from i",
                 "    for j in range(i, n):       # window end",
                 "        if s[j] in seen:        # repeat → stop",
                 "            break",
@@ -111,7 +96,10 @@ export function makeChapters(E) {
                 "# best is the answer",
               ],
               cpp: [
-                "    for (int j = i; j < n; j++) {    // window end",
+                "int best = 0, n = s.size();",
+                "for (int i = 0; i < n; i++) {        // window start",
+                "    set<char> seen;                 // letters used from i",
+                "    for (int j = i; j < n; j++) {   // window end",
                 "        if (seen.count(s[j])) break; // repeat → stop",
                 "        seen.insert(s[j]);",
                 "        best = max(best, j - i + 1);",

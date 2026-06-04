@@ -96,32 +96,18 @@ export function makeChapters(E) {
           E={E}
           sections={[
             {
-              label: t(E, "① Pick a start", "① 시작 칸을 하나씩"),
+              label: t(E, "Brute force — every start × every end", "완전탐색 — 모든 시작 × 모든 끝"),
               color: TEAL,
               why: [
                 t(E, "count is the variable that counts the answer — bump it up by one each time we find a slice that sums to k.", "count 는 답 개수를 세는 변수예요 — 합이 k 인 토막을 찾을 때마다 1 늘려요."),
-                t(E, "i is the start. From there, total begins at 0.", "i 는 시작 칸. 거기서부터 더한 합 total 을 0 으로 시작해요."),
+                t(E, "For each start i, set total to 0. Then move the end j right, adding nums[j] as you go.", "시작 칸 i 마다 total 을 0 으로 두고, 끝 칸 j 를 오른쪽으로 옮기며 nums[j] 를 더해요."),
+                t(E, "Whenever total lands exactly on k, that's one more slice — count it.", "더하다가 total 이 딱 k 가 되면, 답을 1 늘려요."),
               ],
               cppOnly: [t(E, "A sum can get big, so total is long long.", "합이 커질 수 있어서 total 은 long long 으로 둬요.")],
               py: [
                 "count = 0",
-                "for i in range(len(nums)):      # subarray start",
+                "for i in range(len(nums)):          # subarray start",
                 "    total = 0",
-              ],
-              cpp: [
-                "int count = 0, n = nums.size();",
-                "for (int i = 0; i < n; i++) {       // subarray start",
-                "    long long total = 0;",
-              ],
-            },
-            {
-              label: t(E, "② Stretch the end, adding as you go", "② 끝 칸을 옮기며 더하기"),
-              color: TEAL,
-              why: [
-                t(E, "Move the end j one step right and add that number to total.", "끝 칸 j 를 오른쪽으로 한 칸씩 옮기며, 그 칸 숫자를 total 에 더해요."),
-                t(E, "Whenever total lands exactly on k, that's one more slice — count it.", "더하다가 total 이 딱 k 가 되면, 답을 1 늘려요."),
-              ],
-              py: [
                 "    for j in range(i, len(nums)):   # subarray end",
                 "        total += nums[j]",
                 "        if total == k:",
@@ -130,6 +116,9 @@ export function makeChapters(E) {
                 "# count is the answer",
               ],
               cpp: [
+                "int count = 0, n = nums.size();",
+                "for (int i = 0; i < n; i++) {           // subarray start",
+                "    long long total = 0;",
                 "    for (int j = i; j < n; j++) {       // subarray end",
                 "        total += nums[j];",
                 "        if (total == k) count++;",
