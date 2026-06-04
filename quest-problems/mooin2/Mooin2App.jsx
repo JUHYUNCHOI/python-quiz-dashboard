@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { Mooin2ProgressiveCode, downloadMooin2PDF, getMooin2Sections, Mooin2Sim, Mooin2Runner } from "./components";
-import { makeMooin2Ch1, makeMooin2Ch2 } from "./chapters";
+import { CodeSectionView } from "@/components/quest/CodeSectionView";
+import { downloadMooin2PDF, getMooin2Sections, MooinExplorer, MooinDeepAudit } from "./components";
+import { MooinBruteRunner, MooinCountTrace } from "./sims";
+import { makeMooin2Ch1, makeMooin2Ch2, makeMooin2Ch3, makeMooin2Ch4 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
 const A = "#ea580c";
@@ -21,6 +23,8 @@ export default function Mooin2App(props = {}) {
   });
   const E = lang === "en";
   const [codeLang, setCodeLang] = useCodeLang();
+
+  // Persist tab/si across refresh
   const _posKey = typeof window !== "undefined" ? `quest-pos-${window.location.pathname}` : "";
   const _loadPos = () => {
     if (typeof window === "undefined") return { tab: 0, si: 0 };
@@ -33,11 +37,16 @@ export default function Mooin2App(props = {}) {
 
   const [ch1Q, setCh1Q] = useState(() => makeMooin2Ch1(lang === "en"));
   const [ch2Q, setCh2Q] = useState(() => makeMooin2Ch2(lang === "en", "py"));
+  const [ch3Q, setCh3Q] = useState(() => makeMooin2Ch3(lang === "en"));
+  const [ch4Q, setCh4Q] = useState(() => makeMooin2Ch4(lang === "en", "py"));
 
+  // codeLang change → rebuild Ch2 (brute code) + Ch4 (full code) preserving answered/solved
   useEffect(() => {
     setCh2Q(prev => makeMooin2Ch2(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
+    setCh4Q(prev => makeMooin2Ch4(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   }, [codeLang, E]);
 
+  // Save tab + si to localStorage on every change
   useEffect(() => {
     if (typeof window === "undefined") return;
     try { window.localStorage.setItem(_posKey, JSON.stringify({ tab, si })); } catch {}
@@ -48,17 +57,27 @@ export default function Mooin2App(props = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propLang]);
 
-  const TABS = E ? ["📋 Problem", "⚡ Code"] : ["📋 문제", "⚡ 코드"];
-  const setters = { 0: setCh1Q, 1: setCh2Q };
-  const states  = { 0: ch1Q,    1: ch2Q };
-  const makers  = { 0: makeMooin2Ch1, 1: (e) => makeMooin2Ch2(e, codeLang) };
+  const TABS = E
+    ? ["📋 Problem", "🐢 First Try", "💡 Fast Idea", "⚡ Code"]
+    : ["📋 문제", "🐢 첫 시도", "💡 빠른 풀이", "⚡ 코드"];
+
+  const setters = { 0: setCh1Q, 1: setCh2Q, 2: setCh3Q, 3: setCh4Q };
+  const states  = { 0: ch1Q,    1: ch2Q,    2: ch3Q,    3: ch4Q };
+  const makers  = {
+    0: makeMooin2Ch1,
+    1: (e) => makeMooin2Ch2(e, codeLang),
+    2: makeMooin2Ch3,
+    3: (e) => makeMooin2Ch4(e, codeLang),
+  };
 
   const switchLang = nl => {
     const ne = nl === "en"; setLang(nl);
-    for (const k of [0,1]) setters[k](prev => makers[k](ne).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
+    for (const k of [0,1,2,3]) setters[k](prev => makers[k](ne).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   };
 
-  const steps = states[tab], cur = Math.min(si, steps.length - 1), step = steps[cur];
+  const steps = states[tab];
+  const cur = Math.min(si, steps.length - 1);
+  const step = steps[cur];
 
   const handleAnswer = i => {
     if (step.answered != null) return;
@@ -72,42 +91,61 @@ export default function Mooin2App(props = {}) {
 
   const showAnswerHint = (step.type === "quiz" && step.answered == null) || (step.type === "input" && !step.solved);
   const canNext = cur < steps.length - 1 || tab < TABS.length - 1;
+  const canPrev = cur > 0 || tab > 0;
   const next = () => {
     if (cur < steps.length - 1) {
       setSi(cur + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else if (tab < TABS.length - 1) {
-      setVisitedTabs(prev => { const n = new Set(prev); n.add(tab + 1); return n; });
-      setTab(tab + 1); setSi(0);
-      setters[tab + 1](makers[tab + 1](E));
+      const nextTab = tab + 1;
+      setTab(nextTab); setSi(0);
+      setVisitedTabs(prev => { const n = new Set(prev); n.add(nextTab); return n; });
+      setters[nextTab](makers[nextTab](E));
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
-  const prev = () => { setSi(Math.max(0, cur - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const prev = () => {
+    if (cur > 0) {
+      setSi(cur - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (tab > 0) {
+      const prevTab = tab - 1;
+      const prevSteps = states[prevTab];
+      setTab(prevTab);
+      setSi(prevSteps.length - 1);
+      setVisitedTabs(p => { const n = new Set(p); n.add(prevTab); return n; });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
-  const showCodeControls = tab === 1;
+  const showCodeControls = tab === 1 || tab === 3;
 
   const renderContent = () => {
     if (step.type === "quiz") return <Quiz {...step} onAnswer={handleAnswer} />;
     if (step.type === "input") return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
-    if (step.type === "progressive") return <Mooin2ProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
-    if (step.type === "sim") return <Mooin2Sim E={E} />;
-    if (step.type === "runner") return <Mooin2Runner E={E} />;
+    if (step.type === "bruteRunner") return <MooinBruteRunner E={E} />;
+    if (step.type === "deepAudit") return <MooinDeepAudit E={E} />;
+    if (step.type === "countTrace") return <MooinCountTrace E={E} />;
+    if (step.type === "explorer") return <MooinExplorer E={E} />;
+    if (step.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={step.section} />;
     return null;
   };
 
   const renderPreviewBody = (s) => {
+    if (!s) return null;
     if (s.type === "quiz") return <Quiz {...s} onAnswer={() => {}} />;
-    if (s.type === "input") return (
-      <NumInput question={s.question} hint={s.hint} answer={s.answer} E={E} onSolve={() => {}} />
-    );
+    if (s.type === "input") return <NumInput question={s.question} hint={s.hint} answer={s.answer} E={E} onSolve={() => {}} />;
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={s.code} /></div>;
-    if (s.type === "progressive") return <Mooin2ProgressiveCode E={E} lang={codeLang} sections={s.sections} />;
-    if (s.type === "sim") return <Mooin2Sim E={E} />;
-    if (s.type === "runner") return <Mooin2Runner E={E} />;
+    if (s.type === "bruteRunner") return <MooinBruteRunner E={E} />;
+    if (s.type === "deepAudit") return <MooinDeepAudit E={E} />;
+    if (s.type === "countTrace") return <MooinCountTrace E={E} />;
+    if (s.type === "explorer") return <MooinExplorer E={E} />;
+    if (s.type === "code-section") return <CodeSectionView E={E} lang={codeLang} section={s.section} />;
     return null;
   };
 
@@ -160,6 +198,7 @@ export default function Mooin2App(props = {}) {
 
       <QuestBottomNav
         cur={cur}
+        canPrev={canPrev}
         canNext={canNext}
         accent={A}
         E={E}

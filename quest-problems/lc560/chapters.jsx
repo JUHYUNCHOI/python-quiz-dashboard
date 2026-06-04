@@ -146,14 +146,48 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The faster way uses a running sum — the total from the very start up to where you are. Any slice's sum = (running sum now) − (running sum just before the slice began). We want that gap to be k. Flip it around: (sum before the slice) = (sum now) − k. So the question becomes: of the running sums I've seen so far, how many equal (now − k)?",
-        "더 빠른 길은 '누적합' 을 써요 — 맨 앞에서 지금 자리까지 전부 더한 값이에요. 어떤 토막의 합 = (지금까지 누적합) − (그 토막 시작 직전까지 누적합) 이에요. 우리는 이 차이가 k 이길 원해요. 식을 뒤집으면: (시작 직전 누적합) = (지금 누적합) − k. 그래서 질문이 이렇게 바뀌어요 → \"지금까지 본 누적합 중에 (지금 − k) 인 게 몇 개였지?\""),
+        "Now the fast way. The key is one idea — the running sum.\nThe formula below is the whole trick ↓",
+        "이제 빠른 방법이에요. 열쇠는 딱 하나, '누적합'.\n아래 식이 전부예요 ↓"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ background: TEAL_L, border: `2px solid ${TEAL}`, borderRadius: 10, padding: "12px 16px", marginBottom: 12 }}>
-            <div style={{ fontSize: 12.5, fontWeight: 800, color: TEAL_D, marginBottom: 8, textAlign: "center" }}>
-              {t(E, "Key rewrite", "핵심 변환")}
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: TEAL_D, marginBottom: 3, textAlign: "center" }}>
+              {t(E, "The running-sum rewrite", "누적합 공식")}
             </div>
+            <div style={{ fontSize: 11, color: "#475569", marginBottom: 10, textAlign: "center", lineHeight: 1.5 }}>
+              {t(E, "running sum = everything added from the very start up to this cell",
+                   "누적합 = 맨 앞부터 지금 칸까지 전부 더한 값")}
+            </div>
+
+            {/* 구체 예시: 토막 합 = 두 누적합의 차이 (슬라이드 1 과 같은 [1,1,1]) */}
+            <div style={{ background: "#fff", border: "1px dashed #7dd3fc", borderRadius: 8, padding: "8px 10px", marginBottom: 12 }}>
+              <div style={{ fontSize: 10.5, color: "#64748b", marginBottom: 7, textAlign: "center" }}>
+                {t(E, "Why a difference? The prefix-sum list of [1,1,1] is [0,1,2,3]:", "왜 '차이'? — [1,1,1] 의 누적합 리스트는 [0,1,2,3]:")}
+              </div>
+              <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", marginBottom: 7, flexWrap: "wrap" }}>
+                {[
+                  { v: 0, lab: t(E, "start", "시작 전"), hl: false },
+                  { v: 1, lab: "+1", hl: true },
+                  { v: 2, lab: "+1", hl: false },
+                  { v: 3, lab: "+1", hl: true },
+                ].map((c, i) => (
+                  <div key={i} style={{
+                    display: "flex", flexDirection: "column", alignItems: "center",
+                    minWidth: 40, borderRadius: 7, padding: "3px 6px",
+                    background: c.hl ? "#e0f2fe" : "#f8fafc",
+                    border: `2px solid ${c.hl ? TEAL : "#e2e8f0"}`,
+                  }}>
+                    <span style={{ fontSize: 9, color: "#94a3b8" }}>{c.lab}</span>
+                    <span style={{ fontSize: 15, fontWeight: 800, color: c.hl ? TEAL_D : "#94a3b8" }}>{c.v}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ fontSize: 11.5, textAlign: "center", color: TEAL_D, fontWeight: 700, lineHeight: 1.5 }}>
+                {t(E, "slice sum = (sum now) − (sum before)  →  3 − 1 = 2  ✓",
+                     "토막 합 = (지금 누적합) − (시작 직전 누적합)  →  3 − 1 = 2  ✓")}
+              </div>
+            </div>
+
             {[
               { label: t(E, "We want:", "원하는 것:"), formula: t(E, "(sum now) − (sum before the slice)  =  k", "(지금 누적합) − (시작 직전 누적합)  =  k") },
               { label: t(E, "Flip it:", "뒤집으면:"), formula: t(E, "(sum before the slice)  =  (sum now) − k", "(시작 직전 누적합)  =  (지금 누적합) − k") },
@@ -164,10 +198,15 @@ export function makeChapters(E) {
               </div>
             ))}
           </div>
-          <div style={{ fontSize: 12, color: "#374151", lineHeight: 1.7, background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 8, padding: "8px 12px" }}>
-            {t(E,
-              "Keep a roll-call (a dictionary) of how many times each running sum has shown up. Then \"how many equal (now − k)?\" is answered in one look — the inner loop disappears completely. That's the flat green bar you saw on the speed slider.",
-              "지금까지 나온 누적합을 '출석부(딕셔너리)' 에 몇 번 나왔는지 적어둬요. 그럼 \"(지금 − k) 인 게 몇 개?\" 를 한 번에 찾아요 — 안쪽 반복이 통째로 사라져요. 속도 슬라이더에서 평평하던 초록 막대가 바로 이거예요.")}
+          <div style={{ background: "#ecfdf5", border: "2px solid #34d399", borderLeft: "6px solid #10b981", borderRadius: 10, padding: "10px 14px" }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#047857", marginBottom: 5 }}>
+              💡 {t(E, "Why this is instant", "그래서 한 번에 찾아져요")}
+            </div>
+            <div style={{ fontSize: 12.5, color: "#065f46", lineHeight: 1.6 }}>
+              {t(E,
+                "Build the prefix-sum list once, then sweep it left to right. At each value, just check whether (value − k) showed up earlier — a dictionary answers that instantly, so the inner loop disappears.",
+                "누적합 리스트를 한 번 만들어 두고 왼→오로 훑어요. 각 값에서 (그 값 − k) 가 앞에 나왔는지만 보면 되고, 그건 딕셔너리가 바로 답해줘요 — 안쪽 반복이 사라져요.")}
+            </div>
           </div>
         </div>
       ),
@@ -177,8 +216,8 @@ export function makeChapters(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now follow it one square at a time. Press \"Next step\" and watch four things: the running sum, the partner we look for (running sum − k), the roll-call (seen), and the answer ticking up. Then try the negatives example — that's where you see why we count how many times (not just yes/no).",
-        "이제 한 칸씩 직접 따라가 봐요. \"다음 스텝\" 을 누르면서 네 가지를 보세요: 누적합, 찾는 짝(누적합 − k), 출석부(seen), 그리고 답이 하나씩 늘어나는 것. 그다음 음수 예제도 눌러봐요 — 거기서 왜 '있다/없다' 가 아니라 '몇 번' 을 세야 하는지 보여요."),
+        "First, ① Build the prefix list.\nAdd nums left to right, appending each running sum to prefix = [0, …].\nThen switch to ② Count the pairs: sweep the list and count values that differ by k, using a dictionary.\nTry the negatives example — you'll see the same prefix value show up twice.",
+        "먼저 ① 누적합 리스트 만들기.\nnums 를 왼쪽부터 더해 prefix = [0, …] 리스트를 한 칸씩 채워요.\n그다음 ② 차이가 k 인 쌍 세기 로 바꿔서, 리스트를 훑으며 차이가 k 인 값들을 딕셔너리로 세요.\n음수 예제도 눌러봐요 — 같은 누적합 값이 두 번 나오는 걸 보게 돼요."),
       content: <SubarraySumSim E={E} />,
     },
 
@@ -186,102 +225,126 @@ export function makeChapters(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In the walkthrough, we start with seen = {0: 1}. Why begin with running sum 0 already counted once?",
-        "따라가기에서 seen = {0: 1} 로 시작했어요. 왜 누적합 0 을 미리 1 번 본 걸로 두고 시작할까요?"),
+        "We built the prefix list starting at prefix = [0]. Why put a 0 at the very front?",
+        "누적합 리스트를 prefix = [0] 으로 시작했어요. 왜 맨 앞에 0 을 넣을까요?"),
       question: t(E,
-        "Why initialize seen = {0: 1} before walking the array?",
-        "왜 배열 걷기 전에 seen = {0: 1} 로 초기화할까요?"),
+        "Why start the prefix-sum list with [0]?",
+        "왜 누적합 리스트를 [0] 으로 시작할까요?"),
       options: [
         t(E,
-          "It stands for the empty sum — before any number is added. If a slice starting at index 0 sums to k, this is what lets us count it.",
-          "아무것도 안 더한 빈 누적합을 나타내요. 맨 앞(0번)부터 시작하는 토막의 합이 k 이면, 이게 있어야 그걸 셀 수 있어요."),
+          "0 is the empty prefix — the sum before any number. A subarray starting at index 0 has sum prefix[r] − prefix[0], so this 0 must be in the list to count those.",
+          "0 은 '아무것도 안 더한' 빈 누적합이에요. 맨 앞(0번)부터 시작하는 토막의 합은 prefix[r] − prefix[0] 인데, 이 0 이 리스트에 있어야 그런 토막을 셀 수 있어요."),
         t(E,
-          "It's a placeholder — remove it and the code still works.",
-          "자리 채우기용 — 빼도 코드가 작동해요."),
+          "It's just a placeholder — remove it and the code works the same.",
+          "그냥 자리 채우기 — 빼도 똑같이 작동해요."),
         t(E,
-          "It accounts for k=0 edge case only.",
-          "k=0 예외 상황만을 위한 거예요."),
+          "To make the list length an even number.",
+          "리스트 길이를 짝수로 맞추려고요."),
       ],
       correct: 0,
       explain: t(E,
-        "The running sum starts at 0. If at some square the running sum equals k, then (running sum − k) = 0, and seen[0] = 1 counts the slice that started at the very beginning. Without {0:1}, every slice starting at index 0 would be missed.",
-        "누적합은 0 에서 시작해요. 어떤 칸에서 누적합이 딱 k 가 되면, (누적합 − k) = 0 이고, seen[0] = 1 이 맨 앞부터 시작한 토막을 세줘요. {0:1} 이 없으면 맨 앞(0번)부터 시작하는 토막을 전부 놓쳐요."),
+        "A subarray nums[l..r] sums to prefix[r+1] − prefix[l]. A slice starting at the very beginning (l = 0) is prefix[r+1] − prefix[0], so prefix[0] = 0 has to be in the list — otherwise every subarray starting at index 0 would be missed.",
+        "토막 nums[l..r] 의 합 = prefix[r+1] − prefix[l] 이에요. 맨 앞부터 시작하는 토막(l=0)은 prefix[r+1] − prefix[0] 인데, prefix[0] = 0 이 리스트에 없으면 맨 앞부터 시작하는 토막을 전부 놓쳐요. 그래서 [0] 으로 시작해요."),
     },
 
     /* ── 7. Final code (progressive) ─────────────────────────── */
     {
       type: "reveal",
       narr: t(E,
-        "Just one sweep through the array — O(n) time and space. The dictionary does the whole job the inner loop used to do.",
-        "배열을 딱 한 번만 쭉 훑으면 끝 — 시간도 공간도 O(n). 딕셔너리가 안쪽 반복이 하던 일을 통째로 대신해요."),
+        "Build the prefix-sum list, then one sweep with a dictionary — O(n) time and space. No nested loop.",
+        "누적합 리스트를 만들고, 딕셔너리로 한 번만 훑으면 끝 — 시간도 공간도 O(n). 이중 반복 없음."),
       content: (
         <CodeJourney
           E={E}
           sections={[
             {
-              label: t(E, "1. Setup", "1. 준비"),
+              label: t(E, "1. Build the prefix-sum list", "1. 누적합 리스트 만들기"),
               color: TEAL,
               why: [
-                t(E, "prefix: the running sum, growing as we walk.", "prefix: 걸으며 계속 더해 가는 누적합."),
-                t(E, "seen: the roll-call — how many times each running sum has shown up.", "seen: 출석부 — 각 누적합이 지금까지 몇 번 나왔는지."),
-                t(E, "{0: 1}: the empty sum (nothing added yet) counts as seen once.", "{0: 1}: 아무것도 안 더한 상태(빈 누적합)를 1 번 본 걸로 시작."),
+                t(E, "prefix[0] = 0: the empty prefix — the sum before adding anything.", "prefix[0] = 0: 빈 누적합 — 아무것도 더하기 전의 합."),
+                t(E, "Each next cell = the previous one + the next number. So prefix[i] holds the sum of the first i numbers.", "다음 칸 = 이전 칸 + 다음 숫자. 그래서 prefix[i] 는 앞 i 개 숫자의 합."),
               ],
-              cppOnly: [t(E, "prefix is long long so a big sum can't overflow.", "큰 합이 넘치지 않게 prefix 는 long long 으로.")],
+              cppOnly: [t(E, "Use long long for prefix so a big sum can't overflow.", "합이 커질 수 있으니 prefix 는 long long 으로.")],
               py: [
+                "from collections import defaultdict",
+                "",
                 "def subarraySum(nums: list[int], k: int) -> int:",
-                "    count = 0",
-                "    prefix = 0",
-                "    seen = {0: 1}      # empty prefix seen once",
+                "    prefix = [0]                  # empty prefix",
+                "    for x in nums:",
+                "        prefix.append(prefix[-1] + x)",
               ],
               cpp: [
                 "int subarraySum(vector<int>& nums, int k) {",
-                "    unordered_map<long long,int> seen;",
-                "    seen[0] = 1;            // empty prefix",
-                "    long long prefix = 0;",
-                "    int count = 0;",
+                "    int n = nums.size();",
+                "    vector<long long> prefix(n + 1, 0);   // prefix[0] = 0",
+                "    for (int i = 0; i < n; i++)",
+                "        prefix[i + 1] = prefix[i] + nums[i];",
               ],
             },
             {
-              label: t(E, "2. Walk and look up the partner", "2. 걸으며 짝을 찾기"),
+              label: t(E, "2. Count pairs that differ by k", "2. 차이가 k 인 쌍 세기"),
               color: TEAL,
               why: [
-                t(E, "Add each number to prefix, one at a time.", "숫자를 하나씩 prefix 에 더해요."),
-                t(E, "The partner is prefix − k. How many earlier running sums equal it = how many slices ending right here add up to k.", "찾는 짝은 prefix − k. 이전 누적합 중 이 값이 몇 개 있었나 = 지금 칸에서 끝나는 '합이 k' 토막 개수."),
+                t(E, "A subarray sum = prefix[r] − prefix[l]. We want that difference to be k.", "토막 합 = prefix[r] − prefix[l]. 이 차이가 k 인 쌍을 찾는 거예요."),
+                t(E, "Sweep the list. For value p, the partner is p − k: how many earlier values equal it = how many valid slices end here.", "리스트를 훑어요. 값 p 의 짝은 p − k: 앞에서 이 값이 몇 번 나왔나 = 여기서 끝나는 유효한 토막 개수."),
+                t(E, "Look up first, then record p — so a value never pairs with itself.", "조회를 먼저 하고 그다음 p 를 기록 — 자기 자신과 짝지어지지 않게."),
               ],
-              pyOnly: [t(E, "seen.get(key, 0) returns 0 when the key is absent.", "seen.get(key, 0) 은 키가 없으면 0 반환.")],
+              pyOnly: [t(E, "seen = defaultdict(int): a missing key reads as 0 automatically — no if-check needed before adding.", "seen = defaultdict(int): 없는 키를 읽으면 자동으로 0 — if 검사 없이 바로 더하고 셀 수 있어요.")],
               cppOnly: [t(E, "Check seen.count first — reading a missing key would insert a 0.", "seen.count 로 먼저 확인 — 없는 키를 읽으면 0 이 삽입돼요.")],
               py: [
-                "    for x in nums:",
-                "        prefix += x",
-                "        count += seen.get(prefix - k, 0)",
-              ],
-              cpp: [
-                "    for (int x : nums) {",
-                "        prefix += x;",
-                "        if (seen.count(prefix - k))",
-                "            count += seen[prefix - k];",
-              ],
-            },
-            {
-              label: t(E, "3. Record, then return", "3. 출석부에 적고 반환"),
-              color: TEAL,
-              why: [
-                t(E, "Mark this running sum on the roll-call — one more appearance.", "지금 누적합을 출석부에 1 번 더 적어요."),
-                t(E, "Once the sweep is done, count is the answer.", "끝까지 다 돌면 count 가 정답이에요."),
-              ],
-              py: [
-                "        seen[prefix] = seen.get(prefix, 0) + 1",
-                "",
+                "    count = 0",
+                "    seen = defaultdict(int)       # {prefix value: how many times}",
+                "    for p in prefix:",
+                "        count += seen[p - k]      # missing key → 0",
+                "        seen[p] += 1",
                 "    return count",
               ],
               cpp: [
-                "        seen[prefix]++;",
+                "    int count = 0;",
+                "    unordered_map<long long,int> seen;",
+                "    for (long long p : prefix) {",
+                "        if (seen.count(p - k)) count += seen[p - k];",
+                "        seen[p]++;",
                 "    }",
                 "    return count;",
                 "}",
               ],
             },
           ]}
+          fullCode={{
+            py: [
+              "from collections import defaultdict",
+              "",
+              "def subarraySum(nums: list[int], k: int) -> int:",
+              "    # 1. prefix-sum list",
+              "    prefix = [0]",
+              "    for x in nums:",
+              "        prefix.append(prefix[-1] + x)",
+              "    # 2. count pairs that differ by k",
+              "    count = 0",
+              "    seen = defaultdict(int)",
+              "    for p in prefix:",
+              "        count += seen[p - k]",
+              "        seen[p] += 1",
+              "    return count",
+            ],
+            cpp: [
+              "int subarraySum(vector<int>& nums, int k) {",
+              "    int n = nums.size();",
+              "    vector<long long> prefix(n + 1, 0);",
+              "    for (int i = 0; i < n; i++)",
+              "        prefix[i + 1] = prefix[i] + nums[i];",
+              "",
+              "    int count = 0;",
+              "    unordered_map<long long,int> seen;",
+              "    for (long long p : prefix) {",
+              "        if (seen.count(p - k)) count += seen[p - k];",
+              "        seen[p]++;",
+              "    }",
+              "    return count;",
+              "}",
+            ],
+          }}
           doneNote={t(E, "O(n) time & space. [1,1,1],k=2 → 2; [1,2,3],k=3 → 2.", "시간·공간 O(n). [1,1,1],k=2 → 2; [1,2,3],k=3 → 2.")}
         />
       ),

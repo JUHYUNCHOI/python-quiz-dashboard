@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCheckupsSections, ReverseSim, DiagonalSim, MatchUpToSim, DiagPrefixSim } from "./components";
+import { CheckupsBruteRunner } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 /* ====================================================================
@@ -343,9 +344,14 @@ export function makeCheckupsCh1(E) {
   ];
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   Chapter 2 — 🐢 First Try (brute force).
+   The obvious O(N³): try every (l, r), reverse, count. Build it section by
+   section, RUN it live (feel it crawl), then see why N = 7500 times out.
+   ════════════════════════════════════════════════════════════════════ */
 export function makeCheckupsCh2(E, lang = "py") {
   return [
-    /* 2-1 — Light, narrative intro instead of a planning grid + complexity badge. */
+    /* 2-1 — Light, narrative intro. */
     {
       type: "reveal",
       narr: t(E,
@@ -369,12 +375,42 @@ export function makeCheckupsCh2(E, lang = "py") {
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
 
-    /* [결-b 한계] — show why brute times out on N=7500. */
+    /* 2-6 — RUN the brute force live: feel it crawl as N grows. */
     {
       type: "reveal",
       narr: t(E,
-        "Submit brute — small inputs pass, big ones time out.  Why?  Count operations.",
-        "brute 제출 — 작은 입력은 통과, 큰 입력은 시간 초과. 왜? 연산 수를 세 봐."),
+        "Now RUN it.  Try N = 50, then 200, then 600 — watch the time jump.  Three nested loops means triple the trouble.",
+        "이제 직접 돌려봐요. N = 50 → 200 → 600 순서로 — 시간이 어떻게 뛰는지 봐요. 루프 세 겹 = 세 배의 고통."),
+      content: (<CheckupsBruteRunner E={E} />),
+    },
+
+    /* 2-7 — predict quiz: how does the work grow? (active step) */
+    {
+      type: "quiz",
+      narr: t(E,
+        "You just watched it slow down.  Predict the pattern before reading on.",
+        "방금 느려지는 걸 봤죠. 다음으로 넘어가기 전에 패턴을 예측해 봐요."),
+      question: t(E,
+        "If N doubles (say 300 → 600), roughly how much MORE work does the brute force do?",
+        "N 이 두 배가 되면 (예: 300 → 600), brute 가 하는 일은 대략 몇 배로 늘까요?"),
+      options: [
+        t(E, "About 2× (twice the work)", "약 2 배"),
+        t(E, "About 4× (squared)", "약 4 배 (제곱)"),
+        t(E, "About 8× (cubed)", "약 8 배 (세제곱)"),
+        t(E, "No change", "변화 없음"),
+      ],
+      correct: 2,
+      explain: t(E,
+        "Three nested loops → O(N³).  Doubling N multiplies work by 2³ = 8.  That's why 600 felt so much slower than 300.",
+        "루프 세 겹 → O(N³). N 을 두 배로 하면 일은 2³ = 8 배. 그래서 600 이 300 보다 훨씬 느렸어요."),
+    },
+
+    /* 2-8 — [결-b 한계] why brute times out on N=7500. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Submit brute — small inputs pass, big ones time out.  Here's the math behind what you just felt.",
+        "brute 제출 — 작은 입력은 통과, 큰 입력은 시간 초과. 방금 느낀 걸 숫자로 확인해 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 12, padding: 16 }}>
@@ -429,50 +465,143 @@ export function makeCheckupsCh2(E, lang = "py") {
 
             <div style={{ background: "#fff7ed", border: "1px dashed #fdba74", borderRadius: 8, padding: "10px 12px", fontSize: 12.5, color: "#7c2d12", lineHeight: 1.6 }}>
               💡 {t(E,
-                "Constraint says N ≤ 7,500.  We need to drop one factor of N — turn O(N) per pair into O(1).  Next pages: a key observation that lets us do exactly that.",
-                "제약: N ≤ 7,500. N 한 겹을 빼야 — 쌍당 O(N) 을 O(1) 로. 다음 페이지부터 그게 가능한 핵심 관찰.")}
+                "Constraint says N ≤ 7,500.  We need to drop one factor of N — turn O(N) per pair into O(1).  Next chapter: a key observation that lets us do exactly that.",
+                "제약: N ≤ 7,500. N 한 겹을 빼야 — 쌍당 O(N) 을 O(1) 로. 다음 챕터: 그게 가능한 핵심 관찰.")}
+            </div>
+          </div>
+        </div>),
+    },
+  ];
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Chapter 3 — 💡 Fast Idea.
+   The "same diagonal, same comparison" observation, taught entirely through
+   three interactive sims. No walls of pseudo-code — the visuals carry it.
+   ════════════════════════════════════════════════════════════════════ */
+export function makeCheckupsCh3(E) {
+  return [
+    /* 3-1 — the big idea, in plain words (own lines so it stands out). */
+    {
+      type: "reveal",
+      narr: t(E,
+        "One picture unlocks everything.  Look at what stays the same as (l, r) changes.",
+        "그림 하나가 전부를 풀어줘요. (l, r) 이 바뀔 때 무엇이 그대로인지 봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: 16, fontSize: 13, color: C.text, lineHeight: 1.75 }}>
+            <div style={{ fontWeight: 700, color: "#0e7490", marginBottom: 10, fontSize: 14 }}>
+              🔑 {t(E, "The key observation", "핵심 관찰")}
+            </div>
+            <div style={{ marginBottom: 10 }}>
+              {t(E,
+                "When you reverse a[l..r], the cell that lands on position i is the value that was at l + r − i.",
+                "a[l..r] 를 뒤집으면, 위치 i 에 오는 값은 원래 l + r − i 자리에 있던 값이에요.")}
+            </div>
+            <div style={{ background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8, padding: "10px 12px", marginBottom: 10, textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#0e7490", fontWeight: 700 }}>
+              {t(E, "that index depends ONLY on s = l + r", "그 인덱스는 s = l + r 에만 달려 있어요")}
+            </div>
+            <div>
+              {t(E,
+                "So every (l, r) pair with the same sum s asks the EXACT same comparison questions inside the window.  Group them by s — that's the 'diagonal'.  The three sims below build the idea up one layer at a time.",
+                "그래서 합 s 가 같은 모든 (l, r) 쌍은 윈도우 안에서 완전히 같은 비교를 해요. s 별로 묶으면 — 그게 '대각선'. 아래 시뮬 세 개가 한 겹씩 쌓아가요.")}
             </div>
           </div>
         </div>),
     },
 
-    /* 2-7..2-11 — Smart code sections (5️⃣..9️⃣) [결-c].
-        slice(4)[0] = ⑤ idea, [1] = ⑥ matchUpTo, [2] = ⑦ diag,
-        [3] = ⑧ combine + print, [4] = ⑨ FULL integrated code.
+    /* 3-2 — DiagonalSim: drag two (l, r) windows; same s → same colour. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Drag two (l, r) windows.  When their l + r matches, inside cells share a colour: same diagonal, same comparison.",
+        "두 (l, r) 윈도우를 드래그해 봐요. l + r 가 같으면 안쪽 셀이 같은 색 — 같은 대각선이면 같은 비교."),
+      content: (<DiagonalSim E={E} />),
+    },
 
-        ⑤, ⑥, ⑦ swap CodeSectionView for interactive sims:
-          ⑤ DiagonalSim — drag two (l, r) windows; same l+r → same colour.
-          ⑥ MatchUpToSim — sweep matchUpTo, then drag (l, r) and watch
-             outside-window matches resolve via the prefix formula.
-          ⑦ DiagPrefixSim — pick a diagonal s, see ✓/✗ per position,
-             then drag (l, r) and read inside matches off diag[r]−diag[l−1].
-        Visualization carries the load; dense pseudo-code prose is gone. */
-    ...getCheckupsSections(E).slice(4).map((sec, i) => ({
+    /* 3-3 — quiz on the diagonal idea (active step). */
+    {
+      type: "quiz",
+      narr: t(E,
+        "Quick check on what 'same diagonal' means.",
+        "'같은 대각선' 이 뭔지 확인해 봐요."),
+      question: t(E,
+        "Which pair (l, r) lands on the SAME diagonal as (l=2, r=5)?",
+        "(l=2, r=5) 와 같은 대각선에 있는 쌍은 어느 것일까요?"),
+      options: [
+        "(l=3, r=4)",
+        "(l=1, r=5)",
+        "(l=2, r=6)",
+        "(l=4, r=4)",
+      ],
+      correct: 0,
+      explain: t(E,
+        "Same diagonal means same s = l + r.  Here s = 2 + 5 = 7.  (l=3, r=4) gives 3 + 4 = 7 — same diagonal.  The others give 6, 8, 8.",
+        "같은 대각선 = 같은 s = l + r. 여기선 s = 2 + 5 = 7. (l=3, r=4) 는 3 + 4 = 7 — 같은 대각선. 나머지는 6, 8, 8."),
+    },
+
+    /* 3-4 — MatchUpToSim: outside-window matches via a prefix built once. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Outside the window, nothing moves.  Build matchUpTo once (left-to-right), then drag (l, r) — outside matches drop out instantly.",
+        "윈도우 바깥은 안 움직여요. matchUpTo 를 왼쪽부터 한 번만 만들고, (l, r) 드래그 — 바깥 일치 수가 바로 떨어져요."),
+      content: (<MatchUpToSim E={E} />),
+    },
+
+    /* 3-5 — DiagPrefixSim: inside-window matches via per-diagonal prefix. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Inside the window: pick a diagonal s, count ✓ per position to get diag[k].  Any (l, r) on this s reads inside matches as diag[r] − diag[l−1].",
+        "윈도우 안: 대각선 s 를 골라 자리마다 ✓ 를 세면 diag[k]. 이 s 의 (l, r) 안쪽 일치는 diag[r] − diag[l−1] 로 바로 읽어요."),
+      content: (<DiagPrefixSim E={E} />),
+    },
+
+    /* 3-6 — closing input: the two-piece formula in one number (active step). */
+    {
+      type: "input",
+      narr: t(E,
+        "Put the two prefixes together for one (l, r).",
+        "한 (l, r) 에 대해 두 prefix 를 합쳐 봐요."),
+      question: t(E,
+        "For some (l, r): outside matches = 3, inside matches = diag[r] − diag[l−1] = 5 − 2.  Total checkups for this pair?",
+        "어떤 (l, r): 바깥 일치 = 3, 안쪽 일치 = diag[r] − diag[l−1] = 5 − 2. 이 쌍의 총 검진 수는?"),
+      hint: t(E,
+        "Total = outside + inside.  inside = 5 − 2 = 3.",
+        "총합 = 바깥 + 안쪽. 안쪽 = 5 − 2 = 3."),
+      answer: 6,
+    },
+  ];
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Chapter 4 — ⚡ Code.
+   Now that the idea is clear from the sims, see the actual O(N²) code:
+   the idea recap, both prefixes, the combine loop, and the full program.
+   ════════════════════════════════════════════════════════════════════ */
+export function makeCheckupsCh4(E, lang = "py") {
+  // Smart sections: slice(4) = [5️⃣ idea, 6️⃣ matchUpTo, 7️⃣ diag, 8️⃣ combine, 9️⃣ full].
+  const smart = getCheckupsSections(E).slice(4);
+  return [
+    ...smart.map((sec, i) => ({
       type: "reveal",
       narr:
         i === 0
-          ? t(E, "The fix — drag two (l, r) windows.  When their l + r matches, inside cells share a colour: same diagonal, same comparison.",
-                "고치는 길 — 두 (l, r) 윈도우 드래그. l + r 가 같으면 안쪽 셀이 같은 색 — 같은 대각선이면 같은 비교.")
+          ? t(E, "Here's the idea as code — the outside comparison is fixed, the inside one depends only on s = l + r.",
+                "아이디어를 코드로 — 바깥 비교는 고정, 안쪽은 s = l + r 에만 의존.")
           : i === 1
-          ? t(E,
-              "Build matchUpTo once with a left-to-right sweep.  Then drag (l, r) — outside-window matches drop out instantly from the prefix.",
-              "matchUpTo 를 왼쪽부터 한 번만 만들어. 그다음 (l, r) 드래그 — 바깥 일치 수가 prefix 에서 바로 떨어져.")
+          ? t(E, "matchUpTo — built once with a left-to-right sweep.  Outside-window matches come straight from it.",
+                "matchUpTo — 왼쪽부터 한 번에. 바깥 일치는 여기서 바로 나와요.")
           : i === 2
-          ? t(E,
-              "Pick a diagonal s — every position i pairs with j = s − i.  Count ✓ to get diag[k]; any (l, r) on this s reads inside matches as diag[r] − diag[l−1].",
-              "대각선 s 를 골라봐 — 자리 i 마다 짝 j = s − i. ✓ 를 세면 diag[k] 가 나오고, 이 s 의 (l, r) 안쪽 일치는 diag[r] − diag[l−1] 로 바로 읽음.")
-          : i === 4
-          ? t(E,
-              "All five pieces wired together — variable names match the section pages above.  Read top to bottom.",
-              "다섯 조각이 한 군데에 — 변수 이름은 위 섹션 페이지 그대로. 위에서 아래로 읽어요.")
-          : "",
-      content: i === 0
-        ? (<DiagonalSim E={E} />)
-        : i === 1
-        ? (<MatchUpToSim E={E} />)
-        : i === 2
-        ? (<DiagPrefixSim E={E} />)
-        : (<CodeSectionView section={sec} lang={lang} E={E} />),
+          ? t(E, "diag — rebuilt for each diagonal s.  Inside-window matches = diag[r] − diag[l−1].",
+                "diag — 대각선 s 마다 새로. 안쪽 일치 = diag[r] − diag[l−1].")
+          : i === 3
+          ? t(E, "Combine the two prefixes for every (l, r) on the diagonal, then print the tally.",
+                "대각선 위 모든 (l, r) 에 대해 두 prefix 합치고, 집계를 출력.")
+          : t(E, "All five pieces wired together — variable names match the sections above.  Read top to bottom.",
+                "다섯 조각이 한 군데에 — 변수 이름은 위 섹션 그대로. 위에서 아래로 읽어요."),
+      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
   ];
 }

@@ -75,6 +75,8 @@ function Chip({ label, value, hot }) {
 }
 
 export function SlidingWindowSim({ E }) {
+  const [lang] = useCodeLang();                 // 위쪽 🐍 Py / 💻 C++ 토글과 동기화
+  const py = lang === "py";
   const [caseId, setCaseId] = useState("basic");
   const [si, setSi] = useState(0);
 
@@ -153,9 +155,13 @@ export function SlidingWindowSim({ E }) {
         {step.phase === "init" ? (
           <div style={{ fontSize: 12.5, color: ACC_D, lineHeight: 1.7 }}>
             <b>{t(E, "Start.", "시작.")}</b>{" "}
-            {t(E,
-              "The window is empty. left = 0, best = 0. We'll slide the right edge forward one letter at a time, and remember where we last saw each letter in last (a dictionary).",
-              "창문(window)이 비어 있어요. left = 0, best = 0. 오른쪽 끝 right 를 한 글자씩 앞으로 밀면서, 각 글자를 마지막으로 본 위치를 last(딕셔너리)에 기억해 둬요.")}
+            {py
+              ? t(E,
+                  "The window is empty. left = 0, best = 0. We'll slide the right edge forward one letter at a time, and remember where we last saw each letter in last (a dictionary).",
+                  "창문(window)이 비어 있어요. left = 0, best = 0. 오른쪽 끝 right 를 한 글자씩 앞으로 밀면서, 각 글자를 마지막으로 본 위치를 last(딕셔너리)에 기억해 둬요.")
+              : t(E,
+                  "The window is empty. left = 0, best = 0. We'll slide the right edge forward one letter at a time, and remember where we last saw each letter in last (a map).",
+                  "창문(window)이 비어 있어요. left = 0, best = 0. 오른쪽 끝 right 를 한 글자씩 앞으로 밀면서, 각 글자를 마지막으로 본 위치를 last(맵 map)에 기억해 둬요.")}
           </div>
         ) : (
           <div style={{ display: "grid", gap: 7 }}>
@@ -163,7 +169,7 @@ export function SlidingWindowSim({ E }) {
                  desc={t(E, "the new right-edge letter", "새로 들어온 오른쪽 글자")} />
             <Row n="②"
                  code={step.prevIdx === null
-                   ? `'${step.ch}' ${E ? "not in" : "∉"} last`
+                   ? (py ? `'${step.ch}' not in last` : `last.count('${step.ch}') == 0`)
                    : `last['${step.ch}'] = ${step.prevIdx} ${step.prevIdx >= step.leftBefore ? "≥" : "<"} left ${step.leftBefore}`}
                  desc={step.prevIdx === null
                    ? t(E, "brand-new letter → window stays", "처음 보는 글자 → 창문 유지")
@@ -359,7 +365,7 @@ export function SpeedRaceSim({ E, nMax = 50000, nStart = 200, constraintN = 5000
 
 /* ── 단계별 코드 (Python/C++ 토글) ───────────────────────────────
    sections: [{ label, color, py:[], cpp:[], why:[], pyOnly:[], cppOnly:[] }] */
-export function CodeJourney({ E, sections, doneNote }) {
+export function CodeJourney({ E, sections, doneNote, fullCode }) {
   // Single source of truth: the header 🐍 Py / 💻 C++ toggle (shared via localStorage).
   const [lang] = useCodeLang();
   return (
@@ -387,6 +393,17 @@ export function CodeJourney({ E, sections, doneNote }) {
           </div>
         );
       })}
+
+      {fullCode && (
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ display: "inline-block", fontSize: 12, fontWeight: 800, color: "#fff", background: ACC_D, borderRadius: "8px 8px 0 0", padding: "5px 12px" }}>
+            {t(E, "✓ Full solution", "✓ 전체 코드")}
+          </div>
+          <div style={{ border: `2px solid ${ACC_D}`, borderRadius: "0 8px 8px 8px", padding: 10, background: "#fff" }}>
+            <CodeBlock lang={lang} lines={lang === "py" ? fullCode.py : fullCode.cpp} />
+          </div>
+        </div>
+      )}
 
       {doneNote && (
         <div style={{ background: OK_BG, border: `2px solid ${OK_BD}`, borderRadius: 10, padding: "10px 14px", fontSize: 13, fontWeight: 700, color: OK, textAlign: "center" }}>

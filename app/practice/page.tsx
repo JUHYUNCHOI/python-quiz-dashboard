@@ -222,6 +222,21 @@ function ClusterList({
         </div>
       )}
 
+      {/* 도전 문제(코딩 뱅크) 입구 — 연습 다음 단계 */}
+      <a
+        href="/coding-bank"
+        className="flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 hover:border-amber-400 hover:shadow-sm transition-all"
+      >
+        <span className="text-2xl shrink-0">💪</span>
+        <div className="min-w-0 flex-1">
+          <p className="font-bold text-amber-900 leading-tight">{t("도전 문제", "Challenge Problems")}</p>
+          <p className="text-xs text-amber-800/80 mt-0.5">
+            {t("연습이 익숙해지면, 배운 걸로 푸는 응용 문제에 도전해요.", "Once practice feels easy, try applied challenge problems.")}
+          </p>
+        </div>
+        <span className="text-amber-500 shrink-0" aria-hidden>→</span>
+      </a>
+
       {/* 지금 할 것 — 메인 카드 */}
       {!goalReached && nextCluster && (() => {
         const locCluster = localizeCluster(nextCluster, locale)
