@@ -31,27 +31,49 @@ export function makeChapters(E) {
                 </div>
               ))}
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+            <div style={{ fontSize: 11, color: "#64748b", textAlign: "center", marginBottom: 6 }}>
+              {t(E, "Check every contiguous slice — all 6 of them:", "연속 구간을 전부 확인 — 총 6개:")}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 5 }}>
               {[
-                { label: "nums[0..1]", sum: 2, ok: true },
-                { label: "nums[1..2]", sum: 2, ok: true },
-                { label: "nums[0..2]", sum: 3, ok: false },
-                { label: "nums[0..0]", sum: 1, ok: false },
-              ].map((item, i) => (
-                <div key={i} style={{
-                  background: item.ok ? "#f0fdf4" : "#f8fafc",
-                  border: `1px solid ${item.ok ? "#86efac" : "#e2e8f0"}`,
-                  borderRadius: 6, padding: "5px 8px", textAlign: "center", fontSize: 11.5,
-                }}>
-                  <span style={{ fontFamily: "monospace", color: "#374151" }}>{item.label}</span>
-                  <span style={{ fontWeight: 700, color: item.ok ? "#15803d" : "#94a3b8", marginLeft: 6 }}>
-                    sum={item.sum} {item.ok ? "✓" : "✗"}
-                  </span>
-                </div>
-              ))}
+                { from: 0, to: 0, sum: 1 },
+                { from: 1, to: 1, sum: 1 },
+                { from: 2, to: 2, sum: 1 },
+                { from: 0, to: 1, sum: 2 },
+                { from: 1, to: 2, sum: 2 },
+                { from: 0, to: 2, sum: 3 },
+              ].map((item, i) => {
+                const ok = item.sum === 2;
+                return (
+                  <div key={i} style={{
+                    background: ok ? "#f0fdf4" : "#f8fafc",
+                    border: `1px solid ${ok ? "#86efac" : "#e2e8f0"}`,
+                    borderRadius: 6, padding: "5px 8px",
+                    display: "flex", alignItems: "center", justifyContent: "space-between", gap: 6,
+                  }}>
+                    <div style={{ display: "flex", gap: 3 }}>
+                      {[0,1,2].map(j => {
+                        const inRange = j >= item.from && j <= item.to;
+                        return (
+                          <div key={j} style={{
+                            width: 18, height: 18, borderRadius: 4, fontSize: 10, fontWeight: 700,
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            background: inRange ? TEAL : "#fff",
+                            color: inRange ? "#fff" : "#cbd5e1",
+                            border: `1px solid ${inRange ? TEAL : "#e2e8f0"}`,
+                          }}>1</div>
+                        );
+                      })}
+                    </div>
+                    <span style={{ fontWeight: 700, fontSize: 11.5, color: ok ? "#15803d" : "#94a3b8" }}>
+                      ={item.sum} {ok ? "✓" : "✗"}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
             <div style={{ marginTop: 8, fontWeight: 700, fontSize: 13, color: TEAL_D, textAlign: "center" }}>
-              {t(E, "Answer: 2", "정답: 2")}
+              {t(E, "2 of the 6 sum to 2  →  Answer: 2", "6개 중 합이 2인 건 2개  →  정답: 2")}
             </div>
           </div>
           <div style={{ fontSize: 12, color: "#374151", lineHeight: 1.6, background: "#fff", border: "1px solid #e2e8f0", borderRadius: 8, padding: "8px 12px" }}>
