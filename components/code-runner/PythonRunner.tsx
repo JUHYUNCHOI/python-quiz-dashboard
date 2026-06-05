@@ -178,7 +178,7 @@ sys.stdout = StringIO()
             onKeyDown={handleKeyDown}
             disabled={isLoading}
             className={cn(
-              "w-full h-40 p-3 font-mono text-sm rounded-lg border-2 resize-none",
+              "w-full min-h-40 h-40 p-3 font-mono text-sm rounded-lg border-2 resize-y",
               "bg-gray-900 text-green-400",
               "focus:outline-none focus:border-blue-500",
               isLoading && "opacity-50"

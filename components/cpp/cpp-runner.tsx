@@ -467,6 +467,8 @@ export function CppRunner({
               background: "#282c34",
               color: "#e6edf3",
             }}
+            resizable
+            storageKey="lesson"
           />
         </div>
       </div>

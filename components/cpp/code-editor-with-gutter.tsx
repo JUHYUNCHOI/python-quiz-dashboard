@@ -1,7 +1,7 @@
 "use client"
 
 import dynamic from "next/dynamic"
-import { useMemo } from "react"
+import { useMemo, useRef, useState, useEffect } from "react"
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 
@@ -16,6 +16,10 @@ interface Props {
   insertSpaces?: boolean
   style?: React.CSSProperties
   onKeyDown?: React.KeyboardEventHandler<HTMLTextAreaElement & HTMLDivElement>
+  /** 사용자가 드래그로 높이를 조절할 수 있게 (기본 true). */
+  resizable?: boolean
+  /** 조절한 높이를 기억할 localStorage 키 (없으면 세션 내에서만 유지). */
+  storageKey?: string
 }
 
 const DEFAULT_FONT_SIZE = 14
@@ -39,8 +43,27 @@ export function CodeEditorWithGutter({
   insertSpaces = true,
   style,
   onKeyDown,
+  resizable = true,
+  storageKey,
 }: Props) {
   const lineCount = useMemo(() => value.split("\n").length, [value])
+
+  // 드래그로 조절한 높이(px). 저장된 값 있으면 복원.
+  const initialHeight = typeof style?.minHeight === "number" ? style.minHeight : 260
+  const [boxHeight, setBoxHeight] = useState<number | null>(null)
+  const wrapRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!resizable || !storageKey) return
+    try {
+      const saved = parseInt(localStorage.getItem(`editor-h-${storageKey}`) || "", 10)
+      if (saved && saved > 80) setBoxHeight(saved)
+    } catch {}
+  }, [resizable, storageKey])
+  // 드래그(resize) 끝나면 현재 높이 저장
+  const persistHeight = () => {
+    if (!resizable || !storageKey || !wrapRef.current) return
+    try { localStorage.setItem(`editor-h-${storageKey}`, String(Math.round(wrapRef.current.offsetHeight))) } catch {}
+  }
 
   // Derive font / line-height from style prop so gutter aligns with editor.
   const fontSize = typeof style?.fontSize === "number" ? style.fontSize : DEFAULT_FONT_SIZE
@@ -56,16 +79,27 @@ export function CodeEditorWithGutter({
     background: "transparent",   // gutter wrapper holds the bg
     color: "#e6edf3",
     ...(style || {}),
+    // resizable 일 때는 바깥 컨테이너가 높이를 관리하므로 에디터 자체 minHeight 해제
+    ...(resizable ? { minHeight: undefined } : {}),
   }
 
   // VSCode-like: gutter merges with editor (same bg), dim numbers, error line tinted.
   return (
     <div
+      ref={wrapRef}
+      onMouseUp={persistHeight}
       className="cpp-editor-gutter-wrap"
       style={{
         display: "flex",
         position: "relative",
         background: editorBg,
+        ...(resizable ? {
+          resize: "vertical",
+          overflow: "auto",
+          // 기본은 auto(내용에 맞춰 자동) — 기존 동작 유지. 드래그하면 그 높이 고정.
+          height: boxHeight ?? "auto",
+          minHeight: initialHeight,
+        } : {}),
       }}
     >
       {/* Line number gutter — visually merged with editor */}
