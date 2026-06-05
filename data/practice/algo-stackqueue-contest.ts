@@ -11,6 +11,204 @@ export const stackQueueContestCluster: PracticeCluster = {
     description: "Monotonic stack, bracket matching, sliding window max — using as a tool",
   },
   problems: [
+    // ═════════════════════════════════════════════════════════════════
+    // 쉬움 입문 (on-ramp): 스택 뒤집기 → 괄호 깊이(스택) → 카드 버리기(큐)
+    // ═════════════════════════════════════════════════════════════════
+    {
+      id: "asq-e01",
+      cluster: "algo-stackqueue-contest",
+      unlockAfter: "algo-stackqueue",
+      difficulty: "쉬움",
+      title: "스택으로 뒤집기",
+      description: `N개의 정수를 입력 순서의 **반대로** 출력하라.
+
+스택은 **나중에 넣은 게 먼저 나오는(LIFO)** 자료구조다. 전부 넣었다가 하나씩 꺼내면 자연히 역순이 된다 — 스택의 가장 기본 감각.`,
+      constraints: "1 ≤ N ≤ 100,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto& x : a) cin >> x;
+    // TODO: 역순으로 공백 구분 출력 (스택에 넣었다 꺼내는 것과 같음)
+
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+a = list(map(int, input().split()))
+# TODO: 역순으로 공백 구분 출력`,
+      testCases: [
+        { stdin: "5\n1 2 3 4 5", expectedOutput: "5 4 3 2 1", label: "기본" },
+        { stdin: "1\n7", expectedOutput: "7", label: "원소 1개" },
+        { stdin: "3\n10 20 30", expectedOutput: "30 20 10", label: "3개" },
+      ],
+      hints: ["전부 스택(또는 배열)에 넣고, 뒤에서부터 꺼내면 역순.", "Python: a[::-1] 로 뒤집기."],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto& x : a) cin >> x;
+    for (int i = n - 1; i >= 0; i--) {
+        cout << a[i];
+        if (i > 0) cout << ' ';
+    }
+    cout << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+a = list(map(int, input().split()))
+print(*a[::-1])`,
+      solutionExplanation: "스택은 LIFO라 다 넣었다 꺼내면 역순입니다. 배열을 뒤에서부터 출력하는 것과 같아요.",
+      en: {
+        title: "Reverse with a Stack",
+        description: `Print N integers in **reverse** of input order. A stack is **last-in-first-out**: push everything, pop one by one, and you get the reverse — the most basic stack feel.`,
+        constraints: "1 ≤ N ≤ 100,000",
+        hints: ["Push all, pop from the end → reversed.", "Python: a[::-1]."],
+        solutionExplanation: "A stack is LIFO, so pushing all then popping reverses the order.",
+      },
+    },
+    {
+      id: "asq-e02",
+      cluster: "algo-stackqueue-contest",
+      unlockAfter: "algo-stackqueue",
+      difficulty: "쉬움",
+      title: "괄호의 최대 깊이",
+      description: `올바른 괄호 문자열 \`(\`, \`)\` 만으로 이루어진 문자열이 주어진다. **가장 깊이 중첩된 정도**(최대 깊이)를 출력하라.
+
+\`(\` 를 만나면 깊이 +1, \`)\` 를 만나면 -1. 그동안의 최댓값이 답이다 — 스택의 '크기'를 추적하는 감각.`,
+      constraints: "1 ≤ 길이 ≤ 100,000, 항상 올바른 괄호 문자열",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    string s;
+    cin >> s;
+    // TODO: '(' 면 깊이+1(최댓값 갱신), ')' 면 깊이-1
+
+    return 0;
+}`,
+      pyInitialCode: `s = input().strip()
+# TODO: 최대 중첩 깊이 출력`,
+      testCases: [
+        { stdin: "(()())", expectedOutput: "2", label: "최대 2" },
+        { stdin: "((()))", expectedOutput: "3", label: "최대 3" },
+        { stdin: "()()", expectedOutput: "1", label: "평평" },
+        { stdin: "()", expectedOutput: "1", label: "한 쌍" },
+      ],
+      hints: ["변수 d(현재 깊이)와 mx(최댓값).", "'(' → d++ 후 mx=max(mx,d). ')' → d--."],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    string s;
+    cin >> s;
+    int d = 0, mx = 0;
+    for (char c : s) {
+        if (c == '(') { d++; mx = max(mx, d); }
+        else d--;
+    }
+    cout << mx << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `s = input().strip()
+d = 0
+mx = 0
+for c in s:
+    if c == '(':
+        d += 1
+        mx = max(mx, d)
+    else:
+        d -= 1
+print(mx)`,
+      solutionExplanation: "여는 괄호에서 깊이를 올리고 닫는 괄호에서 내리며, 그동안의 최대 깊이를 기록합니다. 스택에 쌓인 높이를 세는 것과 같아요.",
+      en: {
+        title: "Max Bracket Depth",
+        description: `Given a valid string of \`(\` and \`)\`, print the **maximum nesting depth**. \`(\` adds 1, \`)\` subtracts 1; the running maximum is the answer — tracking a stack's size.`,
+        constraints: "1 ≤ length ≤ 100,000, always a valid bracket string",
+        hints: ["Keep d (current depth) and mx (max).", "'(' → d++ then mx=max(mx,d); ')' → d--."],
+        solutionExplanation: "Raise depth on '(', lower on ')', record the max — equals the height of the stack.",
+      },
+    },
+    {
+      id: "asq-e03",
+      cluster: "algo-stackqueue-contest",
+      unlockAfter: "algo-stackqueue",
+      difficulty: "쉬움",
+      title: "카드 버리기 (큐)",
+      description: `1부터 N까지 번호가 적힌 카드가 차례로 쌓여 있다 (맨 위 1, 그 아래 2, …). 다음을 카드가 한 장 남을 때까지 반복한다:
+
+1. 맨 위 카드를 **버린다**.
+2. 그 다음 맨 위 카드를 맨 **아래로** 옮긴다.
+
+마지막에 남는 카드의 번호를 출력하라. **큐(먼저 넣은 게 먼저 나오는, FIFO)** 로 그대로 흉내 내면 된다.
+
+출처: BOJ 2164 paraphrased`,
+      constraints: "1 ≤ N ≤ 500,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    queue<int> q;
+    for (int i = 1; i <= n; i++) q.push(i);
+    // TODO: 한 장 남을 때까지 (버리기 + 맨 아래로 옮기기) 반복
+
+    return 0;
+}`,
+      pyInitialCode: `from collections import deque
+n = int(input())
+q = deque(range(1, n + 1))
+# TODO: 한 장 남을 때까지 popleft 2번(버리고 옮기기) 반복`,
+      testCases: [
+        { stdin: "1", expectedOutput: "1", label: "1장" },
+        { stdin: "2", expectedOutput: "2", label: "2장" },
+        { stdin: "4", expectedOutput: "4", label: "4장" },
+        { stdin: "6", expectedOutput: "4", label: "6장" },
+        { stdin: "7", expectedOutput: "6", label: "7장" },
+      ],
+      hints: [
+        "큐에 1..N 을 넣는다.",
+        "크기가 1보다 큰 동안: front 버리고(pop), 다음 front 를 빼서 뒤에 다시 push.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    queue<int> q;
+    for (int i = 1; i <= n; i++) q.push(i);
+    while (q.size() > 1) {
+        q.pop();                 // 맨 위 버리기
+        q.push(q.front());       // 다음 카드를 맨 아래로
+        q.pop();
+    }
+    cout << q.front() << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `from collections import deque
+n = int(input())
+q = deque(range(1, n + 1))
+while len(q) > 1:
+    q.popleft()            # 맨 위 버리기
+    q.append(q.popleft())  # 다음 카드를 맨 아래로
+print(q[0])`,
+      solutionExplanation: "큐로 카드 더미를 그대로 흉내 냅니다. 앞에서 한 장 버리고(pop), 그 다음 한 장을 빼서 뒤에 다시 넣기(push)를 한 장 남을 때까지 반복해요.",
+      en: {
+        title: "Discard Cards (Queue)",
+        description: `Cards 1..N are stacked (1 on top). Repeat until one card remains: (1) discard the top card, (2) move the next top card to the bottom. Print the last remaining card. Simulate directly with a **queue (FIFO)**.`,
+        constraints: "1 ≤ N ≤ 500,000",
+        hints: ["Push 1..N into a queue.", "While size>1: pop the front (discard), then move the next front to the back."],
+        solutionExplanation: "Simulate the pile with a queue: discard the front, then push the next front to the back, until one remains.",
+      },
+    },
+
     // ─────────────────────────────────────────────────────────────────
     // 1. 괄호 짝 맞추기 — 보통
     // ─────────────────────────────────────────────────────────────────

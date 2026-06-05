@@ -11,6 +11,229 @@ export const greedyContestCluster: PracticeCluster = {
     description: "Activity selection, coin change, sort + 1-pass",
   },
   problems: [
+    // ═════════════════════════════════════════════════════════════════
+    // 쉬움 입문 (on-ramp): 정렬 후 그리디 감각 — 대기시간 합 → 회의 배정 → 로프
+    // ═════════════════════════════════════════════════════════════════
+    {
+      id: "agre-e01",
+      cluster: "algo-greedy-contest",
+      unlockAfter: "algo-greedy",
+      difficulty: "쉬움",
+      title: "대기 시간의 합 최소",
+      description: `N명이 ATM 앞에 줄을 선다. 각 사람이 돈을 뽑는 데 걸리는 시간이 주어진다. 줄 서는 순서를 잘 정하면 **모든 사람의 대기 시간(자기 차례 전까지 기다린 시간) 합**을 최소로 만들 수 있다. 그 최솟값을 출력하라.
+
+직관: **빨리 끝나는 사람을 앞에** 세우면 된다. 정렬한 뒤 누적합을 더하면 끝 — 그리디의 가장 기본 형태.
+
+출처: BOJ 11399 paraphrased`,
+      constraints: "1 ≤ N ≤ 100,000, 1 ≤ 각 시간 ≤ 1000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto& x : a) cin >> x;
+    // TODO: 오름차순 정렬 후, 누적합을 더해 대기시간 합 출력
+
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+a = sorted(map(int, input().split()))
+# TODO: 누적합을 더해가며 총 대기시간 출력`,
+      testCases: [
+        { stdin: "5\n3 1 4 3 2", expectedOutput: "32", label: "기본" },
+        { stdin: "1\n5", expectedOutput: "5", label: "1명" },
+        { stdin: "3\n10 10 10", expectedOutput: "60", label: "같은 시간" },
+      ],
+      hints: [
+        "빨리 끝나는 사람을 앞에 → 오름차순 정렬.",
+        "앞에서부터 누적합 s 를 더해가며 그 s 들을 전부 합한 게 답.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto& x : a) cin >> x;
+    sort(a.begin(), a.end());
+    long long s = 0, tot = 0;
+    for (int x : a) { s += x; tot += s; }
+    cout << tot << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+a = sorted(map(int, input().split()))
+s = 0
+tot = 0
+for x in a:
+    s += x
+    tot += s
+print(tot)`,
+      solutionExplanation: "빨리 끝나는 사람을 앞에 세우는 게 최적입니다(그리디). 오름차순 정렬 후 누적합들의 합이 총 대기 시간이에요.",
+      en: {
+        title: "Minimize Total Waiting Time",
+        description: `N people queue at an ATM with given withdrawal times. Ordering them well minimizes the **sum of waiting times**. Print that minimum. Greedy: put the **fastest first** — sort, then add running prefix sums.`,
+        constraints: "1 ≤ N ≤ 100,000, 1 ≤ each time ≤ 1000",
+        hints: ["Fastest first → sort ascending.", "Accumulate prefix sums and add them all up."],
+        solutionExplanation: "Putting the fastest first is optimal; sort ascending and sum the running prefix sums.",
+      },
+    },
+    {
+      id: "agre-e02",
+      cluster: "algo-greedy-contest",
+      unlockAfter: "algo-greedy",
+      difficulty: "쉬움",
+      title: "회의실 배정",
+      description: `한 개의 회의실에 N개의 회의 신청이 들어왔다. 각 회의는 \`시작 끝\` 시간으로 주어진다. 한 회의가 끝나는 시각과 다음 회의가 시작하는 시각이 같아도 된다. **겹치지 않게 최대한 많이** 배정할 때 그 개수를 출력하라.
+
+직관: **끝나는 시각이 빠른 회의부터** 고르면 최대가 된다 — 고전 그리디.
+
+출처: BOJ 1931 paraphrased`,
+      constraints: "1 ≤ N ≤ 100,000, 0 ≤ 시작 ≤ 끝 ≤ 1,000,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<long long,long long>> v(n); // {끝, 시작}
+    for (auto& p : v) cin >> p.second >> p.first;
+    // TODO: 끝나는 시각 기준 정렬 후, 겹치지 않게 그리디 선택
+
+    return 0;
+}`,
+      pyInitialCode: `import sys
+d = sys.stdin.read().split()
+n = int(d[0])
+iv = []
+idx = 1
+for _ in range(n):
+    s = int(d[idx]); e = int(d[idx + 1]); idx += 2
+    iv.append((e, s))   # (끝, 시작)
+# TODO: 끝 기준 정렬 후 그리디로 최대 회의 수 출력`,
+      testCases: [
+        { stdin: "3\n1 3\n2 4\n3 5", expectedOutput: "2", label: "1-3, 3-5" },
+        { stdin: "3\n1 2\n2 3\n3 4", expectedOutput: "3", label: "딱 맞닿음" },
+        { stdin: "1\n5 8", expectedOutput: "1", label: "1개" },
+      ],
+      hints: [
+        "끝나는 시각 기준 오름차순 정렬.",
+        "마지막으로 고른 회의의 끝 시각 이상에서 시작하는 회의면 선택, 끝 시각 갱신.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<long long,long long>> v(n); // {끝, 시작}
+    for (auto& p : v) cin >> p.second >> p.first;
+    sort(v.begin(), v.end());
+    long long last = -1;
+    int cnt = 0;
+    for (auto& [e, s] : v) {
+        if (s >= last) { cnt++; last = e; }
+    }
+    cout << cnt << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+d = sys.stdin.read().split()
+n = int(d[0])
+iv = []
+idx = 1
+for _ in range(n):
+    s = int(d[idx]); e = int(d[idx + 1]); idx += 2
+    iv.append((e, s))
+iv.sort()
+last = -1
+cnt = 0
+for e, s in iv:
+    if s >= last:
+        cnt += 1
+        last = e
+print(cnt)`,
+      solutionExplanation: "끝나는 시각이 빠른 회의부터 고르면 뒤에 더 많은 회의를 넣을 여지가 생깁니다(그리디). 끝 시각으로 정렬해 겹치지 않게 차례로 선택해요.",
+      en: {
+        title: "Meeting Room Scheduling",
+        description: `N meeting requests for one room, each \`start end\` (a meeting may start exactly when another ends). Print the **maximum number of non-overlapping** meetings. Greedy: pick the meeting that **ends earliest** first.`,
+        constraints: "1 ≤ N ≤ 100,000, 0 ≤ start ≤ end ≤ 1e9",
+        hints: ["Sort by end time ascending.", "Pick a meeting if it starts ≥ the last chosen end; update the end."],
+        solutionExplanation: "Choosing the earliest-ending meeting leaves the most room after it; sort by end and greedily pick non-overlapping ones.",
+      },
+    },
+    {
+      id: "agre-e03",
+      cluster: "algo-greedy-contest",
+      unlockAfter: "algo-greedy",
+      difficulty: "쉬움",
+      title: "로프로 들 수 있는 최대 무게",
+      description: `N개의 로프가 있고 각각 버틸 수 있는 최대 무게가 주어진다. 여러 로프를 **함께** 쓰면 무게가 똑같이 나뉜다 — k개를 함께 쓰면 각 로프엔 (전체 무게 / k) 가 걸리므로, **가장 약한 로프 × k** 까지 들 수 있다. 어떤 로프들을 고르든 좋다. 들 수 있는 **최대 무게**를 출력하라.
+
+직관: 큰 것부터 정렬해 k개를 쓰면, 그때의 최솟값은 k번째 로프다. 답 = max( a[k]·k ).
+
+출처: BOJ 2217 paraphrased`,
+      constraints: "1 ≤ N ≤ 100,000, 1 ≤ 각 무게 ≤ 10,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto& x : a) cin >> x;
+    // TODO: 내림차순 정렬 후, i번째(1-based)까지 쓸 때 a[i]*i 의 최댓값
+
+    return 0;
+}`,
+      pyInitialCode: `import sys
+d = sys.stdin.read().split()
+n = int(d[0])
+a = sorted(map(int, d[1:1+n]), reverse=True)
+# TODO: a[i] * (i+1) 의 최댓값 출력`,
+      testCases: [
+        { stdin: "2\n10 15", expectedOutput: "20", label: "둘 함께 10*2" },
+        { stdin: "1\n5", expectedOutput: "5", label: "1개" },
+        { stdin: "3\n1 2 3", expectedOutput: "4", label: "2*2" },
+      ],
+      hints: [
+        "큰 무게부터 내림차순 정렬.",
+        "앞에서 k개를 쓰면 최솟값은 k번째 → 후보는 a[k-1]*k. 모든 k 에 대해 최댓값.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto& x : a) cin >> x;
+    sort(a.begin(), a.end(), greater<int>());
+    long long best = 0;
+    for (int i = 0; i < n; i++) {
+        best = max(best, (long long)a[i] * (i + 1));
+    }
+    cout << best << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+d = sys.stdin.read().split()
+n = int(d[0])
+a = sorted(map(int, d[1:1+n]), reverse=True)
+print(max(a[i] * (i + 1) for i in range(n)))`,
+      solutionExplanation: "내림차순으로 정렬하면, 앞에서 k개를 함께 쓸 때 가장 약한 로프는 k번째입니다. 그때 드는 무게는 a[k]·k — 모든 k 중 최댓값이 답이에요.",
+      en: {
+        title: "Max Weight a Rope Can Lift",
+        description: `N ropes with max weights. Using k ropes together splits the weight evenly, so they can lift **(weakest of the k) × k**. Pick any subset. Print the **maximum liftable weight**. Greedy: sort descending; answer = max(a[k]·k).`,
+        constraints: "1 ≤ N ≤ 100,000, 1 ≤ each ≤ 10,000",
+        hints: ["Sort descending.", "Using the first k, the weakest is the k-th → candidate a[k-1]*k; take the max over k."],
+        solutionExplanation: "Sorted descending, using the first k ropes the weakest is the k-th; the best of a[k]·k over all k is the answer.",
+      },
+    },
+
     // ─────────────────────────────────────────────────────────────────
     // 1. 동전 거스름 — 보통 (BOJ 11047)
     // ─────────────────────────────────────────────────────────────────

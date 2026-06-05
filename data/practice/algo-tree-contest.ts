@@ -11,6 +11,327 @@ export const treeContestCluster: PracticeCluster = {
     description: "Tree representation + 4 traversals + tree DP — build parent from children",
   },
   problems: [
+    // ═══════════ 쉬움 입문 (on-ramp) ═══════════
+    {
+      id: "atree-e01",
+      cluster: "algo-tree-contest",
+      unlockAfter: "algo-tree",
+      difficulty: "쉬움",
+      title: "트리의 리프 노드 개수",
+      description: `루트가 1번인 트리가 주어집니다. **리프(leaf)** 노드는 자식이 하나도 없는 노드예요.
+
+루트 1번을 기준으로 자식이 없는 노드가 몇 개인지 세어 출력하세요.
+
+**입력**: 첫 줄에 노드 수 N(루트는 1번), 다음 N-1줄에 간선 \`u v\`(무방향).
+**출력**: 리프 노드의 개수. (N=1이면 1)`,
+      constraints: "1 ≤ N ≤ 100,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // TODO: 인접 리스트 + 루트 1 BFS로 자식 없는 노드 수 세기
+    return 0;
+}`,
+      pyInitialCode: `import sys
+from collections import deque
+input = sys.stdin.readline
+
+def main():
+    n = int(input())
+    # TODO: 인접 리스트 + 루트 1 BFS로 리프 수 세기
+
+main()`,
+      testCases: [
+        { stdin: "3\n1 2\n1 3", expectedOutput: "2", label: "두 자식 모두 잎" },
+        { stdin: "4\n1 2\n2 3\n2 4", expectedOutput: "2", label: "잎 3,4" },
+        { stdin: "5\n1 2\n1 3\n3 4\n3 5", expectedOutput: "3", label: "잎 2,4,5" },
+        { stdin: "1", expectedOutput: "1", label: "노드 1개" },
+        { stdin: "2\n1 2", expectedOutput: "1", label: "잎 2" },
+      ],
+      hints: [
+        "인접 리스트 adj[u]에 양방향 간선 저장.",
+        "루트 1에서 BFS로 각 노드의 자식 수를 세면, 자식 0인 노드가 리프.",
+        "N≥2이면 차수 1인 노드가 리프. N=1은 1로 따로 처리.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    if (n == 1) { cout << 1 << '\\n'; return 0; }
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v; cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    vector<bool> visited(n + 1, false);
+    vector<int> childCnt(n + 1, 0);
+    queue<int> q;
+    q.push(1); visited[1] = true;
+    while (!q.empty()) {
+        int cur = q.front(); q.pop();
+        for (int nx : adj[cur]) {
+            if (!visited[nx]) { visited[nx] = true; childCnt[cur]++; q.push(nx); }
+        }
+    }
+    int leaves = 0;
+    for (int i = 1; i <= n; i++) if (childCnt[i] == 0) leaves++;
+    cout << leaves << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+from collections import deque
+input = sys.stdin.readline
+
+def main():
+    n = int(input())
+    if n == 1:
+        print(1)
+        return
+    adj = [[] for _ in range(n + 1)]
+    for _ in range(n - 1):
+        u, v = map(int, input().split())
+        adj[u].append(v)
+        adj[v].append(u)
+    visited = [False] * (n + 1)
+    child_cnt = [0] * (n + 1)
+    q = deque([1]); visited[1] = True
+    while q:
+        cur = q.popleft()
+        for nx in adj[cur]:
+            if not visited[nx]:
+                visited[nx] = True
+                child_cnt[cur] += 1
+                q.append(nx)
+    print(sum(1 for i in range(1, n + 1) if child_cnt[i] == 0))
+
+main()`,
+      solutionExplanation: "루트 1에서 BFS로 각 노드를 처음 방문할 때 부모의 자식 수를 늘립니다. 자식 수 0인 노드가 리프. N=1은 1로 따로 처리.",
+      en: {
+        title: "Count Leaf Nodes",
+        description: `A tree rooted at node 1. A leaf has no children. Count nodes with no children (N=1 → 1).`,
+        constraints: "1 ≤ N ≤ 100,000",
+        hints: ["Adjacency list both ways.", "BFS from 1 counting children; 0 children = leaf.", "For N≥2 a degree-1 node is a leaf; N=1 → 1."],
+        solutionExplanation: "BFS from root 1; nodes with 0 children are leaves. N=1 handled as 1.",
+      },
+    },
+    {
+      id: "atree-e02",
+      cluster: "algo-tree-contest",
+      unlockAfter: "algo-tree",
+      difficulty: "쉬움",
+      title: "트리의 높이",
+      description: `루트가 1번인 트리가 주어집니다. **높이**는 루트 1번에서 가장 멀리 떨어진 노드까지의 **간선 개수**예요.
+
+루트에서 BFS로 각 노드의 깊이를 구한 뒤 최댓값을 출력하세요. (루트 깊이 0, N=1이면 0)`,
+      constraints: "1 ≤ N ≤ 100,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // TODO: 루트 1 BFS로 깊이 구하고 최댓값 출력 (루트 깊이 0)
+    return 0;
+}`,
+      pyInitialCode: `import sys
+from collections import deque
+input = sys.stdin.readline
+
+def main():
+    n = int(input())
+    # TODO: 루트 1 BFS로 최대 깊이 출력
+
+main()`,
+      testCases: [
+        { stdin: "1", expectedOutput: "0", label: "노드 1개" },
+        { stdin: "3\n1 2\n1 3", expectedOutput: "1", label: "높이 1" },
+        { stdin: "4\n1 2\n2 3\n3 4", expectedOutput: "3", label: "일자 체인" },
+        { stdin: "5\n1 2\n1 3\n2 4\n2 5", expectedOutput: "2", label: "높이 2" },
+        { stdin: "2\n1 2", expectedOutput: "1", label: "간선 하나" },
+      ],
+      hints: [
+        "depth[1]=0으로 시작, BFS 큐에 1을 넣기.",
+        "자식 nx로 내려가면 depth[nx]=depth[cur]+1.",
+        "모든 depth 중 최댓값이 높이.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    if (n == 1) { cout << 0 << '\\n'; return 0; }
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v; cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    vector<int> depth(n + 1, -1);
+    queue<int> q;
+    q.push(1); depth[1] = 0;
+    int best = 0;
+    while (!q.empty()) {
+        int cur = q.front(); q.pop();
+        for (int nx : adj[cur]) {
+            if (depth[nx] == -1) {
+                depth[nx] = depth[cur] + 1;
+                best = max(best, depth[nx]);
+                q.push(nx);
+            }
+        }
+    }
+    cout << best << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+from collections import deque
+input = sys.stdin.readline
+
+def main():
+    n = int(input())
+    if n == 1:
+        print(0)
+        return
+    adj = [[] for _ in range(n + 1)]
+    for _ in range(n - 1):
+        u, v = map(int, input().split())
+        adj[u].append(v)
+        adj[v].append(u)
+    depth = [-1] * (n + 1)
+    depth[1] = 0
+    best = 0
+    q = deque([1])
+    while q:
+        cur = q.popleft()
+        for nx in adj[cur]:
+            if depth[nx] == -1:
+                depth[nx] = depth[cur] + 1
+                best = max(best, depth[nx])
+                q.append(nx)
+    print(best)
+
+main()`,
+      solutionExplanation: "루트 깊이를 0으로 두고 BFS. 한 칸 내려갈 때마다 깊이가 1 증가하고, 최대 깊이가 트리의 높이입니다.",
+      en: {
+        title: "Height of a Tree",
+        description: `Tree rooted at 1. Height = edges from root to the farthest node. BFS for depths, print the max (root depth 0, N=1 → 0).`,
+        constraints: "1 ≤ N ≤ 100,000",
+        hints: ["depth[1]=0, push 1.", "Child depth = parent depth + 1.", "Max depth is the height."],
+        solutionExplanation: "BFS depths from root; the maximum depth is the height.",
+      },
+    },
+    {
+      id: "atree-e03",
+      cluster: "algo-tree-contest",
+      unlockAfter: "algo-tree",
+      difficulty: "쉬움",
+      title: "각 노드의 부모 찾기",
+      description: `루트가 1번인 트리가 주어집니다. **2번부터 N번까지** 각 노드의 부모 번호를 공백으로 구분해 한 줄에 출력하세요. (N=1이면 빈 줄)
+
+부모는 루트 쪽으로 한 칸 올라갔을 때 만나는 노드예요.`,
+      constraints: "1 ≤ N ≤ 100,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // TODO: 루트 1 BFS로 부모를 정하고 2..N 부모 출력
+    return 0;
+}`,
+      pyInitialCode: `import sys
+from collections import deque
+input = sys.stdin.readline
+
+def main():
+    n = int(input())
+    # TODO: 루트 1 BFS로 부모 정하고 2..N 출력
+
+main()`,
+      testCases: [
+        { stdin: "3\n1 2\n1 3", expectedOutput: "1 1", label: "2,3의 부모 1" },
+        { stdin: "4\n1 2\n2 3\n2 4", expectedOutput: "1 2 2", label: "p2=1,p3=2,p4=2" },
+        { stdin: "5\n1 2\n1 3\n3 4\n3 5", expectedOutput: "1 1 3 3", label: "기본" },
+        { stdin: "2\n1 2", expectedOutput: "1", label: "2의 부모 1" },
+        { stdin: "1", expectedOutput: "", label: "노드 1개" },
+      ],
+      hints: [
+        "parent[1]=0으로 두고 BFS 큐에 1을 넣기.",
+        "cur에서 안 간 nx로 갈 때 parent[nx]=cur.",
+        "2..N parent 를 공백으로 출력. N=1이면 빈 줄.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    if (n == 1) { cout << '\\n'; return 0; }
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v; cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    vector<int> parent(n + 1, 0);
+    vector<bool> visited(n + 1, false);
+    queue<int> q;
+    q.push(1); visited[1] = true;
+    while (!q.empty()) {
+        int cur = q.front(); q.pop();
+        for (int nx : adj[cur]) {
+            if (!visited[nx]) { visited[nx] = true; parent[nx] = cur; q.push(nx); }
+        }
+    }
+    for (int i = 2; i <= n; i++) {
+        cout << parent[i];
+        if (i < n) cout << ' ';
+    }
+    cout << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+from collections import deque
+input = sys.stdin.readline
+
+def main():
+    n = int(input())
+    if n == 1:
+        print()
+        return
+    adj = [[] for _ in range(n + 1)]
+    for _ in range(n - 1):
+        u, v = map(int, input().split())
+        adj[u].append(v)
+        adj[v].append(u)
+    parent = [0] * (n + 1)
+    visited = [False] * (n + 1)
+    q = deque([1]); visited[1] = True
+    while q:
+        cur = q.popleft()
+        for nx in adj[cur]:
+            if not visited[nx]:
+                visited[nx] = True
+                parent[nx] = cur
+                q.append(nx)
+    print(" ".join(str(parent[i]) for i in range(2, n + 1)))
+
+main()`,
+      solutionExplanation: "루트 1에서 BFS. 노드를 처음 방문할 때 꺼낸 노드가 부모입니다. 2번부터 N번까지 부모를 공백으로 출력.",
+      en: {
+        title: "Find the Parent of Each Node",
+        description: `Tree rooted at 1. Print parents of nodes 2..N, space-separated (N=1 → empty line).`,
+        constraints: "1 ≤ N ≤ 100,000",
+        hints: ["parent[1]=0, push 1.", "Going cur→nx records parent[nx]=cur.", "Print parents 2..N; N=1 → empty line."],
+        solutionExplanation: "BFS from root 1; the node you came from is the parent. Print parents 2..N.",
+      },
+    },
     // ─────────────────────────────────────────────────────────────────
     // 1. 트리 노드 수 카운트 (DFS) — 보통
     // ─────────────────────────────────────────────────────────────────

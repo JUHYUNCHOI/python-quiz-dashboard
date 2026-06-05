@@ -11,6 +11,237 @@ export const priorityQueueContestCluster: PracticeCluster = {
     description: "Heap push/pop in O(log N) — K patterns, scheduling, merging, median",
   },
   problems: [
+    // ═══════════ 쉬움 입문 (on-ramp) ═══════════
+    {
+      id: "apq-e01",
+      cluster: "algo-priorityqueue-contest",
+      unlockAfter: "algo-priorityqueue",
+      difficulty: "쉬움",
+      title: "최대 힙",
+      description: `N개의 명령을 처리하세요. 각 줄에 정수 x:
+- x > 0 이면 배열에 x를 넣습니다.
+- x = 0 이면 배열에서 **가장 큰 값**을 출력하고 제거합니다(비었으면 0).
+
+가장 큰 값을 빠르게 꺼내야 하니 **최대 힙(우선순위 큐)** 을 쓰면 딱이에요.`,
+      constraints: "1 ≤ N ≤ 100,000, 0 ≤ x ≤ 1,000,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    priority_queue<int> pq; // 기본이 최대 힙
+    for (int i = 0; i < n; i++) {
+        int x; cin >> x;
+        // TODO: x>0 넣기, x==0 가장 큰 값 출력 후 제거(비었으면 0)
+    }
+    return 0;
+}`,
+      pyInitialCode: `import sys, heapq
+input = sys.stdin.readline
+n = int(input())
+heap = []  # heapq는 최소 힙이라 -x로 넣어 최대 힙처럼
+for _ in range(n):
+    x = int(input())
+    # TODO: x>0 이면 -x push, x==0 이면 가장 큰 값 출력 후 제거(비었으면 0)`,
+      testCases: [
+        { stdin: "6\n0\n1\n2\n0\n0\n0\n", expectedOutput: "0\n2\n1\n0" },
+        { stdin: "3\n5\n5\n0\n", expectedOutput: "5" },
+        { stdin: "1\n0\n", expectedOutput: "0" },
+        { stdin: "7\n10\n3\n0\n0\n7\n0\n0\n", expectedOutput: "10\n3\n7\n0" },
+      ],
+      hints: [
+        "C++ priority_queue<int>는 기본 최대 힙, top()이 최댓값.",
+        "x==0 이면 empty() 확인 후 top() 출력 + pop(), 비었으면 0.",
+        "파이썬 heapq는 최소 힙이라 -x로 넣고 꺼낼 때 다시 -.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    priority_queue<int> pq;
+    for (int i = 0; i < n; i++) {
+        int x; cin >> x;
+        if (x > 0) pq.push(x);
+        else {
+            if (pq.empty()) cout << 0 << '\\n';
+            else { cout << pq.top() << '\\n'; pq.pop(); }
+        }
+    }
+    return 0;
+}`,
+      pySolutionCode: `import sys, heapq
+input = sys.stdin.readline
+n = int(input())
+heap = []
+out = []
+for _ in range(n):
+    x = int(input())
+    if x > 0:
+        heapq.heappush(heap, -x)
+    else:
+        out.append("0" if not heap else str(-heapq.heappop(heap)))
+print("\\n".join(out))`,
+      solutionExplanation: "최대 힙은 가장 큰 값을 O(log N)에 꺼냅니다. C++ priority_queue<int>는 기본 최대 힙. 파이썬은 -x로 넣어 최소 힙을 최대 힙처럼 씁니다.",
+      en: {
+        title: "Max Heap",
+        description: `Process N commands: x>0 inserts x; x=0 prints and removes the largest (0 if empty). Use a max heap.`,
+        constraints: "1 ≤ N ≤ 100,000",
+        hints: ["C++ priority_queue<int> is a max heap.", "x==0: check empty, print top(), pop.", "Python: push -x."],
+        solutionExplanation: "Max heap pops the largest in O(log N); Python negates values to use heapq as a max heap.",
+      },
+    },
+    {
+      id: "apq-e02",
+      cluster: "algo-priorityqueue-contest",
+      unlockAfter: "algo-priorityqueue",
+      difficulty: "쉬움",
+      title: "K번째 큰 수",
+      description: `N개의 정수 중 **K번째로 큰 값**을 출력하세요. 첫 줄에 N K, 둘째 줄에 N개의 정수.
+
+예: 3 1 2 에서 K=2 → 큰 순서 3,2,1 → 2.`,
+      constraints: "1 ≤ K ≤ N ≤ 100,000, |정수| ≤ 1,000,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    priority_queue<int> pq;
+    for (int i = 0; i < n; i++) { int x; cin >> x; pq.push(x); }
+    // TODO: K-1번 pop 후 top() 출력
+    return 0;
+}`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+n, k = map(int, input().split())
+nums = list(map(int, input().split()))
+# TODO: 내림차순 정렬 또는 힙으로 K번째 큰 값 출력`,
+      testCases: [
+        { stdin: "3 2\n3 1 2", expectedOutput: "2" },
+        { stdin: "5 1\n10 4 7 2 9", expectedOutput: "10" },
+        { stdin: "5 5\n10 4 7 2 9", expectedOutput: "2" },
+        { stdin: "4 3\n8 8 3 1", expectedOutput: "3" },
+      ],
+      hints: [
+        "최대 힙에 다 넣으면 top()이 1번째 큰 값.",
+        "K-1번 꺼내 버리면 다음 top()이 K번째.",
+        "또는 내림차순 정렬 후 인덱스 K-1.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    priority_queue<int> pq;
+    for (int i = 0; i < n; i++) { int x; cin >> x; pq.push(x); }
+    for (int i = 0; i < k - 1; i++) pq.pop();
+    cout << pq.top() << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+n, k = map(int, input().split())
+nums = list(map(int, input().split()))
+nums.sort(reverse=True)
+print(nums[k - 1])`,
+      solutionExplanation: "최대 힙에서 큰 값을 K-1번 버리면 남은 top()이 K번째로 큰 값. 더 간단히는 내림차순 정렬 후 인덱스 K-1.",
+      en: {
+        title: "K-th Largest Value",
+        description: `Print the K-th largest of N integers. e.g. 3 1 2, K=2 → 2.`,
+        constraints: "1 ≤ K ≤ N ≤ 100,000",
+        hints: ["Max heap top() is the largest.", "Pop K-1, then top().", "Or sort descending, index K-1."],
+        solutionExplanation: "Pop the largest K-1 times; or sort descending and read index K-1.",
+      },
+    },
+    {
+      id: "apq-e03",
+      cluster: "algo-priorityqueue-contest",
+      unlockAfter: "algo-priorityqueue",
+      difficulty: "쉬움",
+      title: "두 수 합치기 최소 비용",
+      description: `N개의 수에서 **가장 작은 두 수**를 골라 합치는 작업을 반복합니다(합칠 때 그 합만큼 비용). 수가 하나 남을 때까지 할 때 **총 비용의 최솟값**을 출력하세요.
+
+예: 10 20 40 → (10+20)=30, (30+40)=70 → 총 100.
+
+항상 가장 작은 두 수부터 합쳐야 최소. **최소 힙**으로 작은 값을 빠르게 꺼내세요. (N=1이면 0)`,
+      constraints: "1 ≤ N ≤ 100,000, 각 수 ≤ 1,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    priority_queue<int, vector<int>, greater<int>> pq; // 최소 힙
+    for (int i = 0; i < n; i++) { int x; cin >> x; pq.push(x); }
+    long long total = 0;
+    // TODO: 2개 이상인 동안 가장 작은 두 수 합치고 total에 더하고 다시 넣기
+    cout << total << '\\n';
+    return 0;
+}`,
+      pyInitialCode: `import sys, heapq
+input = sys.stdin.readline
+n = int(input())
+nums = list(map(int, input().split()))
+heapq.heapify(nums)
+total = 0
+# TODO: 2개 이상인 동안 가장 작은 두 수 합치고 total에 더하고 다시 넣기
+print(total)`,
+      testCases: [
+        { stdin: "3\n10 20 40", expectedOutput: "100" },
+        { stdin: "1\n5", expectedOutput: "0" },
+        { stdin: "4\n1 2 3 4", expectedOutput: "19" },
+        { stdin: "2\n7 13", expectedOutput: "20" },
+      ],
+      hints: [
+        "최소 힙: C++ priority_queue<int, vector<int>, greater<int>>.",
+        "2개 이상인 동안 가장 작은 두 값을 꺼내 합을 total에 더하고 다시 push.",
+        "N=1이면 합칠 게 없어 0.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    priority_queue<int, vector<int>, greater<int>> pq;
+    for (int i = 0; i < n; i++) { int x; cin >> x; pq.push(x); }
+    long long total = 0;
+    while (pq.size() >= 2) {
+        int a = pq.top(); pq.pop();
+        int b = pq.top(); pq.pop();
+        long long sum = (long long)a + b;
+        total += sum;
+        pq.push((int)sum);
+    }
+    cout << total << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys, heapq
+input = sys.stdin.readline
+n = int(input())
+nums = list(map(int, input().split()))
+heapq.heapify(nums)
+total = 0
+while len(nums) >= 2:
+    a = heapq.heappop(nums)
+    b = heapq.heappop(nums)
+    s = a + b
+    total += s
+    heapq.heappush(nums, s)
+print(total)`,
+      solutionExplanation: "가장 작은 두 수부터 합쳐야 큰 수가 늦게 더해져 총비용이 최소가 됩니다. 최소 힙으로 작은 값을 꺼내 합치고 다시 넣기를 반복해요. 1 2 3 4 → 3,6,10 → 19.",
+      en: {
+        title: "Minimum Cost to Merge Numbers",
+        description: `Repeatedly merge the two smallest numbers (cost = their sum) until one remains; print the minimum total cost. e.g. 10 20 40 → 100. (N=1 → 0)`,
+        constraints: "1 ≤ N ≤ 100,000",
+        hints: ["Min heap.", "While ≥2: pop two smallest, add sum to total, push it back.", "N=1 → 0."],
+        solutionExplanation: "Merging the two smallest first minimizes cost; a min heap fetches them quickly.",
+      },
+    },
     // ─────────────────────────────────────────────────────────────────
     // 1. 최소 힙 (BOJ 1927) — 보통
     // ─────────────────────────────────────────────────────────────────

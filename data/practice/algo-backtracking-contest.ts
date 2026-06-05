@@ -11,6 +11,294 @@ export const backtrackingContestCluster: PracticeCluster = {
     description: "choose / explore / un-choose — decision tree search + pruning",
   },
   problems: [
+    // ═══════════ 쉬움 입문 (on-ramp) ═══════════
+    {
+      id: "abt-e01",
+      cluster: "algo-backtracking-contest",
+      unlockAfter: "algo-backtracking",
+      difficulty: "쉬움",
+      title: "1~N 중 M개 조합 (사전순 출력)",
+      description: `1부터 N까지의 자연수 중에서 M개를 고르는 모든 조합을 사전순으로 출력하세요.
+
+- 같은 수를 두 번 고를 수 없고, 한 조합 안의 수는 오름차순.
+- 각 조합은 공백으로 구분해 한 줄에.
+
+예: N=4, M=2 → 첫 줄 \`1 2\`, 마지막 줄 \`3 4\`.
+
+백트래킹으로 "방금 고른 수보다 큰 수만 다음에 고른다"를 지키면 자동으로 오름차순·사전순이 됩니다.`,
+      constraints: "1 ≤ M ≤ N ≤ 8",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+int N, M, pick[10];
+
+void bt(int start, int depth) {
+    // depth == M 이면 출력, 아니면 start..N 골라 재귀
+}
+
+int main() {
+    cin >> N >> M;
+    bt(1, 0);
+    return 0;
+}`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def bt(start, picked):
+    # len(picked)==M 이면 출력, 아니면 start..N 골라 재귀
+    pass
+
+N, M = map(int, input().split())
+bt(1, [])`,
+      testCases: [
+        { stdin: "4 2", expectedOutput: "1 2\n1 3\n1 4\n2 3\n2 4\n3 4" },
+        { stdin: "3 1", expectedOutput: "1\n2\n3" },
+        { stdin: "4 4", expectedOutput: "1 2 3 4" },
+        { stdin: "3 3", expectedOutput: "1 2 3" },
+        { stdin: "4 3", expectedOutput: "1 2 3\n1 2 4\n1 3 4\n2 3 4" },
+      ],
+      hints: [
+        "고른 수 배열을 두고, 깊이가 M이면 한 줄 출력.",
+        "다음 재귀에 start로 i+1을 넘기면 중복 없이 오름차순.",
+        "for i=start..N: 고르고 → 재귀 → 되돌리기(백트래킹).",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+int N, M, pick[10];
+
+void bt(int start, int depth) {
+    if (depth == M) {
+        for (int i = 0; i < M; i++) {
+            cout << pick[i];
+            if (i < M - 1) cout << ' ';
+        }
+        cout << '\\n';
+        return;
+    }
+    for (int i = start; i <= N; i++) {
+        pick[depth] = i;
+        bt(i + 1, depth + 1);
+    }
+}
+
+int main() {
+    cin >> N >> M;
+    bt(1, 0);
+    return 0;
+}`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def bt(start, picked):
+    if len(picked) == M:
+        print(' '.join(map(str, picked)))
+        return
+    for i in range(start, N + 1):
+        picked.append(i)
+        bt(i + 1, picked)
+        picked.pop()
+
+N, M = map(int, input().split())
+bt(1, [])`,
+      solutionExplanation: "다음에 고를 수로 i+1을 넘겨 '방금 고른 수보다 큰 수만' 고르게 하면 한 조합이 오름차순이 되고, 작은 수부터 시도하므로 출력도 사전순입니다.",
+      en: {
+        title: "Combinations of M from 1~N (lexicographic)",
+        description: `Print every combination of M numbers from 1..N in lexicographic order, increasing within a line, space-separated.`,
+        constraints: "1 ≤ M ≤ N ≤ 8",
+        hints: ["When depth==M, print the picks.", "Pass start=i+1 for no duplicates and increasing order.", "Choose → recurse → undo."],
+        solutionExplanation: "Passing i+1 keeps combinations increasing; trying smaller first makes output lexicographic.",
+      },
+    },
+    {
+      id: "abt-e02",
+      cluster: "algo-backtracking-contest",
+      unlockAfter: "algo-backtracking",
+      difficulty: "쉬움",
+      title: "부분수열의 합 (경우의 수)",
+      description: `N개의 정수가 주어집니다. 일부를 골라(공집합 제외) 그 합이 \`S\`가 되는 경우의 수를 출력하세요.
+
+- 각 원소는 "고른다/안 고른다" 두 가지.
+- 같은 위치는 한 번만, 서로 다른 위치는 값이 같아도 다른 선택으로 셈.
+
+각 원소마다 포함/제외로 가지를 치며 끝에서 합을 확인하는 백트래킹으로 셉니다.`,
+      constraints: "1 ≤ N ≤ 20, |정수| ≤ 100000, |S| ≤ 2000000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+int N; long long S; int a[25]; int cnt = 0;
+
+void bt(int idx, int chosen, long long sum) {
+    // idx==N 이면 chosen>0 && sum==S 일 때 cnt++
+    // 아니면 a[idx] 제외/포함 두 갈래로 재귀
+}
+
+int main() {
+    cin >> N >> S;
+    for (int i = 0; i < N; i++) cin >> a[i];
+    bt(0, 0, 0);
+    cout << cnt << '\\n';
+    return 0;
+}`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def bt(idx, chosen, total):
+    # idx==N 이면 chosen>0 and total==S 일 때 카운트
+    pass
+
+data = input().split()
+N, S = int(data[0]), int(data[1])
+a = list(map(int, input().split()))
+cnt = 0
+bt(0, 0, 0)
+print(cnt)`,
+      testCases: [
+        { stdin: "3 3\n5 1 2", expectedOutput: "1" },
+        { stdin: "4 0\n1 -1 2 -2", expectedOutput: "3" },
+        { stdin: "1 5\n5", expectedOutput: "1" },
+        { stdin: "3 4\n2 2 2", expectedOutput: "3" },
+        { stdin: "2 10\n1 2", expectedOutput: "0" },
+      ],
+      hints: [
+        "재귀에 (인덱스, 고른 개수, 지금까지 합)을 넘긴다.",
+        "인덱스가 N이면 chosen>0 이고 합==S 일 때 +1.",
+        "각 원소: 제외하고 다음 / 포함하고(합+a[idx], chosen+1) 다음.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+int N; long long S; int a[25]; int cnt = 0;
+
+void bt(int idx, int chosen, long long sum) {
+    if (idx == N) {
+        if (chosen > 0 && sum == S) cnt++;
+        return;
+    }
+    bt(idx + 1, chosen, sum);
+    bt(idx + 1, chosen + 1, sum + a[idx]);
+}
+
+int main() {
+    cin >> N >> S;
+    for (int i = 0; i < N; i++) cin >> a[i];
+    bt(0, 0, 0);
+    cout << cnt << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def bt(idx, chosen, total):
+    global cnt
+    if idx == N:
+        if chosen > 0 and total == S:
+            cnt += 1
+        return
+    bt(idx + 1, chosen, total)
+    bt(idx + 1, chosen + 1, total + a[idx])
+
+data = input().split()
+N, S = int(data[0]), int(data[1])
+a = list(map(int, input().split()))
+cnt = 0
+bt(0, 0, 0)
+print(cnt)`,
+      solutionExplanation: "각 원소를 포함/제외 두 갈래로 모든 2^N 부분집합을 만듭니다. 끝에서 공집합이 아니고 합이 S면 카운트. N≤20이라 충분히 빠릅니다.",
+      en: {
+        title: "Subset Sum (count the ways)",
+        description: `Count non-empty subsets of N integers whose sum equals S. Branch include/exclude per element, check the sum at the end.`,
+        constraints: "1 ≤ N ≤ 20, |int| ≤ 100000, |S| ≤ 2000000",
+        hints: ["Pass (index, chosen count, running sum).", "At index N: if chosen>0 and sum==S, +1.", "Two branches: skip / add a[idx]."],
+        solutionExplanation: "Generate all 2^N subsets via include/exclude; count non-empty ones summing to S.",
+      },
+    },
+    {
+      id: "abt-e03",
+      cluster: "algo-backtracking-contest",
+      unlockAfter: "algo-backtracking",
+      difficulty: "쉬움",
+      title: "1~N 중 M개 조합의 개수",
+      description: `1부터 N까지에서 M개를 고르는 조합이 몇 가지인지 그 **개수만** 출력하세요. (순서 무관, 같은 수 두 번 못 고름)
+
+예: N=4, M=2 → {1,2},{1,3},{1,4},{2,3},{2,4},{3,4} 로 6가지 → 6.
+
+수학 공식 대신 백트래킹으로 직접 다 만들어 세는 연습입니다.`,
+      constraints: "1 ≤ M ≤ N ≤ 20 (M ≤ N; 단 M=0도 허용 → 1)",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+long long N, M, cnt = 0;
+
+void bt(int start, int depth) {
+    // depth==M 이면 cnt++, 아니면 start..N 골라 재귀
+}
+
+int main() {
+    cin >> N >> M;
+    bt(1, 0);
+    cout << cnt << '\\n';
+    return 0;
+}`,
+      pyInitialCode: `import sys
+sys.setrecursionlimit(10000)
+input = sys.stdin.readline
+
+def bt(start, depth):
+    # depth==M 이면 카운트, 아니면 start..N 재귀
+    pass
+
+N, M = map(int, input().split())
+cnt = 0
+bt(1, 0)
+print(cnt)`,
+      testCases: [
+        { stdin: "4 2", expectedOutput: "6" },
+        { stdin: "3 1", expectedOutput: "3" },
+        { stdin: "5 5", expectedOutput: "1" },
+        { stdin: "5 0", expectedOutput: "1" },
+        { stdin: "6 3", expectedOutput: "20" },
+      ],
+      hints: [
+        "abt-e01과 골격 동일. 출력 대신 개수만 +1.",
+        "다음에 i+1을 넘겨 같은 조합 중복 카운트 방지.",
+        "M=0이면 시작부터 depth==M이라 1이 됨(아무것도 안 고르는 한 가지).",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+long long N, M, cnt = 0;
+
+void bt(int start, int depth) {
+    if (depth == M) { cnt++; return; }
+    for (int i = start; i <= N; i++) bt(i + 1, depth + 1);
+}
+
+int main() {
+    cin >> N >> M;
+    bt(1, 0);
+    cout << cnt << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+sys.setrecursionlimit(10000)
+input = sys.stdin.readline
+
+def bt(start, depth):
+    global cnt
+    if depth == M:
+        cnt += 1
+        return
+    for i in range(start, N + 1):
+        bt(i + 1, depth + 1)
+
+N, M = map(int, input().split())
+cnt = 0
+bt(1, 0)
+print(cnt)`,
+      solutionExplanation: "조합을 다 만들되 출력 대신 개수만 셉니다. i+1을 넘겨 중복을 막으면 결과는 C(N,M). M=0이면 1(아무것도 안 고르는 한 가지).",
+      en: {
+        title: "Count combinations of M from 1~N",
+        description: `Print only the number of ways to choose M from 1..N. e.g. N=4,M=2 → 6.`,
+        constraints: "1 ≤ M ≤ N ≤ 20 (M=0 → 1)",
+        hints: ["Same skeleton as abt-e01, count instead of print.", "Pass i+1 to avoid double counting.", "M=0 → 1."],
+        solutionExplanation: "Build all combinations counting only; passing i+1 avoids duplicates, yielding C(N,M).",
+      },
+    },
     // ─────────────────────────────────────────────────────────────────
     // 1. 순열 모두 출력 (사전순) — 보통
     // ─────────────────────────────────────────────────────────────────

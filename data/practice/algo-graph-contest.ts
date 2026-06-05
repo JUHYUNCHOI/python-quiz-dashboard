@@ -11,6 +11,284 @@ export const graphContestCluster: PracticeCluster = {
     description: "BFS shortest, DFS connected components, cycle, grid",
   },
   problems: [
+    // ═════════════════════════════════════════════════════════════════
+    // 쉬움 입문 (on-ramp): 그래프 표현(차수) → 도달 가능 수(BFS 한 번) → 연결 요소
+    // ═════════════════════════════════════════════════════════════════
+    {
+      id: "agra-e01",
+      cluster: "algo-graph-contest",
+      unlockAfter: "algo-graph",
+      difficulty: "쉬움",
+      title: "정점의 차수",
+      description: `정점 N개, 간선 M개의 (무방향) 그래프가 주어진다. 각 간선은 \`u v\` 로 주어진다. **각 정점에 연결된 간선 수(차수)** 를 1번부터 N번까지 공백으로 구분해 출력하라.
+
+그래프를 다루는 첫걸음은 "누가 누구랑 연결됐는지" 표현하는 것. 차수를 세는 건 그 표현을 만드는 가장 기본 연습이다.`,
+      constraints: "1 ≤ N ≤ 100,000, 0 ≤ M ≤ 200,000, 1 ≤ u, v ≤ N",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    vector<int> deg(n + 1, 0);
+    // TODO: 간선마다 양 끝 정점의 차수를 1씩 늘리고, 1..N 출력
+
+    return 0;
+}`,
+      pyInitialCode: `import sys
+d = sys.stdin.read().split()
+n, m = int(d[0]), int(d[1])
+deg = [0] * (n + 1)
+# TODO: 간선마다 deg[u]++, deg[v]++ 한 뒤 1..N 출력`,
+      testCases: [
+        { stdin: "4 3\n1 2\n1 3\n2 4", expectedOutput: "2 2 1 1", label: "기본" },
+        { stdin: "3 0", expectedOutput: "0 0 0", label: "간선 없음" },
+        { stdin: "2 1\n1 2", expectedOutput: "1 1", label: "간선 1개" },
+      ],
+      hints: ["간선 u v 를 읽을 때마다 deg[u]++, deg[v]++.", "1번부터 N번까지 차수 출력."],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    vector<int> deg(n + 1, 0);
+    for (int i = 0; i < m; i++) {
+        int u, v; cin >> u >> v;
+        deg[u]++; deg[v]++;
+    }
+    for (int i = 1; i <= n; i++) {
+        cout << deg[i];
+        if (i < n) cout << ' ';
+    }
+    cout << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+d = sys.stdin.read().split()
+n, m = int(d[0]), int(d[1])
+deg = [0] * (n + 1)
+i = 2
+for _ in range(m):
+    u, v = int(d[i]), int(d[i + 1])
+    i += 2
+    deg[u] += 1
+    deg[v] += 1
+print(*deg[1:])`,
+      solutionExplanation: "간선 하나는 양 끝 정점 두 개의 차수를 1씩 올립니다. 모든 간선을 훑으며 세면 끝이에요.",
+      en: {
+        title: "Degree of Each Vertex",
+        description: `An undirected graph with N vertices and M edges (each \`u v\`). Print the **degree** (number of incident edges) of vertices 1..N, space-separated. The first step in graphs is representing connections — counting degrees is the most basic practice.`,
+        constraints: "1 ≤ N ≤ 100,000, 0 ≤ M ≤ 200,000, 1 ≤ u, v ≤ N",
+        hints: ["For each edge u v: deg[u]++, deg[v]++.", "Print degrees 1..N."],
+        solutionExplanation: "Each edge raises the degree of its two endpoints; sweep all edges and count.",
+      },
+    },
+    {
+      id: "agra-e02",
+      cluster: "algo-graph-contest",
+      unlockAfter: "algo-graph",
+      difficulty: "쉬움",
+      title: "1번에서 갈 수 있는 정점 수",
+      description: `정점 N개, 간선 M개의 무방향 그래프가 주어진다. **1번 정점에서 출발해 간선을 따라 도달할 수 있는 정점의 수**(자기 자신 포함)를 출력하라.
+
+이게 BFS/DFS의 핵심이다 — 시작점에서 퍼져나가며 방문한 정점을 세면 된다.`,
+      constraints: "1 ≤ N ≤ 100,000, 0 ≤ M ≤ 200,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < m; i++) {
+        int u, v; cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    // TODO: 1번에서 BFS/DFS 로 퍼지며 방문 정점 수 세기
+
+    return 0;
+}`,
+      pyInitialCode: `import sys
+from collections import deque
+d = sys.stdin.read().split()
+n, m = int(d[0]), int(d[1])
+adj = [[] for _ in range(n + 1)]
+i = 2
+for _ in range(m):
+    u, v = int(d[i]), int(d[i + 1]); i += 2
+    adj[u].append(v); adj[v].append(u)
+# TODO: 1번에서 BFS 로 방문 정점 수 출력`,
+      testCases: [
+        { stdin: "4 2\n1 2\n3 4", expectedOutput: "2", label: "1과 2만" },
+        { stdin: "4 3\n1 2\n2 3\n3 4", expectedOutput: "4", label: "전부 연결" },
+        { stdin: "1 0", expectedOutput: "1", label: "혼자" },
+      ],
+      hints: [
+        "방문 표시 배열 vis 와 큐(또는 재귀)를 쓴다.",
+        "1번을 큐에 넣고 방문 표시. 꺼낼 때마다 카운트하고, 안 간 이웃을 큐에 넣는다.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < m; i++) {
+        int u, v; cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    vector<bool> vis(n + 1, false);
+    queue<int> q;
+    q.push(1); vis[1] = true;
+    int c = 0;
+    while (!q.empty()) {
+        int x = q.front(); q.pop();
+        c++;
+        for (int y : adj[x]) if (!vis[y]) { vis[y] = true; q.push(y); }
+    }
+    cout << c << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+from collections import deque
+d = sys.stdin.read().split()
+n, m = int(d[0]), int(d[1])
+adj = [[] for _ in range(n + 1)]
+i = 2
+for _ in range(m):
+    u, v = int(d[i]), int(d[i + 1]); i += 2
+    adj[u].append(v); adj[v].append(u)
+vis = [False] * (n + 1)
+q = deque([1]); vis[1] = True
+c = 0
+while q:
+    x = q.popleft()
+    c += 1
+    for y in adj[x]:
+        if not vis[y]:
+            vis[y] = True
+            q.append(y)
+print(c)`,
+      solutionExplanation: "1번에서 시작해 큐로 이웃을 따라 퍼집니다(BFS). 방문 표시를 하며 꺼낸 정점 수를 세면 도달 가능한 정점 수예요.",
+      en: {
+        title: "How Many Vertices Are Reachable from 1",
+        description: `Undirected graph, N vertices, M edges. Print the number of vertices **reachable from vertex 1** (including itself). This is the core of BFS/DFS — spread out from the start and count visited vertices.`,
+        constraints: "1 ≤ N ≤ 100,000, 0 ≤ M ≤ 200,000",
+        hints: ["Use a visited array and a queue (or recursion).", "Push 1, mark it; on pop count it and enqueue unvisited neighbors."],
+        solutionExplanation: "BFS from vertex 1, marking visited; the number of popped vertices is the reachable count.",
+      },
+    },
+    {
+      id: "agra-e03",
+      cluster: "algo-graph-contest",
+      unlockAfter: "algo-graph",
+      difficulty: "쉬움",
+      title: "연결 요소의 개수",
+      description: `정점 N개, 간선 M개의 무방향 그래프가 주어진다. 서로 이어진 정점들을 한 덩어리로 볼 때, **덩어리(연결 요소)가 몇 개**인지 출력하라.
+
+방문 안 한 정점에서 BFS/DFS 를 시작할 때마다 새 덩어리 하나. 그 횟수를 세면 된다.
+
+출처: BOJ 11724 paraphrased`,
+      constraints: "1 ≤ N ≤ 50,000, 0 ≤ M ≤ 100,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < m; i++) {
+        int u, v; cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    // TODO: 방문 안 한 정점마다 BFS/DFS 시작 → 시작 횟수 = 연결 요소 수
+
+    return 0;
+}`,
+      pyInitialCode: `import sys
+from collections import deque
+d = sys.stdin.read().split()
+n, m = int(d[0]), int(d[1])
+adj = [[] for _ in range(n + 1)]
+i = 2
+for _ in range(m):
+    u, v = int(d[i]), int(d[i + 1]); i += 2
+    adj[u].append(v); adj[v].append(u)
+# TODO: 방문 안 한 정점마다 BFS 시작, 시작 횟수 출력`,
+      testCases: [
+        { stdin: "4 2\n1 2\n3 4", expectedOutput: "2", label: "두 덩어리" },
+        { stdin: "5 0", expectedOutput: "5", label: "전부 따로" },
+        { stdin: "4 3\n1 2\n2 3\n3 4", expectedOutput: "1", label: "하나로 연결" },
+      ],
+      hints: [
+        "1번부터 N번까지 보면서, 아직 방문 안 했으면 거기서 BFS/DFS 시작.",
+        "BFS/DFS 를 새로 시작한 횟수가 곧 연결 요소의 수.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < m; i++) {
+        int u, v; cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    vector<bool> vis(n + 1, false);
+    int comp = 0;
+    for (int s = 1; s <= n; s++) {
+        if (vis[s]) continue;
+        comp++;
+        queue<int> q;
+        q.push(s); vis[s] = true;
+        while (!q.empty()) {
+            int x = q.front(); q.pop();
+            for (int y : adj[x]) if (!vis[y]) { vis[y] = true; q.push(y); }
+        }
+    }
+    cout << comp << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+from collections import deque
+input_data = sys.stdin.read().split()
+n, m = int(input_data[0]), int(input_data[1])
+adj = [[] for _ in range(n + 1)]
+i = 2
+for _ in range(m):
+    u, v = int(input_data[i]), int(input_data[i + 1]); i += 2
+    adj[u].append(v); adj[v].append(u)
+vis = [False] * (n + 1)
+comp = 0
+for s in range(1, n + 1):
+    if vis[s]:
+        continue
+    comp += 1
+    q = deque([s]); vis[s] = True
+    while q:
+        x = q.popleft()
+        for y in adj[x]:
+            if not vis[y]:
+                vis[y] = True
+                q.append(y)
+print(comp)`,
+      solutionExplanation: "방문하지 않은 정점에서 BFS/DFS를 새로 시작할 때마다 덩어리 하나입니다. 시작한 횟수가 연결 요소의 개수예요.",
+      en: {
+        title: "Number of Connected Components",
+        description: `Undirected graph, N vertices, M edges. Print how many **connected components** (clumps of mutually reachable vertices) there are. Each time you start BFS/DFS from an unvisited vertex, that's one new component — count the starts.`,
+        constraints: "1 ≤ N ≤ 50,000, 0 ≤ M ≤ 100,000",
+        hints: ["Scan 1..N; if unvisited, start a BFS/DFS there.", "The number of starts = number of components."],
+        solutionExplanation: "Each BFS/DFS started from an unvisited vertex is one component; count the starts.",
+      },
+    },
+
     // ─────────────────────────────────────────────────────────────────
     // 1. DFS 순서 출력 — 보통
     // ─────────────────────────────────────────────────────────────────

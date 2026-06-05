@@ -11,6 +11,171 @@ export const bitManipulationContestCluster: PracticeCluster = {
     description: "AND/OR/XOR/SHIFT — XOR tricks, bitmask subsets, intro bit DP",
   },
   problems: [
+    // ═══════════ 쉬움 입문 (on-ramp) ═══════════
+    {
+      id: "abit-e01",
+      cluster: "algo-bitmanipulation-contest",
+      unlockAfter: "algo-bitmanipulation",
+      difficulty: "쉬움",
+      title: "켜진 비트 수 (popcount)",
+      description: `정수 \`N\`이 주어집니다. \`N\`을 이진수로 나타냈을 때 **1의 개수**(켜진 비트 수)를 출력하세요.
+
+예: \`13\`은 이진수로 \`1101\`이고 1이 3개이므로 답은 \`3\`.`,
+      constraints: "0 ≤ N ≤ 10^18",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    long long n;
+    cin >> n;
+    // TODO: n의 이진수에서 1의 개수 출력
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+# TODO: n의 이진수에서 1의 개수 출력`,
+      testCases: [
+        { stdin: "13", expectedOutput: "3" },
+        { stdin: "0", expectedOutput: "0" },
+        { stdin: "1", expectedOutput: "1" },
+        { stdin: "255", expectedOutput: "8" },
+        { stdin: "1023", expectedOutput: "10" },
+      ],
+      hints: [
+        "n & 1로 마지막 비트를 보고 n >>= 1로 밀며 셀 수 있어요.",
+        "C++ __builtin_popcountll(n), Python bin(n).count('1').",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    long long n;
+    cin >> n;
+    cout << __builtin_popcountll(n) << "\\n";
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+print(bin(n).count('1'))`,
+      solutionExplanation: "이진수의 1 개수를 셉니다. C++ __builtin_popcountll, Python bin(n).count('1'). 직접 세려면 n&1 확인 후 n>>=1.",
+      en: {
+        title: "Count Set Bits (popcount)",
+        description: `Print the number of 1s in the binary form of N. e.g. 13 = 1101 → 3.`,
+        constraints: "0 ≤ N ≤ 10^18",
+        hints: ["Check n & 1, shift n >>= 1.", "C++ __builtin_popcountll; Python bin(n).count('1')."],
+        solutionExplanation: "Count 1-bits via a library call or by checking the last bit and shifting.",
+      },
+    },
+    {
+      id: "abit-e02",
+      cluster: "algo-bitmanipulation-contest",
+      unlockAfter: "algo-bitmanipulation",
+      difficulty: "쉬움",
+      title: "2의 거듭제곱 판별",
+      description: `정수 \`N\`이 주어집니다. \`N\`이 **2의 거듭제곱**이면 \`YES\`, 아니면 \`NO\`를 출력하세요.
+
+2의 거듭제곱은 이진수로 1이 **딱 하나만** 켜진 수(1, 2, 4, 8, …)예요.`,
+      constraints: "0 ≤ N ≤ 10^18",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    long long n;
+    cin >> n;
+    // TODO: 2의 거듭제곱이면 YES, 아니면 NO
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+# TODO: 2의 거듭제곱이면 YES, 아니면 NO`,
+      testCases: [
+        { stdin: "16", expectedOutput: "YES" },
+        { stdin: "1", expectedOutput: "YES" },
+        { stdin: "6", expectedOutput: "NO" },
+        { stdin: "1024", expectedOutput: "YES" },
+        { stdin: "0", expectedOutput: "NO" },
+      ],
+      hints: [
+        "2의 거듭제곱은 이진수에서 1이 딱 하나.",
+        "n > 0 이고 (n & (n-1)) == 0 이면 2의 거듭제곱.",
+        "0도 거짓이 되도록 n > 0 조건을 꼭 넣기.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    long long n;
+    cin >> n;
+    if (n > 0 && (n & (n - 1)) == 0) cout << "YES" << "\\n";
+    else cout << "NO" << "\\n";
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+if n > 0 and (n & (n - 1)) == 0:
+    print("YES")
+else:
+    print("NO")`,
+      solutionExplanation: "n & (n-1)은 가장 낮은 1비트를 지웁니다. 1이 하나뿐이면 0이 돼요. n=0은 따로 거르려고 n>0 조건을 함께 검사합니다.",
+      en: {
+        title: "Power of Two Check",
+        description: `Print YES if N is a power of two (exactly one set bit), else NO.`,
+        constraints: "0 ≤ N ≤ 10^18",
+        hints: ["A power of two has one set bit.", "n>0 && (n&(n-1))==0.", "Keep n>0 so 0 is rejected."],
+        solutionExplanation: "n & (n-1) clears the lowest set bit, giving 0 only for single-bit numbers; also require n>0.",
+      },
+    },
+    {
+      id: "abit-e03",
+      cluster: "algo-bitmanipulation-contest",
+      unlockAfter: "algo-bitmanipulation",
+      difficulty: "쉬움",
+      title: "k번째 비트 확인",
+      description: `정수 \`N\`과 \`k\`가 공백으로 주어집니다. \`N\`의 \`k\`번째 비트(0-based, 최하위=0)가 **켜져 있으면 1**, 아니면 **0**을 출력하세요.
+
+예: \`13\`은 \`1101\`. 0번=1, 1번=0, 2번=1. 그래서 \`13 0\` → \`1\`.`,
+      constraints: "0 ≤ N ≤ 10^18, 0 ≤ k ≤ 62",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    long long n;
+    int k;
+    cin >> n >> k;
+    // TODO: n의 k번째 비트가 켜졌으면 1, 아니면 0
+    return 0;
+}`,
+      pyInitialCode: `n, k = map(int, input().split())
+# TODO: n의 k번째 비트가 켜졌으면 1, 아니면 0`,
+      testCases: [
+        { stdin: "13 0", expectedOutput: "1" },
+        { stdin: "13 1", expectedOutput: "0" },
+        { stdin: "13 2", expectedOutput: "1" },
+        { stdin: "13 3", expectedOutput: "1" },
+        { stdin: "1024 10", expectedOutput: "1" },
+      ],
+      hints: [
+        "n을 k칸 오른쪽으로 밀면 k번째 비트가 맨 아래로 와요.",
+        "(n >> k) & 1 이 답.",
+        "또는 마스크 (1LL << k)와 & 해서 0인지 확인.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    long long n;
+    int k;
+    cin >> n >> k;
+    cout << ((n >> k) & 1) << "\\n";
+    return 0;
+}`,
+      pySolutionCode: `n, k = map(int, input().split())
+print((n >> k) & 1)`,
+      solutionExplanation: "n을 k칸 오른쪽으로 밀면(n>>k) k번째 비트가 맨 아래로 오고, & 1로 그 비트만 0/1로 뽑아냅니다.",
+      en: {
+        title: "Check the k-th Bit",
+        description: `Given N and k, print 1 if the k-th bit (0-based) of N is set, else 0. e.g. 13(1101), k=0 → 1.`,
+        constraints: "0 ≤ N ≤ 10^18, 0 ≤ k ≤ 62",
+        hints: ["Shift n right by k.", "(n >> k) & 1.", "Or AND with mask (1LL << k)."],
+        solutionExplanation: "Shift right by k to bring the k-th bit to the bottom, then & 1.",
+      },
+    },
     // ─────────────────────────────────────────────────────────────────
     // 1. 짝 없는 원소 — 보통 (XOR)
     // ─────────────────────────────────────────────────────────────────

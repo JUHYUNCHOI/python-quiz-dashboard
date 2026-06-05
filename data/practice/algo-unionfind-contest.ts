@@ -11,6 +11,289 @@ export const unionFindContestCluster: PracticeCluster = {
     description: "Connectivity, Kruskal MST, group count",
   },
   problems: [
+    // ═══════════ 쉬움 입문 (on-ramp) ═══════════
+    {
+      id: "auf-e01",
+      cluster: "algo-unionfind-contest",
+      unlockAfter: "algo-unionfind",
+      difficulty: "쉬움",
+      title: "그룹의 개수",
+      description: `\`N\`개의 원소가 처음엔 각자 따로 있어요(1번~N번). 그다음 \`M\`개의 "합치기" 명령 \`a b\`가 주어집니다. 각 명령은 a가 속한 그룹과 b가 속한 그룹을 하나로 합쳐요.
+
+모든 명령을 처리한 뒤, 서로 다른 그룹이 **몇 개** 남는지 출력하세요. 유니온-파인드로 합치고, 마지막에 서로 다른 대표(루트)의 수를 세면 됩니다.`,
+      constraints: "1 ≤ N ≤ 100,000, 0 ≤ M ≤ 100,000, 1 ≤ a, b ≤ N",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int parent[100005];
+int find(int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); }
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) parent[i] = i;
+    // TODO: m개 합치기 후 서로 다른 루트 개수 출력
+    return 0;
+}`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    n, m = map(int, input().split())
+    parent = list(range(n + 1))
+    # TODO: find/union 후 서로 다른 루트 개수 출력
+
+main()`,
+      testCases: [
+        { stdin: "4 2\n1 2\n3 4\n", expectedOutput: "2" },
+        { stdin: "5 2\n1 2\n2 3\n", expectedOutput: "3" },
+        { stdin: "3 0\n", expectedOutput: "3" },
+        { stdin: "6 4\n1 2\n3 4\n5 6\n1 3\n", expectedOutput: "2" },
+      ],
+      hints: [
+        "parent[i]=i 로 초기화하면 처음엔 그룹이 N개.",
+        "find(x)는 경로 압축으로 루트를 찾고, unite는 두 루트를 잇는다.",
+        "마지막에 find(i)==i 인 원소(자기가 루트인 것)의 개수가 그룹 수.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int parent[100005];
+int find(int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); }
+void unite(int a, int b) { a = find(a); b = find(b); if (a != b) parent[a] = b; }
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) parent[i] = i;
+    for (int i = 0; i < m; i++) { int a, b; cin >> a >> b; unite(a, b); }
+    int cnt = 0;
+    for (int i = 1; i <= n; i++) if (find(i) == i) cnt++;
+    cout << cnt << "\\n";
+    return 0;
+}`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    n, m = map(int, input().split())
+    parent = list(range(n + 1))
+    def find(x):
+        root = x
+        while parent[root] != root:
+            root = parent[root]
+        while parent[x] != root:
+            parent[x], x = root, parent[x]
+        return root
+    for _ in range(m):
+        a, b = map(int, input().split())
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[ra] = rb
+    print(sum(1 for i in range(1, n + 1) if find(i) == i))
+
+main()`,
+      solutionExplanation: "처음엔 모두 자기 자신이 대표라 그룹이 N개. 합칠 때마다 두 루트를 잇고, 마지막에 find(i)==i 인 원소 수가 곧 그룹 수입니다.",
+      en: {
+        title: "Number of Groups",
+        description: `N elements start separate; M union commands \`a b\` merge groups. Print how many distinct groups remain (count distinct roots).`,
+        constraints: "1 ≤ N ≤ 100,000, 0 ≤ M ≤ 100,000",
+        hints: ["parent[i]=i → N groups initially.", "find with path compression; unite links roots.", "Count i where find(i)==i."],
+        solutionExplanation: "Link roots on each union; the count of self-roots is the number of groups.",
+      },
+    },
+    {
+      id: "auf-e02",
+      cluster: "algo-unionfind-contest",
+      unlockAfter: "algo-unionfind",
+      difficulty: "쉬움",
+      title: "가장 큰 그룹의 크기",
+      description: `\`N\`개의 원소와 \`M\`개의 "합치기" 명령 \`a b\`가 주어져요. 모든 명령을 처리한 뒤 **가장 큰 그룹**의 원소 개수를 출력하세요. 합칠 때 각 그룹의 크기를 같이 관리하면 됩니다.`,
+      constraints: "1 ≤ N ≤ 100,000, 0 ≤ M ≤ 100,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int parent[100005], sz[100005];
+int find(int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); }
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) { parent[i] = i; sz[i] = 1; }
+    // TODO: 합치며 크기 더하고, 루트 sz 중 최댓값 출력
+    return 0;
+}`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    n, m = map(int, input().split())
+    parent = list(range(n + 1))
+    size = [1] * (n + 1)
+    # TODO: 합치며 size 더하고 루트 size 중 최댓값 출력
+
+main()`,
+      testCases: [
+        { stdin: "4 2\n1 2\n3 4\n", expectedOutput: "2" },
+        { stdin: "5 3\n1 2\n2 3\n4 5\n", expectedOutput: "3" },
+        { stdin: "3 0\n", expectedOutput: "1" },
+        { stdin: "7 4\n1 2\n2 3\n3 4\n5 6\n", expectedOutput: "4" },
+      ],
+      hints: [
+        "parent[i]=i, sz[i]=1 로 초기화.",
+        "unite에서 한쪽을 다른 쪽에 붙이며 sz를 더한다.",
+        "루트의 sz만 정확하므로 find(i)==i 인 sz 중 최댓값을 출력.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int parent[100005], sz[100005];
+int find(int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); }
+void unite(int a, int b) { a = find(a); b = find(b); if (a != b) { parent[a] = b; sz[b] += sz[a]; } }
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) { parent[i] = i; sz[i] = 1; }
+    for (int i = 0; i < m; i++) { int a, b; cin >> a >> b; unite(a, b); }
+    int best = 0;
+    for (int i = 1; i <= n; i++) if (find(i) == i) best = max(best, sz[i]);
+    cout << best << "\\n";
+    return 0;
+}`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    n, m = map(int, input().split())
+    parent = list(range(n + 1))
+    size = [1] * (n + 1)
+    def find(x):
+        root = x
+        while parent[root] != root:
+            root = parent[root]
+        while parent[x] != root:
+            parent[x], x = root, parent[x]
+        return root
+    for _ in range(m):
+        a, b = map(int, input().split())
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[ra] = rb
+            size[rb] += size[ra]
+    best = 0
+    for i in range(1, n + 1):
+        if find(i) == i:
+            best = max(best, size[i])
+    print(best)
+
+main()`,
+      solutionExplanation: "sz 배열로 각 루트의 그룹 크기를 관리합니다. 합칠 때 sz를 더하고, 마지막에 루트들의 sz 중 최댓값이 가장 큰 그룹의 크기예요.",
+      en: {
+        title: "Size of the Largest Group",
+        description: `N elements, M union commands. Print the size of the largest group. Track group sizes during union.`,
+        constraints: "1 ≤ N ≤ 100,000, 0 ≤ M ≤ 100,000",
+        hints: ["parent[i]=i, sz[i]=1.", "Add sizes on union.", "Max sz among self-roots."],
+        solutionExplanation: "Maintain sizes per root; the max root size is the largest group.",
+      },
+    },
+    {
+      id: "auf-e03",
+      cluster: "algo-unionfind-contest",
+      unlockAfter: "algo-unionfind",
+      difficulty: "쉬움",
+      title: "줄어드는 그룹 수",
+      description: `\`N\`개의 원소가 처음엔 각자 따로 있어 그룹 수는 \`N\`개예요. \`M\`개의 "합치기" 명령 \`a b\`가 한 줄씩 들어옵니다. 명령을 하나 처리할 **때마다** 그 시점의 현재 그룹 개수를 한 줄에 출력하세요(총 M줄).
+
+이미 같은 그룹인 두 원소를 합치는 명령은 그룹 수를 바꾸지 않아요.`,
+      constraints: "1 ≤ N ≤ 100,000, 1 ≤ M ≤ 100,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int parent[100005];
+int find(int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); }
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) parent[i] = i;
+    int groups = n;
+    // TODO: 명령마다 루트 다르면 합치고 groups--, 매번 groups 출력
+    return 0;
+}`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    n, m = map(int, input().split())
+    parent = list(range(n + 1))
+    # TODO: 명령마다 합치고(루트 다를 때) 현재 groups 출력
+
+main()`,
+      testCases: [
+        { stdin: "4 2\n1 2\n3 4\n", expectedOutput: "3\n2" },
+        { stdin: "5 3\n1 2\n1 2\n3 4\n", expectedOutput: "4\n4\n3" },
+        { stdin: "3 2\n1 2\n2 3\n", expectedOutput: "2\n1" },
+        { stdin: "4 3\n1 2\n2 3\n3 4\n", expectedOutput: "3\n2\n1" },
+      ],
+      hints: [
+        "groups를 N으로 시작.",
+        "find(a), find(b)가 다를 때만 합치고 groups-1.",
+        "합쳤든 아니든 명령마다 현재 groups 출력(M줄).",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int parent[100005];
+int find(int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); }
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++) parent[i] = i;
+    int groups = n;
+    for (int i = 0; i < m; i++) {
+        int a, b; cin >> a >> b;
+        int ra = find(a), rb = find(b);
+        if (ra != rb) { parent[ra] = rb; groups--; }
+        cout << groups << "\\n";
+    }
+    return 0;
+}`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    n, m = map(int, input().split())
+    parent = list(range(n + 1))
+    def find(x):
+        root = x
+        while parent[root] != root:
+            root = parent[root]
+        while parent[x] != root:
+            parent[x], x = root, parent[x]
+        return root
+    groups = n
+    out = []
+    for _ in range(m):
+        a, b = map(int, input().split())
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[ra] = rb
+            groups -= 1
+        out.append(groups)
+    print('\\n'.join(map(str, out)))
+
+main()`,
+      solutionExplanation: "그룹 수는 N에서 시작해, 루트가 다른 두 원소를 합칠 때만 1씩 줄어요. 명령마다 현재 그룹 수를 출력하면 점점 줄어드는 모습이 보입니다.",
+      en: {
+        title: "Shrinking Group Count",
+        description: `N elements start separate (N groups). For each of M union commands, print the current group count after processing it (M lines). A merge of already-same group doesn't change the count.`,
+        constraints: "1 ≤ N ≤ 100,000, 1 ≤ M ≤ 100,000",
+        hints: ["Start groups at N.", "Only when roots differ: merge and groups-1.", "Print groups after each command."],
+        solutionExplanation: "Decrement the count only on a real merge; print after each command.",
+      },
+    },
     // ─────────────────────────────────────────────────────────────────
     // 1. 같은 그룹? — 보통 (BOJ 1717 paraphrased)
     // ─────────────────────────────────────────────────────────────────
