@@ -11,6 +11,229 @@ export const arrayContestCluster: PracticeCluster = {
     description: "Beyond basics — two-pointer, sliding window, subarray patterns",
   },
   problems: [
+    // ═════════════════════════════════════════════════════════════════
+    // 쉬움 입문 (on-ramp): 훑기 → 고정 윈도우 → 두 포인터
+    // ═════════════════════════════════════════════════════════════════
+    {
+      id: "aarr-e01",
+      cluster: "algo-array-contest",
+      unlockAfter: "algo-array",
+      difficulty: "쉬움",
+      title: "최댓값과 최솟값",
+      description: `N개의 정수가 주어진다. 그중 **가장 큰 값과 가장 작은 값**을 공백으로 구분해 출력하라.
+
+배열을 한 번 훑으면서 두 변수를 갱신하는 가장 기본 패턴이다. 이게 모든 배열 문제의 출발점.`,
+      constraints: "1 ≤ N ≤ 100,000, -10,000 ≤ 각 정수 ≤ 10,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // TODO: 첫 값으로 최대·최소를 초기화하고, 나머지를 훑으며 갱신하세요
+
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+a = list(map(int, input().split()))
+# TODO: 최댓값과 최솟값을 공백으로 출력`,
+      testCases: [
+        { stdin: "5\n3 1 4 1 5", expectedOutput: "5 1", label: "기본" },
+        { stdin: "1\n7", expectedOutput: "7 7", label: "원소 1개" },
+        { stdin: "3\n-1 -5 -3", expectedOutput: "-1 -5", label: "음수" },
+        { stdin: "4\n2 2 2 2", expectedOutput: "2 2", label: "전부 같음" },
+      ],
+      hints: [
+        "최댓값 mx, 최솟값 mn 을 첫 원소로 초기화.",
+        "나머지 원소마다 mx = max(mx, x), mn = min(mn, x).",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    int mx = 0, mn = 0;
+    for (int k = 0; k < n; k++) {
+        int x; cin >> x;
+        if (k == 0) { mx = mn = x; }
+        else { mx = max(mx, x); mn = min(mn, x); }
+    }
+    cout << mx << ' ' << mn << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+a = list(map(int, input().split()))
+print(max(a), min(a))`,
+      solutionExplanation: "배열을 한 번 훑으며 최댓값·최솟값 두 변수를 갱신합니다. 첫 원소로 초기화하는 걸 잊지 마세요.",
+      en: {
+        title: "Max and Min",
+        description: `Given N integers, print the **largest and smallest** value, separated by a space. One pass updating two variables — the starting point for all array problems.`,
+        constraints: "1 ≤ N ≤ 100,000, -10,000 ≤ each integer ≤ 10,000",
+        hints: ["Init mx, mn to the first element.", "For each other x: mx=max(mx,x), mn=min(mn,x)."],
+        solutionExplanation: "One pass updating max and min, initialized to the first element.",
+      },
+    },
+    {
+      id: "aarr-e02",
+      cluster: "algo-array-contest",
+      unlockAfter: "algo-array",
+      difficulty: "쉬움",
+      title: "연속 K개의 최대 합",
+      description: `N개의 정수와 K가 주어진다. **연속한 K개** 원소의 합 중 가장 큰 값을 출력하라.
+
+매번 K개를 다시 더하면 느리다. 창(window)을 한 칸 옮길 때 **빠지는 값을 빼고 들어오는 값을 더하면** O(N)에 끝난다 — 이게 슬라이딩 윈도우의 첫걸음.`,
+      constraints: "1 ≤ K ≤ N ≤ 100,000, -10,000 ≤ 각 정수 ≤ 10,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<long long> a(n);
+    for (auto& x : a) cin >> x;
+    // TODO: 처음 K개 합을 구한 뒤, 창을 옮기며 최댓값 갱신
+
+    return 0;
+}`,
+      pyInitialCode: `import sys
+d = sys.stdin.read().split()
+n, k = int(d[0]), int(d[1])
+a = list(map(int, d[2:2+n]))
+# TODO: 길이 K 창의 합 최댓값 출력`,
+      testCases: [
+        { stdin: "5 2\n1 2 3 4 5", expectedOutput: "9", label: "4+5" },
+        { stdin: "5 1\n1 2 3 4 5", expectedOutput: "5", label: "K=1" },
+        { stdin: "4 4\n1 2 3 4", expectedOutput: "10", label: "K=N" },
+        { stdin: "5 2\n-1 -2 -3 -4 -5", expectedOutput: "-3", label: "음수 — 덜 음수인 창" },
+      ],
+      hints: [
+        "먼저 처음 K개의 합 s 를 구해 best 로 둔다.",
+        "i = K..N-1 에서 s += a[i] - a[i-K] 로 창을 옮기고 best 갱신.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<long long> a(n);
+    for (auto& x : a) cin >> x;
+    long long s = 0;
+    for (int i = 0; i < k; i++) s += a[i];
+    long long best = s;
+    for (int i = k; i < n; i++) {
+        s += a[i] - a[i - k];
+        best = max(best, s);
+    }
+    cout << best << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+d = sys.stdin.read().split()
+n, k = int(d[0]), int(d[1])
+a = list(map(int, d[2:2+n]))
+s = sum(a[:k])
+best = s
+for i in range(k, n):
+    s += a[i] - a[i - k]
+    best = max(best, s)
+print(best)`,
+      solutionExplanation: "처음 K개 합을 구한 뒤, 창을 한 칸 옮길 때마다 새로 들어온 값을 더하고 빠진 값을 빼서 O(N)에 모든 창의 합을 봅니다.",
+      en: {
+        title: "Max Sum of K in a Row",
+        description: `Given N integers and K, print the largest sum of **K consecutive** elements. Don't re-add K every time — when the window slides, add the entering value and subtract the leaving one (O(N)). Your first sliding window.`,
+        constraints: "1 ≤ K ≤ N ≤ 100,000, -10,000 ≤ each integer ≤ 10,000",
+        hints: ["First sum the initial K elements as best.", "For i=K..N-1: s += a[i]-a[i-K], update best."],
+        solutionExplanation: "Sum the first K, then slide: add the new element, drop the old one — all windows in O(N).",
+      },
+    },
+    {
+      id: "aarr-e03",
+      cluster: "algo-array-contest",
+      unlockAfter: "algo-array",
+      difficulty: "쉬움",
+      title: "합이 X인 두 수 (정렬된 배열)",
+      description: `**오름차순으로 정렬된** N개의 정수와 목표값 X가 주어진다. 서로 다른 두 원소의 합이 X가 되는 쌍이 있으면 \`YES\`, 없으면 \`NO\` 를 출력하라.
+
+정렬돼 있으니 **양 끝에서 두 포인터**로 좁혀가면 된다: 합이 크면 오른쪽을 당기고, 작으면 왼쪽을 민다.`,
+      constraints: "2 ≤ N ≤ 100,000 (오름차순), -10,000 ≤ 각 정수 ≤ 10,000, |X| ≤ 20,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n; long long x;
+    cin >> n >> x;
+    vector<long long> a(n);
+    for (auto& v : a) cin >> v;
+    int l = 0, r = n - 1;
+    // TODO: 두 포인터로 합 == x 인 쌍이 있는지 찾기
+
+    return 0;
+}`,
+      pyInitialCode: `import sys
+d = sys.stdin.read().split()
+n, x = int(d[0]), int(d[1])
+a = list(map(int, d[2:2+n]))
+l, r = 0, n - 1
+# TODO: 두 포인터로 YES / NO 판정`,
+      testCases: [
+        { stdin: "5 9\n1 2 3 4 5", expectedOutput: "YES", label: "4+5=9" },
+        { stdin: "5 100\n1 2 3 4 5", expectedOutput: "NO", label: "불가능" },
+        { stdin: "3 4\n1 1 1", expectedOutput: "NO", label: "최대 합 2" },
+        { stdin: "4 2\n1 1 2 3", expectedOutput: "YES", label: "1+1=2" },
+        { stdin: "2 3\n1 2", expectedOutput: "YES", label: "두 원소" },
+      ],
+      hints: [
+        "l=0, r=n-1 에서 시작. a[l]+a[r] 를 본다.",
+        "합 == x 면 YES. 합 < x 면 l++, 합 > x 면 r--.",
+        "l < r 인 동안 반복, 못 찾으면 NO.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n; long long x;
+    cin >> n >> x;
+    vector<long long> a(n);
+    for (auto& v : a) cin >> v;
+    int l = 0, r = n - 1;
+    bool ok = false;
+    while (l < r) {
+        long long s = a[l] + a[r];
+        if (s == x) { ok = true; break; }
+        else if (s < x) l++;
+        else r--;
+    }
+    cout << (ok ? "YES" : "NO") << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+d = sys.stdin.read().split()
+n, x = int(d[0]), int(d[1])
+a = list(map(int, d[2:2+n]))
+l, r = 0, n - 1
+ok = False
+while l < r:
+    s = a[l] + a[r]
+    if s == x:
+        ok = True
+        break
+    elif s < x:
+        l += 1
+    else:
+        r -= 1
+print("YES" if ok else "NO")`,
+      solutionExplanation: "정렬된 배열에서 양 끝 두 포인터로 좁혀갑니다. 합이 목표보다 작으면 왼쪽을 키우고, 크면 오른쪽을 줄여 O(N)에 판정해요.",
+      en: {
+        title: "Pair Summing to X (sorted)",
+        description: `Given a **sorted** array of N integers and target X, print \`YES\` if two distinct elements sum to X, else \`NO\`. Use **two pointers** from both ends: if the sum is too big move right in, too small move left up.`,
+        constraints: "2 ≤ N ≤ 100,000 (ascending), -10,000 ≤ each ≤ 10,000, |X| ≤ 20,000",
+        hints: ["Start l=0, r=n-1; look at a[l]+a[r].", "==x → YES; <x → l++; >x → r--.", "Repeat while l<r, else NO."],
+        solutionExplanation: "Two pointers from both ends on the sorted array: shrink from the side that overshoots — O(N).",
+      },
+    },
+
     // ─────────────────────────────────────────────────────────────────
     // 1. 최대 연속 부분 배열 합 (Kadane) — 보통
     // ─────────────────────────────────────────────────────────────────

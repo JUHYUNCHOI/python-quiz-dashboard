@@ -11,6 +11,236 @@ export const dpContestCluster: PracticeCluster = {
     description: "1D, 2D DP, LIS, recurrence design",
   },
   problems: [
+    // ═════════════════════════════════════════════════════════════════
+    // 쉬움 입문 (on-ramp): 1·2·3 더하기(경우의 수) → 최소 동전 → 1로 만들기
+    // ═════════════════════════════════════════════════════════════════
+    {
+      id: "adp-e01",
+      cluster: "algo-dp-contest",
+      unlockAfter: "algo-dp",
+      difficulty: "쉬움",
+      title: "1, 2, 3 더하기",
+      description: `정수 N을 **1, 2, 3 의 합으로 나타내는 방법의 수**를 출력하라. 더하는 순서가 다르면 다른 방법으로 센다. 예: 4 = 1+1+1+1 = 1+1+2 = 1+2+1 = 2+1+1 = 2+2 = 1+3 = 3+1 → 7가지.
+
+DP의 기본: \`dp[i] = dp[i-1] + dp[i-2] + dp[i-3]\` (마지막에 1/2/3 중 무엇을 더했는지). 작은 답에서 큰 답을 쌓아 올린다.
+
+출처: BOJ 9095 paraphrased`,
+      constraints: "1 ≤ N ≤ 30",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<long long> dp(n + 1, 0);
+    dp[0] = 1;
+    // TODO: dp[i] = dp[i-1] + dp[i-2] + dp[i-3] (i-s >= 0 인 경우만)
+
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+dp = [0] * (n + 1)
+dp[0] = 1
+# TODO: dp[i] = dp[i-1]+dp[i-2]+dp[i-3] (인덱스 0 이상만)`,
+      testCases: [
+        { stdin: "4", expectedOutput: "7", label: "4 → 7가지" },
+        { stdin: "7", expectedOutput: "44", label: "7 → 44가지" },
+        { stdin: "1", expectedOutput: "1", label: "1가지" },
+        { stdin: "2", expectedOutput: "2", label: "2가지" },
+        { stdin: "3", expectedOutput: "4", label: "4가지" },
+      ],
+      hints: [
+        "dp[0] = 1 (아무것도 안 더하는 한 가지).",
+        "dp[i] = (i≥1? dp[i-1]) + (i≥2? dp[i-2]) + (i≥3? dp[i-3]).",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<long long> dp(n + 1, 0);
+    dp[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        for (int s = 1; s <= 3; s++) {
+            if (i - s >= 0) dp[i] += dp[i - s];
+        }
+    }
+    cout << dp[n] << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+dp = [0] * (n + 1)
+dp[0] = 1
+for i in range(1, n + 1):
+    for s in (1, 2, 3):
+        if i - s >= 0:
+            dp[i] += dp[i - s]
+print(dp[n])`,
+      solutionExplanation: "마지막에 더한 수가 1·2·3 중 무엇인지로 나누면, dp[i]=dp[i-1]+dp[i-2]+dp[i-3]. 작은 값부터 채워 올리는 게 DP의 기본 모양이에요.",
+      en: {
+        title: "1, 2, 3 Addition",
+        description: `Print the **number of ways** to write N as an ordered sum of 1, 2, 3. E.g. 4 has 7 ways. Basic DP: \`dp[i] = dp[i-1] + dp[i-2] + dp[i-3]\` (what you added last). Build big answers from small ones.`,
+        constraints: "1 ≤ N ≤ 30",
+        hints: ["dp[0]=1 (the empty sum).", "dp[i] = dp[i-1]+dp[i-2]+dp[i-3] for valid indices."],
+        solutionExplanation: "Split by the last added number (1/2/3): dp[i]=dp[i-1]+dp[i-2]+dp[i-3], filled bottom-up.",
+      },
+    },
+    {
+      id: "adp-e02",
+      cluster: "algo-dp-contest",
+      unlockAfter: "algo-dp",
+      difficulty: "쉬움",
+      title: "최소 동전 개수",
+      description: `N종류의 동전(금액)과 목표 금액 K가 주어진다. 각 동전은 **몇 개든** 쓸 수 있다. K를 만드는 **최소 동전 개수**를 출력하라. 만들 수 없으면 \`-1\`.
+
+(그리디로는 안 되는 동전도 있어서) DP로 푼다: \`dp[x] = min(dp[x - 동전]) + 1\`. 0원부터 K원까지 차례로 최소 개수를 채워 올린다.`,
+      constraints: "1 ≤ N ≤ 100, 1 ≤ K ≤ 10,000, 1 ≤ 동전 금액 ≤ 10,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> coin(n);
+    for (auto& c : coin) cin >> c;
+    const int INF = 1e9;
+    vector<int> dp(k + 1, INF);
+    dp[0] = 0;
+    // TODO: 각 금액 x 에 대해 dp[x] = min(dp[x - coin]) + 1
+
+    return 0;
+}`,
+      pyInitialCode: `import sys
+d = sys.stdin.read().split()
+n, k = int(d[0]), int(d[1])
+coin = list(map(int, d[2:2+n]))
+INF = float('inf')
+dp = [0] + [INF] * k
+# TODO: dp[x] = min(dp[x - c]) + 1, 못 만들면 -1`,
+      testCases: [
+        { stdin: "3 11\n1 2 5", expectedOutput: "3", label: "5+5+1" },
+        { stdin: "2 6\n3 4", expectedOutput: "2", label: "3+3" },
+        { stdin: "2 7\n2 4", expectedOutput: "-1", label: "불가능" },
+        { stdin: "1 7\n1", expectedOutput: "7", label: "1원만" },
+      ],
+      hints: [
+        "dp[0] = 0, 나머지는 무한대(INF)로 시작.",
+        "각 동전 c 에 대해 x = c..K 를 돌며 dp[x] = min(dp[x], dp[x-c]+1).",
+        "끝에 dp[K] 가 여전히 INF 면 -1.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> coin(n);
+    for (auto& c : coin) cin >> c;
+    const int INF = 1e9;
+    vector<int> dp(k + 1, INF);
+    dp[0] = 0;
+    for (int c : coin) {
+        for (int x = c; x <= k; x++) {
+            if (dp[x - c] + 1 < dp[x]) dp[x] = dp[x - c] + 1;
+        }
+    }
+    cout << (dp[k] == INF ? -1 : dp[k]) << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+d = sys.stdin.read().split()
+n, k = int(d[0]), int(d[1])
+coin = list(map(int, d[2:2+n]))
+INF = float('inf')
+dp = [0] + [INF] * k
+for c in coin:
+    for x in range(c, k + 1):
+        if dp[x - c] + 1 < dp[x]:
+            dp[x] = dp[x - c] + 1
+print(dp[k] if dp[k] != INF else -1)`,
+      solutionExplanation: "0원은 0개. 각 금액 x는 '어떤 동전 c를 마지막에 썼다'고 보면 dp[x]=dp[x-c]+1. 모든 동전·금액을 돌며 최소를 채우고, 끝까지 INF면 못 만드는 것(-1)이에요.",
+      en: {
+        title: "Minimum Number of Coins",
+        description: `Given N coin values and target K (each coin usable any number of times), print the **minimum coins** to make K, or \`-1\` if impossible. Greedy can fail, so use DP: \`dp[x] = min(dp[x - coin]) + 1\`, filled from 0 to K.`,
+        constraints: "1 ≤ N ≤ 100, 1 ≤ K ≤ 10,000, 1 ≤ coin ≤ 10,000",
+        hints: ["dp[0]=0, rest = INF.", "For each coin c, x=c..K: dp[x]=min(dp[x], dp[x-c]+1).", "If dp[K] stays INF → -1."],
+        solutionExplanation: "dp[x]=dp[x-c]+1 over all coins; fill 0..K and report -1 if K stays unreachable.",
+      },
+    },
+    {
+      id: "adp-e03",
+      cluster: "algo-dp-contest",
+      unlockAfter: "algo-dp",
+      difficulty: "쉬움",
+      title: "1로 만들기",
+      description: `정수 N에 다음 세 연산을 쓸 수 있다: ①3으로 나누기(3의 배수일 때) ②2로 나누기(2의 배수일 때) ③1 빼기. N을 **1로 만드는 최소 연산 횟수**를 출력하라.
+
+DP: \`dp[i]\` = i를 1로 만드는 최소 횟수. \`dp[i] = min(dp[i-1], dp[i/2], dp[i/3]) + 1\` (가능한 것만).
+
+출처: BOJ 1463 paraphrased`,
+      constraints: "1 ≤ N ≤ 1,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> dp(n + 1, 0);
+    // TODO: dp[i] = min(dp[i-1], (i%2==0? dp[i/2]), (i%3==0? dp[i/3])) + 1
+
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+dp = [0] * (n + 1)
+# TODO: dp[i] = min(dp[i-1], dp[i//2] if i%2==0, dp[i//3] if i%3==0) + 1`,
+      testCases: [
+        { stdin: "1", expectedOutput: "0", label: "이미 1" },
+        { stdin: "3", expectedOutput: "1", label: "3→1" },
+        { stdin: "10", expectedOutput: "3", label: "10→9→3→1" },
+        { stdin: "2", expectedOutput: "1", label: "2→1" },
+        { stdin: "6", expectedOutput: "2", label: "6→2→1 또는 6→3→1" },
+      ],
+      hints: [
+        "dp[1] = 0.",
+        "dp[i] 는 우선 dp[i-1]+1. 2의 배수면 dp[i/2]+1 과 비교, 3의 배수면 dp[i/3]+1 과 비교.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> dp(n + 1, 0);
+    for (int i = 2; i <= n; i++) {
+        int best = dp[i - 1] + 1;
+        if (i % 2 == 0) best = min(best, dp[i / 2] + 1);
+        if (i % 3 == 0) best = min(best, dp[i / 3] + 1);
+        dp[i] = best;
+    }
+    cout << dp[n] << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+dp = [0] * (n + 1)
+for i in range(2, n + 1):
+    best = dp[i - 1] + 1
+    if i % 2 == 0:
+        best = min(best, dp[i // 2] + 1)
+    if i % 3 == 0:
+        best = min(best, dp[i // 3] + 1)
+    dp[i] = best
+print(dp[n])`,
+      solutionExplanation: "i를 1로 만드는 최소 횟수 dp[i]를 작은 수부터 채웁니다. 항상 -1(dp[i-1])은 가능하고, 2/3의 배수면 나누기 경우와 비교해 더 적은 쪽을 택해요.",
+      en: {
+        title: "Make It 1",
+        description: `Given N, with operations: divide by 3 (if divisible), divide by 2 (if divisible), subtract 1. Print the **minimum operations to reach 1**. DP: \`dp[i] = min(dp[i-1], dp[i/2], dp[i/3]) + 1\` (valid moves only).`,
+        constraints: "1 ≤ N ≤ 1,000,000",
+        hints: ["dp[1]=0.", "dp[i]: start dp[i-1]+1; if divisible by 2/3 compare dp[i/2]+1, dp[i/3]+1."],
+        solutionExplanation: "Fill dp[i] bottom-up: -1 always works; if divisible by 2 or 3 compare those moves and take the min.",
+      },
+    },
+
     // ─────────────────────────────────────────────────────────────────
     // 1. 계단 오르기 N 가지 — 보통
     // ─────────────────────────────────────────────────────────────────

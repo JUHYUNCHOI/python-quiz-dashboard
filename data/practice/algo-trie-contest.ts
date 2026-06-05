@@ -11,6 +11,215 @@ export const trieContestCluster: PracticeCluster = {
     description: "String-specialized tree — insert/search/prefix/autocomplete/wildcard/XOR",
   },
   problems: [
+    // ═══════════ 쉬움 입문 (on-ramp) ═══════════
+    {
+      id: "atrie-e01",
+      cluster: "algo-trie-contest",
+      unlockAfter: "algo-trie",
+      difficulty: "쉬움",
+      title: "접두사로 시작하는 단어 수",
+      description: `트라이(접두사 트리)의 대표 쓰임은 "이 접두사로 시작하는 단어가 몇 개?"예요. 이번엔 트라이를 직접 안 만들고 접두사 개념만 익혀요.
+
+\`N\`개의 단어, 그다음 \`M\`개의 질의 접두사가 주어집니다. 각 접두사 \`P\`로 시작하는 단어가 몇 개인지 한 줄씩 출력하세요.
+
+예: 단어 apple, apply, banana / 접두사 app → 2.`,
+      constraints: "1 ≤ N, M ≤ 1000, 단어·접두사 길이 ≤ 20 (영소문자)",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // n개 단어 입력, m개 접두사마다 시작 단어 수 출력
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+# n개 단어, m개 접두사마다 시작 단어 수 출력`,
+      testCases: [
+        { stdin: "3\napple\napply\nbanana\n1\napp\n", expectedOutput: "2" },
+        { stdin: "3\napple\napply\nbanana\n2\nba\nz\n", expectedOutput: "1\n0" },
+        { stdin: "4\ncat\ncar\ncard\ndog\n2\nca\ncar\n", expectedOutput: "3\n2" },
+        { stdin: "2\nhello\nhi\n1\nh\n", expectedOutput: "2" },
+      ],
+      hints: [
+        "단어를 리스트에 저장.",
+        "각 접두사 P마다 모든 단어를 확인.",
+        "C++ word.compare(0, P.size(), P)==0, 파이썬 word.startswith(P).",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<string> words(n);
+    for (int i = 0; i < n; i++) cin >> words[i];
+    int m;
+    cin >> m;
+    while (m--) {
+        string p;
+        cin >> p;
+        int count = 0;
+        for (const string& w : words)
+            if (w.size() >= p.size() && w.compare(0, p.size(), p) == 0) count++;
+        cout << count << "\\n";
+    }
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+words = [input() for _ in range(n)]
+m = int(input())
+for _ in range(m):
+    p = input()
+    print(sum(1 for w in words if w.startswith(p)))`,
+      solutionExplanation: "단어·질의 수가 작아서 질의마다 모든 단어를 검사해도 충분합니다. word.startswith(P)로 세요. 단어가 아주 많아지면 그때 진짜 트라이가 필요해요.",
+      en: {
+        title: "Count Words with a Given Prefix",
+        description: `Given N words and M query prefixes, print how many words start with each prefix.`,
+        constraints: "1 ≤ N, M ≤ 1000, length ≤ 20",
+        hints: ["Store words in a list.", "Check every word per query.", "startswith / compare."],
+        solutionExplanation: "Small sizes allow checking every word per query with startsWith.",
+      },
+    },
+    {
+      id: "atrie-e02",
+      cluster: "algo-trie-contest",
+      unlockAfter: "algo-trie",
+      difficulty: "쉬움",
+      title: "가장 긴 공통 접두사",
+      description: `여러 단어를 트라이에 넣으면 같은 글자로 시작하는 동안 하나의 줄기를 이뤄요. 그 줄기가 "가장 긴 공통 접두사"예요.
+
+\`N\`개의 문자열이 주어질 때 모두가 공유하는 가장 긴 접두사를 출력하세요. 없으면 빈 줄.
+
+예: flower, flow, flight → \`fl\`.`,
+      constraints: "1 ≤ N ≤ 1000, 각 문자열 길이 ≤ 100 (영소문자)",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // n개 문자열의 공통 접두사 출력
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+# n개 문자열의 공통 접두사 출력`,
+      testCases: [
+        { stdin: "3\nflower\nflow\nflight\n", expectedOutput: "fl" },
+        { stdin: "3\ndog\ncat\nbird\n", expectedOutput: "" },
+        { stdin: "2\ninterview\ninternet\n", expectedOutput: "inter" },
+        { stdin: "1\nhello\n", expectedOutput: "hello" },
+        { stdin: "3\nabc\nabc\nabc\n", expectedOutput: "abc" },
+      ],
+      hints: [
+        "첫 문자열을 기준으로 글자 위치를 0부터 본다.",
+        "모든 문자열의 그 위치 글자가 같은 동안만 접두사에 추가.",
+        "어느 하나가 짧거나 글자가 다르면 멈춘다.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<string> s(n);
+    for (int i = 0; i < n; i++) cin >> s[i];
+    string prefix = "";
+    for (int pos = 0; pos < (int)s[0].size(); pos++) {
+        char c = s[0][pos];
+        bool ok = true;
+        for (int i = 1; i < n; i++) {
+            if (pos >= (int)s[i].size() || s[i][pos] != c) { ok = false; break; }
+        }
+        if (!ok) break;
+        prefix += c;
+    }
+    cout << prefix << "\\n";
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+s = [input() for _ in range(n)]
+prefix = ""
+for pos in range(len(s[0])):
+    c = s[0][pos]
+    if all(pos < len(w) and w[pos] == c for w in s):
+        prefix += c
+    else:
+        break
+print(prefix)`,
+      solutionExplanation: "첫 문자열 기준으로 위치별로 모든 문자열이 같은 글자인지 보며, 달라지거나 짧아지는 순간 멈춥니다. 그때까지 모은 글자가 공통 접두사예요.",
+      en: {
+        title: "Longest Common Prefix",
+        description: `Print the longest prefix shared by all N strings (empty line if none). e.g. flower, flow, flight → fl.`,
+        constraints: "1 ≤ N ≤ 1000, length ≤ 100",
+        hints: ["Use the first string as reference.", "Add while every string matches at that position.", "Stop on mismatch or a shorter string."],
+        solutionExplanation: "Compare position by position against the first string; stop at the first mismatch.",
+      },
+    },
+    {
+      id: "atrie-e03",
+      cluster: "algo-trie-contest",
+      unlockAfter: "algo-trie",
+      difficulty: "쉬움",
+      title: "사전에 있는 단어인가",
+      description: `트라이의 또 다른 기본 기능은 "이 단어가 등록돼 있나?"를 빠르게 확인하는 거예요. 이번엔 트라이 없이 집합(set)으로 충분해요.
+
+\`N\`개의 단어를 등록한 뒤, \`M\`개의 질의 단어가 등록돼 있으면 \`1\`, 없으면 \`0\`을 한 줄씩 출력하세요.`,
+      constraints: "1 ≤ N, M ≤ 1000, 단어 길이 ≤ 20 (영소문자)",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // n개 등록, m개 질의 1/0 출력
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+# n개 등록(set), m개 질의 1/0 출력`,
+      testCases: [
+        { stdin: "3\napple\nbanana\ncherry\n2\napple\ngrape\n", expectedOutput: "1\n0" },
+        { stdin: "2\ncat\ndog\n3\ncat\ndog\ncow\n", expectedOutput: "1\n1\n0" },
+        { stdin: "1\nhello\n2\nhell\nhello\n", expectedOutput: "0\n1" },
+        { stdin: "3\nab\nabc\nabcd\n2\nabc\nabcde\n", expectedOutput: "1\n0" },
+      ],
+      hints: [
+        "등록 단어를 set에 넣기.",
+        "질의 단어가 set에 있으면 1.",
+        "부분 일치가 아니라 전체가 정확히 같아야 함('hell' ≠ 'hello').",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    set<string> dict;
+    for (int i = 0; i < n; i++) { string w; cin >> w; dict.insert(w); }
+    int m;
+    cin >> m;
+    while (m--) {
+        string q;
+        cin >> q;
+        cout << (dict.count(q) ? 1 : 0) << "\\n";
+    }
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+dict_words = set(input() for _ in range(n))
+m = int(input())
+for _ in range(m):
+    q = input()
+    print(1 if q in dict_words else 0)`,
+      solutionExplanation: "등록 단어를 집합에 넣으면 존재 확인이 빠릅니다. 단어 전체가 정확히 일치해야 1. 트라이도 같은 일을 하되 접두사 정보까지 가지에 담아요.",
+      en: {
+        title: "Is the Word in the Dictionary?",
+        description: `Register N words, then for M queries print 1 if registered, else 0.`,
+        constraints: "1 ≤ N, M ≤ 1000, length ≤ 20",
+        hints: ["Put words in a set.", "Check membership.", "Whole word must match exactly."],
+        solutionExplanation: "A set gives fast exact-membership checks.",
+      },
+    },
     // ─────────────────────────────────────────────────────────────────
     // 1. 트라이 기본 — 보통
     // ─────────────────────────────────────────────────────────────────

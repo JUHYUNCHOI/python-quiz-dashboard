@@ -11,6 +11,194 @@ export const sortingContestCluster: PracticeCluster = {
     description: "BOJ Silver / LeetCode Medium — beyond one-line sort()",
   },
   problems: [
+    // ═════════════════════════════════════════════════════════════════
+    // 쉬움 입문 (on-ramp): 오름차순 → 내림차순 → 커스텀(안정) 정렬
+    // ═════════════════════════════════════════════════════════════════
+    {
+      id: "asort-e01",
+      cluster: "algo-sorting-contest",
+      unlockAfter: "algo-sorting",
+      difficulty: "쉬움",
+      title: "오름차순 정렬",
+      description: `N개의 정수를 **오름차순(작은 것부터)** 으로 정렬해 공백으로 구분해 출력하라.
+
+정렬은 직접 구현하지 말고 언어가 주는 정렬 함수(\`sort\`)를 쓰면 된다. 정렬 문제의 기본기.`,
+      constraints: "1 ≤ N ≤ 100,000, -1,000,000 ≤ 각 정수 ≤ 1,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto& x : a) cin >> x;
+    // TODO: 오름차순 정렬 후 공백으로 출력
+
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+a = list(map(int, input().split()))
+# TODO: 오름차순 정렬해서 공백으로 출력`,
+      testCases: [
+        { stdin: "5\n5 3 1 4 2", expectedOutput: "1 2 3 4 5", label: "기본" },
+        { stdin: "3\n3 3 1", expectedOutput: "1 3 3", label: "중복" },
+        { stdin: "1\n7", expectedOutput: "7", label: "원소 1개" },
+        { stdin: "4\n-1 -3 2 0", expectedOutput: "-3 -1 0 2", label: "음수" },
+      ],
+      hints: ["C++: sort(a.begin(), a.end()).", "Python: sorted(a) 또는 a.sort()."],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto& x : a) cin >> x;
+    sort(a.begin(), a.end());
+    for (int i = 0; i < n; i++) {
+        cout << a[i];
+        if (i + 1 < n) cout << ' ';
+    }
+    cout << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+a = list(map(int, input().split()))
+print(*sorted(a))`,
+      solutionExplanation: "언어 내장 정렬로 오름차순 정렬합니다. 직접 버블/선택 정렬을 짤 필요 없어요.",
+      en: {
+        title: "Sort Ascending",
+        description: `Sort N integers in **ascending order** and print them space-separated. Use the built-in sort — don't hand-roll it.`,
+        constraints: "1 ≤ N ≤ 100,000, -1,000,000 ≤ each ≤ 1,000,000",
+        hints: ["C++: sort(a.begin(), a.end()).", "Python: sorted(a)."],
+        solutionExplanation: "Use the language's built-in sort for ascending order.",
+      },
+    },
+    {
+      id: "asort-e02",
+      cluster: "algo-sorting-contest",
+      unlockAfter: "algo-sorting",
+      difficulty: "쉬움",
+      title: "내림차순 정렬",
+      description: `N개의 정수를 **내림차순(큰 것부터)** 으로 정렬해 출력하라.
+
+오름차순에서 정렬 기준만 뒤집으면 된다 — 비교 방향을 바꾸는 첫 연습.`,
+      constraints: "1 ≤ N ≤ 100,000, -1,000,000 ≤ 각 정수 ≤ 1,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto& x : a) cin >> x;
+    // TODO: 내림차순 정렬 후 공백으로 출력
+
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+a = list(map(int, input().split()))
+# TODO: 내림차순 정렬해서 공백으로 출력`,
+      testCases: [
+        { stdin: "5\n5 3 1 4 2", expectedOutput: "5 4 3 2 1", label: "기본" },
+        { stdin: "3\n1 1 2", expectedOutput: "2 1 1", label: "중복" },
+        { stdin: "4\n-1 -3 2 0", expectedOutput: "2 0 -1 -3", label: "음수" },
+      ],
+      hints: ["C++: sort(a.begin(), a.end(), greater<int>()).", "Python: sorted(a, reverse=True)."],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto& x : a) cin >> x;
+    sort(a.begin(), a.end(), greater<int>());
+    for (int i = 0; i < n; i++) {
+        cout << a[i];
+        if (i + 1 < n) cout << ' ';
+    }
+    cout << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+a = list(map(int, input().split()))
+print(*sorted(a, reverse=True))`,
+      solutionExplanation: "정렬 기준을 내림차순으로 바꿉니다. C++은 greater, Python은 reverse=True.",
+      en: {
+        title: "Sort Descending",
+        description: `Sort N integers in **descending order** and print them. Same as ascending, just flip the comparison — your first custom order.`,
+        constraints: "1 ≤ N ≤ 100,000, -1,000,000 ≤ each ≤ 1,000,000",
+        hints: ["C++: sort(..., greater<int>()).", "Python: sorted(a, reverse=True)."],
+        solutionExplanation: "Flip the sort order: greater in C++, reverse=True in Python.",
+      },
+    },
+    {
+      id: "asort-e03",
+      cluster: "algo-sorting-contest",
+      unlockAfter: "algo-sorting",
+      difficulty: "쉬움",
+      title: "나이순 정렬 (같으면 가입 순)",
+      description: `N명의 회원이 \`나이 이름\` 형식으로 주어진다. **나이가 적은 순**으로 정렬하되, **나이가 같으면 먼저 입력된 순서(가입 순)** 를 유지해 출력하라.
+
+이게 "커스텀 정렬 + 안정 정렬"의 첫걸음이다 — 정렬 기준을 나이 하나로만 주고, 동점은 원래 순서가 보존되게 한다.
+
+출처: BOJ 10814 paraphrased`,
+      constraints: "1 ≤ N ≤ 100,000, 1 ≤ 나이 ≤ 200, 이름은 알파벳 문자열",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<int, string>> v(n);
+    for (auto& p : v) cin >> p.first >> p.second;
+    // TODO: 나이 기준 안정 정렬(stable_sort) 후 "나이 이름" 줄마다 출력
+
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+v = [input().split() for _ in range(n)]
+v = [(int(age), name) for age, name in v]
+# TODO: 나이 기준으로 정렬(같으면 입력 순 유지) 후 출력`,
+      testCases: [
+        { stdin: "3\n21 Junkyu\n21 Dohyun\n20 Sunyoung", expectedOutput: "20 Sunyoung\n21 Junkyu\n21 Dohyun", label: "동점 입력순 유지" },
+        { stdin: "2\n30 Kim\n20 Lee", expectedOutput: "20 Lee\n30 Kim", label: "나이순" },
+        { stdin: "1\n25 Park", expectedOutput: "25 Park", label: "1명" },
+      ],
+      hints: [
+        "정렬 기준은 '나이'만. 이름은 비교에 넣지 마세요.",
+        "C++ stable_sort / Python list.sort 는 동점일 때 원래 순서를 보존(안정 정렬)해요.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<int, string>> v(n);
+    for (auto& p : v) cin >> p.first >> p.second;
+    stable_sort(v.begin(), v.end(), [](const auto& a, const auto& b) {
+        return a.first < b.first;
+    });
+    for (auto& p : v) cout << p.first << ' ' << p.second << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+v = [input().split() for _ in range(n)]
+v = [(int(age), name) for age, name in v]
+v.sort(key=lambda t: t[0])
+print('\\n'.join(f"{age} {name}" for age, name in v))`,
+      solutionExplanation: "정렬 기준을 나이 하나로만 주고, 안정 정렬(stable_sort / Python sort)을 쓰면 같은 나이는 입력 순서가 그대로 유지됩니다.",
+      en: {
+        title: "Sort by Age (ties keep input order)",
+        description: `N members given as \`age name\`. Sort by **age ascending**, and for equal ages keep the **original input order** (join order). Your first taste of stable custom sort: compare by age only, ties preserved.`,
+        constraints: "1 ≤ N ≤ 100,000, 1 ≤ age ≤ 200, names are letters",
+        hints: ["Sort key = age only; don't compare names.", "C++ stable_sort / Python sort preserve original order on ties."],
+        solutionExplanation: "Sort with age as the only key using a stable sort, so equal ages keep their input order.",
+      },
+    },
+
     // ─────────────────────────────────────────────────────────────────
     // 1. K번째 작은 수 — 보통
     // ─────────────────────────────────────────────────────────────────

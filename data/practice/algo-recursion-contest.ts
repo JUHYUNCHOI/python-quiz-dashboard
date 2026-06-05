@@ -11,6 +11,224 @@ export const recursionContestCluster: PracticeCluster = {
     description: "Base + recurse — divide&conquer, backtracking, memoization",
   },
   problems: [
+    // ═════════════════════════════════════════════════════════════════
+    // 쉬움 입문 (on-ramp): 1..N 합(재귀) → 피보나치(재귀) → 최대공약수(유클리드)
+    // ═════════════════════════════════════════════════════════════════
+    {
+      id: "arec-e01",
+      cluster: "algo-recursion-contest",
+      unlockAfter: "algo-recursion",
+      difficulty: "쉬움",
+      title: "1부터 N까지의 합 (재귀)",
+      description: `자연수 N이 주어진다. **1 + 2 + … + N** 을 출력하라.
+
+재귀의 기본 모양을 익히는 문제: \`sum(N) = N + sum(N-1)\`, 그리고 \`sum(0) = 0\` (멈추는 조건). 재귀는 "더 작은 문제로 미루고, 바닥에서 멈춘다"는 구조다.`,
+      constraints: "1 ≤ N ≤ 1000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+long long sumTo(int k) {
+    // TODO: k == 0 이면 0, 아니면 k + sumTo(k-1)
+    return 0;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    cout << sumTo(n) << '\\n';
+    return 0;
+}`,
+      pyInitialCode: `import sys
+sys.setrecursionlimit(3000)
+n = int(input())
+
+def sum_to(k):
+    # TODO: k == 0 이면 0, 아니면 k + sum_to(k-1)
+    return 0
+
+print(sum_to(n))`,
+      testCases: [
+        { stdin: "10", expectedOutput: "55", label: "1..10" },
+        { stdin: "1", expectedOutput: "1", label: "N=1" },
+        { stdin: "100", expectedOutput: "5050", label: "1..100" },
+      ],
+      hints: [
+        "멈추는 조건(base case): sum(0) = 0.",
+        "재귀 단계: sum(k) = k + sum(k-1).",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+long long sumTo(int k) {
+    if (k == 0) return 0;
+    return k + sumTo(k - 1);
+}
+
+int main() {
+    int n;
+    cin >> n;
+    cout << sumTo(n) << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+sys.setrecursionlimit(3000)
+n = int(input())
+
+def sum_to(k):
+    if k == 0:
+        return 0
+    return k + sum_to(k - 1)
+
+print(sum_to(n))`,
+      solutionExplanation: "재귀의 두 부분: 멈추는 조건 sum(0)=0, 그리고 자기 호출 sum(k)=k+sum(k-1). 큰 문제를 한 단계 작은 문제로 미루다 바닥에서 멈춰요.",
+      en: {
+        title: "Sum 1..N (recursion)",
+        description: `Given N, print **1 + 2 + … + N**. Learn the basic recursion shape: \`sum(N) = N + sum(N-1)\`, with \`sum(0) = 0\` as the stopping case. Recursion = defer to a smaller problem, stop at the base.`,
+        constraints: "1 ≤ N ≤ 1000",
+        hints: ["Base case: sum(0)=0.", "Recursive step: sum(k)=k+sum(k-1)."],
+        solutionExplanation: "Two parts: base case sum(0)=0 and the self-call sum(k)=k+sum(k-1).",
+      },
+    },
+    {
+      id: "arec-e02",
+      cluster: "algo-recursion-contest",
+      unlockAfter: "algo-recursion",
+      difficulty: "쉬움",
+      title: "피보나치 수 (재귀)",
+      description: `N이 주어진다. N번째 피보나치 수를 출력하라. 단, \`F(0) = 0\`, \`F(1) = 1\`, \`F(k) = F(k-1) + F(k-2)\`.
+
+자기 자신을 **두 번** 부르는 재귀를 연습한다. (N이 작으니 그대로 재귀해도 된다.)`,
+      constraints: "0 ≤ N ≤ 40",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+long long fib(int k) {
+    // TODO: k < 2 면 k, 아니면 fib(k-1) + fib(k-2)
+    return 0;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    cout << fib(n) << '\\n';
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+
+def fib(k):
+    # TODO: k < 2 면 k, 아니면 fib(k-1) + fib(k-2)
+    return 0
+
+print(fib(n))`,
+      testCases: [
+        { stdin: "10", expectedOutput: "55", label: "F(10)" },
+        { stdin: "0", expectedOutput: "0", label: "F(0)" },
+        { stdin: "1", expectedOutput: "1", label: "F(1)" },
+        { stdin: "2", expectedOutput: "1", label: "F(2)" },
+        { stdin: "15", expectedOutput: "610", label: "F(15)" },
+      ],
+      hints: ["base case 두 개: F(0)=0, F(1)=1.", "그 외: F(k)=F(k-1)+F(k-2)."],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+long long fib(int k) {
+    if (k < 2) return k;
+    return fib(k - 1) + fib(k - 2);
+}
+
+int main() {
+    int n;
+    cin >> n;
+    cout << fib(n) << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+
+def fib(k):
+    if k < 2:
+        return k
+    return fib(k - 1) + fib(k - 2)
+
+print(fib(n))`,
+      solutionExplanation: "피보나치는 자기를 두 번 부르는 재귀입니다. base case(0, 1)에서 멈추고, 나머지는 앞 두 항의 합으로 정의돼요.",
+      en: {
+        title: "Fibonacci (recursion)",
+        description: `Given N, print the N-th Fibonacci number: \`F(0)=0, F(1)=1, F(k)=F(k-1)+F(k-2)\`. Practice recursion that calls itself **twice**. (N is small, so plain recursion is fine.)`,
+        constraints: "0 ≤ N ≤ 40",
+        hints: ["Two base cases: F(0)=0, F(1)=1.", "Else F(k)=F(k-1)+F(k-2)."],
+        solutionExplanation: "Fibonacci calls itself twice; stop at base cases 0 and 1, else sum the previous two.",
+      },
+    },
+    {
+      id: "arec-e03",
+      cluster: "algo-recursion-contest",
+      unlockAfter: "algo-recursion",
+      difficulty: "쉬움",
+      title: "최대공약수 (유클리드 재귀)",
+      description: `두 자연수 a, b가 주어진다. **최대공약수(GCD)** 를 출력하라.
+
+유클리드 호제법은 아름다운 재귀다: \`gcd(a, b) = gcd(b, a % b)\`, 그리고 \`b == 0\` 이면 답은 a. 큰 문제를 나머지로 계속 줄여 바닥에서 답이 나온다.`,
+      constraints: "1 ≤ a, b ≤ 1,000,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+long long gcd2(long long a, long long b) {
+    // TODO: b == 0 이면 a, 아니면 gcd2(b, a % b)
+    return 0;
+}
+
+int main() {
+    long long a, b;
+    cin >> a >> b;
+    cout << gcd2(a, b) << '\\n';
+    return 0;
+}`,
+      pyInitialCode: `a, b = map(int, input().split())
+
+def gcd2(a, b):
+    # TODO: b == 0 이면 a, 아니면 gcd2(b, a % b)
+    return 0
+
+print(gcd2(a, b))`,
+      testCases: [
+        { stdin: "12 18", expectedOutput: "6", label: "12,18" },
+        { stdin: "5 7", expectedOutput: "1", label: "서로소" },
+        { stdin: "100 10", expectedOutput: "10", label: "배수" },
+        { stdin: "1 1", expectedOutput: "1", label: "둘 다 1" },
+      ],
+      hints: ["멈추는 조건: b==0 이면 gcd는 a.", "재귀: gcd(a,b)=gcd(b, a%b)."],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+long long gcd2(long long a, long long b) {
+    if (b == 0) return a;
+    return gcd2(b, a % b);
+}
+
+int main() {
+    long long a, b;
+    cin >> a >> b;
+    cout << gcd2(a, b) << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `a, b = map(int, input().split())
+
+def gcd2(a, b):
+    if b == 0:
+        return a
+    return gcd2(b, a % b)
+
+print(gcd2(a, b))`,
+      solutionExplanation: "유클리드 호제법: gcd(a,b)=gcd(b, a%b). b가 0이 되면 그때의 a가 최대공약수입니다. 나머지로 계속 줄이는 재귀예요.",
+      en: {
+        title: "GCD (Euclid, recursion)",
+        description: `Given a, b, print their **greatest common divisor**. Euclid's algorithm is elegant recursion: \`gcd(a,b) = gcd(b, a%b)\`, with answer a when \`b == 0\`. Keep shrinking by remainder until the base.`,
+        constraints: "1 ≤ a, b ≤ 1e9",
+        hints: ["Base case: if b==0, gcd is a.", "Recurse: gcd(a,b)=gcd(b, a%b)."],
+        solutionExplanation: "Euclid: gcd(a,b)=gcd(b,a%b); when b hits 0 the current a is the GCD.",
+      },
+    },
+
     // ─────────────────────────────────────────────────────────────────
     // 1. 팩토리얼 — 보통
     // ─────────────────────────────────────────────────────────────────

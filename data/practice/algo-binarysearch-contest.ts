@@ -11,6 +11,240 @@ export const binarySearchContestCluster: PracticeCluster = {
     description: "Sorted search, lower/upper bound, parametric",
   },
   problems: [
+    // ═════════════════════════════════════════════════════════════════
+    // 쉬움 입문 (on-ramp): x 이하 개수 → 정수 제곱근(결정 문제) → x 이상 첫 값
+    // ═════════════════════════════════════════════════════════════════
+    {
+      id: "abs-e01",
+      cluster: "algo-binarysearch-contest",
+      unlockAfter: "algo-binarysearch",
+      difficulty: "쉬움",
+      title: "x 이하인 수의 개수",
+      description: `**오름차순 정렬된** N개의 정수가 주어지고, M개의 질의가 이어진다. 각 질의 x 마다 **x 이하인 원소가 몇 개**인지 출력하라 (공백 구분 한 줄).
+
+정렬돼 있으니 "x보다 큰 첫 위치"를 이분 탐색으로 찾으면 그 위치가 곧 개수다 (upper_bound). 매번 세지 않아도 O(log N).`,
+      constraints: "1 ≤ N, M ≤ 100,000, 오름차순, |값|, |x| ≤ 1,000,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto& v : a) cin >> v;
+    int m;
+    cin >> m;
+    // TODO: 각 질의 x 마다 x 이하 개수 = upper_bound 위치
+
+    return 0;
+}`,
+      pyInitialCode: `import sys, bisect
+d = sys.stdin.read().split()
+i = 0
+n = int(d[i]); i += 1
+a = [int(d[i + j]) for j in range(n)]; i += n
+m = int(d[i]); i += 1
+# TODO: 각 질의마다 bisect_right(a, x) 출력`,
+      testCases: [
+        { stdin: "5\n1 3 5 7 9\n2\n5 8", expectedOutput: "3 4", label: "≤5:3, ≤8:4" },
+        { stdin: "5\n1 3 5 7 9\n3\n0 9 10", expectedOutput: "0 5 5", label: "경계" },
+        { stdin: "1\n5\n2\n4 5", expectedOutput: "0 1", label: "한 원소" },
+      ],
+      hints: [
+        "정렬돼 있으니 'x보다 큰 첫 위치' = x 이하 개수.",
+        "C++ upper_bound(a.begin(), a.end(), x) - a.begin().",
+        "Python bisect.bisect_right(a, x).",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto& v : a) cin >> v;
+    int m;
+    cin >> m;
+    for (int i = 0; i < m; i++) {
+        int x; cin >> x;
+        int cnt = upper_bound(a.begin(), a.end(), x) - a.begin();
+        cout << cnt;
+        if (i + 1 < m) cout << ' ';
+    }
+    cout << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys, bisect
+d = sys.stdin.read().split()
+i = 0
+n = int(d[i]); i += 1
+a = [int(d[i + j]) for j in range(n)]; i += n
+m = int(d[i]); i += 1
+out = []
+for _ in range(m):
+    x = int(d[i]); i += 1
+    out.append(bisect.bisect_right(a, x))
+print(*out)`,
+      solutionExplanation: "정렬된 배열에서 'x보다 큰 첫 위치'가 곧 x 이하 원소의 개수입니다. 이분 탐색(upper_bound)으로 O(log N)에 찾아요.",
+      en: {
+        title: "Count of Values ≤ x",
+        description: `Given a **sorted** array of N integers and M queries, print for each x **how many elements are ≤ x** (one line, space-separated). The position just past x (upper_bound) is the count — O(log N) per query.`,
+        constraints: "1 ≤ N, M ≤ 100,000, ascending, |values|, |x| ≤ 1e9",
+        hints: ["First position greater than x = count of ≤ x.", "C++ upper_bound; Python bisect_right."],
+        solutionExplanation: "In a sorted array, the first position past x equals the count of elements ≤ x; find it with binary search.",
+      },
+    },
+    {
+      id: "abs-e02",
+      cluster: "algo-binarysearch-contest",
+      unlockAfter: "algo-binarysearch",
+      difficulty: "쉬움",
+      title: "정수 제곱근",
+      description: `정수 N이 주어진다. **제곱이 N 이하인 가장 큰 정수**(즉 ⌊√N⌋)를 출력하라.
+
+배열이 아니라 **'답' 자체를 이분 탐색** 하는 첫 연습이다: mid² ≤ N 이면 더 키워보고, 아니면 줄인다.`,
+      constraints: "0 ≤ N ≤ 1,000,000,000,000,000,000 (10^18)",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    long long n;
+    cin >> n;
+    long long lo = 0, hi = 2000000000LL, ans = 0;
+    // TODO: mid*mid <= n 이면 ans=mid, lo=mid+1; 아니면 hi=mid-1
+
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+lo, hi, ans = 0, n, 0
+# TODO: mid*mid <= n 이면 ans=mid, lo 올리기; 아니면 hi 내리기`,
+      testCases: [
+        { stdin: "16", expectedOutput: "4", label: "완전제곱" },
+        { stdin: "17", expectedOutput: "4", label: "사이값" },
+        { stdin: "0", expectedOutput: "0", label: "0" },
+        { stdin: "99", expectedOutput: "9", label: "99" },
+        { stdin: "100", expectedOutput: "10", label: "100" },
+      ],
+      hints: [
+        "답의 범위 [0, N] 에서 이분 탐색.",
+        "mid*mid ≤ N 이면 가능 → ans 갱신하고 lo=mid+1, 아니면 hi=mid-1.",
+        "곱셈 오버플로 주의 — long long / Python 은 무한정수.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    long long n;
+    cin >> n;
+    long long lo = 0, hi = 2000000000LL, ans = 0;
+    while (lo <= hi) {
+        long long mid = (lo + hi) / 2;
+        if (mid * mid <= n) { ans = mid; lo = mid + 1; }
+        else hi = mid - 1;
+    }
+    cout << ans << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+lo, hi, ans = 0, n, 0
+while lo <= hi:
+    mid = (lo + hi) // 2
+    if mid * mid <= n:
+        ans = mid
+        lo = mid + 1
+    else:
+        hi = mid - 1
+print(ans)`,
+      solutionExplanation: "답이 될 수 있는 범위에서 이분 탐색합니다. mid²이 N 이하면 더 큰 답을 노리고, 아니면 줄여서 ⌊√N⌋을 찾아요.",
+      en: {
+        title: "Integer Square Root",
+        description: `Given N, print the largest integer whose square is ≤ N (i.e. ⌊√N⌋). Your first **binary search on the answer** itself: if mid² ≤ N grow it, else shrink.`,
+        constraints: "0 ≤ N ≤ 10^18",
+        hints: ["Binary search the answer in [0, N].", "mid²≤N → record ans, lo=mid+1; else hi=mid-1.", "Watch overflow — use long long / Python big ints."],
+        solutionExplanation: "Binary search over candidate answers: grow when mid²≤N, shrink otherwise, to find ⌊√N⌋.",
+      },
+    },
+    {
+      id: "abs-e03",
+      cluster: "algo-binarysearch-contest",
+      unlockAfter: "algo-binarysearch",
+      difficulty: "쉬움",
+      title: "x 이상인 가장 작은 수",
+      description: `**오름차순 정렬된** N개의 정수와 M개의 질의가 주어진다. 각 질의 x 마다 **x 이상인 원소 중 가장 작은 값**을 출력하라. 그런 값이 없으면 \`-1\`.
+
+이분 탐색의 lower_bound: "x 이상인 첫 위치"를 찾아 그 값을 답한다.`,
+      constraints: "1 ≤ N, M ≤ 100,000, 오름차순, |값|, |x| ≤ 1,000,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto& v : a) cin >> v;
+    int m;
+    cin >> m;
+    // TODO: 각 질의 x 마다 lower_bound 위치의 값 (없으면 -1)
+
+    return 0;
+}`,
+      pyInitialCode: `import sys, bisect
+d = sys.stdin.read().split()
+i = 0
+n = int(d[i]); i += 1
+a = [int(d[i + j]) for j in range(n)]; i += n
+m = int(d[i]); i += 1
+# TODO: 각 질의마다 x 이상 첫 값 (없으면 -1) 출력`,
+      testCases: [
+        { stdin: "5\n1 3 5 7 9\n4\n4 5 10 0", expectedOutput: "5 5 -1 1", label: "기본" },
+        { stdin: "3\n2 4 6\n2\n6 7", expectedOutput: "6 -1", label: "마지막/초과" },
+        { stdin: "1\n5\n2\n5 6", expectedOutput: "5 -1", label: "한 원소" },
+      ],
+      hints: [
+        "x 이상인 첫 위치 p 를 이분 탐색(lower_bound).",
+        "p 가 배열 끝(n)이면 그런 값 없음 → -1, 아니면 a[p].",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto& v : a) cin >> v;
+    int m;
+    cin >> m;
+    for (int i = 0; i < m; i++) {
+        int x; cin >> x;
+        int p = lower_bound(a.begin(), a.end(), x) - a.begin();
+        cout << (p < n ? a[p] : -1);
+        if (i + 1 < m) cout << ' ';
+    }
+    cout << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys, bisect
+d = sys.stdin.read().split()
+i = 0
+n = int(d[i]); i += 1
+a = [int(d[i + j]) for j in range(n)]; i += n
+m = int(d[i]); i += 1
+out = []
+for _ in range(m):
+    x = int(d[i]); i += 1
+    p = bisect.bisect_left(a, x)
+    out.append(a[p] if p < n else -1)
+print(*out)`,
+      solutionExplanation: "lower_bound로 'x 이상인 첫 위치'를 찾습니다. 그 위치가 배열 끝이면 그런 값이 없는 것(-1), 아니면 그 위치의 값이 답이에요.",
+      en: {
+        title: "Smallest Value ≥ x",
+        description: `Given a **sorted** array and M queries, print for each x the **smallest element ≥ x**, or \`-1\` if none. This is lower_bound: find the first position ≥ x and report that value.`,
+        constraints: "1 ≤ N, M ≤ 100,000, ascending, |values|, |x| ≤ 1e9",
+        hints: ["Binary search the first position ≥ x (lower_bound).", "If that position is the array end → -1, else a[p]."],
+        solutionExplanation: "Find the first position ≥ x with lower_bound; if past the end it's -1, else that element.",
+      },
+    },
+
     // ─────────────────────────────────────────────────────────────────
     // 1. 수 찾기 — 보통
     // ─────────────────────────────────────────────────────────────────

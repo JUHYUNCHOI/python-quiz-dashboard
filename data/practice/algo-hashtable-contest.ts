@@ -11,6 +11,208 @@ export const hashTableContestCluster: PracticeCluster = {
     description: "two-sum variants, subarray sum = K, anagram groups",
   },
   problems: [
+    // ═════════════════════════════════════════════════════════════════
+    // 쉬움 입문 (on-ramp): 존재 확인(set) → 서로 다른 개수 → 최빈값
+    // ═════════════════════════════════════════════════════════════════
+    {
+      id: "ahash-e01",
+      cluster: "algo-hashtable-contest",
+      unlockAfter: "algo-hashtable",
+      difficulty: "쉬움",
+      title: "숫자 카드 (있나 없나)",
+      description: `N개의 정수(가진 카드)가 주어지고, 이어서 M개의 질의가 주어진다. 각 질의 수가 가진 카드에 **있으면 1, 없으면 0** 을 공백으로 구분해 출력하라.
+
+매 질의마다 처음부터 찾으면 느리다. 가진 수를 **집합(set/해시)** 에 넣어두면 각 질의를 즉시 확인할 수 있다 — 해시의 가장 기본 쓰임.
+
+출처: BOJ 10815 paraphrased`,
+      constraints: "1 ≤ N, M ≤ 100,000, -1,000,000,000 ≤ 각 정수 ≤ 1,000,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    unordered_set<int> have;
+    // TODO: 가진 카드를 set 에 넣기
+
+    int m;
+    cin >> m;
+    // TODO: 각 질의마다 있으면 1, 없으면 0 출력
+
+    return 0;
+}`,
+      pyInitialCode: `import sys
+d = sys.stdin.read().split()
+n = int(d[0])
+have = set(map(int, d[1:1+n]))
+m = int(d[1+n])
+q = list(map(int, d[2+n:2+n+m]))
+# TODO: 각 q 가 have 에 있으면 1, 없으면 0 출력`,
+      testCases: [
+        { stdin: "5\n6 3 2 10 -10\n3\n10 9 -5", expectedOutput: "1 0 0", label: "기본" },
+        { stdin: "3\n1 2 3\n4\n1 2 3 4", expectedOutput: "1 1 1 0", label: "마지막만 없음" },
+        { stdin: "1\n7\n2\n7 8", expectedOutput: "1 0", label: "한 장" },
+      ],
+      hints: ["가진 수를 set 에 넣는다 (in 검사 O(1)).", "각 질의 x 에 대해 set 에 있으면 1, 없으면 0."],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    unordered_set<int> have;
+    for (int i = 0; i < n; i++) { int x; cin >> x; have.insert(x); }
+    int m;
+    cin >> m;
+    for (int i = 0; i < m; i++) {
+        int x; cin >> x;
+        cout << (have.count(x) ? 1 : 0);
+        if (i + 1 < m) cout << ' ';
+    }
+    cout << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+d = sys.stdin.read().split()
+n = int(d[0])
+have = set(map(int, d[1:1+n]))
+m = int(d[1+n])
+q = list(map(int, d[2+n:2+n+m]))
+print(*[1 if x in have else 0 for x in q])`,
+      solutionExplanation: "가진 수를 집합(set)에 넣으면 '있는지' 검사가 평균 O(1)입니다. 질의마다 처음부터 훑지 않아도 돼요.",
+      en: {
+        title: "Number Cards (have it?)",
+        description: `N integers (cards you hold), then M queries. For each query print **1 if you have it, 0 if not**, space-separated. Put your cards in a **set/hash** so each lookup is instant — the most basic use of hashing.`,
+        constraints: "1 ≤ N, M ≤ 100,000, -1e9 ≤ each ≤ 1e9",
+        hints: ["Put cards in a set (O(1) lookup).", "For each query, 1 if present else 0."],
+        solutionExplanation: "A set gives average O(1) membership checks, so each query is instant.",
+      },
+    },
+    {
+      id: "ahash-e02",
+      cluster: "algo-hashtable-contest",
+      unlockAfter: "algo-hashtable",
+      difficulty: "쉬움",
+      title: "서로 다른 수의 개수",
+      description: `N개의 정수가 주어진다. 그중 **서로 다른 값이 몇 종류**인지 출력하라.
+
+중복을 자동으로 걸러주는 **집합(set)** 에 전부 넣고 크기를 보면 끝이다.`,
+      constraints: "1 ≤ N ≤ 100,000, -1,000,000,000 ≤ 각 정수 ≤ 1,000,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    unordered_set<int> s;
+    // TODO: 전부 넣고 서로 다른 개수(set 크기) 출력
+
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+a = list(map(int, input().split()))
+# TODO: 서로 다른 수의 개수 출력`,
+      testCases: [
+        { stdin: "5\n1 2 2 3 3", expectedOutput: "3", label: "1,2,3" },
+        { stdin: "4\n5 5 5 5", expectedOutput: "1", label: "전부 같음" },
+        { stdin: "1\n7", expectedOutput: "1", label: "한 개" },
+        { stdin: "6\n1 2 3 4 5 6", expectedOutput: "6", label: "전부 다름" },
+      ],
+      hints: ["set 에 다 넣으면 중복이 사라진다.", "답은 set 의 크기."],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    unordered_set<int> s;
+    for (int i = 0; i < n; i++) { int x; cin >> x; s.insert(x); }
+    cout << s.size() << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+a = list(map(int, input().split()))
+print(len(set(a)))`,
+      solutionExplanation: "집합은 중복을 자동으로 제거하므로, 전부 넣은 뒤 크기를 출력하면 서로 다른 수의 개수가 됩니다.",
+      en: {
+        title: "Count of Distinct Values",
+        description: `Given N integers, print **how many distinct values** there are. Put them all in a **set** (which drops duplicates) and read its size.`,
+        constraints: "1 ≤ N ≤ 100,000, -1e9 ≤ each ≤ 1e9",
+        hints: ["A set removes duplicates.", "Answer = size of the set."],
+        solutionExplanation: "A set auto-dedups; print its size for the count of distinct values.",
+      },
+    },
+    {
+      id: "ahash-e03",
+      cluster: "algo-hashtable-contest",
+      unlockAfter: "algo-hashtable",
+      difficulty: "쉬움",
+      title: "가장 많이 나온 수",
+      description: `N개의 정수가 주어진다. **가장 자주 등장한 수**를 출력하라. 동점이면 **가장 작은 수**를 출력한다.
+
+각 수가 몇 번 나왔는지 **맵(map)** 에 세어 두고, 가장 큰 횟수를 찾으면 된다 — 빈도 카운트의 기본.`,
+      constraints: "1 ≤ N ≤ 100,000, -1,000,000 ≤ 각 정수 ≤ 1,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    map<int, int> cnt;
+    // TODO: 빈도를 세고, 최빈값(동점이면 가장 작은 수) 출력
+
+    return 0;
+}`,
+      pyInitialCode: `import sys
+from collections import Counter
+d = sys.stdin.read().split()
+n = int(d[0])
+a = list(map(int, d[1:1+n]))
+# TODO: 최빈값(동점이면 가장 작은 수) 출력`,
+      testCases: [
+        { stdin: "5\n1 2 2 3 3", expectedOutput: "2", label: "2,3 동점 → 작은 2" },
+        { stdin: "4\n5 5 1 1", expectedOutput: "1", label: "5,1 동점 → 1" },
+        { stdin: "3\n7 7 7", expectedOutput: "7", label: "전부 7" },
+        { stdin: "5\n4 4 4 2 2", expectedOutput: "4", label: "4가 3번" },
+      ],
+      hints: [
+        "map<int,int> 에 각 수의 등장 횟수를 센다.",
+        "C++ map 은 키 오름차순 — 횟수가 '더 클 때만' 갱신하면 동점은 작은 키가 남는다.",
+        "Python: Counter 로 세고, 최대 횟수인 키 중 min().",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    map<int, int> cnt;
+    for (int i = 0; i < n; i++) { int x; cin >> x; cnt[x]++; }
+    int best = -1, ans = 0;
+    for (auto& [k, v] : cnt) {
+        if (v > best) { best = v; ans = k; }
+    }
+    cout << ans << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+from collections import Counter
+d = sys.stdin.read().split()
+n = int(d[0])
+a = list(map(int, d[1:1+n]))
+c = Counter(a)
+mx = max(c.values())
+print(min(k for k, v in c.items() if v == mx))`,
+      solutionExplanation: "맵에 빈도를 셉니다. C++ map은 키 오름차순이라 '더 클 때만' 갱신하면 동점일 때 더 작은 수가 남습니다. Python은 최대 빈도인 키들 중 최솟값을 고릅니다.",
+      en: {
+        title: "Most Frequent Number",
+        description: `Given N integers, print the **most frequent** value; on a tie, the **smallest** one. Count each value in a **map**, then take the largest count — basic frequency counting.`,
+        constraints: "1 ≤ N ≤ 100,000, -1,000,000 ≤ each ≤ 1,000,000",
+        hints: ["Count occurrences in map<int,int>.", "C++ map is key-ascending — update only on strictly greater so ties keep the smaller key.", "Python: Counter, then min key among max count."],
+        solutionExplanation: "Count frequencies in a map; updating only on strictly-greater (over ascending keys) keeps the smallest key on ties.",
+      },
+    },
+
     // ─────────────────────────────────────────────────────────────────
     // 1. 두 수의 합 — 보통 (LC 1 Two Sum)
     // ─────────────────────────────────────────────────────────────────

@@ -11,6 +11,257 @@ export const prefixSumContestCluster: PracticeCluster = {
     description: "Range sums, 2D prefix, frequency prefix, subarray sum = K",
   },
   problems: [
+    // ═════════════════════════════════════════════════════════════════
+    // 쉬움 입문 (알고리즘 절벽 완화 on-ramp): 누적합이 뭔지 → 한 구간 → 여러 구간
+    // ═════════════════════════════════════════════════════════════════
+    {
+      id: "apre-e01",
+      cluster: "algo-prefixsum-contest",
+      unlockAfter: "algo-prefixsum",
+      difficulty: "쉬움",
+      title: "누적합 만들기",
+      description: `N개의 정수가 주어진다. **앞에서부터 더한 합**(누적합)을 차례대로 출력하라.
+
+예를 들어 \`3 1 4\` 의 누적합은 \`3 4 8\` 이다 (3, 3+1, 3+1+4). 누적합은 모든 구간 합 문제의 출발점이다 — 먼저 "지금까지의 합"을 만드는 감을 잡아보자.
+
+누적합들을 공백으로 구분해 한 줄에 출력.`,
+      constraints: "1 ≤ N ≤ 100,000, -1000 ≤ 각 정수 ≤ 1000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // TODO: 숫자를 하나씩 읽으며 지금까지의 합을 누적해 출력하세요
+
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+a = list(map(int, input().split()))
+# TODO: 앞에서부터 누적한 합을 만들어 공백으로 출력하세요`,
+      testCases: [
+        { stdin: "5\n3 1 4 1 5", expectedOutput: "3 4 8 9 14", label: "기본" },
+        { stdin: "1\n7", expectedOutput: "7", label: "원소 1개" },
+        { stdin: "4\n1 2 3 4", expectedOutput: "1 3 6 10", label: "전부 양수" },
+        { stdin: "3\n-1 -2 -3", expectedOutput: "-1 -3 -6", label: "음수" },
+        { stdin: "4\n5 -5 5 -5", expectedOutput: "5 0 5 0", label: "양음 섞임" },
+      ],
+      hints: [
+        "변수 하나(s)에 계속 더해 나가면 돼요. 처음엔 0.",
+        "숫자 하나 읽을 때마다 s += 그 숫자, 그리고 s 를 출력.",
+        "출력 사이에 공백을 넣되 줄 끝 처리에 주의.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    long long s = 0;
+    for (int k = 0; k < n; k++) {
+        int x; cin >> x;
+        s += x;
+        cout << s;
+        if (k + 1 < n) cout << ' ';
+    }
+    cout << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+a = list(map(int, input().split()))
+s = 0
+out = []
+for x in a:
+    s += x
+    out.append(s)
+print(*out)`,
+      solutionExplanation: "합 변수 s를 0에서 시작해 숫자를 읽을 때마다 더하고, 그 값을 바로 출력합니다. 이 '지금까지의 합' 배열이 곧 누적합(prefix sum)이에요.",
+      en: {
+        title: "Build the Prefix Sum",
+        description: `Given N integers, print the **running total** (prefix sum) step by step. For \`3 1 4\` the prefix sums are \`3 4 8\`. This is the starting point for every range-sum problem. Print them space-separated on one line.`,
+        constraints: "1 ≤ N ≤ 100,000, -1000 ≤ each integer ≤ 1000",
+        hints: [
+          "Keep one variable s, starting at 0.",
+          "Each time you read a number, do s += x and print s.",
+          "Mind the spacing at the end of the line.",
+        ],
+        solutionExplanation: "Start s at 0, add each number as you read it, and print the value. That running total array IS the prefix sum.",
+      },
+    },
+    {
+      id: "apre-e02",
+      cluster: "algo-prefixsum-contest",
+      unlockAfter: "algo-prefixsum",
+      difficulty: "쉬움",
+      title: "한 구간의 합",
+      description: `N개의 정수가 주어지고, 그 다음 줄에 두 정수 \`i j\` (1-based, i ≤ j) 가 주어진다. **i번째부터 j번째까지의 합**을 출력하라.
+
+누적합 배열 \`pre\` 를 만들어 두면 (pre[k] = 1~k번째 합), 구간 [i, j] 의 합은 **pre[j] - pre[i-1]** 한 번의 뺄셈으로 구해진다. 이게 누적합의 핵심 기술이다.`,
+      constraints: "1 ≤ N ≤ 100,000, -1000 ≤ 각 정수 ≤ 1000, 1 ≤ i ≤ j ≤ N",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<long long> pre(n + 1, 0);
+    // TODO: pre[k] = pre[k-1] + (k번째 수) 로 누적합 배열을 채우세요
+
+    int i, j;
+    cin >> i >> j;
+    // TODO: 구간 [i, j] 합 = pre[j] - pre[i-1] 출력
+
+    return 0;
+}`,
+      pyInitialCode: `n = int(input())
+a = list(map(int, input().split()))
+pre = [0] * (n + 1)
+# TODO: pre[k] = pre[k-1] + a[k-1]
+i, j = map(int, input().split())
+# TODO: pre[j] - pre[i-1] 출력`,
+      testCases: [
+        { stdin: "5\n10 20 30 40 50\n2 4", expectedOutput: "90", label: "20+30+40" },
+        { stdin: "3\n1 2 3\n1 3", expectedOutput: "6", label: "전체" },
+        { stdin: "1\n7\n1 1", expectedOutput: "7", label: "한 칸" },
+        { stdin: "5\n1 1 1 1 1\n2 4", expectedOutput: "3", label: "세 칸" },
+        { stdin: "4\n-2 -2 -2 -2\n1 4", expectedOutput: "-8", label: "음수" },
+      ],
+      hints: [
+        "pre[0] = 0 으로 두고, pre[k] = pre[k-1] + a[k] (1-based).",
+        "구간 [i, j] 합 = pre[j] - pre[i-1].",
+        "왜 i-1 인지 종이에 작은 예로 그려보면 확실해져요.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<long long> pre(n + 1, 0);
+    for (int k = 1; k <= n; k++) {
+        int x; cin >> x;
+        pre[k] = pre[k - 1] + x;
+    }
+    int i, j;
+    cin >> i >> j;
+    cout << pre[j] - pre[i - 1] << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `n = int(input())
+a = list(map(int, input().split()))
+pre = [0] * (n + 1)
+for k in range(1, n + 1):
+    pre[k] = pre[k - 1] + a[k - 1]
+i, j = map(int, input().split())
+print(pre[j] - pre[i - 1])`,
+      solutionExplanation: "pre[k]에 1~k번째 합을 저장해 두면, 구간 [i,j] 합은 pre[j]에서 i-1번째까지의 합 pre[i-1]을 빼서 한 번에 구합니다.",
+      en: {
+        title: "Sum of One Range",
+        description: `Given N integers and one query \`i j\` (1-based, i ≤ j), print the sum of elements i..j. Build a prefix array \`pre\` (pre[k] = sum of first k), then the range sum is **pre[j] - pre[i-1]** — one subtraction. This is the core trick.`,
+        constraints: "1 ≤ N ≤ 100,000, -1000 ≤ each integer ≤ 1000, 1 ≤ i ≤ j ≤ N",
+        hints: [
+          "Set pre[0]=0, pre[k]=pre[k-1]+a[k] (1-based).",
+          "Range [i, j] sum = pre[j] - pre[i-1].",
+          "Draw a tiny example to see why it's i-1.",
+        ],
+        solutionExplanation: "Store sums of the first k elements in pre[k]; the range [i,j] sum is pre[j] minus pre[i-1] in one step.",
+      },
+    },
+    {
+      id: "apre-e03",
+      cluster: "algo-prefixsum-contest",
+      unlockAfter: "algo-prefixsum",
+      difficulty: "쉬움",
+      title: "여러 구간의 합",
+      description: `N개의 정수가 주어지고, M개의 질의가 이어진다. 각 질의 \`i j\` (1-based) 마다 i번째부터 j번째까지의 합을 한 줄씩 출력하라.
+
+누적합을 **한 번만** 만들어 두면, 질의가 몇 개든 각각 pre[j] - pre[i-1] 로 즉시 답할 수 있다. (질의가 아주 많아지는 버전이 바로 다음 '보통' 문제다.)`,
+      constraints: "1 ≤ N, M ≤ 1,000, -1000 ≤ 각 정수 ≤ 1000, 1 ≤ i ≤ j ≤ N",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<long long> pre(n + 1, 0);
+    // TODO: 누적합 배열 pre 채우기
+
+    int m;
+    cin >> m;
+    while (m--) {
+        int i, j;
+        cin >> i >> j;
+        // TODO: pre[j] - pre[i-1] 출력
+    }
+    return 0;
+}`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+n = int(input())
+a = list(map(int, input().split()))
+pre = [0] * (n + 1)
+# TODO: 누적합 채우기
+m = int(input())
+for _ in range(m):
+    i, j = map(int, input().split())
+    # TODO: pre[j] - pre[i-1] 출력`,
+      testCases: [
+        { stdin: "5\n1 2 3 4 5\n3\n1 5\n2 3\n4 4", expectedOutput: "15\n5\n4", label: "질의 3개" },
+        { stdin: "3\n10 10 10\n2\n1 1\n1 3", expectedOutput: "10\n30", label: "질의 2개" },
+        { stdin: "4\n1 2 3 4\n1\n2 4", expectedOutput: "9", label: "질의 1개" },
+      ],
+      hints: [
+        "누적합 pre 는 질의 전에 딱 한 번만 만들면 돼요.",
+        "각 질의는 pre[j] - pre[i-1] — 반복문 안에서 매번 새로 더하지 마세요.",
+        "출력은 질의마다 한 줄.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<long long> pre(n + 1, 0);
+    for (int k = 1; k <= n; k++) {
+        int x; cin >> x;
+        pre[k] = pre[k - 1] + x;
+    }
+    int m;
+    cin >> m;
+    while (m--) {
+        int i, j;
+        cin >> i >> j;
+        cout << pre[j] - pre[i - 1] << '\\n';
+    }
+    return 0;
+}`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+n = int(input())
+a = list(map(int, input().split()))
+pre = [0] * (n + 1)
+for k in range(1, n + 1):
+    pre[k] = pre[k - 1] + a[k - 1]
+m = int(input())
+out = []
+for _ in range(m):
+    i, j = map(int, input().split())
+    out.append(str(pre[j] - pre[i - 1]))
+print('\\n'.join(out))`,
+      solutionExplanation: "누적합은 질의 전에 한 번만 만들어 둡니다. 그 뒤로는 질의가 몇 개든 각각 pre[j]-pre[i-1] 한 번의 뺄셈으로 끝나요. 다음 보통 문제는 이걸 N,M이 10만까지 커진 버전입니다.",
+      en: {
+        title: "Sums of Many Ranges",
+        description: `Given N integers and M queries \`i j\` (1-based), print each range sum on its own line. Build the prefix sum **once**; then answer any number of queries with pre[j] - pre[i-1]. (The next 'medium' problem is this with much larger N, M.)`,
+        constraints: "1 ≤ N, M ≤ 1,000, -1000 ≤ each integer ≤ 1000, 1 ≤ i ≤ j ≤ N",
+        hints: [
+          "Build pre only once, before the queries.",
+          "Each query is pre[j] - pre[i-1] — don't re-loop per query.",
+          "One line of output per query.",
+        ],
+        solutionExplanation: "Build the prefix sum once; then each of the M queries is a single subtraction. The next medium problem is the same with N, M up to 100,000.",
+      },
+    },
+
     // ─────────────────────────────────────────────────────────────────
     // 1. 구간 합 구하기 4 — 보통
     // ─────────────────────────────────────────────────────────────────

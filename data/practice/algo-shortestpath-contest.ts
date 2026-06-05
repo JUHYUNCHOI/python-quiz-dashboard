@@ -11,6 +11,295 @@ export const shortestPathContestCluster: PracticeCluster = {
     description: "Dijkstra / Bellman-Ford / Floyd-Warshall — least-cost paths on weighted graphs",
   },
   problems: [
+    // ═══════════ 쉬움 입문 (on-ramp): 가중치 1 = BFS 최단거리 ═══════════
+    {
+      id: "asp-e01",
+      cluster: "algo-shortestpath-contest",
+      unlockAfter: "algo-shortestpath",
+      difficulty: "쉬움",
+      title: "1번에서 모든 정점까지 최단 거리",
+      description: `\`N\`개의 정점과 \`M\`개의 간선(양방향, 거리 1)이 주어집니다. 1번에서 출발해 1, 2, …, N번까지의 **최단 거리(간선 수)**를 공백으로 구분해 출력하세요. 1번 자신은 0, 도달 불가는 \`-1\`.
+
+모든 간선 거리가 1이므로 **BFS**로 풉니다 — 처음 방문하는 순간의 거리가 최단입니다.`,
+      constraints: "1 ≤ N ≤ 1000, 0 ≤ M ≤ 5000, 1 ≤ u, v ≤ N",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int N, M;
+    cin >> N >> M;
+    // TODO: 인접 리스트 + 1번 BFS, dist[1..N] 출력 (불가 -1)
+    return 0;
+}`,
+      pyInitialCode: `from collections import deque
+import sys
+input = sys.stdin.readline
+
+def main():
+    N, M = map(int, input().split())
+    # TODO: 1번 BFS, dist[1..N] 출력 (불가 -1)
+
+main()`,
+      testCases: [
+        { stdin: "4 3\n1 2\n2 3\n3 4\n", expectedOutput: "0 1 2 3" },
+        { stdin: "5 3\n1 2\n1 3\n2 4\n", expectedOutput: "0 1 1 2 -1" },
+        { stdin: "1 0\n", expectedOutput: "0" },
+        { stdin: "6 5\n1 2\n2 3\n1 4\n4 5\n5 6\n", expectedOutput: "0 1 2 1 2 3" },
+      ],
+      hints: [
+        "dist를 -1로 초기화하면 미방문/도달불가를 함께 표현.",
+        "큐에 1을 넣고 dist[1]=0. 이웃 중 dist가 -1인 것만 dist+1로 갱신.",
+        "BFS는 가까운 정점부터 방문하므로 처음 정한 거리가 최단.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int N, M;
+    cin >> N >> M;
+    vector<vector<int>> adj(N + 1);
+    for (int i = 0; i < M; i++) {
+        int u, v; cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    vector<int> dist(N + 1, -1);
+    queue<int> q;
+    dist[1] = 0; q.push(1);
+    while (!q.empty()) {
+        int cur = q.front(); q.pop();
+        for (int nxt : adj[cur]) if (dist[nxt] == -1) { dist[nxt] = dist[cur] + 1; q.push(nxt); }
+    }
+    for (int i = 1; i <= N; i++) { cout << dist[i]; if (i < N) cout << ' '; }
+    cout << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `from collections import deque
+import sys
+input = sys.stdin.readline
+
+def main():
+    N, M = map(int, input().split())
+    adj = [[] for _ in range(N + 1)]
+    for _ in range(M):
+        u, v = map(int, input().split())
+        adj[u].append(v)
+        adj[v].append(u)
+    dist = [-1] * (N + 1)
+    dist[1] = 0
+    q = deque([1])
+    while q:
+        cur = q.popleft()
+        for nxt in adj[cur]:
+            if dist[nxt] == -1:
+                dist[nxt] = dist[cur] + 1
+                q.append(nxt)
+    print(' '.join(str(dist[i]) for i in range(1, N + 1)))
+
+main()`,
+      solutionExplanation: "가중치가 모두 1이라 BFS로 최단 거리를 구합니다. 1번을 큐에 넣고 거리 0에서 시작, 미방문 이웃을 dist+1로 갱신. BFS 특성상 처음 정한 거리가 최단입니다. -1로 남으면 도달 불가.",
+      en: {
+        title: "Shortest Distance from 1 to All",
+        description: `Undirected graph, all edges weight 1. Print shortest distance (edges) from node 1 to 1..N (0 for itself, -1 if unreachable). Solve with BFS.`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ M ≤ 5000",
+        hints: ["Init dist to -1.", "Push 1 with dist 0; update only -1 neighbors.", "BFS first-visit distance is shortest."],
+        solutionExplanation: "Weight-1 shortest paths come from BFS; first-set distance is the shortest, -1 means unreachable.",
+      },
+    },
+    {
+      id: "asp-e02",
+      cluster: "algo-shortestpath-contest",
+      unlockAfter: "algo-shortestpath",
+      difficulty: "쉬움",
+      title: "1번에서 N번까지 최단 거리",
+      description: `\`N\`개의 방과 \`M\`개의 양방향 통로(길이 1)가 주어집니다. 1번 방에서 N번 방까지 가는 **최소 통로 수**를 출력하세요. 도달 불가면 \`-1\`. (N=1이면 0)
+
+목적지 하나까지의 거리만 필요하므로 BFS를 돌려 dist[N]을 답합니다.`,
+      constraints: "1 ≤ N ≤ 1000, 0 ≤ M ≤ 5000, 1 ≤ u, v ≤ N",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int N, M;
+    cin >> N >> M;
+    // TODO: 1번 BFS 후 dist[N] 출력 (불가 -1)
+    return 0;
+}`,
+      pyInitialCode: `from collections import deque
+import sys
+input = sys.stdin.readline
+
+def main():
+    N, M = map(int, input().split())
+    # TODO: 1번 BFS 후 dist[N] 출력 (불가 -1)
+
+main()`,
+      testCases: [
+        { stdin: "4 3\n1 2\n2 3\n3 4\n", expectedOutput: "3" },
+        { stdin: "5 4\n1 2\n1 3\n3 5\n2 4\n", expectedOutput: "2" },
+        { stdin: "4 2\n1 2\n3 4\n", expectedOutput: "-1" },
+        { stdin: "1 0\n", expectedOutput: "0" },
+        { stdin: "6 6\n1 2\n2 6\n1 3\n3 4\n4 5\n5 6\n", expectedOutput: "2" },
+      ],
+      hints: [
+        "전 문제와 같은 BFS, dist[N]만 출력.",
+        "dist를 -1로 초기화하면 도달 불가가 자동 처리.",
+        "N=1이면 0.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int N, M;
+    cin >> N >> M;
+    vector<vector<int>> adj(N + 1);
+    for (int i = 0; i < M; i++) {
+        int u, v; cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    vector<int> dist(N + 1, -1);
+    queue<int> q;
+    dist[1] = 0; q.push(1);
+    while (!q.empty()) {
+        int cur = q.front(); q.pop();
+        for (int nxt : adj[cur]) if (dist[nxt] == -1) { dist[nxt] = dist[cur] + 1; q.push(nxt); }
+    }
+    cout << dist[N] << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `from collections import deque
+import sys
+input = sys.stdin.readline
+
+def main():
+    N, M = map(int, input().split())
+    adj = [[] for _ in range(N + 1)]
+    for _ in range(M):
+        u, v = map(int, input().split())
+        adj[u].append(v)
+        adj[v].append(u)
+    dist = [-1] * (N + 1)
+    dist[1] = 0
+    q = deque([1])
+    while q:
+        cur = q.popleft()
+        for nxt in adj[cur]:
+            if dist[nxt] == -1:
+                dist[nxt] = dist[cur] + 1
+                q.append(nxt)
+    print(dist[N])
+
+main()`,
+      solutionExplanation: "앞 문제와 같은 BFS를 돌리고 dist[N]만 출력합니다. 처음 N에 도달했을 때의 거리가 1→N 최단. 연결 안 됐으면 -1.",
+      en: {
+        title: "Shortest Distance from 1 to N",
+        description: `Print the minimum number of weight-1 passages from room 1 to room N (-1 if unreachable, 0 if N=1). BFS, print dist[N].`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ M ≤ 5000",
+        hints: ["Same BFS, print dist[N].", "Init -1 handles unreachable.", "N=1 → 0."],
+        solutionExplanation: "BFS from 1; dist[N] is the shortest, -1 if disconnected.",
+      },
+    },
+    {
+      id: "asp-e03",
+      cluster: "algo-shortestpath-contest",
+      unlockAfter: "algo-shortestpath",
+      difficulty: "쉬움",
+      title: "미로 최단 거리",
+      description: `\`R\`행 \`C\`열 미로가 있어요. \`1\`은 길, \`0\`은 벽. 왼쪽 위 (1,1)에서 오른쪽 아래 (R,C)까지 갈 때 지나는 **칸 수(시작·끝 포함)**의 최솟값을 출력하세요. 상하좌우로만, 길(1)로만 이동. 도달 불가면 \`0\`.
+
+입력: 첫 줄 \`R C\`, 다음 R줄에 띄어쓰기 없는 0/1 문자열. 격자에서도 한 칸 이동은 거리 1이라 BFS로 풀어요(BOJ 2178).`,
+      constraints: "1 ≤ R, C ≤ 100, (1,1)과 (R,C)는 항상 길(1)",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int R, C;
+    cin >> R >> C;
+    // TODO: 격자 읽고 (0,0)→(R-1,C-1) BFS 칸 수 출력 (불가 0)
+    return 0;
+}`,
+      pyInitialCode: `from collections import deque
+import sys
+input = sys.stdin.readline
+
+def main():
+    R, C = map(int, input().split())
+    # TODO: 격자 읽고 (0,0)→(R-1,C-1) BFS 칸 수 출력 (불가 0)
+
+main()`,
+      testCases: [
+        { stdin: "2 2\n11\n11\n", expectedOutput: "3" },
+        { stdin: "1 1\n1\n", expectedOutput: "1" },
+        { stdin: "3 3\n111\n010\n111\n", expectedOutput: "5" },
+        { stdin: "2 2\n10\n01\n", expectedOutput: "0" },
+        { stdin: "4 6\n101111\n101010\n101011\n111011\n", expectedOutput: "15" },
+      ],
+      hints: [
+        "문자열을 2차원 격자로 보관. grid[i][j]=='1'이면 길.",
+        "칸 수로 세려고 시작 칸 거리를 1로 둔다.",
+        "상하좌우 dx/dy로 이동, 범위 밖·벽·방문한 칸은 건너뛰기.",
+        "(R-1,C-1) 못 가면 dist가 0으로 남아 그대로 출력 → 도달 불가 0.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int R, C;
+    cin >> R >> C;
+    vector<string> grid(R);
+    for (int i = 0; i < R; i++) cin >> grid[i];
+    vector<vector<int>> dist(R, vector<int>(C, 0));
+    int dx[] = {-1, 1, 0, 0}, dy[] = {0, 0, -1, 1};
+    queue<pair<int,int>> q;
+    dist[0][0] = 1; q.push({0, 0});
+    while (!q.empty()) {
+        auto [x, y] = q.front(); q.pop();
+        for (int d = 0; d < 4; d++) {
+            int nx = x + dx[d], ny = y + dy[d];
+            if (nx < 0 || nx >= R || ny < 0 || ny >= C) continue;
+            if (grid[nx][ny] != '1' || dist[nx][ny] != 0) continue;
+            dist[nx][ny] = dist[x][y] + 1;
+            q.push({nx, ny});
+        }
+    }
+    cout << dist[R - 1][C - 1] << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `from collections import deque
+import sys
+input = sys.stdin.readline
+
+def main():
+    R, C = map(int, input().split())
+    grid = [input().strip() for _ in range(R)]
+    dist = [[0] * C for _ in range(R)]
+    dx = [-1, 1, 0, 0]
+    dy = [0, 0, -1, 1]
+    dist[0][0] = 1
+    q = deque([(0, 0)])
+    while q:
+        x, y = q.popleft()
+        for d in range(4):
+            nx, ny = x + dx[d], y + dy[d]
+            if nx < 0 or nx >= R or ny < 0 or ny >= C:
+                continue
+            if grid[nx][ny] != '1' or dist[nx][ny] != 0:
+                continue
+            dist[nx][ny] = dist[x][y] + 1
+            q.append((nx, ny))
+    print(dist[R - 1][C - 1])
+
+main()`,
+      solutionExplanation: "격자에서도 한 칸 이동 비용이 1이라 BFS로 최단 거리를 구합니다. 칸 수로 세려고 시작 칸을 1로 두고, 길이며 미방문인 이웃을 거리+1로 갱신. 도착 칸이 0으로 남으면 도달 불가.",
+      en: {
+        title: "Maze Shortest Path",
+        description: `R×C maze (1=path, 0=wall). Print min cells from (1,1) to (R,C) including both ends; 0 if unreachable. 4-directional, paths only. BFS (BOJ 2178).`,
+        constraints: "1 ≤ R, C ≤ 100; (1,1) and (R,C) are paths",
+        hints: ["Keep grid as 2D; '1' is path.", "Start cell distance = 1 (counting cells).", "Skip out-of-bounds/walls/visited.", "Unreached destination stays 0."],
+        solutionExplanation: "BFS on the grid (each move costs 1); start at 1, expand to path/unvisited cells; 0 means unreachable.",
+      },
+    },
     // ─────────────────────────────────────────────────────────────────
     // 1. Dijkstra 기본 — 보통 (BOJ 1753)
     // ─────────────────────────────────────────────────────────────────

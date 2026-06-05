@@ -11,6 +11,177 @@ export const stringContestCluster: PracticeCluster = {
     description: "Palindromes, anagrams, substring patterns — beyond methods",
   },
   problems: [
+    // ═══════════ 쉬움 입문 (on-ramp) ═══════════
+    {
+      id: "astr-e01",
+      cluster: "algo-string-contest",
+      unlockAfter: "algo-string",
+      difficulty: "쉬움",
+      title: "문자열 뒤집기",
+      description: `한 줄에 공백 없는 문자열 S가 주어진다. S를 거꾸로 뒤집어서 한 줄에 출력하라.
+
+예를 들어 \`hello\`가 들어오면 마지막 글자부터 거꾸로 읽어 \`olleh\`를 출력한다.`,
+      constraints: "1 ≤ |S| ≤ 100,000 (S는 공백 없는 영문자/숫자)",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    string s;
+    cin >> s;
+    // TODO: s를 뒤집어서 출력하기
+    return 0;
+}`,
+      pyInitialCode: `s = input()
+# TODO: s를 뒤집어서 출력하기`,
+      testCases: [
+        { stdin: "hello", expectedOutput: "olleh", label: "기본" },
+        { stdin: "abc", expectedOutput: "cba", label: "짧은 문자열" },
+        { stdin: "z", expectedOutput: "z", label: "한 글자" },
+        { stdin: "Coderin", expectedOutput: "niredoC", label: "대문자 포함" },
+      ],
+      hints: [
+        "맨 뒤 글자부터 맨 앞 글자까지 차례로 출력하면 된다.",
+        "C++에는 reverse(s.begin(), s.end()) 가 있고, 파이썬에는 슬라이스 s[::-1] 이 있다.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    string s;
+    cin >> s;
+    reverse(s.begin(), s.end());
+    cout << s << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `s = input()
+print(s[::-1])`,
+      solutionExplanation: "문자열을 통째로 뒤집어 출력합니다. C++는 reverse 함수로 문자열 자체를 뒤집고, 파이썬은 s[::-1] 슬라이스로 거꾸로 된 새 문자열을 만들어 출력합니다.",
+      en: {
+        title: "Reverse a String",
+        description: `A single string S (no spaces) is given on one line. Print S reversed on one line.`,
+        constraints: "1 ≤ |S| ≤ 100,000 (letters/digits, no spaces)",
+        hints: ["Print each character from the last one to the first.", "C++ has reverse(s.begin(), s.end()); Python has the slice s[::-1]."],
+        solutionExplanation: "Reverse the whole string and print it.",
+      },
+    },
+    {
+      id: "astr-e02",
+      cluster: "algo-string-contest",
+      unlockAfter: "algo-string",
+      difficulty: "쉬움",
+      title: "가장 많이 나온 알파벳",
+      description: `소문자 알파벳으로만 이루어진 문자열 S가 주어진다. 가장 많이 등장한 알파벳 하나를 출력하라.
+
+만약 가장 많이 나온 알파벳이 여러 개라면, 그중 사전순으로 가장 앞선 (가장 작은) 알파벳을 출력한다.`,
+      constraints: "1 ≤ |S| ≤ 100,000 (S는 소문자 a~z로만 구성)",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    string s;
+    cin >> s;
+    // TODO: 각 알파벳이 몇 번 나왔는지 세고, 가장 많은 것을 출력하기
+    return 0;
+}`,
+      pyInitialCode: `s = input()
+# TODO: 각 알파벳이 몇 번 나왔는지 세고, 가장 많은 것을 출력하기`,
+      testCases: [
+        { stdin: "banana", expectedOutput: "a", label: "기본" },
+        { stdin: "abcabc", expectedOutput: "a", label: "전부 동점" },
+        { stdin: "mississippi", expectedOutput: "i", label: "동점일 때 사전순" },
+        { stdin: "zzaa", expectedOutput: "a", label: "z와 a 동점" },
+        { stdin: "x", expectedOutput: "x", label: "한 글자" },
+      ],
+      hints: [
+        "길이 26짜리 배열(또는 카운터)을 만들어 각 알파벳이 몇 번 나오는지 센다.",
+        "a부터 z까지 순서대로 확인하면, 가장 큰 횟수를 처음 만나는 알파벳이 자동으로 사전순 우선이 된다.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    string s;
+    cin >> s;
+    int cnt[26] = {0};
+    for (char c : s) cnt[c - 'a']++;
+    int best = 0;
+    for (int i = 1; i < 26; i++) {
+        if (cnt[i] > cnt[best]) best = i;
+    }
+    cout << (char)('a' + best) << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `s = input()
+cnt = [0] * 26
+for c in s:
+    cnt[ord(c) - ord('a')] += 1
+best = 0
+for i in range(1, 26):
+    if cnt[i] > cnt[best]:
+        best = i
+print(chr(ord('a') + best))`,
+      solutionExplanation: "26칸 배열에 각 알파벳 횟수를 세고, a부터 z까지 훑으며 '더 클 때만' 갱신합니다. 동점은 갱신하지 않으므로 사전순으로 앞선 알파벳이 남습니다.",
+      en: {
+        title: "Most Frequent Letter",
+        description: `A string S of lowercase letters is given. Print the single letter that appears most often. On a tie, print the alphabetically smallest.`,
+        constraints: "1 ≤ |S| ≤ 100,000 (lowercase a~z only)",
+        hints: ["Count each letter in a size-26 array.", "Scanning a→z and updating only on strictly greater gives alphabetical priority."],
+        solutionExplanation: "Count frequencies; scan a→z updating only on strictly greater, so ties keep the smaller letter.",
+      },
+    },
+    {
+      id: "astr-e03",
+      cluster: "algo-string-contest",
+      unlockAfter: "algo-string",
+      difficulty: "쉬움",
+      title: "단어 개수 세기",
+      description: `한 줄에 단어들이 공백 한 칸으로 구분되어 주어진다. 단어가 몇 개인지 세어서 출력하라.`,
+      constraints: "단어 1개 이상, 줄 전체 길이 ≤ 100,000. 단어 사이는 공백 한 칸, 줄 앞뒤 공백 없음.",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    string line;
+    getline(cin, line);
+    // TODO: 공백으로 나눈 단어가 몇 개인지 세어서 출력하기
+    return 0;
+}`,
+      pyInitialCode: `line = input()
+# TODO: 공백으로 나눈 단어가 몇 개인지 세어서 출력하기`,
+      testCases: [
+        { stdin: "hello world", expectedOutput: "2", label: "두 단어" },
+        { stdin: "a b c d", expectedOutput: "4", label: "네 단어" },
+        { stdin: "one", expectedOutput: "1", label: "한 단어" },
+        { stdin: "the quick brown fox", expectedOutput: "4", label: "문장" },
+      ],
+      hints: [
+        "한 줄 전체를 읽은 뒤, 공백을 기준으로 잘라서 조각이 몇 개인지 세면 된다.",
+        "C++는 stringstream에 >> 로 단어를 꺼내고, 파이썬은 line.split() 이 단어 리스트를 만든다.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    string line;
+    getline(cin, line);
+    stringstream ss(line);
+    string word;
+    int count = 0;
+    while (ss >> word) count++;
+    cout << count << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `line = input()
+print(len(line.split()))`,
+      solutionExplanation: "줄 전체를 읽고 공백 기준으로 단어를 분리해 개수를 셉니다. C++는 stringstream, 파이썬은 split()+len().",
+      en: {
+        title: "Count Words",
+        description: `One line of words separated by single spaces is given. Print how many words there are.`,
+        constraints: "≥1 word, line length ≤ 100,000, single-space separated, no leading/trailing spaces.",
+        hints: ["Read the whole line, split by spaces, count the pieces.", "C++ stringstream with >>; Python line.split()."],
+        solutionExplanation: "Read the line, split by whitespace, count the words.",
+      },
+    },
     // ─────────────────────────────────────────────────────────────────
     // 1. 회문 검사 — 보통
     // ─────────────────────────────────────────────────────────────────

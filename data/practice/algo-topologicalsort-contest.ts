@@ -11,6 +11,253 @@ export const topologicalSortContestCluster: PracticeCluster = {
     description: "Pull prerequisite → dependent order from DAG — Kahn's, DFS post-order, cycle detection, topo + DP",
   },
   problems: [
+    // ═══════════ 쉬움 입문 (on-ramp) ═══════════
+    {
+      id: "atop-e01",
+      cluster: "algo-topologicalsort-contest",
+      unlockAfter: "algo-topologicalsort",
+      difficulty: "쉬움",
+      title: "진입 차수 구하기",
+      description: `방향 그래프가 주어진다. 간선 \`u v\`는 \`u → v\` 화살표를 뜻한다.
+
+각 정점의 **진입 차수(in-degree)**, 즉 들어오는 화살표 수를 정점 1번부터 N번까지 공백으로 구분해 한 줄에 출력하라. 진입 차수는 위상 정렬의 출발점이다.`,
+      constraints: "1 ≤ N ≤ 1000, 0 ≤ M ≤ 5000, 1 ≤ u, v ≤ N",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    // TODO: 간선 u→v 마다 indeg[v]++, 1..N 출력
+    return 0;
+}`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    n, m = map(int, input().split())
+    indeg = [0] * (n + 1)
+    # TODO: indeg[v]+=1, 1..N 출력
+
+main()`,
+      testCases: [
+        { stdin: "3 2\n1 2\n2 3\n", expectedOutput: "0 1 1" },
+        { stdin: "4 4\n1 2\n1 3\n2 4\n3 4\n", expectedOutput: "0 1 1 2" },
+        { stdin: "5 3\n1 2\n3 2\n4 5\n", expectedOutput: "0 2 0 0 1" },
+        { stdin: "2 0\n", expectedOutput: "0 0" },
+      ],
+      hints: [
+        "진입 차수 = 들어오는 화살표 수. 간선 u→v는 v만 +1.",
+        "크기 N+1 배열을 0으로 두고 indeg[v]++.",
+        "1번부터 N번까지 공백으로 출력.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    vector<int> indeg(n + 1, 0);
+    for (int i = 0; i < m; i++) { int u, v; cin >> u >> v; indeg[v]++; }
+    for (int i = 1; i <= n; i++) { cout << indeg[i]; if (i < n) cout << ' '; }
+    cout << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    n, m = map(int, input().split())
+    indeg = [0] * (n + 1)
+    for _ in range(m):
+        u, v = map(int, input().split())
+        indeg[v] += 1
+    print(' '.join(str(indeg[i]) for i in range(1, n + 1)))
+
+main()`,
+      solutionExplanation: "간선 u→v는 v로 들어가므로 indeg[v]만 1 늘립니다. 모든 간선을 세고 1..N 출력. 이 배열이 Kahn 알고리즘의 출발점입니다.",
+      en: {
+        title: "Compute In-degrees",
+        description: `Directed graph (u v means u→v). Print the in-degree of vertices 1..N, space-separated.`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ M ≤ 5000",
+        hints: ["Edge u→v increments only indeg[v].", "Array of 0s, indeg[v]++.", "Print 1..N."],
+        solutionExplanation: "Count incoming arrows per vertex; this array starts Kahn's algorithm.",
+      },
+    },
+    {
+      id: "atop-e02",
+      cluster: "algo-topologicalsort-contest",
+      unlockAfter: "algo-topologicalsort",
+      difficulty: "쉬움",
+      title: "시작할 수 있는 정점의 개수",
+      description: `방향 그래프가 주어진다(\`u v\` = u→v). 위상 정렬에서 가장 먼저 처리할 수 있는 정점은 **들어오는 화살표가 없는** 정점(진입 차수 0)이다.
+
+진입 차수가 0인 정점이 **몇 개**인지 출력하라.`,
+      constraints: "1 ≤ N ≤ 1000, 0 ≤ M ≤ 5000, 1 ≤ u, v ≤ N",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    // TODO: 진입 차수 0인 정점 개수 출력
+    return 0;
+}`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    n, m = map(int, input().split())
+    indeg = [0] * (n + 1)
+    # TODO: 진입 차수 0인 정점 개수 출력
+
+main()`,
+      testCases: [
+        { stdin: "3 2\n1 2\n2 3\n", expectedOutput: "1" },
+        { stdin: "4 4\n1 2\n1 3\n2 4\n3 4\n", expectedOutput: "1" },
+        { stdin: "5 3\n1 2\n3 2\n4 5\n", expectedOutput: "3" },
+        { stdin: "3 3\n1 2\n2 3\n3 1\n", expectedOutput: "0" },
+      ],
+      hints: [
+        "먼저 진입 차수 배열을 채운다.",
+        "1..N 중 indeg[i]==0 인 것을 센다.",
+        "사이클이 있으면 0개일 수도 있다 → 0 출력.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    vector<int> indeg(n + 1, 0);
+    for (int i = 0; i < m; i++) { int u, v; cin >> u >> v; indeg[v]++; }
+    int cnt = 0;
+    for (int i = 1; i <= n; i++) if (indeg[i] == 0) cnt++;
+    cout << cnt << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+
+def main():
+    n, m = map(int, input().split())
+    indeg = [0] * (n + 1)
+    for _ in range(m):
+        u, v = map(int, input().split())
+        indeg[v] += 1
+    print(sum(1 for i in range(1, n + 1) if indeg[i] == 0))
+
+main()`,
+      solutionExplanation: "진입 차수 0인 정점은 위상 정렬에서 가장 먼저 꺼낼 수 있는 후보입니다. 진입 차수를 센 뒤 0인 정점 수를 셉니다. 사이클(1→2→3→1)이면 0개.",
+      en: {
+        title: "Count of Startable Vertices",
+        description: `Directed graph. Print how many vertices have in-degree 0 (can start first in topological sort).`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ M ≤ 5000",
+        hints: ["Fill in-degrees.", "Count indeg[i]==0.", "May be 0 if there's a cycle."],
+        solutionExplanation: "Count vertices with no incoming arrows.",
+      },
+    },
+    {
+      id: "atop-e03",
+      cluster: "algo-topologicalsort-contest",
+      unlockAfter: "algo-topologicalsort",
+      difficulty: "쉬움",
+      title: "사이클이 있을까? (Kahn)",
+      description: `방향 그래프가 주어진다(\`u v\` = u→v). **Kahn 알고리즘**으로 사이클 존재 여부를 판정하라.
+
+1. 진입 차수 0인 정점을 큐에 넣는다.
+2. 큐에서 꺼내 "제거"(처리 수 +1)하고, 그 정점이 가리키던 정점들의 진입 차수를 1씩 줄인다.
+3. 0이 된 정점을 큐에 넣는다. 큐가 빌 때까지 반복.
+
+모든 정점을 제거하면(처리 수 == N) 사이클 없는 DAG → \`YES\`, 아니면 \`NO\`.`,
+      constraints: "1 ≤ N ≤ 1000, 0 ≤ M ≤ 5000, 1 ≤ u, v ≤ N",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> adj(n + 1);
+    vector<int> indeg(n + 1, 0);
+    // TODO: 간선 읽고, 진입 0부터 BFS식 제거, 제거 수==n 이면 YES
+    return 0;
+}`,
+      pyInitialCode: `import sys
+from collections import deque
+input = sys.stdin.readline
+
+def main():
+    n, m = map(int, input().split())
+    adj = [[] for _ in range(n + 1)]
+    indeg = [0] * (n + 1)
+    # TODO: Kahn 으로 제거 수==n 이면 YES, 아니면 NO
+
+main()`,
+      testCases: [
+        { stdin: "3 2\n1 2\n2 3\n", expectedOutput: "YES" },
+        { stdin: "2 2\n1 2\n2 1\n", expectedOutput: "NO" },
+        { stdin: "4 3\n1 2\n2 3\n3 4\n", expectedOutput: "YES" },
+        { stdin: "3 3\n1 2\n2 3\n3 1\n", expectedOutput: "NO" },
+        { stdin: "4 2\n1 2\n3 4\n", expectedOutput: "YES" },
+      ],
+      hints: [
+        "진입 0인 정점을 모두 큐에.",
+        "꺼낼 때마다 처리 수++, 이웃 진입 차수--, 0되면 큐에.",
+        "처리 수 == N 이면 YES, 작으면 사이클(NO).",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> adj(n + 1);
+    vector<int> indeg(n + 1, 0);
+    for (int i = 0; i < m; i++) { int u, v; cin >> u >> v; adj[u].push_back(v); indeg[v]++; }
+    queue<int> q;
+    for (int i = 1; i <= n; i++) if (indeg[i] == 0) q.push(i);
+    int processed = 0;
+    while (!q.empty()) {
+        int cur = q.front(); q.pop();
+        processed++;
+        for (int nxt : adj[cur]) if (--indeg[nxt] == 0) q.push(nxt);
+    }
+    cout << (processed == n ? "YES" : "NO") << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+from collections import deque
+input = sys.stdin.readline
+
+def main():
+    n, m = map(int, input().split())
+    adj = [[] for _ in range(n + 1)]
+    indeg = [0] * (n + 1)
+    for _ in range(m):
+        u, v = map(int, input().split())
+        adj[u].append(v)
+        indeg[v] += 1
+    q = deque(i for i in range(1, n + 1) if indeg[i] == 0)
+    processed = 0
+    while q:
+        cur = q.popleft()
+        processed += 1
+        for nxt in adj[cur]:
+            indeg[nxt] -= 1
+            if indeg[nxt] == 0:
+                q.append(nxt)
+    print("YES" if processed == n else "NO")
+
+main()`,
+      solutionExplanation: "진입 0인 정점부터 제거하며 이웃 진입 차수를 줄입니다. 모든 정점을 제거하면 DAG(YES). 사이클 안 정점들은 서로 진입 차수를 0으로 못 만들어 남으므로 처리 수 < N → NO.",
+      en: {
+        title: "Is There a Cycle? (Kahn)",
+        description: `Use Kahn's algorithm: remove in-degree-0 vertices, decrement neighbors; if all removed (processed==N) it's a DAG → YES, else NO.`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ M ≤ 5000",
+        hints: ["Queue all in-degree-0.", "Pop → processed++, decrement neighbors, push new 0s.", "processed==N → YES else NO."],
+        solutionExplanation: "If every vertex can be peeled off, no cycle; cycle vertices stay stuck, so processed < N.",
+      },
+    },
     // ─────────────────────────────────────────────────────────────────
     // 1. 줄세우기 (BOJ 2252) — 보통
     // ─────────────────────────────────────────────────────────────────

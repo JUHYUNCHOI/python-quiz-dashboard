@@ -11,6 +11,246 @@ export const divideConquerContestCluster: PracticeCluster = {
     description: "Divide → Conquer → Combine — merge sort, fast power, quadtree, and more",
   },
   problems: [
+    // ═══════════ 쉬움 입문 (on-ramp) ═══════════
+    {
+      id: "adc-e01",
+      cluster: "algo-divideconquer-contest",
+      unlockAfter: "algo-divideconquer",
+      difficulty: "쉬움",
+      title: "빠른 거듭제곱 (A^B mod M)",
+      description: `정수 A, B, M이 주어집니다. \`A^B\`를 \`M\`으로 나눈 나머지를 출력하세요.
+
+B가 최대 10억까지 커질 수 있어 A를 B번 곱하면 느립니다. **분할정복(이진 거듭제곱)**:
+- B 짝수: \`A^B = (A^(B/2))^2\`
+- B 홀수: \`A^B = A × A^(B-1)\`
+
+곱셈 횟수가 B번 → 약 log₂(B)번으로 줄어요. 입력: \`A B M\`. 예: \`2 10 1000\` → 24.`,
+      constraints: "0 ≤ A ≤ 1,000,000  /  0 ≤ B ≤ 1,000,000,000  /  1 ≤ M ≤ 1,000,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    long long A, B, M;
+    cin >> A >> B >> M;
+    // TODO: 이진 거듭제곱으로 A^B mod M (곱할 때마다 % M)
+    return 0;
+}`,
+      pyInitialCode: `A, B, M = map(int, input().split())
+# TODO: 이진 거듭제곱으로 A^B mod M`,
+      testCases: [
+        { stdin: "2 10 1000", expectedOutput: "24" },
+        { stdin: "3 4 100", expectedOutput: "81" },
+        { stdin: "5 0 7", expectedOutput: "1" },
+        { stdin: "7 3 5", expectedOutput: "3" },
+        { stdin: "10 9 1000000000", expectedOutput: "0" },
+      ],
+      hints: [
+        "half = power(A, B/2, M) 를 먼저 구하면, 짝수일 때 답은 half*half % M.",
+        "홀수면 half*half 에 A를 한 번 더 곱한다.",
+        "곱할 때마다 % M (half < M < 10^9 이라 half*half < 10^18, long long 안전).",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+
+long long power(long long a, long long b, long long m) {
+    a %= m;
+    if (b == 0) return 1 % m;
+    long long half = power(a, b / 2, m);
+    long long sq = (half * half) % m;
+    if (b % 2 == 1) sq = (sq * a) % m;
+    return sq;
+}
+
+int main() {
+    long long A, B, M;
+    cin >> A >> B >> M;
+    cout << power(A, B, M) << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+sys.setrecursionlimit(100)
+
+def power(a, b, m):
+    a %= m
+    if b == 0:
+        return 1 % m
+    half = power(a, b // 2, m)
+    sq = (half * half) % m
+    if b % 2 == 1:
+        sq = (sq * a) % m
+    return sq
+
+A, B, M = map(int, input().split())
+print(power(A, B, M))`,
+      solutionExplanation: "지수를 절반으로 쪼개 곱셈을 log₂(B)번으로 줄입니다. 짝수면 절반의 제곱, 홀수면 거기에 A를 한 번 더. 매 곱셈마다 %M.",
+      en: {
+        title: "Fast Exponentiation (A^B mod M)",
+        description: `Output A^B mod M with binary exponentiation: even → (A^(B/2))^2, odd → A × A^(B-1). ~log₂(B) multiplies. e.g. 2 10 1000 → 24.`,
+        constraints: "0 ≤ A ≤ 1e6, 0 ≤ B ≤ 1e9, 1 ≤ M ≤ 1e9",
+        hints: ["Compute half=power(A,B/2,M) first.", "Odd → multiply by A once more.", "Mod after each multiply."],
+        solutionExplanation: "Halve the exponent; square the half, multiply once more if odd, mod each step.",
+      },
+    },
+    {
+      id: "adc-e02",
+      cluster: "algo-divideconquer-contest",
+      unlockAfter: "algo-divideconquer",
+      difficulty: "쉬움",
+      title: "분할정복으로 배열 최댓값",
+      description: `정수 N개의 **최댓값**을 출력하세요. 반복문 대신 **분할정복**으로 연습합니다.
+
+구간 [l,r]의 최댓값 = 절반으로 나눠 왼쪽 최댓값, 오른쪽 최댓값을 재귀로 구한 뒤 둘 중 큰 값. 길이 1이면(l==r) 그 원소가 답.
+
+입력: 첫 줄 N, 둘째 줄 정수 N개.`,
+      constraints: "1 ≤ N ≤ 100,000  /  |각 정수| ≤ 1,000,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+int a[100005];
+
+int main() {
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; i++) cin >> a[i];
+    // TODO: solve(0, n-1) 분할정복 최댓값
+    return 0;
+}`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(300000)
+n = int(input())
+a = list(map(int, input().split()))
+# TODO: 분할정복 최댓값`,
+      testCases: [
+        { stdin: "5\n3 7 2 9 4", expectedOutput: "9" },
+        { stdin: "1\n42", expectedOutput: "42" },
+        { stdin: "4\n-5 -2 -8 -1", expectedOutput: "-1" },
+        { stdin: "6\n10 10 10 10 10 10", expectedOutput: "10" },
+        { stdin: "3\n1000000000 -1000000000 0", expectedOutput: "1000000000" },
+      ],
+      hints: [
+        "solve(l, r): l==r 이면 a[l] 반환.",
+        "mid=(l+r)/2, max(solve(l,mid), solve(mid+1,r)).",
+        "base case에서 원소를 반환하면 음수만 있어도 안전.",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+int a[100005];
+
+int solve(int l, int r) {
+    if (l == r) return a[l];
+    int mid = (l + r) / 2;
+    return max(solve(l, mid), solve(mid + 1, r));
+}
+
+int main() {
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; i++) cin >> a[i];
+    cout << solve(0, n - 1) << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(300000)
+
+def solve(l, r):
+    if l == r:
+        return a[l]
+    mid = (l + r) // 2
+    return max(solve(l, mid), solve(mid + 1, r))
+
+n = int(input())
+a = list(map(int, input().split()))
+print(solve(0, n - 1))`,
+      solutionExplanation: "구간을 절반으로 나눠 각 절반의 최댓값을 재귀로 구하고 큰 쪽을 반환합니다. base case가 원소 자체라 음수만 있어도 정확합니다.",
+      en: {
+        title: "Array Maximum by Divide and Conquer",
+        description: `Print the max of N integers using divide and conquer: split at mid, max of both halves; length-1 returns the element.`,
+        constraints: "1 ≤ N ≤ 100,000, |int| ≤ 1e9",
+        hints: ["solve(l,r): l==r → a[l].", "mid split, max of halves.", "Base case returns the element (handles negatives)."],
+        solutionExplanation: "Recurse on halves and take the larger; base case returns the single element.",
+      },
+    },
+    {
+      id: "adc-e03",
+      cluster: "algo-divideconquer-contest",
+      unlockAfter: "algo-divideconquer",
+      difficulty: "쉬움",
+      title: "분할정복으로 합 구하기",
+      description: `정수 N개의 **합**을 출력하세요. 반복문 대신 **분할정복**으로 좌/우를 나눠 더합니다.
+
+구간 [l,r]의 합 = 절반으로 나눠 왼쪽 합 + 오른쪽 합. 길이 1이면 그 원소가 합.
+
+입력: 첫 줄 N, 둘째 줄 정수 N개. (합은 커질 수 있어 long long 필요)`,
+      constraints: "1 ≤ N ≤ 100,000  /  |각 정수| ≤ 1,000,000,000",
+      initialCode: `#include <bits/stdc++.h>
+using namespace std;
+long long a[100005];
+
+int main() {
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; i++) cin >> a[i];
+    // TODO: 분할정복 합 (long long!)
+    return 0;
+}`,
+      pyInitialCode: `import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(300000)
+n = int(input())
+a = list(map(int, input().split()))
+# TODO: 분할정복 합`,
+      testCases: [
+        { stdin: "5\n1 2 3 4 5", expectedOutput: "15" },
+        { stdin: "1\n7", expectedOutput: "7" },
+        { stdin: "4\n-1 -2 -3 -4", expectedOutput: "-10" },
+        { stdin: "3\n1000000000 1000000000 1000000000", expectedOutput: "3000000000" },
+        { stdin: "6\n0 0 0 0 0 0", expectedOutput: "0" },
+      ],
+      hints: [
+        "solve(l, r): l==r 이면 a[l].",
+        "mid 로 나눠 solve(l,mid)+solve(mid+1,r).",
+        "합이 10^14까지 커지니 long long 사용(파이썬은 자동).",
+      ],
+      solutionCode: `#include <bits/stdc++.h>
+using namespace std;
+long long a[100005];
+
+long long solve(int l, int r) {
+    if (l == r) return a[l];
+    int mid = (l + r) / 2;
+    return solve(l, mid) + solve(mid + 1, r);
+}
+
+int main() {
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; i++) cin >> a[i];
+    cout << solve(0, n - 1) << '\\n';
+    return 0;
+}`,
+      pySolutionCode: `import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(300000)
+
+def solve(l, r):
+    if l == r:
+        return a[l]
+    mid = (l + r) // 2
+    return solve(l, mid) + solve(mid + 1, r)
+
+n = int(input())
+a = list(map(int, input().split()))
+print(solve(0, n - 1))`,
+      solutionExplanation: "구간을 절반으로 나눠 두 합을 재귀로 구해 더합니다. 합이 10^14까지 커질 수 있어 long long을 씁니다.",
+      en: {
+        title: "Sum by Divide and Conquer",
+        description: `Print the sum of N integers via divide and conquer (split, sum both halves). Use long long (sum up to 1e14).`,
+        constraints: "1 ≤ N ≤ 100,000, |int| ≤ 1e9",
+        hints: ["solve(l,r): l==r → a[l].", "Add the two halves.", "long long for the sum."],
+        solutionExplanation: "Recurse on halves and add; long long avoids overflow.",
+      },
+    },
     // ─────────────────────────────────────────────────────────────────
     // 1. 머지 소트 구현 — 보통
     // ─────────────────────────────────────────────────────────────────
