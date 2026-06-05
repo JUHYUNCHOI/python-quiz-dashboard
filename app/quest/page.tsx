@@ -480,6 +480,19 @@ export default function QuestPage() {
           </div>
         </div>
 
+        {/* 대회 대비 코스(순서 사다리) 진입 — 따라가는 길 */}
+        <Link
+          href="/course/kl"
+          className="flex items-center gap-3 border-2 border-amber-300 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 p-4 mb-6 hover:border-amber-500 hover:shadow-md transition-all"
+        >
+          <span className="text-2xl shrink-0">🧗</span>
+          <div className="min-w-0 flex-1">
+            <p className="font-black text-amber-900 leading-tight">{t("대회 대비 코스 — 순서대로 풀기", "Contest Prep — in order")}</p>
+            <p className="text-xs text-amber-800/80 mt-0.5">{t("고르지 말고 위에서부터 한 문제씩. 쉬움 → 어려움 사다리.", "Don't pick — follow the ladder, easy → hard, one at a time.")}</p>
+          </div>
+          <span className="text-amber-500 shrink-0" aria-hidden>→</span>
+        </Link>
+
         {/* Overall progress bar */}
         {loaded && (
           <div className="border border-gray-200 rounded-xl shadow-sm bg-white p-4 mb-6">

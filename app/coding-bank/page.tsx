@@ -163,6 +163,21 @@ function ProblemList({
         <LanguageToggle className="shrink-0 mt-1" />
       </div>
 
+      {/* 다음 단계: 알고리즘 — 도전을 충분히 풀었으면 */}
+      <a
+        href="/algo"
+        className="flex items-center gap-3 rounded-2xl border border-purple-200 bg-purple-50 px-4 py-3 hover:border-purple-400 hover:shadow-sm transition-all"
+      >
+        <span className="text-2xl shrink-0">🧩</span>
+        <div className="min-w-0 flex-1">
+          <p className="font-bold text-purple-900 leading-tight">{t("다음 단계: 알고리즘", "Next: Algorithms")}</p>
+          <p className="text-xs text-purple-800/80 mt-0.5">
+            {t("도전이 익숙해지면, 이름 있는 기법(BFS·DP 등)을 배워요. 토픽마다 쉬운 것부터.", "Once challenges feel easy, learn named techniques (BFS, DP…). Each topic starts easy.")}
+          </p>
+        </div>
+        <span className="text-purple-400 shrink-0" aria-hidden>→</span>
+      </a>
+
       {/* 진도 바 */}
       {problems.length > 0 && (
         <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-4">

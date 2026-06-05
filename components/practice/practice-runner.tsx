@@ -404,6 +404,8 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
           insertSpaces={true}
           onKeyDown={createSmartKeyHandler(setCode, { onCtrlEnter: runTests })}
           style={{ fontFamily: "monospace", fontSize: 14, minHeight: 260, color: "#cdd6f4", background: "transparent" }}
+          resizable
+          storageKey="practice"
         />
       </div>
 
