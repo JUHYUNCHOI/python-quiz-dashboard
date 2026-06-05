@@ -38,6 +38,7 @@ const CATEGORY_LABELS: Record<string, { ko: string; en: string }> = {
   "brute-force": { ko: "완전탐색", en: "Brute Force" },
   "map-set": { ko: "Map/Set", en: "Map/Set" },
   string: { ko: "문자열", en: "Strings" },
+  grid: { ko: "그리드/2D", en: "Grid/2D" },
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -46,6 +47,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   "brute-force": "bg-orange-100 text-orange-700 border-orange-200",
   "map-set": "bg-emerald-100 text-emerald-700 border-emerald-200",
   string: "bg-pink-100 text-pink-700 border-pink-200",
+  grid: "bg-cyan-100 text-cyan-700 border-cyan-200",
 }
 
 const DIFFICULTY_COLORS: Record<string, string> = {
@@ -124,7 +126,7 @@ function ProblemList({
   useEffect(() => {
     const cat = searchParams.get("category")
     const diff = searchParams.get("difficulty")
-    if (cat && (cat === "sort" || cat === "simulation" || cat === "brute-force" || cat === "map-set" || cat === "string")) {
+    if (cat && (cat === "sort" || cat === "simulation" || cat === "brute-force" || cat === "map-set" || cat === "string" || cat === "grid")) {
       setCategoryFilter(cat as Category)
       setShowFilters(true)
     }
@@ -442,7 +444,7 @@ function ProblemDetail({
     title: problem.title,
     description: "",
     constraints: "",
-    initialCode: `#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    \n    return 0;\n}`,
+    initialCode: problem.initialCode ?? `#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    \n    return 0;\n}`,
     language: "cpp",
     testCases: problem.testCases.map(tc => ({ stdin: tc.input, expectedOutput: tc.output })),
     hints: [],
@@ -526,7 +528,8 @@ function ProblemDetail({
         )}
       </div>
 
-      {/* 입출력 형식 */}
+      {/* 입출력 형식 — 형식 정보가 있을 때만 (통합된 bank 문제는 설명에 포함돼 비어 있음) */}
+      {(localInputFormat || localOutputFormat) && (
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-3">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
@@ -543,6 +546,7 @@ function ProblemDetail({
           </p>
         </div>
       </div>
+      )}
 
       {/* 예제 */}
       {problem.testCases.length > 0 && (
@@ -767,8 +771,15 @@ function CodingBankContent() {
       }).catch(() => {})
     }
 
-    // localStorage 즉시 로드
-    setSolvedSet(getSolvedSet())
+    // localStorage 즉시 로드 — coding-bank-solved + (통합 전) practice-solved 둘 다 읽어 진도 보존
+    {
+      const init = getSolvedSet()
+      try {
+        const pr = JSON.parse(localStorage.getItem("practice-solved") || "[]") as string[]
+        pr.forEach(id => init.add(id))
+      } catch {}
+      setSolvedSet(init)
+    }
 
     // DB 로드 (백그라운드)
     fetch("/api/coding-bank/progress")

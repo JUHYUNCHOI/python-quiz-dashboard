@@ -1,12 +1,14 @@
 export interface CodingBankProblem {
   id: string
-  category: "sort" | "simulation" | "brute-force" | "map-set" | "string"
+  category: "sort" | "simulation" | "brute-force" | "map-set" | "string" | "grid"
   difficulty: "쉬움" | "보통" | "어려움"
   title: string
   description: string
   constraints: string
   inputFormat: string
   outputFormat: string
+  /** C++ 시작 코드 (없으면 페이지 기본 템플릿). 통합된 bank 문제는 자체 starter 보존용. */
+  initialCode?: string
   testCases: {
     input: string
     output: string
