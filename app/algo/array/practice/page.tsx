@@ -87,6 +87,14 @@ export default function SortingPracticePage() {
   const problemId = searchParams.get("p")
   const problem = problemId ? arrayContestCluster.problems.find(p => p.id === problemId) : null
 
+  const toggleSolved = (id: string) => {
+    const next = new Set(solvedSet)
+    if (next.has(id)) next.delete(id)
+    else next.add(id)
+    setSolvedSet(next)
+    try { localStorage.setItem(SOLVED_KEY, JSON.stringify([...next])) } catch {}
+  }
+
   const handleSolved = () => {
     const next = new Set(solvedSet)
     if (problemId) next.add(problemId)
@@ -245,6 +253,16 @@ export default function SortingPracticePage() {
                       </span>
                     </div>
                   </div>
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    aria-label={isSolved ? "완료 해제" : "완료 체크"}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSolved(p.id) }}
+                    className={cn(
+                      "shrink-0 w-7 h-7 rounded-full border flex items-center justify-center text-xs font-black transition-colors cursor-pointer",
+                      isSolved ? "bg-emerald-500 border-emerald-500 text-white" : "border-gray-300 text-transparent hover:border-emerald-400 hover:text-emerald-400"
+                    )}
+                  >✓</span>
                   <ArrowRight className="w-4 h-4 text-gray-400 shrink-0" />
                 </div>
               </Link>

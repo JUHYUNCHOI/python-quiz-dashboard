@@ -8,7 +8,7 @@
 //  ▸ flow/지도 아님 — 그냥 문제 목록 뷰. 외부 링크는 새 탭.
 // ─────────────────────────────────────────────────────────────────────
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
@@ -51,10 +51,24 @@ const PHASES: { at: number; ko: string; en: string; dot: string }[] = [
 ]
 const PROB_BY_ID = new Map(EXTERNAL_PROBLEMS.map(p => [p.id, p]))
 
-function ProblemRow({ p, showDiff }: { p: ExtProblem; showDiff?: boolean }) {
+// 학생이 직접 누르는 "했음" 체크 — 외부 링크라 자동 채점 불가
+function CheckDot({ done, onToggle }: { done: boolean; onToggle: () => void }) {
+  return (
+    <button
+      onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggle() }}
+      aria-label={done ? "완료 해제" : "완료 체크"}
+      className={"shrink-0 w-5 h-5 rounded-full border flex items-center justify-center text-[11px] font-black transition-colors " +
+        (done ? "bg-green-500 border-green-500 text-white" : "border-gray-300 text-transparent hover:border-green-400 hover:text-green-400")}
+    >✓</button>
+  )
+}
+
+function ProblemRow({ p, showDiff, done, onToggle }: { p: ExtProblem; showDiff?: boolean; done?: boolean; onToggle?: (id: string) => void }) {
   return (
     <a href={p.url} target="_blank" rel="noopener noreferrer"
-       className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 hover:border-gray-400 hover:shadow-sm transition-all">
+       className={"flex items-center gap-2 rounded-lg border px-3 py-2 hover:border-gray-400 hover:shadow-sm transition-all " +
+         (done ? "border-green-200 bg-green-50/60" : "border-gray-200 bg-white")}>
+      <CheckDot done={!!done} onToggle={() => onToggle?.(p.id)} />
       <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold border shrink-0 ${SOURCE_META[p.source].color}`}>{SOURCE_META[p.source].label}</span>
       <div className="min-w-0 flex-1">
         <p className="text-sm font-semibold text-gray-900 truncate">{p.title}</p>
@@ -71,6 +85,20 @@ function Content() {
   const [mode, setMode] = useState<"map" | "diff" | "topic">("map")  // 기본: 맵(차례대로)
   const [diff, setDiff] = useState<ExtDifficulty>("쉬움")           // 난이도별 모드에서 선택된 난이도
   const [openTopic, setOpenTopic] = useState<ExtTopic | null>(null) // 유형별 모드에서 펼친 유형
+
+  // 학생이 직접 체크한 "했음" 문제들 (외부 링크라 자동 못 잡음)
+  const [doneSet, setDoneSet] = useState<Set<string>>(new Set())
+  useEffect(() => {
+    try { setDoneSet(new Set(JSON.parse(localStorage.getItem("kl-prep-done") || "[]") as string[])) } catch {}
+  }, [])
+  const toggleDone = (id: string) => {
+    setDoneSet(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id); else next.add(id)
+      try { localStorage.setItem("kl-prep-done", JSON.stringify([...next])) } catch {}
+      return next
+    })
+  }
 
   const diffCount = (d: ExtDifficulty) => EXTERNAL_PROBLEMS.filter(p => p.difficulty === d).length
   const topicCount = (tp: ExtTopic) => EXTERNAL_PROBLEMS.filter(p => p.topic === tp).length
@@ -152,8 +180,10 @@ function Content() {
                     </div>
                   )}
                   <a href={p.url} target="_blank" rel="noopener noreferrer"
-                     className="flex items-center gap-2.5 rounded-lg border border-gray-200 bg-white px-3 py-2 ml-3 hover:border-gray-400 hover:shadow-sm transition-all">
+                     className={"flex items-center gap-2.5 rounded-lg border px-3 py-2 ml-3 hover:border-gray-400 hover:shadow-sm transition-all " +
+                       (doneSet.has(p.id) ? "border-green-200 bg-green-50/60" : "border-gray-200 bg-white")}>
                     <span className="w-6 h-6 shrink-0 rounded-full bg-gray-900 text-white text-xs font-black flex items-center justify-center">{i + 1}</span>
+                    <CheckDot done={doneSet.has(p.id)} onToggle={() => toggleDone(p.id)} />
                     <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold border shrink-0 ${SOURCE_META[p.source].color}`}>{SOURCE_META[p.source].label}</span>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-gray-900 truncate">{p.title}</p>
@@ -203,7 +233,7 @@ function Content() {
                   <span className="text-xs text-gray-400">{items.length}</span>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  {items.map(p => <ProblemRow key={p.id} p={p} />)}
+                  {items.map(p => <ProblemRow key={p.id} p={p} done={doneSet.has(p.id)} onToggle={toggleDone} />)}
                 </div>
               </div>
             )
@@ -232,7 +262,7 @@ function Content() {
                 </button>
                 {open && (
                   <div className="px-3 pb-3 flex flex-col gap-1.5">
-                    {items.map(p => <ProblemRow key={p.id} p={p} showDiff />)}
+                    {items.map(p => <ProblemRow key={p.id} p={p} showDiff done={doneSet.has(p.id)} onToggle={toggleDone} />)}
                   </div>
                 )}
               </div>
