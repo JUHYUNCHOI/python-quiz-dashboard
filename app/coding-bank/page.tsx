@@ -111,10 +111,12 @@ function ProblemList({
   problems,
   solvedSet,
   onSelect,
+  onToggleSolved,
 }: {
   problems: CodingBankProblem[]
   solvedSet: Set<string>
   onSelect: (p: CodingBankProblem) => void
+  onToggleSolved: (id: string) => void
 }) {
   const { t, lang } = useLanguage()
   const searchParams = useSearchParams()
@@ -336,6 +338,18 @@ function ProblemList({
                         <span className={cn("text-[11px] px-1.5 py-0.5 rounded font-medium border", DIFFICULTY_COLORS[problem.difficulty])}>{diffLabel(problem.difficulty)}</span>
                       </div>
                     </div>
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      aria-label={solved ? "완료 해제" : "완료 체크"}
+                      onClick={(e) => { e.stopPropagation(); onToggleSolved(problem.id) }}
+                      className={cn(
+                        "shrink-0 w-6 h-6 rounded-full border flex items-center justify-center text-xs font-black transition-colors cursor-pointer",
+                        solved
+                          ? "bg-emerald-500 border-emerald-500 text-white"
+                          : "border-gray-300 text-transparent hover:border-emerald-400 hover:text-emerald-400"
+                      )}
+                    >✓</span>
                   </button>
                 )
               })}
@@ -389,7 +403,18 @@ function ProblemList({
                   </div>
                 </div>
               </div>
-              {solved && <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />}
+              <span
+                role="button"
+                tabIndex={0}
+                aria-label={solved ? "완료 해제" : "완료 체크"}
+                onClick={(e) => { e.stopPropagation(); onToggleSolved(problem.id) }}
+                className={cn(
+                  "shrink-0 mt-0.5 w-6 h-6 rounded-full border flex items-center justify-center text-xs font-black transition-colors cursor-pointer",
+                  solved
+                    ? "bg-emerald-500 border-emerald-500 text-white"
+                    : "border-gray-300 text-transparent hover:border-emerald-400 hover:text-emerald-400"
+                )}
+              >✓</span>
             </div>
           </button>
         )
@@ -799,6 +824,17 @@ function CodingBankContent() {
     setSolvedSet((prev) => new Set([...prev, id]))
   }
 
+  // 학생이 직접 누르는 "했음" 체크 (외부/튜토리얼처럼 자동 채점 안 되는 경우 보조)
+  const toggleSolved = (id: string) => {
+    setSolvedSet((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      try { localStorage.setItem(LS_KEY, JSON.stringify([...next])) } catch {}
+      return next
+    })
+  }
+
   return (
     <main className="max-w-2xl mx-auto px-4 pt-4">
       <JourneyBreadcrumb items={[
@@ -819,6 +855,7 @@ function CodingBankContent() {
           problems={CODING_BANK_PROBLEMS}
           solvedSet={solvedSet}
           onSelect={setSelectedProblem}
+          onToggleSolved={toggleSolved}
         />
       )}
     </main>
