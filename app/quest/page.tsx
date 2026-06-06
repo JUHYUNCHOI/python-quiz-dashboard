@@ -303,6 +303,17 @@ export default function QuestPage() {
     setLoaded(true)
   }, [])
 
+  // 학생이 직접 "했음" 토글 — quest-solved 에 저장 (외부/튜토리얼이라 자동 채점이 어려움)
+  const toggleSolved = (id: string) => {
+    setSolvedSet(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      try { localStorage.setItem("quest-solved", JSON.stringify([...next])) } catch {}
+      return next
+    })
+  }
+
   // 잠금 해제 — 모두 풀린 상태로 (이전: 알고리즘 토픽 8개 완료 조건)
   const isUnlocked = true
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -652,7 +663,17 @@ export default function QuestPage() {
                                               🎯
                                             </span>
                                           )}
-                                          {isSolved && <span className="text-green-500 font-bold text-xs flex-shrink-0">✓</span>}
+                                          <button
+                                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSolved(problem.id) }}
+                                            title={isSolved ? t("했음 — 누르면 해제", "Done — tap to undo") : t("했으면 체크", "Tap to mark done")}
+                                            aria-label={isSolved ? "완료 해제" : "완료 체크"}
+                                            className={[
+                                              "shrink-0 w-5 h-5 rounded-full border flex items-center justify-center text-[11px] font-black transition-colors",
+                                              isSolved
+                                                ? "bg-green-500 border-green-500 text-white"
+                                                : "border-gray-300 text-transparent hover:border-green-400 hover:text-green-400",
+                                            ].join(" ")}
+                                          >✓</button>
                                         </Link>
                                       )
                                     })}
