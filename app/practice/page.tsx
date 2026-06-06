@@ -10,7 +10,7 @@ import { PracticeRunner } from "@/components/practice/practice-runner"
 import { McqRunner } from "@/components/practice/mcq-runner"
 import { PracticeSession } from "@/components/practice/practice-session"
 import { ALL_CLUSTERS, BANK_CLUSTERS } from "@/data/practice"
-import { getNextLessonId, getLessonName, getCompletedLessons } from "@/lib/curriculum-data"
+import { getNextLessonId, getLessonName, getCompletedLessons, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { getSmartNext } from "@/lib/smart-next"
 import type { PracticeCluster, PracticeProblem } from "@/data/practice/types"
 import { localizeCluster, localizeProblem } from "@/data/practice/types"
@@ -44,6 +44,13 @@ function isClusterUnlocked(cluster: PracticeCluster): boolean {
     const completed = JSON.parse(localStorage.getItem("completedLessons") || "[]") as string[]
     return completed.includes(cluster.unlockAfter)
   } catch { return false }
+}
+
+// 전체 레슨 순서 (커리큘럼) — "방금 배운 레슨" 판단용
+const LESSON_ORDER: string[] = [...pythonParts, ...cppParts, ...pseudoParts].flatMap(p => p.lessonIds.map(String))
+function lessonPos(id: string): number {
+  const i = LESSON_ORDER.indexOf(String(id))
+  return i === -1 ? 9999 : i
 }
 
 // SET 1 기준(7문제) 이상 풀었으면 "충분히 완료"
@@ -88,20 +95,24 @@ function ClusterList({
   // '다음 예고' 섹션은 더 이상 필요 X — 모두 노출
   const nextLockedCluster = null
 
-  // 다음 클러스터 선택: 학생이 *이미 진행 중* 인 클러스터 우선 (가장 많이 푼 순).
-  // 그게 없으면 unlockAfter 순서 (배열 첫 번째 = py-io 등).
-  // 버그: 이전엔 activeClusters[0] 만 골라서, 학생이 lesson 졸업미션으로 다른
-  // 클러스터를 시작했어도 항상 py-io (입출력 기초) 가 "다음" 으로 떠서 헷갈렸음.
+  // 다음 클러스터 선택 — 수업 진도 기반 (2026-06 개선):
+  //  1) 수업을 들은(해금된) 클러스터 우선 — "방금 배운 거 연습"
+  //  2) 해금된 것끼리: 가장 최근에 배운 레슨의 연습 우선 (커리큘럼 뒤쪽)
+  //  3) 이미 풀던 것(많이 푼) 우선 — 마무리 가까운 거
+  //  4) 커리큘럼 순서
+  // 이전엔 "푼 개수"만 봐서, 수업과 무관한 클러스터(예: struct)가 다음으로 떠 헷갈렸음.
   const withProgress = activeClusters
-    .map(c => ({ c, solved: c.problems.filter(p => solvedSet.has(p.id)).length }))
+    .map(c => ({
+      c,
+      solved: c.problems.filter(p => solvedSet.has(p.id)).length,
+      unlocked: isClusterUnlocked(c),
+      pos: lessonPos(c.unlockAfter),
+    }))
     .sort((a, b) => {
-      // 진행 중 (solved > 0) > 시작 안 함 (solved = 0)
-      if (a.solved > 0 && b.solved === 0) return -1
-      if (b.solved > 0 && a.solved === 0) return 1
-      // 진행 중끼리: 더 많이 푼 순 (마무리 가까운 거 우선)
-      if (a.solved > 0 && b.solved > 0) return b.solved - a.solved
-      // 둘 다 0: 원래 순서 유지 (unlockAfter)
-      return 0
+      if (a.unlocked !== b.unlocked) return a.unlocked ? -1 : 1          // 1) 들은 수업 우선
+      if (a.unlocked && b.unlocked && a.pos !== b.pos) return b.pos - a.pos // 2) 가장 최근 배운 레슨
+      if (a.solved !== b.solved) return b.solved - a.solved              // 3) 마무리 가까운 거
+      return a.pos - b.pos                                               // 4) 커리큘럼 순서
     })
   const nextCluster = withProgress[0]?.c
   const otherActive = activeClusters.filter(c => c !== nextCluster)
