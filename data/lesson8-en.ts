@@ -465,20 +465,20 @@ f"{n:05d}"       # 5 digits, zero-padded
           type: "mission",
           title: "🏆 Mission Step 3 — Many Items + Total",
           task: "Now print **multiple items** and add a total line at the end. Name left-aligned width 12, price right-aligned width 8 with comma.",
-          initialCode: "items = ['Americano', 'Cafe Latte', 'Choco Cake']\nprices = [4500, 5000, 6500]\n\nfor i in range(3):\n    # Name left-12, price right-8 with comma\n    print(f'{items[i]:<12} {prices[i]:___}')\n\ntotal = sum(prices)\nprint(f'{\"Total\":<12} {total:>8,}')",
+          initialCode: "# Print each menu line. Name left width 12, price right width 8 with comma\nprint(f'{\"Americano\":<12} {4500:___}')\nprint(f'{\"Cafe Latte\":<12} {5000:___}')\nprint(f'{\"Choco Cake\":<12} {6500:___}')\n\ntotal = 4500 + 5000 + 6500\nprint(f'{\"Total\":<12} {total:>8,}')",
           expectedOutput: "Americano       4,500\nCafe Latte      5,000\nChoco Cake      6,500\nTotal          16,000",
-          hint: "The blank inside the for-loop is the price slot. Right-align width 8 + comma = `:>8,`.",
-          hint2: "f'{items[i]:<12} {prices[i]:>8,}'"
+          hint: "The price slot is right-aligned width 8 + comma = `:>8,`.",
+          hint2: "f'{\"Americano\":<12} {4500:>8,}'"
         },
         {
           id: "mission1",
           type: "mission",
           title: "🏆 Final Mission — Cafe Menu",
           task: "It's a cafe menu. Right-align prices in a width of 8 with a thousands comma — all in one slot! Fill both blanks with the same number 8.",
-          initialCode: "items = ['Americano', 'Cafe Latte', 'Choco Cake']\nprices = [4500, 5000, 6500]\ncount = len(items)\n\nprint('=' * 25)\nprint(f'{\"☕ Cafe Menu\":^25}')\nprint('=' * 25)\n\nfor i in range(count):\n    print(f'{items[i]:<12} {prices[i]:>___,}')\n\nprint('-' * 25)\ntotal = sum(prices)\nprint(f'{\"Total\":<12} {total:>___,}')\nprint('=' * 25)",
+          initialCode: "print('=' * 25)\nprint(f'{\"☕ Cafe Menu\":^25}')\nprint('=' * 25)\n\nprint(f'{\"Americano\":<12} {4500:>___,}')\nprint(f'{\"Cafe Latte\":<12} {5000:>8,}')\nprint(f'{\"Choco Cake\":<12} {6500:>8,}')\n\nprint('-' * 25)\ntotal = 4500 + 5000 + 6500\nprint(f'{\"Total\":<12} {total:>___,}')\nprint('=' * 25)",
           expectedOutput: "=========================\n       ☕ Cafe Menu       \n=========================\nAmericano       4,500\nCafe Latte      5,000\nChoco Cake      6,500\n-------------------------\nTotal          16,000\n=========================",
           hint: "Both blanks get the same number. Prices have 4-5 digits, so the width needs to be bigger to line up.",
-          hint2: "Both blanks are `8` (e.g. `{prices[i]:>8,}`)."
+          hint2: "Both blanks are `8` (e.g. `{4500:>8,}`)."
         },
         {
           id: "complete",
