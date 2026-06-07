@@ -849,7 +849,7 @@ Output: the number of students who submitted all M assignments, and the number w
       id: "sim-015",
       cluster: "simulation",
       unlockAfter: "cpp-p2",
-      difficulty: "어려움",
+      difficulty: "쉬움",
       title: "신호등 시뮬레이션",
       description: `N개의 신호등이 있고, 각 신호등은 빨간불 지속 시간 R초, 초록불 지속 시간 G초가 주어집니다.
 모든 신호등은 시각 0에 빨간불로 시작합니다.
