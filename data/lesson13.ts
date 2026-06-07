@@ -163,67 +163,57 @@ for i in range(0, 10, 2):
     },
     {
       id: "ch3",
-      title: "리스트 순회",
-      emoji: "📋",
+      title: "문자열 순회와 합계",
+      emoji: "🔤",
       steps: [
         {
           id: "list-explain",
           type: "explain",
-          title: "📋 리스트의 각 알맹이를 하나씩 꺼내기",
-          content: `**리스트** \`[]\` 는 여러 값을 한 줄에 담는 상자예요!
-\`\`\`python
-fruits = ["사과", "바나나", "딸기"]
-\`\`\`
-
-💡 리스트는 **Part 3 에서 자세히** 배워요. 지금은 \"for 문이랑 함께 쓰면 편하다\" 만 알면 충분.
-
-range 대신 **리스트** 를 넣으면, 리스트 안의 알맹이가 하나씩 꺼내져요:
+          title: "🔤 문자열을 한 글자씩 꺼내기",
+          content: `range 말고 **문자열** 도 for 문에 넣을 수 있어요. 그러면 글자가 **하나씩** 꺼내져요!
 
 \`\`\`python
-for fruit in fruits:
-    print(fruit)
-# 사과
-# 바나나
-# 딸기
+word = "사과"
+for ch in word:
+    print(ch)
+# 사
+# 과
 \`\`\`
 
-문법: **for 변수 in 리스트:**
-\`fruit\` 라는 변수에 **사과 → 바나나 → 딸기** 가 차례로 들어가요.`
+문법: **for 변수 in 문자열:**
+\`ch\` 라는 변수에 **사 → 과** 가 차례로 들어가요. (변수 이름은 마음대로 — 글자라서 \`ch\` 추천)`
         },
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ 빈칸 채우기 — 친구들에게 한 명씩 인사",
-          task: "리스트 안의 이름들에게 \"안녕, ○○!\" 하고 인사하세요!",
-          initialCode: "names = [\"철수\", \"영희\", \"민수\"]\n\nfor ___ in names:\n    print(f\"안녕, {___}!\")",
-          expectedOutput: "안녕, 철수!\n안녕, 영희!\n안녕, 민수!",
-          hint: "두 빈칸은 **같은 변수 이름** 이어야 해요. (변수 이름은 마음대로 — name 추천)",
-          hint2: "name / name"
+          title: "🖥️ 빈칸 채우기 — 이름 세로로 쓰기",
+          task: "이름을 한 글자씩 세로로 출력하세요!",
+          initialCode: "name = \"홍길동\"\n\nfor ___ in name:\n    print(___)",
+          expectedOutput: "홍\n길\n동",
+          hint: "두 빈칸은 **같은 변수 이름** 이어야 해요. (글자라서 ch 추천)",
+          hint2: "ch / ch"
         },
         {
           id: "sum-explain",
           type: "explain",
-          title: "🧮 점수 합계 구하기 — 변수 더하기 패턴",
+          title: "🧮 합계 구하기 — 변수 더하기 패턴",
           content: `for 문 + 변수 = **합계 구하기**!
 
 \`\`\`python
-numbers = [10, 20, 30, 40, 50]
 total = 0   # 시작은 0 부터
 
-for num in numbers:
+for num in range(1, 6):   # 1, 2, 3, 4, 5
     total = total + num   # 매번 total 에 num 을 더해 다시 저장
 
-print(f"합계: {total}")  # 합계: 150
+print(f"합계: {total}")  # 합계: 15
 \`\`\`
 
 흐름:
-- 첫 번째: total = 0 + 10 = 10
-- 두 번째: total = 10 + 20 = 30
-- ... 계속 누적 → 마지막: 150
+- 첫 번째: total = 0 + 1 = 1
+- 두 번째: total = 1 + 2 = 3
+- ... 계속 누적 → 마지막: 15
 
-> 💡 \`total = total + num\` 은 \`total += num\` 으로 짧게 쓸 수도 있어요.
->
-> ⚡ 그냥 다 더하고 싶을 땐 \`sum(numbers)\` 한 줄로 끝!`
+> 💡 \`total = total + num\` 은 \`total += num\` 으로 짧게 쓸 수도 있어요.`
         },
         {
           id: "forif-sim",
@@ -237,12 +227,12 @@ print(f"합계: {total}")  # 합계: 150
         {
           id: "try5",
           type: "tryit",
-          title: "🖥️ 빈칸 채우기 — 5 명의 시험 점수 합치기",
-          task: "scores 리스트의 모든 점수를 더해 총점을 구하세요!",
-          initialCode: "scores = [85, 90, 78, 92, 88]\ntotal = 0\n\nfor score in scores:\n    # total 에 score 를 더해 다시 total 에 넣으세요\n    total = ___\n\nprint(f\"총점: {total}\")",
-          expectedOutput: "총점: 433",
-          hint: "지금 total 에 이번 score 를 더한 값을, 다시 total 에 넣어요.",
-          hint2: "total + score"
+          title: "🖥️ 빈칸 채우기 — 1 부터 10 까지 합치기",
+          task: "1 부터 10 까지 모두 더해 합계를 구하세요!",
+          initialCode: "total = 0\n\nfor i in range(1, 11):\n    # total 에 i 를 더해 다시 total 에 넣으세요\n    total = ___\n\nprint(f\"합계: {total}\")",
+          expectedOutput: "합계: 55",
+          hint: "지금 total 에 이번 i 를 더한 값을, 다시 total 에 넣어요.",
+          hint2: "total + i"
         }
       ]
     },
@@ -269,7 +259,7 @@ print(f"합계: {total}")  # 합계: 150
 
 ✅ \`for i in range(n):\` — n 번 반복
 ✅ \`range(시작, 끝, 간격)\` — 범위 정하기 (끝은 안 포함!)
-✅ \`for item in 리스트:\` — 리스트 순회
+✅ \`for 글자 in 문자열:\` — 문자열 한 글자씩
 ✅ **합계 패턴** — \`total = total + num\` (또는 \`total += num\`)
 
 다음 시간엔 **while 반복문** — "조건이 참인 동안 반복" 을 배워요! 🚀`

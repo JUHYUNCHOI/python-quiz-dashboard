@@ -163,67 +163,58 @@ for i in range(0, 10, 2):
     },
     {
       id: "ch3",
-      title: "Iterating Over Lists",
-      emoji: "📋",
+      title: "Looping Over a String + Sums",
+      emoji: "🔤",
       steps: [
         {
           id: "list-explain",
           type: "explain",
-          title: "📋 Pull items from a list, one by one",
-          content: `A **list** \`[]\` holds many values in one box!
-\`\`\`python
-fruits = ["apple", "banana", "strawberry"]
-\`\`\`
-
-💡 We'll cover lists **in detail in Part 3**. For now, just know: \"a for loop pairs nicely with a list.\"
-
-Instead of \`range\`, put a **list** after \`in\` — each item comes out one at a time:
+          title: "🔤 Pull a string apart, one letter at a time",
+          content: `Besides \`range\`, you can put a **string** after \`in\` — each letter comes out one at a time!
 
 \`\`\`python
-for fruit in fruits:
-    print(fruit)
-# apple
-# banana
-# strawberry
+word = "cat"
+for ch in word:
+    print(ch)
+# c
+# a
+# t
 \`\`\`
 
-Pattern: **for variable in list:**
-The variable \`fruit\` becomes **apple → banana → strawberry**, in order.`
+Pattern: **for variable in string:**
+The variable \`ch\` becomes **c → a → t**, in order. (Any name works — \`ch\` for "character" is common.)`
         },
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ Fill the blank — greet each friend",
-          task: "Say \"Hello, ○○!\" to each name in the list!",
-          initialCode: "names = [\"Alice\", \"Bob\", \"Charlie\"]\n\nfor ___ in names:\n    print(f\"Hello, {___}!\")",
-          expectedOutput: "Hello, Alice!\nHello, Bob!\nHello, Charlie!",
-          hint: "Both blanks must be the **same variable name** (any name — \"name\" works).",
-          hint2: "name / name"
+          title: "🖥️ Fill the blank — print a name down the page",
+          task: "Print a name one letter per line!",
+          initialCode: "name = \"Mia\"\n\nfor ___ in name:\n    print(___)",
+          expectedOutput: "M\ni\na",
+          hint: "Both blanks must be the **same variable name** (\"ch\" works for a character).",
+          hint2: "ch / ch"
         },
         {
           id: "sum-explain",
           type: "explain",
-          title: "🧮 Sum the scores — the \"add to a variable\" pattern",
+          title: "🧮 Sum it up — the \"add to a variable\" pattern",
           content: `for loop + a counter variable = **sum it up**!
 
 \`\`\`python
-numbers = [10, 20, 30, 40, 50]
 total = 0   # start at 0
 
-for num in numbers:
+for num in range(1, 6):   # 1, 2, 3, 4, 5
     total = total + num   # add num to total, store back
 
-print(f"Sum: {total}")  # Sum: 150
+print(f"Sum: {total}")  # Sum: 15
 \`\`\`
 
 Flow:
-- Round 1: total = 0 + 10 = 10
-- Round 2: total = 10 + 20 = 30
-- ... keep adding → final: 150
+- Round 1: total = 0 + 1 = 1
+- Round 2: total = 1 + 2 = 3
+- ... keep adding → final: 15
 
-> 💡 \`total = total + num\` can be shortened to \`total += num\`.
->
-> ⚡ For a quick total, \`sum(numbers)\` does it in one line!`
+> 💡 \`total = total + num\` can be shortened to \`total += num\`.`
         },
         {
           id: "forif-sim",
@@ -237,12 +228,12 @@ Press **▶ Run** or **▷ Step**.`,
         {
           id: "try5",
           type: "tryit",
-          title: "🖥️ Fill the blank — total the 5 test scores",
-          task: "Add every score in the list to get the total!",
-          initialCode: "scores = [85, 90, 78, 92, 88]\ntotal = 0\n\nfor score in scores:\n    # Add score to total and store it back\n    total = ___\n\nprint(f\"Total: {total}\")",
-          expectedOutput: "Total: 433",
-          hint: "Take the current total, add this score, store it back in total.",
-          hint2: "total + score"
+          title: "🖥️ Fill the blank — add up 1 to 10",
+          task: "Add every number from 1 to 10 to get the total!",
+          initialCode: "total = 0\n\nfor i in range(1, 11):\n    # Add i to total and store it back\n    total = ___\n\nprint(f\"Total: {total}\")",
+          expectedOutput: "Total: 55",
+          hint: "Take the current total, add this i, store it back in total.",
+          hint2: "total + i"
         }
       ]
     },
@@ -269,7 +260,7 @@ Press **▶ Run** or **▷ Step**.`,
 
 ✅ \`for i in range(n):\` — repeat n times
 ✅ \`range(start, end, step)\` — pick a range (end is NOT included!)
-✅ \`for item in list:\` — go through a list
+✅ \`for ch in string:\` — go through each letter
 ✅ **Sum pattern** — \`total = total + num\` (or \`total += num\`)
 
 Next time: **while loops** — "repeat while a condition is true"! 🚀`
