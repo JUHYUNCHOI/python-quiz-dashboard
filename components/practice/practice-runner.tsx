@@ -67,7 +67,7 @@ function buildHighlightHtml(code: string, patterns: Array<{ re: RegExp; cls: str
   return html
 }
 
-function highlightCode(code: string, language: "cpp" | "python" = "cpp"): string {
+export function highlightCode(code: string, language: "cpp" | "python" = "cpp"): string {
   if (language === "python") {
     return buildHighlightHtml(code, [
       { re: PY_STRING, cls: "string" },
@@ -587,7 +587,11 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
       </button>
       {showSolution && (
         <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
-          <pre className="font-mono text-sm text-gray-700 whitespace-pre-wrap overflow-x-auto">{currentSolutionCode}</pre>
+          <pre
+            className="font-mono text-sm whitespace-pre-wrap overflow-x-auto rounded-lg p-3"
+            style={{ background: "#1e1e2e", color: "#e6edf3" }}
+            dangerouslySetInnerHTML={{ __html: highlightCode(currentSolutionCode, lang) }}
+          />
           <p className="mt-3 text-sm text-gray-500">{problem.solutionExplanation}</p>
         </div>
       )}

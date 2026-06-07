@@ -24,7 +24,7 @@ import {
 } from "lucide-react"
 import type { CodingBankProblem } from "@/data/coding-bank"
 import { CODING_BANK_PROBLEMS, STARTER_PICKS } from "@/data/coding-bank"
-import { PracticeRunner } from "@/components/practice/practice-runner"
+import { PracticeRunner, highlightCode } from "@/components/practice/practice-runner"
 import type { PracticeProblem } from "@/data/practice/types"
 import { useRouter } from "next/navigation"
 import { getCompletedLessons } from "@/lib/curriculum-data"
@@ -683,9 +683,23 @@ function ProblemDetail({
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
                 {t("솔루션 코드", "Solution Code")}
               </p>
-              <pre className="text-sm text-emerald-300 font-mono whitespace-pre-wrap overflow-x-auto leading-relaxed">
-                {problem.solutionCode}
-              </pre>
+              <pre
+                className="text-sm font-mono whitespace-pre-wrap overflow-x-auto leading-relaxed"
+                style={{ color: "#e6edf3" }}
+                dangerouslySetInnerHTML={{ __html: highlightCode(problem.solutionCode, "cpp") }}
+              />
+              {problem.pySolutionCode && (
+                <>
+                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mt-4 mb-2">
+                    {t("파이썬 풀이", "Python Solution")}
+                  </p>
+                  <pre
+                    className="text-sm font-mono whitespace-pre-wrap overflow-x-auto leading-relaxed"
+                    style={{ color: "#e6edf3" }}
+                    dangerouslySetInnerHTML={{ __html: highlightCode(problem.pySolutionCode, "python") }}
+                  />
+                </>
+              )}
             </div>
           </div>
         )}
