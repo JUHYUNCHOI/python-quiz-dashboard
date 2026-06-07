@@ -386,6 +386,12 @@ function ProblemList({
   const isAllMcq = cluster.problems.every(p => p.type === "mcq")
   const locCluster = localizeCluster(cluster, locale)
 
+  // 난이도 필터 — 잘하는 학생이 바로 어려움으로 점프 (쉬운 것만 보이는 문제 해소)
+  const [diffFilter, setDiffFilter] = useState<"전체" | "쉬움" | "보통" | "어려움">("전체")
+  const diffCounts: Record<string, number> = { 쉬움: 0, 보통: 0, 어려움: 0 }
+  cluster.problems.forEach(p => { diffCounts[p.difficulty] = (diffCounts[p.difficulty] ?? 0) + 1 })
+  const passDiff = (p: PracticeProblem) => diffFilter === "전체" || p.difficulty === diffFilter
+
   return (
     <div className="flex flex-col gap-4 pb-24">
       <div className="flex items-center gap-3 mb-2">
@@ -406,9 +412,36 @@ function ProblemList({
         ▶ {isAllMcq ? t("연속으로 풀기", "Play all") : t("순서대로 풀기", "Start in order")}
         <span className="text-purple-200 font-normal text-xs">({cluster.problems.length} {t("문제 고정 순서", "problems · fixed order")})</span>
       </button>
+
+      {/* 난이도 필터 칩 — 2개 이상 난이도가 있을 때만 */}
       {(() => {
-        const mcqProblems = cluster.problems.filter(p => p.type === "mcq")
-        const codeProblems = cluster.problems.filter(p => p.type !== "mcq")
+        const diffs = (["쉬움", "보통", "어려움"] as const).filter(d => diffCounts[d] > 0)
+        if (diffs.length < 2) return null
+        const chip = (key: typeof diffFilter, label: string) => (
+          <button
+            key={key}
+            onClick={() => setDiffFilter(key)}
+            className={cn(
+              "px-3 py-1.5 rounded-full text-xs font-bold border transition-colors",
+              diffFilter === key
+                ? "bg-gray-900 text-white border-gray-900"
+                : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
+            )}
+          >
+            {label}
+          </button>
+        )
+        return (
+          <div className="flex flex-wrap gap-2 -mt-1">
+            {chip("전체", `${t("전체", "All")} ${cluster.problems.length}`)}
+            {diffs.map(d => chip(d, `${diffLabel(d)} ${diffCounts[d]}`))}
+          </div>
+        )
+      })()}
+
+      {(() => {
+        const mcqProblems = cluster.problems.filter(p => p.type === "mcq" && passDiff(p))
+        const codeProblems = cluster.problems.filter(p => p.type !== "mcq" && passDiff(p))
         const hasBoth = mcqProblems.length > 0 && codeProblems.length > 0
 
         const renderProblem = (problem: PracticeProblem, globalIdx: number) => {
@@ -444,7 +477,11 @@ function ProblemList({
         }
 
         if (!hasBoth) {
-          return cluster.problems.map((p, i) => renderProblem(p, i))
+          const list = cluster.problems.filter(passDiff)
+          if (list.length === 0) {
+            return <p className="text-gray-400 text-sm text-center py-6">{t("해당 난이도 문제가 없어요.", "No problems at this level.")}</p>
+          }
+          return list.map((p, i) => renderProblem(p, i))
         }
 
         return (

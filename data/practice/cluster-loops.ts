@@ -451,7 +451,7 @@ int main() {
       id: "loop-006",
       cluster: "loops",
       unlockAfter: "cpp-7",
-      difficulty: "어려움",
+      difficulty: "쉬움",
       title: "구구단 출력",
       description: `정수 N이 주어질 때, N단 구구단을 출력하세요.
 

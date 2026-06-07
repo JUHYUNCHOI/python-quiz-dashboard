@@ -234,6 +234,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => clearInterval(interval)
   }, [user, supabase])
 
+  // 로그인 직후 1회: DB lesson_progress → localStorage completedLessons 병합.
+  // /practice·/learn·/algo 의 "다음 추천" 이 다른 기기/캐시 초기화 후에도 실제 진도를 반영하도록.
+  useEffect(() => {
+    if (!user) return
+    let cancelled = false
+    import("@/lib/progress-sync")
+      .then(({ syncCompletedLessons }) => {
+        if (!cancelled) void syncCompletedLessons()
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [user])
+
   return (
     <AuthContext.Provider
       value={{

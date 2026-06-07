@@ -610,7 +610,7 @@ Read N and call counter N times, then print the final count.`,
       id: "pyfunc-011",
       cluster: "py-functions",
       unlockAfter: "34",
-      difficulty: "어려움",
+      difficulty: "쉬움",
       title: "가변 인자 합산",
       description: `*args를 사용하여 임의 개수의 숫자를 받아 합계를 반환하는 함수 total(*args)를 구현하세요.
 첫 줄에 N, 두 번째 줄에 N개의 정수가 주어집니다.`,

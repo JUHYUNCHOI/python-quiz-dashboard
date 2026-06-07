@@ -451,7 +451,7 @@ If there are no such elements, print an empty line.`,
       id: "pydict-010",
       cluster: "py-dicts",
       unlockAfter: "21",
-      difficulty: "어려움",
+      difficulty: "쉬움",
       title: "멱집합 원소 수",
       description: `첫 줄에 정수 N이 주어집니다. 이어서 N줄에 걸쳐 서로 다른 원소가 하나씩 주어집니다.
 이 N개 원소의 멱집합(모든 부분집합의 집합)에 포함된 부분집합의 수를 출력하세요.`,
