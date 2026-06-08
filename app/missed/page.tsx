@@ -103,7 +103,7 @@ export default function MissedPage() {
               📚 {t("틀린 문제 창고", "Wrong Question Bank")}
             </h1>
             <p className="text-xs sm:text-sm text-rose-600/70 mt-0.5">
-              {t("틀린 문제 모음. 7일 뒤 🔓 다시 풀어서 맞히면 마스터(창고에서 빠지고 점수↑).", "Wrong questions. After 7 days 🔓 solve again to master (removed + score up).")}
+              {t("틀린 문제 모음. 복습 간격이 단계마다 늘어요 (1→3→7→14일). 🔓 되면 다시 풀어 맞히면 승급, 끝까지 가면 마스터 ✓.", "Wrong questions. Review gaps grow each step (1→3→7→14d). When 🔓, solve again to level up — finish to master ✓.")}
             </p>
           </div>
         </div>
