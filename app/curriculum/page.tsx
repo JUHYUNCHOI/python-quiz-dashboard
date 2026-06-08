@@ -468,11 +468,9 @@ export default function CurriculumPage() {
     } catch { /* ignore */ }
     // 알고리즘 토픽 진도
     try {
-      const algoCompleted = JSON.parse(localStorage.getItem("algo-completed") || "[]") as string[]
-      const algoCompletedSet = new Set(algoCompleted)
-      const topicsDone = ALL_TOPICS.filter(topic =>
-        topic.problems.some(p => algoCompletedSet.has(p.id))
-      ).length
+      // 알고리즘 토픽 완료는 completedLessons 의 "algo-*" 로 기록됨 (algo-completed 키는 안 씀)
+      const completed = JSON.parse(localStorage.getItem("completedLessons") || "[]") as string[]
+      const topicsDone = completed.filter(id => typeof id === "string" && id.startsWith("algo-")).length
       setAlgoTopicsDone(topicsDone)
     } catch { /* ignore */ }
     setLoaded(true)

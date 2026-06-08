@@ -60,3 +60,33 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json({ ok: true })
 }
+
+/**
+ * DELETE /api/coding-bank/progress
+ * 코딩 뱅크 문제 완료 해제 (학생이 "✓ 했음" 체크를 해제했을 때)
+ * body: { problemId: string }
+ */
+export async function DELETE(request: NextRequest) {
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+
+  const { problemId } = await request.json() as { problemId: string }
+  if (!problemId) return NextResponse.json({ error: "problemId required" }, { status: 400 })
+
+  const { error } = await supabase
+    .from("lesson_progress")
+    .delete()
+    .eq("user_id", user.id)
+    .eq("lesson_id", problemId)
+    .eq("variant", "")
+    .eq("progress_type", "coding-bank")
+
+  if (error) {
+    console.error("[/api/coding-bank/progress DELETE]", error)
+    return NextResponse.json({ error: "DB error" }, { status: 500 })
+  }
+
+  return NextResponse.json({ ok: true })
+}

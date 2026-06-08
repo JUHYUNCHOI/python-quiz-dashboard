@@ -838,13 +838,20 @@ function CodingBankContent() {
     setSolvedSet((prev) => new Set([...prev, id]))
   }
 
-  // 학생이 직접 누르는 "했음" 체크 (외부/튜토리얼처럼 자동 채점 안 되는 경우 보조)
+  // 학생이 직접 누르는 "했음" 체크. 양방향 DB 동기화 — 해제도 DB 반영(안 그러면 로드 시 union 으로 되살아남)
   const toggleSolved = (id: string) => {
     setSolvedSet((prev) => {
       const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
+      const adding = !next.has(id)
+      if (adding) next.add(id)
+      else next.delete(id)
       try { localStorage.setItem(LS_KEY, JSON.stringify([...next])) } catch {}
+      // DB 동기화: 추가=POST, 해제=DELETE (로그인 상태일 때만 의미; 실패는 무시)
+      fetch("/api/coding-bank/progress", {
+        method: adding ? "POST" : "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ problemId: id }),
+      }).catch(() => {})
       return next
     })
   }
