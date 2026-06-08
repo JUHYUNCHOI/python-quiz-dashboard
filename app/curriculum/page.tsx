@@ -980,7 +980,7 @@ export default function CurriculumPage() {
                   </>
                 ) : (
                   <>
-                    {nextLessonInfo && (
+                    {nextLessonInfo ? (
                       <Link
                         href={`/learn/${nextLessonInfo.lesson.id}`}
                         className="bg-green-500 text-white px-6 py-3 rounded-xl border border-gray-200 font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-sm"
@@ -993,13 +993,21 @@ export default function CurriculumPage() {
                         </span> {nextLessonInfo.lesson.title}
                         <Play className="h-5 w-5" />
                       </Link>
+                    ) : (
+                      // 수업을 다 들은 학생 — 죽은 목록 대신 '앞으로 가는 길' 안내 (지도가 알아서 다음 단계로 라우팅)
+                      <Link
+                        href="/journey"
+                        className="bg-green-500 text-white px-6 py-3 rounded-xl border border-gray-200 font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-sm"
+                      >
+                        🎓 {t("수업 완료! 다음 단계 보기", "Lessons done! See what's next")} →
+                      </Link>
                     )}
                     {completedCount > 0 && (
                       <Link
                         href="/algo"
                         className="bg-purple-500 text-white px-5 py-3 rounded-xl border border-gray-200 font-bold hover:bg-purple-600 transition-colors flex items-center justify-center gap-2 shadow-sm"
                       >
-                        🧠 {t("퀴즈 연습", "Quiz")}
+                        🧩 {t("알고리즘", "Algorithms")}
                       </Link>
                     )}
                   </>
