@@ -16,6 +16,7 @@ import { ReleaseStageBanner } from "@/components/quest/ReleaseStageBanner"
 import { QuestCompletionCard } from "@/components/quest/QuestCompletionCard"
 import { UsacoVerifiedBadge } from "@/components/quest/UsacoVerifiedBadge"
 import { useCodeLang } from "@/components/quest/use-code-lang"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 
 const ALGO_UNLOCK_THRESHOLD = 8
 
@@ -103,6 +104,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const { lang, t } = useLanguage()
   const [codeLang, setCodeLang] = useCodeLang()
   const { profile } = useAuth()
+  const isTeacher = useEffectiveIsTeacher()
   const meta = PROBLEM_MAP.get(problemId)
 
   // 잠금 해제 — 모든 학생이 바로 접근 가능 (이전엔 알고 토픽 8개 완료 조건이라
@@ -281,8 +283,8 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           <ExternalLink size={11} />
           <span className="md:hidden">{t("원래 문제", "Original")}</span>
         </a>
-        {/* 🏆 USACO 검증 결과 (실제 제출, 추측 아님) — 데이터 있는 quest 만 */}
-        <UsacoVerifiedBadge questId={problemId} E={lang === "en"} compact />
+        {/* 🏆 USACO 검증 결과 — 선생님 전용 (학생에겐 'C++ 5/12' 같은 게 혼란) */}
+        {isTeacher && <UsacoVerifiedBadge questId={problemId} E={lang === "en"} compact />}
         {solved ? (
           <div className="flex items-center gap-1 bg-green-50 border border-green-300 rounded-full px-2 py-0.5 flex-shrink-0">
             <CheckCircle size={12} className="text-green-600" />
