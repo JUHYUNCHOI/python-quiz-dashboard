@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { LanguageToggle } from "@/components/language-toggle"
 import { Trophy, Flame, LogIn } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { useGamification } from "@/hooks/use-gamification"
@@ -14,7 +15,7 @@ import { usePathname } from "next/navigation"
 export function Header() {
   const { profile, isAuthenticated, isLoading } = useAuth()
   const { level, dailyStreak } = useGamification()
-  const { lang, setLang, t } = useLanguage()
+  const { lang, t } = useLanguage()
   const pathname = usePathname()
   const isTeacher = useEffectiveIsTeacher()
 
@@ -55,23 +56,8 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-2 md:gap-4">
-          {/* 언어 선택 탭 — /quest/[problemId] 페이지에서는 숨김 (App 리셋 방지) */}
-          {!isInQuestProblem && (
-            <div className="flex items-center rounded-full bg-gray-100 p-0.5 text-xs font-bold">
-              <button
-                onClick={() => setLang('ko')}
-                className={`px-2.5 py-1.5 rounded-full transition-colors ${lang === 'ko' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-              >
-                🇰🇷 KO
-              </button>
-              <button
-                onClick={() => setLang('en')}
-                className={`px-2.5 py-1.5 rounded-full transition-colors ${lang === 'en' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-              >
-                🇺🇸 EN
-              </button>
-            </div>
-          )}
+          {/* 언어 선택 탭 — 공용 컴포넌트로 통일. /quest/[problemId] 에서는 숨김 (App 리셋 방지) */}
+          {!isInQuestProblem && <LanguageToggle />}
 
           {!isLoading && !isAuthenticated ? (
             <Link

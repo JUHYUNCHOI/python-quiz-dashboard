@@ -117,7 +117,6 @@ function ClusterList({
   const nextCluster = withProgress[0]?.c
   const otherActive = activeClusters.filter(c => c !== nextCluster)
   const [showAllActive, setShowAllActive] = useState(false)
-  const visibleOtherActive = showAllActive ? otherActive : otherActive.slice(0, 2)
 
   const renderSmallCard = (cluster: PracticeCluster, accent = false) => {
     const solved = cluster.problems.filter(p => solvedSet.has(p.id)).length
@@ -287,23 +286,21 @@ function ClusterList({
         )
       })()}
 
-      {/* 해금된 나머지 — 최대 2개, 더 보기 */}
+      {/* 다른 연습 — 기본 접힘 (선택지 줄이기). 펼치면 전체 목록 */}
       {otherActive.length > 0 && (
         <div className="flex flex-col gap-2">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide px-1">
-            {t("해금된 클러스터", "Also unlocked")}
-          </p>
-          {visibleOtherActive.map(c => renderSmallCard(c))}
-          {otherActive.length > 2 && (
-            <button
-              onClick={() => setShowAllActive(v => !v)}
-              className="text-xs text-purple-500 font-semibold py-1 text-center hover:text-purple-700 transition-colors"
-            >
-              {showAllActive
-                ? t("접기 ▲", "Show less ▲")
-                : t(`+ ${otherActive.length - 2}개 더 보기`, `+ ${otherActive.length - 2} more`)}
-            </button>
-          )}
+          <button
+            onClick={() => setShowAllActive(v => !v)}
+            className="flex items-center justify-between px-1 py-1.5 text-left"
+          >
+            <span className="text-xs font-semibold text-gray-500">
+              {t("다른 연습도 골라서 풀기", "Pick another practice")} ({otherActive.length})
+            </span>
+            <span className="text-xs text-purple-500 font-semibold shrink-0">
+              {showAllActive ? t("접기 ▲", "Hide ▲") : t("펼치기 ▾", "Show ▾")}
+            </span>
+          </button>
+          {showAllActive && otherActive.map(c => renderSmallCard(c))}
         </div>
       )}
 
