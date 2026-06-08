@@ -69,7 +69,21 @@ function getCodingBankSolvedCount(): number {
   }
 }
 
+/** 학생이 "했음" 표시한 대회/quest 수 (학생이 직접 체크 — quest 는 자동 채점 불가). */
+function getQuestSolvedCount(): number {
+  if (typeof window === "undefined") return 0
+  try {
+    const raw = localStorage.getItem("quest-solved")
+    if (!raw) return 0
+    const arr = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.length : 0
+  } catch {
+    return 0
+  }
+}
+
 const CODING_BANK_THRESHOLD = 5  // 5개 풀면 코딩 뱅크 "충분히 했음" 으로 보고 알고리즘 추천
+const CONTEST_THRESHOLD = 8  // 알고리즘 8 토픽 완료 → 실전 대회(quest) 단계 진입 (대회 해금 기준과 동일)
 
 export function getSmartNext(
   completedIds: Set<string | number>,
@@ -133,6 +147,23 @@ export function getSmartNext(
   // 2. 트랙 모든 레슨 완료 → 알고리즘 추천 (Python / C++ 트랙)
   // Wave 1 → 2 → 3 순서로 첫 미완료 토픽
   if (preferredTrack === "python" || preferredTrack === "cpp") {
+    const algoDone = ALGO_TOPICS.filter(tp => completedIds.has(tp.lessonId)).length
+
+    // 🌉 다리 3: 알고리즘 충분히(8토픽) → 마지막 단계 '대회'(quest)로 안내.
+    // (이전엔 알고리즘 후 곧장 '마스터'로 끝나 대회로 가는 길이 끊겨 있었음)
+    if (algoDone >= CONTEST_THRESHOLD) {
+      const qSolved = getQuestSolvedCount()
+      return {
+        type: "quest",
+        title: qSolved > 0 ? `실전 대회 문제 (${qSolved} 풀이)` : "실전 대회 문제 — 이제 진짜 대회!",
+        titleEn: qSolved > 0 ? `Contest Problems (${qSolved} solved)` : "Contest Problems — the real thing!",
+        href: "/quest",
+        subtitle: "USACO Bronze · MCC — 배운 알고리즘으로 실전",
+        emoji: "🏆",
+        reason: `알고리즘 ${algoDone}개 완료 → 대회 단계 진입`,
+      }
+    }
+
     const sortedAlgo = [...ALGO_TOPICS].sort((a, b) => a.wave - b.wave)
     const nextAlgo = sortedAlgo.find(tp => !completedIds.has(tp.lessonId))
     if (nextAlgo) {
@@ -149,15 +180,18 @@ export function getSmartNext(
     }
   }
 
-  // 3. 다 끝났으면 마스터
-  return {
-    type: "complete",
-    title: "🏆 마스터!",
-    titleEn: "🏆 Master!",
-    href: "/curriculum",
-    subtitle: "모든 단계 완료",
-    emoji: "🏆",
-    reason: "모든 트랙 완료",
+  // 3. 알고리즘 토픽이 8개 미만이라 위 다리에 안 걸렸는데 다 끝낸 경우(예외적) → 대회로
+  {
+    const qSolved = getQuestSolvedCount()
+    return {
+      type: "quest",
+      title: qSolved > 0 ? `실전 대회 문제 (${qSolved} 풀이)` : "실전 대회 문제 🏆",
+      titleEn: qSolved > 0 ? `Contest Problems (${qSolved} solved)` : "Contest Problems 🏆",
+      href: "/quest",
+      subtitle: "USACO Bronze · MCC — 실전 대회",
+      emoji: "🏆",
+      reason: "모든 학습 단계 완료 → 대회",
+    }
   }
 }
 
