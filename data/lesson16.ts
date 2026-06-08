@@ -450,10 +450,9 @@ even = [n for n in nums if n % 2 == 0]
           id: "mission3",
           type: "mission",
           title: "🏆 미션 3 — 입력 받은 수의 짝수만",
-          task: "공백으로 구분된 정수들을 입력받아 **짝수만 정렬해** 출력하세요!",
-          initialCode: "nums = list(map(int, input().split()))\n\n# 컴프리헨션으로 짝수만 골라 정렬\nevens = sorted([n for n in nums if n % ___ == 0])\n\nprint(evens)",
+          task: "정수 리스트에서 **짝수만 골라 정렬해** 출력하세요!",
+          initialCode: "nums = [5, 2, 8, 3, 6, 1, 4, 7]\n\n# 컴프리헨션으로 짝수만 골라 정렬\nevens = sorted([n for n in nums if n % ___ == 0])\n\nprint(evens)",
           expectedOutput: "[2, 4, 6, 8]",
-          stdin: "5 2 8 3 6 1 4 7",
           hint: "n % 2 == 0 이 짝수.",
           hint2: "evens = sorted([n for n in nums if n % 2 == 0])"
         },
