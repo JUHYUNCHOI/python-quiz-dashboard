@@ -13,7 +13,7 @@ import { LibraryToggle, type LibraryVariant } from "@/components/library-toggle"
 import { SoundToggle } from "@/components/sound-toggle"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { useLessonSync } from "@/hooks/use-lesson-sync"
-import { markLessonComplete, addLearnWrongQuestion } from "@/lib/mark-lesson-complete"
+import { markLessonComplete, addLearnWrongQuestion, markLearnWrongMastered } from "@/lib/mark-lesson-complete"
 import { saveStepAnswer } from "@/lib/save-step-answer"
 import { useGamification } from "@/hooks/use-gamification"
 import { logActivity } from "@/lib/activity-log"
@@ -133,6 +133,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         if (steps[si].id === stepIdParam) {
           setCurrentChapter(ci)
           setCurrentStep(si)
+          // /missed 에서 재도전하러 온 경우 — 완료한 문제라도 다시 풀 수 있게 초기화
+          setSelectedAnswer(null)
+          setShowExplanation(false)
+          setQuizAttempts(0)
           return
         }
       }
@@ -707,6 +711,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     }
     if (isCorrect) {
       play("correct")
+      // 창고에 있던 문제를 다시 풀어 맞힘 → 마스터 처리(창고에서 제거, 점수 회복)
+      if (!effectiveTeacher && step?.id) markLearnWrongMastered(lessonId, step.id)
       if (!completedSteps.has(step.id)) {
         setCompletedSteps(prev => new Set([...prev, step.id]))
         if (!isIGCSE && !effectiveTeacher && !isAlreadyDone) {
@@ -747,6 +753,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     }
     if (correct) {
       play("correct")
+      // 창고에 있던 문제를 다시 풀어 맞힘 → 마스터 처리 (창고에서 제거)
+      if (!effectiveTeacher && step?.id) markLearnWrongMastered(lessonId, step.id)
       if (!completedSteps.has(step.id)) {
         setCompletedSteps(prev => new Set([...prev, step.id]))
         if (!isIGCSE && !effectiveTeacher && !isAlreadyDone) {

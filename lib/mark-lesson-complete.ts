@@ -264,6 +264,19 @@ export function addToWrongBank(lessonId: string | number, stepIndices: number[])
  * source="learn" 로 마킹. stepId (lesson step.id) 로 식별.
  * Phase 1 MVP: localStorage 만 (Supabase 동기화는 schema 마이그레이션 후 Phase 2).
  */
+// 틀린 문제 복습 간격: 마지막으로 틀린 뒤 7일 지나야 다시 풀 수 있음 (간격 반복)
+export const WRONG_REVIEW_GAP_MS = 7 * 24 * 60 * 60 * 1000
+
+/** 이 항목을 지금 다시 풀 수 있나 (마지막 오답 + 7일 경과) */
+export function isWrongDue(entry: WrongQuestionEntry, now: number = Date.now()): boolean {
+  return now >= entry.addedAt + WRONG_REVIEW_GAP_MS
+}
+
+/** 다시 풀 수 있을 때까지 남은 일수 (올림, 최소 0) */
+export function wrongDaysUntilDue(entry: WrongQuestionEntry, now: number = Date.now()): number {
+  return Math.max(0, Math.ceil((entry.addedAt + WRONG_REVIEW_GAP_MS - now) / (24 * 60 * 60 * 1000)))
+}
+
 export function addLearnWrongQuestion(lessonId: string | number, stepId: string) {
   if (!stepId) return
   const normalizedId = String(lessonId)
@@ -271,16 +284,20 @@ export function addLearnWrongQuestion(lessonId: string | number, stepId: string)
   try {
     const raw = localStorage.getItem(WRONG_BANK_KEY)
     const bank: WrongQuestionEntry[] = raw ? JSON.parse(raw) : []
-    // dedup: 같은 lessonId + stepId + source="learn" 이면 추가 X (이미 있음)
-    const exists = bank.some(e => e.source === "learn" && e.lessonId === normalizedId && e.stepId === stepId)
-    if (exists) return
-    bank.push({
-      lessonId: normalizedId,
-      stepIndex: -1, // sentinel (learn-source 에서는 의미 없음)
-      stepId,
-      source: "learn",
-      addedAt: now,
-    })
+    // 이미 있으면 addedAt 을 now 로 갱신 → 7일 복습 타이머 리셋 (재도전에서 또 틀리면 7일 뒤로 미룸)
+    const existing = bank.find(e => e.source === "learn" && e.lessonId === normalizedId && e.stepId === stepId)
+    if (existing) {
+      existing.addedAt = now
+      existing.mastered = false
+    } else {
+      bank.push({
+        lessonId: normalizedId,
+        stepIndex: -1, // sentinel (learn-source 에서는 의미 없음)
+        stepId,
+        source: "learn",
+        addedAt: now,
+      })
+    }
     localStorage.setItem(WRONG_BANK_KEY, JSON.stringify(bank))
   } catch {}
 }
