@@ -149,9 +149,9 @@ print(attack(20, True))`,
         task: "___ 자리 3개를 채우세요!",
         guide: "치명타 시스템 완성",
         hint: "random 호출, 확률 비교, 1.5배!",
-        template: "import random\nrandom.seed(0)\n\ndef attack(atk):\n    damage = atk\n    if random.___() < 0.5:\n        damage = ___(damage * ___)\n        print(f'크리! {damage}')\n    else:\n        print(f'일반 {damage}')\n\nattack(10)\nattack(10)",
+        template: "import random\nrandom.seed(10)\n\ndef attack(atk):\n    damage = atk\n    if random.___() < 0.5:\n        damage = ___(damage * ___)\n        print(f'크리! {damage}')\n    else:\n        print(f'일반 {damage}')\n\nattack(10)\nattack(10)",
         blanksAnswer: ["random", "int", "1.5"],
-        answer: "import random\nrandom.seed(0)\n\ndef attack(atk):\n    damage = atk\n    if random.random() < 0.5:\n        damage = int(damage * 1.5)\n        print(f'크리! {damage}')\n    else:\n        print(f'일반 {damage}')\n\nattack(10)\nattack(10)",
+        answer: "import random\nrandom.seed(10)\n\ndef attack(atk):\n    damage = atk\n    if random.random() < 0.5:\n        damage = int(damage * 1.5)\n        print(f'크리! {damage}')\n    else:\n        print(f'일반 {damage}')\n\nattack(10)\nattack(10)",
         alternateAnswers: [],
         expect: "일반 10\n크리! 15"
       }
@@ -320,7 +320,7 @@ print(total_atk(10, Equip(5)))`,
         alternateAnswers: [
           "import random\nrandom.seed(0)\natk=20\nfor i in range(4):\n    if random.random()<0.5:\n        print(int(atk*1.5))\n    else:\n        print(atk)"
         ],
-        expect: "20\n30\n30\n20"
+        expect: "20\n20\n30\n30"
       }
     },
 
