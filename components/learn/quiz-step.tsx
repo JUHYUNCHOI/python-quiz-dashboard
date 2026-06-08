@@ -121,12 +121,6 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
             </button>
           )
         })}
-        {/* 1번째 오답 → 한 번 더 기회 (정답은 아직 공개 X) */}
-        {selectedAnswer !== null && !showExplanation && (
-          <div className="p-3 rounded-xl bg-amber-50 border-2 border-amber-300 text-sm font-bold text-amber-700 flex items-center gap-2">
-            🤔 {t("아쉬워요! 다시 한 번 골라봐요.", "Not quite — try once more.")}
-          </div>
-        )}
         {showExplanation && step.explanation && (
           <div className="mt-2 space-y-2">
             {/* 오답일 때: 정답 강조 카드 */}
