@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { LanguageToggle } from "@/components/language-toggle"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Trophy, ExternalLink, ArrowRight } from "lucide-react"
 import { AlgoViewer } from "@/components/algo/algo-viewer"
@@ -26,7 +27,7 @@ const WAVE_COLOR: Record<number, string> = {
 
 export function AlgoTopicPage({ topic }: AlgoTopicPageProps) {
   const router = useRouter()
-  const { lang, setLang } = useLanguage()
+  const { lang } = useLanguage()
   const [codeTrack, setCodeTrack] = useState<"cpp" | "python">("cpp")
 
   return (
@@ -55,23 +56,8 @@ export function AlgoTopicPage({ topic }: AlgoTopicPageProps) {
             </span>
           </div>
 
-          {/* 언어 토글 (콘텐츠 언어: KO / EN) */}
-          <div className="flex items-center bg-gray-100 rounded-lg p-0.5 shrink-0">
-            <button
-              onClick={() => setLang("ko")}
-              className={cn(
-                "text-xs font-bold px-2.5 py-1 rounded-md transition-colors",
-                lang === "ko" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
-              )}
-            >한국어</button>
-            <button
-              onClick={() => setLang("en")}
-              className={cn(
-                "text-xs font-bold px-2.5 py-1 rounded-md transition-colors",
-                lang === "en" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
-              )}
-            >EN</button>
-          </div>
+          {/* 언어 토글 — 공용 컴포넌트로 통일 */}
+          <LanguageToggle className="shrink-0" />
 
           {/* 코드 언어 토글 (C++ / Python) */}
           <div className="flex items-center bg-gray-100 rounded-lg p-0.5 shrink-0">

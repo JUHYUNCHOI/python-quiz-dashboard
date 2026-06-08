@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, Suspense, lazy } from "react"
+import { LanguageToggle } from "@/components/language-toggle"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
@@ -99,7 +100,7 @@ declare global { interface Window { _questLang?: string } }
 
 export default function QuestProblemClient({ problemId }: { problemId: string }) {
   const router = useRouter()
-  const { lang, setLang, t } = useLanguage()
+  const { lang, t } = useLanguage()
   const [codeLang, setCodeLang] = useCodeLang()
   const { profile } = useAuth()
   const meta = PROBLEM_MAP.get(problemId)
@@ -237,18 +238,9 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
             <span className="font-semibold text-gray-600">{meta.sub}</span>
           </div>
         </div>
-        {/* 언어 토글: 한국어 ↔ English (글로벌 컨텍스트, persistent) */}
-        <div className="flex-shrink-0 hidden sm:flex items-stretch border border-gray-300 rounded-md overflow-hidden text-[10px] font-bold">
-          <button
-            onClick={() => setLang("ko")}
-            className={`px-1.5 py-0.5 transition-colors ${lang === "ko" ? "bg-purple-500 text-white" : "bg-white text-gray-500 hover:bg-purple-50"}`}
-            title="한국어"
-          >한</button>
-          <button
-            onClick={() => setLang("en")}
-            className={`px-1.5 py-0.5 transition-colors border-l border-gray-200 ${lang === "en" ? "bg-purple-500 text-white" : "bg-white text-gray-500 hover:bg-purple-50"}`}
-            title="English"
-          >EN</button>
+        {/* 언어 토글 — 공용 컴포넌트로 통일 */}
+        <div className="flex-shrink-0 hidden sm:block">
+          <LanguageToggle />
         </div>
         {/* 코드 언어 토글: Python ↔ C++ (localStorage persistent across quests) */}
         <div className="flex-shrink-0 flex items-stretch border border-gray-300 rounded-md overflow-hidden text-[10px] font-bold">
