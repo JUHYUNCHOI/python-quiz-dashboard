@@ -436,8 +436,8 @@ export default function JourneyPage() {
 
   const stages = trackId === "B"
     ? [
+        // 코딩 뱅크(cpp-16 잠금, C++ STL)는 Python 트랙에서 제외 — 메인 지도·smart-next 와 일치
         { emoji: "🐍", label: "Python 수업+연습", done: PY_DONE, total: 52 },
-        { emoji: "💪", label: "코딩 뱅크 (도전)", done: BANK_SOLVED, total: 5 },
         { emoji: "🧩", label: "알고리즘 (Py)", done: ALGO_MASTERED, total: 20 },
         { emoji: "🏆", label: "대회", done: 0, total: 1 },
       ]

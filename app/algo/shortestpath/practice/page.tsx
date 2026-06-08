@@ -219,6 +219,7 @@ export default function SortingPracticePage() {
 
         {/* 🌱 패턴 적용 (보통) + 🏆 응용 도전 (어려움) — 2 섹션 */}
         {(() => {
+          const warmup = shortestPathContestCluster.problems.filter(p => p.difficulty === "쉬움")
           const easy = shortestPathContestCluster.problems.filter(p => p.difficulty === "보통")
           const hard = shortestPathContestCluster.problems.filter(p => p.difficulty === "어려움")
           const renderItem = (p: any) => {
@@ -270,6 +271,17 @@ export default function SortingPracticePage() {
           }
           return (
             <>
+              {warmup.length > 0 && (
+                <div className="mb-5">
+                  <div className="flex items-center gap-2 mb-2 px-1">
+                    <span className="text-sm font-black text-green-700">🟢 {t("워밍업", "Warm-up")}</span>
+                    <span className="text-[11px] text-gray-500">{t("— 가볍게 시작 (쉬움)", "— gentle start (easy)")}</span>
+                  </div>
+                  <div className="space-y-2">
+                    {warmup.map(renderItem)}
+                  </div>
+                </div>
+              )}
               {easy.length > 0 && (
                 <div className="mb-5">
                   <div className="flex items-center gap-2 mb-2 px-1">

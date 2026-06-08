@@ -180,6 +180,19 @@ export function getSmartNext(
     }
   }
 
+  // pseudo/IGCSE: 시험 트랙이라 USACO 대회로 보내지 않음 — 트랙 완료/복습으로 안내
+  if (preferredTrack === "pseudo") {
+    return {
+      type: "complete",
+      title: "🎓 Pseudocode 트랙 완료!",
+      titleEn: "🎓 Pseudocode track complete!",
+      href: "/curriculum?course=pseudo",
+      subtitle: "IGCSE 의사코드 — 복습하거나 시험 대비를 이어가요",
+      emoji: "🎓",
+      reason: "pseudo 트랙 모든 레슨 완료 (USACO 대상 아님)",
+    }
+  }
+
   // 3. 알고리즘 토픽이 8개 미만이라 위 다리에 안 걸렸는데 다 끝낸 경우(예외적) → 대회로
   {
     const qSolved = getQuestSolvedCount()
