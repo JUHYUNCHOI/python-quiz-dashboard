@@ -111,7 +111,7 @@ print(f'개학한 지 {school_days.days}일')
 # 비교
 if today > birthday:
     print('생일이 지났어요!')`,
-      expectedOutput: `생일: 2010년 5월 20일\n태어난 지 5139일\n개학한 지 103일\n생일이 지났어요!`,
+      expectedOutput: `생일: 2010년 5월 20일\n태어난 지 5140일\n개학한 지 103일\n생일이 지났어요!`,
       hint: "날짜끼리 빼면 차이(일수)가 나와요!",
       hint2: ".days로 일수를 가져와요!"
     },
@@ -149,7 +149,7 @@ foods = ['치킨', '피자', '햄버거', '떡볶이', '김밥']
 for i in range(3):
     pick = random.choice(foods)
     print(f'\\n오늘의 메뉴 {i+1}: {pick}')`,
-      expectedOutput: `=== 주사위 5번 ===\n1번째: 1\n2번째: 1\n3번째: 6\n4번째: 6\n5번째: 6\n\n오늘의 메뉴 1: 치킨\n오늘의 메뉴 2: 치킨\n오늘의 메뉴 3: 김밥`,
+      expectedOutput: `=== 주사위 5번 ===\n1번째: 6\n2번째: 1\n3번째: 1\n4번째: 6\n5번째: 3\n\n오늘의 메뉴 1: 치킨\n\n오늘의 메뉴 2: 치킨\n\n오늘의 메뉴 3: 햄버거`,
       hint: "seed(42)를 설정하면 항상 같은 순서의 랜덤값이 나와요!",
       hint2: "코드를 그대로 실행하세요!"
     },
