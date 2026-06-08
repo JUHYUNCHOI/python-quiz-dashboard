@@ -2,7 +2,7 @@ import { C, t } from "@/components/quest/theme";
 import { getPhotoshoot25Sections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: makePhotoshoot25Ch1 (5 steps)
+   Chapter 1: makePhotoshoot25Ch1 (6 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makePhotoshoot25Ch1(E) {
   return [
@@ -70,6 +70,40 @@ export function makePhotoshoot25Ch1(E) {
                   <b style={{ color: "#15803d" }}>{t(E, "maximum K x K window sum", "K x K 윈도우의 최대 합")}</b>
                   {t(E, ".", " 을 출력해요.")}
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-1b: Numbers-first warm-up — compute K×K window sums on a tiny grid before the big-O talk
+    {
+      type: "reveal",
+      narr: t(E,
+        "Before the big-O talk, let's slide a 2×2 photo over a tiny 3×3 grid and add up real numbers.",
+        "빅오 얘기 전에, 작은 3×3 격자 위에서 2×2 사진을 옮겨가며 실제 숫자를 더해봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
+              🔢 {t(E, "K×K window sum — with numbers", "K×K 창 합 — 숫자로")}
+            </div>
+            <div style={{ marginBottom: 6 }}>
+              {t(E, "Grid N=3, photo size K=2. Beauty:", "격자 N=3, 사진 크기 K=2. 아름다움:")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, background: "#fff", border: "1px solid #c4b5fd", borderRadius: 6, padding: "6px 10px", display: "inline-block", lineHeight: 1.5 }}>
+              <div>1&nbsp;&nbsp;2&nbsp;&nbsp;0</div>
+              <div>0&nbsp;&nbsp;3&nbsp;&nbsp;1</div>
+              <div>4&nbsp;&nbsp;0&nbsp;&nbsp;2</div>
+            </div>
+            <div style={{ marginTop: 8, paddingLeft: 8, borderLeft: "3px solid #c4b5fd", display: "flex", flexDirection: "column", gap: 3 }}>
+              <div>{t(E, "top-left 2×2: ", "왼쪽 위 2×2: ")}1+2+0+3 = <b>6</b></div>
+              <div style={{ color: "#7c3aed", fontWeight: 700 }}>{t(E, "bottom-left 2×2: ", "왼쪽 아래 2×2: ")}0+3+4+0 = 7 ← {t(E, "biggest!", "최대!")}</div>
+            </div>
+            <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
+              👉 {t(E, "Best photo = the largest sum among all K×K windows = ", "가장 멋진 사진 = 모든 K×K 창 합 중 최댓값 = ")}<b style={{ color: "#15803d" }}>7</b>
+              <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
+                {t(E, "An update raises one cell — some window sums change, and we reprint the max.",
+                     "업데이트는 한 칸을 키워요 — 일부 창 합이 바뀌고, 최댓값을 다시 출력해요.")}
               </div>
             </div>
           </div>
