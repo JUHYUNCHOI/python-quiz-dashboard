@@ -151,24 +151,12 @@ export default function MooApp(props = {}) {
 
   const codeControlsSlot = showCodeControls ? (
     <div style={{ display: "flex", gap: 0, alignItems: "stretch" }}>
-      <select
-        value={codeLang}
-        onChange={e => setCodeLang(e.target.value)}
-        title={t(E, "Choose code language", "코드 언어 선택")}
-        style={{
-          background: "#fff", color: A, border: `1.5px solid ${A}`,
-          borderRadius: "8px 0 0 8px", borderRight: "none",
-          padding: "4px 6px", fontSize: 12, fontWeight: 800, cursor: "pointer",
-        }}>
-        <option value="py">🐍 Py</option>
-        <option value="cpp">💻 C++</option>
-      </select>
       <button
         onClick={() => downloadMooPDF(E, getMooSections(E), codeLang)}
         title={t(E, "Download full study guide", "전체 풀이 PDF 다운로드")}
         style={{
           background: A, color: "#fff", border: `1.5px solid ${A}`,
-          borderRadius: "0 8px 8px 0",
+          borderRadius: "8px",
           padding: "5px 10px", cursor: "pointer", fontSize: 12, fontWeight: 800,
         }}>📄 PDF</button>
     </div>
