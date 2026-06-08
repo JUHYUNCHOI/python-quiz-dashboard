@@ -127,32 +127,39 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
         {step.options?.map((option, idx) => {
           const isSelected = selectedAnswer === idx
           const isCorrect = idx === step.answer
-          const showResult = selectedAnswer !== null
+          const revealed = showExplanation               // 확정(채점) 후에만 정답 공개
+          const selectedWrong = isSelected && !isCorrect  // 고른 오답 (재시도 중에도 빨강)
           return (
             <motion.button
-              key={`${idx}-${selectedAnswer}`}
+              key={`${idx}-${selectedAnswer}-${showExplanation}`}
               whileTap={{ scale: 0.97 }}
               onClick={() => onAnswer(idx)}
-              disabled={selectedAnswer !== null}
+              disabled={revealed}
               className={cn(
                 "w-full p-4 rounded-xl text-left font-mono text-sm md:text-base transition-all border-2 whitespace-pre-line flex items-center min-h-[48px]",
-                !showResult && "bg-white hover:bg-emerald-50 active:bg-emerald-100 border-gray-200 hover:border-emerald-400",
-                showResult && isCorrect && "bg-green-100 border-green-500 text-green-800",
-                showResult && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800",
-                showResult && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400",
+                !revealed && !selectedWrong && "bg-white hover:bg-emerald-50 active:bg-emerald-100 border-gray-200 hover:border-emerald-400",
+                selectedWrong && "bg-red-100 border-red-500 text-red-800",
+                revealed && isCorrect && "bg-green-100 border-green-500 text-green-800",
+                revealed && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400",
               )}
             >
               <span className="flex-1 font-mono text-sm whitespace-pre-line">{option.replace(/\\n/g, '\n')}</span>
-              {showResult && isCorrect && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
-              {showResult && isSelected && !isCorrect && <X className="w-5 h-5 shrink-0 ml-2 text-red-600" />}
+              {revealed && isCorrect && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
+              {selectedWrong && <X className="w-5 h-5 shrink-0 ml-2 text-red-600" />}
             </motion.button>
           )
         })}
+        {/* 1번째 오답 → 한 번 더 기회 (정답/출력은 아직 공개 X) */}
+        {selectedAnswer !== null && !showExplanation && (
+          <div className="p-3 rounded-xl bg-amber-50 border-2 border-amber-300 text-sm font-bold text-amber-700 flex items-center gap-2">
+            🤔 {t("아쉬워요! 다시 한 번 골라봐요.", "Not quite — try once more.")}
+          </div>
+        )}
       </div>
 
       {/* 터미널 애니메이션 */}
       <AnimatePresence>
-        <TerminalOutput output={correctOutput} show={selectedAnswer !== null} />
+        <TerminalOutput output={correctOutput} show={showExplanation} />
       </AnimatePresence>
 
       {/* 설명 */}

@@ -105,21 +105,28 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
         {step.options?.map((option, idx) => {
           const isSelected = selectedAnswer === idx
           const isCorrect = idx === step.answer
-          const showResult = selectedAnswer !== null
+          const revealed = showExplanation               // 확정(채점) 후에만 정답 공개
+          const selectedWrong = isSelected && !isCorrect  // 고른 오답 (재시도 중에도 빨강)
           return (
-            <button key={`${idx}-${selectedAnswer}`} onClick={() => onAnswer(idx)} disabled={selectedAnswer !== null}
+            <button key={`${idx}-${selectedAnswer}-${showExplanation}`} onClick={() => onAnswer(idx)} disabled={revealed}
               className={cn("w-full p-4 rounded-xl text-left font-medium text-sm md:text-base transition-all border-2 flex items-center min-h-[48px] active:scale-[0.98]",
-                !showResult && "bg-white hover:bg-purple-50 active:bg-purple-100 border-gray-200 hover:border-purple-400",
-                showResult && isCorrect && "bg-green-100 border-green-500 text-green-800",
-                showResult && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800",
-                showResult && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400",
+                !revealed && !selectedWrong && "bg-white hover:bg-purple-50 active:bg-purple-100 border-gray-200 hover:border-purple-400",
+                selectedWrong && "bg-red-100 border-red-500 text-red-800",
+                revealed && isCorrect && "bg-green-100 border-green-500 text-green-800",
+                revealed && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400",
               )}>
               <span className="flex-1">{option.split(/\\n|\n/).map((line, i, arr) => (<span key={i}>{line}{i < arr.length - 1 && <br />}</span>))}</span>
-              {showResult && isCorrect && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
-              {showResult && isSelected && !isCorrect && <X className="w-5 h-5 shrink-0 ml-2 text-red-600" />}
+              {revealed && isCorrect && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
+              {selectedWrong && <X className="w-5 h-5 shrink-0 ml-2 text-red-600" />}
             </button>
           )
         })}
+        {/* 1번째 오답 → 한 번 더 기회 (정답은 아직 공개 X) */}
+        {selectedAnswer !== null && !showExplanation && (
+          <div className="p-3 rounded-xl bg-amber-50 border-2 border-amber-300 text-sm font-bold text-amber-700 flex items-center gap-2">
+            🤔 {t("아쉬워요! 다시 한 번 골라봐요.", "Not quite — try once more.")}
+          </div>
+        )}
         {showExplanation && step.explanation && (
           <div className="mt-2 space-y-2">
             {/* 오답일 때: 정답 강조 카드 */}

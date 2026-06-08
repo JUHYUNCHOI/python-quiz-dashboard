@@ -688,12 +688,20 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   goPrevRef.current = goPrev
 
   const handleQuizAnswer = (idx: number) => {
-    if (selectedAnswer !== null) return
-    setSelectedAnswer(idx)
-    setShowExplanation(true)
-    setQuizAttempts(prev => prev + 1)
+    if (showExplanation) return // 이미 확정(채점)된 문제는 무시
     const isCorrect = idx === step.answer
-    // 스텝 답변 저장 (선생님이 학생 답 확인용)
+    const attempt = quizAttempts + 1
+    setQuizAttempts(attempt)
+    setSelectedAnswer(idx)
+
+    // 1번째 오답 → 한 번 더 기회 (확정/정답공개 X, 다른 답 다시 고를 수 있음)
+    if (!isCorrect && attempt < 2) {
+      play("wrong")
+      return
+    }
+
+    // 정답이거나 2번째 시도 → 확정(채점). 틀려도 완료 처리해서 진행 가능 ("그냥 채점")
+    setShowExplanation(true)
     if (!effectiveTeacher) {
       saveStepAnswer({
         lessonId,
@@ -719,9 +727,13 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       }
     } else {
       play("wrong")
-      // 수업 중 오답 → 틀린 문제 창고에 저장 (선생님 제외)
+      // 수업 중 오답(2번째도 틀림) → 틀린 문제 창고에 저장 (선생님 제외)
       if (!effectiveTeacher && step?.id) {
         addLearnWrongQuestion(lessonId, step.id)
+      }
+      // 그냥 채점: 틀려도 완료로 처리 → 다음으로 진행 가능 (갇힘 방지)
+      if (!completedSteps.has(step.id)) {
+        setCompletedSteps(prev => new Set([...prev, step.id]))
       }
     }
   }
