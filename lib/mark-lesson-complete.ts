@@ -93,10 +93,11 @@ export interface WrongQuestionEntry {
   stepIndex: number           // review-source 인 경우: review 의 flat step index. learn-source 면 -1 (의미 없음)
   stepId?: string             // learn-source 인 경우: lesson step.id (예: "ch1-quiz1")
   source?: "review" | "learn" // 기본 "review" (생략 시 review 로 간주)
-  addedAt: number
+  addedAt: number             // 마지막으로 틀린/단계 변경된 시각 (다음 복습 due 계산 기준)
   mastered?: boolean          // 마스터 (자동 또는 수동) 시 true
   correctStreak?: number      // 연속 정답 수 (오답 시 0 리셋)
   lastCorrectAt?: number      // 마지막 정답 시각 (24h gap 체크용)
+  box?: number                // learn-source 간격반복 단계 (1→1일,2→3일,3→7일,4→14일, 통과시 졸업). 기본 1
 }
 
 // 마스터 기준 — spaced repetition
@@ -264,17 +265,25 @@ export function addToWrongBank(lessonId: string | number, stepIndices: number[])
  * source="learn" 로 마킹. stepId (lesson step.id) 로 식별.
  * Phase 1 MVP: localStorage 만 (Supabase 동기화는 schema 마이그레이션 후 Phase 2).
  */
-// 틀린 문제 복습 간격: 마지막으로 틀린 뒤 7일 지나야 다시 풀 수 있음 (간격 반복)
-export const WRONG_REVIEW_GAP_MS = 7 * 24 * 60 * 60 * 1000
+// 간격 반복 (Leitner) — 틀린 문제는 단계가 오를수록 복습 간격이 늘어남.
+// box 1→1일, 2→3일, 3→7일, 4→14일. box 4 에서 또 맞히면 졸업(마스터).
+// 재도전에서 틀리면 box 1(1일)로 리셋.
+const BOX_INTERVAL_DAYS: Record<number, number> = { 1: 1, 2: 3, 3: 7, 4: 14 }
+export const WRONG_MAX_BOX = 4
+const DAY_MS = 24 * 60 * 60 * 1000
 
-/** 이 항목을 지금 다시 풀 수 있나 (마지막 오답 + 7일 경과) */
+function boxIntervalMs(box: number): number {
+  return (BOX_INTERVAL_DAYS[box] ?? 1) * DAY_MS
+}
+
+/** 이 항목을 지금 다시 풀 수 있나 (마지막 변경 + 현재 단계 간격 경과) */
 export function isWrongDue(entry: WrongQuestionEntry, now: number = Date.now()): boolean {
-  return now >= entry.addedAt + WRONG_REVIEW_GAP_MS
+  return now >= entry.addedAt + boxIntervalMs(entry.box ?? 1)
 }
 
 /** 다시 풀 수 있을 때까지 남은 일수 (올림, 최소 0) */
 export function wrongDaysUntilDue(entry: WrongQuestionEntry, now: number = Date.now()): number {
-  return Math.max(0, Math.ceil((entry.addedAt + WRONG_REVIEW_GAP_MS - now) / (24 * 60 * 60 * 1000)))
+  return Math.max(0, Math.ceil((entry.addedAt + boxIntervalMs(entry.box ?? 1) - now) / DAY_MS))
 }
 
 export function addLearnWrongQuestion(lessonId: string | number, stepId: string) {
@@ -289,6 +298,7 @@ export function addLearnWrongQuestion(lessonId: string | number, stepId: string)
     if (existing) {
       existing.addedAt = now
       existing.mastered = false
+      existing.box = 1   // 재도전에서 또 틀림 → 1단계(1일)로 리셋
     } else {
       bank.push({
         lessonId: normalizedId,
@@ -296,6 +306,7 @@ export function addLearnWrongQuestion(lessonId: string | number, stepId: string)
         stepId,
         source: "learn",
         addedAt: now,
+        box: 1,
       })
     }
     localStorage.setItem(WRONG_BANK_KEY, JSON.stringify(bank))
@@ -317,6 +328,30 @@ export function markLearnWrongMastered(lessonId: string | number, stepId: string
       bank[idx] = { ...bank[idx], mastered: true }
       localStorage.setItem(WRONG_BANK_KEY, JSON.stringify(bank))
     }
+  } catch {}
+}
+
+/**
+ * learn-source 항목을 재도전에서 맞힘 → 다음 단계로 승급 (간격 늘림).
+ * box 4 에서 맞히면 졸업(mastered=true, 창고에서 사라짐). 창고에 없으면 무시(첫 정답 등).
+ */
+export function promoteLearnWrong(lessonId: string | number, stepId: string) {
+  if (!stepId) return
+  const normalizedId = String(lessonId)
+  const now = Date.now()
+  try {
+    const raw = localStorage.getItem(WRONG_BANK_KEY)
+    const bank: WrongQuestionEntry[] = raw ? JSON.parse(raw) : []
+    const e = bank.find(x => x.source === "learn" && x.lessonId === normalizedId && x.stepId === stepId && !x.mastered)
+    if (!e) return // 창고에 없으면(첫 정답 등) 아무것도 안 함
+    const nextBox = (e.box ?? 1) + 1
+    if (nextBox > WRONG_MAX_BOX) {
+      e.mastered = true        // 마지막 단계 통과 → 졸업
+    } else {
+      e.box = nextBox
+      e.addedAt = now          // 다음 단계 간격 타이머 시작
+    }
+    localStorage.setItem(WRONG_BANK_KEY, JSON.stringify(bank))
   } catch {}
 }
 
