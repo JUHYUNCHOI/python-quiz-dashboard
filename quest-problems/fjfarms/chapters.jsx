@@ -3,7 +3,7 @@ import { getFjFarmsSections } from "./components";
 import { GrowthSim } from "./GrowthSim";
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (3 steps)
+   Chapter 1: 📋 문제 이해 (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeFjFarmsCh1(E) {
   return [
@@ -74,6 +74,39 @@ export function makeFjFarmsCh1(E) {
                   {t(E, " on which every t[i] matches, or -1 if it can never happen.",
                         " 를 출력해요. 모든 t[i] 가 맞는 첫 날, 절대 안 되면 -1.")}
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-1b: Numbers-first warm-up — compute h+a·d on tiny numbers before the abstraction
+    {
+      type: "reveal",
+      narr: t(E,
+        "Before the formula sinks in, let's compute two plants' heights day by day with real numbers.",
+        "공식이 익기 전에, 식물 2개 키를 날짜별로 실제 숫자로 계산해봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 700, color: "#065f46", marginBottom: 8 }}>
+              🔢 {t(E, "Heights grow every day — with numbers", "키는 매일 자란다 — 숫자로")}
+            </div>
+            <div style={{ marginBottom: 6 }}>
+              {t(E, "Plant 0: height 8, +1/day → ", "0번 식물: 키 8, 하루 +1 → ")}<code>8 + 1·d</code><br/>
+              {t(E, "Plant 1: height 3, +3/day → ", "1번 식물: 키 3, 하루 +3 → ")}<code>3 + 3·d</code>
+            </div>
+            <div style={{ paddingLeft: 8, borderLeft: "3px solid #6ee7b7", display: "flex", flexDirection: "column", gap: 3, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+              <div>d=0:  8  vs  3</div>
+              <div>d=1:  9  vs  6</div>
+              <div>d=2: 10  vs  9</div>
+              <div style={{ color: "#7c3aed", fontWeight: 700 }}>d=3: 11  vs 12  ← {t(E, "plant 1 overtakes!", "1번이 추월!")}</div>
+            </div>
+            <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+              👉 {t(E, "Plants taller than plant 0: ", "0번보다 큰 식물 수: ")}
+              <b>{t(E, "0 on days 0–2, then 1 from day 3.", "d=0~2 → 0개, d=3부터 → 1개.")}</b>
+              <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
+                {t(E, "That 'taller-than count' changes over time — we hunt the day it matches every t[i].",
+                     "이 '더 큰 식물 수'가 날마다 변해요 — 모든 t[i]와 맞는 날을 찾는 거예요.")}
               </div>
             </div>
           </div>
