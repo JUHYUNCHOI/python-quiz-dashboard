@@ -158,6 +158,13 @@ function FStringVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const substituted = Math.floor((step - 1) / 2)  // 마지막으로 치환된 슬롯 인덱스
   const stepsLeft = totalSteps - step
 
+  // 지금 강조 중인 슬롯이 "어느 변수에서" 값을 가져오는지 → 그 변수 박스를 깜박이게
+  const activeSlotPiece = activeSlot >= 0 ? slots[activeSlot] : undefined
+  const activeVarName = activeSlotPiece && activeSlotPiece.kind === "slot" ? activeSlotPiece.slot.varName : null
+  const isSourceVar = (name: string) =>
+    phase === "highlighting" && !!activeVarName &&
+    (activeVarName === name || new RegExp(`(^|[^A-Za-z0-9_])${name}([^A-Za-z0-9_]|$)`).test(activeVarName))
+
   const reset = () => setStep(0)
   const stepOnce = () => setStep((s) => Math.min(s + 1, totalSteps))
   const runAll = () => setStep(totalSteps)
@@ -225,13 +232,29 @@ function FStringVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
             {isEn ? "VARIABLES" : "변수"}
           </div>
           <div className="flex flex-wrap gap-2">
-            {preset.vars.map((v) => (
-              <div key={v.name} className="flex items-center gap-2 px-3 py-2 rounded-xl border-2 bg-white" style={{ borderColor: v.color }}>
-                <span className="font-mono text-sm font-bold" style={{ color: v.color }}>{v.name}</span>
-                <span className="text-gray-300 text-sm">=</span>
-                <span className="font-mono text-sm text-gray-700">{v.value}</span>
-              </div>
-            ))}
+            {preset.vars.map((v) => {
+              const active = isSourceVar(v.name)
+              return (
+                <motion.div
+                  key={v.name}
+                  animate={active
+                    ? { scale: [1, 1.1, 1], boxShadow: [`0 0 0 0 ${v.color}00`, `0 0 12px 2px ${v.color}cc`, `0 0 0 0 ${v.color}00`] }
+                    : { scale: 1, boxShadow: "0 0 0 0 rgba(0,0,0,0)" }}
+                  transition={active ? { duration: 0.7, repeat: Infinity } : { duration: 0.2 }}
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl border-2 bg-white"
+                  style={{ borderColor: v.color }}
+                >
+                  <span className="font-mono text-sm font-bold" style={{ color: v.color }}>{v.name}</span>
+                  <span className="text-gray-300 text-sm">=</span>
+                  <span className="font-mono text-sm text-gray-700">{v.value}</span>
+                  {active && (
+                    <span className="ml-1 text-xs font-bold whitespace-nowrap" style={{ color: v.color }}>
+                      ← {isEn ? "from here!" : "여기서 꺼내요!"}
+                    </span>
+                  )}
+                </motion.div>
+              )
+            })}
           </div>
         </div>
 
