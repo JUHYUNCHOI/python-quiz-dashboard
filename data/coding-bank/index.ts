@@ -27,6 +27,20 @@ const DROP_B_TITLES = new Set<string>([
   "주차장 관리", "단어 뒤집기", "문자열 압축", "소수 목록", "시저 암호",
 ])
 
+// 진짜 알고리즘(DP/BFS/투포인터)이 필요한 문제 — "알고리즘 전 단계, STL/완전탐색으로 푼다"는
+// 도전뱅크 의도에 안 맞음. 메모리 '콘텐츠 경계'(알고리즘 이론=Algorithm Lab) 결정에 따라 도전뱅크에서 제외.
+// (데이터(bank-*.ts)는 그대로 유지 — 나중에 Algorithm Lab 으로 재배치 가능. 여기선 노출만 제외.)
+const ALGO_GRADE_TITLES = new Set<string>([
+  "최장 증가 부분수열",      // LIS — DP
+  "최소 동전 개수",          // coin change — DP/greedy
+  "구간 합이 K인 부분배열",  // prefix-sum + hashmap
+  "격자 섬 탐색",            // count islands — flood fill (BFS/DFS)
+  "격자 경로 수",            // grid path DP
+  "격자 경로 최댓값",        // grid path DP
+  "격자 곱 경로",            // grid path DP
+  "빗물 담기",               // rainwater — two-pointer / stack
+])
+
 function fromPractice(p: PracticeProblem, category: CodingBankProblem["category"]): CodingBankProblem {
   return {
     id: p.id,
@@ -58,7 +72,7 @@ function fromPractice(p: PracticeProblem, category: CodingBankProblem["category"
 
 const bankConverted: CodingBankProblem[] = BANK_CLUSTERS.flatMap(cluster =>
   cluster.problems
-    .filter(p => !DROP_B_TITLES.has(p.title))
+    .filter(p => !DROP_B_TITLES.has(p.title) && !ALGO_GRADE_TITLES.has(p.title))
     .map(p => fromPractice(p, CLUSTER_CATEGORY[cluster.id] ?? "brute-force")),
 )
 
