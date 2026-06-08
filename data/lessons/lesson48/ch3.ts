@@ -138,7 +138,7 @@ print(f'\\n평균 가격: {math.___(avg_price)}G (올림)')
 # JSON 저장
 save = json.dumps(shop_items, ensure_ascii=False)
 print(f'세이브 데이터 크기: {len(save)}자')`,
-      expectedOutput: `=== 아이템 상점 ===\n  검: 1500G (ATK +20)\n  방패: 1200G (ATK +0)\n  지팡이: 2000G (ATK +35)\n\n평균 가격: 1567G (올림)\n세이브 데이터 크기: 96자`,
+      expectedOutput: `=== 아이템 상점 ===\n  검: 1500G (ATK +20)\n  방패: 1200G (ATK +0)\n  지팡이: 2000G (ATK +35)\n\n평균 가격: 1567G (올림)\n세이브 데이터 크기: 101자`,
       hint: "json 모듈, values()로 값 가져오기, ceil로 올림!",
       hint2: "json / values / ceil"
     }

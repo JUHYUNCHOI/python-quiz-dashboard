@@ -489,7 +489,7 @@ else:
           task: "공백으로 구분된 단어들을 입력받아 **고유 단어 수** 와 **중복 단어 수** 를 출력하세요!",
           initialCode: "words = input().split()\n\n# 1) 고유 단어 수 = set 의 길이\n# 2) 중복 단어 수 = 전체 - 고유\n\nunique = ___\nduplicates = ___\n\nprint(f\"전체: {len(words)}개\")\nprint(f\"고유: {unique}개\")\nprint(f\"중복: {duplicates}개\")",
           expectedOutput: "전체: 8개\n고유: 5개\n중복: 3개",
-          stdin: "사과 배 사과 감 배 키위 사과 감",
+          stdin: "사과 배 사과 감 배 키위 포도 감",
           hint: "len(set(words)) 가 고유 수. 중복 = 전체 - 고유.",
           hint2: "unique = len(set(words))\nduplicates = len(words) - unique"
         },
