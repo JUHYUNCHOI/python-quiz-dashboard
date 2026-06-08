@@ -56,25 +56,31 @@ export function AlgoTopicPage({ topic }: AlgoTopicPageProps) {
             </span>
           </div>
 
-          {/* 언어 토글 — 공용 컴포넌트로 통일 */}
-          <LanguageToggle className="shrink-0" />
+          {/* 설명(읽기) 언어 — "읽기" 라벨로 코드 언어와 구분 */}
+          <div className="flex items-center gap-1 shrink-0">
+            <span className="text-[10px] text-gray-400 font-bold hidden sm:inline">{lang === "en" ? "Read" : "읽기"}</span>
+            <LanguageToggle />
+          </div>
 
-          {/* 코드 언어 토글 (C++ / Python) */}
-          <div className="flex items-center bg-gray-100 rounded-lg p-0.5 shrink-0">
-            <button
-              onClick={() => setCodeTrack("cpp")}
-              className={cn(
-                "text-xs font-bold px-2.5 py-1 rounded-md transition-colors",
-                codeTrack === "cpp" ? "bg-white text-blue-700 shadow-sm" : "text-gray-500 hover:text-gray-700"
-              )}
-            >⚡ C++</button>
-            <button
-              onClick={() => setCodeTrack("python")}
-              className={cn(
-                "text-xs font-bold px-2.5 py-1 rounded-md transition-colors",
-                codeTrack === "python" ? "bg-white text-green-700 shadow-sm" : "text-gray-500 hover:text-gray-700"
-              )}
-            >🐍 Python</button>
+          {/* 코드 언어 토글 (C++ / Python) — "코드" 라벨 */}
+          <div className="flex items-center gap-1 shrink-0">
+            <span className="text-[10px] text-gray-400 font-bold hidden sm:inline">{lang === "en" ? "Code" : "코드"}</span>
+            <div className="flex items-center bg-gray-100 rounded-lg p-0.5">
+              <button
+                onClick={() => setCodeTrack("cpp")}
+                className={cn(
+                  "text-xs font-bold px-2.5 py-1 rounded-md transition-colors",
+                  codeTrack === "cpp" ? "bg-white text-blue-700 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                )}
+              >⚡ C++</button>
+              <button
+                onClick={() => setCodeTrack("python")}
+                className={cn(
+                  "text-xs font-bold px-2.5 py-1 rounded-md transition-colors",
+                  codeTrack === "python" ? "bg-white text-green-700 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                )}
+              >🐍 Python</button>
+            </div>
           </div>
         </div>
       </div>
