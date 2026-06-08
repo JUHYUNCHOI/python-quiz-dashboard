@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
-import { getWrongBank, markWrongQuestionMastered, markLearnWrongMastered, syncWrongBankFromSupabase, type WrongQuestionEntry } from "@/lib/mark-lesson-complete"
+import { getWrongBank, markWrongQuestionMastered, markLearnWrongMastered, syncWrongBankFromSupabase, isWrongDue, wrongDaysUntilDue, type WrongQuestionEntry } from "@/lib/mark-lesson-complete"
 import { lessonsData } from "../review/[lessonId]/data/lessons"
 import type { StepContent, LessonData } from "../review/[lessonId]/data/types"
 import { ArrowLeft } from "lucide-react"
@@ -103,7 +103,7 @@ export default function MissedPage() {
               📚 {t("틀린 문제 창고", "Wrong Question Bank")}
             </h1>
             <p className="text-xs sm:text-sm text-rose-600/70 mt-0.5">
-              {t("복습에서 틀린 문제 모음. 다시 풀어 마스터하세요.", "Wrong questions from reviews. Practice to master.")}
+              {t("틀린 문제 모음. 7일 뒤 🔓 다시 풀어서 맞히면 마스터(창고에서 빠지고 점수↑).", "Wrong questions. After 7 days 🔓 solve again to master (removed + score up).")}
             </p>
           </div>
         </div>
@@ -212,24 +212,34 @@ export default function MissedPage() {
                         const bgDim = isLearn ? "bg-purple-400 hover:bg-purple-600 border-purple-300" : "bg-rose-400 hover:bg-rose-600 border-rose-300"
                         return (
                           <div key={`${e.lessonId}-${e.stepId ?? e.stepIndex}-${i}`} className="inline-flex items-stretch rounded-lg overflow-hidden shadow-sm">
-                            <Link
-                              href={href}
-                              title={previewShort || label}
-                              className={cn(
-                                "inline-flex items-center gap-1.5 px-3.5 py-2.5 text-sm font-black transition-all",
-                                bg,
-                                "text-white active:scale-95 min-w-[60px] justify-center"
-                              )}
-                            >
-                              <span>{label}</span>
-                              {/* streak 진행 표시 — 1번 맞은 상태 (마스터 직전) */}
-                              {!isLearn && (e.correctStreak ?? 0) >= 1 && (
-                                <span className="text-[10px] bg-white/30 rounded px-1 font-bold">
-                                  {e.correctStreak}/2
-                                </span>
-                              )}
-                              <span className="opacity-80">→</span>
-                            </Link>
+                            {isWrongDue(e) ? (
+                              <Link
+                                href={href}
+                                title={previewShort || label}
+                                className={cn(
+                                  "inline-flex items-center gap-1.5 px-3.5 py-2.5 text-sm font-black transition-all",
+                                  bg,
+                                  "text-white active:scale-95 min-w-[60px] justify-center"
+                                )}
+                              >
+                                <span>{label}</span>
+                                {/* streak 진행 표시 — 1번 맞은 상태 (마스터 직전) */}
+                                {!isLearn && (e.correctStreak ?? 0) >= 1 && (
+                                  <span className="text-[10px] bg-white/30 rounded px-1 font-bold">
+                                    {e.correctStreak}/2
+                                  </span>
+                                )}
+                                <span className="opacity-80">→</span>
+                              </Link>
+                            ) : (
+                              // 7일 간격 잠금 — 마지막으로 틀린 뒤 7일 지나야 재도전 가능
+                              <span
+                                title={t("7일 간격 복습 — 다시 풀 수 있을 때까지 기다려요", "Spaced review — wait until it's due")}
+                                className="inline-flex items-center gap-1 px-3.5 py-2.5 text-sm font-black min-w-[60px] justify-center bg-gray-200 text-gray-500 cursor-not-allowed"
+                              >
+                                🔒 {wrongDaysUntilDue(e)}{t("일", "d")}
+                              </span>
+                            )}
                             <button
                               type="button"
                               onClick={() => handleDismiss(e)}
