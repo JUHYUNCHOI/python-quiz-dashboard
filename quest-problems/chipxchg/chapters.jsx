@@ -2,7 +2,7 @@ import { C, t } from "@/components/quest/theme";
 import { getChipXchgSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: makeChipXchgCh1 (5 steps)
+   Chapter 1: makeChipXchgCh1 (6 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeChipXchgCh1(E) {
   return [
@@ -67,6 +67,44 @@ export function makeChipXchgCh1(E) {
                   {t(E, " that guarantees reaching f_A A-chips. (Up to 10^4 test cases, answer up to 10^18 — use 64-bit.)",
                        " 를 출력. (테스트 최대 10^4, 답 최대 10^18 — 64비트 사용.)")}
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>),
+    },
+
+    // 1-1b: Numeric warm-up — ground the variables before the abstract formula
+    {
+      type: "reveal",
+      narr: t(E,
+        "Before the formula, let's try tiny numbers. Trade rule: 3 type-B chips → 1 type-A chip.",
+        "공식 전에 작은 숫자로 먼저 해봐요. 환전 규칙: B칩 3개 → A칩 1개."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#f0fdf4", border: "1.5px solid #16a34a", borderRadius: 10, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 700, color: "#15803d", marginBottom: 8 }}>
+              🔢 {t(E, "Get a feel with numbers first", "숫자로 먼저 감 잡기")}
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              {t(E, "Trade rule: ", "환전 규칙: ")}
+              <b style={{ color: "#0891b2" }}>{t(E, "3 type-B → 1 type-A", "B칩 3개 → A칩 1개")}</b>
+              {" (c_B=3, c_A=1)"}
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              {t(E, "You hold ", "지금 손에 ")}
+              <b>{t(E, "2 type-A and 7 type-B", "A칩 2개, B칩 7개")}</b>
+              {t(E, ". Final type-A count?", ". 최종 A칩은?")}
+            </div>
+            <div style={{ paddingLeft: 8, borderLeft: "3px solid #86efac", display: "flex", flexDirection: "column", gap: 4 }}>
+              <div>{t(E, "7 type-B = (group of 3) ×2 + 1 leftover", "B칩 7개 = (3개 묶음) ×2 + 자투리 1개")}</div>
+              <div>{t(E, "2 groups → 2 type-A ✅  /  1 leftover can't convert ❌", "묶음 2개 → A칩 2개 ✅  /  자투리 1개는 못 바꿈 ❌")}</div>
+              <div>{t(E, "Final type-A = 2 + 2 = ", "최종 A칩 = 2 + 2 = ")}<b style={{ color: "#15803d" }}>4</b></div>
+            </div>
+            <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #86efac" }}>
+              👉 <b>{t(E, "Final A = A_now + (B_now // c_B) × c_A", "최종 A = A_now + (B_now // c_B) × c_A")}</b>
+              {" = 2 + (7 // 3)×1 = 4"}
+              <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>
+                {t(E, "( // = integer division; leftovers are discarded )", "( // = 몫. 자투리는 버려져요 )")}
               </div>
             </div>
           </div>
