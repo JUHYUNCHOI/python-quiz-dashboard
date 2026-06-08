@@ -108,27 +108,32 @@ Press **▶ Run** or **▷ Step**.`,
           id: "range-explain",
           type: "explain",
           title: "🔢 range() = pick \"from where to where\"",
-          content: `You can put **1, 2, or 3 numbers** inside range. Each has a different meaning.
+          content: `Think of \`range\` as a **vending machine that hands you numbers in order**. Depending on which buttons you press (how many numbers you give it), you get different numbers out. You can pass **1, 2, or 3 numbers**, and each has a different meaning.
 
 **① range(end)** — from 0 up to (but not including) end
 \`\`\`python
 for i in range(5):
     print(i)  # 0, 1, 2, 3, 4
 \`\`\`
+You didn't press a "start" button, so Python starts at **0** for you. (Why 0 and not 1? Python counts the first item as item 0 — like an elevator with a "G (ground)" floor instead of floor 1.)
 
 **② range(start, end)** — from start up to (but not including) end
 \`\`\`python
 for i in range(1, 6):
     print(i)  # 1, 2, 3, 4, 5
 \`\`\`
+For when you want to start at **your own number**, not 0. To count from 1, use \`range(1, ...)\`.
 
 **③ range(start, end, step)** — jump by step
 \`\`\`python
 for i in range(0, 10, 2):
     print(i)  # 0, 2, 4, 6, 8
 \`\`\`
+Instead of one at a time, **skip in jumps**. Step 2 gives even numbers, step 3 jumps three at a time.
 
-> 💡 The \`end\` is **never included**. To print 1–5, use \`range(1, 6)\`!`
+**Why is the end never included?** \`range(start, end)\` is defined to go *"up to just before end."* That way \`range(0, 5)\` lands on exactly **5 numbers** (0,1,2,3,4), so the tidy rule "end − start = how many" always works out.
+
+> ⚠️ The \`end\` is **always excluded**! For example \`range(1, 5)\` gives \`1, 2, 3, 4\` — **5 is left out**. So to print \`1 ~ 5\` all the way, make the end one bigger: \`range(1, 6)\`.`
         },
         {
           id: "try2",
@@ -181,8 +186,12 @@ for ch in word:
 # t
 \`\`\`
 
+**Why can a string go into a for loop?** A string is really just *letters lined up in a row*. \`"cat"\` is the letters \`c\`, \`a\`, \`t\` stuck together in order (like train cars). A for loop is the tool for "take a lined-up thing and pull items off the front one by one," so just as \`range\` hands you numbers one at a time, a string hands you **letters one at a time**.
+
 Pattern: **for variable in string:**
-The variable \`ch\` becomes **c → a → t**, in order. (Any name works — \`ch\` for "character" is common.)`
+The variable \`ch\` becomes **c → a → t**, in order. (Any name works — \`ch\` for "character" is common.)
+
+> 💡 Since you can handle one letter at a time, you can print a name down the page or count its letters in a single for line.`
         },
         {
           id: "try4",
@@ -213,6 +222,8 @@ Flow:
 - Round 1: total = 0 + 1 = 1
 - Round 2: total = 1 + 2 = 3
 - ... keep adding → final: 15
+
+**Why put \`total = 0\` *outside* the for loop?** \`total\` is an **empty piggy bank** that collects the numbers. You only empty a piggy bank *once, before* you start dropping coins in. If you put \`total = 0\` *inside* the loop, you'd empty the piggy bank every round — so whatever you added keeps vanishing and the sum never builds up!
 
 > 💡 \`total = total + num\` can be shortened to \`total += num\`.`
         },

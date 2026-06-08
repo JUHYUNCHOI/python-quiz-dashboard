@@ -108,6 +108,26 @@ print(f'Average: {___}')`,
       emoji: "🔝",
       steps: [
         {
+          id: "ch2-0",
+          type: "explain",
+          title: "💭 The biggest and smallest, in one go?",
+          content: `💭 To find the **highest score** among several? You *could* compare them one by one with if statements — but that's long and error-prone.
+
+\`max()\` and \`min()\` do it for you. Among several values (or a list), \`max()\` returns the **biggest** and \`min()\` returns the **smallest**.
+
+\`\`\`python
+max(3, 9, 5)        # 9
+min(3, 9, 5)        # 3
+max([10, 4, 8])     # 10   ← a list works too
+\`\`\`
+
+**When?** Highest/lowest score, priciest item, longest word — whenever you need the "extreme of a bunch."
+
+> 💡 Much shorter and safer than comparing with if statements yourself.
+
+@key: \`max()\` = the biggest, \`min()\` = the smallest!`
+        },
+        {
           id: "ch2-1",
           type: "tryit",
           title: "max(), min() Basics",
@@ -380,6 +400,24 @@ print(___(numbers))`,
       title: "Other Useful Functions",
       emoji: "🧰",
       steps: [
+        {
+          id: "ch5-0",
+          type: "explain",
+          title: "💭 Small tools worth keeping in your kit",
+          content: `💭 Besides what you've learned, a few more small built-ins are handy to keep around. This chapter zips through five of them.
+
+- \`abs(x)\` — **absolute value** (drop the sign). \`abs(-5)\` → \`5\`. Great for measuring the *difference (distance)* between two values.
+- \`round(x, n)\` — **rounding**. \`round(3.14159, 2)\` → \`3.14\`. (Unlike \`int()\`'s *chopping* from lesson 9, this goes to the **nearest** value!)
+- \`filter(condition, items)\` — keeps **only the items that pass** the condition. If \`map()\` was "change them all," \`filter()\` is "pick out some."
+- \`enumerate(items)\` — gives you the **index (number)** along with each value. For when you need "which position" (you met it in lesson 17).
+- \`zip(listA, listB)\` — **pairs up** two lists like a zipper. For viewing names and scores side by side.
+
+Run each one below and it'll click fast. 👇
+
+> 💡 Don't memorize them whole — just remember "these tools exist" and look them up when needed.
+
+@key: \`abs\`/\`round\`/\`filter\`/\`enumerate\`/\`zip\` — handy little tools you'll keep meeting!`
+        },
         {
           id: "ch5-1",
           type: "tryit",
