@@ -240,22 +240,26 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
             <span className="font-semibold text-gray-600">{meta.sub}</span>
           </div>
         </div>
-        {/* 언어 토글 — 공용 컴포넌트로 통일 */}
-        <div className="flex-shrink-0 hidden sm:block">
+        {/* 설명(읽기) 언어 — 한/영. "읽기" 라벨로 코드 언어와 구분 */}
+        <div className="flex-shrink-0 hidden sm:flex items-center gap-1">
+          <span className="text-[10px] text-gray-400 font-bold">{t("읽기", "Read")}</span>
           <LanguageToggle />
         </div>
-        {/* 코드 언어 토글: Python ↔ C++ (localStorage persistent across quests) */}
-        <div className="flex-shrink-0 flex items-stretch border border-gray-300 rounded-md overflow-hidden text-[10px] font-bold">
-          <button
-            onClick={() => setCodeLang("py")}
-            className={`px-1.5 py-0.5 transition-colors ${codeLang === "py" ? "bg-emerald-500 text-white" : "bg-white text-gray-500 hover:bg-emerald-50"}`}
-            title="Python"
-          >🐍 Py</button>
-          <button
-            onClick={() => setCodeLang("cpp")}
-            className={`px-1.5 py-0.5 transition-colors border-l border-gray-200 ${codeLang === "cpp" ? "bg-emerald-500 text-white" : "bg-white text-gray-500 hover:bg-emerald-50"}`}
-            title="C++"
-          >💻 C++</button>
+        {/* 코드 언어 — Py/C++. "코드" 라벨로 읽기 언어와 구분 */}
+        <div className="flex-shrink-0 flex items-center gap-1">
+          <span className="text-[10px] text-gray-400 font-bold hidden sm:inline">{t("코드", "Code")}</span>
+          <div className="flex items-stretch border border-gray-300 rounded-md overflow-hidden text-[10px] font-bold">
+            <button
+              onClick={() => setCodeLang("py")}
+              className={`px-1.5 py-0.5 transition-colors ${codeLang === "py" ? "bg-emerald-500 text-white" : "bg-white text-gray-500 hover:bg-emerald-50"}`}
+              title="Python"
+            >🐍 Py</button>
+            <button
+              onClick={() => setCodeLang("cpp")}
+              className={`px-1.5 py-0.5 transition-colors border-l border-gray-200 ${codeLang === "cpp" ? "bg-emerald-500 text-white" : "bg-white text-gray-500 hover:bg-emerald-50"}`}
+              title="C++"
+            >💻 C++</button>
+          </div>
         </div>
         {/* 원래 문제 — 반반 스크린 토글 (md 이상) + 새 탭 열기 */}
         <button
