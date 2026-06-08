@@ -261,32 +261,36 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
             >💻 C++</button>
           </div>
         </div>
-        {/* 원래 문제 — 반반 스크린 토글 (md 이상) + 새 탭 열기 */}
-        <button
-          onClick={() => {
-            setIframeBlocked(false)
-            setSplitView(v => !v)
-          }}
-          className={`hidden md:flex flex-shrink-0 items-center gap-1 text-[11px] font-semibold px-2 py-1 rounded-md border transition-colors ${
-            splitView
-              ? "bg-amber-100 border-amber-400 text-amber-800"
-              : "text-gray-500 hover:text-amber-700 border-gray-200 hover:border-amber-300 hover:bg-amber-50"
-          }`}
-          title={t("원본 문제를 옆에 띄우기", "Show original problem side-by-side")}
-        >
-          <Columns2 size={11} />
-          <span>{splitView ? t("닫기", "Close") : t("원래 문제", "Original")}</span>
-        </button>
-        <a
-          href={getOriginalProblemUrl(meta)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-shrink-0 flex items-center gap-1 text-[11px] font-semibold text-gray-500 hover:text-amber-700 px-2 py-1 rounded-md border border-gray-200 hover:border-amber-300 hover:bg-amber-50 transition-colors"
-          title={t("새 탭에서 원본 문제 열기", "Open original problem in new tab")}
-        >
-          <ExternalLink size={11} />
-          <span className="md:hidden">{t("원래 문제", "Original")}</span>
-        </a>
+        {/* 원래 문제 — 한 그룹으로 묶음(중복 제거). 데스크톱: 옆에 띄우기 + 새 탭, 모바일: 새 탭만 */}
+        <div className={`flex-shrink-0 flex items-stretch rounded-md border overflow-hidden transition-colors ${
+          splitView ? "border-amber-400" : "border-gray-200"
+        }`}>
+          <button
+            onClick={() => {
+              setIframeBlocked(false)
+              setSplitView(v => !v)
+            }}
+            className={`hidden md:flex items-center gap-1 text-[11px] font-semibold px-2 py-1 transition-colors ${
+              splitView
+                ? "bg-amber-100 text-amber-800"
+                : "text-gray-500 hover:text-amber-700 hover:bg-amber-50"
+            }`}
+            title={t("원본 문제를 옆에 띄우기", "Show original problem side-by-side")}
+          >
+            <Columns2 size={11} />
+            <span>{splitView ? t("닫기", "Close") : t("원래 문제", "Original")}</span>
+          </button>
+          <a
+            href={getOriginalProblemUrl(meta)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-semibold text-gray-500 hover:text-amber-700 hover:bg-amber-50 px-2 py-1 md:border-l md:border-gray-200 transition-colors"
+            title={t("새 탭에서 원본 문제 열기", "Open original problem in new tab")}
+          >
+            <ExternalLink size={11} />
+            <span className="md:hidden">{t("원래 문제", "Original")}</span>
+          </a>
+        </div>
         {/* 🏆 USACO 검증 결과 — 선생님 전용 (학생에겐 'C++ 5/12' 같은 게 혼란) */}
         {isTeacher && <UsacoVerifiedBadge questId={problemId} E={lang === "en"} compact />}
         {solved ? (
