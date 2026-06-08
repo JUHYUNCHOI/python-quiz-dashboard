@@ -37,7 +37,7 @@ export const ch6: Chapter = {
       task: "score.txt에 점수를 저장하는 함수 완성하기",
       initialCode: `def save_score(점수):
     # score.txt에 점수 저장하기
-    # 💡 with open('score.txt', 'w') 사용!
+    # 💡 파일을 쓰기 모드로 열어서 점수를 적어보세요
     pass
 
 # 테스트
@@ -55,7 +55,7 @@ print('저장 완료!')`,
       initialCode: `def load_score():
     # score.txt에서 점수 불러오기
     # 파일 없으면 0 반환
-    # 💡 try-except FileNotFoundError 사용!
+    # 💡 파일이 없을 때를 대비해 예외 처리를 해보세요
     pass
 
 # 테스트

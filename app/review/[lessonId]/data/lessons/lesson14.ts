@@ -334,14 +334,14 @@ export const lesson14: LessonData = {
       type: "practice",
       content: {
         level: 2,
-        task: "0부터 시작해서 i가 3이 되면 break로 탈출하는 while True 루프를 완성해요",
+        task: "0부터 시작해서 i가 3이 되는 순간 반복을 멈추는 무한 루프를 완성해요",
         guide: "while True: + if 조건: break",
         template: "i = 0\nwhile ___:\n    if i == 3:\n        ___\n    print(i)\n    i += 1",
         blanksAnswer: ["True", "break"],
         answer: "i = 0\nwhile True:\n    if i == 3:\n        break\n    print(i)\n    i += 1",
         expect: "0\n1\n2",
         en: {
-          task: "Complete a while True loop that breaks when i equals 3",
+          task: "Complete an endless loop that stops the moment i becomes 3",
           guide: "while True: + if condition: break"
         }
       }

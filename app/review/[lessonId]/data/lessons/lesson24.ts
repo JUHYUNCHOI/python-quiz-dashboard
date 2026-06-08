@@ -181,7 +181,7 @@ print(list(q))`,
       type: "practice",
       content: {
         level: 1,
-        task: "deque를 import하고 큐에 'a', 'b'를 넣은 뒤 popleft하세요",
+        task: "collections에서 큐 자료형을 가져와 'a', 'b'를 넣은 뒤 앞에서 하나 꺼내세요",
         guide: "from collections import deque!",
         hint: "deque()로 만들고 append → popleft!",
         template: "from collections import ___\n\nqueue = deque()\nqueue.append('a')\nqueue.append('b')\nprint(queue.___())",
@@ -189,7 +189,7 @@ print(list(q))`,
         answer: "from collections import deque\n\nqueue = deque()\nqueue.append('a')\nqueue.append('b')\nprint(queue.popleft())",
         expect: "a",
         en: {
-          task: "Import deque, add 'a', 'b' to the queue, then popleft",
+          task: "Import a queue type from collections, add 'a', 'b', then take one from the front",
           guide: "from collections import deque!",
           hint: "Create with deque() then append → popleft!"
         }

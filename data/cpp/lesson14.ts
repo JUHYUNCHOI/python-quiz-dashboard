@@ -646,7 +646,7 @@ int main() {
           content: `N명의 학생을 입력받을 때 vector 선언은 어떻게 할까요?`,
           code: `int n;
 cin >> n;
-vector<___> students(n);  // n칸짜리 Student 벡터
+vector<___> students(n);  // 학생 n 명을 담을 벡터
 
 for (int i = 0; i < n; i++) {
     cin >> students[i].name >> students[i].score;

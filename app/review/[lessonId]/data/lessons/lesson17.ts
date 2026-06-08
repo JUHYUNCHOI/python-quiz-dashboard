@@ -204,7 +204,7 @@ export const lesson17: LessonData = {
       type: "practice",
       content: {
         level: 1,
-        task: "enumerate로 학생 이름에 1부터 번호 매기기",
+        task: "학생 이름에 1번부터 순번을 붙여 출력해요",
         guide: "enumerate(리스트, 시작번호) 기억!",
         hint: "enumerate(students, 1) 사용!",
         template: "students = [\"철수\", \"영희\", \"민수\"]\nfor i, name in ___(students, ___):\n    print(f\"{i}번: {name}\")",
@@ -212,7 +212,7 @@ export const lesson17: LessonData = {
         answer: "students = [\"철수\", \"영희\", \"민수\"]\nfor i, name in enumerate(students, 1):\n    print(f\"{i}번: {name}\")",
         expect: "1번: 철수\n2번: 영희\n3번: 민수",
         en: {
-          task: "Number student names starting from 1 using enumerate",
+          task: "Number student names starting from 1",
           guide: "Remember enumerate(list, start)!",
           hint: "Use enumerate(students, 1)!"
         }

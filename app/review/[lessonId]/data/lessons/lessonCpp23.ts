@@ -314,14 +314,14 @@ export const lessonCpp23: LessonData = {
         type: "practice",
         content: {
           level: 2,
-          task: "pair 벡터를 second(점수) 기준 오름차순으로 정렬해요!",
+          task: "pair 벡터를 점수 기준 오름차순으로 정렬해요!",
           guide: "pair의 두 번째 값으로 정렬하려면 람다에서 어떤 멤버를 비교해야 할까?",
           template: 'vector<pair<string, int>> v = {{"A",85},{"B",70},{"C",92}};\nsort(v.begin(), v.end(),\n    [](auto a, auto b){ return a.___ < b.___; });',
           answer: "second",
           blanksAnswer: ["second", "second"],
           expect: 'vector<pair<string, int>> v = {{"A",85},{"B",70},{"C",92}};\nsort(v.begin(), v.end(),\n    [](auto a, auto b){ return a.second < b.second; });',
           en: {
-            task: "Sort a pair vector in ascending order by second (score)!",
+            task: "Sort a pair vector in ascending order by score!",
             guide: "To sort by the second value of a pair, which member should the lambda compare?"
           }
         }

@@ -334,7 +334,7 @@ int main() {
           code: `class Car {
     double speed;
     void forward() {
-        ___ += 10;   // speed 를 10 증가
+        ___ += 10;   // 속도를 10 만큼 늘려요
     }
 };`,
           fillBlanks: [
@@ -921,7 +921,7 @@ private:
 public:
     Player(int h) { hp = h; }
 
-    int getHp() { return ___; }   // hp 반환
+    int getHp() { return ___; }   // 체력 값을 그대로 돌려줘요
 
     void takeDamage(int dmg) {
         if (hp - dmg ___ 0)       // hp가 0 이하로 내려가지 않도록

@@ -338,7 +338,7 @@ int main() {
           code: `class Car {
     double speed;
     void forward() {
-        ___ += 10;   // increase speed by 10
+        ___ += 10;   // increase the speed by 10
     }
 };`,
           fillBlanks: [
@@ -931,7 +931,7 @@ private:
 public:
     Player(int h) { hp = h; }
 
-    int getHp() { return ___; }   // return hp
+    int getHp() { return ___; }   // give back the health value
 
     void takeDamage(int dmg) {
         if (hp - dmg ___ 0)       // don't go below 0

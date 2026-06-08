@@ -438,14 +438,14 @@ export const lessonCpp11: LessonData = {
         type: "practice",
         content: {
           level: 3,
-          task: "find와 substr을 조합해서 \"apple.txt\"에서 확장자 \".txt\"를 추출해요!",
+          task: "\"apple.txt\"에서 점(.) 위치를 찾아 그 뒤의 확장자 \".txt\"를 잘라내요!",
           guide: "find(\".\")로 위치 찾고, substr(위치)로 끝까지 추출!",
           template: 'string file = "apple.txt";\nint pos = file.___(".");\nstring ext = file.___(pos);\ncout << ext << endl;',
           answer: "find",
           blanksAnswer: ["find", "substr"],
           expect: 'string file = "apple.txt";\nint pos = file.find(".");\nstring ext = file.substr(pos);\ncout << ext << endl;',
           en: {
-            task: "Combine find and substr to extract the extension \".txt\" from \"apple.txt\"!",
+            task: "Locate the dot (.) in \"apple.txt\" and cut out the extension \".txt\" after it!",
             guide: "Use find(\".\") to get the position, then substr(pos) to extract to the end!"
           }
         }

@@ -372,7 +372,9 @@ export function BlankCodeRunner({
         // input 필드 (choices 없을 때) 또는 디스플레이 박스 (choices 있을 때)
         const currentBlankId = blankIdx
         const value = filledValues[currentBlankId] || ''
-        const answerLength = answers[currentBlankId]?.length || 6
+        // 박스 너비: 학생이 입력한 만큼만 자람 (빈칸일 땐 작게).
+        // 정답 길이로 잡으면 (1) 답 길이 유출 (2) hint2 가 전체 힌트일 때 박스가 과하게 넓어짐 → 둘 다 방지.
+        const boxWidth = Math.max(value.length + 1, 4)
 
         if (choices.length > 0) {
           // 보기 선택 모드: 클릭 가능한 디스플레이 박스
@@ -389,7 +391,7 @@ export function BlankCodeRunner({
                     ? "border-purple-400 bg-purple-900/30 text-purple-300"
                     : "border-gray-500 bg-gray-800 text-gray-500"
               )}
-              style={{ minWidth: `${Math.max(answerLength, value.length, 3) + 2}ch` }}
+              style={{ minWidth: `${boxWidth}ch` }}
             >
               {value || '?'}
             </span>
@@ -459,7 +461,7 @@ export function BlankCodeRunner({
                     ? "border-purple-400 text-purple-300"
                     : "border-gray-500 text-gray-400"
               )}
-              style={{ width: `${Math.max(answerLength, value.length, 3) + 2}ch` }}
+              style={{ width: `${boxWidth}ch` }}
               spellCheck={false}
               autoComplete="off"
             />

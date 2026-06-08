@@ -96,7 +96,7 @@ Price: 19000
           type: "tryit",
           title: "🖥️ Try It — Drop One Name In",
           task: "Use an f-string to print a name!",
-          initialCode: "name = \"Bob\"\n# Put the name variable inside the f-string\nprint(f\"Hello, {___}!\")",
+          initialCode: "name = \"Bob\"\n# Put the variable you made above inside the { }\nprint(f\"Hello, {___}!\")",
           expectedOutput: "Hello, Bob!",
           hint: "Use the f\"...{variable}...\" pattern!",
           hint2: "f\"Hello, {name}!\""
@@ -243,7 +243,7 @@ The \`f\` stands for "float" (a number with a decimal point). So \`.2f\` = "floa
           type: "tryit",
           title: "🖥️ Try It — 1 Decimal Place",
           task: "Print with 1 decimal place!",
-          initialCode: "score = 85.7777\n# Use :.1f for 1 decimal place\nprint(f\"Average: {score:___}\")",
+          initialCode: "score = 85.7777\n# Show only 1 decimal place\nprint(f\"Average: {score:___}\")",
           expectedOutput: "Average: 85.8",
           hint: "{score:.1f}",
           hint2: "f\"Average: {score:.1f}\""
@@ -274,7 +274,7 @@ Salary: 3,500,000
           type: "tryit",
           title: "🖥️ Try It — Thousands Comma",
           task: "Print with thousands separator commas!",
-          initialCode: "money = 50000000\n# Use :, for thousands commas\nprint(f\"Balance: {money:___}\")",
+          initialCode: "money = 50000000\n# Add a comma every thousands place\nprint(f\"Balance: {money:___}\")",
           expectedOutput: "Balance: 50,000,000",
           hint: "{money:,}",
           hint2: "f\"Balance: {money:,}\""
@@ -303,7 +303,7 @@ Think of it as a tool for **lining up columns** in a table.`
           type: "tryit",
           title: "🖥️ Try It — Left-align, Width 10",
           task: "Left-align name in a 10-char slot!",
-          initialCode: "name = \"cat\"\n# Use :<10 for left-align, width 10\nprint(f\"|{name:___}|\")",
+          initialCode: "name = \"cat\"\n# Left-align inside a 10-character slot\nprint(f\"|{name:___}|\")",
           expectedOutput: "|cat       |",
           hint: "{name:<10}",
           hint2: "f\"|{name:<10}|\""
@@ -329,7 +329,7 @@ print(f"|{'cat':>10}|")
           type: "tryit",
           title: "🖥️ Try It — Right-align, Width 10",
           task: "Right-align the name in a 10-character slot!",
-          initialCode: "name = \"Alice\"\n# Use :>10 for right-align, width 10\nprint(f\"|{name:___}|\")",
+          initialCode: "name = \"Alice\"\n# Right-align inside a 10-character slot\nprint(f\"|{name:___}|\")",
           expectedOutput: "|     Alice|",
           hint: "{name:>10}",
           hint2: "f\"|{name:>10}|\""
@@ -360,7 +360,7 @@ Empty space gets split on both sides. Perfect for titles/headers.
           type: "tryit",
           title: "🖥️ Try It — Center, Width 10",
           task: "Center-align title in a 10-char slot!",
-          initialCode: "title = \"MENU\"\n# Use :^10 for center, width 10\nprint(f\"|{title:___}|\")",
+          initialCode: "title = \"MENU\"\n# Center inside a 10-character slot\nprint(f\"|{title:___}|\")",
           expectedOutput: "|   MENU   |",
           hint: "{title:^10}",
           hint2: "f\"|{title:^10}|\""
@@ -385,7 +385,7 @@ print(f"{n:05d}")   # 00007
           type: "tryit",
           title: "🖥️ Try It — Make a 5-digit ID",
           task: "Print num as a 5-digit integer (00042)!",
-          initialCode: "num = 42\n# Use :05d for 5 digits, padded with 0\nprint(f\"{num:___}\")",
+          initialCode: "num = 42\n# Make it 5 digits, filling the front with zeros\nprint(f\"{num:___}\")",
           expectedOutput: "00042",
           hint: "{num:05d}",
           hint2: "f\"{num:05d}\""

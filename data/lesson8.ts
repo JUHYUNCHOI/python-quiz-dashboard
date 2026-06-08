@@ -96,7 +96,7 @@ print(f"가격: {price}원")
           type: "tryit",
           title: "🖥️ 직접 해보기 — 이름 한 개 넣기",
           task: "f-string으로 이름을 출력하세요!",
-          initialCode: "name = \"민수\"\n# f-string으로 name 변수를 넣으세요\nprint(f\"안녕, {___}!\")",
+          initialCode: "name = \"민수\"\n# {} 안에 위에서 만든 변수를 넣어보세요\nprint(f\"안녕, {___}!\")",
           expectedOutput: "안녕, 민수!",
           hint: "f\"...{변수}...\" 형태로!",
           hint2: "f\"안녕, {name}!\""
@@ -243,7 +243,7 @@ print(f"원주율: {pi:.4f}")   # 3.1416 (소수점 4자리)
           type: "tryit",
           title: "🖥️ 직접 해보기 — 소수점 1자리",
           task: "소수점 1자리까지 출력하세요!",
-          initialCode: "score = 85.7777\n# :.1f 로 소수점 1자리\nprint(f\"평균: {score:___}점\")",
+          initialCode: "score = 85.7777\n# 소수점 1자리까지만 보여주세요\nprint(f\"평균: {score:___}점\")",
           expectedOutput: "평균: 85.8점",
           hint: "{score:.1f}",
           hint2: "f\"평균: {score:.1f}점\""
@@ -274,7 +274,7 @@ print(f"월급: {salary:,}원")
           type: "tryit",
           title: "🖥️ 직접 해보기 — 천 단위 쉼표",
           task: "천 단위 쉼표를 넣어서 출력하세요!",
-          initialCode: "money = 50000000\n# :, 로 천 단위 쉼표\nprint(f\"잔고: {money:___}원\")",
+          initialCode: "money = 50000000\n# 천 단위마다 쉼표를 넣어주세요\nprint(f\"잔고: {money:___}원\")",
           expectedOutput: "잔고: 50,000,000원",
           hint: "{money:,}",
           hint2: "f\"잔고: {money:,}원\""
@@ -303,7 +303,7 @@ print(f"|{'cat':<10}|")
           type: "tryit",
           title: "🖥️ 직접 해보기 — 왼쪽 정렬 10칸",
           task: "name을 왼쪽 정렬로 10칸에 넣어 출력하세요!",
-          initialCode: "name = \"cat\"\n# :<10 으로 왼쪽 정렬, 10칸\nprint(f\"|{name:___}|\")",
+          initialCode: "name = \"cat\"\n# 10칸 안에서 왼쪽으로 붙여 정렬하세요\nprint(f\"|{name:___}|\")",
           expectedOutput: "|cat       |",
           hint: "{name:<10} 처럼!",
           hint2: "f\"|{name:<10}|\""
@@ -329,7 +329,7 @@ print(f"|{'cat':>10}|")
           type: "tryit",
           title: "🖥️ 직접 해보기 — 오른쪽 정렬 10칸",
           task: "이름을 오른쪽 정렬로 10칸에 넣어 출력하세요!",
-          initialCode: "name = \"홍길동\"\n# :>10 으로 오른쪽 정렬, 10칸\nprint(f\"|{name:___}|\")",
+          initialCode: "name = \"홍길동\"\n# 10칸 안에서 오른쪽으로 붙여 정렬하세요\nprint(f\"|{name:___}|\")",
           expectedOutput: "|       홍길동|",
           hint: "{name:>10} 처럼!",
           hint2: "f\"|{name:>10}|\""
@@ -360,7 +360,7 @@ print(f"|{'cat':^10}|")
           type: "tryit",
           title: "🖥️ 직접 해보기 — 가운데 정렬 10칸",
           task: "title을 가운데 정렬로 10칸에 넣어 출력하세요!",
-          initialCode: "title = \"MENU\"\n# :^10 으로 가운데 정렬, 10칸\nprint(f\"|{title:___}|\")",
+          initialCode: "title = \"MENU\"\n# 10칸 안에서 가운데로 정렬하세요\nprint(f\"|{title:___}|\")",
           expectedOutput: "|   MENU   |",
           hint: "{title:^10} 처럼!",
           hint2: "f\"|{title:^10}|\""
@@ -385,7 +385,7 @@ print(f"{n:05d}")   # 00007
           type: "tryit",
           title: "🖥️ 직접 해보기 — 학번 5자리 만들기",
           task: "num을 5자리 정수로 출력하세요! (00042)",
-          initialCode: "num = 42\n# :05d 로 5자리, 빈 자리는 0\nprint(f\"{num:___}\")",
+          initialCode: "num = 42\n# 5자리로 만들고 빈 앞자리는 0으로 채우세요\nprint(f\"{num:___}\")",
           expectedOutput: "00042",
           hint: "{num:05d}",
           hint2: "f\"{num:05d}\""

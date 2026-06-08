@@ -24,9 +24,15 @@ level = 5
 # Restart? score = 0, level = 1
 \`\`\`
 
-**Save it to a file?** -> It stays even after the program closes!
+**Why does it disappear?** A variable lives in the computer's **memory (RAM)**, a temporary workspace. But that space is only borrowed *while the program is running*, so when the program ends it gets wiped clean -- and every variable you made gets erased with it.
+
+**Save it to a file?** -> It stays even after the program closes! A file isn't written to memory; it's written to **disk (storage)**. Disk keeps its contents even when the power goes off.
 
 📓 **Think of it like a notebook!** A variable is like a memory in your head (gone when you sleep). A file is like a note in your notebook (still there whenever you look back).
+
+So anything you need to **see again later** -- a game score, a diary, settings -- shouldn't be memorized in your head (a variable); it should be written in your notebook (a file). If you trust only your head, one nap (one program close) and it's all gone.
+
+> 💡 The reason a game has a "Continue" button after you close it -- that's exactly because it **wrote the score and level to a file and read them back**. Today you'll build that secret yourself!
 
 @Key point: Variables disappear when the program closes! Save to a **file** and it lasts forever!`
         },
@@ -72,6 +78,13 @@ f.close()
 
 A test.txt file is created with "Hello!" saved in it!
 
+**Why three steps?** Picture writing in a notebook -- it lines up perfectly.
+- **\`open(...)\`** -- the step that *opens* the notebook. \`'w'\` means "open it in write mode." (Unlike a variable in memory, a file has to be *opened first* before you can touch it.)
+- **\`write(...)\`** -- the step that *writes* letters into the open notebook.
+- **\`close()\`** -- the step that *closes and tidies up* the notebook.
+
+**Why does \`close()\` matter?** Python doesn't write your \`write()\` text to disk right away -- it holds it for a moment (a buffer) and sends it all to disk when you \`close()\`. So if you never close, the text you thought you wrote **might not actually be in the file**. It's like a notebook you left open and never closed.
+
 @Key point: **open('file', 'w')** -> **write()** -> **close()** = 3 steps to write a file!`
         },
         {
@@ -80,13 +93,19 @@ A test.txt file is created with "Hello!" saved in it!
           title: "What if you forget close()?",
           content: `You have to write close() every time... but what if you **forget**? Could that cause problems? Is there a way to close it automatically?
 
+🚪 **If you open a door, you must close it** -- a file is the same. Leave it open and the text might never reach the disk, or the computer keeps holding the file thinking "who's still using this?" But people always forget. Once code gets long, dropping that one \`close()\` line is all too easy.
+
+So Python gives you a way that *closes it for you* -- the **\`with\` statement**.
+
 \`\`\`python
 with open('test.txt', 'w') as f:
     f.write('Hello!')
 # close() happens automatically here
 \`\`\`
 
-From now on we'll only use the with statement!
+The moment you **leave the \`with\` block** (the indented part), Python presses \`close()\` for you. It's like a door that opens when you walk in and closes itself when you walk out.
+
+**The real win:** even if an **error** stops your code in the middle, \`with\` still closes the file. With a manual \`close()\`, an error jumps right past that line and leaves the file open. So from now on, instead of \`open()...close()\` we'll use **only the \`with\` statement** -- shorter and safer.
 
 @Key point: Use the **with statement** and close() is automatic! Safe and convenient!`
         },
@@ -170,6 +189,14 @@ First line
 Second line
 Third line
 \`\`\`
+
+**How is this different from writing?** The shape is almost identical -- you still open it with \`with open(...)\`. Only two things change.
+- The mode is **\`'r'\`** (read) instead of \`'w'\`. It tells Python "I didn't open this to write -- I opened it to **read**."
+- Instead of *putting in* with \`write(content)\`, you *take out* with **\`read()\`**. So \`read()\` **returns** what it pulled out, and you store it in a variable (\`content = f.read()\`).
+
+The direction is exactly reversed. Writing sends your letters → *into* the file; reading pulls the file's letters → *out into* your variable. With a notebook, writing is putting pen to paper / reading is taking it in with your eyes.
+
+> 💡 Opening with \`'w'\` *blanks the notebook out*, but opening with \`'r'\` lets you look at what's written **without touching it**. In read mode there's no way to accidentally erase the contents.
 
 @Key point: **'r' = read = read mode!** read() reads the entire file at once!`
         },
@@ -333,7 +360,9 @@ FileNotFoundError:
 No such file or directory: 'missing.txt'
 \`\`\`
 
-We can handle this with try-except!
+**Why does it crash?** \`'r'\` (read) opens a file that *already exists*. If that file isn't there, Python panics -- "there's nothing to read?" -- and stops the program with a **FileNotFoundError**. (\`'w'\`, on the other hand, just creates the file if it's missing, so it never raises this.)
+
+This often happens the very first time you run a program, before any save file exists yet. With the **try-except** you learned in lesson 37, you can plan ahead -- "if the file isn't there, do this instead" -- and keep going without crashing.
 
 @Key point: Reading a missing file -> **FileNotFoundError!** Catch it with try-except!`
         },
@@ -419,7 +448,7 @@ print('C')
           task: "Complete a function that saves a score to score.txt",
           initialCode: `def save_score(score):
     # Save score to score.txt
-    # Use with open('score.txt', 'w')!
+    # 💡 Open the file in write mode and write the score
     pass
 
 # Test
@@ -437,7 +466,7 @@ print('Save complete!')`,
           initialCode: `def load_score():
     # Load score from score.txt
     # Return 0 if file doesn't exist
-    # Use try-except FileNotFoundError!
+    # 💡 Handle the case where the file might be missing
     pass
 
 # Test

@@ -23,7 +23,9 @@ export const lesson35EnData: LessonData = {
           id: "ch1-1",
           type: "explain",
           title: "💭 Python has functions ready for you to use!",
-          content: `💭 You don't have to write every function yourself! Python comes with **commonly-used functions** built in — called **built-in functions**.
+          content: `Measuring a list's length, adding everything up, sorting — these come up *so* often that writing your own \`def\` every time would be a waste. So Python ships with **the most common functions already built in**. We call these **built-in functions**.
+
+Think of them as a ready-made **toolbox**. When you need a hammer you don't *carve* one — you grab it from the box. Same here: need a total? Grab \`sum()\`. No reinventing the wheel. (Bonus: these tools are written in C, so they run **much faster** than functions you'd write yourself.)
 
 Let's master the **5 most useful** ones:
 
@@ -32,6 +34,8 @@ Let's master the **5 most useful** ones:
 3. \`max()\`, \`min()\` — **max/min** 🔝
 4. \`sorted()\` — **sort** 📊
 5. \`map()\` — **transform** 🔄
+
+> 💡 No \`import\` needed either. \`len()\`, \`sum()\` just work *anywhere, anytime* — the moment you start Python, these tools are already within reach.
 
 @key: Built-in functions = functions **Python made for you**! Just call \`len()\`, \`sum()\` etc — no def needed.`
         },
@@ -199,6 +203,8 @@ print(sorted([3, 1, 4, 1, 5], reverse=True))
           title: "💭 Sort by length instead of alphabet?",
           content: `💭 Plain \`sorted()\` on words = **alphabetical**. How do I sort by **length** instead?
 
+This is where \`key=\` comes in. \`key\` tells \`sorted()\`: *"Don't compare the values directly — run each one through THIS function first, and compare by that result."* It's like secretly attaching a **tag (a score)** to each value before deciding the order.
+
 \`\`\`python
 words = ['apple', 'pie', 'banana']
 
@@ -207,8 +213,17 @@ print(sorted(words, key=len))
 # ['pie', 'apple', 'banana']
 \`\`\`
 
-Each word's length: apple=5, pie=3, banana=6
-Sorted by length: 3, 5, 6 → pie, apple, banana
+**Let's see it step by step.** With \`key=len\`, \`sorted()\` compares not the words themselves but *the result of \`len()\` on each word*.
+
+| word | \`len(word)\` ← comparison tag |
+|------|------|
+| 'apple' | 5 |
+| 'pie' | 3 |
+| 'banana' | 6 |
+
+Line them up by the tag numbers 3, 5, 6 → \`pie\`, \`apple\`, \`banana\`. The alphabet is ignored — only **length** matters.
+
+> 💡 Pass just the function *name* to \`key\` — \`key=len\` (\`key=len()\` ❌, no parentheses!). You only tell it *which ruler to measure with*; \`sorted()\` does the actual measuring. In the next step you'll use \`key=lambda x: x[1]\` to build your own rule, like *"compare by the tuple's second value."*
 
 @key: \`key=function\` lets you pick the **sort criteria**! \`key=len\` = by length.`
         },
@@ -254,7 +269,9 @@ print(___)`,
           id: "ch4-1",
           type: "explain",
           title: "💭 Can I transform every list item at once?",
-          content: `💭 To change \`['1', '2', '3']\` into a list of integers, do you have to convert each one yourself? Too tedious!
+          content: `💭 To change \`['1', '2', '3']\` into a list of integers, do you loop with \`for\`, call \`int()\` on each, and \`append()\` to a new list? It works — but it's tedious!
+
+That's exactly what \`map()\` solves in one line: *"apply the same function to every value in the list."* Picture a **factory conveyor belt** 🏭 — the strings \`'1'\`, \`'2'\`, \`'3'\` ride in single file, pass through the \`int\` machine once, and come out the other side as the numbers \`1\`, \`2\`, \`3\`. You never touch them one by one; each item gets the **same processing** automatically.
 
 \`\`\`
 ['1', '2', '3']  ── map(int, ...) ──→  [1, 2, 3]
@@ -269,7 +286,14 @@ numbers = list(map(int, strings))
 print(numbers)  # [1, 2, 3]
 \`\`\`
 
-🚨 **Note!** \`map()\` returns a map object. **Wrap with \`list()\`** to make it a list.
+Notice the \`int\` handed to \`map\` has *no parentheses* (\`int()\` ❌). You're handing over the *machine itself* to bolt onto the belt — you're not running it once yourself.
+
+> 💡 \`map()\` doesn't hand you a list right away — it returns a **map object** (the conveyor belt itself). To *collect the results into a list*, wrap it in \`list()\`.
+> \`\`\`python
+> map(int, ['1', '2'])         # <map object ...>  ← still a belt
+> list(map(int, ['1', '2']))   # [1, 2]            ← collected into a list!
+> \`\`\`
+> Forget \`list()\` and \`print(map(...))\` shows something like \`<map object>\` — a classic gotcha. Don't forget!
 
 @key: \`map(function, list)\` = apply the function to **every** item! Don't forget \`list()\` wrap.`
         },
@@ -309,6 +333,8 @@ print(sum(result))
           title: "💭 How do I read multiple numbers on one line?",
           content: `💭 If a user types \`10 20 30\` on **one line**, how do you read them all as integers?
 
+This is where \`map\` really shines. What \`input()\` gives you is one big blob of text — you can't do math on it. So you **chain three tools like a conveyor line**: split it up (\`split\`), transform them all (\`map\`), receive them in one line.
+
 \`\`\`python
 # Multiple numbers on one line (into variables)
 a, b, c = map(int, input().split())
@@ -317,12 +343,14 @@ a, b, c = map(int, input().split())
 numbers = list(map(int, input().split()))
 \`\`\`
 
-**Step-by-step:**
-1. \`input()\` = "10 20 30" (string)
-2. \`.split()\` = ['10', '20', '30'] (list of strings)
-3. \`map(int, ...)\` = converts each to int
+**Follow it step by step (input: \`10 20 30\`):**
+1. \`input()\` → \`"10 20 30"\` — **one blob of text**, spaces included
+2. \`.split()\` → \`['10', '20', '30']\` — a **list of strings**, split on spaces
+3. \`map(int, ...)\` → runs each string through the \`int\` conveyor → \`10, 20, 30\` (real numbers!)
 
-💡 This pattern appears on **almost every exam!**
+Now you can unpack them into \`a, b, c\`, or wrap in \`list()\` to grab them all as a list.
+
+> 💡 This pattern appears on **almost every exam.** Memorize \`map(int, input().split())\` as one unit and input handling will rarely trip you up.
 
 @key: \`map(int, input().split())\` — the magic one-liner for multiple-number input!`
         },

@@ -18,7 +18,9 @@ export const lesson25EnData: LessonData = {
           id: "intro",
           type: "explain",
           title: "\u21d4\ufe0f A Deque Works on Both Ends!",
-          content: `**Deque** = Double-Ended Queue.
+          content: `Last time, a **queue** only let you add at one end and remove at the other (like a theme-park line — you join at the back and leave from the front). But real life has plenty of situations where you can *cut in at the front AND leave from the back*. That's exactly what a deque is for.
+
+**Deque** = Double-Ended Queue ("a queue with **both ends** open").
 You can add and remove from **both** ends!
 
 \`\`\`
@@ -27,44 +29,52 @@ You can add and remove from **both** ends!
     add/remove       add/remove
 \`\`\`
 
-**Analogy: a tunnel open at both ends.**
-- Use it like a stack
-- Use it like a queue
-- Both in O(1)!`
+**Analogy: a tunnel open at both ends.** A queue is a one-way tunnel — one entrance, one exit. A deque has **both ends serving as entrance and exit**.
+- Use only one end -> it acts like a **stack**
+- Add at one end, remove at the other -> it acts like a **queue**
+- Touch either end and it's **O(1)** fast!`
         },
         {
           id: "compare",
           type: "explain",
           title: "\ud83d\udcca Stack vs Queue vs Deque",
-          content: `| Data Structure | Front | Back |
+          content: `Stacks and queues are really structures with **one entrance deliberately blocked off**. A stack opens only one end so *the last item in comes out first*; a queue takes items in one end and out the other so *first in, first out*. Each one closes off a side on purpose to keep its rule simple.
+
+| Data Structure | Front | Back |
 |----------------|-------|------|
 | **Stack** | \u274c | Add/Remove |
 | **Queue** | Remove only | Add only |
 | **Deque** | Add/Remove | Add/Remove |
 
-**Deque = The most flexible data structure!**
+Notice only the deque has all four cells **open**? A deque is the structure where *"the blocked entrances are all re-opened."* So you can add and remove freely at **both the front and the back**.
+
+**Deque = The most flexible data structure!** Use one end and it's a stack; add at one end and remove at the other and it's a queue \u2014 so a single deque can **imitate both** a stack and a queue.
 
 \`\`\`
 Stack: Back only  ->  [   ]
 Queue: Front<-Back -> [   ]
 Deque: <- Both ->     [   ]
-\`\`\``
+\`\`\`
+
+> \ud83d\udca1 So why not just always use a deque? When both ends are open it's easy to lose track of *"which end did I add to again?"* If you **only need one end**, use a stack/queue with its clear rule, and reach for a deque **only when you truly need both ends**.`
         },
         {
           id: "realworld",
           type: "explain",
           title: "\ud83c\udf0d Real-World Deques",
-          content: `**Deque examples:**
+          content: `Everything that suits a deque has one thing in common \u2014 you need to touch **both ends**. If you only touch one end, a stack or queue is enough; but the examples below need *both the front and the back*.
 
-\ud83c\udfb5 **Music Player** - Access previous/next track
-\ud83d\udcc4 **Recent Documents** - Add new docs, remove old ones
-\ud83c\udfae **Game Actions** - Undo/Redo
-\ud83d\ude82 **Bidirectional Train** - Board/exit from both sides
+\ud83d\ude82 **Bidirectional train/subway** - People board and exit at car 1 (front) AND the last car (back). Doors open on both ends, so it's a deque.
+\ud83c\udfae **Undo / Redo** - Pile the latest action on the back (append) and drop overly-old history from the front (popleft). You use both ends together.
+\ud83d\udcc4 **Recent documents list** - A newly opened doc goes on the front (appendleft); when the list is full, the oldest one drops off the back (pop).
+\ud83c\udfb5 **Music Player** - You move to the previous track (front) and the next track (back), so you need access from both sides.
 
-**In algorithms:**
-- Sliding window maximum
-- Palindrome checking
-- BFS optimization`
+**The same reasoning makes it show up in algorithms:**
+- **Palindrome check** - To see if "level" reads the same both ways, you compare *the very first and very last character at the same time* -> remove from both ends.
+- **Sliding window maximum** - Push new values onto the back (append) and drop stale values that left the window from the front (popleft) -> both ends.
+- **BFS optimization** (0-1 BFS, etc.) - Put nearer nodes at the front, farther ones at the back to control priority.
+
+> \ud83d\udca1 One-line test: *"Do I need to remove from the front AND add at the back?"* -> If yes, it's a deque.`
         },
         {
           id: "quiz1",
@@ -110,7 +120,9 @@ Deque: <- Both ->     [   ]
           id: "operations",
           type: "explain",
           title: "\u2699\ufe0f 4 Core Deque Operations",
-          content: `\`\`\`python
+          content: `The names are built to be easy to remember. The plain version handles the **back (right)**, and adding \`left\` to the name switches it to the **front (left)**. \`append\` adds, \`pop\` removes — just tack on \`left\` to flip the direction.
+
+\`\`\`python
 from collections import deque
 d = deque()
 
@@ -123,7 +135,11 @@ d.appendleft(x)  # Add to front
 d.popleft()      # Remove from front
 \`\`\`
 
-**All O(1)!** Faster than lists!`
+**Analogy: a straw (tunnel) open at both ends.** Imagine beads inside the straw. Both openings are open, so whether it's the left bead or the right bead, you can add or remove it **the instant you reach for it**.
+
+**Why are all 4 O(1) (instant)?** A deque is built to *always remember where the very front and very back are*. So no matter which end you touch, it jumps straight "to that spot" — it never counts from the start of the line.
+
+> 💡 The key difference from a list: touching the front of a list (\`insert(0, x)\`, \`pop(0)\`) forces *every element behind it to shift over one slot*, so it gets slower the longer the list (O(n)). A deque does no shifting when you touch the front, so it's **always O(1)** — when front operations are frequent, a deque is far faster.`
         },
         {
           id: "try1",
@@ -139,7 +155,9 @@ d.popleft()      # Remove from front
           id: "more-operations",
           type: "explain",
           title: "\ud83d\udd27 Additional Features",
-          content: `\`\`\`python
+          content: `A deque has two more handy features that use both ends. Both do *something tedious to do by hand* in a single line.
+
+\`\`\`python
 from collections import deque
 
 d = deque([1, 2, 3, 4, 5])
@@ -159,7 +177,13 @@ d.extendleft([0, -1])  # Add multiple to front (reversed!)
 d = deque(maxlen=3)
 d.extend([1, 2, 3, 4, 5])
 print(d)  # [3, 4, 5] Only the most recent 3!
-\`\`\``
+\`\`\`
+
+**🔄 rotate — shift the whole thing around.** It takes items off one end and slips them onto the other, all at once. **When do you use it?** When you want to *move only the starting point* while keeping the order. For example, when a turn comes around in a game (\`rotate(-1)\` -> the next player moves to the front), or when rotating a circular arrangement (a round table). Doing it by hand means repeating "pop the back -> push the front" for every step; \`rotate(n)\` does it in one line.
+
+**📏 maxlen — automatically keep only the most recent N.** Make it with \`deque(maxlen=3)\` and *the moment the length exceeds 3, the opposite end drops off on its own*. **When do you use it?** Whenever you only need to "remember the recent ones" — the last 10 chat messages, the last 5 game scores, a sensor's last 100 readings. You *don't* have to write \`if len > N: pop()\` yourself — the deque discards the old ones for you.
+
+> 💡 The key to \`maxlen\`: on a full deque, \`append\` (add to back) drops the **front**, and \`appendleft\` (add to front) drops the **back**. In other words, *the side opposite to where you added* gets pushed out.`
         },
         {
           id: "try2",
@@ -184,18 +208,22 @@ print(d)  # [3, 4, 5] Only the most recent 3!
           title: "\ud83e\udde9 Problem 1: Palindrome Check",
           content: `**Palindrome**: A word that reads the same forwards and backwards (e.g. "level", "racecar")
 
+**Why is a deque a perfect fit?** A palindrome check *pairs up the very first and very last character*, and if they match, narrows inward one layer at a time. That's exactly handling **both ends at once**. A deque pops the front character (\`popleft()\`) and the back character (\`pop()\`) both in O(1), so it expresses "squeeze inward from both ends" directly.
+
 **Checking with a deque:**
 1. Put the characters into a deque
-2. Pop from front and back, compare them
-3. If all match, it's a palindrome!
+2. Pop one from each end and compare (\`popleft()\` <-> \`pop()\`)
+3. The moment a pair differs -> "not a palindrome"; if all match to the end, it's a palindrome!
 
 \`\`\`
 "level"
-Front: l <-> Back: l \u2713
-Front: e <-> Back: e \u2713
+Front: l <-> Back: l \u2713   <- popleft()=l, pop()=l
+Front: e <-> Back: e \u2713   <- popleft()=e, pop()=e
 Middle: v (remains if odd length)
 -> Palindrome!
-\`\`\``
+\`\`\`
+
+> \ud83d\udca1 Since you squeeze toward the middle, you stop once length drops to 1 or less (\`len(d) <= 1\`). For odd lengths a single middle character is left over, but it has nothing to compare against itself, so it just passes.`
         },
         {
           id: "try3",
@@ -222,9 +250,14 @@ Window [-1, -3, 5] -> Max: 5
 ...
 \`\`\`
 
+**Why is a deque a perfect fit?** Each time the window slides one step right, *a new value comes in at the right end and the stale value leaves from the left end*. Incoming goes on the back (append), outgoing leaves from the front (popleft) — exactly the deque's two-ended behavior.
+
+There's one more clever twist. **When a new value larger than ones already inside arrives**, the smaller older values *can never be the maximum again*, so we drop them from the back (pop). This leaves the deque holding only candidates that get "bigger toward the front, smaller toward the back," so **the front is always the current window's maximum**.
+
 **Optimized with a deque:**
-- Keep only indices that could be the maximum in the deque
-- O(n) time complexity!`
+- Keep only indices that could be the maximum in the deque (front = largest value)
+- Front index that left the window: \`popleft\`; back index smaller than the new value: \`pop\`
+- Each element enters and leaves the deque once, so the whole thing is **O(n)** — far faster than re-scanning for the max every time (O(nK))!`
         },
         {
           id: "try4",

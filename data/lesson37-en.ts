@@ -30,6 +30,12 @@ ValueError: invalid literal for int()
 
 The program crashes! The game shuts down!
 
+Here's the important part -- **this isn't your fault.** \`int()\` worked exactly as you learned in lesson 9. "abc" can't be turned into a number, so \`int()\` honestly said "I can't do this!" and threw a ValueError. The real problem is that you didn't **expect and prepare** for it.
+
+And remember -- *you* aren't the one typing. **Someone else (the user)** types the input. People make typos, mess around, and hit enter on blank lines. No matter how perfectly you write your code, one weird input and the whole program dies right there.
+
+> 💡 The code isn't **wrong** -- it just has no *plan for the unexpected*. Today we learn that plan: how to keep the program alive even when an error happens.
+
 @Key point: When an error occurs, the program **stops completely!** That's why we need error handling!`
         },
         {
@@ -86,7 +92,15 @@ except:
     print('Error occurred!')
 \`\`\`
 
-@Key point: **try** = "give it a shot", **except** = "if there's an error, do this!"`
+🛟 The **safety net** analogy from before fits perfectly here. Inside \`try:\` goes the **risky code** -- the acrobat doing the stunt. It works when it works, but it might fall (error). Inside \`except:\` goes the **net** -- what to do instead when it falls.
+
+So when deciding where code goes, just ask yourself:
+- *"Could this line fail?"* -> then put it **inside try** (e.g. \`int(input_value)\`, \`10 / num\`, opening a file)
+- *"What should I show if it fails?"* -> put that response **inside except** (e.g. \`'Please enter a number!'\`)
+
+One key point -- if the code inside \`try:\` **runs with no error, except never runs at all.** The net is only used when the acrobat falls; the rest of the time it just sits there, right? Same here. The net (except) is an emergency standby that only kicks in *when something falls*.
+
+@Key point: **try** = "give it a shot (risky code)", **except** = "if there's an error, do this! (the fallback)"`
         },
         {
           id: "ch2-2",
@@ -181,7 +195,13 @@ except ValueError:       # Specify the error name!
 
 Write the **error name** after except to catch only that error!
 
-@Key point: Write \`except ValueError:\` with the **error name** to catch only that specific error!`
+**Just using \`except:\` to catch everything is easier, so why bother naming it?** 🛟 Think about the net. You hung it to catch a falling acrobat -- but if it also catches *passing birds, dropped hats, and a worker who slipped by accident*, you'd wonder, "Wait, was that actually the acrobat?" A bare \`except:\` (a net with no name) **catches every single error, no questions asked.** The ValueError you expected, AND a *real bug you never saw coming* (a misspelled variable, a function called wrong) -- it marks them all as "handled." So a real bug hides behind that \`'Cannot convert to number!'\` message and you might *never* find it.
+
+Writing \`except ValueError:\` pins it down: "catch only value-conversion failures, and **let every other error pass through** so it stops normally like always." That's how you tell *an expected mistake* apart from *a real bug*.
+
+> ⚠️ A bare \`except:\` swallows *every* error and **hides real bugs too.** It's a trap that makes "where did it go wrong?" impossible to answer. So catch *only the error you expect* with \`except ErrorName:\`.
+
+@Key point: Write \`except ValueError:\` with the **error name** to catch only that specific error! (A bare except hides real bugs too)`
         },
         {
           id: "ch3-1a",
@@ -197,6 +217,12 @@ except ZeroDivisionError:  # Division by zero error!
 \`\`\`
 
 Just change the error name and you can catch **any error** with the same pattern!
+
+The good news is -- *the pattern never changes.* You just **swap the name tag** after \`except\`. Number conversion failed? \`ValueError\`. Divided by zero? \`ZeroDivisionError\`. Opened a file that doesn't exist? \`FileNotFoundError\`. Python has a set name for each situation, and you just write that name to catch only that error.
+
+The different names are actually a *good* thing. The error name itself is a label telling you *"what went wrong."* Just seeing \`ZeroDivisionError\` tells you "ah, I divided by zero." (This error name is the same family as the ValueError you briefly met at the end of lesson 9.)
+
+> 💡 An error name = a label that tells you *"what went wrong."* \`ValueError\` = a value broke the rules · \`ZeroDivisionError\` = divided by zero. Write the name exactly and only that error gets caught.
 
 @Key point: Each error type has a different name! **ValueError**, **ZeroDivisionError**, etc.!`
         },
@@ -264,6 +290,8 @@ except ValueError:
 \`\`\`
 
 This only catches ValueError -- **entering 0 still crashes!**
+
+🛟 It's like the net only covers *one section*. There's a net where ValueError falls, but no net where ZeroDivisionError falls -- so it hits the floor with a thud (= program stops). If one spot can have **multiple kinds** of accidents, you need a net for each kind.
 
 @Key point: A try block can have **multiple types of errors**! One except might not be enough!`
         },

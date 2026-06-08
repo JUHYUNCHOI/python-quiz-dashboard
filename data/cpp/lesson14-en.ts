@@ -657,7 +657,7 @@ int main() {
           content: `When reading N students, how do you declare the vector?`,
           code: `int n;
 cin >> n;
-vector<___> students(n);  // n-slot Student vector
+vector<___> students(n);  // a vector holding n students
 
 for (int i = 0; i < n; i++) {
     cin >> students[i].name >> students[i].score;
