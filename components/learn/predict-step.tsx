@@ -149,12 +149,6 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
             </motion.button>
           )
         })}
-        {/* 1번째 오답 → 한 번 더 기회 (정답/출력은 아직 공개 X) */}
-        {selectedAnswer !== null && !showExplanation && (
-          <div className="p-3 rounded-xl bg-amber-50 border-2 border-amber-300 text-sm font-bold text-amber-700 flex items-center gap-2">
-            🤔 {t("아쉬워요! 다시 한 번 골라봐요.", "Not quite — try once more.")}
-          </div>
-        )}
       </div>
 
       {/* 터미널 애니메이션 */}

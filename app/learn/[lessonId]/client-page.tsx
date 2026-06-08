@@ -688,19 +688,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   goPrevRef.current = goPrev
 
   const handleQuizAnswer = (idx: number) => {
-    if (showExplanation) return // 이미 확정(채점)된 문제는 무시
+    if (selectedAnswer !== null) return // 첫 답으로 박제 — 즉시 재시도 없음 (벼락치기 통과 차단)
     const isCorrect = idx === step.answer
-    const attempt = quizAttempts + 1
-    setQuizAttempts(attempt)
+    setQuizAttempts(prev => prev + 1)
     setSelectedAnswer(idx)
-
-    // 1번째 오답 → 한 번 더 기회 (확정/정답공개 X, 다른 답 다시 고를 수 있음)
-    if (!isCorrect && attempt < 2) {
-      play("wrong")
-      return
-    }
-
-    // 정답이거나 2번째 시도 → 확정(채점). 틀려도 완료 처리해서 진행 가능 ("그냥 채점")
+    // 첫 답 = 확정(채점). 틀려도 정답·설명 보여주고 넘어가되 점수 0 (박제). 재획득은 7일 후 창고 재마스터로만.
     setShowExplanation(true)
     if (!effectiveTeacher) {
       saveStepAnswer({
