@@ -51,6 +51,12 @@ const PHASES: { at: number; ko: string; en: string; dot: string }[] = [
 ]
 const PROB_BY_ID = new Map(EXTERNAL_PROBLEMS.map(p => [p.id, p]))
 
+// 이 단계엔 선수지식(이분탐색 등)이 아직 부족한 문제 → "알고리즘 배운 뒤"로 안내.
+// 막진 않음 — 표시만 해서 지금 여기서 안 막히게.
+const DEFER_AFTER_ALGO: Record<string, { ko: string; en: string }> = {
+  "cses-1091": { ko: "⏳ 알고리즘(이분탐색) 배운 뒤에", en: "⏳ After binary search (algorithm stage)" },
+}
+
 // 학생이 직접 누르는 "했음" 체크 — 외부 링크라 자동 채점 불가
 function CheckDot({ done, onToggle }: { done: boolean; onToggle: () => void }) {
   return (
@@ -171,6 +177,7 @@ function Content() {
               const p = PROB_BY_ID.get(id)
               if (!p) return null
               const phase = PHASES.find(ph => ph.at === i)
+              const defer = DEFER_AFTER_ALGO[id]
               return (
                 <li key={id}>
                   {phase && (
@@ -181,13 +188,17 @@ function Content() {
                   )}
                   <a href={p.url} target="_blank" rel="noopener noreferrer"
                      className={"flex items-center gap-2.5 rounded-lg border px-3 py-2 ml-3 hover:border-gray-400 hover:shadow-sm transition-all " +
-                       (doneSet.has(p.id) ? "border-green-200 bg-green-50/60" : "border-gray-200 bg-white")}>
+                       (doneSet.has(p.id) ? "border-green-200 bg-green-50/60"
+                        : defer ? "border-amber-300 border-dashed bg-amber-50/50"
+                        : "border-gray-200 bg-white")}>
                     <span className="w-6 h-6 shrink-0 rounded-full bg-gray-900 text-white text-xs font-black flex items-center justify-center">{i + 1}</span>
                     <CheckDot done={doneSet.has(p.id)} onToggle={() => toggleDone(p.id)} />
                     <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold border shrink-0 ${SOURCE_META[p.source].color}`}>{SOURCE_META[p.source].label}</span>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-gray-900 truncate">{p.title}</p>
-                      <p className="text-xs text-gray-500 truncate">{p.topic} · {p.blurb}</p>
+                      {defer
+                        ? <p className="text-xs font-bold text-amber-600 truncate">{lang === "ko" ? defer.ko : defer.en}</p>
+                        : <p className="text-xs text-gray-500 truncate">{p.topic} · {p.blurb}</p>}
                     </div>
                     <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold border shrink-0 ${DIFF_COLOR[p.difficulty]}`}>{p.difficulty}</span>
                     <span className="text-gray-300 shrink-0" aria-hidden>↗</span>
