@@ -20,6 +20,7 @@ import { logActivity } from "@/lib/activity-log"
 import { trackStepVisit } from "@/lib/track-step-visit"
 import { getCompletedLessons, pythonParts, cppParts, pseudoParts, getNextLessonId } from "@/lib/curriculum-data"
 import { getSmartNext } from "@/lib/smart-next"
+import { onRampForLesson } from "@/lib/journey/contest-prep-map"
 import { useAuth } from "@/contexts/auth-context"
 import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { AdSlot } from "@/components/ad-slot"
@@ -1011,6 +1012,36 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                   )
                 }
                 return null
+              })()}
+              {/* 🏆 방금 배운 개념으로 풀 수 있는 대회 문제 (on-ramp) — prereq 레슨에서만 */}
+              {(() => {
+                const track = currentProgrammingLang === "cpp" ? "cpp" : "python"
+                const onramp = onRampForLesson(lessonId, track)
+                if (!onramp.length) return null
+                return (
+                  <div className="mt-3 rounded-2xl border-2 border-amber-200 bg-amber-50 p-4 text-left">
+                    <p className="text-sm font-black text-amber-800 mb-0.5">🏆 {t("방금 배운 걸로 풀 수 있는 대회 문제", "Contest problems you can now solve")}</p>
+                    <p className="text-[11px] text-amber-600 mb-2.5">{t("쉬운 것부터 — 새 탭에서 풀어요.", "Easiest first — opens in a new tab.")}</p>
+                    <div className="space-y-1.5">
+                      {onramp.map((p) => (
+                        <a
+                          key={p.id}
+                          href={p.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 rounded-lg bg-white border border-amber-200 px-3 py-2 hover:border-amber-400 transition-colors"
+                        >
+                          <span className="text-sm font-bold text-gray-800 flex-1 truncate">{p.title}</span>
+                          <span className="text-[10px] text-gray-400 shrink-0">{p.source}</span>
+                          <span className="text-amber-500 shrink-0">↗</span>
+                        </a>
+                      ))}
+                    </div>
+                    <a href="/course/kl" className="mt-2 inline-block text-[11px] font-bold text-amber-700 hover:underline">
+                      {t("이 개념 문제 더 풀기 →", "More problems on this topic →")}
+                    </a>
+                  </div>
+                )
               })()}
               {/* 보조 액션: 퀴즈 / 돌아가기 — 작은 사이드 바이 사이드 */}
               <div className="flex gap-2 pt-1">

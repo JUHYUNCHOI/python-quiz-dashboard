@@ -1125,6 +1125,9 @@ export default function CurriculumPage() {
                       <span className="mt-1 text-xs text-center rounded-lg py-1.5 font-bold text-green-700">
                         {practiceProblemsDone >= 40 ? `✅ ${t("알고리즘 해금!", "Algorithms Unlocked!")}` : t("레슨에서 Try Challenge로 도전!", "Try Challenge in each lesson!")}
                       </span>
+                      <Link href="/course/kl" className="text-xs text-center bg-amber-500 text-white rounded-lg py-1.5 font-black hover:bg-amber-600 transition-colors">
+                        🎯 {t("KL 대비 사다리 (40문제) →", "KL Prep Ladder (40 problems) →")}
+                      </Link>
                       {completedLessons.has("cpp-p3") && (
                         <Link href="/coding-bank" className="text-xs text-center border border-emerald-400 text-emerald-600 rounded-lg py-1.5 font-bold hover:bg-emerald-50 transition-colors">
                           🏦 {t("코딩 뱅크 →", "Coding Bank →")}
@@ -1253,6 +1256,9 @@ export default function CurriculumPage() {
                       <span className="mt-1 text-xs text-center rounded-lg py-1.5 font-bold text-green-700">
                         {pyPracticeDone >= pyPracticeGoal ? `✅ ${t("알고리즘 해금!", "Algorithms Unlocked!")}` : t("레슨에서 Try Challenge로 도전!", "Try Challenge in each lesson!")}
                       </span>
+                      <Link href="/course/kl" className="text-xs text-center bg-amber-500 text-white rounded-lg py-1.5 font-black hover:bg-amber-600 transition-colors">
+                        🎯 {t("KL 대비 사다리 (40문제) →", "KL Prep Ladder (40 problems) →")}
+                      </Link>
                     </>
                   ) : (
                     <>
