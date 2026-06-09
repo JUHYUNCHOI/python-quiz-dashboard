@@ -12,6 +12,7 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { ALL_CLUSTERS } from "@/data/practice"
 import { ALL_TOPICS } from "@/data/algorithm/topics"
+import { onRampForLesson } from "@/lib/journey/contest-prep-map"
 import { getRankForPart, getStudentTrackRank, RANKS, type RankInfo } from "@/lib/curriculum-ranks"
 import { pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import {
@@ -1743,6 +1744,15 @@ export default function CurriculumPage() {
                                                     </span>
                                                   </>
                                                 )}
+                                                {(() => {
+                                                  const track = String(lesson.id).startsWith("cpp-") ? "cpp" : "python"
+                                                  const cnt = onRampForLesson(lesson.id, track).length
+                                                  return cnt > 0 ? (
+                                                    <span className="px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded text-xs font-bold" title={t("이 레슨을 끝내면 풀 수 있는 대회 문제", "Contest problems unlocked by finishing this lesson")}>
+                                                      🏆 {t(`대회문제 ${cnt}`, `${cnt} contest`)}
+                                                    </span>
+                                                  ) : null
+                                                })()}
                                               </>
                                             )}
                                           </div>
