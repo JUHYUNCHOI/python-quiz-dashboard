@@ -292,7 +292,7 @@ function Content() {
       </div>
 
       <p className="text-center text-xs text-gray-400 mt-6">
-        {t("초안 — 외부 공개 저지 문제 모음(자체 채점 아님). 진입 위치는 검토 후 연결.", "Draft — public-judge problems (not self-graded). Entry point TBD.")}
+        {t("외부 공개 저지 문제 모음 — 누르면 새 탭에서 풀어요. 커리큘럼 '2. 연습' 단계의 일부예요.", "Public-judge problems — open in a new tab. Part of the curriculum's 'Practice' stage.")}
       </p>
     </main>
   )
