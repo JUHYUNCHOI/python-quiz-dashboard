@@ -37,7 +37,27 @@ export const lesson50: LessonData = {
 
 hero = Character('영희', 'mage')
 print(f'{hero.name}: HP {hero.hp}, ATK {hero.atk}')`,
-        result: "영희: HP 80, ATK 25"
+        result: "영희: HP 80, ATK 25",
+        en: {
+          lines: [
+            "Each job gets different stats! Branch with if/elif.",
+            "Warrior = tough, mage = high attack, archer = balanced!"
+          ],
+          code: `class Character:
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+        if job == 'warrior':
+            self.hp, self.atk, self.defense = 120, 15, 12
+        elif job == 'mage':
+            self.hp, self.atk, self.defense = 80, 25, 5
+        else:
+            self.hp, self.atk, self.defense = 100, 20, 8
+
+hero = Character('Emma', 'mage')
+print(f'{hero.name}: HP {hero.hp}, ATK {hero.atk}')`,
+          result: "Emma: HP 80, ATK 25"
+        }
       }
     },
 
@@ -63,6 +83,26 @@ print(a.hp, b.hp)`,
           answer: 1,
           feedback: "warrior → 120, archer → else 분기로 100!"
         },
+        en: {
+          code: `class Character:
+    def __init__(self, name, job):
+        if job == 'warrior':
+            self.hp = 120
+        elif job == 'mage':
+            self.hp = 80
+        else:
+            self.hp = 100
+
+a = Character('A', 'warrior')
+b = Character('B', 'archer')
+print(a.hp, b.hp)`,
+          predict: {
+            question: "What's the output?",
+            options: ["120 80", "120 100", "80 100", "100 120"],
+            feedback: "warrior → 120, archer falls to else branch → 100!"
+          },
+          result: "120 100"
+        },
         result: "120 100"
       }
     },
@@ -78,7 +118,17 @@ print(a.hp, b.hp)`,
           "방어력 최고"
         ],
         answer: 1,
-        explanation: "마법사는 HP 80(최저), ATK 25(최고)! 유리대포 스타일이에요!"
+        explanation: "마법사는 HP 80(최저), ATK 25(최고)! 유리대포 스타일이에요!",
+        en: {
+          question: "What's special about the mage job?",
+          options: [
+            "Highest HP, low attack",
+            "Low HP, highest attack",
+            "All stats balanced",
+            "Highest defense"
+          ],
+          explanation: "The mage has HP 80 (lowest) and ATK 25 (highest)! A glass-cannon style!"
+        }
       }
     },
 
@@ -93,7 +143,15 @@ print(a.hp, b.hp)`,
         blanksAnswer: ["elif", "mage"],
         answer: "class Character:\n    def __init__(self, name, job):\n        self.name = name\n        if job == 'warrior':\n            self.hp = 120\n        elif job == 'mage':\n            self.hp = 80\n        else:\n            self.hp = 100\n\nc = Character('영희', 'mage')\nprint(c.hp)",
         alternateAnswers: [],
-        expect: "80"
+        expect: "80",
+        en: {
+          task: "Fill in the 2 blanks!",
+          guide: "Complete the job-based branching",
+          hint: "After if comes elif, and the keyword is 'mage'!",
+          template: "class Character:\n    def __init__(self, name, job):\n        self.name = name\n        if job == 'warrior':\n            self.hp = 120\n        ___ job == '___':\n            self.hp = 80\n        else:\n            self.hp = 100\n\nc = Character('Emma', 'mage')\nprint(c.hp)",
+          answer: "class Character:\n    def __init__(self, name, job):\n        self.name = name\n        if job == 'warrior':\n            self.hp = 120\n        elif job == 'mage':\n            self.hp = 80\n        else:\n            self.hp = 100\n\nc = Character('Emma', 'mage')\nprint(c.hp)",
+          expect: "80"
+        }
       }
     },
 
@@ -127,7 +185,23 @@ print(a.hp, b.hp)`,
 new_hp, dmg = take_damage(100, 5, 10)
 print(f'데미지 {dmg}, HP {new_hp}')`,
         result: "데미지 1, HP 99",
-        note: "5 - 10 = -5 지만 최소 1 보장!"
+        note: "5 - 10 = -5 지만 최소 1 보장!",
+        en: {
+          lines: [
+            "Combat damage = attack - defense!",
+            "But what if defense is higher? Guarantee a minimum of 1 damage!"
+          ],
+          code: `def take_damage(hp, damage, defense):
+    actual = damage - defense
+    if actual < 1:
+        actual = 1
+    return hp - actual, actual
+
+new_hp, dmg = take_damage(100, 5, 10)
+print(f'Damage {dmg}, HP {new_hp}')`,
+          result: "Damage 1, HP 99",
+          note: "5 - 10 = -5, but a minimum of 1 is guaranteed!"
+        }
       }
     },
 
@@ -156,6 +230,29 @@ print(dmg, hero.hp)`,
           answer: 1,
           feedback: "20 - 5 = 15 데미지, HP 100 - 15 = 85!"
         },
+        en: {
+          code: `class Character:
+    def __init__(self, hp, defense):
+        self.hp = hp
+        self.defense = defense
+
+    def take_damage(self, damage):
+        actual = damage - self.defense
+        if actual < 1:
+            actual = 1
+        self.hp -= actual
+        return actual
+
+hero = Character(100, 5)
+dmg = hero.take_damage(20)
+print(dmg, hero.hp)`,
+          predict: {
+            question: "What's the output?",
+            options: ["20 80", "15 85", "5 95", "1 99"],
+            feedback: "20 - 5 = 15 damage, HP 100 - 15 = 85!"
+          },
+          result: "15 85"
+        },
         result: "15 85"
       }
     },
@@ -166,7 +263,12 @@ print(dmg, hero.hp)`,
         question: "용사(ATK 15) 가 고블린(DEF 5) 을 공격하면 데미지는?",
         options: ["5", "10", "15", "20"],
         answer: 1,
-        explanation: "15 - 5 = 10! 방어력만큼 데미지가 깎여요!"
+        explanation: "15 - 5 = 10! 방어력만큼 데미지가 깎여요!",
+        en: {
+          question: "If a warrior (ATK 15) attacks a goblin (DEF 5), how much damage?",
+          options: ["5", "10", "15", "20"],
+          explanation: "15 - 5 = 10! Damage is reduced by the amount of defense!"
+        }
       }
     },
 
@@ -176,7 +278,12 @@ print(dmg, hero.hp)`,
         question: "공격력 3, 방어력 10 인 상대를 공격하면 데미지는?",
         options: ["0", "1", "-7", "7"],
         answer: 1,
-        explanation: "3 - 10 = -7 이지만 최소 1! `if actual < 1: actual = 1` 로 보장!"
+        explanation: "3 - 10 = -7 이지만 최소 1! `if actual < 1: actual = 1` 로 보장!",
+        en: {
+          question: "If you attack an opponent with attack 3 and defense 10, how much damage?",
+          options: ["0", "1", "-7", "7"],
+          explanation: "3 - 10 = -7, but a minimum of 1! Guaranteed by `if actual < 1: actual = 1`!"
+        }
       }
     },
 
@@ -191,7 +298,15 @@ print(dmg, hero.hp)`,
         blanksAnswer: ["defense", "1", "-="],
         answer: "class Hero:\n    def __init__(self, hp, defense):\n        self.hp = hp\n        self.defense = defense\n\n    def take_damage(self, damage):\n        actual = damage - self.defense\n        if actual < 1:\n            actual = 1\n        self.hp -= actual\n        return actual\n\nh = Hero(100, 8)\nprint(h.take_damage(20), h.hp)",
         alternateAnswers: [],
-        expect: "12 88"
+        expect: "12 88",
+        en: {
+          task: "Fill in the 3 blanks!",
+          guide: "Complete the take_damage method",
+          hint: "Compute the difference → guarantee minimum 1 → reduce hp",
+          template: "class Hero:\n    def __init__(self, hp, defense):\n        self.hp = hp\n        self.defense = defense\n\n    def take_damage(self, damage):\n        actual = damage - self.___\n        if actual < ___:\n            actual = 1\n        self.hp ___ actual\n        return actual\n\nh = Hero(100, 8)\nprint(h.take_damage(20), h.hp)",
+          answer: "class Hero:\n    def __init__(self, hp, defense):\n        self.hp = hp\n        self.defense = defense\n\n    def take_damage(self, damage):\n        actual = damage - self.defense\n        if actual < 1:\n            actual = 1\n        self.hp -= actual\n        return actual\n\nh = Hero(100, 8)\nprint(h.take_damage(20), h.hp)",
+          expect: "12 88"
+        }
       }
     },
 
@@ -228,7 +343,26 @@ c = Character()
 c.heal(50)
 print(c.hp)`,
         result: "100",
-        note: "70 + 50 = 120 이지만 max_hp 100 으로 제한!"
+        note: "70 + 50 = 120 이지만 max_hp 100 으로 제한!",
+        en: {
+          lines: [
+            "heal must not exceed max_hp.",
+            "Use the min(current hp + heal amount, max_hp) pattern to cap it!"
+          ],
+          code: `class Character:
+    def __init__(self):
+        self.hp = 70
+        self.max_hp = 100
+
+    def heal(self, amount):
+        self.hp = min(self.hp + amount, self.max_hp)
+
+c = Character()
+c.heal(50)
+print(c.hp)`,
+          result: "100",
+          note: "70 + 50 = 120, but capped at max_hp 100!"
+        }
       }
     },
 
@@ -259,6 +393,32 @@ print(c.level, c.exp)`,
           answer: 2,
           feedback: "250 → 100 빼고 lv2, 100 더 빼고 lv3, 50 남음!"
         },
+        en: {
+          lines: [
+            "Level up every 100 exp!",
+            "With while, you can gain several levels at once."
+          ],
+          code: `class Character:
+    def __init__(self):
+        self.level = 1
+        self.exp = 0
+
+    def gain_exp(self, amount):
+        self.exp += amount
+        while self.exp >= 100:
+            self.exp -= 100
+            self.level += 1
+
+c = Character()
+c.gain_exp(250)
+print(c.level, c.exp)`,
+          predict: {
+            question: "What's the output?",
+            options: ["1 250", "2 50", "3 50", "4 50"],
+            feedback: "250 → subtract 100 to lv2, subtract another 100 to lv3, 50 left over!"
+          },
+          result: "3 50"
+        },
         result: "3 50"
       }
     },
@@ -274,7 +434,15 @@ print(c.level, c.exp)`,
         blanksAnswer: ["min", "max_hp"],
         answer: "class Character:\n    def __init__(self):\n        self.hp = 50\n        self.max_hp = 100\n\n    def heal(self, amount):\n        self.hp = min(self.hp + amount, self.max_hp)\n\nc = Character()\nc.heal(80)\nprint(c.hp)",
         alternateAnswers: [],
-        expect: "100"
+        expect: "100",
+        en: {
+          task: "Fill in the 2 blanks!",
+          guide: "Complete the heal method — cap at the maximum with min!",
+          hint: "min(current value, max value)",
+          template: "class Character:\n    def __init__(self):\n        self.hp = 50\n        self.max_hp = 100\n\n    def heal(self, amount):\n        self.hp = ___(self.hp + amount, self.___)\n\nc = Character()\nc.heal(80)\nprint(c.hp)",
+          answer: "class Character:\n    def __init__(self):\n        self.hp = 50\n        self.max_hp = 100\n\n    def heal(self, amount):\n        self.hp = min(self.hp + amount, self.max_hp)\n\nc = Character()\nc.heal(80)\nprint(c.hp)",
+          expect: "100"
+        }
       }
     },
 
@@ -289,7 +457,15 @@ print(c.level, c.exp)`,
         blanksAnswer: ["+=", ">=", "+="],
         answer: "class Player:\n    def __init__(self):\n        self.level = 1\n        self.exp = 0\n\n    def gain_exp(self, amount):\n        self.exp += amount\n        while self.exp >= 100:\n            self.exp -= 100\n            self.level += 1\n\np = Player()\np.gain_exp(150)\nprint(p.level, p.exp)",
         alternateAnswers: [],
-        expect: "2 50"
+        expect: "2 50",
+        en: {
+          task: "Fill in the 3 blanks!",
+          guide: "gain_exp + level-up system",
+          hint: "If 100 or more, subtract it and level++!",
+          template: "class Player:\n    def __init__(self):\n        self.level = 1\n        self.exp = 0\n\n    def gain_exp(self, amount):\n        self.exp ___ amount\n        while self.exp ___ 100:\n            self.exp -= 100\n            self.level ___ 1\n\np = Player()\np.gain_exp(150)\nprint(p.level, p.exp)",
+          answer: "class Player:\n    def __init__(self):\n        self.level = 1\n        self.exp = 0\n\n    def gain_exp(self, amount):\n        self.exp += amount\n        while self.exp >= 100:\n            self.exp -= 100\n            self.level += 1\n\np = Player()\np.gain_exp(150)\nprint(p.level, p.exp)",
+          expect: "2 50"
+        }
       }
     },
 
@@ -328,7 +504,28 @@ def use_item(hero_hp, max_hp, item):
 potion = Item('물약', 'heal', 30)
 new_hp = use_item(60, 100, potion)
 print(new_hp)`,
-        result: "90"
+        result: "90",
+        en: {
+          lines: [
+            "Apply different effects based on the Item's item_type!",
+            "'heal' → restore HP, 'atk' → boost attack, 'def' → boost defense."
+          ],
+          code: `class Item:
+    def __init__(self, name, item_type, value):
+        self.name = name
+        self.item_type = item_type
+        self.value = value
+
+def use_item(hero_hp, max_hp, item):
+    if item.item_type == 'heal':
+        return min(hero_hp + item.value, max_hp)
+    return hero_hp
+
+potion = Item('Potion', 'heal', 30)
+new_hp = use_item(60, 100, potion)
+print(new_hp)`,
+          result: "90"
+        }
       }
     },
 
@@ -352,6 +549,25 @@ print(used, len(inventory))`,
           answer: 0,
           feedback: "3개 추가, pop(0) 으로 첫 번째 '물약' 꺼냄, 2개 남음!"
         },
+        en: {
+          lines: [
+            "The inventory is a list! append to add, pop to use and remove."
+          ],
+          code: `inventory = []
+inventory.append('Potion')
+inventory.append('Sword')
+inventory.append('Shield')
+print(len(inventory))
+
+used = inventory.pop(0)
+print(used, len(inventory))`,
+          predict: {
+            question: "What's the output?",
+            options: ["3\nPotion 2", "3\nShield 2", "2\nPotion 1", "Error"],
+            feedback: "3 added, pop(0) takes the first 'Potion', 2 left!"
+          },
+          result: "3\nPotion 2"
+        },
         result: "3\n물약 2"
       }
     },
@@ -367,7 +583,17 @@ print(used, len(inventory))`,
           "del inventory[0]"
         ],
         answer: 1,
-        explanation: "pop(index) 는 해당 위치의 아이템을 꺼내고 반환! 사용+제거를 한 번에!"
+        explanation: "pop(index) 는 해당 위치의 아이템을 꺼내고 반환! 사용+제거를 한 번에!",
+        en: {
+          question: "Which method uses an item from the inventory and removes it?",
+          options: [
+            "inventory.remove(0)",
+            "inventory.pop(index)",
+            "inventory.delete(0)",
+            "del inventory[0]"
+          ],
+          explanation: "pop(index) takes the item at that position and returns it! Use + remove in one step!"
+        }
       }
     },
 
@@ -382,7 +608,15 @@ print(used, len(inventory))`,
         blanksAnswer: ["pop", "heal", "min"],
         answer: "class Item:\n    def __init__(self, name, item_type, value):\n        self.name = name\n        self.item_type = item_type\n        self.value = value\n\nhp = 40\nmax_hp = 100\ninventory = [Item('물약', 'heal', 30)]\n\nitem = inventory.pop(0)\nif item.item_type == 'heal':\n    hp = min(hp + item.value, max_hp)\nprint(hp, len(inventory))",
         alternateAnswers: [],
-        expect: "70 0"
+        expect: "70 0",
+        en: {
+          task: "Fill in the 3 blanks!",
+          guide: "Complete the use_item logic — handle only the heal type",
+          hint: "Compare item_type, cap with min, append/pop?",
+          template: "class Item:\n    def __init__(self, name, item_type, value):\n        self.name = name\n        self.item_type = item_type\n        self.value = value\n\nhp = 40\nmax_hp = 100\ninventory = [Item('Potion', 'heal', 30)]\n\nitem = inventory.___(0)\nif item.item_type == '___':\n    hp = ___(hp + item.value, max_hp)\nprint(hp, len(inventory))",
+          answer: "class Item:\n    def __init__(self, name, item_type, value):\n        self.name = name\n        self.item_type = item_type\n        self.value = value\n\nhp = 40\nmax_hp = 100\ninventory = [Item('Potion', 'heal', 30)]\n\nitem = inventory.pop(0)\nif item.item_type == 'heal':\n    hp = min(hp + item.value, max_hp)\nprint(hp, len(inventory))",
+          expect: "70 0"
+        }
       }
     },
 
@@ -415,7 +649,17 @@ print(used, len(inventory))`,
           "이름이 틀렸어요"
         ],
         answer: 1,
-        explanation: "damage 3, defense 10 이면 actual = -7 → hp 가 7 늘어남! `if actual < 1: actual = 1` 필요!"
+        explanation: "damage 3, defense 10 이면 actual = -7 → hp 가 7 늘어남! `if actual < 1: actual = 1` 필요!",
+        en: {
+          question: "What's wrong with the following take_damage method?",
+          options: [
+            "self is missing",
+            "There's no minimum-1-damage guarantee (if defense is higher, hp increases!)",
+            "The return is wrong",
+            "The name is wrong"
+          ],
+          explanation: "If damage is 3 and defense is 10, actual = -7 → hp increases by 7! You need `if actual < 1: actual = 1`!"
+        }
       }
     },
 
@@ -431,7 +675,12 @@ print(used, len(inventory))`,
         alternateAnswers: [
           "class Character:\n    def __init__(self,hp,atk,defense):\n        self.hp=hp\n        self.atk=atk\n        self.defense=defense\n    def take_damage(self,damage):\n        actual=max(damage-self.defense,1)\n        self.hp-=actual\nhero=Character(100,0,5)\nhero.take_damage(20)\nprint(hero.hp)"
         ],
-        expect: "85"
+        expect: "85",
+        en: {
+          task: "Write from scratch! Create a Character class (hp, atk, defense),\nand with a take_damage method, print the remaining HP after hero(100, 0, 5) takes 20 damage",
+          guide: "actual = damage - defense, minimum 1, hp -= actual",
+          hint: "class Character:\n    def __init__(self, hp, atk, defense):\n        self.hp = hp\n        self.atk = atk\n        self.defense = defense\n\n    def take_damage(self, damage):\n        actual = damage - self.defense\n        if actual < 1:\n            actual = 1\n        self.hp -= actual\n\nhero = Character(100, 0, 5)\nhero.take_damage(20)\nprint(hero.hp)"
+        }
       }
     },
 
@@ -447,7 +696,12 @@ print(used, len(inventory))`,
         alternateAnswers: [
           "class Character:\n    def __init__(self,hp,max_hp):\n        self.hp=hp\n        self.max_hp=max_hp\n    def heal(self,amount):\n        self.hp=min(self.hp+amount,self.max_hp)\nc=Character(50,100)\nc.heal(30)\nprint(c.hp)"
         ],
-        expect: "80"
+        expect: "80",
+        en: {
+          task: "Write from scratch! Apply a heal(30) method to a Character(hp=50, max_hp=100) object and print HP.\nBe sure to use min so it never exceeds max_hp!",
+          guide: "self.hp = min(self.hp + amount, self.max_hp)",
+          hint: "class Character:\n    def __init__(self, hp, max_hp):\n        self.hp = hp\n        self.max_hp = max_hp\n\n    def heal(self, amount):\n        self.hp = min(self.hp + amount, self.max_hp)\n\nc = Character(50, 100)\nc.heal(30)\nprint(c.hp)"
+        }
       }
     },
 

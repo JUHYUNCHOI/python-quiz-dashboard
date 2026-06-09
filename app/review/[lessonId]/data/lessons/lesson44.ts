@@ -34,7 +34,10 @@ class Dog(Animal):
 d = Dog('뽀삐')
 d.speak()`,
         result: "뽀삐이(가) 소리내요",
-        note: "Dog는 Animal의 __init__과 speak를 자동으로 물려받아요!"
+        note: "Dog는 Animal의 __init__과 speak를 자동으로 물려받아요!",
+        en: {
+          note: "Dog automatically inherits Animal's __init__ and speak!"
+        }
       }
     },
 
@@ -49,7 +52,17 @@ d.speak()`,
           "Dog의 메서드 이름"
         ],
         answer: 1,
-        explanation: "괄호 안에 부모 클래스를 적으면 그 클래스의 속성과 메서드를 물려받아요!"
+        explanation: "괄호 안에 부모 클래스를 적으면 그 클래스의 속성과 메서드를 물려받아요!",
+        en: {
+          question: "In class Dog(Animal):, what does the Animal in parentheses mean?",
+          options: [
+            "A parameter of Dog",
+            "The parent class that Dog inherits from",
+            "A variable of type Animal",
+            "The name of a Dog method"
+          ],
+          explanation: "When you write a parent class in the parentheses, you inherit that class's attributes and methods!"
+        }
       }
     },
 
@@ -62,7 +75,12 @@ d.speak()`,
         hint: "괄호 안에 부모 클래스 이름!",
         template: "class Animal:\n    def __init__(s, name):\n        s.name = name\n\nclass Cat(___):\n    pass\n\nc = Cat('나비')\nprint(c.name)",
         answer: "Animal",
-        expect: "나비"
+        expect: "나비",
+        en: {
+          task: "Fill in the blank so the Cat class inherits from Animal!",
+          guide: "The class Child(Parent): form",
+          hint: "The parent class name goes in the parentheses!"
+        }
       }
     },
 
@@ -100,7 +118,14 @@ d.speak()`,
           answer: 1,
           feedback: "Dog가 speak를 다시 정의했으니 자식의 메서드가 실행돼요! 이게 오버라이딩!"
         },
-        result: "멍멍!"
+        result: "멍멍!",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["동물 소리", "멍멍!", "동물 소리\\n멍멍!", "Error"],
+            feedback: "Dog redefined speak, so the child's method runs! This is overriding!"
+          }
+        }
       }
     },
 
@@ -121,7 +146,10 @@ d = Dog('뽀삐', '푸들')
 print(d.name)
 print(d.breed)`,
         result: "뽀삐\n푸들",
-        note: "super().__init__(name)으로 부모의 __init__을 호출! name 저장은 부모에게 맡기고, 새 속성만 추가!"
+        note: "super().__init__(name)으로 부모의 __init__을 호출! name 저장은 부모에게 맡기고, 새 속성만 추가!",
+        en: {
+          note: "Call the parent's __init__ with super().__init__(name)! Let the parent store name, and only add the new attribute!"
+        }
       }
     },
 
@@ -136,7 +164,17 @@ print(d.breed)`,
           "다음 객체"
         ],
         answer: 1,
-        explanation: "super()는 부모 클래스를 가리켜요! super().__init__()으로 부모의 __init__을 호출할 수 있어요!"
+        explanation: "super()는 부모 클래스를 가리켜요! super().__init__()으로 부모의 __init__을 호출할 수 있어요!",
+        en: {
+          question: "What does super() point to?",
+          options: [
+            "Itself",
+            "The parent class",
+            "The topmost class",
+            "The next object"
+          ],
+          explanation: "super() points to the parent class! You can call the parent's __init__ with super().__init__()!"
+        }
       }
     },
 
@@ -147,6 +185,11 @@ print(d.breed)`,
         task: "___ 자리 2개를 채워 super()로 부모 __init__을 호출해요!",
         guide: "super().__init__(부모가 받는 인자)",
         hint: "super().__init__(name)",
+        en: {
+          task: "Fill in the 2 blanks to call the parent __init__ with super()!",
+          guide: "super().__init__(the argument the parent takes)",
+          hint: "super().__init__(name)"
+        },
         template: "class Animal:\n    def __init__(s, name):\n        s.name = name\n\nclass Cat(Animal):\n    def __init__(s, name, color):\n        ___().__init__(___)\n        s.color = color\n\nc = Cat('나비', '검정')\nprint(c.name, c.color)",
         blanksAnswer: ["super", "name"],
         answer: "class Animal:\n    def __init__(s, name):\n        s.name = name\n\nclass Cat(Animal):\n    def __init__(s, name, color):\n        super().__init__(name)\n        s.color = color\n\nc = Cat('나비', '검정')\nprint(c.name, c.color)",
@@ -163,7 +206,12 @@ print(d.breed)`,
         hint: "def speak(s):",
         template: "class Animal:\n    def speak(s):\n        print('동물')\n\nclass Cow(Animal):\n    def ___(s):\n        print('음매!')\n\nc = Cow()\nc.speak()",
         answer: "speak",
-        expect: "음매!"
+        expect: "음매!",
+        en: {
+          task: "Fill in the blank to override the speak method!",
+          guide: "If you define a method with the same name in the child class, it gets overridden",
+          hint: "def speak(s):"
+        }
       }
     },
 
@@ -189,7 +237,14 @@ print(d.name)`,
           feedback: "super().__init__(name)을 안 했으니 s.name이 저장 안 됨! d.name 접근 시 에러!"
         },
         isError: true,
-        result: "푸들\nAttributeError: 'Dog' object has no attribute 'name'"
+        result: "푸들\nAttributeError: 'Dog' object has no attribute 'name'",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["푸들\\n뽀삐", "푸들\\nNone", "푸들 then AttributeError", "Error"],
+            feedback: "super().__init__(name) wasn't called, so s.name isn't stored! Accessing d.name causes an error!"
+          }
+        }
       }
     },
 
@@ -227,7 +282,14 @@ print(Counter.count)`,
           answer: 2,
           feedback: "Counter()를 3번 호출 → count가 3번 증가 → 3!"
         },
-        result: "3"
+        result: "3",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["1", "2", "3", "0"],
+            feedback: "Counter() is called 3 times → count increases 3 times → 3!"
+          }
+        }
       }
     },
 
@@ -242,7 +304,17 @@ print(Counter.count)`,
           "인스턴스 변수만 사용 가능"
         ],
         answer: 0,
-        explanation: "클래스 변수(class 바로 아래 정의)는 모든 인스턴스가 공유! s.속성은 각 객체별!"
+        explanation: "클래스 변수(class 바로 아래 정의)는 모든 인스턴스가 공유! s.속성은 각 객체별!",
+        en: {
+          question: "What's the difference between a class variable and an instance variable?",
+          options: [
+            "Class variables are shared by all objects, instance variables are separate per object",
+            "Class variables are fast and instance variables are slow",
+            "No difference",
+            "Only instance variables can be used"
+          ],
+          explanation: "Class variables (defined right under class) are shared by all instances! s.attribute is per object!"
+        }
       }
     },
 
@@ -255,7 +327,12 @@ print(Counter.count)`,
         hint: "__init__에서 클래스 변수 증가!",
         template: "class Student:\n    total = 0\n\n    def __init__(s, name):\n        s.name = name\n        Student.___ = Student.total + 1\n\na = Student('철수')\nb = Student('영희')\nprint(Student.total)",
         answer: "total",
-        expect: "2"
+        expect: "2",
+        en: {
+          task: "Fill in the blank to count the total number of students!",
+          guide: "Student.total = Student.total + 1",
+          hint: "Increase the class variable in __init__!"
+        }
       }
     },
 
@@ -282,7 +359,13 @@ print(Counter.count)`,
         hint: "students.append(Student(...))",
         template: "class Student:\n    def __init__(s, name):\n        s.name = name\n\nstudents = []\nstudents.append(Student('철수'))\nstudents.append(Student('영희'))\nprint(students[0].___)\nprint(students[1].name)",
         answer: "name",
-        expect: "철수\n영희"
+        expect: "철수\n영희",
+        en: {
+          message: "Wait! Let's use lists and classes together. (lesson 16 review)",
+          task: "Fill in the blank to put students in a list!",
+          guide: "You can put objects in a list too!",
+          hint: "students.append(Student(...))"
+        }
       }
     },
 
@@ -293,6 +376,11 @@ print(Counter.count)`,
         task: "처음부터 작성! Animal 클래스(name, speak 메서드) 와\nDog(Animal) 자식 클래스를 만들어요.\nDog는 speak를 '멍멍!'으로 오버라이딩.\nd = Dog('뽀삐') 후 d.speak() 실행.",
         guide: "class Dog(Animal): def speak(s): print('멍멍!')",
         hint: "class Animal:\n    def __init__(s, name):\n        s.name = name\n    def speak(s):\n        print('동물 소리')\n\nclass Dog(Animal):\n    def speak(s):\n        print('멍멍!')\n\nd = Dog('뽀삐')\nd.speak()",
+        en: {
+          task: "Write from scratch! Make an Animal class (name, speak method) and\na Dog(Animal) child class.\nDog overrides speak to '멍멍!'.\nThen run d = Dog('뽀삐') and d.speak().",
+          guide: "class Dog(Animal): def speak(s): print('멍멍!')",
+          hint: "class Animal:\n    def __init__(s, name):\n        s.name = name\n    def speak(s):\n        print('동물 소리')\n\nclass Dog(Animal):\n    def speak(s):\n        print('멍멍!')\n\nd = Dog('뽀삐')\nd.speak()"
+        },
         template: null,
         answer: "class Animal:\n    def __init__(s, name):\n        s.name = name\n\n    def speak(s):\n        print('동물 소리')\n\nclass Dog(Animal):\n    def speak(s):\n        print('멍멍!')\n\nd = Dog('뽀삐')\nd.speak()",
         alternateAnswers: [
@@ -309,6 +397,11 @@ print(Counter.count)`,
         task: "처음부터 작성! Vehicle(name, speed) 부모 클래스와\nCar(Vehicle) 자식 클래스(추가 속성: wheels=4)를 만들어요.\nsuper().__init__()을 사용해서 부모 속성 저장.\nCar('소나타', 200)을 만들어 name, speed, wheels를 출력.",
         guide: "super().__init__(name, speed)로 부모에게 위임!",
         hint: "class Vehicle:\n    def __init__(s, name, speed):\n        s.name = name\n        s.speed = speed\n\nclass Car(Vehicle):\n    def __init__(s, name, speed):\n        super().__init__(name, speed)\n        s.wheels = 4\n\nc = Car('소나타', 200)\nprint(c.name)\nprint(c.speed)\nprint(c.wheels)",
+        en: {
+          task: "Write from scratch! Make a Vehicle(name, speed) parent class and\na Car(Vehicle) child class (extra attribute: wheels=4).\nUse super().__init__() to store the parent attributes.\nMake Car('소나타', 200) and print name, speed, wheels.",
+          guide: "Delegate to the parent with super().__init__(name, speed)!",
+          hint: "class Vehicle:\n    def __init__(s, name, speed):\n        s.name = name\n        s.speed = speed\n\nclass Car(Vehicle):\n    def __init__(s, name, speed):\n        super().__init__(name, speed)\n        s.wheels = 4\n\nc = Car('소나타', 200)\nprint(c.name)\nprint(c.speed)\nprint(c.wheels)"
+        },
         template: null,
         answer: "class Vehicle:\n    def __init__(s, name, speed):\n        s.name = name\n        s.speed = speed\n\nclass Car(Vehicle):\n    def __init__(s, name, speed):\n        super().__init__(name, speed)\n        s.wheels = 4\n\nc = Car('소나타', 200)\nprint(c.name)\nprint(c.speed)\nprint(c.wheels)",
         alternateAnswers: [
@@ -339,7 +432,17 @@ print(d.name)`,
           "print(d.name) 대신 print(d.breed)를 써야 함"
         ],
         answer: 0,
-        explanation: "자식 __init__에서 super().__init__(name)을 호출 안 하면 부모가 정의한 name 속성이 만들어지지 않아요!"
+        explanation: "자식 __init__에서 super().__init__(name)을 호출 안 하면 부모가 정의한 name 속성이 만들어지지 않아요!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "super().__init__(name) isn't called, so s.name isn't stored",
+            "The class Dog(Animal) syntax is wrong",
+            "d = Dog('뽀삐', '푸들') is wrong",
+            "You should use print(d.breed) instead of print(d.name)"
+          ],
+          explanation: "If the child __init__ doesn't call super().__init__(name), the name attribute defined by the parent never gets created!"
+        }
       }
     },
 

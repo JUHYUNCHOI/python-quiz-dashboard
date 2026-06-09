@@ -20,7 +20,12 @@ export const lesson31: LessonData = {
         question: "10 // 3 의 결과는?",
         options: ["3", "3.33", "1", "3.0"],
         answer: 0,
-        explanation: "// 는 몫(정수 나눗셈)! 10을 3으로 나눈 몫은 3."
+        explanation: "// 는 몫(정수 나눗셈)! 10을 3으로 나눈 몫은 3.",
+        en: {
+          question: "What is the result of 10 // 3?",
+          options: ["3", "3.33", "1", "3.0"],
+          explanation: "// is the quotient (integer division)! 10 divided by 3 gives a quotient of 3."
+        }
       }
     },
     {
@@ -29,7 +34,12 @@ export const lesson31: LessonData = {
         question: "10 % 3 의 결과는?",
         options: ["3", "1", "0", "3.33"],
         answer: 1,
-        explanation: "% 는 나머지! 10 = 3*3 + 1 → 나머지 1."
+        explanation: "% 는 나머지! 10 = 3*3 + 1 → 나머지 1.",
+        en: {
+          question: "What is the result of 10 % 3?",
+          options: ["3", "1", "0", "3.33"],
+          explanation: "% is the remainder! 10 = 3*3 + 1 → remainder 1."
+        }
       }
     },
     {
@@ -42,6 +52,13 @@ print(x * 3)`,
           options: ["에러", "파이썬3", "파이썬파이썬파이썬", "9"],
           answer: 2,
           feedback: "문자열 * 정수 = 그만큼 반복! '파이썬' * 3 = '파이썬파이썬파이썬'."
+        },
+        en: {
+          lines: ["Predict the result!"],
+          predict: {
+            options: ["Error", "파이썬3", "파이썬파이썬파이썬", "9"],
+            feedback: "string * integer = repeated that many times! '파이썬' * 3 = '파이썬파이썬파이썬'."
+          }
         }
       }
     },
@@ -52,6 +69,11 @@ print(x * 3)`,
         task: "1부터 10까지의 합을 출력하세요",
         guide: "for + range + 누적!",
         hint: "total += i",
+        en: {
+          task: "Print the sum from 1 to 10",
+          guide: "for + range + accumulate!",
+          hint: "total += i"
+        },
         template: `total = 0
 for i in range(1, ___):
     total += i
@@ -65,6 +87,10 @@ print(total)`,
       content: {
         message: "🔄 if/elif 복습!",
         task: "x가 20보다 크면 'A', 10보다 크면 'B', 그 외 'C'",
+        en: {
+          message: "🔄 Review if/elif!",
+          task: "If x is greater than 20 print 'A', greater than 10 print 'B', otherwise 'C'"
+        },
         template: `x = 15
 if x > 20:
     print('A')
@@ -83,6 +109,11 @@ else:
         task: "1~20 사이 짝수의 합을 출력하세요",
         guide: "% 2 == 0 으로 짝수!",
         hint: "if i % 2 == 0: total += i",
+        en: {
+          task: "Print the sum of even numbers from 1 to 20",
+          guide: "% 2 == 0 detects even numbers!",
+          hint: "if i % 2 == 0: total += i"
+        },
         template: `total = 0
 for i in range(1, 21):
     if i ___ 2 == 0:
@@ -98,7 +129,12 @@ print(total)`,
         question: "text = 'Hello World' 일 때 text[0:5] 는?",
         options: ["'Hello'", "'Hello '", "'Hello World'", "'H'"],
         answer: 0,
-        explanation: "[0:5] 는 인덱스 0~4 (끝값 미포함) → 'Hello'!"
+        explanation: "[0:5] 는 인덱스 0~4 (끝값 미포함) → 'Hello'!",
+        en: {
+          question: "When text = 'Hello World', what is text[0:5]?",
+          options: ["'Hello'", "'Hello '", "'Hello World'", "'H'"],
+          explanation: "[0:5] is indexes 0~4 (end not included) → 'Hello'!"
+        }
       }
     },
     {
@@ -137,6 +173,13 @@ print(len(fruits))`,
           options: ["3", "4", "5", "에러"],
           answer: 1,
           feedback: "append 로 1개 추가 → 4개!"
+        },
+        en: {
+          lines: ["Predict the result!"],
+          predict: {
+            options: ["3", "4", "5", "Error"],
+            feedback: "append adds 1 item → 4 items!"
+          }
         }
       }
     },
@@ -150,6 +193,13 @@ print(len(s))`,
           options: ["5", "3", "2", "에러"],
           answer: 1,
           feedback: "set 은 중복을 제거! {1, 2, 3} → 3개."
+        },
+        en: {
+          lines: ["Predict the result!"],
+          predict: {
+            options: ["5", "3", "2", "Error"],
+            feedback: "A set removes duplicates! {1, 2, 3} → 3 items."
+          }
         }
       }
     },
@@ -159,7 +209,12 @@ print(len(s))`,
         question: "d = {'a': 1, 'b': 2} 일 때 list(d.keys()) 는?",
         options: ["[1, 2]", "['a', 'b']", "['a':1, 'b':2]", "에러"],
         answer: 1,
-        explanation: ".keys() 는 키만! 값은 .values(), 키-값 쌍은 .items()."
+        explanation: ".keys() 는 키만! 값은 .values(), 키-값 쌍은 .items().",
+        en: {
+          question: "When d = {'a': 1, 'b': 2}, what is list(d.keys())?",
+          options: ["[1, 2]", "['a', 'b']", "['a':1, 'b':2]", "Error"],
+          explanation: ".keys() gives only the keys! Use .values() for values, .items() for key-value pairs."
+        }
       }
     },
     {
@@ -169,6 +224,11 @@ print(len(s))`,
         task: "리스트의 중복을 제거하고 정렬해서 출력하세요",
         guide: "set 으로 중복 제거 → sorted!",
         hint: "sorted(set(nums))",
+        en: {
+          task: "Remove duplicates from the list, then sort and print it",
+          guide: "Remove duplicates with set → sorted!",
+          hint: "sorted(set(nums))"
+        },
         template: `nums = [3, 1, 4, 1, 5, 3]
 print(sorted(___(nums)))`,
         answer: "set",
@@ -187,6 +247,13 @@ print(a)`,
           options: ["[1, 2, 3]", "[1, 2, 3, 4]", "[4]", "에러"],
           answer: 1,
           feedback: "b = a 는 *같은 리스트*에 이름표만 하나 더! 진짜 복사는 b = a.copy() 또는 b = a[:]."
+        },
+        en: {
+          lines: ["🚨 Watch out for the trap! Predict the result!"],
+          predict: {
+            options: ["[1, 2, 3]", "[1, 2, 3, 4]", "[4]", "Error"],
+            feedback: "b = a just adds another name tag to the *same list*! A real copy is b = a.copy() or b = a[:]."
+          }
         }
       }
     },
@@ -197,6 +264,11 @@ print(a)`,
         task: "'banana' 에서 글자별 등장 횟수를 딕셔너리로 만들어 'a' 의 개수를 출력하세요",
         guide: "있으면 +1, 없으면 1로 시작!",
         hint: "if ch in counter: counter[ch] += 1; else: counter[ch] = 1",
+        en: {
+          task: "Build a dictionary of how many times each letter appears in 'banana', then print the count of 'a'",
+          guide: "If it exists, +1; if not, start at 1!",
+          hint: "if ch in counter: counter[ch] += 1; else: counter[ch] = 1"
+        },
         template: `text = 'banana'
 counter = {}
 for ch in text:
@@ -214,6 +286,10 @@ print(counter['a'])`,
       content: {
         message: "🔄 슬라이싱 복습!",
         task: "리스트를 뒤집어서 출력하세요",
+        en: {
+          message: "🔄 Review slicing!",
+          task: "Reverse the list and print it"
+        },
         template: "nums = [1, 2, 3, 4, 5]\nprint(nums[::___])",
         answer: "-1",
         expect: "[5, 4, 3, 2, 1]"
@@ -232,7 +308,17 @@ print(nums[5])`,
           "문제 없음"
         ],
         answer: 0,
-        explanation: "리스트 길이는 3 (인덱스 0~2). nums[5] 는 없는 칸을 가리켜 IndexError!"
+        explanation: "리스트 길이는 3 (인덱스 0~2). nums[5] 는 없는 칸을 가리켜 IndexError!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Index out of range → IndexError",
+            "List syntax error",
+            "print is used incorrectly",
+            "No problem"
+          ],
+          explanation: "The list length is 3 (indexes 0~2). nums[5] points to a slot that doesn't exist → IndexError!"
+        }
       }
     },
     {
@@ -265,6 +351,10 @@ print(nums[5])`,
       content: {
         message: "🔄 for + range 복습!",
         task: "range로 5,4,3,2,1 을 출력 (역순)",
+        en: {
+          message: "🔄 Review for + range!",
+          task: "Use range to print 5,4,3,2,1 (reverse order)"
+        },
         template: `for i in range(5, 0, ___):
     print(i)`,
         answer: "-1",
@@ -280,7 +370,11 @@ for i in range(8):
     fib.append(fib[-1] + fib[-2])
 print(fib)`,
         result: "[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]",
-        note: "현재 = 이전 + 그 이전! fib[-1] 은 마지막, fib[-2] 는 끝에서 두 번째."
+        note: "현재 = 이전 + 그 이전! fib[-1] 은 마지막, fib[-2] 는 끝에서 두 번째.",
+        en: {
+          lines: ["Building the Fibonacci sequence!"],
+          note: "Current = previous + the one before! fib[-1] is the last, fib[-2] is the second to last."
+        }
       }
     },
     {
@@ -290,6 +384,11 @@ print(fib)`,
         task: "2~20 사이 소수만 출력하세요 (n을 2부터 n-1까지 나눠봐서 모두 안 나누어 떨어지면 소수)",
         guide: "is_prime 플래그 사용!",
         hint: "for i in range(2, n): if n % i == 0: is_prime = False; break",
+        en: {
+          task: "Print only the prime numbers from 2 to 20 (divide n by 2 through n-1; if none divide evenly, it's prime)",
+          guide: "Use an is_prime flag!",
+          hint: "for i in range(2, n): if n % i == 0: is_prime = False; break"
+        },
         template: `for n in range(2, 21):
     is_prime = True
     for i in range(2, n):
@@ -319,6 +418,14 @@ print(counter[3])`,
           options: ["2", "3", "4", "5"],
           answer: 2,
           feedback: "data 안에서 3은 4번 등장!"
+        },
+        en: {
+          lines: ["Predict the result!"],
+          predict: {
+            question: "How many times does 3 appear?",
+            options: ["2", "3", "4", "5"],
+            feedback: "3 appears 4 times in data!"
+          }
         }
       }
     },
@@ -329,6 +436,11 @@ print(counter[3])`,
         task: "리스트의 최빈값(가장 많이 등장한 값)을 출력하세요",
         guide: "딕셔너리로 세고 max(counter, key=counter.get) 으로 최빈값!",
         hint: "딕셔너리 만들고 → max로 가장 큰 값을 가진 키 찾기",
+        en: {
+          task: "Print the mode of the list (the value that appears most often)",
+          guide: "Count with a dictionary, then find the mode with max(counter, key=counter.get)!",
+          hint: "Build a dictionary → use max to find the key with the largest value"
+        },
         template: null,
         answer: `data = [1, 3, 2, 3, 4, 3, 2, 1, 3]
 counter = {}
@@ -367,7 +479,12 @@ print(mode)`
         question: "a = {1,2,3}, b = {2,3,4} 일 때 a & b 는?",
         options: ["{1, 2, 3, 4}", "{2, 3}", "{1, 4}", "{}"],
         answer: 1,
-        explanation: "& 는 교집합! 공통 원소 {2, 3}. (|는 합집합, -는 차집합)"
+        explanation: "& 는 교집합! 공통 원소 {2, 3}. (|는 합집합, -는 차집합)",
+        en: {
+          question: "When a = {1,2,3}, b = {2,3,4}, what is a & b?",
+          options: ["{1, 2, 3, 4}", "{2, 3}", "{1, 4}", "{}"],
+          explanation: "& is intersection! Common elements {2, 3}. (| is union, - is difference)"
+        }
       }
     },
     {
@@ -377,6 +494,11 @@ print(mode)`
         task: "두 리스트의 공통 원소 개수를 출력하세요",
         guide: "set 으로 변환 후 교집합!",
         hint: "len(set(a) & set(b))",
+        en: {
+          task: "Print the number of common elements in two lists",
+          guide: "Convert to sets, then take the intersection!",
+          hint: "len(set(a) & set(b))"
+        },
         template: `a = [1, 2, 3, 4, 5]
 b = [3, 4, 5, 6, 7]
 common = set(a) ___ set(b)
@@ -407,6 +529,14 @@ print(totals['사과'])`,
           options: ["1500", "3000", "2000", "5000"],
           answer: 1,
           feedback: "사과 1500 + 1500 = 3000!"
+        },
+        en: {
+          lines: ["Predict the result!"],
+          predict: {
+            question: "What is the accumulated amount for 사과 (apple)?",
+            options: ["1500", "3000", "2000", "5000"],
+            feedback: "사과 1500 + 1500 = 3000!"
+          }
         }
       }
     },
@@ -417,6 +547,11 @@ print(totals['사과'])`,
         task: "쇼핑 데이터에서 바나나의 총 구매 금액을 출력하세요",
         guide: "for문으로 바나나만 골라 누적!",
         hint: "if p['item'] == '바나나': total += p['amount']",
+        en: {
+          task: "From the shopping data, print the total purchase amount for 바나나 (banana)",
+          guide: "Use a for loop to pick out only 바나나 and accumulate!",
+          hint: "if p['item'] == '바나나': total += p['amount']"
+        },
         template: `purchases = [
     {'item': '사과', 'amount': 1500},
     {'item': '바나나', 'amount': 2000},
@@ -446,7 +581,17 @@ print(info['age'])`,
           "문제 없음"
         ],
         answer: 0,
-        explanation: "딕셔너리에 없는 키 접근은 KeyError! info.get('age', 0) 로 안전하게."
+        explanation: "딕셔너리에 없는 키 접근은 KeyError! info.get('age', 0) 로 안전하게.",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Accessing a key that doesn't exist → KeyError",
+            "Dictionary syntax error",
+            "print is used incorrectly",
+            "No problem"
+          ],
+          explanation: "Accessing a missing key in a dictionary causes a KeyError! Use info.get('age', 0) to be safe."
+        }
       }
     },
     {

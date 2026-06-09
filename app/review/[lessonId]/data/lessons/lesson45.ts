@@ -25,7 +25,10 @@ export const lesson45: LessonData = {
 print(math.sqrt(16))
 print(math.pi)`,
         result: "4.0\n3.141592653589793",
-        note: "import 모듈 → 모듈.기능 으로 사용!"
+        note: "import 모듈 → 모듈.기능 으로 사용!",
+        en: {
+          note: "import module → use it as module.feature!"
+        }
       }
     },
 
@@ -42,6 +45,13 @@ print(sqrt(100))`,
           answer: 0,
           feedback: "from import로 가져오면 모듈명 없이 바로 사용! sqrt(25)=5.0, sqrt(100)=10.0!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["5.0\\n10.0", "math.sqrt(25)\\nmath.sqrt(100)", "Error", "25\\n100"],
+            feedback: "With from import you use it directly without the module name! sqrt(25)=5.0, sqrt(100)=10.0!"
+          }
+        },
         result: "5.0\n10.0"
       }
     },
@@ -57,7 +67,17 @@ print(sqrt(100))`,
           "math(sqrt(16))"
         ],
         answer: 1,
-        explanation: "from...import로 가져오면 모듈명 없이 바로 sqrt(16)!"
+        explanation: "from...import로 가져오면 모듈명 없이 바로 sqrt(16)!",
+        en: {
+          question: "After from math import sqrt, how do you call sqrt(16)?",
+          options: [
+            "math.sqrt(16)",
+            "sqrt(16)",
+            "import.sqrt(16)",
+            "math(sqrt(16))"
+          ],
+          explanation: "With from...import you call sqrt(16) directly without the module name!"
+        }
       }
     },
 
@@ -70,7 +90,12 @@ print(sqrt(100))`,
         hint: "import math",
         template: "___ math\nprint(math.pi)",
         answer: "import",
-        expect: "3.141592653589793"
+        expect: "3.141592653589793",
+        en: {
+          task: "Fill in the ___ to import the math module!",
+          guide: "import module-name",
+          hint: "import math"
+        }
       }
     },
 
@@ -84,7 +109,12 @@ print(sqrt(100))`,
         template: "___ math ___ sqrt, pi\nprint(sqrt(9))\nprint(pi)",
         blanksAnswer: ["from", "import"],
         answer: "from math import sqrt, pi\nprint(sqrt(9))\nprint(pi)",
-        expect: "3.0\n3.141592653589793"
+        expect: "3.0\n3.141592653589793",
+        en: {
+          task: "Fill in the two ___ blanks to import sqrt and pi at once!",
+          guide: "from module import func1, func2",
+          hint: "from math import sqrt, pi"
+        }
       }
     },
 
@@ -96,7 +126,10 @@ print(sqrt(100))`,
 print(m.sqrt(81))
 print(m.pi)`,
         result: "9.0\n3.141592653589793",
-        note: "as로 별명을 붙이면 짧게 쓸 수 있어요!"
+        note: "as로 별명을 붙이면 짧게 쓸 수 있어요!",
+        en: {
+          note: "Giving it an alias with as lets you write it shorter!"
+        }
       }
     },
 
@@ -109,7 +142,12 @@ print(m.pi)`,
         hint: "as를 사용!",
         template: "import math ___ m\nprint(m.floor(3.9))",
         answer: "as",
-        expect: "3"
+        expect: "3",
+        en: {
+          task: "Fill in the ___ to give math the alias m!",
+          guide: "import module as alias",
+          hint: "Use as!"
+        }
       }
     },
 
@@ -141,6 +179,13 @@ print(math.sqrt(64))`,
           answer: 1,
           feedback: "ceil=올림(4), floor=내림(3), sqrt=제곱근(8.0)!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["3\\n3\\n8.0", "4\\n3\\n8.0", "4\\n4\\n8", "3\\n4\\n8.0"],
+            feedback: "ceil=round up (4), floor=round down (3), sqrt=square root (8.0)!"
+          }
+        },
         result: "4\n3\n8.0"
       }
     },
@@ -151,7 +196,12 @@ print(math.sqrt(64))`,
         question: "math.ceil(2.1)의 결과는?",
         options: ["2", "3", "2.1", "2.0"],
         answer: 1,
-        explanation: "ceil은 올림! 2.1 → 3!"
+        explanation: "ceil은 올림! 2.1 → 3!",
+        en: {
+          question: "What's the result of math.ceil(2.1)?",
+          options: ["2", "3", "2.1", "2.0"],
+          explanation: "ceil rounds up! 2.1 → 3!"
+        }
       }
     },
 
@@ -161,7 +211,12 @@ print(math.sqrt(64))`,
         question: "math.floor(7.9)의 결과는?",
         options: ["7", "8", "7.9", "7.0"],
         answer: 0,
-        explanation: "floor는 내림! 7.9 → 7!"
+        explanation: "floor는 내림! 7.9 → 7!",
+        en: {
+          question: "What's the result of math.floor(7.9)?",
+          options: ["7", "8", "7.9", "7.0"],
+          explanation: "floor rounds down! 7.9 → 7!"
+        }
       }
     },
 
@@ -175,7 +230,12 @@ print(math.sqrt(64))`,
         template: "import math\n\nr = 5\narea = math.___ * r ** ___\nprint(f'{area:.2f}')",
         blanksAnswer: ["pi", "2"],
         answer: "import math\n\nr = 5\narea = math.pi * r ** 2\nprint(f'{area:.2f}')",
-        expect: "78.54"
+        expect: "78.54",
+        en: {
+          task: "Fill in the two ___ blanks to compute the area of a circle!",
+          guide: "circle area = π × r²",
+          hint: "Use math.pi and r ** 2!"
+        }
       }
     },
 
@@ -186,6 +246,11 @@ print(math.sqrt(64))`,
         task: "처음부터 작성! math 모듈을 import해서\n10의 제곱근, 5의 팩토리얼, 2.3의 올림 값을 한 줄씩 출력해요.\n(힌트: sqrt, factorial, ceil)",
         guide: "math.sqrt(10), math.factorial(5), math.ceil(2.3)",
         hint: "import math\nprint(math.sqrt(10))\nprint(math.factorial(5))\nprint(math.ceil(2.3))",
+        en: {
+          task: "Write from scratch! Import the math module and print, one per line,\nthe square root of 10, the factorial of 5, and the ceiling of 2.3.\n(hint: sqrt, factorial, ceil)",
+          guide: "math.sqrt(10), math.factorial(5), math.ceil(2.3)",
+          hint: "import math\nprint(math.sqrt(10))\nprint(math.factorial(5))\nprint(math.ceil(2.3))"
+        },
         template: null,
         answer: "import math\nprint(math.sqrt(10))\nprint(math.factorial(5))\nprint(math.ceil(2.3))",
         alternateAnswers: [
@@ -218,7 +283,10 @@ random.seed(42)
 print(random.randint(1, 10))
 print(random.choice(['가위', '바위', '보']))`,
         result: "2\n바위",
-        note: "seed(42)로 결과 고정! randint=정수 범위, choice=리스트에서 하나!"
+        note: "seed(42)로 결과 고정! randint=정수 범위, choice=리스트에서 하나!",
+        en: {
+          note: "seed(42) fixes the result! randint=integer in a range, choice=one item from a list!"
+        }
       }
     },
 
@@ -228,7 +296,12 @@ print(random.choice(['가위', '바위', '보']))`,
         question: "random.randint(1, 6)의 결과로 나올 수 없는 값은?",
         options: ["1", "3", "6", "7"],
         answer: 3,
-        explanation: "randint(1, 6)은 1~6 사이! 7은 불가능!"
+        explanation: "randint(1, 6)은 1~6 사이! 7은 불가능!",
+        en: {
+          question: "Which value can NOT come from random.randint(1, 6)?",
+          options: ["1", "3", "6", "7"],
+          explanation: "randint(1, 6) is between 1 and 6! 7 is impossible!"
+        }
       }
     },
 
@@ -243,7 +316,17 @@ print(random.choice(['가위', '바위', '보']))`,
           "리스트를 거꾸로 만듦"
         ],
         answer: 1,
-        explanation: "choice는 리스트에서 랜덤으로 하나를 골라줘요!"
+        explanation: "choice는 리스트에서 랜덤으로 하나를 골라줘요!",
+        en: {
+          question: "What does random.choice(['a', 'b', 'c']) do?",
+          options: [
+            "Always returns 'a'",
+            "Picks one item randomly from the list",
+            "Sorts the list",
+            "Reverses the list"
+          ],
+          explanation: "choice picks one random item from the list!"
+        }
       }
     },
 
@@ -257,7 +340,12 @@ print(random.choice(['가위', '바위', '보']))`,
         template: "___ random\nrandom.seed(0)\nn = random.___(1, 100)\nprint(n)",
         blanksAnswer: ["import", "randint"],
         answer: "import random\nrandom.seed(0)\nn = random.randint(1, 100)\nprint(n)",
-        expect: "50"
+        expect: "50",
+        en: {
+          task: "Fill in the two ___ blanks to draw a random integer between 1 and 100!",
+          guide: "import the random module, then use randint!",
+          hint: "import random / random.randint(1, 100)"
+        }
       }
     },
 
@@ -271,7 +359,10 @@ cards = [1, 2, 3, 4, 5]
 random.shuffle(cards)
 print(cards)`,
         result: "[2, 5, 4, 1, 3]",
-        note: "shuffle은 리스트를 직접 섞어요 (return 없음)!"
+        note: "shuffle은 리스트를 직접 섞어요 (return 없음)!",
+        en: {
+          note: "shuffle mixes the list in place (no return value)!"
+        }
       }
     },
 
@@ -284,7 +375,13 @@ print(cards)`,
         hint: "for i in range(3):",
         template: "import random\nrandom.seed(1)\nfor i in ___(3):\n    print(random.randint(1, 6))",
         answer: "range",
-        expect: "2\n5\n1"
+        expect: "2\n5\n1",
+        en: {
+          message: "Hold on! A review of lists and for loops. (review of lesson 17)",
+          task: "Fill in the ___ to roll a die 3 times!",
+          guide: "Loop with for and use randint!",
+          hint: "for i in range(3):"
+        }
       }
     },
 
@@ -313,7 +410,10 @@ print(today)
 print(today.year)
 print(today.month)`,
         result: "2026-05-31\n2026\n5",
-        note: "date(년, 월, 일)로 날짜를 만들고, .year/.month/.day로 접근!"
+        note: "date(년, 월, 일)로 날짜를 만들고, .year/.month/.day로 접근!",
+        en: {
+          note: "Make a date with date(year, month, day), and access it with .year/.month/.day!"
+        }
       }
     },
 
@@ -323,7 +423,12 @@ print(today.month)`,
         question: "from datetime import date 한 뒤 d = date(2026, 1, 1) 이라 하면 d.year는?",
         options: ["1", "2026", "'2026'", "에러"],
         answer: 1,
-        explanation: "date(2026, 1, 1)의 year 속성은 2026!"
+        explanation: "date(2026, 1, 1)의 year 속성은 2026!",
+        en: {
+          question: "After from datetime import date and d = date(2026, 1, 1), what is d.year?",
+          options: ["1", "2026", "'2026'", "Error"],
+          explanation: "The year attribute of date(2026, 1, 1) is 2026!"
+        }
       }
     },
 
@@ -336,7 +441,12 @@ print(today.month)`,
         hint: "datetime 모듈에서 date만!",
         template: "from ___ import date\nd = date(2026, 12, 25)\nprint(d.month)",
         answer: "datetime",
-        expect: "12"
+        expect: "12",
+        en: {
+          task: "Fill in the ___ to import date!",
+          guide: "from datetime import date",
+          hint: "Just date from the datetime module!"
+        }
       }
     },
 
@@ -347,6 +457,11 @@ print(today.month)`,
         task: "처음부터 작성! random 모듈을 import해서\nseed(5)로 고정한 뒤 1~10 사이 랜덤 정수 3개를 한 줄씩 출력해요.\nfor문 사용.",
         guide: "for i in range(3): print(random.randint(1, 10))",
         hint: "import random\nrandom.seed(5)\nfor i in range(3):\n    print(random.randint(1, 10))",
+        en: {
+          task: "Write from scratch! Import the random module,\nfix it with seed(5), then print 3 random integers between 1 and 10, one per line.\nUse a for loop.",
+          guide: "for i in range(3): print(random.randint(1, 10))",
+          hint: "import random\nrandom.seed(5)\nfor i in range(3):\n    print(random.randint(1, 10))"
+        },
         template: null,
         answer: "import random\nrandom.seed(5)\nfor i in range(3):\n    print(random.randint(1, 10))",
         alternateAnswers: [
@@ -369,7 +484,17 @@ print(math.sqrt(16))`,
           "print를 써야 함"
         ],
         answer: 0,
-        explanation: "from math import sqrt는 sqrt만 가져온 것! math.sqrt가 아니라 그냥 sqrt(16)!"
+        explanation: "from math import sqrt는 sqrt만 가져온 것! math.sqrt가 아니라 그냥 sqrt(16)!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Since you used from math import sqrt, you must call it as just sqrt(16)",
+            "The math module has no sqrt",
+            "The import syntax is wrong",
+            "You need to use print"
+          ],
+          explanation: "from math import sqrt imports only sqrt! Not math.sqrt, just sqrt(16)!"
+        }
       }
     },
 
@@ -380,6 +505,11 @@ print(math.sqrt(16))`,
         task: "처음부터 작성! math의 pi와 random의 randint를 둘 다 사용해요.\nseed(0)로 고정 후 1~5 사이 랜덤 정수 r을 뽑고,\n반지름 r인 원의 넓이를 출력 (소수점 2자리).",
         guide: "import math, random; random.seed(0); r = randint(1,5); area = math.pi * r ** 2",
         hint: "import math\nimport random\nrandom.seed(0)\nr = random.randint(1, 5)\narea = math.pi * r ** 2\nprint(f'{area:.2f}')",
+        en: {
+          task: "Write from scratch! Use both math's pi and random's randint.\nFix it with seed(0), draw a random integer r between 1 and 5,\nand print the area of a circle with radius r (2 decimal places).",
+          guide: "import math, random; random.seed(0); r = randint(1,5); area = math.pi * r ** 2",
+          hint: "import math\nimport random\nrandom.seed(0)\nr = random.randint(1, 5)\narea = math.pi * r ** 2\nprint(f'{area:.2f}')"
+        },
         template: null,
         answer: "import math\nimport random\nrandom.seed(0)\nr = random.randint(1, 5)\narea = math.pi * r ** 2\nprint(f'{area:.2f}')",
         alternateAnswers: [

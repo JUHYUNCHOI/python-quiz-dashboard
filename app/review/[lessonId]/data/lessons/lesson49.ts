@@ -35,7 +35,25 @@ export const lesson49: LessonData = {
 hero = Character('용사')
 print(f'{hero.name}: HP {hero.hp}/{hero.max_hp}')`,
         result: "용사: HP 100/100",
-        note: "max_hp는 회복할 때 한도로 써요!"
+        note: "max_hp는 회복할 때 한도로 써요!",
+        en: {
+          lines: [
+            "The RPG hero = the Character class!",
+            "Name, HP, attack, defense... all expressed as attributes."
+          ],
+          code: `class Character:
+    def __init__(self, name):
+        self.name = name
+        self.hp = 100
+        self.max_hp = 100
+        self.atk = 15
+        self.defense = 10
+
+hero = Character('Hero')
+print(f'{hero.name}: HP {hero.hp}/{hero.max_hp}')`,
+          result: "Hero: HP 100/100",
+          note: "max_hp is used as the cap when healing!"
+        }
       }
     },
 
@@ -58,6 +76,23 @@ print(hero.hp)`,
           answer: 1,
           feedback: "100 - 30 = 70! 객체 속성도 변수처럼 바꿀 수 있어요!"
         },
+        en: {
+          code: `class Character:
+    def __init__(self, name):
+        self.name = name
+        self.hp = 100
+        self.max_hp = 100
+
+hero = Character('Tom')
+hero.hp = hero.hp - 30
+print(hero.hp)`,
+          predict: {
+            question: "What's the output?",
+            options: ["100", "70", "30", "Error"],
+            feedback: "100 - 30 = 70! Object attributes can be changed just like variables!"
+          },
+          result: "70"
+        },
         result: "70"
       }
     },
@@ -73,7 +108,17 @@ print(hero.hp)`,
           "몬스터와 구분하려고"
         ],
         answer: 1,
-        explanation: "HP가 줄었다가 회복할 때 max_hp 보다 넘지 않게! min(hp + heal, max_hp) 패턴!"
+        explanation: "HP가 줄었다가 회복할 때 max_hp 보다 넘지 않게! min(hp + heal, max_hp) 패턴!",
+        en: {
+          question: "Why store `max_hp` separately in the Character class?",
+          options: [
+            "To save memory",
+            "To cap healing so HP doesn't exceed the maximum",
+            "Because it's a Python rule",
+            "To distinguish from monsters"
+          ],
+          explanation: "So that when HP drops and then heals, it doesn't exceed max_hp! The min(hp + heal, max_hp) pattern!"
+        }
       }
     },
 
@@ -88,7 +133,14 @@ print(hero.hp)`,
         template: "class Character:\n    def __init__(self, name):\n        self.___ = name\n        self.hp = 100\n        self.max_hp = 100\n\nhero = Character('용사')\nprint(f'{hero.name}: HP {hero.hp}')",
         answer: "name",
         alternateAnswers: [],
-        expect: "용사: HP 100"
+        expect: "용사: HP 100",
+        en: {
+          task: "Fill in the blank!",
+          guide: "Complete the Character class's __init__",
+          hint: "self.attribute = value",
+          template: "class Character:\n    def __init__(self, name):\n        self.___ = name\n        self.hp = 100\n        self.max_hp = 100\n\nhero = Character('Hero')\nprint(f'{hero.name}: HP {hero.hp}')",
+          expect: "Hero: HP 100"
+        }
       }
     },
 
@@ -103,7 +155,15 @@ print(hero.hp)`,
         blanksAnswer: ["0", "[]"],
         answer: "class Character:\n    def __init__(self, name):\n        self.name = name\n        self.gold = 0\n        self.inventory = []\n\nhero = Character('영희')\nprint(f'골드: {hero.gold}, 가방: {hero.inventory}')",
         alternateAnswers: [],
-        expect: "골드: 0, 가방: []"
+        expect: "골드: 0, 가방: []",
+        en: {
+          task: "Fill in the 2 blanks!",
+          guide: "Add gold and inventory attributes",
+          hint: "Gold is the number 0, inventory is an empty list []!",
+          template: "class Character:\n    def __init__(self, name):\n        self.name = name\n        self.gold = ___\n        self.inventory = ___\n\nhero = Character('Emma')\nprint(f'Gold: {hero.gold}, Bag: {hero.inventory}')",
+          answer: "class Character:\n    def __init__(self, name):\n        self.name = name\n        self.gold = 0\n        self.inventory = []\n\nhero = Character('Emma')\nprint(f'Gold: {hero.gold}, Bag: {hero.inventory}')",
+          expect: "Gold: 0, Bag: []"
+        }
       }
     },
 
@@ -138,7 +198,24 @@ print(hero.hp)`,
 
 slime = Monster('슬라임', 30, 8, 30, 20)
 print(f'{slime.name}: HP {slime.hp}, 보상 {slime.gold_reward}G')`,
-        result: "슬라임: HP 30, 보상 20G"
+        result: "슬라임: HP 30, 보상 20G",
+        en: {
+          lines: [
+            "A Monster is similar to a Character, but rewards are key.",
+            "When defeated, it gives experience (exp_reward) and gold (gold_reward)."
+          ],
+          code: `class Monster:
+    def __init__(self, name, hp, atk, exp, gold):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+        self.exp_reward = exp
+        self.gold_reward = gold
+
+slime = Monster('Slime', 30, 8, 30, 20)
+print(f'{slime.name}: HP {slime.hp}, reward {slime.gold_reward}G')`,
+          result: "Slime: HP 30, reward 20G"
+        }
       }
     },
 
@@ -153,7 +230,17 @@ print(f'{slime.name}: HP {slime.hp}, 보상 {slime.gold_reward}G')`,
           "exp_reward (경험치 보상)"
         ],
         answer: 2,
-        explanation: "인벤토리는 플레이어의 속성! 몬스터는 HP, 공격력, 처치 보상이 핵심!"
+        explanation: "인벤토리는 플레이어의 속성! 몬스터는 HP, 공격력, 처치 보상이 핵심!",
+        en: {
+          question: "Which attribute is NOT essential for the Monster class?",
+          options: [
+            "hp (health)",
+            "atk (attack power)",
+            "inventory",
+            "exp_reward (experience reward)"
+          ],
+          explanation: "Inventory is a player attribute! For a monster, HP, attack power, and defeat rewards are key!"
+        }
       }
     },
 
@@ -173,7 +260,23 @@ print(f'{slime.name}: HP {slime.hp}, 보상 {slime.gold_reward}G')`,
 
 potion = Item('물약', 'heal', 30, 50)
 print(f'{potion.name}: {potion.item_type} +{potion.value}, {potion.price}G')`,
-        result: "물약: heal +30, 50G"
+        result: "물약: heal +30, 50G",
+        en: {
+          lines: [
+            "An Item uses its type (item_type) to distinguish effects.",
+            "'heal' = healing, 'atk' = attack boost, 'def' = defense boost."
+          ],
+          code: `class Item:
+    def __init__(self, name, item_type, value, price):
+        self.name = name
+        self.item_type = item_type
+        self.value = value
+        self.price = price
+
+potion = Item('Potion', 'heal', 30, 50)
+print(f'{potion.name}: {potion.item_type} +{potion.value}, {potion.price}G')`,
+          result: "Potion: heal +30, 50G"
+        }
       }
     },
 
@@ -188,7 +291,15 @@ print(f'{potion.name}: {potion.item_type} +{potion.value}, {potion.price}G')`,
         blanksAnswer: ["name", "hp", "gold"],
         answer: "class Monster:\n    def __init__(self, name, hp, gold):\n        self.name = name\n        self.hp = hp\n        self.gold_reward = gold\n\nm = Monster('고블린', 50, 40)\nprint(f'{m.name}: HP {m.hp}, +{m.gold_reward}G')",
         alternateAnswers: [],
-        expect: "고블린: HP 50, +40G"
+        expect: "고블린: HP 50, +40G",
+        en: {
+          task: "Fill in the 3 blanks!",
+          guide: "Create the Monster class",
+          hint: "Use the pattern self.attribute = parameter!",
+          template: "class Monster:\n    def __init__(self, name, hp, gold):\n        self.___ = name\n        self.hp = ___\n        self.gold_reward = ___\n\nm = Monster('Goblin', 50, 40)\nprint(f'{m.name}: HP {m.hp}, +{m.gold_reward}G')",
+          answer: "class Monster:\n    def __init__(self, name, hp, gold):\n        self.name = name\n        self.hp = hp\n        self.gold_reward = gold\n\nm = Monster('Goblin', 50, 40)\nprint(f'{m.name}: HP {m.hp}, +{m.gold_reward}G')",
+          expect: "Goblin: HP 50, +40G"
+        }
       }
     },
 
@@ -203,7 +314,15 @@ print(f'{potion.name}: {potion.item_type} +{potion.value}, {potion.price}G')`,
         blanksAnswer: ["item_type", "value"],
         answer: "class Item:\n    def __init__(self, name, item_type, value):\n        self.name = name\n        self.item_type = item_type\n        self.value = value\n\nsword = Item('검', 'atk', 5)\nprint(f'{sword.name}: {sword.item_type} +{sword.value}')",
         alternateAnswers: [],
-        expect: "검: atk +5"
+        expect: "검: atk +5",
+        en: {
+          task: "Fill in the 2 blanks!",
+          guide: "Create the Item class",
+          hint: "Both item_type and value come from the parameters!",
+          template: "class Item:\n    def __init__(self, name, item_type, value):\n        self.name = name\n        self.item_type = ___\n        self.value = ___\n\nsword = Item('Sword', 'atk', 5)\nprint(f'{sword.name}: {sword.item_type} +{sword.value}')",
+          answer: "class Item:\n    def __init__(self, name, item_type, value):\n        self.name = name\n        self.item_type = item_type\n        self.value = value\n\nsword = Item('Sword', 'atk', 5)\nprint(f'{sword.name}: {sword.item_type} +{sword.value}')",
+          expect: "Sword: atk +5"
+        }
       }
     },
 
@@ -241,7 +360,27 @@ def next_action():
 print(next_action())
 print(next_action())
 print(next_action())`,
-        result: "battle\nshop\nquit"
+        result: "battle\nshop\nquit",
+        en: {
+          lines: [
+            "On the web you can't use input().",
+            "Instead, put actions into an actions list ahead of time and take them out one by one!"
+          ],
+          code: `actions = ['battle', 'shop', 'quit']
+idx = 0
+def next_action():
+    global idx
+    if idx < len(actions):
+        a = actions[idx]
+        idx += 1
+        return a
+    return 'quit'
+
+print(next_action())
+print(next_action())
+print(next_action())`,
+          result: "battle\nshop\nquit"
+        }
       }
     },
 
@@ -265,6 +404,24 @@ print(next_action())`,
           answer: 1,
           feedback: "idx 가 0→1 로 늘어나서 두 번째 호출 시 actions[1] = 'heal'!"
         },
+        en: {
+          code: `actions = ['attack', 'heal', 'attack']
+idx = 0
+def next_action():
+    global idx
+    a = actions[idx]
+    idx += 1
+    return a
+
+print(next_action())
+print(next_action())`,
+          predict: {
+            question: "What's the second print's result?",
+            options: ["attack", "heal", "attack heal", "Error"],
+            feedback: "idx grows 0→1, so the second call gives actions[1] = 'heal'!"
+          },
+          result: "attack\nheal"
+        },
         result: "attack\nheal"
       }
     },
@@ -280,7 +437,15 @@ print(next_action())`,
         blanksAnswer: ["global", "+="],
         answer: "actions = ['go', 'stop']\nidx = 0\ndef next_action():\n    global idx\n    a = actions[idx]\n    idx += 1\n    return a\n\nprint(next_action())\nprint(next_action())",
         alternateAnswers: [],
-        expect: "go\nstop"
+        expect: "go\nstop",
+        en: {
+          task: "Fill in the 2 blanks!",
+          guide: "Complete the next_action function",
+          hint: "Use global so idx can be changed, and idx += 1!",
+          template: "actions = ['go', 'stop']\nidx = 0\ndef next_action():\n    ___ idx\n    a = actions[idx]\n    idx ___ 1\n    return a\n\nprint(next_action())\nprint(next_action())",
+          answer: "actions = ['go', 'stop']\nidx = 0\ndef next_action():\n    global idx\n    a = actions[idx]\n    idx += 1\n    return a\n\nprint(next_action())\nprint(next_action())",
+          expect: "go\nstop"
+        }
       }
     },
 
@@ -295,7 +460,17 @@ print(next_action())`,
           "웹에서는 파이썬을 못 쓴다"
         ],
         answer: 1,
-        explanation: "actions = ['attack', 'heal'] 처럼 미리 정해두고 next_action() 으로 하나씩 꺼내요!"
+        explanation: "actions = ['attack', 'heal'] 처럼 미리 정해두고 next_action() 으로 하나씩 꺼내요!",
+        en: {
+          question: "In a web (Pyodide) environment, what do you use instead of `input()`?",
+          options: [
+            "Use the prompt() function",
+            "Put actions into an actions list ahead of time",
+            "Read with sys.stdin",
+            "You can't use Python on the web"
+          ],
+          explanation: "Decide them ahead of time like actions = ['attack', 'heal'] and take them out one by one with next_action()!"
+        }
       }
     },
 
@@ -331,7 +506,17 @@ print(hero.name)`,
           "hp 가 너무 높아요"
         ],
         answer: 2,
-        explanation: "self. 가 빠지면 객체에 저장이 안 돼요! self.name = name 으로 객체에 속성을 저장해야 hero.name 에 접근 가능!"
+        explanation: "self. 가 빠지면 객체에 저장이 안 돼요! self.name = name 으로 객체에 속성을 저장해야 hero.name 에 접근 가능!",
+        en: {
+          question: "What's wrong with this Character class?",
+          options: [
+            "The class keyword is missing",
+            "The __init__ name is wrong",
+            "It should be self.name = name",
+            "hp is too high"
+          ],
+          explanation: "Without self., it's not stored on the object! You must store the attribute with self.name = name to access hero.name!"
+        }
       }
     },
 
@@ -347,7 +532,17 @@ print(hero.name)`,
         alternateAnswers: [
           "class Character:\n    def __init__(s,name,hp,atk):\n        s.name=name\n        s.hp=hp\n        s.atk=atk\nhero=Character('용사',100,15)\nprint(f'{hero.name}: {hero.hp}/{hero.atk}')"
         ],
-        expect: "용사: 100/15"
+        expect: "용사: 100/15",
+        en: {
+          task: "Write from scratch! Create a Character class (name, hp, atk),\nthen create hero('Hero', 100, 15) and print it in 'name: HP/ATK' format",
+          guide: "class Character → __init__(self, name, hp, atk) → self.attribute = value",
+          hint: "class Character:\n    def __init__(self, name, hp, atk):\n        self.name = name\n        self.hp = hp\n        self.atk = atk\n\nhero = Character('Hero', 100, 15)\nprint(f'{hero.name}: {hero.hp}/{hero.atk}')",
+          answer: "class Character:\n    def __init__(self, name, hp, atk):\n        self.name = name\n        self.hp = hp\n        self.atk = atk\n\nhero = Character('Hero', 100, 15)\nprint(f'{hero.name}: {hero.hp}/{hero.atk}')",
+          alternateAnswers: [
+            "class Character:\n    def __init__(s,name,hp,atk):\n        s.name=name\n        s.hp=hp\n        s.atk=atk\nhero=Character('Hero',100,15)\nprint(f'{hero.name}: {hero.hp}/{hero.atk}')"
+          ],
+          expect: "Hero: 100/15"
+        }
       }
     },
 
@@ -360,7 +555,14 @@ print(hero.name)`,
         hint: "class Item:\n    def __init__(self, name, item_type, value):\n        self.name = name\n        self.item_type = item_type\n        self.value = value\n\npotion = Item('물약', 'heal', 30)\nsword = Item('검', 'atk', 8)\nprint(f'{potion.name}: {potion.item_type} +{potion.value}')\nprint(f'{sword.name}: {sword.item_type} +{sword.value}')",
         template: null,
         answer: "class Item:\n    def __init__(self, name, item_type, value):\n        self.name = name\n        self.item_type = item_type\n        self.value = value\n\npotion = Item('물약', 'heal', 30)\nsword = Item('검', 'atk', 8)\nprint(f'{potion.name}: {potion.item_type} +{potion.value}')\nprint(f'{sword.name}: {sword.item_type} +{sword.value}')",
-        expect: "물약: heal +30\n검: atk +8"
+        expect: "물약: heal +30\n검: atk +8",
+        en: {
+          task: "Write from scratch! Create an Item class (name, item_type, value),\nthen create potion('Potion', 'heal', 30) and sword('Sword', 'atk', 8) and print each as 'name: type +value'",
+          guide: "class Item: __init__ with 3 parameters, create 2 objects",
+          hint: "class Item:\n    def __init__(self, name, item_type, value):\n        self.name = name\n        self.item_type = item_type\n        self.value = value\n\npotion = Item('Potion', 'heal', 30)\nsword = Item('Sword', 'atk', 8)\nprint(f'{potion.name}: {potion.item_type} +{potion.value}')\nprint(f'{sword.name}: {sword.item_type} +{sword.value}')",
+          answer: "class Item:\n    def __init__(self, name, item_type, value):\n        self.name = name\n        self.item_type = item_type\n        self.value = value\n\npotion = Item('Potion', 'heal', 30)\nsword = Item('Sword', 'atk', 8)\nprint(f'{potion.name}: {potion.item_type} +{potion.value}')\nprint(f'{sword.name}: {sword.item_type} +{sword.value}')",
+          expect: "Potion: heal +30\nSword: atk +8"
+        }
       }
     },
 
