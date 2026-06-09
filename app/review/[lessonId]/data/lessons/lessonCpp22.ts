@@ -604,7 +604,7 @@ export const lessonCpp22: LessonData = {
           code: 'class Car {\npublic:\n    string model;\n    int speed;\n}\n\nCar c;',
           options: [
             "클래스 닫는 중괄호 뒤에 세미콜론(;)이 없어서",
-            "public: 키워드가 잘못됐서",
+            "public: 키워드가 잘못됐어서",
             "Car 변수를 클래스 밖에서 선언할 수 없어서"
           ],
           answer: 0,

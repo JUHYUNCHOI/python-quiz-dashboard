@@ -634,6 +634,7 @@ export const lessonCpp2: LessonData = {
           alternateAnswers: [
             "int cm;\ncin>>cm;\ndouble m=cm/100.0;\ncout<<m<<endl;"
           ],
+          stdin: "175",
           expect: "1.75",
           en: {
             task: "Write a complete program!\nRead a cm value (int), convert to meters (double), and print\nEx: input 175 → output 1.75",

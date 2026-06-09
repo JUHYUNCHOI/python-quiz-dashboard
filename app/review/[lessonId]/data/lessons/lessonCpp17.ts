@@ -354,8 +354,8 @@ export const lessonCpp17: LessonData = {
         content: {
           message: "잠깐! map 기억나요?",
           task: "map에서 키 \"apple\"에 해당하는 값을 가져와요!",
-          template: 'map<string, int> m = {{"apple", 3}, {"banana", 5}};\ncout << m___["apple"] << endl;',
-          answer: "",
+          template: 'map<string, int> m = {{"apple", 3}, {"banana", 5}};\ncout << ___["apple"] << endl;',
+          answer: "m",
           expect: 'map<string, int> m = {{"apple", 3}, {"banana", 5}};\ncout << m["apple"] << endl;',
           en: {
             message: "Quick! Remember map?",

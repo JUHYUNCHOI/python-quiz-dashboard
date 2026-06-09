@@ -249,6 +249,7 @@ export const lessonCpp3: LessonData = {
           alternateAnswers: [
             "double c;cin>>c;double f=c*9.0/5.0+32;cout<<f<<endl;"
           ],
+          stdin: "100",
           expect: "212",
           en: {
             task: "Write from scratch! Read Celsius (double), convert to Fahrenheit, print\nFormula: F = C * 9.0/5.0 + 32",

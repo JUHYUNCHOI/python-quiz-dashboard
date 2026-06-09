@@ -537,7 +537,7 @@ export const lessonCpp4: LessonData = {
           task: "정수 n을 입력받고 → n개의 수를 입력받아 → 최솟값을 출력해요",
           guide: "minVal = 첫 번째 수, for loop으로 비교",
           template: "int n;\ncin >> n;\nint minVal, x;\ncin >> minVal;\nfor (int i = 1; i < n; i++) {\n    ___ >> x;\n    if (x ___ minVal) minVal = x;\n}\ncout << minVal << endl;",
-          blanksAnswer: ["cin", "< "],
+          blanksAnswer: ["cin", "<"],
           alternateAnswers: [],
           answer: "int n;\ncin >> n;\nint minVal, x;\ncin >> minVal;\nfor (int i = 1; i < n; i++) {\n    cin >> x;\n    if (x < minVal) minVal = x;\n}\ncout << minVal << endl;",
           expect: "2",
@@ -561,6 +561,7 @@ export const lessonCpp4: LessonData = {
           alternateAnswers: [
             "string name;int age;cin>>name>>age;cout<<name<<\" is \"<<age<<\" years old.\"<<endl;"
           ],
+          stdin: "Alice 20",
           expect: "Alice is 20 years old.",
           en: {
             task: "Write from scratch! Read a name (string) and age (int), print \"name is N years old.\"",
@@ -583,6 +584,7 @@ export const lessonCpp4: LessonData = {
           alternateAnswers: [
             "int a,b,c;\ncin>>a>>b>>c;\nint sum=a+b+c;\ncout<<sum<<endl<<(double)sum/3<<endl;"
           ],
+          stdin: "90 90 90",
           expect: "270\n90",
           en: {
             task: "Write from scratch! Read 3 scores, print the total and average (with decimal)",

@@ -97,7 +97,6 @@ export const lessonCpp26: LessonData = {
             options: [
               "v = {1, 3} — all duplicates removed",
               "v = {1, 3, 1, 3} — only adjacent duplicates removed, so unchanged",
-              "Only **adjacent** duplicates removed — {1, 3, 1, 3} stays as 4 elements",
               "Compile error",
               "Program crashes"
             ],
