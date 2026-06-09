@@ -67,7 +67,7 @@ print(score + 10)     # ❌ TypeError!
           id: "intro-viz",
           type: "interactive",
           title: "🎬 변환 시각화 — 값이 옷을 갈아입어요",
-          description: "위 예시를 누르거나, 아래에 직접 값을 넣고 int/float/str/bool 을 골라 ▶ 변환! 을 눌러봐요. 따옴표가 벗겨지고 소수점이 잘려나가는 걸 눈으로 직접 보세요.",
+          description: "예시를 눌러 천천히 변신하는 걸 보세요. (직접 값을 넣어보고 싶으면 아래 \"직접 값 넣어보기\"를 펴면 돼요.)",
           component: "typeConversionVisualizer",
         },
         {

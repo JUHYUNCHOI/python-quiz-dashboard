@@ -394,6 +394,7 @@ export default function CurriculumPage() {
   }
   const [cppNudge, setCppNudge] = useState(false)
   const [showCppModal, setShowCppModal] = useState(false)
+  const [refShelfOpen, setRefShelfOpen] = useState(false) // 참고용(cpp-17~20) 레슨 접기/펴기
   // 레슨별 진행 중 상태: lessonId → { visitedSteps, totalSteps }
   const [lessonInProgress, setLessonInProgress] = useState<Map<string, { visited: number; total: number }>>(new Map())
   const [practiceClustersDone, setPracticeClustersDone] = useState(0)
@@ -1595,37 +1596,43 @@ export default function CurriculumPage() {
                                           "Up to here (map & set + algo setup) you can solve ~80% of USACO Bronze. Lessons below are for reference — come back when needed!"
                                         )}
                                       </p>
-                                      <div className="flex flex-wrap gap-2">
-                                        <Link
-                                          href="/learn/cpp-p3"
-                                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs sm:text-sm font-bold border border-gray-200 shadow-sm transition-all"
-                                        >
-                                          🏆 {t("USACO 모의전 (cpp-p3)", "USACO Mock (cpp-p3)")}
-                                        </Link>
-                                        <Link
-                                          href="/coding-bank"
-                                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs sm:text-sm font-bold border border-gray-200 shadow-sm transition-all"
-                                        >
-                                          🌟 {t("코딩 뱅크 (100 문제)", "Coding Bank (100 problems)")}
-                                        </Link>
-                                        <Link
-                                          href="/algo"
-                                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white text-xs sm:text-sm font-bold border border-gray-200 shadow-sm transition-all"
-                                        >
-                                          🧠 {t("Algorithm Lab", "Algorithm Lab")}
-                                        </Link>
+                                      {/* 다음 1개 — 큰 버튼 하나 (결정 피로 0) */}
+                                      <Link
+                                        href="/coding-bank"
+                                        className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm sm:text-base font-black shadow-md transition-all"
+                                      >
+                                        ⭐ {t("다음 → 코딩 뱅크에서 풀기 시작", "Next → Start solving in Coding Bank")}
+                                      </Link>
+                                      <p className="text-[11px] text-gray-500 mt-2">
+                                        {t(
+                                          "배운 STL·문법만으로 푸는 종합 문제 — 알고리즘 들어가기 전 워밍업이에요.",
+                                          "Multi-step problems with just the STL/syntax you know — a warm-up before algorithms."
+                                        )}
+                                      </p>
+                                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-[11px] text-gray-400">
+                                        <span>{t("나중에:", "Later:")}</span>
+                                        <Link href="/learn/cpp-p3" className="hover:text-gray-600 underline-offset-2 hover:underline">🏆 {t("USACO 모의전", "USACO Mock")}</Link>
+                                        <Link href="/algo" className="hover:text-gray-600 underline-offset-2 hover:underline">🧠 Algorithm Lab</Link>
                                       </div>
                                       <p className="text-[11px] text-gray-500 mt-2.5">
                                         {t(
-                                          "↓ cpp-17 ~ cpp-20 은 각 알고리즘 토픽 시작 직전 5 분만 훑고 와도 충분해요.",
-                                          "↓ cpp-17 ~ cpp-20: a 5-minute skim before each algorithm topic is plenty."
+                                          "📌 stack & queue · 파일 I/O 는 알고리즘/대회 직전에 \"다음\"으로 다시 안내돼요. STL 탐색 · CP 팁은 자료실(필요할 때).",
+                                          "📌 stack & queue · file I/O reappear as \"next\" right before algorithms/contest. STL search · CP tips live in the reference shelf."
                                         )}
                                       </p>
+                                      <button
+                                        onClick={() => setRefShelfOpen((o) => !o)}
+                                        className="mt-2 text-[11px] font-bold text-gray-500 hover:text-gray-700 underline underline-offset-2"
+                                      >
+                                        {refShelfOpen
+                                          ? t("참고 레슨 접기 ▲", "Hide reference lessons ▲")
+                                          : t("📌 참고 레슨 보기 (cpp-17~20) ▾", "📌 Show reference lessons (cpp-17~20) ▾")}
+                                      </button>
                                     </div>
                                   </div>
                                 </div>
                               )}
-                            {(() => {
+                            {(!lesson.optional || refShelfOpen) && (() => {
                               // 학생 모드 공통 계산
                               const cluster = lessonToClusters.get(String(lesson.id))?.[0]
                               const hasReview = !isPseudo && !!lesson.hasQuiz
