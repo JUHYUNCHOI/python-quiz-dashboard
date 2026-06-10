@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, Suspense } from "react"
+import Link from "next/link"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
@@ -162,6 +163,19 @@ function ClusterList({
           </p>
         </div>
       </div>
+
+      {/* 🎯 KL 대비 문제 입구 — 연습 탭에서 한 번에 */}
+      <Link
+        href="/course/kl"
+        className="flex items-center gap-3 rounded-2xl border-2 border-amber-300 bg-amber-50 px-4 py-3 hover:border-amber-500 hover:shadow-sm transition-all"
+      >
+        <span className="text-2xl shrink-0">🎯</span>
+        <div className="min-w-0 flex-1">
+          <p className="font-bold text-amber-900 leading-tight">{t("KL 대비 문제 (자동 채점)", "KL Prep Problems (auto-graded)")}</p>
+          <p className="text-xs text-amber-700/80 mt-0.5">{t("배운 걸로 푸는 대회형 문제 — 앱에서 바로 풀어요", "Contest-style problems with what you learned — solve in-app")}</p>
+        </div>
+        <span className="text-amber-400 shrink-0" aria-hidden>→</span>
+      </Link>
 
       {/* 언어 탭 */}
       <div className="flex bg-gray-100 rounded-xl p-1">
