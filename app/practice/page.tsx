@@ -39,6 +39,58 @@ const DIFFICULTY_COLOR: Record<string, string> = {
   "어려움": "text-red-700 bg-red-100",
 }
 
+// ── 🎯 KL 필터 데이터 — kl:true 태그 문제 (별도 페이지 X, /practice 안 한 모드) ──
+const _KL_DIFF_ORDER = ["쉬움", "보통", "어려움"]
+const KL_GROUPS = ALL_CLUSTERS
+  .map(c => ({
+    id: c.id,
+    title: c.title,
+    emoji: c.emoji,
+    problems: c.problems
+      .filter(p => p.kl)
+      .sort((a, b) => _KL_DIFF_ORDER.indexOf(a.difficulty) - _KL_DIFF_ORDER.indexOf(b.difficulty)),
+  }))
+  .filter(g => g.problems.length > 0)
+const KL_TOTAL = KL_GROUPS.reduce((s, g) => s + g.problems.length, 0)
+
+// KL 필터 뷰 — 연습 안에서 KL 태그 문제만. 각 문제는 /practice 딥링크(페이지 이동 없이 runner).
+function KLView({ solvedSet }: { solvedSet: Set<string> }) {
+  const { t } = useLanguage()
+  return (
+    <div className="flex flex-col gap-4">
+      <p className="text-xs text-gray-500">
+        {t("KL 대비 — 배운 걸로 푸는 문제. 누르면 바로 풀고 자동 채점돼요.", "KL prep — solve with what you learned. Auto-graded in place.")}
+      </p>
+      {KL_GROUPS.map(g => (
+        <div key={g.id}>
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-base">{g.emoji}</span>
+            <h3 className="text-sm font-bold text-gray-700">{g.title}</h3>
+            <span className="text-xs text-gray-400">{g.problems.length}</span>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            {g.problems.map((p, i) => {
+              const solved = solvedSet.has(p.id)
+              return (
+                <Link
+                  key={p.id}
+                  href={`/practice?cluster=${g.id}&problem=${p.id}&from=kl`}
+                  className={"flex items-center gap-2 rounded-lg border px-3 py-2 transition-all hover:border-amber-400 hover:shadow-sm " + (solved ? "border-green-200 bg-green-50/60" : "border-gray-200 bg-white")}
+                >
+                  <span className="w-5 h-5 shrink-0 rounded-full bg-gray-900 text-white text-[10px] font-black flex items-center justify-center">{i + 1}</span>
+                  <span className="text-sm font-semibold text-gray-900 flex-1 truncate">{p.title}</span>
+                  <span className={"text-[10px] px-1.5 py-0.5 rounded font-bold shrink-0 " + (DIFFICULTY_COLOR[p.difficulty] ?? "")}>{p.difficulty}</span>
+                  {solved ? <span className="text-green-500 shrink-0 text-xs">✓</span> : <span className="text-gray-300 shrink-0" aria-hidden>→</span>}
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function isClusterUnlocked(cluster: PracticeCluster): boolean {
   if (typeof window === "undefined") return false
   try {
@@ -70,6 +122,7 @@ function ClusterList({
   onLangChange,
   isTeacher = false,
   onBack,
+  initialKl = false,
 }: {
   onSelect: (cluster: PracticeCluster) => void
   solvedSet: Set<string>
@@ -78,9 +131,11 @@ function ClusterList({
   onLangChange: (lang: Lang) => void
   isTeacher?: boolean
   onBack?: () => void
+  initialKl?: boolean
 }) {
   const { t, lang: locale } = useLanguage()
   const [showCompleted, setShowCompleted] = useState(false)
+  const [klMode, setKlMode] = useState(initialKl)
   const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
 
   // 전체 풀린 문제 수 (알고리즘 해금 목표)
@@ -145,37 +200,50 @@ function ClusterList({
     )
   }
 
+  // 모드 토글 — 수업별 연습 ↔ 🎯 KL 문제 (필터, 페이지 이동 X)
+  const modeToggle = (
+    <div className="inline-flex rounded-xl border border-gray-200 overflow-hidden self-start">
+      <button onClick={() => setKlMode(false)} className={"px-4 py-2 text-sm font-bold " + (!klMode ? "bg-gray-900 text-white" : "bg-white text-gray-500")}>
+        💪 {t("수업별 연습", "By lesson")}
+      </button>
+      <button onClick={() => setKlMode(true)} className={"px-4 py-2 text-sm font-bold " + (klMode ? "bg-amber-500 text-white" : "bg-white text-gray-500")}>
+        🎯 {t("KL 문제", "KL")} <span className="opacity-70">{KL_TOTAL}</span>
+      </button>
+    </div>
+  )
+  const headerBlock = (
+    <div className="flex items-center gap-3">
+      <button onClick={onBack} className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors shrink-0">
+        <ArrowLeft className="w-4 h-4 text-gray-600" />
+      </button>
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">{t("코딩 연습", "Practice")}</h1>
+        <p className="text-sm text-gray-400 mt-0.5">
+          {klMode ? t("🎯 KL 대비 문제만 보기", "🎯 KL prep problems only") : t("문제를 풀면 알고리즘 학습이 열려요", "Solve problems to unlock algorithm study")}
+        </p>
+      </div>
+    </div>
+  )
+
+  // 🎯 KL 모드 — 연습 안에서 KL 태그 문제만 (별도 페이지 X)
+  if (klMode) {
+    return (
+      <div className="flex flex-col gap-4 pb-24">
+        {headerBlock}
+        {modeToggle}
+        <KLView solvedSet={solvedSet} />
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col gap-4 pb-24">
 
       {/* 헤더 */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={onBack}
-          className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors shrink-0"
-        >
-          <ArrowLeft className="w-4 h-4 text-gray-600" />
-        </button>
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">{t("코딩 연습", "Practice")}</h1>
-          <p className="text-sm text-gray-400 mt-0.5">
-            {t("문제를 풀면 알고리즘 학습이 열려요", "Solve problems to unlock algorithm study")}
-          </p>
-        </div>
-      </div>
+      {headerBlock}
 
-      {/* 🎯 KL 대비 문제 입구 — 연습 탭에서 한 번에 */}
-      <Link
-        href="/course/kl"
-        className="flex items-center gap-3 rounded-2xl border-2 border-amber-300 bg-amber-50 px-4 py-3 hover:border-amber-500 hover:shadow-sm transition-all"
-      >
-        <span className="text-2xl shrink-0">🎯</span>
-        <div className="min-w-0 flex-1">
-          <p className="font-bold text-amber-900 leading-tight">{t("KL 대비 문제 (자동 채점)", "KL Prep Problems (auto-graded)")}</p>
-          <p className="text-xs text-amber-700/80 mt-0.5">{t("배운 걸로 푸는 대회형 문제 — 앱에서 바로 풀어요", "Contest-style problems with what you learned — solve in-app")}</p>
-        </div>
-        <span className="text-amber-400 shrink-0" aria-hidden>→</span>
-      </Link>
+      {/* 모드 토글 (KL 필터) */}
+      {modeToggle}
 
       {/* 언어 탭 */}
       <div className="flex bg-gray-100 rounded-xl p-1">
@@ -895,6 +963,7 @@ function PracticeContent() {
         lang={lang}
         onLangChange={handleLangChange}
         isTeacher={isTeacher}
+        initialKl={searchParams.get("view") === "kl"}
         onBack={() => {
           if (fromParam === "lesson" || fromParam === "curriculum") {
             router.back()
