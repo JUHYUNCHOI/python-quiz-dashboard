@@ -251,8 +251,8 @@ export default function CurriculumPage() {
         { id: "cpp-24", title: t("21. 🚀 알고리즘 시작 전 셋업", "21. 🚀 Pre-Algorithm Setup"), description: t("3 줄 외우기 — bits/stdc++.h + Fast I/O. 5 분.", "Memorize 3 lines — bits/stdc++.h + Fast I/O. 5 min."), duration: t("5분", "5 min") },
         { id: "cpp-26", title: t("22. sort 응용 패턴 📌 심화", "22. Sort Application Patterns 📌 Advanced"), description: t("sort+unique+erase, stable_sort, count_if 등 — Bronze 합격 후 알아두면 좋음", "sort+unique+erase, stable_sort, count_if, etc. — good to know after Bronze"), duration: t("15분", "15 min"), hasQuiz: true, optional: true },
         { id: "cpp-17", title: t("23. STL 탐색 함수 📌 참고용", "23. STL Search Functions 📌 Reference"), description: t("이미 다른 레슨에서 대부분 다룸 — 정리/심화로 보면 OK", "Mostly covered in earlier lessons — view as a recap/extension"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
-        { id: "cpp-18", title: t("24. stack & queue 📌 참고용", "24. stack & queue 📌 Reference"), description: t("Algorithm Lab 의 BFS/DFS 시작 직전에 돌아와서 보기", "Come back here right before starting BFS/DFS in Algorithm Lab"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
-        { id: "cpp-19", title: t("25. 파일 I/O & Fast I/O 심화 📌 참고용", "25. File I/O & Fast I/O Deep Dive 📌 Reference"), description: t("Fast I/O 핵심은 cpp-24 에 있음 — 여기는 파일 I/O + 심화", "Fast I/O essentials are in cpp-24 — this is File I/O + deep dive"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
+        { id: "cpp-18", title: t("24. stack & queue ⏳ 알고리즘 직전에", "24. stack & queue ⏳ Before algorithms"), description: t("참고용 아님 — BFS/DFS 배우기 직전에 꼭 필요해요 (큐 없이는 BFS 못 함)", "Not optional — needed right before BFS/DFS (no queue, no BFS)"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
+        { id: "cpp-19", title: t("25. 파일 I/O ⏳ 대회 직전에", "25. File I/O ⏳ Before contests"), description: t("참고용 아님 — USACO는 파일로 입출력 받아서 대회 진입 직전 꼭 챙겨요", "Not optional — USACO uses file I/O, grab this right before contests"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
         { id: "cpp-20", title: t("26. CP 실전 팁 📌 참고용", "26. CP Practical Tips 📌 Reference"), description: t("typedef, 매크로, 비트마스크 등 — 필요할 때 돌아오기", "typedef, macros, bitmask, etc. — come back when needed"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
         { id: "cpp-p3", title: t("🏆 USACO 모의전 (Part 3 종합)", "🏆 USACO Mock Contest (Part 3 Capstone)"), description: t("pair / sort / map / stack — 3 문제로 진짜 USACO 풀이 체험", "pair / sort / map / stack — 3 problems for real USACO experience"), duration: t("30분", "30 min"), isProject: true },
       ],
@@ -1632,8 +1632,8 @@ export default function CurriculumPage() {
                                         className="mt-2 text-[11px] font-bold text-gray-500 hover:text-gray-700 underline underline-offset-2"
                                       >
                                         {refShelfOpen
-                                          ? t("참고 레슨 접기 ▲", "Hide reference lessons ▲")
-                                          : t("📌 참고 레슨 보기 (cpp-17~20) ▾", "📌 Show reference lessons (cpp-17~20) ▾")}
+                                          ? t("참고·심화 레슨 접기 ▲", "Hide extra lessons ▲")
+                                          : t("📌 참고·심화 + ⏳ 나중에 볼 레슨 (cpp-17~20) ▾", "📌 Reference + ⏳ later lessons (cpp-17~20) ▾")}
                                       </button>
                                     </div>
                                   </div>
