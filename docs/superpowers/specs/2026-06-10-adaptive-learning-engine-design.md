@@ -35,14 +35,15 @@ lib/adaptive/
 ### 3.1 concepts.ts
 - `Concept` = 토픽 키(배열·정렬·투포인터·해시·누적합·그리디·문자열·스택큐 … + algo 토픽 + (Phase3) 레슨 개념).
 - `problemConcept(problem)` → 개념 (문제의 cluster/topic 태그에서). 
+- **태그 폴백:** 태그 없는 문제는 개념 `"general"`로 매핑하되 적응 풀에서 제외(고정 순서로). 계획 단계에서 Phase-1 후보(연습 클러스터 + KL)가 전부 유효 태그를 갖는지 먼저 확인.
 - `CONCEPT_ORDER` / `prereqs` — 커리큘럼 순서(기초 개념을 고급보다 먼저). 기존 TOPIC_PREREQ·ALGO_TOPICS.wave 재사용.
 
 ### 3.2 skill-model.ts
-- 입력: `ProgressEvent[]` = {problemId, concept, difficulty, solved, starred, attempts}.
-- (학생×개념) **mastery score**: 깔끔히(starred) **+2**, 힌트/스캐폴드 풀이 **+1**, 실패/미풀이 **−1**. (가중치는 상수, 튜닝 가능)
-- score → `level`: `struggling | learning | proficient | mastered` (점수 + 최근 연속 신호).
+- 입력: `ProgressEvent[]` = {problemId, concept, difficulty, solved, starred, attempts}. **순서 = 배열 순(시도 순). v1은 영구 타임스탬프 불필요** — "최근"은 그 개념 이벤트 부분열의 뒤쪽 N개.
+- (학생×개념) **mastery score**: 깔끔히(starred) **+2**, 힌트/스캐폴드 풀이 **+1**, 실패/미풀이 **−1**. (가중치 상수, 튜닝 가능)
+- score → `level` **초기 임계값(상수, 튜닝 가능)**: `score ≤ 0 || 데이터 0 → struggling/unknown(쉬운 것부터)`, `1–2 → learning`, `3–5 → proficient`, `≥6 → mastered`. "최근 연속" = 그 개념 마지막 **3개** 이벤트.
 - (옵션·후순위) 시간 감쇠로 복습 필요 표시.
-- 순수: `computeMastery(events): Record<Concept, {score, level, recent}>`.
+- 순수: `computeMastery(events): Record<Concept, {score, level, recent}>`. (TDD: 위 임계값으로 기대 출력 단언)
 
 ### 3.3 next-item.ts
 - 입력: mastery, 후보 문제 풀(개념·난이도·미풀이 여부), 커리큘럼 순서.
