@@ -117,11 +117,10 @@ export default function AlgoPage() {
           </div>
         </Link>
 
-        {/* 전체 토픽 보기 안내 */}
-        <p className="text-xs text-gray-400 text-center -mt-3">
-          {t("아래는 전체 토픽 목록 — 자유롭게 골라도 OK", "All topics below — feel free to pick any")}
-        </p>
-
+        {/* 전체 토픽 — 기본 접힘 (선택지 줄이기). 평소엔 위 '이어서 학습' 추천만 보면 됨 */}
+        <details className="rounded-2xl border border-gray-200 bg-gray-50/60 px-4 py-3">
+          <summary className="text-sm font-bold text-gray-600 cursor-pointer">🧩 {t(`전체 토픽 보기 (${ALGO_TOPICS.length}) — 자유롭게 골라도 OK`, `All ${ALGO_TOPICS.length} topics — pick any`)}</summary>
+          <div className="mt-4 flex flex-col gap-5">
         {([1, 2, 3] as const).map(wave => {
           const waveTopics = ALGO_TOPICS.filter(tp => tp.wave === wave)
           const info = WAVE_INFO[wave]
@@ -172,6 +171,8 @@ export default function AlgoPage() {
             </section>
           )
         })}
+          </div>
+        </details>
       </div>
       <BottomNav />
     </div>
