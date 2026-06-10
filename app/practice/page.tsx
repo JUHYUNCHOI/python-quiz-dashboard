@@ -51,7 +51,7 @@ const KL_FLAT = ALL_CLUSTERS
 const KL_TOTAL = KL_FLAT.length
 
 // KL 필터 뷰 — 연습 안에서 KL 태그 문제만. 각 문제는 /practice 딥링크(페이지 이동 없이 runner).
-function KLView({ solvedSet, starredSet }: { solvedSet: Set<string>; starredSet: Set<string> }) {
+function KLView({ solvedSet, starredSet, compact = false }: { solvedSet: Set<string>; starredSet: Set<string>; compact?: boolean }) {
   const { t } = useLanguage()
   // 적응형: 학생 진행으로 "지금 추천" 1개. 실패/없음 → null → 카드 숨김(=목록 그대로, 폴백)
   const rec = getAdaptiveNext({
@@ -62,7 +62,7 @@ function KLView({ solvedSet, starredSet }: { solvedSet: Set<string>; starredSet:
   const recProb = rec ? KL_FLAT.find(p => p.id === rec.problemId) : null
   return (
     <div className="flex flex-col gap-1.5">
-      {recProb && rec && (
+      {!compact && recProb && rec && (
         <Link
           href={`/practice?cluster=${recProb._clusterId}&problem=${recProb.id}&from=kl`}
           className="rounded-2xl border-2 border-amber-400 bg-amber-50 p-4 flex items-center gap-3 hover:shadow-md transition-all mb-1"
@@ -77,7 +77,7 @@ function KLView({ solvedSet, starredSet }: { solvedSet: Set<string>; starredSet:
       )}
 
       {/* 📊 내 실력 (개념별) — 풀수록 채워짐. 학생이 자기 실력을 봄 */}
-      {(() => {
+      {!compact && (() => {
         const summary = summarizeConcepts(
           KL_FLAT.map(p => ({ id: p.id, cluster: p._clusterId, difficulty: p.difficulty })),
           solvedSet,
@@ -109,9 +109,11 @@ function KLView({ solvedSet, starredSet }: { solvedSet: Set<string>; starredSet:
         )
       })()}
 
-      <p className="text-xs text-gray-500 mb-1">
-        {t("또는 위에서부터 한 문제씩 — 쉬움→어려움 순서. 누르면 바로 풀고 자동 채점돼요.", "Or top to bottom, easy→hard. Tap to solve in place, auto-graded.")}
-      </p>
+      {!compact && (
+        <p className="text-xs text-gray-500 mb-1">
+          {t("또는 위에서부터 한 문제씩 — 쉬움→어려움 순서. 누르면 바로 풀고 자동 채점돼요.", "Or top to bottom, easy→hard. Tap to solve in place, auto-graded.")}
+        </p>
+      )}
       {KL_FLAT.map((p, i) => {
         const solved = solvedSet.has(p.id)
         const prev = KL_FLAT[i - 1]
@@ -137,6 +139,67 @@ function KLView({ solvedSet, starredSet }: { solvedSet: Set<string>; starredSet:
           </div>
         )
       })}
+    </div>
+  )
+}
+
+const _MASTERY_LABEL: Record<string, [string, string, string]> = {
+  struggling: ["막힘", "Stuck", "bg-rose-100 text-rose-600"],
+  learning: ["배우는 중", "Learning", "bg-amber-100 text-amber-700"],
+  proficient: ["능숙", "Proficient", "bg-sky-100 text-sky-700"],
+  mastered: ["마스터", "Mastered", "bg-emerald-100 text-emerald-700"],
+}
+function clusterName(id: string): string {
+  const c = ALL_CLUSTERS.find(x => x.id === id)
+  if (!c) return id
+  return c.title.replace(/ ?문제 ?풀이$/, "").replace(/ ?문제$/, "")
+}
+
+// ⭐ 적응형 패널 — 수업별(해금) + KL 합친 풀에서 "다음 1개" + 📊 내 실력. 탭 고르기 없음.
+function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet: Set<string>; starredSet: Set<string> }) {
+  const { t } = useLanguage()
+  const lessonClusters = (lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS).filter(isClusterUnlocked)
+  const pool = [
+    ...lessonClusters.flatMap(c => c.problems.map(p => ({ id: p.id, cluster: c.id, difficulty: p.difficulty }))),
+    ...KL_FLAT.map(p => ({ id: p.id, cluster: p._clusterId, difficulty: p.difficulty })),
+  ]
+  const rec = getAdaptiveNext({ pool, solvedSet, starredSet })
+  const recProb = rec ? ALL_CLUSTERS.flatMap(c => c.problems).find(p => p.id === rec.problemId) : null
+  const summary = summarizeConcepts(pool, solvedSet, starredSet).filter(c => c.started)
+
+  return (
+    <div className="flex flex-col gap-2">
+      {rec && recProb ? (
+        <Link
+          href={`/practice?cluster=${rec.concept}&problem=${rec.problemId}&from=practice`}
+          className="rounded-3xl border-2 border-violet-300 bg-gradient-to-br from-violet-50 to-sky-50 p-5 hover:shadow-md transition-all"
+        >
+          <p className="text-[11px] font-bold text-violet-500 mb-0.5">👉 {t(`지금 할 것 — ${rec.reason}`, `Do this — ${rec.reasonEn}`)}</p>
+          <p className="text-lg font-black text-gray-900 leading-tight">{recProb.title}</p>
+          <p className="text-xs text-gray-500 mt-0.5">{clusterName(rec.concept)} <span className="ml-1 text-violet-400 font-bold">→</span></p>
+        </Link>
+      ) : (
+        <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-4 text-center text-sm font-bold text-emerald-700">
+          {t("이 단계 문제를 다 풀었어요! 🎉 아래에서 더 풀거나 다음 단계로 가요.", "All cleared here! 🎉 Browse more below or move on.")}
+        </div>
+      )}
+      {summary.length > 0 && (
+        <details className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2">
+          <summary className="text-xs font-bold text-gray-600 cursor-pointer">📊 {t("내 실력 (개념별) — 풀수록 채워져요", "My skill (by concept) — fills as you solve")}</summary>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {summary.map(c => {
+              const [ko, en, cls] = _MASTERY_LABEL[c.level]
+              return (
+                <span key={c.concept} className="text-[11px] inline-flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-2 py-1">
+                  <span className="font-semibold text-gray-700">{clusterName(c.concept)}</span>
+                  <span className={"px-1.5 py-0.5 rounded font-bold " + cls}>{t(ko, en)}</span>
+                  <span className="text-gray-400">{c.solved}/{c.total}</span>
+                </span>
+              )
+            })}
+          </div>
+        </details>
+      )}
     </div>
   )
 }
@@ -185,7 +248,6 @@ function ClusterList({
 }) {
   const { t, lang: locale } = useLanguage()
   const [showCompleted, setShowCompleted] = useState(false)
-  const [klMode, setKlMode] = useState(initialKl)
   const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
 
   // 전체 풀린 문제 수 (알고리즘 해금 목표)
@@ -251,49 +313,19 @@ function ClusterList({
   }
 
   // 모드 토글 — 수업별 연습 ↔ 🎯 KL 문제 (필터, 페이지 이동 X)
-  const modeToggle = (
-    <div className="inline-flex rounded-xl border border-gray-200 overflow-hidden self-start">
-      <button onClick={() => setKlMode(false)} className={"px-4 py-2 text-sm font-bold " + (!klMode ? "bg-gray-900 text-white" : "bg-white text-gray-500")}>
-        💪 {t("수업별 연습", "By lesson")}
-      </button>
-      <button onClick={() => setKlMode(true)} className={"px-4 py-2 text-sm font-bold " + (klMode ? "bg-amber-500 text-white" : "bg-white text-gray-500")}>
-        🎯 {t("KL 문제", "KL")} <span className="opacity-70">{KL_TOTAL}</span>
-      </button>
-    </div>
-  )
-  const headerBlock = (
-    <div className="flex items-center gap-3">
-      <button onClick={onBack} className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors shrink-0">
-        <ArrowLeft className="w-4 h-4 text-gray-600" />
-      </button>
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">{t("코딩 연습", "Practice")}</h1>
-        <p className="text-sm text-gray-400 mt-0.5">
-          {klMode ? t("🎯 KL 대비 문제만 보기", "🎯 KL prep problems only") : t("문제를 풀면 알고리즘 학습이 열려요", "Solve problems to unlock algorithm study")}
-        </p>
-      </div>
-    </div>
-  )
-
-  // 🎯 KL 모드 — 연습 안에서 KL 태그 문제만 (별도 페이지 X)
-  if (klMode) {
-    return (
-      <div className="flex flex-col gap-4 pb-24">
-        {headerBlock}
-        {modeToggle}
-        <KLView solvedSet={solvedSet} starredSet={starredSet} />
-      </div>
-    )
-  }
-
   return (
     <div className="flex flex-col gap-4 pb-24">
 
       {/* 헤더 */}
-      {headerBlock}
-
-      {/* 모드 토글 (KL 필터) */}
-      {modeToggle}
+      <div className="flex items-center gap-3">
+        <button onClick={onBack} className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors shrink-0">
+          <ArrowLeft className="w-4 h-4 text-gray-600" />
+        </button>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">{t("코딩 연습", "Practice")}</h1>
+          <p className="text-sm text-gray-400 mt-0.5">{t("문제를 풀면 알고리즘 학습이 열려요", "Solve problems to unlock algorithm study")}</p>
+        </div>
+      </div>
 
       {/* 언어 탭 */}
       <div className="flex bg-gray-100 rounded-xl p-1">
@@ -310,6 +342,9 @@ function ClusterList({
           </button>
         ))}
       </div>
+
+      {/* ⭐ 적응형: 수업별+KL 합친 "다음 1개" + 📊 내 실력 (탭 고르기 없음) */}
+      <AdaptivePanel lang={lang} solvedSet={solvedSet} starredSet={starredSet} />
 
       {/* 알고리즘 해금 진행 바 */}
       {!goalReached && (
@@ -485,6 +520,14 @@ function ClusterList({
           )}
         </div>
       )}
+
+      {/* 🎯 KL 대비 문제 — 직접 골라 풀기(접이식). 평소엔 위 '다음 1개'가 알아서 서빙 */}
+      <details open={initialKl} className="rounded-2xl border border-amber-200 bg-amber-50/40 px-4 py-3">
+        <summary className="text-sm font-bold text-amber-800 cursor-pointer">🎯 {t(`KL 대비 문제 직접 골라 풀기 (${KL_TOTAL})`, `Browse KL prep problems (${KL_TOTAL})`)}</summary>
+        <div className="mt-3">
+          <KLView solvedSet={solvedSet} starredSet={starredSet} compact />
+        </div>
+      </details>
 
     </div>
   )
