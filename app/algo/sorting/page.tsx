@@ -293,13 +293,16 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
         {step === 0 && (
           <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border-2 border-emerald-200 min-h-[280px]">
             <p className="text-5xl text-center mb-3">🎯</p>
+            <span className="block mx-auto w-fit text-[11px] font-black text-emerald-700 bg-emerald-100 border border-emerald-300 rounded-full px-2.5 py-0.5 mb-3">
+              ⏱ {t("이미 배웠죠 — 30초 복습", "Already covered — 30-sec recap")}
+            </span>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("자, 진짜로 정렬해 볼까요?", "OK, let's actually sort?")}
+              {t("정렬 한 줄, 기억나죠?", "The one-line sort — remember?")}
             </h3>
             <p className="text-sm text-gray-700 leading-relaxed mb-3">
               {t(
-                "Python 도 C++ 도 — 정렬은 진짜 한 줄로 끝나요. 직접 짜는 거 아니에요. 라이브러리가 해줘요.",
-                "Python and C++ — sorting really is one line. You don't write it yourself. The library does.",
+                "Python 도 C++ 도 정렬은 라이브러리 한 줄이에요. 직접 짜는 거 아니에요. 빠르게 짚고 넘어가요.",
+                "In Python and C++, sorting is one library line — you don't write it yourself. Quick refresher.",
               )}
             </p>
             <div className="bg-white rounded-lg p-3 font-mono text-sm space-y-1 text-emerald-700 border border-emerald-200">
@@ -451,6 +454,17 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 "If you write sort yourself, usually O(N²) — fine up to ~10K items, dies past 1M.",
               )}
             </p>
+            <div className="bg-white/70 rounded-lg p-3 border border-purple-200 mb-3">
+              <p className="text-xs font-black text-purple-800 mb-1">
+                🪓 {t("왜 'log N' 이 끼어들까? — 절반씩 나누기", "Why does 'log N' show up? — halving")}
+              </p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t(
+                  "빠른 정렬들의 비밀은 '분할정복' 이에요: 배열을 절반으로, 또 절반으로 계속 쪼개요. 16 개 → 8 → 4 → 2 → 1, 단 4 번이면 끝. 8 개는 3 번, 1024 개도 10 번. '절반씩 줄이는 횟수' 가 바로 log N 이에요. 그래서 N 개를 다루는 데 N×(log N) 번이면 충분해요.",
+                  "Fast sorts use 'divide & conquer': split the array in half, then half again. 16 → 8 → 4 → 2 → 1 takes just 4 cuts; 8 takes 3; even 1024 takes 10. That 'number of halvings' IS log N — so handling N items costs N × (log N).",
+                )}
+              </p>
+            </div>
             <p className="text-sm text-gray-700 leading-relaxed">
               {t(
                 "다음 슬라이드에서 두 속도가 얼마나 차이 나는지 표로 봐요.",
@@ -576,13 +590,16 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
         {step === 0 && (
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 min-h-[280px]">
             <p className="text-5xl text-center mb-3">🔧</p>
+            <span className="block mx-auto w-fit text-[11px] font-black text-emerald-700 bg-emerald-100 border border-emerald-300 rounded-full px-2.5 py-0.5 mb-3">
+              ⏱ {t("이미 배웠죠 — 30초 복습", "Already covered — 30-sec recap")}
+            </span>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
               {t("숫자말고 다른 걸로 정렬하려면?", "What if you want to sort by something else?")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "지금까지는 숫자만 정렬했죠. 근데 실제 문제는 보통 더 복잡해요:",
-                "So far just numbers. But real problems are often more complex:",
+                "숫자 말고 '기준' 을 정해서 정렬하는 법 — 이미 배웠어요. 빠르게 떠올려봐요:",
+                "Sorting by a chosen 'key' instead of raw numbers — you've seen this. Quick recall:",
               )}
             </p>
             <ul className="space-y-1.5 text-sm text-gray-700 mb-3 pl-2">
@@ -703,6 +720,17 @@ sort(people.begin(), people.end(),
                 ? t("핵심: key= 에 '뭘 기준으로?' 만 알려주면 끝.", "Key idea: tell sort 'what to compare by' via key=.")
                 : t("핵심: 비교자 lambda 에 'a 가 b 보다 먼저?' 조건을 적으면 끝.", "Key idea: write 'is a before b?' in the comparator lambda.")}
             </p>
+            <div className="bg-indigo-50 rounded-xl p-3 border-2 border-indigo-200">
+              <p className="text-sm font-black text-indigo-900 mb-1">
+                🧷 {t("'안정 정렬(stable)' — 다중 기준의 비밀", "'Stable sort' — the multi-key secret")}
+              </p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t(
+                  "값이 같을 때 원래 순서를 그대로 지켜주는 정렬을 '안정 정렬' 이라고 해요. 이게 왜 중요하냐면 — 두 기준으로 정렬할 때 '약한 기준 먼저, 강한 기준 나중' 으로 두 번 정렬하면 깔끔하게 풀려요. 예: 먼저 '이름' 으로 정렬 → 그다음 '나이' 로 정렬하면, 같은 나이끼리는 이름 순서가 유지돼요. Python 의 sort 와 C++ 의 stable_sort 가 안정 정렬이에요. (C++ 의 일반 sort 는 보장 안 됨 — 동점 순서 중요하면 stable_sort.)",
+                  "A 'stable' sort keeps equal items in their original order. Why it matters: to sort by two keys, sort by the weaker key first, then the stronger key — equal items stay in the earlier order. e.g. sort by 'name' first, then by 'age': within the same age, names stay alphabetical. Python's sort and C++'s stable_sort are stable. (Plain C++ sort isn't guaranteed — use stable_sort when tie order matters.)",
+                )}
+              </p>
+            </div>
           </div>
         )}
 
@@ -791,6 +819,24 @@ function Chapter5({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
               )}
               <li><b>5.</b> {t("절대 직접 O(N²) 짜지 말기 — 라이브러리 써요", "Never write O(N²) sort — use library")}</li>
             </ol>
+            <div className="mt-3 bg-white rounded-xl p-3 border-2 border-orange-200">
+              <p className="text-sm font-black text-orange-800 mb-1">
+                🧰 {t("진짜 쓸모: '정렬 후' 가 핵심", "Real payoff: what you do *after* sorting")}
+              </p>
+              <p className="text-xs text-gray-700 leading-relaxed mb-2">
+                {t(
+                  "정렬 자체보다 '정렬한 다음 무엇을 하느냐' 가 진짜 무기예요. 대표 패턴 하나:",
+                  "The real weapon isn't sorting itself — it's what you do once it's sorted. One classic pattern:",
+                )}
+              </p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                <b>{t("정렬 → 양끝 투포인터.", "Sort → two pointers from both ends.")}</b>{" "}
+                {t(
+                  "예: 배열에서 두 수를 더해 정확히 K 가 되는 짝 찾기. 먼저 정렬한 뒤, 가장 작은 값(왼쪽)과 가장 큰 값(오른쪽)을 보면서 — 합이 너무 크면 오른쪽을 한 칸 당기고, 너무 작으면 왼쪽을 한 칸 밀어요. 모든 짝을 다 확인(O(N²))할 필요 없이 한 번 훑으면 끝(O(N)). 정렬이 '순서' 를 만들어줬기 때문에 가능한 거예요. (이게 그리디·이분탐색의 출발점이기도 해요.)",
+                  "e.g. find a pair summing to exactly K. Sort first, then look at the smallest (left) and largest (right): if the sum is too big, pull the right pointer in; too small, push the left pointer up. No need to check every pair (O(N²)) — one sweep (O(N)) does it. This only works because sorting gave you order. (It's also the seed of greedy & binary-search tricks.)",
+                )}
+              </p>
+            </div>
             <p className="text-xs text-amber-700 mt-3 text-center italic">
               {t("이 정도면 정렬이 나오는 문제 거의 다 풀 수 있어요!", "This is enough to handle almost any sorting problem!")}
             </p>
@@ -1012,11 +1058,26 @@ export default function SortingPage() {
               </p>
             </div>
 
-            {/* 🏆문제 풀이 — in-app 핵심 CTA */}
-
-            <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
-              🗺️ {t("다음 알고리즘 토픽 보기", "Next algorithm topic")} <ArrowRight className="inline w-4 h-4" />
-            </Link>
+            {/* 🏆 문제 풀이 — in-app 핵심 CTA */}
+            <div className="space-y-2">
+              <Link href="/algo/sorting/practice"
+                className="flex items-center justify-between bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl px-4 py-3 shadow-md active:scale-[0.99] transition-all">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">🏆</span>
+                  <div>
+                    <p className="font-black text-sm leading-tight">{t("정렬 문제 풀러 가기", "Sorting practice")}</p>
+                    <p className="text-[11px] text-emerald-50">{t("배운 걸 바로 실전에서 써봐요", "Put it to work right away")}</p>
+                  </div>
+                </div>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link href="/coding-bank" className="block px-4 py-2 bg-white hover:bg-blue-50 text-blue-700 rounded-xl font-bold text-sm text-center border-2 border-blue-200">
+                💼 {t("코딩 뱅크 — 정렬 응용 (STL만)", "Coding Bank — sorting applied")} <ArrowRight className="inline w-4 h-4" />
+              </Link>
+              <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
+                🗺️ {t("다음 알고리즘 토픽 보기", "Next algorithm topic")} <ArrowRight className="inline w-4 h-4" />
+              </Link>
+            </div>
           </div>
         )}
 

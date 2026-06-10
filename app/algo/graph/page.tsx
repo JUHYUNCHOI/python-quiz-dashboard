@@ -155,6 +155,15 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <h3 className="text-xl font-black text-gray-900 mb-3 text-center">
               {t("그래프 — 연결된 것들의 세계", "Graphs — the world of connections")}
             </h3>
+            <div className="bg-white/80 rounded-lg p-3 border border-amber-200 mb-3">
+              <p className="text-xs text-amber-700 font-bold mb-1">📌 {t("이건 새 개념이에요 (복습 X)", "This is a NEW concept (not review)")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t(
+                  "그래프는 main 커리큘럼에 안 나왔어요. 새 도구 — 그래서 '어려운 게 당연해요'. 천천히 가요.",
+                  "Graphs weren't in the main curriculum. New tool — being confused is normal. We'll go slowly.",
+                )}
+              </p>
+            </div>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-orange-700">{t("비유", "Analogy")}:</b>{" "}
               {t(
@@ -674,8 +683,8 @@ vector<int> bfs(int start, int n, vector<vector<int>>& adj) {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "체크: ① 큐에 push 하는 *순간* visited=true (꺼낼 때 X — 중복 push 막기). ② 가중치 없는 그래프만 최단 보장.",
-                "Check: ① mark visited *when pushing* (not on pop — prevents double push). ② shortest only on unweighted graphs.",
+                "체크: ① 큐에 push 하는 *순간* visited=true (꺼낼 때 X). 왜? — pop 할 때 표시하면 같은 노드가 여러 이웃을 통해 큐에 *여러 번* 들어갈 수 있어요. push 할 때 막으면 노드마다 딱 한 번만 큐에 들어가요. ② 가중치 없는 그래프만 최단 보장.",
+                "Check: ① mark visited *when pushing* (not on pop). Why? — marking on pop lets the same node get pushed *multiple times* via different neighbors. Marking on push means each node enters the queue exactly once. ② shortest only on unweighted graphs.",
               )}
             </p>
           </div>

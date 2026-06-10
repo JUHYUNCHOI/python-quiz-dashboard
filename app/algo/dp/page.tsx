@@ -144,7 +144,7 @@ function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
 // ── Chapter 1: 왜 DP? — 비유 + 메모이제이션 ↔ tabulation 다리 ────
 function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 3
+  const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
 
   return (
@@ -197,6 +197,62 @@ N=5 → 8 가지`}
         )}
 
         {step === 1 && (
+          <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl p-6 border-2 border-red-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🐌</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("\"그냥 재귀로 풀면 안 돼?\"", "\"Can't I just use plain recursion?\"")}
+            </h3>
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
+              {t(
+                "ways(N) = ways(N-1) + ways(N-2) 를 그대로 재귀로 옮기면:",
+                "Translate ways(N) = ways(N-1) + ways(N-2) straight into recursion:",
+              )}
+            </p>
+            <div className="bg-gray-900 rounded-lg p-3 mb-3">
+              <pre className="text-xs text-emerald-200 font-mono leading-relaxed">
+{`def ways(n):
+    if n <= 1: return 1
+    return ways(n-1) + ways(n-2)`}
+              </pre>
+            </div>
+            <p className="text-xs text-gray-700 leading-relaxed mb-2">
+              {t(
+                "문제: ways(5) 를 부르면 ways(3) 을 *두 번*, ways(2) 를 *세 번* 다시 계산해요. 트리를 펼쳐 보면:",
+                "Problem: calling ways(5) recomputes ways(3) *twice*, ways(2) *three times*. Unfold the call tree:",
+              )}
+            </p>
+            <div className="bg-white/80 rounded-lg p-3 border border-red-200 mb-3 overflow-x-auto">
+              <pre className="text-[11px] text-gray-800 font-mono leading-relaxed">
+{`ways(5)
+├─ ways(4)
+│  ├─ ways(3)        ← 또 계산
+│  │  ├─ ways(2)     ← 또 계산
+│  │  └─ ways(1)
+│  └─ ways(2)        ← 또 계산
+└─ ways(3)           ← 또 계산
+   ├─ ways(2)        ← 또 계산
+   └─ ways(1)`}
+              </pre>
+            </div>
+            <div className="bg-red-100 rounded-lg p-3 border border-red-300">
+              <p className="text-xs text-red-900 leading-relaxed text-center">
+                💥 <b>{t("같은 부분 문제를 수없이 다시 계산", "Same subproblems recomputed over and over")}</b>.{" "}
+                {t(
+                  "N=40 이면 호출이 ~3 억 번 → 몇 초씩 걸려요. N=50 은 사실상 멈춤.",
+                  "At N=40 that's ~300M calls → several seconds. N=50 basically hangs.",
+                )}
+              </p>
+              <p className="text-xs text-red-800 leading-relaxed text-center mt-2">
+                {t(
+                  "→ 한 번 푼 답을 *저장* 하면 각 ways(k) 는 딱 한 번만. 이게 DP 의 출발점.",
+                  "→ *Save* each answer once and every ways(k) runs just once. That's the seed of DP.",
+                )}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {step === 2 && (
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 min-h-[280px]">
             <p className="text-5xl text-center mb-3">🔁</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
@@ -242,7 +298,7 @@ N=5 → 8 가지`}
           </div>
         )}
 
-        {step === 2 && (
+        {step === 3 && (
           <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border-2 border-purple-200 min-h-[280px]">
             <p className="text-5xl text-center mb-3">🗺️</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
@@ -301,9 +357,11 @@ N=5 → 8 가지`}
 // ── Chapter 2: 1D DP (계단 / 피보나치) ───────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
+  const totalSteps = 5
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
+  const [fillPassed, setFillPassed] = useState(false)
+  void fillPassed
 
   // 시뮬레이션: dp[] 한 칸씩 채우기 (계단 N=10)
   // dp[0]=1, dp[1]=1, dp[i] = dp[i-1] + dp[i-2]
@@ -468,10 +526,103 @@ int main() {
                 "Checklist: ① base ② recurrence ③ small→large order. Most 1D DP looks like this.",
               )}
             </p>
+
+            <div className="bg-purple-50 rounded-2xl p-3 border-2 border-purple-200 mt-4">
+              <p className="text-sm font-black text-purple-900">🔄 {t("같은 계산, 반대 방향 — 메모이제이션 (top-down)", "Same calc, opposite direction — memoization (top-down)")}</p>
+              <p className="text-xs text-gray-700 mt-1">
+                {t(
+                  "Ch1 의 느린 재귀에 *캐시 한 줄* 만 더하면 돼요. 표를 안 채우고, 재귀가 물어볼 때만 채워요.",
+                  "Just add *one cache* to Ch1's slow recursion. No table loop — fill on demand as the recursion asks.",
+                )}
+              </p>
+            </div>
+            <CodeBlock lang={codeLang} setLang={setCodeLang}
+              py={`from functools import cache
+
+@cache                           # ← 캐시 한 줄! (또는 dict 로 직접)
+def stairs(n):
+    if n <= 1:
+        return 1
+    return stairs(n-1) + stairs(n-2)   # ④ 점화식 — 재귀 그대로
+
+print(stairs(40))   # 165580141 — 캐시 덕분에 즉시!
+
+# 캐시를 dict 로 직접 쓰면:
+memo = {}
+def stairs2(n):
+    if n <= 1: return 1
+    if n in memo: return memo[n]       # 이미 풀었으면 꺼내 쓰기
+    memo[n] = stairs2(n-1) + stairs2(n-2)
+    return memo[n]`}
+              cpp={`#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<long long> memo;              // -1 = 아직 안 풂
+
+long long stairs(int n) {
+    if (n <= 1) return 1;
+    if (memo[n] != -1) return memo[n];        // 이미 풀었으면 꺼내 쓰기
+    return memo[n] = stairs(n-1) + stairs(n-2);   // ④ 점화식 — 재귀 그대로
+}
+
+int main() {
+    int n = 40;
+    memo.assign(n + 1, -1);
+    cout << stairs(n) << endl;   // 165580141 — 즉시!
+    return 0;
+}`}
+            />
+            <div className="bg-amber-50 rounded-lg p-3 border border-amber-300">
+              <p className="text-xs text-amber-900 leading-relaxed text-center">
+                💡 <b>{t("두 코드는 같은 dp 값을 같은 횟수로 계산", "Both compute the same dp values, the same number of times")}</b>.{" "}
+                {t(
+                  "위(top-down)는 ways(N) 부터 *내려가며* 필요할 때 채우고, 아래(bottom-up)는 ways(0) 부터 *올라가며* 미리 채워요. 방향만 다름.",
+                  "Top-down starts at ways(N) and fills *downward* on demand; bottom-up starts at ways(0) and fills *upward* ahead of time. Only the direction differs.",
+                )}
+              </p>
+            </div>
           </div>
         )}
 
         {step === 3 && (
+          <div className="space-y-3">
+            <div className="bg-emerald-50 rounded-2xl p-3 border-2 border-emerald-200">
+              <p className="text-sm font-black text-emerald-900">✏️ {t("직접 점화식 세우기", "Build the recurrence yourself")}</p>
+              <p className="text-xs text-gray-700 mt-1">
+                {t(
+                  "계단 문제로 돌아가요. \"i 번째 계단 도착 직전엔 (i-1) 또는 (i-2) 에 있었다.\" 그렇다면 dp[i] 는?",
+                  "Back to the stairs. \"Right before stair i, I was on (i-1) or (i-2).\" So dp[i] = ?",
+                )}
+              </p>
+            </div>
+            <div className="bg-gray-900 rounded-lg p-3">
+              <pre className="text-xs text-emerald-200 font-mono leading-relaxed text-center">
+{`dp[i] = ________   ← 빈칸 채우기`}
+              </pre>
+            </div>
+            <MiniQuiz
+              question={t(
+                "계단 오르기에서 dp[i] 의 점화식은? (한 번에 1 칸 또는 2 칸)",
+                "What is dp[i] for climbing stairs? (1 or 2 steps at a time)",
+              )}
+              options={[
+                "dp[i] = dp[i-1] + dp[i-2]",
+                "dp[i] = dp[i-1] * dp[i-2]",
+                "dp[i] = dp[i-1] + 1",
+                "dp[i] = max(dp[i-1], dp[i-2])",
+              ]}
+              answerIdx={0}
+              hint={t(
+                "(i-1) 에서 오는 방법 수 + (i-2) 에서 오는 방법 수 를 *더하면* i 까지 가는 전체 방법 수. 곱이나 max 가 아니라 합.",
+                "Ways from (i-1) + ways from (i-2) *added together* = total ways to reach i. It's a sum, not a product or a max.",
+              )}
+              onCorrect={() => setFillPassed(true)}
+            />
+          </div>
+        )}
+
+        {step === 4 && (
           <MiniQuiz
             question={t(
               "메모이제이션 (top-down) 과 tabulation (bottom-up), 같은 1D DP 문제의 시간복잡도는?",
@@ -642,6 +793,27 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 💡 {t(
                   "각 칸 = max( 위 칸, 왼쪽 위 어딘가 + 현재 물건 가치 ). 이전 행만 필요해요.",
                   "Each cell = max( cell above, some upper-left cell + current item's value ). Only previous row is needed.",
+                )}
+              </p>
+            </div>
+
+            <div className="mt-3 bg-amber-50 rounded-lg p-3 border-2 border-amber-300">
+              <p className="text-xs font-black text-amber-900 mb-2">✍️ {t("한 칸 직접 계산해 보기 — dp[1][5]", "Compute one cell by hand — dp[1][5]")}</p>
+              <p className="text-[11px] text-gray-800 leading-relaxed mb-2">
+                {t(
+                  "i=1 → 물건 (w=2, v=3) 만 고려, 용량 w=5. 두 갈래:",
+                  "i=1 → only item (w=2, v=3) available, capacity w=5. Two branches:",
+                )}
+              </p>
+              <ul className="text-[11px] text-gray-800 space-y-1 leading-relaxed mb-2">
+                <li>• <b>{t("안 담기", "Skip")}</b>: dp[0][5] = 0</li>
+                <li>• <b>{t("담기", "Take")}</b>: dp[0][5-2] + 3 = dp[0][3] + 3 = 0 + 3 = <b>3</b></li>
+              </ul>
+              <p className="text-[11px] text-amber-900 leading-relaxed">
+                → dp[1][5] = max(0, 3) = <b className="text-amber-700">3</b>.{" "}
+                {t(
+                  "표에서 i=1, w=5 칸이 정말 3 인지 확인해 봐요!",
+                  "Check the i=1, w=5 cell in the table — it really is 3!",
                 )}
               </p>
             </div>

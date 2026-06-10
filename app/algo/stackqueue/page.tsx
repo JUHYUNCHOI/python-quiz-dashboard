@@ -1206,9 +1206,17 @@ export default function StackQueuePage() {
               </p>
             </div>
 
-            <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
-              🗺️ {t("다음 알고리즘 토픽 보기", "Next algorithm topic")} <ArrowRight className="inline w-4 h-4" />
-            </Link>
+            <div className="space-y-2">
+              <Link href="/algo/stackqueue/practice" className="block px-4 py-2 bg-white hover:bg-emerald-50 text-emerald-700 rounded-xl font-bold text-sm text-center border-2 border-emerald-200">
+                🏆 {t("스택/큐 문제 풀러 가기", "Stack/Queue practice problems")} <ArrowRight className="inline w-4 h-4" />
+              </Link>
+              <Link href="/coding-bank" className="block px-4 py-2 bg-white hover:bg-blue-50 text-blue-700 rounded-xl font-bold text-sm text-center border-2 border-blue-200">
+                💼 {t("코딩 뱅크 — 스택/큐 응용 문제", "Coding Bank — stack/queue applied")} <ArrowRight className="inline w-4 h-4" />
+              </Link>
+              <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
+                🗺️ {t("다음 알고리즘 토픽 보기", "Next algorithm topic")} <ArrowRight className="inline w-4 h-4" />
+              </Link>
+            </div>
           </div>
         )}
       </main>

@@ -405,6 +405,41 @@ return -1                                ← 없음`}
                 "Found in just 2 compares! Linear scan would take 6.",
               )}
             </p>
+
+            {/* 없는 값 케이스 — off-by-one 핵심 */}
+            <div className="bg-rose-50 rounded-lg p-3 border-2 border-rose-200 mt-3">
+              <p className="text-sm font-black text-rose-800 mb-2">🚫 {t("그럼 없는 값은? — 예: 4 찾기", "What if it's not there? — e.g. find 4")}</p>
+              <pre className="text-[11px] text-gray-800 font-mono leading-relaxed whitespace-pre-wrap">
+{t(
+`(0,7) mid=3 arr[3]=7 > 4 → high=2  (왼쪽)
+(0,2) mid=1 arr[1]=3 < 4 → low=2   (오른쪽)
+(2,2) mid=2 arr[2]=5 > 4 → high=1  (왼쪽)
+이제 low=2 > high=1 → 범위가 사라짐 → return -1`,
+`(0,7) mid=3 arr[3]=7 > 4 → high=2  (left)
+(0,2) mid=1 arr[1]=3 < 4 → low=2   (right)
+(2,2) mid=2 arr[2]=5 > 4 → high=1  (left)
+now low=2 > high=1 → range is empty → return -1`,
+)}
+              </pre>
+              <p className="text-[11px] text-rose-800 leading-relaxed mt-2">
+                {t(
+                  "포인트 ①: while 조건이 ",
+                  "Point ①: the while condition is ",
+                )}<b>{t("low ≤ high (=)", "low ≤ high (=)")}</b>{t(
+                  " 라서 low=high 인 칸 1 개짜리 범위도 한 번 더 확인해요. low > high 가 되는 그 순간 = '없음' 확정 → return -1.",
+                  " — so even a 1-cell range (low=high) gets checked once more. The instant low > high, the range is empty = 'not found' → return -1.",
+                )}
+              </p>
+              <p className="text-[11px] text-rose-800 leading-relaxed mt-1.5">
+                {t(
+                  "포인트 ②: mid 는 이미 봤으니 다시 넣지 않아요 — 그래서 ",
+                  "Point ②: mid is already checked, so we never re-include it — that's why ",
+                )}<b>{t("low = mid + 1", "low = mid + 1")}</b>{t(" / ", " / ")}<b>{t("high = mid − 1", "high = mid − 1")}</b>{t(
+                  ". +1 / −1 을 빠뜨리면 같은 칸을 무한 반복해요 (off-by-one 최대 함정).",
+                  ". Forget the +1 / −1 and you loop forever on the same cell (the #1 off-by-one trap).",
+                )}
+              </p>
+            </div>
           </div>
         )}
 
@@ -563,6 +598,21 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 )}
               </p>
             </div>
+            <div className="bg-indigo-50 rounded-lg p-3 border border-indigo-200 mt-3">
+              <p className="text-sm font-bold text-indigo-800 mb-1">📏 {t("왜 high = len (반열린 구간)?", "Why high = len (half-open)?")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t(
+                  "기본 이분탐색은 '값을 찾으면 멈춤' 이라 high = len-1 (닫힌 구간) 이면 됐어요. 하지만 lower_bound 의 답은 '마지막 칸 다음' 일 수도 있어요 — 예: 모든 값이 x 보다 작으면 답은 len. 그래서 ",
+                  "Basic search stops the moment it finds the value, so high = len-1 (closed) was fine. But lower_bound's answer can be 'one past the last cell' — e.g. if every value < x, the answer is len. So we keep ",
+                )}<b className="text-indigo-800">{t("high = len 으로 시작", "high = len")}</b>{t(
+                  " 해서 그 자리까지 후보로 남겨둬요. 구간은 ",
+                  " as a reachable candidate. The range is ",
+                )}<b>{t("[low, high)", "[low, high)")}</b>{t(
+                  " — low 는 포함, high 는 제외.",
+                  " — low included, high excluded.",
+                )}
+              </p>
+            </div>
           </div>
         )}
 
@@ -628,9 +678,49 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
         {step === 2 && (
           <div className="space-y-3">
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
-              <p className="text-sm font-black text-blue-900">📝 {t("코드 — lower_bound / bisect", "Code — lower_bound / bisect")}</p>
+              <p className="text-sm font-black text-blue-900">📝 {t("코드 — 먼저 직접 짜보기", "Code — write it by hand first")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {t("Python 은 bisect 모듈, C++ 은 std::lower_bound — STL 한 줄로 끝.", "Python: bisect module. C++: std::lower_bound. STL one-liners.")}
+                {t("반열린 구간이라 while 조건이 low < high (= 없음). 찾아도 멈추지 않고 high만 당겨요.", "Half-open range → while uses low < high (no =). Don't stop on a match — just pull high in.")}
+              </p>
+            </div>
+            <CodeBlock lang={codeLang} setLang={setCodeLang}
+              py={`def lower_bound(arr, x):
+    low, high = 0, len(arr)      # high = len (반열린)
+    while low < high:            # = 없음!
+        mid = (low + high) // 2
+        if arr[mid] < x:
+            low = mid + 1        # mid 는 너무 작음 → 버림
+        else:
+            high = mid           # mid 는 후보 → 남김 (-1 아님!)
+    return low                   # low == high = 답
+
+arr = [1, 3, 3, 3, 5, 7]
+print(lower_bound(arr, 3))   # 1
+print(lower_bound(arr, 6))   # 5 (삽입 위치)`}
+              cpp={`// 직접 구현 — 반열린 구간 [low, high)
+int lower_bound_by_hand(const vector<int>& arr, int x) {
+    int low = 0, high = arr.size();   // high = len
+    while (low < high) {              // = 없음!
+        int mid = low + (high - low) / 2;
+        if (arr[mid] < x)
+            low = mid + 1;            // 너무 작음 → 버림
+        else
+            high = mid;               // 후보 → 남김 (mid-1 아님!)
+    }
+    return low;                       // low == high = 답
+}`}
+            />
+            <p className="text-xs text-gray-600 text-center leading-relaxed">
+              {t(
+                "기본 이분탐색과 두 곳만 달라요: ① while 이 < (≤ 아님) ② else 에서 high = mid (high = mid-1 아님 — mid 도 답일 수 있으니까).",
+                "Only two differences from basic search: ① while uses < (not ≤) ② else does high = mid (not mid-1 — mid itself may be the answer).",
+              )}
+            </p>
+
+            <div className="bg-emerald-50 rounded-2xl p-3 border-2 border-emerald-200 mt-4">
+              <p className="text-sm font-black text-emerald-900">⚡ {t("실전에선 — 이거 한 줄", "In practice — one line")}</p>
+              <p className="text-xs text-gray-700 mt-1">
+                {t("Python 은 bisect 모듈, C++ 은 std::lower_bound. 직접 짜본 그 로직이 STL 한 줄에 들어있어요.", "Python: bisect. C++: std::lower_bound. The hand-written logic is exactly what these one-liners do.")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}

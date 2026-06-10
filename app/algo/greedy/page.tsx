@@ -339,6 +339,15 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <p className="text-sm font-bold text-cyan-700 text-center">
               {t("끝나는 시간 빠른 회의를 먼저 끝내야 — *남은 시간이 길어져요*.", "Finishing early leaves *more room* for the rest.")}
             </p>
+            <div className="bg-violet-50 rounded-lg p-3 border border-violet-200 mt-3">
+              <p className="text-xs font-bold text-violet-800 mb-1">🔄 {t("왜 최적일까? — 바꿔치기 직관 (교환논증)", "Why optimal? — swap intuition (exchange argument)")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t(
+                  "최적 답이 우리 그리디와 다른 회의를 첫 번째로 골랐다고 해봐요. 그 첫 회의를 '끝나는 시간이 가장 빠른 회의' 로 *바꿔치기* 해도 — 더 일찍 끝나니까 뒤 회의들이 들어갈 자리는 *오히려 더 넓어져요*. 즉 손해가 전혀 없어요. 그러니 끝나는 시간 가장 빠른 걸 첫 선택으로 두는 게 항상 안전 → 우리 그리디도 최적.",
+                  "Suppose the optimal answer picks some other meeting first. Swap that first pick for the earliest-ending one — it finishes sooner, so the room left for later meetings only *grows*. No loss at all. So choosing the earliest end first is always safe → our greedy is optimal too.",
+                )}
+              </p>
+            </div>
           </div>
         )}
 
@@ -826,6 +835,15 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                   : t("긴 일 먼저 → 뒷사람이 *길게* 기다림. 비효율.", "Long tasks first → later people wait *longer*. Wasteful.")}
               </p>
             </div>
+            <div className="bg-violet-50 rounded-lg p-3 border border-violet-200 mt-3">
+              <p className="text-xs font-bold text-violet-800 mb-1">🔄 {t("왜 짧은 일 먼저가 최적? — 인접 바꿔치기 (교환논증)", "Why shortest first is optimal — adjacent swap (exchange argument)")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t(
+                  "줄에서 *바로 옆에 붙어 있는* 두 사람 A, B 만 떼서 봐요 (A 가 앞). 둘을 서로 바꿔도 — 그 둘보다 뒤에 있는 사람들의 대기 시간은 *전혀 안 변해요* (둘의 시간 합은 그대로니까). 변하는 건 딱 B 의 대기뿐. A 가 더 길면, 긴 A 가 앞에 있어서 B 가 그만큼 더 기다리고 있던 것 → A·B 를 바꿔 *짧은 걸 앞으로* 보내면 B 가 덜 기다림 = 전체 합이 줄어요. 즉 '긴 게 짧은 것 앞에' 있으면 언제든 바꿔서 이득. 더 못 바꿀 때 = 완전히 짧은 순. 그래서 짧은 일 먼저가 최적.",
+                  "Take just two *adjacent* people A, B (A in front). Swapping them leaves everyone behind them *completely unchanged* (their combined time is the same). Only B's wait changes. If A is the longer one, B was waiting that extra amount for A — swap so the *shorter goes first* and B waits less = total drops. So whenever a longer one sits ahead of a shorter one, swapping helps. When no such pair is left = fully sorted shortest-first. Hence shortest first is optimal.",
+                )}
+              </p>
+            </div>
           </div>
         )}
 
@@ -968,6 +986,10 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               <p className="text-[11px] text-purple-700 leading-relaxed">
                 🗺️ {t("다음 토픽: BFS/DFS, DP, 이분탐색. ", "Next topics: BFS/DFS, DP, binary search. ")}
                 <Link href="/algo" className="font-bold underline hover:text-purple-900">{t("알고리즘 지도 →", "Algo map →")}</Link>
+              </p>
+              <p className="text-[11px] text-emerald-700 leading-relaxed">
+                🏆 {t("바로 실전? 그리디 단골 문제로 검증해봐요. ", "Ready? Test it on real contest problems. ")}
+                <Link href="/quest" className="font-bold underline hover:text-emerald-900">{t("Quest 도전 →", "Quest →")}</Link>
               </p>
             </div>
           </div>
