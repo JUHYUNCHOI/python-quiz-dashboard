@@ -41,52 +41,47 @@ const DIFFICULTY_COLOR: Record<string, string> = {
 
 // ── 🎯 KL 필터 데이터 — kl:true 태그 문제 (별도 페이지 X, /practice 안 한 모드) ──
 const _KL_DIFF_ORDER = ["쉬움", "보통", "어려움"]
-const KL_GROUPS = ALL_CLUSTERS
-  .map(c => ({
-    id: c.id,
-    title: c.title,
-    emoji: c.emoji,
-    problems: c.problems
-      .filter(p => p.kl)
-      .sort((a, b) => _KL_DIFF_ORDER.indexOf(a.difficulty) - _KL_DIFF_ORDER.indexOf(b.difficulty)),
-  }))
-  .filter(g => g.problems.length > 0)
-const KL_TOTAL = KL_GROUPS.reduce((s, g) => s + g.problems.length, 0)
+// 토픽 그룹 X — 쉬움→어려움 한 줄(사다리). "어느 토픽 풀까" 고르는 단계 제거. 토픽은 작은 태그로만.
+const KL_FLAT = ALL_CLUSTERS
+  .flatMap(c => c.problems
+    .filter(p => p.kl)
+    .map(p => ({ ...p, _clusterId: c.id, _topic: c.title.replace(/ ?문제 ?풀이$/, "").replace(/ ?문제$/, "") })))
+  .sort((a, b) => _KL_DIFF_ORDER.indexOf(a.difficulty) - _KL_DIFF_ORDER.indexOf(b.difficulty))
+const KL_TOTAL = KL_FLAT.length
 
 // KL 필터 뷰 — 연습 안에서 KL 태그 문제만. 각 문제는 /practice 딥링크(페이지 이동 없이 runner).
 function KLView({ solvedSet }: { solvedSet: Set<string> }) {
   const { t } = useLanguage()
   return (
-    <div className="flex flex-col gap-4">
-      <p className="text-xs text-gray-500">
-        {t("KL 대비 — 배운 걸로 푸는 문제. 누르면 바로 풀고 자동 채점돼요.", "KL prep — solve with what you learned. Auto-graded in place.")}
+    <div className="flex flex-col gap-1.5">
+      <p className="text-xs text-gray-500 mb-1">
+        {t("위에서부터 한 문제씩 — 쉬움→어려움 순서예요. 누르면 바로 풀고 자동 채점돼요.", "Top to bottom, easy→hard. Tap to solve in place, auto-graded.")}
       </p>
-      {KL_GROUPS.map(g => (
-        <div key={g.id}>
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-base">{g.emoji}</span>
-            <h3 className="text-sm font-bold text-gray-700">{g.title}</h3>
-            <span className="text-xs text-gray-400">{g.problems.length}</span>
+      {KL_FLAT.map((p, i) => {
+        const solved = solvedSet.has(p.id)
+        const prev = KL_FLAT[i - 1]
+        const showDivider = !prev || prev.difficulty !== p.difficulty
+        return (
+          <div key={p.id}>
+            {showDivider && (
+              <p className="mt-3 mb-1 text-[11px] font-bold text-gray-400">
+                {p.difficulty === "쉬움" ? t("쉬움부터 — 손풀기", "Easy — warm-up")
+                  : p.difficulty === "보통" ? t("보통 — 한 번 생각", "Medium — think once")
+                  : t("어려움 — 기법 입문", "Hard — techniques")}
+              </p>
+            )}
+            <Link
+              href={`/practice?cluster=${p._clusterId}&problem=${p.id}&from=kl`}
+              className={"flex items-center gap-2.5 rounded-lg border px-3 py-2 transition-all hover:border-amber-400 hover:shadow-sm " + (solved ? "border-green-200 bg-green-50/60" : "border-gray-200 bg-white")}
+            >
+              <span className="w-6 h-6 shrink-0 rounded-full bg-gray-900 text-white text-xs font-black flex items-center justify-center">{i + 1}</span>
+              <span className="text-sm font-semibold text-gray-900 flex-1 truncate">{p.title}</span>
+              <span className="text-[10px] text-gray-400 shrink-0">{p._topic}</span>
+              {solved ? <span className="text-green-500 shrink-0 text-xs">✓</span> : <span className="text-gray-300 shrink-0" aria-hidden>→</span>}
+            </Link>
           </div>
-          <div className="flex flex-col gap-1.5">
-            {g.problems.map((p, i) => {
-              const solved = solvedSet.has(p.id)
-              return (
-                <Link
-                  key={p.id}
-                  href={`/practice?cluster=${g.id}&problem=${p.id}&from=kl`}
-                  className={"flex items-center gap-2 rounded-lg border px-3 py-2 transition-all hover:border-amber-400 hover:shadow-sm " + (solved ? "border-green-200 bg-green-50/60" : "border-gray-200 bg-white")}
-                >
-                  <span className="w-5 h-5 shrink-0 rounded-full bg-gray-900 text-white text-[10px] font-black flex items-center justify-center">{i + 1}</span>
-                  <span className="text-sm font-semibold text-gray-900 flex-1 truncate">{p.title}</span>
-                  <span className={"text-[10px] px-1.5 py-0.5 rounded font-bold shrink-0 " + (DIFFICULTY_COLOR[p.difficulty] ?? "")}>{p.difficulty}</span>
-                  {solved ? <span className="text-green-500 shrink-0 text-xs">✓</span> : <span className="text-gray-300 shrink-0" aria-hidden>→</span>}
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
