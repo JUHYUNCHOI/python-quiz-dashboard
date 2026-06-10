@@ -172,7 +172,10 @@ const TIERS: { d: "쉬움" | "보통" | "어려움"; dot: string; ko: string; en
 function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet: Set<string>; starredSet: Set<string> }) {
   const { t, lang: locale } = useLanguage()
   const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
-  const all = clusters.flatMap(c => c.problems.map(p => ({ p, cluster: c.id, topic: clusterName(c.id) })))
+  // 수업 연습 + KL(🎯, 양언어) 을 한 사다리에 — KL도 난이도 태그가 있으니 같이 녹임
+  const lessonAll = clusters.flatMap(c => c.problems.map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: false })))
+  const klAll = ALL_CLUSTERS.flatMap(c => c.problems.filter(p => p.kl).map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: true })))
+  const all = [...lessonAll, ...klAll]
 
   // 추천 다음 1개 — 적응형(내 수준에 맞는 난이도, 토픽 무관)
   const pool = all.map(x => ({ id: x.p.id, cluster: x.cluster, difficulty: x.p.difficulty }))
@@ -190,7 +193,7 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
         >
           <p className="text-[11px] font-bold text-violet-500 mb-0.5">👉 {t(`지금 추천 — ${rec.reason}`, `Recommended — ${rec.reasonEn}`)}</p>
           <p className="text-lg font-black text-gray-900 leading-tight">{localizeProblem(recX.p, locale).title}</p>
-          <p className="text-xs text-gray-500 mt-0.5">{recX.topic} · {recX.p.difficulty} <span className="ml-1 text-violet-400 font-bold">→</span></p>
+          <p className="text-xs text-gray-500 mt-0.5">{recX.kl ? "🎯 " : ""}{recX.topic} · {recX.p.difficulty} <span className="ml-1 text-violet-400 font-bold">→</span></p>
         </Link>
       ) : (
         <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-4 text-center text-sm font-bold text-emerald-700">
@@ -222,7 +225,7 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
                     className={"flex items-center gap-2 rounded-lg border px-3 py-2 transition-all hover:border-violet-400 " + (solved ? "border-green-200 bg-green-50/60" : "border-gray-200 bg-white")}
                   >
                     <span className="text-sm font-semibold text-gray-900 flex-1 truncate">{localizeProblem(x.p, locale).title}</span>
-                    <span className="text-[10px] text-gray-400 shrink-0">{x.topic}</span>
+                    <span className="text-[10px] text-gray-400 shrink-0">{x.kl ? "🎯 " : ""}{x.topic}</span>
                     {solved ? <span className="text-green-500 shrink-0 text-xs">✓</span> : <span className="text-gray-300 shrink-0" aria-hidden>→</span>}
                   </Link>
                 )
@@ -235,11 +238,7 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
         )
       })}
 
-      {/* 🎯 KL 대비 + 📊 내 실력 (접이식) */}
-      <details className="rounded-xl border border-amber-200 bg-amber-50/50 px-3 py-2">
-        <summary className="text-sm font-bold text-amber-800 cursor-pointer">🎯 {t(`KL 대비 문제 (${KL_TOTAL})`, `KL prep (${KL_TOTAL})`)}</summary>
-        <div className="mt-3"><KLView solvedSet={solvedSet} starredSet={starredSet} compact /></div>
-      </details>
+      {/* 📊 내 실력 (접이식) — KL(🎯)은 위 난이도 사다리에 녹아 있음 */}
       {summary.length > 0 && (
         <details className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2">
           <summary className="text-xs font-bold text-gray-600 cursor-pointer">📊 {t("내 실력 (개념별)", "My skill (by concept)")}</summary>
