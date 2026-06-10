@@ -19,6 +19,7 @@ export const prefixSumContestCluster: PracticeCluster = {
       cluster: "algo-prefixsum-contest",
       unlockAfter: "algo-prefixsum",
       difficulty: "쉬움",
+      kl: true,
       title: "누적합 만들기",
       description: `N개의 정수가 주어진다. **앞에서부터 더한 합**(누적합)을 차례대로 출력하라.
 
@@ -93,6 +94,7 @@ print(*out)`,
       cluster: "algo-prefixsum-contest",
       unlockAfter: "algo-prefixsum",
       difficulty: "쉬움",
+      kl: true,
       title: "한 구간의 합",
       description: `N개의 정수가 주어지고, 그 다음 줄에 두 정수 \`i j\` (1-based, i ≤ j) 가 주어진다. **i번째부터 j번째까지의 합**을 출력하라.
 
@@ -172,6 +174,7 @@ print(pre[j] - pre[i - 1])`,
       cluster: "algo-prefixsum-contest",
       unlockAfter: "algo-prefixsum",
       difficulty: "쉬움",
+      kl: true,
       title: "여러 구간의 합",
       description: `N개의 정수가 주어지고, M개의 질의가 이어진다. 각 질의 \`i j\` (1-based) 마다 i번째부터 j번째까지의 합을 한 줄씩 출력하라.
 
@@ -270,6 +273,7 @@ print('\\n'.join(out))`,
       cluster: "algo-prefixsum-contest",
       unlockAfter: "algo-prefixsum",
       difficulty: "보통",
+      kl: true,
       title: "구간 합 빠르게",
       description: `N개의 정수가 주어지고, M개의 질의가 이어진다. 각 질의는 두 정수 \`i j\` (1-based, i ≤ j) 로 주어지며, **i번째부터 j번째까지의 원소 합** 을 답해야 한다.
 
@@ -396,6 +400,7 @@ Source: BOJ 11659 paraphrased`,
       cluster: "algo-prefixsum-contest",
       unlockAfter: "algo-prefixsum",
       difficulty: "보통",
+      kl: true,
       title: "연속 K개의 최대 합",
       description: `N일간 매일의 기온 변화 \`a[1..N]\` 이 주어진다. 연속한 **K일** 동안 기온 변화의 합이 **가장 큰 값** 을 출력하라.
 
@@ -515,6 +520,7 @@ Source: BOJ 2559 paraphrased`,
       cluster: "algo-prefixsum-contest",
       unlockAfter: "algo-prefixsum",
       difficulty: "보통",
+      kl: true,
       title: "알파벳별 등장 횟수 (구간)",
       description: `영문 소문자로 된 문자열 \`s\` 와 Q개의 질의가 주어진다. 각 질의는 \`c l r\` (문자 c, 0-based 인덱스 l과 r, l ≤ r) 형식이며, **s[l..r] 구간 안에 문자 c 가 몇 번 등장하는지** 답해야 한다.
 
@@ -649,6 +655,7 @@ Source: BOJ 16139 paraphrased`,
       cluster: "algo-prefixsum-contest",
       unlockAfter: "algo-prefixsum",
       difficulty: "보통",
+      kl: true,
       title: "이번 달 매출 — 누적 vs 구간",
       description: `N일간 매출 \`a[1..N]\` 이 주어진다. Q개의 질의를 처리하라.
 
@@ -787,6 +794,7 @@ Source: original (mixed-type 1D prefix queries)`,
       cluster: "algo-prefixsum-contest",
       unlockAfter: "algo-prefixsum",
       difficulty: "보통",
+      kl: true,
       title: "누적합이 0 이 되는 가장 빠른 위치",
       description: `N개의 정수 \`a[1..N]\` 이 주어진다. **첫 k 개의 합이 0** 이 되는 **가장 작은 k (1 ≤ k ≤ N)** 를 출력하라. 그런 k 가 없다면 \`-1\` 출력.
 
@@ -881,6 +889,7 @@ Source: original (first-occurrence prefix)`,
       cluster: "algo-prefixsum-contest",
       unlockAfter: "algo-prefixsum",
       difficulty: "보통",
+      kl: true,
       title: "균형점 찾기 (양쪽 합 같음)",
       description: `N개의 정수 \`a[1..N]\` 이 주어진다. \`a[1..i] 의 합 == a[i+1..N] 의 합\` 을 만족하는 **가장 작은 i (1 ≤ i < N)** 를 찾아 출력하라. 그런 i 가 없으면 \`-1\` 출력.
 

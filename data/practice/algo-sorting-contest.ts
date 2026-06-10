@@ -19,6 +19,7 @@ export const sortingContestCluster: PracticeCluster = {
       cluster: "algo-sorting-contest",
       unlockAfter: "algo-sorting",
       difficulty: "쉬움",
+      kl: true,
       title: "오름차순 정렬",
       description: `N개의 정수를 **오름차순(작은 것부터)** 으로 정렬해 공백으로 구분해 출력하라.
 
@@ -79,6 +80,7 @@ print(*sorted(a))`,
       cluster: "algo-sorting-contest",
       unlockAfter: "algo-sorting",
       difficulty: "쉬움",
+      kl: true,
       title: "내림차순 정렬",
       description: `N개의 정수를 **내림차순(큰 것부터)** 으로 정렬해 출력하라.
 
@@ -138,6 +140,7 @@ print(*sorted(a, reverse=True))`,
       cluster: "algo-sorting-contest",
       unlockAfter: "algo-sorting",
       difficulty: "쉬움",
+      kl: true,
       title: "나이순 정렬 (같으면 가입 순)",
       description: `N명의 회원이 \`나이 이름\` 형식으로 주어진다. **나이가 적은 순**으로 정렬하되, **나이가 같으면 먼저 입력된 순서(가입 순)** 를 유지해 출력하라.
 
@@ -207,6 +210,7 @@ print('\\n'.join(f"{age} {name}" for age, name in v))`,
       cluster: "algo-sorting-contest",
       unlockAfter: "algo-sorting",
       difficulty: "보통",
+      kl: true,
       title: "K번째 작은 수",
       description: `N개의 정수와 K가 주어진다. 정렬했을 때 K번째(1-based)로 작은 값을 출력하라.
 
@@ -291,6 +295,7 @@ Source: LeetCode 215 (Kth Largest Element) paraphrased — flipped to smallest`,
       cluster: "algo-sorting-contest",
       unlockAfter: "algo-sorting",
       difficulty: "보통",
+      kl: true,
       title: "단어 정렬",
       description: `N개의 단어를 다음 규칙으로 정렬해 출력하라.
 
@@ -408,6 +413,7 @@ Source: BOJ 1181 paraphrased`,
       cluster: "algo-sorting-contest",
       unlockAfter: "algo-sorting",
       difficulty: "보통",
+      kl: true,
       title: "두 배열의 공통 원소",
       description: `두 배열 A (크기 N), B (크기 M) 가 주어진다. A 와 B 양쪽에 모두 등장하는 **서로 다른 값** 의 개수를 출력하라.
 
@@ -507,6 +513,7 @@ Source: original (two-pointer practice)`,
       cluster: "algo-sorting-contest",
       unlockAfter: "algo-sorting",
       difficulty: "보통",
+      kl: true,
       title: "양극 K개 제외한 합",
       description: `N개의 정수와 K가 주어진다. 정렬한 뒤 **가장 작은 K개와 가장 큰 K개를 제외**하고 나머지 원소들의 합을 출력하라.
 
@@ -1063,6 +1070,7 @@ Source: original (Huffman / BOJ 1715 paraphrased)`,
       cluster: "algo-sorting-contest",
       unlockAfter: "algo-sorting",
       difficulty: "보통",
+      kl: true,
       title: "순위 매기기 (동점은 같은 순위, 다음 순위 건너뜀)",
       description: `N명의 학생 점수가 입력 순서대로 주어진다. 각 학생의 **순위** 를 입력 순서대로 한 줄에 공백으로 구분해 출력하라.
 
@@ -1317,6 +1325,7 @@ Source: LeetCode 253 (Meeting Rooms II) paraphrased`,
       cluster: "algo-sorting-contest",
       unlockAfter: "algo-sorting",
       difficulty: "보통",
+      kl: true,
       title: "중복 제거 후 K번째 작은 값",
       description: `N개의 정수와 K가 주어진다. **중복을 제거한 후** 오름차순으로 정렬했을 때 K번째(1-based) 값을 출력하라.
 
