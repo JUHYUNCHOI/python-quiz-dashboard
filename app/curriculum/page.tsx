@@ -1584,9 +1584,50 @@ export default function CurriculumPage() {
                           // cpp-26 이 첫 optional 심화 레슨이라 그 직전에 노출
                           const showMainTrackMilestone = isCpp && lesson.id === "cpp-26" && part.id === "cpp-part3"
                           const cpp16Done = completedLessons.has("cpp-16") && completedLessons.has("cpp-24")
+                          // Python 핵심 트랙(Part 1~8) 마무리 → Part 9(종합 프로젝트) 직전(레슨 49)에 노출
+                          const showPyMainTrackMilestone = !isCpp && !isPseudo && lesson.id === 49 && part.id === "part9"
+                          const pyCoreDone = Array.from({ length: 48 }, (_, i) => i + 1).every(n => completedLessons.has(n) || completedLessons.has(String(n)))
 
                           return (
                             <Fragment key={lesson.id}>
+                              {showPyMainTrackMilestone && (
+                                <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-emerald-50 via-sky-50 to-indigo-50 p-4 sm:p-5 shadow-md">
+                                  <div className="flex items-start gap-3">
+                                    <div className="text-3xl shrink-0">{pyCoreDone ? "🎉" : "🐍"}</div>
+                                    <div className="flex-1 min-w-0">
+                                      <h3 className="font-black text-base sm:text-lg text-gray-900 mb-1">
+                                        {pyCoreDone
+                                          ? t("Python 핵심 완성! 이제 실력을 쌓아요", "Python core done! Time to build skill")
+                                          : t("여기까지가 Python 핵심 트랙이에요", "This is the Python core track")}
+                                      </h3>
+                                      <p className="text-xs sm:text-sm text-gray-700 leading-relaxed mb-3">
+                                        {t(
+                                          "Part 1~8로 Python 언어는 다 익혔어요. 이제 문제를 많이 풀어 실력을 쌓을 차례예요 — 도구는 모았지만 바로 풀 수 있는 건 아니에요. (아래 종합 프로젝트도 좋은 연습이에요.)",
+                                          "Parts 1–8 cover the whole language. Now it's time to solve lots of problems to build skill — having the tools isn't the same as being able to solve yet. (The final projects below are great practice too.)"
+                                        )}
+                                      </p>
+                                      <Link
+                                        href="/practice"
+                                        className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-600 hover:to-indigo-600 text-white text-sm sm:text-base font-black shadow-md transition-all"
+                                      >
+                                        ⭐ {t("다음 → 문제 많이 풀기", "Next → Solve lots of problems")}
+                                      </Link>
+                                      <p className="text-[11px] text-gray-500 mt-2">
+                                        {t(
+                                          "수업별 연습 + 🎯 KL 대비 문제로 실력 → 알고리즘 기초(스택/큐까지) → 대회 도전.",
+                                          "Lesson practice + 🎯 KL prep → basic algorithms (through stack/queue) → contests."
+                                        )}
+                                      </p>
+                                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-[11px] text-gray-400">
+                                        <span>{t("나중에:", "Later:")}</span>
+                                        <Link href="/course/kl" className="hover:text-gray-600 underline-offset-2 hover:underline">🎯 {t("KL 대비", "KL Prep")}</Link>
+                                        <Link href="/algo" className="hover:text-gray-600 underline-offset-2 hover:underline">🧠 Algorithm Lab</Link>
+                                        <Link href="/quest" className="hover:text-gray-600 underline-offset-2 hover:underline">🏆 {t("실전", "Contest")}</Link>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
                               {showMainTrackMilestone && (
                                 <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-emerald-50 via-amber-50 to-orange-50 p-4 sm:p-5 shadow-md">
                                   <div className="flex items-start gap-3">
