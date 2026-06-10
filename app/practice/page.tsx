@@ -171,6 +171,8 @@ const TIERS: { d: "쉬움" | "보통" | "어려움"; dot: string; ko: string; en
 
 function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet: Set<string>; starredSet: Set<string> }) {
   const { t, lang: locale } = useLanguage()
+  const [lastId, setLastId] = useState<string | null>(null)
+  useEffect(() => { try { setLastId(localStorage.getItem("practice-last-problem")) } catch {} }, [])
   const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
   // 수업 연습 + KL(🎯, 양언어) 을 한 사다리에 — KL도 난이도 태그가 있으니 같이 녹임
   const lessonAll = clusters.flatMap(c => c.problems.map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: false })))
@@ -181,6 +183,8 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
   const pool = all.map(x => ({ id: x.p.id, cluster: x.cluster, difficulty: x.p.difficulty }))
   const rec = getAdaptiveNext({ pool, solvedSet, starredSet })
   const recX = rec ? all.find(x => x.p.id === rec.problemId) : null
+  const lastX = lastId ? all.find(x => x.p.id === lastId) : null
+  const totalSolved = all.filter(x => solvedSet.has(x.p.id)).length
   const summary = summarizeConcepts(pool, solvedSet, starredSet).filter(c => c.started)
 
   return (
@@ -199,6 +203,24 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
         <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-4 text-center text-sm font-bold text-emerald-700">
           {t("이 언어 연습을 다 풀었어요! 🎉 🧩 알고리즘으로 가요.", "All practice cleared! 🎉 On to algorithms.")}
         </div>
+      )}
+
+      {/* 📍 마지막에 풀던 곳 — 이어가기 쉽게 */}
+      {lastX && (!recX || lastX.p.id !== recX.p.id) && (
+        <Link
+          href={`/practice?cluster=${lastX.cluster}&problem=${lastX.p.id}&from=practice`}
+          className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 flex items-center gap-2 hover:border-violet-300 transition-all"
+        >
+          <span className="text-base shrink-0">📍</span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-bold text-gray-400">{t("마지막에 푼 문제", "Last solved")}</p>
+            <p className="text-sm font-semibold text-gray-800 truncate">{localizeProblem(lastX.p, locale).title}{solvedSet.has(lastX.p.id) ? " ✓" : ""}</p>
+          </div>
+          <span className="text-gray-300 shrink-0" aria-hidden>→</span>
+        </Link>
+      )}
+      {totalSolved > 0 && (
+        <p className="text-xs text-gray-400 text-center -mt-1">✓ {t(`지금까지 ${totalSolved}문제 풀었어요`, `${totalSolved} solved so far`)}</p>
       )}
 
       {/* 난이도 단계 사다리 — 쉬움 펼침, 보통/어려움 접힘. 각 단계 안은 토픽 섞임 */}
@@ -704,6 +726,7 @@ function ProblemDetail({
   const handleSuccess = async (starred: boolean) => {
     await onMarkSolved(problem.id)
     if (starred) await onMarkStarred(problem.id)
+    try { localStorage.setItem("practice-last-problem", problem.id) } catch {} // 마지막에 푼 문제 기록
   }
 
   // ── MCQ: 단일 컬럼 레이아웃 ──
