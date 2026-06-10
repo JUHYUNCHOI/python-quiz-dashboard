@@ -321,6 +321,24 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 <li>3. <b>{t("Combine — 머지!", "Combine — merge!")}</b>: {t("두 정렬된 배열을 합쳐 하나의 정렬된 배열로", "merge two sorted halves into one sorted array")}</li>
               </ol>
             </div>
+            <div className="bg-indigo-50 rounded-lg p-3 border-2 border-indigo-200 mb-3">
+              <p className="text-xs font-bold text-indigo-800 mb-2">📐 {t("왜 O(N log N)? — 두 조각으로 나눠 보기", "Why O(N log N)? — break it into two pieces")}</p>
+              <ul className="text-xs text-gray-800 space-y-1.5 leading-relaxed">
+                <li>
+                  ① {t("반씩 나누면 바닥(1 개짜리)까지 ", "Halving until singletons takes ")}
+                  <b className="text-indigo-700">{t("log N 단계", "log N levels")}</b>
+                  {t(" — N → N/2 → N/4 → … → 1.", " — N → N/2 → N/4 → … → 1.")}
+                </li>
+                <li>
+                  ② {t("각 단계에서 merge 가 전체 원소를 ", "At each level, merge sweeps every element ")}
+                  <b className="text-indigo-700">{t("한 번씩 훑음", "exactly once")}</b>
+                  {t(" → 단계마다 ", " → ")}<b className="text-indigo-700">N</b>{t(" 작업.", " work per level.")}
+                </li>
+              </ul>
+              <p className="text-xs text-center font-mono text-indigo-900 mt-2 pt-2 border-t border-indigo-200">
+                {t("log N 단계 × 단계당 N = ", "log N levels × N per level = ")}<b>N log N</b>
+              </p>
+            </div>
             <p className="text-sm font-bold text-cyan-700 text-center">
               {t(
                 "시간: O(N log N) — 어떤 입력이든 *항상*. 이게 핵심 장점.",

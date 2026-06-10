@@ -206,10 +206,10 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
 ▼              1
 B ─── 1 ───────┘
 
-BFS 의 답: A→C (직접) = 거리 1 (간선 1 개)
-진짜 답:   A→B→C    = 10 ... 아니 잠깐 A→B→C 가
-                       1+1 = 2 이고 직접은 10
-→ BFS 는 간선 *수* 만 보고 가중치 무시!`}
+BFS 의 답: A→C (직접) = 간선 1 개 → "가깝다" 판정
+진짜 답:   A→B→C     = 1 + 1 = 2  (직접 A→C 는 10)
+→ A→B→C 가 더 짧은데, BFS 는 간선 *수* 만 보고
+  가중치를 무시해 더 비싼 직접 간선을 골라 버림!`}
               </pre>
             </div>
             <p className="text-sm font-bold text-rose-700 text-center">
@@ -311,12 +311,34 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 )}
               </p>
             </div>
+            <div className="bg-emerald-50 rounded-lg p-3 border border-emerald-200 mb-3">
+              <p className="text-xs font-bold text-emerald-800 mb-2">🤔 {t("왜 '가장 가까운 정점을 확정' 해도 안전할까?", "Why is 'finalize the closest vertex' safe?")}</p>
+              <p className="text-xs text-gray-700 leading-relaxed mb-2">
+                {t(
+                  "모든 간선이 0 이상이라, 지금 가장 가까운 미확정 정점은 *더 짧아질 길이 없어요*. 다른 경로로 거기에 가려면 이미 더 먼 정점을 한 번 거쳐야 하는데, 거기서 0 이상인 간선을 더하면 거리가 줄어들 수가 없거든요.",
+                  "Since every edge is ≥ 0, the closest unfinalized vertex *can't get any shorter*. Any other route would first pass through a farther vertex, then add a non-negative edge — so it can never beat the current distance.",
+                )}
+              </p>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t(
+                  "→ 그래서 지금 거리로 *확정* 해도 안전. 음수 간선이 있으면 '더 먼 정점을 거치면 거리가 줄어드는' 일이 생겨 — 이 보장이 깨져요.",
+                  "→ So finalizing it now is safe. A negative edge would let a detour through a farther vertex shrink the distance — breaking this guarantee.",
+                )}
+              </p>
+            </div>
             <div className="bg-white/80 rounded-lg p-3 border border-amber-200 mb-3">
               <p className="text-xs font-bold text-amber-800 mb-2">🛠️ {t("필요한 도구", "Tools needed")}</p>
               <ul className="text-xs text-gray-700 leading-relaxed space-y-1">
                 <li>• <code className="bg-amber-100 px-1 rounded">dist[]</code> — {t("각 정점까지의 현재 최단 거리 (시작은 INF)", "current best distance per vertex (init INF)")}</li>
                 <li>• <code className="bg-amber-100 px-1 rounded">min-heap (PQ)</code> — {t("가장 가까운 정점을 빨리 꺼내기", "pull closest vertex fast")}</li>
               </ul>
+              <p className="text-[11px] text-gray-600 leading-relaxed mt-2 pt-2 border-t border-amber-200">
+                {t("우선순위 큐 (min-heap) 가 처음이면? ", "New to the priority queue (min-heap)? ")}
+                <Link href="/algo/priorityqueue" className="font-bold text-amber-700 underline decoration-dotted">
+                  {t("우선순위 큐 토픽", "Priority Queue topic")}
+                </Link>
+                {t(" 먼저 보고 와요 — '가장 작은 걸 O(log n) 에 꺼낸다' 만 알면 OK.", " first — just knowing 'pop the smallest in O(log n)' is enough.")}
+              </p>
             </div>
             <div className="bg-rose-50 rounded-lg p-3 border border-rose-200">
               <p className="text-xs text-rose-800 leading-relaxed">

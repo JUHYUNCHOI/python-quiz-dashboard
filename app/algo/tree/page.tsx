@@ -281,7 +281,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
 // ── Chapter 2: 트리 표현 ─────────────────────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
+  const totalSteps = 6
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
 
@@ -337,6 +337,56 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
         )}
 
         {step === 1 && (
+          <div className="bg-gradient-to-br from-violet-50 to-fuchsia-50 rounded-2xl p-6 border-2 border-violet-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🌉</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("표현은 두 가지 — 헷갈리지 말기", "Two representations — don't mix them up")}
+            </h3>
+            <p className="text-sm text-gray-800 leading-relaxed mb-3">
+              {t(
+                "트리를 코드로 담는 방법은 크게 두 갈래예요. 문제마다 어느 쪽인지 먼저 확인하세요.",
+                "There are two main ways to store a tree in code. Always check which one a problem uses first.",
+              )}
+            </p>
+            <div className="space-y-3 mb-3">
+              <div className="bg-white rounded-lg p-3 border-2 border-blue-200">
+                <p className="text-sm font-black text-blue-800 mb-1">
+                  🌳 ① {t("일반 트리 — children[] 인접 리스트", "General tree — children[] adjacency list")}
+                </p>
+                <p className="text-xs text-gray-700 leading-relaxed mb-1">
+                  {t(
+                    "자식 수 제한 없음. adj[u] = u 에 연결된 노드들. (앞 슬라이드에서 본 것)",
+                    "Any number of children. adj[u] = nodes linked to u. (the slide you just saw)",
+                  )}
+                </p>
+                <code className="text-[11px] text-blue-900 bg-blue-50 px-1.5 py-0.5 rounded">adj[1] = [2, 3], adj[2] = [1, 4, 5]</code>
+              </div>
+              <div className="bg-white rounded-lg p-3 border-2 border-purple-200">
+                <p className="text-sm font-black text-purple-800 mb-1">
+                  ⚖️ ② {t("이진 트리 — left[] / right[]", "Binary tree — left[] / right[]")}
+                </p>
+                <p className="text-xs text-gray-700 leading-relaxed mb-1">
+                  {t(
+                    "자식이 최대 2 명. left[u], right[u] 에 왼/오 자식 번호. 없으면 0.",
+                    "At most 2 children. left[u], right[u] hold left/right child id. 0 if none.",
+                  )}
+                </p>
+                <code className="text-[11px] text-purple-900 bg-purple-50 px-1.5 py-0.5 rounded">left[1] = 2, right[1] = 3</code>
+              </div>
+            </div>
+            <div className="bg-amber-50 rounded-lg p-3 border-2 border-amber-300">
+              <p className="text-xs text-amber-900 leading-relaxed">
+                👉 <b>{t("이 토픽 순회 예제는 이진 트리(left/right) 기준이에요.", "This topic's traversal examples use the binary tree (left/right) form.")}</b>{" "}
+                {t(
+                  "챕터 3 순회 코드의 preorder/inorder/postorder 는 left[u], right[u] 를 따라가요. 인접 리스트는 입력 읽기·트리 DP(챕터 4)에서 다시 등장해요.",
+                  "Chapter 3's preorder/inorder/postorder follow left[u], right[u]. The adjacency list reappears for reading input and tree DP (Ch 4).",
+                )}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {step === 2 && (
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
             <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("5 노드 트리 — 클릭해 보기", "5-node tree — click around")}</p>
             <p className="text-xs text-gray-600 text-center mb-3">
@@ -395,7 +445,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
           </div>
         )}
 
-        {step === 2 && (
+        {step === 3 && (
           <div className="space-y-3">
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
               <p className="text-sm font-black text-blue-900">📝 {t("코드 — 트리 입력 + 인접 리스트", "Code — read tree + adjacency list")}</p>
@@ -449,7 +499,61 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
+        {step === 4 && (
+          <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-6 border-2 border-teal-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">📏</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("깊이(depth) vs 높이(height)", "Depth vs Height")}
+            </h3>
+            <div className="space-y-3 mb-3">
+              <div className="bg-white rounded-lg p-3 border-2 border-teal-200">
+                <p className="text-sm font-black text-teal-800 mb-1">
+                  ⬇️ {t("깊이 (depth)", "depth")}
+                </p>
+                <p className="text-xs text-gray-700 leading-relaxed">
+                  {t(
+                    "루트에서 그 노드까지의 간선 수. 루트 = 0, 한 칸 내려갈 때마다 +1. '위에서 얼마나 내려왔나'.",
+                    "Number of edges from the root down to that node. Root = 0, +1 per step down. 'How far down from the top'.",
+                  )}
+                </p>
+              </div>
+              <div className="bg-white rounded-lg p-3 border-2 border-cyan-200">
+                <p className="text-sm font-black text-cyan-800 mb-1">
+                  ⬆️ {t("높이 (height)", "height")}
+                </p>
+                <p className="text-xs text-gray-700 leading-relaxed">
+                  {t(
+                    "그 노드에서 가장 깊은 잎(leaf)까지의 간선 수. 리프 = 0. '아래로 얼마나 더 갈 수 있나'.",
+                    "Number of edges from that node down to its deepest leaf. Leaf = 0. 'How far down it can still go'.",
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className="bg-white/70 rounded-lg p-3 border border-teal-200 mb-3">
+              <p className="text-xs font-bold text-teal-800 mb-2">📌 {t("높이는 재귀로 (postorder!)", "Height via recursion (postorder!)")}</p>
+              <pre className="text-xs text-gray-800 font-mono leading-relaxed">
+{t(
+`height(node):
+    리프면 → 0
+    아니면 → 1 + max(자식들의 height)`,
+`height(node):
+    if leaf  → 0
+    else     → 1 + max(height of each child)`,
+)}
+              </pre>
+            </div>
+            <div className="bg-amber-50 rounded-lg p-3 border border-amber-200">
+              <p className="text-xs text-amber-800 leading-relaxed">
+                💡 {t(
+                  "높이도 '자식부터 → 부모' 라 챕터 4 트리 DP 랑 똑같은 모양이에요. max(자식 height) + 1.",
+                  "Height is also 'children → parent', the same shape as Ch 4 tree DP. max(child height) + 1.",
+                )}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {step === 5 && (
           <MiniQuiz
             question={t(
               "N = 5 인 트리에 간선은 몇 개?",
@@ -969,36 +1073,16 @@ int main() {
 // ── Chapter 5: 정리 + 실전 ───────────────────────────────────────
 function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 2
+  const totalSteps = 1
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
         {step === 0 && (
-          <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-6 border-2 border-amber-300 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">👏</p>
-            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("트리 마스터!", "Tree Master!")}
-            </h3>
-            <p className="text-sm text-gray-800 leading-relaxed text-center mb-3">
-              {t(
-                "트리는 재귀의 가장 자연스러운 무대예요. 잘 했어요! 🎉",
-                "Trees are recursion's natural stage. Nice work! 🎉",
-              )}
-            </p>
-            <div className="bg-white/80 rounded-lg p-3 border border-amber-200">
-              <p className="text-sm text-gray-800 font-bold text-center">
-                {t(
-                  "이제 트리 DP, LCA, 트리 지름 같은 어려운 문제도 같은 패턴으로 풀 수 있어요.",
-                  "Now you can tackle tree DP, LCA, tree diameter — all with the same pattern.",
-                )}
-              </p>
-            </div>
-          </div>
-        )}
-
-        {step === 1 && (
           <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-5 border-2 border-amber-300">
+            <p className="text-sm font-bold text-emerald-700 text-center mb-3">
+              {t("트리는 재귀의 가장 자연스러운 무대예요. 잘 했어요! 🎉", "Trees are recursion's natural stage. Nice work! 🎉")}
+            </p>
             <h3 className="text-base font-black text-amber-900 mb-3">📌 {t("핵심 정리", "Key Takeaways")}</h3>
             <ol className="space-y-2 text-sm text-gray-800">
               <li><b>1.</b> {t("트리 = 노드 N 개 + 간선 N-1 개 + 사이클 없음.", "Tree = N nodes + N-1 edges + no cycles.")}</li>

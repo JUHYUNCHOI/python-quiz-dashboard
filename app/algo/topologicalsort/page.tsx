@@ -357,6 +357,21 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 </p>
               </div>
             </div>
+            <div className="bg-emerald-50 rounded-lg p-3 border-2 border-emerald-200 mb-3">
+              <p className="text-xs text-emerald-900 leading-relaxed">
+                🔑 <b>{t("왜 맞을까 (불변식)", "Why it's correct (invariant)")}:</b>{" "}
+                {t(
+                  "in-degree 0 = 나를 향한 화살표가 하나도 없음 = 선행이 전부 끝남 = 지금 꺼내도 안전.",
+                  "in-degree 0 = no arrows point at me = all prerequisites are done = safe to take out now.",
+                )}
+              </p>
+            </div>
+            <p className="text-[11px] text-gray-500 text-center mb-2 leading-relaxed">
+              {t(
+                "💬 큐(queue)가 처음이라면: 먼저 넣은 게 먼저 나오는 줄서기 — 선입선출.",
+                "💬 New to queues? First in, first out — like a line of people.",
+              )}
+            </p>
             <p className="text-sm font-bold text-cyan-700 text-center">
               {t("시간: O(V + E) — 모든 노드/에지 한 번씩.", "Time: O(V + E) — each node/edge processed once.")}
             </p>

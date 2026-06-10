@@ -174,36 +174,21 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
           </div>
         )}
 
-        {/* Slide 1 — 짧은 복습 한 화면 */}
+        {/* Slide 1 — 한 문장 복습 (기초 사용법은 이미 안다는 전제) */}
         {step === 1 && (
-          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-5 border-2 border-amber-200">
-            <p className="text-base font-black text-gray-900 mb-3 text-center">
-              ⚡ {t("30초 복습", "30-sec recap")}
+          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border-2 border-amber-200 min-h-[280px] flex flex-col justify-center">
+            <p className="text-5xl text-center mb-4">✅</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("문자열 다루는 법은 알죠?", "You know how to handle strings, right?")}
+            </h3>
+            <p className="text-sm text-gray-800 leading-relaxed text-center mb-2">
+              {t(
+                "인덱스로 글자 꺼내기, 길이 재기, 한 글자씩 순회 — 수업 + 연습에서 이미 손에 익은 것들. 여기선 그걸 다시 가르치지 않아요.",
+                "Pulling a char by index, measuring length, looping char by char — already in your hands from lessons + practice. We won't re-teach those.",
+              )}
             </p>
-            <div className="bg-white border-2 border-amber-200 rounded-lg p-3 mb-3">
-              <p className="text-[11px] text-gray-500 mb-2 text-center">{t('"HELLO" 는 글자 배열', '"HELLO" is a row of chars')}</p>
-              <div className="flex gap-1 justify-center mb-1">
-                {["H", "E", "L", "L", "O"].map((c, i) => (
-                  <div key={i} className="w-10 h-10 rounded-lg bg-amber-100 border-2 border-amber-400 flex items-center justify-center font-mono font-black text-amber-800 text-lg">{c}</div>
-                ))}
-              </div>
-              <div className="flex gap-1 justify-center">
-                {[0, 1, 2, 3, 4].map(i => (
-                  <div key={i} className="w-10 text-center text-[10px] text-gray-500 font-mono">[{i}]</div>
-                ))}
-              </div>
-            </div>
-            <div className="space-y-1.5 text-sm text-gray-800">
-              <p>📍 <b>{t("인덱스 접근", "Index access")}</b> — <code className="bg-amber-50 px-1 rounded text-xs">s[0]</code> = 'H', <code className="bg-amber-50 px-1 rounded text-xs">s[4]</code> = 'O'</p>
-              <p>📏 <b>{t("길이", "Length")}</b> — {codeLang === "py"
-                ? <><code className="bg-amber-50 px-1 rounded text-xs">len(s)</code> {t("→ 5", "→ 5")}</>
-                : <><code className="bg-amber-50 px-1 rounded text-xs">s.size()</code> {t("→ 5", "→ 5")}</>}</p>
-              <p>🔁 <b>{t("순회", "Loop")}</b> — {codeLang === "py"
-                ? <><code className="bg-amber-50 px-1 rounded text-xs">for c in s:</code></>
-                : <><code className="bg-amber-50 px-1 rounded text-xs">for (char c : s)</code></>}</p>
-            </div>
-            <p className="text-xs text-amber-700 text-center mt-3 leading-relaxed italic">
-              {t("→ 익숙하죠? 이게 출발점이에요.", "→ Familiar, right? This is our starting line.")}
+            <p className="text-sm text-orange-700 font-bold text-center mt-3 leading-relaxed">
+              {t("→ 여기선 그 위에서 '알고리즘' 으로 한 걸음 더 →", "→ Here we go one step further — into algorithms →")}
             </p>
           </div>
         )}
@@ -217,16 +202,16 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
             </h3>
             <div className="space-y-2 text-sm text-gray-800 mb-3">
               <div className="bg-white rounded-lg p-3 border border-blue-200">
-                <b className="text-blue-700">📏 {t("인덱싱 / 슬라이싱", "Indexing / slicing")}</b>
-                <p className="text-xs text-gray-600 mt-1">{t("부분문자열 뽑기 — 끝 인덱스 vs 길이 헷갈리기 쉬워요", "Pulling out a substring — end-index vs length is easy to mix up")}</p>
+                <b className="text-blue-700">🪞 {t("회문 — 두 포인터", "Palindrome — two pointers")}</b>
+                <p className="text-xs text-gray-600 mt-1">{t("양 끝에서 가운데로 좁히며 좌우 대칭 검사 — O(N)", "Check left-right symmetry, narrowing from both ends — O(N)")}</p>
               </div>
               <div className="bg-white rounded-lg p-3 border border-blue-200">
-                <b className="text-blue-700">🛠 {t("자주 쓰는 메서드", "Common methods")}</b>
-                <p className="text-xs text-gray-600 mt-1">{t("find / replace / upper·lower — 언제 어느 것?", "find / replace / upper·lower — when to use which?")}</p>
+                <b className="text-blue-700">🪟 {t("슬라이딩 윈도우", "Sliding window")}</b>
+                <p className="text-xs text-gray-600 mt-1">{t("부분문자열을 미끄러뜨리며 조건 맞는 가장 긴 구간 찾기", "Slide a substring window to find the longest valid range")}</p>
               </div>
               <div className="bg-white rounded-lg p-3 border border-blue-200">
                 <b className="text-blue-700">🔢 {t("ASCII 카운팅", "ASCII counting")}</b>
-                <p className="text-xs text-gray-600 mt-1">{t("문자 → 숫자 변환으로 알파벳 빈도 세는 트릭", "Char-to-number trick for letter-frequency counting")}</p>
+                <p className="text-xs text-gray-600 mt-1">{t("문자 → 숫자 변환으로 알파벳 빈도 세는 트릭 (아나그램 등)", "Char-to-number trick to count letter frequency (anagrams, etc.)")}</p>
               </div>
             </div>
             <p className="text-xs text-blue-700 text-center font-bold leading-relaxed">
@@ -885,8 +870,8 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; already
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed text-center">
               {t(
-                "잘 했어요 👏 글자 한 개를 '인덱스로 꺼내고', '메서드로 다듬고', 'ASCII 로 숫자 변환' — 이 3 가지면 Bronze 문자열 문제는 거의 다 풀려요. 핵심만 한 번 더 짚고 갈게요.",
-                "Great work 👏 Index out one char, polish with methods, convert via ASCII — these 3 cover almost any Bronze string problem. Let me recap the essentials.",
+                "잘 했어요 👏 '두 포인터로 회문', '윈도우 미끄러뜨리기', 'ASCII 26 칸 카운팅' — 이 3 가지 알고리즘 패턴이면 Bronze 문자열 문제는 거의 다 풀려요. 핵심만 한 번 더 짚고 갈게요.",
+                "Great work 👏 Two-pointer palindromes, sliding windows, ASCII count[26] — these 3 algorithm patterns cover almost any Bronze string problem. Let me recap the essentials.",
               )}
             </p>
           </div>
@@ -894,17 +879,15 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; already
 
         {step === 1 && (
           <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-5 border-2 border-amber-300">
-            <h3 className="text-base font-black text-amber-900 mb-3">📌 {t("핵심 정리", "Key Takeaways")}</h3>
+            <h3 className="text-base font-black text-amber-900 mb-3">📌 {t("핵심 정리 — 알고리즘 3 패턴", "Key Takeaways — 3 algorithm patterns")}</h3>
             <ol className="space-y-2 text-sm text-gray-800">
-              <li><b>1.</b> {t("문자열 = 글자 배열. 인덱스는 0 부터.", "String = array of chars. Indices start at 0.")}</li>
-              <li><b>2.</b> {t("길이", "Length")}: Python <code className="bg-white px-1.5 py-0.5 rounded">len(s)</code>, C++ <code className="bg-white px-1.5 py-0.5 rounded">s.size()</code></li>
-              <li><b>3.</b> {t("부분", "Slice")}: Python <code className="bg-white px-1.5 py-0.5 rounded">s[a:b]</code> (끝 미포함), C++ <code className="bg-white px-1.5 py-0.5 rounded">s.substr(a, len)</code> (길이!)</li>
-              <li><b>4.</b> {t("자주 쓰는 메서드", "Common methods")}: <code className="bg-white px-1.5 py-0.5 rounded">upper, lower, find, replace, split</code></li>
-              <li><b>5.</b> {t("ASCII", "ASCII")}: <code className="bg-white px-1.5 py-0.5 rounded">ord/chr</code> (Py), {t("캐스팅", "cast")} (C++). A=65, a=97, 0=48</li>
-              <li><b>6.</b> {t("알파벳 카운팅 → count[26], 인덱스 = c - 'a'", "Alphabet counting → count[26], index = c - 'a'")}</li>
+              <li><b>1. 🪞 {t("회문 — 두 포인터", "Palindrome — two pointers")}</b> {t("양 끝 L, R 에서 가운데로 좁히며 s[L]==s[R] 검사. O(N).", "L, R from both ends toward the middle, check s[L]==s[R]. O(N).")}</li>
+              <li><b>2. 🪞 {t("가장 긴 회문", "Longest palindrome")}</b> {t("각 인덱스를 중심으로 (i,i) + (i,i+1) 양쪽 확장 — 홀짝 둘 다. O(N²).", "Expand around each center, (i,i) AND (i,i+1) for odd+even. O(N²).")}</li>
+              <li><b>3. 🪟 {t("슬라이딩 윈도우", "Sliding window")}</b> {t("R 은 한 칸씩 확장, 조건 어기면 L 을 옮겨 줄임. 각 글자 한 번씩 → O(N).", "R extends one step; when the rule breaks, shrink L. Each char once → O(N).")}</li>
+              <li><b>4. 🔢 {t("ASCII 카운팅", "ASCII counting")}</b> <code className="bg-white px-1.5 py-0.5 rounded">count[26]</code>, {t("인덱스 = c - 'a'", "index = c - 'a'")}. {t("아나그램은 한 배열에 + / - 만!", "Anagram: one array, + then −!")}</li>
             </ol>
             <p className="text-xs text-amber-700 mt-3 text-center italic">
-              {t("이거면 Bronze 문자열 문제 80% 는 풀어요!", "That's enough for ~80% of Bronze string problems!")}
+              {t("이 3 패턴이면 Bronze 문자열 문제 대부분이 풀려요!", "These 3 patterns crack most Bronze string problems!")}
             </p>
             <div className="mt-3 pt-3 border-t border-amber-200">
               <p className="text-[11px] text-blue-700 leading-relaxed">

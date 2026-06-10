@@ -952,43 +952,27 @@ vector<string> autocomplete(Trie* root, const string& prefix) {
 // ── Chapter 5: 정리 ──────────────────────────────────────────────
 function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 2
+  const totalSteps = 1
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
         {step === 0 && (
-          <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-6 border-2 border-amber-300 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">👏</p>
-            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("트라이 마스터!", "Trie Master!")}
-            </h3>
+          <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-5 border-2 border-amber-300">
+            <p className="text-3xl text-center mb-1">👏</p>
             <p className="text-sm text-gray-800 leading-relaxed text-center mb-3">
               {t(
-                "Wave 3 마지막 토픽까지 완주! 트라이는 자동완성, 사전, IP 라우팅까지 — 문자열이 등장하는 어디서나 쓰이는 강력한 도구예요. 🎉",
+                "Wave 3 마지막 토픽 완주! 트라이는 자동완성, 사전, IP 라우팅까지 — 문자열이 등장하는 어디서나 쓰여요. 🎉",
                 "Last Wave 3 topic done! Tries power autocomplete, dictionaries, even IP routing — anywhere strings appear. 🎉",
               )}
             </p>
-            <div className="bg-white/80 rounded-lg p-3 border border-amber-200">
-              <p className="text-sm text-gray-800 font-bold text-center">
-                {t(
-                  "알고리즘 토픽 전체 끝! 이제 코딩 뱅크 / 도전 문제로 실전 응용해봐요.",
-                  "All algorithm topics done! Time for Coding Bank / quests to apply what you've learned.",
-                )}
-              </p>
-            </div>
-          </div>
-        )}
-
-        {step === 1 && (
-          <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-5 border-2 border-amber-300">
             <h3 className="text-base font-black text-amber-900 mb-3">📌 {t("핵심 정리", "Key Takeaways")}</h3>
             <ol className="space-y-2 text-sm text-gray-800">
               <li><b>1.</b> {t("트라이 = ", "Trie = ")}<b>{t("문자열 트리", "string tree")}</b>. {t("노드 = children + is_end 두 필드.", "Node = children + is_end.")}</li>
               <li><b>2.</b> {t("insert / search 모두 ", "Both insert / search ")}<b>O(L)</b> ({t("L = 단어 길이", "L = word length")}). {t("등록 단어 수와 무관!", "Independent of dictionary size!")}</li>
               <li><b>3.</b> {t("prefix 검색은 ", "Prefix search = ")}<b>{t("walk + DFS 서브트리", "walk + DFS subtree")}</b>. {t("자동완성의 핵심.", "Core of autocomplete.")}</li>
               <li><b>4.</b> {t("공통 prefix 가 많은 단어들 → 메모리 절약. set / dict 보다 효율적인 경우.", "Lots of shared prefixes → memory savings. Where trie beats set/dict.")}</li>
-              <li><b>5.</b> {t("Binary trie (자식 0/1) 로 XOR 최댓값 같은 비트 문제도 풀 수 있음. 확장형도 풍부.", "Binary trie (children 0/1) solves XOR-max and similar bit problems. Many variants.")}</li>
+              <li><b className="text-blue-700">{t("💡 더 깊이(참고).", "💡 Going deeper (FYI).")}</b> {t("Binary trie (자식 0/1) 로 XOR 최댓값 같은 비트 문제도 풀 수 있음. 확장형도 풍부 — 이 토픽 본문에선 안 다뤘어요.", "A binary trie (children 0/1) solves XOR-max and similar bit problems. Many variants — not covered in this topic's lessons.")}</li>
             </ol>
             <p className="text-xs text-amber-700 mt-3 text-center italic">
               {t("문자열 + 검색 + 빠름 → 트라이 떠올리기!", "Strings + lookups + speed → think trie!")}

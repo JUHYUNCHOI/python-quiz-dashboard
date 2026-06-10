@@ -326,6 +326,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </div>
               <div className="bg-white rounded-lg p-2.5 border border-cyan-200">
                 <p><b className="text-cyan-700">NOT (~)</b>{t(" — 0/1 뒤집기. (signed 라 음수 나옴 — unsigned 권장)", " — flip 0/1. (signed wraps to negative)")}</p>
+                <p className="text-[11px] text-gray-500 mt-1">{t("왜 음수? 컴퓨터는 음수를 '2의 보수' 로 저장해서 ~x = -x-1 이 돼요. (예: ~5 = -6). 특정 비트 폭만 보려면 & 0xff 처럼 마스킹.", "Why negative? Computers store negatives in 'two's complement', so ~x = -x-1 (e.g. ~5 = -6). Mask with & 0xff to keep a fixed bit width.")}</p>
               </div>
               <div className="bg-white rounded-lg p-2.5 border border-cyan-200">
                 <p><b className="text-cyan-700">SHIFT (&lt;&lt; &gt;&gt;)</b>{t(" — 비트 자리 이동. &lt;&lt; 1 = ×2, &gt;&gt; 1 = ÷2.", " — shift bits. << 1 = ×2, >> 1 = ÷2.")}</p>
@@ -770,9 +771,9 @@ for mask in range(1 << N):
             items.append(arr[i])
     print(f"mask={mask}  subset={items}  sum={s}")
 
-# 비트 DP 미리 보기 — dp[mask] 가 'mask 가 표현하는 상태의 최적값'
-# TSP: dp[mask][v] = mask 의 도시들을 방문하고 마지막이 v 일 때 최단 거리
-# (depth: Wave 3 알고리즘 토픽에서 다룸)`}
+# ⛳ 여기까지가 이 챕터 범위 — "부분집합 모두 순회".
+# (dp[mask][v] 같은 비트마스크 DP / TSP 는 Wave 3 DP 토픽에서 다뤄요.
+#  지금은 모르는 게 정상이니 안 봐도 돼요!)`}
               cpp={`#include <iostream>
 #include <vector>
 using namespace std;
@@ -795,16 +796,19 @@ int main() {
         }
         cout << "}  sum=" << sum << endl;
     }
-    // 비트 DP (TSP 등) 는 dp[mask] 가 'mask 상태의 최적값' — Wave 3 에서 다룸.
+    // ⛳ 여기까지가 이 챕터 범위 — "부분집합 모두 순회".
+    // (dp[mask][v] 같은 비트마스크 DP / TSP 는 Wave 3 DP 토픽. 지금은 안 봐도 OK.)
     return 0;
 }`}
             />
-            <p className="text-xs text-gray-600 text-center leading-relaxed">
-              {t(
-                "TSP, set cover, traveling-like 문제는 N ≤ 20 일 때 dp[mask][...] 패턴이 표준. 지금은 '부분집합 순회' 만 손에 익히면 OK.",
-                "TSP, set-cover, traveling-style problems at N ≤ 20 use dp[mask][...] as the standard. For now, just get comfortable enumerating subsets.",
-              )}
-            </p>
+            <div className="bg-indigo-50 rounded-lg p-3 border border-indigo-200">
+              <p className="text-xs text-indigo-800 text-center leading-relaxed">
+                🚧 {t(
+                  "여기 이 챕터는 '부분집합 모두 순회' 까지가 끝! TSP·set cover 같은 dp[mask][...] 비트마스크 DP 는 Wave 3 DP 토픽에서 따로 배워요 — 지금은 몰라도 괜찮아요.",
+                  "This chapter stops at 'enumerating subsets'. dp[mask][...] bitmask DP (TSP, set-cover) is taught later in the Wave 3 DP topic — no need to know it yet.",
+                )}
+              </p>
+            </div>
           </div>
         )}
 
@@ -877,11 +881,23 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <ol className="space-y-2 text-sm text-gray-800">
               <li><b>1.</b> {t("비트 연산 비용 = ", "Cost of a bit op = ")}<b>O(1)</b> — {t("CPU 가 32/64 비트를 한 번에 처리.", "CPU handles 32/64 bits at once.")}</li>
               <li><b>2.</b> <b>{t("XOR 의 두 법칙", "XOR's two laws")}</b>: x ^ x = 0, x ^ 0 = x. {t("짝 없는 원소, swap, 두 missing 응용.", "Lone element, swap, two-missing applications.")}</li>
-              <li><b>3.</b> <b>2 의 거듭제곱?</b>{" "}<code className="bg-white px-1 rounded text-xs">x &gt; 0 && (x & (x-1)) == 0</code></li>
-              <li><b>4.</b> <b>{t("부분집합 모두 순회", "Enumerate all subsets")}</b> — <code className="bg-white px-1 rounded text-xs">for mask in range(1 &lt;&lt; N)</code>. N ≤ 20.</li>
-              <li><b>5.</b> {t("내장 함수", "Built-ins")}: <code className="bg-white px-1 rounded text-xs">__builtin_popcount(x)</code>, <code className="bg-white px-1 rounded text-xs">bin(x).count('1')</code>, <code className="bg-white px-1 rounded text-xs">x & -x</code> {t("(가장 낮은 set bit)", "(lowest set bit)")}</li>
-              <li><b>6.</b> {t("디버깅: ", "Debug: ")}<code className="bg-white px-1 rounded text-xs">bin(x)</code> {t("로 비트 패턴 직접 출력해보기. 종이에 그려보면 안 헷갈림.", "to print the bit pattern. Draw on paper if confused.")}</li>
+              <li><b>3.</b> <b>{t("부분집합 모두 순회", "Enumerate all subsets")}</b> — <code className="bg-white px-1 rounded text-xs">for mask in range(1 &lt;&lt; N)</code>. N ≤ 20.</li>
+              <li><b>4.</b> {t("디버깅: ", "Debug: ")}<code className="bg-white px-1 rounded text-xs">bin(x)</code> {t("로 비트 패턴 직접 출력해보기. 종이에 그려보면 안 헷갈림.", "to print the bit pattern. Draw on paper if confused.")}</li>
             </ol>
+            <div className="mt-3 bg-white/70 rounded-lg p-3 border border-amber-200">
+              <p className="text-xs font-black text-amber-800 mb-2">💡 {t("보너스 트릭 (참고 — 위 본문엔 안 나온 것들)", "Bonus tricks (reference — not covered above)")}</p>
+              <ul className="space-y-1.5 text-xs text-gray-700">
+                <li>
+                  <code className="bg-amber-50 px-1 rounded">x &gt; 0 && (x & (x-1)) == 0</code> — {t("2 의 거듭제곱인지 판별. (2 의 거듭제곱은 set bit 가 딱 1 개라, x-1 과 AND 하면 0 이 됨.)", "Is x a power of two? A power of two has exactly one set bit, so x & (x-1) clears it to 0.")}
+                </li>
+                <li>
+                  <code className="bg-amber-50 px-1 rounded">x & -x</code> — {t("가장 낮은 set bit 만 남기기. (-x 는 2 의 보수라 가장 낮은 1 비트만 겹침.)", "Isolate the lowest set bit. (-x is two's complement, so only the lowest 1-bit overlaps.)")}
+                </li>
+                <li>
+                  <code className="bg-amber-50 px-1 rounded">__builtin_popcount(x)</code> {t("(C++)", "(C++)")} / <code className="bg-amber-50 px-1 rounded">bin(x).count('1')</code> {t("(Python)", "(Python)")} — {t("켜진 비트 개수 세기.", "Count the set bits.")}
+                </li>
+              </ul>
+            </div>
             <p className="text-xs text-amber-700 mt-3 text-center italic">
               {t("스위치들의 언어 — 이제 그래프 DP, TSP, 압축 표현이 손에 잡혀요!", "The language of switches — graph DP, TSP, and compact state are in reach!")}
             </p>
