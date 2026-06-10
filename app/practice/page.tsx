@@ -161,47 +161,88 @@ function clusterName(id: string): string {
 const CPP_PRACTICE_ORDER = ["io", "conditionals", "loops", "functions", "part1-combo", "arrays", "strings", "refs-ptrs", "structs", "pair-tuple", "constructs", "map-set", "simulation", "stackqueue", "grid", "sorting", "search"]
 const PY_PRACTICE_ORDER = ["py-basics", "py-output", "py-typeconv", "py-io", "py-conditionals", "py-logic", "py-loops", "py-lists", "py-strings", "py-dicts", "py-functions", "py-oop"]
 
+// 연습 = 난이도 단계(쉬움→보통→어려움, 토픽 섞임). 한 토픽 안에도 난이도가 다양하므로
+// "토픽 일렬"이 아니라 "난이도 사다리"로. 추천(다음 1개)은 적응형이 내 수준 맞춰 고름.
+const TIERS: { d: "쉬움" | "보통" | "어려움"; dot: string; ko: string; en: string }[] = [
+  { d: "쉬움", dot: "bg-emerald-500", ko: "쉬움 — 손풀기", en: "Easy — warm-up" },
+  { d: "보통", dot: "bg-amber-500", ko: "보통 — 한 번 생각", en: "Medium — think once" },
+  { d: "어려움", dot: "bg-rose-500", ko: "어려움 — 기법", en: "Hard — technique" },
+]
+
 function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet: Set<string>; starredSet: Set<string> }) {
   const { t, lang: locale } = useLanguage()
-  const byId = new Map(ALL_CLUSTERS.map(c => [c.id, c]))
-  const order = lang === "cpp" ? CPP_PRACTICE_ORDER : PY_PRACTICE_ORDER
+  const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
+  const all = clusters.flatMap(c => c.problems.map(p => ({ p, cluster: c.id, topic: clusterName(c.id) })))
 
-  // 클러스터 → 맵 노드 (커리큘럼 순). 첫 미완료 = 현재(추천).
-  let assignedCurrent = false
-  const nodes: MapNode[] = []
-  for (const id of order) {
-    const c = byId.get(id)
-    if (!c) continue
-    const done = isClusterDone(c, solvedSet)
-    let state: "done" | "current" | "ahead" = done ? "done" : "ahead"
-    if (!done && !assignedCurrent) { state = "current"; assignedCurrent = true }
-    nodes.push({ id: c.id, emoji: c.emoji, label: localizeCluster(c, locale).title, href: `/practice?cluster=${c.id}&session=1&from=practice`, state })
-  }
-  // 코딩 뱅크 관문(cpp) + 알고리즘 출구
-  if (lang === "cpp") {
-    nodes.push({ id: "_bank", emoji: "💪", milestone: true, label: t("코딩 뱅크 — 종합 도전", "Coding Bank — Challenge"), sub: t("배운 걸로 푸는 응용 문제", "Apply what you learned"), href: "/coding-bank", state: assignedCurrent ? "ahead" : "current" })
-  }
-  nodes.push({ id: "_algo", emoji: "🧩", milestone: true, label: t("알고리즘 시작", "Start Algorithms"), href: "/algo", state: "ahead" })
-
-  // 📊 내 실력 — 클러스터+KL 푼 것 기준
-  const pool = [
-    ...order.flatMap(id => (byId.get(id)?.problems ?? []).map(p => ({ id: p.id, cluster: id, difficulty: p.difficulty }))),
-    ...KL_FLAT.map(p => ({ id: p.id, cluster: p._clusterId, difficulty: p.difficulty })),
-  ]
+  // 추천 다음 1개 — 적응형(내 수준에 맞는 난이도, 토픽 무관)
+  const pool = all.map(x => ({ id: x.p.id, cluster: x.cluster, difficulty: x.p.difficulty }))
+  const rec = getAdaptiveNext({ pool, solvedSet, starredSet })
+  const recX = rec ? all.find(x => x.p.id === rec.problemId) : null
   const summary = summarizeConcepts(pool, solvedSet, starredSet).filter(c => c.started)
 
   return (
     <div className="flex flex-col gap-3">
-      {/* 🎯 KL 대비 — 접이식 칩 (수업 줄기와 직교) */}
+      {/* 👉 지금 추천 — 적응형이 내 수준 맞춰 고른 1개 */}
+      {recX && rec ? (
+        <Link
+          href={`/practice?cluster=${recX.cluster}&problem=${recX.p.id}&from=practice`}
+          className="rounded-3xl border-2 border-violet-300 bg-gradient-to-br from-violet-50 to-sky-50 p-5 hover:shadow-md transition-all"
+        >
+          <p className="text-[11px] font-bold text-violet-500 mb-0.5">👉 {t(`지금 추천 — ${rec.reason}`, `Recommended — ${rec.reasonEn}`)}</p>
+          <p className="text-lg font-black text-gray-900 leading-tight">{localizeProblem(recX.p, locale).title}</p>
+          <p className="text-xs text-gray-500 mt-0.5">{recX.topic} · {recX.p.difficulty} <span className="ml-1 text-violet-400 font-bold">→</span></p>
+        </Link>
+      ) : (
+        <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-4 text-center text-sm font-bold text-emerald-700">
+          {t("이 언어 연습을 다 풀었어요! 🎉 🧩 알고리즘으로 가요.", "All practice cleared! 🎉 On to algorithms.")}
+        </div>
+      )}
+
+      {/* 난이도 단계 사다리 — 쉬움 펼침, 보통/어려움 접힘. 각 단계 안은 토픽 섞임 */}
+      {TIERS.map(tier => {
+        const items = all.filter(x => x.p.difficulty === tier.d)
+        if (items.length === 0) return null
+        const solvedCnt = items.filter(x => solvedSet.has(x.p.id)).length
+        const ordered = [...items.filter(x => !solvedSet.has(x.p.id)), ...items.filter(x => solvedSet.has(x.p.id))]
+        const SHOWN = 12
+        return (
+          <details key={tier.d} open={tier.d === "쉬움"} className="rounded-2xl border border-gray-200 bg-white px-4 py-3">
+            <summary className="flex items-center gap-2 text-sm font-bold text-gray-700 cursor-pointer">
+              <span className={"w-2.5 h-2.5 rounded-full " + tier.dot} />
+              {t(tier.ko, tier.en)}
+              <span className="ml-auto text-xs font-normal text-gray-400">{solvedCnt}/{items.length}</span>
+            </summary>
+            <div className="mt-3 flex flex-col gap-1.5">
+              {ordered.slice(0, SHOWN).map(x => {
+                const solved = solvedSet.has(x.p.id)
+                return (
+                  <Link
+                    key={x.p.id}
+                    href={`/practice?cluster=${x.cluster}&problem=${x.p.id}&from=practice`}
+                    className={"flex items-center gap-2 rounded-lg border px-3 py-2 transition-all hover:border-violet-400 " + (solved ? "border-green-200 bg-green-50/60" : "border-gray-200 bg-white")}
+                  >
+                    <span className="text-sm font-semibold text-gray-900 flex-1 truncate">{localizeProblem(x.p, locale).title}</span>
+                    <span className="text-[10px] text-gray-400 shrink-0">{x.topic}</span>
+                    {solved ? <span className="text-green-500 shrink-0 text-xs">✓</span> : <span className="text-gray-300 shrink-0" aria-hidden>→</span>}
+                  </Link>
+                )
+              })}
+              {ordered.length > SHOWN && (
+                <p className="text-[11px] text-gray-400 text-center pt-1">+{ordered.length - SHOWN}{t("개 더 (위 추천 따라가면 자동으로)", " more (the recommendation walks you through)")}</p>
+              )}
+            </div>
+          </details>
+        )
+      })}
+
+      {/* 🎯 KL 대비 + 📊 내 실력 (접이식) */}
       <details className="rounded-xl border border-amber-200 bg-amber-50/50 px-3 py-2">
         <summary className="text-sm font-bold text-amber-800 cursor-pointer">🎯 {t(`KL 대비 문제 (${KL_TOTAL})`, `KL prep (${KL_TOTAL})`)}</summary>
         <div className="mt-3"><KLView solvedSet={solvedSet} starredSet={starredSet} compact /></div>
       </details>
-
-      {/* 📊 내 실력 */}
       {summary.length > 0 && (
         <details className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2">
-          <summary className="text-xs font-bold text-gray-600 cursor-pointer">📊 {t("내 실력 (개념별) — 풀수록 채워져요", "My skill — fills as you solve")}</summary>
+          <summary className="text-xs font-bold text-gray-600 cursor-pointer">📊 {t("내 실력 (개념별)", "My skill (by concept)")}</summary>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {summary.map(c => {
               const [ko, en, cls] = _MASTERY_LABEL[c.level]
@@ -216,10 +257,6 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
           </div>
         </details>
       )}
-
-      {/* 🗺 한 줄기 맵 — 현재 위치 + 추천(▶) + 자유 점프 */}
-      <p className="text-sm text-gray-400 -mb-1">{t("길 따라 한 칸씩 · 아무거나 눌러도 OK", "Follow the path · or jump to any")}</p>
-      <LearningMap nodes={nodes} recommendLabel={assignedCurrent ? t("이어서", "Continue") : t("여기서 시작", "Start")} />
     </div>
   )
 }
