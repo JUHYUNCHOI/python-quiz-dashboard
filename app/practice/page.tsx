@@ -10,7 +10,7 @@ import { RequireAuth } from "@/components/require-auth"
 import { PracticeRunner } from "@/components/practice/practice-runner"
 import { McqRunner } from "@/components/practice/mcq-runner"
 import { PracticeSession } from "@/components/practice/practice-session"
-import { ALL_CLUSTERS, BANK_CLUSTERS } from "@/data/practice"
+import { ALL_CLUSTERS, BANK_CLUSTERS, ALGO_CONTEST_IDS } from "@/data/practice"
 import { getNextLessonId, getLessonName, getCompletedLessons, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { getSmartNext } from "@/lib/smart-next"
 import type { PracticeCluster, PracticeProblem } from "@/data/practice/types"
@@ -30,8 +30,8 @@ function getClusterLang(cluster: PracticeCluster): Lang {
 }
 
 const BANK_CLUSTER_IDS = new Set(BANK_CLUSTERS.map(c => c.id))
-const CPP_CLUSTERS = ALL_CLUSTERS.filter(c => getClusterLang(c) === "cpp" && !BANK_CLUSTER_IDS.has(c.id))
-const PYTHON_CLUSTERS = ALL_CLUSTERS.filter(c => getClusterLang(c) === "python" && !BANK_CLUSTER_IDS.has(c.id))
+const CPP_CLUSTERS = ALL_CLUSTERS.filter(c => getClusterLang(c) === "cpp" && !BANK_CLUSTER_IDS.has(c.id) && !ALGO_CONTEST_IDS.has(c.id))
+const PYTHON_CLUSTERS = ALL_CLUSTERS.filter(c => getClusterLang(c) === "python" && !BANK_CLUSTER_IDS.has(c.id) && !ALGO_CONTEST_IDS.has(c.id))
 
 const DIFFICULTY_COLOR: Record<string, string> = {
   "쉬움": "text-emerald-700 bg-emerald-100",

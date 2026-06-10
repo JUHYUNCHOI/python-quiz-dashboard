@@ -70,6 +70,7 @@ import { pyStringsCluster } from "./py-cluster-strings"
 import { pyDictsCluster } from "./py-cluster-dicts"
 import { pyFunctionsCluster } from "./py-cluster-functions"
 import { pyOopCluster } from "./py-cluster-oop"
+import { ALGO_CONTEST_CLUSTERS, ALGO_CONTEST_IDS } from "./algo-contest"
 import type { PracticeCluster } from "./types"
 
 /** 코딩 뱅크 클러스터 — cpp-p3 완료 후 해금, 자유 선택 방식 */
@@ -114,4 +115,8 @@ export const ALL_CLUSTERS: PracticeCluster[] = [
   pyDictsCluster,
   pyFunctionsCluster,
   pyOopCluster,
+  // 알고리즘 토픽별 contest 클러스터 (그리드엔 ALGO_CONTEST_IDS 로 제외, 딥링크/KL 필터용으로 포함)
+  ...ALGO_CONTEST_CLUSTERS,
 ]
+
+export { ALGO_CONTEST_CLUSTERS, ALGO_CONTEST_IDS }
