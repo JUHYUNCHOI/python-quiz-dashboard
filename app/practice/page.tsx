@@ -173,11 +173,16 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
   const { t, lang: locale } = useLanguage()
   const [lastId, setLastId] = useState<string | null>(null)
   useEffect(() => { try { setLastId(localStorage.getItem("practice-last-problem")) } catch {} }, [])
+  const [topicFilter, setTopicFilter] = useState("all") // "all" | "kl" | 토픽명
   const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
   // 수업 연습 + KL(🎯, 양언어) 을 한 사다리에 — KL도 난이도 태그가 있으니 같이 녹임
   const lessonAll = clusters.flatMap(c => c.problems.map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: false })))
   const klAll = ALL_CLUSTERS.flatMap(c => c.problems.filter(p => p.kl).map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: true })))
   const all = [...lessonAll, ...klAll]
+  const topics = Array.from(new Set(all.map(x => x.topic)))
+  const filtered = topicFilter === "all" ? all
+    : topicFilter === "kl" ? all.filter(x => x.kl)
+    : all.filter(x => x.topic === topicFilter)
 
   // 추천 다음 1개 — 적응형(내 수준에 맞는 난이도, 토픽 무관)
   const pool = all.map(x => ({ id: x.p.id, cluster: x.cluster, difficulty: x.p.difficulty }))
@@ -223,15 +228,28 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
         <p className="text-xs text-gray-400 text-center -mt-1">✓ {t(`지금까지 ${totalSolved}문제 풀었어요`, `${totalSolved} solved so far`)}</p>
       )}
 
-      {/* 난이도 단계 사다리 — 쉬움 펼침, 보통/어려움 접힘. 각 단계 안은 토픽 섞임 */}
+      {/* 🔎 주제/KL 필터 — 평소 [전체], 배열만·KL만 보고 싶을 때 */}
+      <div className="flex flex-wrap gap-1.5">
+        {[{ k: "all", label: t("전체", "All") }, { k: "kl", label: "🎯 KL" }, ...topics.map(tp => ({ k: tp, label: tp }))].map(c => (
+          <button
+            key={c.k}
+            onClick={() => setTopicFilter(c.k)}
+            className={"text-xs font-bold px-2.5 py-1 rounded-full border transition-colors " + (topicFilter === c.k ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-500 border-gray-200 hover:border-gray-400")}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
+
+      {/* 난이도 단계 사다리 — 쉬움 펼침, 보통/어려움 접힘. 필터 적용됨 */}
       {TIERS.map(tier => {
-        const items = all.filter(x => x.p.difficulty === tier.d)
+        const items = filtered.filter(x => x.p.difficulty === tier.d)
         if (items.length === 0) return null
         const solvedCnt = items.filter(x => solvedSet.has(x.p.id)).length
         const ordered = [...items.filter(x => !solvedSet.has(x.p.id)), ...items.filter(x => solvedSet.has(x.p.id))]
         const SHOWN = 12
         return (
-          <details key={tier.d} open={tier.d === "쉬움"} className="rounded-2xl border border-gray-200 bg-white px-4 py-3">
+          <details key={tier.d} open={tier.d === "쉬움" || topicFilter !== "all"} className="rounded-2xl border border-gray-200 bg-white px-4 py-3">
             <summary className="flex items-center gap-2 text-sm font-bold text-gray-700 cursor-pointer">
               <span className={"w-2.5 h-2.5 rounded-full " + tier.dot} />
               {t(tier.ko, tier.en)}
