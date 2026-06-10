@@ -228,17 +228,21 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
         <p className="text-xs text-gray-400 text-center -mt-1">✓ {t(`지금까지 ${totalSolved}문제 풀었어요`, `${totalSolved} solved so far`)}</p>
       )}
 
-      {/* 🔎 주제/KL 필터 — 평소 [전체], 배열만·KL만 보고 싶을 때 */}
-      <div className="flex flex-wrap gap-1.5">
-        {[{ k: "all", label: t("전체", "All") }, { k: "kl", label: "🎯 KL" }, ...topics.map(tp => ({ k: tp, label: tp }))].map(c => (
-          <button
-            key={c.k}
-            onClick={() => setTopicFilter(c.k)}
-            className={"text-xs font-bold px-2.5 py-1 rounded-full border transition-colors " + (topicFilter === c.k ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-500 border-gray-200 hover:border-gray-400")}
-          >
-            {c.label}
-          </button>
-        ))}
+      {/* 🔎 주제/KL 필터 — 작은 드롭다운 하나 (평소 전체, 배열/KL 보고 싶을 때만) */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-gray-400">🔎 {t("주제", "Topic")}</span>
+        <select
+          value={topicFilter}
+          onChange={e => setTopicFilter(e.target.value)}
+          className="text-xs font-bold border border-gray-200 rounded-lg px-2 py-1 bg-white text-gray-700"
+        >
+          <option value="all">{t("전체", "All")}</option>
+          <option value="kl">🎯 KL</option>
+          {topics.map(tp => <option key={tp} value={tp}>{tp}</option>)}
+        </select>
+        {topicFilter !== "all" && (
+          <button onClick={() => setTopicFilter("all")} className="text-xs text-gray-400 hover:text-gray-600 underline">{t("전체로", "Clear")}</button>
+        )}
       </div>
 
       {/* 난이도 단계 사다리 — 쉬움 펼침, 보통/어려움 접힘. 필터 적용됨 */}
