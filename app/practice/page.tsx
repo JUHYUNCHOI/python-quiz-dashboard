@@ -11,7 +11,7 @@ import { PracticeRunner } from "@/components/practice/practice-runner"
 import { McqRunner } from "@/components/practice/mcq-runner"
 import { PracticeSession } from "@/components/practice/practice-session"
 import { ALL_CLUSTERS, BANK_CLUSTERS, ALGO_CONTEST_IDS } from "@/data/practice"
-import { getAdaptiveNext } from "@/lib/adaptive"
+import { getAdaptiveNext, summarizeConcepts } from "@/lib/adaptive"
 import { getNextLessonId, getLessonName, getCompletedLessons, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { getSmartNext } from "@/lib/smart-next"
 import type { PracticeCluster, PracticeProblem } from "@/data/practice/types"
@@ -75,6 +75,40 @@ function KLView({ solvedSet, starredSet }: { solvedSet: Set<string>; starredSet:
           <span className="text-amber-500 shrink-0" aria-hidden>→</span>
         </Link>
       )}
+
+      {/* 📊 내 실력 (개념별) — 풀수록 채워짐. 학생이 자기 실력을 봄 */}
+      {(() => {
+        const summary = summarizeConcepts(
+          KL_FLAT.map(p => ({ id: p.id, cluster: p._clusterId, difficulty: p.difficulty })),
+          solvedSet,
+          starredSet,
+        )
+        const topicName = new Map(KL_FLAT.map(p => [p._clusterId, p._topic]))
+        const LABEL: Record<string, [string, string, string]> = {
+          struggling: ["막힘", "Stuck", "bg-rose-100 text-rose-600"],
+          learning: ["배우는 중", "Learning", "bg-amber-100 text-amber-700"],
+          proficient: ["능숙", "Proficient", "bg-sky-100 text-sky-700"],
+          mastered: ["마스터", "Mastered", "bg-emerald-100 text-emerald-700"],
+        }
+        return (
+          <details className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 mb-1">
+            <summary className="text-xs font-bold text-gray-600 cursor-pointer">📊 {t("내 실력 (개념별) — 풀수록 채워져요", "My skill (by concept) — fills as you solve")}</summary>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {summary.map(c => {
+                const [ko, en, cls] = c.started ? LABEL[c.level] : ["아직", "—", "bg-gray-100 text-gray-400"]
+                return (
+                  <span key={c.concept} className="text-[11px] inline-flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-2 py-1">
+                    <span className="font-semibold text-gray-700">{topicName.get(c.concept)}</span>
+                    <span className={"px-1.5 py-0.5 rounded font-bold " + cls}>{t(ko, en)}</span>
+                    <span className="text-gray-400">{c.solved}/{c.total}</span>
+                  </span>
+                )
+              })}
+            </div>
+          </details>
+        )
+      })()}
+
       <p className="text-xs text-gray-500 mb-1">
         {t("또는 위에서부터 한 문제씩 — 쉬움→어려움 순서. 누르면 바로 풀고 자동 채점돼요.", "Or top to bottom, easy→hard. Tap to solve in place, auto-graded.")}
       </p>

@@ -2,6 +2,7 @@
 import { pickNext } from "./next-item"
 import type { AdaptiveNext, ProgressEvent, Difficulty } from "./types"
 export * from "./types"
+export { summarizeConcepts, type ConceptSummary } from "./summary"
 
 interface Args {
   pool: { id: string; cluster: string; difficulty: Difficulty }[]
