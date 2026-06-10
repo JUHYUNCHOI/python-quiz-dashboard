@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Play } from "lucide-react"
 import { ALGO_TOPICS } from "@/data/algo/topics"
+import { LearningMap, type MapNode } from "@/components/learning-map"
 import { LanguageToggle } from "@/components/language-toggle"
 import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
@@ -48,6 +49,36 @@ export default function AlgoPage() {
   const recommendedNext = ALGO_TOPICS.find(tp => tp.wave === 1 && !completedIds.has(tp.lessonId))
     || ALGO_TOPICS.find(tp => !completedIds.has(tp.lessonId))
     || ALGO_TOPICS[0]
+
+  // 맵 노드 — wave 순(=배열 순) 한 줄기. 구간 밴드 + Bronze 끝 🏆 대회 마일스톤.
+  const WAVE_SECTION: Record<number, [string, string]> = {
+    1: ["🥉 Bronze — 기초", "🥉 Bronze — Basics"],
+    2: ["🥈 Silver", "🥈 Silver"],
+    3: ["🥇 Gold+", "🥇 Gold+"],
+  }
+  const algoNodes: MapNode[] = []
+  let _lastWave = 0
+  for (const tp of ALGO_TOPICS) {
+    if (tp.wave === 2 && _lastWave === 1) {
+      algoNodes.push({
+        id: "_contest", emoji: "🏆", milestone: true,
+        label: t("USACO 대회 도전", "Try USACO Contest"),
+        sub: t("Bronze 기초 끝 — 이제 실전 문제!", "Bronze done — real problems!"),
+        href: "/quest", state: "ahead",
+      })
+    }
+    const section = tp.wave !== _lastWave ? t(WAVE_SECTION[tp.wave][0], WAVE_SECTION[tp.wave][1]) : undefined
+    _lastWave = tp.wave
+    const done = completedIds.has(tp.lessonId)
+    algoNodes.push({
+      id: tp.id,
+      emoji: tp.icon,
+      label: t(tp.title, tp.titleEn),
+      href: `/algo/${tp.id}`,
+      state: done ? "done" : tp.id === recommendedNext?.id ? "current" : "ahead",
+      section,
+    })
+  }
   const isFreshStart = completedIds.size === 0
 
   return (
@@ -70,108 +101,12 @@ export default function AlgoPage() {
       </div>
 
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 space-y-8">
-        {/* 추천 다음 — Duolingo 스타일 큰 CTA. 진도 0 이면 '시작', 있으면 '이어서' */}
-        {loaded && recommendedNext && (
-          <Link
-            href={`/algo/${recommendedNext.id}`}
-            className="block bg-orange-500 rounded-2xl p-5 text-white shadow-lg shadow-amber-200/60 hover:shadow-xl active:scale-[0.99] transition-all"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl shrink-0">
-                {recommendedNext.icon}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold opacity-90 mb-0.5">
-                  {isFreshStart
-                    ? t("🚀 추천 — 여기서 시작", "🚀 Recommended — Start here")
-                    : t(`▶ 이어서 학습 (${completedIds.size}/${ALGO_TOPICS.length} 완료)`, `▶ Continue (${completedIds.size}/${ALGO_TOPICS.length} done)`)}
-                </p>
-                <p className="text-xl sm:text-2xl font-black leading-tight">
-                  {t(recommendedNext.title, recommendedNext.titleEn)}
-                </p>
-                <p className="text-xs opacity-90 mt-1">
-                  {t(recommendedNext.category, recommendedNext.categoryEn)}
-                </p>
-              </div>
-              <Play className="w-8 h-8 opacity-80 shrink-0" />
-            </div>
-          </Link>
-        )}
-
-        {/* USACO 실전 문제로 바로 가는 링크 — 알고리즘 끝까지 안 가도 도전 가능 */}
-        <Link
-          href="/quest"
-          className="block bg-amber-500 rounded-2xl p-4 text-white shadow-md hover:shadow-lg active:scale-[0.99] transition-all"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl shrink-0">🏆</div>
-            <div className="flex-1 min-w-0">
-              <p className="text-base font-black leading-tight">
-                {t("USACO 실전 문제 도전하기", "Try USACO Contest Problems")}
-              </p>
-              <p className="text-[11px] opacity-90 mt-0.5">
-                {t("USACO Bronze / MCC 160+ 문제 — 알고리즘 익히면서 병행해도 OK", "USACO Bronze / MCC 160+ problems — try alongside algorithm topics")}
-              </p>
-            </div>
-            <span className="text-2xl shrink-0">→</span>
-          </div>
-        </Link>
-
-        {/* 전체 토픽 보기 안내 */}
-        <p className="text-xs text-gray-400 text-center -mt-3">
-          {t("아래는 전체 토픽 목록 — 자유롭게 골라도 OK", "All topics below — feel free to pick any")}
-        </p>
-
-        {([1, 2, 3] as const).map(wave => {
-          const waveTopics = ALGO_TOPICS.filter(tp => tp.wave === wave)
-          const info = WAVE_INFO[wave]
-          return (
-            <section key={wave}>
-              <h2 className={cn(
-                "text-sm font-bold px-3 py-1.5 rounded-lg border inline-block mb-3",
-                info.badge
-              )}>
-                {t(info.label(waveTopics.length), info.labelEn(waveTopics.length))}
-              </h2>
-              <div className={cn(
-                "grid gap-3",
-                waveTopics.length <= 6
-                  ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6"
-                  : "grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-4"
-              )}>
-                {waveTopics.map(topic => {
-                  const isCompleted = completedIds.has(topic.lessonId)
-                  const isRecommended = topic.id === recommendedNext?.id
-                  return (
-                    <Link
-                      key={topic.id}
-                      href={`/algo/${topic.id}`}
-                      className={cn(
-                        "relative flex flex-col items-center gap-2 p-4 rounded-2xl border-2 bg-white hover:shadow-md transition-all hover:-translate-y-0.5",
-                        info.color,
-                        isCompleted && "ring-2 ring-green-300 ring-offset-1",
-                        isRecommended && !isCompleted && "ring-2 ring-orange-400 ring-offset-1 animate-pulse"
-                      )}
-                    >
-                      {isCompleted && (
-                        <span className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-green-500 text-white text-[10px] flex items-center justify-center font-bold">✓</span>
-                      )}
-                      <span className="text-3xl">{topic.icon}</span>
-                      <div className="text-center">
-                        <p className="text-sm font-bold text-gray-900 leading-tight">
-                          {t(topic.title, topic.titleEn)}
-                        </p>
-                        <p className="text-[10px] text-gray-400 mt-0.5">
-                          {t(topic.category, topic.categoryEn)}
-                        </p>
-                      </div>
-                    </Link>
-                  )
-                })}
-              </div>
-            </section>
-          )
-        })}
+        {/* 🗺 한 줄기 맵 — 현재 위치 + 추천(▶) + 자유 점프. 데스크탑 지그재그/모바일 세로. */}
+        <p className="text-sm text-gray-400 -mb-2">{t("길 따라 한 칸씩 · 아무 토픽이나 눌러 바로 가도 OK", "Follow the path · or jump to any topic")}</p>
+        <LearningMap
+          nodes={algoNodes}
+          recommendLabel={completedIds.size === 0 ? t("여기서 시작", "Start here") : t("이어서", "Continue")}
+        />
       </div>
       <BottomNav />
     </div>

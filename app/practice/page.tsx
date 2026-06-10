@@ -11,6 +11,8 @@ import { PracticeRunner } from "@/components/practice/practice-runner"
 import { McqRunner } from "@/components/practice/mcq-runner"
 import { PracticeSession } from "@/components/practice/practice-session"
 import { ALL_CLUSTERS, BANK_CLUSTERS, ALGO_CONTEST_IDS } from "@/data/practice"
+import { getAdaptiveNext, summarizeConcepts } from "@/lib/adaptive"
+import { LearningMap, type MapNode } from "@/components/learning-map"
 import { getNextLessonId, getLessonName, getCompletedLessons, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { getSmartNext } from "@/lib/smart-next"
 import type { PracticeCluster, PracticeProblem } from "@/data/practice/types"
@@ -50,13 +52,69 @@ const KL_FLAT = ALL_CLUSTERS
 const KL_TOTAL = KL_FLAT.length
 
 // KL 필터 뷰 — 연습 안에서 KL 태그 문제만. 각 문제는 /practice 딥링크(페이지 이동 없이 runner).
-function KLView({ solvedSet }: { solvedSet: Set<string> }) {
+function KLView({ solvedSet, starredSet, compact = false }: { solvedSet: Set<string>; starredSet: Set<string>; compact?: boolean }) {
   const { t } = useLanguage()
+  // 적응형: 학생 진행으로 "지금 추천" 1개. 실패/없음 → null → 카드 숨김(=목록 그대로, 폴백)
+  const rec = getAdaptiveNext({
+    pool: KL_FLAT.map(p => ({ id: p.id, cluster: p._clusterId, difficulty: p.difficulty })),
+    solvedSet,
+    starredSet,
+  })
+  const recProb = rec ? KL_FLAT.find(p => p.id === rec.problemId) : null
   return (
     <div className="flex flex-col gap-1.5">
-      <p className="text-xs text-gray-500 mb-1">
-        {t("위에서부터 한 문제씩 — 쉬움→어려움 순서예요. 누르면 바로 풀고 자동 채점돼요.", "Top to bottom, easy→hard. Tap to solve in place, auto-graded.")}
-      </p>
+      {!compact && recProb && rec && (
+        <Link
+          href={`/practice?cluster=${recProb._clusterId}&problem=${recProb.id}&from=kl`}
+          className="rounded-2xl border-2 border-amber-400 bg-amber-50 p-4 flex items-center gap-3 hover:shadow-md transition-all mb-1"
+        >
+          <span className="text-2xl shrink-0">⭐</span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-bold text-amber-600">{t(`지금 추천 — ${rec.reason}`, `Recommended — ${rec.reasonEn}`)}</p>
+            <p className="font-bold text-gray-900 truncate">{recProb.title}</p>
+          </div>
+          <span className="text-amber-500 shrink-0" aria-hidden>→</span>
+        </Link>
+      )}
+
+      {/* 📊 내 실력 (개념별) — 풀수록 채워짐. 학생이 자기 실력을 봄 */}
+      {!compact && (() => {
+        const summary = summarizeConcepts(
+          KL_FLAT.map(p => ({ id: p.id, cluster: p._clusterId, difficulty: p.difficulty })),
+          solvedSet,
+          starredSet,
+        )
+        const topicName = new Map(KL_FLAT.map(p => [p._clusterId, p._topic]))
+        const LABEL: Record<string, [string, string, string]> = {
+          struggling: ["막힘", "Stuck", "bg-rose-100 text-rose-600"],
+          learning: ["배우는 중", "Learning", "bg-amber-100 text-amber-700"],
+          proficient: ["능숙", "Proficient", "bg-sky-100 text-sky-700"],
+          mastered: ["마스터", "Mastered", "bg-emerald-100 text-emerald-700"],
+        }
+        return (
+          <details className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 mb-1">
+            <summary className="text-xs font-bold text-gray-600 cursor-pointer">📊 {t("내 실력 (개념별) — 풀수록 채워져요", "My skill (by concept) — fills as you solve")}</summary>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {summary.map(c => {
+                const [ko, en, cls] = c.started ? LABEL[c.level] : ["아직", "—", "bg-gray-100 text-gray-400"]
+                return (
+                  <span key={c.concept} className="text-[11px] inline-flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-2 py-1">
+                    <span className="font-semibold text-gray-700">{topicName.get(c.concept)}</span>
+                    <span className={"px-1.5 py-0.5 rounded font-bold " + cls}>{t(ko, en)}</span>
+                    <span className="text-gray-400">{c.solved}/{c.total}</span>
+                  </span>
+                )
+              })}
+            </div>
+          </details>
+        )
+      })()}
+
+      {!compact && (
+        <p className="text-xs text-gray-500 mb-1">
+          {t("또는 위에서부터 한 문제씩 — 쉬움→어려움 순서. 누르면 바로 풀고 자동 채점돼요.", "Or top to bottom, easy→hard. Tap to solve in place, auto-graded.")}
+        </p>
+      )}
       {KL_FLAT.map((p, i) => {
         const solved = solvedSet.has(p.id)
         const prev = KL_FLAT[i - 1]
@@ -82,6 +140,144 @@ function KLView({ solvedSet }: { solvedSet: Set<string> }) {
           </div>
         )
       })}
+    </div>
+  )
+}
+
+const _MASTERY_LABEL: Record<string, [string, string, string]> = {
+  struggling: ["막힘", "Stuck", "bg-rose-100 text-rose-600"],
+  learning: ["배우는 중", "Learning", "bg-amber-100 text-amber-700"],
+  proficient: ["능숙", "Proficient", "bg-sky-100 text-sky-700"],
+  mastered: ["마스터", "Mastered", "bg-emerald-100 text-emerald-700"],
+}
+function clusterName(id: string): string {
+  const c = ALL_CLUSTERS.find(x => x.id === id)
+  if (!c) return id
+  return c.title.replace(/ ?문제 ?풀이$/, "").replace(/ ?문제$/, "")
+}
+
+// ⭐ 적응형 패널 — 수업별(해금) + KL 합친 풀에서 "다음 1개" + 📊 내 실력. 탭 고르기 없음.
+// 연습 맵 순서 (커리큘럼 순) — 조사 보고 기반 단일 줄기
+const CPP_PRACTICE_ORDER = ["io", "conditionals", "loops", "functions", "part1-combo", "arrays", "strings", "refs-ptrs", "structs", "pair-tuple", "constructs", "map-set", "simulation", "stackqueue", "grid", "sorting", "search"]
+const PY_PRACTICE_ORDER = ["py-basics", "py-output", "py-typeconv", "py-io", "py-conditionals", "py-logic", "py-loops", "py-lists", "py-strings", "py-dicts", "py-functions", "py-oop"]
+
+// 연습 = 난이도 단계(쉬움→보통→어려움, 토픽 섞임). 한 토픽 안에도 난이도가 다양하므로
+// "토픽 일렬"이 아니라 "난이도 사다리"로. 추천(다음 1개)은 적응형이 내 수준 맞춰 고름.
+const TIERS: { d: "쉬움" | "보통" | "어려움"; dot: string; ko: string; en: string }[] = [
+  { d: "쉬움", dot: "bg-emerald-500", ko: "쉬움 — 손풀기", en: "Easy — warm-up" },
+  { d: "보통", dot: "bg-amber-500", ko: "보통 — 한 번 생각", en: "Medium — think once" },
+  { d: "어려움", dot: "bg-rose-500", ko: "어려움 — 기법", en: "Hard — technique" },
+]
+
+function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet: Set<string>; starredSet: Set<string> }) {
+  const { t, lang: locale } = useLanguage()
+  const [lastId, setLastId] = useState<string | null>(null)
+  useEffect(() => { try { setLastId(localStorage.getItem("practice-last-problem")) } catch {} }, [])
+  const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
+  // 수업 연습 + KL(🎯, 양언어) 을 한 사다리에 — KL도 난이도 태그가 있으니 같이 녹임
+  const lessonAll = clusters.flatMap(c => c.problems.map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: false })))
+  const klAll = ALL_CLUSTERS.flatMap(c => c.problems.filter(p => p.kl).map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: true })))
+  const all = [...lessonAll, ...klAll]
+
+  // 추천 다음 1개 — 적응형(내 수준에 맞는 난이도, 토픽 무관)
+  const pool = all.map(x => ({ id: x.p.id, cluster: x.cluster, difficulty: x.p.difficulty }))
+  const rec = getAdaptiveNext({ pool, solvedSet, starredSet })
+  const recX = rec ? all.find(x => x.p.id === rec.problemId) : null
+  const lastX = lastId ? all.find(x => x.p.id === lastId) : null
+  const totalSolved = all.filter(x => solvedSet.has(x.p.id)).length
+  const summary = summarizeConcepts(pool, solvedSet, starredSet).filter(c => c.started)
+
+  return (
+    <div className="flex flex-col gap-3">
+      {/* 👉 지금 추천 — 적응형이 내 수준 맞춰 고른 1개 */}
+      {recX && rec ? (
+        <Link
+          href={`/practice?cluster=${recX.cluster}&problem=${recX.p.id}&from=practice`}
+          className="rounded-3xl border-2 border-violet-300 bg-gradient-to-br from-violet-50 to-sky-50 p-5 hover:shadow-md transition-all"
+        >
+          <p className="text-[11px] font-bold text-violet-500 mb-0.5">👉 {t(`지금 추천 — ${rec.reason}`, `Recommended — ${rec.reasonEn}`)}</p>
+          <p className="text-lg font-black text-gray-900 leading-tight">{localizeProblem(recX.p, locale).title}</p>
+          <p className="text-xs text-gray-500 mt-0.5">{recX.kl ? "🎯 " : ""}{recX.topic} · {recX.p.difficulty} <span className="ml-1 text-violet-400 font-bold">→</span></p>
+        </Link>
+      ) : (
+        <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-4 text-center text-sm font-bold text-emerald-700">
+          {t("이 언어 연습을 다 풀었어요! 🎉 🧩 알고리즘으로 가요.", "All practice cleared! 🎉 On to algorithms.")}
+        </div>
+      )}
+
+      {/* 📍 마지막에 풀던 곳 — 이어가기 쉽게 */}
+      {lastX && (!recX || lastX.p.id !== recX.p.id) && (
+        <Link
+          href={`/practice?cluster=${lastX.cluster}&problem=${lastX.p.id}&from=practice`}
+          className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 flex items-center gap-2 hover:border-violet-300 transition-all"
+        >
+          <span className="text-base shrink-0">📍</span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-bold text-gray-400">{t("마지막에 푼 문제", "Last solved")}</p>
+            <p className="text-sm font-semibold text-gray-800 truncate">{localizeProblem(lastX.p, locale).title}{solvedSet.has(lastX.p.id) ? " ✓" : ""}</p>
+          </div>
+          <span className="text-gray-300 shrink-0" aria-hidden>→</span>
+        </Link>
+      )}
+      {totalSolved > 0 && (
+        <p className="text-xs text-gray-400 text-center -mt-1">✓ {t(`지금까지 ${totalSolved}문제 풀었어요`, `${totalSolved} solved so far`)}</p>
+      )}
+
+      {/* 난이도 단계 사다리 — 쉬움 펼침, 보통/어려움 접힘. 각 단계 안은 토픽 섞임 */}
+      {TIERS.map(tier => {
+        const items = all.filter(x => x.p.difficulty === tier.d)
+        if (items.length === 0) return null
+        const solvedCnt = items.filter(x => solvedSet.has(x.p.id)).length
+        const ordered = [...items.filter(x => !solvedSet.has(x.p.id)), ...items.filter(x => solvedSet.has(x.p.id))]
+        const SHOWN = 12
+        return (
+          <details key={tier.d} open={tier.d === "쉬움"} className="rounded-2xl border border-gray-200 bg-white px-4 py-3">
+            <summary className="flex items-center gap-2 text-sm font-bold text-gray-700 cursor-pointer">
+              <span className={"w-2.5 h-2.5 rounded-full " + tier.dot} />
+              {t(tier.ko, tier.en)}
+              <span className="ml-auto text-xs font-normal text-gray-400">{solvedCnt}/{items.length}</span>
+            </summary>
+            <div className="mt-3 flex flex-col gap-1.5">
+              {ordered.slice(0, SHOWN).map(x => {
+                const solved = solvedSet.has(x.p.id)
+                return (
+                  <Link
+                    key={x.p.id}
+                    href={`/practice?cluster=${x.cluster}&problem=${x.p.id}&from=practice`}
+                    className={"flex items-center gap-2 rounded-lg border px-3 py-2 transition-all hover:border-violet-400 " + (solved ? "border-green-200 bg-green-50/60" : "border-gray-200 bg-white")}
+                  >
+                    <span className="text-sm font-semibold text-gray-900 flex-1 truncate">{localizeProblem(x.p, locale).title}</span>
+                    <span className="text-[10px] text-gray-400 shrink-0">{x.kl ? "🎯 " : ""}{x.topic}</span>
+                    {solved ? <span className="text-green-500 shrink-0 text-xs">✓</span> : <span className="text-gray-300 shrink-0" aria-hidden>→</span>}
+                  </Link>
+                )
+              })}
+              {ordered.length > SHOWN && (
+                <p className="text-[11px] text-gray-400 text-center pt-1">+{ordered.length - SHOWN}{t("개 더 (위 추천 따라가면 자동으로)", " more (the recommendation walks you through)")}</p>
+              )}
+            </div>
+          </details>
+        )
+      })}
+
+      {/* 📊 내 실력 (접이식) — KL(🎯)은 위 난이도 사다리에 녹아 있음 */}
+      {summary.length > 0 && (
+        <details className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2">
+          <summary className="text-xs font-bold text-gray-600 cursor-pointer">📊 {t("내 실력 (개념별)", "My skill (by concept)")}</summary>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {summary.map(c => {
+              const [ko, en, cls] = _MASTERY_LABEL[c.level]
+              return (
+                <span key={c.concept} className="text-[11px] inline-flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-2 py-1">
+                  <span className="font-semibold text-gray-700">{clusterName(c.concept)}</span>
+                  <span className={"px-1.5 py-0.5 rounded font-bold " + cls}>{t(ko, en)}</span>
+                  <span className="text-gray-400">{c.solved}/{c.total}</span>
+                </span>
+              )
+            })}
+          </div>
+        </details>
+      )}
     </div>
   )
 }
@@ -130,7 +326,6 @@ function ClusterList({
 }) {
   const { t, lang: locale } = useLanguage()
   const [showCompleted, setShowCompleted] = useState(false)
-  const [klMode, setKlMode] = useState(initialKl)
   const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
 
   // 전체 풀린 문제 수 (알고리즘 해금 목표)
@@ -167,7 +362,6 @@ function ClusterList({
     })
   const nextCluster = withProgress[0]?.c
   const otherActive = activeClusters.filter(c => c !== nextCluster)
-  const [showAllActive, setShowAllActive] = useState(false)
 
   const renderSmallCard = (cluster: PracticeCluster, accent = false) => {
     const solved = cluster.problems.filter(p => solvedSet.has(p.id)).length
@@ -196,49 +390,19 @@ function ClusterList({
   }
 
   // 모드 토글 — 수업별 연습 ↔ 🎯 KL 문제 (필터, 페이지 이동 X)
-  const modeToggle = (
-    <div className="inline-flex rounded-xl border border-gray-200 overflow-hidden self-start">
-      <button onClick={() => setKlMode(false)} className={"px-4 py-2 text-sm font-bold " + (!klMode ? "bg-gray-900 text-white" : "bg-white text-gray-500")}>
-        💪 {t("수업별 연습", "By lesson")}
-      </button>
-      <button onClick={() => setKlMode(true)} className={"px-4 py-2 text-sm font-bold " + (klMode ? "bg-amber-500 text-white" : "bg-white text-gray-500")}>
-        🎯 {t("KL 문제", "KL")} <span className="opacity-70">{KL_TOTAL}</span>
-      </button>
-    </div>
-  )
-  const headerBlock = (
-    <div className="flex items-center gap-3">
-      <button onClick={onBack} className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors shrink-0">
-        <ArrowLeft className="w-4 h-4 text-gray-600" />
-      </button>
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">{t("코딩 연습", "Practice")}</h1>
-        <p className="text-sm text-gray-400 mt-0.5">
-          {klMode ? t("🎯 KL 대비 문제만 보기", "🎯 KL prep problems only") : t("문제를 풀면 알고리즘 학습이 열려요", "Solve problems to unlock algorithm study")}
-        </p>
-      </div>
-    </div>
-  )
-
-  // 🎯 KL 모드 — 연습 안에서 KL 태그 문제만 (별도 페이지 X)
-  if (klMode) {
-    return (
-      <div className="flex flex-col gap-4 pb-24">
-        {headerBlock}
-        {modeToggle}
-        <KLView solvedSet={solvedSet} />
-      </div>
-    )
-  }
-
   return (
     <div className="flex flex-col gap-4 pb-24">
 
       {/* 헤더 */}
-      {headerBlock}
-
-      {/* 모드 토글 (KL 필터) */}
-      {modeToggle}
+      <div className="flex items-center gap-3">
+        <button onClick={onBack} className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors shrink-0">
+          <ArrowLeft className="w-4 h-4 text-gray-600" />
+        </button>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">{t("코딩 연습", "Practice")}</h1>
+          <p className="text-sm text-gray-400 mt-0.5">{t("문제를 풀면 알고리즘 학습이 열려요", "Solve problems to unlock algorithm study")}</p>
+        </div>
+      </div>
 
       {/* 언어 탭 */}
       <div className="flex bg-gray-100 rounded-xl p-1">
@@ -256,180 +420,8 @@ function ClusterList({
         ))}
       </div>
 
-      {/* 알고리즘 해금 진행 바 */}
-      {!goalReached && (
-        <div className="rounded-2xl bg-purple-50 border border-purple-100 px-4 py-3">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-bold text-purple-700">
-              🧠 {t("알고리즘 학습 준비", "Algorithm Unlock")}
-            </span>
-            <span className="text-xs font-semibold text-purple-500">
-              {totalSolved} / {GOAL}
-            </span>
-          </div>
-          <div className="relative h-3 bg-purple-100 rounded-full overflow-hidden">
-            {/* 채워진 부분 */}
-            <div
-              className="absolute left-0 top-0 h-full bg-purple-500 rounded-full transition-all duration-500"
-              style={{ width: `${Math.min(100, (totalSolved / GOAL) * 100)}%` }}
-            />
-            {/* 남은 부분 — pulse */}
-            <div
-              className="absolute top-0 h-full bg-purple-200 rounded-r-full animate-pulse"
-              style={{
-                left: `${Math.min(100, (totalSolved / GOAL) * 100)}%`,
-                right: 0,
-              }}
-            />
-          </div>
-          <p className="text-xs text-purple-500 font-semibold mt-1.5">
-            {GOAL - totalSolved > 0
-              ? t(`${GOAL - totalSolved}문제 더 풀면 알고리즘 학습이 열려요 →`, `${GOAL - totalSolved} more problems to unlock algorithms →`)
-              : t("거의 다 왔어요!", "Almost there!")}
-          </p>
-        </div>
-      )}
-
-      {/* 알고리즘 해금 달성 */}
-      {goalReached && (
-        <div className="rounded-2xl bg-purple-600 p-5 flex flex-col gap-3 shadow-md">
-          <div className="flex items-center gap-3">
-            <span className="text-3xl">🎉</span>
-            <div>
-              <p className="font-black text-white">{t("알고리즘 해금!", "Algorithms Unlocked!")}</p>
-              <p className="text-sm text-purple-200">{t("충분히 연습했어요. 이제 알고리즘으로 넘어가세요!", "Great work! Time to level up to algorithms.")}</p>
-            </div>
-          </div>
-          <a
-            href="/algo"
-            className="w-full rounded-xl bg-white text-purple-700 font-bold text-sm py-3 text-center hover:bg-purple-50 transition-colors"
-          >
-            {t("알고리즘 학습 시작하기 →", "Start Algorithm Study →")}
-          </a>
-        </div>
-      )}
-
-      {/* 도전 문제(코딩 뱅크) 입구 — 연습 다음 단계 */}
-      <a
-        href="/coding-bank"
-        className="flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 hover:border-amber-400 hover:shadow-sm transition-all"
-      >
-        <span className="text-2xl shrink-0">💪</span>
-        <div className="min-w-0 flex-1">
-          <p className="font-bold text-amber-900 leading-tight">{t("도전 문제", "Challenge Problems")}</p>
-          <p className="text-xs text-amber-800/80 mt-0.5">
-            {t("연습이 익숙해지면, 배운 걸로 푸는 응용 문제에 도전해요.", "Once practice feels easy, try applied challenge problems.")}
-          </p>
-        </div>
-        <span className="text-amber-500 shrink-0" aria-hidden>→</span>
-      </a>
-
-      {/* 지금 할 것 — 메인 카드 */}
-      {!goalReached && nextCluster && (() => {
-        const locCluster = localizeCluster(nextCluster, locale)
-        const solved = nextCluster.problems.filter(p => solvedSet.has(p.id)).length
-        const inProgress = solved > 0
-        return (
-          <button
-            onClick={() => onSelect(nextCluster)}
-            className="w-full rounded-2xl bg-purple-600 hover:bg-purple-700 active:scale-[0.99] transition-all text-left p-5 shadow-md"
-          >
-            <p className="text-xs font-bold text-purple-300 uppercase tracking-wide mb-2">
-              {inProgress ? t("👈 계속하기", "👈 Continue") : t("👉 지금 여기서 시작하세요", "👉 Start here")}
-            </p>
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-xl font-black text-white">
-                  {nextCluster.emoji} {locCluster.title}
-                </p>
-                <p className="text-sm text-purple-200 mt-1">{locCluster.description}</p>
-              </div>
-              <span className="text-white text-2xl shrink-0 animate-bounce">→</span>
-            </div>
-            {/* 세트 정보 */}
-            <div className="mt-3 flex items-center gap-2">
-              <span className="text-xs bg-white/20 text-white rounded-full px-2.5 py-1 font-semibold">
-                {inProgress
-                  ? t(`${solved}문제 완료`, `${solved} done`)
-                  : t(`세트 1 · ${Math.min(SET1_SIZE, nextCluster.problems.length)}문제`, `Set 1 · ${Math.min(SET1_SIZE, nextCluster.problems.length)} problems`)}
-              </span>
-              {!inProgress && (
-                <span className="text-xs text-white/50">
-                  {t("총 ", "total ")} {nextCluster.problems.length}{t("문제", " problems")}
-                </span>
-              )}
-            </div>
-          </button>
-        )
-      })()}
-
-      {/* 다른 연습 — 기본 접힘 (선택지 줄이기). 펼치면 전체 목록 */}
-      {otherActive.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <button
-            onClick={() => setShowAllActive(v => !v)}
-            className="flex items-center justify-between px-1 py-1.5 text-left"
-          >
-            <span className="text-xs font-semibold text-gray-500">
-              {t("다른 연습도 골라서 풀기", "Pick another practice")} ({otherActive.length})
-            </span>
-            <span className="text-xs text-purple-500 font-semibold shrink-0">
-              {showAllActive ? t("접기 ▲", "Hide ▲") : t("펼치기 ▾", "Show ▾")}
-            </span>
-          </button>
-          {showAllActive && otherActive.map(c => renderSmallCard(c))}
-        </div>
-      )}
-
-      {/* '다음 예고' 섹션 제거 — 소프트 진행으로 모든 클러스터 항상 보이고 클릭 가능 */}
-
-      {/* 완료한 클러스터 — 기본 접힘 */}
-      {doneClusters.length > 0 && (
-        <div>
-          <button
-            onClick={() => setShowCompleted(v => !v)}
-            className="w-full flex items-center gap-2 px-1 py-2 text-left"
-          >
-            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-            <span className="text-sm font-semibold text-gray-400">
-              {t(`완료 ${doneClusters.length}개`, `${doneClusters.length} completed`)}
-            </span>
-            <div className="flex-1 h-px bg-gray-100" />
-            <span className="text-xs text-gray-300">{showCompleted ? "▲" : "▼"}</span>
-          </button>
-          {showCompleted && (
-            <div className="flex flex-col gap-2 mt-1">
-              {doneClusters.map(cluster => {
-                const solved = cluster.problems.filter(p => solvedSet.has(p.id)).length
-                const total = cluster.problems.length
-                const starred = cluster.problems.filter(p => starredSet.has(p.id)).length
-                const locCluster = localizeCluster(cluster, locale)
-                return (
-                  <button
-                    key={cluster.id}
-                    onClick={() => onSelect(cluster)}
-                    className="w-full rounded-2xl border border-emerald-100 bg-emerald-50 hover:bg-emerald-100 p-3 text-left flex items-center gap-3 transition-all"
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                    <span className="text-lg shrink-0">{cluster.emoji}</span>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm text-gray-800 truncate">{locCluster.title}</p>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-gray-400 shrink-0">
-                      {starred > 0 && (
-                        <span className="flex items-center gap-0.5 text-amber-500">
-                          <Star className="w-3 h-3 fill-amber-400" />{starred}
-                        </span>
-                      )}
-                      <span>{solved}/{total}</span>
-                    </div>
-                  </button>
-                )
-              })}
-            </div>
-          )}
-        </div>
-      )}
+      {/* ⭐ 적응형: 수업별+KL 합친 "다음 1개" + 📊 내 실력 (탭 고르기 없음) */}
+      <AdaptivePanel lang={lang} solvedSet={solvedSet} starredSet={starredSet} />
 
     </div>
   )
@@ -734,6 +726,7 @@ function ProblemDetail({
   const handleSuccess = async (starred: boolean) => {
     await onMarkSolved(problem.id)
     if (starred) await onMarkStarred(problem.id)
+    try { localStorage.setItem("practice-last-problem", problem.id) } catch {} // 마지막에 푼 문제 기록
   }
 
   // ── MCQ: 단일 컬럼 레이아웃 ──
