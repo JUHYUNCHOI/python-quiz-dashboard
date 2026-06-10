@@ -284,7 +284,6 @@ function ClusterList({
     })
   const nextCluster = withProgress[0]?.c
   const otherActive = activeClusters.filter(c => c !== nextCluster)
-  const [showAllActive, setShowAllActive] = useState(false)
 
   const renderSmallCard = (cluster: PracticeCluster, accent = false) => {
     const solved = cluster.problems.filter(p => solvedSet.has(p.id)).length
@@ -399,77 +398,29 @@ function ClusterList({
         </div>
       )}
 
-      {/* 도전 문제(코딩 뱅크) 입구 — 연습 다음 단계 */}
-      <a
-        href="/coding-bank"
-        className="flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 hover:border-amber-400 hover:shadow-sm transition-all"
-      >
-        <span className="text-2xl shrink-0">💪</span>
-        <div className="min-w-0 flex-1">
-          <p className="font-bold text-amber-900 leading-tight">{t("도전 문제", "Challenge Problems")}</p>
-          <p className="text-xs text-amber-800/80 mt-0.5">
-            {t("연습이 익숙해지면, 배운 걸로 푸는 응용 문제에 도전해요.", "Once practice feels easy, try applied challenge problems.")}
-          </p>
-        </div>
-        <span className="text-amber-500 shrink-0" aria-hidden>→</span>
-      </a>
-
-      {/* 지금 할 것 — 메인 카드 */}
-      {!goalReached && nextCluster && (() => {
-        const locCluster = localizeCluster(nextCluster, locale)
-        const solved = nextCluster.problems.filter(p => solvedSet.has(p.id)).length
-        const inProgress = solved > 0
-        return (
-          <button
-            onClick={() => onSelect(nextCluster)}
-            className="w-full rounded-2xl bg-purple-600 hover:bg-purple-700 active:scale-[0.99] transition-all text-left p-5 shadow-md"
-          >
-            <p className="text-xs font-bold text-purple-300 uppercase tracking-wide mb-2">
-              {inProgress ? t("👈 계속하기", "👈 Continue") : t("👉 지금 여기서 시작하세요", "👉 Start here")}
-            </p>
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-xl font-black text-white">
-                  {nextCluster.emoji} {locCluster.title}
-                </p>
-                <p className="text-sm text-purple-200 mt-1">{locCluster.description}</p>
-              </div>
-              <span className="text-white text-2xl shrink-0 animate-bounce">→</span>
+      {/* 🧭 직접 골라 풀기 — 평소엔 위 '지금 할 것'이 알아서. 고르고 싶을 때만 펼침 */}
+      <details open={initialKl} className="rounded-2xl border border-gray-200 bg-gray-50/60 px-4 py-3">
+        <summary className="text-sm font-bold text-gray-600 cursor-pointer">🧭 {t("직접 골라 풀기 (수업별 · 도전 · KL)", "Pick yourself (lessons · challenge · KL)")}</summary>
+        <div className="mt-3 flex flex-col gap-2">
+          {/* 도전 문제(코딩 뱅크) */}
+          <a href="/coding-bank" className="flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 hover:border-amber-400 transition-all">
+            <span className="text-2xl shrink-0">💪</span>
+            <div className="min-w-0 flex-1">
+              <p className="font-bold text-amber-900 leading-tight">{t("도전 문제", "Challenge Problems")}</p>
+              <p className="text-xs text-amber-800/80 mt-0.5">{t("배운 걸로 푸는 응용 문제", "Applied problems with what you learned")}</p>
             </div>
-            {/* 세트 정보 */}
-            <div className="mt-3 flex items-center gap-2">
-              <span className="text-xs bg-white/20 text-white rounded-full px-2.5 py-1 font-semibold">
-                {inProgress
-                  ? t(`${solved}문제 완료`, `${solved} done`)
-                  : t(`세트 1 · ${Math.min(SET1_SIZE, nextCluster.problems.length)}문제`, `Set 1 · ${Math.min(SET1_SIZE, nextCluster.problems.length)} problems`)}
-              </span>
-              {!inProgress && (
-                <span className="text-xs text-white/50">
-                  {t("총 ", "total ")} {nextCluster.problems.length}{t("문제", " problems")}
-                </span>
-              )}
-            </div>
-          </button>
-        )
-      })()}
-
-      {/* 다른 연습 — 기본 접힘 (선택지 줄이기). 펼치면 전체 목록 */}
-      {otherActive.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <button
-            onClick={() => setShowAllActive(v => !v)}
-            className="flex items-center justify-between px-1 py-1.5 text-left"
-          >
-            <span className="text-xs font-semibold text-gray-500">
-              {t("다른 연습도 골라서 풀기", "Pick another practice")} ({otherActive.length})
-            </span>
-            <span className="text-xs text-purple-500 font-semibold shrink-0">
-              {showAllActive ? t("접기 ▲", "Hide ▲") : t("펼치기 ▾", "Show ▾")}
-            </span>
-          </button>
-          {showAllActive && otherActive.map(c => renderSmallCard(c))}
+            <span className="text-amber-500 shrink-0" aria-hidden>→</span>
+          </a>
+          {/* 수업별 클러스터 */}
+          {!goalReached && nextCluster && renderSmallCard(nextCluster, true)}
+          {otherActive.map(c => renderSmallCard(c))}
+          {/* 🎯 KL */}
+          <div className="mt-1 pt-2 border-t border-gray-200">
+            <p className="text-xs font-bold text-amber-700 mb-1.5">🎯 {t(`KL 대비 문제 (${KL_TOTAL})`, `KL prep (${KL_TOTAL})`)}</p>
+            <KLView solvedSet={solvedSet} starredSet={starredSet} compact />
+          </div>
         </div>
-      )}
+      </details>
 
       {/* '다음 예고' 섹션 제거 — 소프트 진행으로 모든 클러스터 항상 보이고 클릭 가능 */}
 
@@ -520,14 +471,6 @@ function ClusterList({
           )}
         </div>
       )}
-
-      {/* 🎯 KL 대비 문제 — 직접 골라 풀기(접이식). 평소엔 위 '다음 1개'가 알아서 서빙 */}
-      <details open={initialKl} className="rounded-2xl border border-amber-200 bg-amber-50/40 px-4 py-3">
-        <summary className="text-sm font-bold text-amber-800 cursor-pointer">🎯 {t(`KL 대비 문제 직접 골라 풀기 (${KL_TOTAL})`, `Browse KL prep problems (${KL_TOTAL})`)}</summary>
-        <div className="mt-3">
-          <KLView solvedSet={solvedSet} starredSet={starredSet} compact />
-        </div>
-      </details>
 
     </div>
   )
