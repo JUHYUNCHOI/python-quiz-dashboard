@@ -147,11 +147,13 @@ export function getSmartNext(
   // 2. 트랙 모든 레슨 완료 → 알고리즘 추천 (Python / C++ 트랙)
   // Wave 1 → 2 → 3 순서로 첫 미완료 토픽
   if (preferredTrack === "python" || preferredTrack === "cpp") {
-    const algoDone = ALGO_TOPICS.filter(tp => completedIds.has(tp.lessonId)).length
+    // 🌉 다리 3: 알고리즘 **Wave 1 기초(정렬·배열·스택큐·해시·누적합·문자열)** 를 마치면
+    // 대회(quest)로 안내. USACO Bronze 는 구현 위주라 Wave 1 기초면 도전 가능 —
+    // graph/dp 등 Wave 2/3 는 선수조건이 아니라 "필요할 때 / Silver+" 에서.
+    // (이전엔 8토픽 — Silver 일부까지 — 요구했음. 기준을 낮춤 = 기존 학생 영향 없음.)
+    const wave1Done = ALGO_TOPICS.filter(tp => tp.wave === 1).every(tp => completedIds.has(tp.lessonId))
 
-    // 🌉 다리 3: 알고리즘 충분히(8토픽) → 마지막 단계 '대회'(quest)로 안내.
-    // (이전엔 알고리즘 후 곧장 '마스터'로 끝나 대회로 가는 길이 끊겨 있었음)
-    if (algoDone >= CONTEST_THRESHOLD) {
+    if (wave1Done) {
       const qSolved = getQuestSolvedCount()
       return {
         type: "quest",
@@ -160,7 +162,7 @@ export function getSmartNext(
         href: "/quest",
         subtitle: "USACO Bronze · MCC — 배운 알고리즘으로 실전",
         emoji: "🏆",
-        reason: `알고리즘 ${algoDone}개 완료 → 대회 단계 진입`,
+        reason: `알고리즘 Wave 1 기초(스택/큐 포함) 완료 → 대회 단계 진입`,
       }
     }
 
