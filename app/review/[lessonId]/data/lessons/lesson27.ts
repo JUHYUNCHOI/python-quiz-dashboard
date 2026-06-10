@@ -51,7 +51,7 @@ print(f'컴퓨터: {computer}')`,
         hint: "choices 리스트를 넣으면 돼요",
         template: "import random\nrandom.seed(1)\n\nchoices = ['가위', '바위', '보']\ncomputer = random.___(choices)\nprint(computer)",
         answer: "choice",
-        expect: "보"
+        expect: "가위"
       }
     },
     {

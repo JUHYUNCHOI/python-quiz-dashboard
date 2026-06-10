@@ -599,6 +599,7 @@ export const lessonCpp7: LessonData = {
           alternateAnswers: [
             "int n;\ncin>>n;\nint sum=0;\nfor(int i=0;i<n;i++){int x;cin>>x;sum+=x;}\ncout<<sum<<endl;"
           ],
+          stdin: "5 1 2 3 4 5",
           expect: "15",
           en: {
             task: "Write from scratch! Read n → read n integers → print the total sum",

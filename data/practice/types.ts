@@ -29,6 +29,8 @@ export interface PracticeProblem {
   cluster: string                         // 클러스터 ID
   unlockAfter: string                     // "cpp-7" | "10" (Python lessonId)
   difficulty: "쉬움" | "보통" | "어려움"
+  /** KL Coding Cup 수준(입문 구현·Bronze급)으로 큐레이션된 문제 — "KL" 필터에 노출 */
+  kl?: boolean
   title: string
   description: string
   constraints: string                     // "1 ≤ N ≤ 1000"

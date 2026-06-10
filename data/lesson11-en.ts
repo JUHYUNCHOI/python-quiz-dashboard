@@ -18,11 +18,19 @@ export const lesson11EnData: LessonData = {
           id: "intro",
           type: "explain",
           title: "🎮 Building a Fork in the Road",
-          content: `In games, when your HP hits 0 you see a Game Over screen, right?
+          content: `So far, every line of code we've written has run **top to bottom, no skipping** — a single straight path.
 
-"If HP is 0 → Game Over" is an **"if ~ then ~"** — that's a **fork in your code**.
+But real programs need to behave **differently** depending on the situation. In a game, when your HP hits 0 you see a Game Over screen; if you're still alive, you keep playing, right?
 
-The thing that builds this fork is what we'll learn today: the **conditional (if statement)**.`
+That's a **fork in the road**. When you're walking and hit a fork, you split off left or right depending on *some condition*.
+
+\`\`\`
+Is HP 0?
+   ├─ yes → Game Over screen
+   └─ no  → Keep playing
+\`\`\`
+
+"If HP is 0 → Game Over" — an **"if ~ then ~"** — is exactly that fork in your code. Building these forks is what we'll learn today: the **conditional (if statement)** — your program's first step toward *thinking and making decisions*.`
         },
         {
           id: "syntax-explain",
@@ -44,7 +52,20 @@ if score >= 100:
     print('Level up!')   ← indented 4 spaces
 \`\`\`
 
-> 💡 No indent? Python tells you "the indentation is wrong" (\`IndentationError\`).`
+**But why do we need the colon and the indentation?** They tell Python *"the code from here to here belongs inside the if."*
+
+- The **colon \`:\`** is a start signal — *"okay, the stuff that belongs to this if begins now!"*
+- The **indentation (4 spaces)** bundles those lines together: *"these lines are the if's *children*."* Just like indenting the text under a heading in an essay.
+
+\`\`\`python
+if score >= 100:
+    print('Level up!')   ← indented → runs only when the if is true
+print('Game continues')  ← not indented → always runs, condition or not
+\`\`\`
+
+Only the indented line is affected by the if; a line back at the left edge is *outside* the if and runs *every time*. Languages like C++ use \`{ }\` braces to group code, but Python groups it with **indentation itself**, which keeps code looking clean.
+
+> 💡 No indent? Python tells you "the indentation is wrong" (\`IndentationError\`). Forgetting the colon is just as common — so make it a habit to type the \`:\` first at the end of an if line!`
         },
         {
           id: "syntax-builder",
@@ -83,7 +104,9 @@ if score >= 100:
           id: "else-explain",
           type: "explain",
           title: "↔️ if-else: One or the Other",
-          content: `If you want to do something when the condition is false, use **else**!
+          content: `The \`if\` we saw earlier means *"if the condition is true, do this; otherwise do nothing."* But a fork in the road usually has **both paths**, doesn't it?
+
+At a door, *"if you're an adult, let them in; otherwise turn them away"* — often you must do exactly **one of two** things. That's what **else** ("if not that") is for.
 
 \`\`\`python
 age = 15
@@ -94,7 +117,11 @@ else:
     print('You are a minor')
 \`\`\`
 
-→ 15 is less than 18, so 'You are a minor' is printed!`
+→ 15 is less than 18, so 'You are a minor' is printed!
+
+\`if\` and \`else\` are the **two branches of the fork**. If the condition is true, the \`if\` side runs; if false, the \`else\` side runs — **exactly one of them**, always. They never both run, and they're never both skipped.
+
+> 💡 You don't write a condition on \`else\`. Just \`else:\` and you're done! It automatically handles *every remaining case* where the if condition was false.`
         },
         {
           id: "try2",
@@ -173,7 +200,7 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
           id: "elif-explain",
           type: "explain",
           title: "🔢 elif — When You Have 3+ Forks",
-          content: `With just if / else, you have 2 forks. For **3 or more**, you need **elif**.
+          content: `With just if / else, you have 2 forks. But grades split into A·B·C·F — **3 or more** branches, right? That's when you need **elif**.
 
 \`elif\` is short for \`else if\` — "if not that, then maybe this".
 
@@ -186,18 +213,37 @@ elif score >= 70:
     print('C')
 else:
     print('F')
-\`\`\``
+\`\`\`
+
+**Can't I just use several separate ifs?** — This is the key insight. If you write \`if\` statements separately, Python checks **every single one**. So with a score of 95:
+
+\`\`\`python
+if score >= 90:    # 95 >= 90 → true! prints 'A'
+    print('A')
+if score >= 80:    # 95 >= 80 → also true! prints 'B' too 😱
+    print('B')
+if score >= 70:    # 95 >= 70 → true again! prints 'C' too 😱😱
+    print('C')
+\`\`\`
+
+→ You get \`A B C\` **all of them**! But we only wanted 'A'.
+
+\`elif\` prevents exactly this. **Once an earlier condition is true, the elif branches below aren't even checked.** So only the first matching branch runs and it stops — exactly what we wanted.`
         },
         {
           id: "elif-flow",
           type: "explain",
           title: "📐 How elif Runs",
-          content: `Python checks **top to bottom** and runs **only the first True branch**, then skips the rest.
+          content: `An if / elif / else group works like a **vending machine**. You insert a coin, it checks the buttons from the top, and at the *first matching slot* a drink comes out and it **stops right there** — it never even tries the buttons below.
+
+Or think of a **checkpoint**: it inspects line by line from the top, runs **only the first branch that passes (is true)**, and skips all the rest.
 
 Example: \`score = 85\`
 - \`score >= 90\` ? → no, skip
 - \`score >= 80\` ? → yes! → **print 'B' and stop**
-- The remaining elif / else are never even checked`
+- The remaining elif / else are never even checked
+
+> 💡 That's why **order really matters**. If you put \`score >= 70\` at the very top, both 85 and 95 would get caught there first and print 'C'. The trick is to put the *narrowest (strictest) condition* on top and the *broadest one* at the bottom.`
         },
         {
           id: "elif-sim",

@@ -19,6 +19,7 @@ export const greedyContestCluster: PracticeCluster = {
       cluster: "algo-greedy-contest",
       unlockAfter: "algo-greedy",
       difficulty: "쉬움",
+      kl: true,
       title: "대기 시간의 합 최소",
       description: `N명이 ATM 앞에 줄을 선다. 각 사람이 돈을 뽑는 데 걸리는 시간이 주어진다. 줄 서는 순서를 잘 정하면 **모든 사람의 대기 시간(자기 차례 전까지 기다린 시간) 합**을 최소로 만들 수 있다. 그 최솟값을 출력하라.
 
@@ -86,6 +87,7 @@ print(tot)`,
       cluster: "algo-greedy-contest",
       unlockAfter: "algo-greedy",
       difficulty: "쉬움",
+      kl: true,
       title: "회의실 배정",
       description: `한 개의 회의실에 N개의 회의 신청이 들어왔다. 각 회의는 \`시작 끝\` 시간으로 주어진다. 한 회의가 끝나는 시각과 다음 회의가 시작하는 시각이 같아도 된다. **겹치지 않게 최대한 많이** 배정할 때 그 개수를 출력하라.
 
@@ -170,6 +172,7 @@ print(cnt)`,
       cluster: "algo-greedy-contest",
       unlockAfter: "algo-greedy",
       difficulty: "쉬움",
+      kl: true,
       title: "로프로 들 수 있는 최대 무게",
       description: `N개의 로프가 있고 각각 버틸 수 있는 최대 무게가 주어진다. 여러 로프를 **함께** 쓰면 무게가 똑같이 나뉜다 — k개를 함께 쓰면 각 로프엔 (전체 무게 / k) 가 걸리므로, **가장 약한 로프 × k** 까지 들 수 있다. 어떤 로프들을 고르든 좋다. 들 수 있는 **최대 무게**를 출력하라.
 
@@ -242,6 +245,7 @@ print(max(a[i] * (i + 1) for i in range(n)))`,
       cluster: "algo-greedy-contest",
       unlockAfter: "algo-greedy",
       difficulty: "보통",
+      kl: true,
       title: "동전 거스름 (큰 단위부터)",
       description: `N 가지 동전이 있고, K 원을 거슬러 주려고 한다. 각 동전은 무한히 사용 가능. 사용한 **동전의 최소 개수** 를 출력하라.
 
@@ -341,6 +345,7 @@ Source: BOJ 11047 paraphrased`,
       cluster: "algo-greedy-contest",
       unlockAfter: "algo-greedy",
       difficulty: "보통",
+      kl: true,
       title: "회의실 배정 (끝 시간 정렬)",
       description: `한 회의실에 N 개의 회의가 신청되었다. 각 회의는 (시작, 끝) 시간을 갖는다. 서로 겹치지 않게 **최대로 많은 회의** 를 배정할 때, 그 개수를 출력하라.
 
@@ -450,6 +455,7 @@ Source: BOJ 1931 paraphrased`,
       cluster: "algo-greedy-contest",
       unlockAfter: "algo-greedy",
       difficulty: "보통",
+      kl: true,
       title: "ATM 줄서기 (짧은 일 먼저)",
       description: `N 명이 ATM 앞에 줄을 선다. \`i\` 번째 사람의 인출 시간이 \`t[i]\` 분이다. **각 사람의 대기 시간 합** (= 자기 차례까지 기다린 시간 + 자기 인출 시간) 의 **최솟값** 을 출력하라.
 
@@ -550,6 +556,7 @@ Source: BOJ 11399 paraphrased`,
       cluster: "algo-greedy-contest",
       unlockAfter: "algo-greedy",
       difficulty: "보통",
+      kl: true,
       title: "잃어버린 괄호 (최소화)",
       description: `\`+\` 와 \`-\` 만 들어간 수식이 주어진다 (예: \`55-50+40\`). 적절히 괄호를 쳐서 **식의 값을 최소화** 한 결과를 출력하라.
 
@@ -662,6 +669,7 @@ Source: BOJ 1541 paraphrased`,
       cluster: "algo-greedy-contest",
       unlockAfter: "algo-greedy",
       difficulty: "보통",
+      kl: true,
       title: "K번째 큰 수 (정렬 + 인덱싱)",
       description: `N 개의 정수와 정수 K 가 주어진다. **K번째로 큰 수** 를 출력하라 (1-indexed, 중복 허용).
 
@@ -751,6 +759,7 @@ Source: original`,
       cluster: "algo-greedy-contest",
       unlockAfter: "algo-greedy",
       difficulty: "보통",
+      kl: true,
       title: "캠핑 짐 — 최대 개수",
       description: `캠핑 갈 가방의 무게 한도가 \`W\` 이고, N 개의 짐이 있다. 짐 \`i\` 의 무게는 \`w[i]\`. **개수를 최대로** 가져가려면 몇 개 가져갈 수 있는지 출력하라.
 
@@ -1547,11 +1556,11 @@ input = sys.stdin.readline
 `,
       pySolutionCode: `import sys
 import heapq
-input = sys.stdin.readline
 
-n, k = map(int, input().split())
-jewels = [tuple(map(int, input().split())) for _ in range(n)]
-bags = [int(input()) for _ in range(k)]
+data = iter(sys.stdin.read().split())
+n, k = int(next(data)), int(next(data))
+jewels = [(int(next(data)), int(next(data))) for _ in range(n)]
+bags = [int(next(data)) for _ in range(k)]
 
 jewels.sort()
 bags.sort()

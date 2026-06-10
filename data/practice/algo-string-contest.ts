@@ -17,6 +17,7 @@ export const stringContestCluster: PracticeCluster = {
       cluster: "algo-string-contest",
       unlockAfter: "algo-string",
       difficulty: "쉬움",
+      kl: true,
       title: "문자열 뒤집기",
       description: `한 줄에 공백 없는 문자열 S가 주어진다. S를 거꾸로 뒤집어서 한 줄에 출력하라.
 
@@ -69,6 +70,7 @@ print(s[::-1])`,
       cluster: "algo-string-contest",
       unlockAfter: "algo-string",
       difficulty: "쉬움",
+      kl: true,
       title: "가장 많이 나온 알파벳",
       description: `소문자 알파벳으로만 이루어진 문자열 S가 주어진다. 가장 많이 등장한 알파벳 하나를 출력하라.
 
@@ -134,6 +136,7 @@ print(chr(ord('a') + best))`,
       cluster: "algo-string-contest",
       unlockAfter: "algo-string",
       difficulty: "쉬움",
+      kl: true,
       title: "단어 개수 세기",
       description: `한 줄에 단어들이 공백 한 칸으로 구분되어 주어진다. 단어가 몇 개인지 세어서 출력하라.`,
       constraints: "단어 1개 이상, 줄 전체 길이 ≤ 100,000. 단어 사이는 공백 한 칸, 줄 앞뒤 공백 없음.",
@@ -190,6 +193,7 @@ print(len(line.split()))`,
       cluster: "algo-string-contest",
       unlockAfter: "algo-string",
       difficulty: "보통",
+      kl: true,
       title: "회문 검사",
       description: `한 줄에 문자열 S 가 주어진다. S 가 **회문(palindrome)** — 앞에서 읽으나 뒤에서 읽으나 같은 문자열 — 이면 \`YES\`, 아니면 \`NO\` 를 출력하라.
 
@@ -411,6 +415,7 @@ Source: LeetCode 5 simplified (N ≤ 1000)`,
       cluster: "algo-string-contest",
       unlockAfter: "algo-string",
       difficulty: "보통",
+      kl: true,
       title: "아나그램 검사",
       description: `두 문자열 A, B 가 각 줄에 주어진다. 두 문자열이 서로 **아나그램** 인지(글자 구성과 개수가 정확히 같은지) \`YES\` / \`NO\` 로 출력하라.
 
@@ -508,6 +513,7 @@ Source: BOJ 16171 simplified`,
       cluster: "algo-string-contest",
       unlockAfter: "algo-string",
       difficulty: "보통",
+      kl: true,
       title: "유효한 괄호 문자열",
       description: `\`()\`, \`[]\`, \`{}\` 세 종류의 괄호로만 이루어진 문자열 S 가 주어진다. S 가 **유효한 괄호 문자열** 인지 \`YES\` / \`NO\` 로 출력하라.
 
@@ -633,6 +639,7 @@ Source: LeetCode 20 (Valid Parentheses)`,
       cluster: "algo-string-contest",
       unlockAfter: "algo-string",
       difficulty: "보통",
+      kl: true,
       title: "문자열 압축 (RLE)",
       description: `문자열 S 가 주어진다. **연속해서 반복되는 같은 글자** 를 \`글자개수\` 형식으로 압축한 결과를 출력하라.
 
@@ -749,6 +756,7 @@ Source: LeetCode 443 simplified — always emit RLE (no length comparison)`,
       cluster: "algo-string-contest",
       unlockAfter: "algo-string",
       difficulty: "보통",
+      kl: true,
       title: "부분 문자열 찾기 (단순 검색)",
       description: `두 문자열 \`haystack\` 과 \`needle\` 이 각 줄에 주어진다. \`haystack\` 안에서 \`needle\` 이 **처음 등장하는 시작 인덱스** (0-based) 를 출력하라. 등장하지 않으면 \`-1\` 출력.
 
@@ -857,6 +865,7 @@ Source: LeetCode 28 (Find the Index of the First Occurrence)`,
       cluster: "algo-string-contest",
       unlockAfter: "algo-string",
       difficulty: "보통",
+      kl: true,
       title: "가장 긴 공통 접두사",
       description: `첫 줄에 N, 그 다음 N 줄에 영문 소문자 문자열들이 주어진다. **모든 문자열의 공통 접두사(prefix)** 중 가장 긴 것을 출력하라. 공통 접두사가 없으면 빈 줄을 출력 (개행만).
 
@@ -1398,6 +1407,7 @@ Source: LeetCode 340 (Longest Substring with At Most K Distinct Characters)`,
       cluster: "algo-string-contest",
       unlockAfter: "algo-string",
       difficulty: "보통",
+      kl: true,
       title: "번호판 검증",
       description: `한 줄에 문자열 S 가 주어진다. 다음 패턴에 정확히 맞으면 \`VALID\`, 아니면 \`INVALID\` 를 출력하라.
 

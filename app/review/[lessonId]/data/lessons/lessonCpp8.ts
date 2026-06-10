@@ -113,9 +113,9 @@ export const lessonCpp8: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드는 왜 에러일까요?",
-          code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << double(3) << endl;\n    return 0;\n}\n\nint double(int x) {\n    return x * 2;\n}',
+          code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << twice(3) << endl;\n    return 0;\n}\n\nint twice(int x) {\n    return x * 2;\n}',
           options: [
-            "double이라는 이름을 쓸 수 없어서",
+            "세미콜론(;)이 빠져서",
             "함수가 main() 아래에 정의되어 있어서",
             "return x * 2가 잘못돼서"
           ],
@@ -124,7 +124,7 @@ export const lessonCpp8: LessonData = {
           en: {
             question: "Why does this code cause an error?",
             options: [
-              "Cannot use the name 'double'",
+              "A semicolon (;) is missing",
               "Function is defined below main()",
               "return x * 2 is wrong"
             ],

@@ -19,6 +19,7 @@ export const arrayContestCluster: PracticeCluster = {
       cluster: "algo-array-contest",
       unlockAfter: "algo-array",
       difficulty: "쉬움",
+      kl: true,
       title: "최댓값과 최솟값",
       description: `N개의 정수가 주어진다. 그중 **가장 큰 값과 가장 작은 값**을 공백으로 구분해 출력하라.
 
@@ -79,6 +80,7 @@ print(max(a), min(a))`,
       cluster: "algo-array-contest",
       unlockAfter: "algo-array",
       difficulty: "쉬움",
+      kl: true,
       title: "연속 K개의 최대 합",
       description: `N개의 정수와 K가 주어진다. **연속한 K개** 원소의 합 중 가장 큰 값을 출력하라.
 
@@ -153,6 +155,7 @@ print(best)`,
       cluster: "algo-array-contest",
       unlockAfter: "algo-array",
       difficulty: "쉬움",
+      kl: true,
       title: "합이 X인 두 수 (정렬된 배열)",
       description: `**오름차순으로 정렬된** N개의 정수와 목표값 X가 주어진다. 서로 다른 두 원소의 합이 X가 되는 쌍이 있으면 \`YES\`, 없으면 \`NO\` 를 출력하라.
 
@@ -242,6 +245,7 @@ print("YES" if ok else "NO")`,
       cluster: "algo-array-contest",
       unlockAfter: "algo-array",
       difficulty: "보통",
+      kl: true,
       title: "연속 부분 배열 최대 합 (Kadane)",
       description: `N개의 정수가 주어진다. **연속된** 부분 배열 중 합이 가장 큰 것을 찾아 그 합을 출력하라.
 
@@ -344,6 +348,7 @@ Source: LeetCode 53 (Maximum Subarray) paraphrased`,
       cluster: "algo-array-contest",
       unlockAfter: "algo-array",
       difficulty: "보통",
+      kl: true,
       title: "두 수 합 = target (정렬 + 두 포인터)",
       description: `N개의 정수와 target 이 주어진다. 합이 정확히 target 이 되는 **서로 다른 인덱스의 두 원소** 가 존재하면 두 값을 \`작은 값 큰 값\` 형식으로 출력하라. 없으면 \`NO\` 출력.
 
@@ -465,6 +470,7 @@ Source: LeetCode 1 (Two Sum) paraphrased — sorted variant`,
       cluster: "algo-array-contest",
       unlockAfter: "algo-array",
       difficulty: "보통",
+      kl: true,
       title: "최장 연속 증가 부분 배열",
       description: `N개의 정수가 주어진다. **연속**되고 **순증가** (strictly increasing — a[i] < a[i+1]) 인 가장 긴 부분 배열의 **길이** 를 출력하라.
 
@@ -568,6 +574,7 @@ Source: LeetCode 674 paraphrased`,
       cluster: "algo-array-contest",
       unlockAfter: "algo-array",
       difficulty: "보통",
+      kl: true,
       title: "0 이동 (Move Zeroes)",
       description: `N개의 정수가 주어진다. 모든 **0 을 배열 끝으로 이동** 시키되, **0 이 아닌 원소들의 상대 순서** 는 그대로 유지. 결과 배열을 공백으로 구분해 한 줄에 출력하라.
 
@@ -676,6 +683,7 @@ Source: LeetCode 283 (Move Zeroes) paraphrased`,
       cluster: "algo-array-contest",
       unlockAfter: "algo-array",
       difficulty: "보통",
+      kl: true,
       title: "배열 오른쪽 K칸 회전",
       description: `N개의 정수와 K가 주어진다. 배열을 **오른쪽으로 K칸 회전** 시킨 결과를 한 줄에 공백으로 구분해 출력하라.
 
@@ -792,6 +800,7 @@ Source: LeetCode 189 (Rotate Array) paraphrased`,
       cluster: "algo-array-contest",
       unlockAfter: "algo-array",
       difficulty: "보통",
+      kl: true,
       title: "다수 원소 (Boyer-Moore Vote)",
       description: `N개의 정수가 주어진다. 그 중 **N/2 보다 많이** 등장하는 값을 출력하라 (반드시 존재한다고 가정).
 

@@ -30,6 +30,7 @@ function getChWidth(str: string): number {
 import { Check, X, Lightbulb, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { highlightCpp, highlightCppInline, highlightPython, highlightPythonInline } from "@/components/ui/code-block"
 import type {
   StepContent,
@@ -292,6 +293,7 @@ function McqStep({
 }) {
   const { t, lang } = useLanguage()
   const E = lang === "en"
+  const isTeacher = useEffectiveIsTeacher()
   const [selected, setSelected] = useState<number | null>(savedAnswer ?? null)
   const answered = selected !== null
   const isRight = selected === content.answer
@@ -330,6 +332,7 @@ function McqStep({
         {options.map((opt, i) => {
           const isSelected = selected === i
           const isCorrect = i === content.answer
+          const teacherHint = isTeacher && !answered && isCorrect
           return (
             <button
               key={i}
@@ -337,7 +340,8 @@ function McqStep({
               disabled={answered}
               className={cn(
                 "rounded-xl border px-4 py-3 text-left transition-all flex items-center gap-3",
-                !answered && "border-gray-200 bg-white hover:border-purple-400 hover:bg-purple-50/60 cursor-pointer shadow-sm",
+                !answered && !teacherHint && "border-gray-200 bg-white hover:border-purple-400 hover:bg-purple-50/60 cursor-pointer shadow-sm",
+                teacherHint && "border-green-400 bg-white ring-2 ring-green-200 cursor-pointer shadow-sm",
                 answered && isCorrect && "border-emerald-400 bg-emerald-50",
                 answered && isSelected && !isCorrect && "border-red-400 bg-red-50",
                 answered && !isSelected && !isCorrect && "border-gray-100 bg-gray-50/80 opacity-40 cursor-not-allowed",
@@ -359,6 +363,7 @@ function McqStep({
               )}>
                 {opt.replace(/\\n/g, "\n")}
               </span>
+              {teacherHint && <span className="shrink-0 text-[11px] font-bold text-green-600">👩‍🏫 {t("정답", "Answer")}</span>}
               {answered && isCorrect && <Check className="w-4 h-4 text-emerald-500 shrink-0" />}
               {answered && isSelected && !isCorrect && <X className="w-4 h-4 text-red-400 shrink-0" />}
             </button>
@@ -428,6 +433,7 @@ function PracticeStep({
 }) {
   const { t, lang: curLang } = useLanguage()
   const isEn = curLang === "en"
+  const isTeacher = useEffectiveIsTeacher()
 
   const isFullCode = content.template === null
   // EN 템플릿/expect 우선 사용 (없으면 KO fallback)
@@ -684,6 +690,21 @@ function PracticeStep({
             : <span key={i}>{part}</span>
         )}
       </p>
+
+      {/* 👩‍🏫 선생님 정답 — 수업 중 답 확인용 (학생 뷰에선 안 보임) */}
+      {isTeacher && result === "idle" && (() => {
+        const enC = content.en as { answer?: string; blanksAnswer?: string[] } | undefined
+        const blanks = (isEn && enC?.blanksAnswer) ? enC.blanksAnswer : (content as { blanksAnswer?: string[] }).blanksAnswer
+        const ans = (isEn && enC?.answer) ? enC.answer : (content as { answer?: string }).answer
+        const text = (Array.isArray(blanks) && blanks.length > 1) ? blanks.join("   ·   ") : ans
+        if (!text) return null
+        return (
+          <div className="rounded-xl border-2 border-green-300 bg-green-50 px-3 py-2">
+            <p className="text-[10px] font-bold text-green-600 mb-0.5">👩‍🏫 {t("정답 (선생님만 보임)", "Answer (teacher only)")}</p>
+            <pre className="text-sm text-green-800 font-mono whitespace-pre-wrap break-words">{text}</pre>
+          </div>
+        )
+      })()}
 
       {/* 예시 입력 — 전체 코드 작성 시, sampleInput 또는 stdin 이 있으면 보여줌 */}
       {isFullCode && result === "idle" && (() => {

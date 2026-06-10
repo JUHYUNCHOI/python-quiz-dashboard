@@ -86,13 +86,13 @@ hello()`,
           question: "출력 결과는?",
           options: ["Hi!", "Hi!\nHi!", "아무것도 출력 안 됨"],
           answer: 1,
-          feedback: "안녕()을 2번 호출했으니 2번 출력!"
+          feedback: "hello()를 2번 호출했으니 2번 출력!"
         },
         en: {
           predict: {
             question: "What's the output?",
             options: ["Hi!", "Hi!\nHi!", "Nothing is printed"],
-            feedback: "안녕() is called twice, so it prints twice!"
+            feedback: "hello() is called twice, so it prints twice!"
           }
         },
         result: "Hi!\nHi!"

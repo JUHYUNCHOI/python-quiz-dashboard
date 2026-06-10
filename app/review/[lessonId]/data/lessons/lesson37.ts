@@ -214,14 +214,14 @@ except ValueError:
       type: "practice",
       content: {
         level: 1.5,
-        task: "___ 자리를 채워서 ValueError만 잡으세요!",
+        task: "___ 자리를 채워서 값이 잘못됐을 때 나는 에러만 골라 잡으세요!",
         guide: "except 뒤에 에러 이름을 써요!",
         hint: "값(Value)이 잘못됐을 때 나는 에러 이름은?",
         template: "try:\n    숫자 = int('abc')\n___ ___:\n    print('숫자가 아니에요!')",
         blanksAnswer: ["except", "ValueError"],
         answer: "try:\n    숫자 = int('abc')\nexcept ValueError:\n    print('숫자가 아니에요!')",
         en: {
-          task: "Fill in the blanks to catch only ValueError!",
+          task: "Fill in the blanks to catch only the error from a bad value!",
           guide: "Write the error name after except!",
           hint: "What is the name of the error when a value is wrong?"
         },

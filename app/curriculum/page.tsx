@@ -12,6 +12,7 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { ALL_CLUSTERS } from "@/data/practice"
 import { ALL_TOPICS } from "@/data/algorithm/topics"
+import { onRampForLesson } from "@/lib/journey/contest-prep-map"
 import { getRankForPart, getStudentTrackRank, RANKS, type RankInfo } from "@/lib/curriculum-ranks"
 import { pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import {
@@ -250,8 +251,8 @@ export default function CurriculumPage() {
         { id: "cpp-24", title: t("21. 🚀 알고리즘 시작 전 셋업", "21. 🚀 Pre-Algorithm Setup"), description: t("3 줄 외우기 — bits/stdc++.h + Fast I/O. 5 분.", "Memorize 3 lines — bits/stdc++.h + Fast I/O. 5 min."), duration: t("5분", "5 min") },
         { id: "cpp-26", title: t("22. sort 응용 패턴 📌 심화", "22. Sort Application Patterns 📌 Advanced"), description: t("sort+unique+erase, stable_sort, count_if 등 — Bronze 합격 후 알아두면 좋음", "sort+unique+erase, stable_sort, count_if, etc. — good to know after Bronze"), duration: t("15분", "15 min"), hasQuiz: true, optional: true },
         { id: "cpp-17", title: t("23. STL 탐색 함수 📌 참고용", "23. STL Search Functions 📌 Reference"), description: t("이미 다른 레슨에서 대부분 다룸 — 정리/심화로 보면 OK", "Mostly covered in earlier lessons — view as a recap/extension"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
-        { id: "cpp-18", title: t("24. stack & queue 📌 참고용", "24. stack & queue 📌 Reference"), description: t("Algorithm Lab 의 BFS/DFS 시작 직전에 돌아와서 보기", "Come back here right before starting BFS/DFS in Algorithm Lab"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
-        { id: "cpp-19", title: t("25. 파일 I/O & Fast I/O 심화 📌 참고용", "25. File I/O & Fast I/O Deep Dive 📌 Reference"), description: t("Fast I/O 핵심은 cpp-24 에 있음 — 여기는 파일 I/O + 심화", "Fast I/O essentials are in cpp-24 — this is File I/O + deep dive"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
+        { id: "cpp-18", title: t("24. stack & queue ⏳ 알고리즘 직전에", "24. stack & queue ⏳ Before algorithms"), description: t("참고용 아님 — BFS/DFS 배우기 직전에 꼭 필요해요 (큐 없이는 BFS 못 함)", "Not optional — needed right before BFS/DFS (no queue, no BFS)"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
+        { id: "cpp-19", title: t("25. 파일 I/O ⏳ 대회 직전에", "25. File I/O ⏳ Before contests"), description: t("참고용 아님 — USACO는 파일로 입출력 받아서 대회 진입 직전 꼭 챙겨요", "Not optional — USACO uses file I/O, grab this right before contests"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
         { id: "cpp-20", title: t("26. CP 실전 팁 📌 참고용", "26. CP Practical Tips 📌 Reference"), description: t("typedef, 매크로, 비트마스크 등 — 필요할 때 돌아오기", "typedef, macros, bitmask, etc. — come back when needed"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
         { id: "cpp-p3", title: t("🏆 USACO 모의전 (Part 3 종합)", "🏆 USACO Mock Contest (Part 3 Capstone)"), description: t("pair / sort / map / stack — 3 문제로 진짜 USACO 풀이 체험", "pair / sort / map / stack — 3 problems for real USACO experience"), duration: t("30분", "30 min"), isProject: true },
       ],
@@ -394,6 +395,7 @@ export default function CurriculumPage() {
   }
   const [cppNudge, setCppNudge] = useState(false)
   const [showCppModal, setShowCppModal] = useState(false)
+  const [refShelfOpen, setRefShelfOpen] = useState(false) // 참고용(cpp-17~20) 레슨 접기/펴기
   // 레슨별 진행 중 상태: lessonId → { visitedSteps, totalSteps }
   const [lessonInProgress, setLessonInProgress] = useState<Map<string, { visited: number; total: number }>>(new Map())
   const [practiceClustersDone, setPracticeClustersDone] = useState(0)
@@ -1124,6 +1126,9 @@ export default function CurriculumPage() {
                       <span className="mt-1 text-xs text-center rounded-lg py-1.5 font-bold text-green-700">
                         {practiceProblemsDone >= 40 ? `✅ ${t("알고리즘 해금!", "Algorithms Unlocked!")}` : t("레슨에서 Try Challenge로 도전!", "Try Challenge in each lesson!")}
                       </span>
+                      <Link href="/course/kl" className="text-xs text-center bg-amber-500 text-white rounded-lg py-1.5 font-black hover:bg-amber-600 transition-colors">
+                        🎯 {t("KL 대비 사다리 (40문제) →", "KL Prep Ladder (40 problems) →")}
+                      </Link>
                       {completedLessons.has("cpp-p3") && (
                         <Link href="/coding-bank" className="text-xs text-center border border-emerald-400 text-emerald-600 rounded-lg py-1.5 font-bold hover:bg-emerald-50 transition-colors">
                           🏦 {t("코딩 뱅크 →", "Coding Bank →")}
@@ -1252,6 +1257,9 @@ export default function CurriculumPage() {
                       <span className="mt-1 text-xs text-center rounded-lg py-1.5 font-bold text-green-700">
                         {pyPracticeDone >= pyPracticeGoal ? `✅ ${t("알고리즘 해금!", "Algorithms Unlocked!")}` : t("레슨에서 Try Challenge로 도전!", "Try Challenge in each lesson!")}
                       </span>
+                      <Link href="/course/kl" className="text-xs text-center bg-amber-500 text-white rounded-lg py-1.5 font-black hover:bg-amber-600 transition-colors">
+                        🎯 {t("KL 대비 사다리 (40문제) →", "KL Prep Ladder (40 problems) →")}
+                      </Link>
                     </>
                   ) : (
                     <>
@@ -1595,37 +1603,43 @@ export default function CurriculumPage() {
                                           "Up to here (map & set + algo setup) you can solve ~80% of USACO Bronze. Lessons below are for reference — come back when needed!"
                                         )}
                                       </p>
-                                      <div className="flex flex-wrap gap-2">
-                                        <Link
-                                          href="/learn/cpp-p3"
-                                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs sm:text-sm font-bold border border-gray-200 shadow-sm transition-all"
-                                        >
-                                          🏆 {t("USACO 모의전 (cpp-p3)", "USACO Mock (cpp-p3)")}
-                                        </Link>
-                                        <Link
-                                          href="/coding-bank"
-                                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs sm:text-sm font-bold border border-gray-200 shadow-sm transition-all"
-                                        >
-                                          🌟 {t("코딩 뱅크 (100 문제)", "Coding Bank (100 problems)")}
-                                        </Link>
-                                        <Link
-                                          href="/algo"
-                                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white text-xs sm:text-sm font-bold border border-gray-200 shadow-sm transition-all"
-                                        >
-                                          🧠 {t("Algorithm Lab", "Algorithm Lab")}
-                                        </Link>
+                                      {/* 다음 1개 — 큰 버튼 하나 (결정 피로 0) */}
+                                      <Link
+                                        href="/coding-bank"
+                                        className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm sm:text-base font-black shadow-md transition-all"
+                                      >
+                                        ⭐ {t("다음 → 코딩 뱅크에서 풀기 시작", "Next → Start solving in Coding Bank")}
+                                      </Link>
+                                      <p className="text-[11px] text-gray-500 mt-2">
+                                        {t(
+                                          "배운 STL·문법만으로 푸는 종합 문제 — 알고리즘 들어가기 전 워밍업이에요.",
+                                          "Multi-step problems with just the STL/syntax you know — a warm-up before algorithms."
+                                        )}
+                                      </p>
+                                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-[11px] text-gray-400">
+                                        <span>{t("나중에:", "Later:")}</span>
+                                        <Link href="/learn/cpp-p3" className="hover:text-gray-600 underline-offset-2 hover:underline">🏆 {t("USACO 모의전", "USACO Mock")}</Link>
+                                        <Link href="/algo" className="hover:text-gray-600 underline-offset-2 hover:underline">🧠 Algorithm Lab</Link>
                                       </div>
                                       <p className="text-[11px] text-gray-500 mt-2.5">
                                         {t(
-                                          "↓ cpp-17 ~ cpp-20 은 각 알고리즘 토픽 시작 직전 5 분만 훑고 와도 충분해요.",
-                                          "↓ cpp-17 ~ cpp-20: a 5-minute skim before each algorithm topic is plenty."
+                                          "📌 stack & queue · 파일 I/O 는 알고리즘/대회 직전에 \"다음\"으로 다시 안내돼요. STL 탐색 · CP 팁은 자료실(필요할 때).",
+                                          "📌 stack & queue · file I/O reappear as \"next\" right before algorithms/contest. STL search · CP tips live in the reference shelf."
                                         )}
                                       </p>
+                                      <button
+                                        onClick={() => setRefShelfOpen((o) => !o)}
+                                        className="mt-2 text-[11px] font-bold text-gray-500 hover:text-gray-700 underline underline-offset-2"
+                                      >
+                                        {refShelfOpen
+                                          ? t("참고·심화 레슨 접기 ▲", "Hide extra lessons ▲")
+                                          : t("📌 참고·심화 + ⏳ 나중에 볼 레슨 (cpp-17~20) ▾", "📌 Reference + ⏳ later lessons (cpp-17~20) ▾")}
+                                      </button>
                                     </div>
                                   </div>
                                 </div>
                               )}
-                            {(() => {
+                            {(!lesson.optional || refShelfOpen) && (() => {
                               // 학생 모드 공통 계산
                               const cluster = lessonToClusters.get(String(lesson.id))?.[0]
                               const hasReview = !isPseudo && !!lesson.hasQuiz
@@ -1730,6 +1744,15 @@ export default function CurriculumPage() {
                                                     </span>
                                                   </>
                                                 )}
+                                                {(() => {
+                                                  const track = String(lesson.id).startsWith("cpp-") ? "cpp" : "python"
+                                                  const cnt = onRampForLesson(lesson.id, track).length
+                                                  return cnt > 0 ? (
+                                                    <span className="px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded text-xs font-bold" title={t("이 레슨을 끝내면 풀 수 있는 대회 문제", "Contest problems unlocked by finishing this lesson")}>
+                                                      🏆 {t(`대회문제 ${cnt}`, `${cnt} contest`)}
+                                                    </span>
+                                                  ) : null
+                                                })()}
                                               </>
                                             )}
                                           </div>

@@ -70,14 +70,14 @@ export const lessonCpp16: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "string을 키, int를 값으로 하는 map을 선언해요!",
+          task: "문자열을 키, 정수를 값으로 하는 map을 선언해요!",
           guide: "map<키타입, 값타입> 형태!",
           template: "map<___, ___> scores;",
           answer: "string",
           blanksAnswer: ["string", "int"],
           expect: "map<string, int> scores;",
           en: {
-            task: "Declare a map with string keys and int values!",
+            task: "Declare a map that uses text as keys and whole numbers as values!",
             guide: "Use the form: map<keyType, valueType>"
           }
         }

@@ -9,6 +9,7 @@
 // ─────────────────────────────────────────────────────────────────────
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
@@ -19,6 +20,7 @@ import {
   EXTERNAL_PROBLEMS, SOURCE_META,
   type ExtProblem, type ExtTopic, type ExtDifficulty,
 } from "@/data/practice/contest-prep-external"
+import { ALL_CLUSTERS } from "@/data/practice"
 
 const DIFF_ORDER: ExtDifficulty[] = ["쉬움", "보통", "어려움"]
 const TOPIC_ORDER: ExtTopic[] = ["시뮬레이션", "완전탐색", "배열", "문자열", "map/빈도", "정렬", "투포인터", "그리드", "수학", "그리디"]
@@ -50,6 +52,25 @@ const PHASES: { at: number; ko: string; en: string; dot: string }[] = [
   { at: 33, ko: "4단계 · 기법 입문 (윈도우·이분·누적합)", en: "Stage 4 · Techniques", dot: "bg-rose-500" },
 ]
 const PROB_BY_ID = new Map(EXTERNAL_PROBLEMS.map(p => [p.id, p]))
+
+// ── 앱 안 자체채점 KL 문제 (kl:true 태그) — 클러스터별 그룹, 쉬움→어려움 ──
+const KL_GROUPS = ALL_CLUSTERS
+  .map(c => ({
+    id: c.id,
+    title: c.title,
+    emoji: c.emoji,
+    problems: c.problems
+      .filter(p => p.kl)
+      .sort((a, b) => DIFF_ORDER.indexOf(a.difficulty) - DIFF_ORDER.indexOf(b.difficulty)),
+  }))
+  .filter(g => g.problems.length > 0)
+const KL_TOTAL = KL_GROUPS.reduce((s, g) => s + g.problems.length, 0)
+
+// 이 단계엔 선수지식(이분탐색 등)이 아직 부족한 문제 → "알고리즘 배운 뒤"로 안내.
+// 막진 않음 — 표시만 해서 지금 여기서 안 막히게.
+const DEFER_AFTER_ALGO: Record<string, { ko: string; en: string }> = {
+  "cses-1091": { ko: "⏳ 알고리즘(이분탐색) 배운 뒤에", en: "⏳ After binary search (algorithm stage)" },
+}
 
 // 학생이 직접 누르는 "했음" 체크 — 외부 링크라 자동 채점 불가
 function CheckDot({ done, onToggle }: { done: boolean; onToggle: () => void }) {
@@ -114,10 +135,54 @@ function Content() {
         <div>
           <h1 className="text-2xl font-black text-gray-900">{t("KL 대비 문제", "KL Prep Problems")}</h1>
           <p className="text-gray-600 text-sm font-medium mt-0.5">
-            {t(`공개 저지 ${EXTERNAL_PROBLEMS.length}문제 · 누르면 새 탭으로 열려요`, `${EXTERNAL_PROBLEMS.length} public-judge problems · opens in a new tab`)}
+            {t(`앱에서 바로 푸는 ${KL_TOTAL}문제 (자동 채점) · 아래 외부 문제는 더 풀기용`, `${KL_TOTAL} in-app problems (auto-graded) · external below for extra practice`)}
           </p>
         </div>
         <LanguageToggle className="shrink-0 mt-1" />
+      </div>
+
+      {/* ── 🎯 앱에서 바로 풀기 (자체 채점) — 메인 ── */}
+      {KL_TOTAL > 0 && (
+        <section className="mb-8">
+          <div className="flex items-center gap-2 mb-1">
+            <h2 className="text-lg font-black text-gray-900">🎯 {t("앱에서 바로 풀기", "Solve in-app")}</h2>
+            <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold border border-emerald-200">{t("자동 채점", "Auto-graded")}</span>
+          </div>
+          <p className="text-xs text-gray-500 mb-4">
+            {t("누르면 앱 안에서 풀고 바로 채점돼요. 선생님은 정답도 볼 수 있어요.", "Opens in-app, auto-graded. Teachers can view the solution.")}
+          </p>
+          <div className="flex flex-col gap-4">
+            {KL_GROUPS.map(g => (
+              <div key={g.id}>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-base">{g.emoji}</span>
+                  <h3 className="text-sm font-bold text-gray-700">{g.title}</h3>
+                  <span className="text-xs text-gray-400">{g.problems.length}</span>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  {g.problems.map((p, i) => (
+                    <Link
+                      key={p.id}
+                      href={`/practice?cluster=${g.id}&problem=${p.id}&from=kl&lang=cpp`}
+                      className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 hover:border-emerald-400 hover:shadow-sm transition-all"
+                    >
+                      <span className="w-5 h-5 shrink-0 rounded-full bg-gray-900 text-white text-[10px] font-black flex items-center justify-center">{i + 1}</span>
+                      <span className="text-sm font-semibold text-gray-900 flex-1 truncate">{p.title}</span>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold border shrink-0 ${DIFF_COLOR[p.difficulty]}`}>{p.difficulty}</span>
+                      <span className="text-gray-300 shrink-0" aria-hidden>→</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── 📚 더 풀기 — 외부 공개 저지 (새 탭) ── */}
+      <div className="mb-3 pt-2 border-t border-gray-200">
+        <h2 className="text-lg font-black text-gray-900">📚 {t("더 풀기 — 외부 문제", "More — external problems")}</h2>
+        <p className="text-xs text-gray-500 mt-0.5">{t(`공개 저지 ${EXTERNAL_PROBLEMS.length}문제 · 새 탭으로 열려요 (자체 채점 아님)`, `${EXTERNAL_PROBLEMS.length} public-judge problems · opens in new tab (not auto-graded)`)}</p>
       </div>
 
       {/* 난이도 기준 — "얼만큼 어려운지" 절대 감 */}
@@ -171,6 +236,7 @@ function Content() {
               const p = PROB_BY_ID.get(id)
               if (!p) return null
               const phase = PHASES.find(ph => ph.at === i)
+              const defer = DEFER_AFTER_ALGO[id]
               return (
                 <li key={id}>
                   {phase && (
@@ -181,13 +247,17 @@ function Content() {
                   )}
                   <a href={p.url} target="_blank" rel="noopener noreferrer"
                      className={"flex items-center gap-2.5 rounded-lg border px-3 py-2 ml-3 hover:border-gray-400 hover:shadow-sm transition-all " +
-                       (doneSet.has(p.id) ? "border-green-200 bg-green-50/60" : "border-gray-200 bg-white")}>
+                       (doneSet.has(p.id) ? "border-green-200 bg-green-50/60"
+                        : defer ? "border-amber-300 border-dashed bg-amber-50/50"
+                        : "border-gray-200 bg-white")}>
                     <span className="w-6 h-6 shrink-0 rounded-full bg-gray-900 text-white text-xs font-black flex items-center justify-center">{i + 1}</span>
                     <CheckDot done={doneSet.has(p.id)} onToggle={() => toggleDone(p.id)} />
                     <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold border shrink-0 ${SOURCE_META[p.source].color}`}>{SOURCE_META[p.source].label}</span>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-gray-900 truncate">{p.title}</p>
-                      <p className="text-xs text-gray-500 truncate">{p.topic} · {p.blurb}</p>
+                      {defer
+                        ? <p className="text-xs font-bold text-amber-600 truncate">{lang === "ko" ? defer.ko : defer.en}</p>
+                        : <p className="text-xs text-gray-500 truncate">{p.topic} · {p.blurb}</p>}
                     </div>
                     <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold border shrink-0 ${DIFF_COLOR[p.difficulty]}`}>{p.difficulty}</span>
                     <span className="text-gray-300 shrink-0" aria-hidden>↗</span>
@@ -281,7 +351,7 @@ function Content() {
       </div>
 
       <p className="text-center text-xs text-gray-400 mt-6">
-        {t("초안 — 외부 공개 저지 문제 모음(자체 채점 아님). 진입 위치는 검토 후 연결.", "Draft — public-judge problems (not self-graded). Entry point TBD.")}
+        {t("외부 공개 저지 문제 모음 — 누르면 새 탭에서 풀어요. 커리큘럼 '2. 연습' 단계의 일부예요.", "Public-judge problems — open in a new tab. Part of the curriculum's 'Practice' stage.")}
       </p>
     </main>
   )

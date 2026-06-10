@@ -29,7 +29,11 @@ export const lesson42: LessonData = {
 hero = Character('용사', 100)
 hero.say_hello()`,
         result: "안녕! 나는 용사!",
-        note: "메서드의 첫 매개변수는 항상 s(self) — '나 자신'을 가리켜!"
+        note: "메서드의 첫 매개변수는 항상 s(self) — '나 자신'을 가리켜!",
+        en: {
+          lines: ["You make a method with def inside a class!"],
+          note: "A method's first parameter is always s(self) — it points to 'myself'!"
+        }
       }
     },
     {
@@ -43,7 +47,17 @@ hero.say_hello()`,
           "클래스 밖에 써야 함"
         ],
         answer: 1,
-        explanation: "메서드의 첫 매개변수는 항상 s(self)! 인스턴스 자신을 가리켜요."
+        explanation: "메서드의 첫 매개변수는 항상 s(self)! 인스턴스 자신을 가리켜요.",
+        en: {
+          question: "What rule must you always follow when making a method?",
+          options: [
+            "The method name must start with a capital letter",
+            "The first parameter is always s(self)",
+            "It must always have a return",
+            "It must be written outside the class"
+          ],
+          explanation: "A method's first parameter is always s(self)! It points to the instance itself."
+        }
       }
     },
     {
@@ -63,6 +77,13 @@ d.bark()`,
           options: ["멍멍!", "초코: 멍멍!", "Dog: 멍멍!", "에러"],
           answer: 1,
           feedback: "s 는 d 자신! s.name 은 '초코'. → '초코: 멍멍!'"
+        },
+        en: {
+          lines: ["Predict the result!"],
+          predict: {
+            options: ["멍멍!", "초코: 멍멍!", "Dog: 멍멍!", "Error"],
+            feedback: "s is d itself! s.name is '초코'. → '초코: 멍멍!'"
+          }
         }
       }
     },
@@ -83,7 +104,12 @@ d.bark()`,
 hero = Character('용사')
 hero.___()`,
         answer: "say_hello",
-        expect: "안녕! 나는 용사!"
+        expect: "안녕! 나는 용사!",
+        en: {
+          task: "Call Character's say_hello method",
+          guide: "Call it with object.method()!",
+          hint: "hero.say_hello()"
+        }
       }
     },
     {
@@ -104,7 +130,12 @@ hero = Character('용사')
 hero.introduce(___)`,
         answer: "'전사'",
         alternateAnswers: ['"전사"'],
-        expect: "용사, 직업: 전사"
+        expect: "용사, 직업: 전사",
+        en: {
+          task: "Call the introduce method to print the name and job",
+          guide: "Pass the job as an argument!",
+          hint: "hero.introduce('전사')"
+        }
       }
     },
     {
@@ -144,7 +175,11 @@ hero.introduce(___)`,
 c = Cat('나비')
 print(c.name)`,
         answer: "s",
-        expect: "나비"
+        expect: "나비",
+        en: {
+          message: "🔄 __init__ review!",
+          task: "What is the first parameter of __init__?"
+        }
       }
     },
     {
@@ -163,7 +198,11 @@ print(c.name)`,
 hero = Character('용사', 80)
 hero.heal(20)`,
         result: "용사 회복! HP 100",
-        note: "s.hp = s.hp + amount → 객체 자신의 hp를 직접 수정!"
+        note: "s.hp = s.hp + amount → 객체 자신의 hp를 직접 수정!",
+        en: {
+          lines: ["Inside a method, change the object's state with s.attribute = value!"],
+          note: "s.hp = s.hp + amount → directly modifies the object's own hp!"
+        }
       }
     },
     {
@@ -186,6 +225,13 @@ print(c.value)`,
           options: ["0", "1", "3", "에러"],
           answer: 2,
           feedback: "bump 를 3번 호출 → value 가 0 → 1 → 2 → 3!"
+        },
+        en: {
+          lines: ["Predict the result!"],
+          predict: {
+            options: ["0", "1", "3", "Error"],
+            feedback: "bump is called 3 times → value goes 0 → 1 → 2 → 3!"
+          }
         }
       }
     },
@@ -209,7 +255,12 @@ hero.level_up()
 hero.level_up()
 print(hero.level)`,
         answer: "level",
-        expect: "3"
+        expect: "3",
+        en: {
+          task: "Make a level_up method that raises the level by 1 each time",
+          guide: "The s.level = s.level + 1 pattern!",
+          hint: "Inside the method, s.level = s.level + 1"
+        }
       }
     },
     {
@@ -230,7 +281,11 @@ hero = Character('용사', 100, 25)
 slime = Character('슬라임', 50, 5)
 hero.attack(slime)`,
         result: "슬라임 HP: 25",
-        note: "target 도 객체라서 target.속성 으로 접근 가능!"
+        note: "target 도 객체라서 target.속성 으로 접근 가능!",
+        en: {
+          lines: ["You can also take another object as a parameter and modify that object!"],
+          note: "target is also an object, so you can access it with target.attribute!"
+        }
       }
     },
     {
@@ -254,7 +309,12 @@ hero = Character('용사', 100, 30)
 slime = Character('슬라임', 50, 5)
 hero.attack(slime)`,
         answer: "atk",
-        expect: "슬라임 HP: 20"
+        expect: "슬라임 HP: 20",
+        en: {
+          task: "Inside the attack method, reduce target's hp by s.atk",
+          guide: "target.hp = target.hp - s.atk!",
+          hint: "Subtract s.atk from target.hp and store it back in target.hp"
+        }
       }
     },
     {
@@ -273,7 +333,17 @@ c = Cat('나비')`,
           "문제 없음"
         ],
         answer: 0,
-        explanation: "메서드의 첫 매개변수는 항상 s(self)! def __init__(s, name): 처럼 작성해야 해요."
+        explanation: "메서드의 첫 매개변수는 항상 s(self)! def __init__(s, name): 처럼 작성해야 해요.",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "The first parameter s(self) is missing from __init__",
+            "The Cat class name is wrong",
+            "The name variable is not defined",
+            "Nothing is wrong"
+          ],
+          explanation: "A method's first parameter is always s(self)! You must write it like def __init__(s, name):."
+        }
       }
     },
     {
@@ -316,7 +386,11 @@ mage = Character('마법사', 80)
 print(hero.name, mage.name)
 print(Character.game_title)`,
         result: "용사 마법사\nRPG",
-        note: "클래스 변수는 클래스 안 + 메서드 밖! 인스턴스 변수는 __init__ 안의 s.xxx!"
+        note: "클래스 변수는 클래스 안 + 메서드 밖! 인스턴스 변수는 __init__ 안의 s.xxx!",
+        en: {
+          lines: ["Instance variables have different values for each object, class variables are shared by all!"],
+          note: "Class variables go inside the class but outside methods! Instance variables are s.xxx inside __init__!"
+        }
       }
     },
     {
@@ -330,7 +404,17 @@ print(Character.game_title)`,
           "__init__ 안에서만 만들 수 있다"
         ],
         answer: 2,
-        explanation: "클래스 변수는 모든 객체가 공유! 클래스 안, 메서드 밖에 선언."
+        explanation: "클래스 변수는 모든 객체가 공유! 클래스 안, 메서드 밖에 선언.",
+        en: {
+          question: "Which of the following correctly describes a class variable?",
+          options: [
+            "It has a different value for each object",
+            "It is declared in the form s.xxx",
+            "All objects share the same value",
+            "It can only be created inside __init__"
+          ],
+          explanation: "Class variables are shared by all objects! Declared inside the class, outside methods."
+        }
       }
     },
     {
@@ -352,6 +436,13 @@ print(Pet.count)`,
           options: ["1", "2", "3", "0"],
           answer: 2,
           feedback: "Pet.count 는 클래스 변수 (공유). 3마리 만들면 3!"
+        },
+        en: {
+          lines: ["Predict the result!"],
+          predict: {
+            options: ["1", "2", "3", "0"],
+            feedback: "Pet.count is a class variable (shared). Make 3 pets and it's 3!"
+          }
         }
       }
     },
@@ -374,7 +465,12 @@ m2 = TeamMember('B')
 m3 = TeamMember('C')
 print(TeamMember.member_count)`,
         answer: "member_count",
-        expect: "3"
+        expect: "3",
+        en: {
+          task: "Increase the class variable member_count by 1 each time",
+          guide: "TeamMember.member_count = TeamMember.member_count + 1",
+          hint: "Access a class variable with ClassName.variableName!"
+        }
       }
     },
     {
@@ -388,7 +484,17 @@ print(TeamMember.member_count)`,
           "지역 변수"
         ],
         answer: 1,
-        explanation: "각자 다른 값 = 인스턴스 변수! __init__ 안에서 s.hp 로 만들어요."
+        explanation: "각자 다른 값 = 인스턴스 변수! __init__ 안에서 s.hp 로 만들어요.",
+        en: {
+          question: "Which variable should you use to store a different hp value for each character?",
+          options: [
+            "Class variable (outside methods)",
+            "Instance variable (s.hp)",
+            "Global variable",
+            "Local variable"
+          ],
+          explanation: "Different value for each = instance variable! Make it with s.hp inside __init__."
+        }
       }
     },
     {
@@ -430,7 +536,11 @@ print(TeamMember.member_count)`,
 hero = Character('용사')
 hero.___()`,
         answer: "show",
-        expect: "용사"
+        expect: "용사",
+        en: {
+          message: "🔄 Method call review!",
+          task: "Call hero's show method"
+        }
       }
     },
     {
@@ -453,6 +563,13 @@ print(hero.hp)`,
           options: ["50", "70", "85", "35"],
           answer: 2,
           feedback: "50 + 20 = 70, 70 + 15 = 85!"
+        },
+        en: {
+          lines: ["Predict the result!"],
+          predict: {
+            options: ["50", "70", "85", "35"],
+            feedback: "50 + 20 = 70, 70 + 15 = 85!"
+          }
         }
       }
     },
@@ -463,6 +580,11 @@ print(hero.hp)`,
         task: "BankAccount 클래스의 deposit/withdraw 메서드 빈칸을 채우세요",
         guide: "deposit 은 +, withdraw 는 -. 잔액 부족이면 출력!",
         hint: "balance += amount / if balance >= amount: balance -= amount",
+        en: {
+          task: "Fill in the blanks in BankAccount's deposit/withdraw methods",
+          guide: "deposit is +, withdraw is -. Print if balance is insufficient!",
+          hint: "balance += amount / if balance >= amount: balance -= amount"
+        },
         template: `class BankAccount:
     def __init__(s, owner, balance):
         s.owner = owner
@@ -506,6 +628,11 @@ print(a.balance)`,
         task: "Counter 클래스를 만들어 bump() 3번 후 값을 출력하세요",
         guide: "__init__ 에서 value=0, bump 에서 +1!",
         hint: "class Counter: def __init__(s): s.value = 0 ...",
+        en: {
+          task: "Make a Counter class and print the value after calling bump() 3 times",
+          guide: "value=0 in __init__, +1 in bump!",
+          hint: "class Counter: def __init__(s): s.value = 0 ..."
+        },
         template: null,
         answer: `class Counter:
     def __init__(s):
@@ -552,7 +679,17 @@ d.bark()`,
           "문제 없음"
         ],
         answer: 0,
-        explanation: "메서드의 첫 매개변수는 항상 s! def bark(s): 처럼 작성해야 d.bark() 호출 시 에러가 안 나요."
+        explanation: "메서드의 첫 매개변수는 항상 s! def bark(s): 처럼 작성해야 d.bark() 호출 시 에러가 안 나요.",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "The s(self) parameter is missing from the bark method",
+            "class Dog is wrong",
+            "d = Dog() has no arguments",
+            "Nothing is wrong"
+          ],
+          explanation: "A method's first parameter is always s! You must write it like def bark(s): so calling d.bark() doesn't cause an error."
+        }
       }
     },
     {

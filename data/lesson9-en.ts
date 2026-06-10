@@ -18,46 +18,56 @@ export const lesson9EnData: LessonData = {
           id: "intro",
           type: "explain",
           title: "🔄 Why Change a Type?",
-          content: `Remember from lesson 5 that \`"3" + "5"\` gave you \`"35"\`?
+          content: `Remember from lesson 5 that \`"3" + "5"\` gave you \`"35"\`? Same \`+\`, totally different result.
 
 \`\`\`python
-"3" + "5"     # "35"  ← glues the letters
+"3" + "5"     # "35"  ← glues the letters together
 3 + 5         # 8     ← real addition
 \`\`\`
 
-Quotes around it → **string (str)**. No quotes → **integer (int)**. They look similar, but Python treats them completely differently.
+Quotes around it → **string (str)**. No quotes → **integer (int)**. Even though both look like \`3\`, to Python the **letter \`"3"\`** and the **number \`3\`** are completely different kinds of thing. (Like the difference between a 🍎 *photo* of an apple and a *real* apple.)
 
-The catch — sometimes you get **a string that looks like a number**.
+The catch — the world is full of **strings that look like numbers**.
 
 \`\`\`python
-score = "85"          # came from somewhere as text
+score = "85"          # came from somewhere as text (a string!)
 print(score + 10)     # ❌ TypeError!
 \`\`\`
 
-Python: "Is this \`"85"\` text or a number? I can't add them!"`
+Python: *"This \`"85"\` is text (str), so how do I add it to the number \`10\`? The kinds don't match — I can't!"*
+
+Especially \`input()\` (next lesson) — whatever the user types always comes in as a string, so you *must* convert it before doing math. That's why **type conversion** shows up almost every day from here on.`
         },
         {
           id: "intro-clothes",
           type: "explain",
           title: "👕 Think of it as changing clothes",
-          content: `Type conversion = a value **changing its outfit**.
+          content: `Type conversion in one line — a value **changing its outfit**.
 
-| Function | Into what outfit? | Example |
+The *contents* (\`85\`) stay the same, but depending on which **outfit (type)** it wears, Python treats it differently.
+- Wearing the number outfit (\`int\`) → it can do **math** like add/subtract.
+- Wearing the text outfit (\`str\`) → it can be **glued** to other text.
+
+Four helpers change the outfit for you:
+
+| Helper | Into what outfit? | Example |
 |----------|-------------------|---------|
-| \`int()\` | int (integer) | \`int("85")\` → \`85\` |
-| \`float()\` | float (decimal number) | \`float("3.14")\` → \`3.14\` |
-| \`str()\` | str (text — adds quotes) | \`str(42)\` → \`"42"\` |
-| \`bool()\` | bool (True / False) | \`bool(0)\` → \`False\` |
+| \`int()\` | integer (whole number) | \`int("85")\` → \`85\` |
+| \`float()\` | decimal number | \`float("3.14")\` → \`3.14\` |
+| \`str()\` | text (adds quotes) | \`str(42)\` → \`"42"\` |
+| \`bool()\` | True / False | \`bool(0)\` → \`False\` |
 
-> 💡 **int** = whole number / **float** = number with a decimal point / **str** = text / **bool** = True or False.
+> 💡 **int** = whole number (no decimal) · **float** = number with a decimal · **str** = text · **bool** = True or False
+>
+> The function name *is* the outfit: \`int(...)\` → "put on the integer outfit", \`str(...)\` → "put on the text outfit".
 
-The *meaning* of the value stays the same — \`"85"\` and \`85\` both mean "eighty-five". Only the *outfit* changes, which decides what Python lets you do with it.`
+The *meaning* ("eighty-five") stays the same — only the **outfit (how Python handles it)** changes. Try changing outfits below and it'll click. 👇`
         },
         {
           id: "intro-viz",
           type: "interactive",
-          title: "🎬 Visualize the conversion — click around",
-          description: "Pick a preset and press ▷ Step. Watch how a value changes its outfit.",
+          title: "🎬 Visualize the conversion — the value changes outfit",
+          description: "Tap an example above, or type your own value and pick int/float/str/bool, then press ▶ Convert! Watch the quotes peel off and the decimals fall away with your own eyes.",
           component: "typeConversionVisualizer",
         },
         {
@@ -84,25 +94,31 @@ The *meaning* of the value stays the same — \`"85"\` and \`85\` both mean "eig
           id: "int-explain",
           type: "explain",
           title: "🔢 int() — to integer",
-          content: `\`int()\` takes two kinds of input:
+          content: `Hand a value to \`int()\` and it **rebuilds it as an integer (a whole number)**. It welcomes two kinds of guest.
 
-**1) A number-looking string → integer**
+**Guest ①  a string that looks like a number** — \`"123"\` is *wearing quotes* but is a number inside.
 
 \`\`\`python
-int("123")    # 123
+int("123")    # 123  ← strip the quotes, back to a real number
 int("0")      # 0
 int("-7")     # -7
 \`\`\`
 
-**2) A float → integer (decimals are *cut off*, NOT rounded!)**
+Great for values that arrive "as a number wearing a text outfit" — game scores, an age typed into a box.
+
+**Guest ②  a decimal number (float)**
 
 \`\`\`python
-int(3.7)      # 3   ← NOT 4!
-int(3.9)      # 3   ← still 3!
+int(3.7)      # 3   ← !! not 4
+int(3.9)      # 3   ← 3.9 still becomes 3!
 int(-2.8)     # -2  ← cut toward zero
 \`\`\`
 
-> 💡 Rounding is \`round()\`. \`int()\` just **chops**. (round comes later.)`
+This surprises everyone once. \`int()\` does **not round** — it just **chops off** everything after the dot.
+
+**Why chop?** \`int()\`'s job is *"make it an integer"*, not *"find the nearest integer"*. If you want the nearest value, that's a **different function**, \`round()\`. (round comes later, on its own.)
+
+> 🔪 \`int()\` = **scissors** that cut off the decimals  ·  🎯 \`round()\` = **moves to the nearest** slot`
         },
         {
           id: "predict-truncate",
@@ -147,22 +163,24 @@ print(int(3.9))
           id: "float-explain",
           type: "explain",
           title: "🔢 float() — to decimal",
-          content: `\`float()\` = convert to a decimal number.
+          content: `\`float()\` changes a value into the **decimal-number (float) outfit**.
 
 \`\`\`python
 # string → float
 float("3.14")     # 3.14
-float("100")      # 100.0   ← .0 attaches!
+float("100")      # 100.0   ← even a whole-number look gets .0!
 
 # integer → float
 float(10)         # 10.0
 \`\`\`
 
-**When to use it:**
-- Prices, heights, averages — anything that *can have a decimal*.
-- To turn the result of \`input()\` (always a string — coming next lesson) into a real number.
+**Why does \`.0\` show up?** A float is "a number that has a decimal point", so even with nothing after the dot it **adds \`.0\` to say "I'm a float."** \`10\` (int) and \`10.0\` (float) are the same value but *different types*.
 
-> 💡 Difference from \`int\`: \`float("3.14")\` ✅ works! The dot is fine.`
+**When to use it:**
+- Prices, heights, averages — anything that **needs a decimal**.
+- To turn an \`input()\` value like \`"3.5"\` (next lesson) into a real number.
+
+> 💡 The key difference from \`int()\`: \`int("3.14")\` is ❌ rejected, but \`float("3.14")\` ✅ works! Strings with a dot (\`.\`) are float's job.`
         },
         {
           id: "pre-try3",
@@ -188,7 +206,7 @@ float(10)         # 10.0
           id: "str-explain",
           type: "explain",
           title: "📝 str() — to text",
-          content: `\`str()\` = turn a number (or other value) into a **string** by wrapping it in quotes.
+          content: `\`str()\` puts a **text outfit (quotes)** on a number (or any value).
 
 \`\`\`python
 str(123)          # "123"
@@ -196,7 +214,7 @@ str(3.14)         # "3.14"
 str(True)         # "True"
 \`\`\`
 
-**When?** — When you want to glue with text using \`+\`.
+**When?** — when you want to **glue a number to other text with \`+\`**.
 
 \`\`\`python
 score = 95
@@ -207,9 +225,15 @@ print("Score: " + str(score) + " points")
 Score: 95 points
 {/output}
 
-Without str()? — \`"Score: " + 95\` ❌ TypeError!
+**Why must you convert with \`str()\`?** \`+\` only works *between the same kind*. text+text means "glue", number+number means "add". But **text + number** makes Python ask "do I glue or add?" — so it refuses.
 
-> 💡 With **f-strings** from lesson 8 you don't need \`str()\`: \`f"Score: {score} points"\` — it converts automatically.`
+\`\`\`python
+print("Score: " + 95)   # ❌ TypeError!  (text + number)
+\`\`\`
+
+Turn \`95\` into the text \`"95"\` first → text + text → glues cleanly.
+
+> 💡 With **f-strings** from lesson 8 you don't even need \`str()\`: \`f"Score: {score} points"\` — it auto-converts whatever is inside the braces. (\`str()\` is doing that same conversion *by hand*.)`
         },
         {
           id: "pre-try4",
@@ -255,26 +279,32 @@ print(str(7) + str(3))
           id: "bool-explain",
           type: "explain",
           title: "✅ bool() — to True/False",
-          content: `\`bool()\` = turn a value into **True** or **False**.
+          content: `\`bool()\` changes a value into **True or False**. Python decides by asking: "is this value *empty, or filled?*"
 
-**Values that become False (memorize these!):**
+**Values that become False — the "empty" ones (memorize!):**
 \`\`\`python
-bool(0)       # False
+bool(0)       # False   ← the number 0
 bool(0.0)     # False
-bool("")      # False   ← empty string
+bool("")      # False   ← empty string (nothing inside the quotes)
 \`\`\`
 
-**Everything else is True:**
+**Everything else is True — the "has something" ones:**
 \`\`\`python
 bool(1)       # True
-bool(-1)      # True    ← negatives too!
+bool(-1)      # True    ← negatives too, since they're "not 0"!
 bool("hi")    # True
-bool("0")     # True    ← "0" in quotes is NOT empty!
+bool("0")     # True    ← !! "0" in quotes is one character → "filled"
 \`\`\`
 
-> 💡 Tricky one: \`bool("0")\` is **True**. Anything with at least one character inside quotes is a "non-empty string" → True.
+**The key idea:** *"empty → False, anything in it → True."*
+- \`0\` and \`""\` are "totally empty" → False
+- \`"0"\` *contains the character 0* → not empty, so True!
+
+> 💡 \`bool("0")\` being \`True\` is a classic gotcha. If there's *even one* character inside the quotes, it's a "non-empty string" → True.
 >
-> An empty list \`[]\` is also False — lists come in lesson 16.`
+> (FYI: an empty list \`[]\` is also False — lists come in lesson 16.)
+
+This "empty vs filled" judgment shows up again in lesson 11's **if statements**.`
         },
         {
           id: "try5",
@@ -290,21 +320,25 @@ bool("0")     # True    ← "0" in quotes is NOT empty!
           id: "error-explain",
           type: "explain",
           title: "⚠️ Two kinds of conversion error",
-          content: `Bad conversions raise errors. Knowing the **error name** makes them less scary.
+          content: `Trying to force the wrong outfit makes Python raise an **error**. They look scary, but **once you know the error's name** you can see exactly what went wrong.
 
 \`\`\`python
-int("abc")        # ❌ ValueError: not digits
-int("3.14")       # ❌ ValueError: string has a dot
-float("hello")    # ❌ ValueError: not a number
+int("abc")        # ❌ ValueError — not a numeric string
+int("3.14")       # ❌ ValueError — the string has a dot
+float("hello")    # ❌ ValueError — not number-shaped
 \`\`\`
 
-> 💡 **ValueError** means "the value doesn't fit the conversion rule."
+> 💡 **ValueError** means *"the value doesn't fit the conversion rule."*
 
-**Safe detour — dot-string? use float first!**
+**Why does \`int("3.14")\` error?** — easy to mix up, so to be clear:
+- \`int(3.14)\` → ✅ \`3\`  (a real float just needs its decimal chopped — fine)
+- \`int("3.14")\` → ❌  (\`int()\` doesn't know what to do with a dot *inside text*, so it refuses)
+
+**Safe detour — for a dot-string, go through \`float\` first:**
 
 \`\`\`python
 text = "3.14"
-num = int(float(text))    # float first, then int
+num = int(float(text))    # ① float("3.14") → 3.14   ② int(3.14) → 3
 print(num)
 \`\`\`
 
@@ -312,7 +346,9 @@ print(num)
 3
 {/output}
 
-(Mind the order: inner = float, outer = int.)`
+The inner \`float()\` turns the text into the real number \`3.14\` first, then the outer \`int()\` chops the decimal to \`3\`. **Inner → outer order** is the key! (Try the "See the safe path" button in the visualizer above to watch it.)
+
+> ⚠️ In real programs a user might type something wrong and trigger a ValueError. Handling that safely with \`try-except\` comes in lesson 37.`
         },
         {
           id: "predict-error",

@@ -19,6 +19,7 @@ export const hashTableContestCluster: PracticeCluster = {
       cluster: "algo-hashtable-contest",
       unlockAfter: "algo-hashtable",
       difficulty: "쉬움",
+      kl: true,
       title: "숫자 카드 (있나 없나)",
       description: `N개의 정수(가진 카드)가 주어지고, 이어서 M개의 질의가 주어진다. 각 질의 수가 가진 카드에 **있으면 1, 없으면 0** 을 공백으로 구분해 출력하라.
 
@@ -93,6 +94,7 @@ print(*[1 if x in have else 0 for x in q])`,
       cluster: "algo-hashtable-contest",
       unlockAfter: "algo-hashtable",
       difficulty: "쉬움",
+      kl: true,
       title: "서로 다른 수의 개수",
       description: `N개의 정수가 주어진다. 그중 **서로 다른 값이 몇 종류**인지 출력하라.
 
@@ -147,6 +149,7 @@ print(len(set(a)))`,
       cluster: "algo-hashtable-contest",
       unlockAfter: "algo-hashtable",
       difficulty: "쉬움",
+      kl: true,
       title: "가장 많이 나온 수",
       description: `N개의 정수가 주어진다. **가장 자주 등장한 수**를 출력하라. 동점이면 **가장 작은 수**를 출력한다.
 
@@ -221,6 +224,7 @@ print(min(k for k, v in c.items() if v == mx))`,
       cluster: "algo-hashtable-contest",
       unlockAfter: "algo-hashtable",
       difficulty: "보통",
+      kl: true,
       title: "두 수의 합",
       description: `N개의 정수와 목표값 T가 주어진다. 두 원소의 합이 정확히 T가 되는 **서로 다른 인덱스 쌍** \`(i, j)\` (0-based, \`i < j\`) 를 찾아 한 줄에 \`i j\` 형식으로 출력하라.
 
@@ -580,6 +584,7 @@ Source: LeetCode 49 (Group Anagrams) paraphrased`,
       cluster: "algo-hashtable-contest",
       unlockAfter: "algo-hashtable",
       difficulty: "보통",
+      kl: true,
       title: "첫 반복 글자",
       description: `영문 소문자 문자열 \`s\` 가 주어진다. 두 번 이상 등장하는 글자 중 **가장 먼저 두 번째로 등장한** 글자의 0-based 인덱스를 출력하라. 그런 글자가 없으면 \`-1\` 출력.
 
@@ -786,6 +791,7 @@ Source: LeetCode 3 (Longest Substring Without Repeating Characters) paraphrased`
       cluster: "algo-hashtable-contest",
       unlockAfter: "algo-hashtable",
       difficulty: "보통",
+      kl: true,
       title: "정확히 K번 등장한 값의 수",
       description: `N개의 정수와 K가 주어진다. **정확히 K번** 등장하는 **서로 다른 값** 의 개수를 출력하라.
 
@@ -883,6 +889,7 @@ Source: original (LC 387-style counting variant)`,
       cluster: "algo-hashtable-contest",
       unlockAfter: "algo-hashtable",
       difficulty: "보통",
+      kl: true,
       title: "두 배열의 교집합 (중복 포함)",
       description: `두 배열 A (크기 N), B (크기 M) 이 주어진다. **두 배열 모두에 등장하는 원소들을 중복도 함께** 출력하라 — 즉 어떤 값 x 가 A 에 3 번, B 에 2 번 나오면 결과에 2 번 등장한다 (min(3,2)=2).
 
@@ -1302,6 +1309,7 @@ Source: LeetCode 36 (Valid Sudoku) paraphrased`,
       cluster: "algo-hashtable-contest",
       unlockAfter: "algo-hashtable",
       difficulty: "보통",
+      kl: true,
       title: "숫자 카드 — 빈도수 조회",
       description: `N장의 카드(정수)와 M개의 질문이 주어진다. 각 질문 카드 x 가 N장 중 **정확히 몇 번** 등장하는지 한 줄에 공백으로 구분해 출력하라.
 
@@ -1413,6 +1421,7 @@ Source: BOJ 10816 paraphrased`,
       cluster: "algo-hashtable-contest",
       unlockAfter: "algo-hashtable",
       difficulty: "보통",
+      kl: true,
       title: "포켓몬 도감 — 양방향 조회",
       description: `N마리의 포켓몬 이름이 1번부터 N번까지 순서대로 주어진다. 그 후 M개의 질문이 주어진다.
 

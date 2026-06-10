@@ -502,14 +502,14 @@ export const lessonCppP3: LessonData = {
         type: "practice",
         content: {
           level: 2,
-          task: "pair 벡터를 second 기준 내림차순으로 정렬하는 람다를 완성해요!",
+          task: "pair 벡터를 각 쌍의 두 번째 값 기준 내림차순으로 정렬하는 람다를 완성해요!",
           guide: "sort의 세 번째 인자로 람다 comparator를 넣어요!",
           template: "sort(v.begin(), v.end(), [](pair<int,int> a, pair<int,int> b) {\n    return a.___ > b.___;\n});",
           answer: "second",
           blanksAnswer: ["second", "second"],
           expect: "sort(v.begin(), v.end(), [](pair<int,int> a, pair<int,int> b) {\n    return a.second > b.second;\n});",
           en: {
-            task: "Complete the lambda to sort a pair vector by second value in descending order!",
+            task: "Complete the lambda to sort a pair vector by each pair's second value in descending order!",
             guide: "Pass a lambda comparator as the third argument to sort!"
           }
         }

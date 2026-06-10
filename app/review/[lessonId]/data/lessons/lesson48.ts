@@ -254,7 +254,7 @@ print(type(s).__name__)`,
       type: "practice",
       content: {
         level: 2,
-        task: "json.dumps로 딕셔너리를 문자열로, json.loads로 다시 딕셔너리로 변환하는 코드를 채우세요",
+        task: "json으로 딕셔너리를 문자열로 바꿨다가 다시 딕셔너리로 되돌리는 코드를 채우세요",
         guide: "dumps = 저장, loads = 불러오기",
         hint: "json.dumps / json.loads",
         template: "import json\nd = {'x': 10}\ns = json.___(d)\nback = json.___(s)\nprint(back['x'])",
@@ -262,7 +262,7 @@ print(type(s).__name__)`,
         answer: "import json\nd = {'x': 10}\ns = json.dumps(d)\nback = json.loads(s)\nprint(back['x'])",
         expect: "10",
         en: {
-          task: "Use json.dumps and json.loads",
+          task: "Turn a dictionary into a string with json, then back into a dictionary",
           guide: "dumps = save, loads = load",
           hint: "json.dumps / json.loads"
         }

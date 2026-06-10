@@ -30,6 +30,19 @@ export const lesson32EnData: LessonData = {
 
 Sending this to **10 people**… 🤯
 
+\`\`\`python
+print("Happy birthday, Tom! Have a great day!")
+print("Happy birthday, Jane! Have a great day!")
+print("Happy birthday, Mike! Have a great day!")
+# ... 7 more lines 😵
+\`\`\`
+
+You copied nearly identical lines 10 times. The problem isn't just that it's tedious — it's **dangerous**. Later you want to change "Happy birthday" to "Happy Bday"? You'd have to fix **all 10 lines**, and if you miss even one, that line keeps sending the old message. That's why copy-paste is a *mistake factory*.
+
+The only thing that actually changes is **the name** — one spot. Everything else is the same every time. So wouldn't it be great to write the same part **just once**, and only swap in the name each time?
+
+> 💡 The golden rule of programming: **don't write the same code twice.** If you're doing the same job over and over, that's a signal it's "time to box it up."
+
 @key: We want to **box up repeating code** and just swap the parts that change!`
         },
         {
@@ -53,14 +66,21 @@ Sending this to **10 people**… 🤯
           component: "pyFunctionBuilder",
           content: `💭 What if we put the repeating code **in a box and give it a name**? And poke a **hole** for the part that changes?
 
+Think of a function as a **vending machine**. 🥤 You don't need to know *what happens inside* a vending machine. You press the **button (name)** and drop in a **coin (ingredient)** → out comes a drink. A function is the same. Build it well once, and from then on you just **call its name and drop in the ingredient**, and the code inside runs on its own.
+
 \`\`\`python
 def celebrate(name):
     print(f"Happy birthday, {name}! Have a great day!")
 \`\`\`
 
-- **def** = "I'm going to define a box!"
-- **celebrate** = the name of the box
-- **name** = the ingredient that goes into the box (the changing part!)
+- **def** = "I'm going to define a box!" (define)
+- **celebrate** = the name of the box (you'll call it by this name later)
+- **name** = the ingredient that goes into the box (the changing part — the vending machine's coin slot!)
+- The indented lines below are the **contents packed inside the box**
+
+The \`name\` slot here is exactly the **"hole"** we were looking for back in ch1-1. The identical message goes inside the box just once, and only the name that changes each time gets dropped into this hole.
+
+> 💡 \`def celebrate(name):\` only *builds* the box for now. You've placed the vending machine in the store, but you haven't pressed a button yet. To actually get a drink (the message) out, you need the **call** you'll learn in ch2.
 
 @key: This box is called a **function**! Build it with \`def name(ingredient):\``
         },
@@ -103,11 +123,17 @@ def celebrate(name):
 # Up to here — nothing is printed yet! 😮
 \`\`\`
 
-You have to **call** the function to run it:
+\`def\` only **builds the vending machine and places it in the store.** Nobody has pressed a button yet, so of course no drink comes out. When Python sees \`def\`, it just **remembers** that this box exists — it does not run the code inside right away.
+
+You have to **call** the function — that is, press the button — to run it:
 
 \`\`\`python
 celebrate("Tom")  # 👈 This is what actually runs it!
 \`\`\`
+
+Writing \`function_name(value)\` is the signal "use this box now!" Only then does the \`print\` inside run.
+
+> 💡 \`def celebrate(...)\` is **writing down a recipe**; \`celebrate("Tom")\` is **actually cooking with that recipe**. No matter how well you write the recipe, if you never tell anyone to cook, no food appears.
 
 @key: Defining isn't enough — you have to **call** it as \`function_name(value)\` to actually run the code.`
         },
@@ -116,6 +142,8 @@ celebrate("Tom")  # 👈 This is what actually runs it!
           type: "explain",
           title: "💭 What happens when you call it?",
           content: `💭 When you write \`celebrate("Tom")\`… does \`"Tom"\` slot into the **name** spot?
+
+Yes! The \`"Tom"\` you put in the parentheses drops into the vending machine's coin slot and **fills every \`name\` spot** inside the function with that value. That's why \`{name}\` comes out as \`Tom\`.
 
 \`\`\`python
 def celebrate(name):
@@ -126,6 +154,10 @@ celebrate("Jane")   # → "Happy birthday, Jane!"
 celebrate("Mike")   # → "Happy birthday, Mike!"
 \`\`\`
 
+You built the box **only once**, but every time you call it the code inside runs from the start again — just like a vending machine gives a fresh drink each time you drop a coin. This is the key to solving the "10 copy-pastes" problem from ch1-1: now there's just **one** \`print\` line, and you only **call** it 10 times!
+
+> 💡 Same box, different ingredient → different result. \`celebrate("Tom")\` and \`celebrate("Jane")\` call the **same function**, but the ingredient differs so the result differs. That's how one function can serve hundreds of "customers."
+
 @key: Each call runs the function's code again. Swap the name and call it as **many times** as you want!`
         },
         {
@@ -134,12 +166,15 @@ celebrate("Mike")   # → "Happy birthday, Mike!"
           title: "💭 What if I want to change the message?",
           content: `💭 Want to change "Happy birthday!" to "Happy Bday!"? How different is **with vs without** a function?
 
+Back in ch1-1 we called copy-paste a *mistake factory*. Now the real reason shows up. The moment you have to change the message, the gap between the two approaches blows wide open.
+
 **Without a function:** edit all 10 lines 😵
 \`\`\`python
 print("Happy birthday, Tom!")
 print("Happy birthday, Jane!")
 print("Happy birthday, Mike!")
 \`\`\`
+You have to fix all 10 spots, and if you forget even one line, that one keeps the old message.
 
 **With a function:** edit just the body! 😎
 \`\`\`python
@@ -150,6 +185,9 @@ celebrate("Tom")
 celebrate("Jane")
 celebrate("Mike")
 \`\`\`
+The \`print\` line lives in **just one place**, so fixing it there changes the message for all 100 people at once.
+
+> 💡 Functions keep the "single source of truth" principle. Since the message lives in **exactly one place** (inside the function), there's one place to fix and almost nothing to get wrong. The longer your code gets, the bigger this difference becomes.
 
 @key: With functions you **fix one spot** and everything updates. Maintenance becomes easy!`
         },
@@ -240,13 +278,19 @@ hi()
           title: "💭 What about the parts that change?",
           content: `💭 "Tom", "Jane", "Mike"… **only the name changes** — how do we hand it to the function?
 
+Picture the vending machine again. The \`name\` you write in the parentheses when building the function is the **coin slot**. It's reserving a spot in advance: *"I'll receive an ingredient right here."* And when you call \`celebrate("Tom")\`, the \`"Tom"\` is the **coin** you drop into that slot.
+
 \`\`\`python
-def celebrate(name):    # 👈 name = a parameter!
+def celebrate(name):    # 👈 name = a parameter (the coin slot!)
     print(f"Happy birthday, {name}!")
 
 celebrate("Tom")   # "Tom" goes into name
 celebrate("Jane")  # "Jane" goes into name
 \`\`\`
+
+The moment you call it, \`"Tom"\` is *assigned* to the \`name\` slot. So when you write \`{name}\` inside the function, it becomes \`Tom\`. The next customer drops in \`"Jane"\`, and this time the same slot holds Jane.
+
+> 💡 When you **define** a function, the \`name\` in the parentheses is "an empty spot waiting for an ingredient" (a parameter); when you **call** it, the \`"Tom"\` in the parentheses is "the actual ingredient you drop in" (the argument/value). Think of it as preparing an empty cup vs. actually pouring a drink into it.
 
 @key: A **parameter** is the ingredient you pass to a function! Put it in the parentheses and the function uses it.`
         },
@@ -278,6 +322,8 @@ greet("Jane")
           title: "💭 What if I want to pass the age too?",
           content: `💭 Not just a name — what if I want **name and age** both? Can a function take more than one parameter?
 
+Of course! Just make **several** coin slots. Reserve several spots in the parentheses, separated by commas, and you can receive that many ingredients.
+
 \`\`\`python
 def introduce(name, age):
     print(f"I'm {name}, {age} years old.")
@@ -285,6 +331,10 @@ def introduce(name, age):
 introduce("Tom", 15)   # name=Tom, age=15
 introduce("Jane", 14)  # name=Jane, age=14
 \`\`\`
+
+Here the **order really matters.** The first ingredient (\`"Tom"\`) goes into the first slot (\`name\`), the second (\`15\`) into the second slot (\`age\`) — they pair up *in the order you wrote them*. So if you flip the order with \`introduce(15, "Tom")\`, "Tom" lands in the age slot and things get weird.
+
+> ⚠️ If a function has 2 parameters, you **must** pass exactly 2 when calling it. Passing just one, like \`introduce("Tom")\`, leaves the age slot empty → \`TypeError\`. The number of ingredients you agreed to receive and the number you actually drop in must always match.
 
 @key: Separate parameters with **commas (,)** to take more than one!`
         },
@@ -320,7 +370,7 @@ introduce("Jane", 14)
           title: "Food order function",
           task: "Make order print '<food> please!' for each order",
           initialCode: `def order(food):
-    print(f"_____ please!")  # put food in here!
+    print(f"_____ please!")  # put the ordered food name in here
 
 order("pizza")
 order("chicken")`,
@@ -359,6 +409,8 @@ greet("Mike")
           title: "💭 What if I want to store the result?",
           content: `💭 You want to **save** what the function calculated into a variable! \`print\` just shows it on the screen… how do we get the value **back**?
 
+When you drop a coin into a vending machine, a **drink comes out.** You have to receive that drink in your hand before you can drink it or put it in your bag. A function is the same: once you've made it do a job, there has to be a way to **hand the result back to you.** That's exactly what \`return\` does.
+
 \`\`\`python
 def add(a, b):
     return a + b  # send the result back!
@@ -366,6 +418,10 @@ def add(a, b):
 result = add(3, 5)   # 8 is stored in result
 print(result)        # 8
 \`\`\`
+
+The moment it hits \`return a + b\`, the function computes \`a + b\` and **hands that value (8) back to where it was called.** So the spot where you wrote \`add(3, 5)\` turns into \`8\`, and \`result = 8\`. Now 8 lives in a variable, so you can print it, calculate with it, whatever you like.
+
+> 💡 When a function hits \`return\`, it **ends right there.** Once the drink comes out, the vending machine's job is done. Any code below \`return\` won't run.
 
 @key: **return** = send a value back! You can store it in a variable or use it in calculations.`
         },
@@ -407,6 +463,11 @@ print(result)`,
           title: "💭 What's the difference between print and return?",
           content: `💭 Don't they both show the result? Isn't **print** enough? What's the difference?
 
+This is the **most confusing but most important** part of this lesson. Both look like they "put out a result," but *who* they put it out to is completely different.
+
+- **print** shows the result **on the screen and that's it.** A human can see it, but the program can't reuse the value. (Like writing on a wall — you can read it, but you can't hold it.)
+- **return** **hands the result back to the calling code.** It doesn't show on screen, but you can store it in a variable or use it in another calculation.
+
 **print** = just shows it on the screen (does NOT save)
 \`\`\`python
 def hi():
@@ -415,6 +476,7 @@ def hi():
 x = hi()      # "Hi!" gets printed
 print(x)      # None (empty 😱)
 \`\`\`
+\`hi()\` has no \`return\`. So there's no value to hand back, and Python gives you \`None\`, meaning "empty-handed." That's what lands in \`x\`.
 
 **return** = sends the value back (CAN save)
 \`\`\`python
@@ -425,6 +487,9 @@ x = add(3, 5)
 print(x)      # 8
 print(x * 2)  # 16 — you can use it in calculations!
 \`\`\`
+
+> 💡 One line: **print shows it to a person; return hands it to the program.**
+> Picture a function that calculates a score. With \`print\` only, the score *appears* on screen, but you can't rank it or average it — the value isn't kept anywhere. You have to \`return\` it to keep going with things like \`total = score1 + score2\`. That's why a *function that calculates* almost always uses \`return\`.
 
 @key: **print** just shows; **return** sends it back so you can store and calculate with it.`
         },
@@ -445,7 +510,7 @@ print(x * 2)  # 16 — you can use it in calculations!
           title: "Make a square function",
           task: "Fill in the blank so square returns the square of a number (square of 3 = 3 * 3 = 9)",
           initialCode: `def square(n):
-    return _____  # put n * n here
+    return _____  # return n multiplied by itself
 
 print(square(3))   # should print 9
 print(square(5))   # should print 25`,
@@ -508,6 +573,8 @@ function_name(value_to_pass)
           title: "💭 Can I build a calculator with this?",
           content: `💭 Now that you know functions and return… could you build **your own calculator**?
 
+A calculator has a separate add button and subtract button. You build functions the same way — **one function per job.** Make an add machine and a subtract machine, then pick which one to call when you need it.
+
 \`\`\`python
 def add(a, b):
     return a + b
@@ -518,6 +585,8 @@ def subtract(a, b):
 print(add(10, 5))       # 15
 print(subtract(10, 5))  # 5
 \`\`\`
+
+Since each function \`return\`s its result, you can hand that value straight to \`print\` to show it on screen. When one function does just one job — so if addition has a bug you only look at \`add\` — it becomes much easier to fix and to read.
 
 @key: Give each function **one job** and you get a clean calculator!`
         },
@@ -541,7 +610,7 @@ print(subtract(10, 5))  # 5
           title: "Make a subtract function",
           task: "Fill in the blank so subtract returns the difference!",
           initialCode: `def subtract(a, b):
-    return _____  # put a - b here
+    return _____  # return the difference of the two numbers
 
 print(subtract(10, 3))  # should print 7
 print(subtract(20, 8))  # should print 12`,
@@ -573,7 +642,7 @@ def add(a, b):
     return a + b
 
 def multiply(a, b):
-    return _____  # put a * b here
+    return _____  # return the product of the two numbers
 
 print("3 + 5 =", add(3, 5))
 print("3 * 5 =", multiply(3, 5))`,

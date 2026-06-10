@@ -23,7 +23,7 @@ random.seed(0)
 
 n = random.randint(1, 45)
 print(n)`,
-        result: "33",
+        result: "25",
         note: "randint는 양쪽 끝(1과 45)을 모두 포함해요!"
       }
     },
@@ -313,7 +313,8 @@ print(numbers)`,
         hint: "random.seed(42)와 randint(1, 45) 사용!",
         template: null,
         answer: "import random\nrandom.seed(42)\nnumbers = []\nwhile len(numbers) < 6:\n    n = random.randint(1, 45)\n    if n not in numbers:\n        numbers.append(n)\nnumbers.sort()\nprint(numbers)",
-        expect: "[3, 14, 25, 30, 40, 45]"
+        alternateAnswers: ["import random\nrandom.seed(42)\nnumbers = []\nwhile len(numbers) < 6:\n    n = random.randint(1, 45)\n    if n not in numbers:\n        numbers.append(n)\nprint(sorted(numbers))"],
+        expect: "[2, 8, 15, 16, 18, 41]"
       }
     },
     {
@@ -326,7 +327,7 @@ random.seed(42)
 numbers = random.sample(range(1, 46), 6)
 numbers.sort()
 print(numbers)`,
-        result: "[7, 9, 17, 19, 20, 33]",
+        result: "[2, 8, 15, 16, 18, 41]",
         note: "random.sample(범위, 개수)는 중복 없이 한 번에! while/not in 없이 끝나요."
       }
     },
@@ -363,7 +364,7 @@ print(numbers)`,
         hint: "매 세트마다 numbers = []로 초기화!",
         template: null,
         answer: "import random\nrandom.seed(1)\nfor game in range(1, 4):\n    numbers = []\n    while len(numbers) < 3:\n        n = random.randint(1, 10)\n        if n not in numbers:\n            numbers.append(n)\n    numbers.sort()\n    print(f'{game}: {numbers}')",
-        expect: "1: [3, 5, 9]\n2: [3, 4, 5]\n3: [1, 5, 6]"
+        expect: "1: [2, 3, 10]\n2: [2, 5, 8]\n3: [4, 7, 8]"
       }
     },
     {

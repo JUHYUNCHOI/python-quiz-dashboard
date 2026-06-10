@@ -203,7 +203,7 @@ export const lesson15: LessonData = {
           lines: ["Dictionary uses keys to access values!"],
           predict: {
             question: "What is the output?",
-            options: ["영희", "15", "age"],
+            options: ["bob", "15", "age"],
             feedback: "person['age'] retrieves the value 15 associated with the key 'age'!"
           }
         }

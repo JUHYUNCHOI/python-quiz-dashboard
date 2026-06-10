@@ -620,7 +620,7 @@ export const lessonCpp10: LessonData = {
         content: {
           level: 3,
           task: "🔥 scores 의 정확한 평균을 소수점까지 출력하세요! (예시: 81.6)",
-          guide: "함정 — int / int = int 라 86.4 가 아니라 86 만 나와요. 합계나 개수 중 하나를 double 로 만들어야 해요. (double)sum / scores.size() 같은 식)",
+          guide: "함정 — int / int = int 라 81.6 이 아니라 81 만 나와요. 합계나 개수 중 하나를 double 로 만들어야 해요. (double)sum / scores.size() 같은 식)",
           template: null,
           starterCode: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> scores = {85, 90, 70, 95, 68};\n\n    // 👇 1. range-for 로 합계 구하기\n\n\n    // 👇 2. 정확한 평균 출력 (정수 나눗셈 주의!)\n\n\n    return 0;\n}',
           answer: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> scores = {85, 90, 70, 95, 68};\n    int sum = 0;\n\n    for (auto x : scores) sum += x;\n\n    cout << (double)sum / scores.size();\n\n    return 0;\n}',

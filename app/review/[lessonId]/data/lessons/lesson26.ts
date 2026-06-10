@@ -505,7 +505,7 @@ print(student["score"])`,
             "print is used incorrectly",
             "No problem"
           ],
-          explanation: "Accessing a missing key raises KeyError! Use student.get('성적', 0) with get() for safety."
+          explanation: "Accessing a missing key raises KeyError! Use student.get('score', 0) with get() for safety."
         }
       }
     },

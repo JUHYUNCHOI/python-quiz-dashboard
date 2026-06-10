@@ -178,7 +178,7 @@ random.shuffle(deck)`,
         task: "주사위 2개를 굴려서 합을 반환하는 함수를 완성하세요",
         template: "import random\ndef roll_two():\n    a = random.randint(1, 6)\n    b = random.randint(1, 6)\n    ___ a + b\n\nrandom.seed(0)\nprint(roll_two())",
         answer: "return",
-        expect: "9",
+        expect: "8",
         en: {
           message: "🔄 Function review!",
           task: "Complete the function that rolls two dice and returns the sum"
@@ -194,7 +194,7 @@ random.shuffle(deck)`,
         hint: "random.seed(1); random.choice(items)",
         template: "import random\nrandom.seed(1)\nitems = ['가위', '바위', '보']\npick = random.___(items)\nprint(pick)",
         answer: "choice",
-        expect: "보",
+        expect: "가위",
         en: {
           task: "Use random.choice to pick from ['가위', '바위', '보'] (seed 1)",
           guide: "Fixing seed to 1 makes output deterministic",

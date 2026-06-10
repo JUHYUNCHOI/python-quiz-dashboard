@@ -8,6 +8,7 @@ import { CodeBlock } from "@/components/ui/code-block"
 import { renderContent } from "./render-content"
 import { motion, AnimatePresence } from "framer-motion"
 import { useLanguage } from "@/contexts/language-context"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 
 interface PredictStepProps {
   step: LessonStep
@@ -59,6 +60,7 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
   const [showAckButton, setShowAckButton] = useState(false)
   const [showHint, setShowHint] = useState(false)
   const { t } = useLanguage()
+  const isTeacher = useEffectiveIsTeacher()
 
   useEffect(() => {
     if (showExplanation && selectedAnswer !== null && selectedAnswer !== step.answer) {
@@ -129,6 +131,7 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
           const isCorrect = idx === step.answer
           const revealed = showExplanation               // 확정(채점) 후에만 정답 공개
           const selectedWrong = isSelected && !isCorrect  // 고른 오답 (재시도 중에도 빨강)
+          const teacherHint = isTeacher && !revealed && isCorrect  // 선생님: 채점 전에도 정답 표시
           return (
             <motion.button
               key={`${idx}-${selectedAnswer}-${showExplanation}`}
@@ -137,13 +140,15 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
               disabled={revealed}
               className={cn(
                 "w-full p-4 rounded-xl text-left font-mono text-sm md:text-base transition-all border-2 whitespace-pre-line flex items-center min-h-[48px]",
-                !revealed && !selectedWrong && "bg-white hover:bg-emerald-50 active:bg-emerald-100 border-gray-200 hover:border-emerald-400",
+                !revealed && !selectedWrong && !teacherHint && "bg-white hover:bg-emerald-50 active:bg-emerald-100 border-gray-200 hover:border-emerald-400",
+                teacherHint && "bg-white border-green-400 ring-2 ring-green-200",
                 selectedWrong && "bg-red-100 border-red-500 text-red-800",
                 revealed && isCorrect && "bg-green-100 border-green-500 text-green-800",
                 revealed && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400",
               )}
             >
               <span className="flex-1 font-mono text-sm whitespace-pre-line">{option.replace(/\\n/g, '\n')}</span>
+              {teacherHint && <span className="shrink-0 ml-2 text-[11px] font-bold text-green-600 font-sans">👩‍🏫 {t("정답", "Answer")}</span>}
               {revealed && isCorrect && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
               {selectedWrong && <X className="w-5 h-5 shrink-0 ml-2 text-red-600" />}
             </motion.button>

@@ -7,6 +7,7 @@ import { LessonStep } from "./types"
 import { CodeBlock } from "@/components/ui/code-block"
 import { renderContent } from "./render-content"
 import { useLanguage } from "@/contexts/language-context"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { motion } from "framer-motion"
 
 interface QuizStepProps {
@@ -22,6 +23,7 @@ interface QuizStepProps {
 
 export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, quizAttempts, onAnswer, onAcknowledge, showNextOnCorrect }: QuizStepProps) {
   const { t } = useLanguage()
+  const isTeacher = useEffectiveIsTeacher()
   const [showAckButton, setShowAckButton] = useState(false)
   const [showCorrectNext, setShowCorrectNext] = useState(false)
   const [showCode, setShowCode] = useState(false)
@@ -107,15 +109,18 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
           const isCorrect = idx === step.answer
           const revealed = showExplanation               // 확정(채점) 후에만 정답 공개
           const selectedWrong = isSelected && !isCorrect  // 고른 오답 (재시도 중에도 빨강)
+          const teacherHint = isTeacher && !revealed && isCorrect  // 선생님: 채점 전에도 정답 표시
           return (
             <button key={`${idx}-${selectedAnswer}-${showExplanation}`} onClick={() => onAnswer(idx)} disabled={revealed}
               className={cn("w-full p-4 rounded-xl text-left font-medium text-sm md:text-base transition-all border-2 flex items-center min-h-[48px] active:scale-[0.98]",
-                !revealed && !selectedWrong && "bg-white hover:bg-purple-50 active:bg-purple-100 border-gray-200 hover:border-purple-400",
+                !revealed && !selectedWrong && !teacherHint && "bg-white hover:bg-purple-50 active:bg-purple-100 border-gray-200 hover:border-purple-400",
+                teacherHint && "bg-white border-green-400 ring-2 ring-green-200",
                 selectedWrong && "bg-red-100 border-red-500 text-red-800",
                 revealed && isCorrect && "bg-green-100 border-green-500 text-green-800",
                 revealed && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400",
               )}>
               <span className="flex-1">{option.split(/\\n|\n/).map((line, i, arr) => (<span key={i}>{line}{i < arr.length - 1 && <br />}</span>))}</span>
+              {teacherHint && <span className="shrink-0 ml-2 text-[11px] font-bold text-green-600">👩‍🏫 {t("정답", "Answer")}</span>}
               {revealed && isCorrect && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
               {selectedWrong && <X className="w-5 h-5 shrink-0 ml-2 text-red-600" />}
             </button>

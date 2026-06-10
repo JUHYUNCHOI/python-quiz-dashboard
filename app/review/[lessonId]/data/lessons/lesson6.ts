@@ -487,7 +487,7 @@ export const lesson6: LessonData = {
           lines: [
             "🛠️ 문자열 정리 도구!"
           ],
-          code: "original: '  Hello, World!  '\nlength: 19\nuppercase: 'HELLO, WORLD!'\nreplaced: 'Hello, Python!'",
+          code: "original: '  Hello, World!  '\nlength: 17\nuppercase: 'HELLO, WORLD!'\nreplaced: 'Hello, Python!'",
           isPreview: true,
           note: "한 줄씩 만들어보자!"
         }
@@ -512,7 +512,7 @@ export const lesson6: LessonData = {
           step: 2,
           total: 4,
           task: "text의 길이 출력 (len 사용)",
-          target: "길이: 19",
+          target: "길이: 17",
           hint: "print('길이:', len(text))",
           done: ["원본: '  Hello, World!  '"],
           answer: "print('길이:', len(text))"
@@ -526,7 +526,7 @@ export const lesson6: LessonData = {
           task: "공백 제거 후 대문자 출력",
           target: "대문자: HELLO, WORLD!",
           hint: "print('대문자:', text.strip().upper())",
-          done: ["원본: '  Hello, World!  '", "길이: 19"],
+          done: ["원본: '  Hello, World!  '", "길이: 17"],
           answer: "print('대문자:', text.strip().upper())"
         }
       },
@@ -538,7 +538,7 @@ export const lesson6: LessonData = {
           task: "공백 제거 후 'World'를 'Python'으로 치환해서 출력",
           target: "치환: Hello, Python!",
           hint: "print('치환:', text.strip().replace('World', 'Python'))",
-          done: ["원본: '  Hello, World!  '", "길이: 19", "대문자: HELLO, WORLD!"],
+          done: ["원본: '  Hello, World!  '", "길이: 17", "대문자: HELLO, WORLD!"],
           answer: "print('치환:', text.strip().replace('World', 'Python'))"
         }
       },

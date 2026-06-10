@@ -519,6 +519,7 @@ export const lessonCpp6: LessonData = {
           alternateAnswers: [
             "int n;\ncin>>n;\nif(n%2==0)cout<<\"even\";else cout<<\"odd\";\ncout<<endl;\nif(n>10)cout<<\"big\";else cout<<\"small\";\ncout<<endl;"
           ],
+          stdin: "12",
           expect: "even\nbig",
           en: {
             task: "Write from scratch! Read n → print \"even\" or \"odd\", then print \"big\" or \"small\" based on whether n > 10",
@@ -541,6 +542,7 @@ export const lessonCpp6: LessonData = {
           alternateAnswers: [
             "int a,b;\ncin>>a>>b;\ncout<<(a>b?a:b)<<endl;"
           ],
+          stdin: "3 7",
           expect: "7",
           en: {
             task: "Write from scratch! Read two numbers a, b and print the larger one (use ternary operator!)",
@@ -633,6 +635,7 @@ export const lessonCpp6: LessonData = {
           alternateAnswers: [
             "int a,b,c;\ncin>>a>>b>>c;\nif(a>=b&&a>=c)cout<<a<<endl;\nelse if(b>=c)cout<<b<<endl;\nelse cout<<c<<endl;"
           ],
+          stdin: "9 5 2",
           expect: "9",
           en: {
             task: "Write from scratch! Read three integers a, b, c and print the largest\n(use if/else if/else)",

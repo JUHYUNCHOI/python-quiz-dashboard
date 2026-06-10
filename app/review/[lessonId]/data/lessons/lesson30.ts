@@ -25,7 +25,11 @@ export const lesson30: LessonData = {
 # 첫 번째 학생의 이름?
 print(students[0]['name'])`,
         result: "철수",
-        note: "students[i][키] — 인덱스로 학생 고르고, 키로 속성 꺼내기!"
+        note: "students[i][키] — 인덱스로 학생 고르고, 키로 속성 꺼내기!",
+        en: {
+          lines: ["One student = one dictionary, many students = a list of dictionaries!"],
+          note: "students[i][key] — pick a student by index, get an attribute by key!"
+        }
       }
     },
     {
@@ -42,6 +46,13 @@ print(students[2]['kor'])`,
           options: ["85", "95", "72", "에러"],
           answer: 2,
           feedback: "students[2]는 민수 딕셔너리. 그 안의 'kor' 값은 72!"
+        },
+        en: {
+          lines: ["Predict the result!"],
+          predict: {
+            options: ["85", "95", "72", "Error"],
+            feedback: "students[2] is 민수's dictionary. Its 'kor' value is 72!"
+          }
         }
       }
     },
@@ -51,7 +62,12 @@ print(students[2]['kor'])`,
         question: "students = [{'name':'A'}, {'name':'B'}] 일 때 students[1]['name']은?",
         options: ["'A'", "'B'", "['A','B']", "에러"],
         answer: 1,
-        explanation: "students[1]은 두 번째 딕셔너리. 그 안의 'name' 값은 'B'!"
+        explanation: "students[1]은 두 번째 딕셔너리. 그 안의 'name' 값은 'B'!",
+        en: {
+          question: "When students = [{'name':'A'}, {'name':'B'}], what is students[1]['name']?",
+          options: ["'A'", "'B'", "['A','B']", "Error"],
+          explanation: "students[1] is the second dictionary. Its 'name' value is 'B'!"
+        }
       }
     },
     {
@@ -67,7 +83,12 @@ print(students[2]['kor'])`,
 ]
 print(students[___]['eng'])`,
         answer: "1",
-        expect: "88"
+        expect: "88",
+        en: {
+          task: "Print the second student's English score",
+          guide: "The students[index]['key'] pattern!",
+          hint: "students[1]['eng']!"
+        }
       }
     },
     {
@@ -77,6 +98,11 @@ print(students[___]['eng'])`,
         task: "모든 학생의 이름을 한 줄씩 출력하세요",
         guide: "for s in students: 로 순회!",
         hint: "for s in students: print(s['name'])",
+        en: {
+          task: "Print every student's name, one per line",
+          guide: "Iterate with for s in students:!",
+          hint: "for s in students: print(s['name'])"
+        },
         template: `students = [
     {'name': '철수', 'kor': 85},
     {'name': '영희', 'kor': 95},
@@ -124,6 +150,10 @@ for s in students:
       content: {
         message: "🔄 sum과 len 복습!",
         task: "리스트 평균을 구하세요",
+        en: {
+          message: "🔄 Review sum and len!",
+          task: "Calculate the list's average"
+        },
         template: "nums = [80, 90, 70]\navg = ___(nums) / len(nums)\nprint(avg)",
         answer: "sum",
         expect: "80.0"
@@ -138,7 +168,11 @@ total = s['kor'] + s['eng'] + s['math']
 avg = total / 3
 print(f'{s["name"]}: {avg:.1f}')`,
         result: "철수: 85.0",
-        note: "각 키를 꺼내서 더한 다음 과목 수로 나누면 끝!"
+        note: "각 키를 꺼내서 더한 다음 과목 수로 나누면 끝!",
+        en: {
+          lines: ["How do you find one student's average across 3 subjects?"],
+          note: "Pull out each key's value, add them up, then divide by the number of subjects!"
+        }
       }
     },
     {
@@ -148,6 +182,11 @@ print(f'{s["name"]}: {avg:.1f}')`,
         task: "각 학생의 평균을 출력하세요",
         guide: "for문 + 평균 계산!",
         hint: "총합 / 3 으로 평균!",
+        en: {
+          task: "Print each student's average",
+          guide: "for loop + average calculation!",
+          hint: "Average = total / 3!"
+        },
         template: `students = [
     {'name': '철수', 'kor': 80, 'eng': 90, 'math': 70},
     {'name': '영희', 'kor': 90, 'eng': 100, 'math': 80},
@@ -174,7 +213,11 @@ for s in students:
 print(kor_scores)
 print(sum(kor_scores) / len(kor_scores))`,
         result: "[80, 100, 60]\n80.0",
-        note: "한 과목만 뽑아서 리스트 → sum/len 으로 평균!"
+        note: "한 과목만 뽑아서 리스트 → sum/len 으로 평균!",
+        en: {
+          lines: ["How do you collect just the Korean scores and average them?"],
+          note: "Gather one subject into a list → average it with sum/len!"
+        }
       }
     },
     {
@@ -184,6 +227,11 @@ print(sum(kor_scores) / len(kor_scores))`,
         task: "수학 점수만 모아 리스트로 만든 뒤 최댓값을 출력하세요",
         guide: "append + max()!",
         hint: "for문으로 'math' 만 모으고 max(리스트)!",
+        en: {
+          task: "Collect the math scores into a list, then print the maximum",
+          guide: "append + max()!",
+          hint: "Gather only 'math' with a for loop, then max(list)!"
+        },
         template: `students = [
     {'name': '철수', 'math': 70},
     {'name': '영희', 'math': 95},
@@ -217,7 +265,17 @@ print(max(math_scores))`,
           "students + 'kor'"
         ],
         answer: 1,
-        explanation: "리스트 안의 딕셔너리는 for문으로 순회하면서 누적해야 해요!"
+        explanation: "리스트 안의 딕셔너리는 for문으로 순회하면서 누적해야 해요!",
+        en: {
+          question: "How do you get the sum of every student's 'kor' score in students?",
+          options: [
+            "sum(students['kor'])",
+            "for s in students: total += s['kor']",
+            "students.sum('kor')",
+            "students + 'kor'"
+          ],
+          explanation: "For a list of dictionaries, you must iterate with a for loop and accumulate!"
+        }
       }
     },
     {
@@ -249,6 +307,10 @@ print(max(math_scores))`,
       content: {
         message: "🔄 if/elif 복습!",
         task: "점수에 따라 등급을 출력하세요 (90↑ A, 80↑ B, 그 외 C)",
+        en: {
+          message: "🔄 Review if/elif!",
+          task: "Print a grade based on the score (90+ A, 80+ B, otherwise C)"
+        },
         template: `score = 85
 if score >= 90:
     print('A')
@@ -276,7 +338,10 @@ for s in students:
     else:
         grade = 'C'
     print(f'{s["name"]}: {grade}')`,
-        result: "철수: A\n영희: C"
+        result: "철수: A\n영희: C",
+        en: {
+          lines: ["Assign grades based on each student's average!"]
+        }
       }
     },
     {
@@ -298,6 +363,14 @@ print(count)`,
           options: ["1", "2", "3", "0"],
           answer: 1,
           feedback: "철수(65) + 민수(45) = 2명!"
+        },
+        en: {
+          lines: ["Predict the result!"],
+          predict: {
+            question: "How many students scored below 70?",
+            options: ["1", "2", "3", "0"],
+            feedback: "철수(65) + 민수(45) = 2 students!"
+          }
         }
       }
     },
@@ -308,6 +381,11 @@ print(count)`,
         task: "평균이 80 이상인 학생만 이름을 출력하세요",
         guide: "if 조건문 + 출력!",
         hint: "if s['avg'] >= 80:",
+        en: {
+          task: "Print the names of only the students whose average is 80 or higher",
+          guide: "if condition + print!",
+          hint: "if s['avg'] >= 80:"
+        },
         template: `students = [
     {'name': '철수', 'avg': 92},
     {'name': '영희', 'avg': 75},
@@ -333,7 +411,17 @@ print(students['kor'])`,
           "문제 없음"
         ],
         answer: 0,
-        explanation: "리스트는 정수 인덱스로! students[0]['kor'] 처럼 학생을 먼저 꺼낸 다음 키로 접근해야 해요."
+        explanation: "리스트는 정수 인덱스로! students[0]['kor'] 처럼 학생을 먼저 꺼낸 다음 키로 접근해야 해요.",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "students is a list, so you can't access it by key → you must get a student by index first",
+            "Dictionary syntax error",
+            "print is used incorrectly",
+            "No problem"
+          ],
+          explanation: "Lists use integer indexes! Like students[0]['kor'], get a student first, then access by key."
+        }
       }
     },
     {
@@ -343,6 +431,11 @@ print(students['kor'])`,
         task: "students 안에서 'kor' 점수가 가장 높은 학생의 이름을 출력하세요",
         guide: "최댓값 찾기 패턴! 첫 학생을 best로 두고 비교!",
         hint: "best = students[0]; for s in students: if s['kor'] > best['kor']: best = s",
+        en: {
+          task: "Print the name of the student with the highest 'kor' score in students",
+          guide: "The find-the-maximum pattern! Start with the first student as best and compare!",
+          hint: "best = students[0]; for s in students: if s['kor'] > best['kor']: best = s"
+        },
         template: null,
         answer: `students = [
     {'name': '철수', 'kor': 85},
@@ -405,6 +498,13 @@ print(total)`,
           options: ["170", "190", "340", "260"],
           answer: 2,
           feedback: "철수: 80+70=150, 영희: 90+100=190 → 합 340!"
+        },
+        en: {
+          lines: ["Predict the result!"],
+          predict: {
+            options: ["170", "190", "340", "260"],
+            feedback: "철수: 80+70=150, 영희: 90+100=190 → total 340!"
+          }
         }
       }
     },
@@ -419,7 +519,17 @@ print(total)`,
           "students[eng].mean()"
         ],
         answer: 1,
-        explanation: "리스트 안의 딕셔너리에서 한 키 평균은 for문으로 모아서 sum/len! 첫 번째 옵션은 students['eng']가 에러예요."
+        explanation: "리스트 안의 딕셔너리에서 한 키 평균은 for문으로 모아서 sum/len! 첫 번째 옵션은 students['eng']가 에러예요.",
+        en: {
+          question: "Which is the correct code to find the average English score in the students list?",
+          options: [
+            "sum(students['eng']) / len(students)",
+            "Gather only the 'eng' scores with a for loop, then sum/len",
+            "students.average('eng')",
+            "students[eng].mean()"
+          ],
+          explanation: "For one key's average in a list of dictionaries, gather with a for loop then sum/len! The first option errors because students['eng'] is invalid."
+        }
       }
     },
     {
@@ -429,6 +539,11 @@ print(total)`,
         task: "students의 평균 점수 합계를 출력하세요 (각 학생 2과목 평균 → 다 더하기)",
         guide: "for 안에서 평균 계산 + 누적!",
         hint: "avg = (s['kor']+s['eng'])/2 후 total += avg",
+        en: {
+          task: "Print the sum of the students' average scores (each student's 2-subject average → add them all)",
+          guide: "Calculate the average inside the for loop + accumulate!",
+          hint: "avg = (s['kor']+s['eng'])/2 then total += avg"
+        },
         template: `students = [
     {'name': '철수', 'kor': 80, 'eng': 70},
     {'name': '영희', 'kor': 90, 'eng': 100},
@@ -447,6 +562,10 @@ print(total)`,
       content: {
         message: "🔄 슬라이싱 복습!",
         task: "students 리스트의 처음 2명만 잘라서 출력하세요",
+        en: {
+          message: "🔄 Review slicing!",
+          task: "Slice and print only the first 2 students in the students list"
+        },
         template: `students = [
     {'name': '철수'}, {'name': '영희'}, {'name': '민수'}
 ]
@@ -462,6 +581,11 @@ print(students[___])`,
         task: "70점 미만 점수가 하나라도 있는 학생 이름을 출력하세요",
         guide: "각 학생의 점수 중 하나라도 70 미만이면 출력!",
         hint: "if s['kor'] < 70 or s['eng'] < 70: print(...)",
+        en: {
+          task: "Print the names of students who have at least one score below 70",
+          guide: "If any one of a student's scores is below 70, print it!",
+          hint: "if s['kor'] < 70 or s['eng'] < 70: print(...)"
+        },
         template: `students = [
     {'name': '철수', 'kor': 80, 'eng': 65},
     {'name': '영희', 'kor': 90, 'eng': 100},

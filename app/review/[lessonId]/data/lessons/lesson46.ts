@@ -236,7 +236,7 @@ deactivate`,
       type: "practice",
       content: {
         level: 2,
-        task: "from...import로 math의 sqrt와 pi만 가져와서 원의 넓이를 계산하세요",
+        task: "math에서 sqrt와 pi만 골라 가져와 원의 넓이를 계산하세요",
         guide: "from 모듈 import 함수1, 함수2",
         hint: "from math import sqrt, pi",
         template: "___ math ___ sqrt, pi\nr = 4\narea = pi * r ** 2\nprint(f'넓이={area:.2f}, 제곱근={sqrt(area):.2f}')",
@@ -244,7 +244,7 @@ deactivate`,
         answer: "from math import sqrt, pi\nr = 4\narea = pi * r ** 2\nprint(f'넓이={area:.2f}, 제곱근={sqrt(area):.2f}')",
         expect: "넓이=50.27, 제곱근=7.09",
         en: {
-          task: "Use from...import to import sqrt and pi from math, then compute circle area",
+          task: "Import just sqrt and pi from math, then compute the circle area",
           guide: "from module import func1, func2",
           hint: "from math import sqrt, pi"
         }

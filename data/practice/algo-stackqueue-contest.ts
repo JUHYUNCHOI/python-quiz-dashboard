@@ -19,6 +19,7 @@ export const stackQueueContestCluster: PracticeCluster = {
       cluster: "algo-stackqueue-contest",
       unlockAfter: "algo-stackqueue",
       difficulty: "쉬움",
+      kl: true,
       title: "스택으로 뒤집기",
       description: `N개의 정수를 입력 순서의 **반대로** 출력하라.
 
@@ -77,6 +78,7 @@ print(*a[::-1])`,
       cluster: "algo-stackqueue-contest",
       unlockAfter: "algo-stackqueue",
       difficulty: "쉬움",
+      kl: true,
       title: "괄호의 최대 깊이",
       description: `올바른 괄호 문자열 \`(\`, \`)\` 만으로 이루어진 문자열이 주어진다. **가장 깊이 중첩된 정도**(최대 깊이)를 출력하라.
 
@@ -139,6 +141,7 @@ print(mx)`,
       cluster: "algo-stackqueue-contest",
       unlockAfter: "algo-stackqueue",
       difficulty: "쉬움",
+      kl: true,
       title: "카드 버리기 (큐)",
       description: `1부터 N까지 번호가 적힌 카드가 차례로 쌓여 있다 (맨 위 1, 그 아래 2, …). 다음을 카드가 한 장 남을 때까지 반복한다:
 
@@ -217,6 +220,7 @@ print(q[0])`,
       cluster: "algo-stackqueue-contest",
       unlockAfter: "algo-stackqueue",
       difficulty: "보통",
+      kl: true,
       title: "괄호 짝 맞추기",
       description: `T개의 문자열이 주어진다. 각 문자열은 \`(\` 와 \`)\` 만으로 이루어져 있다. 각 문자열에 대해 모든 괄호가 올바르게 짝지어졌는지 판정하라.
 
@@ -472,6 +476,7 @@ Source: LeetCode 20 paraphrased`,
       cluster: "algo-stackqueue-contest",
       unlockAfter: "algo-stackqueue",
       difficulty: "보통",
+      kl: true,
       title: "회문 검사 (스택 + 큐)",
       description: `한 줄의 영문 소문자 문자열이 주어진다. 회문(palindrome — 앞으로 읽으나 뒤로 읽으나 같은 문자열)이면 YES, 아니면 NO 를 출력하라.
 
@@ -1030,6 +1035,7 @@ Source: LeetCode 901 (Online Stock Span) paraphrased`,
       cluster: "algo-stackqueue-contest",
       unlockAfter: "algo-stackqueue",
       difficulty: "보통",
+      kl: true,
       title: "후위 표기식 (RPN) 계산기",
       description: `**후위 표기식** (postfix / RPN: Reverse Polish Notation) 의 토큰들이 공백으로 구분되어 한 줄에 주어진다. 결과를 정수로 출력하라.
 
@@ -1164,6 +1170,7 @@ Source: LeetCode 150 paraphrased`,
       cluster: "algo-stackqueue-contest",
       unlockAfter: "algo-stackqueue",
       difficulty: "보통",
+      kl: true,
       title: "요세푸스 문제 (큐로)",
       description: `N 명의 사람이 \`1, 2, ..., N\` 번호 순서대로 원을 그리며 앉아 있다. 1 번부터 시작해 시계 방향으로 \`K\` 번째 사람을 제거한다. 제거된 사람의 다음 사람부터 다시 시작해 또 \`K\` 번째를 제거. 이를 모두 빠질 때까지 반복.
 
@@ -1444,6 +1451,7 @@ Source: LeetCode 239 paraphrased`,
       cluster: "algo-stackqueue-contest",
       unlockAfter: "algo-stackqueue",
       difficulty: "보통",
+      kl: true,
       title: "프린터 큐 (우선순위 큐 없이!)",
       description: `프린터에 \`N\` 개의 문서가 대기열에 차례로 들어 있다. 각 문서에는 1-9 의 **중요도** 가 있다. 프린터는 다음 규칙으로 동작:
 

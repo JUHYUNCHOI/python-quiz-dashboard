@@ -96,8 +96,8 @@ print(f'20 / 4 = {divide(20, 4)}')`,
       title: "🏆 도전: 안전한 나누기",
       task: "0으로 나누려고 하면 '나눌 수 없어요!'를 반환하세요!",
       initialCode: `def safe_divide(a, b):
-    # b가 0이면 '나눌 수 없어요!' 반환
-    # 아니면 a / b 반환
+    # b가 0이면 나눌 수 없다고 알려주고
+    # 그렇지 않으면 나눈 결과를 돌려주세요
 
 
 print(safe_divide(10, 2))

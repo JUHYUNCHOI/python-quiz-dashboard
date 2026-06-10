@@ -46,22 +46,34 @@ for fruit in fruits:        # for (각각) 변수 in (리스트) :
           id: "calc-explain",
           type: "explain",
           title: "🧮 순회하면서 계산",
-          content: `각 요소로 뭔가를 할 수 있어요:
+          content: `그냥 꺼내서 보는 것보다, 박스를 하나씩 꺼내면서 **숫자를 차곡차곡 쌓는** 게 진짜 자주 쓰는 패턴이에요. 장바구니에 물건을 하나씩 담으면서 영수증 합계가 *그때그때* 늘어나는 것처럼요. 🧾
+
+핵심은 **밖에 통(\`total\`)을 하나 두고**, for 가 한 바퀴 돌 때마다 그 통에 값을 더하는 거예요.
 
 \`\`\`python
 prices = [1000, 2000, 3000]
-total = 0
+total = 0                      # ① 빈 통을 먼저 만들고
 
 for price in prices:
-    total = total + price
+    total = total + price      # ② 한 개 꺼낼 때마다 통에 더해요
 
 print("총합:", total)  # 6000
 \`\`\`
 
-**더 짧게:**
+> 💡 한 바퀴씩 통 안을 따라가 보면:
+> - 시작: \`total = 0\`
+> - \`price = 1000\` → \`total = 0 + 1000 = 1000\`
+> - \`price = 2000\` → \`total = 1000 + 2000 = 3000\`
+> - \`price = 3000\` → \`total = 3000 + 3000 = 6000\`
+>
+> \`total\` 은 **for 안에서 매번 새로 만드는 게 아니라**, 밖에서 만든 통을 *계속 이어서* 쓰는 거예요. for 밖에서 \`total = 0\` 으로 시작하는 게 그래서 중요해요. (안에 두면 매번 0 으로 초기화돼서 늘 마지막 값만 남아요!)
+
+**합계만 필요하면 더 짧게:**
 \`\`\`python
 total = sum(prices)  # 6000
-\`\`\``
+\`\`\`
+
+\`sum()\` 은 *합계 전용* 단축키예요. 하지만 합계가 아니라 *조건 맞는 것만 세기*, *최댓값 갱신* 같은 건 위처럼 직접 통을 굴려야 하니, 이 "통에 쌓기" 패턴은 꼭 손에 익혀 두세요.`
         },
         {
           id: "try2",
@@ -84,19 +96,31 @@ total = sum(prices)  # 6000
           id: "enumerate-explain",
           type: "explain",
           title: "🔢 enumerate (번호도 같이) — 순서 번호 필요할 때",
-          content: `**enumerate = 번호 매기기**. 값뿐 아니라 **몇 번째인지** 도 필요할 때 써요.
+          content: `기본 for 는 값만 줘요 — *"철수, 영희, 민수"*. 그런데 가끔은 **"몇 번째 학생인지"** 도 같이 알아야 해요. *"3번 학생: 철수"* 처럼 번호를 붙여 출력하거나, 등수를 매길 때요.
+
+**직접 번호를 세는 방법도 있긴 해요:**
+\`\`\`python
+i = 0                    # 번호 통을 따로 두고
+for fruit in fruits:
+    print(f"{i}번: {fruit}")
+    i = i + 1            # 매번 직접 1 올려줘야 해요 — 깜빡하기 쉬움!
+\`\`\`
+
+이렇게 \`i = i + 1\` 을 손으로 챙기면, *한 줄이라도 빠뜨리면* 번호가 안 올라가거나 엉켜요. **enumerate** 는 이 번호 매기기를 *대신 해주는 도우미*예요. (이름값 그대로 — enumerate = "번호 매기다")
 
 \`\`\`python
 fruits = ["사과", "바나나", "딸기"]
 
-for i, fruit in enumerate(fruits):    # i = 번호, fruit = 값
+for i, fruit in enumerate(fruits):    # i = 번호, fruit = 값 (둘 다 자동!)
     print(f"{i}번: {fruit}")
 # 0번: 사과
 # 1번: 바나나
 # 2번: 딸기
 \`\`\`
 
-\`enumerate(리스트)\` 가 (번호, 값) 한 묶음씩 돌려줘요.`
+\`enumerate(리스트)\` 가 한 바퀴마다 **(번호, 값)** 을 한 묶음으로 건네줘요. 그래서 \`i, fruit\` 두 변수로 한 번에 받는 거예요.
+
+> 💡 번호는 \`0\` 부터 시작해요 (리스트 인덱스와 똑같이!). 사람이 보는 "1번, 2번…" 으로 바꾸려면 \`i + 1\` 로 출력하면 돼요 — 1등/2등 매길 때 자주 쓰는 손질이에요.`
         },
         {
           id: "try3",
@@ -112,22 +136,27 @@ for i, fruit in enumerate(fruits):    # i = 번호, fruit = 값
           id: "range-explain",
           type: "explain",
           title: "🔢 range()와 인덱스 접근",
-          content: `range(len(리스트))로도 순회 가능:
+          content: `\`enumerate\` 말고도, **위치 번호(인덱스)** 로 리스트를 도는 방법이 또 있어요 — \`range(len(리스트))\`.
+
+\`len(fruits)\` 가 \`3\` 이면 \`range(3)\` → \`0, 1, 2\`. 즉 **자리 번호를 직접 만들어** 놓고, \`fruits[i]\` 로 그 자리 박스를 꺼내는 거예요.
 
 \`\`\`python
 fruits = ["사과", "바나나", "딸기"]
 
 for i in range(len(fruits)):
-    print(f"{i}: {fruits[i]}")
+    print(f"{i}: {fruits[i]}")   # i 자리 박스를 직접 집어요
 \`\`\`
 
-**값을 수정할 때 유용해요:**
+그런데 *그냥 값만 볼 거면* \`for fruit in fruits:\` 가 훨씬 깔끔해요. **그럼 이 방식은 언제 쓸까요?** — 리스트 **내용을 그 자리에서 바꿔야** 할 때예요.
+
 \`\`\`python
 numbers = [1, 2, 3]
 for i in range(len(numbers)):
-    numbers[i] = numbers[i] * 2
+    numbers[i] = numbers[i] * 2    # i 자리에 새 값을 *덮어써요*
 print(numbers)  # [2, 4, 6]
-\`\`\``
+\`\`\`
+
+> ⚠️ \`for num in numbers:\` 의 \`num\` 은 박스 속 값의 **복사본**이라, \`num = num * 2\` 해도 원본 리스트는 안 바뀌어요. 원본을 고치려면 *"몇 번 자리"* 인 \`i\` 를 알아야 \`numbers[i] = ...\` 로 그 칸을 직접 덮어쓸 수 있어요. 그래서 **값을 수정할 땐 인덱스 접근** 이 필요한 거예요.`
         },
         {
           id: "pre-for-pattern",
@@ -182,16 +211,22 @@ print(words)          # ['banana', 'apple', 'cherry']  ← 원본 그대로
           id: "filter-explain",
           type: "explain",
           title: "🔍 조건에 맞는 것만 찾기",
-          content: `for문 안에서 if문으로 필터링:
+          content: `리스트 전체를 도는 건 똑같은데, 이번엔 **전부 다 처리하지 않고** *마음에 드는 것만 골라내요*. 빨래 바구니에서 흰옷만 따로 빼는 느낌이에요. 🧺
+
+방법은 의외로 단순해요 — **for 로 하나씩 꺼내 보고**, 안에서 **if 로 "이거 조건 맞아?" 한 번 물어보는** 거예요. 맞으면 처리(여기선 출력), 아니면 그냥 지나쳐요.
 
 \`\`\`python
 numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-for num in numbers:
-    if num % 2 == 0:  # 짝수만
-        print(num)
+for num in numbers:        # ① 하나씩 꺼내서
+    if num % 2 == 0:       # ② "짝수야?" 라고 물어보고
+        print(num)         # ③ 맞을 때만 출력 (홀수면 그냥 통과)
 # 2, 4, 6, 8, 10
-\`\`\``
+\`\`\`
+
+> 💡 \`num % 2\` 는 2 로 나눈 **나머지**예요. 짝수는 나머지가 \`0\`, 홀수는 \`1\`. 그래서 \`num % 2 == 0\` 이 "짝수냐?" 를 묻는 거예요.
+>
+> if 의 조건만 바꾸면 **무엇이든 골라낼 수 있어요** — \`if score >= 80\` 이면 80 점 이상만, \`if "김" in name\` 이면 김씨만. for(다 돌기) + if(조건 검사) 조합은 "조건에 맞는 것만 골라 담기" 의 가장 기본 도구예요.`
         },
         {
           id: "try5",

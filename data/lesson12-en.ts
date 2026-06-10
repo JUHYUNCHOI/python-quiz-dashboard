@@ -31,7 +31,7 @@ Today we make friends with all three!`
           id: "and-explain",
           type: "explain",
           title: "🔗 and — Both Must Be True",
-          content: `Both sides must be **True** for the whole thing to be True.
+          content: `Use \`and\` when **several conditions must *all* pass at once** — like an amusement-park ride. For example: "age 13 **or older** *AND* height 140cm **or taller**" — meet just one and you still can't ride! Code works the same way.
 
 \`\`\`python
 age = 15
@@ -40,6 +40,8 @@ if age >= 13 and age < 19:
     print("You are a teenager")
 \`\`\`
 
+Slip an \`and\` **between** the conditions and Python checks each one. **Both** must be True for the whole to be True.
+
 | Left | and | Right | Result |
 |---|---|---|---|
 | True | and | True | **True** ✅ |
@@ -47,13 +49,13 @@ if age >= 13 and age < 19:
 | False | and | True | False ❌ |
 | False | and | False | False ❌ |
 
-➡️ **One False makes the whole thing False.**`
+➡️ **One False makes the whole thing False.** (Like several locks that must *all* open before the door does!)`
         },
         {
           id: "or-explain",
           type: "explain",
           title: "🔗 or — At Least One",
-          content: `Only **one** side needs to be True.
+          content: `Now the opposite case. When **any one of several cases is enough** — like "the shop is closed on **Saturday *or* Sunday**" — use \`or\`. If \`and\` is the *strict* friend (satisfy them all!), \`or\` is the *easygoing* friend (just one will do!).
 
 \`\`\`python
 day = "Saturday"
@@ -69,7 +71,7 @@ if day == "Saturday" or day == "Sunday":
 | False | or | True | True ✅ |
 | False | or | False | **False** ❌ |
 
-➡️ **One True makes the whole thing True.**`
+➡️ **One True makes the whole thing True.** (Only when *both* are false does it turn False!)`
         },
         {
           id: "match-game",
@@ -144,7 +146,7 @@ if day == "Saturday" or day == "Sunday":
           id: "not-explain",
           type: "explain",
           title: "🔄 not — Flip It",
-          content: `**not** flips True ↔ False.
+          content: `\`not\` flips True ↔ False. It's perfect for **"do something when ~ is *not* true."** For example, when someone is **not** logged in you want to show "please log in" — that's a job for \`not\`.
 
 \`\`\`python
 is_raining = False
@@ -158,7 +160,9 @@ if not is_raining:
 | True | → | False |
 | False | → | True |
 
-💡 Use **not** when you mean "**if NOT ...**".`
+> 💡 **Where it shows up a lot:** \`if not is_logged_in:\` → not logged in, so prompt them. \`if not found:\` → didn't find it, so notify.
+>
+> Instead of the long \`is_raining == False\`, just write \`not is_raining\` — it reads like plain English (*"if not raining"*) and stays much cleaner.`
         },
         {
           id: "circuit-not",
@@ -273,12 +277,14 @@ else:
           id: "in-explain",
           type: "explain",
           title: "📝 in — Is It Inside?",
-          content: `**in** checks whether something is contained.
+          content: `\`in\` is the handy way to check "is that thing inside this?" in one go. Otherwise you'd compare characters one by one with \`==\`, but \`in\` settles it with a single *"is it anywhere in there?"*
 
 \`\`\`python
 if "a" in "apple":
     print("'a' is in there!")  # ✅
 \`\`\`
+
+For example, checking whether a guessed letter is **contained** in the answer (like Hangman), or whether an email has an \`"@"\` in it — it's perfect whenever *all you need to know is present-or-not*.
 
 **not in** is the opposite — "not contained":
 

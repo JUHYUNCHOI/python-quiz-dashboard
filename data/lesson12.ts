@@ -31,7 +31,7 @@ export const lesson12Data: LessonData = {
           id: "and-explain",
           type: "explain",
           title: "🔗 and = 그리고",
-          content: `두 조건이 **둘 다** True 여야 전체가 True.
+          content: `놀이기구 탑승처럼 **여러 조건을 *동시에* 다 통과해야** 할 때 \`and\` 를 써요. 예를 들어 "나이 13살 **이상** *그리고* 키 140cm **이상**" — 둘 중 하나만 만족하면 못 타죠? 코드도 똑같아요.
 
 \`\`\`python
 age = 15
@@ -40,6 +40,8 @@ if age >= 13 and age < 19:
     print("청소년이에요")
 \`\`\`
 
+조건 **사이마다** \`and\` 를 끼워 넣으면, 파이썬이 하나씩 다 확인해요. **둘 다** True 여야 전체가 True.
+
 | 왼쪽 | and | 오른쪽 | 결과 |
 |---|---|---|---|
 | True | and | True | **True** ✅ |
@@ -47,13 +49,13 @@ if age >= 13 and age < 19:
 | False | and | True | False ❌ |
 | False | and | False | False ❌ |
 
-➡️ **하나라도 False 면 전체 False.**`
+➡️ **하나라도 False 면 전체 False.** (자물쇠 여러 개가 *전부* 풀려야 문이 열리는 것처럼!)`
         },
         {
           id: "or-explain",
           type: "explain",
           title: "🔗 or = 또는",
-          content: `**하나만** True 여도 전체가 True.
+          content: `이번엔 반대 상황. "**토요일 *또는* 일요일** 이면 가게 휴무" 처럼, **여러 경우 중 하나라도 맞으면** OK 일 때 \`or\` 를 써요. \`and\` 가 *까다로운* 친구(다 만족!)라면, \`or\` 는 *너그러운* 친구(하나만 돼도 통과!).
 
 \`\`\`python
 day = "토요일"
@@ -69,7 +71,7 @@ if day == "토요일" or day == "일요일":
 | False | or | True | True ✅ |
 | False | or | False | **False** ❌ |
 
-➡️ **하나라도 True 면 전체 True.**`
+➡️ **하나라도 True 면 전체 True.** (둘 다 틀려야 비로소 False!)`
         },
         {
           id: "match-game",
@@ -144,7 +146,7 @@ if day == "토요일" or day == "일요일":
           id: "not-explain",
           type: "explain",
           title: "🔄 not = 아닌 (뒤집기)",
-          content: `**not** 은 True ↔ False 를 뒤집어요.
+          content: `\`not\` 은 True ↔ False 를 뒤집어요. **"~ 가 *아닐* 때 뭔가 하고 싶을 때"** 딱이에요. 예를 들어 로그인이 **안** 돼 있으면 "로그인하세요" 라고 안내하고 싶죠? 그럴 때 \`not\`.
 
 \`\`\`python
 is_raining = False
@@ -158,7 +160,9 @@ if not is_raining:
 | True | → | False |
 | False | → | True |
 
-💡 "**~ 가 아니라면**" 을 코드로 쓸 때 not.`
+> 💡 **자주 쓰는 곳:** \`if not is_logged_in:\` → 로그인 *안* 했으면 안내. \`if not found:\` → 못 찾았으면 알림.
+>
+> \`is_raining == False\` 라고 길게 쓰는 대신 \`not is_raining\` — 영어 문장처럼 *"비 안 오면"* 하고 읽혀서 훨씬 깔끔해요.`
         },
         {
           id: "circuit-not",
@@ -273,12 +277,14 @@ else:
           id: "in-explain",
           type: "explain",
           title: "📝 in = ~ 안에 있나요?",
-          content: `**in** 은 "안에 들어 있나" 를 확인해요.
+          content: `"이 안에 그게 들어 있나?" 를 한 방에 확인할 때 \`in\` 이 편해요. 안 그러면 글자를 하나하나 \`==\` 로 비교해야 하는데, \`in\` 은 *"전체 중에 들어 있어?"* 한마디로 끝나요.
 
 \`\`\`python
 if "a" in "apple":
     print("a 있음!")  # ✅
 \`\`\`
+
+예를 들어 입력받은 글자가 답에 **포함돼 있는지** (행맨 게임처럼), 또는 이메일에 \`"@"\` 가 들어 있는지 확인할 때처럼 — *"있는지 없는지만 알면 될 때"* 딱이에요.
 
 **not in** 은 반대 — "안에 없나":
 

@@ -347,6 +347,16 @@ const registry: Record<string, ComponentEntry> = {
     }),
   },
 
+  // 스택 시각화 (lesson 23 / cpp-18) — LIFO push/pop/peek 애니메이션
+  stackVisualizer: {
+    load: () => import("@/components/animations/stack-visualizer"),
+    exportName: "StackVisualizer",
+    props: (step: any, lang: string) => ({
+      lang,
+      ...(step?.componentProps || {}),
+    }),
+  },
+
   // Python f-string {var} 슬롯 치환 + 포맷 스펙 시각화
   pyFstringVisualizer: {
     load: () => import("@/components/animations/fstring-visualizer"),

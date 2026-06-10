@@ -467,9 +467,9 @@ export const lesson7: LessonData = {
           en: {
             question: "Which code makes two print() calls output on the same line?",
             options: [
-              "print('A')\\nprint('B')",
-              "print('A', end='')\\nprint('B')",
-              "print('A', sep='')\\nprint('B')"
+              "print('A')\nprint('B')",
+              "print('A', end='')\nprint('B')",
+              "print('A', sep='')\nprint('B')"
             ],
             explanation: "end='' removes the newline so the next print continues on the same line! sep is for separating values within the same print()."
           }
@@ -491,7 +491,7 @@ export const lesson7: LessonData = {
           en: {
             question: "What is the result of print('안녕', end='!')?",
             options: [
-              "안녕\\n (with newline)",
+              "안녕\n (with newline)",
               "안녕! (no newline, ! appended)",
               "안녕 ! (space + !)"
             ],

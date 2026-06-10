@@ -55,15 +55,19 @@ Remove: 1→2→3  (in order!)
           id: "realworld",
           type: "explain",
           title: "🌍 Queues in Real Life",
-          content: `**Examples of queues:**
+          content: `Queues are *already* everywhere in daily life. The common thread is one thing — **"whoever came first is handled first."** They're all queues because the *order has to be respected to be fair*.
 
-🚶 **Waiting in line** - First come, first served
-🖨️ **Printer queue** - First request printed first
-🎮 **Game matchmaking** - First to sign up, first to play
-📦 **Package processing** - First received, first shipped
-🎵 **Music playlist** - Plays in order
+🚶 **Waiting in line** — first come, first served. If someone behind you cuts in, everyone gets mad. That's why a line is *always* FIFO.
 
-**Common theme**: Fair, sequential processing!`
+🖨️ **Printer queue** — if you hit print first but someone else's doc comes out first, that's wrong. Jobs should print in the *order they were requested*.
+
+🎮 **Game matchmaking** — whoever hit "find match" first gets matched first. Fairness means rewarding whoever waited longest.
+
+📦 **Package processing** · 🎵 **Music playlist** — first package received ships first, first song added plays first.
+
+> 💡 **Why are these all queues?** The key is *"respect the order people waited in."* First in, first out (FIFO) = a line with no cutting. If instead the *last* one in goes out first (LIFO), that's not a queue — it's a **stack**.
+
+**Common theme**: Fair processing, in the order people arrived!`
         },
         {
           id: "quiz1",
@@ -104,22 +108,24 @@ Remove: 1→2→3  (in order!)
           id: "operations",
           type: "explain",
           title: "⚙️ Queue Operations",
-          content: `**Two core operations:**
+          content: `Picture the queue as a *line* again. Only two things ever happen in a line — **a new person joins the back, and one person leaves from the front.** Naming those two actions gives us the queue's core operations.
 
-**enqueue** - Add to the back
+**enqueue** — add to the **back** (latecomers go to the end)
 \`\`\`
 enqueue(3): [1,2] → [1,2,3]
 \`\`\`
 
-**dequeue** - Remove from the front
+**dequeue** — remove from the **front** (whoever waited longest leaves)
 \`\`\`
 dequeue(): [1,2,3] → [2,3] (returns 1)
 \`\`\`
 
-**Helper operations:**
-- **front**: Peek at the front item (without removing)
-- **isEmpty**: Check if the queue is empty
-- **size**: Get the number of items`
+**Why does the *front* leave?** Because a queue promises "first in, first out" (FIFO). The frontmost \`1\` got in line first, so it's only fair it leaves first. The place you enter (back) and the place you exit (front) are on **opposite ends** — that's the shape of a queue. (A stack uses the *same* end — push and pop both from the top.)
+
+**Helper operations (look *without disturbing* the line):**
+- **front**: just *peek* at who's at the front (no removal)
+- **isEmpty**: check whether the line is empty
+- **size**: how many are waiting right now`
         },
         {
           id: "pred-list-slow",
@@ -139,7 +145,8 @@ dequeue(): [1,2,3] → [2,3] (returns 1)
           id: "deque-explain",
           type: "explain",
           title: "📦 Using collections.deque",
-          content: `Using a list for a queue is **slow!**
+          content: `You *can* build a queue with a list — \`append\` to add at the back, \`pop(0)\` to remove the front, and you get FIFO. **But it's slow!** Understanding *why* is today's key insight.
+
 \`\`\`python
 # List - pop(0) is O(n), which is slow!
 queue = []
@@ -147,14 +154,28 @@ queue.append(1)     # enqueue
 queue.pop(0)        # dequeue - slow!
 \`\`\`
 
-**Using deque makes it fast!**
+**Why is \`pop(0)\` slow?** A list is like a row of **fixed, numbered seats** (0, 1, 2, …). When the person in seat 0 (the front) leaves, seat 0 *can't stay empty* — so everyone behind has to **shuffle forward by one seat**.
+
+\`\`\`
+[A][B][C][D]   ← remove A (front)
+   ↓ B,C,D all shift one seat ←
+[B][C][D]
+\`\`\`
+
+With 10 people, 9 shuffle; with 10,000 people, 9,999 shuffle. The more people, the longer it takes — that's **O(n)** (proportional to the count).
+
+**deque skips the shuffling!**
 \`\`\`python
 from collections import deque
 
 queue = deque()
 queue.append(1)     # enqueue - O(1)
 queue.popleft()     # dequeue - O(1) fast!
-\`\`\``
+\`\`\`
+
+Think of a \`deque\` as a **line with separate front and back doors**. It isn't tied to seat numbers, so when \`popleft()\` removes the front person, *everyone else stays put*. No shuffling needed — whether there are 10,000 or a million people, it's always **instant (O(1))**.
+
+> 💡 \`list.pop(0)\` = remove the front, *everyone shuffles forward* (O(n), slow)  ·  \`deque.popleft()\` = just walk out the front door (O(1), fast). **Always use \`deque\` for a queue!**`
         },
         {
           id: "try1",
@@ -170,8 +191,9 @@ queue.popleft()     # dequeue - O(1) fast!
           id: "class-queue",
           type: "explain",
           title: "🖨️ Printer Queue Simulation",
-          content: `A printer queue is a classic queue!
-Files print in the **order they were requested**.
+          content: `Now let's use the \`deque\` we just learned to build something that *actually behaves like the real thing* — a printer.
+
+What happens when several people send jobs to a shared school printer at once? It can't print them all simultaneously, so it **lines the requests up** and handles them one at a time. If you sent yours first, yours prints first — exactly a queue (FIFO). So \`append\` to stack up requests and \`popleft\` to print from the front, and it works just like a real printer.
 
 \`\`\`python
 from collections import deque
@@ -223,6 +245,8 @@ N=7, K=3:
 ...
 \`\`\`
 
+**Why solve it with a queue?** The key is that people sit in a *circle* and you keep going around. Unroll that circle into a line — you count off from the front one at a time, and **anyone still alive goes back to the end of the line** to wait their turn again. That's exactly how a queue behaves: take from the front (\`popleft\`) → if they survive, put them at the back (\`append\`); only the K-th person gets removed and *not* re-added. Going around the circle = going around the queue.
+
 **Solving with a queue:**
 1. Dequeue K-1 people and re-enqueue them (send to back)
 2. Dequeue the K-th person (eliminated)
@@ -259,7 +283,9 @@ Discard: 1, move 2 to bottom → [3,4,2]
 Discard: 3, move 4 to bottom → [2,4]
 Discard: 2, move 4 to bottom → [4]
 Last card: 4
-\`\`\``
+\`\`\`
+
+**Why a queue?** Picture the deck as a line from top to bottom — you only ever touch the *top (front)*: discard one (\`popleft\`), then send the next to the *bottom (back)* (\`popleft\` the value, then \`append\` it). Only taking from the front and adding to the back — that's a queue. It's the same pattern as Josephus, except instead of "survive" the move is "send to the bottom."`
         },
         {
           id: "try4",

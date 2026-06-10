@@ -230,15 +230,15 @@ export const lessonCpp12: LessonData = {
         type: "practice",
         content: {
           level: 2,
-          task: "두 정수를 참조로 받아서 서로 교환하는 swap 함수를 완성해요",
-          guide: "void swap(int& a, int& b) { int tmp = a; a = b; b = tmp; }",
-          template: "void swap(int___ a, int___ b) {\n    int tmp = a;\n    a = b;\n    b = ___;\n}",
+          task: "두 정수를 참조로 받아서 서로 교환하는 mySwap 함수를 완성해요",
+          guide: "void mySwap(int& a, int& b) { int tmp = a; a = b; b = tmp; }",
+          template: "void mySwap(int___ a, int___ b) {\n    int tmp = a;\n    a = b;\n    b = ___;\n}",
           blanksAnswer: ["&", "&", "tmp"],
-          answer: "void swap(int& a, int& b) {\n    int tmp = a;\n    a = b;\n    b = tmp;\n}",
-          expect: "void swap(int& a, int& b) {\n    int tmp = a;\n    a = b;\n    b = tmp;\n}",
+          answer: "void mySwap(int& a, int& b) {\n    int tmp = a;\n    a = b;\n    b = tmp;\n}",
+          expect: "void mySwap(int& a, int& b) {\n    int tmp = a;\n    a = b;\n    b = tmp;\n}",
           en: {
-            task: "Complete the swap function that takes two integers by reference and swaps them",
-            guide: "void swap(int& a, int& b) { int tmp = a; a = b; b = tmp; }"
+            task: "Complete the mySwap function that takes two integers by reference and swaps them",
+            guide: "void mySwap(int& a, int& b) { int tmp = a; a = b; b = tmp; }"
           }
         }
       },

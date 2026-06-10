@@ -24,7 +24,7 @@ export const lesson33EnData: LessonData = {
           id: "ch1-1",
           type: "explain",
           title: "💭 Can we make functions smarter?",
-          content: `💭 Last time you built add and subtract functions. But every call needs the same values, and you only get **one** result back… isn't there an **easier way**?
+          content: `💭 Last time you built add and subtract functions. They work fine — but as you use them, a few small annoyances show up.
 
 \`\`\`
 === Calculator ===
@@ -34,11 +34,15 @@ export const lesson33EnData: LessonData = {
 20 / 4 = 5.0
 \`\`\`
 
-Today we upgrade functions to be **smarter**:
+Think about it — you keep passing the same value over and over, \`return\` gives you only **one** result back, and if you mix up the order of the values, they land in the wrong spots.
 
-- Use default values for **convenience**
-- Get **multiple results** back at once
-- Use name tags to be **crystal clear**
+Functions are a **tool you reach for constantly**, so these little annoyances pile up fast. So today we upgrade functions with 3 techniques that make them **smarter and easier to use**.
+
+- **Default values** — pre-set the common value so it fills in automatically when you skip it
+- **Multiple returns** — get two or three results back at once, not just one
+- **Keyword arguments** — attach name tags so order never trips you up
+
+> 💡 All three are about *using functions more easily*. These aren't hard new concepts — they're convenience features layered on top of the functions you already know.
 
 @key: Adding **default values, multiple returns, and keyword arguments** makes functions way more convenient!`
         },
@@ -99,8 +103,11 @@ greet('Liz', 'Hello')
 
 **'Hello' five times!** 😩
 
-Most of the time it's "Hello"…
-typing it every single time is annoying!
+Most of the time it's "Hello", and only occasionally something else. Yet you have to type out a value that *barely ever changes* on every single call — annoying!
+
+We do this in real life too. Order an "iced americano" at a café and you get the **default size** by default. You don't have to say "regular size, please" every time. Only when you want a big one do you add "make it large!"
+
+It'd be great if functions worked the same way. Skip it and **'Hello' fills in automatically**; only pass a value when you actually want a different greeting.
 
 @key: We need a way to **auto-fill** values we use most of the time without typing them every call.`
         },
@@ -115,7 +122,7 @@ def greet(name, message='Hello'):  # 👈 Default!
     print(f'{message}, {name}!')
 \`\`\`
 
-Just put the default value after **=**!
+Just put the default value after **=**! This is a promise up front: *"if no message is given, use this."*
 
 \`\`\`python
 greet('Tom')              # No message → "Hello, Tom!"
@@ -123,7 +130,9 @@ greet('Jane', 'Welcome')  # Message given → "Welcome, Jane!"
 \`\`\`
 
 - **Skip the value** → default is used! ✅
-- **Pass a value** → your value wins! ✅
+- **Pass a value** → your value wins! ✅ (your value *overrides* the default)
+
+> 💡 A default value turns a parameter into an **"optional field."** \`name\` is *required*, but \`message\` becomes optional. So the most common case (\`greet('Tom')\`) stays short, and you only add a value for the special cases.
 
 @key: Write **=value** on a parameter and Python auto-uses it when nothing is passed.`
         },
@@ -194,7 +203,18 @@ def func(a, b=1):
 - Parameters **without** defaults → **first**
 - Parameters **with** defaults → **last**
 
-Why? Otherwise Python can't tell which value goes where!
+**Why does this rule exist?** When you pass values by order (positional arguments), Python fills them **left to right**. But if a parameter with a default comes first, like \`def func(a=1, b)\`, things break.
+
+\`\`\`python
+def func(a=1, b):   # ❌
+    return a + b
+
+func(5)   # Is this 5 for a, or for b? 🤔
+\`\`\`
+
+If you pass just \`5\` — putting it in \`a\` makes no sense since \`a\` already has default 1, and then \`b\` gets nothing. From Python's view, *an optional slot sitting in front of a required slot* tangles up "where do I start filling?" So Python throws an **error the moment the function is defined** — it blocks the confusing situation in advance.
+
+> ⚠️ Memory tip: **"Must-give first, may-skip later."** Like \`def order(menu, qty=1)\` — menu is required, quantity is optional!
 
 @key: Parameters with defaults must come **after** parameters without defaults.`
         },
@@ -213,8 +233,8 @@ Why? Otherwise Python can't tell which value goes where!
           title: "💰 Discount function",
           task: "Complete the function that applies a 10% default discount!",
           initialCode: `def discount(price, rate=10):
-    # discounted = price * (100 - rate) / 100
-    # Write the return statement here!
+    # Work out the final price after taking off rate%
+    # then return it here!
 
 
 print(discount(10000))       # 10% off → 9000
@@ -245,7 +265,9 @@ quotient = 17 // 5      # 3
 remainder = 17 % 5      # 2
 \`\`\`
 
-Can one function give us **both**?
+Can one function give us **both**? Quotient and remainder often travel together as a *pair*. (Converting time to minutes → "X min Y sec"; giving change → "X dollars Y cents" — both come out two-at-a-time.)
+
+Think about it — in real life one action often hands back several results. Put coins into a vending machine and out comes **a drink + your change** together. You don't make two separate trips for the drink and the change. A function returning its results as one bundle would be just as handy.
 
 @key: We need a way to **return multiple values at once** from a function!`
         },
@@ -262,6 +284,8 @@ def divide(num, divisor):
     return quotient, remainder    # 👈 2 values separated by comma!
 \`\`\`
 
+There's a hidden secret here. When you list values with commas like \`return quotient, remainder\`, Python wraps them into **one bundle (a tuple)** before sending it back — like \`(3, 2)\`. So it's not really "returning several values"; it's **bundling several into one and returning that one**. (Just like the vending machine sending the drink and change out one shared slot!)
+
 How to receive:
 \`\`\`python
 # Way 1: receive as one (tuple)
@@ -274,9 +298,13 @@ print(q)           # 3
 print(r)           # 2
 \`\`\`
 
+Way 2 is the neat one. Put 2 variables separated by a comma on the left, and Python **unpacks** the bundle \`(3, 2)\` — 3 into the first variable, 2 into the second, in order. This is called *unpacking*. It's like taking items out of a bag and placing each in its spot.
+
+> 💡 So the **number of variables on the left must match the number of values on the right.** \`q, r = divide(17, 5)\` → the bundle is \`(3, 2)\`, so 2 variables. If the counts don't match, Python errors out: *"which value goes where?"*
+
 **return val1, val2** → **var1, var2 = func()**
 
-@key: List multiple values after **return** with commas, and unpack them with **matching commas**!`
+@key: List multiple values after **return** with commas and Python returns one bundle (a tuple); unpack it into variables with **matching commas**!`
         },
         {
           id: "ch3-3",
@@ -367,6 +395,10 @@ profile('Tom', 15, 'Python High', 3, 12)
 # Is 15 the age? Grade? Number?
 \`\`\`
 
+So far we've passed values **by order** (positional arguments). That means the function only recognizes values by their **slot number** — *"slot 1 = name, slot 2 = age..."* So if you accidentally swap the order of \`3\` and \`12\`, there's **no error — it just quietly gives the wrong result.** That's the scary part.
+
+It's like writing a shipping label as a row of numbers with no field names. The recipient, the zip code, the phone number are all numbers — get the order wrong and it goes to the wrong house.
+
 @key: When parameters pile up, you need **name tags** to pass values clearly!`
         },
         {
@@ -391,7 +423,13 @@ introduce(school='Python High', name='Tom', age=15)
 #         👆 Order doesn't matter!
 \`\`\`
 
-Write **name=value** and pass arguments in any order!
+You attach a **name tag** to each value with \`name=\`. On a shipping label that's like writing "Recipient: Tom", "School: Python High" with the field names included. Now even if the boxes are jumbled, the courier delivers correctly by **reading the tags**. Python does the same — it finds each value by *name* instead of *slot number*.
+
+Name tags make two things easier:
+- **No need to memorize order** — even confusing parameters just need the right name.
+- **Easy to skip optional values** — let the front options stay at their defaults and pinpoint just the one you want, like \`color='red'\`. (Paired with default values, this gets really powerful!)
+
+> 💡 You can **mix** positional (by order) and keyword (by name tag) arguments. Just keep *positional ones first, keyword ones after*. E.g. \`introduce('Tom', school='Python High', age=15)\` — name by order, the rest by tag.
 
 @key: Use **name=value** (keyword arguments) and Python matches by **name** — order stops mattering.`
         },
@@ -542,8 +580,8 @@ print(f'20 / 4 = {divide(20, 4)}')`,
           title: "🏆 Challenge: safe divide",
           task: "Return 'Cannot divide!' when dividing by 0!",
           initialCode: `def safe_divide(a, b):
-    # If b is 0, return 'Cannot divide!'
-    # Otherwise return a / b
+    # If b is 0, tell the user it can't be divided
+    # otherwise return the division result
 
 
 print(safe_divide(10, 2))

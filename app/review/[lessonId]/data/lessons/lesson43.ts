@@ -40,7 +40,14 @@ print(slime.hp)`,
           answer: 1,
           feedback: "slime.hp(50) - hero.atk(20) = 30!"
         },
-        result: "30"
+        result: "30",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["50", "30", "20", "5"],
+            feedback: "slime.hp(50) - hero.atk(20) = 30!"
+          }
+        }
       }
     },
 
@@ -53,7 +60,12 @@ print(slime.hp)`,
         hint: "s.속성 = 매개변수 형태!",
         template: "class Character:\n    def __init__(s, name, hp):\n        s.name = name\n        ___ = hp\n\nhero = Character('용사', 100)\nprint(hero.hp)",
         answer: "s.hp",
-        expect: "100"
+        expect: "100",
+        en: {
+          task: "Fill in the blank to make a character!",
+          guide: "Store the attribute in __init__!",
+          hint: "Use the s.attribute = parameter form!"
+        }
       }
     },
 
@@ -64,6 +76,11 @@ print(slime.hp)`,
         task: "___ 자리 2개를 채워 take_damage 메서드를 완성해요!",
         guide: "데미지만큼 hp를 줄여요!",
         hint: "s.hp = s.hp - damage",
+        en: {
+          task: "Fill in the 2 blanks to complete the take_damage method!",
+          guide: "Reduce hp by the damage amount!",
+          hint: "s.hp = s.hp - damage"
+        },
         template: "class Character:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\n    def take_damage(s, damage):\n        s.___ = s.hp - ___\n\nhero = Character('용사', 100)\nhero.take_damage(30)\nprint(hero.hp)",
         blanksAnswer: ["hp", "damage"],
         answer: "class Character:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\n    def take_damage(s, damage):\n        s.hp = s.hp - damage\n\nhero = Character('용사', 100)\nhero.take_damage(30)\nprint(hero.hp)",
@@ -82,7 +99,17 @@ print(slime.hp)`,
           "에러"
         ],
         answer: 1,
-        explanation: "점(.) 앞의 객체가 s에 들어가고, 괄호의 인자가 target!"
+        explanation: "점(.) 앞의 객체가 s에 들어가고, 괄호의 인자가 target!",
+        en: {
+          question: "When you call hero.attack(slime), what are s and target in the attack method?",
+          options: [
+            "s=slime, target=hero",
+            "s=hero, target=slime",
+            "both s and target are hero",
+            "Error"
+          ],
+          explanation: "The object before the dot (.) goes into s, and the argument in parentheses is target!"
+        }
       }
     },
 
@@ -125,7 +152,14 @@ print(a.balance)`,
           answer: 1,
           feedback: "1000 + 500 - 300 = 1200!"
         },
-        result: "1200"
+        result: "1200",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["1000", "1200", "1500", "800"],
+            feedback: "1000 + 500 - 300 = 1200!"
+          }
+        }
       }
     },
 
@@ -136,6 +170,11 @@ print(a.balance)`,
         task: "___ 자리 2개를 채워 deposit/withdraw를 완성해요!",
         guide: "입금은 +, 출금은 -",
         hint: "s.balance = s.balance + amount",
+        en: {
+          task: "Fill in the 2 blanks to complete deposit/withdraw!",
+          guide: "Deposit is +, withdraw is -",
+          hint: "s.balance = s.balance + amount"
+        },
         template: "class Account:\n    def __init__(s, balance):\n        s.balance = balance\n\n    def deposit(s, amount):\n        s.balance = s.balance ___ amount\n\n    def withdraw(s, amount):\n        s.balance = s.balance ___ amount\n\na = Account(100)\na.deposit(50)\na.withdraw(30)\nprint(a.balance)",
         blanksAnswer: ["+", "-"],
         answer: "class Account:\n    def __init__(s, balance):\n        s.balance = balance\n\n    def deposit(s, amount):\n        s.balance = s.balance + amount\n\n    def withdraw(s, amount):\n        s.balance = s.balance - amount\n\na = Account(100)\na.deposit(50)\na.withdraw(30)\nprint(a.balance)",
@@ -166,7 +205,14 @@ print(a.balance)`,
           answer: 3,
           feedback: "200 > 100이라 return으로 빠져나옴! balance 그대로 100!"
         },
-        result: "잔액 부족!\n100"
+        result: "잔액 부족!\n100",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["100", "-100", "잔액 부족!\\n-100", "잔액 부족!\\n100"],
+            feedback: "200 > 100, so it exits with return! balance stays 100!"
+          }
+        }
       }
     },
 
@@ -177,6 +223,11 @@ print(a.balance)`,
         task: "처음부터 작성! Account 클래스(owner, balance)를 만들고\n계좌를 만들어 200원 입금 후 잔액을 출력해요",
         guide: "class Account; __init__(s, owner, balance); deposit 메서드",
         hint: "class Account:\n    def __init__(s, owner, balance):\n        s.owner = owner\n        s.balance = balance\n\n    def deposit(s, amount):\n        s.balance = s.balance + amount\n\na = Account('철수', 500)\na.deposit(200)\nprint(a.balance)",
+        en: {
+          task: "Write from scratch! Make an Account class (owner, balance),\ncreate an account, deposit 200, then print the balance",
+          guide: "class Account; __init__(s, owner, balance); deposit method",
+          hint: "class Account:\n    def __init__(s, owner, balance):\n        s.owner = owner\n        s.balance = balance\n\n    def deposit(s, amount):\n        s.balance = s.balance + amount\n\na = Account('철수', 500)\na.deposit(200)\nprint(a.balance)"
+        },
         template: null,
         answer: "class Account:\n    def __init__(s, owner, balance):\n        s.owner = owner\n        s.balance = balance\n\n    def deposit(s, amount):\n        s.balance = s.balance + amount\n\na = Account('철수', 500)\na.deposit(200)\nprint(a.balance)",
         alternateAnswers: [
@@ -215,7 +266,10 @@ print(a.balance)`,
 r = Rectangle(5, 3)
 print(r.area())`,
         result: "15",
-        note: "return으로 값을 돌려주고 print로 출력!"
+        note: "return으로 값을 돌려주고 print로 출력!",
+        en: {
+          note: "Return the value with return, then print it!"
+        }
       }
     },
 
@@ -228,7 +282,12 @@ print(r.area())`,
         hint: "return (s.w + s.h) * 2",
         template: "class Rectangle:\n    def __init__(s, w, h):\n        s.w = w\n        s.h = h\n\n    def perimeter(s):\n        return (s.w + s.h) * ___\n\nr = Rectangle(4, 6)\nprint(r.perimeter())",
         answer: "2",
-        expect: "20"
+        expect: "20",
+        en: {
+          task: "Fill in the blank to complete the perimeter method!",
+          guide: "Rectangle perimeter = (width + height) × 2",
+          hint: "return (s.w + s.h) * 2"
+        }
       }
     },
 
@@ -253,7 +312,17 @@ print(r.area())`,
           "r = Rectangle(5, 3)이 잘못됐어요"
         ],
         answer: 0,
-        explanation: "메서드 안에서 속성을 쓸 땐 항상 s.속성으로 접근해야 해요! 그냥 w, h를 쓰면 NameError!"
+        explanation: "메서드 안에서 속성을 쓸 땐 항상 s.속성으로 접근해야 해요! 그냥 w, h를 쓰면 NameError!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Inside the area method, you must use s.w, s.h instead of w, h",
+            "__init__ is wrong",
+            "You must use print instead of return",
+            "r = Rectangle(5, 3) is wrong"
+          ],
+          explanation: "When using attributes inside a method, always access them with s.attribute! Using just w, h causes a NameError!"
+        }
       }
     },
 
@@ -264,6 +333,11 @@ print(r.area())`,
         task: "처음부터 작성! Circle 클래스(radius)를 만들고\nradius=10인 원의 넓이를 출력해요 (π = 3.14)",
         guide: "class Circle; __init__(s, radius); area 메서드는 3.14 * s.radius ** 2 반환",
         hint: "class Circle:\n    def __init__(s, radius):\n        s.radius = radius\n\n    def area(s):\n        return 3.14 * s.radius ** 2\n\nc = Circle(10)\nprint(c.area())",
+        en: {
+          task: "Write from scratch! Make a Circle class (radius),\nthen print the area of a circle with radius=10 (π = 3.14)",
+          guide: "class Circle; __init__(s, radius); the area method returns 3.14 * s.radius ** 2",
+          hint: "class Circle:\n    def __init__(s, radius):\n        s.radius = radius\n\n    def area(s):\n        return 3.14 * s.radius ** 2\n\nc = Circle(10)\nprint(c.area())"
+        },
         template: null,
         answer: "class Circle:\n    def __init__(s, radius):\n        s.radius = radius\n\n    def area(s):\n        return 3.14 * s.radius ** 2\n\nc = Circle(10)\nprint(c.area())",
         alternateAnswers: [
@@ -313,7 +387,14 @@ print(b.progress())`,
           answer: 1,
           feedback: "50 / 200 * 100 = 25.0%!"
         },
-        result: "25.0"
+        result: "25.0",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["50.0", "25.0", "200", "50"],
+            feedback: "50 / 200 * 100 = 25.0%!"
+          }
+        }
       }
     },
 
@@ -326,7 +407,13 @@ print(b.progress())`,
         hint: "f'{b.title} ({b.author})'",
         template: "class Book:\n    def __init__(s, title, author):\n        s.title = title\n        s.author = author\n\nb = Book('파이썬', '김작가')\nprint(f'{b.title} ({b.___})')",
         answer: "author",
-        expect: "파이썬 (김작가)"
+        expect: "파이썬 (김작가)",
+        en: {
+          message: "Wait! You can also use f-strings inside a class. (lesson 8 review)",
+          task: "Fill in the blank to print the book info!",
+          guide: "Combine f-strings with object attributes!",
+          hint: "f'{b.title} ({b.author})'"
+        }
       }
     },
 
@@ -337,6 +424,11 @@ print(b.progress())`,
         task: "___ 자리 3개를 채워 Book 클래스를 완성해요!",
         guide: "title, pages 속성 + summary 메서드",
         hint: "s.title, s.pages, f-string으로 한 줄 요약!",
+        en: {
+          task: "Fill in the 3 blanks to complete the Book class!",
+          guide: "title, pages attributes + summary method",
+          hint: "s.title, s.pages, a one-line summary with an f-string!"
+        },
         template: "class Book:\n    def ___(s, title, pages):\n        s.title = title\n        s.___ = pages\n\n    def summary(s):\n        return f'{s.title} - {s.pages}쪽'\n\nb = Book('파이썬 입문', 300)\nprint(b.___())",
         blanksAnswer: ["__init__", "pages", "summary"],
         answer: "class Book:\n    def __init__(s, title, pages):\n        s.title = title\n        s.pages = pages\n\n    def summary(s):\n        return f'{s.title} - {s.pages}쪽'\n\nb = Book('파이썬 입문', 300)\nprint(b.summary())",
@@ -351,6 +443,11 @@ print(b.progress())`,
         task: "처음부터 작성! Student 클래스(name, scores 리스트)를 만들고\nadd_score(점수 추가), average(평균 반환) 메서드를 만들어요.\n학생 '민수'에 80, 90, 100을 추가하고 평균을 출력해요.",
         guide: "scores는 빈 리스트로 시작! append로 추가, sum/len으로 평균!",
         hint: "class Student:\n    def __init__(s, name):\n        s.name = name\n        s.scores = []\n    def add_score(s, score):\n        s.scores.append(score)\n    def average(s):\n        return sum(s.scores) / len(s.scores)\n\ns = Student('민수')\ns.add_score(80)\ns.add_score(90)\ns.add_score(100)\nprint(s.average())",
+        en: {
+          task: "Write from scratch! Make a Student class (name, scores list) with\nadd_score (add a score) and average (return the average) methods.\nAdd 80, 90, 100 to student '민수' and print the average.",
+          guide: "scores starts as an empty list! Add with append, average with sum/len!",
+          hint: "class Student:\n    def __init__(s, name):\n        s.name = name\n        s.scores = []\n    def add_score(s, score):\n        s.scores.append(score)\n    def average(s):\n        return sum(s.scores) / len(s.scores)\n\ns = Student('민수')\ns.add_score(80)\ns.add_score(90)\ns.add_score(100)\nprint(s.average())"
+        },
         template: null,
         answer: "class Student:\n    def __init__(s, name):\n        s.name = name\n        s.scores = []\n\n    def add_score(s, score):\n        s.scores.append(score)\n\n    def average(s):\n        return sum(s.scores) / len(s.scores)\n\ns = Student('민수')\ns.add_score(80)\ns.add_score(90)\ns.add_score(100)\nprint(s.average())",
         expect: "90.0"
@@ -368,7 +465,17 @@ print(b.progress())`,
           "한 객체만 만들 수 있어요"
         ],
         answer: 1,
-        explanation: "Student('민수')와 Student('영희')는 각각 다른 name, scores를 가져요!"
+        explanation: "Student('민수')와 Student('영희')는 각각 다른 name, scores를 가져요!",
+        en: {
+          question: "When you make several objects, what about each object's attributes?",
+          options: [
+            "All objects share the same values",
+            "Each object has independent values",
+            "You can only use values set by the class",
+            "You can only make one object"
+          ],
+          explanation: "Student('민수') and Student('영희') each have their own name and scores!"
+        }
       }
     },
 

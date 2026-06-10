@@ -34,6 +34,8 @@ def 함수이름(매개변수):
       title: "💭 이걸로 계산기를 만들 수 있을까?",
       content: `💭 함수와 return을 배웠으니... **나만의 계산기**를 만들 수 있지 않을까?
 
+계산기에는 더하기 버튼, 빼기 버튼이 따로 있죠. 함수도 그렇게 **버튼 하나에 기능 하나**씩 만들어두면 돼요. 더하기 자판기, 빼기 자판기를 각각 만들어두고, 필요할 때 골라서 부르는 거예요.
+
 \`\`\`python
 def add(a, b):
     return a + b
@@ -44,6 +46,8 @@ def subtract(a, b):
 print(add(10, 5))       # 15
 print(subtract(10, 5))  # 5
 \`\`\`
+
+각 함수가 \`return\` 으로 결과를 돌려주니까, 그 값을 바로 \`print\` 에 넘겨서 화면에 보여줄 수 있어요. 한 함수가 한 가지 일만 하면 — 나중에 더하기에 버그가 생겨도 \`add\` 만 보면 되니까 — 고치기도, 읽기도 훨씬 쉬워져요.
 
 @핵심: 함수마다 **하나의 기능**을 담으면 깔끔한 계산기 완성!`
     },
@@ -67,7 +71,7 @@ print(subtract(10, 5))  # 5
       title: "빼기 함수 만들기",
       task: "subtract 함수가 두 수의 차이를 돌려주도록 빈칸을 채우세요!",
       initialCode: `def subtract(a, b):
-    return _____  # a - b를 입력하세요
+    return _____  # 두 수의 차를 돌려주세요
 
 print(subtract(10, 3))  # 7이 나와야 해요
 print(subtract(20, 8))  # 12가 나와야 해요`,
@@ -99,7 +103,7 @@ def add(a, b):
     return a + b
 
 def multiply(a, b):
-    return _____  # a * b를 입력하세요
+    return _____  # 두 수의 곱을 돌려주세요
 
 print("3 + 5 =", add(3, 5))
 print("3 * 5 =", multiply(3, 5))`,

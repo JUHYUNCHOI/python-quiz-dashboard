@@ -394,7 +394,7 @@ export const lesson1: LessonData = {
           template: null,
           answer: "print(20 / 4)",
           alternateAnswers: ["print(20/4)"],
-          expect: "5",
+          expect: "5.0",
           en: {
             task: "Calculate 20 / 4 and print it",
             guide: "/ means divide!"
