@@ -103,6 +103,7 @@ interface DbSession {
 function RoundResult({
   setNum,
   passed,
+  starred = 0,
   total,
   wrongNums,
   teacherAssigned,
@@ -114,6 +115,7 @@ function RoundResult({
 }: {
   setNum: number
   passed: number
+  starred?: number   // 힌트 없이 깔끔히 푼 수 (이해도)
   total: number
   wrongNums: number[]
   teacherAssigned: boolean
@@ -158,6 +160,20 @@ function RoundResult({
           <span className="text-base font-bold text-gray-800">{pct}%</span>
         </div>
       </div>
+
+      {/* 💎 이해도 평가 — 힌트 없이 깔끔히 풀었나 (starred) 기준 적응형 안내 */}
+      {passed > 0 && (
+        <div className="w-full rounded-2xl border bg-white/60 px-5 py-3 text-sm text-gray-600 border-gray-200">
+          <p className="text-xs text-gray-400 mb-1">💎 {t(`힌트 없이 깔끔히: ${starred}/${total}`, `Clean (no hints): ${starred}/${total}`)}</p>
+          <p className="font-bold text-gray-800">
+            {starred >= total
+              ? t("완벽히 이해했어요 — 바로 다음 단계로 가도 좋아요! 🚀", "Fully mastered — ready to move on! 🚀")
+              : passed >= total
+                ? t("다 풀었지만 힌트를 좀 썼어요 — 한 번 더 보면 확실해져요.", "Solved all, but used some hints — a quick review locks it in.")
+                : t("막힌 문제가 있어요 — 복습하거나 한 세트 더 풀어요.", "Some were tough — review or try another set.")}
+          </p>
+        </div>
+      )}
 
       {!isGood && wrongNums.length > 0 && (
         <div className="bg-amber-50 border border-amber-200 rounded-2xl px-5 py-3 w-full text-left">
@@ -295,6 +311,7 @@ export function PracticeSession({
   const [roundProblems, setRoundProblems] = useState<PracticeProblem[]>([])
   const [index, setIndex] = useState(0)
   const [passedInRound, setPassedInRound] = useState<Set<string>>(new Set())
+  const [starredInRound, setStarredInRound] = useState<Set<string>>(new Set())  // 힌트 없이 깔끔히 푼 것 (이해도)
   const [canAdvance, setCanAdvance] = useState(false)
   const [teacherAssignedId, setTeacherAssignedId] = useState<string | null>(null)
   const [isSaving, setIsSaving] = useState(false)
@@ -452,6 +469,7 @@ export function PracticeSession({
     setRoundProblems(p)
     setIndex(0)
     setPassedInRound(new Set())
+    setStarredInRound(new Set())
     setCanAdvance(false)
     setPhase("solving")
   }, [cluster.problems])
@@ -460,7 +478,10 @@ export function PracticeSession({
     const p = roundProblems[index]
     if (!p) return
     await onMarkSolved(p.id)
-    if (starred) await onMarkStarred(p.id)
+    if (starred) {
+      await onMarkStarred(p.id)
+      setStarredInRound(prev => new Set([...prev, p.id]))
+    }
     setPassedInRound(prev => new Set([...prev, p.id]))
     setCanAdvance(true)
   }, [roundProblems, index, onMarkSolved, onMarkStarred])
@@ -671,6 +692,7 @@ export function PracticeSession({
         <RoundResult
           setNum={currentSet}
           passed={passedInRound.size}
+          starred={starredInRound.size}
           total={roundProblems.length}
           wrongNums={wrongNums}
           teacherAssigned={!!teacherAssignedId}
