@@ -382,6 +382,30 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 )}
               </p>
             </div>
+            <div className="mt-3 bg-purple-50 rounded-xl p-3 border-2 border-purple-200">
+              <p className="text-xs font-black text-purple-900 mb-2">🔙 {t("진짜 핵심: 막히면 *되돌리기 (undo)*", "The real heart: *undo* when stuck")}</p>
+              <p className="text-[11px] text-gray-700 leading-relaxed mb-2">
+                {t(
+                  "위 보드는 *성공 경로* 만 보여줘서 쉬워 보여요. 하지만 진짜 백트래킹은 — 퀸을 놓다 충돌하면 *방금 놓은 걸 치우고(undo)* 같은 행의 다음 칸을 시도해요. 그 칸도 막히면 또 치우고... 다 막히면 *이전 행* 으로 돌아가 거기 퀸도 치워요.",
+                  "The board above shows only the *success path*, so it looks easy. But real backtracking — when a queen conflicts, you *remove the one just placed (undo)* and try the next column in the same row. Blocked again? Remove and retry... All blocked? Go *back a row* and remove that queen too.",
+                )}
+              </p>
+              <div className="bg-white/70 rounded-lg p-2 border border-purple-200">
+                <p className="text-[11px] text-gray-700 leading-relaxed">
+                  <b className="text-purple-800">{t("미니 장면 — 1 행에 둘 곳 찾기:", "Mini scene — placing in row 1:")}</b><br />
+                  {t(
+                    "0 행은 1 열에 퀸. 1 행 0 열 시도 → 대각선 충돌! ✗ 치움. 1 열 → 같은 열! ✗ 치움. 2 열 → 또 대각선! ✗ 치움. 3 열 → OK! ✓ 놓고 다음 행으로.",
+                    "Row 0 has its queen at col 1. Row 1 try col 0 → diagonal conflict! ✗ undo. Col 1 → same column! ✗ undo. Col 2 → diagonal again! ✗ undo. Col 3 → OK! ✓ place & go to next row.",
+                  )}
+                </p>
+              </div>
+              <p className="text-[11px] text-purple-700 leading-relaxed mt-2 font-bold">
+                {t(
+                  "'놓기 → 막히면 치우기' 의 끝없는 반복 — 이게 백트래킹이에요. 깔끔한 성공 경로 하나 뒤엔 수없이 놓았다 치운 시도가 숨어 있어요.",
+                  "'place → if stuck, remove' over and over — that's backtracking. Behind one clean success path hide countless place-and-remove attempts.",
+                )}
+              </p>
+            </div>
           </div>
         )}
 

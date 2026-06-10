@@ -289,7 +289,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
 // ── Chapter 2: heap 사용법 ───────────────────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
+  const totalSteps = 5
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
 
@@ -409,14 +409,71 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </div>
             <p className="text-[11px] text-gray-500 mt-3 text-center italic">
               {t(
-                "내부는 트리 구조지만, 우리는 'push/pop' 두 가지만 알면 충분.",
-                "Internally a tree, but for us 'push/pop' is all that matters.",
+                "내부는 트리 구조 — 다음 슬라이드에서 그 'log N' 의 정체를 봐요.",
+                "Internally it's a tree — next slide reveals where that 'log N' comes from.",
               )}
             </p>
           </div>
         )}
 
         {step === 2 && (
+          <div className="bg-gradient-to-br from-indigo-50 to-violet-50 rounded-2xl p-5 border-2 border-indigo-200 min-h-[280px]">
+            <p className="text-4xl text-center mb-2">🌲</p>
+            <h3 className="text-lg font-black text-gray-900 mb-2 text-center">
+              {t("heap 의 속 — log N 은 어디서?", "Inside a heap — where does log N come from?")}
+            </h3>
+            <p className="text-xs text-gray-700 leading-relaxed mb-3 text-center">
+              {t(
+                "heap 은 정렬된 리스트가 아니에요. *완전 이진 트리* — 규칙 딱 하나: ",
+                "A heap isn't a sorted list. It's a *complete binary tree* — with one rule: ",
+              )}<b className="text-indigo-700">{t("부모 ≤ 자식", "parent ≤ children")}</b>
+              {t(" (min-heap). 그래서 루트가 *항상 최솟값*.", " (min-heap). So the root is *always the min*.")}
+            </p>
+
+            <div className="bg-white/80 rounded-lg p-3 border border-indigo-200 mb-3">
+              <p className="text-[11px] font-bold text-indigo-700 mb-2 uppercase">{t("예: 1,3,5,8,7 을 넣으면", "e.g. after inserting 1,3,5,8,7")}</p>
+              <pre className="text-[12px] font-mono text-gray-800 leading-relaxed text-center">{`        1        ← ${t("루트 = 최솟값", "root = min")}
+      /   \\
+     3     5
+    / \\
+   8   7
+
+${t("모든 부모 ≤ 자식 ✓", "every parent ≤ its children ✓")}`}</pre>
+            </div>
+
+            <div className="space-y-2 mb-3">
+              <div className="bg-white rounded-lg p-3 border-2 border-emerald-200">
+                <p className="text-sm font-black text-emerald-800 mb-1">⬆ push — {t("sift-up (위로 헤엄)", "sift-up (swim up)")}</p>
+                <p className="text-xs text-gray-700 leading-relaxed">
+                  {t(
+                    "맨 끝에 넣고 → 부모보다 작으면 부모와 한 칸 교환 → 계속. *트리 높이만큼* 만 오르면 끝.",
+                    "Drop it at the end → if smaller than parent, swap up one level → repeat. Climbs at most the *tree height*.",
+                  )}
+                </p>
+              </div>
+              <div className="bg-white rounded-lg p-3 border-2 border-rose-200">
+                <p className="text-sm font-black text-rose-800 mb-1">⬇ pop — {t("sift-down (아래로 가라앉기)", "sift-down (sink down)")}</p>
+                <p className="text-xs text-gray-700 leading-relaxed">
+                  {t(
+                    "루트를 꺼낸 뒤 → 맨 끝 값을 루트로 올리고 → 자식 중 *작은 쪽* 과 교환하며 내려감. 역시 트리 높이만큼.",
+                    "Take the root → move the last value to the root → swap down with the *smaller child*. Again, at most the tree height.",
+                  )}
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-indigo-100 rounded-lg p-3 border-2 border-indigo-300">
+              <p className="text-sm font-bold text-indigo-900 text-center leading-relaxed">
+                {t(
+                  "노드 N 개 트리의 높이 = log₂N. push/pop 은 *한 경로* 만 타고 오르내림 → ",
+                  "A tree of N nodes has height log₂N. push/pop ride just *one path* up or down → ",
+                )}<b>O(log N)</b>{t(". 성능표의 log N 이 바로 이거예요.", ". That's the log N in the table.")}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
           <div className="space-y-3">
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
               <p className="text-sm font-black text-blue-900">📝 {t("코드 — min-heap / max-heap", "Code — min-heap / max-heap")}</p>
@@ -475,7 +532,7 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (codeLang === "py" ? (
+        {step === 4 && (codeLang === "py" ? (
           <MiniQuiz
             question={t(
               "Python heapq 에 [5, 3, 8, 1, 7] 을 차례로 push 한 뒤 heappop 을 두 번 호출하면? (반환된 값 순서)",

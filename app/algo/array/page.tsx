@@ -189,20 +189,14 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "이유 하나 — ",
-                "Reason one — ",
-              )}<b className="text-blue-700">O(1) {t("인덱스 접근", "index access")}</b>{t(
-                ". arr[37] 하면 길이가 10 이든 100 만이든 즉시 꺼내져요. 사물함에서 #37 칸 바로 여는 것처럼.",
-                ". arr[37] fetches instantly whether the array has 10 or 1M items. Like walking straight to locker #37.",
-              )}
-            </p>
-            <p className="text-sm text-gray-700 leading-relaxed mb-3">
-              {t(
-                "이유 둘 — 메모리에 ",
-                "Reason two — ",
+                "배열은 값들이 메모리에 ",
+                "Arrays sit ",
               )}<b className="text-blue-700">{t("연속으로", "contiguous in memory")}</b>{t(
-                " 붙어 있어서, for 로 쭉 돌릴 때 CPU 가 엄청 빨라요. '한 번에 N 개 다 본다' 가 부담 없어요.",
-                ". CPU rips through them when you loop. 'Visit all N' costs almost nothing.",
+                " 붙어 있어서 두 가지가 공짜예요 — arr[37] 같은 ",
+                ", which buys two things for free — ",
+              )}<b className="text-blue-700">{t("번호로 바로 접근 O(1)", "O(1) index access")}</b>{t(
+                " (길이가 10 이든 100 만이든 즉시), 그리고 for 로 쭉 도는 순회가 아주 빨라요.",
+                " (instant whether length is 10 or 1M like locker #37) and blazing-fast for-loop traversal.",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-blue-200 mt-3">
@@ -228,34 +222,34 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
             <div className="space-y-2.5">
               <div className="bg-white rounded-lg p-3 border-2 border-purple-200">
                 <p className="text-sm font-black text-purple-800 mb-1">
-                  🔁 1. {t("순회하며 누적", "Traverse + accumulate")}
+                  🎯 1. {t("두 포인터", "Two Pointers")}
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "합, 최댓값, 카운트 — 다 '변수 하나 두고 for 로 굴리며 갱신' 한 패턴.",
-                    "Sum, max, count — all the same pattern: 'one variable + for loop, update as you go.'",
+                    "정렬된 배열에서 양 끝 L·R 로 시작해 안쪽으로 좁혀가기 — O(N²) 짝 찾기를 O(N) 으로.",
+                    "Start with L·R at both ends of a sorted array and squeeze inward — turn O(N²) pair search into O(N).",
                   )}
                 </p>
               </div>
               <div className="bg-white rounded-lg p-3 border-2 border-purple-200">
                 <p className="text-sm font-black text-purple-800 mb-1">
-                  🔀 2. {t("두 배열 같이 보기", "Two arrays side-by-side")}
+                  🪟 2. {t("슬라이딩 윈도우", "Sliding Window")}
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "같은 인덱스로 두 배열 동시에 보기 — 비교, 짝짓기, 차이 계산.",
-                    "Walk two arrays at the same index — compare, pair, diff.",
+                    "연속 구간을 한 칸씩 밀며 '+ 들어오는 것, − 나가는 것' 만 갱신 — 매번 다시 더하지 않기.",
+                    "Slide a contiguous window one step at a time, updating only '+ new, − old' — never re-sum from scratch.",
                   )}
                 </p>
               </div>
               <div className="bg-white rounded-lg p-3 border-2 border-purple-200">
                 <p className="text-sm font-black text-purple-800 mb-1">
-                  ⚠️ 3. {t("경계 처리 (가장 자주 틀리는 곳)", "Edge handling (where bugs hide)")}
+                  📈 3. {t("부분 배열 최대 합 (Kadane)", "Max Subarray (Kadane)")}
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "off-by-one, 빈 배열, 범위 밖 인덱스 — Bronze 문제 부분 점수의 90% 가 여기서 새요.",
-                    "Off-by-one, empty arrays, out-of-range — 90% of lost Bronze points leak from here.",
+                    "각 위치에서 '지금까지 이어갈까, 여기서 새로 시작할까' 한 번만 판단 — 한 번 훑어 O(N).",
+                    "At each index decide once: 'extend the run or start fresh?' — one pass, O(N).",
                   )}
                 </p>
               </div>
@@ -886,15 +880,13 @@ function Chapter5({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
           <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-5 border-2 border-amber-300">
             <h3 className="text-base font-black text-amber-900 mb-3">📌 {t("핵심 정리", "Key Takeaways")}</h3>
             <ol className="space-y-2 text-sm text-gray-800">
-              <li><b>1.</b> {t("배열 = 같은 종류 값을 한 줄에 묶어두는 통", "Array = a row bundling same-kind values")}</li>
-              <li><b>2.</b> {t("인덱스는 ", "Indices start at ")}<b>0</b>{t(" 부터 — 마지막 = ", " — last = ")}<code className="bg-white px-1 rounded">{codeLang === "py" ? "len(arr) - 1" : "arr.size() - 1"}</code></li>
-              <li><b>3.</b> {t("번호로 바로 접근 = ", "Lookup by index = ")}<b>O(1)</b> {t("(엄청 빠름)", "(super fast)")}</li>
-              <li><b>4.</b> {t("순회 = ", "Traversal = ")}<code className="bg-white px-1 rounded">{codeLang === "py" ? "for x in arr" : "for (auto x : arr)"}</code></li>
-              <li><b>5.</b> {t("합/최댓값/카운트 = 변수 하나 추적하며 순회", "Sum/max/count = track one variable while looping")}</li>
-              <li><b>6.</b> {t("항상 확인: N=0? 마지막 인덱스? off-by-one?", "Always check: N=0? last index? off-by-one?")}</li>
+              <li><b>1.</b> <b className="text-cyan-700">{t("두 포인터", "Two Pointers")}</b> {t("= 정렬된 배열 양 끝 L·R 에서 안쪽으로 좁히기. 짝 찾기 O(N²) → O(N).", "= squeeze L·R inward from both ends of a sorted array. Pair search O(N²) → O(N).")}</li>
+              <li><b>2.</b> <b className="text-emerald-700">{t("슬라이딩 윈도우", "Sliding Window")}</b> {t("= 연속 구간을 밀며 ", "= slide a contiguous window, updating ")}<b>{t("+ 새것 − 옛것", "+ new − old")}</b>{t(" 만 갱신. 다시 더하지 않기.", " only. Never re-sum.")}</li>
+              <li><b>3.</b> <b className="text-rose-700">Kadane</b> {t("= 각 위치에서 ", "= at each index, ")}<b>{t("이어가기 vs 새로 시작", "extend vs start fresh")}</b>{t(" 한 번 판단. 한 번 훑어 O(N).", " — one decision, one O(N) pass.")}</li>
+              <li><b>4.</b> {t("셋 다 공통: '한 번 훑으며 상태 하나만 들고 가기' → 느린 풀이를 O(N) 으로.", "All three share one idea: 'one pass, carry one piece of state' → slow brute force becomes O(N).")}</li>
             </ol>
             <p className="text-xs text-amber-700 mt-3 text-center italic">
-              {t("이 6 개만 머리에 박혀 있으면 Bronze 배열 문제 거의 다 풀어요!", "These 6 cover most Bronze array problems!")}
+              {t("이 3 패턴이면 Bronze 배열 문제 대부분이 풀려요!", "These 3 patterns crack most Bronze array problems!")}
             </p>
             <div className="mt-3 pt-3 border-t border-amber-200">
               <p className="text-[11px] text-blue-700 leading-relaxed">

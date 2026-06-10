@@ -370,6 +370,28 @@ union(1,2) 후: parent = [_, 1, 1, 3, 4, 5]
                 ↺ {t("리셋", "Reset")}
               </button>
             </div>
+
+            <div className="mt-3 bg-indigo-50 rounded-xl p-3 border-2 border-indigo-200">
+              <p className="text-xs font-black text-indigo-900 mb-2">🪜 {t("find 의 진짜 동작: 루트까지 *한 칸씩 올라가기*", "What find really does: *climb up one step at a time*")}</p>
+              <p className="text-[11px] text-gray-700 leading-relaxed mb-2">
+                {t(
+                  "위 시뮬은 이미 *루트인* 노드만 조회해서 한 방에 끝나 보여요. 하지만 일반적으로 find(x) 는 한 칸에 안 끝나요. x 의 부모로, 그 부모의 부모로... parent[x] == x 인 *루트* 를 만날 때까지 계속 올라가요.",
+                  "The sim above only queries nodes that are *already roots*, so it looks one-step. But in general find(x) isn't one step. Go to x's parent, then that parent's parent... and keep climbing until you hit a *root* where parent[x] == x.",
+                )}
+              </p>
+              <div className="bg-white/70 rounded-lg p-2 border border-indigo-200">
+                <p className="text-[11px] font-mono text-gray-700 leading-relaxed">
+                  {t("예: 1→2→3→4 체인에서 find(1):", "e.g. chain 1→2→3→4, find(1):")}<br />
+                  1 → parent[1]=2 → 2 → parent[2]=3 → 3 → parent[3]=4 → parent[4]=4 ✓ {t("루트!", "root!")}
+                </p>
+              </div>
+              <p className="text-[11px] text-indigo-700 leading-relaxed mt-2 font-bold">
+                {t(
+                  "체인이 길면 이 '올라가기' 가 O(N) 까지 느려져요 — 그래서 다음 챕터에서 *경로 압축* 으로 트리를 납작하게 눌러요.",
+                  "If the chain is long, this climb degrades to O(N) — that's why the next chapter flattens the tree with *path compression*.",
+                )}
+              </p>
+            </div>
           </div>
         )}
 
@@ -823,6 +845,15 @@ size[i] = i 가 루트일 때 트리의 노드 개수
                 "Only when ranks are equal does the new rank go +1. Otherwise it stays!",
               )}
             </p>
+            <div className="mt-2 bg-violet-50 rounded-lg p-2 border border-violet-200">
+              <p className="text-[11px] text-violet-800 leading-relaxed">
+                💭 <b>{t("왜 깊이가 log N?", "Why depth is log N?")}</b>{" "}
+                {t(
+                  "rank 를 1 늘리려면 *같은 rank 두 트리* 가 만나야 해요 → 노드 수가 매번 2 배 필요. 그러니 rank r 트리엔 노드가 최소 2ʳ 개. 거꾸로, 노드 N 개로 만들 수 있는 깊이는 최대 log₂N.",
+                  "To raise rank by 1, *two trees of equal rank* must meet → node count must double each time. So a rank-r tree has at least 2ʳ nodes. Conversely, N nodes give depth at most log₂N.",
+                )}
+              </p>
+            </div>
           </div>
         )}
 
