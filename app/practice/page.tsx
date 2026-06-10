@@ -11,6 +11,7 @@ import { PracticeRunner } from "@/components/practice/practice-runner"
 import { McqRunner } from "@/components/practice/mcq-runner"
 import { PracticeSession } from "@/components/practice/practice-session"
 import { ALL_CLUSTERS, BANK_CLUSTERS, ALGO_CONTEST_IDS } from "@/data/practice"
+import { getAdaptiveNext } from "@/lib/adaptive"
 import { getNextLessonId, getLessonName, getCompletedLessons, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { getSmartNext } from "@/lib/smart-next"
 import type { PracticeCluster, PracticeProblem } from "@/data/practice/types"
@@ -50,12 +51,32 @@ const KL_FLAT = ALL_CLUSTERS
 const KL_TOTAL = KL_FLAT.length
 
 // KL 필터 뷰 — 연습 안에서 KL 태그 문제만. 각 문제는 /practice 딥링크(페이지 이동 없이 runner).
-function KLView({ solvedSet }: { solvedSet: Set<string> }) {
+function KLView({ solvedSet, starredSet }: { solvedSet: Set<string>; starredSet: Set<string> }) {
   const { t } = useLanguage()
+  // 적응형: 학생 진행으로 "지금 추천" 1개. 실패/없음 → null → 카드 숨김(=목록 그대로, 폴백)
+  const rec = getAdaptiveNext({
+    pool: KL_FLAT.map(p => ({ id: p.id, cluster: p._clusterId, difficulty: p.difficulty })),
+    solvedSet,
+    starredSet,
+  })
+  const recProb = rec ? KL_FLAT.find(p => p.id === rec.problemId) : null
   return (
     <div className="flex flex-col gap-1.5">
+      {recProb && rec && (
+        <Link
+          href={`/practice?cluster=${recProb._clusterId}&problem=${recProb.id}&from=kl`}
+          className="rounded-2xl border-2 border-amber-400 bg-amber-50 p-4 flex items-center gap-3 hover:shadow-md transition-all mb-1"
+        >
+          <span className="text-2xl shrink-0">⭐</span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-bold text-amber-600">{t(`지금 추천 — ${rec.reason}`, `Recommended — ${rec.reasonEn}`)}</p>
+            <p className="font-bold text-gray-900 truncate">{recProb.title}</p>
+          </div>
+          <span className="text-amber-500 shrink-0" aria-hidden>→</span>
+        </Link>
+      )}
       <p className="text-xs text-gray-500 mb-1">
-        {t("위에서부터 한 문제씩 — 쉬움→어려움 순서예요. 누르면 바로 풀고 자동 채점돼요.", "Top to bottom, easy→hard. Tap to solve in place, auto-graded.")}
+        {t("또는 위에서부터 한 문제씩 — 쉬움→어려움 순서. 누르면 바로 풀고 자동 채점돼요.", "Or top to bottom, easy→hard. Tap to solve in place, auto-graded.")}
       </p>
       {KL_FLAT.map((p, i) => {
         const solved = solvedSet.has(p.id)
@@ -226,7 +247,7 @@ function ClusterList({
       <div className="flex flex-col gap-4 pb-24">
         {headerBlock}
         {modeToggle}
-        <KLView solvedSet={solvedSet} />
+        <KLView solvedSet={solvedSet} starredSet={starredSet} />
       </div>
     )
   }
