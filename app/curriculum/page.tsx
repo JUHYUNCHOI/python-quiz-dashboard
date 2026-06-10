@@ -1599,8 +1599,8 @@ export default function CurriculumPage() {
                                       </h3>
                                       <p className="text-xs sm:text-sm text-gray-700 leading-relaxed mb-3">
                                         {t(
-                                          "여기까지 (map & set + 알고리즘 셋업) 면 USACO Bronze 80% 를 풀 수 있어요. 아래는 심화/참고용 — 필요할 때 와도 OK!",
-                                          "Up to here (map & set + algo setup) you can solve ~80% of USACO Bronze. Lessons below are for reference — come back when needed!"
+                                          "여기까지면 USACO Bronze에 필요한 도구(STL)는 거의 다 모았어요. 이제 문제를 많이 풀어 실력을 쌓을 차례예요 — 도구를 모은 거지, 바로 풀 수 있는 건 아니에요. 아래는 심화/참고용.",
+                                          "Up to here you've gathered almost all the tools (STL) USACO Bronze needs. Now it's time to solve lots of problems to build skill — having the tools isn't the same as being able to solve yet. Lessons below are reference/advanced."
                                         )}
                                       </p>
                                       {/* 다음 1개 — 큰 버튼 하나 (결정 피로 0) */}
