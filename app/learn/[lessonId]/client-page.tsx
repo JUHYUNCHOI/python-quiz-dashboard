@@ -1037,7 +1037,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                         </a>
                       ))}
                     </div>
-                    <a href="/course/kl" className="mt-2 inline-block text-[11px] font-bold text-amber-700 hover:underline">
+                    <a href="/practice?view=kl" className="mt-2 inline-block text-[11px] font-bold text-amber-700 hover:underline">
                       {t("이 개념 문제 더 풀기 →", "More problems on this topic →")}
                     </a>
                   </div>

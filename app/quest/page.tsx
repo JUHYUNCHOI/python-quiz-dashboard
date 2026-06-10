@@ -489,9 +489,9 @@ export default function QuestPage() {
           </div>
         </div>
 
-        {/* 대회 대비 코스(순서 사다리) 진입 — 따라가는 길 */}
+        {/* 대회 대비 문제 진입 — /practice 의 KL 필터로 */}
         <Link
-          href="/course/kl"
+          href="/practice?view=kl"
           className="flex items-center gap-3 border-2 border-amber-300 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 p-4 mb-6 hover:border-amber-500 hover:shadow-md transition-all"
         >
           <span className="text-2xl shrink-0">🧗</span>
