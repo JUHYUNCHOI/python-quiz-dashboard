@@ -179,7 +179,8 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
   const lessonAll = clusters.flatMap(c => c.problems.map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: false })))
   const klAll = ALL_CLUSTERS.flatMap(c => c.problems.filter(p => p.kl).map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: true })))
   const all = [...lessonAll, ...klAll]
-  const topics = Array.from(new Set(all.map(x => x.topic)))
+  // 드롭다운 주제 = 수업 클러스터만 (KL은 '🎯 KL' 한 항목으로 — 중복 방지)
+  const topics = Array.from(new Set(lessonAll.map(x => x.topic)))
   const filtered = topicFilter === "all" ? all
     : topicFilter === "kl" ? all.filter(x => x.kl)
     : all.filter(x => x.topic === topicFilter)
