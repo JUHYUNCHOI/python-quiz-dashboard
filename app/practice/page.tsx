@@ -252,37 +252,63 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
         ))}
       </div>
 
-      {/* 난이도 단계 사다리 — 쉬움 펼침, 보통/어려움 접힘. 필터 적용됨 */}
+      {/* 난이도 단계 사다리 — 안 푼 건 위(할 것), 푼 건 '완료' 접개식으로 분리 */}
       {TIERS.filter(tier => diffFilter === "all" || tier.d === diffFilter).map(tier => {
         const items = filtered.filter(x => x.p.difficulty === tier.d)
         if (items.length === 0) return null
-        const solvedCnt = items.filter(x => solvedSet.has(x.p.id)).length
-        const ordered = [...items.filter(x => !solvedSet.has(x.p.id)), ...items.filter(x => solvedSet.has(x.p.id))]
+        const unsolved = items.filter(x => !solvedSet.has(x.p.id))
+        const solvedItems = items.filter(x => solvedSet.has(x.p.id))
+        const solvedCnt = solvedItems.length
         const SHOWN = 12
         return (
           <details key={tier.d} open={tier.d === "쉬움" || topicFilter !== "all" || diffFilter !== "all"} className="rounded-2xl border border-gray-200 bg-white px-4 py-3">
             <summary className="flex items-center gap-2 text-sm font-bold text-gray-700 cursor-pointer">
               <span className={"w-2.5 h-2.5 rounded-full " + tier.dot} />
               {t(tier.ko, tier.en)}
-              <span className="ml-auto text-xs font-normal text-gray-400">{solvedCnt}/{items.length}</span>
+              <span className={"ml-auto text-xs " + (solvedCnt > 0 ? "font-bold text-green-600" : "font-normal text-gray-400")}>
+                {solvedCnt > 0 ? `✓ ${solvedCnt} / ${items.length}` : `0 / ${items.length}`}
+              </span>
             </summary>
             <div className="mt-3 flex flex-col gap-1.5">
-              {ordered.slice(0, SHOWN).map(x => {
-                const solved = solvedSet.has(x.p.id)
-                return (
-                  <Link
-                    key={x.p.id}
-                    href={`/practice?cluster=${x.cluster}&problem=${x.p.id}&from=practice`}
-                    className={"flex items-center gap-2 rounded-lg border px-3 py-2 transition-all hover:border-violet-400 " + (solved ? "border-green-200 bg-green-50/60" : "border-gray-200 bg-white")}
-                  >
-                    <span className="text-sm font-semibold text-gray-900 flex-1 truncate">{localizeProblem(x.p, locale).title}</span>
-                    <span className="text-[10px] text-gray-400 shrink-0">{x.kl ? "🎯 " : ""}{x.topic}</span>
-                    {solved ? <span className="text-green-500 shrink-0 text-xs">✓</span> : <span className="text-gray-300 shrink-0" aria-hidden>→</span>}
-                  </Link>
-                )
-              })}
-              {ordered.length > SHOWN && (
-                <p className="text-[11px] text-gray-400 text-center pt-1">+{ordered.length - SHOWN}{t("개 더 (위 추천 따라가면 자동으로)", " more (the recommendation walks you through)")}</p>
+              {/* 할 것 — 아직 안 푼 문제 */}
+              {unsolved.slice(0, SHOWN).map(x => (
+                <Link
+                  key={x.p.id}
+                  href={`/practice?cluster=${x.cluster}&problem=${x.p.id}&from=practice`}
+                  className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 transition-all hover:border-violet-400"
+                >
+                  <span className="text-sm font-semibold text-gray-900 flex-1 truncate">{localizeProblem(x.p, locale).title}</span>
+                  <span className="text-[10px] text-gray-400 shrink-0">{x.kl ? "🎯 " : ""}{x.topic}</span>
+                  <span className="text-gray-300 shrink-0" aria-hidden>→</span>
+                </Link>
+              ))}
+              {unsolved.length > SHOWN && (
+                <p className="text-[11px] text-gray-400 text-center pt-1">+{unsolved.length - SHOWN}{t("개 더 (위 추천 따라가면 자동으로)", " more (the recommendation walks you through)")}</p>
+              )}
+              {unsolved.length === 0 && (
+                <p className="text-[11px] text-green-600 font-bold text-center py-1">🎉 {t("이 난이도 다 풀었어요!", "All done in this tier!")}</p>
+              )}
+
+              {/* ✓ 완료한 문제 — 접개식으로 확인 (끝낸 것 vs 안 끝낸 것 구분) */}
+              {solvedCnt > 0 && (
+                <details className="mt-1 rounded-lg bg-green-50/60 border border-green-100 px-3 py-1.5">
+                  <summary className="text-xs font-bold text-green-700 cursor-pointer">
+                    ✓ {t(`완료한 ${solvedCnt}개 보기`, `View ${solvedCnt} completed`)}
+                  </summary>
+                  <div className="mt-2 flex flex-col gap-1">
+                    {solvedItems.map(x => (
+                      <Link
+                        key={x.p.id}
+                        href={`/practice?cluster=${x.cluster}&problem=${x.p.id}&from=practice`}
+                        className="flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-green-100/60 transition-colors"
+                      >
+                        <span className="text-green-500 shrink-0 text-xs">✓</span>
+                        <span className="text-sm text-gray-500 line-through flex-1 truncate">{localizeProblem(x.p, locale).title}</span>
+                        <span className="text-[10px] text-gray-400 shrink-0">{x.kl ? "🎯 " : ""}{x.topic}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </details>
               )}
             </div>
           </details>
