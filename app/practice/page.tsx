@@ -190,7 +190,6 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
   const recX = rec ? all.find(x => x.p.id === rec.problemId) : null
   const lastX = lastId ? all.find(x => x.p.id === lastId) : null
   const totalSolved = all.filter(x => solvedSet.has(x.p.id)).length
-  const summary = summarizeConcepts(pool, solvedSet, starredSet).filter(c => c.started)
 
   return (
     <div className="flex flex-col gap-3">
@@ -282,24 +281,6 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
         )
       })}
 
-      {/* 📊 내 실력 (접이식) — KL(🎯)은 위 난이도 사다리에 녹아 있음 */}
-      {summary.length > 0 && (
-        <details className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2">
-          <summary className="text-xs font-bold text-gray-600 cursor-pointer">📊 {t("내 실력 (개념별)", "My skill (by concept)")}</summary>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {summary.map(c => {
-              const [ko, en, cls] = _MASTERY_LABEL[c.level]
-              return (
-                <span key={c.concept} className="text-[11px] inline-flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-2 py-1">
-                  <span className="font-semibold text-gray-700">{clusterName(c.concept)}</span>
-                  <span className={"px-1.5 py-0.5 rounded font-bold " + cls}>{t(ko, en)}</span>
-                  <span className="text-gray-400">{c.solved}/{c.total}</span>
-                </span>
-              )
-            })}
-          </div>
-        </details>
-      )}
     </div>
   )
 }
