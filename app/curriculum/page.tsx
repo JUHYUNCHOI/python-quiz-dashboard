@@ -1036,7 +1036,16 @@ export default function CurriculumPage() {
                         🎓 {t("수업 완료! 다음 단계 보기", "Lessons done! See what's next")} →
                       </Link>
                     )}
-                    {/* 알고리즘 CTA — 실제 잠금 해제(연습 40개 완료/선생님) 후에만. 진도 초반엔 노출 X */}
+                    {/* 연습 CTA — 수업 다음 단계는 '연습'. 연습이 열렸으면 항상 여기로 (알고리즘 점프 X) */}
+                    {(isCpp ? practiceUnlocked : isPseudo ? false : pyPracticeUnlocked) && (
+                      <Link
+                        href="/practice"
+                        className="bg-violet-500 text-white px-5 py-3 rounded-xl border border-gray-200 font-bold hover:bg-violet-600 transition-colors flex items-center justify-center gap-2 shadow-sm"
+                      >
+                        💪 {t("연습문제", "Practice")}
+                      </Link>
+                    )}
+                    {/* 알고리즘 CTA — 연습 40개 완료(또는 선생님) 후에만. 그 전엔 노출 X */}
                     {(isCpp ? algoUnlocked : isPseudo ? false : pyAlgoUnlocked) && (
                       <Link
                         href="/algo"
