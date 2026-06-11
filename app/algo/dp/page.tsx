@@ -1160,10 +1160,6 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               {t("DP 가 손에 잡히면 — 그래프 DP, 트리 DP, 비트마스크 DP 까지 다 같은 방식!", "Once DP clicks, graph-DP / tree-DP / bitmask-DP all follow the same pattern!")}
             </p>
             <div className="mt-3 pt-3 border-t border-amber-200 space-y-2">
-              <p className="text-[11px] text-emerald-700 leading-relaxed">
-                💼 {t("옆길 — 더 많은 DP 패턴 연습: 코딩 뱅크에서 DP 응용 문제. ", "Sidequest — more DP patterns: try Coding Bank's DP problems. ")}
-                <Link href="/coding-bank" className="font-bold underline hover:text-emerald-900">{t("바로 가기 →", "Go →")}</Link>
-              </p>
               <p className="text-[11px] text-blue-700 leading-relaxed">
                 🏆 {t("진짜 실전 — USACO Bronze/Silver 문제. ", "Real combat — USACO Bronze/Silver problems. ")}
                 <Link href="/quest" className="font-bold underline hover:text-blue-900">{t("Quest 페이지 →", "Quest page →")}</Link>
@@ -1384,9 +1380,6 @@ export default function DpPage() {
             </div>
 
             <div className="space-y-2">
-              <Link href="/coding-bank" className="block px-4 py-2 bg-white hover:bg-blue-50 text-blue-700 rounded-xl font-bold text-sm text-center border-2 border-blue-200">
-                💼 {t("코딩 뱅크 — DP 응용 문제", "Coding Bank — DP applied")} <ArrowRight className="inline w-4 h-4" />
-              </Link>
               <Link href="/quest" className="block px-4 py-2 bg-white hover:bg-amber-50 text-amber-700 rounded-xl font-bold text-sm text-center border-2 border-amber-200">
                 🏆 {t("USACO Quest — 실전 DP 문제", "USACO Quest — real DP problems")} <ArrowRight className="inline w-4 h-4" />
               </Link>

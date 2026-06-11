@@ -840,12 +840,6 @@ function Chapter5({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
             <p className="text-xs text-amber-700 mt-3 text-center italic">
               {t("이 정도면 정렬이 나오는 문제 거의 다 풀 수 있어요!", "This is enough to handle almost any sorting problem!")}
             </p>
-            <div className="mt-3 pt-3 border-t border-amber-200">
-              <p className="text-[11px] text-blue-700 leading-relaxed">
-                💡 {t("아직 부족해요? 코딩 뱅크에서 종합 도전 (STL 만). ", "Need more? Try Coding Bank — STL-only multi-concept. ")}
-                <Link href="/coding-bank" className="font-bold underline hover:text-blue-900">{t("바로 가기 →", "Go →")}</Link>
-              </p>
-            </div>
           </div>
         )}
       </div>
@@ -1070,9 +1064,6 @@ export default function SortingPage() {
                   </div>
                 </div>
                 <ArrowRight className="w-5 h-5" />
-              </Link>
-              <Link href="/coding-bank" className="block px-4 py-2 bg-white hover:bg-blue-50 text-blue-700 rounded-xl font-bold text-sm text-center border-2 border-blue-200">
-                💼 {t("코딩 뱅크 — 정렬 응용 (STL만)", "Coding Bank — sorting applied")} <ArrowRight className="inline w-4 h-4" />
               </Link>
               <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
                 🗺️ {t("다음 알고리즘 토픽 보기", "Next algorithm topic")} <ArrowRight className="inline w-4 h-4" />
