@@ -204,8 +204,8 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
           <p className="text-xs text-gray-500 mt-0.5">{recX.kl ? "🎯 " : ""}{recX.topic} · {recX.p.difficulty} <span className="ml-1 text-violet-400 font-bold">→</span></p>
         </Link>
       ) : (
-        <Link href="/coding-bank" className="block rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-4 text-center text-sm font-bold text-emerald-700 hover:bg-emerald-100 transition-colors">
-          {t("이 언어 연습을 다 풀었어요! 🎉 🧰 코딩 뱅크에서 직접 문제 풀어보기 →", "All practice cleared! 🎉 On to Coding Bank →")}
+        <Link href="/algo" className="block rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-4 text-center text-sm font-bold text-emerald-700 hover:bg-emerald-100 transition-colors">
+          {t("이 언어 연습을 다 풀었어요! 🎉 🧩 알고리즘 배우러 가기 →", "All practice cleared! 🎉 On to algorithms →")}
         </Link>
       )}
 
@@ -326,19 +326,6 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
           </details>
         )
       })}
-
-      {/* 🧰 종합 도전 (코딩뱅크) — 연습의 마지막 칸: 여러 도구 섞어서 스스로 */}
-      <Link
-        href="/coding-bank"
-        className="rounded-2xl border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50 p-4 flex items-center gap-3 hover:shadow-md transition-all"
-      >
-        <span className="text-2xl shrink-0">🧰</span>
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-black text-amber-900">{t("코딩 뱅크", "Coding Bank")}</p>
-          <p className="text-xs text-amber-700 mt-0.5">{t("코딩 문제 모음 — 골라서 코드 짜고 바로 채점받는 곳", "A bank of coding problems — write code, get graded instantly")}</p>
-        </div>
-        <span className="text-amber-400 shrink-0">→</span>
-      </Link>
 
     </div>
   )

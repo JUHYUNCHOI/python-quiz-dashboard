@@ -1021,7 +1021,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </p>
             <div className="mt-3 pt-3 border-t border-amber-200 space-y-2">
               <p className="text-[11px] text-purple-700 leading-relaxed">
-                🌲 {t("옆길: 손이 더 익숙해지고 싶으면 — 코딩 뱅크에서 응용 문제 더 풀고 와요. 너무 어렵게 느껴지면 재귀 챕터 다시 봐도 돼요. ", "Side path: want more hands-on? Practice in Coding Bank. If it's tough, revisit Recursion. ")}
+                🌲 {t("너무 어렵게 느껴지면 재귀 챕터를 다시 봐도 돼요. ", "If it feels tough, you can revisit the Recursion chapter. ")}
                 <Link href="/algo/recursion" className="font-bold underline hover:text-purple-900">{t("재귀로 →", "To Recursion →")}</Link>
               </p>
             </div>

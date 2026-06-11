@@ -81,21 +81,6 @@ function clusterDoneCount(completedIds: Set<string | number>, cluster: any): boo
   }
 }
 
-function getCodingBankSolvedCount(): number {
-  if (typeof window === "undefined") return 0
-  try {
-    const raw = localStorage.getItem("coding-bank-solved")
-    if (!raw) return 0
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr.length : 0
-  } catch {
-    return 0
-  }
-}
-
-/** 코딩 뱅크 "충분히 함" 기준 — smart-next 의 CODING_BANK_THRESHOLD 와 동일 */
-const CODING_BANK_GOAL = 5
-
 export const JOURNEY_STAGES: JourneyStage[] = [
   {
     id: "python",
@@ -115,16 +100,14 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     emoji: "💪",
     title: "Python 연습",
     titleEn: "Python Practice",
-    description: "직접 코드 짜며 연습 → 코딩 뱅크에서 진짜 문제 풀기",
-    descriptionEn: "Practice coding → solve real problems in Coding Bank",
+    description: "직접 코드 짜며 실력 다지기",
+    descriptionEn: "Hands-on coding practice",
     href: "/practice?lang=python",
     rank: "silver",
     computeProgress: () => {
-      // 연습 = 개념 클러스터 + 종합 도전(코딩뱅크). 종합 도전이 마지막 한 칸.
       const clusters = getPyClusters()
-      const clusterDone = clusters.filter(c => clusterDoneCount(new Set(), c)).length
-      const bankCredit = getCodingBankSolvedCount() >= CODING_BANK_GOAL ? 1 : 0
-      return { done: Math.min(clusterDone, PY_PRACTICE_GOAL_CLUSTERS - 1) + bankCredit, total: PY_PRACTICE_GOAL_CLUSTERS }
+      const done = clusters.filter(c => clusterDoneCount(new Set(), c)).length
+      return { done: Math.min(done, PY_PRACTICE_GOAL_CLUSTERS), total: PY_PRACTICE_GOAL_CLUSTERS }
     },
   },
   {
@@ -147,16 +130,14 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     emoji: "💪",
     title: "C++ 연습",
     titleEn: "C++ Practice",
-    description: "직접 코드 짜며 연습 → 코딩 뱅크에서 진짜 문제 풀기",
-    descriptionEn: "Practice coding → solve real problems in Coding Bank",
+    description: "직접 코드 짜며 실력 다지기 (알고리즘 가기 전)",
+    descriptionEn: "Hands-on coding practice (before algorithms)",
     href: "/practice?lang=cpp",
     rank: "silver",
     computeProgress: () => {
-      // 연습 = 개념 클러스터 + 종합 도전(코딩뱅크). 종합 도전이 마지막 한 칸.
       const clusters = getCppPracticeClusters()
-      const clusterDone = clusters.filter(c => clusterDoneCount(new Set(), c)).length
-      const bankCredit = getCodingBankSolvedCount() >= CODING_BANK_GOAL ? 1 : 0
-      return { done: Math.min(clusterDone, CPP_PRACTICE_GOAL - 1) + bankCredit, total: CPP_PRACTICE_GOAL }
+      const done = clusters.filter(c => clusterDoneCount(new Set(), c)).length
+      return { done: Math.min(done, CPP_PRACTICE_GOAL), total: CPP_PRACTICE_GOAL }
     },
   },
   {

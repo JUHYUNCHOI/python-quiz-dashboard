@@ -54,21 +54,6 @@ const TRACKS: Record<"python" | "cpp" | "pseudo", Track> = {
  *   4. 모든 Python Part 완료 → 알고리즘 추천
  *   5. 알고리즘 어느 정도 완료 → quest 추천
  */
-/**
- * 클라이언트에서만 호출되는 코딩 뱅크 진행도 조회. 서버 SSR 에선 0 반환.
- */
-function getCodingBankSolvedCount(): number {
-  if (typeof window === "undefined") return 0
-  try {
-    const raw = localStorage.getItem("coding-bank-solved")
-    if (!raw) return 0
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr.length : 0
-  } catch {
-    return 0
-  }
-}
-
 /** 학생이 "했음" 표시한 대회/quest 수 (학생이 직접 체크 — quest 는 자동 채점 불가). */
 function getQuestSolvedCount(): number {
   if (typeof window === "undefined") return 0
@@ -82,7 +67,6 @@ function getQuestSolvedCount(): number {
   }
 }
 
-const CODING_BANK_THRESHOLD = 5  // 5개 풀면 코딩 뱅크 "충분히 했음" 으로 보고 알고리즘 추천
 const CONTEST_THRESHOLD = 8  // 알고리즘 8 토픽 완료 → 실전 대회(quest) 단계 진입 (대회 해금 기준과 동일)
 
 export function getSmartNext(
@@ -91,7 +75,7 @@ export function getSmartNext(
 ): SmartNextResult {
   const track = TRACKS[preferredTrack]
 
-  // C++ 메인 트랙(cpp-16 / cpp-p3) 완료 → cpp-17~20(참고용)은 건너뛰고 다음 단계(코딩뱅크)로.
+  // C++ 메인 트랙(cpp-16 / cpp-p3) 완료 → cpp-17~20(참고용)은 건너뛰고 알고리즘으로.
   const cppMainDone = preferredTrack === "cpp" && (completedIds.has("cpp-16") || completedIds.has("cpp-p3"))
 
   // 1. 트랙 안에서 첫 미완료 레슨 (C++ 메인 끝났으면 레슨 추천 생략)
@@ -126,22 +110,8 @@ export function getSmartNext(
     }
   }
 
-  // 2. 레슨 끝 → 코딩뱅크(알고리즘 전) → 알고리즘 → 대회 (Python / C++ 트랙)
+  // 2. 레슨 끝 → 알고리즘 → 대회 (Python / C++ 트랙)
   if (preferredTrack === "python" || preferredTrack === "cpp") {
-    // 🧰 연습의 종합 도전(코딩뱅크) — 알고리즘 배우기 *전*, 여러 도구 섞어 스스로 푸는 관문 (Bronze)
-    const bankSolved = getCodingBankSolvedCount()
-    if (bankSolved < CODING_BANK_THRESHOLD) {
-      return {
-        type: "coding-bank",
-        title: bankSolved > 0 ? `코딩 뱅크 (${bankSolved}/${CODING_BANK_THRESHOLD})` : "코딩 뱅크",
-        titleEn: bankSolved > 0 ? `Coding Bank (${bankSolved}/${CODING_BANK_THRESHOLD})` : "Coding Bank",
-        href: "/coding-bank",
-        subtitle: "코딩 문제 모음 — 골라서 코드 짜고 바로 채점",
-        emoji: "🧰",
-        reason: "연습 종합 도전(코딩뱅크) — 알고리즘 전 스스로 풀기",
-      }
-    }
-
     // 알고리즘 — Bronze(Wave 1) 핵심부터. Wave1 끝나면 대회 단계.
     // graph/dp 등 Wave 2/3 는 선수조건이 아니라 "필요할 때 / Silver+" 에서.
     const wave1Done = ALGO_TOPICS.filter(tp => tp.wave === 1).every(tp => completedIds.has(tp.lessonId))
@@ -162,7 +132,7 @@ export function getSmartNext(
       }
     }
 
-    // 코딩뱅크 + 알고리즘 Bronze 끝 → 실전 대회
+    // 알고리즘 Bronze 끝 → 실전 대회
     const qSolved = getQuestSolvedCount()
     return {
       type: "quest",
@@ -171,7 +141,7 @@ export function getSmartNext(
       href: "/quest",
       subtitle: "USACO Bronze · MCC — 배운 걸로 실전",
       emoji: "🏆",
-      reason: `코딩뱅크 + 알고리즘 기초 완료 → 대회 단계`,
+      reason: `알고리즘 기초 완료 → 대회 단계`,
     }
   }
 

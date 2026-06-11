@@ -766,11 +766,7 @@ export default function JourneyPage() {
           <span className="block sm:inline">💡 {t("더 풀고 싶으면:", "Want more practice?")} </span>
           <span className="inline-block mt-1 sm:mt-0">
             <Link href="/practice" className="text-blue-600 hover:underline font-bold">
-              {t("수업별 연습", "Lesson Clusters")}
-            </Link>
-            <span className="mx-1.5 text-gray-300">·</span>
-            <Link href="/coding-bank" className="text-amber-600 hover:underline font-bold">
-              {t("코딩 뱅크", "Coding Bank")}
+              {t("연습 문제", "Practice")}
             </Link>
             <span className="mx-1.5 text-gray-300">·</span>
             <Link href="/algo" className="text-purple-600 hover:underline font-bold">
