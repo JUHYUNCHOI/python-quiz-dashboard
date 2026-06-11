@@ -936,7 +936,16 @@ function PracticeContent() {
       <main className="max-w-5xl mx-auto px-4 pt-4">
         <ProblemDetail
           problem={problem}
-          onBack={() => setParam("problem", null)}
+          onBack={() => {
+            // 사다리/대회대비에서 연 단일 문제 → 끝내면 목록으로 (cluster만 남기면 세션 인트로로 튕김)
+            if (fromParam === "practice" || fromParam === "kl") {
+              const p = new URLSearchParams()
+              const l = searchParams.get("lang"); if (l) p.set("lang", l)
+              router.push(p.toString() ? `/practice?${p.toString()}` : "/practice")
+            } else {
+              setParam("problem", null)
+            }
+          }}
           onMarkSolved={markSolved}
           onMarkStarred={markStarred}
         />
