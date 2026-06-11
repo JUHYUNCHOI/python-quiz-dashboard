@@ -404,31 +404,32 @@ function ClusterList({
   return (
     <div className="flex flex-col gap-4 pb-24">
 
-      {/* 헤더 */}
-      <div className="flex items-center gap-3">
+      {/* 헤더 — 제목(좌) + 언어 토글(우측 상단, 위치 통일) */}
+      <div className="flex items-start gap-3">
         <button onClick={onBack} className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors shrink-0">
           <ArrowLeft className="w-4 h-4 text-gray-600" />
         </button>
-        <div>
+        <div className="min-w-0 flex-1">
           <h1 className="text-2xl font-bold text-gray-900">{t("코딩 연습", "Practice")}</h1>
           <p className="text-sm text-gray-400 mt-0.5">{t("문제를 풀면 알고리즘 학습이 열려요", "Solve problems to unlock algorithm study")}</p>
         </div>
-      </div>
-
-      {/* 언어 탭 */}
-      <div className="flex bg-gray-100 rounded-xl p-1">
-        {(["cpp", "python"] as Lang[]).map(l => (
-          <button
-            key={l}
-            onClick={() => onLangChange(l)}
-            className={cn(
-              "flex-1 py-2 rounded-lg text-sm font-semibold transition-all",
-              lang === l ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
-            )}
-          >
-            {l === "cpp" ? "C++" : "Python"}
-          </button>
-        ))}
+        {/* 언어 토글 — 우측 상단 */}
+        <div className="flex gap-1 shrink-0">
+          {(["python", "cpp"] as Lang[]).map(l => (
+            <button
+              key={l}
+              onClick={() => onLangChange(l)}
+              className={cn(
+                "flex items-center gap-1 px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold transition-all",
+                lang === l
+                  ? (l === "cpp" ? "bg-blue-600 text-white shadow-sm" : "bg-orange-500 text-white shadow-sm")
+                  : "bg-white text-gray-500 hover:bg-gray-50"
+              )}
+            >
+              {l === "cpp" ? "⚡ C++" : "🐍 Python"}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* ⭐ 적응형: 수업별+KL 합친 "다음 1개" + 📊 내 실력 (탭 고르기 없음) */}

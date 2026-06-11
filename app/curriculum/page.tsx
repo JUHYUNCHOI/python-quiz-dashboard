@@ -815,9 +815,9 @@ export default function CurriculumPage() {
       {/* 커리큘럼: 넓은 레이아웃 + 양쪽 여백 */}
       <main className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 pb-24">
         
-        {/* 코스 선택 탭 */}
+        {/* 코스 선택 탭 — 우측 상단 정렬 (언어 토글 위치 통일) */}
         <div className="max-w-[1600px] mx-auto mb-5 pt-3">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 justify-end">
             {/* Python 탭 */}
             <button
               onClick={() => handleCourseChange("python")}
