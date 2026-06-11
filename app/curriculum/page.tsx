@@ -1036,7 +1036,8 @@ export default function CurriculumPage() {
                         🎓 {t("수업 완료! 다음 단계 보기", "Lessons done! See what's next")} →
                       </Link>
                     )}
-                    {completedCount > 0 && (
+                    {/* 알고리즘 CTA — 실제 잠금 해제(연습 40개 완료/선생님) 후에만. 진도 초반엔 노출 X */}
+                    {(isCpp ? algoUnlocked : isPseudo ? false : pyAlgoUnlocked) && (
                       <Link
                         href="/algo"
                         className="bg-purple-500 text-white px-5 py-3 rounded-xl border border-gray-200 font-bold hover:bg-purple-600 transition-colors flex items-center justify-center gap-2 shadow-sm"
