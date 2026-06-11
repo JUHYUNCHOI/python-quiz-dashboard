@@ -133,10 +133,10 @@ export function getSmartNext(
     if (bankSolved < CODING_BANK_THRESHOLD) {
       return {
         type: "coding-bank",
-        title: bankSolved > 0 ? `코딩 뱅크 (${bankSolved}/${CODING_BANK_THRESHOLD})` : "코딩 뱅크 — 직접 풀어보기",
-        titleEn: bankSolved > 0 ? `Coding Bank (${bankSolved}/${CODING_BANK_THRESHOLD})` : "Coding Bank — solve it yourself",
+        title: bankSolved > 0 ? `코딩 뱅크 (${bankSolved}/${CODING_BANK_THRESHOLD})` : "코딩 뱅크",
+        titleEn: bankSolved > 0 ? `Coding Bank (${bankSolved}/${CODING_BANK_THRESHOLD})` : "Coding Bank",
         href: "/coding-bank",
-        subtitle: "배운 걸로 진짜 문제를 처음부터 풀어봐요",
+        subtitle: "코딩 문제 모음 — 골라서 코드 짜고 바로 채점",
         emoji: "🧰",
         reason: "연습 종합 도전(코딩뱅크) — 알고리즘 전 스스로 풀기",
       }
