@@ -27,14 +27,12 @@ export function summarizeConcepts(
   return order.map(concept => {
     const probs = pool.filter(p => p.cluster === concept)
     const solved = probs.filter(p => solvedSet.has(p.id)).length
+    const total = probs.length
     const m = mastery[concept]
-    return {
-      concept,
-      level: m?.level ?? "struggling",
-      score: m?.score ?? 0,
-      solved,
-      total: probs.length,
-      started: solved > 0,
-    }
+    // 표시용 레벨은 '얼마나 풀었나(비율)' 기준 — '마스터'는 대부분 풀었을 때만 (3/21=마스터 X)
+    const ratio = total > 0 ? solved / total : 0
+    let level: Level = "struggling"
+    if (solved > 0) level = ratio < 0.35 ? "learning" : ratio < 0.75 ? "proficient" : "mastered"
+    return { concept, level, score: m?.score ?? 0, solved, total, started: solved > 0 }
   })
 }
