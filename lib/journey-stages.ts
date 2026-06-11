@@ -81,18 +81,6 @@ function clusterDoneCount(completedIds: Set<string | number>, cluster: any): boo
   }
 }
 
-function getCodingBankSolvedCount(): number {
-  if (typeof window === "undefined") return 0
-  try {
-    const raw = localStorage.getItem("coding-bank-solved")
-    if (!raw) return 0
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr.length : 0
-  } catch {
-    return 0
-  }
-}
-
 export const JOURNEY_STAGES: JourneyStage[] = [
   {
     id: "python",
@@ -142,17 +130,15 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     emoji: "💪",
     title: "C++ 연습",
     titleEn: "C++ Practice",
-    description: "CPP 클러스터 + 코딩 뱅크 — 알고리즘 가기 전 워밍업",
-    descriptionEn: "C++ clusters + Coding Bank — warm up before algo",
+    description: "CPP 클러스터 — 알고리즘 가기 전 코드 연습",
+    descriptionEn: "C++ clusters — practice before algorithms",
     href: "/practice?lang=cpp",
     rank: "silver",
     computeProgress: () => {
+      // 코딩 뱅크는 알고리즘 *뒤*·대회 직전 단계로 이동 (smart-next 가 라우팅). 여기선 CPP 클러스터만.
       const clusters = getCppPracticeClusters()
       const clusterDone = clusters.filter(c => clusterDoneCount(new Set(), c)).length
-      const bankSolved = getCodingBankSolvedCount()
-      // 클러스터 1개 = 1점, 코딩뱅크 5문제 = 1점
-      const score = clusterDone + Math.min(Math.floor(bankSolved / 5), 3)
-      return { done: Math.min(score, CPP_PRACTICE_GOAL), total: CPP_PRACTICE_GOAL }
+      return { done: Math.min(clusterDone, CPP_PRACTICE_GOAL), total: CPP_PRACTICE_GOAL }
     },
   },
   {
