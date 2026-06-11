@@ -128,17 +128,17 @@ export function getSmartNext(
 
   // 2. 레슨 끝 → 코딩뱅크(알고리즘 전) → 알고리즘 → 대회 (Python / C++ 트랙)
   if (preferredTrack === "python" || preferredTrack === "cpp") {
-    // 🌉 코딩뱅크 먼저 — 알고리즘 배우기 *전*, 기법 없이 스스로 푸는 첫 관문 (브루트포스 = Bronze)
+    // 🧰 연습의 종합 도전(코딩뱅크) — 알고리즘 배우기 *전*, 여러 도구 섞어 스스로 푸는 관문 (Bronze)
     const bankSolved = getCodingBankSolvedCount()
     if (bankSolved < CODING_BANK_THRESHOLD) {
       return {
         type: "coding-bank",
-        title: bankSolved > 0 ? `코딩 뱅크 (${bankSolved}/${CODING_BANK_THRESHOLD})` : "코딩 뱅크 — 알고리즘 전 첫 도전",
-        titleEn: bankSolved > 0 ? `Coding Bank (${bankSolved}/${CODING_BANK_THRESHOLD})` : "Coding Bank — before algorithms",
+        title: bankSolved > 0 ? `종합 도전 (${bankSolved}/${CODING_BANK_THRESHOLD})` : "종합 도전 — 여러 도구 섞어서",
+        titleEn: bankSolved > 0 ? `Coding Bank (${bankSolved}/${CODING_BANK_THRESHOLD})` : "Coding Bank challenge",
         href: "/coding-bank",
-        subtitle: "기법 없이 스스로 풀어보기 (브루트포스) — Bronze 감각",
+        subtitle: "연습 마무리 — 어떤 도구 쓸지 스스로 판단 (알고리즘 전)",
         emoji: "🧰",
-        reason: "레슨 후 · 알고리즘 전 코딩뱅크 (브루트포스로 스스로 풀기)",
+        reason: "연습 종합 도전(코딩뱅크) — 알고리즘 전 스스로 풀기",
       }
     }
 

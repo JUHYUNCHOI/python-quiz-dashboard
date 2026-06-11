@@ -115,14 +115,16 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     emoji: "💪",
     title: "Python 연습",
     titleEn: "Python Practice",
-    description: "12 클러스터 — 코드 직접 짜기, 실력 다지기",
-    descriptionEn: "12 clusters — hands-on coding practice",
+    description: "개념 클러스터 + 🧰 종합 도전(코딩뱅크) — 직접 짜기",
+    descriptionEn: "Concept clusters + 🧰 Coding Bank challenge",
     href: "/practice?lang=python",
     rank: "silver",
     computeProgress: () => {
+      // 연습 = 개념 클러스터 + 종합 도전(코딩뱅크). 종합 도전이 마지막 한 칸.
       const clusters = getPyClusters()
-      const done = clusters.filter(c => clusterDoneCount(new Set(), c)).length
-      return { done: Math.min(done, PY_PRACTICE_GOAL_CLUSTERS), total: PY_PRACTICE_GOAL_CLUSTERS }
+      const clusterDone = clusters.filter(c => clusterDoneCount(new Set(), c)).length
+      const bankCredit = getCodingBankSolvedCount() >= CODING_BANK_GOAL ? 1 : 0
+      return { done: Math.min(clusterDone, PY_PRACTICE_GOAL_CLUSTERS - 1) + bankCredit, total: PY_PRACTICE_GOAL_CLUSTERS }
     },
   },
   {
@@ -145,15 +147,16 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     emoji: "💪",
     title: "C++ 연습",
     titleEn: "C++ Practice",
-    description: "CPP 클러스터 — 알고리즘 가기 전 코드 연습",
-    descriptionEn: "C++ clusters — practice before algorithms",
+    description: "CPP 클러스터 + 🧰 종합 도전(코딩뱅크) — 알고리즘 가기 전",
+    descriptionEn: "C++ clusters + 🧰 Coding Bank — before algorithms",
     href: "/practice?lang=cpp",
     rank: "silver",
     computeProgress: () => {
-      // 코딩 뱅크는 알고리즘 *뒤*·대회 직전 단계로 이동 (smart-next 가 라우팅). 여기선 CPP 클러스터만.
+      // 연습 = 개념 클러스터 + 종합 도전(코딩뱅크). 종합 도전이 마지막 한 칸.
       const clusters = getCppPracticeClusters()
       const clusterDone = clusters.filter(c => clusterDoneCount(new Set(), c)).length
-      return { done: Math.min(clusterDone, CPP_PRACTICE_GOAL), total: CPP_PRACTICE_GOAL }
+      const bankCredit = getCodingBankSolvedCount() >= CODING_BANK_GOAL ? 1 : 0
+      return { done: Math.min(clusterDone, CPP_PRACTICE_GOAL - 1) + bankCredit, total: CPP_PRACTICE_GOAL }
     },
   },
   {
@@ -171,21 +174,6 @@ export const JOURNEY_STAGES: JourneyStage[] = [
       const bronze = ALGO_TOPICS.filter(tp => tp.wave === 1)
       const done = bronze.filter(tp => completedIds.has(tp.lessonId)).length
       return { done, total: bronze.length }
-    },
-  },
-  {
-    id: "coding-bank",
-    type: "main",
-    emoji: "🧰",
-    title: "코딩 뱅크",
-    titleEn: "Coding Bank",
-    description: "대회 직전 — STL/문법으로 입출력 문제 감각 익히기",
-    descriptionEn: "Pre-contest — sharpen I/O problem instincts",
-    href: "/coding-bank",
-    rank: "gold",
-    computeProgress: () => {
-      const solved = getCodingBankSolvedCount()
-      return { done: Math.min(solved, CODING_BANK_GOAL), total: CODING_BANK_GOAL }
     },
   },
   {
