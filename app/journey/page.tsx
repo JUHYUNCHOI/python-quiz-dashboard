@@ -350,7 +350,7 @@ export default function JourneyPage() {
           .eq("user_id", user.id)
           .eq("completed", true)
         if (cancelled) return
-        if (data) {
+        if (Array.isArray(data)) {
           setCompletedIds(prev => {
             const merged = new Set<string | number>(prev)
             data.forEach(r => merged.add(r.lesson_id))
