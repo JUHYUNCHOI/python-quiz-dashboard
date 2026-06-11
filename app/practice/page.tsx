@@ -208,9 +208,9 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
           <p className="text-xs text-gray-500 mt-0.5">{recX.kl ? "🎯 " : ""}{recX.topic} · {recX.p.difficulty} <span className="ml-1 text-violet-400 font-bold">→</span></p>
         </Link>
       ) : (
-        <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-4 text-center text-sm font-bold text-emerald-700">
-          {t("이 언어 연습을 다 풀었어요! 🎉 🧩 알고리즘으로 가요.", "All practice cleared! 🎉 On to algorithms.")}
-        </div>
+        <Link href="/algo" className="block rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-4 text-center text-sm font-bold text-emerald-700 hover:bg-emerald-100 transition-colors">
+          {t("이 언어 연습을 다 풀었어요! 🎉 🧩 알고리즘 배우러 가기 →", "All practice cleared! 🎉 On to algorithms →")}
+        </Link>
       )}
 
       {/* 📍 마지막에 풀던 곳 — 이어가기 쉽게 */}
