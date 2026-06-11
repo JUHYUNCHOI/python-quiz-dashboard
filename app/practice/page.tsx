@@ -173,17 +173,13 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
   const { t, lang: locale } = useLanguage()
   const [lastId, setLastId] = useState<string | null>(null)
   useEffect(() => { try { setLastId(localStorage.getItem("practice-last-problem")) } catch {} }, [])
-  const [topicFilter, setTopicFilter] = useState("all") // "all" | "kl" | 토픽명
+  const [topicFilter, setTopicFilter] = useState("all") // "all" | 토픽명
   const [diffFilter, setDiffFilter] = useState<"all" | "쉬움" | "보통" | "어려움">("all")
   const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
-  // 수업 연습 + KL(🎯, 양언어) 을 한 사다리에 — KL도 난이도 태그가 있으니 같이 녹임
-  const lessonAll = clusters.flatMap(c => c.problems.map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: false })))
-  const klAll = ALL_CLUSTERS.flatMap(c => c.problems.filter(p => p.kl).map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: true })))
-  const all = [...lessonAll, ...klAll]
-  // 드롭다운 주제 = 수업 클러스터만 (KL은 '🎯 KL' 한 항목으로 — 중복 방지)
-  const topics = Array.from(new Set(lessonAll.map(x => x.topic)))
+  // 연습 = 수업 병행 클러스터만 (배운 개념 굳히기). 대회대비/알고리즘 문제는 알고리즘 단계 소속.
+  const all = clusters.flatMap(c => c.problems.map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: false })))
+  const topics = Array.from(new Set(all.map(x => x.topic)))
   const filtered = topicFilter === "all" ? all
-    : topicFilter === "kl" ? all.filter(x => x.kl)
     : all.filter(x => x.topic === topicFilter)
 
   // 추천 다음 1개 — 적응형(내 수준에 맞는 난이도, 토픽 무관)
@@ -192,7 +188,7 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
   const recX = rec ? all.find(x => x.p.id === rec.problemId) : null
   const lastX = lastId ? all.find(x => x.p.id === lastId) : null
   const solvedInView = filtered.filter(x => solvedSet.has(x.p.id)).length // 현재 보기(주제 필터) 기준 진행
-  const viewLabel = topicFilter === "all" ? t("전체 진행", "Overall") : topicFilter === "kl" ? `🎯 ${t("대회 대비", "Contest prep")}` : topicFilter
+  const viewLabel = topicFilter === "all" ? t("전체 진행", "Overall") : topicFilter
   const pct = (n: number, d: number) => (d > 0 ? Math.round((n / d) * 100) : 0)
 
   return (
@@ -235,7 +231,6 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
           className="font-bold border border-gray-200 rounded-lg px-2 py-1.5 bg-white text-gray-700"
         >
           <option value="all">📚 {t("주제: 전체", "Topic: All")}</option>
-          <option value="kl">🎯 {t("대회 대비", "Contest prep")}</option>
           {topics.map(tp => <option key={tp} value={tp}>{tp}</option>)}
         </select>
         <span className="text-gray-200">|</span>
