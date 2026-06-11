@@ -334,8 +334,8 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
       >
         <span className="text-2xl shrink-0">🧰</span>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-black text-amber-900">{t("종합 도전 — 코딩 뱅크", "Coding Bank — challenge")}</p>
-          <p className="text-xs text-amber-700 mt-0.5">{t("개념을 다 익혔으면, 여러 도구 섞어서 스스로 풀어보기 (알고리즘 전 마지막)", "Mix everything you've learned — last step before algorithms")}</p>
+          <p className="text-sm font-black text-amber-900">{t("코딩 뱅크 — 직접 풀어보기", "Coding Bank — solve it yourself")}</p>
+          <p className="text-xs text-amber-700 mt-0.5">{t("배운 걸로 진짜 문제를 처음부터 끝까지 풀어봐요", "Solve a whole real problem with what you've learned")}</p>
         </div>
         <span className="text-amber-400 shrink-0">→</span>
       </Link>

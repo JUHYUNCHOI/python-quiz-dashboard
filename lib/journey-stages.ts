@@ -115,8 +115,8 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     emoji: "💪",
     title: "Python 연습",
     titleEn: "Python Practice",
-    description: "개념 클러스터 + 🧰 종합 도전(코딩뱅크) — 직접 짜기",
-    descriptionEn: "Concept clusters + 🧰 Coding Bank challenge",
+    description: "직접 코드 짜며 연습 → 코딩 뱅크에서 진짜 문제 풀기",
+    descriptionEn: "Practice coding → solve real problems in Coding Bank",
     href: "/practice?lang=python",
     rank: "silver",
     computeProgress: () => {
@@ -147,8 +147,8 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     emoji: "💪",
     title: "C++ 연습",
     titleEn: "C++ Practice",
-    description: "CPP 클러스터 + 🧰 종합 도전(코딩뱅크) — 알고리즘 가기 전",
-    descriptionEn: "C++ clusters + 🧰 Coding Bank — before algorithms",
+    description: "직접 코드 짜며 연습 → 코딩 뱅크에서 진짜 문제 풀기",
+    descriptionEn: "Practice coding → solve real problems in Coding Bank",
     href: "/practice?lang=cpp",
     rank: "silver",
     computeProgress: () => {
