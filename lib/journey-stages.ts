@@ -81,6 +81,21 @@ function clusterDoneCount(completedIds: Set<string | number>, cluster: any): boo
   }
 }
 
+function getCodingBankSolvedCount(): number {
+  if (typeof window === "undefined") return 0
+  try {
+    const raw = localStorage.getItem("coding-bank-solved")
+    if (!raw) return 0
+    const arr = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.length : 0
+  } catch {
+    return 0
+  }
+}
+
+/** 코딩 뱅크 "충분히 함" 기준 — smart-next 의 CODING_BANK_THRESHOLD 와 동일 */
+const CODING_BANK_GOAL = 5
+
 export const JOURNEY_STAGES: JourneyStage[] = [
   {
     id: "python",
@@ -147,13 +162,30 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     emoji: "🧠",
     title: "알고리즘",
     titleEn: "Algorithm",
-    description: `BFS/DFS · DP · 그리디 — ${ALGO_TOPICS.length}개 토픽`,
-    descriptionEn: `BFS/DFS · DP · Greedy — ${ALGO_TOPICS.length} topics`,
+    description: "Bronze 핵심 (정렬·배열·스택큐 등) · Silver/Gold는 선택 심화",
+    descriptionEn: "Bronze core (sort·array·stack/queue) · Silver/Gold optional",
     href: "/algo",
     rank: "gold",
+    // 완료 기준 = Bronze(Wave 1) 핵심. Silver/Gold 는 '필요할 때' 심화 (smart-next 모델과 일치).
     computeProgress: (completedIds) => {
-      const done = ALGO_TOPICS.filter(tp => completedIds.has(tp.lessonId)).length
-      return { done, total: ALGO_TOPICS.length }
+      const bronze = ALGO_TOPICS.filter(tp => tp.wave === 1)
+      const done = bronze.filter(tp => completedIds.has(tp.lessonId)).length
+      return { done, total: bronze.length }
+    },
+  },
+  {
+    id: "coding-bank",
+    type: "main",
+    emoji: "🧰",
+    title: "코딩 뱅크",
+    titleEn: "Coding Bank",
+    description: "대회 직전 — STL/문법으로 입출력 문제 감각 익히기",
+    descriptionEn: "Pre-contest — sharpen I/O problem instincts",
+    href: "/coding-bank",
+    rank: "gold",
+    computeProgress: () => {
+      const solved = getCodingBankSolvedCount()
+      return { done: Math.min(solved, CODING_BANK_GOAL), total: CODING_BANK_GOAL }
     },
   },
   {
