@@ -191,7 +191,9 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
   const rec = getAdaptiveNext({ pool, solvedSet, starredSet })
   const recX = rec ? all.find(x => x.p.id === rec.problemId) : null
   const lastX = lastId ? all.find(x => x.p.id === lastId) : null
-  const totalSolved = all.filter(x => solvedSet.has(x.p.id)).length
+  const solvedInView = filtered.filter(x => solvedSet.has(x.p.id)).length // 현재 보기(주제 필터) 기준 진행
+  const viewLabel = topicFilter === "all" ? t("전체 진행", "Overall") : topicFilter === "kl" ? `🎯 ${t("대회 대비", "Contest prep")}` : topicFilter
+  const pct = (n: number, d: number) => (d > 0 ? Math.round((n / d) * 100) : 0)
 
   return (
     <div className="flex flex-col gap-3">
@@ -225,10 +227,6 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
           <span className="text-gray-300 shrink-0" aria-hidden>→</span>
         </Link>
       )}
-      {totalSolved > 0 && (
-        <p className="text-xs text-gray-400 text-center -mt-1">✓ {t(`지금까지 ${totalSolved}문제 풀었어요`, `${totalSolved} solved so far`)}</p>
-      )}
-
       {/* 🔎 필터 — 주제(드롭다운) + 난이도(칩). 평소 전체, 골라보고 싶을 때만 */}
       <div className="flex items-center gap-2 flex-wrap text-xs">
         <select
@@ -252,6 +250,19 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
         ))}
       </div>
 
+      {/* 📊 전체 진행 — 현재 보기(주제 필터) 기준 한눈에 */}
+      {filtered.length > 0 && (
+        <div className="rounded-xl border border-gray-200 bg-white px-4 py-3">
+          <div className="flex items-center justify-between text-xs font-bold mb-1.5">
+            <span className="text-gray-600">{viewLabel}</span>
+            <span className={solvedInView > 0 ? "text-green-600" : "text-gray-400"}>✓ {solvedInView} / {filtered.length} ({pct(solvedInView, filtered.length)}%)</span>
+          </div>
+          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-full bg-green-400 transition-all" style={{ width: `${pct(solvedInView, filtered.length)}%` }} />
+          </div>
+        </div>
+      )}
+
       {/* 난이도 단계 사다리 — 안 푼 건 위(할 것), 푼 건 '완료' 접개식으로 분리 */}
       {TIERS.filter(tier => diffFilter === "all" || tier.d === diffFilter).map(tier => {
         const items = filtered.filter(x => x.p.difficulty === tier.d)
@@ -262,12 +273,18 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
         const SHOWN = 12
         return (
           <details key={tier.d} open={tier.d === "쉬움" || topicFilter !== "all" || diffFilter !== "all"} className="rounded-2xl border border-gray-200 bg-white px-4 py-3">
-            <summary className="flex items-center gap-2 text-sm font-bold text-gray-700 cursor-pointer">
-              <span className={"w-2.5 h-2.5 rounded-full " + tier.dot} />
-              {t(tier.ko, tier.en)}
-              <span className={"ml-auto text-xs " + (solvedCnt > 0 ? "font-bold text-green-600" : "font-normal text-gray-400")}>
-                {solvedCnt > 0 ? `✓ ${solvedCnt} / ${items.length}` : `0 / ${items.length}`}
-              </span>
+            <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+              <div className="flex items-center gap-2 text-sm font-bold text-gray-700">
+                <span className={"w-2.5 h-2.5 rounded-full " + tier.dot} />
+                {t(tier.ko, tier.en)}
+                <span className={"ml-auto text-xs " + (solvedCnt > 0 ? "font-bold text-green-600" : "font-normal text-gray-400")}>
+                  {solvedCnt > 0 ? `✓ ${solvedCnt} / ${items.length}` : `0 / ${items.length}`}
+                </span>
+              </div>
+              {/* 단계별 진행 바 — 접혀 있어도 얼마나 했는지 보임 */}
+              <div className="mt-1.5 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full bg-green-400 transition-all" style={{ width: `${pct(solvedCnt, items.length)}%` }} />
+              </div>
             </summary>
             <div className="mt-3 flex flex-col gap-1.5">
               {/* 할 것 — 아직 안 푼 문제 */}

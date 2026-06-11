@@ -70,9 +70,22 @@ export default function AlgoPage() {
       </div>
 
       <div className="max-w-[1000px] mx-auto px-4 sm:px-6 py-6 space-y-7">
-        <p className="text-sm text-gray-400 -mb-2">
+        <p className="text-sm text-gray-400">
           {t("배우고 싶은 알고리즘을 눌러요 · 등급 순서대로 가면 자연스러워요", "Tap an algorithm to learn · following the tiers is the natural order")}
         </p>
+
+        {/* 📊 전체 진행 */}
+        <div className="rounded-xl border border-gray-200 bg-white px-4 py-3">
+          <div className="flex items-center justify-between text-xs font-bold mb-1.5">
+            <span className="text-gray-600">{t("전체 진행", "Overall")}</span>
+            <span className={doneCount > 0 ? "text-green-600" : "text-gray-400"}>
+              ✓ {doneCount} / {ALGO_TOPICS.length} ({Math.round((doneCount / ALGO_TOPICS.length) * 100)}%)
+            </span>
+          </div>
+          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-full bg-green-400 transition-all" style={{ width: `${Math.round((doneCount / ALGO_TOPICS.length) * 100)}%` }} />
+          </div>
+        </div>
 
         {TIERS.map(tier => {
           const topics = ALGO_TOPICS.filter(tp => tp.wave === tier.wave)
@@ -81,12 +94,16 @@ export default function AlgoPage() {
           return (
             <section key={tier.wave}>
               {/* 등급 헤더 */}
-              <div className="flex items-baseline gap-2 mb-3">
+              <div className="flex items-baseline gap-2 mb-1.5">
                 <h2 className="text-sm font-extrabold text-gray-700">{t(tier.ko, tier.en)}</h2>
                 <span className={cn("text-xs font-bold", tierDone > 0 ? "text-green-600" : "text-gray-400")}>
                   {tierDone}/{topics.length}
                 </span>
                 <span className="text-xs text-gray-300 hidden sm:inline">· {t(tier.subKo, tier.subEn)}</span>
+              </div>
+              {/* 등급별 진행 바 */}
+              <div className="mb-3 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full bg-green-400 transition-all" style={{ width: `${topics.length ? Math.round((tierDone / topics.length) * 100) : 0}%` }} />
               </div>
 
               {/* 토픽 카드 그리드 */}
