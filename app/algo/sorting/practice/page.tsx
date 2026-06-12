@@ -113,7 +113,7 @@ export default function SortingPracticePage() {
         <main className="max-w-5xl mx-auto px-4 pt-4">
           <div className="mb-3 flex items-center gap-2">
             <button
-              onClick={() => router.push("/algo/sorting/practice")}
+              onClick={() => router.push("/algo/sorting")}
               className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700"
             >
               <ArrowLeft className="w-4 h-4" /> {t("문제 목록", "Problem list")}
