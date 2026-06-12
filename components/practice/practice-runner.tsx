@@ -8,6 +8,7 @@ import { callPistonWithRetry } from "@/lib/piston"
 import type { PracticeProblem } from "@/data/practice/types"
 import { localizeProblem } from "@/data/practice/types"
 import { useLanguage } from "@/contexts/language-context"
+import { useEffectiveIsTeacher } from "@/lib/effective-role"
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 import { CodeEditorWithGutter, parseErrorLine } from "@/components/cpp/code-editor-with-gutter"
@@ -203,6 +204,7 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
 
   // 이중 언어 지원: pyInitialCode + pySolutionCode 가 둘 다 있으면 토글 가능.
   // 기본값: 문제의 language (없으면 cpp).
+  const isTeacher = useEffectiveIsTeacher()
   const hasPython = !!(rawProblem.pyInitialCode && rawProblem.pySolutionCode)
   const defaultLang = problem.language ?? "cpp"
   const [runtimeLang, setRuntimeLang] = useState<"cpp" | "python">(() => {
@@ -576,25 +578,41 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
         </div>
       )}
 
-      {/* 정답 코드 */}
-      <button
-        onClick={() => setShowSolution(s => !s)}
-        className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-600 transition-colors py-1"
-      >
-        <Eye className="w-4 h-4" />
-        {showSolution ? t("정답 숨기기", "Hide solution") : t("정답 보기", "Show solution")}
-        <ChevronDown className={cn("w-4 h-4 transition-transform", showSolution && "rotate-180")} />
-      </button>
-      {showSolution && (
-        <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
-          <pre
-            className="font-mono text-sm whitespace-pre-wrap overflow-x-auto rounded-lg p-3"
-            style={{ background: "#1e1e2e", color: "#e6edf3" }}
-            dangerouslySetInnerHTML={{ __html: highlightCode(currentSolutionCode, lang) }}
-          />
-          <p className="mt-3 text-sm text-gray-500">{problem.solutionExplanation}</p>
-        </div>
-      )}
+      {/* 정답 코드 — 베끼기 방지: 학생은 2회 시도 또는 힌트 다 본 뒤에만. 선생님은 항상. */}
+      {(() => {
+        const allHints = (problem.hints ?? []).length
+        const canSeeSolution = isTeacher || failCount >= 2 || (allHints > 0 && hintsShown >= allHints)
+        if (!canSeeSolution) {
+          return (
+            <p className="text-xs text-gray-400 py-1 flex items-center gap-1.5">
+              <Eye className="w-3.5 h-3.5" />
+              {t("정답은 두 번 풀어보거나 힌트를 다 본 뒤에 열려요", "Solution unlocks after 2 tries or viewing all hints")}
+            </p>
+          )
+        }
+        return (
+          <>
+            <button
+              onClick={() => setShowSolution(s => !s)}
+              className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-600 transition-colors py-1"
+            >
+              <Eye className="w-4 h-4" />
+              {showSolution ? t("정답 숨기기", "Hide solution") : t("정답 보기", "Show solution")}
+              <ChevronDown className={cn("w-4 h-4 transition-transform", showSolution && "rotate-180")} />
+            </button>
+            {showSolution && (
+              <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
+                <pre
+                  className="font-mono text-sm whitespace-pre-wrap overflow-x-auto rounded-lg p-3"
+                  style={{ background: "#1e1e2e", color: "#e6edf3" }}
+                  dangerouslySetInnerHTML={{ __html: highlightCode(currentSolutionCode, lang) }}
+                />
+                <p className="mt-3 text-sm text-gray-500">{problem.solutionExplanation}</p>
+              </div>
+            )}
+          </>
+        )
+      })()}
     </div>
   )
 }

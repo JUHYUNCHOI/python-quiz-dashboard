@@ -15,8 +15,8 @@ import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
-import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react"
-import { PracticeRunner } from "@/components/practice/practice-runner"
+import { ArrowLeft, ArrowRight, CheckCircle2, BookOpen, X } from "lucide-react"
+import { PracticeRunner, highlightCode } from "@/components/practice/practice-runner"
 import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
 import { sortingContestCluster } from "@/data/practice/algo-sorting-contest"
 import React from "react"
@@ -79,10 +79,28 @@ export default function SortingPracticePage() {
   const searchParams = useSearchParams()
   const { user } = useAuth()
   const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set())
+  const [showLesson, setShowLesson] = useState(false)
+  const [panelW, setPanelW] = useState(80)
+  const [dragging, setDragging] = useState(false)
 
   useEffect(() => {
     setSolvedSet(getSolvedSet())
   }, [])
+
+  // 수업 패널 왼쪽 가장자리 드래그 → 너비 조절
+  useEffect(() => {
+    if (!dragging) return
+    const onMove = (e: MouseEvent) => setPanelW(Math.min(95, Math.max(30, ((window.innerWidth - e.clientX) / window.innerWidth) * 100)))
+    const onUp = () => setDragging(false)
+    window.addEventListener("mousemove", onMove)
+    window.addEventListener("mouseup", onUp)
+    document.body.style.userSelect = "none"
+    return () => {
+      window.removeEventListener("mousemove", onMove)
+      window.removeEventListener("mouseup", onUp)
+      document.body.style.userSelect = ""
+    }
+  }, [dragging])
 
   const problemId = searchParams.get("p")
   const problem = problemId ? sortingContestCluster.problems.find(p => p.id === problemId) : null
@@ -111,12 +129,19 @@ export default function SortingPracticePage() {
       <div className="min-h-screen bg-gray-50 pb-24">
         <Header />
         <main className="max-w-5xl mx-auto px-4 pt-4">
-          <div className="mb-3 flex items-center gap-2">
+          <div className="mb-3 flex items-center justify-between gap-2">
             <button
               onClick={() => router.push("/algo/sorting")}
               className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700"
             >
               <ArrowLeft className="w-4 h-4" /> {t("문제 목록", "Problem list")}
+            </button>
+            {/* 문제 안에서 수업 보기 — 이동 없이 옆에서 슬라이드 */}
+            <button
+              onClick={() => setShowLesson(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-violet-200 bg-violet-50 text-violet-700 text-sm font-bold hover:bg-violet-100 transition-colors"
+            >
+              <BookOpen className="w-4 h-4" /> {t("수업 보기", "Lesson")}
             </button>
           </div>
 
@@ -169,6 +194,30 @@ export default function SortingPracticePage() {
 
           <PracticeRunner problem={problem} onSuccess={handleSolved} />
         </main>
+
+        {/* 📖 수업 — 이동 없이 옆에서 슬라이드 (in-context). 크기 조절 가능 */}
+        {showLesson && (
+          <>
+            <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setShowLesson(false)} />
+            <div className="fixed top-0 right-0 bottom-0 w-full bg-white z-50 shadow-2xl overflow-y-auto" style={{ width: `${panelW}vw` }}>
+              <div onMouseDown={() => setDragging(true)} className="hidden sm:flex absolute left-0 top-0 bottom-0 w-2.5 cursor-col-resize items-center justify-center hover:bg-violet-100 group z-10" title="드래그해서 크기 조절">
+                <div className="w-1 h-12 rounded-full bg-gray-300 group-hover:bg-violet-400 transition-colors" />
+              </div>
+              <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 pl-5 flex items-center justify-between">
+                <h2 className="font-black text-gray-900 flex items-center gap-1.5"><BookOpen className="w-4 h-4 text-violet-500" /> {t("정렬 개념", "Sorting concept")}</h2>
+                <button onClick={() => setShowLesson(false)} className="p-1.5 rounded-lg hover:bg-gray-100" aria-label="close"><X className="w-5 h-5 text-gray-500" /></button>
+              </div>
+              <div className="px-5 py-4 space-y-4 text-sm text-gray-700 leading-relaxed">
+                <p>{t("정렬은 데이터를 크기 순서대로 줄 세우는 거예요. 대부분 직접 짜지 않고 sort() 한 줄로 끝나요.", "Sorting puts data in order. Usually one line — sort() — handles it.")}</p>
+                <pre className="rounded-lg bg-gray-900 px-3 py-2.5 text-xs font-mono overflow-x-auto whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: highlightCode(`sort(v.begin(), v.end());            // 오름차순\nsort(v.begin(), v.end(), greater<int>()); // 내림차순`, "cpp") }} />
+                <p>{t("핵심은 '무엇을 기준으로' 정렬하느냐예요. 점수·시간·이름 같은 기준을 정하고, 정렬한 뒤의 처리로 문제를 풀어요.", "The key is what to sort by — then process after sorting.")}</p>
+                <Link href="/algo/sorting/learn" className="block rounded-xl bg-violet-500 text-white text-center px-4 py-3 font-bold hover:bg-violet-600 transition-colors">
+                  📖 {t("전체 수업 보기 (애니메이션·예제) →", "Full lesson (animations, examples) →")}
+                </Link>
+              </div>
+            </div>
+          </>
+        )}
         <BottomNav />
       </div>
     )
