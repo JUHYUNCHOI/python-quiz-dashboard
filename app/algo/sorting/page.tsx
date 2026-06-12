@@ -19,6 +19,8 @@ export default function SortingTopicPage() {
   const { t } = useLanguage()
   const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set())
   const [showLesson, setShowLesson] = useState(false)
+  const [panelW, setPanelW] = useState(80) // 패널 너비 (vw). 기본 4/5
+  const [dragging, setDragging] = useState(false)
 
   useEffect(() => {
     try {
@@ -26,6 +28,24 @@ export default function SortingTopicPage() {
       if (raw) setSolvedSet(new Set(JSON.parse(raw)))
     } catch {}
   }, [])
+
+  // 패널 왼쪽 가장자리 드래그 → 너비 조절 (30%~95%)
+  useEffect(() => {
+    if (!dragging) return
+    const onMove = (e: MouseEvent) => {
+      const w = ((window.innerWidth - e.clientX) / window.innerWidth) * 100
+      setPanelW(Math.min(95, Math.max(30, w)))
+    }
+    const onUp = () => setDragging(false)
+    window.addEventListener("mousemove", onMove)
+    window.addEventListener("mouseup", onUp)
+    document.body.style.userSelect = "none"
+    return () => {
+      window.removeEventListener("mousemove", onMove)
+      window.removeEventListener("mouseup", onUp)
+      document.body.style.userSelect = ""
+    }
+  }, [dragging])
 
   const problems = sortingContestCluster.problems
   const total = problems.length
@@ -138,8 +158,19 @@ export default function SortingTopicPage() {
       {showLesson && (
         <>
           <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setShowLesson(false)} />
-          <div className="fixed top-0 right-0 bottom-0 w-full sm:max-w-md bg-white z-50 shadow-2xl overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+          <div
+            className="fixed top-0 right-0 bottom-0 w-full bg-white z-50 shadow-2xl overflow-y-auto"
+            style={{ width: `${panelW}vw` }}
+          >
+            {/* 드래그 핸들 — 왼쪽 가장자리 (데스크탑) */}
+            <div
+              onMouseDown={() => setDragging(true)}
+              className="hidden sm:flex absolute left-0 top-0 bottom-0 w-2.5 cursor-col-resize items-center justify-center hover:bg-violet-100 group z-10"
+              title="드래그해서 크기 조절"
+            >
+              <div className="w-1 h-12 rounded-full bg-gray-300 group-hover:bg-violet-400 transition-colors" />
+            </div>
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 pl-5 flex items-center justify-between">
               <h2 className="font-black text-gray-900 flex items-center gap-1.5"><BookOpen className="w-4 h-4 text-violet-500" /> {t("정렬 개념", "Sorting concept")}</h2>
               <button onClick={() => setShowLesson(false)} className="p-1.5 rounded-lg hover:bg-gray-100" aria-label="close"><X className="w-5 h-5 text-gray-500" /></button>
             </div>
