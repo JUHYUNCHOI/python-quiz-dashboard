@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils"
 import { ArrowLeft, BookOpen, CheckCircle2 } from "lucide-react"
 import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
 import { sortingContestCluster } from "@/data/practice/algo-sorting-contest"
+import { LessonPanel } from "@/components/algo/lesson-panel"
+import { SortingLesson } from "@/components/algo/sorting-lesson"
 
 const SOLVED_KEY = "algo-sorting-contest-solved"
 
@@ -19,6 +21,7 @@ export default function SortingTopicPage() {
   const router = useRouter()
   const { t } = useLanguage()
   const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set())
+  const [showLesson, setShowLesson] = useState(false)
 
   useEffect(() => {
     try {
@@ -59,12 +62,12 @@ export default function SortingTopicPage() {
             </h1>
             <p className="text-sm text-gray-500 mt-0.5">{t("문제를 풀면서 익혀요 · 막히면 문제마다 힌트가 있어요", "Learn by solving · each problem has hints")}</p>
           </div>
-          <Link
-            href="/algo/sorting/learn"
+          <button
+            onClick={() => setShowLesson(true)}
             className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-200 bg-white text-gray-600 text-sm font-bold hover:bg-violet-50 hover:text-violet-700 hover:border-violet-300 transition-colors"
           >
             <BookOpen className="w-4 h-4" /> {t("수업", "Lesson")}
-          </Link>
+          </button>
         </div>
 
         {/* 진행 — 얼마만큼 풀었나 */}
@@ -80,9 +83,9 @@ export default function SortingTopicPage() {
 
         {/* 처음이면 수업부터 권유 */}
         {isFresh && (
-          <Link href="/algo/sorting/learn" className="block w-full mb-4 rounded-xl border-2 border-dashed border-violet-200 bg-violet-50/50 px-4 py-3 text-sm text-violet-700 font-bold hover:bg-violet-50 transition-colors">
-            👋 {t("정렬이 처음이면 — 먼저 📖 수업을 보고 오세요 →", "New to sorting? Read the 📖 lesson first →")}
-          </Link>
+          <button onClick={() => setShowLesson(true)} className="block w-full text-left mb-4 rounded-xl border-2 border-dashed border-violet-200 bg-violet-50/50 px-4 py-3 text-sm text-violet-700 font-bold hover:bg-violet-50 transition-colors">
+            👋 {t("정렬이 처음이면 — 먼저 📖 수업을 펼쳐보세요", "New to sorting? Open the 📖 lesson first")}
+          </button>
         )}
 
         {/* 문제 목록 (난이도별) — 푼 건 ✓, 안 푼 건 → */}
@@ -133,6 +136,11 @@ export default function SortingTopicPage() {
           </Link>
         )}
       </main>
+
+      {/* 📖 수업 — 이동 없이 옆 슬라이드 (in-context) */}
+      <LessonPanel open={showLesson} onClose={() => setShowLesson(false)} title={t("정렬 수업", "Sorting lesson")}>
+        <SortingLesson />
+      </LessonPanel>
       <BottomNav />
     </div>
   )
