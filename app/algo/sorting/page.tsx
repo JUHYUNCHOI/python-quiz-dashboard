@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils"
 import { ArrowLeft, BookOpen, CheckCircle2, X } from "lucide-react"
 import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
 import { sortingContestCluster } from "@/data/practice/algo-sorting-contest"
+import { highlightCode } from "@/components/practice/practice-runner"
 
 const SOLVED_KEY = "algo-sorting-contest-solved"
 
@@ -176,8 +177,10 @@ export default function SortingTopicPage() {
             </div>
             <div className="px-4 py-4 space-y-4 text-sm text-gray-700 leading-relaxed">
               <p>{t("정렬은 데이터를 크기 순서대로 줄 세우는 거예요. 대부분 직접 짜지 않고 sort() 한 줄로 끝나요.", "Sorting puts data in order. Usually one line — sort() — handles it.")}</p>
-              <pre className="rounded-lg bg-gray-900 text-gray-100 px-3 py-2.5 text-xs font-mono overflow-x-auto whitespace-pre-wrap">{`sort(v.begin(), v.end());            // 오름차순
-sort(v.begin(), v.end(), greater<int>()); // 내림차순`}</pre>
+              <pre
+                className="rounded-lg bg-gray-900 px-3 py-2.5 text-xs font-mono overflow-x-auto whitespace-pre-wrap"
+                dangerouslySetInnerHTML={{ __html: highlightCode(`sort(v.begin(), v.end());            // 오름차순\nsort(v.begin(), v.end(), greater<int>()); // 내림차순`, "cpp") }}
+              />
               <p>{t("핵심은 '무엇을 기준으로' 정렬하느냐예요. 점수·시간·이름 같은 기준을 정하고, 정렬한 뒤의 처리(최댓값·중복 제거·짝짓기)로 문제를 풀어요.", "The key is what to sort by. Pick a key (score, time, name…), then process after sorting.")}</p>
               <Link href="/algo/sorting/learn" className="block rounded-xl bg-violet-500 text-white text-center px-4 py-3 font-bold hover:bg-violet-600 transition-colors">
                 📖 {t("전체 수업 보기 (애니메이션·예제) →", "Full lesson (animations, examples) →")}
