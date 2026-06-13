@@ -188,6 +188,83 @@ export function makeReflectionCh1(E) {
       content: (<ReflectionGrid E={E} />),
     },
 
+    /* 1-3b — Trace the FIRST official update "1 3" through the formula → total 4→3. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now trace the FIRST official update \"1 3\" — it toggles cell (1,3). Watch ONE group's cost change move the total from 4 to 3.",
+        "이제 첫 공식 update \"1 3\" 을 따라가요 — 칸 (1,3) 을 토글. 한 그룹의 비용 변화가 총합을 4 → 3 으로 옮기는 걸 봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
+            🔄 {t(E, "Update \"1 3\" — toggle cell (1, 3)", "Update \"1 3\" — 칸 (1, 3) 토글")}
+          </div>
+
+          <div style={{ background: "#ecfeff", border: "1.5px solid #0891b2", borderRadius: 10, padding: "10px 14px", marginBottom: 10, fontSize: 12.5, color: C.text, lineHeight: 1.6 }}>
+            {t(E, "Cell (1, 3) belongs to the ", "칸 (1, 3) 은 ")}
+            <b style={{ color: "#0891b2" }}>{t(E, "top-row group", "위 한 줄 그룹")}</b>
+            {t(E, ": (1,2) (1,3) (4,2) (4,3).  Toggling (1,3) only changes THIS group's count — nothing else.",
+                  " 에 속해요: (1,2) (1,3) (4,2) (4,3). (1,3) 토글은 이 그룹의 개수만 바꿔요 — 나머지는 그대로.")}
+          </div>
+
+          {/* Before / After group state */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+            {/* BEFORE */}
+            <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 8, textAlign: "center" }}>{t(E, "BEFORE", "전")}</div>
+              <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 8 }}>
+                {[["(1,2)", false], ["(1,3)", true], ["(4,2)", false], ["(4,3)", true]].map(([lbl, painted], k) => (
+                  <div key={k} style={{ textAlign: "center" }}>
+                    <div style={{ width: 30, height: 30, borderRadius: 6, border: "1.5px solid #fbbf24", background: painted ? "#7c2d12" : "#fffbeb", display: "flex", alignItems: "center", justifyContent: "center", color: painted ? "#fff" : "#d97706", fontWeight: 700, fontSize: 14 }}>
+                      {painted ? "#" : "."}
+                    </div>
+                    <div style={{ fontSize: 9, color: "#92400e", marginTop: 2 }}>{lbl}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#7c2d12", textAlign: "center" }}>
+                {t(E, "cnt = 2 → cost min(2, 2) = ", "cnt = 2 → 비용 min(2, 2) = ")}<b>2</b>
+              </div>
+            </div>
+            {/* AFTER */}
+            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 8, textAlign: "center" }}>{t(E, "AFTER toggle (1,3)", "(1,3) 토글 후")}</div>
+              <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 8 }}>
+                {[["(1,2)", false], ["(1,3)", false], ["(4,2)", false], ["(4,3)", true]].map(([lbl, painted], k) => (
+                  <div key={k} style={{ textAlign: "center" }}>
+                    <div style={{ width: 30, height: 30, borderRadius: 6, border: k === 1 ? "2px solid #16a34a" : "1.5px solid #86efac", background: painted ? "#166534" : "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", color: painted ? "#fff" : "#16a34a", fontWeight: 700, fontSize: 14 }}>
+                      {painted ? "#" : "."}
+                    </div>
+                    <div style={{ fontSize: 9, color: "#15803d", marginTop: 2 }}>{lbl}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#166534", textAlign: "center" }}>
+                {t(E, "cnt = 1 → cost min(1, 3) = ", "cnt = 1 → 비용 min(1, 3) = ")}<b>1</b>
+              </div>
+            </div>
+          </div>
+
+          {/* Total arithmetic */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center", fontSize: 13, color: "#5b21b6", lineHeight: 1.6 }}>
+            {t(E, "This group's cost: ", "이 그룹 비용: ")}<b>2 → 1</b>{t(E, " (down 1).  ", " (1 감소). ")}
+            <br/>
+            <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5 }}>
+              total = 4 − cost<sub>old</sub>(2) + cost<sub>new</sub>(1) = 4 − 2 + 1 = <b style={{ color: "#15803d" }}>3</b>
+            </span>
+            <div style={{ fontSize: 11.5, color: "#6d28d9", marginTop: 4 }}>
+              {t(E, "→ matches the first output line: ", "→ 첫 출력 줄과 일치: ")}<b style={{ color: "#15803d" }}>3</b> ✅
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfeff", border: "1px dashed #67e8f9", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#155e75", lineHeight: 1.6, textAlign: "center" }}>
+            👉 {t(E,
+              "Only THIS one group's number changed — every other group is untouched. That's why each update is O(1): recompute one group, nudge the total.",
+              "이 한 그룹의 숫자만 바뀌었어요 — 나머지 그룹은 전혀 안 건드림. 그래서 update 1 번이 O(1): 한 그룹만 다시 계산하고 총합만 살짝 옮기면 끝.")}
+          </div>
+        </div>),
+    },
+
     /* 1-4 — Quiz: which cells form a group with (r, c)? */
     {
       type: "quiz",
