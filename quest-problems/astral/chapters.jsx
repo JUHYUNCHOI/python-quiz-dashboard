@@ -1103,8 +1103,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "① Where should I put stars? Let me just try the most natural thing — scan the orbit start → end, one cell at a time, and place a star wherever it seems needed.\nWhen a G has no star arriving into it, place a star there; that star travels to the next cell in photo 2.\nTry it on orbit G G B. It seems to work… until the very end!",
-        "① 별을 어디에 놓지? 일단 가장 자연스러운 대로 해볼게요 — 궤도 시작부터 끝까지 한 칸씩 보면서, 필요해 보이는 칸에 별을 놓는 거예요.\n앞에서 별이 안 오는 G 엔 별을 놓고 — 그 별은 사진 2에서 다음 칸으로 가요.\n궤도 G G B 로 해봐요. 잘 되는 것 같다가… 맨 끝에서 무슨 일이?"),
+        "① First instinct — go front → back. Each time a G has no star arriving, drop a star; that star then slides ONE step right (into the next cell in photo 2).\nOn orbit G G B it feels brilliant: G(0)'s star slides into G(1), filling it for FREE — one star, two cells!\nBut watch — that 'free fill' is about to backfire at the B.",
+        "① 첫 직감 — 앞→뒤로. 별이 안 들어오는 G 마다 별을 놓고, 그 별은 한 칸 오른쪽(사진2의 다음 칸)으로 미끄러져요.\n궤도 G G B 에선 기막혀 보여요: G(0)의 별이 G(1)로 미끄러져 공짜로 채워짐 — 별 하나로 두 칸!\n근데 봐요 — 그 '공짜'가 끝의 B 에서 발목을 잡아요."),
       content: (
         <div style={{ padding: 14 }}>
           {/* One-line plan banner — the per-step bubbles below carry the rule details */}
@@ -1142,8 +1142,8 @@ export function makeAstralCh2(E, lang = "py") {
               cells: [{letter:"G",star:true,active:false},{letter:"G",star:false,active:true},{letter:"B",star:false,active:true}],
               note: t(E, "B(2): to fill photo 2, G(1) must SEND a star here. But G(1) was filled for free — it has no star to send. 💥", "B(2): 사진2 를 채우려면 G(1) 이 별을 보내줘야 해요. 그런데 G(1) 은 공짜로 때워서 보낼 별이 없어요. 💥"),
               why: t(E,
-                "This orbit is NOT impossible — it solves with 3 stars! Forward handed G(0)'s star to G(1) too early, so the B never got the star it needed.\n→ Walk it backward and you'll see it.",
-                "이 궤도, 사실 불가능이 아니에요 — 별 3개로 풀려요! 앞→뒤가 G(0) 의 별을 G(1) 한테 미리 줘버려서, 정작 B 가 필요한 별을 못 받은 거예요.\n→ 거꾸로 가보면 보여요."),
+                "It's NOT impossible — it needs just 3 stars! The trap: forward slid G(0)'s star into G(1) to fill it for free, so G(1) kept NO star of its own. But B(2) gets its photo-2 star ONLY if G(1) sends one — and G(1) has none left to send.\nForward gave away the very star the B needed. A B's need points LEFT (it pulls a star from the cell before it) — so solve it going backward.",
+                "불가능 아니에요 — 별 3개면 돼요! 함정: 앞→뒤가 G(0) 의 별을 G(1) 로 미끄러뜨려 공짜로 채워서, G(1) 엔 자기 별이 안 남았어요. 그런데 B(2) 는 G(1) 이 보내줘야만 사진2 별이 생겨요 — 보낼 별이 없죠.\n앞→뒤가 B 에게 필요한 바로 그 별을 줘버린 거예요. B 의 요구는 '왼쪽'을 향해요(앞 칸의 별을 당김) — 그러니 거꾸로 풀어야 해요."),
               result: t(E, "Stuck — the forward plan is wrong ✗ (the answer is NOT -1!)", "막혔어요 — 앞→뒤 작전이 틀렸어요 ✗ (답은 -1 아니에요!)"),
               ok: false,
             },
@@ -1156,8 +1156,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "② End → start: just flip the direction! Same orbit G G B, but this time we start at the END and walk back to the start. So B is the very first cell we hit — we handle its demand BEFORE deciding the earlier cells. (Speed: one quick pass per orbit — easily inside USACO's 4-second limit.)",
-        "② 뒤→앞: 방향만 뒤집어봐요! 같은 궤도 G G B 인데, 이번엔 궤도의 끝에서 시작 쪽으로 거꾸로 가요. 그러면 B 를 제일 먼저 만나요 — 앞 칸을 정하기 *전에* B 의 요구부터 들어주는 거예요. (속도: 각 궤도를 한 번만 훑으면 끝 — USACO 4초 제한 여유롭게 통과.)"),
+        "② Same orbit — just flip the direction: end → start. Now the B is the FIRST cell we hit. A B always demands one thing: 'the cell before me must KEEP a star to send me.' So honor it on the spot — star the B, and star its predecessor.\nBecause we serve each demand BEFORE that cell could be spent on anything else, we never give away a star someone needed. One clean pass, no guessing.",
+        "② 같은 궤도 — 방향만 뒤집어요: 끝→시작. 이제 B 를 제일 먼저 만나요. B 의 요구는 늘 하나: '내 앞 칸은 나한테 보낼 별을 가지고 있어야 해.' 그래서 그 자리에서 들어줘요 — B 에 별, 그 앞 칸에도 별.\n각 요구를 그 칸이 다른 데 쓰이기 전에 먼저 처리하니까, 누가 필요로 한 별을 빼앗을 일이 없어요. 깔끔한 한 번 훑기, 찍기 없음."),
       content: (
         <div style={{ padding: 14 }}>
           {/* One-line plan banner — the per-step bubbles below carry the rule details */}
