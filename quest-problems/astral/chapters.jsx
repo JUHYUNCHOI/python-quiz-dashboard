@@ -724,8 +724,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Each star shifts the same way every photo. Here: right=1, down=2. So (0,0) → (2,1) → (4,2) → off the grid.\nWe call this path an orbit.",
-        "별은 사진마다 똑같이 움직여요. 예시: right=1, down=2. (0,0) → (2,1) → (4,2) → 사진 밖.\n이 경로를 궤도라고 해요."),
+        "So how do we count the MINIMUM original stars? The trick: figure out which cells came from the SAME single star — otherwise we'd count one star many times.\nA star shifts the same way every photo, so let's follow one star's path. Here: right=1, down=2 → (0,0) → (2,1) → (4,2) → off the grid. We call this path an orbit.",
+        "그럼 '원본 별 최소 개수'를 어떻게 셀까요? 비결은 — 어떤 칸들이 *같은 별 하나* 에서 나온 건지 알아내는 거예요 (안 그러면 별 하나를 여러 번 세니까).\n별은 사진마다 똑같은 규칙으로 움직이니, 별 하나가 지나는 길을 따라가 봐요. 예시: right=1, down=2 → (0,0) → (2,1) → (4,2) → 사진 밖. 이 길을 '궤도'라고 해요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 5, textAlign: "center" }}>
