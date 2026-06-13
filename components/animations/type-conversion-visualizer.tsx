@@ -272,6 +272,7 @@ function TypeConversionVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const [funcPillLabel, setFuncPillLabel] = useState<string>("int()")
   const [trapOffered, setTrapOffered] = useState(false)
   const [showSandbox, setShowSandbox] = useState(false)
+  const [activeLabel, setActiveLabel] = useState<string | null>(null) // 선택된 빠른예시 칩
 
   const timers = useRef<ReturnType<typeof setTimeout>[]>([])
   const clearTimers = () => { timers.current.forEach(clearTimeout); timers.current = [] }
@@ -284,6 +285,7 @@ function TypeConversionVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const onSrcChange = (next: string) => {
     clearTimers()
     setSrc(next)
+    setActiveLabel(null)
     setPhase("idle"); setConv(null); setTrapOffered(false); setBeforeVal(null)
     setLeaving({ q: false, frac: false })
     setDisplay(parseSource(next))
@@ -379,15 +381,22 @@ function TypeConversionVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
       <div>
         <p className="text-xs font-bold text-gray-400 mb-1.5">{tt("빠른 예시 — 눌러서 천천히 변신 보기", "Quick examples — tap to watch it morph")}</p>
         <div className="flex flex-wrap gap-2">
-          {PRESETS.map((p) => (
-            <button
-              key={p.label}
-              onClick={() => run(p.src, p.func)}
-              className="px-3 py-1.5 rounded-lg text-xs font-bold border-2 bg-white text-gray-500 border-gray-200 hover:border-gray-300 transition-all font-mono active:scale-95"
-            >
-              {p.label} {p.danger && "❌"}
-            </button>
-          ))}
+          {PRESETS.map((p) => {
+            const isActive = activeLabel === p.label
+            const busy = phase === "highlight" || phase === "reveal"
+            return (
+              <button
+                key={p.label}
+                onClick={() => { setActiveLabel(p.label); run(p.src, p.func) }}
+                disabled={busy && !isActive}
+                className={"px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition-all font-mono active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed " +
+                  (isActive ? "" : "bg-white text-gray-500 border-gray-200 hover:border-gray-300")}
+                style={isActive ? { background: TYPE_COLORS[p.func] + "18", color: TYPE_COLORS[p.func], borderColor: TYPE_COLORS[p.func] } : undefined}
+              >
+                {p.label} {p.danger && "❌"}
+              </button>
+            )
+          })}
         </div>
       </div>
 
