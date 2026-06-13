@@ -115,6 +115,35 @@ export function makeMexesCh1(E) {
         </div>),
     },
 
+    /* 1-2b — DERIVE why max, not sum. Sample a = [2,2,2,0], target mex = 2. */
+    {
+      type: "quiz",
+      narr: t(E,
+        "Back to mex = 2 on a = [2, 2, 2, 0]. Count the two jobs separately: values missing from {0, 1} = 1 (only the value 1 is absent). Copies of 2 to remove = 3.",
+        "다시 a = [2, 2, 2, 0] 의 mex = 2. 두 가지 일을 따로 세 봐: {0, 1} 중 빠진 값 = 1 (값 1 만 없음). 제거할 2 의 개수 = 3."),
+      question: t(E,
+        "If we just ADD them: 1 (fill missing) + 3 (remove 2s) = 4. But the real answer is 3. Why is adding too many?",
+        "그냥 더하면: 1 (빠진 값 채우기) + 3 (2 제거) = 4. 그런데 진짜 답은 3. 왜 더하면 너무 많을까?"),
+      options: [
+        t(E,
+          "The op that turns a 2 into a 1 does BOTH jobs — removes a 2 AND fills the missing 1 — so it's counted once, not twice. Cost = max(1, 3) = 3.",
+          "2 를 1 로 바꾸는 연산 한 번이 두 일을 동시에 해 — 2 를 제거하고 + 빠진 1 을 채워 — 그래서 두 번이 아니라 한 번. 비용 = max(1, 3) = 3."),
+        t(E,
+          "Removing a 2 is free, so we only pay for filling the missing 1. Cost = 1.",
+          "2 제거는 공짜라서 빠진 1 채우기만 비용. 비용 = 1."),
+        t(E,
+          "We must remove all three 2s and separately add the 1, so 4 really is correct.",
+          "2 세 개를 다 지우고 따로 1 을 더해야 하니 4 가 맞다."),
+        t(E,
+          "Adding is right but we double-counted the 0, so it's 4 − 1 = 3.",
+          "더하기가 맞지만 0 을 두 번 세서 4 − 1 = 3."),
+      ],
+      correct: 0,
+      explain: t(E,
+        "One operation can do two things at once: changing a 2 into the missing 1 BOTH removes a copy of 2 AND supplies the 1. Summing double-counts that shared op. The cost is the bigger of the two needs — max(missing, count of i) — not their sum. Here max(1, 3) = 3.",
+        "한 번의 연산이 두 일을 동시에 해: 2 를 빠진 1 로 바꾸면 2 한 개를 제거함과 동시에 1 을 채워. 더하면 이 공유 연산을 두 번 세는 셈. 비용은 두 필요 중 더 큰 쪽 — max(빠진 값, i 의 개수) — 이지 합이 아냐. 여기선 max(1, 3) = 3."),
+    },
+
     /* 1-3 — Interactive: drag mex slider. */
     {
       type: "reveal",
@@ -140,19 +169,19 @@ export function makeMexesCh1(E) {
         "0 ✓, 1 ✓, 2 없음 ✓ — 이미 mex = 2. 0 ops."),
     },
 
-    /* 1-5 — Input quiz. */
+    /* 1-5 — Input quiz: max BITES here (remove side dominates). */
     {
       type: "input",
       narr: t(E,
-        "a = [0, 0, 0].  Walk through what's in the array — is it already mex = 1?",
-        "a = [0, 0, 0]. 배열 안에 뭐가 있나 — 이미 mex = 1?"),
+        "a = [0, 2, 2], target mex = 2. Count both jobs: missing from {0, 1} (0 ✓ present, 1 absent) and copies of 2 to remove. Then take the bigger one — max, not sum.",
+        "a = [0, 2, 2], 목표 mex = 2. 두 일을 세 봐: {0, 1} 중 빠진 값 (0 ✓ 있음, 1 없음) 과 제거할 2 의 개수. 그다음 더 큰 쪽 — 합이 아니라 max."),
       question: t(E,
-        "Min ops for a = [0, 0, 0] to make mex = 1?",
-        "a = [0, 0, 0] 의 mex = 1 만들기 최소 ops?"),
+        "Min ops for a = [0, 2, 2] to make mex = 2?",
+        "a = [0, 2, 2] 의 mex = 2 만들기 최소 ops?"),
       hint: t(E,
-        "For mex = 1: 0 must be present, 1 must be absent.",
-        "mex = 1 조건: 0 있고 1 없어야."),
-      answer: 0,
+        "Missing = 1 (only the 1 is absent). Copies of 2 to remove = 2. Answer = max(1, 2). One removed 2 can become the missing 1.",
+        "빠진 값 = 1 (1 만 없음). 제거할 2 = 2 개. 답 = max(1, 2). 제거하는 2 하나가 빠진 1 이 될 수 있어."),
+      answer: 2,
     },
   ];
 }

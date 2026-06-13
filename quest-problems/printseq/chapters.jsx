@@ -100,6 +100,98 @@ YES`}
         </div>),
     },
 
+    /* 1-2b — Discover the three shapes.  Three tiny sequences reveal that
+       every sequence is one of: all-same (A), repeated block (B), or must be
+       split (C).  This is WHERE the A/B/C trichotomy comes from — derived,
+       not asserted later in the code chapter. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Look at three tiny sequences. Each one forces a different move: copy one value, repeat a whole block, or CUT in two. Every sequence ends up being one of these three shapes.",
+        "작은 수열 세 개를 보자. 각각 다른 수를 강제해 — 값 하나 복사, 블록 통째로 반복, 둘로 자르기. 모든 수열은 결국 이 세 모양 중 하나야."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#16a34a", textAlign: "center", marginBottom: 10 }}>
+            🔎 {t(E, "Three sequences, three shapes", "수열 셋, 모양 셋")}
+          </div>
+
+          {/* Shape A */}
+          <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 10, padding: 12, marginBottom: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
+              <code style={{ background: "#dcfce7", padding: "2px 8px", borderRadius: 4, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace" }}>[2, 2, 2]</code>
+              <span style={{ fontSize: 12, color: "#15803d", fontWeight: 600 }}>{t(E, "all the same", "전부 같음")}</span>
+              <span style={{ fontSize: 11, color: C.dim }}>→ {t(E, "shape A: uniform", "모양 A: 균일")}</span>
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>REP 3 (PRINT 2) END</code>
+              {"  →  "}
+              <b style={{ color: "#15803d" }}>{t(E, "1 PRINT", "PRINT 1 개")}</b>
+            </div>
+          </div>
+
+          {/* Shape B */}
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: 12, marginBottom: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
+              <code style={{ background: "#dbeafe", padding: "2px 8px", borderRadius: 4, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace" }}>[1, 2, 1, 2]</code>
+              <span style={{ fontSize: 12, color: "#1d4ed8", fontWeight: 600 }}>{t(E, "block [1,2] twice", "[1,2] 블록 두 번")}</span>
+              <span style={{ fontSize: 11, color: C.dim }}>→ {t(E, "shape B: repeated block", "모양 B: 블록 반복")}</span>
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>REP 2 (PRINT 1; PRINT 2) END</code>
+              {"  →  "}
+              <b style={{ color: "#1d4ed8" }}>{t(E, "2 PRINTs", "PRINT 2 개")}</b>
+            </div>
+          </div>
+
+          {/* Shape C */}
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: 12, marginBottom: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
+              <code style={{ background: "#fee2e2", padding: "2px 8px", borderRadius: 4, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace" }}>[1, 1, 2, 2]</code>
+              <span style={{ fontSize: 12, color: "#b91c1c", fontWeight: 600 }}>{t(E, "neither — must cut", "둘 다 아님 — 잘라야 함")}</span>
+              <span style={{ fontSize: 11, color: C.dim }}>→ {t(E, "shape C: split", "모양 C: 쪼개기")}</span>
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>[1,1]</code>
+              {" | "}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>[2,2]</code>
+              {"  →  "}
+              {t(E, "each its own sub-program, ", "각각 하위 프로그램, ")}
+              <b style={{ color: "#b91c1c" }}>{t(E, "split the budget", "예산 나누기")}</b>
+            </div>
+            <div style={{ marginTop: 6, fontSize: 11, color: "#7f1d1d", lineHeight: 1.5 }}>
+              {t(E, "Not uniform (1≠2), and not one block repeated cleanly. The only move left is to cut it in two and solve each side.",
+                    "균일하지도 않고 (1≠2), 한 블록이 깔끔히 반복되지도 않아. 남은 수는 둘로 자르고 각 쪽을 푸는 것뿐.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px dashed #6ee7b7", borderRadius: 10, padding: 12, fontSize: 12, color: "#065f46", lineHeight: 1.65 }}>
+            🎯 {t(E,
+              "Every sequence is one of three shapes — all-same, a repeated block, or it must be split. That's why the code checks exactly A, B, C.",
+              "모든 수열은 세 모양 중 하나 — 다 같거나, 블록 반복이거나, 쪼개야 하거나. 그래서 코드가 정확히 A, B, C 를 검사하는 거야.")}
+          </div>
+        </div>),
+    },
+
+    /* 1-2c — Follow-up: name the shape. */
+    {
+      type: "quiz",
+      narr: t(E,
+        "Three shapes: all-same (A), repeated block (B), or split (C). Which one is this?",
+        "세 모양: 다 같음(A), 블록 반복(B), 쪼개기(C). 이건 어느 것?"),
+      question: t(E,
+        "Which shape is [3, 3, 1, 1]?",
+        "[3, 3, 1, 1] 은 어느 모양?"),
+      options: [
+        t(E, "A — all the same", "A — 다 같음"),
+        t(E, "B — one block repeated", "B — 한 블록 반복"),
+        t(E, "C — must be split", "C — 쪼개야 함"),
+      ],
+      correct: 2,
+      explain: t(E,
+        "3≠1 so not uniform (A), and [3,3,1,1] isn't one block repeated (B). Cut into [3,3] | [1,1] and solve each — shape C, split.",
+        "3≠1 이라 균일(A) 아니고, [3,3,1,1] 은 한 블록 반복(B) 도 아냐. [3,3] | [1,1] 로 잘라 각각 풀기 — 모양 C, 쪼개기."),
+    },
+
     /* 1-3 — Explorer simulator. */
     {
       type: "reveal",
