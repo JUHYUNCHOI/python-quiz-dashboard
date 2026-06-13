@@ -1076,20 +1076,6 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               )}
             </p>
             <div className="space-y-2">
-              <div className="bg-white rounded-lg p-3 border-2 border-blue-200">
-                <p className="text-sm font-black text-blue-800 mb-1">
-                  💡 {t("부족해요? 코딩 뱅크 →", "Need more? Coding Bank →")}
-                </p>
-                <p className="text-xs text-gray-700 leading-relaxed mb-2">
-                  {t(
-                    "lower_bound, parametric 활용 문제들 — 손이 익을 때까지 풀어요.",
-                    "lower_bound + parametric problems — practice until it's muscle memory.",
-                  )}
-                </p>
-                <Link href="/coding-bank" className="text-xs font-bold text-blue-700 underline hover:text-blue-900">
-                  {t("바로 가기 →", "Go →")}
-                </Link>
-              </div>
               <div className="bg-white rounded-lg p-3 border-2 border-purple-200">
                 <p className="text-sm font-black text-purple-800 mb-1">
                   🧩 {t("다음 알고리즘 토픽", "Next algorithm topic")}
@@ -1332,9 +1318,6 @@ export default function BinarySearchPage() {
             </div>
 
             <div className="space-y-2">
-              <Link href="/coding-bank" className="block px-4 py-2 bg-white hover:bg-blue-50 text-blue-700 rounded-xl font-bold text-sm text-center border-2 border-blue-200">
-                💼 {t("코딩 뱅크 — 이분탐색 응용 문제", "Coding Bank — binary search applied")} <ArrowRight className="inline w-4 h-4" />
-              </Link>
               <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
                 🗺️ {t("다음 알고리즘 토픽", "Next algorithm topic")} <ArrowRight className="inline w-4 h-4" />
               </Link>

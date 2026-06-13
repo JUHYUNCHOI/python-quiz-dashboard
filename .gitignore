@@ -36,3 +36,4 @@ next-env.d.ts
 /ios/
 /android/
 scripts/output/
+.superpowers/

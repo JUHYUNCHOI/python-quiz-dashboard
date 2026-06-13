@@ -1099,10 +1099,6 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 🏆 {t("문제 풀러 가기 — 트리 12 문제 (DFS, BFS, 트리 DP). ", "Go practice — 12 tree problems (DFS, BFS, tree DP). ")}
                 <Link href="/algo/tree/practice" className="font-bold underline hover:text-emerald-900">{t("연습 →", "Practice →")}</Link>
               </p>
-              <p className="text-[11px] text-blue-700 leading-relaxed">
-                💡 {t("옆길 — 아직 익숙하지 않으면 코딩 뱅크에서 가볍게 워밍업. ", "Side path — not feeling confident? Warm up in Coding Bank first. ")}
-                <Link href="/coding-bank" className="font-bold underline hover:text-blue-900">{t("바로 가기 →", "Go →")}</Link>
-              </p>
               <p className="text-[11px] text-purple-700 leading-relaxed">
                 🗺️ {t("다음 토픽 — 그래프, BFS/DFS. ", "Next topic — graph, BFS/DFS. ")}
                 <Link href="/algo" className="font-bold underline hover:text-purple-900">{t("알고리즘 지도 →", "Algo map →")}</Link>
@@ -1321,9 +1317,6 @@ export default function TreePage() {
             <div className="space-y-2">
               <Link href="/algo/tree/practice" className="block px-4 py-2 bg-white hover:bg-emerald-50 text-emerald-700 rounded-xl font-bold text-sm text-center border-2 border-emerald-200">
                 🌳 {t("트리 문제 12 — 풀러 가기", "12 tree problems — go solve")} <ArrowRight className="inline w-4 h-4" />
-              </Link>
-              <Link href="/coding-bank" className="block px-4 py-2 bg-white hover:bg-blue-50 text-blue-700 rounded-xl font-bold text-sm text-center border border-blue-200">
-                💼 {t("옆길 — 코딩 뱅크 워밍업", "Side path — Coding Bank warmup")} <ArrowRight className="inline w-4 h-4" />
               </Link>
               <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
                 🗺️ {t("다음 알고리즘 토픽 (그래프)", "Next topic (graph)")} <ArrowRight className="inline w-4 h-4" />

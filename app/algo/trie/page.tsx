@@ -982,10 +982,6 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 💡 {t("연습 문제 12 개 — 사전 / prefix / 와일드카드 / XOR. ", "12 practice problems — dictionary / prefix / wildcard / XOR. ")}
                 <Link href="/algo/trie/practice" className="font-bold underline hover:text-blue-900">{t("바로 가기 →", "Go →")}</Link>
               </p>
-              <p className="text-[11px] text-emerald-700 leading-relaxed">
-                💼 {t("아직 부족해요? 코딩 뱅크에서 문자열 + 자료구조 종합 문제. ", "Need more? Try string + data-structure combos in Coding Bank. ")}
-                <Link href="/coding-bank" className="font-bold underline hover:text-emerald-900">{t("바로 가기 →", "Go →")}</Link>
-              </p>
               <p className="text-[11px] text-purple-700 leading-relaxed">
                 🏆 {t("실전 시간 — USACO 문제로! ", "Real contest time — USACO! ")}
                 <Link href="/quests" className="font-bold underline hover:text-purple-900">{t("도전 문제 →", "Quests →")}</Link>
@@ -1203,9 +1199,6 @@ export default function TriePage() {
             <div className="space-y-2">
               <Link href="/algo/trie/practice" className="block px-4 py-2 bg-white hover:bg-blue-50 text-blue-700 rounded-xl font-bold text-sm text-center border-2 border-blue-200">
                 🔤 {t("트라이 문제 12 개 풀기", "12 trie problems")} <ArrowRight className="inline w-4 h-4" />
-              </Link>
-              <Link href="/coding-bank" className="block px-4 py-2 bg-white hover:bg-emerald-50 text-emerald-700 rounded-xl font-bold text-sm text-center border border-emerald-200">
-                💼 {t("코딩 뱅크 — 문자열 + 자료구조 종합", "Coding Bank — string + data-structure combos")} <ArrowRight className="inline w-4 h-4" />
               </Link>
               <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
                 🗺️ {t("알고리즘 지도", "Algo map")} <ArrowRight className="inline w-4 h-4" />

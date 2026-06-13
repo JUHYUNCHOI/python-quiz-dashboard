@@ -12,12 +12,17 @@ describe("summarizeConcepts", () => {
     expect(arr.total).toBe(2)
     expect(arr.solved).toBe(0)
   })
-  it("깔끔히 풀면 level/solved 반영", () => {
+  it("비율 기준 level — arr 2개 중 1개 풀면 능숙(50%), 마스터 아님", () => {
     const r = summarizeConcepts(pool, new Set(["a1"]), new Set(["a1"]))
     const arr = r.find(c => c.concept === "arr")!
     expect(arr.started).toBe(true)
     expect(arr.solved).toBe(1)
-    expect(arr.level).toBe("learning") // score 2
+    expect(arr.level).toBe("proficient") // 1/2 = 50% → 능숙 (마스터는 75%+)
+  })
+  it("일부만 풀면 마스터 아님 (3/21 = 배우는 중)", () => {
+    const big = Array.from({ length: 21 }, (_, i) => ({ id: `b${i}`, cluster: "big", difficulty: "쉬움" as const }))
+    const r = summarizeConcepts(big, new Set(["b0", "b1", "b2"]), new Set())
+    expect(r.find(c => c.concept === "big")!.level).toBe("learning") // 3/21 ≈ 14%
   })
   it("pool 등장 순서 유지 (arr → sort)", () => {
     const r = summarizeConcepts(pool, new Set(), new Set())

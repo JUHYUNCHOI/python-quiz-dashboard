@@ -978,11 +978,6 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               {t("그리디 = 정렬 + 1-pass. 그 위에 *왜 이 정렬?* 만 답하면 됨.", "Greedy = sort + 1-pass. Just answer *why this sort?*")}
             </p>
             <div className="mt-3 pt-3 border-t border-amber-200 space-y-2">
-              <p className="text-[11px] text-blue-700 leading-relaxed">
-                💡 <b>{t("옆길 — 더 연습 필요해요?", "Side path — need more practice?")}</b>{" "}
-                {t("코딩 뱅크에서 그리디 응용 문제로 다져요. ", "Strengthen with greedy problems in Coding Bank. ")}
-                <Link href="/coding-bank" className="font-bold underline hover:text-blue-900">{t("바로 가기 →", "Go →")}</Link>
-              </p>
               <p className="text-[11px] text-purple-700 leading-relaxed">
                 🗺️ {t("다음 토픽: BFS/DFS, DP, 이분탐색. ", "Next topics: BFS/DFS, DP, binary search. ")}
                 <Link href="/algo" className="font-bold underline hover:text-purple-900">{t("알고리즘 지도 →", "Algo map →")}</Link>
@@ -1205,9 +1200,6 @@ export default function GreedyPage() {
             </div>
 
             <div className="space-y-2">
-              <Link href="/coding-bank" className="block px-4 py-2 bg-white hover:bg-blue-50 text-blue-700 rounded-xl font-bold text-sm text-center border-2 border-blue-200">
-                💼 {t("코딩 뱅크 — 그리디 응용 문제", "Coding Bank — greedy applied")} <ArrowRight className="inline w-4 h-4" />
-              </Link>
               <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
                 🗺️ {t("다음 알고리즘 토픽 (DP / BFS)", "Next topic (DP / BFS)")} <ArrowRight className="inline w-4 h-4" />
               </Link>

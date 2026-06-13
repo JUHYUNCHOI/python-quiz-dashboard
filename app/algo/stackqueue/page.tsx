@@ -989,12 +989,6 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; already
             <p className="text-xs text-amber-700 mt-3 text-center italic">
               {t("이 정도면 Bronze 의 스택/큐 문제 대부분 풀어요!", "Enough to crack most Bronze stack/queue problems!")}
             </p>
-            <div className="mt-3 pt-3 border-t border-amber-200">
-              <p className="text-[11px] text-blue-700 leading-relaxed">
-                💡 {t("아직 부족해요? 코딩 뱅크에서 종합 도전 (STL 만). ", "Need more? Try Coding Bank — STL-only multi-concept. ")}
-                <Link href="/coding-bank" className="font-bold underline hover:text-blue-900">{t("바로 가기 →", "Go →")}</Link>
-              </p>
-            </div>
           </div>
         )}
       </div>
@@ -1209,9 +1203,6 @@ export default function StackQueuePage() {
             <div className="space-y-2">
               <Link href="/algo/stackqueue/practice" className="block px-4 py-2 bg-white hover:bg-emerald-50 text-emerald-700 rounded-xl font-bold text-sm text-center border-2 border-emerald-200">
                 🏆 {t("스택/큐 문제 풀러 가기", "Stack/Queue practice problems")} <ArrowRight className="inline w-4 h-4" />
-              </Link>
-              <Link href="/coding-bank" className="block px-4 py-2 bg-white hover:bg-blue-50 text-blue-700 rounded-xl font-bold text-sm text-center border-2 border-blue-200">
-                💼 {t("코딩 뱅크 — 스택/큐 응용 문제", "Coding Bank — stack/queue applied")} <ArrowRight className="inline w-4 h-4" />
               </Link>
               <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
                 🗺️ {t("다음 알고리즘 토픽 보기", "Next algorithm topic")} <ArrowRight className="inline w-4 h-4" />

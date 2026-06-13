@@ -1018,10 +1018,6 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               {t("그래프가 손에 잡히면 — 최단 경로, 다익스트라, 위상 정렬, MST 다 열려요!", "Once graphs click — shortest paths, Dijkstra, topological sort, MST all open!")}
             </p>
             <div className="mt-3 pt-3 border-t border-amber-200 space-y-2">
-              <p className="text-[11px] text-blue-700 leading-relaxed">
-                💡 {t("아직 부족해요? 코딩 뱅크에서 BFS/DFS 활용 문제. ", "Need more? Try BFS/DFS problems in Coding Bank. ")}
-                <Link href="/coding-bank" className="font-bold underline hover:text-blue-900">{t("바로 가기 →", "Go →")}</Link>
-              </p>
               <p className="text-[11px] text-purple-700 leading-relaxed">
                 🌲 {t("다음 토픽: 그래프 위에서 — 이분탐색, DP, 백트래킹. ", "Next topics on graphs: binary search, DP, backtracking. ")}
                 <Link href="/algo" className="font-bold underline hover:text-purple-900">{t("알고리즘 지도 →", "Algo map →")}</Link>
@@ -1237,9 +1233,6 @@ export default function GraphPage() {
             </div>
 
             <div className="space-y-2">
-              <Link href="/coding-bank" className="block px-4 py-2 bg-white hover:bg-blue-50 text-blue-700 rounded-xl font-bold text-sm text-center border-2 border-blue-200">
-                💼 {t("코딩 뱅크 — BFS/DFS 응용 문제", "Coding Bank — BFS/DFS applied")} <ArrowRight className="inline w-4 h-4" />
-              </Link>
               <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
                 🗺️ {t("다음 알고리즘 토픽", "Next algorithm topic")} <ArrowRight className="inline w-4 h-4" />
               </Link>

@@ -815,46 +815,78 @@ export default function CurriculumPage() {
       {/* 커리큘럼: 넓은 레이아웃 + 양쪽 여백 */}
       <main className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 pb-24">
         
-        {/* 코스 선택 탭 */}
+        {/* 코스 진행 스트립 — Python → C++ (토글 아님, 여정의 단계로 표현) */}
         <div className="max-w-[1600px] mx-auto mb-5 pt-3">
-          <div className="flex flex-wrap gap-2">
-            {/* Python 탭 */}
+          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+            {/* 1단계: Python */}
             <button
               onClick={() => handleCourseChange("python")}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-bold transition-all ${
+              className={cn(
+                "flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-bold transition-all",
                 selectedCourse === "python"
-                  ? "bg-orange-500 text-white shadow-sm"
-                  : "bg-white text-gray-700 hover:bg-orange-50"
-              }`}
+                  ? "bg-orange-500 text-white border-orange-500 shadow-sm"
+                  : "bg-white text-gray-600 border-gray-200 hover:bg-orange-50"
+              )}
             >
               🐍 Python
-              <span className={`text-[10px] font-normal ${selectedCourse === "python" ? "text-white/70" : "text-gray-400"}`}>52강</span>
+              <span className={cn("text-[10px] font-normal", selectedCourse === "python" ? "text-white/70" : "text-gray-400")}>
+                {pythonLessonsDone}/{pythonLessonsTotal}강
+              </span>
             </button>
 
-            {/* C++ 탭 */}
+            {/* 진행 화살표 — 순서임을 시각화 */}
+            <span className="text-gray-300 text-base select-none">→</span>
+
+            {/* 2단계: C++ (Python 다음) */}
             <button
               onClick={() => handleCourseChange("cpp")}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-bold transition-all ${selectedCourse === "cpp" ? "bg-blue-600 text-white shadow-sm" : hasPythonProgress ? "bg-white text-gray-700 hover:bg-blue-50" : "bg-white text-gray-400 border-gray-300 hover:bg-blue-50"}`}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-bold transition-all",
+                selectedCourse === "cpp"
+                  ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                  : !hasPythonProgress
+                    ? "bg-white text-gray-400 border-gray-200 hover:bg-blue-50"
+                    : "bg-white text-gray-600 border-gray-200 hover:bg-blue-50"
+              )}
             >
               ⚡ C++
-              <span className={`text-[10px] font-normal ${selectedCourse === "cpp" ? "text-white/70" : "text-gray-400"}`}>20강</span>
+              <span className={cn(
+                "text-[10px] font-normal",
+                selectedCourse === "cpp" ? "text-white/70" : !hasPythonProgress ? "text-gray-400" : "text-blue-500"
+              )}>
+                {selectedCourse === "cpp"
+                  ? "20강"
+                  : !hasPythonProgress
+                    ? `🔒 ${t("Python 먼저", "Python first")}`
+                    : pythonLessonsDone >= pythonLessonsTotal
+                      ? `✨ ${t("이제 도전!", "Ready!")}`
+                      : t("다음 단계", "Next")}
+              </span>
             </button>
 
-            {/* IGCSE — 선생님 또는 IGCSE 트랙 학생 */}
+            {/* IGCSE — 선생님/IGCSE 학생만, 별도 트랙이라 조용히 우측에 */}
             {(isTeacher || isIgcseStudent) && (
               <button
                 onClick={() => handleCourseChange("pseudo")}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-bold transition-all ${
+                className={cn(
+                  "ml-auto flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-all",
                   selectedCourse === "pseudo"
-                    ? "bg-green-500 text-white shadow-sm"
-                    : "bg-white text-green-700 hover:bg-green-50"
-                }`}
+                    ? "bg-green-500 text-white border-green-500 shadow-sm"
+                    : "bg-white text-green-700 border-gray-200 hover:bg-green-50"
+                )}
               >
                 📄 IGCSE
-                <span className={`text-[10px] font-normal ${selectedCourse === "pseudo" ? "text-white/70" : "text-gray-400"}`}>37강</span>
               </button>
             )}
           </div>
+          {/* 한 줄 안내 — '선택'이 아니라 '순서'임을 알려줌 */}
+          <p className="text-xs text-gray-400 mt-2">
+            {selectedCourse === "cpp"
+              ? t("C++는 파이썬을 안다는 전제로 만든 과정이에요.", "C++ assumes you already know Python.")
+              : selectedCourse === "pseudo"
+                ? t("IGCSE 0478 트랙이에요.", "IGCSE 0478 track.")
+                : t("파이썬을 끝내면 자연스럽게 C++로 이어져요.", "Finish Python, then continue to C++.")}
+          </p>
 
           {/* C++ 선택 모달 */}
           {showCppModal && (
@@ -1004,7 +1036,17 @@ export default function CurriculumPage() {
                         🎓 {t("수업 완료! 다음 단계 보기", "Lessons done! See what's next")} →
                       </Link>
                     )}
-                    {completedCount > 0 && (
+                    {/* 연습 CTA — 수업 다음 단계는 '연습'. 연습이 열렸으면 항상 여기로 (알고리즘 점프 X) */}
+                    {(isCpp ? practiceUnlocked : isPseudo ? false : pyPracticeUnlocked) && (
+                      <Link
+                        href="/practice"
+                        className="bg-violet-500 text-white px-5 py-3 rounded-xl border border-gray-200 font-bold hover:bg-violet-600 transition-colors flex items-center justify-center gap-2 shadow-sm"
+                      >
+                        💪 {t("연습문제", "Practice")}
+                      </Link>
+                    )}
+                    {/* 알고리즘 CTA — 연습 40개 완료(또는 선생님) 후에만. 그 전엔 노출 X */}
+                    {(isCpp ? algoUnlocked : isPseudo ? false : pyAlgoUnlocked) && (
                       <Link
                         href="/algo"
                         className="bg-purple-500 text-white px-5 py-3 rounded-xl border border-gray-200 font-bold hover:bg-purple-600 transition-colors flex items-center justify-center gap-2 shadow-sm"
@@ -1129,11 +1171,6 @@ export default function CurriculumPage() {
                       <Link href="/practice?view=kl" className="text-xs text-center bg-amber-500 text-white rounded-lg py-1.5 font-black hover:bg-amber-600 transition-colors">
                         🎯 {t("KL 대비 문제 풀기 →", "KL Prep Problems →")}
                       </Link>
-                      {completedLessons.has("cpp-p3") && (
-                        <Link href="/coding-bank" className="text-xs text-center border border-emerald-400 text-emerald-600 rounded-lg py-1.5 font-bold hover:bg-emerald-50 transition-colors">
-                          🏦 {t("코딩 뱅크 →", "Coding Bank →")}
-                        </Link>
-                      )}
                     </>
                   ) : (
                     <>
@@ -1646,15 +1683,15 @@ export default function CurriculumPage() {
                                       </p>
                                       {/* 다음 1개 — 큰 버튼 하나 (결정 피로 0) */}
                                       <Link
-                                        href="/coding-bank"
+                                        href="/practice?lang=cpp"
                                         className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm sm:text-base font-black shadow-md transition-all"
                                       >
-                                        ⭐ {t("다음 → 코딩 뱅크에서 풀기 시작", "Next → Start solving in Coding Bank")}
+                                        ⭐ {t("다음 → 연습 문제 많이 풀기", "Next → Practice lots of problems")}
                                       </Link>
                                       <p className="text-[11px] text-gray-500 mt-2">
                                         {t(
-                                          "배운 STL·문법만으로 푸는 종합 문제 — 알고리즘 들어가기 전 워밍업이에요.",
-                                          "Multi-step problems with just the STL/syntax you know — a warm-up before algorithms."
+                                          "배운 걸로 문제를 많이 풀어 실력을 쌓아요 — 알고리즘 들어가기 전 단계.",
+                                          "Solve lots of problems with what you know — before moving on to algorithms."
                                         )}
                                       </p>
                                       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-[11px] text-gray-400">

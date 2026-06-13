@@ -40,7 +40,7 @@ const PLACEMENTS: Record<string, MapPlacement> = {
   "python":          { x: 28, y: 12, landmark: "🌱" },
   "python-practice": { x: 28, y: 35, landmark: "💪" },
   "cpp":             { x: 72, y: 35, landmark: "⚡" },
-  "cpp-practice":    { x: 72, y: 55, landmark: "🌉" },
+  "cpp-practice":    { x: 72, y: 55, landmark: "💪" },
   "algo":            { x: 28, y: 65, landmark: "🧩" },
   "usaco":           { x: 28, y: 88, landmark: "🏆" },
 }
@@ -350,7 +350,7 @@ export default function JourneyPage() {
           .eq("user_id", user.id)
           .eq("completed", true)
         if (cancelled) return
-        if (data) {
+        if (Array.isArray(data)) {
           setCompletedIds(prev => {
             const merged = new Set<string | number>(prev)
             data.forEach(r => merged.add(r.lesson_id))
@@ -413,12 +413,6 @@ export default function JourneyPage() {
   const PY_DONE = PY_DONE_LOCAL
   const CPP_LIST = ["cpp-1","cpp-2","cpp-3","cpp-4","cpp-5","cpp-6","cpp-7","cpp-8","cpp-p1","cpp-9","cpp-10","cpp-11","cpp-12","cpp-13","cpp-14","cpp-21","cpp-22","cpp-p2","cpp-15","cpp-16","cpp-17","cpp-18","cpp-19","cpp-20","cpp-23","cpp-p3"]
   const CPP_DONE = CPP_LIST.filter(id => completedIds.has(id)).length
-  const BANK_SOLVED = (() => {
-    try {
-      const raw = typeof window !== "undefined" ? localStorage.getItem("coding-bank-solved") : null
-      return raw ? (JSON.parse(raw) as string[]).length : 0
-    } catch { return 0 }
-  })()
   // 20 알고리즘 토픽 — Wave 1 (Bronze 6) + Wave 2 (Silver 6) + Wave 3 (Gold+ 8)
   const ALL_ALGO_TOPICS = [
     "sorting","prefixsum","array","stackqueue","hashtable","string",      // Wave 1
@@ -434,9 +428,9 @@ export default function JourneyPage() {
     } catch { return false }
   }).length
 
+  // 코딩 뱅크 = 연습의 '종합 도전'(별도 단계 아님) — 연습에 흡수. 요약은 4단계로 단순.
   const stages = trackId === "B"
     ? [
-        // 코딩 뱅크(cpp-16 잠금, C++ STL)는 Python 트랙에서 제외 — 메인 지도·smart-next 와 일치
         { emoji: "🐍", label: "Python 수업+연습", done: PY_DONE, total: 52 },
         { emoji: "🧩", label: "알고리즘 (Py)", done: ALGO_MASTERED, total: 20 },
         { emoji: "🏆", label: "대회", done: 0, total: 1 },
@@ -444,14 +438,12 @@ export default function JourneyPage() {
     : trackId === "C"
     ? [
         { emoji: "⚡", label: "C++ 수업+연습", done: CPP_DONE, total: CPP_LIST.length },
-        { emoji: "💪", label: "코딩 뱅크 (도전)", done: BANK_SOLVED, total: 5 },
         { emoji: "🧩", label: "알고리즘", done: ALGO_MASTERED, total: 20 },
         { emoji: "🏆", label: "대회", done: 0, total: 1 },
       ]
     : [
         { emoji: "🐍", label: "Python 수업+연습", done: PY_DONE, total: 52 },
         { emoji: "⚡", label: "C++ 수업+연습", done: CPP_DONE, total: CPP_LIST.length },
-        { emoji: "💪", label: "코딩 뱅크 (도전)", done: BANK_SOLVED, total: 5 },
         { emoji: "🧩", label: "알고리즘", done: ALGO_MASTERED, total: 20 },
         { emoji: "🏆", label: "대회", done: 0, total: 1 },
       ]
@@ -774,11 +766,7 @@ export default function JourneyPage() {
           <span className="block sm:inline">💡 {t("더 풀고 싶으면:", "Want more practice?")} </span>
           <span className="inline-block mt-1 sm:mt-0">
             <Link href="/practice" className="text-blue-600 hover:underline font-bold">
-              {t("수업별 연습", "Lesson Clusters")}
-            </Link>
-            <span className="mx-1.5 text-gray-300">·</span>
-            <Link href="/coding-bank" className="text-amber-600 hover:underline font-bold">
-              {t("코딩 뱅크", "Coding Bank")}
+              {t("연습 문제", "Practice")}
             </Link>
             <span className="mx-1.5 text-gray-300">·</span>
             <Link href="/algo" className="text-purple-600 hover:underline font-bold">

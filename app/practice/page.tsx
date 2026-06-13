@@ -173,19 +173,23 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
   const { t, lang: locale } = useLanguage()
   const [lastId, setLastId] = useState<string | null>(null)
   useEffect(() => { try { setLastId(localStorage.getItem("practice-last-problem")) } catch {} }, [])
+  const [topicFilter, setTopicFilter] = useState("all") // "all" | 토픽명
+  const [diffFilter, setDiffFilter] = useState<"all" | "쉬움" | "보통" | "어려움">("all")
   const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
-  // 수업 연습 + KL(🎯, 양언어) 을 한 사다리에 — KL도 난이도 태그가 있으니 같이 녹임
-  const lessonAll = clusters.flatMap(c => c.problems.map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: false })))
-  const klAll = ALL_CLUSTERS.flatMap(c => c.problems.filter(p => p.kl).map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: true })))
-  const all = [...lessonAll, ...klAll]
+  // 연습 = 수업 병행 클러스터만 (배운 개념 굳히기). 대회대비/알고리즘 문제는 알고리즘 단계 소속.
+  const all = clusters.flatMap(c => c.problems.map(p => ({ p, cluster: c.id, topic: clusterName(c.id), kl: false })))
+  const topics = Array.from(new Set(all.map(x => x.topic)))
+  const filtered = topicFilter === "all" ? all
+    : all.filter(x => x.topic === topicFilter)
 
   // 추천 다음 1개 — 적응형(내 수준에 맞는 난이도, 토픽 무관)
   const pool = all.map(x => ({ id: x.p.id, cluster: x.cluster, difficulty: x.p.difficulty }))
   const rec = getAdaptiveNext({ pool, solvedSet, starredSet })
   const recX = rec ? all.find(x => x.p.id === rec.problemId) : null
   const lastX = lastId ? all.find(x => x.p.id === lastId) : null
-  const totalSolved = all.filter(x => solvedSet.has(x.p.id)).length
-  const summary = summarizeConcepts(pool, solvedSet, starredSet).filter(c => c.started)
+  const solvedInView = filtered.filter(x => solvedSet.has(x.p.id)).length // 현재 보기(주제 필터) 기준 진행
+  const viewLabel = topicFilter === "all" ? t("전체 진행", "Overall") : topicFilter
+  const pct = (n: number, d: number) => (d > 0 ? Math.round((n / d) * 100) : 0)
 
   return (
     <div className="flex flex-col gap-3">
@@ -200,9 +204,9 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
           <p className="text-xs text-gray-500 mt-0.5">{recX.kl ? "🎯 " : ""}{recX.topic} · {recX.p.difficulty} <span className="ml-1 text-violet-400 font-bold">→</span></p>
         </Link>
       ) : (
-        <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-4 text-center text-sm font-bold text-emerald-700">
-          {t("이 언어 연습을 다 풀었어요! 🎉 🧩 알고리즘으로 가요.", "All practice cleared! 🎉 On to algorithms.")}
-        </div>
+        <Link href="/algo" className="block rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-4 text-center text-sm font-bold text-emerald-700 hover:bg-emerald-100 transition-colors">
+          {t("이 언어 연습을 다 풀었어요! 🎉 🧩 알고리즘 배우러 가기 →", "All practice cleared! 🎉 On to algorithms →")}
+        </Link>
       )}
 
       {/* 📍 마지막에 풀던 곳 — 이어가기 쉽게 */}
@@ -219,65 +223,96 @@ function AdaptivePanel({ lang, solvedSet, starredSet }: { lang: Lang; solvedSet:
           <span className="text-gray-300 shrink-0" aria-hidden>→</span>
         </Link>
       )}
-      {totalSolved > 0 && (
-        <p className="text-xs text-gray-400 text-center -mt-1">✓ {t(`지금까지 ${totalSolved}문제 풀었어요`, `${totalSolved} solved so far`)}</p>
+      {/* 🔎 필터 — 주제(드롭다운) + 난이도(칩). 평소 전체, 골라보고 싶을 때만 */}
+      <div className="flex items-center gap-2 flex-wrap text-xs">
+        <select
+          value={topicFilter}
+          onChange={e => setTopicFilter(e.target.value)}
+          className="font-bold border border-gray-200 rounded-lg px-2 py-1.5 bg-white text-gray-700"
+        >
+          <option value="all">📚 {t("주제: 전체", "Topic: All")}</option>
+          {topics.map(tp => <option key={tp} value={tp}>{tp}</option>)}
+        </select>
+        <span className="text-gray-200">|</span>
+        {([["all", t("전체", "All")], ["쉬움", "🟢 " + t("쉬움", "Easy")], ["보통", "🟡 " + t("보통", "Med")], ["어려움", "🔴 " + t("어려움", "Hard")]] as const).map(([k, label]) => (
+          <button
+            key={k}
+            onClick={() => setDiffFilter(k as typeof diffFilter)}
+            className={"font-bold px-2.5 py-1 rounded-full border transition-colors " + (diffFilter === k ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-500 border-gray-200 hover:border-gray-400")}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* 📊 전체 진행 — 현재 보기(주제 필터) 기준 한눈에 */}
+      {filtered.length > 0 && (
+        <div className="rounded-xl border border-gray-200 bg-white px-4 py-3">
+          <div className="flex items-center justify-between text-xs font-bold mb-1.5">
+            <span className="text-gray-600">{viewLabel}</span>
+            <span className={solvedInView > 0 ? "text-green-600" : "text-gray-400"}>✓ {solvedInView} / {filtered.length} ({pct(solvedInView, filtered.length)}%)</span>
+          </div>
+          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-full bg-green-400 transition-all" style={{ width: `${pct(solvedInView, filtered.length)}%` }} />
+          </div>
+        </div>
       )}
 
-      {/* 난이도 단계 사다리 — 쉬움 펼침, 보통/어려움 접힘. 각 단계 안은 토픽 섞임 */}
-      {TIERS.map(tier => {
-        const items = all.filter(x => x.p.difficulty === tier.d)
+      {/* 난이도 단계 사다리 — 안 푼 건 위(할 것), 푼 건 '완료' 접개식으로 분리 */}
+      {TIERS.filter(tier => diffFilter === "all" || tier.d === diffFilter).map(tier => {
+        const items = filtered.filter(x => x.p.difficulty === tier.d)
         if (items.length === 0) return null
-        const solvedCnt = items.filter(x => solvedSet.has(x.p.id)).length
-        const ordered = [...items.filter(x => !solvedSet.has(x.p.id)), ...items.filter(x => solvedSet.has(x.p.id))]
-        const SHOWN = 12
+        const solvedItems = items.filter(x => solvedSet.has(x.p.id))
+        const unsolved = items.filter(x => !solvedSet.has(x.p.id))
+        const solvedCnt = solvedItems.length
+        // 푼 것(✓) 먼저 → 안 푼 것. 진행이 목록에서 바로 보이게.
+        const ordered = [...solvedItems, ...unsolved]
+        const SHOWN = 15
         return (
-          <details key={tier.d} open={tier.d === "쉬움"} className="rounded-2xl border border-gray-200 bg-white px-4 py-3">
-            <summary className="flex items-center gap-2 text-sm font-bold text-gray-700 cursor-pointer">
-              <span className={"w-2.5 h-2.5 rounded-full " + tier.dot} />
-              {t(tier.ko, tier.en)}
-              <span className="ml-auto text-xs font-normal text-gray-400">{solvedCnt}/{items.length}</span>
+          <details key={tier.d} open={tier.d === "쉬움" || topicFilter !== "all" || diffFilter !== "all"} className="rounded-2xl border border-gray-200 bg-white px-4 py-3">
+            <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+              <div className="flex items-center gap-2 text-sm font-bold text-gray-700">
+                <span className={"w-2.5 h-2.5 rounded-full " + tier.dot} />
+                {t(tier.ko, tier.en)}
+                <span className={"ml-auto text-xs " + (solvedCnt > 0 ? "font-bold text-green-600" : "font-normal text-gray-400")}>
+                  {solvedCnt > 0 ? `✓ ${solvedCnt} / ${items.length}` : `0 / ${items.length}`}
+                </span>
+              </div>
+              {/* 단계별 진행 바 — 접혀 있어도 얼마나 했는지 보임 */}
+              <div className="mt-1.5 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full bg-green-400 transition-all" style={{ width: `${pct(solvedCnt, items.length)}%` }} />
+              </div>
             </summary>
             <div className="mt-3 flex flex-col gap-1.5">
+              {/* 푼 것(✓ 초록) 먼저, 그 다음 안 푼 것(→) — 한 목록에서 진행이 바로 보임 */}
               {ordered.slice(0, SHOWN).map(x => {
                 const solved = solvedSet.has(x.p.id)
                 return (
                   <Link
                     key={x.p.id}
                     href={`/practice?cluster=${x.cluster}&problem=${x.p.id}&from=practice`}
-                    className={"flex items-center gap-2 rounded-lg border px-3 py-2 transition-all hover:border-violet-400 " + (solved ? "border-green-200 bg-green-50/60" : "border-gray-200 bg-white")}
+                    className={"flex items-center gap-2 rounded-lg border px-3 py-2 transition-all " + (solved ? "border-green-200 bg-green-50/60" : "border-gray-200 bg-white hover:border-violet-400")}
                   >
-                    <span className="text-sm font-semibold text-gray-900 flex-1 truncate">{localizeProblem(x.p, locale).title}</span>
-                    <span className="text-[10px] text-gray-400 shrink-0">{x.kl ? "🎯 " : ""}{x.topic}</span>
-                    {solved ? <span className="text-green-500 shrink-0 text-xs">✓</span> : <span className="text-gray-300 shrink-0" aria-hidden>→</span>}
+                    {solved
+                      ? <span className="text-green-500 shrink-0 text-xs">✓</span>
+                      : <span className="w-3.5 shrink-0" aria-hidden />}
+                    <span className={"text-sm flex-1 truncate " + (solved ? "text-gray-400 line-through" : "font-semibold text-gray-900")}>{localizeProblem(x.p, locale).title}</span>
+                    <span className="text-[10px] text-gray-400 shrink-0">{x.topic}</span>
+                    {!solved && <span className="text-gray-300 shrink-0" aria-hidden>→</span>}
                   </Link>
                 )
               })}
               {ordered.length > SHOWN && (
-                <p className="text-[11px] text-gray-400 text-center pt-1">+{ordered.length - SHOWN}{t("개 더 (위 추천 따라가면 자동으로)", " more (the recommendation walks you through)")}</p>
+                <p className="text-[11px] text-gray-400 text-center pt-1">+{ordered.length - SHOWN}{t("개 더", " more")}</p>
+              )}
+              {solvedCnt === items.length && items.length > 0 && (
+                <p className="text-[11px] text-green-600 font-bold text-center py-1">🎉 {t("이 난이도 다 풀었어요!", "All done in this tier!")}</p>
               )}
             </div>
           </details>
         )
       })}
 
-      {/* 📊 내 실력 (접이식) — KL(🎯)은 위 난이도 사다리에 녹아 있음 */}
-      {summary.length > 0 && (
-        <details className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2">
-          <summary className="text-xs font-bold text-gray-600 cursor-pointer">📊 {t("내 실력 (개념별)", "My skill (by concept)")}</summary>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {summary.map(c => {
-              const [ko, en, cls] = _MASTERY_LABEL[c.level]
-              return (
-                <span key={c.concept} className="text-[11px] inline-flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-2 py-1">
-                  <span className="font-semibold text-gray-700">{clusterName(c.concept)}</span>
-                  <span className={"px-1.5 py-0.5 rounded font-bold " + cls}>{t(ko, en)}</span>
-                  <span className="text-gray-400">{c.solved}/{c.total}</span>
-                </span>
-              )
-            })}
-          </div>
-        </details>
-      )}
     </div>
   )
 }
@@ -393,31 +428,32 @@ function ClusterList({
   return (
     <div className="flex flex-col gap-4 pb-24">
 
-      {/* 헤더 */}
-      <div className="flex items-center gap-3">
+      {/* 헤더 — 제목(좌) + 언어 토글(우측 상단, 위치 통일) */}
+      <div className="flex items-start gap-3">
         <button onClick={onBack} className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors shrink-0">
           <ArrowLeft className="w-4 h-4 text-gray-600" />
         </button>
-        <div>
+        <div className="min-w-0 flex-1">
           <h1 className="text-2xl font-bold text-gray-900">{t("코딩 연습", "Practice")}</h1>
           <p className="text-sm text-gray-400 mt-0.5">{t("문제를 풀면 알고리즘 학습이 열려요", "Solve problems to unlock algorithm study")}</p>
         </div>
-      </div>
-
-      {/* 언어 탭 */}
-      <div className="flex bg-gray-100 rounded-xl p-1">
-        {(["cpp", "python"] as Lang[]).map(l => (
-          <button
-            key={l}
-            onClick={() => onLangChange(l)}
-            className={cn(
-              "flex-1 py-2 rounded-lg text-sm font-semibold transition-all",
-              lang === l ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
-            )}
-          >
-            {l === "cpp" ? "C++" : "Python"}
-          </button>
-        ))}
+        {/* 언어 토글 — 우측 상단 */}
+        <div className="flex gap-1 shrink-0">
+          {(["python", "cpp"] as Lang[]).map(l => (
+            <button
+              key={l}
+              onClick={() => onLangChange(l)}
+              className={cn(
+                "flex items-center gap-1 px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold transition-all",
+                lang === l
+                  ? (l === "cpp" ? "bg-blue-600 text-white shadow-sm" : "bg-orange-500 text-white shadow-sm")
+                  : "bg-white text-gray-500 hover:bg-gray-50"
+              )}
+            >
+              {l === "cpp" ? "⚡ C++" : "🐍 Python"}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* ⭐ 적응형: 수업별+KL 합친 "다음 1개" + 📊 내 실력 (탭 고르기 없음) */}
@@ -925,7 +961,16 @@ function PracticeContent() {
       <main className="max-w-5xl mx-auto px-4 pt-4">
         <ProblemDetail
           problem={problem}
-          onBack={() => setParam("problem", null)}
+          onBack={() => {
+            // 사다리/대회대비에서 연 단일 문제 → 끝내면 목록으로 (cluster만 남기면 세션 인트로로 튕김)
+            if (fromParam === "practice" || fromParam === "kl") {
+              const p = new URLSearchParams()
+              const l = searchParams.get("lang"); if (l) p.set("lang", l)
+              router.push(p.toString() ? `/practice?${p.toString()}` : "/practice")
+            } else {
+              setParam("problem", null)
+            }
+          }}
           onMarkSolved={markSolved}
           onMarkStarred={markStarred}
         />

@@ -917,10 +917,6 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               {t("재귀가 손에 잡히면 — DP, 백트래킹, 트리, 그래프 다 열려요!", "Once recursion clicks, DP/backtracking/trees/graphs all open up!")}
             </p>
             <div className="mt-3 pt-3 border-t border-amber-200 space-y-2">
-              <p className="text-[11px] text-blue-700 leading-relaxed">
-                💡 {t("아직 부족해요? 코딩 뱅크에서 재귀 활용 문제. ", "Need more? Try recursion problems in Coding Bank. ")}
-                <Link href="/coding-bank" className="font-bold underline hover:text-blue-900">{t("바로 가기 →", "Go →")}</Link>
-              </p>
               <p className="text-[11px] text-purple-700 leading-relaxed">
                 🌲 {t("다음 토픽: 재귀 위에서 — DP, 백트래킹, 트리. ", "Next topics built on recursion: DP, backtracking, trees. ")}
                 <Link href="/algo" className="font-bold underline hover:text-purple-900">{t("알고리즘 지도 →", "Algo map →")}</Link>
@@ -1139,9 +1135,6 @@ export default function RecursionPage() {
             </div>
 
             <div className="space-y-2">
-              <Link href="/coding-bank" className="block px-4 py-2 bg-white hover:bg-blue-50 text-blue-700 rounded-xl font-bold text-sm text-center border-2 border-blue-200">
-                💼 {t("코딩 뱅크 — 재귀 응용 문제", "Coding Bank — recursion applied")} <ArrowRight className="inline w-4 h-4" />
-              </Link>
               <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
                 🗺️ {t("다음 알고리즘 토픽 (DP / 백트래킹)", "Next topic (DP / backtracking)")} <ArrowRight className="inline w-4 h-4" />
               </Link>

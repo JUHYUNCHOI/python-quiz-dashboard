@@ -912,13 +912,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                     </p>
                   </div>
                   <div className="flex flex-col gap-2">
-                    {/* 코딩 뱅크 — 문법 ↔ 알고리즘 사이 다리. 모든 학생에게 노출 */}
-                    <button
-                      onClick={() => router.push("/coding-bank")}
-                      className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-1.5"
-                    >
-                      🌟 {t("코딩 뱅크 100 문제 (알고리즘 가기 전)", "Coding Bank (before Algorithm)")} →
-                    </button>
                     <button
                       onClick={() => router.push("/algo")}
                       className="w-full py-2.5 bg-purple-500 hover:bg-purple-600 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-1.5"

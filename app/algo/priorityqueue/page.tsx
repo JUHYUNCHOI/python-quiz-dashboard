@@ -1075,10 +1075,6 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               {t("heap 손에 잡히면 — 최단경로, 그리디 최적화, 스트림 처리 다 풀려요!", "Once heap clicks, shortest paths, greedy optimization, and stream problems all open up!")}
             </p>
             <div className="mt-3 pt-3 border-t border-amber-200 space-y-2">
-              <p className="text-[11px] text-blue-700 leading-relaxed">
-                💡 {t("아직 부족해요? 코딩 뱅크에서 heap 활용 문제. ", "Need more? Try heap problems in Coding Bank. ")}
-                <Link href="/coding-bank" className="font-bold underline hover:text-blue-900">{t("바로 가기 →", "Go →")}</Link>
-              </p>
               <p className="text-[11px] text-purple-700 leading-relaxed">
                 🌐 {t("다음 토픽: 최단경로 — heap 이 본격적으로 활약. ", "Next topic: shortest paths — heap takes the lead. ")}
                 <Link href="/algo" className="font-bold underline hover:text-purple-900">{t("알고리즘 지도 →", "Algo map →")}</Link>
@@ -1299,9 +1295,6 @@ export default function PriorityQueuePage() {
             <div className="space-y-2">
               <Link href="/algo/priorityqueue/practice" className="block px-4 py-2 bg-white hover:bg-emerald-50 text-emerald-700 rounded-xl font-bold text-sm text-center border-2 border-emerald-200">
                 ⚡ {t("우선순위 큐 문제 풀이 (12)", "Priority Queue Practice (12)")} <ArrowRight className="inline w-4 h-4" />
-              </Link>
-              <Link href="/coding-bank" className="block px-4 py-2 bg-white hover:bg-blue-50 text-blue-700 rounded-xl font-bold text-sm text-center border-2 border-blue-200">
-                💼 {t("코딩 뱅크 — heap 응용", "Coding Bank — heap applied")} <ArrowRight className="inline w-4 h-4" />
               </Link>
               <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200">
                 🗺️ {t("다음 알고리즘 토픽 (최단경로)", "Next topic (shortest path)")} <ArrowRight className="inline w-4 h-4" />

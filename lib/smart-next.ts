@@ -54,21 +54,6 @@ const TRACKS: Record<"python" | "cpp" | "pseudo", Track> = {
  *   4. 모든 Python Part 완료 → 알고리즘 추천
  *   5. 알고리즘 어느 정도 완료 → quest 추천
  */
-/**
- * 클라이언트에서만 호출되는 코딩 뱅크 진행도 조회. 서버 SSR 에선 0 반환.
- */
-function getCodingBankSolvedCount(): number {
-  if (typeof window === "undefined") return 0
-  try {
-    const raw = localStorage.getItem("coding-bank-solved")
-    if (!raw) return 0
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr.length : 0
-  } catch {
-    return 0
-  }
-}
-
 /** 학생이 "했음" 표시한 대회/quest 수 (학생이 직접 체크 — quest 는 자동 채점 불가). */
 function getQuestSolvedCount(): number {
   if (typeof window === "undefined") return 0
@@ -82,7 +67,6 @@ function getQuestSolvedCount(): number {
   }
 }
 
-const CODING_BANK_THRESHOLD = 5  // 5개 풀면 코딩 뱅크 "충분히 했음" 으로 보고 알고리즘 추천
 const CONTEST_THRESHOLD = 8  // 알고리즘 8 토픽 완료 → 실전 대회(quest) 단계 진입 (대회 해금 기준과 동일)
 
 export function getSmartNext(
@@ -91,29 +75,11 @@ export function getSmartNext(
 ): SmartNextResult {
   const track = TRACKS[preferredTrack]
 
-  // 🌉 다리 1: C++ 메인 트랙 (cpp-16) 완료 → 코딩 뱅크 추천
-  // cpp-17/18/19/20 은 참고용이라 Smart-Next 가 강제 추천하지 않음.
-  // 코딩 뱅크 5문제 풀면 다음 단계 (알고리즘) 로 넘어감.
-  if (preferredTrack === "cpp" && (completedIds.has("cpp-16") || completedIds.has("cpp-p3"))) {
-    const bankSolved = getCodingBankSolvedCount()
-    if (bankSolved < CODING_BANK_THRESHOLD) {
-      return {
-        type: "coding-bank",
-        title: bankSolved > 0
-          ? `코딩 뱅크 (${bankSolved}/${CODING_BANK_THRESHOLD})`
-          : "코딩 뱅크 — 알고리즘 가기 전",
-        titleEn: bankSolved > 0
-          ? `Coding Bank (${bankSolved}/${CODING_BANK_THRESHOLD})`
-          : "Coding Bank — Before Algorithm",
-        href: "/coding-bank",
-        subtitle: "문법 → 실전 감각 — 알고리즘 가기 전 워밍업",
-        emoji: "🌟",
-        reason: "cpp-16 완료, 알고리즘 입문 전 코딩 뱅크 다리",
-      }
-    }
-  }
+  // C++ 메인 트랙(cpp-16 / cpp-p3) 완료 → cpp-17~20(참고용)은 건너뛰고 알고리즘으로.
+  const cppMainDone = preferredTrack === "cpp" && (completedIds.has("cpp-16") || completedIds.has("cpp-p3"))
 
-  // 1. 트랙 안에서 첫 미완료 Part 찾기
+  // 1. 트랙 안에서 첫 미완료 레슨 (C++ 메인 끝났으면 레슨 추천 생략)
+  if (!cppMainDone)
   for (const part of track.parts) {
     const allDone = part.lessonIds.every(id => completedIds.has(id) || completedIds.has(String(id)))
     if (allDone) {
@@ -144,41 +110,38 @@ export function getSmartNext(
     }
   }
 
-  // 2. 트랙 모든 레슨 완료 → 알고리즘 추천 (Python / C++ 트랙)
-  // Wave 1 → 2 → 3 순서로 첫 미완료 토픽
+  // 2. 레슨 끝 → 알고리즘 → 대회 (Python / C++ 트랙)
   if (preferredTrack === "python" || preferredTrack === "cpp") {
-    // 🌉 다리 3: 알고리즘 **Wave 1 기초(정렬·배열·스택큐·해시·누적합·문자열)** 를 마치면
-    // 대회(quest)로 안내. USACO Bronze 는 구현 위주라 Wave 1 기초면 도전 가능 —
+    // 알고리즘 — Bronze(Wave 1) 핵심부터. Wave1 끝나면 대회 단계.
     // graph/dp 등 Wave 2/3 는 선수조건이 아니라 "필요할 때 / Silver+" 에서.
-    // (이전엔 8토픽 — Silver 일부까지 — 요구했음. 기준을 낮춤 = 기존 학생 영향 없음.)
     const wave1Done = ALGO_TOPICS.filter(tp => tp.wave === 1).every(tp => completedIds.has(tp.lessonId))
-
-    if (wave1Done) {
-      const qSolved = getQuestSolvedCount()
-      return {
-        type: "quest",
-        title: qSolved > 0 ? `실전 대회 문제 (${qSolved} 풀이)` : "실전 대회 문제 — 이제 진짜 대회!",
-        titleEn: qSolved > 0 ? `Contest Problems (${qSolved} solved)` : "Contest Problems — the real thing!",
-        href: "/quest",
-        subtitle: "USACO Bronze · MCC — 배운 알고리즘으로 실전",
-        emoji: "🏆",
-        reason: `알고리즘 Wave 1 기초(스택/큐 포함) 완료 → 대회 단계 진입`,
+    if (!wave1Done) {
+      const sortedAlgo = [...ALGO_TOPICS].sort((a, b) => a.wave - b.wave)
+      const nextAlgo = sortedAlgo.find(tp => !completedIds.has(tp.lessonId))
+      if (nextAlgo) {
+        const waveLabel = nextAlgo.wave === 1 ? "Bronze" : nextAlgo.wave === 2 ? "Silver" : "Gold+"
+        return {
+          type: "algo-topic",
+          title: `${nextAlgo.title}`,
+          titleEn: `${nextAlgo.titleEn}`,
+          href: `/algo/${nextAlgo.id}`,
+          subtitle: `알고리즘 · Wave ${nextAlgo.wave} (${waveLabel})`,
+          emoji: nextAlgo.icon,
+          reason: `다음 알고리즘 토픽 (wave ${nextAlgo.wave})`,
+        }
       }
     }
 
-    const sortedAlgo = [...ALGO_TOPICS].sort((a, b) => a.wave - b.wave)
-    const nextAlgo = sortedAlgo.find(tp => !completedIds.has(tp.lessonId))
-    if (nextAlgo) {
-      const waveLabel = nextAlgo.wave === 1 ? "Bronze" : nextAlgo.wave === 2 ? "Silver" : "Gold+"
-      return {
-        type: "algo-topic",
-        title: `${nextAlgo.title}`,
-        titleEn: `${nextAlgo.titleEn}`,
-        href: `/algo/${nextAlgo.id}`,
-        subtitle: `알고리즘 · Wave ${nextAlgo.wave} (${waveLabel})`,
-        emoji: nextAlgo.icon,
-        reason: `다음 알고리즘 토픽 (wave ${nextAlgo.wave})`,
-      }
+    // 알고리즘 Bronze 끝 → 실전 대회
+    const qSolved = getQuestSolvedCount()
+    return {
+      type: "quest",
+      title: qSolved > 0 ? `실전 대회 문제 (${qSolved} 풀이)` : "실전 대회 문제 — 이제 진짜 대회!",
+      titleEn: qSolved > 0 ? `Contest Problems (${qSolved} solved)` : "Contest Problems — the real thing!",
+      href: "/quest",
+      subtitle: "USACO Bronze · MCC — 배운 걸로 실전",
+      emoji: "🏆",
+      reason: `알고리즘 기초 완료 → 대회 단계`,
     }
   }
 

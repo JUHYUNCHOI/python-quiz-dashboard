@@ -81,18 +81,6 @@ function clusterDoneCount(completedIds: Set<string | number>, cluster: any): boo
   }
 }
 
-function getCodingBankSolvedCount(): number {
-  if (typeof window === "undefined") return 0
-  try {
-    const raw = localStorage.getItem("coding-bank-solved")
-    if (!raw) return 0
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr.length : 0
-  } catch {
-    return 0
-  }
-}
-
 export const JOURNEY_STAGES: JourneyStage[] = [
   {
     id: "python",
@@ -112,8 +100,8 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     emoji: "💪",
     title: "Python 연습",
     titleEn: "Python Practice",
-    description: "12 클러스터 — 코드 직접 짜기, 실력 다지기",
-    descriptionEn: "12 clusters — hands-on coding practice",
+    description: "직접 코드 짜며 실력 다지기",
+    descriptionEn: "Hands-on coding practice",
     href: "/practice?lang=python",
     rank: "silver",
     computeProgress: () => {
@@ -142,17 +130,14 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     emoji: "💪",
     title: "C++ 연습",
     titleEn: "C++ Practice",
-    description: "CPP 클러스터 + 코딩 뱅크 — 알고리즘 가기 전 워밍업",
-    descriptionEn: "C++ clusters + Coding Bank — warm up before algo",
+    description: "직접 코드 짜며 실력 다지기 (알고리즘 가기 전)",
+    descriptionEn: "Hands-on coding practice (before algorithms)",
     href: "/practice?lang=cpp",
     rank: "silver",
     computeProgress: () => {
       const clusters = getCppPracticeClusters()
-      const clusterDone = clusters.filter(c => clusterDoneCount(new Set(), c)).length
-      const bankSolved = getCodingBankSolvedCount()
-      // 클러스터 1개 = 1점, 코딩뱅크 5문제 = 1점
-      const score = clusterDone + Math.min(Math.floor(bankSolved / 5), 3)
-      return { done: Math.min(score, CPP_PRACTICE_GOAL), total: CPP_PRACTICE_GOAL }
+      const done = clusters.filter(c => clusterDoneCount(new Set(), c)).length
+      return { done: Math.min(done, CPP_PRACTICE_GOAL), total: CPP_PRACTICE_GOAL }
     },
   },
   {
@@ -161,13 +146,15 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     emoji: "🧠",
     title: "알고리즘",
     titleEn: "Algorithm",
-    description: `BFS/DFS · DP · 그리디 — ${ALGO_TOPICS.length}개 토픽`,
-    descriptionEn: `BFS/DFS · DP · Greedy — ${ALGO_TOPICS.length} topics`,
+    description: "Bronze 핵심 (정렬·배열·스택큐 등) · Silver/Gold는 선택 심화",
+    descriptionEn: "Bronze core (sort·array·stack/queue) · Silver/Gold optional",
     href: "/algo",
     rank: "gold",
+    // 완료 기준 = Bronze(Wave 1) 핵심. Silver/Gold 는 '필요할 때' 심화 (smart-next 모델과 일치).
     computeProgress: (completedIds) => {
-      const done = ALGO_TOPICS.filter(tp => completedIds.has(tp.lessonId)).length
-      return { done, total: ALGO_TOPICS.length }
+      const bronze = ALGO_TOPICS.filter(tp => tp.wave === 1)
+      const done = bronze.filter(tp => completedIds.has(tp.lessonId)).length
+      return { done, total: bronze.length }
     },
   },
   {
