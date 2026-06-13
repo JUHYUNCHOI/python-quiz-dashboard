@@ -975,6 +975,12 @@ export function makeAstralCh2(E, lang = "py") {
               </div>
             </div>
           ))}
+          {/* greedy 한 줄 설명 — 단어가 처음 나오는 자리라 간단히 (자세히는 다음 슬라이드) */}
+          <div style={{ marginTop: 8, fontSize: 11.5, color: "#6b7280", background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 11px", lineHeight: 1.6 }}>
+            💡 {t(E,
+              "Greedy (그리디) = decide by looking only at what's right in front of you, without thinking ahead. Details next slide.",
+              "그리디(greedy) = 뒤는 안 보고 지금 눈앞만 보고 바로 정하는 방법. 자세한 건 다음 슬라이드에서.")}
+          </div>
         </div>
       ),
     },
