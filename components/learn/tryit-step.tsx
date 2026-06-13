@@ -64,6 +64,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
             storageKey={lessonId ? `${lessonId}-${step.id}` : step.id}
             initialCode={step.initialCode || ""}
             expectedOutput={step.expectedOutput}
+            stdin={step.stdin}
             task={step.task}
             hint={step.hint}
             hint2={step.hint2}
@@ -78,6 +79,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
             storageKey={lessonId ? `${lessonId}-${step.id}` : step.id}
             initialCode={step.initialCode || ""}
             expectedOutput={step.expectedOutput}
+            stdin={step.stdin}
             task={step.task}
             hint={step.hint}
             onSuccess={onSuccess}
