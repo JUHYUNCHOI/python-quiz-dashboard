@@ -63,16 +63,10 @@ Let's look at each one!`
         },
         {
           id: "predict-num-type",
-          type: "predict",
+          type: "quiz",
           title: "💭 What type is 7.0?",
-          content: "Just one thing to check — is there a decimal point?",
-          code: "print(type(7.0))",
-          options: [
-            "<class 'int'>",
-            "<class 'float'>",
-            "<class 'str'>",
-            "<class 'bool'>"
-          ],
+          content: "What type is 7.0? (Just check — is there a decimal point?)",
+          options: ["int (integer)", "float", "str (string)", "bool (boolean)"],
           answer: 1,
           explanation: "It has `.0`, so it's a float! Even if it looks like a whole number, the decimal point makes it a float."
         },
@@ -105,16 +99,6 @@ True, False
 ⚠️ **Must start with a capital letter!** \`true\` ❌, \`True\` ✅
 
 **Often used for:** logged in or not, pass/fail — anything that's **one of exactly two options**`
-        },
-        {
-          id: "try-type-print",
-          type: "tryit",
-          title: "🖥️ Type `print(type(10))` yourself!",
-          task: "Run the code below as-is.\n\n💡 The output will look a bit busy — something like `<class 'int'>`. **Just look at the word inside the quotes (`int`)!** The rest is automatic packaging Python adds for you.",
-          initialCode: "print(type(10))",
-          expectedOutput: "<class 'int'>",
-          hint: "Just hit ▶ Run.",
-          hint2: "print(type(10))"
         },
         {
           id: "quiz1",

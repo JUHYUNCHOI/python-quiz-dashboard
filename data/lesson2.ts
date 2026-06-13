@@ -63,16 +63,10 @@ export const lesson2Data: LessonData = {
         },
         {
           id: "predict-num-type",
-          type: "predict",
+          type: "quiz",
           title: "💭 7.0 은 어떤 타입?",
-          content: "소수점이 있냐 없냐 — 그것만 보면 돼요!",
-          code: "print(type(7.0))",
-          options: [
-            "<class 'int'>",
-            "<class 'float'>",
-            "<class 'str'>",
-            "<class 'bool'>"
-          ],
+          content: "7.0 은 어떤 타입일까요? (소수점이 있냐 없냐만 보면 돼요!)",
+          options: ["int (정수)", "float (실수)", "str (문자열)", "bool (불리언)"],
           answer: 1,
           explanation: "`.0` 이 붙어 있으니까 실수(float)! 정수처럼 보여도 소수점이 있으면 float 예요."
         },
@@ -105,16 +99,6 @@ True, False
 ⚠️ **반드시 대문자로 시작!** \`true\` ❌, \`True\` ✅
 
 **자주 쓰는 곳:** 로그인 여부, 합격/불합격 — **둘 중 하나만** 가능한 모든 것`
-        },
-        {
-          id: "try-type-print",
-          type: "tryit",
-          title: "🖥️ `print(type(10))` 직접 쳐봐!",
-          task: "아래 코드를 그대로 실행해 보세요.\n\n💡 결과가 좀 복잡하게 보일 거예요 — `<class 'int'>` 같은 거. **따옴표 안 단어 (`int`) 만 보면 돼요!** 나머지는 파이썬이 알아서 적어주는 거예요.",
-          initialCode: "print(type(10))",
-          expectedOutput: "<class 'int'>",
-          hint: "그대로 ▶ 실행 누르면 돼요.",
-          hint2: "print(type(10))"
         },
         {
           id: "quiz1",
