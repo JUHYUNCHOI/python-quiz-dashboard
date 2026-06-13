@@ -212,15 +212,25 @@ function isTrapDecimalString(v: Val | null, func: FuncName): boolean {
   return !!v && func === "int" && v.type === "str" && !intStringRe.test(v.head) && numericStringRe.test(v.head)
 }
 
-const PRESETS: { label: string; src: string; func: FuncName; danger?: boolean }[] = [
-  { label: 'int("123")', src: '"123"', func: "int" },
-  { label: "int(3.7)", src: "3.7", func: "int" },
-  { label: 'float("3.14")', src: '"3.14"', func: "float" },
-  { label: "str(42)", src: "42", func: "str" },
-  { label: "bool(0)", src: "0", func: "bool" },
-  { label: 'bool("hi")', src: '"hi"', func: "bool" },
-  { label: 'int("3.14")', src: '"3.14"', func: "int", danger: true },
+type Cat = "wrap" | "strip" | "cut" | "tf" | "err"
+const PRESETS: { label: string; src: string; func: FuncName; danger?: boolean; cat: Cat }[] = [
+  { label: "str(42)", src: "42", func: "str", cat: "wrap" },
+  { label: 'int("123")', src: '"123"', func: "int", cat: "strip" },
+  { label: 'float("3.14")', src: '"3.14"', func: "float", cat: "strip" },
+  { label: "int(3.7)", src: "3.7", func: "int", cat: "cut" },
+  { label: "bool(0)", src: "0", func: "bool", cat: "tf" },
+  { label: 'bool("hi")', src: '"hi"', func: "bool", cat: "tf" },
+  { label: 'int("3.14")', src: '"3.14"', func: "int", danger: true, cat: "err" },
 ]
+// 동작별 묶음 — 학생이 "따옴표 입히기 / 벗기기 / 소수점 자르기" 를 또렷이 구분
+const CAT_ORDER: Cat[] = ["wrap", "strip", "cut", "tf", "err"]
+const CAT_LABEL: Record<Cat, Bi> = {
+  wrap: { ko: "따옴표 입히기 (→ 글자)", en: "add quotes (→ text)" },
+  strip: { ko: "따옴표 벗기기 (글자 → 숫자)", en: "remove quotes (text → number)" },
+  cut: { ko: "소수점 자르기 (실수 → 정수)", en: "drop decimal (float → int)" },
+  tf: { ko: "True / False 판정", en: "True / False" },
+  err: { ko: "안 되는 경우 (에러)", en: "can't convert (error)" },
+}
 const FUNCS: FuncName[] = ["int", "float", "str", "bool"]
 
 // 작은 칩 (before / after 비교용)
@@ -380,21 +390,32 @@ function TypeConversionVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
       {/* 빠른 예시 */}
       <div>
         <p className="text-xs font-bold text-gray-400 mb-1.5">{tt("빠른 예시 — 눌러서 천천히 변신 보기", "Quick examples — tap to watch it morph")}</p>
-        <div className="flex flex-wrap gap-2">
-          {PRESETS.map((p) => {
-            const isActive = activeLabel === p.label
+        <div className="space-y-2">
+          {CAT_ORDER.map((cat) => {
+            const items = PRESETS.filter((p) => p.cat === cat)
+            if (!items.length) return null
             const busy = phase === "highlight" || phase === "reveal"
             return (
-              <button
-                key={p.label}
-                onClick={() => { setActiveLabel(p.label); run(p.src, p.func) }}
-                disabled={busy && !isActive}
-                className={"px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition-all font-mono active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed " +
-                  (isActive ? "" : "bg-white text-gray-500 border-gray-200 hover:border-gray-300")}
-                style={isActive ? { background: TYPE_COLORS[p.func] + "18", color: TYPE_COLORS[p.func], borderColor: TYPE_COLORS[p.func] } : undefined}
-              >
-                {p.label} {p.danger && "❌"}
-              </button>
+              <div key={cat}>
+                <p className="text-[10px] font-bold text-gray-400 mb-1">{tt(CAT_LABEL[cat].ko, CAT_LABEL[cat].en)}</p>
+                <div className="flex flex-wrap gap-2">
+                  {items.map((p) => {
+                    const isActive = activeLabel === p.label
+                    return (
+                      <button
+                        key={p.label}
+                        onClick={() => { setActiveLabel(p.label); run(p.src, p.func) }}
+                        disabled={busy && !isActive}
+                        className={"px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition-all font-mono active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed " +
+                          (isActive ? "" : "bg-white text-gray-500 border-gray-200 hover:border-gray-300")}
+                        style={isActive ? { background: TYPE_COLORS[p.func] + "18", color: TYPE_COLORS[p.func], borderColor: TYPE_COLORS[p.func] } : undefined}
+                      >
+                        {p.label} {p.danger && "❌"}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
             )
           })}
         </div>
