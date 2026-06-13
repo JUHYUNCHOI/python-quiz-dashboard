@@ -6,7 +6,7 @@ import { CodeSectionView } from "@/components/quest/CodeSectionView";
 /* ── 클릭형 궤도 시뮬레이터 ──────────────────────────────────────
    stepData: Array<{ cells: {letter,star,active}[], note: string, result?: string, ok?: boolean }>
    ─────────────────────────────────────────────────────────── */
-function ChainStepSim({ stepData }) {
+function ChainStepSim({ stepData, E }) {
   const [si, setSi] = useState(0);
   const last = stepData.length - 1;
   const idx = si > last ? last : si < 0 ? 0 : si;  // guard: a reused instance may carry a stale index
@@ -69,11 +69,11 @@ function ChainStepSim({ stepData }) {
       )}
       {/* Prev / Next */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
-        {btn(isFirst, "◀ 이전", () => setSi(Math.max(0, idx - 1)))}
+        {btn(isFirst, E ? "◀ Prev" : "◀ 이전", () => setSi(Math.max(0, idx - 1)))}
         <span style={{ fontSize: 11, color: "#64748b", minWidth: 44, textAlign: "center" }}>
           {idx + 1} / {stepData.length}
         </span>
-        {btn(isLast, "다음 ▶", () => setSi(Math.min(last, idx + 1)))}
+        {btn(isLast, E ? "Next ▶" : "다음 ▶", () => setSi(Math.min(last, idx + 1)))}
       </div>
     </div>
   );
@@ -84,7 +84,7 @@ function ChainStepSim({ stepData }) {
    orbit: [[r,c]...] 궤도 칸 좌표 (별 가는 순서대로)
    stepData: ChainStepSim 과 동일 — cells[i] ↔ orbit[i]
    ─────────────────────────────────────────────────────────── */
-function OrbitGridStepSim({ rows, cols, orbit, stepData, caption }) {
+function OrbitGridStepSim({ rows, cols, orbit, stepData, caption, E }) {
   const [si, setSi] = useState(0);
   const last = stepData.length - 1;
   const idx = si > last ? last : si < 0 ? 0 : si;  // guard: a reused instance may carry a stale index
@@ -244,11 +244,11 @@ function OrbitGridStepSim({ rows, cols, orbit, stepData, caption }) {
       </div>
       {/* Prev / Next */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
-        {btn(isFirst, "◀ 이전", () => setSi(Math.max(0, idx - 1)))}
+        {btn(isFirst, E ? "◀ Prev" : "◀ 이전", () => setSi(Math.max(0, idx - 1)))}
         <span style={{ fontSize: 11, color: "#64748b", minWidth: 44, textAlign: "center" }}>
           {idx + 1} / {stepData.length}
         </span>
-        {btn(isLast, "다음 ▶", () => setSi(Math.min(last, idx + 1)))}
+        {btn(isLast, E ? "Next ▶" : "다음 ▶", () => setSi(Math.min(last, idx + 1)))}
       </div>
     </div>
   );
@@ -1120,7 +1120,7 @@ export function makeAstralCh2(E, lang = "py") {
 
           {/* Interactive 2D-grid simulation — star moves ↘ along the orbit */}
           <OrbitGridStepSim
-            key="fwd-greedy"
+            key="fwd-greedy" E={E}
             rows={5} cols={5} orbit={[[0,0],[2,1],[4,2]]}
             caption={t(E,
               "Follow just the blue-arrow line (one orbit). Gray cells = other orbits.",
@@ -1128,7 +1128,7 @@ export function makeAstralCh2(E, lang = "py") {
             stepData={[
             {
               cells: [{letter:"G",star:false,active:false},{letter:"G",star:false,active:false},{letter:"B",star:false,active:false}],
-              note: t(E, "Orbit G G B — all empty. Start at cell (0) and follow the orbit to the end.", "궤도 G G B 시작. 시작 칸 (0) 부터 끝 (2) 으로 별이 가는 방향을 따라가요.")
+              note: t(E, "Orbit G G B — no stars placed yet (G = star in ONE photo, B = star in BOTH). Start at cell (0) and follow the orbit to the end.", "궤도 G G B — 아직 별을 안 놓은 상태 (G = 한 사진에만 별, B = 두 사진 모두 별). 시작 칸 (0) 부터 끝 (2) 으로 별이 가는 방향을 따라가요.")
             },
             {
               cells: [{letter:"G",star:true,active:true},{letter:"G",star:false,active:false},{letter:"B",star:false,active:false}],
@@ -1173,7 +1173,7 @@ export function makeAstralCh2(E, lang = "py") {
 
           {/* Interactive 2D-grid simulation — same orbit, walked end → start */}
           <OrbitGridStepSim
-            key="bwd-greedy"
+            key="bwd-greedy" E={E}
             rows={5} cols={5} orbit={[[0,0],[2,1],[4,2]]}
             caption={t(E,
               "Same orbit — but walk it backward, from the END (2) toward the start (0).",
@@ -1181,7 +1181,7 @@ export function makeAstralCh2(E, lang = "py") {
             stepData={[
             {
               cells: [{letter:"G",star:false,active:false},{letter:"G",star:false,active:false},{letter:"B",star:false,active:false}],
-              note: t(E, "Same orbit G G B — all empty. This time start at the end (2) and go back to (0).", "같은 궤도 G G B. 이번엔 끝 칸 (2) 부터 시작 (0) 으로 거꾸로 가요.")
+              note: t(E, "Same orbit G G B — no stars placed yet. This time start at the end (2) and go back to (0).", "같은 궤도 G G B — 아직 별 안 놓음. 이번엔 끝 칸 (2) 부터 시작 (0) 으로 거꾸로 가요.")
             },
             {
               cells: [{letter:"G",star:false,active:false},{letter:"G",star:true,active:false},{letter:"B",star:true,active:true}],
