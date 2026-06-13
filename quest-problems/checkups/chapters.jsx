@@ -510,6 +510,51 @@ export function makeCheckupsCh3(E) {
         </div>),
     },
 
+    /* 3-1b — DERIVE l+r−i (the mirror) so the key formula is earned, not asserted. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Wait — why l + r − i? Let's SEE it. Reversing just mirrors the window: the ends swap, then it works inward.",
+        "잠깐 — 왜 l + r − i 일까? 직접 봐요. 뒤집기는 윈도우를 거울처럼 뒤집어요: 양 끝이 바뀌고 안쪽으로 좁혀가요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "#0e7490", textAlign: "center", marginBottom: 10 }}>
+            🪞 {t(E, "Why position i gets the value from l + r − i", "왜 위치 i 에 l + r − i 의 값이 올까")}
+          </div>
+          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+            {t(E, "Take the window [l, r] = [2, 5]. Reversing pairs the ends and moves inward:",
+                  "윈도우 [l, r] = [2, 5] 를 봐요. 뒤집으면 양 끝이 짝지어 안쪽으로:")}
+            <div style={{ display: "flex", justifyContent: "center", gap: 6, margin: "12px 0 6px" }}>
+              {[1, 2, 3, 4, 5, 6].map(p => {
+                const inside = p >= 2 && p <= 5;
+                return (
+                  <div key={p} style={{
+                    width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+                    fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 15,
+                    background: inside ? "#cffafe" : "#fff", color: inside ? "#0e7490" : "#cbd5e1",
+                    border: `${inside ? 1.5 : 1}px solid ${inside ? "#22d3ee" : C.border}`,
+                  }}>{p}</div>
+                );
+              })}
+            </div>
+            <div style={{ textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#0e7490", fontWeight: 700, lineHeight: 1.9 }}>
+              2 ↔ 5,&nbsp;&nbsp; 3 ↔ 4
+            </div>
+            <div style={{ marginTop: 10, padding: "9px 11px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8, fontSize: 12.5, lineHeight: 1.8 }}>
+              {t(E, "Each pair adds up to the SAME total: 2 + 5 = 7 and 3 + 4 = 7. So the value landing on position i came from (7 − i) = (l + r − i).",
+                    "각 짝의 합이 똑같아요: 2 + 5 = 7, 3 + 4 = 7. 그래서 위치 i 에 오는 값은 (7 − i) = (l + r − i) 에서 온 거예요.")}
+              <div style={{ marginTop: 6, color: "#0e7490", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+                ✓ i = 2 → 7 − 2 = 5,&nbsp;&nbsp; i = 3 → 7 − 3 = 4
+              </div>
+            </div>
+            <div style={{ marginTop: 10, fontWeight: 700, color: "#0e7490" }}>
+              {t(E, "And s = l + r = 7 is the same for every spot in the window — that one constant is the whole secret.",
+                    "그리고 s = l + r = 7 은 윈도우 안 모든 자리에서 똑같아요 — 그 상수 하나가 전부의 비밀이에요.")}
+            </div>
+          </div>
+        </div>),
+    },
+
     /* 3-2 — DiagonalSim: drag two (l, r) windows; same s → same colour. */
     {
       type: "reveal",
@@ -538,6 +583,40 @@ export function makeCheckupsCh3(E) {
       explain: t(E,
         "Same diagonal means same s = l + r.  Here s = 2 + 5 = 7.  (l=3, r=4) gives 3 + 4 = 7 — same diagonal.  The others give 6, 8, 8.",
         "같은 대각선 = 같은 s = l + r. 여기선 s = 2 + 5 = 7. (l=3, r=4) 는 3 + 4 = 7 — 같은 대각선. 나머지는 6, 8, 8."),
+    },
+
+    /* 3-3b — split the count into OUTSIDE + INSIDE so the next two sims have a home. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Here's the whole plan for counting ONE operation fast: split the line into two zones.",
+        "한 연산을 빠르게 세는 전체 작전: 줄을 두 구역으로 나눠요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "#0e7490", textAlign: "center", marginBottom: 10 }}>
+            ✂️ {t(E, "Checkups = OUTSIDE + INSIDE", "검진 수 = 바깥 + 안쪽")}
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 12 }}>
+            {[
+              { label: t(E, "outside", "바깥"), c: "#e2e8f0", bd: "#cbd5e1", tc: "#475569", grow: 1 },
+              { label: "[ l … r ]", c: "#cffafe", bd: "#22d3ee", tc: "#0e7490", grow: 2 },
+              { label: t(E, "outside", "바깥"), c: "#e2e8f0", bd: "#cbd5e1", tc: "#475569", grow: 1 },
+            ].map((z, i) => (
+              <div key={i} style={{
+                flex: z.grow, background: z.c, border: `1.5px solid ${z.bd}`, borderRadius: 8,
+                padding: "12px 6px", textAlign: "center", fontSize: 12.5, fontWeight: 700, color: z.tc,
+              }}>{z.label}</div>
+            ))}
+          </div>
+          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.75 }}>
+            <div><b style={{ color: "#475569" }}>{t(E, "OUTSIDE the window", "윈도우 바깥")}</b> — {t(E, "nothing moved. A spot matches if a[i] = b[i], exactly like before any reversal — and it's the SAME for every (l, r).", "아무것도 안 움직임. a[i] = b[i] 면 일치 — 뒤집기 전과 똑같고, 모든 (l, r) 에서 동일.")}</div>
+            <div style={{ marginTop: 8 }}><b style={{ color: "#0e7490" }}>{t(E, "INSIDE the window", "윈도우 안")}</b> — {t(E, "reversed. Position i now holds a[l+r−i], compared to b[i]. This is the part that changes — but only with the diagonal s.", "뒤집힘. 위치 i 에 a[l+r−i] 가 와서 b[i] 와 비교. 바뀌는 부분 — 단, 대각선 s 에만 따라.")}</div>
+            <div style={{ marginTop: 10, textAlign: "center", padding: "9px 10px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8, fontWeight: 800, color: "#0e7490", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+              {t(E, "checkups = (outside matches) + (inside matches)", "검진 수 = (바깥 일치) + (안쪽 일치)")}
+            </div>
+            <div style={{ marginTop: 8 }}>{t(E, "We just need a fast way to read each part. Outside first — it never changes.", "각 부분을 빠르게 읽는 법만 있으면 돼요. 바깥부터 — 절대 안 변하니까.")}</div>
+          </div>
+        </div>),
     },
 
     /* 3-4 — MatchUpToSim: outside-window matches via a prefix built once. */
