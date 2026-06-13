@@ -787,7 +787,7 @@ export function makeAstralCh2(E, lang = "py") {
                       from:"(0,0)", calc: t(E,"row 0+2=2, col 0+1=1","행 0+2=2, 열 0+1=1"), to:"(2,1)", ok:true,
                     },
                     {
-                      from:"(2,1)", calc: t(E,"row 2+2=4, col 1+1=2","행 2+2=4, 열 1+1=2"), to: t(E,"(4,2) off grid ✗","(4,2) 밖 ✗"), ok:false,
+                      from:"(2,1)", calc: t(E,"row 2+2=4, col 1+1=2","행 2+2=4, 열 1+1=2"), to: t(E,"(4,2) off grid → chain ends","(4,2) 밖 → 여기서 궤도 끝"), ok:false,
                     },
                   ].map((step,i) => (
                     <div key={i} style={{
@@ -801,10 +801,10 @@ export function makeAstralCh2(E, lang = "py") {
                       <span style={{ color:"#64748b", fontSize:11 }}>+right=1, +down=2</span>
                       <span style={{ color:"#94a3b8" }}>→</span>
                       <span style={{
-                        background: step.ok ? "#dbeafe" : "#fee2e2",
-                        border: `2px solid ${step.ok ? "#3b82f6" : "#fca5a5"}`,
+                        background: step.ok ? "#dbeafe" : "#f1f5f9",
+                        border: `2px solid ${step.ok ? "#3b82f6" : "#cbd5e1"}`,
                         borderRadius:6, padding:"4px 9px", fontWeight:800,
-                        color: step.ok ? "#1e40af" : "#b91c1c",
+                        color: step.ok ? "#1e40af" : "#64748b",
                       }}>{step.to}</span>
                     </div>
                   ))}
@@ -812,8 +812,8 @@ export function makeAstralCh2(E, lang = "py") {
 
                 <div style={{ fontSize:12, color:"#374151", textAlign:"center", lineHeight:1.7 }}>
                   {t(E,
-                    "Chain = [(0,0) → (2,1)]. Only 2 cells. The star can ONLY visit these cells — nothing else.",
-                    "궤도 = [(0,0) → (2,1)]. 2칸짜리 궤도예요. 이 별은 이 두 칸 외에는 절대 갈 수 없어요.")}
+                    "Chain = [(0,0) → (2,1)]. Only 2 cells — that's just where the orbit ends. (A star going off-grid simply vanishes; it doesn't affect the answer.)",
+                    "궤도 = [(0,0) → (2,1)]. 2칸짜리 궤도예요 — 밖으로 나가면 그냥 거기서 궤도가 끝나는 것. (나간 별은 사라질 뿐, 답 계산엔 안 들어가요.)")}
                 </div>
               </div>
             );
