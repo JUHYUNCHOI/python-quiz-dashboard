@@ -187,32 +187,40 @@ export function makeMooin2Ch1(E) {
    ════════════════════════════════════════════════════════════════════ */
 export function makeMooin2Ch2(E, lang = "py") {
   const isCpp = lang === "cpp";
-  const bruteLinesPy = [
+  // Brute split into 3 build-up pieces (read → loops → check) so the code
+  // is never dumped all at once.
+  const bruteReadPy = [
     "import sys",
     "data = sys.stdin.read().split()",
     "N = int(data[0])",
     "a = [int(data[1 + i]) for i in range(N)]",
-    "",
-    "seen = set()",
+  ];
+  const bruteLoopPy = [
+    "seen = set()                       # distinct (x, y) moos",
     "for i in range(N):                 # x is at i",
     "    for j in range(i + 1, N):      # first y at j",
     "        for k in range(j + 1, N):  # second y at k",
+  ];
+  const bruteBodyPy = [
     "            if a[j] == a[k] and a[i] != a[j]:",
     "                seen.add((a[i], a[j]))",
     "print(len(seen))",
   ];
-  const bruteLinesCpp = [
+  const bruteReadCpp = [
     "#include <bits/stdc++.h>",
     "using namespace std;",
     "int main() {",
     "    int N; cin >> N;",
     "    vector<int> a(N);",
     "    for (int& x : a) cin >> x;",
-    "",
-    "    set<pair<int,int>> seen;",
+  ];
+  const bruteLoopCpp = [
+    "    set<pair<int,int>> seen;                // distinct (x, y) moos",
     "    for (int i = 0; i < N; i++)             // x at i",
     "        for (int j = i + 1; j < N; j++)     // first y at j",
     "            for (int k = j + 1; k < N; k++) // second y at k",
+  ];
+  const bruteBodyCpp = [
     "                if (a[j] == a[k] && a[i] != a[j])",
     "                    seen.insert({a[i], a[j]});",
     "    cout << seen.size() << endl;",
@@ -242,18 +250,58 @@ export function makeMooin2Ch2(E, lang = "py") {
           </div>
         </div>),
     },
-    /* 2-2 — brute code */
+    /* 2-2 — brute code, piece 1: read input */
     {
       type: "reveal",
       narr: t(E,
-        "Here it is in code. It's correct and easy to read — three loops, one if, one set.",
-        "코드로 옮기면 이래요. 맞고 읽기도 쉬워요 — 반복 3개, if 하나, 집합 하나."),
+        "Let's write it one piece at a time. Piece 1: read N, then the N numbers into the list a.",
+        "코드를 한 조각씩 써요. 1조각: N 을 읽고, 그다음 숫자 N 개를 리스트 a 로."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0891b2", marginBottom: 8 }}>
-            🐢 {t(E, "Brute force — correct, but…", "브루트포스 — 맞지만…")}
+            🐢 {t(E, "Brute — piece 1: read the input", "브루트 — 1조각: 입력 읽기")}
           </div>
-          <CodeBlock lines={isCpp ? bruteLinesCpp : bruteLinesPy} lang={isCpp ? "cpp" : "py"} />
+          <CodeBlock lines={isCpp ? bruteReadCpp : bruteReadPy} lang={isCpp ? "cpp" : "py"} />
+          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
+            {t(E, "Nothing clever yet — just get the numbers into a so we can look at them.",
+                  "아직 영리한 건 없어요 — 그냥 숫자를 a 에 담아 들여다볼 준비.")}
+          </div>
+        </div>),
+    },
+    /* 2-2 — brute code, piece 2: the three loops */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Piece 2: a moo is 3 positions i < j < k. So loop all three — every i, every j after it, every k after that.",
+        "2조각: moo 는 위치 3개 i < j < k. 그러니 셋 다 돌려요 — 모든 i, 그 뒤 모든 j, 또 그 뒤 모든 k."),
+      content: (
+        <div style={{ padding: 14 }}>
+          <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0891b2", marginBottom: 8 }}>
+            🐢 {t(E, "Brute — piece 2: three nested loops", "브루트 — 2조각: 3중 반복")}
+          </div>
+          <CodeBlock lines={isCpp ? bruteLoopCpp : bruteLoopPy} lang={isCpp ? "cpp" : "py"} />
+          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
+            {t(E, "seen is a set — it auto-drops duplicates, so its size will be the count of DISTINCT moos.",
+                  "seen 은 집합 — 중복을 알아서 버려요. 그래서 크기가 곧 서로 다른 moo 개수가 돼요.")}
+          </div>
+        </div>),
+    },
+    /* 2-2 — brute code, piece 3: keep the ones that fit + print */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Piece 3: inside, keep only real moos — a[j] = a[k] (the y-pair) and a[i] ≠ a[j] (a real x). Then print how many distinct ones we found.",
+        "3조각: 안에서 진짜 moo 만 남겨요 — a[j] = a[k] (y 짝) 이고 a[i] ≠ a[j] (진짜 x). 그다음 서로 다른 개수를 출력."),
+      content: (
+        <div style={{ padding: 14 }}>
+          <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0891b2", marginBottom: 8 }}>
+            🐢 {t(E, "Brute — piece 3: check & count", "브루트 — 3조각: 판정 후 집계")}
+          </div>
+          <CodeBlock lines={isCpp ? bruteBodyCpp : bruteBodyPy} lang={isCpp ? "cpp" : "py"} />
+          <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
+            {t(E, "Correct and easy to read. Now the big question: how fast is it?",
+                  "맞고 읽기도 쉬워요. 이제 큰 질문: 얼마나 빠를까요?")}
+          </div>
         </div>),
     },
     /* 2-3 — RUN it (feel the pain) */
@@ -287,7 +335,35 @@ export function makeMooin2Ch2(E, lang = "py") {
           </div>
         </div>),
     },
-    /* 2-5 — bridge */
+    /* 2-5 — where brute wastes work (discovery, not a jump) */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Before any trick — let's SEE what brute keeps redoing. Watch the value 4 in the sample.",
+        "트릭으로 점프하기 전에 — 브루트가 뭘 자꾸 다시 하는지 봐요. 샘플에서 값 4 를 보세요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
+            🔁 {t(E, "Brute redoes the same work", "브루트는 같은 일을 반복해요")}
+          </div>
+          <div style={{ background: "#ecfeff", border: "1.5px solid #67e8f9", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#155e75", lineHeight: 1.7 }}>
+            {t(E,
+              "In a = [1, 2, 3, 4, 4, 4], the value 4 sits at indices 3, 4, 5. Brute tries every (j, k) pair of 4's — and for EACH pair it re-scans all i before j to collect the x's:",
+              "a = [1, 2, 3, 4, 4, 4] 에서 4 는 인덱스 3, 4, 5. 브루트는 4 의 모든 (j, k) 짝마다 j 앞의 i 를 다시 훑어 x 를 모아요:")}
+            <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5 }}>
+              <div style={{ background: "#fff", border: "1px solid #a5f3fc", borderRadius: 6, padding: "5px 9px" }}>(j, k) = (3, 4) → x {t(E, "before index 3", "인덱스 3 앞")} = {"{1, 2, 3}"}</div>
+              <div style={{ background: "#fff", border: "1px solid #a5f3fc", borderRadius: 6, padding: "5px 9px" }}>(j, k) = (3, 5) → x {t(E, "before index 3", "인덱스 3 앞")} = {"{1, 2, 3}"}</div>
+              <div style={{ background: "#fff", border: "1px solid #a5f3fc", borderRadius: 6, padding: "5px 9px" }}>(j, k) = (4, 5) → x {t(E, "before index 4", "인덱스 4 앞")} = {"{1, 2, 3}"} <span style={{ color: "#0891b2" }}>(4 {t(E, "is y, skip", "는 y, 제외")})</span></div>
+            </div>
+            <div style={{ marginTop: 10, padding: "8px 10px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8 }}>
+              💡 {t(E,
+                "All three pairs collect the SAME x's — {1, 2, 3}. The set just throws the duplicates away. So brute did the same work three times for nothing!",
+                "세 짝이 모두 같은 x — {1, 2, 3} — 를 모아요. 집합이 중복을 버릴 뿐. 결국 같은 일을 세 번 헛한 거죠!")}
+            </div>
+          </div>
+        </div>),
+    },
+    /* 2-6 — collapse to per-y count (the realization, now earned) */
     {
       type: "reveal",
       narr: t(E,
