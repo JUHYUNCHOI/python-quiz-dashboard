@@ -37,7 +37,7 @@ Let's look at each one!`
           title: "📋 Number types — integer and float",
           content: `Numbers split into **two kinds**, based on one thing: does it have a decimal point?
 
-### 1️⃣ **Integer** <span style="font-size:0.85em; opacity:0.7">(short name: int)</span> — whole numbers, no decimal
+### 1️⃣ **Integer** (short name: int) — whole numbers, no decimal
 
 \`\`\`python
 10, -5, 0, 1000
@@ -47,7 +47,7 @@ Let's look at each one!`
 
 ---
 
-### 2️⃣ **Float** <span style="font-size:0.85em; opacity:0.7">(short name: float)</span> — numbers with a decimal point
+### 2️⃣ **Float** (short name: float) — numbers with a decimal point
 
 \`\`\`python
 3.14, -0.5, 2.0
@@ -82,7 +82,7 @@ Let's look at each one!`
           title: "📋 Text and True/False — string and boolean",
           content: `Now the two non-number types.
 
-### 3️⃣ **String** <span style="font-size:0.85em; opacity:0.7">(short name: str)</span> — letters
+### 3️⃣ **String** (short name: str) — letters
 
 \`\`\`python
 "hello", 'python', "123"
@@ -96,7 +96,7 @@ Let's look at each one!`
 
 ---
 
-### 4️⃣ **Boolean** <span style="font-size:0.85em; opacity:0.7">(short name: bool)</span> — True or False
+### 4️⃣ **Boolean** (short name: bool) — True or False
 
 \`\`\`python
 True, False
