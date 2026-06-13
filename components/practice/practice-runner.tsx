@@ -9,6 +9,7 @@ import type { PracticeProblem } from "@/data/practice/types"
 import { localizeProblem } from "@/data/practice/types"
 import { useLanguage } from "@/contexts/language-context"
 import { useEffectiveIsTeacher } from "@/lib/effective-role"
+import { useIsOwner } from "@/components/owner-only-guard"
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 import { CodeEditorWithGutter, parseErrorLine } from "@/components/cpp/code-editor-with-gutter"
@@ -205,6 +206,7 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
   // 이중 언어 지원: pyInitialCode + pySolutionCode 가 둘 다 있으면 토글 가능.
   // 기본값: 문제의 language (없으면 cpp).
   const isTeacher = useEffectiveIsTeacher()
+  const isOwner = useIsOwner() // owner(julia)는 학생 뷰여도 디버깅 위해 정답 항상 접근
   const hasPython = !!(rawProblem.pyInitialCode && rawProblem.pySolutionCode)
   const defaultLang = problem.language ?? "cpp"
   const [runtimeLang, setRuntimeLang] = useState<"cpp" | "python">(() => {
@@ -581,7 +583,7 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
       {/* 정답 코드 — 베끼기 방지: 학생은 2회 시도 또는 힌트 다 본 뒤에만. 선생님은 항상. */}
       {(() => {
         const allHints = (problem.hints ?? []).length
-        const canSeeSolution = isTeacher || failCount >= 2 || (allHints > 0 && hintsShown >= allHints)
+        const canSeeSolution = isTeacher || isOwner || failCount >= 2 || (allHints > 0 && hintsShown >= allHints)
         if (!canSeeSolution) {
           return (
             <p className="text-xs text-gray-400 py-1 flex items-center gap-1.5">
