@@ -8,6 +8,7 @@ import { BookOpen, Brain, Trophy, Flame, Zap, ChevronRight, Target, CheckCircle2
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useLanguage } from "@/contexts/language-context"
+import { LanguageToggle } from "@/components/language-toggle"
 import { useGamification, DAILY_XP_GOAL, getLevelTitle } from "@/hooks/use-gamification"
 import { useState, useEffect } from "react"
 import { OnboardingModal } from "@/components/onboarding-modal"
@@ -165,12 +166,15 @@ function LandingPage() {
           <span className="text-2xl">🦒</span>
           <span className="font-black text-xl text-gray-800">{t("코드린", "Coderin")}</span>
         </div>
-        <Link
-          href="/login"
-          className="px-4 py-2 rounded-full text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 transition-colors"
-        >
-          {t("로그인", "Login")}
-        </Link>
+        <div className="flex items-center gap-2">
+          <LanguageToggle />
+          <Link
+            href="/login"
+            className="px-4 py-2 rounded-full text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 transition-colors"
+          >
+            {t("로그인", "Login")}
+          </Link>
+        </div>
       </div>
 
       <main className="max-w-[1200px] mx-auto px-5 pb-16">

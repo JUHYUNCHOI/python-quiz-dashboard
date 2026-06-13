@@ -724,8 +724,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Each star shifts the same way every photo. Here: right=1, down=2. So (0,0) → (2,1) → (4,2) → off the grid.\nWe call this path an orbit.",
-        "별은 사진마다 똑같이 움직여요. 예시: right=1, down=2. (0,0) → (2,1) → (4,2) → 사진 밖.\n이 경로를 궤도라고 해요."),
+        "So how do we count the MINIMUM original stars? The trick: figure out which cells came from the SAME single star — otherwise we'd count one star many times.\nA star shifts the same way every photo, so let's follow one star's path. Here: right=1, down=2 → (0,0) → (2,1) → (4,2) → off the grid. We call this path an orbit.",
+        "그럼 '원본 별 최소 개수'를 어떻게 셀까요? 비결은 — 어떤 칸들이 *같은 별 하나* 에서 나온 건지 알아내는 거예요 (안 그러면 별 하나를 여러 번 세니까).\n별은 사진마다 똑같은 규칙으로 움직이니, 별 하나가 지나는 길을 따라가 봐요. 예시: right=1, down=2 → (0,0) → (2,1) → (4,2) → 사진 밖. 이 길을 '궤도'라고 해요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 5, textAlign: "center" }}>
@@ -787,7 +787,7 @@ export function makeAstralCh2(E, lang = "py") {
                       from:"(0,0)", calc: t(E,"row 0+2=2, col 0+1=1","행 0+2=2, 열 0+1=1"), to:"(2,1)", ok:true,
                     },
                     {
-                      from:"(2,1)", calc: t(E,"row 2+2=4, col 1+1=2","행 2+2=4, 열 1+1=2"), to: t(E,"(4,2) off grid ✗","(4,2) 밖 ✗"), ok:false,
+                      from:"(2,1)", calc: t(E,"row 2+2=4, col 1+1=2","행 2+2=4, 열 1+1=2"), to: t(E,"(4,2) off grid → chain ends","(4,2) 밖 → 여기서 궤도 끝"), ok:false,
                     },
                   ].map((step,i) => (
                     <div key={i} style={{
@@ -801,10 +801,10 @@ export function makeAstralCh2(E, lang = "py") {
                       <span style={{ color:"#64748b", fontSize:11 }}>+right=1, +down=2</span>
                       <span style={{ color:"#94a3b8" }}>→</span>
                       <span style={{
-                        background: step.ok ? "#dbeafe" : "#fee2e2",
-                        border: `2px solid ${step.ok ? "#3b82f6" : "#fca5a5"}`,
+                        background: step.ok ? "#dbeafe" : "#f1f5f9",
+                        border: `2px solid ${step.ok ? "#3b82f6" : "#cbd5e1"}`,
                         borderRadius:6, padding:"4px 9px", fontWeight:800,
-                        color: step.ok ? "#1e40af" : "#b91c1c",
+                        color: step.ok ? "#1e40af" : "#64748b",
                       }}>{step.to}</span>
                     </div>
                   ))}
@@ -812,8 +812,8 @@ export function makeAstralCh2(E, lang = "py") {
 
                 <div style={{ fontSize:12, color:"#374151", textAlign:"center", lineHeight:1.7 }}>
                   {t(E,
-                    "Chain = [(0,0) → (2,1)]. Only 2 cells. The star can ONLY visit these cells — nothing else.",
-                    "궤도 = [(0,0) → (2,1)]. 2칸짜리 궤도예요. 이 별은 이 두 칸 외에는 절대 갈 수 없어요.")}
+                    "Chain = [(0,0) → (2,1)]. Only 2 cells — that's just where the orbit ends. (A star going off-grid simply vanishes; it doesn't affect the answer.)",
+                    "궤도 = [(0,0) → (2,1)]. 2칸짜리 궤도예요 — 밖으로 나가면 그냥 거기서 궤도가 끝나는 것. (나간 별은 사라질 뿐, 답 계산엔 안 들어가요.)")}
                 </div>
               </div>
             );
@@ -975,6 +975,12 @@ export function makeAstralCh2(E, lang = "py") {
               </div>
             </div>
           ))}
+          {/* greedy 한 줄 설명 — 단어가 처음 나오는 자리라 간단히 (자세히는 다음 슬라이드) */}
+          <div style={{ marginTop: 8, fontSize: 11.5, color: "#6b7280", background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 11px", lineHeight: 1.6 }}>
+            💡 {t(E,
+              "Greedy (그리디) = decide by looking only at what's right in front of you, without thinking ahead. Details next slide.",
+              "그리디(greedy) = 뒤는 안 보고 지금 눈앞만 보고 바로 정하는 방법. 자세한 건 다음 슬라이드에서.")}
+          </div>
         </div>
       ),
     },

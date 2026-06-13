@@ -24,11 +24,13 @@ interface PyodideInterface {
   runPythonAsync: (code: string) => Promise<any>
   globals: any
   setStdout: (options: { batched?: (msg: string) => void; raw?: (charCode: number) => void; write?: (buf: Uint8Array) => number }) => void
+  setStdin?: (options: { stdin?: () => string | undefined | null; isatty?: boolean }) => void
 }
 
 interface PythonRunnerProps {
   initialCode?: string
   expectedOutput?: string
+  stdin?: string
   task?: string
   hint?: string
   onSuccess?: () => void
@@ -77,6 +79,7 @@ async function loadPyodideInstance(): Promise<PyodideInterface> {
 export function PythonRunner({
   initialCode = "",
   expectedOutput = "",
+  stdin,
   task = "",
   hint = "",
   onSuccess,
@@ -248,6 +251,17 @@ export function PythonRunner({
       pyodideInstance.setStdout({
         raw: (b: number) => { capturedBytes.push(b) }
       })
+
+      // input() 지원 — 레슨이 준 stdin 을 Pyodide 에 줄 단위로 먹임 (없으면 즉시 EOF)
+      if (typeof pyodideInstance.setStdin === "function") {
+        if (stdin != null && stdin !== "") {
+          const _lines = String(stdin).split("\n")
+          let _i = 0
+          pyodideInstance.setStdin({ stdin: () => (_i < _lines.length ? _lines[_i++] + "\n" : undefined) })
+        } else {
+          pyodideInstance.setStdin({ stdin: () => undefined })
+        }
+      }
 
       await pyodideInstance.runPythonAsync(code)
 

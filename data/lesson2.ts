@@ -37,7 +37,7 @@ export const lesson2Data: LessonData = {
           title: "📋 숫자 종류 — 정수와 실수",
           content: `숫자에는 **두 종류** 가 있어요. 소수점이 있느냐 없느냐로 갈려요.
 
-### 1️⃣ **정수** <span style="font-size:0.85em; opacity:0.7">(영어: int)</span> — 소수점 없는 숫자
+### 1️⃣ **정수** (영어: int) — 소수점 없는 숫자
 
 \`\`\`python
 10, -5, 0, 1000
@@ -47,7 +47,7 @@ export const lesson2Data: LessonData = {
 
 ---
 
-### 2️⃣ **실수** <span style="font-size:0.85em; opacity:0.7">(영어: float)</span> — 소수점 있는 숫자
+### 2️⃣ **실수** (영어: float) — 소수점 있는 숫자
 
 \`\`\`python
 3.14, -0.5, 2.0
@@ -82,7 +82,7 @@ export const lesson2Data: LessonData = {
           title: "📋 글자와 참/거짓 — 문자열과 불리언",
           content: `이제 숫자가 아닌 두 종류를 봐요.
 
-### 3️⃣ **문자열** <span style="font-size:0.85em; opacity:0.7">(영어: str)</span> — 글자
+### 3️⃣ **문자열** (영어: str) — 글자
 
 \`\`\`python
 "안녕", '파이썬', "123"
@@ -96,7 +96,7 @@ export const lesson2Data: LessonData = {
 
 ---
 
-### 4️⃣ **불리언** <span style="font-size:0.85em; opacity:0.7">(영어: bool)</span> — 참 또는 거짓
+### 4️⃣ **불리언** (영어: bool) — 참 또는 거짓
 
 \`\`\`python
 True, False
@@ -289,7 +289,7 @@ True
 
 > 💡 **SyntaxError** = "문법 에러". 파이썬이 코드를 읽는데 말이 안 되는 부분이 있을 때 나오는 비명이에요.
 
-따옴표로 감싸야 문자열로 저장돼요:
+따옴표로 감싸야 문자열(str)이 돼요:
 
 \`\`\`python
 '010-1234-5678'  # ✅ str
@@ -353,16 +353,16 @@ True
         {
           id: "quiz-error1",
           type: "quiz",
-          title: "❓ 전화번호 저장은?",
-          content: "전화번호 010-1234-5678을 저장하려면?",
+          title: "❓ 전화번호는 어떻게 써요?",
+          content: "전화번호 010-1234-5678 을 파이썬에서 올바르게 쓰려면?",
           options: [
-            "phone = 010-1234-5678",
-            "phone = '010-1234-5678'",
-            "phone = 010.1234.5678",
-            "phone = 010 1234 5678"
+            "010-1234-5678",
+            "'010-1234-5678'",
+            "010.1234.5678",
+            "010 1234 5678"
           ],
           answer: 1,
-          explanation: "하이픈(-)은 파이썬에서 빼기예요! 따옴표로 감싸야 문자열로 저장돼요."
+          explanation: "하이픈(-)은 파이썬에서 빼기예요! 따옴표로 감싸야 문자열(str)이 돼요."
         },
         {
           id: "quiz-error2",

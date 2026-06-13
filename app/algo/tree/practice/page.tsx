@@ -15,8 +15,10 @@ import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
-import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react"
+import { ArrowLeft, ArrowRight, CheckCircle2, BookOpen } from "lucide-react"
 import { PracticeRunner } from "@/components/practice/practice-runner"
+import { LessonPanel } from "@/components/algo/lesson-panel"
+import { TreeLesson } from "@/components/algo/tree-lesson"
 import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
 import { treeContestCluster } from "@/data/practice/algo-tree-contest"
 import React from "react"
@@ -79,6 +81,7 @@ export default function SortingPracticePage() {
   const searchParams = useSearchParams()
   const { user } = useAuth()
   const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set())
+  const [showLesson, setShowLesson] = useState(false)
 
   useEffect(() => {
     setSolvedSet(getSolvedSet())
@@ -111,12 +114,19 @@ export default function SortingPracticePage() {
       <div className="min-h-screen bg-gray-50 pb-24">
         <Header />
         <main className="max-w-5xl mx-auto px-4 pt-4">
-          <div className="mb-3 flex items-center gap-2">
+          <div className="mb-3 flex items-center justify-between gap-2">
             <button
-              onClick={() => router.push("/algo/tree/practice")}
+              onClick={() => router.push("/algo/tree")}
               className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700"
             >
               <ArrowLeft className="w-4 h-4" /> {t("문제 목록", "Problem list")}
+            </button>
+            {/* 문제 안에서 수업 보기 — 이동 없이 옆에서 슬라이드 */}
+            <button
+              onClick={() => setShowLesson(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-violet-200 bg-violet-50 text-violet-700 text-sm font-bold hover:bg-violet-100 transition-colors"
+            >
+              <BookOpen className="w-4 h-4" /> {t("수업 보기", "Lesson")}
             </button>
           </div>
 
@@ -169,6 +179,11 @@ export default function SortingPracticePage() {
 
           <PracticeRunner problem={problem} onSuccess={handleSolved} />
         </main>
+
+        {/* 📖 수업 — 이동 없이 옆에서 슬라이드 (in-context) */}
+        <LessonPanel open={showLesson} onClose={() => setShowLesson(false)} title={t("트리 수업", "Tree lesson")}>
+          <TreeLesson />
+        </LessonPanel>
         <BottomNav />
       </div>
     )

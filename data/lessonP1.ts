@@ -26,7 +26,10 @@ export const lessonP1Data: LessonData = {
 
 \`\`\`
 === 🧮 미니 계산기 ===
-결과: 10 + 3 = 13
+10 + 3 = 13
+10 - 3 = 7
+10 * 3 = 30
+10 / 3 = 3.33...
 \`\`\`
 
 **오늘 쓸 개념:**
@@ -90,35 +93,27 @@ print(f'결과: {result}')
         {
           id: "step2-5",
           type: "explain",
-          title: "💡 if-elif 살짝 맛보기!",
-          content: `계산기는 +, -, *, / 중 **어떤 걸 할지 골라야** 해요.
-이때 쓰는 게 \`if\`와 \`elif\`!
+          title: "🔢 빼기·곱하기·나누기도!",
+          content: `덧셈을 해봤으니, 나머지도 **똑같은 방법**으로!
 
 \`\`\`python
-op = '+'
-
-if op == '+':
-    print('더하기!')
-elif op == '-':
-    print('빼기!')
+print(f'{num1} - {num2} = {num1 - num2}')   # 빼기
+print(f'{num1} * {num2} = {num1 * num2}')   # 곱하기
+print(f'{num1} / {num2} = {num1 / num2}')   # 나누기
 \`\`\`
 
-- \`if 조건:\` → 조건이 맞으면 실행!
-- \`elif 조건:\` → 위의 if가 아니면, 이 조건을 확인!
-- \`else:\` → 위의 모든 조건이 아니면 실행!
-
-💡 \`if-elif-else\`는 **Part 2에서 자세히** 배워요!
-지금은 "조건에 따라 다른 코드를 실행한다"는 것만 이해하면 OK!`
+💡 \`/\`(나누기) 결과는 항상 **소수(float)** 예요 — lesson 9에서 배웠죠!
+(10 / 3 = 3.333...)`
         },
         {
           id: "step3",
           type: "tryit",
           title: "3️⃣ 곱하기·나누기도 추가!",
-          task: "*, / 도 처리하게 빈칸을 채워봐!",
-          initialCode: "# input() 대신 직접 값을 넣어요\nnum1 = 10\nnum2 = 3\nop = '+'\n\nif op == '+':\n    result = num1 + num2\nelif op == '-':\n    result = num1 - num2\n# 나머지 연산자도 추가해봐\nelif op == '*':\n    result = ___\nelif op == '/':\n    result = ___\n\nprint(f'{num1} {op} {num2} = {result}')",
-          expectedOutput: "10 + 3 = 13",
+          task: "곱하기·나누기 결과를 빈칸에 채워봐!",
+          initialCode: "num1 = 10\nnum2 = 3\nprint(f'{num1} + {num2} = {num1 + num2}')\nprint(f'{num1} - {num2} = {num1 - num2}')\nprint(f'{num1} * {num2} = {___}')\nprint(f'{num1} / {num2} = {___}')",
+          expectedOutput: "10 + 3 = 13\n10 - 3 = 7\n10 * 3 = 30\n10 / 3 = 3.3333333333333335",
           hint: "곱하기는 num1 * num2, 나누기는 num1 / num2!",
-          hint2: "num1 * num2 / num1 / num2"
+          hint2: "num1 * num2  /  num1 / num2"
         }
       ]
     },
@@ -131,11 +126,11 @@ elif op == '-':
           id: "mission",
           type: "mission",
           title: "🏆 완성된 계산기 만들기!",
-          task: "제목, 모든 연산, 결과 출력까지 다 채워봐!",
-          initialCode: "print('=== 🧮 미니 계산기 ===')\n\n# input() 대신 직접 값을 넣어요\nnum1 = 10\nnum2 = 3\nop = '+'\n\nif op == '+':\n    result = ___\nelif op == '-':\n    result = ___\nelif op == '*':\n    result = ___\nelif op == '/':\n    result = ___\nelse:\n    result = '오류'\n\nprint(f'결과: {num1} {op} {num2} = {result}')",
-          expectedOutput: "=== 🧮 미니 계산기 ===\n결과: 10 + 3 = 13",
-          hint: "각 연산자에 맞는 계산식을 넣으세요!",
-          hint2: "result = num1 + num2"
+          task: "제목 + 네 가지 연산 결과를 다 채워 완성해봐!",
+          initialCode: "print('=== 🧮 미니 계산기 ===')\nnum1 = 10\nnum2 = 3\nprint(f'{num1} + {num2} = {___}')\nprint(f'{num1} - {num2} = {___}')\nprint(f'{num1} * {num2} = {___}')\nprint(f'{num1} / {num2} = {___}')",
+          expectedOutput: "=== 🧮 미니 계산기 ===\n10 + 3 = 13\n10 - 3 = 7\n10 * 3 = 30\n10 / 3 = 3.3333333333333335",
+          hint: "각 빈칸: num1 + num2, num1 - num2, num1 * num2, num1 / num2",
+          hint2: "num1 + num2"
         },
         {
           id: "complete",
@@ -143,22 +138,27 @@ elif op == '-':
           title: "🎉 프로젝트 완료!",
           content: `## 축하해요! 🎉
 
-**미니 계산기**를 완성했어요!
+**미니 계산기**를 완성했어요! 두 수의 사칙연산을 한 번에 보여주죠.
 
 ### 오늘 쓴 개념:
 ✅ print() - 출력
 ✅ 변수 - 데이터 저장
 ✅ +, -, *, / - 연산자
-✅ if-elif-else - 조건문 (살짝 맛보기)
+✅ int() / float() - 타입 변환
 ✅ f-string - 결과 꾸미기
 
-### 도전 과제 💪 (Part 2 배운 후에!)
-- 나눗셈에서 0으로 나누기 막기
-- 직접 input()으로 숫자 받기
-- 계산 여러 번 반복하기 (while)
-- 좋아하는 숫자로 num1, num2 바꿔서 실행!
+### 🤔 그런데… 한 가지 아쉬운 점!
+지금은 +, -, ×, ÷ 를 **전부** 보여줘요.
+근데 사용자가 **"+ 하나만"** 보고 싶다면?
+원하는 것만 **골라서** 보여주려면 — **"조건"** 이 필요해요!
 
-**Part 2**에서 조건문과 반복문을 자세히 배워요! 🚀`
+➡️ 그게 바로 **Part 2**에서 배울 **조건문 \`if\`** 예요! 🚀
+(\`if op == '+': ...\` 처럼 — 곧 만나요!)
+
+### 도전 과제 💪 (Part 2 배운 후에!)
+- \`if\` 로 원하는 연산 하나만 골라 보여주기
+- \`input()\` 으로 직접 숫자 받기
+- \`while\` 로 계산 여러 번 반복하기`
         }
       ]
     }

@@ -1018,8 +1018,22 @@ export function AstralAlgoTrace({ E }) {
                         </>
                       );
                     }
-                    // G or B → show star
+                    // G/B → 별. 단 G인데 predecessor(r-B, c-A)에 이미 별이 있으면
+                    // '옮겨온 별'(원본 사진엔 없음, 위에서 내려옴) → ★ 대신 흐린 ↘ 로 (세는 별 아님).
+                    // (B 는 두 사진 모두 별 = 여기 원본 별이 있으니 항상 ★)
                     const starColor = letter === "B" ? "#1e293b" : "#475569";
+                    const pr = r - B, pc = c - A;
+                    const movedIn = letter === "G" && pr >= 0 && pc >= 0 && pr < N && pc < N
+                      && marks[`${pr},${pc}`]?.kind === "chain";
+                    if (movedIn) {
+                      return (
+                        <>
+                          <div style={{ fontSize: 17, lineHeight: 1, color: "#cbd5e1", fontWeight: 900 }}
+                               title={t(E, "moved in from up-left — not an original star", "위에서 내려온 별 — 원본 아님")}>↘</div>
+                          <div style={{ fontSize: 9, marginTop: 1, color: starColor, fontWeight: 700 }}>{letter} ({r},{c})</div>
+                        </>
+                      );
+                    }
                     return (
                       <>
                         <div style={{ fontSize: 20, lineHeight: 1, color: "#d97706", fontWeight: 900 }}>★</div>
