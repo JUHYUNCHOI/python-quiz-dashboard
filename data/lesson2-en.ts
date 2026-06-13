@@ -289,7 +289,7 @@ True
 
 > 💡 **SyntaxError** = "grammar error". Python yells this when it reads your code and something doesn't make grammatical sense.
 
-Wrap it in quotes to store it as a string:
+Wrap it in quotes to make it a string:
 
 \`\`\`python
 '555-867-5309'  # ✅ str
@@ -353,16 +353,16 @@ You'll learn how to combine strings with numbers in a **later lesson**. For now,
         {
           id: "quiz-error1",
           type: "quiz",
-          title: "❓ How to store a phone number?",
-          content: "How do you store the phone number 555-867-5309?",
+          title: "❓ How do you write a phone number?",
+          content: "How do you write the phone number 555-867-5309 correctly in Python?",
           options: [
-            "phone = 555-867-5309",
-            "phone = '555-867-5309'",
-            "phone = 555.867.5309",
-            "phone = 555 867 5309"
+            "555-867-5309",
+            "'555-867-5309'",
+            "555.867.5309",
+            "555 867 5309"
           ],
           answer: 1,
-          explanation: "Hyphens (-) mean subtraction in Python! Wrap it in quotes to store it as a string."
+          explanation: "Hyphens (-) mean subtraction in Python! Wrap it in quotes to make it a string (str)."
         },
         {
           id: "quiz-error2",
