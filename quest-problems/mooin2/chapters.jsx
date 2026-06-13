@@ -260,8 +260,8 @@ export function makeMooin2Ch2(E, lang = "py") {
     {
       type: "bruteRunner",
       narr: t(E,
-        "Let's RUN it. Try N = 40 (instant), then N = 160, then N = 420 — feel it crawl as N grows! 🐌",
-        "직접 돌려봐요. N = 40 (순식간), N = 160, N = 420 순서로 — N 이 커질수록 느려지는 걸 느껴봐요! 🐌"),
+        "Let's RUN it. N = 40 finishes instantly — then jump to N = 2000 🐌 and watch it actually crawl. Hit Stop whenever you've felt enough!",
+        "직접 돌려봐요. N = 40 은 순식간 — 그다음 N = 2000 🐌 로 올리면 진짜로 기어가는 걸 봐요. 충분히 느꼈으면 Stop 눌러요!"),
     },
     /* 2-4 — the limit */
     {

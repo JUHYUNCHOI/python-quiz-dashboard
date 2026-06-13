@@ -14,9 +14,10 @@ const A = "#ea580c";
    student physically watches small N finish instantly and big N hang.
    ════════════════════════════════════════════════════════════════════ */
 const BRUTE_PRESETS = [
-  { n: 40,  label_en: "N = 40",  label_ko: "N = 40" },
-  { n: 160, label_en: "N = 160", label_ko: "N = 160" },
-  { n: 420, label_en: "N = 420", label_ko: "N = 420" },
+  { n: 40,   label_en: "N = 40",      label_ko: "N = 40" },
+  { n: 200,  label_en: "N = 200",     label_ko: "N = 200" },
+  { n: 800,  label_en: "N = 800",     label_ko: "N = 800" },
+  { n: 2000, label_en: "N = 2000 🐌", label_ko: "N = 2000 🐌" },
 ];
 
 // Deterministic array with lots of repeats (values in 1..maxV).
