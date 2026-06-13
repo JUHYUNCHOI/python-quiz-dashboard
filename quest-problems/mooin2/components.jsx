@@ -550,12 +550,51 @@ export function downloadMooin2PDF(E, sections, lang = "py") {
 <div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO January 2025 Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+
+<h2>${t(E, "Problem", "문제")}</h2>
+<div class="why">
+  <b>🐄 ${t(E, "What's a moo?", "moo 란?")}</b>
+  <p>${t(E, "A <b>moo</b> is three numbers (x, y, y): the last two are EQUAL, the first is DIFFERENT. It <b>occurs</b> in the array if you can pick those three left-to-right in order — gaps are allowed (a subsequence).", "<b>moo</b> 는 숫자 3개 (x, y, y): 뒤 둘은 같고 첫째는 다름. 그 셋을 왼→오 순서로 고를 수 있으면(사이 건너뜀 OK = 부분수열) 배열에서 <b>발생</b>.")}</p>
+  <p>${t(E, "Count the number of <b>DISTINCT</b> moos — i.e. distinct (x, y) pairs.", "<b>서로 다른</b> moo 개수 — 즉 서로 다른 (x, y) 쌍 — 를 센다.")}</p>
+  <p><b>${t(E, "Input", "입력")}:</b> ${t(E, "line 1 = N; line 2 = N integers a₁ … a_N.", "1줄 = N; 2줄 = 정수 N 개 a₁ … a_N.")}</p>
+  <p><b>${t(E, "Constraints", "제약")}:</b> 1 ≤ N ≤ 10⁶, 1 ≤ aᵢ ≤ N ${t(E, "(answer can be big — use 64-bit in C++).", "(답이 클 수 있음 — C++ 는 64-bit).")}</p>
+</div>
+<h3>${t(E, "Sample", "샘플")}</h3>
+<pre>${t(E, "input", "입력")}:
+6
+1 2 3 4 4 4
+
+${t(E, "output", "출력")}: 3</pre>
+<div class="why">${t(E, "The 3 distinct moos are (1,4,4), (2,4,4), (3,4,4) — all use the (4,4) pair, with three different x's.", "서로 다른 moo 3개는 (1,4,4), (2,4,4), (3,4,4) — 모두 (4,4) 짝을 쓰고 x 만 셋.")}</div>
+
+<h2>${t(E, "First idea — and why it's too slow", "첫 아이디어 — 왜 너무 느린가")}</h2>
+<div class="why">
+  <p>${t(E, "Obvious approach: try every triple i &lt; j &lt; k. If a[j] = a[k] and a[i] ≠ a[j], add (a[i], a[j]) to a set. The set's final size is the answer (the set kills duplicates).", "뻔한 방법: 모든 삼중 i &lt; j &lt; k 시도. a[j] = a[k] 이고 a[i] ≠ a[j] 면 (a[i], a[j]) 를 집합에 넣기. 집합의 최종 크기가 답 (집합이 중복 제거).")}</p>
+  <p>${t(E, "But that's ≈ N³ ÷ 6 work. N = 10⁶ → ~1.7×10¹⁷ steps → about <b>30 YEARS</b> at a billion/sec. The limit is ~2 seconds. We need O(N).", "하지만 ≈ N³ ÷ 6. N = 10⁶ → ~1.7×10¹⁷ → 초당 10억 번 해도 약 <b>30년</b>. 제한 ~2초. O(N) 이 필요.")}</p>
+</div>
+
+<h2>${t(E, "The fast idea — O(N)", "빠른 아이디어 — O(N)")}</h2>
+<div class="why">
+  <p>${t(E, "For each value y that appears at least twice, let <b>p = the second-to-last position of y</b> (the latest j that still has another y after it). Every DISTINCT value before p can be the x. So add <b>D[p]</b>, where D[k] = number of distinct values in a[0..k-1].", "2번 이상 나오는 각 y 에 대해 <b>p = y 의 끝에서 두 번째 위치</b> (뒤에 또 y 가 있는 가장 늦은 j). p 앞의 서로 다른 값은 모두 x 가 될 수 있음. 그래서 <b>D[p]</b> 더하기 (D[k] = a[0..k-1] 의 서로 다른 값 수).")}</p>
+  <p><b>⚠️ ${t(E, "Tricky bit", "함정")}:</b> ${t(E, "x must differ from y. y itself appears before p exactly when count[y] ≥ 3 — subtract 1 in that case.", "x 는 y 와 달라야. count[y] ≥ 3 일 때만 y 가 p 앞에 등장 — 그땐 1 빼기.")}</p>
+  <p>${t(E, "Sample trace: y = 4, p = 4, D[4] = 4 (values 1,2,3,4), count[4] = 3 → 4 − 1 = 3. Answer = 3. ✓", "샘플 추적: y = 4, p = 4, D[4] = 4 (값 1,2,3,4), count[4] = 3 → 4 − 1 = 3. 답 = 3. ✓")}</p>
+</div>
+
 <h2>${t(E, "Code (4 sections)", "코드 (4 섹션)")}</h2>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>
   ${sectionCode(s)}
 `).join("")}
+
+<h2>${t(E, "Self-check", "스스로 확인")}</h2>
+<div class="why">
+  <p>1. ${t(E, "a = [1, 2, 2] — how many distinct moos occur?", "a = [1, 2, 2] — 서로 다른 moo 개수는?")}</p>
+  <p>2. ${t(E, "a = [1, 1] — how many?", "a = [1, 1] — 몇 개?")}</p>
+  <p>3. ${t(E, "a = [4, 1, 4, 4] — which moo(s) occur, and why do we subtract 1?", "a = [4, 1, 4, 4] — 어떤 moo 가 발생하고, 왜 1 을 빼나?")}</p>
+  <p style="color:#9ca3af;font-size:11px;margin-top:8px;">${t(E, "Answers: 1) one — (1,2,2). 2) zero — there's no x ≠ 1 before the (1,1) pair. 3) one — (1,4,4); count[4] = 3, so a 4 sits before p and can't be its own x → subtract 1.", "답: 1) 1개 — (1,2,2). 2) 0개 — (1,1) 짝 앞에 x ≠ 1 이 없음. 3) 1개 — (1,4,4); count[4] = 3 이라 4 가 p 앞에 있고 자기 x 가 못 됨 → 1 빼기.")}</p>
+</div>
+
 <div style="margin-top:30px;font-size:10px;color:#94a3b8;text-align:center;border-top:1px solid #e5e7eb;padding-top:8px;">© Coderin · 코드린</div>
 </body></html>`;
   win.document.write(html);
