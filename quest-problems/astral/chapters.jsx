@@ -1103,8 +1103,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "① First instinct — go front → back. Each time a G has no star arriving, drop a star; that star then slides ONE step right (into the next cell in photo 2).\nOn orbit G G B it feels brilliant: G(0)'s star slides into G(1), filling it for FREE — one star, two cells!\nBut watch — that 'free fill' is about to backfire at the B.",
-        "① 첫 직감 — 앞→뒤로. 별이 안 들어오는 G 마다 별을 놓고, 그 별은 한 칸 오른쪽(사진2의 다음 칸)으로 미끄러져요.\n궤도 G G B 에선 기막혀 보여요: G(0)의 별이 G(1)로 미끄러져 공짜로 채워짐 — 별 하나로 두 칸!\n근데 봐요 — 그 '공짜'가 끝의 B 에서 발목을 잡아요."),
+        "Let's try the obvious order: front → back.\nRule: when a G has no star coming in, put one original star there. That star then slides one step forward (it lands on the next cell in photo 2).\nOn orbit G G B this feels clever: G(0)'s star slides into G(1) and fills it for FREE — one star covers two cells!\nBut watch the B at the end. That 'free fill' is exactly what breaks it.",
+        "당연한 순서부터 해봐요: 앞 → 뒤.\n규칙: G 에 들어오는 별이 없으면 거기에 원본 별을 하나 놓아요. 그 별은 한 칸 앞으로 미끄러져요 (사진 2 에서 다음 칸에 도착).\n궤도 G G B 에선 똑똑해 보여요: G(0) 의 별이 G(1) 로 미끄러져 공짜로 채워짐 — 별 하나로 두 칸!\n근데 끝의 B 를 봐요. 바로 그 '공짜 채움' 때문에 깨져요."),
       content: (
         <div style={{ padding: 14 }}>
           {/* One-line plan banner — the per-step bubbles below carry the rule details */}
@@ -1142,8 +1142,8 @@ export function makeAstralCh2(E, lang = "py") {
               cells: [{letter:"G",star:true,active:false},{letter:"G",star:false,active:true},{letter:"B",star:false,active:true}],
               note: t(E, "B(2): to fill photo 2, G(1) must SEND a star here. But G(1) was filled for free — it has no star to send. 💥", "B(2): 사진2 를 채우려면 G(1) 이 별을 보내줘야 해요. 그런데 G(1) 은 공짜로 때워서 보낼 별이 없어요. 💥"),
               why: t(E,
-                "It's NOT impossible — it needs just 3 stars! The trap: forward slid G(0)'s star into G(1) to fill it for free, so G(1) kept NO star of its own. But B(2) gets its photo-2 star ONLY if G(1) sends one — and G(1) has none left to send.\nForward gave away the very star the B needed. A B's need points LEFT (it pulls a star from the cell before it) — so solve it going backward.",
-                "불가능 아니에요 — 별 3개면 돼요! 함정: 앞→뒤가 G(0) 의 별을 G(1) 로 미끄러뜨려 공짜로 채워서, G(1) 엔 자기 별이 안 남았어요. 그런데 B(2) 는 G(1) 이 보내줘야만 사진2 별이 생겨요 — 보낼 별이 없죠.\n앞→뒤가 B 에게 필요한 바로 그 별을 줘버린 거예요. B 의 요구는 '왼쪽'을 향해요(앞 칸의 별을 당김) — 그러니 거꾸로 풀어야 해요."),
+                "The puzzle is NOT impossible — 3 stars solve it. We just chose the wrong order.\nWhat went wrong: a B MUST receive a star from the cell right before it. So B(2) needs G(1) to keep a star and send it over. But going forward, we filled G(1) 'for free' with G(0)'s incoming star — so G(1) kept none of its own to send. We spent the very star the B was counting on.\nLesson: a G is a free choice, but a B is a hard demand on the cell before it. We should settle the hard demands FIRST. And a B's demand points backward (to the cell before it) — so we should sweep from the END.",
+                "이 퍼즐은 불가능한 게 아니에요 — 별 3 개면 풀려요. 그냥 순서를 잘못 골랐을 뿐.\n무엇이 잘못됐나: B 는 바로 앞 칸에서 별을 받아야만 해요. 그래서 B(2) 는 G(1) 이 별을 가지고 있다가 보내줘야 해요. 그런데 앞→뒤로 가면서 G(1) 을 G(0) 의 들어오는 별로 '공짜로' 채워버려서, G(1) 엔 보낼 자기 별이 안 남았어요. B 가 기대던 바로 그 별을 써버린 거예요.\n교훈: G 는 자유 선택이지만, B 는 앞 칸에 대한 강한 요구예요. 강한 요구부터 먼저 들어줘야 해요. 그리고 B 의 요구는 뒤(앞 칸)를 가리켜요 — 그러니 끝에서부터 훑어야 해요."),
               result: t(E, "Stuck — the forward plan is wrong ✗ (the answer is NOT -1!)", "막혔어요 — 앞→뒤 작전이 틀렸어요 ✗ (답은 -1 아니에요!)"),
               ok: false,
             },
@@ -1156,8 +1156,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "② Same orbit — just flip the direction: end → start. Now the B is the FIRST cell we hit. A B always demands one thing: 'the cell before me must KEEP a star to send me.' So honor it on the spot — star the B, and star its predecessor.\nBecause we serve each demand BEFORE that cell could be spent on anything else, we never give away a star someone needed. One clean pass, no guessing.",
-        "② 같은 궤도 — 방향만 뒤집어요: 끝→시작. 이제 B 를 제일 먼저 만나요. B 의 요구는 늘 하나: '내 앞 칸은 나한테 보낼 별을 가지고 있어야 해.' 그래서 그 자리에서 들어줘요 — B 에 별, 그 앞 칸에도 별.\n각 요구를 그 칸이 다른 데 쓰이기 전에 먼저 처리하니까, 누가 필요로 한 별을 빼앗을 일이 없어요. 깔끔한 한 번 훑기, 찍기 없음."),
+        "Same orbit, same rule — just flip the direction: end → start.\nNow the B is the FIRST cell we meet. A B has no choice: the cell right before it MUST keep an original star to send over. So we obey it immediately — star the B, and star the cell before it.\nBecause we hit each B before we ever touch the cell it leans on, we lock in that needed star FIRST. We can never accidentally spend it. One clean pass, no guessing.",
+        "같은 궤도, 같은 규칙 — 방향만 뒤집어요: 끝 → 시작.\n이제 B 를 제일 먼저 만나요. B 는 선택지가 없어요: 바로 앞 칸이 보내줄 원본 별을 반드시 가지고 있어야 해요. 그래서 바로 들어줘요 — B 에 별, 그 앞 칸에도 별.\n각 B 를 그 B 가 기대는 앞 칸에 닿기 전에 먼저 만나니까, 필요한 별을 먼저 박아둬요. 실수로 써버릴 일이 없어요. 깔끔한 한 번 훑기, 찍기 없음."),
       content: (
         <div style={{ padding: 14 }}>
           {/* One-line plan banner — the per-step bubbles below carry the rule details */}
@@ -1176,10 +1176,25 @@ export function makeAstralCh2(E, lang = "py") {
             background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10,
             padding: "10px 13px", marginBottom: 14, fontSize: 12.5, color: "#92400e", lineHeight: 1.65,
           }}>
-            🔑 <b>{t(E, "Why backward?", "왜 거꾸로?")}</b>{" "}
+            🔑 <b>{t(E, "Why backward? In one line:", "왜 거꾸로? 한 줄로:")}</b>{" "}
             {t(E,
-              "A B is FORCED — the cell right before it MUST hold an original star (zero choice). A G is a CHOICE — its star can be its own, or one that slid in from the left. You have to settle the no-choice cells first — and a B's demand points LEFT — so sweep from the end: you meet each B before you fix the G's it leans on, and never give away a star a B needs.",
-              "B 는 강제예요 — 바로 앞 칸에 원본 별이 반드시 있어야 해요 (선택지 0). G 는 선택이에요 — 그 별이 자기 원본일 수도, 왼쪽에서 이동해 온 것일 수도. 선택지 없는 칸(B)부터 정해야 하는데, B 의 강제는 왼쪽(앞 칸)을 가리켜요 — 그래서 끝에서부터 훑으면 B 가 기대는 G 를 정하기 전에 B 를 먼저 만나, B 가 필요로 한 별을 빼앗지 않아요.")}
+              "B = forced (the cell before it MUST hold a star). G = a choice. Settle the forced ones first — and they point backward — so sweep from the end.",
+              "B = 강제 (앞 칸에 별이 반드시 있어야 함). G = 선택. 강제부터 먼저 정한다 — 그리고 그건 뒤를 가리킨다 — 그러니 끝에서부터 훑는다.")}
+            <div style={{
+              marginTop: 9, paddingTop: 9, borderTop: "1px dashed #fbbf24", fontSize: 11.5, lineHeight: 1.6,
+            }}>
+              {t(E,
+                "B is FORCED: a B has a star in BOTH photos, so its photo-2 star can only have arrived from the cell before it — that cell is FORCED to hold an original star. Zero choice.",
+                "B 는 강제: B 는 두 사진 모두 별이 있어요. 그러니 사진-2 별은 앞 칸에서 온 것일 수밖에 없어요 — 그 앞 칸은 원본 별을 반드시 가져야 해요. 선택지 0.")}
+              <br/>
+              {t(E,
+                "G is a CHOICE: a G has a star in only ONE photo, so it could be its own original star (that later vanishes), OR a star that slid in from the cell before it. Either works.",
+                "G 는 선택: G 는 한 사진에만 별이 있어요. 그러니 자기 원본 별일 수도 (나중에 사라짐), 앞 칸에서 미끄러져 온 별일 수도. 둘 다 OK.")}
+              <br/>
+              {t(E,
+                "So fix the no-choice cells (B) first. Every B leans on the cell BEFORE it — so go from the end: you meet each B before the cell it leans on, pin the forced star, and never give it away to a G.",
+                "그러니 선택지 없는 칸(B)부터 정해요. 모든 B 는 자기 앞 칸에 기대요 — 그래서 끝에서부터 가요: B 를 그 앞 칸보다 먼저 만나 강제 별을 박아두고, 그걸 G 에게 빼앗기지 않아요.")}
+            </div>
           </div>
 
           {/* Interactive 2D-grid simulation — same orbit, walked end → start */}
@@ -1230,10 +1245,35 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "That backward rule is the whole solution — let's turn it straight into code. The nice surprise: we don't even need to group cells into orbits first. We just sweep the WHOLE grid from the bottom-right corner to the top-left, and keep a set of cells that MUST hold an original star.",
-        "방금 그 뒤→앞 규칙이 사실 풀이 전부예요 — 그대로 코드로 옮겨봐요. 놀라운 점: 칸을 궤도별로 묶을 필요도 없어요. 그냥 격자 전체를 오른쪽-아래 끝에서 왼쪽-위로 한 번 훑으면서, '원래 별이 꼭 있어야 하는 칸'만 set 에 모으면 돼요."),
+        "That backward rule is the whole solution — let's turn it straight into code. The nice surprise: we don't even need to group cells into orbits first. We just sweep the WHOLE grid from the bottom-right corner to the top-left, and keep a set of cells that MUST hold an original star.\nFirst, one piece of vocabulary: 'the cell a star came FROM.' A star moves +down rows, +right cols each photo. So a star sitting at (r, c) in photo 2 must have started one step back: (r − down, c − right) — up by down, left by right. We'll call that cell the predecessor. Going backward by the same amount the star moved = the cell it came from.",
+        "방금 그 뒤→앞 규칙이 사실 풀이 전부예요 — 그대로 코드로 옮겨봐요. 놀라운 점: 칸을 궤도별로 묶을 필요도 없어요. 그냥 격자 전체를 오른쪽-아래 끝에서 왼쪽-위로 한 번 훑으면서, '원래 별이 꼭 있어야 하는 칸'만 set 에 모으면 돼요.\n먼저 용어 하나: '별이 온 칸'. 별은 사진마다 아래로 +down, 오른쪽으로 +right 만큼 움직여요. 그러니 사진 2 에서 (r, c) 에 있는 별은 한 칸 거꾸로 — (r − down, c − right), 즉 위로 down, 왼쪽으로 right — 에서 출발했어야 해요. 그 칸을 '직전 칸(predecessor)'이라 불러요. 별이 움직인 만큼 거꾸로 = 별이 온 칸."),
       content: (
         <div style={{ padding: 14 }}>
+          {/* Concrete "predecessor = the cell a star came FROM" panel (down=1,right=1) */}
+          <div style={{
+            background: "#eef2ff", border: "1.5px solid #c7d2fe", borderRadius: 10,
+            padding: "11px 14px", marginBottom: 12,
+          }}>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#3730a3", marginBottom: 7, textAlign: "center" }}>
+              📍 {t(E, "\"The cell a star came FROM\" (predecessor)", "\"별이 온 칸\" (직전 칸)")}
+            </div>
+            <div style={{ fontSize: 11.5, color: "#3730a3", lineHeight: 1.6, marginBottom: 9 }}>
+              {t(E,
+                "A star moves +down, +right each photo. So to find where the star at (r, c) came from, step the SAME amount backward: up by down, left by right.",
+                "별은 사진마다 아래로 +down, 오른쪽으로 +right 움직여요. 그러니 (r, c) 의 별이 어디서 왔는지 알려면 똑같은 만큼 거꾸로: 위로 down, 왼쪽으로 right.")}
+            </div>
+            <div style={{
+              textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5,
+              color: "#1e1b4b", background: "#fff", border: "1px dashed #a5b4fc",
+              borderRadius: 8, padding: "8px 6px", lineHeight: 1.8,
+            }}>
+              {t(E, "predecessor(r, c) = (r − down, c − right)", "직전 칸(r, c) = (r − down, c − right)")}<br/>
+              <span style={{ color: "#6366f1" }}>
+                {t(E, "e.g. down=1, right=1:  star at (2,2) came from (1,1)", "예) down=1, right=1:  (2,2) 의 별은 (1,1) 에서 옴")}
+              </span>
+            </div>
+          </div>
+
           <div style={{
             background: "#f0fdfa", border: "2px solid #0d9488", borderRadius: 10,
             padding: "10px 14px", marginBottom: 12,
@@ -1243,11 +1283,11 @@ export function makeAstralCh2(E, lang = "py") {
             </div>
             {[
               { k: "B", c: "#1e293b", fg: "#fff",
-                txt: t(E, "★ here AND ★ at the predecessor (r-down, c-right). If that cell is W or off-grid → -1.",
-                         "여기 ★ + 직전 칸 (r-down, c-right) 에도 ★. 그 칸이 W 거나 사진 밖이면 → -1.") },
+                txt: t(E, "FORCED. ★ here AND ★ on the cell it came from = (r−down, c−right). If that cell is W or off-grid → impossible → -1.",
+                         "강제. 여기 ★ + 별이 온 칸 = (r−down, c−right) 에도 ★. 그 칸이 W 거나 사진 밖이면 → 불가능 → -1.") },
               { k: "G", c: "#cbd5e1", fg: "#1e293b",
-                txt: t(E, "Already starred (a later B grabbed it)? skip. Else: ★ at predecessor if it can hold one, otherwise ★ here.",
-                         "이미 별 있음 (뒤쪽 B 가 찍어둠)? 통과. 아니면: 직전 칸이 별 가능하면 거기 ★, 안 되면 여기 ★.") },
+                txt: t(E, "A CHOICE. Already starred (a B before it grabbed that cell)? skip — one star covers both. Else: ★ on the cell it came from if that cell can hold a star, otherwise ★ here.",
+                         "선택. 이미 별 있음 (뒤쪽 B 가 그 칸을 찍어둠)? 통과 — 별 하나가 둘을 덮음. 아니면: 별이 온 칸이 별을 가질 수 있으면 거기 ★, 안 되면 여기 ★.") },
               { k: "W", c: "#fff", fg: "#94a3b8",
                 txt: t(E, "Nothing — empty in both photos.", "아무것도 안 함 — 두 사진 다 비어있음.") },
             ].map((row, i) => (
@@ -1288,24 +1328,57 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Quick confidence check on orbit G G B again — and the one case that returns -1.",
-        "궤도 G G B 로 다시 한번 확인 — 그리고 -1 이 나오는 단 하나의 경우."),
+        "Let's run the code by hand on orbit G G B, with down=1, right=1. Cells: (0,0)=G, (1,1)=G, (2,2)=B. Sweep backward and watch the 'possibles' set fill up.",
+        "코드를 손으로 궤도 G G B 에 돌려봐요. down=1, right=1. 칸: (0,0)=G, (1,1)=G, (2,2)=B. 거꾸로 훑으면서 'possibles' set 이 차는 걸 봐요."),
       content: (
         <div style={{ padding: 14 }}>
+          {/* possibles trace table for G G B (down=1, right=1) */}
           <div style={{
             background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 10,
-            padding: "10px 14px", marginBottom: 10,
+            padding: "11px 13px", marginBottom: 10,
           }}>
-            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#14532d", marginBottom: 6 }}>
-              ✅ {t(E, "Trace on G G B (sweeping backward)", "G G B 거꾸로 훑기")}
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#14532d", marginBottom: 8 }}>
+              ✅ {t(E, "Sweep backward — trace the possibles set", "거꾸로 훑기 — possibles set 따라가기")}
             </div>
-            <div style={{ fontSize: 12, color: "#166534", lineHeight: 1.8, fontFamily: "'JetBrains Mono',monospace" }}>
-              {t(E, "B(2) → add (2) and its predecessor (1)   → possibles = {1, 2}", "B(2) → (2) 와 직전 칸 (1) 추가   → possibles = {1, 2}")}<br/>
-              {t(E, "G(1) → already in possibles → skip", "G(1) → 이미 possibles 에 있음 → 통과")}<br/>
-              {t(E, "G(0) → not in set, no predecessor → add (0)   → possibles = {0, 1, 2}", "G(0) → set 에 없고 직전 칸 없음 → (0) 추가   → possibles = {0, 1, 2}")}
-            </div>
-            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#15803d", marginTop: 6 }}>
+            <table style={{
+              width: "100%", borderCollapse: "collapse",
+              fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: "#166534",
+            }}>
+              <thead>
+                <tr style={{ background: "#dcfce7", color: "#14532d" }}>
+                  <th style={{ padding: "5px 6px", textAlign: "left", border: "1px solid #bbf7d0" }}>{t(E, "cell", "칸")}</th>
+                  <th style={{ padding: "5px 6px", textAlign: "left", border: "1px solid #bbf7d0" }}>{t(E, "what happens", "하는 일")}</th>
+                  <th style={{ padding: "5px 6px", textAlign: "left", border: "1px solid #bbf7d0" }}>possibles</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ padding: "5px 6px", border: "1px solid #bbf7d0", fontWeight: 800 }}>(2,2)=B</td>
+                  <td style={{ padding: "5px 6px", border: "1px solid #bbf7d0" }}>{t(E, "forced. add (2,2); came-from (1,1) is G → add (1,1)", "강제. (2,2) 추가; 온 칸 (1,1) 은 G → (1,1) 추가")}</td>
+                  <td style={{ padding: "5px 6px", border: "1px solid #bbf7d0" }}>{"{(1,1),(2,2)}"}</td>
+                </tr>
+                <tr style={{ background: "#f7fee7" }}>
+                  <td style={{ padding: "5px 6px", border: "1px solid #bbf7d0", fontWeight: 800 }}>(1,1)=G</td>
+                  <td style={{ padding: "5px 6px", border: "1px solid #bbf7d0" }}>{t(E, "already in possibles (the B pinned it) → skip", "이미 possibles 에 있음 (B 가 박아둠) → 통과")}</td>
+                  <td style={{ padding: "5px 6px", border: "1px solid #bbf7d0" }}>{"{(1,1),(2,2)}"}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "5px 6px", border: "1px solid #bbf7d0", fontWeight: 800 }}>(0,0)=G</td>
+                  <td style={{ padding: "5px 6px", border: "1px solid #bbf7d0" }}>{t(E, "came-from (−1,−1) off-grid → add (0,0)", "온 칸 (−1,−1) 사진 밖 → (0,0) 추가")}</td>
+                  <td style={{ padding: "5px 6px", border: "1px solid #bbf7d0" }}>{"{(0,0),(1,1),(2,2)}"}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#15803d", marginTop: 8 }}>
               {t(E, "answer = len(possibles) = 3 ✓", "answer = len(possibles) = 3 ✓")}
+            </div>
+            <div style={{
+              marginTop: 8, background: "#fef9c3", border: "1px solid #fde047",
+              borderRadius: 8, padding: "8px 11px", fontSize: 12, color: "#854d0e", lineHeight: 1.55,
+            }}>
+              💡 {t(E,
+                "The star the B forced at (1,1) ALSO satisfies the G at (1,1) — one star, two cells. That's why backward never gets stuck.",
+                "B 가 (1,1) 에 강제로 박은 별이 (1,1) 의 G 도 동시에 해결해요 — 별 하나, 두 칸. 그래서 거꾸로 가면 절대 안 막혀요.")}
             </div>
           </div>
           <div style={{

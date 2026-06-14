@@ -8,6 +8,13 @@
  *  - 빈 짝 Backspace: {|} 사이에서 Backspace 누르면 둘 다 삭제
  *  - Ctrl/Cmd+Enter: 옵션으로 실행 콜백 호출
  *
+ * ⚠️ 커서 보존 (2026-06): 예전엔 setCode(newVal) 뒤 requestAnimationFrame 으로
+ *    selection 을 복원했는데, controlled <textarea value={code}> 에선 rAF 가
+ *    React 리렌더와 경합해서 커서가 끝으로 튕기거나 글자가 엉뚱한 곳에 들어갔다.
+ *    → 이제 textarea.setRangeText() 로 DOM 을 먼저 고치고 커서를 즉시 잡은 뒤
+ *      setCode(textarea.value) 로 state 를 맞춘다. 이러면 React 가 "값이 DOM 과
+ *      이미 같음"을 보고 value 를 다시 안 써서 커서가 보존된다 (표준 패턴).
+ *
  * @param setCode  코드 setter
  * @param opts
  *   - onCtrlEnter: Ctrl/Cmd+Enter 시 실행할 콜백 (없으면 무시)
@@ -34,6 +41,25 @@ export function createSmartKeyHandler(
     const end = textarea.selectionEnd
     const val = textarea.value
 
+    // 텍스트 [from,to] 를 text 로 치환하고, 커서를 caret 위치에 놓고,
+    // React state 를 DOM 과 동기화. setRangeText 가 DOM·undo 를 네이티브로
+    // 처리하므로 커서가 절대 안 튕긴다.
+    const apply = (text: string, from: number, to: number, caret: number) => {
+      // setRangeText 미지원(아주 구형) 시 fallback
+      if (typeof textarea.setRangeText === "function") {
+        textarea.setRangeText(text, from, to, "preserve")
+      } else {
+        textarea.value = val.slice(0, from) + text + val.slice(to)
+      }
+      textarea.selectionStart = textarea.selectionEnd = caret
+      setCode(textarea.value)
+    }
+
+    // 값은 그대로 두고 커서만 한 칸 이동 (괄호/따옴표 건너뛰기)
+    const moveCaret = (caret: number) => {
+      textarea.selectionStart = textarea.selectionEnd = caret
+    }
+
     // Ctrl/Cmd + Enter 또는 Shift + Enter → 옵션 콜백 (코드 실행 등)
     if (e.key === "Enter" && (e.ctrlKey || e.metaKey || e.shiftKey)) {
       e.preventDefault()
@@ -42,15 +68,9 @@ export function createSmartKeyHandler(
     }
 
     // Tab — 4 spaces 들여쓰기 (Python 처럼 indent-sensitive 언어에 필수)
-    // SimpleEditor 는 자체 Tab 처리가 있지만, 일반 <textarea> 는 없음.
-    // 우리 handler 가 먼저 실행되므로 여기서 처리해도 안전.
     if (e.key === "Tab" && !e.shiftKey) {
       e.preventDefault()
-      const newVal = val.slice(0, start) + "    " + val.slice(end)
-      setCode(newVal)
-      requestAnimationFrame(() => {
-        textarea.selectionStart = textarea.selectionEnd = start + 4
-      })
+      apply("    ", start, end, start + 4)
       return
     }
 
@@ -68,24 +88,14 @@ export function createSmartKeyHandler(
 
       // { | }  →  {\n    |\n}  (커서가 가운데 줄에)
       if (justAfterBrace && justBeforeClose) {
-        const newVal =
-          val.slice(0, start) + "\n" + indent + extraIndent + "\n" + indent + val.slice(start)
-        const newCursor = start + 1 + indent.length + extraIndent.length
-        setCode(newVal)
-        requestAnimationFrame(() => {
-          textarea.selectionStart = newCursor
-          textarea.selectionEnd = newCursor
-        })
+        const insert = "\n" + indent + extraIndent + "\n" + indent
+        const caret = start + 1 + indent.length + extraIndent.length
+        apply(insert, start, end, caret)
         return
       }
 
-      const newVal = val.slice(0, start) + "\n" + indent + extraIndent + val.slice(start)
-      const newCursor = start + 1 + indent.length + extraIndent.length
-      setCode(newVal)
-      requestAnimationFrame(() => {
-        textarea.selectionStart = newCursor
-        textarea.selectionEnd = newCursor
-      })
+      const insert = "\n" + indent + extraIndent
+      apply(insert, start, end, start + insert.length)
       return
     }
 
@@ -101,9 +111,7 @@ export function createSmartKeyHandler(
       // 따옴표 다음에 같은 따옴표 있으면 그냥 건너뜀
       if ((e.key === '"' || e.key === "'") && val[start] === e.key) {
         e.preventDefault()
-        requestAnimationFrame(() => {
-          textarea.selectionStart = textarea.selectionEnd = start + 1
-        })
+        moveCaret(start + 1)
         return
       }
       // 다음 글자가 식별자 (영문/숫자/_) 면 자동 닫기 비활성화
@@ -116,25 +124,25 @@ export function createSmartKeyHandler(
       const open = e.key
       const close = pairs[open]
       const selected = val.slice(start, end)
-      const newVal = val.slice(0, start) + open + selected + close + val.slice(end)
-      setCode(newVal)
-      requestAnimationFrame(() => {
-        if (selected) {
-          textarea.selectionStart = start + 1
-          textarea.selectionEnd = end + 1
-        } else {
-          textarea.selectionStart = textarea.selectionEnd = start + 1
-        }
-      })
+      if (typeof textarea.setRangeText === "function") {
+        textarea.setRangeText(open + selected + close, start, end, "preserve")
+      } else {
+        textarea.value = val.slice(0, start) + open + selected + close + val.slice(end)
+      }
+      if (selected) {
+        textarea.selectionStart = start + 1
+        textarea.selectionEnd = end + 1
+      } else {
+        textarea.selectionStart = textarea.selectionEnd = start + 1
+      }
+      setCode(textarea.value)
       return
     }
 
     // 닫는 괄호 입력 — 다음 자리에 같은 닫는 괄호 있으면 그냥 건너뜀
     if ([")", "]", "}"].includes(e.key) && val[start] === e.key) {
       e.preventDefault()
-      requestAnimationFrame(() => {
-        textarea.selectionStart = textarea.selectionEnd = start + 1
-      })
+      moveCaret(start + 1)
       return
     }
 
@@ -151,11 +159,7 @@ export function createSmartKeyHandler(
       }
       if (matches[before] === after) {
         e.preventDefault()
-        const newVal = val.slice(0, start - 1) + val.slice(start + 1)
-        setCode(newVal)
-        requestAnimationFrame(() => {
-          textarea.selectionStart = textarea.selectionEnd = start - 1
-        })
+        apply("", start - 1, start + 1, start - 1)
         return
       }
     }
