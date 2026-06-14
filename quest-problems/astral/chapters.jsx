@@ -2114,6 +2114,97 @@ export function makeAstralCh2(E, lang = "py") {
         </div>),
     },
 
+    /* 2-4.7 — PAYOFF: "what did the DP actually DO?" Trace G G B — the case where
+       forward-greedy got trapped and had to go backward, but DP doesn't.
+       This ties the appendix back to the backward-greedy main solution. Added 2026-06-14. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "So — what did the DP actually DO? Here's the case that trapped the forward greedy and forced us to go backward. Watch the DP walk the SAME orbit forward and still get it right.",
+        "그래서 — DP 가 결국 뭘 한 거예요? 앞→뒤 그리디가 막혀서 '거꾸로' 가야 했던 바로 그 경우를 봐요. DP 는 같은 궤도를 앞으로 가는데도 답을 맞혀요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#7c3aed" }}>
+              💡 {t(E, "What the DP \"did\" — orbit G G B", "DP 가 \"한 일\" — 궤도 G G B")}
+            </div>
+          </div>
+
+          {/* Plain-language framing of the two columns */}
+          <div style={{ background: "#faf5ff", border: "1.5px solid #d8b4fe", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: "#4c1d95", lineHeight: 1.65 }}>
+            <b>keep</b> = {t(E, "doesn't pass a star on", "별을 다음 칸에 안 보냄")}. &nbsp;
+            <b>pass</b> = {t(E, "passes an original star to the next cell", "원래 별을 다음 칸에 보냄")}.<br/>
+            {t(E,
+              "A G can be your OWN original star (then it can pass on) OR a star that slid in from before (free — but it can't pass on). Those are the two columns.",
+              "G 는 내 원래 별일 수도 있고 (그럼 다음에 보낼 수 있음), 앞 칸에서 슬라이드해 들어온 별일 수도 있어요 (공짜 — 대신 다음에 못 보냄). 이게 두 칸(열)이에요.")}
+          </div>
+
+          {/* The trace table: k / cell / what happens / min_stars [keep, pass] */}
+          <div style={{ overflowX: "auto", marginBottom: 10 }}>
+            <table style={{ margin: "0 auto", borderCollapse: "collapse", fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
+              <thead>
+                <tr style={{ background: "#f3e8ff", color: "#5b21b6" }}>
+                  <th style={{ padding: "6px 10px", border: "1px solid #d8b4fe" }}>k</th>
+                  <th style={{ padding: "6px 10px", border: "1px solid #d8b4fe" }}>{t(E, "cell", "칸")}</th>
+                  <th style={{ padding: "6px 10px", border: "1px solid #d8b4fe" }}>{t(E, "what happens", "무슨 일")}</th>
+                  <th style={{ padding: "6px 10px", border: "1px solid #d8b4fe" }}>min_stars [keep, pass]</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center" }}>0</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center", background: "#cbd5e1", fontWeight: 700 }}>G</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", fontSize: 10.5, fontFamily: "system-ui" }}>
+                    {t(E, "Start. Own original ★ is forced. Can keep it OR pass it on.",
+                          "시작. 내 원래 별 강제. 머무를 수도, 보낼 수도.")}
+                  </td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center", background: "#ede9fe", color: "#5b21b6", fontWeight: 700 }}>[1, 1]</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center" }}>1</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center", background: "#cbd5e1", fontWeight: 700 }}>G</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", fontSize: 10.5, fontFamily: "system-ui" }}>
+                    {t(E,
+                      "⒜ star slid in from prev pass=1 → fills this G FREE, but can't pass on → keep=1.  ⒝ own new ★ from prev keep=1 → +1=2, can keep or pass → [2,2].",
+                      "⒜ 앞의 pass=1 에서 별이 슬라이드해 들어옴 → 이 G 를 공짜로 채움, 대신 다음에 못 보냄 → keep=1.  ⒝ 앞의 keep=1 에서 내 새 별 → +1=2, 머무름/보냄 둘 다 → [2,2].")}
+                  </td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center", background: "#ede9fe", color: "#5b21b6", fontWeight: 700 }}>[1, 2]</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center" }}>2</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center", background: "#1e293b", color: "#fff", fontWeight: 700 }}>B</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", fontSize: 10.5, fontFamily: "system-ui" }}>
+                    {t(E,
+                      "B NEEDS an arriving star → only the pass=2 branch can feed it; + its own ★ (+1) → [3, 3].",
+                      "B 는 들어오는 별이 꼭 필요 → pass=2 가지만 먹여줄 수 있음; + 자기 별 (+1) → [3, 3].")}
+                  </td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center", background: "#ede9fe", color: "#5b21b6", fontWeight: 700 }}>[3, 3]</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style={{ background: "#ede9fe", border: "2px solid #7c3aed", borderRadius: 10, padding: "10px 14px", textAlign: "center", fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 12 }}>
+            ✅ path_min = min(3, 3) = 3
+          </div>
+
+          {/* THE PUNCHLINE — tie to why greedy needed backward, DP doesn't */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "11px 13px", fontSize: 12, color: "#7c2d12", lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, color: "#c2410c", marginBottom: 5 }}>
+              🎯 {t(E, "THIS is what the DP did", "바로 이게 DP 가 한 일")}
+            </div>
+            {t(E,
+              "At the middle G the DP held BOTH futures: \"filled free, keep=1 but can't pass on\" AND \"own star, pass=2 but can keep going.\" The B can only be reached through the pass=2 branch → 2+1 = 3.",
+              "가운데 G 에서 DP 는 두 미래를 동시에 들고 있었어요: \"공짜로 채움, keep=1 인데 다음에 못 보냄\" 그리고 \"내 별, pass=2 인데 계속 보낼 수 있음.\" B 는 pass=2 가지로만 닿을 수 있어요 → 2+1 = 3.")}
+            <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px dashed #fdba74" }}>
+              {t(E,
+                "Forward greedy would grab the cheap keep=1 at that G and then get STUCK at the B — that's exactly why the main solution had to walk BACKWARD (let the B reach back and claim a star). The DP never picks early: it carries both states and takes the smaller at the end, so it finds 3 going forward — never trapped by direction.",
+                "앞→뒤 그리디는 그 G 에서 싼 keep=1 을 덥석 잡고 → B 에서 막혀요. 이게 바로 메인 풀이가 '거꾸로' 가야 했던 이유 (B 가 뒤로 손 뻗어 별을 차지하게). DP 는 일찍 안 골라요 — 두 상태를 다 들고 가다 끝에서 작은 걸 골라서, 앞으로 가도 3 을 찾아요. 방향에 갇히지 않아요.")}
+            </div>
+          </div>
+        </div>),
+    },
+
     /* 2-5 — Full code. (Edge case for stars-don't-move appears inline as a brief `if` branch;
        no separate slide needed, similar to how we simplified EMPTY/❌.)
        Note: sections[5] = Full code, after sections were split (4 → 4a + 4b). */
