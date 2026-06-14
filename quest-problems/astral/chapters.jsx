@@ -1171,6 +1171,17 @@ export function makeAstralCh2(E, lang = "py") {
               "끝에서부터 — B를 만나면 바로 앞 칸에 ★ 먼저 놓기. 이번엔 안 막힐까?")}
           </div>
 
+          {/* 🔑 The one-liner that makes "why backward" click: B = forced, G = choice. */}
+          <div style={{
+            background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10,
+            padding: "10px 13px", marginBottom: 14, fontSize: 12.5, color: "#92400e", lineHeight: 1.65,
+          }}>
+            🔑 <b>{t(E, "Why backward?", "왜 거꾸로?")}</b>{" "}
+            {t(E,
+              "A B is FORCED — the cell right before it MUST hold an original star (zero choice). A G is a CHOICE — its star can be its own, or one that slid in from the left. You have to settle the no-choice cells first — and a B's demand points LEFT — so sweep from the end: you meet each B before you fix the G's it leans on, and never give away a star a B needs.",
+              "B 는 강제예요 — 바로 앞 칸에 원본 별이 반드시 있어야 해요 (선택지 0). G 는 선택이에요 — 그 별이 자기 원본일 수도, 왼쪽에서 이동해 온 것일 수도. 선택지 없는 칸(B)부터 정해야 하는데, B 의 강제는 왼쪽(앞 칸)을 가리켜요 — 그래서 끝에서부터 훑으면 B 가 기대는 G 를 정하기 전에 B 를 먼저 만나, B 가 필요로 한 별을 빼앗지 않아요.")}
+          </div>
+
           {/* Interactive 2D-grid simulation — same orbit, walked end → start */}
           <OrbitGridStepSim
             key="bwd-greedy" E={E}
