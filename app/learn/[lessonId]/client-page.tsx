@@ -13,7 +13,7 @@ import { LibraryToggle, type LibraryVariant } from "@/components/library-toggle"
 import { SoundToggle } from "@/components/sound-toggle"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { useLessonSync } from "@/hooks/use-lesson-sync"
-import { markLessonComplete, addLearnWrongQuestion, promoteLearnWrong } from "@/lib/mark-lesson-complete"
+import { markLessonComplete, addLearnWrongQuestion, promoteLearnWrong, addResolveLater, removeResolveLater } from "@/lib/mark-lesson-complete"
 import { saveStepAnswer } from "@/lib/save-step-answer"
 import { useGamification } from "@/hooks/use-gamification"
 import { logActivity } from "@/lib/activity-log"
@@ -90,6 +90,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const [currentStep, setCurrentStep] = useState(0)
   const [score, setScore] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set())
+  // 정답으로 "맞힌" 스텝 (completedSteps 와 별개 — completedSteps 는 틀려도 크레딧 주려고 채워짐).
+  // goNext 시 이 set 에 없으면 "나중에 다시 풀기" 목록에 기록.
+  const correctlySolvedRef = useRef<Set<string>>(new Set())
   const [isAlreadyDone, setIsAlreadyDone] = useState(false) // 이미 완료한 레슨: 자유 탐색 허용
   const [progressLoaded, setProgressLoaded] = useState(false)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
@@ -154,15 +157,12 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   const isCurrentStepCompleted = step ? completedSteps.has(step.id) : false
   
+  // 더 이상 하드 블록 없음 — 어떤 스텝에서든 항상 "다음" 가능.
+  // 틀리거나 안 풀어도 크레딧 주고 넘어감 ("틀리면 그냥 점수 내주고 다음으로").
+  // 못 맞힌 tryit/mission/quiz 는 goNext 에서 "나중에 다시 풀기" 목록에 기록됨.
   const canGoNext = () => {
     if (!step) return false
-    if (effectiveTeacher) return true // 선생님은 어디서든 자유롭게 이동
-    if (step.type === "explain" || step.type === "interactive" || step.type === "animation") return true
-    // practice/coding/mission은 isAlreadyDone이어도 반드시 완료 필요
-    // (재방문 시 미완료 상태로 스킵 방지)
-    if (step.type === "tryit" || step.type === "mission" || step.type === "coding" || step.type === "practice") return isCurrentStepCompleted
-    if (isAlreadyDone) return true // 이미 완료한 레슨: quiz/predict 등 자유 탐색
-    return isCurrentStepCompleted
+    return true
   }
 
   // 기존 진행상황 마이그레이션 (practice-v2-p4 → practice-v2-p4-turtle)
@@ -494,7 +494,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   }, [completedSteps, step?.id])
 
   const handleSuccess = useCallback(() => {
-    if (!step?.id || completedSteps.has(step.id)) return
+    if (!step?.id) return
+    correctlySolvedRef.current.add(step.id)
+    if (!effectiveTeacher) removeResolveLater(lessonId, step.id) // 맞혔으니 다시 풀기 목록에서 제거
+    if (completedSteps.has(step.id)) return
     setCompletedSteps(prev => new Set([...prev, step.id]))
     if (isIGCSE || effectiveTeacher || isAlreadyDone) {
       play("codeSuccess")
@@ -506,7 +509,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       play("codeSuccess")
       setTimeout(() => setShowConfetti(false), 2000)
     }
-  }, [completedSteps, step?.id, play, isIGCSE, effectiveTeacher, isAlreadyDone, t])
+  }, [completedSteps, step?.id, play, isIGCSE, effectiveTeacher, isAlreadyDone, t, lessonId])
 
   const closeSuccessOverlay = useCallback(() => { setShowSuccess(false) }, [])
 
@@ -630,6 +633,19 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     }, 50)
   }
 
+  // 풀이형 스텝(tryit/mission/coding/practice/quiz/predict/fillblank)을 못 맞히고 넘어가면
+  // "나중에 다시 풀기"(lesson-resolve-later) 목록에 기록. 정답이면 각 핸들러에서 이미 제거됨.
+  // goNext / acknowledgeQuiz / handleStepAcknowledge 모든 진행 경로에서 호출.
+  const recordResolveLaterIfNeeded = () => {
+    if (!step?.id || effectiveTeacher) return
+    // 이미 완료한 레슨 재방문 시엔 기록 안 함 (1회차 학습 흐름용 — 재방문은 자유 탐색)
+    if (isAlreadyDone) return
+    const solvableTypes = ["tryit", "mission", "coding", "practice", "quiz", "predict", "fillblank"]
+    if (solvableTypes.includes(step.type) && !correctlySolvedRef.current.has(step.id)) {
+      addResolveLater(lessonId, step.id)
+    }
+  }
+
   const goNext = () => {
     if (!canGoNext() || isNavigatingRef.current) return
     isNavigatingRef.current = true
@@ -643,6 +659,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         (step.type === "explain" || step.type === "interactive" || step.type === "animation")) {
       setCompletedSteps(prev => new Set([...prev, step.id]))
     }
+    recordResolveLaterIfNeeded()
     if (currentStep < chapter.steps.length - 1) {
       const nextStep = chapter.steps[currentStep + 1]
       setCurrentStep(currentStep + 1)
@@ -714,6 +731,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       play("correct")
       // 창고에 있던 문제를 다시 풀어 맞힘 → 다음 단계로 승급(간격↑), 마지막 단계 통과 시 졸업
       if (!effectiveTeacher && step?.id) promoteLearnWrong(lessonId, step.id)
+      if (step?.id) {
+        correctlySolvedRef.current.add(step.id)
+        if (!effectiveTeacher) removeResolveLater(lessonId, step.id) // 맞혔으니 다시 풀기 목록에서 제거
+      }
       if (!completedSteps.has(step.id)) {
         setCompletedSteps(prev => new Set([...prev, step.id]))
         if (!isIGCSE && !effectiveTeacher && !isAlreadyDone) {
@@ -756,6 +777,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       play("correct")
       // 창고에 있던 문제를 다시 풀어 맞힘 → 다음 단계로 승급(간격↑), 마지막 단계 통과 시 졸업
       if (!effectiveTeacher && step?.id) promoteLearnWrong(lessonId, step.id)
+      if (step?.id) {
+        correctlySolvedRef.current.add(step.id)
+        if (!effectiveTeacher) removeResolveLater(lessonId, step.id) // 맞혔으니 다시 풀기 목록에서 제거
+      }
       if (!completedSteps.has(step.id)) {
         setCompletedSteps(prev => new Set([...prev, step.id]))
         if (!isIGCSE && !effectiveTeacher && !isAlreadyDone) {
@@ -776,6 +801,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   }
 
   const handleStepAcknowledge = () => {
+    recordResolveLaterIfNeeded()
     if (!completedSteps.has(step.id)) {
       setCompletedSteps(prev => new Set([...prev, step.id]))
     }
@@ -792,6 +818,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     if (isNavigatingRef.current) return
     isNavigatingRef.current = true
     setTimeout(() => { isNavigatingRef.current = false }, 400)
+    recordResolveLaterIfNeeded()
     if (!completedSteps.has(step.id)) {
       setCompletedSteps(prev => new Set([...prev, step.id]))
     }

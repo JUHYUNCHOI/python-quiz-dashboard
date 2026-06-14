@@ -355,6 +355,54 @@ export function promoteLearnWrong(lessonId: string | number, stepId: string) {
   } catch {}
 }
 
+/**
+ * 나중에 다시 풀 문제 목록 (lesson-resolve-later).
+ * 학생이 tryit/mission/quiz 를 못 맞히고 넘어가면 여기에 "<lessonId>:<stepId>" 로 기록.
+ * 나중에 맞히면 제거. 별도 UI 가 이 목록을 surfacing 할 수 있음 (follow-up).
+ * 기존 키(WRONG_BANK 등)와 독립 — 새 키만 추가.
+ */
+const RESOLVE_LATER_KEY = "lesson-resolve-later"
+
+function resolveLaterKey(lessonId: string | number, stepId: string): string {
+  return `${String(lessonId)}:${stepId}`
+}
+
+export function addResolveLater(lessonId: string | number, stepId: string) {
+  if (!stepId) return
+  const key = resolveLaterKey(lessonId, stepId)
+  try {
+    const raw = localStorage.getItem(RESOLVE_LATER_KEY)
+    const list: string[] = raw ? JSON.parse(raw) : []
+    if (!list.includes(key)) {
+      list.push(key)
+      localStorage.setItem(RESOLVE_LATER_KEY, JSON.stringify(list))
+    }
+  } catch {}
+}
+
+export function removeResolveLater(lessonId: string | number, stepId: string) {
+  if (!stepId) return
+  const key = resolveLaterKey(lessonId, stepId)
+  try {
+    const raw = localStorage.getItem(RESOLVE_LATER_KEY)
+    if (!raw) return
+    const list: string[] = JSON.parse(raw)
+    const next = list.filter(k => k !== key)
+    if (next.length !== list.length) {
+      localStorage.setItem(RESOLVE_LATER_KEY, JSON.stringify(next))
+    }
+  } catch {}
+}
+
+export function getResolveLater(): string[] {
+  try {
+    const raw = localStorage.getItem(RESOLVE_LATER_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch {
+    return []
+  }
+}
+
 export function getWrongBank(): WrongQuestionEntry[] {
   try {
     const raw = localStorage.getItem(WRONG_BANK_KEY)
