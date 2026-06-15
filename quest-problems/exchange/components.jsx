@@ -184,22 +184,6 @@ const EX_BUILD_CPP = [
 /* ──────────────────────────────────────────────────────────────
    Section 4: Output + Full Code
    ────────────────────────────────────────────────────────────── */
-const EX_OUTPUT_PY = [
-  "print(' '.join(map(str, result)))",
-];
-const EX_OUTPUT_CPP = [
-  "    for (int i = 0; i < N; i++) {",
-  "        cout << result[i];",
-  "        if (i + 1 == N) {",
-  "            cout << endl;",
-  "        } else {",
-  "            cout << ' ';",
-  "        }",
-  "    }",
-  "    return 0;",
-  "}",
-];
-
 const EX_FULL_PY = [
   "N = int(input())",
   "milk = list(map(int, input().split()))",
