@@ -78,7 +78,56 @@ export function makeBlocksCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Interactive sim — assign cubes to positions and watch ✓/✗ live.
+    // 1-2: Official I/O format + verbatim sample
+    {
+      type: "reveal",
+      narr: t(E,
+        "Here is the exact input/output format and the official sample. Read it once — your program must reproduce this output exactly.",
+        "정확한 입력/출력 형식과 공식 예제예요. 한 번 읽어봐요 — 프로그램은 이 출력을 그대로 만들어내야 해요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10, fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 700, color: "#5b21b6", marginBottom: 6 }}>📥 {t(E, "Input", "입력")}</div>
+            <div>{t(E, "Line 1: N (1 ≤ N ≤ 10), the number of words.", "1번째 줄: 단어 개수 N (1 ≤ N ≤ 10).")}</div>
+            <div>{t(E, "Next 4 lines: each is 6 uppercase letters — the faces of one block.", "다음 4줄: 각 줄은 대문자 6개 — 블록 하나의 6개 면.")}</div>
+            <div>{t(E, "Next N lines: a word (1–4 letters) to try to spell.", "다음 N줄: 만들어볼 단어 (1~4글자).")}</div>
+            <div style={{ fontWeight: 700, color: "#5b21b6", margin: "8px 0 6px" }}>📤 {t(E, "Output", "출력")}</div>
+            <div>{t(E, "For each word, print YES if it can be spelled, else NO.", "각 단어마다 만들 수 있으면 YES, 아니면 NO 출력.")}</div>
+          </div>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <div style={{ flex: 1, minWidth: 140 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "Sample Input", "예제 입력")}</div>
+              <pre style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: 10, fontSize: 12, fontFamily: "'JetBrains Mono', monospace", margin: 0 }}>{`6
+MOOOOO
+OOOOOO
+ABCDEF
+UVWXYZ
+COW
+MOO
+ZOO
+MOVE
+CODE
+FARM`}</pre>
+            </div>
+            <div style={{ flex: 1, minWidth: 120 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "Sample Output", "예제 출력")}</div>
+              <pre style={{ background: "#0f172a", color: "#86efac", borderRadius: 8, padding: 10, fontSize: 12, fontFamily: "'JetBrains Mono', monospace", margin: 0 }}>{`YES
+NO
+YES
+YES
+NO
+NO`}</pre>
+            </div>
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 10, lineHeight: 1.6 }}>
+            💡 {t(E,
+              "MOO is NO: the M is only on block 1, but spelling MOO would need block 1 to show M and an O at the same time. CODE is NO: C, D, E all live on the same block (ABCDEF), so they can't show at once.",
+              "MOO 가 NO 인 이유: M 은 블록 1 에만 있는데, MOO 를 만들려면 블록 1 이 M 과 O 를 동시에 보여줘야 해요. CODE 가 NO 인 이유: C, D, E 가 모두 같은 블록(ABCDEF)에 있어 한꺼번에 보일 수 없어요.")}
+          </div>
+        </div>
+      ),
+    },
+    // 1-3: Interactive sim — assign cubes to positions and watch ✓/✗ live.
     {
       type: "reveal",
       narr: t(E,
@@ -86,7 +135,7 @@ export function makeBlocksCh1(E) {
         "시뮬레이터로 직접 해봐요. 목표 단어를 고르고, 각 글자에 큐브를 배정해서 면이 맞는지 확인해요. 같은 큐브 재사용은 막혀 있어요."),
       content: <BlockLetterSim E={E} />,
     },
-    // 1-3: Quiz
+    // 1-4: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -104,7 +153,7 @@ export function makeBlocksCh1(E) {
         "Correct! C(4,3)=4 ways to choose 3 blocks, times 3!=6 arrangements = 24 total.",
         "맞아! C(4,3)=4가지로 3개 블록 선택, 곱하기 3!=6 배열 = 총 24가지."),
     },
-    // 1-4: Input
+    // 1-5: Input
     {
       type: "input",
       narr: t(E,

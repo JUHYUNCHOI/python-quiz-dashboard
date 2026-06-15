@@ -231,6 +231,32 @@ export function makeAcow1Ch1(E) {
               </div>
             </div>
           </div>
+
+          {/* 📥 I/O + Sample */}
+          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 12, padding: 14 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#475569", marginBottom: 8 }}>
+              📥 {t(E, "Input / Output", "입력 / 출력")}
+            </div>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 8 }}>
+              <div>{t(E, "Line 1: N and L (1 ≤ N ≤ 10^5, 0 ≤ L ≤ 10^5)", "1행: N 과 L (1 ≤ N ≤ 10^5, 0 ≤ L ≤ 10^5)")}</div>
+              <div>{t(E, "Line 2: N citation counts c[1..N] (0 ≤ c[i] ≤ 10^5)", "2행: N개의 인용수 c[1..N] (0 ≤ c[i] ≤ 10^5)")}</div>
+              <div>{t(E, "Output: the maximum achievable h-index", "출력: 달성 가능한 h-index 최댓값")}</div>
+            </div>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <div style={{ flex: "1 1 120px" }}>
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, marginBottom: 3 }}>{t(E, "Sample input 1", "입력 예 1")}</div>
+                <pre style={{ background: "#0f172a", color: "#e2e8f0", padding: "8px 10px", borderRadius: 8, fontSize: 12, margin: 0, fontFamily: "monospace" }}>{`4 0\n1 100 2 3`}</pre>
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, margin: "6px 0 3px" }}>{t(E, "Output 1", "출력 1")}</div>
+                <pre style={{ background: "#0f172a", color: "#e2e8f0", padding: "8px 10px", borderRadius: 8, fontSize: 12, margin: 0, fontFamily: "monospace" }}>{`2`}</pre>
+              </div>
+              <div style={{ flex: "1 1 120px" }}>
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, marginBottom: 3 }}>{t(E, "Sample input 2", "입력 예 2")}</div>
+                <pre style={{ background: "#0f172a", color: "#e2e8f0", padding: "8px 10px", borderRadius: 8, fontSize: 12, margin: 0, fontFamily: "monospace" }}>{`4 1\n1 100 2 3`}</pre>
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, margin: "6px 0 3px" }}>{t(E, "Output 2", "출력 2")}</div>
+                <pre style={{ background: "#0f172a", color: "#e2e8f0", padding: "8px 10px", borderRadius: 8, fontSize: 12, margin: 0, fontFamily: "monospace" }}>{`3`}</pre>
+              </div>
+            </div>
+          </div>
         </div>),
     },
     // 1-1b: Interactive H-Index simulator (additive)

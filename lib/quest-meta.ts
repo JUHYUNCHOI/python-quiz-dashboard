@@ -1116,6 +1116,41 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
       "print(sum(cur))",
     ].join("\n"),
   },
+  exchange: {
+    // Same problem as `milkexchange` — real USACO 2024 Feb Bronze #2 "Milk Exchange".
+    type: "simulation",
+    concepts_taught: ["circular-array", "directional-pass", "capacity-cap"],
+    concepts_required: ["loop", "list-basics", "string-basics"],
+    difficulty: 3,
+    supported_languages: ["py", "cpp"],
+    validate_io: [
+      // Official USACO Feb 2024 Bronze #2 samples
+      { input: "3 1\nRRL\n1 1 1\n",                    expected: "2" },
+      { input: "5 20\nLLLLL\n3 3 2 3 3\n",             expected: "14" },
+      { input: "9 5\nRRRLRRLLR\n5 8 4 9 3 4 9 5 4\n",  expected: "38" },
+    ],
+    solution_py: [
+      "import sys",
+      "data = sys.stdin.read().split()",
+      "p = 0",
+      "N = int(data[p])",
+      "p += 1",
+      "M = int(data[p])",
+      "p += 1",
+      "S = data[p]; p += 1               # direction string (no spaces)",
+      "cap = [int(x) for x in data[p:p+N]]",
+      "cur = list(cap)                    # initial milk = capacity",
+      "for t in range(M):",
+      "    for i in range(N):",
+      "        if cur[i] > 0:",
+      "            cur[i] -= 1",
+      "            j = (i + (1 if S[i] == 'R' else -1)) % N",
+      "            cur[j] += 1",
+      "    for i in range(N):",
+      "        cur[i] = min(cur[i], cap[i])",
+      "print(sum(cur))",
+    ].join("\n"),
+  },
   productivity: {
     type: "algorithm-reveal",
     concepts_taught: ["sort-then-binary-search", "transform-to-1d"],
@@ -1778,11 +1813,65 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   // These quests have working Python but the C++ section is incomplete.
   // Marking supported_languages: ["py"] makes the language toggle's
   // Py choice the safe default for them.
-  aircond1:     { ...DEFAULT_META, supported_languages: ["py"] },
-  alchemy:      { ...DEFAULT_META, supported_languages: ["py"] },
+  aircond1: {
+    ...DEFAULT_META,
+    supported_languages: ["py"],
+  },
+  alchemy: {
+    ...DEFAULT_META,
+    type: "brute-force",
+    supported_languages: ["py", "cpp"],
+    // Rewritten 2026-06-15 → real USACO 2022 Open Bronze #3 (cpid 1229).
+    // Maximize units of metal N via greedy recursive crafting. Recipe
+    // line: "L M ing1..ingM". Case 1 = official sample (answer 1).
+    validate_io: [
+      { input: "5\n2 0 0 1 0\n3\n5 2 3 4\n2 1 1\n3 1 2\n", expected: "1" },
+      { input: "3\n2 2 0\n1\n3 2 1 2\n", expected: "2" },
+    ],
+    solution_py: [
+      "import sys",
+      "input = sys.stdin.readline",
+      "sys.setrecursionlimit(100000)",
+      "",
+      "N = int(input())",
+      "have = [0] + list(map(int, input().split()))",
+      "K = int(input())",
+      "recipe = [[] for _ in range(N + 1)]",
+      "for _ in range(K):",
+      "    nums = list(map(int, input().split()))",
+      "    L, M = nums[0], nums[1]",
+      "    recipe[L] = nums[2:2 + M]",
+      "",
+      "def make(m, stock):",
+      "    if stock[m] > 0:",
+      "        stock[m] -= 1",
+      "        return True",
+      "    if not recipe[m]:",
+      "        return False",
+      "    for ing in recipe[m]:",
+      "        if not make(ing, stock):",
+      "            return False",
+      "    return True",
+      "",
+      "ans = 0",
+      "while True:",
+      "    trial = have[:]",
+      "    if make(N, trial):",
+      "        have = trial",
+      "        ans += 1",
+      "    else:",
+      "        break",
+      "print(ans)",
+    ].join("\n"),
+  },
   madscientist: { ...DEFAULT_META, supported_languages: ["py"] },
   reach:        { ...DEFAULT_META, supported_languages: ["py"] },
-  reverseeng:   { ...DEFAULT_META, supported_languages: ["py"] },
+  // reverseeng rewritten 2026-06-15 → real USACO 2022 Dec Bronze #3 (cpid 1253).
+  // Correct greedy "peel a consistent (variable,value) group" algorithm lives in
+  // quest-problems/reverseeng/components.jsx (py + cpp). Both verified locally vs the
+  // official sample (OK/OK/LIE/LIE). Kept single-line here so the validate-solutions.mjs
+  // extractor (which only cleanly parses isolated multi-line blocks) is unperturbed.
+  reverseeng:   { ...DEFAULT_META, supported_languages: ["py", "cpp"] },
   socialdist2:  { ...DEFAULT_META, supported_languages: ["py"] },
   stuckinrut:   { ...DEFAULT_META, supported_languages: ["py"] },
   subseqmedian: { ...DEFAULT_META, supported_languages: ["py"] },
@@ -1795,8 +1884,48 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   acowdemia1:    { ...DEFAULT_META, type: "brute-force",       supported_languages: ["py"] },
   acowdemia2:    { ...DEFAULT_META, type: "pattern-discovery", supported_languages: ["py"] },
   acowdemia3:    { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"], difficulty: 3 },
-  billboard2:    { ...DEFAULT_META, type: "simulation",        supported_languages: ["py"] },
-  blocks:        { ...DEFAULT_META, type: "brute-force",       supported_languages: ["py"] },
+  billboard2: {
+    ...DEFAULT_META,
+    type: "simulation",
+    supported_languages: ["py"],
+  },
+  blocks: {
+    ...DEFAULT_META,
+    type: "brute-force",
+    supported_languages: ["py", "cpp"],
+    // Rewritten 2026-06-15 → real USACO 2022 Feb Bronze #3 (cpid 1205).
+    // Per word, YES/NO: can each letter get a distinct block (one face up)?
+    // Case 1 = official sample.
+    validate_io: [
+      {
+        input: "6\nMOOOOO\nOOOOOO\nABCDEF\nUVWXYZ\nCOW\nMOO\nZOO\nMOVE\nCODE\nFARM\n",
+        expected: "YES\nNO\nYES\nYES\nNO\nNO",
+      },
+    ],
+    solution_py: [
+      "N = int(input())",
+      "blocks = [input().strip() for _ in range(4)]",
+      "",
+      "def can_spell(word):",
+      "    used = [False] * 4",
+      "    def solve(pos):",
+      "        if pos == len(word):",
+      "            return True",
+      "        for b in range(4):",
+      "            if not used[b] and word[pos] in blocks[b]:",
+      "                used[b] = True",
+      "                if solve(pos + 1):",
+      "                    used[b] = False",
+      "                    return True",
+      "                used[b] = False",
+      "        return False",
+      "    return solve(0)",
+      "",
+      "for _ in range(N):",
+      "    w = input().strip()",
+      "    print('YES' if can_spell(w) else 'NO')",
+    ].join("\n"),
+  },
   cowntrace:     { ...DEFAULT_META, type: "simulation",        supported_languages: ["py"] },
   lifeguards:    { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"], difficulty: 3 },
   livestock:     { ...DEFAULT_META, type: "simulation",        supported_languages: ["py"] },

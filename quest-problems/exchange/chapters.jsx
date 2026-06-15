@@ -1,76 +1,45 @@
 import { C, t } from "@/components/quest/theme";
 import { getExchangeSections } from "./components";
 
+const A = "#2563eb";
+
+// Reference solution: brute simulation of M minutes (real Milk Exchange).
 export const SOLUTION_CODE = [
-  "N, M = map(int, input().split())",
-  "milk = list(map(int, input().split()))",
-  "",
-  "# Each round, every cow's milk moves clockwise by one position.",
-  "# After M rounds, the milk now at position i came from position (i - M) % N.",
-  "result = [milk[(i - M) % N] for i in range(N)]",
-  "print(' '.join(map(str, result)))",
+  "import sys",
+  "data = sys.stdin.read().split()",
+  "p = 0",
+  "N = int(data[p]); p += 1",
+  "M = int(data[p]); p += 1",
+  "S = data[p]; p += 1               # direction string, e.g. 'RRL'",
+  "cap = [int(x) for x in data[p:p+N]]",
+  "cur = list(cap)                   # initial milk = capacity",
+  "for t in range(M):",
+  "    for i in range(N):",
+  "        if cur[i] > 0:",
+  "            cur[i] -= 1",
+  "            j = (i + (1 if S[i] == 'R' else -1)) % N",
+  "            cur[j] += 1",
+  "    for i in range(N):",
+  "        cur[i] = min(cur[i], cap[i])",
+  "print(sum(cur))",
 ];
 
-/* ─── helper: cow circle ─── */
-function CowCircle({ values, highlight = [], accent = "#2563eb", size = 130 }) {
-  const n = values.length;
-  const cx = size / 2, cy = size / 2, r = size * 0.36;
-  return (
-    <svg width={size} height={size} style={{ display: "block", margin: "0 auto" }}>
-      <circle cx={cx} cy={cy} r={r + 10} fill="none" stroke="#93c5fd" strokeWidth="1.5" strokeDasharray="4 3" />
-      {values.map((v, i) => {
-        const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
-        const x = cx + r * Math.cos(angle);
-        const y = cy + r * Math.sin(angle);
-        const hl = highlight.includes(i);
-        return (
-          <g key={i}>
-            <circle cx={x} cy={y} r={16} fill={hl ? accent : "#eff6ff"} stroke={hl ? accent : "#93c5fd"} strokeWidth="2" />
-            <text x={x} y={y + 1} textAnchor="middle" dominantBaseline="middle"
-              style={{ fontSize: 12, fontWeight: 700, fill: hl ? "#fff" : accent, fontFamily: "'JetBrains Mono',monospace" }}>
-              {v}
-            </text>
-          </g>
-        );
-      })}
-    </svg>
-  );
-}
-
-/* ─── helper: milk bar chart ─── */
-function MilkBars({ values, max, accent = "#2563eb", labels }) {
-  return (
-    <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "flex-end" }}>
-      {values.map((v, i) => (
-        <div key={i} style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 11, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: accent, marginBottom: 2 }}>{v}</div>
-          <div style={{
-            width: 32, height: Math.max(4, (v / max) * 60), borderRadius: "4px 4px 0 0",
-            background: accent, opacity: 0.7 + (v / max) * 0.3,
-          }} />
-          {labels && <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>{labels[i]}</div>}
-        </div>
-      ))}
-    </div>
-  );
-}
-
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (10 steps)
+   Chapter 1: 📋 Problem Understanding
    ═══════════════════════════════════════════════════════════════ */
 export function makeExchangeCh1(E) {
   return [
-    // 1-1 타이틀
+    // 1-1 Intro / mission
     {
       type: "reveal",
       narr: t(E,
-        "N cows stand in a circle, each holding some milk.\nEvery round, each cow passes ALL her milk to the next cow clockwise.\nAfter M rounds, how much milk does each cow hold?",
-        "N마리 소가 원형으로 서있고, 각자 우유를 가지고 있어요.\n매 라운드마다 모든 소가 자기 우유를 시계방향 다음 소에게 전부 넘겨요.\nM라운드 뒤, 각 소가 든 우유의 양은?"),
+        "N cows stand in a circle, each with a full bucket of milk.\nEvery minute, each cow with milk passes 1 liter left or right.\nMilk over a bucket's capacity is lost. How much milk is left after M minutes?",
+        "N마리 소가 원형으로 서 있고, 각자 우유가 가득 찬 양동이를 가지고 있어요.\n매분 우유가 있는 소는 1리터를 왼쪽 또는 오른쪽으로 전달해요.\n양동이 용량을 넘는 우유는 버려져요. M분 후 남은 우유는?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>🥛</div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Milk Exchange</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: A }}>Milk Exchange</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2024 Bronze #2</div>
           </div>
 
@@ -81,572 +50,219 @@ export function makeExchangeCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
-                "Print how much milk each cow holds after M rounds of clockwise passing.",
-                "M 라운드 동안 시계방향으로 우유를 전달한 뒤, 각 소가 든 우유 양을 출력.")}
+                "After M minutes of milk passing (with overflow lost), output the TOTAL milk left.",
+                "M분 동안 우유를 전달하고 (넘침은 버림) 남은 총 우유 양을 출력.")}
             </div>
           </div>
 
-          <div style={{ background: "#dbeafe", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
-              📖 {t(E, "Problem", "문제")}
+          {/* Mini-visual: 3 cows, RRL, one minute trace */}
+          <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#1e3a8a", textAlign: "center", marginBottom: 10 }}>
+              {t(E, "Tiny example: 3 cows, directions RRL, all start with 1 L (cap 1)",
+                    "작은 예: 소 3마리, 방향 RRL, 모두 1 L로 시작 (용량 1)")}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E, "N cows stand in a ", "N마리 소가 ")}
-                  <b style={{ color: "#2563eb" }}>{t(E, "circle", "원형")}</b>
-                  {t(E, ", each starting with some milk.",
-                        "으로 서있고, 각자 우유를 가지고 있어요.")}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 14 }}>
+              {/* Before */}
+              <div>
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, textAlign: "center", marginBottom: 6 }}>{t(E, "Before", "전")}</div>
+                <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+                  {[{ v: 1, dir: "→" }, { v: 1, dir: "→" }, { v: 1, dir: "←" }].map((c, i) => (
+                    <div key={i} style={{ background: "#fff", border: "1px solid #93c5fd", borderRadius: 10, padding: "6px 8px", textAlign: "center", minWidth: 40 }}>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: "#1e3a8a", fontFamily: "'JetBrains Mono',monospace" }}>{c.v} L</div>
+                      <div style={{ fontSize: 13, color: "#2563eb", fontWeight: 600 }}>{c.dir}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E, "In each round, every cow ", "매 라운드마다 모든 소가 ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "passes ALL her milk", "자기 우유 전부")}</b>
-                  {t(E, " to the next cow clockwise — at the same time.",
-                        "를 시계방향 다음 소에게 동시에 넘겨요.")}
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E, "This repeats for ", "이 과정을 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "M rounds", "M번")}</b>
-                  {t(E, " (M can be huge).",
-                        " 반복해요 (M은 매우 클 수 있어요).")}
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
-                <div>
-                  {t(E, "Print how much milk ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "each cow holds after M rounds", "M라운드 뒤 각 소가 든 우유의 양")}</b>
-                  {t(E, ".", "을 출력해요.")}
+
+              <div style={{ fontSize: 22, color: A, fontWeight: 700 }}>→</div>
+
+              {/* After 1 minute */}
+              <div>
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, textAlign: "center", marginBottom: 6 }}>{t(E, "After 1 minute", "1분 후")}</div>
+                <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+                  {[{ v: 0, hi: false }, { v: 1, hi: true }, { v: 1, hi: false }].map((c, i) => (
+                    <div key={i} style={{ background: c.hi ? "#fef3c7" : "#fff", border: `1px solid ${c.hi ? "#fbbf24" : "#93c5fd"}`, borderRadius: 10, padding: "6px 8px", textAlign: "center", minWidth: 40 }}>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: c.hi ? "#92400e" : "#1e3a8a", fontFamily: "'JetBrains Mono',monospace" }}>{c.v} L</div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
+            <div style={{ marginTop: 10, fontSize: 11, color: C.text, textAlign: "center", lineHeight: 1.6 }}>
+              {t(E, "Cow 1 received from BOTH sides → would have 2 L, but cap = 1 → 1 L lost (yellow). ",
+                    "소 1이 양쪽에서 받음 → 2 L가 됐어야 하지만 용량 1 → 1 L 버려짐 (노랑). ")}
+              <b style={{ color: A }}>{t(E, "Total milk = 0 + 1 + 1 = 2.", "총 우유 = 0 + 1 + 1 = 2.")}</b>
+            </div>
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
+            {t(E,
+              "N cows in a circle, each with milk and a capacity limit.\nEvery minute: pass 1L left or right. Overflow is lost! Find total milk after M minutes.",
+              "N마리 소가 원형으로, 각각 우유와 용량 제한이 있어요.\n매분: 1L를 왼쪽 또는 오른쪽으로 전달.\n넘치면 버려져!\nM분 후 총 우유량을 구해요.")}
           </div>
         </div>),
     },
 
-    // 1-2 [승] sample input/output
+    // 1-2 Official sample I/O
     {
       type: "reveal",
       narr: t(E,
-        "Input is N M then N milk amounts. Output is one line of N final amounts.",
-        "입력은 N M 한 줄, 그 다음 우유 N 개. 출력은 마지막 우유 N 개 한 줄."),
+        "Input: line 1 is N M, line 2 is the direction string (no spaces), line 3 is N capacities. Initial milk equals capacity.",
+        "입력: 첫 줄 N M, 둘째 줄 방향 문자열 (공백 없음), 셋째 줄 N개 용량. 초기 우유 = 용량."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
-            <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.55, color: "#7c2d12", whiteSpace: "pre" }}>
-{`4 1
-5 3 8 4`}
-              </div>
-              <div style={{ fontSize: 10.5, color: "#9a3412", marginTop: 6, lineHeight: 1.5 }}>
-                {t(E, "N=4 cows, M=1 round. Then N milk amounts.", "N=4 마리, M=1 라운드. 그 다음 우유 N 개.")}
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, textAlign: "center", marginBottom: 10 }}>
+            📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
+            <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#1e3a8a", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#1e3a8a", whiteSpace: "pre" }}>
+{`3 1
+RRL
+1 1 1`}
               </div>
             </div>
             <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.55, color: "#166534", whiteSpace: "pre" }}>
-{`4 5 3 8`}
-              </div>
-              <div style={{ fontSize: 10.5, color: "#15803d", marginTop: 6, lineHeight: 1.5 }}>
-                {t(E, "Each cow's milk after M rounds, space-separated.", "M 라운드 후 각 소의 우유 — 공백 구분.")}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
+{`2`}
               </div>
             </div>
           </div>
-          <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center" }}>
-            {t(E, "→ Next pages walk through how 4 5 3 8 actually appears.",
-                  "→ 다음 페이지에서 4 5 3 8 이 어떻게 나오는지 자세히.")}
+          <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 600, color: "#1e3a8a", marginBottom: 6 }}>
+              🔍 {t(E, "Walkthrough — minute 1", "풀이 — 1분 후")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
+              {t(E, "Cows: [1, 1, 1], directions R R L, caps [1, 1, 1].",
+                    "소: [1, 1, 1], 방향 R R L, 용량 [1, 1, 1].")}
+              <br/>
+              {t(E, "Cow 0 → cow 1 (R). Cow 1 → cow 2 (R). Cow 2 → cow 1 (L).",
+                    "소 0 → 소 1 (R). 소 1 → 소 2 (R). 소 2 → 소 1 (L).")}
+              <br/>
+              {t(E, "After transfers: cow 1 receives from both sides → over capacity → overflow lost.",
+                    "전달 후: 소 1이 양쪽에서 받음 → 용량 초과 → 넘침은 사라짐.")}
+            </div>
+            <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
+              {t(E, "→ total milk = 0 + 1 + 1 = 2.", "→ 총 우유 = 0 + 1 + 1 = 2.")}
+            </div>
           </div>
         </div>),
     },
 
-    // 1-3 원형 배치
+    // 1-3 How passing works
     {
       type: "reveal",
       narr: t(E,
-        "Picture the 4 cows in a circle, each holding the starting amount.",
-        "4 마리 소가 원형으로 — 각자 시작 우유를 들고 있어."),
+        "Each cow simultaneously passes 1 liter in its direction.\nA cow with 0 milk passes nothing.\nIf milk received pushes a cow over its capacity, the overflow is lost forever!",
+        "모든 소가 동시에 자기 방향으로 1리터를 전달해요. 우유가 0이면 아무것도 안 전달해요. 받은 우유가 용량을 넘으면 넘치는 건 영원히 사라져요!"),
       content: (
         <div style={{ padding: 16 }}>
-          <CowCircle values={[5, 3, 8, 4]} size={140} />
-          <div style={{ textAlign: "center", marginTop: 8, fontSize: 12, color: C.dim }}>
-            {t(E, "Each number = milk amount for that cow", "각 숫자 = 그 소의 우유 양")}
+          <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 14, padding: 14, textAlign: "center" }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: A, marginBottom: 10 }}>
+              {t(E, "Passing Rules", "전달 규칙")}
+            </div>
+            <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10 }}>
+              {[
+                [t(E, "Has milk?", "우유 있어요?"), t(E, "Pass 1L", "1L 전달")],
+                [t(E, "Over capacity?", "용량 초과?"), t(E, "Overflow lost!", "넘치면 버려!")],
+              ].map(([q, a], i) => (
+                <div key={i} style={{ background: "#fff", border: "1px solid #93c5fd", borderRadius: 10, padding: 10, flex: 1 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: A }}>{q}</div>
+                  <div style={{ fontSize: 11, color: C.text, marginTop: 4 }}>{a}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              {t(E,
+                "All transfers happen simultaneously, then capacity is enforced.",
+                "모든 전달이 동시에 일어나고, 그 후 용량 제한이 적용돼요.")}
+            </div>
           </div>
         </div>),
     },
 
-    // 1-3 한 라운드 시뮬
-    {
-      type: "reveal",
-      narr: t(E,
-        "Round 1: Each cow passes milk to the next cow clockwise.\nCow 0's milk (5) goes to cow 1.\nCow 1's milk (3) goes to cow 2.\nAnd so on!", "라운드 1: 각 소가 시계방향 다음 소에게 전달. 소0의 우유(5)가 소1에게. 소1의 우유(3)가 소2에게. 계속!"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20 }}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "Before", "전")}</div>
-              <MilkBars values={[5, 3, 8, 4]} max={8} labels={["c0","c1","c2","c3"]} />
-            </div>
-            <div style={{ fontSize: 24, color: "#2563eb", fontWeight: 700 }}>→</div>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "After round 1", "라운드 1 후")}</div>
-              <MilkBars values={[4, 5, 3, 8]} max={8} labels={["c0","c1","c2","c3"]} accent="#16a34a" />
-            </div>
-          </div>
-          <div style={{ textAlign: "center", marginTop: 8, fontSize: 11, color: C.dim }}>
-            {t(E, "Cow i gets milk from cow (i-1). Cow 0 gets from cow 3 (wrap around)!",
-                  "소 i가 소 (i-1)에게서 받음. 소 0은 소 3에게서 (원형이니까)!")}
-          </div>
-        </div>),
-    },
-
-    // 1-4 퀴즈: 라운드 후
+    // 1-4 Quiz: net change
     {
       type: "quiz",
       narr: t(E,
-        "Try it — trace one round in your head and see who ends up with what.",
-        "직접 — 머릿속으로 한 라운드 따라가 보고 누가 뭘 갖게 되는지 봐."),
+        "Think about what happens when two adjacent cows pass to each other!",
+        "두 이웃한 소가 서로에게 전달하면 어떻게 되는지 생각해봐요!"),
       question: t(E,
-        "Start: [5,3,8,4]. After 1 round, cow 2 has...?",
-        "시작: [5,3,8,4]. 1라운드 후 소2는...?"),
+        "If cow A passes left and neighbor cow B passes right to cow A, what is cow A's net milk change from these two?",
+        "소 A가 왼쪽으로, 이웃 소 B가 오른쪽으로 소 A에게 전달하면, 이 둘로 인한 소 A의 우유 순 변화는?"),
       options: [
-        t(E, "3 (cow 1's original milk)", "3 (소1의 원래 우유)"),
-        t(E, "8 (cow 2's original milk)", "8 (소2의 원래 우유)"),
-        t(E, "5 (cow 0's original milk)", "5 (소0의 원래 우유)"),
+        t(E, "+1 (gains one)", "+1 (하나 받아)"),
+        t(E, "0 (gives one, receives one)", "0 (하나 주고 하나 받아)"),
+        t(E, "-1 (loses one)", "-1 (하나 잃어)"),
       ],
-      correct: 0,
-      explain: t(E, "Cow 2 receives from cow 1 (who had 3) ✅", "소2는 소1(3 보유)에게서 받음 ✅"),
+      correct: 1,
+      explain: t(E,
+        "Right! A gives 1L left and receives 1L from B. Net change = 0. Milk is only lost on overflow.",
+        "맞아! A는 왼쪽으로 1L 주고 B에게서 1L 받아요. 순 변화 = 0. 우유는 넘칠 때만 사라져요."),
     },
 
-    // 1-5 총량 보존
-    {
-      type: "reveal",
-      narr: t(E,
-        "Key insight: the TOTAL milk never changes!\nEach round just moves milk around.\n5+3+8+4 = 20 before AND after.", "핵심: 총 우유량은 절대 변하지 않아! 매 라운드는 우유를 이동시킬 뿐. 5+3+8+4 = 20 전이나 후나."),
-      content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 8 }}>
-            {[5, 3, 8, 4].map((v, i) => (
-              <div key={i} style={{
-                width: 36, height: 36, borderRadius: 8,
-                background: "#dbeafe", border: "1px solid #93c5fd",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 14, fontWeight: 700, color: "#2563eb",
-              }}>{v}</div>
-            ))}
-            <div style={{ alignSelf: "center", fontSize: 16, fontWeight: 700, color: C.dim }}>=</div>
-            <div style={{
-              width: 44, height: 44, borderRadius: 10,
-              background: "#16a34a", border: "1px solid #16a34a",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 18, fontWeight: 700, color: "#fff",
-            }}>20</div>
-          </div>
-          <div style={{ fontSize: 12, fontWeight: 700, color: "#16a34a" }}>
-            {t(E, "Total stays 20 forever — milk is conserved!", "총량은 영원히 20 — 우유는 보존돼요!")}
-          </div>
-        </div>),
-    },
-
-    // 1-6 무한 라운드 후
-    {
-      type: "reveal",
-      narr: t(E,
-        "Look at what happens if we keep passing forever — the bars on the right.  What do you notice?",
-        "계속 끝없이 전달하면 어떻게 될까 — 오른쪽 막대 봐. 뭐가 보여?"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20 }}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "Start", "시작")}</div>
-              <MilkBars values={[5, 3, 8, 4]} max={8} />
-            </div>
-            <div style={{ fontSize: 20, color: "#2563eb", fontWeight: 700 }}>→∞→</div>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "After ∞ rounds", "∞ 라운드 후")}</div>
-              <MilkBars values={[5, 5, 5, 5]} max={8} accent="#16a34a" />
-            </div>
-          </div>
-          <div style={{ textAlign: "center", marginTop: 8, fontSize: 13, fontWeight: 600, color: "#16a34a" }}>
-            20 ÷ 4 = 5 {t(E, "each!", "씩!")}
-          </div>
-        </div>),
-    },
-
-    // 1-7 퀴즈: 평균
-    {
-      type: "quiz",
-      narr: t(E,
-        "Use what you just observed — total milk stays the same, distributed across N cows.",
-        "방금 본 것 그대로 — 총 우유는 그대로, N 마리에 나눠 가짐."),
-      question: t(E,
-        "N=5, milk=[2,4,6,8,10]. Total=30. Each cow gets?",
-        "N=5, milk=[2,4,6,8,10]. 합계=30. 각 소는?"),
-      options: ["6", "30", "5", "10"],
-      correct: 0,
-      explain: t(E, "30 ÷ 5 = 6 ✅", "30 ÷ 5 = 6 ✅"),
-    },
-
-    // 1-8 나누어 떨어지지 않으면?
-    {
-      type: "reveal",
-      narr: t(E,
-        "What if total doesn't divide evenly?\nN=3, total=7.\nWe can't give 7/3 = 2.33...\nto each.\nInstead: some cows get ⌊7/3⌋=2, others get 3!", "균등하게 안 나눠지면? N=3, 합계=7. 7/3 = 2.33... 불가. 대신: 일부는 ⌊7/3⌋=2, 나머지는 3!"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
-            <div style={{ background: "#dbeafe", borderRadius: 10, padding: 10, textAlign: "center" }}>
-              <span style={{ fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: "#2563eb" }}>
-                7 ÷ 3 = 2 ... 1
-              </span>
-            </div>
-            <div style={{ display: "flex", gap: 12 }}>
-              <div style={{ background: "#f0fdf4", borderRadius: 10, padding: 10, textAlign: "center" }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: "#16a34a" }}>avg = 7 // 3</div>
-                <div style={{ fontSize: 20, fontWeight: 700, color: "#16a34a" }}>2</div>
-              </div>
-              <div style={{ background: "#fef2f2", borderRadius: 10, padding: 10, textAlign: "center" }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: "#dc2626" }}>extra = 7 % 3</div>
-                <div style={{ fontSize: 20, fontWeight: 700, color: "#dc2626" }}>1</div>
-              </div>
-            </div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: C.text }}>
-              → {t(E, "1 cow gets 3, 2 cows get 2", "1마리 3, 2마리 2")}
-            </div>
-          </div>
-        </div>),
-    },
-
-    // 1-9 입력: 나머지
+    // 1-5 Input: small case
     {
       type: "input",
       narr: t(E,
-        "N=4, total=10. How many cows get avg+1? That's 10 % 4.", "N=4, 합계=10. 몇 마리가 avg+1을 받아요? 10 % 4 계산."),
-      question: t(E, "10 % 4 = ?", "10 % 4 = ?"),
-      answer: 2,
-    },
-
-    // 1-10 정리
-    {
-      type: "reveal",
-      narr: t(E,
-        "Summary: after infinite rounds, extra = total%N cows get avg+1, and (N-extra) cows get avg.\nThat's the entire answer!", "정리: 무한 라운드 후, extra = total%N 마리가 avg+1, (N-extra) 마리가 avg. 이게 전체 답!"),
-      content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "#16a34a", marginBottom: 6 }}>
-              {t(E, "The Formula", "공식")}
-            </div>
-            <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 2 }}>
-              <div>avg = total // N</div>
-              <div>extra = total % N</div>
-              <div>{t(E, "extra cows → avg+1", "extra 마리 → avg+1")}</div>
-              <div>{t(E, "(N-extra) cows → avg", "(N-extra) 마리 → avg")}</div>
-            </div>
-          </div>
-        </div>),
+        "Let's try a simple case!\n3 cows in a circle, all pass right, each starts with 2L, capacity 2.",
+        "간단한 예시를 해보자! 3마리 소가 원형으로, 모두 오른쪽으로 전달, 각각 2L로 시작, 용량 2."),
+      question: t(E,
+        "3 cows, all pass right, milk=[2,2,2], capacity=[2,2,2]. After 1 minute, what is the total milk?",
+        "3마리 소, 모두 오른쪽 전달, 우유=[2,2,2], 용량=[2,2,2]. 1분 후 총 우유량은?"),
+      hint: t(E,
+        "Each cow gives 1 right AND receives 1 from the left. Will any cow exceed its capacity?",
+        "각 소는 1을 오른쪽으로 주고 왼쪽에서 1 받아. 용량 초과되는 소가 있을까?"),
+      answer: 6,
     },
   ];
 }
 
-
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: 🔍 왜 이게 맞는지 (8 steps)
+   Chapter 2: ⚡ Code
    ═══════════════════════════════════════════════════════════════ */
 export function makeExchangeCh2(E, lang = "py") {
   return [
-    // 2-0 알고리즘 요약 (코드 탭 시작)
+    // 2-0 Idea recap
     {
       type: "reveal",
       narr: t(E,
-        "Recap: total stays the same, so after enough rounds milk splits as evenly as possible.\nCode is just: total → avg → extra → output.", "정리: 총량은 그대로니까 충분한 라운드 후 우유는 가능한 균등하게 분배. 코드는 단순: total → avg → extra → 출력."),
+        "The plan: simulate one minute at a time. Each cow with milk passes 1L, then over-cap cells lose the overflow. Repeat M times, sum at the end.",
+        "계획: 한 분씩 시뮬레이션. 우유 있는 소가 1L 전달, 그 다음 용량 초과는 버림. M번 반복하고 마지막에 합계."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ background: "#dbeafe", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, fontSize: 14, fontWeight: 600, color: "#2563eb" }}>
-            {t(E, "No simulation. Pure math: O(N).", "시뮬 없음. 순수 수학: O(N).")}
-          </div>
-        </div>),
-    },
-    // 2-1 회전의 본질
-    {
-      type: "reveal",
-      narr: t(E,
-        "Each round is just a ROTATION of all milk values.\nCow i gets cow (i-1)'s milk.\nAfter N rounds, everything returns to the start!", "매 라운드는 모든 우유 값의 회전일 뿐. 소 i가 소 (i-1)의 우유를 받아요. N라운드 후 모든 게 원래대로!"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            {[
-              { label: t(E, "Round 0", "라운드 0"), values: [5, 3, 8, 4] },
-              { label: t(E, "Round 1", "라운드 1"), values: [4, 5, 3, 8] },
-              { label: t(E, "Round 2", "라운드 2"), values: [8, 4, 5, 3] },
-              { label: t(E, "Round 3", "라운드 3"), values: [3, 8, 4, 5] },
-              { label: t(E, "Round 4", "라운드 4"), values: [5, 3, 8, 4] },
-            ].map((row, i) => (
-              <div key={i} style={{
-                display: "flex", alignItems: "center", gap: 8,
-                background: i === 4 ? "#f0fdf4" : (i % 2 === 0 ? "#eff6ff" : "#f8fafc"),
-                borderRadius: 8, padding: "6px 10px",
-                border: i === 4 ? "2px solid #86efac" : "none",
-              }}>
-                <span style={{ fontSize: 10, fontWeight: 700, color: i === 4 ? "#16a34a" : C.dim, width: 60 }}>{row.label}</span>
-                <div style={{ display: "flex", gap: 4 }}>
-                  {row.values.map((v, j) => (
-                    <div key={j} style={{
-                      width: 28, height: 28, borderRadius: 6,
-                      background: i === 4 ? "#dcfce7" : "#dbeafe",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 12, fontWeight: 700, color: i === 4 ? "#16a34a" : "#2563eb",
-                    }}>{v}</div>
-                  ))}
-                </div>
-                {i === 4 && <span style={{ fontSize: 10, fontWeight: 700, color: "#16a34a" }}>= {t(E, "back to start!", "원래대로!")}</span>}
-              </div>
-            ))}
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, fontSize: 14, fontWeight: 600, color: A }}>
+            {t(E, "Brute simulation: pass → cap → repeat. O(N·M).", "단순 시뮬: 전달 → 용량 제한 → 반복. O(N·M).")}
           </div>
         </div>),
     },
 
-    // 2-2 정수 나눗셈 vs 나머지
-    {
-      type: "reveal",
-      narr: t(E,
-        "Python's // is integer division (floor).\n% is modulo (remainder).\nThese two work together: total = (total // N) × N + (total % N).", "파이썬의 //는 정수 나눗셈(내림). %는 나머지. 이 둘이 함께 작동: total = (total // N) × N + (total % N)."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
-            <div><span style={{ color: "#e2e8f0" }}>7 // 3  </span><span style={{ color: "#6b7280" }}># → 2 (quotient)</span></div>
-            <div><span style={{ color: "#e2e8f0" }}>7 % 3   </span><span style={{ color: "#6b7280" }}># → 1 (remainder)</span></div>
-            <div><span style={{ color: "#6b7280" }}># Check: 2 × 3 + 1 = 7 ✅</span></div>
-          </div>
-        </div>),
-    },
-
-    // 2-3 퀴즈: 정수 나눗셈
-    {
-      type: "quiz",
-      narr: t(E, "Let's practice! 13 // 5 = ?", "연습! 13 // 5 = ?"),
-      question: t(E, "13 // 5 = ?", "13 // 5 = ?"),
-      options: ["2", "3", "2.6", "13"],
-      correct: 0,
-      explain: t(E, "13 ÷ 5 = 2 remainder 3. Floor = 2 ✅", "13 ÷ 5 = 2 나머지 3. 내림 = 2 ✅"),
-    },
-
-    // 2-4 입력: 나머지 연습
-    {
-      type: "input",
-      narr: t(E,
-        "13 % 5 = the remainder when 13 is divided by 5.", "13 % 5 = 13을 5로 나눈 나머지."),
-      question: t(E, "13 % 5 = ?", "13 % 5 = ?"),
-      answer: 3,
-    },
-
-    // 2-5 결과 배열 구성
-    {
-      type: "reveal",
-      narr: t(E,
-        "Building the result: make a list with 'extra' copies of (avg+1) and (N-extra) copies of avg.\nExample: N=4, total=10 → avg=2, extra=2.", "결과 배열 구성: (avg+1) extra개 + avg (N-extra)개. 예: N=4, 합계=10 → avg=2, extra=2."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 8 }}>
-            {[3, 3, 2, 2].map((v, i) => (
-              <div key={i} style={{
-                width: 40, height: 40, borderRadius: 8,
-                background: v === 3 ? "#dc2626" : "#2563eb",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 16, fontWeight: 700, color: "#fff",
-              }}>{v}</div>
-            ))}
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", gap: 12, fontSize: 11, fontWeight: 700 }}>
-            <span style={{ color: "#dc2626" }}>2 × (avg+1=3)</span>
-            <span style={{ color: "#2563eb" }}>2 × (avg=2)</span>
-          </div>
-          <div style={{ textAlign: "center", marginTop: 6, fontSize: 12, color: C.dim }}>
-            {t(E, "Check: 3+3+2+2 = 10 = total ✅", "확인: 3+3+2+2 = 10 = 합계 ✅")}
-          </div>
-        </div>),
-    },
-
-    // 2-6 퀴즈: 결과 확인
-    {
-      type: "quiz",
-      narr: t(E,
-        "N=5, total=13. avg=2, extra=3. How many cows get 2?", "N=5, 합계=13. avg=2, extra=3. 2를 받는 소는 몇 마리?"),
-      question: t(E, "N - extra = 5 - 3 = ?", "N - extra = 5 - 3 = ?"),
-      options: ["2", "3", "5", "0"],
-      correct: 0,
-      explain: t(E, "5 - 3 = 2 cows get avg=2. The other 3 get avg+1=3 ✅", "5 - 3 = 2마리가 avg=2. 나머지 3마리가 avg+1=3 ✅"),
-    },
-
-    // 2-7 균등 분배인 경우
-    {
-      type: "reveal",
-      narr: t(E,
-        "Special case: if total divides evenly (extra=0), ALL cows get the same amount!\n[avg, avg, ..., avg].", "특수 경우: 균등 분배 시 (extra=0), 모든 소가 같은 양! [avg, avg, ..., avg]."),
-      content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ background: "#f0fdf4", borderRadius: 10, padding: 10, border: "1px solid #86efac" }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: "#16a34a", marginBottom: 4 }}>
-              {t(E, "N=4, total=20 → extra=0", "N=4, 합계=20 → extra=0")}
-            </div>
-            <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
-              {[5, 5, 5, 5].map((v, i) => (
-                <div key={i} style={{
-                  width: 36, height: 36, borderRadius: 8, background: "#16a34a",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 14, fontWeight: 700, color: "#fff",
-                }}>{v}</div>
-              ))}
-            </div>
-          </div>
-        </div>),
-    },
-
-    // 2-8 입력: 큰 예시
-    {
-      type: "input",
-      narr: t(E,
-        "N=7, total=25. avg = 25 // 7 = 3. extra = 25 % 7 = ?", "N=7, 합계=25. avg = 25 // 7 = 3. extra = 25 % 7 = ?"),
-      question: t(E, "25 % 7 = ?", "25 % 7 = ?"),
-      answer: 4,
-    },
+    // 2-1 Static worked example (sim step — replaces wrong interactive sim)
     {
       type: "sim",
       narr: t(E,
-        "Pick a milk distribution. Step through total → avg/extra → final result.", "우유 분배를 고르고 total → avg/extra → 결과를 단계별로."),
+        "Trace the official Sample 1 minute by minute — see the milk move and the overflow disappear.",
+        "공식 샘플 1을 분 단위로 따라가 봐 — 우유가 움직이고 넘침이 사라지는 걸 봐."),
     },
-    // 2-9 progressive code
+
+    // 2-2 Progressive code build
     {
       type: "progressive",
       narr: t(E,
-        "Now build the solution step by step. Each section reveals one piece of the algorithm.", "이제 솔루션을 단계별로 만들어보자. 각 섹션마다 알고리즘 한 조각씩."),
+        "Now build the solution. The section below reveals the simulation loop one piece at a time.",
+        "이제 솔루션을 만들어보자. 아래 섹션이 시뮬레이션 루프를 한 조각씩 보여줘."),
       sections: getExchangeSections(E),
     },
+
+    // 2-3 Runner — verify on official samples
     {
       type: "runner",
       narr: t(E,
-        "Try your own milk amounts.", "직접 우유 양 시도."),
-    },
-  ];
-}
-
-
-/* ═══════════════════════════════════════════════════════════════
-   Chapter 3: ⚡ 코드 빌드 (8 steps)
-   ═══════════════════════════════════════════════════════════════ */
-export function makeExchangeCh3(E) {
-  return [
-    // 3-1 입력 읽기
-    {
-      type: "reveal",
-      narr: t(E,
-        "Step 1: Read N and the milk amounts.", "1단계: N과 우유 양 읽기."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
-            <div><span style={{ color: "#e2e8f0" }}>N = </span><span style={{ color: "#c084fc" }}>int</span><span style={{ color: "#e2e8f0" }}>(</span><span style={{ color: "#c084fc" }}>input</span><span style={{ color: "#e2e8f0" }}>())</span></div>
-            <div><span style={{ color: "#e2e8f0" }}>milk = </span><span style={{ color: "#c084fc" }}>list</span><span style={{ color: "#e2e8f0" }}>(</span><span style={{ color: "#c084fc" }}>map</span><span style={{ color: "#e2e8f0" }}>(</span><span style={{ color: "#c084fc" }}>int</span><span style={{ color: "#e2e8f0" }}>, </span><span style={{ color: "#c084fc" }}>input</span><span style={{ color: "#e2e8f0" }}>().split()))</span></div>
-          </div>
-        </div>),
-    },
-
-    // 3-2 합계, 평균, 나머지
-    {
-      type: "reveal",
-      narr: t(E,
-        "Step 2: Compute total, average (floor), and extra (remainder).", "2단계: 합계, 평균(내림), 나머지 계산."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
-            <div><span style={{ color: "#e2e8f0" }}>total = </span><span style={{ color: "#c084fc" }}>sum</span><span style={{ color: "#e2e8f0" }}>(milk)</span></div>
-            <div><span style={{ color: "#e2e8f0" }}>avg = total // N</span></div>
-            <div><span style={{ color: "#e2e8f0" }}>extra = total % N</span></div>
-          </div>
-        </div>),
-    },
-
-    // 3-3 퀴즈: sum()
-    {
-      type: "quiz",
-      narr: t(E,
-        "Python's sum() adds all elements in a list. sum([5,3,8,4]) = 20.", "파이썬의 sum()은 리스트 모든 원소를 더함. sum([5,3,8,4]) = 20."),
-      question: t(E, "sum([1, 2, 3, 4, 5]) = ?", "sum([1, 2, 3, 4, 5]) = ?"),
-      options: ["15", "5", "120", "10"],
-      correct: 0,
-      explain: t(E, "1+2+3+4+5 = 15 ✅", "1+2+3+4+5 = 15 ✅"),
-    },
-
-    // 3-4 결과 리스트 구성
-    {
-      type: "reveal",
-      narr: t(E,
-        "Step 3: Build the result list.\nPython trick: [x] * n creates a list with x repeated n times!", "3단계: 결과 리스트 구성. 파이썬 트릭: [x] * n은 x를 n번 반복한 리스트!"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
-            <div><span style={{ color: "#e2e8f0" }}>result = [avg + 1] * extra + [avg] * (N - extra)</span></div>
-            <div>&nbsp;</div>
-            <div style={{ color: "#6b7280" }}># Example: avg=2, extra=2, N=5</div>
-            <div style={{ color: "#6b7280" }}># [3]*2 + [2]*3 = [3,3,2,2,2]</div>
-          </div>
-        </div>),
-    },
-
-    // 3-5 퀴즈: 리스트 곱셈
-    {
-      type: "quiz",
-      narr: t(E,
-        "[7] * 3 creates [7, 7, 7]. List multiplication repeats the list!", "[7] * 3은 [7, 7, 7]을 만들어요. 리스트 곱셈은 리스트를 반복!"),
-      question: t(E, "[5] * 4 = ?", "[5] * 4 = ?"),
-      options: ["[5, 5, 5, 5]", "[20]", "[5, 4]", "[5]"],
-      correct: 0,
-      explain: t(E, "[5] repeated 4 times = [5, 5, 5, 5] ✅", "[5]를 4번 반복 = [5, 5, 5, 5] ✅"),
-    },
-
-    // 3-6 출력
-    {
-      type: "reveal",
-      narr: t(E,
-        "Step 4: Print the result as space-separated numbers.", "4단계: 결과를 공백으로 구분해서 출력."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: C.codeBg, borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 14, lineHeight: 2 }}>
-            <div><span style={{ color: "#c084fc" }}>print</span><span style={{ color: "#e2e8f0" }}>(' '.join(</span><span style={{ color: "#c084fc" }}>map</span><span style={{ color: "#e2e8f0" }}>(</span><span style={{ color: "#c084fc" }}>str</span><span style={{ color: "#e2e8f0" }}>, result)))</span></div>
-          </div>
-          <div style={{ marginTop: 6, fontSize: 12, color: C.dim }}>
-            {t(E, "map(str, ...) converts ints to strings, ' '.join() puts spaces between them.", "map(str, ...)이 정수를 문자열로, ' '.join()이 사이에 공백.")}
-          </div>
-        </div>),
-    },
-
-    // 3-7 복잡도
-    {
-      type: "reveal",
-      narr: t(E,
-        "Time: O(N) — just sum the list and build the result.\nSpace: O(N) — for the result list.\nSuper efficient!", "시간: O(N) — 리스트 합계 구하고 결과 구성. 공간: O(N) — 결과 리스트. 매우 효율적!"),
-      content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 28, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(N)</div>
-          <div style={{ fontSize: 12, color: C.ok, fontWeight: 700, marginTop: 4 }}>
-            {t(E, "No simulation needed — pure math!", "시뮬레이션 불필요 — 순수 수학!")}
-          </div>
-        </div>),
-    },
-
-    // 3-8 전체 코드
-    {
-      type: "code",
-      narr: t(E,
-        "Complete solution: read, compute sum/avg/extra, build result, print. Just 6 lines! 🎉", "완전한 솔루션: 읽기, 합/평균/나머지 계산, 결과 구성, 출력. 단 6줄! 🎉"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+        "Pick an official sample and confirm the simulation gives the expected total.",
+        "공식 샘플을 골라 시뮬레이션이 예상 합계를 내는지 확인해."),
     },
   ];
 }

@@ -10,8 +10,8 @@ export function makeAlchemyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "There are N metals (1..N), and you start with some count of each. Each metal i (i ≥ 2) has a recipe — a set of lower-numbered metals — that turns into ONE unit of metal i.\nUsing the recipes any number of times, can you create at least one unit of metal N?",
-        "1번부터 N번까지 N개의 금속이 있고, 각 금속의 시작 개수가 주어져요. 2번 이상의 금속 i는 각자 레시피를 가지고 있어요 — 더 낮은 번호의 금속들을 모아서 i 1개를 만들어요.\n레시피를 마음대로 사용해서 금속 N을 1개 이상 만들 수 있을까요?"),
+        "There are N metals (1..N), and you start with a[i] units of metal i. Each recipe takes one unit each of several lower-numbered metals and turns them into ONE unit of a higher-numbered metal.\nUsing the recipes any number of times, what is the MAXIMUM number of units of metal N you can end up with?",
+        "1번부터 N번까지 N개의 금속이 있고, 금속 i 를 a[i] 개씩 가지고 시작해요. 각 레시피는 더 낮은 번호의 금속 여러 개를 1개씩 모아서 더 높은 번호의 금속 1개를 만들어요.\n레시피를 마음대로 여러 번 써서, 금속 N 을 최대 몇 개까지 만들 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -27,8 +27,8 @@ export function makeAlchemyCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
-                "Output 1 if you can craft at least one unit of metal N, else 0.",
-                "금속 N 을 1단위 이상 만들 수 있으면 1, 없으면 0 출력.")}
+                "Output the MAXIMUM number of units of metal N you can craft.",
+                "만들 수 있는 금속 N 의 최대 개수를 출력해요.")}
             </div>
           </div>
 
@@ -69,8 +69,8 @@ export function makeAlchemyCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "1 if you can make at least 1 unit of metal N, else 0", "금속 N을 1단위 이상 만들 수 있으면 1, 없으면 0")}</b>
-                  {t(E, ".", "을 출력해요.")}
+                  <b style={{ color: "#15803d" }}>{t(E, "the maximum number of units of metal N you can make", "만들 수 있는 금속 N 의 최대 개수")}</b>
+                  {t(E, ".", "를 출력해요.")}
                 </div>
               </div>
             </div>
@@ -79,7 +79,52 @@ export function makeAlchemyCh1(E) {
           <RecipeSimulator E={E} />
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: Official I/O format + verbatim sample + worked example
+    {
+      type: "reveal",
+      narr: t(E,
+        "Here is the exact input/output format and the official sample. Trace it once so the recipe-line format is clear.",
+        "정확한 입력/출력 형식과 공식 예제예요. 레시피 줄 형식이 헷갈리지 않게 한 번 따라가 봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10, fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 700, color: "#92400e", marginBottom: 6 }}>📥 {t(E, "Input", "입력")}</div>
+            <div>{t(E, "Line 1: N (number of metals).", "1번째 줄: 금속 개수 N.")}</div>
+            <div>{t(E, "Line 2: N integers a[1..N] — starting units (0 ≤ a[i] ≤ 10000).", "2번째 줄: 정수 N개 a[1..N] — 시작 개수 (0 ≤ a[i] ≤ 10000).")}</div>
+            <div>{t(E, "Line 3: K (number of recipes, 1 ≤ K < N).", "3번째 줄: 레시피 개수 K (1 ≤ K < N).")}</div>
+            <div>{t(E, "Next K lines: L M ing₁ … ing_M — make 1 of metal L from M ingredients.", "다음 K줄: L M 재료₁ … 재료_M — 재료 M개로 금속 L 1개를 만들어요.")}</div>
+            <div style={{ fontWeight: 700, color: "#92400e", margin: "8px 0 6px" }}>📤 {t(E, "Output", "출력")}</div>
+            <div>{t(E, "The maximum number of units of metal N achievable.", "만들 수 있는 금속 N 의 최대 개수.")}</div>
+          </div>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <div style={{ flex: 1, minWidth: 150 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "Sample Input", "예제 입력")}</div>
+              <pre style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 8, padding: 10, fontSize: 12, fontFamily: "'JetBrains Mono', monospace", margin: 0 }}>{`5
+2 0 0 1 0
+3
+5 2 3 4
+2 1 1
+3 1 2`}</pre>
+            </div>
+            <div style={{ flex: 1, minWidth: 110 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>{t(E, "Sample Output", "예제 출력")}</div>
+              <pre style={{ background: "#0f172a", color: "#86efac", borderRadius: 8, padding: 10, fontSize: 12, fontFamily: "'JetBrains Mono', monospace", margin: 0 }}>{`1`}</pre>
+            </div>
+          </div>
+          {/* TODO: sim redesign — a static worked example, can become an animated craft-trace later */}
+          <div style={{ background: "#fff", border: "1px dashed #fcd34d", borderRadius: 10, padding: "10px 12px", marginTop: 10, fontSize: 11.5, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 700, color: "#92400e", marginBottom: 4 }}>🔍 {t(E, "Reading the recipe lines", "레시피 줄 읽기")}</div>
+            <div>{t(E, "\"5 2 3 4\" → make metal 5 from M=2 ingredients: metals 3 and 4.", "\"5 2 3 4\" → 재료 M=2개(금속 3, 4)로 금속 5 를 만들어요.")}</div>
+            <div>{t(E, "\"2 1 1\" → make metal 2 from M=1 ingredient: metal 1.", "\"2 1 1\" → 재료 M=1개(금속 1)로 금속 2 를 만들어요.")}</div>
+            <div>{t(E, "\"3 1 2\" → make metal 3 from M=1 ingredient: metal 2.", "\"3 1 2\" → 재료 M=1개(금속 2)로 금속 3 을 만들어요.")}</div>
+            <div style={{ marginTop: 6 }}>{t(E,
+              "Start: metal 1 = 2, metal 4 = 1, rest 0. Turn 1→2→3, then 3 + 4 → 5. That makes one unit of metal 5. Only one metal-1 is left after, not enough for a second metal 5 → answer 1.",
+              "시작: 금속 1 = 2개, 금속 4 = 1개, 나머지 0. 1→2→3 으로 바꾸고, 3 + 4 → 5. 금속 5 가 1개 나와요. 그 뒤 금속 1 이 1개 남지만 금속 4 가 없어 두 번째 금속 5 는 못 만들어요 → 답 1.")}</div>
+          </div>
+        </div>
+      ),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
@@ -97,7 +142,7 @@ export function makeAlchemyCh1(E) {
         "Correct! You need 1 of each ingredient. With 1x metal 2, you can only make 1x metal 3.",
         "맞아! 각 재료가 1개씩 필요해요. 금속2가 1개뿐이니 금속3은 1개만 만들 수 있어요."),
     },
-    // 1-3: Input
+    // 1-4: Input
     {
       type: "input",
       narr: t(E,

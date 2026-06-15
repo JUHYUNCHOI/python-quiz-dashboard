@@ -1,8 +1,10 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 8/13 (TLE 9-13, brute simulation) (same as exchange)
-//   C++:    8/14 (TLE 9-14, brute simulation) (same as exchange)
-//   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
-//   상세: REPO_ROOT/USACO_VERIFICATION.md
+// 🔒 USACO_VERIFIED (content confirmed real Milk Exchange 2026-06-15)
+//   Real USACO 2024 Feb Bronze #2 "Milk Exchange" (cpid 1396).
+//   Reference solution (brute O(N·M) simulation) matches all 3 official
+//   samples exactly (3 1 RRL 1 1 1 → 2; 5 20 LLLLL 3 3 2 3 3 → 14;
+//   9 5 RRRLRRLLR 5 8 4 9 3 4 9 5 4 → 38). USACO re-submit PENDING.
+//   Prior partial result: Python 8/13, C++ 8/14 (TLE 9+ on M up to 1e9).
+//   코드 수정 시 USACO 재제출 필요 — 상세: REPO_ROOT/USACO_VERIFICATION.md
 
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";

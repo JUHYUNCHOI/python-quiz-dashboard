@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getRevEngSections, RevEngDeepAuditSim } from "./components";
+import { getRevEngSections } from "./components";
 
 /* ===============================================================
    Chapter 1: Problem (3 steps)
@@ -10,8 +10,8 @@ export function makeRevEngCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "M test cases are given; each test case has a binary input array of length N and an expected boolean output. We need to know whether SOME simple if/else program of the form 'if arr[i] == constant: output X else output Y' (depending on a SINGLE input position) could produce all the expected outputs.\nPrint OK if such a program exists, else LIE.",
-        "M 개의 테스트 케이스가 주어져요. 각 케이스는 길이 N 의 이진 입력 배열과 기대 출력 (0/1) 을 가져요. 어떤 'if arr[i] == 상수: X 출력 else Y 출력' 형태의 단순 if/else 프로그램 (단 하나의 입력 위치만 사용) 으로 모든 기대 출력을 만들 수 있는지 판단해요.\n그런 프로그램이 존재하면 OK, 아니면 LIE 를 출력해요."),
+        "Elsie's program is a chain of if / else-if / else statements. Each statement looks at ONE variable and returns 0 or 1, like:\n  if (b[1]==1) return 1;\n  else if (b[0]==0) return 0;\n  else return 1;\nWe are given M inputs (each a length-N string of 0/1) with their claimed outputs. Decide whether SOME such program could produce all of them: print OK, otherwise LIE.",
+        "Elsie의 프로그램은 if / else-if / else 가 줄줄이 이어진 형태예요. 각 문장은 변수 하나만 보고 0이나 1을 반환해요. 예:\n  if (b[1]==1) return 1;\n  else if (b[0]==0) return 0;\n  else return 1;\nM개의 입력(각각 길이 N의 0/1 문자열)과 주장된 출력이 주어져요. 그런 프로그램으로 모두 만들 수 있으면 OK, 아니면 LIE를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -27,8 +27,8 @@ export function makeRevEngCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
-                "Output OK if a single-position if/else program could produce all the test outputs, else LIE.",
-                "한 위치 if/else 프로그램이 모든 출력을 만들 수 있으면 OK, 아니면 LIE 출력.")}
+                "Output OK if a chain of if / else-if / else (each testing one variable) could produce all the outputs, else LIE.",
+                "if / else-if / else 연쇄 (각 문장이 변수 하나 검사)로 모든 출력을 만들 수 있으면 OK, 아니면 LIE 출력.")}
             </div>
           </div>
 
@@ -49,9 +49,9 @@ export function makeRevEngCh1(E) {
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Could a ", "")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "simple if/else program on a SINGLE input position", "한 개의 입력 위치만 사용하는 단순 if/else 프로그램")}</b>
-                  {t(E, " (\"if arr[i] == c: X else Y\") explain all the outputs?",
-                        " (\"if arr[i] == c: X else Y\") 으로 모든 출력을 설명할 수 있을까요?")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "chain of if / else-if / else statements (each testing ONE variable)", "if / else-if / else 문장들의 연쇄 (각 문장은 변수 하나만 검사)")}</b>
+                  {t(E, " produce all the claimed outputs?",
+                        " 으로 주장된 모든 출력을 만들 수 있을까요?")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
@@ -83,13 +83,35 @@ export function makeRevEngCh1(E) {
         "Correct! If the same input produces different outputs, no deterministic program can be consistent. It's a LIE.",
         "맞아! 같은 입력이 다른 출력을 만들면, 어떤 결정적 프로그램도 일관될 수 없어요. LIE야."),
     },
-    // 1-3: Deep audit sim — try every (pos, A, B) by hand
+    // 1-3: Worked example of the greedy peel
+    // TODO: sim redesign — RevEngDeepAuditSim models a SINGLE-variable if/else, which is
+    // NOT the real problem (a chain of if/else-if/else). Replaced with a static worked
+    // example of the correct greedy peel. A new interactive peel sim should be built later.
     {
       type: "reveal",
       narr: t(E,
-        "Let's audit by hand. Pick a position (pos) and an assignment (A,B). The rule is 'if arr[pos]==0 return A, else return B'. Each row shows whether that rule matches the expected output. Try every combo until one works — or all fail (LIE).",
-        "직접 감사해 보자. 위치(pos)와 배정(A,B)을 골라봐. 규칙은 'if arr[pos]==0 이면 A, 아니면 B'. 각 행은 그 규칙이 기대 출력과 맞는지 보여줘. 모든 조합을 시도해 — 하나라도 맞으면 OK, 다 실패면 LIE."),
-      content: <RevEngDeepAuditSim E={E} />,
+        "The real idea: an if-statement keyed on one variable=value works only if EVERY remaining row with that variable=value shares the same output. Peel those rows off, then repeat on what's left. If everything peels away → OK. If you ever get stuck → LIE.",
+        "핵심 아이디어: '어떤 변수=값' 으로 거는 if 문은, 그 조건에 맞는 남은 행들의 출력이 전부 같을 때만 만들 수 있어요. 그런 행들을 떼어내고, 남은 것으로 다시 반복해요. 전부 떼어내지면 → OK, 도중에 막히면 → LIE."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
+              {t(E, "Worked example (sample case 2)", "예제 풀이 (샘플 2번)")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, background: "#fff", border: "1px solid #e5e7eb", borderRadius: 8, padding: 10, marginBottom: 10 }}>
+              00 → 0{"\n"}01 → 1{"\n"}10 → 1{"\n"}11 → 1
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <div>① {t(E, "Rows with variable[0]==1: \"10\"→1, \"11\"→1 — both output 1. Peel them off.", "변수[0]==1인 행: \"10\"→1, \"11\"→1 — 둘 다 출력 1. 떼어냄.")}</div>
+              <div>② {t(E, "Left: \"00\"→0, \"01\"→1. Rows with variable[1]==1: just \"01\"→1. Peel it.", "남음: \"00\"→0, \"01\"→1. 변수[1]==1인 행: \"01\"→1뿐. 떼어냄.")}</div>
+              <div>③ {t(E, "Left: \"00\"→0. One row, peel it (e.g. else return 0).", "남음: \"00\"→0. 한 행, 떼어냄 (else return 0).")}</div>
+              <div style={{ color: "#15803d", fontWeight: 700, marginTop: 4 }}>
+                ✓ {t(E, "Everything peeled away → OK", "전부 떼어짐 → OK")}
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
     },
     // 1-4: Input
     {
@@ -117,8 +139,8 @@ export function makeRevEngCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Identical inputs with different outputs → LIE. Otherwise try every (pos, A, B) — 'if arr[pos]==0 return A else B' must match every test. OK if any works. Sections build it one piece at a time.",
-        "동일 입력 다른 출력 → LIE. 아니면 모든 (위치, A, B) 시도 — 모든 테스트와 일치하면 OK. 아래 섹션이 한 단락씩 쌓아요."),
+        "Repeatedly find a variable=value whose remaining rows ALL share one output, peel them off, and loop. If every row peels away → OK, otherwise LIE. Sections build it one piece at a time.",
+        "남은 행들의 출력이 전부 같은 '변수=값' 을 찾아 떼어내기를 반복해요. 전부 떼어지면 → OK, 아니면 LIE. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getRevEngSections(E),
     },
   ];

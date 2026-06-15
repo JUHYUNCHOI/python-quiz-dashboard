@@ -1,211 +1,98 @@
-import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getAcowdemia2Sections } from "./components";
 
-/* ---------- Definitely-Senior Auditor ----------
-   Additive bilingual interactive sim. The student edits two papers' author
-   lists and watches the (a -> b) "always before" matrix update live. The
-   verdict for the pair (A, B) flips between DEFINITELY SENIOR and
-   UNDETERMINED based on whether A appears before B in every shared paper. */
-function DefinitelySeniorSim({ E }) {
-  // Two papers, each an ordered list of author IDs (0-indexed cows).
-  const [papers, setPapers] = useState([
-    [0, 1, 2],
-    [1, 0],
-  ]);
-  const [pairA, setPairA] = useState(0);
-  const [pairB, setPairB] = useState(1);
+// TODO: sim redesign — replace this static worked example with an interactive
+// sim for the REAL Acowdemia II (effort-order publications, alphabetical-tie
+// rule, N×N B/1/0/? matrix). The previous DefinitelySeniorSim modeled a
+// made-up problem and was removed during the 2026-06-15 rewrite.
 
-  const N = 3;
-  const COW_EMOJI = ["🐄", "🐮", "🐂"];
-  const COW_COLOR = ["#2563eb", "#7c3aed", "#15803d"];
-  const cowName = (id) => `${COW_EMOJI[id]}${id}`;
+/* ---------- Static worked example of official Sample 1 ----------
+   Publication lists all N members in DECREASING effort order; ties broken
+   alphabetically. More senior = less effort = appears LATER. An adjacent
+   pair that is already alphabetical gives NO info (could be a tie); only an
+   alphabetical *break* proves a real effort gap. */
+function SeniorityWorkedExample({ E }) {
+  const members = ["dean", "elsie", "mildred"];
+  const COLOR = { dean: "#2563eb", elsie: "#7c3aed", mildred: "#15803d" };
+  const pub = ["elsie", "mildred", "dean"]; // decreasing effort
 
-  // before[a][b] = true if some paper has a appearing before b.
-  const before = Array.from({ length: N }, () => Array(N).fill(false));
-  for (const auth of papers) {
-    for (let i = 0; i < auth.length; i++) {
-      for (let j = i + 1; j < auth.length; j++) {
-        before[auth[i]][auth[j]] = true;
-      }
-    }
-  }
-
-  // verdict for ordered pair (A, B):
-  //  - SHARED: at least one paper contains both
-  //  - SENIOR: shared && before[A][B] && !before[B][A]
-  const sharesPaper = (a, b) => papers.some((p) => p.includes(a) && p.includes(b));
-  const verdict = (a, b) => {
-    if (a === b) return "self";
-    if (!sharesPaper(a, b)) return "noshare";
-    if (before[a][b] && !before[b][a]) return "senior";
-    return "undetermined";
-  };
-
-  const cyclePos = (pi, slot) => {
-    const next = papers.map((p) => p.slice());
-    const list = next[pi];
-    list[slot] = (list[slot] + 1) % N;
-    setPapers(next);
-  };
-  const addAuthor = (pi) => {
-    if (papers[pi].length >= 4) return;
-    const next = papers.map((p) => p.slice());
-    next[pi].push(0);
-    setPapers(next);
-  };
-  const delAuthor = (pi) => {
-    if (papers[pi].length <= 1) return;
-    const next = papers.map((p) => p.slice());
-    next[pi].pop();
-    setPapers(next);
-  };
-  const reset = () => {
-    setPapers([[0, 1, 2], [1, 0]]);
-    setPairA(0);
-    setPairB(1);
-  };
-
-  const v = verdict(pairA, pairB);
-  const verdictColor =
-    v === "senior" ? "#15803d" :
-    v === "undetermined" ? "#b45309" :
-    v === "noshare" ? "#6b7280" : "#6b7280";
-  const verdictBg =
-    v === "senior" ? "#dcfce7" :
-    v === "undetermined" ? "#fef3c7" :
-    v === "noshare" ? "#f3f4f6" : "#f3f4f6";
-  const verdictText =
-    v === "senior" ? t(E, "DEFINITELY SENIOR ✅", "확실히 선임 ✅") :
-    v === "undetermined" ? t(E, "UNDETERMINED ❓", "판단 불가 ❓") :
-    v === "noshare" ? t(E, "no shared paper", "공동 논문 없음") :
-    t(E, "same cow", "같은 소");
+  // Official Sample 1 answer matrix.
+  const matrix = [
+    ["B", "1", "1"],
+    ["0", "B", "?"],
+    ["0", "?", "B"],
+  ];
+  const cellBg = (ch) =>
+    ch === "B" ? "#f3f4f6" : ch === "1" ? "#dcfce7" : ch === "0" ? "#fee2e2" : "#fef3c7";
+  const cellFg = (ch) =>
+    ch === "B" ? "#9ca3af" : ch === "1" ? "#15803d" : ch === "0" ? "#b91c1c" : "#b45309";
 
   return (
     <div style={{ background: C.card, border: `1.5px solid ${C.border}`, borderRadius: 12, padding: 14, marginTop: 12 }}>
       <div style={{ fontSize: 12, fontWeight: 800, color: "#2563eb", marginBottom: 6, letterSpacing: 0.4 }}>
-        🧪 {t(E, "Try it: Definitely-Senior Auditor", "직접 해보기: 선임 판정 시뮬레이터")}
-      </div>
-      <div style={{ fontSize: 12, color: C.dim, marginBottom: 10, lineHeight: 1.5 }}>
-        {t(E,
-          "Tap any author chip to cycle the cow ID. Pick a pair (A, B) below — the verdict flips live. A is 'definitely senior' to B only when they share a paper AND A is before B in every shared paper.",
-          "저자 칩을 눌러 소 번호를 바꿔봐요. 아래에서 (A, B) 를 골라요 — 판정이 바로 바뀌어요. 함께 쓴 논문이 있고, 그 모든 논문에서 A 가 B 보다 앞일 때만 '확실히 선임'.")}
+        🔍 {t(E, "Worked example — Sample 1", "예제 따라가기 — 샘플 1")}
       </div>
 
-      {/* Papers */}
-      {papers.map((auth, pi) => (
-        <div key={pi} style={{
-          background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10,
-          padding: "8px 10px", marginBottom: 8,
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 11, fontWeight: 700, color: "#475569", minWidth: 56 }}>
-              📄 {t(E, `Paper ${pi + 1}`, `논문 ${pi + 1}`)}
+      {/* The publication */}
+      <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: "8px 10px", marginBottom: 10 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#475569", marginBottom: 6 }}>
+          📄 {t(E, "Publication (most effort → least effort):", "논문 (노력 많음 → 적음):")}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          {pub.map((nm, i) => (
+            <span key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{
+                background: "#fff", color: COLOR[nm], border: `1.5px solid ${COLOR[nm]}`,
+                borderRadius: 8, padding: "3px 9px", fontSize: 13, fontWeight: 800, fontFamily: "monospace",
+              }}>{nm}</span>
+              {i < pub.length - 1 && <span style={{ color: "#94a3b8" }}>›</span>}
             </span>
-            {auth.map((cid, slot) => (
-              <button key={slot} onClick={() => cyclePos(pi, slot)} style={{
-                background: "#fff", color: COW_COLOR[cid],
-                border: `1.5px solid ${COW_COLOR[cid]}`, borderRadius: 8,
-                padding: "3px 9px", fontSize: 13, fontWeight: 800, cursor: "pointer",
-                fontFamily: "monospace",
-              }}>{cowName(cid)}</button>
-            ))}
-            <button onClick={() => addAuthor(pi)} disabled={auth.length >= 4} style={{
-              background: "transparent", border: "1px dashed #94a3b8", borderRadius: 6,
-              color: "#475569", padding: "2px 7px", fontSize: 11, cursor: auth.length >= 4 ? "not-allowed" : "pointer",
-              opacity: auth.length >= 4 ? 0.4 : 1,
-            }}>+</button>
-            <button onClick={() => delAuthor(pi)} disabled={auth.length <= 1} style={{
-              background: "transparent", border: "1px dashed #94a3b8", borderRadius: 6,
-              color: "#475569", padding: "2px 7px", fontSize: 11, cursor: auth.length <= 1 ? "not-allowed" : "pointer",
-              opacity: auth.length <= 1 ? 0.4 : 1,
-            }}>−</button>
-          </div>
-        </div>
-      ))}
-
-      {/* Pair selector */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginTop: 10, marginBottom: 8 }}>
-        <span style={{ fontSize: 12, fontWeight: 700, color: "#475569" }}>
-          {t(E, "Audit pair:", "판정할 쌍:")}
-        </span>
-        <span style={{ fontSize: 11, color: "#64748b" }}>A =</span>
-        {[0, 1, 2].map((id) => (
-          <button key={`A${id}`} onClick={() => setPairA(id)} style={{
-            background: pairA === id ? COW_COLOR[id] : "#fff",
-            color: pairA === id ? "#fff" : COW_COLOR[id],
-            border: `1.5px solid ${COW_COLOR[id]}`, borderRadius: 6,
-            padding: "2px 7px", fontSize: 12, fontWeight: 800, cursor: "pointer",
-            fontFamily: "monospace",
-          }}>{cowName(id)}</button>
-        ))}
-        <span style={{ fontSize: 11, color: "#64748b", marginLeft: 4 }}>B =</span>
-        {[0, 1, 2].map((id) => (
-          <button key={`B${id}`} onClick={() => setPairB(id)} style={{
-            background: pairB === id ? COW_COLOR[id] : "#fff",
-            color: pairB === id ? "#fff" : COW_COLOR[id],
-            border: `1.5px solid ${COW_COLOR[id]}`, borderRadius: 6,
-            padding: "2px 7px", fontSize: 12, fontWeight: 800, cursor: "pointer",
-            fontFamily: "monospace",
-          }}>{cowName(id)}</button>
-        ))}
-      </div>
-
-      {/* Verdict box */}
-      <div style={{
-        background: verdictBg, border: `1.5px solid ${verdictColor}`, borderRadius: 10,
-        padding: "8px 12px", marginBottom: 8,
-      }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: verdictColor, letterSpacing: 0.4, marginBottom: 4 }}>
-          {t(E, "Verdict for (A, B)", "(A, B) 판정")}
-        </div>
-        <div style={{ fontSize: 13, fontWeight: 800, color: verdictColor, fontFamily: "monospace" }}>
-          {cowName(pairA)} → {cowName(pairB)} : {verdictText}
-        </div>
-        <div style={{ fontSize: 11, color: verdictColor, marginTop: 4, lineHeight: 1.5 }}>
-          {pairA === pairB
-            ? t(E, "Pick two different cows.", "서로 다른 소를 골라요.")
-            : v === "noshare"
-            ? t(E, "These cows never co-author a paper, so seniority cannot be checked.", "두 소가 함께 쓴 논문이 없어서 선임 여부를 확인할 수 없어요.")
-            : v === "senior"
-            ? t(E, `In every shared paper, ${cowName(pairA)} appears before ${cowName(pairB)}.`,
-                  `함께 쓴 모든 논문에서 ${cowName(pairA)} 가 ${cowName(pairB)} 보다 앞에 등장해요.`)
-            : t(E, `At least one shared paper has ${cowName(pairB)} before ${cowName(pairA)} — the order is not consistent.`,
-                  `한 논문이라도 ${cowName(pairB)} 가 ${cowName(pairA)} 보다 앞이면 — 순서가 일관되지 않아요.`)}
-        </div>
-      </div>
-
-      {/* before[][] mini-matrix */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: "#475569" }}>
-          {t(E, "before[a][b]:", "before[a][b]:")}
-        </div>
-        <div style={{ display: "inline-grid", gridTemplateColumns: `auto repeat(${N}, 28px)`, gap: 2, fontFamily: "monospace", fontSize: 11 }}>
-          <div></div>
-          {[0, 1, 2].map((b) => (
-            <div key={`hb${b}`} style={{ textAlign: "center", color: COW_COLOR[b], fontWeight: 800 }}>{b}</div>
           ))}
-          {[0, 1, 2].flatMap((a) => [
-            <div key={`ra${a}`} style={{ color: COW_COLOR[a], fontWeight: 800, paddingRight: 4 }}>{a}</div>,
-            ...[0, 1, 2].map((b) => {
-              const on = a !== b && before[a][b];
-              const hi = a === pairA && b === pairB;
-              return (
-                <div key={`c${a}${b}`} style={{
-                  width: 28, height: 22, lineHeight: "22px", textAlign: "center",
-                  background: a === b ? "#f3f4f6" : on ? "#dcfce7" : "#fef3c7",
-                  color: a === b ? "#9ca3af" : on ? "#15803d" : "#b45309",
-                  border: hi ? "2px solid #2563eb" : "1px solid #e5e7eb",
-                  borderRadius: 4, fontWeight: 800,
-                }}>{a === b ? "·" : on ? "T" : "F"}</div>
-              );
-            }),
-          ])}
         </div>
-        <button onClick={reset} style={{
-          marginLeft: "auto", background: "transparent", border: "1px solid #cbd5e1",
-          color: "#475569", borderRadius: 6, padding: "3px 9px", fontSize: 11, cursor: "pointer", fontWeight: 700,
-        }}>{t(E, "↺ reset", "↺ 초기화")}</button>
+      </div>
+
+      {/* Reasoning */}
+      <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 10 }}>
+        <div style={{ marginBottom: 4 }}>
+          {t(E,
+            "• elsie › mildred is already alphabetical — could be an effort tie, so NO info.",
+            "• elsie › mildred 는 이미 알파벳 순서 — 노력이 같은데 이름순으로 적힌 것일 수 있어 정보 없음.")}
+        </div>
+        <div style={{ marginBottom: 4 }}>
+          {t(E,
+            "• mildred › dean breaks alphabetical order → a real effort gap. So dean did LESS effort than both elsie and mildred → dean is senior to both.",
+            "• mildred › dean 은 알파벳 순서를 깨뜨림 → 진짜 노력 차이. dean 은 elsie·mildred 보다 노력이 적음 → dean 이 둘보다 선임.")}
+        </div>
+        <div>
+          {t(E,
+            "• elsie vs mildred stays '?' — we never proved a gap between them.",
+            "• elsie 와 mildred 사이는 '?' — 둘 사이 노력 차이를 증명하지 못함.")}
+        </div>
+      </div>
+
+      {/* Output matrix */}
+      <div style={{ fontSize: 11, fontWeight: 700, color: "#475569", marginBottom: 6 }}>
+        {t(E, "Output (row i vs column j):", "출력 (행 i 대 열 j):")}
+      </div>
+      <div style={{ display: "inline-grid", gridTemplateColumns: `auto repeat(3, 34px)`, gap: 3, fontFamily: "monospace", fontSize: 12 }}>
+        <div></div>
+        {members.map((nm) => (
+          <div key={`h${nm}`} style={{ textAlign: "center", color: COLOR[nm], fontWeight: 800, fontSize: 9 }}>{nm.slice(0, 3)}</div>
+        ))}
+        {members.flatMap((nm, i) => [
+          <div key={`r${nm}`} style={{ color: COLOR[nm], fontWeight: 800, paddingRight: 4, fontSize: 9, lineHeight: "26px" }}>{nm.slice(0, 3)}</div>,
+          ...matrix[i].map((ch, j) => (
+            <div key={`c${i}${j}`} style={{
+              width: 34, height: 26, lineHeight: "26px", textAlign: "center",
+              background: cellBg(ch), color: cellFg(ch),
+              border: "1px solid #e5e7eb", borderRadius: 4, fontWeight: 800,
+            }}>{ch}</div>
+          )),
+        ])}
+      </div>
+      <div style={{ fontSize: 10, color: C.dim, marginTop: 6 }}>
+        {t(E, "B = self · 1 = row senior · 0 = row junior · ? = undetermined",
+              "B = 자기 자신 · 1 = 행이 선임 · 0 = 행이 후임 · ? = 판단 불가")}
       </div>
     </div>
   );
@@ -220,8 +107,8 @@ export function makeAcow2Ch1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "K papers are each authored by some subset of N total cow-researchers, written in a particular order.\nCow A is more senior than cow B if (a) they share at least one paper, and (b) on every shared paper A's name appears BEFORE B's. Count how many ordered pairs (A, B) satisfy this 'definitely senior' relation.",
-        "N명의 소-연구자가 함께 K개의 논문을 썼고, 각 논문마다 저자 순서가 정해져 있어요.\n소 A 가 소 B 보다 '확실히 선임' 이려면 두 가지 조건이 필요해요. 첫째, 둘이 함께 쓴 논문이 하나라도 있어야 해요. 둘째, 그 모든 공동 논문에서 A 의 이름이 B 보다 앞에 나와야 해요. 이 조건을 만족하는 순서쌍 (A, B) 의 개수를 출력해요."),
+        "Bessie wants to figure out the relative seniority of N lab members from K publications.\nEvery publication lists ALL N members in decreasing order of effort. When two members put in the SAME effort, they are listed alphabetically. The rule: a more senior researcher never puts in more effort than a junior one.\nFor each ordered pair (i, j), decide whether i is definitely senior, definitely junior, or undetermined. Output an N×N grid.",
+        "Bessie 는 K개의 논문으로 N명 연구원의 선후임 관계를 알아내려 해요.\n각 논문은 N명 전원을 노력이 많은 순서로 나열해요. 노력이 같으면 이름 알파벳 순으로 나열해요. 규칙: 선임은 후임보다 노력을 더 많이 하지 않아요.\n각 순서쌍 (i, j) 에 대해 i 가 확실히 선임인지, 확실히 후임인지, 알 수 없는지 판정해 N×N 격자로 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -237,8 +124,8 @@ export function makeAcow2Ch1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
-                "Print the number of ordered pairs (A, B) where A is definitely senior to B.",
-                "A 가 B 보다 확실히 선임인 순서쌍 (A, B) 의 개수를 출력해요.")}
+                "For each pair, print 'B' (self), '1' (row senior), '0' (row junior), or '?' (undetermined) as an N×N grid.",
+                "각 쌍에 대해 'B'(자기), '1'(행이 선임), '0'(행이 후임), '?'(판단 불가) 를 N×N 격자로 출력해요.")}
             </div>
           </div>
 
@@ -251,63 +138,90 @@ export function makeAcow2Ch1(E) {
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "There are ", "")}
-                  <b style={{ color: "#2563eb" }}>{t(E, "N cow-researchers and K papers", "N명의 소-연구자와 K개의 논문")}</b>
-                  {t(E, " — each paper has an ordered list of authors.",
-                        " 이 있고, 각 논문은 정해진 순서의 저자 목록을 가져요.")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "N lab members and K publications", "N명의 연구원과 K개의 논문")}</b>
+                  {t(E, ". Each publication lists ALL N members in ", " 이 있어요. 각 논문은 N명 전원을 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "decreasing order of effort", "노력이 많은 순서")}</b>
+                  {t(E, ".", " 로 나열해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Cow ", "소 ")}
-                  <b style={{ color: "#7c3aed" }}>A is 'definitely senior' to B</b>
-                  {t(E, " if they share at least one paper AND in every shared paper A's name appears before B's.",
-                        " 인 조건: 둘이 함께 쓴 논문이 1개 이상 있고, 그 모든 공동 논문에서 A 가 B 보다 앞에 등장.")}
+                  {t(E, "When effort is ", "노력이 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "tied, members are listed alphabetically", "같으면 이름 알파벳 순으로 나열")}</b>
+                  {t(E, ". A more senior member never puts in more effort than a junior one.",
+                        " 돼요. 선임은 후임보다 노력을 더 하지 않아요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "number of ordered pairs (A, B) where A is definitely senior to B", "A 가 B 보다 확실히 선임인 순서쌍 (A, B) 의 개수")}</b>
-                  {t(E, ".", "를 출력해요.")}
+                  {t(E, "Output an ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "N×N grid", "N×N 격자")}</b>
+                  {t(E, ": 'B' on the diagonal, '1' if row member is senior, '0' if junior, '?' if undetermined.",
+                        " 출력: 대각선은 'B', 행 연구원이 선임이면 '1', 후임이면 '0', 알 수 없으면 '?'.")}
                 </div>
               </div>
             </div>
           </div>
 
-          <DefinitelySeniorSim E={E} />
+          {/* 📥 I/O + Sample */}
+          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#475569", marginBottom: 8 }}>
+              📥 {t(E, "Input / Output", "입력 / 출력")}
+            </div>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 8 }}>
+              <div>{t(E, "Line 1: K and N (1 ≤ K, N ≤ 100)", "1행: K 와 N (1 ≤ K, N ≤ 100)")}</div>
+              <div>{t(E, "Line 2: N names (lowercase, ≤ 10 chars) — the member order for the grid", "2행: N개의 이름 (소문자, 10자 이하) — 격자의 연구원 순서")}</div>
+              <div>{t(E, "Next K lines: each lists all N names for one publication", "다음 K행: 각 행은 한 논문의 N명 이름 목록")}</div>
+              <div>{t(E, "Output: N lines of N characters each", "출력: N개 행, 각 행 N글자")}</div>
+            </div>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <div style={{ flex: "1 1 140px" }}>
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, marginBottom: 3 }}>{t(E, "Sample input", "입력 예")}</div>
+                <pre style={{ background: "#0f172a", color: "#e2e8f0", padding: "8px 10px", borderRadius: 8, fontSize: 12, margin: 0, fontFamily: "monospace" }}>{`1 3\ndean elsie mildred\nelsie mildred dean`}</pre>
+              </div>
+              <div style={{ flex: "1 1 100px" }}>
+                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, marginBottom: 3 }}>{t(E, "Sample output", "출력 예")}</div>
+                <pre style={{ background: "#0f172a", color: "#e2e8f0", padding: "8px 10px", borderRadius: 8, fontSize: 12, margin: 0, fontFamily: "monospace" }}>{`B11\n0B?\n0?B`}</pre>
+              </div>
+            </div>
+          </div>
+
+          <SeniorityWorkedExample E={E} />
         </div>),
     },
     // 1-2: Quiz
     {
       type: "quiz",
       narr: t(E,
-        "In author list [A, B, C], A appears before B.\nIf this is the only paper, can we say A is more senior than B?", "저자 목록 [A, B, C]에서 A가 B 앞에 나와요. 이것이 유일한 논문이면, A가 B보다 선임이라고 할 수 있을까?"),
+        "A publication lists members in decreasing effort order, ties broken alphabetically.\nIn one publication you see 'amy beth' (amy then beth). Can you conclude amy is more junior than beth?",
+        "논문은 노력이 많은 순서로, 같으면 이름순으로 나열돼요.\n한 논문에서 'amy beth' (amy 다음 beth) 를 봤어요. amy 가 beth 보다 후임이라고 결론지을 수 있을까요?"),
       question: t(E,
-        "List [A,B,C]: A always before B. A more senior or equal?",
-        "목록 [A,B,C]: A가 항상 B 앞. A가 더 선임 또는 동등?"),
+        "'amy beth' in one pub (already alphabetical). amy more junior than beth?",
+        "한 논문에 'amy beth' (이미 알파벳순). amy 가 beth 보다 후임?"),
       options: [
-        t(E, "Yes, A is more senior", "네, A가 더 선임"),
-        t(E, "No, we can't tell from one paper", "아니요, 논문 하나로는 알 수 없어"),
+        t(E, "Yes — amy is listed first so she did more effort", "네 — amy 가 앞이라 노력을 더 함"),
+        t(E, "No — they could be tied, then sorted alphabetically", "아니요 — 노력이 같아 이름순일 수도 있음"),
       ],
-      correct: 0,
+      correct: 1,
       explain: t(E,
-        "If A always appears before B in all co-authored papers, we conclude A is more senior (or equal).",
-        "공동 저술한 모든 논문에서 A가 항상 B 앞에 나타나면, A가 더 선임(또는 동등)이라고 결론."),
+        "'amy beth' is already in alphabetical order, so it could just be an effort tie broken alphabetically. We learn nothing — undetermined.",
+        "'amy beth' 는 이미 알파벳순이라 노력이 같은데 이름순으로 적힌 것일 수도 있어요. 아무 정보도 못 얻어요 — 판단 불가."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "2 publications: [A,B] and [B,A].\nWhat is the relationship between A and B?\nEnter 0 for undetermined.", "2개의 논문: [A,B]와 [B,A]. A와 B의 관계는? 판단 불가이면 0을 입력해요."),
+        "One publication lists 'mildred dean' (mildred then dean).\nThis BREAKS alphabetical order (d < m), proving a real effort gap. So dean did less effort.\nIn the output grid, what digit goes at row=dean, column=mildred? (1 = dean senior, 0 = dean junior)",
+        "한 논문이 'mildred dean' (mildred 다음 dean) 으로 나열돼요.\n이건 알파벳순을 깨뜨려서 (d < m) 진짜 노력 차이를 증명해요. 그래서 dean 이 노력을 덜 했어요.\n출력 격자에서 행=dean, 열=mildred 자리에 들어갈 숫자는? (1 = dean 선임, 0 = dean 후임)"),
       question: t(E,
-        "Pubs [A,B] and [B,A]. Relationship? (0=undetermined)",
-        "논문 [A,B]와 [B,A]. 관계? (0=판단 불가)"),
+        "'mildred dean' breaks alphabetical order. Grid cell row=dean, col=mildred = ? (1 or 0)",
+        "'mildred dean' 은 알파벳순을 깸. 격자 행=dean, 열=mildred = ? (1 또는 0)"),
       hint: t(E,
-        "Look at each paper separately — is A always before B across all of them?",
-        "두 논문을 각각 살펴봐요 — 모든 논문에서 A 가 항상 B 보다 앞에 있나요?"),
-      answer: 0,
+        "Less effort = more senior. dean is listed later (less effort), so dean is senior to mildred.",
+        "노력이 적음 = 선임. dean 이 뒤에 있어(노력 적음) dean 이 mildred 보다 선임."),
+      answer: 1,
     },
   ];
 }
@@ -322,8 +236,8 @@ export function makeAcow2Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "For every paper, mark before[a][b] = True if a appears before b somewhere in that paper. Cow A is 'definitely senior' to B iff before[A][B] is True AND before[B][A] is False. Sum over all (A, B). Sections build it one piece at a time.",
-        "모든 논문에서, 그 논문 안에서 a 가 b 보다 앞이면 before[a][b] = True. A 가 B 보다 '확실히 선임' 이면 before[A][B] 가 True 이고 before[B][A] 가 False. 모든 (A, B) 에 대해 합산. 아래 섹션이 한 단락씩 쌓아요."),
+        "Each publication lists everyone in decreasing effort order. Scan each pair of positions x < y: once an alphabetical break appears between them, the later author (less effort) is definitely senior to the earlier one. Record senior[later][earlier] = True. Then fill the grid: 'B' on the diagonal, '1'/'0' from senior, '?' otherwise. Sections build it one piece at a time.",
+        "각 논문은 노력이 많은 순서로 전원을 나열해요. 위치 x < y 쌍을 훑다가 그 사이에 알파벳순이 깨지는 순간 — 뒤 저자(노력 적음)가 앞 저자보다 확실히 선임. senior[뒤][앞] = True 로 기록해요. 그 다음 격자 채우기: 대각선 'B', senior 에서 '1'/'0', 나머지는 '?'. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getAcowdemia2Sections(E),
     },
   ];
