@@ -1,6 +1,9 @@
 // 🔒 USACO_VERIFIED (2026-05-13)
 //   Python: 0/1 (WA - algorithm overcounts (22 vs 3 expected))
 //   C++:    0/1 (WA - same algorithm bug as py (22 vs 3))
+//   C++/Py corrected from official editorial 2026-06-15 (left/right now count the
+//     IMMEDIATELY-ADJACENT opposite-breed run, not all opposites). Passes sample
+//     (GHGHG -> 3). USACO re-submit pending.
 //   코드 수정 시 USACO 재제출 필요 — REPO_ROOT/USACO_VERIFICATION.md 참고
 
 import { useState, useRef } from "react";
@@ -145,22 +148,20 @@ export function LonelyPhotoSim({ E }) {
   const N = s.length;
   const cur = Math.min(si, N - 1);
 
-  // for current i: count left/right same-type runs
-  let left = 0;
-  for (let j = cur - 1; j >= 0 && s[j] === s[cur]; j--) left++;
-  let right = 0;
-  for (let j = cur + 1; j < N && s[j] === s[cur]; j++) right++;
-  const oppLeft = cur - left;
-  const oppRight = (N - 1 - cur) - right;
+  // for current i: count the opposite-breed run touching i on each side
+  let oppLeft = 0;
+  if (cur > 0 && s[cur - 1] !== s[cur]) { oppLeft = 1; for (let j = cur - 2; j >= 0 && s[j] === s[cur - 1]; j--) oppLeft++; }
+  let oppRight = 0;
+  if (cur + 1 < N && s[cur + 1] !== s[cur]) { oppRight = 1; for (let j = cur + 2; j < N && s[j] === s[cur + 1]; j++) oppRight++; }
   const contribution = oppLeft * oppRight + Math.max(0, oppLeft - 1) + Math.max(0, oppRight - 1);
 
   // running total
   let runningTotal = 0;
   for (let i = 0; i <= cur; i++) {
-    let l = 0; for (let j = i - 1; j >= 0 && s[j] === s[i]; j--) l++;
-    let r = 0; for (let j = i + 1; j < N && s[j] === s[i]; j++) r++;
-    const ol = i - l;
-    const or_ = (N - 1 - i) - r;
+    let ol = 0;
+    if (i > 0 && s[i - 1] !== s[i]) { ol = 1; for (let j = i - 2; j >= 0 && s[j] === s[i - 1]; j--) ol++; }
+    let or_ = 0;
+    if (i + 1 < N && s[i + 1] !== s[i]) { or_ = 1; for (let j = i + 2; j < N && s[j] === s[i + 1]; j++) or_++; }
     runningTotal += ol * or_ + Math.max(0, ol - 1) + Math.max(0, or_ - 1);
   }
 
@@ -182,13 +183,13 @@ export function LonelyPhotoSim({ E }) {
       <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 12 }}>
         {s.split("").map((ch, idx) => {
           const isCur = idx === cur;
-          const inSameRun = (idx >= cur - left && idx <= cur + right);
-          const isOppLeft = idx < cur - left;
-          const isOppRight = idx > cur + right;
-          const lab = isCur ? "i" : (inSameRun ? "same" : (isOppLeft ? "opp_l" : (isOppRight ? "opp_r" : "")));
-          const labColor = isCur ? "#92400e" : (inSameRun ? A : (isOppLeft ? "#16a34a" : (isOppRight ? "#dc2626" : "transparent")));
-          // Show label only on the BOUNDARY positions to avoid clutter on every same-run cell.
-          const showLab = isCur || (inSameRun && (idx === cur - left || idx === cur + right)) || isOppLeft || isOppRight;
+          // opposite-breed run touching i: [cur-oppLeft .. cur-1] on the left, [cur+1 .. cur+oppRight] on the right
+          const isOppLeft = idx >= cur - oppLeft && idx < cur;
+          const isOppRight = idx > cur && idx <= cur + oppRight;
+          const lab = isCur ? "i" : (isOppLeft ? "opp_l" : (isOppRight ? "opp_r" : ""));
+          const labColor = isCur ? "#92400e" : (isOppLeft ? "#16a34a" : (isOppRight ? "#dc2626" : "transparent"));
+          // Show label only on the BOUNDARY positions to avoid clutter.
+          const showLab = isCur || (isOppLeft && (idx === cur - 1 || idx === cur - oppLeft)) || (isOppRight && (idx === cur + 1 || idx === cur + oppRight));
           return (
             <div key={idx} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
               <div style={{ fontSize: 9, height: 12, fontWeight: 700, color: showLab ? labColor : "transparent", fontFamily: "'JetBrains Mono',monospace" }}>
@@ -197,8 +198,8 @@ export function LonelyPhotoSim({ E }) {
               <div style={{
                 width: 32, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
                 borderRadius: 6, fontSize: 14, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
-                background: isCur ? "#fef3c7" : (inSameRun ? "#dbeafe" : (isOppLeft ? "#dcfce7" : (isOppRight ? "#fee2e2" : "#fff"))),
-                border: `1px solid ${isCur ? "#f59e0b" : (inSameRun ? A : (isOppLeft ? "#16a34a" : (isOppRight ? "#dc2626" : "#e5e7eb")))}`,
+                background: isCur ? "#fef3c7" : (isOppLeft ? "#dcfce7" : (isOppRight ? "#fee2e2" : "#fff")),
+                border: `1px solid ${isCur ? "#f59e0b" : (isOppLeft ? "#16a34a" : (isOppRight ? "#dc2626" : "#e5e7eb"))}`,
                 color: C.text,
               }}>{ch}</div>
             </div>
@@ -244,10 +245,11 @@ export function LonelyPhotoRunner({ E }) {
     const N = s.length;
     let total = 0;
     for (let i = 0; i < N; i++) {
-      let l = 0; for (let j = i - 1; j >= 0 && s[j] === s[i]; j--) l++;
-      let r = 0; for (let j = i + 1; j < N && s[j] === s[i]; j++) r++;
-      const ol = i - l, or_ = (N - 1 - i) - r;
-      total += ol * or_ + Math.max(0, ol - 1) + Math.max(0, or_ - 1);
+      let left = 0;
+      if (i > 0 && s[i - 1] !== s[i]) { left = 1; for (let j = i - 2; j >= 0 && s[j] === s[i - 1]; j--) left++; }
+      let right = 0;
+      if (i + 1 < N && s[i + 1] !== s[i]) { right = 1; for (let j = i + 2; j < N && s[j] === s[i + 1]; j++) right++; }
+      total += left * right + Math.max(0, left - 1) + Math.max(0, right - 1);
     }
     setResult({ done: true, total });
   };
@@ -280,46 +282,54 @@ const LP_INPUT_CPP = [
   "    cin >> s;",
 ];
 
-/* Section 2: scan run lengths */
+/* Section 2: adjacent opposite-breed runs around i */
 const LP_RUN_PY = [
   "ans = 0",
   "for i in range(N):",
-  "    # Count same-type cows extending left and right from i",
-  "    left = right = 0",
-  "    for j in range(i - 1, -1, -1):",
-  "        if s[j] == s[i]: left += 1",
-  "        else: break",
-  "    for j in range(i + 1, N):",
-  "        if s[j] == s[i]: right += 1",
-  "        else: break",
+  "    # left = opposite-breed cows touching i on the left",
+  "    left = 0",
+  "    if i > 0 and s[i - 1] != s[i]:",
+  "        left = 1",
+  "        for j in range(i - 2, -1, -1):",
+  "            if s[j] == s[i - 1]: left += 1",
+  "            else: break",
+  "    # right = opposite-breed cows touching i on the right",
+  "    right = 0",
+  "    if i + 1 < N and s[i + 1] != s[i]:",
+  "        right = 1",
+  "        for j in range(i + 2, N):",
+  "            if s[j] == s[i + 1]: right += 1",
+  "            else: break",
 ];
 const LP_RUN_CPP = [
   "    long long ans = 0;",
   "    for (int i = 0; i < N; i++) {",
-  "        int left = 0, right = 0;",
-  "        for (int j = i - 1; j >= 0 && s[j] == s[i]; j--) left++;",
-  "        for (int j = i + 1; j <  N && s[j] == s[i]; j++) right++;",
+  "        long long left = 0;",
+  "        if (i > 0 && s[i - 1] != s[i]) {",
+  "            left = 1;",
+  "            for (int j = i - 2; j >= 0 && s[j] == s[i - 1]; j--) left++;",
+  "        }",
+  "        long long right = 0;",
+  "        if (i + 1 < N && s[i + 1] != s[i]) {",
+  "            right = 1;",
+  "            for (int j = i + 2; j < N && s[j] == s[i + 1]; j++) right++;",
+  "        }",
 ];
 
 /* Section 3: count lonely substrings centred on i */
 const LP_COUNT_PY = [
-  "    # opp_left = opposite-type cows strictly left of the same-type run",
-  "    opp_left  = i - left",
-  "    opp_right = (N - 1 - i) - right",
-  "",
-  "    # Substrings of length >= 3 where i is the only cow of its type:",
-  "    ans += opp_left * opp_right                # at least 1 on each side",
-  "    ans += max(0, opp_left  - 1)               # 2+ on left, 0 on right",
-  "    ans += max(0, opp_right - 1)               # 0 on left, 2+ on right",
+  "    # left/right = opposite-breed cows touching i (i is the only one of its breed)",
+  "    # Substrings of length >= 3 where i is the lonely cow:",
+  "    ans += left * right            # at least 1 opposite on each side",
+  "    ans += max(0, left  - 1)       # 2+ on left, none on right",
+  "    ans += max(0, right - 1)       # 2+ on right, none on left",
   "",
   "print(ans)",
 ];
 const LP_COUNT_CPP = [
-  "        long long opp_left  = i - left;",
-  "        long long opp_right = (N - 1 - i) - right;",
-  "        ans += opp_left * opp_right;",
-  "        ans += max(0LL, opp_left  - 1);",
-  "        ans += max(0LL, opp_right - 1);",
+  "        ans += left * right;",
+  "        ans += max(0LL, left  - 1);",
+  "        ans += max(0LL, right - 1);",
   "    }",
   "    cout << ans << '\\n';",
   "    return 0;",
@@ -333,18 +343,23 @@ const LP_FULL_PY = [
   "",
   "ans = 0",
   "for i in range(N):",
-  "    left = right = 0",
-  "    for j in range(i - 1, -1, -1):",
-  "        if s[j] == s[i]: left += 1",
-  "        else: break",
-  "    for j in range(i + 1, N):",
-  "        if s[j] == s[i]: right += 1",
-  "        else: break",
-  "    opp_left  = i - left",
-  "    opp_right = (N - 1 - i) - right",
-  "    ans += opp_left * opp_right",
-  "    ans += max(0, opp_left  - 1)",
-  "    ans += max(0, opp_right - 1)",
+  "    # left = opposite-breed cows touching i on the left",
+  "    left = 0",
+  "    if i > 0 and s[i - 1] != s[i]:",
+  "        left = 1",
+  "        for j in range(i - 2, -1, -1):",
+  "            if s[j] == s[i - 1]: left += 1",
+  "            else: break",
+  "    # right = opposite-breed cows touching i on the right",
+  "    right = 0",
+  "    if i + 1 < N and s[i + 1] != s[i]:",
+  "        right = 1",
+  "        for j in range(i + 2, N):",
+  "            if s[j] == s[i + 1]: right += 1",
+  "            else: break",
+  "    ans += left * right",
+  "    ans += max(0, left  - 1)",
+  "    ans += max(0, right - 1)",
   "",
   "print(ans)",
 ];
@@ -360,14 +375,19 @@ const LP_FULL_CPP = [
   "",
   "    long long ans = 0;",
   "    for (int i = 0; i < N; i++) {",
-  "        int left = 0, right = 0;",
-  "        for (int j = i - 1; j >= 0 && s[j] == s[i]; j--) left++;",
-  "        for (int j = i + 1; j <  N && s[j] == s[i]; j++) right++;",
-  "        long long opp_left  = i - left;",
-  "        long long opp_right = (N - 1 - i) - right;",
-  "        ans += opp_left * opp_right;",
-  "        ans += max(0LL, opp_left  - 1);",
-  "        ans += max(0LL, opp_right - 1);",
+  "        long long left = 0;",
+  "        if (i > 0 && s[i - 1] != s[i]) {",
+  "            left = 1;",
+  "            for (int j = i - 2; j >= 0 && s[j] == s[i - 1]; j--) left++;",
+  "        }",
+  "        long long right = 0;",
+  "        if (i + 1 < N && s[i + 1] != s[i]) {",
+  "            right = 1;",
+  "            for (int j = i + 2; j < N && s[j] == s[i + 1]; j++) right++;",
+  "        }",
+  "        ans += left * right;",
+  "        ans += max(0LL, left  - 1);",
+  "        ans += max(0LL, right - 1);",
   "    }",
   "    cout << ans << '\\n';",
   "    return 0;",
@@ -394,18 +414,18 @@ export function getLonelyPhotoSections(E) {
       ],
     },
     {
-      label: t(E, "📏 2. Same-type Run Around i", "📏 2. i 주변 같은 타입 길이"),
+      label: t(E, "📏 2. Opposite Run Touching i", "📏 2. i에 닿은 반대 품종 길이"),
       color: "#0891b2",
       py: LP_RUN_PY, cpp: LP_RUN_CPP,
       why: [
-        t(E, "For each cow i, count consecutive same-type cows on its left and right.",
-            "각 소 i에 대해, 같은 타입이 좌/우로 연속 몇 칸 있는지."),
-        t(E, "If left + right > 0, cow i is NEVER alone in any substring containing one of those neighbors.",
-            "left + right > 0이면, 그 이웃을 포함하는 부분문자열에서 i는 절대 외롭지 않음."),
+        t(E, "Treat each cow i as the lonely one. Count opposite-breed cows that touch i directly on each side.",
+            "각 소 i를 '외로운 1마리'로 보고, i에 바로 붙은 반대 품종 소가 좌/우로 몇 마리인지 센다."),
+        t(E, "Stop the moment the breed changes — only the run immediately next to i can extend a substring where i stays the only one of its breed.",
+            "품종이 바뀌는 순간 멈춤 — i에 바로 붙은 구간만이 'i가 자기 품종 유일'을 유지하는 부분문자열을 늘릴 수 있음."),
       ],
       pyOnly: [
-        t(E, "for j in range(i-1, -1, -1) walks left; break stops at the first different cow.",
-            "for j in range(i-1, -1, -1)이 왼쪽 진행; 다른 타입 만나면 break."),
+        t(E, "First check s[i-1] != s[i]; only then walk further left while the breed stays the same.",
+            "먼저 s[i-1] != s[i] 확인; 그 다음 같은 품종인 동안만 더 왼쪽으로."),
       ],
       cppOnly: [
         t(E, "Combine the bound check with the equality check in the for-loop condition.",
@@ -417,12 +437,12 @@ export function getLonelyPhotoSections(E) {
       color: "#16a34a",
       py: LP_COUNT_PY, cpp: LP_COUNT_CPP,
       why: [
-        t(E, "opp_left = opposite-type cows strictly left of i's same-type run; opp_right symmetric.",
-            "opp_left = i의 같은 타입 구간 왼쪽의 반대 타입 수; opp_right 대칭."),
-        t(E, "We need length ≥ 3 with exactly one cow of i's type. Three cases: ≥1 on each side, ≥2 on one side only.",
-            "길이 ≥ 3, i 타입이 정확히 1마리. 세 경우: 양쪽 ≥1, 한쪽만 ≥2."),
-        t(E, "Sum is opp_left·opp_right + max(0, opp_left-1) + max(0, opp_right-1).",
-            "합 = opp_left·opp_right + max(0, opp_left-1) + max(0, opp_right-1)."),
+        t(E, "left = opposite cows touching i on the left, right = opposite cows touching i on the right.",
+            "left = i 왼쪽에 닿은 반대 품종 수, right = i 오른쪽에 닿은 반대 품종 수."),
+        t(E, "We need length ≥ 3 with exactly one cow of i's breed. Three cases: ≥1 on each side, ≥2 on one side only.",
+            "길이 ≥ 3, i 품종이 정확히 1마리. 세 경우: 양쪽 ≥1, 한쪽만 ≥2."),
+        t(E, "Sum is left·right + max(0, left-1) + max(0, right-1).",
+            "합 = left·right + max(0, left-1) + max(0, right-1)."),
       ],
       pyOnly: [
         t(E, "max(0, x - 1) handles the case where there are < 2 cows available.",

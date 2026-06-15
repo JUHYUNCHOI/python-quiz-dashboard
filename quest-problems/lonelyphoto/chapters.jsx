@@ -136,8 +136,8 @@ export function makeLonelyPhotoCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "For each cow i, count same-type neighbors and the opposite-type cows beyond. The formula combines those into the lonely count.  Sections build it one piece at a time.",
-        "각 소 i 마다 — 같은 품종 이웃이 어디까지인지, 그 너머 반대 품종이 몇 마리인지 세고 공식으로 합쳐. 아래 섹션이 한 단락씩 쌓아요."),
+        "Treat each cow i as the lonely one. Count the opposite-breed cows that touch i directly on its left and right, then a small formula combines those into the lonely count. Sections build it one piece at a time.",
+        "각 소 i 를 '외로운 1마리' 로 보고 — i 에 바로 붙은 반대 품종 소가 좌/우로 몇 마리인지 세고, 작은 공식으로 합쳐. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getLonelyPhotoSections(E),
     },
     {

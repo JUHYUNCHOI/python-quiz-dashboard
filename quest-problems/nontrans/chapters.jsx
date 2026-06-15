@@ -10,8 +10,8 @@ export function makeNonTransCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We're given two 4-sided dice A and B (each side a value in 1..10), and A beats B (more (a, b) outcomes have a > b than a < b).\nFind a 4-sided die C (sides also in 1..10) such that B beats C AND C beats A — or report no such die exists.",
-        "각 면이 1..10 사이 값인 4면 주사위 A, B 가 주어지고, A 가 B 를 이겨요 (a > b 인 (a, b) 결과가 a < b 인 결과보다 많음).\nB 가 C 를 이기고 C 가 A 를 이기는 4면 주사위 C (면도 1..10) 를 찾아요. 없으면 보고."),
+        "We're given two 4-sided dice A and B (each side a value in 1..10). A direction-beats relation: X beats Y if more (x, y) outcomes have x > y than x < y.\nDecide whether a 4-sided die C (sides also in 1..10) exists making a non-transitive cycle: A beats B, B beats C, and C beats A. Print 'yes' or 'no'.",
+        "각 면이 1..10 사이 값인 4면 주사위 A, B 가 주어져요. 'X 가 Y 를 이긴다' = (x, y) 결과 중 x > y 가 x < y 보다 많을 때.\nA 가 B 를, B 가 C 를, C 가 A 를 이기는 비추이적 사이클을 만드는 4면 주사위 C (면도 1..10) 가 존재하는지 판정해요. 'yes' 또는 'no' 출력."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -27,8 +27,8 @@ export function makeNonTransCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
-                "Print the four faces of die C that beats A while losing to B, or 'no' if no such C exists.",
-                "B 에게 지면서 A 를 이기는 주사위 C 의 네 면을 출력해요. 그런 C 가 없으면 'no'.")}
+                "Print 'yes' if a die C exists with A beats B, B beats C, and C beats A — otherwise 'no'.",
+                "A 가 B 를, B 가 C 를, C 가 A 를 이기는 주사위 C 가 존재하면 'yes', 아니면 'no' 출력.")}
             </div>
           </div>
 
@@ -67,9 +67,11 @@ export function makeNonTransCh1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print the four faces of C, or ", "C 의 네 면을 출력해요. 그런 C 가 존재하지 않으면 ")}
+                  {t(E, "Print ", "그런 C 가 존재하면 ")}
+                  <b style={{ color: "#15803d" }}>'yes'</b>
+                  {t(E, " if such a C exists, otherwise ", " , 없으면 ")}
                   <b style={{ color: "#15803d" }}>'no'</b>
-                  {t(E, " if no such C exists.", " 출력.")}
+                  {t(E, ".", " 출력.")}
                 </div>
               </div>
             </div>
