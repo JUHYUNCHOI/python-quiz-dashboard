@@ -1,6 +1,9 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 14/14 PASS
-//   C++:    1/14 (WA - adjacent swap wrong algo (problem is leftward modifications))
+// 🔒 USACO_VERIFIED (2026-05-13) / C++ rewritten 2026-06-15
+//   Python: 14/14 PASS (USACO)
+//   C++:    rewritten to the correct leftward-modification greedy (running-max
+//           inversion count, mirrors the Python). Local-verified vs both official
+//           samples (cpid 1204): S1→0, S2→2. Old code used a wrong adjacent-swap
+//           algo (1/14 WA). Pending USACO re-submission to restore the full 14/14 seal.
 //   코드 수정 시 USACO 재제출 필요 — REPO_ROOT/USACO_VERIFICATION.md 참고
 
 import { useState } from "react";
@@ -201,38 +204,31 @@ const FULL_PY = [
 const FULL_CPP = [
   "#include <iostream>",
   "#include <vector>",
+  "#include <map>",
   "using namespace std;",
   "",
   "int main() {",
   "    int N;",
   "    cin >> N;",
-  "    vector<int> a(N), b(N);",
-  "    for (int i = 0; i < N; i++) {",
-  "        cin >> a[i];",
-  "    }",
-  "    for (int i = 0; i < N; i++) {",
-  "        cin >> b[i];",
-  "    }",
+  "    vector<int> target(N), current(N);",
+  "    for (int i = 0; i < N; i++) cin >> target[i];",
+  "    for (int i = 0; i < N; i++) cin >> current[i];",
   "",
-  "    // Count adjacent swaps needed to turn a into b",
-  "    long long swaps = 0;",
+  "    // pos[cow] = index of that cow in the current line",
+  "    map<int,int> pos;",
+  "    for (int i = 0; i < N; i++) pos[current[i]] = i;",
+  "",
+  "    // Walk the target order left to right. A cow must be moved",
+  "    // left if its current position sits before one we've",
+  "    // already locked in (the running max). Otherwise it stays.",
+  "    long long ans = 0;",
+  "    int maxPos = -1;",
   "    for (int i = 0; i < N; i++) {",
-  "        if (a[i] != b[i]) {",
-  "            int j = i;",
-  "            while (j < N && a[j] != b[i]) {",
-  "                j++;",
-  "            }",
-  "            // Bubble a[j] down to position i with adjacent swaps",
-  "            while (j > i) {",
-  "                int tmp = a[j];",
-  "                a[j] = a[j - 1];",
-  "                a[j - 1] = tmp;",
-  "                swaps++;",
-  "                j--;",
-  "            }",
-  "        }",
+  "        int p = pos[target[i]];",
+  "        if (p < maxPos) ans++;",
+  "        else maxPos = p;",
   "    }",
-  "    cout << swaps << \"\\n\";",
+  "    cout << ans << \"\\n\";",
   "    return 0;",
   "}",
 ];
@@ -254,10 +250,10 @@ export function getPhotoshoot2Sections(E) {
             "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
       ],
       cppOnly: [
-        t(E, "Three-variable swap with tmp — no std::swap needed.",
-            "tmp 변수로 세 줄 swap — std::swap 불필요."),
-        t(E, "long long for swap count: worst case N*(N-1)/2 can exceed int range when N is big.",
-            "swap 개수는 long long — 최악 N*(N-1)/2 는 N 이 크면 int 범위 초과."),
+        t(E, "std::map<int,int> mirrors Python's dict for the cow→position lookup.",
+            "std::map<int,int> 가 Python dict 역할 — 소→위치 조회."),
+        t(E, "long long for the answer: with N up to 1e5 the move count can exceed int range.",
+            "정답은 long long — N 이 최대 1e5 라 이동 수가 int 범위를 넘을 수 있어."),
       ],
     },
   ];

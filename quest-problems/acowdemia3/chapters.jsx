@@ -299,8 +299,8 @@ export function makeAcow3Ch2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Greedy: scan grass cells left-to-right, top-to-bottom. For each grass cell, find pairs of cows it could connect (its 2 adjacent cow cells). If both cows are still 'free' (haven't been paired yet), match them and increment count. Sections build it one piece at a time.",
-        "그리디: 풀 칸을 왼→오, 위→아래로 스캔. 각 풀 칸마다 연결할 수 있는 소 쌍 (인접한 2 마리 소) 을 찾아요. 두 소가 아직 짝이 없으면 매칭하고 카운트 증가. 아래 섹션이 한 단락씩 쌓아요."),
+        "Scan grass cells left-to-right, top-to-bottom. A grass cell with exactly 2 adjacent cows offers ONE pair — but the same pair can show up at two grass cells, so we keep pairs in a set (counted once). A grass cell with 3+ cows always has two on opposite sides: a fresh pair, so add 1 immediately. Answer = opposite-side count + unique-pair count. Sections build it one piece at a time.",
+        "풀 칸을 왼→오, 위→아래로 스캔해요. 소가 정확히 2마리인 풀 칸은 한 쌍을 제안 — 그런데 같은 쌍이 풀 칸 두 곳에 나올 수 있으니 set 에 넣어 한 번만 세요. 소가 3마리 이상인 풀 칸은 항상 둘이 반대편에 있어 새 쌍이라 바로 +1. 정답 = 반대편 쌍 개수 + 중복 없는 쌍 개수. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getAcowdemia3Sections(E),
     },
   ];

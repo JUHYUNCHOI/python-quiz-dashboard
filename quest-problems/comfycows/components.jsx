@@ -1,3 +1,11 @@
+// C++ rewritten 2026-06-15
+//   Python: correct incremental solver, prints comfortable count per iteration.
+//   C++:    rewritten to match — keeps a `comfortable` set and re-checks only the
+//           new cow + her 4 neighbors each step, printing the running size. Old code
+//           never printed per-iteration and accumulated a single counter (0/1 WA).
+//   Local-verified vs official sample (cpid 1108): output 0,0,0,1,0,0,1,2 — exact match.
+//   USACO re-submission recommended to seal C++.
+
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
@@ -180,27 +188,42 @@ const FULL_PY = [
 
 const FULL_CPP = [
   "#include <iostream>",
-  "#include <algorithm>",
   "#include <set>",
   "#include <utility>",
   "using namespace std;",
   "",
+  "set<pair<int,int>> cows;        // every occupied cell",
+  "set<pair<int,int>> comfortable; // cells that currently have exactly 3 neighbors",
+  "int dx[] = {0, 0, 1, -1};",
+  "int dy[] = {1, -1, 0, 0};",
+  "",
+  "int countNeighbors(int x, int y) {",
+  "    int n = 0;",
+  "    for (int k = 0; k < 4; k++)",
+  "        if (cows.count({x + dx[k], y + dy[k]})) n++;",
+  "    return n;",
+  "}",
+  "",
+  "void updateComfort(int x, int y) {",
+  "    // Only count a cell if a cow is actually standing on it.",
+  "    if (cows.count({x, y}) && countNeighbors(x, y) == 3)",
+  "        comfortable.insert({x, y});",
+  "    else",
+  "        comfortable.erase({x, y});",
+  "}",
+  "",
   "int main() {",
   "    int N; cin >> N;",
-  "    set<pair<int,int>> cows;",
-  "    int dx[] = {0, 0, 1, -1};",
-  "    int dy[] = {1, -1, 0, 0};",
-  "    int comfortableCount = 0;",
   "    for (int i = 0; i < N; i++) {",
   "        int x, y; cin >> x >> y;",
   "        cows.insert({x, y});",
-  "        // Update comfort status of cells around",
-  "        // Bronze: just count cells with exactly 3 neighbors",
-  "        int cnt = 0;",
-  "        for (int k = 0; k < 4; k++) if (cows.count({x + dx[k], y + dy[k]})) cnt++;",
-  "        if (cnt == 3) comfortableCount++;",
+  "        // The new cow + her 4 neighbors are the only cells",
+  "        // whose comfort status can change this step.",
+  "        updateComfort(x, y);",
+  "        for (int k = 0; k < 4; k++)",
+  "            updateComfort(x + dx[k], y + dy[k]);",
+  "        cout << comfortable.size() << \"\\n\";",
   "    }",
-  "    cout << comfortableCount << \"\\n\";",
   "    return 0;",
   "}",
 ];

@@ -1802,7 +1802,7 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   livestock:     { ...DEFAULT_META, type: "simulation",        supported_languages: ["py"] },
   magicorbs:     { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"] },
   milkorder:     { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"], difficulty: 3 },
-  photoshoot2:   { ...DEFAULT_META, type: "simulation",        supported_languages: ["py"] },
+  photoshoot2:   { ...DEFAULT_META, type: "simulation",        supported_languages: ["py", "cpp"] },
   swapity:       { ...DEFAULT_META, type: "algorithm-reveal",  supported_languages: ["py"] },
   teleport:      { ...DEFAULT_META, type: "simulation",        supported_languages: ["py"] },
 

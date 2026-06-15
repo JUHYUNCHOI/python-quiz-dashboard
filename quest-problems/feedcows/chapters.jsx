@@ -69,8 +69,9 @@ export function makeFeedCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of patches needed", "필요한 최소 패치 수")}</b>
-                  {t(E, ".", "를 출력해요.")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of patches", "최소 패치 수")}</b>
+                  {t(E, ", then one valid placement string ('.', 'G', 'H') — for each of the T test cases.",
+                        " 와 한 가지 유효한 배치 문자열 ('.', 'G', 'H') 을 출력해요 — T개의 테스트 케이스 각각에 대해.")}
                 </div>
               </div>
             </div>
@@ -123,8 +124,8 @@ export function makeFeedCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Track per breed the right-end of the last patch placed (last_G, last_H). When a cow of breed B at position i is past last_B, place a NEW patch at i — extending its coverage to i + K. Sections build it one piece at a time.",
-        "품종별로 마지막 패치의 오른쪽 끝 (last_G, last_H) 추적. 품종 B 의 소가 i 에 있고 i > last_B 이면 i 에 새 패치를 놓아 — 커버 범위를 i + K 까지 확장. 아래 섹션이 한 단락씩 쌓아요."),
+        "Track per breed how far it is already satisfied (g_cover, h_cover). When a cow of breed B at position i is not yet covered, place a NEW patch as far right as it can still reach — at position i + K — which then covers same-breed cows up to i + 2K. There are T test cases, and each prints the count plus the patch string. Sections build it one piece at a time.",
+        "품종별로 어디까지 이미 만족됐는지 추적 (g_cover, h_cover). 품종 B 의 소가 i 에 있고 아직 미커버이면, 여전히 닿을 수 있는 가장 오른쪽 — 위치 i + K — 에 새 패치를 놓아. 그러면 같은 품종 소를 i + 2K 까지 커버해. 테스트 케이스가 T개이고, 각각 개수와 패치 문자열을 출력해. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getFeedCowsSections(E),
     },
   ];
