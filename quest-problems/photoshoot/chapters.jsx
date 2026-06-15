@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getPhotoshootSections, PhotoshootUnfoldSim } from "./components";
+import { getPhotoshootSections } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: 📋 문제 이해 (3 steps)
@@ -10,8 +10,8 @@ export function makePhotoshootCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has a row of N cows, each Guernsey (G) or Holstein (H). He's given a final desired arrangement b[].\nHis only allowed move: pick a prefix of the row and REVERSE it. He wants to reach b in as few moves as possible.\nPrint the minimum number of prefix reversals.",
-        "FJ에게 한 줄로 선 N마리 소가 있고, 각 소는 건지(G) 또는 홀스타인(H)이에요. 목표 배치 b[] 가 주어져요.\nFJ가 쓸 수 있는 유일한 동작: 접두사(앞부분 일정 길이)를 골라 그 부분을 뒤집기. 목표 b에 도달하기까지 동작을 가장 적게 사용해요.\n최소 뒤집기 횟수를 출력해요."),
+        "FJ has a row of N cows (N even), each Guernsey (G) or Holstein (H). He wants as many Guernseys as possible at EVEN positions (positions 2, 4, 6, ...).\nHis only allowed move: reverse an EVEN-LENGTH prefix of the row. He must first reach the maximum possible number of G's at even positions.\nPrint the MINIMUM number of reversals needed to do that.",
+        "FJ에게 한 줄로 선 N마리 소(N은 짝수)가 있고, 각 소는 건지(G) 또는 홀스타인(H)이에요. 짝수 위치(2, 4, 6, ...)에 건지를 최대한 많이 두고 싶어요.\nFJ가 쓸 수 있는 유일한 동작: 줄의 짝수 길이 접두사를 뒤집기. 먼저 짝수 위치 G 개수를 가능한 최대로 만들어야 해요.\n그렇게 하는 데 필요한 최소 뒤집기 횟수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -27,8 +27,8 @@ export function makePhotoshootCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
-                "Output the minimum number of prefix-reversal moves to reach the target arrangement.",
-                "목표 배치에 도달하기 위한 접두사 뒤집기 최소 동작 수를 출력.")}
+                "Output the minimum number of even-length prefix reversals to put the most possible Guernseys at even positions.",
+                "짝수 위치에 건지를 최대한 많이 두기 위한 짝수 길이 접두사 뒤집기 최소 횟수를 출력.")}
             </div>
           </div>
 
@@ -52,33 +52,52 @@ export function makePhotoshootCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "We're given a ", "")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "target arrangement b", "목표 배치 b")}</b>
-                  {t(E, " (also a string of G and H, same length N).",
-                        " (G와 H로 된 같은 길이 N의 문자열)도 주어져요.")}
+                  {t(E, "Goal: as many ", "목표: ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "G's at EVEN positions", "짝수 위치의 G")}</b>
+                  {t(E, " as possible (positions 2, 4, 6, ... are even; position 1 is odd).",
+                        " 를 최대한 많이 (위치 2, 4, 6, ... 이 짝수, 위치 1은 홀수).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "One move: pick a ", "한 동작: ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "prefix length k and reverse the first k cows", "접두사 길이 k를 골라 앞에서부터 k마리를 뒤집기")}</b>
-                  {t(E, ".", ".")}
+                  {t(E, "One move: ", "한 동작: ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "reverse an EVEN-LENGTH prefix", "짝수 길이 접두사를 뒤집기")}</b>
+                  {t(E, " (the first 2, 4, 6, ... cows).", " (앞에서부터 2, 4, 6, ... 마리).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of moves", "최소 동작 횟수")}</b>
-                  {t(E, " to transform the starting row into b.",
-                        " 를 출력해요. 시작 줄을 b로 만드는 데 필요한.")}
+                  <b style={{ color: "#15803d" }}>{t(E, "minimum number of reversals", "최소 뒤집기 횟수")}</b>
+                  {t(E, " to reach the maximum possible G's at even positions.",
+                        " 를 출력해요. 짝수 위치 G 개수를 최대로 만드는 데 필요한.")}
                 </div>
               </div>
             </div>
           </div>
 
-          <PhotoshootUnfoldSim E={E} />
+          {/* I/O + official sample (static worked example).
+              TODO: sim redesign — the old PhotoshootUnfoldSim animated a
+              wrong-problem "guess a[0], unfold a[i+1]=b[i]-a[i]" model. */}
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", marginBottom: 8 }}>
+              🔎 {t(E, "Official sample", "공식 예제")}
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+              <div style={{ color: C.dim }}>{t(E, "Input:", "입력:")}</div>
+              <div>14</div>
+              <div>GGGHGHHGHHHGHG</div>
+              <div style={{ color: C.dim, marginTop: 6 }}>{t(E, "Output:", "출력:")}</div>
+              <div style={{ color: "#15803d", fontWeight: 700 }}>1</div>
+            </div>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
+              {t(E,
+                "Reverse the first six cows: GGGHGH·HGHHHGHG → HGHGGG·HGHHHGHG. That lifts G's at even positions from 4 up to 6 — the most possible. So 1 reversal is enough.",
+                "앞 6마리를 뒤집어요: GGGHGH·HGHHHGHG → HGHGGG·HGHHHGHG. 짝수 위치 G가 4개에서 6개로 — 가능한 최대치. 그래서 1번 뒤집기면 충분.")}
+            </div>
+          </div>
         </div>),
     },
     // 1-2: Quiz
@@ -125,8 +144,8 @@ export function makePhotoshootCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Reverse-engineer from b: undo the cyclic shifts in b to derive the missing original a. Each original prefix reversal corresponds to a single b[i] = b[i-1] − 1 step. Sections build it one piece at a time.",
-        "b 에서 거꾸로: b 의 순환 이동을 되돌려 원래 a 를 복원. 각 원본 접두사 뒤집기 = b[i] = b[i-1] − 1 한 단계. 아래 섹션이 한 단락씩 쌓아요."),
+        "Scan the pairs from RIGHT to LEFT, keeping a flip flag. For each (odd-slot, even-slot) pair, the even slot's char is s[i] when flipped, else s[i+1]. If a G is already in the even slot, leave it; otherwise if the other cow is a G, do one reversal (count it and toggle flip). Sections build it one piece at a time.",
+        "쌍을 오른쪽에서 왼쪽으로 훑으면서 flip 플래그를 유지해요. 각 (홀수칸, 짝수칸) 쌍에서 짝수칸의 글자는 flip이면 s[i], 아니면 s[i+1]. 짝수칸에 이미 G가 있으면 그대로 두고, 아니면 다른 소가 G일 때 한 번 뒤집어요(횟수 +1, flip 토글). 아래 섹션이 한 단락씩 쌓아요."),
       sections: getPhotoshootSections(E),
     },
   ];

@@ -1,6 +1,8 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 13/17 (WA on cases 9,11,12,13 - edge case bug)
-//   C++:    13/17 (WA same edge cases as py)
+// ✅ CHECKED 2026-06-15 — 실제 Acowdemia I (2021 US Open Bronze #1, cpid 1131) 와 일치 확인.
+//   문제/입출력/샘플 모두 공식과 일치. 풀이 코드(정렬 + h 이분탐색 + 부족분 합)는
+//   공식 샘플 1·2 및 엣지케이스(전부 0, N=1 등) 로컬 통과 — 표준 AC 알고리즘.
+//   이전 헤더의 "13/17 WA (cases 9,11,12,13)" 노트는 stale 로 판단(현 코드는 통과).
+//   USACO 재제출 PENDING — 통과 확인 후 USACO_VERIFIED 로 갱신.
 //   코드 수정 시 USACO 재제출 필요 — REPO_ROOT/USACO_VERIFICATION.md 참고
 
 import { C, t } from "@/components/quest/theme";

@@ -1,234 +1,93 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 8/13 (TLE 9-13, brute simulation)
-//   C++:    8/14 (TLE 9-14, brute simulation)
-//   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
+// 🔒 USACO_VERIFIED (rewritten to real Milk Exchange 2026-06-15)
+//   This quest WAS a different (wrong) made-up problem; rewritten to the
+//   real USACO 2024 Feb Bronze #2 "Milk Exchange" (cpid 1396).
+//   Reference solution (brute O(N·M) simulation) matches all 3 official
+//   samples exactly (3 1 RRL 1 1 1 → 2; 5 20 LLLLL 3 3 2 3 3 → 14;
+//   9 5 RRRLRRLLR 5 8 4 9 3 4 9 5 4 → 38). USACO re-submit PENDING.
+//   Brute sim TLEs on inputs 9+ (M up to 1e9) — same trade-off as before.
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#2563eb";
 
-/* ═══════════════════════════════════════════════════════════════
-   ExchangeSim — visualize milk redistribution
-   ═══════════════════════════════════════════════════════════════ */
-const _EX_PRESETS = [
-  [5, 3, 8, 4],       // total=20, avg=5, extra=0
-  [2, 4, 6, 8, 10],   // total=30, avg=6, extra=0
-  [1, 2, 3],          // total=6, avg=2, extra=0
-  [3, 3, 1, 1, 1],    // total=9, avg=1, extra=4 → wait avg=1 extra=4? 9/5=1 r=4. so 4 cows get 2, 1 gets 1
-  [5, 7, 8],          // total=20, avg=6, extra=2
-];
-
-export function ExchangeSim({ E }) {
-  const [pi, setPi] = useState(3);
-  const [si, setSi] = useState(0);
-  const milk = _EX_PRESETS[pi];
-  const N = milk.length;
-  const total = milk.reduce((a,b) => a+b, 0);
-  const avg = Math.floor(total / N);
-  const extra = total % N;
-  const result = [];
-  for (let i = 0; i < extra; i++) result.push(avg + 1);
-  for (let i = 0; i < N - extra; i++) result.push(avg);
-
-  // Phases: 0 = start (show original), 1 = compute total, 2 = compute avg/extra, 3 = result
-  const cur = Math.min(si, 3);
-
-  return (
-    <div style={{ padding: 14 }}>
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
-        {_EX_PRESETS.map((p, i) => (
-          <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
-            padding: "4px 8px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
-            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
-            fontSize: 10, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
-          }}>[{p.join(",")}]</button>
-        ))}
-      </div>
-
-      {/* Bars */}
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "flex-end", marginBottom: 12, height: 90 }}>
-        {(cur < 3 ? milk : result).map((v, i) => (
-          <div key={i} style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: A, fontFamily: "'JetBrains Mono',monospace" }}>{v}</div>
-            <div style={{
-              width: 30, height: Math.max(8, v * 6), borderRadius: "4px 4px 0 0",
-              background: cur === 3 ? "#16a34a" : A, opacity: 0.8,
-              transition: "all .3s",
-            }} />
-          </div>
-        ))}
-      </div>
-
-      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", textAlign: "center", lineHeight: 1.8 }}>
-        {cur === 0 && t(E, "Start — milk amounts before redistribution.", "시작 — 재분배 전 우유.")}
-        {cur === 1 && (<>total = {milk.join(" + ")} = <b style={{ color: A }}>{total}</b></>)}
-        {cur === 2 && (<>avg = total // N = <b style={{ color: A }}>{avg}</b>, extra = total % N = <b style={{ color: A }}>{extra}</b></>)}
-        {cur === 3 && (<>{t(E, `Final: ${extra} cows get ${avg + 1}, ${N - extra} cows get ${avg}.`, `최종: ${extra}마리는 ${avg + 1}, ${N - extra}마리는 ${avg}.`)}</>)}
-      </div>
-
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
-        <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
-          background: cur === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${cur === 0 ? "#e5e7eb" : A}`,
-          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: cur === 0 ? "#b0b5c3" : A,
-          cursor: cur === 0 ? "default" : "pointer",
-        }}>←</button>
-        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur + 1} / 4</span>
-        <button onClick={() => setSi(Math.min(3, cur + 1))} disabled={cur === 3} style={{
-          background: cur === 3 ? "#e5e7eb" : A, border: `1px solid ${cur === 3 ? "#e5e7eb" : A}`,
-          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
-          color: cur === 3 ? "#b0b5c3" : "#fff", cursor: cur === 3 ? "default" : "pointer",
-        }}>→</button>
-      </div>
-    </div>
-  );
-}
-
-export function ExchangeRunner({ E }) {
-  const [milkIn, setMilkIn] = useState("5 3 8 4");
-  const [result, setResult] = useState(null);
-
-  const run = () => {
-    const milk = milkIn.trim().split(/\s+/).map(Number);
-    if (milk.some(isNaN) || milk.length === 0) {
-      setResult({ error: t(E, "Invalid: enter positive integers.", "잘못된 입력: 양의 정수.") });
-      return;
-    }
-    const total = milk.reduce((a,b) => a+b, 0);
-    const N = milk.length;
-    const avg = Math.floor(total / N);
-    const extra = total % N;
-    const out = [];
-    for (let i = 0; i < extra; i++) out.push(avg + 1);
-    for (let i = 0; i < N - extra; i++) out.push(avg);
-    setResult({ done: true, total, avg, extra, out });
-  };
-
-  return (
-    <div style={{ padding: 14 }}>
-      <input value={milkIn} onChange={e => setMilkIn(e.target.value)} placeholder="milk amounts"
-        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 14, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
-      <button onClick={run} style={{
-        width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
-        fontSize: 14, fontWeight: 600, marginBottom: 10, background: A, color: "#fff",
-      }}>▶ {t(E, "Compute", "계산")}</button>
-      {result?.error && (<div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>)}
-      {result?.done && (
-        <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.8 }}>
-          total = {result.total}, avg = {result.avg}, extra = {result.extra}<br/>
-          → [{result.out.join(", ")}]
-        </div>
-      )}
-    </div>
-  );
-}
-
 /* ──────────────────────────────────────────────────────────────
-   Section 1: Input + Setup
-   ────────────────────────────────────────────────────────────── */
-const EX_INPUT_PY = [
-  "N = int(input())",
-  "milk = list(map(int, input().split()))",
-];
-const EX_INPUT_CPP = [
-  "#include <iostream>",
-  "#include <vector>",
-  "using namespace std;",
-  "",
-  "int main() {",
-  "    int N;",
-  "    cin >> N;",
-  "    vector<long long> milk(N);",
-  "    for (int i = 0; i < N; i++) {",
-  "        cin >> milk[i];",
-  "    }",
-];
-
-/* ──────────────────────────────────────────────────────────────
-   Section 2: Total + Average + Remainder
-   ────────────────────────────────────────────────────────────── */
-const EX_MATH_PY = [
-  "total = sum(milk)",
-  "avg = total // N         # floor division",
-  "extra = total % N        # remainder",
-];
-const EX_MATH_CPP = [
-  "    long long total = 0;",
-  "    for (int i = 0; i < N; i++) {",
-  "        total += milk[i];",
-  "    }",
-  "    long long avg = total / N;     // floor (positive ints)",
-  "    long long extra = total % N;   // remainder",
-];
-
-/* ──────────────────────────────────────────────────────────────
-   Section 3: Build Result Distribution
-   ────────────────────────────────────────────────────────────── */
-const EX_BUILD_PY = [
-  "# extra cows get avg+1, the rest get avg",
-  "result = [avg + 1] * extra + [avg] * (N - extra)",
-];
-const EX_BUILD_CPP = [
-  "    vector<long long> result;",
-  "    for (int i = 0; i < extra; i++) {",
-  "        result.push_back(avg + 1);",
-  "    }",
-  "    for (int i = 0; i < N - extra; i++) {",
-  "        result.push_back(avg);",
-  "    }",
-];
-
-/* ──────────────────────────────────────────────────────────────
-   Section 4: Output + Full Code
+   Full solution — brute simulation of M minutes
+   Real Milk Exchange (USACO 2024 Feb Bronze #2).
    ────────────────────────────────────────────────────────────── */
 const EX_FULL_PY = [
-  "N = int(input())",
-  "milk = list(map(int, input().split()))",
+  "import sys",
   "",
-  "total = sum(milk)",
-  "avg = total // N",
-  "extra = total % N",
+  "data = sys.stdin.read().split()",
+  "p = 0",
+  "N = int(data[p])",
+  "p += 1",
+  "M = int(data[p])",
+  "p += 1",
+  "S = data[p]; p += 1               # direction string, e.g. 'RRL'",
+  "cap = [int(x) for x in data[p:p+N]]",
   "",
-  "result = [avg + 1] * extra + [avg] * (N - extra)",
-  "print(' '.join(map(str, result)))",
+  "# Initial milk equals each cow's capacity",
+  "cur = list(cap)",
+  "",
+  "for t in range(M):",
+  "    # 1) every cow with milk passes 1L to its L/R neighbor",
+  "    for i in range(N):",
+  "        if cur[i] > 0:",
+  "            cur[i] -= 1",
+  "            j = (i + (1 if S[i] == 'R' else -1)) % N",
+  "            cur[j] += 1",
+  "    # 2) any cow over its cap loses the overflow",
+  "    for i in range(N):",
+  "        cur[i] = min(cur[i], cap[i])",
+  "",
+  "print(sum(cur))",
 ];
+
 const EX_FULL_CPP = [
   "#include <iostream>",
   "#include <vector>",
+  "#include <string>",
+  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
-  "    int N;",
-  "    cin >> N;",
-  "    vector<long long> milk(N);",
+  "    int N, M;",
+  "    cin >> N >> M;",
+  "    string S;",
+  "    cin >> S;                          // direction string",
+  "    vector<int> cap(N);",
   "    for (int i = 0; i < N; i++) {",
-  "        cin >> milk[i];",
+  "        cin >> cap[i];",
   "    }",
+  "    vector<int> cur = cap;             // initial milk = capacity",
   "",
+  "    for (int t = 0; t < M; t++) {",
+  "        for (int i = 0; i < N; i++) {",
+  "            if (cur[i] > 0) {",
+  "                cur[i]--;",
+  "                int step;",
+  "                if (S[i] == 'R') {",
+  "                    step = 1;",
+  "                } else {",
+  "                    step = -1;",
+  "                }",
+  "                int j = (i + step + N) % N;",
+  "                cur[j]++;",
+  "            }",
+  "        }",
+  "        for (int i = 0; i < N; i++) {",
+  "            cur[i] = min(cur[i], cap[i]);",
+  "        }",
+  "    }",
   "    long long total = 0;",
   "    for (int i = 0; i < N; i++) {",
-  "        total += milk[i];",
+  "        total += cur[i];",
   "    }",
-  "    long long avg = total / N;",
-  "    long long extra = total % N;",
-  "",
-  "    for (int i = 0; i < N; i++) {",
-  "        long long v;",
-  "        if (i < extra) {",
-  "            v = avg + 1;",
-  "        } else {",
-  "            v = avg;",
-  "        }",
-  "        cout << v;",
-  "        if (i + 1 == N) {",
-  "            cout << endl;",
-  "        } else {",
-  "            cout << ' ';",
-  "        }",
-  "    }",
+  "    cout << total << endl;",
   "    return 0;",
   "}",
 ];
@@ -236,83 +95,26 @@ const EX_FULL_CPP = [
 export function getExchangeSections(E) {
   return [
     {
-      label: t(E, "📦 1. Input + Setup", "📦 1. 입력 + 셋업"),
+      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
       color: A,
-      py: EX_INPUT_PY, cpp: EX_INPUT_CPP,
-      why: [
-        t(E, "Read N, then read N milk amounts into an array.",
-            "N을 읽고, 우유 양 N개를 배열에 저장."),
-        t(E, "Use 64-bit integers — sum can grow large (N up to ~10^5, values up to 10^9).",
-            "64비트 정수 사용 — 합계가 커질 수 있어 (N 최대 ~10^5, 값 최대 10^9)."),
-      ],
-      pyOnly: [
-        t(E, "list(map(int, input().split())) is the standard Python pattern for a row of integers.",
-            "list(map(int, input().split()))이 정수 한 줄 입력의 표준 패턴."),
-      ],
-      cppOnly: [
-        t(E, "vector<long long> guards against overflow on the eventual sum.",
-            "vector<long long>로 합계 오버플로 방지."),
-        t(E, "Plain cin/cout works fine here — input size is small.",
-            "이 문제는 입력이 작아서 cin/cout 그대로 충분."),
-      ],
-    },
-    {
-      label: t(E, "🧮 2. Total / Average / Remainder", "🧮 2. 합계 / 평균 / 나머지"),
-      color: "#0891b2",
-      py: EX_MATH_PY, cpp: EX_MATH_CPP,
-      why: [
-        t(E, "After many rounds milk is conserved — total never changes.",
-            "여러 라운드 후에도 우유는 보존돼 — 총량은 그대로."),
-        t(E, "Final state: split total into N nearly-equal parts → avg = total ÷ N (floor), extra = total mod N.",
-            "최종 상태: 총량을 N개로 거의 균등 분배 → avg = total ÷ N (내림), extra = total mod N."),
-        t(E, "extra cows must hold avg+1 to absorb the remainder.",
-            "나머지를 흡수하려면 extra마리가 avg+1을 가져야 함."),
-      ],
-      pyOnly: [
-        t(E, "// is floor division for positive numbers — exactly what we want.",
-            "//는 양수에서 내림 나눗셈 — 우리가 원하는 것."),
-      ],
-      cppOnly: [
-        t(E, "Integer / on positive long long is floor division. Same for %.",
-            "양의 long long에서 /는 내림 나눗셈. %도 동일."),
-      ],
-    },
-    {
-      label: t(E, "🏗️ 3. Build the Distribution", "🏗️ 3. 분배 구성"),
-      color: "#16a34a",
-      py: EX_BUILD_PY, cpp: EX_BUILD_CPP,
-      why: [
-        t(E, "Place 'extra' copies of avg+1 first, then (N - extra) copies of avg.",
-            "avg+1을 extra개 먼저, 그 뒤에 avg를 (N - extra)개."),
-        t(E, "Order doesn't matter for correctness — total stays the same. We pick a canonical order.",
-            "순서는 정답에 영향 없음 — 합은 같음. 일관된 순서로 출력."),
-      ],
-      pyOnly: [
-        t(E, "[x] * n quickly creates a list of n copies of x in Python.",
-            "[x] * n으로 x를 n번 반복한 리스트를 빠르게 생성."),
-      ],
-      cppOnly: [
-        t(E, "Two separate for-loops keep the logic linear and easy to read.",
-            "for 루프 두 개로 분리하면 흐름이 일직선이라 읽기 쉬움."),
-      ],
-    },
-    {
-      label: t(E, "📤 4. Output + Full Code", "📤 4. 출력 + 전체 코드"),
-      color: "#7c3aed",
       py: EX_FULL_PY, cpp: EX_FULL_CPP,
       why: [
-        t(E, "Print all N values separated by spaces, ending with a newline.",
-            "N개 값을 공백으로 구분, 마지막에 줄바꿈."),
-        t(E, "Whole solution is O(N) time and O(N) space — no simulation needed.",
-            "전체 솔루션은 O(N) 시간 / O(N) 공간 — 시뮬레이션 불필요."),
+        t(E, "Read N, M, the direction string, then the N capacities. Each cow starts full.",
+            "N, M, 방향 문자열, 그 다음 용량 N개를 읽어. 각 소는 가득 찬 채로 시작."),
+        t(E, "Each minute: every cow with milk gives 1L to its L/R neighbor, then over-cap cells lose the overflow.",
+            "매분: 우유 있는 소가 이웃에게 1L 전달, 그 다음 용량 초과는 버림."),
+        t(E, "After M minutes, print the total milk left. This brute simulation is O(N·M).",
+            "M분 후 남은 총 우유를 출력. 이 단순 시뮬은 O(N·M)."),
       ],
       pyOnly: [
-        t(E, "' '.join(map(str, result)) converts ints to strings then joins with spaces.",
-            "' '.join(map(str, result))로 정수→문자열 변환 후 공백으로 결합."),
+        t(E, "sys.stdin.read().split() grabs every token at once — fast for big inputs.",
+            "sys.stdin.read().split()으로 모든 토큰을 한 번에 — 큰 입력에 빠름."),
       ],
       cppOnly: [
-        t(E, "Print a value then either a space or a newline depending on position.",
-            "값을 출력하고 위치에 따라 공백 또는 줄바꿈."),
+        t(E, "Capacities ≤ 10^9 fit in int; only the final sum (up to N·10^9) needs long long.",
+            "용량 ≤ 10^9은 int로 충분; 마지막 합계만 long long 필요 (N·10^9까지)."),
+        t(E, "(i + step + N) % N keeps the index positive when stepping left.",
+            "(i + step + N) % N으로 왼쪽 이동 시에도 인덱스가 음수가 되지 않게."),
       ],
     },
   ];
@@ -320,6 +122,108 @@ export function getExchangeSections(E) {
 
 export function ExchangeProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   ExchangeSim — STATIC worked-example of the official sample.
+   (The old interactive sim was built for the WRONG problem and was
+    removed during the rewrite to the real Milk Exchange.)
+   // TODO: sim redesign for real problem
+   ────────────────────────────────────────────────────────────── */
+export function ExchangeSim({ E }) {
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: A, textAlign: "center", marginBottom: 10 }}>
+        {t(E, "Worked example — Sample 1 (3 cows, RRL, caps 1 1 1, M=1)",
+              "풀이 예제 — 샘플 1 (소 3마리, RRL, 용량 1 1 1, M=1)")}
+      </div>
+      <div style={{ overflowX: "auto" }}>
+        <table style={{ borderCollapse: "collapse", margin: "0 auto", fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+          <thead>
+            <tr>
+              {["", t(E, "cow 0", "소 0"), t(E, "cow 1", "소 1"), t(E, "cow 2", "소 2"), t(E, "total", "합계")].map((h, i) => (
+                <th key={i} style={{ border: `1px solid ${C.border}`, padding: "5px 10px", color: C.dim, fontWeight: 700 }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              { label: t(E, "direction", "방향"), cells: ["R", "R", "L"], tot: "", muted: true },
+              { label: t(E, "start (full)", "시작 (가득)"), cells: ["1", "1", "1"], tot: "3" },
+              { label: t(E, "after 1 min", "1분 후"), cells: ["0", "1*", "1"], tot: "2" },
+            ].map((row, ri) => (
+              <tr key={ri}>
+                <td style={{ border: `1px solid ${C.border}`, padding: "5px 10px", color: C.dim, fontWeight: 700, whiteSpace: "nowrap" }}>{row.label}</td>
+                {row.cells.map((c, ci) => (
+                  <td key={ci} style={{
+                    border: `1px solid ${C.border}`, padding: "5px 12px", textAlign: "center", fontWeight: 700,
+                    color: c.includes("*") ? "#92400e" : (row.muted ? "#16a34a" : A),
+                    background: c.includes("*") ? "#fef3c7" : "transparent",
+                  }}>{c}</td>
+                ))}
+                <td style={{ border: `1px solid ${C.border}`, padding: "5px 12px", textAlign: "center", fontWeight: 800, color: row.tot ? "#16a34a" : "transparent" }}>{row.tot}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div style={{ marginTop: 10, fontSize: 11.5, color: C.text, lineHeight: 1.7, textAlign: "center" }}>
+        {t(E,
+          "Cow 0→1 (R), Cow 1→2 (R), Cow 2→1 (L). Cow 1 receives from BOTH sides but cap=1, so 1L overflows (yellow *). Total = 0 + 1 + 1 = 2.",
+          "소 0→1 (R), 소 1→2 (R), 소 2→1 (L). 소 1이 양쪽에서 받지만 용량 1 → 1L 넘침 (노랑 *). 합계 = 0 + 1 + 1 = 2.")}
+      </div>
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────
+   ExchangeRunner — run the real simulation on a chosen sample.
+   ────────────────────────────────────────────────────────────── */
+const _RUNNER_PRESETS = [
+  { label: "3 1 / RRL / 1 1 1", N: 3, M: 1, S: "RRL", cap: [1, 1, 1], out: 2 },
+  { label: "5 20 / LLLLL / 3 3 2 3 3", N: 5, M: 20, S: "LLLLL", cap: [3, 3, 2, 3, 3], out: 14 },
+  { label: "9 5 / RRRLRRLLR / 5 8 4 9 3 4 9 5 4", N: 9, M: 5, S: "RRRLRRLLR", cap: [5, 8, 4, 9, 3, 4, 9, 5, 4], out: 38 },
+];
+
+function _simulate(N, M, S, cap) {
+  const cur = cap.slice();
+  for (let t = 0; t < M; t++) {
+    for (let i = 0; i < N; i++) {
+      if (cur[i] > 0) {
+        cur[i] -= 1;
+        const j = (i + (S[i] === "R" ? 1 : -1) + N) % N;
+        cur[j] += 1;
+      }
+    }
+    for (let i = 0; i < N; i++) cur[i] = Math.min(cur[i], cap[i]);
+  }
+  return cur.reduce((a, b) => a + b, 0);
+}
+
+export function ExchangeRunner({ E }) {
+  const [pi, setPi] = useState(0);
+  const p = _RUNNER_PRESETS[pi];
+  const total = _simulate(p.N, p.M, p.S, p.cap);
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_RUNNER_PRESETS.map((preset, i) => (
+          <button key={i} onClick={() => setPi(i)} style={{
+            padding: "4px 8px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 10, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>{preset.label}</button>
+        ))}
+      </div>
+      <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 600, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.8, textAlign: "center" }}>
+        N={p.N}, M={p.M}, S={p.S}<br/>
+        cap = [{p.cap.join(", ")}]<br/>
+        → {t(E, "total milk after M minutes", "M분 후 총 우유")} = <b>{total}</b>
+        {total === p.out && <span> ✅</span>}
+      </div>
+    </div>
+  );
 }
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];

@@ -1,8 +1,11 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 11/11 PASS
-//   C++:    0/1 (Compile error - missing #include <tuple>)
-//   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
-//   상세: REPO_ROOT/USACO_VERIFICATION.md
+// 🔧 REWRITTEN 2026-06-15 — real problem: Air Cownditioning II (2023 Jan Bronze 2, cpid 1297)
+//   C++ placeholder (summed cow costs) replaced with the correct 2^M subset (bitmask) search,
+//   matching the already-correct Python. Local: compiles + matches official sample (10) exactly.
+//   USACO re-submit PENDING.
+//   ⚠️ CURRICULUM NOTE: this Bronze problem's intended solution is bitmask enumeration over
+//   the M (≤10) air conditioners — bit ops are taught only as a CP tip (cpp-20), not core
+//   C++ curriculum. Kept because there is no non-bitmask Bronze solution and the Python
+//   already shipped this approach. Flag for design review if a no-bitmask version is desired.
 
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
@@ -207,14 +210,28 @@ const FULL_CPP = [
   "",
   "int main() {",
   "    int N, M; cin >> N >> M;",
-  "    vector<tuple<int,int,int>> cows(N), acs(M);",
-  "    for (auto& [s, e, c] : cows) cin >> s >> e >> c;",
-  "    for (auto& [a, b, p] : acs) cin >> a >> b >> p;",
-  "    // Generic baseline: minimum cost to satisfy all cooling needs",
-  "    // (Real problem: bitmask over ACs)",
-  "    long long total = 0;",
-  "    for (auto& [s, e, c] : cows) total += c;",
-  "    cout << total << \"\\n\";",
+  "    vector<int> cs(N), ce(N), cc(N);          // cow: stall range + cooling needed",
+  "    for (int i = 0; i < N; i++) cin >> cs[i] >> ce[i] >> cc[i];",
+  "    vector<int> as(M), ae(M), ap(M), acost(M);// AC: range, power, cost",
+  "    for (int j = 0; j < M; j++) cin >> as[j] >> ae[j] >> ap[j] >> acost[j];",
+  "",
+  "    long long best = -1;",
+  "    // Try every subset of the M air conditioners (M <= 10, so 2^M <= 1024)",
+  "    for (int mask = 0; mask < (1 << M); mask++) {",
+  "        long long total = 0;",
+  "        vector<int> cool(101, 0);             // cooling at each stall 1..100",
+  "        for (int j = 0; j < M; j++)",
+  "            if (mask & (1 << j)) {            // AC j is turned on",
+  "                total += acost[j];",
+  "                for (int pos = as[j]; pos <= ae[j]; pos++) cool[pos] += ap[j];",
+  "            }",
+  "        bool ok = true;",
+  "        for (int i = 0; i < N && ok; i++)",
+  "            for (int pos = cs[i]; pos <= ce[i]; pos++)",
+  "                if (cool[pos] < cc[i]) { ok = false; break; }",
+  "        if (ok && (best == -1 || total < best)) best = total;",
+  "    }",
+  "    cout << best << \"\\n\";",
   "    return 0;",
   "}",
 ];
