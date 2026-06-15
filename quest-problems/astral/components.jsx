@@ -1387,8 +1387,6 @@ const AST_S4B_CPP = [
 
 // Backwards compatibility: keep AST_S4_PY/CPP as the union
 const AST_S4_PY = [...AST_S4A_PY, "", ...AST_S4B_PY];
-const AST_S4_CPP = [...AST_S4A_CPP, ...AST_S4B_CPP];
-
 const AST_FULL_PY = [
   "import sys",
   "",
