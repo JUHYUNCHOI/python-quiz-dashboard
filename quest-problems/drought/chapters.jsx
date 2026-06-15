@@ -10,8 +10,8 @@ export function makeDroughtCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N cows in a row, each with some hunger level.\nIn one operation, you pick a pair of adjacent cows and reduce BOTH of their hunger levels by 1 (only if both ≥ 1).\nYou want every cow to end at hunger 0 — find the minimum number of operations, or print -1 if impossible.",
-        "FJ에게 한 줄로 선 N마리 소가 있고, 각 소는 배고픔 수치를 가져요.\n한 번의 연산으로 인접한 두 소를 골라 둘의 배고픔을 동시에 1씩 줄여요 (둘 다 ≥ 1일 때만).\n모든 소를 배고픔 0으로 만드는 최소 연산 횟수를 출력해요. 불가능하면 -1."),
+        "FJ has N cows in a row, each with some hunger level.\nIn one operation, you pick a pair of adjacent cows and reduce BOTH of their hunger levels by 1.\nYou want every cow to end at the SAME (non-negative) hunger level — find the minimum number of operations, or print -1 if impossible. There are T such test cases.",
+        "FJ에게 한 줄로 선 N마리 소가 있고, 각 소는 배고픔 수치를 가져요.\n한 번의 연산으로 인접한 두 소를 골라 둘의 배고픔을 동시에 1씩 줄여요.\n모든 소를 같은 (음이 아닌) 배고픔 값으로 만드는 최소 연산 횟수를 출력해요. 불가능하면 -1. 이런 테스트 케이스가 T개 주어져요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -27,8 +27,8 @@ export function makeDroughtCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
-                "Output the minimum operations to bring every cow's hunger to 0, or -1 if impossible.",
-                "모든 소의 배고픔을 0 으로 만드는 최소 연산 수 (불가능하면 -1) 를 출력.")}
+                "Output the minimum operations to make every cow's hunger EQUAL (any non-negative value), or -1 if impossible. Repeat for T test cases.",
+                "모든 소의 배고픔을 같은 값 (음이 아닌 아무 값) 으로 만드는 최소 연산 수 (불가능하면 -1) 를 출력. T개 테스트 케이스 반복.")}
             </div>
           </div>
 
@@ -62,7 +62,7 @@ export function makeDroughtCh1(E) {
                 <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Goal: ", "목표: ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "make every cow's hunger equal 0", "모든 소의 배고픔을 0으로 만들기")}</b>
+                  <b style={{ color: "#dc2626" }}>{t(E, "make every cow's hunger equal (any non-negative value)", "모든 소의 배고픔을 같은 값 (음이 아닌 아무 값) 으로 만들기")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>
@@ -126,8 +126,8 @@ export function makeDroughtCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "For each candidate final value t (0..min(a)), compute d[i] = a[i] − t and walk left to right — pair (i, i+1) must be fed exactly d[i] times, so d[i+1] -= d[i]. Negative d or last d ≠ 0 means that t is impossible. Sections build it one piece at a time.",
-        "가능한 최종 값 t (0 ~ min(a)) 마다 d[i] = a[i] − t 계산하고 왼쪽부터 오른쪽 — 쌍 (i, i+1) 은 정확히 d[i] 번 먹여야 하니 d[i+1] -= d[i]. d 가 음수거나 마지막 d ≠ 0 이면 그 t 는 불가능. 아래 섹션이 한 단락씩 쌓아요."),
+        "Walk left to right: pair (i, i+1) is fed o[i] times, and once you fix the final hunger f, each o[i] is forced — o[i] = h[i] − f − o[i-1]. f itself comes from the alternating sum (+ − + − …). Any o[i] < 0 means that case is impossible (-1). The answer is 2 × sum(o). Sections build it one piece at a time.",
+        "왼쪽부터 오른쪽으로: 쌍 (i, i+1) 은 o[i] 번 먹이고, 최종 배고픔 f 를 정하면 o[i] 는 자동으로 o[i] = h[i] − f − o[i-1] 로 정해져. f 는 교대합 (+ − + − …) 으로 구해. o[i] 가 음수면 그 케이스는 불가능 (-1). 답은 2 × sum(o). 아래 섹션이 한 단락씩 쌓아요."),
       sections: getDroughtSections(E),
     },
   ];
