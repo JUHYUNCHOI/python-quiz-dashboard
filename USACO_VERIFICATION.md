@@ -77,21 +77,21 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `countliars` | Counting Liars | Open 2022 Bronze #2 | 🟡 2/9 (TLE - O(10^6 * N) loop too slow) | 🟡 2/12 (TLE - same as py (p up to 10^9)) |
 | `photoshoot` | Photoshoot | Open 2022 Bronze #1 | ❌ 0/1 (RTE - wrong input format (no target line)) | ❌ 0/1 (WA - solution for different problem (permutation, not reversal count)) |
 | `blocks` | Blocks | Feb 2022 Bronze #3 | ❌ 0/1 (WA - output format wrong (prints count instead of YES/NO per word)) | ❌ 0/1 (WA - scaffold counts distinct letters) |
-| `photoshoot2` | Photoshoot 2 | Feb 2022 Bronze #2 | ✅ 14/14 PASS | ❌ 1/14 (WA - adjacent swap wrong algo (problem is leftward modifications)) |
+| `photoshoot2` | Photoshoot 2 | Feb 2022 Bronze #2 | ✅ 14/14 PASS | 🔧 C++ rewritten 2026-06-15 to correct running-max inversion greedy; local-verified vs official samples (S1→0, S2→2). USACO re-submit pending (was 1/14 WA adjacent-swap) |
 | `sleepclass` | Sleeping in Class | Feb 2022 Bronze #1 | ❌ 0/1 (WA - bug when total=0 edge case) | ❌ 0/1 (WA same as py - total=0 edge case bug) |
 | `drought` | Drought | Jan 2022 Bronze #3 | ❌ 0/1 (WA - py expects single case, problem has T test cases) | ❌ 0/1 (WA - single test case (problem has T tests)) |
 | `nontrans` | Non-Transitive Dice | Jan 2022 Bronze #2 | ❌ 0/1 (WA+RTE - wrong input parsing) | ❌ 0/1 (WA - cpp only checks A beats B, not transitive C) |
 | `herdle` | Herdle | Jan 2022 Bronze #1 | ❌ 0/1 (RTE - wrong input parsing (no T)) | ❌ 0/1 (WA - cpp expects T but problem has single test case) |
 | `walkhome` | Walking Home | Dec 2021 Bronze #3 | ❌ 0/1 (RTE - missing T (test cases) handling) | ❌ 0/1 (WA - missing T loop, also wrong algo) |
-| `aircond1` | Air Cownditioning | Dec 2021 Bronze #2 | ✅ 10/10 PASS | ❌ 0/1 (WA - cpp uses sum of abs diffs (wrong algo)) |
+| `aircond1` | Air Cownditioning | Dec 2021 Bronze #2 | 🔧 Py rewritten 2026-06-15 to clean diff-array (0-padded, sum of upward jumps); local-verified vs official sample (5) | 🔧 C++ rewritten 2026-06-15 to correct diff-array algo (was 0/1 WA sum-of-abs); local-verified vs official sample (5). USACO re-submit pending |
 | `lonelyphoto` | Lonely Photo | Dec 2021 Bronze #1 | ❌ 0/1 (WA - algorithm overcounts (22 vs 3 expected)) | ❌ 0/1 (WA - same algorithm bug as py (22 vs 3)) |
 | `acowdemia3` | Acowdemia III | Open 2021 Bronze #3 | ❌ 0/1 (WA - overcounts (5 vs 4)) | ❌ 0/1 (WA same as py) |
 | `acowdemia2` | Acowdemia II | Open 2021 Bronze #2 | ❌ 0/1 (RTE - author names are strings, py treats as ints) | ❌ 0/1 (WA - output count not relation matrix) |
 | `acowdemia1` | Acowdemia I | Open 2021 Bronze #1 | ❌ 13/17 (WA on cases 9,11,12,13 - edge case bug) | ❌ 13/17 (WA same edge cases as py) |
 | `clockfence` | Clockwise Fence | Feb 2021 Bronze #3 | ❌ 0/1 (RTE - missing T (test cases) parse) | ❌ 0/1 (WA - output format (counts vs CW/CCW per test)) |
-| `comfycows` | Comfortable Cows | Feb 2021 Bronze #2 | ✅ 12/12 PASS | ❌ 0/1 (WA - doesn't print per iteration, accumulates wrong) |
+| `comfycows` | Comfortable Cows | Feb 2021 Bronze #2 | ✅ 12/12 PASS | 🔧 C++ rewritten 2026-06-15 to incremental per-iteration solver (comfortable set, re-check 5 cells/step); local-verified vs official sample (0,0,0,1,0,0,1,2). USACO re-submit pending (was 0/1 WA no per-iteration output) |
 | `yearcow` | Year of the Cow | Feb 2021 Bronze #1 | ❌ 0/1 (RTE - wrong input parsing (8-word phrase)) | ✅ 10/10 PASS |
-| `stalling` | Just Stalling | Jan 2021 Bronze #3 | ❌ 0/1 (RTE - wrong input format (all on one line)) | ❌ 0/1 (WA - greedy direction wrong) |
+| `stalling` | Just Stalling | Jan 2021 Bronze #3 | 🔧 Py rewritten 2026-06-15 to space-separated input + tallest-cow-first greedy (was RTE wrong input format); local-verified vs official sample (8) + 300 random vs brute-force | 🔧 C++ rewritten 2026-06-15 to tallest-cow-first greedy (was WA wrong direction); local-verified vs official sample (8) + brute-force. USACO re-submit pending |
 | `oddphotos` | Even More Odd Photos | Jan 2021 Bronze #2 | ❌ 0/1 (WA - overcounts (4 vs 3)) | ❌ 0/1 (WA - cpp solves Bronze Photoshoot not Even More Odd) |
 | `uddered` | Uddered but not Herd | Jan 2021 Bronze #1 | ✅ 10/10 PASS | ✅ 10/10 PASS |
 | `stuckinrut` | Stuck in a Rut | Dec 2020 Bronze #3 | ❌ 3/10 (WA - greedy doesn't handle cascading correctly) | ❌ 0/1 (Compile error - missing #include <tuple>) |

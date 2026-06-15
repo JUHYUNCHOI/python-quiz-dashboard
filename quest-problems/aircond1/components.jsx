@@ -1,7 +1,10 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 10/10 PASS
-//   C++:    0/1 (WA - cpp uses sum of abs diffs (wrong algo))
-//   코드 수정 시 USACO 재제출 필요 — REPO_ROOT/USACO_VERIFICATION.md 참고
+// ⚠️ USACO_PENDING (code fixed 2026-06-15, local-verified, USACO 재제출 필요)
+//   이전 상태 (2026-05-13): C++ 0/1 WA — sum of abs diffs (wrong algo).
+//   2026-06-15 수정: 올바른 알고리즘으로 교체 (diff array d[i]=pref-cur 를 0 으로
+//   양끝 패딩 후 '양의 점프(upward jumps)' 합 = 최소 +1/-1 구간 명령 수).
+//   로컬 검증: Python + C++ 모두 공식 샘플(cpid 1156: 5\n1 5 3 3 4\n1 2 2 2 1 → 5)
+//   정확히 일치. 엣지 케이스도 통과. USACO 재제출로 전 테스트 확정 필요.
+//   재제출 후 REPO_ROOT/USACO_VERIFICATION.md 갱신.
 
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
@@ -11,60 +14,46 @@ const A = "#f97316";
 
 const FULL_PY = [
   "N = int(input())",
-  "current = list(map(int, input().split()))",
-  "preferred = list(map(int, input().split()))",
+  "preferred = list(map(int, input().split()))  # p[i] = target temp",
+  "current = list(map(int, input().split()))    # t[i] = current temp",
   "",
-  "# Compute difference array",
+  "# d[i] = how much stall i must change (target - current)",
   "d = [preferred[i] - current[i] for i in range(N)]",
   "",
-  "# Answer = sum of positive increases + sum of negative decreases",
-  "# Think of it like painting: when diff goes up, new strokes needed",
+  "# A +1/-1 range command = one 'stroke' over a contiguous range.",
+  "# Pad d with 0 on both ends; the minimum number of commands equals",
+  "# the sum of all UPWARD jumps in the padded array.",
+  "ext = [0] + d + [0]",
   "ans = 0",
-  "prev = 0",
-  "for i in range(N):",
-  "    if d[i] > prev:",
-  "        ans += d[i] - prev  # need more positive strokes",
-  "    elif d[i] < prev:",
-  "        ans += prev - d[i]  # need more negative strokes (if sign flips)",
-  "    prev = d[i]",
-  "",
-  "# Handle the boundary at the end",
-  "ans += abs(prev)",
-  "",
-  "# Simpler equivalent: ans = sum(max(0, d[i]-d[i-1]) for increases)",
-  "#                       + sum(max(0, d[i-1]-d[i]) for decreases)",
-  "# with d[-1] = d[N] = 0",
-  "",
-  "# Even simpler:",
-  "d2 = [preferred[i] - current[i] for i in range(N)]",
-  "ans2 = abs(d2[0])",
-  "for i in range(1, N):",
-  "    ans2 += max(0, d2[i] - d2[i-1])  # positive jumps",
-  "    ans2 += max(0, d2[i-1] - d2[i])  # handled by abs at end? No.",
-  "# Correct approach:",
-  "ans3 = 0",
-  "ext = [0] + d2 + [0]",
   "for i in range(1, len(ext)):",
-  "    if ext[i] > ext[i-1]:",
-  "        ans3 += ext[i] - ext[i-1]",
+  "    if ext[i] > ext[i - 1]:",
+  "        ans += ext[i] - ext[i - 1]",
   "",
-  "print(ans3)",
+  "print(ans)",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
   "#include <vector>",
-  "#include <cmath>",
   "using namespace std;",
   "",
   "int main() {",
   "    int N; cin >> N;",
-  "    vector<int> cur(N), pref(N);",
-  "    for (auto& x : cur) cin >> x;",
-  "    for (auto& x : pref) cin >> x;",
-  "    long long total = 0;",
-  "    for (int i = 0; i < N; i++) total += abs(pref[i] - cur[i]);",
-  "    cout << total << \"\\n\";",
+  "    vector<long long> pref(N), cur(N);",
+  "    for (auto& x : pref) cin >> x;  // target temps",
+  "    for (auto& x : cur) cin >> x;   // current temps",
+  "",
+  "    // ext = [0, d[0], d[1], ..., d[N-1], 0] where d[i] = pref[i]-cur[i]",
+  "    // Answer = sum of upward jumps in ext.",
+  "    long long ans = 0;",
+  "    long long prev = 0;  // ext value to the left (starts at the 0 pad)",
+  "    for (int i = 0; i < N; i++) {",
+  "        long long cur_d = pref[i] - cur[i];",
+  "        if (cur_d > prev) ans += cur_d - prev;",
+  "        prev = cur_d;",
+  "    }",
+  "    // final step down to the trailing 0 pad never adds an upward jump",
+  "    cout << ans << \"\\n\";",
   "    return 0;",
   "}",
 ];
