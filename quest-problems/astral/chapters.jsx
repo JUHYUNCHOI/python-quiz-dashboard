@@ -1015,44 +1015,11 @@ export function makeAstralCh2(E, lang = "py") {
             </div>
           </div>
 
-          {/* When to use + pros/cons */}
-          <div style={{ background: "#fafaf9", border: "2px solid #d6d3d1", borderRadius: 10, padding: "10px 14px", marginBottom: 12 }}>
-            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#44403c", marginBottom: 7 }}>
-              🤔 {t(E, "When is greedy good — and when is it risky?", "그리디는 언제 좋고, 언제 위험할까?")}
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 8 }}>
-              <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8, padding: "7px 10px" }}>
-                <div style={{ fontSize: 11.5, fontWeight: 800, color: "#14532d", marginBottom: 3 }}>👍 {t(E,"Good","장점")}</div>
-                <div style={{ fontSize: 11, color: "#166534", lineHeight: 1.5 }}>
-                  {t(E,"Fast and the code is short — just pick the best-looking choice right now.","빠르고 코드가 짧아요 — 그냥 '지금 제일 좋아 보이는 것'만 고르면 되니까.")}
-                </div>
-              </div>
-              <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 8, padding: "7px 10px" }}>
-                <div style={{ fontSize: 11.5, fontWeight: 800, color: "#991b1b", marginBottom: 3 }}>👎 {t(E,"Risk","단점")}</div>
-                <div style={{ fontSize: 11, color: "#b91c1c", lineHeight: 1.5 }}>
-                  {t(E,"Looks only at now, so it's sometimes wrong — good now can mean a loss later.","눈앞만 봐서 가끔 틀려요 — 지금 좋아 보여도 나중에 손해일 수 있어요.")}
-                </div>
-              </div>
-            </div>
-            <div style={{ fontSize: 11.5, color: "#44403c", lineHeight: 1.6, background: "#fffbeb", border: "1.5px solid #fde68a", borderRadius: 7, padding: "7px 10px" }}>
-              {t(E,
-                "Use it when 'pick the best each step' is guaranteed to give the best total (like making change). So with greedy you must always ask: 'Is this really always correct?'",
-                "✅ 언제 써요? '매 순간 제일 좋은 걸 고르면 전체도 최선'인 게 확실할 때만 (거스름돈처럼!). 그래서 그리디는 항상 '이게 정말 맞나?' 확인이 필요해요.")}
-            </div>
-            <a
-              href="/algo/greedy"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 5, marginTop: 9,
-                fontSize: 11.5, fontWeight: 700, color: "#7c3aed",
-                background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 7,
-                padding: "5px 11px", textDecoration: "none",
-              }}
-            >
-              {t(E, "Still curious? Learn greedy in depth", "그리디가 더 궁금하면 → 그리디 알고리즘 제대로 배우기")}
-              <span style={{ fontSize: 10, opacity: 0.7 }}>{t(E, "(new tab) ↗", "(새 탭) ↗")}</span>
-            </a>
+          {/* fast-but-sometimes-wrong — one line (teaser for next slide) */}
+          <div style={{ fontSize: 12, color: "#44403c", lineHeight: 1.6, background: "#fafaf9", border: "1.5px solid #d6d3d1", borderRadius: 8, padding: "8px 12px", marginBottom: 12 }}>
+            ⚡ {t(E,
+              "Fast and short to code — but it only looks at NOW, so it can be wrong. (We'll see that next. 👀)",
+              "⚡ 빠르고 코드도 짧아요 — 근데 눈앞만 봐서 가끔 틀려요. (다음 슬라이드에서 봐요 👀)")}
           </div>
 
           {/* In this problem */}
@@ -1161,23 +1128,8 @@ export function makeAstralCh2(E, lang = "py") {
           }}>
             🔑 <b>{t(E, "Why backward? In one line:", "왜 거꾸로? 한 줄로:")}</b>{" "}
             {t(E,
-              "B = forced (the cell before it MUST hold a star). G = a choice. Settle the forced ones first — and they point backward — so sweep from the end.",
-              "B = 강제 (앞 칸에 별이 반드시 있어야 함). G = 선택. 강제부터 먼저 정한다 — 그리고 그건 뒤를 가리킨다 — 그러니 끝에서부터 훑는다.")}
-            <div style={{
-              marginTop: 9, paddingTop: 9, borderTop: "1px dashed #fbbf24", fontSize: 11.5, lineHeight: 1.6,
-            }}>
-              {t(E,
-                "B is FORCED: a B has a star in BOTH photos, so its photo-2 star can only have arrived from the cell before it — that cell is FORCED to hold an original star. Zero choice.",
-                "B 는 강제: B 는 두 사진 모두 별이 있어요. 그러니 사진-2 별은 앞 칸에서 온 것일 수밖에 없어요 — 그 앞 칸은 원본 별을 반드시 가져야 해요. 선택지 0.")}
-              <br/>
-              {t(E,
-                "G is a CHOICE: a G has a star in only ONE photo, so it could be its own original star (that later vanishes), OR a star that slid in from the cell before it. Either works.",
-                "G 는 선택: G 는 한 사진에만 별이 있어요. 그러니 자기 원본 별일 수도 (나중에 사라짐), 앞 칸에서 미끄러져 온 별일 수도. 둘 다 OK.")}
-              <br/>
-              {t(E,
-                "So fix the no-choice cells (B) first. Every B leans on the cell BEFORE it — so go from the end: you meet each B before the cell it leans on, pin the forced star, and never give it away to a G.",
-                "그러니 선택지 없는 칸(B)부터 정해요. 모든 B 는 자기 앞 칸에 기대요 — 그래서 끝에서부터 가요: B 를 그 앞 칸보다 먼저 만나 강제 별을 박아두고, 그걸 G 에게 빼앗기지 않아요.")}
-            </div>
+              "B = forced (the cell before it MUST hold a star). G = a choice. Settle the forced B's first — and they point backward — so sweep from the end. Watch it below. 👇",
+              "B = 강제 (앞 칸에 별이 반드시 있어야 함). G = 선택. 강제인 B 부터 정하는데 — 그건 뒤를 가리켜요 — 그러니 끝에서부터 훑어요. 아래에서 봐요 👇")}
           </div>
 
           {/* Interactive 2D-grid simulation — same orbit, walked end → start */}
