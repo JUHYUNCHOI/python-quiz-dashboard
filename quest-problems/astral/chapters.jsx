@@ -615,18 +615,6 @@ export function makeAstralCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #1</div>
           </div>
 
-          {/* 🎯 Mission box */}
-          <div style={{ background: "#eef2ff", border: "1.5px solid #4f46e5", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "#312e81", letterSpacing: 0.5, marginBottom: 4 }}>
-              🎯 {t(E, "Mission", "미션")}
-            </div>
-            <div style={{ fontSize: 13, color: "#312e81", lineHeight: 1.5 }}>
-              {t(E,
-                "Output the minimum stars in the original photo that match the composite — or -1 if no consistent original exists.",
-                "합친 그림과 맞아떨어지는 원본 사진의 별 가장 적은 개수를 답으로 — 맞는 원본이 없으면 -1.")}
-            </div>
-          </div>
-
           <div style={{ background: "#eef2ff", border: "1px solid #a5b4fc", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#312e81", marginBottom: 8 }}>
               📖 {t(E, "Problem", "문제")}
@@ -779,8 +767,8 @@ GGG`}
         "Now flip it around — instead of G, think about B. Some cell can NEVER be B. Which one?",
         "이번엔 반대로 — G 말고 B 를 생각해봐요. 어떤 칸은 절대 B 가 될 수 없어요. 어디일까요?"),
       question: t(E,
-        "Stars move right 1, down 1. For a cell to be B, a star must arrive from the cell just up-left of it. So what if that up-left cell is off the grid? Then that cell can NEVER be B. Which cell is it?",
-        "별은 오른쪽 1, 아래 1 칸씩 움직여요. 어떤 칸이 B 가 되려면, 바로 왼쪽 위 칸에서 별이 와 줘야 해요. 그럼 그 왼쪽 위 칸이 사진 밖이면? 그 칸은 절대 B 가 못 돼요. 어느 칸일까요?"),
+        "Stars move right 1, down 1. Which cell can NEVER be B?",
+        "별이 오른쪽 1, 아래 1 로 움직여요. 어느 칸이 절대 B 가 될 수 없을까요?"),
       options: [
         "(0, 0)",
         "(1, 1)",
