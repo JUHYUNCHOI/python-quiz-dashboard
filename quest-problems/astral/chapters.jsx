@@ -605,8 +605,8 @@ export function makeAstralCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You just watched one star move. Now let's turn that into rules. We see the COMPOSITE (the merged picture): W (empty in both photos), G (star in exactly one), B (star in both). Find the minimum stars in the original photo, or -1 if impossible.",
-        "방금 별 하나가 어떻게 움직이는지 봤어요. 이제 그걸 규칙으로 정리해요. 합성 (두 사진 합친 그림) 의 각 칸: W (둘 다 없음), G (한 사진에만), B (둘 다). 처음 사진에 별이 가장 적게 몇 개인지 답으로, 안 되면 -1."),
+        "You just saw one star move. Now let's nail down the exact rules. 👇",
+        "방금 별 하나가 움직이는 걸 봤죠. 이제 정확한 규칙을 정리해요 👇"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
