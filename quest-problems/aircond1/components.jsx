@@ -1,10 +1,12 @@
-// ⚠️ USACO_PENDING (code fixed 2026-06-15, local-verified, USACO 재제출 필요)
-//   이전 상태 (2026-05-13): C++ 0/1 WA — sum of abs diffs (wrong algo).
-//   2026-06-15 수정: 올바른 알고리즘으로 교체 (diff array d[i]=pref-cur 를 0 으로
-//   양끝 패딩 후 '양의 점프(upward jumps)' 합 = 최소 +1/-1 구간 명령 수).
-//   로컬 검증: Python + C++ 모두 공식 샘플(cpid 1156: 5\n1 5 3 3 4\n1 2 2 2 1 → 5)
-//   정확히 일치. 엣지 케이스도 통과. USACO 재제출로 전 테스트 확정 필요.
-//   재제출 후 REPO_ROOT/USACO_VERIFICATION.md 갱신.
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 10/10 on cpid=1156 (fixed missing trailing 0-pad)
+//   이전 상태 (2026-06-15): C++ 6/10 — '양의 점프(upward jumps)' 합 방식이
+//   trailing 0 패드를 빠뜨림 → d 가 음수로 끝나는 (오른쪽 끝 스톨을 낮춰야 하는)
+//   테스트에서 과소 계산되어 WA. 양끝 패딩 중 한쪽만 처리한 off-by-one.
+//   2026-06-16 수정: 공식 에디토리얼 공식으로 교체 — d[i]=pref-cur 를 0 으로
+//   양끝 패딩 후 인접 차의 절댓값 합 / 2 = 최소 +1/-1 구간 명령 수.
+//   로컬 검증: 공식 샘플(cpid 1156: 5\n1 5 3 3 4\n1 2 2 2 1 → 5) 일치,
+//   에디토리얼 레퍼런스와 랜덤 300케이스 전부 일치, 음수로 끝나는 엣지 통과.
+//   USACO 재제출로 전 테스트 확정 후 REPO_ROOT/USACO_VERIFICATION.md 갱신.
 
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
@@ -20,16 +22,15 @@ const FULL_PY = [
   "# d[i] = how much stall i must change (target - current)",
   "d = [preferred[i] - current[i] for i in range(N)]",
   "",
-  "# A +1/-1 range command = one 'stroke' over a contiguous range.",
-  "# Pad d with 0 on both ends; the minimum number of commands equals",
-  "# the sum of all UPWARD jumps in the padded array.",
+  "# A +1/-1 range command changes the total gap by at most 2, so the",
+  "# minimum number of commands equals the sum of |d[i]-d[i+1]| over the",
+  "# array padded with 0 on BOTH ends, divided by 2.",
   "ext = [0] + d + [0]",
-  "ans = 0",
+  "total = 0",
   "for i in range(1, len(ext)):",
-  "    if ext[i] > ext[i - 1]:",
-  "        ans += ext[i] - ext[i - 1]",
+  "    total += abs(ext[i] - ext[i - 1])",
   "",
-  "print(ans)",
+  "print(total // 2)",
 ];
 
 const FULL_CPP = [
@@ -37,23 +38,26 @@ const FULL_CPP = [
   "#include <vector>",
   "using namespace std;",
   "",
+  "long long llabs_(long long x) { return x < 0 ? -x : x; }",
+  "",
   "int main() {",
   "    int N; cin >> N;",
   "    vector<long long> pref(N), cur(N);",
   "    for (auto& x : pref) cin >> x;  // target temps",
   "    for (auto& x : cur) cin >> x;   // current temps",
   "",
-  "    // ext = [0, d[0], d[1], ..., d[N-1], 0] where d[i] = pref[i]-cur[i]",
-  "    // Answer = sum of upward jumps in ext.",
-  "    long long ans = 0;",
-  "    long long prev = 0;  // ext value to the left (starts at the 0 pad)",
+  "    // d[i] = pref[i] - cur[i]; pad d with 0 at BOTH ends.",
+  "    // A +1/-1 range command changes the total gap by at most 2, so",
+  "    // answer = (sum of |d[i]-d[i+1]| over the padded array) / 2.",
+  "    long long total = 0;",
+  "    long long prev = 0;  // leading 0 pad",
   "    for (int i = 0; i < N; i++) {",
   "        long long cur_d = pref[i] - cur[i];",
-  "        if (cur_d > prev) ans += cur_d - prev;",
+  "        total += llabs_(cur_d - prev);",
   "        prev = cur_d;",
   "    }",
-  "    // final step down to the trailing 0 pad never adds an upward jump",
-  "    cout << ans << \"\\n\";",
+  "    total += llabs_(0 - prev);  // trailing 0 pad (needed when d ends negative)",
+  "    cout << total / 2 << \"\\n\";",
   "    return 0;",
   "}",
 ];

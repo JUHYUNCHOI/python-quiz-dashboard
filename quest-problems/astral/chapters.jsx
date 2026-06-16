@@ -254,6 +254,177 @@ function OrbitGridStepSim({ rows, cols, orbit, stepData, caption, E }) {
   );
 }
 
+/* ── Sample 1 counter: walk WWB/BBB/GGG cell-by-cell, a speech bubble on the
+   active cell explains its letter, and the star count adds up to 7.
+   (Editable slide content — NOT a locked sim.) ── */
+function Sample1Counter({ E }) {
+  const grid = [["W", "W", "B"], ["B", "B", "B"], ["G", "G", "G"]];
+  const order = [];
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) order.push({ r, c, letter: grid[r][c] });
+  const last = order.length; // final summary step
+  const [si, setSi] = useState(0);
+  const idx = Math.max(0, Math.min(si, last));
+  const isFinal = idx === last;
+  const active = isFinal ? null : order[idx];
+  const upto = isFinal ? order.length - 1 : idx;
+  let stars = 0;
+  for (let k = 0; k <= upto; k++) if (order[k].letter !== "W") stars++;
+
+  const S = 48, GAP = 6, P = S + GAP, gridW = 3 * S + 2 * GAP;
+  const letterColor = (L) => L === "W" ? "#94a3b8" : L === "G" ? "#6366f1" : "#1e293b";
+  const meaning = (L) => L === "W"
+    ? t(E, "W = empty in both photos → 0 stars", "W = 두 사진 다 비어 → 별 0개")
+    : L === "G"
+    ? t(E, "G = star in ONE photo → a star that LEFT → +1", "G = 한 사진에만 → 사라진 별 → +1")
+    : t(E, "B = star in BOTH → a star that STAYED → +1", "B = 두 사진 다 → 그대로 있던 별 → +1");
+
+  const btn = (disabled, label, onClick) => (
+    <button onClick={onClick} disabled={disabled} style={{
+      padding: "5px 16px", borderRadius: 7, border: "none", fontSize: 12, fontWeight: 700,
+      cursor: disabled ? "default" : "pointer",
+      background: disabled ? "#f1f5f9" : "#4f46e5", color: disabled ? "#94a3b8" : "#fff",
+    }}>{label}</button>
+  );
+
+  return (
+    <div style={{ padding: "4px 0" }}>
+      <div style={{ position: "relative", width: gridW + 16 + 188, maxWidth: "100%", height: 3 * P, margin: "0 auto 10px" }}>
+        {order.map((cell, i) => {
+          const isAct = !isFinal && i === idx;
+          const counted = i <= upto && cell.letter !== "W";
+          return (
+            <div key={i} style={{
+              position: "absolute", left: cell.c * P, top: cell.r * P, width: S, height: S,
+              borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+              fontFamily: "'JetBrains Mono',monospace", fontSize: 19, fontWeight: 800,
+              color: isAct ? "#fff" : letterColor(cell.letter),
+              background: isAct ? "#4f46e5" : (counted ? "#eef2ff" : "#f8fafc"),
+              border: `2.5px solid ${isAct ? "#4f46e5" : (counted ? "#a5b4fc" : "#e2e8f0")}`,
+              boxShadow: isAct ? "0 0 0 4px rgba(79,70,229,.25)" : "none",
+              transform: isAct ? "scale(1.08)" : "none", transition: "all .15s",
+            }}>
+              {cell.letter}
+              {counted && !isAct && (
+                <span style={{ position: "absolute", top: -9, right: -6, fontSize: 13, color: "#d97706" }}>★</span>
+              )}
+            </div>
+          );
+        })}
+        {!isFinal && (
+          <div style={{
+            position: "absolute", left: gridW + 18, top: active.r * P - 2, width: 168,
+            background: "#312e81", color: "#fff", borderRadius: 10, padding: "8px 11px",
+            fontSize: 12, lineHeight: 1.5, fontWeight: 600,
+          }}>
+            <div style={{
+              position: "absolute", left: -7, top: 15, width: 0, height: 0,
+              borderTop: "7px solid transparent", borderBottom: "7px solid transparent", borderRight: "8px solid #312e81",
+            }} />
+            {meaning(active.letter)}
+          </div>
+        )}
+        {isFinal && (
+          <div style={{
+            position: "absolute", left: gridW + 18, top: P, width: 168,
+            background: "#dcfce7", color: "#14532d", border: "1.5px solid #16a34a",
+            borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.5, fontWeight: 700,
+          }}>
+            {t(E, "All done! G ×3 + B ×4 = 7 stars.", "다 셌어요! G 3개 + B 4개 = 별 7개!")}
+          </div>
+        )}
+      </div>
+
+      <div style={{ textAlign: "center", marginBottom: 8, fontSize: 14, fontWeight: 800, color: "#4f46e5" }}>
+        ⭐ {t(E, "stars so far", "지금까지 별")}: {stars}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
+        {btn(idx === 0, E ? "◀ Prev" : "◀ 이전", () => setSi(Math.max(0, idx - 1)))}
+        <span style={{ fontSize: 11, color: "#64748b", minWidth: 44, textAlign: "center" }}>{idx + 1} / {last + 1}</span>
+        {btn(isFinal, E ? "Next ▶" : "다음 ▶", () => setSi(Math.min(last, idx + 1)))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Orbit walk: follow ONE star (right=1, down=2) cell by cell, bubble on the
+   active cell. (0,0) → (2,1) → off-grid. Editable slide content. ── */
+function OrbitWalk({ E }) {
+  const orbit = [{ r: 0, c: 0 }, { r: 2, c: 1 }];
+  const steps = [
+    { cell: orbit[0], vis: 1, bubble: t(E, "Start! One star sits at (0,0).", "여기서 시작! 별 하나가 (0,0)에 있어요.") },
+    { cell: orbit[1], vis: 2, bubble: t(E, "+right 1, +down 2 → (2,1). The SAME star moved here.", "+오른쪽1, +아래2 → (2,1). 같은 별이 여기로 옮겨왔어요.") },
+    { cell: null, off: true, vis: 2, bubble: t(E, "+right 1, +down 2 → (4,2) is OFF the grid! The star leaves — the orbit ends.", "+오른쪽1, +아래2 → (4,2)는 사진 밖! 별이 나가서 궤도 끝.") },
+    { cell: null, final: true, vis: 2, bubble: t(E, "This path is the ORBIT = (0,0) → (2,1). One star's trail.", "이 길이 '궤도' = (0,0) → (2,1). 같은 별 하나가 지나간 길!") },
+  ];
+  const [si, setSi] = useState(0);
+  const last = steps.length - 1;
+  const idx = Math.max(0, Math.min(si, last));
+  const cur = steps[idx];
+  const S = 40, GAP = 5, P = S + GAP, gridW = 4 * S + 3 * GAP;
+  const orbitIndexOf = (r, c) => orbit.findIndex(o => o.r === r && o.c === c);
+
+  const btn = (disabled, label, onClick) => (
+    <button onClick={onClick} disabled={disabled} style={{
+      padding: "5px 16px", borderRadius: 7, border: "none", fontSize: 12, fontWeight: 700,
+      cursor: disabled ? "default" : "pointer",
+      background: disabled ? "#f1f5f9" : "#4f46e5", color: disabled ? "#94a3b8" : "#fff",
+    }}>{label}</button>
+  );
+
+  return (
+    <div style={{ padding: "4px 0" }}>
+      <div style={{ position: "relative", width: gridW + 16 + 180, maxWidth: "100%", height: 4 * P + 14, margin: "0 auto 10px" }}>
+        {[0, 1, 2, 3].flatMap(r => [0, 1, 2, 3].map(c => {
+          const oi = orbitIndexOf(r, c);
+          const revealed = oi !== -1 && oi < cur.vis;
+          const isAct = cur.cell && cur.cell.r === r && cur.cell.c === c;
+          return (
+            <div key={`${r},${c}`} style={{
+              position: "absolute", left: c * P, top: r * P, width: S, height: S, borderRadius: 7,
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              background: isAct ? "#3b82f6" : revealed ? "#dbeafe" : "#f8fafc",
+              border: `2px solid ${isAct ? "#1e40af" : revealed ? "#3b82f6" : "#e2e8f0"}`,
+              boxShadow: isAct ? "0 0 0 4px rgba(59,130,246,.25)" : "none",
+              transform: isAct ? "scale(1.1)" : "none", transition: "all .15s",
+            }}>
+              <div style={{ fontSize: (isAct || revealed) ? 17 : 12, lineHeight: 1, color: isAct ? "#fff" : revealed ? "#2563eb" : "#e2e8f0" }}>
+                {(isAct || revealed) ? "★" : "·"}
+              </div>
+              {(isAct || revealed) && <div style={{ fontSize: 8, fontWeight: 700, color: isAct ? "#dbeafe" : "#93c5fd" }}>({r},{c})</div>}
+            </div>
+          );
+        }))}
+        {cur.off && (
+          <div style={{ position: "absolute", left: P, top: 4 * P - 6, fontSize: 11, fontWeight: 800, color: "#dc2626" }}>
+            ↓ (4,2) ✗
+          </div>
+        )}
+        <div style={{
+          position: "absolute", left: gridW + 16, top: cur.cell ? cur.cell.r * P : 0, width: 168,
+          background: cur.final ? "#dcfce7" : "#1e3a8a", color: cur.final ? "#14532d" : "#fff",
+          border: cur.final ? "1.5px solid #16a34a" : "none",
+          borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.5, fontWeight: 600,
+        }}>
+          {cur.cell && (
+            <div style={{
+              position: "absolute", left: -7, top: 15, width: 0, height: 0,
+              borderTop: "7px solid transparent", borderBottom: "7px solid transparent", borderRight: "8px solid #1e3a8a",
+            }} />
+          )}
+          {cur.bubble}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
+        {btn(idx === 0, E ? "◀ Prev" : "◀ 이전", () => setSi(Math.max(0, idx - 1)))}
+        <span style={{ fontSize: 11, color: "#64748b", minWidth: 44, textAlign: "center" }}>{idx + 1} / {steps.length}</span>
+        {btn(idx === last, E ? "Next ▶" : "다음 ▶", () => setSi(Math.min(last, idx + 1)))}
+      </div>
+    </div>
+  );
+}
+
 export function makeAstralCh1(E) {
   return [
     /* 1-0 — Hook: visual story first (before any formal text). */
@@ -283,8 +454,8 @@ export function makeAstralCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now the formal rules. We see the COMPOSITE (the merged picture): W (empty in both photos), G (star in exactly one), B (star in both). Find the minimum stars in the original photo, or -1 if impossible.",
-        "이제 정확한 규칙. 합성 (두 사진 합친 그림) 의 각 칸: W (둘 다 없음), G (한 사진에만), B (둘 다). 처음 사진에 별이 가장 적게 몇 개인지 답으로 써요, 안 되면 -1."),
+        "You just watched one star move. Now let's turn that into rules. We see the COMPOSITE (the merged picture): W (empty in both photos), G (star in exactly one), B (star in both). Find the minimum stars in the original photo, or -1 if impossible.",
+        "방금 별 하나가 어떻게 움직이는지 봤어요. 이제 그걸 규칙으로 정리해요. 합성 (두 사진 합친 그림) 의 각 칸: W (둘 다 없음), G (한 사진에만), B (둘 다). 처음 사진에 별이 가장 적게 몇 개인지 답으로, 안 되면 -1."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -350,8 +521,8 @@ export function makeAstralCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Sample 1: stars don't move at all (right=0, down=0). Each G is a star that disappeared, each B is a star that stayed. So min stars = (G count) + (B count) = 7.",
-        "샘플 1: 별이 아예 안 움직임 (right=0, down=0). G 는 사라진 별, B 는 그대로 있는 별. 별 가장 적게 = G 칸 수 + B 칸 수 = 7."),
+        "Now that we know the rules, let's start with the EASIEST case — what if stars don't move at all? (Sample 1: right=0, down=0.) Each G is a star that disappeared, each B is a star that stayed. So min stars = (G count) + (B count) = 7.",
+        "규칙을 알았으니, 제일 쉬운 경우부터 — 별이 아예 안 움직이면? (샘플 1: right=0, down=0.) G 는 사라진 별, B 는 그대로 있는 별. 별 가장 적게 = G 칸 수 + B 칸 수 = 7."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#4f46e5", textAlign: "center", marginBottom: 10 }}>
@@ -376,24 +547,15 @@ GGG`}
             </div>
           </div>
 
-          <div style={{ background: "#eef2ff", border: "1px solid #a5b4fc", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
-            <div style={{ fontWeight: 600, color: "#312e81", marginBottom: 6 }}>
-              🔍 {t(E, "Why so simple when stars don't move?", "별이 안 움직이면 왜 이렇게 간단할까?")}
+          <div style={{ background: "#eef2ff", border: "1px solid #a5b4fc", borderRadius: 10, padding: 12 }}>
+            <div style={{ fontWeight: 600, color: "#312e81", marginBottom: 4, fontSize: 12.5 }}>
+              🔍 {t(E, "Count the stars — one cell at a time", "별을 한 칸씩 세어봐요")}
             </div>
-            <div>
-              {t(E, "If a star doesn't move, photo 2 looks the SAME as photo 1. So:",
-                    "별이 안 움직이면 사진 2 가 사진 1 이랑 똑같아요. 그래서:")}
+            <div style={{ fontSize: 11.5, color: C.dim, marginBottom: 6 }}>
+              {t(E, "Stars don't move, so photo 2 = photo 1. Press 다음 ▶ and watch each cell.",
+                    "별이 안 움직이니 사진 2 = 사진 1. 다음 ▶ 누르며 칸을 하나씩 봐요.")}
             </div>
-            <div style={{ marginTop: 6, lineHeight: 1.7 }}>
-              • <b>W</b> = {t(E, "no star in either photo", "두 사진 다 비어")} → 0 stars<br/>
-              • <b>G</b> = {t(E, "star showed up in only ONE of the photos — must be a star that disappeared",
-                                "한 사진에만 보였음 → 사라진 별")} → 1 star<br/>
-              • <b>B</b> = {t(E, "star in both photos — star stayed", "두 사진 다 별 → 그대로 있던 별")} → 1 star
-            </div>
-            <div style={{ marginTop: 8, color: "#15803d", fontWeight: 700 }}>
-              {t(E, "So min stars = (G count) + (B count) = 3 + 4 = 7.",
-                    "그래서 별 가장 적게 = G 칸 수 + B 칸 수 = 3 + 4 = 7.")}
-            </div>
+            <Sample1Counter E={E} />
           </div>
         </div>),
     },
@@ -402,16 +564,10 @@ GGG`}
     {
       type: "reveal",
       narr: t(E,
-        "Look — corner cell (0,0) is G. Star moves: right 1, down 1. For a star to arrive HERE, it would have come from up 1, left 1 = (-1,-1). That's outside the grid — no star can ever arrive at (0,0).",
-        "봐요 — 모서리 칸 (0,0) 이 G. 별 이동: 오른쪽 1, 아래 1. 별이 여기로 들어오려면 위 1, 왼쪽 1 = (-1,-1) 에서 와야 해요. 근데 그건 사진 밖. 그래서 (0,0) 에 별이 들어올 길 자체가 없어요."),
+        "Easy case (no movement) done. Now if stars DO move, G gets tricky. The corner (0,0) is G — but if movement is right 1, down 1, a star would have to arrive from (-1,-1). That's outside the grid — no star can ever arrive at (0,0).",
+        "쉬운 경우(안 움직임)는 끝. 이번엔 별이 움직이면 G 가 까다로워져요. 모서리 칸 (0,0) 이 G 인데, 별 이동이 오른쪽 1·아래 1 이면 — 별이 여기로 들어오려면 (-1,-1) 에서 와야 해요. 근데 그건 사진 밖. 그래서 (0,0) 엔 별이 들어올 길이 없어요."),
       content: (
         <div style={{ padding: 16 }}>
-          {/* Bridge: Sample 1 was easy (no move). Now stars move → G becomes ambiguous. */}
-          <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "9px 13px", marginBottom: 12, fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
-            💡 {t(E,
-              "Sample 1 was easy because stars didn't move — a G could only be a star that left. Now stars MOVE, and that makes G tricky: a G could be a star that left, OR a star that slid in from another cell.",
-              "Sample 1은 별이 안 움직여서 쉬웠어요 — G는 '떠난 별'일 수밖에 없었거든요. 이제 별이 움직이면 G가 까다로워져요: G는 '떠난 별'일 수도, '옆 칸에서 슬쩍 들어온 별'일 수도 있어요.")}
-          </div>
           <div style={{ textAlign: "center", marginBottom: 12 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: "#4f46e5" }}>
               📍 {t(E, "Corner G — predecessor off-grid", "모서리 G — 이전 칸 사진 밖")}
@@ -537,149 +693,13 @@ GGG`}
         "맞아요! 사진 밖에서 별이 들어올 수가 없으니까 — 가능한 건 처음부터 별이 있었다가 떠난 경우 뿐이에요."),
     },
 
-    /* 1-2.5 — Algorithm sim FIRST: see the whole picture (moved from Ch2) */
-    {
-      type: "reveal",
-      narr: t(E,
-        "This sim DRAWS ★ on cells where stars exist — that's the answer we're computing. Cells on the SAME line (the line a star travels along) share a background color = one star's path. Different lines don't interact, so we can solve each line alone. ▶ Press start.",
-        "이 시뮬은 별이 있는 칸에 ★ 를 그려줘요 — 그게 우리가 구하려는 답. 한 별이 지나는 같은 궤도 위 칸들은 배경 색도 같음 = 한 별의 길. 궤도끼리 서로 영향 X → 한 궤도씩 따로 풀 수 있어요. ▶ 시작 눌러봐요."),
-      content: (<AstralAlgoTrace E={E} />),
-    },
-
-    /* 1-2.6 — Visual summary: 5 scenes (W, G×2, B×2) using actual cell graphics */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Five possible scenes — one peek and you know.",
-        "다섯 가지 장면. 한번 보면 머리에 들어와."),
-      content: (() => {
-        // Reusable mini cell graphic — same look as the sim
-        const Cell = ({ letter, hasStar, outside, dim, label }) => (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-            <div style={{
-              width: 46, height: 46, borderRadius: 7,
-              background: outside ? "transparent" : (dim ? "#f1f5f9" : "#fff"),
-              border: outside ? "2px dashed #cbd5e1" : `2px solid ${letter === "B" ? "#1e293b" : letter === "G" ? "#a78bfa" : "#cbd5e1"}`,
-              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-              fontFamily: "'JetBrains Mono',monospace",
-            }}>
-              {outside ? (
-                <div style={{ fontSize: 9, color: "#94a3b8", fontWeight: 700 }}>{t(E, "off-grid", "밖")}</div>
-              ) : (
-                <>
-                  {hasStar && <div style={{ fontSize: 18, lineHeight: 1, color: "#d97706", fontWeight: 900 }}>★</div>}
-                  {!hasStar && letter && <div style={{ fontSize: 14, fontWeight: 800, color: dim ? "#94a3b8" : "#475569", lineHeight: 1 }}>{letter}</div>}
-                  {!hasStar && !letter && <div style={{ fontSize: 14, color: "#cbd5e1" }}>·</div>}
-                </>
-              )}
-            </div>
-            {label && <div style={{ fontSize: 9.5, color: "#64748b", fontWeight: 600 }}>{label}</div>}
-          </div>
-        );
-
-        const Arrow = () => (
-          <div style={{ fontSize: 18, color: "#94a3b8", margin: "0 4px", marginTop: -10 }}>↖</div>
-        );
-
-        const SceneRow = ({ predCell, currentCell, verdict, verdictColor, bg, border }) => (
-          <div style={{
-            display: "flex", alignItems: "center", gap: 8,
-            background: bg, border: `2px solid ${border}`, borderRadius: 10,
-            padding: "8px 12px",
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 2, minWidth: 130 }}>
-              {predCell}
-              <Arrow />
-              {currentCell}
-            </div>
-            <div style={{ fontSize: 12.5, fontWeight: 800, color: verdictColor, flex: 1, lineHeight: 1.35 }}>
-              {verdict}
-            </div>
-          </div>
-        );
-
-        return (
-          <div style={{ display: "flex", flexDirection: "column", gap: 7, padding: "0 4px" }}>
-            {/* W scene — just one cell, no trace */}
-            <div style={{
-              display: "flex", alignItems: "center", gap: 8,
-              background: "#f8fafc", border: "2px solid #cbd5e1", borderRadius: 10,
-              padding: "8px 12px",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", minWidth: 130, paddingLeft: 78 }}>
-                <Cell letter="W" hasStar={false} dim />
-              </div>
-              <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0f766e", flex: 1 }}>
-                {t(E, "W → just skip ✓", "W → 그냥 다음 ✓")}
-              </div>
-            </div>
-
-            {/* G scene 1 — predecessor has star → moved-in */}
-            <SceneRow
-              predCell={<Cell hasStar={true} label={t(E, "one step back", "거꾸로")} />}
-              currentCell={<Cell letter="G" hasStar={true} label={t(E, "here", "여기")} />}
-              verdict={t(E, "G — moved-in ✨", "G → 들어온 별 ✨")}
-              verdictColor="#7c3aed"
-              bg="#faf5ff"
-              border="#c4b5fd"
-            />
-
-            {/* G scene 2 — predecessor outside grid → original here */}
-            <SceneRow
-              predCell={<Cell outside label={t(E, "one step back", "거꾸로")} />}
-              currentCell={<Cell letter="G" hasStar={true} label={t(E, "here", "여기")} />}
-              verdict={t(E, "G — original here 🌱", "G → 원래 여기 별 🌱")}
-              verdictColor="#7c3aed"
-              bg="#faf5ff"
-              border="#c4b5fd"
-            />
-
-            {/* G scene 3 — predecessor inside grid but W (empty) → also original here */}
-            <SceneRow
-              predCell={<Cell letter="W" hasStar={false} dim label={t(E, "one step back", "거꾸로")} />}
-              currentCell={<Cell letter="G" hasStar={true} label={t(E, "here", "여기")} />}
-              verdict={t(E, "G — also original here 🌱", "G → 똑같이 원래 여기 별 🌱")}
-              verdictColor="#7c3aed"
-              bg="#faf5ff"
-              border="#c4b5fd"
-            />
-
-            {/* B scene — both have star → OK */}
-            <SceneRow
-              predCell={<Cell hasStar={true} label={t(E, "one step back", "거꾸로")} />}
-              currentCell={<Cell letter="B" hasStar={true} label={t(E, "here", "여기")} />}
-              verdict={t(E, "B — both ★ ✓ OK", "B → 양쪽 다 별 ✓ OK")}
-              verdictColor="#16a34a"
-              bg="#f0fdf4"
-              border="#86efac"
-            />
-
-            {/* B scene invalid — pred outside grid → EMPTY */}
-            <SceneRow
-              predCell={<Cell outside label={t(E, "one step back", "거꾸로")} />}
-              currentCell={<Cell letter="B" hasStar={true} label={t(E, "here", "여기")} />}
-              verdict={t(E, "B — pred ★ missing ❌", "B → 거꾸로 별 없음 ❌")}
-              verdictColor="#dc2626"
-              bg="#fef2f2"
-              border="#fca5a5"
-            />
-
-            {/* B scene invalid — pred W (empty) → also EMPTY */}
-            <SceneRow
-              predCell={<Cell letter="W" hasStar={false} dim label={t(E, "one step back", "거꾸로")} />}
-              currentCell={<Cell letter="B" hasStar={true} label={t(E, "here", "여기")} />}
-              verdict={t(E, "B — pred is W, still ★ missing ❌", "B → 거꾸로 W 라도 별 없음 ❌")}
-              verdictColor="#dc2626"
-              bg="#fef2f2"
-              border="#fca5a5"
-            />
-          </div>
-        );
-      })(),
-    },
+    /* 1-2.5 + 1-2.6 MOVED to Ch2 (2026-06-16): the full-algorithm sim and the
+       W/G/B rule summary belong after the methods + greedy win, not in the
+       problem chapter. They now live in Ch2 right after 2-3.06, before 2-G0. */
 
     /* 1-3.0 — s/in playground REMOVED (2026-06-01) — was redundant with the visual summary
        above (1-2.6). The s/in formal notation is reintroduced in Ch2 where it is actually used. */
+
 
     /* 1-3.1/2/3 — W/B/G individual quizzes REMOVED (2026-06-01) — redundant after the
        visual summary table (1-2.6). The application quizzes that follow (corner G, when -1,
@@ -691,6 +711,9 @@ GGG`}
     /* 1-4 — Quiz: when is -1? */
     {
       type: "quiz",
+      narr: t(E,
+        "Now flip it around — instead of G, think about B. Some cell can NEVER be B. Which one?",
+        "이번엔 반대로 — G 말고 B 를 생각해봐요. 어떤 칸은 절대 B 가 될 수 없어요. 어디일까요?"),
       question: t(E,
         "3×3 grid, stars move right 1 down 1. For a cell to be B, a star must arrive from its top-left neighbor (one step back). Which cell can NEVER be B?",
         "3×3 사진, 별 이동: 오른쪽 1·아래 1. B 가 되려면 왼쪽 위 칸 (한 칸 거꾸로) 에서 별이 와야 해요. 어느 칸은 그 자리가 사진 밖이라서 절대 B 가 될 수 없을까?"),
@@ -724,100 +747,18 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "So how do we count the MINIMUM original stars? The trick: figure out which cells came from the SAME single star — otherwise we'd count one star many times.\nA star shifts the same way every photo, so let's follow one star's path. Here: right=1, down=2 → (0,0) → (2,1) → (4,2) → off the grid. We call this path an orbit.",
-        "그럼 '원본 별 최소 개수'를 어떻게 셀까요? 비결은 — 어떤 칸들이 *같은 별 하나* 에서 나온 건지 알아내는 거예요 (안 그러면 별 하나를 여러 번 세니까).\n별은 사진마다 똑같은 규칙으로 움직이니, 별 하나가 지나는 길을 따라가 봐요. 예시: right=1, down=2 → (0,0) → (2,1) → (4,2) → 사진 밖. 이 길을 '궤도'라고 해요."),
+        "How do we count the FEWEST original stars? First figure out which cells are really the SAME single star — otherwise we'd count one star many times. A star shifts the same way every photo, so just follow its path. We call that path an ORBIT — follow one below.",
+        "원본 별을 가장 적게 세려면, 먼저 어떤 칸들이 사실 같은 별 하나인지 알아내야 해요 (안 그러면 한 별을 여러 번 세니까). 별은 매번 똑같이 움직이니까, 그 별이 지나간 길만 따라가면 돼요. 이 길을 '궤도'라고 해요 — 아래에서 하나 따라가 봐요."),
       content: (
         <div style={{ padding: 14 }}>
-          <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 5, textAlign: "center" }}>
-            {t(E, "Example: right=1, down=2 — trace one star", "예시: right=1, down=2 — 별 하나 따라가기")}
+          <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 2, textAlign: "center" }}>
+            {t(E, "Follow one star (right=1, down=2)", "별 하나 따라가기 (right=1, down=2)")}
           </div>
-          <div style={{ fontSize: 11, color: "#64748b", marginBottom: 12, textAlign: "center" }}>
-            {t(E, "right = move right →,  down = move down ↓", "right = 오른쪽으로 →,  down = 아래로 ↓")}
+          <div style={{ fontSize: 11, color: "#64748b", marginBottom: 10, textAlign: "center" }}>
+            {t(E, "Press 다음 ▶ — watch the star hop, cell by cell.", "다음 ▶ 누르며 별이 한 칸씩 뛰는 걸 봐요.")}
           </div>
 
-          {/* 4×4 grid — chain: (0,0) and (2,1) highlighted, arrow between them */}
-          {(() => {
-            // For right=1, down=2: star at (0,0) moves to (2,1), then off grid
-            const chain = new Set(["0,0", "2,1"]);
-            return (
-              <div>
-                <div style={{ display:"flex", flexDirection:"column", alignItems:"center", marginBottom:10 }}>
-                  {[0,1,2,3].map(r => (
-                    <div key={r} style={{ display:"flex", gap:5, marginBottom:5 }}>
-                      {[0,1,2,3].map(c => {
-                        const on = chain.has(`${r},${c}`);
-                        const isFirst = r===0 && c===0;
-                        const isSecond = r===2 && c===1;
-                        return (
-                          <div key={c} style={{
-                            width:52, height:52, borderRadius:8,
-                            background: on ? "#dbeafe" : "#f8fafc",
-                            border: on ? "2.5px solid #3b82f6" : "1.5px solid #e2e8f0",
-                            display:"flex", flexDirection:"column",
-                            alignItems:"center", justifyContent:"center", gap:1,
-                            position:"relative",
-                          }}>
-                            <div style={{ fontSize: on ? 20 : 14, color: on ? "#2563eb" : "#e2e8f0", lineHeight:1 }}>
-                              {on ? "★" : "·"}
-                            </div>
-                            {on && (
-                              <div style={{ fontSize:9, color:"#93c5fd", fontWeight:700 }}>({r},{c})</div>
-                            )}
-                            {isFirst && (
-                              <div style={{
-                                position:"absolute", top:-9, right:-9,
-                                background:"#2563eb", color:"#fff",
-                                fontSize:8, fontWeight:800, borderRadius:4, padding:"1px 4px",
-                              }}>START</div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Step-by-step calculation */}
-                <div style={{ background:"#eff6ff", border:"1.5px solid #93c5fd", borderRadius:9, padding:"10px 14px", marginBottom:10 }}>
-                  <div style={{ fontSize:12, fontWeight:800, color:"#1e3a8a", marginBottom:8 }}>
-                    {t(E, "How to calculate next position:", "다음 칸 계산 방법:")}
-                  </div>
-                  {[
-                    {
-                      from:"(0,0)", calc: t(E,"row 0+2=2, col 0+1=1","행 0+2=2, 열 0+1=1"), to:"(2,1)", ok:true,
-                    },
-                    {
-                      from:"(2,1)", calc: t(E,"row 2+2=4, col 1+1=2","행 2+2=4, 열 1+1=2"), to: t(E,"(4,2) off grid → chain ends","(4,2) 밖 → 여기서 궤도 끝"), ok:false,
-                    },
-                  ].map((step,i) => (
-                    <div key={i} style={{
-                      display:"flex", alignItems:"center", gap:8, marginBottom: i===0 ? 6:0,
-                      fontFamily:"monospace", fontSize:12,
-                    }}>
-                      <span style={{
-                        background:"#dbeafe", border:"2px solid #3b82f6", borderRadius:6,
-                        padding:"4px 9px", fontWeight:800, color:"#1e40af",
-                      }}>{step.from}</span>
-                      <span style={{ color:"#64748b", fontSize:11 }}>+right=1, +down=2</span>
-                      <span style={{ color:"#94a3b8" }}>→</span>
-                      <span style={{
-                        background: step.ok ? "#dbeafe" : "#f1f5f9",
-                        border: `2px solid ${step.ok ? "#3b82f6" : "#cbd5e1"}`,
-                        borderRadius:6, padding:"4px 9px", fontWeight:800,
-                        color: step.ok ? "#1e40af" : "#64748b",
-                      }}>{step.to}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div style={{ fontSize:12, color:"#374151", textAlign:"center", lineHeight:1.7 }}>
-                  {t(E,
-                    "Chain = [(0,0) → (2,1)]. Only 2 cells — that's just where the orbit ends. (A star going off-grid simply vanishes; it doesn't affect the answer.)",
-                    "궤도 = [(0,0) → (2,1)]. 2칸짜리 궤도예요 — 밖으로 나가면 그냥 거기서 궤도가 끝나는 것. (나간 별은 사라질 뿐, 답 계산엔 안 들어가요.)")}
-                </div>
-              </div>
-            );
-          })()}
+          <OrbitWalk E={E} />
         </div>
       ),
     },
@@ -1233,6 +1174,147 @@ export function makeAstralCh2(E, lang = "py") {
           ]} />
         </div>
       ),
+    },
+
+    /* 1-2.5 — Algorithm sim FIRST: see the whole picture (moved from Ch1 2026-06-16) */
+    {
+      type: "reveal",
+      narr: t(E,
+        "This sim DRAWS ★ on cells where stars exist — that's the answer we're computing. Cells on the SAME line (the line a star travels along) share a background color = one star's path. Different lines don't interact, so we can solve each line alone. ▶ Press start.",
+        "이 시뮬은 별이 있는 칸에 ★ 를 그려줘요 — 그게 우리가 구하려는 답. 한 별이 지나는 같은 궤도 위 칸들은 배경 색도 같음 = 한 별의 길. 궤도끼리 서로 영향 X → 한 궤도씩 따로 풀 수 있어요. ▶ 시작 눌러봐요."),
+      content: (<AstralAlgoTrace E={E} />),
+    },
+
+    /* 1-2.6 — Visual summary: 5 scenes (W, G×2, B×2) using actual cell graphics (moved from Ch1 2026-06-16) */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Five possible scenes — one peek and you know.",
+        "다섯 가지 장면. 한번 보면 머리에 들어와."),
+      content: (() => {
+        // Reusable mini cell graphic — same look as the sim
+        const Cell = ({ letter, hasStar, outside, dim, label }) => (
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+            <div style={{
+              width: 46, height: 46, borderRadius: 7,
+              background: outside ? "transparent" : (dim ? "#f1f5f9" : "#fff"),
+              border: outside ? "2px dashed #cbd5e1" : `2px solid ${letter === "B" ? "#1e293b" : letter === "G" ? "#a78bfa" : "#cbd5e1"}`,
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              fontFamily: "'JetBrains Mono',monospace",
+            }}>
+              {outside ? (
+                <div style={{ fontSize: 9, color: "#94a3b8", fontWeight: 700 }}>{t(E, "off-grid", "밖")}</div>
+              ) : (
+                <>
+                  {hasStar && <div style={{ fontSize: 18, lineHeight: 1, color: "#d97706", fontWeight: 900 }}>★</div>}
+                  {!hasStar && letter && <div style={{ fontSize: 14, fontWeight: 800, color: dim ? "#94a3b8" : "#475569", lineHeight: 1 }}>{letter}</div>}
+                  {!hasStar && !letter && <div style={{ fontSize: 14, color: "#cbd5e1" }}>·</div>}
+                </>
+              )}
+            </div>
+            {label && <div style={{ fontSize: 9.5, color: "#64748b", fontWeight: 600 }}>{label}</div>}
+          </div>
+        );
+
+        const Arrow = () => (
+          <div style={{ fontSize: 18, color: "#94a3b8", margin: "0 4px", marginTop: -10 }}>↖</div>
+        );
+
+        const SceneRow = ({ predCell, currentCell, verdict, verdictColor, bg, border }) => (
+          <div style={{
+            display: "flex", alignItems: "center", gap: 8,
+            background: bg, border: `2px solid ${border}`, borderRadius: 10,
+            padding: "8px 12px",
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 2, minWidth: 130 }}>
+              {predCell}
+              <Arrow />
+              {currentCell}
+            </div>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: verdictColor, flex: 1, lineHeight: 1.35 }}>
+              {verdict}
+            </div>
+          </div>
+        );
+
+        return (
+          <div style={{ display: "flex", flexDirection: "column", gap: 7, padding: "0 4px" }}>
+            {/* W scene — just one cell, no trace */}
+            <div style={{
+              display: "flex", alignItems: "center", gap: 8,
+              background: "#f8fafc", border: "2px solid #cbd5e1", borderRadius: 10,
+              padding: "8px 12px",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", minWidth: 130, paddingLeft: 78 }}>
+                <Cell letter="W" hasStar={false} dim />
+              </div>
+              <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0f766e", flex: 1 }}>
+                {t(E, "W → just skip ✓", "W → 그냥 다음 ✓")}
+              </div>
+            </div>
+
+            {/* G scene 1 — predecessor has star → moved-in */}
+            <SceneRow
+              predCell={<Cell hasStar={true} label={t(E, "one step back", "거꾸로")} />}
+              currentCell={<Cell letter="G" hasStar={true} label={t(E, "here", "여기")} />}
+              verdict={t(E, "G — moved-in ✨", "G → 들어온 별 ✨")}
+              verdictColor="#7c3aed"
+              bg="#faf5ff"
+              border="#c4b5fd"
+            />
+
+            {/* G scene 2 — predecessor outside grid → original here */}
+            <SceneRow
+              predCell={<Cell outside label={t(E, "one step back", "거꾸로")} />}
+              currentCell={<Cell letter="G" hasStar={true} label={t(E, "here", "여기")} />}
+              verdict={t(E, "G — original here 🌱", "G → 원래 여기 별 🌱")}
+              verdictColor="#7c3aed"
+              bg="#faf5ff"
+              border="#c4b5fd"
+            />
+
+            {/* G scene 3 — predecessor inside grid but W (empty) → also original here */}
+            <SceneRow
+              predCell={<Cell letter="W" hasStar={false} dim label={t(E, "one step back", "거꾸로")} />}
+              currentCell={<Cell letter="G" hasStar={true} label={t(E, "here", "여기")} />}
+              verdict={t(E, "G — also original here 🌱", "G → 똑같이 원래 여기 별 🌱")}
+              verdictColor="#7c3aed"
+              bg="#faf5ff"
+              border="#c4b5fd"
+            />
+
+            {/* B scene — both have star → OK */}
+            <SceneRow
+              predCell={<Cell hasStar={true} label={t(E, "one step back", "거꾸로")} />}
+              currentCell={<Cell letter="B" hasStar={true} label={t(E, "here", "여기")} />}
+              verdict={t(E, "B — both ★ ✓ OK", "B → 양쪽 다 별 ✓ OK")}
+              verdictColor="#16a34a"
+              bg="#f0fdf4"
+              border="#86efac"
+            />
+
+            {/* B scene invalid — pred outside grid → EMPTY */}
+            <SceneRow
+              predCell={<Cell outside label={t(E, "one step back", "거꾸로")} />}
+              currentCell={<Cell letter="B" hasStar={true} label={t(E, "here", "여기")} />}
+              verdict={t(E, "B — pred ★ missing ❌", "B → 거꾸로 별 없음 ❌")}
+              verdictColor="#dc2626"
+              bg="#fef2f2"
+              border="#fca5a5"
+            />
+
+            {/* B scene invalid — pred W (empty) → also EMPTY */}
+            <SceneRow
+              predCell={<Cell letter="W" hasStar={false} dim label={t(E, "one step back", "거꾸로")} />}
+              currentCell={<Cell letter="B" hasStar={true} label={t(E, "here", "여기")} />}
+              verdict={t(E, "B — pred is W, still ★ missing ❌", "B → 거꾸로 W 라도 별 없음 ❌")}
+              verdictColor="#dc2626"
+              bg="#fef2f2"
+              border="#fca5a5"
+            />
+          </div>
+        );
+      })(),
     },
 
     /* ════════════════════════════════════════════════════════════════

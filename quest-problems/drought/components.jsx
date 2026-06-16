@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 15/15 on cpid=1181
 // 🔒 USACO_VERIFIED (2026-05-13)
 //   Python: 0/1 (WA - py expects single case, problem has T test cases)
 //   C++:    0/1 (WA - single test case (problem has T tests))

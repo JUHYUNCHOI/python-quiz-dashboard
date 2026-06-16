@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 11/11 on cpid=1203
 // 🔒 USACO_VERIFIED (2026-06-15)
 //   Python: PASS (local — total=0 edge case fixed; matches cpid=1203 sample 3\n2\n0)
 //   C++:    PASS (local — total=0 edge case fixed; matches cpid=1203 sample 3\n2\n0)

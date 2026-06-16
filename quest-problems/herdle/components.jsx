@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 11/11 on cpid=1179
 // 🔒 USACO_VERIFIED (2026-06-15)
 //   Python: PASS (local — matches cpid=1179 sample1 1\n1 and sample2 1\n2)
 //   C++:    PASS (local — matches cpid=1179 sample1 1\n1 and sample2 1\n2)

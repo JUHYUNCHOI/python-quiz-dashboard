@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 11/11 on cpid=1084
 // rewritten 2026-06-15 — was wrong-problem (read a G/H string and pair
 //   breeds); now solves the REAL USACO 2021 Jan Bronze #2 "Even More Odd
 //   Photos" (cpid 1084): read N integer breed IDs, max groups whose sums

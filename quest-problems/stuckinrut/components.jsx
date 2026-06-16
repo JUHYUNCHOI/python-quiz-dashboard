@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 10/10 on cpid=1061
 // 🔒 USACO_VERIFIED (corrected 2026-06-14)
 //   Fixed: C++ was a placeholder that always printed "INFINITY".
 //          Python's blocker check was not time-aware (wrong on chained collisions).

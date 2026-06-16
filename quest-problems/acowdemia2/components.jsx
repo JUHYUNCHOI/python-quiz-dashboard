@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 10/10 on cpid=1132
 // ⚠️ REWRITTEN 2026-06-15 — 이전 quest 는 made-up 문제(저자 ID 정수, 개수 출력)였음.
 //   실제 Acowdemia II (2021 US Open Bronze #2, cpid 1132) 로 재작성.
 //   샘플 1·2 로컬 통과 (C++ g++ -std=c++17 / Python3, exact match).
