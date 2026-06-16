@@ -1662,13 +1662,13 @@ export function makeAstralCh2(E, lang = "py") {
             </div>
             <div style={{ fontSize: 12, color: "#14532d", lineHeight: 1.7 }}>
               {t(E,
-                "At every cell, there's only ONE thing we don't know yet: 'is a star arriving here from the previous cell?' Yes or No. So we carry TWO numbers side by side:",
-                "각 칸에서 모르는 게 딱 하나예요: '앞 칸 별이 여기로 이동해 오고 있나?' 예/아니오. 그래서 두 숫자를 나란히 들고 가요:")}
+                "At each cell only ONE thing is unknown — is a star arriving here from the cell before? We can't tell which case is better until the end, so we carry the answer for BOTH cases:",
+                "각 칸에서 모르는 건 딱 하나 — 앞 칸 별이 여기로 와 있나? 끝까지 가 봐야 어느 쪽이 이득인지 알아요. 그래서 두 경우의 답을 둘 다 들고 가요:")}
             </div>
             <div style={{ display: "flex", gap: 8, marginTop: 7, flexWrap: "wrap" }}>
               {[
-                { label: t(E, "No star arriving →", "별 안 왔을 때 →"), desc: t(E, "min stars so far", "지금까지 별 수 최솟값"), bg: "#dcfce7", bd: "#16a34a", tc: "#14532d" },
-                { label: t(E, "Star IS arriving →", "별 왔을 때 →"), desc: t(E, "min stars so far", "지금까지 별 수 최솟값"), bg: "#dbeafe", bd: "#3b82f6", tc: "#1e40af" },
+                { label: t(E, "① If NO star arrives", "① 별이 안 왔다면"), desc: t(E, "min stars up to here", "여기까지 별 최소 개수"), bg: "#dcfce7", bd: "#16a34a", tc: "#14532d" },
+                { label: t(E, "② If a star DOES arrive", "② 별이 왔다면"), desc: t(E, "min stars up to here", "여기까지 별 최소 개수"), bg: "#dbeafe", bd: "#3b82f6", tc: "#1e40af" },
               ].map((item, i) => (
                 <div key={i} style={{ background: item.bg, border: `1.5px solid ${item.bd}`, borderRadius: 7, padding: "6px 10px", flex: 1, minWidth: 110 }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: item.tc }}>{item.label}</div>
@@ -1678,8 +1678,8 @@ export function makeAstralCh2(E, lang = "py") {
             </div>
             <div style={{ fontSize: 11.5, color: "#14532d", marginTop: 7, lineHeight: 1.6 }}>
               {t(E,
-                "At the last cell, just pick the smaller of the two. Done!",
-                "마지막 칸에서 두 숫자 중 작은 걸 고르면 그게 정답이에요!")}
+                "At the last cell, pick the smaller of the two = the answer! ⭐",
+                "끝 칸에서 둘 중 작은 걸 골라요 = 정답! ⭐")}
             </div>
           </div>
           <div style={{
