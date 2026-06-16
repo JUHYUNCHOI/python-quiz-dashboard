@@ -425,6 +425,74 @@ function OrbitWalk({ E }) {
   );
 }
 
+/* ── Predecessor peek: a star at (2,2) → step back (up=down, left=right) → (1,1).
+   Shows "the cell a star came from" with a bubble. Editable slide content. ── */
+function PredecessorPeek({ E }) {
+  const steps = [
+    { focus: { r: 2, c: 2 }, pred: false, bubble: t(E, "In photo 2, a star sits at (2,2).", "사진 2 에서 별이 (2,2) 에 있어요.") },
+    { focus: { r: 1, c: 1 }, pred: true, bubble: t(E, "Step back the same move (up 1, left 1) → (1,1). The star came from here!", "한 칸 거꾸로 (위 1, 왼 1) → (1,1). 별은 여기서 왔어요!") },
+    { final: true, pred: true, bubble: t(E, "predecessor = (r − down, c − right) — the cell a star came from.", "직전 칸 = (r − down, c − right) — 별이 온 칸이에요.") },
+  ];
+  const [si, setSi] = useState(0);
+  const last = steps.length - 1;
+  const idx = Math.max(0, Math.min(si, last));
+  const cur = steps[idx];
+  const S = 46, GAP = 5, P = S + GAP, gridW = 3 * S + 2 * GAP;
+
+  const btn = (disabled, label, onClick) => (
+    <button onClick={onClick} disabled={disabled} style={{
+      padding: "5px 16px", borderRadius: 7, border: "none", fontSize: 12, fontWeight: 700,
+      cursor: disabled ? "default" : "pointer",
+      background: disabled ? "#f1f5f9" : "#4f46e5", color: disabled ? "#94a3b8" : "#fff",
+    }}>{label}</button>
+  );
+
+  return (
+    <div style={{ padding: "4px 0" }}>
+      <div style={{ position: "relative", width: gridW + 16 + 176, maxWidth: "100%", height: 3 * P, margin: "6px auto 10px" }}>
+        {[0, 1, 2].flatMap(r => [0, 1, 2].map(c => {
+          const isStar = r === 2 && c === 2;
+          const isPred = r === 1 && c === 1 && cur.pred;
+          const isAct = !cur.final && cur.focus.r === r && cur.focus.c === c;
+          return (
+            <div key={`${r},${c}`} style={{
+              position: "absolute", left: c * P, top: r * P, width: S, height: S, borderRadius: 8,
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              background: isAct ? "#4f46e5" : isPred ? "#fef9c3" : isStar ? "#eef2ff" : "#f8fafc",
+              border: `2px solid ${isAct ? "#4f46e5" : isPred ? "#facc15" : isStar ? "#a5b4fc" : "#e2e8f0"}`,
+              boxShadow: isAct ? "0 0 0 4px rgba(79,70,229,.25)" : "none",
+              transform: isAct ? "scale(1.08)" : "none", transition: "all .15s",
+            }}>
+              {isStar && <div style={{ fontSize: 19, color: isAct ? "#fff" : "#d97706", lineHeight: 1 }}>★</div>}
+              {isPred && !isStar && <div style={{ fontSize: 18, color: isAct ? "#fff" : "#a16207", lineHeight: 1 }}>↖</div>}
+              <div style={{ fontSize: 8, fontWeight: 700, color: isAct ? "#e0e7ff" : "#94a3b8" }}>({r},{c})</div>
+            </div>
+          );
+        }))}
+        <div style={{
+          position: "absolute", left: gridW + 16, top: cur.final ? P : cur.focus.r * P, width: 168,
+          background: cur.final ? "#dcfce7" : "#1e3a8a", color: cur.final ? "#14532d" : "#fff",
+          border: cur.final ? "1.5px solid #16a34a" : "none",
+          borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.5, fontWeight: 600,
+        }}>
+          {!cur.final && (
+            <div style={{
+              position: "absolute", left: -7, top: 15, width: 0, height: 0,
+              borderTop: "7px solid transparent", borderBottom: "7px solid transparent", borderRight: "8px solid #1e3a8a",
+            }} />
+          )}
+          {cur.bubble}
+        </div>
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
+        {btn(idx === 0, E ? "◀ Prev" : "◀ 이전", () => setSi(Math.max(0, idx - 1)))}
+        <span style={{ fontSize: 11, color: "#64748b", minWidth: 44, textAlign: "center" }}>{idx + 1} / {steps.length}</span>
+        {btn(idx === last, E ? "Next ▶" : "다음 ▶", () => setSi(Math.min(last, idx + 1)))}
+      </div>
+    </div>
+  );
+}
+
 export function makeAstralCh1(E) {
   return [
     /* 1-0 — Hook: visual story first (before any formal text). */
@@ -1327,33 +1395,16 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "That backward rule is the whole solution — let's turn it straight into code. The nice surprise: we don't even need to group cells into orbits first. We just sweep the WHOLE grid from the bottom-right corner to the top-left, and keep a set of cells that MUST hold an original star.\nFirst, one piece of vocabulary: 'the cell a star came FROM.' A star moves +down rows, +right cols each photo. So a star sitting at (r, c) in photo 2 must have started one step back: (r − down, c − right) — up by down, left by right. We'll call that cell the predecessor. Going backward by the same amount the star moved = the cell it came from.",
-        "방금 그 뒤→앞 규칙이 사실 풀이 전부예요 — 그대로 코드로 옮겨봐요. 놀라운 점: 칸을 궤도별로 묶을 필요도 없어요. 그냥 격자 전체를 오른쪽-아래 끝에서 왼쪽-위로 한 번 훑으면서, '원래 별이 꼭 있어야 하는 칸'만 set 에 모으면 돼요.\n먼저 용어 하나: '별이 온 칸'. 별은 사진마다 아래로 +down, 오른쪽으로 +right 만큼 움직여요. 그러니 사진 2 에서 (r, c) 에 있는 별은 한 칸 거꾸로 — (r − down, c − right), 즉 위로 down, 왼쪽으로 right — 에서 출발했어야 해요. 그 칸을 '직전 칸(predecessor)'이라 불러요. 별이 움직인 만큼 거꾸로 = 별이 온 칸."),
+        "That backward rule IS the whole solution — let's code it. Just one new word first: a star's predecessor — the cell it came from. Step back by the same move the star makes. Watch below, then see the rule.",
+        "방금 그 거꾸로 규칙이 풀이 전부예요 — 코드로 옮겨요. 새 용어 하나만: 별의 '직전 칸' = 별이 온 칸. 별이 움직인 만큼 거꾸로 가면 그 칸이에요. 아래에서 보고, 규칙을 봐요."),
       content: (
         <div style={{ padding: 14 }}>
-          {/* Concrete "predecessor = the cell a star came FROM" panel (down=1,right=1) */}
-          <div style={{
-            background: "#eef2ff", border: "1.5px solid #c7d2fe", borderRadius: 10,
-            padding: "11px 14px", marginBottom: 12,
-          }}>
-            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#3730a3", marginBottom: 7, textAlign: "center" }}>
+          {/* predecessor concept as a bubble walk */}
+          <div style={{ background: "#eef2ff", border: "1.5px solid #c7d2fe", borderRadius: 10, padding: "8px 12px", marginBottom: 12 }}>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#3730a3", marginBottom: 2, textAlign: "center" }}>
               📍 {t(E, "\"The cell a star came FROM\" (predecessor)", "\"별이 온 칸\" (직전 칸)")}
             </div>
-            <div style={{ fontSize: 11.5, color: "#3730a3", lineHeight: 1.6, marginBottom: 9 }}>
-              {t(E,
-                "A star moves +down, +right each photo. So to find where the star at (r, c) came from, step the SAME amount backward: up by down, left by right.",
-                "별은 사진마다 아래로 +down, 오른쪽으로 +right 움직여요. 그러니 (r, c) 의 별이 어디서 왔는지 알려면 똑같은 만큼 거꾸로: 위로 down, 왼쪽으로 right.")}
-            </div>
-            <div style={{
-              textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5,
-              color: "#1e1b4b", background: "#fff", border: "1px dashed #a5b4fc",
-              borderRadius: 8, padding: "8px 6px", lineHeight: 1.8,
-            }}>
-              {t(E, "predecessor(r, c) = (r − down, c − right)", "직전 칸(r, c) = (r − down, c − right)")}<br/>
-              <span style={{ color: "#6366f1" }}>
-                {t(E, "e.g. down=1, right=1:  star at (2,2) came from (1,1)", "예) down=1, right=1:  (2,2) 의 별은 (1,1) 에서 옴")}
-              </span>
-            </div>
+            <PredecessorPeek E={E} />
           </div>
 
           <div style={{
