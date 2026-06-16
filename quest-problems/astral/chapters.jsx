@@ -283,8 +283,8 @@ export function makeAstralCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now the formal rules. We see the COMPOSITE (the merged picture): W (empty in both photos), G (star in exactly one), B (star in both). Find the minimum stars in the original photo, or -1 if impossible.",
-        "이제 정확한 규칙. 합성 (두 사진 합친 그림) 의 각 칸: W (둘 다 없음), G (한 사진에만), B (둘 다). 처음 사진에 별이 가장 적게 몇 개인지 답으로 써요, 안 되면 -1."),
+        "You just watched one star move. Now let's turn that into rules. We see the COMPOSITE (the merged picture): W (empty in both photos), G (star in exactly one), B (star in both). Find the minimum stars in the original photo, or -1 if impossible.",
+        "방금 별 하나가 어떻게 움직이는지 봤어요. 이제 그걸 규칙으로 정리해요. 합성 (두 사진 합친 그림) 의 각 칸: W (둘 다 없음), G (한 사진에만), B (둘 다). 처음 사진에 별이 가장 적게 몇 개인지 답으로, 안 되면 -1."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -350,8 +350,8 @@ export function makeAstralCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Sample 1: stars don't move at all (right=0, down=0). Each G is a star that disappeared, each B is a star that stayed. So min stars = (G count) + (B count) = 7.",
-        "샘플 1: 별이 아예 안 움직임 (right=0, down=0). G 는 사라진 별, B 는 그대로 있는 별. 별 가장 적게 = G 칸 수 + B 칸 수 = 7."),
+        "Now that we know the rules, let's start with the EASIEST case — what if stars don't move at all? (Sample 1: right=0, down=0.) Each G is a star that disappeared, each B is a star that stayed. So min stars = (G count) + (B count) = 7.",
+        "규칙을 알았으니, 제일 쉬운 경우부터 — 별이 아예 안 움직이면? (샘플 1: right=0, down=0.) G 는 사라진 별, B 는 그대로 있는 별. 별 가장 적게 = G 칸 수 + B 칸 수 = 7."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#4f46e5", textAlign: "center", marginBottom: 10 }}>
@@ -402,8 +402,8 @@ GGG`}
     {
       type: "reveal",
       narr: t(E,
-        "Look — corner cell (0,0) is G. Star moves: right 1, down 1. For a star to arrive HERE, it would have come from up 1, left 1 = (-1,-1). That's outside the grid — no star can ever arrive at (0,0).",
-        "봐요 — 모서리 칸 (0,0) 이 G. 별 이동: 오른쪽 1, 아래 1. 별이 여기로 들어오려면 위 1, 왼쪽 1 = (-1,-1) 에서 와야 해요. 근데 그건 사진 밖. 그래서 (0,0) 에 별이 들어올 길 자체가 없어요."),
+        "Easy case (no movement) done. Now if stars DO move, G gets tricky. The corner (0,0) is G — but if movement is right 1, down 1, a star would have to arrive from (-1,-1). That's outside the grid — no star can ever arrive at (0,0).",
+        "쉬운 경우(안 움직임)는 끝. 이번엔 별이 움직이면 G 가 까다로워져요. 모서리 칸 (0,0) 이 G 인데, 별 이동이 오른쪽 1·아래 1 이면 — 별이 여기로 들어오려면 (-1,-1) 에서 와야 해요. 근데 그건 사진 밖. 그래서 (0,0) 엔 별이 들어올 길이 없어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 12 }}>
@@ -549,6 +549,9 @@ GGG`}
     /* 1-4 — Quiz: when is -1? */
     {
       type: "quiz",
+      narr: t(E,
+        "Now flip it around — instead of G, think about B. Some cell can NEVER be B. Which one?",
+        "이번엔 반대로 — G 말고 B 를 생각해봐요. 어떤 칸은 절대 B 가 될 수 없어요. 어디일까요?"),
       question: t(E,
         "3×3 grid, stars move right 1 down 1. For a cell to be B, a star must arrive from its top-left neighbor (one step back). Which cell can NEVER be B?",
         "3×3 사진, 별 이동: 오른쪽 1·아래 1. B 가 되려면 왼쪽 위 칸 (한 칸 거꾸로) 에서 별이 와야 해요. 어느 칸은 그 자리가 사진 밖이라서 절대 B 가 될 수 없을까?"),
