@@ -55,7 +55,7 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `logicalmoos` | Logical Moos | Open 2024 Bronze #1 | 🟡 8/14 (TLE 9-14, brute slice eval) | 🟡 8/22 (TLE - O(NQ) brute) |
 | `productivity` | Max Productivity | Feb 2024 Bronze #3 | ✅ 17/17 PASS | ✅ 17/17 PASS |
 | `exchange` | Milk Exchange | Feb 2024 Bronze #2 | 🟡 8/13 (TLE 9-13, brute simulation) | ✅ 16/16 PASS (re-submitted 2026-06-16 C++17, cpid=1396; rewrote to O(N) monotonic-chain, was brute TLE) |
-| `milkexchange` | Milk Exchange | Feb 2024 Bronze #2 | 🟡 8/13 (TLE 9-13, brute simulation) (same as exchange) | 🟡 8/14 (TLE 9-14, brute simulation) (same as exchange) |
+| `milkexchange` | Milk Exchange | Feb 2024 Bronze #2 | 🟡 8/13 (TLE 9-13, brute simulation) (FULL_PY still brute) | ✅ 16/16 PASS (re-submitted 2026-06-16 C++17, cpid=1396; O(N) monotonic-chain, same as exchange) |
 | `palindrome` | Palindrome Game | Feb 2024 Bronze #1 | 🟡 4/10 (TLE 5-10, O(S^2) DP per test case) | 🟡 6/13 (TLE 7-13, O(S^2) DP) |
 | `bacteria` | Balancing Bacteria | Jan 2024 Bronze #3 | ✅ 15/15 PASS | ✅ 15/15 PASS |
 | `cannonball` | Cannonball | Jan 2024 Bronze #2 | ✅ 20/20 PASS | ✅ 20/20 PASS |
