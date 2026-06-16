@@ -425,6 +425,89 @@ function OrbitWalk({ E }) {
   );
 }
 
+/* ── Corner-G walk: 4×4 (phantom (-1,-1) + real grid). Step through why a corner
+   G must be "a star that left" — bubble on the active cell. Editable content. ── */
+function CornerGWalk({ E }) {
+  const steps = [
+    { focus: "g", bubble: t(E, "The corner (0,0) is G.", "모서리 칸 (0,0) 이 G 예요.") },
+    { focus: "phantom", bubble: t(E, "To arrive at (0,0), a star must come from (-1,-1) — but that's OFF the grid! ❌", "(0,0) 으로 오려면 별이 (-1,-1) 에서 와야 해요 — 근데 사진 밖! ❌") },
+    { focus: "g", bubble: t(E, "So no star can arrive. Only ONE story is left: a star was HERE, then left.", "그래서 별이 못 들어와요. 가능한 건 딱 하나 — 원래 별이 여기 있다가 떠난 것.") },
+    { final: true, bubble: t(E, "(0,0) G = a star that left before photo 2 → count +1!", "(0,0) G = 사진 2 전에 떠난 별 → 별 +1!") },
+  ];
+  const [si, setSi] = useState(0);
+  const last = steps.length - 1;
+  const idx = Math.max(0, Math.min(si, last));
+  const cur = steps[idx];
+  const S = 44, GAP = 4, P = S + GAP, gridW = 4 * S + 3 * GAP;
+  const actDisp = cur.final ? null : (cur.focus === "phantom" ? { dr: 0, dc: 0 } : { dr: 1, dc: 1 });
+  const bubbleRow = actDisp ? actDisp.dr : 1;
+
+  const btn = (disabled, label, onClick) => (
+    <button onClick={onClick} disabled={disabled} style={{
+      padding: "5px 16px", borderRadius: 7, border: "none", fontSize: 12, fontWeight: 700,
+      cursor: disabled ? "default" : "pointer",
+      background: disabled ? "#f1f5f9" : "#4f46e5", color: disabled ? "#94a3b8" : "#fff",
+    }}>{label}</button>
+  );
+
+  return (
+    <div style={{ padding: "4px 0" }}>
+      <div style={{ position: "relative", width: gridW + 14 + 172, maxWidth: "100%", height: 4 * P, margin: "0 auto 10px" }}>
+        {[0, 1, 2, 3].flatMap(dr => [0, 1, 2, 3].map(dc => {
+          const isPhantom = dr === 0 && dc === 0;
+          const isReal = dr >= 1 && dc >= 1;
+          if (!isPhantom && !isReal) return null;
+          const R = dr - 1, C = dc - 1;
+          const isG = isReal && R === 0 && C === 0;
+          const isAct = actDisp && actDisp.dr === dr && actDisp.dc === dc;
+          return (
+            <div key={`${dr},${dc}`} style={{
+              position: "absolute", left: dc * P, top: dr * P, width: S, height: S, borderRadius: 6,
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              fontFamily: "'JetBrains Mono',monospace",
+              background: isPhantom ? "#fee2e2" : isAct ? "#4f46e5" : isG ? "#cbd5e1" : "#f8fafc",
+              border: isPhantom ? "2px dashed #dc2626" : `2px solid ${isAct ? "#4f46e5" : isG ? "#94a3b8" : "#e2e8f0"}`,
+              boxShadow: isAct ? "0 0 0 4px rgba(79,70,229,.25)" : "none",
+              transform: isAct ? "scale(1.06)" : "none", transition: "all .15s",
+            }}>
+              {isPhantom ? (
+                <>
+                  <div style={{ fontSize: 16, lineHeight: 1, color: "#991b1b" }}>❌</div>
+                  <div style={{ fontSize: 7.5, color: "#991b1b", fontWeight: 700 }}>(-1,-1)</div>
+                </>
+              ) : (
+                <>
+                  <div style={{ fontSize: isG ? 15 : 9, fontWeight: 800, color: isAct ? "#fff" : isG ? "#1e293b" : "#cbd5e1" }}>{isG ? "G" : "·"}</div>
+                  <div style={{ fontSize: 7.5, color: isAct ? "#e0e7ff" : "#94a3b8" }}>({R},{C})</div>
+                </>
+              )}
+            </div>
+          );
+        }))}
+        <div style={{
+          position: "absolute", left: gridW + 14, top: bubbleRow * P, width: 168,
+          background: cur.final ? "#dcfce7" : "#1e3a8a", color: cur.final ? "#14532d" : "#fff",
+          border: cur.final ? "1.5px solid #16a34a" : "none",
+          borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.5, fontWeight: 600,
+        }}>
+          {!cur.final && (
+            <div style={{
+              position: "absolute", left: -7, top: 15, width: 0, height: 0,
+              borderTop: "7px solid transparent", borderBottom: "7px solid transparent", borderRight: "8px solid #1e3a8a",
+            }} />
+          )}
+          {cur.bubble}
+        </div>
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
+        {btn(idx === 0, E ? "◀ Prev" : "◀ 이전", () => setSi(Math.max(0, idx - 1)))}
+        <span style={{ fontSize: 11, color: "#64748b", minWidth: 44, textAlign: "center" }}>{idx + 1} / {steps.length}</span>
+        {btn(idx === last, E ? "Next ▶" : "다음 ▶", () => setSi(Math.min(last, idx + 1)))}
+      </div>
+    </div>
+  );
+}
+
 /* ── Predecessor peek: a star at (2,2) → step back (up=down, left=right) → (1,1).
    Shows "the cell a star came from" with a bubble. Editable slide content. ── */
 function PredecessorPeek({ E }) {
@@ -646,94 +729,7 @@ GGG`}
             </div>
           </div>
 
-          {/* 4x4 layout: phantom (-1,-1) at top-left + real 3x3 grid bottom-right */}
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 56px)", gridTemplateRows: "repeat(4, 56px)", gap: 4 }}>
-              {/* Row -1: phantom (-1,-1) + empty */}
-              <div style={{ background: "#fee2e2", border: "2px dashed #dc2626", borderRadius: 6, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#991b1b", fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 700 }}>
-                <div style={{ fontSize: 22, lineHeight: 1 }}>❌</div>
-                <div style={{ fontSize: 9, marginTop: 2 }}>(-1,-1)</div>
-              </div>
-              <div></div><div></div><div></div>
-              {/* Row 0 */}
-              <div></div>
-              <div style={{ background: "#cbd5e1", border: "2.5px solid #4f46e5", borderRadius: 6, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#1e293b", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>
-                <div style={{ fontSize: 18 }}>G</div>
-                <div style={{ fontSize: 9, color: C.dim, marginTop: 1 }}>(0,0)</div>
-              </div>
-              <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", color: C.dim, fontFamily: "'JetBrains Mono',monospace", fontSize: 10 }}>(0,1)</div>
-              <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", color: C.dim, fontFamily: "'JetBrains Mono',monospace", fontSize: 10 }}>(0,2)</div>
-              {/* Row 1 */}
-              <div></div>
-              <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", color: C.dim, fontFamily: "'JetBrains Mono',monospace", fontSize: 10 }}>(1,0)</div>
-              <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", color: C.dim, fontFamily: "'JetBrains Mono',monospace", fontSize: 10 }}>(1,1)</div>
-              <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", color: C.dim, fontFamily: "'JetBrains Mono',monospace", fontSize: 10 }}>(1,2)</div>
-              {/* Row 2 */}
-              <div></div>
-              <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", color: C.dim, fontFamily: "'JetBrains Mono',monospace", fontSize: 10 }}>(2,0)</div>
-              <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", color: C.dim, fontFamily: "'JetBrains Mono',monospace", fontSize: 10 }}>(2,1)</div>
-              <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", color: C.dim, fontFamily: "'JetBrains Mono',monospace", fontSize: 10 }}>(2,2)</div>
-            </div>
-          </div>
-
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-            <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "8px 14px", fontSize: 12.5, color: "#92400e", fontWeight: 600, lineHeight: 1.6, textAlign: "center" }}>
-              {t(E,
-                "For a star to ARRIVE at (0,0), it would have come from (-1,-1) — but that cell is OUTSIDE the grid. So no star can arrive here.",
-                "(0,0) 에 별이 들어오려면 (-1,-1) 에서 와야 했어요 — 근데 그 칸은 사진 밖. 그래서 별이 못 들어와요.")}
-            </div>
-          </div>
-
-          {/* ✅ The only remaining possibility — shown as two photos taken at different times */}
-          <div style={{ background: "#f0fdf4", border: "2px solid #16a34a", borderRadius: 12, padding: "12px 14px", marginBottom: 8 }}>
-            <div style={{ fontSize: 12.5, fontWeight: 700, color: "#14532d", marginBottom: 12, textAlign: "center" }}>
-              ✅ {t(E, "Then the ONLY story that fits:",
-                       "그럼 가능한 단 하나의 이야기:")}
-            </div>
-
-            {/* Two photos taken at different times → composite */}
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginBottom: 10, flexWrap: "wrap" }}>
-              {/* Photo 1 */}
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-                  📷 {t(E, "Photo 1 (first)", "사진 1 (먼저 찍음)")}
-                </div>
-                <div style={{ width: 54, height: 54, background: "#fef3c7", border: "2px solid #fbbf24", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, color: "#d97706", fontWeight: 800 }}>★</div>
-                <div style={{ fontSize: 10, color: "#92400e", marginTop: 3, fontWeight: 700 }}>{t(E, "star at (0,0)", "(0,0) 에 별")}</div>
-              </div>
-
-              {/* Time arrow */}
-              <div style={{ textAlign: "center", padding: "0 4px" }}>
-                <div style={{ fontSize: 18, color: "#15803d", fontWeight: 800 }}>⏰</div>
-                <div style={{ fontSize: 10, color: "#15803d", fontWeight: 700 }}>{t(E, "time passes", "시간 지남")}</div>
-                <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>{t(E, "(star leaves: moved or vanished)", "(별이 떠남: 이동했거나 사라짐)")}</div>
-              </div>
-
-              {/* Photo 2 */}
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: 10, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-                  📷 {t(E, "Photo 2 (later)", "사진 2 (나중에 찍음)")}
-                </div>
-                <div style={{ width: 54, height: 54, background: "#fff", border: `2px solid ${C.border}`, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center" }}></div>
-                <div style={{ fontSize: 10, color: C.dim, marginTop: 3, fontWeight: 700 }}>{t(E, "(0,0) empty", "(0,0) 비어있음")}</div>
-              </div>
-
-              <div style={{ fontSize: 22, color: "#15803d", fontWeight: 800, padding: "0 4px" }}>=</div>
-
-              {/* Composite */}
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: 10, color: "#16a34a", fontWeight: 700, marginBottom: 4 }}>{t(E, "Composite", "합성 (둘 합침)")}</div>
-                <div style={{ width: 54, height: 54, background: "#cbd5e1", border: "2.5px solid #16a34a", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, color: "#1e293b", fontWeight: 800 }}>G</div>
-                <div style={{ fontSize: 10, color: "#15803d", marginTop: 3, fontWeight: 700 }}>{t(E, "star in 1 photo only", "한 사진에만 별")}</div>
-              </div>
-            </div>
-
-            <div style={{ background: "#dcfce7", borderRadius: 8, padding: "8px 12px", fontSize: 12.5, color: "#14532d", textAlign: "center", lineHeight: 1.55 }}>
-              💡 <b>{t(E,
-                "(0,0) is G → an original star WAS here, but it left before photo 2.  → count this star: +1.",
-                "(0,0) 가 G → 원래 별이 있었는데 사진 2 찍기 전에 떠남.  → 이 별 1 개 셈: +1.")}</b>
-            </div>
-          </div>
+          <CornerGWalk E={E} />
         </div>
       ),
     },
