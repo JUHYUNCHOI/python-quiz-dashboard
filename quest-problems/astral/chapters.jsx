@@ -254,6 +254,99 @@ function OrbitGridStepSim({ rows, cols, orbit, stepData, caption, E }) {
   );
 }
 
+/* ── Sample 1 counter: walk WWB/BBB/GGG cell-by-cell, a speech bubble on the
+   active cell explains its letter, and the star count adds up to 7.
+   (Editable slide content — NOT a locked sim.) ── */
+function Sample1Counter({ E }) {
+  const grid = [["W", "W", "B"], ["B", "B", "B"], ["G", "G", "G"]];
+  const order = [];
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) order.push({ r, c, letter: grid[r][c] });
+  const last = order.length; // final summary step
+  const [si, setSi] = useState(0);
+  const idx = Math.max(0, Math.min(si, last));
+  const isFinal = idx === last;
+  const active = isFinal ? null : order[idx];
+  const upto = isFinal ? order.length - 1 : idx;
+  let stars = 0;
+  for (let k = 0; k <= upto; k++) if (order[k].letter !== "W") stars++;
+
+  const S = 48, GAP = 6, P = S + GAP, gridW = 3 * S + 2 * GAP;
+  const letterColor = (L) => L === "W" ? "#94a3b8" : L === "G" ? "#6366f1" : "#1e293b";
+  const meaning = (L) => L === "W"
+    ? t(E, "W = empty in both photos → 0 stars", "W = 두 사진 다 비어 → 별 0개")
+    : L === "G"
+    ? t(E, "G = star in ONE photo → a star that LEFT → +1", "G = 한 사진에만 → 사라진 별 → +1")
+    : t(E, "B = star in BOTH → a star that STAYED → +1", "B = 두 사진 다 → 그대로 있던 별 → +1");
+
+  const btn = (disabled, label, onClick) => (
+    <button onClick={onClick} disabled={disabled} style={{
+      padding: "5px 16px", borderRadius: 7, border: "none", fontSize: 12, fontWeight: 700,
+      cursor: disabled ? "default" : "pointer",
+      background: disabled ? "#f1f5f9" : "#4f46e5", color: disabled ? "#94a3b8" : "#fff",
+    }}>{label}</button>
+  );
+
+  return (
+    <div style={{ padding: "4px 0" }}>
+      <div style={{ position: "relative", width: gridW + 16 + 188, maxWidth: "100%", height: 3 * P, margin: "0 auto 10px" }}>
+        {order.map((cell, i) => {
+          const isAct = !isFinal && i === idx;
+          const counted = i <= upto && cell.letter !== "W";
+          return (
+            <div key={i} style={{
+              position: "absolute", left: cell.c * P, top: cell.r * P, width: S, height: S,
+              borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+              fontFamily: "'JetBrains Mono',monospace", fontSize: 19, fontWeight: 800,
+              color: isAct ? "#fff" : letterColor(cell.letter),
+              background: isAct ? "#4f46e5" : (counted ? "#eef2ff" : "#f8fafc"),
+              border: `2.5px solid ${isAct ? "#4f46e5" : (counted ? "#a5b4fc" : "#e2e8f0")}`,
+              boxShadow: isAct ? "0 0 0 4px rgba(79,70,229,.25)" : "none",
+              transform: isAct ? "scale(1.08)" : "none", transition: "all .15s",
+            }}>
+              {cell.letter}
+              {counted && !isAct && (
+                <span style={{ position: "absolute", top: -9, right: -6, fontSize: 13, color: "#d97706" }}>★</span>
+              )}
+            </div>
+          );
+        })}
+        {!isFinal && (
+          <div style={{
+            position: "absolute", left: gridW + 18, top: active.r * P - 2, width: 168,
+            background: "#312e81", color: "#fff", borderRadius: 10, padding: "8px 11px",
+            fontSize: 12, lineHeight: 1.5, fontWeight: 600,
+          }}>
+            <div style={{
+              position: "absolute", left: -7, top: 15, width: 0, height: 0,
+              borderTop: "7px solid transparent", borderBottom: "7px solid transparent", borderRight: "8px solid #312e81",
+            }} />
+            {meaning(active.letter)}
+          </div>
+        )}
+        {isFinal && (
+          <div style={{
+            position: "absolute", left: gridW + 18, top: P, width: 168,
+            background: "#dcfce7", color: "#14532d", border: "1.5px solid #16a34a",
+            borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.5, fontWeight: 700,
+          }}>
+            {t(E, "All done! G ×3 + B ×4 = 7 stars.", "다 셌어요! G 3개 + B 4개 = 별 7개!")}
+          </div>
+        )}
+      </div>
+
+      <div style={{ textAlign: "center", marginBottom: 8, fontSize: 14, fontWeight: 800, color: "#4f46e5" }}>
+        ⭐ {t(E, "stars so far", "지금까지 별")}: {stars}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
+        {btn(idx === 0, E ? "◀ Prev" : "◀ 이전", () => setSi(Math.max(0, idx - 1)))}
+        <span style={{ fontSize: 11, color: "#64748b", minWidth: 44, textAlign: "center" }}>{idx + 1} / {last + 1}</span>
+        {btn(isFinal, E ? "Next ▶" : "다음 ▶", () => setSi(Math.min(last, idx + 1)))}
+      </div>
+    </div>
+  );
+}
+
 export function makeAstralCh1(E) {
   return [
     /* 1-0 — Hook: visual story first (before any formal text). */
@@ -376,24 +469,15 @@ GGG`}
             </div>
           </div>
 
-          <div style={{ background: "#eef2ff", border: "1px solid #a5b4fc", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
-            <div style={{ fontWeight: 600, color: "#312e81", marginBottom: 6 }}>
-              🔍 {t(E, "Why so simple when stars don't move?", "별이 안 움직이면 왜 이렇게 간단할까?")}
+          <div style={{ background: "#eef2ff", border: "1px solid #a5b4fc", borderRadius: 10, padding: 12 }}>
+            <div style={{ fontWeight: 600, color: "#312e81", marginBottom: 4, fontSize: 12.5 }}>
+              🔍 {t(E, "Count the stars — one cell at a time", "별을 한 칸씩 세어봐요")}
             </div>
-            <div>
-              {t(E, "If a star doesn't move, photo 2 looks the SAME as photo 1. So:",
-                    "별이 안 움직이면 사진 2 가 사진 1 이랑 똑같아요. 그래서:")}
+            <div style={{ fontSize: 11.5, color: C.dim, marginBottom: 6 }}>
+              {t(E, "Stars don't move, so photo 2 = photo 1. Press 다음 ▶ and watch each cell.",
+                    "별이 안 움직이니 사진 2 = 사진 1. 다음 ▶ 누르며 칸을 하나씩 봐요.")}
             </div>
-            <div style={{ marginTop: 6, lineHeight: 1.7 }}>
-              • <b>W</b> = {t(E, "no star in either photo", "두 사진 다 비어")} → 0 stars<br/>
-              • <b>G</b> = {t(E, "star showed up in only ONE of the photos — must be a star that disappeared",
-                                "한 사진에만 보였음 → 사라진 별")} → 1 star<br/>
-              • <b>B</b> = {t(E, "star in both photos — star stayed", "두 사진 다 별 → 그대로 있던 별")} → 1 star
-            </div>
-            <div style={{ marginTop: 8, color: "#15803d", fontWeight: 700 }}>
-              {t(E, "So min stars = (G count) + (B count) = 3 + 4 = 7.",
-                    "그래서 별 가장 적게 = G 칸 수 + B 칸 수 = 3 + 4 = 7.")}
-            </div>
+            <Sample1Counter E={E} />
           </div>
         </div>),
     },
