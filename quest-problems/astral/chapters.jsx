@@ -432,7 +432,7 @@ function CornerGWalk({ E }) {
     { focus: "g", bubble: t(E, "The corner (0,0) is G.", "모서리 칸 (0,0) 이 G 예요.") },
     { focus: "phantom", bubble: t(E, "To arrive at (0,0), a star must come from (-1,-1). But that's outside the photo — and there are NO stars outside the photo. ❌", "(0,0) 으로 별이 오려면 (-1,-1) 에서 와야 해요. 근데 거긴 사진 밖 — 사진 밖엔 별이 아예 없어요. ❌") },
     { focus: "g", bubble: t(E, "So there's no star to come in. Only ONE possibility left: a star was HERE in photo 1, then left.", "그러니 (0,0) 으로 들어올 별이 없어요. 남은 가능성은 딱 하나 — 원래 (0,0) 에 별이 있다가 떠난 것.") },
-    { final: true, bubble: t(E, "(0,0) G = a star that left before photo 2 → count +1!", "(0,0) G = 사진 2 전에 떠난 별 → 별 +1!") },
+    { final: true, bubble: t(E, "So (0,0) really had 1 star in photo 1. Add 1 to our answer (the star count)! ⭐", "그러니 (0,0) 엔 사진 1 에 별이 1개 있었던 거예요. 답(별 개수)에 1 더하기! ⭐") },
   ];
   const [si, setSi] = useState(0);
   const last = steps.length - 1;
