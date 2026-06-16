@@ -1747,40 +1747,6 @@ export function makeAstralCh2(E, lang = "py") {
             </div>
           </div>
 
-          {/* Backward Greedy vs DP — the two winners */}
-          <div style={{
-            background: "#f8fafc",
-            border: "1px solid #e2e8f0",
-            borderRadius: 10,
-            padding: "10px 14px",
-          }}>
-            <div style={{ fontSize: 11.5, fontWeight: 700, color: "#374151", marginBottom: 8, textAlign: "center" }}>
-              {t(E, "The two winners compared:", "두 정답 방법 비교:")}
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-              <div style={{ background: "#f0fdf4", borderRadius: 8, padding: "8px 10px" }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: "#14532d", marginBottom: 4 }}>⬅️ {t(E,"Right→left greedy","뒤→앞 그리디(greedy)")}</div>
-                <div style={{ fontSize: 11, color: "#166534", lineHeight: 1.55 }}>
-                  {t(E,
-                    "\"B cells grab first.\" Simple to code, passes USACO. Works by intuition — why it's always minimum is less obvious.",
-                    "\"B 칸 먼저 처리.\" 코드 간단, USACO 통과. 직관적으로 작동하는데 왜 항상 최솟값인지는 설명하기 어려워요.")}
-                </div>
-              </div>
-              <div style={{ background: "#eef2ff", borderRadius: 8, padding: "8px 10px" }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: "#3730a3", marginBottom: 4 }}>💡 DP</div>
-                <div style={{ fontSize: 11, color: "#3730a3", lineHeight: 1.55 }}>
-                  {t(E,
-                    "Carry both options at every cell, pick the smaller at the end. Always correct — no guessing needed.",
-                    "매 칸에서 두 경우를 나란히 들고 가다가 끝에서 작은 거 선택. 항상 정확 — 운에 의존 안 해요.")}
-                </div>
-              </div>
-            </div>
-            <div style={{ fontSize: 10.5, color: "#64748b", textAlign: "center", marginTop: 6, lineHeight: 1.5 }}>
-              {t(E,
-                "Both are equally fast. We already coded the greedy above; this appendix codes the DP — always correct, and it bends to variants.",
-                "둘 다 속도는 같아요. 그리디는 위에서 이미 짰고, 이 부록에선 DP 를 짜봐요 — 항상 정확하고, 변형에도 강해요.")}
-            </div>
-          </div>
         </div>
       ),
     },
