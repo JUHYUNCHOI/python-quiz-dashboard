@@ -347,6 +347,84 @@ function Sample1Counter({ E }) {
   );
 }
 
+/* ── Orbit walk: follow ONE star (right=1, down=2) cell by cell, bubble on the
+   active cell. (0,0) → (2,1) → off-grid. Editable slide content. ── */
+function OrbitWalk({ E }) {
+  const orbit = [{ r: 0, c: 0 }, { r: 2, c: 1 }];
+  const steps = [
+    { cell: orbit[0], vis: 1, bubble: t(E, "Start! One star sits at (0,0).", "여기서 시작! 별 하나가 (0,0)에 있어요.") },
+    { cell: orbit[1], vis: 2, bubble: t(E, "+right 1, +down 2 → (2,1). The SAME star moved here.", "+오른쪽1, +아래2 → (2,1). 같은 별이 여기로 옮겨왔어요.") },
+    { cell: null, off: true, vis: 2, bubble: t(E, "+right 1, +down 2 → (4,2) is OFF the grid! The star leaves — the orbit ends.", "+오른쪽1, +아래2 → (4,2)는 사진 밖! 별이 나가서 궤도 끝.") },
+    { cell: null, final: true, vis: 2, bubble: t(E, "This path is the ORBIT = (0,0) → (2,1). One star's trail.", "이 길이 '궤도' = (0,0) → (2,1). 같은 별 하나가 지나간 길!") },
+  ];
+  const [si, setSi] = useState(0);
+  const last = steps.length - 1;
+  const idx = Math.max(0, Math.min(si, last));
+  const cur = steps[idx];
+  const S = 40, GAP = 5, P = S + GAP, gridW = 4 * S + 3 * GAP;
+  const orbitIndexOf = (r, c) => orbit.findIndex(o => o.r === r && o.c === c);
+
+  const btn = (disabled, label, onClick) => (
+    <button onClick={onClick} disabled={disabled} style={{
+      padding: "5px 16px", borderRadius: 7, border: "none", fontSize: 12, fontWeight: 700,
+      cursor: disabled ? "default" : "pointer",
+      background: disabled ? "#f1f5f9" : "#4f46e5", color: disabled ? "#94a3b8" : "#fff",
+    }}>{label}</button>
+  );
+
+  return (
+    <div style={{ padding: "4px 0" }}>
+      <div style={{ position: "relative", width: gridW + 16 + 180, maxWidth: "100%", height: 4 * P + 14, margin: "0 auto 10px" }}>
+        {[0, 1, 2, 3].flatMap(r => [0, 1, 2, 3].map(c => {
+          const oi = orbitIndexOf(r, c);
+          const revealed = oi !== -1 && oi < cur.vis;
+          const isAct = cur.cell && cur.cell.r === r && cur.cell.c === c;
+          return (
+            <div key={`${r},${c}`} style={{
+              position: "absolute", left: c * P, top: r * P, width: S, height: S, borderRadius: 7,
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              background: isAct ? "#3b82f6" : revealed ? "#dbeafe" : "#f8fafc",
+              border: `2px solid ${isAct ? "#1e40af" : revealed ? "#3b82f6" : "#e2e8f0"}`,
+              boxShadow: isAct ? "0 0 0 4px rgba(59,130,246,.25)" : "none",
+              transform: isAct ? "scale(1.1)" : "none", transition: "all .15s",
+            }}>
+              <div style={{ fontSize: (isAct || revealed) ? 17 : 12, lineHeight: 1, color: isAct ? "#fff" : revealed ? "#2563eb" : "#e2e8f0" }}>
+                {(isAct || revealed) ? "★" : "·"}
+              </div>
+              {(isAct || revealed) && <div style={{ fontSize: 8, fontWeight: 700, color: isAct ? "#dbeafe" : "#93c5fd" }}>({r},{c})</div>}
+            </div>
+          );
+        }))}
+        {cur.off && (
+          <div style={{ position: "absolute", left: P, top: 4 * P - 6, fontSize: 11, fontWeight: 800, color: "#dc2626" }}>
+            ↓ (4,2) ✗
+          </div>
+        )}
+        <div style={{
+          position: "absolute", left: gridW + 16, top: cur.cell ? cur.cell.r * P : 0, width: 168,
+          background: cur.final ? "#dcfce7" : "#1e3a8a", color: cur.final ? "#14532d" : "#fff",
+          border: cur.final ? "1.5px solid #16a34a" : "none",
+          borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.5, fontWeight: 600,
+        }}>
+          {cur.cell && (
+            <div style={{
+              position: "absolute", left: -7, top: 15, width: 0, height: 0,
+              borderTop: "7px solid transparent", borderBottom: "7px solid transparent", borderRight: "8px solid #1e3a8a",
+            }} />
+          )}
+          {cur.bubble}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
+        {btn(idx === 0, E ? "◀ Prev" : "◀ 이전", () => setSi(Math.max(0, idx - 1)))}
+        <span style={{ fontSize: 11, color: "#64748b", minWidth: 44, textAlign: "center" }}>{idx + 1} / {steps.length}</span>
+        {btn(idx === last, E ? "Next ▶" : "다음 ▶", () => setSi(Math.min(last, idx + 1)))}
+      </div>
+    </div>
+  );
+}
+
 export function makeAstralCh1(E) {
   return [
     /* 1-0 — Hook: visual story first (before any formal text). */
@@ -669,100 +747,18 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "So how do we count the MINIMUM original stars? The trick: figure out which cells came from the SAME single star — otherwise we'd count one star many times.\nA star shifts the same way every photo, so let's follow one star's path. Here: right=1, down=2 → (0,0) → (2,1) → (4,2) → off the grid. We call this path an orbit.",
-        "그럼 '원본 별 최소 개수'를 어떻게 셀까요? 비결은 — 어떤 칸들이 *같은 별 하나* 에서 나온 건지 알아내는 거예요 (안 그러면 별 하나를 여러 번 세니까).\n별은 사진마다 똑같은 규칙으로 움직이니, 별 하나가 지나는 길을 따라가 봐요. 예시: right=1, down=2 → (0,0) → (2,1) → (4,2) → 사진 밖. 이 길을 '궤도'라고 해요."),
+        "How do we count the FEWEST original stars? First figure out which cells are really the SAME single star — otherwise we'd count one star many times. A star shifts the same way every photo, so just follow its path. We call that path an ORBIT — follow one below.",
+        "원본 별을 가장 적게 세려면, 먼저 어떤 칸들이 사실 같은 별 하나인지 알아내야 해요 (안 그러면 한 별을 여러 번 세니까). 별은 매번 똑같이 움직이니까, 그 별이 지나간 길만 따라가면 돼요. 이 길을 '궤도'라고 해요 — 아래에서 하나 따라가 봐요."),
       content: (
         <div style={{ padding: 14 }}>
-          <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 5, textAlign: "center" }}>
-            {t(E, "Example: right=1, down=2 — trace one star", "예시: right=1, down=2 — 별 하나 따라가기")}
+          <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 2, textAlign: "center" }}>
+            {t(E, "Follow one star (right=1, down=2)", "별 하나 따라가기 (right=1, down=2)")}
           </div>
-          <div style={{ fontSize: 11, color: "#64748b", marginBottom: 12, textAlign: "center" }}>
-            {t(E, "right = move right →,  down = move down ↓", "right = 오른쪽으로 →,  down = 아래로 ↓")}
+          <div style={{ fontSize: 11, color: "#64748b", marginBottom: 10, textAlign: "center" }}>
+            {t(E, "Press 다음 ▶ — watch the star hop, cell by cell.", "다음 ▶ 누르며 별이 한 칸씩 뛰는 걸 봐요.")}
           </div>
 
-          {/* 4×4 grid — chain: (0,0) and (2,1) highlighted, arrow between them */}
-          {(() => {
-            // For right=1, down=2: star at (0,0) moves to (2,1), then off grid
-            const chain = new Set(["0,0", "2,1"]);
-            return (
-              <div>
-                <div style={{ display:"flex", flexDirection:"column", alignItems:"center", marginBottom:10 }}>
-                  {[0,1,2,3].map(r => (
-                    <div key={r} style={{ display:"flex", gap:5, marginBottom:5 }}>
-                      {[0,1,2,3].map(c => {
-                        const on = chain.has(`${r},${c}`);
-                        const isFirst = r===0 && c===0;
-                        const isSecond = r===2 && c===1;
-                        return (
-                          <div key={c} style={{
-                            width:52, height:52, borderRadius:8,
-                            background: on ? "#dbeafe" : "#f8fafc",
-                            border: on ? "2.5px solid #3b82f6" : "1.5px solid #e2e8f0",
-                            display:"flex", flexDirection:"column",
-                            alignItems:"center", justifyContent:"center", gap:1,
-                            position:"relative",
-                          }}>
-                            <div style={{ fontSize: on ? 20 : 14, color: on ? "#2563eb" : "#e2e8f0", lineHeight:1 }}>
-                              {on ? "★" : "·"}
-                            </div>
-                            {on && (
-                              <div style={{ fontSize:9, color:"#93c5fd", fontWeight:700 }}>({r},{c})</div>
-                            )}
-                            {isFirst && (
-                              <div style={{
-                                position:"absolute", top:-9, right:-9,
-                                background:"#2563eb", color:"#fff",
-                                fontSize:8, fontWeight:800, borderRadius:4, padding:"1px 4px",
-                              }}>START</div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Step-by-step calculation */}
-                <div style={{ background:"#eff6ff", border:"1.5px solid #93c5fd", borderRadius:9, padding:"10px 14px", marginBottom:10 }}>
-                  <div style={{ fontSize:12, fontWeight:800, color:"#1e3a8a", marginBottom:8 }}>
-                    {t(E, "How to calculate next position:", "다음 칸 계산 방법:")}
-                  </div>
-                  {[
-                    {
-                      from:"(0,0)", calc: t(E,"row 0+2=2, col 0+1=1","행 0+2=2, 열 0+1=1"), to:"(2,1)", ok:true,
-                    },
-                    {
-                      from:"(2,1)", calc: t(E,"row 2+2=4, col 1+1=2","행 2+2=4, 열 1+1=2"), to: t(E,"(4,2) off grid → chain ends","(4,2) 밖 → 여기서 궤도 끝"), ok:false,
-                    },
-                  ].map((step,i) => (
-                    <div key={i} style={{
-                      display:"flex", alignItems:"center", gap:8, marginBottom: i===0 ? 6:0,
-                      fontFamily:"monospace", fontSize:12,
-                    }}>
-                      <span style={{
-                        background:"#dbeafe", border:"2px solid #3b82f6", borderRadius:6,
-                        padding:"4px 9px", fontWeight:800, color:"#1e40af",
-                      }}>{step.from}</span>
-                      <span style={{ color:"#64748b", fontSize:11 }}>+right=1, +down=2</span>
-                      <span style={{ color:"#94a3b8" }}>→</span>
-                      <span style={{
-                        background: step.ok ? "#dbeafe" : "#f1f5f9",
-                        border: `2px solid ${step.ok ? "#3b82f6" : "#cbd5e1"}`,
-                        borderRadius:6, padding:"4px 9px", fontWeight:800,
-                        color: step.ok ? "#1e40af" : "#64748b",
-                      }}>{step.to}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div style={{ fontSize:12, color:"#374151", textAlign:"center", lineHeight:1.7 }}>
-                  {t(E,
-                    "Chain = [(0,0) → (2,1)]. Only 2 cells — that's just where the orbit ends. (A star going off-grid simply vanishes; it doesn't affect the answer.)",
-                    "궤도 = [(0,0) → (2,1)]. 2칸짜리 궤도예요 — 밖으로 나가면 그냥 거기서 궤도가 끝나는 것. (나간 별은 사라질 뿐, 답 계산엔 안 들어가요.)")}
-                </div>
-              </div>
-            );
-          })()}
+          <OrbitWalk E={E} />
         </div>
       ),
     },
