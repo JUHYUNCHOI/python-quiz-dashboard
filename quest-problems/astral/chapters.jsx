@@ -660,8 +660,8 @@ export function makeAstralCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now that we know the rules, let's start with the EASIEST case — what if stars don't move at all? (Sample 1: right=0, down=0.) Each G is a star that disappeared, each B is a star that stayed. So min stars = (G count) + (B count) = 7.",
-        "규칙을 알았으니, 제일 쉬운 경우부터 — 별이 아예 안 움직이면? (샘플 1: right=0, down=0.) G 는 사라진 별, B 는 그대로 있는 별. 별 가장 적게 = G 칸 수 + B 칸 수 = 7."),
+        "Now the rules are clear — let's warm up with the EASIEST case: stars don't move. Count the stars one cell at a time. 👇",
+        "규칙을 알았으니 제일 쉬운 경우부터 — 별이 아예 안 움직이면? 아래에서 별을 한 칸씩 세어 봐요 👇"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#4f46e5", textAlign: "center", marginBottom: 10 }}>
@@ -703,8 +703,8 @@ GGG`}
     {
       type: "reveal",
       narr: t(E,
-        "Easy case (no movement) done. Now if stars DO move, G gets tricky. The corner (0,0) is G — but if movement is right 1, down 1, a star would have to arrive from (-1,-1). That's outside the grid — no star can ever arrive at (0,0).",
-        "쉬운 경우(안 움직임)는 끝. 이번엔 별이 움직이면 G 가 까다로워져요. 모서리 칸 (0,0) 이 G 인데, 별 이동이 오른쪽 1·아래 1 이면 — 별이 여기로 들어오려면 (-1,-1) 에서 와야 해요. 근데 그건 사진 밖. 그래서 (0,0) 엔 별이 들어올 길이 없어요."),
+        "Easy case done. Now stars MOVE — and a corner G gets tricky. Step through it below. 👇",
+        "쉬운 경우는 끝. 이번엔 별이 움직여요 — 모서리 G 가 까다로워져요. 아래에서 한 칸씩 따라가 봐요 👇"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 12 }}>
