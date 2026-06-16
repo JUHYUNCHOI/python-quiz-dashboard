@@ -2,6 +2,9 @@
 //   Last full verification: 2026-05-13 (Python 12/12 PASS, C++ 12/12 PASS) — DP solution.
 //   2026-06-01: Renamed A → right, B → down for student readability.
 //     Algorithm unchanged. Must resubmit to USACO to confirm before main deploy.
+//   2026-06-16: AstralChainDiscovery — display TEXT only: simplified the page-1
+//     "Chain discovery / 별 길 찾기" box to a plain "G in two cells" observation and
+//     removed the premature orbit/independence note. NO solution code changed.
 //   2026-06-03: Added BACKWARD-GREEDY as the MAIN solution (teacher's own verified
 //     approach). AST_GREEDY_FULL_PY is the teacher's actual USACO-accepted Python
 //     submission (logic verbatim; only input-reading switched to the fast
@@ -405,29 +408,23 @@ export function AstralChainDiscovery({ E }) {
       <div style={{ marginTop: 12, background: "#eef2ff", border: `1.5px solid ${A_COLOR}`, borderRadius: 8, padding: "10px 12px", fontSize: 12, color: "#312e81", lineHeight: 1.6 }}>
         {moves && inside ? (
           <>
-            <b>🔗 {t(E, "Chain discovery", "별 길 찾기")}:</b>{" "}
-            {t(E, `Star at (0,0) lands at (${endR},${endC}) in photo 2. The composite has G at BOTH (0,0) and (${endR},${endC}) — these two cells are linked by the star's movement (right ${right}, down ${down}). Following that link repeatedly traces a path.`,
-                  `(0,0) 의 별이 사진 2 의 (${endR},${endC}) 로 옮겨감. 합성은 (0,0) 과 (${endR},${endC}) 둘 다 G — 이 두 칸이 별 이동 (오른쪽 ${right}, 아래 ${down}) 으로 연결돼. 계속 따라가면 한 별 길.`)}
+            <b>👀 {t(E, "Look!", "여기 봐!")}:</b>{" "}
+            {t(E, `The star moved (0,0) → (${endR},${endC}), so the composite now shows G in TWO cells.`,
+                  `별이 (0,0) → (${endR},${endC}) 로 움직였더니, 합성에 G 가 두 칸 생겼어요!`)}
           </>
         ) : moves && !inside ? (
           <>
-            <b>{t(E, "Star lost off-grid", "별이 격자 밖으로")}:</b>{" "}
-            {t(E, "Composite only shows G at the source — single isolated cell, no path link.",
-                  "합성은 출발지에만 G — 외톨이 칸, 별 길 이어짐 없음.")}
+            <b>{t(E, "Star went off-grid", "별이 격자 밖으로")}:</b>{" "}
+            {t(E, "It left the grid, so the composite shows G in just one cell.",
+                  "격자 밖으로 나가서, 합성엔 G 가 한 칸만.")}
           </>
         ) : (
           <>
             <b>{t(E, "Star disappeared", "별 사라짐")}:</b>{" "}
-            {t(E, "Composite shows G only at the source — no star path.",
-                  "합성은 출발지에만 G — 별 길 없음.")}
+            {t(E, "The composite shows G in just one cell.",
+                  "합성엔 G 가 한 칸만.")}
           </>
         )}
-      </div>
-
-      <div style={{ marginTop: 8, padding: "8px 12px", background: "#fffbeb", border: "1px dashed #fbbf24", borderRadius: 8, fontSize: 11.5, color: "#78350f", lineHeight: 1.55 }}>
-        💡 {t(E,
-          "When stars don't move (right 0, down 0), each star stays in its own cell — cells don't affect each other → just count G + B. When stars DO move, a star visits one cell, then the next, then the next … so those cells along the path affect each other → handle one path at a time.",
-          "별이 안 움직이면 (오른쪽 0, 아래 0) 각 별이 자기 자리에 → 칸끼리 영향 없음 → 그냥 G+B 셈. 별이 움직이면 한 별이 칸을 차례차례 지나가니까, 그 길의 칸들끼리 서로 영향 → 별 길 하나씩 처리.")}
       </div>
     </div>
   );
