@@ -432,7 +432,7 @@ function CornerGWalk({ E }) {
     { focus: "g", bubble: t(E, "The corner (0,0) is G.", "모서리 칸 (0,0) 이 G 예요.") },
     { focus: "phantom", bubble: t(E, "To arrive at (0,0), a star must come from (-1,-1). But that's outside the photo — and there are NO stars outside the photo. ❌", "(0,0) 으로 별이 오려면 (-1,-1) 에서 와야 해요. 근데 거긴 사진 밖 — 사진 밖엔 별이 아예 없어요. ❌") },
     { focus: "g", bubble: t(E, "So there's no star to come in. Only ONE possibility left: a star was HERE in photo 1, then left.", "그러니 (0,0) 으로 들어올 별이 없어요. 남은 가능성은 딱 하나 — 원래 (0,0) 에 별이 있다가 떠난 것.") },
-    { final: true, bubble: t(E, "So (0,0) really had 1 star in photo 1. Add 1 to our answer (the star count)! ⭐", "그러니 (0,0) 엔 사진 1 에 별이 1개 있었던 거예요. 답(별 개수)에 1 더하기! ⭐") },
+    { final: true, bubble: t(E, "Count this star — answer +1! ⭐", "이 별도 하나로 세요 — 답(별 개수) +1! ⭐") },
   ];
   const [si, setSi] = useState(0);
   const last = steps.length - 1;
@@ -973,8 +973,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Before the simulations — what does 'greedy' mean? Greedy = pick by looking only at what's in front of you.\nLook only at the current cell and decide immediately, without thinking about what comes next.",
-        "시뮬 전에 — '그리디(greedy)' 방법이 뭔지 알아봐요. 그리디 = 눈앞만 보고 고르기.\n지금 내 눈앞에 있는 칸만 보고, 뒤에 뭐가 오는지 생각하지 않고 즉시 결정하는 방법이에요."),
+        "Before the simulations — what does 'greedy' mean? 👇",
+        "시뮬 전에 — '그리디(greedy)'가 뭔지 알아봐요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           {/* Daily life example */}
@@ -1086,8 +1086,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Let's try the obvious order: front → back.\nRule: when a G has no star coming in, put one original star there. That star then slides one step forward (it lands on the next cell in photo 2).\nOn orbit G G B this feels clever: G(0)'s star slides into G(1) and fills it for FREE — one star covers two cells!\nBut watch the B at the end. That 'free fill' is exactly what breaks it.",
-        "당연한 순서부터 해봐요: 앞 → 뒤.\n규칙: G 에 들어오는 별이 없으면 거기에 원본 별을 하나 놓아요. 그 별은 한 칸 앞으로 미끄러져요 (사진 2 에서 다음 칸에 도착).\n궤도 G G B 에선 똑똑해 보여요: G(0) 의 별이 G(1) 로 미끄러져 공짜로 채워짐 — 별 하나로 두 칸!\n근데 끝의 B 를 봐요. 바로 그 '공짜 채움' 때문에 깨져요."),
+        "First let's try the obvious order — front → back. Does it hold? 👇",
+        "당연한 순서부터 해봐요 — 앞 → 뒤. 끝까지 잘 될까요? 👇"),
       content: (
         <div style={{ padding: 14 }}>
           {/* One-line plan banner — the per-step bubbles below carry the rule details */}
@@ -1139,8 +1139,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Same orbit, same rule — just flip the direction: end → start.\nNow the B is the FIRST cell we meet. A B has no choice: the cell right before it MUST keep an original star to send over. So we obey it immediately — star the B, and star the cell before it.\nBecause we hit each B before we ever touch the cell it leans on, we lock in that needed star FIRST. We can never accidentally spend it. One clean pass, no guessing.",
-        "같은 궤도, 같은 규칙 — 방향만 뒤집어요: 끝 → 시작.\n이제 B 를 제일 먼저 만나요. B 는 선택지가 없어요: 바로 앞 칸이 보내줄 원본 별을 반드시 가지고 있어야 해요. 그래서 바로 들어줘요 — B 에 별, 그 앞 칸에도 별.\n각 B 를 그 B 가 기대는 앞 칸에 닿기 전에 먼저 만나니까, 필요한 별을 먼저 박아둬요. 실수로 써버릴 일이 없어요. 깔끔한 한 번 훑기, 찍기 없음."),
+        "Same orbit — just flip the direction: end → start. This time it works. 👇",
+        "같은 궤도인데 — 방향만 뒤집어요: 끝 → 시작. 이번엔 풀려요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           {/* One-line plan banner — the per-step bubbles below carry the rule details */}
@@ -1222,8 +1222,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "This sim DRAWS ★ on cells where stars exist — that's the answer we're computing. Cells on the SAME line (the line a star travels along) share a background color = one star's path. Different lines don't interact, so we can solve each line alone. ▶ Press start.",
-        "이 시뮬은 별이 있는 칸에 ★ 를 그려줘요 — 그게 우리가 구하려는 답. 한 별이 지나는 같은 궤도 위 칸들은 배경 색도 같음 = 한 별의 길. 궤도끼리 서로 영향 X → 한 궤도씩 따로 풀 수 있어요. ▶ 시작 눌러봐요."),
+        "Watch the whole thing run once — ▶ press start. 👇",
+        "전체가 한 번 도는 걸 봐요 — ▶ 시작 눌러봐요. 👇"),
       content: (<AstralAlgoTrace E={E} />),
     },
 
@@ -1231,8 +1231,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Five possible scenes — one peek and you know.",
-        "다섯 가지 장면. 한번 보면 머리에 들어와."),
+        "W, G, B — one at a time. One peek and you know. 👇",
+        "W·G·B — 한 칸씩 보기. 한번 보면 머리에 들어와요. 👇"),
       content: (() => {
         // Reusable mini cell graphic — same look as the sim
         const Cell = ({ letter, hasStar, outside, dim, label }) => (
@@ -1369,8 +1369,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "That backward rule IS the whole solution — let's code it. Just one new word first: a star's predecessor — the cell it came from. Step back by the same move the star makes. Watch below, then see the rule.",
-        "방금 그 거꾸로 규칙이 풀이 전부예요 — 코드로 옮겨요. 새 용어 하나만: 별의 '직전 칸' = 별이 온 칸. 별이 움직인 만큼 거꾸로 가면 그 칸이에요. 아래에서 보고, 규칙을 봐요."),
+        "That backward rule IS the whole solution — let's turn it into code. 👇",
+        "방금 그 거꾸로 규칙이 풀이 전부예요 — 코드로 옮겨요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           {/* predecessor concept as a bubble walk */}
@@ -1435,8 +1435,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Let's run the code by hand on orbit G G B, with down=1, right=1. Cells: (0,0)=G, (1,1)=G, (2,2)=B. Sweep backward and watch the 'possibles' set fill up.",
-        "코드를 손으로 궤도 G G B 에 돌려봐요. down=1, right=1. 칸: (0,0)=G, (1,1)=G, (2,2)=B. 거꾸로 훑으면서 'possibles' set 이 차는 걸 봐요."),
+        "Let's run the code by hand on orbit G G B and watch 'possibles' fill up. 👇",
+        "코드를 손으로 궤도 G G B 에 돌려보며 'possibles' 가 차는 걸 봐요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           {/* possibles trace table for G G B (down=1, right=1) */}
@@ -1511,8 +1511,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "That's the full solution — you could stop here. But here's an optional bonus: a totally different way to think about the same problem, using DP. It's worth knowing because it's 'safe' (you don't have to prove the greedy is always minimum) and it bends easily to harder variants — like 'each star costs a different amount'.",
-        "여기까지가 완성된 풀이예요 — 여기서 멈춰도 돼요. 근데 선택 보너스: 같은 문제를 완전히 다른 각도, DP 로 푸는 법. 알아두면 좋은 이유 — '안전하고' (그리디가 항상 최소인지 증명 안 해도 됨), 더 어려운 변형에도 잘 휘어져요 (예: '별마다 비용이 다르다')."),
+        "That's the full solution — you could stop here. Optional bonus below: the same problem solved a totally different way, with DP. 👇",
+        "여기까지가 완성된 풀이예요 — 멈춰도 돼요. 아래는 선택 보너스: 같은 문제를 완전히 다른 각도, DP 로 푸는 법. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{
@@ -1555,8 +1555,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "To really understand why the minimum is what it is, let's try a completely different approach: test every possible combination! Each G cell has two choices — place a brand-new star here, OR let a star from the previous cell travel here in photo 2.",
-        "왜 그 값이 최솟값인지 제대로 이해하려면 완전히 다른 방법으로 봐요: 모든 경우를 다 시도해보기! 각 G 칸은 두 가지 선택 — 여기 새 별을 놓거나, 아니면 앞 칸 별이 사진 2에서 이 칸으로 이동해 오거나."),
+        "A completely different idea: test every possible combination. 👇",
+        "완전히 다른 방법: 모든 경우를 다 시도해보기. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{
@@ -1632,8 +1632,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Brute force works but explodes. Each G doubles the options. A chain with k G cells = 2^k combinations.",
-        "단순 시도는 항상 정답인데 너무 느려요. G 칸이 하나 늘어날 때마다 경우의 수가 2 배. G 가 k 개면 2^k 가지."),
+        "Brute force always works — but watch it explode on long chains. 👇",
+        "단순 시도는 항상 정답이지만 — 궤도가 길어지면 폭주해요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{
@@ -1677,8 +1677,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Key insight: anywhere in a row, only ONE thing from the past matters — 'is a star arriving here?' That's just 2 states. Carry both options forward at every cell, pick the smaller at the very end. Same correctness as trying everything — but way, way faster. That's DP.",
-        "핵심 발견: 궤도 어느 지점에서든, 앞에서 중요한 정보는 딱 하나 — '별이 이리 오고 있나?' 상태가 딱 2 가지예요. 매 칸에서 두 경우를 다 들고 가다가 끝에서 작은 거 고르면 돼요. 모든 경우를 다 해보는 것만큼 정확하고, 훨씬 빠른 방법 — 이게 바로 DP예요."),
+        "Same idea as brute force, but smarter — that's DP. 👇",
+        "단순 시도와 같은 아이디어인데 더 똑똑한 방법 — 이게 DP예요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{
@@ -1823,8 +1823,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Why TWO numbers per cell? At a G cell, the star can either keep or pass out — we can't pick the better option yet (depends on what comes later). So we carry BOTH options forward: min_stars[0] = stars if this cell does NOT pass; min_stars[1] = stars if it DOES. The LAST cell's smaller number = the path's answer.",
-        "왜 칸마다 숫자가 두 개? G 칸에선 별을 머무를지 보낼지 두 가지 선택 가능 — 지금 못 골라요 (뒤에 뭐 오는지 봐야). 그래서 두 옵션 다 들고 가는 거: min_stars[0] = 안 보낼 때 별 수, min_stars[1] = 보낼 때 별 수. 마지막 칸의 작은 숫자 = 답. ❌ 나오면 그 길은 못 만들어요."),
+        "Now watch the DP carry both numbers per cell, live. ▶ 👇",
+        "이제 DP 가 칸마다 숫자 두 개를 들고 가는 걸 직접 봐요. ▶ 👇"),
       content: (<AstralDpSim E={E} />),
     },
 
@@ -1834,8 +1834,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Quick bridge — the ❌ you just saw in the sim is what the CODE calls EMPTY (a huge number). Why a number and not a 'fail' flag? Because of one min(...) trick.",
-        "잠깐 다리 — 방금 시뮬에 보인 ❌ 를 코드에선 EMPTY (엄청 큰 수) 라고 불러요. 왜 그냥 '실패' 표시 안 쓰고 큰 수? min(...) 한 줄 요령 때문이에요."),
+        "The ❌ from the sim is what the code calls EMPTY — a huge number. Why? 👇",
+        "방금 시뮬의 ❌ 를 코드에선 EMPTY (엄청 큰 수) 라고 불러요. 왜일까요? 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ textAlign: "center", marginBottom: 10 }}>
@@ -1947,8 +1947,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "🔹 STEP 1 — Set up the FIRST cell. It has nothing before it (no incoming star). So min_stars[0]/min_stars[1] are forced by the letter.",
-        "🔹 1 단계 — 첫 칸 설정. 앞에 아무것도 없으니 들어올 별 X. 첫 칸의 min_stars[0]/min_stars[1] 은 글자 보고 바로 결정."),
+        "🔹 STEP 1 — set up the FIRST cell. 👇",
+        "🔹 1 단계 — 첫 칸 설정. 👇"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 10 }}>
@@ -2018,8 +2018,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "🔹 STEP 2 — cheat sheet for each next cell. Given the letter (W/G/B), how to compute new min_stars from previous min_stars. Just a few lines of code.",
-        "🔹 2 단계 — 다음 칸마다 적용할 치트시트. 글자 (W/G/B) 보고, 이전 min_stars 에서 새 min_stars 어떻게 계산하는지. 코드 몇 줄로 끝."),
+        "🔹 STEP 2 — a cheat sheet for each next cell. 👇",
+        "🔹 2 단계 — 다음 칸마다 적용할 치트시트. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ textAlign: "center", marginBottom: 10 }}>
@@ -2103,8 +2103,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "🔹 STEP 3 — pick the answer from the LAST cell. Whatever star this cell would 'pass on' goes off the grid anyway, so both options are valid. Take the smaller. If even the smaller is ❌, the whole path is impossible (-1).",
-        "🔹 3 단계 — 마지막 칸에서 답 고르기. 마지막 칸이 별을 보내든 말든 어차피 사진 밖이라 상관없음. 그러니 두 옵션 다 OK, 더 작은 쪽 = 답. 그것마저 ❌ 면 이 별 길은 못 만듦 (-1)."),
+        "🔹 STEP 3 — pick the answer from the LAST cell. 👇",
+        "🔹 3 단계 — 마지막 칸에서 답 고르기. 👇"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 10 }}>
@@ -2143,8 +2143,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "🎯 All 3 steps in action — hand-trace the path [G, W, G, G]. You can replay each row in the live sim above (preset 'G→W→G→G'). Final answer = 2.",
-        "🎯 1+2+3 단계를 한 별 길에 다 적용 — [G, W, G, G] 손으로 풀어보기. 위 시뮬에서 프리셋 'G→W→G→G' 로 궤도마다 확인 가능. 답 = 2."),
+        "🎯 All 3 steps in action — hand-trace the path [G, W, G, G]. 👇",
+        "🎯 1+2+3 단계를 한 별 길에 다 적용 — [G, W, G, G] 손으로 풀어보기. 👇"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 10 }}>
@@ -2227,8 +2227,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "So — what did the DP actually DO? Here's the case that trapped the forward greedy and forced us to go backward. Watch the DP walk the SAME orbit forward and still get it right.",
-        "그래서 — DP 가 결국 뭘 한 거예요? 앞→뒤 그리디가 막혀서 '거꾸로' 가야 했던 바로 그 경우를 봐요. DP 는 같은 궤도를 앞으로 가는데도 답을 맞혀요."),
+        "So — what did the DP actually DO? Watch it on the orbit that trapped forward greedy. 👇",
+        "그래서 — DP 가 결국 뭘 한 거예요? 앞→뒤 그리디가 막혔던 그 궤도에서 봐요. 👇"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -2323,8 +2323,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Final check: let's run the WHOLE algorithm on a fresh example, end to end. 3×3 grid, stars move right 1, down 1. Watch how the 5 steps come together into one final answer.",
-        "마지막 확인: 새 예시로 알고리즘 전체를 처음부터 끝까지 돌려봐요. 3×3 사진, 별 이동: 오른쪽 1, 아래 1. 5 단계가 어떻게 모여서 답 하나 나오는지 봐요."),
+        "Final check: run the WHOLE algorithm on a fresh example, end to end. 👇",
+        "마지막 확인: 새 예시로 알고리즘 전체를 처음부터 끝까지 돌려봐요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ textAlign: "center", marginBottom: 10 }}>
