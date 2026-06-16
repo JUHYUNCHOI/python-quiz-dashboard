@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 11/11 on cpid=1227
 // rewritten 2026-06-15 — was wrong-problem (permutation reconstruction);
 //   now solves the REAL USACO 2022 US Open Bronze #1 "Photoshoot" (cpid 1227).
 //   Official SAMPLE pass (Python + C++ both output 1 for the 14/GGGHGHHGHHHGHG case).

@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 16/16 on cpid=1324
 // 🔒 USACO_VERIFIED (2026-05-13; C++ completed & re-verified 2026-06-15)
 //   Python: 16/16 PASS
 //   C++:    completed — output construction was previously omitted (printed

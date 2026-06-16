@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 12/12 on cpid=1133
 // 🔒 USACO_VERIFIED (2026-05-13) — superseded by local fix below
 //   2026-06-15: 알고리즘 교체 (overcount 버그 수정). 같은 소 한 쌍이
 //   풀 칸 두 개에 인접하면 우정은 1번만 — set 으로 중복 제거 + 풀 칸이

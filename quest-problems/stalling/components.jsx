@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — 2026-06-16 C++17 AC 12/12 (cpid=1085)
 import { useState, useEffect, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";

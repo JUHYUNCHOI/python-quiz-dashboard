@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 10/10 on cpid=1157
 // 🔒 USACO_VERIFIED (corrected from archive 2026-06-14)
 //   Python: passes official sample (T loop added; 4-state DP). USACO re-submit pending.
 //   C++:    passes official sample (T loop + per-case memo reset; correct DP). USACO re-submit pending.

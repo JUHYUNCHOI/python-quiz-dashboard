@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 12/12 on cpid=1252
 // 🔒 USACO_VERIFIED (corrected 2026-06-14)
 //   Fixed: added T test-case loop + full output (count line + config string).
 //          Greedy now matches the official editorial (patch at i+K, cover to i+2K).

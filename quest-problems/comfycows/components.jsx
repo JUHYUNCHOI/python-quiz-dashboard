@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 12/12 on cpid=1108
 // C++ rewritten 2026-06-15
 //   Python: correct incremental solver, prints comfortable count per iteration.
 //   C++:    rewritten to match — keeps a `comfortable` set and re-checks only the

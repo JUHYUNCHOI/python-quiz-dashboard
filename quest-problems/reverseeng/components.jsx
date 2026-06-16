@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 12/12 on cpid=1253
 // 🔧 REWRITTEN 2026-06-15 — real problem: Reverse Engineering (2022 Dec Bronze 3, cpid 1253)
 //   Both Python & C++ now use the correct greedy "peel a consistent (var,value) group" algorithm.
 //   Local: compiles + matches official sample (OK/OK/LIE/LIE) exactly.

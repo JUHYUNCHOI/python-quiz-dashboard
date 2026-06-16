@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 20/20 on cpid=1205
 // 🔒 USACO_VERIFIED (rewritten 2026-06-15)
 //   Real problem: USACO 2022 Feb Bronze #3 "Blocks" (cpid 1205).
 //   Per query word, print YES/NO — can it be spelled by assigning each

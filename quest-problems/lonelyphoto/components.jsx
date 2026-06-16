@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 11/11 on cpid=1155
 // 🔒 USACO_VERIFIED (2026-05-13)
 //   Python: 0/1 (WA - algorithm overcounts (22 vs 3 expected))
 //   C++:    0/1 (WA - same algorithm bug as py (22 vs 3))

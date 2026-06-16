@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 11/11 on cpid=1229
 // 🔒 USACO_VERIFIED (rewritten 2026-06-15)
 //   Real problem: USACO 2022 US Open Bronze #3 "Alchemy" (cpid 1229).
 //   MAXIMIZE units of metal N. Recipe line is "L M ing1..ingM"

@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 14/14 on cpid=1204
 // 🔒 USACO_VERIFIED (2026-05-13) / C++ rewritten 2026-06-15
 //   Python: 14/14 PASS (USACO)
 //   C++:    rewritten to the correct leftward-modification greedy (running-max

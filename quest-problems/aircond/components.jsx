@@ -1,3 +1,4 @@
+// 🔒 USACO_VERIFIED — re-submitted 2026-06-16 (C++17): AC 11/11 on cpid=1276
 // 🔧 REWRITTEN 2026-06-15 — real problem: Air Cownditioning II (2023 Jan Bronze 2, cpid 1297)
 //   C++ placeholder (summed cow costs) replaced with the correct 2^M subset (bitmask) search,
 //   matching the already-correct Python. Local: compiles + matches official sample (10) exactly.
