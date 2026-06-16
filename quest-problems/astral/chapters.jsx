@@ -819,8 +819,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "A star never leaves its own orbit — blue stars only touch blue cells, green only green. So orbits never bump into each other, like trains on separate tracks.\nThat means we can solve one orbit at a time, then add the answers up.",
-        "별은 자기 궤도 밖으로 못 나가요. 파란 별은 파란 칸만, 초록 별은 초록 칸만 밟아요. 그래서 궤도끼리 절대 안 부딪혀요 — 선로가 다른 기차들처럼요.\n그러니까 궤도를 하나씩 따로 풀고, 답을 더하면 끝!"),
+        "Each star stays on its OWN colour (orbit) — different colours never meet. So solve each colour, then add them up. 👇",
+        "별은 자기 색(궤도)만 밟아요 — 다른 색끼리 절대 안 만나요. 그러니 색마다 따로 풀고 더하면 끝! 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 12, textAlign: "center" }}>
@@ -871,16 +871,6 @@ export function makeAstralCh2(E, lang = "py") {
               </div>
             );
           })()}
-
-          {/* Why independent — the reason, in kid terms */}
-          <div style={{
-            background:"#eff6ff", border:"1.5px solid #93c5fd", borderRadius:8,
-            padding:"9px 13px", marginBottom:10, fontSize:12, color:"#1e3a8a", lineHeight:1.7,
-          }}>
-            {t(E,
-              "A blue star can never land on a green cell. So whatever happens in the blue orbit doesn't change the green orbit at all. They don't touch → they're independent.",
-              "파란 별은 초록 칸에 갈 일이 없어요. 그러니 파란 궤도에서 무슨 일이 생겨도 초록 궤도엔 아무 영향 없어요. 서로 안 만나니까 → 독립이에요.")}
-          </div>
 
           {/* Concrete sum — solve each, then add */}
           <div style={{
