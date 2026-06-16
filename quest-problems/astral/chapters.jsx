@@ -779,8 +779,8 @@ GGG`}
         "Now flip it around — instead of G, think about B. Some cell can NEVER be B. Which one?",
         "이번엔 반대로 — G 말고 B 를 생각해봐요. 어떤 칸은 절대 B 가 될 수 없어요. 어디일까요?"),
       question: t(E,
-        "3×3 grid, stars move right 1 down 1. For a cell to be B, a star must arrive from its top-left neighbor (one step back). Which cell can NEVER be B?",
-        "3×3 사진, 별 이동: 오른쪽 1·아래 1. B 가 되려면 왼쪽 위 칸 (한 칸 거꾸로) 에서 별이 와야 해요. 어느 칸은 그 자리가 사진 밖이라서 절대 B 가 될 수 없을까?"),
+        "Stars move right 1, down 1. For a cell to be B, a star must arrive from the cell just up-left of it. So what if that up-left cell is off the grid? Then that cell can NEVER be B. Which cell is it?",
+        "별은 오른쪽 1, 아래 1 칸씩 움직여요. 어떤 칸이 B 가 되려면, 바로 왼쪽 위 칸에서 별이 와 줘야 해요. 그럼 그 왼쪽 위 칸이 사진 밖이면? 그 칸은 절대 B 가 못 돼요. 어느 칸일까요?"),
       options: [
         "(0, 0)",
         "(1, 1)",
