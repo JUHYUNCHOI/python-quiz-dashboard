@@ -376,8 +376,8 @@ function AstralDpWalk({ E }) {
       "Next cell G. The cell before (W) sent nothing → no star arrived → we must PLACE a new star here (1+1 = 2). Don't move it on → don't-send = 2.",
       "다음 칸 G. 앞 칸(W)이 보낸 별이 없어요 → 옮겨온 별 없음 → 여기 새 별 1 개를 놔야 G가 돼요 (1+1 = 2). 안 보내면 → 안 보냄 = 2.") },
     { c: 2, box: "B", bubble: t(E,
-      "Same G. Move that new star on → send = 2. (The count is still 2.)",
-      "같은 G 칸. 그 새 별을 보내면 → 보냄 = 2. (놓은 별 수는 그대로 2.)") },
+      "Same G. Only 1 star is sent. But this '2' is NOT how many are sent — it's the TOTAL stars placed so far: 1 (cell 1) + 1 (here) = 2. → send-case = 2.",
+      "같은 G 칸. 보내는 별은 1 개예요. 근데 이 숫자 2 는 '보낸 개수'가 아니라 '여기까지 놓은 별 총합'이에요 — 1 번 칸 1 개 + 이 칸 1 개 = 2. → 보냄 = 2.") },
     { c: 3, box: "A", bubble: t(E,
       "Last cell G — THIS is the key! Two ways to be 'don't-send': ⒜ if the cell before was 'don't-send' (2) → no star arrived → place a new one, 2+1 = 3. ⒝ if the cell before SENT (2) → that star moves in and fills this G FREE → no new star = 2. Keep the smaller → don't-send = 2. (So it's 1,1,2,2 — NOT 3!)",
       "마지막 칸 G — 여기가 핵심! '안 보냄'을 만드는 두 길: ⒜ 앞이 '안 보냄'(2)이면 옮겨온 별 없어 새 별 놓음 → 2+1 = 3. ⒝ 앞이 '보냄'(2)이면 그 별이 옮겨와 이 G를 공짜로 채움 → 새 별 안 놓음 = 2. 더 작은 2 → 안 보냄 = 2. (그래서 1,1,2,2 — 3 이 아니에요!)") },
@@ -464,9 +464,12 @@ function AstralDpWalk({ E }) {
       </div>
 
       {/* legend */}
+      <div style={{ textAlign: "center", marginBottom: 4, fontSize: 11, fontWeight: 700, color: "#4f46e5" }}>
+        {t(E, "the number = TOTAL stars placed so far (NOT how many are sent)",
+              "숫자 = 여기까지 놓은 별 총합 (보낸 개수가 아니에요)")}
+      </div>
       <div style={{ display: "flex", justifyContent: "center", gap: 14, marginBottom: 8, fontSize: 10.5, color: "#64748b", flexWrap: "wrap" }}>
-        <span><b style={{ color: "#15803d" }}>{t(E, "don't send", "안 보냄")}</b> = {t(E, "this cell sends NO star to the next cell", "이 칸 별을 다음 칸으로 안 보냄")}</span>
-        <span><b style={{ color: "#15803d" }}>{t(E, "send", "보냄")}</b> = {t(E, "this cell SENDS a star to the next cell", "다음 칸으로 보냄")}</span>
+        <span><b style={{ color: "#15803d" }}>{t(E, "don't send", "안 보냄")}</b> / <b style={{ color: "#15803d" }}>{t(E, "send", "보냄")}</b> = {t(E, "the case where this cell does/doesn't send a star on", "이 칸이 다음으로 별을 안 보내는 / 보내는 경우")}</span>
         <span><b style={{ color: "#dc2626" }}>❌</b> = {t(E, "impossible", "불가능")}</span>
       </div>
 
