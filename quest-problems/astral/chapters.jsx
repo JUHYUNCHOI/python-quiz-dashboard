@@ -80,7 +80,7 @@ function ChainStepSim({ stepData, E }) {
 }
 
 /* ── 2D 그리드 궤도 시뮬레이터 ──────────────────────────────────
-   별이 그리드 위에서 ↘ 대각선으로 이동하는 궤도를 직접 보여줌.
+   별이 그리드 위에서 ↘ 대각선으로 이동하는 줄을 직접 보여줌.
    orbit: [[r,c]...] 궤도 칸 좌표 (별 가는 순서대로)
    stepData: ChainStepSim 과 동일 — cells[i] ↔ orbit[i]
    ─────────────────────────────────────────────────────────── */
@@ -855,7 +855,7 @@ export function makeAstralCh2(E, lang = "py") {
             {
               num: "①", icon: "➡️",
               label: t(E, "Left → right (greedy)", "앞→뒤 그리디(greedy)"),
-              desc: t(E, "Walk the orbit one cell at a time, start → end. Fast — but misses some cases.", "궤도를 한 칸씩 시작→끝으로. 빠르지만 가끔 틀려요."),
+              desc: t(E, "Walk the orbit one cell at a time, start → end. Fast — but misses some cases.", "줄을 한 칸씩 시작→끝으로. 빠르지만 가끔 틀려요."),
               badge: t(E, "✗ sometimes wrong", "✗ 가끔 틀림"),
               bg: "#fef2f2", border: "#fca5a5", tc: "#991b1b",
             },
@@ -960,7 +960,7 @@ export function makeAstralCh2(E, lang = "py") {
           {/* Closing line — leads into the hands-on simulations (no spoilers) */}
           <div style={{ fontSize: 11.5, fontWeight: 700, color: "#475569", textAlign: "center", marginTop: 4 }}>
             {t(E, "Now let's actually try it on an orbit, step by step →",
-                 "이제 궤도에 직접 한 칸씩 적용해봐요 →")}
+                 "이제 줄에 직접 한 칸씩 적용해봐요 →")}
           </div>
         </div>
       ),
@@ -996,12 +996,12 @@ export function makeAstralCh2(E, lang = "py") {
             key="fwd-greedy" E={E}
             rows={5} cols={5} orbit={[[0,0],[2,1],[4,2]]}
             caption={t(E,
-              "Follow just the blue-arrow line (one orbit). Gray cells = other orbits.",
-              "파란 화살표 한 줄(= 궤도)만 따라가요. 회색 칸은 다른 궤도예요.")}
+              "Follow just the blue-arrow line. Gray cells = other lines.",
+              "파란 화살표 한 줄만 따라가요. 회색 칸은 다른 줄이에요.")}
             stepData={[
             {
               cells: [{letter:"G",star:false,active:false},{letter:"G",star:false,active:false},{letter:"B",star:false,active:false}],
-              note: t(E, "Orbit G G B — no stars placed yet (G = star in ONE photo, B = star in BOTH). Start at cell (0) and follow the orbit to the end.", "궤도 G G B — 아직 별을 안 놓은 상태 (G = 한 사진에만 별, B = 두 사진 모두 별). 시작 칸 (0) 부터 끝 (2) 으로 별이 가는 방향을 따라가요.")
+              note: t(E, "Orbit G G B — no stars placed yet (G = star in ONE photo, B = star in BOTH). Start at cell (0) and follow the orbit to the end.", "줄 G G B — 아직 별을 안 놓은 상태 (G = 한 사진에만 별, B = 두 사진 모두 별). 시작 칸 (0) 부터 끝 (2) 으로 별이 가는 방향을 따라가요.")
             },
             {
               cells: [{letter:"G",star:true,active:true},{letter:"G",star:false,active:false},{letter:"B",star:false,active:false}],
@@ -1039,7 +1039,7 @@ export function makeAstralCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Same orbit — just flip the direction: end → start. This time it works. 👇",
-        "같은 궤도인데 — 방향만 뒤집어요: 끝 → 시작. 이번엔 풀려요. 👇"),
+        "같은 줄인데 — 방향만 뒤집어요: 끝 → 시작. 이번엔 풀려요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           {/* One-line plan banner — the per-step bubbles below carry the rule details */}
@@ -1061,7 +1061,7 @@ export function makeAstralCh2(E, lang = "py") {
             rows={5} cols={5} orbit={[[0,0],[2,1],[4,2]]}
             caption={t(E,
               "Same orbit — but walk it backward, from the END (2) toward the start (0).",
-              "같은 궤도인데 — 이번엔 거꾸로, 끝 (2) → 시작 (0) 방향으로 가요.")}
+              "같은 줄인데 — 이번엔 거꾸로, 끝 (2) → 시작 (0) 방향으로 가요.")}
             stepData={[
             {
               cells: [{letter:"G",star:false,active:false},{letter:"G",star:false,active:false},{letter:"B",star:false,active:false}],
@@ -1124,7 +1124,7 @@ export function makeAstralCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Let's run the code by hand on orbit G G B and watch 'possibles' fill up. 👇",
-        "코드를 손으로 궤도 G G B 에 돌려보며 'possibles' 가 차는 걸 봐요. 👇"),
+        "코드를 손으로 줄 G G B 에 돌려보며 'possibles' 가 차는 걸 봐요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           {/* possibles trace table for G G B (down=1, right=1) */}
@@ -1314,7 +1314,7 @@ export function makeAstralCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Brute force always works — but watch it explode on long chains. 👇",
-        "단순 시도는 항상 정답이지만 — 궤도가 길어지면 폭주해요. 👇"),
+        "단순 시도는 항상 정답이지만 — 줄이 길어지면 폭주해요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{
@@ -1326,13 +1326,13 @@ export function makeAstralCh2(E, lang = "py") {
             textAlign: "center",
           }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: "#991b1b" }}>
-              ⏰ {t(E, "Too slow when chains are long", "궤도가 길어지면 폭주")}
+              ⏰ {t(E, "Too slow when chains are long", "줄이 길어지면 폭주")}
             </div>
           </div>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, marginBottom: 10 }}>
             <thead>
               <tr style={{ background: "#f1f5f9" }}>
-                <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "G cells in chain", "궤도의 G 칸 수")}</th>
+                <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "G cells in chain", "줄의 G 칸 수")}</th>
                 <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "Combinations to try", "시도할 경우의 수")}</th>
               </tr>
             </thead>
@@ -1348,7 +1348,7 @@ export function makeAstralCh2(E, lang = "py") {
           <div style={{ fontSize: 12, color: "#64748b", textAlign: "center", lineHeight: 1.55 }}>
             {t(E,
               "Grids can have lines of 200+ cells. Brute force can't finish. We need a smarter way.",
-              "한 궤도에 칸이 200 개 넘을 수도 있어요. 단순 시도로는 못 풀어요. 더 똑똑한 방법이 필요해요.")}
+              "한 줄에 칸이 200 개 넘을 수도 있어요. 단순 시도로는 못 풀어요. 더 똑똑한 방법이 필요해요.")}
           </div>
         </div>
       ),
@@ -1489,7 +1489,7 @@ export function makeAstralCh2(E, lang = "py") {
             <div style={{ fontSize: 12, color: "#713f12", lineHeight: 1.55 }}>
               {t(E,
                 "Row of 200 cells: all combinations = 2²⁰⁰ (impossible). DP = 200 × 2 = 400 steps. Done.",
-                "궤도 200 칸: 모든 경우 = 2²⁰⁰ (불가능). DP = 200 × 2 = 400 번만 계산하면 끝.")}
+                "줄 200 칸: 모든 경우 = 2²⁰⁰ (불가능). DP = 200 × 2 = 400 번만 계산하면 끝.")}
             </div>
           </div>
 
@@ -1848,12 +1848,12 @@ export function makeAstralCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "So — what did the DP actually DO? Watch it on the orbit that trapped forward greedy. 👇",
-        "그래서 — DP 가 결국 뭘 한 거예요? 앞→뒤 그리디가 막혔던 그 궤도에서 봐요. 👇"),
+        "그래서 — DP 가 결국 뭘 한 거예요? 앞→뒤 그리디가 막혔던 그 줄에서 봐요. 👇"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: "#7c3aed" }}>
-              💡 {t(E, "What the DP \"did\" — orbit G G B", "DP 가 \"한 일\" — 궤도 G G B")}
+              💡 {t(E, "What the DP \"did\" — orbit G G B", "DP 가 \"한 일\" — 줄 G G B")}
             </div>
           </div>
 
