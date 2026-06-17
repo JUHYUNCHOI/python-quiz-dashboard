@@ -1355,8 +1355,8 @@ export function makeAstralCh2(E, lang = "py") {
             <div style={{ background: "#faf5ff", borderRadius: 8, padding: "9px 11px" }}>
               <div style={{ fontSize: 11.5, fontWeight: 700, color: "#6b21a8", marginBottom: 4 }}>💡 {t(E, "DP (the bonus)", "DP (보너스)")}</div>
               <div style={{ fontSize: 11, color: "#7e22ce", lineHeight: 1.55 }}>
-                {t(E, "Carry BOTH options at every cell, pick the smaller at the end. Always correct; bends to variants.",
-                      "매 칸 두 경우 다 들고 가다 끝에서 작은 거. 항상 정확; 변형에 강함.")}
+                {t(E, "Carry BOTH options at every cell, pick the smaller at the end. Always correct — no clever guess needed.",
+                      "매 칸 두 경우 다 들고 가다 끝에서 작은 거. 찍기·눈치 없이 항상 정확.")}
               </div>
             </div>
           </div>
@@ -1390,6 +1390,15 @@ export function makeAstralCh2(E, lang = "py") {
             </div>
             <div style={{ fontSize: 13, color: "#4c1d95", lineHeight: 1.6 }}>
               {t(E, "The fewest is the answer.", "가장 적게 나오는 게 답이에요.")}
+            </div>
+          </div>
+          {/* why TWO numbers — the bridge before the walk shows two boxes */}
+          <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 10, padding: "11px 14px", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, color: "#14532d", lineHeight: 1.7 }}>
+              <b>{t(E, "Why 2 numbers per cell? ", "근데 왜 칸마다 숫자 2개? ")}</b>
+              {t(E,
+                "One cell can be filled two ways — place a new star here, OR a star rolls in from the cell before. We can't tell yet which pays off, so we carry BOTH per cell.",
+                "한 칸은 두 가지로 채워져요 — 여기 별을 새로 놓거나, 앞 칸 별이 굴러오거나. 어느 게 이득일지 미리 모르니 칸마다 두 개를 다 들고 가요.")}
             </div>
           </div>
           <div style={{ background: "#faf5ff", border: "1px solid #e9d5ff", borderRadius: 10, padding: "11px 14px", textAlign: "center" }}>
