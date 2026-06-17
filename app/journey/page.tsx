@@ -753,6 +753,27 @@ export default function JourneyPage() {
           </div>
         </Link>
 
+        {/* 🏆 도전 문제 — 연습 너머 한 단계 (대회 수준 사다리). 메인 CTA 보다 작게. */}
+        <Link
+          href="/course/kl"
+          className="block mb-4 p-4 rounded-2xl bg-white border-2 border-rose-200 hover:border-rose-400 hover:shadow-lg active:scale-[0.99] transition-all"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 bg-rose-100 rounded-xl flex items-center justify-center text-2xl shrink-0">
+              🏆
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-base sm:text-lg font-black text-rose-700 leading-tight">
+                {t("도전 문제", "Challenge Problems")}
+              </p>
+              <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5 break-keep">
+                {t("연습보다 한 단계 위 — 대회 수준 문제를 한 개씩", "A step above practice — contest-level, one at a time")}
+              </p>
+            </div>
+            <span className="text-xl sm:text-2xl text-rose-300 shrink-0">→</span>
+          </div>
+        </Link>
+
         {hasCpp && (
           <div className="mb-4 text-center">
             <p className="text-xs sm:text-sm text-emerald-700 font-bold inline-block px-3 py-1 bg-emerald-100 rounded-full border border-emerald-400 break-keep">
