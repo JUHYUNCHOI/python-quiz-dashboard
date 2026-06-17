@@ -1224,8 +1224,8 @@ export function makeAstralCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ fontSize: 11, color: "#64748b", textAlign: "center", marginTop: 10, lineHeight: 1.5 }}>
-            {t(E, "Next slides build DP from scratch: all-combos → too slow → what DP is → this problem.",
-                  "다음 슬라이드에서 DP 를 처음부터 쌓아요: 모든 경우 → 너무 느림 → DP가 뭔지 → 이 문제.")}
+            {t(E, "Next slides build DP from scratch: try all → too slow → DP (fewest-so-far per cell).",
+                  "다음 슬라이드에서 DP 를 처음부터 쌓아요: 다 해보기 → 너무 느림 → DP (칸마다 여기까지 최소).")}
           </div>
         </div>
       ),
@@ -1354,77 +1354,13 @@ export function makeAstralCh2(E, lang = "py") {
       ),
     },
 
-    /* 2-DP-what — NEW (2026-06-17): plain-life analogy for DP BEFORE the min_stars machine.
-       Stairs: #ways to reach step N = (ways to N-1) + (ways to N-2). Write small answers
-       down, reuse them — never recount. This is the whole idea of DP. */
+    /* 2-3.3 — "What DP is + DP on THIS problem" — no analogy, built on the brute/greedy the
+       student already saw (teacher: analogy too hard, explain plainly). */
     {
       type: "reveal",
       narr: t(E,
-        "Before the machine — what even IS DP? One everyday picture: climbing stairs. 👇",
-        "기계로 들어가기 전에 — DP가 대체 뭘까? 일상 그림 하나: 계단 오르기. 👇"),
-      content: (
-        <div style={{ padding: 14 }}>
-          <div style={{
-            background: "#ede9fe", border: "2px solid #8b5cf6", borderRadius: 10,
-            padding: "10px 14px", marginBottom: 12, textAlign: "center",
-          }}>
-            <div style={{ fontSize: 13.5, fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
-              🪜 {t(E, "DP = write small answers down, reuse them",
-                       "DP = 작은 답을 적어두고 → 다시 꺼내 쓰기")}
-            </div>
-            <div style={{ fontSize: 12, color: "#4c1d95", lineHeight: 1.55 }}>
-              {t(E, "You can step up 1 or 2 stairs at a time. How many ways to reach the top?",
-                    "한 번에 1칸 또는 2칸 오를 수 있어요. 꼭대기까지 가는 방법은 몇 가지?")}
-            </div>
-          </div>
-
-          {/* stairs: ways[n] = ways[n-1] + ways[n-2] */}
-          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 4, marginBottom: 10 }}>
-            {[
-              { n: 1, w: 1 }, { n: 2, w: 2 }, { n: 3, w: 3 },
-              { n: 4, w: 5 }, { n: 5, w: 8 },
-            ].map((s, i) => (
-              <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <div style={{
-                  width: 46, height: 22 + s.n * 14, background: "#f5f3ff",
-                  border: "2px solid #8b5cf6", borderRadius: "6px 6px 0 0",
-                  display: "flex", alignItems: "flex-start", justifyContent: "center",
-                  paddingTop: 3, fontSize: 15, fontWeight: 800, color: "#6b21a8",
-                }}>{s.w}</div>
-                <div style={{ fontSize: 10, color: "#64748b", marginTop: 2 }}>
-                  {s.n}{t(E, "", "칸")}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{
-            background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8,
-            padding: "9px 12px", fontSize: 12.5, color: "#14532d", lineHeight: 1.7,
-          }}>
-            {t(E,
-              "To reach stair 5 you came from stair 4 or stair 3. So: ways(5) = ways(4) + ways(3) = 5 + 3 = 8.",
-              "5번째 칸엔 4번째나 3번째 칸에서 와요. 그래서: 방법(5) = 방법(4) + 방법(3) = 5 + 3 = 8.")}
-            <br/>
-            <b>{t(E, "You never recount stair 4 — you already wrote it down (= 5).",
-                    "4번째 칸을 다시 세지 않아요 — 이미 적어뒀으니까 (= 5).")}</b>
-          </div>
-
-          <div style={{ fontSize: 12, color: "#64748b", textAlign: "center", marginTop: 10, lineHeight: 1.5 }}>
-            {t(E,
-              "That's all DP is: walk one step at a time, write 'best so far' down, reuse it. Now let's do the same for our star line. 👉",
-              "DP는 이게 다예요: 한 칸씩 가며 '여기까지 최선'을 적어두고 다시 씀. 이제 우리 별 줄에도 똑같이 해봐요. 👉")}
-          </div>
-        </div>
-      ),
-    },
-
-    /* 2-3.3 — "DP on THIS problem" (was: DP = brute + memo). Now the bridge from the stairs analogy. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Same trick as the stairs — but here, at each cell we track 'fewest stars so far'. 👇",
-        "계단과 똑같은 수법 — 여기선 칸마다 '여기까지 별 최소 개수'를 적어둬요. 👇"),
+        "Here's what DP is — simply: go cell by cell, and at each cell write down 'fewest stars so far'. 👇",
+        "DP가 뭐냐면 — 쉽게 말해, 한 칸씩 가면서 칸마다 '여기까지 별 최소'를 적어두는 거예요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{
@@ -1436,12 +1372,12 @@ export function makeAstralCh2(E, lang = "py") {
             textAlign: "center",
           }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
-              💡 {t(E, "Walk the line, write 'fewest stars so far'", "줄을 따라가며 '여기까지 별 최소' 적기")}
+              💡 {t(E, "DP = walk cell by cell, write 'fewest stars so far'", "DP = 한 칸씩 가며 '여기까지 별 최소' 적어두기")}
             </div>
             <div style={{ fontSize: 12.5, color: "#4c1d95", lineHeight: 1.55 }}>
               {t(E,
-                "Just like stairs: one cell at a time, reuse the previous cell's answer — never redo it.",
-                "계단처럼: 한 칸씩, 바로 앞 칸의 답을 다시 써먹어요 — 두 번 계산 안 함.")}
+                "Each new cell just reuses the previous cell's written answer — no recounting. That's why it beats 'try everything'.",
+                "새 칸은 바로 앞 칸에 적어둔 답만 가져다 써요 — 다시 안 셈. 그래서 '다 해보기'보다 빨라요.")}
             </div>
           </div>
           <div style={{
