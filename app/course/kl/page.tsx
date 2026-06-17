@@ -138,17 +138,39 @@ function Content() {
     <main className="max-w-xl mx-auto px-4 pt-4 pb-28">
       <JourneyBreadcrumb items={[
         { label: "연습", labelEn: "Practice", emoji: "🎯" },
-        { label: "KL 사다리", labelEn: "KL Ladder", emoji: "🪜" },
+        { label: "도전 문제", labelEn: "Challenge", emoji: "🪜" },
       ]} />
 
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-black text-gray-900">{t("KL 사다리", "KL Ladder")}</h1>
+          <h1 className="text-2xl font-black text-gray-900">{t("도전 문제 사다리", "Challenge Ladder")}</h1>
           <p className="text-gray-600 text-sm font-medium mt-0.5">
             {t("위에서부터 한 문제씩. '쉬움이야 어려움이야' 고민 말고 — 지금 할 1개만 풀어요.", "One at a time, top to bottom. Don't overthink levels — just do the next one.")}
           </p>
         </div>
         <LanguageToggle className="shrink-0 mt-1" />
+      </div>
+
+      {/* 🗺️ 전체 흐름에서 여기 — 다른 문제 세트와 난이도 관계 한눈에 */}
+      <div className="mb-5 rounded-xl border border-rose-200 bg-rose-50/50 px-3 py-3">
+        <p className="text-[10px] font-bold text-rose-400 uppercase tracking-wider mb-2 text-center">
+          {t("전체 학습에서 여기쯤", "Where this sits")}
+        </p>
+        <div className="flex items-center justify-center gap-1.5 text-xs font-bold flex-wrap">
+          <span className="text-gray-400">📘 {t("수업", "Lessons")}</span>
+          <span className="text-gray-300">›</span>
+          <span className="text-gray-400">🎯 {t("연습", "Practice")}</span>
+          <span className="text-gray-300">›</span>
+          <span className="px-2 py-0.5 rounded-full bg-rose-500 text-white shadow-sm">🪜 {t("도전", "Challenge")}</span>
+          <span className="text-gray-300">›</span>
+          <span className="text-gray-400">🧩 {t("알고리즘", "Algorithms")}</span>
+          <span className="text-gray-300">›</span>
+          <span className="text-gray-400">🏆 {t("대회", "Contest")}</span>
+        </div>
+        <p className="text-[11px] text-gray-600 text-center mt-2 break-keep leading-relaxed">
+          {t("연습(개념 1개씩) 다음 단계 · 쉬움→어려움 순. 앞쪽은 아는 도구로, 뒤로 갈수록 알고리즘(이분탐색·누적합 등)과 슬슬 겹쳐요.",
+             "Next step after Practice · Easy→Hard. Early ones use tools you know; later ones start touching algorithms (binary search, prefix sums).")}
+        </p>
       </div>
 
       {/* 진행 바 */}
@@ -268,6 +290,23 @@ function Content() {
             <p className="text-xs text-gray-500 mb-3">
               {t("앱 안에서 풀고 바로 채점돼요. 선생님은 정답도 볼 수 있어요.", "Opens in-app, auto-graded. Teachers can view the solution.")}
             </p>
+
+            {/* 🏦 코딩뱅크 — 앱 내 자동채점 문제 100여 개로 연결 (별도 문제, 풀 거리 최대화) */}
+            <Link
+              href="/coding-bank"
+              className="flex items-center gap-3 rounded-xl border-2 border-emerald-300 bg-white px-4 py-3 mb-4 hover:border-emerald-500 hover:shadow-sm transition-all"
+            >
+              <span className="text-2xl shrink-0">🏦</span>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-black text-emerald-800">{t("코딩뱅크 — 문제 더 풀기", "Coding Bank — more problems")}</p>
+                <p className="text-[11px] text-gray-500 mt-0.5 break-keep">
+                  {t("앱에서 자동채점되는 복합문제 100여 개 (여기 사다리와 겹치지 않는 별도 문제). 도구 골라 풀기.",
+                     "100+ more auto-graded problems (separate from this ladder). Pick your own tools.")}
+                </p>
+              </div>
+              <span className="text-emerald-400 shrink-0" aria-hidden>→</span>
+            </Link>
+
             <div className="flex flex-col gap-4">
               {KL_GROUPS.map(g => (
                 <div key={g.id}>
@@ -325,7 +364,7 @@ function Content() {
                 <span className="text-gray-600">{t("CF 1300~1600 · LeetCode Medium · AtCoder D · USACO Silver 입문 — 기법·통찰 필요", "CF 1300~1600 · LC Medium · ABC D · Silver intro — needs technique / insight")}</span>
               </div>
               <div className="mt-1 rounded-lg bg-white border border-gray-200 px-3 py-2 text-gray-700">
-                📍 <span className="font-bold">{t("KL Coding Cup ≈ 쉬움~보통", "KL Coding Cup ≈ Easy~Medium")}</span> {t("(입문 구현). '어려움'은 그 이상 = 욕심/심화.", "(intro implementation). 'Hard' is above KL — reach/extra.")}
+                📍 <span className="font-bold">{t("이 사다리 ≈ 쉬움~보통", "This ladder ≈ Easy~Medium")}</span> {t("(입문 구현). '어려움'은 그 이상 = 욕심/심화.", "(intro implementation). 'Hard' is above — reach/extra.")}
               </div>
             </div>
           </details>
