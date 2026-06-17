@@ -190,11 +190,12 @@ function OrbitGridStepSim({ rows, cols, orbit, stepData, caption, E }) {
                   );
                 }
                 const cell = cur.cells[oi];
+                const isDone = cell.done && !cell.active;
                 return (
                   <div key={`${r}-${c}`} style={{
                     position: "absolute", left, top, width: CELL, height: CELL, borderRadius: 8, zIndex: 1,
-                    border: `2.5px solid ${cell.active ? "#3b82f6" : cell.star ? "#d97706" : "#c7d2fe"}`,
-                    background: cell.active ? "#dbeafe" : cell.star ? "#fef9c3" : "#eef2ff",
+                    border: `2.5px solid ${cell.active ? "#3b82f6" : isDone ? "#16a34a" : cell.star ? "#d97706" : "#c7d2fe"}`,
+                    background: cell.active ? "#dbeafe" : isDone ? "#dcfce7" : cell.star ? "#fef9c3" : "#eef2ff",
                     boxShadow: cell.active ? "0 0 0 4px rgba(59,130,246,0.18)" : "none",
                     display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
                     transition: "background 0.15s, border-color 0.15s, box-shadow 0.15s",
@@ -202,7 +203,10 @@ function OrbitGridStepSim({ rows, cols, orbit, stepData, caption, E }) {
                     {cell.star && (
                       <div style={{ position: "absolute", top: -11, fontSize: 15, color: "#d97706", fontWeight: 800 }}>★</div>
                     )}
-                    <div style={{ fontSize: 16, fontWeight: 800, lineHeight: 1, color: cell.active ? "#1e40af" : cell.star ? "#92400e" : "#6366f1" }}>
+                    {isDone && (
+                      <div style={{ position: "absolute", bottom: -9, right: -7, fontSize: 12, fontWeight: 900, color: "#16a34a" }}>✓</div>
+                    )}
+                    <div style={{ fontSize: 16, fontWeight: 800, lineHeight: 1, color: cell.active ? "#1e40af" : isDone ? "#15803d" : cell.star ? "#92400e" : "#6366f1" }}>
                       {cell.letter}
                     </div>
                     <div style={{ fontSize: 10, lineHeight: 1, marginTop: 2, color: "#94a3b8" }}>({oi})</div>
@@ -229,19 +233,30 @@ function OrbitGridStepSim({ rows, cols, orbit, stepData, caption, E }) {
               ...(placeRight ? { borderRight: `8px solid ${bubBg}` } : { borderLeft: `8px solid ${bubBg}` }),
             }} />
             <div style={{ fontSize: 12.5, fontWeight: 500, color: "#1f2937", lineHeight: 1.55 }}>{cur.note}</div>
-            {cur.why && (
-              <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px dashed #e2e8f0", fontSize: 11.5, color: "#6b7280", lineHeight: 1.5, whiteSpace: "pre-line" }}>
-                {cur.why}
-              </div>
-            )}
-            {isLast && cur.result && (
-              <div style={{ marginTop: 7, fontSize: 12, fontWeight: 800, color: cur.ok ? "#15803d" : "#b91c1c" }}>
-                {cur.result}
-              </div>
-            )}
           </div>
         </div>
       </div>
+
+      {/* result + reflection — rendered in a calm box BELOW the grid (never covers cells,
+          never blows the bubble up). Only the short per-step note stays in the bubble. */}
+      {((isLast && cur.result) || cur.why) && (
+        <div style={{
+          maxWidth: 560, margin: "0 auto 10px",
+          background: failing ? "#fef2f2" : passing ? "#f0fdf4" : "#f8fafc",
+          border: `1.5px solid ${bubBorder}`, borderRadius: 11, padding: "11px 14px",
+        }}>
+          {isLast && cur.result && (
+            <div style={{ fontSize: 13, fontWeight: 800, color: cur.ok ? "#15803d" : "#b91c1c", marginBottom: cur.why ? 7 : 0 }}>
+              {cur.result}
+            </div>
+          )}
+          {cur.why && (
+            <div style={{ fontSize: 12, color: "#475569", lineHeight: 1.7, whiteSpace: "pre-line" }}>
+              {cur.why}
+            </div>
+          )}
+        </div>
+      )}
       {/* Prev / Next */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
         {btn(isFirst, E ? "◀ Prev" : "◀ 이전", () => setSi(Math.max(0, idx - 1)))}
@@ -1164,15 +1179,15 @@ export function makeAstralCh2(E, lang = "py") {
               note: t(E, "G(0): nothing arrives here (it's the start) → place ★. This star will travel to G(1) in photo 2.", "G(0): 여기엔 별이 안 와요 (시작 칸) → ★ 놓기. 이 별은 사진 2에서 G(1) 으로 가요.")
             },
             {
-              cells: [{letter:"G",star:true,active:false},{letter:"G",star:false,active:true},{letter:"B",star:false,active:false}],
+              cells: [{letter:"G",star:true,active:false,done:true},{letter:"G",star:false,active:true},{letter:"B",star:false,active:false}],
               note: t(E, "G(1): the star from G(0) arrives here in photo 2 → already satisfied → skip. (Looks efficient — one star covered two cells!)", "G(1): G(0) 별이 사진 2에서 여기로 와요 → 이미 OK → 통과. (별 하나로 두 칸 해결, 똑똑해 보이죠!)")
             },
             {
-              cells: [{letter:"G",star:true,active:false},{letter:"G",star:false,active:true},{letter:"B",star:false,active:true}],
+              cells: [{letter:"G",star:true,active:false,done:true},{letter:"G",star:false,active:true},{letter:"B",star:false,active:true}],
               note: t(E, "B(2): to fill photo 2, G(1) must SEND a star here. But G(1) was filled for free — it has no star to send. 💥", "B(2): 사진2 를 채우려면 G(1) 이 별을 보내줘야 해요. 그런데 G(1) 은 공짜로 때워서 보낼 별이 없어요. 💥"),
               why: t(E,
-                "The puzzle is NOT impossible — 3 stars solve it. We just chose the wrong order.\nWhat went wrong: a B MUST receive a star from the cell right before it. So B(2) needs G(1) to keep a star and send it over. But going forward, we filled G(1) 'for free' with G(0)'s incoming star — so G(1) kept none of its own to send. We spent the very star the B was counting on.\nLesson: a G is a free choice, but a B is a hard demand on the cell before it. We should settle the hard demands FIRST. And a B's demand points backward (to the cell before it) — so we should sweep from the END.",
-                "이 퍼즐은 불가능한 게 아니에요 — 별 3 개면 풀려요. 그냥 순서를 잘못 골랐을 뿐.\n무엇이 잘못됐나: B 는 바로 앞 칸에서 별을 받아야만 해요. 그래서 B(2) 는 G(1) 이 별을 가지고 있다가 보내줘야 해요. 그런데 앞→뒤로 가면서 G(1) 을 G(0) 의 들어오는 별로 '공짜로' 채워버려서, G(1) 엔 보낼 자기 별이 안 남았어요. B 가 기대던 바로 그 별을 써버린 거예요.\n교훈: G 는 자유 선택이지만, B 는 앞 칸에 대한 강한 요구예요. 강한 요구부터 먼저 들어줘야 해요. 그리고 B 의 요구는 뒤(앞 칸)를 가리켜요 — 그러니 끝에서부터 훑어야 해요."),
+                "A B means: 'the cell right before me MUST hold a star.' But going front→back, we used up that cell (G(1)) for free before we ever met the B — so no star was left to send.\n→ To settle a B's demand first, we must sweep from the END, backward. (The puzzle is fine — 3 stars solve it, NOT -1.)",
+                "B 는 '바로 앞 칸에 별이 꼭 있어야 한다'는 명령이에요. 그런데 앞에서부터 가면, B 를 만나기도 전에 그 앞 칸(G(1)) 을 공짜로 때워서 보낼 별이 안 남아요.\n→ 명령(B)부터 먼저 들어주려면 끝에서부터 거꾸로 가야 해요. (퍼즐은 멀쩡해요 — 별 3개면 풀려요, -1 아님.)"),
               result: t(E, "Stuck — the forward plan is wrong ✗ (the answer is NOT -1!)", "막혔어요 — 앞→뒤 작전이 틀렸어요 ✗ (답은 -1 아니에요!)"),
               ok: false,
             },
@@ -1228,19 +1243,19 @@ export function makeAstralCh2(E, lang = "py") {
               note: t(E, "B(2): B cell — ★ here AND ★ at the cell before it, G(1). Now G(1)'s star will travel to B(2) in photo 2 ✓", "B(2): B 칸 → 여기 ★ + 바로 앞 G(1)에도 ★. 이제 G(1) 별이 사진 2에서 B(2)로 와줘요 ✓")
             },
             {
-              cells: [{letter:"G",star:false,active:false},{letter:"G",star:true,active:true},{letter:"B",star:true,active:false}],
+              cells: [{letter:"G",star:false,active:false},{letter:"G",star:true,active:true},{letter:"B",star:true,active:false,done:true}],
               note: t(E, "G(1): already has ★ → skip, already satisfied.", "G(1): 이미 ★ 있음 → 통과, 조건 OK.")
             },
             {
-              cells: [{letter:"G",star:true,active:true},{letter:"G",star:true,active:false},{letter:"B",star:true,active:false}],
+              cells: [{letter:"G",star:true,active:true},{letter:"G",star:true,active:false,done:true},{letter:"B",star:true,active:false,done:true}],
               note: t(E, "G(0): no ★, and it's the start (no cell before it) → place ★ here directly.", "G(0): ★ 없음. 앞 칸이 없는 시작 칸 → 여기에 직접 ★.")
             },
             {
-              cells: [{letter:"G",star:true,active:false},{letter:"G",star:true,active:false},{letter:"B",star:true,active:true}],
+              cells: [{letter:"G",star:true,active:false,done:true},{letter:"G",star:true,active:false,done:true},{letter:"B",star:true,active:false,done:true}],
               note: t(E, "Done! G(0)★, G(1)★, B(2)★ = 3 stars. Every cell satisfied ✓", "완료! G(0)★, G(1)★, B(2)★ = 별 3개. 모든 칸 조건 OK ✓"),
               why: t(E,
-                "We met B first and handled its demand — 'the cell before a B must have a star' — up front, and that same star covers G(1). Nothing to guess here (the B forced it all), so we never get stuck.",
-                "B 를 먼저 만나서 'B 앞 칸엔 무조건 별' 명령부터 처리했어요 — 그 별이 G(1)도 같이 해결. 여기선 고를 것도 없었어요(B 가 다 강제). 그래서 안 막혀요."),
+                "Going from the end, we meet the B first and obey its demand right away — and that same star also covers G(1). Nothing to guess (the B forces it all), so we never get stuck.",
+                "끝에서부터 가서 B 를 먼저 만났어요. 'B 앞 칸엔 무조건 별' 명령을 바로 들어주니, 그 별이 G(1)까지 같이 해결돼요. 고를 게 없어서(B 가 다 강제) 안 막혀요."),
               result: t(E, "3 stars — all conditions satisfied ✓", "별 3개 — 모든 조건 충족 ✓"),
               ok: true,
             },
