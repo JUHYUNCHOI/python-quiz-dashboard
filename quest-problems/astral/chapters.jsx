@@ -273,10 +273,10 @@ function Sample1Counter({ E }) {
   const S = 48, GAP = 6, P = S + GAP, gridW = 3 * S + 2 * GAP;
   const letterColor = (L) => L === "W" ? "#94a3b8" : L === "G" ? "#6366f1" : "#1e293b";
   const meaning = (L) => L === "W"
-    ? t(E, "W = empty cell. 0 stars.", "W = 빈 칸. 별 0개.")
+    ? t(E, "W = empty in both photos. 0 stars.", "W = 두 사진 다 비어. 별 0개.")
     : L === "G"
-    ? t(E, "G = 1 star (in one photo). +1 ⭐", "G = 별 1개 (한 사진에만). +1 ⭐")
-    : t(E, "B = 1 star (in both photos). +1 ⭐", "B = 별 1개 (두 사진 다). +1 ⭐");
+    ? t(E, "G = star in ONE photo → it was here, then left. Still 1 star! ⭐", "G = 한 사진에만 → 있다가 떠난 별. 그래도 1개! ⭐")
+    : t(E, "B = star in BOTH photos → it stayed put. 1 star! ⭐", "B = 두 사진 다 → 안 떠나고 그대로 있던 별. 1개! ⭐");
 
   const btn = (disabled, label, onClick) => (
     <button onClick={onClick} disabled={disabled} style={{
