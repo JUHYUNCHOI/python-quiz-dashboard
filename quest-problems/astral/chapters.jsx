@@ -1267,38 +1267,38 @@ export function makeAstralCh2(E, lang = "py") {
             <tbody>
               <tr>
                 <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>1</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "★ new", "★ 새 별")}</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "★ new", "★ 새 별")}</td>
+                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "★ new one", "★ 새로 둔 별")}</td>
+                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "★ new one", "★ 새로 둔 별")}</td>
                 <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center", fontWeight: 700 }}>2</td>
               </tr>
               <tr style={{ background: "#dcfce7" }}>
                 <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>2</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "★ new (→ next)", "★ 새 별 (→ 다음 칸)")}</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "↩ arrived", "↩ 이어온 별")}</td>
+                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "★ new one (→ next)", "★ 새로 둔 별 (→ 다음 칸)")}</td>
+                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "↩ from prev", "↩ 앞에서 온 별")}</td>
                 <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center", fontWeight: 800, color: "#15803d" }}>1 ✅</td>
               </tr>
               <tr style={{ color: "#94a3b8" }}>
                 <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>3</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "↩ arrived", "↩ 이어온 별")}</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "★ new", "★ 새 별")}</td>
+                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "↩ from prev", "↩ 앞에서 온 별")}</td>
+                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "★ new one", "★ 새로 둔 별")}</td>
                 <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>❌</td>
               </tr>
               <tr style={{ color: "#94a3b8" }}>
                 <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>4</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "↩ arrived", "↩ 이어온 별")}</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "↩ arrived", "↩ 이어온 별")}</td>
+                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "↩ from prev", "↩ 앞에서 온 별")}</td>
+                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "↩ from prev", "↩ 앞에서 온 별")}</td>
                 <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>❌</td>
               </tr>
             </tbody>
           </table>
           <div style={{ fontSize: 11, color: "#94a3b8", marginBottom: 6, lineHeight: 1.5 }}>
             <span style={{ background: "#f1f5f9", borderRadius: 4, padding: "1px 6px", fontWeight: 600, color: "#64748b" }}>
-              {t(E, "↩ arrived", "↩ 이어온 별")}
+              {t(E, "↩ from prev", "↩ 앞에서 온 별")}
             </span>
             {" "}
             {t(E,
-              "= the star from the previous cell travels here in photo 2 (no extra star needed here)",
-              "= 앞 칸에 있던 별이 사진 2에서 이 칸으로 이동해 온 것 (여기 새 별 불필요)")}
+              "= the star from the previous cell rolled in (photo 2) — so no new star is placed here",
+              "= 앞 칸에 있던 별이 사진 2에서 이 칸으로 굴러온 것 — 그래서 여기엔 새로 안 둬도 됨")}
           </div>
           <div style={{ fontSize: 12, color: "#64748b", textAlign: "center", lineHeight: 1.55 }}>
             {t(E,
@@ -1728,7 +1728,7 @@ export function makeAstralCh2(E, lang = "py") {
                   <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "case", "케이스")}</th>
                   <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "needs incoming ★?", "들어온 별?")}</th>
                   <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "uses prev cell's", "쓰는 이전 칸 값")}</th>
-                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "+ new ★?", "+ 새 별?")}</th>
+                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "+ new star?", "+ 새로 둔 별?")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -1975,7 +1975,7 @@ export function makeAstralCh2(E, lang = "py") {
                   <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", fontSize: 10.5, fontFamily: "system-ui" }}>
                     {t(E,
                       "⒜ star slid in from prev pass=1 → fills this G FREE, but can't pass on → keep=1.  ⒝ own new ★ from prev keep=1 → +1=2, can keep or pass → [2,2].",
-                      "⒜ 앞의 pass=1 에서 별이 슬라이드해 들어옴 → 이 G 를 공짜로 채움, 대신 다음에 못 보냄 → keep=1.  ⒝ 앞의 keep=1 에서 내 새 별 → +1=2, 머무름/보냄 둘 다 → [2,2].")}
+                      "⒜ 앞의 pass=1 에서 별이 굴러 들어옴 → 이 G 를 채움(새로 안 둠), 대신 다음에 못 보냄 → keep=1.  ⒝ 앞의 keep=1 에서 새로 둔 별 → +1=2, 머무름/보냄 둘 다 → [2,2].")}
                   </td>
                   <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center", background: "#ede9fe", color: "#5b21b6", fontWeight: 700 }}>[1, 2]</td>
                 </tr>
