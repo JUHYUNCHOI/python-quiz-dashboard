@@ -367,68 +367,27 @@ function Sample1Counter({ E }) {
    the cells are linked into a rail and solved together. Editable slide content.
    Solid ★ = photo1 (original spot) · faint ★ = photo2 (one-notch-ahead image). ── */
 function OrbitWalk({ E }) {
-  const Ac = "#2563eb", AcG = "#93c5fd"; // star A (blue) solid / ghost
-  const Bc = "#db2777", BcG = "#f9a8d4"; // star B (pink) solid / ghost
-  const RAIL = "#d97706";
-  // rail = (0,0) → (2,1) → (4,2 off-grid)
-  const railHops = [[{ r:0,c:0 }, { r:2,c:1 }], [{ r:2,c:1 }, { r:4,c:2 }]];
-
-  // each step: chips per cell { top, bottom } + active hop + gold-shared set + bubble
+  // ONE concrete idea: a star moves exactly one step (photo1 → photo2). So to read
+  // any cell, look "one step back". No chains/rails — the main greedy never needs them.
+  const Ac = "#2563eb", AcG = "#93c5fd"; // solid (photo1) / ghost (photo2)
+  const P1 = { r: 0, c: 0 }, P2 = { r: 2, c: 1 };
   const steps = [
-    {
-      tail: { r:0, c:0 }, hop: null, gold: new Set(), chips: {},
-      bubble: t(E, "These cells are linked into ONE rail: (0,0) → (2,1) → off-grid. The arrow = where a star goes in photo 2 (one notch).",
-                  "이 칸들은 한 '레일'로 이어져요: (0,0) → (2,1) → 사진 밖. 화살표 = 사진2에서 한 칸 가는 방향이에요."),
-    },
-    {
-      tail: { r:0, c:0 }, hop: 0, gold: new Set(), bubble: t(E,
-        "Star A: in photo 1 it's at (0,0). In photo 2 it moves ONE notch → (2,1). That's its only move.",
-        "별 A: 사진1에선 (0,0). 사진2에선 딱 한 칸 가서 (2,1). 이게 유일한 이동이에요."),
-      chips: { "0,0": { bottom: { s:"A", c:Ac } }, "2,1": { top: { s:"A", c:AcG } } },
-    },
-    {
-      tail: { r:2, c:1 }, hop: 1, gold: new Set(), bubble: t(E,
-        "A DIFFERENT star B: photo 1 at (2,1). Photo 2 → (4,2) = off the grid. It also moves just one notch.",
-        "다른 별 B: 사진1에선 (2,1). 사진2는 (4,2) = 사진 밖. 얘도 딱 한 칸만 가요."),
-      chips: { "2,1": { bottom: { s:"B", c:Bc } }, "4,2": { top: { s:"B", c:BcG } } },
-    },
-    {
-      tail: { r:2, c:1 }, hop: null, gold: new Set(["2,1"]), bubble: t(E,
-        "Decide to put a star at (0,0) → (2,1)'s photo-2 is filled automatically. So the (0,0) decision DECIDES (2,1) — you can't choose (2,1) on its own.",
-        "(0,0)에 별을 두기로 정하면 → (2,1)의 '사진2'가 저절로 채워져요. 즉 (0,0) 결정이 (2,1)을 정해버려요 — (2,1)만 따로 못 정해요."),
-      chips: { "2,1": { top: { s:"A", c:AcG }, bottom: { s:"B", c:Bc } } },
-    },
-    {
-      tail: null, final: true, hop: null, gold: new Set(), chips: {},
-      bubble: t(E,
-        "Front cell decides the next → you can't solve them apart. So bundle (0,0)–(2,1)–… into ONE rail and decide it in order. (How to decide comes next!)",
-        "앞 칸이 뒤 칸을 정해버려요 → 따로따로 못 풀어요. 그래서 (0,0)–(2,1)–… 를 한 줄(레일)로 이어서 순서대로 정해요. (어떻게 정하는지는 다음에!)"),
-    },
+    { p1: P1, p2: null, arrow: false, tail: P1,
+      bubble: t(E, "Photo 1 — one star sits at (0,0).", "사진1 — 별 하나가 (0,0) 에 있어요.") },
+    { p1: P1, p2: P2, arrow: true, tail: P2,
+      bubble: t(E, "Photo 2 — that star moves just ONE step (right 1, down 2) → (2,1).",
+                   "사진2 — 그 별이 딱 한 칸 움직여요 (오른쪽 1, 아래 2) → (2,1).") },
+    { p1: P1, p2: P2, arrow: true, tail: P2, final: true,
+      bubble: t(E, "So a star seen at (2,1) came from '(2,1) minus one step' = (0,0). Whatever cell you look at, just check 'one step back'! 🔑",
+                   "그래서 (2,1) 에 보이는 별은 '거꾸로 한 칸'인 (0,0) 에서 온 거예요. 어떤 칸이든 '거꾸로 한 칸'만 보면 돼요! 🔑") },
   ];
-
   const [si, setSi] = useState(0);
   const last = steps.length - 1;
   const idx = Math.max(0, Math.min(si, last));
   const cur = steps[idx];
-  const S = 44, GAP = 6, P = S + GAP, gridW = 4 * S + 3 * GAP;
-
-  const cx = (r, c) => c * P + S / 2, cy = (r, c) => r * P + S / 2;
-  const line = (a, b, color, w, op, z) => {
-    const x1 = cx(a.r, a.c), y1 = cy(a.r, a.c), x2 = cx(b.r, b.c), y2 = cy(b.r, b.c);
-    const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy), ang = Math.atan2(dy, dx) * 180 / Math.PI;
-    return <div key={`${x1}-${y1}-${z}`} style={{
-      position: "absolute", left: x1, top: y1 - w / 2, width: len, height: w,
-      background: color, opacity: op, transformOrigin: "0 50%", transform: `rotate(${ang}deg)`,
-      borderRadius: 2, zIndex: z,
-    }} />;
-  };
-
-  const chipEl = (chip, ghost) => (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", lineHeight: 1 }}>
-      <span style={{ fontSize: ghost ? 14 : 17, color: chip.c, fontWeight: 800, opacity: ghost ? 0.85 : 1 }}>★</span>
-      <span style={{ fontSize: 8, fontWeight: 800, color: chip.c }}>{chip.s}</span>
-    </div>
-  );
+  const S = 46, GAP = 6, P = S + GAP, gridW = 4 * S + 3 * GAP;
+  const cx = (cell) => cell.c * P + S / 2, cy = (cell) => cell.r * P + S / 2;
+  const key = (cell) => `${cell.r},${cell.c}`;
 
   const btn = (disabled, label, onClick) => (
     <button onClick={onClick} disabled={disabled} style={{
@@ -438,66 +397,64 @@ function OrbitWalk({ E }) {
     }}>{label}</button>
   );
 
-  const railCells = new Set(["0,0", "2,1"]);
-
   return (
     <div style={{ padding: "4px 0" }}>
-      <div style={{ position: "relative", width: gridW + 16 + 188, maxWidth: "100%", height: 5 * P + 6, margin: "0 auto 10px" }}>
-        {/* faint full rail */}
-        {railHops.map(([a, b], i) => line(a, b, RAIL, 3, 0.22, 0))}
-        {/* active hop highlighted in the star's colour */}
-        {cur.hop != null && line(railHops[cur.hop][0], railHops[cur.hop][1], cur.hop === 0 ? Ac : Bc, 3.5, 0.9, 1)}
-
-        {/* 4×4 grid + off-grid cell (4,2) */}
-        {[...[0,1,2,3].flatMap(r => [0,1,2,3].map(c => ({ r, c, off:false }))), { r:4, c:2, off:true }].map(({ r, c, off }) => {
-          const key = `${r},${c}`;
-          const chip = cur.chips[key];
-          const onRail = railCells.has(key) || off;
-          const isGold = cur.gold.has(key);
+      <div style={{ position: "relative", width: gridW + 16 + 192, maxWidth: "100%", height: 4 * P + 6, margin: "0 auto 10px" }}>
+        {/* one-step arrow (0,0) → (2,1) */}
+        {cur.arrow && (() => {
+          const x1 = cx(P1), y1 = cy(P1), x2 = cx(P2), y2 = cy(P2);
+          const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy), ang = Math.atan2(dy, dx) * 180 / Math.PI;
+          return <div style={{
+            position: "absolute", left: x1, top: y1 - 1.5, width: len, height: 3,
+            background: Ac, opacity: 0.5, transformOrigin: "0 50%", transform: `rotate(${ang}deg)`,
+            borderRadius: 2, zIndex: 1,
+          }} />;
+        })()}
+        {/* 4×4 grid */}
+        {[0,1,2,3].flatMap(r => [0,1,2,3].map(c => {
+          const cell = { r, c }, k = key(cell);
+          const isP1 = k === key(cur.p1);
+          const isP2 = cur.p2 && k === key(cur.p2);
           return (
-            <div key={key} style={{
+            <div key={k} style={{
               position: "absolute", left: c * P, top: r * P, width: S, height: S, borderRadius: 8, zIndex: 2,
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 1,
-              background: off ? "#fafafa" : isGold ? "#fef3c7" : "#fff",
-              border: isGold ? `2.5px solid ${RAIL}`
-                : off ? "2px dashed #cbd5e1"
-                : onRail ? `2px dashed ${RAIL}` : "2px solid #eef2f6",
-              boxShadow: isGold ? "0 0 0 4px rgba(217,119,6,.18)" : "none",
-              transition: "all .15s",
+              background: isP1 ? "#dbeafe" : isP2 ? "#eff6ff" : "#fff",
+              border: isP1 ? `2.5px solid ${Ac}` : isP2 ? `2px dashed ${Ac}` : "2px solid #eef2f6",
+              boxShadow: isP1 ? `0 0 0 4px rgba(37,99,235,.15)` : "none", transition: "all .15s",
             }}>
-              {chip?.top && chipEl(chip.top, true)}
-              {chip?.bottom && chipEl(chip.bottom, false)}
-              {!chip?.top && !chip?.bottom && (
-                <span style={{ fontSize: 8, fontWeight: 700, color: off ? "#dc2626" : onRail ? RAIL : "#cbd5e1" }}>
-                  {off ? "사진밖" : `(${r},${c})`}
-                </span>
+              {isP1 ? (
+                <><span style={{ fontSize: 18, color: Ac, fontWeight: 900, lineHeight: 1 }}>★</span>
+                  <span style={{ fontSize: 8, fontWeight: 800, color: Ac }}>{t(E, "photo1", "사진1")}</span></>
+              ) : isP2 ? (
+                <><span style={{ fontSize: 16, color: AcG, fontWeight: 900, lineHeight: 1 }}>★</span>
+                  <span style={{ fontSize: 8, fontWeight: 800, color: "#60a5fa" }}>{t(E, "photo2", "사진2")}</span></>
+              ) : (
+                <span style={{ fontSize: 8, fontWeight: 700, color: "#cbd5e1" }}>({r},{c})</span>
               )}
             </div>
           );
-        })}
-
+        }))}
         {/* bubble */}
         <div style={{
-          position: "absolute", left: gridW + 16,
-          top: cur.tail ? Math.min(cur.tail.r * P, 3 * P) : 2 * P, width: 176,
+          position: "absolute", left: gridW + 16, top: Math.min(cur.tail.r * P, 2 * P), width: 184,
           background: cur.final ? "#dcfce7" : "#1e3a8a", color: cur.final ? "#14532d" : "#fff",
           border: cur.final ? "1.5px solid #16a34a" : "none",
-          borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.5, fontWeight: 600, zIndex: 3,
+          borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.55, fontWeight: 600, zIndex: 3,
         }}>
-          {cur.tail && (
-            <div style={{
-              position: "absolute", left: -7, top: 15, width: 0, height: 0,
-              borderTop: "7px solid transparent", borderBottom: "7px solid transparent", borderRight: "8px solid #1e3a8a",
-            }} />
-          )}
+          <div style={{
+            position: "absolute", left: -7, top: 15, width: 0, height: 0,
+            borderTop: "7px solid transparent", borderBottom: "7px solid transparent",
+            borderRight: `8px solid ${cur.final ? "#dcfce7" : "#1e3a8a"}`,
+          }} />
           {cur.bubble}
         </div>
       </div>
 
       {/* legend */}
       <div style={{ display: "flex", justifyContent: "center", gap: 14, marginBottom: 8, fontSize: 10.5, color: "#64748b", flexWrap: "wrap" }}>
-        <span><b style={{ color:"#1e293b" }}>진한 ★</b> = {t(E, "photo 1 (original)", "사진1 (원래 자리)")}</span>
-        <span><b style={{ color:"#94a3b8" }}>흐린 ★</b> = {t(E, "photo 2 (one notch ahead)", "사진2 (한 칸 간 모습)")}</span>
+        <span><b style={{ color: Ac }}>진한 ★</b> = {t(E, "photo 1 (original spot)", "사진1 (원래 자리)")}</span>
+        <span><b style={{ color: "#93c5fd" }}>흐린 ★</b> = {t(E, "photo 2 (one step later)", "사진2 (한 칸 뒤 모습)")}</span>
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
@@ -886,19 +843,20 @@ export function makeAstralCh2(E, lang = "py") {
   });
 
   return [
-    /* 2-0 — 궤도(chain)이 뭔지: 별 하나의 경로 (right=1, down=2 예시) */
+    /* 2-0 — the one mechanic the whole solution rests on: a star moves ONE step,
+       so any cell's photo-2 came from "one step back". (No chains/rails — not needed.) */
     {
       type: "reveal",
       narr: t(E,
-        "A star moves just ONE notch (photo 1 → photo 2).\nBut the cells line up like a rail — many stars ride it, one notch each. Watch below 👇",
-        "별은 딱 한 칸만 움직여요 (사진1 → 사진2).\n그런데 칸들이 레일처럼 이어져서, 여러 별이 한 칸씩 올라타요. 아래에서 봐요 👇"),
+        "Just one thing to know: a star moves exactly ONE step (photo 1 → photo 2). Watch below 👇",
+        "딱 하나만 알면 돼요: 별은 정확히 한 칸 움직여요 (사진1 → 사진2). 아래에서 봐요 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 2, textAlign: "center" }}>
-            {t(E, "A rail of cells (right=1, down=2)", "칸들이 이어진 레일 (right=1, down=2)")}
+            {t(E, "A star moves one step (right=1, down=2)", "별은 한 칸 움직여요 (오른쪽 1, 아래 2)")}
           </div>
           <div style={{ fontSize: 11, color: "#64748b", marginBottom: 10, textAlign: "center" }}>
-            {t(E, "Press 다음 ▶ — each star hops just one notch.", "다음 ▶ 누르며 별이 각자 한 칸씩만 가는 걸 봐요.")}
+            {t(E, "Press 다음 ▶ to step through it.", "다음 ▶ 누르며 한 칸씩 따라가 봐요.")}
           </div>
 
           <OrbitWalk E={E} />
@@ -906,90 +864,8 @@ export function makeAstralCh2(E, lang = "py") {
       ),
     },
 
-    /* 2-0a — 독립성: 궤도끼리 완전히 독립 */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Each star stays on its OWN colour (orbit) — different colours never meet. So solve each colour, then add them up. 👇",
-        "별은 자기 색(궤도)만 밟아요 — 다른 색끼리 절대 안 만나요. 그러니 색마다 따로 풀고 더하면 끝! 👇"),
-      content: (
-        <div style={{ padding: 14 }}>
-          <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 12, textAlign: "center" }}>
-            {t(E, "Every cell painted by its orbit", "칸마다 자기 궤도 색으로 칠하기")}
-          </div>
-
-          {/* All chains colored grid — right=1, down=2 */}
-          {(() => {
-            // right=1, down=2 in 4×4 grid → chain ID per cell
-            // Chain 0: (0,0)↔(2,1)  Chain 1: (0,1)↔(2,2)  Chain 2: (0,2)↔(2,3)
-            // Chain 3: (0,3) alone   Chain 4: (1,0)↔(3,1)  Chain 5: (1,1)↔(3,2)
-            // Chain 6: (1,2)↔(3,3)  Chain 7: (1,3) alone   Chain 8: (2,0) alone  Chain 9: (3,0) alone
-            const cid = [
-              [0, 1, 2, 3],
-              [4, 5, 6, 7],
-              [8, 0, 1, 2],
-              [9, 4, 5, 6],
-            ];
-            const CC = [
-              { bg:"#dbeafe", bd:"#3b82f6" }, // 0 blue
-              { bg:"#dcfce7", bd:"#16a34a" }, // 1 green
-              { bg:"#fef9c3", bd:"#d97706" }, // 2 amber
-              { bg:"#ede9fe", bd:"#8b5cf6" }, // 3 purple
-              { bg:"#fce7f3", bd:"#ec4899" }, // 4 pink
-              { bg:"#e0f2fe", bd:"#0891b2" }, // 5 cyan
-              { bg:"#fff7ed", bd:"#f97316" }, // 6 orange
-              { bg:"#fef2f2", bd:"#ef4444" }, // 7 red
-              { bg:"#f0fdf4", bd:"#22c55e" }, // 8 lime
-              { bg:"#f5f3ff", bd:"#7c3aed" }, // 9 violet
-            ];
-            // same-chain cells share color — shows independence visually
-            return (
-              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", marginBottom:10 }}>
-                {cid.map((row, r) => (
-                  <div key={r} style={{ display:"flex", gap:5, marginBottom:5 }}>
-                    {row.map((ci, c) => (
-                      <div key={c} style={{
-                        width:50, height:50, borderRadius:8,
-                        background: CC[ci].bg,
-                        border: `2.5px solid ${CC[ci].bd}`,
-                      }} />
-                    ))}
-                  </div>
-                ))}
-                <div style={{ fontSize:11.5, color:"#64748b", marginTop:6 }}>
-                  {t(E,"each cell has exactly one color — no cell is in two orbits","칸마다 색이 딱 하나 — 두 궤도에 동시에 속하는 칸은 없어요")}
-                </div>
-              </div>
-            );
-          })()}
-
-          {/* Concrete sum — solve each, then add */}
-          <div style={{
-            background:"#f0fdf4", border:"2px solid #16a34a", borderRadius:8,
-            padding:"10px 14px", textAlign:"center",
-          }}>
-            <div style={{ fontSize:12.5, fontWeight:700, color:"#14532d", marginBottom:7 }}>
-              {t(E,"So break the big puzzle into small ones, solve each, then add:",
-                   "그래서 큰 문제를 작은 문제로 쪼개고, 하나씩 푼 다음 더해요:")}
-            </div>
-            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:6, flexWrap:"wrap", fontSize:12, fontWeight:800 }}>
-              <span style={{ background:"#dbeafe", border:"2px solid #3b82f6", borderRadius:6, padding:"3px 8px", color:"#1e40af" }}>
-                {t(E,"blue answer","파란 궤도 답")}
-              </span>
-              <span style={{ color:"#16a34a" }}>+</span>
-              <span style={{ background:"#dcfce7", border:"2px solid #16a34a", borderRadius:6, padding:"3px 8px", color:"#14532d" }}>
-                {t(E,"green answer","초록 궤도 답")}
-              </span>
-              <span style={{ color:"#16a34a" }}>+ … =</span>
-              <span style={{ background:"#fef9c3", border:"2px solid #d97706", borderRadius:6, padding:"3px 8px", color:"#92400e" }}>
-                {t(E,"whole answer","전체 답")}
-              </span>
-            </div>
-          </div>
-
-        </div>
-      ),
-    },
+    /* 2-0a (독립성/체인 색칠) MOVED to the DP section (2026-06-17): the chain/independence
+       idea is only needed for DP, not the main greedy. Teacher: "DP 설명은 DP 쪽으로." */
 
     /* 2-0b — 3가지 방법 로드맵 */
     {
@@ -1457,6 +1333,93 @@ export function makeAstralCh2(E, lang = "py") {
             {t(E, "Next few slides build the DP from scratch: all-combinations → too slow → DP.",
                   "다음 몇 슬라이드에서 DP 를 처음부터 쌓아요: 모든 경우 → 너무 느림 → DP.")}
           </div>
+        </div>
+      ),
+    },
+
+    /* 2-0a — (moved here from before-greedy, 2026-06-17): independence belongs in the DP
+       framing. A cell's photo-2 comes from "one step back", so cells link into separate lines
+       (chains). DP solves ONE line; do it for every line and add. The main greedy never needs this. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "For DP, split the photo into separate LINES: a cell's photo-2 comes from one step back, so cells link into chains. Each cell is in just one line → solve each line, add them up. 👇",
+        "DP 로 풀려면 사진을 여러 '줄'로 쪼개요: 한 칸의 사진2는 거꾸로 한 칸에서 오니까, 칸들이 줄줄이 이어져요. 한 칸은 한 줄에만 속해요 → 줄마다 따로 풀고 더하면 끝! 👇"),
+      content: (
+        <div style={{ padding: 14 }}>
+          <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 12, textAlign: "center" }}>
+            {t(E, "Every cell painted by its line (chain)", "칸마다 자기 줄(체인) 색으로 칠하기")}
+          </div>
+
+          {/* All chains colored grid — right=1, down=2 */}
+          {(() => {
+            // right=1, down=2 in 4×4 grid → chain ID per cell
+            // Chain 0: (0,0)↔(2,1)  Chain 1: (0,1)↔(2,2)  Chain 2: (0,2)↔(2,3)
+            // Chain 3: (0,3) alone   Chain 4: (1,0)↔(3,1)  Chain 5: (1,1)↔(3,2)
+            // Chain 6: (1,2)↔(3,3)  Chain 7: (1,3) alone   Chain 8: (2,0) alone  Chain 9: (3,0) alone
+            const cid = [
+              [0, 1, 2, 3],
+              [4, 5, 6, 7],
+              [8, 0, 1, 2],
+              [9, 4, 5, 6],
+            ];
+            const CC = [
+              { bg:"#dbeafe", bd:"#3b82f6" }, // 0 blue
+              { bg:"#dcfce7", bd:"#16a34a" }, // 1 green
+              { bg:"#fef9c3", bd:"#d97706" }, // 2 amber
+              { bg:"#ede9fe", bd:"#8b5cf6" }, // 3 purple
+              { bg:"#fce7f3", bd:"#ec4899" }, // 4 pink
+              { bg:"#e0f2fe", bd:"#0891b2" }, // 5 cyan
+              { bg:"#fff7ed", bd:"#f97316" }, // 6 orange
+              { bg:"#fef2f2", bd:"#ef4444" }, // 7 red
+              { bg:"#f0fdf4", bd:"#22c55e" }, // 8 lime
+              { bg:"#f5f3ff", bd:"#7c3aed" }, // 9 violet
+            ];
+            // same-chain cells share color — shows independence visually
+            return (
+              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", marginBottom:10 }}>
+                {cid.map((row, r) => (
+                  <div key={r} style={{ display:"flex", gap:5, marginBottom:5 }}>
+                    {row.map((ci, c) => (
+                      <div key={c} style={{
+                        width:50, height:50, borderRadius:8,
+                        background: CC[ci].bg,
+                        border: `2.5px solid ${CC[ci].bd}`,
+                      }} />
+                    ))}
+                  </div>
+                ))}
+                <div style={{ fontSize:11.5, color:"#64748b", marginTop:6 }}>
+                  {t(E,"each cell has exactly one color — no cell is in two orbits","칸마다 색이 딱 하나 — 두 궤도에 동시에 속하는 칸은 없어요")}
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Concrete sum — solve each, then add */}
+          <div style={{
+            background:"#f0fdf4", border:"2px solid #16a34a", borderRadius:8,
+            padding:"10px 14px", textAlign:"center",
+          }}>
+            <div style={{ fontSize:12.5, fontWeight:700, color:"#14532d", marginBottom:7 }}>
+              {t(E,"So break the big puzzle into small ones, solve each, then add:",
+                   "그래서 큰 문제를 작은 문제로 쪼개고, 하나씩 푼 다음 더해요:")}
+            </div>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:6, flexWrap:"wrap", fontSize:12, fontWeight:800 }}>
+              <span style={{ background:"#dbeafe", border:"2px solid #3b82f6", borderRadius:6, padding:"3px 8px", color:"#1e40af" }}>
+                {t(E,"blue answer","파란 궤도 답")}
+              </span>
+              <span style={{ color:"#16a34a" }}>+</span>
+              <span style={{ background:"#dcfce7", border:"2px solid #16a34a", borderRadius:6, padding:"3px 8px", color:"#14532d" }}>
+                {t(E,"green answer","초록 궤도 답")}
+              </span>
+              <span style={{ color:"#16a34a" }}>+ … =</span>
+              <span style={{ background:"#fef9c3", border:"2px solid #d97706", borderRadius:6, padding:"3px 8px", color:"#92400e" }}>
+                {t(E,"whole answer","전체 답")}
+              </span>
+            </div>
+          </div>
+
         </div>
       ),
     },
