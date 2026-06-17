@@ -353,41 +353,45 @@ function Sample1Counter({ E }) {
    (A/B framing = min_stars[0]/min_stars[1] in the solution code — index = "did a
    star arrive into this cell". ❌ = EMPTY = impossible.) ── */
 function AstralDpWalk({ E }) {
-  // Fixed worked example. Each step = one cell. Two numbers = fewest "placed stars" so far,
-  // for "this cell does NOT send a star on" / "this cell DOES send".  +1 = place a NEW star here.
-  // Verified trace (matches AstralDpSim & solution code): G→[1,1] W→[1,❌] G→[2,2] G→[2,3].
+  // ONE box per step, so 안 보냄 / 보냄 are filled separately and slowly.
+  // letters G W G G ; 안 보냄=[1,1,2,2] 보냄=[1,❌,2,3] ; verified, answer 2.
   const X = "❌";
-  const cells = [
-    {
-      L: "G", A: "1", B: "1",
-      bubble: t(E,
-        "First cell, G. Nothing arrives from before, so we must place 1 star here → 1. (The number under a cell = total stars placed SO FAR, not just this cell.) Move it on or not, still 1 → both boxes 1.",
-        "첫 칸 G. 맨 앞이라 앞에서 온 별이 없으니 여기 별 1 개를 꼭 놔요 → 1. (칸 밑 숫자 = 여기까지 놓은 별 합계예요. 이 칸 하나가 아니라.) 보내든 안 보내든 1 개 → 두 칸 다 1."),
-    },
-    {
-      L: "W", A: "1", B: X,
-      bubble: t(E,
-        "W = an empty cell. We place NO star here → the total doesn't go up → it stays 1 from before. ('don't send' = 1.) 'Send' means moving THIS cell's star on — but W has no star to send → impossible ❌.",
-        "W = 텅 빈 칸이에요. 여기엔 별을 안 놓아요 → 합계가 안 늘어요 → 앞의 1 그대로. ('안 보냄' = 1) '보냄'은 이 칸 별을 다음으로 보내는 건데, W엔 보낼 별이 없어요 → 불가능 ❌."),
-    },
-    {
-      L: "G", A: "2", B: "2",
-      bubble: t(E,
-        "G again. The cell before (W) is [1, ❌] — it sent nothing. So no star arrived here → we must PLACE A NEW star here (1+1 = 2). That placed star can move on or not → both boxes = 2.",
-        "또 G. 앞 칸(W)은 [1, ❌] — 보낸 게 없어요. 그러니 옮겨온 별이 없어 여기 새 별 1 개를 놔야 해요 (1+1 = 2). 그 놓은 별은 옮겨가든 안 가든 → 두 칸 다 2."),
-    },
-    {
-      L: "G", A: "2", B: "3", final: true,
-      bubble: t(E,
-        "Last cell G. The cell before is [don't send 2, send 2]. Two ways: ⒜ before 'don't send' → no star arrived, so PLACE a new star, 2+1 = 3. ⒝ before 'send' → that star moved in and makes this G, so NO new star needed → stays 2. Keep the smaller, min(3, 2) = 2 ← the min! Last cell, nothing left to send → answer = smaller = 2. (We could use ⒝ only because we kept the previous cell's 'send' number — that's why each cell carries TWO.) 🔑",
-        "마지막 칸 G. 앞 칸은 [안 보냄 2, 보냄 2]. 두 길: ⒜ 앞이 '안 보냄' → 옮겨온 별 없음 → 여기 새 별 놓음 2+1 = 3. ⒝ 앞이 '보냄' → 그 별이 옮겨와 이 G가 됨 → 새 별 안 놔도 됨, 그대로 2. 더 적은 min(3, 2) = 2 를 적어요 ← 여기가 바로 min! 마지막 칸이라 더 보낼 데 없으니 답 = 작은 2! (앞 칸의 '보냄' 숫자를 따로 들고 있었기에 ⒝를 쓸 수 있었죠 — 그래서 칸마다 숫자 둘.) 🔑"),
-    },
+  const letters = ["G", "W", "G", "G"];
+  const aVals = ["1", "1", "2", "2"];   // 안 보냄
+  const bVals = ["1", X, "2", "3"];     // 보냄
+  const steps = [
+    { c: 0, box: "A", bubble: t(E,
+      "First cell G. Nothing arrives from before → we must place 1 star here. (Number = total placed SO FAR.) If this star does NOT move on → still 1 → don't-send = 1.",
+      "첫 칸 G. 맨 앞이라 앞에서 온 별이 없어요 → 여기 별 1 개를 꼭 놔요. (밑 숫자 = 여기까지 놓은 별 합계.) 이 별을 다음 칸으로 '안 보내면' → 놓은 별 1 개 → 안 보냄 = 1.") },
+    { c: 0, box: "B", bubble: t(E,
+      "Same first cell. If this star DOES move on? Still just 1 placed star → send = 1. (Moving it or not, the count is the same.)",
+      "같은 첫 칸. 이 별을 다음 칸으로 '보내면'? 그래도 놓은 별은 1 개 → 보냄 = 1. (보내든 안 보내든 놓은 별 수는 같아요.)") },
+    { c: 1, box: "A", bubble: t(E,
+      "Next cell W = both photos empty. We place NO star here → the total doesn't grow → stays 1 → don't-send = 1.",
+      "다음 칸 W = 두 사진 다 빈 칸. 여기엔 별을 안 놓아요 → 합계 안 늘어 그대로 1 → 안 보냄 = 1.") },
+    { c: 1, box: "B", bubble: t(E,
+      "Same W. 'Send' means moving THIS cell's star on — but W has no star to send → impossible ❌.",
+      "같은 W 칸. '보냄'은 이 칸 별을 다음으로 보내는 건데, W엔 보낼 별이 없어요 → 불가능 ❌.") },
+    { c: 2, box: "A", bubble: t(E,
+      "Next cell G. The cell before (W) sent nothing → no star arrived → we must PLACE a new star here (1+1 = 2). Don't move it on → don't-send = 2.",
+      "다음 칸 G. 앞 칸(W)이 보낸 별이 없어요 → 옮겨온 별 없음 → 여기 새 별 1 개를 놔야 G가 돼요 (1+1 = 2). 안 보내면 → 안 보냄 = 2.") },
+    { c: 2, box: "B", bubble: t(E,
+      "Same G. Move that new star on → send = 2. (The count is still 2.)",
+      "같은 G 칸. 그 새 별을 보내면 → 보냄 = 2. (놓은 별 수는 그대로 2.)") },
+    { c: 3, box: "A", bubble: t(E,
+      "Last cell G — THIS is the key! Two ways to be 'don't-send': ⒜ if the cell before was 'don't-send' (2) → no star arrived → place a new one, 2+1 = 3. ⒝ if the cell before SENT (2) → that star moves in and fills this G FREE → no new star = 2. Keep the smaller → don't-send = 2. (So it's 1,1,2,2 — NOT 3!)",
+      "마지막 칸 G — 여기가 핵심! '안 보냄'을 만드는 두 길: ⒜ 앞이 '안 보냄'(2)이면 옮겨온 별 없어 새 별 놓음 → 2+1 = 3. ⒝ 앞이 '보냄'(2)이면 그 별이 옮겨와 이 G를 공짜로 채움 → 새 별 안 놓음 = 2. 더 작은 2 → 안 보냄 = 2. (그래서 1,1,2,2 — 3 이 아니에요!)") },
+    { c: 3, box: "B", final: true, bubble: t(E,
+      "'Send' = 3 (place a new star here and move it on). Last cell, nothing left to send → answer = the smaller of the two = 2! 🔑",
+      "'보냄' = 3 (여기 새 별 놓고 다음으로 보내는 경우). 마지막 칸이라 더 보낼 데 없으니, 답 = 두 칸 중 작은 2! 🔑") },
   ];
   const [si, setSi] = useState(0);
-  const last = cells.length - 1;
+  const last = steps.length - 1;
   const idx = Math.max(0, Math.min(si, last));
-  const cur = cells[idx];
-  const S = 56, GAP = 34, P = S + GAP, gridW = cells.length * S + (cells.length - 1) * GAP;
+  const cur = steps[idx];
+  const S = 56, GAP = 34, P = S + GAP, gridW = letters.length * S + (letters.length - 1) * GAP;
+  const stepOf = (ci, b) => 2 * ci + (b === "B" ? 1 : 0);
+  const shown = (ci, b) => stepOf(ci, b) <= idx;
 
   const compColors = { W: { bg: "#fff", bd: "#e2e8f0", fg: "#94a3b8" }, G: { bg: "#cbd5e1", bd: "#94a3b8", fg: "#1e293b" }, B: { bg: "#1e293b", bd: "#0f172a", fg: "#fff" } };
   const box = (label, val, active) => {
@@ -417,30 +421,29 @@ function AstralDpWalk({ E }) {
   return (
     <div style={{ padding: "4px 0" }}>
       <div style={{ position: "relative", width: gridW + 16 + 200, maxWidth: "100%", minHeight: 132, margin: "0 auto 10px" }}>
-        {/* row of cells; each cell shows its letter + A/B boxes below */}
-        {cells.map((cell, i) => {
-          const active = i === idx;
-          const seen = i <= idx;
-          const cc = compColors[cell.L];
+        {/* row of cells; each cell's two boxes (안 보냄 / 보냄) fill ONE per step */}
+        {letters.map((L, i) => {
+          const active = i === cur.c;
+          const seen = i <= cur.c;
+          const cc = compColors[L];
+          const ph = (
+            <div style={{ minWidth: 38, padding: "2px 5px", borderRadius: 6, border: "1.5px dashed #eef2f6", fontSize: 13, fontWeight: 800, lineHeight: 1.2, textAlign: "center", color: "#e2e8f0" }}>
+              <div style={{ fontSize: 9 }}>·</div>·
+            </div>
+          );
           return (
             <div key={i} style={{ position: "absolute", left: i * P, top: 18, width: S, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
-              {/* letter cell */}
               <div style={{
                 width: S, height: S, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: 20, fontWeight: 900, transition: "all .15s",
                 background: seen ? cc.bg : "#f8fafc", color: seen ? cc.fg : "#cbd5e1",
                 border: active ? "3px solid #4f46e5" : `2px solid ${seen ? cc.bd : "#eef2f6"}`,
                 boxShadow: active ? "0 0 0 4px rgba(79,70,229,.18)" : "none",
-              }}>{cell.L}</div>
-              {/* A / B boxes */}
-              {seen ? (
-                <div style={{ display: "flex", gap: 3 }}>
-                  {box(t(E, "don't send", "안 보냄"), cell.A, active)}
-                  {box(t(E, "send", "보냄"), cell.B, active)}
-                </div>
-              ) : (
-                <div style={{ fontSize: 10, color: "#cbd5e1" }}>· ·</div>
-              )}
+              }}>{L}</div>
+              <div style={{ display: "flex", gap: 3 }}>
+                {shown(i, "A") ? box(t(E, "don't send", "안 보냄"), aVals[i], active && cur.box === "A") : ph}
+                {shown(i, "B") ? box(t(E, "send", "보냄"), bVals[i], active && cur.box === "B") : ph}
+              </div>
             </div>
           );
         })}
@@ -469,7 +472,7 @@ function AstralDpWalk({ E }) {
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
         {btn(idx === 0, E ? "◀ Prev" : "◀ 이전", () => setSi(Math.max(0, idx - 1)))}
-        <span style={{ fontSize: 11, color: "#64748b", minWidth: 44, textAlign: "center" }}>{idx + 1} / {cells.length}</span>
+        <span style={{ fontSize: 11, color: "#64748b", minWidth: 44, textAlign: "center" }}>{idx + 1} / {steps.length}</span>
         {btn(idx === last, E ? "Next ▶" : "다음 ▶", () => setSi(Math.min(last, idx + 1)))}
       </div>
     </div>
