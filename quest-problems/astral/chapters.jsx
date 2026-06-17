@@ -1519,17 +1519,6 @@ export function makeAstralCh2(E, lang = "py") {
       ),
     },
 
-    /* 2-1 — Read input (moved here 2026-06-02: first piece of code, after all 3 methods
-       were explored. Now Ch2 flows clean: overview → 3 methods detail → CODE starts here). */
-    sectionStep(sections[0], t(E,
-      "Let's code the DP version too (optional). It's 5 chunks: ① read input → ② handle 'stars don't move' shortcut → ③ group cells into chains → ④ DP each chain → ⑤ add up. (Reading input is the same as the greedy — shown again here so this appendix stands alone.) Starting with ①.",
-      "DP 버전도 코드로 짜봐요 (선택). 5 덩어리예요: ① 입력 받기 → ② '별 안 움직임' 지름길 → ③ 별 길 묶기 → ④ 한 묶음씩 DP → ⑤ 합치기. (입력 읽기는 그리디와 똑같아요 — 부록이 따로 읽혀도 되게 다시 보여줘요.) ① 부터 시작.")),
-
-    /* 2-3 — Walk chains code (groups cells into chains; per-chain DP comes next). */
-    sectionStep(sections[2], t(E,
-      "Next: walk every cell and find where each chain STARTS (a cell whose 'one step back' lands off the grid). The DP per chain comes after.",
-      "다음: 모든 칸을 둘러보면서 묶음 (chain) 시작점만 찾기 (한 칸 거꾸로 가면 사진 밖인 칸). 묶음 안의 DP 계산은 그 다음 슬라이드부터.")),
-
     /* 2-3.4 — Predict: why DP tracks BOTH outcomes */
     {
       type: "quiz",
@@ -1805,6 +1794,17 @@ export function makeAstralCh2(E, lang = "py") {
         </div>
       ),
     },
+    /* 2-1 — Read input (moved here 2026-06-02: first piece of code, after all 3 methods
+       were explored. Now Ch2 flows clean: overview → 3 methods detail → CODE starts here). */
+    sectionStep(sections[0], t(E,
+      "Let's code the DP version too (optional). It's 5 chunks: ① read input → ② handle 'stars don't move' shortcut → ③ group cells into chains → ④ DP each chain → ⑤ add up. (Reading input is the same as the greedy — shown again here so this appendix stands alone.) Starting with ①.",
+      "DP 버전도 코드로 짜봐요 (선택). 5 덩어리예요: ① 입력 받기 → ② '별 안 움직임' 지름길 → ③ 별 길 묶기 → ④ 한 묶음씩 DP → ⑤ 합치기. (입력 읽기는 그리디와 똑같아요 — 부록이 따로 읽혀도 되게 다시 보여줘요.) ① 부터 시작.")),
+
+    /* 2-3 — Walk chains code (groups cells into chains; per-chain DP comes next). */
+    sectionStep(sections[2], t(E,
+      "Next: walk every cell and find where each chain STARTS (a cell whose 'one step back' lands off the grid). The DP per chain comes after.",
+      "다음: 모든 칸을 둘러보면서 묶음 (chain) 시작점만 찾기 (한 칸 거꾸로 가면 사진 밖인 칸). 묶음 안의 DP 계산은 그 다음 슬라이드부터.")),
+
 
     /* 2-4a — First cell init (split from old 2-4 for clarity). */
     sectionStep(sections[3], t(E,
