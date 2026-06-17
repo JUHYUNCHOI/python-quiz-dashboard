@@ -420,7 +420,7 @@ function AstralDpWalk({ E }) {
 
   return (
     <div style={{ padding: "4px 0" }}>
-      <div style={{ position: "relative", width: gridW, maxWidth: "100%", height: 118, margin: "0 auto 8px" }}>
+      <div style={{ position: "relative", width: gridW + 16 + 380, maxWidth: "100%", minHeight: 175, margin: "0 auto 8px" }}>
         {/* row of cells; each cell's two boxes (안 보냄 / 보냄) fill ONE per step */}
         {letters.map((L, i) => {
           const active = i === cur.c;
@@ -447,15 +447,21 @@ function AstralDpWalk({ E }) {
             </div>
           );
         })}
-      </div>
-      {/* bubble — full width BELOW the grid (wide, so only intended line breaks show) */}
-      <div style={{
-        maxWidth: 540, margin: "0 auto 10px",
-        background: cur.final ? "#dcfce7" : "#1e3a8a", color: cur.final ? "#14532d" : "#fff",
-        border: cur.final ? "1.5px solid #16a34a" : "none",
-        borderRadius: 10, padding: "12px 16px", fontSize: 13, lineHeight: 1.7, fontWeight: 600, whiteSpace: "pre-line",
-      }}>
-        {cur.bubble}
+        {/* bubble — right of the grid; width fits the text so only intended line breaks show */}
+        <div style={{
+          position: "absolute", left: gridW + 16, top: 4,
+          width: "max-content", maxWidth: 360,
+          background: cur.final ? "#dcfce7" : "#1e3a8a", color: cur.final ? "#14532d" : "#fff",
+          border: cur.final ? "1.5px solid #16a34a" : "none",
+          borderRadius: 10, padding: "10px 13px", fontSize: 12.5, lineHeight: 1.65, fontWeight: 600, zIndex: 3, whiteSpace: "pre-line",
+        }}>
+          <div style={{
+            position: "absolute", left: -7, top: 18, width: 0, height: 0,
+            borderTop: "7px solid transparent", borderBottom: "7px solid transparent",
+            borderRight: `8px solid ${cur.final ? "#dcfce7" : "#1e3a8a"}`,
+          }} />
+          {cur.bubble}
+        </div>
       </div>
 
       {/* legend */}
