@@ -353,33 +353,34 @@ function Sample1Counter({ E }) {
    (A/B framing = min_stars[0]/min_stars[1] in the solution code — index = "did a
    star arrive into this cell". ❌ = EMPTY = impossible.) ── */
 function AstralDpWalk({ E }) {
-  // Fixed worked example. Each step = one cell. A = no star rolled in, B = a star rolled in.
+  // Fixed worked example. Each step = one cell. Two numbers = fewest "placed stars" so far,
+  // for "this cell does NOT send a star on" / "this cell DOES send".  +1 = place a NEW star here.
   // Verified trace (matches AstralDpSim & solution code): G→[1,1] W→[1,❌] G→[2,2] G→[2,3].
   const X = "❌";
   const cells = [
     {
       L: "G", A: "1", B: "1",
       bubble: t(E,
-        "First cell, letter G (a star in just ONE photo). It's the very front, so no star can arrive from before → we MUST place an original star here. Whether this cell SENDS that star to the next cell or NOT, it's still 1 star → both boxes = 1.",
-        "첫 칸, 글자 G (한 사진에만 별). 맨 앞이라 앞에서 굴러온 별이 없어요 → 여기 원래 별 1 개가 꼭 필요해요. 그 별을 다음 칸으로 '보내'든 '안 보내'든 별은 1 개 → 두 칸 다 1."),
+        "First cell, letter G (a star in just ONE photo). It's the very front, so no star can arrive from before → we MUST place 1 star here. Whether this placed star then moves to the next cell ('send') or not ('don't send'), it's still 1 placed star → both boxes = 1.",
+        "첫 칸, 글자 G (한 사진에만 별). 맨 앞이라 앞에서 옮겨온 별이 없어요 → 여기 놓는 별 1 개가 꼭 필요해요. 그 놓은 별이 다음 칸으로 '옮겨가(보냄)'든 '안 가(안 보냄)'든 놓는 별은 1 개 → 두 칸 다 1."),
     },
     {
       L: "W", A: "1", B: X,
       bubble: t(E,
-        "Letter W = both photos empty here. If the cell before had SENT a star, it would land here and this wouldn't be empty → so the previous cell must be 'didn't send' (1). And W has no star, so it can't send one onward → 'send' is impossible ❌. → [don't send 1, send ❌]",
-        "글자 W = 두 사진 다 빔. 앞 칸이 별을 '보냈'다면 여기 도착해서 빈 칸이 아니게 돼요 → 앞 칸이 '안 보냄'(1)일 때만 이어져요. 그리고 W는 별이 없어 다음으로 보낼 수도 없으니 '보냄'은 불가능 ❌. → [안 보냄 1, 보냄 ❌]"),
+        "Letter W = both photos empty here. If the cell before had SENT a star, it would land here and this wouldn't be empty → so the previous cell must be 'don't send' (1). And W has no star, so nothing can be sent on → 'send' is impossible ❌. → [don't send 1, send ❌]",
+        "글자 W = 두 사진 다 빔. 앞 칸이 별을 '보냈'다면 여기 도착해 빈 칸이 아니게 돼요 → 앞 칸이 '안 보냄'(1)일 때만 이어져요. 그리고 W는 별이 없어 보낼 것도 없으니 '보냄'은 불가능 ❌. → [안 보냄 1, 보냄 ❌]"),
     },
     {
       L: "G", A: "2", B: "2",
       bubble: t(E,
-        "G again. The cell before (W) is [1, ❌] — it sent NOTHING (the 'send' box is ❌). So no star arrives to fill this G for free → we must place a NEW star here (1+1 = 2). That new star can send onward or not → both boxes = 2.",
-        "또 G. 앞 칸(W)은 [1, ❌] — 보낸 게 없어요('보냄'이 ❌). 그러니 굴러와 공짜로 채울 별이 없어 여기 새 별 1 개를 둬야 해요 (1+1 = 2). 그 별은 보내든 안 보내든 → 두 칸 다 2."),
+        "G again. The cell before (W) is [1, ❌] — it sent nothing. So no star arrived here → we must PLACE A NEW star here (1+1 = 2). That placed star can move on or not → both boxes = 2.",
+        "또 G. 앞 칸(W)은 [1, ❌] — 보낸 게 없어요. 그러니 옮겨온 별이 없어 여기 새 별 1 개를 놔야 해요 (1+1 = 2). 그 놓은 별은 옮겨가든 안 가든 → 두 칸 다 2."),
     },
     {
       L: "G", A: "2", B: "3", final: true,
       bubble: t(E,
-        "Last cell G. The cell before is [don't send 2, send 2]. Two ways to fill it: ⒜ before 'didn't send' → place a new star, 2+1 = 3. ⒝ before 'sent' → that star rolls in and fills this cell FREE, stays 2. Write the SMALLER, min(3, 2) = 2 ← that's the min! It's the last cell so there's no next to send to → answer = the smaller of the two = 2. (We could use ⒝ only because we'd kept the cell-before's 'send' number — that's why each cell carries TWO.) 🔑",
-        "마지막 칸 G. 앞 칸은 [안 보냄 2, 보냄 2]. 채우는 두 길: ⒜ 앞이 '안 보냄' → 여기 새 별 둬서 2+1 = 3. ⒝ 앞이 '보냄' → 그 별이 굴러와 이 칸 공짜로 채움, 그대로 2. 더 적은 min(3, 2) = 2 를 적어요 ← 여기가 바로 min! 마지막 칸이라 더 보낼 데가 없으니 답 = 두 숫자 중 작은 2! (앞 칸의 '보냄' 숫자를 따로 들고 있었기에 ⒝ 길을 쓸 수 있었죠 — 그래서 칸마다 숫자 둘.) 🔑"),
+        "Last cell G. The cell before is [don't send 2, send 2]. Two ways: ⒜ before 'don't send' → no star arrived, so PLACE a new star, 2+1 = 3. ⒝ before 'send' → that star moved in and makes this G, so NO new star needed → stays 2. Keep the smaller, min(3, 2) = 2 ← the min! Last cell, nothing left to send → answer = smaller = 2. (We could use ⒝ only because we kept the previous cell's 'send' number — that's why each cell carries TWO.) 🔑",
+        "마지막 칸 G. 앞 칸은 [안 보냄 2, 보냄 2]. 두 길: ⒜ 앞이 '안 보냄' → 옮겨온 별 없음 → 여기 새 별 놓음 2+1 = 3. ⒝ 앞이 '보냄' → 그 별이 옮겨와 이 G가 됨 → 새 별 안 놔도 됨, 그대로 2. 더 적은 min(3, 2) = 2 를 적어요 ← 여기가 바로 min! 마지막 칸이라 더 보낼 데 없으니 답 = 작은 2! (앞 칸의 '보냄' 숫자를 따로 들고 있었기에 ⒝를 쓸 수 있었죠 — 그래서 칸마다 숫자 둘.) 🔑"),
     },
   ];
   const [si, setSi] = useState(0);
@@ -472,61 +473,6 @@ function AstralDpWalk({ E }) {
         {btn(idx === last, E ? "Next ▶" : "다음 ▶", () => setSi(Math.min(last, idx + 1)))}
       </div>
     </div>
-  );
-}
-
-/* ── DpMergeViz: the ONE picture that grounds "+0 vs +1". A single original star:
-   if it SENDS (rolls one step in photo 2) it fills the NEXT cell for free (+0);
-   if it does NOT send, the next cell needs a brand-new star (+1). That free-fill is
-   exactly why a running total can stay the same instead of always going up. ── */
-function DpMergeViz({ E }) {
-  const tx = "#334155", dim = "#64748b";
-  const Ax = 168, Bx = 300, BW = 56;        // two adjacent cells
-  const cellA = (y) => (
-    <g>
-      <rect x={Ax} y={y} width={BW} height={BW} rx="10" fill="#fef3c7" stroke="#f59e0b" strokeWidth="2" />
-      <text x={Ax + BW / 2} y={y + BW / 2 + 9} fontSize="26" textAnchor="middle" fill="#f59e0b">★</text>
-    </g>
-  );
-  return (
-    <svg width="100%" viewBox="0 0 680 238" role="img" style={{ display: "block", margin: "0 auto", maxWidth: 720 }}>
-      <title>{t(E, "Why +0 or +1", "왜 +0 또는 +1")}</title>
-      <defs>
-        <marker id="dpAh" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-          <path d="M0,0 L7,3 L0,6 Z" fill="#2563eb" />
-        </marker>
-      </defs>
-
-      <text x="40" y="40" fontSize="14" fontWeight="800" fill={tx}>
-        {t(E, "One original star — does it SEND, or not?", "원래 별 하나 — 다음 칸으로 보내나, 안 보내나?")}
-      </text>
-      <text x="40" y="62" fontSize="12" fill={dim}>
-        {t(E, "what we count = fewest original stars (photo 1)", "세는 것 = 원래 별(사진1) 최소 개수")}
-      </text>
-
-      {/* ── row 1: SEND → free fill (+0) ── */}
-      <text x="44" y="106" fontSize="13" fontWeight="800" fill="#2563eb">{t(E, "Send", "보냄")}</text>
-      {cellA(82)}
-      <line x1={Ax + BW + 4} y1="110" x2={Bx - 6} y2="110" stroke="#2563eb" strokeWidth="2" markerEnd="url(#dpAh)" />
-      <text x={(Ax + BW + Bx) / 2 + 2} y="98" fontSize="11" fill="#2563eb" textAnchor="middle">{t(E, "rolls 1 step", "한 칸 굴러감")}</text>
-      <rect x={Bx} y="82" width={BW} height={BW} rx="10" fill="#eff6ff" stroke="#93c5fd" strokeWidth="2" />
-      <text x={Bx + BW / 2} y="108" fontSize="22" textAnchor="middle" fill="#93c5fd">★</text>
-      <text x={Bx + BW / 2} y="126" fontSize="9.5" textAnchor="middle" fill="#3b82f6">{t(E, "free", "공짜")}</text>
-      <text x="384" y="105" fontSize="12.5" fontWeight="700" fill={tx}>{t(E, "next cell filled for free", "다음 칸을 공짜로 채움")}</text>
-      <text x="384" y="126" fontSize="15" fontWeight="800" fill="#15803d">+0</text>
-
-      <line x1="40" y1="152" x2="640" y2="152" stroke="#eef2f6" strokeWidth="1" />
-
-      {/* ── row 2: DON'T send → new star needed (+1) ── */}
-      <text x="44" y="192" fontSize="13" fontWeight="800" fill="#15803d">{t(E, "Don't send", "안 보냄")}</text>
-      {cellA(168)}
-      <line x1={Ax + BW + 4} y1="196" x2={Bx - 6} y2="196" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="4 4" />
-      <text x={(Ax + BW + Bx) / 2 + 2} y="184" fontSize="11" fill="#94a3b8" textAnchor="middle">{t(E, "no roll", "안 굴러감")}</text>
-      <rect x={Bx} y="168" width={BW} height={BW} rx="10" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="2" strokeDasharray="4 3" />
-      <text x={Bx + BW / 2} y="200" fontSize="22" textAnchor="middle" fill="#cbd5e1">?</text>
-      <text x="384" y="191" fontSize="12.5" fontWeight="700" fill={tx}>{t(E, "next cell needs a new star", "다음 칸엔 새 별이 필요")}</text>
-      <text x="384" y="212" fontSize="15" fontWeight="800" fill="#b45309">+1</text>
-    </svg>
   );
 }
 
@@ -1433,28 +1379,19 @@ export function makeAstralCh2(E, lang = "py") {
             textAlign: "center",
           }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
-              💡 {t(E, "DP = walk cell by cell, write 'fewest stars so far'", "DP = 한 칸씩 가며 '여기까지 별 최소' 적어두기")}
+              💡 {t(E, "DP = walk cell by cell, write 'fewest placed stars so far'", "DP = 한 칸씩 가며 칸마다 '여기까지 놓은 별 최소' 적어두기")}
             </div>
             <div style={{ fontSize: 12.5, color: "#4c1d95", lineHeight: 1.55 }}>
               {t(E,
-                "Count = fewest original stars (photo 1) that explain the line. Per cell we write the running total so far.",
-                "세는 것 = 줄을 설명하는 원래 별(사진1) 최소 개수. 칸마다 '여기까지 쓴 별 총합'을 적어요.")}
+                "We count the fewest stars we place (photo 1). Per cell we write TWO numbers — the fewest-so-far if this cell's star does NOT move to the next cell, and if it DOES.",
+                "우리가 세는 건 직접 놓는 별(사진1) 최소 개수. 칸마다 숫자 두 개를 적어요 — 이 칸 별이 다음 칸으로 '안 옮겨갈 때 / 옮겨갈 때' 각각 여기까지 최소.")}
             </div>
           </div>
-          <DpMergeViz E={E} />
-          {/* why TWO numbers + cumulative +0/+1 — folds in the teacher's questions */}
-          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: "10px 13px", marginTop: 10 }}>
-            <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.7 }}>
-              <b style={{ color: "#5b21b6" }}>{t(E, "Why TWO numbers per cell? ", "왜 칸마다 숫자 2개? ")}</b>
+          <div style={{ background: "#faf5ff", border: "1px solid #e9d5ff", borderRadius: 10, padding: "11px 14px", textAlign: "center" }}>
+            <div style={{ fontSize: 12.5, color: "#6b21a8", lineHeight: 1.7 }}>
               {t(E,
-                "Going left→right you can't tell yet whether sending this star pays off (depends on what's ahead). So we DON'T decide — we carry both ('don't send' / 'send') totals. That's exactly the trap forward-greedy fell into by committing too early; DP keeps both, so it never gets stuck.",
-                "왼→오로 가면 이 별을 보내는 게 이득일지 지금은 몰라요(뒤를 봐야 앎). 그래서 안 정하고 두 총합('안 보냄'/'보냄')을 다 들고 가요. 이게 바로 forward greedy가 일찍 정해서 틀리던 함정 — DP는 둘 다 들고 가니 안 막혀요.")}
-            </div>
-            <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.7, marginTop: 6 }}>
-              <b style={{ color: "#15803d" }}>{t(E, "It's cumulative, +0 or +1. ", "누적이에요, +0 또는 +1. ")}</b>
-              {t(E,
-                "Each number is the running total of original stars. The smaller number at the LAST cell is the answer. Next: fill [G, W, G, G] cell by cell yourself 👉",
-                "각 숫자는 원래 별 누적 총합. 마지막 칸의 더 작은 수가 답. 다음에서 [G, W, G, G]를 한 칸씩 직접 채워봐요 👉")}
+                "Static pictures kept confusing this — so let's just DO it. Next slide fills the line [G, W, G, G] one cell at a time, with a speech bubble explaining each step. 👉",
+                "글·그림으로는 계속 헷갈렸으니 — 다음에서 그냥 한 칸씩 직접 해봐요. [G, W, G, G] 줄을 한 칸씩 채우면서, 칸마다 말풍선으로 왜 그런지 짚어줘요. 👉")}
             </div>
           </div>
 
@@ -1490,8 +1427,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Let's walk ONE line — [G, W, G, G] — one cell at a time. Each cell keeps TWO numbers: fewest stars if it does NOT send a star onward, and if it DOES. Press Next ▶. 👇",
-        "한 줄 [G, W, G, G]을 한 칸씩 걸어가요. 칸마다 숫자 두 개 — 이 칸 별을 다음 칸으로 '안 보낼 때 / 보낼 때' 각각 최소 별 수 — 를 쌓아가요. 다음 ▶ 👇"),
+        "Goal: fewest stars we PLACE to make line [G, W, G, G]. Walk it one cell at a time — each cell keeps two numbers ('don't send' / 'send'). Read each bubble. Next ▶ 👇",
+        "목표: 줄 [G, W, G, G]을 만드는 데 우리가 놓는 별이 최소 몇 개. 한 칸씩 걸어가며 칸마다 숫자 두 개('안 보냄'/'보냄')를 채워요. 말풍선을 읽어요. 다음 ▶ 👇"),
       content: (<AstralDpWalk E={E} />),
     },
 
