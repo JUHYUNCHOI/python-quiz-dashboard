@@ -150,7 +150,7 @@ function dpRun(chain, E) {
       ? t(E, "W: no star, no pass-out", "W: 별 없음, 보낼 것도 없음")
       : c0 === "G"
         ? t(E, "G: 1 ★ here, can keep OR pass on", "G: 별 1 개, 안 보냄/보냄 둘 다 가능")
-        : t(E, "❌ B as first cell needs an incoming ★, but none exists", "❌ B 가 첫 칸 — 들어온 별이 필요한데 없음")
+        : t(E, "❌ B as first cell needs a ★ sent from a previous cell, but there's none", "❌ B 가 첫 칸 — 앞 칸이 보낸 별이 필요한데 앞 칸이 없음")
   });
 
   for (let k = 1; k < chain.length; k++) {
@@ -160,17 +160,17 @@ function dpRun(chain, E) {
     let note = "";
     if (c === "W") {
       if (s0 !== EMPTY) ns[0] = s0;
-      note = t(E, "W = empty here → no incoming star possible → only min_stars[0] carries forward.",
-                  "W = 여기 빈 칸 → 들어온 별 못 받음 → min_stars[0] 만 이어짐.");
+      note = t(E, "W = empty. If the cell before SENT a star it wouldn't be empty → continues only from the prev 'don't send' (min_stars[0]). W can't send → 'send' is ❌.",
+                  "W = 빈 칸. 앞 칸이 별 보냈으면 안 비어 있음 → 앞 칸 '안 보냄'(min_stars[0])에서만 이어짐. W는 보낼 것도 없으니 '보냄'은 ❌.");
     } else if (c === "B") {
       if (s1 !== EMPTY) { ns[0] = s1 + 1; ns[1] = s1 + 1; }
-      note = t(E, "B = ★ here AND must receive an incoming ★ → +1 star.",
-                  "B = 여기 별 + 들어온 별 둘 다 있어야 → 별 +1.");
+      note = t(E, "B = ★ here AND a ★ sent from the cell before must arrive → needs prev 'send' → +1 star.",
+                  "B = 여기 별 + 앞 칸이 보낸 별 도착 둘 다 → 앞 칸 '보냄' 필요 → 별 +1.");
     } else {
       if (s0 !== EMPTY) { ns[0] = Math.min(ns[0], s0 + 1); ns[1] = Math.min(ns[1], s0 + 1); }
       if (s1 !== EMPTY) { ns[0] = Math.min(ns[0], s1); }
-      note = t(E, "G = star in one photo. Two cases — original here (+1), or moved-in (no new ★).",
-                  "G = 한 사진에만 별. 두 갈래 — 원래 별이면 +1, 들어온 별이면 그대로.");
+      note = t(E, "G = star in one photo. Two cases — a NEW star here (+1), or the cell before SENT one that arrives (no new ★).",
+                  "G = 한 사진에만 별. 두 갈래 — 여기 새 별(+1), 또는 앞 칸이 보낸 별이 도착(새 별 0).");
     }
     min_stars = ns;
     trace.push({ comp: c, min_stars: [...min_stars], note });
@@ -203,9 +203,9 @@ export function AstralDpSim({ E }) {
 
   return (
     <div style={{ padding: 14 }}>
-      <div style={{ fontSize: 11, color: C.dim, marginBottom: 8, textAlign: "center" }}>
-        {t(E, "👇 Click cells to change W/G/B.",
-              "👇 칸 클릭해서 W/G/B 바꿔봐요.")}
+      <div style={{ fontSize: 11, color: C.dim, marginBottom: 8, textAlign: "center", lineHeight: 1.6 }}>
+        {t(E, "👇 Click a cell to change W/G/B. Watch how the two rows (don't send / send) update at each cell, then guess the final answer at the bottom.",
+              "👇 칸을 눌러 W/G/B를 바꿔봐요. 아래 두 줄(안 보냄 / 보냄)이 칸마다 어떻게 바뀌는지 보고, 맨 아래 답을 예상해봐요.")}
       </div>
 
       {/* 프리셋 */}
@@ -260,7 +260,7 @@ export function AstralDpSim({ E }) {
             </tr>
             {/* min_stars[0] */}
             <tr>
-              <td style={{ fontSize: 11, color: C.dim, textAlign: "right", padding: "2px 6px" }}>min_stars[0]</td>
+              <td style={{ fontSize: 11, color: C.dim, textAlign: "right", padding: "2px 6px", lineHeight: 1.3 }}>min_stars[0]<br/><span style={{ fontSize: 9.5, color: "#15803d", fontFamily: "system-ui" }}>{t(E, "(don't send)", "(안 보냄)")}</span></td>
               {trace.map((tr, i) => {
                 const v = tr.min_stars[0];
                 const inf = v === Infinity;
@@ -275,7 +275,7 @@ export function AstralDpSim({ E }) {
             </tr>
             {/* min_stars[1] */}
             <tr>
-              <td style={{ fontSize: 11, color: C.dim, textAlign: "right", padding: "2px 6px" }}>min_stars[1]</td>
+              <td style={{ fontSize: 11, color: C.dim, textAlign: "right", padding: "2px 6px", lineHeight: 1.3 }}>min_stars[1]<br/><span style={{ fontSize: 9.5, color: "#15803d", fontFamily: "system-ui" }}>{t(E, "(send)", "(보냄)")}</span></td>
               {trace.map((tr, i) => {
                 const v = tr.min_stars[1];
                 const inf = v === Infinity;
