@@ -1274,74 +1274,115 @@ export function makeAstralCh2(E, lang = "py") {
       ),
     },
 
-    /* 2-G4 — WRAP-UP: what 'greedy' is, as an algorithm.
-       (Replaced the brute→DP appendix on 2026-06-17 per teacher: end on a clean
-        greedy explanation. DP was same speed as greedy, only faster than brute —
-        not worth the confusion for this audience.) */
+    /* 2-G4a — WHAT greedy is, walked on a coin-change WIN. (Expanded 2026-06-17:
+       teacher said the one-slide recap was too short/unclear — split into 2, walk examples.) */
     {
       type: "reveal",
       narr: t(E,
-        "Last slide — what IS 'greedy', really? (What you just did was greedy.) 👇",
-        "마지막 — '그리디'가 진짜 뭔지 정리해요. (방금 한 게 바로 그거예요.) 👇"),
+        "Now the real wrap-up — what IS 'greedy'? Let's take it slow, easy example first. 👇",
+        "이제 진짜 정리 — '그리디'가 뭘까요? 쉬운 예부터 천천히 볼게요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
-
-          {/* 1) what greedy is (general) */}
-          <div style={{ background: "#fef9c3", border: "2px solid #f59e0b", borderRadius: 10, padding: "10px 14px", marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 5 }}>
-              💡 {t(E, "Greedy = at each step, grab what looks best RIGHT NOW", "그리디(greedy) = 매 순간, 지금 제일 좋아 보이는 걸 바로 고르기")}
+          {/* definition */}
+          <div style={{ background: "#fef9c3", border: "2px solid #f59e0b", borderRadius: 10, padding: "11px 14px", marginBottom: 12 }}>
+            <div style={{ fontSize: 13.5, fontWeight: 800, color: "#92400e", marginBottom: 5 }}>
+              💡 {t(E, "Greedy = the 'grab-the-best-right-now' method", "그리디(greedy) = '지금 제일 좋은 거!' 하고 바로 집는 방법 (욕심쟁이)")}
             </div>
-            <div style={{ fontSize: 12, color: "#78350f", lineHeight: 1.7 }}>
+            <div style={{ fontSize: 12.5, color: "#78350f", lineHeight: 1.75 }}>
               {t(E,
-                "No planning the whole thing ahead — just take the obvious-best at each step. Here: at each cell, decide 'star or not?' on the spot.",
-                "전체를 미리 계획 안 하고, 단계마다 '눈앞 최선'만 집어요. 이 문제선: 칸마다 '별 놔, 말아?'를 그 자리에서 바로 결정.")}
+                "It doesn't plan the whole thing ahead. At each step it just grabs whatever looks best at that moment — and never looks back.",
+                "전체를 미리 계획하지 않아요. 매 순간, 그냥 '지금 제일 좋아 보이는 것'을 바로 집고 — 뒤도 안 돌아봐요.")}
             </div>
           </div>
 
-          {/* 2) when greedy works / fails — the coin example (order/rule matters) */}
-          <div style={{ background: "#fff", border: "1.5px solid #e5e7eb", borderRadius: 10, padding: "10px 13px", marginBottom: 10 }}>
-            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#374151", marginBottom: 7 }}>
-              🪙 {t(E, "But greedy isn't always right — it depends on the rule", "근데 그리디가 항상 맞는 건 아니에요 — 규칙에 따라 달라요")}
+          {/* worked WIN: change for 380 won, step by step */}
+          <div style={{ background: "#fff", border: "1.5px solid #e5e7eb", borderRadius: 10, padding: "11px 13px" }}>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#374151", marginBottom: 3 }}>
+              🪙 {t(E, "Example: give 380 won in the fewest coins", "예: 380원을 동전 최소 개수로 거슬러주기")}
+            </div>
+            <div style={{ fontSize: 11.5, color: "#6b7280", marginBottom: 10, lineHeight: 1.55 }}>
+              {t(E, "Greedy rule: 'always hand over the biggest coin that still fits!' — one at a time:", "그리디 규칙: '지금 낼 수 있는 가장 큰 동전부터!' — 한 개씩:")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+              {[
+                { coin: "100", left: 280 }, { coin: "100", left: 180 }, { coin: "100", left: 80 },
+                { coin: "50", left: 30 }, { coin: "10", left: 20 }, { coin: "10", left: 10 }, { coin: "10", left: 0 },
+              ].map((s, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 12 }}>
+                  <span style={{ background: "#fde68a", border: "1.5px solid #f59e0b", borderRadius: 999, padding: "2px 12px", fontWeight: 800, color: "#92400e", minWidth: 70, textAlign: "center" }}>
+                    {s.coin}{t(E, " won", "원")}
+                  </span>
+                  <span style={{ color: "#cbd5e1" }}>→</span>
+                  <span style={{ color: s.left === 0 ? "#15803d" : "#6b7280", fontWeight: s.left === 0 ? 800 : 600 }}>
+                    {s.left === 0 ? t(E, "0 left — done! ✓", "0원 남음 — 끝! ✓") : `${s.left}${t(E, " won left", "원 남음")}`}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#15803d", marginTop: 11, background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8, padding: "8px 12px" }}>
+              {t(E, "→ 7 coins. Grabbing the biggest each time gave the fewest. Greedy WORKED ✅",
+                 "→ 동전 7개. 매번 큰 것만 집었더니 최소 개수가 됐어요! 그리디 성공 ✅")}
+            </div>
+          </div>
+        </div>
+      ),
+    },
+
+    /* 2-G4b — when greedy FAILS (strange coins) + why it works HERE (order/certain-first). */
+    {
+      type: "reveal",
+      narr: t(E,
+        "So is greedy ALWAYS right? ...and why did it work for THIS problem? 👇",
+        "그럼 그리디는 항상 맞을까요? …그리고 이 문제엔 왜 통했을까요? 👇"),
+      content: (
+        <div style={{ padding: 14 }}>
+          {/* FAIL: weird coins */}
+          <div style={{ background: "#fef2f2", border: "2px solid #fca5a5", borderRadius: 10, padding: "11px 14px", marginBottom: 12 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#991b1b", marginBottom: 6 }}>
+              ❌ {t(E, "But NOT always — a strange-coin land", "근데 항상은 아니에요 — 이상한 나라 동전")}
+            </div>
+            <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.65, marginBottom: 9 }}>
+              {t(E, "A land where coins are only 1, 3, and 4. Make exactly 6:", "동전이 1원·3원·4원만 있는 나라. 딱 6원을 만들어요:")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8, padding: "7px 10px", fontSize: 11.5, color: "#14532d", lineHeight: 1.55 }}>
-                ✅ {t(E,
-                  "Change for 380 won, normal coins → take the biggest each time = fewest coins. Greedy WORKS.",
-                  "380원 거슬러주기(보통 동전) → 매번 큰 것부터 = 최소 개수. 그리디 통해요.")}
+              <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 8, padding: "8px 11px", fontSize: 12.5, color: "#991b1b", lineHeight: 1.5 }}>
+                {t(E, "Greedy (biggest first): ", "그리디(큰 거부터): ")}<b>4 + 1 + 1</b> → {t(E, "3 coins", "동전 3개")}
               </div>
-              <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 8, padding: "7px 10px", fontSize: 11.5, color: "#991b1b", lineHeight: 1.55 }}>
-                ❌ {t(E,
-                  "Weird coins 1·3·4, make 6 → biggest-first gives 4+1+1 = 3 coins, but 3+3 = 2 is better. Greedy FAILS.",
-                  "이상한 동전 1·3·4로 6 만들기 → 큰 것부터면 4+1+1 = 3개, 근데 3+3 = 2개가 더 적어요. 그리디 틀려요.")}
+              <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8, padding: "8px 11px", fontSize: 12.5, color: "#14532d", lineHeight: 1.5 }}>
+                {t(E, "Real fewest: ", "진짜 최소: ")}<b>3 + 3</b> → {t(E, "2 coins ✓", "동전 2개 ✓")}
               </div>
             </div>
-            <div style={{ fontSize: 11, color: "#6b7280", marginTop: 7, lineHeight: 1.55 }}>
-              {t(E,
-                "→ So greedy isn't 'just be greedy' — it's 'be greedy in a way that's been checked to work.'",
-                "→ 그래서 그리디는 '아무 욕심'이 아니라 '통하는 게 확인된 욕심'이에요.")}
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#991b1b", marginTop: 9, lineHeight: 1.6 }}>
+              😮 {t(E, "Grabbing the biggest used one MORE coin! So greedy CAN be wrong.",
+                     "큰 것부터 욕심냈더니 오히려 1개 더 썼어요! 그리디가 틀릴 수도 있는 거죠.")}
             </div>
           </div>
 
-          {/* 3) this problem: order was the key (not 'greedy is bad') */}
-          <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "9px 13px", marginBottom: 10 }}>
-            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 6 }}>
-              🧭 {t(E, "This problem: the ORDER was the whole game", "이 문제: '순서'가 전부였어요")}
+          {/* so: you must check it works */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "10px 14px", marginBottom: 12, fontSize: 12.5, color: "#92400e", lineHeight: 1.75 }}>
+            💡 {t(E,
+              "So: greedy is fast and easy — but you must CHECK it works for your problem, and find the rule/order that makes it always right.",
+              "그래서: 그리디는 빠르고 쉽지만 — '내 문제에 통하나?'를 꼭 확인하고, 항상 맞게 해주는 '규칙·순서'를 찾아야 해요.")}
+          </div>
+
+          {/* this problem */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "10px 14px", marginBottom: 12 }}>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 6 }}>
+              🧭 {t(E, "This problem: the order was everything", "이 문제는? 순서가 전부였어요")}
             </div>
-            <div style={{ fontSize: 11.5, color: "#1e3a8a", lineHeight: 1.65 }}>
-              {t(E, "Same greedy idea — ", "똑같은 그리디인데 — ")}
-              <b style={{ color: "#991b1b" }}>{t(E, "front → back fails ✗", "앞→뒤는 막히고 ✗")}</b>
-              {t(E, ", ", ", ")}
-              <b style={{ color: "#14532d" }}>{t(E, "back → front is always right ✓", "뒤→앞은 항상 정답 ✓")}</b>
-              {t(E, " (USACO 12/12). What was wrong wasn't greedy — it was the order.",
-                 " (USACO 12/12). 틀린 건 그리디가 아니라 '순서'였어요.")}
+            <div style={{ fontSize: 12, color: "#1e3a8a", lineHeight: 1.75 }}>
+              <b style={{ color: "#991b1b" }}>{t(E, "front → back ✗ (gets stuck)", "앞→뒤 ✗ (막힘)")}</b>{t(E, "  ·  ", "  ·  ")}
+              <b style={{ color: "#15803d" }}>{t(E, "back → front ✓ (always right, 12/12)", "뒤→앞 ✓ (항상 정답, 12/12)")}</b>
+              {t(E, " — going backward you settle the CERTAIN B's first, so the G's never trip you up.",
+                 " — 거꾸로 가면 확정인 B부터 처리해서, G가 발목 잡을 일이 없어요.")}
             </div>
           </div>
 
-          {/* 4) takeaway */}
-          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 14px", fontSize: 12.5, color: "#4c1d95", lineHeight: 1.7, fontWeight: 700 }}>
+          {/* takeaway */}
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#4c1d95", lineHeight: 1.75, fontWeight: 700 }}>
             🎯 {t(E,
-              "Greedy isn't a 'risky' algorithm. With the right rule/order it's a powerful, always-correct method. Here, 'back → front' was that right rule.",
-              "그리디는 '못 믿을' 알고리즘이 아니에요. 맞는 규칙·순서만 고르면 항상 정답인 강력한 방법이에요. 이 문제선 '뒤→앞'이 그 맞는 규칙이었고요.")}
+              "Greedy isn't 'unreliable' — find the rule that works, and it's a fast, always-correct method. Here, that rule was 'back → front'.",
+              "그리디는 '못 믿을' 게 아니에요 — 통하는 규칙만 찾으면 빠르고 항상 정답인 강력한 방법이에요. 이 문제선 그 규칙이 '뒤→앞'이었고요.")}
           </div>
         </div>
       ),
