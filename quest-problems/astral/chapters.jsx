@@ -726,16 +726,7 @@ GGG`}
             </div>
           </div>
 
-          <div style={{ background: "#eef2ff", border: "1px solid #a5b4fc", borderRadius: 10, padding: 12 }}>
-            <div style={{ fontWeight: 600, color: "#312e81", marginBottom: 4, fontSize: 12.5 }}>
-              🔍 {t(E, "Count the stars — one cell at a time", "별을 한 칸씩 세어봐요")}
-            </div>
-            <div style={{ fontSize: 11.5, color: C.dim, marginBottom: 6 }}>
-              {t(E, "Stars don't move, so photo 2 = photo 1. Press 다음 ▶ and watch each cell.",
-                    "별이 안 움직이니 사진 2 = 사진 1. 다음 ▶ 누르며 칸을 하나씩 봐요.")}
-            </div>
-            <Sample1Counter E={E} />
-          </div>
+          <Sample1Counter E={E} />
         </div>),
     },
 
@@ -844,13 +835,6 @@ export function makeAstralCh2(E, lang = "py") {
         "딱 하나만 알면 돼요: 별은 정확히 한 칸 움직여요 (사진1 → 사진2). 아래에서 봐요 👇"),
       content: (
         <div style={{ padding: 14 }}>
-          <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 2, textAlign: "center" }}>
-            {t(E, "A star moves one step (right=1, down=2)", "별은 한 칸 움직여요 (오른쪽 1, 아래 2)")}
-          </div>
-          <div style={{ fontSize: 11, color: "#64748b", marginBottom: 10, textAlign: "center" }}>
-            {t(E, "Press 다음 ▶ to step through it.", "다음 ▶ 누르며 한 칸씩 따라가 봐요.")}
-          </div>
-
           <OrbitWalk E={E} />
         </div>
       ),
@@ -863,13 +847,13 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "OK — chains are independent, so we just need to solve ONE chain. How? 3 approaches.",
-        "OK — 궤도끼리 독립이니까, 한 궤도만 풀면 돼요. 어떻게? 3 가지 방법이에요."),
+        "How do we actually decide each cell? There are 3 ways — let's see them one by one.",
+        "그럼 칸을 실제로 어떻게 정할까요? 방법이 3 가지예요 — 하나씩 봐요."),
       content: (
         <div style={{ padding: 14 }}>
 
           <div style={{ fontSize: 12, fontWeight: 700, color: "#374151", marginBottom: 7 }}>
-            {t(E, "3 ways to solve a single chain (next slides):", "한 궤도를 어떻게 풀까요? 3 가지 방법 (다음 슬라이드):")}
+            {t(E, "3 ways to decide the cells (next slides):", "칸을 정하는 3 가지 방법 (다음 슬라이드):")}
           </div>
           {[
             {
@@ -981,18 +965,6 @@ export function makeAstralCh2(E, lang = "py") {
               "⚡ 빠르고 코드도 짧아요 — 근데 눈앞만 봐서 가끔 틀려요. (다음 슬라이드에서 봐요 👀)")}
           </div>
 
-          {/* In this problem */}
-          <div style={{ background: "#eff6ff", border: "2px solid #3b82f6", borderRadius: 10, padding: "10px 14px", marginBottom: 10 }}>
-            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 6 }}>
-              ⭐ {t(E, "Greedy in this problem", "이 문제에서 그리디")}
-            </div>
-            <div style={{ fontSize: 12, color: "#1e40af", lineHeight: 1.7 }}>
-              {t(E,
-                "Scan cells one by one. At each cell: look only at this cell's type and the neighboring star — then decide whether to place a star. No looking ahead at future cells.",
-                "칸을 하나씩 봐요. 각 칸에서: 이 칸의 종류와 바로 옆 칸에 별이 있는지만 보고, 별을 놓을지 즉시 결정해요. 뒤에 뭐가 오는지는 안 봐요.")}
-            </div>
-          </div>
-
           {/* Closing line — leads into the hands-on simulations (no spoilers) */}
           <div style={{ fontSize: 11.5, fontWeight: 700, color: "#475569", textAlign: "center", marginTop: 4 }}>
             {t(E, "Now let's actually try it on an orbit, step by step →",
@@ -1062,7 +1034,7 @@ export function makeAstralCh2(E, lang = "py") {
             {
               cells: [{letter:"G",star:true,active:false,done:true},{letter:"G",star:false,active:false},{letter:"B",star:false,active:true}],
               note: t(E, "So the forward plan gets stuck.", "그래서 앞→뒤 작전은 막혀요."),
-              result: t(E, "→ Settle the command (B) first → sweep from the END! (puzzle is fine — 3 stars, not -1)", "→ 명령(B)부터 들으려면 끝에서부터 거꾸로! (퍼즐 멀쩡 — 별 3개, -1 아님)"),
+              result: t(E, "→ Stuck here, but it's not unsolvable. Go from the END instead — next slide!", "→ 여기선 막혔지만 못 푸는 건 아니에요. 끝에서부터 거꾸로 가볼게요 — 다음 슬라이드!"),
               ok: false,
             },
           ]} />
@@ -1202,14 +1174,6 @@ export function makeAstralCh2(E, lang = "py") {
             </table>
             <div style={{ fontSize: 12.5, fontWeight: 800, color: "#15803d", marginTop: 8 }}>
               {t(E, "answer = len(possibles) = 3 ✓", "answer = len(possibles) = 3 ✓")}
-            </div>
-            <div style={{
-              marginTop: 8, background: "#fef9c3", border: "1px solid #fde047",
-              borderRadius: 8, padding: "8px 11px", fontSize: 12, color: "#854d0e", lineHeight: 1.55,
-            }}>
-              💡 {t(E,
-                "The star the B forced at (1,1) ALSO satisfies the G at (1,1) — one star, two cells. That's why backward never gets stuck.",
-                "B 가 (1,1) 에 강제로 박은 별이 (1,1) 의 G 도 동시에 해결해요 — 별 하나, 두 칸. 그래서 거꾸로 가면 절대 안 막혀요.")}
             </div>
           </div>
           <div style={{
@@ -1601,8 +1565,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Now watch the DP carry both numbers per cell, live. ▶ 👇",
-        "이제 DP 가 칸마다 숫자 두 개를 들고 가는 걸 직접 봐요. ▶ 👇"),
+        "Click a cell to flip W/G/B and watch the two numbers change. 👇",
+        "칸을 눌러 W/G/B 를 바꾸면 숫자 두 개가 어떻게 변하는지 봐요. 👇"),
       content: (<AstralDpSim E={E} />),
     },
 
