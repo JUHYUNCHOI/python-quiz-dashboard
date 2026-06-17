@@ -1414,15 +1414,6 @@ export function makeAstralCh2(E, lang = "py") {
       content: (<AstralDpWalk E={E} />),
     },
 
-    /* 2-3.5 — DP intuition + live sim, now AFTER predict quiz */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Now YOU try: change a cell, GUESS what the answer becomes, then check. (Tip: the 'W→B' preset is impossible — see why ❌.) 👇",
-        "이제 직접 해봐요: 칸을 바꿔서 답이 어떻게 될지 먼저 예상 → 눌러서 확인. ('W→B' 프리셋은 왜 ❌ 인지 맞혀봐요.) 👇"),
-      content: (<AstralDpSim E={E} />),
-    },
-
     /* 2-3.7 — Bridge: ❌ in sim ↔ EMPTY (a huge number) in code.
        MOVED here 2026-06-02 (was between STEP 1 and STEP 2). Now right after the sim
        so EMPTY is introduced while ❌ is fresh; STEP labels stay uninterrupted. */
