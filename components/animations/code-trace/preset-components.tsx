@@ -14,6 +14,9 @@ export function CodeTracePyNestedIf({ lang = "ko" }: { lang?: string }) {
 export function CodeTracePyForSum({ lang = "ko" }: { lang?: string }) {
   return <CodeTraceSimulator preset={P.PY_FOR_SUM} lang={lang as "ko" | "en"} />
 }
+export function CodeTracePyForString({ lang = "ko" }: { lang?: string }) {
+  return <CodeTraceSimulator preset={P.PY_FOR_STRING} lang={lang as "ko" | "en"} />
+}
 export function CodeTracePyWhile({ lang = "ko" }: { lang?: string }) {
   return <CodeTraceSimulator preset={P.PY_WHILE_COUNTDOWN} lang={lang as "ko" | "en"} />
 }

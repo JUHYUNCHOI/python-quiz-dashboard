@@ -673,6 +673,11 @@ const registry: Record<string, ComponentEntry> = {
     exportName: "CodeTracePyForSum",
     props: (_step: any, lang: string) => ({ lang }),
   },
+  codeTracePyForString: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTracePyForString",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
   codeTracePyWhile: {
     load: () => import("@/components/animations/code-trace/preset-components"),
     exportName: "CodeTracePyWhile",

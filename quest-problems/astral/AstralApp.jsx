@@ -122,7 +122,7 @@ export default function AstralApp(props = {}) {
   ) : null;
 
   return (
-    <div>
+    <div style={{ wordBreak: "keep-all" }}>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
         <QuestProgressBar
           tabs={TABS}

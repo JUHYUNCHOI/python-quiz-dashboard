@@ -285,11 +285,11 @@ if score >= 70:    # 95 >= 70 → 또또 참! 'C' 까지 출력 😱😱
           id: "try3",
           type: "tryit",
           title: "🖥️ elif 빈칸 채우기 — 등급 출력",
-          task: "점수에 따른 등급을 출력하세요! (95점 → A)",
-          initialCode: "score = 95\nif score >= 90:\n    print('A')\n___:\n    print('B')\nelse:\n    print('C')",
-          expectedOutput: "A",
-          hint: "80점 이상인 조건을 elif로 쓰세요!",
-          hint2: "elif score >= 80:"
+          task: "점수에 따른 등급을 출력하세요! (85점 → B)",
+          initialCode: "score = 85\nif score >= 90:\n    print('A')\n___:\n    print('B')\nelse:\n    print('C')",
+          expectedOutput: "B",
+          hint: "80점 이상인 조건을 elif로 쓰세요! (콜론 : 은 이미 있으니 빼고)",
+          hint2: "elif score >= 80"
         },
         {
           id: "quiz3",

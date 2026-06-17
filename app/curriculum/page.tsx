@@ -485,16 +485,21 @@ export default function CurriculumPage() {
     const allData = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
     const active = new Set<string>()
 
-    for (const part of allData) {
-      const ids = part.lessons.map(l => l.id)
-      const hasIncompleteLesson = ids.some(id => !completedLessons.has(id))
-      if (hasIncompleteLesson) {
-        active.add(part.id)
+    // 학생이 "실제로 머무는 파트"(가장 멀리 진행한 지점)를 펼친다.
+    // 이전엔 '첫 미완료 파트'만 펼쳐서, 앞 파트에 안 끝낸 레슨이 하나라도 있으면
+    // (예: 채점 버그로 못 깬 레슨) 학생이 작업 중인 뒤 파트가 접혀버렸음.
+    // → 완료 레슨이 있는 가장 마지막 파트를 찾고, 그 파트가 다 끝났으면 다음 파트를 펼침.
+    let activeId: string | null = null
+    for (let i = allData.length - 1; i >= 0; i--) {
+      const ids = allData[i].lessons.map(l => l.id)
+      if (ids.some(id => completedLessons.has(id))) {
+        const allDone = ids.every(id => completedLessons.has(id))
+        activeId = (allDone && i + 1 < allData.length) ? allData[i + 1].id : allData[i].id
         break
       }
     }
-
-    if (active.size === 0 && allData.length > 0) active.add(allData[0].id)
+    if (!activeId && allData.length > 0) activeId = allData[0].id
+    if (activeId) active.add(activeId)
     setExpandedParts(active)
   }, [loaded, selectedCourse]) // eslint-disable-line react-hooks/exhaustive-deps
 

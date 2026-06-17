@@ -1,4 +1,10 @@
 // ✅ USACO_VERIFIED — locally re-verified 2026-06-14 (greedy ≡ 12/12 DP + brute oracle + official samples)
+//   2026-06-17: Teacher confirmed current greedy PASSES USACO 12/12 (submitted via VS Code).
+//     Then removed the redundant 'if right==0 and down==0' no-move branch from the GREEDY
+//     (AST_GREEDY_FULL_PY/CPP only — the DP/chain version still NEEDS it). Output proven
+//     IDENTICAL with/without the branch: 20000 random valid cases (1743 shift=0) → 0 mismatch
+//     + sample 1 = 7. Reason: at shift=0 each G/B cell adds itself, so count = #G+#B either way.
+//     → Re-submit the branch-less greedy once to confirm (expected 12/12).
 //   Last full verification: 2026-05-13 (Python 12/12 PASS, C++ 12/12 PASS) — DP solution.
 //   2026-06-01: Renamed A → right, B → down for student readability.
 //     Algorithm unchanged. Must resubmit to USACO to confirm before main deploy.
@@ -144,7 +150,7 @@ function dpRun(chain, E) {
       ? t(E, "W: no star, no pass-out", "W: 별 없음, 보낼 것도 없음")
       : c0 === "G"
         ? t(E, "G: 1 ★ here, can keep OR pass on", "G: 별 1 개, 안 보냄/보냄 둘 다 가능")
-        : t(E, "❌ B as first cell needs an incoming ★, but none exists", "❌ B 가 첫 칸 — 들어온 별이 필요한데 없음")
+        : t(E, "❌ B as first cell needs a ★ sent from a previous cell, but there's none", "❌ B 가 첫 칸 — 앞 칸이 보낸 별이 필요한데 앞 칸이 없음")
   });
 
   for (let k = 1; k < chain.length; k++) {
@@ -154,17 +160,17 @@ function dpRun(chain, E) {
     let note = "";
     if (c === "W") {
       if (s0 !== EMPTY) ns[0] = s0;
-      note = t(E, "W = empty here → no incoming star possible → only min_stars[0] carries forward.",
-                  "W = 여기 빈 칸 → 들어온 별 못 받음 → min_stars[0] 만 이어짐.");
+      note = t(E, "W = empty. If the cell before SENT a star it wouldn't be empty → continues only from the prev 'don't send' (min_stars[0]). W can't send → 'send' is ❌.",
+                  "W = 빈 칸. 앞 칸이 별 보냈으면 안 비어 있음 → 앞 칸 '안 보냄'(min_stars[0])에서만 이어짐. W는 보낼 것도 없으니 '보냄'은 ❌.");
     } else if (c === "B") {
       if (s1 !== EMPTY) { ns[0] = s1 + 1; ns[1] = s1 + 1; }
-      note = t(E, "B = ★ here AND must receive an incoming ★ → +1 star.",
-                  "B = 여기 별 + 들어온 별 둘 다 있어야 → 별 +1.");
+      note = t(E, "B = ★ here AND a ★ sent from the cell before must arrive → needs prev 'send' → +1 star.",
+                  "B = 여기 별 + 앞 칸이 보낸 별 도착 둘 다 → 앞 칸 '보냄' 필요 → 별 +1.");
     } else {
       if (s0 !== EMPTY) { ns[0] = Math.min(ns[0], s0 + 1); ns[1] = Math.min(ns[1], s0 + 1); }
       if (s1 !== EMPTY) { ns[0] = Math.min(ns[0], s1); }
-      note = t(E, "G = star in one photo. Two cases — original here (+1), or moved-in (no new ★).",
-                  "G = 한 사진에만 별. 두 갈래 — 원래 별이면 +1, 들어온 별이면 그대로.");
+      note = t(E, "G = star in one photo. Two cases — a NEW star here (+1), or the cell before SENT one that arrives (no new ★).",
+                  "G = 한 사진에만 별. 두 갈래 — 여기 새 별(+1), 또는 앞 칸이 보낸 별이 도착(새 별 0).");
     }
     min_stars = ns;
     trace.push({ comp: c, min_stars: [...min_stars], note });
@@ -197,9 +203,9 @@ export function AstralDpSim({ E }) {
 
   return (
     <div style={{ padding: 14 }}>
-      <div style={{ fontSize: 11, color: C.dim, marginBottom: 8, textAlign: "center" }}>
-        {t(E, "👇 Click cells to change W/G/B.",
-              "👇 칸 클릭해서 W/G/B 바꿔봐요.")}
+      <div style={{ fontSize: 11, color: C.dim, marginBottom: 8, textAlign: "center", lineHeight: 1.6 }}>
+        {t(E, "👇 Click a cell to change W/G/B. Watch how the two rows (don't send / send) update at each cell, then guess the final answer at the bottom.",
+              "👇 칸을 눌러 W/G/B를 바꿔봐요. 아래 두 줄(안 보냄 / 보냄)이 칸마다 어떻게 바뀌는지 보고, 맨 아래 답을 예상해봐요.")}
       </div>
 
       {/* 프리셋 */}
@@ -254,7 +260,7 @@ export function AstralDpSim({ E }) {
             </tr>
             {/* min_stars[0] */}
             <tr>
-              <td style={{ fontSize: 11, color: C.dim, textAlign: "right", padding: "2px 6px" }}>min_stars[0]</td>
+              <td style={{ fontSize: 11, color: C.dim, textAlign: "right", padding: "2px 6px", lineHeight: 1.3 }}>min_stars[0]<br/><span style={{ fontSize: 9.5, color: "#15803d", fontFamily: "system-ui" }}>{t(E, "(don't send)", "(안 보냄)")}</span></td>
               {trace.map((tr, i) => {
                 const v = tr.min_stars[0];
                 const inf = v === Infinity;
@@ -269,7 +275,7 @@ export function AstralDpSim({ E }) {
             </tr>
             {/* min_stars[1] */}
             <tr>
-              <td style={{ fontSize: 11, color: C.dim, textAlign: "right", padding: "2px 6px" }}>min_stars[1]</td>
+              <td style={{ fontSize: 11, color: C.dim, textAlign: "right", padding: "2px 6px", lineHeight: 1.3 }}>min_stars[1]<br/><span style={{ fontSize: 9.5, color: "#15803d", fontFamily: "system-ui" }}>{t(E, "(send)", "(보냄)")}</span></td>
               {trace.map((tr, i) => {
                 const v = tr.min_stars[1];
                 const inf = v === Infinity;
@@ -1666,13 +1672,6 @@ const AST_GREEDY_FULL_PY = [
   "        down = int(data[p]); p += 1      # 별이 아래로 몇 칸",
   "        grid = [data[p + r] for r in range(N)]; p += N",
   "",
-  "        # 별이 안 움직이면 → G, B 칸 그냥 세기",
-  "        if right == 0 and down == 0:",
-  "            cnt = sum(1 for r in range(N) for c in range(N)",
-  "                      if grid[r][c] in ('G', 'B'))",
-  "            out.append(str(cnt))",
-  "            continue",
-  "",
   "        possibles = set()       # 원래 별이 있어야 하는 칸 (중복 자동 제거)",
   "        impossible = False",
   "        for r in range(N - 1, -1, -1):       # 끝에서부터 거꾸로",
@@ -1723,16 +1722,6 @@ const AST_GREEDY_FULL_CPP = [
   "        vector<string> grid(N);",
   "        for (int r = 0; r < N; r++) cin >> grid[r];",
   "",
-  "        // 별이 안 움직이면 → G, B 칸 그냥 세기",
-  "        if (right == 0 && down == 0) {",
-  "            int cnt = 0;",
-  "            for (int r = 0; r < N; r++)",
-  "                for (int c = 0; c < N; c++)",
-  "                    if (grid[r][c] == 'G' || grid[r][c] == 'B') cnt++;",
-  "            cout << cnt << '\\n';",
-  "            continue;",
-  "        }",
-  "",
   "        set<pair<int,int>> possibles;   // 원래 별이 있어야 하는 칸",
   "        bool impossible = false;",
   "        for (int r = N - 1; r >= 0 && !impossible; r--) {",
@@ -1772,20 +1761,12 @@ export function getAstralSections(E) {
       color: A_COLOR,
       py: AST_S1_PY, cpp: AST_S1_CPP,
       why: [
-        t(E, "First line: how many puzzles (T). Each puzzle then gives:",
-            "맨 첫 줄에 퍼즐 몇 개인지 (T). 각 퍼즐마다 차례로:"),
-        t(E, "• N = grid side length (so the grid is N×N)",
-            "• N = 격자 한 변 크기 (격자는 N × N)"),
-        t(E, "• right = how far the star moves right",
-            "• right = 별이 오른쪽으로 몇 칸 가는지"),
-        t(E, "• down = how far the star moves down",
-            "• down = 별이 아래로 몇 칸 가는지"),
-        t(E, "• then N lines of W/G/B characters — the grid itself",
-            "• 그 다음 W/G/B 문자로 된 N 줄 — 격자 내용"),
+        t(E, "First line: number of puzzles (T). Each puzzle: N (grid size), right & down (the shift), then N lines of W/G/B. (See the sample on the right.)",
+            "맨 첫 줄: 퍼즐 개수 (T). 각 퍼즐: N (격자 크기), right·down (이동량), 그 다음 W/G/B 격자 N 줄. (오른쪽 샘플 참고.)"),
       ],
       pyOnly: [
-        t(E, "sys.stdin.read().split() + pointer p — faster than input() at Σ N² ≤ 10⁷.",
-            "sys.stdin.read().split() + 포인터 p — Σ N² ≤ 10⁷ 에선 input() 보다 빠름."),
+        t(E, "Read all the input at once, then take it piece by piece — fast and simple.",
+            "입력을 한 번에 다 읽어서 앞에서부터 하나씩 꺼내 써요 — 빠르고 간단."),
       ],
       cppOnly: [],
       aside: <SampleInputAside E={E} sample={AST_SAMPLE} highlight={[0, 1, 2, 3, 4]} note={t(E,
@@ -1810,16 +1791,8 @@ export function getAstralSections(E) {
       color: "#7c3aed",
       py: AST_S3_PY, cpp: AST_S3_CPP,
       why: [
-        t(E, "📖 How to read this code — just 4 chunks:",
-            "📖 코드 읽는 법 — 네 덩어리로 나눠서 봐:"),
-        t(E, "Lines 1-4 — get our tools ready: visited grid (so we don't process a cell twice), running total, 'impossible' flag.",
-            "1-4 줄: 도구 꺼내기. visited 격자 (같은 칸 두 번 안 보려고), 합계 total, '망함' 표시 impossible."),
-        t(E, "Lines 5-9 — walk every cell with two for-loops. Already touched? Skip.",
-            "5-9 줄: for 두 개로 모든 칸 한 번씩 둘러보기. 이미 손댔으면 그냥 넘김."),
-        t(E, "Lines 10-12 — look BACK (up `down`, left `right`). If THAT cell is in-grid, this isn't the start — skip. Only the cells whose 'look back' falls off-grid are real starts.",
-            "10-12 줄: 거꾸로 위로 down, 왼쪽으로 right 가봐. 그 칸이 격자 안이면 여기는 시작점 아님 → 스킵. 거꾸로 갔을 때 격자 밖 나가는 칸만 진짜 시작점."),
-        t(E, "Lines 13-20 — from the start, keep going (+ down rows, + right cols) — store each cell into `path` until we fall off the grid. One star path is done.",
-            "13-20 줄: 시작점에서 (아래 down, 오른쪽 right) 로 한 칸씩 가면서 path 에 담기. 격자 밖 나가면 끝. 별 길 하나 다 봤음."),
+        t(E, "📖 Find a line's start (its 'one step back' is off the grid), then follow the star's move one cell at a time → that's one line. (Line-by-line notes in the code comments.)",
+            "📖 줄의 시작 칸(거꾸로 한 칸이 사진 밖인 칸)을 찾고, 거기서 별 이동 방향으로 한 칸씩 따라가요 → 한 줄 완성. (줄별 설명은 코드 주석에.)"),
       ],
       pyOnly: [],
       cppOnly: [],
@@ -1829,10 +1802,10 @@ export function getAstralSections(E) {
       color: "#0891b2",
       py: AST_S4A_PY, cpp: AST_S4A_CPP,
       why: [
-        t(E, "Look at the first letter (W or G). Fill min_stars[0] / min_stars[1] using the 'first cell' table.",
-            "첫 글자 (W 또는 G) 보고, '첫 칸 정해진 경우' 표 그대로 min_stars[0] / min_stars[1] 적기."),
-        t(E, "W → min_stars = [0, EMPTY]. G → min_stars = [1, 1]. B as first cell is impossible, min_stars stays [EMPTY, EMPTY].",
-            "W → min_stars = [0, EMPTY]. G → min_stars = [1, 1]. B 가 첫 칸이면 불가 → min_stars 그대로 [EMPTY, EMPTY]."),
+        t(E, "Line's first cell: read its two numbers (don't-send / send) from the letter — exactly like step 1 of the walk.",
+            "줄 첫 칸: 글자 보고 두 숫자(안 보냄 / 보냄) 시작값을 적어요 — 워크 1 번 칸이랑 똑같아요."),
+        t(E, "W → [0, ✕].  G → [1, 1].  (B can't be a line's first cell.)  In the code these two numbers are min_stars[0] (don't-send) and min_stars[1] (send).",
+            "W → [안 보냄 0, 보냄 ✕].  G → [1, 1].  (B 는 줄 첫 칸이 될 수 없어요.)  코드에선 이 두 숫자가 min_stars[0](안 보냄), min_stars[1](보냄)."),
       ],
       pyOnly: [],
       cppOnly: [],
@@ -1842,10 +1815,10 @@ export function getAstralSections(E) {
       color: "#0891b2",
       py: AST_S4B_PY, cpp: AST_S4B_CPP,
       why: [
-        t(E, "Each step: read prev_keep, prev_pass + this letter → compute new_min_stars[0], new_min_stars[1].",
-            "매 칸: 이전 칸의 prev_keep, prev_pass + 이 칸 글자 → 새 new_min_stars[0], new_min_stars[1] 계산."),
-        t(E, "Inside the loop the if-else for W / G / B is literally the cheat-sheet table from earlier.",
-            "루프 안의 if-else (W / G / B) — 앞에서 본 치트시트 표를 그대로 옮긴 거."),
+        t(E, "Each next cell: previous cell's two numbers + this letter → this cell's two numbers — exactly like pressing Next in the walk.",
+            "각 다음 칸: 앞 칸 두 숫자 + 이 칸 글자 → 이 칸 두 숫자 — 워크에서 '다음 ▶' 누른 거랑 똑같아요."),
+        t(E, "The if-else just handles each letter (W / G / B) the way the walk did, cell by cell.",
+            "if-else 는 글자(W / G / B)마다 워크에서 한 그대로 한 칸씩 처리하는 거예요."),
       ],
       pyOnly: [],
       cppOnly: [],
@@ -1857,17 +1830,12 @@ export function getAstralSections(E) {
       why: [
         t(E, "📖 Putting it all together — same chunks you've seen, now stitched into one main():",
             "📖 전부 합치기 — 방금까지 본 덩어리들을 main() 하나에 이어 붙인 거야:"),
-        t(E, "(a) Read input → (b) 'stars don't move' shortcut → (c) walk every star path → (d) per path: if-else min_stars update → (e) min(min_stars[0], min_stars[1]) = that path's answer.",
-            "(a) 입력 받기 → (b) '별 안 움직이면' 분기 → (c) 별 길마다 걷기 → (d) 한 길당: if-else 로 min_stars 업데이트 → (e) min(min_stars[0], min_stars[1]) = 그 길의 답."),
-        t(E, "Sum all path answers = total. If any path's answer is EMPTY → print -1 instead.",
-            "별 길 답들 다 더하면 total. 한 별 길이라도 EMPTY 면 total 대신 -1 출력."),
-        t(E, "Speed-wise: each cell is visited once + O(1) work → O(N²) per case. With Σ N² ≤ 10⁷, plenty of headroom.",
-            "속도: 칸당 한 번 + O(1) 작업 → 케이스당 O(N²). 전체 Σ N² ≤ 10⁷ 라 여유 있음."),
+        t(E, "(a) read input → (b) shortcut if stars don't move → (c) for each line, fill its two numbers cell by cell → (d) that line's answer = the smaller number → (e) add up every line's answer.",
+            "(가) 입력 받기 → (나) 별 안 움직이면 지름길 → (다) 줄마다 한 칸씩 두 숫자 채우기 → (라) 줄 답 = 더 작은 수 → (마) 줄 답 다 더하기."),
+        t(E, "Add up all the line answers = total. If any line is impossible (✕) → print -1 instead.",
+            "줄 답을 다 더하면 총합. 한 줄이라도 불가능(✕)하면 총합 대신 -1 출력."),
       ],
-      pyOnly: [
-        t(E, "Buffer outputs in a list and print('\\n'.join(out)) once at the end — faster than T prints.",
-            "케이스 답을 list 에 모아 마지막에 print('\\n'.join(out)) — T 번 print 보다 빠름."),
-      ],
+      pyOnly: [],
       cppOnly: [],
     },
     /* ── index 6: BACKWARD GREEDY core (main solution heart) ── */
@@ -1876,18 +1844,10 @@ export function getAstralSections(E) {
       color: "#0d9488",
       py: AST_GREEDY_CORE_PY, cpp: AST_GREEDY_CORE_CPP,
       why: [
-        t(E, "📖 The whole idea in one pass — no chain-grouping, no DP table:",
-            "📖 한 번 훑기로 끝 — 별 길 묶기도, DP 표도 필요 없어:"),
-        t(E, "Walk every cell from the bottom-right corner toward the top-left.",
-            "오른쪽-아래 끝 칸에서 왼쪽-위로, 모든 칸을 거꾸로 한 번씩 봐."),
-        t(E, "B → this cell AND its predecessor (one step back) both need an original star. If that predecessor is W or off-grid, B is impossible → -1.",
-            "B → 이 칸 + 직전 칸 (거꾸로 한 칸) 둘 다 원래 별 필요. 직전 칸이 W 거나 사진 밖이면 B 못 만듦 → -1."),
-        t(E, "G → if this cell already got a star (a later B demanded it), done. Otherwise put one original star at the predecessor (share it) when possible, else here.",
-            "G → 이 칸에 이미 별이 찍혔으면 (뒤쪽 B 가 시켜둠) 끝. 아니면 가능하면 직전 칸에 별 하나 (공유), 안 되면 여기."),
-        t(E, "Why backward works: going end → start, every B's demand is already recorded BEFORE we reach the predecessor. No guessing — so a one-pass greedy is exact.",
-            "거꾸로가 되는 이유: 끝 → 시작으로 가면 B 의 요구가 직전 칸에 닿기 전에 이미 기록돼 있어. 찍을 일이 없으니 한 번 훑기 그리디가 정확해."),
-        t(E, "possibles is a set, so adding the same cell twice counts once. answer = len(possibles).",
-            "possibles 는 set 이라 같은 칸 두 번 넣어도 하나로 셈. answer = len(possibles)."),
+        t(E, "📖 One backward pass from the bottom-right corner — no chains, no DP table.",
+            "📖 오른쪽-아래 끝에서 거꾸로 한 번 훑기 — 별 길 묶기도, DP 표도 필요 없어요."),
+        t(E, "The B / G rule for each cell is written on each line below. answer = len(possibles).",
+            "칸마다 B / G 규칙은 아래 코드에 줄마다 적혀 있어요. 답 = len(possibles)."),
       ],
       pyOnly: [],
       cppOnly: [
@@ -1904,12 +1864,8 @@ export function getAstralSections(E) {
       color: "#dc2626",
       py: AST_GREEDY_FULL_PY, cpp: AST_GREEDY_FULL_CPP,
       why: [
-        t(E, "📖 Everything stitched together — read input → 'stars don't move' shortcut → the backward greedy → print the count (or -1).",
-            "📖 전부 합치기 — 입력 받기 → '별 안 움직임' 지름길 → 뒤→앞 그리디 → 별 수 출력 (또는 -1)."),
-        t(E, "Notice there's no chain list and no min_stars table — the set possibles does all the bookkeeping.",
-            "별 길 리스트도, min_stars 표도 없는 거 봐 — set possibles 하나가 다 기억해 줘."),
-        t(E, "Speed: each cell visited once + O(log) set work → about O(N² log N) per case. Comfortably inside the time limit.",
-            "속도: 칸당 한 번 + set O(log) → 케이스당 약 O(N² log N). 제한 시간 안에 여유."),
+        t(E, "📖 All together — read input → backward greedy → print count (or -1). The set possibles does all the bookkeeping.",
+            "📖 전부 합치기 — 입력 → 거꾸로 그리디 → 출력 (또는 -1). set possibles 하나가 다 기억해요."),
       ],
       pyOnly: [
         t(E, "This is the teacher's actual USACO-accepted Python (logic verbatim; input switched to the fast sys.stdin read).",

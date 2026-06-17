@@ -193,6 +193,13 @@ for ch in word:
 > 💡 한 글자씩 다룰 수 있으니, 이름을 세로로 쓰거나 글자 수를 세는 것도 for 한 줄로 할 수 있어요.`
         },
         {
+          id: "string-trace",
+          type: "interactive",
+          title: "🎬 문자열에서 글자가 하나씩 꺼내지는 모습",
+          component: "codeTracePyForString",
+          description: `\`for ch in word:\` 가 도는 걸 한 단계씩 따라가 봐요. \`ch\` 에 **사 → 과** 가 차례로 들어가고, 글자를 다 꺼내면 멈춰요. (range 가 숫자를 하나씩 뽑던 것과 똑같죠!)`
+        },
+        {
           id: "try4",
           type: "tryit",
           title: "🖥️ 빈칸 채우기 — 이름 세로로 쓰기",
