@@ -377,9 +377,15 @@ function OrbitWalk({ E }) {
     { p1: P1, p2: P2, arrow: true, tail: P2,
       bubble: t(E, "Photo 2 — that star moves just ONE step (right 1, down 2) → (2,1).",
                    "사진2 — 그 별이 딱 한 칸 움직여요 (오른쪽 1, 아래 2) → (2,1).") },
+    { p1: P1, p2: P2, arrow: true, tail: P1, gFocus: P1,
+      bubble: t(E, "Look at (0,0): a star in photo 1, but NONE in photo 2 (it left). A star in only ONE photo = G!",
+                   "(0,0) 을 봐요: 사진1엔 별, 사진2엔 없어요 (떠났으니까). 한 사진에만 별 = G!") },
+    { p1: P1, p2: P2, arrow: true, tail: P2, gFocus: P2,
+      bubble: t(E, "Look at (2,1): NONE in photo 1, a star in photo 2 (it arrived). Also one photo only = G! So a G means a star LEFT, or a star ARRIVED.",
+                   "(2,1) 을 봐요: 사진1엔 없고, 사진2에만 별 (들어왔으니까). 이것도 한 사진에만 = G! → G 는 별이 '떠난 자리' 또는 '들어온 자리'예요.") },
     { p1: P1, p2: P2, arrow: true, tail: P2, final: true,
-      bubble: t(E, "So a star seen at (2,1) came from '(2,1) minus one step' = (0,0). Whatever cell you look at, just check 'one step back'! 🔑",
-                   "그래서 (2,1) 에 보이는 별은 '거꾸로 한 칸'인 (0,0) 에서 온 거예요. 어떤 칸이든 '거꾸로 한 칸'만 보면 돼요! 🔑") },
+      bubble: t(E, "And a star seen at (2,1) came from '(2,1) minus one step' = (0,0). Whatever cell you look at, just check 'one step back'! 🔑",
+                   "그리고 (2,1) 에 보이는 별은 '거꾸로 한 칸'인 (0,0) 에서 온 거예요. 어떤 칸이든 '거꾸로 한 칸'만 보면 돼요! 🔑") },
   ];
   const [si, setSi] = useState(0);
   const last = steps.length - 1;
@@ -415,14 +421,16 @@ function OrbitWalk({ E }) {
           const cell = { r, c }, k = key(cell);
           const isP1 = k === key(cur.p1);
           const isP2 = cur.p2 && k === key(cur.p2);
+          const isG = cur.gFocus && k === key(cur.gFocus);
           return (
             <div key={k} style={{
-              position: "absolute", left: c * P, top: r * P, width: S, height: S, borderRadius: 8, zIndex: 2,
+              position: "absolute", left: c * P, top: r * P, width: S, height: S, borderRadius: 8, zIndex: isG ? 4 : 2,
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 1,
-              background: isP1 ? "#dbeafe" : isP2 ? "#eff6ff" : "#fff",
-              border: isP1 ? `2.5px solid ${Ac}` : isP2 ? `2px dashed ${Ac}` : "2px solid #eef2f6",
-              boxShadow: isP1 ? `0 0 0 4px rgba(37,99,235,.15)` : "none", transition: "all .15s",
+              background: isG ? "#fef9c3" : isP1 ? "#dbeafe" : isP2 ? "#eff6ff" : "#fff",
+              border: isG ? "2.5px solid #d97706" : isP1 ? `2.5px solid ${Ac}` : isP2 ? `2px dashed ${Ac}` : "2px solid #eef2f6",
+              boxShadow: isG ? "0 0 0 4px rgba(217,119,6,.2)" : isP1 ? `0 0 0 4px rgba(37,99,235,.15)` : "none", transition: "all .15s",
             }}>
+              {isG && <div style={{ position: "absolute", top: -10, right: -8, fontSize: 12, fontWeight: 900, color: "#d97706" }}>G</div>}
               {isP1 ? (
                 <><span style={{ fontSize: 18, color: Ac, fontWeight: 900, lineHeight: 1 }}>★</span>
                   <span style={{ fontSize: 8, fontWeight: 800, color: Ac }}>{t(E, "photo1", "사진1")}</span></>
