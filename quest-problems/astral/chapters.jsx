@@ -1119,6 +1119,25 @@ export function makeAstralCh2(E, lang = "py") {
         "같은 줄인데 — 방향만 뒤집어요: 끝 → 시작. 이번엔 풀려요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
+          {/* WHY backward — the deep "왜?": settle the CERTAIN (B) first, which shrinks
+              the CHOICES (G). Like Sudoku. Added 2026-06-17 per teacher (kids always ask why). */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 12, padding: "10px 13px", marginBottom: 12 }}>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>
+              🤔 {t(E, "Why go from the END?", "왜 끝(뒤)에서부터 가요?")}
+            </div>
+            <div style={{ fontSize: 11.5, color: "#78350f", lineHeight: 1.7 }}>
+              <div style={{ marginBottom: 3 }}>
+                🔒 <b>{t(E, "B = settled", "B = 확정")}</b> — {t(E, "this cell AND the one before it BOTH must have a star. No choice.", "이 칸 + 바로 앞 칸, 둘 다 별이 있어야 함. 선택 없음.")}
+              </div>
+              <div style={{ marginBottom: 6 }}>
+                🤷 <b>{t(E, "G = 2 choices", "G = 선택지 2개")}</b> — {t(E, "put a star here, OR let one roll in from the cell before.", "여기에 별을 놓거나, 앞 칸에서 굴러오게 하거나.")}
+              </div>
+              <div style={{ fontWeight: 700, color: "#92400e" }}>
+                {t(E, "→ Settle the certain B's FIRST, and the G's have less to guess. Going backward you meet each B first — so you never guess wrong. (Just like filling the sure squares in Sudoku first!)",
+                   "→ 확정인 B부터 박으면, G는 고민할 게 줄어요. 거꾸로 가면 B를 먼저 만나니까 → 헷갈려서 틀릴 일이 없어요. (스도쿠에서 확실한 칸부터 채우는 것처럼!)")}
+              </div>
+            </div>
+          </div>
           {/* One-line plan banner — the per-step bubbles below carry the rule details */}
           <div style={{
             background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 999,
@@ -1142,8 +1161,8 @@ export function makeAstralCh2(E, lang = "py") {
             stepData={[
             {
               cells: [{letter:"G",star:false,active:false},{letter:"G",star:false,active:false},{letter:"B",star:false,active:false}],
-              note: t(E, "Why from the end? A B is a COMMAND: 'the cell before me MUST have a star.' Going from the end, we meet the B first → so we can put that star right away. (Going forward, we used that cell up before meeting the B → stuck.) So: end (2) → back.",
-                         "왜 끝부터냐고요? B 는 '내 앞 칸에 별이 꼭 있어야 해' 하는 명령이에요. 끝부터 가면 B 를 먼저 만나서 → 그 앞 칸에 별을 바로 놓아줄 수 있어요. (앞에서 가면 그 칸을 B 만나기도 전에 써버려 막혔죠.) 그래서 끝 (2) 부터 거꾸로!")
+              note: t(E, "Start at the END (2) — no stars yet. We walk backward so we meet the certain B first (see the box above). Press ▶.",
+                         "끝 (2) 부터 시작 — 아직 별 없음. 확정인 B 를 먼저 만나려고 거꾸로 가요 (위 박스 참고). ▶ 눌러요.")
             },
             {
               cells: [{letter:"G",star:false,active:false},{letter:"G",star:true,active:false},{letter:"B",star:true,active:true}],
