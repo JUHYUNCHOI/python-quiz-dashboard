@@ -438,6 +438,7 @@ function CornerGWalk({ E }) {
   const last = steps.length - 1;
   const idx = Math.max(0, Math.min(si, last));
   const cur = steps[idx];
+  const showStar = idx >= 2; // from "a star WAS here" (step 3) onward, mark the original ★
   const S = 44, GAP = 4, P = S + GAP, gridW = 4 * S + 3 * GAP;
   const actDisp = cur.final ? null : (cur.focus === "phantom" ? { dr: 0, dc: 0 } : { dr: 1, dc: 1 });
   const bubbleRow = actDisp ? actDisp.dr : 1;
@@ -479,6 +480,9 @@ function CornerGWalk({ E }) {
                 <>
                   <div style={{ fontSize: isG ? 15 : 9, fontWeight: 800, color: isAct ? "#fff" : isG ? "#1e293b" : "#cbd5e1" }}>{isG ? "G" : "·"}</div>
                   <div style={{ fontSize: 7.5, color: isAct ? "#e0e7ff" : "#94a3b8" }}>({R},{C})</div>
+                  {isG && showStar && (
+                    <div style={{ position: "absolute", top: -10, right: -8, fontSize: 17, color: "#d97706", lineHeight: 1 }}>★</div>
+                  )}
                 </>
               )}
             </div>
@@ -726,11 +730,11 @@ GGG`}
     {
       type: "quiz",
       narr: t(E,
-        "You just saw: this corner cell has nothing up-left of it. So a star couldn't have come from there. Lock it in.",
-        "방금 봤죠: 이 모서리 칸은 왼쪽 위에 아무 칸도 없어요. 그러니까 거기서 별이 들어올 수가 없어요. 다시 한 번 확인."),
+        "Now you pick the answer. 👇",
+        "방금 본 거, 직접 골라봐요 👇"),
       question: t(E,
-        "The corner cell is G, but no star could come from up-left (no cell there). So how did this become G?",
-        "모서리 칸이 G 인데, 왼쪽 위에 칸이 없어서 별이 들어올 수가 없어요. 그럼 어떻게 G 가 됐을까요?"),
+        "The corner (0,0) is G. How did it become G?",
+        "모서리 칸 (0,0) 이 G 예요. 어떻게 G 가 됐을까요?"),
       options: [
         t(E, "A star was here at the start, then left.",
             "처음부터 이 칸에 별이 있었는데, 떠난 거."),
