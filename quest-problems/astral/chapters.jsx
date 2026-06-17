@@ -346,6 +346,135 @@ function Sample1Counter({ E }) {
   );
 }
 
+/* ── AstralDpWalk: step the DP across ONE line [G,W,G,G], one cell per click, with a
+   plain-language bubble each step. Two numbers per cell = "no star rolled in (A)" /
+   "a star rolled in (B)". Values come straight from the verified AstralDpSim machine:
+   [1,1] → [1,❌] → [2,2] → [2,3], answer = min(2,3) = 2. Editable slide content.
+   (A/B framing = min_stars[0]/min_stars[1] in the solution code — index = "did a
+   star arrive into this cell". ❌ = EMPTY = impossible.) ── */
+function AstralDpWalk({ E }) {
+  // Fixed worked example. Each step = one cell. A = no star rolled in, B = a star rolled in.
+  // Verified trace (matches AstralDpSim & solution code): G→[1,1] W→[1,❌] G→[2,2] G→[2,3].
+  const X = "❌";
+  const cells = [
+    {
+      L: "G", A: "1", B: "1",
+      bubble: t(E,
+        "First cell, letter G (a star in just ONE of the two photos). It's the very first cell, so nothing can roll IN from the left. So either way we MUST have placed an original star here → that's 1 star. We carry 1 in both boxes for now.",
+        "첫 칸, 글자 G (두 사진 중 한쪽에만 별). 맨 앞 칸이라 왼쪽에서 별이 '굴러 들어올' 데가 없어요. 그러니 어느 쪽이든 여기 원래 별 1 개가 꼭 있어야 해요 → 별 1 개. 일단 두 칸(상자) 다 1 로 적어둬요."),
+    },
+    {
+      L: "W", A: "1", B: X,
+      bubble: t(E,
+        "Letter W = both photos empty here. No star is in photo 2, so NO star rolled in from the left. → only the 'no star rolled in' box (A) survives, and it keeps the 1. The 'star rolled in' box (B) is impossible → ❌.",
+        "글자 W = 여기 두 사진 다 비었어요. 사진2에 별이 없으니 왼쪽에서 별이 안 굴러 들어왔어요. → '안 들어옴' 상자(A) 만 살아남고, 1 을 그대로 가져가요. '들어옴' 상자(B) 는 말이 안 되니 ❌."),
+    },
+    {
+      L: "G", A: "2", B: "2",
+      bubble: t(E,
+        "Letter G again — a star in just ONE photo. Two ways to make it: ⒜ a star rolled IN from the left (no new star, +0), or ⒝ we put a NEW original star here (+1). Whichever box we extend, we add the cheaper option. Here both come to 2.",
+        "또 G — 한 사진에만 별. 두 갈래로 만들 수 있어요: ⒜ 왼쪽에서 별이 굴러 들어옴 (새 별 0, +0), ⒝ 여기 원래 별을 새로 둠 (+1). 각 상자에 더 싼 쪽을 더해요. 여기선 둘 다 2 가 돼요."),
+    },
+    {
+      L: "G", A: "2", B: "3", final: true,
+      bubble: t(E,
+        "Last cell! The line's answer = the SMALLER of this cell's two boxes = min(2, 3) = 2. Why two boxes the whole way? Because rolling a star IN saves a new star — but we never know in advance where rolling helps, so we carry BOTH possibilities to the end and let the smaller one win. 🔑",
+        "마지막 칸! 이 줄의 답 = 이 칸 두 상자 중 작은 쪽 = min(2, 3) = 2. 왜 끝까지 상자 두 개를 들고 다닐까요? 별을 굴려 '들여오면' 새 별을 아끼는데, 어디서 굴리는 게 이득일지 미리 모르니 두 경우를 끝까지 들고 가서 작은 쪽이 이기게 해요. 🔑"),
+    },
+  ];
+  const [si, setSi] = useState(0);
+  const last = cells.length - 1;
+  const idx = Math.max(0, Math.min(si, last));
+  const cur = cells[idx];
+  const S = 56, GAP = 12, P = S + GAP, gridW = cells.length * S + (cells.length - 1) * GAP;
+
+  const compColors = { W: { bg: "#fff", bd: "#e2e8f0", fg: "#94a3b8" }, G: { bg: "#cbd5e1", bd: "#94a3b8", fg: "#1e293b" }, B: { bg: "#1e293b", bd: "#0f172a", fg: "#fff" } };
+  const box = (label, val, active) => {
+    const isX = val === X;
+    return (
+      <div style={{
+        minWidth: 30, textAlign: "center", padding: "2px 6px", borderRadius: 6,
+        fontSize: 13, fontWeight: 800, lineHeight: 1.2,
+        background: active ? (isX ? "#fee2e2" : "#dcfce7") : "#f8fafc",
+        color: isX ? "#dc2626" : active ? "#15803d" : "#94a3b8",
+        border: active ? `1.5px solid ${isX ? "#fca5a5" : "#86efac"}` : "1.5px solid #eef2f6",
+      }}>
+        <div style={{ fontSize: 8.5, fontWeight: 800, color: active ? "#64748b" : "#cbd5e1", letterSpacing: .3 }}>{label}</div>
+        {val}
+      </div>
+    );
+  };
+
+  const btn = (disabled, label, onClick) => (
+    <button onClick={onClick} disabled={disabled} style={{
+      padding: "5px 16px", borderRadius: 7, border: "none", fontSize: 12, fontWeight: 700,
+      cursor: disabled ? "default" : "pointer",
+      background: disabled ? "#f1f5f9" : "#4f46e5", color: disabled ? "#94a3b8" : "#fff",
+    }}>{label}</button>
+  );
+
+  return (
+    <div style={{ padding: "4px 0" }}>
+      <div style={{ position: "relative", width: gridW + 16 + 200, maxWidth: "100%", minHeight: 132, margin: "0 auto 10px" }}>
+        {/* row of cells; each cell shows its letter + A/B boxes below */}
+        {cells.map((cell, i) => {
+          const active = i === idx;
+          const seen = i <= idx;
+          const cc = compColors[cell.L];
+          return (
+            <div key={i} style={{ position: "absolute", left: i * P, top: 18, width: S, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
+              {/* letter cell */}
+              <div style={{
+                width: S, height: S, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 20, fontWeight: 900, transition: "all .15s",
+                background: seen ? cc.bg : "#f8fafc", color: seen ? cc.fg : "#cbd5e1",
+                border: active ? "3px solid #4f46e5" : `2px solid ${seen ? cc.bd : "#eef2f6"}`,
+                boxShadow: active ? "0 0 0 4px rgba(79,70,229,.18)" : "none",
+              }}>{cell.L}</div>
+              {/* A / B boxes */}
+              {seen ? (
+                <div style={{ display: "flex", gap: 3 }}>
+                  {box("A", cell.A, active)}
+                  {box("B", cell.B, active)}
+                </div>
+              ) : (
+                <div style={{ fontSize: 10, color: "#cbd5e1" }}>· ·</div>
+              )}
+            </div>
+          );
+        })}
+        {/* bubble — to the right of the grid */}
+        <div style={{
+          position: "absolute", left: gridW + 16, top: 4, width: 192,
+          background: cur.final ? "#dcfce7" : "#1e3a8a", color: cur.final ? "#14532d" : "#fff",
+          border: cur.final ? "1.5px solid #16a34a" : "none",
+          borderRadius: 10, padding: "9px 12px", fontSize: 11.5, lineHeight: 1.55, fontWeight: 600, zIndex: 3,
+        }}>
+          <div style={{
+            position: "absolute", left: -7, top: 18, width: 0, height: 0,
+            borderTop: "7px solid transparent", borderBottom: "7px solid transparent",
+            borderRight: `8px solid ${cur.final ? "#dcfce7" : "#1e3a8a"}`,
+          }} />
+          {cur.bubble}
+        </div>
+      </div>
+
+      {/* legend */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 14, marginBottom: 8, fontSize: 10.5, color: "#64748b", flexWrap: "wrap" }}>
+        <span><b style={{ color: "#15803d" }}>A</b> = {t(E, "no star rolled in", "별 안 들어옴")}</span>
+        <span><b style={{ color: "#15803d" }}>B</b> = {t(E, "a star rolled in", "별 굴러 들어옴")}</span>
+        <span><b style={{ color: "#dc2626" }}>❌</b> = {t(E, "impossible", "불가능")}</span>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
+        {btn(idx === 0, E ? "◀ Prev" : "◀ 이전", () => setSi(Math.max(0, idx - 1)))}
+        <span style={{ fontSize: 11, color: "#64748b", minWidth: 44, textAlign: "center" }}>{idx + 1} / {cells.length}</span>
+        {btn(idx === last, E ? "Next ▶" : "다음 ▶", () => setSi(Math.min(last, idx + 1)))}
+      </div>
+    </div>
+  );
+}
+
 /* ── Rail walk: the cells (0,0)–(2,1)–(off grid) form ONE rail. A star hops just
    ONE notch (photo1 → photo2). TWO different stars share cell (2,1) — that is why
    the cells are linked into a rail and solved together. Editable slide content.
@@ -1456,12 +1585,22 @@ export function makeAstralCh2(E, lang = "py") {
         "맞아요 — 그래서 칸마다 숫자 두 개 (min_stars[0], min_stars[1]) 를 들고 다녀요. 하나는 '안 보냄', 다른 하나는 '보냄'. 마지막 칸의 작은 쪽이 그 길의 답."),
     },
 
+    /* 2-3.45 — Step through ONE line [G,W,G,G] cell-by-cell, plain-language bubbles,
+       BEFORE the free-play toggle sim. Builds the "two boxes A/B" idea slowly. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Let's walk ONE line — [G, W, G, G] — one cell at a time. Press Next ▶ and read what happens at each cell. Each cell keeps TWO numbers. 👇",
+        "한 줄 — [G, W, G, G] — 을 한 칸씩 걸어가 볼게요. 다음 ▶ 을 누르며 각 칸에서 무슨 일이 일어나는지 읽어요. 칸마다 숫자 두 개를 들고 다녀요. 👇"),
+      content: (<AstralDpWalk E={E} />),
+    },
+
     /* 2-3.5 — DP intuition + live sim, now AFTER predict quiz */
     {
       type: "reveal",
       narr: t(E,
-        "Try it: change a cell, GUESS what the answer becomes, then check. (Tip: the 'W→B' preset is impossible — see why ❌.) 👇",
-        "직접 해봐요: 칸을 바꿔서 답이 어떻게 될지 먼저 예상 → 눌러서 확인. ('W→B' 프리셋은 왜 ❌ 인지 맞혀봐요.) 👇"),
+        "Now YOU try: change a cell, GUESS what the answer becomes, then check. (Tip: the 'W→B' preset is impossible — see why ❌.) 👇",
+        "이제 직접 해봐요: 칸을 바꿔서 답이 어떻게 될지 먼저 예상 → 눌러서 확인. ('W→B' 프리셋은 왜 ❌ 인지 맞혀봐요.) 👇"),
       content: (<AstralDpSim E={E} />),
     },
 
