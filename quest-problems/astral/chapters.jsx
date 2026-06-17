@@ -1434,8 +1434,8 @@ export function makeAstralCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ fontSize: 13, color: "#334155", lineHeight: 1.6, textAlign: "center", marginBottom: 10 }}>
-            {t(E, "A star only moves ONE fixed way, so a star travels along a diagonal 'line'.",
-                  "별은 한 방향으로만 움직여요. 그래서 별 하나가 지나는 칸들이 대각선 '줄' 하나예요.")}
+            {t(E, "A star only moves ONE fixed way (e.g. right 1, down 1), so the cells a star passes through form a 'line'. (A different move makes a different-shaped line — not always a diagonal.)",
+                  "별은 한 방향으로만 움직여요 (예: 오른쪽 1·아래 1). 그래서 별 하나가 지나는 칸들이 한 '줄'을 이뤄요. (이동량이 다르면 줄 모양도 달라져요 — 꼭 대각선은 아니에요.)")}
           </div>
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 6 }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 54px)", gap: 5 }}>
