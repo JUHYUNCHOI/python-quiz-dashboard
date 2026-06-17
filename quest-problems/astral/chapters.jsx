@@ -1397,29 +1397,6 @@ export function makeAstralCh2(E, lang = "py") {
       ),
     },
 
-    /* 2-3.4 — Predict: why DP tracks BOTH outcomes */
-    {
-      type: "quiz",
-      narr: t(E,
-        "Quick think: at a G cell, the star can either STAY or MOVE to the next cell. Greedy commits to one right away (clever). The systematic way doesn't commit — what does it do?",
-        "잠깐 생각: G 칸에선 별이 머무를지 다음 칸으로 갈지 두 갈래. 그리디는 칸마다 하나로 바로 정해요(영리하게). 정석으로 안 정하고 가려면?"),
-      question: t(E,
-        "When we don't know which choice is better yet, what do we do?",
-        "어느 게 좋은지 모를 땐 어떻게 할까요?"),
-      options: [
-        t(E, "Carry BOTH answers, pick the smaller at the very end.",
-            "두 답 다 들고 가다가, 맨 끝에서 더 작은 거 고르기."),
-        t(E, "Guess one and hope for the best.",
-            "하나 찍고 잘 되길 기도하기."),
-        t(E, "Always pick 'send' — moving stars uses less.",
-            "무조건 '보내기' — 별 적게 들 거예요.")
-      ],
-      correct: 0,
-      explain: t(E,
-        "Right — that's why each cell stores TWO numbers (min_stars[0] and min_stars[1]): one for 'didn't send', one for 'sent'. The smaller of the two at the LAST cell is the path's answer.",
-        "맞아요 — 그래서 칸마다 숫자 두 개 (min_stars[0], min_stars[1]) 를 들고 다녀요. 하나는 '안 보냄', 다른 하나는 '보냄'. 마지막 칸의 작은 쪽이 그 길의 답."),
-    },
-
     /* 2-3.45 — Step through ONE line [G,W,G,G] cell-by-cell, plain-language bubbles,
        BEFORE the free-play toggle sim. Builds the "two boxes A/B" idea slowly. */
     {
