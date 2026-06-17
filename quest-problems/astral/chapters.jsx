@@ -934,11 +934,7 @@ export function makeAstralCh2(E, lang = "py") {
               {[
                 { coin: "500원", fits: false, note: t(E,"too big","너무 커") },
                 { coin: "100원", fits: true,  note: "→ 280" },
-                { coin: "100원", fits: true,  note: "→ 180" },
-                { coin: "100원", fits: true,  note: "→ 80" },
-                { coin: "50원",  fits: true,  note: "→ 30" },
-                { coin: "10원",  fits: true,  note: "→ 20" },
-                { coin: "10원",  fits: true,  note: "→ 10" },
+                { coin: "…",     fits: true,  note: t(E,"keep picking biggest","큰 것부터 계속") },
                 { coin: "10원",  fits: true,  note: "→ 0 ✓" },
               ].map((c, i) => (
                 <div key={i} style={{
@@ -953,8 +949,8 @@ export function makeAstralCh2(E, lang = "py") {
               ))}
             </div>
             <div style={{ fontSize: 11.5, marginTop: 6, color: "#78350f", fontWeight: 700 }}>
-              {t(E, "Result: 7 coins. Each step: just pick the biggest that fits. No planning ahead!",
-                 "결과: 7개. 매 순간 '지금 쓸 수 있는 가장 큰 동전'만 골랐어요. 미래 계획 없음!")}
+              {t(E, "→ 7 coins. Every step: just pick the biggest. No planning ahead!",
+                 "→ 7개. 매번 '제일 큰 것'만 골랐어요. 미래 계획 없음!")}
             </div>
           </div>
 
@@ -1766,11 +1762,7 @@ export function makeAstralCh2(E, lang = "py") {
         <div style={{ padding: 14 }}>
           <div style={{ textAlign: "center", marginBottom: 10 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: "#4f46e5" }}>
-              🔗 {t(E, "Case → Code", "케이스 → 코드")}
-            </div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
-              {t(E, "prev_keep = prev min_stars[0], prev_pass = prev min_stars[1], new_min_stars = new min_stars",
-                    "prev_keep = 이전 min_stars[0], prev_pass = 이전 min_stars[1], new_min_stars = 새 min_stars")}
+              🔗 {t(E, "Each cell type → what to do", "칸 종류별 → 뭘 하나")}
             </div>
           </div>
 
@@ -1782,7 +1774,6 @@ export function makeAstralCh2(E, lang = "py") {
                   <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "needs incoming ★?", "들어온 별?")}</th>
                   <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "uses prev", "쓰는 prev")}</th>
                   <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "+ new ★?", "+ 새 별?")}</th>
-                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe", fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "new min_stars", "새 min_stars")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -1792,7 +1783,6 @@ export function makeAstralCh2(E, lang = "py") {
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>{t(E, "No", "아니")}</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>prev_keep</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>—</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", fontFamily: "'JetBrains Mono',monospace", background: "#f8fafc", fontSize: 10.5 }}>new_min_stars[0] = prev_keep;<br/>new_min_stars[1] = ❌</td>
                 </tr>
                 {/* B */}
                 <tr>
@@ -1800,7 +1790,6 @@ export function makeAstralCh2(E, lang = "py") {
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", color: "#16a34a", fontWeight: 700 }}>{t(E, "Yes", "예")}</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>prev_pass</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", color: "#dc2626", fontWeight: 700 }}>+1</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", fontFamily: "'JetBrains Mono',monospace", background: "#f8fafc", fontSize: 10.5 }}>new_min_stars[0] =<br/>new_min_stars[1] = prev_pass+1</td>
                 </tr>
                 {/* G case (a) — original ★ here */}
                 <tr>
@@ -1808,7 +1797,6 @@ export function makeAstralCh2(E, lang = "py") {
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>{t(E, "No", "아니")}</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>prev_keep</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", color: "#dc2626", fontWeight: 700 }}>+1</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", fontFamily: "'JetBrains Mono',monospace", background: "#f8fafc", fontSize: 10.5 }}>new_min_stars[0] =<br/>new_min_stars[1] = prev_keep+1</td>
                 </tr>
                 {/* G case (b) — ★ moved in from predecessor */}
                 <tr>
@@ -1816,7 +1804,6 @@ export function makeAstralCh2(E, lang = "py") {
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", color: "#16a34a", fontWeight: 700 }}>{t(E, "Yes", "예")}</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>prev_pass</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>—</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", fontFamily: "'JetBrains Mono',monospace", background: "#f8fafc", fontSize: 10.5 }}>new_min_stars[0] = min(<br/>  new_min_stars[0], prev_pass)<br/><span style={{ color: "#64748b" }}>{t(E, "// can't pass on", "// 보낼 수 없음")}</span></td>
                 </tr>
               </tbody>
             </table>
@@ -1964,12 +1951,12 @@ export function makeAstralCh2(E, lang = "py") {
               🎯 {t(E, "THIS is what the DP did", "바로 이게 DP 가 한 일")}
             </div>
             {t(E,
-              "At the middle G the DP held BOTH futures: \"filled free, keep=1 but can't pass on\" AND \"own star, pass=2 but can keep going.\" The B can only be reached through the pass=2 branch → 2+1 = 3.",
-              "가운데 G 에서 DP 는 두 미래를 동시에 들고 있었어요: \"공짜로 채움, keep=1 인데 다음에 못 보냄\" 그리고 \"내 별, pass=2 인데 계속 보낼 수 있음.\" B 는 pass=2 가지로만 닿을 수 있어요 → 2+1 = 3.")}
+              "At the middle G, DP kept BOTH futures and only picked the smaller at the end — so it finds 3 even going forward.",
+              "가운데 G 에서 DP 는 두 가지를 다 들고 가다 끝에서 작은 걸 골랐어요 — 그래서 앞으로 가도 3 을 찾아요.")}
             <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px dashed #fdba74" }}>
               {t(E,
-                "Forward greedy would grab the cheap keep=1 at that G and then get STUCK at the B — that's exactly why the main solution had to walk BACKWARD (let the B reach back and claim a star). The DP never picks early: it carries both states and takes the smaller at the end, so it finds 3 going forward — never trapped by direction.",
-                "앞→뒤 그리디는 그 G 에서 싼 keep=1 을 덥석 잡고 → B 에서 막혀요. 이게 바로 메인 풀이가 '거꾸로' 가야 했던 이유 (B 가 뒤로 손 뻗어 별을 차지하게). DP 는 일찍 안 골라요 — 두 상태를 다 들고 가다 끝에서 작은 걸 골라서, 앞으로 가도 3 을 찾아요. 방향에 갇히지 않아요.")}
+                "The greedy grabbed the cheap option early and got stuck — that's why it had to go backward. DP never picks early, so it's never trapped by direction.",
+                "그리디는 일찍 싼 걸 잡아 막혔죠 — 그래서 거꾸로 가야 했어요. DP 는 일찍 안 골라서 방향에 안 갇혀요.")}
             </div>
           </div>
         </div>),
