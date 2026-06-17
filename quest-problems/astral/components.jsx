@@ -238,7 +238,7 @@ export function AstralDpSim({ E }) {
               <td style={{ width: 70, fontSize: 11, color: C.dim, textAlign: "right", padding: "2px 6px" }}>{t(E, "position", "위치")}</td>
               {chain.map((_, i) => (
                 <td key={i} style={{ width: 64, textAlign: "center", fontSize: 11, color: C.dim }}>
-                  {i + 1}{t(E, "st", "번째")}
+                  {i + 1}{t(E, "", "번째")}
                 </td>
               ))}
             </tr>
@@ -308,7 +308,7 @@ export function AstralDpSim({ E }) {
         border: `2px solid ${impossible ? "#dc2626" : "#16a34a"}`,
       }}>
         {impossible
-          ? t(E, "❌ Path min = ❌ (impossible) → can't be made (-1)", "❌ 별 길 가장 적은 = ❌ (못 만듦) → -1")
+          ? t(E, "❌ Chain min = ❌ (impossible) → can't be made (-1)", "❌ 별 길 가장 적은 = ❌ (못 만듦) → -1")
           : t(E, `✅ Chain min = min(min_stars[0], min_stars[1]) = ${final}`, `✅ 별 길 가장 적은 = min(min_stars[0], min_stars[1]) = ${final}`)}
       </div>
     </div>

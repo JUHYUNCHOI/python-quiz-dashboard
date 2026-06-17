@@ -976,12 +976,12 @@ export function makeAstralCh2(E, lang = "py") {
     /* 2-0a (독립성/체인 색칠) MOVED to the DP section (2026-06-17): the chain/independence
        idea is only needed for DP, not the main greedy. Teacher: "DP 설명은 DP 쪽으로." */
 
-    /* 2-0b — 3가지 방법 로드맵 */
+    /* 2-0b — 2가지 방법 로드맵 (DP 제거 후 2가지) */
     {
       type: "reveal",
       narr: t(E,
-        "How do we actually decide each cell? There are 3 ways — let's see them one by one.",
-        "그럼 칸을 실제로 어떻게 정할까요? 방법이 3 가지예요 — 하나씩 봐요."),
+        "How do we actually decide each cell? There are 2 ways — let's see them one by one.",
+        "그럼 칸을 실제로 어떻게 정할까요? 방법이 2 가지예요 — 하나씩 봐요."),
       content: (
         <div style={{ padding: 14 }}>
 
@@ -1084,7 +1084,7 @@ export function makeAstralCh2(E, lang = "py") {
           <div style={{ fontSize: 12, color: "#44403c", lineHeight: 1.6, background: "#fafaf9", border: "1.5px solid #d6d3d1", borderRadius: 8, padding: "8px 12px", marginBottom: 12 }}>
             ⚡ {t(E,
               "Fast and short to code — but it only looks at NOW, so it can be wrong. (We'll see that next. 👀)",
-              "⚡ 빠르고 코드도 짧아요 — 근데 눈앞만 봐서 가끔 틀려요. (다음 슬라이드에서 봐요 👀)")}
+              "빠르고 코드도 짧아요 — 근데 눈앞만 봐서 가끔 틀려요. (다음 슬라이드에서 봐요 👀)")}
           </div>
 
           {/* Closing line — leads into the hands-on simulations (no spoilers) */}
@@ -1346,7 +1346,7 @@ export function makeAstralCh2(E, lang = "py") {
               <div style={{ fontSize: 11.5, color: "#991b1b", lineHeight: 1.6 }}>
                 {t(E,
                   "Meets the demanding B too late — by then the earlier cells are already locked the wrong way.",
-                  " 별이 필요한 B 를 너무 늦게 만나요 — 그때면 앞 칸들이 이미 엉뚱하게 정해져 버려요.")}
+                  "별이 필요한 B 를 너무 늦게 만나요 — 그때면 앞 칸들이 이미 엉뚱하게 정해져 버려요.")}
               </div>
             </div>
             <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 9, padding: "9px 12px" }}>
