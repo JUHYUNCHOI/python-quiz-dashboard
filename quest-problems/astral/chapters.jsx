@@ -1836,92 +1836,10 @@ export function makeAstralCh2(E, lang = "py") {
 
     /* 2-4.6 — REMOVED (2026-06-17): static [G,W,G,G] hand-trace table duplicated the live
        AstralDpSim (same preset) — even pointed students back to the sim. Heaviest "how" wall. */
-    /* 2-0a — (moved here 2026-06-17, AFTER one-line DP is built): now extend one line → 2D.
-       The cells split into independent lines (each cell on one), so DP each line and add. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "We can now solve ONE line. But the photo is 2D — many lines. Good news: the cells split into separate lines (each cell on just one), so solve each line and add. 👇",
-        "이제 한 줄은 풀 수 있어요. 근데 사진은 2D — 줄이 여러 개죠. 좋은 소식: 칸들이 따로따로 줄로 갈라져요 (한 칸은 한 줄에만). 그러니 줄마다 풀고 더하면 끝! 👇"),
-      content: (
-        <div style={{ padding: 14 }}>
-          <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 12, textAlign: "center" }}>
-            {t(E, "Every cell painted by its line (chain)", "칸마다 자기 줄(체인) 색으로 칠하기")}
-          </div>
 
-          {/* All chains colored grid — right=1, down=2 */}
-          {(() => {
-            // right=1, down=2 in 4×4 grid → chain ID per cell
-            // Chain 0: (0,0)↔(2,1)  Chain 1: (0,1)↔(2,2)  Chain 2: (0,2)↔(2,3)
-            // Chain 3: (0,3) alone   Chain 4: (1,0)↔(3,1)  Chain 5: (1,1)↔(3,2)
-            // Chain 6: (1,2)↔(3,3)  Chain 7: (1,3) alone   Chain 8: (2,0) alone  Chain 9: (3,0) alone
-            const cid = [
-              [0, 1, 2, 3],
-              [4, 5, 6, 7],
-              [8, 0, 1, 2],
-              [9, 4, 5, 6],
-            ];
-            const CC = [
-              { bg:"#dbeafe", bd:"#3b82f6" }, // 0 blue
-              { bg:"#dcfce7", bd:"#16a34a" }, // 1 green
-              { bg:"#fef9c3", bd:"#d97706" }, // 2 amber
-              { bg:"#ede9fe", bd:"#8b5cf6" }, // 3 purple
-              { bg:"#fce7f3", bd:"#ec4899" }, // 4 pink
-              { bg:"#e0f2fe", bd:"#0891b2" }, // 5 cyan
-              { bg:"#fff7ed", bd:"#f97316" }, // 6 orange
-              { bg:"#fef2f2", bd:"#ef4444" }, // 7 red
-              { bg:"#f0fdf4", bd:"#22c55e" }, // 8 lime
-              { bg:"#f5f3ff", bd:"#7c3aed" }, // 9 violet
-            ];
-            // same-chain cells share color — shows independence visually
-            return (
-              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", marginBottom:10 }}>
-                {cid.map((row, r) => (
-                  <div key={r} style={{ display:"flex", gap:5, marginBottom:5 }}>
-                    {row.map((ci, c) => (
-                      <div key={c} style={{
-                        width:50, height:50, borderRadius:8,
-                        background: CC[ci].bg,
-                        border: `2.5px solid ${CC[ci].bd}`,
-                      }} />
-                    ))}
-                  </div>
-                ))}
-                <div style={{ fontSize:11.5, color:"#64748b", marginTop:6 }}>
-                  {t(E,"each cell has exactly one color — no cell is in two orbits","칸마다 색이 딱 하나 — 두 궤도에 동시에 속하는 칸은 없어요")}
-                </div>
-              </div>
-            );
-          })()}
-
-          {/* Concrete sum — solve each, then add */}
-          <div style={{
-            background:"#f0fdf4", border:"2px solid #16a34a", borderRadius:8,
-            padding:"10px 14px", textAlign:"center",
-          }}>
-            <div style={{ fontSize:12.5, fontWeight:700, color:"#14532d", marginBottom:7 }}>
-              {t(E,"So break the big puzzle into small ones, solve each, then add:",
-                   "그래서 큰 문제를 작은 문제로 쪼개고, 하나씩 푼 다음 더해요:")}
-            </div>
-            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:6, flexWrap:"wrap", fontSize:12, fontWeight:800 }}>
-              <span style={{ background:"#dbeafe", border:"2px solid #3b82f6", borderRadius:6, padding:"3px 8px", color:"#1e40af" }}>
-                {t(E,"blue answer","파란 궤도 답")}
-              </span>
-              <span style={{ color:"#16a34a" }}>+</span>
-              <span style={{ background:"#dcfce7", border:"2px solid #16a34a", borderRadius:6, padding:"3px 8px", color:"#14532d" }}>
-                {t(E,"green answer","초록 궤도 답")}
-              </span>
-              <span style={{ color:"#16a34a" }}>+ … =</span>
-              <span style={{ background:"#fef9c3", border:"2px solid #d97706", borderRadius:6, padding:"3px 8px", color:"#92400e" }}>
-                {t(E,"whole answer","전체 답")}
-              </span>
-            </div>
-          </div>
-
-        </div>
-      ),
-    },
-
+    /* 2-0a (color-grid "split into lines") — REMOVED (2026-06-17): teacher found the 10-color
+       independence grid confusing, and 2-4.5 already says it in one line
+       ("별 길끼리 안 겹침 → 총 답 = 모든 별 길 합"). No separate abstract grid needed. */
 
     /* 2-4.7 — PAYOFF: "what did the DP actually DO?" Trace G G B — the case where
        forward-greedy got trapped and had to go backward, but DP doesn't.
