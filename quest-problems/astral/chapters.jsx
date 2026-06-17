@@ -361,14 +361,14 @@ function AstralDpWalk({ E }) {
     {
       L: "G", A: "1", B: "1",
       bubble: t(E,
-        "First cell, letter G (a star in just ONE photo). It's the very front, so no star can arrive from before → we MUST place 1 star here. Whether this placed star then moves to the next cell ('send') or not ('don't send'), it's still 1 placed star → both boxes = 1.",
-        "첫 칸, 글자 G (한 사진에만 별). 맨 앞이라 앞에서 옮겨온 별이 없어요 → 여기 놓는 별 1 개가 꼭 필요해요. 그 놓은 별이 다음 칸으로 '옮겨가(보냄)'든 '안 가(안 보냄)'든 놓는 별은 1 개 → 두 칸 다 1."),
+        "First cell, G. Nothing arrives from before, so we must place 1 star here → 1. (The number under a cell = total stars placed SO FAR, not just this cell.) Move it on or not, still 1 → both boxes 1.",
+        "첫 칸 G. 맨 앞이라 앞에서 온 별이 없으니 여기 별 1 개를 꼭 놔요 → 1. (칸 밑 숫자 = 여기까지 놓은 별 합계예요. 이 칸 하나가 아니라.) 보내든 안 보내든 1 개 → 두 칸 다 1."),
     },
     {
       L: "W", A: "1", B: X,
       bubble: t(E,
-        "Letter W = both photos empty here. If the cell before had SENT a star, it would land here and this wouldn't be empty → so the previous cell must be 'don't send' (1). And W has no star, so nothing can be sent on → 'send' is impossible ❌. → [don't send 1, send ❌]",
-        "글자 W = 두 사진 다 빔. 앞 칸이 별을 '보냈'다면 여기 도착해 빈 칸이 아니게 돼요 → 앞 칸이 '안 보냄'(1)일 때만 이어져요. 그리고 W는 별이 없어 보낼 것도 없으니 '보냄'은 불가능 ❌. → [안 보냄 1, 보냄 ❌]"),
+        "W = an empty cell. We place NO star here → the total doesn't go up → it stays 1 from before. ('don't send' = 1.) 'Send' means moving THIS cell's star on — but W has no star to send → impossible ❌.",
+        "W = 텅 빈 칸이에요. 여기엔 별을 안 놓아요 → 합계가 안 늘어요 → 앞의 1 그대로. ('안 보냄' = 1) '보냄'은 이 칸 별을 다음으로 보내는 건데, W엔 보낼 별이 없어요 → 불가능 ❌."),
     },
     {
       L: "G", A: "2", B: "2",
