@@ -347,22 +347,73 @@ function Sample1Counter({ E }) {
   );
 }
 
-/* ── Orbit walk: follow ONE star (right=1, down=2) cell by cell, bubble on the
-   active cell. (0,0) → (2,1) → off-grid. Editable slide content. ── */
+/* ── Rail walk: the cells (0,0)–(2,1)–(off grid) form ONE rail. A star hops just
+   ONE notch (photo1 → photo2). TWO different stars share cell (2,1) — that is why
+   the cells are linked into a rail and solved together. Editable slide content.
+   Solid ★ = photo1 (original spot) · faint ★ = photo2 (one-notch-ahead image). ── */
 function OrbitWalk({ E }) {
-  const orbit = [{ r: 0, c: 0 }, { r: 2, c: 1 }];
+  const Ac = "#2563eb", AcG = "#93c5fd"; // star A (blue) solid / ghost
+  const Bc = "#db2777", BcG = "#f9a8d4"; // star B (pink) solid / ghost
+  const RAIL = "#d97706";
+  // rail = (0,0) → (2,1) → (4,2 off-grid)
+  const railHops = [[{ r:0,c:0 }, { r:2,c:1 }], [{ r:2,c:1 }, { r:4,c:2 }]];
+
+  // each step: chips per cell { top, bottom } + active hop + gold-shared set + bubble
   const steps = [
-    { cell: orbit[0], vis: 1, bubble: t(E, "Start! One star sits at (0,0).", "여기서 시작! 별 하나가 (0,0)에 있어요.") },
-    { cell: orbit[1], vis: 2, bubble: t(E, "+right 1, +down 2 → (2,1). The SAME star moved here.", "+오른쪽1, +아래2 → (2,1). 같은 별이 여기로 옮겨왔어요.") },
-    { cell: null, off: true, vis: 2, bubble: t(E, "+right 1, +down 2 → (4,2) is OFF the grid! The star leaves — the orbit ends.", "+오른쪽1, +아래2 → (4,2)는 사진 밖! 별이 나가서 궤도 끝.") },
-    { cell: null, final: true, vis: 2, bubble: t(E, "This path is the ORBIT = (0,0) → (2,1). One star's trail.", "이 길이 '궤도' = (0,0) → (2,1). 같은 별 하나가 지나간 길!") },
+    {
+      tail: { r:0, c:0 }, hop: null, gold: new Set(), chips: {},
+      bubble: t(E, "These cells are linked into ONE rail: (0,0) → (2,1) → off-grid. The arrow = where a star goes in photo 2 (one notch).",
+                  "이 칸들은 한 '레일'로 이어져요: (0,0) → (2,1) → 사진 밖. 화살표 = 사진2에서 한 칸 가는 방향이에요."),
+    },
+    {
+      tail: { r:0, c:0 }, hop: 0, gold: new Set(), bubble: t(E,
+        "Star A: in photo 1 it's at (0,0). In photo 2 it moves ONE notch → (2,1). That's its only move.",
+        "별 A: 사진1에선 (0,0). 사진2에선 딱 한 칸 가서 (2,1). 이게 유일한 이동이에요."),
+      chips: { "0,0": { bottom: { s:"A", c:Ac } }, "2,1": { top: { s:"A", c:AcG } } },
+    },
+    {
+      tail: { r:2, c:1 }, hop: 1, gold: new Set(), bubble: t(E,
+        "A DIFFERENT star B: photo 1 at (2,1). Photo 2 → (4,2) = off the grid. It also moves just one notch.",
+        "다른 별 B: 사진1에선 (2,1). 사진2는 (4,2) = 사진 밖. 얘도 딱 한 칸만 가요."),
+      chips: { "2,1": { bottom: { s:"B", c:Bc } }, "4,2": { top: { s:"B", c:BcG } } },
+    },
+    {
+      tail: { r:2, c:1 }, hop: null, gold: new Set(["2,1"]), bubble: t(E,
+        "Look at (2,1): it's A's photo-2 spot AND B's photo-1 spot. Two stars share this one cell — that's why the cells are linked!",
+        "(2,1)을 봐요: A의 '사진2 자리'이자 B의 '사진1 자리'예요. 한 칸을 두 별이 나눠 써요 — 그래서 칸들이 엮이는 거예요!"),
+      chips: { "2,1": { top: { s:"A", c:AcG }, bottom: { s:"B", c:Bc } } },
+    },
+    {
+      tail: null, final: true, hop: null, gold: new Set(), chips: {},
+      bubble: t(E,
+        "So we bundle (0,0)–(2,1)–… into one RAIL and solve it together. Many stars sit on a rail — each moves just one notch.",
+        "그래서 (0,0)–(2,1)–… 를 한 '레일'로 묶어 같이 풀어요. 레일 위엔 여러 별, 각자 딱 한 칸씩만 이동!"),
+    },
   ];
+
   const [si, setSi] = useState(0);
   const last = steps.length - 1;
   const idx = Math.max(0, Math.min(si, last));
   const cur = steps[idx];
-  const S = 40, GAP = 5, P = S + GAP, gridW = 4 * S + 3 * GAP;
-  const orbitIndexOf = (r, c) => orbit.findIndex(o => o.r === r && o.c === c);
+  const S = 44, GAP = 6, P = S + GAP, gridW = 4 * S + 3 * GAP;
+
+  const cx = (r, c) => c * P + S / 2, cy = (r, c) => r * P + S / 2;
+  const line = (a, b, color, w, op, z) => {
+    const x1 = cx(a.r, a.c), y1 = cy(a.r, a.c), x2 = cx(b.r, b.c), y2 = cy(b.r, b.c);
+    const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy), ang = Math.atan2(dy, dx) * 180 / Math.PI;
+    return <div key={`${x1}-${y1}-${z}`} style={{
+      position: "absolute", left: x1, top: y1 - w / 2, width: len, height: w,
+      background: color, opacity: op, transformOrigin: "0 50%", transform: `rotate(${ang}deg)`,
+      borderRadius: 2, zIndex: z,
+    }} />;
+  };
+
+  const chipEl = (chip, ghost) => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", lineHeight: 1 }}>
+      <span style={{ fontSize: ghost ? 14 : 17, color: chip.c, fontWeight: 800, opacity: ghost ? 0.85 : 1 }}>★</span>
+      <span style={{ fontSize: 8, fontWeight: 800, color: chip.c }}>{chip.s}</span>
+    </div>
+  );
 
   const btn = (disabled, label, onClick) => (
     <button onClick={onClick} disabled={disabled} style={{
@@ -372,41 +423,53 @@ function OrbitWalk({ E }) {
     }}>{label}</button>
   );
 
+  const railCells = new Set(["0,0", "2,1"]);
+
   return (
     <div style={{ padding: "4px 0" }}>
-      <div style={{ position: "relative", width: gridW + 16 + 180, maxWidth: "100%", height: 4 * P + 14, margin: "0 auto 10px" }}>
-        {[0, 1, 2, 3].flatMap(r => [0, 1, 2, 3].map(c => {
-          const oi = orbitIndexOf(r, c);
-          const revealed = oi !== -1 && oi < cur.vis;
-          const isAct = cur.cell && cur.cell.r === r && cur.cell.c === c;
+      <div style={{ position: "relative", width: gridW + 16 + 188, maxWidth: "100%", height: 5 * P + 6, margin: "0 auto 10px" }}>
+        {/* faint full rail */}
+        {railHops.map(([a, b], i) => line(a, b, RAIL, 3, 0.22, 0))}
+        {/* active hop highlighted in the star's colour */}
+        {cur.hop != null && line(railHops[cur.hop][0], railHops[cur.hop][1], cur.hop === 0 ? Ac : Bc, 3.5, 0.9, 1)}
+
+        {/* 4×4 grid + off-grid cell (4,2) */}
+        {[...[0,1,2,3].flatMap(r => [0,1,2,3].map(c => ({ r, c, off:false }))), { r:4, c:2, off:true }].map(({ r, c, off }) => {
+          const key = `${r},${c}`;
+          const chip = cur.chips[key];
+          const onRail = railCells.has(key) || off;
+          const isGold = cur.gold.has(key);
           return (
-            <div key={`${r},${c}`} style={{
-              position: "absolute", left: c * P, top: r * P, width: S, height: S, borderRadius: 7,
-              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-              background: isAct ? "#3b82f6" : revealed ? "#dbeafe" : "#f8fafc",
-              border: `2px solid ${isAct ? "#1e40af" : revealed ? "#3b82f6" : "#e2e8f0"}`,
-              boxShadow: isAct ? "0 0 0 4px rgba(59,130,246,.25)" : "none",
-              transform: isAct ? "scale(1.1)" : "none", transition: "all .15s",
+            <div key={key} style={{
+              position: "absolute", left: c * P, top: r * P, width: S, height: S, borderRadius: 8, zIndex: 2,
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 1,
+              background: off ? "#fafafa" : isGold ? "#fef3c7" : "#fff",
+              border: isGold ? `2.5px solid ${RAIL}`
+                : off ? "2px dashed #cbd5e1"
+                : onRail ? `2px dashed ${RAIL}` : "2px solid #eef2f6",
+              boxShadow: isGold ? "0 0 0 4px rgba(217,119,6,.18)" : "none",
+              transition: "all .15s",
             }}>
-              <div style={{ fontSize: (isAct || revealed) ? 17 : 12, lineHeight: 1, color: isAct ? "#fff" : revealed ? "#2563eb" : "#e2e8f0" }}>
-                {(isAct || revealed) ? "★" : "·"}
-              </div>
-              {(isAct || revealed) && <div style={{ fontSize: 8, fontWeight: 700, color: isAct ? "#dbeafe" : "#93c5fd" }}>({r},{c})</div>}
+              {chip?.top && chipEl(chip.top, true)}
+              {chip?.bottom && chipEl(chip.bottom, false)}
+              {!chip?.top && !chip?.bottom && (
+                <span style={{ fontSize: 8, fontWeight: 700, color: off ? "#dc2626" : onRail ? RAIL : "#cbd5e1" }}>
+                  {off ? "사진밖" : `(${r},${c})`}
+                </span>
+              )}
             </div>
           );
-        }))}
-        {cur.off && (
-          <div style={{ position: "absolute", left: P, top: 4 * P - 6, fontSize: 11, fontWeight: 800, color: "#dc2626" }}>
-            ↓ (4,2) ✗
-          </div>
-        )}
+        })}
+
+        {/* bubble */}
         <div style={{
-          position: "absolute", left: gridW + 16, top: cur.cell ? cur.cell.r * P : 0, width: 168,
+          position: "absolute", left: gridW + 16,
+          top: cur.tail ? Math.min(cur.tail.r * P, 3 * P) : 2 * P, width: 176,
           background: cur.final ? "#dcfce7" : "#1e3a8a", color: cur.final ? "#14532d" : "#fff",
           border: cur.final ? "1.5px solid #16a34a" : "none",
-          borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.5, fontWeight: 600,
+          borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.5, fontWeight: 600, zIndex: 3,
         }}>
-          {cur.cell && (
+          {cur.tail && (
             <div style={{
               position: "absolute", left: -7, top: 15, width: 0, height: 0,
               borderTop: "7px solid transparent", borderBottom: "7px solid transparent", borderRight: "8px solid #1e3a8a",
@@ -414,6 +477,12 @@ function OrbitWalk({ E }) {
           )}
           {cur.bubble}
         </div>
+      </div>
+
+      {/* legend */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 14, marginBottom: 8, fontSize: 10.5, color: "#64748b", flexWrap: "wrap" }}>
+        <span><b style={{ color:"#1e293b" }}>진한 ★</b> = {t(E, "photo 1 (original)", "사진1 (원래 자리)")}</span>
+        <span><b style={{ color:"#94a3b8" }}>흐린 ★</b> = {t(E, "photo 2 (one notch ahead)", "사진2 (한 칸 간 모습)")}</span>
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
@@ -809,15 +878,15 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "One star just shifts to a new cell each photo.\nFollow the cells it passes through — that path is its ORBIT. Watch one below 👇",
-        "한 별은 사진마다 자리만 옮겨요.\n그 별이 지나간 칸들을 따라가면 — 그 길이 바로 '궤도' 예요. 아래에서 하나 봐요 👇"),
+        "A star moves just ONE notch (photo 1 → photo 2).\nBut the cells line up like a rail — many stars ride it, one notch each. Watch below 👇",
+        "별은 딱 한 칸만 움직여요 (사진1 → 사진2).\n그런데 칸들이 레일처럼 이어져서, 여러 별이 한 칸씩 올라타요. 아래에서 봐요 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 2, textAlign: "center" }}>
-            {t(E, "Follow one star (right=1, down=2)", "별 하나 따라가기 (right=1, down=2)")}
+            {t(E, "A rail of cells (right=1, down=2)", "칸들이 이어진 레일 (right=1, down=2)")}
           </div>
           <div style={{ fontSize: 11, color: "#64748b", marginBottom: 10, textAlign: "center" }}>
-            {t(E, "Press 다음 ▶ — watch the star hop, cell by cell.", "다음 ▶ 누르며 별이 한 칸씩 뛰는 걸 봐요.")}
+            {t(E, "Press 다음 ▶ — each star hops just one notch.", "다음 ▶ 누르며 별이 각자 한 칸씩만 가는 걸 봐요.")}
           </div>
 
           <OrbitWalk E={E} />
