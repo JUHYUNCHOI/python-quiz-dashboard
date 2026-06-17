@@ -1459,10 +1459,16 @@ export function makeAstralCh2(E, lang = "py") {
           <div style={{ fontSize: 13, color: "#334155", lineHeight: 1.75, textAlign: "center" }}>
             {t(E, "Stars never cross between lines → count each line on its own, then add up. One line = the walk's [G,W,G,G].",
                   "줄끼리는 별이 안 섞여요 → 줄마다 따로 세서 다 더하면 끝. 줄 하나 = 워크의 [G, W, G, G].")}
-            <br />
-            <span style={{ color: "#6b21a8", fontWeight: 800 }}>
-              {t(E, "Split into lines → count each line (the walk) → add them up = answer.", "격자를 줄로 쪼갬 → 줄마다 별 세기(워크) → 다 더하면 = 답.")}
-            </span>
+          </div>
+          {/* WHY splitting is easier (teacher: '왜 격자로 나눠야 쉬워지는거지?') */}
+          <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 10, padding: "10px 13px", marginTop: 10, fontSize: 12.5, color: "#78350f", lineHeight: 1.7 }}>
+            <b>{t(E, "Why is splitting easier? ", "왜 나누면 쉬워져요? ")}</b>
+            {t(E,
+              "The whole grid at once is tangled (placing a star here changes things over there). But since lines don't affect each other, each line is just a tiny one-row puzzle — and what you do in one line can't break another. So solve them separately and add up.",
+              "격자를 통째로 보면 얽혀서 복잡해요 (여기 별 놓으면 저기가 바뀜). 근데 줄끼리는 서로 영향이 없으니, 한 줄은 그냥 '칸 몇 개짜리 작은 문제' — 한 줄에서 뭘 해도 다른 줄을 망치지 않아요. 그래서 따로따로 풀어 더하면 돼요.")}
+          </div>
+          <div style={{ color: "#6b21a8", fontWeight: 800, fontSize: 13, textAlign: "center", marginTop: 10 }}>
+            {t(E, "Split into lines → count each line (the walk) → add them up = answer.", "격자를 줄로 쪼갬 → 줄마다 별 세기(워크) → 다 더하면 = 답.")}
           </div>
         </div>
       ),
@@ -1476,6 +1482,53 @@ export function makeAstralCh2(E, lang = "py") {
         "Goal: fewest stars we PLACE to make line [G, W, G, G]. Walk it one cell at a time — each cell keeps two numbers ('don't send' / 'send'). Read each bubble. Next ▶ 👇",
         "목표: 줄 [G, W, G, G]을 만드는 데 우리가 놓는 별이 최소 몇 개. 한 칸씩 걸어가며 칸마다 숫자 두 개('안 보냄'/'보냄')를 채워요. 말풍선을 읽어요. 다음 ▶ 👇"),
       content: (<AstralDpWalk E={E} />),
+    },
+
+    /* 2-3.46 — CONCRETE whole-grid example (added 2026-06-17): teacher kept asking
+       "왜 줄로 나누면 쉬워지나" — show it working on a real grid, end to end. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now a real grid, end to end: split into lines → solve each with the walk → add up = answer. 👇",
+        "이제 진짜 격자 하나로 끝까지: 줄로 갈라 → 줄마다 워크로 풀고 → 다 더하면 답. 👇"),
+      content: (
+        <div style={{ padding: 14 }}>
+          <div style={{ fontSize: 13, color: "#334155", textAlign: "center", marginBottom: 10 }}>
+            {t(E, "Example 3×3 grid (stars move right 1, down 1):", "예시 3×3 격자 (별 이동: 오른쪽 1·아래 1):")}
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 50px)", gap: 5 }}>
+              {[["G","W","W"],["W","G","W"],["W","W","G"]].flatMap((row, r) => row.map((L, c) => {
+                const onDiag = r === c;
+                return (
+                  <div key={`${r}-${c}`} style={{
+                    width: 50, height: 50, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 18, fontWeight: 800,
+                    background: onDiag ? "#fef3c7" : "#f8fafc",
+                    border: onDiag ? "2.5px solid #f59e0b" : "1.5px solid #eef2f6",
+                    color: onDiag ? "#b45309" : (L === "G" ? "#475569" : "#cbd5e1"),
+                  }}>{L}</div>
+                );
+              }))}
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 7, marginBottom: 10 }}>
+            <div style={{ background: "#fffbeb", border: "1.5px solid #f59e0b", borderRadius: 8, padding: "8px 12px", fontSize: 12.5, color: "#78350f" }}>
+              <b>{t(E, "Yellow line: G G G", "노란 줄: G G G")}</b> → {t(E, "solve it with the walk → 2 stars", "워크처럼 한 칸씩 풀면 → 별 2 개")}
+            </div>
+            <div style={{ background: "#f8fafc", border: "1.5px solid #e2e8f0", borderRadius: 8, padding: "8px 12px", fontSize: 12.5, color: "#64748b" }}>
+              {t(E, "The other lines are all W (empty) → 0 stars each.", "나머지 줄들은 전부 W (빈 칸) → 별 0 개씩.")}
+            </div>
+          </div>
+          <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 14px", textAlign: "center", fontSize: 14, fontWeight: 800, color: "#14532d" }}>
+            {t(E, "Add them up: 2 + 0 + 0 + 0 + 0 = 2 → the answer!", "다 더하면: 2 + 0 + 0 + 0 + 0 = 2 → 답!")}
+          </div>
+          <div style={{ fontSize: 12, color: "#6b21a8", textAlign: "center", marginTop: 9, fontWeight: 700, lineHeight: 1.6 }}>
+            {t(E, "See? Split into lines → each line is a tiny walk → add up. That's the whole thing.",
+                  "봤죠? 줄로 갈라 → 줄마다 작은 워크 → 더하기. 이게 전부예요.")}
+          </div>
+        </div>
+      ),
     },
 
     /* ── DP CODE (rebuilt 2026-06-17): old explanation tables (EMPTY, STEP cheat
