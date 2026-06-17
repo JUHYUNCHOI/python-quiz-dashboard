@@ -37,6 +37,7 @@ export function ProgressiveCodeStepper({
   accentColor = "#7c5cfc",
 }: Props) {
   const [idx, setIdx] = useState(0);
+  const [showAside, setShowAside] = useState(false);
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const safeIdx = Math.min(Math.max(idx, 0), sections.length - 1);
   const s = sections[safeIdx];
@@ -76,9 +77,28 @@ export function ProgressiveCodeStepper({
             </button>
           ))}
         </div>
-        <span style={{ fontSize: 10.5, color: C.dim, fontWeight: 700 }}>
-          {langLabel}
-        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          {s.aside && (
+            <button
+              onClick={() => setShowAside((v) => !v)}
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                padding: "4px 10px",
+                borderRadius: 7,
+                border: `1.5px solid ${accentColor}`,
+                cursor: "pointer",
+                background: showAside ? accentColor : "#fff",
+                color: showAside ? "#fff" : accentColor,
+              }}
+            >
+              📥 {t(E, "Sample input", "샘플 입력")}
+            </button>
+          )}
+          <span style={{ fontSize: 10.5, color: C.dim, fontWeight: 700 }}>
+            {langLabel}
+          </span>
+        </div>
       </div>
 
       {/* Single section. With `aside` set, render side-by-side: code on the
@@ -86,9 +106,9 @@ export function ProgressiveCodeStepper({
       <div
         style={{
           marginBottom: 14,
-          display: s.aside ? "grid" : "block",
-          gridTemplateColumns: s.aside ? "minmax(0, 1fr) minmax(200px, 280px)" : undefined,
-          gap: s.aside ? 20 : 0,
+          display: s.aside && showAside ? "grid" : "block",
+          gridTemplateColumns: s.aside && showAside ? "minmax(0, 1fr) minmax(200px, 280px)" : undefined,
+          gap: s.aside && showAside ? 20 : 0,
         }}
       >
         <div>
@@ -197,7 +217,7 @@ export function ProgressiveCodeStepper({
           <CodeBlock lines={code} lang={lang} />
         </div>
         </div>
-        {s.aside && <div>{s.aside}</div>}
+        {s.aside && showAside && <div>{s.aside}</div>}
       </div>
 
     </div>
