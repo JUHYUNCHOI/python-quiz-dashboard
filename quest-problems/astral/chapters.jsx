@@ -774,8 +774,8 @@ GGG`}
     {
       type: "quiz",
       narr: t(E,
-        "B = a star in BOTH photos.\nSo the photo-2 star must arrive from the cell one step back.\nIf that back-cell is off the grid → no star can arrive → it can't be B.\nWhich cell is that?",
-        "B = 두 사진 다 별이에요.\n그러려면 두 번째 사진 별이 '거꾸로 한 칸'에서 와 줘야 해요.\n근데 그 거꾸로 칸이 사진 밖이면 → 별이 못 와서 B 가 안 돼요.\n어느 칸일까요?"),
+        "Same idea as the corner: if the back-cell is off the grid, no star arrives → can't be B 👇",
+        "방금 모서리에서 본 거랑 똑같아요 — 거꾸로 간 칸이 사진 밖이면 B 가 안 돼요 👇"),
       question: t(E,
         "Stars move right 1, down 1. Which cell can NEVER be B?",
         "별이 오른쪽 1, 아래 1 로 움직여요. 어느 칸이 절대 B 가 될 수 없을까요?"),
