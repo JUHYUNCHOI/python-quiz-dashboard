@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getAstralSections, AstralComposite, AstralChainDiscovery, AstralAlgoTrace, AstralDpSim } from "./components";
+import { getAstralSections, AstralComposite, AstralChainDiscovery, AstralDpSim } from "./components";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 /* ── 클릭형 궤도 시뮬레이터 ──────────────────────────────────────
@@ -1264,14 +1264,9 @@ export function makeAstralCh2(E, lang = "py") {
       ),
     },
 
-    /* 1-2.5 — Algorithm sim FIRST: see the whole picture (moved from Ch1 2026-06-16) */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Watch the whole thing run once — ▶ press start. 👇",
-        "전체가 한 번 도는 걸 봐요 — ▶ 시작 눌러봐요. 👇"),
-      content: (<AstralAlgoTrace E={E} />),
-    },
+    /* 1-2.5 — REMOVED (2026-06-17): AstralAlgoTrace "whole run" overview was redundant here —
+       the 3-method roadmap (2-0b) + greedy derivation (2-3.05/06) already cover the picture,
+       and the DP sim appears later. Teacher: it interrupted the flow after backward greedy. */
 
     /* 1-2.6 — Visual summary: 5 scenes (W, G×2, B×2) using actual cell graphics (moved from Ch1 2026-06-16) */
     {
