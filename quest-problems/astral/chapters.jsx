@@ -1088,16 +1088,7 @@ export function makeAstralCh2(E, lang = "py") {
               "끝에서부터 — B를 만나면 바로 앞 칸에 ★ 먼저 놓기. 이번엔 안 막힐까?")}
           </div>
 
-          {/* 🔑 The one-liner that makes "why backward" click: B = forced, G = choice. */}
-          <div style={{
-            background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10,
-            padding: "10px 13px", marginBottom: 14, fontSize: 12.5, color: "#92400e", lineHeight: 1.65,
-          }}>
-            🔑 <b>{t(E, "Why backward? In one line:", "왜 거꾸로? 한 줄로:")}</b>{" "}
-            {t(E,
-              "B = forced (the cell before it MUST hold a star). G = a choice. Settle the forced B's first — and they point backward — so sweep from the end. Watch it below. 👇",
-              "B = 강제 (앞 칸에 별이 반드시 있어야 함). G = 선택. 강제인 B 부터 정하는데 — 그건 뒤를 가리켜요 — 그러니 끝에서부터 훑어요. 아래에서 봐요 👇")}
-          </div>
+          {/* "Why backward" now lives in the sim's first bubble (step 0), not a separate box. */}
 
           {/* Interactive 2D-grid simulation — same orbit, walked end → start */}
           <OrbitGridStepSim
@@ -1109,7 +1100,8 @@ export function makeAstralCh2(E, lang = "py") {
             stepData={[
             {
               cells: [{letter:"G",star:false,active:false},{letter:"G",star:false,active:false},{letter:"B",star:false,active:false}],
-              note: t(E, "Same orbit G G B — no stars placed yet. This time start at the end (2) and go back to (0).", "같은 궤도 G G B — 아직 별 안 놓음. 이번엔 끝 칸 (2) 부터 시작 (0) 으로 거꾸로 가요.")
+              note: t(E, "Why from the end? A B is a COMMAND: 'the cell before me MUST have a star.' Going from the end, we meet the B first → so we can put that star right away. (Going forward, we used that cell up before meeting the B → stuck.) So: end (2) → back.",
+                         "왜 끝부터냐고요? B 는 '내 앞 칸에 별이 꼭 있어야 해' 하는 명령이에요. 끝부터 가면 B 를 먼저 만나서 → 그 앞 칸에 별을 바로 놓아줄 수 있어요. (앞에서 가면 그 칸을 B 만나기도 전에 써버려 막혔죠.) 그래서 끝 (2) 부터 거꾸로!")
             },
             {
               cells: [{letter:"G",star:false,active:false},{letter:"G",star:true,active:false},{letter:"B",star:true,active:true}],
