@@ -809,8 +809,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "How do we count the FEWEST original stars? First figure out which cells are really the SAME single star — otherwise we'd count one star many times. A star shifts the same way every photo, so just follow its path. We call that path an ORBIT — follow one below.",
-        "원본 별을 가장 적게 세려면, 먼저 어떤 칸들이 사실 같은 별 하나인지 알아내야 해요 (안 그러면 한 별을 여러 번 세니까). 별은 매번 똑같이 움직이니까, 그 별이 지나간 길만 따라가면 돼요. 이 길을 '궤도'라고 해요 — 아래에서 하나 따라가 봐요."),
+        "One star just shifts to a new cell each photo.\nFollow the cells it passes through — that path is its ORBIT. Watch one below 👇",
+        "한 별은 사진마다 자리만 옮겨요.\n그 별이 지나간 칸들을 따라가면 — 그 길이 바로 '궤도' 예요. 아래에서 하나 봐요 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 2, textAlign: "center" }}>
