@@ -1248,19 +1248,19 @@ export function makeAstralCh2(E, lang = "py") {
             textAlign: "center",
           }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 4 }}>
-              🐢 {t(E, "Brute force — try all combinations", "단순 시도 — 모든 경우 다 해보기")}
+              🐢 {t(E, "Brute force — try every combination", "단순 시도 — 모든 경우 다 해보기")}
             </div>
-            <div style={{ fontSize: 12.5, color: "#78350f" }}>
-              {t(E, "Goal: list every choice, pick the fewest stars → check the greedy answer is right.",
-                    "목표: 모든 선택을 다 적고 → 별 제일 적은 걸 골라서 → 그리디 답이 맞는지 확인.")}
+            <div style={{ fontSize: 12, color: "#78350f", lineHeight: 1.6 }}>
+              {t(E, "Take a tiny line of just two G cells (call them 1st G, 2nd G). Each star is either 'new one' or 'from prev' → 2×2 = 4 combos. Try all, keep the fewest stars.",
+                    "G 칸 2개짜리 짧은 줄로 (첫 G, 둘째 G). 각 칸의 별은 '새로 둔 별' 아니면 '앞에서 온 별' → 2×2 = 4가지. 다 해보고 별 제일 적은 걸 골라요.")}
             </div>
           </div>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12.5, marginBottom: 8 }}>
             <thead>
               <tr style={{ background: "#f1f5f9" }}>
                 <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center", width: 40 }}>#</th>
-                <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>G(0)</th>
-                <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>G(1)</th>
+                <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "1st G", "첫 G")}</th>
+                <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "2nd G", "둘째 G")}</th>
                 <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "Stars", "별 수")}</th>
               </tr>
             </thead>
@@ -1302,8 +1302,8 @@ export function makeAstralCh2(E, lang = "py") {
           </div>
           <div style={{ fontSize: 12, color: "#64748b", textAlign: "center", lineHeight: 1.55 }}>
             {t(E,
-              "Rows 3-4 are ❌ — G(0) is the first cell, no previous cell to arrive from. Best valid = Row 2 with 1 star (one star moves G(0) → G(1)).",
-              "3-4 번은 ❌ — G(0) 은 첫 칸이라 이전 칸이 없어요. 가능한 것 중 가장 적은 별 수 = 2 번 (별 1 개가 G(0)→G(1) 로 이동). 답은 1 별!")}
+              "Rows 3-4 are ❌ — the 1st G has no cell before it, so a star can't 'arrive' there. Best valid = Row 2 with 1 star (one star moves 1st G → 2nd G).",
+              "3-4 번은 ❌ — 첫 G 는 앞에 칸이 없어서 별이 '와서' 채울 수 없어요. 가능한 것 중 별 제일 적은 건 2번 (별 1개가 첫 G → 둘째 G 로 이동). 답은 1!")}
           </div>
         </div>
       ),
