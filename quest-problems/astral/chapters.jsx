@@ -1057,10 +1057,10 @@ export function makeAstralCh2(E, lang = "py") {
             },
             {
               cells: [{letter:"G",star:true,active:false,done:true},{letter:"G",star:false,active:true},{letter:"B",star:false,active:true}],
-              note: t(E, "B(2): to fill photo 2, G(1) must SEND a star here. But G(1) was filled for free — it has no star to send. 💥", "B(2): 사진2 를 채우려면 G(1) 이 별을 보내줘야 해요. 그런데 G(1) 은 공짜로 때워서 보낼 별이 없어요. 💥"),
+              note: t(E, "B(2): for photo 2 here, the cell before it — G(1) — must have a star to send. But G(1) was already filled by G(0)'s incoming star, so it placed NO star of its own → nothing to send. 💥", "B(2): 여기 사진2 가 별이 되려면, 앞 칸 G(1) 에 보낼 별이 있어야 해요. 그런데 G(1) 은 G(0) 에서 온 별로 이미 채워져서 자기 별을 안 놨어요 → 보낼 별이 없어요. 💥"),
               why: t(E,
                 "A B means: 'the cell right before me MUST hold a star.' But going front→back, we used up that cell (G(1)) for free before we ever met the B — so no star was left to send.\n→ To settle a B's demand first, we must sweep from the END, backward. (The puzzle is fine — 3 stars solve it, NOT -1.)",
-                "B 는 '바로 앞 칸에 별이 꼭 있어야 한다'는 명령이에요. 그런데 앞에서부터 가면, B 를 만나기도 전에 그 앞 칸(G(1)) 을 공짜로 때워서 보낼 별이 안 남아요.\n→ 명령(B)부터 먼저 들어주려면 끝에서부터 거꾸로 가야 해요. (퍼즐은 멀쩡해요 — 별 3개면 풀려요, -1 아님.)"),
+                "B 는 '바로 앞 칸에 별이 꼭 있어야 한다'는 명령이에요. 그런데 앞에서부터 가면, B 를 만나기도 전에 그 앞 칸(G(1)) 이 G(0) 에서 온 별로 채워져서 자기 별을 안 놔요 — 그래서 정작 B 에 보낼 별이 안 남아요.\n→ 명령(B)부터 먼저 들어주려면 끝에서부터 거꾸로 가야 해요. (퍼즐은 멀쩡해요 — 별 3개면 풀려요, -1 아님.)"),
               result: t(E, "Stuck — the forward plan is wrong ✗ (the answer is NOT -1!)", "막혔어요 — 앞→뒤 작전이 틀렸어요 ✗ (답은 -1 아니에요!)"),
               ok: false,
             },
