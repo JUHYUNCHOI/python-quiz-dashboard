@@ -475,83 +475,70 @@ function AstralDpWalk({ E }) {
   );
 }
 
-/* ── DpMergeViz: the "what DP does + why fast" picture. TOP = brute tree that
-   doubles every cell (2ⁿ). BOTTOM = DP keeps only 2 dots per column (안 보냄/보냄)
-   by MERGING same-state paths → 2×n. Static SVG, quest light-mode colors. ── */
+/* ── DpMergeViz: "what DP does" picture (greedy+DP only, no brute). A filled
+   2-row table for line [G,W,G,G]: rows 안 보냄 / 보냄, cols = cells. Flow arrows
+   show each cell's pair computed from the previous cell's pair; last cell's
+   smaller number is the answer. Same numbers as the walk & sim. ── */
 function DpMergeViz({ E }) {
   const tx = "#334155", dim = "#64748b";
-  const L1 = "칸 1", L2 = "칸 2", L3 = "칸 3", L4 = "칸 4";
+  const letters = ["G", "W", "G", "G"];
+  const cx = [250, 360, 470, 580];
+  const top = ["1", "1", "2", "2"];      // 안 보냄
+  const bot = ["1", "❌", "2", "3"];      // 보냄
+  const BW = 70, R1 = 100, R2 = 140, BH = 32;  // box geometry
+  const cellBox = (i, val, y, isBot) => {
+    const x = cx[i] - BW / 2;
+    const isX = val === "❌";
+    const last = i === 3;
+    return (
+      <g key={`${y}-${i}`}>
+        <rect x={x} y={y} width={BW} height={BH} rx="6"
+          fill={isX ? "#fee2e2" : isBot ? "#eff6ff" : "#f0fdf4"}
+          stroke={last ? "#f59e0b" : isX ? "#fca5a5" : isBot ? "#bfdbfe" : "#bbf7d0"}
+          strokeWidth={last ? "2.5" : "1.5"} />
+        <text x={cx[i]} y={y + 21} fontSize="15" fontWeight="800" textAnchor="middle"
+          fill={isX ? "#dc2626" : isBot ? "#2563eb" : "#15803d"}>{val}</text>
+      </g>
+    );
+  };
   return (
-    <svg width="100%" viewBox="0 0 680 524" role="img" style={{ display: "block", margin: "0 auto", maxWidth: 720 }}>
-      <title>{t(E, "Brute vs DP", "브루트 vs DP")}</title>
+    <svg width="100%" viewBox="0 0 680 232" role="img" style={{ display: "block", margin: "0 auto", maxWidth: 720 }}>
+      <title>{t(E, "What DP does", "DP가 하는 일")}</title>
+      <defs>
+        <marker id="dpAh" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#94a3b8" />
+        </marker>
+      </defs>
 
-      <text x="40" y="48" fontSize="14" fontWeight="800" fill={tx}>
-        {t(E, "Brute — branches double at every cell", "브루트 — 칸마다 갈림길이 2배")}
+      <text x="40" y="42" fontSize="14" fontWeight="800" fill={tx}>
+        {t(E, "What DP does — fill 2 numbers per cell from the previous cell", "DP가 하는 일 — 칸마다 숫자 2개를 앞 칸 보고 채워가기")}
       </text>
-      <text x="44" y="84" fontSize="12" fill={dim}>{t(E, "cell 1", L1)}</text>
-      <text x="44" y="124" fontSize="12" fill={dim}>{t(E, "cell 2", L2)}</text>
-      <text x="44" y="164" fontSize="12" fill={dim}>{t(E, "cell 3", L3)}</text>
-      <text x="44" y="204" fontSize="12" fill={dim}>{t(E, "cell 4", L4)}</text>
+      <text x="40" y="64" fontSize="12" fill={dim}>{t(E, "example line:  G  W  G  G", "예: 한 줄  G  W  G  G")}</text>
 
-      <g stroke="#94a3b8" strokeWidth="1">
-        <line x1="435" y1="80" x2="375" y2="120" /><line x1="435" y1="80" x2="495" y2="120" />
-        <line x1="375" y1="120" x2="330" y2="160" /><line x1="375" y1="120" x2="400" y2="160" />
-        <line x1="495" y1="120" x2="470" y2="160" /><line x1="495" y1="120" x2="540" y2="160" />
-        <line x1="330" y1="160" x2="295" y2="200" /><line x1="330" y1="160" x2="335" y2="200" />
-        <line x1="400" y1="160" x2="375" y2="200" /><line x1="400" y1="160" x2="415" y2="200" />
-        <line x1="470" y1="160" x2="455" y2="200" /><line x1="470" y1="160" x2="495" y2="200" />
-        <line x1="540" y1="160" x2="535" y2="200" /><line x1="540" y1="160" x2="575" y2="200" />
+      {/* column letters */}
+      {letters.map((ch, i) => (
+        <text key={`h${i}`} x={cx[i]} y="92" fontSize="14" fontWeight="800" fill="#475569" textAnchor="middle">{ch}</text>
+      ))}
+      {/* row labels */}
+      <text x="44" y={R1 + 21} fontSize="12" fontWeight="700" fill="#15803d">{t(E, "don't send", "안 보냄")}</text>
+      <text x="44" y={R2 + 21} fontSize="12" fontWeight="700" fill="#2563eb">{t(E, "send", "보냄")}</text>
+
+      {/* flow arrows prev → next (both rows) */}
+      <g stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#dpAh)">
+        {[0, 1, 2].map((i) => (
+          <g key={`a${i}`}>
+            <line x1={cx[i] + BW / 2} y1={R1 + BH / 2} x2={cx[i + 1] - BW / 2 - 3} y2={R1 + BH / 2} />
+            <line x1={cx[i] + BW / 2} y1={R2 + BH / 2} x2={cx[i + 1] - BW / 2 - 3} y2={R2 + BH / 2} />
+          </g>
+        ))}
       </g>
-      <g fill="#64748b">
-        <circle cx="435" cy="80" r="7" />
-        <circle cx="375" cy="120" r="7" /><circle cx="495" cy="120" r="7" />
-        <circle cx="330" cy="160" r="6" /><circle cx="400" cy="160" r="6" /><circle cx="470" cy="160" r="6" /><circle cx="540" cy="160" r="6" />
-        <circle cx="295" cy="200" r="5" /><circle cx="335" cy="200" r="5" /><circle cx="375" cy="200" r="5" /><circle cx="415" cy="200" r="5" />
-        <circle cx="455" cy="200" r="5" /><circle cx="495" cy="200" r="5" /><circle cx="535" cy="200" r="5" /><circle cx="575" cy="200" r="5" />
-      </g>
-      <text x="435" y="230" fontSize="12" fill={dim} textAnchor="middle">
-        {t(E, "⋯ keeps doubling → 2ⁿ branches", "⋯ 계속 2배씩 → 2ⁿ 갈래")}
-      </text>
 
-      <line x1="40" y1="256" x2="640" y2="256" stroke="#e2e8f0" strokeWidth="1" />
+      {letters.map((_, i) => cellBox(i, top[i], R1, false))}
+      {letters.map((_, i) => cellBox(i, bot[i], R2, true))}
 
-      <text x="40" y="286" fontSize="14" fontWeight="800" fill={tx}>
-        {t(E, "DP — merge same paths → only 2 dots per cell", "DP — 같은 갈래끼리 합쳐 칸마다 점 2개")}
-      </text>
-      <text x="44" y="331" fontSize="12" fill="#15803d">{t(E, "don't send", "안 보냄")}</text>
-      <text x="44" y="384" fontSize="12" fill="#2563eb">{t(E, "send", "보냄")}</text>
-
-      <text x="200" y="312" fontSize="12" fill={dim} textAnchor="middle">{t(E, "cell 1", L1)}</text>
-      <text x="330" y="312" fontSize="12" fill={dim} textAnchor="middle">{t(E, "cell 2", L2)}</text>
-      <text x="460" y="312" fontSize="12" fill={dim} textAnchor="middle">{t(E, "cell 3", L3)}</text>
-      <text x="590" y="312" fontSize="12" fill={dim} textAnchor="middle">{t(E, "cell 4", L4)}</text>
-
-      <g stroke="#cbd5e1" strokeWidth="1">
-        <line x1="200" y1="328" x2="330" y2="328" /><line x1="200" y1="380" x2="330" y2="380" />
-        <line x1="200" y1="328" x2="330" y2="380" /><line x1="200" y1="380" x2="330" y2="328" />
-        <line x1="330" y1="328" x2="460" y2="328" /><line x1="330" y1="380" x2="460" y2="380" />
-        <line x1="330" y1="328" x2="460" y2="380" /><line x1="330" y1="380" x2="460" y2="328" />
-        <line x1="460" y1="328" x2="590" y2="328" /><line x1="460" y1="380" x2="590" y2="380" />
-        <line x1="460" y1="328" x2="590" y2="380" /><line x1="460" y1="380" x2="590" y2="328" />
-      </g>
-      <g>
-        <circle cx="200" cy="328" r="9" fill="#16a34a" /><circle cx="200" cy="380" r="9" fill="#3b82f6" />
-        <circle cx="330" cy="328" r="9" fill="#16a34a" /><circle cx="330" cy="380" r="9" fill="#3b82f6" />
-        <circle cx="460" cy="328" r="9" fill="#16a34a" /><circle cx="460" cy="380" r="9" fill="#3b82f6" />
-        <circle cx="590" cy="328" r="9" fill="#16a34a" /><circle cx="590" cy="380" r="9" fill="#3b82f6" />
-      </g>
-      <text x="395" y="424" fontSize="12" fill={dim} textAnchor="middle">
-        {t(E, "2 dots per cell → 2 × n steps", "칸마다 점 2개 → 2 × n 번")}
-      </text>
-
-      <text x="40" y="466" fontSize="12" fill={dim}>{t(E, "A line of 200 cells:", "줄 200칸이면:")}</text>
-      <rect x="60" y="476" width="285" height="34" rx="8" fill="#fee2e2" stroke="#ef4444" />
-      <text x="202" y="498" fontSize="14" fontWeight="700" fill="#991b1b" textAnchor="middle">
-        {t(E, "Brute  2²⁰⁰  (huge)", "브루트  2²⁰⁰  (우주보다 큼)")}
-      </text>
-      <rect x="365" y="476" width="275" height="34" rx="8" fill="#dcfce7" stroke="#16a34a" />
-      <text x="502" y="498" fontSize="14" fontWeight="700" fill="#14532d" textAnchor="middle">
-        {t(E, "DP  400 steps  (blink!)", "DP  400번  (눈 깜짝!)")}
+      <text x="350" y="208" fontSize="13" fontWeight="800" fill="#15803d" textAnchor="middle">
+        {t(E, "last cell → smaller of the two = min(2, 3) = 2 = answer",
+              "마지막 칸 → 두 숫자 중 작은 것 = min(2, 3) = 2 = 답")}
       </text>
     </svg>
   );
@@ -1435,57 +1422,8 @@ export function makeAstralCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ fontSize: 11, color: "#64748b", textAlign: "center", marginTop: 10, lineHeight: 1.5 }}>
-            {t(E, "Next slides build DP from scratch: try all → too slow → DP (fewest-so-far per cell).",
-                  "다음 슬라이드에서 DP 를 처음부터 쌓아요: 다 해보기 → 너무 느림 → DP (칸마다 여기까지 최소).")}
-          </div>
-        </div>
-      ),
-    },
-
-    /* 2-3.2 — The simplest idea (try every combo) explodes for long chains */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Simplest idea: at each G cell, try both — keep the star or send it on. But on a long line that explodes. 👇",
-        "가장 단순한 생각: G 칸마다 별을 '보낼지 말지' 둘 다 해보기. 근데 줄이 길어지면 폭주해요. 👇"),
-      content: (
-        <div style={{ padding: 14 }}>
-          <div style={{
-            background: "#fee2e2",
-            border: "2px solid #ef4444",
-            borderRadius: 10,
-            padding: "10px 14px",
-            marginBottom: 10,
-            textAlign: "center",
-          }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#991b1b" }}>
-              ⏰ {t(E, "Too slow when chains are long", "줄이 길어지면 폭주")}
-            </div>
-          </div>
-          <div style={{ fontSize: 12, color: "#64748b", textAlign: "center", marginBottom: 10, lineHeight: 1.55 }}>
-            {t(E, "Each G cell has 2 choices (keep / send) → a line of n G cells = 2ⁿ combos to try.",
-                  "각 G 칸은 2 가지(보냄/안 보냄) → G 가 n 개인 줄은 다 해볼 경우가 2ⁿ.")}
-          </div>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, marginBottom: 10 }}>
-            <thead>
-              <tr style={{ background: "#f1f5f9" }}>
-                <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "G cells in chain", "줄의 G 칸 수")}</th>
-                <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "Combinations to try", "시도할 경우의 수")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>2</td><td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>4</td></tr>
-              <tr><td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>5</td><td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>32</td></tr>
-              <tr><td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>10</td><td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>1,024</td></tr>
-              <tr><td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>20</td><td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>1,048,576</td></tr>
-              <tr style={{ background: "#fef2f2" }}><td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center", fontWeight: 700 }}>50</td><td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center", fontWeight: 700, color: "#991b1b" }}>{t(E, "≈ 1 quadrillion", "약 1000 조")}</td></tr>
-              <tr style={{ background: "#fef2f2" }}><td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center", fontWeight: 700 }}>100</td><td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center", fontWeight: 700, color: "#991b1b" }}>{t(E, "longer than universe age", "우주 나이보다 김")}</td></tr>
-            </tbody>
-          </table>
-          <div style={{ fontSize: 12, color: "#64748b", textAlign: "center", lineHeight: 1.55 }}>
-            {t(E,
-              "Grids can have lines of 200+ cells. Brute force can't finish. We need a smarter way.",
-              "한 줄에 칸이 200 개 넘을 수도 있어요. 단순 시도로는 못 풀어요. 더 똑똑한 방법이 필요해요.")}
+            {t(E, "Next: see what DP does — keep both choices per cell, pick the smaller at the end.",
+                  "다음에서 DP 가 뭘 하는지 봐요 — 칸마다 두 경우 들고 가다 끝에서 작은 것 고르기.")}
           </div>
         </div>
       ),
@@ -1513,15 +1451,15 @@ export function makeAstralCh2(E, lang = "py") {
             </div>
             <div style={{ fontSize: 12.5, color: "#4c1d95", lineHeight: 1.55 }}>
               {t(E,
-                "Each new cell just reuses the previous cell's written answer — no recounting. That's why it beats 'try everything'.",
-                "새 칸은 바로 앞 칸에 적어둔 답만 가져다 써요 — 다시 안 셈. 그래서 '다 해보기'보다 빨라요.")}
+                "Each cell keeps two numbers — fewest stars if it does NOT send a star on, and if it DOES — using only the previous cell's numbers.",
+                "칸마다 숫자 두 개를 들고 가요 — 이 칸 별을 '안 보낼 때 / 보낼 때' 각각 여기까지 별 최소. 바로 앞 칸 숫자만 보고 채워요.")}
             </div>
           </div>
           <DpMergeViz E={E} />
           <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginTop: 6, lineHeight: 1.6 }}>
             {t(E,
-              "Each cell decides: send this star to the next cell, or not. Same-state paths have the same future → keep the cheaper one → just 2 numbers per cell. Next: walk it cell by cell 👉",
-              "칸마다 정할 건 하나 — 이 별을 다음 칸으로 보낼까 말까. 같은 경우(보냄/안 보냄)는 앞으로가 똑같으니 더 싼 것만 남겨 합쳐요 → 칸마다 숫자 2개. 다음에서 한 칸씩 직접 봐요 👉")}
+              "Left to right, one cell at a time. Each cell's two numbers come from the previous cell's. The smaller number at the last cell is the answer — always the minimum, no guessing. Next: walk it cell by cell 👉",
+              "왼→오 한 칸씩. 각 칸 두 숫자는 앞 칸 두 숫자만 보고 계산해요. 마지막 칸의 더 작은 수가 답 — 눈치/찍기 없이 항상 최소. 다음에서 한 칸씩 직접 봐요 👉")}
           </div>
 
         </div>
@@ -1532,8 +1470,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "Quick think: at a G cell, the star can either STAY or MOVE to the next cell. Greedy got tricked picking one too early. So what's the safe move?",
-        "잠깐 생각: G 칸에선 별이 머무를지 다음 칸으로 갈지 두 갈래. Greedy 가 하나 일찍 골라서 틀렸어요. 안전한 방법은?"),
+        "Quick think: at a G cell, the star can either STAY or MOVE to the next cell. Greedy commits to one right away (clever). The systematic way doesn't commit — what does it do?",
+        "잠깐 생각: G 칸에선 별이 머무를지 다음 칸으로 갈지 두 갈래. 그리디는 칸마다 하나로 바로 정해요(영리하게). 정석으로 안 정하고 가려면?"),
       question: t(E,
         "When we don't know which choice is better yet, what do we do?",
         "어느 게 좋은지 모를 땐 어떻게 할까요?"),
