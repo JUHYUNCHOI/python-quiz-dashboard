@@ -1237,8 +1237,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "For DP, split the photo into separate LINES: a cell's photo-2 comes from one step back, so cells link into chains. Each cell is in just one line → solve each line, add them up. 👇",
-        "DP 로 풀려면 사진을 여러 '줄'로 쪼개요: 한 칸의 사진2는 거꾸로 한 칸에서 오니까, 칸들이 줄줄이 이어져요. 한 칸은 한 줄에만 속해요 → 줄마다 따로 풀고 더하면 끝! 👇"),
+        "DP only knows how to walk ONE line in order — but the photo is 2D. Luckily the cells link into separate diagonal lines (each cell on just one), so we DP each line and add them up. 👇",
+        "DP 는 '한 줄을 순서대로' 푸는 도구예요 — 근데 사진은 2D. 다행히 칸들이 따로따로 '줄(체인)'로 묶여요 (한 칸은 한 줄에만). 그래서 줄마다 DP 하고 더하면 끝! 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 12, textAlign: "center" }}>
