@@ -87,6 +87,21 @@ export function TeacherMirror() {
     return () => ch.removeEventListener("message", handler)
   }, [mounted, isMirror])
 
+  // 미러 창: quest 는 Next/Prev 시 URL 이 안 바뀌고 localStorage(quest-pos-*)로만
+  // 페이지를 넘긴다. BroadcastChannel "nav" 는 URL(route) 변경만 감지하므로 quest 이동을
+  // 못 따라갔다. → 메인 창이 quest-pos 를 쓰면 미러 창에 storage 이벤트가 오므로, 그때
+  // 새 위치로 다시 그린다 (정적 export 호환 위해 reload).
+  useEffect(() => {
+    if (!mounted || !isMirror) return
+    const onStorage = (e: StorageEvent) => {
+      if (!e.key || !e.key.startsWith("quest-pos-")) return
+      if (!e.newValue || e.newValue === e.oldValue) return
+      window.location.reload()
+    }
+    window.addEventListener("storage", onStorage)
+    return () => window.removeEventListener("storage", onStorage)
+  }, [mounted, isMirror])
+
   // 미러 창에서는 버튼 X
   if (!mounted || isMirror || !isOwner) return null
 

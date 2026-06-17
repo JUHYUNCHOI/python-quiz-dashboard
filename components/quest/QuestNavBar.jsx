@@ -101,9 +101,10 @@ export function QuestProgressBar({
                   const isVisited = isPastTab || (isCurTab && i < cur);
                   const isHovered = hoverInfo && hoverInfo.tabIdx === tabIdx && hoverInfo.i === i;
                   const hue = tabHue(tabIdx);
-                  // current = full hue, visited = lighter, unvisited = faint tint
-                  // (faint tint keeps each tab's region color-coded even before you reach it)
-                  const bg = isCurrent ? hue : isVisited ? `${hue}88` : `${hue}33`;
+                  // current = full hue, visited = mostly filled, unvisited = a clear
+                  // (not faint) tint so each tab's region stays its own color and
+                  // neighbouring tabs' unvisited stretches don't blur into one another.
+                  const bg = isCurrent ? hue : isVisited ? `${hue}cc` : `${hue}66`;
                   return (
                     <button
                       key={`${tabIdx}-${i}`}
