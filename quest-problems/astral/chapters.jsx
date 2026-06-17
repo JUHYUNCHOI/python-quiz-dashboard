@@ -1141,61 +1141,9 @@ export function makeAstralCh2(E, lang = "py") {
        program. The DP block below becomes an OPTIONAL "another method" appendix.
        ════════════════════════════════════════════════════════════════ */
 
-    /* 2-G0 — Bridge: the backward rule → code (no chains, no DP table needed) */
-    {
-      type: "reveal",
-      narr: t(E,
-        "That backward rule IS the whole solution — let's turn it into code. 👇",
-        "방금 그 거꾸로 규칙이 풀이 전부예요 — 코드로 옮겨요. 👇"),
-      content: (
-        <div style={{ padding: 14 }}>
-          {/* predecessor concept as a bubble walk */}
-          <div style={{ background: "#eef2ff", border: "1.5px solid #c7d2fe", borderRadius: 10, padding: "8px 12px", marginBottom: 12 }}>
-            <div style={{ fontSize: 12.5, fontWeight: 800, color: "#3730a3", marginBottom: 2, textAlign: "center" }}>
-              📍 {t(E, "\"The cell a star came FROM\" (predecessor)", "\"별이 온 칸\" (직전 칸)")}
-            </div>
-            <PredecessorPeek E={E} />
-          </div>
-
-          <div style={{
-            background: "#f0fdfa", border: "2px solid #0d9488", borderRadius: 10,
-            padding: "10px 14px", marginBottom: 12,
-          }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#0f766e", marginBottom: 6, textAlign: "center" }}>
-              ⬅️ {t(E, "The rule, as code", "규칙을 코드로")}
-            </div>
-            {[
-              { k: "B", c: "#1e293b", fg: "#fff",
-                txt: t(E, "FORCED. ★ here AND ★ on the cell it came from = (r−down, c−right). If that cell is W or off-grid → impossible → -1.",
-                         "강제. 여기 ★ + 별이 온 칸 = (r−down, c−right) 에도 ★. 그 칸이 W 거나 사진 밖이면 → 불가능 → -1.") },
-              { k: "G", c: "#cbd5e1", fg: "#1e293b",
-                txt: t(E, "A CHOICE. Already starred (a B before it grabbed that cell)? skip — one star covers both. Else: ★ on the cell it came from if that cell can hold a star, otherwise ★ here.",
-                         "선택. 이미 별 있음 (뒤쪽 B 가 그 칸을 찍어둠)? 통과 — 별 하나가 둘을 덮음. 아니면: 별이 온 칸이 별을 가질 수 있으면 거기 ★, 안 되면 여기 ★.") },
-              { k: "W", c: "#fff", fg: "#94a3b8",
-                txt: t(E, "Nothing — empty in both photos.", "아무것도 안 함 — 두 사진 다 비어있음.") },
-            ].map((row, i) => (
-              <div key={i} style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 6 }}>
-                <div style={{
-                  width: 26, height: 26, borderRadius: 6, flexShrink: 0,
-                  background: row.c, color: row.fg, border: "1.5px solid #94a3b8",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontWeight: 800, fontSize: 13, fontFamily: "'JetBrains Mono',monospace",
-                }}>{row.k}</div>
-                <div style={{ fontSize: 11.5, color: "#0f172a", lineHeight: 1.5 }}>{row.txt}</div>
-              </div>
-            ))}
-          </div>
-          <div style={{
-            background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: 8,
-            padding: "9px 12px", fontSize: 11.5, color: "#1e40af", lineHeight: 1.6,
-          }}>
-            💡 {t(E,
-              "Going backward means every B's pull on its predecessor is recorded BEFORE we reach that predecessor — so when we get to a G, we already know if a star is sitting there. No guessing, one pass. The answer = how many cells ended up in the set.",
-              "거꾸로 가면 B 가 직전 칸을 당기는 게 그 칸에 닿기 전에 이미 기록돼요 — 그래서 G 에 도착하면 거기 별이 있는지 이미 알아요. 찍을 일 없이 한 번 훑기. 답 = set 에 모인 칸 개수.")}
-          </div>
-        </div>
-      ),
-    },
+    /* 2-G0 — REMOVED (2026-06-17): predecessor sim duplicated 2-0 ("거꾸로 한 칸"); the
+       B/G/W rule box + tip were walls the code slides' comments already cover.
+       Teacher: "이 페이지 필요한가? 밑에 칸 읽기 싫은데." Backward sim → code now flows directly. */
 
     /* 2-G1 — backward greedy core code */
     sectionStep(sections[6], t(E,
@@ -2146,8 +2094,8 @@ export function makeAstralCh2(E, lang = "py") {
        no separate slide needed, similar to how we simplified EMPTY/❌.)
        Note: sections[5] = Full code, after sections were split (4 → 4a + 4b). */
     sectionStep(sections[5], t(E,
-      "Everything stitched together. You'll spot a tiny `if right == 0 and down == 0:` branch near the top — that's the trivial 'stars don't move → just count G+B' shortcut.",
-      "전부 합친 코드. 위쪽에 `if right == 0 and down == 0:` 짧은 분기 하나 — '별 안 움직이면 G+B 그냥 세기' 지름길.")),
+      "Everything stitched together. The tiny `if right == 0 and down == 0:` branch is needed because if stars don't move, 'one step back' is the cell ITSELF → no start cell exists → the main sweep would find nothing. So we handle it separately: no movement → no G → just count G+B.",
+      "전부 합친 코드. 위쪽 `if right == 0 and down == 0:` 분기가 꼭 필요한 이유 — 별이 안 움직이면 '거꾸로 한 칸'이 자기 자신이라 시작 칸을 하나도 못 찾아요 → 일반 방법이 아무것도 못 셈. 그래서 따로: 안 움직이면 G 없고 → G+B 그냥 세기.")),
 
     /* 2-6 — Sample 2 end-to-end walkthrough (general A,B case) */
     {
