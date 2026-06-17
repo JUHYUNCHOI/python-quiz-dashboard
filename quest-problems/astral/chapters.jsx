@@ -1265,137 +1265,9 @@ export function makeAstralCh2(E, lang = "py") {
        the 3-method roadmap (2-0b) + greedy derivation (2-3.05/06) already cover the picture,
        and the DP sim appears later. Teacher: it interrupted the flow after backward greedy. */
 
-    /* 1-2.6 — Visual summary: 5 scenes (W, G×2, B×2) using actual cell graphics (moved from Ch1 2026-06-16) */
-    {
-      type: "reveal",
-      narr: t(E,
-        "W, G, B — one at a time. One peek and you know. 👇",
-        "W·G·B — 한 칸씩 보기. 한번 보면 머리에 들어와요. 👇"),
-      content: (() => {
-        // Reusable mini cell graphic — same look as the sim
-        const Cell = ({ letter, hasStar, outside, dim, label }) => (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-            <div style={{
-              width: 46, height: 46, borderRadius: 7,
-              background: outside ? "transparent" : (dim ? "#f1f5f9" : "#fff"),
-              border: outside ? "2px dashed #cbd5e1" : `2px solid ${letter === "B" ? "#1e293b" : letter === "G" ? "#a78bfa" : "#cbd5e1"}`,
-              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-              fontFamily: "'JetBrains Mono',monospace",
-            }}>
-              {outside ? (
-                <div style={{ fontSize: 9, color: "#94a3b8", fontWeight: 700 }}>{t(E, "off-grid", "밖")}</div>
-              ) : (
-                <>
-                  {hasStar && <div style={{ fontSize: 18, lineHeight: 1, color: "#d97706", fontWeight: 900 }}>★</div>}
-                  {!hasStar && letter && <div style={{ fontSize: 14, fontWeight: 800, color: dim ? "#94a3b8" : "#475569", lineHeight: 1 }}>{letter}</div>}
-                  {!hasStar && !letter && <div style={{ fontSize: 14, color: "#cbd5e1" }}>·</div>}
-                </>
-              )}
-            </div>
-            {label && <div style={{ fontSize: 9.5, color: "#64748b", fontWeight: 600 }}>{label}</div>}
-          </div>
-        );
-
-        const Arrow = () => (
-          <div style={{ fontSize: 18, color: "#94a3b8", margin: "0 4px", marginTop: -10 }}>↖</div>
-        );
-
-        const SceneRow = ({ predCell, currentCell, verdict, verdictColor, bg, border }) => (
-          <div style={{
-            display: "flex", alignItems: "center", gap: 8,
-            background: bg, border: `2px solid ${border}`, borderRadius: 10,
-            padding: "8px 12px",
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 2, minWidth: 130 }}>
-              {predCell}
-              <Arrow />
-              {currentCell}
-            </div>
-            <div style={{ fontSize: 12.5, fontWeight: 800, color: verdictColor, flex: 1, lineHeight: 1.35 }}>
-              {verdict}
-            </div>
-          </div>
-        );
-
-        return (
-          <div style={{ display: "flex", flexDirection: "column", gap: 7, padding: "0 4px" }}>
-            {/* W scene — just one cell, no trace */}
-            <div style={{
-              display: "flex", alignItems: "center", gap: 8,
-              background: "#f8fafc", border: "2px solid #cbd5e1", borderRadius: 10,
-              padding: "8px 12px",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", minWidth: 130, paddingLeft: 78 }}>
-                <Cell letter="W" hasStar={false} dim />
-              </div>
-              <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0f766e", flex: 1 }}>
-                {t(E, "W → just skip ✓", "W → 그냥 다음 ✓")}
-              </div>
-            </div>
-
-            {/* G scene 1 — predecessor has star → moved-in */}
-            <SceneRow
-              predCell={<Cell hasStar={true} label={t(E, "one step back", "거꾸로")} />}
-              currentCell={<Cell letter="G" hasStar={true} label={t(E, "here", "여기")} />}
-              verdict={t(E, "G — moved-in ✨", "G → 들어온 별 ✨")}
-              verdictColor="#7c3aed"
-              bg="#faf5ff"
-              border="#c4b5fd"
-            />
-
-            {/* G scene 2 — predecessor outside grid → original here */}
-            <SceneRow
-              predCell={<Cell outside label={t(E, "one step back", "거꾸로")} />}
-              currentCell={<Cell letter="G" hasStar={true} label={t(E, "here", "여기")} />}
-              verdict={t(E, "G — original here 🌱", "G → 원래 여기 별 🌱")}
-              verdictColor="#7c3aed"
-              bg="#faf5ff"
-              border="#c4b5fd"
-            />
-
-            {/* G scene 3 — predecessor inside grid but W (empty) → also original here */}
-            <SceneRow
-              predCell={<Cell letter="W" hasStar={false} dim label={t(E, "one step back", "거꾸로")} />}
-              currentCell={<Cell letter="G" hasStar={true} label={t(E, "here", "여기")} />}
-              verdict={t(E, "G — also original here 🌱", "G → 똑같이 원래 여기 별 🌱")}
-              verdictColor="#7c3aed"
-              bg="#faf5ff"
-              border="#c4b5fd"
-            />
-
-            {/* B scene — both have star → OK */}
-            <SceneRow
-              predCell={<Cell hasStar={true} label={t(E, "one step back", "거꾸로")} />}
-              currentCell={<Cell letter="B" hasStar={true} label={t(E, "here", "여기")} />}
-              verdict={t(E, "B — both ★ ✓ OK", "B → 양쪽 다 별 ✓ OK")}
-              verdictColor="#16a34a"
-              bg="#f0fdf4"
-              border="#86efac"
-            />
-
-            {/* B scene invalid — pred outside grid → EMPTY */}
-            <SceneRow
-              predCell={<Cell outside label={t(E, "one step back", "거꾸로")} />}
-              currentCell={<Cell letter="B" hasStar={true} label={t(E, "here", "여기")} />}
-              verdict={t(E, "B — pred ★ missing ❌", "B → 거꾸로 별 없음 ❌")}
-              verdictColor="#dc2626"
-              bg="#fef2f2"
-              border="#fca5a5"
-            />
-
-            {/* B scene invalid — pred W (empty) → also EMPTY */}
-            <SceneRow
-              predCell={<Cell letter="W" hasStar={false} dim label={t(E, "one step back", "거꾸로")} />}
-              currentCell={<Cell letter="B" hasStar={true} label={t(E, "here", "여기")} />}
-              verdict={t(E, "B — pred is W, still ★ missing ❌", "B → 거꾸로 W 라도 별 없음 ❌")}
-              verdictColor="#dc2626"
-              bg="#fef2f2"
-              border="#fca5a5"
-            />
-          </div>
-        );
-      })(),
-    },
+    /* 1-2.6 — REMOVED (2026-06-17): the W/G/B 7-row summary table was redundant —
+       the rail sim, corner-G sim, and greedy derivation already teach every row.
+       Teacher: the point didn't pop and it duplicated earlier sims. */
 
     /* ════════════════════════════════════════════════════════════════
        MAIN SOLUTION CODE = the backward greedy (teacher's verified approach).
@@ -1593,8 +1465,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "A completely different idea: test every possible combination. 👇",
-        "완전히 다른 방법: 모든 경우를 다 시도해보기. 👇"),
+        "Not sure the greedy answer is really the smallest? Just try EVERY combination — then you know for sure. 👇",
+        "거꾸로 그리디 답이 진짜 최소일까? 못 믿겠으면 — 모든 경우를 다 해보면 100% 확실해요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{
@@ -1609,7 +1481,8 @@ export function makeAstralCh2(E, lang = "py") {
               🐢 {t(E, "Brute force — try all combinations", "단순 시도 — 모든 경우 다 해보기")}
             </div>
             <div style={{ fontSize: 12.5, color: "#78350f" }}>
-              {t(E, "Chain: G → G (2 cells along the star line)", "궤도: G → G (별 한 궤도에 G 가 2 개)")}
+              {t(E, "Goal: list every choice, pick the fewest stars → check the greedy answer is right.",
+                    "목표: 모든 선택을 다 적고 → 별 제일 적은 걸 골라서 → 그리디 답이 맞는지 확인.")}
             </div>
           </div>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12.5, marginBottom: 8 }}>
