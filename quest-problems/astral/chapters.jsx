@@ -1366,8 +1366,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Here's what DP is — simply: go cell by cell, and at each cell write down 'fewest stars so far'. 👇",
-        "DP가 뭐냐면 — 쉽게 말해, 한 칸씩 가면서 칸마다 '여기까지 별 최소'를 적어두는 거예요. 👇"),
+        "What's DP? Just go cell by cell from the left, counting how few stars were in photo 1. 👇",
+        "DP가 뭐냐면 — 왼쪽부터 한 칸씩 가면서, 사진 1에 별이 몇 개 있었는지 세는 거예요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{
