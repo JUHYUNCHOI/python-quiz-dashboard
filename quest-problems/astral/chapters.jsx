@@ -516,16 +516,18 @@ function CornerGWalk({ E }) {
     { focus: "g", bubble: t(E, "The corner (0,0) is G.", "모서리 칸 (0,0) 이 G 예요.") },
     { focus: "phantom", bubble: t(E, "To arrive at (0,0), a star must come from (-1,-1). But that's outside the photo — and there are NO stars outside the photo. ❌", "(0,0) 으로 별이 오려면 (-1,-1) 에서 와야 해요. 근데 거긴 사진 밖 — 사진 밖엔 별이 아예 없어요. ❌") },
     { focus: "g", bubble: t(E, "So there's no star to come in. Only ONE possibility left: a star was HERE in photo 1, then left.", "그러니 (0,0) 으로 들어올 별이 없어요. 남은 가능성은 딱 하나 — 원래 (0,0) 에 별이 있다가 떠난 것.") },
-    { final: true, bubble: t(E, "Count this star — answer +1! ⭐", "이 별도 하나로 세요 — 답(별 개수) +1! ⭐") },
+    { focus: "g", green: true, bubble: t(E, "Count this star — answer +1! ⭐", "이 별도 하나로 세요 — 답(별 개수) +1! ⭐") },
+    { edge: true, bubble: t(E, "Not just the corner — EVERY cell whose 'one step back' lands off-grid is the same: the whole top row + the whole left column.", "모서리만이 아니에요 — '거꾸로 한 칸'이 사진 밖인 칸은 다 똑같아요: 맨 위 줄 + 맨 왼쪽 줄 전부 (노란 칸).") },
+    { edge: true, green: true, bubble: t(E, "So none of these can be B. A B needs a star arriving from the cell behind it — but that's off-grid, so no star can come. ⛔", "그래서 이 칸들은 B 가 못 돼요. B 는 거꾸로 칸에서 별이 와줘야 하는데, 거긴 사진 밖이라 올 별이 없거든요. ⛔") },
   ];
   const [si, setSi] = useState(0);
   const last = steps.length - 1;
   const idx = Math.max(0, Math.min(si, last));
   const cur = steps[idx];
-  const showStar = idx >= 2; // from "a star WAS here" (step 3) onward, mark the original ★
+  const showStar = idx >= 2 && idx <= 3; // mark the original ★ during the corner-G beats (not the edge generalization)
   const S = 44, GAP = 4, P = S + GAP, gridW = 4 * S + 3 * GAP;
-  const actDisp = cur.final ? null : (cur.focus === "phantom" ? { dr: 0, dc: 0 } : { dr: 1, dc: 1 });
-  const bubbleRow = actDisp ? actDisp.dr : 1;
+  const actDisp = (cur.green || cur.edge) ? null : (cur.focus === "phantom" ? { dr: 0, dc: 0 } : { dr: 1, dc: 1 });
+  const bubbleRow = cur.edge ? 0 : actDisp ? actDisp.dr : 1;
 
   const btn = (disabled, label, onClick) => (
     <button onClick={onClick} disabled={disabled} style={{
@@ -545,13 +547,14 @@ function CornerGWalk({ E }) {
           const R = dr - 1, C = dc - 1;
           const isG = isReal && R === 0 && C === 0;
           const isAct = actDisp && actDisp.dr === dr && actDisp.dc === dc;
+          const isEdge = cur.edge && isReal && (R === 0 || C === 0); // top row + left column
           return (
             <div key={`${dr},${dc}`} style={{
               position: "absolute", left: dc * P, top: dr * P, width: S, height: S, borderRadius: 6,
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
               fontFamily: "'JetBrains Mono',monospace",
-              background: isPhantom ? "#fee2e2" : isAct ? "#4f46e5" : isG ? "#cbd5e1" : "#f8fafc",
-              border: isPhantom ? "2px dashed #dc2626" : `2px solid ${isAct ? "#4f46e5" : isG ? "#94a3b8" : "#e2e8f0"}`,
+              background: isPhantom ? "#fee2e2" : isAct ? "#4f46e5" : isEdge ? "#fef9c3" : isG ? "#cbd5e1" : "#f8fafc",
+              border: isPhantom ? "2px dashed #dc2626" : `2px solid ${isAct ? "#4f46e5" : isEdge ? "#d97706" : isG ? "#94a3b8" : "#e2e8f0"}`,
               boxShadow: isAct ? "0 0 0 4px rgba(79,70,229,.25)" : "none",
               transform: isAct ? "scale(1.06)" : "none", transition: "all .15s",
             }}>
@@ -574,11 +577,11 @@ function CornerGWalk({ E }) {
         }))}
         <div style={{
           position: "absolute", left: gridW + 14, top: bubbleRow * P, width: 168,
-          background: cur.final ? "#dcfce7" : "#1e3a8a", color: cur.final ? "#14532d" : "#fff",
-          border: cur.final ? "1.5px solid #16a34a" : "none",
+          background: cur.green ? "#dcfce7" : "#1e3a8a", color: cur.green ? "#14532d" : "#fff",
+          border: cur.green ? "1.5px solid #16a34a" : "none",
           borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.5, fontWeight: 600,
         }}>
-          {!cur.final && (
+          {!cur.green && !cur.edge && (
             <div style={{
               position: "absolute", left: -7, top: 15, width: 0, height: 0,
               borderTop: "7px solid transparent", borderBottom: "7px solid transparent", borderRight: "8px solid #1e3a8a",
@@ -806,12 +809,6 @@ GGG`}
           </div>
 
           <CornerGWalk E={E} />
-
-          <div style={{ marginTop: 12, background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "9px 13px", fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
-            💡 {t(E,
-              "And it's not just the corner — ANY cell whose one-step-back lands off the grid (the whole top row + left column) can't get an incoming star.",
-              "모서리만이 아니에요 — 거꾸로 한 칸이 사진 밖인 칸은 다 별이 못 들어와요 (맨 위 줄 + 맨 왼쪽 줄 전부).")}
-          </div>
         </div>
       ),
     },
@@ -858,8 +855,8 @@ GGG`}
     {
       type: "quiz",
       narr: t(E,
-        "Same idea as the corner: if the back-cell is off the grid, no star arrives → can't be B 👇",
-        "방금 모서리에서 본 거랑 똑같아요 — 거꾸로 간 칸이 사진 밖이면 B 가 안 돼요 👇"),
+        "Now you pick it. 👇",
+        "직접 골라봐요 👇"),
       question: t(E,
         "Stars move right 1, down 1. Which cell can NEVER be B?",
         "별이 오른쪽 1, 아래 1 로 움직여요. 어느 칸이 절대 B 가 될 수 없을까요?"),
