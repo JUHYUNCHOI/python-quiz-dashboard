@@ -1423,5 +1423,494 @@ export function makeAstralCh2(E, lang = "py") {
       content: (<AstralDpWalk E={E} />),
     },
 
+    /* 2-3.7 — Bridge: ❌ in sim ↔ EMPTY (a huge number) in code.
+       MOVED here 2026-06-02 (was between STEP 1 and STEP 2). Now right after the sim
+       so EMPTY is introduced while ❌ is fresh; STEP labels stay uninterrupted. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "The ❌ from the sim is what the code calls EMPTY — a huge number. Why? 👇",
+        "방금 시뮬의 ❌ 를 코드에선 EMPTY (엄청 큰 수) 라고 불러요. 왜일까요? 👇"),
+      content: (
+        <div style={{ padding: 14 }}>
+          <div style={{ textAlign: "center", marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#4f46e5" }}>
+              🔢 {t(E, "Sim shows ❌   ⟷   Code uses EMPTY = 99999999", "시뮬 ❌   ⟷   코드 EMPTY = 99999999")}
+            </div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 3 }}>
+              {t(E, "Same meaning: 'this option can't be built'.",
+                    "같은 의미: '이 경우 만들 수 없음'.")}
+            </div>
+          </div>
+
+          {/* Example: min_stars = [3, ❌] */}
+          <div style={{ background: "#eef2ff", border: "1.5px solid #a5b4fc", borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
+            <div style={{ fontSize: 12, color: "#312e81", marginBottom: 6, fontWeight: 700 }}>
+              {t(E, "Example: min_stars = [3, ❌]", "예: min_stars = [3, ❌]")}
+            </div>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+              • {t(E, "If this cell does NOT pass a star out: 3 stars. Works.",
+                    "이 칸이 별 안 보낼 때: 3 개. 가능.")}<br/>
+              • {t(E, "If this cell DOES pass a star out: ❌ — can't be made.",
+                    "이 칸이 별 보낼 때: ❌ — 못 만듦.")}
+            </div>
+          </div>
+
+          {/* NEW: Concrete min() examples to demystify why huge number auto-filters */}
+          <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#166534", marginBottom: 6 }}>
+              🎯 {t(E, "Why min(...) filters out automatically", "왜 min(...) 이 알아서 걸러내요")}
+            </div>
+            <div style={{ fontSize: 12.5, color: "#14532d", lineHeight: 1.7, fontFamily: "'JetBrains Mono',monospace" }}>
+              min(3, 99999999) = <b style={{ color: "#16a34a" }}>3</b>     <span style={{ color: "#64748b", fontFamily: "system-ui" }}>{t(E, "← real wins", "← 진짜 답 이김")}</span><br/>
+              min(99999999, 99999999) = <b style={{ color: "#dc2626" }}>99999999</b>  <span style={{ color: "#64748b", fontFamily: "system-ui" }}>{t(E, "← all fail → still huge", "← 둘 다 실패 → 여전히 큰 수")}</span>
+            </div>
+            <div style={{ fontSize: 11.5, color: "#166534", marginTop: 8, lineHeight: 1.55 }}>
+              {t(E,
+                "Huge number is always bigger than any real answer → min() picks the real one. If both are huge → answer stays huge → that path is impossible.",
+                "큰 수는 어떤 진짜 답보다도 크니까 min() 이 진짜를 골라요. 둘 다 큰 수면 → 결과도 큰 수 → 그 길은 못 만듦. if 로 따로 걸러줄 필요 없음.")}
+            </div>
+          </div>
+
+          {/* Code representation */}
+          <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", color: "#f1f5f9", fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.65 }}>
+            <div style={{ color: "#94a3b8", marginBottom: 4 }}>// {t(E, "in code:", "코드에서는:")}</div>
+            <div><span style={{ color: "#c4b5fd" }}>const int</span> EMPTY = <span style={{ color: "#fbbf24" }}>99999999</span>;  <span style={{ color: "#64748b" }}>// {t(E, "huge number — bigger than any real answer", "엄청 큰 수")}</span></div>
+            <div style={{ marginTop: 4 }}><span style={{ color: "#94a3b8" }}>{t(E, "// Same idea in Python: EMPTY = 99999999", "// Python 도 똑같이: EMPTY = 99999999")}</span></div>
+          </div>
+        </div>
+      ),
+    },
+
+    /* 2-3.5b — Mini-roadmap: 3 steps to compute one path's answer */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now let's break that sim down into 3 steps — that's what the next slides go through, in order.",
+        "방금 그 시뮬을 3 단계로 쪼개서 볼 거예요 — 다음 슬라이드들이 차례로 다룰게요."),
+      content: (
+        <div style={{ padding: 14 }}>
+          <div style={{ textAlign: "center", marginBottom: 12 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#4f46e5" }}>
+              🗺️ {t(E, "How the sim works — 3 steps", "시뮬이 어떻게 돌아가나 — 3 단계")}
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { n: 1, title: t(E, "Set up the FIRST cell's min_stars", "첫 칸의 min_stars 정하기"),
+                why: t(E, "Why: DP needs a starting value. First cell has nothing before it, so its values are forced.",
+                          "왜: DP 가 시작값이 있어야 굴러감. 첫 칸은 앞에 아무것도 없으니 값이 정해져 있음."),
+                how: t(E, "How: look at the first letter (W/G/B) → fill min_stars[0]/min_stars[1].",
+                          "방법: 첫 글자 (W/G/B) 보고 → min_stars[0]/min_stars[1] 채우기.") },
+              { n: 2, title: t(E, "Walk the rest, one cell at a time", "나머지 칸 차례차례 처리"),
+                why: t(E, "Why: each cell's value depends only on the PREVIOUS cell + this cell's letter. Walk left-to-right and chain it.",
+                          "왜: 각 칸 값이 바로 이전 칸 값 + 이 칸 글자로만 결정됨. 그래서 왼쪽에서 오른쪽으로 한 칸씩 차례."),
+                how: t(E, "How: previous min_stars + current letter → new min_stars (if-else on W/G/B).",
+                          "방법: 이전 min_stars + 이 칸 글자 → 새 min_stars (W/G/B if-else).") },
+              { n: 3, title: t(E, "Take the smaller at the LAST cell", "마지막 칸의 작은 숫자 = 답"),
+                why: t(E, "Why: the last cell's star (if any) goes off-grid anyway. Both options are valid endings → pick the cheaper one.",
+                          "왜: 마지막 칸이 보내든 안 보내든 어차피 사진 밖 → 둘 다 유효한 결말 → 더 적은 쪽 = 답."),
+                how: t(E, "How: min(min_stars[0], min_stars[1]). ❌ → -1.",
+                          "방법: min(min_stars[0], min_stars[1]). ❌ → -1.") },
+            ].map(s => (
+              <div key={s.n} style={{
+                display: "grid", gridTemplateColumns: "auto 1fr", gap: 12, alignItems: "center",
+                background: "#f8fafc", border: "1.5px solid #cbd5e1", borderRadius: 10, padding: "10px 14px",
+              }}>
+                <div style={{
+                  width: 36, height: 36, borderRadius: "50%", background: "#4f46e5", color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 16, fontWeight: 800,
+                }}>{s.n}</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#1e293b" }}>{s.title}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ),
+    },
+
+    /* 2-3.6 — First cell (k=0) forced cases. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "🔹 STEP 1 — set up the FIRST cell. 👇",
+        "🔹 1 단계 — 첫 칸 설정. 👇"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#4f46e5" }}>
+              📌 {t(E, "First cell — what min_stars[0] and min_stars[1] start as", "첫 칸 — min_stars[0], min_stars[1] 시작값")}
+            </div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
+              {t(E, "min_stars[0] = stars so far if this cell does NOT pass one out. min_stars[1] = stars so far if it DOES.",
+                    "min_stars[0] = 이 칸이 별 안 보낼 때 지금까지 별 수. min_stars[1] = 보낼 때 지금까지 별 수.")}
+            </div>
+          </div>
+
+          <div style={{ overflowX: "auto", marginBottom: 10 }}>
+            <table style={{ margin: "0 auto", borderCollapse: "collapse", fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+              <thead>
+                <tr style={{ background: "#eef2ff", color: "#312e81" }}>
+                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "letter", "글자")}</th>
+                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>min_stars[0]</th>
+                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>min_stars[1]</th>
+                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "why", "이유")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#fff" }}><b>W</b></td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#dcfce7", color: "#15803d", fontWeight: 700 }}>0</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#fee2e2", color: "#dc2626", fontWeight: 700 }}>❌</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", fontSize: 11 }}>
+                    {t(E, "Empty cell → 0 stars. Can't pass on what's not there → ❌.",
+                          "빈 칸 → 별 0 개. 없는 걸 보낼 순 없음 → ❌.")}
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#cbd5e1" }}><b>G</b></td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#dcfce7", color: "#15803d", fontWeight: 700 }}>1</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#dcfce7", color: "#15803d", fontWeight: 700 }}>1</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", fontSize: 11 }}>
+                    {t(E, "Original ★ here → 1 star. Can keep it OR pass it on — both OK.",
+                          "원래 별 → 1 개. 머무를 수도, 다음 칸에 보낼 수도 있음 — 둘 다 가능.")}
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#1e293b", color: "#fff" }}><b>B</b></td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#fee2e2", color: "#dc2626", fontWeight: 700 }}>❌</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#fee2e2", color: "#dc2626", fontWeight: 700 }}>❌</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", fontSize: 11 }}>
+                    {t(E, "B needs incoming ★, but first cell has nothing before it → ❌.",
+                          "B 는 들어온 별 필요한데, 첫 칸은 앞에 아무것도 없음 → ❌.")}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 8, padding: "8px 12px", fontSize: 11.5, color: "#991b1b", lineHeight: 1.6 }}>
+            ❌ {t(E,
+              "If the first cell is B, the entire star path is broken (min_stars = [❌, ❌]) — nothing fixes it later. Answer = -1.",
+              "별 길 첫 칸이 B 면 그 길 전체가 망함 (min_stars = [❌, ❌]) — 뒤로 어떻게 가도 못 살림. 답은 -1.")}
+          </div>
+        </div>),
+    },
+
+    /* 2-3.7 — MOVED to right after 2-3.5 (DP sim) 2026-06-02. STEP 1 → STEP 2 flow
+       now uninterrupted; EMPTY introduced while ❌ from sim is still fresh. */
+
+    /* 2-3.8 — Case → Code mapping table */
+    {
+      type: "reveal",
+      narr: t(E,
+        "🔹 STEP 2 — a cheat sheet for each next cell. 👇",
+        "🔹 2 단계 — 다음 칸마다 적용할 치트시트. 👇"),
+      content: (
+        <div style={{ padding: 14 }}>
+          <div style={{ textAlign: "center", marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#4f46e5" }}>
+              🔗 {t(E, "Each cell type → what to do", "칸 종류별 → 뭘 하나")}
+            </div>
+          </div>
+
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ margin: "0 auto", borderCollapse: "collapse", fontSize: 11.5 }}>
+              <thead>
+                <tr style={{ background: "#eef2ff", color: "#312e81" }}>
+                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "case", "케이스")}</th>
+                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "needs incoming ★?", "들어온 별?")}</th>
+                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "uses prev cell's", "쓰는 이전 칸 값")}</th>
+                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "+ new star?", "+ 새로 둔 별?")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* W */}
+                <tr>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#fff", fontWeight: 800 }}>W</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>{t(E, "No", "아니")}</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>min_stars[0]</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>—</td>
+                </tr>
+                {/* B */}
+                <tr>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#1e293b", color: "#fff", fontWeight: 800 }}>B</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", color: "#16a34a", fontWeight: 700 }}>{t(E, "Yes", "예")}</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>min_stars[1]</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", color: "#dc2626", fontWeight: 700 }}>+1</td>
+                </tr>
+                {/* G case (a) — original ★ here */}
+                <tr>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#cbd5e1", fontWeight: 800 }}>G (a)</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>{t(E, "No", "아니")}</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>min_stars[0]</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", color: "#dc2626", fontWeight: 700 }}>+1</td>
+                </tr>
+                {/* G case (b) — ★ moved in from predecessor */}
+                <tr>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#cbd5e1", fontWeight: 800 }}>G (b)</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", color: "#16a34a", fontWeight: 700 }}>{t(E, "Yes", "예")}</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>min_stars[1]</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style={{ background: "#dcfce7", border: "1.5px solid #16a34a", borderRadius: 8, padding: "10px 12px", marginTop: 10, fontSize: 12, color: "#14532d", textAlign: "center", lineHeight: 1.6 }}>
+            ✅ <b>{t(E,
+              "The code on the next slide = if-else on this table. Nothing more.",
+              "다음 슬라이드 코드 = 이 표를 그대로 if-else 로 쓴 것. 그게 전부.")}</b>
+          </div>
+        </div>
+      ),
+    },
+    /* 2-1 — Read input (moved here 2026-06-02: first piece of code, after all 3 methods
+       were explored. Now Ch2 flows clean: overview → 3 methods detail → CODE starts here). */
+    sectionStep(sections[0], t(E,
+      "Let's code the DP version too (optional). It's 5 chunks: ① read input → ② handle 'stars don't move' shortcut → ③ group cells into chains → ④ DP each chain → ⑤ add up. (Reading input is the same as the greedy — shown again here so this appendix stands alone.) Starting with ①.",
+      "DP 버전도 코드로 짜봐요 (선택). 5 덩어리예요: ① 입력 받기 → ② '별 안 움직임' 지름길 → ③ 별 길 묶기 → ④ 한 묶음씩 DP → ⑤ 합치기. (입력 읽기는 그리디와 똑같아요 — 부록이 따로 읽혀도 되게 다시 보여줘요.) ① 부터 시작.")),
+
+    /* 2-3 — Walk chains code (groups cells into chains; per-chain DP comes next). */
+    sectionStep(sections[2], t(E,
+      "Next: walk every cell and find where each chain STARTS (a cell whose 'one step back' lands off the grid). The DP per chain comes after.",
+      "다음: 모든 칸을 둘러보면서 묶음 (chain) 시작점만 찾기 (한 칸 거꾸로 가면 사진 밖인 칸). 묶음 안의 DP 계산은 그 다음 슬라이드부터.")),
+
+
+    /* 2-4a — First cell init (split from old 2-4 for clarity). */
+    sectionStep(sections[3], t(E,
+      "🔹 STEP 1 in code — set up first cell's min_stars.",
+      "🔹 1 단계 코드 — 첫 칸의 min_stars 설정.")),
+
+    /* 2-4b — Main loop (split from old 2-4). */
+    sectionStep(sections[4], t(E,
+      "🔹 STEP 2 in code — walk the rest. For each cell: previous min_stars + current letter → new min_stars (the if-else over W/G/B is the cheat sheet you saw earlier).",
+      "🔹 2 단계 코드 — 나머지 칸 차례차례. 매 칸: 이전 min_stars + 이 칸 글자 → 새 min_stars (W/G/B if-else 는 방금 본 치트시트 그대로).")),
+
+    /* 2-4.5 — Why min(min_stars[0], min_stars[1]) is the chain answer. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "🔹 STEP 3 — pick the answer from the LAST cell. 👇",
+        "🔹 3 단계 — 마지막 칸에서 답 고르기. 👇"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#4f46e5" }}>
+              🎯 {t(E, "Last cell: pick the smaller min_stars", "마지막 칸: 더 작은 min_stars 선택")}
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: 10, alignItems: "center", marginBottom: 10 }}>
+            <div style={{ background: "#fff", border: "2px solid #a5b4fc", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+              <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>{t(E, "min_stars[0]", "min_stars[0]")}</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: "#312e81" }}>2</div>
+              <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>{t(E, "don't pass star out", "별 안 보냄")}</div>
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: "#4f46e5" }}>vs</div>
+            <div style={{ background: "#fff", border: "2px solid #a5b4fc", borderRadius: 10, padding: "10px 12px", textAlign: "center" }}>
+              <div style={{ fontSize: 11, color: C.dim, marginBottom: 4 }}>{t(E, "min_stars[1]", "min_stars[1]")}</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: "#312e81" }}>3</div>
+              <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>{t(E, "pass star out", "별 보냄")}</div>
+            </div>
+          </div>
+
+          <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 14px", textAlign: "center", fontSize: 14, fontWeight: 800, color: "#14532d", marginBottom: 8 }}>
+            ✅ path_min = min(2, 3) = 2
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "1px dashed #fbbf24", borderRadius: 8, padding: "8px 12px", fontSize: 11.5, color: "#78350f", lineHeight: 1.6 }}>
+            💡 {t(E,
+              "Different paths don't share cells → total = sum of every path's path_min. If any path is ❌ → -1.",
+              "별 길끼리 서로 칸 안 겹침 → 총 답 = 모든 별 길의 path_min 합. 한 길이라도 ❌ 면 → -1.")}
+          </div>
+        </div>),
+    },
+
+    /* 2-4.6 — REMOVED (2026-06-17): static [G,W,G,G] hand-trace table duplicated the live
+       AstralDpSim (same preset) — even pointed students back to the sim. Heaviest "how" wall. */
+
+    /* 2-0a (color-grid "split into lines") — REMOVED (2026-06-17): teacher found the 10-color
+       independence grid confusing, and 2-4.5 already says it in one line
+       ("별 길끼리 안 겹침 → 총 답 = 모든 별 길 합"). No separate abstract grid needed. */
+
+    /* 2-4.7 — PAYOFF: "what did the DP actually DO?" Trace G G B — the case where
+       forward-greedy got trapped and had to go backward, but DP doesn't.
+       This ties the appendix back to the backward-greedy main solution. Added 2026-06-14. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "So — what did the DP actually DO? Watch it on the orbit that trapped forward greedy. 👇",
+        "그래서 — DP 가 결국 뭘 한 거예요? 앞→뒤 그리디가 막혔던 그 줄에서 봐요. 👇"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#7c3aed" }}>
+              💡 {t(E, "What the DP \"did\" — orbit G G B", "DP 가 \"한 일\" — 줄 G G B")}
+            </div>
+          </div>
+
+          {/* Plain-language framing of the two columns */}
+          <div style={{ background: "#faf5ff", border: "1.5px solid #d8b4fe", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: "#4c1d95", lineHeight: 1.65 }}>
+            <b>keep</b> = {t(E, "doesn't pass a star on", "별을 다음 칸에 안 보냄")}. &nbsp;
+            <b>pass</b> = {t(E, "passes an original star to the next cell", "원래 별을 다음 칸에 보냄")}.<br/>
+            {t(E,
+              "A G can be your OWN original star (then it can pass on) OR a star that slid in from before (free — but it can't pass on). Those are the two columns.",
+              "G 는 내 원래 별일 수도 있고 (그럼 다음에 보낼 수 있음), 앞 칸에서 슬라이드해 들어온 별일 수도 있어요 (공짜 — 대신 다음에 못 보냄). 이게 두 칸(열)이에요.")}
+          </div>
+
+          {/* The trace table: k / cell / what happens / min_stars [keep, pass] */}
+          <div style={{ overflowX: "auto", marginBottom: 10 }}>
+            <table style={{ margin: "0 auto", borderCollapse: "collapse", fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
+              <thead>
+                <tr style={{ background: "#f3e8ff", color: "#5b21b6" }}>
+                  <th style={{ padding: "6px 10px", border: "1px solid #d8b4fe" }}>k</th>
+                  <th style={{ padding: "6px 10px", border: "1px solid #d8b4fe" }}>{t(E, "cell", "칸")}</th>
+                  <th style={{ padding: "6px 10px", border: "1px solid #d8b4fe" }}>{t(E, "what happens", "무슨 일")}</th>
+                  <th style={{ padding: "6px 10px", border: "1px solid #d8b4fe" }}>min_stars [keep, pass]</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center" }}>0</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center", background: "#cbd5e1", fontWeight: 700 }}>G</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", fontSize: 10.5, fontFamily: "system-ui" }}>
+                    {t(E, "Start. Own original ★ is forced. Can keep it OR pass it on.",
+                          "시작. 내 원래 별 강제. 머무를 수도, 보낼 수도.")}
+                  </td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center", background: "#ede9fe", color: "#5b21b6", fontWeight: 700 }}>[1, 1]</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center" }}>1</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center", background: "#cbd5e1", fontWeight: 700 }}>G</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", fontSize: 10.5, fontFamily: "system-ui" }}>
+                    {t(E,
+                      "⒜ star slid in from prev pass=1 → fills this G FREE, but can't pass on → keep=1.  ⒝ own new ★ from prev keep=1 → +1=2, can keep or pass → [2,2].",
+                      "⒜ 앞의 pass=1 에서 별이 굴러 들어옴 → 이 G 를 채움(새로 안 둠), 대신 다음에 못 보냄 → keep=1.  ⒝ 앞의 keep=1 에서 새로 둔 별 → +1=2, 머무름/보냄 둘 다 → [2,2].")}
+                  </td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center", background: "#ede9fe", color: "#5b21b6", fontWeight: 700 }}>[1, 2]</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center" }}>2</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center", background: "#1e293b", color: "#fff", fontWeight: 700 }}>B</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", fontSize: 10.5, fontFamily: "system-ui" }}>
+                    {t(E,
+                      "B NEEDS an arriving star → only the pass=2 branch can feed it; + its own ★ (+1) → [3, 3].",
+                      "B 는 들어오는 별이 꼭 필요 → pass=2 가지만 먹여줄 수 있음; + 자기 별 (+1) → [3, 3].")}
+                  </td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #d8b4fe", textAlign: "center", background: "#ede9fe", color: "#5b21b6", fontWeight: 700 }}>[3, 3]</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style={{ background: "#ede9fe", border: "2px solid #7c3aed", borderRadius: 10, padding: "10px 14px", textAlign: "center", fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 12 }}>
+            ✅ path_min = min(3, 3) = 3
+          </div>
+
+          {/* THE PUNCHLINE — tie to why greedy needed backward, DP doesn't */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "11px 13px", fontSize: 12, color: "#7c2d12", lineHeight: 1.7 }}>
+            <div style={{ fontWeight: 800, color: "#c2410c", marginBottom: 5 }}>
+              🎯 {t(E, "THIS is what the DP did", "바로 이게 DP 가 한 일")}
+            </div>
+            {t(E,
+              "At the middle G, DP kept BOTH futures and only picked the smaller at the end — so it finds 3 even going forward.",
+              "가운데 G 에서 DP 는 두 가지를 다 들고 가다 끝에서 작은 걸 골랐어요 — 그래서 앞으로 가도 3 을 찾아요.")}
+            <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px dashed #fdba74" }}>
+              {t(E,
+                "The greedy grabbed the cheap option early and got stuck — that's why it had to go backward. DP never picks early, so it's never trapped by direction.",
+                "그리디는 일찍 싼 걸 잡아 막혔죠 — 그래서 거꾸로 가야 했어요. DP 는 일찍 안 골라서 방향에 안 갇혀요.")}
+            </div>
+          </div>
+        </div>),
+    },
+
+    /* 2-5 — Full code. (Edge case for stars-don't-move appears inline as a brief `if` branch;
+       no separate slide needed, similar to how we simplified EMPTY/❌.)
+       Note: sections[5] = Full code, after sections were split (4 → 4a + 4b). */
+    sectionStep(sections[5], t(E,
+      "Everything stitched together. The tiny `if right == 0 and down == 0:` branch is needed because if stars don't move, 'one step back' is the cell ITSELF → no start cell exists → the main sweep would find nothing. So we handle it separately: no movement → no G → just count G+B.",
+      "전부 합친 코드. 위쪽 `if right == 0 and down == 0:` 분기가 꼭 필요한 이유 — 별이 안 움직이면 '거꾸로 한 칸'이 자기 자신이라 시작 칸을 하나도 못 찾아요 → 일반 방법이 아무것도 못 셈. 그래서 따로: 안 움직이면 G 없고 → G+B 그냥 세기.")),
+
+    /* 2-6 — Sample 2 end-to-end walkthrough (general A,B case) */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Final check: run the WHOLE algorithm on a fresh example, end to end. 👇",
+        "마지막 확인: 새 예시로 알고리즘 전체를 처음부터 끝까지 돌려봐요. 👇"),
+      content: (
+        <div style={{ padding: 14 }}>
+          <div style={{ textAlign: "center", marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#4f46e5" }}>
+              🔭 {t(E, "End-to-end: 3×3, stars move right 1, down 1", "전체 흐름: 3×3, 별 이동 오른쪽 1, 아래 1")}
+            </div>
+          </div>
+
+          {/* Grid display */}
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 48px)", gap: 4 }}>
+              {[
+                ["G", "W", "W"],
+                ["W", "G", "W"],
+                ["W", "W", "G"],
+              ].flatMap((row, r) => row.map((letter, c) => {
+                const bg = letter === "W" ? "#fff" : letter === "G" ? "#cbd5e1" : "#1e293b";
+                const fg = letter === "B" ? "#fff" : "#1e293b";
+                return (
+                  <div key={`${r}-${c}`} style={{
+                    width: 48, height: 48, background: bg, color: fg,
+                    border: `1.5px solid ${C.border}`, borderRadius: 6,
+                    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                    fontFamily: "'JetBrains Mono',monospace",
+                  }}>
+                    <div style={{ fontSize: 18, fontWeight: 800 }}>{letter}</div>
+                    <div style={{ fontSize: 9, color: letter === "B" ? "#cbd5e1" : "#64748b", marginTop: 1 }}>({r},{c})</div>
+                  </div>
+                );
+              }))}
+            </div>
+          </div>
+
+          {/* Steps table */}
+          <div style={{ background: "#fff", border: "1.5px solid #cbd5e1", borderRadius: 8, padding: "8px 12px", fontSize: 11.5, lineHeight: 1.6 }}>
+            <div style={{ marginBottom: 6 }}>
+              <b style={{ color: "#4f46e5" }}>{t(E, "Step 1-2", "1-2 단계")}:</b> {t(E, "Read input → stars do move → general case.", "입력 받기 → 별이 움직임 → 일반 경우로 진행.")}
+            </div>
+            <div style={{ marginBottom: 6 }}>
+              <b style={{ color: "#4f46e5" }}>{t(E, "Step 3 (group cells):", "3 단계 (칸 묶기):")}</b> {t(E, "5 paths total. Starts: row 0 + col 0.", "총 5 별 길. 시작점: 0 행 + 0 열.")}
+              <div style={{ paddingLeft: 14, fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#475569" }}>
+                {t(E, "• (0,0) → (1,1) → (2,2)  = G G G", "• (0,0) → (1,1) → (2,2)  = G G G")}<br/>
+                {t(E, "• (0,1) → (1,2)  = W W", "• (0,1) → (1,2)  = W W")}<br/>
+                {t(E, "• (0,2)  = W", "• (0,2)  = W")}<br/>
+                {t(E, "• (1,0) → (2,1)  = W W", "• (1,0) → (2,1)  = W W")}<br/>
+                {t(E, "• (2,0)  = W", "• (2,0)  = W")}
+              </div>
+            </div>
+            <div style={{ marginBottom: 6 }}>
+              <b style={{ color: "#4f46e5" }}>{t(E, "Step 4 (count per group):", "4 단계 (묶음마다 별 세기):")}</b>
+              <div style={{ paddingLeft: 14, fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#475569" }}>
+                {t(E, "• G→G→G  →  path_min = 2  (one star travels 0→1→2)", "• G→G→G  →  path_min = 2  (별 1 개가 0→1→2 로 이동)")}<br/>
+                {t(E, "• W→W  →  path_min = 0", "• W→W  →  path_min = 0")}<br/>
+                {t(E, "• W  →  path_min = 0", "• W  →  path_min = 0")}<br/>
+                {t(E, "• W→W  →  path_min = 0", "• W→W  →  path_min = 0")}<br/>
+                {t(E, "• W  →  path_min = 0", "• W  →  path_min = 0")}
+              </div>
+            </div>
+            <div style={{ background: "#dcfce7", borderRadius: 6, padding: "6px 10px", marginTop: 8 }}>
+              <b style={{ color: "#14532d" }}>{t(E, "Step 5 (sum):", "5 단계 (합치기):")}</b>{" "}
+              <span style={{ color: "#14532d" }}>{t(E, "2 + 0 + 0 + 0 + 0 = ", "2 + 0 + 0 + 0 + 0 = ")}</span>
+              <b style={{ color: "#14532d", fontSize: 14 }}>2</b>
+            </div>
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "1px dashed #fbbf24", borderRadius: 8, padding: "8px 12px", marginTop: 8, fontSize: 11, color: "#78350f", textAlign: "center", lineHeight: 1.5 }}>
+            💡 {t(E,
+              "If ANY chain had been ❌ (e.g., B at a corner with off-grid predecessor), the total would be -1 instead.",
+              "어느 한 묶음이라도 ❌ 였다면 (예: 모서리에 B 가 있었으면) 답이 -1 이 됐을 거예요.")}
+          </div>
+        </div>
+      ),
+    },
   ];
 }
