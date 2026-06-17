@@ -986,7 +986,7 @@ export function makeAstralCh2(E, lang = "py") {
         <div style={{ padding: 14 }}>
 
           <div style={{ fontSize: 12, fontWeight: 700, color: "#374151", marginBottom: 7 }}>
-            {t(E, "3 ways to decide the cells (next slides):", "칸을 정하는 3 가지 방법 (다음 슬라이드):")}
+            {t(E, "2 ways to decide the cells (next slides):", "칸을 정하는 2 가지 방법 (다음 슬라이드):")}
           </div>
           {[
             {
@@ -1002,13 +1002,6 @@ export function makeAstralCh2(E, lang = "py") {
               desc: t(E, "Flip direction — walk end → start. Always correct. This is the code we'll write. USACO 12/12 ✓", "방향 뒤집기 — 끝→시작. 항상 정답. 이게 우리가 짤 코드예요. USACO 12/12 ✓"),
               badge: t(E, "★ main", "★ 메인"),
               bg: "#f0fdf4", border: "#86efac", tc: "#14532d",
-            },
-            {
-              num: "③", icon: "💡",
-              label: t(E, "All combinations + DP (bonus)", "모든 경우 → DP (보너스)"),
-              desc: t(E, "Optional. A different angle on the same problem — robust to harder variants.", "선택. 같은 문제를 다른 각도로 — 더 어려운 변형에 강해요."),
-              badge: t(E, "optional", "선택"),
-              bg: "#ede9fe", border: "#c4b5fd", tc: "#4c1d95",
             },
           ].map((item, i) => (
             <div key={i} style={{
@@ -1103,8 +1096,10 @@ export function makeAstralCh2(E, lang = "py") {
       ),
     },
 
-    /* Structure (2026-06-02): Ch2 follows "overview → each method in detail → code".
-       2-0 = method overview, 2-3.05~2-3.3 = each method's detail, THEN code starts. */
+    /* Structure: Ch2 = "overview → greedy in detail → greedy code → wrap-up".
+       2-0 = method overview (2 greedy directions), 2-3.05/06 = forward fails vs
+       backward works, 2-G1/G2 = code, 2-G3 = hand-trace + -1, 2-G4 = greedy recap.
+       (DP brute→appendix removed 2026-06-17: same speed as greedy, only confusing.) */
 
     /* 2-2 moved later — see right before 2-5 (full code). The edge case (stars don't move)
        comes AFTER the main algorithm so students see the interesting flow first. */
@@ -1318,262 +1313,62 @@ export function makeAstralCh2(E, lang = "py") {
       ),
     },
 
-    /* ════════════════════════════════════════════════════════════════
-       OPTIONAL APPENDIX — "another method": brute force → DP.
-       Kept because it proves WHY the minimum is right (no greedy-proof needed)
-       and generalizes to weighted variants. Students can stop after 2-G3.
-       ════════════════════════════════════════════════════════════════ */
-
-    /* 2-DP-intro — frame the rest as an optional, variant-robust alternative */
+    /* 2-G4 — WRAP-UP: what 'greedy' is, as an algorithm.
+       (Replaced the brute→DP appendix on 2026-06-17 per teacher: end on a clean
+        greedy explanation. DP was same speed as greedy, only faster than brute —
+        not worth the confusion for this audience.) */
     {
       type: "reveal",
       narr: t(E,
-        "That's the full solution — you could stop here. Optional bonus below: the same problem solved a totally different way, with DP. 👇",
-        "여기까지가 완성된 풀이예요 — 멈춰도 돼요. 아래는 선택 보너스: 같은 문제를 완전히 다른 각도, DP 로 푸는 법. 👇"),
+        "Last recap — what was this 'greedy' algorithm we used? 👇",
+        "마지막 정리 — 우리가 쓴 '그리디(greedy)' 알고리즘이 뭐였는지 한눈에. 👇"),
       content: (
         <div style={{ padding: 14 }}>
-          <div style={{
-            background: "#faf5ff", border: "2px solid #a855f7", borderRadius: 10,
-            padding: "12px 16px", marginBottom: 12, textAlign: "center",
-          }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#6b21a8", marginBottom: 4 }}>
-              📦 {t(E, "Optional — another method: DP", "선택 — 또 다른 방법: DP")}
+
+          {/* what greedy is */}
+          <div style={{ background: "#fef9c3", border: "2px solid #f59e0b", borderRadius: 10, padding: "10px 14px", marginBottom: 12 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 5 }}>
+              💡 {t(E, "Greedy = decide right now, no looking ahead", "그리디(greedy) = 멀리 안 보고, 지금 칸에서 바로 결정")}
             </div>
-            <div style={{ fontSize: 11.5, color: "#7e22ce" }}>
-              {t(E, "Already solved it with the greedy above. This is bonus understanding.",
-                    "위 그리디로 이미 풀었어요. 이건 보너스 이해예요.")}
+            <div style={{ fontSize: 12, color: "#78350f", lineHeight: 1.7 }}>
+              {t(E,
+                "At each cell you ask just ONE thing: 'does THIS cell force a star?' — and answer on the spot. No planning the whole grid ahead.",
+                "칸마다 딱 하나만 물어봐요: '이 칸이 별을 강제하나?' — 그 자리에서 바로 답. 격자 전체를 미리 계획 안 해요.")}
             </div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-            <div style={{ background: "#f0fdf4", borderRadius: 8, padding: "9px 11px" }}>
-              <div style={{ fontSize: 11.5, fontWeight: 700, color: "#14532d", marginBottom: 4 }}>⬅️ {t(E, "Greedy (what we coded)", "그리디 (방금 짠 거)")}</div>
-              <div style={{ fontSize: 11, color: "#166534", lineHeight: 1.55 }}>
-                {t(E, "One backward pass. Shortest code. You trust each step is forced — no guessing.",
-                      "거꾸로 한 번 훑기. 코드 제일 짧음. 각 칸이 강제됨을 믿고 감 — 찍기 없음.")}
+
+          {/* forward vs backward */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 12 }}>
+            <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 9, padding: "9px 12px" }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#991b1b", marginBottom: 3 }}>
+                ➡️ {t(E, "Front → back: WRONG ✗", "앞→뒤: 틀림 ✗")}
+              </div>
+              <div style={{ fontSize: 11.5, color: "#991b1b", lineHeight: 1.6 }}>
+                {t(E,
+                  "Meets the demanding B too late — by then the earlier cells are already locked the wrong way.",
+                  " 별이 필요한 B 를 너무 늦게 만나요 — 그때면 앞 칸들이 이미 엉뚱하게 정해져 버려요.")}
               </div>
             </div>
-            <div style={{ background: "#faf5ff", borderRadius: 8, padding: "9px 11px" }}>
-              <div style={{ fontSize: 11.5, fontWeight: 700, color: "#6b21a8", marginBottom: 4 }}>💡 {t(E, "DP (the bonus)", "DP (보너스)")}</div>
-              <div style={{ fontSize: 11, color: "#7e22ce", lineHeight: 1.55 }}>
-                {t(E, "Carry BOTH options at every cell, pick the smaller at the end. Always correct — no clever guess needed.",
-                      "매 칸 두 경우 다 들고 가다 끝에서 작은 거. 찍기·눈치 없이 항상 정확.")}
+            <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 9, padding: "9px 12px" }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#14532d", marginBottom: 3 }}>
+                ⬅️ {t(E, "Back → front: ALWAYS RIGHT ✓", "뒤→앞: 항상 정답 ✓")}
+              </div>
+              <div style={{ fontSize: 11.5, color: "#14532d", lineHeight: 1.6 }}>
+                {t(E,
+                  "Meets each B FIRST, pins the star it needs — then everything before it just falls into place. USACO 12/12 ✓",
+                  "B 를 먼저 만나 필요한 별을 박아두면, 그 앞은 저절로 맞아떨어져요. USACO 12/12 ✓")}
               </div>
             </div>
           </div>
-          <div style={{ fontSize: 11, color: "#64748b", textAlign: "center", marginTop: 10, lineHeight: 1.5 }}>
-            {t(E, "Next: see what DP does — keep both choices per cell, pick the smaller at the end.",
-                  "다음에서 DP 가 뭘 하는지 봐요 — 칸마다 두 경우 들고 가다 끝에서 작은 것 고르기.")}
+
+          {/* one-line takeaway */}
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 14px", fontSize: 12.5, color: "#4c1d95", lineHeight: 1.7, fontWeight: 700 }}>
+            🎯 {t(E,
+              "The whole trick: flip the direction. Same greedy — but now 'just look at NOW' is always correct. That's the algorithm.",
+              "핵심은 딱 하나 — 방향을 뒤집은 것. 똑같은 그리디인데, 이제 '지금 눈앞만 봐도' 항상 맞아요. 그게 이 문제의 알고리즘이에요.")}
           </div>
         </div>
       ),
     },
-
-    /* 2-3.3 — "What DP is + DP on THIS problem" — no analogy, built on the brute/greedy the
-       student already saw (teacher: analogy too hard, explain plainly). */
-    {
-      type: "reveal",
-      narr: t(E,
-        "What's DP? Just go cell by cell from the left, counting how few stars were in photo 1. 👇",
-        "DP가 뭐냐면 — 왼쪽부터 한 칸씩 가면서, 사진 1에 별이 몇 개 있었는지 세는 거예요. 👇"),
-      content: (
-        <div style={{ padding: 14 }}>
-          <div style={{
-            background: "#ede9fe",
-            border: "2px solid #8b5cf6",
-            borderRadius: 10,
-            padding: "10px 14px",
-            marginBottom: 12,
-            textAlign: "center",
-          }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
-              💡 {t(E, "DP = go cell by cell from the left, counting how many stars were in photo 1", "DP = 왼쪽부터 한 칸씩 가며, 사진 1에 별이 몇 개였나 세기")}
-            </div>
-            <div style={{ fontSize: 13, color: "#4c1d95", lineHeight: 1.6 }}>
-              {t(E, "The fewest is the answer.", "가장 적게 나오는 게 답이에요.")}
-            </div>
-          </div>
-          {/* why TWO numbers — the bridge before the walk shows two boxes */}
-          <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 10, padding: "11px 14px", marginBottom: 10 }}>
-            <div style={{ fontSize: 13, color: "#14532d", lineHeight: 1.7 }}>
-              <b>{t(E, "Why 2 numbers per cell? ", "근데 왜 칸마다 숫자 2개? ")}</b>
-              {t(E,
-                "One cell can be filled two ways — place a new star here, OR a star rolls in from the cell before. We can't tell yet which pays off, so we carry BOTH per cell.",
-                "한 칸은 두 가지로 채워져요 — 여기 별을 새로 놓거나, 앞 칸 별이 굴러오거나. 어느 게 이득일지 미리 모르니 칸마다 두 개를 다 들고 가요.")}
-            </div>
-          </div>
-          <div style={{ background: "#faf5ff", border: "1px solid #e9d5ff", borderRadius: 10, padding: "11px 14px", textAlign: "center" }}>
-            <div style={{ fontSize: 13, color: "#6b21a8", lineHeight: 1.7 }}>
-              {t(E,
-                "Words are hard — let's just do it. Next, count the line [G, W, G, G] one cell at a time, with an easy bubble at each cell. 👉",
-                "글로는 어려우니 — 다음에서 그냥 한 칸씩 직접 세 봐요. [G, W, G, G] 줄을 한 칸씩, 칸마다 쉬운 말풍선으로 짚어줄게요. 👉")}
-            </div>
-          </div>
-
-        </div>
-      ),
-    },
-
-    /* 2-3.4big — BIG PICTURE: grid splits into lines (rails). Added 2026-06-17
-       (teacher: "칸들을 레일로 묶기? 어떻게 왜? 전체적으로 뭘 하는지 모르겠다").
-       The walk solves ONE line; this slide says WHY there are lines. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Wait — what are we even finding? The fewest ORIGINAL stars. To count them easily, we split the grid into 'lines'. 👇",
-        "잠깐 — 우리가 구하는 게 뭐였죠? '원래 별 최소 개수'. 그걸 쉽게 세려고 격자를 '줄'로 나눠요. 👇"),
-      content: (
-        <div style={{ padding: 14 }}>
-          {/* GOAL first (teacher: '이걸 왜? 뭘 위한건데') */}
-          <div style={{ background: "#f0fdf4", border: "2px solid #16a34a", borderRadius: 10, padding: "11px 14px", marginBottom: 10, textAlign: "center" }}>
-            <div style={{ fontSize: 13.5, fontWeight: 800, color: "#14532d", marginBottom: 3 }}>
-              🎯 {t(E, "What we're finding", "우리가 구하는 답")}
-            </div>
-            <div style={{ fontSize: 13, color: "#166534", lineHeight: 1.55 }}>
-              {t(E, "Looking only at the photo (W/G/B), how few original stars could have made it?",
-                    "사진(W/G/B)만 보고 — 이걸 만들려면 '원래 별'이 최소 몇 개 있어야 했나?")}
-            </div>
-          </div>
-          <div style={{ fontSize: 13, color: "#334155", lineHeight: 1.6, textAlign: "center", marginBottom: 10 }}>
-            {t(E, "A star only moves ONE fixed way (e.g. right 1, down 1), so the cells a star passes through form a 'line'. (A different move makes a different-shaped line — not always a diagonal.)",
-                  "별은 한 방향으로만 움직여요 (예: 오른쪽 1·아래 1). 그래서 별 하나가 지나는 칸들이 한 '줄'을 이뤄요. (이동량이 다르면 줄 모양도 달라져요 — 꼭 대각선은 아니에요.)")}
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: 6 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 54px)", gap: 5 }}>
-              {[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]].map(([r,c], i) => {
-                const onRail = r === c;
-                return (
-                  <div key={i} style={{
-                    width: 54, height: 54, borderRadius: 8,
-                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20,
-                    background: onRail ? "#fef3c7" : "#f8fafc",
-                    border: onRail ? "2.5px solid #f59e0b" : "1.5px solid #eef2f6",
-                    color: onRail ? "#b45309" : "#e2e8f0", fontWeight: 800,
-                  }}>{onRail ? "↘" : "·"}</div>
-                );
-              })}
-            </div>
-          </div>
-          <div style={{ fontSize: 11.5, color: "#92400e", textAlign: "center", marginBottom: 10, fontWeight: 700 }}>
-            {t(E, "↑ the yellow cells = one star's path = ONE line", "↑ 노란 칸 = 별 하나가 지나는 길 = 한 줄")}
-          </div>
-          <div style={{ fontSize: 13, color: "#334155", lineHeight: 1.75, textAlign: "center" }}>
-            {t(E, "Stars never cross between lines → count each line on its own, then add up. One line = the walk's [G,W,G,G].",
-                  "줄끼리는 별이 안 섞여요 → 줄마다 따로 세서 다 더하면 끝. 줄 하나 = 워크의 [G, W, G, G].")}
-          </div>
-          {/* WHY splitting is easier (teacher: '왜 격자로 나눠야 쉬워지는거지?') */}
-          <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 10, padding: "10px 13px", marginTop: 10, fontSize: 12.5, color: "#78350f", lineHeight: 1.7 }}>
-            <b>{t(E, "Why is splitting easier? ", "왜 나누면 쉬워져요? ")}</b>
-            {t(E,
-              "The whole grid at once is tangled (placing a star here changes things over there). But since lines don't affect each other, each line is just a tiny one-row puzzle — and what you do in one line can't break another. So solve them separately and add up.",
-              "격자를 통째로 보면 얽혀서 복잡해요 (여기 별 놓으면 저기가 바뀜). 근데 줄끼리는 서로 영향이 없으니, 한 줄은 그냥 '칸 몇 개짜리 작은 문제' — 한 줄에서 뭘 해도 다른 줄을 망치지 않아요. 그래서 따로따로 풀어 더하면 돼요.")}
-          </div>
-          <div style={{ color: "#6b21a8", fontWeight: 800, fontSize: 13, textAlign: "center", marginTop: 10 }}>
-            {t(E, "Split into lines → count each line (the walk) → add them up = answer.", "격자를 줄로 쪼갬 → 줄마다 별 세기(워크) → 다 더하면 = 답.")}
-          </div>
-        </div>
-      ),
-    },
-
-    /* 2-3.45 — Step through ONE line [G,W,G,G] cell-by-cell, plain-language bubbles,
-       BEFORE the free-play toggle sim. Builds the "two boxes A/B" idea slowly. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Goal: fewest stars we PLACE to make line [G, W, G, G]. Walk it one cell at a time — each cell keeps two numbers ('don't send' / 'send'). Read each bubble. Next ▶ 👇",
-        "목표: 줄 [G, W, G, G]을 만드는 데 우리가 놓는 별이 최소 몇 개. 한 칸씩 걸어가며 칸마다 숫자 두 개('안 보냄'/'보냄')를 채워요. 말풍선을 읽어요. 다음 ▶ 👇"),
-      content: (<AstralDpWalk E={E} />),
-    },
-
-    /* 2-3.46 — CONCRETE whole-grid example (added 2026-06-17): teacher kept asking
-       "왜 줄로 나누면 쉬워지나" — show it working on a real grid, end to end. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Now a real grid, end to end: split into lines → solve each with the walk → add up = answer. 👇",
-        "이제 진짜 격자 하나로 끝까지: 줄로 갈라 → 줄마다 워크로 풀고 → 다 더하면 답. 👇"),
-      content: (
-        <div style={{ padding: 14 }}>
-          <div style={{ fontSize: 13, color: "#334155", textAlign: "center", marginBottom: 10 }}>
-            {t(E, "Example 3×3 grid (stars move right 1, down 1):", "예시 3×3 격자 (별 이동: 오른쪽 1·아래 1):")}
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 50px)", gap: 5 }}>
-              {[["G","W","W"],["W","G","W"],["W","W","G"]].flatMap((row, r) => row.map((L, c) => {
-                const onDiag = r === c;
-                return (
-                  <div key={`${r}-${c}`} style={{
-                    width: 50, height: 50, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 18, fontWeight: 800,
-                    background: onDiag ? "#fef3c7" : "#f8fafc",
-                    border: onDiag ? "2.5px solid #f59e0b" : "1.5px solid #eef2f6",
-                    color: onDiag ? "#b45309" : (L === "G" ? "#475569" : "#cbd5e1"),
-                  }}>{L}</div>
-                );
-              }))}
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 7, marginBottom: 10 }}>
-            <div style={{ background: "#fffbeb", border: "1.5px solid #f59e0b", borderRadius: 8, padding: "8px 12px", fontSize: 12.5, color: "#78350f" }}>
-              <b>{t(E, "Yellow line: G G G", "노란 줄: G G G")}</b> → {t(E, "solve it with the walk → 2 stars", "워크처럼 한 칸씩 풀면 → 별 2 개")}
-            </div>
-            <div style={{ background: "#f8fafc", border: "1.5px solid #e2e8f0", borderRadius: 8, padding: "8px 12px", fontSize: 12.5, color: "#64748b" }}>
-              {t(E, "The other lines are all W (empty) → 0 stars each.", "나머지 줄들은 전부 W (빈 칸) → 별 0 개씩.")}
-            </div>
-          </div>
-          <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 14px", textAlign: "center", fontSize: 14, fontWeight: 800, color: "#14532d" }}>
-            {t(E, "Add them up: 2 + 0 + 0 + 0 + 0 = 2 → the answer!", "다 더하면: 2 + 0 + 0 + 0 + 0 = 2 → 답!")}
-          </div>
-          <div style={{ fontSize: 12, color: "#6b21a8", textAlign: "center", marginTop: 9, fontWeight: 700, lineHeight: 1.6 }}>
-            {t(E, "See? Split into lines → each line is a tiny walk → add up. That's the whole thing.",
-                  "봤죠? 줄로 갈라 → 줄마다 작은 워크 → 더하기. 이게 전부예요.")}
-          </div>
-        </div>
-      ),
-    },
-
-    /* ── DP CODE (rebuilt 2026-06-17): old explanation tables (EMPTY, STEP cheat
-       sheets, Sample2) thrown out. The CODE is kept (getAstralSections); each
-       chunk's explanation is written fresh, tied back to the walk above. ── */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Now turn that walk into code — it's 5 small chunks. 👇",
-        "이제 위 워크에서 한 걸 그대로 코드로 옮겨요. 작은 5조각이에요. 👇"),
-      content: (
-        <div style={{ padding: 14 }}>
-          <div style={{ background: "#faf5ff", border: "2px solid #a855f7", borderRadius: 10, padding: "12px 16px", textAlign: "center", marginBottom: 10 }}>
-            <div style={{ fontSize: 13.5, fontWeight: 800, color: "#6b21a8" }}>
-              {t(E, "Walk → Code, in 5 chunks", "워크 → 코드, 5조각으로")}
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-            {[
-              t(E, "① Read the input (grid + how far stars move).", "① 입력 받기 (격자 + 별 이동량)."),
-              t(E, "② Group cells into lines (rails).", "② 칸들을 줄(레일)로 묶기."),
-              t(E, "③ Each line's FIRST cell — its two starting numbers (like walk step 1).", "③ 각 줄의 첫 칸 — 두 숫자 시작값 (워크 1번 칸처럼)."),
-              t(E, "④ The rest, one cell at a time (like pressing Next in the walk).", "④ 나머지 칸, 한 칸씩 (워크에서 '다음 ▶' 누른 것처럼)."),
-              t(E, "⑤ Add up each line's smaller number → the answer.", "⑤ 줄마다 작은 수를 더하면 → 답."),
-            ].map((line, i) => (
-              <div key={i} style={{ fontSize: 12.5, color: "#334155", lineHeight: 1.6, background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: "7px 11px" }}>{line}</div>
-            ))}
-          </div>
-        </div>
-      ),
-    },
-    sectionStep(sections[0], t(E,
-      "① Read the input: grid size, how far stars move (right, down), then the grid letters.",
-      "① 입력 받기 — 격자 크기, 별이 오른쪽·아래로 몇 칸 가는지, 그다음 격자 글자들.")),
-    sectionStep(sections[2], t(E,
-      "② A 'line (rail)' = cells linked by the star's move. Find each line's START cell (its 'one step back' falls off the grid).",
-      "② '줄(레일)' = 별 이동 방향으로 이어진 칸들. 각 줄의 시작 칸(거꾸로 한 칸이 사진 밖인 칸)만 찾아요.")),
-    sectionStep(sections[3], t(E,
-      "③ Just like walk step 1: at the line's first cell, set the two numbers (don't-send / send) from its letter.",
-      "③ 워크 1번 칸 그대로 — 줄의 첫 칸에서 글자 보고 두 숫자(안 보냄/보냄) 시작값을 정해요.")),
-    sectionStep(sections[4], t(E,
-      "④ Just like pressing Next in the walk: each next cell = previous two numbers + this letter → this cell's two numbers.",
-      "④ 워크에서 '다음 ▶' 누른 그대로 — 각 다음 칸은 앞 칸 두 숫자 + 이 칸 글자로 이 칸 두 숫자를 정해요.")),
-    sectionStep(sections[5], t(E,
-      "⑤ Each line's answer = the smaller of its last cell's two numbers. Add them all up. (Any impossible line → -1.)",
-      "⑤ 줄마다 답 = 마지막 칸 두 숫자 중 작은 것. 다 더하면 전체 답. (한 줄이라도 불가능하면 → -1.)")),
   ];
 }
