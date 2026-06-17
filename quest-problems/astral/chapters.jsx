@@ -394,15 +394,15 @@ function OrbitWalk({ E }) {
     },
     {
       tail: { r:2, c:1 }, hop: null, gold: new Set(["2,1"]), bubble: t(E,
-        "Look at (2,1): it's A's photo-2 spot AND B's photo-1 spot. Two stars share this one cell — that's why the cells are linked!",
-        "(2,1)을 봐요: A의 '사진2 자리'이자 B의 '사진1 자리'예요. 한 칸을 두 별이 나눠 써요 — 그래서 칸들이 엮이는 거예요!"),
+        "Decide to put a star at (0,0) → (2,1)'s photo-2 is filled automatically. So the (0,0) decision DECIDES (2,1) — you can't choose (2,1) on its own.",
+        "(0,0)에 별을 두기로 정하면 → (2,1)의 '사진2'가 저절로 채워져요. 즉 (0,0) 결정이 (2,1)을 정해버려요 — (2,1)만 따로 못 정해요."),
       chips: { "2,1": { top: { s:"A", c:AcG }, bottom: { s:"B", c:Bc } } },
     },
     {
       tail: null, final: true, hop: null, gold: new Set(), chips: {},
       bubble: t(E,
-        "So we bundle (0,0)–(2,1)–… into one RAIL and solve it together. Many stars sit on a rail — each moves just one notch.",
-        "그래서 (0,0)–(2,1)–… 를 한 '레일'로 묶어 같이 풀어요. 레일 위엔 여러 별, 각자 딱 한 칸씩만 이동!"),
+        "Front cell decides the next → you can't solve them apart. So bundle (0,0)–(2,1)–… into ONE rail and decide it in order. (How to decide comes next!)",
+        "앞 칸이 뒤 칸을 정해버려요 → 따로따로 못 풀어요. 그래서 (0,0)–(2,1)–… 를 한 줄(레일)로 이어서 순서대로 정해요. (어떻게 정하는지는 다음에!)"),
     },
   ];
 
