@@ -1413,6 +1413,59 @@ export function makeAstralCh2(E, lang = "py") {
       ),
     },
 
+    /* 2-3.4big — BIG PICTURE: grid splits into lines (rails). Added 2026-06-17
+       (teacher: "칸들을 레일로 묶기? 어떻게 왜? 전체적으로 뭘 하는지 모르겠다").
+       The walk solves ONE line; this slide says WHY there are lines. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Big picture first: the grid splits into separate LINES. We solve one line at a time. 👇",
+        "전체 그림 먼저: 격자는 여러 '줄'로 나뉘어요. 줄 하나씩 풀면 돼요. 👇"),
+      content: (
+        <div style={{ padding: 14 }}>
+          <div style={{ background: "#faf5ff", border: "2px solid #a855f7", borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center" }}>
+            <div style={{ fontSize: 13.5, fontWeight: 800, color: "#6b21a8", marginBottom: 4 }}>
+              {t(E, "Big picture — split the grid into 'lines'", "전체 그림 — 격자를 '줄'로 쪼개기")}
+            </div>
+            <div style={{ fontSize: 12.5, color: "#7e22ce", lineHeight: 1.55 }}>
+              {t(E, "A star moves ONE fixed way (here: right 1, down 1). So the cells one star can pass through form a line.",
+                    "별은 정해진 한 방향으로만 움직여요 (여기선 오른쪽 1·아래 1). 그래서 한 별이 지나는 칸들이 한 줄을 이뤄요.")}
+            </div>
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 54px)", gap: 5 }}>
+              {[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]].map(([r,c], i) => {
+                const onRail = r === c;
+                return (
+                  <div key={i} style={{
+                    width: 54, height: 54, borderRadius: 8,
+                    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                    background: onRail ? "#fef3c7" : "#f8fafc",
+                    border: onRail ? "2.5px solid #f59e0b" : "1.5px solid #e2e8f0",
+                    color: onRail ? "#92400e" : "#cbd5e1", fontWeight: 800,
+                  }}>
+                    {onRail && <div style={{ fontSize: 16 }}>↘</div>}
+                    <div style={{ fontSize: 9.5, opacity: .85 }}>({r},{c})</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div style={{ fontSize: 12.5, color: "#334155", lineHeight: 1.75, textAlign: "center" }}>
+            {t(E, "The yellow cells (0,0)→(1,1)→(2,2) are ONE line — a star slides through them. A star stays inside its line, so lines don't affect each other.",
+                  "노란 칸 (0,0)→(1,1)→(2,2) 이 한 줄 — 별이 이 칸들을 따라 지나가요. 별은 자기 줄 안에서만 머무니, 줄끼리는 서로 상관없어요.")}
+            <br />
+            {t(E, "(The other cells form their own lines too.) So solve each line on its own — and the walk's [G,W,G,G] is exactly one line.",
+                  "(나머지 칸들도 각자 줄을 이뤄요.) 그러니 줄 하나씩 따로 풀면 돼요 — 워크의 [G, W, G, G] 가 바로 줄 하나예요.")}
+            <br />
+            <span style={{ color: "#6b21a8", fontWeight: 800 }}>
+              {t(E, "Split into lines → solve each (the walk) → add them up.", "격자를 줄로 쪼갬 → 줄마다 풀기(워크) → 다 더하기.")}
+            </span>
+          </div>
+        </div>
+      ),
+    },
+
     /* 2-3.45 — Step through ONE line [G,W,G,G] cell-by-cell, plain-language bubbles,
        BEFORE the free-play toggle sim. Builds the "two boxes A/B" idea slowly. */
     {
