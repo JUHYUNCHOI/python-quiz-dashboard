@@ -1126,11 +1126,19 @@ export function makeAstralCh2(E, lang = "py") {
               🤔 {t(E, "Why go from the END?", "왜 끝(뒤)에서부터 가요?")}
             </div>
             <div style={{ fontSize: 11.5, color: "#78350f", lineHeight: 1.7 }}>
-              <div style={{ marginBottom: 3 }}>
+              <div style={{ marginBottom: 5 }}>
                 🔒 <b>{t(E, "B = settled", "B = 확정")}</b> — {t(E, "this cell AND the one before it BOTH must have a star. No choice.", "이 칸 + 바로 앞 칸, 둘 다 별이 있어야 함. 선택 없음.")}
+                <div style={{ fontSize: 10.5, color: "#a16207", marginLeft: 16, marginTop: 1, lineHeight: 1.5 }}>
+                  {t(E, "why? B = star in BOTH photos → photo-2's star was SENT here by the cell before → so that cell had an original star too.",
+                     "왜? B = 두 사진 다 별 → 사진2의 별은 앞 칸이 보낸 것 → 그러니 앞 칸에도 원래 별이 있던 거예요.")}
+                </div>
               </div>
               <div style={{ marginBottom: 6 }}>
                 🤷 <b>{t(E, "G = 2 choices", "G = 선택지 2개")}</b> — {t(E, "put a star here, OR let one roll in from the cell before.", "여기에 별을 놓거나, 앞 칸에서 굴러오게 하거나.")}
+                <div style={{ fontSize: 10.5, color: "#a16207", marginLeft: 16, marginTop: 1, lineHeight: 1.5 }}>
+                  {t(E, "why? G = star in just ONE photo → it's an original star here, OR one rolled in — one of two.",
+                     "왜? G = 한 사진에만 별 → '여기 원래 별' 이거나 '앞에서 굴러옴' 둘 중 하나라 선택지 2개.")}
+                </div>
               </div>
               <div style={{ fontWeight: 700, color: "#92400e" }}>
                 {t(E, "→ Settle the certain B's FIRST, and the G's have less to guess. Going backward you meet each B first — so you never guess wrong. (Just like filling the sure squares in Sudoku first!)",
@@ -1138,18 +1146,8 @@ export function makeAstralCh2(E, lang = "py") {
               </div>
             </div>
           </div>
-          {/* One-line plan banner — the per-step bubbles below carry the rule details */}
-          <div style={{
-            background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 999,
-            padding: "8px 16px", marginBottom: 14, textAlign: "center",
-            fontSize: 12.5, color: "#14532d", lineHeight: 1.5,
-          }}>
-            ⬅️ <b>{t(E, "Backward plan", "거꾸로 작전")}:</b> {t(E,
-              "end → start — the moment you hit a B, put ★ on the cell just before it. Does it still get stuck?",
-              "끝에서부터 — B를 만나면 바로 앞 칸에 ★ 먼저 놓기. 이번엔 안 막힐까?")}
-          </div>
-
-          {/* "Why backward" now lives in the sim's first bubble (step 0), not a separate box. */}
+          {/* Plan banner removed 2026-06-17 (teacher): it duplicated the WHY box above
+              and the sim's first bubble. The 🤔 box + sim now carry the reasoning. */}
 
           {/* Interactive 2D-grid simulation — same orbit, walked end → start */}
           <OrbitGridStepSim
