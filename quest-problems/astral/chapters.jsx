@@ -1881,87 +1881,8 @@ export function makeAstralCh2(E, lang = "py") {
         </div>),
     },
 
-    /* 2-4.6 — Hand-trace example: chain G→W→G→G. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "🎯 All 3 steps in action — hand-trace the path [G, W, G, G]. 👇",
-        "🎯 1+2+3 단계를 한 별 길에 다 적용 — [G, W, G, G] 손으로 풀어보기. 👇"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 10 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: "#4f46e5" }}>
-              ✍️ {t(E, "Hand-trace: path [G, W, G, G]", "손-trace: 별 길 [G, W, G, G]")}
-            </div>
-          </div>
-
-          <div style={{ overflowX: "auto", marginBottom: 10 }}>
-            <table style={{ margin: "0 auto", borderCollapse: "collapse", fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
-              <thead>
-                <tr style={{ background: "#eef2ff", color: "#312e81" }}>
-                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "step", "단계")}</th>
-                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>letter</th>
-                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>min_stars[0]</th>
-                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>min_stars[1]</th>
-                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "how", "방법")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>0</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#cbd5e1", fontWeight: 700 }}>G</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#dcfce7", color: "#15803d", fontWeight: 700 }}>1</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#dcfce7", color: "#15803d", fontWeight: 700 }}>1</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", fontSize: 10.5 }}>
-                    {t(E, "First cell. G → 1 original star here, can keep or pass on → min_stars=[1,1].",
-                          "첫 칸. G → 원래 별 1 개, 안 보냄/보냄 둘 다 OK → min_stars=[1,1].")}
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>1</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#fff", fontWeight: 700 }}>W</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#dcfce7", color: "#15803d", fontWeight: 700 }}>1</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#fee2e2", color: "#dc2626", fontWeight: 700 }}>❌</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", fontSize: 10.5 }}>
-                    {t(E, "W: no star, no incoming. Use prev 'don't pass' (=1) → new_min_stars[0]=1. W can't pass on → new_min_stars[1]=❌.",
-                          "W: 별 없음, 들어온 별 없음. 이전 '안 보냄' (=1) 사용 → new_min_stars[0]=1. W 는 보낼 수 없음 → new_min_stars[1]=❌.")}
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>2</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#cbd5e1", fontWeight: 700 }}>G</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#dcfce7", color: "#15803d", fontWeight: 700 }}>2</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#dcfce7", color: "#15803d", fontWeight: 700 }}>2</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", fontSize: 10.5 }}>
-                    {t(E, "G case (a) — original ★ here: prev 'don't pass'=1 → +1 star → new_min_stars=[2,2]. G case (b) — moved-in: prev 'pass'=❌ skip.",
-                          "G 경우 (a) — 원래 별 있음: 이전 '안 보냄'=1 → +1 별 → new_min_stars=[2,2]. G 경우 (b) — 들어온 별: 이전 '보냄'=❌ 스킵.")}
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>3</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#cbd5e1", fontWeight: 700 }}>G</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#dcfce7", color: "#15803d", fontWeight: 700 }}>2</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#dcfce7", color: "#15803d", fontWeight: 700 }}>3</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", fontSize: 10.5 }}>
-                    {t(E, "G case (a): prev 'don't pass'=2 → +1 = 3 → new_min_stars=[3,3]. G case (b): prev 'pass'=2 → no new ★ → new_min_stars[0]=min(3,2)=2. Final new_min_stars=[2,3].",
-                          "G 경우 (a): 이전 '안 보냄'=2 → +1 = 3 → new_min_stars=[3,3]. G 경우 (b): 이전 '보냄'=2 → 새 별 없음 → new_min_stars[0]=min(3,2)=2. 최종 new_min_stars=[2,3].")}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 14px", textAlign: "center", fontSize: 14, fontWeight: 800, color: "#14532d" }}>
-            ✅ {t(E, "Path answer = min(min_stars[0], min_stars[1]) = min(2, 3) = 2",
-                    "별 길 답 = min(min_stars[0], min_stars[1]) = min(2, 3) = 2")}
-          </div>
-
-          <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
-            {t(E, "Scroll back to the live simulator (preset 'G→W→G→G') — values should match exactly.",
-                  "위 시뮬 (프리셋 'G→W→G→G') 로 돌아가서 값이 정확히 같은지 확인해 봐요.")}
-          </div>
-        </div>),
-    },
+    /* 2-4.6 — REMOVED (2026-06-17): static [G,W,G,G] hand-trace table duplicated the live
+       AstralDpSim (same preset) — even pointed students back to the sim. Heaviest "how" wall. */
 
     /* 2-4.7 — PAYOFF: "what did the DP actually DO?" Trace G G B — the case where
        forward-greedy got trapped and had to go backward, but DP doesn't.
