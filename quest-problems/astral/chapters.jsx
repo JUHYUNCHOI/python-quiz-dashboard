@@ -475,71 +475,57 @@ function AstralDpWalk({ E }) {
   );
 }
 
-/* ── DpMergeViz: "what DP does" picture (greedy+DP only, no brute). A filled
-   2-row table for line [G,W,G,G]: rows 안 보냄 / 보냄, cols = cells. Flow arrows
-   show each cell's pair computed from the previous cell's pair; last cell's
-   smaller number is the answer. Same numbers as the walk & sim. ── */
+/* ── DpMergeViz: the ONE picture that grounds "+0 vs +1". A single original star:
+   if it SENDS (rolls one step in photo 2) it fills the NEXT cell for free (+0);
+   if it does NOT send, the next cell needs a brand-new star (+1). That free-fill is
+   exactly why a running total can stay the same instead of always going up. ── */
 function DpMergeViz({ E }) {
   const tx = "#334155", dim = "#64748b";
-  const letters = ["G", "W", "G", "G"];
-  const cx = [250, 360, 470, 580];
-  const top = ["1", "1", "2", "2"];      // 안 보냄
-  const bot = ["1", "❌", "2", "3"];      // 보냄
-  const BW = 70, R1 = 100, R2 = 140, BH = 32;  // box geometry
-  const cellBox = (i, val, y, isBot) => {
-    const x = cx[i] - BW / 2;
-    const isX = val === "❌";
-    const last = i === 3;
-    return (
-      <g key={`${y}-${i}`}>
-        <rect x={x} y={y} width={BW} height={BH} rx="6"
-          fill={isX ? "#fee2e2" : isBot ? "#eff6ff" : "#f0fdf4"}
-          stroke={last ? "#f59e0b" : isX ? "#fca5a5" : isBot ? "#bfdbfe" : "#bbf7d0"}
-          strokeWidth={last ? "2.5" : "1.5"} />
-        <text x={cx[i]} y={y + 21} fontSize="15" fontWeight="800" textAnchor="middle"
-          fill={isX ? "#dc2626" : isBot ? "#2563eb" : "#15803d"}>{val}</text>
-      </g>
-    );
-  };
+  const Ax = 168, Bx = 300, BW = 56;        // two adjacent cells
+  const cellA = (y) => (
+    <g>
+      <rect x={Ax} y={y} width={BW} height={BW} rx="10" fill="#fef3c7" stroke="#f59e0b" strokeWidth="2" />
+      <text x={Ax + BW / 2} y={y + BW / 2 + 9} fontSize="26" textAnchor="middle" fill="#f59e0b">★</text>
+    </g>
+  );
   return (
-    <svg width="100%" viewBox="0 0 680 232" role="img" style={{ display: "block", margin: "0 auto", maxWidth: 720 }}>
-      <title>{t(E, "What DP does", "DP가 하는 일")}</title>
+    <svg width="100%" viewBox="0 0 680 238" role="img" style={{ display: "block", margin: "0 auto", maxWidth: 720 }}>
+      <title>{t(E, "Why +0 or +1", "왜 +0 또는 +1")}</title>
       <defs>
-        <marker id="dpAh" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
-          <path d="M0,0 L6,3 L0,6 Z" fill="#94a3b8" />
+        <marker id="dpAh" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="#2563eb" />
         </marker>
       </defs>
 
-      <text x="40" y="42" fontSize="14" fontWeight="800" fill={tx}>
-        {t(E, "What DP does — fill 2 numbers per cell from the previous cell", "DP가 하는 일 — 칸마다 숫자 2개를 앞 칸 보고 채워가기")}
+      <text x="40" y="40" fontSize="14" fontWeight="800" fill={tx}>
+        {t(E, "One original star — does it SEND, or not?", "원래 별 하나 — 다음 칸으로 보내나, 안 보내나?")}
       </text>
-      <text x="40" y="64" fontSize="12" fill={dim}>{t(E, "example line:  G  W  G  G", "예: 한 줄  G  W  G  G")}</text>
-
-      {/* column letters */}
-      {letters.map((ch, i) => (
-        <text key={`h${i}`} x={cx[i]} y="92" fontSize="14" fontWeight="800" fill="#475569" textAnchor="middle">{ch}</text>
-      ))}
-      {/* row labels */}
-      <text x="44" y={R1 + 21} fontSize="12" fontWeight="700" fill="#15803d">{t(E, "don't send", "안 보냄")}</text>
-      <text x="44" y={R2 + 21} fontSize="12" fontWeight="700" fill="#2563eb">{t(E, "send", "보냄")}</text>
-
-      {/* flow arrows prev → next (both rows) */}
-      <g stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#dpAh)">
-        {[0, 1, 2].map((i) => (
-          <g key={`a${i}`}>
-            <line x1={cx[i] + BW / 2} y1={R1 + BH / 2} x2={cx[i + 1] - BW / 2 - 3} y2={R1 + BH / 2} />
-            <line x1={cx[i] + BW / 2} y1={R2 + BH / 2} x2={cx[i + 1] - BW / 2 - 3} y2={R2 + BH / 2} />
-          </g>
-        ))}
-      </g>
-
-      {letters.map((_, i) => cellBox(i, top[i], R1, false))}
-      {letters.map((_, i) => cellBox(i, bot[i], R2, true))}
-
-      <text x="350" y="208" fontSize="13" fontWeight="800" fill="#15803d" textAnchor="middle">
-        {t(E, "last cell → smaller of the two = min(2, 3) = 2 = answer",
-              "마지막 칸 → 두 숫자 중 작은 것 = min(2, 3) = 2 = 답")}
+      <text x="40" y="62" fontSize="12" fill={dim}>
+        {t(E, "what we count = fewest original stars (photo 1)", "세는 것 = 원래 별(사진1) 최소 개수")}
       </text>
+
+      {/* ── row 1: SEND → free fill (+0) ── */}
+      <text x="44" y="106" fontSize="13" fontWeight="800" fill="#2563eb">{t(E, "Send", "보냄")}</text>
+      {cellA(82)}
+      <line x1={Ax + BW + 4} y1="110" x2={Bx - 6} y2="110" stroke="#2563eb" strokeWidth="2" markerEnd="url(#dpAh)" />
+      <text x={(Ax + BW + Bx) / 2 + 2} y="98" fontSize="11" fill="#2563eb" textAnchor="middle">{t(E, "rolls 1 step", "한 칸 굴러감")}</text>
+      <rect x={Bx} y="82" width={BW} height={BW} rx="10" fill="#eff6ff" stroke="#93c5fd" strokeWidth="2" />
+      <text x={Bx + BW / 2} y="108" fontSize="22" textAnchor="middle" fill="#93c5fd">★</text>
+      <text x={Bx + BW / 2} y="126" fontSize="9.5" textAnchor="middle" fill="#3b82f6">{t(E, "free", "공짜")}</text>
+      <text x="384" y="105" fontSize="12.5" fontWeight="700" fill={tx}>{t(E, "next cell filled for free", "다음 칸을 공짜로 채움")}</text>
+      <text x="384" y="126" fontSize="15" fontWeight="800" fill="#15803d">+0</text>
+
+      <line x1="40" y1="152" x2="640" y2="152" stroke="#eef2f6" strokeWidth="1" />
+
+      {/* ── row 2: DON'T send → new star needed (+1) ── */}
+      <text x="44" y="192" fontSize="13" fontWeight="800" fill="#15803d">{t(E, "Don't send", "안 보냄")}</text>
+      {cellA(168)}
+      <line x1={Ax + BW + 4} y1="196" x2={Bx - 6} y2="196" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="4 4" />
+      <text x={(Ax + BW + Bx) / 2 + 2} y="184" fontSize="11" fill="#94a3b8" textAnchor="middle">{t(E, "no roll", "안 굴러감")}</text>
+      <rect x={Bx} y="168" width={BW} height={BW} rx="10" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="2" strokeDasharray="4 3" />
+      <text x={Bx + BW / 2} y="200" fontSize="22" textAnchor="middle" fill="#cbd5e1">?</text>
+      <text x="384" y="191" fontSize="12.5" fontWeight="700" fill={tx}>{t(E, "next cell needs a new star", "다음 칸엔 새 별이 필요")}</text>
+      <text x="384" y="212" fontSize="15" fontWeight="800" fill="#b45309">+1</text>
     </svg>
   );
 }
@@ -1451,15 +1437,25 @@ export function makeAstralCh2(E, lang = "py") {
             </div>
             <div style={{ fontSize: 12.5, color: "#4c1d95", lineHeight: 1.55 }}>
               {t(E,
-                "Each cell keeps two numbers — fewest stars if it does NOT send a star on, and if it DOES — using only the previous cell's numbers.",
-                "칸마다 숫자 두 개를 들고 가요 — 이 칸 별을 '안 보낼 때 / 보낼 때' 각각 여기까지 별 최소. 바로 앞 칸 숫자만 보고 채워요.")}
+                "Count = fewest original stars (photo 1) that explain the line. Per cell we write the running total so far.",
+                "세는 것 = 줄을 설명하는 원래 별(사진1) 최소 개수. 칸마다 '여기까지 쓴 별 총합'을 적어요.")}
             </div>
           </div>
           <DpMergeViz E={E} />
-          <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginTop: 6, lineHeight: 1.6 }}>
-            {t(E,
-              "Left to right, one cell at a time. Each cell's two numbers come from the previous cell's. The smaller number at the last cell is the answer — always the minimum, no guessing. Next: walk it cell by cell 👉",
-              "왼→오 한 칸씩. 각 칸 두 숫자는 앞 칸 두 숫자만 보고 계산해요. 마지막 칸의 더 작은 수가 답 — 눈치/찍기 없이 항상 최소. 다음에서 한 칸씩 직접 봐요 👉")}
+          {/* why TWO numbers + cumulative +0/+1 — folds in the teacher's questions */}
+          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: "10px 13px", marginTop: 10 }}>
+            <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.7 }}>
+              <b style={{ color: "#5b21b6" }}>{t(E, "Why TWO numbers per cell? ", "왜 칸마다 숫자 2개? ")}</b>
+              {t(E,
+                "Going left→right you can't tell yet whether sending this star pays off (depends on what's ahead). So we DON'T decide — we carry both ('don't send' / 'send') totals. That's exactly the trap forward-greedy fell into by committing too early; DP keeps both, so it never gets stuck.",
+                "왼→오로 가면 이 별을 보내는 게 이득일지 지금은 몰라요(뒤를 봐야 앎). 그래서 안 정하고 두 총합('안 보냄'/'보냄')을 다 들고 가요. 이게 바로 forward greedy가 일찍 정해서 틀리던 함정 — DP는 둘 다 들고 가니 안 막혀요.")}
+            </div>
+            <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.7, marginTop: 6 }}>
+              <b style={{ color: "#15803d" }}>{t(E, "It's cumulative, +0 or +1. ", "누적이에요, +0 또는 +1. ")}</b>
+              {t(E,
+                "Each number is the running total of original stars. The smaller number at the LAST cell is the answer. Next: fill [G, W, G, G] cell by cell yourself 👉",
+                "각 숫자는 원래 별 누적 총합. 마지막 칸의 더 작은 수가 답. 다음에서 [G, W, G, G]를 한 칸씩 직접 채워봐요 👉")}
+            </div>
           </div>
 
         </div>
