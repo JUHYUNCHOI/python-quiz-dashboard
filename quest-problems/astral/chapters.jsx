@@ -475,6 +475,137 @@ function AstralDpWalk({ E }) {
   );
 }
 
+/* ── BruteWalk: "try EVERY combination" shown ONE combo per click instead of a
+   static 4-row table. A tiny line of two G cells; each cell is either a NEW star
+   or a star that ROLLED IN from the cell before. Combo 2 (1 star) = the greedy
+   answer; combos 3-4 are impossible (first cell has nothing before it). Editable. ── */
+function BruteWalk({ E }) {
+  const combos = [
+    {
+      n: "1", first: { mode: "new" }, second: { mode: "new" }, arrow: false,
+      badge: t(E, "2 stars", "별 2 개"), tone: "ok",
+      bubble: t(E,
+        "Combo 1: put a NEW star in BOTH cells → 2 stars. It works, but that's a lot.",
+        "1 번: 두 칸 다 '새 별'을 둬요 → 별 2 개. 되긴 하는데 많죠."),
+    },
+    {
+      n: "2", first: { mode: "new" }, second: { mode: "rolled" }, arrow: true,
+      badge: t(E, "1 star ✅", "별 1 개 ✅"), tone: "best",
+      bubble: t(E,
+        "Combo 2: ONE new star in the first cell, and in photo 2 it rolls into the second cell → just 1 star covers BOTH! ✅ (exactly what the greedy found)",
+        "2 번: 첫 칸에만 새 별 하나 두고, 사진2 에서 그 별이 둘째 칸으로 굴러가요 → 별 1 개로 두 칸 다 설명! ✅ (그리디가 찾은 답과 똑같아요)"),
+    },
+    {
+      n: "3·4", first: { mode: "rolled", bad: true }, second: { mode: "muted" }, arrow: false,
+      badge: t(E, "impossible ❌", "불가능 ❌"), tone: "bad",
+      bubble: t(E,
+        "Combos 3 & 4 fill the FIRST cell with a 'rolled-in' star. But a rolled-in star needs a cell before it — and the first cell is the very front, nothing before it → impossible ❌.",
+        "3·4 번은 첫 칸을 '앞에서 굴러온 별'로 채우려 해요. 그런데 굴러온 별은 앞에 칸이 있어야 하는데, 첫 칸은 맨 앞이라 앞 칸이 없어요 → 불가능 ❌."),
+    },
+    {
+      n: "🔑", first: { mode: "new" }, second: { mode: "rolled" }, arrow: true, final: true,
+      badge: t(E, "min = 1", "최소 = 1 개"), tone: "best",
+      bubble: t(E,
+        "Possible ones: combo 1 (2 stars) and combo 2 (1 star). The fewest is combo 2 → answer 1. Trying EVERY combo like this proves the greedy answer really is the smallest. 🔑",
+        "되는 건 1 번(2 개)과 2 번(1 개). 제일 적은 건 2 번 → 답은 별 1 개. 이렇게 모든 경우를 다 해보면 그리디 답이 진짜 최소라는 게 확인돼요. 🔑"),
+    },
+  ];
+  const [si, setSi] = useState(0);
+  const last = combos.length - 1;
+  const idx = Math.max(0, Math.min(si, last));
+  const cur = combos[idx];
+  const S = 62, GAP = 36, P = S + GAP, gridW = 2 * S + GAP, cellTop = 26;
+
+  const tc = cur.final
+    ? { bub: "#dcfce7", fg: "#14532d", tail: "#dcfce7", border: "1.5px solid #16a34a" }
+    : cur.tone === "bad"
+      ? { bub: "#7f1d1d", fg: "#fff", tail: "#7f1d1d" }
+      : { bub: "#1e3a8a", fg: "#fff", tail: "#1e3a8a" };
+  const badgeC = cur.tone === "bad"
+    ? { bg: "#fee2e2", fg: "#dc2626" }
+    : cur.tone === "best"
+      ? { bg: "#dcfce7", fg: "#15803d" }
+      : { bg: "#e0e7ff", fg: "#3730a3" };
+
+  const cellBox = (cell, label) => {
+    const bad = cell.bad, muted = cell.mode === "muted";
+    return (
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, width: S }}>
+        <div style={{
+          width: S, height: S, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 28, fontWeight: 900,
+          background: bad ? "#fee2e2" : muted ? "#f8fafc" : "#eef2ff",
+          border: bad ? "2.5px solid #f87171" : muted ? "2px solid #eef2f6" : "2px solid #c7d2fe",
+        }}>
+          {cell.mode === "new" && <span style={{ color: "#f59e0b" }}>★</span>}
+          {cell.mode === "rolled" && !bad && <span style={{ color: "#f59e0b", opacity: .5 }}>★</span>}
+          {bad && <span style={{ color: "#dc2626", fontSize: 23 }}>❌</span>}
+          {muted && <span style={{ color: "#e2e8f0", fontSize: 20 }}>·</span>}
+        </div>
+        <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b" }}>{label}</div>
+        <div style={{ fontSize: 9.5, fontWeight: 700, color: bad ? "#dc2626" : muted ? "#cbd5e1" : "#f59e0b" }}>
+          {muted ? "—" : cell.mode === "new" ? t(E, "new star", "새 별") : bad ? t(E, "rolled?", "굴러옴?") : t(E, "rolled in", "굴러옴")}
+        </div>
+      </div>
+    );
+  };
+  const btn = (disabled, label, onClick) => (
+    <button onClick={onClick} disabled={disabled} style={{
+      padding: "5px 16px", borderRadius: 7, border: "none", fontSize: 12, fontWeight: 700,
+      cursor: disabled ? "default" : "pointer",
+      background: disabled ? "#f1f5f9" : "#4f46e5", color: disabled ? "#94a3b8" : "#fff",
+    }}>{label}</button>
+  );
+
+  return (
+    <div style={{ padding: "4px 0" }}>
+      <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 6, lineHeight: 1.5 }}>
+        {t(E, "A tiny line of two G cells. Each is a NEW star or a star ROLLED IN from before.",
+              "G 칸 2 개짜리 짧은 줄. 각 칸은 '새 별' 또는 '앞에서 굴러온 별'.")}
+      </div>
+      <div style={{ position: "relative", width: gridW + 16 + 200, maxWidth: "100%", minHeight: 132, margin: "0 auto 8px" }}>
+        {/* combo number tag */}
+        <div style={{ position: "absolute", left: 0, top: 0, fontSize: 12, fontWeight: 800, color: cur.tone === "bad" ? "#dc2626" : "#4f46e5" }}>
+          {cur.final ? t(E, "Conclusion", "정리") : t(E, `Combo ${cur.n}`, `${cur.n} 번`)}
+        </div>
+        {/* two cells */}
+        <div style={{ position: "absolute", left: 0, top: cellTop }}>{cellBox(cur.first, E ? "1st G" : "첫 G")}</div>
+        <div style={{ position: "absolute", left: P, top: cellTop }}>{cellBox(cur.second, E ? "2nd G" : "둘째 G")}</div>
+        {/* roll arrow */}
+        {cur.arrow && (
+          <div style={{ position: "absolute", left: S - 4, top: cellTop + S / 2 - 14, width: GAP + 8, textAlign: "center" }}>
+            <div style={{ fontSize: 9, color: "#f59e0b", fontWeight: 800 }}>{t(E, "rolls", "굴러감")}</div>
+            <div style={{ fontSize: 20, color: "#f59e0b", lineHeight: 1 }}>→</div>
+          </div>
+        )}
+        {/* badge */}
+        <div style={{ position: "absolute", left: 0, top: cellTop + S + 30, width: gridW, textAlign: "center" }}>
+          <span style={{ background: badgeC.bg, color: badgeC.fg, fontSize: 12, fontWeight: 800, borderRadius: 999, padding: "3px 12px" }}>{cur.badge}</span>
+        </div>
+        {/* bubble */}
+        <div style={{
+          position: "absolute", left: gridW + 16, top: 4, width: 192,
+          background: tc.bub, color: tc.fg, border: tc.border || "none",
+          borderRadius: 10, padding: "9px 12px", fontSize: 11.5, lineHeight: 1.55, fontWeight: 600, zIndex: 3,
+        }}>
+          <div style={{
+            position: "absolute", left: -7, top: 18, width: 0, height: 0,
+            borderTop: "7px solid transparent", borderBottom: "7px solid transparent",
+            borderRight: `8px solid ${tc.tail}`,
+          }} />
+          {cur.bubble}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
+        {btn(idx === 0, E ? "◀ Prev" : "◀ 이전", () => setSi(Math.max(0, idx - 1)))}
+        <span style={{ fontSize: 11, color: "#64748b", minWidth: 44, textAlign: "center" }}>{idx + 1} / {combos.length}</span>
+        {btn(idx === last, E ? "Next ▶" : "다음 ▶", () => setSi(Math.min(last, idx + 1)))}
+      </div>
+    </div>
+  );
+}
+
 /* ── Rail walk: the cells (0,0)–(2,1)–(off grid) form ONE rail. A star hops just
    ONE notch (photo1 → photo2). TWO different stars share cell (2,1) — that is why
    the cells are linked into a rail and solved together. Editable slide content.
@@ -1366,76 +1497,7 @@ export function makeAstralCh2(E, lang = "py") {
       narr: t(E,
         "Not sure the greedy answer is really the smallest? Just try EVERY combination — then you know for sure. 👇",
         "거꾸로 그리디 답이 진짜 최소일까? 못 믿겠으면 — 모든 경우를 다 해보면 100% 확실해요. 👇"),
-      content: (
-        <div style={{ padding: 14 }}>
-          <div style={{
-            background: "#fef3c7",
-            border: "2px solid #f59e0b",
-            borderRadius: 10,
-            padding: "10px 14px",
-            marginBottom: 12,
-            textAlign: "center",
-          }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 4 }}>
-              🐢 {t(E, "Brute force — try every combination", "단순 시도 — 모든 경우 다 해보기")}
-            </div>
-            <div style={{ fontSize: 12, color: "#78350f", lineHeight: 1.6 }}>
-              {t(E, "Take a tiny line of just two G cells (call them 1st G, 2nd G). Each star is either 'new one' or 'from prev' → 2×2 = 4 combos. Try all, keep the fewest stars.",
-                    "G 칸 2개짜리 짧은 줄로 (첫 G, 둘째 G). 각 칸의 별은 '새로 둔 별' 아니면 '앞에서 온 별' → 2×2 = 4가지. 다 해보고 별 제일 적은 걸 골라요.")}
-            </div>
-          </div>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12.5, marginBottom: 8 }}>
-            <thead>
-              <tr style={{ background: "#f1f5f9" }}>
-                <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center", width: 40 }}>#</th>
-                <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "1st G", "첫 G")}</th>
-                <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "2nd G", "둘째 G")}</th>
-                <th style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "Stars", "별 수")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>1</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "★ new one", "★ 새로 둔 별")}</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "★ new one", "★ 새로 둔 별")}</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center", fontWeight: 700 }}>2</td>
-              </tr>
-              <tr style={{ background: "#dcfce7" }}>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>2</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "★ new one (→ next)", "★ 새로 둔 별 (→ 다음 칸)")}</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "↩ from prev", "↩ 앞에서 온 별")}</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center", fontWeight: 800, color: "#15803d" }}>1 ✅</td>
-              </tr>
-              <tr style={{ color: "#94a3b8" }}>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>3</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "↩ from prev", "↩ 앞에서 온 별")}</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "★ new one", "★ 새로 둔 별")}</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>❌</td>
-              </tr>
-              <tr style={{ color: "#94a3b8" }}>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>4</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "↩ from prev", "↩ 앞에서 온 별")}</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>{t(E, "↩ from prev", "↩ 앞에서 온 별")}</td>
-                <td style={{ padding: "6px 8px", border: "1px solid #cbd5e1", textAlign: "center" }}>❌</td>
-              </tr>
-            </tbody>
-          </table>
-          <div style={{ fontSize: 11, color: "#94a3b8", marginBottom: 6, lineHeight: 1.5 }}>
-            <span style={{ background: "#f1f5f9", borderRadius: 4, padding: "1px 6px", fontWeight: 600, color: "#64748b" }}>
-              {t(E, "↩ from prev", "↩ 앞에서 온 별")}
-            </span>
-            {" "}
-            {t(E,
-              "= the star from the previous cell rolled in (photo 2) — so no new star is placed here",
-              "= 앞 칸에 있던 별이 사진 2에서 이 칸으로 굴러온 것 — 그래서 여기엔 새로 안 둬도 됨")}
-          </div>
-          <div style={{ fontSize: 12, color: "#64748b", textAlign: "center", lineHeight: 1.55 }}>
-            {t(E,
-              "Rows 3-4 are ❌ — the 1st G has no cell before it, so a star can't 'arrive' there. Best valid = Row 2 with 1 star (one star moves 1st G → 2nd G).",
-              "3-4 번은 ❌ — 첫 G 는 앞에 칸이 없어서 별이 '와서' 채울 수 없어요. 가능한 것 중 별 제일 적은 건 2번 (별 1개가 첫 G → 둘째 G 로 이동). 답은 1!")}
-          </div>
-        </div>
-      ),
+      content: (<BruteWalk E={E} />),
     },
 
     /* 2-3.2 — Brute force is too slow for long chains */
