@@ -1241,15 +1241,12 @@ export function makeAstralCh2(E, lang = "py") {
        B/G/W rule box + tip were walls the code slides' comments already cover.
        Teacher: "이 페이지 필요한가? 밑에 칸 읽기 싫은데." Backward sim → code now flows directly. */
 
-    /* 2-G1 — backward greedy core code */
-    sectionStep(sections[6], t(E,
-      "Here's the heart of it: two loops sweeping backward, a set called possibles, and the B / G / W branches you just saw. Read it slowly — every branch matches one line of the rule.",
-      "핵심이에요: 거꾸로 도는 for 두 개, possibles 라는 set, 그리고 방금 본 B / G / W 갈래. 천천히 읽어봐요 — 각 갈래가 규칙 한 줄에 딱 대응해요.")),
-
-    /* 2-G2 — full backward greedy program (teacher's verified code) */
+    /* 2-G2 — full backward greedy program (teacher's verified code).
+       2-G1(sections[6] core) removed 2026-06-17 per teacher: it just repeated the same
+       logic already inside this passed program — keep only the real verified code. */
     sectionStep(sections[7], t(E,
-      "Now the complete program: read input → the backward greedy → print the count (or -1). This is the actual code that passed USACO 12/12.",
-      "이제 전체 코드: 입력 받기 → 뒤→앞 그리디 → 별 수 출력 (또는 -1). 이게 USACO 12/12 통과한 실제 코드예요.")),
+      "The complete program: read input → the backward greedy → print the count (or -1). This is the actual code that passed USACO 12/12. Read it slowly — each B / G branch matches one line of the rule.",
+      "전체 코드예요: 입력 받기 → 뒤→앞 그리디 → 별 수 출력 (또는 -1). 이게 USACO 12/12 통과한 실제 코드예요. 천천히 읽어봐요 — 각 B / G 갈래가 규칙 한 줄에 대응해요.")),
 
     /* 2-G3 — confidence check + the -1 edge case */
     {
