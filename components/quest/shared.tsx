@@ -372,11 +372,11 @@ export function CodeBlock({ lines, lang = "py" }: CodeBlockProps) {
         {copied ? "✓ Copied" : "📋 Copy"}
       </button>
       {lines.map((l, i) => (
-        <div key={i} className="flex min-h-5">
-          <span className="text-gray-500 w-7 text-right mr-2.5 flex-shrink-0 select-none text-[11px]">
+        <div key={i} className="flex min-h-5 items-start">
+          <span className="text-gray-500 w-7 text-right mr-2.5 flex-shrink-0 select-none text-[11px] pt-px">
             {i + 1}
           </span>
-          <span style={{ whiteSpace: "pre" }}>{highlight(l, lang)}</span>
+          <span style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", flex: 1, minWidth: 0 }}>{highlight(l, lang)}</span>
         </div>
       ))}
     </div>
