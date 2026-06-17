@@ -1224,96 +1224,9 @@ export function makeAstralCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ fontSize: 11, color: "#64748b", textAlign: "center", marginTop: 10, lineHeight: 1.5 }}>
-            {t(E, "Next few slides build the DP from scratch: all-combinations → too slow → DP.",
-                  "다음 몇 슬라이드에서 DP 를 처음부터 쌓아요: 모든 경우 → 너무 느림 → DP.")}
+            {t(E, "Next slides build DP from scratch: all-combos → too slow → what DP is → this problem.",
+                  "다음 슬라이드에서 DP 를 처음부터 쌓아요: 모든 경우 → 너무 느림 → DP가 뭔지 → 이 문제.")}
           </div>
-        </div>
-      ),
-    },
-
-    /* 2-0a — (moved here from before-greedy, 2026-06-17): independence belongs in the DP
-       framing. A cell's photo-2 comes from "one step back", so cells link into separate lines
-       (chains). DP solves ONE line; do it for every line and add. The main greedy never needs this. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "DP only knows how to walk ONE line in order — but the photo is 2D. Luckily the cells link into separate diagonal lines (each cell on just one), so we DP each line and add them up. 👇",
-        "DP 는 '한 줄을 순서대로' 푸는 도구예요 — 근데 사진은 2D. 다행히 칸들이 따로따로 '줄(체인)'로 묶여요 (한 칸은 한 줄에만). 그래서 줄마다 DP 하고 더하면 끝! 👇"),
-      content: (
-        <div style={{ padding: 14 }}>
-          <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 12, textAlign: "center" }}>
-            {t(E, "Every cell painted by its line (chain)", "칸마다 자기 줄(체인) 색으로 칠하기")}
-          </div>
-
-          {/* All chains colored grid — right=1, down=2 */}
-          {(() => {
-            // right=1, down=2 in 4×4 grid → chain ID per cell
-            // Chain 0: (0,0)↔(2,1)  Chain 1: (0,1)↔(2,2)  Chain 2: (0,2)↔(2,3)
-            // Chain 3: (0,3) alone   Chain 4: (1,0)↔(3,1)  Chain 5: (1,1)↔(3,2)
-            // Chain 6: (1,2)↔(3,3)  Chain 7: (1,3) alone   Chain 8: (2,0) alone  Chain 9: (3,0) alone
-            const cid = [
-              [0, 1, 2, 3],
-              [4, 5, 6, 7],
-              [8, 0, 1, 2],
-              [9, 4, 5, 6],
-            ];
-            const CC = [
-              { bg:"#dbeafe", bd:"#3b82f6" }, // 0 blue
-              { bg:"#dcfce7", bd:"#16a34a" }, // 1 green
-              { bg:"#fef9c3", bd:"#d97706" }, // 2 amber
-              { bg:"#ede9fe", bd:"#8b5cf6" }, // 3 purple
-              { bg:"#fce7f3", bd:"#ec4899" }, // 4 pink
-              { bg:"#e0f2fe", bd:"#0891b2" }, // 5 cyan
-              { bg:"#fff7ed", bd:"#f97316" }, // 6 orange
-              { bg:"#fef2f2", bd:"#ef4444" }, // 7 red
-              { bg:"#f0fdf4", bd:"#22c55e" }, // 8 lime
-              { bg:"#f5f3ff", bd:"#7c3aed" }, // 9 violet
-            ];
-            // same-chain cells share color — shows independence visually
-            return (
-              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", marginBottom:10 }}>
-                {cid.map((row, r) => (
-                  <div key={r} style={{ display:"flex", gap:5, marginBottom:5 }}>
-                    {row.map((ci, c) => (
-                      <div key={c} style={{
-                        width:50, height:50, borderRadius:8,
-                        background: CC[ci].bg,
-                        border: `2.5px solid ${CC[ci].bd}`,
-                      }} />
-                    ))}
-                  </div>
-                ))}
-                <div style={{ fontSize:11.5, color:"#64748b", marginTop:6 }}>
-                  {t(E,"each cell has exactly one color — no cell is in two orbits","칸마다 색이 딱 하나 — 두 궤도에 동시에 속하는 칸은 없어요")}
-                </div>
-              </div>
-            );
-          })()}
-
-          {/* Concrete sum — solve each, then add */}
-          <div style={{
-            background:"#f0fdf4", border:"2px solid #16a34a", borderRadius:8,
-            padding:"10px 14px", textAlign:"center",
-          }}>
-            <div style={{ fontSize:12.5, fontWeight:700, color:"#14532d", marginBottom:7 }}>
-              {t(E,"So break the big puzzle into small ones, solve each, then add:",
-                   "그래서 큰 문제를 작은 문제로 쪼개고, 하나씩 푼 다음 더해요:")}
-            </div>
-            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:6, flexWrap:"wrap", fontSize:12, fontWeight:800 }}>
-              <span style={{ background:"#dbeafe", border:"2px solid #3b82f6", borderRadius:6, padding:"3px 8px", color:"#1e40af" }}>
-                {t(E,"blue answer","파란 궤도 답")}
-              </span>
-              <span style={{ color:"#16a34a" }}>+</span>
-              <span style={{ background:"#dcfce7", border:"2px solid #16a34a", borderRadius:6, padding:"3px 8px", color:"#14532d" }}>
-                {t(E,"green answer","초록 궤도 답")}
-              </span>
-              <span style={{ color:"#16a34a" }}>+ … =</span>
-              <span style={{ background:"#fef9c3", border:"2px solid #d97706", borderRadius:6, padding:"3px 8px", color:"#92400e" }}>
-                {t(E,"whole answer","전체 답")}
-              </span>
-            </div>
-          </div>
-
         </div>
       ),
     },
@@ -1441,12 +1354,77 @@ export function makeAstralCh2(E, lang = "py") {
       ),
     },
 
-    /* 2-3.3 — Bridge: DP = brute force with a memo */
+    /* 2-DP-what — NEW (2026-06-17): plain-life analogy for DP BEFORE the min_stars machine.
+       Stairs: #ways to reach step N = (ways to N-1) + (ways to N-2). Write small answers
+       down, reuse them — never recount. This is the whole idea of DP. */
     {
       type: "reveal",
       narr: t(E,
-        "Same idea as brute force, but smarter — that's DP. 👇",
-        "단순 시도와 같은 아이디어인데 더 똑똑한 방법 — 이게 DP예요. 👇"),
+        "Before the machine — what even IS DP? One everyday picture: climbing stairs. 👇",
+        "기계로 들어가기 전에 — DP가 대체 뭘까? 일상 그림 하나: 계단 오르기. 👇"),
+      content: (
+        <div style={{ padding: 14 }}>
+          <div style={{
+            background: "#ede9fe", border: "2px solid #8b5cf6", borderRadius: 10,
+            padding: "10px 14px", marginBottom: 12, textAlign: "center",
+          }}>
+            <div style={{ fontSize: 13.5, fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
+              🪜 {t(E, "DP = write small answers down, reuse them",
+                       "DP = 작은 답을 적어두고 → 다시 꺼내 쓰기")}
+            </div>
+            <div style={{ fontSize: 12, color: "#4c1d95", lineHeight: 1.55 }}>
+              {t(E, "You can step up 1 or 2 stairs at a time. How many ways to reach the top?",
+                    "한 번에 1칸 또는 2칸 오를 수 있어요. 꼭대기까지 가는 방법은 몇 가지?")}
+            </div>
+          </div>
+
+          {/* stairs: ways[n] = ways[n-1] + ways[n-2] */}
+          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 4, marginBottom: 10 }}>
+            {[
+              { n: 1, w: 1 }, { n: 2, w: 2 }, { n: 3, w: 3 },
+              { n: 4, w: 5 }, { n: 5, w: 8 },
+            ].map((s, i) => (
+              <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <div style={{
+                  width: 46, height: 22 + s.n * 14, background: "#f5f3ff",
+                  border: "2px solid #8b5cf6", borderRadius: "6px 6px 0 0",
+                  display: "flex", alignItems: "flex-start", justifyContent: "center",
+                  paddingTop: 3, fontSize: 15, fontWeight: 800, color: "#6b21a8",
+                }}>{s.w}</div>
+                <div style={{ fontSize: 10, color: "#64748b", marginTop: 2 }}>
+                  {s.n}{t(E, "", "칸")}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{
+            background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8,
+            padding: "9px 12px", fontSize: 12.5, color: "#14532d", lineHeight: 1.7,
+          }}>
+            {t(E,
+              "To reach stair 5 you came from stair 4 or stair 3. So: ways(5) = ways(4) + ways(3) = 5 + 3 = 8.",
+              "5번째 칸엔 4번째나 3번째 칸에서 와요. 그래서: 방법(5) = 방법(4) + 방법(3) = 5 + 3 = 8.")}
+            <br/>
+            <b>{t(E, "You never recount stair 4 — you already wrote it down (= 5).",
+                    "4번째 칸을 다시 세지 않아요 — 이미 적어뒀으니까 (= 5).")}</b>
+          </div>
+
+          <div style={{ fontSize: 12, color: "#64748b", textAlign: "center", marginTop: 10, lineHeight: 1.5 }}>
+            {t(E,
+              "That's all DP is: walk one step at a time, write 'best so far' down, reuse it. Now let's do the same for our star line. 👉",
+              "DP는 이게 다예요: 한 칸씩 가며 '여기까지 최선'을 적어두고 다시 씀. 이제 우리 별 줄에도 똑같이 해봐요. 👉")}
+          </div>
+        </div>
+      ),
+    },
+
+    /* 2-3.3 — "DP on THIS problem" (was: DP = brute + memo). Now the bridge from the stairs analogy. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Same trick as the stairs — but here, at each cell we track 'fewest stars so far'. 👇",
+        "계단과 똑같은 수법 — 여기선 칸마다 '여기까지 별 최소 개수'를 적어둬요. 👇"),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{
@@ -1458,12 +1436,12 @@ export function makeAstralCh2(E, lang = "py") {
             textAlign: "center",
           }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
-              💡 {t(E, "DP = brute force with a memo", "DP = 단순 시도 + 손메모")}
+              💡 {t(E, "Walk the line, write 'fewest stars so far'", "줄을 따라가며 '여기까지 별 최소' 적기")}
             </div>
             <div style={{ fontSize: 12.5, color: "#4c1d95", lineHeight: 1.55 }}>
               {t(E,
-                "For each cell, store the answer ONCE. Don't recompute when other combinations need it.",
-                "칸마다 답을 한 번만 계산하고 적어두기. 다른 경우의 수가 와도 다시 안 계산.")}
+                "Just like stairs: one cell at a time, reuse the previous cell's answer — never redo it.",
+                "계단처럼: 한 칸씩, 바로 앞 칸의 답을 다시 써먹어요 — 두 번 계산 안 함.")}
             </div>
           </div>
           <div style={{
@@ -1858,6 +1836,92 @@ export function makeAstralCh2(E, lang = "py") {
 
     /* 2-4.6 — REMOVED (2026-06-17): static [G,W,G,G] hand-trace table duplicated the live
        AstralDpSim (same preset) — even pointed students back to the sim. Heaviest "how" wall. */
+    /* 2-0a — (moved here 2026-06-17, AFTER one-line DP is built): now extend one line → 2D.
+       The cells split into independent lines (each cell on one), so DP each line and add. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "We can now solve ONE line. But the photo is 2D — many lines. Good news: the cells split into separate lines (each cell on just one), so solve each line and add. 👇",
+        "이제 한 줄은 풀 수 있어요. 근데 사진은 2D — 줄이 여러 개죠. 좋은 소식: 칸들이 따로따로 줄로 갈라져요 (한 칸은 한 줄에만). 그러니 줄마다 풀고 더하면 끝! 👇"),
+      content: (
+        <div style={{ padding: 14 }}>
+          <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 12, textAlign: "center" }}>
+            {t(E, "Every cell painted by its line (chain)", "칸마다 자기 줄(체인) 색으로 칠하기")}
+          </div>
+
+          {/* All chains colored grid — right=1, down=2 */}
+          {(() => {
+            // right=1, down=2 in 4×4 grid → chain ID per cell
+            // Chain 0: (0,0)↔(2,1)  Chain 1: (0,1)↔(2,2)  Chain 2: (0,2)↔(2,3)
+            // Chain 3: (0,3) alone   Chain 4: (1,0)↔(3,1)  Chain 5: (1,1)↔(3,2)
+            // Chain 6: (1,2)↔(3,3)  Chain 7: (1,3) alone   Chain 8: (2,0) alone  Chain 9: (3,0) alone
+            const cid = [
+              [0, 1, 2, 3],
+              [4, 5, 6, 7],
+              [8, 0, 1, 2],
+              [9, 4, 5, 6],
+            ];
+            const CC = [
+              { bg:"#dbeafe", bd:"#3b82f6" }, // 0 blue
+              { bg:"#dcfce7", bd:"#16a34a" }, // 1 green
+              { bg:"#fef9c3", bd:"#d97706" }, // 2 amber
+              { bg:"#ede9fe", bd:"#8b5cf6" }, // 3 purple
+              { bg:"#fce7f3", bd:"#ec4899" }, // 4 pink
+              { bg:"#e0f2fe", bd:"#0891b2" }, // 5 cyan
+              { bg:"#fff7ed", bd:"#f97316" }, // 6 orange
+              { bg:"#fef2f2", bd:"#ef4444" }, // 7 red
+              { bg:"#f0fdf4", bd:"#22c55e" }, // 8 lime
+              { bg:"#f5f3ff", bd:"#7c3aed" }, // 9 violet
+            ];
+            // same-chain cells share color — shows independence visually
+            return (
+              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", marginBottom:10 }}>
+                {cid.map((row, r) => (
+                  <div key={r} style={{ display:"flex", gap:5, marginBottom:5 }}>
+                    {row.map((ci, c) => (
+                      <div key={c} style={{
+                        width:50, height:50, borderRadius:8,
+                        background: CC[ci].bg,
+                        border: `2.5px solid ${CC[ci].bd}`,
+                      }} />
+                    ))}
+                  </div>
+                ))}
+                <div style={{ fontSize:11.5, color:"#64748b", marginTop:6 }}>
+                  {t(E,"each cell has exactly one color — no cell is in two orbits","칸마다 색이 딱 하나 — 두 궤도에 동시에 속하는 칸은 없어요")}
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Concrete sum — solve each, then add */}
+          <div style={{
+            background:"#f0fdf4", border:"2px solid #16a34a", borderRadius:8,
+            padding:"10px 14px", textAlign:"center",
+          }}>
+            <div style={{ fontSize:12.5, fontWeight:700, color:"#14532d", marginBottom:7 }}>
+              {t(E,"So break the big puzzle into small ones, solve each, then add:",
+                   "그래서 큰 문제를 작은 문제로 쪼개고, 하나씩 푼 다음 더해요:")}
+            </div>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:6, flexWrap:"wrap", fontSize:12, fontWeight:800 }}>
+              <span style={{ background:"#dbeafe", border:"2px solid #3b82f6", borderRadius:6, padding:"3px 8px", color:"#1e40af" }}>
+                {t(E,"blue answer","파란 궤도 답")}
+              </span>
+              <span style={{ color:"#16a34a" }}>+</span>
+              <span style={{ background:"#dcfce7", border:"2px solid #16a34a", borderRadius:6, padding:"3px 8px", color:"#14532d" }}>
+                {t(E,"green answer","초록 궤도 답")}
+              </span>
+              <span style={{ color:"#16a34a" }}>+ … =</span>
+              <span style={{ background:"#fef9c3", border:"2px solid #d97706", borderRadius:6, padding:"3px 8px", color:"#92400e" }}>
+                {t(E,"whole answer","전체 답")}
+              </span>
+            </div>
+          </div>
+
+        </div>
+      ),
+    },
+
 
     /* 2-4.7 — PAYOFF: "what did the DP actually DO?" Trace G G B — the case where
        forward-greedy got trapped and had to go backward, but DP doesn't.
