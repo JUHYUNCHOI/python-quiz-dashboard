@@ -991,14 +991,14 @@ export function makeAstralCh2(E, lang = "py") {
           {[
             {
               num: "①", icon: "➡️",
-              label: t(E, "Left → right (greedy)", "앞→뒤 그리디(greedy)"),
+              label: t(E, "Front → back (greedy)", "앞→뒤 그리디(greedy)"),
               desc: t(E, "Walk the orbit one cell at a time, start → end. Fast — but misses some cases.", "줄을 한 칸씩 시작→끝으로. 빠르지만 가끔 틀려요."),
               badge: t(E, "✗ sometimes wrong", "✗ 가끔 틀림"),
               bg: "#fef2f2", border: "#fca5a5", tc: "#991b1b",
             },
             {
               num: "②", icon: "⬅️",
-              label: t(E, "Right → left (greedy) — our solution", "뒤→앞 그리디(greedy) — 우리 풀이"),
+              label: t(E, "Back → front (greedy) — our solution", "뒤→앞 그리디(greedy) — 우리 풀이"),
               desc: t(E, "Flip direction — walk end → start. Always correct. This is the code we'll write. USACO 12/12 ✓", "방향 뒤집기 — 끝→시작. 항상 정답. 이게 우리가 짤 코드예요. USACO 12/12 ✓"),
               badge: t(E, "★ main", "★ 메인"),
               bg: "#f0fdf4", border: "#86efac", tc: "#14532d",
