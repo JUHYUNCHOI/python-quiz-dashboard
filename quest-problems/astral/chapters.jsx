@@ -1378,20 +1378,18 @@ export function makeAstralCh2(E, lang = "py") {
             marginBottom: 12,
             textAlign: "center",
           }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", marginBottom: 4 }}>
-              💡 {t(E, "DP = walk cell by cell, write 'fewest placed stars so far'", "DP = 한 칸씩 가며 칸마다 '여기까지 놓은 별 최소' 적어두기")}
+            <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+              💡 {t(E, "DP = go cell by cell from the left, counting how many stars were in photo 1", "DP = 왼쪽부터 한 칸씩 가며, 사진 1에 별이 몇 개였나 세기")}
             </div>
-            <div style={{ fontSize: 12.5, color: "#4c1d95", lineHeight: 1.55 }}>
-              {t(E,
-                "We count the fewest stars we place (photo 1). Per cell we write TWO numbers — the fewest-so-far if this cell's star does NOT move to the next cell, and if it DOES.",
-                "우리가 세는 건 직접 놓는 별(사진1) 최소 개수. 칸마다 숫자 두 개를 적어요 — 이 칸 별이 다음 칸으로 '안 옮겨갈 때 / 옮겨갈 때' 각각 여기까지 최소.")}
+            <div style={{ fontSize: 13, color: "#4c1d95", lineHeight: 1.6 }}>
+              {t(E, "The fewest is the answer.", "가장 적게 나오는 게 답이에요.")}
             </div>
           </div>
           <div style={{ background: "#faf5ff", border: "1px solid #e9d5ff", borderRadius: 10, padding: "11px 14px", textAlign: "center" }}>
-            <div style={{ fontSize: 12.5, color: "#6b21a8", lineHeight: 1.7 }}>
+            <div style={{ fontSize: 13, color: "#6b21a8", lineHeight: 1.7 }}>
               {t(E,
-                "Static pictures kept confusing this — so let's just DO it. Next slide fills the line [G, W, G, G] one cell at a time, with a speech bubble explaining each step. 👉",
-                "글·그림으로는 계속 헷갈렸으니 — 다음에서 그냥 한 칸씩 직접 해봐요. [G, W, G, G] 줄을 한 칸씩 채우면서, 칸마다 말풍선으로 왜 그런지 짚어줘요. 👉")}
+                "Words are hard — let's just do it. Next, count the line [G, W, G, G] one cell at a time, with an easy bubble at each cell. 👉",
+                "글로는 어려우니 — 다음에서 그냥 한 칸씩 직접 세 봐요. [G, W, G, G] 줄을 한 칸씩, 칸마다 쉬운 말풍선으로 짚어줄게요. 👉")}
             </div>
           </div>
 
