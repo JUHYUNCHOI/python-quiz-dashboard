@@ -228,24 +228,38 @@ export function QuestProgressBar({
           );
         })()}
 
-        {/* Compact under-bar locator: tab labels + 1/N */}
-        <div style={{
-          marginTop: 4, fontSize: 10.5, fontWeight: 700,
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-        }}>
-          <span style={{ color: tab === 0 ? accent : C.dim }}>{tabs[0]}</span>
-          <span style={{
-            fontFamily: "'JetBrains Mono',monospace", color: accent,
-            fontSize: 11, fontWeight: 800,
-          }}>
-            {cur + 1} / {steps.length}
-          </span>
-          {tabs.length > 1 && (
-            <span style={{ color: tab === tabs.length - 1 ? accent : C.dim }}>
-              {tabs[tabs.length - 1]}
+        {/* Compact under-bar locator: tab labels + 1/N.
+            The "N/M" count is attached to the ACTIVE tab's label so it can never be
+            misread as belonging to the other tab (e.g. code-tab "7/7" next to "문제"). */}
+        {(() => {
+          const last = tabs.length - 1;
+          const count = (
+            <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 800 }}>
+              {cur + 1} / {steps.length}
             </span>
-          )}
-        </div>
+          );
+          return (
+            <div style={{
+              marginTop: 4, fontSize: 10.5, fontWeight: 700,
+              display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
+            }}>
+              <span style={{ color: tab === 0 ? accent : C.dim, display: "flex", alignItems: "center", gap: 5 }}>
+                {tabs[0]}{tab === 0 ? count : null}
+              </span>
+              {/* middle-tab fallback (3+ tabs): name + count in the center */}
+              {tabs.length > 2 && tab !== 0 && tab !== last && (
+                <span style={{ color: accent, display: "flex", alignItems: "center", gap: 5 }}>
+                  {tabs[tab]}{count}
+                </span>
+              )}
+              {tabs.length > 1 && (
+                <span style={{ color: tab === last ? accent : C.dim, display: "flex", alignItems: "center", gap: 5 }}>
+                  {tabs[last]}{tab === last ? count : null}
+                </span>
+              )}
+            </div>
+          );
+        })()}
       </div>
 
       {/* Optional code-tab-only controls slot */}
