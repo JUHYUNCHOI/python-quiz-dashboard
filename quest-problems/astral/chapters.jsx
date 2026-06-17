@@ -1116,8 +1116,8 @@ export function makeAstralCh2(E, lang = "py") {
 
     /* 2-G2 — full backward greedy program (teacher's verified code) */
     sectionStep(sections[7], t(E,
-      "Now the complete program: read input → the 'stars don't move' shortcut → the backward greedy → print the count (or -1). This is the actual code that passed USACO 12/12.",
-      "이제 전체 코드: 입력 받기 → '별 안 움직임' 지름길 → 뒤→앞 그리디 → 별 수 출력 (또는 -1). 이게 USACO 12/12 통과한 실제 코드예요.")),
+      "Now the complete program: read input → the backward greedy → print the count (or -1). This is the actual code that passed USACO 12/12.",
+      "이제 전체 코드: 입력 받기 → 뒤→앞 그리디 → 별 수 출력 (또는 -1). 이게 USACO 12/12 통과한 실제 코드예요.")),
 
     /* 2-G3 — confidence check + the -1 edge case */
     {
