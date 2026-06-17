@@ -722,6 +722,12 @@ GGG`}
           </div>
 
           <CornerGWalk E={E} />
+
+          <div style={{ marginTop: 12, background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "9px 13px", fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
+            💡 {t(E,
+              "And it's not just the corner — ANY cell whose one-step-back lands off the grid (the whole top row + left column) can't get an incoming star.",
+              "모서리만이 아니에요 — 거꾸로 한 칸이 사진 밖인 칸은 다 별이 못 들어와요 (맨 위 줄 + 맨 왼쪽 줄 전부).")}
+          </div>
         </div>
       ),
     },
@@ -768,8 +774,8 @@ GGG`}
     {
       type: "quiz",
       narr: t(E,
-        "Now flip it around — instead of G, think about B. Some cell can NEVER be B. Which one?",
-        "이번엔 반대로 — G 말고 B 를 생각해봐요. 어떤 칸은 절대 B 가 될 수 없어요. 어디일까요?"),
+        "B = a star in BOTH photos.\nSo the photo-2 star must arrive from the cell one step back.\nIf that back-cell is off the grid → no star can arrive → it can't be B.\nWhich cell is that?",
+        "B = 두 사진 다 별이에요.\n그러려면 두 번째 사진 별이 '거꾸로 한 칸'에서 와 줘야 해요.\n근데 그 거꾸로 칸이 사진 밖이면 → 별이 못 와서 B 가 안 돼요.\n어느 칸일까요?"),
       question: t(E,
         "Stars move right 1, down 1. Which cell can NEVER be B?",
         "별이 오른쪽 1, 아래 1 로 움직여요. 어느 칸이 절대 B 가 될 수 없을까요?"),
