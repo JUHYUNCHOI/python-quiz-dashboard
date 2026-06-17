@@ -309,6 +309,19 @@ export function BlankCodeRunner({
         }
       }
 
+      // input("프롬프트") 의 프롬프트가 stdout 에 echo 되어 expectedOutput 비교를
+      // 깨뜨리는 버그 방지 — builtins.input 을 프롬프트 출력 없이 stdin 만 읽도록
+      // 1회 래핑한다 (가드로 중첩 방지). 정답 출력엔 프롬프트가 없으므로 이게 맞음.
+      await pyodideInstance.runPythonAsync(
+        "import builtins as _cb\n" +
+        "if not getattr(_cb.input, '_cr_wrapped', False):\n" +
+        "    _cr_oi = _cb.input\n" +
+        "    def _cr_input(*a, **k):\n" +
+        "        return _cr_oi()\n" +
+        "    _cr_input._cr_wrapped = True\n" +
+        "    _cb.input = _cr_input\n"
+      )
+
       await pyodideInstance.runPythonAsync(code)
 
       const capturedOutput = new TextDecoder().decode(new Uint8Array(capturedBytes))

@@ -366,6 +366,78 @@ export const PY_FOR_SUM: CodeTracePreset = {
 }
 
 // ============================================================
+// Python: for 반복문 (문자열 한 글자씩)
+// ============================================================
+export const PY_FOR_STRING: CodeTracePreset = {
+  title: { ko: "for 반복문: 문자열 한 글자씩", en: "for Loop: Over a String" },
+  description: { ko: "문자열을 for 에 넣으면 글자가 하나씩 꺼내져요", en: "Put a string in a for loop and pull out one character at a time" },
+  language: "python",
+  code: [
+    'word = "사과"',
+    "for ch in word:",
+    "    print(ch)",
+  ],
+  steps: [
+    {
+      line: 1, phase: "assign",
+      variables: [{ name: "word", value: "사과", type: "str", changed: true }],
+      explanation: { ko: 'word 에 "사과" 를 저장합니다 (글자 2 개가 한 줄로)', en: 'Store "사과" in word (two characters in a row)' },
+    },
+    // --- 반복 1: ch = "사" ---
+    {
+      line: 2, phase: "condition",
+      variables: [
+        { name: "word", value: "사과", type: "str" },
+        { name: "ch", value: "사", type: "str", changed: true },
+      ],
+      condition: { expression: "ch in word", substituted: "사 → '사과' 의 첫 글자", result: true },
+      explanation: { ko: "반복 시작! 첫 글자 '사' 를 ch 에 넣고 루프 진입", en: "Loop starts! Put first char '사' into ch and enter loop" },
+      arrow: "enter-loop",
+    },
+    {
+      line: 3, phase: "output",
+      variables: [
+        { name: "word", value: "사과", type: "str" },
+        { name: "ch", value: "사", type: "str" },
+      ],
+      output: "사",
+      explanation: { ko: "지금 ch 는 '사'. 그대로 출력합니다", en: "ch is now '사'. Print it" },
+    },
+    // --- 반복 2: ch = "과" ---
+    {
+      line: 2, phase: "condition",
+      variables: [
+        { name: "word", value: "사과", type: "str" },
+        { name: "ch", value: "과", type: "str", changed: true },
+      ],
+      condition: { expression: "ch in word", substituted: "과 → '사과' 의 두 번째 글자", result: true },
+      explanation: { ko: "다시 위로! 다음 글자 '과' 를 ch 에 넣고 루프 계속", en: "Back to top! Put next char '과' into ch and continue" },
+      arrow: "enter-loop",
+    },
+    {
+      line: 3, phase: "output",
+      variables: [
+        { name: "word", value: "사과", type: "str" },
+        { name: "ch", value: "과", type: "str" },
+      ],
+      output: "과",
+      explanation: { ko: "지금 ch 는 '과'. 그대로 출력합니다", en: "ch is now '과'. Print it" },
+    },
+    // --- 반복 종료 ---
+    {
+      line: 2, phase: "condition",
+      variables: [
+        { name: "word", value: "사과", type: "str" },
+        { name: "ch", value: "과", type: "str" },
+      ],
+      condition: { expression: "'사과' 끝", substituted: "더 이상 글자 없음", result: false },
+      explanation: { ko: "'사과' 의 글자를 다 꺼냈어요. 반복 종료!", en: "All characters of '사과' used. Loop ends!" },
+      arrow: "exit-loop",
+    },
+  ],
+}
+
+// ============================================================
 // Python: while 반복문 (카운트다운)
 // ============================================================
 export const PY_WHILE_COUNTDOWN: CodeTracePreset = {
@@ -1473,6 +1545,7 @@ export const CODE_TRACE_PRESETS = {
   pyNestedIf: PY_NESTED_IF,
   pyNestedIfFalse: PY_NESTED_IF_FALSE,
   pyForSum: PY_FOR_SUM,
+  pyForString: PY_FOR_STRING,
   pyWhileCountdown: PY_WHILE_COUNTDOWN,
   pyForIfFilter: PY_FOR_IF_FILTER,
   // C++

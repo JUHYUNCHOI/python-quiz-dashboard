@@ -160,6 +160,9 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const supabaseSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   // Supabase 복원을 딱 한 번만 실행하기 위한 플래그
   const hasHydratedRef = useRef(false)
+  // 하이드레이션(원격 복원 시도) 완료 플래그 — 이게 true 되기 전엔 Supabase 저장 보류.
+  // 마운트 직후의 빈 상태(점수 0·완료 없음)가 좋은 원격 데이터를 덮어쓰는 레이스 방지.
+  const didHydrateRef = useRef(false)
   // 현재 스텝의 자동 채점 함수 참조 (Next 누를 때 호출)
   const autoCheckRef = useRef<(() => boolean) | null>(null)
 
@@ -180,6 +183,10 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
     } catch {}
     // Supabase: 디바운스 저장 (선생님 모드 제외)
     if (user && !effectiveTeacher) {
+      // ⚠️ 하이드레이션(원격 복원) 완료 전엔 저장 보류. 마운트 직후의 빈 상태가
+      // 더 느린 네트워크 복원보다 먼저 Supabase 에 써져 좋은 데이터를 0점/미완료로
+      // 덮어쓰던 버그 방지. 복원이 끝나면(상태 변경으로) 이 effect 가 다시 돌며 저장됨.
+      if (!didHydrateRef.current) return
       if (supabaseSaveTimer.current) clearTimeout(supabaseSaveTimer.current)
       supabaseSaveTimer.current = setTimeout(() => {
         saveReviewProgressToSupabase(lessonId, progressData)
@@ -211,6 +218,9 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
         // localStorage도 최신으로 업데이트
         try { localStorage.setItem(storageKey, JSON.stringify(remote)) } catch {}
       }
+    }).finally(() => {
+      // 원격 복원 시도가 끝났음 (복원했든 원격이 없든) → 이제부터 Supabase 저장 허용
+      didHydrateRef.current = true
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, lessonId])
