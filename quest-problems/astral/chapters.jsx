@@ -1478,8 +1478,8 @@ export function makeAstralCh2(E, lang = "py") {
             </div>
             <div style={{ fontSize: 12, color: "#14532d", lineHeight: 1.7 }}>
               {t(E,
-                "At each cell only ONE thing is unknown — is a star arriving here from the cell before? We can't tell which case is better until the end, so we carry the answer for BOTH cases:",
-                "각 칸에서 모르는 건 딱 하나 — 앞 칸 별이 여기로 와 있나? 끝까지 가 봐야 어느 쪽이 이득인지 알아요. 그래서 두 경우의 답을 둘 다 들고 가요:")}
+                "At each cell only ONE thing is unknown — is a star arriving here from the cell before? There are two cases:",
+                "각 칸에서 모르는 건 딱 하나 — 앞 칸 별이 여기로 와 있나? 두 경우가 있어요:")}
             </div>
             <div style={{ display: "flex", gap: 8, marginTop: 7, flexWrap: "wrap" }}>
               {[
@@ -1494,8 +1494,8 @@ export function makeAstralCh2(E, lang = "py") {
             </div>
             <div style={{ fontSize: 11.5, color: "#14532d", marginTop: 7, lineHeight: 1.6 }}>
               {t(E,
-                "At the last cell, pick the smaller of the two = the answer! ⭐",
-                "끝 칸에서 둘 중 작은 걸 골라요 = 정답! ⭐")}
+                "Greedy got STUCK by choosing one of these too early. So what's the safe move? Decide it yourself next 👉",
+                "그리디는 이 둘 중 하나를 일찍 골라서 막혔어요. 그럼 안전하게 하려면? 다음에서 직접 골라봐요 👉")}
             </div>
           </div>
           <div style={{
@@ -1557,8 +1557,8 @@ export function makeAstralCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Click a cell to flip W/G/B and watch the two numbers change. 👇",
-        "칸을 눌러 W/G/B 를 바꾸면 숫자 두 개가 어떻게 변하는지 봐요. 👇"),
+        "Try it: change a cell, GUESS what the answer becomes, then check. (Tip: the 'W→B' preset is impossible — see why ❌.) 👇",
+        "직접 해봐요: 칸을 바꿔서 답이 어떻게 될지 먼저 예상 → 눌러서 확인. ('W→B' 프리셋은 왜 ❌ 인지 맞혀봐요.) 👇"),
       content: (<AstralDpSim E={E} />),
     },
 
@@ -1661,17 +1661,9 @@ export function makeAstralCh2(E, lang = "py") {
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 16, fontWeight: 800,
                 }}>{s.n}</div>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "#1e293b" }}>{s.title}</div>
-                  <div style={{ fontSize: 11, color: "#475569", marginTop: 3, lineHeight: 1.45 }}>{s.why}</div>
-                  <div style={{ fontSize: 11, color: "#64748b", marginTop: 2, lineHeight: 1.45 }}>{s.how}</div>
-                </div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#1e293b" }}>{s.title}</div>
               </div>
             ))}
-          </div>
-          <div style={{ background: "#eef2ff", border: "1.5px solid #a5b4fc", borderRadius: 8, padding: "8px 12px", marginTop: 10, fontSize: 11.5, color: "#312e81", textAlign: "center" }}>
-            💡 {t(E, "Each step gets its own slide ahead — look for the step number at the top.",
-                    "각 단계마다 슬라이드 따로. 위에 표시되는 단계 번호 따라가면 돼.")}
           </div>
         </div>
       ),
@@ -1768,7 +1760,7 @@ export function makeAstralCh2(E, lang = "py") {
                 <tr style={{ background: "#eef2ff", color: "#312e81" }}>
                   <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "case", "케이스")}</th>
                   <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "needs incoming ★?", "들어온 별?")}</th>
-                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "uses prev", "쓰는 prev")}</th>
+                  <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "uses prev cell's", "쓰는 이전 칸 값")}</th>
                   <th style={{ padding: "6px 10px", border: "1px solid #c7d2fe" }}>{t(E, "+ new ★?", "+ 새 별?")}</th>
                 </tr>
               </thead>
@@ -1777,28 +1769,28 @@ export function makeAstralCh2(E, lang = "py") {
                 <tr>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#fff", fontWeight: 800 }}>W</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>{t(E, "No", "아니")}</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>prev_keep</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>min_stars[0]</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>—</td>
                 </tr>
                 {/* B */}
                 <tr>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#1e293b", color: "#fff", fontWeight: 800 }}>B</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", color: "#16a34a", fontWeight: 700 }}>{t(E, "Yes", "예")}</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>prev_pass</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>min_stars[1]</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", color: "#dc2626", fontWeight: 700 }}>+1</td>
                 </tr>
                 {/* G case (a) — original ★ here */}
                 <tr>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#cbd5e1", fontWeight: 800 }}>G (a)</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>{t(E, "No", "아니")}</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>prev_keep</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>min_stars[0]</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", color: "#dc2626", fontWeight: 700 }}>+1</td>
                 </tr>
                 {/* G case (b) — ★ moved in from predecessor */}
                 <tr>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", background: "#cbd5e1", fontWeight: 800 }}>G (b)</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", color: "#16a34a", fontWeight: 700 }}>{t(E, "Yes", "예")}</td>
-                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>prev_pass</td>
+                  <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>min_stars[1]</td>
                   <td style={{ padding: "6px 10px", border: "1px solid #c7d2fe", textAlign: "center" }}>—</td>
                 </tr>
               </tbody>
