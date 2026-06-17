@@ -57,6 +57,10 @@ export function QuestProgressBar({
   const barRef = useRef(null);
   const _labelFor = labelFor || ((s, i) => defaultLabelFor(s, i, E));
   const steps = states[tab] || [];
+  // Each tab gets its own hue so the bar (and locator labels) make the
+  // 문제 / 코드 regions instantly distinguishable. Tab 0 = quest accent.
+  const TAB_HUES = [accent, "#0d9488", "#d97706", "#0891b2"];
+  const tabHue = (i) => TAB_HUES[i % TAB_HUES.length];
 
   const showHover = (e, tabIdx, i) => {
     const segRect = e.currentTarget.getBoundingClientRect();
@@ -96,7 +100,10 @@ export function QuestProgressBar({
                   const isCurrent = isCurTab && i === cur;
                   const isVisited = isPastTab || (isCurTab && i < cur);
                   const isHovered = hoverInfo && hoverInfo.tabIdx === tabIdx && hoverInfo.i === i;
-                  const bg = isCurrent ? accent : isVisited ? `${accent}88` : "#cbd5e1";
+                  const hue = tabHue(tabIdx);
+                  // current = full hue, visited = lighter, unvisited = faint tint
+                  // (faint tint keeps each tab's region color-coded even before you reach it)
+                  const bg = isCurrent ? hue : isVisited ? `${hue}88` : `${hue}33`;
                   return (
                     <button
                       key={`${tabIdx}-${i}`}
@@ -228,24 +235,38 @@ export function QuestProgressBar({
           );
         })()}
 
-        {/* Compact under-bar locator: tab labels + 1/N */}
-        <div style={{
-          marginTop: 4, fontSize: 10.5, fontWeight: 700,
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-        }}>
-          <span style={{ color: tab === 0 ? accent : C.dim }}>{tabs[0]}</span>
-          <span style={{
-            fontFamily: "'JetBrains Mono',monospace", color: accent,
-            fontSize: 11, fontWeight: 800,
-          }}>
-            {cur + 1} / {steps.length}
-          </span>
-          {tabs.length > 1 && (
-            <span style={{ color: tab === tabs.length - 1 ? accent : C.dim }}>
-              {tabs[tabs.length - 1]}
+        {/* Compact under-bar locator: tab labels + 1/N.
+            The "N/M" count is attached to the ACTIVE tab's label so it can never be
+            misread as belonging to the other tab (e.g. code-tab "7/7" next to "문제"). */}
+        {(() => {
+          const last = tabs.length - 1;
+          const count = (
+            <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 800 }}>
+              {cur + 1} / {steps.length}
             </span>
-          )}
-        </div>
+          );
+          return (
+            <div style={{
+              marginTop: 4, fontSize: 10.5, fontWeight: 700,
+              display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
+            }}>
+              <span style={{ color: tab === 0 ? tabHue(0) : C.dim, display: "flex", alignItems: "center", gap: 5 }}>
+                {tabs[0]}{tab === 0 ? count : null}
+              </span>
+              {/* middle-tab fallback (3+ tabs): name + count in the center */}
+              {tabs.length > 2 && tab !== 0 && tab !== last && (
+                <span style={{ color: tabHue(tab), display: "flex", alignItems: "center", gap: 5 }}>
+                  {tabs[tab]}{count}
+                </span>
+              )}
+              {tabs.length > 1 && (
+                <span style={{ color: tab === last ? tabHue(last) : C.dim, display: "flex", alignItems: "center", gap: 5 }}>
+                  {tabs[last]}{tab === last ? count : null}
+                </span>
+              )}
+            </div>
+          );
+        })()}
       </div>
 
       {/* Optional code-tab-only controls slot */}
