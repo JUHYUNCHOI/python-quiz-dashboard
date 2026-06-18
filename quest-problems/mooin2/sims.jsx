@@ -213,6 +213,7 @@ function buildCountTrace(a) {
   const ys = Object.keys(count).map(Number).filter(y => count[y] >= 2).sort((p, q) => lastSeen[q] - lastSeen[p]);
   const steps = [];
   steps.push({ kind: "intro", ans: 0, ys });
+  if (ys.length) steps.push({ kind: "plan", ans: 0, ys });   // 긴 intro 를 둘로 나눔 (선생님 2026-06-18)
   let ans = 0;
   for (const y of ys) {
     const p = secondLast[y];
@@ -248,17 +249,21 @@ export function MooinCountTrace({ E }) {
   let note;
   if (step.kind === "intro")
     note = built.ys.length
-      ? t(E, `A moo is (x, y, y) — its last two must be the SAME. So find the values that repeat (appear ≥ 2): {${built.ys.join(", ")}}. We'll go from the BACK (the value whose pair sits furthest right first), count the moos each makes, and add up.`,
-            `moo = (x, y, y) — 뒤 두 글자가 똑같아야 해요. 그러니 2번 이상 나오는 값(반복 숫자)을 찾아요: {${built.ys.join(", ")}}. 뒤쪽 쌍부터 하나씩(맨 뒤에 짝이 있는 값부터), 값마다 moo 수를 세서 더해 갈게요.`)
+      ? t(E, `A moo's last two are the SAME number. So find the values that repeat (appear ≥ 2): {${built.ys.join(", ")}}.`,
+            `moo 는 뒤 두 개가 같은 숫자예요. 그래서 2번 이상 나오는 값을 찾아요 → {${built.ys.join(", ")}}.`)
       : t(E, "No value appears twice → no moos → answer 0.", "2번 이상 나오는 값이 없음 → moo 없음 → 답 0.");
+  else if (step.kind === "plan")
+    note = t(E,
+      `We'll take them from the BACK — the value whose pair sits furthest right first. For each, count its moos and add up.`,
+      `이 값들을 뒤쪽 쌍부터 하나씩 볼게요. 값마다 moo 수를 세서 더해 가요.`);
   else if (step.kind === "pair")
     note = t(E,
-      `Scanning from the BACK, find a same-number pair: ${step.y}, ${step.y} (i=${step.p} and i=${step.occ[step.occ.length - 1]}). These two are the moo's "y, y" — now look LEFT of them for the front x.`,
-      `맨 뒤에서부터 같은 숫자 짝을 찾아요 → ${step.y}, ${step.y} (i=${step.p}, i=${step.occ[step.occ.length - 1]}). 이 둘이 moo 의 'y, y'! 이제 이 짝 왼쪽에서 맨 앞 x 를 찾아요.`);
+      `From the BACK, here's a same-number pair: ${step.y}, ${step.y}. These two are the moo's "y, y"!`,
+      `맨 뒤에서부터 같은 숫자 짝 → ${step.y}, ${step.y}. 이 둘이 moo 의 'y, y'!`);
   else if (step.kind === "count")
     note = t(E,
-      `Count the DIFFERENT values in that left zone: {${step.beforeSet.join(", ")}} → ${step.d0} of them.`,
-      `그 왼쪽(앞) 구역에서 서로 다른 값을 세요: {${step.beforeSet.join(", ")}} → ${step.d0}개.`);
+      `Now LEFT of the pair, count the different values: {${step.beforeSet.join(", ")}} → ${step.d0}.`,
+      `이제 짝 왼쪽에서 서로 다른 값을 세요: {${step.beforeSet.join(", ")}} → ${step.d0}개.`);
   else if (step.kind === "subtract")
     note = t(E,
       `But a moo needs x ≠ y. ${step.y} itself sits in that zone, so drop 1: ${step.d0} − 1 = ${step.contrib}.`,
