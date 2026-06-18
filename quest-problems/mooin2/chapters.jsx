@@ -377,7 +377,8 @@ export function makeMooin2Ch3(E) {
           <div style={{ fontSize: 14, fontWeight: 800, color: "#ea580c", textAlign: "center", marginBottom: 10 }}>
             🚀 {t(E, "Faster idea: count per y", "빠른 아이디어: y 마다 세기")}
           </div>
-          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#9a3412", lineHeight: 1.75 }}>
+          {/* recipe */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#9a3412", lineHeight: 1.75, marginBottom: 12 }}>
             <div style={{ background: "#fff", border: "1px dashed #fdba74", borderRadius: 8, padding: "8px 11px", marginBottom: 11, fontSize: 12.5, lineHeight: 1.65 }}>
               🔖 {t(E,
                 "Reminder — a moo is (x, y, y): y = the repeated value (appears ≥ 2 times), x = a different value sitting before it.",
@@ -390,26 +391,17 @@ export function makeMooin2Ch3(E) {
               <div><b>3.</b> {t(E, "Add that count to the answer.", "그 개수를 답에 더하기.")}</div>
             </div>
           </div>
-        </div>),
-    },
-    /* 3-2 — why the latest j */
-    {
-      type: "reveal",
-      narr: t(E,
-        "x needs two y's behind it. So x just has to be before y's second-to-last spot. Let's see it on a real array.",
-        "x 는 뒤에 y 가 2개 있어야 해요. 그러니 x 는 'y 의 끝에서 두 번째' 자리보다 앞에만 있으면 돼요 — 그림으로 봐요."),
-      content: (
-        <div style={{ padding: 16 }}>
+          {/* 왜 '끝에서 두 번째'? — 구체 그림으로 바로 옆에서 (선생님 2026-06-18: recipe 와 한 화면) */}
           <div style={{ background: "#eef6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#1e3a8a", lineHeight: 1.7, marginBottom: 12 }}>
+            <div style={{ fontWeight: 800, marginBottom: 6 }}>👇 {t(E, "Why the SECOND-TO-LAST spot?", "왜 '끝에서 두 번째'일까?")}</div>
             {t(E,
-              "moo is x, y, y → x needs TWO y's behind it. So just find where y appears for the second-to-last time — anything before that has two y's left after it.",
-              "moo 는 x, y, y → x 뒤에 y 가 2개 있어야 해요. 그러니 y 가 '끝에서 두 번째'로 나오는 자리만 찾으면 돼요 — 그 앞은 전부 뒤에 y 가 2개 남아 있거든요.")}
+              "moo is x, y, y → x needs TWO y's behind it. So find where y shows up for the second-to-last time — everything before it still has two y's left after, so it can be x.",
+              "moo 는 x, y, y → x 뒤에 y 가 2개 있어야 해요. 그러니 y 가 '끝에서 두 번째'로 나오는 자리를 찾으면 — 그 앞은 전부 뒤에 y 가 2개 남아 있어서 x 가 될 수 있어요.")}
             {/* 구체 그림: 1 2 3 4 4 4 에서 끝에서 두 번째 4 와 그 뒤 2개 */}
             <div style={{ display: "flex", gap: 4, justifyContent: "center", margin: "12px 0 4px" }}>
               {[1, 2, 3, 4, 4, 4].map((v, i) => {
                 const isSecondLast = i === 4;          // 끝에서 두 번째 4
                 const isTail = i >= 4;                  // 여기부터 뒤로 4가 2개
-                const isZone = i < 4;                   // x 후보 구역
                 return (
                   <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
                     <div style={{
@@ -434,27 +426,12 @@ export function makeMooin2Ch3(E) {
                 "앞 구역 {1, 2, 3, 4} 에서 4 자신만 빼면 → 1, 2, 3 → 4 로 만드는 moo 3개.")}
             </div>
           </div>
-          {/* 다른 배열로도 직접 따라가 보기 (선생님 2026-06-18: 동작마다 말풍선) */}
+          {/* 다른 배열로 직접, 동작마다 말풍선 따라가 보기 (선생님 2026-06-18) */}
           <MooinCountTrace E={E} />
         </div>),
     },
-    /* 3-5 — D[p] meaning */
-    {
-      type: "reveal",
-      narr: t(E,
-        "The count we need = how many DIFFERENT values appear before that second-to-last spot. That's exactly the x-candidate count.",
-        "필요한 건 — '끝에서 두 번째 자리' 앞에 나온 서로 다른 값의 수. 그게 바로 x 후보 수예요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#065f46", lineHeight: 1.75 }}>
-            {t(E, "Example y = 4: its second-to-last spot is index 4. The distinct values before it are {1, 2, 3, 4} → 4 of them.",
-                  "예 y = 4: 끝에서 두 번째 자리는 4번. 그 앞의 서로 다른 값은 {1, 2, 3, 4} → 4개.")}
-            <div style={{ marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#15803d", textAlign: "center", fontWeight: 800 }}>
-              {t(E, "distinct values before that spot = x candidates", "끝에서 두 번째 자리 앞의 서로 다른 값 = x 후보 수")}
-            </div>
-          </div>
-        </div>),
-    },
+    /* 3-5 — REMOVED 2026-06-18: 'distinct before second-to-last = x candidates' (same y=4 →
+       {1,2,3,4} example) is now shown in the merged recipe slide (3-1) picture + the sim. Dup. */
     /* 3-6 — REMOVED 2026-06-18: subtract-1 edge case was confusing as a text slide;
        the countTrace sim already shows '(drop y itself)' inline, and the code handles it. */
     /* 3-7 — REMOVED 2026-06-18: countTrace sim now embedded in the 'why' slide (3-2)
