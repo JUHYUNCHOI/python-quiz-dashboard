@@ -405,28 +405,8 @@ export function makeMooin2Ch3(E) {
               "A moo is x, y, y — so you need TWO y's after x. Take y's second-to-last spot: exactly two y's sit from there onward. So every value before that spot can be the x — the widest 'before' zone, so no x is missed.",
               "moo 는 x, y, y — 그러니 x 뒤에 y 가 2개 있어야 해요. y 의 '끝에서 두 번째' 자리를 잡으면, 그 자리부터 뒤로 y 가 딱 2개 남아요. 그래서 그 자리 앞에 나온 값은 전부 x 가 될 수 있어요 — 가장 넓은 '앞 구역'이라 x 를 하나도 안 놓쳐요.")}
           </div>
-          <div style={{ textAlign: "center", fontSize: 12, color: "#9a3412", fontWeight: 700, marginBottom: 6 }}>
-            a = [1, 2, 3, 4, 4, 4] · y = 4
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", gap: 5, marginBottom: 6 }}>
-            {[1, 2, 3, 4, 4, 4].map((v, i) => {
-              const before = i <= 3;
-              const isP = i === 4;
-              return (
-                <div key={i} style={{
-                  width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center",
-                  borderRadius: 8, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", fontSize: 15,
-                  background: isP ? "#ea580c" : before ? "#dbeafe" : "#fff",
-                  color: isP ? "#fff" : C.text,
-                  border: `2px solid ${isP ? "#ea580c" : before ? "#93c5fd" : C.border}`,
-                }}>{v}</div>
-              );
-            })}
-          </div>
-          <div style={{ textAlign: "center", fontSize: 11.5, color: C.dim }}>
-            {t(E, "The second-to-last 4 is at spot 4. The blue zone before it holds the x candidates: {1, 2, 3, 4}.",
-                  "끝에서 두 번째 4 는 4번 자리. 그 앞 파란 구역이 x 후보: {1, 2, 3, 4}.")}
-          </div>
+          {/* 정적 그림 대신 인터랙티브 시뮬 — 설명 + 시뮬을 한 화면에 (선생님 2026-06-18) */}
+          <MooinCountTrace E={E} />
         </div>),
     },
     /* 3-5 — D[p] meaning */
@@ -478,13 +458,8 @@ export function makeMooin2Ch3(E) {
           </div>
         </div>),
     },
-    /* 3-7 — count trace payoff sim */
-    {
-      type: "countTrace",
-      narr: t(E,
-        "Now watch the answer ADD UP. Step through each candidate y and see the running total grow. Try all 3 presets!",
-        "이제 답이 더해지는 걸 봐요. 각 후보 y 를 밟으며 누적 합이 커지는 걸 보세요. 3개 preset 다 해봐요!"),
-    },
+    /* 3-7 — REMOVED 2026-06-18: countTrace sim now embedded in the 'why' slide (3-2)
+       so explanation + sim sit on ONE screen (teacher). Standalone slide was a dup. */
     /* 3-8 — recap quiz */
     {
       type: "quiz",
