@@ -227,9 +227,8 @@ function buildCountTrace(a) {
 
     const base = { y, cnt: count[y], p, d0, sub, contrib, occ, beforeSet };
     const ansBefore = ans;
-    steps.push({ kind: "pick", ...base, ans: ansBefore });
-    steps.push({ kind: "spot", ...base, ans: ansBefore });
-    steps.push({ kind: "count", ...base, ans: ansBefore });
+    steps.push({ kind: "pair", ...base, ans: ansBefore });   // 뒤에서 같은 숫자 짝 찾기 (= moo 의 y,y)
+    steps.push({ kind: "count", ...base, ans: ansBefore });  // 그 짝 왼쪽에서 서로 다른 값 세기
     if (sub) steps.push({ kind: "subtract", ...base, ans: ansBefore });
     ans += contrib;
     steps.push({ kind: "add", ...base, ans });
@@ -252,14 +251,10 @@ export function MooinCountTrace({ E }) {
       ? t(E, `A moo is (x, y, y) — its last two must be the SAME. So find the values that repeat (appear ≥ 2): {${built.ys.join(", ")}}. We'll go from the BACK (the value whose pair sits furthest right first), count the moos each makes, and add up.`,
             `moo = (x, y, y) — 뒤 두 글자가 똑같아야 해요. 그러니 2번 이상 나오는 값(반복 숫자)을 찾아요: {${built.ys.join(", ")}}. 뒤쪽 쌍부터 하나씩(맨 뒤에 짝이 있는 값부터), 값마다 moo 수를 세서 더해 갈게요.`)
       : t(E, "No value appears twice → no moos → answer 0.", "2번 이상 나오는 값이 없음 → moo 없음 → 답 0.");
-  else if (step.kind === "pick")
+  else if (step.kind === "pair")
     note = t(E,
-      `Now value ${step.y} — it shows up ${step.cnt} times (a repeat!). We'll use its LAST two as the moo's "y, y". So how many moos can ${step.y} make?`,
-      `이번엔 값 ${step.y} 차례 — ${step.y} 가 ${step.cnt}번 나와요 (반복 숫자!). ${step.y} 의 뒤쪽 2개를 moo 의 'y, y' 로 쓸 거예요. 그럼 ${step.y} 로 moo 몇 개 만들 수 있을까요?`);
-  else if (step.kind === "spot")
-    note = t(E,
-      `Find where ${step.y} appears for the second-to-last time → i=${step.p}. From here on there are exactly two ${step.y}'s — the moo's "y, y". So everything to the LEFT can be the front x.`,
-      `${step.y} 가 '끝에서 두 번째'로 나오는 자리를 찾아요 → i=${step.p} 칸. 여기부터 뒤로 ${step.y} 가 딱 2개 남아요 — moo 의 'y, y'. 그래서 이 자리 왼쪽 값들이 맨 앞 x 가 될 수 있어요.`);
+      `Scanning from the BACK, find a same-number pair: ${step.y}, ${step.y} (i=${step.p} and i=${step.occ[step.occ.length - 1]}). These two are the moo's "y, y" — now look LEFT of them for the front x.`,
+      `맨 뒤에서부터 같은 숫자 짝을 찾아요 → ${step.y}, ${step.y} (i=${step.p}, i=${step.occ[step.occ.length - 1]}). 이 둘이 moo 의 'y, y'! 이제 이 짝 왼쪽에서 맨 앞 x 를 찾아요.`);
   else if (step.kind === "count")
     note = t(E,
       `Count the DIFFERENT values in that left zone: {${step.beforeSet.join(", ")}} → ${step.d0} of them.`,
@@ -277,7 +272,7 @@ export function MooinCountTrace({ E }) {
   else
     note = t(E, `All values done. Answer = ${step.ans}.`, `모든 값 처리 완료. 답 = ${step.ans}.`);
 
-  const showP = ["spot", "count", "subtract", "add"].includes(step.kind);
+  const showP = ["pair", "count", "subtract", "add"].includes(step.kind);
   const hasFormula = ["count", "subtract", "add"].includes(step.kind);
 
   return (
@@ -302,14 +297,12 @@ export function MooinCountTrace({ E }) {
         {a.map((v, i) => {
           const lastOcc = step.occ ? step.occ[step.occ.length - 1] : -1;
           const isPair = showP && (i === step.p || i === lastOcc);             // 뒤 두 개 = moo 의 y, y 쌍
-          const isPick = step.kind === "pick" && step.occ?.includes(i);        // 이 값이 나오는 자리들
           const inZone = (step.kind === "count" || step.kind === "subtract") && i < step.p; // 앞 구역
           const isDrop = step.kind === "subtract" && i < step.p && v === step.y; // 빼는 y 자신 → ✗
           let bg = "#fff", fg = C.text, bd = C.border;
           if (isDrop) { bg = "#fff"; fg = "#b91c1c"; bd = "#dc2626"; }
           else if (isPair) { bg = "#ea580c"; fg = "#fff"; bd = "#ea580c"; }
           else if (inZone) { bg = "#fef3c7"; fg = "#92400e"; bd = "#fbbf24"; }
-          else if (isPick) { bg = "#dbeafe"; fg = "#1e40af"; bd = "#2563eb"; }
           return (
             <div key={i} style={{
               position: "relative",
