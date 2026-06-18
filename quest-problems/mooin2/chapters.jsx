@@ -239,13 +239,26 @@ export function makeMooin2Ch2(E, lang = "py") {
           <div style={{ fontSize: 14, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
             🐢 {t(E, "First idea: try EVERY triple", "첫 아이디어: 모든 삼중을 다 해보기")}
           </div>
-          <div style={{ background: "#ecfeff", border: "1.5px solid #67e8f9", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#155e75", lineHeight: 1.75 }}>
-            {t(E,
-              "A moo is just 3 positions i < j < k. So pick every i, every j after it, every k after that. If a[j] = a[k] (the (y, y) pair) and a[i] ≠ a[j] (a real x), it's a moo — drop the pair (x, y) into a set.",
-              "moo 는 그냥 위치 3개 i < j < k. 그러니 모든 i, 그 뒤의 모든 j, 또 그 뒤의 모든 k 를 골라봐요. a[j] = a[k] ((y, y) 짝) 이고 a[i] ≠ a[j] (진짜 x) 면 moo — 그 쌍 (x, y) 를 집합에 넣어요.")}
-            <div style={{ marginTop: 8, padding: "8px 10px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8 }}>
+          <div style={{ background: "#ecfeff", border: "1.5px solid #67e8f9", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#155e75", lineHeight: 1.7 }}>
+            <div style={{ marginBottom: 9 }}>
+              {t(E,
+                "A moo is 3 spots: a front value (x), then the SAME value twice after it (y, y). So just try them all:",
+                "moo 는 자리 3개예요: 앞 칸 하나(x), 그 뒤에 같은 값 두 개(y, y). 그러니 그냥 다 해봐요:")}
+            </div>
+            {[
+              t(E, "Pick a front value → that's the x.", "앞 칸 하나 고르기 → 이게 x."),
+              t(E, "Pick two spots after it → the (y, y) pair.", "그 뒤에서 두 칸 고르기 → 여기가 y, y 자리."),
+              t(E, "Check: are the back two the SAME? and is the front DIFFERENT?", "확인: 뒤 두 칸이 같아? 그리고 첫 칸은 달라?"),
+              t(E, "If yes → it's a moo! Put its (x, y) into a set.", "맞으면 → moo! 그 (x, y) 를 집합에 넣기."),
+            ].map((line, i) => (
+              <div key={i} style={{ display: "flex", gap: 8, marginBottom: 5 }}>
+                <span style={{ fontWeight: 800, color: "#0891b2", flexShrink: 0 }}>{i + 1}.</span>
+                <span>{line}</span>
+              </div>
+            ))}
+            <div style={{ marginTop: 9, padding: "8px 10px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8 }}>
               💡 {t(E, "A set throws away duplicates automatically — so its final size IS the number of DISTINCT moos.",
-                       "집합(set)은 중복을 알아서 버려요 — 그래서 마지막 크기가 곧 서로 다른 moo 의 개수예요.")}
+                       "집합(set)은 중복을 알아서 버려요 — 그래서 마지막 크기가 곧 서로 다른 moo 개수예요.")}
             </div>
           </div>
         </div>),
