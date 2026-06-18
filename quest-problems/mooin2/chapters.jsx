@@ -374,27 +374,10 @@ export function makeMooin2Ch3(E) {
         "moo 는 뒤 두 글자가 똑같아야 해요. 그러니 2번 이상 나오는 숫자를 찾고 → 그 앞에 나온 값 중 '그 숫자와 다른' 것들이 각각 moo 하나씩을 만들어요 (그 값이 맨 앞 자리). 그래서 그런 값이 몇 가지인지만 세서 더하면 끝! (3중 for-loop 없이)"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 14, fontWeight: 800, color: "#ea580c", textAlign: "center", marginBottom: 10 }}>
-            🚀 {t(E, "Faster idea: count per y", "빠른 아이디어: y 마다 세기")}
-          </div>
-          {/* recipe */}
-          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#9a3412", lineHeight: 1.75, marginBottom: 12 }}>
-            <div style={{ background: "#fff", border: "1px dashed #fdba74", borderRadius: 8, padding: "8px 11px", marginBottom: 11, fontSize: 12.5, lineHeight: 1.65 }}>
-              🔖 {t(E,
-                "Reminder — a moo is (x, y, y): y = the repeated value (appears ≥ 2 times), x = a different value sitting before it.",
-                "기억 — moo = (x, y, y): y = 반복되는 값(2번 이상 나옴), x = 그 앞에 오는 다른 값.")}
-            </div>
-            {t(E, "For each value y that appears at least twice:", "두 번 이상 나오는 각 값 y 에 대해:")}
-            <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
-              <div><b>1.</b> {t(E, "Find y's SECOND-TO-LAST spot (so two y's are still from there on).", "y 의 '끝에서 두 번째' 자리를 찾기 (그래야 그 자리부터 뒤로 y 가 2개 남음).")}</div>
-              <div><b>2.</b> {t(E, "Count the DIFFERENT values before that spot — each one is a candidate x.", "그 자리 앞에 서로 다른 값이 몇 개인지 세기 — 각각이 x 후보.")}</div>
-              <div><b>3.</b> {t(E, "Add that count to the answer.", "그 개수를 답에 더하기.")}</div>
-            </div>
-          </div>
-          {/* 정적 그림 제거 (선생님 2026-06-18: 시뮬과 중복). '왜 끝에서 두 번째'는
-              시뮬 spot 스텝 말풍선이 동작할 때 설명. 아래 한 줄 안내만. */}
+          {/* recipe 박스 전부 제거 (선생님 2026-06-18: '빠른 아이디어 볼 필요 없다 — 시뮬 각
+              스텝 말풍선으로 녹여라'). 설명은 전부 MooinCountTrace 의 스텝 말풍선이 담당. */}
           <div style={{ textAlign: "center", fontSize: 12.5, color: "#7c5cfc", fontWeight: 700, marginBottom: 10 }}>
-            👇 {t(E, "Step through it — each move is explained in the bubble.", "한 동작씩 눌러봐요 — 각 동작 설명이 말풍선에 떠요.")}
+            👇 {t(E, "Step through it — each move is explained in the bubble.", "한 동작씩 눌러봐요 — 각 동작을 말풍선이 설명해요.")}
           </div>
           <MooinCountTrace E={E} />
         </div>),

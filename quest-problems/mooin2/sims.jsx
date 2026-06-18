@@ -247,13 +247,13 @@ export function MooinCountTrace({ E }) {
   let note;
   if (step.kind === "intro")
     note = built.ys.length
-      ? t(E, `Values that repeat: {${built.ys.join(", ")}}. We'll take them ONE at a time — for each, count the moos it makes, then add up.`,
-            `2번 이상 나오는 값: {${built.ys.join(", ")}}. 한 번에 하나씩 — 값마다 만드는 moo 수를 세서 더해 갈 거예요.`)
-      : t(E, "No value appears twice → no moos → answer 0.", "두 번 나오는 값이 없음 → moo 없음 → 답 0.");
+      ? t(E, `A moo is (x, y, y) — its last two must be the SAME. So find the values that repeat (appear ≥ 2): {${built.ys.join(", ")}}. We'll take them ONE at a time, count the moos each makes, and add up.`,
+            `moo = (x, y, y) — 뒤 두 글자가 똑같아야 해요. 그러니 2번 이상 나오는 값(반복 숫자)을 찾아요: {${built.ys.join(", ")}}. 한 번에 하나씩, 값마다 moo 수를 세서 더해 갈게요.`)
+      : t(E, "No value appears twice → no moos → answer 0.", "2번 이상 나오는 값이 없음 → moo 없음 → 답 0.");
   else if (step.kind === "pick")
     note = t(E,
-      `Now value ${step.y}. It shows up ${step.cnt} times (≥ 2!) → it can be the "y, y" part of a moo. Let's count how many moos use ${step.y}.`,
-      `이번엔 값 ${step.y} 차례. ${step.cnt}번 나오니까 (2번 이상!) → moo 의 'y, y' 자리로 쓸 수 있어요. ${step.y} 로 moo 몇 개 만드는지 세 볼게요.`);
+      `Now value ${step.y} — it shows up ${step.cnt} times (a repeat!). We'll use its LAST two as the moo's "y, y". So how many moos can ${step.y} make?`,
+      `이번엔 값 ${step.y} 차례 — ${step.y} 가 ${step.cnt}번 나와요 (반복 숫자!). ${step.y} 의 뒤쪽 2개를 moo 의 'y, y' 로 쓸 거예요. 그럼 ${step.y} 로 moo 몇 개 만들 수 있을까요?`);
   else if (step.kind === "spot")
     note = t(E,
       `Find where ${step.y} appears for the second-to-last time → i=${step.p}. From here on there are exactly two ${step.y}'s — the moo's "y, y". So everything to the LEFT can be the front x.`,
