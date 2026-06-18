@@ -237,7 +237,7 @@ export function makeMooin2Ch2(E, lang = "py") {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
-            🐢 {t(E, "First idea: try EVERY triple", "첫 아이디어: 모든 삼중을 다 해보기")}
+            🐢 {t(E, "First idea: try EVERY 3-spot combo", "첫 아이디어: 3칸을 모든 방법으로 골라보기")}
           </div>
           <div style={{ background: "#ecfeff", border: "1.5px solid #67e8f9", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#155e75", lineHeight: 1.7 }}>
             <div style={{ marginBottom: 9 }}>
@@ -315,11 +315,10 @@ export function makeMooin2Ch2(E, lang = "py") {
           </div>
           <CodeBlock
             lines={isCpp ? [...bruteReadCpp, ...bruteLoopCpp, ...bruteBodyCpp] : [...bruteReadPy, ...bruteLoopPy, ...bruteBodyPy]}
-            dimUntil={isCpp ? (bruteReadCpp.length + bruteLoopCpp.length) : (bruteReadPy.length + bruteLoopPy.length)}
             lang={isCpp ? "cpp" : "py"} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-            {t(E, "↑ The full brute program, all together. Correct and easy to read — now the big question: how fast is it?",
-                  "↑ 합쳐진 전체 브루트 코드예요. 맞고 읽기 쉬운데 — 이제 큰 질문: 얼마나 빠를까요?")}
+            {t(E, "↑ The full brute program — all of it. Correct and easy to read — now the big question: how fast is it?",
+                  "↑ 완성된 전체 브루트 코드 (전부). 맞고 읽기 쉬운데 — 이제 큰 질문: 얼마나 빠를까요?")}
           </div>
         </div>),
     },
@@ -334,39 +333,28 @@ export function makeMooin2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Did you feel it? Three nested loops means roughly N × N × N work. That number EXPLODES.",
-        "느꼈어요? 3중 반복은 대략 N × N × N 만큼 일해요. 그 수가 폭발해요."),
+        "Felt it? Three nested loops do about N × N × N work → it TIMES OUT. So what do we do? 👇",
+        "느꼈죠? 3중 반복은 대략 N × N × N 만큼 일해서 → 시간 초과(타임오버)가 나요. 그럼 어떻게? 👇"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#991b1b", lineHeight: 1.75 }}>
-            <div style={{ fontWeight: 800, marginBottom: 6 }}>🚧 {t(E, "Why brute force loses", "브루트포스가 지는 이유")}</div>
-            {t(E, "Triples for N numbers ≈ N³ ÷ 6. Watch it grow:", "N 개 숫자의 삼중 ≈ N³ ÷ 6. 커지는 걸 봐요:")}
+            <div style={{ fontWeight: 800, marginBottom: 6 }}>🚧 {t(E, "Why it TIMES OUT", "왜 시간 초과(타임오버)가 날까?")}</div>
+            {t(E, "Picking 3 spots out of N ≈ N³ ÷ 6 ways. Watch it grow:", "N 개에서 3칸 고르는 경우의 수 ≈ N³ ÷ 6. 커지는 걸 봐요:")}
             <div style={{ marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.9 }}>
-              N = 100 → ~160,000 {t(E, "triples (fine)", "삼중 (괜찮음)")}<br/>
+              N = 100 → ~160,000 {t(E, "combos (fine)", "가짓수 (괜찮음)")}<br/>
               N = 10,000 → ~1.6 × 10¹¹ {t(E, "(slow)", "(느림)")}<br/>
               N = 1,000,000 → ~1.7 × 10¹⁷ {t(E, "(forever)", "(영원)")}
             </div>
             <div style={{ marginTop: 8, fontWeight: 700, color: "#7c2d12" }}>
               {t(E,
-                "At a billion steps per second, N = 10⁶ would take ~30 YEARS. The time limit is ~2 seconds.",
-                "1초에 10억 번 해도 N = 10⁶ 은 약 30년 걸려요. 제한 시간은 약 2초예요.")}
+                "At a billion steps per second, N = 10⁶ would take ~30 YEARS. The limit is ~2 seconds → TIME OUT.",
+                "1초에 10억 번 해도 N = 10⁶ 은 약 30년 걸려요. 제한 시간은 약 2초 → 시간 초과(타임오버).")}
             </div>
           </div>
-        </div>),
-    },
-    /* 2-6 — collapse to per-y count (the realization, now earned) */
-    {
-      type: "reveal",
-      narr: t(E,
-        "So: the answer is right, but we need a MUCH faster way to count it. Time to think smarter. 👉",
-        "그래서: 답은 맞지만 훨씬 빠르게 세는 방법이 필요해요. 더 똑똑하게 생각할 시간. 👉"),
-      content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 34, marginBottom: 8 }}>🐢 → 🚀</div>
-          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 12, padding: "14px 16px", fontSize: 14, color: "#9a3412", lineHeight: 1.7, maxWidth: 440, margin: "0 auto" }}>
-            {t(E,
-              "Key realization: we don't actually need to LOOK at every triple. For each repeated value y, we just need to know one thing — how many different x's can sit before y's pair. Let's build that next.",
-              "핵심 깨달음: 사실 모든 삼중을 볼 필요가 없어요. 반복되는 값 y 마다 딱 하나만 알면 돼요 — y 의 짝 앞에 서로 다른 x 가 몇 개 올 수 있는가. 다음에 이걸 만들어요.")}
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "11px 13px", fontSize: 13.5, color: "#9a3412", lineHeight: 1.7 }}>
+            🚀 {t(E,
+              "So we won't count combos one by one. Instead — for each repeated value, we'll work out 'how many moos can it make?' in one shot, and add those up. (How? Step by step in the next tab.)",
+              "그래서 조합을 하나하나 세지 않아요. 대신 — 반복되는 값마다 '이 값으로 moo 를 몇 개 만들 수 있나?' 를 한 번에 구해서 더할 거예요. (어떻게? 다음 탭에서 하나씩.)")}
           </div>
         </div>),
     },
@@ -382,116 +370,24 @@ export function makeMooin2Ch3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The fast idea: don't check triples. For each value y that repeats, ask one question.",
-        "빠른 아이디어: 삼중을 확인하지 말자. 반복되는 각 값 y 마다 질문 하나만 해요."),
+        "A moo's last two letters must be the SAME. So find a number that appears at least twice — then each DIFFERENT value that appeared before it makes one moo (that value out front). So just count how many such values there are, and add them up. No triple loop!",
+        "moo 는 뒤 두 글자가 똑같아야 해요. 그러니 2번 이상 나오는 숫자를 찾고 → 그 앞에 나온 값 중 '그 숫자와 다른' 것들이 각각 moo 하나씩을 만들어요 (그 값이 맨 앞 자리). 그래서 그런 값이 몇 가지인지만 세서 더하면 끝! (3중 for-loop 없이)"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 14, fontWeight: 800, color: "#ea580c", textAlign: "center", marginBottom: 10 }}>
-            🚀 {t(E, "Faster idea: count per y", "빠른 아이디어: y 마다 세기")}
+          {/* recipe 박스 전부 제거 (선생님 2026-06-18: '빠른 아이디어 볼 필요 없다 — 시뮬 각
+              스텝 말풍선으로 녹여라'). 설명은 전부 MooinCountTrace 의 스텝 말풍선이 담당. */}
+          <div style={{ textAlign: "center", fontSize: 12.5, color: "#7c5cfc", fontWeight: 700, marginBottom: 10 }}>
+            👇 {t(E, "Step through it — each move is explained in the bubble.", "한 동작씩 눌러봐요 — 각 동작을 말풍선이 설명해요.")}
           </div>
-          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#9a3412", lineHeight: 1.75 }}>
-            {t(E, "For each value y that appears at least twice:", "두 번 이상 나오는 각 값 y 에 대해:")}
-            <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
-              <div><b>1.</b> {t(E, "Find p = y's second-to-last spot (so two y's are still at/after p).", "p = y 의 '끝에서 두 번째' 자리 (그래야 p 부터 뒤로 y 가 2개).")}</div>
-              <div><b>2.</b> {t(E, "Count how many DIFFERENT values appear before p. Each is a candidate x.", "p 앞에 서로 다른 값이 몇 개인지 세기. 각각이 x 후보.")}</div>
-              <div><b>3.</b> {t(E, "Add that count to the answer.", "그 개수를 답에 더하기.")}</div>
-            </div>
-          </div>
+          <MooinCountTrace E={E} />
         </div>),
     },
-    /* 3-2 — why the latest j */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Why y's SECOND-TO-LAST spot? A moo needs two y's after x — and everything before that spot still has two y's after it.",
-        "왜 '끝에서 두 번째 y'? moo 는 x 뒤에 y 가 2개 있어야 해요 — 그 자리 앞이면 뒤에 y 가 딱 2개 남거든요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#eef6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#1e3a8a", lineHeight: 1.75, marginBottom: 12 }}>
-            {t(E,
-              "A moo is x, y, y — so you need TWO y's after x. Take y's second-to-last spot (call it p): exactly two y's sit from p onward. So every value before p can be the x — the widest 'before' zone, so no x is missed.",
-              "moo 는 x, y, y — 그러니 x 뒤에 y 가 2개 있어야 해요. y 의 '끝에서 두 번째' 자리(= p)를 잡으면, p 부터 뒤로 y 가 딱 2개 남아요. 그래서 p 앞에 나온 값은 전부 x 가 될 수 있어요 — 가장 넓은 '앞 구역'이라 x 를 하나도 안 놓쳐요.")}
-          </div>
-          <div style={{ textAlign: "center", fontSize: 12, color: "#9a3412", fontWeight: 700, marginBottom: 6 }}>
-            a = [1, 2, 3, 4, 4, 4] · y = 4
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", gap: 5, marginBottom: 6 }}>
-            {[1, 2, 3, 4, 4, 4].map((v, i) => {
-              const before = i <= 3;
-              const isP = i === 4;
-              return (
-                <div key={i} style={{
-                  width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center",
-                  borderRadius: 8, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", fontSize: 15,
-                  background: isP ? "#ea580c" : before ? "#dbeafe" : "#fff",
-                  color: isP ? "#fff" : C.text,
-                  border: `2px solid ${isP ? "#ea580c" : before ? "#93c5fd" : C.border}`,
-                }}>{v}</div>
-              );
-            })}
-          </div>
-          <div style={{ textAlign: "center", fontSize: 11.5, color: C.dim }}>
-            {t(E, "p = 4 (the second-to-last 4). The blue zone before it holds the x candidates: {1, 2, 3, 4}.",
-                  "p = 4 (끝에서 두 번째 4). 그 앞 파란 구역이 x 후보: {1, 2, 3, 4}.")}
-          </div>
-        </div>),
-    },
-    /* 3-5 — D[p] meaning */
-    {
-      type: "reveal",
-      narr: t(E,
-        "One tool to count it fast — D[p]: how many DIFFERENT values appear before p. That's exactly the x-candidate count.",
-        "빠르게 세는 도구 하나 — D[p]: p 앞에 나온 서로 다른 값의 수. 그게 바로 x 후보 수예요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#065f46", lineHeight: 1.75 }}>
-            {t(E, "Recall: p = second_last[y], and D[p] = distinct values in a[0..p-1]. So for y = 4: p = 4, D[4] = 4 (the values 1, 2, 3, 4).",
-                  "기억: p = second_last[y], D[p] = a[0..p-1] 의 서로 다른 값 수. y = 4 면: p = 4, D[4] = 4 (값 1, 2, 3, 4).")}
-            <div style={{ marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#15803d", textAlign: "center", fontWeight: 800 }}>
-              D[second_last[y]] = {t(E, "candidate x count", "x 후보 수")}
-            </div>
-          </div>
-        </div>),
-    },
-    /* 3-6 — subtract-1 subtlety */
-    {
-      type: "reveal",
-      narr: t(E,
-        "One tricky case to watch! x must be DIFFERENT from y. Sometimes y sneaks into the candidate count.",
-        "조심할 함정 하나! x 는 y 와 달라야 해요. 가끔 y 가 후보 수에 슬쩍 끼어들어요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#92400e", lineHeight: 1.75 }}>
-            <div style={{ fontWeight: 800, marginBottom: 6 }}>
-              ⚠️ {t(E, "Subtract 1 when count[y] ≥ 3", "count[y] ≥ 3 이면 1 빼기")}
-            </div>
-            {t(E,
-              "D[p] counts ALL distinct values before p — including y itself, if y already showed up there. But y can't be its own x. So when y appears before p (which happens exactly when count[y] ≥ 3), subtract 1.",
-              "D[p] 는 p 앞의 모든 서로 다른 값을 세요 — y 가 거기 이미 나왔다면 y 도 포함. 하지만 y 는 자기 자신의 x 가 못 돼요. 그래서 y 가 p 앞에 나오면 (count[y] ≥ 3 일 때 정확히 그럼) 1 빼요.")}
-            <div style={{ marginTop: 10, padding: "9px 11px", background: "#fff", border: "1px dashed #fbbf24", borderRadius: 8, fontSize: 12.5 }}>
-              <div style={{ fontWeight: 700, marginBottom: 4 }}>{t(E, "Example", "예시")}: a = [4, 1, 4, 4]</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, lineHeight: 1.8 }}>
-                y = 4, count[4] = 3 (≥ 3)<br/>
-                p = second_last[4] = {t(E, "index 2", "인덱스 2")}<br/>
-                {t(E, "values before p", "p 앞의 값")}: {"{4, 1}"} → D[p] = 2<br/>
-                {t(E, "but 4 can't be its own x → −1", "그런데 4 는 자기 x 가 못 됨 → −1")}<br/>
-                <span style={{ color: "#15803d", fontWeight: 800 }}>→ 2 − 1 = 1 moo: (1, 4, 4) ✓</span>
-              </div>
-            </div>
-            <div style={{ marginTop: 6 }}>
-              {t(E, "If count[y] = 2, both y's sit at or after p, so y wasn't counted before p — no subtraction.",
-                    "count[y] 가 2 면 두 y 가 모두 p 거나 그 뒤라 p 앞에 y 가 안 세어져요 — 뺄 필요 없음.")}
-            </div>
-          </div>
-        </div>),
-    },
-    /* 3-7 — count trace payoff sim */
-    {
-      type: "countTrace",
-      narr: t(E,
-        "Now watch the answer ADD UP. Step through each candidate y and see the running total grow. Try all 3 presets!",
-        "이제 답이 더해지는 걸 봐요. 각 후보 y 를 밟으며 누적 합이 커지는 걸 보세요. 3개 preset 다 해봐요!"),
-    },
+    /* 3-5 — REMOVED 2026-06-18: 'distinct before second-to-last = x candidates' (same y=4 →
+       {1,2,3,4} example) is now shown in the merged recipe slide (3-1) picture + the sim. Dup. */
+    /* 3-6 — REMOVED 2026-06-18: subtract-1 edge case was confusing as a text slide;
+       the countTrace sim already shows '(drop y itself)' inline, and the code handles it. */
+    /* 3-7 — REMOVED 2026-06-18: countTrace sim now embedded in the 'why' slide (3-2)
+       so explanation + sim sit on ONE screen (teacher). Standalone slide was a dup. */
     /* 3-8 — recap quiz */
     {
       type: "quiz",
@@ -509,8 +405,8 @@ export function makeMooin2Ch3(E) {
     {
       type: "explorer",
       narr: t(E,
-        "Free play! Try the presets and see which moos occur. Notice values with count = 1 never become y.",
-        "자유 탐험! preset 을 눌러 발생 moo 를 봐요. count = 1 인 값은 절대 y 가 못 되는 걸 확인해요."),
+        "Try it yourself! Tap a preset and see which moos occur. A value that appears only ONCE can never be y (y must repeat).",
+        "직접 눌러봐요! 여러 배열에서 어떤 moo 가 생기는지. 한 번만 나오는 값은 절대 y 가 못 돼요 — y 는 2번 이상 나와야 하니까."),
     },
   ];
 }

@@ -217,8 +217,20 @@ function buildCountTrace(a) {
     const d0 = D[p];
     const sub = count[y] >= 3;
     const contrib = d0 - (sub ? 1 : 0);
+    // 끝에서 두 번째 y 자리(p) 앞 구역에 나온 서로 다른 값들
+    const beforeSet = []; const bseen = new Set();
+    for (let i = 0; i < p; i++) { if (!bseen.has(a[i])) { bseen.add(a[i]); beforeSet.push(a[i]); } }
+    // y 가 나오는 모든 자리
+    const occ = []; for (let i = 0; i < N; i++) if (a[i] === y) occ.push(i);
+
+    const base = { y, cnt: count[y], p, d0, sub, contrib, occ, beforeSet };
+    const ansBefore = ans;
+    steps.push({ kind: "pick", ...base, ans: ansBefore });
+    steps.push({ kind: "spot", ...base, ans: ansBefore });
+    steps.push({ kind: "count", ...base, ans: ansBefore });
+    if (sub) steps.push({ kind: "subtract", ...base, ans: ansBefore });
     ans += contrib;
-    steps.push({ kind: "y", y, cnt: count[y], p, d0, sub, contrib, ans });
+    steps.push({ kind: "add", ...base, ans });
   }
   if (ys.length === 0) steps.push({ kind: "none", ans: 0 });
   steps.push({ kind: "final", ans });
@@ -235,17 +247,36 @@ export function MooinCountTrace({ E }) {
   let note;
   if (step.kind === "intro")
     note = built.ys.length
-      ? t(E, `Candidates (count ≥ 2): y ∈ {${built.ys.join(", ")}}. We add each one's contribution.`,
-            `후보 (count ≥ 2): y ∈ {${built.ys.join(", ")}}. 각각의 기여를 더해요.`)
-      : t(E, "No value appears twice → no candidates → answer 0.", "두 번 나오는 값이 없음 → 후보 없음 → 답 0.");
-  else if (step.kind === "y")
+      ? t(E, `A moo is (x, y, y) — its last two must be the SAME. So find the values that repeat (appear ≥ 2): {${built.ys.join(", ")}}. We'll take them ONE at a time, count the moos each makes, and add up.`,
+            `moo = (x, y, y) — 뒤 두 글자가 똑같아야 해요. 그러니 2번 이상 나오는 값(반복 숫자)을 찾아요: {${built.ys.join(", ")}}. 한 번에 하나씩, 값마다 moo 수를 세서 더해 갈게요.`)
+      : t(E, "No value appears twice → no moos → answer 0.", "2번 이상 나오는 값이 없음 → moo 없음 → 답 0.");
+  else if (step.kind === "pick")
     note = t(E,
-      `y = ${step.y}: latest pair at p = ${step.p}. D[${step.p}] = ${step.d0} distinct x's before it${step.sub ? `, but count[${step.y}] = ${step.cnt} ≥ 3 so subtract 1` : ""}. → +${step.contrib}. Running total = ${step.ans}.`,
-      `y = ${step.y}: 가장 늦은 짝 p = ${step.p}. 그 앞 서로 다른 x = D[${step.p}] = ${step.d0}${step.sub ? `, 그런데 count[${step.y}] = ${step.cnt} ≥ 3 이라 1 빼기` : ""}. → +${step.contrib}. 누적 = ${step.ans}.`);
+      `Now value ${step.y} — it shows up ${step.cnt} times (a repeat!). We'll use its LAST two as the moo's "y, y". So how many moos can ${step.y} make?`,
+      `이번엔 값 ${step.y} 차례 — ${step.y} 가 ${step.cnt}번 나와요 (반복 숫자!). ${step.y} 의 뒤쪽 2개를 moo 의 'y, y' 로 쓸 거예요. 그럼 ${step.y} 로 moo 몇 개 만들 수 있을까요?`);
+  else if (step.kind === "spot")
+    note = t(E,
+      `Find where ${step.y} appears for the second-to-last time → i=${step.p}. From here on there are exactly two ${step.y}'s — the moo's "y, y". So everything to the LEFT can be the front x.`,
+      `${step.y} 가 '끝에서 두 번째'로 나오는 자리를 찾아요 → i=${step.p} 칸. 여기부터 뒤로 ${step.y} 가 딱 2개 남아요 — moo 의 'y, y'. 그래서 이 자리 왼쪽 값들이 맨 앞 x 가 될 수 있어요.`);
+  else if (step.kind === "count")
+    note = t(E,
+      `Count the DIFFERENT values in that left zone: {${step.beforeSet.join(", ")}} → ${step.d0} of them.`,
+      `그 왼쪽(앞) 구역에서 서로 다른 값을 세요: {${step.beforeSet.join(", ")}} → ${step.d0}개.`);
+  else if (step.kind === "subtract")
+    note = t(E,
+      `But a moo needs x ≠ y. ${step.y} itself sits in that zone, so drop 1: ${step.d0} − 1 = ${step.contrib}.`,
+      `그런데 moo 는 x ≠ y 여야 해요. 앞 구역에 ${step.y} 자신도 껴 있으니 1개 빼요: ${step.d0} − 1 = ${step.contrib}개.`);
+  else if (step.kind === "add")
+    note = t(E,
+      `So ${step.y} makes ${step.contrib} moo(s). Add to the running total → ${step.ans}.`,
+      `그래서 ${step.y} 로 만드는 moo 는 ${step.contrib}개. 누적에 더하면 → ${step.ans}.`);
   else if (step.kind === "none")
     note = t(E, "Nothing to add. Answer = 0.", "더할 게 없음. 답 = 0.");
   else
-    note = t(E, `All candidates added. Answer = ${step.ans}.`, `모든 후보 합산 완료. 답 = ${step.ans}.`);
+    note = t(E, `All values done. Answer = ${step.ans}.`, `모든 값 처리 완료. 답 = ${step.ans}.`);
+
+  const showP = ["spot", "count", "subtract", "add"].includes(step.kind);
+  const hasFormula = ["count", "subtract", "add"].includes(step.kind);
 
   return (
     <div style={{ padding: 16 }}>
@@ -267,34 +298,56 @@ export function MooinCountTrace({ E }) {
       {/* array */}
       <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 12 }}>
         {a.map((v, i) => {
-          const isP = step.kind === "y" && i === step.p;
+          const lastOcc = step.occ ? step.occ[step.occ.length - 1] : -1;
+          const isPair = showP && (i === step.p || i === lastOcc);             // 뒤 두 개 = moo 의 y, y 쌍
+          const isPick = step.kind === "pick" && step.occ?.includes(i);        // 이 값이 나오는 자리들
+          const inZone = (step.kind === "count" || step.kind === "subtract") && i < step.p; // 앞 구역
+          const isDrop = step.kind === "subtract" && i < step.p && v === step.y; // 빼는 y 자신 → ✗
+          let bg = "#fff", fg = C.text, bd = C.border;
+          if (isDrop) { bg = "#fff"; fg = "#b91c1c"; bd = "#dc2626"; }
+          else if (isPair) { bg = "#ea580c"; fg = "#fff"; bd = "#ea580c"; }
+          else if (inZone) { bg = "#fef3c7"; fg = "#92400e"; bd = "#fbbf24"; }
+          else if (isPick) { bg = "#dbeafe"; fg = "#1e40af"; bd = "#2563eb"; }
           return (
             <div key={i} style={{
+              position: "relative",
               width: 38, height: 46, display: "flex", flexDirection: "column",
               alignItems: "center", justifyContent: "center", borderRadius: 8,
               fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
-              background: isP ? "#ea580c" : "#fff", color: isP ? "#fff" : C.text,
-              border: `2px solid ${isP ? "#ea580c" : C.border}`,
+              background: bg, color: fg, border: `2px solid ${bd}`,
+              opacity: isDrop ? 0.7 : 1,
             }}>
               <div style={{ fontSize: 9, opacity: 0.8 }}>i={i}</div>
-              <div style={{ fontSize: 14 }}>{v}</div>
+              <div style={{ fontSize: 14, textDecoration: isDrop ? "line-through" : "none" }}>{v}</div>
+              {isDrop && (
+                <div style={{
+                  position: "absolute", top: -8, right: -8, width: 18, height: 18, borderRadius: "50%",
+                  background: "#dc2626", color: "#fff", fontSize: 12, fontWeight: 900,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+                }}>✗</div>
+              )}
             </div>
           );
         })}
       </div>
-      {step.kind === "y" && (
+      {showP && (
         <div style={{ textAlign: "center", fontSize: 11, color: "#9a3412", marginBottom: 10 }}>
-          ↑ p = second_last[{step.y}] = {step.p}
+          {step.kind === "count" || step.kind === "subtract"
+            ? `🟡 ${t(E, `left of the back two ${step.y}'s — count distinct values here`, `뒤 두 개 ${step.y} 앞 구역 — 여기서 서로 다른 값을 세요`)}`
+            : `🟠 ${t(E, `the back two ${step.y}'s = the moo's "y, y"`, `뒤 두 개 ${step.y} = moo 의 'y, y'`)}`}
         </div>
       )}
 
-      {/* contribution formula */}
-      {step.kind === "y" && (
+      {/* contribution formula — reveal piece by piece */}
+      {hasFormula && (
         <div style={{ display: "flex", justifyContent: "center", gap: 8, alignItems: "center", flexWrap: "wrap", marginBottom: 12, fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
-          <span style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 6, padding: "4px 9px", color: "#9a3412" }}>D[{step.p}] = {step.d0}</span>
-          {step.sub && <span style={{ color: "#dc2626", fontWeight: 800 }}>− 1</span>}
-          <span style={{ fontWeight: 800 }}>=</span>
-          <span style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 6, padding: "4px 9px", color: "#15803d", fontWeight: 800 }}>+{step.contrib}</span>
+          <span style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 6, padding: "4px 9px", color: "#9a3412" }}>{t(E, "before", "앞의 서로 다른 값")} {step.d0}</span>
+          {step.sub && (step.kind === "subtract" || step.kind === "add") && <span style={{ color: "#dc2626", fontWeight: 800 }}>− 1</span>}
+          {step.kind === "add" && <>
+            <span style={{ fontWeight: 800 }}>=</span>
+            <span style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 6, padding: "4px 9px", color: "#15803d", fontWeight: 800 }}>+{step.contrib}</span>
+          </>}
         </div>
       )}
 
