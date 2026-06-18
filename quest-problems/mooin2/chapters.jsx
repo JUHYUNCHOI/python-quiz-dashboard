@@ -370,8 +370,8 @@ export function makeMooin2Ch3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The fast idea: don't check every combo with a triple loop. For each repeated value, just count the different values BEFORE it — and add those up!",
-        "빠른 아이디어: 3중 for-loop 으로 일일이 안 세요. 반복되는 값마다 — 그 값 앞에 서로 다른 값이 몇 개인지 세서 더하면 끝!"),
+        "A moo's last two letters must be the SAME. So find a repeated number — then every value in FRONT of it that's different from it can be the moo's front. Just count those and add them up. No triple loop!",
+        "moo 는 뒤 두 글자가 똑같아야 해요. 그러니 반복되는 숫자를 찾고 → 그 앞에서 '그 숫자와 다른' 값들이 전부 moo 의 맨 앞이 될 수 있어요. 그 가짓수만 세서 더하면 끝! (3중 for-loop 없이)"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: "#ea580c", textAlign: "center", marginBottom: 10 }}>
