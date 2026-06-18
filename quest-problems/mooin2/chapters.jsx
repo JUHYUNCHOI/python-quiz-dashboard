@@ -378,10 +378,15 @@ export function makeMooin2Ch3(E) {
             🚀 {t(E, "Faster idea: count per y", "빠른 아이디어: y 마다 세기")}
           </div>
           <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#9a3412", lineHeight: 1.75 }}>
+            <div style={{ background: "#fff", border: "1px dashed #fdba74", borderRadius: 8, padding: "8px 11px", marginBottom: 11, fontSize: 12.5, lineHeight: 1.65 }}>
+              🔖 {t(E,
+                "Reminder — a moo is (x, y, y): y = the repeated value (appears ≥ 2 times), x = a different value sitting before it.",
+                "기억 — moo = (x, y, y): y = 반복되는 값(2번 이상 나옴), x = 그 앞에 오는 다른 값.")}
+            </div>
             {t(E, "For each value y that appears at least twice:", "두 번 이상 나오는 각 값 y 에 대해:")}
             <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
-              <div><b>1.</b> {t(E, "Find p = y's second-to-last spot (so two y's are still at/after p).", "p = y 의 '끝에서 두 번째' 자리 (그래야 p 부터 뒤로 y 가 2개).")}</div>
-              <div><b>2.</b> {t(E, "Count how many DIFFERENT values appear before p. Each is a candidate x.", "p 앞에 서로 다른 값이 몇 개인지 세기. 각각이 x 후보.")}</div>
+              <div><b>1.</b> {t(E, "Find p = y's second-to-last spot (so two y's are still at/after p).", "p = y 의 '끝에서 두 번째' 자리 (그래야 p 부터 뒤로 y 가 2개 남음).")}</div>
+              <div><b>2.</b> {t(E, "Count how many DIFFERENT values appear before p — each one is a candidate x.", "p 앞에 서로 다른 값이 몇 개인지 세기 — 각각이 x 후보.")}</div>
               <div><b>3.</b> {t(E, "Add that count to the answer.", "그 개수를 답에 더하기.")}</div>
             </div>
           </div>
