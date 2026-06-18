@@ -298,24 +298,35 @@ export function MooinCountTrace({ E }) {
       {/* array */}
       <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 12 }}>
         {a.map((v, i) => {
-          const isP = showP && i === step.p;                                   // 끝에서 두 번째 자리
+          const lastOcc = step.occ ? step.occ[step.occ.length - 1] : -1;
+          const isPair = showP && (i === step.p || i === lastOcc);             // 뒤 두 개 = moo 의 y, y 쌍
           const isPick = step.kind === "pick" && step.occ?.includes(i);        // 이 값이 나오는 자리들
           const inZone = (step.kind === "count" || step.kind === "subtract") && i < step.p; // 앞 구역
-          const isDrop = step.kind === "subtract" && i < step.p && v === step.y; // 빼야 할 y 자신
+          const isDrop = step.kind === "subtract" && i < step.p && v === step.y; // 빼는 y 자신 → ✗
           let bg = "#fff", fg = C.text, bd = C.border;
-          if (isP) { bg = "#ea580c"; fg = "#fff"; bd = "#ea580c"; }
-          else if (isDrop) { bg = "#fee2e2"; fg = "#b91c1c"; bd = "#dc2626"; }
+          if (isDrop) { bg = "#fff"; fg = "#b91c1c"; bd = "#dc2626"; }
+          else if (isPair) { bg = "#ea580c"; fg = "#fff"; bd = "#ea580c"; }
           else if (inZone) { bg = "#fef3c7"; fg = "#92400e"; bd = "#fbbf24"; }
           else if (isPick) { bg = "#dbeafe"; fg = "#1e40af"; bd = "#2563eb"; }
           return (
             <div key={i} style={{
+              position: "relative",
               width: 38, height: 46, display: "flex", flexDirection: "column",
               alignItems: "center", justifyContent: "center", borderRadius: 8,
               fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
               background: bg, color: fg, border: `2px solid ${bd}`,
+              opacity: isDrop ? 0.7 : 1,
             }}>
               <div style={{ fontSize: 9, opacity: 0.8 }}>i={i}</div>
-              <div style={{ fontSize: 14 }}>{v}</div>
+              <div style={{ fontSize: 14, textDecoration: isDrop ? "line-through" : "none" }}>{v}</div>
+              {isDrop && (
+                <div style={{
+                  position: "absolute", top: -8, right: -8, width: 18, height: 18, borderRadius: "50%",
+                  background: "#dc2626", color: "#fff", fontSize: 12, fontWeight: 900,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+                }}>✗</div>
+              )}
             </div>
           );
         })}
@@ -323,8 +334,8 @@ export function MooinCountTrace({ E }) {
       {showP && (
         <div style={{ textAlign: "center", fontSize: 11, color: "#9a3412", marginBottom: 10 }}>
           {step.kind === "count" || step.kind === "subtract"
-            ? `🟡 ${t(E, `left of second-to-last ${step.y} — count distinct values here`, `끝에서 두 번째 ${step.y} 앞 구역 — 여기서 서로 다른 값을 세요`)}`
-            : `↑ ${t(E, `second-to-last ${step.y}`, `끝에서 두 번째 ${step.y}`)}`}
+            ? `🟡 ${t(E, `left of the back two ${step.y}'s — count distinct values here`, `뒤 두 개 ${step.y} 앞 구역 — 여기서 서로 다른 값을 세요`)}`
+            : `🟠 ${t(E, `the back two ${step.y}'s = the moo's "y, y"`, `뒤 두 개 ${step.y} = moo 의 'y, y'`)}`}
         </div>
       )}
 
