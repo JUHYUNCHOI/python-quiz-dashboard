@@ -348,34 +348,6 @@ export function makeMooin2Ch2(E, lang = "py") {
           </div>
         </div>),
     },
-    /* 2-5 — where brute wastes work (discovery, not a jump) */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Before any trick — let's SEE what brute keeps redoing. Watch the value 4 in the sample.",
-        "트릭으로 점프하기 전에 — 브루트가 뭘 자꾸 다시 하는지 봐요. 샘플에서 값 4 를 보세요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 14, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
-            🔁 {t(E, "Brute redoes the same work", "브루트는 같은 일을 반복해요")}
-          </div>
-          <div style={{ background: "#ecfeff", border: "1.5px solid #67e8f9", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#155e75", lineHeight: 1.7 }}>
-            {t(E,
-              "In a = [1, 2, 3, 4, 4, 4], the value 4 sits at indices 3, 4, 5. Brute tries every (j, k) pair of 4's — and for EACH pair it re-scans all i before j to collect the x's:",
-              "a = [1, 2, 3, 4, 4, 4] 에서 4 는 인덱스 3, 4, 5. 브루트는 4 의 모든 (j, k) 짝마다 j 앞의 i 를 다시 훑어 x 를 모아요:")}
-            <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5 }}>
-              <div style={{ background: "#fff", border: "1px solid #a5f3fc", borderRadius: 6, padding: "5px 9px" }}>(j, k) = (3, 4) → x {t(E, "before index 3", "인덱스 3 앞")} = {"{1, 2, 3}"}</div>
-              <div style={{ background: "#fff", border: "1px solid #a5f3fc", borderRadius: 6, padding: "5px 9px" }}>(j, k) = (3, 5) → x {t(E, "before index 3", "인덱스 3 앞")} = {"{1, 2, 3}"}</div>
-              <div style={{ background: "#fff", border: "1px solid #a5f3fc", borderRadius: 6, padding: "5px 9px" }}>(j, k) = (4, 5) → x {t(E, "before index 4", "인덱스 4 앞")} = {"{1, 2, 3}"} <span style={{ color: "#0891b2" }}>(4 {t(E, "is y, skip", "는 y, 제외")})</span></div>
-            </div>
-            <div style={{ marginTop: 10, padding: "8px 10px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8 }}>
-              💡 {t(E,
-                "All three pairs collect the SAME x's — {1, 2, 3}. The set just throws the duplicates away. So brute did the same work three times for nothing!",
-                "세 짝이 모두 같은 x — {1, 2, 3} — 를 모아요. 집합이 중복을 버릴 뿐. 결국 같은 일을 세 번 헛한 거죠!")}
-            </div>
-          </div>
-        </div>),
-    },
     /* 2-6 — collapse to per-y count (the realization, now earned) */
     {
       type: "reveal",
@@ -414,7 +386,7 @@ export function makeMooin2Ch3(E) {
           <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#9a3412", lineHeight: 1.75 }}>
             {t(E, "For each value y that appears at least twice:", "두 번 이상 나오는 각 값 y 에 대해:")}
             <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
-              <div><b>1.</b> {t(E, "Find p — the LATEST spot where y still has another y after it.", "p 찾기 — y 뒤에 또 y 가 있는 가장 늦은 자리.")}</div>
+              <div><b>1.</b> {t(E, "Find p = y's second-to-last spot (so two y's are still at/after p).", "p = y 의 '끝에서 두 번째' 자리 (그래야 p 부터 뒤로 y 가 2개).")}</div>
               <div><b>2.</b> {t(E, "Count how many DIFFERENT values appear before p. Each is a candidate x.", "p 앞에 서로 다른 값이 몇 개인지 세기. 각각이 x 후보.")}</div>
               <div><b>3.</b> {t(E, "Add that count to the answer.", "그 개수를 답에 더하기.")}</div>
             </div>
@@ -425,14 +397,14 @@ export function makeMooin2Ch3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Why the LATEST spot for y? Because the later it sits, the more room is in front of it — so the most x candidates.",
-        "왜 '가장 늦은' 자리? 늦게 앉을수록 그 앞 공간이 넓으니까 — x 후보가 가장 많이 들어와요."),
+        "Why y's SECOND-TO-LAST spot? A moo needs two y's after x — and everything before that spot still has two y's after it.",
+        "왜 '끝에서 두 번째 y'? moo 는 x 뒤에 y 가 2개 있어야 해요 — 그 자리 앞이면 뒤에 y 가 딱 2개 남거든요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#eef6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#1e3a8a", lineHeight: 1.75, marginBottom: 12 }}>
             {t(E,
-              "We want the pair (y, y) to use the LATEST possible first-y. Call its position p. Everything before p is free to be the x. A later p = a longer 'before' zone = more distinct x's. Picking the latest never loses a single x.",
-              "(y, y) 짝의 첫 y 를 가능한 가장 늦게 두고 싶어요. 그 위치를 p 라 해요. p 앞은 전부 x 가 될 수 있어요. p 가 늦을수록 '앞 구역'이 길어지고 = 서로 다른 x 가 더 많아져요. 가장 늦게 고르면 어떤 x 도 놓치지 않아요.")}
+              "A moo is x, y, y — so you need TWO y's after x. Take y's second-to-last spot (call it p): exactly two y's sit from p onward. So every value before p can be the x — the widest 'before' zone, so no x is missed.",
+              "moo 는 x, y, y — 그러니 x 뒤에 y 가 2개 있어야 해요. y 의 '끝에서 두 번째' 자리(= p)를 잡으면, p 부터 뒤로 y 가 딱 2개 남아요. 그래서 p 앞에 나온 값은 전부 x 가 될 수 있어요 — 가장 넓은 '앞 구역'이라 x 를 하나도 안 놓쳐요.")}
           </div>
           <div style={{ textAlign: "center", fontSize: 12, color: "#9a3412", fontWeight: 700, marginBottom: 6 }}>
             a = [1, 2, 3, 4, 4, 4] · y = 4
@@ -458,36 +430,12 @@ export function makeMooin2Ch3(E) {
           </div>
         </div>),
     },
-    /* 3-3 — framing before the audit sim */
-    {
-      type: "reveal",
-      narr: t(E,
-        "To do this fast we build 4 little tables in ONE left-to-right pass. Here's what each one is for.",
-        "이걸 빠르게 하려고 왼→오로 한 번 훑으며 작은 표 4개를 만들어요. 각각 뭘 위한 건지 봐요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#eef6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#1e3a8a", lineHeight: 1.8 }}>
-            <div style={{ fontWeight: 800, marginBottom: 6 }}>🤔 {t(E, "What are these 4 tables FOR?", "이 표 4개는 무슨 질문에 답할까요?")}</div>
-            <div><b>count[v]</b> — {t(E, "can v even be the (y, y) pair? (need ≥ 2)", "v 가 (y, y) 짝이 될 수 있나? (2번 이상 필요)")}</div>
-            <div><b>last_seen[v]</b> — {t(E, "where did we last see v? (helper to build the next one)", "v 를 마지막으로 본 곳? (다음 표 만드는 도우미)")}</div>
-            <div><b>second_last[v]</b> — {t(E, "that's p! the latest spot with another v after it.", "그게 p! 뒤에 v 가 또 있는 가장 늦은 자리.")}</div>
-            <div><b>D[k]</b> — {t(E, "how many DISTINCT values appear before position k? (the x candidates)", "위치 k 앞에 서로 다른 값이 몇 개? (x 후보 수)")}</div>
-          </div>
-        </div>),
-    },
-    /* 3-4 — Deep Audit sim */
-    {
-      type: "deepAudit",
-      narr: t(E,
-        "Step through a = [1, 2, 3, 4, 4, 4] one index at a time and watch all 4 tables fill in.",
-        "a = [1, 2, 3, 4, 4, 4] 를 한 칸씩 밟으며 표 4개가 채워지는 걸 봐요."),
-    },
     /* 3-5 — D[p] meaning */
     {
       type: "reveal",
       narr: t(E,
-        "Now the magic: D[p] is EXACTLY the number of distinct x candidates before y's pair. No looping needed.",
-        "이제 마법: D[p] 가 바로 y 짝 앞의 서로 다른 x 후보 수예요. 반복할 필요 없어요."),
+        "One tool to count it fast — D[p]: how many DIFFERENT values appear before p. That's exactly the x-candidate count.",
+        "빠르게 세는 도구 하나 — D[p]: p 앞에 나온 서로 다른 값의 수. 그게 바로 x 후보 수예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#065f46", lineHeight: 1.75 }}>
