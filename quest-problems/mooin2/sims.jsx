@@ -346,9 +346,15 @@ export function MooinCountTrace({ E }) {
         </div>
       )}
 
-      {/* narration — 메인 설명 (배열 바로 다음) */}
-      <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "11px 13px", fontSize: 13, color: "#92400e", lineHeight: 1.6, marginBottom: 10, minHeight: 44 }}>
-        {note}
+      {/* narration — 진짜 말풍선 (위 배열을 가리키는 꼬리) (선생님 2026-06-18) */}
+      <div style={{ position: "relative", marginTop: 4, marginBottom: 12 }}>
+        {/* 꼬리: 테두리색 삼각형 + 그 위 살짝 작은 배경색 삼각형 */}
+        <div style={{ position: "absolute", top: -9, left: 30, width: 0, height: 0, borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderBottom: "9px solid #fbbf24" }} />
+        <div style={{ position: "absolute", top: -7, left: 31, width: 0, height: 0, borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderBottom: "8px solid #fffbeb" }} />
+        <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 14, padding: "11px 14px", fontSize: 13, color: "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", gap: 8 }}>
+          <span style={{ fontSize: 15, flexShrink: 0 }}>💬</span>
+          <span>{note}</span>
+        </div>
       </div>
 
       {/* running total — 부가 정보라 작은 칩으로 (선생님 2026-06-18: 메인이 먼저 보여야) */}
