@@ -346,14 +346,16 @@ export function MooinCountTrace({ E }) {
         </div>
       )}
 
-      {/* running total */}
-      <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", textAlign: "center", fontSize: 13, fontWeight: 700, marginBottom: 10 }}>
-        {t(E, "answer so far", "현재까지 답")}: <span style={{ fontSize: 20 }}>{step.ans}</span>
+      {/* narration — 메인 설명 (배열 바로 다음) */}
+      <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "11px 13px", fontSize: 13, color: "#92400e", lineHeight: 1.6, marginBottom: 10, minHeight: 44 }}>
+        {note}
       </div>
 
-      {/* narration */}
-      <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: "#92400e", lineHeight: 1.6, marginBottom: 10, minHeight: 44 }}>
-        {note}
+      {/* running total — 부가 정보라 작은 칩으로 (선생님 2026-06-18: 메인이 먼저 보여야) */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
+        <div style={{ background: "#fff7ed", border: `1.5px solid ${A}`, color: A, borderRadius: 999, padding: "4px 14px", fontSize: 12, fontWeight: 700 }}>
+          {t(E, "answer so far", "현재까지 답")} <span style={{ fontSize: 16, fontWeight: 900 }}>{step.ans}</span>
+        </div>
       </div>
 
       <SimNav idx={idx} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
