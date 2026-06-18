@@ -396,16 +396,45 @@ export function makeMooin2Ch3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Why y's SECOND-TO-LAST spot? A moo needs two y's after x — and everything before that spot still has two y's after it.",
-        "왜 '끝에서 두 번째 y'? moo 는 x 뒤에 y 가 2개 있어야 해요 — 그 자리 앞이면 뒤에 y 가 딱 2개 남거든요."),
+        "x needs two y's behind it. So x just has to be before y's second-to-last spot. Let's see it on a real array.",
+        "x 는 뒤에 y 가 2개 있어야 해요. 그러니 x 는 'y 의 끝에서 두 번째' 자리보다 앞에만 있으면 돼요 — 그림으로 봐요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#eef6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#1e3a8a", lineHeight: 1.75, marginBottom: 12 }}>
+          <div style={{ background: "#eef6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#1e3a8a", lineHeight: 1.7, marginBottom: 12 }}>
             {t(E,
-              "A moo is x, y, y — so you need TWO y's after x. Take y's second-to-last spot: exactly two y's sit from there onward. So every value before that spot can be the x — the widest 'before' zone, so no x is missed.",
-              "moo 는 x, y, y — 그러니 x 뒤에 y 가 2개 있어야 해요. y 의 '끝에서 두 번째' 자리를 잡으면, 그 자리부터 뒤로 y 가 딱 2개 남아요. 그래서 그 자리 앞에 나온 값은 전부 x 가 될 수 있어요 — 가장 넓은 '앞 구역'이라 x 를 하나도 안 놓쳐요.")}
+              "moo is x, y, y → x needs TWO y's behind it. So just find where y appears for the second-to-last time — anything before that has two y's left after it.",
+              "moo 는 x, y, y → x 뒤에 y 가 2개 있어야 해요. 그러니 y 가 '끝에서 두 번째'로 나오는 자리만 찾으면 돼요 — 그 앞은 전부 뒤에 y 가 2개 남아 있거든요.")}
+            {/* 구체 그림: 1 2 3 4 4 4 에서 끝에서 두 번째 4 와 그 뒤 2개 */}
+            <div style={{ display: "flex", gap: 4, justifyContent: "center", margin: "12px 0 4px" }}>
+              {[1, 2, 3, 4, 4, 4].map((v, i) => {
+                const isSecondLast = i === 4;          // 끝에서 두 번째 4
+                const isTail = i >= 4;                  // 여기부터 뒤로 4가 2개
+                const isZone = i < 4;                   // x 후보 구역
+                return (
+                  <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+                    <div style={{
+                      width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
+                      borderRadius: 7, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", fontSize: 15,
+                      background: isSecondLast ? "#ea580c" : isTail ? "#fde68a" : "#dbeafe",
+                      color: isSecondLast ? "#fff" : isTail ? "#92400e" : "#1e40af",
+                      border: `2px solid ${isSecondLast ? "#ea580c" : isTail ? "#f59e0b" : "#60a5fa"}`,
+                    }}>{v}</div>
+                    <div style={{ fontSize: 8.5, color: "#64748b" }}>{isSecondLast ? "↑여기" : ""}</div>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, fontWeight: 700, marginTop: 2 }}>
+              <span style={{ color: "#1e40af" }}>{t(E, "← x candidates (front)", "← 앞 = x 후보 자리")}</span>
+              <span style={{ color: "#b45309" }}>{t(E, "two y's left →", "여기부터 4가 2개 →")}</span>
+            </div>
+            <div style={{ marginTop: 10, fontSize: 12.5 }}>
+              {t(E,
+                "Front zone {1, 2, 3, 4}, drop the 4 itself → 1, 2, 3 → three moos with 4.",
+                "앞 구역 {1, 2, 3, 4} 에서 4 자신만 빼면 → 1, 2, 3 → 4 로 만드는 moo 3개.")}
+            </div>
           </div>
-          {/* 정적 그림 대신 인터랙티브 시뮬 — 설명 + 시뮬을 한 화면에 (선생님 2026-06-18) */}
+          {/* 다른 배열로도 직접 따라가 보기 (선생님 2026-06-18: 동작마다 말풍선) */}
           <MooinCountTrace E={E} />
         </div>),
     },
