@@ -391,42 +391,11 @@ export function makeMooin2Ch3(E) {
               <div><b>3.</b> {t(E, "Add that count to the answer.", "그 개수를 답에 더하기.")}</div>
             </div>
           </div>
-          {/* 왜 '끝에서 두 번째'? — 구체 그림으로 바로 옆에서 (선생님 2026-06-18: recipe 와 한 화면) */}
-          <div style={{ background: "#eef6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#1e3a8a", lineHeight: 1.7, marginBottom: 12 }}>
-            <div style={{ fontWeight: 800, marginBottom: 6 }}>👇 {t(E, "Why the SECOND-TO-LAST spot?", "왜 '끝에서 두 번째'일까?")}</div>
-            {t(E,
-              "moo is x, y, y → x needs TWO y's behind it. So find where y shows up for the second-to-last time — everything before it still has two y's left after, so it can be x.",
-              "moo 는 x, y, y → x 뒤에 y 가 2개 있어야 해요. 그러니 y 가 '끝에서 두 번째'로 나오는 자리를 찾으면 — 그 앞은 전부 뒤에 y 가 2개 남아 있어서 x 가 될 수 있어요.")}
-            {/* 구체 그림: 1 2 3 4 4 4 에서 끝에서 두 번째 4 와 그 뒤 2개 */}
-            <div style={{ display: "flex", gap: 4, justifyContent: "center", margin: "12px 0 4px" }}>
-              {[1, 2, 3, 4, 4, 4].map((v, i) => {
-                const isSecondLast = i === 4;          // 끝에서 두 번째 4
-                const isTail = i >= 4;                  // 여기부터 뒤로 4가 2개
-                return (
-                  <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-                    <div style={{
-                      width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
-                      borderRadius: 7, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", fontSize: 15,
-                      background: isSecondLast ? "#ea580c" : isTail ? "#fde68a" : "#dbeafe",
-                      color: isSecondLast ? "#fff" : isTail ? "#92400e" : "#1e40af",
-                      border: `2px solid ${isSecondLast ? "#ea580c" : isTail ? "#f59e0b" : "#60a5fa"}`,
-                    }}>{v}</div>
-                    <div style={{ fontSize: 8.5, color: "#64748b" }}>{isSecondLast ? "↑여기" : ""}</div>
-                  </div>
-                );
-              })}
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, fontWeight: 700, marginTop: 2 }}>
-              <span style={{ color: "#1e40af" }}>{t(E, "← x candidates (front)", "← 앞 = x 후보 자리")}</span>
-              <span style={{ color: "#b45309" }}>{t(E, "two y's left →", "여기부터 4가 2개 →")}</span>
-            </div>
-            <div style={{ marginTop: 10, fontSize: 12.5 }}>
-              {t(E,
-                "Front zone {1, 2, 3, 4}, drop the 4 itself → 1, 2, 3 → three moos with 4.",
-                "앞 구역 {1, 2, 3, 4} 에서 4 자신만 빼면 → 1, 2, 3 → 4 로 만드는 moo 3개.")}
-            </div>
+          {/* 정적 그림 제거 (선생님 2026-06-18: 시뮬과 중복). '왜 끝에서 두 번째'는
+              시뮬 spot 스텝 말풍선이 동작할 때 설명. 아래 한 줄 안내만. */}
+          <div style={{ textAlign: "center", fontSize: 12.5, color: "#7c5cfc", fontWeight: 700, marginBottom: 10 }}>
+            👇 {t(E, "Step through it — each move is explained in the bubble.", "한 동작씩 눌러봐요 — 각 동작 설명이 말풍선에 떠요.")}
           </div>
-          {/* 다른 배열로 직접, 동작마다 말풍선 따라가 보기 (선생님 2026-06-18) */}
           <MooinCountTrace E={E} />
         </div>),
     },

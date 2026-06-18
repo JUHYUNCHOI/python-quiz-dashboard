@@ -256,8 +256,8 @@ export function MooinCountTrace({ E }) {
       `이번엔 값 ${step.y} 차례. ${step.cnt}번 나오니까 (2번 이상!) → moo 의 'y, y' 자리로 쓸 수 있어요. ${step.y} 로 moo 몇 개 만드는지 세 볼게요.`);
   else if (step.kind === "spot")
     note = t(E,
-      `First, find where ${step.y} appears for the second-to-last time → spot i=${step.p}. Everything to the LEFT of here can be the front x of a moo.`,
-      `먼저 ${step.y} 가 '끝에서 두 번째'로 나오는 자리를 찾아요 → i=${step.p} 칸. 이 자리 왼쪽(앞)에 나온 값들이 moo 의 맨 앞 x 가 될 수 있어요.`);
+      `Find where ${step.y} appears for the second-to-last time → i=${step.p}. From here on there are exactly two ${step.y}'s — the moo's "y, y". So everything to the LEFT can be the front x.`,
+      `${step.y} 가 '끝에서 두 번째'로 나오는 자리를 찾아요 → i=${step.p} 칸. 여기부터 뒤로 ${step.y} 가 딱 2개 남아요 — moo 의 'y, y'. 그래서 이 자리 왼쪽 값들이 맨 앞 x 가 될 수 있어요.`);
   else if (step.kind === "count")
     note = t(E,
       `Count the DIFFERENT values in that left zone: {${step.beforeSet.join(", ")}} → ${step.d0} of them.`,
