@@ -310,7 +310,7 @@ export function MooinCountTrace({ E }) {
         return (
           <div style={{ width: boxW, margin: "0 auto 12px" }}>
             {/* 말풍선 (아래로 꼬리) */}
-            <div style={{ position: "relative", background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 14, padding: "11px 14px", fontSize: 13, color: "#92400e", lineHeight: 1.6, minHeight: 40, display: "flex", gap: 8, marginBottom: 12 }}>
+            <div style={{ position: "relative", background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 14, padding: "11px 14px", fontSize: 13, color: "#92400e", lineHeight: 1.6, minHeight: 40, display: "flex", gap: 8, marginBottom: 12, wordBreak: "keep-all", overflowWrap: "anywhere" }}>
               <span style={{ fontSize: 15, flexShrink: 0 }}>💬</span>
               <span>{note}</span>
               <div style={{ position: "absolute", bottom: -9, left: tailLeft, width: 0, height: 0, borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderTop: "9px solid #fbbf24", transition: "left .2s" }} />
