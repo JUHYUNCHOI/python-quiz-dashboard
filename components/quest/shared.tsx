@@ -336,9 +336,12 @@ export function highlight(line: string, lang: "py" | "cpp" = "py"): React.ReactN
 interface CodeBlockProps {
   lines: string[]
   lang?: "py" | "cpp"
+  /** Lines [0, dimUntil) render dimmed (already-built context); the rest are
+   *  the newly-added lines, shown full-strength. Default 0 = nothing dimmed. */
+  dimUntil?: number
 }
 
-export function CodeBlock({ lines, lang = "py" }: CodeBlockProps) {
+export function CodeBlock({ lines, lang = "py", dimUntil = 0 }: CodeBlockProps) {
   const [copied, setCopied] = useState(false)
   const handleCopy = async () => {
     try {
@@ -372,7 +375,7 @@ export function CodeBlock({ lines, lang = "py" }: CodeBlockProps) {
         {copied ? "✓ Copied" : "📋 Copy"}
       </button>
       {lines.map((l, i) => (
-        <div key={i} className="flex min-h-5 items-start">
+        <div key={i} className="flex min-h-5 items-start" style={{ opacity: i < dimUntil ? 0.38 : 1, transition: "opacity 150ms" }}>
           <span className="text-gray-500 w-7 text-right mr-2.5 flex-shrink-0 select-none text-[11px] pt-px">
             {i + 1}
           </span>

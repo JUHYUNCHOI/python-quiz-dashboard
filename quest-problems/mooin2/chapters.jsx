@@ -292,10 +292,13 @@ export function makeMooin2Ch2(E, lang = "py") {
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0891b2", marginBottom: 8 }}>
             🐢 {t(E, "Brute — piece 2: three nested loops", "브루트 — 2조각: 3중 반복")}
           </div>
-          <CodeBlock lines={isCpp ? bruteLoopCpp : bruteLoopPy} lang={isCpp ? "cpp" : "py"} />
+          <CodeBlock
+            lines={isCpp ? [...bruteReadCpp, ...bruteLoopCpp] : [...bruteReadPy, ...bruteLoopPy]}
+            dimUntil={isCpp ? bruteReadCpp.length : bruteReadPy.length}
+            lang={isCpp ? "cpp" : "py"} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-            {t(E, "seen is a set — it auto-drops duplicates, so its size will be the count of DISTINCT moos.",
-                  "seen 은 집합 — 중복을 알아서 버려요. 그래서 크기가 곧 서로 다른 moo 개수가 돼요.")}
+            {t(E, "Gray = already written; colored = the new lines. seen is a set — it auto-drops duplicates, so its size = the count of DISTINCT moos.",
+                  "회색 = 이미 짠 줄, 색 = 새로 추가한 줄. seen 은 집합 — 중복을 알아서 버려요. 그래서 크기 = 서로 다른 moo 개수.")}
           </div>
         </div>),
     },
@@ -310,10 +313,13 @@ export function makeMooin2Ch2(E, lang = "py") {
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0891b2", marginBottom: 8 }}>
             🐢 {t(E, "Brute — piece 3: check & count", "브루트 — 3조각: 판정 후 집계")}
           </div>
-          <CodeBlock lines={isCpp ? bruteBodyCpp : bruteBodyPy} lang={isCpp ? "cpp" : "py"} />
+          <CodeBlock
+            lines={isCpp ? [...bruteReadCpp, ...bruteLoopCpp, ...bruteBodyCpp] : [...bruteReadPy, ...bruteLoopPy, ...bruteBodyPy]}
+            dimUntil={isCpp ? (bruteReadCpp.length + bruteLoopCpp.length) : (bruteReadPy.length + bruteLoopPy.length)}
+            lang={isCpp ? "cpp" : "py"} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-            {t(E, "Correct and easy to read. Now the big question: how fast is it?",
-                  "맞고 읽기도 쉬워요. 이제 큰 질문: 얼마나 빠를까요?")}
+            {t(E, "↑ The full brute program, all together. Correct and easy to read — now the big question: how fast is it?",
+                  "↑ 합쳐진 전체 브루트 코드예요. 맞고 읽기 쉬운데 — 이제 큰 질문: 얼마나 빠를까요?")}
           </div>
         </div>),
     },
