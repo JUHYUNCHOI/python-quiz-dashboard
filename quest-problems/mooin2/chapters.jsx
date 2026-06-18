@@ -370,8 +370,8 @@ export function makeMooin2Ch3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The fast idea: skip the triple for-loop. For each repeated value y, ask one question.",
-        "빠른 아이디어: 3중 for-loop(모든 i·j·k)을 돌리지 말자. 반복되는 각 값 y 마다 질문 하나만."),
+        "The fast idea: skip the triple for-loop. For each repeated value, answer ONE question — 'how many moos can it make?'",
+        "빠른 아이디어: 3중 for-loop 대신 — 반복되는 값마다 '이 값으로 moo 몇 개 만드나?' 하나만 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: "#ea580c", textAlign: "center", marginBottom: 10 }}>
