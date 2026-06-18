@@ -315,11 +315,10 @@ export function makeMooin2Ch2(E, lang = "py") {
           </div>
           <CodeBlock
             lines={isCpp ? [...bruteReadCpp, ...bruteLoopCpp, ...bruteBodyCpp] : [...bruteReadPy, ...bruteLoopPy, ...bruteBodyPy]}
-            dimUntil={isCpp ? (bruteReadCpp.length + bruteLoopCpp.length) : (bruteReadPy.length + bruteLoopPy.length)}
             lang={isCpp ? "cpp" : "py"} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
-            {t(E, "↑ The full brute program, all together. Correct and easy to read — now the big question: how fast is it?",
-                  "↑ 합쳐진 전체 브루트 코드예요. 맞고 읽기 쉬운데 — 이제 큰 질문: 얼마나 빠를까요?")}
+            {t(E, "↑ The full brute program — all of it. Correct and easy to read — now the big question: how fast is it?",
+                  "↑ 완성된 전체 브루트 코드 (전부). 맞고 읽기 쉬운데 — 이제 큰 질문: 얼마나 빠를까요?")}
           </div>
         </div>),
     },
@@ -334,12 +333,12 @@ export function makeMooin2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Did you feel it? Three nested loops means roughly N × N × N work. That number EXPLODES.",
-        "느꼈어요? 3중 반복은 대략 N × N × N 만큼 일해요. 그 수가 폭발해요."),
+        "Felt it? Three nested loops do about N × N × N work → it TIMES OUT. So what do we do? 👇",
+        "느꼈죠? 3중 반복은 대략 N × N × N 만큼 일해서 → 시간 초과(타임오버)가 나요. 그럼 어떻게? 👇"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#991b1b", lineHeight: 1.75 }}>
-            <div style={{ fontWeight: 800, marginBottom: 6 }}>🚧 {t(E, "Why brute force loses", "브루트포스가 지는 이유")}</div>
+            <div style={{ fontWeight: 800, marginBottom: 6 }}>🚧 {t(E, "Why it TIMES OUT", "왜 시간 초과(타임오버)가 날까?")}</div>
             {t(E, "Triples for N numbers ≈ N³ ÷ 6. Watch it grow:", "N 개 숫자의 삼중 ≈ N³ ÷ 6. 커지는 걸 봐요:")}
             <div style={{ marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.9 }}>
               N = 100 → ~160,000 {t(E, "triples (fine)", "삼중 (괜찮음)")}<br/>
@@ -348,25 +347,14 @@ export function makeMooin2Ch2(E, lang = "py") {
             </div>
             <div style={{ marginTop: 8, fontWeight: 700, color: "#7c2d12" }}>
               {t(E,
-                "At a billion steps per second, N = 10⁶ would take ~30 YEARS. The time limit is ~2 seconds.",
-                "1초에 10억 번 해도 N = 10⁶ 은 약 30년 걸려요. 제한 시간은 약 2초예요.")}
+                "At a billion steps per second, N = 10⁶ would take ~30 YEARS. The limit is ~2 seconds → TIME OUT.",
+                "1초에 10억 번 해도 N = 10⁶ 은 약 30년 걸려요. 제한 시간은 약 2초 → 시간 초과(타임오버).")}
             </div>
           </div>
-        </div>),
-    },
-    /* 2-6 — collapse to per-y count (the realization, now earned) */
-    {
-      type: "reveal",
-      narr: t(E,
-        "So: the answer is right, but we need a MUCH faster way to count it. Time to think smarter. 👉",
-        "그래서: 답은 맞지만 훨씬 빠르게 세는 방법이 필요해요. 더 똑똑하게 생각할 시간. 👉"),
-      content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ fontSize: 34, marginBottom: 8 }}>🐢 → 🚀</div>
-          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 12, padding: "14px 16px", fontSize: 14, color: "#9a3412", lineHeight: 1.7, maxWidth: 440, margin: "0 auto" }}>
-            {t(E,
-              "Key realization: we don't actually need to LOOK at every triple. For each repeated value y, we just need to know one thing — how many different x's can sit before y's pair. Let's build that next.",
-              "핵심 깨달음: 사실 모든 삼중을 볼 필요가 없어요. 반복되는 값 y 마다 딱 하나만 알면 돼요 — y 의 짝 앞에 서로 다른 x 가 몇 개 올 수 있는가. 다음에 이걸 만들어요.")}
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "11px 13px", fontSize: 13.5, color: "#9a3412", lineHeight: 1.7 }}>
+            🚀 {t(E,
+              "So we DON'T look at every triple. For each repeated value y, count just ONE thing — how many different x's can sit before y's pair. (Next tab!)",
+              "그래서 모든 삼중을 다 보지 않아요. 반복되는 값 y 마다 딱 하나만 — '짝 앞에 서로 다른 x 가 몇 개?' 만 세요. (다음 탭에서!)")}
           </div>
         </div>),
     },
