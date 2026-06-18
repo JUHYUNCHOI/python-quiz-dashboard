@@ -353,8 +353,8 @@ export function makeMooin2Ch2(E, lang = "py") {
           </div>
           <div style={{ marginTop: 12, background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "11px 13px", fontSize: 13.5, color: "#9a3412", lineHeight: 1.7 }}>
             🚀 {t(E,
-              "So we DON'T try every 3-spot combo. For each repeated value y, count just ONE thing — how many different x's can sit before y's pair. (Next tab!)",
-              "그래서 3칸 조합을 다 보지 않아요. 반복되는 값 y 마다 딱 하나만 — '짝 앞에 서로 다른 x 가 몇 개?' 만 세요. (다음 탭에서!)")}
+              "So we won't count combos one by one. Instead — for each repeated value, we'll work out 'how many moos can it make?' in one shot, and add those up. (How? Step by step in the next tab.)",
+              "그래서 조합을 하나하나 세지 않아요. 대신 — 반복되는 값마다 '이 값으로 moo 를 몇 개 만들 수 있나?' 를 한 번에 구해서 더할 거예요. (어떻게? 다음 탭에서 하나씩.)")}
           </div>
         </div>),
     },
