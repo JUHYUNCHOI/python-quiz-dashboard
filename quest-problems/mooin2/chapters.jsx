@@ -237,7 +237,7 @@ export function makeMooin2Ch2(E, lang = "py") {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
-            🐢 {t(E, "First idea: try EVERY triple", "첫 아이디어: 모든 삼중을 다 해보기")}
+            🐢 {t(E, "First idea: try EVERY 3-spot combo", "첫 아이디어: 3칸을 모든 방법으로 골라보기")}
           </div>
           <div style={{ background: "#ecfeff", border: "1.5px solid #67e8f9", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#155e75", lineHeight: 1.7 }}>
             <div style={{ marginBottom: 9 }}>
@@ -339,9 +339,9 @@ export function makeMooin2Ch2(E, lang = "py") {
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#991b1b", lineHeight: 1.75 }}>
             <div style={{ fontWeight: 800, marginBottom: 6 }}>🚧 {t(E, "Why it TIMES OUT", "왜 시간 초과(타임오버)가 날까?")}</div>
-            {t(E, "Triples for N numbers ≈ N³ ÷ 6. Watch it grow:", "N 개 숫자의 삼중 ≈ N³ ÷ 6. 커지는 걸 봐요:")}
+            {t(E, "Picking 3 spots out of N ≈ N³ ÷ 6 ways. Watch it grow:", "N 개에서 3칸 고르는 경우의 수 ≈ N³ ÷ 6. 커지는 걸 봐요:")}
             <div style={{ marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.9 }}>
-              N = 100 → ~160,000 {t(E, "triples (fine)", "삼중 (괜찮음)")}<br/>
+              N = 100 → ~160,000 {t(E, "combos (fine)", "가짓수 (괜찮음)")}<br/>
               N = 10,000 → ~1.6 × 10¹¹ {t(E, "(slow)", "(느림)")}<br/>
               N = 1,000,000 → ~1.7 × 10¹⁷ {t(E, "(forever)", "(영원)")}
             </div>
@@ -353,8 +353,8 @@ export function makeMooin2Ch2(E, lang = "py") {
           </div>
           <div style={{ marginTop: 12, background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "11px 13px", fontSize: 13.5, color: "#9a3412", lineHeight: 1.7 }}>
             🚀 {t(E,
-              "So we DON'T look at every triple. For each repeated value y, count just ONE thing — how many different x's can sit before y's pair. (Next tab!)",
-              "그래서 모든 삼중을 다 보지 않아요. 반복되는 값 y 마다 딱 하나만 — '짝 앞에 서로 다른 x 가 몇 개?' 만 세요. (다음 탭에서!)")}
+              "So we DON'T try every 3-spot combo. For each repeated value y, count just ONE thing — how many different x's can sit before y's pair. (Next tab!)",
+              "그래서 3칸 조합을 다 보지 않아요. 반복되는 값 y 마다 딱 하나만 — '짝 앞에 서로 다른 x 가 몇 개?' 만 세요. (다음 탭에서!)")}
           </div>
         </div>),
     },
@@ -370,8 +370,8 @@ export function makeMooin2Ch3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The fast idea: don't check triples. For each value y that repeats, ask one question.",
-        "빠른 아이디어: 삼중을 확인하지 말자. 반복되는 각 값 y 마다 질문 하나만 해요."),
+        "The fast idea: skip the triple for-loop. For each repeated value y, ask one question.",
+        "빠른 아이디어: 3중 for-loop(모든 i·j·k)을 돌리지 말자. 반복되는 각 값 y 마다 질문 하나만."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: "#ea580c", textAlign: "center", marginBottom: 10 }}>
@@ -385,8 +385,8 @@ export function makeMooin2Ch3(E) {
             </div>
             {t(E, "For each value y that appears at least twice:", "두 번 이상 나오는 각 값 y 에 대해:")}
             <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
-              <div><b>1.</b> {t(E, "Find p = y's second-to-last spot (so two y's are still at/after p).", "p = y 의 '끝에서 두 번째' 자리 (그래야 p 부터 뒤로 y 가 2개 남음).")}</div>
-              <div><b>2.</b> {t(E, "Count how many DIFFERENT values appear before p — each one is a candidate x.", "p 앞에 서로 다른 값이 몇 개인지 세기 — 각각이 x 후보.")}</div>
+              <div><b>1.</b> {t(E, "Find y's SECOND-TO-LAST spot (so two y's are still from there on).", "y 의 '끝에서 두 번째' 자리를 찾기 (그래야 그 자리부터 뒤로 y 가 2개 남음).")}</div>
+              <div><b>2.</b> {t(E, "Count the DIFFERENT values before that spot — each one is a candidate x.", "그 자리 앞에 서로 다른 값이 몇 개인지 세기 — 각각이 x 후보.")}</div>
               <div><b>3.</b> {t(E, "Add that count to the answer.", "그 개수를 답에 더하기.")}</div>
             </div>
           </div>
@@ -402,8 +402,8 @@ export function makeMooin2Ch3(E) {
         <div style={{ padding: 16 }}>
           <div style={{ background: "#eef6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: "#1e3a8a", lineHeight: 1.75, marginBottom: 12 }}>
             {t(E,
-              "A moo is x, y, y — so you need TWO y's after x. Take y's second-to-last spot (call it p): exactly two y's sit from p onward. So every value before p can be the x — the widest 'before' zone, so no x is missed.",
-              "moo 는 x, y, y — 그러니 x 뒤에 y 가 2개 있어야 해요. y 의 '끝에서 두 번째' 자리(= p)를 잡으면, p 부터 뒤로 y 가 딱 2개 남아요. 그래서 p 앞에 나온 값은 전부 x 가 될 수 있어요 — 가장 넓은 '앞 구역'이라 x 를 하나도 안 놓쳐요.")}
+              "A moo is x, y, y — so you need TWO y's after x. Take y's second-to-last spot: exactly two y's sit from there onward. So every value before that spot can be the x — the widest 'before' zone, so no x is missed.",
+              "moo 는 x, y, y — 그러니 x 뒤에 y 가 2개 있어야 해요. y 의 '끝에서 두 번째' 자리를 잡으면, 그 자리부터 뒤로 y 가 딱 2개 남아요. 그래서 그 자리 앞에 나온 값은 전부 x 가 될 수 있어요 — 가장 넓은 '앞 구역'이라 x 를 하나도 안 놓쳐요.")}
           </div>
           <div style={{ textAlign: "center", fontSize: 12, color: "#9a3412", fontWeight: 700, marginBottom: 6 }}>
             a = [1, 2, 3, 4, 4, 4] · y = 4
@@ -424,8 +424,8 @@ export function makeMooin2Ch3(E) {
             })}
           </div>
           <div style={{ textAlign: "center", fontSize: 11.5, color: C.dim }}>
-            {t(E, "p = 4 (the second-to-last 4). The blue zone before it holds the x candidates: {1, 2, 3, 4}.",
-                  "p = 4 (끝에서 두 번째 4). 그 앞 파란 구역이 x 후보: {1, 2, 3, 4}.")}
+            {t(E, "The second-to-last 4 is at spot 4. The blue zone before it holds the x candidates: {1, 2, 3, 4}.",
+                  "끝에서 두 번째 4 는 4번 자리. 그 앞 파란 구역이 x 후보: {1, 2, 3, 4}.")}
           </div>
         </div>),
     },
@@ -433,15 +433,15 @@ export function makeMooin2Ch3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "One tool to count it fast — D[p]: how many DIFFERENT values appear before p. That's exactly the x-candidate count.",
-        "빠르게 세는 도구 하나 — D[p]: p 앞에 나온 서로 다른 값의 수. 그게 바로 x 후보 수예요."),
+        "The count we need = how many DIFFERENT values appear before that second-to-last spot. That's exactly the x-candidate count.",
+        "필요한 건 — '끝에서 두 번째 자리' 앞에 나온 서로 다른 값의 수. 그게 바로 x 후보 수예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#065f46", lineHeight: 1.75 }}>
-            {t(E, "Recall: p = second_last[y], and D[p] = distinct values in a[0..p-1]. So for y = 4: p = 4, D[4] = 4 (the values 1, 2, 3, 4).",
-                  "기억: p = second_last[y], D[p] = a[0..p-1] 의 서로 다른 값 수. y = 4 면: p = 4, D[4] = 4 (값 1, 2, 3, 4).")}
+            {t(E, "Example y = 4: its second-to-last spot is index 4. The distinct values before it are {1, 2, 3, 4} → 4 of them.",
+                  "예 y = 4: 끝에서 두 번째 자리는 4번. 그 앞의 서로 다른 값은 {1, 2, 3, 4} → 4개.")}
             <div style={{ marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#15803d", textAlign: "center", fontWeight: 800 }}>
-              D[second_last[y]] = {t(E, "candidate x count", "x 후보 수")}
+              {t(E, "distinct values before that spot = x candidates", "끝에서 두 번째 자리 앞의 서로 다른 값 = x 후보 수")}
             </div>
           </div>
         </div>),
@@ -456,24 +456,24 @@ export function makeMooin2Ch3(E) {
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#92400e", lineHeight: 1.75 }}>
             <div style={{ fontWeight: 800, marginBottom: 6 }}>
-              ⚠️ {t(E, "Subtract 1 when count[y] ≥ 3", "count[y] ≥ 3 이면 1 빼기")}
+              ⚠️ {t(E, "Subtract 1 when y appears 3+ times", "y 가 3번 이상 나오면 1 빼기")}
             </div>
             {t(E,
-              "D[p] counts ALL distinct values before p — including y itself, if y already showed up there. But y can't be its own x. So when y appears before p (which happens exactly when count[y] ≥ 3), subtract 1.",
-              "D[p] 는 p 앞의 모든 서로 다른 값을 세요 — y 가 거기 이미 나왔다면 y 도 포함. 하지만 y 는 자기 자신의 x 가 못 돼요. 그래서 y 가 p 앞에 나오면 (count[y] ≥ 3 일 때 정확히 그럼) 1 빼요.")}
+              "The 'before' zone may already contain y itself (if y showed up early). But y can't be its own x — so when that happens (exactly when y appears 3+ times), subtract 1.",
+              "'앞 구역'에 y 자신이 이미 들어있을 수 있어요 (y 가 일찍 나왔으면). 그런데 y 는 자기 x 가 못 돼요 — 그럴 땐 (= y 가 3번 이상 나올 때) 1 빼요.")}
             <div style={{ marginTop: 10, padding: "9px 11px", background: "#fff", border: "1px dashed #fbbf24", borderRadius: 8, fontSize: 12.5 }}>
               <div style={{ fontWeight: 700, marginBottom: 4 }}>{t(E, "Example", "예시")}: a = [4, 1, 4, 4]</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, lineHeight: 1.8 }}>
-                y = 4, count[4] = 3 (≥ 3)<br/>
-                p = second_last[4] = {t(E, "index 2", "인덱스 2")}<br/>
-                {t(E, "values before p", "p 앞의 값")}: {"{4, 1}"} → D[p] = 2<br/>
-                {t(E, "but 4 can't be its own x → −1", "그런데 4 는 자기 x 가 못 됨 → −1")}<br/>
+                y = 4 가 3번 나옴 (≥ 3)<br/>
+                {t(E, "second-to-last 4 = index 2", "끝에서 두 번째 4 = 2번 자리")}<br/>
+                {t(E, "distinct before it", "그 앞의 서로 다른 값")}: {"{4, 1}"} → 2<br/>
+                {t(E, "4 can't be its own x → −1", "4 는 자기 x 가 못 됨 → −1")}<br/>
                 <span style={{ color: "#15803d", fontWeight: 800 }}>→ 2 − 1 = 1 moo: (1, 4, 4) ✓</span>
               </div>
             </div>
             <div style={{ marginTop: 6 }}>
-              {t(E, "If count[y] = 2, both y's sit at or after p, so y wasn't counted before p — no subtraction.",
-                    "count[y] 가 2 면 두 y 가 모두 p 거나 그 뒤라 p 앞에 y 가 안 세어져요 — 뺄 필요 없음.")}
+              {t(E, "If y appears only twice, y isn't in the 'before' zone — no subtraction.",
+                    "y 가 2번만 나오면 '앞 구역'에 y 가 없어요 — 뺄 필요 없음.")}
             </div>
           </div>
         </div>),
