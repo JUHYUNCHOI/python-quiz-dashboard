@@ -426,38 +426,8 @@ export function makeMooin2Ch3(E) {
           </div>
         </div>),
     },
-    /* 3-6 — subtract-1 subtlety */
-    {
-      type: "reveal",
-      narr: t(E,
-        "One tricky case to watch! x must be DIFFERENT from y. Sometimes y sneaks into the candidate count.",
-        "조심할 함정 하나! x 는 y 와 달라야 해요. 가끔 y 가 후보 수에 슬쩍 끼어들어요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#92400e", lineHeight: 1.75 }}>
-            <div style={{ fontWeight: 800, marginBottom: 6 }}>
-              ⚠️ {t(E, "Subtract 1 when y appears 3+ times", "y 가 3번 이상 나오면 1 빼기")}
-            </div>
-            {t(E,
-              "The 'before' zone may already contain y itself (if y showed up early). But y can't be its own x — so when that happens (exactly when y appears 3+ times), subtract 1.",
-              "'앞 구역'에 y 자신이 이미 들어있을 수 있어요 (y 가 일찍 나왔으면). 그런데 y 는 자기 x 가 못 돼요 — 그럴 땐 (= y 가 3번 이상 나올 때) 1 빼요.")}
-            <div style={{ marginTop: 10, padding: "9px 11px", background: "#fff", border: "1px dashed #fbbf24", borderRadius: 8, fontSize: 12.5 }}>
-              <div style={{ fontWeight: 700, marginBottom: 4 }}>{t(E, "Example", "예시")}: a = [4, 1, 4, 4]</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, lineHeight: 1.8 }}>
-                y = 4 가 3번 나옴 (≥ 3)<br/>
-                {t(E, "second-to-last 4 = index 2", "끝에서 두 번째 4 = 2번 자리")}<br/>
-                {t(E, "distinct before it", "그 앞의 서로 다른 값")}: {"{4, 1}"} → 2<br/>
-                {t(E, "4 can't be its own x → −1", "4 는 자기 x 가 못 됨 → −1")}<br/>
-                <span style={{ color: "#15803d", fontWeight: 800 }}>→ 2 − 1 = 1 moo: (1, 4, 4) ✓</span>
-              </div>
-            </div>
-            <div style={{ marginTop: 6 }}>
-              {t(E, "If y appears only twice, y isn't in the 'before' zone — no subtraction.",
-                    "y 가 2번만 나오면 '앞 구역'에 y 가 없어요 — 뺄 필요 없음.")}
-            </div>
-          </div>
-        </div>),
-    },
+    /* 3-6 — REMOVED 2026-06-18: subtract-1 edge case was confusing as a text slide;
+       the countTrace sim already shows '(drop y itself)' inline, and the code handles it. */
     /* 3-7 — REMOVED 2026-06-18: countTrace sim now embedded in the 'why' slide (3-2)
        so explanation + sim sit on ONE screen (teacher). Standalone slide was a dup. */
     /* 3-8 — recap quiz */
@@ -477,8 +447,8 @@ export function makeMooin2Ch3(E) {
     {
       type: "explorer",
       narr: t(E,
-        "Free play! Try the presets and see which moos occur. Notice values with count = 1 never become y.",
-        "자유 탐험! preset 을 눌러 발생 moo 를 봐요. count = 1 인 값은 절대 y 가 못 되는 걸 확인해요."),
+        "Try it yourself! Tap a preset and see which moos occur. A value that appears only ONCE can never be y (y must repeat).",
+        "직접 눌러봐요! 여러 배열에서 어떤 moo 가 생기는지. 한 번만 나오는 값은 절대 y 가 못 돼요 — y 는 2번 이상 나와야 하니까."),
     },
   ];
 }
