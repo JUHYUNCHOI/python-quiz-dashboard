@@ -208,7 +208,9 @@ function buildCountTrace(a) {
   const seen = new Set(); const D = [0];
   for (let i = 0; i < N; i++) { D.push(D[i] + (seen.has(a[i]) ? 0 : 1)); seen.add(a[i]); }
 
-  const ys = Object.keys(count).map(Number).filter(y => count[y] >= 2).sort((x, y) => x - y);
+  // 뒤에서부터 — moo 의 'y,y' 쌍이 뒤쪽에 있으니, 마지막 등장이 가장 뒤인 값부터 처리
+  // (선생님 2026-06-18: "뒤 3,3 부터 찾아야지". 합계는 순서 무관 — 학생 직관에 맞춤).
+  const ys = Object.keys(count).map(Number).filter(y => count[y] >= 2).sort((p, q) => lastSeen[q] - lastSeen[p]);
   const steps = [];
   steps.push({ kind: "intro", ans: 0, ys });
   let ans = 0;
@@ -247,8 +249,8 @@ export function MooinCountTrace({ E }) {
   let note;
   if (step.kind === "intro")
     note = built.ys.length
-      ? t(E, `A moo is (x, y, y) — its last two must be the SAME. So find the values that repeat (appear ≥ 2): {${built.ys.join(", ")}}. We'll take them ONE at a time, count the moos each makes, and add up.`,
-            `moo = (x, y, y) — 뒤 두 글자가 똑같아야 해요. 그러니 2번 이상 나오는 값(반복 숫자)을 찾아요: {${built.ys.join(", ")}}. 한 번에 하나씩, 값마다 moo 수를 세서 더해 갈게요.`)
+      ? t(E, `A moo is (x, y, y) — its last two must be the SAME. So find the values that repeat (appear ≥ 2): {${built.ys.join(", ")}}. We'll go from the BACK (the value whose pair sits furthest right first), count the moos each makes, and add up.`,
+            `moo = (x, y, y) — 뒤 두 글자가 똑같아야 해요. 그러니 2번 이상 나오는 값(반복 숫자)을 찾아요: {${built.ys.join(", ")}}. 뒤쪽 쌍부터 하나씩(맨 뒤에 짝이 있는 값부터), 값마다 moo 수를 세서 더해 갈게요.`)
       : t(E, "No value appears twice → no moos → answer 0.", "2번 이상 나오는 값이 없음 → moo 없음 → 답 0.");
   else if (step.kind === "pick")
     note = t(E,
