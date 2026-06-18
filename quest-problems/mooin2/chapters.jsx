@@ -370,13 +370,13 @@ export function makeMooin2Ch3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A moo's last two letters must be the SAME. So find a number that appears at least twice — then each DIFFERENT value that appeared before it makes one moo (that value out front). So just count how many such values there are, and add them up. No triple loop!",
-        "moo 는 뒤 두 글자가 똑같아야 해요. 그러니 2번 이상 나오는 숫자를 찾고 → 그 앞에 나온 값 중 '그 숫자와 다른' 것들이 각각 moo 하나씩을 만들어요 (그 값이 맨 앞 자리). 그래서 그런 값이 몇 가지인지만 세서 더하면 끝! (3중 for-loop 없이)"),
+        "A moo's last two are the same number. So find a matching pair, then just count how many DIFFERENT numbers came before it!",
+        "moo 는 뒤 두 개가 같은 숫자예요. 그래서 같은 숫자 짝을 찾고, 그 앞에 나온 다른 숫자가 몇 가지인지만 세면 돼요!"),
       content: (
         <div style={{ padding: 16 }}>
           {/* recipe 박스 전부 제거 (선생님 2026-06-18: '빠른 아이디어 볼 필요 없다 — 시뮬 각
               스텝 말풍선으로 녹여라'). 설명은 전부 MooinCountTrace 의 스텝 말풍선이 담당. */}
-          <div style={{ textAlign: "center", fontSize: 12.5, color: "#7c5cfc", fontWeight: 700, marginBottom: 10 }}>
+          <div style={{ textAlign: "center", fontSize: 12.5, color: "#7c5cfc", fontWeight: 700, marginBottom: 10, wordBreak: "keep-all" }}>
             👇 {t(E, "Step through it — each move is explained in the bubble.", "한 동작씩 눌러봐요 — 각 동작을 말풍선이 설명해요.")}
           </div>
           <MooinCountTrace E={E} />

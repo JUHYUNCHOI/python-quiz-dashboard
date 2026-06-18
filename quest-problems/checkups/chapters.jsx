@@ -1,84 +1,10 @@
 import { C, t } from "@/components/quest/theme";
-import { getCheckupsSections, ReverseSim, DiagonalSim, MatchUpToSim, DiagPrefixSim } from "./components";
-import { CheckupsBruteRunner } from "./sims";
+import { getCheckupsSections, DiagonalSim, MatchUpToSim, DiagPrefixSim } from "./components";
+import { CheckupsBruteRunner, CheckupsIntroSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
-/* ====================================================================
-   Shared visual language for the checkups quest — reused across the
-   1-1 mini-visual, the 1-5 sample-3 walkthrough, and the ReverseSim.
-   Keeping these in one place means a tweak applies everywhere.
-   ==================================================================== */
-const SPECIES = {
-  1: { bg: "#fef3c7", text: "#92400e", border: "#fcd34d" },  // amber
-  2: { bg: "#dbeafe", text: "#1e3a8a", border: "#93c5fd" },  // blue
-  3: { bg: "#fce7f3", text: "#9d174d", border: "#f9a8d4" },  // pink
-  4: { bg: "#dcfce7", text: "#14532d", border: "#86efac" },  // green
-  5: { bg: "#ede9fe", text: "#5b21b6", border: "#a78bfa" },  // purple
-};
-
-function SpeciesCell({ v, swapped, matched, size = 52 }) {
-  const sp = SPECIES[v] || SPECIES[1];
-  return (
-    <div style={{
-      width: size, height: size, borderRadius: 10,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      fontFamily: "'JetBrains Mono',monospace", fontSize: Math.round(size * 0.42), fontWeight: 700,
-      background: sp.bg, color: sp.text,
-      border: `${swapped ? 1.5 : 1}px ${swapped ? "dashed" : "solid"} ${swapped ? "#3b82f6" : sp.border}`,
-      boxShadow: matched ? "0 0 0 2px #22c55e inset" : "none",
-    }}>{v}</div>
-  );
-}
-
-function CowRow({ label, sub, cells, withSwap, matches, size = 52 }) {
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-      <div style={{ width: 130, fontSize: 12, fontWeight: 600, color: "#7f1d1d", textAlign: "right", lineHeight: 1.25 }}>
-        {label}
-        {sub && <div style={{ fontSize: 10, color: C.dim, fontWeight: 400 }}>{sub}</div>}
-      </div>
-      <div style={{ display: "flex", gap: 6 }}>
-        {cells.map((c, i) => (
-          <SpeciesCell key={i} v={c.v} swapped={withSwap && c.swapped} matched={matches?.[i]} size={size} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function TreatedRow({ matches, size = 52 }) {
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4 }}>
-      <div style={{ width: 130, fontSize: 12, fontWeight: 600, color: "#15803d", textAlign: "right" }}>
-        💉 치료?
-      </div>
-      <div style={{ display: "flex", gap: 6 }}>
-        {matches.map((m, i) => (
-          <div key={i} style={{
-            width: size, height: Math.round(size * 0.6), borderRadius: 8,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: Math.round(size * 0.36), fontWeight: 600,
-            background: m ? "#22c55e" : "transparent",
-            color: m ? "#fff" : "#cbd5e1",
-          }}>{m ? "✓" : "—"}</div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function PositionRow({ n, size = 52 }) {
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 2 }}>
-      <div style={{ width: 130 }} />
-      <div style={{ display: "flex", gap: 6 }}>
-        {Array.from({ length: n }, (_, i) => (
-          <div key={i} style={{ width: size, fontSize: 10, color: C.dim, textAlign: "center", fontWeight: 400 }}>{i + 1}</div>
-        ))}
-      </div>
-    </div>
-  );
-}
+// (예전 정적 시각화 헬퍼 SpeciesCell/CowRow/TreatedRow/PositionRow 는
+//  1-1 이 CheckupsIntroSim 으로, 1-5 가 삭제되며 더 안 쓰여서 제거함.)
 
 // Reference solution — full O(N²) version (matches `solution_py` in quest-meta).
 export function makeCheckupsCh1(E) {
@@ -87,96 +13,34 @@ export function makeCheckupsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has N cows in a line. The vet checks cow i ONLY if its species matches b[i]. FJ performs ONE operation — reverse the subarray [l, r]. For every c=0..N, count how many (l, r) operations leave EXACTLY c cows checked.",
-        "FJ 에 N 마리 소가 줄 서 있어요. 수의사는 i 번째 소의 종이 b[i] 와 같을 때만 검진. FJ 가 딱 한 번 [l, r] 부분 배열을 뒤집어요. c = 0..N 각각에 대해 정확히 c 마리가 검진되는 (l, r) 쌍의 개수를 출력."),
+        "Cows stand in a row. Each cow has a species, written as a number. The vet has already decided, for each spot, which species it will treat there — and it treats the cow at that spot only when the cow's species matches. FJ flips one chunk of cows to change who gets treated.",
+        "소들이 한 줄로 서 있어요. 소마다 '종'이 있고 숫자로 적어요. 수의사는 자리마다 '여기선 몇 번 종을 치료하겠다'를 미리 정해뒀어요 — 그 자리에 선 소의 종이 정해둔 종과 같을 때만 치료해줘요. FJ 는 소 한 구간을 통째로 뒤집어서 누가 치료받는지를 바꿔요."),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 8 }}>
-            <div style={{ fontSize: 32, marginBottom: 4 }}>🐮</div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Cow Checkups</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #3</div>
+          <div style={{ textAlign: "center", marginBottom: 10 }}>
+            <div style={{ fontSize: 26 }}>🐮</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: "#dc2626" }}>Cow Checkups</div>
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>USACO Jan 2025 Bronze #3</div>
           </div>
 
-          {/* Mini-visual: concrete example with labelled rows so a/b is unambiguous. */}
-          <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 12, fontWeight: 500, color: "#7f1d1d", textAlign: "center", marginBottom: 10 }}>
-              {t(E, "Tiny example: 4 cows lined up. Each cow has a species, and the vet has a target species for each spot.",
-                    "작은 예: 소 4 마리가 줄 서 있음. 각 자리마다 소가 가진 종 / 수의사가 원하는 종.")}
-            </div>
+          {/* 단계별 시뮬 — 자리마다 비교 + 뒤집기를 말풍선으로 (선생님: '시뮬로 동작에 따라 말풍선') */}
+          <CheckupsIntroSim E={E} />
 
-            {/* Step 1: no reversal */}
-            <div style={{ background: "#fff", border: "1px solid #fecaca", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
-                {t(E, "1. Without any reversal", "1. 뒤집기 없이")}
-              </div>
-              <CowRow
-                label={t(E, "🐄 has", "🐄 가진 종")}
-                sub="a"
-                cells={[{v:1},{v:2},{v:1},{v:3}]}
-                matches={[true, false, true, false]}
-              />
-              <CowRow
-                label={t(E, "📋 vet wants", "📋 원하는 종")}
-                sub="b"
-                cells={[{v:1},{v:1},{v:1},{v:1}]}
-                matches={[true, false, true, false]}
-              />
-              <TreatedRow matches={[true, false, true, false]} />
-              <PositionRow n={4} />
-              <div style={{ marginTop: 8, textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 600 }}>
-                {t(E, "→ 2 cows treated (positions 1 and 3).", "→ 2 마리 치료 (1, 3 번 자리).")}
-              </div>
-            </div>
-
-            {/* Step 2: one reversal */}
-            <div style={{ background: "#fff", border: "1px solid #fecaca", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
-                {t(E, "2. Pick (l, r) = (2, 3) → reverse a[2..3] (blue dashed = swapped)",
-                      "2. (l, r) = (2, 3) 골라 a[2..3] 뒤집기 (파랑 점선 = 교환된 칸)")}
-              </div>
-              <CowRow
-                label={t(E, "🐄 has (after swap)", "🐄 가진 종 (뒤집기 후)")}
-                sub="a'"
-                cells={[
-                  {v:1, swapped:false},
-                  {v:1, swapped:true},
-                  {v:2, swapped:true},
-                  {v:3, swapped:false},
-                ]}
-                matches={[true, true, false, false]}
-                withSwap
-              />
-              <CowRow
-                label={t(E, "📋 vet wants", "📋 원하는 종")}
-                sub="b"
-                cells={[{v:1},{v:1},{v:1},{v:1}]}
-                matches={[true, true, false, false]}
-              />
-              <TreatedRow matches={[true, true, false, false]} />
-              <PositionRow n={4} />
-              <div style={{ marginTop: 8, textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 600 }}>
-                {t(E, "→ still 2 treated, but DIFFERENT cows (positions 1, 2 instead of 1, 3).",
-                      "→ 여전히 2 마리 — 다른 소들 (1, 3 자리 → 1, 2 자리).")}
-              </div>
-            </div>
-
-            {/* Step 3: try ALL (l, r) and tally */}
-            <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>
-                {t(E, "3. Try EVERY (l, r) — N=4 has 4·5/2 = 10 of them — and tally how many give 0, 1, 2, 3, 4 checkups.",
-                      "3. 모든 (l, r) 시도 — N=4 면 4·5/2 = 10 개 — 검진 수 0, 1, 2, 3, 4 별로 몇 개 나오는지 집계.")}
-              </div>
-              <div style={{ fontSize: 11, color: C.text, lineHeight: 1.7 }}>
-                {t(E, "Output: one line per check count.  E.g. '4' means 4 of the 10 operations leave that many cows checked.",
-                      "출력: 검진 수 별 한 줄. 예 '4' 는 10 개 연산 중 4 개가 그 검진 수를 만든다는 뜻.")}
-              </div>
-            </div>
+          {/* 윗줄/아랫줄 설명은 시뮬이 하므로 큰 박스는 제거 — b[i]·입력형식만 한 줄로 남김 (선생님 판단 위임) */}
+          <div style={{ marginTop: 2, marginBottom: 10, fontSize: 11.5, color: C.dim, textAlign: "center", lineHeight: 1.6, wordBreak: "keep-all" }}>
+            📝 {t(E, "Input: N, then row a, then row b.  In code top = a, bottom = b → b[i] = the species chosen for spot i.",
+                   "입력: N → 윗줄(a) → 아랫줄(b).  코드에선 윗줄=a, 아랫줄=b → b[i] = i 번째 자리에 정해둔 종.")}
           </div>
 
-          <div style={{ marginTop: 6, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
-            📐 <span style={{ fontWeight: 600 }}>{t(E, "Constraints", "제약")}:</span>{" "}
-            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace", fontWeight: 400 }}>1 ≤ N ≤ 7500</code>,{" "}
-            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace", fontWeight: 400 }}>1 ≤ a[i], b[i] ≤ N</code>
+          {/* 출력이 뭔지 */}
+          <div style={{ background: "#dcfce7", border: "1px solid #86efac", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: "#166534", lineHeight: 1.65, wordBreak: "keep-all" }}>
+            📤 <b>{t(E, "Output", "출력")}</b> — {t(E, "Flipping can be done many ways. For each possible check-count 0, 1, …, N, print how many flips give exactly that count (one number per line).",
+                     "뒤집는 방법은 여러 가지. 검진 수가 0, 1, …, N 인 경우가 각각 몇 가지인지 한 줄씩 출력.")}
+          </div>
+
+          <div style={{ padding: "7px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11, color: "#5b21b6", lineHeight: 1.6 }}>
+            📐 <span style={{ fontWeight: 600 }}>{t(E, "Limits", "제약")}:</span>{" "}
+            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ N ≤ 7500</code>
           </div>
         </div>),
     },
@@ -212,44 +76,39 @@ export function makeCheckupsCh1(E) {
             </div>
           </div>
 
-          <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
-            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
-              🔍 {t(E, "All 6 operations enumerated", "6 개 연산 모두")}
+          <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65, wordBreak: "keep-all" }}>
+            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 8 }}>
+              🔍 {t(E, "6 reversals → group by how many got checked", "뒤집기 6가지 → 검진된 수별로 묶기")}
             </div>
-            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, lineHeight: 1.7 }}>
-              <div>a = [1, 3, 2], b = [3, 2, 1]</div>
-              <div style={{ marginTop: 4, color: "#7f1d1d" }}>
-                {t(E, "Length-1 (no actual reversal):", "길이 1 (사실상 그대로):")}
+            {[
+              { c: 0, n: 3, note: t(E, "the 3 length-1 ops (nothing flips)", "길이 1 연산 3개 (안 바뀜)") },
+              { c: 1, n: 3, note: t(E, "the 3 real reversals", "진짜 뒤집기 3개") },
+              { c: 2, n: 0, note: "" },
+              { c: 3, n: 0, note: "" },
+            ].map((row) => (
+              <div key={row.c} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
+                <span style={{ width: 56, fontSize: 11.5, fontWeight: 600, color: "#5b21b6" }}>{t(E, `check ${row.c}`, `검진 ${row.c}`)}</span>
+                <div style={{ display: "flex", gap: 3 }}>
+                  {Array.from({ length: 3 }, (_, i) => (
+                    <span key={i} style={{ width: 15, height: 15, borderRadius: 3, background: i < row.n ? "#8b5cf6" : "#e9d5ff" }} />
+                  ))}
+                </div>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, color: "#5b21b6", minWidth: 26 }}>{row.n}{t(E, "", "개")}</span>
+                {row.note && <span style={{ fontSize: 10.5, color: C.dim }}>← {row.note}</span>}
               </div>
-              <div>(l=1, r=1): a → [1, 3, 2] · check = <b>0</b></div>
-              <div>(l=2, r=2): a → [1, 3, 2] · check = <b>0</b></div>
-              <div>(l=3, r=3): a → [1, 3, 2] · check = <b>0</b></div>
-              <div style={{ marginTop: 4, color: "#15803d" }}>
-                {t(E, "Length ≥ 2 (real reversal):", "길이 ≥ 2 (진짜 뒤집기):")}
-              </div>
-              <div>(l=1, r=2): a → [3, 1, 2] · check = <b>1</b> (pos 1: 3=3)</div>
-              <div>(l=2, r=3): a → [1, 2, 3] · check = <b>1</b> (pos 2: 2=2)</div>
-              <div>(l=1, r=3): a → [2, 3, 1] · check = <b>1</b> (pos 3: 1=1)</div>
-            </div>
+            ))}
             <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #c4b5fd" }}>
-              <b>{t(E, "Tally:", "집계:")}</b>{" "}
-              {t(E, "c=0: 3 ops · c=1: 3 ops · c=2: 0 · c=3: 0 → output ", "c=0: 3 · c=1: 3 · c=2: 0 · c=3: 0 → 출력 ")}
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>3 3 0 0</code>
+              → {t(E, "output, one per line:", "출력 (한 줄에 하나씩):")}{" "}
+              <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>3 / 3 / 0 / 0</code>
             </div>
           </div>
         </div>),
     },
 
-    /* 1-3 — Interactive simulator: drag (l, r), see reversed array + checkup count. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Drag the l and r sliders to pick a reversal. The top row is a (after reverse), the bottom is b. Green cells = vet checks.",
-        "l, r 슬라이더 드래그해서 뒤집기 선택. 위 줄 = a (뒤집은 후), 아래 줄 = b. 초록 칸 = 수의사 검진."),
-      content: (<ReverseSim E={E} />),
-    },
+    /* (옛 1-3 ReverseSim 삭제 — 1-1 인터랙티브 시뮬과 중복 + 점선 매핑이 보기 어려움.
+        ReverseSim 은 🔒 components.jsx 라 손 못 대므로 스텝 자체를 뺌. 선생님 검토) */
 
-    /* 1-4 — Quiz on understanding the operation. */
+    /* 1-3 — Quiz on understanding the operation. */
     {
       type: "quiz",
       narr: t(E,
@@ -265,69 +124,7 @@ export function makeCheckupsCh1(E) {
         "위치 2..4 의 값 [1, 2, 3] 을 뒤집으면 [3, 2, 1]. 새 a = [5, 3, 2, 1, 4], a[3] = 2."),
     },
 
-    /* 1-5 — Sample 3 walkthrough — pinpoint a high-yield reversal. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Sample 3: a bigger case — N=7.  Walk through one specific reversal and count cows by hand.",
-        "샘플 3: 더 큰 케이스 — N=7. 뒤집기 하나 골라 직접 손으로 검진 수 세 보자."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text }}>
-            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
-              🔍 {t(E, "Walkthrough — Sample 3, pick (l=4, r=5)", "풀이 — 샘플 3, (l=4, r=5)")}
-            </div>
-            <div style={{ marginBottom: 10, fontSize: 12, lineHeight: 1.6 }}>
-              {t(E, "N=7. Reverse positions 4..5 of a (the values 2, 1 swap to 1, 2).  Same colour above & below ⇒ vet treats that cow.",
-                    "N=7. a 의 4..5 위치 뒤집기 (값 2, 1 ↔ 1, 2). 위아래 같은 색 ⇒ 그 자리 치료.")}
-            </div>
-
-            {(() => {
-              // Sample 3 data: a = [1, 3, 2, 2, 1, 3, 2], b = [3, 2, 2, 1, 2, 3, 1].
-              // After reversing a[4..5]: a' = [1, 3, 2, 1, 2, 3, 2].
-              const aOriginal = [1, 3, 2, 2, 1, 3, 2];
-              const aPrime    = [1, 3, 2, 1, 2, 3, 2];
-              const b         = [3, 2, 2, 1, 2, 3, 1];
-              const swapped   = [false, false, false, true, true, false, false];
-              const matches   = aPrime.map((v, i) => v === b[i]);
-              const N = 7;
-              return (
-                <>
-                  <CowRow
-                    label={t(E, "🐄 original", "🐄 원래")}
-                    sub="a"
-                    cells={aOriginal.map(v => ({ v }))}
-                    size={42}
-                  />
-                  <CowRow
-                    label={t(E, "🐄 after swap", "🐄 뒤집기 후")}
-                    sub="a'"
-                    cells={aPrime.map((v, i) => ({ v, swapped: swapped[i] }))}
-                    matches={matches}
-                    withSwap
-                    size={42}
-                  />
-                  <CowRow
-                    label={t(E, "📋 vet wants", "📋 원하는 종")}
-                    sub="b"
-                    cells={b.map(v => ({ v }))}
-                    matches={matches}
-                    size={42}
-                  />
-                  <TreatedRow matches={matches} size={42} />
-                  <PositionRow n={N} size={42} />
-                </>
-              );
-            })()}
-
-            <div style={{ marginTop: 8, textAlign: "center", color: "#15803d", fontWeight: 600, fontSize: 13 }}>
-              {t(E, "→ 4 cows treated (positions 3, 4, 5, 6).", "→ 4 마리 치료 (3, 4, 5, 6 번 자리).")}
-            </div>
-          </div>
-        </div>),
-    },
-
-    /* 1-6 — Input quiz on a tiny example. */
+    /* 1-4 — Input quiz on a tiny example. */
     {
       type: "input",
       narr: t(E,
@@ -660,27 +457,38 @@ export function makeCheckupsCh3(E) {
    the idea recap, both prefixes, the combine loop, and the full program.
    ════════════════════════════════════════════════════════════════════ */
 export function makeCheckupsCh4(E, lang = "py") {
-  // Smart sections: slice(4) = [5️⃣ idea, 6️⃣ matchUpTo, 7️⃣ diag, 8️⃣ combine, 9️⃣ full].
-  const smart = getCheckupsSections(E).slice(4);
+  // Ch3 가 ⑤(아이디어)를 유도+시뮬로 이미 가르쳤으므로 Ch4 는 실제 코드 ⑥⑦⑧⑨ 만.
+  // (전체 ⑤~⑨ 는 PDF 에 그대로 남아 있어 참고 가능.)
+  const smart = getCheckupsSections(E).slice(5);   // [6️⃣ matchUpTo, 7️⃣ diag, 8️⃣ combine, 9️⃣ full]
   return [
     ...smart.map((sec, i) => ({
       type: "reveal",
       narr:
         i === 0
-          ? t(E, "Here's the idea as code — the outside comparison is fixed, the inside one depends only on s = l + r.",
-                "아이디어를 코드로 — 바깥 비교는 고정, 안쪽은 s = l + r 에만 의존.")
-          : i === 1
           ? t(E, "matchUpTo — built once with a left-to-right sweep.  Outside-window matches come straight from it.",
                 "matchUpTo — 왼쪽부터 한 번에. 바깥 일치는 여기서 바로 나와요.")
-          : i === 2
+          : i === 1
           ? t(E, "diag — rebuilt for each diagonal s.  Inside-window matches = diag[r] − diag[l−1].",
                 "diag — 대각선 s 마다 새로. 안쪽 일치 = diag[r] − diag[l−1].")
-          : i === 3
+          : i === 2
           ? t(E, "Combine the two prefixes for every (l, r) on the diagonal, then print the tally.",
                 "대각선 위 모든 (l, r) 에 대해 두 prefix 합치고, 집계를 출력.")
-          : t(E, "All five pieces wired together — variable names match the sections above.  Read top to bottom.",
-                "다섯 조각이 한 군데에 — 변수 이름은 위 섹션 그대로. 위에서 아래로 읽어요."),
+          : t(E, "All the pieces wired together — variable names match the sections above.  Read top to bottom.",
+                "조각들이 한 군데에 — 변수 이름은 위 섹션 그대로. 위에서 아래로 읽어요."),
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
+    /* 4-끝 — 마무리 확인 (능동): 빠른 풀이의 복잡도 = 이 챕터의 보상 */
+    {
+      type: "quiz",
+      narr: t(E, "Last check — why is this finally fast enough?", "마지막 확인 — 왜 이제 충분히 빠를까요?"),
+      question: t(E,
+        "Brute was O(N³) (hours at N = 7500).  What is this smart solution's total time?",
+        "brute 는 O(N³) (N = 7500 에서 몇 시간).  이 빠른 풀이의 전체 복잡도는?"),
+      options: ["O(N)", "O(N²)", "O(N³)", "O(2ᴺ)"],
+      correct: 1,
+      explain: t(E,
+        "Each (l, r) is now O(1) — just two prefix lookups — and there are about N² pairs → O(N²).  At N = 7500 that's ~5·10⁷ ops, fast enough.",
+        "이제 (l, r) 마다 O(1) — prefix 조회 두 번뿐 — 이고 쌍이 약 N² 개 → O(N²). N = 7500 이면 약 5·10⁷ 연산, 충분히 빨라요."),
+    },
   ];
 }

@@ -170,6 +170,7 @@ export default function CheckupsApp(props = {}) {
           background: C.card, borderRadius: 14, border: `2px solid ${C.border}`,
           marginBottom: 10, boxShadow: "0 2px 10px rgba(0,0,0,.04)", overflow: "hidden",
           minHeight: 460,
+          wordBreak: "keep-all",   // 한글 단어 중간 줄바꿈 방지 — 상속되어 전 챕터 텍스트에 적용 (선생님 반복 지적)
         }}>
           {renderContent()}
         </div>

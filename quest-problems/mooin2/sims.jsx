@@ -208,9 +208,12 @@ function buildCountTrace(a) {
   const seen = new Set(); const D = [0];
   for (let i = 0; i < N; i++) { D.push(D[i] + (seen.has(a[i]) ? 0 : 1)); seen.add(a[i]); }
 
-  const ys = Object.keys(count).map(Number).filter(y => count[y] >= 2).sort((x, y) => x - y);
+  // 뒤에서부터 — moo 의 'y,y' 쌍이 뒤쪽에 있으니, 마지막 등장이 가장 뒤인 값부터 처리
+  // (선생님 2026-06-18: "뒤 3,3 부터 찾아야지". 합계는 순서 무관 — 학생 직관에 맞춤).
+  const ys = Object.keys(count).map(Number).filter(y => count[y] >= 2).sort((p, q) => lastSeen[q] - lastSeen[p]);
   const steps = [];
   steps.push({ kind: "intro", ans: 0, ys });
+  if (ys.length) steps.push({ kind: "plan", ans: 0, ys });   // 긴 intro 를 둘로 나눔 (선생님 2026-06-18)
   let ans = 0;
   for (const y of ys) {
     const p = secondLast[y];
@@ -225,9 +228,8 @@ function buildCountTrace(a) {
 
     const base = { y, cnt: count[y], p, d0, sub, contrib, occ, beforeSet };
     const ansBefore = ans;
-    steps.push({ kind: "pick", ...base, ans: ansBefore });
-    steps.push({ kind: "spot", ...base, ans: ansBefore });
-    steps.push({ kind: "count", ...base, ans: ansBefore });
+    steps.push({ kind: "pair", ...base, ans: ansBefore });   // 뒤에서 같은 숫자 짝 찾기 (= moo 의 y,y)
+    steps.push({ kind: "count", ...base, ans: ansBefore });  // 그 짝 왼쪽에서 서로 다른 값 세기
     if (sub) steps.push({ kind: "subtract", ...base, ans: ansBefore });
     ans += contrib;
     steps.push({ kind: "add", ...base, ans });
@@ -247,21 +249,21 @@ export function MooinCountTrace({ E }) {
   let note;
   if (step.kind === "intro")
     note = built.ys.length
-      ? t(E, `A moo is (x, y, y) — its last two must be the SAME. So find the values that repeat (appear ≥ 2): {${built.ys.join(", ")}}. We'll take them ONE at a time, count the moos each makes, and add up.`,
-            `moo = (x, y, y) — 뒤 두 글자가 똑같아야 해요. 그러니 2번 이상 나오는 값(반복 숫자)을 찾아요: {${built.ys.join(", ")}}. 한 번에 하나씩, 값마다 moo 수를 세서 더해 갈게요.`)
+      ? t(E, `A moo's last two are the SAME number. So find the values that repeat (appear ≥ 2): {${built.ys.join(", ")}}.`,
+            `moo 는 뒤 두 개가 같은 숫자예요. 그래서 2번 이상 나오는 값을 찾아요 → {${built.ys.join(", ")}}.`)
       : t(E, "No value appears twice → no moos → answer 0.", "2번 이상 나오는 값이 없음 → moo 없음 → 답 0.");
-  else if (step.kind === "pick")
+  else if (step.kind === "plan")
     note = t(E,
-      `Now value ${step.y} — it shows up ${step.cnt} times (a repeat!). We'll use its LAST two as the moo's "y, y". So how many moos can ${step.y} make?`,
-      `이번엔 값 ${step.y} 차례 — ${step.y} 가 ${step.cnt}번 나와요 (반복 숫자!). ${step.y} 의 뒤쪽 2개를 moo 의 'y, y' 로 쓸 거예요. 그럼 ${step.y} 로 moo 몇 개 만들 수 있을까요?`);
-  else if (step.kind === "spot")
+      `We'll take them from the BACK — the value whose pair sits furthest right first. For each, count its moos and add up.`,
+      `이 값들을 뒤쪽 쌍부터 하나씩 볼게요. 값마다 moo 수를 세서 더해 가요.`);
+  else if (step.kind === "pair")
     note = t(E,
-      `Find where ${step.y} appears for the second-to-last time → i=${step.p}. From here on there are exactly two ${step.y}'s — the moo's "y, y". So everything to the LEFT can be the front x.`,
-      `${step.y} 가 '끝에서 두 번째'로 나오는 자리를 찾아요 → i=${step.p} 칸. 여기부터 뒤로 ${step.y} 가 딱 2개 남아요 — moo 의 'y, y'. 그래서 이 자리 왼쪽 값들이 맨 앞 x 가 될 수 있어요.`);
+      `From the BACK, here's a same-number pair: ${step.y}, ${step.y}. These two are the moo's "y, y"!`,
+      `맨 뒤에서부터 같은 숫자 짝 → ${step.y}, ${step.y}. 이 둘이 moo 의 'y, y'!`);
   else if (step.kind === "count")
     note = t(E,
-      `Count the DIFFERENT values in that left zone: {${step.beforeSet.join(", ")}} → ${step.d0} of them.`,
-      `그 왼쪽(앞) 구역에서 서로 다른 값을 세요: {${step.beforeSet.join(", ")}} → ${step.d0}개.`);
+      `Now LEFT of the pair, count the different values: {${step.beforeSet.join(", ")}} → ${step.d0}.`,
+      `이제 짝 왼쪽에서 서로 다른 값을 세요: {${step.beforeSet.join(", ")}} → ${step.d0}개.`);
   else if (step.kind === "subtract")
     note = t(E,
       `But a moo needs x ≠ y. ${step.y} itself sits in that zone, so drop 1: ${step.d0} − 1 = ${step.contrib}.`,
@@ -275,7 +277,7 @@ export function MooinCountTrace({ E }) {
   else
     note = t(E, `All values done. Answer = ${step.ans}.`, `모든 값 처리 완료. 답 = ${step.ans}.`);
 
-  const showP = ["spot", "count", "subtract", "add"].includes(step.kind);
+  const showP = ["pair", "count", "subtract", "add"].includes(step.kind);
   const hasFormula = ["count", "subtract", "add"].includes(step.kind);
 
   return (
@@ -295,49 +297,66 @@ export function MooinCountTrace({ E }) {
         ))}
       </div>
 
-      {/* array */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 12 }}>
-        {a.map((v, i) => {
-          const lastOcc = step.occ ? step.occ[step.occ.length - 1] : -1;
-          const isPair = showP && (i === step.p || i === lastOcc);             // 뒤 두 개 = moo 의 y, y 쌍
-          const isPick = step.kind === "pick" && step.occ?.includes(i);        // 이 값이 나오는 자리들
-          const inZone = (step.kind === "count" || step.kind === "subtract") && i < step.p; // 앞 구역
-          const isDrop = step.kind === "subtract" && i < step.p && v === step.y; // 빼는 y 자신 → ✗
-          let bg = "#fff", fg = C.text, bd = C.border;
-          if (isDrop) { bg = "#fff"; fg = "#b91c1c"; bd = "#dc2626"; }
-          else if (isPair) { bg = "#ea580c"; fg = "#fff"; bd = "#ea580c"; }
-          else if (inZone) { bg = "#fef3c7"; fg = "#92400e"; bd = "#fbbf24"; }
-          else if (isPick) { bg = "#dbeafe"; fg = "#1e40af"; bd = "#2563eb"; }
-          return (
-            <div key={i} style={{
-              position: "relative",
-              width: 38, height: 46, display: "flex", flexDirection: "column",
-              alignItems: "center", justifyContent: "center", borderRadius: 8,
-              fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
-              background: bg, color: fg, border: `2px solid ${bd}`,
-              opacity: isDrop ? 0.7 : 1,
-            }}>
-              <div style={{ fontSize: 9, opacity: 0.8 }}>i={i}</div>
-              <div style={{ fontSize: 14, textDecoration: isDrop ? "line-through" : "none" }}>{v}</div>
-              {isDrop && (
-                <div style={{
-                  position: "absolute", top: -8, right: -8, width: 18, height: 18, borderRadius: "50%",
-                  background: "#dc2626", color: "#fff", fontSize: 12, fontWeight: 900,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
-                }}>✗</div>
-              )}
+      {/* 말풍선 + 배열 — 말풍선이 배열 바로 위에서 '지금 보는 칸'을 꼬리로 가리킴
+          (선생님 2026-06-18: '실제 봐야하는 시뮬 옆에 나와야지'. astral 그리드 말풍선 패턴) */}
+      {(() => {
+        const CW = 42;                                  // 셀 38 + gap 4
+        const ARR_W = a.length * 38 + (a.length - 1) * 4;
+        const boxW = Math.max(ARR_W, 320);
+        const arrLeft = (boxW - ARR_W) / 2;
+        const lastOcc = step.occ ? step.occ[step.occ.length - 1] : -1;
+        // 꼬리가 가리킬 칸
+        let focusCol;
+        if (step.kind === "count") focusCol = Math.max(0, Math.floor((step.p - 1) / 2));
+        else if (step.kind === "subtract") focusCol = step.occ[0];
+        else if (step.kind === "pair" || step.kind === "add") focusCol = step.p;
+        else focusCol = Math.floor((a.length - 1) / 2);
+        const tailLeft = arrLeft + focusCol * CW + 19 - 8;  // 셀 중앙 − 꼬리 절반
+        return (
+          <div style={{ width: boxW, margin: "0 auto 12px" }}>
+            {/* 말풍선 (아래로 꼬리) */}
+            <div style={{ position: "relative", background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 14, padding: "11px 14px", fontSize: 13, color: "#92400e", lineHeight: 1.6, minHeight: 40, display: "flex", gap: 8, marginBottom: 12, wordBreak: "keep-all", overflowWrap: "anywhere" }}>
+              <span style={{ fontSize: 15, flexShrink: 0 }}>💬</span>
+              <span>{note}</span>
+              <div style={{ position: "absolute", bottom: -9, left: tailLeft, width: 0, height: 0, borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderTop: "9px solid #fbbf24", transition: "left .2s" }} />
+              <div style={{ position: "absolute", bottom: -7, left: tailLeft + 1, width: 0, height: 0, borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: "8px solid #fffbeb", transition: "left .2s" }} />
             </div>
-          );
-        })}
-      </div>
-      {showP && (
-        <div style={{ textAlign: "center", fontSize: 11, color: "#9a3412", marginBottom: 10 }}>
-          {step.kind === "count" || step.kind === "subtract"
-            ? `🟡 ${t(E, `left of the back two ${step.y}'s — count distinct values here`, `뒤 두 개 ${step.y} 앞 구역 — 여기서 서로 다른 값을 세요`)}`
-            : `🟠 ${t(E, `the back two ${step.y}'s = the moo's "y, y"`, `뒤 두 개 ${step.y} = moo 의 'y, y'`)}`}
-        </div>
-      )}
+            {/* array */}
+            <div style={{ display: "flex", justifyContent: "center", gap: 4 }}>
+              {a.map((v, i) => {
+                const isPair = showP && (i === step.p || i === lastOcc);             // 뒤 두 개 = moo 의 y, y 쌍
+                const inZone = (step.kind === "count" || step.kind === "subtract") && i < step.p; // 앞 구역
+                const isDrop = step.kind === "subtract" && i < step.p && v === step.y; // 빼는 y 자신 → ✗
+                let bg = "#fff", fg = C.text, bd = C.border;
+                if (isDrop) { bg = "#fff"; fg = "#b91c1c"; bd = "#dc2626"; }
+                else if (isPair) { bg = "#ea580c"; fg = "#fff"; bd = "#ea580c"; }
+                else if (inZone) { bg = "#fef3c7"; fg = "#92400e"; bd = "#fbbf24"; }
+                return (
+                  <div key={i} style={{
+                    position: "relative",
+                    width: 38, height: 46, display: "flex", flexDirection: "column",
+                    alignItems: "center", justifyContent: "center", borderRadius: 8,
+                    fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+                    background: bg, color: fg, border: `2px solid ${bd}`,
+                    opacity: isDrop ? 0.7 : 1,
+                  }}>
+                    <div style={{ fontSize: 9, opacity: 0.8 }}>i={i}</div>
+                    <div style={{ fontSize: 14, textDecoration: isDrop ? "line-through" : "none" }}>{v}</div>
+                    {isDrop && (
+                      <div style={{
+                        position: "absolute", top: -8, right: -8, width: 18, height: 18, borderRadius: "50%",
+                        background: "#dc2626", color: "#fff", fontSize: 12, fontWeight: 900,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+                      }}>✗</div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* contribution formula — reveal piece by piece */}
       {hasFormula && (
@@ -351,14 +370,11 @@ export function MooinCountTrace({ E }) {
         </div>
       )}
 
-      {/* running total */}
-      <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", textAlign: "center", fontSize: 13, fontWeight: 700, marginBottom: 10 }}>
-        {t(E, "answer so far", "현재까지 답")}: <span style={{ fontSize: 20 }}>{step.ans}</span>
-      </div>
-
-      {/* narration */}
-      <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: "#92400e", lineHeight: 1.6, marginBottom: 10, minHeight: 44 }}>
-        {note}
+      {/* running total — 부가 정보라 작은 칩으로 (선생님 2026-06-18: 메인이 먼저 보여야) */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
+        <div style={{ background: "#fff7ed", border: `1.5px solid ${A}`, color: A, borderRadius: 999, padding: "4px 14px", fontSize: 12, fontWeight: 700 }}>
+          {t(E, "answer so far", "현재까지 답")} <span style={{ fontSize: 16, fontWeight: 900 }}>{step.ans}</span>
+        </div>
       </div>
 
       <SimNav idx={idx} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
