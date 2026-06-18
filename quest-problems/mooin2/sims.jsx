@@ -292,47 +292,66 @@ export function MooinCountTrace({ E }) {
         ))}
       </div>
 
-      {/* array */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 12 }}>
-        {a.map((v, i) => {
-          const lastOcc = step.occ ? step.occ[step.occ.length - 1] : -1;
-          const isPair = showP && (i === step.p || i === lastOcc);             // 뒤 두 개 = moo 의 y, y 쌍
-          const inZone = (step.kind === "count" || step.kind === "subtract") && i < step.p; // 앞 구역
-          const isDrop = step.kind === "subtract" && i < step.p && v === step.y; // 빼는 y 자신 → ✗
-          let bg = "#fff", fg = C.text, bd = C.border;
-          if (isDrop) { bg = "#fff"; fg = "#b91c1c"; bd = "#dc2626"; }
-          else if (isPair) { bg = "#ea580c"; fg = "#fff"; bd = "#ea580c"; }
-          else if (inZone) { bg = "#fef3c7"; fg = "#92400e"; bd = "#fbbf24"; }
-          return (
-            <div key={i} style={{
-              position: "relative",
-              width: 38, height: 46, display: "flex", flexDirection: "column",
-              alignItems: "center", justifyContent: "center", borderRadius: 8,
-              fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
-              background: bg, color: fg, border: `2px solid ${bd}`,
-              opacity: isDrop ? 0.7 : 1,
-            }}>
-              <div style={{ fontSize: 9, opacity: 0.8 }}>i={i}</div>
-              <div style={{ fontSize: 14, textDecoration: isDrop ? "line-through" : "none" }}>{v}</div>
-              {isDrop && (
-                <div style={{
-                  position: "absolute", top: -8, right: -8, width: 18, height: 18, borderRadius: "50%",
-                  background: "#dc2626", color: "#fff", fontSize: 12, fontWeight: 900,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
-                }}>✗</div>
-              )}
+      {/* 말풍선 + 배열 — 말풍선이 배열 바로 위에서 '지금 보는 칸'을 꼬리로 가리킴
+          (선생님 2026-06-18: '실제 봐야하는 시뮬 옆에 나와야지'. astral 그리드 말풍선 패턴) */}
+      {(() => {
+        const CW = 42;                                  // 셀 38 + gap 4
+        const ARR_W = a.length * 38 + (a.length - 1) * 4;
+        const boxW = Math.max(ARR_W, 320);
+        const arrLeft = (boxW - ARR_W) / 2;
+        const lastOcc = step.occ ? step.occ[step.occ.length - 1] : -1;
+        // 꼬리가 가리킬 칸
+        let focusCol;
+        if (step.kind === "count") focusCol = Math.max(0, Math.floor((step.p - 1) / 2));
+        else if (step.kind === "subtract") focusCol = step.occ[0];
+        else if (step.kind === "pair" || step.kind === "add") focusCol = step.p;
+        else focusCol = Math.floor((a.length - 1) / 2);
+        const tailLeft = arrLeft + focusCol * CW + 19 - 8;  // 셀 중앙 − 꼬리 절반
+        return (
+          <div style={{ width: boxW, margin: "0 auto 12px" }}>
+            {/* 말풍선 (아래로 꼬리) */}
+            <div style={{ position: "relative", background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 14, padding: "11px 14px", fontSize: 13, color: "#92400e", lineHeight: 1.6, minHeight: 40, display: "flex", gap: 8, marginBottom: 12 }}>
+              <span style={{ fontSize: 15, flexShrink: 0 }}>💬</span>
+              <span>{note}</span>
+              <div style={{ position: "absolute", bottom: -9, left: tailLeft, width: 0, height: 0, borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderTop: "9px solid #fbbf24", transition: "left .2s" }} />
+              <div style={{ position: "absolute", bottom: -7, left: tailLeft + 1, width: 0, height: 0, borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: "8px solid #fffbeb", transition: "left .2s" }} />
             </div>
-          );
-        })}
-      </div>
-      {showP && (
-        <div style={{ textAlign: "center", fontSize: 11, color: "#9a3412", marginBottom: 10 }}>
-          {step.kind === "count" || step.kind === "subtract"
-            ? `🟡 ${t(E, `left of the back two ${step.y}'s — count distinct values here`, `뒤 두 개 ${step.y} 앞 구역 — 여기서 서로 다른 값을 세요`)}`
-            : `🟠 ${t(E, `the back two ${step.y}'s = the moo's "y, y"`, `뒤 두 개 ${step.y} = moo 의 'y, y'`)}`}
-        </div>
-      )}
+            {/* array */}
+            <div style={{ display: "flex", justifyContent: "center", gap: 4 }}>
+              {a.map((v, i) => {
+                const isPair = showP && (i === step.p || i === lastOcc);             // 뒤 두 개 = moo 의 y, y 쌍
+                const inZone = (step.kind === "count" || step.kind === "subtract") && i < step.p; // 앞 구역
+                const isDrop = step.kind === "subtract" && i < step.p && v === step.y; // 빼는 y 자신 → ✗
+                let bg = "#fff", fg = C.text, bd = C.border;
+                if (isDrop) { bg = "#fff"; fg = "#b91c1c"; bd = "#dc2626"; }
+                else if (isPair) { bg = "#ea580c"; fg = "#fff"; bd = "#ea580c"; }
+                else if (inZone) { bg = "#fef3c7"; fg = "#92400e"; bd = "#fbbf24"; }
+                return (
+                  <div key={i} style={{
+                    position: "relative",
+                    width: 38, height: 46, display: "flex", flexDirection: "column",
+                    alignItems: "center", justifyContent: "center", borderRadius: 8,
+                    fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+                    background: bg, color: fg, border: `2px solid ${bd}`,
+                    opacity: isDrop ? 0.7 : 1,
+                  }}>
+                    <div style={{ fontSize: 9, opacity: 0.8 }}>i={i}</div>
+                    <div style={{ fontSize: 14, textDecoration: isDrop ? "line-through" : "none" }}>{v}</div>
+                    {isDrop && (
+                      <div style={{
+                        position: "absolute", top: -8, right: -8, width: 18, height: 18, borderRadius: "50%",
+                        background: "#dc2626", color: "#fff", fontSize: 12, fontWeight: 900,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+                      }}>✗</div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* contribution formula — reveal piece by piece */}
       {hasFormula && (
@@ -345,17 +364,6 @@ export function MooinCountTrace({ E }) {
           </>}
         </div>
       )}
-
-      {/* narration — 진짜 말풍선 (위 배열을 가리키는 꼬리) (선생님 2026-06-18) */}
-      <div style={{ position: "relative", marginTop: 4, marginBottom: 12 }}>
-        {/* 꼬리: 테두리색 삼각형 + 그 위 살짝 작은 배경색 삼각형 */}
-        <div style={{ position: "absolute", top: -9, left: 30, width: 0, height: 0, borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderBottom: "9px solid #fbbf24" }} />
-        <div style={{ position: "absolute", top: -7, left: 31, width: 0, height: 0, borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderBottom: "8px solid #fffbeb" }} />
-        <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 14, padding: "11px 14px", fontSize: 13, color: "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", gap: 8 }}>
-          <span style={{ fontSize: 15, flexShrink: 0 }}>💬</span>
-          <span>{note}</span>
-        </div>
-      </div>
 
       {/* running total — 부가 정보라 작은 칩으로 (선생님 2026-06-18: 메인이 먼저 보여야) */}
       <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
