@@ -2,7 +2,7 @@
 // 🔒 USACO_VERIFIED code in that file is never touched. These are
 // illustrative-only (brute "feel the pain" + the counting payoff trace).
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 
@@ -170,7 +170,7 @@ export function MooinBruteRunner({ E }) {
 
       {done && (
         <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 13px", fontSize: 12.5, color: "#92400e", lineHeight: 1.7 }}>
-          ✅ {t(E, `Finished ${ops.toLocaleString()} triples in ${ms} ms.`, `${ops.toLocaleString()} 개 삼중을 ${ms} ms 에 끝냄.`)}
+          ✅ {t(E, `Finished ${ops.toLocaleString()} triples in ${ms} ms.`, `${ops.toLocaleString()}개 삼중을 ${ms} ms 에 끝냄.`)}
           {projYears != null && (
             <div style={{ marginTop: 5, fontWeight: 700, color: "#7c2d12" }}>
               {t(E,
@@ -209,7 +209,7 @@ function buildCountTrace(a) {
   const seen = new Set(); const D = [0];
   for (let i = 0; i < N; i++) { D.push(D[i] + (seen.has(a[i]) ? 0 : 1)); seen.add(a[i]); }
 
-  // 뒤에서부터 — moo 의 'y,y' 쌍이 뒤쪽에 있으니, 마지막 등장이 가장 뒤인 값부터 처리
+  // 뒤에서부터 — moo의 'y,y' 쌍이 뒤쪽에 있으니, 마지막 등장이 가장 뒤인 값부터 처리
   // (선생님 2026-06-18: "뒤 3,3 부터 찾아야지". 합계는 순서 무관 — 학생 직관에 맞춤).
   const ys = Object.keys(count).map(Number).filter(y => count[y] >= 2).sort((p, q) => lastSeen[q] - lastSeen[p]);
   const steps = [];
@@ -235,7 +235,7 @@ function buildCountTrace(a) {
 
     const base = { y, cnt: count[y], p, d0, sub, contrib, occ, beforeSet };
     const ansBefore = ans;
-    steps.push({ kind: "pair", ...base, ans: ansBefore });   // 뒤에서 같은 숫자 짝 찾기 (= moo 의 y,y)
+    steps.push({ kind: "pair", ...base, ans: ansBefore });   // 뒤에서 같은 숫자 짝 찾기 (= moo의 y,y)
     // 그 짝 왼쪽을 한 칸씩 — 처음 보는 값이면 +1
     if (scan.length === 0) {
       steps.push({ kind: "scan", ...base, scan: null, distinct: 0, scanDone: true, ans: ansBefore });
@@ -263,48 +263,75 @@ export function MooinCountTrace({ E }) {
   let note;
   if (step.kind === "intro")
     note = built.ys.length
-      ? t(E, `Goal: count how many DIFFERENT moos there are. A moo's last two are the SAME number, so first find the values that repeat (appear ≥ 2): {${built.ys.join(", ")}}.`,
-            `목표: 서로 다른 moo 가 몇 개인지 세기. moo 는 뒤 두 개가 같은 숫자라, 먼저 2번 이상 나오는 값을 찾아요 → {${built.ys.join(", ")}}.`)
-      : t(E, "No value appears twice → no moos → answer 0.", "2번 이상 나오는 값이 없음 → moo 없음 → 답 0.");
+      ? t(E, `Goal: count how many different moos there are. A moo has "the same number twice at the end", so first let's find the numbers that show up 2 or more times → here that's ${built.ys.join(", ")}.`,
+            `목표는 — 서로 다른 moo가 몇 개인지 세는 거예요. moo는 '뒤 두 개가 같은 숫자'죠. 그러니 먼저 2번 넘게 나오는 숫자를 찾아요 → 여기선 ${built.ys.join(", ")}예요.`)
+      : t(E, "No number shows up twice, so no moo can be made. The answer is 0.", "2번 넘게 나오는 숫자가 없어서 moo를 만들 수 없어요. 답은 0이에요.");
   else if (step.kind === "plan")
     note = t(E,
-      `We'll take them from the BACK — the value whose pair sits furthest right first. For each, count its moos and add up.`,
-      `이 값들을 뒤쪽 쌍부터 하나씩 볼게요. 값마다 moo 수를 세서 더해 가요.`);
+      `We'll look at these numbers one by one, count how many moos each one makes, and add them up. (Let's start with the pair furthest to the right.)`,
+      `이 숫자들을 하나씩 보면서, 각 숫자가 moo를 몇 개 만드는지 세서 더할 거예요. (오른쪽에 있는 짝부터 볼게요.)`);
   else if (step.kind === "pair")
     note = t(E,
-      `From the BACK, here's a same-number pair: ${step.y}, ${step.y}. These two are the moo's "y, y"!`,
-      `맨 뒤에서부터 같은 숫자 짝 → ${step.y}, ${step.y}. 이 둘이 moo 의 'y, y'!`);
+      `Here's a matching pair: ${step.y} and ${step.y}. These two are the moo's "same number twice at the end". Now let's see which numbers can come before this pair.`,
+      `같은 숫자 짝을 찾았어요 → ${step.y}과 ${step.y}. 이 두 개가 moo의 '뒤에 오는 같은 숫자 두 개'예요. 이제 이 짝 앞에 어떤 숫자들이 올 수 있는지 볼게요.`);
   else if (step.kind === "scan") {
     if (!step.scan)
-      note = t(E, "The zone left of the pair is empty → 0 different values.",
-                  "짝 왼쪽 구역이 비었어요 → 서로 다른 값 0개.");
+      note = t(E, "There's nothing to the left of the pair, so no number can come before it — that's 0.",
+                  "짝 왼쪽에 칸이 없어요. 앞에 올 수 있는 숫자가 없으니 0이에요.");
     else {
       const sc = step.scan;
       const head = sc.isNew
-        ? t(E, `i=${sc.i} → ${sc.v} is NEW! +1.`, `i=${sc.i} 의 ${sc.v} → 처음 보는 값! +1.`)
-        : t(E, `i=${sc.i} → ${sc.v} already counted, skip.`, `i=${sc.i} 의 ${sc.v} → 이미 센 값, 그대로.`);
+        ? t(E, `Looking left of the pair, one cell at a time: ${sc.v} is a new number here, so add one kind.`, `짝 왼쪽을 한 칸씩 봐요. ${sc.v}는 여기서 처음 보는 숫자라, 종류를 하나 더해요.`)
+        : t(E, `${sc.v} we already counted, so we leave it as is.`, `${sc.v}는 아까 이미 센 숫자라 그대로 둬요.`);
       const tail = step.scanDone
-        ? t(E, ` Zone done → ${step.d0} different values.`, ` 앞 구역 끝 → 서로 다른 값 ${step.d0}개.`)
-        : t(E, ` (${sc.distinct} so far)`, ` (지금까지 ${sc.distinct}개)`);
+        ? t(E, ` Done — ${step.d0} different numbers came before the pair.`, ` 짝 왼쪽을 다 봤어요 — 앞에 서로 다른 숫자가 ${step.d0}종류 있었네요.`)
+        : t(E, ` (${sc.distinct} kinds so far)`, ` (지금까지 ${sc.distinct}종류)`);
       note = head + tail;
     }
   }
   else if (step.kind === "subtract")
     note = t(E,
-      `But a moo needs x ≠ y. ${step.y} itself sits in that zone, so drop 1: ${step.d0} − 1 = ${step.contrib}.`,
-      `그런데 moo 는 x ≠ y 여야 해요. 앞 구역에 ${step.y} 자신도 껴 있으니 1개 빼요: ${step.d0} − 1 = ${step.contrib}개.`);
+      `But a moo's front number has to be different from the back two. ${step.y} itself is among those numbers before the pair, and it can't be the front number — so drop one: ${step.contrib}.`,
+      `그런데 moo의 앞 숫자는 뒤 두 개랑 달라야 해요. 짝 앞에 ${step.y} 자신도 끼어 있는데, 그건 앞 숫자로 못 써요 — 그래서 하나 빼면 ${step.contrib}개예요.`);
   else if (step.kind === "add")
     note = t(E,
-      `So ${step.y} makes ${step.contrib} moo(s). Add to the running total → ${step.ans}.`,
-      `그래서 ${step.y} 로 만드는 moo 는 ${step.contrib}개. 누적에 더하면 → ${step.ans}.`);
+      `So ${step.y} can make ${step.contrib} moos. Add that to the answer so far → ${step.ans}.`,
+      `그래서 ${step.y}로 만들 수 있는 moo는 ${step.contrib}개. 지금까지 답에 더하면 ${step.ans}이에요.`);
   else if (step.kind === "none")
-    note = t(E, "Nothing to add. Answer = 0.", "더할 게 없음. 답 = 0.");
+    note = t(E, "There's nothing to add up. The answer is 0.", "더할 게 없어요. 답은 0이에요.");
   else
-    note = t(E, `All values done — there are ${step.ans} different moos in all!`, `모든 값 처리 완료 — 서로 다른 moo 는 모두 ${step.ans}개!`);
+    note = t(E, `We've gone through every number. ${step.ans} different moos in all — that's the answer!`, `모든 숫자를 다 봤어요. 서로 다른 moo는 모두 ${step.ans}개 — 이게 답이에요!`);
 
   const showP = ["pair", "scan", "subtract", "add"].includes(step.kind);
   const hasFormula = ["subtract", "add"].includes(step.kind);
   const scanI = (step.kind === "scan" && step.scan) ? step.scan.i : -1;
+
+  // 이 단계에서 '봐야 할' 배열 칸 — 말풍선이 그 칸 위로 이동 (선생님 2026-06-19:
+  // '말풍선이 봐야 할 곳으로 이동해야지'. DeepAudit 과 동일한 움직이는 말풍선).
+  let focusCol;
+  if (step.kind === "scan") focusCol = scanI >= 0 ? scanI : step.p;
+  else if (step.kind === "subtract") focusCol = step.occ[0];
+  else if (step.kind === "pair" || step.kind === "add") focusCol = step.p;
+  else focusCol = Math.floor((a.length - 1) / 2);   // intro·plan·none·final → 가운데
+
+  const containerRef = useRef(null);
+  const targetRef = useRef(null);
+  const bubbleRef = useRef(null);
+  const [pos, setPos] = useState({ left: 0, top: 0, tailX: 24, ready: false });
+  useLayoutEffect(() => {
+    const tc = targetRef.current, cont = containerRef.current, bub = bubbleRef.current;
+    if (!tc || !cont || !bub) return;
+    const cr = cont.getBoundingClientRect();
+    const tr = tc.getBoundingClientRect();
+    const br = bub.getBoundingClientRect();
+    const cx = tr.left + tr.width / 2 - cr.left;     // 타깃 칸 가로 중심
+    const tTop = tr.top - cr.top;
+    let left = cx - br.width / 2;
+    left = Math.max(2, Math.min(left, cr.width - br.width - 2));
+    const top = Math.max(0, tTop - br.height - 12);  // 칸 위에 말풍선, 아래로 꼬리
+    const tailX = Math.max(12, Math.min(cx - left - 8, br.width - 24));
+    setPos({ left, top, tailX, ready: true });
+  }, [safe, E, pi]);
 
   return (
     <div style={{ padding: 16 }}>
@@ -326,31 +353,22 @@ export function MooinCountTrace({ E }) {
       {/* 말풍선 + 배열 — 말풍선이 배열 바로 위에서 '지금 보는 칸'을 꼬리로 가리킴
           (선생님 2026-06-18: '실제 봐야하는 시뮬 옆에 나와야지'. astral 그리드 말풍선 패턴) */}
       {(() => {
-        const CW = 42;                                  // 셀 38 + gap 4
-        const ARR_W = a.length * 38 + (a.length - 1) * 4;
-        const boxW = Math.max(ARR_W, 320);
-        const arrLeft = (boxW - ARR_W) / 2;
         const lastOcc = step.occ ? step.occ[step.occ.length - 1] : -1;
-        // 꼬리가 가리킬 칸
-        let focusCol;
-        if (step.kind === "scan") focusCol = scanI >= 0 ? scanI : step.p;
-        else if (step.kind === "subtract") focusCol = step.occ[0];
-        else if (step.kind === "pair" || step.kind === "add") focusCol = step.p;
-        else focusCol = Math.floor((a.length - 1) / 2);
-        const tailLeft = arrLeft + focusCol * CW + 19 - 8;  // 셀 중앙 − 꼬리 절반
+        // 컨테이너를 꽉 채워(배열은 가운데) 말풍선이 포커스 칸 쪽으로 충분히 미끄러질 공간 확보
+        // (선생님 2026-06-19: 오른쪽 짝이면 말풍선도 오른쪽으로 가야 집중됨).
         return (
-          <div style={{ width: boxW, margin: "0 auto 12px" }}>
-            {/* 말풍선 (아래로 꼬리) */}
-            <div style={{ position: "relative", background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 14, padding: "11px 14px", fontSize: 13, color: "#92400e", lineHeight: 1.6, minHeight: 40, display: "flex", gap: 8, marginBottom: 12, wordBreak: "keep-all", overflowWrap: "anywhere" }}>
+          <div ref={containerRef} style={{ position: "relative", width: "100%", margin: "0 auto 12px", paddingTop: 104 }}>
+            {/* 움직이는 말풍선 — 포커스 칸 위로 이동, 아래로 꼬리 (DeepAudit 과 동일 패턴) */}
+            <div ref={bubbleRef} style={{ position: "absolute", left: pos.left, top: pos.top, maxWidth: 340, zIndex: 5, background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 14, padding: "10px 13px", fontSize: 13, color: "#92400e", lineHeight: 1.55, display: "flex", gap: 7, wordBreak: "keep-all", overflowWrap: "anywhere", boxShadow: "0 5px 16px rgba(0,0,0,0.14)", opacity: pos.ready ? 1 : 0, transition: "left .28s ease, top .28s ease, opacity .15s" }}>
               <span style={{ fontSize: 15, flexShrink: 0 }}>💬</span>
               <span>{note}</span>
-              <div style={{ position: "absolute", bottom: -9, left: tailLeft, width: 0, height: 0, borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderTop: "9px solid #fbbf24", transition: "left .2s" }} />
-              <div style={{ position: "absolute", bottom: -7, left: tailLeft + 1, width: 0, height: 0, borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: "8px solid #fffbeb", transition: "left .2s" }} />
+              <div style={{ position: "absolute", bottom: -9, left: pos.tailX, width: 0, height: 0, borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderTop: "9px solid #fbbf24" }} />
+              <div style={{ position: "absolute", bottom: -7, left: pos.tailX + 1, width: 0, height: 0, borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: "8px solid #fffbeb" }} />
             </div>
             {/* array */}
             <div style={{ display: "flex", justifyContent: "center", gap: 4 }}>
               {a.map((v, i) => {
-                const isPair = showP && (i === step.p || i === lastOcc);             // 뒤 두 개 = moo 의 y, y 쌍
+                const isPair = showP && (i === step.p || i === lastOcc);             // 뒤 두 개 = moo의 y, y 쌍
                 const inZone = step.kind === "subtract" && i < step.p;               // 앞 구역 (빼기 단계)
                 const isDrop = step.kind === "subtract" && i < step.p && v === step.y; // 빼는 y 자신 → ✗
                 // scan 단계: 커서 + 처음 보는 값 / 이미 본 값
@@ -372,7 +390,7 @@ export function MooinCountTrace({ E }) {
                 const badge = scanState === "cur-new" ? "+1" : (scanState === "cur-rep" ? "=" : (isDrop ? "✗" : null));
                 const badgeBg = scanState === "cur-new" ? "#16a34a" : (scanState === "cur-rep" ? "#9ca3af" : "#dc2626");
                 return (
-                  <div key={i} style={{
+                  <div key={i} ref={i === focusCol ? targetRef : null} style={{
                     position: "relative",
                     width: 38, height: 46, display: "flex", flexDirection: "column",
                     alignItems: "center", justifyContent: "center", borderRadius: 8,

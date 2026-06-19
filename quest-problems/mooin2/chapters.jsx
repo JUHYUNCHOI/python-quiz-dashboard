@@ -339,31 +339,48 @@ export function makeMooin2Ch2(E, lang = "py") {
    ════════════════════════════════════════════════════════════════════ */
 export function makeMooin2Ch3(E) {
   return [
-    /* 순서 재배치 (선생님 2026-06-19: '정답 코드 전에 시뮬이 보여야지'):
-       동기+예측(quiz) → 방법 시뮬(CountTrace) 을 챕터 '마지막' 으로 → ⚡코드 바로 직전에
-       시뮬이 오도록. 시뮬만 보고 '뭘 하는지' 이해한 뒤 코드로 넘어감. */
+    /* 흐름 (선생님 2026-06-19): ① 브루트 안 됨 → 다른 방법 ② 우리가 만든 방법 시뮬
+       ③ '이걸 코드로?' → 정보 담을 변수 소개 ④ 그 변수 채우기 시뮬 → ⚡코드.
+       워밍업 퀴즈 제거 (선생님: '필요 없다'). */
 
-    /* 3-1 — warm-up: 동기 + 감으로 예측 (빠른 방법 보기 직전 hook) */
-    {
-      type: "quiz",
-      narr: t(E,
-        "Brute timed out — let's think differently. Before the fast method, take a guess! (Hint: y must appear ≥ 2 times, and some x ≠ y must sit before its pair.)",
-        "브루트는 타임오버였죠 — 다르게 생각해요. 빠른 방법을 보기 전에, 감으로 한 번! (힌트: y 는 2번 이상 나와야 하고, 그 짝 앞에 다른 수 x ≠ y 도 있어야 해요.)"),
-      question: t(E, "a = [1, 1]. How many moos occur?", "a = [1, 1]. 발생 moo 개수?"),
-      options: ["0", "1", "2"],
-      correct: 0,
-      explain: t(E,
-        "y = 1 has count 2, but there's no x ≠ 1 before the (1, 1) pair. No moos. Answer = 0.",
-        "y = 1 은 count 2 지만 (1, 1) 짝 앞에 x ≠ 1 이 없음. moo 0 개."),
-    },
-
-    /* 3-2 — 방법 시뮬 (정답 코드 바로 직전). 코드 한 줄 없이 시뮬만 봐도 '무슨 일을
-       하는지' 가 보이게 — 같은 숫자 짝 찾기 → 앞의 서로 다른 값 하나씩 세기 → 누적. */
+    /* 3-1 — 동기 ONLY: 브루트가 왜 느렸나 + moo 특징으로 hook. 방법은 안 알려주고
+       궁금하게만 → 2-2 시뮬이 진짜 reveal 이 되도록 (선생님 2026-06-19: 1/4가 방법을
+       미리 다 말하면 시뮬이 스포일러 반복됨). */
     {
       type: "reveal",
       narr: t(E,
-        "Now watch the fast method, one move at a time — no code, just the picture. Find a same-number pair, then count how many DIFFERENT numbers came before it.",
-        "이제 빠른 방법을 한 동작씩 봐요 — 코드 없이 그림만. 같은 숫자 짝을 찾고, 그 앞에 나온 서로 다른 숫자가 몇 가지인지 세면 돼요."),
+        "Brute force timed out when N got big — so we need a smarter way.",
+        "브루트포스는 N 이 커지면 타임오버였죠 — 그러니 다른 방법을 생각해봐야 해요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 12, padding: "14px 16px", fontSize: 14, color: "#9a3412", lineHeight: 1.7, maxWidth: 480, margin: "0 auto", wordBreak: "keep-all" }}>
+            <div style={{ fontWeight: 800, marginBottom: 8 }}>
+              🐢 {t(E, "Why was brute so slow?", "브루트는 왜 그렇게 느렸을까?")}
+            </div>
+            <div>
+              {t(E,
+                "It tried EVERY 3 spots one by one — so when N gets big, the work explodes. 💥",
+                "모든 3칸 조합을 하나하나 다 봤거든요 — 그래서 N 이 커지면 일이 폭발해요. 💥")}
+            </div>
+            <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px dashed #fdba74" }}>
+              {t(E,
+                "But a moo has a special trait: its last two numbers are the SAME. Could we use that to skip the wasted work? 🤔",
+                "그런데 moo 엔 특별한 점이 있어요 — 뒤 두 숫자가 같다는 것. 이걸 이용하면 헛수고를 건너뛸 수 있지 않을까? 🤔")}
+            </div>
+          </div>
+          <div style={{ textAlign: "center", fontSize: 12.5, color: "#7c5cfc", fontWeight: 700, marginTop: 12, wordBreak: "keep-all" }}>
+            👉 {t(E, "Hit Next — let's find out, step by step.", "「다음」을 누르면 직접 알아볼 수 있어요.")}
+          </div>
+        </div>),
+    },
+
+    /* 3-2 — 방법 시뮬 (CountTrace). 방법이 '여기서 처음' 밝혀지는 reveal — narr 은 짧게,
+       설명은 전부 시뮬 말풍선이 담당 (선생님 2026-06-18). */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Here's the smarter method — discover it one move at a time, no code, just the picture.",
+        "더 똑똑한 방법, 여기서 한 동작씩 직접 알아봐요 — 코드 없이 그림만."),
       content: (
         <div style={{ padding: 16 }}>
           {/* recipe 박스 전부 제거 (선생님 2026-06-18: '빠른 아이디어 볼 필요 없다 — 시뮬 각
@@ -373,6 +390,67 @@ export function makeMooin2Ch3(E) {
           </div>
           <MooinCountTrace E={E} />
         </div>),
+    },
+
+    /* 3-3 — 다리: '방법은 알았다 → 이걸 코드로? → 정보를 담을 변수가 필요'.
+       DeepAudit 의 변수들이 갑자기 안 튀어나오게, 먼저 '왜 이 변수가 필요한지' 소개. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "We've got the method. Now — how do we turn it into code? The computer has to remember a bit of info in variables.",
+        "방법은 알았어요. 그럼 이걸 코드로 어떻게 만들까요? 컴퓨터는 필요한 정보를 변수(메모지)에 담아둬야 해요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13.5, color: C.text, lineHeight: 1.7, marginBottom: 4, textAlign: "center", wordBreak: "keep-all" }}>
+            {t(E, "So we don't recount every time, the code jots down 3 notes:",
+                  "매번 다시 세지 않으려고, 코드는 메모 3장을 적어둬요:")}
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, textAlign: "center", marginBottom: 12, wordBreak: "keep-all" }}>
+            {t(E, "(a “number” = a value in the array · a “spot” = a position: 0, 1, 2, …)",
+                  "(여기서 ‘숫자’ = 배열에 든 값 · ‘자리’ = 위치 0, 1, 2, …)")}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 500, margin: "0 auto" }}>
+            {[
+              {
+                plain: t(E, "Each number — how many times did it show up?", "숫자마다 — 몇 번 나왔지?"),
+                why: t(E, "It must show up at least twice to make a pair (y, y).", "같은 숫자 짝(y, y)을 만들려면 2번 이상 나와야 하니까."),
+                code: "count",
+              },
+              {
+                plain: t(E, "Each number — where does its pair start?", "숫자마다 — 그 짝이 어디서 시작하지?"),
+                why: t(E, "Everything before that spot is where x can come from.", "그 자리 앞쪽이 바로 'x 가 올 수 있는 구역'이라서."),
+                code: "second_last",
+              },
+              {
+                plain: t(E, "Each spot — how many DIFFERENT numbers came before it?", "자리마다 — 그 앞에 서로 다른 숫자가 몇 종류지?"),
+                why: t(E, "That many numbers are exactly the x's we can choose.", "그 종류 수가 곧 고를 수 있는 x 개수예요."),
+                code: "D",
+              },
+            ].map((m, i) => (
+              <div key={i} style={{ background: "#f8fafc", border: "1.5px solid #e2e8f0", borderRadius: 10, padding: "10px 12px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 4, flexWrap: "wrap" }}>
+                  <span style={{ fontSize: 13.5, fontWeight: 800, color: C.text, wordBreak: "keep-all" }}>{m.plain}</span>
+                  <span style={{ fontSize: 10.5, color: C.dim, flexShrink: 0 }}>{t(E, "code:", "코드 이름:")}</span>
+                  <code style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800, color: "#7c3aed", background: "#fff", border: "1px solid #ddd6fe", borderRadius: 6, padding: "1px 6px", flexShrink: 0 }}>{m.code}</code>
+                </div>
+                <div style={{ fontSize: 12.5, color: C.dim, lineHeight: 1.6, wordBreak: "keep-all" }}>{m.why}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign: "center", fontSize: 12.5, color: "#7c5cfc", fontWeight: 700, marginTop: 12, wordBreak: "keep-all" }}>
+            👉 {t(E, "Hit Next — watch these notes fill in as we scan.", "「다음」을 누르면 이 메모들이 배열을 훑으며 채워지는 걸 볼 수 있어요.")}
+          </div>
+        </div>),
+    },
+
+    /* 3-4 — 변수 채우기 시뮬 (정답 코드 '바로 직전'). 선생님 2026-06-19:
+       "이런 정보를 보관하는 변수들을 만들고 그거에 대한 시뮬을 보여주면 될 것 같다."
+       → 위에서 소개한 변수들이 배열을 훑으며 채워지는 걸 코드 없이 봄. */
+    {
+      type: "deepAudit",
+      narr: t(E,
+        "Scan the array once and the notes fill in. The ⚡ Code tab simply writes down exactly this.",
+        "배열을 한 번 훑으면 이 메모들이 채워져요. ⚡코드 탭은 바로 이걸 그대로 적는 거예요."),
     },
   ];
 }
