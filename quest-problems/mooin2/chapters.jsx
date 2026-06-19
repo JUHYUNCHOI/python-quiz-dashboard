@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
-import { getMooin2Sections, MooinExplorer, MooinDeepAudit } from "./components";
+import { getMooin2Sections } from "./components";
 import { MooinBruteRunner, MooinCountTrace } from "./sims";
 
 /* ════════════════════════════════════════════════════════════════════
@@ -329,35 +329,8 @@ export function makeMooin2Ch2(E, lang = "py") {
         "Let's RUN it. N = 40 finishes instantly — then jump to N = 2000 🐌 and watch it actually crawl. Hit Stop whenever you've felt enough!",
         "직접 돌려봐요. N = 40 은 순식간 — 그다음 N = 2000 🐌 로 올리면 진짜로 기어가는 걸 봐요. 충분히 느꼈으면 Stop 눌러요!"),
     },
-    /* 2-4 — the limit */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Felt it? Three nested loops do about N × N × N work → it TIMES OUT. So what do we do? 👇",
-        "느꼈죠? 3중 반복은 대략 N × N × N 만큼 일해서 → 시간 초과(타임오버)가 나요. 그럼 어떻게? 👇"),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#991b1b", lineHeight: 1.75 }}>
-            <div style={{ fontWeight: 800, marginBottom: 6 }}>🚧 {t(E, "Why it TIMES OUT", "왜 시간 초과(타임오버)가 날까?")}</div>
-            {t(E, "Picking 3 spots out of N ≈ N³ ÷ 6 ways. Watch it grow:", "N 개에서 3칸 고르는 경우의 수 ≈ N³ ÷ 6. 커지는 걸 봐요:")}
-            <div style={{ marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.9 }}>
-              N = 100 → ~160,000 {t(E, "combos (fine)", "가짓수 (괜찮음)")}<br/>
-              N = 10,000 → ~1.6 × 10¹¹ {t(E, "(slow)", "(느림)")}<br/>
-              N = 1,000,000 → ~1.7 × 10¹⁷ {t(E, "(forever)", "(영원)")}
-            </div>
-            <div style={{ marginTop: 8, fontWeight: 700, color: "#7c2d12" }}>
-              {t(E,
-                "At a billion steps per second, N = 10⁶ would take ~30 YEARS. The limit is ~2 seconds → TIME OUT.",
-                "1초에 10억 번 해도 N = 10⁶ 은 약 30년 걸려요. 제한 시간은 약 2초 → 시간 초과(타임오버).")}
-            </div>
-          </div>
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "11px 13px", fontSize: 13.5, color: "#9a3412", lineHeight: 1.7 }}>
-            🚀 {t(E,
-              "So we won't count combos one by one. Instead — for each repeated value, we'll work out 'how many moos can it make?' in one shot, and add those up. (How? Step by step in the next tab.)",
-              "그래서 조합을 하나하나 세지 않아요. 대신 — 반복되는 값마다 '이 값으로 moo 를 몇 개 만들 수 있나?' 를 한 번에 구해서 더할 거예요. (어떻게? 다음 탭에서 하나씩.)")}
-          </div>
-        </div>),
-    },
+    /* 2-4 (limit/bridge) REMOVED 2026-06-18 — narr·박스가 같은 말이었고, 체감은 BruteRunner(2-3)가,
+       동기는 빠른풀이 첫 페이지가 담당 → 불필요 (선생님). 첫시도는 BruteRunner 로 끝남. */
   ];
 }
 
@@ -366,12 +339,31 @@ export function makeMooin2Ch2(E, lang = "py") {
    ════════════════════════════════════════════════════════════════════ */
 export function makeMooin2Ch3(E) {
   return [
-    /* 3-1 — the recipe */
+    /* 순서 재배치 (선생님 2026-06-19: '정답 코드 전에 시뮬이 보여야지'):
+       동기+예측(quiz) → 방법 시뮬(CountTrace) 을 챕터 '마지막' 으로 → ⚡코드 바로 직전에
+       시뮬이 오도록. 시뮬만 보고 '뭘 하는지' 이해한 뒤 코드로 넘어감. */
+
+    /* 3-1 — warm-up: 동기 + 감으로 예측 (빠른 방법 보기 직전 hook) */
+    {
+      type: "quiz",
+      narr: t(E,
+        "Brute timed out — let's think differently. Before the fast method, take a guess! (Hint: y must appear ≥ 2 times, and some x ≠ y must sit before its pair.)",
+        "브루트는 타임오버였죠 — 다르게 생각해요. 빠른 방법을 보기 전에, 감으로 한 번! (힌트: y 는 2번 이상 나와야 하고, 그 짝 앞에 다른 수 x ≠ y 도 있어야 해요.)"),
+      question: t(E, "a = [1, 1]. How many moos occur?", "a = [1, 1]. 발생 moo 개수?"),
+      options: ["0", "1", "2"],
+      correct: 0,
+      explain: t(E,
+        "y = 1 has count 2, but there's no x ≠ 1 before the (1, 1) pair. No moos. Answer = 0.",
+        "y = 1 은 count 2 지만 (1, 1) 짝 앞에 x ≠ 1 이 없음. moo 0 개."),
+    },
+
+    /* 3-2 — 방법 시뮬 (정답 코드 바로 직전). 코드 한 줄 없이 시뮬만 봐도 '무슨 일을
+       하는지' 가 보이게 — 같은 숫자 짝 찾기 → 앞의 서로 다른 값 하나씩 세기 → 누적. */
     {
       type: "reveal",
       narr: t(E,
-        "A moo's last two are the same number. So find a matching pair, then just count how many DIFFERENT numbers came before it!",
-        "moo 는 뒤 두 개가 같은 숫자예요. 그래서 같은 숫자 짝을 찾고, 그 앞에 나온 다른 숫자가 몇 가지인지만 세면 돼요!"),
+        "Now watch the fast method, one move at a time — no code, just the picture. Find a same-number pair, then count how many DIFFERENT numbers came before it.",
+        "이제 빠른 방법을 한 동작씩 봐요 — 코드 없이 그림만. 같은 숫자 짝을 찾고, 그 앞에 나온 서로 다른 숫자가 몇 가지인지 세면 돼요."),
       content: (
         <div style={{ padding: 16 }}>
           {/* recipe 박스 전부 제거 (선생님 2026-06-18: '빠른 아이디어 볼 필요 없다 — 시뮬 각
@@ -381,32 +373,6 @@ export function makeMooin2Ch3(E) {
           </div>
           <MooinCountTrace E={E} />
         </div>),
-    },
-    /* 3-5 — REMOVED 2026-06-18: 'distinct before second-to-last = x candidates' (same y=4 →
-       {1,2,3,4} example) is now shown in the merged recipe slide (3-1) picture + the sim. Dup. */
-    /* 3-6 — REMOVED 2026-06-18: subtract-1 edge case was confusing as a text slide;
-       the countTrace sim already shows '(drop y itself)' inline, and the code handles it. */
-    /* 3-7 — REMOVED 2026-06-18: countTrace sim now embedded in the 'why' slide (3-2)
-       so explanation + sim sit on ONE screen (teacher). Standalone slide was a dup. */
-    /* 3-8 — recap quiz */
-    {
-      type: "quiz",
-      narr: t(E,
-        "Quick check. y needs ≥ 2 copies AND some x ≠ y before its pair.",
-        "퀴즈. y 는 2개 이상 + 짝 앞에 x ≠ y 가 있어야."),
-      question: t(E, "a = [1, 1]. How many moos occur?", "a = [1, 1]. 발생 moo 개수?"),
-      options: ["0", "1", "2"],
-      correct: 0,
-      explain: t(E,
-        "y = 1 has count 2, but there's no x ≠ 1 before the (1, 1) pair. No moos. Answer = 0.",
-        "y = 1 은 count 2 지만 (1, 1) 짝 앞에 x ≠ 1 이 없음. moo 0 개."),
-    },
-    /* 3-9 — free explorer */
-    {
-      type: "explorer",
-      narr: t(E,
-        "Try it yourself! Tap a preset and see which moos occur. A value that appears only ONCE can never be y (y must repeat).",
-        "직접 눌러봐요! 여러 배열에서 어떤 moo 가 생기는지. 한 번만 나오는 값은 절대 y 가 못 돼요 — y 는 2번 이상 나와야 하니까."),
     },
   ];
 }

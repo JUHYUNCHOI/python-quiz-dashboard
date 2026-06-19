@@ -218,7 +218,8 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const LazyComp = getLazyComponent(meta.id)
 
   return (
-    <div className="min-h-screen bg-[#f3f0ff] flex flex-col">
+    // break-keep: 모든 quest 의 한글 텍스트가 단어 중간에서 줄바꿈되지 않게 (상속) — 선생님 반복 지적
+    <div className="min-h-screen bg-[#f3f0ff] flex flex-col break-keep">
       <Header />
 
       {/* Breadcrumb: USACO · Dec 2024 Bronze #2 + done button */}
