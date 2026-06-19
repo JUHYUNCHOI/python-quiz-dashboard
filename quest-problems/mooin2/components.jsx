@@ -512,7 +512,10 @@ const M2_S2_PY = (E) => [
   "        second_last[v] = last_seen[v]",
   "    last_seen[v] = i",
 ];
-const M2_S2_CPP = [
+const M2_S2_CPP = (E) => [
+  t(E, "    // count[v] = number of times v appears", "    // count[v] = 값 v 가 나온 횟수"),
+  t(E, "    // second_last[v] = index of the SECOND-TO-LAST occurrence of v", "    // second_last[v] = v 가 '끝에서 두 번째'로 나온 자리"),
+  t(E, "    //                  (only meaningful if count[v] >= 2)", "    //                  (count[v] >= 2 일 때만 의미 있음)"),
   "    vector<int> last_seen(N + 2, -1);",
   "    vector<int> second_last(N + 2, -1);",
   "    vector<int> count(N + 2, 0);",
@@ -535,7 +538,9 @@ const M2_S3_PY = (E) => [
   "    D[i + 1] = D[i] + (0 if seen[a[i]] else 1)",
   "    seen[a[i]] = True",
 ];
-const M2_S3_CPP = [
+const M2_S3_CPP = (E) => [
+  t(E, "    // D[k] = number of distinct values in a[0..k-1]", "    // D[k] = a[0..k-1] 안의 서로 다른 값 개수"),
+  t(E, "    // Walk left-to-right, marking each new value.", "    // 왼쪽→오른쪽으로 훑으며, 새 값이 나올 때마다 표시."),
   "    vector<bool> seen(N + 2, false);",
   "    vector<int> D(N + 1, 0);",
   "    for (int i = 0; i < N; i++) {",
@@ -585,7 +590,7 @@ const M2_FULL_PY = (E) => [
   "",
   "print(ans)",
 ];
-const M2_FULL_CPP = [
+const M2_FULL_CPP = (E) => [
   "#include <iostream>",
   "#include <vector>",
   "using namespace std;",
@@ -598,6 +603,7 @@ const M2_FULL_CPP = [
   "        cin >> a[i];",
   "    }",
   "",
+  t(E, "    // count + second-to-last position", "    // 값별 count + 끝에서 두 번째 위치"),
   "    vector<int> last_seen(N + 2, -1);",
   "    vector<int> second_last(N + 2, -1);",
   "    vector<int> count(N + 2, 0);",
@@ -610,6 +616,7 @@ const M2_FULL_CPP = [
   "        last_seen[v] = i;",
   "    }",
   "",
+  t(E, "    // Prefix distinct count", "    // 앞쪽 서로 다른 값 개수 (D)"),
   "    vector<bool> seen(N + 2, false);",
   "    vector<int> D(N + 1, 0);",
   "    for (int i = 0; i < N; i++) {",
@@ -617,6 +624,11 @@ const M2_FULL_CPP = [
   "        seen[a[i]] = true;",
   "    }",
   "",
+  t(E, "    // For each y with count >= 2:", "    // count >= 2 인 각 y 에 대해:"),
+  t(E, "    //   second_last[y] is where j sits (the (count-1)-th occurrence).", "    //   second_last[y] = j 의 자리 ((count-1) 번째 등장)."),
+  t(E, "    //   distinct x's allowed: positions [0, second_last[y] - 1] → D[second_last[y]] values.", "    //   가능한 x 종류: 자리 [0, second_last[y] - 1] → D[second_last[y]] 개."),
+  t(E, "    //   But y itself appears in those positions iff there are >=2 occurrences before", "    //   단, count[y] >= 3 이면 그 구간에 y 자신도 들어 있음"),
+  t(E, "    //   second_last, i.e., count[y] >= 3. Subtract 1 in that case.", "    //   (second_last 앞에 y 가 한 번 더). 그땐 1 을 빼줌."),
   "    long long ans = 0;",
   "    for (int y = 1; y <= N + 1; y++) {",
   "        if (count[y] >= 2) {",
@@ -650,7 +662,7 @@ export function getMooin2Sections(E) {
     {
       label: t(E, "2️⃣ count + second-to-last position per value", "2️⃣ 값별 count + 끝에서 두 번째 위치"),
       color: "#0891b2",
-      py: M2_S2_PY(E), cpp: M2_S2_CPP,
+      py: M2_S2_PY(E), cpp: M2_S2_CPP(E),
       why: [
         t(E, "count[v] tells us if v can be the moo's repeated value (need ≥ 2).",
             "count[v] 가 ≥ 2 여야 v 가 moo 반복값이 될 수 있음."),
@@ -663,7 +675,7 @@ export function getMooin2Sections(E) {
     {
       label: t(E, "3️⃣ Prefix distinct count", "3️⃣ prefix 서로 다른 값 수"),
       color: "#16a34a",
-      py: M2_S3_PY(E), cpp: M2_S3_CPP,
+      py: M2_S3_PY(E), cpp: M2_S3_CPP(E),
       why: [
         t(E, "D[k] = number of DISTINCT values in a[0..k-1].",
             "D[k] = a[0..k-1] 의 서로 다른 값 수."),
@@ -676,7 +688,7 @@ export function getMooin2Sections(E) {
     {
       label: t(E, "4️⃣ Sum contributions — full code", "4️⃣ 기여 합산 — 전체 코드"),
       color: "#dc2626",
-      py: M2_FULL_PY(E), cpp: M2_FULL_CPP,
+      py: M2_FULL_PY(E), cpp: M2_FULL_CPP(E),
       why: [
         t(E, "For each y with count[y] ≥ 2: D[second_last[y]] gives distinct values appearing before j.",
             "count[y] ≥ 2 인 y 마다: D[second_last[y]] 가 j 앞 서로 다른 값 수."),
