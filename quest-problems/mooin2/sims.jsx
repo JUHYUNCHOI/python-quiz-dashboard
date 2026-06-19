@@ -191,9 +191,10 @@ export function MooinBruteRunner({ E }) {
    contribution, and the running total.
    ════════════════════════════════════════════════════════════════════ */
 const COUNT_PRESETS = [
-  { name: "S1", a: [1, 2, 3, 4, 4, 4] },
-  { name: "−1 case", a: [4, 1, 4, 4] },
-  { name: "Mixed", a: [3, 1, 2, 1, 2, 3, 3] },
+  // 기본을 '섞인' 예제로 — 앞 구역에 같은 값이 또 나와서 '하나씩 세기'가 살아남
+  { name_en: "Mixed", name_ko: "섞인 예", a: [3, 1, 2, 1, 2, 3, 3] },
+  { name_en: "Simple", name_ko: "쉬운 예", a: [1, 2, 3, 4, 4, 4] },
+  { name_en: "−1 case", name_ko: "−1 경우", a: [4, 1, 4, 4] },
 ];
 
 function buildCountTrace(a) {
@@ -220,16 +221,29 @@ function buildCountTrace(a) {
     const d0 = D[p];
     const sub = count[y] >= 3;
     const contrib = d0 - (sub ? 1 : 0);
-    // 끝에서 두 번째 y 자리(p) 앞 구역에 나온 서로 다른 값들
-    const beforeSet = []; const bseen = new Set();
-    for (let i = 0; i < p; i++) { if (!bseen.has(a[i])) { bseen.add(a[i]); beforeSet.push(a[i]); } }
+    // 끝에서 두 번째 y 자리(p) 앞 구역(0..p-1)을 한 칸씩 훑으며 '서로 다른 값' 누적
+    const scan = []; const sseen = new Set();
+    for (let i = 0; i < p; i++) {
+      const v = a[i];
+      const isNew = !sseen.has(v);
+      if (isNew) sseen.add(v);
+      scan.push({ i, v, isNew, distinct: sseen.size, list: [...sseen] });
+    }
+    const beforeSet = scan.length ? scan[scan.length - 1].list : [];
     // y 가 나오는 모든 자리
     const occ = []; for (let i = 0; i < N; i++) if (a[i] === y) occ.push(i);
 
     const base = { y, cnt: count[y], p, d0, sub, contrib, occ, beforeSet };
     const ansBefore = ans;
     steps.push({ kind: "pair", ...base, ans: ansBefore });   // 뒤에서 같은 숫자 짝 찾기 (= moo 의 y,y)
-    steps.push({ kind: "count", ...base, ans: ansBefore });  // 그 짝 왼쪽에서 서로 다른 값 세기
+    // 그 짝 왼쪽을 한 칸씩 — 처음 보는 값이면 +1
+    if (scan.length === 0) {
+      steps.push({ kind: "scan", ...base, scan: null, distinct: 0, scanDone: true, ans: ansBefore });
+    } else {
+      scan.forEach((sc, k) => {
+        steps.push({ kind: "scan", ...base, scan: sc, distinct: sc.distinct, scanDone: k === scan.length - 1, ans: ansBefore });
+      });
+    }
     if (sub) steps.push({ kind: "subtract", ...base, ans: ansBefore });
     ans += contrib;
     steps.push({ kind: "add", ...base, ans });
@@ -249,8 +263,8 @@ export function MooinCountTrace({ E }) {
   let note;
   if (step.kind === "intro")
     note = built.ys.length
-      ? t(E, `A moo's last two are the SAME number. So find the values that repeat (appear ≥ 2): {${built.ys.join(", ")}}.`,
-            `moo 는 뒤 두 개가 같은 숫자예요. 그래서 2번 이상 나오는 값을 찾아요 → {${built.ys.join(", ")}}.`)
+      ? t(E, `Goal: count how many DIFFERENT moos there are. A moo's last two are the SAME number, so first find the values that repeat (appear ≥ 2): {${built.ys.join(", ")}}.`,
+            `목표: 서로 다른 moo 가 몇 개인지 세기. moo 는 뒤 두 개가 같은 숫자라, 먼저 2번 이상 나오는 값을 찾아요 → {${built.ys.join(", ")}}.`)
       : t(E, "No value appears twice → no moos → answer 0.", "2번 이상 나오는 값이 없음 → moo 없음 → 답 0.");
   else if (step.kind === "plan")
     note = t(E,
@@ -260,10 +274,21 @@ export function MooinCountTrace({ E }) {
     note = t(E,
       `From the BACK, here's a same-number pair: ${step.y}, ${step.y}. These two are the moo's "y, y"!`,
       `맨 뒤에서부터 같은 숫자 짝 → ${step.y}, ${step.y}. 이 둘이 moo 의 'y, y'!`);
-  else if (step.kind === "count")
-    note = t(E,
-      `Now LEFT of the pair, count the different values: {${step.beforeSet.join(", ")}} → ${step.d0}.`,
-      `이제 짝 왼쪽에서 서로 다른 값을 세요: {${step.beforeSet.join(", ")}} → ${step.d0}개.`);
+  else if (step.kind === "scan") {
+    if (!step.scan)
+      note = t(E, "The zone left of the pair is empty → 0 different values.",
+                  "짝 왼쪽 구역이 비었어요 → 서로 다른 값 0개.");
+    else {
+      const sc = step.scan;
+      const head = sc.isNew
+        ? t(E, `i=${sc.i} → ${sc.v} is NEW! +1.`, `i=${sc.i} 의 ${sc.v} → 처음 보는 값! +1.`)
+        : t(E, `i=${sc.i} → ${sc.v} already counted, skip.`, `i=${sc.i} 의 ${sc.v} → 이미 센 값, 그대로.`);
+      const tail = step.scanDone
+        ? t(E, ` Zone done → ${step.d0} different values.`, ` 앞 구역 끝 → 서로 다른 값 ${step.d0}개.`)
+        : t(E, ` (${sc.distinct} so far)`, ` (지금까지 ${sc.distinct}개)`);
+      note = head + tail;
+    }
+  }
   else if (step.kind === "subtract")
     note = t(E,
       `But a moo needs x ≠ y. ${step.y} itself sits in that zone, so drop 1: ${step.d0} − 1 = ${step.contrib}.`,
@@ -275,10 +300,11 @@ export function MooinCountTrace({ E }) {
   else if (step.kind === "none")
     note = t(E, "Nothing to add. Answer = 0.", "더할 게 없음. 답 = 0.");
   else
-    note = t(E, `All values done. Answer = ${step.ans}.`, `모든 값 처리 완료. 답 = ${step.ans}.`);
+    note = t(E, `All values done — there are ${step.ans} different moos in all!`, `모든 값 처리 완료 — 서로 다른 moo 는 모두 ${step.ans}개!`);
 
-  const showP = ["pair", "count", "subtract", "add"].includes(step.kind);
-  const hasFormula = ["count", "subtract", "add"].includes(step.kind);
+  const showP = ["pair", "scan", "subtract", "add"].includes(step.kind);
+  const hasFormula = ["subtract", "add"].includes(step.kind);
+  const scanI = (step.kind === "scan" && step.scan) ? step.scan.i : -1;
 
   return (
     <div style={{ padding: 16 }}>
@@ -293,7 +319,7 @@ export function MooinCountTrace({ E }) {
             padding: "4px 10px", borderRadius: 6, fontSize: 11, fontWeight: 700,
             border: `1.5px solid ${pi === i ? A : C.border}`,
             background: pi === i ? "#ffedd5" : "#fff", color: pi === i ? A : C.text, cursor: "pointer",
-          }}>{p.name}: [{p.a.join(", ")}]</button>
+          }}>{E ? p.name_en : p.name_ko}: [{p.a.join(", ")}]</button>
         ))}
       </div>
 
@@ -307,7 +333,7 @@ export function MooinCountTrace({ E }) {
         const lastOcc = step.occ ? step.occ[step.occ.length - 1] : -1;
         // 꼬리가 가리킬 칸
         let focusCol;
-        if (step.kind === "count") focusCol = Math.max(0, Math.floor((step.p - 1) / 2));
+        if (step.kind === "scan") focusCol = scanI >= 0 ? scanI : step.p;
         else if (step.kind === "subtract") focusCol = step.occ[0];
         else if (step.kind === "pair" || step.kind === "add") focusCol = step.p;
         else focusCol = Math.floor((a.length - 1) / 2);
@@ -325,12 +351,26 @@ export function MooinCountTrace({ E }) {
             <div style={{ display: "flex", justifyContent: "center", gap: 4 }}>
               {a.map((v, i) => {
                 const isPair = showP && (i === step.p || i === lastOcc);             // 뒤 두 개 = moo 의 y, y 쌍
-                const inZone = (step.kind === "count" || step.kind === "subtract") && i < step.p; // 앞 구역
+                const inZone = step.kind === "subtract" && i < step.p;               // 앞 구역 (빼기 단계)
                 const isDrop = step.kind === "subtract" && i < step.p && v === step.y; // 빼는 y 자신 → ✗
-                let bg = "#fff", fg = C.text, bd = C.border;
-                if (isDrop) { bg = "#fff"; fg = "#b91c1c"; bd = "#dc2626"; }
+                // scan 단계: 커서 + 처음 보는 값 / 이미 본 값
+                let scanState = null;          // 'cur-new' | 'cur-rep' | 'past-new' | 'past-rep' | 'future'
+                if (step.kind === "scan" && i < step.p) {
+                  if (i === scanI) scanState = step.scan.isNew ? "cur-new" : "cur-rep";
+                  else if (i < scanI) scanState = a.slice(0, i).indexOf(v) === -1 ? "past-new" : "past-rep";
+                  else scanState = "future";
+                }
+                let bg = "#fff", fg = C.text, bd = C.border, op = 1;
+                if (isDrop) { bg = "#fff"; fg = "#b91c1c"; bd = "#dc2626"; op = 0.7; }
                 else if (isPair) { bg = "#ea580c"; fg = "#fff"; bd = "#ea580c"; }
                 else if (inZone) { bg = "#fef3c7"; fg = "#92400e"; bd = "#fbbf24"; }
+                else if (scanState === "cur-new") { bg = "#dcfce7"; fg = "#15803d"; bd = "#16a34a"; }
+                else if (scanState === "cur-rep") { bg = "#f3f4f6"; fg = "#6b7280"; bd = "#9ca3af"; }
+                else if (scanState === "past-new") { bg = "#fef3c7"; fg = "#92400e"; bd = "#fbbf24"; }
+                else if (scanState === "past-rep") { bg = "#fff"; fg = "#9ca3af"; bd = "#e5e7eb"; op = 0.7; }
+                else if (scanState === "future") { bg = "#fff"; fg = "#c4c4c4"; bd = "#eee"; op = 0.55; }
+                const badge = scanState === "cur-new" ? "+1" : (scanState === "cur-rep" ? "=" : (isDrop ? "✗" : null));
+                const badgeBg = scanState === "cur-new" ? "#16a34a" : (scanState === "cur-rep" ? "#9ca3af" : "#dc2626");
                 return (
                   <div key={i} style={{
                     position: "relative",
@@ -338,17 +378,17 @@ export function MooinCountTrace({ E }) {
                     alignItems: "center", justifyContent: "center", borderRadius: 8,
                     fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
                     background: bg, color: fg, border: `2px solid ${bd}`,
-                    opacity: isDrop ? 0.7 : 1,
+                    opacity: op, transition: "background .15s, border-color .15s",
                   }}>
                     <div style={{ fontSize: 9, opacity: 0.8 }}>i={i}</div>
                     <div style={{ fontSize: 14, textDecoration: isDrop ? "line-through" : "none" }}>{v}</div>
-                    {isDrop && (
+                    {badge && (
                       <div style={{
-                        position: "absolute", top: -8, right: -8, width: 18, height: 18, borderRadius: "50%",
-                        background: "#dc2626", color: "#fff", fontSize: 12, fontWeight: 900,
+                        position: "absolute", top: -8, right: -8, minWidth: 18, height: 18, padding: "0 3px", borderRadius: 9,
+                        background: badgeBg, color: "#fff", fontSize: 11, fontWeight: 900,
                         display: "flex", alignItems: "center", justifyContent: "center",
                         boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
-                      }}>✗</div>
+                      }}>{badge}</div>
                     )}
                   </div>
                 );
@@ -357,6 +397,27 @@ export function MooinCountTrace({ E }) {
           </div>
         );
       })()}
+
+      {/* scan 단계 — 서로 다른 값을 하나씩 세는 카운터 + 모은 값 칩 */}
+      {step.kind === "scan" && (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, background: "#ecfdf5", border: "1.5px solid #16a34a", borderRadius: 999, padding: "4px 12px" }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#15803d" }}>{t(E, "different values", "서로 다른 값")}</span>
+            <span style={{ fontSize: 18, fontWeight: 900, color: "#15803d" }}>{step.distinct}</span>
+          </div>
+          {step.scan && step.scan.list.length > 0 && (
+            <div style={{ display: "flex", gap: 4, flexWrap: "wrap", justifyContent: "center" }}>
+              {step.scan.list.map((val, k) => (
+                <span key={k} style={{
+                  fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
+                  background: "#fff", border: "1.5px solid #16a34a", color: "#15803d",
+                  borderRadius: 6, padding: "2px 8px",
+                }}>{val}</span>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* contribution formula — reveal piece by piece */}
       {hasFormula && (

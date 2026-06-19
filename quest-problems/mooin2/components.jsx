@@ -82,12 +82,13 @@ export function MooinExplorer({ E }) {
         ))}
       </div>
 
-      <div style={{ background: A, color: "#fff", borderRadius: 10, padding: "10px 12px", fontSize: 13, fontWeight: 600, marginBottom: 10, textAlign: "center" }}>
-        {t(E, "Distinct moos: ", "서로 다른 moo: ")}<span style={{ fontSize: 18 }}>{moos.length}</span>
+      {/* 시각만 축소 — 풀폭 배너 → 가운데 컴팩트 알약 (선생님: '뭐이리 커?'). 정답 코드 무관. */}
+      <div style={{ background: A, color: "#fff", borderRadius: 999, padding: "4px 14px", fontSize: 12, fontWeight: 600, margin: "0 auto 10px", textAlign: "center", width: "fit-content" }}>
+        {t(E, "Distinct moos: ", "서로 다른 moo: ")}<span style={{ fontSize: 15 }}>{moos.length}</span>
       </div>
 
       {moos.length > 0 && (
-        <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#9a3412", lineHeight: 1.7 }}>
+        <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: "6px 9px", fontSize: 11, color: "#9a3412", lineHeight: 1.55, width: "fit-content", maxWidth: "100%", margin: "0 auto" }}>
           <b>{t(E, "Moos that occur:", "발생하는 moo:")}</b><br/>
           {moos.map(([x, y], i) => (
             <code key={i} style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, marginRight: 6, fontFamily: "'JetBrains Mono',monospace" }}>
