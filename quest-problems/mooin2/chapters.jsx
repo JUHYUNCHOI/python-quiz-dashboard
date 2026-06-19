@@ -196,10 +196,10 @@ export function makeMooin2Ch2(E, lang = "py") {
     "a = [int(data[1 + i]) for i in range(N)]",
   ];
   const bruteLoopPy = [
-    "seen = set()                       # distinct (x, y) moos",
-    "for i in range(N):                 # x is at i",
-    "    for j in range(i + 1, N):      # first y at j",
-    "        for k in range(j + 1, N):  # second y at k",
+    t(E, "seen = set()                       # distinct (x, y) moos", "seen = set()                       # 서로 다른 (x, y) moo 모음"),
+    t(E, "for i in range(N):                 # x is at i", "for i in range(N):                 # x 는 i 자리"),
+    t(E, "    for j in range(i + 1, N):      # first y at j", "    for j in range(i + 1, N):      # 첫 y 는 j 자리"),
+    t(E, "        for k in range(j + 1, N):  # second y at k", "        for k in range(j + 1, N):  # 둘째 y 는 k 자리"),
   ];
   const bruteBodyPy = [
     "            if a[j] == a[k] and a[i] != a[j]:",
@@ -215,10 +215,10 @@ export function makeMooin2Ch2(E, lang = "py") {
     "    for (int& x : a) cin >> x;",
   ];
   const bruteLoopCpp = [
-    "    set<pair<int,int>> seen;                // distinct (x, y) moos",
-    "    for (int i = 0; i < N; i++)             // x at i",
-    "        for (int j = i + 1; j < N; j++)     // first y at j",
-    "            for (int k = j + 1; k < N; k++) // second y at k",
+    t(E, "    set<pair<int,int>> seen;                // distinct (x, y) moos", "    set<pair<int,int>> seen;                // 서로 다른 (x, y) moo 모음"),
+    t(E, "    for (int i = 0; i < N; i++)             // x at i", "    for (int i = 0; i < N; i++)             // x 는 i 자리"),
+    t(E, "        for (int j = i + 1; j < N; j++)     // first y at j", "        for (int j = i + 1; j < N; j++)     // 첫 y 는 j 자리"),
+    t(E, "            for (int k = j + 1; k < N; k++) // second y at k", "            for (int k = j + 1; k < N; k++) // 둘째 y 는 k 자리"),
   ];
   const bruteBodyCpp = [
     "                if (a[j] == a[k] && a[i] != a[j])",
