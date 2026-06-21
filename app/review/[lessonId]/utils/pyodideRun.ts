@@ -9,11 +9,9 @@ interface PyodideLike {
   setStdin?: (o: { stdin: () => string | undefined }) => void
 }
 
-declare global {
-  interface Window {
-    loadPyodide?: (config?: { indexURL?: string }) => Promise<PyodideLike>
-  }
-}
+// Window.loadPyodide 는 다른 파일(python-runner 등)에서 이미 전역 선언됨 →
+// 여기서 다시 선언하면 modifier 충돌(빌드 에러). 그냥 캐스팅해서 쓴다.
+const _win = () => window as unknown as { loadPyodide?: (config?: { indexURL?: string }) => Promise<PyodideLike> }
 
 const PYODIDE_URL = "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/"
 
@@ -24,7 +22,7 @@ export async function loadPyodideForReview(): Promise<PyodideLike> {
   if (instance) return instance
   if (loading) return loading
   loading = (async () => {
-    if (!window.loadPyodide) {
+    if (!_win().loadPyodide) {
       await new Promise<void>((resolve, reject) => {
         const script = document.createElement("script")
         script.src = PYODIDE_URL + "pyodide.js"
@@ -33,7 +31,7 @@ export async function loadPyodideForReview(): Promise<PyodideLike> {
         document.head.appendChild(script)
       })
     }
-    instance = await window.loadPyodide!({ indexURL: PYODIDE_URL })
+    instance = await _win().loadPyodide!({ indexURL: PYODIDE_URL })
     return instance
   })()
   return loading
