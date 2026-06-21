@@ -41,6 +41,7 @@ import type {
   ExplainContent,
 } from "./data/types"
 import { runPythonCode } from "./utils/pythonRunner"
+import { runPythonReal, loadPyodideForReview } from "./utils/pyodideRun"
 import { callPiston } from "@/lib/piston"
 
 // ─────────────────────────────────────────────────────────────
@@ -474,6 +475,11 @@ function PracticeStep({
 
   useEffect(() => { firstInputRef.current?.focus() }, [])
 
+  // 파이썬 코드 스텝이면 Pyodide 를 미리 로드 (첫 '확인' 때 몇 초 기다리는 것 방지)
+  useEffect(() => {
+    if (isFullCode && language === "python") loadPyodideForReview().catch(() => {})
+  }, [isFullCode, language])
+
   // inputs 변경 시 localStorage에 저장 (제출 전에만)
   useEffect(() => {
     if (!storageKey || result !== "idle") return
@@ -498,10 +504,13 @@ function PracticeStep({
     if (isFullCode && content.expect) {
       const expectedOut = String(displayExpect).trim()
 
-      // Python: 자체 runner로 실행 후 출력 비교
-      // (runner가 제한적이므로 텍스트 비교를 안전망으로 사용)
+      // Python: 진짜 파이썬(Pyodide)으로 실행 후 출력 비교.
+      // (예전 정규식 가짜 러너는 if/for 를 못 돌려 조건문 레슨에서 맞는 코드를
+      //  틀렸다고 했음 — 선생님 2026-06-21 라이브. 텍스트 비교는 안전망으로 유지.)
       if (language === "python") {
-        const runResult = runPythonCode(combined)
+        setIsRunning(true)                       // Pyodide 로드·실행 동안 '확인 중' 표시
+        const runResult = await runPythonReal(combined)
+        setIsRunning(false)
         if (!runResult.error) {
           const actualOut = (runResult.result ?? "").trim()
           if (actualOut === expectedOut) {
