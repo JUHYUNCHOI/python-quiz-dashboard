@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, Fragment } from "react"
 import dynamic from "next/dynamic"
 import { highlightCppCode } from "@/components/cpp/cpp-runner"
+import { highlightPythonCode } from "./utils/highlightPy"
 import { createSmartKeyHandler } from "@/components/cpp/editor-key-handler"
 
 // 동적 import — SSR 비활성화
@@ -812,38 +813,28 @@ function PracticeStep({
                 )}
               </div>
             )}
-            {/* 입력 — C++ 은 SimpleEditor (syntax 하이라이팅 + auto-indent + auto-bracket), Python 은 textarea */}
-            {language === "cpp" ? (
-              <div className="bg-[#1a1b2e] text-[#a9b1d6] font-mono text-sm min-h-[280px] cpp-editor-dark">
-                <SimpleEditor
-                  value={inputs[0]}
-                  onValueChange={(v: string) => setInputs([v])}
-                  highlight={highlightCppCode}
-                  padding={16}
-                  tabSize={4}
-                  insertSpaces={true}
-                  placeholder={t("// 여기에 코드를 작성하세요...", "// Write your code here...")}
-                  textareaClassName="focus:outline-none"
-                  onKeyDown={createSmartKeyHandler((next) => setInputs([next]), { onCtrlEnter: check })}
-                  style={{
-                    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-                    fontSize: 14,
-                    minHeight: 280,
-                  }}
-                />
-              </div>
-            ) : (
-              <textarea
-                ref={firstInputRef as React.RefObject<HTMLTextAreaElement>}
+            {/* 입력 — Python·C++ 둘 다 SimpleEditor (syntax 하이라이팅 + auto-indent + auto-bracket).
+                 Python 은 예전엔 맨 textarea 라 하이라이트가 없었음 (선생님 2026-06-21 라이브). */}
+            <div className="bg-[#1a1b2e] text-[#a9b1d6] font-mono text-sm min-h-[280px] cpp-editor-dark">
+              <SimpleEditor
                 value={inputs[0]}
-                onChange={e => setInputs([e.target.value])}
+                onValueChange={(v: string) => setInputs([v])}
+                highlight={language === "cpp" ? highlightCppCode : highlightPythonCode}
+                padding={16}
+                tabSize={4}
+                insertSpaces={true}
+                placeholder={language === "cpp"
+                  ? t("// 여기에 코드를 작성하세요...", "// Write your code here...")
+                  : t("# 여기에 코드를 작성하세요...", "# Write your code here...")}
+                textareaClassName="focus:outline-none"
                 onKeyDown={createSmartKeyHandler((next) => setInputs([next]), { onCtrlEnter: check })}
-                placeholder={t("# 여기에 코드를 작성하세요...", "# Write your code here...")}
-                rows={12}
-                className="w-full bg-[#1a1b2e] text-[#a9b1d6] px-4 py-3 font-mono text-sm focus:outline-none resize-y placeholder:text-gray-600 min-h-[280px]"
-                spellCheck={false}
+                style={{
+                  fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                  fontSize: 14,
+                  minHeight: 280,
+                }}
               />
-            )}
+            </div>
           </div>
           <button
             onClick={check}
