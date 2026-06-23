@@ -610,12 +610,12 @@ function _buildMirrorSteps(E) {
     { win: [_ML, _MR], rev: 0, reveal: "all", focus: null, formula: false, payoff: false,
       bubble: t(E, `BEFORE reversing: checkups are spots ${before.join(", ")} — only ${before.length}.`,
                    `뒤집기 전 — 검진 ✓ 는 자리 ${before.join("·")}, ${before.length}마리뿐이에요.`) },
-    // 3) 뒤집기 (바깥)
-    { win: [_ML, _MR], rev: 1, reveal: "none", focus: null, formula: false, payoff: false,
-      bubble: t(E, `Reverse spots ${_ML}–${_MR}: the outer two cows slide and swap (spot ${_ML} ↔ ${_MR}).`,
-                   `자리 ${_ML}~${_MR} 뒤집기 — 바깥 두 소가 미끄러지며 자리 바꿈 (자리 ${_ML} ↔ ${_MR}).`) },
+    // 3) 뒤집기 (바깥) — 윈도우 밖(자리 1·6)은 안 움직이니 검진 ✓ 유지 (선생님 2026-06-23)
+    { win: [_ML, _MR], rev: 1, reveal: "outside", focus: null, formula: false, payoff: false,
+      bubble: t(E, `Reverse spots ${_ML}–${_MR}: the outer two cows slide and swap (spot ${_ML} ↔ ${_MR}). Outside (spots 1, 6) doesn't move.`,
+                   `자리 ${_ML}~${_MR} 뒤집기 — 바깥 두 소가 미끄러지며 자리 바꿈 (자리 ${_ML} ↔ ${_MR}). 윈도우 밖(자리 1·6)은 그대로.`) },
     // 4) 뒤집기 (안쪽)
-    { win: [_ML, _MR], rev: 2, reveal: "none", focus: null, formula: false, payoff: false,
+    { win: [_ML, _MR], rev: 2, reveal: "outside", focus: null, formula: false, payoff: false,
       bubble: t(E, `Inner two too (spot ${_ML + 1} ↔ ${_MR - 1}). Reversed!`,
                    `안쪽 둘도 (자리 ${_ML + 1} ↔ ${_MR - 1}). 다 뒤집혔어요!`) },
     // 5) 뒤집은 후 검진 (Q2: 어떻게 바뀌었나)
@@ -630,18 +630,10 @@ function _buildMirrorSteps(E) {
     { win: [_ML, _MR], rev: 2, reveal: "inside", focus: 3, formula: true, payoff: false,
       bubble: t(E, `So spot 3's partner = the spot that sums to 7 = spot 4. After reversing, spot 3 holds spot 4's cow: D.`,
                    `그러니 자리 3 의 짝꿍 = 더해서 7 되는 자리 = 자리 4. 뒤집으면 자리 3 엔 자리 4 의 소 D 가 와요.`) },
-    // 8) 다른 뒤집기도 합이 같음
-    { win: [3, 4], rev: 0, reveal: "none", focus: null, formula: false, payoff: false,
-      bubble: t(E, `Now a DIFFERENT reversal — spots 3–4. Its ends add to 3 + 4 = 7 too, same s!`,
-                   `이번엔 다른 뒤집기 — 자리 3~4. 양 끝을 더하면 3 + 4 = 7, s 가 똑같죠!`) },
-    // 9) 같은 짝꿍 → 같은 소 → 같은 검진
-    { win: [3, 4], rev: 1, reveal: "inside", focus: 3, formula: true, payoff: false,
-      bubble: t(E, `Here too, spot 3's partner sums to 7 → spot 4 → cow D again! Same s ⇒ same partner ⇒ same cow ⇒ same checkup.`,
-                   `여기서도 자리 3 의 짝꿍은 더해서 7 = 자리 4 → 또 소 D! s 가 같으면 짝꿍이 같고 → 오는 소도 같고 → 검진도 같아요.`) },
-    // 10) payoff — 처음 목표('모든 뒤집기 검진 수')에 닿게
-    { win: [3, 4], rev: 1, reveal: "inside", focus: null, formula: false, payoff: true,
-      bubble: t(E, `So size doesn't matter — only s. Count the inside once per s and reuse it → we get the checkup count of EVERY reversal, fast! 🚀`,
-                   `그래서 구간 크기는 상관없고 s 만 중요해요. s 마다 안쪽 검진을 한 번만 세서 재사용하면 → 모든 뒤집기 방법의 검진 수를 빠르게 다 셀 수 있어요! 🚀`) },
+    // 8) 규칙 정리 + 다음(GrowSim)으로 — '다른 윈도우 비교' 중복 스텝 제거 (선생님 2026-06-23)
+    { win: [_ML, _MR], rev: 2, reveal: "all", focus: null, formula: true, payoff: true,
+      bubble: t(E, `That's the rule: spot i always gets spot (s−i)'s cow — so only s matters, not the window's size. Next: use this to count EVERY reversal fast. 🚀`,
+                   `이게 핵심 규칙! 자리 i 엔 늘 (s−i)번 자리 소가 와요 — 그러니 구간 크기는 상관없고 s 만 중요해요. 다음 화면에서 이 규칙으로 '모든 뒤집기'를 빨리 세 봐요. 🚀`) },
   ];
 }
 
@@ -654,7 +646,7 @@ export function CheckupsMirrorSim({ E }) {
   const gridW = _MN * STEP - GAP;
   const ltr = tk => String.fromCharCode(64 + tk);
   const inWin = p => p >= wl && p <= wr;
-  const ckShow = p => st.reveal === "all" ? true : (st.reveal === "inside" ? inWin(p) : false);
+  const ckShow = p => st.reveal === "all" ? true : st.reveal === "inside" ? inWin(p) : st.reveal === "outside" ? !inWin(p) : false;
   // 현재 뒤집힘(st.rev) 상태에서 자리 p 에 있는 소(토큰) — 뒤집기 전엔 원본, 후엔 거울
   const tokAtSpotNow = p => { for (let tk = 1; tk <= _MN; tk++) if (_slotG(tk, wl, wr, st.rev) + 1 === p) return tk; return p; };
   const ckOk = p => tokAtSpotNow(p) === _MB[p - 1];
