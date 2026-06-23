@@ -602,10 +602,10 @@ function _buildMirrorSteps(E) {
   for (let p = 1; p <= _MN; p++) if (_tokAt(p, _ML, _MR) === _MB[p - 1]) after.push(p);
   const gained = after.filter(p => !before.includes(p));   // 새로 검진받게 된 자리
   return [
-    // 1) 무대 + 목표
+    // 1) 무대 + 진짜 목표: '모든 뒤집기'의 검진 수를 다 세야 함 → 너무 많으니 빨리 (선생님 2026-06-23)
     { win: [_ML, _MR], rev: 0, reveal: "none", focus: null, formula: false, payoff: false,
-      bubble: t(E, `🐄 cows in a row (A–F = breeds). 📋 the vet wants a breed at each spot — match = checkup ✓. Goal: reverse spots ${_ML}–${_MR} to get MORE checkups.`,
-                   `🐄 소들이 줄 서 있어요 (A~F=종류). 📋 수의사가 자리마다 원하는 종이 있고, 같으면 검진 ✓. 목표: 자리 ${_ML}~${_MR}를 뒤집어서 검진을 더 받게 하기.`) },
+      bubble: t(E, `🐄 cows, 📋 the vet's wanted breed — match = checkup ✓. Reversing different chunks gives different checkup counts, and we must find the count for EVERY reversal — too many to redo one by one. Let's find a shortcut.`,
+                   `🐄 소 줄, 📋 수의사가 원하는 종 — 같으면 검진 ✓. 어느 구간을 뒤집느냐에 따라 검진 수가 달라져요. 우리는 '모든 뒤집기'의 검진 수를 다 알아야 하는데, 방법이 너무 많아요 — 빨리 세는 비결을 찾아봐요.`) },
     // 2) 뒤집기 전 검진 (Q1: 원래 검진받던 소)
     { win: [_ML, _MR], rev: 0, reveal: "all", focus: null, formula: false, payoff: false,
       bubble: t(E, `BEFORE reversing: checkups are spots ${before.join(", ")} — only ${before.length}.`,
@@ -638,10 +638,10 @@ function _buildMirrorSteps(E) {
     { win: [3, 4], rev: 1, reveal: "inside", focus: 3, formula: true, payoff: false,
       bubble: t(E, `Here too, spot 3's partner sums to 7 → spot 4 → cow D again! Same s ⇒ same partner ⇒ same cow ⇒ same checkup.`,
                    `여기서도 자리 3 의 짝꿍은 더해서 7 = 자리 4 → 또 소 D! s 가 같으면 짝꿍이 같고 → 오는 소도 같고 → 검진도 같아요.`) },
-    // 10) payoff
+    // 10) payoff — 처음 목표('모든 뒤집기 검진 수')에 닿게
     { win: [3, 4], rev: 1, reveal: "inside", focus: null, formula: false, payoff: true,
-      bubble: t(E, `So the window's size doesn't matter — only s. Count the inside checkups once per s, reuse for every window → N× faster! 🚀`,
-                   `그래서 뒤집는 구간 크기는 상관없고 s 만 중요해요. s 마다 안쪽 검진을 한 번만 세서 모든 윈도우에 다 쓰면 → N배 빨라요! 🚀`) },
+      bubble: t(E, `So size doesn't matter — only s. Count the inside once per s and reuse it → we get the checkup count of EVERY reversal, fast! 🚀`,
+                   `그래서 구간 크기는 상관없고 s 만 중요해요. s 마다 안쪽 검진을 한 번만 세서 재사용하면 → 모든 뒤집기 방법의 검진 수를 빠르게 다 셀 수 있어요! 🚀`) },
   ];
 }
 
