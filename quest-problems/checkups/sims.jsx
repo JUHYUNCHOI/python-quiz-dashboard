@@ -687,8 +687,10 @@ export function CheckupsMirrorSim({ E }) {
       {/* 격자: 🐄 a(슬라이드) / 📋 b / 검진? / 자리 — 목표(검진 세기)를 계속 보여줌 */}
       <div style={{ width: "fit-content", margin: "0 auto" }}>
         {rowWrap(t(E, "🐄 cow", "🐄 소"), "#7f1d1d",
-          <div style={{ position: "relative", width: gridW, height: TW }}>
-            <div style={{ position: "absolute", top: -4, left: (wl - 1) * STEP - 4, width: (wr - wl + 1) * STEP - GAP + 8, height: TW + 8, borderRadius: 11, background: "#ecfeff", border: "1.5px dashed #67e8f9", zIndex: 0, transition: "left .4s, width .4s" }} />
+          <div style={{ position: "relative", width: gridW, height: TW, marginTop: 14 }}>
+            {/* 뒤집는 '창(window)' 프레임 + 라벨 */}
+            <div style={{ position: "absolute", top: -6, left: (wl - 1) * STEP - 5, width: (wr - wl + 1) * STEP - GAP + 10, height: TW + 12, borderRadius: 12, background: "#ecfeff", border: "2px solid #22d3ee", boxShadow: "0 0 0 3px rgba(34,211,238,.12)", zIndex: 0, transition: "left .4s, width .4s" }} />
+            <div style={{ position: "absolute", top: -19, left: (wl - 1) * STEP - 5 + ((wr - wl + 1) * STEP - GAP + 10) / 2, transform: "translateX(-50%)", background: "#0891b2", color: "#fff", fontSize: 9.5, fontWeight: 800, borderRadius: 6, padding: "1px 8px", whiteSpace: "nowrap", zIndex: 3, transition: "left .4s" }}>🔁 {t(E, "reverse window", "뒤집는 창")} {wl}~{wr}</div>
             {[1, 2, 3, 4, 5, 6].map(tk => {
               const slot = _slotG(tk, wl, wr, st.rev), sp = _SP[tk] || _SP[1];
               const hot = st.focus != null && slot + 1 === st.focus;
@@ -817,8 +819,10 @@ export function CheckupsGrowSim({ E }) {
 
       <div style={{ width: "fit-content", margin: "0 auto" }}>
         {rowWrap(t(E, "🐄 cow", "🐄 소"), "#7f1d1d",
-          <div style={{ position: "relative", width: gridW, height: TW + 16 }}>
-            <div style={{ position: "absolute", top: -4, left: (wl - 1) * STEP - 4, width: (wr - wl + 1) * STEP - GAP + 8, height: TW + 8, borderRadius: 11, background: "#ecfeff", border: "1.5px dashed #67e8f9", zIndex: 0, transition: "left .4s, width .4s" }} />
+          <div style={{ position: "relative", width: gridW, height: TW + 18, marginTop: 14 }}>
+            {/* 뒤집는 '창(window)' 프레임 + 라벨 */}
+            <div style={{ position: "absolute", top: -6, left: (wl - 1) * STEP - 5, width: (wr - wl + 1) * STEP - GAP + 10, height: TW + 12, borderRadius: 12, background: "#ecfeff", border: "2px solid #22d3ee", boxShadow: "0 0 0 3px rgba(34,211,238,.12)", zIndex: 0, transition: "left .4s, width .4s" }} />
+            <div style={{ position: "absolute", top: -19, left: (wl - 1) * STEP - 5 + ((wr - wl + 1) * STEP - GAP + 10) / 2, transform: "translateX(-50%)", background: "#0891b2", color: "#fff", fontSize: 9.5, fontWeight: 800, borderRadius: 6, padding: "1px 8px", whiteSpace: "nowrap", zIndex: 3, transition: "left .4s" }}>🔁 {t(E, "reverse window", "뒤집는 창")} {wl}~{wr}</div>
             {[1, 2, 3, 4, 5, 6].map(tk => {
               const slot = (tk >= wl && tk <= wr) ? (wl + wr - tk - 1) : tk - 1;
               const sp = _SP[tk] || _SP[1];
@@ -918,8 +922,10 @@ export function CheckupsTrySim({ E }) {
 
       <div style={{ width: "fit-content", margin: "0 auto" }}>
         {rowWrap(t(E, "🐄 cow", "🐄 소"), "#7f1d1d",
-          <div style={{ position: "relative", width: gridW, height: TW }}>
-            <div style={{ position: "absolute", top: -4, left: (l - 1) * STEP - 4, width: (r - l + 1) * STEP - GAP + 8, height: TW + 8, borderRadius: 11, background: "#ecfeff", border: "1.5px dashed #67e8f9", zIndex: 0, transition: "left .4s, width .4s" }} />
+          <div style={{ position: "relative", width: gridW, height: TW, marginTop: 14 }}>
+            {/* 뒤집는 '창(window)' 프레임 + 라벨 */}
+            <div style={{ position: "absolute", top: -6, left: (l - 1) * STEP - 5, width: (r - l + 1) * STEP - GAP + 10, height: TW + 12, borderRadius: 12, background: "#ecfeff", border: "2px solid #22d3ee", boxShadow: "0 0 0 3px rgba(34,211,238,.12)", zIndex: 0, transition: "left .4s, width .4s" }} />
+            <div style={{ position: "absolute", top: -19, left: (l - 1) * STEP - 5 + ((r - l + 1) * STEP - GAP + 10) / 2, transform: "translateX(-50%)", background: "#0891b2", color: "#fff", fontSize: 9.5, fontWeight: 800, borderRadius: 6, padding: "1px 8px", whiteSpace: "nowrap", zIndex: 3, transition: "left .4s" }}>🔁 {t(E, "reverse window", "뒤집는 창")} {l}~{r}</div>
             {[1, 2, 3, 4, 5, 6].map(tk => {
               const slot = (tk >= l && tk <= r) ? (l + r - tk - 1) : tk - 1;
               const sp = _SP[tk] || _SP[1];
