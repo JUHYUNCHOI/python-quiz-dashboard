@@ -610,12 +610,12 @@ function _buildMirrorSteps(E) {
     { win: [_ML, _MR], rev: 0, reveal: "all", focus: null, formula: false, payoff: false,
       bubble: t(E, `BEFORE reversing: checkups are spots ${before.join(", ")} — only ${before.length}.`,
                    `뒤집기 전 — 검진 ✓ 는 자리 ${before.join("·")}, ${before.length}마리뿐이에요.`) },
-    // 3) 뒤집기 (바깥)
-    { win: [_ML, _MR], rev: 1, reveal: "none", focus: null, formula: false, payoff: false,
-      bubble: t(E, `Reverse spots ${_ML}–${_MR}: the outer two cows slide and swap (spot ${_ML} ↔ ${_MR}).`,
-                   `자리 ${_ML}~${_MR} 뒤집기 — 바깥 두 소가 미끄러지며 자리 바꿈 (자리 ${_ML} ↔ ${_MR}).`) },
+    // 3) 뒤집기 (바깥) — 윈도우 밖(자리 1·6)은 안 움직이니 검진 ✓ 유지 (선생님 2026-06-23)
+    { win: [_ML, _MR], rev: 1, reveal: "outside", focus: null, formula: false, payoff: false,
+      bubble: t(E, `Reverse spots ${_ML}–${_MR}: the outer two cows slide and swap (spot ${_ML} ↔ ${_MR}). Outside (spots 1, 6) doesn't move.`,
+                   `자리 ${_ML}~${_MR} 뒤집기 — 바깥 두 소가 미끄러지며 자리 바꿈 (자리 ${_ML} ↔ ${_MR}). 윈도우 밖(자리 1·6)은 그대로.`) },
     // 4) 뒤집기 (안쪽)
-    { win: [_ML, _MR], rev: 2, reveal: "none", focus: null, formula: false, payoff: false,
+    { win: [_ML, _MR], rev: 2, reveal: "outside", focus: null, formula: false, payoff: false,
       bubble: t(E, `Inner two too (spot ${_ML + 1} ↔ ${_MR - 1}). Reversed!`,
                    `안쪽 둘도 (자리 ${_ML + 1} ↔ ${_MR - 1}). 다 뒤집혔어요!`) },
     // 5) 뒤집은 후 검진 (Q2: 어떻게 바뀌었나)
@@ -654,7 +654,7 @@ export function CheckupsMirrorSim({ E }) {
   const gridW = _MN * STEP - GAP;
   const ltr = tk => String.fromCharCode(64 + tk);
   const inWin = p => p >= wl && p <= wr;
-  const ckShow = p => st.reveal === "all" ? true : (st.reveal === "inside" ? inWin(p) : false);
+  const ckShow = p => st.reveal === "all" ? true : st.reveal === "inside" ? inWin(p) : st.reveal === "outside" ? !inWin(p) : false;
   // 현재 뒤집힘(st.rev) 상태에서 자리 p 에 있는 소(토큰) — 뒤집기 전엔 원본, 후엔 거울
   const tokAtSpotNow = p => { for (let tk = 1; tk <= _MN; tk++) if (_slotG(tk, wl, wr, st.rev) + 1 === p) return tk; return p; };
   const ckOk = p => tokAtSpotNow(p) === _MB[p - 1];
