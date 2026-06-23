@@ -671,8 +671,6 @@ export function CheckupsMirrorSim({ E }) {
       <div style={{ width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 17, background: sp.bg, color: sp.tx, border: `${hot ? 2.5 : 1.5}px solid ${hot ? "#ea580c" : sp.bd}`, boxShadow: hot ? "0 0 0 3px rgba(234,88,12,.2)" : "none" }}>{ltr(tk)}</div>
     );
   };
-  // 짝꿍 자리 = 합이 s 되는 자리 (focus 의 짝). 통찰 스텝에서 '뒤집기 전' 줄에 강조.
-  const partner = st.focus != null ? _MS - st.focus : null;
 
   return (
     <div style={{ padding: 16 }}>
@@ -694,14 +692,17 @@ export function CheckupsMirrorSim({ E }) {
             {[1, 2, 3, 4, 5, 6].map(tk => {
               const slot = _slotG(tk, wl, wr, st.rev), sp = _SP[tk] || _SP[1];
               const hot = st.focus != null && slot + 1 === st.focus;
+              const moved = slot + 1 !== tk;   // 이 자리(slot+1)의 원래 소(=ltr(slot+1))와 다름 → 위치 바뀜
               return (
-                <div key={"t" + tk} style={{ position: "absolute", top: 0, left: slot * STEP, width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 17, background: sp.bg, color: sp.tx, border: `${hot ? 2.5 : 1.5}px solid ${hot ? "#ea580c" : sp.bd}`, boxShadow: hot ? "0 0 0 3px rgba(234,88,12,.2)" : "none", transition: "left .55s cubic-bezier(.4,0,.2,1), border-color .2s, box-shadow .2s", zIndex: 1 }}>{ltr(tk)}</div>
+                <div key={"t" + tk} style={{ position: "absolute", top: 0, left: slot * STEP, width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 17, background: sp.bg, color: sp.tx, border: `${hot ? 2.5 : 1.5}px solid ${hot ? "#ea580c" : sp.bd}`, boxShadow: hot ? "0 0 0 3px rgba(234,88,12,.2)" : "none", transition: "left .55s cubic-bezier(.4,0,.2,1), border-color .2s, box-shadow .2s", zIndex: 1 }}>
+                  {ltr(tk)}
+                  {moved && (
+                    <span title={t(E, "originally here", "원래 이 자리")} style={{ position: "absolute", top: -7, right: -6, fontSize: 9, fontWeight: 800, color: "#94a3b8", background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, padding: "0 3px", lineHeight: "13px", textDecoration: "line-through" }}>{ltr(slot + 1)}</span>
+                  )}
+                </div>
               );
             })}
           </div>
-        )}
-        {rowWrap(t(E, "↩️ before", "↩️ 뒤집기 전"), "#9a3412",
-          <div style={{ display: "flex", gap: GAP }}>{[1, 2, 3, 4, 5, 6].map(p => <div key={p}>{fixedCell(p, partner === p)}</div>)}</div>
         )}
         {rowWrap(t(E, "📋 wants", "📋 원하는"), "#1e40af",
           <div style={{ display: "flex", gap: GAP }}>{_MB.map((tk, k) => <div key={k}>{fixedCell(tk)}</div>)}</div>
