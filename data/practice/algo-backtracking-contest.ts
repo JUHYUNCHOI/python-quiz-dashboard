@@ -17,6 +17,7 @@ export const backtrackingContestCluster: PracticeCluster = {
       cluster: "algo-backtracking-contest",
       unlockAfter: "algo-backtracking",
       difficulty: "쉬움",
+      kl: true,
       title: "1~N 중 M개 조합 (사전순 출력)",
       description: `1부터 N까지의 자연수 중에서 M개를 고르는 모든 조합을 사전순으로 출력하세요.
 
@@ -113,6 +114,7 @@ bt(1, [])`,
       cluster: "algo-backtracking-contest",
       unlockAfter: "algo-backtracking",
       difficulty: "쉬움",
+      kl: true,
       title: "부분수열의 합 (경우의 수)",
       description: `N개의 정수가 주어집니다. 일부를 골라(공집합 제외) 그 합이 \`S\`가 되는 경우의 수를 출력하세요.
 
@@ -214,6 +216,7 @@ print(cnt)`,
       cluster: "algo-backtracking-contest",
       unlockAfter: "algo-backtracking",
       difficulty: "쉬움",
+      kl: true,
       title: "1~N 중 M개 조합의 개수",
       description: `1부터 N까지에서 M개를 고르는 조합이 몇 가지인지 그 **개수만** 출력하세요. (순서 무관, 같은 수 두 번 못 고름)
 
@@ -307,6 +310,7 @@ print(cnt)`,
       cluster: "algo-backtracking-contest",
       unlockAfter: "algo-backtracking",
       difficulty: "보통",
+      kl: true,
       title: "순열 모두 출력 (사전순)",
       description: `정수 N 이 주어진다. 1 부터 N 까지의 모든 순열을 **사전순 오름차순** 으로 한 줄에 하나씩 출력하라. 각 순열의 숫자는 공백으로 구분.
 
@@ -439,6 +443,7 @@ Source: LeetCode 46 paraphrased + lex output`,
       cluster: "algo-backtracking-contest",
       unlockAfter: "algo-backtracking",
       difficulty: "보통",
+      kl: true,
       title: "조합 출력 (N 중 R 개)",
       description: `정수 N, R 이 주어진다 (R ≤ N). 1 부터 N 까지의 숫자 중 **R 개를 고르는 모든 조합** 을 사전순으로 한 줄에 하나씩 출력하라. 숫자는 오름차순, 공백 구분.
 
@@ -557,6 +562,7 @@ Source: BOJ 15649 variant / LeetCode 77`,
       cluster: "algo-backtracking-contest",
       unlockAfter: "algo-backtracking",
       difficulty: "보통",
+      kl: true,
       title: "부분집합 모두 출력 (2^N 개)",
       description: `정수 N 이 주어진다. 1..N 의 **모든 부분집합** 을 한 줄에 하나씩 출력하라.
 
@@ -682,6 +688,7 @@ Source: LeetCode 78 (Subsets) paraphrased`,
       cluster: "algo-backtracking-contest",
       unlockAfter: "algo-backtracking",
       difficulty: "보통",
+      kl: true,
       title: "N-Queens 해 개수",
       description: `N × N 체스판에 N 개의 퀸을 서로 공격하지 않도록 배치하는 **모든 해의 개수** 를 출력하라.
 
@@ -803,6 +810,7 @@ Source: classical / LeetCode 52`,
       cluster: "algo-backtracking-contest",
       unlockAfter: "algo-backtracking",
       difficulty: "보통",
+      kl: true,
       title: "부분집합 합 = K (존재 여부)",
       description: `N 개의 양의 정수와 목표값 K 가 주어진다. **비어있지 않은** 부분집합 중 합이 정확히 K 가 되는 게 있으면 \`YES\`, 없으면 \`NO\`.
 
@@ -917,6 +925,7 @@ Source: LeetCode 416 simplified`,
       cluster: "algo-backtracking-contest",
       unlockAfter: "algo-backtracking",
       difficulty: "보통",
+      kl: true,
       title: "K 자리 숫자열 (1..N 중복 없이)",
       description: `정수 N, K 가 주어진다 (K ≤ N). 1 부터 N 까지의 숫자에서 **K 개를 골라 나열한 수열** 을 모두 사전순으로 한 줄에 하나씩 출력하라 (각 숫자 공백 구분).
 
