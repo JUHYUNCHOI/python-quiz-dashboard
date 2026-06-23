@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCheckupsSections, DiagonalSim, MatchUpToSim, DiagPrefixSim } from "./components";
-import { CheckupsBruteRunner, CheckupsIntroSim } from "./sims";
+import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsFastSim, CheckupsMirrorSim, CheckupsTrySim, CheckupsOutPrefixSim, CheckupsInPrefixSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 // (예전 정적 시각화 헬퍼 SpeciesCell/CowRow/TreatedRow/PositionRow 는
@@ -278,109 +278,29 @@ export function makeCheckupsCh2(E, lang = "py") {
    ════════════════════════════════════════════════════════════════════ */
 export function makeCheckupsCh3(E) {
   return [
-    /* 3-1 — the big idea, in plain words (own lines so it stands out). */
+    /* 3-1 — 핵심 관찰을 텍스트 벽이 아니라 stepped 말풍선 시뮬(CheckupsMirrorSim)로.
+        동기(브루트 느림→윈도우가 열쇠)는 짧은 narration, i 정의·거울·s·대각선·'그래서 뭐'는
+        시뮬 안 말풍선이 한 번에 하나씩. (선생님 2026-06-22) */
     {
       type: "reveal",
       narr: t(E,
-        "One picture unlocks everything.  Look at what stays the same as (l, r) changes.",
-        "그림 하나가 전부를 풀어줘요. (l, r) 이 바뀔 때 무엇이 그대로인지 봐요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: 16, fontSize: 13, color: C.text, lineHeight: 1.75 }}>
-            <div style={{ fontWeight: 700, color: "#0e7490", marginBottom: 10, fontSize: 14 }}>
-              🔑 {t(E, "The key observation", "핵심 관찰")}
-            </div>
-            <div style={{ marginBottom: 10 }}>
-              {t(E,
-                "When you reverse a[l..r], the cell that lands on position i is the value that was at l + r − i.",
-                "a[l..r] 를 뒤집으면, 위치 i 에 오는 값은 원래 l + r − i 자리에 있던 값이에요.")}
-            </div>
-            <div style={{ background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8, padding: "10px 12px", marginBottom: 10, textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#0e7490", fontWeight: 700 }}>
-              {t(E, "that index depends ONLY on s = l + r", "그 인덱스는 s = l + r 에만 달려 있어요")}
-            </div>
-            <div>
-              {t(E,
-                "So every (l, r) pair with the same sum s asks the EXACT same comparison questions inside the window.  Group them by s — that's the 'diagonal'.  The three sims below build the idea up one layer at a time.",
-                "그래서 합 s 가 같은 모든 (l, r) 쌍은 윈도우 안에서 완전히 같은 비교를 해요. s 별로 묶으면 — 그게 '대각선'. 아래 시뮬 세 개가 한 겹씩 쌓아가요.")}
-            </div>
-          </div>
-        </div>),
+        "Brute force is too slow — we need another way. The reversed range, the window, holds the key. Watch how it moves and find the shortcut.",
+        "브루트포스가 느려서 다른 방법이 필요해요. 뒤집는 구간 '윈도우' 가 열쇠예요 — 윈도우가 어떻게 움직이는지 보면서 길을 찾아봐요."),
+      content: (<CheckupsMirrorSim E={E} />),
     },
 
-    /* 3-1b — DERIVE l+r−i (the mirror) so the key formula is earned, not asserted. */
+    /* 3-1b — 직접 구간을 골라 뒤집어 보는 탐색 (선생님 2026-06-23: '자리 3,4,5 뒤집을 때 보고 싶어').
+        s 가 다르면 안쪽 검진이 달라지는 걸 학생이 직접 확인. */
     {
       type: "reveal",
       narr: t(E,
-        "Wait — why l + r − i? Let's SEE it. Reversing just mirrors the window: the ends swap, then it works inward.",
-        "잠깐 — 왜 l + r − i 일까? 직접 봐요. 뒤집기는 윈도우를 거울처럼 뒤집어요: 양 끝이 바뀌고 안쪽으로 좁혀가요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 14, fontWeight: 700, color: "#0e7490", textAlign: "center", marginBottom: 10 }}>
-            🪞 {t(E, "Why position i gets the value from l + r − i", "왜 위치 i 에 l + r − i 의 값이 올까")}
-          </div>
-          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-            {t(E, "Take the window [l, r] = [2, 5]. Reversing pairs the ends and moves inward:",
-                  "윈도우 [l, r] = [2, 5] 를 봐요. 뒤집으면 양 끝이 짝지어 안쪽으로:")}
-            <div style={{ display: "flex", justifyContent: "center", gap: 6, margin: "12px 0 6px" }}>
-              {[1, 2, 3, 4, 5, 6].map(p => {
-                const inside = p >= 2 && p <= 5;
-                return (
-                  <div key={p} style={{
-                    width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
-                    fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 15,
-                    background: inside ? "#cffafe" : "#fff", color: inside ? "#0e7490" : "#cbd5e1",
-                    border: `${inside ? 1.5 : 1}px solid ${inside ? "#22d3ee" : C.border}`,
-                  }}>{p}</div>
-                );
-              })}
-            </div>
-            <div style={{ textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#0e7490", fontWeight: 700, lineHeight: 1.9 }}>
-              2 ↔ 5,&nbsp;&nbsp; 3 ↔ 4
-            </div>
-            <div style={{ marginTop: 10, padding: "9px 11px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8, fontSize: 12.5, lineHeight: 1.8 }}>
-              {t(E, "Each pair adds up to the SAME total: 2 + 5 = 7 and 3 + 4 = 7. So the value landing on position i came from (7 − i) = (l + r − i).",
-                    "각 짝의 합이 똑같아요: 2 + 5 = 7, 3 + 4 = 7. 그래서 위치 i 에 오는 값은 (7 − i) = (l + r − i) 에서 온 거예요.")}
-              <div style={{ marginTop: 6, color: "#0e7490", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
-                ✓ i = 2 → 7 − 2 = 5,&nbsp;&nbsp; i = 3 → 7 − 3 = 4
-              </div>
-            </div>
-            <div style={{ marginTop: 10, fontWeight: 700, color: "#0e7490" }}>
-              {t(E, "And s = l + r = 7 is the same for every spot in the window — that one constant is the whole secret.",
-                    "그리고 s = l + r = 7 은 윈도우 안 모든 자리에서 똑같아요 — 그 상수 하나가 전부의 비밀이에요.")}
-            </div>
-          </div>
-        </div>),
+        "Your turn — pick any window and reverse it. Watch the cows flip and the checkups recount. Notice: windows with the same s share the same inside.",
+        "직접 해봐요 — 구간을 골라 뒤집어요. 소가 뒤집히고 검진이 다시 세지는 걸 봐요. s 가 같은 구간끼리는 안쪽이 똑같다는 것도 확인!"),
+      content: (<CheckupsTrySim E={E} />),
     },
 
-    /* 3-2 — DiagonalSim: drag two (l, r) windows; same s → same colour. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Drag two (l, r) windows.  When their l + r matches, inside cells share a colour: same diagonal, same comparison.",
-        "두 (l, r) 윈도우를 드래그해 봐요. l + r 가 같으면 안쪽 셀이 같은 색 — 같은 대각선이면 같은 비교."),
-      content: (<DiagonalSim E={E} />),
-    },
-
-    /* 3-3 — quiz on the diagonal idea (active step). */
-    {
-      type: "quiz",
-      narr: t(E,
-        "Quick check on what 'same diagonal' means.",
-        "'같은 대각선' 이 뭔지 확인해 봐요."),
-      question: t(E,
-        "Which pair (l, r) lands on the SAME diagonal as (l=2, r=5)?",
-        "(l=2, r=5) 와 같은 대각선에 있는 쌍은 어느 것일까요?"),
-      options: [
-        "(l=3, r=4)",
-        "(l=1, r=5)",
-        "(l=2, r=6)",
-        "(l=4, r=4)",
-      ],
-      correct: 0,
-      explain: t(E,
-        "Same diagonal means same s = l + r.  Here s = 2 + 5 = 7.  (l=3, r=4) gives 3 + 4 = 7 — same diagonal.  The others give 6, 8, 8.",
-        "같은 대각선 = 같은 s = l + r. 여기선 s = 2 + 5 = 7. (l=3, r=4) 는 3 + 4 = 7 — 같은 대각선. 나머지는 6, 8, 8."),
-    },
+    /* (3-2 DiagonalSim + 3-3 '대각선' 퀴즈 제거 — 거울 시뮬이 같은 'same-s 재사용'을 검진 세기로
+        이미 더 명확히 보여줌. 추상 반복 + '대각선' 용어 재등장이 오히려 헷갈렸음. 선생님 2026-06-22) */
 
     /* 3-3b — split the count into OUTSIDE + INSIDE so the next two sims have a home. */
     {
@@ -407,7 +327,7 @@ export function makeCheckupsCh3(E) {
           </div>
           <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.75 }}>
             <div><b style={{ color: "#475569" }}>{t(E, "OUTSIDE the window", "윈도우 바깥")}</b> — {t(E, "nothing moved. A spot matches if a[i] = b[i], exactly like before any reversal — and it's the SAME for every (l, r).", "아무것도 안 움직임. a[i] = b[i] 면 일치 — 뒤집기 전과 똑같고, 모든 (l, r) 에서 동일.")}</div>
-            <div style={{ marginTop: 8 }}><b style={{ color: "#0e7490" }}>{t(E, "INSIDE the window", "윈도우 안")}</b> — {t(E, "reversed. Position i now holds a[l+r−i], compared to b[i]. This is the part that changes — but only with the diagonal s.", "뒤집힘. 위치 i 에 a[l+r−i] 가 와서 b[i] 와 비교. 바뀌는 부분 — 단, 대각선 s 에만 따라.")}</div>
+            <div style={{ marginTop: 8 }}><b style={{ color: "#0e7490" }}>{t(E, "INSIDE the window", "윈도우 안")}</b> — {t(E, "reversed. Spot i now holds a[l+r−i], compared to b[i]. This is the part that changes — but only with s = l + r.", "뒤집힘. 자리 i 에 a[l+r−i] 가 와서 b[i] 와 비교. 뒤집기마다 바뀌는 부분 — 단, s = l + r 에만 따라.")}</div>
             <div style={{ marginTop: 10, textAlign: "center", padding: "9px 10px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8, fontWeight: 800, color: "#0e7490", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
               {t(E, "checkups = (outside matches) + (inside matches)", "검진 수 = (바깥 일치) + (안쪽 일치)")}
             </div>
@@ -416,22 +336,32 @@ export function makeCheckupsCh3(E) {
         </div>),
     },
 
-    /* 3-4 — MatchUpToSim: outside-window matches via a prefix built once. */
+    /* 3-4 — 바깥 검진을 prefix 로 빨리: 말풍선 stepped (선생님 2026-06-22: '말풍선으로 하나씩'). */
     {
       type: "reveal",
       narr: t(E,
-        "Outside the window, nothing moves.  Build matchUpTo once (left-to-right), then drag (l, r) — outside matches drop out instantly.",
-        "윈도우 바깥은 안 움직여요. matchUpTo 를 왼쪽부터 한 번만 만들고, (l, r) 드래그 — 바깥 일치 수가 바로 떨어져요."),
-      content: (<MatchUpToSim E={E} />),
+        "First the OUTSIDE part — it never changes. A prefix makes it instant.",
+        "먼저 바깥 — 절대 안 변해요. prefix 하나면 바로 읽혀요."),
+      content: (<CheckupsOutPrefixSim E={E} />),
     },
 
-    /* 3-5 — DiagPrefixSim: inside-window matches via per-diagonal prefix. */
+    /* 3-5 — 안쪽 검진을 s별 prefix 로 빨리: 말풍선 stepped (선생님 2026-06-22). */
     {
       type: "reveal",
       narr: t(E,
-        "Inside the window: pick a diagonal s, count ✓ per position to get diag[k].  Any (l, r) on this s reads inside matches as diag[r] − diag[l−1].",
-        "윈도우 안: 대각선 s 를 골라 자리마다 ✓ 를 세면 diag[k]. 이 s 의 (l, r) 안쪽 일치는 diag[r] − diag[l−1] 로 바로 읽어요."),
-      content: (<DiagPrefixSim E={E} />),
+        "Now the INSIDE part — it changes with s, but same s shares the same prefix.",
+        "이제 안쪽 — s 마다 다르지만, s 가 같으면 같은 prefix 를 나눠 써요."),
+      content: (<CheckupsInPrefixSim E={E} />),
+    },
+
+    /* 3-5b — 통합 payoff: 세 시뮬(대각선·바깥·안쪽)을 한 자리에서 모아 한 (l,r) 의
+        검진 수 = 바깥 + 안쪽 을 stepped 로 세보기 (선생님 2026-06-22: '한 자리에서 볼 수 있게'). */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now put all three pieces together — count ONE window in a single view: outside + inside.",
+        "이제 세 조각을 한 자리에 모아 — 윈도우 하나의 검진 수를 한 화면에서: 바깥 + 안쪽."),
+      content: (<CheckupsFastSim E={E} />),
     },
 
     /* 3-6 — closing input: the two-piece formula in one number (active step). */

@@ -4,7 +4,7 @@
 //   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 
-import { useState, useRef, useLayoutEffect } from "react";
+import { useState, useRef, useLayoutEffect, useEffect } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";
 import { SampleInputAside } from "@/components/quest/SampleInputAside";
@@ -199,11 +199,12 @@ function buildAuditTrace(a) {
     const contrib = d - (sub ? 1 : 0);
     const pair = [p, lastIdx];
 
-    // (a) 배열에서 짝 찾기
+    // (a) '몇 번 나왔나(count)' 로 짝 존재 확인 — payoff 단계의 코드는 배열이 아니라 count 를 읽음
+    //     (선생님 2026-06-22: 말풍선이 times seen 을 짚어야 코드에 충실. 배열 주황은 맥락용으로 유지)
     trace.push(snap({
-      i: N - 1, v: y, phase: "use", ans, focus: null, arrPair: pair, ledger: done.slice(),
-      note_en: `Now ${y}. In the array, here are its two ${y}s (orange) — a ${y}, ${y} pair. Let's count how many moos this pair makes.`,
-      note_ko: `이제 ${y} 차례예요. 배열에서 ${y}가 있는 두 칸을 찾았어요 (주황 칸) — ${y}, ${y} 짝이죠. 이 짝으로 moo가 몇 개 나오는지 세어 볼게요.`,
+      i: N - 1, v: y, phase: "use", ans, focus: { table: "count", col: y }, arrPair: pair, ledger: done.slice(),
+      note_en: `Now ${y}. In "times seen", ${y} shows ${count[y]} — that's 2 or more, so a ${y}, ${y} pair exists. (The orange cells are those two ${y}s in the array.) Let's count its moos.`,
+      note_ko: `이제 ${y} 차례예요. '몇 번 나왔나'를 보면 ${y}는 ${count[y]} — 2 이상이죠. 그래서 ${y}, ${y} 짝이 있어요. (배열 주황 칸이 그 두 ${y}예요.) 이 짝의 moo를 세어 볼게요.`,
     }));
     // (b) 짝 시작 자리 (앞쪽 y) 확인
     trace.push(snap({
@@ -300,10 +301,21 @@ export function MooinDeepAudit({ E }) {
   const containerRef = useRef(null);
   const targetRef = useRef(null);
   const bubbleRef = useRef(null);
-  const [pos, setPos] = useState({ side: "top", left: 0, top: 0, tail: 24, ready: false });
+  const [pos, setPos] = useState({ side: "top", left: 0, top: 0, tail: 24, padTop: 0, ready: false });
 
-  // 봐야 할 칸을 측정 → 말풍선을 그 칸 '오른쪽 빈 공간'에 두고 왼쪽으로 꼬리 (표를 안 가림).
-  // 오른쪽 공간이 부족하면 칸 위로 올리고 아래로 꼬리 (선생님 2026-06-19: '말풍선이 다 가린다').
+  // 모바일(좁은 화면)에선 '계산 기록' 패널을 오른쪽 absolute 대신 아래 블록으로 (선생님 2026-06-22: 모바일에서 가려짐)
+  const [isNarrow, setIsNarrow] = useState(false);
+  useEffect(() => {
+    const onResize = () => setIsNarrow(window.innerWidth < 600);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // 봐야 할 칸을 측정 → 말풍선을 그 칸 옆/위로 (표를 안 가림).
+  // 단, 타깃이 '맨 위 배열 스트립' 칸이면 위에 공간이 없어 말풍선이 스트립을 덮으므로,
+  // 컨테이너 위에 띠 공간(padTop)을 만들어 말풍선을 스트립 '위'에 두고 아래로 꼬리.
+  // (선생님 2026-06-22: '말풍선이 엉뚱한 곳을 가리킨다' — 짝 칸 위로 정확히 가리키게 수정)
   useLayoutEffect(() => {
     const tc = targetRef.current, cont = containerRef.current, bub = bubbleRef.current;
     if (!tc || !cont || !bub) return;
@@ -314,22 +326,62 @@ export function MooinDeepAudit({ E }) {
     const cellCx = tr.left + tr.width / 2 - cr.left;
     const cellCy = tr.top + tr.height / 2 - cr.top;
     const cellTop = tr.top - cr.top;
-    // payoff 단계엔 오른쪽에 '계산 기록' 패널이 있으니 그만큼 폭을 비워둠
-    const availW = (step.phase === "use" && step.ledger) ? cr.width - 168 : cr.width;
-    if (cellRight + 14 + br.width <= availW) {
+    // payoff 단계엔 오른쪽에 '계산 기록' 패널이 있으니 그만큼 폭을 비워둠 (모바일은 패널이 아래로 가니 전체 폭)
+    const availW = (!isNarrow && step.phase === "use" && step.ledger) ? cr.width - 168 : cr.width;
+    const clampLeft = (x) => Math.max(2, Math.min(x, availW - br.width - 2));
+    if (arrTargetI >= 0) {
+      // 배열 스트립 칸 타깃 → 위에 띠를 비워 말풍선을 스트립 위에 두고 아래로 꼬리 (칸을 정확히 가리킴)
+      const left = clampLeft(cellCx - br.width / 2);
+      const tail = Math.max(12, Math.min(cellCx - left - 8, br.width - 24));
+      setPos({ side: "top", left, top: 4, tail, padTop: br.height + 16, ready: true });
+    } else if (cellRight + 14 + br.width <= availW) {
       const left = cellRight + 14;
       let top = cellCy - br.height / 2;
       top = Math.max(0, Math.min(top, Math.max(0, cr.height - br.height)));
       const tail = Math.max(10, Math.min(cellCy - top - 8, br.height - 22));
-      setPos({ side: "left", left, top, tail, ready: true });
+      setPos({ side: "left", left, top, tail, padTop: 0, ready: true });
     } else {
-      let left = cellCx - br.width / 2;
-      left = Math.max(2, Math.min(left, availW - br.width - 2));
+      const left = clampLeft(cellCx - br.width / 2);
       const top = Math.max(0, cellTop - br.height - 12);
       const tail = Math.max(12, Math.min(cellCx - left - 8, br.width - 24));
-      setPos({ side: "top", left, top, tail, ready: true });
+      setPos({ side: "top", left, top, tail, padTop: 0, ready: true });
     }
-  }, [safe, E]);
+  }, [safe, E, isNarrow]);
+
+  // 계산 기록(누적 합) 내용 — 데스크탑은 오른쪽 absolute, 모바일은 아래 블록으로 같은 내용 재사용
+  const ledgerBody = (step.phase === "use" && step.ledger) ? (
+    <>
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#9a3412", marginBottom: 5, fontFamily: "-apple-system, 'Apple SD Gothic Neo', sans-serif" }}>
+        🧮 {t(E, "moo tally", "계산 기록")}
+      </div>
+      {step.ledger.length === 0 && (
+        <div style={{ fontSize: 11, color: C.dim, fontFamily: "-apple-system, 'Apple SD Gothic Neo', sans-serif" }}>{t(E, "(filling in…)", "(채우는 중…)")}</div>
+      )}
+      {step.ledger.map(({ y, d, sub, contrib }, li) => {
+        const isNew = step.ledgerNew === y;
+        return (
+          <div key={li} style={{ padding: "3px 0", borderTop: li > 0 ? "1px dashed #fde2c4" : "none" }}>
+            <div style={{
+              display: "flex", justifyContent: "space-between", alignItems: "center",
+              fontSize: 12, fontFamily: "'JetBrains Mono',monospace",
+              color: isNew ? "#15803d" : C.text, fontWeight: isNew ? 800 : 700,
+            }}>
+              <span>{y} {t(E, "→ moo", "→ moo")}</span><span>{contrib}{t(E, "", "개")}</span>
+            </div>
+            <div style={{ fontSize: 9.5, color: isNew ? "#16a34a" : C.dim, fontFamily: "'JetBrains Mono',monospace", marginTop: 1 }}>
+              {t(E, `kinds ${d}${sub ? " − 1" : ""}`, `앞 ${d}종류${sub ? " − 1" : ""}`)}
+            </div>
+          </div>
+        );
+      })}
+      {step.ledger.length > 0 && (
+        <div style={{ borderTop: "1.5px solid #fdba74", marginTop: 5, paddingTop: 5, display: "flex", justifyContent: "space-between", alignItems: "center", color: A, fontWeight: 800 }}>
+          <span style={{ fontSize: 12, fontFamily: "-apple-system, 'Apple SD Gothic Neo', sans-serif" }}>{t(E, "total", "합")}</span>
+          <span style={{ fontSize: step.ledgerSum ? 18 : 14, fontFamily: "'JetBrains Mono',monospace" }}>{step.ans}</span>
+        </div>
+      )}
+    </>
+  ) : null;
 
   return (
     <div style={{ padding: 14 }}>
@@ -342,7 +394,7 @@ export function MooinDeepAudit({ E }) {
         </div>
       </div>
 
-      <div ref={containerRef} style={{ position: "relative", paddingTop: 8 }}>
+      <div ref={containerRef} style={{ position: "relative", paddingTop: pos.padTop || 8, transition: "padding-top .28s ease" }}>
         {/* 움직이는 말풍선 — 봐야 할 칸 옆(또는 위)으로 이동, 꼬리가 그 칸을 가리킴 */}
         <div ref={bubbleRef} style={{
           position: "absolute", left: pos.left, top: pos.top, maxWidth: 290, zIndex: 5,
@@ -367,38 +419,10 @@ export function MooinDeepAudit({ E }) {
           )}
         </div>
 
-        {/* 오른쪽 계산 기록 (payoff) — 숫자마다 만든 moo 개수를 적어 두고 합산 */}
-        {step.phase === "use" && step.ledger && (
+        {/* 계산 기록 (payoff·데스크탑) — 오른쪽 absolute. 모바일은 아래 블록으로 (D[] 밑) */}
+        {!isNarrow && ledgerBody && (
           <div style={{ position: "absolute", top: 0, right: 0, width: 150, zIndex: 4, background: "#fffdf7", border: "1.5px solid #fdba74", borderRadius: 10, padding: "8px 10px", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: "#9a3412", marginBottom: 5, fontFamily: "-apple-system, 'Apple SD Gothic Neo', sans-serif" }}>
-              🧮 {t(E, "moo tally", "계산 기록")}
-            </div>
-            {step.ledger.length === 0 && (
-              <div style={{ fontSize: 11, color: C.dim, fontFamily: "-apple-system, 'Apple SD Gothic Neo', sans-serif" }}>{t(E, "(filling in…)", "(채우는 중…)")}</div>
-            )}
-            {step.ledger.map(({ y, d, sub, contrib }, li) => {
-              const isNew = step.ledgerNew === y;
-              return (
-                <div key={li} style={{ padding: "3px 0", borderTop: li > 0 ? "1px dashed #fde2c4" : "none" }}>
-                  <div style={{
-                    display: "flex", justifyContent: "space-between", alignItems: "center",
-                    fontSize: 12, fontFamily: "'JetBrains Mono',monospace",
-                    color: isNew ? "#15803d" : C.text, fontWeight: isNew ? 800 : 700,
-                  }}>
-                    <span>{y} {t(E, "→ moo", "→ moo")}</span><span>{contrib}{t(E, "", "개")}</span>
-                  </div>
-                  <div style={{ fontSize: 9.5, color: isNew ? "#16a34a" : C.dim, fontFamily: "'JetBrains Mono',monospace", marginTop: 1 }}>
-                    {t(E, `kinds ${d}${sub ? " − 1" : ""}`, `앞 ${d}종류${sub ? " − 1" : ""}`)}
-                  </div>
-                </div>
-              );
-            })}
-            {step.ledger.length > 0 && (
-              <div style={{ borderTop: "1.5px solid #fdba74", marginTop: 5, paddingTop: 5, display: "flex", justifyContent: "space-between", alignItems: "center", color: A, fontWeight: 800 }}>
-                <span style={{ fontSize: 12, fontFamily: "-apple-system, 'Apple SD Gothic Neo', sans-serif" }}>{t(E, "total", "합")}</span>
-                <span style={{ fontSize: step.ledgerSum ? 18 : 14, fontFamily: "'JetBrains Mono',monospace" }}>{step.ans}</span>
-              </div>
-            )}
+            {ledgerBody}
           </div>
         )}
 
@@ -459,6 +483,13 @@ export function MooinDeepAudit({ E }) {
             })}
           </div>
         </div>
+
+        {/* 계산 기록 (payoff·모바일) — 좁은 화면에선 오른쪽 패널이 가려지므로 D[] 밑에 블록으로 */}
+        {isNarrow && ledgerBody && (
+          <div style={{ marginTop: 10, background: "#fffdf7", border: "1.5px solid #fdba74", borderRadius: 10, padding: "8px 10px" }}>
+            {ledgerBody}
+          </div>
+        )}
       </div>
 
       {/* (누적 답은 오른쪽 '계산 기록' 패널의 '합' 으로 표시 — 별도 칩 제거) */}
