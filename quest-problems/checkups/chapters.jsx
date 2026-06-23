@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCheckupsSections, DiagonalSim, MatchUpToSim, DiagPrefixSim } from "./components";
-import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsFastSim, CheckupsMirrorSim, CheckupsTrySim, CheckupsOutPrefixSim, CheckupsInPrefixSim } from "./sims";
+import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsFastSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim, CheckupsOutPrefixSim, CheckupsInPrefixSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 // (예전 정적 시각화 헬퍼 SpeciesCell/CowRow/TreatedRow/PositionRow 는
@@ -287,6 +287,16 @@ export function makeCheckupsCh3(E) {
         "Brute force is too slow — we need another way. The reversed range, the window, holds the key. Watch how it moves and find the shortcut.",
         "브루트포스가 느려서 다른 방법이 필요해요. 뒤집는 구간 '윈도우' 가 열쇠예요 — 윈도우가 어떻게 움직이는지 보면서 길을 찾아봐요."),
       content: (<CheckupsMirrorSim E={E} />),
+    },
+
+    /* 3-1a — 같은 s 위에서 한 짝씩 넓히며 새 짝만 ±로 더하는 걸 직접 보여줌
+        (선생님 2026-06-23: '4개·3개·전체 바꿀때 +1/−1 다 표시'). prefix(누적)의 본질. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Same s, growing window: the inside never moves — only the new pair changes. Just add its ±. That's how we count fast.",
+        "같은 s 에서 구간을 넓혀가요 — 안쪽은 안 움직이고 새 짝만 바뀌어요. 그 ± 만 더하면 끝. 이렇게 빨리 세요."),
+      content: (<CheckupsGrowSim E={E} />),
     },
 
     /* 3-1b — 직접 구간을 골라 뒤집어 보는 탐색 (선생님 2026-06-23: '자리 3,4,5 뒤집을 때 보고 싶어').
