@@ -738,6 +738,99 @@ export function CheckupsMirrorSim({ E }) {
 }
 
 /* ════════════════════════════════════════════════════════════════════
+   CheckupsTrySim — 직접 구간을 골라 뒤집어 보는 탐색 패널 (선생님 2026-06-23:
+   '자리 3,4,5 뒤집을 때 어떤지 보고 싶어'). s 가 다르면 안쪽 검진이 달라지는 걸
+   학생이 직접 확인. MirrorSim 의 슬라이드/코너라벨 패턴 재사용. Illustrative-only.
+   ════════════════════════════════════════════════════════════════════ */
+const _TRY_WINS = [[2, 5], [3, 4], [3, 5], [2, 6], [1, 6]];
+
+export function CheckupsTrySim({ E }) {
+  const [wi, setWi] = useState(2);     // 기본 [3,5] (선생님 요청)
+  const [l, r] = _TRY_WINS[wi];
+  const s = l + r;
+  const TW = 44, STEP = 52, GAP = STEP - TW, LAB = 56;
+  const gridW = _MN * STEP - GAP;
+  const ltr = tk => String.fromCharCode(64 + tk);
+  const tokAt = p => (p >= l && p <= r) ? (l + r - p) : p;   // 뒤집은 뒤 자리 p 의 소
+  const okCount = (() => { let c = 0; for (let p = 1; p <= _MN; p++) if (tokAt(p) === _MB[p - 1]) c++; return c; })();
+  const baseCount = (() => { let c = 0; for (let p = 1; p <= _MN; p++) if (p === _MB[p - 1]) c++; return c; })();  // 안 뒤집었을 때
+
+  const rowWrap = (label, color, node) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
+      <div style={{ width: LAB, textAlign: "right", fontSize: 10.5, fontWeight: 700, color, lineHeight: 1.1 }}>{label}</div>
+      {node}
+    </div>
+  );
+  const fixedCell = tk => {
+    const sp = _SP[tk] || _SP[1];
+    return <div style={{ width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 17, background: sp.bg, color: sp.tx, border: `1.5px solid ${sp.bd}` }}>{ltr(tk)}</div>;
+  };
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#0e7490", marginBottom: 4 }}>
+        🔀 {t(E, "Try reversing any window", "직접 구간 골라 뒤집어 보기")}
+      </div>
+      <div style={{ textAlign: "center", fontSize: 11.5, color: C.dim, marginBottom: 12, wordBreak: "keep-all" }}>
+        {t(E, "Pick a window — cows reverse, checkups recount.", "구간을 골라요 — 소가 뒤집히고 검진이 다시 세져요.")}
+      </div>
+
+      {/* 구간 버튼 */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginBottom: 14 }}>
+        {_TRY_WINS.map((w, i) => (
+          <button key={i} onClick={() => setWi(i)} style={{ padding: "5px 11px", borderRadius: 7, fontSize: 12, fontWeight: 800, border: `1.5px solid ${wi === i ? "#0891b2" : C.border}`, background: wi === i ? "#cffafe" : "#fff", color: wi === i ? "#0e7490" : C.text, cursor: "pointer" }}>
+            {t(E, "spots", "자리")} {w[0]}~{w[1]} <span style={{ fontSize: 10, opacity: 0.8 }}>(s={w[0] + w[1]})</span>
+          </button>
+        ))}
+      </div>
+
+      <div style={{ width: "fit-content", margin: "0 auto" }}>
+        {rowWrap(t(E, "🐄 cow", "🐄 소"), "#7f1d1d",
+          <div style={{ position: "relative", width: gridW, height: TW }}>
+            <div style={{ position: "absolute", top: -4, left: (l - 1) * STEP - 4, width: (r - l + 1) * STEP - GAP + 8, height: TW + 8, borderRadius: 11, background: "#ecfeff", border: "1.5px dashed #67e8f9", zIndex: 0, transition: "left .4s, width .4s" }} />
+            {[1, 2, 3, 4, 5, 6].map(tk => {
+              const slot = (tk >= l && tk <= r) ? (l + r - tk - 1) : tk - 1;
+              const sp = _SP[tk] || _SP[1];
+              const moved = slot + 1 !== tk;
+              return (
+                <div key={tk} style={{ position: "absolute", top: 0, left: slot * STEP, width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 17, background: sp.bg, color: sp.tx, border: `1.5px solid ${sp.bd}`, transition: "left .5s cubic-bezier(.4,0,.2,1)", zIndex: 1 }}>
+                  {ltr(tk)}
+                  {moved && <span style={{ position: "absolute", top: -7, right: -6, fontSize: 9, fontWeight: 800, color: "#94a3b8", background: "#fff", border: "1px solid #e2e8f0", borderRadius: 6, padding: "0 3px", lineHeight: "13px", textDecoration: "line-through" }}>{ltr(slot + 1)}</span>}
+                </div>
+              );
+            })}
+          </div>
+        )}
+        {rowWrap(t(E, "📋 wants", "📋 원하는"), "#1e40af",
+          <div style={{ display: "flex", gap: GAP }}>{_MB.map((tk, k) => <div key={k}>{fixedCell(tk)}</div>)}</div>
+        )}
+        {rowWrap(t(E, "🩺 ✓?", "🩺 검진?"), "#15803d",
+          <div style={{ display: "flex", gap: GAP }}>
+            {Array.from({ length: _MN }, (_, k) => {
+              const p = k + 1, ok = tokAt(p) === _MB[p - 1];
+              return <div key={k} style={{ width: TW, height: 24, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 800, background: ok ? "#22c55e" : "transparent", color: ok ? "#fff" : "#cbd5e1" }}>{ok ? "✓" : "—"}</div>;
+            })}
+          </div>
+        )}
+        {rowWrap("", C.dim,
+          <div style={{ display: "flex", gap: GAP }}>
+            {Array.from({ length: _MN }, (_, k) => {
+              const win = k + 1 >= l && k + 1 <= r;
+              return <div key={k} style={{ width: TW, textAlign: "center", fontSize: 9.5, color: win ? "#0e7490" : C.dim, fontWeight: win ? 700 : 400 }}>{t(E, "spot", "자리")} {k + 1}</div>;
+            })}
+          </div>
+        )}
+      </div>
+
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", alignItems: "center", marginTop: 14, flexWrap: "wrap" }}>
+        <div style={{ background: "#cffafe", border: "1.5px solid #0891b2", color: "#0e7490", borderRadius: 999, padding: "5px 14px", fontSize: 12.5, fontWeight: 800 }}>s = {l} + {r} = {s}</div>
+        <div style={{ background: "#fff7ed", border: "1.5px solid #ea580c", color: "#9a3412", borderRadius: 999, padding: "5px 14px", fontSize: 12.5, fontWeight: 800 }}>{t(E, "checkups", "검진")} <span style={{ fontSize: 16 }}>{okCount}</span> <span style={{ fontSize: 10.5, fontWeight: 600, opacity: 0.85 }}>({t(E, "was", "원래")} {baseCount})</span></div>
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════
    CheckupsOutPrefixSim — 바깥 검진을 'prefix(미리 누적)'로 빨리 세기.
    말풍선 stepped (선생님 2026-06-22: '말풍선으로 하나씩 쉽게'). 윈도우 바깥은 안 변하니
    '여기까지 ✓ 몇 개' 를 한 번 적어두면 어떤 윈도우든 빼기 두 번으로 바깥 검진을 구함.
