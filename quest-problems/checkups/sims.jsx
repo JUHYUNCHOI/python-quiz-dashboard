@@ -665,12 +665,14 @@ export function CheckupsMirrorSim({ E }) {
       {node}
     </div>
   );
-  const fixedCell = tk => {
+  const fixedCell = (tk, hot = false) => {
     const sp = _SP[tk] || _SP[1];
     return (
-      <div style={{ width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 17, background: sp.bg, color: sp.tx, border: `1.5px solid ${sp.bd}` }}>{ltr(tk)}</div>
+      <div style={{ width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 17, background: sp.bg, color: sp.tx, border: `${hot ? 2.5 : 1.5}px solid ${hot ? "#ea580c" : sp.bd}`, boxShadow: hot ? "0 0 0 3px rgba(234,88,12,.2)" : "none" }}>{ltr(tk)}</div>
     );
   };
+  // 짝꿍 자리 = 합이 s 되는 자리 (focus 의 짝). 통찰 스텝에서 '뒤집기 전' 줄에 강조.
+  const partner = st.focus != null ? _MS - st.focus : null;
 
   return (
     <div style={{ padding: 16 }}>
@@ -697,6 +699,9 @@ export function CheckupsMirrorSim({ E }) {
               );
             })}
           </div>
+        )}
+        {st.formula && rowWrap(t(E, "↩️ before", "↩️ 뒤집기 전"), "#9a3412",
+          <div style={{ display: "flex", gap: GAP }}>{[1, 2, 3, 4, 5, 6].map(p => <div key={p}>{fixedCell(p, partner === p)}</div>)}</div>
         )}
         {rowWrap(t(E, "📋 wants", "📋 원하는"), "#1e40af",
           <div style={{ display: "flex", gap: GAP }}>{_MB.map((tk, k) => <div key={k}>{fixedCell(tk)}</div>)}</div>
