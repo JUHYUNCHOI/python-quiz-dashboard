@@ -622,26 +622,26 @@ function _buildMirrorSteps(E) {
     { win: [_ML, _MR], rev: 2, reveal: "all", focus: null, formula: false, payoff: false,
       bubble: t(E, `AFTER: checkups are spots ${after.join(", ")} — ${after.length}! Spots ${gained.join(", ")} newly matched.`,
                    `뒤집은 후 — 검진 ✓ 는 자리 ${after.join("·")}, ${after.length}마리! 자리 ${gained.join("·")}가 새로 맞았어요.`) },
-    // 6) 자리 하나만 추적해 규칙 발견 (Q3: 왜 그 자리를 보나)
-    { win: [_ML, _MR], rev: 2, reveal: "all", focus: 4, formula: true, payoff: false,
-      bubble: t(E, `Why does a spot match? Trace just ONE — spot 4. Reversing brought spot 3's cow here (4 + 3 = 7). So a spot's checkup depends only on the ends' sum s = l + r.`,
-                   `왜 어떤 자리는 맞을까? 자리 하나만 따라가 봐요 — 자리 4. 뒤집으니 자리 3의 소가 여기 왔죠 (4 + 3 = 7). 그래서 검진 여부는 두 끝의 합 s = l + r 에만 달려요.`) },
-    // 7) 같은 s 인 다른 뒤집기
+    // 6) 뒤집기 = 짝지어 자리 바꾸기. 짝의 합은 늘 s
+    { win: [_ML, _MR], rev: 2, reveal: "none", focus: null, formula: true, payoff: false,
+      bubble: t(E, `Reversing just swaps cows in PAIRS: spot 2 ↔ 5, spot 3 ↔ 4. Add each pair's spots — always 7 (= the ends' sum s).`,
+                   `뒤집기는 자리끼리 짝지어 바꾸는 거예요: 자리 2 ↔ 5, 자리 3 ↔ 4. 각 짝의 두 자리를 더하면? 늘 7 (= 양 끝 합 s)!`) },
+    // 7) 그래서 자리 3 의 짝꿍 = 7−3 = 자리 4 → 자리 3 엔 자리 4 소가 옴
+    { win: [_ML, _MR], rev: 2, reveal: "inside", focus: 3, formula: true, payoff: false,
+      bubble: t(E, `So spot 3's partner = the spot that sums to 7 = spot 4. After reversing, spot 3 holds spot 4's cow: D.`,
+                   `그러니 자리 3 의 짝꿍 = 더해서 7 되는 자리 = 자리 4. 뒤집으면 자리 3 엔 자리 4 의 소 D 가 와요.`) },
+    // 8) 다른 뒤집기도 합이 같음
     { win: [3, 4], rev: 0, reveal: "none", focus: null, formula: false, payoff: false,
-      bubble: t(E, `Really? Try a DIFFERENT reversal — just spots 3–4 (l=3, r=4, so s = 7, same sum).`,
-                   `진짜? 다른 뒤집기로 확인 — 이번엔 자리 3~4만 (l=3, r=4, 합은 똑같이 s = 7).`) },
-    // 8) 메커니즘 — 자리 3 엔 원래 (s−i)번 소가 옴 (Q: 왜?)
+      bubble: t(E, `Now a DIFFERENT reversal — spots 3–4. Its ends add to 3 + 4 = 7 too, same s!`,
+                   `이번엔 다른 뒤집기 — 자리 3~4. 양 끝을 더하면 3 + 4 = 7, s 가 똑같죠!`) },
+    // 9) 같은 짝꿍 → 같은 소 → 같은 검진
     { win: [3, 4], rev: 1, reveal: "inside", focus: 3, formula: true, payoff: false,
-      bubble: t(E, `Reverse, look at spot 3 — it gets the original spot-(7−3)=4 cow: D.`,
-                   `뒤집고 자리 3 을 봐요 — 원래 (7−3)=4번 소, 즉 D 가 와요.`) },
-    // 9) 결론 — s 만 같으면 같은 소 → 같은 검진
-    { win: [3, 4], rev: 1, reveal: "inside", focus: 3, formula: true, payoff: false,
-      bubble: t(E, `In [2,5], spot 3 also got cow D! Same s ⇒ same cow at that spot ⇒ same checkup. The window size doesn't matter — only s.`,
-                   `[2,5] 때도 자리 3 엔 똑같이 D 였죠! s 만 같으면 그 자리엔 같은 소 → 검진도 똑같아요. 뒤집는 구간 크기는 상관없고 s 만 중요해요.`) },
-    // 9) payoff
+      bubble: t(E, `Here too, spot 3's partner sums to 7 → spot 4 → cow D again! Same s ⇒ same partner ⇒ same cow ⇒ same checkup.`,
+                   `여기서도 자리 3 의 짝꿍은 더해서 7 = 자리 4 → 또 소 D! s 가 같으면 짝꿍이 같고 → 오는 소도 같고 → 검진도 같아요.`) },
+    // 10) payoff
     { win: [3, 4], rev: 1, reveal: "inside", focus: null, formula: false, payoff: true,
-      bubble: t(E, `So same-s reversals share the same inside checkups. Count once per s, reuse everywhere → N× faster! 🚀`,
-                   `그래서 s 가 같은 뒤집기는 안쪽 검진이 똑같아요. s마다 한 번만 세서 다 쓰면 → N배 빨라요! 🚀`) },
+      bubble: t(E, `So the window's size doesn't matter — only s. Count the inside checkups once per s, reuse for every window → N× faster! 🚀`,
+                   `그래서 뒤집는 구간 크기는 상관없고 s 만 중요해요. s 마다 안쪽 검진을 한 번만 세서 모든 윈도우에 다 쓰면 → N배 빨라요! 🚀`) },
   ];
 }
 
@@ -722,7 +722,7 @@ export function CheckupsMirrorSim({ E }) {
       {/* 공식 줄 (insight — 자리 번호끼리의 관계) */}
       <div style={{ textAlign: "center", minHeight: 20, margin: "10px 0 4px", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>
         {st.formula && (
-          <span style={{ fontSize: 13, color: "#0e7490" }}>{t(E, "spot i ← spot (l + r − i)", "자리 i ← (l + r − i)번 자리")}　·　s = l + r = {_MS}</span>
+          <span style={{ fontSize: 13, color: "#0e7490" }}>{t(E, "a spot + its partner", "자리 + 짝꿍")} = s = {_MS}</span>
         )}
       </div>
 
