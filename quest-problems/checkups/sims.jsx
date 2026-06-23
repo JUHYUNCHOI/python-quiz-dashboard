@@ -630,18 +630,10 @@ function _buildMirrorSteps(E) {
     { win: [_ML, _MR], rev: 2, reveal: "inside", focus: 3, formula: true, payoff: false,
       bubble: t(E, `So spot 3's partner = the spot that sums to 7 = spot 4. After reversing, spot 3 holds spot 4's cow: D.`,
                    `그러니 자리 3 의 짝꿍 = 더해서 7 되는 자리 = 자리 4. 뒤집으면 자리 3 엔 자리 4 의 소 D 가 와요.`) },
-    // 8) 다른 뒤집기도 합이 같음
-    { win: [3, 4], rev: 0, reveal: "none", focus: null, formula: false, payoff: false,
-      bubble: t(E, `Now a DIFFERENT reversal — spots 3–4. Its ends add to 3 + 4 = 7 too, same s!`,
-                   `이번엔 다른 뒤집기 — 자리 3~4. 양 끝을 더하면 3 + 4 = 7, s 가 똑같죠!`) },
-    // 9) 같은 짝꿍 → 같은 소 → 같은 검진
-    { win: [3, 4], rev: 1, reveal: "inside", focus: 3, formula: true, payoff: false,
-      bubble: t(E, `Here too, spot 3's partner sums to 7 → spot 4 → cow D again! Same s ⇒ same partner ⇒ same cow ⇒ same checkup.`,
-                   `여기서도 자리 3 의 짝꿍은 더해서 7 = 자리 4 → 또 소 D! s 가 같으면 짝꿍이 같고 → 오는 소도 같고 → 검진도 같아요.`) },
-    // 10) payoff — 처음 목표('모든 뒤집기 검진 수')에 닿게
-    { win: [3, 4], rev: 1, reveal: "inside", focus: null, formula: false, payoff: true,
-      bubble: t(E, `So size doesn't matter — only s. Count the inside once per s and reuse it → we get the checkup count of EVERY reversal, fast! 🚀`,
-                   `그래서 구간 크기는 상관없고 s 만 중요해요. s 마다 안쪽 검진을 한 번만 세서 재사용하면 → 모든 뒤집기 방법의 검진 수를 빠르게 다 셀 수 있어요! 🚀`) },
+    // 8) 규칙 정리 + 다음(GrowSim)으로 — '다른 윈도우 비교' 중복 스텝 제거 (선생님 2026-06-23)
+    { win: [_ML, _MR], rev: 2, reveal: "all", focus: null, formula: true, payoff: true,
+      bubble: t(E, `That's the rule: spot i always gets spot (s−i)'s cow — so only s matters, not the window's size. Next: use this to count EVERY reversal fast. 🚀`,
+                   `이게 핵심 규칙! 자리 i 엔 늘 (s−i)번 자리 소가 와요 — 그러니 구간 크기는 상관없고 s 만 중요해요. 다음 화면에서 이 규칙으로 '모든 뒤집기'를 빨리 세 봐요. 🚀`) },
   ];
 }
 
