@@ -215,9 +215,11 @@ DELETE FROM lesson_progress WHERE variant IS NULL;
 - `summary` — 챕터 요약 카드 (건너뜀)
 - `chapter`, `reward`, `done` — UI 구조용 (건너뜀)
 
-**⚠️ 현재 상태 (2026-04-07):**
-- `client-page.tsx`가 실수로 `/learn` 데이터를 바라보고 있음 → 복습 데이터(`./data/lessons`)를 다시 연결해야 함
-- `ReviewStepRenderer` 컴포넌트 신규 작성 필요 (learn의 StepRenderer와 타입 시스템이 다름)
+**✅ 현재 상태 (2026-06-21 갱신 — 동작 완료):**
+- `client-page.tsx`는 복습 데이터(`./data/lessons`의 `lessonsData`)에 올바르게 연결됨
+- `ReviewStepRenderer` 컴포넌트 작성 완료, 복습 스텝 렌더링 중
+- **Python 코드 채점은 진짜 파이썬(Pyodide)** 사용 — `utils/pyodideRun.ts`의 `runPythonReal`. 과거 가짜 정규식 러너가 `if/for` 를 못 돌려 맞는 조건문 코드를 오답 처리하던 버그 수정함. C++ 채점은 Piston.
+- 코드 에디터 신택스 하이라이트: `utils/highlightPy.ts`(Python) + `highlightCppCode`(C++)
 - DB 연동(`saveStepAnswer`, `markQuizComplete`)은 그대로 유지
 
 **복습 레슨 파일 작성 규칙:**
