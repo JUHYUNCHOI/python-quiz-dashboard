@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCheckupsSections, DiagonalSim, MatchUpToSim, DiagPrefixSim } from "./components";
-import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsFastSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim, CheckupsOutPrefixSim, CheckupsInPrefixSim } from "./sims";
+import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsFastSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 // (예전 정적 시각화 헬퍼 SpeciesCell/CowRow/TreatedRow/PositionRow 는
@@ -341,36 +341,21 @@ export function makeCheckupsCh3(E) {
             <div style={{ marginTop: 10, textAlign: "center", padding: "9px 10px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8, fontWeight: 800, color: "#0e7490", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
               {t(E, "checkups = (outside matches) + (inside matches)", "검진 수 = (바깥 일치) + (안쪽 일치)")}
             </div>
-            <div style={{ marginTop: 8 }}>{t(E, "We just need a fast way to read each part. Outside first — it never changes.", "각 부분을 빠르게 읽는 법만 있으면 돼요. 바깥부터 — 절대 안 변하니까.")}</div>
+            <div style={{ marginTop: 8 }}>{t(E, "Outside never changes; inside depends only on s. Let's count both for one window, together.", "바깥은 안 변하고, 안쪽은 s 에만 달려요. 한 윈도우에서 둘을 같이 세 볼게요.")}</div>
           </div>
         </div>),
     },
 
-    /* 3-4 — 바깥 검진을 prefix 로 빨리: 말풍선 stepped (선생님 2026-06-22: '말풍선으로 하나씩'). */
-    {
-      type: "reveal",
-      narr: t(E,
-        "First the OUTSIDE part — it never changes. A prefix makes it instant.",
-        "먼저 바깥 — 절대 안 변해요. prefix 하나면 바로 읽혀요."),
-      content: (<CheckupsOutPrefixSim E={E} />),
-    },
+    /* 3-4·3-5 (OutPrefixSim·InPrefixSim) 제거 (선생님 2026-06-23: '시뮬이 너무 많다').
+        바깥-prefix 는 FastSim 바깥 칸이, 안쪽-prefix 는 GrowSim 의 ± 가 이미 보여주고,
+        실제 구현(prefix 배열)은 코드 챕터(⚡)가 한 줄씩 다룸 → 중복. 바로 통합 FastSim 으로. */
 
-    /* 3-5 — 안쪽 검진을 s별 prefix 로 빨리: 말풍선 stepped (선생님 2026-06-22). */
+    /* 3-5b — 통합: 한 윈도우의 검진 수 = 바깥 + 안쪽 을 한 화면에서 stepped 로. */
     {
       type: "reveal",
       narr: t(E,
-        "Now the INSIDE part — it changes with s, but same s shares the same prefix.",
-        "이제 안쪽 — s 마다 다르지만, s 가 같으면 같은 prefix 를 나눠 써요."),
-      content: (<CheckupsInPrefixSim E={E} />),
-    },
-
-    /* 3-5b — 통합 payoff: 세 시뮬(대각선·바깥·안쪽)을 한 자리에서 모아 한 (l,r) 의
-        검진 수 = 바깥 + 안쪽 을 stepped 로 세보기 (선생님 2026-06-22: '한 자리에서 볼 수 있게'). */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Now put all three pieces together — count ONE window in a single view: outside + inside.",
-        "이제 세 조각을 한 자리에 모아 — 윈도우 하나의 검진 수를 한 화면에서: 바깥 + 안쪽."),
+        "Put it together — count ONE window in a single view: outside + inside.",
+        "한 윈도우의 검진 수를 한 화면에서 세 봐요: 바깥 + 안쪽."),
       content: (<CheckupsFastSim E={E} />),
     },
 
