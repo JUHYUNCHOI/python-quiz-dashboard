@@ -700,7 +700,7 @@ export function CheckupsMirrorSim({ E }) {
             })}
           </div>
         )}
-        {st.formula && rowWrap(t(E, "↩️ before", "↩️ 뒤집기 전"), "#9a3412",
+        {rowWrap(t(E, "↩️ before", "↩️ 뒤집기 전"), "#9a3412",
           <div style={{ display: "flex", gap: GAP }}>{[1, 2, 3, 4, 5, 6].map(p => <div key={p}>{fixedCell(p, partner === p)}</div>)}</div>
         )}
         {rowWrap(t(E, "📋 wants", "📋 원하는"), "#1e40af",
