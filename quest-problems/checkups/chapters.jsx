@@ -278,14 +278,46 @@ export function makeCheckupsCh2(E, lang = "py") {
    ════════════════════════════════════════════════════════════════════ */
 export function makeCheckupsCh3(E) {
   return [
-    /* 3-1 — 핵심 관찰을 텍스트 벽이 아니라 stepped 말풍선 시뮬(CheckupsMirrorSim)로.
-        동기(브루트 느림→윈도우가 열쇠)는 짧은 narration, i 정의·거울·s·대각선·'그래서 뭐'는
-        시뮬 안 말풍선이 한 번에 하나씩. (선생님 2026-06-22) */
+    /* 3-0 — 큰 그림 먼저: 검진 = 바깥 + 안쪽 (선생님 2026-06-23: 흐름 순서 — 쪼개기를 맨 앞으로).
+        바깥=쉬움(안 변함), 안쪽=핵심(뒤집힘). 이걸 깔고 안쪽으로 들어감. */
     {
       type: "reveal",
       narr: t(E,
-        "Brute force is too slow — we need another way. The reversed range, the window, holds the key. Watch how it moves and find the shortcut.",
-        "브루트포스가 느려서 다른 방법이 필요해요. 뒤집는 구간 '윈도우' 가 열쇠예요 — 윈도우가 어떻게 움직이는지 보면서 길을 찾아봐요."),
+        "Brute force is too slow. The trick: split each window's checkups into TWO parts — outside + inside — and count each fast.",
+        "브루트포스는 느려요. 비결: 한 윈도우의 검진을 두 조각 — 바깥 + 안쪽 — 으로 나눠 각각 빨리 세는 거예요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "#0e7490", textAlign: "center", marginBottom: 10 }}>
+            ✂️ {t(E, "Checkups = OUTSIDE + INSIDE", "검진 수 = 바깥 + 안쪽")}
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 12 }}>
+            {[
+              { label: t(E, "outside", "바깥"), c: "#e2e8f0", bd: "#cbd5e1", tc: "#475569", grow: 1 },
+              { label: "[ l … r ]", c: "#cffafe", bd: "#22d3ee", tc: "#0e7490", grow: 2 },
+              { label: t(E, "outside", "바깥"), c: "#e2e8f0", bd: "#cbd5e1", tc: "#475569", grow: 1 },
+            ].map((z, i) => (
+              <div key={i} style={{
+                flex: z.grow, background: z.c, border: `1.5px solid ${z.bd}`, borderRadius: 8,
+                padding: "12px 6px", textAlign: "center", fontSize: 12.5, fontWeight: 700, color: z.tc,
+              }}>{z.label}</div>
+            ))}
+          </div>
+          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.75, wordBreak: "keep-all" }}>
+            <div><b style={{ color: "#475569" }}>{t(E, "OUTSIDE", "바깥")}</b> — {t(E, "doesn't move. Easy: a[i] = b[i], same for every window — count once up front.", "안 움직여요. 쉬움: a[i] = b[i], 모든 윈도우에서 똑같아 — 미리 한 번 세두면 끝.")}</div>
+            <div style={{ marginTop: 8 }}><b style={{ color: "#0e7490" }}>{t(E, "INSIDE", "안쪽")}</b> — {t(E, "reversed, so it changes — this is the hard part. We'll crack it next.", "뒤집혀서 바뀌어요 — 여기가 핵심(어려운 부분). 다음에서 풀어요.")}</div>
+            <div style={{ marginTop: 10, textAlign: "center", padding: "9px 10px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8, fontWeight: 800, color: "#0e7490", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+              {t(E, "checkups = (outside) + (inside)", "검진 수 = (바깥) + (안쪽)")}
+            </div>
+          </div>
+        </div>),
+    },
+
+    /* 3-1 — 안쪽(핵심) 규칙: 뒤집으면 자리 i ← 짝꿍(s−i), s 만 중요 — stepped 말풍선 시뮬. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Start with the hard part, the INSIDE — what does reversing do? Watch one window: each spot gets its partner's cow.",
+        "어려운 '안쪽'부터 — 뒤집으면 뭐가 바뀔까요? 한 윈도우를 보며, 각 자리에 짝꿍 소가 오는 걸 봐요."),
       content: (<CheckupsMirrorSim E={E} />),
     },
 
@@ -311,40 +343,7 @@ export function makeCheckupsCh3(E) {
 
     /* (3-2 DiagonalSim + 3-3 '대각선' 퀴즈 제거 — 거울 시뮬이 같은 'same-s 재사용'을 검진 세기로
         이미 더 명확히 보여줌. 추상 반복 + '대각선' 용어 재등장이 오히려 헷갈렸음. 선생님 2026-06-22) */
-
-    /* 3-3b — split the count into OUTSIDE + INSIDE so the next two sims have a home. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Here's the whole plan for counting ONE operation fast: split the line into two zones.",
-        "한 연산을 빠르게 세는 전체 작전: 줄을 두 구역으로 나눠요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 14, fontWeight: 700, color: "#0e7490", textAlign: "center", marginBottom: 10 }}>
-            ✂️ {t(E, "Checkups = OUTSIDE + INSIDE", "검진 수 = 바깥 + 안쪽")}
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 12 }}>
-            {[
-              { label: t(E, "outside", "바깥"), c: "#e2e8f0", bd: "#cbd5e1", tc: "#475569", grow: 1 },
-              { label: "[ l … r ]", c: "#cffafe", bd: "#22d3ee", tc: "#0e7490", grow: 2 },
-              { label: t(E, "outside", "바깥"), c: "#e2e8f0", bd: "#cbd5e1", tc: "#475569", grow: 1 },
-            ].map((z, i) => (
-              <div key={i} style={{
-                flex: z.grow, background: z.c, border: `1.5px solid ${z.bd}`, borderRadius: 8,
-                padding: "12px 6px", textAlign: "center", fontSize: 12.5, fontWeight: 700, color: z.tc,
-              }}>{z.label}</div>
-            ))}
-          </div>
-          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.75 }}>
-            <div><b style={{ color: "#475569" }}>{t(E, "OUTSIDE the window", "윈도우 바깥")}</b> — {t(E, "nothing moved. A spot matches if a[i] = b[i], exactly like before any reversal — and it's the SAME for every (l, r).", "아무것도 안 움직임. a[i] = b[i] 면 일치 — 뒤집기 전과 똑같고, 모든 (l, r) 에서 동일.")}</div>
-            <div style={{ marginTop: 8 }}><b style={{ color: "#0e7490" }}>{t(E, "INSIDE the window", "윈도우 안")}</b> — {t(E, "reversed. Spot i now holds a[l+r−i], compared to b[i]. This is the part that changes — but only with s = l + r.", "뒤집힘. 자리 i 에 a[l+r−i] 가 와서 b[i] 와 비교. 뒤집기마다 바뀌는 부분 — 단, s = l + r 에만 따라.")}</div>
-            <div style={{ marginTop: 10, textAlign: "center", padding: "9px 10px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8, fontWeight: 800, color: "#0e7490", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
-              {t(E, "checkups = (outside matches) + (inside matches)", "검진 수 = (바깥 일치) + (안쪽 일치)")}
-            </div>
-            <div style={{ marginTop: 8 }}>{t(E, "Outside never changes; inside depends only on s. Let's count both for one window, together.", "바깥은 안 변하고, 안쪽은 s 에만 달려요. 한 윈도우에서 둘을 같이 세 볼게요.")}</div>
-          </div>
-        </div>),
-    },
+    /* 쪼개기(바깥+안쪽) 슬라이드는 맨 앞(3-0)으로 이동 (선생님 2026-06-23: 흐름 순서). */
 
     /* 3-4·3-5 (OutPrefixSim·InPrefixSim) 제거 (선생님 2026-06-23: '시뮬이 너무 많다').
         바깥-prefix 는 FastSim 바깥 칸이, 안쪽-prefix 는 GrowSim 의 ± 가 이미 보여주고,
