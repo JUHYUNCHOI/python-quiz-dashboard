@@ -630,10 +630,14 @@ function _buildMirrorSteps(E) {
     { win: [3, 4], rev: 0, reveal: "none", focus: null, formula: false, payoff: false,
       bubble: t(E, `Really? Try a DIFFERENT reversal — just spots 3–4 (l=3, r=4, so s = 7, same sum).`,
                    `진짜? 다른 뒤집기로 확인 — 이번엔 자리 3~4만 (l=3, r=4, 합은 똑같이 s = 7).`) },
-    // 8) 안쪽 검진이 똑같음
-    { win: [3, 4], rev: 1, reveal: "inside", focus: null, formula: false, payoff: false,
-      bubble: t(E, `Reverse, check inside (spots 3–4): spot 3 ✓, spot 4 ✗ — SAME as [2,5]'s spots 3–4! Because s = 7 for both.`,
-                   `뒤집고 안쪽(자리 3·4)만 봐요: 자리 3 ✓, 자리 4 ✗ — [2,5] 때 자리 3·4 랑 똑같죠! s 가 둘 다 7 이라서.`) },
+    // 8) 메커니즘 — 자리 3 엔 원래 (s−i)번 소가 옴 (Q: 왜?)
+    { win: [3, 4], rev: 1, reveal: "inside", focus: 3, formula: true, payoff: false,
+      bubble: t(E, `Reverse, look at spot 3 — it gets the original spot-(7−3)=4 cow: D.`,
+                   `뒤집고 자리 3 을 봐요 — 원래 (7−3)=4번 소, 즉 D 가 와요.`) },
+    // 9) 결론 — s 만 같으면 같은 소 → 같은 검진
+    { win: [3, 4], rev: 1, reveal: "inside", focus: 3, formula: true, payoff: false,
+      bubble: t(E, `In [2,5], spot 3 also got cow D! Same s ⇒ same cow at that spot ⇒ same checkup. The window size doesn't matter — only s.`,
+                   `[2,5] 때도 자리 3 엔 똑같이 D 였죠! s 만 같으면 그 자리엔 같은 소 → 검진도 똑같아요. 뒤집는 구간 크기는 상관없고 s 만 중요해요.`) },
     // 9) payoff
     { win: [3, 4], rev: 1, reveal: "inside", focus: null, formula: false, payoff: true,
       bubble: t(E, `So same-s reversals share the same inside checkups. Count once per s, reuse everywhere → N× faster! 🚀`,
