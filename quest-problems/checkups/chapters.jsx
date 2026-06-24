@@ -376,6 +376,48 @@ export function makeCheckupsCh3(E, lang = "py") {
       content: (<CheckupsKeyCodeSim E={E} lang={lang} />),
     },
 
+    /* 3-5d — 결(payoff): 그래서 전체가 빨라졌다 + 분포 완성 (선생님 2026-06-24: '이게 설명 끝인가?' — 결론이 약함) */
+    {
+      type: "reveal",
+      narr: t(E,
+        "So — the payoff. Each window now costs O(1), so ALL windows take O(N²) instead of O(N³). The distribution you tallied by hand at the start now comes out instantly, even for N=7500.",
+        "그래서 — 결론. 윈도우 하나가 이제 O(1) 이라, 모든 윈도우를 O(N³) 대신 O(N²) 에 다 세요. 처음에 손으로 통에 모았던 분포가, N=7500 이어도 순식간에 나와요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: "#065f46", textAlign: "center", marginBottom: 12 }}>
+            🚀 {t(E, "So how much faster?", "그래서 — 얼마나 빨라졌나")}
+          </div>
+
+          {/* brute → fast 비교 */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+            <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px" }}>
+              <div style={{ fontSize: 11.5, fontWeight: 800, color: "#991b1b", marginBottom: 5 }}>🐢 {t(E, "Brute", "브루트포스")}</div>
+              <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.6, wordBreak: "keep-all" }}>
+                {t(E, "Reverse + recount every window", "윈도우마다 뒤집고 다시 셈")}<br />
+                <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>O(N³)</code> → {t(E, "TLE", "시간 초과")}
+              </div>
+            </div>
+            <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 12px" }}>
+              <div style={{ fontSize: 11.5, fontWeight: 800, color: "#065f46", marginBottom: 5 }}>⚡ {t(E, "Fast", "빠른 풀이")}</div>
+              <div style={{ fontSize: 12, color: "#065f46", lineHeight: 1.6, wordBreak: "keep-all" }}>
+                {t(E, "Outside once + inside reused per s → each window O(1)", "바깥 한 번 + 안쪽 s별 재사용 → 윈도우당 O(1)")}<br />
+                <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>O(N²)</code> → {t(E, "passes", "통과")}
+              </div>
+            </div>
+          </div>
+
+          {/* 분포 완성 — EnumSim 으로 회귀 */}
+          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: "12px 14px", fontSize: 12.5, color: "#155e75", lineHeight: 1.7, wordBreak: "keep-all", textAlign: "center" }}>
+            {t(E,
+              "We dropped one whole factor of N — exactly what we needed. Each window's checkup count goes into a tally box (just like the start), and that tally IS the answer.",
+              "N 한 겹을 통째로 덜어냈어요 — 딱 필요했던 거죠. 윈도우마다 검진 수를 통에 넣으면 (맨 처음 그 통!), 그 통이 바로 답(분포)이에요.")}
+            <div style={{ marginTop: 8, fontWeight: 800, color: "#0e7490", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+              {t(E, "every window → +1 to its box → output", "모든 윈도우 → 통에 +1 → 출력")}
+            </div>
+          </div>
+        </div>),
+    },
+
     /* 3-6 — closing input: the two-piece formula in one number (active step). */
     {
       type: "input",
