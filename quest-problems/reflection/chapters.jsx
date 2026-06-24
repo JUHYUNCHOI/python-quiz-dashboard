@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getReflectionSections, ReflectionGrid } from "./components";
-import { ReflectionGroupSim } from "./sims";
+import { ReflectionRuleSim, ReflectionGroupSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 export function makeReflectionCh1(E) {
@@ -76,6 +76,15 @@ export function makeReflectionCh1(E) {
             </div>
           </div>
         </div>),
+    },
+
+    /* 1-0b — 규칙을 그림으로: 한 칸 칠하면 거울 짝 3칸이 따라온다 (선생님 2026-06-24: 읽지 말고 시뮬). */
+    {
+      type: "reveal",
+      narr: t(E,
+        "The rule, as a picture — paint one cell and watch its 3 mirror twins light up.",
+        "규칙을 그림으로 — 한 칸 칠하면 거울 짝 3칸이 따라 켜지는 걸 봐요."),
+      content: (<ReflectionRuleSim E={E} />),
     },
 
     /* 1-1b — Numbers-first warm-up: make the mirror-twins + cost concrete before formulas. */
