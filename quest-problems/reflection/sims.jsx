@@ -52,17 +52,17 @@ function _buildRuleSteps(E) {
       bubble: t(E, "Split the canvas with a vertical + horizontal center line → 4 quadrants. Paint one quadrant; the rest must MIRROR it.",
                    "캔버스를 가로·세로 가운데 선으로 → 4분면으로 나눠요. 한 분면을 칠하면, 나머지는 거울처럼 따라와야 해요.") },
     { lit: [TR], focus: TR,
-      bubble: t(E, "Paint one cell in the top-right quadrant…",
-                   "오른쪽 위 분면에 한 칸을 칠하면…") },
+      bubble: t(E, "Paint cell (1, 4) — top-right.",
+                   "칸 (1, 4) 을 칠해요 — 오른쪽 위.") },
     { lit: [TR, TL], focus: TL,
-      bubble: t(E, "Vertical mirror → the top-LEFT twin must match too.",
-                   "세로 가운데 선 거울 → 왼쪽 위 짝도 같아야 해요.") },
+      bubble: t(E, "Vertical mirror: column 4 ↔ column 1 → (1, 1) must match too.",
+                   "세로 거울: 열 4 ↔ 열 1 → (1, 1) 도 같아야 해요.") },
     { lit: [TR, TL, BR], focus: BR,
-      bubble: t(E, "Horizontal mirror → the bottom-RIGHT twin too.",
-                   "가로 가운데 선 거울 → 오른쪽 아래 짝도.") },
+      bubble: t(E, "Horizontal mirror: row 1 ↔ row 4 → (4, 4) too.",
+                   "가로 거울: 행 1 ↔ 행 4 → (4, 4) 도.") },
     { lit: [TR, TL, BR, BL], focus: BL,
-      bubble: t(E, "Both mirrors → the bottom-LEFT twin. These 4 are ONE group — all must be the same color!",
-                   "둘 다 거울 → 왼쪽 아래 짝까지. 이 4칸이 한 묶음 — 다 같은 색이어야 대칭이에요!") },
+      bubble: t(E, "Both mirrors → (4, 1). So (1,4)·(1,1)·(4,4)·(4,1) are ONE group — all the same color!",
+                   "둘 다 거울 → (4, 1). 그래서 (1,4)·(1,1)·(4,4)·(4,1) 이 한 묶음 — 다 같은 색이어야 해요!") },
     { lit: [TR, TL, BR, BL], focus: null, done: true,
       bubble: t(E, "Bessie messed up some cells, so groups don't match. Goal: fix it with the FEWEST flips. (count next →)",
                    "Bessie 가 칸을 바꿔놔서 묶음이 안 맞을 수 있어요. 그걸 최소 횟수로 고치는 게 문제예요. (다음 화면에서 세요 →)") },
@@ -97,12 +97,16 @@ export function ReflectionRuleSim({ E }) {
             const lit = isLit(r, c), foc = isFocus(r, c);
             return (
               <div key={r + "-" + c} style={{
+                position: "relative",
                 width: CELL, height: CELL, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center",
                 fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 20,
                 background: lit ? "#334155" : "#f1f5f9", color: lit ? "#fff" : "#cbd5e1",
                 border: `${foc ? 3 : 1.5}px solid ${foc ? "#ea580c" : (lit ? "#334155" : "#e2e8f0")}`,
                 boxShadow: foc ? "0 0 0 3px rgba(234,88,12,.25)" : "none", transition: "all .25s",
-              }}>{lit ? "#" : "·"}</div>
+              }}>
+                <span style={{ position: "absolute", top: 2, left: 4, fontSize: 8.5, fontWeight: 700, color: foc ? "#ea580c" : (lit ? "#94a3b8" : "#b6c2cf") }}>{r + 1},{c + 1}</span>
+                {lit ? "#" : "·"}
+              </div>
             );
           }))}
         </div>

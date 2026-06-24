@@ -56,43 +56,7 @@ export function makeReflectionCh1(E) {
         </div>),
     },
 
-    /* 1-1b — Numbers-first warm-up: make the mirror-twins + cost concrete before formulas. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Before the (r,c) formulas, let's find the mirror twins with real numbers on a 4×4 grid.",
-        "(r,c) 공식 전에, 4×4 격자에서 거울 짝을 실제 숫자로 먼저 찾아봐요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfeff", border: "1.5px solid #0891b2", borderRadius: 10, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 700, color: "#155e75", marginBottom: 8 }}>
-              🔢 {t(E, "Mirror twins, with numbers first", "거울 짝, 숫자로 먼저")}
-            </div>
-            <div style={{ marginBottom: 8 }}>
-              {t(E, "Take a ", "")}<b>{t(E, "4×4 grid (N=4)", "4×4 격자 (N=4)")}</b>
-              {t(E, " and look at cell ", " 에서 칸 ")}<b style={{ color: "#0891b2" }}>(1, 2)</b>
-              {t(E, ". Its 3 mirror twins:", " 하나를 봐요. 거울 짝 3개:")}
-            </div>
-            <div style={{ paddingLeft: 8, borderLeft: "3px solid #67e8f9", display: "flex", flexDirection: "column", gap: 4 }}>
-              <div>{t(E, "Left↔right: ", "좌우 뒤집기: ")}<b>(1, N+1−2) = (1, 3)</b></div>
-              <div>{t(E, "Top↔bottom: ", "상하 뒤집기: ")}<b>(N+1−1, 2) = (4, 2)</b></div>
-              <div>{t(E, "Both: ", "둘 다: ")}<b>(4, 3)</b></div>
-            </div>
-            <div style={{ marginTop: 8 }}>
-              {t(E, "So ", "즉 ")}<b style={{ color: "#0891b2" }}>(1,2) · (1,3) · (4,2) · (4,3)</b>
-              {t(E, " must always be the SAME color.", " 네 칸은 늘 같은 색이어야 해요.")}
-            </div>
-            <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #67e8f9" }}>
-              {t(E, "If 3 of those 4 are painted? Paint the 1 leftover → all match → ", "그 4칸 중 3칸이 칠해졌다면? 남은 1칸만 칠하면 다 같아져요 → ")}
-              <b style={{ color: "#16a34a" }}>{t(E, "1 flip", "1번")}</b>
-              <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
-                👉 {t(E, "For a group with p painted of 4: min flips = min(p, 4−p). Answer = sum over all mirror groups.",
-                       "한 그룹에 4칸 중 p칸 칠해짐 → 최소 뒤집기 = min(p, 4−p). 답 = 모든 거울 그룹의 합.")}
-              </div>
-            </div>
-          </div>
-        </div>),
-    },
+    /* 1-1b 제거 (선생님 2026-06-24: 거울 짝을 글로 다시 설명 — 1-1 RuleSim 이 index 라벨로 이미 보여줌. 중복). */
 
     /* 1-2 — Sample I/O verbatim + walkthrough. */
     {
@@ -134,26 +98,10 @@ export function makeReflectionCh1(E) {
             </div>
           </div>
 
-          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
-            <div style={{ fontWeight: 600, color: "#155e75", marginBottom: 6 }}>
-              🔍 {t(E, "Why initial answer = 4?", "왜 초기 답 = 4?")}
-            </div>
-            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
-              {t(E, "The canvas has 4×4/4 = 4 'mirror groups' of 4 cells each. For each group:",
-                    "캔버스에는 (4×4)/4 = 4 개의 '거울 그룹' (각 4 칸). 그룹마다:")}
-            </div>
-            <div style={{ marginTop: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#5b21b6" }}>
-              {t(E, "Corners group (1,1)(1,4)(4,1)(4,4) = . . . #  → 1 painted, flip 1.", "모서리 그룹 (1,1)(1,4)(4,1)(4,4) = . . . #  → 1 칠함, 1 뒤집기.")}
-              <br/>
-              {t(E, "Top row group (1,2)(1,3)(4,2)(4,3) = . # . # → 2 painted, flip 2.", "위 한 줄 그룹 (1,2)(1,3)(4,2)(4,3) = . # . # → 2 칠함, 2 뒤집기.")}
-              <br/>
-              {t(E, "Side columns (2,1)(2,4)(3,1)(3,4) = # # # # → 4 painted, flip 0.", "양옆 칸 (2,1)(2,4)(3,1)(3,4) = # # # # → 4 칠함, 0 뒤집기.")}
-              <br/>
-              {t(E, "Center group (2,2)(2,3)(3,2)(3,3) = # . # # → 3 painted, flip 1.", "가운데 그룹 (2,2)(2,3)(3,2)(3,3) = # . # # → 3 칠함, 1 뒤집기.")}
-            </div>
-            <div style={{ marginTop: 6, fontWeight: 600, color: "#15803d" }}>
-              {t(E, "Total = 1 + 2 + 0 + 1 = 4.", "합계 = 1 + 2 + 0 + 1 = 4.")}
-            </div>
+          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.65, wordBreak: "keep-all" }}>
+            {t(E,
+              "Input = the picture, then the cells to flip. Output = the first answer, then after each flip. Why the first answer is 4 — see it on the next picture 👇",
+              "입력 = 그림 + 바꿀 칸들. 출력 = 처음 답 + 매번 바꾼 뒤 답. 처음 답이 왜 4인지는 — 바로 다음 그림으로 봐요 👇")}
           </div>
         </div>),
     },
