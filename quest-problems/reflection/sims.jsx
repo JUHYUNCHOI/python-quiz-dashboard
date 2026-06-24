@@ -25,13 +25,15 @@ function _buildReflSteps(E) {
       const contrib = Math.min(k, 4 - k);
       total += contrib;
       const same = (k === 0 || k === 4);
+      // 실제로 바뀌는(적은 쪽) 칸 — # 가 같거나 적으면 # 칸을, 아니면 · 칸을 바꿈
+      const flip = cells.filter(([a, b]) => (k <= 4 - k) ? RG[a][b] === "#" : RG[a][b] === ".");
       steps.push({
-        grp: cells, k, contrib, total, final: false,
+        grp: cells, flip, k, contrib, total, final: false,
         bubble: same
           ? t(E, `These 4 mirror cells: ${k} '#', ${4 - k} '·' → already all the same! (+0)`,
                 `이 거울 짝 4칸: # ${k}개, · ${4 - k}개 → 이미 다 같아요! (+0)`)
-          : t(E, `These 4 mirror cells: ${k} '#', ${4 - k} '·' → flip the smaller side, ${contrib} cell(s). (+${contrib})`,
-                `이 거울 짝 4칸: # ${k}개, · ${4 - k}개 → 적은 쪽 ${contrib}칸만 바꾸면 다 같아져요. (+${contrib})`),
+          : t(E, `These 4 mirror cells: ${k} '#', ${4 - k} '·' → flip the smaller side — the ${contrib} yellow ↻ cell(s). (+${contrib})`,
+                `이 거울 짝 4칸: # ${k}개, · ${4 - k}개 → 적은 쪽, 노란 ↻ ${contrib}칸만 바꾸면 다 같아져요. (+${contrib})`),
       });
     }
   }
@@ -125,6 +127,7 @@ export function ReflectionGroupSim({ E }) {
   const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length);
   const st = steps[Math.min(safe, steps.length - 1)];
   const inGrp = (r, c) => st.grp && st.grp.some(([a, b]) => a === r && b === c);
+  const isFlip = (r, c) => st.flip && st.flip.some(([a, b]) => a === r && b === c);  // 바뀌는(적은 쪽) 칸
   const CELL = 46;
 
   return (
@@ -142,15 +145,20 @@ export function ReflectionGroupSim({ E }) {
       {/* 4×4 그리드 — 현재 묶음 4칸 주황 강조 */}
       <div style={{ display: "grid", gridTemplateColumns: `repeat(${RN}, ${CELL}px)`, gap: 5, justifyContent: "center", marginBottom: 12 }}>
         {RG.flatMap((row, r) => row.map((v, c) => {
-          const hi = inGrp(r, c), painted = v === "#";
+          const hi = inGrp(r, c), painted = v === "#", flip = isFlip(r, c);
           return (
             <div key={r + "-" + c} style={{
+              position: "relative",
               width: CELL, height: CELL, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center",
               fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 20,
-              background: painted ? "#334155" : "#f1f5f9", color: painted ? "#fff" : "#cbd5e1",
-              border: `${hi ? 3 : 1.5}px solid ${hi ? "#ea580c" : (painted ? "#334155" : "#e2e8f0")}`,
-              boxShadow: hi ? "0 0 0 3px rgba(234,88,12,.2)" : "none", transition: "all .2s",
-            }}>{painted ? "#" : "·"}</div>
+              background: flip ? "#fef08a" : (painted ? "#334155" : "#f1f5f9"),
+              color: flip ? "#92400e" : (painted ? "#fff" : "#cbd5e1"),
+              border: `${(hi || flip) ? 3 : 1.5}px solid ${flip ? "#f59e0b" : (hi ? "#ea580c" : (painted ? "#334155" : "#e2e8f0"))}`,
+              boxShadow: flip ? "0 0 0 3px rgba(245,158,11,.3)" : (hi ? "0 0 0 3px rgba(234,88,12,.2)" : "none"), transition: "all .2s",
+            }}>
+              {painted ? "#" : "·"}
+              {flip && <span style={{ position: "absolute", top: -9, right: -7, fontSize: 11, fontWeight: 900, background: "#f59e0b", color: "#fff", borderRadius: "50%", width: 18, height: 18, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 3px rgba(0,0,0,.3)" }}>↻</span>}
+            </div>
           );
         }))}
       </div>
