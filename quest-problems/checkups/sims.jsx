@@ -731,10 +731,15 @@ function _buildMirrorSteps(E) {
     { win: [_ML, _MR], rev: 2, reveal: "none", focus: null, formula: true, payoff: false,
       bubble: t(E, `Reversing just swaps cows in PAIRS: spot 2 ↔ 5, spot 3 ↔ 4. Add each pair's spots — always 7 (= the ends' sum s).`,
                    `뒤집기는 자리끼리 짝지어 바꾸는 거예요: 자리 2 ↔ 5, 자리 3 ↔ 4. 각 짝의 두 자리를 더하면? 늘 7 (= 양 끝 합 s)!`) },
-    // 7) 그래서 자리 3 의 짝꿍 = 7−3 = 자리 4 → 자리 3 엔 자리 4 소가 옴
-    { win: [_ML, _MR], rev: 2, reveal: "inside", focus: 3, formula: true, payoff: false,
-      bubble: t(E, `So spot 3's partner = the spot that sums to 7 = spot 4. After reversing, spot 3 holds spot 4's cow: D.`,
-                   `그러니 자리 3 의 짝꿍 = 더해서 7 되는 자리 = 자리 4. 뒤집으면 자리 3 엔 자리 4 의 소 D 가 와요.`) },
+    // 7a) 뒤집기 전 — 자리 3 의 짝꿍 = 자리 4, 지금 자리 4 에 소 D 가 보임
+    //     (선생님 2026-06-24: 뒤집힌 줄에서 '자리 4 의 D' 라 해서 화면 자리4=C 와 충돌 → 뒤집기 전부터)
+    { win: [_ML, _MR], rev: 0, reveal: "none", focus: 4, formula: true, payoff: false,
+      bubble: t(E, `Before flipping: spot 3's partner = the spot that sums to 7 = spot 4. Right now spot 4 holds cow D.`,
+                   `뒤집기 전 — 자리 3 의 짝꿍 = 더해서 7 되는 자리 = 자리 4. 지금 자리 4 에 소 D 가 있죠.`) },
+    // 7b) 뒤집으면 그 D 가 자리 4 → 자리 3 으로 미끄러져 옴 (focus 가 D 를 따라감)
+    { win: [_ML, _MR], rev: 2, reveal: "none", focus: 3, formula: true, payoff: false,
+      bubble: t(E, `Flip → that cow D slides from spot 4 to spot 3. So spot i always gets spot (s−i)'s cow.`,
+                   `뒤집으면 그 소 D 가 자리 4 에서 자리 3 으로 미끄러져 와요. 그래서 자리 i 엔 늘 (s−i)번 자리 소가 와요.`) },
     // 8) 규칙 정리 + 다음(GrowSim)으로 — '다른 윈도우 비교' 중복 스텝 제거 (선생님 2026-06-23)
     { win: [_ML, _MR], rev: 2, reveal: "all", focus: null, formula: true, payoff: true,
       bubble: t(E, `That's the rule: spot i always gets spot (s−i)'s cow — so only s matters, not the window's size. Next: use this to count EVERY reversal fast. 🚀`,
