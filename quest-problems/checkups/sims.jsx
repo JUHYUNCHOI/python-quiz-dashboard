@@ -1094,36 +1094,110 @@ export function CheckupsTrySim({ E }) {
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   CheckupsKeyCodeSim — 핵심을 코드로 살짝 (선생님 2026-06-24: '안 reverse 하고
-   그 자리만 비교' 강조 + 토글 X — 학생이 배우는 언어 하나만(lang prop)).
+   CheckupsKeyCodeSim — 코드를 그림에 붙여서 (선생님 2026-06-24: 코드만 새 페이지에
+   띄우면 a·b·i 가 뭔지 끊겨서 아무도 모름). 방금 본 소/원하는/자리 위에서 코드 한
+   줄씩 실행 — a[l+r-i] 가 '그림의 이 소' 임을 눈으로 잇는다. 토글 X (학생 언어 lang).
    ════════════════════════════════════════════════════════════════════ */
+const _KC_SOU = [1, 2, 3, 4, 5, 6];     // 자리별 소가 가진 종 (= A..F)
+const _KC_WANT = [1, 3, 4, 1, 2, 6];    // 자리별 원하는 종 (A,C,D,A,B,F)
+const _KC_LT = ["", "A", "B", "C", "D", "E", "F"];
+const _KC_L = 2, _KC_R = 5, _KC_S = 7;  // 구간 [2,5], s=7
+const _KC_INS = [2, 3, 4, 5];           // 안쪽 자리들
+function _buildKeySteps(E) {
+  const steps = [];
+  steps.push({ i: null, src: null, ok: null, inside: 0, payoff: false,
+    bubble: t(E,
+      "Code reads symbols, but they're just THIS picture. a = cows, b = wanted, i = spot. We never flip — for each inside spot i, we fetch a[l+r−i].",
+      "코드 글자들은 사실 이 그림이에요. a = 소 줄, b = 원하는 줄, i = 자리. 안 뒤집고, 안쪽 자리 i 마다 a[l+r−i] 만 가져와요.") });
+  let inside = 0;
+  _KC_INS.forEach((i) => {
+    const src = _KC_S - i;                  // a[l+r-i] 가 가리키는 자리
+    const v = _KC_SOU[src - 1];             // 그 소의 종
+    const want = _KC_WANT[i - 1];
+    const ok = v === want;
+    if (ok) inside++;
+    steps.push({ i, src, ok, inside, payoff: false,
+      bubble: t(E,
+        `Spot ${i}: a[${_KC_S}−${i}] = a[${src}] = cow ${_KC_LT[v]}. Wanted b[${i}] = ${_KC_LT[want]}. ${ok ? "Same → inside + 1." : "Different → skip."}`,
+        `자리 ${i}: a[${_KC_S}−${i}] = a[${src}] = 소 ${_KC_LT[v]}. 원하는 b[${i}] = ${_KC_LT[want]}. ${ok ? "같다 → inside + 1." : "다르다 → 그냥 넘어가요."}`) });
+  });
+  steps.push({ i: null, src: null, ok: null, inside, payoff: true,
+    bubble: t(E,
+      `Done — inside = ${inside}. No row was ever reversed; we just read a[l+r−i] and compared. That's the whole trick.`,
+      `끝 — inside = ${inside}. 줄을 한 번도 안 뒤집었어요. a[l+r−i] 를 보고 비교만 했죠. 이게 비결의 전부예요.`) });
+  return steps;
+}
+function _KcCell({ letter, hl, kind }) {
+  const tone = kind === "src" ? { bg: "#cffafe", bd: "#0891b2", tx: "#0e7490" }
+    : kind === "want" ? { bg: "#dcfce7", bd: "#16a34a", tx: "#166534" }
+    : { bg: "#fff", bd: C.border, tx: C.text };
+  return <div style={{ width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 15, background: hl ? tone.bg : "#fff", color: hl ? tone.tx : C.text, border: `1.5px solid ${hl ? tone.bd : C.border}`, transition: "all .2s" }}>{letter}</div>;
+}
 export function CheckupsKeyCodeSim({ E, lang = "py" }) {
   const cpp = lang === "cpp";
+  const steps = _buildKeySteps(E);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const st = steps[idx];
   const py = [
-    "# 안 뒤집어요! 자리 i 엔 a[l+r-i] 가 올 걸 아니까:",
-    "v = a[l + r - i]        # 그 자리에 올 값 (s = l + r)",
-    "if v == b[i]:           # 그 값만 b[i] 와 바로 비교",
-    "    inside += 1",
+    "for i in range(l, r + 1):   # 안쪽 자리 l..r",
+    "    v = a[l + r - i]        # 자리 i 에 올 소",
+    "    if v == b[i]:           # 원하는 소와 같으면",
+    "        inside += 1         # 검진 ✓",
   ];
   const cc = [
-    "// 안 뒤집어요! 자리 i 엔 a[l+r-i] 가 올 걸 아니까:",
-    "int v = a[l + r - i];    // 그 자리에 올 값 (s = l + r)",
-    "if (v == b[i]) inside++; // 그 값만 b[i] 와 바로 비교",
+    "for (int i = l; i <= r; i++) {  // 안쪽 자리 l..r",
+    "  int v = a[l + r - i];         // 자리 i 에 올 소",
+    "  if (v == b[i]) inside++;      // 원하는 소면 검진 ✓",
+    "}",
   ];
   return (
     <div style={{ padding: 16 }}>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#0e7490", marginBottom: 10 }}>
-        ⌨️ {t(E, "The idea, in code — no reversing", "코드로 살짝 — 안 뒤집고 비교")}
+        ⌨️ {t(E, "The code IS this picture", "코드 = 이 그림")}
       </div>
 
-      <div style={{ maxWidth: 480, margin: "0 auto 12px", background: "#ecfeff", border: "1.5px solid #67e8f9", borderRadius: 12, padding: "10px 13px", fontSize: 12.5, color: "#155e75", lineHeight: 1.6, textAlign: "center", wordBreak: "keep-all" }}>
-        💬 {t(E,
-          "We never actually reverse the row. Spot i will get a[l+r−i], so we just compare THAT value to b[i] — done.",
-          "줄을 진짜로 뒤집지 않아요. 자리 i 엔 a[l+r−i] 가 올 테니, 그 값만 b[i] 와 비교하면 끝.")}
+      {/* 말풍선 */}
+      <div style={{ maxWidth: 500, margin: "0 auto 10px" }}>
+        <div style={{ background: st.payoff ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 12.5, color: st.payoff ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all" }}>💬 {st.bubble}</div>
+        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}` }} />
       </div>
 
+      {/* 그림: 소 줄 / 원하는 줄 / 자리 — 코드 심볼을 여기에 묶음 */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 5, alignItems: "center", marginBottom: 6 }}>
+        {[["a", "🐮 " + t(E, "cows", "소"), _KC_SOU, "src"], ["b", "📋 " + t(E, "wanted", "원하는"), _KC_WANT, "want"]].map(([sym, lab, arr, kind]) => (
+          <div key={sym} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ width: 70, fontSize: 11, color: C.dim, textAlign: "right", wordBreak: "keep-all" }}><code style={{ color: kind === "src" ? "#0891b2" : "#16a34a", fontWeight: 700 }}>{sym}</code> {lab}</div>
+            <div style={{ display: "flex", gap: 6 }}>
+              {arr.map((sp, k) => {
+                const p = k + 1;
+                const hl = kind === "src" ? (st.src === p) : (st.i === p);
+                return <_KcCell key={k} letter={_KC_LT[sp]} hl={hl} kind={kind} />;
+              })}
+            </div>
+          </div>
+        ))}
+        {/* 자리 번호 + 구간 */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ width: 70 }} />
+          <div style={{ display: "flex", gap: 6 }}>
+            {[1, 2, 3, 4, 5, 6].map((p) => {
+              const inWin = p >= _KC_L && p <= _KC_R;
+              return <div key={p} style={{ width: 34, textAlign: "center", fontSize: 10, fontWeight: st.i === p ? 800 : 500, color: st.i === p ? "#b45309" : inWin ? "#0e7490" : C.dim }}>{p}</div>;
+            })}
+          </div>
+        </div>
+      </div>
+      <div style={{ textAlign: "center", fontSize: 10.5, color: C.dim, marginBottom: 10 }}>
+        l = {_KC_L}, r = {_KC_R} → l + r = {_KC_S}　·　inside = <b style={{ color: "#15803d", fontSize: 13 }}>{st.inside}</b>
+      </div>
+
+      {/* 코드 — 그림과 같은 의미 (학생 언어 하나만) */}
       <div style={{ maxWidth: 520, margin: "0 auto" }}>
         <CodeBlock lines={cpp ? cc : py} lang={cpp ? "cpp" : "py"} />
+      </div>
+
+      <div style={{ marginTop: 12 }}>
+        <SimNav idx={idx} total={tot} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
       </div>
     </div>
   );
