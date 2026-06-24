@@ -753,21 +753,21 @@ export default function JourneyPage() {
           </div>
         </Link>
 
-        {/* 🏆 도전 문제 — 연습 너머 한 단계 (대회 수준 사다리). 메인 CTA 보다 작게. */}
+        {/* 🧗 연습 · 도전 — 풀 문제 단일 허브 (난이도순 한 줄 + 오늘 할 것 1개). 메인 CTA 보다 작게. */}
         <Link
-          href="/course/kl"
+          href="/course/ladder"
           className="block mb-4 p-4 rounded-2xl bg-white border-2 border-rose-200 hover:border-rose-400 hover:shadow-lg active:scale-[0.99] transition-all"
         >
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 sm:w-12 sm:h-12 bg-rose-100 rounded-xl flex items-center justify-center text-2xl shrink-0">
-              🏆
+              🧗
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-base sm:text-lg font-black text-rose-700 leading-tight">
-                {t("도전 문제", "Challenge Problems")}
+                {t("연습 · 도전", "Practice · Challenge")}
               </p>
               <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5 break-keep">
-                {t("연습보다 한 단계 위 — 대회 수준 문제를 한 개씩", "A step above practice — contest-level, one at a time")}
+                {t("풀 문제를 난이도순 한 줄로 — 오늘 할 것 1개부터 (연습·코딩뱅크·대회 다 여기)", "All problems in one difficulty line — start with today's one (practice·bank·contest, all here)")}
               </p>
             </div>
             <span className="text-xl sm:text-2xl text-rose-300 shrink-0">→</span>
@@ -781,20 +781,6 @@ export default function JourneyPage() {
             </p>
           </div>
         )}
-
-        {/* 막힐 때 / 더 풀고 싶을 때 안내 — 작은 한 줄 링크 (분산 효과 최소) */}
-        <div className="mt-6 text-center text-xs sm:text-sm text-gray-500 break-keep px-2">
-          <span className="block sm:inline">💡 {t("더 풀고 싶으면:", "Want more practice?")} </span>
-          <span className="inline-block mt-1 sm:mt-0">
-            <Link href="/practice" className="text-blue-600 hover:underline font-bold">
-              {t("연습 문제", "Practice")}
-            </Link>
-            <span className="mx-1.5 text-gray-300">·</span>
-            <Link href="/algo" className="text-purple-600 hover:underline font-bold">
-              {t("알고리즘 토픽", "Algo Topics")}
-            </Link>
-          </span>
-        </div>
 
       </main>
 

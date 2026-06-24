@@ -809,6 +809,17 @@ function ProblemDetail({
             {diffLabel(problem.difficulty)}
           </span>
         </div>
+        {problem.unlockAfter && (
+          <a
+            href={`/learn/${problem.unlockAfter}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-auto shrink-0 flex items-center gap-1.5 text-sm font-bold text-blue-600 hover:text-blue-700 hover:underline whitespace-nowrap"
+            title={t("막히면 우리 수업으로 — 구글 말고", "Stuck? Use our lesson")}
+          >
+            📖 {t("막히면 수업 보기", "Stuck? Lesson")}
+          </a>
+        )}
       </div>
 
       {/* 모바일 탭 */}
@@ -898,6 +909,13 @@ function PracticeContent() {
   const problem = cluster?.problems.find(p => p.id === problemId)
   const sessionMode = searchParams.get("session") === "1"
 
+  // 맨몸 /practice (cluster·problem 없이) 진입 → 연습·도전 허브로 흡수 (옛 브라우즈 허브 제거)
+  const needsHubRedirect = !clusterId && !problemId
+  useEffect(() => {
+    if (needsHubRedirect) router.replace("/course/ladder")
+  }, [needsHubRedirect, router]) // eslint-disable-line react-hooks/exhaustive-deps
+  if (needsHubRedirect) return null
+
   // cluster 없이 직접 /practice 접근하면 ClusterList 표시 (아래 fallback return).
   // 이전엔 /curriculum 으로 redirect 했었음 — 하단 메뉴 '도전' 탭이 작동 안 함.
 
@@ -962,6 +980,8 @@ function PracticeContent() {
         <ProblemDetail
           problem={problem}
           onBack={() => {
+            // 연습·도전 허브에서 연 문제 → 끝내면 허브로
+            if (fromParam === "ladder") { router.push("/course/ladder"); return }
             // 사다리/대회대비에서 연 단일 문제 → 끝내면 목록으로 (cluster만 남기면 세션 인트로로 튕김)
             if (fromParam === "practice" || fromParam === "kl") {
               const p = new URLSearchParams()

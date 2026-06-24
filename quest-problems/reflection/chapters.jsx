@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getReflectionSections, ReflectionGrid } from "./components";
+import { ReflectionRuleSim, ReflectionGroupSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 export function makeReflectionCh1(E) {
@@ -8,8 +9,8 @@ export function makeReflectionCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ has an N×N canvas (N even). A valid painting is symmetric across BOTH the horizontal and vertical center lines — every cell has 3 mirror twins, all four must agree. After Bessie's vandalism, find the MIN cells to flip to restore that symmetry. Updates toggle one cell at a time.",
-        "FJ 의 N×N 캔버스 (N 짝수). 올바른 그림은 가로 + 세로 가운데 선 양쪽으로 대칭 — 모든 칸은 거울 짝 3 개를 가지고, 4 칸 모두 같은 색이어야 함. Bessie 가 망친 뒤 대칭 회복에 필요한 최소 칸 뒤집기. update 마다 한 칸씩 토글."),
+        "FJ's picture should be mirror-symmetric across the center lines — paint one cell and its 3 mirror twins must match. Fix Bessie's mess in the fewest flips, and re-answer after each one-cell change.",
+        "FJ 그림은 가운데 선으로 거울 대칭이어야 해요 — 한 칸 칠하면 거울 짝 3칸도 같은 색. Bessie 가 망친 걸 최소 횟수로 고치고, 한 칸씩 바꿀 때마다 다시 답해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -18,104 +19,27 @@ export function makeReflectionCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2025 Bronze #1</div>
           </div>
 
-          {/* 🎯 Mission box */}
-          <div style={{ background: "#ecfeff", border: "1.5px solid #0891b2", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+          {/* 🎯 Mission box — 쉬운 말 */}
+          <div style={{ background: "#ecfeff", border: "1.5px solid #0891b2", borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center" }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#155e75", letterSpacing: 0.5, marginBottom: 4 }}>
               🎯 {t(E, "Mission", "미션")}
             </div>
-            <div style={{ fontSize: 13, color: "#155e75", lineHeight: 1.5 }}>
+            <div style={{ fontSize: 13, color: "#155e75", lineHeight: 1.55, wordBreak: "keep-all" }}>
               {t(E,
-                "Output the minimum cells to flip so the canvas is symmetric across both center lines — before any update, then after each of U updates (U+1 lines total).",
-                "캔버스가 가로 + 세로 가운데 선 양쪽으로 대칭이 되는 최소 뒤집기 횟수를 출력 — update 전 + 각 update 후 (총 U+1 줄).")}
+                "Make the picture mirror-symmetric with the FEWEST cell changes. Bessie flips one cell at a time — answer again after each.",
+                "그림을 거울 대칭으로 만드는 데 칸을 최소 몇 번 바꿔야 할까요? Bessie 가 한 칸씩 바꿀 때마다 다시 답해요.")}
             </div>
           </div>
 
-          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "#155e75", marginBottom: 8 }}>
-              📖 {t(E, "Problem", "문제")}
-            </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.65, marginBottom: 10 }}>
-              {t(E, "FJ has an ", "FJ 에게 ")}
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontWeight: 600 }}>N × N</code>
-              {t(E, " canvas (N is EVEN). A valid painting is built by painting the top-right quadrant and reflecting it across the horizontal and vertical center lines into the other three quadrants. Bessie vandalized it.",
-                    " 캔버스가 있어요 (N 은 짝수). 올바른 그림은 우상단 사분면을 그린 뒤 가로/세로 가운데 선으로 다른 세 사분면에 반사. Bessie 가 망쳤어요.")}
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.55 }}>
-              <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #67e8f9", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#0891b2", fontWeight: 600, flexShrink: 0 }}>1.</span>
-                <div>
-                  <b style={{ color: "#0891b2" }}>{t(E, "Symmetry rule", "대칭 규칙")}</b>
-                  {t(E, " — cell (r, c) must match cells (r, N+1−c), (N+1−r, c), (N+1−r, N+1−c). All FOUR must be the same color.",
-                        " — 칸 (r, c) 는 (r, N+1−c), (N+1−r, c), (N+1−r, N+1−c) 와 같아야 함. 네 칸이 모두 같은 색.")}
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #67e8f9", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#7c3aed", fontWeight: 600, flexShrink: 0 }}>2.</span>
-                <div>
-                  <b style={{ color: "#7c3aed" }}>{t(E, "Update format", "update 형식")}</b>
-                  {t(E, " — U updates follow. Each gives (r, c) and TOGGLES that one cell (paint ↔ unpaint).",
-                        " — U 개의 update. 각각 (r, c) 를 줘서 그 한 칸을 토글 (칠함 ↔ 안 칠함).")}
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: 8, background: "#fff", border: "1.5px solid #67e8f9", borderRadius: 8, padding: "8px 10px" }}>
-                <span style={{ color: "#16a34a", fontWeight: 600, flexShrink: 0 }}>3.</span>
-                <div>
-                  <b style={{ color: "#16a34a" }}>{t(E, "Output", "출력")}</b>
-                  {t(E, " — U + 1 lines: minimum cells to flip BEFORE any update, then after each update.",
-                        " — U + 1 줄: update 전 + 각 update 후의 최소 뒤집기 횟수.")}
-                </div>
-              </div>
-            </div>
-
-            <div style={{ marginTop: 10, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
-              📐 <b>{t(E, "Constraints", "제약")}:</b>{" "}
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>2 ≤ N ≤ 2000</code>{" "}({t(E, "N even", "N 짝수")}),{" "}
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>0 ≤ U ≤ 10⁵</code>
-            </div>
-          </div>
+          {/* 규칙은 그림(시뮬)으로 — 페이지엔 미션 + 시뮬만 (선생님 2026-06-24: 한 페이지에 너무 많다) */}
+          <ReflectionRuleSim E={E} />
         </div>),
     },
 
-    /* 1-1b — Numbers-first warm-up: make the mirror-twins + cost concrete before formulas. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Before the (r,c) formulas, let's find the mirror twins with real numbers on a 4×4 grid.",
-        "(r,c) 공식 전에, 4×4 격자에서 거울 짝을 실제 숫자로 먼저 찾아봐요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#ecfeff", border: "1.5px solid #0891b2", borderRadius: 10, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 700, color: "#155e75", marginBottom: 8 }}>
-              🔢 {t(E, "Mirror twins, with numbers first", "거울 짝, 숫자로 먼저")}
-            </div>
-            <div style={{ marginBottom: 8 }}>
-              {t(E, "Take a ", "")}<b>{t(E, "4×4 grid (N=4)", "4×4 격자 (N=4)")}</b>
-              {t(E, " and look at cell ", " 에서 칸 ")}<b style={{ color: "#0891b2" }}>(1, 2)</b>
-              {t(E, ". Its 3 mirror twins:", " 하나를 봐요. 거울 짝 3개:")}
-            </div>
-            <div style={{ paddingLeft: 8, borderLeft: "3px solid #67e8f9", display: "flex", flexDirection: "column", gap: 4 }}>
-              <div>{t(E, "Left↔right: ", "좌우 뒤집기: ")}<b>(1, N+1−2) = (1, 3)</b></div>
-              <div>{t(E, "Top↔bottom: ", "상하 뒤집기: ")}<b>(N+1−1, 2) = (4, 2)</b></div>
-              <div>{t(E, "Both: ", "둘 다: ")}<b>(4, 3)</b></div>
-            </div>
-            <div style={{ marginTop: 8 }}>
-              {t(E, "So ", "즉 ")}<b style={{ color: "#0891b2" }}>(1,2) · (1,3) · (4,2) · (4,3)</b>
-              {t(E, " must always be the SAME color.", " 네 칸은 늘 같은 색이어야 해요.")}
-            </div>
-            <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #67e8f9" }}>
-              {t(E, "If 3 of those 4 are painted? Paint the 1 leftover → all match → ", "그 4칸 중 3칸이 칠해졌다면? 남은 1칸만 칠하면 다 같아져요 → ")}
-              <b style={{ color: "#16a34a" }}>{t(E, "1 flip", "1번")}</b>
-              <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
-                👉 {t(E, "For a group with p painted of 4: min flips = min(p, 4−p). Answer = sum over all mirror groups.",
-                       "한 그룹에 4칸 중 p칸 칠해짐 → 최소 뒤집기 = min(p, 4−p). 답 = 모든 거울 그룹의 합.")}
-              </div>
-            </div>
-          </div>
-        </div>),
-    },
+    /* 1-1 형식 슬라이드 제거 (선생님 2026-06-24: 2·3페이지 합치기 — 추상 형식은 샘플 입출력이 라벨로 다 보여줌).
+       1-1b('숫자로 먼저') 도 이미 제거(RuleSim index 중복). */
 
-    /* 1-2 — Sample I/O verbatim + walkthrough. */
+    /* 1-2 — Sample I/O (= 형식도 겸함) + 제약. */
     {
       type: "reveal",
       narr: t(E,
@@ -155,36 +79,34 @@ export function makeReflectionCh1(E) {
             </div>
           </div>
 
-          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.65 }}>
-            <div style={{ fontWeight: 600, color: "#155e75", marginBottom: 6 }}>
-              🔍 {t(E, "Why initial answer = 4?", "왜 초기 답 = 4?")}
-            </div>
-            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
-              {t(E, "The canvas has 4×4/4 = 4 'mirror groups' of 4 cells each. For each group:",
-                    "캔버스에는 (4×4)/4 = 4 개의 '거울 그룹' (각 4 칸). 그룹마다:")}
-            </div>
-            <div style={{ marginTop: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#5b21b6" }}>
-              {t(E, "Corners group (1,1)(1,4)(4,1)(4,4) = . . . #  → 1 painted, flip 1.", "모서리 그룹 (1,1)(1,4)(4,1)(4,4) = . . . #  → 1 칠함, 1 뒤집기.")}
-              <br/>
-              {t(E, "Top row group (1,2)(1,3)(4,2)(4,3) = . # . # → 2 painted, flip 2.", "위 한 줄 그룹 (1,2)(1,3)(4,2)(4,3) = . # . # → 2 칠함, 2 뒤집기.")}
-              <br/>
-              {t(E, "Side columns (2,1)(2,4)(3,1)(3,4) = # # # # → 4 painted, flip 0.", "양옆 칸 (2,1)(2,4)(3,1)(3,4) = # # # # → 4 칠함, 0 뒤집기.")}
-              <br/>
-              {t(E, "Center group (2,2)(2,3)(3,2)(3,3) = # . # # → 3 painted, flip 1.", "가운데 그룹 (2,2)(2,3)(3,2)(3,3) = # . # # → 3 칠함, 1 뒤집기.")}
-            </div>
-            <div style={{ marginTop: 6, fontWeight: 600, color: "#15803d" }}>
-              {t(E, "Total = 1 + 2 + 0 + 1 = 4.", "합계 = 1 + 2 + 0 + 1 = 4.")}
-            </div>
+          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.65, wordBreak: "keep-all" }}>
+            {t(E,
+              "Input = the picture, then the cells to flip. Output = the first answer, then after each flip. Why the first answer is 4 — see it on the next picture 👇",
+              "입력 = 그림(첫 줄 N·U) + 바꿀 칸 (r, c) 들. 출력 = 처음 답 + 매번 바꾼 뒤 답. 처음 답이 왜 4인지는 — 바로 다음 그림으로 봐요 👇")}
+          </div>
+          <div style={{ marginTop: 8, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
+            📐 <b>{t(E, "Limits", "제약")}:</b>{" "}
+            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>2 ≤ N ≤ 2000</code>{" "}({t(E, "N even", "N 짝수")}),{" "}
+            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>0 ≤ U ≤ 10⁵</code>
           </div>
         </div>),
     },
 
-    /* 1-3 — Interactive grid simulator. */
+    /* 1-2b — 그림 따라 한 묶음씩 말풍선으로 최소 뒤집기 세기 (선생님 2026-06-24: 읽을 거 말고 시뮬+짧은 말풍선). */
     {
       type: "reveal",
       narr: t(E,
-        "Click any cell to toggle it. Watch how its 3 mirror twins move with it (same color group). Total ops at the bottom updates live.",
-        "아무 칸이나 클릭해서 토글해봐요. 거울 짝 3 개가 같이 움직임 (같은 색 그룹). 아래 총 ops 가 실시간 갱신."),
+        "Follow the picture — count the minimum flips one mirror-group at a time. Short bubbles explain each step.",
+        "그림 따라가 봐요 — 거울 짝 묶음마다 최소 뒤집기를 세요. 각 단계는 짧은 말풍선이 설명해요."),
+      content: (<ReflectionGroupSim E={E} />),
+    },
+
+    /* 1-3 — Interactive grid simulator. (직접 아무 칸이나 토글) */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now try it yourself — click any cell to toggle it; its 3 mirror twins move together. Total updates live.",
+        "이제 직접 — 아무 칸이나 클릭해서 토글해봐요. 거울 짝 3개가 같이 움직이고, 아래 총합이 실시간 갱신."),
       content: (<ReflectionGrid E={E} />),
     },
 

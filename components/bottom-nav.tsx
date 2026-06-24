@@ -22,7 +22,7 @@ export function BottomNav() {
   const studentNav: NavItem[] = [
     { icon: Map,     label: t("지도", "Map"),        href: "/journey"    },
     { icon: BookOpen,label: t("수업", "Lessons"),    href: "/curriculum" },
-    { icon: Brain,   label: t("연습", "Practice"),   href: "/practice"   },
+    { icon: Brain,   label: t("연습", "Practice"),   href: "/course/ladder" },
     { icon: Puzzle,  label: t("알고리즘", "Algo"),   href: "/algo"       },
     { icon: Trophy,  label: t("실전", "Contest"),    href: "/quest"      },
     { icon: User,    label: t("내정보", "Profile"),  href: "/profile"    },
