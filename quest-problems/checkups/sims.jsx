@@ -968,6 +968,13 @@ export function CheckupsTrySim({ E }) {
         <div style={{ background: "#cffafe", border: "1.5px solid #0891b2", color: "#0e7490", borderRadius: 999, padding: "5px 14px", fontSize: 12.5, fontWeight: 800 }}>s = {l} + {r} = {s}</div>
         <div style={{ background: "#fff7ed", border: "1.5px solid #ea580c", color: "#9a3412", borderRadius: 999, padding: "5px 14px", fontSize: 12.5, fontWeight: 800 }}>{t(E, "checkups", "검진")} <span style={{ fontSize: 16 }}>{okCount}</span> <span style={{ fontSize: 10.5, fontWeight: 600, opacity: 0.85 }}>({t(E, "was", "원래")} {baseCount})</span></div>
       </div>
+
+      {/* '왜 s 같으면 안쪽이 같나' 한 줄 — 자리 i ← (s−i)번 소 (선생님 2026-06-24: 아직 이해 안 됨) */}
+      <div style={{ maxWidth: 460, margin: "12px auto 0", background: "#ecfeff", border: "1px dashed #67e8f9", borderRadius: 10, padding: "9px 12px", fontSize: 12, color: "#155e75", lineHeight: 1.65, textAlign: "center", wordBreak: "keep-all" }}>
+        💡 {t(E,
+          `Inside, spot i gets the original spot-(s−i) cow. Here s=${s}, e.g. spot 3 ← cow (${s}−3=${s - 3}). Only s matters — so windows with the SAME s have the SAME inside! (Try spots 2~5 and 3~4 — both s=7.)`,
+          `안쪽 자리 i 엔 '원래 (s−i)번 소'가 와요. 지금 s=${s}, 예: 자리 3 ← (${s}−3=${s - 3})번 소. s 만 쓰니까 — s 같은 구간끼리는 안쪽이 똑같아요! (자리 2~5 와 3~4 둘 다 s=7, 눌러서 비교해 봐요.)`)}
+      </div>
     </div>
   );
 }
