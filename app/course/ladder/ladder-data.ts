@@ -1,5 +1,5 @@
-// 자동 생성 — 학습 사다리. level = 에이전트가 문제별로 읽고 매긴 난이도(8~90 공통척도).
-// algo 300 + 외부 545(external) + 코딩뱅크 100 + 연습클러스터 485. lang: cpp/py/없음(공통). 2026-06-23.
+// 자동 생성 — 학습 사다리. level=난이도(8~90). url=문제별 deep-link(+from=ladder→뒤로 허브로).
+// algo 300 + 외부 545 + 코딩뱅크 100 + 연습 485. kl=KL 수업 세트. 2026-06-23.
 export type LadderItem = { id:string; topic:string; title:string; level:number; diff?:string; kl?:boolean; external?:boolean; source?:string; url?:string; lang?:string; cat?:string };
 export const LADDER: LadderItem[] = [
  {
@@ -39,7 +39,7 @@ export const LADDER: LadderItem[] = [
   "level": 8,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=io&problem=io-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -49,7 +49,7 @@ export const LADDER: LadderItem[] = [
   "level": 8,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -59,7 +59,7 @@ export const LADDER: LadderItem[] = [
   "level": 8,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -69,7 +69,7 @@ export const LADDER: LadderItem[] = [
   "level": 8,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -79,7 +79,7 @@ export const LADDER: LadderItem[] = [
   "level": 8,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -89,7 +89,7 @@ export const LADDER: LadderItem[] = [
   "level": 8,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -99,7 +99,7 @@ export const LADDER: LadderItem[] = [
   "level": 9,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -119,7 +119,7 @@ export const LADDER: LadderItem[] = [
   "level": 9,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -129,7 +129,7 @@ export const LADDER: LadderItem[] = [
   "level": 9,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -139,7 +139,7 @@ export const LADDER: LadderItem[] = [
   "level": 9,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -149,7 +149,7 @@ export const LADDER: LadderItem[] = [
   "level": 9,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -159,7 +159,7 @@ export const LADDER: LadderItem[] = [
   "level": 9,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -169,7 +169,7 @@ export const LADDER: LadderItem[] = [
   "level": 9,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -179,7 +179,7 @@ export const LADDER: LadderItem[] = [
   "level": 9,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-c01&from=ladder",
   "cat": "practice"
  },
  {
@@ -189,7 +189,7 @@ export const LADDER: LadderItem[] = [
   "level": 9,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -199,7 +199,7 @@ export const LADDER: LadderItem[] = [
   "level": 9,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -209,7 +209,7 @@ export const LADDER: LadderItem[] = [
   "level": 9,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -219,7 +219,7 @@ export const LADDER: LadderItem[] = [
   "level": 9,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -229,7 +229,7 @@ export const LADDER: LadderItem[] = [
   "level": 9,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -239,7 +239,7 @@ export const LADDER: LadderItem[] = [
   "level": 9,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -249,7 +249,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -259,7 +259,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -319,7 +319,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-004&from=ladder",
   "cat": "bank"
  },
  {
@@ -328,7 +328,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "문자열 뒤집기",
   "level": 10,
-  "kl": true
+  "url": "/algo/string/practice?p=astr-e01&from=ladder"
  },
  {
   "id": "str-001",
@@ -337,7 +337,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=strings&problem=str-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -347,7 +347,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-ST01&from=ladder",
   "cat": "practice"
  },
  {
@@ -357,7 +357,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -367,7 +367,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -377,7 +377,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -387,7 +387,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-017&from=ladder",
   "cat": "practice"
  },
  {
@@ -397,7 +397,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -407,7 +407,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=io&problem=io-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -417,7 +417,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -427,7 +427,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -437,7 +437,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -447,7 +447,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -457,7 +457,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -467,7 +467,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -477,7 +477,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -487,7 +487,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -497,7 +497,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -507,7 +507,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-c01&from=ladder",
   "cat": "practice"
  },
  {
@@ -517,7 +517,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-c02&from=ladder",
   "cat": "practice"
  },
  {
@@ -527,7 +527,7 @@ export const LADDER: LadderItem[] = [
   "level": 10,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -548,7 +548,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "HackerRank",
-  "url": "https://www.hackerrank.com/challenges/simple-array-sum/problem"
+  "url": "https://www.hackerrank.com/challenges/simple-array-sum/problem",
+  "kl": true
  },
  {
   "id": "lc-1920",
@@ -567,7 +568,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-001&from=ladder",
   "cat": "bank"
  },
  {
@@ -636,7 +637,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "오름차순 정렬",
   "level": 11,
-  "kl": true
+  "url": "/algo/sorting/practice?p=asort-e01&from=ladder"
  },
  {
   "id": "sort-001",
@@ -645,7 +646,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -654,7 +655,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "스택으로 뒤집기",
   "level": 11,
-  "kl": true
+  "url": "/algo/stackqueue/practice?p=asq-e01&from=ladder"
  },
  {
   "id": "lc-344",
@@ -664,7 +665,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/reverse-string/"
+  "url": "https://leetcode.com/problems/reverse-string/",
+  "kl": true
  },
  {
   "id": "lc-709",
@@ -683,7 +685,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-RP01&from=ladder",
   "cat": "practice"
  },
  {
@@ -693,7 +695,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-FD01&from=ladder",
   "cat": "practice"
  },
  {
@@ -703,7 +705,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -713,7 +715,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -723,7 +725,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -733,7 +735,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -743,7 +745,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-022&from=ladder",
   "cat": "practice"
  },
  {
@@ -753,7 +755,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-023&from=ladder",
   "cat": "practice"
  },
  {
@@ -763,7 +765,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-019&from=ladder",
   "cat": "practice"
  },
  {
@@ -773,7 +775,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -783,7 +785,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -793,7 +795,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -803,7 +805,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=io&problem=io-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -813,7 +815,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=constructs&problem=con-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -823,7 +825,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=constructs&problem=con-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -833,7 +835,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=part1-combo&problem=p1c-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -843,7 +845,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -853,7 +855,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -863,7 +865,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -873,7 +875,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -883,7 +885,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -893,7 +895,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -903,7 +905,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-c01&from=ladder",
   "cat": "practice"
  },
  {
@@ -913,7 +915,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -923,7 +925,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -933,7 +935,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -943,7 +945,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-DF01&from=ladder",
   "cat": "practice"
  },
  {
@@ -953,7 +955,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -963,7 +965,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -973,7 +975,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -983,7 +985,7 @@ export const LADDER: LadderItem[] = [
   "level": 11,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -992,7 +994,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "최댓값과 최솟값",
   "level": 12,
-  "kl": true
+  "url": "/algo/array/practice?p=aarr-e01&from=ladder"
  },
  {
   "id": "hr-a-very-big-sum",
@@ -1011,7 +1013,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -1021,7 +1023,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -1031,7 +1033,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-AP01&from=ladder",
   "cat": "practice"
  },
  {
@@ -1041,7 +1043,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-IDX01&from=ladder",
   "cat": "practice"
  },
  {
@@ -1051,7 +1053,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-006&from=ladder",
   "cat": "bank"
  },
  {
@@ -1060,7 +1062,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "서로 다른 수의 개수",
   "level": 12,
-  "kl": true
+  "url": "/algo/hashtable/practice?p=ahash-e02&from=ladder"
  },
  {
   "id": "cses-1083",
@@ -1070,7 +1072,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "CSES",
-  "url": "https://cses.fi/problemset/task/1083"
+  "url": "https://cses.fi/problemset/task/1083",
+  "kl": true
  },
  {
   "id": "kattis-oddities",
@@ -1149,7 +1152,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-001&from=ladder",
   "cat": "bank"
  },
  {
@@ -1159,7 +1162,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -1169,7 +1172,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -1179,7 +1182,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -1189,7 +1192,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-016&from=ladder",
   "cat": "practice"
  },
  {
@@ -1199,7 +1202,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -1208,7 +1211,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "단어 개수 세기",
   "level": 12,
-  "kl": true
+  "url": "/algo/string/practice?p=astr-e03&from=ladder"
  },
  {
   "id": "lc-1108",
@@ -1237,7 +1240,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-001&from=ladder",
   "cat": "bank"
  },
  {
@@ -1247,7 +1250,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-004&from=ladder",
   "cat": "bank"
  },
  {
@@ -1257,7 +1260,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=strings&problem=str-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -1267,7 +1270,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -1277,7 +1280,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-W01&from=ladder",
   "cat": "practice"
  },
  {
@@ -1287,7 +1290,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-C01&from=ladder",
   "cat": "practice"
  },
  {
@@ -1297,7 +1300,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -1307,7 +1310,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -1317,7 +1320,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -1327,7 +1330,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -1337,7 +1340,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=refs-ptrs&problem=refs-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -1347,7 +1350,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=refs-ptrs&problem=refs-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -1357,7 +1360,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=part1-combo&problem=p1c-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -1367,7 +1370,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -1377,7 +1380,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -1387,7 +1390,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -1397,7 +1400,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -1407,7 +1410,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -1417,7 +1420,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-c02&from=ladder",
   "cat": "practice"
  },
  {
@@ -1427,7 +1430,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -1437,7 +1440,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-c02&from=ladder",
   "cat": "practice"
  },
  {
@@ -1447,7 +1450,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -1457,7 +1460,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -1467,7 +1470,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -1477,7 +1480,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -1487,7 +1490,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-MR01&from=ladder",
   "cat": "practice"
  },
  {
@@ -1497,7 +1500,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -1507,7 +1510,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-c03&from=ladder",
   "cat": "practice"
  },
  {
@@ -1517,7 +1520,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-c04&from=ladder",
   "cat": "practice"
  },
  {
@@ -1527,7 +1530,7 @@ export const LADDER: LadderItem[] = [
   "level": 12,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -1617,7 +1620,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -1627,7 +1630,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -1637,7 +1640,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -1647,7 +1650,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -1657,7 +1660,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -1667,7 +1670,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-001&from=ladder",
   "cat": "bank"
  },
  {
@@ -1676,7 +1679,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "정점의 차수",
   "level": 13,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-e01&from=ladder"
  },
  {
   "id": "grid-001",
@@ -1685,7 +1688,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -1694,7 +1697,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "숫자 카드 (있나 없나)",
   "level": 13,
-  "kl": true
+  "url": "/algo/hashtable/practice?p=ahash-e01&from=ladder"
  },
  {
   "id": "pydict-010",
@@ -1703,7 +1706,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -1752,7 +1755,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "누적합 만들기",
   "level": 13,
-  "kl": true
+  "url": "/algo/prefixsum/practice?p=apre-e01&from=ladder"
  },
  {
   "id": "lc-412",
@@ -1762,7 +1765,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/fizz-buzz/"
+  "url": "https://leetcode.com/problems/fizz-buzz/",
+  "kl": true
  },
  {
   "id": "lc-1672",
@@ -1782,7 +1786,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "CSES",
-  "url": "https://cses.fi/problemset/task/1068"
+  "url": "https://cses.fi/problemset/task/1068",
+  "kl": true
  },
  {
   "id": "cf-977a",
@@ -1841,7 +1846,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-003&from=ladder",
   "cat": "bank"
  },
  {
@@ -1851,7 +1856,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -1860,7 +1865,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "내림차순 정렬",
   "level": 13,
-  "kl": true
+  "url": "/algo/sorting/practice?p=asort-e02&from=ladder"
  },
  {
   "id": "kattis-abc",
@@ -1879,7 +1884,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-001&from=ladder",
   "cat": "bank"
  },
  {
@@ -1889,7 +1894,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -1929,7 +1934,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-003&from=ladder",
   "cat": "bank"
  },
  {
@@ -1939,7 +1944,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-005&from=ladder",
   "cat": "bank"
  },
  {
@@ -1949,7 +1954,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -1959,7 +1964,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=io&problem=io-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -1969,7 +1974,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=constructs&problem=con-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -1979,7 +1984,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=part1-combo&problem=p1c-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -1989,7 +1994,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -1999,7 +2004,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-c01&from=ladder",
   "cat": "practice"
  },
  {
@@ -2009,7 +2014,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -2019,7 +2024,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -2029,7 +2034,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -2039,7 +2044,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -2049,7 +2054,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -2059,7 +2064,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -2069,7 +2074,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-c04&from=ladder",
   "cat": "practice"
  },
  {
@@ -2079,7 +2084,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -2089,7 +2094,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -2099,7 +2104,7 @@ export const LADDER: LadderItem[] = [
   "level": 13,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-c05&from=ladder",
   "cat": "practice"
  },
  {
@@ -2149,7 +2154,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -2178,7 +2183,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "두 수의 AND / OR / XOR",
   "level": 14,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-006&from=ladder"
  },
  {
   "id": "hr-diagonal-difference",
@@ -2188,7 +2193,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "HackerRank",
-  "url": "https://www.hackerrank.com/challenges/diagonal-difference/problem"
+  "url": "https://www.hackerrank.com/challenges/diagonal-difference/problem",
+  "kl": true
  },
  {
   "id": "bank-grid-002",
@@ -2197,7 +2203,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-002&from=ladder",
   "cat": "bank"
  },
  {
@@ -2287,7 +2293,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-016&from=ladder",
   "cat": "bank"
  },
  {
@@ -2297,7 +2303,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -2308,7 +2314,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "Codeforces",
-  "url": "https://codeforces.com/problemset/problem/339/A"
+  "url": "https://codeforces.com/problemset/problem/339/A",
+  "kl": true
  },
  {
   "id": "mcc-2019-p1",
@@ -2327,7 +2334,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-002&from=ladder",
   "cat": "bank"
  },
  {
@@ -2337,7 +2344,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-017&from=ladder",
   "cat": "practice"
  },
  {
@@ -2387,7 +2394,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=strings&problem=str-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -2397,7 +2404,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -2407,7 +2414,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-DW01&from=ladder",
   "cat": "practice"
  },
  {
@@ -2417,7 +2424,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-OL01&from=ladder",
   "cat": "practice"
  },
  {
@@ -2427,7 +2434,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -2437,7 +2444,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -2447,7 +2454,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -2457,7 +2464,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=refs-ptrs&problem=refs-NP01&from=ladder",
   "cat": "practice"
  },
  {
@@ -2467,7 +2474,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=io&problem=io-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -2477,7 +2484,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=constructs&problem=con-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -2487,7 +2494,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-c02&from=ladder",
   "cat": "practice"
  },
  {
@@ -2497,7 +2504,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -2507,7 +2514,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -2517,7 +2524,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -2527,7 +2534,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -2537,7 +2544,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -2547,7 +2554,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -2557,7 +2564,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -2567,7 +2574,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -2577,7 +2584,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-basics&problem=pybasics-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -2587,7 +2594,7 @@ export const LADDER: LadderItem[] = [
   "level": 14,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -2596,7 +2603,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "사전에 있는 단어인가",
   "level": 14,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-e03&from=ladder"
  },
  {
   "id": "lc-1480",
@@ -2606,7 +2613,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/running-sum-of-1d-array/"
+  "url": "https://leetcode.com/problems/running-sum-of-1d-array/",
+  "kl": true
  },
  {
   "id": "hr-angry-professor",
@@ -2625,7 +2633,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -2635,7 +2643,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -2675,7 +2683,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -2685,7 +2693,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -2696,7 +2704,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/contains-duplicate/"
+  "url": "https://leetcode.com/problems/contains-duplicate/",
+  "kl": true
  },
  {
   "id": "pydict-002",
@@ -2705,7 +2714,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -2716,7 +2725,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "Codeforces",
-  "url": "https://codeforces.com/problemset/problem/4/A"
+  "url": "https://codeforces.com/problemset/problem/4/A",
+  "kl": true
  },
  {
   "id": "cf-50a",
@@ -2865,7 +2875,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-002&from=ladder",
   "cat": "bank"
  },
  {
@@ -2875,7 +2885,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -2884,7 +2894,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "괄호의 최대 깊이",
   "level": 15,
-  "kl": true
+  "url": "/algo/stackqueue/practice?p=asq-e02&from=ladder"
  },
  {
   "id": "sq-009",
@@ -2893,7 +2903,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -2953,7 +2963,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-002&from=ladder",
   "cat": "bank"
  },
  {
@@ -2963,7 +2973,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=strings&problem=str-CMP01&from=ladder",
   "cat": "practice"
  },
  {
@@ -2973,7 +2983,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -2983,7 +2993,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -2993,7 +3003,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-016&from=ladder",
   "cat": "practice"
  },
  {
@@ -3003,7 +3013,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -3013,7 +3023,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -3023,7 +3033,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -3033,7 +3043,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=io&problem=io-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -3043,7 +3053,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=io&problem=io-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -3053,7 +3063,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=part1-combo&problem=p1c-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -3063,7 +3073,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=pair-tuple&problem=pt-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -3073,7 +3083,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-018&from=ladder",
   "cat": "practice"
  },
  {
@@ -3083,7 +3093,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -3093,7 +3103,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-c04&from=ladder",
   "cat": "practice"
  },
  {
@@ -3103,7 +3113,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-c05&from=ladder",
   "cat": "practice"
  },
  {
@@ -3113,7 +3123,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-C01&from=ladder",
   "cat": "practice"
  },
  {
@@ -3123,7 +3133,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -3133,7 +3143,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -3143,7 +3153,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -3153,7 +3163,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-c03&from=ladder",
   "cat": "practice"
  },
  {
@@ -3163,7 +3173,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -3173,7 +3183,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -3183,7 +3193,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -3193,7 +3203,7 @@ export const LADDER: LadderItem[] = [
   "level": 15,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -3213,7 +3223,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -3223,7 +3233,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -3243,7 +3253,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-002&from=ladder",
   "cat": "bank"
  },
  {
@@ -3253,7 +3263,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=search&problem=search-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -3262,7 +3272,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "k번째 비트 확인",
   "level": 16,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-e03&from=ladder"
  },
  {
   "id": "lc-832",
@@ -3301,7 +3311,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=map-set&problem=ms-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -3311,7 +3321,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -3362,7 +3372,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "CSES",
-  "url": "https://cses.fi/problemset/task/1094"
+  "url": "https://cses.fi/problemset/task/1094",
+  "kl": true
  },
  {
   "id": "cf-282a",
@@ -3430,7 +3441,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "K번째 작은 수",
   "level": 16,
-  "kl": true
+  "url": "/algo/sorting/practice?p=asort-001&from=ladder"
  },
  {
   "id": "cc-TSORT",
@@ -3459,7 +3470,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-003&from=ladder",
   "cat": "bank"
  },
  {
@@ -3469,7 +3480,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -3479,7 +3490,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-DQ01&from=ladder",
   "cat": "practice"
  },
  {
@@ -3519,7 +3530,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -3529,7 +3540,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-027&from=ladder",
   "cat": "practice"
  },
  {
@@ -3539,7 +3550,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -3549,7 +3560,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -3559,7 +3570,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -3569,7 +3580,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-018&from=ladder",
   "cat": "practice"
  },
  {
@@ -3579,7 +3590,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-021&from=ladder",
   "cat": "practice"
  },
  {
@@ -3589,7 +3600,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -3599,7 +3610,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -3609,7 +3620,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-W01&from=ladder",
   "cat": "practice"
  },
  {
@@ -3619,7 +3630,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -3629,7 +3640,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -3639,7 +3650,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -3649,7 +3660,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -3659,7 +3670,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -3669,7 +3680,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -3679,7 +3690,7 @@ export const LADDER: LadderItem[] = [
   "level": 16,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -3699,7 +3710,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-PB01&from=ladder",
   "cat": "practice"
  },
  {
@@ -3709,7 +3720,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -3719,7 +3730,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -3729,7 +3740,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -3749,7 +3760,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-003&from=ladder",
   "cat": "bank"
  },
  {
@@ -3759,7 +3770,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-005&from=ladder",
   "cat": "bank"
  },
  {
@@ -3768,7 +3779,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "켜진 비트 수 (popcount)",
   "level": 17,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-e01&from=ladder"
  },
  {
   "id": "agre-e01",
@@ -3776,7 +3787,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "대기 시간의 합 최소",
   "level": 17,
-  "kl": true
+  "url": "/algo/greedy/practice?p=agre-e01&from=ladder"
  },
  {
   "id": "cf-263a",
@@ -3815,7 +3826,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-003&from=ladder",
   "cat": "bank"
  },
  {
@@ -3826,7 +3837,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/valid-anagram/"
+  "url": "https://leetcode.com/problems/valid-anagram/",
+  "kl": true
  },
  {
   "id": "cf-443a",
@@ -3855,7 +3867,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -3935,7 +3947,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-006&from=ladder",
   "cat": "bank"
  },
  {
@@ -3945,7 +3957,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -3965,7 +3977,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-006&from=ladder",
   "cat": "bank"
  },
  {
@@ -3975,7 +3987,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -3984,7 +3996,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "가장 많이 나온 알파벳",
   "level": 17,
-  "kl": true
+  "url": "/algo/string/practice?p=astr-e02&from=ladder"
  },
  {
   "id": "lc-125",
@@ -4043,7 +4055,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-006&from=ladder",
   "cat": "bank"
  },
  {
@@ -4053,7 +4065,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=strings&problem=str-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -4063,7 +4075,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -4073,7 +4085,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -4083,7 +4095,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-026&from=ladder",
   "cat": "practice"
  },
  {
@@ -4093,7 +4105,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-020&from=ladder",
   "cat": "practice"
  },
  {
@@ -4103,7 +4115,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -4113,7 +4125,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -4123,7 +4135,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=refs-ptrs&problem=refs-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -4133,7 +4145,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=refs-ptrs&problem=refs-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -4143,7 +4155,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=io&problem=io-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -4153,7 +4165,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=pair-tuple&problem=pt-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -4163,7 +4175,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-c03&from=ladder",
   "cat": "practice"
  },
  {
@@ -4173,7 +4185,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -4183,7 +4195,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -4193,7 +4205,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -4203,7 +4215,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -4213,7 +4225,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -4223,7 +4235,7 @@ export const LADDER: LadderItem[] = [
   "level": 17,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -4232,7 +4244,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "접두사로 시작하는 단어 수",
   "level": 17,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-e01&from=ladder"
  },
  {
   "id": "lc-1365",
@@ -4261,7 +4273,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -4271,7 +4283,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -4291,7 +4303,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-006&from=ladder",
   "cat": "bank"
  },
  {
@@ -4301,7 +4313,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-017&from=ladder",
   "cat": "bank"
  },
  {
@@ -4310,7 +4322,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "set bit 개수 (popcount)",
   "level": 18,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-002&from=ladder"
  },
  {
   "id": "lc-1351",
@@ -4329,7 +4341,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-004&from=ladder",
   "cat": "bank"
  },
  {
@@ -4338,7 +4350,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "가장 많이 나온 수",
   "level": 18,
-  "kl": true
+  "url": "/algo/hashtable/practice?p=ahash-e03&from=ladder"
  },
  {
   "id": "lc-1",
@@ -4348,7 +4360,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/two-sum/"
+  "url": "https://leetcode.com/problems/two-sum/",
+  "kl": true
  },
  {
   "id": "lc-383",
@@ -4378,7 +4391,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "Codeforces",
-  "url": "https://codeforces.com/problemset/problem/520/A"
+  "url": "https://codeforces.com/problemset/problem/520/A",
+  "kl": true
  },
  {
   "id": "cf-228a",
@@ -4408,7 +4422,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "HackerRank",
-  "url": "https://www.hackerrank.com/challenges/sock-merchant/problem"
+  "url": "https://www.hackerrank.com/challenges/sock-merchant/problem",
+  "kl": true
  },
  {
   "id": "ms-001",
@@ -4417,7 +4432,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=map-set&problem=ms-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -4427,7 +4442,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=map-set&problem=ms-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -4437,7 +4452,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-001&from=ladder",
   "cat": "practice"
  },
  {
@@ -4557,7 +4572,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-005&from=ladder",
   "cat": "bank"
  },
  {
@@ -4567,7 +4582,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -4576,7 +4591,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "중복 제거 후 K번째 작은 값",
   "level": 18,
-  "kl": true
+  "url": "/algo/sorting/practice?p=asort-011&from=ladder"
  },
  {
   "id": "bank-ds-005",
@@ -4585,7 +4600,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-005&from=ladder",
   "cat": "bank"
  },
  {
@@ -4595,7 +4610,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -4605,7 +4620,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -4614,7 +4629,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "번호판 검증",
   "level": 18,
-  "kl": true
+  "url": "/algo/string/practice?p=astr-011&from=ladder"
  },
  {
   "id": "lc-557",
@@ -4683,7 +4698,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=strings&problem=str-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -4693,7 +4708,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -4703,7 +4718,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -4713,7 +4728,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -4723,7 +4738,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -4733,7 +4748,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=refs-ptrs&problem=refs-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -4743,7 +4758,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=refs-ptrs&problem=refs-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -4753,7 +4768,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=refs-ptrs&problem=refs-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -4763,7 +4778,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=io&problem=io-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -4773,7 +4788,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=constructs&problem=con-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -4783,7 +4798,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=part1-combo&problem=p1c-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -4793,7 +4808,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=pair-tuple&problem=pt-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -4803,7 +4818,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-029&from=ladder",
   "cat": "practice"
  },
  {
@@ -4813,7 +4828,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-c03&from=ladder",
   "cat": "practice"
  },
  {
@@ -4823,7 +4838,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-c05&from=ladder",
   "cat": "practice"
  },
  {
@@ -4833,7 +4848,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -4843,7 +4858,7 @@ export const LADDER: LadderItem[] = [
   "level": 18,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -4873,7 +4888,7 @@ export const LADDER: LadderItem[] = [
   "level": 19,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -4883,7 +4898,7 @@ export const LADDER: LadderItem[] = [
   "level": 19,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-018&from=ladder",
   "cat": "practice"
  },
  {
@@ -4902,7 +4917,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "2의 거듭제곱 판별",
   "level": 19,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-e02&from=ladder"
  },
  {
   "id": "lc-566",
@@ -4981,7 +4996,7 @@ export const LADDER: LadderItem[] = [
   "level": 19,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -5012,7 +5027,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/plus-one/"
+  "url": "https://leetcode.com/problems/plus-one/",
+  "kl": true
  },
  {
   "id": "bank-ds-004",
@@ -5021,7 +5037,7 @@ export const LADDER: LadderItem[] = [
   "level": 19,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-004&from=ladder",
   "cat": "bank"
  },
  {
@@ -5031,7 +5047,7 @@ export const LADDER: LadderItem[] = [
   "level": 19,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -5040,7 +5056,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "카드 버리기 (큐)",
   "level": 19,
-  "kl": true
+  "url": "/algo/stackqueue/practice?p=asq-e03&from=ladder"
  },
  {
   "id": "astr-003",
@@ -5048,7 +5064,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "아나그램 검사",
   "level": 19,
-  "kl": true
+  "url": "/algo/string/practice?p=astr-003&from=ladder"
  },
  {
   "id": "hr-repeated-string",
@@ -5097,7 +5113,7 @@ export const LADDER: LadderItem[] = [
   "level": 19,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=strings&problem=str-R01&from=ladder",
   "cat": "practice"
  },
  {
@@ -5107,7 +5123,7 @@ export const LADDER: LadderItem[] = [
   "level": 19,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -5117,7 +5133,7 @@ export const LADDER: LadderItem[] = [
   "level": 19,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -5127,7 +5143,7 @@ export const LADDER: LadderItem[] = [
   "level": 19,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=constructs&problem=con-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -5137,7 +5153,7 @@ export const LADDER: LadderItem[] = [
   "level": 19,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=constructs&problem=con-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -5147,7 +5163,7 @@ export const LADDER: LadderItem[] = [
   "level": 19,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=part1-combo&problem=p1c-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -5157,7 +5173,7 @@ export const LADDER: LadderItem[] = [
   "level": 19,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-030&from=ladder",
   "cat": "practice"
  },
  {
@@ -5167,7 +5183,7 @@ export const LADDER: LadderItem[] = [
   "level": 19,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -5176,7 +5192,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "연속 K개의 최대 합",
   "level": 20,
-  "kl": true
+  "url": "/algo/array/practice?p=aarr-e02&from=ladder"
  },
  {
   "id": "abc245b",
@@ -5215,7 +5231,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -5225,7 +5241,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -5235,7 +5251,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-011&from=ladder",
   "cat": "bank"
  },
  {
@@ -5245,7 +5261,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=search&problem=search-002&from=ladder",
   "cat": "practice"
  },
  {
@@ -5254,7 +5270,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "2의 거듭제곱인가?",
   "level": 20,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-004&from=ladder"
  },
  {
   "id": "agre-005",
@@ -5262,7 +5278,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "K번째 큰 수 (정렬 + 인덱싱)",
   "level": 20,
-  "kl": true
+  "url": "/algo/greedy/practice?p=agre-005&from=ladder"
  },
  {
   "id": "lc-1380",
@@ -5291,7 +5307,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-005&from=ladder",
   "cat": "bank"
  },
  {
@@ -5300,7 +5316,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "정확히 K번 등장한 값의 수",
   "level": 20,
-  "kl": true
+  "url": "/algo/hashtable/practice?p=ahash-006&from=ladder"
  },
  {
   "id": "lc-169",
@@ -5310,7 +5326,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/majority-element/"
+  "url": "https://leetcode.com/problems/majority-element/",
+  "kl": true
  },
  {
   "id": "lc-136",
@@ -5329,7 +5346,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=map-set&problem=ms-UM01&from=ladder",
   "cat": "practice"
  },
  {
@@ -5339,7 +5356,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -5378,7 +5395,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "한 구간의 합",
   "level": 20,
-  "kl": true
+  "url": "/algo/prefixsum/practice?p=apre-e02&from=ladder"
  },
  {
   "id": "arec-e01",
@@ -5386,7 +5403,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "1부터 N까지의 합 (재귀)",
   "level": 20,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-e01&from=ladder"
  },
  {
   "id": "bank-sim-008",
@@ -5395,7 +5412,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-008&from=ladder",
   "cat": "bank"
  },
  {
@@ -5405,7 +5422,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -5414,7 +5431,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "나이순 정렬 (같으면 가입 순)",
   "level": 20,
-  "kl": true
+  "url": "/algo/sorting/practice?p=asort-e03&from=ladder"
  },
  {
   "id": "asort-004",
@@ -5422,7 +5439,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "양극 K개 제외한 합",
   "level": 20,
-  "kl": true
+  "url": "/algo/sorting/practice?p=asort-004&from=ladder"
  },
  {
   "id": "abc304a",
@@ -5441,7 +5458,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -5450,7 +5467,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "회문 검사",
   "level": 20,
-  "kl": true
+  "url": "/algo/string/practice?p=astr-001&from=ladder"
  },
  {
   "id": "mco-2013-a",
@@ -5479,7 +5496,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=strings&problem=str-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -5489,7 +5506,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -5499,7 +5516,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -5509,7 +5526,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -5519,7 +5536,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=io&problem=io-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -5529,7 +5546,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=constructs&problem=con-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -5539,7 +5556,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=pair-tuple&problem=pt-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -5549,7 +5566,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=pair-tuple&problem=pt-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -5559,7 +5576,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -5569,7 +5586,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-016&from=ladder",
   "cat": "practice"
  },
  {
@@ -5579,7 +5596,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -5589,7 +5606,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -5599,7 +5616,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-c06&from=ladder",
   "cat": "practice"
  },
  {
@@ -5609,7 +5626,7 @@ export const LADDER: LadderItem[] = [
   "level": 20,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -5618,7 +5635,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "가장 긴 공통 접두사",
   "level": 20,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-e02&from=ladder"
  },
  {
   "id": "aarr-e03",
@@ -5626,7 +5643,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "합이 X인 두 수 (정렬된 배열)",
   "level": 21,
-  "kl": true
+  "url": "/algo/array/practice?p=aarr-e03&from=ladder"
  },
  {
   "id": "lc-283",
@@ -5636,7 +5653,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/move-zeroes/"
+  "url": "https://leetcode.com/problems/move-zeroes/",
+  "kl": true
  },
  {
   "id": "lc-26",
@@ -5685,7 +5703,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -5695,7 +5713,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -5725,7 +5743,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-015&from=ladder",
   "cat": "bank"
  },
  {
@@ -5735,7 +5753,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -5815,7 +5833,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -5855,7 +5873,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -5865,7 +5883,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-018&from=ladder",
   "cat": "practice"
  },
  {
@@ -5895,7 +5913,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-008&from=ladder",
   "cat": "bank"
  },
  {
@@ -5905,7 +5923,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=strings&problem=str-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -5915,7 +5933,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -5925,7 +5943,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -5935,7 +5953,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=pair-tuple&problem=pt-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -5945,7 +5963,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -5955,7 +5973,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -5965,7 +5983,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-017&from=ladder",
   "cat": "practice"
  },
  {
@@ -5975,7 +5993,7 @@ export const LADDER: LadderItem[] = [
   "level": 21,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -5996,7 +6014,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/squares-of-a-sorted-array/"
+  "url": "https://leetcode.com/problems/squares-of-a-sorted-array/",
+  "kl": true
  },
  {
   "id": "cc-TLG",
@@ -6075,7 +6094,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "쉬움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-004&from=ladder",
   "cat": "bank"
  },
  {
@@ -6085,7 +6104,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=search&problem=search-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -6094,7 +6113,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "두 수 swap (XOR — 임시 변수 없이)",
   "level": 22,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-003&from=ladder"
  },
  {
   "id": "agre-006",
@@ -6102,7 +6121,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "캠핑 짐 — 최대 개수",
   "level": 22,
-  "kl": true
+  "url": "/algo/greedy/practice?p=agre-006&from=ladder"
  },
  {
   "id": "mcc-2025-p1",
@@ -6121,7 +6140,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-013&from=ladder",
   "cat": "bank"
  },
  {
@@ -6131,7 +6150,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -6141,7 +6160,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -6150,7 +6169,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "숫자 카드 — 빈도수 조회",
   "level": 22,
-  "kl": true
+  "url": "/algo/hashtable/practice?p=ahash-010&from=ladder"
  },
  {
   "id": "abc308b",
@@ -6179,7 +6198,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -6208,7 +6227,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "팩토리얼 (재귀)",
   "level": 22,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-001&from=ladder"
  },
  {
   "id": "lc-1544",
@@ -6247,7 +6266,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-011&from=ladder",
   "cat": "bank"
  },
  {
@@ -6277,7 +6296,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -6307,7 +6326,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-013&from=ladder",
   "cat": "bank"
  },
  {
@@ -6317,7 +6336,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "쉬움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -6327,7 +6346,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -6337,7 +6356,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -6347,7 +6366,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -6357,7 +6376,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-c04&from=ladder",
   "cat": "practice"
  },
  {
@@ -6367,7 +6386,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-c06&from=ladder",
   "cat": "practice"
  },
  {
@@ -6377,7 +6396,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -6387,7 +6406,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-typeconv&problem=pytypeconv-c07&from=ladder",
   "cat": "practice"
  },
  {
@@ -6397,7 +6416,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -6407,7 +6426,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -6417,7 +6436,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -6427,7 +6446,7 @@ export const LADDER: LadderItem[] = [
   "level": 22,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -6457,7 +6476,7 @@ export const LADDER: LadderItem[] = [
   "level": 23,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=search&problem=search-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -6466,7 +6485,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "ATM 줄서기 (짧은 일 먼저)",
   "level": 23,
-  "kl": true
+  "url": "/algo/greedy/practice?p=agre-003&from=ladder"
  },
  {
   "id": "hr-beautiful-binary-string",
@@ -6505,7 +6524,7 @@ export const LADDER: LadderItem[] = [
   "level": 23,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -6515,7 +6534,7 @@ export const LADDER: LadderItem[] = [
   "level": 23,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -6524,7 +6543,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "여러 구간의 합",
   "level": 23,
-  "kl": true
+  "url": "/algo/prefixsum/practice?p=apre-e03&from=ladder"
  },
  {
   "id": "arec-002",
@@ -6532,7 +6551,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "거듭제곱 (단순 재귀)",
   "level": 23,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-002&from=ladder"
  },
  {
   "id": "abc315b",
@@ -6551,7 +6570,7 @@ export const LADDER: LadderItem[] = [
   "level": 23,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -6571,7 +6590,7 @@ export const LADDER: LadderItem[] = [
   "level": 23,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -6581,7 +6600,7 @@ export const LADDER: LadderItem[] = [
   "level": 23,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -6590,7 +6609,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "부분 문자열 찾기 (단순 검색)",
   "level": 23,
-  "kl": true
+  "url": "/algo/string/practice?p=astr-006&from=ladder"
  },
  {
   "id": "cses-1755",
@@ -6639,7 +6658,7 @@ export const LADDER: LadderItem[] = [
   "level": 23,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-011&from=ladder",
   "cat": "bank"
  },
  {
@@ -6649,7 +6668,7 @@ export const LADDER: LadderItem[] = [
   "level": 23,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -6659,7 +6678,7 @@ export const LADDER: LadderItem[] = [
   "level": 23,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -6669,7 +6688,7 @@ export const LADDER: LadderItem[] = [
   "level": 23,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -6679,7 +6698,7 @@ export const LADDER: LadderItem[] = [
   "level": 23,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -6689,7 +6708,7 @@ export const LADDER: LadderItem[] = [
   "level": 23,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -6699,7 +6718,7 @@ export const LADDER: LadderItem[] = [
   "level": 23,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -6708,7 +6727,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "최장 연속 증가 부분 배열",
   "level": 24,
-  "kl": true
+  "url": "/algo/array/practice?p=aarr-003&from=ladder"
  },
  {
   "id": "lc-121",
@@ -6718,7 +6737,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/"
+  "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+  "kl": true
  },
  {
   "id": "lc-88",
@@ -6797,7 +6817,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-007&from=ladder",
   "cat": "bank"
  },
  {
@@ -6806,7 +6826,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "짝 없는 원소 (XOR)",
   "level": 24,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-001&from=ladder"
  },
  {
   "id": "agre-e03",
@@ -6814,7 +6834,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "로프로 들 수 있는 최대 무게",
   "level": 24,
-  "kl": true
+  "url": "/algo/greedy/practice?p=agre-e03&from=ladder"
  },
  {
   "id": "mcc-2019-p2",
@@ -6863,7 +6883,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -6872,7 +6892,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "첫 반복 글자",
   "level": 24,
-  "kl": true
+  "url": "/algo/hashtable/practice?p=ahash-004&from=ladder"
  },
  {
   "id": "ms-004",
@@ -6881,7 +6901,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=map-set&problem=ms-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -6891,7 +6911,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=map-set&problem=ms-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -6901,7 +6921,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -6920,7 +6940,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "피보나치 수 (재귀)",
   "level": 24,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-e02&from=ladder"
  },
  {
   "id": "cf-474a",
@@ -6979,7 +6999,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-010&from=ladder",
   "cat": "bank"
  },
  {
@@ -6989,7 +7009,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -6998,7 +7018,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "두 배열의 공통 원소",
   "level": 24,
-  "kl": true
+  "url": "/algo/sorting/practice?p=asort-003&from=ladder"
  },
  {
   "id": "cf-160a",
@@ -7026,7 +7046,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "괄호 짝 맞추기",
   "level": 24,
-  "kl": true
+  "url": "/algo/stackqueue/practice?p=asq-001&from=ladder"
  },
  {
   "id": "sq-003",
@@ -7035,7 +7055,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-003&from=ladder",
   "cat": "practice"
  },
  {
@@ -7044,7 +7064,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "문자열 압축 (RLE)",
   "level": 24,
-  "kl": true
+  "url": "/algo/string/practice?p=astr-005&from=ladder"
  },
  {
   "id": "abc320b",
@@ -7083,7 +7103,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-007&from=ladder",
   "cat": "bank"
  },
  {
@@ -7093,7 +7113,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-017&from=ladder",
   "cat": "bank"
  },
  {
@@ -7103,7 +7123,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=strings&problem=str-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -7113,7 +7133,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -7123,7 +7143,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -7133,7 +7153,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-016&from=ladder",
   "cat": "practice"
  },
  {
@@ -7143,7 +7163,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -7153,7 +7173,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -7163,7 +7183,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -7173,7 +7193,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=refs-ptrs&problem=refs-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -7183,7 +7203,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=io&problem=io-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -7193,7 +7213,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=constructs&problem=con-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -7203,7 +7223,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=part1-combo&problem=p1c-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -7213,7 +7233,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -7223,7 +7243,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -7233,7 +7253,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -7243,7 +7263,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -7253,7 +7273,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-c02&from=ladder",
   "cat": "practice"
  },
  {
@@ -7263,7 +7283,7 @@ export const LADDER: LadderItem[] = [
   "level": 24,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -7272,7 +7292,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "진입 차수 구하기",
   "level": 24,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-e01&from=ladder"
  },
  {
   "id": "aarr-011",
@@ -7280,7 +7300,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "빠진 수 찾기 (0..N 중 하나 빠짐)",
   "level": 25,
-  "kl": false
+  "url": "/algo/array/practice?p=aarr-011&from=ladder"
  },
  {
   "id": "abc303b",
@@ -7338,7 +7358,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "포켓몬 도감 — 양방향 조회",
   "level": 25,
-  "kl": true
+  "url": "/algo/hashtable/practice?p=ahash-011&from=ladder"
  },
  {
   "id": "ms-007",
@@ -7347,7 +7367,7 @@ export const LADDER: LadderItem[] = [
   "level": 25,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=map-set&problem=ms-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -7376,7 +7396,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "배열 합 (재귀)",
   "level": 25,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-003&from=ladder"
  },
  {
   "id": "lc-225",
@@ -7395,7 +7415,7 @@ export const LADDER: LadderItem[] = [
   "level": 25,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-007&from=ladder",
   "cat": "bank"
  },
  {
@@ -7415,7 +7435,7 @@ export const LADDER: LadderItem[] = [
   "level": 25,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-010&from=ladder",
   "cat": "bank"
  },
  {
@@ -7424,7 +7444,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "가장 긴 공통 접두사",
   "level": 25,
-  "kl": true
+  "url": "/algo/string/practice?p=astr-007&from=ladder"
  },
  {
   "id": "bank-str-015",
@@ -7433,7 +7453,7 @@ export const LADDER: LadderItem[] = [
   "level": 25,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-015&from=ladder",
   "cat": "bank"
  },
  {
@@ -7443,7 +7463,7 @@ export const LADDER: LadderItem[] = [
   "level": 25,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=strings&problem=str-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -7453,7 +7473,7 @@ export const LADDER: LadderItem[] = [
   "level": 25,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-018&from=ladder",
   "cat": "practice"
  },
  {
@@ -7463,7 +7483,7 @@ export const LADDER: LadderItem[] = [
   "level": 25,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -7473,7 +7493,7 @@ export const LADDER: LadderItem[] = [
   "level": 25,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -7483,7 +7503,7 @@ export const LADDER: LadderItem[] = [
   "level": 25,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -7493,7 +7513,7 @@ export const LADDER: LadderItem[] = [
   "level": 25,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -7503,7 +7523,7 @@ export const LADDER: LadderItem[] = [
   "level": 25,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -7523,7 +7543,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-016&from=ladder",
   "cat": "practice"
  },
  {
@@ -7533,7 +7553,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -7573,7 +7593,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-009&from=ladder",
   "cat": "bank"
  },
  {
@@ -7603,7 +7623,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=map-set&problem=ms-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -7613,7 +7633,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -7623,7 +7643,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-016&from=ladder",
   "cat": "practice"
  },
  {
@@ -7643,7 +7663,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-015&from=ladder",
   "cat": "bank"
  },
  {
@@ -7673,7 +7693,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=strings&problem=str-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -7683,7 +7703,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-019&from=ladder",
   "cat": "practice"
  },
  {
@@ -7693,7 +7713,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=conditionals&problem=cond-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -7703,7 +7723,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=refs-ptrs&problem=refs-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -7713,7 +7733,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=constructs&problem=con-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -7723,7 +7743,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -7733,7 +7753,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -7743,7 +7763,7 @@ export const LADDER: LadderItem[] = [
   "level": 26,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -7752,7 +7772,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "시작할 수 있는 정점의 개수",
   "level": 26,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-e02&from=ladder"
  },
  {
   "id": "aarr-004",
@@ -7760,7 +7780,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "0 이동 (Move Zeroes)",
   "level": 27,
-  "kl": true
+  "url": "/algo/array/practice?p=aarr-004&from=ladder"
  },
  {
   "id": "lc-643",
@@ -7789,7 +7809,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=search&problem=search-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -7798,7 +7818,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "동전 거스름 (큰 단위부터)",
   "level": 27,
-  "kl": true
+  "url": "/algo/greedy/practice?p=agre-001&from=ladder"
  },
  {
   "id": "hr-luck-balance",
@@ -7837,7 +7857,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -7846,7 +7866,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "두 수의 합",
   "level": 27,
-  "kl": true
+  "url": "/algo/hashtable/practice?p=ahash-001&from=ladder"
  },
  {
   "id": "ms-006",
@@ -7855,7 +7875,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=map-set&problem=ms-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -7865,7 +7885,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -7904,7 +7924,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "구간 합 빠르게",
   "level": 27,
-  "kl": true
+  "url": "/algo/prefixsum/practice?p=apre-001&from=ladder"
  },
  {
   "id": "arec-e03",
@@ -7912,7 +7932,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "최대공약수 (유클리드 재귀)",
   "level": 27,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-e03&from=ladder"
  },
  {
   "id": "arec-006",
@@ -7920,7 +7940,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "최대공약수 (유클리드 호제법)",
   "level": 27,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-006&from=ladder"
  },
  {
   "id": "cf-313a",
@@ -7949,7 +7969,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -7958,7 +7978,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "단어 정렬",
   "level": 27,
-  "kl": true
+  "url": "/algo/sorting/practice?p=asort-002&from=ladder"
  },
  {
   "id": "abc323b",
@@ -7977,7 +7997,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-007&from=ladder",
   "cat": "bank"
  },
  {
@@ -7987,7 +8007,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-014&from=ladder",
   "cat": "bank"
  },
  {
@@ -7997,7 +8017,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -8006,7 +8026,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "회문 검사 (스택 + 큐)",
   "level": 27,
-  "kl": true
+  "url": "/algo/stackqueue/practice?p=asq-003&from=ladder"
  },
  {
   "id": "sq-005",
@@ -8015,7 +8035,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -8024,7 +8044,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "유효한 괄호 문자열",
   "level": 27,
-  "kl": true
+  "url": "/algo/string/practice?p=astr-004&from=ladder"
  },
  {
   "id": "bank-str-009",
@@ -8033,7 +8053,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-009&from=ladder",
   "cat": "bank"
  },
  {
@@ -8043,7 +8063,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-014&from=ladder",
   "cat": "bank"
  },
  {
@@ -8053,7 +8073,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=strings&problem=str-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -8063,7 +8083,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -8073,7 +8093,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-017&from=ladder",
   "cat": "practice"
  },
  {
@@ -8083,7 +8103,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=functions&problem=fn-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -8093,7 +8113,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -8103,7 +8123,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=refs-ptrs&problem=refs-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -8113,7 +8133,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=pair-tuple&problem=pt-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -8123,7 +8143,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-output&problem=pyout-c07&from=ladder",
   "cat": "practice"
  },
  {
@@ -8133,7 +8153,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -8143,7 +8163,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-016&from=ladder",
   "cat": "practice"
  },
  {
@@ -8153,7 +8173,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-c01&from=ladder",
   "cat": "practice"
  },
  {
@@ -8163,7 +8183,7 @@ export const LADDER: LadderItem[] = [
   "level": 27,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-functions&problem=pyfunc-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -8174,7 +8194,8 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/"
+  "url": "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/",
+  "kl": true
  },
  {
   "id": "bank-bf-018",
@@ -8183,7 +8204,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-018&from=ladder",
   "cat": "bank"
  },
  {
@@ -8203,7 +8224,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-007&from=ladder",
   "cat": "bank"
  },
  {
@@ -8213,7 +8234,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-019&from=ladder",
   "cat": "bank"
  },
  {
@@ -8223,7 +8244,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=map-set&problem=ms-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -8233,7 +8254,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -8282,7 +8303,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "누적합이 0 이 되는 가장 빠른 위치",
   "level": 28,
-  "kl": true
+  "url": "/algo/prefixsum/practice?p=apre-005&from=ladder"
  },
  {
   "id": "arec-005",
@@ -8290,7 +8311,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "1부터 N까지 거꾸로 출력 (재귀)",
   "level": 28,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-005&from=ladder"
  },
  {
   "id": "cf-339b",
@@ -8309,7 +8330,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-012&from=ladder",
   "cat": "bank"
  },
  {
@@ -8329,7 +8350,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-013&from=ladder",
   "cat": "bank"
  },
  {
@@ -8339,7 +8360,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-012&from=ladder",
   "cat": "bank"
  },
  {
@@ -8349,7 +8370,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-c01&from=ladder",
   "cat": "practice"
  },
  {
@@ -8359,7 +8380,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-005&from=ladder",
   "cat": "practice"
  },
  {
@@ -8369,7 +8390,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-019&from=ladder",
   "cat": "practice"
  },
  {
@@ -8379,7 +8400,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-021&from=ladder",
   "cat": "practice"
  },
  {
@@ -8389,7 +8410,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-024&from=ladder",
   "cat": "practice"
  },
  {
@@ -8399,7 +8420,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-027&from=ladder",
   "cat": "practice"
  },
  {
@@ -8409,7 +8430,7 @@ export const LADDER: LadderItem[] = [
   "level": 28,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-conditionals&problem=pycond-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -8418,7 +8439,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "두 수 합 = target (정렬 + 두 포인터)",
   "level": 29,
-  "kl": true
+  "url": "/algo/array/practice?p=aarr-002&from=ladder"
  },
  {
   "id": "cf-706b",
@@ -8447,7 +8468,7 @@ export const LADDER: LadderItem[] = [
   "level": 29,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-016&from=ladder",
   "cat": "practice"
  },
  {
@@ -8476,7 +8497,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "회의실 배정",
   "level": 29,
-  "kl": true
+  "url": "/algo/greedy/practice?p=agre-e02&from=ladder"
  },
  {
   "id": "grid-009",
@@ -8485,7 +8506,7 @@ export const LADDER: LadderItem[] = [
   "level": 29,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -8494,7 +8515,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "두 배열의 교집합 (중복 포함)",
   "level": 29,
-  "kl": true
+  "url": "/algo/hashtable/practice?p=ahash-007&from=ladder"
  },
  {
   "id": "apre-004",
@@ -8502,7 +8523,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "이번 달 매출 — 누적 vs 구간",
   "level": 29,
-  "kl": true
+  "url": "/algo/prefixsum/practice?p=apre-004&from=ladder"
  },
  {
   "id": "apq-e01",
@@ -8510,7 +8531,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "최대 힙",
   "level": 29,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-e01&from=ladder"
  },
  {
   "id": "arec-004",
@@ -8518,7 +8539,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "회문 검사 (재귀)",
   "level": 29,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-004&from=ladder"
  },
  {
   "id": "abc332b",
@@ -8537,7 +8558,7 @@ export const LADDER: LadderItem[] = [
   "level": 29,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-014&from=ladder",
   "cat": "bank"
  },
  {
@@ -8546,7 +8567,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "빈도수 정렬",
   "level": 29,
-  "kl": false
+  "url": "/algo/sorting/practice?p=asort-005&from=ladder"
  },
  {
   "id": "abc321b",
@@ -8585,7 +8606,7 @@ export const LADDER: LadderItem[] = [
   "level": 29,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-011&from=ladder",
   "cat": "bank"
  },
  {
@@ -8595,7 +8616,7 @@ export const LADDER: LadderItem[] = [
   "level": 29,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -8604,7 +8625,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "후위 표기식 (RPN) 계산기",
   "level": 29,
-  "kl": true
+  "url": "/algo/stackqueue/practice?p=asq-007&from=ladder"
  },
  {
   "id": "bank-str-010",
@@ -8613,7 +8634,7 @@ export const LADDER: LadderItem[] = [
   "level": 29,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-010&from=ladder",
   "cat": "bank"
  },
  {
@@ -8623,7 +8644,7 @@ export const LADDER: LadderItem[] = [
   "level": 29,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-020&from=ladder",
   "cat": "practice"
  },
  {
@@ -8633,7 +8654,7 @@ export const LADDER: LadderItem[] = [
   "level": 29,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-022&from=ladder",
   "cat": "practice"
  },
  {
@@ -8643,7 +8664,7 @@ export const LADDER: LadderItem[] = [
   "level": 29,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-023&from=ladder",
   "cat": "practice"
  },
  {
@@ -8653,7 +8674,7 @@ export const LADDER: LadderItem[] = [
   "level": 29,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-026&from=ladder",
   "cat": "practice"
  },
  {
@@ -8663,7 +8684,7 @@ export const LADDER: LadderItem[] = [
   "level": 29,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-c03&from=ladder",
   "cat": "practice"
  },
  {
@@ -8673,7 +8694,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-019&from=ladder",
   "cat": "practice"
  },
  {
@@ -8683,7 +8704,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-017&from=ladder",
   "cat": "practice"
  },
  {
@@ -8713,7 +8734,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-008&from=ladder",
   "cat": "bank"
  },
  {
@@ -8723,7 +8744,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=search&problem=search-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -8753,7 +8774,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-008&from=ladder",
   "cat": "bank"
  },
  {
@@ -8763,7 +8784,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-018&from=ladder",
   "cat": "bank"
  },
  {
@@ -8773,7 +8794,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-018&from=ladder",
   "cat": "practice"
  },
  {
@@ -8782,7 +8803,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "연속 K개의 최대 합",
   "level": 30,
-  "kl": true
+  "url": "/algo/prefixsum/practice?p=apre-002&from=ladder"
  },
  {
   "id": "mcc-2019-p3",
@@ -8801,7 +8822,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-009&from=ladder",
   "cat": "bank"
  },
  {
@@ -8811,7 +8832,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -8822,7 +8843,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "CSES",
-  "url": "https://cses.fi/problemset/task/1621"
+  "url": "https://cses.fi/problemset/task/1621",
+  "kl": true
  },
  {
   "id": "bank-ds-008",
@@ -8831,7 +8853,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-008&from=ladder",
   "cat": "bank"
  },
  {
@@ -8841,7 +8863,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -8851,7 +8873,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -8861,7 +8883,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=strings&problem=str-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -8871,7 +8893,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=loops&problem=loop-020&from=ladder",
   "cat": "practice"
  },
  {
@@ -8881,7 +8903,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -8891,7 +8913,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-028&from=ladder",
   "cat": "practice"
  },
  {
@@ -8901,7 +8923,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-c05&from=ladder",
   "cat": "practice"
  },
  {
@@ -8911,7 +8933,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -8921,7 +8943,7 @@ export const LADDER: LadderItem[] = [
   "level": 30,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-io&problem=pyio-c04&from=ladder",
   "cat": "practice"
  },
  {
@@ -8930,7 +8952,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "길이 K 부분 배열 최대 합 (슬라이딩 윈도우)",
   "level": 31,
-  "kl": false
+  "url": "/algo/array/practice?p=aarr-009&from=ladder"
  },
  {
   "id": "arr-020",
@@ -8939,7 +8961,7 @@ export const LADDER: LadderItem[] = [
   "level": 31,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-020&from=ladder",
   "cat": "practice"
  },
  {
@@ -8949,7 +8971,7 @@ export const LADDER: LadderItem[] = [
   "level": 31,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -8958,7 +8980,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "1~N 중 M개 조합의 개수",
   "level": 31,
-  "kl": true
+  "url": "/algo/backtracking/practice?p=abt-e03&from=ladder"
  },
  {
   "id": "cf-1335d",
@@ -8977,7 +8999,7 @@ export const LADDER: LadderItem[] = [
   "level": 31,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-012&from=ladder",
   "cat": "bank"
  },
  {
@@ -8986,7 +9008,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "x 이하인 수의 개수",
   "level": 31,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-e01&from=ladder"
  },
  {
   "id": "abs-e03",
@@ -8994,7 +9016,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "x 이상인 가장 작은 수",
   "level": 31,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-e03&from=ladder"
  },
  {
   "id": "agre-002",
@@ -9002,7 +9024,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "회의실 배정 (끝 시간 정렬)",
   "level": 31,
-  "kl": true
+  "url": "/algo/greedy/practice?p=agre-002&from=ladder"
  },
  {
   "id": "cf-158b",
@@ -9041,7 +9063,7 @@ export const LADDER: LadderItem[] = [
   "level": 31,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=map-set&problem=ms-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -9051,7 +9073,7 @@ export const LADDER: LadderItem[] = [
   "level": 31,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-017&from=ladder",
   "cat": "practice"
  },
  {
@@ -9070,7 +9092,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "최소 힙",
   "level": 31,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-001&from=ladder"
  },
  {
   "id": "apq-002",
@@ -9078,7 +9100,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "최대 힙",
   "level": 31,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-002&from=ladder"
  },
  {
   "id": "sim-014",
@@ -9087,7 +9109,7 @@ export const LADDER: LadderItem[] = [
   "level": 31,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -9096,7 +9118,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "순위 매기기 (동점은 같은 순위, 다음 순위 건너뜀)",
   "level": 31,
-  "kl": true
+  "url": "/algo/sorting/practice?p=asort-009&from=ladder"
  },
  {
   "id": "abc260b",
@@ -9115,7 +9137,7 @@ export const LADDER: LadderItem[] = [
   "level": 31,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-009&from=ladder",
   "cat": "bank"
  },
  {
@@ -9125,7 +9147,7 @@ export const LADDER: LadderItem[] = [
   "level": 31,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -9134,7 +9156,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "요세푸스 문제 (큐로)",
   "level": 31,
-  "kl": true
+  "url": "/algo/stackqueue/practice?p=asq-008&from=ladder"
  },
  {
   "id": "sq-008",
@@ -9143,7 +9165,7 @@ export const LADDER: LadderItem[] = [
   "level": 31,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -9163,7 +9185,7 @@ export const LADDER: LadderItem[] = [
   "level": 31,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=constructs&problem=con-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -9173,7 +9195,7 @@ export const LADDER: LadderItem[] = [
   "level": 31,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-c06&from=ladder",
   "cat": "practice"
  },
  {
@@ -9183,7 +9205,7 @@ export const LADDER: LadderItem[] = [
   "level": 31,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-017&from=ladder",
   "cat": "practice"
  },
  {
@@ -9193,7 +9215,7 @@ export const LADDER: LadderItem[] = [
   "level": 31,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -9203,7 +9225,7 @@ export const LADDER: LadderItem[] = [
   "level": 32,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-019&from=ladder",
   "cat": "practice"
  },
  {
@@ -9224,7 +9246,8 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "external": true,
   "source": "USACO",
-  "url": "https://usaco.org/index.php?page=viewproblem2&cpid=855"
+  "url": "https://usaco.org/index.php?page=viewproblem2&cpid=855",
+  "kl": true
  },
  {
   "id": "bank-sim-013",
@@ -9233,7 +9256,7 @@ export const LADDER: LadderItem[] = [
   "level": 32,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-013&from=ladder",
   "cat": "bank"
  },
  {
@@ -9242,7 +9265,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "최소 회의실 수",
   "level": 32,
-  "kl": false
+  "url": "/algo/sorting/practice?p=asort-010&from=ladder"
  },
  {
   "id": "cf-545d",
@@ -9270,7 +9293,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "배열 오른쪽 K칸 회전",
   "level": 33,
-  "kl": true
+  "url": "/algo/array/practice?p=aarr-005&from=ladder"
  },
  {
   "id": "cf-1744c",
@@ -9289,7 +9312,7 @@ export const LADDER: LadderItem[] = [
   "level": 33,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -9298,7 +9321,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "부분수열의 합 (경우의 수)",
   "level": 33,
-  "kl": true
+  "url": "/algo/backtracking/practice?p=abt-e02&from=ladder"
  },
  {
   "id": "cses-1622",
@@ -9317,7 +9340,7 @@ export const LADDER: LadderItem[] = [
   "level": 33,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-010&from=ladder",
   "cat": "bank"
  },
  {
@@ -9326,7 +9349,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "수 찾기 (이분탐색)",
   "level": 33,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-001&from=ladder"
  },
  {
   "id": "abs-002",
@@ -9334,7 +9357,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "lower_bound — 첫 위치 찾기",
   "level": 33,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-002&from=ladder"
  },
  {
   "id": "abit-008",
@@ -9342,7 +9365,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "32-bit 비트 뒤집기 (reverse bits)",
   "level": 33,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-008&from=ladder"
  },
  {
   "id": "mcc-2019-p4",
@@ -9371,7 +9394,7 @@ export const LADDER: LadderItem[] = [
   "level": 33,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-009&from=ladder",
   "cat": "bank"
  },
  {
@@ -9381,7 +9404,7 @@ export const LADDER: LadderItem[] = [
   "level": 33,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -9411,7 +9434,7 @@ export const LADDER: LadderItem[] = [
   "level": 33,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=map-set&problem=ms-008&from=ladder",
   "cat": "practice"
  },
  {
@@ -9450,7 +9473,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "균형점 찾기 (양쪽 합 같음)",
   "level": 33,
-  "kl": true
+  "url": "/algo/prefixsum/practice?p=apre-006&from=ladder"
  },
  {
   "id": "apq-e02",
@@ -9458,7 +9481,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "K번째 큰 수",
   "level": 33,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-e02&from=ladder"
  },
  {
   "id": "cf-1352d",
@@ -9476,7 +9499,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "가장 자주 등장하는 K개 원소",
   "level": 33,
-  "kl": false
+  "url": "/algo/sorting/practice?p=asort-006&from=ladder"
  },
  {
   "id": "cses-1629",
@@ -9486,7 +9509,8 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "external": true,
   "source": "CSES",
-  "url": "https://cses.fi/problemset/task/1629"
+  "url": "https://cses.fi/problemset/task/1629",
+  "kl": true
  },
  {
   "id": "cses-1074",
@@ -9496,7 +9520,8 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "external": true,
   "source": "CSES",
-  "url": "https://cses.fi/problemset/task/1074"
+  "url": "https://cses.fi/problemset/task/1074",
+  "kl": true
  },
  {
   "id": "usaco-687",
@@ -9515,7 +9540,7 @@ export const LADDER: LadderItem[] = [
   "level": 33,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-015&from=ladder",
   "cat": "bank"
  },
  {
@@ -9525,7 +9550,7 @@ export const LADDER: LadderItem[] = [
   "level": 33,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=sorting&problem=sort-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -9534,7 +9559,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "세 종류 괄호 짝 맞추기",
   "level": 33,
-  "kl": false
+  "url": "/algo/stackqueue/practice?p=asq-002&from=ladder"
  },
  {
   "id": "sq-006",
@@ -9543,7 +9568,7 @@ export const LADDER: LadderItem[] = [
   "level": 33,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -9552,7 +9577,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "이진 문자열 분할 점수 최대화",
   "level": 33,
-  "kl": false
+  "url": "/algo/string/practice?p=astr-012&from=ladder"
  },
  {
   "id": "cf-1913b",
@@ -9581,7 +9606,7 @@ export const LADDER: LadderItem[] = [
   "level": 33,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -9591,7 +9616,7 @@ export const LADDER: LadderItem[] = [
   "level": 33,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=structs&problem=struct-006&from=ladder",
   "cat": "practice"
  },
  {
@@ -9601,7 +9626,7 @@ export const LADDER: LadderItem[] = [
   "level": 33,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-logic&problem=pylogic-025&from=ladder",
   "cat": "practice"
  },
  {
@@ -9610,7 +9635,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "주식 사고팔기 — 한 번 거래로 최대 이익",
   "level": 34,
-  "kl": false
+  "url": "/algo/array/practice?p=aarr-012&from=ladder"
  },
  {
   "id": "cf-1690d",
@@ -9649,7 +9674,7 @@ export const LADDER: LadderItem[] = [
   "level": 34,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -9658,7 +9683,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "1~N 중 M개 조합 (사전순 출력)",
   "level": 34,
-  "kl": true
+  "url": "/algo/backtracking/practice?p=abt-e01&from=ladder"
  },
  {
   "id": "cf-1791d",
@@ -9677,7 +9702,7 @@ export const LADDER: LadderItem[] = [
   "level": 34,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-014&from=ladder",
   "cat": "bank"
  },
  {
@@ -9686,7 +9711,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "정수 제곱근",
   "level": 34,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-e02&from=ladder"
  },
  {
   "id": "abs-003",
@@ -9694,7 +9719,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "upper_bound — 초과 위치 찾기",
   "level": 34,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-003&from=ladder"
  },
  {
   "id": "cf-515c",
@@ -9723,7 +9748,7 @@ export const LADDER: LadderItem[] = [
   "level": 34,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-012&from=ladder",
   "cat": "bank"
  },
  {
@@ -9733,7 +9758,7 @@ export const LADDER: LadderItem[] = [
   "level": 34,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -9743,7 +9768,7 @@ export const LADDER: LadderItem[] = [
   "level": 34,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -9783,7 +9808,7 @@ export const LADDER: LadderItem[] = [
   "level": 34,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-019&from=ladder",
   "cat": "bank"
  },
  {
@@ -9792,7 +9817,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "분수 정렬 (나눗셈 없이)",
   "level": 34,
-  "kl": false
+  "url": "/algo/sorting/practice?p=asort-007&from=ladder"
  },
  {
   "id": "cses-1619",
@@ -9802,7 +9827,8 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "external": true,
   "source": "CSES",
-  "url": "https://cses.fi/problemset/task/1619"
+  "url": "https://cses.fi/problemset/task/1619",
+  "kl": true
  },
  {
   "id": "bank-ds-012",
@@ -9811,7 +9837,7 @@ export const LADDER: LadderItem[] = [
   "level": 34,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-012&from=ladder",
   "cat": "bank"
  },
  {
@@ -9821,7 +9847,7 @@ export const LADDER: LadderItem[] = [
   "level": 34,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-004&from=ladder",
   "cat": "practice"
  },
  {
@@ -9851,7 +9877,7 @@ export const LADDER: LadderItem[] = [
   "level": 34,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-c03&from=ladder",
   "cat": "practice"
  },
  {
@@ -9861,7 +9887,7 @@ export const LADDER: LadderItem[] = [
   "level": 34,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-019&from=ladder",
   "cat": "practice"
  },
  {
@@ -9871,7 +9897,7 @@ export const LADDER: LadderItem[] = [
   "level": 34,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -9880,7 +9906,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "연속 부분 배열 최대 합 (Kadane)",
   "level": 35,
-  "kl": true
+  "url": "/algo/array/practice?p=aarr-001&from=ladder"
  },
  {
   "id": "lc-53",
@@ -9890,7 +9916,8 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/maximum-subarray/"
+  "url": "https://leetcode.com/problems/maximum-subarray/",
+  "kl": true
  },
  {
   "id": "usaco-568",
@@ -9929,7 +9956,7 @@ export const LADDER: LadderItem[] = [
   "level": 35,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=arrays&problem=arr-017&from=ladder",
   "cat": "practice"
  },
  {
@@ -9939,7 +9966,7 @@ export const LADDER: LadderItem[] = [
   "level": 35,
   "diff": "보통",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -9980,7 +10007,8 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "external": true,
   "source": "CSES",
-  "url": "https://cses.fi/problemset/task/1090"
+  "url": "https://cses.fi/problemset/task/1090",
+  "kl": true
  },
  {
   "id": "cf-479c",
@@ -9999,7 +10027,7 @@ export const LADDER: LadderItem[] = [
   "level": 35,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-016&from=ladder",
   "cat": "bank"
  },
  {
@@ -10019,7 +10047,7 @@ export const LADDER: LadderItem[] = [
   "level": 35,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-018&from=ladder",
   "cat": "practice"
  },
  {
@@ -10028,7 +10056,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "다수 원소 (Boyer-Moore Vote)",
   "level": 36,
-  "kl": true
+  "url": "/algo/array/practice?p=aarr-006&from=ladder"
  },
  {
   "id": "cf-1364b",
@@ -10057,7 +10085,7 @@ export const LADDER: LadderItem[] = [
   "level": 36,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-015&from=ladder",
   "cat": "bank"
  },
  {
@@ -10066,7 +10094,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "1..N set bit 총합 (LC 338 누적)",
   "level": 36,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-012&from=ladder"
  },
  {
   "id": "agre-004",
@@ -10074,7 +10102,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "잃어버린 괄호 (최소화)",
   "level": 36,
-  "kl": true
+  "url": "/algo/greedy/practice?p=agre-004&from=ladder"
  },
  {
   "id": "cf-1520e",
@@ -10103,7 +10131,7 @@ export const LADDER: LadderItem[] = [
   "level": 36,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-010&from=ladder",
   "cat": "bank"
  },
  {
@@ -10112,7 +10140,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "아나그램 그룹화",
   "level": 36,
-  "kl": false
+  "url": "/algo/hashtable/practice?p=ahash-003&from=ladder"
  },
  {
   "id": "abc295c",
@@ -10140,7 +10168,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "알파벳별 등장 횟수 (구간)",
   "level": 36,
-  "kl": true
+  "url": "/algo/prefixsum/practice?p=apre-003&from=ladder"
  },
  {
   "id": "arec-008",
@@ -10148,7 +10176,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "하노이 탑 — 이동 횟수",
   "level": 36,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-008&from=ladder"
  },
  {
   "id": "cses-1084",
@@ -10158,7 +10186,8 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "external": true,
   "source": "CSES",
-  "url": "https://cses.fi/problemset/task/1084"
+  "url": "https://cses.fi/problemset/task/1084",
+  "kl": true
  },
  {
   "id": "cf-451b",
@@ -10187,7 +10216,7 @@ export const LADDER: LadderItem[] = [
   "level": 36,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-020&from=ladder",
   "cat": "bank"
  },
  {
@@ -10196,7 +10225,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "프린터 큐 (우선순위 큐 없이!)",
   "level": 36,
-  "kl": true
+  "url": "/algo/stackqueue/practice?p=asq-010&from=ladder"
  },
  {
   "id": "astr-008",
@@ -10204,7 +10233,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "좋은 분할 개수",
   "level": 36,
-  "kl": false
+  "url": "/algo/string/practice?p=astr-008&from=ladder"
  },
  {
   "id": "usaco-987",
@@ -10223,7 +10252,7 @@ export const LADDER: LadderItem[] = [
   "level": 36,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -10233,7 +10262,7 @@ export const LADDER: LadderItem[] = [
   "level": 36,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-016&from=ladder",
   "cat": "practice"
  },
  {
@@ -10243,7 +10272,7 @@ export const LADDER: LadderItem[] = [
   "level": 36,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-017&from=ladder",
   "cat": "practice"
  },
  {
@@ -10254,7 +10283,8 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "external": true,
   "source": "Codeforces",
-  "url": "https://codeforces.com/problemset/problem/279/B"
+  "url": "https://codeforces.com/problemset/problem/279/B",
+  "kl": true
  },
  {
   "id": "abs-004",
@@ -10262,7 +10292,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "정렬된 배열에서 K 의 개수",
   "level": 37,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-004&from=ladder"
  },
  {
   "id": "lc-1260",
@@ -10302,7 +10332,8 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "external": true,
   "source": "CSES",
-  "url": "https://cses.fi/problemset/task/1640"
+  "url": "https://cses.fi/problemset/task/1640",
+  "kl": true
  },
  {
   "id": "abc251c",
@@ -10320,7 +10351,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "가장 큰 물통 (Container With Most Water)",
   "level": 38,
-  "kl": false
+  "url": "/algo/array/practice?p=aarr-008&from=ladder"
  },
  {
   "id": "cf-1374d",
@@ -10339,7 +10370,7 @@ export const LADDER: LadderItem[] = [
   "level": 38,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-020&from=ladder",
   "cat": "practice"
  },
  {
@@ -10350,7 +10381,8 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "external": true,
   "source": "CSES",
-  "url": "https://cses.fi/problemset/task/1623"
+  "url": "https://cses.fi/problemset/task/1623",
+  "kl": true
  },
  {
   "id": "abc320c",
@@ -10399,7 +10431,7 @@ export const LADDER: LadderItem[] = [
   "level": 38,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -10408,7 +10440,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "중복 없는 가장 긴 부분 문자열",
   "level": 38,
-  "kl": false
+  "url": "/algo/hashtable/practice?p=ahash-005&from=ladder"
  },
  {
   "id": "ms-009",
@@ -10417,7 +10449,7 @@ export const LADDER: LadderItem[] = [
   "level": 38,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=map-set&problem=ms-009&from=ladder",
   "cat": "practice"
  },
  {
@@ -10426,7 +10458,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "절댓값 힙",
   "level": 38,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-003&from=ladder"
  },
  {
   "id": "bank-sim-018",
@@ -10435,7 +10467,7 @@ export const LADDER: LadderItem[] = [
   "level": 38,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-018&from=ladder",
   "cat": "bank"
  },
  {
@@ -10444,7 +10476,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "막대 합치기 — 최소 비용",
   "level": 38,
-  "kl": false
+  "url": "/algo/sorting/practice?p=asort-008&from=ladder"
  },
  {
   "id": "cses-1630",
@@ -10463,7 +10495,7 @@ export const LADDER: LadderItem[] = [
   "level": 38,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-019&from=ladder",
   "cat": "bank"
  },
  {
@@ -10472,7 +10504,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "최소 삽입으로 균형 잡기",
   "level": 38,
-  "kl": false
+  "url": "/algo/stackqueue/practice?p=asq-011&from=ladder"
  },
  {
   "id": "mcc-2025-p4",
@@ -10501,7 +10533,7 @@ export const LADDER: LadderItem[] = [
   "level": 38,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-018&from=ladder",
   "cat": "practice"
  },
  {
@@ -10510,7 +10542,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "분할정복으로 합 구하기",
   "level": 39,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-e03&from=ladder"
  },
  {
   "id": "abc230c",
@@ -10528,7 +10560,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "두 수의 합이 0 — 모든 쌍 개수",
   "level": 39,
-  "kl": false
+  "url": "/algo/hashtable/practice?p=ahash-012&from=ladder"
  },
  {
   "id": "abc278c",
@@ -10566,7 +10598,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "조합 출력 (N 중 R 개)",
   "level": 40,
-  "kl": true
+  "url": "/algo/backtracking/practice?p=abt-002&from=ladder"
  },
  {
   "id": "cf-1692f",
@@ -10604,7 +10636,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "ceil sqrt — 제곱근 이분탐색",
   "level": 40,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-006&from=ladder"
  },
  {
   "id": "abit-005",
@@ -10612,7 +10644,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "부분집합 모두 출력 (bitmask)",
   "level": 40,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-005&from=ladder"
  },
  {
   "id": "adc-e02",
@@ -10620,7 +10652,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "분할정복으로 배열 최댓값",
   "level": 40,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-e02&from=ladder"
  },
  {
   "id": "adp-006",
@@ -10628,7 +10660,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "연속 부분합 최대 (Kadane → DP)",
   "level": 40,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-006&from=ladder"
  },
  {
   "id": "lc-59",
@@ -10657,7 +10689,7 @@ export const LADDER: LadderItem[] = [
   "level": 40,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-011&from=ladder",
   "cat": "bank"
  },
  {
@@ -10666,7 +10698,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "유효한 스도쿠 보드",
   "level": 40,
-  "kl": false
+  "url": "/algo/hashtable/practice?p=ahash-009&from=ladder"
  },
  {
   "id": "abc301c",
@@ -10705,7 +10737,7 @@ export const LADDER: LadderItem[] = [
   "level": 40,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-dicts&problem=pydict-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -10734,7 +10766,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "빠른 거듭제곱 (분할 정복, mod M)",
   "level": 40,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-007&from=ladder"
  },
  {
   "id": "abc265c",
@@ -10752,7 +10784,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "아나그램 그룹 정렬 출력",
   "level": 40,
-  "kl": false
+  "url": "/algo/sorting/practice?p=asort-012&from=ladder"
  },
  {
   "id": "bank-ds-017",
@@ -10761,7 +10793,7 @@ export const LADDER: LadderItem[] = [
   "level": 40,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-017&from=ladder",
   "cat": "bank"
  },
  {
@@ -10771,7 +10803,7 @@ export const LADDER: LadderItem[] = [
   "level": 40,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-007&from=ladder",
   "cat": "practice"
  },
  {
@@ -10780,7 +10812,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "한 글자 차이 (one edit distance)",
   "level": 40,
-  "kl": false
+  "url": "/algo/string/practice?p=astr-009&from=ladder"
  },
  {
   "id": "mco-2013-c",
@@ -10809,7 +10841,7 @@ export const LADDER: LadderItem[] = [
   "level": 40,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-019&from=ladder",
   "cat": "bank"
  },
  {
@@ -10819,7 +10851,7 @@ export const LADDER: LadderItem[] = [
   "level": 40,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-c02&from=ladder",
   "cat": "practice"
  },
  {
@@ -10829,7 +10861,7 @@ export const LADDER: LadderItem[] = [
   "level": 40,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-loops&problem=pyloop-020&from=ladder",
   "cat": "practice"
  },
  {
@@ -10838,7 +10870,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "트리의 리프 노드 개수",
   "level": 40,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-e01&from=ladder"
  },
  {
   "id": "cf-1352e",
@@ -10867,7 +10899,7 @@ export const LADDER: LadderItem[] = [
   "level": 41,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-015&from=ladder",
   "cat": "practice"
  },
  {
@@ -10876,7 +10908,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "K 번째 작은 수",
   "level": 41,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-004&from=ladder"
  },
  {
   "id": "abc308c",
@@ -10904,7 +10936,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "트리의 높이",
   "level": 41,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-e02&from=ladder"
  },
  {
   "id": "cf-580b",
@@ -10933,7 +10965,7 @@ export const LADDER: LadderItem[] = [
   "level": 42,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-lists&problem=pylist-018&from=ladder",
   "cat": "practice"
  },
  {
@@ -10942,7 +10974,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "순열 모두 출력 (사전순)",
   "level": 42,
-  "kl": true
+  "url": "/algo/backtracking/practice?p=abt-001&from=ladder"
  },
  {
   "id": "abc302c",
@@ -10961,7 +10993,7 @@ export const LADDER: LadderItem[] = [
   "level": 42,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-013&from=ladder",
   "cat": "bank"
  },
  {
@@ -10970,7 +11002,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "정렬된 배열 두 합 (Two Sum II)",
   "level": 42,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-009&from=ladder"
  },
  {
   "id": "abit-007",
@@ -10978,7 +11010,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "두 짝 없는 원소 찾기 (LC 260)",
   "level": 42,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-007&from=ladder"
  },
  {
   "id": "agre-011",
@@ -10986,7 +11018,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "활동 선택 재방문 (정렬 + 1-pass 증명)",
   "level": 42,
-  "kl": false
+  "url": "/algo/greedy/practice?p=agre-011&from=ladder"
  },
  {
   "id": "mco-2013-d",
@@ -11034,7 +11066,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "부분 배열 합 = K",
   "level": 42,
-  "kl": false
+  "url": "/algo/hashtable/practice?p=ahash-002&from=ladder"
  },
  {
   "id": "abc262c",
@@ -11062,7 +11094,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "2D 영역 합 질의",
   "level": 42,
-  "kl": false
+  "url": "/algo/prefixsum/practice?p=apre-009&from=ladder"
  },
  {
   "id": "apq-e03",
@@ -11070,7 +11102,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "두 수 합치기 최소 비용",
   "level": 42,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-e03&from=ladder"
  },
  {
   "id": "arec-011",
@@ -11078,7 +11110,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "피보나치 (메모이제이션)",
   "level": 42,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-011&from=ladder"
  },
  {
   "id": "sim-010",
@@ -11087,7 +11119,7 @@ export const LADDER: LadderItem[] = [
   "level": 42,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=simulation&problem=sim-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -11127,7 +11159,7 @@ export const LADDER: LadderItem[] = [
   "level": 42,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-ds&problem=bank-ds-018&from=ladder",
   "cat": "bank"
  },
  {
@@ -11136,7 +11168,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "오큰수 (Next Greater Element)",
   "level": 42,
-  "kl": false
+  "url": "/algo/stackqueue/practice?p=asq-005&from=ladder"
  },
  {
   "id": "astr-002",
@@ -11144,7 +11176,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "가장 긴 회문 부분 문자열",
   "level": 42,
-  "kl": false
+  "url": "/algo/string/practice?p=astr-002&from=ladder"
  },
  {
   "id": "bank-str-016",
@@ -11153,7 +11185,7 @@ export const LADDER: LadderItem[] = [
   "level": 42,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-016&from=ladder",
   "cat": "bank"
  },
  {
@@ -11163,7 +11195,7 @@ export const LADDER: LadderItem[] = [
   "level": 42,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -11172,7 +11204,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "각 노드의 부모 찾기",
   "level": 42,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-e03&from=ladder"
  },
  {
   "id": "cses-1141",
@@ -11182,7 +11214,8 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "external": true,
   "source": "CSES",
-  "url": "https://cses.fi/problemset/task/1141"
+  "url": "https://cses.fi/problemset/task/1141",
+  "kl": true
  },
  {
   "id": "abc328c",
@@ -11210,7 +11243,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "부분집합 모두 출력 (2^N 개)",
   "level": 43,
-  "kl": true
+  "url": "/algo/backtracking/practice?p=abt-003&from=ladder"
  },
  {
   "id": "abit-009",
@@ -11218,7 +11251,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "부분집합 합 = K 인 부분집합 개수 (bitmask)",
   "level": 43,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-009&from=ladder"
  },
  {
   "id": "adc-e01",
@@ -11226,7 +11259,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "빠른 거듭제곱 (A^B mod M)",
   "level": 43,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-e01&from=ladder"
  },
  {
   "id": "abc334c",
@@ -11264,7 +11297,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "빗물 가두기 (양방향 prefix max)",
   "level": 43,
-  "kl": false
+  "url": "/algo/prefixsum/practice?p=apre-011&from=ladder"
  },
  {
   "id": "arec-009",
@@ -11272,7 +11305,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "부분집합 합 존재 여부 (백트래킹)",
   "level": 43,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-009&from=ladder"
  },
  {
   "id": "cf-1b",
@@ -11300,7 +11333,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "트리 노드 수 카운트 (DFS)",
   "level": 43,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-001&from=ladder"
  },
  {
   "id": "atree-011",
@@ -11308,7 +11341,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "리프 노드 카운트",
   "level": 43,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-011&from=ladder"
  },
  {
   "id": "aarr-007",
@@ -11316,7 +11349,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "부분 배열 합 = K (누적합 + 해시맵)",
   "level": 44,
-  "kl": false
+  "url": "/algo/array/practice?p=aarr-007&from=ladder"
  },
  {
   "id": "lc-11",
@@ -11334,7 +11367,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "K 자리 숫자열 (1..N 중복 없이)",
   "level": 44,
-  "kl": true
+  "url": "/algo/backtracking/practice?p=abt-006&from=ladder"
  },
  {
   "id": "usaco-736",
@@ -11353,7 +11386,7 @@ export const LADDER: LadderItem[] = [
   "level": 44,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-020&from=ladder",
   "cat": "bank"
  },
  {
@@ -11362,7 +11395,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "거듭제곱 빠르게 (mod M)",
   "level": 44,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-002&from=ladder"
  },
  {
   "id": "adp-e01",
@@ -11370,7 +11403,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "1, 2, 3 더하기",
   "level": 44,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-e01&from=ladder"
  },
  {
   "id": "agra-e02",
@@ -11378,7 +11411,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "1번에서 갈 수 있는 정점 수",
   "level": 44,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-e02&from=ladder"
  },
  {
   "id": "cf-1338a",
@@ -11388,7 +11421,8 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "external": true,
   "source": "Codeforces",
-  "url": "https://codeforces.com/problemset/problem/1338/A"
+  "url": "https://codeforces.com/problemset/problem/1338/A",
+  "kl": true
  },
  {
   "id": "cses-1625",
@@ -11417,7 +11451,7 @@ export const LADDER: LadderItem[] = [
   "level": 44,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-016&from=ladder",
   "cat": "bank"
  },
  {
@@ -11427,7 +11461,7 @@ export const LADDER: LadderItem[] = [
   "level": 44,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=grid&problem=grid-012&from=ladder",
   "cat": "practice"
  },
  {
@@ -11438,7 +11472,8 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "external": true,
   "source": "CSES",
-  "url": "https://cses.fi/problemset/task/1091"
+  "url": "https://cses.fi/problemset/task/1091",
+  "kl": true
  },
  {
   "id": "lc-347",
@@ -11456,7 +11491,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "부분 배열 합이 K 인 개수",
   "level": 44,
-  "kl": false
+  "url": "/algo/prefixsum/practice?p=apre-007&from=ladder"
  },
  {
   "id": "usaco-712",
@@ -11514,7 +11549,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "스택으로 가능한 출력 순서인가?",
   "level": 44,
-  "kl": false
+  "url": "/algo/stackqueue/practice?p=asq-012&from=ladder"
  },
  {
   "id": "sq-013",
@@ -11523,7 +11558,7 @@ export const LADDER: LadderItem[] = [
   "level": 44,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-013&from=ladder",
   "cat": "practice"
  },
  {
@@ -11533,7 +11568,7 @@ export const LADDER: LadderItem[] = [
   "level": 44,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-strings&problem=pystr-010&from=ladder",
   "cat": "practice"
  },
  {
@@ -11543,7 +11578,7 @@ export const LADDER: LadderItem[] = [
   "level": 44,
   "diff": "어려움",
   "lang": "py",
-  "url": "/practice",
+  "url": "/practice?cluster=py-oop&problem=pyoop-011&from=ladder",
   "cat": "practice"
  },
  {
@@ -11552,7 +11587,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "Inorder 순회 (이진 트리, left[]/right[])",
   "level": 44,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-003&from=ladder"
  },
  {
   "id": "atree-004",
@@ -11560,7 +11595,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "Postorder 순회 (이진 트리)",
   "level": 44,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-004&from=ladder"
  },
  {
   "id": "cses-1641",
@@ -11599,7 +11634,7 @@ export const LADDER: LadderItem[] = [
   "level": 45,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-016&from=ladder",
   "cat": "bank"
  },
  {
@@ -11608,7 +11643,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "피보나치 (Bottom-up DP)",
   "level": 45,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-002&from=ladder"
  },
  {
   "id": "apq-005",
@@ -11616,7 +11651,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "카드 합치기 (최소 비용)",
   "level": 45,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-005&from=ladder"
  },
  {
   "id": "sq-014",
@@ -11625,7 +11660,7 @@ export const LADDER: LadderItem[] = [
   "level": 45,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/practice",
+  "url": "/practice?cluster=stackqueue&problem=sq-014&from=ladder",
   "cat": "practice"
  },
  {
@@ -11654,7 +11689,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "각 노드의 부모 찾기 (BFS)",
   "level": 45,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-008&from=ladder"
  },
  {
   "id": "abt-005",
@@ -11662,7 +11697,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "부분집합 합 = K (존재 여부)",
   "level": 46,
-  "kl": true
+  "url": "/algo/backtracking/practice?p=abt-005&from=ladder"
  },
  {
   "id": "usaco-688",
@@ -11682,7 +11717,8 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "external": true,
   "source": "Codeforces",
-  "url": "https://codeforces.com/problemset/problem/371/C"
+  "url": "https://codeforces.com/problemset/problem/371/C",
+  "kl": true
  },
  {
   "id": "usaco-1085",
@@ -11700,7 +11736,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "회전된 정렬 배열에서 검색",
   "level": 46,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-005&from=ladder"
  },
  {
   "id": "adc-001",
@@ -11708,7 +11744,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "머지 소트 직접 구현",
   "level": 46,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-001&from=ladder"
  },
  {
   "id": "adp-e03",
@@ -11716,7 +11752,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "1로 만들기",
   "level": 46,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-e03&from=ladder"
  },
  {
   "id": "abc325c",
@@ -11745,7 +11781,7 @@ export const LADDER: LadderItem[] = [
   "level": 46,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-017&from=ladder",
   "cat": "bank"
  },
  {
@@ -11764,7 +11800,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "부분 배열 합이 K의 배수",
   "level": 46,
-  "kl": false
+  "url": "/algo/prefixsum/practice?p=apre-008&from=ladder"
  },
  {
   "id": "arec-010",
@@ -11772,7 +11808,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "순열 모두 생성 (사전순)",
   "level": 46,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-010&from=ladder"
  },
  {
   "id": "cses-1163",
@@ -11792,7 +11828,8 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "external": true,
   "source": "Codeforces",
-  "url": "https://codeforces.com/problemset/problem/812/C"
+  "url": "https://codeforces.com/problemset/problem/812/C",
+  "kl": true
  },
  {
   "id": "asq-006",
@@ -11800,7 +11837,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "주식 가격 (가격이 떨어지지 않은 기간)",
   "level": 46,
-  "kl": false
+  "url": "/algo/stackqueue/practice?p=asq-006&from=ladder"
  },
  {
   "id": "astr-010",
@@ -11808,7 +11845,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "K 개 이하 서로 다른 글자를 갖는 가장 긴 부분 문자열",
   "level": 46,
-  "kl": false
+  "url": "/algo/string/practice?p=astr-010&from=ladder"
  },
  {
   "id": "atop-e03",
@@ -11816,7 +11853,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "사이클이 있을까? (Kahn)",
   "level": 46,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-e03&from=ladder"
  },
  {
   "id": "atree-002",
@@ -11824,7 +11861,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "Preorder 순회 (루트=1, 자식은 번호 오름차순)",
   "level": 46,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-002&from=ladder"
  },
  {
   "id": "atree-005",
@@ -11832,7 +11869,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "BFS Level Order 출력",
   "level": 46,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-005&from=ladder"
  },
  {
   "id": "cses-1645",
@@ -11852,7 +11889,8 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "external": true,
   "source": "Codeforces",
-  "url": "https://codeforces.com/problemset/problem/701/C"
+  "url": "https://codeforces.com/problemset/problem/701/C",
+  "kl": true
  },
  {
   "id": "lc-153",
@@ -11890,7 +11928,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "계단 오르기 — 경우의 수",
   "level": 47,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-001&from=ladder"
  },
  {
   "id": "agra-001",
@@ -11898,7 +11936,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "DFS 방문 순서",
   "level": 47,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-001&from=ladder"
  },
  {
   "id": "agra-002",
@@ -11906,7 +11944,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "BFS 방문 순서",
   "level": 47,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-002&from=ladder"
  },
  {
   "id": "usaco-939",
@@ -11935,7 +11973,7 @@ export const LADDER: LadderItem[] = [
   "level": 47,
   "diff": "보통",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-014&from=ladder",
   "cat": "bank"
  },
  {
@@ -11964,7 +12002,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "K 큰 원소 (내림차순 출력)",
   "level": 47,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-007&from=ladder"
  },
  {
   "id": "asp-e02",
@@ -11972,7 +12010,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "1번에서 N번까지 최단 거리",
   "level": 47,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-e02&from=ladder"
  },
  {
   "id": "aarr-010",
@@ -11980,7 +12018,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "다음 큰 수 (Monotonic Stack)",
   "level": 48,
-  "kl": false
+  "url": "/algo/array/practice?p=aarr-010&from=ladder"
  },
  {
   "id": "lc-238",
@@ -12029,7 +12067,7 @@ export const LADDER: LadderItem[] = [
   "level": 48,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-bf&problem=bank-bf-019&from=ladder",
   "cat": "bank"
  },
  {
@@ -12038,7 +12076,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "Hamming distance 합 (LC 477)",
   "level": 48,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-010&from=ladder"
  },
  {
   "id": "adc-005",
@@ -12046,7 +12084,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "색종이 만들기 (N×N 분할)",
   "level": 48,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-005&from=ladder"
  },
  {
   "id": "adp-004",
@@ -12054,7 +12092,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "1로 만들기 (BOJ 1463)",
   "level": 48,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-004&from=ladder"
  },
  {
   "id": "agra-e03",
@@ -12062,7 +12100,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "연결 요소의 개수",
   "level": 48,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-e03&from=ladder"
  },
  {
   "id": "agra-003",
@@ -12070,7 +12108,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "연결 요소 개수",
   "level": 48,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-003&from=ladder"
  },
  {
   "id": "cf-1690e",
@@ -12098,7 +12136,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "글자 구성이 같은 부분 문자열 쌍",
   "level": 48,
-  "kl": false
+  "url": "/algo/hashtable/practice?p=ahash-008&from=ladder"
  },
  {
   "id": "cses-1662",
@@ -12116,7 +12154,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "0/1 배열에서 0과 1 같은 수 — 최장 부분 배열",
   "level": 48,
-  "kl": false
+  "url": "/algo/prefixsum/practice?p=apre-010&from=ladder"
  },
  {
   "id": "asp-e01",
@@ -12124,7 +12162,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "1번에서 모든 정점까지 최단 거리",
   "level": 48,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-e01&from=ladder"
  },
  {
   "id": "usaco-856",
@@ -12143,7 +12181,7 @@ export const LADDER: LadderItem[] = [
   "level": 48,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-017&from=ladder",
   "cat": "bank"
  },
  {
@@ -12163,7 +12201,7 @@ export const LADDER: LadderItem[] = [
   "level": 48,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-018&from=ladder",
   "cat": "bank"
  },
  {
@@ -12192,7 +12230,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "가중치 없는 최단 경로 (BFS)",
   "level": 49,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-003&from=ladder"
  },
  {
   "id": "usaco-1107",
@@ -12212,7 +12250,8 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/merge-intervals/"
+  "url": "https://leetcode.com/problems/merge-intervals/",
+  "kl": true
  },
  {
   "id": "lc-152",
@@ -12230,7 +12269,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "N-Queens 해 개수",
   "level": 50,
-  "kl": true
+  "url": "/algo/backtracking/practice?p=abt-004&from=ladder"
  },
  {
   "id": "usaco-965",
@@ -12258,7 +12297,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "나무 자르기 (parametric search)",
   "level": 50,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-007&from=ladder"
  },
  {
   "id": "abit-011",
@@ -12266,7 +12305,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "부분 배열 XOR = K 인 구간 개수 (prefix XOR + hash)",
   "level": 50,
-  "kl": false
+  "url": "/algo/bitmanipulation/practice?p=abit-011&from=ladder"
  },
  {
   "id": "adc-006",
@@ -12274,7 +12313,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "쿼드트리 압축",
   "level": 50,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-006&from=ladder"
  },
  {
   "id": "agra-005",
@@ -12282,7 +12321,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "한 정점에서의 거리",
   "level": 50,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-005&from=ladder"
  },
  {
   "id": "mco-2015-trains",
@@ -12300,7 +12339,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "그룹 합치기 (트리 비용 최소화)",
   "level": 50,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-012&from=ladder"
  },
  {
   "id": "usaco-808",
@@ -12350,7 +12389,8 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/minimum-size-subarray-sum/"
+  "url": "https://leetcode.com/problems/minimum-size-subarray-sum/",
+  "kl": true
  },
  {
   "id": "lc-503",
@@ -12378,7 +12418,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "랜선 자르기 (parametric search)",
   "level": 51,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-008&from=ladder"
  },
  {
   "id": "adc-004",
@@ -12386,7 +12426,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "최대 부분합 (분할 정복)",
   "level": 51,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-004&from=ladder"
  },
  {
   "id": "adc-012",
@@ -12394,7 +12434,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "종이의 개수 (3진 분할)",
   "level": 51,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-012&from=ladder"
  },
  {
   "id": "usaco-759",
@@ -12432,7 +12472,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "2×2 행렬 거듭제곱 (mod 1000)",
   "level": 52,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-003&from=ladder"
  },
  {
   "id": "adp-e02",
@@ -12440,7 +12480,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "최소 동전 개수",
   "level": 52,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-e02&from=ladder"
  },
  {
   "id": "agra-004",
@@ -12448,7 +12488,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "미로 최단 거리 (BFS)",
   "level": 52,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-004&from=ladder"
  },
  {
   "id": "agre-007",
@@ -12456,7 +12496,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "회의실 2 — 필요한 회의실 수 (heap)",
   "level": 52,
-  "kl": false
+  "url": "/algo/greedy/practice?p=agre-007&from=ladder"
  },
  {
   "id": "lc-739",
@@ -12475,7 +12515,7 @@ export const LADDER: LadderItem[] = [
   "level": 52,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-grid&problem=bank-grid-020&from=ladder",
   "cat": "bank"
  },
  {
@@ -12494,7 +12534,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "격자 경로 수 (재귀 + 메모이제이션)",
   "level": 52,
-  "kl": false
+  "url": "/algo/recursion/practice?p=arec-012&from=ladder"
  },
  {
   "id": "asp-e03",
@@ -12502,7 +12542,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "미로 최단 거리",
   "level": 52,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-e03&from=ladder"
  },
  {
   "id": "usaco-1227",
@@ -12521,7 +12561,7 @@ export const LADDER: LadderItem[] = [
   "level": 52,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-sim&problem=bank-sim-020&from=ladder",
   "cat": "bank"
  },
  {
@@ -12560,7 +12600,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "DAG 검사 (사이클이 있는가?)",
   "level": 52,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-005&from=ladder"
  },
  {
   "id": "atree-006",
@@ -12568,7 +12608,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "트리 높이 (최대 깊이)",
   "level": 52,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-006&from=ladder"
  },
  {
   "id": "usaco-1156b",
@@ -12586,7 +12626,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "가장 적은 분량 (parametric search)",
   "level": 53,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-010&from=ladder"
  },
  {
   "id": "lc-128",
@@ -12614,7 +12654,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "작업 순서 (한 줄 출력)",
   "level": 53,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-002&from=ladder"
  },
  {
   "id": "auf-e01",
@@ -12622,7 +12662,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "그룹의 개수",
   "level": 53,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-e01&from=ladder"
  },
  {
   "id": "lc-15",
@@ -12632,7 +12672,8 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/3sum/"
+  "url": "https://leetcode.com/problems/3sum/",
+  "kl": true
  },
  {
   "id": "lc-33",
@@ -12650,7 +12691,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "N-Queens 모든 해 출력",
   "level": 54,
-  "kl": false
+  "url": "/algo/backtracking/practice?p=abt-007&from=ladder"
  },
  {
   "id": "agra-007",
@@ -12658,7 +12699,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "단지 번호 붙이기 (DFS)",
   "level": 54,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-007&from=ladder"
  },
  {
   "id": "agra-011",
@@ -12666,7 +12707,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "유기농 배추 (다중 테스트 케이스)",
   "level": 54,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-011&from=ladder"
  },
  {
   "id": "mco-2013-f",
@@ -12694,7 +12735,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "줄세우기 (Kahn's 기본)",
   "level": 54,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-001&from=ladder"
  },
  {
   "id": "auf-e03",
@@ -12702,7 +12743,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "줄어드는 그룹 수",
   "level": 54,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-e03&from=ladder"
  },
  {
   "id": "agra-009",
@@ -12710,7 +12751,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "섬의 개수 (8 방향 DFS)",
   "level": 55,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-009&from=ladder"
  },
  {
   "id": "usaco-1108",
@@ -12728,7 +12769,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "여러 출발지 최단 거리 (Multi-source Dijkstra)",
   "level": 55,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-005&from=ladder"
  },
  {
   "id": "lc-424",
@@ -12738,7 +12779,8 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "external": true,
   "source": "LeetCode",
-  "url": "https://leetcode.com/problems/longest-repeating-character-replacement/"
+  "url": "https://leetcode.com/problems/longest-repeating-character-replacement/",
+  "kl": true
  },
  {
   "id": "auf-e02",
@@ -12746,7 +12788,7 @@ export const LADDER: LadderItem[] = [
   "diff": "쉬움",
   "title": "가장 큰 그룹의 크기",
   "level": 55,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-e02&from=ladder"
  },
  {
   "id": "usaco-572",
@@ -12764,7 +12806,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "그래프 K-색칠 가능 여부",
   "level": 56,
-  "kl": false
+  "url": "/algo/backtracking/practice?p=abt-010&from=ladder"
  },
  {
   "id": "abs-012",
@@ -12772,7 +12814,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "합이 K 이상인 부분 배열 최소 길이",
   "level": 56,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-012&from=ladder"
  },
  {
   "id": "adc-010",
@@ -12780,7 +12822,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "행렬 곱셈 (O(N³))",
   "level": 56,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-010&from=ladder"
  },
  {
   "id": "adp-003",
@@ -12788,7 +12830,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "RGB 거리 (3-state DP)",
   "level": 56,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-003&from=ladder"
  },
  {
   "id": "agra-006",
@@ -12796,7 +12838,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "양분 그래프 (Bipartite) 검사",
   "level": 56,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-006&from=ladder"
  },
  {
   "id": "agre-008",
@@ -12804,7 +12846,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "단어 수학 (자리값 그리디)",
   "level": 56,
-  "kl": false
+  "url": "/algo/greedy/practice?p=agre-008&from=ladder"
  },
  {
   "id": "mcc-2025-p5",
@@ -12842,7 +12884,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "stream 에서 가장 자주 나온 K 원소",
   "level": 56,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-011&from=ladder"
  },
  {
   "id": "atop-010",
@@ -12850,7 +12892,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "강의 수강 완료 가능? (LC 207)",
   "level": 56,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-010&from=ladder"
  },
  {
   "id": "abt-011",
@@ -12858,7 +12900,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "미로에서 같은 칸 안 거치는 경로 수",
   "level": 57,
-  "kl": false
+  "url": "/algo/backtracking/practice?p=abt-011&from=ladder"
  },
  {
   "id": "usaco-940",
@@ -12886,7 +12928,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "선수 과목 수강 순서 (DFS 기반)",
   "level": 57,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-003&from=ladder"
  },
  {
   "id": "auf-001",
@@ -12894,7 +12936,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "같은 그룹? (union / find 기본)",
   "level": 57,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-001&from=ladder"
  },
  {
   "id": "auf-002",
@@ -12902,7 +12944,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "연결 요소 개수 (DSU 버전)",
   "level": 57,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-002&from=ladder"
  },
  {
   "id": "abc338d",
@@ -12922,7 +12964,8 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "external": true,
   "source": "USACO",
-  "url": "https://usaco.org/index.php?page=viewproblem2&cpid=595"
+  "url": "https://usaco.org/index.php?page=viewproblem2&cpid=595",
+  "kl": true
  },
  {
   "id": "abt-009",
@@ -12930,7 +12973,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "그리드에서 단어 찾기 (LC 79)",
   "level": 58,
-  "kl": false
+  "url": "/algo/backtracking/practice?p=abt-009&from=ladder"
  },
  {
   "id": "usaco-857",
@@ -12948,7 +12991,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "가장 가까운 두 점 (거리 제곱)",
   "level": 58,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-009&from=ladder"
  },
  {
   "id": "adp-005",
@@ -12956,7 +12999,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "정수 삼각형 (BOJ 1932)",
   "level": 58,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-005&from=ladder"
  },
  {
   "id": "agra-008",
@@ -12964,7 +13007,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "토마토 — 모두 익는 데 며칠? (다중 시작 BFS)",
   "level": 58,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-008&from=ladder"
  },
  {
   "id": "agre-010",
@@ -12972,7 +13015,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "K 개 지워 가장 작은 수 (stack 그리디)",
   "level": 58,
-  "kl": false
+  "url": "/algo/greedy/practice?p=agre-010&from=ladder"
  },
  {
   "id": "usaco-1229",
@@ -13000,7 +13043,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "running 중간값 (두 힙)",
   "level": 58,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-006&from=ladder"
  },
  {
   "id": "usaco-713",
@@ -13018,7 +13061,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "슬라이딩 윈도우 최대값",
   "level": 58,
-  "kl": false
+  "url": "/algo/stackqueue/practice?p=asq-009&from=ladder"
  },
  {
   "id": "bank-str-020",
@@ -13027,7 +13070,7 @@ export const LADDER: LadderItem[] = [
   "level": 58,
   "diff": "어려움",
   "lang": "cpp",
-  "url": "/coding-bank",
+  "url": "/practice?cluster=bank-str&problem=bank-str-020&from=ladder",
   "cat": "bank"
  },
  {
@@ -13036,7 +13079,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "사전 순 위상 정렬",
   "level": 58,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-011&from=ladder"
  },
  {
   "id": "atree-012",
@@ -13044,7 +13087,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "트리 DP — 각 노드의 서브트리 합",
   "level": 58,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-012&from=ladder"
  },
  {
   "id": "auf-004",
@@ -13052,7 +13095,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "사이클 검출 (간선 추가 시점)",
   "level": 58,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-004&from=ladder"
  },
  {
   "id": "auf-005",
@@ -13060,7 +13103,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "가장 큰 그룹 크기",
   "level": 58,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-005&from=ladder"
  },
  {
   "id": "adc-011",
@@ -13068,7 +13111,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "이진 GCD (Stein's algorithm, 단순화)",
   "level": 59,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-011&from=ladder"
  },
  {
   "id": "usaco-691",
@@ -13096,7 +13139,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "친구 그룹 사이즈 추적",
   "level": 59,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-003&from=ladder"
  },
  {
   "id": "usaco-666",
@@ -13114,7 +13157,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "스도쿠 풀이 (4×4)",
   "level": 60,
-  "kl": false
+  "url": "/algo/backtracking/practice?p=abt-008&from=ladder"
  },
  {
   "id": "usaco-1228",
@@ -13142,7 +13185,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "K번째 작은 수 (Quickselect)",
   "level": 60,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-008&from=ladder"
  },
  {
   "id": "adp-012",
@@ -13150,7 +13193,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "격자 경로 수 (장애물 포함, 2D DP)",
   "level": 60,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-012&from=ladder"
  },
  {
   "id": "agra-010",
@@ -13158,7 +13201,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "안전 영역 (다중 시뮬레이션)",
   "level": 60,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-010&from=ladder"
  },
  {
   "id": "usaco-941",
@@ -13176,7 +13219,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "회의실 최소 개수",
   "level": 60,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-009&from=ladder"
  },
  {
   "id": "abc320d",
@@ -13194,7 +13237,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "강의 시간표 (학기 번호 출력)",
   "level": 60,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-006&from=ladder"
  },
  {
   "id": "atree-007",
@@ -13202,7 +13245,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "트리 지름 (가장 긴 경로)",
   "level": 60,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-007&from=ladder"
  },
  {
   "id": "auf-006",
@@ -13210,7 +13253,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "같은 가족? (혈연 + 결혼 관계)",
   "level": 60,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-006&from=ladder"
  },
  {
   "id": "usaco-761",
@@ -13228,7 +13271,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "학기 과목 — 사이클이면 사이클 길이 출력",
   "level": 61,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-012&from=ladder"
  },
  {
   "id": "auf-011",
@@ -13236,7 +13279,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "친구 그룹 — 가장 큰 그룹 + 그룹 수",
   "level": 61,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-011&from=ladder"
  },
  {
   "id": "abs-011",
@@ -13244,7 +13287,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "K 번째 수 (N×N 곱셈표)",
   "level": 62,
-  "kl": false
+  "url": "/algo/binarysearch/practice?p=abs-011&from=ladder"
  },
  {
   "id": "adc-007",
@@ -13252,7 +13295,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "역순쌍 개수 (Inversion Count)",
   "level": 62,
-  "kl": false
+  "url": "/algo/divideconquer/practice?p=adc-007&from=ladder"
  },
  {
   "id": "adp-011",
@@ -13260,7 +13303,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "거스름 — 최소 동전 수 (BOJ 2294)",
   "level": 62,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-011&from=ladder"
  },
  {
   "id": "apq-008",
@@ -13268,7 +13311,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "K 개 정렬 배열 합치기",
   "level": 62,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-008&from=ladder"
  },
  {
   "id": "usaco-1061",
@@ -13306,7 +13349,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "트라이 기본 — 단어 사전 검색",
   "level": 62,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-001&from=ladder"
  },
  {
   "id": "auf-012",
@@ -13314,7 +13357,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "섬과 다리 (동적 연결 카운트)",
   "level": 62,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-012&from=ladder"
  },
  {
   "id": "adp-008",
@@ -13322,7 +13365,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "최장 증가 부분수열 (LIS, O(N²))",
   "level": 63,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-008&from=ladder"
  },
  {
   "id": "usaco-689",
@@ -13350,7 +13393,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "음악 프로그램 순서 (불가능 검출)",
   "level": 63,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-009&from=ladder"
  },
  {
   "id": "auf-010",
@@ -13358,7 +13401,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "여행 경로 (모두 같은 그룹?)",
   "level": 63,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-010&from=ladder"
  },
  {
   "id": "adp-007",
@@ -13366,7 +13409,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "0/1 배낭 문제 (BOJ 12865)",
   "level": 64,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-007&from=ladder"
  },
  {
   "id": "mcc-2025-p6",
@@ -13394,7 +13437,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "작업 스케줄링 (마감 + 이익)",
   "level": 64,
-  "kl": false
+  "url": "/algo/priorityqueue/practice?p=apq-010&from=ladder"
  },
  {
   "id": "usaco-917",
@@ -13412,7 +13455,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "가능한 위상 순서 개수",
   "level": 64,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-004&from=ladder"
  },
  {
   "id": "atrie-002",
@@ -13420,7 +13463,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "Prefix 매칭 — 등록 단어가 query 의 prefix?",
   "level": 64,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-002&from=ladder"
  },
  {
   "id": "atrie-003",
@@ -13428,7 +13471,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "가장 긴 공통 prefix (LCP)",
   "level": 65,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-003&from=ladder"
  },
  {
   "id": "abt-012",
@@ -13436,7 +13479,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "K 그룹으로 같은 합 분할 (LC 698)",
   "level": 66,
-  "kl": false
+  "url": "/algo/backtracking/practice?p=abt-012&from=ladder"
  },
  {
   "id": "adp-009",
@@ -13444,7 +13487,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "최장 공통 부분수열 (LCS, BOJ 9251)",
   "level": 66,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-009&from=ladder"
  },
  {
   "id": "agra-012",
@@ -13452,7 +13495,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "미로 만들기 (0-1 BFS)",
   "level": 66,
-  "kl": false
+  "url": "/algo/graph/practice?p=agra-012&from=ladder"
  },
  {
   "id": "agre-009",
@@ -13460,7 +13503,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "멀티탭 스케줄링 (Belady)",
   "level": 66,
-  "kl": false
+  "url": "/algo/greedy/practice?p=agre-009&from=ladder"
  },
  {
   "id": "apre-012",
@@ -13468,7 +13511,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "길이 K 이상 부분 배열의 최대 평균",
   "level": 66,
-  "kl": false
+  "url": "/algo/prefixsum/practice?p=apre-012&from=ladder"
  },
  {
   "id": "atrie-004",
@@ -13476,7 +13519,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "자동완성 — prefix 로 시작하는 단어 개수",
   "level": 66,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-004&from=ladder"
  },
  {
   "id": "adp-010",
@@ -13484,7 +13527,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "동전 1 — 만드는 방법 수 (BOJ 2293)",
   "level": 67,
-  "kl": false
+  "url": "/algo/dp/practice?p=adp-010&from=ladder"
  },
  {
   "id": "atop-007",
@@ -13492,7 +13535,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "최소 작업 완료 시간 (위상 + DP)",
   "level": 67,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-007&from=ladder"
  },
  {
   "id": "atrie-005",
@@ -13500,7 +13543,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "단어 사전 — 대소문자 구분",
   "level": 67,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-005&from=ladder"
  },
  {
   "id": "agre-012",
@@ -13508,7 +13551,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "보석 도둑 (priority_queue)",
   "level": 68,
-  "kl": false
+  "url": "/algo/greedy/practice?p=agre-012&from=ladder"
  },
  {
   "id": "asp-001",
@@ -13516,7 +13559,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "최단 경로 (Dijkstra 기본)",
   "level": 68,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-001&from=ladder"
  },
  {
   "id": "asq-004",
@@ -13524,7 +13567,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "히스토그램에서 가장 큰 직사각형",
   "level": 68,
-  "kl": false
+  "url": "/algo/stackqueue/practice?p=asq-004&from=ladder"
  },
  {
   "id": "atop-008",
@@ -13532,7 +13575,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "건물 짓기 (각 건물의 최소 시간)",
   "level": 68,
-  "kl": false
+  "url": "/algo/topologicalsort/practice?p=atop-008&from=ladder"
  },
  {
   "id": "atree-009",
@@ -13540,7 +13583,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "LCA (최저 공통 조상) — 단순 버전",
   "level": 68,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-009&from=ladder"
  },
  {
   "id": "atrie-006",
@@ -13548,7 +13591,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "다른 단어의 prefix 인 단어 개수",
   "level": 68,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-006&from=ladder"
  },
  {
   "id": "auf-007",
@@ -13556,7 +13599,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "최소 스패닝 트리 (크루스칼)",
   "level": 68,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-007&from=ladder"
  },
  {
   "id": "asp-012",
@@ -13564,7 +13607,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "최소 비용 (단일 쌍 Dijkstra)",
   "level": 69,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-012&from=ladder"
  },
  {
   "id": "atree-010",
@@ -13572,7 +13615,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "두 노드 사이 거리 (간선 수)",
   "level": 69,
-  "kl": false
+  "url": "/algo/tree/practice?p=atree-010&from=ladder"
  },
  {
   "id": "atrie-010",
@@ -13580,7 +13623,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "동음이의어 — 소문자 변환 후 카운트",
   "level": 70,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-010&from=ladder"
  },
  {
   "id": "asp-002",
@@ -13588,7 +13631,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "격자 최단 비용 (Dijkstra 4 방향)",
   "level": 71,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-002&from=ladder"
  },
  {
   "id": "auf-008",
@@ -13596,7 +13639,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "도시 분할 계획 (MST - 최댓값)",
   "level": 71,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-008&from=ladder"
  },
  {
   "id": "asp-006",
@@ -13604,7 +13647,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "최단 경로 복원 (Dijkstra + parent)",
   "level": 72,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-006&from=ladder"
  },
  {
   "id": "atrie-007",
@@ -13612,7 +13655,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "트라이 통합 검색 (insert / search / startsWith)",
   "level": 72,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-007&from=ladder"
  },
  {
   "id": "asp-009",
@@ -13620,7 +13663,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "경유지 통과 최단 경로",
   "level": 74,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-009&from=ladder"
  },
  {
   "id": "asp-011",
@@ -13628,7 +13671,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "우주신과의 교감 (MST + 최대 가중치)",
   "level": 74,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-011&from=ladder"
  },
  {
   "id": "asp-008",
@@ -13636,7 +13679,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "모든 쌍 최단 경로 (Floyd-Warshall)",
   "level": 75,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-008&from=ladder"
  },
  {
   "id": "atrie-012",
@@ -13644,7 +13687,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "가장 많이 등장하는 prefix (점수 = 길이 × 등장 횟수)",
   "level": 75,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-012&from=ladder"
  },
  {
   "id": "asp-007",
@@ -13652,7 +13695,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "Bellman-Ford — 음수 사이클 검출",
   "level": 76,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-007&from=ladder"
  },
  {
   "id": "atrie-011",
@@ -13660,7 +13703,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "길이 K prefix 로 그룹 — 그룹 개수",
   "level": 76,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-011&from=ladder"
  },
  {
   "id": "auf-009",
@@ -13668,7 +13711,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "행성 터널 (좌표 정렬 + MST)",
   "level": 76,
-  "kl": false
+  "url": "/algo/unionfind/practice?p=auf-009&from=ladder"
  },
  {
   "id": "asp-010",
@@ -13676,7 +13719,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "K 번 이내 환승 최저가 (Bellman-Ford 변형)",
   "level": 78,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-010&from=ladder"
  },
  {
   "id": "asp-004",
@@ -13684,7 +13727,7 @@ export const LADDER: LadderItem[] = [
   "diff": "보통",
   "title": "K 번째 최단 경로",
   "level": 80,
-  "kl": false
+  "url": "/algo/shortestpath/practice?p=asp-004&from=ladder"
  },
  {
   "id": "atrie-008",
@@ -13692,7 +13735,7 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "와일드카드 검색 (\\",
   "level": 80,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-008&from=ladder"
  },
  {
   "id": "atrie-009",
@@ -13700,6 +13743,6 @@ export const LADDER: LadderItem[] = [
   "diff": "어려움",
   "title": "두 수의 최대 XOR (Binary Trie)",
   "level": 82,
-  "kl": false
+  "url": "/algo/trie/practice?p=atrie-009&from=ladder"
  }
 ];
