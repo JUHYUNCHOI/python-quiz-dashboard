@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getReflectionSections, ReflectionGrid } from "./components";
+import { ReflectionGroupSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 export function makeReflectionCh1(E) {
@@ -179,12 +180,21 @@ export function makeReflectionCh1(E) {
         </div>),
     },
 
-    /* 1-3 — Interactive grid simulator. */
+    /* 1-2b — 그림 따라 한 묶음씩 말풍선으로 최소 뒤집기 세기 (선생님 2026-06-24: 읽을 거 말고 시뮬+짧은 말풍선). */
     {
       type: "reveal",
       narr: t(E,
-        "Click any cell to toggle it. Watch how its 3 mirror twins move with it (same color group). Total ops at the bottom updates live.",
-        "아무 칸이나 클릭해서 토글해봐요. 거울 짝 3 개가 같이 움직임 (같은 색 그룹). 아래 총 ops 가 실시간 갱신."),
+        "Follow the picture — count the minimum flips one mirror-group at a time. Short bubbles explain each step.",
+        "그림 따라가 봐요 — 거울 짝 묶음마다 최소 뒤집기를 세요. 각 단계는 짧은 말풍선이 설명해요."),
+      content: (<ReflectionGroupSim E={E} />),
+    },
+
+    /* 1-3 — Interactive grid simulator. (직접 아무 칸이나 토글) */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now try it yourself — click any cell to toggle it; its 3 mirror twins move together. Total updates live.",
+        "이제 직접 — 아무 칸이나 클릭해서 토글해봐요. 거울 짝 3개가 같이 움직이고, 아래 총합이 실시간 갱신."),
       content: (<ReflectionGrid E={E} />),
     },
 
