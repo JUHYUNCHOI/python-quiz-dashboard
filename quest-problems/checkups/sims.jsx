@@ -6,6 +6,7 @@
 import { useState, useRef, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
+import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
 
@@ -974,6 +975,42 @@ export function CheckupsTrySim({ E }) {
         💡 {t(E,
           `Inside, spot i gets the original spot-(s−i) cow. Here s=${s}, e.g. spot 3 ← cow (${s}−3=${s - 3}). Only s matters — so windows with the SAME s have the SAME inside! (Try spots 2~5 and 3~4 — both s=7.)`,
           `안쪽 자리 i 엔 '원래 (s−i)번 소'가 와요. 지금 s=${s}, 예: 자리 3 ← (${s}−3=${s - 3})번 소. s 만 쓰니까 — s 같은 구간끼리는 안쪽이 똑같아요! (자리 2~5 와 3~4 둘 다 s=7, 눌러서 비교해 봐요.)`)}
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   CheckupsKeyCodeSim — 핵심을 코드로 살짝 (선생님 2026-06-24: '안 reverse 하고
+   그 자리만 비교' 강조 + 토글 X — 학생이 배우는 언어 하나만(lang prop)).
+   ════════════════════════════════════════════════════════════════════ */
+export function CheckupsKeyCodeSim({ E, lang = "py" }) {
+  const cpp = lang === "cpp";
+  const py = [
+    "# 안 뒤집어요! 자리 i 엔 a[l+r-i] 가 올 걸 아니까:",
+    "v = a[l + r - i]        # 그 자리에 올 값 (s = l + r)",
+    "if v == b[i]:           # 그 값만 b[i] 와 바로 비교",
+    "    inside += 1",
+  ];
+  const cc = [
+    "// 안 뒤집어요! 자리 i 엔 a[l+r-i] 가 올 걸 아니까:",
+    "int v = a[l + r - i];    // 그 자리에 올 값 (s = l + r)",
+    "if (v == b[i]) inside++; // 그 값만 b[i] 와 바로 비교",
+  ];
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#0e7490", marginBottom: 10 }}>
+        ⌨️ {t(E, "The idea, in code — no reversing", "코드로 살짝 — 안 뒤집고 비교")}
+      </div>
+
+      <div style={{ maxWidth: 480, margin: "0 auto 12px", background: "#ecfeff", border: "1.5px solid #67e8f9", borderRadius: 12, padding: "10px 13px", fontSize: 12.5, color: "#155e75", lineHeight: 1.6, textAlign: "center", wordBreak: "keep-all" }}>
+        💬 {t(E,
+          "We never actually reverse the row. Spot i will get a[l+r−i], so we just compare THAT value to b[i] — done.",
+          "줄을 진짜로 뒤집지 않아요. 자리 i 엔 a[l+r−i] 가 올 테니, 그 값만 b[i] 와 비교하면 끝.")}
+      </div>
+
+      <div style={{ maxWidth: 520, margin: "0 auto" }}>
+        <CodeBlock lines={cpp ? cc : py} lang={cpp ? "cpp" : "py"} />
       </div>
     </div>
   );

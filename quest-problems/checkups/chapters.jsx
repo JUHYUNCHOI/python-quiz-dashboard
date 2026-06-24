@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCheckupsSections, DiagonalSim, MatchUpToSim, DiagPrefixSim } from "./components";
-import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsFastSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim } from "./sims";
+import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsFastSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim, CheckupsKeyCodeSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 // (예전 정적 시각화 헬퍼 SpeciesCell/CowRow/TreatedRow/PositionRow 는
@@ -276,7 +276,7 @@ export function makeCheckupsCh2(E, lang = "py") {
    The "same diagonal, same comparison" observation, taught entirely through
    three interactive sims. No walls of pseudo-code — the visuals carry it.
    ════════════════════════════════════════════════════════════════════ */
-export function makeCheckupsCh3(E) {
+export function makeCheckupsCh3(E, lang = "py") {
   return [
     /* 3-0 — 큰 그림 먼저: 검진 = 바깥 + 안쪽 (선생님 2026-06-23: 흐름 순서 — 쪼개기를 맨 앞으로).
         바깥=쉬움(안 변함), 안쪽=핵심(뒤집힘). 이걸 깔고 안쪽으로 들어감. */
@@ -356,6 +356,15 @@ export function makeCheckupsCh3(E) {
         "Put it together — count ONE window in a single view: outside + inside.",
         "한 윈도우의 검진 수를 한 화면에서 세 봐요: 바깥 + 안쪽."),
       content: (<CheckupsFastSim E={E} />),
+    },
+
+    /* 3-5c — 핵심을 코드로 살짝 (Py/C++ 토글) (선생님 2026-06-24: 안 바꾸고 index 비교 + 재사용을 코드로) */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Same idea in code — no reversing, just compare a[l+r−i] to b[i]. Python in Python, C++ in C++.",
+        "그 아이디어를 코드로 — 안 뒤집고 a[l+r−i] 를 b[i] 와 비교. 파이썬은 파이썬, C++ 은 C++ 로."),
+      content: (<CheckupsKeyCodeSim E={E} lang={lang} />),
     },
 
     /* 3-6 — closing input: the two-piece formula in one number (active step). */
