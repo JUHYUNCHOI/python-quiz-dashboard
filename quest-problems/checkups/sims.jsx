@@ -518,7 +518,7 @@ export function CheckupsIntroSim({ E }) {
    Reuses the intro's a/b data + cell colours. Illustrative-only.
    ════════════════════════════════════════════════════════════════════ */
 const _FL = 1, _FR = 4;          // 뒤집을 윈도우 (0-idx) = 자리 2~5 (인트로와 동일)
-const _FS = _FL + _FR;           // 대각선 합 s = 5
+const _FS = _FL + _FR;           // 합 s = 5
 
 function _fastInfo(i) {
   const outside = i < _FL || i > _FR;
@@ -546,16 +546,16 @@ function _buildFastSteps(E) {
         `네모 바깥(자리 ${outSpots.join(", ")})은 안 뒤집혀요. a[i] = b[i] 면 일치 — 모든 윈도우에서 똑같아요.`) },
     { zone: "outside", flip: false, reveal: "outside", tally: { out: outCount },
       bubble: t(E,
-        `Outside matches = ${outCount}. Since it never changes, one prefix gives this instantly.`,
-        `바깥 일치 = ${outCount}개. 안 변하니까 prefix 한 번이면 바로 읽혀요.`) },
+        `Outside matches = ${outCount}. It never changes, so we count it once up front and reuse it.`,
+        `바깥 일치 = ${outCount}개. 안 변하니까 미리 한 번 세두고 그대로 써요.`) },
     { zone: "inside", flip: true, reveal: "outside", tally: { out: outCount },
       bubble: t(E,
-        `INSIDE the box it flips: spot i now holds a[${_FS}−i] (diagonal s = ${_FS}). Compare that to b[i].`,
-        `네모 안은 뒤집혀요: 자리 i 에 a[${_FS}−i] 가 와요 (대각선 s = ${_FS}). 그걸 b[i] 와 비교해요.`) },
+        `INSIDE the box it flips: spot i now holds a[${_FS}−i] (sum s = ${_FS}). Compare that to b[i].`,
+        `네모 안은 뒤집혀요: 자리 i 에 a[${_FS}−i] 가 와요 (합 s = ${_FS}). 그걸 b[i] 와 비교해요.`) },
     { zone: "inside", flip: true, reveal: "all", tally: { out: outCount, inn: inCount },
       bubble: t(E,
-        `Inside matches = ${inCount} (spots ${inMatchSpots.join(", ")}). Same diagonal → read it from the diagonal prefix.`,
-        `안쪽 일치 = ${inCount}개 (자리 ${inMatchSpots.join(", ")}). 같은 대각선이라 대각선 prefix 에서 읽어요.`) },
+        `Inside matches = ${inCount} (spots ${inMatchSpots.join(", ")}). Same s → same inside, so we reuse what we counted once for this s.`,
+        `안쪽 일치 = ${inCount}개 (자리 ${inMatchSpots.join(", ")}). 같은 s 면 안쪽이 똑같으니, 이 s 에서 한 번 세둔 걸 그대로 써요.`) },
     { zone: null, flip: true, reveal: "all", tally: { out: outCount, inn: inCount, total: outCount + inCount },
       bubble: t(E,
         `Checkups = outside ${outCount} + inside ${inCount} = ${outCount + inCount}. Same answer as brute — but two lookups, O(1)!`,
