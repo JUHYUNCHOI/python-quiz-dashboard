@@ -330,18 +330,11 @@ export function makeCheckupsCh3(E, lang = "py") {
       content: (<CheckupsMirrorSim E={E} />),
     },
 
-    /* 3-1a — 같은 s 위에서 한 짝씩 넓히며 새 짝만 ±로 더하는 걸 직접 보여줌
-        (선생님 2026-06-23: '4개·3개·전체 바꿀때 +1/−1 다 표시'). prefix(누적)의 본질. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Same s, growing window: the inside never moves — only the new pair changes. Just add its ±. That's how we count fast.",
-        "같은 s 에서 구간을 넓혀가요 — 안쪽은 안 움직이고 새 짝만 바뀌어요. 그 ± 만 더하면 끝. 이렇게 빨리 세요."),
-      content: (<CheckupsGrowSim E={E} />),
-    },
+    /* 3-1a (GrowSim) 제거 — '같은 s → 안쪽 같다'를 TrySim ←원래자리 행이 더 명확히 증명하고,
+        Grow 의 '±로 키우기' 틀은 결론(s마다 한 번 세서 재사용)과 다른 틀이라 겉돎 (선생님 2026-06-24: 반복 제거·제대로 개편). */
 
     /* 3-1b — 직접 구간을 골라 뒤집어 보는 탐색 (선생님 2026-06-23: '자리 3,4,5 뒤집을 때 보고 싶어').
-        s 가 다르면 안쪽 검진이 달라지는 걸 학생이 직접 확인. */
+        s 가 다르면 안쪽 검진이 달라지는 걸 학생이 직접 확인 + ←원래자리 로 같은 s 재사용 증명. */
     {
       type: "reveal",
       narr: t(E,

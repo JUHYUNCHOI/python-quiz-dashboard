@@ -523,43 +523,36 @@ const _FS = _FL + _FR;           // 합 s = 5
 function _fastInfo(i) {
   const outside = i < _FL || i > _FR;
   const lands = outside ? _A6[i] : _A6[_FS - i];   // 뒤집은 뒤 자리 i 에 오는 값
-  return { outside, lands, match: lands === _B6[i] };
+  return { outside, lands, match: lands === _MB[i] };  // MirrorSim 과 같은 b(_MB) 사용 — 같은 예제로 통일
 }
 
 function _buildFastSteps(E) {
   const N = _A6.length;
   let outCount = 0, inCount = 0;
-  const outSpots = [], inMatchSpots = [];
+  const inMatchSpots = [];
   for (let i = 0; i < N; i++) {
     const f = _fastInfo(i);
-    if (f.outside) { outSpots.push(i + 1); if (f.match) outCount++; }
-    else { if (f.match) { inCount++; inMatchSpots.push(i + 1); } }
+    if (f.outside) { if (f.match) outCount++; }
+    else if (f.match) { inCount++; inMatchSpots.push(i + 1); }
   }
+  // 이미 배운 두 조각(바깥/안쪽)을 '합치기'만 — 재설명·(s−i) 재유도 없음 (선생님 2026-06-24: 반복 제거)
   return [
     { zone: null, flip: false, reveal: "none", tally: {},
       bubble: t(E,
-        `One window (l, r) = spots ${_FL + 1}–${_FR + 1}. Instead of re-counting all N spots, split it: checkups = OUTSIDE + INSIDE.`,
-        `윈도우 (l, r) = 자리 ${_FL + 1}~${_FR + 1} 하나. N 자리를 다시 다 세지 말고 나눠요: 검진 수 = 바깥 + 안쪽.`) },
-    { zone: "outside", flip: false, reveal: "none", tally: {},
-      bubble: t(E,
-        `OUTSIDE the box (spots ${outSpots.join(", ")}) nothing flips. A spot counts when a[i] = b[i] — the SAME for every window.`,
-        `네모 바깥(자리 ${outSpots.join(", ")})은 안 뒤집혀요. a[i] = b[i] 면 일치 — 모든 윈도우에서 똑같아요.`) },
+        `One window, spots ${_FL + 1}–${_FR + 1}. We know checkups = OUTSIDE + INSIDE — let's add the two parts.`,
+        `윈도우 하나, 자리 ${_FL + 1}~${_FR + 1}. 검진 = 바깥 + 안쪽 인 거 알죠 — 두 조각을 더해봐요.`) },
     { zone: "outside", flip: false, reveal: "outside", tally: { out: outCount },
       bubble: t(E,
-        `Outside matches = ${outCount}. It never changes, so we count it once up front and reuse it.`,
-        `바깥 일치 = ${outCount}개. 안 변하니까 미리 한 번 세두고 그대로 써요.`) },
-    { zone: "inside", flip: true, reveal: "outside", tally: { out: outCount },
-      bubble: t(E,
-        `INSIDE the box it flips: spot i now holds a[${_FS}−i] (sum s = ${_FS}). Compare that to b[i].`,
-        `네모 안은 뒤집혀요: 자리 i 에 a[${_FS}−i] 가 와요 (합 s = ${_FS}). 그걸 b[i] 와 비교해요.`) },
+        `Outside (spots 1, 6) doesn't flip — counted once up front. Outside matches = ${outCount}.`,
+        `바깥(자리 1·6)은 안 뒤집혀요 — 미리 세둔 것. 바깥 일치 = ${outCount}개.`) },
     { zone: "inside", flip: true, reveal: "all", tally: { out: outCount, inn: inCount },
       bubble: t(E,
-        `Inside matches = ${inCount} (spots ${inMatchSpots.join(", ")}). Same s → same inside, so we reuse what we counted once for this s.`,
-        `안쪽 일치 = ${inCount}개 (자리 ${inMatchSpots.join(", ")}). 같은 s 면 안쪽이 똑같으니, 이 s 에서 한 번 세둔 걸 그대로 써요.`) },
+        `Inside flips. We already counted it once for this s — inside matches = ${inCount} (spots ${inMatchSpots.join(", ")}).`,
+        `안쪽은 뒤집혀요. 이 s 에서 한 번 세둔 것 — 안쪽 일치 = ${inCount}개 (자리 ${inMatchSpots.join("·")}).`) },
     { zone: null, flip: true, reveal: "all", tally: { out: outCount, inn: inCount, total: outCount + inCount },
       bubble: t(E,
-        `Checkups = outside ${outCount} + inside ${inCount} = ${outCount + inCount}. Same answer as brute — but two lookups, O(1)!`,
-        `검진 수 = 바깥 ${outCount} + 안쪽 ${inCount} = ${outCount + inCount}. brute 와 똑같은 답 — 근데 조회 두 번, O(1)!`) },
+        `Checkups = outside ${outCount} + inside ${inCount} = ${outCount + inCount}. Same answer as brute — but just an add, O(1)!`,
+        `검진 수 = 바깥 ${outCount} + 안쪽 ${inCount} = ${outCount + inCount}. brute 와 같은 답 — 근데 더하기 한 번, O(1)!`) },
   ];
 }
 
@@ -574,6 +567,7 @@ export function CheckupsFastSim({ E }) {
   const dimFor = i => st.zone === "outside" ? inWindow(i) : (st.zone === "inside" ? !inWindow(i) : false);
   const matchShown = i => st.reveal === "all" ? true : (st.reveal === "outside" ? !inWindow(i) : false);
   const aVal = i => (st.flip && inWindow(i)) ? _A6[_FS - i] : _A6[i];
+  const ltr = v => String.fromCharCode(64 + v);   // 1→A … 6→F (MirrorSim/TrySim 과 같은 글자 표기)
 
   const cell = (val, dim) => {
     const sp = _SP[val] || _SP[1];
@@ -583,7 +577,7 @@ export function CheckupsFastSim({ E }) {
         fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16,
         background: dim ? "#f8fafc" : sp.bg, color: dim ? "#cbd5e1" : sp.tx,
         border: `1.5px solid ${dim ? "#e2e8f0" : sp.bd}`, transition: "all .25s",
-      }}>{val}</div>
+      }}>{ltr(val)}</div>
     );
   };
   const tallyBox = (label, val, bg, bd, tc, big) => (
@@ -634,7 +628,7 @@ export function CheckupsFastSim({ E }) {
             📋 {t(E, "wants", "원하는")}<div style={{ fontSize: 9, color: C.dim, fontWeight: 400 }}>b</div>
           </div>
           <div style={{ display: "flex", gap: GAP }}>
-            {Array.from({ length: N }, (_, i) => <div key={i}>{cell(_B6[i], dimFor(i))}</div>)}
+            {Array.from({ length: N }, (_, i) => <div key={i}>{cell(_MB[i], dimFor(i))}</div>)}
           </div>
         </div>
         {/* 일치 줄 */}
