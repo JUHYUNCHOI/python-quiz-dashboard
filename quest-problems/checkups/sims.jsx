@@ -740,32 +740,37 @@ const _GROW = [[3, 4], [2, 5], [1, 6]];   // s=7 위에서 가운데→전체로
 
 function _buildGrowSteps(E) {
   const want = p => _MB[p - 1];
-  const tokAt = (p, l, r) => (p >= l && p <= r) ? (l + r - p) : p;
-  const cnt = (l, r) => { let c = 0; for (let p = 1; p <= _MN; p++) if (tokAt(p, l, r) === want(p)) c++; return c; };
+  const tokAt = (p, l, r, flipped) => (flipped && p >= l && p <= r) ? (l + r - p) : p;
+  const cnt = (l, r, flipped) => { let c = 0; for (let p = 1; p <= _MN; p++) if (tokAt(p, l, r, flipped) === want(p)) c++; return c; };
   const steps = [];
-  let prev = null;
+  // 0) 뒤집기 전 — 원래 줄부터 시작 (선생님 2026-06-24: 시뮬 시작이 뒤집히기 전부터)
+  const base = cnt(3, 4, false);
+  steps.push({ win: [3, 4], flipped: false, added: null, dmap: null, total: base, delta: null, prev: null, payoff: false,
+    bubble: t(E, `The original row — not flipped yet. Checkups ✓ = ${base}. Let's reverse the middle pair [3, 4].`,
+                 `원래 줄이에요 — 아직 안 뒤집음. 검진 ✓ = ${base}마리. 가운데 짝 [3~4] 를 뒤집어 볼게요.`) });
+  let prev = base;
   _GROW.forEach((w, i) => {
-    const [l, r] = w, total = cnt(l, r);
-    let added = null, dmap = null, delta = null;
+    const [l, r] = w, total = cnt(l, r, true);
+    let added = null, dmap = null, delta = total - prev;
     if (i > 0) {
       const dl = (want(l) === r ? 1 : 0) - (want(l) === l ? 1 : 0);   // 자리 l: 새 소 r vs 원래 소 l
       const dr = (want(r) === l ? 1 : 0) - (want(r) === r ? 1 : 0);   // 자리 r: 새 소 l vs 원래 소 r
-      added = [l, r]; dmap = { [l]: dl, [r]: dr }; delta = total - prev;
+      added = [l, r]; dmap = { [l]: dl, [r]: dr };
     }
     let bubble;
-    if (i === 0) bubble = t(E, `Start with just the middle pair, spots ${l}–${r}. Checkups now: ${total}.`,
-                                `가운데 한 짝 [${l}~${r}]만 뒤집어요. 지금 검진 ✓ = ${total}마리.`);
+    if (i === 0) bubble = t(E, `Reverse the middle pair [${l}, ${r}]: checkups ${prev} → ${total}.`,
+                                `가운데 짝 [${l}~${r}] 뒤집기: 검진 ${prev} → ${total}마리.`);
     else {
       const tag = Object.entries(dmap).map(([p, d]) => `${t(E, "spot", "자리")} ${p} ${d > 0 ? "+1" : d < 0 ? "−1" : "0"}`).join(", ");
       bubble = t(E,
         `Widen by one pair → [${l}, ${r}]. The inside stays the same (same s)! Only the new pair changes: ${tag}. So ${prev} ${delta >= 0 ? "+" : "−"} ${Math.abs(delta)} = ${total}.`,
         `한 짝 넓혀 [${l}~${r}]. 안쪽은 그대로(s 가 같으니까)! 새로 들어온 짝만 바뀌어요: ${tag}. 그래서 ${prev} ${delta >= 0 ? "+" : "−"} ${Math.abs(delta)} = ${total}.`);
     }
-    steps.push({ win: w, added, dmap, total, delta, prev, payoff: false, bubble });
+    steps.push({ win: w, flipped: true, added, dmap, total, delta, prev, payoff: false, bubble });
     prev = total;
   });
   steps.push({
-    win: [1, 6], added: null, dmap: null, total: cnt(1, 6), delta: null, prev: null, payoff: true,
+    win: [1, 6], flipped: true, added: null, dmap: null, total: cnt(1, 6, true), delta: null, prev: null, payoff: true,
     bubble: t(E,
       `See? Each time we widen, only the two NEW spots change — just add their ±. No need to recount all of them. That's the speed-up! 🚀`,
       `봤죠? 넓힐 때마다 새로 들어온 두 자리만 바뀌어요 — 그 ± 만 더하면 끝. 전체를 다시 안 세도 돼요. 이게 빨라지는 비결! 🚀`),
@@ -782,7 +787,7 @@ export function CheckupsGrowSim({ E }) {
   const gridW = _MN * STEP - GAP;
   const ltr = tk => String.fromCharCode(64 + tk);
   const want = p => _MB[p - 1];
-  const tokAt = p => (p >= wl && p <= wr) ? (wl + wr - p) : p;
+  const tokAt = p => (st.flipped && p >= wl && p <= wr) ? (wl + wr - p) : p;
   const ckOk = p => tokAt(p) === want(p);
   const isAdded = p => st.added && (p === st.added[0] || p === st.added[1]);
 
@@ -816,7 +821,7 @@ export function CheckupsGrowSim({ E }) {
             <div style={{ position: "absolute", top: -6, left: (wl - 1) * STEP - 5, width: (wr - wl + 1) * STEP - GAP + 10, height: TW + 12, borderRadius: 12, background: "#ecfeff", border: "2px solid #22d3ee", boxShadow: "0 0 0 3px rgba(34,211,238,.12)", zIndex: 0, transition: "left .4s, width .4s" }} />
             <div style={{ position: "absolute", top: -19, left: (wl - 1) * STEP - 5 + ((wr - wl + 1) * STEP - GAP + 10) / 2, transform: "translateX(-50%)", background: "#0891b2", color: "#fff", fontSize: 9.5, fontWeight: 800, borderRadius: 6, padding: "1px 8px", whiteSpace: "nowrap", zIndex: 3, transition: "left .4s" }}>🔁 {t(E, "reverse window", "뒤집는 창")} {wl}~{wr}</div>
             {[1, 2, 3, 4, 5, 6].map(tk => {
-              const slot = (tk >= wl && tk <= wr) ? (wl + wr - tk - 1) : tk - 1;
+              const slot = (st.flipped && tk >= wl && tk <= wr) ? (wl + wr - tk - 1) : tk - 1;
               const sp = _SP[tk] || _SP[1];
               const moved = slot + 1 !== tk;
               const addedHere = st.added && (slot + 1 === st.added[0] || slot + 1 === st.added[1]);
