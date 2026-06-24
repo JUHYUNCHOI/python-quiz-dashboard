@@ -32,6 +32,110 @@ function makeArrays(n) {
   return { a, b };
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   CheckupsEnumSim — "구간은 입력이 아니다" 를 흐름으로 (선생님 2026-06-24:
+   설명 말고 시뮬에서 저절로). 공식 샘플 N=3 의 6가지 뒤집기를 우리가 직접
+   다 만들어 점수별로 모으면 → 출력 3,3,0,0. 구간이 들어오는 게 아니라 우리가 다 해봄.
+   ════════════════════════════════════════════════════════════════════ */
+const _ENA = [1, 3, 2];      // 윗줄 (소가 가진 종)
+const _ENB = [3, 2, 1];      // 아랫줄 (수의사가 원하는 종)
+const _ENN = 3;
+const _ENORDER = [[1, 1], [1, 2], [1, 3], [2, 2], [2, 3], [3, 3]];  // l≤r 모든 구간 6가지
+function _enReverse(l, r) { const res = _ENA.slice(); for (let i = l; i <= r; i++) res[i - 1] = _ENA[(l + r - i) - 1]; return res; }
+function _enScore(row) { let c = 0; for (let i = 0; i < _ENN; i++) if (row[i] === _ENB[i]) c++; return c; }
+function _buildEnumSteps(E) {
+  const steps = [];
+  const buckets = [0, 0, 0, 0];
+  steps.push({ flip: null, row: _ENA.slice(), score: null, buckets: buckets.slice(), payoff: false,
+    bubble: t(E,
+      "Input is just two rows. WHERE to flip isn't given — we choose it. With N=3 there are 6 segments. Let's try them all!",
+      "입력은 윗줄·아랫줄 둘 뿐이에요. '어디를 뒤집을지'는 안 주어져요 — 우리가 골라요. N=3 이면 구간이 6가지. 다 해봐요!") });
+  _ENORDER.forEach(([l, r]) => {
+    const row = _enReverse(l, r), sc = _enScore(row);
+    buckets[sc]++;
+    steps.push({ flip: [l, r], row, score: sc, buckets: buckets.slice(), payoff: false,
+      bubble: t(E,
+        `Flip [${l}, ${r}] → ${sc} checkup${sc === 1 ? "" : "s"}. Drop one into the "${sc}" box.`,
+        `[${l}~${r}] 뒤집기 → 검진 ${sc}개. '검진 ${sc}' 칸에 하나 넣어요.`) });
+  });
+  steps.push({ flip: null, row: _ENA.slice(), score: null, buckets: buckets.slice(), payoff: true,
+    bubble: t(E,
+      "All 6 tried. The box counts 3, 3, 0, 0 ARE the output — no segment was ever handed to us; we made them all.",
+      "6가지 다 해봤어요. 칸 개수 3, 3, 0, 0 이 그대로 출력! 구간은 누가 준 게 아니라 — 우리가 전부 만들어 본 거예요.") });
+  return steps;
+}
+function _EnCell({ v, ok, dim }) {
+  return <div style={{ width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 15, background: dim ? "#f1f5f9" : ok ? "#dcfce7" : "#fff", color: dim ? "#94a3b8" : ok ? "#166534" : C.text, border: `1.5px solid ${dim ? "#e2e8f0" : ok ? "#86efac" : C.border}` }}>{v}</div>;
+}
+export function CheckupsEnumSim({ E }) {
+  const steps = _buildEnumSteps(E);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const st = steps[idx];
+  const [l, r] = st.flip || [0, 0];
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: A, marginBottom: 10 }}>
+        🔁 {t(E, "We try EVERY flip ourselves", "뒤집기를 우리가 전부 해봐요")}
+      </div>
+
+      {/* 말풍선 */}
+      <div style={{ maxWidth: 500, margin: "0 auto 8px" }}>
+        <div style={{ background: st.payoff ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.payoff ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all" }}>💬 {st.bubble}</div>
+        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}` }} />
+      </div>
+
+      {/* 두 줄(입력) + 검진 */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 5, alignItems: "center", marginBottom: 12 }}>
+        {[
+          [t(E, "🐮 cows (flipped)", "🐮 소 (뒤집은 줄)"), st.row, true],
+          [t(E, "📋 wanted", "📋 원하는"), _ENB, false],
+        ].map(([lab, arr, isTop]) => (
+          <div key={lab} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ width: 96, fontSize: 11, color: C.dim, textAlign: "right", wordBreak: "keep-all" }}>{lab}</div>
+            <div style={{ display: "flex", gap: 6, position: "relative" }}>
+              {arr.map((v, i) => {
+                const inWin = isTop && st.flip && (i + 1 >= l && i + 1 <= r);
+                const ok = st.flip && st.row[i] === _ENB[i];
+                return <div key={i} style={{ position: "relative" }}>
+                  <_EnCell v={v} ok={isTop ? ok : false} dim={false} />
+                  {inWin && <div style={{ position: "absolute", inset: -3, border: "2px solid #06b6d4", borderRadius: 10, pointerEvents: "none" }} />}
+                </div>;
+              })}
+            </div>
+          </div>
+        ))}
+        {st.flip && (
+          <div style={{ fontSize: 11.5, color: "#0e7490", fontWeight: 700, marginTop: 2 }}>
+            {t(E, `flip [${l}, ${r}] → checkups = ${st.score}`, `구간 [${l}~${r}] 뒤집기 → 검진 ${st.score}개`)}
+          </div>
+        )}
+      </div>
+
+      {/* 점수 통(buckets) = 출력 */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 4 }}>
+        {st.buckets.map((cnt, sc) => {
+          const justHit = st.flip && st.score === sc;
+          return (
+            <div key={sc} style={{ minWidth: 58, textAlign: "center", background: justHit ? "#cffafe" : st.payoff ? "#ecfdf5" : "#f8fafc", border: `1.5px solid ${justHit ? "#0891b2" : st.payoff ? "#6ee7b7" : C.border}`, borderRadius: 10, padding: "7px 6px", transition: "all .25s" }}>
+              <div style={{ fontSize: 10.5, color: C.dim, fontWeight: 600 }}>{t(E, "checkups", "검진")} {sc}</div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: justHit ? "#0e7490" : st.payoff ? "#065f46" : C.text }}>{cnt}</div>
+            </div>
+          );
+        })}
+      </div>
+      {st.payoff && (
+        <div style={{ textAlign: "center", fontSize: 11.5, color: "#065f46", fontWeight: 700, marginTop: 8 }}>
+          ↑ {t(E, "this is exactly the output (one line each)", "이게 그대로 출력 (한 줄씩)")}
+        </div>
+      )}
+
+      <div style={{ marginTop: 12 }}>
+        <SimNav idx={idx} total={tot} onIdx={setIdx} accent={A} showLabels isEn={E} />
+      </div>
+    </div>
+  );
+}
+
 export function CheckupsBruteRunner({ E }) {
   const [pi, setPi] = useState(0);
   const [running, setRunning] = useState(false);
