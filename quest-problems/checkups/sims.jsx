@@ -728,12 +728,12 @@ function _buildMirrorSteps(E) {
     // 7a) 뒤집기 전 — 자리 3 의 짝꿍 = 자리 4, 지금 자리 4 에 소 D 가 보임
     //     (선생님 2026-06-24: 뒤집힌 줄에서 '자리 4 의 D' 라 해서 화면 자리4=C 와 충돌 → 뒤집기 전부터)
     { win: [_ML, _MR], rev: 0, reveal: "none", focus: 4, formula: true, payoff: false,
-      bubble: t(E, `Before flipping: spot 3's partner = the spot that sums to 7 = spot 4. Right now spot 4 holds cow D.`,
-                   `뒤집기 전 — 자리 3 의 짝꿍 = 더해서 7 되는 자리 = 자리 4. 지금 자리 4 에 소 D 가 있죠.`) },
-    // 7b) 뒤집으면 그 D 가 자리 4 → 자리 3 으로 미끄러져 옴 (focus 가 D 를 따라감)
-    { win: [_ML, _MR], rev: 2, reveal: "none", focus: 3, formula: true, payoff: false,
-      bubble: t(E, `Flip → that cow D slides from spot 4 to spot 3. So spot i always gets spot (s−i)'s cow.`,
-                   `뒤집으면 그 소 D 가 자리 4 에서 자리 3 으로 미끄러져 와요. 그래서 자리 i 엔 늘 (s−i)번 자리 소가 와요.`) },
+      bubble: t(E, `Spots 3 and 4 will swap cows (3 + 4 = 7). Right now spot 4 holds cow D.`,
+                   `자리 3 과 자리 4 의 소가 자리를 바꿔요 (7 − 3 = 4). 지금 자리 4 엔 소 D 가 있죠.`) },
+    // 7b) 뒤집으면 D 가 자리 3 으로 + 검진 채워서 '자리3 검진 = 자리4 D 확인' (선생님 2026-06-24: 표현·줄맞춤)
+    { win: [_ML, _MR], rev: 2, reveal: "inside", focus: 3, formula: true, payoff: false,
+      bubble: t(E, `So to check spot 3, just look at spot 4's cow D. D = wanted D → checkup ✓!`,
+                   `그래서 자리 3 에서 검진받을 소를 알려면 → 자리 4 의 소 D 를 확인하면 돼요. D = 원하는 D → 검진 ✓!`) },
     // 8) 규칙 정리 + 다음(GrowSim)으로 — '다른 윈도우 비교' 중복 스텝 제거 (선생님 2026-06-23)
     { win: [_ML, _MR], rev: 2, reveal: "all", focus: null, formula: true, payoff: true,
       bubble: t(E, `That's the rule: spot i always gets spot (s−i)'s cow — so only s matters, not the window's size. Next: use this to count EVERY reversal fast. 🚀`,
