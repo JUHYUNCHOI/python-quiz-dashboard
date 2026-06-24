@@ -36,29 +36,10 @@ export function makeReflectionCh1(E) {
         </div>),
     },
 
-    /* 1-1 — 입출력 형식 + 제약 (분리: 문제 페이지는 미션+시뮬만 두려고) */
-    {
-      type: "reveal",
-      narr: t(E,
-        "How the input and output look — short version.",
-        "입력·출력이 어떻게 생겼는지 — 짧게."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#fff", border: "1.5px solid #67e8f9", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: C.text, lineHeight: 1.85, wordBreak: "keep-all" }}>
-            📥 <b>{t(E, "Input", "입력")}</b> {t(E, ": N and U → the N-row picture → U lines, each a cell (r, c) to flip (paint ↔ erase).", ": N·U → 그림 N줄 → 바꾼 칸 (r, c) U줄 (칠함 ↔ 지움).")}<br />
-            📤 <b>{t(E, "Output", "출력")}</b> {t(E, ": U+1 lines — fewest changes at the start, then after each flip.", ": U+1 줄 — 처음 + 매번 바꾼 뒤의 최소 바꾸기 수.")}
-          </div>
-          <div style={{ marginTop: 10, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
-            📐 <b>{t(E, "Limits", "제약")}:</b>{" "}
-            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>2 ≤ N ≤ 2000</code>{" "}({t(E, "N even", "N 짝수")}),{" "}
-            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>0 ≤ U ≤ 10⁵</code>
-          </div>
-        </div>),
-    },
+    /* 1-1 형식 슬라이드 제거 (선생님 2026-06-24: 2·3페이지 합치기 — 추상 형식은 샘플 입출력이 라벨로 다 보여줌).
+       1-1b('숫자로 먼저') 도 이미 제거(RuleSim index 중복). */
 
-    /* 1-1b 제거 (선생님 2026-06-24: 거울 짝을 글로 다시 설명 — 1-1 RuleSim 이 index 라벨로 이미 보여줌. 중복). */
-
-    /* 1-2 — Sample I/O verbatim + walkthrough. */
+    /* 1-2 — Sample I/O (= 형식도 겸함) + 제약. */
     {
       type: "reveal",
       narr: t(E,
@@ -101,7 +82,12 @@ export function makeReflectionCh1(E) {
           <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.65, wordBreak: "keep-all" }}>
             {t(E,
               "Input = the picture, then the cells to flip. Output = the first answer, then after each flip. Why the first answer is 4 — see it on the next picture 👇",
-              "입력 = 그림 + 바꿀 칸들. 출력 = 처음 답 + 매번 바꾼 뒤 답. 처음 답이 왜 4인지는 — 바로 다음 그림으로 봐요 👇")}
+              "입력 = 그림(첫 줄 N·U) + 바꿀 칸 (r, c) 들. 출력 = 처음 답 + 매번 바꾼 뒤 답. 처음 답이 왜 4인지는 — 바로 다음 그림으로 봐요 👇")}
+          </div>
+          <div style={{ marginTop: 8, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
+            📐 <b>{t(E, "Limits", "제약")}:</b>{" "}
+            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>2 ≤ N ≤ 2000</code>{" "}({t(E, "N even", "N 짝수")}),{" "}
+            <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>0 ≤ U ≤ 10⁵</code>
           </div>
         </div>),
     },
