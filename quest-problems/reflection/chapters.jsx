@@ -31,21 +31,24 @@ export function makeReflectionCh1(E) {
             </div>
           </div>
 
-          {/* 한 줄 설명 + 그림(시뮬)을 바로 여기에 (선생님 2026-06-24: 시뮬이 이 페이지에) */}
-          <div style={{ fontSize: 13, color: C.text, lineHeight: 1.7, marginBottom: 6, wordBreak: "keep-all" }}>
-            {t(E,
-              "The picture is split into 4 parts by the center lines. Paint one cell and its 3 mirror twins must be the same color. Bessie changed some cells — watch the rule below:",
-              "그림은 가운데 가로·세로 선으로 4칸으로 나뉘어요. 한 칸을 칠하면 거울 짝 3칸도 같은 색이어야 해요. Bessie 가 칸 몇 개를 바꿔놨고요 — 규칙을 아래 그림으로 봐요:")}
-          </div>
+          {/* 규칙은 그림(시뮬)으로 — 페이지엔 미션 + 시뮬만 (선생님 2026-06-24: 한 페이지에 너무 많다) */}
           <ReflectionRuleSim E={E} />
+        </div>),
+    },
 
-          {/* 형식 — 간단히 */}
-          <div style={{ marginTop: 8, background: "#fff", border: "1.5px solid #67e8f9", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+    /* 1-1 — 입출력 형식 + 제약 (분리: 문제 페이지는 미션+시뮬만 두려고) */
+    {
+      type: "reveal",
+      narr: t(E,
+        "How the input and output look — short version.",
+        "입력·출력이 어떻게 생겼는지 — 짧게."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#fff", border: "1.5px solid #67e8f9", borderRadius: 10, padding: "12px 14px", fontSize: 13, color: C.text, lineHeight: 1.85, wordBreak: "keep-all" }}>
             📥 <b>{t(E, "Input", "입력")}</b> {t(E, ": N and U → the N-row picture → U lines, each a cell (r, c) to flip (paint ↔ erase).", ": N·U → 그림 N줄 → 바꾼 칸 (r, c) U줄 (칠함 ↔ 지움).")}<br />
             📤 <b>{t(E, "Output", "출력")}</b> {t(E, ": U+1 lines — fewest changes at the start, then after each flip.", ": U+1 줄 — 처음 + 매번 바꾼 뒤의 최소 바꾸기 수.")}
           </div>
-
-          <div style={{ marginTop: 8, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
+          <div style={{ marginTop: 10, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
             📐 <b>{t(E, "Limits", "제약")}:</b>{" "}
             <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>2 ≤ N ≤ 2000</code>{" "}({t(E, "N even", "N 짝수")}),{" "}
             <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>0 ≤ U ≤ 10⁵</code>
