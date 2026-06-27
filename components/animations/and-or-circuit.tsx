@@ -151,10 +151,13 @@ export function AndOrCircuit({
         </div>
       </div>
 
-      {/* 설명 */}
-      <p className="text-sm text-slate-600 leading-relaxed">
-        {labels.explanation[mode]}
-      </p>
+      {/* 설명 — 말풍선 */}
+      <div className="relative mt-3 mx-auto max-w-md">
+        <div className="absolute left-1/2 -translate-x-1/2 -top-[7px] w-0 h-0 border-l-8 border-r-8 border-b-[8px] border-l-transparent border-r-transparent border-b-amber-300" />
+        <div className="bg-amber-50 border-[1.5px] border-amber-300 rounded-2xl px-4 py-3 text-sm text-amber-900 leading-relaxed font-medium break-keep text-center">
+          💬 {labels.explanation[mode]}
+        </div>
+      </div>
     </div>
   )
 }

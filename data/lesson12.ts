@@ -74,6 +74,28 @@ if day == "토요일" or day == "일요일":
 ➡️ **하나라도 True 면 전체 True.** (둘 다 틀려야 비로소 False!)`
         },
         {
+          id: "not-explain",
+          type: "explain",
+          title: "🔄 not = 아닌 (뒤집기)",
+          content: `\`not\` 은 True ↔ False 를 뒤집어요. **"~ 가 *아닐* 때 뭔가 하고 싶을 때"** 딱이에요. 예를 들어 로그인이 **안** 돼 있으면 "로그인하세요" 라고 안내하고 싶죠? 그럴 때 \`not\`.
+
+\`\`\`python
+is_raining = False
+
+if not is_raining:
+    print("산책 가자!")  # 비 안 오니까 출력 ✅
+\`\`\`
+
+| 원래 | → | not |
+|---|---|---|
+| True | → | False |
+| False | → | True |
+
+> 💡 **자주 쓰는 곳:** \`if not is_logged_in:\` → 로그인 *안* 했으면 안내. \`if not found:\` → 못 찾았으면 알림.
+>
+> \`is_raining == False\` 라고 길게 쓰는 대신 \`not is_raining\` — 영어 문장처럼 *"비 안 오면"* 하고 읽혀서 훨씬 깔끔해요.`
+        },
+        {
           id: "match-game",
           type: "interactive",
           title: "🎮 한국말 → and / or / not 빠르게!",
@@ -83,8 +105,8 @@ if day == "토요일" or day == "일요일":
         {
           id: "circuit-andor",
           type: "interactive",
-          title: "🎬 스위치로 느껴보기 — and / or",
-          description: "스위치 A, B 를 켜고 꺼봐요. and 는 둘 다 켜져야, or 는 하나만 켜져도 전구가 켜져요!",
+          title: "🎬 스위치로 느껴보기 — and / or / not",
+          description: "스위치 A, B 를 켜고 꺼봐요. 위 모드 버튼으로 and / or / not 도 바꿔봐요 — and 는 둘 다, or 는 하나만, not 은 뒤집기!",
           component: "pyAndOrCircuit",
           componentProps: { initialMode: "and" }
         },
@@ -142,36 +164,6 @@ if day == "토요일" or day == "일요일":
       title: "not 과 우선순위",
       emoji: "🔄",
       steps: [
-        {
-          id: "not-explain",
-          type: "explain",
-          title: "🔄 not = 아닌 (뒤집기)",
-          content: `\`not\` 은 True ↔ False 를 뒤집어요. **"~ 가 *아닐* 때 뭔가 하고 싶을 때"** 딱이에요. 예를 들어 로그인이 **안** 돼 있으면 "로그인하세요" 라고 안내하고 싶죠? 그럴 때 \`not\`.
-
-\`\`\`python
-is_raining = False
-
-if not is_raining:
-    print("산책 가자!")  # 비 안 오니까 출력 ✅
-\`\`\`
-
-| 원래 | → | not |
-|---|---|---|
-| True | → | False |
-| False | → | True |
-
-> 💡 **자주 쓰는 곳:** \`if not is_logged_in:\` → 로그인 *안* 했으면 안내. \`if not found:\` → 못 찾았으면 알림.
->
-> \`is_raining == False\` 라고 길게 쓰는 대신 \`not is_raining\` — 영어 문장처럼 *"비 안 오면"* 하고 읽혀서 훨씬 깔끔해요.`
-        },
-        {
-          id: "circuit-not",
-          type: "interactive",
-          title: "🎬 스위치로 느껴보기 — not",
-          description: "위 모드 버튼에서 NOT 을 눌러봐요. 스위치를 ON 하면 전구가 OFF — 뒤집기!",
-          component: "pyAndOrCircuit",
-          componentProps: { initialMode: "not" }
-        },
         {
           id: "pre-try3",
           type: "quiz",
@@ -238,11 +230,11 @@ if (age >= 13 and age <= 19) or is_student:
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 괄호로 묶기",
-          task: "13~19살 이거나 학생이면 '할인 적용!' 출력!",
-          initialCode: "age = 20\nis_student = True\n\n# (청소년) 또는 (학생)\nif (age >= 13 ___ age <= 19) ___ is_student:\n    print(\"할인 적용!\")\nelse:\n    print(\"정가\")",
+          title: "🖥️ 직접 해보기 — and + or 같이",
+          task: "13~19살(나이 범위) **이거나** 학생이면 '할인 적용!'. 빈칸 2개에 and / or 를 알맞게 넣어봐요. (괄호 안 = 나이 범위, 괄호 밖 = 또는 학생)",
+          initialCode: "age = 20\nis_student = True\n\n# 청소년(13~19살) 이거나 학생이면 할인!\n# 괄호 안 빈칸: 13살 이상 ___ 19살 이하   → '둘 다' 만족해야 (그리고)\n# 괄호 밖 빈칸: (나이 조건) ___ 학생        → '둘 중 하나'면 OK (또는)\nif (age >= 13 ___ age <= 19) ___ is_student:\n    print(\"할인 적용!\")\nelse:\n    print(\"정가\")",
           expectedOutput: "할인 적용!",
-          hint: "괄호 안은 둘 다 만족? / 괄호 바깥은 둘 중 하나?",
+          hint: "괄호 안 = 13 이상 '그리고' 19 이하 (둘 다). 괄호 밖 = '또는' 학생 (둘 중 하나).",
           hint2: "and / or"
         }
       ]
