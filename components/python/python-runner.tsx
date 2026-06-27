@@ -371,7 +371,7 @@ export function PythonRunner({
           </span>
         </div>
         
-        <div className="relative">
+        <div className="relative flex">
           {/* 초기 코드가 있고 아직 수정 안 했을 때: 수정해야 할 부분 표시 */}
           {initialCode && !hasEdited && code === initialCode && (
             <div className="absolute top-0 right-0 z-20 m-2">
@@ -380,6 +380,21 @@ export function PythonRunner({
               </span>
             </div>
           )}
+
+          {/* 줄번호 gutter — 데스크탑만 (모바일은 공간 절약).
+              줄높이(15px*1.8=27px) + 위 패딩(py-4=16px) 을 코드 레이어(md:p-4)와 맞춰 정렬. */}
+          <div
+            aria-hidden="true"
+            className="hidden md:block flex-shrink-0 select-none font-mono text-[15px] leading-[1.8] py-4 pl-3 pr-2 text-right text-gray-500"
+            style={{ minHeight: editorMinHeight }}
+          >
+            {Array.from({ length: lineCount }, (_, i) => (
+              <div key={i}>{i + 1}</div>
+            ))}
+          </div>
+
+          {/* 코드 영역 (highlight + 투명 textarea) */}
+          <div className="relative flex-1 min-w-0">
 
           {/* Syntax highlighted 배경 레이어
               ⚠️ textarea 와 *완전히 동일한* 텍스트 메트릭 보장 — 안 그러면 커서 ≠ 글자 정렬 어긋남.
@@ -435,6 +450,7 @@ export function PythonRunner({
             style={{ minHeight: editorMinHeight, tabSize: 4, fontFeatureSettings: '"liga" 0, "calt" 0' }}
             spellCheck={false}
           />
+          </div>
         </div>
         {/* 모바일 심볼 툴바 — 터치 디바이스에서만 표시 */}
         <CodeSymbolToolbar textareaRef={textareaRef} setCode={setCode} variant="python" />

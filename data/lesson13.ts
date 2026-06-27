@@ -136,6 +136,13 @@ for i in range(0, 10, 2):
 > ⚠️ \`끝\` 은 **항상 안 포함**! 예를 들어 \`range(1, 5)\` 는 \`1, 2, 3, 4\` — **5 는 빠져요**. 그래서 \`1 ~ 5\` 까지 다 찍고 싶으면 끝을 하나 크게 \`range(1, 6)\` 으로 써요.`
         },
         {
+          id: "range-track",
+          type: "interactive",
+          title: "🎬 range 숫자가 뽑히는 모습 — 시작은 포함, 끝은 제외!",
+          content: "range(5) / range(2, 6) / range(1, 10, 2) 버튼을 눌러봐요. 마커가 **시작 칸부터** 한 칸씩 걷고, **끝 칸은 🚫** — 끝은 안 나와요! 말풍선이 한 칸씩 설명해줘요.",
+          component: "pyRangeTrack",
+        },
+        {
           id: "try2",
           type: "tryit",
           title: "🖥️ 빈칸 채우기 — 1 부터 5 까지",

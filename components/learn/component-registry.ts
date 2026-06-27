@@ -234,6 +234,10 @@ const registry: Record<string, ComponentEntry> = {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "PyForBuilder",
   },
+  pyRangeTrack: {
+    load: () => import("@/components/animations/range-track"),
+    exportName: "RangeTrack",
+  },
   pyFunctionBuilder: {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "PyFunctionBuilder",

@@ -539,6 +539,8 @@ export function BlankCodeRunner({
 
       return (
         <div key={lineIdx} className="leading-[1.8] whitespace-pre">
+          {/* 줄번호 — 같은 줄 박스 안에 둬서 빈칸 박스로 줄 키가 커져도 자동 정렬. 데스크탑만. */}
+          <span aria-hidden="true" className="hidden md:inline-block w-8 pr-2 text-right text-gray-500 select-none">{lineIdx + 1}</span>
           {parts}
         </div>
       )

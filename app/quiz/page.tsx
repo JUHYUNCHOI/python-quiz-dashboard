@@ -609,7 +609,7 @@ export default function QuizPage() {
               {/* Code Block */}
               {question.code && question.code.trim() !== "" && (
                 <div className="mb-6">
-                  <CodeDisplay key={question.id} code={question.code} showLineNumbers={false} />
+                  <CodeDisplay key={question.id} code={question.code} />
                 </div>
               )}
 
