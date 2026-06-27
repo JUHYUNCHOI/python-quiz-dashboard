@@ -401,6 +401,27 @@ export function translatePythonError(raw: string, lang: "ko" | "en" = "ko"): Fri
     return { title: "", hints: [], original: "" }
   }
 
+  // 무한 루프 타임아웃 — 워커가 5초 초과로 강제 종료된 경우 (utils/pyodideWorker)
+  if (raw.includes("__CR_TIMEOUT__")) {
+    return lang === "en"
+      ? {
+          title: "⏱️ Stopped after 5s — looks like an infinite loop",
+          hints: [
+            "Make the loop end — e.g. so the condition eventually becomes false, or decrease the counter.",
+            "A `while` with no way to stop will run forever.",
+          ],
+          original: "",
+        }
+      : {
+          title: "⏱️ 5초가 넘어 멈췄어요 — 무한 루프인 것 같아요",
+          hints: [
+            "반복이 끝나도록 고쳐 보세요 — 예: 조건이 언젠가 거짓이 되거나, 세는 값을 줄이도록.",
+            "멈출 방법이 없는 `while` 은 영원히 돌아요.",
+          ],
+          original: "",
+        }
+  }
+
   // 마지막 줄에 진짜 에러 메시지가 있음 (Traceback 윗줄들은 스택)
   const lines = raw.split("\n").filter((l) => l.trim())
   const errorLine = lines[lines.length - 1] || raw

@@ -11,6 +11,7 @@ import { renderInlineMarkdown } from "@/components/learn/render-content"
 import { CodeSymbolToolbar } from "./code-symbol-toolbar"
 import { translatePythonError } from "@/lib/python-error-friendly"
 import { useEffectiveIsTeacher } from "@/lib/effective-role"
+import { runPython, preloadPython } from "@/utils/pyodideWorker"
 
 // Pyodide 타입 정의
 declare global {
@@ -46,35 +47,8 @@ interface PythonRunnerProps {
   requireCorrect?: boolean
 }
 
-// Pyodide 싱글톤
-let pyodideInstance: PyodideInterface | null = null
-let pyodideLoading: Promise<PyodideInterface> | null = null
-
-async function loadPyodideInstance(): Promise<PyodideInterface> {
-  if (pyodideInstance) return pyodideInstance
-  
-  if (pyodideLoading) return pyodideLoading
-  
-  pyodideLoading = (async () => {
-    if (!window.loadPyodide) {
-      await new Promise<void>((resolve, reject) => {
-        const script = document.createElement("script")
-        script.src = "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"
-        script.onload = () => resolve()
-        script.onerror = () => reject(new Error("Pyodide 로드 실패"))
-        document.head.appendChild(script)
-      })
-    }
-    
-    pyodideInstance = await window.loadPyodide({
-      indexURL: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/"
-    })
-    
-    return pyodideInstance
-  })()
-  
-  return pyodideLoading
-}
+// Pyodide 실행은 Web Worker 로 (utils/pyodideWorker). 메인 스레드에서 직접 안 돌림 —
+// 무한 루프 시 UI 가 얼지 않도록 + 타임아웃 시 워커 강제 종료.
 
 export function PythonRunner({
   initialCode = "",
@@ -135,7 +109,7 @@ export function PythonRunner({
   const composingRef = useRef(false)
 
   useEffect(() => {
-    loadPyodideInstance()
+    preloadPython()
       .then(() => setIsPyodideReady(true))
       .catch((err) => {
         console.error("Pyodide 로드 에러:", err)
@@ -221,7 +195,7 @@ export function PythonRunner({
   const editorMinHeight = `${Math.max(minPx, lineCount * 32 + 48)}px`
 
   const runCode = useCallback(async () => {
-    if (!isPyodideReady || !pyodideInstance) {
+    if (!isPyodideReady) {
       setError("Python 로딩 중...")
       return
     }
@@ -244,42 +218,30 @@ export function PythonRunner({
     setIsCorrect(null)
 
     try {
-      // ⚠️ batched 는 줄바꿈 시에만 flush — end="." 같은 개행 없는 출력에서
-      // batched 가 안 불려 정답인데 틀린 것으로 판정되던 버그.
-      // raw 콜백은 바이트별로 호출되어 개행 없어도 모든 출력 포착.
-      const capturedBytes: number[] = []
-      pyodideInstance.setStdout({
-        raw: (b: number) => { capturedBytes.push(b) }
-      })
+      // 워커에서 실행 — 메인 스레드(UI) 가 절대 안 얼고, 5초 초과 시 워커를 강제 종료해
+      // 무한 루프든 C-레벨 멈춤이든 모두 잡힘. stdout 캡처·input 프롬프트 억제는 워커 내부.
+      const res = await runPython(code, { stdin: stdin ?? "", timeoutMs: 5000 })
 
-      // input() 지원 — 레슨이 준 stdin 을 Pyodide 에 줄 단위로 먹임 (없으면 즉시 EOF)
-      if (typeof pyodideInstance.setStdin === "function") {
-        if (stdin != null && stdin !== "") {
-          const _lines = String(stdin).split("\n")
-          let _i = 0
-          pyodideInstance.setStdin({ stdin: () => (_i < _lines.length ? _lines[_i++] + "\n" : undefined) })
-        } else {
-          pyodideInstance.setStdin({ stdin: () => undefined })
-        }
+      if (res.timedOut) {
+        setError("__CR_TIMEOUT__")  // 렌더의 translatePythonError 가 친근 안내로 변환
+        setIsCorrect(false)
+        setAttempts(prev => prev + 1)
+        onError?.()
+        if (attempts >= 1 && hint) setShowHint(true)
+        return
       }
 
-      // input("프롬프트") 의 프롬프트가 stdout 에 echo 되어 expectedOutput 비교를
-      // 깨뜨리는 버그 방지 — builtins.input 을 프롬프트 출력 없이 stdin 만 읽도록
-      // 1회 래핑한다 (가드로 중첩 방지). 정답 출력엔 프롬프트가 없으므로 이게 맞음.
-      await pyodideInstance.runPythonAsync(
-        "import builtins as _cb\n" +
-        "if not getattr(_cb.input, '_cr_wrapped', False):\n" +
-        "    _cr_oi = _cb.input\n" +
-        "    def _cr_input(*a, **k):\n" +
-        "        return _cr_oi()\n" +
-        "    _cr_input._cr_wrapped = True\n" +
-        "    _cb.input = _cr_input\n"
-      )
+      if (!res.ok) {
+        // 원본 에러 메시지 그대로 — 친근 변환은 렌더의 translatePythonError() 담당.
+        setError(res.error || "에러!")
+        setIsCorrect(false)
+        setAttempts(prev => prev + 1)
+        onError?.()
+        if (attempts >= 1 && hint) setShowHint(true)
+        return
+      }
 
-      await pyodideInstance.runPythonAsync(code)
-
-      const capturedOutput = new TextDecoder().decode(new Uint8Array(capturedBytes))
-      const result = capturedOutput.trimEnd()
+      const result = res.stdout.trimEnd()
       setOutput(result)
 
       if (expectedOutput) {
@@ -311,22 +273,16 @@ export function PythonRunner({
         if (storageKey) saveSubmission(storageKey, code)
       }
     } catch (err: any) {
-      // ⚠️ 원본 에러 메시지를 그대로 setError 에 저장.
-      // 친근 변환은 렌더 단계의 translatePythonError() 가 담당 — 여기서 미리 가공하면
-      // 정규식 매칭이 깨져서 변환기가 fallback("에러가 발생했어요") 으로 떨어짐.
-      const errorMsg = err.message || "에러!"
-      setError(errorMsg)
+      // 안전망 — runPython 은 보통 throw 하지 않지만(결과로 에러 반환), 예기치 못한 경우 대비.
+      setError(err?.message || "에러!")
       setIsCorrect(false)
       setAttempts(prev => prev + 1)
       onError?.()
-      
-      if (attempts >= 1 && hint) {
-        setShowHint(true)
-      }
+      if (attempts >= 1 && hint) setShowHint(true)
     } finally {
       setIsLoading(false)
     }
-  }, [code, isPyodideReady, expectedOutput, onSuccess, onError, attempts, hint])
+  }, [code, isPyodideReady, expectedOutput, onSuccess, onError, attempts, hint, stdin, t])
 
   // VSCode 비슷한 편의: auto-bracket, smart indent (콜론 뒤 +4), Tab=4 spaces,
   // 빈 짝 Backspace, Shift/Ctrl/Cmd+Enter 로 실행. 공유 핸들러 사용.
