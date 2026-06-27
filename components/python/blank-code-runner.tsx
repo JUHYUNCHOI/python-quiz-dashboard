@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { renderInlineMarkdown } from "@/components/learn/render-content"
 import { translatePythonError } from "@/lib/python-error-friendly"
 import { useEffectiveIsTeacher } from "@/lib/effective-role"
+import { runPython, preloadPython } from "@/utils/pyodideWorker"
 
 // Pyodide 타입 정의
 declare global {
@@ -42,30 +43,8 @@ interface BlankCodeRunnerProps {
   choices?: string[]
 }
 
-// Pyodide 싱글톤
-let pyodideInstance: PyodideInterface | null = null
-let pyodideLoading: Promise<PyodideInterface> | null = null
-
-async function loadPyodideInstance(): Promise<PyodideInterface> {
-  if (pyodideInstance) return pyodideInstance
-  if (pyodideLoading) return pyodideLoading
-  pyodideLoading = (async () => {
-    if (!window.loadPyodide) {
-      await new Promise<void>((resolve, reject) => {
-        const script = document.createElement("script")
-        script.src = "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"
-        script.onload = () => resolve()
-        script.onerror = () => reject(new Error("Pyodide 로드 실패"))
-        document.head.appendChild(script)
-      })
-    }
-    pyodideInstance = await window.loadPyodide({
-      indexURL: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/"
-    })
-    return pyodideInstance
-  })()
-  return pyodideLoading
-}
+// Pyodide 실행은 Web Worker 로 (utils/pyodideWorker). 메인 스레드에서 직접 안 돌림 —
+// 무한 루프 시 UI 가 얼지 않도록 + 타임아웃 시 워커 강제 종료.
 
 // initialCode에서 ___ 위치를 파싱
 function parseBlanks(code: string) {
@@ -200,7 +179,7 @@ export function BlankCodeRunner({
   const inputRefs = useRef<Record<number, HTMLInputElement | null>>({})
 
   useEffect(() => {
-    loadPyodideInstance()
+    preloadPython()
       .then(() => setIsPyodideReady(true))
       .catch((err) => {
         console.error("Pyodide 로드 에러:", err)
@@ -272,7 +251,7 @@ export function BlankCodeRunner({
   const allFilled = blanks.every(b => filledValues[b.id]?.trim())
 
   const runCode = useCallback(async () => {
-    if (!isPyodideReady || !pyodideInstance) {
+    if (!isPyodideReady) {
       setError("Python 로딩 중...")
       return
     }
@@ -290,59 +269,27 @@ export function BlankCodeRunner({
     setIsCorrect(null)
 
     try {
-      // ⚠️ batched 는 줄바꿈 시에만 flush — 학생이 end="" / end="." 처럼
-      // 개행 없는 출력을 하면 batched 가 안 불려서 정답인데 틀린 것으로
-      // 처리되던 버그. raw 콜백은 바이트별로 호출되어 모든 출력 포착.
-      const capturedBytes: number[] = []
-      pyodideInstance.setStdout({
-        raw: (b: number) => { if (capturedBytes.length < 200000) capturedBytes.push(b) }  // 출력 폭주(무한루프) 시 메모리 보호
-      })
+      // 워커에서 실행 — 메인 스레드(UI) 안 얼림. 5초 초과 시 워커 강제 종료로 무한 루프 잡힘.
+      // stdout 캡처·200KB 캡·input 프롬프트 억제는 워커 내부 담당.
+      const res = await runPython(code, { stdin: stdin ?? "", timeoutMs: 5000 })
 
-      // input() 지원 — 레슨이 준 stdin 을 Pyodide 에 줄 단위로 먹임 (없으면 즉시 EOF)
-      if (typeof pyodideInstance.setStdin === "function") {
-        if (stdin != null && stdin !== "") {
-          const _lines = String(stdin).split("\n")
-          let _i = 0
-          pyodideInstance.setStdin({ stdin: () => (_i < _lines.length ? _lines[_i++] + "\n" : undefined) })
-        } else {
-          pyodideInstance.setStdin({ stdin: () => undefined })
-        }
+      if (res.timedOut) {
+        setError("__CR_TIMEOUT__")  // 렌더의 translatePythonError 가 친근 안내로 변환
+        setIsCorrect(false)
+        setAttempts(prev => prev + 1)
+        if (attempts >= 1 && hint) setShowHint(true)
+        return
       }
 
-      // input("프롬프트") 의 프롬프트가 stdout 에 echo 되어 expectedOutput 비교를
-      // 깨뜨리는 버그 방지 — builtins.input 을 프롬프트 출력 없이 stdin 만 읽도록
-      // 1회 래핑한다 (가드로 중첩 방지). 정답 출력엔 프롬프트가 없으므로 이게 맞음.
-      await pyodideInstance.runPythonAsync(
-        "import builtins as _cb\n" +
-        "if not getattr(_cb.input, '_cr_wrapped', False):\n" +
-        "    _cr_oi = _cb.input\n" +
-        "    def _cr_input(*a, **k):\n" +
-        "        return _cr_oi()\n" +
-        "    _cr_input._cr_wrapped = True\n" +
-        "    _cb.input = _cr_input\n"
-      )
+      if (!res.ok) {
+        setError(res.error || "에러!")
+        setIsCorrect(false)
+        setAttempts(prev => prev + 1)
+        if (attempts >= 1 && hint) setShowHint(true)
+        return
+      }
 
-      // ⏱️ 무한 루프 안전장치 — sys.settrace 워치독이 ~3초 넘으면 TimeoutError 로 끊는다.
-      //    (Pyodide 는 메인 스레드 동기 실행이라, 학생이 무한 루프를 짜면 타임아웃이 없으면
-      //     탭이 통째로 얼어 '버튼이 눌리지도 않는' 상태가 됨. settrace 는 줄마다 호출되어
-      //     루프 안에서도 시간 체크가 가능하다.)
-      ;(pyodideInstance as any).globals.set("_cr_user_code", code)
-      await pyodideInstance.runPythonAsync(
-        "import sys as _crs, time as _crt\n" +
-        "_cr_deadline = _crt.time() + 3.0\n" +
-        "def _cr_watchdog(f, e, a):\n" +
-        "    if _crt.time() > _cr_deadline:\n" +
-        "        raise TimeoutError('__CR_TIMEOUT__')\n" +
-        "    return _cr_watchdog\n" +
-        "_crs.settrace(_cr_watchdog)\n" +
-        "try:\n" +
-        "    exec(_cr_user_code)\n" +
-        "finally:\n" +
-        "    _crs.settrace(None)\n"
-      )
-
-      const capturedOutput = new TextDecoder().decode(new Uint8Array(capturedBytes))
-      const result = capturedOutput.trimEnd()
+      const result = res.stdout.trimEnd()
       setOutput(result)
 
       if (expectedOutput) {
@@ -366,26 +313,15 @@ export function BlankCodeRunner({
         if (storageKey) saveSubmission(storageKey, JSON.stringify({ values: filledValues, assembled: code }))
       }
     } catch (err: any) {
-      const errorMsg = err.message || "에러!"
-      // ⏱️ 무한 루프(워치독 타임아웃) — 친근 안내. (그 외 원본 에러는 렌더 단계 translatePythonError() 담당)
-      if (errorMsg.includes("__CR_TIMEOUT__")) {
-        setError(t(
-          "⏱️ 3초가 넘어 멈췄어요 — 무한 루프인 것 같아요. 반복이 끝나도록(예: 값을 줄여서) 고쳐 보세요!",
-          "⏱️ Stopped after 3s — looks like an infinite loop. Make the loop end (e.g., decrease the value)!"
-        ))
-      } else {
-        setError(errorMsg)
-      }
+      // 안전망 — runPython 은 보통 throw 하지 않지만(결과로 에러 반환), 예기치 못한 경우 대비.
+      setError(err?.message || "에러!")
       setIsCorrect(false)
       setAttempts(prev => prev + 1)
-
-      if (attempts >= 1 && hint) {
-        setShowHint(true)
-      }
+      if (attempts >= 1 && hint) setShowHint(true)
     } finally {
       setIsLoading(false)
     }
-  }, [buildCode, isPyodideReady, expectedOutput, onSuccess, attempts, hint, allFilled])
+  }, [buildCode, isPyodideReady, expectedOutput, onSuccess, attempts, hint, allFilled, stdin, filledValues, storageKey])
 
   const reset = () => {
     setFilledValues({})
