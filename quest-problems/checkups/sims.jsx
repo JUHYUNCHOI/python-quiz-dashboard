@@ -703,41 +703,28 @@ function _buildMirrorSteps(E) {
   return [
     // 1) 무대 + 진짜 목표: '모든 뒤집기'의 검진 수를 다 세야 함 → 너무 많으니 빨리 (선생님 2026-06-23)
     { win: [_ML, _MR], rev: 0, reveal: "none", focus: null, formula: false, payoff: false,
-      bubble: t(E, `🐄 cows, 📋 the vet's wanted breed — match = checkup ✓. Reversing different chunks gives different checkup counts, and we must find the count for EVERY reversal — too many to redo one by one. Let's find a shortcut.`,
-                   `🐄 소 줄, 📋 수의사가 원하는 종 — 같으면 검진 ✓. 어느 구간을 뒤집느냐에 따라 검진 수가 달라져요. 우리는 '모든 뒤집기'의 검진 수를 다 알아야 하는데, 방법이 너무 많아요 — 빨리 세는 비결을 찾아봐요.`) },
+      bubble: t(E, `When you flip a window, the cows inside it change places — so which cows get a checkup changes too. If we find the RULE for how they move, we can count fast. Let's flip spots ${_ML}~${_MR} and look.`,
+                   `구간을 뒤집으면 그 안의 소들이 자리를 바꿔요 — 그래서 검진받는 소도 달라지죠. 소들이 '어떻게 자리를 바꾸는지' 규칙만 찾으면 빨리 셀 수 있어요. 자, 자리 ${_ML}~${_MR} 를 직접 뒤집어 봐요.`) },
     // 2) 뒤집기 전 검진 (Q1: 원래 검진받던 소)
     { win: [_ML, _MR], rev: 0, reveal: "all", focus: null, formula: false, payoff: false,
       bubble: t(E, `BEFORE reversing: checkups are spots ${before.join(", ")} — only ${before.length}.`,
                    `뒤집기 전 — 검진 ✓ 는 자리 ${before.join("·")}, ${before.length}마리뿐이에요.`) },
     // 3) 뒤집기 (바깥) — 윈도우 밖(자리 1·6)은 안 움직이니 검진 ✓ 유지 (선생님 2026-06-23)
     { win: [_ML, _MR], rev: 1, reveal: "outside", focus: null, formula: false, payoff: false,
-      bubble: t(E, `Reverse spots ${_ML}–${_MR}: the outer two cows slide and swap (spot ${_ML} ↔ ${_MR}). Outside (spots 1, 6) doesn't move.`,
-                   `자리 ${_ML}~${_MR} 뒤집기 — 바깥 두 소가 미끄러지며 자리 바꿈 (자리 ${_ML} ↔ ${_MR}). 윈도우 밖(자리 1·6)은 그대로.`) },
+      bubble: t(E, `Reverse spots ${_ML}–${_MR} — first the two ENDS (spots ${_ML}, ${_MR}) swap cows. Outside (spots 1, 6) doesn't move.`,
+                   `자리 ${_ML}~${_MR} 뒤집기 — 먼저 양 끝(자리 ${_ML}·${_MR})의 소가 서로 자리를 바꿔요. 윈도우 밖(자리 1·6)은 안 움직여요.`) },
     // 4) 뒤집기 (안쪽)
     { win: [_ML, _MR], rev: 2, reveal: "outside", focus: null, formula: false, payoff: false,
-      bubble: t(E, `Inner two too (spot ${_ML + 1} ↔ ${_MR - 1}). Reversed!`,
-                   `안쪽 둘도 (자리 ${_ML + 1} ↔ ${_MR - 1}). 다 뒤집혔어요!`) },
+      bubble: t(E, `Then the inner two (spots ${_ML + 1}, ${_MR - 1}) swap too. Ends first, then inside → the whole window is reversed!`,
+                   `그 다음 안쪽(자리 ${_ML + 1}·${_MR - 1})도 바꿔요. 끝 → 안쪽 순서로 → 구간이 다 뒤집혔어요!`) },
     // 5) 뒤집은 후 검진 (Q2: 어떻게 바뀌었나)
     { win: [_ML, _MR], rev: 2, reveal: "all", focus: null, formula: false, payoff: false,
       bubble: t(E, `AFTER: checkups are spots ${after.join(", ")} — ${after.length}! Spots ${gained.join(", ")} newly matched.`,
                    `뒤집은 후 — 검진 ✓ 는 자리 ${after.join("·")}, ${after.length}마리! 자리 ${gained.join("·")}가 새로 맞았어요.`) },
-    // 6) 뒤집기 = 짝지어 자리 바꾸기. 짝의 합은 늘 s
-    { win: [_ML, _MR], rev: 2, reveal: "none", focus: null, formula: true, payoff: false,
-      bubble: t(E, `Reversing just swaps cows in PAIRS: spot 2 ↔ 5, spot 3 ↔ 4. Add each pair's spots — always 7 (= the ends' sum s).`,
-                   `뒤집기는 자리끼리 짝지어 바꾸는 거예요: 자리 2 ↔ 5, 자리 3 ↔ 4. 각 짝의 두 자리를 더하면? 늘 7 (= 양 끝 합 s)!`) },
-    // 7a) 뒤집기 전 — 자리 3 의 짝꿍 = 자리 4, 지금 자리 4 에 소 D 가 보임
-    //     (선생님 2026-06-24: 뒤집힌 줄에서 '자리 4 의 D' 라 해서 화면 자리4=C 와 충돌 → 뒤집기 전부터)
-    { win: [_ML, _MR], rev: 0, reveal: "none", focus: 4, formula: true, payoff: false,
-      bubble: t(E, `Spots 3 and 4 will swap cows (3 + 4 = 7). Right now spot 4 holds cow D.`,
-                   `자리 3 과 자리 4 의 소가 자리를 바꿔요 (7 − 3 = 4). 지금 자리 4 엔 소 D 가 있죠.`) },
-    // 7b) 뒤집으면 D 가 자리 3 으로 + 검진 채워서 '자리3 검진 = 자리4 D 확인' (선생님 2026-06-24: 표현·줄맞춤)
-    { win: [_ML, _MR], rev: 2, reveal: "inside", focus: 3, formula: true, payoff: false,
-      bubble: t(E, `So to check spot 3, just look at spot 4's cow D. D = wanted D → checkup ✓!`,
-                   `그래서 자리 3 에서 검진받을 소를 알려면 → 자리 4 의 소 D 를 확인하면 돼요. D = 원하는 D → 검진 ✓!`) },
-    // 8) 규칙 정리 + 다음(GrowSim)으로 — '다른 윈도우 비교' 중복 스텝 제거 (선생님 2026-06-23)
+    // 6) 딱 하나 기억: 서로 자리 바꾼 짝들의 자리수 합 = s (=7). 공식·비교는 다음 시뮬로. (선생님 2026-06-24)
     { win: [_ML, _MR], rev: 2, reveal: "all", focus: null, formula: true, payoff: true,
-      bubble: t(E, `That's the rule: spot i always gets spot (s−i)'s cow — so only s matters, not the window's size. Next: use this to count EVERY reversal fast. 🚀`,
-                   `이게 핵심 규칙! 자리 i 엔 늘 (s−i)번 자리 소가 와요 — 그러니 구간 크기는 상관없고 s 만 중요해요. 다음 화면에서 이 규칙으로 '모든 뒤집기'를 빨리 세 봐요. 🚀`) },
+      bubble: t(E, `Remember just ONE thing! The cows that swapped — spots ${_ML} & ${_MR} (${_ML}+${_MR}=${_MS}), spots ${_ML + 1} & ${_MR - 1} (${_ML + 1}+${_MR - 1}=${_MS}). Their spot numbers always add to ${_MS} (= l + r). Keep that ${_MS} in mind — next, we'll count WITHOUT flipping. 🚀`,
+                   `딱 하나만 기억해요! 서로 자리를 바꾼 소들 — 자리 ${_ML}·${_MR} (${_ML}+${_MR}=${_MS}), 자리 ${_ML + 1}·${_MR - 1} (${_ML + 1}+${_MR - 1}=${_MS}). 바뀐 짝의 자리수 합은 늘 ${_MS} (= 양 끝 합 l+r). 이 ${_MS}만 기억해요 — 다음 화면에서 안 뒤집고 셀 거예요. 🚀`) },
   ];
 }
 
@@ -803,13 +790,13 @@ export function CheckupsMirrorSim({ E }) {
           </div>
         )}
         {rowWrap(t(E, "📋 wants", "📋 원하는"), "#1e40af",
-          <div style={{ display: "flex", gap: GAP }}>{_MB.map((tk, k) => <div key={k}>{fixedCell(tk)}</div>)}</div>
+          <div style={{ display: "flex", gap: GAP }}>{_MB.map((tk, k) => <div key={k}>{fixedCell(tk, st.focus === k + 1)}</div>)}</div>
         )}
         {rowWrap(t(E, "🩺 ✓?", "🩺 검진?"), "#15803d",
           <div style={{ display: "flex", gap: GAP }}>
             {Array.from({ length: _MN }, (_, k) => {
-              const p = k + 1, show = ckShow(p), ok = ckOk(p);
-              return <div key={k} style={{ width: TW, height: 24, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 800, background: show && ok ? "#22c55e" : "transparent", color: show ? (ok ? "#fff" : "#cbd5e1") : "transparent", transition: "background .2s" }}>{show ? (ok ? "✓" : "—") : ""}</div>;
+              const p = k + 1, show = ckShow(p), ok = ckOk(p), hot = st.focus === p;
+              return <div key={k} style={{ width: TW, height: 24, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 800, background: show && ok ? "#22c55e" : "transparent", color: show ? (ok ? "#fff" : "#cbd5e1") : "transparent", boxShadow: hot ? "0 0 0 2px #ea580c" : "none", transition: "background .2s" }}>{show ? (ok ? "✓" : "—") : ""}</div>;
             })}
           </div>
         )}
@@ -826,7 +813,7 @@ export function CheckupsMirrorSim({ E }) {
       {/* 공식 줄 (insight — 자리 번호끼리의 관계) */}
       <div style={{ textAlign: "center", minHeight: 20, margin: "10px 0 4px", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>
         {st.formula && (
-          <span style={{ fontSize: 13, color: "#0e7490" }}>{t(E, "a spot + its partner", "자리 + 짝꿍")} = s = {_MS}</span>
+          <span style={{ fontSize: 13, color: "#0e7490" }}>{t(E, `s = ends' sum (l+r) = ${_ML}+${_MR} = ${_MS}`, `s = 양 끝 합 (l+r) = ${_ML}+${_MR} = ${_MS}`)}</span>
         )}
       </div>
 
@@ -1098,8 +1085,8 @@ export function CheckupsTrySim({ E }) {
       {/* 새 '↩ 원래자리' 행을 가리키는 한 줄 (텍스트 설명 대신 그림 안내) */}
       <div style={{ maxWidth: 460, margin: "12px auto 0", background: "#ecfeff", border: "1px dashed #67e8f9", borderRadius: 10, padding: "8px 12px", fontSize: 11.5, color: "#155e75", lineHeight: 1.6, textAlign: "center", wordBreak: "keep-all" }}>
         💡 {t(E,
-          `"←N" = where each inside cow came from (= s − spot). Same s → same numbers → same inside! Try 2~5 then 3~4 (both s=7).`,
-          `"←N" = 안쪽 소가 원래 있던 자리 (= s − 자리). s 같으면 이 숫자들이 똑같아 → 안쪽도 똑같아요! 자리 2~5 누른 뒤 3~4 눌러 봐요 (둘 다 s=7).`)}
+          `No flip needed: compare cow[i] with wanted[s−i]. "←N" = where each inside cow came from (= s − spot). Same s → same ←N → same inside! Try 2~5 then 3~4 (both s=7).`,
+          `안 뒤집어요: 소[자리 i] 와 원하는[s−i] 만 비교. "←N" = 그 소가 원래 있던 자리 (= s − 자리). s 같으면 ←N 이 똑같아 → 안쪽도 똑같아요! 자리 2~5, 3~4 둘 다 s=7 눌러봐요.`)}
       </div>
     </div>
   );
