@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCheckupsSections, DiagonalSim, MatchUpToSim, DiagPrefixSim } from "./components";
-import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsFastSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim } from "./sims";
+import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsFastSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim, CheckupsKeyCodeSim, CheckupsEnumSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 // (예전 정적 시각화 헬퍼 SpeciesCell/CowRow/TreatedRow/PositionRow 는
@@ -103,6 +103,15 @@ export function makeCheckupsCh1(E) {
             </div>
           </div>
         </div>),
+    },
+
+    /* 1-2b — '구간은 입력이 아니라 우리가 다 해본다' 를 시뮬로 (선생님 2026-06-24: 설명 말고 흐름에서 저절로). */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Where does that 3, 3, 0, 0 come from? The flip isn't given — we try all 6 segments ourselves and tally by checkup count.",
+        "그 3, 3, 0, 0 은 어디서 나올까요? 뒤집을 곳은 안 주어져요 — 6가지 구간을 우리가 다 해보고 검진 수별로 모아요."),
+      content: (<CheckupsEnumSim E={E} />),
     },
 
     /* (옛 1-3 ReverseSim 삭제 — 1-1 인터랙티브 시뮬과 중복 + 점선 매핑이 보기 어려움.
@@ -276,7 +285,7 @@ export function makeCheckupsCh2(E, lang = "py") {
    The "same diagonal, same comparison" observation, taught entirely through
    three interactive sims. No walls of pseudo-code — the visuals carry it.
    ════════════════════════════════════════════════════════════════════ */
-export function makeCheckupsCh3(E) {
+export function makeCheckupsCh3(E, lang = "py") {
   return [
     /* 3-0 — 큰 그림 먼저: 검진 = 바깥 + 안쪽 (선생님 2026-06-23: 흐름 순서 — 쪼개기를 맨 앞으로).
         바깥=쉬움(안 변함), 안쪽=핵심(뒤집힘). 이걸 깔고 안쪽으로 들어감. */
@@ -303,7 +312,7 @@ export function makeCheckupsCh3(E) {
             ))}
           </div>
           <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.75, wordBreak: "keep-all" }}>
-            <div><b style={{ color: "#475569" }}>{t(E, "OUTSIDE", "바깥")}</b> — {t(E, "doesn't move. Easy: a[i] = b[i], same for every window — count once up front.", "안 움직여요. 쉬움: a[i] = b[i], 모든 윈도우에서 똑같아 — 미리 한 번 세두면 끝.")}</div>
+            <div><b style={{ color: "#475569" }}>{t(E, "OUTSIDE", "바깥")}</b> — {t(E, "doesn't move. Easy: the cow already matches what that spot wants — same for every window, so count it once up front.", "안 움직여요. 쉬움: 소가 그 자리 원하는 종과 이미 같은지만 보면 돼요 — 모든 윈도우에서 똑같으니 미리 한 번 세두면 끝.")}</div>
             <div style={{ marginTop: 8 }}><b style={{ color: "#0e7490" }}>{t(E, "INSIDE", "안쪽")}</b> — {t(E, "reversed, so it changes — this is the hard part. We'll crack it next.", "뒤집혀서 바뀌어요 — 여기가 핵심(어려운 부분). 다음에서 풀어요.")}</div>
             <div style={{ marginTop: 10, textAlign: "center", padding: "9px 10px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8, fontWeight: 800, color: "#0e7490", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
               {t(E, "checkups = (outside) + (inside)", "검진 수 = (바깥) + (안쪽)")}
@@ -316,28 +325,21 @@ export function makeCheckupsCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Start with the hard part, the INSIDE — what does reversing do? Watch one window: each spot gets its partner's cow.",
-        "어려운 '안쪽'부터 — 뒤집으면 뭐가 바뀔까요? 한 윈도우를 보며, 각 자리에 짝꿍 소가 오는 걸 봐요."),
+        "Flip a window and the cows inside change places — so the checkups change. Let's find the rule for how they move.",
+        "구간을 뒤집으면 그 안 소들이 자리를 바꿔 — 그래서 검진이 달라져요. 소가 어떻게 자리를 바꾸는지 규칙을 찾아봐요."),
       content: (<CheckupsMirrorSim E={E} />),
     },
 
-    /* 3-1a — 같은 s 위에서 한 짝씩 넓히며 새 짝만 ±로 더하는 걸 직접 보여줌
-        (선생님 2026-06-23: '4개·3개·전체 바꿀때 +1/−1 다 표시'). prefix(누적)의 본질. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Same s, growing window: the inside never moves — only the new pair changes. Just add its ±. That's how we count fast.",
-        "같은 s 에서 구간을 넓혀가요 — 안쪽은 안 움직이고 새 짝만 바뀌어요. 그 ± 만 더하면 끝. 이렇게 빨리 세요."),
-      content: (<CheckupsGrowSim E={E} />),
-    },
+    /* 3-1a (GrowSim) 제거 — '같은 s → 안쪽 같다'를 TrySim ←원래자리 행이 더 명확히 증명하고,
+        Grow 의 '±로 키우기' 틀은 결론(s마다 한 번 세서 재사용)과 다른 틀이라 겉돎 (선생님 2026-06-24: 반복 제거·제대로 개편). */
 
     /* 3-1b — 직접 구간을 골라 뒤집어 보는 탐색 (선생님 2026-06-23: '자리 3,4,5 뒤집을 때 보고 싶어').
-        s 가 다르면 안쪽 검진이 달라지는 걸 학생이 직접 확인. */
+        s 가 다르면 안쪽 검진이 달라지는 걸 학생이 직접 확인 + ←원래자리 로 같은 s 재사용 증명. */
     {
       type: "reveal",
       narr: t(E,
-        "Your turn — pick any window and reverse it. Watch the cows flip and the checkups recount. Notice: windows with the same s share the same inside.",
-        "직접 해봐요 — 구간을 골라 뒤집어요. 소가 뒤집히고 검진이 다시 세지는 걸 봐요. s 가 같은 구간끼리는 안쪽이 똑같다는 것도 확인!"),
+        "Remember s = l + r? Then you don't flip! Spot i's cow lands at spot (s−i), so just compare cow[i] with wanted[s−i]. Pick any window and check — and notice: same s ⇒ same inside.",
+        "s = l + r 기억하죠? 그럼 안 뒤집어도 돼요! 자리 i 소는 뒤집으면 자리 (s−i)로 가니까 — 소[i] 와 원하는[s−i] 만 비교하면 끝. 구간을 골라 확인해봐요 (s 같은 구간끼린 안쪽 똑같아요)."),
       content: (<CheckupsTrySim E={E} />),
     },
 
@@ -349,6 +351,44 @@ export function makeCheckupsCh3(E) {
         바깥-prefix 는 FastSim 바깥 칸이, 안쪽-prefix 는 GrowSim 의 ± 가 이미 보여주고,
         실제 구현(prefix 배열)은 코드 챕터(⚡)가 한 줄씩 다룸 → 중복. 바로 통합 FastSim 으로. */
 
+    /* 3-1c — 재사용(절차): s 같은 구간은 안쪽 ✓ 자리가 똑같음 → s마다 한 번 적어두고 빼기 한 번.
+        (선생님 2026-06-24: '재사용'이 말로만 있던 구멍 — 왜 빨라지는지의 핵심을 절차로.) */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Same s ⇒ same ✓ spots. So write each s down ONCE, then reuse — any window of that s is just a subtraction.",
+        "s 같은 구간은 안쪽 ✓ 자리가 똑같아요. 그러니 s마다 한 번만 세서 적어두고 → 같은 s 구간은 빼기 한 번으로 재사용!"),
+      content: (
+        <div style={{ padding: 16, maxWidth: 460, margin: "0 auto" }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "#0e7490", textAlign: "center", marginBottom: 12 }}>
+            🔁 {t(E, "Count each s ONCE, then reuse", "s 마다 한 번만 세고 — 재사용")}
+          </div>
+          {[
+            { lab: t(E, "spot", "자리"), cells: ["1", "2", "3", "4", "5", "6"], plain: true },
+            { lab: t(E, "inside ✓ (s=7)", "안쪽 ✓ (s=7)"), cells: ["·", "·", "✓", "·", "✓", "·"], hot: [2, 4] },
+            { lab: t(E, "✓ so far", "여기까지 ✓"), cells: ["0", "0", "1", "1", "2", "2"], pre: true },
+          ].map((row, ri) => (
+            <div key={ri} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+              <div style={{ width: 92, fontSize: 11, fontWeight: 700, color: row.plain ? C.dim : "#0e7490", textAlign: "right" }}>{row.lab}</div>
+              {row.cells.map((c, ci) => (
+                <div key={ci} style={{
+                  width: 34, height: 28, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 14,
+                  color: row.plain ? C.dim : (row.hot && row.hot.includes(ci)) ? "#15803d" : "#0e7490",
+                  background: row.pre ? "#ecfeff" : (row.hot && row.hot.includes(ci)) ? "#dcfce7" : "transparent",
+                  border: row.pre ? "1px solid #67e8f9" : "none",
+                }}>{c}</div>
+              ))}
+            </div>
+          ))}
+          <div style={{ marginTop: 12, background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: "#9a3412", lineHeight: 1.65, textAlign: "center", wordBreak: "keep-all", fontWeight: 600 }}>
+            {t(E,
+              "Window [2,5] inside = (✓ up to 5) − (✓ up to 1) = 2 − 0 = 2. One subtraction! Write each s down once, then every window is a subtract.",
+              "구간 [2,5] 안쪽 = (자리 5까지 2) − (자리 1까지 0) = 2 − 0 = 2. 빼기 한 번! s마다 한 번 적어두면, 어떤 구간이든 빼기 한 번이에요.")}
+          </div>
+        </div>),
+    },
+
     /* 3-5b — 통합: 한 윈도우의 검진 수 = 바깥 + 안쪽 을 한 화면에서 stepped 로. */
     {
       type: "reveal",
@@ -358,18 +398,69 @@ export function makeCheckupsCh3(E) {
       content: (<CheckupsFastSim E={E} />),
     },
 
+    /* 3-5c — 핵심을 코드로 살짝 (Py/C++ 토글) (선생님 2026-06-24: 안 바꾸고 index 비교 + 재사용을 코드로) */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Same idea in code — no reversing, just compare a[l+r−i] to b[i]. Python in Python, C++ in C++.",
+        "그 아이디어를 코드로 — 안 뒤집고 a[l+r−i] 를 b[i] 와 비교. 파이썬은 파이썬, C++ 은 C++ 로."),
+      content: (<CheckupsKeyCodeSim E={E} lang={lang} />),
+    },
+
+    /* 3-5d — 결(payoff): 그래서 전체가 빨라졌다 + 분포 완성 (선생님 2026-06-24: '이게 설명 끝인가?' — 결론이 약함) */
+    {
+      type: "reveal",
+      narr: t(E,
+        "So — the payoff. Each window now costs O(1), so ALL windows take O(N²) instead of O(N³). The distribution you tallied by hand at the start now comes out instantly, even for N=7500.",
+        "그래서 — 결론. 윈도우 하나가 이제 O(1) 이라, 모든 윈도우를 O(N³) 대신 O(N²) 에 다 세요. 처음에 손으로 통에 모았던 분포가, N=7500 이어도 순식간에 나와요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: "#065f46", textAlign: "center", marginBottom: 12 }}>
+            🚀 {t(E, "So how much faster?", "그래서 — 얼마나 빨라졌나")}
+          </div>
+
+          {/* brute → fast 비교 */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+            <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px" }}>
+              <div style={{ fontSize: 11.5, fontWeight: 800, color: "#991b1b", marginBottom: 5 }}>🐢 {t(E, "Brute", "브루트포스")}</div>
+              <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.6, wordBreak: "keep-all" }}>
+                {t(E, "Reverse + recount every window", "윈도우마다 뒤집고 다시 셈")}<br />
+                <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>O(N³)</code> → {t(E, "TLE", "시간 초과")}
+              </div>
+            </div>
+            <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 12px" }}>
+              <div style={{ fontSize: 11.5, fontWeight: 800, color: "#065f46", marginBottom: 5 }}>⚡ {t(E, "Fast", "빠른 풀이")}</div>
+              <div style={{ fontSize: 12, color: "#065f46", lineHeight: 1.6, wordBreak: "keep-all" }}>
+                {t(E, "Outside once + inside reused per s → each window O(1)", "바깥 한 번 + 안쪽 s별 재사용 → 윈도우당 O(1)")}<br />
+                <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>O(N²)</code> → {t(E, "passes", "통과")}
+              </div>
+            </div>
+          </div>
+
+          {/* 분포 완성 — EnumSim 으로 회귀 */}
+          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: "12px 14px", fontSize: 12.5, color: "#155e75", lineHeight: 1.7, wordBreak: "keep-all", textAlign: "center" }}>
+            {t(E,
+              "We dropped one whole factor of N — exactly what we needed. Each window's checkup count goes into a tally box (just like the start), and that tally IS the answer.",
+              "N 한 겹을 통째로 덜어냈어요 — 딱 필요했던 거죠. 윈도우마다 검진 수를 통에 넣으면 (맨 처음 그 통!), 그 통이 바로 답(분포)이에요.")}
+            <div style={{ marginTop: 8, fontWeight: 800, color: "#0e7490", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+              {t(E, "every window → +1 to its box → output", "모든 윈도우 → 통에 +1 → 출력")}
+            </div>
+          </div>
+        </div>),
+    },
+
     /* 3-6 — closing input: the two-piece formula in one number (active step). */
     {
       type: "input",
       narr: t(E,
-        "Put the two prefixes together for one (l, r).",
-        "한 (l, r) 에 대해 두 prefix 를 합쳐 봐요."),
+        "Add the two parts for one window: outside + inside.",
+        "한 윈도우의 두 조각을 더해 봐요: 바깥 + 안쪽."),
       question: t(E,
-        "For some (l, r): outside matches = 3, inside matches = diag[r] − diag[l−1] = 5 − 2.  Total checkups for this pair?",
-        "어떤 (l, r): 바깥 일치 = 3, 안쪽 일치 = diag[r] − diag[l−1] = 5 − 2. 이 쌍의 총 검진 수는?"),
+        "For some window: outside matches = 3, inside matches = 3 (read from this s's count).  Total checkups for this window?",
+        "어떤 윈도우: 바깥 일치 = 3개, 안쪽 일치 = 3개 (이 s 에서 세둔 걸 읽음). 이 윈도우의 총 검진 수는?"),
       hint: t(E,
-        "Total = outside + inside.  inside = 5 − 2 = 3.",
-        "총합 = 바깥 + 안쪽. 안쪽 = 5 − 2 = 3."),
+        "Total = outside + inside = 3 + 3.",
+        "총합 = 바깥 + 안쪽 = 3 + 3."),
       answer: 6,
     },
   ];

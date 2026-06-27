@@ -295,7 +295,7 @@ export function BlankCodeRunner({
       // 처리되던 버그. raw 콜백은 바이트별로 호출되어 모든 출력 포착.
       const capturedBytes: number[] = []
       pyodideInstance.setStdout({
-        raw: (b: number) => { capturedBytes.push(b) }
+        raw: (b: number) => { if (capturedBytes.length < 200000) capturedBytes.push(b) }  // 출력 폭주(무한루프) 시 메모리 보호
       })
 
       // input() 지원 — 레슨이 준 stdin 을 Pyodide 에 줄 단위로 먹임 (없으면 즉시 EOF)
@@ -322,7 +322,24 @@ export function BlankCodeRunner({
         "    _cb.input = _cr_input\n"
       )
 
-      await pyodideInstance.runPythonAsync(code)
+      // ⏱️ 무한 루프 안전장치 — sys.settrace 워치독이 ~3초 넘으면 TimeoutError 로 끊는다.
+      //    (Pyodide 는 메인 스레드 동기 실행이라, 학생이 무한 루프를 짜면 타임아웃이 없으면
+      //     탭이 통째로 얼어 '버튼이 눌리지도 않는' 상태가 됨. settrace 는 줄마다 호출되어
+      //     루프 안에서도 시간 체크가 가능하다.)
+      ;(pyodideInstance as any).globals.set("_cr_user_code", code)
+      await pyodideInstance.runPythonAsync(
+        "import sys as _crs, time as _crt\n" +
+        "_cr_deadline = _crt.time() + 3.0\n" +
+        "def _cr_watchdog(f, e, a):\n" +
+        "    if _crt.time() > _cr_deadline:\n" +
+        "        raise TimeoutError('__CR_TIMEOUT__')\n" +
+        "    return _cr_watchdog\n" +
+        "_crs.settrace(_cr_watchdog)\n" +
+        "try:\n" +
+        "    exec(_cr_user_code)\n" +
+        "finally:\n" +
+        "    _crs.settrace(None)\n"
+      )
 
       const capturedOutput = new TextDecoder().decode(new Uint8Array(capturedBytes))
       const result = capturedOutput.trimEnd()
@@ -349,10 +366,16 @@ export function BlankCodeRunner({
         if (storageKey) saveSubmission(storageKey, JSON.stringify({ values: filledValues, assembled: code }))
       }
     } catch (err: any) {
-      // ⚠️ 원본 에러 그대로 — 친근 변환은 렌더 단계 translatePythonError() 가 담당.
-      // 여기서 미리 가공하면 정규식 매칭이 깨짐.
       const errorMsg = err.message || "에러!"
-      setError(errorMsg)
+      // ⏱️ 무한 루프(워치독 타임아웃) — 친근 안내. (그 외 원본 에러는 렌더 단계 translatePythonError() 담당)
+      if (errorMsg.includes("__CR_TIMEOUT__")) {
+        setError(t(
+          "⏱️ 3초가 넘어 멈췄어요 — 무한 루프인 것 같아요. 반복이 끝나도록(예: 값을 줄여서) 고쳐 보세요!",
+          "⏱️ Stopped after 3s — looks like an infinite loop. Make the loop end (e.g., decrease the value)!"
+        ))
+      } else {
+        setError(errorMsg)
+      }
       setIsCorrect(false)
       setAttempts(prev => prev + 1)
 

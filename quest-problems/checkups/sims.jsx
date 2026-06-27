@@ -6,6 +6,7 @@
 import { useState, useRef, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
+import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
 
@@ -29,6 +30,110 @@ function makeArrays(n) {
     b[i] = ((i * 5 + 1) % n) + 1;
   }
   return { a, b };
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   CheckupsEnumSim — "구간은 입력이 아니다" 를 흐름으로 (선생님 2026-06-24:
+   설명 말고 시뮬에서 저절로). 공식 샘플 N=3 의 6가지 뒤집기를 우리가 직접
+   다 만들어 점수별로 모으면 → 출력 3,3,0,0. 구간이 들어오는 게 아니라 우리가 다 해봄.
+   ════════════════════════════════════════════════════════════════════ */
+const _ENA = [1, 3, 2];      // 윗줄 (소가 가진 종)
+const _ENB = [3, 2, 1];      // 아랫줄 (수의사가 원하는 종)
+const _ENN = 3;
+const _ENORDER = [[1, 1], [1, 2], [1, 3], [2, 2], [2, 3], [3, 3]];  // l≤r 모든 구간 6가지
+function _enReverse(l, r) { const res = _ENA.slice(); for (let i = l; i <= r; i++) res[i - 1] = _ENA[(l + r - i) - 1]; return res; }
+function _enScore(row) { let c = 0; for (let i = 0; i < _ENN; i++) if (row[i] === _ENB[i]) c++; return c; }
+function _buildEnumSteps(E) {
+  const steps = [];
+  const buckets = [0, 0, 0, 0];
+  steps.push({ flip: null, row: _ENA.slice(), score: null, buckets: buckets.slice(), payoff: false,
+    bubble: t(E,
+      "Input is just two rows. WHERE to flip isn't given — we choose it. With N=3 there are 6 segments. Let's try them all!",
+      "입력은 윗줄·아랫줄 둘 뿐이에요. '어디를 뒤집을지'는 안 주어져요 — 우리가 골라요. N=3 이면 구간이 6가지. 다 해봐요!") });
+  _ENORDER.forEach(([l, r]) => {
+    const row = _enReverse(l, r), sc = _enScore(row);
+    buckets[sc]++;
+    steps.push({ flip: [l, r], row, score: sc, buckets: buckets.slice(), payoff: false,
+      bubble: t(E,
+        `Flip [${l}, ${r}] → ${sc} checkup${sc === 1 ? "" : "s"}. Drop one into the "${sc}" box.`,
+        `[${l}~${r}] 뒤집기 → 검진 ${sc}개. '검진 ${sc}' 칸에 하나 넣어요.`) });
+  });
+  steps.push({ flip: null, row: _ENA.slice(), score: null, buckets: buckets.slice(), payoff: true,
+    bubble: t(E,
+      "All 6 tried. The box counts 3, 3, 0, 0 ARE the output — no segment was ever handed to us; we made them all.",
+      "6가지 다 해봤어요. 칸 개수 3, 3, 0, 0 이 그대로 출력! 구간은 누가 준 게 아니라 — 우리가 전부 만들어 본 거예요.") });
+  return steps;
+}
+function _EnCell({ v, ok, dim }) {
+  return <div style={{ width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 15, background: dim ? "#f1f5f9" : ok ? "#dcfce7" : "#fff", color: dim ? "#94a3b8" : ok ? "#166534" : C.text, border: `1.5px solid ${dim ? "#e2e8f0" : ok ? "#86efac" : C.border}` }}>{v}</div>;
+}
+export function CheckupsEnumSim({ E }) {
+  const steps = _buildEnumSteps(E);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const st = steps[idx];
+  const [l, r] = st.flip || [0, 0];
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: A, marginBottom: 10 }}>
+        🔁 {t(E, "We try EVERY flip ourselves", "뒤집기를 우리가 전부 해봐요")}
+      </div>
+
+      {/* 말풍선 */}
+      <div style={{ maxWidth: 500, margin: "0 auto 8px" }}>
+        <div style={{ background: st.payoff ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.payoff ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all" }}>💬 {st.bubble}</div>
+        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}` }} />
+      </div>
+
+      {/* 두 줄(입력) + 검진 */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 5, alignItems: "center", marginBottom: 12 }}>
+        {[
+          [t(E, "🐮 cows (flipped)", "🐮 소 (뒤집은 줄)"), st.row, true],
+          [t(E, "📋 wanted", "📋 원하는"), _ENB, false],
+        ].map(([lab, arr, isTop]) => (
+          <div key={lab} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ width: 96, fontSize: 11, color: C.dim, textAlign: "right", wordBreak: "keep-all" }}>{lab}</div>
+            <div style={{ display: "flex", gap: 6, position: "relative" }}>
+              {arr.map((v, i) => {
+                const inWin = isTop && st.flip && (i + 1 >= l && i + 1 <= r);
+                const ok = st.flip && st.row[i] === _ENB[i];
+                return <div key={i} style={{ position: "relative" }}>
+                  <_EnCell v={v} ok={isTop ? ok : false} dim={false} />
+                  {inWin && <div style={{ position: "absolute", inset: -3, border: "2px solid #06b6d4", borderRadius: 10, pointerEvents: "none" }} />}
+                </div>;
+              })}
+            </div>
+          </div>
+        ))}
+        {st.flip && (
+          <div style={{ fontSize: 11.5, color: "#0e7490", fontWeight: 700, marginTop: 2 }}>
+            {t(E, `flip [${l}, ${r}] → checkups = ${st.score}`, `구간 [${l}~${r}] 뒤집기 → 검진 ${st.score}개`)}
+          </div>
+        )}
+      </div>
+
+      {/* 점수 통(buckets) = 출력 */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 4 }}>
+        {st.buckets.map((cnt, sc) => {
+          const justHit = st.flip && st.score === sc;
+          return (
+            <div key={sc} style={{ minWidth: 58, textAlign: "center", background: justHit ? "#cffafe" : st.payoff ? "#ecfdf5" : "#f8fafc", border: `1.5px solid ${justHit ? "#0891b2" : st.payoff ? "#6ee7b7" : C.border}`, borderRadius: 10, padding: "7px 6px", transition: "all .25s" }}>
+              <div style={{ fontSize: 10.5, color: C.dim, fontWeight: 600 }}>{t(E, "checkups", "검진")} {sc}</div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: justHit ? "#0e7490" : st.payoff ? "#065f46" : C.text }}>{cnt}</div>
+            </div>
+          );
+        })}
+      </div>
+      {st.payoff && (
+        <div style={{ textAlign: "center", fontSize: 11.5, color: "#065f46", fontWeight: 700, marginTop: 8 }}>
+          ↑ {t(E, "this is exactly the output (one line each)", "이게 그대로 출력 (한 줄씩)")}
+        </div>
+      )}
+
+      <div style={{ marginTop: 12 }}>
+        <SimNav idx={idx} total={tot} onIdx={setIdx} accent={A} showLabels isEn={E} />
+      </div>
+    </div>
+  );
 }
 
 export function CheckupsBruteRunner({ E }) {
@@ -413,48 +518,41 @@ export function CheckupsIntroSim({ E }) {
    Reuses the intro's a/b data + cell colours. Illustrative-only.
    ════════════════════════════════════════════════════════════════════ */
 const _FL = 1, _FR = 4;          // 뒤집을 윈도우 (0-idx) = 자리 2~5 (인트로와 동일)
-const _FS = _FL + _FR;           // 대각선 합 s = 5
+const _FS = _FL + _FR;           // 합 s = 5
 
 function _fastInfo(i) {
   const outside = i < _FL || i > _FR;
   const lands = outside ? _A6[i] : _A6[_FS - i];   // 뒤집은 뒤 자리 i 에 오는 값
-  return { outside, lands, match: lands === _B6[i] };
+  return { outside, lands, match: lands === _MB[i] };  // MirrorSim 과 같은 b(_MB) 사용 — 같은 예제로 통일
 }
 
 function _buildFastSteps(E) {
   const N = _A6.length;
   let outCount = 0, inCount = 0;
-  const outSpots = [], inMatchSpots = [];
+  const inMatchSpots = [];
   for (let i = 0; i < N; i++) {
     const f = _fastInfo(i);
-    if (f.outside) { outSpots.push(i + 1); if (f.match) outCount++; }
-    else { if (f.match) { inCount++; inMatchSpots.push(i + 1); } }
+    if (f.outside) { if (f.match) outCount++; }
+    else if (f.match) { inCount++; inMatchSpots.push(i + 1); }
   }
+  // 이미 배운 두 조각(바깥/안쪽)을 '합치기'만 — 재설명·(s−i) 재유도 없음 (선생님 2026-06-24: 반복 제거)
   return [
     { zone: null, flip: false, reveal: "none", tally: {},
       bubble: t(E,
-        `One window (l, r) = spots ${_FL + 1}–${_FR + 1}. Instead of re-counting all N spots, split it: checkups = OUTSIDE + INSIDE.`,
-        `윈도우 (l, r) = 자리 ${_FL + 1}~${_FR + 1} 하나. N 자리를 다시 다 세지 말고 나눠요: 검진 수 = 바깥 + 안쪽.`) },
-    { zone: "outside", flip: false, reveal: "none", tally: {},
-      bubble: t(E,
-        `OUTSIDE the box (spots ${outSpots.join(", ")}) nothing flips. A spot counts when a[i] = b[i] — the SAME for every window.`,
-        `네모 바깥(자리 ${outSpots.join(", ")})은 안 뒤집혀요. a[i] = b[i] 면 일치 — 모든 윈도우에서 똑같아요.`) },
+        `One window, spots ${_FL + 1}–${_FR + 1}. We know checkups = OUTSIDE + INSIDE — let's add the two parts.`,
+        `윈도우 하나, 자리 ${_FL + 1}~${_FR + 1}. 검진 = 바깥 + 안쪽 인 거 알죠 — 두 조각을 더해봐요.`) },
     { zone: "outside", flip: false, reveal: "outside", tally: { out: outCount },
       bubble: t(E,
-        `Outside matches = ${outCount}. Since it never changes, one prefix gives this instantly.`,
-        `바깥 일치 = ${outCount}개. 안 변하니까 prefix 한 번이면 바로 읽혀요.`) },
-    { zone: "inside", flip: true, reveal: "outside", tally: { out: outCount },
-      bubble: t(E,
-        `INSIDE the box it flips: spot i now holds a[${_FS}−i] (diagonal s = ${_FS}). Compare that to b[i].`,
-        `네모 안은 뒤집혀요: 자리 i 에 a[${_FS}−i] 가 와요 (대각선 s = ${_FS}). 그걸 b[i] 와 비교해요.`) },
+        `Outside (spots 1, 6) doesn't flip — counted once up front. Outside matches = ${outCount}.`,
+        `바깥(자리 1·6)은 안 뒤집혀요 — 미리 세둔 것. 바깥 일치 = ${outCount}개.`) },
     { zone: "inside", flip: true, reveal: "all", tally: { out: outCount, inn: inCount },
       bubble: t(E,
-        `Inside matches = ${inCount} (spots ${inMatchSpots.join(", ")}). Same diagonal → read it from the diagonal prefix.`,
-        `안쪽 일치 = ${inCount}개 (자리 ${inMatchSpots.join(", ")}). 같은 대각선이라 대각선 prefix 에서 읽어요.`) },
+        `Inside flips. We already counted it once for this s — inside matches = ${inCount} (spots ${inMatchSpots.join(", ")}).`,
+        `안쪽은 뒤집혀요. 이 s 에서 한 번 세둔 것 — 안쪽 일치 = ${inCount}개 (자리 ${inMatchSpots.join("·")}).`) },
     { zone: null, flip: true, reveal: "all", tally: { out: outCount, inn: inCount, total: outCount + inCount },
       bubble: t(E,
-        `Checkups = outside ${outCount} + inside ${inCount} = ${outCount + inCount}. Same answer as brute — but two lookups, O(1)!`,
-        `검진 수 = 바깥 ${outCount} + 안쪽 ${inCount} = ${outCount + inCount}. brute 와 똑같은 답 — 근데 조회 두 번, O(1)!`) },
+        `Checkups = outside ${outCount} + inside ${inCount} = ${outCount + inCount}. Same answer as brute — but just an add, O(1)!`,
+        `검진 수 = 바깥 ${outCount} + 안쪽 ${inCount} = ${outCount + inCount}. brute 와 같은 답 — 근데 더하기 한 번, O(1)!`) },
   ];
 }
 
@@ -469,6 +567,7 @@ export function CheckupsFastSim({ E }) {
   const dimFor = i => st.zone === "outside" ? inWindow(i) : (st.zone === "inside" ? !inWindow(i) : false);
   const matchShown = i => st.reveal === "all" ? true : (st.reveal === "outside" ? !inWindow(i) : false);
   const aVal = i => (st.flip && inWindow(i)) ? _A6[_FS - i] : _A6[i];
+  const ltr = v => String.fromCharCode(64 + v);   // 1→A … 6→F (MirrorSim/TrySim 과 같은 글자 표기)
 
   const cell = (val, dim) => {
     const sp = _SP[val] || _SP[1];
@@ -478,7 +577,7 @@ export function CheckupsFastSim({ E }) {
         fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16,
         background: dim ? "#f8fafc" : sp.bg, color: dim ? "#cbd5e1" : sp.tx,
         border: `1.5px solid ${dim ? "#e2e8f0" : sp.bd}`, transition: "all .25s",
-      }}>{val}</div>
+      }}>{ltr(val)}</div>
     );
   };
   const tallyBox = (label, val, bg, bd, tc, big) => (
@@ -529,7 +628,7 @@ export function CheckupsFastSim({ E }) {
             📋 {t(E, "wants", "원하는")}<div style={{ fontSize: 9, color: C.dim, fontWeight: 400 }}>b</div>
           </div>
           <div style={{ display: "flex", gap: GAP }}>
-            {Array.from({ length: N }, (_, i) => <div key={i}>{cell(_B6[i], dimFor(i))}</div>)}
+            {Array.from({ length: N }, (_, i) => <div key={i}>{cell(_MB[i], dimFor(i))}</div>)}
           </div>
         </div>
         {/* 일치 줄 */}
@@ -604,36 +703,28 @@ function _buildMirrorSteps(E) {
   return [
     // 1) 무대 + 진짜 목표: '모든 뒤집기'의 검진 수를 다 세야 함 → 너무 많으니 빨리 (선생님 2026-06-23)
     { win: [_ML, _MR], rev: 0, reveal: "none", focus: null, formula: false, payoff: false,
-      bubble: t(E, `🐄 cows, 📋 the vet's wanted breed — match = checkup ✓. Reversing different chunks gives different checkup counts, and we must find the count for EVERY reversal — too many to redo one by one. Let's find a shortcut.`,
-                   `🐄 소 줄, 📋 수의사가 원하는 종 — 같으면 검진 ✓. 어느 구간을 뒤집느냐에 따라 검진 수가 달라져요. 우리는 '모든 뒤집기'의 검진 수를 다 알아야 하는데, 방법이 너무 많아요 — 빨리 세는 비결을 찾아봐요.`) },
+      bubble: t(E, `When you flip a window, the cows inside it change places — so which cows get a checkup changes too. If we find the RULE for how they move, we can count fast. Let's flip spots ${_ML}~${_MR} and look.`,
+                   `구간을 뒤집으면 그 안의 소들이 자리를 바꿔요 — 그래서 검진받는 소도 달라지죠. 소들이 '어떻게 자리를 바꾸는지' 규칙만 찾으면 빨리 셀 수 있어요. 자, 자리 ${_ML}~${_MR} 를 직접 뒤집어 봐요.`) },
     // 2) 뒤집기 전 검진 (Q1: 원래 검진받던 소)
     { win: [_ML, _MR], rev: 0, reveal: "all", focus: null, formula: false, payoff: false,
       bubble: t(E, `BEFORE reversing: checkups are spots ${before.join(", ")} — only ${before.length}.`,
                    `뒤집기 전 — 검진 ✓ 는 자리 ${before.join("·")}, ${before.length}마리뿐이에요.`) },
     // 3) 뒤집기 (바깥) — 윈도우 밖(자리 1·6)은 안 움직이니 검진 ✓ 유지 (선생님 2026-06-23)
     { win: [_ML, _MR], rev: 1, reveal: "outside", focus: null, formula: false, payoff: false,
-      bubble: t(E, `Reverse spots ${_ML}–${_MR}: the outer two cows slide and swap (spot ${_ML} ↔ ${_MR}). Outside (spots 1, 6) doesn't move.`,
-                   `자리 ${_ML}~${_MR} 뒤집기 — 바깥 두 소가 미끄러지며 자리 바꿈 (자리 ${_ML} ↔ ${_MR}). 윈도우 밖(자리 1·6)은 그대로.`) },
+      bubble: t(E, `Reverse spots ${_ML}–${_MR} — first the two ENDS (spots ${_ML}, ${_MR}) swap cows. Outside (spots 1, 6) doesn't move.`,
+                   `자리 ${_ML}~${_MR} 뒤집기 — 먼저 양 끝(자리 ${_ML}·${_MR})의 소가 서로 자리를 바꿔요. 윈도우 밖(자리 1·6)은 안 움직여요.`) },
     // 4) 뒤집기 (안쪽)
     { win: [_ML, _MR], rev: 2, reveal: "outside", focus: null, formula: false, payoff: false,
-      bubble: t(E, `Inner two too (spot ${_ML + 1} ↔ ${_MR - 1}). Reversed!`,
-                   `안쪽 둘도 (자리 ${_ML + 1} ↔ ${_MR - 1}). 다 뒤집혔어요!`) },
+      bubble: t(E, `Then the inner two (spots ${_ML + 1}, ${_MR - 1}) swap too. Ends first, then inside → the whole window is reversed!`,
+                   `그 다음 안쪽(자리 ${_ML + 1}·${_MR - 1})도 바꿔요. 끝 → 안쪽 순서로 → 구간이 다 뒤집혔어요!`) },
     // 5) 뒤집은 후 검진 (Q2: 어떻게 바뀌었나)
     { win: [_ML, _MR], rev: 2, reveal: "all", focus: null, formula: false, payoff: false,
       bubble: t(E, `AFTER: checkups are spots ${after.join(", ")} — ${after.length}! Spots ${gained.join(", ")} newly matched.`,
                    `뒤집은 후 — 검진 ✓ 는 자리 ${after.join("·")}, ${after.length}마리! 자리 ${gained.join("·")}가 새로 맞았어요.`) },
-    // 6) 뒤집기 = 짝지어 자리 바꾸기. 짝의 합은 늘 s
-    { win: [_ML, _MR], rev: 2, reveal: "none", focus: null, formula: true, payoff: false,
-      bubble: t(E, `Reversing just swaps cows in PAIRS: spot 2 ↔ 5, spot 3 ↔ 4. Add each pair's spots — always 7 (= the ends' sum s).`,
-                   `뒤집기는 자리끼리 짝지어 바꾸는 거예요: 자리 2 ↔ 5, 자리 3 ↔ 4. 각 짝의 두 자리를 더하면? 늘 7 (= 양 끝 합 s)!`) },
-    // 7) 그래서 자리 3 의 짝꿍 = 7−3 = 자리 4 → 자리 3 엔 자리 4 소가 옴
-    { win: [_ML, _MR], rev: 2, reveal: "inside", focus: 3, formula: true, payoff: false,
-      bubble: t(E, `So spot 3's partner = the spot that sums to 7 = spot 4. After reversing, spot 3 holds spot 4's cow: D.`,
-                   `그러니 자리 3 의 짝꿍 = 더해서 7 되는 자리 = 자리 4. 뒤집으면 자리 3 엔 자리 4 의 소 D 가 와요.`) },
-    // 8) 규칙 정리 + 다음(GrowSim)으로 — '다른 윈도우 비교' 중복 스텝 제거 (선생님 2026-06-23)
+    // 6) 딱 하나 기억: 서로 자리 바꾼 짝들의 자리수 합 = s (=7). 공식·비교는 다음 시뮬로. (선생님 2026-06-24)
     { win: [_ML, _MR], rev: 2, reveal: "all", focus: null, formula: true, payoff: true,
-      bubble: t(E, `That's the rule: spot i always gets spot (s−i)'s cow — so only s matters, not the window's size. Next: use this to count EVERY reversal fast. 🚀`,
-                   `이게 핵심 규칙! 자리 i 엔 늘 (s−i)번 자리 소가 와요 — 그러니 구간 크기는 상관없고 s 만 중요해요. 다음 화면에서 이 규칙으로 '모든 뒤집기'를 빨리 세 봐요. 🚀`) },
+      bubble: t(E, `Remember just ONE thing! The cows that swapped — spots ${_ML} & ${_MR} (${_ML}+${_MR}=${_MS}), spots ${_ML + 1} & ${_MR - 1} (${_ML + 1}+${_MR - 1}=${_MS}). Their spot numbers always add to ${_MS} (= l + r). Keep that ${_MS} in mind — next, we'll count WITHOUT flipping. 🚀`,
+                   `딱 하나만 기억해요! 서로 자리를 바꾼 소들 — 자리 ${_ML}·${_MR} (${_ML}+${_MR}=${_MS}), 자리 ${_ML + 1}·${_MR - 1} (${_ML + 1}+${_MR - 1}=${_MS}). 바뀐 짝의 자리수 합은 늘 ${_MS} (= 양 끝 합 l+r). 이 ${_MS}만 기억해요 — 다음 화면에서 안 뒤집고 셀 거예요. 🚀`) },
   ];
 }
 
@@ -699,13 +790,13 @@ export function CheckupsMirrorSim({ E }) {
           </div>
         )}
         {rowWrap(t(E, "📋 wants", "📋 원하는"), "#1e40af",
-          <div style={{ display: "flex", gap: GAP }}>{_MB.map((tk, k) => <div key={k}>{fixedCell(tk)}</div>)}</div>
+          <div style={{ display: "flex", gap: GAP }}>{_MB.map((tk, k) => <div key={k}>{fixedCell(tk, st.focus === k + 1)}</div>)}</div>
         )}
         {rowWrap(t(E, "🩺 ✓?", "🩺 검진?"), "#15803d",
           <div style={{ display: "flex", gap: GAP }}>
             {Array.from({ length: _MN }, (_, k) => {
-              const p = k + 1, show = ckShow(p), ok = ckOk(p);
-              return <div key={k} style={{ width: TW, height: 24, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 800, background: show && ok ? "#22c55e" : "transparent", color: show ? (ok ? "#fff" : "#cbd5e1") : "transparent", transition: "background .2s" }}>{show ? (ok ? "✓" : "—") : ""}</div>;
+              const p = k + 1, show = ckShow(p), ok = ckOk(p), hot = st.focus === p;
+              return <div key={k} style={{ width: TW, height: 24, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 800, background: show && ok ? "#22c55e" : "transparent", color: show ? (ok ? "#fff" : "#cbd5e1") : "transparent", boxShadow: hot ? "0 0 0 2px #ea580c" : "none", transition: "background .2s" }}>{show ? (ok ? "✓" : "—") : ""}</div>;
             })}
           </div>
         )}
@@ -722,7 +813,7 @@ export function CheckupsMirrorSim({ E }) {
       {/* 공식 줄 (insight — 자리 번호끼리의 관계) */}
       <div style={{ textAlign: "center", minHeight: 20, margin: "10px 0 4px", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>
         {st.formula && (
-          <span style={{ fontSize: 13, color: "#0e7490" }}>{t(E, "a spot + its partner", "자리 + 짝꿍")} = s = {_MS}</span>
+          <span style={{ fontSize: 13, color: "#0e7490" }}>{t(E, `s = ends' sum (l+r) = ${_ML}+${_MR} = ${_MS}`, `s = 양 끝 합 (l+r) = ${_ML}+${_MR} = ${_MS}`)}</span>
         )}
       </div>
 
@@ -740,32 +831,39 @@ const _GROW = [[3, 4], [2, 5], [1, 6]];   // s=7 위에서 가운데→전체로
 
 function _buildGrowSteps(E) {
   const want = p => _MB[p - 1];
-  const tokAt = (p, l, r) => (p >= l && p <= r) ? (l + r - p) : p;
-  const cnt = (l, r) => { let c = 0; for (let p = 1; p <= _MN; p++) if (tokAt(p, l, r) === want(p)) c++; return c; };
+  // 안쪽([l+1,r-1])은 늘 뒤집힌 상태. 새 짝(l,r)만 pairFlipped 로 토글. 바깥은 원본.
+  const slotOf = (tk, l, r, pairFlipped) => {
+    if (tk < l || tk > r) return tk - 1;
+    if ((tk === l || tk === r) && !pairFlipped) return tk - 1;   // 새 짝 아직 안 뒤집음
+    return l + r - tk - 1;                                       // 뒤집힘(안쪽 + 뒤집은 새 짝)
+  };
+  const tokAt = (p, l, r, pf) => { for (let tk = 1; tk <= _MN; tk++) if (slotOf(tk, l, r, pf) + 1 === p) return tk; return p; };
+  const cnt = (l, r, pf) => { let c = 0; for (let p = 1; p <= _MN; p++) if (tokAt(p, l, r, pf) === want(p)) c++; return c; };
   const steps = [];
-  let prev = null;
+  let prev = null;   // 직전 윈도우의 '뒤집은 후' 검진 수
   _GROW.forEach((w, i) => {
-    const [l, r] = w, total = cnt(l, r);
-    let added = null, dmap = null, delta = null;
-    if (i > 0) {
-      const dl = (want(l) === r ? 1 : 0) - (want(l) === l ? 1 : 0);   // 자리 l: 새 소 r vs 원래 소 l
-      const dr = (want(r) === l ? 1 : 0) - (want(r) === r ? 1 : 0);   // 자리 r: 새 소 l vs 원래 소 r
-      added = [l, r]; dmap = { [l]: dl, [r]: dr }; delta = total - prev;
-    }
-    let bubble;
-    if (i === 0) bubble = t(E, `Start with just the middle pair, spots ${l}–${r}. Checkups now: ${total}.`,
-                                `가운데 한 짝 [${l}~${r}]만 뒤집어요. 지금 검진 ✓ = ${total}마리.`);
-    else {
-      const tag = Object.entries(dmap).map(([p, d]) => `${t(E, "spot", "자리")} ${p} ${d > 0 ? "+1" : d < 0 ? "−1" : "0"}`).join(", ");
-      bubble = t(E,
-        `Widen by one pair → [${l}, ${r}]. The inside stays the same (same s)! Only the new pair changes: ${tag}. So ${prev} ${delta >= 0 ? "+" : "−"} ${Math.abs(delta)} = ${total}.`,
-        `한 짝 넓혀 [${l}~${r}]. 안쪽은 그대로(s 가 같으니까)! 새로 들어온 짝만 바뀌어요: ${tag}. 그래서 ${prev} ${delta >= 0 ? "+" : "−"} ${Math.abs(delta)} = ${total}.`);
-    }
-    steps.push({ win: w, added, dmap, total, delta, prev, payoff: false, bubble });
+    const [l, r] = w;
+    const pre = cnt(l, r, false);    // 새 짝 안 뒤집은 상태 (= 직전 윈도우 결과)
+    const dl = (want(l) === r ? 1 : 0) - (want(l) === l ? 1 : 0);   // 자리 l: 새 소 r vs 원래 소 l
+    const dr = (want(r) === l ? 1 : 0) - (want(r) === r ? 1 : 0);   // 자리 r: 새 소 l vs 원래 소 r
+    // (1) 새 짝 들어옴 — 아직 안 뒤집음
+    steps.push({ win: w, pairFlipped: false, added: [l, r], dmap: null, total: pre, delta: null, prev: null, payoff: false,
+      bubble: i === 0
+        ? t(E, `The original row — not flipped yet. Checkups ✓ = ${pre}. Let's flip the middle pair [${l}, ${r}].`,
+              `원래 줄이에요 — 아직 안 뒤집음. 검진 ✓ = ${pre}마리. 가운데 짝 [${l}~${r}] 를 뒤집어 볼게요.`)
+        : t(E, `Widen to [${l}, ${r}] — the new pair (spots ${l}, ${r}) just arrived. Inside stays put; not flipped yet.`,
+              `구간을 [${l}~${r}]로 넓혀요 — 새 짝 (자리 ${l}·${r})이 들어왔어요. 안쪽은 그대로, 아직 안 뒤집음.`) });
+    // (2) 새 짝 뒤집기
+    const total = cnt(l, r, true), delta = total - pre;
+    const tag = `${t(E, "spot", "자리")} ${l} ${dl > 0 ? "+1" : dl < 0 ? "−1" : "0"}, ${t(E, "spot", "자리")} ${r} ${dr > 0 ? "+1" : dr < 0 ? "−1" : "0"}`;
+    steps.push({ win: w, pairFlipped: true, added: [l, r], dmap: { [l]: dl, [r]: dr }, total, delta, prev: pre, payoff: false,
+      bubble: t(E,
+        `Flip the pair: ${tag}. Only these two change → ${pre} ${delta >= 0 ? "+" : "−"} ${Math.abs(delta)} = ${total}.`,
+        `새 짝을 뒤집어요: ${tag}. 이 두 자리만 바뀌어 → ${pre} ${delta >= 0 ? "+" : "−"} ${Math.abs(delta)} = ${total}.`) });
     prev = total;
   });
   steps.push({
-    win: [1, 6], added: null, dmap: null, total: cnt(1, 6), delta: null, prev: null, payoff: true,
+    win: [1, 6], pairFlipped: true, added: null, dmap: null, total: prev, delta: null, prev: null, payoff: true,
     bubble: t(E,
       `See? Each time we widen, only the two NEW spots change — just add their ±. No need to recount all of them. That's the speed-up! 🚀`,
       `봤죠? 넓힐 때마다 새로 들어온 두 자리만 바뀌어요 — 그 ± 만 더하면 끝. 전체를 다시 안 세도 돼요. 이게 빨라지는 비결! 🚀`),
@@ -782,7 +880,12 @@ export function CheckupsGrowSim({ E }) {
   const gridW = _MN * STEP - GAP;
   const ltr = tk => String.fromCharCode(64 + tk);
   const want = p => _MB[p - 1];
-  const tokAt = p => (p >= wl && p <= wr) ? (wl + wr - p) : p;
+  const slotOf = tk => {
+    if (tk < wl || tk > wr) return tk - 1;
+    if ((tk === wl || tk === wr) && !st.pairFlipped) return tk - 1;   // 새 짝 아직 안 뒤집음
+    return wl + wr - tk - 1;
+  };
+  const tokAt = p => { for (let tk = 1; tk <= _MN; tk++) if (slotOf(tk) + 1 === p) return tk; return p; };
   const ckOk = p => tokAt(p) === want(p);
   const isAdded = p => st.added && (p === st.added[0] || p === st.added[1]);
 
@@ -816,7 +919,7 @@ export function CheckupsGrowSim({ E }) {
             <div style={{ position: "absolute", top: -6, left: (wl - 1) * STEP - 5, width: (wr - wl + 1) * STEP - GAP + 10, height: TW + 12, borderRadius: 12, background: "#ecfeff", border: "2px solid #22d3ee", boxShadow: "0 0 0 3px rgba(34,211,238,.12)", zIndex: 0, transition: "left .4s, width .4s" }} />
             <div style={{ position: "absolute", top: -19, left: (wl - 1) * STEP - 5 + ((wr - wl + 1) * STEP - GAP + 10) / 2, transform: "translateX(-50%)", background: "#0891b2", color: "#fff", fontSize: 9.5, fontWeight: 800, borderRadius: 6, padding: "1px 8px", whiteSpace: "nowrap", zIndex: 3, transition: "left .4s" }}>🔁 {t(E, "reverse window", "뒤집는 창")} {wl}~{wr}</div>
             {[1, 2, 3, 4, 5, 6].map(tk => {
-              const slot = (tk >= wl && tk <= wr) ? (wl + wr - tk - 1) : tk - 1;
+              const slot = slotOf(tk);
               const sp = _SP[tk] || _SP[1];
               const moved = slot + 1 !== tk;
               const addedHere = st.added && (slot + 1 === st.added[0] || slot + 1 === st.added[1]);
@@ -859,6 +962,15 @@ export function CheckupsGrowSim({ E }) {
           {st.delta != null && <span style={{ marginLeft: 7, color: st.delta > 0 ? "#16a34a" : st.delta < 0 ? "#dc2626" : "#94a3b8" }}>({st.prev} {st.delta >= 0 ? "+" : "−"} {Math.abs(st.delta)})</span>}
         </div>
       </div>
+
+      {/* 대칭 성장은 같은 s 가족 안에서만 — 한쪽만 넓히면 다른 가족 (선생님 2026-06-24) */}
+      {st.payoff && (
+        <div style={{ maxWidth: 470, margin: "0 auto 12px", background: "#ecfeff", border: "1px dashed #67e8f9", borderRadius: 10, padding: "9px 12px", fontSize: 11.5, color: "#155e75", lineHeight: 1.6, textAlign: "center", wordBreak: "keep-all" }}>
+          {t(E,
+            "Heads-up: this is the s=7 family (we widen evenly on BOTH sides, keeping s). A one-side widen like [3,5] is s=8 — a different family, grown from its own center [4,4]. Each s grows this way, covering every window once.",
+            "잠깐: 이건 s=7 가족이에요 (양쪽으로 똑같이 넓혀 s 유지). [3,5]처럼 한쪽만 넓힌 건 s=8 — 가운데가 [4,4]인 다른 가족이죠. s 마다 이렇게 키워서 모든 구간을 한 번씩 다 세요.")}
+        </div>
+      )}
 
       <SimNav idx={idx} total={tot} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
     </div>
@@ -931,6 +1043,19 @@ export function CheckupsTrySim({ E }) {
             })}
           </div>
         )}
+        {/* 각 안쪽 소가 '원래 어느 자리'에서 왔나 = s − 자리 (선생님 2026-06-24: 캡션 텍스트 말고 눈으로) */}
+        {rowWrap(t(E, "↩ from", "↩ 원래자리"), "#0891b2",
+          <div style={{ display: "flex", gap: GAP }}>
+            {Array.from({ length: _MN }, (_, k) => {
+              const p = k + 1, win = p >= l && p <= r;
+              return <div key={k} style={{ width: TW, display: "flex", justifyContent: "center", alignItems: "center", height: 22 }}>
+                {win
+                  ? <span style={{ fontSize: 11.5, fontWeight: 800, color: "#0e7490", background: "#cffafe", border: "1px solid #67e8f9", borderRadius: 6, padding: "1px 5px" }}>←{s - p}</span>
+                  : <span style={{ fontSize: 12, color: C.dim }}>·</span>}
+              </div>;
+            })}
+          </div>
+        )}
         {rowWrap(t(E, "📋 wants", "📋 원하는"), "#1e40af",
           <div style={{ display: "flex", gap: GAP }}>{_MB.map((tk, k) => <div key={k}>{fixedCell(tk)}</div>)}</div>
         )}
@@ -955,6 +1080,123 @@ export function CheckupsTrySim({ E }) {
       <div style={{ display: "flex", gap: 10, justifyContent: "center", alignItems: "center", marginTop: 14, flexWrap: "wrap" }}>
         <div style={{ background: "#cffafe", border: "1.5px solid #0891b2", color: "#0e7490", borderRadius: 999, padding: "5px 14px", fontSize: 12.5, fontWeight: 800 }}>s = {l} + {r} = {s}</div>
         <div style={{ background: "#fff7ed", border: "1.5px solid #ea580c", color: "#9a3412", borderRadius: 999, padding: "5px 14px", fontSize: 12.5, fontWeight: 800 }}>{t(E, "checkups", "검진")} <span style={{ fontSize: 16 }}>{okCount}</span> <span style={{ fontSize: 10.5, fontWeight: 600, opacity: 0.85 }}>({t(E, "was", "원래")} {baseCount})</span></div>
+      </div>
+
+      {/* 새 '↩ 원래자리' 행을 가리키는 한 줄 (텍스트 설명 대신 그림 안내) */}
+      <div style={{ maxWidth: 460, margin: "12px auto 0", background: "#ecfeff", border: "1px dashed #67e8f9", borderRadius: 10, padding: "8px 12px", fontSize: 11.5, color: "#155e75", lineHeight: 1.6, textAlign: "center", wordBreak: "keep-all" }}>
+        💡 {t(E,
+          `No flip needed: compare cow[i] with wanted[s−i]. "←N" = where each inside cow came from (= s − spot). Same s → same ←N → same inside! Try 2~5 then 3~4 (both s=7).`,
+          `안 뒤집어요: 소[자리 i] 와 원하는[s−i] 만 비교. "←N" = 그 소가 원래 있던 자리 (= s − 자리). s 같으면 ←N 이 똑같아 → 안쪽도 똑같아요! 자리 2~5, 3~4 둘 다 s=7 눌러봐요.`)}
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   CheckupsKeyCodeSim — 코드를 그림에 붙여서 (선생님 2026-06-24: 코드만 새 페이지에
+   띄우면 a·b·i 가 뭔지 끊겨서 아무도 모름). 방금 본 소/원하는/자리 위에서 코드 한
+   줄씩 실행 — a[l+r-i] 가 '그림의 이 소' 임을 눈으로 잇는다. 토글 X (학생 언어 lang).
+   ════════════════════════════════════════════════════════════════════ */
+const _KC_SOU = [1, 2, 3, 4, 5, 6];     // 자리별 소가 가진 종 (= A..F)
+const _KC_WANT = [1, 3, 4, 1, 2, 6];    // 자리별 원하는 종 (A,C,D,A,B,F)
+const _KC_LT = ["", "A", "B", "C", "D", "E", "F"];
+const _KC_L = 2, _KC_R = 5, _KC_S = 7;  // 구간 [2,5], s=7
+const _KC_INS = [2, 3, 4, 5];           // 안쪽 자리들
+function _buildKeySteps(E) {
+  const steps = [];
+  steps.push({ i: null, src: null, ok: null, inside: 0, payoff: false,
+    bubble: t(E,
+      "Code reads symbols, but they're just THIS picture. a = cows, b = wanted, i = spot. We never flip — for each inside spot i, we fetch a[l+r−i].",
+      "코드 글자들은 사실 이 그림이에요. a = 소 줄, b = 원하는 줄, i = 자리. 안 뒤집고, 안쪽 자리 i 마다 a[l+r−i] 만 가져와요.") });
+  let inside = 0;
+  _KC_INS.forEach((i) => {
+    const src = _KC_S - i;                  // a[l+r-i] 가 가리키는 자리
+    const v = _KC_SOU[src - 1];             // 그 소의 종
+    const want = _KC_WANT[i - 1];
+    const ok = v === want;
+    if (ok) inside++;
+    steps.push({ i, src, ok, inside, payoff: false,
+      bubble: t(E,
+        `Spot ${i}: a[${_KC_S}−${i}] = a[${src}] = cow ${_KC_LT[v]}. Wanted b[${i}] = ${_KC_LT[want]}. ${ok ? "Same → inside + 1." : "Different → skip."}`,
+        `자리 ${i}: a[${_KC_S}−${i}] = a[${src}] = 소 ${_KC_LT[v]}. 원하는 b[${i}] = ${_KC_LT[want]}. ${ok ? "같다 → inside + 1." : "다르다 → 그냥 넘어가요."}`) });
+  });
+  steps.push({ i: null, src: null, ok: null, inside, payoff: true,
+    bubble: t(E,
+      `Done — inside = ${inside}. No row was ever reversed; we just read a[l+r−i] and compared. That's the whole trick.`,
+      `끝 — inside = ${inside}. 줄을 한 번도 안 뒤집었어요. a[l+r−i] 를 보고 비교만 했죠. 이게 비결의 전부예요.`) });
+  return steps;
+}
+function _KcCell({ letter, hl, kind }) {
+  const tone = kind === "src" ? { bg: "#cffafe", bd: "#0891b2", tx: "#0e7490" }
+    : kind === "want" ? { bg: "#dcfce7", bd: "#16a34a", tx: "#166534" }
+    : { bg: "#fff", bd: C.border, tx: C.text };
+  return <div style={{ width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 15, background: hl ? tone.bg : "#fff", color: hl ? tone.tx : C.text, border: `1.5px solid ${hl ? tone.bd : C.border}`, transition: "all .2s" }}>{letter}</div>;
+}
+export function CheckupsKeyCodeSim({ E, lang = "py" }) {
+  const cpp = lang === "cpp";
+  const steps = _buildKeySteps(E);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const st = steps[idx];
+  const py = [
+    "for i in range(l, r + 1):   # 안쪽 자리 l..r",
+    "    v = a[l + r - i]        # 자리 i 에 올 소",
+    "    if v == b[i]:           # 원하는 소와 같으면",
+    "        inside += 1         # 검진 ✓",
+  ];
+  const cc = [
+    "for (int i = l; i <= r; i++) {  // 안쪽 자리 l..r",
+    "  int v = a[l + r - i];         // 자리 i 에 올 소",
+    "  if (v == b[i]) inside++;      // 원하는 소면 검진 ✓",
+    "}",
+  ];
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#0e7490", marginBottom: 10 }}>
+        ⌨️ {t(E, "The code IS this picture", "코드 = 이 그림")}
+      </div>
+
+      {/* 말풍선 */}
+      <div style={{ maxWidth: 500, margin: "0 auto 10px" }}>
+        <div style={{ background: st.payoff ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 12.5, color: st.payoff ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all" }}>💬 {st.bubble}</div>
+        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}` }} />
+      </div>
+
+      {/* 그림: 소 줄 / 원하는 줄 / 자리 — 코드 심볼을 여기에 묶음 */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 5, alignItems: "center", marginBottom: 6 }}>
+        {[["a", "🐮 " + t(E, "cows", "소"), _KC_SOU, "src"], ["b", "📋 " + t(E, "wanted", "원하는"), _KC_WANT, "want"]].map(([sym, lab, arr, kind]) => (
+          <div key={sym} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ width: 70, fontSize: 11, color: C.dim, textAlign: "right", wordBreak: "keep-all" }}><code style={{ color: kind === "src" ? "#0891b2" : "#16a34a", fontWeight: 700 }}>{sym}</code> {lab}</div>
+            <div style={{ display: "flex", gap: 6 }}>
+              {arr.map((sp, k) => {
+                const p = k + 1;
+                const hl = kind === "src" ? (st.src === p) : (st.i === p);
+                return <_KcCell key={k} letter={_KC_LT[sp]} hl={hl} kind={kind} />;
+              })}
+            </div>
+          </div>
+        ))}
+        {/* 자리 번호 + 구간 */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ width: 70 }} />
+          <div style={{ display: "flex", gap: 6 }}>
+            {[1, 2, 3, 4, 5, 6].map((p) => {
+              const inWin = p >= _KC_L && p <= _KC_R;
+              return <div key={p} style={{ width: 34, textAlign: "center", fontSize: 10, fontWeight: st.i === p ? 800 : 500, color: st.i === p ? "#b45309" : inWin ? "#0e7490" : C.dim }}>{p}</div>;
+            })}
+          </div>
+        </div>
+      </div>
+      <div style={{ textAlign: "center", fontSize: 10.5, color: C.dim, marginBottom: 10 }}>
+        l = {_KC_L}, r = {_KC_R} → l + r = {_KC_S}　·　inside = <b style={{ color: "#15803d", fontSize: 13 }}>{st.inside}</b>
+      </div>
+
+      {/* 코드 — 그림과 같은 의미 (학생 언어 하나만) */}
+      <div style={{ maxWidth: 520, margin: "0 auto" }}>
+        <CodeBlock lines={cpp ? cc : py} lang={cpp ? "cpp" : "py"} />
+      </div>
+
+      <div style={{ marginTop: 12 }}>
+        <SimNav idx={idx} total={tot} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
       </div>
     </div>
   );

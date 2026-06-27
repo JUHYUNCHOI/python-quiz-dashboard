@@ -33,12 +33,13 @@ export default function CheckupsApp(props = {}) {
 
   const [ch1Q, setCh1Q] = useState(() => makeCheckupsCh1(lang === "en"));
   const [ch2Q, setCh2Q] = useState(() => makeCheckupsCh2(lang === "en", "py"));
-  const [ch3Q, setCh3Q] = useState(() => makeCheckupsCh3(lang === "en"));
+  const [ch3Q, setCh3Q] = useState(() => makeCheckupsCh3(lang === "en", "py"));
   const [ch4Q, setCh4Q] = useState(() => makeCheckupsCh4(lang === "en", "py"));
 
   // codeLang change → rebuild Ch2 (brute code) + Ch4 (smart code) preserving answered/solved
   useEffect(() => {
     setCh2Q(prev => makeCheckupsCh2(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
+    setCh3Q(prev => makeCheckupsCh3(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
     setCh4Q(prev => makeCheckupsCh4(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   }, [codeLang, E]);
 
@@ -60,7 +61,7 @@ export default function CheckupsApp(props = {}) {
   const makers  = {
     0: makeCheckupsCh1,
     1: (e) => makeCheckupsCh2(e, codeLang),
-    2: makeCheckupsCh3,
+    2: (e) => makeCheckupsCh3(e, codeLang),
     3: (e) => makeCheckupsCh4(e, codeLang),
   };
 
