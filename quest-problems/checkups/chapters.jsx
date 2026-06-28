@@ -425,6 +425,7 @@ export function makeCheckupsCh3(E, lang = "py") {
               <div style={{ fontSize: 11.5, fontWeight: 800, color: "#991b1b", marginBottom: 5 }}>🐢 {t(E, "Brute", "브루트포스")}</div>
               <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.6, wordBreak: "keep-all" }}>
                 {t(E, "Reverse + recount every window", "윈도우마다 뒤집고 다시 셈")}<br />
+                <span style={{ fontSize: 10.5, opacity: 0.85 }}>{t(E, "windows ~N² × N cells each", "윈도우 ~N²개 × 윈도우당 N칸")}</span><br />
                 <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>O(N³)</code> → {t(E, "TLE", "시간 초과")}
               </div>
             </div>
@@ -432,6 +433,7 @@ export function makeCheckupsCh3(E, lang = "py") {
               <div style={{ fontSize: 11.5, fontWeight: 800, color: "#065f46", marginBottom: 5 }}>⚡ {t(E, "Fast", "빠른 풀이")}</div>
               <div style={{ fontSize: 12, color: "#065f46", lineHeight: 1.6, wordBreak: "keep-all" }}>
                 {t(E, "Outside once + inside reused per s → each window O(1)", "바깥 한 번 + 안쪽 s별 재사용 → 윈도우당 O(1)")}<br />
+                <span style={{ fontSize: 10.5, opacity: 0.85 }}>{t(E, "windows ~N² × O(1)", "윈도우 ~N²개 × O(1)")}</span><br />
                 <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>O(N²)</code> → {t(E, "passes", "통과")}
               </div>
             </div>
