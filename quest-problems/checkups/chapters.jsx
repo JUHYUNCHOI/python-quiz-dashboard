@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCheckupsSections, DiagonalSim, MatchUpToSim, DiagPrefixSim } from "./components";
-import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsFastSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim, CheckupsKeyCodeSim, CheckupsEnumSim } from "./sims";
+import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim, CheckupsReuseSim, CheckupsKeyCodeSim, CheckupsEnumSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 // (예전 정적 시각화 헬퍼 SpeciesCell/CowRow/TreatedRow/PositionRow 는
@@ -292,8 +292,8 @@ export function makeCheckupsCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Brute force is too slow. The trick: split each window's checkups into TWO parts — outside + inside — and count each fast.",
-        "브루트포스는 느려요. 비결: 한 윈도우의 검진을 두 조각 — 바깥 + 안쪽 — 으로 나눠 각각 빨리 세는 거예요."),
+        "Split each window's checkups: OUTSIDE + INSIDE.",
+        "한 윈도우 검진을 두 조각으로 — 바깥 + 안쪽."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: "#0e7490", textAlign: "center", marginBottom: 10 }}>
@@ -325,8 +325,8 @@ export function makeCheckupsCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Flip a window and the cows inside change places — so the checkups change. Let's find the rule for how they move.",
-        "구간을 뒤집으면 그 안 소들이 자리를 바꿔 — 그래서 검진이 달라져요. 소가 어떻게 자리를 바꾸는지 규칙을 찾아봐요."),
+        "When you flip a window, how do the cows move?",
+        "구간을 뒤집으면 소가 자리를 어떻게 바꿀까?"),
       content: (<CheckupsMirrorSim E={E} />),
     },
 
@@ -338,8 +338,8 @@ export function makeCheckupsCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Remember s = l + r? Then you don't flip! Spot i's cow lands at spot (s−i), so just compare cow[i] with wanted[s−i]. Pick any window and check — and notice: same s ⇒ same inside.",
-        "s = l + r 기억하죠? 그럼 안 뒤집어도 돼요! 자리 i 소는 뒤집으면 자리 (s−i)로 가니까 — 소[i] 와 원하는[s−i] 만 비교하면 끝. 구간을 골라 확인해봐요 (s 같은 구간끼린 안쪽 똑같아요)."),
+        "One window's checkups = outside + inside.",
+        "한 윈도우 검진 = 바깥 + 안쪽."),
       content: (<CheckupsTrySim E={E} />),
     },
 
@@ -351,59 +351,24 @@ export function makeCheckupsCh3(E, lang = "py") {
         바깥-prefix 는 FastSim 바깥 칸이, 안쪽-prefix 는 GrowSim 의 ± 가 이미 보여주고,
         실제 구현(prefix 배열)은 코드 챕터(⚡)가 한 줄씩 다룸 → 중복. 바로 통합 FastSim 으로. */
 
-    /* 3-1c — 재사용(절차): s 같은 구간은 안쪽 ✓ 자리가 똑같음 → s마다 한 번 적어두고 빼기 한 번.
-        (선생님 2026-06-24: '재사용'이 말로만 있던 구멍 — 왜 빨라지는지의 핵심을 절차로.) */
+    /* 3-1c — 재사용(직관만): 같은 s 면 안쪽 ✓ 자리가 똑같다 → s마다 한 번 세두면 재사용.
+        (선생님 2026-06-28: prefix '빼기' 계산은 추상적이라 코드 챕터로 — 여기선 '왜 재사용 되나'만.) */
     {
       type: "reveal",
       narr: t(E,
-        "Same s ⇒ same ✓ spots. So write each s down ONCE, then reuse — any window of that s is just a subtraction.",
-        "s 같은 구간은 안쪽 ✓ 자리가 똑같아요. 그러니 s마다 한 번만 세서 적어두고 → 같은 s 구간은 빼기 한 번으로 재사용!"),
-      content: (
-        <div style={{ padding: 16, maxWidth: 460, margin: "0 auto" }}>
-          <div style={{ fontSize: 14, fontWeight: 700, color: "#0e7490", textAlign: "center", marginBottom: 12 }}>
-            🔁 {t(E, "Count each s ONCE, then reuse", "s 마다 한 번만 세고 — 재사용")}
-          </div>
-          {[
-            { lab: t(E, "spot", "자리"), cells: ["1", "2", "3", "4", "5", "6"], plain: true },
-            { lab: t(E, "inside ✓ (s=7)", "안쪽 ✓ (s=7)"), cells: ["·", "·", "✓", "·", "✓", "·"], hot: [2, 4] },
-            { lab: t(E, "✓ so far", "여기까지 ✓"), cells: ["0", "0", "1", "1", "2", "2"], pre: true },
-          ].map((row, ri) => (
-            <div key={ri} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
-              <div style={{ width: 92, fontSize: 11, fontWeight: 700, color: row.plain ? C.dim : "#0e7490", textAlign: "right" }}>{row.lab}</div>
-              {row.cells.map((c, ci) => (
-                <div key={ci} style={{
-                  width: 34, height: 28, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center",
-                  fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 14,
-                  color: row.plain ? C.dim : (row.hot && row.hot.includes(ci)) ? "#15803d" : "#0e7490",
-                  background: row.pre ? "#ecfeff" : (row.hot && row.hot.includes(ci)) ? "#dcfce7" : "transparent",
-                  border: row.pre ? "1px solid #67e8f9" : "none",
-                }}>{c}</div>
-              ))}
-            </div>
-          ))}
-          <div style={{ marginTop: 12, background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: "#9a3412", lineHeight: 1.65, textAlign: "center", wordBreak: "keep-all", fontWeight: 600 }}>
-            {t(E,
-              "Window [2,5] inside = (✓ up to 5) − (✓ up to 1) = 2 − 0 = 2. One subtraction! Write each s down once, then every window is a subtract.",
-              "구간 [2,5] 안쪽 = (자리 5까지 2) − (자리 1까지 0) = 2 − 0 = 2. 빼기 한 번! s마다 한 번 적어두면, 어떤 구간이든 빼기 한 번이에요.")}
-          </div>
-        </div>),
+        "Same s — count once, reuse.",
+        "같은 s는 한 번만 세고 재사용."),
+      content: (<CheckupsReuseSim E={E} />),
     },
 
-    /* 3-5b — 통합: 한 윈도우의 검진 수 = 바깥 + 안쪽 을 한 화면에서 stepped 로. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Put it together — count ONE window in a single view: outside + inside.",
-        "한 윈도우의 검진 수를 한 화면에서 세 봐요: 바깥 + 안쪽."),
-      content: (<CheckupsFastSim E={E} />),
-    },
+    /* (3-5b FastSim 제거 — TrySim 합본이 '바깥 + 안쪽 = 총'을 이미 한 화면에서 stepped 로 함. 선생님 2026-06-28: 3·5 중복 합침.) */
 
     /* 3-5c — 핵심을 코드로 살짝 (Py/C++ 토글) (선생님 2026-06-24: 안 바꾸고 index 비교 + 재사용을 코드로) */
     {
       type: "reveal",
       narr: t(E,
-        "Same idea in code — no reversing, just compare a[l+r−i] to b[i]. Python in Python, C++ in C++.",
-        "그 아이디어를 코드로 — 안 뒤집고 a[l+r−i] 를 b[i] 와 비교. 파이썬은 파이썬, C++ 은 C++ 로."),
+        "Now the same idea in code.",
+        "방금 아이디어를 코드로."),
       content: (<CheckupsKeyCodeSim E={E} lang={lang} />),
     },
 
@@ -411,8 +376,8 @@ export function makeCheckupsCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "So — the payoff. Each window now costs O(1), so ALL windows take O(N²) instead of O(N³). The distribution you tallied by hand at the start now comes out instantly, even for N=7500.",
-        "그래서 — 결론. 윈도우 하나가 이제 O(1) 이라, 모든 윈도우를 O(N³) 대신 O(N²) 에 다 세요. 처음에 손으로 통에 모았던 분포가, N=7500 이어도 순식간에 나와요."),
+        "So — how much faster?",
+        "그래서 — 얼마나 빨라졌나?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: "#065f46", textAlign: "center", marginBottom: 12 }}>
@@ -424,19 +389,26 @@ export function makeCheckupsCh3(E, lang = "py") {
             <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px" }}>
               <div style={{ fontSize: 11.5, fontWeight: 800, color: "#991b1b", marginBottom: 5 }}>🐢 {t(E, "Brute", "브루트포스")}</div>
               <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.6, wordBreak: "keep-all" }}>
-                {t(E, "Reverse + recount every window", "윈도우마다 뒤집고 다시 셈")}<br />
-                <span style={{ fontSize: 10.5, opacity: 0.85 }}>{t(E, "windows ~N² × N cells each", "윈도우 ~N²개 × 윈도우당 N칸")}</span><br />
-                <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>O(N³)</code> → {t(E, "TLE", "시간 초과")}
+                {t(E, "Window 1 = look at all N cells", "윈도우 1개 = N칸 다 봄")}<br />
+                <span style={{ fontSize: 10.5, opacity: 0.85 }}>{t(E, "~N² windows × N cells", "윈도우 ~N²개 × N칸")}</span><br />
+                <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>O(N³)</code> → {t(E, "too slow", "느림")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 12px" }}>
               <div style={{ fontSize: 11.5, fontWeight: 800, color: "#065f46", marginBottom: 5 }}>⚡ {t(E, "Fast", "빠른 풀이")}</div>
               <div style={{ fontSize: 12, color: "#065f46", lineHeight: 1.6, wordBreak: "keep-all" }}>
-                {t(E, "Outside once + inside reused per s → each window O(1)", "바깥 한 번 + 안쪽 s별 재사용 → 윈도우당 O(1)")}<br />
-                <span style={{ fontSize: 10.5, opacity: 0.85 }}>{t(E, "windows ~N² × O(1)", "윈도우 ~N²개 × O(1)")}</span><br />
+                {t(E, "Window 1 = outside + a few pairs (fixed)", "윈도우 1개 = 바깥 + 쌍 몇 개 (정해진 횟수)")}<br />
+                <span style={{ fontSize: 10.5, opacity: 0.85 }}>{t(E, "~N² windows × a few = O(1) each", "윈도우 ~N²개 × 몇 번 = 윈도우당 O(1)")}</span><br />
                 <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>O(N²)</code> → {t(E, "passes", "통과")}
               </div>
             </div>
+          </div>
+
+          {/* O(1) 일상어 풀이 */}
+          <div style={{ background: "#fffbeb", border: "1px dashed #fbbf24", borderRadius: 10, padding: "9px 12px", marginBottom: 12, fontSize: 11.5, color: "#92400e", lineHeight: 1.6, textAlign: "center", wordBreak: "keep-all" }}>
+            💡 {t(E,
+              "O(1) per window = the work for one window stays a fixed few steps, no matter how big N is (it doesn't grow with the window).",
+              "윈도우당 O(1) = 윈도우 하나에 드는 일이 N 이 아무리 커도 *정해진 몇 번*으로 일정 (윈도우 커져도 안 늘어남).")}
           </div>
 
           {/* 분포 완성 — EnumSim 으로 회귀 */}
@@ -451,20 +423,7 @@ export function makeCheckupsCh3(E, lang = "py") {
         </div>),
     },
 
-    /* 3-6 — closing input: the two-piece formula in one number (active step). */
-    {
-      type: "input",
-      narr: t(E,
-        "Add the two parts for one window: outside + inside.",
-        "한 윈도우의 두 조각을 더해 봐요: 바깥 + 안쪽."),
-      question: t(E,
-        "For some window: outside matches = 3, inside matches = 3 (read from this s's count).  Total checkups for this window?",
-        "어떤 윈도우: 바깥 일치 = 3개, 안쪽 일치 = 3개 (이 s 에서 세둔 걸 읽음). 이 윈도우의 총 검진 수는?"),
-      hint: t(E,
-        "Total = outside + inside = 3 + 3.",
-        "총합 = 바깥 + 안쪽 = 3 + 3."),
-      answer: 6,
-    },
+    /* (3-6 입력 퀴즈 제거 — TrySim 합본이 '바깥 + 안쪽 = 총'을 직접 보여줘 군더더기. 선생님 2026-06-28.) */
   ];
 }
 
@@ -476,22 +435,18 @@ export function makeCheckupsCh3(E, lang = "py") {
 export function makeCheckupsCh4(E, lang = "py") {
   // Ch3 가 ⑤(아이디어)를 유도+시뮬로 이미 가르쳤으므로 Ch4 는 실제 코드 ⑥⑦⑧⑨ 만.
   // (전체 ⑤~⑨ 는 PDF 에 그대로 남아 있어 참고 가능.)
-  const smart = getCheckupsSections(E).slice(5);   // [6️⃣ matchUpTo, 7️⃣ diag, 8️⃣ combine, 9️⃣ full]
+  const smart = getCheckupsSections(E).slice(5);   // [6️⃣ matchUpTo, 7️⃣ insideUpTo, 8️⃣ combine, 9️⃣ full]
   return [
     ...smart.map((sec, i) => ({
       type: "reveal",
       narr:
         i === 0
-          ? t(E, "matchUpTo — built once with a left-to-right sweep.  Outside-window matches come straight from it.",
-                "matchUpTo — 왼쪽부터 한 번에. 바깥 일치는 여기서 바로 나와요.")
+          ? t(E, "Outside: build matchUpTo once.", "바깥: matchUpTo 미리 한 번.")
           : i === 1
-          ? t(E, "diag — rebuilt for each diagonal s.  Inside-window matches = diag[r] − diag[l−1].",
-                "diag — 대각선 s 마다 새로. 안쪽 일치 = diag[r] − diag[l−1].")
+          ? t(E, "Inside: count once per same-s window (insideUpTo).", "안쪽: s 같은 구간마다 한 번 (insideUpTo).")
           : i === 2
-          ? t(E, "Combine the two prefixes for every (l, r) on the diagonal, then print the tally.",
-                "대각선 위 모든 (l, r) 에 대해 두 prefix 합치고, 집계를 출력.")
-          : t(E, "All the pieces wired together — variable names match the sections above.  Read top to bottom.",
-                "조각들이 한 군데에 — 변수 이름은 위 섹션 그대로. 위에서 아래로 읽어요."),
+          ? t(E, "Combine the two, then print.", "둘을 합쳐서 출력.")
+          : t(E, "All pieces in one program.", "조각들을 한 코드로."),
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
     /* 4-끝 — 마무리 확인 (능동): 빠른 풀이의 복잡도 = 이 챕터의 보상 */
