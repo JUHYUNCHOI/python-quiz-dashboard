@@ -9,8 +9,8 @@ export function makeReflectionCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "FJ's picture should be mirror-symmetric across the center lines — paint one cell and its 3 mirror twins must match. Fix Bessie's mess in the fewest flips, and re-answer after each one-cell change.",
-        "FJ 그림은 가운데 선으로 거울 대칭이어야 해요 — 한 칸 칠하면 거울 짝 3칸도 같은 색. Bessie 가 망친 걸 최소 횟수로 고치고, 한 칸씩 바꿀 때마다 다시 답해요."),
+        "Make the picture mirror-symmetric — in the fewest changes.",
+        "그림을 거울 대칭으로 — 최소 횟수로."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -43,8 +43,8 @@ export function makeReflectionCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Official sample: 4×4 canvas, 5 updates. Initial answer 4, then after each update: 3, 2, 1, 0, 1.",
-        "공식 샘플: 4×4 캔버스, update 5 번. 처음 답 4, 그 다음 update 마다: 3, 2, 1, 0, 1."),
+        "Official sample — input and output.",
+        "공식 샘플 — 입력과 출력."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
@@ -96,8 +96,8 @@ export function makeReflectionCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Follow the picture — count the minimum flips one mirror-group at a time. Short bubbles explain each step.",
-        "그림 따라가 봐요 — 거울 짝 묶음마다 최소 뒤집기를 세요. 각 단계는 짧은 말풍선이 설명해요."),
+        "Count the min flips — one mirror-group at a time.",
+        "묶음마다 최소 뒤집기 세기."),
       content: (<ReflectionGroupSim E={E} />),
     },
 
@@ -105,8 +105,8 @@ export function makeReflectionCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now try it yourself — click any cell to toggle it; its 3 mirror twins move together. Total updates live.",
-        "이제 직접 — 아무 칸이나 클릭해서 토글해봐요. 거울 짝 3개가 같이 움직이고, 아래 총합이 실시간 갱신."),
+        "Try it yourself — toggle a cell.",
+        "직접 칸을 토글해봐요."),
       content: (<ReflectionGrid E={E} />),
     },
 
@@ -114,8 +114,8 @@ export function makeReflectionCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The fast part: keep the answer running. Each flip touches ONE group → just nudge the total ±1. Watch all 5 official updates.",
-        "빠른 부분: 답을 계속 들고 가요. 한 번 바꿀 때마다 묶음 하나만 → total 을 ±1 만 움직이면 끝. 공식 update 5개를 따라가 봐요."),
+        "Each change touches one group → nudge the total ±1.",
+        "바꿀 때마다 묶음 하나만 → 총합 ±1."),
       content: (<ReflectionUpdateSim E={E} />),
     },
 
@@ -163,8 +163,8 @@ export function makeReflectionCh2(E, lang = "py") {
       type: "reveal",
       narr: i === 0
         ? t(E,
-            "Group every cell by its mirror identity, then for each group of 4 cells: flips = min(count, 4 − count).  Brute first, then maintain a running total to handle updates fast.",
-            "모든 칸을 거울 정체로 묶고 — 4 칸 그룹마다 뒤집기 = min(count, 4 − count). brute 먼저, 그 다음 update 빠르게 처리하기 위해 running total 유지.")
+            "Each group's flips = min(painted, 4 − painted).",
+            "그룹마다 뒤집기 = min(칠한 수, 4 − 칠한 수).")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
