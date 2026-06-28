@@ -30,10 +30,10 @@ function _buildReflSteps(E) {
       steps.push({
         grp: cells, flip, k, contrib, total, final: false,
         bubble: same
-          ? t(E, `These 4 mirror cells: ${k} '#', ${4 - k} '·' → already all the same! (+0)`,
-                `이 거울 짝 4칸: # ${k}개, · ${4 - k}개 → 이미 다 같아요! (+0)`)
-          : t(E, `These 4 mirror cells: ${k} '#', ${4 - k} '·' → flip the smaller side — the ${contrib} yellow ↻ cell(s). (+${contrib})`,
-                `이 거울 짝 4칸: # ${k}개, · ${4 - k}개 → 적은 쪽, 노란 ↻ ${contrib}칸만 바꾸면 다 같아져요. (+${contrib})`),
+          ? t(E, `These 4 mirror cells: ${k} '#', ${4 - k} '·' → already all the same, nothing to flip! (+0)`,
+                `이 거울 짝 4칸: # ${k}개, · ${4 - k}개 → 이미 다 같아요, 바꿀 것 없음! (+0)`)
+          : t(E, `These 4: ${k} '#', ${4 - k} '·'. Make all '#'? ${4 - k} flips. All '·'? ${k} flips. Take the cheaper → ${contrib}. (+${contrib})`,
+                `이 4칸: # ${k}개, · ${4 - k}개. 다 #로 하면? ${4 - k}번. 다 ·로 하면? ${k}번. 적은 쪽 → ${contrib}번! (+${contrib})`),
       });
     }
   }
@@ -167,7 +167,9 @@ export function ReflectionGroupSim({ E }) {
       <div style={{ minHeight: 26, textAlign: "center", marginBottom: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800 }}>
         {st.grp && (
           <span>
-            <span style={{ color: "#334155" }}># {st.k}</span>　<span style={{ color: "#94a3b8" }}>· {4 - st.k}</span>　→　<span style={{ color: st.contrib === 0 ? "#16a34a" : "#ea580c" }}>+{st.contrib}</span>
+            <span style={{ color: "#334155" }}># {st.k}</span> <span style={{ color: "#94a3b8" }}>· {4 - st.k}</span>
+            <span style={{ color: C.dim, fontWeight: 600 }}>　→　{t(E, "all#", "다#")}:{4 - st.k} / {t(E, "all·", "다·")}:{st.k}　→　</span>
+            <span style={{ color: st.contrib === 0 ? "#16a34a" : "#ea580c" }}>min = +{st.contrib}</span>
           </span>
         )}
       </div>
