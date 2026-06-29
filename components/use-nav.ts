@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { Home, BookOpen, User, Puzzle, Brain, Trophy, Map } from "lucide-react"
+import { Home, BookOpen, User, Puzzle, Brain, Trophy, Map, Target } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -19,6 +19,7 @@ export function useNavItems(): NavItem[] {
   const { t } = useLanguage()
 
   const studentNav: NavItem[] = [
+    { icon: Target,  label: t("할 것", "Next"),      href: "/course/next" },
     { icon: Map,     label: t("지도", "Map"),        href: "/journey"    },
     { icon: BookOpen,label: t("수업", "Lessons"),    href: "/curriculum" },
     { icon: Brain,   label: t("연습", "Practice"),   href: "/course/ladder" },
@@ -28,6 +29,7 @@ export function useNavItems(): NavItem[] {
   ]
 
   const guestNav: NavItem[] = [
+    { icon: Target,   label: t("할 것", "Next"),    href: "/course/next" },
     { icon: Home,     label: t("홈", "Home"),       href: "/"           },
     { icon: BookOpen, label: t("수업", "Lessons"),  href: "/curriculum" },
     { icon: Puzzle,   label: t("알고리즘", "Algo"), href: "/algo"       },
