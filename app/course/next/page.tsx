@@ -11,6 +11,9 @@ import { BottomNav } from "@/components/bottom-nav";
 import { LADDER } from "../ladder/ladder-data";
 import { getCompletedIds, setManualDone } from "@/lib/path-completion";
 import { questPathForUrl } from "@/lib/cpid-quests";
+import { PATH_LESSONS, type PathCourse } from "@/data/path-lessons";
+
+type PathItem = { id: string; topic: string; title: string; level: number; source?: string; url?: string; external?: boolean; isLesson?: boolean };
 
 // 문제의 실제 이동 링크: 우리 quest 있으면 사이트 안(/quest/<id>), 없으면 원래 url.
 function effLink(it: { url?: string; external?: boolean }) {
@@ -48,27 +51,40 @@ export default function NextPath() {
   const [done, setDone] = useState<Set<string>>(new Set());
   const [ready, setReady] = useState(false);
   const [showMore, setShowMore] = useState(false);  // 잘하는 학생: 더 멀리 보고 점프
+  const [course, setCourse] = useState<PathCourse>("python");
 
-  useEffect(() => { setDone(getCompletedIds()); setReady(true); }, []);
+  useEffect(() => {
+    setDone(getCompletedIds());
+    try { const c = localStorage.getItem("selectedCourse"); if (c === "cpp" || c === "python") setCourse(c); } catch {}
+    setReady(true);
+  }, []);
 
   const refresh = () => setDone(getCompletedIds());
 
-  // 경로 = LADDER 순서(난이도순). 현재 = 아직 안 끝낸 첫 항목.
-  const curIdx = useMemo(() => {
-    const i = LADDER.findIndex((p) => !done.has(p.id));
-    return i === -1 ? LADDER.length - 1 : i;
-  }, [done]);
+  // 경로 = [현재 코스 수업(언어 단계)] → [LADDER 문제(난이도순)]. 한 줄로 통합.
+  const PATH: PathItem[] = useMemo(() => {
+    const lessons: PathItem[] = (PATH_LESSONS[course] || []).map((l) => ({
+      id: String(l.id), topic: "syntax", title: l.title, level: 0, source: "수업", url: `/learn/${l.id}`, external: false, isLesson: true,
+    }));
+    return [...lessons, ...(LADDER as PathItem[])];
+  }, [course]);
 
-  const cur = LADDER[curIdx];
+  // 현재 = 아직 안 끝낸 첫 항목.
+  const curIdx = useMemo(() => {
+    const i = PATH.findIndex((p) => !done.has(p.id));
+    return i === -1 ? PATH.length - 1 : i;
+  }, [done, PATH]);
+
+  const cur = PATH[curIdx];
   const curLink = cur ? effLink(cur) : null;
-  const upcoming = LADDER.slice(curIdx + 1, curIdx + (showMore ? 16 : 6));
-  const recent = LADDER.slice(Math.max(0, curIdx - 2), curIdx).reverse();
-  const total = LADDER.length;
+  const upcoming = PATH.slice(curIdx + 1, curIdx + (showMore ? 16 : 6));
+  const recent = PATH.slice(Math.max(0, curIdx - 2), curIdx).reverse();
+  const total = PATH.length;
   const curBand = cur ? bandOf(cur.level).k : "입문";
   const stages = useMemo(() => BAND_DEFS.map((b) => {
-    const items = LADDER.filter((p) => p.level >= b.lo && p.level <= b.hi);
+    const items = PATH.filter((p) => p.level >= b.lo && p.level <= b.hi);
     return { ...b, total: items.length, done: items.filter((p) => done.has(p.id)).length };
-  }), [done]);
+  }), [done, PATH]);
 
   const markDone = (id: string) => { setManualDone(id, true); refresh(); };
 
@@ -137,7 +153,8 @@ export default function NextPath() {
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
               {chip(cur.topic, cur.level)}
               {cur.source && <span style={{ fontSize: 11, color: "#64748b", border: "1px solid #e2e8f0", borderRadius: 6, padding: "2px 8px" }}>{cur.source}</span>}
-              {curLink?.inSite && <span style={{ fontSize: 11, color: "#16a34a", background: "#dcfce7", borderRadius: 6, padding: "2px 8px", fontWeight: 700 }}>{curLink.isQuest ? "우리 풀이 (단계별)" : "사이트 안에서 풀기"}</span>}
+              {cur.isLesson && <span style={{ fontSize: 11, color: "#0e7490", background: "#cffafe", borderRadius: 6, padding: "2px 8px", fontWeight: 700 }}>수업 듣기</span>}
+              {!cur.isLesson && curLink?.inSite && <span style={{ fontSize: 11, color: "#16a34a", background: "#dcfce7", borderRadius: 6, padding: "2px 8px", fontWeight: 700 }}>{curLink.isQuest ? "우리 풀이 (단계별)" : "사이트 안에서 풀기"}</span>}
             </div>
             {cur && conceptRoute(cur.topic) && (
               <a href={conceptRoute(cur.topic)!} style={{ display: "inline-block", marginBottom: 12, fontSize: 12.5, color: "#7c3aed", textDecoration: "none", fontWeight: 600 }}>
