@@ -7,6 +7,7 @@ import { LanguageProvider } from "@/contexts/language-context"
 import { TeacherMirror } from "@/components/teacher-mirror"
 import { GlobalEditorProvider } from "@/components/teacher/global-editor-provider"
 import { SiteFooter } from "@/components/site-footer"
+import { DesktopSidebar } from "@/components/desktop-sidebar"
 import { ADSENSE_ENABLED, ADSENSE_PUBLISHER_ID } from "@/lib/adsense-config"
 import "./globals.css"
 
@@ -59,8 +60,12 @@ export default function RootLayout({
         <AuthProvider>
           <LanguageProvider>
             <GlobalEditorProvider>
-              {children}
-              <SiteFooter />
+              <DesktopSidebar />
+              {/* 데스크탑(lg+)에서는 좌측 사이드바 폭만큼 본문을 밀어줌 */}
+              <div className="lg:pl-60">
+                {children}
+                <SiteFooter />
+              </div>
               <TeacherMirror />
             </GlobalEditorProvider>
           </LanguageProvider>
