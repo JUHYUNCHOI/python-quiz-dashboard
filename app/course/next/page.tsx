@@ -47,6 +47,7 @@ export default function NextPath() {
   // done = 실제 완료 신호 union(레슨·연습·algo·수동). 읽기 전용 합산.
   const [done, setDone] = useState<Set<string>>(new Set());
   const [ready, setReady] = useState(false);
+  const [showMore, setShowMore] = useState(false);  // 잘하는 학생: 더 멀리 보고 점프
 
   useEffect(() => { setDone(getCompletedIds()); setReady(true); }, []);
 
@@ -60,7 +61,7 @@ export default function NextPath() {
 
   const cur = LADDER[curIdx];
   const curLink = cur ? effLink(cur) : null;
-  const upcoming = LADDER.slice(curIdx + 1, curIdx + 6);
+  const upcoming = LADDER.slice(curIdx + 1, curIdx + (showMore ? 16 : 6));
   const recent = LADDER.slice(Math.max(0, curIdx - 2), curIdx).reverse();
   const total = LADDER.length;
   const curBand = cur ? bandOf(cur.level).k : "입문";
@@ -182,6 +183,9 @@ export default function NextPath() {
                 </button>
               </div>
             ))}
+            <button onClick={() => setShowMore(v => !v)} style={{ display: "block", margin: "4px auto 0", fontSize: 12, color: "#6366f1", background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}>
+              {showMore ? "접기 ▲" : "더 보기 ▼ (멀리 점프)"}
+            </button>
           </>
         )}
 
