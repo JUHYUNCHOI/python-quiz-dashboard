@@ -77,7 +77,7 @@ export default function NextPath() {
 
   const cur = PATH[curIdx];
   const curLink = cur ? effLink(cur) : null;
-  const upcoming = PATH.slice(curIdx + 1, curIdx + (showMore ? 16 : 6));
+  const upcoming = PATH.slice(curIdx + 1, curIdx + (showMore ? 13 : 4));
   const recent = PATH.slice(Math.max(0, curIdx - 2), curIdx).reverse();
   const total = PATH.length;
   const curBand = cur ? bandOf(cur.level).k : "입문";
@@ -108,27 +108,8 @@ export default function NextPath() {
       <main style={{ maxWidth: 560, margin: "0 auto", padding: "16px 16px 0" }}>
         <div style={{ fontSize: 12, color: "#94a3b8", fontWeight: 600 }}>나의 학습 · 이어서</div>
         <h1 style={{ fontSize: 22, fontWeight: 800, color: "#0f172a", margin: "2px 0 4px" }}>다음 할 것</h1>
-        <div style={{ fontSize: 12.5, color: "#64748b", marginBottom: 14 }}>
-          {done.size}개 완료 · 헤매지 말고 아래 1개만 따라가요
-        </div>
-
-        {/* 5단계 띠 — 입문→도전, 현재 단계 강조 */}
-        <div style={{ display: "flex", gap: 6, marginBottom: 18 }}>
-          {stages.map((s) => {
-            const active = s.k === curBand;
-            const pct = s.total ? Math.round((s.done / s.total) * 100) : 0;
-            return (
-              <div key={s.k} style={{ flex: 1, textAlign: "center" }}>
-                <div style={{ fontSize: 11, fontWeight: active ? 800 : 600, color: active ? s.c : "#94a3b8", marginBottom: 4 }}>
-                  {active && "▸ "}{s.k}
-                </div>
-                <div style={{ height: 6, background: "#e2e8f0", borderRadius: 999, overflow: "hidden", outline: active ? `2px solid ${s.c}33` : "none" }}>
-                  <div style={{ width: pct + "%", height: "100%", background: s.c, borderRadius: 999 }} />
-                </div>
-                <div style={{ fontSize: 10, color: "#94a3b8", marginTop: 3 }}>{s.done}/{s.total}</div>
-              </div>
-            );
-          })}
+        <div style={{ fontSize: 12.5, color: "#64748b", marginBottom: 18 }}>
+          {done.size > 0 ? `${done.size}개 완료` : "여기서 시작해요"} · 아래 1개만 하면 돼요
         </div>
 
         {/* 지난 것 (지나온 칸) */}
