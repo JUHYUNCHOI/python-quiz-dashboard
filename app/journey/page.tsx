@@ -648,6 +648,18 @@ export default function JourneyPage() {
           </div>
         )}
 
+        {/* 🧗 문제 풀기 진입 — 통합 경로(/course/next)로. 레슨 여정과 구분(문제/도전). 정적 링크만(추가 전용). */}
+        <a href="/course/next" className="block mb-3 rounded-2xl border-2 border-indigo-300 bg-indigo-50 px-4 py-3 hover:border-indigo-500 hover:shadow-md transition-all">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl shrink-0">🧗</span>
+            <div className="flex-1 min-w-0">
+              <p className="font-black text-indigo-900 text-sm break-keep">{t("문제 풀기 — 이어서", "Practice — continue")}</p>
+              <p className="text-indigo-600/80 text-[11px] mt-0.5 break-keep">{t("난이도 순 한 줄로 · 다음 1개부터", "One ordered path · start at your next")}</p>
+            </div>
+            <span className="text-indigo-500 font-black shrink-0">→</span>
+          </div>
+        </a>
+
         {/* 🔥 Streak 끊김 알림 — 어제 안 들어왔으면 부드러운 격려 */}
         {isStreakAtRisk && dailyStreak > 0 && (
           <div className="mb-3 rounded-xl bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 px-3 py-2.5 flex items-center gap-2">
