@@ -80,36 +80,39 @@ export function Header() {
                   <span className="text-sm font-bold text-amber-800">{t("선생님", "Teacher")}</span>
                 </div>
               )}
-              <div className="flex items-center gap-1.5 rounded-full bg-orange-100 px-3 py-2 min-h-[44px]">
-                <Trophy className="h-4 w-4 text-orange-600" />
-                <span className="text-sm font-semibold text-orange-700">Lv.{level}</span>
-              </div>
+              {/* 레벨/불꽃/창고 — 데스크탑(md+)에서는 좌측 사이드바 하단으로 옮김(위쪽 과밀 해소). 모바일에서만 헤더에 표시. */}
+              <div className="flex items-center gap-1.5 md:hidden">
+                <div className="flex items-center gap-1.5 rounded-full bg-orange-100 px-3 py-2 min-h-[44px]">
+                  <Trophy className="h-4 w-4 text-orange-600" />
+                  <span className="text-sm font-semibold text-orange-700">Lv.{level}</span>
+                </div>
 
-              <div className="flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-2 min-h-[44px]">
-                <Flame className="h-4 w-4 text-red-600" />
-                <span className="text-sm font-semibold text-red-700">{dailyStreak}{t("일", "d")}</span>
-              </div>
+                <div className="flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-2 min-h-[44px]">
+                  <Flame className="h-4 w-4 text-red-600" />
+                  <span className="text-sm font-semibold text-red-700">{dailyStreak}{t("일", "d")}</span>
+                </div>
 
-              {/* 창고 — 0 이면 회색 (발견용), 있으면 빨강 + 카운트 */}
-              <Link
-                href="/missed"
-                title={bankRemaining > 0
-                  ? t(`틀린 문제 ${bankRemaining}개 — 클릭해서 풀기`, `${bankRemaining} wrong — click to practice`)
-                  : t("틀린 문제 창고 (지금은 비어있어요)", "Wrong question bank (empty)")}
-                className={cn(
-                  "flex items-center gap-1.5 rounded-full px-3 py-2 min-h-[44px] transition-colors",
-                  bankRemaining > 0
-                    ? "bg-rose-100 hover:bg-rose-200"
-                    : "bg-gray-100 hover:bg-gray-200"
-                )}
-              >
-                <span className="text-base">📚</span>
-                {bankRemaining > 0 ? (
-                  <span className="text-sm font-semibold text-rose-700">{bankRemaining}</span>
-                ) : (
-                  <span className="text-xs font-medium text-gray-500 hidden sm:inline">{t("창고", "Bank")}</span>
-                )}
-              </Link>
+                {/* 창고 — 0 이면 회색 (발견용), 있으면 빨강 + 카운트 */}
+                <Link
+                  href="/missed"
+                  title={bankRemaining > 0
+                    ? t(`틀린 문제 ${bankRemaining}개 — 클릭해서 풀기`, `${bankRemaining} wrong — click to practice`)
+                    : t("틀린 문제 창고 (지금은 비어있어요)", "Wrong question bank (empty)")}
+                  className={cn(
+                    "flex items-center gap-1.5 rounded-full px-3 py-2 min-h-[44px] transition-colors",
+                    bankRemaining > 0
+                      ? "bg-rose-100 hover:bg-rose-200"
+                      : "bg-gray-100 hover:bg-gray-200"
+                  )}
+                >
+                  <span className="text-base">📚</span>
+                  {bankRemaining > 0 ? (
+                    <span className="text-sm font-semibold text-rose-700">{bankRemaining}</span>
+                  ) : (
+                    <span className="text-xs font-medium text-gray-500 hidden sm:inline">{t("창고", "Bank")}</span>
+                  )}
+                </Link>
+              </div>
             </>
           )}
         </div>
