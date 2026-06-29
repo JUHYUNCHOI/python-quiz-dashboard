@@ -11,7 +11,7 @@ export function BottomNav() {
   const navItems = useNavItems()
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-white/95 backdrop-blur-sm z-50 safe-area-inset-bottom">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-white/95 backdrop-blur-sm z-50 safe-area-inset-bottom">
       <div className="container mx-auto flex justify-around px-2 py-2 md:py-3 max-w-2xl">
         {navItems.map((item) => {
           const Icon = item.icon

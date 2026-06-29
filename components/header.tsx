@@ -47,8 +47,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-orange-100 bg-white/80 backdrop-blur-sm">
       <div className="container mx-auto flex items-center justify-between px-4 py-3 md:py-4">
-        {/* 데스크탑(lg+)에서는 좌측 사이드바에 로고가 있으므로 헤더 브랜드는 숨김 */}
-        <Link href="/" className="flex items-center gap-2 lg:hidden">
+        {/* 데스크탑·패드(md+)에서는 좌측 사이드바에 로고가 있으므로 헤더 브랜드는 숨김 */}
+        <Link href="/" className="flex items-center gap-2 md:hidden">
           <div className="text-2xl md:text-3xl">🦒</div>
           <div>
             <h1 className="text-base md:text-lg font-bold text-gray-800">{t("코드린", "Coderin")}</h1>

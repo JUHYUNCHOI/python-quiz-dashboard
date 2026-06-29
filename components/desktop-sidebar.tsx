@@ -12,7 +12,7 @@ export function DesktopSidebar() {
   const navItems = useNavItems()
 
   return (
-    <aside className="hidden lg:flex fixed top-0 left-0 bottom-0 w-60 flex-col border-r border-gray-200 bg-white z-50">
+    <aside className="hidden md:flex fixed top-0 left-0 bottom-0 w-60 flex-col border-r border-gray-200 bg-white z-50">
       <Link href="/" className="flex items-center gap-2 px-5 h-16 shrink-0 border-b border-gray-100">
         <span className="text-2xl">🦒</span>
         <span className="text-lg font-extrabold text-gray-900">Coderin</span>
