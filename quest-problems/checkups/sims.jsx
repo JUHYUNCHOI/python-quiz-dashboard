@@ -1636,6 +1636,7 @@ export function CheckupsFinalCodeSim({ E }) {
           <_FcRow label={"📋 want"} arr={_FC_WANT} hlIdx={-1} hue="#16a34a" />
           {st.mut ? <_FcRow label={t(E, "matchUpTo", "matchUpTo (바깥)")} arr={st.mut} hlIdx={mutHl} hue="#d97706" /> : null}
           {st.iut ? <_FcRow label={t(E, "insideUpTo (this s)", "insideUpTo (이 s)")} arr={st.iut} hlIdx={iutHl} hue="#0891b2" /> : null}
+          {st.iut ? <div style={{ fontSize: 9.5, color: C.dim, marginLeft: 140, marginTop: -2, marginBottom: 2, wordBreak: "keep-all", lineHeight: 1.35 }}>{t(E, "↑ cells = spot k (1~N), so N+2 cells — NOT 2N. (2N is s's max value, not a cell count)", "↑ 칸 = 자리 k (1~N) 라 N+여유 칸. 8칸 아님 — 8(=2N)은 s의 최댓값이지 칸 수가 아니에요.")}</div> : null}
           <div style={{ height: 4 }} />
           <_FcRow label={t(E, "pairsWithCheckups", "결과[검진수]")} arr={st.pairs} hlIdx={st.pairs === _FC_P1 ? 4 : -1} hue="#16a34a" />
           {/* 스칼라 변수 칩 */}
