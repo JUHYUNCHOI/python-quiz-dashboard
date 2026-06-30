@@ -1492,58 +1492,88 @@ export function CheckupsInPrefixSim({ E }) {
    ════════════════════════════════════════════════════════════════════ */
 const _FC_COW = [2, 1, 3, 1];
 const _FC_WANT = [1, 2, 3, 1];
-const _FC_MUT = [0, 0, 0, 1, 2];
-const _FC_IUT = [0, 1, 2, 2, 2];
-const _FC_P0 = [0, 0, 0, 0, 0];
-const _FC_P1 = [0, 0, 0, 0, 1];
+const _ = null;  // 아직 안 채운 칸
 const _FC_CODE = [
   "matchUpTo[i] = matchUpTo[i-1] + (cow[i]==want[i])",
-  "for s in 2 .. 2N:",
-  "    insideUpTo[k] = insideUpTo[k-1] + (cow[s-k]==want[k])",
-  "    for l in ...:  r = s - l",
-  "        inside  = insideUpTo[r] - insideUpTo[l-1]",
-  "        outside = matchUpTo[l-1] + (matchUpTo[N] - matchUpTo[r])",
-  "        result[inside + outside] += 1",
+  "for s in 2..2N:",
+  "  insideUpTo[k] = insideUpTo[k-1] + (cow[s-k]==want[k])",
+  "  for l, r with l+r = s:",
+  "    inside   = insideUpTo[r] - insideUpTo[l-1]",
+  "    outFront = matchUpTo[l-1]",
+  "    outBack  = matchUpTo[N] - matchUpTo[r]",
+  "    result[inside + outFront + outBack] += 1",
   "print result[0..N]",
 ];
+const _FC_P0 = [0, 0, 0, 0, 0];
+const _FC_P1 = [0, 0, 0, 0, 1];
 
 function _buildFinalSteps(E) {
+  const S = (o) => Object.assign({ tag: "", mut: null, mutHl: -1, iut: null, iutHl: -1, pairs: _FC_P0, pairsHl: false, payoff: false }, o);
   return [
-    { tag: "", mut: false, iut: false, hl: null, pairs: _FC_P0, payoff: false,
-      bubble: t(E, "The final code never re-counts each window. It uses TWO prefix sums to count every window's checkups in one sweep.",
-                   "최종 코드는 구간마다 다시 세지 않아요. 누적합 2개로 모든 구간의 검진 수를 한 번에 세요.") },
-    { tag: "① 바깥 prefix", mut: true, iut: false, hl: "mut", pairs: _FC_P0, payoff: false,
-      bubble: t(E, "matchUpTo: '✓ up to spot i' for the OUTSIDE (unchanged) part. Built once, reused forever.",
-                   "matchUpTo — 자리 i까지 '바깥에서 맞는 칸 ✓' 누적. 딱 한 번 만들어 평생 재사용.") },
-    { tag: "② s = l+r 묶음", mut: true, iut: false, hl: null, pairs: _FC_P0, payoff: false,
-      bubble: t(E, "Group windows by s = l + r. Same s means same reversed shape, so the inside part can be shared.",
-                   "구간을 s = l+r 끼리 묶어요. s가 같으면 뒤집힌 모양이 똑같아 안쪽 계산을 공유해요.") },
-    { tag: "③ 안쪽 prefix (s=3)", mut: true, iut: true, hl: "iut", pairs: _FC_P0, payoff: false,
-      bubble: t(E, "insideUpTo for this s: '✓ up to k' inside the reversed part. Every (l, r) with this s shares it.",
-                   "이 s의 insideUpTo — 뒤집힌 자리의 '맞는 칸 ✓' 누적. 이 s의 모든 (l, r)가 같이 써요.") },
-    { tag: "④ 한 구간 [1,2]", mut: true, iut: true, hl: null, pairs: _FC_P0, payoff: false,
-      bubble: t(E, "Window [1,2] (s=3): inside = insideUpTo[2]-insideUpTo[0] = 2. outside = matchUpTo[0] + (matchUpTo[4]-matchUpTo[2]) = 2.",
-                   "구간 [1,2] (l+r=3): 안쪽 = insideUpTo[2]−insideUpTo[0] = 2.  바깥 = matchUpTo[0] + (matchUpTo[4]−matchUpTo[2]) = 2.") },
-    { tag: "④ 결과 +1", mut: true, iut: true, hl: "pairs", pairs: _FC_P1, payoff: false,
-      bubble: t(E, "checkups = inside 2 + outside 2 = 4, so result[4] += 1. No re-counting, just two subtractions!",
-                   "검진 = 안쪽 2 + 바깥 2 = 4 → 결과[4] 칸을 +1! 다시 세지 않고 빼기 한 번씩으로 끝.") },
-    { tag: "⑤ 출력", mut: false, iut: false, hl: "pairs", pairs: _FC_P1, payoff: false,
-      bubble: t(E, "Repeat for every s and (l, r). result[k] = how many windows give exactly k checkups. Print it.",
-                   "모든 s·모든 (l,r)를 반복하면 — 결과[k] = '검진이 정확히 k개인 구간 수'. 출력하면 정답!") },
-    { tag: "", mut: false, iut: false, hl: null, pairs: _FC_P1, payoff: true,
-      bubble: t(E, "Brute force re-counts N spots per window (N cubed). This uses two prefix sums (N squared) - that's why it passes!",
-                   "브루트포스는 구간마다 N칸 다시 셌어요(N³). 이건 누적합 2개로 빼기만 → N². 그래서 통과! 🚀") },
+    S({ bubble: t(E, "The final code never re-counts each window. It fills two 'prefix' tables, then every window is just subtractions.",
+                     "최종 코드는 구간마다 다시 세지 않아요. '누적' 표 2개를 채워두고, 구간마다 빼기만 해요.") }),
+
+    S({ tag: "① 바깥 누적", mut: [0, 0, _, _, _], mutHl: 1,
+        bubble: t(E, "matchUpTo[i] = how many spots match up to i, OUTSIDE the flip. i=1: cow[1]=2 ≠ want[1]=1 → +0 → matchUpTo[1]=0.",
+                     "matchUpTo[i] = 뒤집기 없이 '자리 i까지 맞는 칸 수'. i=1: cow[1]=2 ≠ want[1]=1 → 0 더함 → matchUpTo[1]=0.") }),
+    S({ tag: "① 바깥 누적", mut: [0, 0, 0, _, _], mutHl: 2,
+        bubble: t(E, "i=2: cow[2]=1 ≠ want[2]=2 → +0 → matchUpTo[2]=0.",
+                     "i=2: cow[2]=1 ≠ want[2]=2 → 0 더함 → matchUpTo[2]=0.") }),
+    S({ tag: "① 바깥 누적", mut: [0, 0, 0, 1, _], mutHl: 3,
+        bubble: t(E, "i=3: cow[3]=3 = want[3]=3 → match ✓ → matchUpTo[3]=1.",
+                     "i=3: cow[3]=3 = want[3]=3 → 맞음 ✓ → matchUpTo[3]=1.") }),
+    S({ tag: "① 바깥 누적", mut: [0, 0, 0, 1, 2], mutHl: 4,
+        bubble: t(E, "i=4: cow[4]=1 = want[4]=1 → ✓ → matchUpTo[4]=2. Outside table done — built ONCE, used for every window.",
+                     "i=4: cow[4]=1 = want[4]=1 → ✓ → matchUpTo[4]=2. 바깥 표 완성 — 딱 한 번 만들어 모든 구간이 씀.") }),
+
+    S({ tag: "② s = l+r 묶음", mut: [0, 0, 0, 1, 2],
+        bubble: t(E, "Group windows by s = l + r. Same s ⇒ the flip lands the same way, so they share one inside table. (here s=3)",
+                     "구간을 s = l+r 끼리 묶어요. s가 같으면 뒤집힌 모양이 똑같아 안쪽 표 하나를 공유해요. (여기선 s=3)") }),
+
+    S({ tag: "③ 안쪽 누적 (s=3)", mut: [0, 0, 0, 1, 2], iut: [0, 1, _, _, _], iutHl: 1,
+        bubble: t(E, "insideUpTo[k] = matches up to spot k INSIDE the flip. After flipping, spot k holds cow[s-k]. k=1: cow[3-1]=cow[2]=1 = want[1]=1 ✓ → insideUpTo[1]=1.",
+                     "insideUpTo[k] = 뒤집은 뒤 '자리 k까지 맞는 칸 수'. 뒤집으면 자리 k엔 cow[s−k]가 와요. k=1: cow[3−1]=cow[2]=1 = want[1]=1 ✓ → insideUpTo[1]=1.") }),
+    S({ tag: "③ 안쪽 누적 (s=3)", mut: [0, 0, 0, 1, 2], iut: [0, 1, 2, _, _], iutHl: 2,
+        bubble: t(E, "k=2: spot 2 holds cow[3-2]=cow[1]=2 = want[2]=2 ✓ → insideUpTo[2]=2.",
+                     "k=2: 자리 2엔 cow[3−2]=cow[1]=2 = want[2]=2 ✓ → insideUpTo[2]=2.") }),
+    S({ tag: "③ 안쪽 누적 (s=3)", mut: [0, 0, 0, 1, 2], iut: [0, 1, 2, 2, _], iutHl: 3,
+        bubble: t(E, "k=3: cow[3-3]=cow[0] is off the board (not a real flip spot for s=3) → +0 → insideUpTo[3]=2.",
+                     "k=3: cow[3−3]=cow[0]은 줄 밖(이 s에선 실제 자리 아님) → 0 더함 → insideUpTo[3]=2.") }),
+    S({ tag: "③ 안쪽 누적 (s=3)", mut: [0, 0, 0, 1, 2], iut: [0, 1, 2, 2, 2], iutHl: 4,
+        bubble: t(E, "k=4: also off the board → insideUpTo[4]=2. Inside table for s=3 done — shared by every window with l+r=3.",
+                     "k=4: 역시 줄 밖 → insideUpTo[4]=2. s=3 안쪽 표 완성 — l+r=3인 모든 구간이 같이 써요.") }),
+
+    S({ tag: "④ 구간 [1,2]", mut: [0, 0, 0, 1, 2], iut: [0, 1, 2, 2, 2],
+        bubble: t(E, "Window [1,2] (l+r=3). inside = insideUpTo[r] − insideUpTo[l-1] = insideUpTo[2] − insideUpTo[0] = 2 − 0 = 2.",
+                     "구간 [1,2] (l+r=3). 안쪽 = insideUpTo[r] − insideUpTo[l−1] = insideUpTo[2] − insideUpTo[0] = 2 − 0 = 2.") }),
+    S({ tag: "④ 구간 [1,2]", mut: [0, 0, 0, 1, 2], iut: [0, 1, 2, 2, 2],
+        bubble: t(E, "outside = front + back = matchUpTo[0] + (matchUpTo[4] − matchUpTo[2]) = 0 + (2 − 0) = 2.",
+                     "바깥 = 앞 + 뒤 = matchUpTo[0] + (matchUpTo[4] − matchUpTo[2]) = 0 + (2 − 0) = 2.") }),
+    S({ tag: "④ 결과 +1", mut: [0, 0, 0, 1, 2], iut: [0, 1, 2, 2, 2], pairs: _FC_P1, pairsHl: true,
+        bubble: t(E, "checkups = inside 2 + outside 2 = 4 → result[4] += 1. No re-counting — two subtractions and done.",
+                     "검진 = 안쪽 2 + 바깥 2 = 4 → 결과[4] 칸 +1! 다시 세지 않고 빼기 두 번으로 끝.") }),
+
+    S({ tag: "⑤ 출력", pairs: _FC_P1, pairsHl: true,
+        bubble: t(E, "Repeat for every s and (l, r). result[k] = how many windows give exactly k checkups. Print it — done.",
+                     "모든 s·모든 (l,r)를 반복하면 — 결과[k] = '검진이 정확히 k개인 구간 수'. 출력하면 정답!") }),
+    S({ pairs: _FC_P1, payoff: true,
+        bubble: t(E, "Brute force re-counts N spots per window (N cubed). This builds two prefix tables and subtracts (N squared) — that's why it passes!",
+                     "브루트포스는 구간마다 N칸 다시 셌어요(N³). 이건 누적 표 2개 만들고 빼기만 (N²) — 그래서 통과! 🚀") }),
   ];
 }
 
-function _FcRow({ label, arr, hlAll, hue }) {
+function _FcRow({ label, arr, hlIdx, hue }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-      <div style={{ width: 110, fontSize: 10.5, color: C.dim, textAlign: "right", wordBreak: "keep-all" }}>{label}</div>
+      <div style={{ width: 116, fontSize: 10.5, color: C.dim, textAlign: "right", wordBreak: "keep-all", lineHeight: 1.25 }}>{label}</div>
       <div style={{ display: "flex", gap: 5 }}>
-        {arr.map((v, k) => (
-          <div key={k} style={{ minWidth: 30, height: 30, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "monospace", fontSize: 13, border: `1px solid ${hlAll ? hue : "#e2e8f0"}`, background: hlAll ? hue + "22" : "#fff", color: hlAll ? hue : "#334155", fontWeight: hlAll ? 800 : 500 }}>{v}</div>
-        ))}
+        {arr.map((v, k) => {
+          const empty = v === null || v === undefined;
+          const on = hlIdx === k;
+          return (
+            <div key={k} style={{ minWidth: 30, height: 30, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "monospace", fontSize: 13, border: `1px solid ${on ? hue : "#e2e8f0"}`, background: on ? hue + "22" : "#fff", color: empty ? "#cbd5e1" : (on ? hue : "#334155"), fontWeight: on ? 800 : 500 }}>{empty ? "·" : v}</div>
+          );
+        })}
       </div>
     </div>
   );
@@ -1556,26 +1586,26 @@ export function CheckupsFinalCodeSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#0e7490", marginBottom: 8 }}>
-        🧩 {t(E, "The final code — step by step", "최종 코드 — 한 부분씩")}
+        🧩 {t(E, "The final code — part by part", "최종 코드 — 한 부분씩")}
         {st.tag ? <span style={{ marginLeft: 8, fontSize: 11, fontWeight: 700, color: "#0891b2", background: "#cffafe", borderRadius: 8, padding: "2px 8px" }}>{st.tag}</span> : null}
       </div>
 
       <div style={{ maxWidth: 520, margin: "0 auto 10px" }}>
-        <div style={{ background: st.payoff ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 12.5, color: st.payoff ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 48, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all" }}>💬 {st.bubble}</div>
+        <div style={{ background: st.payoff ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 12.5, color: st.payoff ? "#065f46" : "#92400e", lineHeight: 1.65, minHeight: 48, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all" }}>💬 {st.bubble}</div>
         <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}` }} />
       </div>
 
-      <div style={{ maxWidth: 470, margin: "0 auto 10px" }}>
-        <_FcRow label={"🐮 cow (1~4)"} arr={_FC_COW} hlAll={false} hue="#0891b2" />
-        <_FcRow label={"📋 want"} arr={_FC_WANT} hlAll={false} hue="#16a34a" />
-        {st.mut ? <_FcRow label={"matchUpTo (바깥·한 번)"} arr={_FC_MUT} hlAll={st.hl === "mut"} hue="#d97706" /> : null}
-        {st.iut ? <_FcRow label={"insideUpTo (s=3 공유)"} arr={_FC_IUT} hlAll={st.hl === "iut"} hue="#0891b2" /> : null}
+      <div style={{ maxWidth: 480, margin: "0 auto 10px" }}>
+        <_FcRow label={"🐮 cow (자리 1~4)"} arr={_FC_COW} hlIdx={-1} hue="#0891b2" />
+        <_FcRow label={"📋 want"} arr={_FC_WANT} hlIdx={-1} hue="#16a34a" />
+        {st.mut ? <_FcRow label={t(E, "matchUpTo (outside)", "matchUpTo (바깥)")} arr={st.mut} hlIdx={st.mutHl} hue="#d97706" /> : null}
+        {st.iut ? <_FcRow label={t(E, "insideUpTo (this s)", "insideUpTo (이 s)")} arr={st.iut} hlIdx={st.iutHl} hue="#0891b2" /> : null}
         <div style={{ height: 6 }} />
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ width: 110, fontSize: 10.5, color: C.dim, textAlign: "right", wordBreak: "keep-all" }}>{t(E, "result[k]", "결과[k]")}</div>
+          <div style={{ width: 116, fontSize: 10.5, color: C.dim, textAlign: "right", wordBreak: "keep-all", lineHeight: 1.25 }}>{t(E, "result[k]", "결과[k]")}</div>
           <div style={{ display: "flex", gap: 5 }}>
             {st.pairs.map((v, k) => {
-              const on = st.hl === "pairs" && k === 4;
+              const on = st.pairsHl && k === 4;
               return (
                 <div key={k} style={{ textAlign: "center" }}>
                   <div style={{ minWidth: 30, height: 30, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "monospace", fontSize: 13, border: `1px solid ${on ? "#16a34a" : "#e2e8f0"}`, background: on ? "#dcfce7" : "#fff", color: on ? "#15803d" : "#334155", fontWeight: on ? 800 : 500 }}>{v}</div>
@@ -1587,7 +1617,7 @@ export function CheckupsFinalCodeSim({ E }) {
         </div>
       </div>
 
-      <div style={{ maxWidth: 540, margin: "0 auto" }}>
+      <div style={{ maxWidth: 560, margin: "0 auto" }}>
         <CodeBlock lines={_FC_CODE} lang="py" />
       </div>
 
