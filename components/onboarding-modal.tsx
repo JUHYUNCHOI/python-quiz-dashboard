@@ -7,27 +7,32 @@ interface OnboardingModalProps {
   onComplete: (course: "python" | "cpp") => void
 }
 
+// 학습 플랜 3가지 — 시작할 때 한 번에 잡음
+//  python-only : Python만 (C++ 숨김)
+//  python-cpp  : Python부터 → 나중에 C++
+//  cpp         : C++부터 (Python 알거나 대회)
+type Plan = "python-only" | "python-cpp" | "cpp"
+
 /**
  * 신규 학생 온보딩 모달
  * - 첫 방문 시 자동 표시 (localStorage "onboarding-done" 체크)
- * - 코스 선택 → selectedCourse 저장 → 첫 레슨으로 안내
+ * - 플랜 선택 → selectedCourse + cppPlan 저장 → 첫 레슨으로 안내
  */
 export function OnboardingModal({ onComplete }: OnboardingModalProps) {
   const { t } = useLanguage()
   const [step, setStep] = useState<"welcome" | "course">("welcome")
-  const [selectedCourse, setSelectedCourse] = useState<"python" | "cpp" | null>(null)
-
-  const handleCourseSelect = (course: "python" | "cpp") => {
-    setSelectedCourse(course)
-  }
+  const [plan, setPlan] = useState<Plan | null>(null)
 
   const handleStart = () => {
-    if (!selectedCourse) return
+    if (!plan) return
+    const course: "python" | "cpp" = plan === "cpp" ? "cpp" : "python"
     try {
-      localStorage.setItem("selectedCourse", selectedCourse)
+      localStorage.setItem("selectedCourse", course)
+      // C++ 노출 여부: 'Python만'이면 only(숨김), 그 외엔 later(노출)
+      localStorage.setItem("cppPlan", plan === "python-only" ? "only" : "later")
       localStorage.setItem("onboarding-done", "1")
     } catch {}
-    onComplete(selectedCourse)
+    onComplete(course)
   }
 
   return (
@@ -74,7 +79,7 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
         {step === "course" && (
           <div className="p-6">
             <h2 className="text-xl font-black text-gray-800 text-center mb-1">
-              {t("어떤 언어부터 배울까요?", "Which language to start with?")}
+              {t("어떻게 배울까요?", "How do you want to learn?")}
             </h2>
             <p className="text-sm text-gray-500 text-center mb-5">
               {t("나중에 언제든 바꿀 수 있어요!", "You can always switch later!")}
@@ -83,11 +88,21 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
             <div className="space-y-3 mb-6">
               {[
                 {
-                  id: "python" as const,
+                  id: "python-cpp" as const,
+                  emoji: "🐍→⚡",
+                  name: t("Python부터 → C++", "Python → C++"),
+                  desc: t("Python으로 시작해서, 익숙해지면 C++까지!", "Start with Python, then move on to C++."),
+                  badge: t("입문 추천", "Recommended"),
+                  colors: "border-green-300 bg-green-50",
+                  selectedColors: "border-green-500 bg-green-100 ring-2 ring-green-400",
+                  badgeColors: "bg-green-100 text-green-700",
+                },
+                {
+                  id: "python-only" as const,
                   emoji: "🐍",
-                  name: "Python",
-                  desc: t("처음 코딩을 배운다면 Python부터!\n문법이 쉽고 실용적이에요.", "New to coding? Start with Python!\nSimple syntax, practical skills."),
-                  badge: t("입문 추천", "Recommended for beginners"),
+                  name: t("Python만", "Python only"),
+                  desc: t("Python 하나만 차근차근. (C++은 나중에 추가 가능)", "Just Python, step by step. (Add C++ later anytime)"),
+                  badge: t("입문", "Beginner"),
                   colors: "border-green-300 bg-green-50",
                   selectedColors: "border-green-500 bg-green-100 ring-2 ring-green-400",
                   badgeColors: "bg-green-100 text-green-700",
@@ -95,33 +110,33 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
                 {
                   id: "cpp" as const,
                   emoji: "⚡",
-                  name: "C++",
-                  desc: t("Python을 이미 알거나 경시대회 준비 중이라면!\n속도가 빠르고 강력해요.", "Already know Python or preparing for competitions!\nFast and powerful."),
+                  name: t("C++부터", "C++ first"),
+                  desc: t("Python을 이미 알거나 대회 준비 중이라면!", "Already know Python or preparing for competitions!"),
                   badge: t("중급 ~ USACO", "Intermediate ~ USACO"),
                   colors: "border-blue-300 bg-blue-50",
                   selectedColors: "border-blue-500 bg-blue-100 ring-2 ring-blue-400",
                   badgeColors: "bg-blue-100 text-blue-700",
                 },
-              ].map(course => (
+              ].map(opt => (
                 <button
-                  key={course.id}
-                  onClick={() => handleCourseSelect(course.id)}
+                  key={opt.id}
+                  onClick={() => setPlan(opt.id)}
                   className={`w-full text-left p-4 rounded-2xl border-2 transition-all ${
-                    selectedCourse === course.id ? course.selectedColors : course.colors
+                    plan === opt.id ? opt.selectedColors : opt.colors
                   } hover:scale-[1.01] active:scale-[0.99]`}
                 >
                   <div className="flex items-start gap-3">
-                    <span className="text-3xl">{course.emoji}</span>
+                    <span className="text-2xl">{opt.emoji}</span>
                     <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-black text-gray-800">{course.name}</span>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${course.badgeColors}`}>
-                          {course.badge}
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-black text-gray-800">{opt.name}</span>
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${opt.badgeColors}`}>
+                          {opt.badge}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5 whitespace-pre-line">{course.desc}</p>
+                      <p className="text-xs text-gray-500 mt-0.5 whitespace-pre-line">{opt.desc}</p>
                     </div>
-                    {selectedCourse === course.id && (
+                    {plan === opt.id && (
                       <span className="text-lg">✅</span>
                     )}
                   </div>
@@ -131,7 +146,7 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
 
             <button
               onClick={handleStart}
-              disabled={!selectedCourse}
+              disabled={!plan}
               className="w-full py-4 rounded-2xl text-lg font-black text-white bg-orange-500 hover:from-orange-500 hover:to-orange-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95"
             >
               {t("레슨 시작하기! 📚", "Start Learning! 📚")}
