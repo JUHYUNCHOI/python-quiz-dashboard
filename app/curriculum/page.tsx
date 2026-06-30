@@ -393,7 +393,6 @@ export default function CurriculumPage() {
       return next
     })
   }
-  const [cppNudge, setCppNudge] = useState(false)
   const [showCppModal, setShowCppModal] = useState(false)
   // 'Python만' 학생 — C++ 칸을 숨김. 기본값 false = 기존처럼 C++ 노출(영향 0). localStorage "cppPlan"='only'면 숨김.
   const [pythonOnly, setPythonOnly] = useState(false)

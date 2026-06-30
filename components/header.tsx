@@ -47,8 +47,7 @@ export function Header() {
   return (
     <header className="md:hidden sticky top-0 z-40 border-b border-orange-100 bg-white/80 backdrop-blur-sm">
       <div className="container mx-auto flex items-center justify-between px-4 py-3 md:py-4">
-        {/* 데스크탑·패드(md+)에서는 좌측 사이드바에 로고가 있으므로 헤더 브랜드는 숨김 */}
-        <Link href="/" className="flex items-center gap-2 md:hidden">
+        <Link href="/" className="flex items-center gap-2">
           <div className="text-2xl md:text-3xl">🦒</div>
           <div>
             <h1 className="text-base md:text-lg font-bold text-gray-800">{t("코드린", "Coderin")}</h1>
@@ -80,8 +79,8 @@ export function Header() {
                   <span className="text-sm font-bold text-amber-800">{t("선생님", "Teacher")}</span>
                 </div>
               )}
-              {/* 레벨/불꽃/창고 — 데스크탑(md+)에서는 좌측 사이드바 하단으로 옮김(위쪽 과밀 해소). 모바일에서만 헤더에 표시. */}
-              <div className="flex items-center gap-1.5 md:hidden">
+              {/* 레벨/불꽃/창고 — 데스크탑에서는 헤더 자체가 숨겨지고 사이드바 하단에 표시됨(아래 모바일용) */}
+              <div className="flex items-center gap-1.5">
                 <div className="flex items-center gap-1.5 rounded-full bg-orange-100 px-3 py-2 min-h-[44px]">
                   <Trophy className="h-4 w-4 text-orange-600" />
                   <span className="text-sm font-semibold text-orange-700">Lv.{level}</span>
