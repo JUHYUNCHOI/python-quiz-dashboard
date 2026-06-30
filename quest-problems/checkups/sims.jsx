@@ -6,7 +6,7 @@
 import { useState, useRef, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
-import { CodeBlock } from "@/components/quest/shared";
+import { CodeBlock, highlight } from "@/components/quest/shared";
 
 const A = "#dc2626";
 
@@ -1644,7 +1644,7 @@ export function CheckupsFinalCodeSim({ E }) {
             return (
               <div key={i} style={{ display: "flex", gap: 8, fontFamily: "monospace", fontSize: 11.5, lineHeight: 1.55, background: on ? "#fde68a22" : "transparent", borderLeft: `3px solid ${on ? "#fbbf24" : "transparent"}`, borderRadius: 3, paddingLeft: 5 }}>
                 <span style={{ color: "#475569", minWidth: 16, textAlign: "right", userSelect: "none" }}>{i + 1}</span>
-                <span style={{ color: on ? "#fde68a" : "#cbd5e1", whiteSpace: "pre" }}>{line}</span>
+                <span style={{ whiteSpace: "pre" }}>{highlight(line, "py")}</span>
               </div>
             );
           })}
