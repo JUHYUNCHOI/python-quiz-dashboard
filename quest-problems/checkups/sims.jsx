@@ -1490,8 +1490,8 @@ export function CheckupsInPrefixSim({ E }) {
    변수(matchUpTo·insideUpTo·결과)가 차오르는 흐름. 자동재생 없음(SimNav 단계).
    예시: cow=[2,1,3,1], want=[1,2,3,1] (1-indexed). 구간 [1,2] 뒤집으면 완전 일치(검진 4).
    ════════════════════════════════════════════════════════════════════ */
-const _FC_COW = [2, 1, 3, 1];
-const _FC_WANT = [1, 2, 3, 1];
+const _FC_COW = [null, 2, 1, 3, 1];   // index 0 = 코드의 빈 자리(cow[0]); 진짜 소는 1~4
+const _FC_WANT = [null, 1, 2, 3, 1];
 const _ = null;  // 아직 안 채운 칸
 // 퀘스트에 실린 그 코드 그대로 (CK_SMART_FULL). 실행되는 줄을 하이라이트.
 const _FC_CODE = [
@@ -1623,7 +1623,16 @@ export function CheckupsFinalCodeSim({ E }) {
       <div style={{ display: "flex", flexWrap: "wrap", gap: 16, justifyContent: "center", alignItems: "flex-start" }}>
         {/* 변수 (왼쪽) */}
         <div style={{ flexShrink: 0 }}>
-          <_FcRow label={"🐮 cow (자리 1~4)"} arr={_FC_COW} hlIdx={-1} hue="#0891b2" />
+          {/* 칸 번호 눈금 — 모든 행이 index 0~4 로 정렬 */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
+            <div style={{ width: 132, fontSize: 10, color: C.dim, textAlign: "right" }}>{t(E, "index", "칸 번호")}</div>
+            <div style={{ display: "flex", gap: 5 }}>
+              {[0, 1, 2, 3, 4].map((n) => (
+                <div key={n} style={{ minWidth: 28, textAlign: "center", fontSize: 10, color: C.dim, fontWeight: 700 }}>{n}</div>
+              ))}
+            </div>
+          </div>
+          <_FcRow label={t(E, "🐮 cow ([0] empty)", "🐮 cow ([0]은 빈칸)")} arr={_FC_COW} hlIdx={-1} hue="#0891b2" />
           <_FcRow label={"📋 want"} arr={_FC_WANT} hlIdx={-1} hue="#16a34a" />
           {st.mut ? <_FcRow label={t(E, "matchUpTo", "matchUpTo (바깥)")} arr={st.mut} hlIdx={mutHl} hue="#d97706" /> : null}
           {st.iut ? <_FcRow label={t(E, "insideUpTo (this s)", "insideUpTo (이 s)")} arr={st.iut} hlIdx={iutHl} hue="#0891b2" /> : null}
