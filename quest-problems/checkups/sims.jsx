@@ -1547,8 +1547,8 @@ function _buildFinalSteps(E) {
                      "pairsWithCheckups: 결과 통 — '검진이 정확히 k개인 구간'을 세는 통. 전부 0으로 시작.") }),
 
     S({ lines: [7, 8], mut: FULL, iut: [0, _, _, _, _], sc: { s: 3 },
-        bubble: t(E, "Outer loop s = l+r. Take s=3. Make a fresh insideUpTo (all 0) for this s.",
-                     "바깥 루프 s = l+r. s=3을 보죠. 이 s 전용 insideUpTo를 새로 0으로 만듦.") }),
+        bubble: t(E, "Outer loop s = l+r (sum of the two ends). Smallest sum is 1+1=2, so s runs 2..2N. Take s=3 — make a fresh insideUpTo (all 0) for this s.",
+                     "바깥 루프 s = l+r (자리 두 개의 합). 가장 작은 합이 1+1=2라 s는 2부터 2N까지. 여기선 s=3 — 이 s 전용 insideUpTo를 새로 0으로.") }),
     S({ lines: [12], mut: FULL, iut: [0, 1, _, _, _], sc: { s: 3, k: 1, j: 2 },
         bubble: t(E, "k=1: j=s−k=2. 1≤2≤4 and cow[2]=1=want[1]=1 → if-branch → insideUpTo[1]=insideUpTo[0]+1=1.",
                      "k=1: j=s−k=2. 1≤2≤4 이고 cow[2]=1=want[1]=1 → if 줄 → insideUpTo[1]=insideUpTo[0]+1=1.") }),
