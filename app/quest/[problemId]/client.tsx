@@ -5,6 +5,7 @@ import { LanguageToggle } from "@/components/language-toggle"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
+import { questAlgo } from "@/lib/quest-algo"
 import { ChevronLeft, ChevronRight, CheckCircle, Loader2, ExternalLink, Columns2, X, ZoomIn, ZoomOut } from "lucide-react"
 import { ALL_PROBLEMS, PROBLEM_MAP, PROBLEM_INDEX, getOriginalProblemUrl, type ProblemMeta } from "./data"
 import { PROBLEM_LOADERS } from "./loaders"
@@ -310,6 +311,22 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           </button>
         )}
       </div>
+
+      {/* 이 문제 핵심 알고리즘 → 학습페이지 (막히면 배우기). 특정 알고리즘 없는 문제(완전탐색 등)는 안 뜸. */}
+      {(() => {
+        const qa = questAlgo(problemId)
+        if (!qa) return null
+        return (
+          <Link
+            href={`${qa.href}?from=quest`}
+            className="flex items-center gap-1.5 bg-violet-50 border-b border-violet-100 px-3 py-1.5 text-[11.5px] text-violet-700 hover:bg-violet-100 transition-colors"
+            title={t("이 문제에 쓰는 알고리즘 배우러 가기", "Go learn the algorithm this problem uses")}
+          >
+            <span>🧠</span>
+            <span>{t("이 문제 핵심", "Core idea")}: <b>{lang === "en" ? qa.en : qa.ko}</b> — {t("막히면 배우기", "stuck? learn it")} →</span>
+          </Link>
+        )
+      })()}
 
       {/* Title strip + prev/next + same-contest jump dots.
           Layout (left → right):
