@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCheckupsSections, DiagonalSim, MatchUpToSim, DiagPrefixSim } from "./components";
-import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim, CheckupsReuseSim, CheckupsKeyCodeSim, CheckupsEnumSim } from "./sims";
+import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim, CheckupsReuseSim, CheckupsKeyCodeSim, CheckupsEnumSim, CheckupsFinalCodeSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 // (예전 정적 시각화 헬퍼 SpeciesCell/CowRow/TreatedRow/PositionRow 는
@@ -370,6 +370,15 @@ export function makeCheckupsCh3(E, lang = "py") {
         "Now the same idea in code.",
         "방금 아이디어를 코드로."),
       content: (<CheckupsKeyCodeSim E={E} lang={lang} />),
+    },
+
+    /* 3-5c2 — 최종 완성 코드를 한 부분씩 (선생님 2026-06-30: '마지막 완성코드에 대한 시뮬') */
+    {
+      type: "reveal",
+      narr: t(E,
+        "The whole final code, part by part.",
+        "최종 완성 코드를 한 부분씩."),
+      content: (<CheckupsFinalCodeSim E={E} />),
     },
 
     /* 3-5d — 결(payoff): 그래서 전체가 빨라졌다 + 분포 완성 (선생님 2026-06-24: '이게 설명 끝인가?' — 결론이 약함) */
