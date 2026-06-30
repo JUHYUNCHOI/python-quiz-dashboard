@@ -890,7 +890,7 @@ export default function CurriculumPage() {
               ? t("C++는 파이썬을 안다는 전제로 만든 과정이에요.", "C++ assumes you already know Python.")
               : selectedCourse === "pseudo"
                 ? t("IGCSE 0478 트랙이에요.", "IGCSE 0478 track.")
-                : t("파이썬을 끝내면 자연스럽게 C++로 이어져요.", "Finish Python, then continue to C++.")}
+                : t("Python만 끝까지 해도 충분해요. C++은 원하면 나중에 켜면 돼요.", "Python alone is plenty — add C++ later whenever you want.")}
           </p>
 
           {/* C++ 선택 모달 */}
