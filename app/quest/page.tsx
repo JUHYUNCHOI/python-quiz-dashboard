@@ -233,18 +233,8 @@ const SECTIONS: Section[] = [
       { id: "mco15secret", emoji: "🔐", title: "Secret", sub: "MCO 2015 P5" },
     ],
   },
-  {
-    label: "LeetCode",
-    icon: "💻",
-    color: "#0891b2",
-    problems: [
-      { id: "lc1480", emoji: "➕", title: "Running Sum of 1d Array", sub: "LeetCode #1480 · Easy" },
-      { id: "lc303",  emoji: "📏", title: "Range Sum Query - Immutable", sub: "LeetCode #303 · Easy" },
-      { id: "lc560",  emoji: "🎯", title: "Subarray Sum Equals K", sub: "LeetCode #560 · Medium" },
-      { id: "lc974",  emoji: "🔢", title: "Subarray Sums Divisible by K", sub: "LeetCode #974 · Medium" },
-      { id: "lc3",    emoji: "🪟", title: "Longest Substring Without Repeating Characters", sub: "LeetCode #3 · Medium" },
-    ],
-  },
+  // LeetCode 5문제(누적합/슬라이딩윈도우 학습 예제)는 '대회' 카탈로그서 제거(2026-06-30).
+  // quest 페이지 자체는 남아있고(/quest/lc560 등) prefix-sum 학습에서 활용. 대회 아님.
 ]
 
 const ALGO_UNLOCK_THRESHOLD = 8
@@ -257,7 +247,7 @@ export default function QuestPage() {
   const [loaded, setLoaded] = useState(false)
   const [algoTopicsDone, setAlgoTopicsDone] = useState(0)
   const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set())
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(["USACO", "MCC", "MCO", "LeetCode"]))
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(["USACO", "MCC", "MCO"]))
   const [betaOptIn, setBetaOptIn] = useReleasePref()
 
   // Phase 5: Filter helper. A quest is visible if:
@@ -547,7 +537,11 @@ export default function QuestPage() {
             {visibleSections.map(s => (
               <button
                 key={s.label}
-                onClick={() => document.getElementById(`sec-${s.label}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                onClick={() => {
+                  // 그 출처만 펼치고 나머지 접기 → 한 대회에 집중
+                  setExpandedSections(new Set([s.label]))
+                  setTimeout(() => document.getElementById(`sec-${s.label}`)?.scrollIntoView({ behavior: "smooth", block: "start" }), 60)
+                }}
                 className="text-xs font-bold px-3 py-1.5 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition-colors"
                 style={{ color: s.color }}
               >
