@@ -1605,7 +1605,8 @@ export function CheckupsFinalCodeSim({ E }) {
         <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}` }} />
       </div>
 
-      <div style={{ maxWidth: 490, margin: "0 auto 10px" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 16, justifyContent: "center", alignItems: "flex-start", marginBottom: 10 }}>
+        <div style={{ flexShrink: 0 }}>
         <_FcRow label={"🐮 cow (자리 1~4)"} arr={_FC_COW} hlIdx={-1} hue="#0891b2" />
         <_FcRow label={"📋 want"} arr={_FC_WANT} hlIdx={-1} hue="#16a34a" />
         {st.mut ? <_FcRow label={t(E, "matchUpTo (outside)", "matchUpTo (바깥·안 뒤집음)")} arr={st.mut} hlIdx={st.mutHl} hue="#d97706" /> : null}
@@ -1628,8 +1629,9 @@ export function CheckupsFinalCodeSim({ E }) {
         </div>
       </div>
 
-      <div style={{ maxWidth: 580, margin: "0 auto" }}>
-        <CodeBlock lines={_FC_CODE} lang="py" />
+        <div style={{ flex: "1 1 340px", minWidth: 300, maxWidth: 560 }}>
+          <CodeBlock lines={_FC_CODE} lang="py" />
+        </div>
       </div>
 
       <div style={{ marginTop: 12 }}>

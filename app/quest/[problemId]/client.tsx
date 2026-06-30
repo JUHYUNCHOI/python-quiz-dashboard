@@ -224,7 +224,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
       <Header />
 
       {/* Breadcrumb: USACO · Dec 2024 Bronze #2 + done button */}
-      <div className="bg-white border-b border-gray-300 px-3 py-1 sticky top-[57px] z-30 flex items-center gap-2">
+      <div className="bg-white border-b border-gray-300 px-3 py-1 sticky top-[57px] md:top-0 z-30 flex items-center gap-2">
         <Link href="/quest" className="text-gray-400 hover:text-gray-700 flex-shrink-0" title={t("문제 목록", "Problem list")}>
           <ChevronLeft size={16} />
         </Link>
