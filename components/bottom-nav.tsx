@@ -1,60 +1,21 @@
 "use client"
 
-import { Home, BookOpen, User, LayoutDashboard, Puzzle, Brain, ClipboardList, Trophy, Map } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { useAuth } from "@/contexts/auth-context"
-import { useLanguage } from "@/contexts/language-context"
+import { useNavItems, isNavActive } from "./use-nav"
 
-type NavItem = {
-  icon: React.ComponentType<{ className?: string }>
-  label: string
-  href: string
-  exact?: boolean
-}
-
+// 모바일 전용 하단 탭바. 데스크탑(lg+)에서는 숨기고 DesktopSidebar 가 대신 보임.
 export function BottomNav() {
   const pathname = usePathname()
-  const { profile, isAuthenticated } = useAuth()
-  const { t } = useLanguage()
-
-  const studentNav: NavItem[] = [
-    { icon: Map,     label: t("지도", "Map"),        href: "/journey"    },
-    { icon: BookOpen,label: t("수업", "Lessons"),    href: "/curriculum" },
-    { icon: Brain,   label: t("연습", "Practice"),   href: "/course/ladder" },
-    { icon: Puzzle,  label: t("알고리즘", "Algo"),   href: "/algo"       },
-    { icon: Trophy,  label: t("실전", "Contest"),    href: "/quest"      },
-    { icon: User,    label: t("내정보", "Profile"),  href: "/profile"    },
-  ]
-
-  const teacherNav: NavItem[] = [
-    { icon: LayoutDashboard, label: t("대시보드", "Dashboard"), href: "/teacher", exact: true },
-    { icon: BookOpen, label: t("수업", "Lessons"), href: "/curriculum" },
-    { icon: ClipboardList, label: t("숙제", "Homework"), href: "/teacher/homework" },
-    { icon: Trophy,   label: t("실전", "Contest"),  href: "/quest"      },
-    { icon: User, label: t("내정보", "Profile"), href: "/profile" },
-  ]
-
-  const guestNav: NavItem[] = [
-    { icon: Home,     label: t("홈", "Home"),      href: "/"           },
-    { icon: BookOpen, label: t("수업", "Lessons"),  href: "/curriculum" },
-    { icon: Puzzle,   label: t("알고리즘", "Algo"),  href: "/algo"  },
-    { icon: Trophy,   label: t("실전", "Contest"),  href: "/quest"      },
-    { icon: User,     label: t("내정보", "Profile"), href: "/profile"    },
-  ]
-
-  // 선생님도 학생 nav 로 통일 (2026-05 단순화) — 선생님 전용 페이지는 URL 직접 접근 가능
-  const navItems = !isAuthenticated ? guestNav : studentNav
+  const navItems = useNavItems()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-white/95 backdrop-blur-sm z-50 safe-area-inset-bottom">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-white/95 backdrop-blur-sm z-50 safe-area-inset-bottom">
       <div className="container mx-auto flex justify-around px-2 py-2 md:py-3 max-w-2xl">
         {navItems.map((item) => {
           const Icon = item.icon
-          const isActive = item.exact
-            ? pathname === item.href
-            : pathname === item.href || pathname.startsWith(item.href + "/")
+          const isActive = isNavActive(item, pathname)
 
           return (
             <Link

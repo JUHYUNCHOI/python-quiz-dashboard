@@ -540,6 +540,23 @@ export default function QuestPage() {
           </div>
         )}
 
+        {/* 출처 바로가기 — USACO 가 길어서 MCC·MCO 가 묻히던 문제 해소 */}
+        {visibleSections.length > 1 && (
+          <div className="flex items-center gap-2 mb-3 flex-wrap">
+            <span className="text-xs font-bold text-gray-400">바로가기</span>
+            {visibleSections.map(s => (
+              <button
+                key={s.label}
+                onClick={() => document.getElementById(`sec-${s.label}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                className="text-xs font-bold px-3 py-1.5 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition-colors"
+                style={{ color: s.color }}
+              >
+                {s.icon} {s.label} <span className="text-gray-400 font-normal">{s.problems.length}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Sections */}
         <div className="flex flex-col gap-4">
           {visibleSections.map(section => {
@@ -549,7 +566,7 @@ export default function QuestPage() {
             const groups = groupByContest(section.problems)
 
             return (
-              <div key={section.label} className="border border-gray-200 rounded-xl shadow-sm bg-white overflow-hidden">
+              <div key={section.label} id={`sec-${section.label}`} className="border border-gray-200 rounded-xl shadow-sm bg-white overflow-hidden scroll-mt-4">
 
                 {/* Section header */}
                 <button

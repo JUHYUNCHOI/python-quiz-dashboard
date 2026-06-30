@@ -393,8 +393,9 @@ export default function CurriculumPage() {
       return next
     })
   }
-  const [cppNudge, setCppNudge] = useState(false)
   const [showCppModal, setShowCppModal] = useState(false)
+  // 'Python만' 학생 — C++ 칸을 숨김. 기본값 false = 기존처럼 C++ 노출(영향 0). localStorage "cppPlan"='only'면 숨김.
+  const [pythonOnly, setPythonOnly] = useState(false)
   const [refShelfOpen, setRefShelfOpen] = useState(false) // 참고용(cpp-17~20) 레슨 접기/펴기
   // 레슨별 진행 중 상태: lessonId → { visitedSteps, totalSteps }
   const [lessonInProgress, setLessonInProgress] = useState<Map<string, { visited: number; total: number }>>(new Map())
@@ -421,6 +422,10 @@ export default function CurriculumPage() {
     try {
       const scoresRaw = localStorage.getItem("quiz-scores")
       if (scoresRaw) setQuizScores(JSON.parse(scoresRaw))
+    } catch {}
+    // 'Python만' 계획 read
+    try {
+      if (localStorage.getItem("cppPlan") === "only") setPythonOnly(true)
     } catch {}
     // URL ?course=cpp/python/pseudo 가 localStorage 보다 우선 (journey 등에서 명시 보낼 때)
     const urlCourse = searchParams.get("course") as CourseType | null
@@ -637,6 +642,12 @@ export default function CurriculumPage() {
     localStorage.setItem("selectedCourse", "cpp")
   }
 
+  // 'Python만' / 'C++도' 전환 — C++ 칸 노출 여부만 바꿈(진도·selectedCourse 안 건드림)
+  const setCppPlan = (only: boolean) => {
+    setPythonOnly(only)
+    try { localStorage.setItem("cppPlan", only ? "only" : "later") } catch {}
+  }
+
   const allLessons = curriculumData.flatMap((part) => part.lessons)
   // 프로젝트는 선택이라 진행률 계산에서 제외 (필수 레슨 기준 100%)
   const requiredLessons = allLessons.filter((l) => !l.isProject)
@@ -839,35 +850,57 @@ export default function CurriculumPage() {
               </span>
             </button>
 
-            {/* 진행 화살표 — 순서임을 시각화 */}
-            <span className="text-gray-300 text-base select-none">→</span>
+            {/* C++ — 'Python만' 학생(pythonOnly)에겐 숨기고, 대신 'C++도 할래요?' 옵트인만 */}
+            {pythonOnly && selectedCourse !== "cpp" ? (
+              <button
+                onClick={() => setCppPlan(false)}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-dashed border-gray-200 bg-white text-xs font-semibold text-gray-400 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50 transition-all"
+              >
+                ➕ {t("C++도 할래요?", "Add C++?")}
+              </button>
+            ) : (
+              <>
+                {/* 진행 화살표 — 순서임을 시각화 */}
+                <span className="text-gray-300 text-base select-none">→</span>
 
-            {/* 2단계: C++ (Python 다음) */}
-            <button
-              onClick={() => handleCourseChange("cpp")}
-              className={cn(
-                "flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-bold transition-all",
-                selectedCourse === "cpp"
-                  ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                  : !hasPythonProgress
-                    ? "bg-white text-gray-400 border-gray-200 hover:bg-blue-50"
-                    : "bg-white text-gray-600 border-gray-200 hover:bg-blue-50"
-              )}
-            >
-              ⚡ C++
-              <span className={cn(
-                "text-[10px] font-normal",
-                selectedCourse === "cpp" ? "text-white/70" : !hasPythonProgress ? "text-gray-400" : "text-blue-500"
-              )}>
-                {selectedCourse === "cpp"
-                  ? "20강"
-                  : !hasPythonProgress
-                    ? `🔒 ${t("Python 먼저", "Python first")}`
-                    : pythonLessonsDone >= pythonLessonsTotal
-                      ? `✨ ${t("이제 도전!", "Ready!")}`
-                      : t("다음 단계", "Next")}
-              </span>
-            </button>
+                {/* 2단계: C++ (Python 다음) */}
+                <button
+                  onClick={() => handleCourseChange("cpp")}
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-bold transition-all",
+                    selectedCourse === "cpp"
+                      ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                      : !hasPythonProgress
+                        ? "bg-white text-gray-400 border-gray-200 hover:bg-blue-50"
+                        : "bg-white text-gray-600 border-gray-200 hover:bg-blue-50"
+                  )}
+                >
+                  ⚡ C++
+                  <span className={cn(
+                    "text-[10px] font-normal",
+                    selectedCourse === "cpp" ? "text-white/70" : !hasPythonProgress ? "text-gray-400" : "text-blue-500"
+                  )}>
+                    {selectedCourse === "cpp"
+                      ? "20강"
+                      : !hasPythonProgress
+                        ? `🔒 ${t("Python 먼저", "Python first")}`
+                        : pythonLessonsDone >= pythonLessonsTotal
+                          ? `✨ ${t("이제 도전!", "Ready!")}`
+                          : t("다음 단계", "Next")}
+                  </span>
+                </button>
+
+                {/* 'Python만 할래요' — C++ 보이는 상태에서 숨기기 옵트아웃 (학생/선생님이 한 번에) */}
+                {selectedCourse === "python" && (
+                  <button
+                    onClick={() => setCppPlan(true)}
+                    className="text-xs text-gray-400 underline underline-offset-2 hover:text-orange-600 transition-colors"
+                  >
+                    {t("Python만 할래요", "Python only")}
+                  </button>
+                )}
+              </>
+            )}
 
             {/* IGCSE — 선생님/IGCSE 학생만, 별도 트랙이라 조용히 우측에 */}
             {(isTeacher || isIgcseStudent) && (
@@ -890,7 +923,9 @@ export default function CurriculumPage() {
               ? t("C++는 파이썬을 안다는 전제로 만든 과정이에요.", "C++ assumes you already know Python.")
               : selectedCourse === "pseudo"
                 ? t("IGCSE 0478 트랙이에요.", "IGCSE 0478 track.")
-                : t("파이썬을 끝내면 자연스럽게 C++로 이어져요.", "Finish Python, then continue to C++.")}
+                : pythonOnly
+                  ? t("Python만 집중하고 있어요. 마음 바뀌면 위에서 C++을 추가할 수 있어요.", "Focusing on Python only. Add C++ above anytime if you change your mind.")
+                  : t("Python만 끝까지 해도 충분해요. C++은 원하면 나중에 켜면 돼요.", "Python alone is plenty — add C++ later whenever you want.")}
           </p>
 
           {/* C++ 선택 모달 */}

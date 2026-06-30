@@ -101,6 +101,7 @@ export default function LadderPage() {
       if (sp.get("kl") === "1") { setKlOnly(true); setFiltersOpen(true); }
       const lg = sp.get("lang"); if (lg === "cpp") { setLang("C++"); setFiltersOpen(true); } else if (lg === "py") { setLang("Python"); setFiltersOpen(true); }
       const kd = sp.get("kind"); if (kd === "자체채점" || kd === "외부") { setKind(kd); setFiltersOpen(true); }
+      const tp = sp.get("topic"); if (tp) { setTopic(tp); setFiltersOpen(true); }  // /algo 학습페이지 → 이 알고리즘 문제 모아보기
     } catch { }
   }, []);
   const toggleDone = (id: string) => {
