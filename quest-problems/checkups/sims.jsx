@@ -1522,69 +1522,90 @@ const _FC_CODE = [
 const _FC_P0 = [0, 0, 0, 0, 0];
 const _FC_P1 = [0, 0, 0, 0, 1];
 
+// 진짜 코드를 그대로 '실행'하며 줄 단위로 step 을 만든다 (디버거식). 줄을 건너뛰지 않음.
 function _buildFinalSteps(E) {
-  // 각 step: line=하이라이트할 코드 줄(들), mut/iut/pairs=변수표 스냅샷, sc=스칼라 변수, bubble=설명
-  const S = (o) => Object.assign({ lines: [], mut: null, iut: null, pairs: _FC_P0, sc: {}, payoff: false }, o);
-  const FULL = [0, 0, 0, 1, 2];
-  return [
-    S({ lines: [], bubble: t(E, "This is the actual passing code. We'll run it line by line and watch the variables change. (cow=[2,1,3,1], want=[1,2,3,1])",
-                                "이게 통과하는 진짜 코드예요. 한 줄씩 실행하며 변수가 어떻게 바뀌는지 봐요. (cow=[2,1,3,1], want=[1,2,3,1])") }),
+  const cow = [0, 2, 1, 3, 1], want = [0, 1, 2, 3, 1], N = 4;
+  const out = [];
+  let mut = [0, null, null, null, null];
+  let pairs = [0, 0, 0, 0, 0];
+  let iut = null, sc = {}, pairsHl = -1;
+  const add = (lines, en, ko, payoff) => out.push({
+    lines: Array.isArray(lines) ? lines : [lines],
+    bubble: t(E, en, ko),
+    mut: mut.slice(), iut: iut ? iut.slice() : null, pairs: pairs.slice(),
+    sc: Object.assign({}, sc), pairsHl, payoff: !!payoff,
+  });
+  const runS = (s) => {
+    const iu = [0, 0, 0, 0, 0, 0];
+    for (let k = 1; k <= N; k++) { const j = s - k; iu[k] = iu[k - 1] + ((1 <= j && j <= N && cow[j] === want[k]) ? 1 : 0); }
+    const lmin = Math.max(1, s - N), lmax = Math.floor(s / 2);
+    for (let l = lmin; l <= lmax; l++) { const r = s - l; pairs[(iu[r] - iu[l - 1]) + (mut[l - 1] + (mut[N] - mut[r]))]++; }
+  };
 
-    S({ lines: [5], mut: [0, 0, _, _, _], sc: { i: 1 },
-        bubble: t(E, "matchUpTo[i] = 'matches up to spot i WITHOUT flipping'. i=1: cow[1]=2 ≠ want[1]=1 → else → matchUpTo[1]=matchUpTo[0]=0.",
-                     "matchUpTo[i] = '안 뒤집고 자리 i까지 맞는 칸 수' 누적. i=1: cow[1]=2 ≠ want[1]=1 → else 줄 → matchUpTo[1]=matchUpTo[0]=0.") }),
-    S({ lines: [5], mut: [0, 0, 0, _, _], sc: { i: 2 },
-        bubble: t(E, "i=2: cow[2]=1 ≠ want[2]=2 → matchUpTo[2]=matchUpTo[1]=0.", "i=2: cow[2]=1 ≠ want[2]=2 → matchUpTo[2]=matchUpTo[1]=0.") }),
-    S({ lines: [3], mut: [0, 0, 0, 1, _], sc: { i: 3 },
-        bubble: t(E, "i=3: cow[3]=3 = want[3]=3 → if-branch → matchUpTo[3]=matchUpTo[2]+1=1.",
-                     "i=3: cow[3]=3 = want[3]=3 → if 줄 → matchUpTo[3]=matchUpTo[2]+1=1.") }),
-    S({ lines: [3], mut: FULL, sc: { i: 4 },
-        bubble: t(E, "i=4: cow[4]=1 = want[4]=1 → matchUpTo[4]=2. Outside table done — built ONCE, reused for every window.",
-                     "i=4: cow[4]=1 = want[4]=1 → matchUpTo[4]=2. 바깥 표 완성 — 딱 한 번 만들어 모든 구간이 재사용.") }),
+  add(0, "Make matchUpTo (all 0). It counts matches WITHOUT flipping.",
+        "matchUpTo 만들기 (전부 0). 안 뒤집은 채 맞는 칸을 셀 표예요.");
+  for (let i = 1; i <= N; i++) {
+    sc = { i };
+    const m = cow[i] === want[i];
+    add([1, 2], "i=" + i + ": is cow[" + i + "]=" + cow[i] + " == want[" + i + "]=" + want[i] + "? " + (m ? "YES" : "no"),
+                "i=" + i + ": cow[" + i + "]=" + cow[i] + " == want[" + i + "]=" + want[i] + " 인가? " + (m ? "예!" : "아니오"));
+    if (m) { mut[i] = mut[i - 1] + 1; add(3, "matchUpTo[" + i + "] = matchUpTo[" + (i - 1) + "]+1 = " + mut[i], "matchUpTo[" + i + "] = matchUpTo[" + (i - 1) + "]+1 = " + mut[i]); }
+    else { mut[i] = mut[i - 1]; add(5, "else: matchUpTo[" + i + "] = matchUpTo[" + (i - 1) + "] = " + mut[i], "else: matchUpTo[" + i + "] = matchUpTo[" + (i - 1) + "] = " + mut[i]); }
+  }
+  sc = {};
+  add(6, "Make the result box (all 0): how many windows give each checkup count.",
+        "결과 통 만들기 (전부 0): 검진 수별로 구간이 몇 개인지 셀 통.");
 
-    S({ lines: [6], mut: FULL,
-        bubble: t(E, "pairsWithCheckups: a tally box — how many windows give exactly k checkups. Start all 0.",
-                     "pairsWithCheckups: 결과 통 — '검진이 정확히 k개인 구간'을 세는 통. 전부 0으로 시작.") }),
+  runS(2); sc = { s: 2 };
+  add(7, "for s = l+r: starts at s=2 (smallest, 1+1). s=2 is window [1,1] - one cow, flipping changes nothing (adds to result[2]). Watch s=3 next.",
+        "for s = l+r: s=2부터 (가장 작은 1+1). s=2는 구간 [1,1] - 소 한 칸, 뒤집어도 그대로 (result[2]에 +1됨). 다음 s=3을 자세히.");
 
-    S({ lines: [7], mut: FULL, sc: { s: 2 },
-        bubble: t(E, "Outer loop s = l+r. It starts at s=2 (smallest sum 1+1). s=2 means only window [1,1] — one cow, flipping it changes nothing. So we'll detail the more interesting s=3 next.",
-                     "바깥 루프 s = l+r. s=2부터 시작해요 (가장 작은 합 1+1). s=2 → 구간 [1,1] 하나뿐 — 소 한 칸이라 뒤집어도 그대로. 그래서 더 의미있는 s=3을 자세히 볼게요.") }),
-    S({ lines: [8], mut: FULL, iut: [0, _, _, _, _], sc: { s: 3 },
-        bubble: t(E, "Now s=3 (window [1,2] belongs to this s). Make a fresh insideUpTo (all 0) just for this s.",
-                     "이제 s=3 (구간 [1,2]가 여기 속함). 이 s 전용 insideUpTo를 새로 0으로 만듦.") }),
-    S({ lines: [12], mut: FULL, iut: [0, 1, _, _, _], sc: { s: 3, k: 1, j: 2 },
-        bubble: t(E, "k=1: j=s−k=2. 1≤2≤4 and cow[2]=1=want[1]=1 → if-branch → insideUpTo[1]=insideUpTo[0]+1=1.",
-                     "k=1: j=s−k=2. 1≤2≤4 이고 cow[2]=1=want[1]=1 → if 줄 → insideUpTo[1]=insideUpTo[0]+1=1.") }),
-    S({ lines: [12], mut: FULL, iut: [0, 1, 2, _, _], sc: { s: 3, k: 2, j: 1 },
-        bubble: t(E, "k=2: j=1. cow[1]=2=want[2]=2 → insideUpTo[2]=insideUpTo[1]+1=2.",
-                     "k=2: j=1. cow[1]=2=want[2]=2 → insideUpTo[2]=insideUpTo[1]+1=2.") }),
-    S({ lines: [14], mut: FULL, iut: [0, 1, 2, 2, _], sc: { s: 3, k: 3, j: 0 },
-        bubble: t(E, "k=3: j=0 → NOT 1≤j≤N → else → insideUpTo[3]=insideUpTo[2]=2 (no change).",
-                     "k=3: j=0 → 1≤j≤N 아님 → else 줄 → insideUpTo[3]=insideUpTo[2]=2 (그대로).") }),
-    S({ lines: [14], mut: FULL, iut: [0, 1, 2, 2, 2], sc: { s: 3, k: 4, j: -1 },
-        bubble: t(E, "k=4: j=−1 → else → insideUpTo[4]=2. insideUpTo for s=3 done = [0,1,2,2,2].",
-                     "k=4: j=−1 → else 줄 → insideUpTo[4]=2. s=3 insideUpTo 완성 = [0,1,2,2,2].") }),
-
-    S({ lines: [15, 16, 17], mut: FULL, iut: [0, 1, 2, 2, 2], sc: { s: 3 },
-        bubble: t(E, "l_min=max(1,3−4)=1, l_max=3//2=1 → for s=3 only window [1,2].",
-                     "l_min=max(1,3−4)=1, l_max=3//2=1 → s=3 엔 구간 [1,2] 하나뿐.") }),
-    S({ lines: [18, 19], mut: FULL, iut: [0, 1, 2, 2, 2], sc: { s: 3, l: 1, r: 2, inside: 2 },
-        bubble: t(E, "l=1, r=s−l=2. inside = insideUpTo[r]−insideUpTo[l−1] = insideUpTo[2]−insideUpTo[0] = 2−0 = 2.",
-                     "l=1, r=s−l=2. inside = insideUpTo[r]−insideUpTo[l−1] = insideUpTo[2]−insideUpTo[0] = 2−0 = 2.") }),
-    S({ lines: [20], mut: FULL, iut: [0, 1, 2, 2, 2], sc: { s: 3, l: 1, r: 2, inside: 2, outside: 2 },
-        bubble: t(E, "outside = matchUpTo[l−1] + (matchUpTo[N]−matchUpTo[r]) = matchUpTo[0] + (matchUpTo[4]−matchUpTo[2]) = 0 + (2−0) = 2.",
-                     "outside = matchUpTo[l−1] + (matchUpTo[N]−matchUpTo[r]) = matchUpTo[0] + (matchUpTo[4]−matchUpTo[2]) = 0 + (2−0) = 2.") }),
-    S({ lines: [21], mut: FULL, iut: [0, 1, 2, 2, 2], pairs: _FC_P1, sc: { s: 3, l: 1, r: 2, inside: 2, outside: 2 },
-        bubble: t(E, "inside+outside = 4 → pairsWithCheckups[4] += 1. (window [1,2] flipped gives 4 checkups — full match!)",
-                     "inside+outside = 4 → pairsWithCheckups[4] += 1. (구간 [1,2] 뒤집으면 검진 4개 — 완전 일치!)") }),
-
-    S({ lines: [7], mut: FULL, pairs: _FC_P1,
-        bubble: t(E, "Back to the s loop: every other s (2,4,5,…) runs the same way — rebuild insideUpTo, then subtract. No re-counting.",
-                     "다시 s 루프로: 다른 s(2,4,5,…)도 똑같이 — insideUpTo만 새로 만들고 빼기로 처리. 다시 세지 않음.") }),
-    S({ lines: [22], pairs: _FC_P1, payoff: true,
-        bubble: t(E, "At the end, print pairsWithCheckups[0..N]. Two prefix tables + subtractions = O(N²), so it passes. 🚀",
-                     "끝나면 pairsWithCheckups[0..N]를 한 줄씩 출력. 누적 표 2개 + 빼기 = O(N²) → 통과! 🚀") }),
-  ];
+  var s = 3;
+  sc = { s: s };
+  add(7, "for s: now s=3.", "for s: 이제 s=3.");
+  iut = [0, null, null, null, null];
+  add(8, "Make a fresh insideUpTo (all 0), just for this s.", "이 s 전용 insideUpTo 새로 만듦 (전부 0).");
+  for (let k = 1; k <= N; k++) {
+    const j = s - k;
+    sc = { s: s, k: k, j: j };
+    const valid = 1 <= j && j <= N, m = valid && cow[j] === want[k];
+    add([9, 10, 11], valid
+        ? "k=" + k + ": j=s-k=" + j + ". cow[" + j + "]=" + cow[j] + " == want[" + k + "]=" + want[k] + "? " + (m ? "YES" : "no")
+        : "k=" + k + ": j=s-k=" + j + " -> off the board -> no",
+        valid
+        ? "k=" + k + ": j=s-k=" + j + ". cow[" + j + "]=" + cow[j] + " == want[" + k + "]=" + want[k] + " 인가? " + (m ? "예!" : "아니오")
+        : "k=" + k + ": j=s-k=" + j + " -> 줄 밖 -> 아니오");
+    if (m) { iut[k] = iut[k - 1] + 1; add(12, "insideUpTo[" + k + "] = insideUpTo[" + (k - 1) + "]+1 = " + iut[k], "insideUpTo[" + k + "] = insideUpTo[" + (k - 1) + "]+1 = " + iut[k]); }
+    else { iut[k] = iut[k - 1]; add(14, "else: insideUpTo[" + k + "] = insideUpTo[" + (k - 1) + "] = " + iut[k], "else: insideUpTo[" + k + "] = insideUpTo[" + (k - 1) + "] = " + iut[k]); }
+  }
+  sc = { s: s };
+  const lmin = Math.max(1, s - N), lmax = Math.floor(s / 2);
+  add([15, 16, 17], "l_min=max(1," + s + "-" + N + ")=" + lmin + ", l_max=" + s + "//2=" + lmax + ". So l goes " + lmin + ".." + lmax + ".",
+                    "l_min=max(1," + s + "-" + N + ")=" + lmin + ", l_max=" + s + "//2=" + lmax + ". l은 " + lmin + ".." + lmax + ".");
+  for (let l = lmin; l <= lmax; l++) {
+    const r = s - l;
+    sc = { s: s, l: l, r: r };
+    add(18, "l=" + l + ": r = s-l = " + r + ".", "l=" + l + ": r = s-l = " + r + ".");
+    const inside = iut[r] - iut[l - 1]; sc = { s: s, l: l, r: r, inside: inside };
+    add(19, "inside = insideUpTo[" + r + "]-insideUpTo[" + (l - 1) + "] = " + iut[r] + "-" + iut[l - 1] + " = " + inside,
+            "inside = insideUpTo[" + r + "]-insideUpTo[" + (l - 1) + "] = " + iut[r] + "-" + iut[l - 1] + " = " + inside);
+    const outside = mut[l - 1] + (mut[N] - mut[r]); sc = { s: s, l: l, r: r, inside: inside, outside: outside };
+    add(20, "outside = matchUpTo[" + (l - 1) + "]+(matchUpTo[" + N + "]-matchUpTo[" + r + "]) = " + mut[l - 1] + "+(" + mut[N] + "-" + mut[r] + ") = " + outside,
+            "outside = matchUpTo[" + (l - 1) + "]+(matchUpTo[" + N + "]-matchUpTo[" + r + "]) = " + mut[l - 1] + "+(" + mut[N] + "-" + mut[r] + ") = " + outside);
+    const checks = inside + outside;
+    pairs[checks]++; pairsHl = checks;
+    add(21, "checkups = " + inside + "+" + outside + " = " + checks + " -> result[" + checks + "] += 1.",
+            "검진 = " + inside + "+" + outside + " = " + checks + " -> result[" + checks + "] += 1.");
+    pairsHl = -1;
+  }
+  sc = {};
+  for (let ss = 4; ss <= 2 * N; ss++) runS(ss);
+  iut = null;
+  add(7, "s=4,5,...,8 run the very same way (new insideUpTo, then subtract). The result box fills in.",
+        "s=4,5,...,8 도 똑같이 (insideUpTo 새로, 빼기). 결과 통이 채워져요.");
+  add(22, "Print result[0..N]. Done - two prefix tables + subtractions = O(N^2), so it passes!",
+        "result[0..N] 출력. 끝 - 누적 표 2개 + 빼기 = O(N^2), 그래서 통과! 🚀", true);
+  return out;
 }
 
 function _FcRow({ label, arr, hlIdx, hue }) {
@@ -1641,7 +1662,7 @@ export function CheckupsFinalCodeSim({ E }) {
           {st.iut ? <_FcRow label={t(E, "insideUpTo (this s)", "insideUpTo (이 s)")} arr={st.iut} hlIdx={iutHl} hue="#0891b2" /> : null}
           {st.iut ? <div style={{ fontSize: 9.5, color: C.dim, maxWidth: 300, marginTop: -1, marginBottom: 2, wordBreak: "keep-all", lineHeight: 1.35 }}>{t(E, "↑ cells = spot k (1~N), so N+2 cells — NOT 2N. (2N is s's max value, not a cell count)", "↑ 칸 = 자리 k (1~N) 라 N+여유 칸. 8칸 아님 — 8(=2N)은 s의 최댓값이지 칸 수가 아니에요.")}</div> : null}
           <div style={{ height: 4 }} />
-          <_FcRow label={t(E, "pairsWithCheckups", "결과[검진수]")} arr={st.pairs} hlIdx={st.pairs === _FC_P1 ? 4 : -1} hue="#16a34a" />
+          <_FcRow label={t(E, "result[checks]", "결과[검진수]")} arr={st.pairs} hlIdx={st.pairsHl ?? -1} hue="#16a34a" />
           {/* 스칼라 변수 칩 */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginTop: 8, maxWidth: 290 }}>
             {scOrder.filter(([key]) => st.sc[key] !== undefined).map(([key, lab]) => (
