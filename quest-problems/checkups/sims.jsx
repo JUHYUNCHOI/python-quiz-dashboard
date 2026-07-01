@@ -1556,49 +1556,52 @@ function _buildFinalSteps(E) {
   add(6, "Make the result box (all 0): how many windows give each checkup count.",
         "결과 통 만들기 (전부 0): 검진 수별로 구간이 몇 개인지 셀 통.");
 
-  runS(2); sc = { s: 2 };
-  add(7, "for s = l+r: starts at s=2 (smallest, 1+1). s=2 is window [1,1] - one cow, flipping changes nothing (adds to result[2]). Watch s=3 next.",
-        "for s = l+r: s=2부터 (가장 작은 1+1). s=2는 구간 [1,1] - 소 한 칸, 뒤집어도 그대로 (result[2]에 +1됨). 다음 s=3을 자세히.");
+  // s 한 값을 코드 줄 그대로 끝까지 밟는다 (s=2, s=3 둘 다 이 헬퍼로 자세히)
+  const traceS = (s, introEn, introKo) => {
+    sc = { s: s };
+    add(7, introEn, introKo);
+    iut = [0, null, null, null, null];
+    add(8, "Make a fresh insideUpTo (all 0), just for this s.", "이 s 전용 insideUpTo 새로 만듦 (전부 0).");
+    for (let k = 1; k <= N; k++) {
+      const j = s - k;
+      sc = { s: s, k: k, j: j };
+      const valid = 1 <= j && j <= N, m = valid && cow[j] === want[k];
+      add([9, 10, 11], valid
+          ? "k=" + k + ": j=s-k=" + j + ". cow[" + j + "]=" + cow[j] + " == want[" + k + "]=" + want[k] + "? " + (m ? "YES" : "no")
+          : "k=" + k + ": j=s-k=" + j + " -> off the board -> no",
+          valid
+          ? "k=" + k + ": j=s-k=" + j + ". cow[" + j + "]=" + cow[j] + " == want[" + k + "]=" + want[k] + " 인가? " + (m ? "예!" : "아니오")
+          : "k=" + k + ": j=s-k=" + j + " -> 줄 밖 -> 아니오");
+      if (m) { iut[k] = iut[k - 1] + 1; add(12, "insideUpTo[" + k + "] = insideUpTo[" + (k - 1) + "]+1 = " + iut[k], "insideUpTo[" + k + "] = insideUpTo[" + (k - 1) + "]+1 = " + iut[k]); }
+      else { iut[k] = iut[k - 1]; add(14, "else: insideUpTo[" + k + "] = insideUpTo[" + (k - 1) + "] = " + iut[k], "else: insideUpTo[" + k + "] = insideUpTo[" + (k - 1) + "] = " + iut[k]); }
+    }
+    sc = { s: s };
+    const lmin = Math.max(1, s - N), lmax = Math.floor(s / 2);
+    add([15, 16, 17], "l_min=max(1," + s + "-" + N + ")=" + lmin + ", l_max=" + s + "//2=" + lmax + ". So l goes " + lmin + ".." + lmax + ".",
+                      "l_min=max(1," + s + "-" + N + ")=" + lmin + ", l_max=" + s + "//2=" + lmax + ". l은 " + lmin + ".." + lmax + ".");
+    for (let l = lmin; l <= lmax; l++) {
+      const r = s - l;
+      sc = { s: s, l: l, r: r };
+      add(18, "l=" + l + ": r = s-l = " + r + ".", "l=" + l + ": r = s-l = " + r + ".");
+      const inside = iut[r] - iut[l - 1]; sc = { s: s, l: l, r: r, inside: inside };
+      add(19, "inside = insideUpTo[" + r + "]-insideUpTo[" + (l - 1) + "] = " + iut[r] + "-" + iut[l - 1] + " = " + inside,
+              "inside = insideUpTo[" + r + "]-insideUpTo[" + (l - 1) + "] = " + iut[r] + "-" + iut[l - 1] + " = " + inside);
+      const outside = mut[l - 1] + (mut[N] - mut[r]); sc = { s: s, l: l, r: r, inside: inside, outside: outside };
+      add(20, "outside = matchUpTo[" + (l - 1) + "]+(matchUpTo[" + N + "]-matchUpTo[" + r + "]) = " + mut[l - 1] + "+(" + mut[N] + "-" + mut[r] + ") = " + outside,
+              "outside = matchUpTo[" + (l - 1) + "]+(matchUpTo[" + N + "]-matchUpTo[" + r + "]) = " + mut[l - 1] + "+(" + mut[N] + "-" + mut[r] + ") = " + outside);
+      const checks = inside + outside;
+      pairs[checks]++; pairsHl = checks;
+      add(21, "checkups = " + inside + "+" + outside + " = " + checks + " -> result[" + checks + "] += 1.",
+              "검진 = " + inside + "+" + outside + " = " + checks + " -> result[" + checks + "] += 1.");
+      pairsHl = -1;
+    }
+    sc = {};
+  };
 
-  var s = 3;
-  sc = { s: s };
-  add(7, "for s: now s=3.", "for s: 이제 s=3.");
-  iut = [0, null, null, null, null];
-  add(8, "Make a fresh insideUpTo (all 0), just for this s.", "이 s 전용 insideUpTo 새로 만듦 (전부 0).");
-  for (let k = 1; k <= N; k++) {
-    const j = s - k;
-    sc = { s: s, k: k, j: j };
-    const valid = 1 <= j && j <= N, m = valid && cow[j] === want[k];
-    add([9, 10, 11], valid
-        ? "k=" + k + ": j=s-k=" + j + ". cow[" + j + "]=" + cow[j] + " == want[" + k + "]=" + want[k] + "? " + (m ? "YES" : "no")
-        : "k=" + k + ": j=s-k=" + j + " -> off the board -> no",
-        valid
-        ? "k=" + k + ": j=s-k=" + j + ". cow[" + j + "]=" + cow[j] + " == want[" + k + "]=" + want[k] + " 인가? " + (m ? "예!" : "아니오")
-        : "k=" + k + ": j=s-k=" + j + " -> 줄 밖 -> 아니오");
-    if (m) { iut[k] = iut[k - 1] + 1; add(12, "insideUpTo[" + k + "] = insideUpTo[" + (k - 1) + "]+1 = " + iut[k], "insideUpTo[" + k + "] = insideUpTo[" + (k - 1) + "]+1 = " + iut[k]); }
-    else { iut[k] = iut[k - 1]; add(14, "else: insideUpTo[" + k + "] = insideUpTo[" + (k - 1) + "] = " + iut[k], "else: insideUpTo[" + k + "] = insideUpTo[" + (k - 1) + "] = " + iut[k]); }
-  }
-  sc = { s: s };
-  const lmin = Math.max(1, s - N), lmax = Math.floor(s / 2);
-  add([15, 16, 17], "l_min=max(1," + s + "-" + N + ")=" + lmin + ", l_max=" + s + "//2=" + lmax + ". So l goes " + lmin + ".." + lmax + ".",
-                    "l_min=max(1," + s + "-" + N + ")=" + lmin + ", l_max=" + s + "//2=" + lmax + ". l은 " + lmin + ".." + lmax + ".");
-  for (let l = lmin; l <= lmax; l++) {
-    const r = s - l;
-    sc = { s: s, l: l, r: r };
-    add(18, "l=" + l + ": r = s-l = " + r + ".", "l=" + l + ": r = s-l = " + r + ".");
-    const inside = iut[r] - iut[l - 1]; sc = { s: s, l: l, r: r, inside: inside };
-    add(19, "inside = insideUpTo[" + r + "]-insideUpTo[" + (l - 1) + "] = " + iut[r] + "-" + iut[l - 1] + " = " + inside,
-            "inside = insideUpTo[" + r + "]-insideUpTo[" + (l - 1) + "] = " + iut[r] + "-" + iut[l - 1] + " = " + inside);
-    const outside = mut[l - 1] + (mut[N] - mut[r]); sc = { s: s, l: l, r: r, inside: inside, outside: outside };
-    add(20, "outside = matchUpTo[" + (l - 1) + "]+(matchUpTo[" + N + "]-matchUpTo[" + r + "]) = " + mut[l - 1] + "+(" + mut[N] + "-" + mut[r] + ") = " + outside,
-            "outside = matchUpTo[" + (l - 1) + "]+(matchUpTo[" + N + "]-matchUpTo[" + r + "]) = " + mut[l - 1] + "+(" + mut[N] + "-" + mut[r] + ") = " + outside);
-    const checks = inside + outside;
-    pairs[checks]++; pairsHl = checks;
-    add(21, "checkups = " + inside + "+" + outside + " = " + checks + " -> result[" + checks + "] += 1.",
-            "검진 = " + inside + "+" + outside + " = " + checks + " -> result[" + checks + "] += 1.");
-    pairsHl = -1;
-  }
-  sc = {};
+  traceS(2, "for s = l+r: s starts at 2 (smallest: l=1,r=1). One window [1,1].",
+            "for s = l+r: s는 2부터 (가장 작음: l=1,r=1). 구간 [1,1] 하나뿐.");
+  traceS(3, "for s: now s=3 (l can be 1). Same steps again.",
+            "for s: 이제 s=3 (l이 1까지). 똑같은 단계 다시.");
   for (let ss = 4; ss <= 2 * N; ss++) runS(ss);
   iut = null;
   add(7, "s=4,5,...,8 run the very same way (new insideUpTo, then subtract). The result box fills in.",
@@ -1609,13 +1612,14 @@ function _buildFinalSteps(E) {
 }
 
 function _FcRow({ label, arr, hlIdx, hue }) {
+  const hls = Array.isArray(hlIdx) ? hlIdx : [hlIdx];
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
       <div style={{ width: 132, fontSize: 10.5, color: C.dim, textAlign: "right", wordBreak: "keep-all", lineHeight: 1.25 }}>{label}</div>
       <div style={{ display: "flex", gap: 5 }}>
         {arr.map((v, k) => {
           const empty = v === null || v === undefined;
-          const on = hlIdx === k;
+          const on = hls.includes(k);
           return (
             <div key={k} style={{ minWidth: 28, height: 28, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "monospace", fontSize: 12.5, border: `1px solid ${on ? hue : "#e2e8f0"}`, background: on ? hue + "22" : "#fff", color: empty ? "#cbd5e1" : (on ? hue : "#334155"), fontWeight: on ? 800 : 500 }}>{empty ? "·" : v}</div>
           );
@@ -1632,6 +1636,19 @@ export function CheckupsFinalCodeSim({ E }) {
   // 변수표 하이라이트 인덱스 (마지막으로 채운 칸)
   const mutHl = st.mut ? st.mut.reduce((a, v, i) => (v !== null ? i : a), -1) : -1;
   const iutHl = st.iut ? st.iut.reduce((a, v, i) => (v !== null ? i : a), -1) : -1;
+  // cow 는 지금 읽는 자리(j, 없으면 i), want 는 지금 읽는 자리(k, 없으면 i) 를 칠한다
+  const cowHl = st.sc.j !== undefined ? st.sc.j : (st.sc.i !== undefined ? st.sc.i : -1);
+  const wantHl = st.sc.k !== undefined ? st.sc.k : (st.sc.i !== undefined ? st.sc.i : -1);
+  // matchUpTo / insideUpTo 는 그 줄이 실제로 읽거나 쓰는 칸들을 칠한다
+  const NF = _FC_COW.length - 1; // = N
+  const { i: sci, k: sck, l: scl, r: scr } = st.sc;
+  const hasLine = (n) => st.lines.includes(n);
+  let mutHls = mutHl >= 0 ? [mutHl] : [];
+  let iutHls = iutHl >= 0 ? [iutHl] : [];
+  if (hasLine(3) || hasLine(5)) mutHls = [sci - 1, sci];           // matchUpTo[i] = matchUpTo[i-1](+1)
+  if (hasLine(12) || hasLine(14)) iutHls = [sck - 1, sck];         // insideUpTo[k] = insideUpTo[k-1](+1)
+  if (hasLine(19)) iutHls = [scl - 1, scr];                        // inside = insideUpTo[r] - insideUpTo[l-1]
+  if (hasLine(20)) mutHls = [scl - 1, scr, NF];                    // outside = matchUpTo[l-1] + (matchUpTo[N] - matchUpTo[r])
   const scOrder = [["i", "i"], ["s", "s"], ["k", "k"], ["j", "j"], ["l", "l"], ["r", "r"], ["inside", "inside"], ["outside", "outside"]];
   return (
     <div style={{ padding: 16 }}>
@@ -1656,10 +1673,10 @@ export function CheckupsFinalCodeSim({ E }) {
               ))}
             </div>
           </div>
-          <_FcRow label={t(E, "🐮 cow ([0] empty)", "🐮 cow ([0]은 빈칸)")} arr={_FC_COW} hlIdx={-1} hue="#0891b2" />
-          <_FcRow label={"📋 want"} arr={_FC_WANT} hlIdx={-1} hue="#16a34a" />
-          {st.mut ? <_FcRow label={t(E, "matchUpTo", "matchUpTo (바깥)")} arr={st.mut} hlIdx={mutHl} hue="#d97706" /> : null}
-          {st.iut ? <_FcRow label={t(E, "insideUpTo (this s)", "insideUpTo (이 s)")} arr={st.iut} hlIdx={iutHl} hue="#0891b2" /> : null}
+          <_FcRow label={t(E, "🐮 cow ([0] empty)", "🐮 cow ([0]은 빈칸)")} arr={_FC_COW} hlIdx={cowHl} hue="#0891b2" />
+          <_FcRow label={"📋 want"} arr={_FC_WANT} hlIdx={wantHl} hue="#16a34a" />
+          {st.mut ? <_FcRow label={t(E, "matchUpTo", "matchUpTo (바깥)")} arr={st.mut} hlIdx={mutHls} hue="#d97706" /> : null}
+          {st.iut ? <_FcRow label={t(E, "insideUpTo (this s)", "insideUpTo (이 s)")} arr={st.iut} hlIdx={iutHls} hue="#0891b2" /> : null}
           {st.iut ? <div style={{ fontSize: 9.5, color: C.dim, maxWidth: 300, marginTop: -1, marginBottom: 2, wordBreak: "keep-all", lineHeight: 1.35 }}>{t(E, "↑ cells = spot k (1~N), so N+2 cells — NOT 2N. (2N is s's max value, not a cell count)", "↑ 칸 = 자리 k (1~N) 라 N+여유 칸. 8칸 아님 — 8(=2N)은 s의 최댓값이지 칸 수가 아니에요.")}</div> : null}
           <div style={{ height: 4 }} />
           <_FcRow label={t(E, "result[checks]", "결과[검진수]")} arr={st.pairs} hlIdx={st.pairsHl ?? -1} hue="#16a34a" />
