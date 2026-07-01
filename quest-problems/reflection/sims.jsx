@@ -14,8 +14,8 @@ function _buildReflSteps(E) {
   const steps = [{
     grp: null, k: null, contrib: null, total: 0, final: false,
     bubble: t(E,
-      "To be mirror-symmetric, each group of 4 mirror cells must be ALL the same color. Per group, change just the smaller side — that's the minimum.",
-      "거울 대칭이 되려면, 거울로 짝지어진 4칸이 다 같은 색이어야 해요. 묶음마다 '적은 쪽'만 바꾸면 최소예요."),
+      "Mirror symmetry = every group of 4 mirror cells is the SAME color. Per group, flip the cells whose color is in the minority — that's the fewest flips. (e.g. 3 '#' + 1 '·' → flip that 1 '·' → all '#')",
+      "거울 대칭 = 짝지어진 4칸이 모두 같은 색. 4칸 안에서 개수가 적은 색깔의 칸만 반대로 뒤집으면 최소 횟수예요. (예: # 3개 + · 1개 → · 하나만 # 로 뒤집으면 4칸 다 #)"),
   }];
   let total = 0;
   for (let r = 0; r < RN / 2; r++) {
