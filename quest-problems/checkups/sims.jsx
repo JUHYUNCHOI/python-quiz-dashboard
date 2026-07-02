@@ -1147,8 +1147,8 @@ export function CheckupsReuseSim({ E }) {
   }
   steps.push({ kind: "payoff", l: 0, r: 0, cnt: null, inside: checks,
     bubble: t(E,
-      `Count the ✓ pattern ONCE per s, then every same-s window reuses it — no recounting!`,
-      `✓ 자리는 s마다 한 번만 세두면, 같은 s 윈도우가 다 재사용 — 매번 다시 안 셈!`) });
+      `Count the ✓ pattern ONCE per s, every same-s window reuses it — no recounting! In code, this 'write once' IS the prefix (coming up).`,
+      `✓ 자리는 s마다 한 번만 세두면 같은 s 창이 다 재사용 — 매번 다시 안 셈! 이 '한 번 적어두기'가 곧 코드의 prefix예요 (조금 뒤에).`) });
 
   const { idx, setIdx, total: tot } = useTraceStep(steps.length);
   const st = steps[Math.min(idx, steps.length - 1)];
@@ -1314,6 +1314,101 @@ export function CheckupsKeyCodeSim({ E, lang = "py" }) {
       <div style={{ marginTop: 12 }}>
         <SimNav idx={idx} total={tot} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
       </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   CheckupsWindowSplitSim — ch3 도입: 진짜 '창문'(문짝 2개)이 닫혔다 열리며
+   창 안만 뒤집히는 걸 보여주고 → 검진 = 창 밖 + 창 안 나누기로 착지.
+   (선생님 2026-07-02: "진짜 윈도우 그림 — 문 닫았다 열었다 느낌".
+    + 해결책 제시는 "그럼 어떻게 해결하면 될까? 생각해보자"로 시작.)
+   소는 transition 없음 — 뒤집기는 늘 닫힌 문 뒤에서 (열면 "짠!").
+   '어떻게' 움직이는지는 다음 슬라이드 MirrorSim 이 보여줌.
+   ════════════════════════════════════════════════════════════════════ */
+export function CheckupsWindowSplitSim({ E }) {
+  // 창문(유리+창살)이 여는 만큼 = 뒤집을 구간. 활짝(1~6) → 2~3 → 2~4 → 2~5 로 '범위가 바뀜'을
+  // 보여주고 → [2,5]에서 뒤집기 → 창 밖/창 안 나누기(누적합 풀이)로 착지.
+  // (선생님 2026-07-02: '창문이 열렸다 닫혔다 하며 범위를 바꾼다. 2~3·2~4·2~5. 창문답게.')
+  const steps = [
+    { l: 1, r: 6, flip: false, split: false, payoff: false,
+      bubble: t(E, "So — how do we solve this? Let's think. FJ flips ONE range — picture a window on it. Open it wide and it's all of 1~6.",
+                   "그럼 어떻게 풀까요? 같이 생각해봐요. FJ는 한 구간을 골라 뒤집어요 — 거기에 '창문'을 달았어요. 활짝 열면 1~6 전체.") },
+    { l: 2, r: 3, flip: false, split: false, payoff: false,
+      bubble: t(E, "The window opens to any width — the OPEN part is the flip range. Narrow: 2~3.",
+                   "창은 아무 만큼이나 열려요 — 열린 부분이 뒤집을 구간. 좁게 열면 2~3.") },
+    { l: 2, r: 4, flip: false, split: false, payoff: false,
+      bubble: t(E, "Open a bit more — 2~4.", "조금 더 열면 2~4.") },
+    { l: 2, r: 5, flip: false, split: false, payoff: false,
+      bubble: t(E, "Open to 2~5 — let's use this window as our example.", "2~5 까지 열어서, 이 창으로 예를 볼게요.") },
+    { l: 2, r: 5, flip: true, split: false, payoff: false,
+      bubble: t(E, "Flip the cows inside the window (2~5) — their order reverses. Outside (1·6) never moves.",
+                   "창 안(2~5)의 소를 뒤집으면 — 순서가 반대로! 창 밖(1·6)은 그대로.") },
+    { l: 2, r: 5, flip: true, split: true, payoff: true,
+      bubble: t(E, "So split the count — checkups = outside (1·6, unchanged) + inside (2~5, flipped).",
+                   "그래서 검진을 두 조각으로 — 창 밖(1·6, 안 변함) + 창 안(2~5, 뒤집힘).") },
+  ];
+  const { idx, safe, setIdx, total } = useTraceStep(steps.length);
+  const st = steps[Math.min(safe, steps.length - 1)];
+  const wl = st.l, wr = st.r;
+  const TW = 44, STEP = 52, GAP = STEP - TW;
+  const PAD = 20;                              // 양옆 여유 — 활짝 열면 문짝이 이 자리로 접혀 들어감
+  const gridW = 6 * STEP - GAP;
+  const boxW = gridW + PAD * 2;
+  const ltr = tk => String.fromCharCode(64 + tk);
+  const H = TW + 16;
+  // 열린 구멍(=뒤집을 구간 [wl,wr]) + 그 바깥을 덮는 문짝 2개 (열수록 옆으로 접혀 얇아짐).
+  const openL = PAD + (wl - 1) * STEP - 5;
+  const openR = PAD + (wr - 1) * STEP + TW + 5;
+  const leafLW = Math.max(0, openL - 3), leafRW = Math.max(0, boxW - openR - 3);
+  const leaf = (extra) => ({ position: "absolute", top: 3, height: H - 6, zIndex: 3, pointerEvents: "none", borderRadius: 6, background: "linear-gradient(180deg,rgba(240,222,180,.72),rgba(224,198,140,.78))", boxShadow: "inset 0 0 0 2px #bd914a, 0 1px 4px rgba(146,64,14,.25)", transition: "left .5s cubic-bezier(.4,0,.2,1), width .5s cubic-bezier(.4,0,.2,1)", ...extra });
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#0e7490", marginBottom: 10 }}>
+        🪟 {t(E, "The window — open it as wide as the flip range", "창문 — 여는 만큼이 뒤집을 구간")}
+      </div>
+      {/* 말풍선 */}
+      <div style={{ position: "relative", maxWidth: 470, margin: "0 auto 26px" }}>
+        <div style={{ background: st.payoff ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 12.5, color: st.payoff ? "#065f46" : "#92400e", lineHeight: 1.6, fontWeight: 600, wordBreak: "keep-all", textAlign: "left" }}>💬 {nbMath(st.bubble)}</div>
+        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}` }} />
+      </div>
+      {/* 소 줄 + 여닫는 창문 (열린 구멍 = 뒤집을 구간, 문짝이 옆으로 접히며 열림) */}
+      <div style={{ position: "relative", width: boxW, height: H, margin: "0 auto", background: "#eef6fa", borderRadius: 10, boxShadow: "inset 0 0 0 2px #cfe4ee" }}>
+        {/* 열린 구멍 (밝은 하늘빛 = 활짝 열림) — 폭이 [wl,wr] 만큼 */}
+        <div style={{ position: "absolute", top: 2, left: openL, width: Math.max(0, openR - openL), height: H - 4, borderRadius: 8, background: "linear-gradient(180deg,#eaf8ff,#cfeeff)", boxShadow: "inset 0 0 0 3px #38bdf8", zIndex: 1, pointerEvents: "none", transition: "left .5s cubic-bezier(.4,0,.2,1), width .5s cubic-bezier(.4,0,.2,1)" }} />
+        {/* 소 6개 (항상 보임 — 창 밖은 문짝 뒤로 흐릿) */}
+        {[1, 2, 3, 4, 5, 6].map(tk => {
+          const slot = (st.flip && tk >= wl && tk <= wr) ? _slotG(tk, wl, wr, 2) : tk - 1;
+          const sp = _SP[tk], inWin = tk >= wl && tk <= wr;
+          return (
+            <div key={tk} style={{ position: "absolute", top: 8, left: PAD + slot * STEP, width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 17, background: sp.bg, color: sp.tx, border: `1.5px solid ${sp.bd}`, opacity: inWin ? 1 : 0.85, transition: "left .5s cubic-bezier(.4,0,.2,1)", zIndex: 2 }}>{ltr(tk)}</div>
+          );
+        })}
+        {/* 문짝 2개 — 창 밖을 덮음 (활짝 열면 옆으로 접혀 얇아짐). 손잡이 표시. */}
+        {leafLW > 4 && <div style={leaf({ left: 3, width: leafLW })}><div style={{ position: "absolute", right: 5, top: "50%", width: 4, height: 16, marginTop: -8, borderRadius: 3, background: "#bd914a" }} /></div>}
+        {leafRW > 4 && <div style={leaf({ left: openR + 3, width: leafRW })}><div style={{ position: "absolute", left: 5, top: "50%", width: 4, height: 16, marginTop: -8, borderRadius: 3, background: "#bd914a" }} /></div>}
+        {/* 창 라벨 */}
+        <div style={{ position: "absolute", top: -20, left: (openL + openR) / 2, transform: "translateX(-50%)", background: "#0891b2", color: "#fff", fontSize: 9.5, fontWeight: 800, borderRadius: 6, padding: "1px 8px", whiteSpace: "nowrap", zIndex: 5, transition: "left .5s cubic-bezier(.4,0,.2,1)" }}>🪟 {t(E, "open", "열린 창")} {wl}~{wr}</div>
+      </div>
+      {/* 자리 번호 */}
+      <div style={{ display: "flex", gap: GAP, width: boxW, boxSizing: "border-box", padding: `0 ${PAD}px`, margin: "8px auto 0" }}>
+        {[1, 2, 3, 4, 5, 6].map(p => <div key={p} style={{ width: TW, textAlign: "center", fontSize: 9.5, color: p >= wl && p <= wr ? "#0284c7" : C.dim, fontWeight: p >= wl && p <= wr ? 700 : 400 }}>{t(E, "spot", "자리")} {p}</div>)}
+      </div>
+      {/* 나누기 착지 (마지막 스텝만) — 빈 스텝엔 공간 안 잡음 (카드가 세로 가운데 정렬하므로 예약 불필요) */}
+      <div style={{ marginTop: st.split ? 14 : 0 }}>
+        {st.split && (
+          <div style={{ maxWidth: 470, margin: "0 auto" }}>
+            <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: "10px 13px", fontSize: 12, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+              <div><b style={{ color: "#475569" }}>{t(E, "OUTSIDE the window", "창 밖")}</b> — {t(E, "never moves → count it once up front. Easy.", "안 움직여요 → 미리 한 번 세두면 끝. 쉬움.")}</div>
+              <div><b style={{ color: "#0e7490" }}>{t(E, "INSIDE the window", "창 안")}</b> — {t(E, "gets reversed → this is the puzzle. We crack it next.", "뒤집혀서 바뀌어요 → 여기가 숙제. 다음에서 풀어요.")}</div>
+              <div style={{ marginTop: 8, textAlign: "center", padding: "8px 10px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8, fontWeight: 800, color: "#0e7490", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+                {t(E, "checkups = (outside) + (inside)", "검진 수 = (창 밖) + (창 안)")}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      <SimNav idx={idx} total={total} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
     </div>
   );
 }
@@ -1491,47 +1586,50 @@ export function CheckupsOutPrefixSim({ E }) {
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   CheckupsInPrefixSim — 안쪽 검진을 's별 prefix' 로 빨리 세기. 말풍선 stepped.
-   s 가 같으면 안쪽 검진 패턴이 똑같음(거울 시뮬에서 봄) → s 마다 prefix 한 번 만들면
-   그 s 의 어떤 윈도우든 빼기 한 번(diag[r]−diag[l−1])으로 안쪽 검진을 구함.
+   CheckupsInPrefixSim — 'insideUpTo' 를 코드 그대로 이해시키는 표. 말풍선 stepped.
+   (선생님 2026-07-02: "prefix·s비교는 알겠는데 insideUpTo 가 뭐고 어떻게 쓰는지 모르겠다."
+    → 만화 창 걷어내고 실제 코드 변수(cow[s−k]·want[k]·insideUpTo[k]) + 코드 줄을 붙인 표로.)
+   예: cow=[2,1,3,1], want=[1,2,3,1], s=5.  '맞나?(0/1)' 줄을 prefix → insideUpTo,
+   창 [l,r] 안쪽 = insideUpTo[r] − insideUpTo[l−1].
    ════════════════════════════════════════════════════════════════════ */
-const _PFIN = [0, 0, 1, 0, 1, 0];   // s=7 안쪽 검진 패턴 (a[7−i]=b[i]) — ✓ at 3,5
-const _PFID = (() => { const p = []; let s = 0; for (let i = 0; i < 6; i++) { s += _PFIN[i]; p.push(s); } return p; })();  // [0,0,1,1,2,2]
+const _IN_COW = [0, 2, 1, 3, 1];     // 1-indexed (앞 0 더미)
+const _IN_WANT = [0, 1, 2, 3, 1];
+const _IN_S = 5, _IN_N = 4;
+const _IN_ARR = (() => { const a = [0]; for (let k = 1; k <= _IN_N; k++) a[k] = _IN_COW[_IN_S - k]; return a; })();        // 자리 k 에 오는 소 cow[s−k]
+const _IN_MATCH = (() => { const m = [0]; for (let k = 1; k <= _IN_N; k++) m[k] = _IN_ARR[k] === _IN_WANT[k] ? 1 : 0; return m; })();
+const _IN_PREF = (() => { const p = [0]; for (let k = 1; k <= _IN_N; k++) p[k] = p[k - 1] + _IN_MATCH[k]; return p; })();   // = insideUpTo, [0,1,1,1,1]
 
 function _buildInPrefixSteps(E) {
-  const inFor = (l, r) => _PFID[r - 1] - (l >= 2 ? _PFID[l - 2] : 0);   // 자리 r까지 − 자리 (l-1)까지
-  const upTo = m => (m >= 1 ? _PFID[m - 1] : 0);
-  // ✓ 를 소에서 '유도' — ✓끼리 짝으로 오독하는 걸 막는다 (선생님 2026-07-02:
-  //   "자리 3+자리 5는 8인데 왜 체크?" — 짝꿍은 3↔4, 5↔2 (합=7). ✓는 자리별 결과).
+  const S = _IN_S;
   const steps = [
-    { showPre: false, l: 0, r: 0, hl: null, focus: null, spot: 0, payoff: false,
-      bubble: t(E, "s=7: each spot i gets the cow from its PARTNER spot 7−i (the two add to 7). ✓ if that cow matches the want.",
-                   "s=7: 자리마다 짝꿍 자리(7−자리)의 소가 와요 — 두 자리 합이 7. 온 소가 원하는 종과 같으면 그 자리가 ✓.") },
-    { showPre: false, l: 0, r: 0, hl: null, focus: null, spot: 3, payoff: false,
-      bubble: t(E, "Spot 3 ← cow D from partner spot 4 (3+4=7). Spot 3 wants D too → ✓!",
-                   "자리 3 ← 짝꿍 자리 4의 소 D (3+4=7). 자리 3이 원하는 것도 D → ✓!") },
-    { showPre: false, l: 0, r: 0, hl: null, focus: null, spot: 5, payoff: false,
-      bubble: t(E, "Spot 5 ← cow B from partner spot 2 (5+2=7) → ✓! (The two ✓s are NOT a pair — each spot's partner is 7−spot.)",
-                   "자리 5 ← 짝꿍 자리 2의 소 B (5+2=7). 원하는 것도 B → ✓! (✓끼리 짝이 아니에요 — 짝꿍은 늘 7−자리.)") },
-    { showPre: true, l: 0, r: 0, hl: null, focus: null, spot: 0, payoff: false,
-      bubble: t(E, "Write this down once — '✓ up to here' for this s (prefix).",
-                   "이 ✓를 미리 적어둬요 — '여기까지 ✓ 몇 개' (prefix).") },
+    { built: 0, kHot: 0, win: null, sub: false, mode: "build", payoff: false,
+      bubble: t(E, `Fix s = ${S}. Flip → spot k gets partner spot j = s−k's cow. So compare cow[j] with want[k].`,
+                   `s = ${S}로 정했어요. 뒤집으면 자리 k엔 짝꿍 자리 j = s−k의 소가 와요. 그 소 cow[j]와 want[k]를 비교!`) },
   ];
-  // 창 [2,5] 자세히 → 창 [3,4] 로 슬라이드 재사용 (둘 다 s=7). 안쪽은 빼기 '한 번'.
-  const win = (l, r, reuse) => {
-    const val = inFor(l, r);
-    if (!reuse) steps.push({ showPre: true, l, r, hl: "in", focus: null, spot: 0, payoff: false,
-      bubble: t(E, `Say the flip window is [${l}~${r}] (s=7). Count only the ✓ INSIDE it — grey outside doesn't count.`,
-                   `뒤집는 창이 [${l}~${r}]라면 (s=7) — 창 안의 ✓만 세요. 창 밖(회색)은 안 셈.`) });
-    steps.push({ showPre: true, l, r, hl: "in", focus: "sub", spot: 0, payoff: reuse,
-      bubble: reuse
-        ? t(E, `Next window [${l}~${r}] — same table: inside ✓ = '${upTo(r)} up to ${r}' − '${upTo(l - 1)} up to ${l - 1}' = ${val}. One subtraction per window! 🚀`,
-              `다음 창 [${l}~${r}]도 표는 그대로 — 창 안 ✓ = '${r}까지 ${upTo(r)}개' − '${l - 1}까지 ${upTo(l - 1)}개' = ${val}개. 창마다 빼기 한 번! 🚀`)
-        : t(E, `Window ✓ count: take '${upTo(r)} up to spot ${r}', then drop the part BEFORE the window ('${upTo(l - 1)} up to spot ${l - 1}') → ${upTo(r)} − ${upTo(l - 1)} = ${val}!`,
-              `창 안의 ✓ 개수: '자리 ${r}까지 ${upTo(r)}개'에서 창 앞부분 '자리 ${l - 1}까지 ${upTo(l - 1)}개'를 빼면 끝 → ${upTo(r)} − ${upTo(l - 1)} = ${val}!`) });
+  for (let k = 1; k <= _IN_N; k++) {
+    const j = S - k, arr = _IN_ARR[k], w = _IN_WANT[k], m = _IN_MATCH[k], p = _IN_PREF[k];
+    steps.push({ built: k, kHot: k, win: null, sub: false, mode: "build", payoff: false,
+      bubble: m
+        ? t(E, `k=${k}: j=s−k=${j} → cow[${j}]=${arr}, want[${k}]=${w} → match(1). insideUpTo[${k}]=insideUpTo[${k - 1}]+1=${p}.`,
+              `k=${k}: j=s−k=${j} → 자리 ${j}의 소 cow[${j}]=${arr}, want[${k}]=${w} → 맞음(1). insideUpTo[${k}]=insideUpTo[${k - 1}]+1=${p}.`)
+        : t(E, `k=${k}: j=s−k=${j} → cow[${j}]=${arr} ≠ want[${k}]=${w} → 0. insideUpTo[${k}]=insideUpTo[${k - 1}]=${p}.`,
+              `k=${k}: j=s−k=${j} → 자리 ${j}의 소 cow[${j}]=${arr} ≠ want[${k}]=${w} → 다름(0). insideUpTo[${k}]=insideUpTo[${k - 1}]=${p} (그대로).`) });
+  }
+  steps.push({ built: _IN_N, kHot: 0, win: null, sub: false, mode: "build", payoff: false,
+    bubble: t(E, `Done. insideUpTo = [0,1,1,1,1] for s=${S} — just ONE array, built once (O(N)).`,
+                 `완성. s=${S}용 insideUpTo = [0,1,1,1,1] — 배열 하나, 한 번만 만들어요 (O(N)).`) });
+  // 사용: 같은 s(=5) 인 창 [2,3], [1,4] — 안쪽은 빼기 한 번.
+  const useWin = (l, r) => {
+    const val = _IN_PREF[r] - _IN_PREF[l - 1];
+    steps.push({ built: _IN_N, kHot: 0, win: [l, r], sub: true, mode: "use", payoff: false,
+      bubble: t(E, `Window [${l},${r}] (l+r=${S}): inside = insideUpTo[${r}] − insideUpTo[${l - 1}] = ${_IN_PREF[r]} − ${_IN_PREF[l - 1]} = ${val}.`,
+                   `창 [${l},${r}] (l+r=${S}): 안쪽 = insideUpTo[${r}] − insideUpTo[${l - 1}] = ${_IN_PREF[r]} − ${_IN_PREF[l - 1]} = ${val}.`) });
   };
-  win(2, 5, false);
-  win(3, 4, true);
+  useWin(2, 3);
+  useWin(1, 4);
+  steps.push({ built: _IN_N, kHot: 0, win: null, sub: false, mode: "use", payoff: true,
+    bubble: t(E, `One array per s → every same-s window is ONE subtraction. That's the code line: inside = insideUpTo[r] − insideUpTo[l-1]. 🚀`,
+                 `s마다 배열 하나 → 그 s의 모든 창은 빼기 한 번. 이게 코드 줄 그대로: inside = insideUpTo[r] − insideUpTo[l-1]. 🚀`) });
   return steps;
 }
 
@@ -1539,36 +1637,48 @@ export function CheckupsInPrefixSim({ E }) {
   const steps = _buildInPrefixSteps(E);
   const { idx, safe, setIdx, total } = useTraceStep(steps.length);
   const st = steps[Math.min(safe, steps.length - 1)];
-  const TW = 44, STEP = 52, GAP = STEP - TW, LAB = 66;
-  const L = st.l, R = st.r, hasWin = st.l > 0;
-  const inWin = p => hasWin && p >= L && p <= R;
-  const preHot = m => st.focus === "sub" && hasWin && (m === R || m === L - 1);
+  const TW = 44, STEP = 54, GAP = STEP - TW, LAB = 104;
+  const COLS = [0, 1, 2, 3, 4];   // 코드의 1-indexed + 더미 0
+  const [L, R] = st.win || [0, 0];
+  const hasWin = !!st.win;
+  const inWin = k => hasWin && k >= L && k <= R;
+  const subCol = k => st.sub && (k === R || k === L - 1);
 
-  // 말풍선을 이번 스텝이 가리키는 칸으로 이동 (바깥 시뮬과 동일).
-  const GRIDW = LAB + 8 + 6 * STEP - GAP;
+  // 말풍선을 이번 스텝이 가리키는 칸으로 이동.
+  const GRIDW = LAB + 8 + COLS.length * STEP - GAP;
   const cellCenter = i => LAB + 8 + i * STEP + TW / 2;
-  const anchorCol = st.spot ? st.spot - 1               // ✓ 유도 스텝 → 그 자리
-    : !hasWin ? 2.5
-    : st.focus === "sub" ? ((R - 1) + (L - 2)) / 2     // 두 뺄셈 칸 사이
-    : (L + R) / 2 - 1;                                 // 창 중앙
+  const anchorCol = st.kHot ? st.kHot
+    : st.sub ? (R + (L - 1)) / 2
+    : 2;
   const anchorX = cellCenter(anchorCol);
-  const BW = 268;
+  const BW = 316;
   const bubbleLeft = Math.max(2, Math.min(GRIDW - BW - 2, anchorX - BW / 2));
   const tailLeft = Math.max(12, Math.min(BW - 28, anchorX - bubbleLeft - 8));
 
   const rowWrap = (label, color, node) => (
     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-      <div style={{ width: LAB, textAlign: "right", fontSize: 10.5, fontWeight: 700, color, lineHeight: 1.1 }}>{label}</div>
+      <div style={{ width: LAB, textAlign: "right", fontSize: 11, fontWeight: 700, color, lineHeight: 1.15, fontFamily: "'JetBrains Mono',monospace", wordBreak: "keep-all" }}>{label}</div>
       {node}
     </div>
   );
+  const numCell = (content, sty) => (
+    <div style={{ width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16, transition: "all .2s", ...sty }}>{content}</div>
+  );
+  const dummy = k => numCell("·", { color: "#e2e8f0", background: "#f8fafc", border: "1.5px solid #f1f5f9" });
 
   return (
     <div style={{ padding: 16 }}>
-      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#0e7490", marginBottom: 10 }}>
-        📊 {t(E, "✓ inside the window — one prefix per s", "창 안 검진 — s마다 prefix 하나")}
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#0e7490", marginBottom: 3 }}>
+        📊 insideUpTo {t(E, "= the 'match?(0/1)' row, prefix-summed", "= '맞나?(0/1)' 줄을 prefix 한 배열")}
       </div>
-      <div style={{ position: "relative", width: GRIDW, height: 92, margin: "0 auto 6px" }}>
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 4, fontFamily: "'JetBrains Mono',monospace" }}>
+        cow = [2,1,3,1]　want = [1,2,3,1]　s = {_IN_S}
+      </div>
+      <div style={{ textAlign: "center", fontSize: 10.5, color: "#0e7490", fontWeight: 700, marginBottom: 10, wordBreak: "keep-all" }}>
+        {t(E, "flip: spot k ← cow from partner spot j = s−k  (badge = j)", "뒤집기: 자리 k ← 짝꿍 자리 j = s−k 의 소  (배지 = j)")}
+      </div>
+
+      <div style={{ position: "relative", width: GRIDW, height: 96, margin: "0 auto 6px" }}>
         <div style={{ position: "absolute", bottom: 8, left: bubbleLeft, width: BW, background: st.payoff ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "10px 13px", fontSize: 12.5, color: st.payoff ? "#065f46" : "#92400e", lineHeight: 1.5, fontWeight: 600, wordBreak: "keep-all", textAlign: "left", boxShadow: "0 2px 8px rgba(0,0,0,.07)", transition: "left .38s cubic-bezier(.4,0,.2,1)" }}>
           💬 {nbMath(st.bubble)}
           <div style={{ position: "absolute", bottom: -9, left: tailLeft, width: 0, height: 0, borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, transition: "left .38s cubic-bezier(.4,0,.2,1)" }} />
@@ -1576,52 +1686,69 @@ export function CheckupsInPrefixSim({ E }) {
       </div>
 
       <div style={{ width: "fit-content", margin: "0 auto" }}>
-        {/* 🐄 오는 소 — 자리 p 엔 짝꿍 자리 7−p 의 소가 옴 (←숫자 = 어느 자리에서 왔나) */}
-        {rowWrap(t(E, "🐄 coming cow", "🐄 오는 소"), "#7f1d1d",
-          <div style={{ display: "flex", gap: GAP }}>
-            {[1, 2, 3, 4, 5, 6].map(p => {
-              const tk = 7 - p, sp = _SP[tk], hot = st.spot === p, dim = hasWin && !inWin(p);
-              return <div key={p} style={{ position: "relative", width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16, opacity: dim ? 0.4 : 1, background: sp.bg, color: sp.tx, border: `${hot ? 2.5 : 1.5}px solid ${hot ? "#ea580c" : sp.bd}`, boxShadow: hot ? "0 0 0 3px rgba(234,88,12,.2)" : "none", transition: "all .2s" }}>
-                {String.fromCharCode(64 + tk)}
-                <span style={{ position: "absolute", top: -8, right: -5, fontSize: 8.5, fontWeight: 800, background: "#fff", border: "1px solid #e2e8f0", borderRadius: 5, padding: "0 3px", lineHeight: "12px", color: "#64748b" }}>←{tk}</span>
-              </div>;
-            })}
-          </div>
-        )}
-        {/* 📋 원하는 종 */}
-        {rowWrap(t(E, "📋 wants", "📋 원하는"), "#1e40af",
-          <div style={{ display: "flex", gap: GAP }}>
-            {_MB.map((tk, k) => {
-              const p = k + 1, sp = _SP[tk], hot = st.spot === p, dim = hasWin && !inWin(p);
-              return <div key={k} style={{ width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16, opacity: dim ? 0.4 : 1, background: sp.bg, color: sp.tx, border: `${hot ? 2.5 : 1.5}px solid ${hot ? "#ea580c" : sp.bd}`, boxShadow: hot ? "0 0 0 3px rgba(234,88,12,.2)" : "none", transition: "all .2s" }}>{String.fromCharCode(64 + tk)}</div>;
-            })}
-          </div>
-        )}
-        {rowWrap(t(E, "🩺 ✓ (s=7)", "🩺 ✓ (s=7)"), "#15803d",
+        {/* 자리 k (+ 창 [l,r] 표시) */}
+        {rowWrap(t(E, "spot k", "자리 k"), "#334155",
           <div style={{ position: "relative", display: "flex", gap: GAP }}>
-            {hasWin && <div style={{ position: "absolute", top: -4, left: (L - 1) * STEP - 4, width: (R - L + 1) * STEP - GAP + 8, height: TW + 8, borderRadius: 11, background: "#ecfeff", border: "1.5px dashed #67e8f9", zIndex: 0, transition: "left .4s cubic-bezier(.4,0,.2,1), width .4s cubic-bezier(.4,0,.2,1)" }} />}
-            {_PFIN.map((v, k) => {
-              const p = k + 1, hot = st.hl === "in" && inWin(p), spotHot = st.spot === p, dim = hasWin && !inWin(p);
-              return <div key={k} style={{ position: "relative", zIndex: 1, width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 800, opacity: dim ? 0.5 : 1, background: v ? (dim ? "#f1f5f9" : "#dcfce7") : "#f8fafc", color: v ? (dim ? "#cbd5e1" : "#15803d") : "#cbd5e1", border: `${(hot || spotHot) ? 2.5 : 1.5}px solid ${spotHot ? "#ea580c" : hot ? "#0891b2" : (v && !dim ? "#86efac" : "#e2e8f0")}`, boxShadow: spotHot ? "0 0 0 3px rgba(234,88,12,.2)" : hot ? "0 0 0 3px rgba(8,145,178,.15)" : "none", transition: "all .2s" }}>{v ? "✓" : "—"}</div>;
-            })}
+            {hasWin && <div style={{ position: "absolute", top: -3, left: L * STEP - 3, width: (R - L + 1) * STEP - GAP + 6, height: TW + 6, borderRadius: 11, background: "#ecfeff", border: "1.5px dashed #67e8f9", zIndex: 0, transition: "left .4s cubic-bezier(.4,0,.2,1), width .4s cubic-bezier(.4,0,.2,1)" }} />}
+            {COLS.map(k => (
+              <div key={k} style={{ position: "relative", zIndex: 1, width: TW, height: TW, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 15, color: k === 0 ? "#cbd5e1" : inWin(k) ? "#0e7490" : "#64748b" }}>{k}</div>
+            ))}
           </div>
         )}
-        {rowWrap(t(E, "📊 diag (up to)", "📊 여기까지 ✓"), "#0891b2",
+        {/* cow[s−k] — 배지 j=s−k 로 '어느 자리에서 온 소'인지 표시 */}
+        {rowWrap("cow[s−k]", "#7f1d1d",
           <div style={{ display: "flex", gap: GAP }}>
-            {_PFID.map((v, k) => {
-              const m = k + 1, hot = st.showPre && preHot(m);
-              return <div key={k} style={{ width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 17, fontWeight: 700, background: hot ? "#cffafe" : (st.showPre ? "#fff" : "#f8fafc"), color: st.showPre ? "#0e7490" : "#cbd5e1", border: `${hot ? 2.5 : 1.5}px solid ${hot ? "#0891b2" : "#e2e8f0"}`, opacity: st.showPre ? 1 : 0.4, transition: "all .2s" }}>{st.showPre ? v : "·"}</div>;
+            {COLS.map(k => {
+              if (k === 0) return <div key={k}>{dummy(k)}</div>;
+              const hot = st.kHot === k, j = _IN_S - k;
+              return (
+                <div key={k} style={{ position: "relative" }}>
+                  {numCell(_IN_ARR[k], { background: hot ? "#fee2e2" : "#fff", color: "#7f1d1d", border: `${hot ? 2.5 : 1.5}px solid ${hot ? "#ef4444" : "#fecaca"}` })}
+                  <span style={{ position: "absolute", top: -8, right: -5, fontSize: 8.5, fontWeight: 800, background: "#fff", border: `1px solid ${hot ? "#ef4444" : "#e2e8f0"}`, borderRadius: 5, padding: "0 3px", lineHeight: "13px", color: hot ? "#b91c1c" : "#64748b" }}>j={j}</span>
+                </div>
+              );
             })}
           </div>
         )}
-        {rowWrap("", C.dim,
+        {/* want[k] */}
+        {rowWrap("want[k]", "#1e40af",
           <div style={{ display: "flex", gap: GAP }}>
-            {Array.from({ length: 6 }, (_, k) => {
-              const win = inWin(k + 1);
-              return <div key={k} style={{ width: TW, textAlign: "center", fontSize: 9.5, color: win ? "#0e7490" : C.dim, fontWeight: win ? 700 : 400 }}>{t(E, "spot", "자리")} {k + 1}</div>;
+            {COLS.map(k => {
+              if (k === 0) return <div key={k}>{dummy(k)}</div>;
+              const hot = st.kHot === k;
+              return <div key={k}>{numCell(_IN_WANT[k], { background: hot ? "#dbeafe" : "#fff", color: "#1e40af", border: `${hot ? 2.5 : 1.5}px solid ${hot ? "#3b82f6" : "#bfdbfe"}` })}</div>;
             })}
           </div>
         )}
+        {/* 맞나? (0/1) */}
+        {rowWrap(t(E, "match? (0/1)", "맞나? (0/1)"), "#15803d",
+          <div style={{ display: "flex", gap: GAP }}>
+            {COLS.map(k => {
+              if (k === 0) return <div key={k}>{dummy(k)}</div>;
+              const shown = k <= st.built, m = _IN_MATCH[k], hot = st.kHot === k;
+              return <div key={k}>{numCell(shown ? m : "·", { background: !shown ? "#f8fafc" : m ? (hot ? "#bbf7d0" : "#dcfce7") : "#fff", color: !shown ? "#cbd5e1" : m ? "#15803d" : "#94a3b8", border: `${hot ? 2.5 : 1.5}px solid ${hot ? "#22c55e" : shown && m ? "#86efac" : "#e2e8f0"}` })}</div>;
+            })}
+          </div>
+        )}
+        {/* insideUpTo[k] = prefix */}
+        {rowWrap("insideUpTo[k]", "#0891b2",
+          <div style={{ display: "flex", gap: GAP }}>
+            {COLS.map(k => {
+              const shown = k === 0 || k <= st.built, sub = subCol(k), cnt = st.kHot > 0 && st.kHot === k, hot = sub || cnt;
+              return <div key={k}>{numCell(shown ? _IN_PREF[k] : "·", { background: sub ? "#cffafe" : cnt ? "#d1fae5" : (shown ? "#fff" : "#f8fafc"), color: shown ? "#0e7490" : "#cbd5e1", border: `${hot ? 2.5 : 1.5}px solid ${sub ? "#0891b2" : cnt ? "#10b981" : (k === 0 ? "#cbd5e1" : "#e2e8f0")}` })}</div>;
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* 표 ↔ 코드 다리 — 이번 스텝이 어느 코드 줄인지 강조 */}
+      <div style={{ margin: "12px auto 0", width: "fit-content", maxWidth: "100%", display: "flex", flexDirection: "column", gap: 5 }}>
+        {[
+          { on: st.mode === "build", txt: "insideUpTo[k] = insideUpTo[k-1] + (cow[s-k]==want[k])" },
+          { on: st.mode === "use", txt: "inside = insideUpTo[r] - insideUpTo[l-1]" },
+        ].map((c, i) => (
+          <div key={i} style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 700, padding: "6px 12px", borderRadius: 8, whiteSpace: "nowrap", overflowX: "auto", background: c.on ? "#ecfeff" : "#f8fafc", color: c.on ? "#0e7490" : "#cbd5e1", border: `1.5px solid ${c.on ? "#67e8f9" : "#eef2f6"}`, transition: "all .2s" }}>{c.txt}</div>
+        ))}
       </div>
 
       <SimNav idx={idx} total={total} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />

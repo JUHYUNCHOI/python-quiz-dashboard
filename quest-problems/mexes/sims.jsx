@@ -11,6 +11,107 @@ const _TARGETS = [0, 1, 2, 3, 4];
 
 const _cnt = (v) => _A.filter((x) => x === v).length;
 
+/* ════════════════════════════════════════════════════════════════════
+   MexesIntroSim — 감 잡기. ① mex 가 뭔지 (0 부터 처음 없는 번호)
+   ② 이 문제가 뭘 시키는지 (mex 를 원하는 값으로 만들기) 를 한 단계씩.
+   ════════════════════════════════════════════════════════════════════ */
+export function MexesIntroSim({ E }) {
+  // 배열 [2,2,2,0] 에서 mex 확인: 0 있음 → 1 없음 → mex = 1
+  const steps = [
+    { ex: null, c0: false, c1: false, mex: false, goal: 3,
+      bubble: t(E, "What this problem asks: change the array so its mex becomes a value WE choose — in the fewest changes. First, what is mex? Press ▶.",
+                   "이 문제가 시키는 것: 배열을 바꿔서 mex 를 '내가 정한 값'으로 만들기 — 최소 횟수로. 먼저 mex 가 뭔지부터. 아래 ▶ '다음' 을 눌러가며 봐요.") },
+    { ex: null, c0: false, c1: false, mex: false, goal: 0,
+      bubble: t(E, "Here are number boxes. mex = starting from 0, the FIRST number that is missing.",
+                   "숫자 상자들이에요. mex = 0 부터 세서 '처음으로 없는' 번호.") },
+    { ex: 0, c0: true, c1: false, mex: false, goal: 0,
+      bubble: t(E, "Is 0 in the boxes? Yes ✔ — keep going.",
+                   "0 이 상자에 있어? 있음 ✔ — 계속.") },
+    { ex: 1, c0: true, c1: true, mex: true, goal: 0,
+      bubble: t(E, "Is 1 in the boxes? No ✘. The first missing one is 1 → mex = 1.",
+                   "1 은 있어? 없음 ✘. 처음으로 없는 게 1 → mex = 1.") },
+    { ex: null, c0: true, c1: true, mex: true, goal: 1,
+      bubble: t(E, "This problem asks the OPPOSITE: change boxes so the mex becomes a value WE pick. One box change = 1 operation. Fewest operations?",
+                   "이 문제는 반대예요: 상자를 바꿔서 mex 를 '우리가 정한 값'으로 만들기. 상자 하나 바꾸기 = 1 번. 최소 몇 번?") },
+    { ex: null, c0: true, c1: true, mex: true, goal: 2,
+      bubble: t(E, "Example — to make mex = 2 we need 0 present, 1 present, 2 absent. Let's do it step by step on the next screen.",
+                   "예를 들어 mex = 2 로 만들려면 → 0 있고, 1 있고, 2 없어야. 다음 화면에서 한 단계씩 직접 해봐요.") },
+  ];
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const st = steps[Math.min(idx, steps.length - 1)];
+
+  const TW = 44, GAP = 8;
+  const CHECK = [0, 1, 2, 3, 4];
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: A, marginBottom: 10, wordBreak: "keep-all" }}>
+        🧮 {t(E, "What is mex, and what does this problem want?", "mex 가 뭐고, 이 문제는 뭘 시키나?")}
+      </div>
+
+      {/* 말풍선 */}
+      <div style={{ maxWidth: 540, margin: "0 auto 14px" }}>
+        <div style={{ background: st.goal ? "#f5f3ff" : (st.mex ? "#ecfdf5" : "#fffbeb"), border: `1.5px solid ${st.goal ? "#c4b5fd" : (st.mex ? "#6ee7b7" : "#fbbf24")}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.goal ? "#5b21b6" : (st.mex ? "#065f46" : "#92400e"), lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all" }}>💬 {st.bubble}</div>
+        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.goal ? "#c4b5fd" : (st.mex ? "#6ee7b7" : "#fbbf24")}` }} />
+      </div>
+
+      {/* 배열 */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, marginBottom: 14 }}>
+        <div style={{ fontSize: 10.5, color: C.dim, fontWeight: 700 }}>{t(E, "boxes", "상자들")}</div>
+        <div style={{ display: "flex", gap: GAP }}>
+          {_A.map((v, i) => {
+            const hot = st.ex != null && v === st.ex;   // 지금 찾는 값과 같은 상자
+            return (
+              <div key={i} style={{
+                width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center",
+                fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 18,
+                background: hot ? "#dcfce7" : "#f5f3ff", color: hot ? "#15803d" : "#5b21b6",
+                border: `2px solid ${hot ? "#16a34a" : "#c4b5fd"}`, transition: "all .2s",
+              }}>{v}</div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 0 부터 확인하는 줄 */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, marginBottom: 12 }}>
+        <div style={{ fontSize: 10.5, color: C.dim, fontWeight: 700 }}>{t(E, "check from 0", "0 부터 확인")}</div>
+        <div style={{ display: "flex", gap: 6 }}>
+          {CHECK.map((v) => {
+            const shown = (v === 0 && st.c0) || (v === 1 && st.c1);
+            const present = _cnt(v) > 0;
+            const isMex = st.mex && v === 1;
+            return (
+              <div key={v} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+                <div style={{
+                  minWidth: 34, height: 30, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 3,
+                  fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 14,
+                  background: shown ? (present ? "#dcfce7" : "#fee2e2") : "#f8fafc",
+                  color: shown ? (present ? "#15803d" : "#b91c1c") : C.dim,
+                  border: `1.5px solid ${isMex ? "#7c3aed" : (shown ? (present ? "#86efac" : "#fca5a5") : C.border)}`,
+                  boxShadow: isMex ? "0 0 0 3px rgba(124,58,237,.15)" : "none",
+                }}>{v}{shown && <span style={{ fontSize: 11 }}>{present ? "✓" : "✗"}</span>}</div>
+                {isMex && <span style={{ fontSize: 9.5, fontWeight: 800, color: "#7c3aed" }}>mex</span>}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* mex 결과 */}
+      {st.mex && (
+        <div style={{ textAlign: "center", fontSize: 15, fontWeight: 800, color: A, marginBottom: 4, wordBreak: "keep-all" }}>
+          {t(E, "first missing = 1  ⟹  mex = 1", "처음 없는 게 1  ⟹  mex = 1")}
+        </div>
+      )}
+
+      <div style={{ marginTop: 12 }}>
+        <SimNav idx={idx} total={tot} onIdx={setIdx} accent={A} showLabels isEn={E} />
+      </div>
+    </div>
+  );
+}
+
 function _buildTarget(m) {
   const needVals = []; for (let v = 0; v < m; v++) needVals.push(v);
   const missingVals = needVals.filter((v) => _cnt(v) === 0);
@@ -18,6 +119,121 @@ function _buildTarget(m) {
   const copies = _cnt(m);
   const ops = Math.max(missing, copies);
   return { m, needVals, missingVals, missing, copies, ops };
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   MexesSampleSim — 공식 샘플 [2,2,2,0] 의 출력 5줄을 하나씩:
+   각 줄이 '목표 mex 몇' 이고 왜 그 숫자인지 말풍선으로.
+   ════════════════════════════════════════════════════════════════════ */
+export function MexesSampleSim({ E }) {
+  const outs = _TARGETS.map((m) => _buildTarget(m).ops);   // [1,0,3,1,2]
+  const steps = [{ hi: -1,
+    bubble: t(E,
+      `Input: the array [${_A.join(", ")}] (N=${_N}). Output: N+1 = ${_N + 1} lines — the min changes for target mex 0, 1, …, ${_N}.`,
+      `입력: 배열 [${_A.join(", ")}] (N=${_N}). 출력: N+1 = ${_N + 1}줄 — 목표 mex 0, 1, …, ${_N} 각각의 최소 변경 수.`) }];
+  _TARGETS.forEach((m, k) => {
+    const info = _buildTarget(m);
+    steps.push({ hi: k,
+      bubble: m === 0
+        ? t(E, `Line ${k + 1} → target mex 0: 0 must be ABSENT. There ${info.copies === 1 ? "is" : "are"} ${info.copies} zero${info.copies === 1 ? "" : "s"} → erase ${info.copies} → ${info.ops}.`,
+              `${k + 1}번째 줄 → 목표 mex 0: 배열에 0 이 없어야 해요. 지금 0 이 ${info.copies}개 → ${info.copies}번 지우면 → ${info.ops}.`)
+        : t(E, `Line ${k + 1} → target mex ${m}: 0…${m - 1} present, ${m} absent. Fill ${info.missing}, remove ${info.copies} → max = ${info.ops}.`,
+              `${k + 1}번째 줄 → 목표 mex ${m}: 0…${m - 1} 다 있고 ${m} 은 없어야. 채울 값 ${info.missing}개 / 없앨 ${m} ${info.copies}개 → max = ${info.ops}.`) });
+  });
+  const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length);
+  const st = steps[Math.min(safe, steps.length - 1)];
+
+  // 활성 목표 m 에서 배열을 실제로 어떻게 바꾸는지 계산 (0…m-1 채우기 + m 없애기)
+  const m = st.hi;                          // -1 이면 intro
+  const changes = {};                       // idx -> { to, kind: 'fill' | 'junk' }
+  if (m >= 0) {
+    const missing = [];
+    for (let v = 0; v < m; v++) if (_cnt(v) === 0) missing.push(v);
+    const copyPos = [];
+    _A.forEach((x, i) => { if (x === m) copyPos.push(i); });
+    const fillQ = missing.slice();
+    let junk = m + 1;
+    for (const i of copyPos) {              // m 은 전부 없애기 — 빠진 값부터 채우고 나머진 딴 수로
+      if (fillQ.length) changes[i] = { to: fillQ.shift(), kind: "fill" };
+      else changes[i] = { to: junk++, kind: "junk" };
+    }
+    for (let i = 0; i < _A.length && fillQ.length; i++) {   // 남은 채울 값: 여분/안 쓰이는 칸 재활용
+      if (changes[i] || _A[i] === m) continue;
+      if (_cnt(_A[i]) > 1 || _A[i] >= m) changes[i] = { to: fillQ.shift(), kind: "fill" };
+    }
+  }
+  const opsNow = m < 0 ? null : _buildTarget(m).ops;
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: A, marginBottom: 12, wordBreak: "keep-all" }}>
+        📤 {t(E, "What each output line means", "출력 각 줄이 뭔지")}
+      </div>
+
+      {/* 말풍선 — 배열 바로 위, 꼬리가 배열을 가리킴 (배열을 가리지 않음) */}
+      <div style={{ maxWidth: 560, margin: "0 auto 2px" }}>
+        <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 12, padding: "10px 14px", fontSize: 12.5, color: "#92400e", lineHeight: 1.55, fontWeight: 600, wordBreak: "keep-all", textAlign: "center", minHeight: 42, display: "flex", alignItems: "center", justifyContent: "center" }}>💬 {st.bubble}</div>
+        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: "9px solid #fbbf24" }} />
+      </div>
+
+      <div style={{ display: "flex", gap: 40, justifyContent: "center", alignItems: "flex-start", flexWrap: "wrap", marginTop: 8 }}>
+        {/* 배열 — 활성 목표에서 실제로 바뀌는 칸을 옛값 → 새값 으로 */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+          <div style={{ fontSize: 10.5, color: C.dim, fontWeight: 700, wordBreak: "keep-all" }}>
+            {m < 0 ? t(E, "input array a", "입력 배열 a")
+                   : (opsNow === 0 ? t(E, "array a — already there", "배열 a — 이미 됨")
+                                   : t(E, "array a — change these", "배열 a — 이렇게 바꾸면"))}
+          </div>
+          <div style={{ display: "flex", gap: 6 }}>
+            {_A.map((v, i) => {
+              const ch = changes[i];
+              if (!ch) return (
+                <div key={i} style={{ width: 46, height: 46, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 17, background: "#f5f3ff", color: "#5b21b6", border: "1.5px solid #c4b5fd" }}>{v}</div>
+              );
+              const fill = ch.kind === "fill";
+              return (
+                <div key={i} style={{ width: 46, height: 46, borderRadius: 8, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800,
+                  background: fill ? "#dcfce7" : "#fff7ed", color: fill ? "#166534" : "#9a3412",
+                  border: `2px solid ${fill ? "#16a34a" : "#ea580c"}` }}>
+                  <span style={{ fontSize: 10.5, textDecoration: "line-through", opacity: 0.6, lineHeight: 1 }}>{v}</span>
+                  <span style={{ fontSize: 17, lineHeight: 1.1 }}>{ch.to}</span>
+                </div>
+              );
+            })}
+          </div>
+          {m >= 0 && (
+            <div style={{ fontSize: 11.5, color: opsNow === 0 ? "#15803d" : A, fontWeight: 700, marginTop: 3, wordBreak: "keep-all" }}>
+              {opsNow === 0
+                ? t(E, "0 changes — already mex " + m, "0 번 바꿈 — 이미 mex " + m)
+                : t(E, `${opsNow} change${opsNow === 1 ? "" : "s"} → mex ${m}`, `${opsNow}번 바꿈 → mex ${m}`)}
+            </div>
+          )}
+        </div>
+
+        {/* 출력 N+1 줄 — 활성 줄 강조 */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+          <div style={{ fontSize: 10.5, color: C.dim, fontWeight: 700 }}>{t(E, "output (N+1 lines)", "출력 (N+1줄)")}</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            {outs.map((v, k) => {
+              const on = st.hi === k;
+              return (
+                <div key={k} style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "flex-end" }}>
+                  <span style={{ fontSize: 10, color: on ? A : C.dim, fontWeight: 700, width: 56, textAlign: "right", wordBreak: "keep-all" }}>{t(E, `mex ${k}`, `목표 ${k}`)}</span>
+                  <div style={{ width: 40, height: 30, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 15,
+                    background: on ? "#ecfdf5" : "#f8fafc", color: on ? "#065f46" : C.text,
+                    border: `${on ? 2 : 1}px solid ${on ? "#6ee7b7" : C.border}`, boxShadow: on ? "0 0 0 3px rgba(110,231,183,.25)" : "none", transition: "all .2s" }}>{v}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 16 }}>
+        <SimNav idx={idx} total={tot} onIdx={setIdx} accent={A} showLabels isEn={E} />
+      </div>
+    </div>
+  );
 }
 
 /* ════════════════════════════════════════════════════════════════════

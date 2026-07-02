@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getReflectionSections, ReflectionGrid } from "./components";
-import { ReflectionRuleSim, ReflectionGroupSim, ReflectionUpdateSim } from "./sims";
+import { ReflectionRuleSim, ReflectionGroupSim, ReflectionUpdateSim, ReflectionBruteSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 export function makeReflectionCh1(E) {
@@ -50,39 +50,77 @@ export function makeReflectionCh1(E) {
           <div style={{ fontSize: 13, fontWeight: 600, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
-{`4 5
-..#.
-##.#
-####
-..##
-1 3
-2 3
-4 3
-4 4
-4 4`}
+          {(() => {
+            const mono = "'JetBrains Mono',monospace";
+            const chip = { fontFamily: mono, fontSize: 12, color: "#7c2d12", background: "#fffbeb", padding: "4px 8px", borderRadius: 4, whiteSpace: "pre", border: "1px solid #fde68a", display: "inline-block" };
+            const note = { fontSize: 11.5, color: "#92400e", lineHeight: 1.5, wordBreak: "keep-all", flex: 1 };
+            const outChip = { fontFamily: mono, fontSize: 12, color: "#166534", background: "#f0fdf4", padding: "3px 10px", borderRadius: 4, border: "1px solid #bbf7d0", minWidth: 30, textAlign: "center", fontWeight: 600 };
+            const outNote = { fontSize: 11.5, color: "#166534", lineHeight: 1.5, wordBreak: "keep-all", flex: 1 };
+            return (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 10, marginBottom: 10 }}>
+                {/* INPUT — labeled */}
+                <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 8 }}>{t(E, "INPUT", "입력")}</div>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                    <div style={chip}>4 5</div>
+                    <div style={note}>
+                      💬 {t(E, <><b>N=4</b> (grid is 4×4), <b>U=5</b> (5 flips)</>, <><b>N=4</b> (그림 크기 4×4), <b>U=5</b> (뒤집기 5 번)</>)}
+                    </div>
+                  </div>
+
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 8 }}>
+                    <div style={chip}>{`..#.\n##.#\n####\n..##`}</div>
+                    <div style={note}>
+                      💬 {t(E, <>The picture — <b>N rows</b>. <code>#</code> = filled, <code>.</code> = empty</>, <>그림 — <b>N 줄</b>. <code>#</code> = 색칠, <code>.</code> = 빈 칸</>)}
+                    </div>
+                  </div>
+
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                    <div style={chip}>{`1 3\n2 3\n4 3\n4 4\n4 4`}</div>
+                    <div style={note}>
+                      💬 {t(E, <>Cells to flip <b>(r, c)</b> — <b>U rows</b>, in order</>, <>뒤집을 칸 <b>(r, c)</b> — <b>U 줄</b>, 순서대로</>)}
+                    </div>
+                  </div>
+                </div>
+
+                {/* OUTPUT — labeled */}
+                <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 8 }}>{t(E, "OUTPUT", "출력")}</div>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                    <div style={outChip}>4</div>
+                    <div style={outNote}>{t(E, "First answer (original grid)", "처음 답 (원래 그림)")}</div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                    <div style={outChip}>3</div>
+                    <div style={outNote}>{t(E, "After flipping (1, 3)", "(1, 3) 뒤집은 뒤")}</div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                    <div style={outChip}>2</div>
+                    <div style={outNote}>{t(E, "After flipping (2, 3)", "(2, 3) 뒤집은 뒤")}</div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                    <div style={outChip}>1</div>
+                    <div style={outNote}>{t(E, "After flipping (4, 3)", "(4, 3) 뒤집은 뒤")}</div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                    <div style={outChip}>0</div>
+                    <div style={outNote}>{t(E, <>After flipping (4, 4) — <b>symmetric!</b></>, <>(4, 4) 뒤집은 뒤 — <b>대칭 달성!</b></>)}</div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <div style={outChip}>1</div>
+                    <div style={outNote}>{t(E, "After flipping (4, 4) again — broken again", "(4, 4) 다시 뒤집은 뒤 — 다시 깨짐")}</div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`4
-3
-2
-1
-0
-1`}
-              </div>
-            </div>
-          </div>
+            );
+          })()}
 
           <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.65, wordBreak: "keep-all" }}>
             {t(E,
-              "Input = the picture, then the cells to flip. Output = the first answer, then after each flip. Why the first answer is 4 — see it on the next picture 👇",
-              "입력 = 그림(첫 줄 N·U) + 바꿀 칸 (r, c) 들. 출력 = 처음 답 + 매번 바꾼 뒤 답. 처음 답이 왜 4인지는 — 바로 다음 그림으로 봐요 👇")}
+              "First 3 blocks in the input = N/U, the picture, the flips. Output = 1 answer per state (original + after each flip). Why 4? See the next picture 👇",
+              "입력 세 덩어리 = N·U / 그림 / 뒤집을 칸. 출력 = 상태마다 답 1 개 (처음 + 매번 뒤집은 뒤). 처음 답 4 인 이유는 다음 그림으로 봐요 👇")}
           </div>
           <div style={{ marginTop: 8, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
             📐 <b>{t(E, "Limits", "제약")}:</b>{" "}
@@ -101,57 +139,22 @@ export function makeReflectionCh1(E) {
       content: (<ReflectionGroupSim E={E} />),
     },
 
-    /* 1-3 — Interactive grid simulator. (직접 아무 칸이나 토글) */
+    /* 1-3 — 브루트포스 시뮬: 뒤집기 1번에도 16칸 다 훑음 → 왜 느린지 눈으로 (선생님 2026-07-02, 텍스트 대비 → 시뮬 교체). */
     {
       type: "reveal",
       narr: t(E,
-        "Try it yourself — toggle a cell.",
-        "직접 칸을 토글해봐요."),
-      content: (<ReflectionGrid E={E} />),
+        "Watch brute force in action — every flip rescans everything.",
+        "브루트포스 동작 확인 — 뒤집기마다 전부 다시 세요."),
+      content: (<ReflectionBruteSim E={E} />),
     },
 
-    /* 1-3b — update 마다 그 묶음만 ±1 → 시뮬로 (선생님 2026-06-24: 처음 답 구하고 바꿀 때 +1/−1 다 보여줘) */
+    /* 1-4 — update 마다 그 묶음만 ±1 → 시뮬로 (알고리즘이 실제로 동작하는 모습) */
     {
       type: "reveal",
       narr: t(E,
-        "Each change touches one group → nudge the total ±1.",
-        "바꿀 때마다 묶음 하나만 → 총합 ±1."),
+        "Watch it in action — each flip nudges the total ±1.",
+        "알고리즘 동작 확인 — 매 뒤집기마다 총합 ±1."),
       content: (<ReflectionUpdateSim E={E} />),
-    },
-
-    /* 1-4 — Quiz: which cells form a group with (r, c)? */
-    {
-      type: "quiz",
-      narr: t(E,
-        "For N=6, cell (2, 5) belongs to a 4-cell group. Which 3 cells share the group?",
-        "N=6 일 때 칸 (2, 5) 는 어느 3 칸과 같은 그룹?"),
-      question: t(E,
-        "N=6, cell (2, 5)'s mirror twins are?",
-        "N=6, 칸 (2, 5) 의 거울 짝은?"),
-      options: [
-        "(2, 2), (5, 5), (5, 2)",
-        "(2, 1), (5, 5), (5, 1)",
-        "(5, 5), (2, 2), (1, 1)",
-      ],
-      correct: 0,
-      explain: t(E,
-        "Mirror across vertical center: c → N+1−c = 6+1−5 = 2 → (2, 2). Mirror across horizontal: r → N+1−r = 5 → (5, 5). Both: (5, 2). Group = {(2,5), (2,2), (5,5), (5,2)}.",
-        "세로 가운데로 거울: c → N+1−c = 6+1−5 = 2 → (2, 2). 가로 거울: r → N+1−r = 5 → (5, 5). 둘 다: (5, 2). 그룹 = {(2,5), (2,2), (5,5), (5,2)}."),
-    },
-
-    /* 1-5 — Input quiz: tiny case. */
-    {
-      type: "input",
-      narr: t(E,
-        "2×2 grid \"#.\" / \"..\".  N=2, so all 4 cells are ONE mirror group.  Count what's painted, decide min flips.",
-        "2×2 그리드 \"#.\" / \"..\". N=2 라 4 칸 모두 한 거울 그룹. 칠해진 거 세고 최소 뒤집기 정해."),
-      question: t(E,
-        "Min flips for 2×2 grid \"#.\" / \"..\"?",
-        "2×2 그리드 \"#.\" / \"..\" 의 최소 뒤집기?"),
-      hint: t(E,
-        "Either everyone in the group becomes '.' or everyone becomes '#'.  Pick the cheaper.",
-        "그룹 전체를 '.' 로 통일하거나 '#' 로 통일. 더 적게 뒤집는 쪽."),
-      answer: 1,
     },
   ];
 }

@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCheckupsSections, DiagonalSim, MatchUpToSim, DiagPrefixSim } from "./components";
-import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim, CheckupsReuseSim, CheckupsKeyCodeSim, CheckupsEnumSim, CheckupsFinalCodeSim, CheckupsWindowRecapSim, CheckupsOutPrefixSim, CheckupsInPrefixSim } from "./sims";
+import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim, CheckupsReuseSim, CheckupsKeyCodeSim, CheckupsEnumSim, CheckupsFinalCodeSim, CheckupsWindowSplitSim, CheckupsWindowRecapSim, CheckupsOutPrefixSim, CheckupsInPrefixSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 // (예전 정적 시각화 헬퍼 SpeciesCell/CowRow/TreatedRow/PositionRow 는
@@ -287,38 +287,15 @@ export function makeCheckupsCh2(E, lang = "py") {
    ════════════════════════════════════════════════════════════════════ */
 export function makeCheckupsCh3(E, lang = "py") {
   return [
-    /* 3-0 — 큰 그림 먼저: 검진 = 바깥 + 안쪽 (선생님 2026-06-23: 흐름 순서 — 쪼개기를 맨 앞으로).
-        바깥=쉬움(안 변함), 안쪽=핵심(뒤집힘). 이걸 깔고 안쪽으로 들어감. */
+    /* 3-0 — 큰 그림 먼저: 검진 = 창 밖 + 창 안. 정적 박스 → 진짜 '창문' 시뮬로 교체
+        (선생님 2026-07-02: "진짜 윈도우 그림 — 문 닫았다 열었다 느낌" + 풀이 도입은
+        "그럼 어떻게 해결하면 될까? 생각해보자"로 시작). */
     {
       type: "reveal",
       narr: t(E,
-        "First — split each window's checkups: outside + inside the window.",
-        "먼저 — 검진을 두 조각으로 나눠요: 창 밖 + 창 안."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 14, fontWeight: 700, color: "#0e7490", textAlign: "center", marginBottom: 10 }}>
-            ✂️ {t(E, "Checkups = outside + inside the window", "검진 수 = 창 밖 + 창 안")}
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 12 }}>
-            {[
-              { label: t(E, "outside", "창 밖"), c: "#e2e8f0", bd: "#cbd5e1", tc: "#475569", grow: 1 },
-              { label: t(E, "🔁 flip window [ l … r ]", "🔁 뒤집는 창 [ l … r ]"), c: "#cffafe", bd: "#22d3ee", tc: "#0e7490", grow: 2 },
-              { label: t(E, "outside", "창 밖"), c: "#e2e8f0", bd: "#cbd5e1", tc: "#475569", grow: 1 },
-            ].map((z, i) => (
-              <div key={i} style={{
-                flex: z.grow, background: z.c, border: `1.5px solid ${z.bd}`, borderRadius: 8,
-                padding: "12px 6px", textAlign: "center", fontSize: 12.5, fontWeight: 700, color: z.tc,
-              }}>{z.label}</div>
-            ))}
-          </div>
-          <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.75, wordBreak: "keep-all" }}>
-            <div><b style={{ color: "#475569" }}>{t(E, "OUTSIDE the window", "창 밖")}</b> — {t(E, "doesn't move. Easy: the cow already matches what that spot wants — same for every window, so count it once up front.", "안 움직여요. 쉬움: 소가 그 자리 원하는 종과 이미 같은지만 보면 돼요 — 어떤 창이든 똑같으니 미리 한 번 세두면 끝.")}</div>
-            <div style={{ marginTop: 8 }}><b style={{ color: "#0e7490" }}>{t(E, "INSIDE the window", "창 안")}</b> — {t(E, "the part that gets reversed, so it changes — this is the hard part. We'll crack it next.", "뒤집히는 부분이라 바뀌어요 — 여기가 핵심(어려운 부분). 다음에서 풀어요.")}</div>
-            <div style={{ marginTop: 10, textAlign: "center", padding: "9px 10px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8, fontWeight: 800, color: "#0e7490", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
-              {t(E, "checkups = (outside) + (inside)", "검진 수 = (창 밖) + (창 안)")}
-            </div>
-          </div>
-        </div>),
+        "So — how do we solve this? Let's think together.",
+        "그럼 어떻게 해결하면 될까요? 같이 생각해봐요."),
+      content: (<CheckupsWindowSplitSim E={E} />),
     },
 
     /* 3-1 — 안쪽(핵심) 규칙: 뒤집으면 자리 i ← 짝꿍(s−i), s 만 중요 — stepped 말풍선 시뮬. */
