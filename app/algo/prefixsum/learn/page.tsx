@@ -908,12 +908,12 @@ export default function PrefixSumPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-purple-50 pb-48">
+    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-purple-50 pb-48 md:pb-12">
       <Header />
 
-      <main className="max-w-2xl mx-auto px-4 pt-4">
-        {/* 헤더 + 진도 */}
-        <div className="mb-4">
+      <main className="max-w-5xl mx-auto px-4 pt-4 md:grid md:grid-cols-[16rem_1fr] md:gap-8 md:items-start">
+        {/* 왼쪽 rail: 제목 · 챕터 목록 · 진도 (데스크탑 고정) */}
+        <div className="mb-4 md:mb-0 md:sticky md:top-4">
           <JourneyBreadcrumb items={[
               { label: "알고리즘", labelEn: "Algorithms", href: "/algo", emoji: "🧩" },
               { label: "누적합", labelEn: "Prefix Sum", emoji: "📊" },
@@ -940,7 +940,7 @@ export default function PrefixSumPage() {
           )}
 
           {/* 챕터 칩 (탐색) + 목적지 칩 */}
-          <div className="flex flex-wrap items-center gap-1.5 mb-2">
+          <div className="flex flex-wrap items-center gap-1.5 mb-2 md:flex-col md:items-stretch">
             {CHAPTERS.map(ch => {
               const isDone = completedChapters.has(ch.id)
               const isCurrent = ch.id === current
@@ -951,7 +951,7 @@ export default function PrefixSumPage() {
                   onClick={() => goToChapter(ch.id)}
                   disabled={!canGo}
                   className={cn(
-                    "text-[11px] font-bold px-2 py-1 rounded-full border transition-all",
+                    "text-[11px] font-bold px-2 py-1 rounded-full border transition-all md:rounded-lg md:text-left md:px-3 md:py-1.5",
                     isCurrent && "bg-orange-500 border-orange-600 text-white shadow-md",
                     !isCurrent && isDone && "bg-green-100 border-green-400 text-green-800",
                     !isCurrent && !isDone && canGo && "bg-white border-gray-300 text-gray-600 hover:border-orange-400",
@@ -976,6 +976,9 @@ export default function PrefixSumPage() {
             {completedChapters.size} / {CHAPTERS.length} {t("챕터 완료", "chapters done")}
           </p>
         </div>
+
+        {/* 오른쪽: 읽기 영역 (데스크탑 2단의 넓은 본문) */}
+        <div className="md:min-w-0">
 
         {/* 챕터 헤더 — 우측 inline 언어 토글 */}
         <div className="mb-4 bg-white rounded-2xl border-2 border-gray-200 p-4 shadow-sm">
@@ -1039,6 +1042,7 @@ export default function PrefixSumPage() {
         )}
 
         {/* 페이지 레벨 이전/다음 챕터 버튼 제거 — 위 챕터 칩 + 슬라이드 nav 가 충분 */}
+        </div>{/* /읽기 영역 */}
       </main>
 
       <BottomNav />
