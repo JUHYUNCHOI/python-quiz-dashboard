@@ -147,7 +147,7 @@ export function makeReflectionCh1(E) {
         "브루트포스로는 시간 초과 — 더 똑똑한 방법이 필요해요."),
       content: (
         <div style={{ padding: 16, fontSize: 13, lineHeight: 1.65, color: C.text }}>
-          <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, color: A, marginBottom: 12 }}>
+          <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, color: "#0891b2", marginBottom: 12 }}>
             🐌 {t(E, "Brute force = time-limit exceeded", "브루트포스 = 시간 초과")}
           </div>
 
