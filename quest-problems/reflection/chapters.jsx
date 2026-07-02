@@ -50,39 +50,77 @@ export function makeReflectionCh1(E) {
           <div style={{ fontSize: 13, fontWeight: 600, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
             📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
-            <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#7c2d12", whiteSpace: "pre" }}>
-{`4 5
-..#.
-##.#
-####
-..##
-1 3
-2 3
-4 3
-4 4
-4 4`}
+          {(() => {
+            const mono = "'JetBrains Mono',monospace";
+            const chip = { fontFamily: mono, fontSize: 12, color: "#7c2d12", background: "#fffbeb", padding: "4px 8px", borderRadius: 4, whiteSpace: "pre", border: "1px solid #fde68a", display: "inline-block" };
+            const note = { fontSize: 11.5, color: "#92400e", lineHeight: 1.5, wordBreak: "keep-all", flex: 1 };
+            const outChip = { fontFamily: mono, fontSize: 12, color: "#166534", background: "#f0fdf4", padding: "3px 10px", borderRadius: 4, border: "1px solid #bbf7d0", minWidth: 30, textAlign: "center", fontWeight: 600 };
+            const outNote = { fontSize: 11.5, color: "#166534", lineHeight: 1.5, wordBreak: "keep-all", flex: 1 };
+            return (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 10, marginBottom: 10 }}>
+                {/* INPUT — labeled */}
+                <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: "#92400e", marginBottom: 8 }}>{t(E, "INPUT", "입력")}</div>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                    <div style={chip}>4 5</div>
+                    <div style={note}>
+                      💬 {t(E, <><b>N=4</b> (grid is 4×4), <b>U=5</b> (5 flips)</>, <><b>N=4</b> (그림 크기 4×4), <b>U=5</b> (뒤집기 5 번)</>)}
+                    </div>
+                  </div>
+
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 8 }}>
+                    <div style={chip}>{`..#.\n##.#\n####\n..##`}</div>
+                    <div style={note}>
+                      💬 {t(E, <>The picture — <b>N rows</b>. <code>#</code> = filled, <code>.</code> = empty</>, <>그림 — <b>N 줄</b>. <code>#</code> = 색칠, <code>.</code> = 빈 칸</>)}
+                    </div>
+                  </div>
+
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                    <div style={chip}>{`1 3\n2 3\n4 3\n4 4\n4 4`}</div>
+                    <div style={note}>
+                      💬 {t(E, <>Cells to flip <b>(r, c)</b> — <b>U rows</b>, in order</>, <>뒤집을 칸 <b>(r, c)</b> — <b>U 줄</b>, 순서대로</>)}
+                    </div>
+                  </div>
+                </div>
+
+                {/* OUTPUT — labeled */}
+                <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 8 }}>{t(E, "OUTPUT", "출력")}</div>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                    <div style={outChip}>4</div>
+                    <div style={outNote}>{t(E, "First answer (original grid)", "처음 답 (원래 그림)")}</div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                    <div style={outChip}>3</div>
+                    <div style={outNote}>{t(E, "After flipping (1, 3)", "(1, 3) 뒤집은 뒤")}</div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                    <div style={outChip}>2</div>
+                    <div style={outNote}>{t(E, "After flipping (2, 3)", "(2, 3) 뒤집은 뒤")}</div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                    <div style={outChip}>1</div>
+                    <div style={outNote}>{t(E, "After flipping (4, 3)", "(4, 3) 뒤집은 뒤")}</div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                    <div style={outChip}>0</div>
+                    <div style={outNote}>{t(E, <>After flipping (4, 4) — <b>symmetric!</b></>, <>(4, 4) 뒤집은 뒤 — <b>대칭 달성!</b></>)}</div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <div style={outChip}>1</div>
+                    <div style={outNote}>{t(E, "After flipping (4, 4) again — broken again", "(4, 4) 다시 뒤집은 뒤 — 다시 깨짐")}</div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.5, color: "#166534", whiteSpace: "pre" }}>
-{`4
-3
-2
-1
-0
-1`}
-              </div>
-            </div>
-          </div>
+            );
+          })()}
 
           <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.65, wordBreak: "keep-all" }}>
             {t(E,
-              "Input = the picture, then the cells to flip. Output = the first answer, then after each flip. Why the first answer is 4 — see it on the next picture 👇",
-              "입력 = 그림(첫 줄 N·U) + 바꿀 칸 (r, c) 들. 출력 = 처음 답 + 매번 바꾼 뒤 답. 처음 답이 왜 4인지는 — 바로 다음 그림으로 봐요 👇")}
+              "First 3 blocks in the input = N/U, the picture, the flips. Output = 1 answer per state (original + after each flip). Why 4? See the next picture 👇",
+              "입력 세 덩어리 = N·U / 그림 / 뒤집을 칸. 출력 = 상태마다 답 1 개 (처음 + 매번 뒤집은 뒤). 처음 답 4 인 이유는 다음 그림으로 봐요 👇")}
           </div>
           <div style={{ marginTop: 8, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
             📐 <b>{t(E, "Limits", "제약")}:</b>{" "}
