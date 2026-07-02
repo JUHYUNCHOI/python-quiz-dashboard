@@ -44,6 +44,12 @@ export function MexesSlider({ E }) {
 
   return (
     <div style={{ padding: 14 }}>
+      {/* 무엇을 하는 자리인지 안내 (선생님 2026-07-02: 뭐하는지 모르겠다) */}
+      <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 8, padding: "9px 13px", marginBottom: 14, fontSize: 12, color: "#1e40af", lineHeight: 1.55, wordBreak: "keep-all", textAlign: "center" }}>
+        👉 {t(E,
+          "Your turn — drag the “target mex” slider (and try the array buttons). Watch how “to add / to remove / min ops” change.",
+          "직접 해봐요 — 아래 ‘목표 mex’ 슬라이더를 드래그(위 배열 버튼도 바꿔보고). 그때마다 ‘추가해야 / 제거 / 최소 ops’ 가 어떻게 바뀌는지 봐요.")}
+      </div>
       <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
         {MEX_PRESETS.map((p, i) => (
           <button key={i} onClick={() => { setPi(i); setTarget(0); }}
