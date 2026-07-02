@@ -44,11 +44,11 @@ export function MexesSlider({ E }) {
 
   return (
     <div style={{ padding: 14 }}>
-      {/* 무엇을 하는 자리인지 안내 (선생님 2026-07-02: 뭐하는지 모르겠다) */}
+      {/* 무엇을 하는 자리인지 안내 (선생님 2026-07-02: 슬라이더 → 버튼으로 교체, 드래그 대신 클릭). */}
       <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 8, padding: "9px 13px", marginBottom: 14, fontSize: 12, color: "#1e40af", lineHeight: 1.55, wordBreak: "keep-all", textAlign: "center" }}>
         👉 {t(E,
-          "Your turn — drag the “target mex” slider (and try the array buttons). Watch how “to add / to remove / min ops” change.",
-          "직접 해봐요 — 아래 ‘목표 mex’ 슬라이더를 드래그(위 배열 버튼도 바꿔보고). 그때마다 ‘추가해야 / 제거 / 최소 ops’ 가 어떻게 바뀌는지 봐요.")}
+          "Your turn — click a “target mex” below (and try the array buttons too). Watch how “to add / to remove / min ops” change.",
+          "직접 해봐요 — 아래 ‘목표 mex’ 를 클릭해요 (위 배열 버튼도 바꿔보고). 그때마다 ‘추가해야 / 제거 / 최소 ops’ 가 어떻게 바뀌는지 봐요.")}
       </div>
       <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
         {MEX_PRESETS.map((p, i) => (
@@ -61,12 +61,21 @@ export function MexesSlider({ E }) {
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "auto 1fr auto", gap: "6px 12px", alignItems: "center", marginBottom: 14, fontSize: 12 }}>
-        <div style={{ fontWeight: 700, color: A, fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "target mex =", "목표 mex =")}</div>
-        <input type="range" min={0} max={N} value={safeTarget}
-          onChange={e => setTarget(Number(e.target.value))}
-          style={{ width: "100%" }} />
-        <div style={{ fontWeight: 600, color: A, minWidth: 24, textAlign: "right" }}>{safeTarget}</div>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14, flexWrap: "wrap", justifyContent: "center" }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: A, fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "target mex =", "목표 mex =")}</div>
+        <div style={{ display: "flex", gap: 6 }}>
+          {Array.from({ length: N + 1 }, (_, v) => (
+            <button key={v} onClick={() => setTarget(v)}
+              style={{
+                width: 34, height: 34, borderRadius: 8,
+                fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+                border: `1.5px solid ${safeTarget === v ? A : C.border}`,
+                background: safeTarget === v ? A : "#fff",
+                color: safeTarget === v ? "#fff" : C.text,
+                cursor: "pointer", transition: "all .15s",
+              }}>{v}</button>
+          ))}
+        </div>
       </div>
 
       {/* Array display */}

@@ -174,6 +174,17 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
     document.body.style.userSelect = "none"
   }
 
+  // 알고리즘 학습 링크: 앱이 '지금 코드/풀이 챕터인가'를 알려줌 (quest-algohint 이벤트).
+  //  null = 앱이 안 알림 → 기존 상단바 그대로.  true = 크게 표시.  false = 숨김.
+  // (선생님 2026-07-02: "코드/빠른풀이 챕터에서만 크게".) 미지원 quest 는 영향 없음.
+  const [algoHint, setAlgoHint] = useState<boolean | null>(null)
+  useEffect(() => {
+    const onHint = (e: Event) => setAlgoHint(!!(e as CustomEvent).detail?.show)
+    window.addEventListener("quest-algohint", onHint)
+    return () => window.removeEventListener("quest-algohint", onHint)
+  }, [])
+  useEffect(() => { setAlgoHint(null) }, [problemId])   // quest 바뀌면 초기화
+
   if (!lockChecked) return null
 
   // Sync synchronously so lazy-loaded App components initialize with correct lang
@@ -316,13 +327,17 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
       {(() => {
         const qa = questAlgo(problemId)
         if (!qa) return null
+        if (algoHint === false) return null   // 앱이 '지금은 문제/시도 챕터'라고 알림 → 숨김
+        const big = algoHint === true          // 코드/풀이 챕터 → 크게
         return (
           <Link
             href={`${qa.href}?from=quest`}
-            className="flex items-center gap-1.5 bg-violet-50 border-b border-violet-100 px-3 py-1.5 text-[11.5px] text-violet-700 hover:bg-violet-100 transition-colors"
+            className={big
+              ? "flex items-center justify-center gap-2 bg-violet-100 border-b-2 border-violet-300 px-3 py-2.5 text-sm font-bold text-violet-800 hover:bg-violet-200 transition-colors"
+              : "flex items-center gap-1.5 bg-violet-50 border-b border-violet-100 px-3 py-1.5 text-[11.5px] text-violet-700 hover:bg-violet-100 transition-colors"}
             title={t("이 문제에 쓰는 알고리즘 배우러 가기", "Go learn the algorithm this problem uses")}
           >
-            <span>🧠</span>
+            <span>{big ? "📘" : "🧠"}</span>
             <span>{t("이 문제 핵심", "Core idea")}: <b>{lang === "en" ? qa.en : qa.ko}</b> — {t("막히면 배우기", "stuck? learn it")} →</span>
           </Link>
         )

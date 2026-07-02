@@ -253,11 +253,13 @@ function _buildUpdateSteps(E) {
   let total = 0;
   for (let r = 0; r < N / 2; r++) for (let c = 0; c < N / 2; c++) total += cost(cntOf([[r, c], [r, N - 1 - c], [N - 1 - r, c], [N - 1 - r, N - 1 - c]]));
   const steps = [{
-    kind: "init", phase: "init", grid: grid.map(r => r.join("")), toggle: null, group: null, total, delta: null, prev: null,
+    kind: "init", phase: "init", fi: 0, grid: grid.map(r => r.join("")), toggle: null, group: null, total, delta: null, prev: null,
     bubble: t(E, `Find the first answer once: sum of each group's smaller side = ${total}. Now when a cell flips — only its ONE group changes.`,
                  `처음 답을 한 번만 구해요: 묶음마다 적은 쪽 합 = ${total}. 이제 칸이 바뀔 때마다 — 건드린 묶음 하나만 다시 보면 돼요.`),
   }];
+  let fi = 0;
   _UPDATES.forEach(([r1, c1]) => {
+    fi++;
     const r = r1 - 1, c = c1 - 1;
     const cells = [[r, c], [r, N - 1 - c], [N - 1 - r, c], [N - 1 - r, N - 1 - c]];
     const before = cntOf(cells), costB = cost(before);
@@ -265,7 +267,7 @@ function _buildUpdateSteps(E) {
     // ── 스텝 A: 바꾸기 직전 (옛 값 그대로, '이 칸 바꿀 거예요' 펄스) ──
     steps.push({
       kind: "upd", phase: "pre", grid: grid.map(rr => rr.join("")), toggle: [r, c], group: cells,
-      before, costB, total, delta: null, prev: null, wasPainted,
+      fi, before, costB, total, delta: null, prev: null, wasPainted,
       bubble: t(E,
         `About to flip (${r1}, ${c1})${wasPainted ? " (erase #)" : " (paint #)"}. Right now this group is #${before}, cost ${costB}. Press ▶.`,
         `(${r1}, ${c1}) 칸을 바꿀 거예요${wasPainted ? " (# 지우기)" : " (# 칠하기)"}. 지금 이 묶음은 #${before}, 비용 ${costB}. ▶ 눌러봐요.`),
@@ -276,7 +278,7 @@ function _buildUpdateSteps(E) {
     // ── 스텝 B: 바뀜 (새 값 + 펑! + 답 ±delta) ──
     steps.push({
       kind: "upd", phase: "post", grid: grid.map(rr => rr.join("")), toggle: [r, c], group: cells,
-      before, after, costB, costA, delta, total, prev,
+      fi, before, after, costB, costA, delta, total, prev,
       bubble: t(E,
         `Flipped! This group #${before}→${after}, cost ${costB}→${costA}. Answer ${prev} ${delta >= 0 ? "+" : "−"} ${Math.abs(delta)} = ${total}.`,
         `바뀌었어요! 이 묶음 #${before}→${after}, 비용 ${costB}→${costA}. 답 ${prev} ${delta >= 0 ? "+" : "−"} ${Math.abs(delta)} = ${total}.`),
@@ -289,6 +291,10 @@ export function ReflectionUpdateSim({ E }) {
   const steps = _buildUpdateSteps(E);
   const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length);
   const st = steps[Math.min(safe, steps.length - 1)];
+  // 답(최소 변경) 시퀀스: 처음 + 플립마다 = 4→3→2→1→0→1
+  const ansSeq = [steps[0].total, ...steps.filter(s => s.phase === "post").map(s => s.total)];
+  const tlShown = st.phase === "post" ? st.fi + 1 : (st.phase === "pre" ? st.fi : 1);
+  const tlCur = st.phase === "post" ? st.fi : (st.phase === "pre" ? st.fi - 1 : 0);
   const CELL = 44, GAP = 5;
   const W = RN * CELL + (RN - 1) * GAP;
   const inGroup = (r, c) => st.group && st.group.some(([a, b]) => a === r && b === c);
@@ -308,6 +314,27 @@ export function ReflectionUpdateSim({ E }) {
       `}</style>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: A, marginBottom: 10 }}>
         ⚡ {t(E, "Each flip changes ONE group → answer ±1", "한 번 바꿀 때마다 한 묶음만 → 답 ±1")}
+      </div>
+
+      {/* 답(최소 변경) 타임라인 — 플립마다 채워짐: 4→3→2→1→0→1 */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4, flexWrap: "wrap", marginBottom: 12 }}>
+        <span style={{ fontSize: 10.5, fontWeight: 700, color: C.dim, marginRight: 3, wordBreak: "keep-all" }}>{t(E, "min changes", "최소 변경")}</span>
+        {ansSeq.map((v, i) => {
+          const shown = i < tlShown, isCur = i === tlCur;
+          return (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              {i > 0 && <span style={{ color: shown ? A : "#cbd5e1", fontWeight: 800, fontSize: 12 }}>→</span>}
+              <div style={{
+                minWidth: 26, height: 26, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center",
+                fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 14,
+                background: isCur ? A : (shown ? "#ecfeff" : "#f8fafc"),
+                color: isCur ? "#fff" : (shown ? "#0e7490" : "#cbd5e1"),
+                border: `1.5px solid ${isCur ? A : (shown ? "#a5f3fc" : C.border)}`,
+                boxShadow: isCur ? "0 0 0 3px rgba(8,145,178,.2)" : "none", transition: "all .2s",
+              }}>{shown ? v : "·"}</div>
+            </div>
+          );
+        })}
       </div>
 
       {/* 말풍선 (꼬리는 그리드 컨테이너로) */}
