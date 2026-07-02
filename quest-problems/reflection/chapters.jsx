@@ -139,57 +139,79 @@ export function makeReflectionCh1(E) {
       content: (<ReflectionGroupSim E={E} />),
     },
 
-    /* 1-3 — Interactive grid simulator. (직접 아무 칸이나 토글) */
+    /* 1-3 — Brute force is too slow → smart approach (precompute + O(1) update) */
     {
       type: "reveal",
       narr: t(E,
-        "Try it yourself — toggle a cell.",
-        "직접 칸을 토글해봐요."),
-      content: (<ReflectionGrid E={E} />),
+        "Brute force takes too long — we need a smarter way.",
+        "브루트포스로는 시간 초과 — 더 똑똑한 방법이 필요해요."),
+      content: (
+        <div style={{ padding: 16, fontSize: 13, lineHeight: 1.65, color: C.text }}>
+          <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, color: A, marginBottom: 12 }}>
+            🐌 {t(E, "Brute force = time-limit exceeded", "브루트포스 = 시간 초과")}
+          </div>
+
+          {/* 🐌 Naive approach */}
+          <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 14px", marginBottom: 12, wordBreak: "keep-all" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#991b1b", marginBottom: 4 }}>
+              {t(E, "❌ Naive approach", "❌ 순진한 방법")}
+            </div>
+            <div style={{ fontSize: 12.5, color: "#7f1d1d" }}>
+              {t(E,
+                "For each of U flips, scan the whole grid and re-count every group.",
+                "매 번 뒤집을 때마다 전체 그리드를 훑어서 모든 묶음을 다시 세기.")}
+            </div>
+            <div style={{ marginTop: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#991b1b", background: "#fff", padding: "6px 10px", borderRadius: 6 }}>
+              U × O(N²) = 10⁵ × 2000² ≈ 4 × 10¹¹ {t(E, " ops → too slow!", " 연산 → 못 끝냄!")}
+            </div>
+          </div>
+
+          {/* 💡 Observation */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 14px", marginBottom: 12, wordBreak: "keep-all" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>
+              💡 {t(E, "Key observation", "핵심 관찰")}
+            </div>
+            <div style={{ fontSize: 12.5, color: "#78350f" }}>
+              {t(E,
+                <>Flipping one cell only affects <b>ONE mirror group</b> — the other groups don't change at all.</>,
+                <>한 칸을 뒤집으면 그 칸이 속한 <b>묶음 하나</b> 만 영향 받음 — 나머지 묶음은 그대로.</>)}
+            </div>
+          </div>
+
+          {/* ✅ Smart approach */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", marginBottom: 12, wordBreak: "keep-all" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", marginBottom: 6 }}>
+              ✅ {t(E, "Smart approach — precompute + delta updates", "똑똑한 방법 — 미리 계산 + 변화분만 갱신")}
+            </div>
+            <ol style={{ margin: 0, paddingLeft: 20, fontSize: 12.5, color: "#064e3b", lineHeight: 1.7 }}>
+              <li>{t(E,
+                <>Compute the initial answer ONCE by scanning all groups. <b>O(N²)</b></>,
+                <>처음 답을 한 번만 계산 — 모든 묶음 훑기. <b>O(N²)</b></>)}</li>
+              <li>{t(E,
+                <>For each flip: find that ONE group, recompute only its cost, adjust the total by ±1. <b>O(1)</b> per flip.</>,
+                <>각 뒤집기: 그 묶음 하나만 다시 세고 총합에서 ±1. 한 번당 <b>O(1)</b>.</>)}</li>
+            </ol>
+            <div style={{ marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#065f46", background: "#fff", padding: "6px 10px", borderRadius: 6 }}>
+              O(N² + U) ≈ 2000² + 10⁵ ≈ 4 × 10⁶ {t(E, " ops → fits comfortably", " 연산 → 여유롭게 통과")}
+            </div>
+          </div>
+
+          <div style={{ background: "#eef2ff", border: "1px dashed #a5b4fc", borderRadius: 8, padding: "8px 12px", fontSize: 11.5, color: "#3730a3", lineHeight: 1.6, wordBreak: "keep-all" }}>
+            📌 {t(E,
+              <>This pattern — <b>precompute once, then only touch what changes</b> — shows up all over competitive programming. See it in action on the next page 👇</>,
+              <>이 패턴 — <b>한 번 미리 계산 + 바뀐 부분만 갱신</b> — 은 대회 문제에서 자주 나와요. 다음 페이지에서 시뮬로 확인 👇</>)}
+          </div>
+        </div>
+      ),
     },
 
-    /* 1-3b — update 마다 그 묶음만 ±1 → 시뮬로 (선생님 2026-06-24: 처음 답 구하고 바꿀 때 +1/−1 다 보여줘) */
+    /* 1-4 — update 마다 그 묶음만 ±1 → 시뮬로 (알고리즘이 실제로 동작하는 모습) */
     {
       type: "reveal",
       narr: t(E,
-        "Each change touches one group → nudge the total ±1.",
-        "바꿀 때마다 묶음 하나만 → 총합 ±1."),
+        "Watch it in action — each flip nudges the total ±1.",
+        "알고리즘 동작 확인 — 매 뒤집기마다 총합 ±1."),
       content: (<ReflectionUpdateSim E={E} />),
-    },
-
-    /* 1-4 — Quiz: which cells form a group with (r, c)? */
-    {
-      type: "quiz",
-      narr: t(E,
-        "For N=6, cell (2, 5) belongs to a 4-cell group. Which 3 cells share the group?",
-        "N=6 일 때 칸 (2, 5) 는 어느 3 칸과 같은 그룹?"),
-      question: t(E,
-        "N=6, cell (2, 5)'s mirror twins are?",
-        "N=6, 칸 (2, 5) 의 거울 짝은?"),
-      options: [
-        "(2, 2), (5, 5), (5, 2)",
-        "(2, 1), (5, 5), (5, 1)",
-        "(5, 5), (2, 2), (1, 1)",
-      ],
-      correct: 0,
-      explain: t(E,
-        "Mirror across vertical center: c → N+1−c = 6+1−5 = 2 → (2, 2). Mirror across horizontal: r → N+1−r = 5 → (5, 5). Both: (5, 2). Group = {(2,5), (2,2), (5,5), (5,2)}.",
-        "세로 가운데로 거울: c → N+1−c = 6+1−5 = 2 → (2, 2). 가로 거울: r → N+1−r = 5 → (5, 5). 둘 다: (5, 2). 그룹 = {(2,5), (2,2), (5,5), (5,2)}."),
-    },
-
-    /* 1-5 — Input quiz: tiny case. */
-    {
-      type: "input",
-      narr: t(E,
-        "2×2 grid \"#.\" / \"..\".  N=2, so all 4 cells are ONE mirror group.  Count what's painted, decide min flips.",
-        "2×2 그리드 \"#.\" / \"..\". N=2 라 4 칸 모두 한 거울 그룹. 칠해진 거 세고 최소 뒤집기 정해."),
-      question: t(E,
-        "Min flips for 2×2 grid \"#.\" / \"..\"?",
-        "2×2 그리드 \"#.\" / \"..\" 의 최소 뒤집기?"),
-      hint: t(E,
-        "Either everyone in the group becomes '.' or everyone becomes '#'.  Pick the cheaper.",
-        "그룹 전체를 '.' 로 통일하거나 '#' 로 통일. 더 적게 뒤집는 쪽."),
-      answer: 1,
     },
   ];
 }
