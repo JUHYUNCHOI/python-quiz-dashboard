@@ -145,8 +145,10 @@ export function ReflectionGroupSim({ E }) {
   const CELL = 46, GAP = 5;
   const W = RN * CELL + (RN - 1) * GAP;
 
-  // 말풍선 꼬리 위치: 현재 묶음의 첫 칸 (top-left anchor) 열 중심으로
-  const focusCol = st.grp ? st.grp[0][1] : null;
+  // 말풍선 꼬리 위치: 뒤집힐 칸 쪽으로 (뒤집힐 게 없으면 묶음 anchor, 그룹 없으면 중앙)
+  const focusCol = (st.flip && st.flip.length > 0)
+    ? st.flip[0][1]
+    : (st.grp ? st.grp[0][1] : null);
   const tailX = focusCol !== null ? focusCol * (CELL + GAP) + CELL / 2 : W / 2;
   const bubbleColor = st.final ? "#6ee7b7" : "#fbbf24";
 
