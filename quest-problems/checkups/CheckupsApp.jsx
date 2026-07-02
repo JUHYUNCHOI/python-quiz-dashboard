@@ -46,6 +46,8 @@ export default function CheckupsApp(props = {}) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     try { window.localStorage.setItem(_posKey, JSON.stringify({ tab, si })); } catch {}
+    // 알고리즘 링크는 '빠른 풀이(2)/코드(3)' 챕터에서만 크게 (선생님 2026-07-02). 문제(0)/첫 시도(1)엔 숨김.
+    window.dispatchEvent(new CustomEvent("quest-algohint", { detail: { show: tab >= 2 } }));
   }, [tab, si, _posKey]);
 
   useEffect(() => {
