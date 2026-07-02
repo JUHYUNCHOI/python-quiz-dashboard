@@ -1319,6 +1319,92 @@ export function CheckupsKeyCodeSim({ E, lang = "py" }) {
 }
 
 /* ════════════════════════════════════════════════════════════════════
+   CheckupsWindowSplitSim — ch3 도입: 진짜 '창문'(문짝 2개)이 닫혔다 열리며
+   창 안만 뒤집히는 걸 보여주고 → 검진 = 창 밖 + 창 안 나누기로 착지.
+   (선생님 2026-07-02: "진짜 윈도우 그림 — 문 닫았다 열었다 느낌".
+    + 해결책 제시는 "그럼 어떻게 해결하면 될까? 생각해보자"로 시작.)
+   소는 transition 없음 — 뒤집기는 늘 닫힌 문 뒤에서 (열면 "짠!").
+   '어떻게' 움직이는지는 다음 슬라이드 MirrorSim 이 보여줌.
+   ════════════════════════════════════════════════════════════════════ */
+export function CheckupsWindowSplitSim({ E }) {
+  const wl = 2, wr = 5;
+  const steps = [
+    { closed: false, rev: 0, split: false, payoff: false,
+      bubble: t(E, "So — how do we solve this? Let's think together. FJ's flip range [2~5]... let's hang a REAL window on it.",
+                   "그럼 어떻게 해결하면 될까요? 같이 생각해봐요. FJ가 뒤집는 구간 [2~5]에 진짜 '창문'을 달아봤어요.") },
+    { closed: true, rev: 0, split: false, payoff: false,
+      bubble: t(E, "Close the window — behind the shutters, FJ flips the cows.",
+                   "창문을 닫아요 — 이 문 뒤에서 FJ가 소들을 뒤집어요.") },
+    { closed: false, rev: 2, split: false, payoff: false,
+      bubble: t(E, "Open it — ta-da! Inside the window the order is reversed. Outside (spots 1·6) was never covered — unchanged.",
+                   "창문을 열면 — 짠! 창 안은 순서가 반대예요. 창 밖(자리 1·6)은 문에 가려진 적도 없고, 그대로.") },
+    { closed: false, rev: 2, split: true, payoff: true,
+      bubble: t(E, "So split the count in two — checkups = outside + inside the window.",
+                   "그래서 검진을 두 조각으로 나눠요 — 검진 수 = 창 밖 + 창 안.") },
+  ];
+  const { idx, safe, setIdx, total } = useTraceStep(steps.length);
+  const st = steps[Math.min(safe, steps.length - 1)];
+  const TW = 44, STEP = 52, GAP = STEP - TW;
+  const gridW = 6 * STEP - GAP;
+  const ltr = tk => String.fromCharCode(64 + tk);
+  const H = TW + 16;                                          // 창틀 높이 (소 위아래 8px 여유)
+  const winLeft = (wl - 1) * STEP - 7, winW = (wr - wl + 1) * STEP - GAP + 14;
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#0e7490", marginBottom: 10 }}>
+        🪟 {t(E, "A real window — close it, open it", "진짜 창문 — 닫았다, 열었다")}
+      </div>
+      {/* 말풍선 (창이 중앙 고정이라 말풍선도 고정) */}
+      <div style={{ position: "relative", maxWidth: 470, margin: "0 auto 26px" }}>
+        <div style={{ background: st.payoff ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 12.5, color: st.payoff ? "#065f46" : "#92400e", lineHeight: 1.6, fontWeight: 600, wordBreak: "keep-all", textAlign: "left" }}>💬 {nbMath(st.bubble)}</div>
+        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}` }} />
+      </div>
+      {/* 소 줄 + 창문 */}
+      <div style={{ position: "relative", width: gridW, height: H, margin: "0 auto" }}>
+        {[1, 2, 3, 4, 5, 6].map(tk => {
+          const slot = st.rev ? _slotG(tk, wl, wr, 2) : tk - 1, sp = _SP[tk];
+          return (
+            <div key={tk} style={{ position: "absolute", top: 8, left: slot * STEP, width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 17, background: sp.bg, color: sp.tx, border: `1.5px solid ${sp.bd}`, zIndex: 1 }}>{ltr(tk)}</div>
+          );
+        })}
+        {/* 창틀 + 문짝 2개 */}
+        <div style={{ position: "absolute", top: 0, left: winLeft, width: winW, height: H, border: "3px solid #92400e", borderRadius: 10, zIndex: 2, overflow: "hidden", boxShadow: "0 2px 6px rgba(146,64,14,.25)" }}>
+          {/* 왼쪽 문짝 */}
+          <div style={{ position: "absolute", top: 0, left: 0, height: "100%", width: st.closed ? "50%" : "7%", background: "linear-gradient(90deg, #fbbf24, #f59e0b)", borderRight: "2px solid #92400e", transition: "width .55s cubic-bezier(.4,0,.2,1)", zIndex: 3 }}>
+            <div style={{ position: "absolute", top: "50%", right: 5, transform: "translateY(-50%)", width: 4, height: 13, borderRadius: 3, background: "#78350f" }} />
+          </div>
+          {/* 오른쪽 문짝 */}
+          <div style={{ position: "absolute", top: 0, right: 0, height: "100%", width: st.closed ? "50%" : "7%", background: "linear-gradient(270deg, #fbbf24, #f59e0b)", borderLeft: "2px solid #92400e", transition: "width .55s cubic-bezier(.4,0,.2,1)", zIndex: 3 }}>
+            <div style={{ position: "absolute", top: "50%", left: 5, transform: "translateY(-50%)", width: 4, height: 13, borderRadius: 3, background: "#78350f" }} />
+          </div>
+        </div>
+        {/* 창 라벨 */}
+        <div style={{ position: "absolute", top: -20, left: winLeft + winW / 2, transform: "translateX(-50%)", background: "#92400e", color: "#fff", fontSize: 9.5, fontWeight: 800, borderRadius: 6, padding: "1px 8px", whiteSpace: "nowrap", zIndex: 4 }}>🪟 {t(E, "flip window", "뒤집는 창")} {wl}~{wr}</div>
+      </div>
+      {/* 자리 번호 */}
+      <div style={{ display: "flex", gap: GAP, width: gridW, margin: "8px auto 0" }}>
+        {[1, 2, 3, 4, 5, 6].map(p => <div key={p} style={{ width: TW, textAlign: "center", fontSize: 9.5, color: p >= wl && p <= wr ? "#92400e" : C.dim, fontWeight: p >= wl && p <= wr ? 700 : 400 }}>{t(E, "spot", "자리")} {p}</div>)}
+      </div>
+      {/* 나누기 착지 (마지막 스텝만) — 빈 스텝엔 공간 안 잡음 (카드가 세로 가운데 정렬하므로 예약 불필요) */}
+      <div style={{ marginTop: st.split ? 14 : 0 }}>
+        {st.split && (
+          <div style={{ maxWidth: 470, margin: "0 auto" }}>
+            <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: "10px 13px", fontSize: 12, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+              <div><b style={{ color: "#475569" }}>{t(E, "OUTSIDE the window", "창 밖")}</b> — {t(E, "never moves → count it once up front. Easy.", "안 움직여요 → 미리 한 번 세두면 끝. 쉬움.")}</div>
+              <div><b style={{ color: "#0e7490" }}>{t(E, "INSIDE the window", "창 안")}</b> — {t(E, "gets reversed → this is the puzzle. We crack it next.", "뒤집혀서 바뀌어요 → 여기가 숙제. 다음에서 풀어요.")}</div>
+              <div style={{ marginTop: 8, textAlign: "center", padding: "8px 10px", background: "#fff", border: "1px dashed #67e8f9", borderRadius: 8, fontWeight: 800, color: "#0e7490", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+                {t(E, "checkups = (outside) + (inside)", "검진 수 = (창 밖) + (창 안)")}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      <SimNav idx={idx} total={total} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════
    CheckupsWindowRecapSim — ch4 도입 30초 복습: '창(window)' = FJ 가 골라
    통째로 뒤집는 구간. 창 안 = 뒤집히는 부분(순서 반대), 창 밖 = 그대로.
    (선생님 2026-07-02: prefix 시뮬 전에 창이 뭔지 + '창 안 = 뒤집을 부분' 짚기.)
