@@ -14,8 +14,8 @@ function _buildReflSteps(E) {
   const steps = [{
     grp: null, k: null, contrib: null, total: 0, final: false,
     bubble: t(E,
-      "Mirror symmetry = every group of 4 mirror cells is the SAME color. Per group, flip the cells whose color is in the minority — that's the fewest flips. (e.g. 3 '#' + 1 '·' → flip that 1 '·' → all '#')",
-      "거울 대칭 = 짝지어진 4칸이 모두 같은 색. 4칸 안에서 개수가 적은 색깔의 칸만 반대로 뒤집으면 최소 횟수예요. (예: # 3개 + · 1개 → · 하나만 # 로 뒤집으면 4칸 다 #)"),
+      "4-cell mirror groups must be ONE color. Flip only the minority color — that's the fewest.",
+      "묶음 4 칸이 다 같은 색이어야 대칭. 적은 쪽 색만 뒤집으면 최소예요."),
   }];
   let total = 0;
   for (let r = 0; r < RN / 2; r++) {
@@ -30,17 +30,17 @@ function _buildReflSteps(E) {
       steps.push({
         grp: cells, flip, k, contrib, total, final: false,
         bubble: same
-          ? t(E, `These 4 mirror cells: ${k} '#', ${4 - k} '·' → already all the same, nothing to flip! (+0)`,
-                `이 거울 짝 4칸: # ${k}개, · ${4 - k}개 → 이미 다 같아요, 바꿀 것 없음! (+0)`)
-          : t(E, `These 4: ${k} '#', ${4 - k} '·'. Make all '#'? ${4 - k} flips. All '·'? ${k} flips. Take the cheaper → ${contrib}. (+${contrib})`,
-                `이 4칸: # ${k}개, · ${4 - k}개. 다 #로 하면? ${4 - k}번. 다 ·로 하면? ${k}번. 적은 쪽 → ${contrib}번! (+${contrib})`),
+          ? t(E, `Already same color → +0`,
+                `이미 같은 색 → +0`)
+          : t(E, `Flip the minority (${contrib} cell${contrib === 1 ? "" : "s"}) → +${contrib}`,
+                `적은 쪽 ${contrib} 칸만 뒤집기 → +${contrib}`),
       });
     }
   }
   steps.push({
     grp: null, k: null, contrib: null, total, final: true,
-    bubble: t(E, `Add up every group: ${total} flips — that's the answer!`,
-                `묶음마다 더하면 ${total}번 — 이게 답이에요!`),
+    bubble: t(E, `Sum of all groups = ${total} — that's the answer!`,
+                `묶음마다 더하면 ${total} — 이게 답!`),
   });
   return steps;
 }
@@ -80,16 +80,30 @@ export function ReflectionRuleSim({ E }) {
   const isFocus = (r, c) => st.focus && st.focus[0] === r && st.focus[1] === c;
   const W = RN * CELL + (RN - 1) * GAP;
 
+  // 말풍선 꼬리 위치: 현재 focus 칸의 열 중심
+  const focusCol = st.focus ? st.focus[1] : null;
+  const tailX = focusCol !== null ? focusCol * (CELL + GAP) + CELL / 2 : W / 2;
+  const bubbleColor = st.done ? "#6ee7b7" : "#fbbf24";
+
   return (
     <div style={{ padding: 16 }}>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: A, marginBottom: 10 }}>
         🪞 {t(E, "The mirror rule — 4 cells move together", "거울 규칙 — 4칸이 같이 움직여요")}
       </div>
 
-      {/* 말풍선 */}
-      <div style={{ position: "relative", maxWidth: 460, margin: "0 auto 14px" }}>
-        <div style={{ background: st.done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.done ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.done ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word" }}>💬 {st.bubble}</div>
-        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.done ? "#6ee7b7" : "#fbbf24"}` }} />
+      {/* 말풍선 + 꼬리 (꼬리가 focus 칸 위치로 이동) */}
+      <div style={{ maxWidth: 460, margin: "0 auto 14px" }}>
+        <div style={{ background: st.done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bubbleColor}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.done ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word" }}>💬 {st.bubble}</div>
+        <div style={{ position: "relative", width: W, height: 9, margin: "0 auto" }}>
+          <div style={{
+            position: "absolute", left: tailX - 8, top: 0,
+            width: 0, height: 0,
+            borderLeft: "8px solid transparent",
+            borderRight: "8px solid transparent",
+            borderTop: `9px solid ${bubbleColor}`,
+            transition: "left .3s ease-out",
+          }} />
+        </div>
       </div>
 
       {/* 그리드 + 가운데 거울 선 */}
@@ -128,7 +142,13 @@ export function ReflectionGroupSim({ E }) {
   const st = steps[Math.min(safe, steps.length - 1)];
   const inGrp = (r, c) => st.grp && st.grp.some(([a, b]) => a === r && b === c);
   const isFlip = (r, c) => st.flip && st.flip.some(([a, b]) => a === r && b === c);  // 바뀌는(적은 쪽) 칸
-  const CELL = 46;
+  const CELL = 46, GAP = 5;
+  const W = RN * CELL + (RN - 1) * GAP;
+
+  // 말풍선 꼬리 위치: 현재 묶음의 첫 칸 (top-left anchor) 열 중심으로
+  const focusCol = st.grp ? st.grp[0][1] : null;
+  const tailX = focusCol !== null ? focusCol * (CELL + GAP) + CELL / 2 : W / 2;
+  const bubbleColor = st.final ? "#6ee7b7" : "#fbbf24";
 
   return (
     <div style={{ padding: 16 }}>
@@ -136,14 +156,23 @@ export function ReflectionGroupSim({ E }) {
         🪞 {t(E, "Minimum flips, one mirror-group at a time", "거울 짝 묶음마다 최소 뒤집기 세기")}
       </div>
 
-      {/* 말풍선 */}
-      <div style={{ position: "relative", maxWidth: 460, margin: "0 auto 14px" }}>
-        <div style={{ background: st.final ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.final ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.final ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word" }}>💬 {st.bubble}</div>
-        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.final ? "#6ee7b7" : "#fbbf24"}` }} />
+      {/* 말풍선 + 꼬리 (꼬리가 현재 묶음 위치로 이동) */}
+      <div style={{ maxWidth: 460, margin: "0 auto 14px" }}>
+        <div style={{ background: st.final ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bubbleColor}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.final ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word" }}>💬 {st.bubble}</div>
+        <div style={{ position: "relative", width: W, height: 9, margin: "0 auto" }}>
+          <div style={{
+            position: "absolute", left: tailX - 8, top: 0,
+            width: 0, height: 0,
+            borderLeft: "8px solid transparent",
+            borderRight: "8px solid transparent",
+            borderTop: `9px solid ${bubbleColor}`,
+            transition: "left .3s ease-out",
+          }} />
+        </div>
       </div>
 
       {/* 4×4 그리드 — 현재 묶음 4칸 주황 강조 */}
-      <div style={{ display: "grid", gridTemplateColumns: `repeat(${RN}, ${CELL}px)`, gap: 5, justifyContent: "center", marginBottom: 12 }}>
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${RN}, ${CELL}px)`, gap: GAP, justifyContent: "center", marginBottom: 12 }}>
         {RG.flatMap((row, r) => row.map((v, c) => {
           const hi = inGrp(r, c), painted = v === "#", flip = isFlip(r, c);
           return (
@@ -222,9 +251,14 @@ export function ReflectionUpdateSim({ E }) {
   const steps = _buildUpdateSteps(E);
   const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length);
   const st = steps[Math.min(safe, steps.length - 1)];
-  const CELL = 44;
+  const CELL = 44, GAP = 5;
+  const W = RN * CELL + (RN - 1) * GAP;
   const inGroup = (r, c) => st.group && st.group.some(([a, b]) => a === r && b === c);
   const isToggle = (r, c) => st.toggle && st.toggle[0] === r && st.toggle[1] === c;
+
+  // 말풍선 꼬리 위치: 뒤집힌 칸의 열 중심 (init 스텝은 중앙)
+  const focusCol = st.toggle ? st.toggle[1] : null;
+  const tailX = focusCol !== null ? focusCol * (CELL + GAP) + CELL / 2 : W / 2;
 
   return (
     <div style={{ padding: 16 }}>
@@ -232,12 +266,22 @@ export function ReflectionUpdateSim({ E }) {
         ⚡ {t(E, "Each flip changes ONE group → answer ±1", "한 번 바꿀 때마다 한 묶음만 → 답 ±1")}
       </div>
 
-      <div style={{ position: "relative", maxWidth: 470, margin: "0 auto 14px" }}>
+      {/* 말풍선 + 꼬리 (꼬리가 뒤집힌 칸 위치로 이동) */}
+      <div style={{ maxWidth: 470, margin: "0 auto 14px" }}>
         <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 12, padding: "11px 14px", fontSize: 12.5, color: "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word" }}>💬 {st.bubble}</div>
-        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: "9px solid #fbbf24" }} />
+        <div style={{ position: "relative", width: W, height: 9, margin: "0 auto" }}>
+          <div style={{
+            position: "absolute", left: tailX - 8, top: 0,
+            width: 0, height: 0,
+            borderLeft: "8px solid transparent",
+            borderRight: "8px solid transparent",
+            borderTop: "9px solid #fbbf24",
+            transition: "left .3s ease-out",
+          }} />
+        </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: `repeat(${RN}, ${CELL}px)`, gap: 5, justifyContent: "center", marginBottom: 12 }}>
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${RN}, ${CELL}px)`, gap: GAP, justifyContent: "center", marginBottom: 12 }}>
         {st.grid.flatMap((row, r) => row.split("").map((v, c) => {
           const painted = v === "#", grp = inGroup(r, c), tog = isToggle(r, c);
           return (
