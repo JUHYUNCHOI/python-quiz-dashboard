@@ -16,6 +16,7 @@ export const TOPIC_KO: Record<string, string> = {
   hashtable: "해시 (맵·집합)",
   prefixsum: "누적 합",
   priorityqueue: "우선순위 큐",
+  slidingwindow: "슬라이딩 윈도우",   // /algo/slidingwindow/learn 만 있음. QUEST_ALGO 에선 아직 미사용 (Checkups 는 prefixsum). 진짜 슬라이딩 윈도우 문제 나오면 매핑.
   recursion: "재귀",
   shortestpath: "최단 경로",
   sorting: "정렬",
@@ -57,6 +58,7 @@ export const TOPIC_EN: Record<string, string> = {
   bitmanipulation: "Bit Manipulation", divideconquer: "Divide & Conquer", dp: "Dynamic Programming",
   graph: "Graphs (BFS/DFS)", greedy: "Greedy", hashtable: "Hashing (map/set)", prefixsum: "Prefix Sums",
   priorityqueue: "Priority Queue", recursion: "Recursion", shortestpath: "Shortest Path",
+  slidingwindow: "Sliding Window",
   sorting: "Sorting", stackqueue: "Stack & Queue", string: "Strings", topologicalsort: "Topological Sort",
   tree: "Trees", trie: "Trie", unionfind: "Union-Find",
 };
