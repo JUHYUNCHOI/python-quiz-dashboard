@@ -32,7 +32,8 @@ export const TOPIC_KO: Record<string, string> = {
 export const QUEST_ALGO: Record<string, string> = {
   abcs: "sorting", acowdemia1: "binarysearch", aircond1: "prefixsum", alchemy: "recursion",
   astral: "greedy", bacteria: "prefixsum", bucketbrigade: "graph", bucketlist: "prefixsum",
-  buymilk: "recursion", checkups: "prefixsum", chipxchg: "binarysearch",
+  buymilk: "recursion", chipxchg: "binarysearch",
+  // checkups: 제거 — center-expansion(대칭 증분)은 표준 알고 토픽 아님 (선생님 2026-07-02).
   cowcollege: "sorting", cowtipping: "greedy", crossroad1: "hashtable", crossroad3: "sorting",
   explodingarrow: "graph", familytree: "tree", favperm2: "backtracking", feedcows: "greedy",
   innovation: "greedy", interview: "priorityqueue", lc1480: "prefixsum", lc3: "hashtable",
