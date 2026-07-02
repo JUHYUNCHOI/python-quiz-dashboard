@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getCheckupsSections, DiagonalSim, MatchUpToSim, DiagPrefixSim } from "./components";
-import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim, CheckupsReuseSim, CheckupsKeyCodeSim, CheckupsEnumSim, CheckupsFinalCodeSim, CheckupsWindowSplitSim, CheckupsWindowRecapSim, CheckupsOutPrefixSim, CheckupsInPrefixSim } from "./sims";
+import { CheckupsBruteRunner, CheckupsIntroSim, CheckupsMirrorSim, CheckupsGrowSim, CheckupsTrySim, CheckupsReuseSim, CheckupsKeyCodeSim, CheckupsEnumSim, CheckupsFinalCodeSim, CheckupsWindowSplitSim, CheckupsWindowRecapSim, CheckupsOutPrefixSim, CheckupsInPrefixSim, CheckupsExpandSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 
 // (예전 정적 시각화 헬퍼 SpeciesCell/CowRow/TreatedRow/PositionRow 는
@@ -286,125 +286,77 @@ export function makeCheckupsCh2(E, lang = "py") {
    three interactive sims. No walls of pseudo-code — the visuals carry it.
    ════════════════════════════════════════════════════════════════════ */
 export function makeCheckupsCh3(E, lang = "py") {
+  // center-expansion 풀이 (선생님 2026-07-02: prefix 걷어내고 이 방식으로 재구성).
+  // ① ExpandSim 한 방에 WHY(대칭→가운데 그대로)+HOW(두 끝만 −1/+1) → ② 능동 퀴즈 → ③ 결(O(N²)).
   return [
-    /* 3-0 — 큰 그림 먼저: 검진 = 창 밖 + 창 안. 정적 박스 → 진짜 '창문' 시뮬로 교체
-        (선생님 2026-07-02: "진짜 윈도우 그림 — 문 닫았다 열었다 느낌" + 풀이 도입은
-        "그럼 어떻게 해결하면 될까? 생각해보자"로 시작). */
+    /* 3-1 — 핵심 시뮬: center-expansion (왜 두 끝만, 어떻게 세나) */
     {
       type: "reveal",
       narr: t(E,
-        "So — how do we solve this? Let's think together.",
-        "그럼 어떻게 해결하면 될까요? 같이 생각해봐요."),
-      content: (<CheckupsWindowSplitSim E={E} />),
+        "The fast idea — reverse from a center and widen; only the two ends change. See why, then how.",
+        "빠른 아이디어 — 가운데에서 뒤집으며 넓히면 두 끝만 바뀐다. 왜 그런지, 어떻게 세는지 봐요."),
+      content: (<CheckupsExpandSim E={E} />),
     },
 
-    /* 3-1 — 안쪽(핵심) 규칙: 뒤집으면 자리 i ← 짝꿍(s−i), s 만 중요 — stepped 말풍선 시뮬. */
+    /* 3-2 — 능동 확인: '두 끝만 바뀐다'를 학생이 직접 확인 */
     {
-      type: "reveal",
-      narr: t(E,
-        "Outside is free (never moves). Now inside the window — flip it: how do the cows move?",
-        "창 밖은 공짜(안 변함). 이제 창 안 — 뒤집으면 소가 어떻게 움직이나?"),
-      content: (<CheckupsMirrorSim E={E} />),
+      type: "quiz",
+      narr: t(E, "Quick check — you widen the interval by one on each side.",
+                 "확인 — 뒤집는 구간을 양쪽으로 한 칸씩 넓혔어요."),
+      question: t(E,
+        "Widen a reversed interval [l,r] to [l-1, r+1]. Which spots' checkup can change?",
+        "뒤집는 구간 [l,r]을 [l-1, r+1]로 넓히면, 검진 여부가 바뀔 수 있는 자리는?"),
+      options: [
+        t(E, "Only the 2 new ends (l-1, r+1)", "새로 들어온 두 끝(l-1, r+1)만"),
+        t(E, "Everything inside [l-1, r+1]", "[l-1, r+1] 안 전부"),
+        t(E, "Only the middle", "가운데만"),
+        t(E, "Nothing changes", "아무것도 안 바뀜"),
+      ],
+      correct: 0,
+      explain: t(E,
+        "Reversing is symmetric, so the middle cows keep their spots. Only the two newly-added ends swap in — so only their checkup can change. That's why each widen is O(1).",
+        "뒤집기는 대칭이라 가운데 소는 자리 그대로. 새로 들어온 두 끝만 바뀌니, 그 두 자리 검진만 달라져요. 그래서 한 번 넓힐 때 O(1)."),
     },
 
-    /* 3-1a (GrowSim) 제거 — '같은 s → 안쪽 같다'를 TrySim ←원래자리 행이 더 명확히 증명하고,
-        Grow 의 '±로 키우기' 틀은 결론(s마다 한 번 세서 재사용)과 다른 틀이라 겉돎 (선생님 2026-06-24: 반복 제거·제대로 개편). */
-
-    /* 3-1b — 직접 구간을 골라 뒤집어 보는 탐색 (선생님 2026-06-23: '자리 3,4,5 뒤집을 때 보고 싶어').
-        s 가 다르면 안쪽 검진이 달라지는 걸 학생이 직접 확인 + ←원래자리 로 같은 s 재사용 증명. */
+    /* 3-3 — 결(payoff): brute O(N³) → center-expansion O(N²) */
     {
       type: "reveal",
-      narr: t(E,
-        "Now you try — pick a window, count outside + inside.",
-        "이제 직접 — 창 하나 골라 '창 밖 + 창 안'을 세 봐요."),
-      content: (<CheckupsTrySim E={E} />),
-    },
-
-    /* (3-2 DiagonalSim + 3-3 '대각선' 퀴즈 제거 — 거울 시뮬이 같은 'same-s 재사용'을 검진 세기로
-        이미 더 명확히 보여줌. 추상 반복 + '대각선' 용어 재등장이 오히려 헷갈렸음. 선생님 2026-06-22) */
-    /* 쪼개기(바깥+안쪽) 슬라이드는 맨 앞(3-0)으로 이동 (선생님 2026-06-23: 흐름 순서). */
-
-    /* 3-4·3-5 (OutPrefixSim·InPrefixSim) 제거 (선생님 2026-06-23: '시뮬이 너무 많다').
-        바깥-prefix 는 FastSim 바깥 칸이, 안쪽-prefix 는 GrowSim 의 ± 가 이미 보여주고,
-        실제 구현(prefix 배열)은 코드 챕터(⚡)가 한 줄씩 다룸 → 중복. 바로 통합 FastSim 으로. */
-
-    /* 3-1c — 재사용(직관만): 같은 s 면 안쪽 ✓ 자리가 똑같다 → s마다 한 번 세두면 재사용.
-        (선생님 2026-06-28: prefix '빼기' 계산은 추상적이라 코드 챕터로 — 여기선 '왜 재사용 되나'만.) */
-    {
-      type: "reveal",
-      narr: t(E,
-        "Recounting every time? For the same s, count the inside once — then reuse.",
-        "매번 다시 셌죠? 같은 s면 창 안은 한 번만 세고 재사용."),
-      content: (<CheckupsReuseSim E={E} />),
-    },
-
-    /* (3-5b FastSim 제거 — TrySim 합본이 '바깥 + 안쪽 = 총'을 이미 한 화면에서 stepped 로 함. 선생님 2026-06-28: 3·5 중복 합침.) */
-
-    /* 3-5c — 핵심을 코드로 살짝 (Py/C++ 토글) (선생님 2026-06-24: 안 바꾸고 index 비교 + 재사용을 코드로) */
-    {
-      type: "reveal",
-      narr: t(E,
-        "And in code we never even flip — the idea, as code.",
-        "게다가 코드에선 아예 안 뒤집어요 — 아이디어를 코드로."),
-      content: (<CheckupsKeyCodeSim E={E} lang={lang} />),
-    },
-
-    /* (3-5c2 FinalCodeSim 이동 → ch4 맨 끝. 선생님 2026-07-01: 완성코드 전체 실행은
-        '아이디어' 챕터가 아니라 코드 조각(6️⃣~9️⃣) 다 만든 뒤 '이제 돌려보자' 자리가 맞음.
-        여기 있으면 코드 챕터와 중복 + 아직 안 배운 코드를 통째로 먼저 보게 됨.) */
-
-    /* 3-5d — 결(payoff): 그래서 전체가 빨라졌다 + 분포 완성 (선생님 2026-06-24: '이게 설명 끝인가?' — 결론이 약함) */
-    {
-      type: "reveal",
-      narr: t(E,
-        "So — how much faster?",
-        "그래서 — 얼마나 빨라졌나?"),
+      narr: t(E, "So — how much faster?", "그래서 — 얼마나 빨라졌나?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: "#065f46", textAlign: "center", marginBottom: 12 }}>
             🚀 {t(E, "So how much faster?", "그래서 — 얼마나 빨라졌나")}
           </div>
 
-          {/* brute → fast 비교 */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
             <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px" }}>
               <div style={{ fontSize: 11.5, fontWeight: 800, color: "#991b1b", marginBottom: 5 }}>🐢 {t(E, "Brute", "브루트포스")}</div>
               <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.6, wordBreak: "keep-all" }}>
-                {t(E, "Window 1 = look at all N cells", "창 1개 = N칸 다 봄")}<br />
-                <span style={{ fontSize: 10.5, opacity: 0.85 }}>{t(E, "~N² windows × N cells", "창 ~N²개 × N칸")}</span><br />
+                {t(E, "Each interval = recount all N spots", "구간마다 = N칸 다시 셈")}<br />
+                <span style={{ fontSize: 10.5, opacity: 0.85 }}>{t(E, "~N² intervals × N", "구간 ~N²개 × N칸")}</span><br />
                 <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>O(N³)</code> → {t(E, "too slow", "느림")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 12px" }}>
-              <div style={{ fontSize: 11.5, fontWeight: 800, color: "#065f46", marginBottom: 5 }}>⚡ {t(E, "Fast", "빠른 풀이")}</div>
+              <div style={{ fontSize: 11.5, fontWeight: 800, color: "#065f46", marginBottom: 5 }}>⚡ {t(E, "Center-expansion", "가운데 넓히기")}</div>
               <div style={{ fontSize: 12, color: "#065f46", lineHeight: 1.6, wordBreak: "keep-all" }}>
-                {t(E, "Window 1 = outside + a few pairs (fixed)", "창 1개 = 창 밖 + 쌍 몇 개 (정해진 횟수)")}<br />
-                <span style={{ fontSize: 10.5, opacity: 0.85 }}>{t(E, "~N² windows × a few = O(1) each", "창 ~N²개 × 몇 번 = 창당 O(1)")}</span><br />
+                {t(E, "Widen from center = fix only 2 ends", "가운데서 넓히며 = 두 끝만 갱신")}<br />
+                <span style={{ fontSize: 10.5, opacity: 0.85 }}>{t(E, "each widen = O(1)", "한 번 넓힐 때 O(1)")}</span><br />
                 <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>O(N²)</code> → {t(E, "passes", "통과")}
               </div>
             </div>
           </div>
 
-          {/* O(1) 일상어 풀이 */}
-          <div style={{ background: "#fffbeb", border: "1px dashed #fbbf24", borderRadius: 10, padding: "9px 12px", marginBottom: 12, fontSize: 11.5, color: "#92400e", lineHeight: 1.6, textAlign: "center", wordBreak: "keep-all" }}>
-            💡 {t(E,
-              "O(1) per window = the work for one window stays a fixed few steps, no matter how big N is (it doesn't grow with the window).",
-              "창당 O(1) = 창 하나에 드는 일이 N 이 아무리 커도 *정해진 몇 번*으로 일정 (창이 커져도 안 늘어남).")}
-          </div>
-
-          {/* 분포 완성 — EnumSim 으로 회귀 */}
           <div style={{ background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 12, padding: "12px 14px", fontSize: 12.5, color: "#155e75", lineHeight: 1.7, wordBreak: "keep-all", textAlign: "center" }}>
             {t(E,
-              "We dropped one whole factor of N — exactly what we needed. Each window's checkup count goes into a tally box (just like the start), and that tally IS the answer.",
-              "N 한 겹을 통째로 덜어냈어요 — 딱 필요했던 거죠. 창마다 검진 수를 통에 넣으면 (맨 처음 그 통!), 그 통이 바로 답(분포)이에요.")}
+              "We never recount the middle — reversing is symmetric, so widening only swaps in two new ends. One whole factor of N gone. Each interval's checkup count goes into a tally box, and that tally is the answer.",
+              "가운데는 다시 안 세요 — 뒤집기가 대칭이라 넓혀도 두 끝만 새로 들어와요. N 한 겹이 통째로 사라져요. 구간마다 검진 수를 통(answer)에 넣으면, 그 통이 답이에요.")}
             <div style={{ marginTop: 8, fontWeight: 800, color: "#0e7490", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
-              {t(E, "every window → +1 to its box → output", "모든 창 → 통에 +1 → 출력")}
+              {t(E, "every interval → +1 to answer[checkups] → output", "모든 구간 → answer[검진수]에 +1 → 출력")}
             </div>
           </div>
         </div>),
     },
-
-    /* (3-6 입력 퀴즈 제거 — TrySim 합본이 '바깥 + 안쪽 = 총'을 직접 보여줘 군더더기. 선생님 2026-06-28.) */
   ];
 }
 
@@ -414,81 +366,177 @@ export function makeCheckupsCh3(E, lang = "py") {
    the idea recap, both prefixes, the combine loop, and the full program.
    ════════════════════════════════════════════════════════════════════ */
 export function makeCheckupsCh4(E, lang = "py") {
-  // Ch3 가 ⑤(아이디어)를 유도+시뮬로 이미 가르쳤으므로 Ch4 는 실제 코드 ⑥⑦⑧⑨ →
-  // 전체를 샘플에 돌려보는 실행 시뮬(FinalCodeSim) → 복잡도 확인.
-  // (전체 ⑤~⑨ 는 PDF 에 그대로 남아 있어 참고 가능.)
-  const smart = getCheckupsSections(E).slice(5);   // [6️⃣ matchUpTo, 7️⃣ insideUpTo, 8️⃣ combine, 9️⃣ full]
+  // center-expansion 코드 (선생님 검증). 코드 조각을 chapters.jsx 안에 인라인으로 정의 →
+  // CodeSectionView 로 렌더 (🔒 components.jsx 의 옛 prefix 코드는 안 건드림). 선생님 2026-07-02.
+  const sec = (label, color, py, cpp, why) => ({ label, color, py, cpp, why });
+
+  const secBase = sec(
+    t(E, "1️⃣ baseMatches — matches with no flip", "1️⃣ baseMatches — 안 뒤집었을 때 맞는 수"), "#0d9488",
+    ["N = int(input())",
+      "cow  = list(map(int, input().split()))",
+      "want = list(map(int, input().split()))",
+      "",
+      "# 아무것도 안 뒤집었을 때 맞는 자리 수 = 모든 구간의 출발점",
+      "baseMatches = sum(1 for i in range(N) if cow[i] == want[i])"],
+    ["int N; cin >> N;",
+      "vector<int> cow(N), want(N);",
+      "for (int &x : cow)  cin >> x;",
+      "for (int &x : want) cin >> x;",
+      "",
+      "// 안 뒤집었을 때 맞는 자리 수 = 출발점",
+      "int baseMatches = 0;",
+      "for (int i = 0; i < N; i++)",
+      "    if (cow[i] == want[i]) baseMatches++;"],
+    [t(E, "Every interval's checkup count starts from baseMatches (the no-flip matches).",
+        "모든 구간의 검진 수는 baseMatches(안 뒤집었을 때 맞는 수)에서 출발해요.")]
+  );
+
+  const secExpand = sec(
+    t(E, "2️⃣ expand — widen from a center, fix only 2 ends", "2️⃣ expand — 가운데서 넓히며 두 끝만 갱신"), "#15803d",
+    ["# 구간을 중심에서 양옆으로 넓히며, 새로 들어온 두 끝만 갱신",
+      "def expand(cow, want, answer, matches, left, right):",
+      "    N = len(cow)",
+      "    while left >= 0 and right < N:",
+      "        # 제자리로 맞던 것 빼고(−), 뒤집혀 새로 맞으면 더함(+)",
+      "        if cow[left]  == want[left]:  matches -= 1",
+      "        if cow[right] == want[right]: matches -= 1",
+      "        if cow[left]  == want[right]: matches += 1",
+      "        if cow[right] == want[left]:  matches += 1",
+      "        answer[matches] += 1",
+      "        left  -= 1",
+      "        right += 1"],
+    ["// 구간을 중심에서 넓히며 새로 들어온 두 끝만 갱신",
+      "void expand(const vector<int>& cow, const vector<int>& want,",
+      "            vector<int>& answer, int matches, int left, int right) {",
+      "    int N = cow.size();",
+      "    while (left >= 0 && right < N) {",
+      "        // 제자리로 맞던 것 빼고(−), 뒤집혀 새로 맞으면 더함(+)",
+      "        if (cow[left]  == want[left])  matches--;",
+      "        if (cow[right] == want[right]) matches--;",
+      "        if (cow[left]  == want[right]) matches++;",
+      "        if (cow[right] == want[left])  matches++;",
+      "        answer[matches]++;",
+      "        left--;",
+      "        right++;",
+      "    }",
+      "}"],
+    [t(E, "matches starts at baseMatches. Each widen touches only left,right: remove the old in-place match (−), add the new flipped match (+).",
+        "matches는 baseMatches에서 시작. 한 번 넓힐 때 left,right만: 원래 맞던 것 빼고(−), 뒤집혀 새로 맞으면 더함(+)."),
+     t(E, "answer[matches] += 1 records this interval's checkup count.",
+        "answer[matches] += 1 로 이 구간의 검진 수를 기록.")]
+  );
+
+  const secMain = sec(
+    t(E, "3️⃣ Run every center + print", "3️⃣ 모든 중심 돌기 + 출력"), "#0891b2",
+    ["answer = [0] * (N + 1)   # answer[k] = 검진 k 인 구간 개수",
+      "",
+      "# 모든 중심: 홀수 길이(i,i), 짝수 길이(i,i+1)",
+      "for i in range(N):",
+      "    expand(cow, want, answer, baseMatches, i, i)",
+      "    expand(cow, want, answer, baseMatches, i, i + 1)",
+      "",
+      "print('\\n'.join(map(str, answer)))"],
+    ["vector<int> answer(N + 1, 0);   // answer[k] = 검진 k 인 구간 개수",
+      "",
+      "// 모든 중심: 홀수 길이(i,i), 짝수 길이(i,i+1)",
+      "for (int i = 0; i < N; i++) {",
+      "    expand(cow, want, answer, baseMatches, i, i);",
+      "    expand(cow, want, answer, baseMatches, i, i + 1);",
+      "}",
+      "",
+      "for (int k = 0; k <= N; k++) cout << answer[k] << \"\\n\";"],
+    [t(E, "Odd center [i,i] = one spot (no flip). Even center [i,i+1] = two spots. Both for every i → every interval exactly once.",
+        "홀수 중심 [i,i]=한 칸(안 뒤집음). 짝수 중심 [i,i+1]=두 칸. i마다 둘 다 → 모든 구간 딱 한 번씩.")]
+  );
+
+  const secFull = sec(
+    t(E, "4️⃣ Full code", "4️⃣ 전체 코드"), "#15803d",
+    ["import sys",
+      "input = sys.stdin.readline",
+      "",
+      "def expand(cow, want, answer, matches, left, right):",
+      "    N = len(cow)",
+      "    while left >= 0 and right < N:",
+      "        if cow[left]  == want[left]:  matches -= 1",
+      "        if cow[right] == want[right]: matches -= 1",
+      "        if cow[left]  == want[right]: matches += 1",
+      "        if cow[right] == want[left]:  matches += 1",
+      "        answer[matches] += 1",
+      "        left  -= 1",
+      "        right += 1",
+      "",
+      "N = int(input())",
+      "cow  = list(map(int, input().split()))",
+      "want = list(map(int, input().split()))",
+      "",
+      "baseMatches = sum(1 for i in range(N) if cow[i] == want[i])",
+      "answer = [0] * (N + 1)",
+      "",
+      "for i in range(N):",
+      "    expand(cow, want, answer, baseMatches, i, i)",
+      "    expand(cow, want, answer, baseMatches, i, i + 1)",
+      "",
+      "print('\\n'.join(map(str, answer)))"],
+    ["#include <iostream>",
+      "#include <vector>",
+      "using namespace std;",
+      "",
+      "void expand(const vector<int>& cow, const vector<int>& want,",
+      "            vector<int>& answer, int matches, int left, int right) {",
+      "    int N = cow.size();",
+      "    while (left >= 0 && right < N) {",
+      "        if (cow[left]  == want[left])  matches--;",
+      "        if (cow[right] == want[right]) matches--;",
+      "        if (cow[left]  == want[right]) matches++;",
+      "        if (cow[right] == want[left])  matches++;",
+      "        answer[matches]++;",
+      "        left--;",
+      "        right++;",
+      "    }",
+      "}",
+      "",
+      "int main() {",
+      "    int N; cin >> N;",
+      "    vector<int> cow(N), want(N);",
+      "    for (int &x : cow)  cin >> x;",
+      "    for (int &x : want) cin >> x;",
+      "",
+      "    int baseMatches = 0;",
+      "    for (int i = 0; i < N; i++)",
+      "        if (cow[i] == want[i]) baseMatches++;",
+      "",
+      "    vector<int> answer(N + 1, 0);",
+      "    for (int i = 0; i < N; i++) {",
+      "        expand(cow, want, answer, baseMatches, i, i);",
+      "        expand(cow, want, answer, baseMatches, i, i + 1);",
+      "    }",
+      "",
+      "    for (int k = 0; k <= N; k++) cout << answer[k] << \"\\n\";",
+      "}"],
+    [t(E, "All pieces together. Each center's widen sum → O(N²) total.", "조각을 한 코드로. 중심마다 넓힌 길이 합 → O(N²).")]
+  );
+
   return [
-    /* 4-0 — 30초 복습: '창(window)' = 뒤집을 구간, 창 안 = 뒤집히는 부분 (선생님 2026-07-02:
-        prefix 시뮬 전에 창 알고리즘 간단 설명 + reverse할 부분이라는 것 짚기). */
-    {
-      type: "reveal",
-      narr: t(E,
-        "First, a 30-second recap — what was the 'window'?",
-        "먼저 30초 복습 — '창'이 뭐였죠?"),
-      content: (<CheckupsWindowRecapSim E={E} />),
-    },
-    /* 4-pre바깥 — 코드 전에 '바깥=prefix 빼기 두 번' 을 시뮬로 먼저 이해 (선생님 2026-07-01:
-        '이해가 안 되는데 코드 먼저는 이상'. matchUpTo 코드 앞에 OutPrefixSim). */
-    {
-      type: "reveal",
-      narr: t(E,
-        "✓ outside the window, fast: two subtractions on a prefix — see it first, then the code.",
-        "창 밖 검진 빨리 세기 — 미리 적어두고 빼기 두 번. 먼저 보고, 그다음 코드."),
-      content: (<CheckupsOutPrefixSim E={E} />),
-    },
-    /* 바깥 코드 (방금 시뮬로 이해한 걸 코드로) */
-    {
-      type: "reveal",
-      narr: t(E, "Outside the window: build matchUpTo once.", "창 밖 검진: matchUpTo 미리 한 번."),
-      content: (<CodeSectionView section={smart[0]} lang={lang} E={E} />),
-    },
-    /* 안쪽: 코드 전에 'prefix 빼기 한 번' 을 시뮬로 먼저 이해 (선생님 2026-07-01). */
-    {
-      type: "reveal",
-      narr: t(E,
-        "✓ inside the window, fast: one subtraction per same-s window — see it first, then the code.",
-        "창 안 검진 빨리 세기 — s 같은 창마다 빼기 한 번. 먼저 보고, 그다음 코드."),
-      content: (<CheckupsInPrefixSim E={E} />),
-    },
-    /* 안쪽 코드 */
-    {
-      type: "reveal",
-      narr: t(E, "Inside the window: count once per same-s window (insideUpTo).", "창 안 검진: s 같은 창마다 한 번 (insideUpTo)."),
-      content: (<CodeSectionView section={smart[1]} lang={lang} E={E} />),
-    },
-    /* 합치기 코드 */
-    {
-      type: "reveal",
-      narr: t(E, "Combine the two, then print.", "둘을 합쳐서 출력."),
-      content: (<CodeSectionView section={smart[2]} lang={lang} E={E} />),
-    },
-    /* 전체 코드 */
-    {
-      type: "reveal",
-      narr: t(E, "All pieces in one program.", "조각들을 한 코드로."),
-      content: (<CodeSectionView section={smart[3]} lang={lang} E={E} />),
-    },
-    /* 4-run — 조각을 다 만들었으니, 전체 코드를 샘플에 한 줄씩 돌려보기 (구 3-5c2 이동. 선생님 2026-07-01) */
-    {
-      type: "reveal",
-      narr: t(E,
-        "All pieces built — now run the whole thing on the sample, line by line.",
-        "조각 다 만들었으니 — 이제 전체를 샘플에 한 줄씩 돌려보자."),
-      content: (<CheckupsFinalCodeSim E={E} />),
-    },
-    /* 4-끝 — 마무리 확인 (능동): 빠른 풀이의 복잡도 = 이 챕터의 보상 */
+    { type: "reveal", narr: t(E, "First — the starting count (no flip).", "먼저 — 출발점(안 뒤집은 검진 수)."),
+      content: (<CodeSectionView section={secBase} lang={lang} E={E} />) },
+    { type: "reveal", narr: t(E, "The heart: expand — touch only the two ends.", "핵심: expand — 두 끝만 건드림."),
+      content: (<CodeSectionView section={secExpand} lang={lang} E={E} />) },
+    { type: "reveal", narr: t(E, "Run every center, then print.", "모든 중심 돌고, 출력."),
+      content: (<CodeSectionView section={secMain} lang={lang} E={E} />) },
+    { type: "reveal", narr: t(E, "All pieces in one program.", "조각들을 한 코드로."),
+      content: (<CodeSectionView section={secFull} lang={lang} E={E} />) },
+    /* 마무리 확인 — 복잡도 */
     {
       type: "quiz",
-      narr: t(E, "Last check — why is this finally fast enough?", "마지막 확인 — 왜 이제 충분히 빠를까요?"),
+      narr: t(E, "Last check — why is this fast enough?", "마지막 확인 — 왜 이제 충분히 빠를까요?"),
       question: t(E,
-        "Brute was O(N³) (hours at N = 7500).  What is this smart solution's total time?",
-        "brute 는 O(N³) (N = 7500 에서 몇 시간).  이 빠른 풀이의 전체 복잡도는?"),
+        "Brute was O(N³) (hours at N = 7500). What is center-expansion's total time?",
+        "brute 는 O(N³) (N = 7500 에서 몇 시간). center-expansion 의 전체 복잡도는?"),
       options: ["O(N)", "O(N²)", "O(N³)", "O(2ᴺ)"],
       correct: 1,
       explain: t(E,
-        "Each (l, r) is now O(1) — just two prefix lookups — and there are about N² pairs → O(N²).  At N = 7500 that's ~5·10⁷ ops, fast enough.",
-        "이제 (l, r) 마다 O(1) — prefix 조회 두 번뿐 — 이고 쌍이 약 N² 개 → O(N²). N = 7500 이면 약 5·10⁷ 연산, 충분히 빨라요."),
+        "Each widen step is O(1) (two ends), and a center widens up to N/2 times. Over all ~N centers → about N² steps → O(N²). Fast enough for N = 7500.",
+        "한 번 넓히는 건 O(1)(두 끝), 한 중심은 최대 N/2 번 넓혀요. 중심 ~N개 합치면 약 N²번 → O(N²). N = 7500 도 충분."),
     },
   ];
 }

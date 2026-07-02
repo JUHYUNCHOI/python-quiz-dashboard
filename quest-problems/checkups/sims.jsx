@@ -1319,6 +1319,184 @@ export function CheckupsKeyCodeSim({ E, lang = "py" }) {
 }
 
 /* ════════════════════════════════════════════════════════════════════
+   CheckupsExpandSim — center-expansion 풀이(선생님 검증 코드)의 핵심 시뮬.
+   가운데에서 뒤집는 구간을 한 칸씩 넓히며 '새로 들어온 두 끝'만 −1/+1 로 갱신 →
+   각 구간 검진 수를 O(1)에 구하고 answer 에 집계. (선생님 2026-07-02: prefix → center-expansion 교체.)
+   예: cow=[2,1,3,1], want=[1,2,3,1] (0-indexed). 중심 (1,2) → (0,3) 상세 추적.
+   ════════════════════════════════════════════════════════════════════ */
+const _EX_COW = [2, 1, 3, 1];
+const _EX_WANT = [1, 2, 3, 1];
+const _EX_ANS = [1, 3, 5, 0, 1];   // 이 예시의 최종 answer (코드가 만드는 값)
+
+// rev = 현재 구간을 뒤집었을 때의 소 배열. 초록 = want 와 같은 자리(검진). matches = 초록 개수.
+// 핵심: 구간을 넓혀도 '가운데'는 rev 값이 그대로 → 두 끝만 다시 세면 됨 (선생님 2026-07-02).
+function _buildExpandSteps(E) {
+  return [
+    /* ── HOW 준비: 출발점 ── */
+    { rev: [2, 1, 3, 1], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
+      bubble: t(E, "No flip — a spot is a checkup when the cow equals want. Now spots 2,3 match → 2. Every interval starts from this 2.",
+                   "안 뒤집으면 — want와 같은 자리 = 검진. 지금 자리 2,3 맞음 → 2. 모든 구간은 이 2에서 출발.") },
+    /* ── WHY ①: 뒤집기 = 가운데 기준 대칭 스왑 ── */
+    { rev: [2, 3, 1, 1], win: [1, 2], changed: [1, 2], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
+      bubble: t(E, "Reversing an interval = ends swap cows, symmetric about the center. Flip [1,2] → spots 1,2 swap (1↔3). Reversed = 2 3 1 1.",
+                   "구간 뒤집기 = 가운데 기준 대칭으로 양 끝끼리 소가 자리 바꿈. [1,2] 뒤집으면 자리 1↔2 바뀜 → 뒤집힌 소 = 2 3 1 1.") },
+    { rev: [2, 3, 1, 1], win: [1, 2], changed: [], pending: [], same: [], focus: null, delta: {}, tally: 1, done: false, payoff: false,
+      bubble: t(E, "vs want → only spot 3 matches. checkups = 1 → answer[1] += 1.",
+                   "want랑 비교 → 자리 3만 맞음. 검진 = 1 → answer[1]에 한 표.") },
+    /* ── WHY ②: 넓혀도 '가운데'는 제자리 (대칭이라) → 두 끝만 새로 ── */
+    { rev: [2, 3, 1, 1], win: [0, 3], changed: [], pending: [0, 3], same: [1, 2], focus: null, delta: {}, tally: null, done: false, payoff: false,
+      bubble: t(E, "Widen to [0,3]. WHY does expand work? Reversing is symmetric — widen both sides equally and the MIDDLE cows keep their spots (1,2 still 3,1!). Only the 2 new ends (0,3) change.",
+                   "넓혀서 [0,3]. expand가 왜 되냐면 — 뒤집기가 대칭이라, 양쪽을 똑같이 넓혀도 가운데 소는 자리 그대로 (자리 1,2 여전히 3,1!). 새 양 끝(0,3)만 바뀜.") },
+    /* ── HOW: 두 끝만 −1/+1 ── */
+    { rev: [1, 3, 1, 1], win: [0, 3], changed: [0], pending: [3], same: [1, 2], focus: 0, delta: { 0: "+1" }, tally: null, done: false, payoff: false,
+      bubble: t(E, "So just fix the 2 ends. Spot 0: was 2 (≠1). Flipped, cow[3]=1 comes = want 1 → +1. matches = 1+1 = 2.",
+                   "그러니 두 끝만 고치면 돼요. 자리 0: 전엔 2 (≠1). 뒤집혀 cow[3]=1 와서 =want 1 → +1. matches = 1+1 = 2.") },
+    { rev: [1, 3, 1, 2], win: [0, 3], changed: [3], pending: [], same: [1, 2], focus: 3, delta: { 3: "−1" }, tally: null, done: false, payoff: false,
+      bubble: t(E, "Spot 3: was 1 (=1, matched). Flipped, cow[0]=2 comes ≠ want 1 → −1. matches = 2−1 = 1.",
+                   "자리 3: 전엔 1 (=1, 맞았음). 뒤집혀 cow[0]=2 와서 ≠want 1 → −1. matches = 2−1 = 1.") },
+    { rev: [1, 3, 1, 2], win: [0, 3], changed: [], pending: [], same: [], focus: null, delta: {}, tally: 1, done: false, payoff: false,
+      bubble: t(E, "checkups = 1 → answer[1] += 1. We touched only the 2 ends — never recounted the middle. THAT'S why expand is fast.",
+                   "검진 = 1 → answer[1]에 또 한 표. 두 끝만 건드리고 가운데는 안 셌죠 — 이게 expand가 빠른 이유예요.") },
+    /* ── 모든 구간 덮기 ── */
+    { rev: [2, 1, 3, 1], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false, centers: true,
+      bubble: t(E, "Two center kinds: even ([i,i+1]) and odd ([i,i] = one spot, no flip). Run both for every i → every interval exactly once.",
+                   "중심 두 종류: 짝수([i,i+1])와 홀수([i,i]=한 칸, 안 뒤집음). i마다 둘 다 돌리면 모든 구간을 딱 한 번씩.") },
+    { rev: [2, 1, 3, 1], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: true, payoff: true,
+      bubble: t(E, "Every center → widen, touch only 2 ends. O(N²) total. (Full run in the code next.)",
+                   "모든 중심 → 넓히며 두 끝만. 합쳐서 O(N²). (전부 돌려보는 건 다음 코드에서!) 🚀") },
+  ];
+}
+
+export function CheckupsExpandSim({ E }) {
+  const steps = _buildExpandSteps(E);
+  const { idx, safe, setIdx, total } = useTraceStep(steps.length);
+  const st = steps[Math.min(safe, steps.length - 1)];
+  const TW = 48, STEP = 60, GAP = STEP - TW, LAB = 96;
+  const [L, R] = st.win || [-1, -1];
+  const hasWin = !!st.win;
+  const isGreen = p => st.rev[p] === _EX_WANT[p];   // 뒤집힌 소가 want 와 같음 = 검진
+  const matches = [0, 1, 2, 3].reduce((a, p) => a + (isGreen(p) ? 1 : 0), 0);
+  const showMatches = !st.done && !st.centers;
+
+  const GRIDW = LAB + 8 + 4 * STEP - GAP;
+  const cellCenter = i => LAB + 8 + i * STEP + TW / 2;
+  const anchorCol = st.focus != null ? st.focus
+    : st.pending.length ? (st.pending[0] + st.pending[st.pending.length - 1]) / 2
+    : hasWin ? (L + R) / 2 : 1.5;
+  const anchorX = cellCenter(anchorCol);
+  const BW = 348;
+  const bubbleLeft = Math.max(2, Math.min(GRIDW - BW - 2, anchorX - BW / 2));
+  const tailLeft = Math.max(12, Math.min(BW - 28, anchorX - bubbleLeft - 8));
+
+  const rowWrap = (label, color, node) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+      <div style={{ width: LAB, textAlign: "right", fontSize: 11, fontWeight: 700, color, fontFamily: "'JetBrains Mono',monospace", wordBreak: "keep-all" }}>{label}</div>
+      {node}
+    </div>
+  );
+
+  // 🐮 원래 소 — 참고용, 흐릿
+  const cowCell = (p) => (
+    <div key={p} style={{ width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16, background: "#f8fafc", color: "#94a3b8", border: "1.5px solid #eef2f6" }}>{_EX_COW[p]}</div>
+  );
+  // 🔄 뒤집힌 소 — 핵심. 초록=검진(want와 같음). pending=곧 바뀜(점선), changed=방금 바뀜, focus=±delta.
+  const revCell = (p) => {
+    const green = isGreen(p);
+    const foc = st.focus === p;
+    const chg = st.changed.includes(p);
+    const pend = st.pending.includes(p);
+    const sm = st.same.includes(p);   // 넓혀도 그대로인 가운데
+    const dl = st.delta[p];
+    const plus = dl === "+1";
+    const bd = foc ? (plus ? "#22c55e" : "#f87171") : pend ? "#fb923c" : sm ? "#10b981" : chg ? "#0891b2" : green ? "#86efac" : "#e2e8f0";
+    return (
+      <div key={p} style={{ position: "relative" }}>
+        <div style={{ width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 18,
+          background: green ? "#dcfce7" : "#fff", color: green ? "#15803d" : "#7f1d1d",
+          border: `${(foc || pend || chg || sm) ? 2.5 : 1.5}px ${(pend || sm) ? "dashed" : "solid"} ${bd}`,
+          boxShadow: foc ? `0 0 0 3px ${plus ? "rgba(34,197,94,.18)" : "rgba(248,113,113,.18)"}` : "none", transition: "all .25s" }}>{st.rev[p]}</div>
+        {foc && dl && <span style={{ position: "absolute", top: -10, right: -6, fontSize: 11.5, fontWeight: 900, padding: "0 5px", borderRadius: 6, background: plus ? "#16a34a" : "#dc2626", color: "#fff", fontFamily: "'JetBrains Mono',monospace", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }}>{dl}</span>}
+        {sm && !foc && <span style={{ position: "absolute", top: -9, left: "50%", transform: "translateX(-50%)", fontSize: 8, fontWeight: 800, padding: "0 4px", borderRadius: 5, background: "#10b981", color: "#fff", whiteSpace: "nowrap", boxShadow: "0 1px 2px rgba(0,0,0,.18)" }}>{t(E, "same", "그대로")}</span>}
+      </div>
+    );
+  };
+  // 📋 want — 참고
+  const wantCell = (p) => (
+    <div key={p} style={{ width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16, background: "#eff6ff", color: "#1e40af", border: "1.5px solid #bfdbfe" }}>{_EX_WANT[p]}</div>
+  );
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#0e7490", marginBottom: 3 }}>
+        📊 {t(E, "Widen from the center — the middle stays, only the two ends change", "가운데에서 넓히며 — 가운데는 그대로, 두 끝만 바뀜")}
+      </div>
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10, fontFamily: "'JetBrains Mono',monospace" }}>
+        cow = [2,1,3,1]　want = [1,2,3,1]
+      </div>
+
+      {/* 말풍선 */}
+      <div style={{ position: "relative", width: GRIDW, height: 92, margin: "0 auto 4px" }}>
+        <div style={{ position: "absolute", bottom: 8, left: bubbleLeft, width: BW, background: st.payoff ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "10px 13px", fontSize: 12.5, color: st.payoff ? "#065f46" : "#92400e", lineHeight: 1.5, fontWeight: 600, wordBreak: "keep-all", textAlign: "left", boxShadow: "0 2px 8px rgba(0,0,0,.07)", transition: "left .38s cubic-bezier(.4,0,.2,1)" }}>
+          💬 {nbMath(st.bubble)}
+          <div style={{ position: "absolute", bottom: -9, left: tailLeft, width: 0, height: 0, borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, transition: "left .38s cubic-bezier(.4,0,.2,1)" }} />
+        </div>
+      </div>
+
+      <div style={{ width: "fit-content", margin: "0 auto" }}>
+        {/* 뒤집는 구간 브래킷 */}
+        {rowWrap("", "#0e7490",
+          <div style={{ position: "relative", height: 16, width: 4 * STEP - GAP }}>
+            {hasWin && <div style={{ position: "absolute", top: 2, left: L * STEP, width: (R - L + 1) * STEP - GAP, height: 12, borderRadius: 6, border: "2px solid #0891b2", borderBottom: "none", transition: "left .4s cubic-bezier(.4,0,.2,1), width .4s cubic-bezier(.4,0,.2,1)" }} />}
+            {hasWin && <div style={{ position: "absolute", top: -3, left: L * STEP + ((R - L + 1) * STEP - GAP) / 2, transform: "translateX(-50%)", fontSize: 9.5, fontWeight: 800, color: "#0891b2", whiteSpace: "nowrap", transition: "left .4s cubic-bezier(.4,0,.2,1)" }}>{t(E, "flip", "뒤집기")} [{L},{R}]</div>}
+          </div>
+        )}
+        {rowWrap(t(E, "🐮 cow (orig)", "🐮 원래 소"), "#94a3b8",
+          <div style={{ display: "flex", gap: GAP }}>{[0, 1, 2, 3].map(cowCell)}</div>
+        )}
+        {rowWrap(t(E, "🔄 flipped", "🔄 뒤집힌 소"), "#15803d",
+          <div style={{ display: "flex", gap: GAP }}>{[0, 1, 2, 3].map(revCell)}</div>
+        )}
+        {rowWrap("📋 want", "#1e40af",
+          <div style={{ display: "flex", gap: GAP }}>{[0, 1, 2, 3].map(wantCell)}</div>
+        )}
+        {rowWrap("", C.dim,
+          <div style={{ display: "flex", gap: GAP }}>{[0, 1, 2, 3].map(p => <div key={p} style={{ width: TW, textAlign: "center", fontSize: 9.5, color: C.dim }}>{t(E, "spot", "자리")} {p}</div>)}</div>
+        )}
+      </div>
+
+      {/* matches 카운터 + tally */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 14, marginTop: 10, flexWrap: "wrap" }}>
+        {showMatches && (
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: "#0e7490", background: "#ecfeff", border: "1.5px solid #67e8f9", borderRadius: 10, padding: "5px 14px" }}>
+            {t(E, "matches (green)", "검진 수 = 초록")} = {matches}
+          </div>
+        )}
+        {st.tally != null && (
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: "#15803d", background: "#dcfce7", border: "1.5px solid #86efac", borderRadius: 10, padding: "5px 12px" }}>
+            answer[{st.tally}] += 1
+          </div>
+        )}
+      </div>
+
+      {/* 최종 출력 (done 스텝) — 코드가 만드는 값 */}
+      {st.done && (
+        <div style={{ margin: "12px auto 0", width: "fit-content", textAlign: "center" }}>
+          <div style={{ fontSize: 10.5, color: C.dim, marginBottom: 4, fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "final output (from the code)", "최종 출력 (코드가 만듦)")}</div>
+          <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+            {_EX_ANS.map((v, k) => (
+              <div key={k} style={{ width: 40, height: 40, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 16, background: "#f0fdf4", border: "1.5px solid #86efac", color: "#15803d" }}>{v}</div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div style={{ height: 12 }} />
+      <SimNav idx={idx} total={total} onIdx={setIdx} accent="#0891b2" showLabels isEn={E} />
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════
    CheckupsWindowSplitSim — ch3 도입: 진짜 '창문'(문짝 2개)이 닫혔다 열리며
    창 안만 뒤집히는 걸 보여주고 → 검진 = 창 밖 + 창 안 나누기로 착지.
    (선생님 2026-07-02: "진짜 윈도우 그림 — 문 닫았다 열었다 느낌".
@@ -1478,34 +1656,52 @@ const _PF = (() => { const p = []; let s = 0; for (let i = 0; i < 6; i++) { s +=
 const _POL = 2, _POR = 5;           // 예시 윈도우 [2,5]
 
 function _buildOutPrefixSteps(E) {
-  // 용어: '바깥' 단독 ❌ → '창 밖 ✓' (선생님 2026-07-02: "바깥 안쪽 용어 이상해").
-  // 두 번째 창은 [3~5] — [1,4]는 앞부분이 아예 없어(0) 오히려 헷갈렸음.
-  return [
-    { showPre: false, l: 0, r: 0, hl: null, focus: null, payoff: false,
-      bubble: t(E, "Cows outside the FLIP window never move — spot i is ✓ if a[i] = b[i]. Same for every window you pick.",
-                   "뒤집는 창 밖의 소는 안 움직여요 — 제자리 그대로라 a[i] = b[i]면 ✓. 어떤 창을 골라도 이 ✓는 똑같아요.") },
-    { showPre: true, l: 0, r: 0, hl: null, focus: null, payoff: false,
-      bubble: t(E, "So write '✓ up to here' ONCE — a prefix. Then any window reads its outside by subtracting.",
-                   "그러니 '여기까지 ✓ 몇 개'를 한 번만 적어둬요 (prefix). 이제 어떤 창이든 빼기로 바로 읽어요.") },
-    { showPre: true, l: 2, r: 5, hl: "out", focus: null, payoff: false,
-      bubble: t(E, "Say the flip window is [2~5]. Its outside ✓ = front part + back part.",
-                   "뒤집는 창이 [2~5]라면 — 창 밖 ✓ = 앞부분 + 뒷부분.") },
-    { showPre: true, l: 2, r: 5, hl: "out", focus: "before", payoff: false,
-      bubble: t(E, "Front (before the window): read it straight off the table — '1 up to spot 1'.",
-                   "앞부분(창 앞): 표에서 바로 읽어요 — '자리 1까지 1개'.") },
-    { showPre: true, l: 2, r: 5, hl: "out", focus: "after", payoff: false,
-      bubble: t(E, "Back (after spot 5): '4 up to 6' minus '3 up to 5' → 4 − 3 = 1!",
-                   "뒷부분(자리 5 뒤): '6까지 4개'에서 '5까지 3개'를 빼면 → 4 − 3 = 1개!") },
-    { showPre: true, l: 2, r: 5, hl: "out", focus: "both", payoff: false,
-      bubble: t(E, "This window's outside ✓ = 1 + 1 = 2. Just two lookups!",
-                   "이 창의 '창 밖 ✓' = 1 + 1 = 2개. 조회 딱 두 번!") },
-    { showPre: true, l: 3, r: 5, hl: "out", focus: null, payoff: false,
-      bubble: t(E, "And we must try every window — next, [3~5]. The table stays the same!",
-                   "창은 이거 하나가 아니죠 — 다음 창 [3~5]. 표는 그대로예요!") },
-    { showPre: true, l: 3, r: 5, hl: "out", focus: "both", payoff: true,
-      bubble: t(E, "Front '1 up to 2' + back '4 − 3 = 1' → outside ✓ = 2. Two subtractions per window! 🚀",
-                   "앞 '자리 2까지 1개' + 뒤 '4 − 3 = 1개' → 창 밖 ✓ = 2개. 창마다 빼기 두 번! 🚀") },
+  // 용어: '창 밖 ✓'. 선생님 2026-07-02: "이해가 안 되니 스텝을 버리지 마 — 한 칸씩 다."
+  // → 표를 자리 1..6 한 칸씩 세며 채우고(built/cntAt), 창은 앞부분·뒷부분·합을 각 스텝으로.
+  const CK = _PFCK, PF = _PF;   // 제자리 맞나(1/0), 여기까지 누적 [1,1,2,3,3,4]
+  const steps = [
+    { built: 0, cntAt: 0, l: 0, r: 0, hl: null, focus: null, payoff: false,
+      bubble: t(E, "Cows OUTSIDE the flip window never move — a spot is ✓ if it already matches. Let's count '✓ up to here' from the left, one spot at a time.",
+                   "뒤집는 창 밖 소는 안 움직여요 — 제자리라 원하는 종과 같으면 ✓. 왼쪽부터 '여기까지 ✓'를 한 칸씩 세볼게요.") },
   ];
+  for (let k = 1; k <= 6; k++) {
+    const v = CK[k - 1], p = PF[k - 1], pv = k > 1 ? PF[k - 2] : 0;
+    steps.push({ built: k, cntAt: k, l: 0, r: 0, hl: null, focus: null, payoff: false,
+      bubble: v
+        ? t(E, `Spot ${k}: matches in place → ✓. '✓ up to here' = ${pv}+1 = ${p}.`,
+              `자리 ${k}: 제자리 그대로 원하는 종과 같음 → ✓. '여기까지 ✓' = ${pv}+1 = ${p}.`)
+        : t(E, `Spot ${k}: doesn't match → ✗. '✓ up to here' stays ${p}.`,
+              `자리 ${k}: 원하는 종과 다름 → ✗. '여기까지 ✓' = 그대로 ${p}.`) });
+  }
+  steps.push({ built: 6, cntAt: 0, l: 0, r: 0, hl: null, focus: null, payoff: false,
+    bubble: t(E, "Done — one table [1,1,2,3,3,4]. Now ANY window reads its outside by subtracting.",
+                 "다 적었어요 — 표 하나 [1,1,2,3,3,4]. 이제 어떤 창이든 빼기로 창 밖을 읽어요.") });
+  // 창 사용: 소개 → 앞부분 → 뒷부분 → 합, 각각 한 스텝씩.
+  const useWin = (l, r, intro, sumPayoff) => {
+    const front = l >= 2 ? PF[l - 2] : 0, back = PF[5] - PF[r - 1];
+    if (intro) steps.push({ built: 6, cntAt: 0, l, r, hl: "out", focus: null, payoff: false,
+      bubble: t(E, `Flip window [${l}~${r}]. Its outside ✓ = FRONT (before) + BACK (after).`,
+                   `뒤집는 창 [${l}~${r}]. 창 밖 ✓ = 앞부분(창 앞) + 뒷부분(창 뒤).`) });
+    steps.push({ built: 6, cntAt: 0, l, r, hl: "out", focus: "before", payoff: false,
+      bubble: t(E, `Front (before spot ${l}): read straight off — 'up to spot ${l - 1}' = ${front}.`,
+                   `앞부분(자리 ${l} 앞): 표에서 바로 — '자리 ${l - 1}까지' = ${front}개.`) });
+    steps.push({ built: 6, cntAt: 0, l, r, hl: "out", focus: "after", payoff: false,
+      bubble: t(E, `Back (after spot ${r}): 'up to 6' − 'up to ${r}' = ${PF[5]} − ${PF[r - 1]} = ${back}.`,
+                   `뒷부분(자리 ${r} 뒤): '자리 6까지 ${PF[5]}개' − '자리 ${r}까지 ${PF[r - 1]}개' = ${back}개.`) });
+    steps.push({ built: 6, cntAt: 0, l, r, hl: "out", focus: "both", payoff: sumPayoff,
+      bubble: sumPayoff
+        ? t(E, `Outside ✓ = ${front} + ${back} = ${front + back}. Two subtractions per window! 🚀`,
+              `창 밖 ✓ = ${front} + ${back} = ${front + back}개. 창마다 빼기 두 번! 🚀`)
+        : t(E, `So this window's outside ✓ = ${front} + ${back} = ${front + back}.`,
+              `그래서 이 창의 창 밖 ✓ = ${front} + ${back} = ${front + back}개.`) });
+  };
+  useWin(2, 5, true, false);
+  // 두 번째 창 [3~5] 로 점프하지 않는다 (선생님 2026-07-02: "또 갑자기 3-5?").
+  // 재사용은 말로만 짚고, '모든 창 순회'는 전체 코드(FinalCodeSim)로 넘긴다.
+  steps.push({ built: 6, cntAt: 0, l: 2, r: 5, hl: "out", focus: "both", payoff: true,
+    bubble: t(E, "The table was made ONCE — so ANY window's outside is just two lookups here. (Looping over every window comes next, in the code.) 🚀",
+                 "표는 딱 한 번 만들었죠 — 그래서 어떤 창이든 창 밖은 여기서 조회 두 번이면 끝. (창을 전부 도는 건 다음 코드에서!) 🚀") });
+  return steps;
 }
 
 export function CheckupsOutPrefixSim({ E }) {
@@ -1524,7 +1720,8 @@ export function CheckupsOutPrefixSim({ E }) {
   // 말풍선을 이번 스텝이 가리키는 칸으로 이동 (선생님 2026-07-01: '해당 곳으로 생동감 있게 이동').
   const GRIDW = LAB + 8 + 6 * STEP - GAP;                 // 격자 전체 너비
   const cellCenter = i => LAB + 8 + i * STEP + TW / 2;    // 칸 i 의 가로 중심
-  const anchorCol = !hasWin ? 2.5
+  const anchorCol = st.cntAt ? st.cntAt - 1                // 세는 중 → 그 칸
+    : !hasWin ? 2.5
     : st.focus === "before" ? L - 2                       // 앞부분 → prefix[L-1] 칸
     : st.focus === "after" ? (R - 1 + 5) / 2              // 뒷부분 → 창 끝~자리6 사이
     : (L + R) / 2 - 1;                                    // 창 중앙
@@ -1558,15 +1755,16 @@ export function CheckupsOutPrefixSim({ E }) {
             {hasWin && <div style={{ position: "absolute", top: -4, left: (L - 1) * STEP - 4, width: (R - L + 1) * STEP - GAP + 8, height: TW + 8, borderRadius: 11, background: "#ecfeff", border: "1.5px dashed #67e8f9", zIndex: 0, transition: "left .4s cubic-bezier(.4,0,.2,1), width .4s cubic-bezier(.4,0,.2,1)" }} />}
             {_PFCK.map((v, k) => {
               const p = k + 1, out = st.hl === "out" && isOut(p), dim = inWin(p);
-              return <div key={k} style={{ position: "relative", zIndex: 1, width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 800, opacity: dim ? 0.5 : 1, background: v ? (dim ? "#f1f5f9" : "#dcfce7") : "#f8fafc", color: v ? (dim ? "#cbd5e1" : "#15803d") : "#cbd5e1", border: `${out ? 2.5 : 1.5}px solid ${out ? "#ea580c" : (v && !dim ? "#86efac" : "#e2e8f0")}`, boxShadow: out ? "0 0 0 3px rgba(234,88,12,.15)" : "none", transition: "all .2s" }}>{v ? "✓" : "—"}</div>;
+              const revealed = p <= (st.built ?? 6), cnt = st.cntAt === p;
+              return <div key={k} style={{ position: "relative", zIndex: 1, width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 800, opacity: dim ? 0.5 : 1, background: !revealed ? "#f8fafc" : v ? (dim ? "#f1f5f9" : (cnt ? "#bbf7d0" : "#dcfce7")) : (cnt ? "#fee2e2" : "#f8fafc"), color: !revealed ? "#cbd5e1" : v ? (dim ? "#cbd5e1" : "#15803d") : (cnt ? "#f87171" : "#cbd5e1"), border: `${(out || cnt) ? 2.5 : 1.5}px solid ${cnt ? (v ? "#22c55e" : "#f87171") : out ? "#ea580c" : (revealed && v && !dim ? "#86efac" : "#e2e8f0")}`, boxShadow: out ? "0 0 0 3px rgba(234,88,12,.15)" : cnt ? "0 0 0 3px rgba(34,197,94,.15)" : "none", transition: "all .2s" }}>{!revealed ? "·" : (v ? "✓" : "—")}</div>;
             })}
           </div>
         )}
         {rowWrap(t(E, "📊 ✓ up to here", "📊 여기까지 ✓"), "#0891b2",
           <div style={{ display: "flex", gap: GAP }}>
             {_PF.map((v, k) => {
-              const m = k + 1, hot = st.showPre && preHot(m);
-              return <div key={k} style={{ width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 17, fontWeight: 700, background: hot ? "#cffafe" : (st.showPre ? "#fff" : "#f8fafc"), color: st.showPre ? "#0e7490" : "#cbd5e1", border: `${hot ? 2.5 : 1.5}px solid ${hot ? "#0891b2" : "#e2e8f0"}`, opacity: st.showPre ? 1 : 0.4, transition: "all .2s" }}>{st.showPre ? v : "·"}</div>;
+              const m = k + 1, revealed = m <= (st.built ?? 6), sub = preHot(m), cnt = st.cntAt === m, hot = sub || cnt;
+              return <div key={k} style={{ width: TW, height: TW, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 17, fontWeight: 700, background: sub ? "#cffafe" : cnt ? "#d1fae5" : (revealed ? "#fff" : "#f8fafc"), color: revealed ? "#0e7490" : "#cbd5e1", border: `${hot ? 2.5 : 1.5}px solid ${sub ? "#0891b2" : cnt ? "#10b981" : "#e2e8f0"}`, opacity: revealed ? 1 : 0.4, transition: "all .2s" }}>{revealed ? v : "·"}</div>;
             })}
           </div>
         )}
@@ -1629,8 +1827,8 @@ function _buildInPrefixSteps(E) {
                    `창 [${l},${r}]: 안쪽 = insideUpTo[${r}] − insideUpTo[${l - 1}] = ${_IN_PREF[r]} − ${_IN_PREF[l - 1]} = ${val}. 빼기 한 번!`) });
   };
   useWin(1, 4, false);
-  useWin(2, 3, false);
-  // inside → 결과: 창 밖과 더해 그 창의 총 검진 → 답[총검진]++ (선생님 2026-07-02: "inside가 어떻게 결과에 영향?")
+  // 두 번째 창 [2,3] 로 점프하지 않는다 (선생님 2026-07-02: "또 갑자기 3-5?" — 같은 결).
+  // inside → 결과: 창 밖과 더해 그 창의 총 검진 → 답[총검진]++ ("모든 창이 이렇게"는 말로).
   steps.push({ countTo: N, showPre: true, kHot: 0, win: null, sub: false, mode: "tally", payoff: true,
     bubble: t(E, `This 'inside' is one window's inside-✓. Add its outside-✓ → that window's TOTAL checkups → tally answer[total] += 1. Every window does this → the final answer.`,
                  `이 'inside'는 그 창의 '창 안 ✓'예요. 여기에 '창 밖 ✓'를 더하면 그 창의 총 검진 수 → 답[총검진]에 1표. 모든 창이 이렇게 한 표씩 → 답 완성!`) });
