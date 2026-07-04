@@ -6,6 +6,7 @@ import type { User } from "@supabase/supabase-js"
 import type { Profile } from "@/lib/supabase/types"
 import { migrateLocalStorageToSupabase, syncCompletionsToSupabase } from "@/lib/supabase/migrate-local-data"
 import { restoreFromCloud } from "@/lib/supabase/restore-from-cloud"
+import { healReviewProgressOnce } from "@/lib/supabase/heal-review-progress"
 
 interface AuthContextType {
   user: User | null
@@ -146,6 +147,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
           // 로그인 시 양방향 동기화 (순차 실행: 업로드 완료 후 복원)
           if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
+            // 🩹 일회성 자가 치유: '가짜 0점 복습완료' 정리 (선생님 2026-07-04).
+            //    반드시 migrate/restore 보다 *먼저* — 안 그러면 오염된 localStorage 가 다시 업로드됨.
+            await healReviewProgressOnce(currentUser.id)
+
             const lastUserId = localStorage.getItem("last-user-id")
             const isSameUser = lastUserId === currentUser.id
             const isFirstLogin = lastUserId === null  // 이 기기에서 처음 로그인 (로그인 전 공부한 데이터 있을 수 있음)
