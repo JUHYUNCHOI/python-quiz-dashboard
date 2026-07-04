@@ -272,16 +272,16 @@ print(20)   # Middle of a line → short note attached to that line.
         {
           id: "quiz2",
           type: "quiz",
-          title: "❓ `print('100')` vs `print(100)` — difference?",
-          content: "What is the difference between `print('100')` and `print(100)`?",
+          title: "❓ Calculating inside print()?",
+          content: "What appears when you run `print(20 - 7)`?",
           options: [
-            "No difference",
-            "'100' is text, 100 is a number",
-            "'100' causes an error",
-            "100 causes an error"
+            "13",
+            "20 - 7",
+            "27",
+            "error"
           ],
-          answer: 1,
-          explanation: "With quotes it's a string, without quotes it's a number!"
+          answer: 0,
+          explanation: "The calculation inside print() runs first, so only the result 13 appears."
         }
       ]
     },

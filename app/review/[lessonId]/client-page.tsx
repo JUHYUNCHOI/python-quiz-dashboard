@@ -318,10 +318,18 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   }, [router])
 
   // 결과 화면 표시 시 완료 저장
-  // 1) 이번 세션에서 풀었으면 → 점수 + 창고 저장 + XP 보상
-  // 2) 이전에 풀어서 자동 결과 뜬 경우 → 저장된 데이터로 점수만 채워주기 (기존 학생 호환)
+  // ⚠️ '복습완료'는 채점 스텝을 **전부** 푼 경우에만 저장한다.
+  //    extractReviewSteps 는 채점 대상 스텝만 담으므로 reviewSteps.length = 풀어야 할 문제 수,
+  //    completedSteps.size = 실제로 푼 수. 예전엔 문제 1개만 풀고 결과 화면에 닿아도 markQuizComplete 가
+  //    불려서 '모두 복습완료 + 0점' 으로 박히던 버그가 있었음 → 부분 풀이는 완료 저장 안 함(진행 중 유지,
+  //    다시 풀 수 있게). (선생님 2026-07-04)
+  // 1) 이번 세션에서 다 풀었으면 → 점수 + 창고 저장 + XP 보상
+  // 2) 이전에 다 풀어서 자동 결과 뜬 경우 → 저장된 데이터로 점수만 채워주기 (기존 학생 호환)
   useEffect(() => {
     if (!showResults) return
+    // 채점 스텝을 전부 풀지 않았으면 완료로 저장하지 않는다 (다시 풀 수 있게 '진행 중' 유지)
+    const allAnswered = reviewSteps.length > 0 && completedSteps.size >= reviewSteps.length
+    if (!allAnswered) return
     const pct = totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0
     if (sessionAttempts > 0) {
       // 이번에 풀었음 — 점수 + 창고 저장
@@ -341,7 +349,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
         }
       } catch {}
     }
-  }, [showResults, totalAttempted, correctCount, lessonId, sessionAttempts, wrongSteps, addDirectXp])
+  }, [showResults, totalAttempted, correctCount, lessonId, sessionAttempts, wrongSteps, addDirectXp, completedSteps, reviewSteps.length])
 
   if (authLoading || !user) return null
 
