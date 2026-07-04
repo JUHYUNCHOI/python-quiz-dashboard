@@ -1322,48 +1322,63 @@ export function CheckupsKeyCodeSim({ E, lang = "py" }) {
    CheckupsExpandSim — center-expansion 풀이(선생님 검증 코드)의 핵심 시뮬.
    가운데에서 뒤집는 구간을 한 칸씩 넓히며 '새로 들어온 두 끝'만 −1/+1 로 갱신 →
    각 구간 검진 수를 O(1)에 구하고 answer 에 집계. (선생님 2026-07-02: prefix → center-expansion 교체.)
-   예: cow=[2,1,3,1], want=[1,2,3,1] (0-indexed). 중심 (1,2) → (0,3) 상세 추적.
+   예: cow=[1,2,3,4,5,6], want=[6,5,4,3,5,1] (0-indexed, 6칸 — 선생님 2026-07-03: 4칸은 너무 적다).
+   중심 [2,3] → [1,4] → [0,5] 로 '두 번' 넓히며 추적: 첫 넓힘=한 끝 +1·다른 끝 −1, 둘째=+1·+1.
+   → '한 칸씩 넓히기'가 반복되는 걸 눈으로 보여줌 (N=4는 한 번만 넓혀져서 안 와닿았음).
    ════════════════════════════════════════════════════════════════════ */
-const _EX_COW = [2, 1, 3, 1];
-const _EX_WANT = [1, 2, 3, 1];
-const _EX_ANS = [1, 3, 5, 0, 1];   // 이 예시의 최종 answer (코드가 만드는 값)
+const _EX_COW = [1, 2, 3, 4, 5, 6];
+const _EX_WANT = [6, 5, 4, 3, 5, 1];
+const _EX_ANS = [6, 12, 0, 2, 0, 1, 0];   // 이 예시의 최종 answer (코드가 만드는 값)
 
 // rev = 현재 구간을 뒤집었을 때의 소 배열. 초록 = want 와 같은 자리(검진). matches = 초록 개수.
 // 핵심: 구간을 넓혀도 '가운데'는 rev 값이 그대로 → 두 끝만 다시 세면 됨 (선생님 2026-07-02).
 function _buildExpandSteps(E) {
   return [
-    /* ── HOW 준비: 출발점 ── */
-    { rev: [2, 1, 3, 1], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
-      bubble: t(E, "No flip — a spot is a checkup when the cow equals want. Now spots 2,3 match → 2. Every interval starts from this 2.",
-                   "안 뒤집으면 — want와 같은 자리 = 검진. 지금 자리 2,3 맞음 → 2. 모든 구간은 이 2에서 출발.") },
-    /* ── WHY ①: 뒤집기 = 가운데 기준 대칭 스왑 ── */
-    { rev: [2, 3, 1, 1], win: [1, 2], changed: [1, 2], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
-      bubble: t(E, "Reversing an interval = ends swap cows, symmetric about the center. Flip [1,2] → spots 1,2 swap (1↔3). Reversed = 2 3 1 1.",
-                   "구간 뒤집기 = 가운데 기준 대칭으로 양 끝끼리 소가 자리 바꿈. [1,2] 뒤집으면 자리 1↔2 바뀜 → 뒤집힌 소 = 2 3 1 1.") },
-    { rev: [2, 3, 1, 1], win: [1, 2], changed: [], pending: [], same: [], focus: null, delta: {}, tally: 1, done: false, payoff: false,
-      bubble: t(E, "vs want → only spot 3 matches. checkups = 1 → answer[1] += 1.",
-                   "want랑 비교 → 자리 3만 맞음. 검진 = 1 → answer[1]에 한 표.") },
-    /* ── WHY ②: 넓혀도 '가운데'는 제자리 (대칭이라) → 두 끝만 새로 ── */
-    { rev: [2, 3, 1, 1], win: [0, 3], changed: [], pending: [0, 3], same: [1, 2], focus: null, delta: {}, tally: null, done: false, payoff: false,
-      bubble: t(E, "Widen to [0,3]. WHY does expand work? Reversing is symmetric — widen both sides equally and the MIDDLE cows keep their spots (1,2 still 3,1!). Only the 2 new ends (0,3) change.",
-                   "넓혀서 [0,3]. expand가 왜 되냐면 — 뒤집기가 대칭이라, 양쪽을 똑같이 넓혀도 가운데 소는 자리 그대로 (자리 1,2 여전히 3,1!). 새 양 끝(0,3)만 바뀜.") },
-    /* ── HOW: 두 끝만 −1/+1 ── */
-    { rev: [1, 3, 1, 1], win: [0, 3], changed: [0], pending: [3], same: [1, 2], focus: 0, delta: { 0: "+1" }, tally: null, done: false, payoff: false,
-      bubble: t(E, "So just fix the 2 ends. Spot 0: was 2 (≠1). Flipped, cow[3]=1 comes = want 1 → +1. matches = 1+1 = 2.",
-                   "그러니 두 끝만 고치면 돼요. 자리 0: 전엔 2 (≠1). 뒤집혀 cow[3]=1 와서 =want 1 → +1. matches = 1+1 = 2.") },
-    { rev: [1, 3, 1, 2], win: [0, 3], changed: [3], pending: [], same: [1, 2], focus: 3, delta: { 3: "−1" }, tally: null, done: false, payoff: false,
-      bubble: t(E, "Spot 3: was 1 (=1, matched). Flipped, cow[0]=2 comes ≠ want 1 → −1. matches = 2−1 = 1.",
-                   "자리 3: 전엔 1 (=1, 맞았음). 뒤집혀 cow[0]=2 와서 ≠want 1 → −1. matches = 2−1 = 1.") },
-    { rev: [1, 3, 1, 2], win: [0, 3], changed: [], pending: [], same: [], focus: null, delta: {}, tally: 1, done: false, payoff: false,
-      bubble: t(E, "checkups = 1 → answer[1] += 1. We touched only the 2 ends — never recounted the middle. THAT'S why expand is fast.",
-                   "검진 = 1 → answer[1]에 또 한 표. 두 끝만 건드리고 가운데는 안 셌죠 — 이게 expand가 빠른 이유예요.") },
+    /* ── 준비: 안 뒤집었을 때 출발점 ── */
+    { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
+      bubble: t(E, "First, no flip at all. A spot is a checkup (green) when the cow already equals want. Right now only spot 4 matches (5=5) → 1. We start from here.",
+                   "먼저, 아무것도 안 뒤집은 상태. 소가 want와 같은 자리 = 검진(초록). 지금은 자리 4만 맞아요(5=5) → 1. 여기서 시작해요.") },
+    /* ── WHY ①: 작은 구간 하나를 뒤집어 세보기 (대칭 스왑) ── */
+    { rev: [1, 2, 4, 3, 5, 6], win: [2, 3], changed: [2, 3], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
+      bubble: t(E, "Start with a tiny interval [2,3] and flip it. Reversing = the two ends swap cows (3↔4). Flipped cows = 1 2 4 3 5 6.",
+                   "작은 구간 [2,3] 하나부터 뒤집어 볼게요. 뒤집기 = 양 끝 소가 자리 바꿈 (3↔4). 뒤집힌 소 = 1 2 4 3 5 6.") },
+    { rev: [1, 2, 4, 3, 5, 6], win: [2, 3], changed: [], pending: [], same: [], focus: null, delta: {}, tally: 3, done: false, payoff: false,
+      bubble: t(E, "vs want → spots 2,3,4 match. checkups = 3 → answer[3] += 1.",
+                   "want랑 비교 → 자리 2,3,4 맞음. 검진 = 3 → answer[3]에 한 표.") },
+    /* ── WHY ②: 한 칸 넓혀도 '가운데'는 그대로 (대칭이라) → 새 두 끝만 ── */
+    { rev: [1, 2, 4, 3, 5, 6], win: [1, 4], changed: [], pending: [1, 4], same: [2, 3], focus: null, delta: {}, tally: null, done: false, payoff: false,
+      bubble: t(E, "Now widen ONE step to [1,4]. Look — the middle cows (spots 2,3) don't move: still 4,3! Reversing is symmetric, so growing both sides keeps the inside put. Only the 2 new ends (1,4) are new.",
+                   "이제 한 칸 넓혀 [1,4]. 봐요 — 가운데 소(자리 2,3)는 안 움직여요, 여전히 4,3! 뒤집기가 대칭이라 양옆을 똑같이 넓혀도 안쪽은 그대로. 새 양 끝(1,4)만 새로 들어와요.") },
+    /* ── HOW: 새 두 끝만, 하나는 +1 하나는 −1 ── */
+    { rev: [1, 5, 4, 3, 5, 6], win: [1, 4], changed: [1], pending: [4], same: [2, 3], focus: 1, delta: { 1: "+1" }, tally: null, done: false, payoff: false,
+      bubble: t(E, "So we only fix the 2 new ends. Spot 1: was 2 (≠5). Now cow[4]=5 slides in = want 5 → +1. matches = 3+1 = 4.",
+                   "그러니 새 양 끝만 고치면 돼요. 자리 1: 전엔 2 (≠5). 이제 cow[4]=5 가 들어와 =want 5 → +1. matches = 3+1 = 4.") },
+    { rev: [1, 5, 4, 3, 2, 6], win: [1, 4], changed: [4], pending: [], same: [2, 3], focus: 4, delta: { 4: "−1" }, tally: null, done: false, payoff: false,
+      bubble: t(E, "Spot 4: was 5 (=5, it matched!). Now cow[1]=2 slides in ≠ want 5 → −1. matches = 4−1 = 3.",
+                   "자리 4: 전엔 5 (=5, 맞았었죠!). 이제 cow[1]=2 가 들어와 ≠want 5 → −1. matches = 4−1 = 3.") },
+    { rev: [1, 5, 4, 3, 2, 6], win: [1, 4], changed: [], pending: [], same: [], focus: null, delta: {}, tally: 3, done: false, payoff: false,
+      bubble: t(E, "checkups = 3 → answer[3] += 1. One end +1, the other −1 — only 2 spots touched, the middle never recounted.",
+                   "검진 = 3 → answer[3]에 또 한 표. 한 끝 +1, 다른 끝 −1 — 딱 두 칸만 건드렸고 가운데는 다시 안 셌어요.") },
+    /* ── 또 한 칸 넓히기 (반복!) ── */
+    { rev: [1, 5, 4, 3, 2, 6], win: [0, 5], changed: [], pending: [0, 5], same: [1, 2, 3, 4], focus: null, delta: {}, tally: null, done: false, payoff: false,
+      bubble: t(E, "Widen ONE more step to [0,5]. Again the middle (spots 1–4) stays exactly the same — only the 2 new ends (0,5) are new. Same move, again.",
+                   "또 한 칸 넓혀 [0,5]. 이번에도 가운데(자리 1~4)는 똑같이 그대로 — 새 양 끝(0,5)만 새로. 같은 동작을 또 한 번.") },
+    { rev: [6, 5, 4, 3, 2, 6], win: [0, 5], changed: [0], pending: [5], same: [1, 2, 3, 4], focus: 0, delta: { 0: "+1" }, tally: null, done: false, payoff: false,
+      bubble: t(E, "Spot 0: was 1 (≠6). Now cow[5]=6 slides in = want 6 → +1. matches = 3+1 = 4.",
+                   "자리 0: 전엔 1 (≠6). 이제 cow[5]=6 이 들어와 =want 6 → +1. matches = 3+1 = 4.") },
+    { rev: [6, 5, 4, 3, 2, 1], win: [0, 5], changed: [5], pending: [], same: [1, 2, 3, 4], focus: 5, delta: { 5: "+1" }, tally: null, done: false, payoff: false,
+      bubble: t(E, "Spot 5: was 6 (≠1). Now cow[0]=1 slides in = want 1 → +1. matches = 4+1 = 5.",
+                   "자리 5: 전엔 6 (≠1). 이제 cow[0]=1 이 들어와 =want 1 → +1. matches = 4+1 = 5.") },
+    { rev: [6, 5, 4, 3, 2, 1], win: [0, 5], changed: [], pending: [], same: [], focus: null, delta: {}, tally: 5, done: false, payoff: false,
+      bubble: t(E, "checkups = 5 → answer[5] += 1. Two widens, and every time only the 2 ends — the middle was NEVER recounted. THAT'S why it's fast.",
+                   "검진 = 5 → answer[5]에 한 표. 두 번 넓히는 동안 매번 양 끝 두 칸만! 가운데는 한 번도 다시 안 셌어요 — 이게 빠른 이유예요.") },
     /* ── 모든 구간 덮기 ── */
-    { rev: [2, 1, 3, 1], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false, centers: true,
-      bubble: t(E, "Two center kinds: even ([i,i+1]) and odd ([i,i] = one spot, no flip). Run both for every i → every interval exactly once.",
-                   "중심 두 종류: 짝수([i,i+1])와 홀수([i,i]=한 칸, 안 뒤집음). i마다 둘 다 돌리면 모든 구간을 딱 한 번씩.") },
-    { rev: [2, 1, 3, 1], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: true, payoff: true,
-      bubble: t(E, "Every center → widen, touch only 2 ends. O(N²) total. (Full run in the code next.)",
-                   "모든 중심 → 넓히며 두 끝만. 합쳐서 O(N²). (전부 돌려보는 건 다음 코드에서!) 🚀") },
+    { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false, centers: true,
+      bubble: t(E, "Two center kinds: even ([i,i+1]) and odd ([i,i] = one spot, no flip). Start each center and widen till it hits a wall → every interval exactly once.",
+                   "중심 두 종류: 짝수([i,i+1])와 홀수([i,i]=한 칸, 안 뒤집음). 중심마다 벽에 닿을 때까지 넓히면 → 모든 구간을 딱 한 번씩.") },
+    { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: true, payoff: true,
+      bubble: t(E, "Every center → widen, touch only 2 ends each step. O(N²) total. (Full run in the code next.)",
+                   "모든 중심 → 넓히며 매 칸 두 끝만. 합쳐서 O(N²). (전부 돌려보는 건 다음 코드에서!) 🚀") },
   ];
 }
 
@@ -1371,18 +1386,19 @@ export function CheckupsExpandSim({ E }) {
   const steps = _buildExpandSteps(E);
   const { idx, safe, setIdx, total } = useTraceStep(steps.length);
   const st = steps[Math.min(safe, steps.length - 1)];
-  const TW = 48, STEP = 60, GAP = STEP - TW, LAB = 96;
+  const N = _EX_COW.length, IDX = _EX_COW.map((_, i) => i);   // 6칸 (선생님 2026-07-03)
+  const TW = 44, STEP = 56, GAP = STEP - TW, LAB = 92;
   const [L, R] = st.win || [-1, -1];
   const hasWin = !!st.win;
   const isGreen = p => st.rev[p] === _EX_WANT[p];   // 뒤집힌 소가 want 와 같음 = 검진
-  const matches = [0, 1, 2, 3].reduce((a, p) => a + (isGreen(p) ? 1 : 0), 0);
+  const matches = IDX.reduce((a, p) => a + (isGreen(p) ? 1 : 0), 0);
   const showMatches = !st.done && !st.centers;
 
-  const GRIDW = LAB + 8 + 4 * STEP - GAP;
+  const GRIDW = LAB + 8 + N * STEP - GAP;
   const cellCenter = i => LAB + 8 + i * STEP + TW / 2;
   const anchorCol = st.focus != null ? st.focus
     : st.pending.length ? (st.pending[0] + st.pending[st.pending.length - 1]) / 2
-    : hasWin ? (L + R) / 2 : 1.5;
+    : hasWin ? (L + R) / 2 : (N - 1) / 2;
   const anchorX = cellCenter(anchorCol);
   const BW = 348;
   const bubbleLeft = Math.max(2, Math.min(GRIDW - BW - 2, anchorX - BW / 2));
@@ -1431,11 +1447,11 @@ export function CheckupsExpandSim({ E }) {
         📊 {t(E, "Widen from the center — the middle stays, only the two ends change", "가운데에서 넓히며 — 가운데는 그대로, 두 끝만 바뀜")}
       </div>
       <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10, fontFamily: "'JetBrains Mono',monospace" }}>
-        cow = [2,1,3,1]　want = [1,2,3,1]
+        cow = [1,2,3,4,5,6]　want = [6,5,4,3,5,1]
       </div>
 
       {/* 말풍선 */}
-      <div style={{ position: "relative", width: GRIDW, height: 92, margin: "0 auto 4px" }}>
+      <div style={{ position: "relative", width: GRIDW, height: 100, margin: "0 auto 22px" }}>
         <div style={{ position: "absolute", bottom: 8, left: bubbleLeft, width: BW, background: st.payoff ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "10px 13px", fontSize: 12.5, color: st.payoff ? "#065f46" : "#92400e", lineHeight: 1.5, fontWeight: 600, wordBreak: "keep-all", textAlign: "left", boxShadow: "0 2px 8px rgba(0,0,0,.07)", transition: "left .38s cubic-bezier(.4,0,.2,1)" }}>
           💬 {nbMath(st.bubble)}
           <div style={{ position: "absolute", bottom: -9, left: tailLeft, width: 0, height: 0, borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, transition: "left .38s cubic-bezier(.4,0,.2,1)" }} />
@@ -1445,22 +1461,22 @@ export function CheckupsExpandSim({ E }) {
       <div style={{ width: "fit-content", margin: "0 auto" }}>
         {/* 뒤집는 구간 브래킷 */}
         {rowWrap("", "#0e7490",
-          <div style={{ position: "relative", height: 16, width: 4 * STEP - GAP }}>
+          <div style={{ position: "relative", height: 16, width: N * STEP - GAP }}>
             {hasWin && <div style={{ position: "absolute", top: 2, left: L * STEP, width: (R - L + 1) * STEP - GAP, height: 12, borderRadius: 6, border: "2px solid #0891b2", borderBottom: "none", transition: "left .4s cubic-bezier(.4,0,.2,1), width .4s cubic-bezier(.4,0,.2,1)" }} />}
             {hasWin && <div style={{ position: "absolute", top: -3, left: L * STEP + ((R - L + 1) * STEP - GAP) / 2, transform: "translateX(-50%)", fontSize: 9.5, fontWeight: 800, color: "#0891b2", whiteSpace: "nowrap", transition: "left .4s cubic-bezier(.4,0,.2,1)" }}>{t(E, "flip", "뒤집기")} [{L},{R}]</div>}
           </div>
         )}
         {rowWrap(t(E, "🐮 cow (orig)", "🐮 원래 소"), "#94a3b8",
-          <div style={{ display: "flex", gap: GAP }}>{[0, 1, 2, 3].map(cowCell)}</div>
+          <div style={{ display: "flex", gap: GAP }}>{IDX.map(cowCell)}</div>
         )}
         {rowWrap(t(E, "🔄 flipped", "🔄 뒤집힌 소"), "#15803d",
-          <div style={{ display: "flex", gap: GAP }}>{[0, 1, 2, 3].map(revCell)}</div>
+          <div style={{ display: "flex", gap: GAP }}>{IDX.map(revCell)}</div>
         )}
         {rowWrap("📋 want", "#1e40af",
-          <div style={{ display: "flex", gap: GAP }}>{[0, 1, 2, 3].map(wantCell)}</div>
+          <div style={{ display: "flex", gap: GAP }}>{IDX.map(wantCell)}</div>
         )}
         {rowWrap("", C.dim,
-          <div style={{ display: "flex", gap: GAP }}>{[0, 1, 2, 3].map(p => <div key={p} style={{ width: TW, textAlign: "center", fontSize: 9.5, color: C.dim }}>{t(E, "spot", "자리")} {p}</div>)}</div>
+          <div style={{ display: "flex", gap: GAP }}>{IDX.map(p => <div key={p} style={{ width: TW, textAlign: "center", fontSize: 9.5, color: C.dim }}>{t(E, "spot", "자리")} {p}</div>)}</div>
         )}
       </div>
 

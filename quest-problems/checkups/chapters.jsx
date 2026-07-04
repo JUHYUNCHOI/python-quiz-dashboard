@@ -293,30 +293,12 @@ export function makeCheckupsCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The fast idea — reverse from a center and widen; only the two ends change. See why, then how.",
-        "빠른 아이디어 — 가운데에서 뒤집으며 넓히면 두 끝만 바뀐다. 왜 그런지, 어떻게 세는지 봐요."),
+        "Counting every interval from scratch is slow. Let's flip a small interval, then grow it one step wider — and see that we only need to fix what actually changed. One step at a time.",
+        "구간마다 처음부터 다 세면 느려요. 작은 구간을 뒤집어 세보고, 한 칸씩 넓히면서 '진짜 바뀐 칸만' 고쳐볼게요. 한 단계씩."),
       content: (<CheckupsExpandSim E={E} />),
     },
 
-    /* 3-2 — 능동 확인: '두 끝만 바뀐다'를 학생이 직접 확인 */
-    {
-      type: "quiz",
-      narr: t(E, "Quick check — you widen the interval by one on each side.",
-                 "확인 — 뒤집는 구간을 양쪽으로 한 칸씩 넓혔어요."),
-      question: t(E,
-        "Widen a reversed interval [l,r] to [l-1, r+1]. Which spots' checkup can change?",
-        "뒤집는 구간 [l,r]을 [l-1, r+1]로 넓히면, 검진 여부가 바뀔 수 있는 자리는?"),
-      options: [
-        t(E, "Only the 2 new ends (l-1, r+1)", "새로 들어온 두 끝(l-1, r+1)만"),
-        t(E, "Everything inside [l-1, r+1]", "[l-1, r+1] 안 전부"),
-        t(E, "Only the middle", "가운데만"),
-        t(E, "Nothing changes", "아무것도 안 바뀜"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Reversing is symmetric, so the middle cows keep their spots. Only the two newly-added ends swap in — so only their checkup can change. That's why each widen is O(1).",
-        "뒤집기는 대칭이라 가운데 소는 자리 그대로. 새로 들어온 두 끝만 바뀌니, 그 두 자리 검진만 달라져요. 그래서 한 번 넓힐 때 O(1)."),
-    },
+    /* (3-2 퀴즈 제거 — ExpandSim 이 방금 '두 끝만'을 보여줬는데 바로 재질문이라 잉여. 선생님 2026-07-02.) */
 
     /* 3-3 — 결(payoff): brute O(N³) → center-expansion O(N²) */
     {
@@ -357,13 +339,54 @@ export function makeCheckupsCh3(E, lang = "py") {
           </div>
         </div>),
     },
+
+    /* 3-4 — '가운데서 넓히기' 한눈에 정리 (선생님 2026-07-03: 학술 카드 → 학생 말투·구체로 재작성) */
+    {
+      type: "reveal",
+      narr: t(E, "Wrap-up — 'widen from the center', in one look.",
+                 "정리 — '가운데서 넓히기' 한눈에."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: "#0e7490", textAlign: "center", marginBottom: 12, wordBreak: "keep-all" }}>
+            📌 {t(E, "'Widen from the center' — in one look", "'가운데서 넓히기' — 한눈에")}
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: 10, padding: "10px 13px", marginBottom: 9, fontSize: 12.5, color: "#1e3a8a", lineHeight: 1.75, wordBreak: "keep-all" }}>
+            <div style={{ fontWeight: 800, marginBottom: 4 }}>💡 {t(E, "In one line", "한 줄로")}</div>
+            {t(E,
+              "Don't recount each interval from scratch. Start at its center and widen one step at a time — the only cells that change are the two outer ends. The middle stays the same even after flipping.",
+              "구간마다 처음부터 다시 세지 말자. 가운데에서 한 칸씩 넓히면, 새로 바뀌는 건 양쪽 끝 두 칸뿐이에요. 가운데는 뒤집어도 그대로거든요.")}
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 13px", marginBottom: 9, fontSize: 12.5, color: "#065f46", lineHeight: 1.75, wordBreak: "keep-all" }}>
+            <div style={{ fontWeight: 800, marginBottom: 4 }}>✅ {t(E, "Why it's fast", "왜 빨라")}</div>
+            {t(E,
+              "It never actually reverses, and never recounts the middle. Each widen fixes just two cells — so it's about N times faster than brute force. Fast enough to pass.",
+              "실제로 뒤집지도, 가운데를 다시 세지도 않아요. 한 번 넓힐 때 딱 두 칸만 고치니까 — 브루트포스보다 N배쯤 빨라져서 통과해요.")}
+          </div>
+
+          <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 13px", marginBottom: 9, fontSize: 12.5, color: "#92400e", lineHeight: 1.75, wordBreak: "keep-all" }}>
+            <div style={{ fontWeight: 800, marginBottom: 4 }}>⚠️ {t(E, "When does this work?", "언제 이게 통해?")}</div>
+            {t(E,
+              "Only when widening changes just the two ends — a mirror-like structure where the middle stays put (like reversing). It's not a one-size-fits-all trick.",
+              "'넓혀도 양 끝만 바뀌는' 문제일 때만 써요. 뒤집기처럼 가운데가 거울처럼 그대로인 구조. 아무 문제에나 되는 만능은 아니에요.")}
+          </div>
+
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 10, padding: "10px 13px", fontSize: 12.5, color: "#5b21b6", lineHeight: 1.75, wordBreak: "keep-all" }}>
+            <div style={{ fontWeight: 800, marginBottom: 4 }}>🎯 {t(E, "You'll meet it again", "딴 데서도 만나")}</div>
+            {t(E,
+              "This same 'expand from the center' shows up when finding palindromes — words that read the same backward, like 'level' or 'noon'. Learn it once, meet it again.",
+              "이 '가운데서 넓히기'는 팰린드롬(거꾸로 읽어도 같은 낱말 — '기러기', 'level') 찾을 때도 똑같이 써요. 한 번 익혀두면 여러 문제에서 다시 만나요.")}
+          </div>
+        </div>),
+    },
   ];
 }
 
 /* ════════════════════════════════════════════════════════════════════
    Chapter 4 — ⚡ Code.
-   Now that the idea is clear from the sims, see the actual O(N²) code:
-   the idea recap, both prefixes, the combine loop, and the full program.
+   center-expansion O(N²) 코드: baseMatches → expand(두 끝만) → 모든 중심 → 전체.
+   (코드는 이 파일에 인라인 정의; components.jsx 의 옛 prefix 코드는 미사용.)
    ════════════════════════════════════════════════════════════════════ */
 export function makeCheckupsCh4(E, lang = "py") {
   // center-expansion 코드 (선생님 검증). 코드 조각을 chapters.jsx 안에 인라인으로 정의 →
@@ -525,18 +548,40 @@ export function makeCheckupsCh4(E, lang = "py") {
       content: (<CodeSectionView section={secMain} lang={lang} E={E} />) },
     { type: "reveal", narr: t(E, "All pieces in one program.", "조각들을 한 코드로."),
       content: (<CodeSectionView section={secFull} lang={lang} E={E} />) },
-    /* 마무리 확인 — 복잡도 */
+    /* (복잡도 퀴즈 제거 — Big-O 고르기는 중1엔 추상적. 언어노트가 구체 시간으로 대신 설명. 선생님 2026-07-02.) */
+
+    /* 4-끝 — 언어 선택: 이 문제는 O(N²)라 C++로. Python 은 큰 N 에서 TLE (선생님 2026-07-02). */
     {
-      type: "quiz",
-      narr: t(E, "Last check — why is this fast enough?", "마지막 확인 — 왜 이제 충분히 빠를까요?"),
-      question: t(E,
-        "Brute was O(N³) (hours at N = 7500). What is center-expansion's total time?",
-        "brute 는 O(N³) (N = 7500 에서 몇 시간). center-expansion 의 전체 복잡도는?"),
-      options: ["O(N)", "O(N²)", "O(N³)", "O(2ᴺ)"],
-      correct: 1,
-      explain: t(E,
-        "Each widen step is O(1) (two ends), and a center widens up to N/2 times. Over all ~N centers → about N² steps → O(N²). Fast enough for N = 7500.",
-        "한 번 넓히는 건 O(1)(두 끝), 한 중심은 최대 N/2 번 넓혀요. 중심 ~N개 합치면 약 N²번 → O(N²). N = 7500 도 충분."),
+      type: "reveal",
+      narr: t(E, "One honest note — which language passes here?",
+                 "솔직한 한마디 — 이 문제, 어떤 언어로 통과할까?"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: "#0e7490", textAlign: "center", marginBottom: 12, wordBreak: "keep-all" }}>
+            🏁 {t(E, "Wrap-up & language choice", "정리 & 언어 선택")}
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 13px", marginBottom: 10, fontSize: 12, color: "#065f46", lineHeight: 1.7, wordBreak: "keep-all" }}>
+            <div style={{ fontWeight: 800, marginBottom: 4 }}>✅ {t(E, "center-expansion, in one line", "center-expansion 한 줄 정리")}</div>
+            {t(E,
+              "Start from baseMatches, widen from each center, fix only the two ends (−1/+1), tally answer[checkups]. O(N²).",
+              "baseMatches에서 출발 → 중심마다 넓히며 두 끝만 (−1/+1) → answer[검진수] 집계. O(N²).")}
+          </div>
+
+          <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 13px", marginBottom: 10, fontSize: 12, color: "#7f1d1d", lineHeight: 1.7, wordBreak: "keep-all" }}>
+            <div style={{ fontWeight: 800, marginBottom: 4 }}>⚠️ {t(E, "Python has a real limit here", "이 문제, Python은 한계가 있어요")}</div>
+            {t(E,
+              "N = 7500 means O(N²) ≈ 28 million inner-loop steps. In C++ that's ~0.05 s → passes. In Python (CPython) the same loop is ~40 s → TLE on the big cases. It's not an algorithm problem — it's language speed, and there is NO faster algorithm (O(N²) is the intended complexity).",
+              "N = 7500이면 O(N²) ≈ 안쪽 루프 2,800만 번. C++은 ~0.05초 → 통과. 근데 Python(CPython)은 같은 루프가 ~40초 → 큰 케이스에서 TLE. 알고리즘 문제가 아니라 언어 속도 문제예요. 게다가 더 빠른 알고리즘도 없어요 (O(N²)가 의도된 복잡도).")}
+          </div>
+
+          <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: 10, padding: "10px 13px", fontSize: 12, color: "#1e3a8a", lineHeight: 1.7, wordBreak: "keep-all" }}>
+            <div style={{ fontWeight: 800, marginBottom: 4 }}>🎯 {t(E, "So", "그래서")}</div>
+            {t(E,
+              "For big N with an O(N²) solution, the language matters. Here: submit in C++ (passes). Pure Python can't hit the limit; only heavy numpy vectorization has a chance. A good lesson: sometimes the right move is choosing C++.",
+              "큰 N + O(N²) 풀이에선 언어 선택이 중요해요. 이 문제는 C++로 제출 (통과). 순수 Python은 제한에 못 들고, numpy로 세게 벡터화해야 겨우 가능해요. 좋은 교훈 — 때론 'C++로 가는 것'이 정답이에요.")}
+          </div>
+        </div>),
     },
   ];
 }
