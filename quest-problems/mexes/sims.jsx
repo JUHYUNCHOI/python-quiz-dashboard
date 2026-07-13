@@ -43,15 +43,22 @@ export function MexesIntroSim({ E }) {
   const TW = 44, GAP = 8;
   const CHECK = [0, 1, 2, 3, 4];
 
+  // 말풍선 이동 (선생님 2026-07-13: 학생이 지금 뭘 봐야 하는지 근처로 옮겨줌)
+  // step index 로 판단 — steps 정의와 1:1 매핑되어 안전.
+  // 0 (도입/문제 소개): 위 고정
+  // 1 (상자 소개), 2-3 (0/1 확인): 배열~체크 행 근처 (~48px)
+  // 4-5 (mex 결과 나온 뒤 문제 규칙 설명): check 행 아래 (~130px)
+  const shiftY = idx >= 4 ? 130 : (idx >= 1 ? 48 : 0);
+
   return (
     <div style={{ padding: 16 }}>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: A, marginBottom: 10, wordBreak: "keep-all" }}>
         🧮 {t(E, "What is mex, and what does this problem want?", "mex 가 뭐고, 이 문제는 뭘 시키나?")}
       </div>
 
-      {/* 말풍선 */}
-      <div style={{ maxWidth: 540, margin: "0 auto 14px" }}>
-        <div style={{ background: st.goal ? "#f5f3ff" : (st.mex ? "#ecfdf5" : "#fffbeb"), border: `1.5px solid ${st.goal ? "#c4b5fd" : (st.mex ? "#6ee7b7" : "#fbbf24")}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.goal ? "#5b21b6" : (st.mex ? "#065f46" : "#92400e"), lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all" }}>💬 {st.bubble}</div>
+      {/* 말풍선 — 스텝에 따라 Y 로 슥 이동 (설명 중인 대상 옆으로) */}
+      <div style={{ maxWidth: 540, margin: "0 auto 14px", position: "relative", zIndex: 5, transform: `translateY(${shiftY}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)" }}>
+        <div style={{ background: st.goal ? "#f5f3ff" : (st.mex ? "#ecfdf5" : "#fffbeb"), border: `1.5px solid ${st.goal ? "#c4b5fd" : (st.mex ? "#6ee7b7" : "#fbbf24")}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.goal ? "#5b21b6" : (st.mex ? "#065f46" : "#92400e"), lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>💬 {st.bubble}</div>
         <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.goal ? "#c4b5fd" : (st.mex ? "#6ee7b7" : "#fbbf24")}` }} />
       </div>
 
@@ -143,6 +150,12 @@ export function MexesSampleSim({ E }) {
   const { idx, safe, setIdx, total: tot } = useTraceStep(steps.length);
   const st = steps[Math.min(safe, steps.length - 1)];
 
+  // 말풍선 이동 (선생님 2026-07-13):
+  // 첫 스텝 (st.hi === -1, 입출력 형식 소개) → 위 고정.
+  // 목표 강조 스텝 (st.hi >= 0) → 배열 + 출력 행 근처로 내려서 학생이 어디를 봐야 하는지 명확.
+  // 각 목표 줄마다 조금씩 다른 Y — 해당 출력 줄 y 위치에 맞춤 (36px 간격 * 줄 index).
+  const shiftY = st.hi < 0 ? 0 : (110 + st.hi * 34);
+
   // 활성 목표 m 에서 배열을 실제로 어떻게 바꾸는지 계산 (0…m-1 채우기 + m 없애기)
   const m = st.hi;                          // -1 이면 intro
   const changes = {};                       // idx -> { to, kind: 'fill' | 'junk' }
@@ -170,9 +183,9 @@ export function MexesSampleSim({ E }) {
         📤 {t(E, "What each output line means", "출력 각 줄이 뭔지")}
       </div>
 
-      {/* 말풍선 — 배열 바로 위, 꼬리가 배열을 가리킴 (배열을 가리지 않음) */}
-      <div style={{ maxWidth: 560, margin: "0 auto 2px" }}>
-        <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 12, padding: "10px 14px", fontSize: 12.5, color: "#92400e", lineHeight: 1.55, fontWeight: 600, wordBreak: "keep-all", textAlign: "center", minHeight: 42, display: "flex", alignItems: "center", justifyContent: "center" }}>💬 {st.bubble}</div>
+      {/* 말풍선 — 스텝별로 Y 이동. 첫 스텝은 위, 목표 강조 시엔 배열/출력 옆으로 슥. */}
+      <div style={{ maxWidth: 560, margin: "0 auto 2px", position: "relative", zIndex: 5, transform: `translateY(${shiftY}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)" }}>
+        <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 12, padding: "10px 14px", fontSize: 12.5, color: "#92400e", lineHeight: 1.55, fontWeight: 600, wordBreak: "keep-all", textAlign: "center", minHeight: 42, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>💬 {st.bubble}</div>
         <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: "9px solid #fbbf24" }} />
       </div>
 
@@ -273,6 +286,16 @@ export function MexesMaxSim({ E }) {
   const st = steps[Math.min(idx, steps.length - 1)];
   const rv = st.reveal;
 
+  // 말풍선 이동 (선생님 2026-07-13):
+  // need(0): 배열 근처, 위 고정
+  // fill(1): 배열 아래 "있어야 함" 행 근처 (~90px)
+  // remove(2): 배열의 remove 대상 강조 중 → 배열 바로 아래 (~48px)
+  // max/done(3,4): 마지막 chips 행 근처 (~160px)
+  const shiftYMax = st.kind === "need" ? 0
+                  : st.kind === "remove" ? 48
+                  : st.kind === "fill" ? 90
+                  : 160;
+
   const TW = 44, GAP = 8;
   const arrCell = (v, i) => {
     const isCopy = rv.remove && v === m;       // 제거 대상
@@ -309,9 +332,9 @@ export function MexesMaxSim({ E }) {
         ))}
       </div>
 
-      {/* 말풍선 */}
-      <div style={{ maxWidth: 540, margin: "0 auto 12px" }}>
-        <div style={{ background: rv.done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${rv.done ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: rv.done ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all" }}>💬 {st.bubble}</div>
+      {/* 말풍선 — 스텝별로 Y 이동 (설명 중인 행 근처로) */}
+      <div style={{ maxWidth: 540, margin: "0 auto 12px", position: "relative", zIndex: 5, transform: `translateY(${shiftYMax}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)" }}>
+        <div style={{ background: rv.done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${rv.done ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: rv.done ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>💬 {st.bubble}</div>
         <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${rv.done ? "#6ee7b7" : "#fbbf24"}` }} />
       </div>
 

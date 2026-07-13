@@ -293,8 +293,8 @@ export function makeCheckupsCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Counting every interval from scratch is slow. Let's flip a small interval, then grow it one step wider — and see that we only need to fix what actually changed. One step at a time.",
-        "구간마다 처음부터 다 세면 느려요. 작은 구간을 뒤집어 세보고, 한 칸씩 넓히면서 '진짜 바뀐 칸만' 고쳐볼게요. 한 단계씩."),
+        "Recounting every interval from scratch is too slow. Let's try a smarter way — start with a tiny interval, then grow it one step at a time and see what changes. Watch it unfold below.",
+        "구간마다 처음부터 다 세면 너무 느려요. 더 똑똑한 방법 — 작은 구간 하나로 시작해서, 한 칸씩 넓혀가며 뭐가 어떻게 바뀌는지 아래 시뮬로 하나씩 봐요."),
       content: (<CheckupsExpandSim E={E} />),
     },
 

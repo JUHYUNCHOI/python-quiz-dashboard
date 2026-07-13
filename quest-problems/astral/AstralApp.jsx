@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 import { AstralProgressiveCode, downloadAstralPDF, getAstralSections, AstralSim, AstralRunner } from "./components";
 import { makeAstralCh1, makeAstralCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
@@ -146,6 +147,13 @@ export default function AstralApp(props = {}) {
           renderPreviewBody={renderPreviewBody}
           codeControlsSlot={codeControlsSlot}
         />
+
+        <AlgorithmTags E={E} tags={[
+          { icon: "🎯", ko: "완전 시뮬레이션", en: "Full simulation" },
+          { icon: "⬅️", ko: "역방향 그리디", en: "Backward greedy" },
+          { icon: "🔒", ko: "확정부터 처리", en: "Certain-first" },
+          { icon: "🧭", ko: "직전 칸 추적", en: "Predecessor lookup" },
+        ]} />
 
         {step.narr && <Narration key={`astr-${tab}-${cur}-${lang}`} text={step.narr} />}
 

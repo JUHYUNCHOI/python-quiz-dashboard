@@ -1,6 +1,7 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 13/13 PASS
-//   C++:    13/13 PASS
+// 🔒 USACO_VERIFIED (2026-05-13, C++ 재작성 2026-07-13 — 재검증 필요)
+//   Python: 13/13 PASS — 원본 검증
+//   C++:    13/13 PASS — 원본 검증. **2026-07-13 helper 람다(isMoo·countAll) → 일반 함수로
+//           재작성 (배운 적 없는 람다 형태 제거). 알고리즘 동일하나 USACO 재제출로 pass 확인 권장.**
 //   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 
@@ -689,19 +690,19 @@ const BR_HELPERS_PY = [
   "    return moos",
 ];
 const BR_HELPERS_CPP = [
-  "    auto isMoo = [](char a, char b, char c) {",
-  "        return a != b && b == c;",
-  "    };",
+  "bool isMoo(char a, char b, char c) {",
+  "    return a != b && b == c;",
+  "}",
   "",
-  "    auto countAll = [&](const string& str) {",
-  "        map<string, int> moos;",
-  "        for (int i = 0; i + 2 < (int)str.size(); i++) {",
-  "            if (isMoo(str[i], str[i+1], str[i+2])) {",
-  "                moos[str.substr(i, 3)]++;",
-  "            }",
+  "map<string, int> countAll(const string& str) {",
+  "    map<string, int> moos;",
+  "    for (int i = 0; i + 2 < (int)str.size(); i++) {",
+  "        if (isMoo(str[i], str[i+1], str[i+2])) {",
+  "            moos[str.substr(i, 3)]++;",
   "        }",
-  "        return moos;",
-  "    };",
+  "    }",
+  "    return moos;",
+  "}",
 ];
 
 const BR_LOOP_PY = (E) => [
@@ -832,6 +833,10 @@ const MOO_INPUT_CPP = [
   "#include <map>",
   "using namespace std;",
   "",
+  "bool isMoo(char a, char b, char c) {",
+  "    return a != b && b == c;",
+  "}",
+  "",
   "int main() {",
   "    int n, f;",
   "    cin >> n >> f;",
@@ -850,10 +855,6 @@ const MOO_PRECOUNT_PY = [
   "        mydict[key] += 1",
 ];
 const MOO_PRECOUNT_CPP = [
-  "    auto isMoo = [](char a, char b, char c) {",
-  "        return a != b && b == c;",
-  "    };",
-  "",
   "    map<string, int> mydict;",
   "    for (int i = 0; i + 2 < n; i++) {",
   "        if (isMoo(s[i], s[i+1], s[i+2])) {",

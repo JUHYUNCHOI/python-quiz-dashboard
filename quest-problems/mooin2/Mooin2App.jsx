@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import { downloadMooin2PDF, getMooin2Sections, MooinExplorer, MooinDeepAudit } from "./components";
 import { MooinBruteRunner, MooinCountTrace } from "./sims";
@@ -162,6 +163,12 @@ export default function Mooin2App(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔢", ko: "빈도 카운트", en: "Frequency count" },
+          { icon: "📍", ko: "두 번째 마지막 자리", en: "Second-last position" },
+          { icon: "📊", ko: "앞 구역 서로 다른 값", en: "Distinct-prefix count" },
+          { icon: "⚡", ko: "O(N³) → O(N) 최적화", en: "O(N³) → O(N) optimize" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

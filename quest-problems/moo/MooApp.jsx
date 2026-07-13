@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import { MooSim, MooBruteRunner, MooRTRSim, MooProgressiveCode, downloadMooPDF, getMooSections } from "./components";
 import { makeMooCh1, makeMooCh2, makeMooCh3, makeMooCh4, makeMooCh5 } from "./chapters";
@@ -165,6 +166,13 @@ export default function MooApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🎯", ko: "완전 탐색 (위치 × 26 글자)", en: "Brute force (position × 26 letters)" },
+          { icon: "🔁", ko: "빼기 → 시도 → 복원", en: "Remove → Try → Restore" },
+          { icon: "🪟", ko: "영향받는 3 윈도우만 갱신", en: "Update only ≤3 affected windows" },
+          { icon: "🗺️", ko: "해시맵 카운트 + 집합", en: "Hashmap count + set" },
+        ]} />
+
         <QuestProgressBar
           tabs={TABS}
           states={states}
