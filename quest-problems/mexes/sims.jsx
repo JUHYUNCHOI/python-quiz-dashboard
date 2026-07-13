@@ -43,12 +43,9 @@ export function MexesIntroSim({ E }) {
   const TW = 44, GAP = 8;
   const CHECK = [0, 1, 2, 3, 4];
 
-  // 말풍선 이동 (선생님 2026-07-13: 학생이 지금 뭘 봐야 하는지 근처로 옮겨줌)
-  // step index 로 판단 — steps 정의와 1:1 매핑되어 안전.
-  // 0 (도입/문제 소개): 위 고정
-  // 1 (상자 소개), 2-3 (0/1 확인): 배열~체크 행 근처 (~48px)
-  // 4-5 (mex 결과 나온 뒤 문제 규칙 설명): check 행 아래 (~130px)
-  const shiftY = idx >= 4 ? 130 : (idx >= 1 ? 48 : 0);
+  // 말풍선은 상자(봐야 할 그림) 위에 고정 — 아래로 내리면 상자를 덮어 가림
+  // (선생님 2026-07-13: "봐야 할 사진은 가리면 안 돼". transform 은 공간을 안 밀어 겹침.)
+  const shiftY = 0;
 
   return (
     <div style={{ padding: 16 }}>
@@ -154,7 +151,7 @@ export function MexesSampleSim({ E }) {
   // 첫 스텝 (st.hi === -1, 입출력 형식 소개) → 위 고정.
   // 목표 강조 스텝 (st.hi >= 0) → 배열 + 출력 행 근처로 내려서 학생이 어디를 봐야 하는지 명확.
   // 각 목표 줄마다 조금씩 다른 Y — 해당 출력 줄 y 위치에 맞춤 (36px 간격 * 줄 index).
-  const shiftY = st.hi < 0 ? 0 : (110 + st.hi * 34);
+  const shiftY = 0;   // 배열(봐야 할 그림) 위 고정 — 안 가리게 (선생님 2026-07-13)
 
   // 활성 목표 m 에서 배열을 실제로 어떻게 바꾸는지 계산 (0…m-1 채우기 + m 없애기)
   const m = st.hi;                          // -1 이면 intro
@@ -286,15 +283,9 @@ export function MexesMaxSim({ E }) {
   const st = steps[Math.min(idx, steps.length - 1)];
   const rv = st.reveal;
 
-  // 말풍선 이동 (선생님 2026-07-13):
-  // need(0): 배열 근처, 위 고정
-  // fill(1): 배열 아래 "있어야 함" 행 근처 (~90px)
-  // remove(2): 배열의 remove 대상 강조 중 → 배열 바로 아래 (~48px)
-  // max/done(3,4): 마지막 chips 행 근처 (~160px)
-  const shiftYMax = st.kind === "need" ? 0
-                  : st.kind === "remove" ? 48
-                  : st.kind === "fill" ? 90
-                  : 160;
+  // 말풍선은 배열(봐야 할 그림) 위에 고정 — 아래로 내리면 배열/칩을 덮어 가림
+  // (선생님 2026-07-13: "봐야 할 사진은 가리면 안 돼".)
+  const shiftYMax = 0;
 
   const TW = 44, GAP = 8;
   const arrCell = (v, i) => {
