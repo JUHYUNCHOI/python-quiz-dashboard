@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 import { PrintseqProgressiveCode, downloadPrintseqPDF, getPrintseqSections, PrintseqSim, PrintseqRunner } from "./components";
 import { makePrintseqCh1, makePrintseqCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
@@ -133,6 +134,12 @@ export default function PrintseqApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🔁", ko: "재귀 분할", en: "Recursive split" },
+          { icon: "🎯", ko: "세 모양 시도 (같음·반복·자르기)", en: "Try 3 shapes (same·repeat·split)" },
+          { icon: "💾", ko: "메모이제이션", en: "Memoization" },
+        ]} />
+
         <QuestProgressBar
           tabs={TABS}
           states={states}

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 import { CheckupsProgressiveCode, downloadCheckupsPDF, getCheckupsSections, CheckupsSim, CheckupsRunner } from "./components";
 import { makeCheckupsCh1, makeCheckupsCh2, makeCheckupsCh3, makeCheckupsCh4 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
@@ -153,6 +154,11 @@ export default function CheckupsApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🐢", ko: "브루트포스 O(N³)", en: "Brute force O(N³)" },
+          { icon: "📏", ko: "가운데서 넓히기", en: "Widen from center" },
+          { icon: "⚡", ko: "두 끝만 갱신 O(N²)", en: "Update 2 ends only O(N²)" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

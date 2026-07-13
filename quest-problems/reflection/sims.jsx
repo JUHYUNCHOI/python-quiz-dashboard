@@ -86,6 +86,8 @@ export function ReflectionRuleSim({ E }) {
   const tailX = focusCol !== null ? focusCol * (CELL + GAP) + CELL / 2 : W / 2;
   const leaderH = (focusRow != null && focusRow > 0) ? focusRow * (CELL + GAP) - 4 : 0;
   const bubbleColor = st.done ? "#6ee7b7" : "#fbbf24";
+  // 말풍선 Y — focus 행이 아래일수록 말풍선도 아래로. 상단 여백 안 잡아먹게 modest 값.
+  const bubbleShiftY = focusRow == null ? 0 : (focusRow <= 1 ? 0 : (focusRow === 2 ? 30 : 60));
 
   return (
     <div style={{ padding: 16 }}>
@@ -94,7 +96,7 @@ export function ReflectionRuleSim({ E }) {
       </div>
 
       {/* 말풍선 (꼬리는 그리드 컨테이너로 이동 — 정확한 열 정렬을 위해) */}
-      <div style={{ maxWidth: 460, margin: "0 auto 6px" }}>
+      <div style={{ maxWidth: 460, margin: "0 auto 6px", transform: `translateY(${bubbleShiftY}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)", position: "relative", zIndex: 5 }}>
         <div style={{ background: st.done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bubbleColor}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.done ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word" }}>💬 {st.bubble}</div>
       </div>
 
@@ -165,6 +167,8 @@ export function ReflectionGroupSim({ E }) {
   const tailX = focusCol !== null ? focusCol * (CELL + GAP) + CELL / 2 : W / 2;
   const leaderH = (focusRow != null && focusRow > 0) ? focusRow * (CELL + GAP) - 4 : 0;
   const bubbleColor = st.final ? "#6ee7b7" : "#fbbf24";
+  // 말풍선 Y — focus 행에 따라 (묶음 anchor 의 첫 칸 기준). final/no-group 이면 0.
+  const bubbleShiftY = focusRow == null ? 0 : (focusRow <= 1 ? 0 : (focusRow === 2 ? 30 : 60));
 
   return (
     <div style={{ padding: 16 }}>
@@ -173,7 +177,7 @@ export function ReflectionGroupSim({ E }) {
       </div>
 
       {/* 말풍선 (꼬리는 그리드 컨테이너로) */}
-      <div style={{ maxWidth: 460, margin: "0 auto 6px" }}>
+      <div style={{ maxWidth: 460, margin: "0 auto 6px", transform: `translateY(${bubbleShiftY}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)", position: "relative", zIndex: 5 }}>
         <div style={{ background: st.final ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bubbleColor}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.final ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word" }}>💬 {st.bubble}</div>
       </div>
 
@@ -337,8 +341,8 @@ export function ReflectionUpdateSim({ E }) {
         })}
       </div>
 
-      {/* 말풍선 (꼬리는 그리드 컨테이너로) */}
-      <div style={{ maxWidth: 470, margin: "0 auto 6px" }}>
+      {/* 말풍선 (꼬리는 그리드 컨테이너로) — toggle 행에 따라 Y 이동 */}
+      <div style={{ maxWidth: 470, margin: "0 auto 6px", transform: `translateY(${focusRow == null ? 0 : (focusRow <= 1 ? 0 : (focusRow === 2 ? 28 : 56))}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)", position: "relative", zIndex: 5 }}>
         <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 12, padding: "11px 14px", fontSize: 12.5, color: "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word" }}>💬 {st.bubble}</div>
       </div>
 
@@ -455,6 +459,9 @@ export function ReflectionBruteSim({ E }) {
   const isFlip = (r, c) => st.flipCell && st.flipCell[0] === r && st.flipCell[1] === c;
   const isDone = st.phase === "done";
   const bubbleColor = isDone ? "#ef4444" : "#fbbf24";
+  // 말풍선 Y — 스캔 중인 묶음 (또는 뒤집힌 칸) 행에 따라 이동
+  const groupRow = st.group ? Math.min(...st.group.map(([r]) => r)) : (st.flipCell ? st.flipCell[0] : null);
+  const bubbleShiftY = groupRow == null ? 0 : (groupRow <= 1 ? 0 : (groupRow === 2 ? 30 : 60));
 
   return (
     <div style={{ padding: 16 }}>
@@ -462,8 +469,8 @@ export function ReflectionBruteSim({ E }) {
         🐌 {t(E, "Brute force — recount ALL groups every flip", "브루트포스 — 뒤집기마다 4 묶음 다시 세기")}
       </div>
 
-      {/* 말풍선 */}
-      <div style={{ maxWidth: 470, margin: "0 auto 6px" }}>
+      {/* 말풍선 — 스캔 묶음 행에 따라 Y */}
+      <div style={{ maxWidth: 470, margin: "0 auto 6px", transform: `translateY(${bubbleShiftY}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)", position: "relative", zIndex: 5 }}>
         <div style={{ background: isDone ? "#fef2f2" : "#fffbeb", border: `1.5px solid ${bubbleColor}`, borderRadius: 12, padding: "11px 14px", fontSize: 12.5, color: isDone ? "#7f1d1d" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word" }}>💬 {st.bubble}</div>
       </div>
 

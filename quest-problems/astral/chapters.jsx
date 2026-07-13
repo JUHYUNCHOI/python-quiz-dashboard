@@ -309,28 +309,34 @@ function Sample1Counter({ E }) {
             </div>
           );
         })}
-        {!isFinal && (
-          <div style={{
-            position: "absolute", left: gridW + 18, top: active.r * P - 2, width: 168,
-            background: "#312e81", color: "#fff", borderRadius: 10, padding: "8px 11px",
-            fontSize: 12, lineHeight: 1.5, fontWeight: 600,
-          }}>
+        {/* 말풍선 = 지금 설명 중인 셀 옆으로 부드럽게 이동 (translateY + transition).
+            active 있으면 그 행으로, 최종 요약은 가운데 행(1)으로. */}
+        {(() => {
+          const targetRow = isFinal ? 1 : active.r;
+          const shiftY = targetRow * P - 2;
+          return (
             <div style={{
-              position: "absolute", left: -7, top: 15, width: 0, height: 0,
-              borderTop: "7px solid transparent", borderBottom: "7px solid transparent", borderRight: "8px solid #312e81",
-            }} />
-            {meaning(active.letter)}
-          </div>
-        )}
-        {isFinal && (
-          <div style={{
-            position: "absolute", left: gridW + 18, top: P, width: 168,
-            background: "#dcfce7", color: "#14532d", border: "1.5px solid #16a34a",
-            borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.5, fontWeight: 700,
-          }}>
-            {t(E, "All done! G ×3 + B ×4 = 7 stars.", "다 셌어요! G 3개 + B 4개 = 별 7개!")}
-          </div>
-        )}
+              position: "absolute", left: gridW + 18, top: 0, width: 168,
+              background: isFinal ? "#dcfce7" : "#312e81", color: isFinal ? "#14532d" : "#fff",
+              border: isFinal ? "1.5px solid #16a34a" : "none",
+              borderRadius: 10, padding: "8px 11px",
+              fontSize: 12, lineHeight: 1.5, fontWeight: isFinal ? 700 : 600,
+              transform: `translateY(${shiftY}px)`,
+              transition: "transform .42s cubic-bezier(.4,0,.2,1), background .3s ease",
+              zIndex: 5,
+            }}>
+              {!isFinal && (
+                <div style={{
+                  position: "absolute", left: -7, top: 15, width: 0, height: 0,
+                  borderTop: "7px solid transparent", borderBottom: "7px solid transparent", borderRight: "8px solid #312e81",
+                }} />
+              )}
+              {isFinal
+                ? t(E, "All done! G ×3 + B ×4 = 7 stars.", "다 셌어요! G 3개 + B 4개 = 별 7개!")
+                : meaning(active.letter)}
+            </div>
+          );
+        })()}
       </div>
 
       <div style={{ textAlign: "center", marginBottom: 8, fontSize: 14, fontWeight: 800, color: "#4f46e5" }}>
@@ -564,12 +570,14 @@ function OrbitWalk({ E }) {
             </div>
           );
         }))}
-        {/* bubble */}
+        {/* 말풍선 = tail(=지금 설명 중인 별 위치) 행으로 부드럽게. */}
         <div style={{
-          position: "absolute", left: gridW + 16, top: Math.min(cur.tail.r * P, 2 * P), width: 184,
+          position: "absolute", left: gridW + 16, top: 0, width: 184,
           background: cur.final ? "#dcfce7" : "#1e3a8a", color: cur.final ? "#14532d" : "#fff",
           border: cur.final ? "1.5px solid #16a34a" : "none",
-          borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.55, fontWeight: 600, zIndex: 3,
+          borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.55, fontWeight: 600, zIndex: 5,
+          transform: `translateY(${Math.min(cur.tail.r * P, 2 * P)}px)`,
+          transition: "transform .42s cubic-bezier(.4,0,.2,1), background .3s ease",
         }}>
           <div style={{
             position: "absolute", left: -7, top: 15, width: 0, height: 0,
@@ -661,11 +669,15 @@ function CornerGWalk({ E }) {
             </div>
           );
         }))}
+        {/* 말풍선 = focus 하는 셀 행으로 부드럽게. edge/green 스텝은 위쪽(0)으로. */}
         <div style={{
-          position: "absolute", left: gridW + 14, top: bubbleRow * P, width: 168,
+          position: "absolute", left: gridW + 14, top: 0, width: 168,
           background: cur.green ? "#dcfce7" : "#1e3a8a", color: cur.green ? "#14532d" : "#fff",
           border: cur.green ? "1.5px solid #16a34a" : "none",
           borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.5, fontWeight: 600,
+          transform: `translateY(${bubbleRow * P}px)`,
+          transition: "transform .42s cubic-bezier(.4,0,.2,1), background .3s ease",
+          zIndex: 5,
         }}>
           {!cur.green && !cur.edge && (
             <div style={{
@@ -729,20 +741,30 @@ function PredecessorPeek({ E }) {
             </div>
           );
         }))}
-        <div style={{
-          position: "absolute", left: gridW + 16, top: cur.final ? P : cur.focus.r * P, width: 168,
-          background: cur.final ? "#dcfce7" : "#1e3a8a", color: cur.final ? "#14532d" : "#fff",
-          border: cur.final ? "1.5px solid #16a34a" : "none",
-          borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.5, fontWeight: 600,
-        }}>
-          {!cur.final && (
+        {/* 말풍선 = 지금 설명 중인 셀 옆으로 부드럽게 (final 은 가운데 행). */}
+        {(() => {
+          const targetRow = cur.final ? 1 : cur.focus.r;
+          const shiftY = targetRow * P;
+          return (
             <div style={{
-              position: "absolute", left: -7, top: 15, width: 0, height: 0,
-              borderTop: "7px solid transparent", borderBottom: "7px solid transparent", borderRight: "8px solid #1e3a8a",
-            }} />
-          )}
-          {cur.bubble}
-        </div>
+              position: "absolute", left: gridW + 16, top: 0, width: 168,
+              background: cur.final ? "#dcfce7" : "#1e3a8a", color: cur.final ? "#14532d" : "#fff",
+              border: cur.final ? "1.5px solid #16a34a" : "none",
+              borderRadius: 10, padding: "8px 11px", fontSize: 12, lineHeight: 1.5, fontWeight: 600,
+              transform: `translateY(${shiftY}px)`,
+              transition: "transform .42s cubic-bezier(.4,0,.2,1), background .3s ease",
+              zIndex: 5,
+            }}>
+              {!cur.final && (
+                <div style={{
+                  position: "absolute", left: -7, top: 15, width: 0, height: 0,
+                  borderTop: "7px solid transparent", borderBottom: "7px solid transparent", borderRight: "8px solid #1e3a8a",
+                }} />
+              )}
+              {cur.bubble}
+            </div>
+          );
+        })()}
       </div>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
         {btn(idx === 0, E ? "◀ Prev" : "◀ 이전", () => setSi(Math.max(0, idx - 1)))}

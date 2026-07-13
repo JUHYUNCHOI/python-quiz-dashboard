@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 import { ReflectionProgressiveCode, downloadReflectionPDF, getReflectionSections, ReflectionSim, ReflectionRunner } from "./components";
 import { makeReflectionCh1, makeReflectionCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
@@ -133,6 +134,11 @@ export default function ReflectionApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "🪞", ko: "거울 짝 4칸 묶음", en: "Mirror-pair 4-cell groups" },
+          { icon: "🎯", ko: "묶음마다 min(#, 4−#)", en: "Per-group min(#, 4−#)" },
+          { icon: "⚡", ko: "뒤집을 때 한 묶음만 재계산 O(1)", en: "One-group delta update O(1)" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}
