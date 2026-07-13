@@ -1506,12 +1506,10 @@ export function CheckupsExpandSim({ E }) {
         cow = [1,2,3,4,5,6]　want = [6,5,4,3,5,1]
       </div>
 
-      {/* 말풍선: focus/pending 스텝에선 Y 로 슥 내려와 flipped 행 바로 위에 붙음 (선생님 2026-07-13) */}
+      {/* 말풍선: 그리드 위 고정, 꼬리(가로)가 대상 열을 가리킴 — 아래로 안 내려 셀/브래킷 안 가림
+          (선생님 2026-07-13: "봐야 할 사진은 가리면 안 돼". translateY 아래이동 = 겹침이라 제거.) */}
       {(() => {
-        // focus 스텝 → 아래로 이동 (cow orig 행 위에 겹침 → flipped 행 바로 위).
-        // pending 스텝 (뒤집을 자리 표시) → 중간 위치.
-        // 그 외(개요/payoff) → 위쪽 고정.
-        const shiftY = st.focus != null ? 92 : (st.pending && st.pending.length > 0 ? 46 : 0);
+        const shiftY = 0;
         return (
           <div style={{ position: "relative", width: GRIDW, height: 100, margin: "0 auto 8px", zIndex: 5 }}>
             <div style={{ position: "absolute", bottom: 8, left: bubbleLeft, width: BW, background: st.payoff ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "10px 13px", fontSize: 12.5, color: st.payoff ? "#065f46" : "#92400e", lineHeight: 1.5, fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", textAlign: "left", boxShadow: "0 4px 14px rgba(0,0,0,.10)", transform: `translateY(${shiftY}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1), left .38s cubic-bezier(.4,0,.2,1)" }}>
@@ -1822,10 +1820,10 @@ export function CheckupsOutPrefixSim({ E }) {
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#0e7490", marginBottom: 10 }}>
         📊 {t(E, "✓ outside the window — write once, read by subtracting", "창 밖 검진 — 미리 적어두고 빼서 읽기")}
       </div>
-      {/* 말풍선: focus 스텝(창 사용 중, prefix 행을 뺌)엔 Y로 슥 내려와 prefix 행 근처로.
-          cntAt(맞나 세는 중)엔 checkup 행 근처로. 그 외엔 위쪽 고정. (선생님 2026-07-13 ExpandSim 패턴) */}
+      {/* 말풍선: 그리드 위 고정, 꼬리(가로)가 대상 열을 가리킴 — 아래로 안 내려 행 안 가림
+          (선생님 2026-07-13: "봐야 할 사진은 가리면 안 돼".) */}
       {(() => {
-        const shiftY = st.focus ? 54 : (st.cntAt ? 22 : 0);
+        const shiftY = 0;
         return (
           <div style={{ position: "relative", width: GRIDW, height: 92, margin: "0 auto 6px", zIndex: 5 }}>
             <div style={{ position: "absolute", bottom: 8, left: bubbleLeft, width: BW, background: st.payoff ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.payoff ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "10px 13px", fontSize: 12.5, color: st.payoff ? "#065f46" : "#92400e", lineHeight: 1.5, fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", textAlign: "left", boxShadow: "0 2px 8px rgba(0,0,0,.07)", transform: `translateY(${shiftY}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1), left .38s cubic-bezier(.4,0,.2,1)" }}>
