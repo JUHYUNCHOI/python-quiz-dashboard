@@ -19,23 +19,29 @@ export function MexesIntroSim({ E }) {
   // 배열 [2,2,2,0] 에서 mex 확인: 0 있음 → 1 없음 → mex = 1
   const steps = [
     { ex: null, c0: false, c1: false, mex: false, goal: 3,
-      bubble: t(E, "What this problem asks: change the array so its mex becomes a value WE choose — in the fewest changes. First, what is mex? Press ▶.",
-                   "이 문제가 시키는 것: 배열을 바꿔서 mex 를 '내가 정한 값'으로 만들기 — 최소 횟수로. 먼저 mex 가 뭔지부터. 아래 ▶ '다음' 을 눌러가며 봐요.") },
+      bubble: t(E,
+        "First — what is 'mex'?\nWe'll figure it out together, one step at a time.\n(Then we'll see what this problem actually asks.)",
+        "우선 'mex' 가 뭔지부터 알아볼게요.\n한 단계씩 같이 확인.\n(그러고 나서 이 문제가 뭘 시키는지 볼게요.)") },
     { ex: null, c0: false, c1: false, mex: false, goal: 0,
-      bubble: t(E, "Here are number boxes. mex = starting from 0, the FIRST number that is missing.",
-                   "숫자 상자들이에요. mex = 0 부터 세서 '처음으로 없는' 번호.") },
+      bubble: t(E,
+        "These are the number boxes.\nmex = starting from 0, the FIRST number NOT in the boxes.",
+        "숫자 상자들이에요.\nmex = 0 부터 세서 '상자에 없는 첫 번째' 번호.") },
     { ex: 0, c0: true, c1: false, mex: false, goal: 0,
-      bubble: t(E, "Is 0 in the boxes? Yes ✔ — keep going.",
-                   "0 이 상자에 있어? 있음 ✔ — 계속.") },
+      bubble: t(E,
+        "Check 0 first — is 0 in the boxes?\nYes ✔ (there's a 0). Keep going.",
+        "먼저 0 확인 — 상자에 0 이 있어?\n있음 ✔ (0 하나). 계속.") },
     { ex: 1, c0: true, c1: true, mex: true, goal: 0,
-      bubble: t(E, "Is 1 in the boxes? No ✘. The first missing one is 1 → mex = 1.",
-                   "1 은 있어? 없음 ✘. 처음으로 없는 게 1 → mex = 1.") },
+      bubble: t(E,
+        "Now check 1 — is 1 in the boxes?\nNo ✘. So the first missing = 1.\n→ mex = 1.",
+        "이제 1 확인 — 상자에 1 이 있어?\n없음 ✘. 처음으로 없는 게 1.\n→ mex = 1.") },
     { ex: null, c0: true, c1: true, mex: true, goal: 1,
-      bubble: t(E, "This problem asks the OPPOSITE: change boxes so the mex becomes a value WE pick. One box change = 1 operation. Fewest operations?",
-                   "이 문제는 반대예요: 상자를 바꿔서 mex 를 '우리가 정한 값'으로 만들기. 상자 하나 바꾸기 = 1 번. 최소 몇 번?") },
+      bubble: t(E,
+        "Just now: boxes → we computed mex.\nThis problem is the OPPOSITE!\nWe pick the mex we want, then CHANGE boxes to make it happen.\nOne box change = 1 operation. Fewest operations?",
+        "방금: 상자 → mex 를 구했어요.\n이 문제는 거꾸로!\n우리가 원하는 mex 를 먼저 정하고, 상자를 바꿔서 그 mex 로 만들기.\n상자 1 개 바꿈 = 연산 1 번. 최소 몇 번?") },
     { ex: null, c0: true, c1: true, mex: true, goal: 2,
-      bubble: t(E, "Example — to make mex = 2 we need 0 present, 1 present, 2 absent. Let's do it step by step on the next screen.",
-                   "예를 들어 mex = 2 로 만들려면 → 0 있고, 1 있고, 2 없어야. 다음 화면에서 한 단계씩 직접 해봐요.") },
+      bubble: t(E,
+        "Example — say we want mex = 2.\nThat means: 0 must be present, 1 must be present, 2 must be ABSENT.\nHow do we do it? Next screen shows step by step.",
+        "예: mex = 2 를 원한다면?\n0 있어야, 1 있어야, 2 는 없어야.\n어떻게 만들지 다음 화면에서 한 단계씩 봐요.") },
   ];
   const { idx, setIdx, total: tot } = useTraceStep(steps.length);
   const st = steps[Math.min(idx, steps.length - 1)];
@@ -55,7 +61,7 @@ export function MexesIntroSim({ E }) {
 
       {/* 말풍선 — 스텝에 따라 Y 로 슥 이동 (설명 중인 대상 옆으로) */}
       <div style={{ maxWidth: 540, margin: "0 auto 14px", position: "relative", zIndex: 5, transform: `translateY(${shiftY}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)" }}>
-        <div style={{ background: st.goal ? "#f5f3ff" : (st.mex ? "#ecfdf5" : "#fffbeb"), border: `1.5px solid ${st.goal ? "#c4b5fd" : (st.mex ? "#6ee7b7" : "#fbbf24")}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.goal ? "#5b21b6" : (st.mex ? "#065f46" : "#92400e"), lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>💬 {st.bubble}</div>
+        <div style={{ background: st.goal ? "#f5f3ff" : (st.mex ? "#ecfdf5" : "#fffbeb"), border: `1.5px solid ${st.goal ? "#c4b5fd" : (st.mex ? "#6ee7b7" : "#fbbf24")}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.goal ? "#5b21b6" : (st.mex ? "#065f46" : "#92400e"), lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>💬 {st.bubble}</div>
         <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.goal ? "#c4b5fd" : (st.mex ? "#6ee7b7" : "#fbbf24")}` }} />
       </div>
 
@@ -182,7 +188,7 @@ export function MexesSampleSim({ E }) {
 
       {/* 말풍선 — 스텝별로 Y 이동. 첫 스텝은 위, 목표 강조 시엔 배열/출력 옆으로 슥. */}
       <div style={{ maxWidth: 560, margin: "0 auto 2px", position: "relative", zIndex: 5, transform: `translateY(${shiftY}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)" }}>
-        <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 12, padding: "10px 14px", fontSize: 12.5, color: "#92400e", lineHeight: 1.55, fontWeight: 600, wordBreak: "keep-all", textAlign: "center", minHeight: 42, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>💬 {st.bubble}</div>
+        <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 12, padding: "10px 14px", fontSize: 12.5, color: "#92400e", lineHeight: 1.55, fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", textAlign: "center", minHeight: 42, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>💬 {st.bubble}</div>
         <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: "9px solid #fbbf24" }} />
       </div>
 
@@ -325,7 +331,7 @@ export function MexesMaxSim({ E }) {
 
       {/* 말풍선 — 스텝별로 Y 이동 (설명 중인 행 근처로) */}
       <div style={{ maxWidth: 540, margin: "0 auto 12px", position: "relative", zIndex: 5, transform: `translateY(${shiftYMax}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)" }}>
-        <div style={{ background: rv.done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${rv.done ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: rv.done ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>💬 {st.bubble}</div>
+        <div style={{ background: rv.done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${rv.done ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: rv.done ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>💬 {st.bubble}</div>
         <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${rv.done ? "#6ee7b7" : "#fbbf24"}` }} />
       </div>
 

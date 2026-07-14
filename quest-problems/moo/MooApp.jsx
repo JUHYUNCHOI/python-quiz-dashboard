@@ -170,7 +170,7 @@ export default function MooApp(props = {}) {
           { icon: "🎯", ko: "완전 탐색 (위치 × 26 글자)", en: "Brute force (position × 26 letters)" },
           { icon: "🔁", ko: "빼기 → 시도 → 복원", en: "Remove → Try → Restore" },
           { icon: "🪟", ko: "영향받는 3 윈도우만 갱신", en: "Update only ≤3 affected windows" },
-          { icon: "🗺️", ko: "해시맵 카운트 + 집합", en: "Hashmap count + set" },
+          { icon: "🗺️", ko: "해시맵 카운트 + 집합", en: "Hashmap count + set", href: "/algo/hashtable/learn?from=quest" },
         ]} />
 
         <QuestProgressBar

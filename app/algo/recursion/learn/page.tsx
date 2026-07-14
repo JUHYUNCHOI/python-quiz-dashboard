@@ -64,18 +64,18 @@ function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
           )} />
         ))}
       </div>
-      <div className="fixed bottom-[76px] sm:bottom-[80px] left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg p-3">
-        <div className="max-w-2xl mx-auto flex gap-2">
+      <div className="fixed bottom-[76px] sm:bottom-[80px] left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg p-2.5">
+        <div className="max-w-md mx-auto flex gap-2">
           <button
             onClick={() => step > 0 && setStep(step - 1)}
             disabled={step === 0}
-            className="px-4 py-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-xl font-bold text-sm"
+            className="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-lg font-bold text-sm"
           >
             ← {t("이전", "Prev")}
           </button>
           <button
             onClick={() => isLast ? onFinish() : setStep(step + 1)}
-            className="flex-1 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95"
+            className="flex-[2] py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-lg font-black text-sm flex items-center justify-center gap-2 shadow-md active:scale-95"
           >
             {isLast ? (finishLabel ?? t("다음 챕터로", "Next chapter")) : (nextLabel ?? t("다음", "Next"))}
             <ArrowRight className="w-5 h-5" />
@@ -140,52 +140,173 @@ function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
   )
 }
 
-// ── Chapter 1: 재귀가 왜 필요해? — 안심시키기 + 2 줄 규칙 + 예고 ────
+// ── Chapter 1: 재귀가 왜 필요해? — 마트료시카 '눈으로' 열기 + 2 줄 규칙 + 예고 ────
+// (선생님 2026-07-13: 텍스트 비유만 있고 그림이 없었음 → 인형이 실제로 하나씩
+//  열리는 스텝 시뮬. 말풍선 하나 + 그 순간의 그림 하나. quest 시뮬과 같은 문법.)
 function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 3
+  const totalSteps = 7
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
+
+  // 마트료시카 시뮬 (step 0~4): 인형이 하나씩 열리며 등장.
+  // dollCount = 이 스텝까지 보이는 인형 수, focus = 강조할 인형 index, base = 마지막(베이스) 강조
+  // 인형은 크게 + 바닥 한 줄(baseline)로 정렬. 라벨은 absolute 로 아래에 띄워 baseline 안 흔들리게.
+  // (선생님 2026-07-13: min-h + items-end 로 '빈 구멍' 생기던 것 제거 → 콘텐츠에 딱 맞게.)
+  const DOLL_SIZES = [86, 68, 52, 38, 26]   // px — 같은 모양, 점점 작게 (데스크탑에서 잘 보이게 키움)
+  const dollSim = (dollCount: number, opts: { base?: boolean } = {}) => (
+    <div className="flex items-end justify-center gap-5 pt-3 pb-7 flex-wrap">
+      {DOLL_SIZES.slice(0, dollCount).map((size, i) => {
+        const isBase = opts.base && i === dollCount - 1
+        return (
+          <div key={i} className="relative flex flex-col items-center">
+            <span
+              style={{ fontSize: size, lineHeight: 1 }}
+              className={cn("transition-all duration-300",
+                isBase && "drop-shadow-[0_0_12px_rgba(244,63,94,0.85)] scale-110")}
+            >🪆</span>
+            {isBase && (
+              <span className="absolute top-full mt-1.5 text-[11px] font-black text-rose-600 whitespace-nowrap">✋ {t("안 열려!", "won't open!")}</span>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+
+  // 폴더 트리 한 조각 (step 0) — 들여쓰기로 '점점 깊어짐' 을 보여줌
+  const folderRow = (depth: number, emoji: string, label: string, dim = false) => (
+    <div className="flex items-center gap-2 text-sm" style={{ marginLeft: depth * 20 }}>
+      <span className="text-base">{emoji}</span>
+      <span className={cn("font-semibold break-keep", dim ? "text-gray-400" : "text-gray-700")}>{label}</span>
+    </div>
+  )
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
+        {/* ── step 0~4: '왜 재귀?' — 곤란한 문제(깊이 모름) → for 막힘 → 재귀 → 인형은 모양 정리.
+            페이지 공통 디자인 언어(이모지 헤더 + h3 + white/70 카드 + 마무리 한 줄)에 맞춤.
+            (선생님 2026-07-13: 앞서 말풍선-only 로 갈아엎었더니 '읽기 싫고 싸구려' → 다른 챕터와
+             같은 카드 문법으로 통일, 텍스트는 짧게·시각물을 주인공으로.) ── */}
         {step === 0 && (
-          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border-2 border-amber-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">😊</p>
-            <h3 className="text-xl font-black text-gray-900 mb-3 text-center">
-              {t("안녕! 재귀 함께 가요", "Hi! Recursion — together")}
+          <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 border-2 border-amber-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🔍</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
+              {t("재귀는 왜 필요할까?", "Why do we need recursion?")}
             </h3>
-            <div className="bg-white/80 rounded-lg p-3 border border-amber-200 mb-3">
-              <p className="text-xs text-amber-700 font-bold mb-1">📌 {t("이건 새 개념이에요 (복습 X)", "This is a NEW concept (not review)")}</p>
-              <p className="text-xs text-gray-700 leading-relaxed">
-                {t(
-                  "재귀는 main 커리큘럼에 안 나왔어요. 새 도구 — 그래서 '어려운 게 당연해요'. 천천히 가요.",
-                  "Recursion wasn't in the main curriculum. New tool — being confused is normal. We'll go slowly.",
-                )}
+            <div className="bg-white/70 rounded-lg p-4 border border-amber-200 mb-3">
+              <p className="text-xs font-bold text-amber-800 mb-3 text-center break-keep">
+                <span className="mr-1">📷</span>{t("사진 한 장을 찾아요 — 폴더 속의 폴더 속…", "Find one photo — folders inside folders…")}
               </p>
+              <div className="flex justify-center">
+                <div className="space-y-1.5">
+                  {folderRow(0, "📁", t("내 컴퓨터", "My PC"))}
+                  {folderRow(1, "📁", t("사진", "Photos"))}
+                  {folderRow(2, "📁", "2025")}
+                  {folderRow(3, "📁", t("… 몇 겹 더?", "… how much deeper?"), true)}
+                  <div className="flex items-center gap-2 text-sm" style={{ marginLeft: 80 }}>
+                    <span className="text-base">🖼️</span>
+                    <span className="font-black text-rose-600 break-keep">{t("찾는 사진!", "the photo!")}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <p className="text-sm text-gray-800 leading-relaxed mb-3">
-              <b className="text-orange-700">{t("비유", "Analogy")}:</b>{" "}
-              {t(
-                "러시아 인형 (마트료시카) 알죠? 큰 인형 열면 같은 모양 작은 인형, 또 열면 더 작은 인형... 마지막엔 손톱만 한 인형.",
-                "Russian dolls (matryoshka). Open the big one → same-shaped smaller one → smaller still → finally a tiny one.",
-              )}
+            <p className="text-sm font-bold text-amber-700 text-center break-keep">
+              {t("몇 겹인지 아무도 몰라요.", "Nobody knows how deep it goes.")}
             </p>
-            <p className="text-sm text-gray-800 leading-relaxed mb-3">
-              {t(
-                "재귀 = ",
-                "Recursion = ",
-              )}<b className="text-orange-700">{t("큰 문제 → 같은 모양의 작은 문제로 나눠 푸는 방법", "split big problem into same-shaped smaller problems")}</b>.
-            </p>
-            <div className="bg-emerald-50 rounded-lg p-3 border border-emerald-200">
-              <p className="text-sm font-bold text-emerald-800 text-center">
-                💛 {t("어려워 보여요? 사실 ", "Looks scary? Actually only ")}<b>{t("2 줄짜리 규칙", "2-line rule")}</b>{t(" 만 외우면 끝.", " to memorize.")}
-              </p>
-            </div>
           </div>
         )}
 
         {step === 1 && (
+          <div className="bg-gradient-to-br from-rose-50 to-orange-50 rounded-2xl p-6 border-2 border-rose-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">😵</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
+              {t("배운 걸로 — for 문?", "Use what we know — for loops?")}
+            </h3>
+            <div className="bg-white/70 rounded-lg p-3 border border-rose-200 mb-3">
+              <p className="text-xs font-bold text-rose-800 mb-2"><span className="mr-1">📝</span>{t("한 겹에 for 하나씩…", "one for per level…")}</p>
+              <div className="bg-gray-900 rounded-lg p-3">
+                <pre className="text-xs text-emerald-200 font-mono leading-relaxed" style={{ fontVariantLigatures: "none" }}>
+{`for A in 컴퓨터:
+    for B in A:
+        for C in B:
+            for ... ❓`}
+                </pre>
+              </div>
+            </div>
+            <p className="text-sm font-bold text-rose-700 text-center break-keep">
+              {t("깊이를 모르니 for 를 몇 개 쓸지 정할 수 없어요.", "Unknown depth → can't decide how many fors.")}
+            </p>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-6 border-2 border-indigo-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">💡</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
+              {t("어느 겹이든 — 하는 일은 하나", "Every level — same one job")}
+            </h3>
+            <div className="bg-white/70 rounded-lg p-4 border border-indigo-200 mb-3">
+              <p className="text-sm font-black text-indigo-800 text-center mb-3">🔍 {t("뒤지기(폴더)", "search(folder)")}</p>
+              <div className="space-y-2 text-[13px] font-bold text-gray-700 break-keep max-w-xs mx-auto">
+                <div className="flex items-center gap-2"><span>🖼️</span><span>{t("사진이면 → 찾았다, 끝!", "photo → found, done!")}</span></div>
+                <div className="flex items-center gap-2 flex-wrap"><span>📁</span><span>{t("폴더면 →", "folder →")}</span>
+                  <span className="text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-lg">🔍 {t("뒤지기", "search")}</span>
+                  <span className="text-indigo-400 text-xs">↺ {t("자기 자신!", "itself!")}</span>
+                </div>
+              </div>
+            </div>
+            <p className="text-sm font-bold text-indigo-700 text-center break-keep">
+              {t("'또 뒤지기' = 자기 자신을 다시 부르기.", "'search again' = call yourself.")}
+            </p>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border-2 border-emerald-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🔁</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
+              {t("이게 바로 재귀예요", "That's recursion")}
+            </h3>
+            <div className="bg-white/70 rounded-lg p-4 border border-emerald-200 mb-3">
+              <div className="flex items-center justify-center gap-3">
+                <div className="bg-rose-50 border-2 border-rose-200 rounded-xl px-4 py-3 text-center flex-1 max-w-[130px]">
+                  <p className="text-2xl mb-1">😵</p>
+                  <p className="text-[11px] font-black text-rose-700 break-keep">for — {t("깊이 미리 알아야", "need depth upfront")}</p>
+                </div>
+                <span className="text-2xl font-black text-gray-300">→</span>
+                <div className="bg-emerald-50 border-2 border-emerald-300 rounded-xl px-4 py-3 text-center flex-1 max-w-[130px]">
+                  <p className="text-2xl mb-1">🔍↺</p>
+                  <p className="text-[11px] font-black text-emerald-800 break-keep">{t("몇 겹이든 자동", "any depth, auto")}</p>
+                </div>
+              </div>
+            </div>
+            <p className="text-sm font-bold text-emerald-700 text-center break-keep mb-2">
+              {t("자기 자신을 부르니, 몇 겹이든 알아서 내려가요.", "It calls itself → handles any depth on its own.")}
+            </p>
+            <p className="text-[11px] text-gray-400 text-center break-keep">
+              {t("(while + 할 일 목록으로도 되긴 해요 — 근데 목록 관리는 우리 몫. 재귀는 자동!)",
+                 "(while + a to-do list works too — but YOU manage the list. Recursion does it for you.)")}
+            </p>
+          </div>
+        )}
+
+        {step === 4 && (
+          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border-2 border-amber-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🪆</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
+              {t("재귀의 모양 = 마트료시카", "Recursion's shape = matryoshka")}
+            </h3>
+            <div className="bg-white/70 rounded-lg p-3 border border-amber-200 mb-3">
+              {dollSim(5, { base: true })}
+            </div>
+            <p className="text-sm font-bold text-amber-700 text-center break-keep">
+              {t("마지막 인형은 안 열려요 → 여기서 멈춤 (= 베이스 케이스!)", "The last doll won't open → stop here (= base case!)")}
+            </p>
+          </div>
+        )}
+
+        {step === 5 && (
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200 min-h-[280px]">
             <p className="text-5xl text-center mb-3">📐</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
@@ -216,22 +337,22 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               </div>
             </div>
             <div className="bg-gray-900 rounded-lg p-3 my-2">
-              <pre className="text-xs text-emerald-200 font-mono leading-relaxed overflow-x-auto">
-{`def factorial(n):
-    if n <= 1: return 1        # ① 베이스 케이스
-    return n * factorial(n-1)  # ② 재귀 호출`}
+              <pre className="text-xs text-emerald-200 font-mono leading-relaxed overflow-x-auto" style={{ fontVariantLigatures: "none" }}>
+{`def 뒤지기(폴더):
+    if 사진이면: return "찾았다!"   # ① 베이스 케이스 (멈춤)
+    return 뒤지기(폴더 속 폴더)     # ② 재귀 호출 (자기 자신)`}
               </pre>
             </div>
-            <p className="text-xs text-blue-700 text-center leading-relaxed">
+            <p className="text-xs text-blue-700 text-center leading-relaxed break-keep">
               {t(
-                "이게 끝이에요. 두 줄만 있으면 재귀.",
-                "That's it. Two lines = recursion.",
+                "아까 그 폴더 뒤지기가 — 딱 이 두 줄이에요.",
+                "Our folder search — exactly these two lines.",
               )}
             </p>
           </div>
         )}
 
-        {step === 2 && (
+        {step === 6 && (
           <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border-2 border-purple-200 min-h-[280px]">
             <p className="text-5xl text-center mb-3">🗺️</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
@@ -932,14 +1053,14 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
         ))}
       </div>
-      <div className="fixed bottom-[76px] sm:bottom-[80px] left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg p-3">
-        <div className="max-w-2xl mx-auto flex gap-2">
+      <div className="fixed bottom-[76px] sm:bottom-[80px] left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg p-2.5">
+        <div className="max-w-md mx-auto flex gap-2">
           <button onClick={() => step > 0 && setStep(step - 1)} disabled={step === 0}
-            className="px-4 py-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-xl font-bold text-sm">
+            className="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-lg font-bold text-sm">
             ← {t("이전", "Prev")}
           </button>
           <button onClick={() => step < totalSteps - 1 ? setStep(step + 1) : onComplete()}
-            className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95">
+            className="flex-[2] py-2.5 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-lg font-black text-sm flex items-center justify-center gap-2 shadow-md active:scale-95">
             {step === totalSteps - 1
               ? <>🎉 {t("재귀 마스터!", "Recursion Master!")} <Sparkles className="w-5 h-5" /></>
               : <>{t("다음", "Next")} <ArrowRight className="w-5 h-5" /></>}
@@ -1040,6 +1161,21 @@ export default function RecursionPage() {
             <h1 className="text-xl sm:text-2xl font-black text-gray-900">{t("재귀", "Recursion")}</h1>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 border border-purple-300">{t("Silver 필수", "Silver core")}</span>
             {isMastered && <span className="text-2xl">⭐</span>}
+            {/* 언어 토글 — 페이지 전역 설정이라 제목 줄 우측에 고정 (선생님 2026-07-13: 챕터 제목 카드 제거) */}
+            <div className="flex bg-gray-100 rounded-md p-0.5 gap-0.5 shrink-0 ml-auto">
+              <button
+                onClick={() => setCodeLang("py")}
+                className={cn("px-2 py-0.5 rounded text-[10px] font-bold transition-all",
+                  codeLang === "py" ? "bg-emerald-500 text-white" : "text-gray-500 hover:text-emerald-600")}
+                title="Python"
+              >🐍 Py</button>
+              <button
+                onClick={() => setCodeLang("cpp")}
+                className={cn("px-2 py-0.5 rounded text-[10px] font-bold transition-all",
+                  codeLang === "cpp" ? "bg-blue-500 text-white" : "text-gray-500 hover:text-blue-600")}
+                title="C++"
+              >⚡ C++</button>
+            </div>
           </div>
 
           {isMastered && (
@@ -1080,40 +1216,6 @@ export default function RecursionPage() {
           <p className="text-[10px] text-gray-500 mt-1 text-right tabular-nums">
             {completedChapters.size} / {CHAPTERS.length} {t("챕터 완료", "chapters done")}
           </p>
-        </div>
-
-        <div className="mb-4 bg-white rounded-2xl border-2 border-gray-200 p-4 shadow-sm">
-          {(() => {
-            const ch = CHAPTERS[current - 1]
-            return (
-              <>
-                <div className="flex items-center justify-between mb-1 gap-2">
-                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider truncate">
-                    {t(`챕터 ${current}/${CHAPTERS.length}`, `Ch ${current}/${CHAPTERS.length}`)} · ⏱ {ch.mins}{t("분", "min")}
-                  </span>
-                  {/* 작은 언어 토글 — 챕터 헤더 우측에 inline */}
-                  <div className="flex bg-gray-100 rounded-md p-0.5 gap-0.5 shrink-0">
-                    <button
-                      onClick={() => setCodeLang("py")}
-                      className={cn("px-2 py-0.5 rounded text-[10px] font-bold transition-all",
-                        codeLang === "py" ? "bg-emerald-500 text-white" : "text-gray-500 hover:text-emerald-600")}
-                      title="Python"
-                    >🐍 Py</button>
-                    <button
-                      onClick={() => setCodeLang("cpp")}
-                      className={cn("px-2 py-0.5 rounded text-[10px] font-bold transition-all",
-                        codeLang === "cpp" ? "bg-blue-500 text-white" : "text-gray-500 hover:text-blue-600")}
-                      title="C++"
-                    >⚡ C++</button>
-                  </div>
-                </div>
-                <h2 className="text-lg sm:text-xl font-black text-gray-900 flex items-center gap-2">
-                  <span className="text-2xl">{ch.emoji}</span>
-                  {t(ch.title, ch.titleEn)}
-                </h2>
-              </>
-            )
-          })()}
         </div>
 
         <div id="chapter-content" className="bg-white rounded-2xl border-2 border-gray-200 p-4 sm:p-5 shadow-sm scroll-mt-4">

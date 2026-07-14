@@ -327,7 +327,8 @@ export function highlight(line: string, lang: "py" | "cpp" = "py"): React.ReactN
       parts.push(<span key={`${m.index}t`} style={{ color: "#e2e8f0" }}>{tok}</span>)
   }
   if (comment)
-    parts.push(<span key="cmt" style={{ color: "#8b949e", fontStyle: "italic" }}>{comment}</span>)
+    // 주석(특히 한글 설명)을 더 밝게 + 이탤릭 제거 — 이탤릭 한글은 잘 안 읽힘 (선생님 2026-07-13).
+    parts.push(<span key="cmt" style={{ color: "#9aa8bd" }}>{comment}</span>)
   return parts
 }
 
@@ -361,7 +362,7 @@ export function CodeBlock({ lines, lang = "py", dimUntil = 0 }: CodeBlockProps) 
     }
   }
   return (
-    <div className="relative bg-gray-900 rounded-xl px-3 py-3 overflow-x-auto text-[13px] leading-relaxed font-mono">
+    <div className="relative bg-gray-900 rounded-xl px-3 py-3 overflow-x-auto text-[13px] leading-relaxed font-mono" style={{ fontVariantLigatures: "none", fontFeatureSettings: '"liga" 0, "calt" 0' }}>
       <button
         onClick={handleCopy}
         className={`absolute top-2 right-2 px-2 py-1 rounded-md text-[11px] font-bold transition-colors ${

@@ -42,6 +42,8 @@ export default function PrintseqApp(props = {}) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     try { window.localStorage.setItem(_posKey, JSON.stringify({ tab, si })); } catch {}
+    // '재귀' 학습 링크는 코드 챕터(1)에서만 크게 (선생님 2026-07-13: 재귀 태그 + 학습으로 갈 수 있게).
+    window.dispatchEvent(new CustomEvent("quest-algohint", { detail: { show: tab >= 1 } }));
   }, [tab, si, _posKey]);
 
   useEffect(() => {
@@ -135,9 +137,9 @@ export default function PrintseqApp(props = {}) {
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
         <AlgorithmTags E={E} tags={[
-          { icon: "🔁", ko: "재귀 분할", en: "Recursive split" },
+          { icon: "🔁", ko: "재귀 분할", en: "Recursive split", href: "/algo/recursion/learn?from=quest" },
           { icon: "🎯", ko: "세 모양 시도 (같음·반복·자르기)", en: "Try 3 shapes (same·repeat·split)" },
-          { icon: "💾", ko: "메모이제이션", en: "Memoization" },
+          { icon: "💾", ko: "메모이제이션 = top-down DP", en: "Memoization = top-down DP", href: "/algo/dp/learn?from=quest" },
         ]} />
 
         <QuestProgressBar

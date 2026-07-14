@@ -65,18 +65,18 @@ function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
           )} />
         ))}
       </div>
-      <div className="fixed bottom-[76px] sm:bottom-[80px] left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg p-3">
-        <div className="max-w-2xl mx-auto flex gap-2">
+      <div className="fixed bottom-[76px] sm:bottom-[80px] left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg p-2.5">
+        <div className="max-w-md mx-auto flex gap-2">
           <button
             onClick={() => step > 0 && setStep(step - 1)}
             disabled={step === 0}
-            className="px-4 py-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-xl font-bold text-sm"
+            className="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-lg font-bold text-sm"
           >
             ← {t("이전", "Prev")}
           </button>
           <button
             onClick={() => isLast ? onFinish() : setStep(step + 1)}
-            className="flex-1 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95"
+            className="flex-[2] py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-lg font-black text-sm flex items-center justify-center gap-2 shadow-md active:scale-95"
           >
             {isLast ? (finishLabel ?? t("다음 챕터로", "Next chapter")) : (nextLabel ?? t("다음", "Next"))}
             <ArrowRight className="w-5 h-5" />
@@ -999,14 +999,14 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; already
             i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
         ))}
       </div>
-      <div className="fixed bottom-[76px] sm:bottom-[80px] left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg p-3">
-        <div className="max-w-2xl mx-auto flex gap-2">
+      <div className="fixed bottom-[76px] sm:bottom-[80px] left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg p-2.5">
+        <div className="max-w-md mx-auto flex gap-2">
           <button onClick={() => step > 0 && setStep(step - 1)} disabled={step === 0}
-            className="px-4 py-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-xl font-bold text-sm">
+            className="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 rounded-lg font-bold text-sm">
             ← {t("이전", "Prev")}
           </button>
           <button onClick={() => step < totalSteps - 1 ? setStep(step + 1) : onComplete()}
-            className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl font-black text-base flex items-center justify-center gap-2 shadow-lg active:scale-95">
+            className="flex-[2] py-2.5 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-lg font-black text-sm flex items-center justify-center gap-2 shadow-md active:scale-95">
             {step === totalSteps - 1
               ? <>🎉 {t("스택/큐 마스터!", "Stack/Queue Master!")} <Sparkles className="w-5 h-5" /></>
               : <>{t("다음", "Next")} <ArrowRight className="w-5 h-5" /></>}
@@ -1100,11 +1100,25 @@ export default function StackQueuePage() {
               { label: "알고리즘", labelEn: "Algorithms", href: "/algo", emoji: "🧩" },
               { label: "스택/큐", labelEn: "Stack/Queue", emoji: "📊" },
             ]} />
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-3 flex-wrap">
             <span className="text-3xl">📚</span>
             <h1 className="text-xl sm:text-2xl font-black text-gray-900">{t("스택과 큐", "Stack & Queue")}</h1>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-300">Bronze</span>
             {isMastered && <span className="text-2xl">⭐</span>}
+            <div className="flex bg-gray-100 rounded-md p-0.5 gap-0.5 shrink-0 ml-auto">
+              <button
+                onClick={() => setCodeLang("py")}
+                className={cn("px-2 py-0.5 rounded text-[10px] font-bold transition-all",
+                  codeLang === "py" ? "bg-emerald-500 text-white" : "text-gray-500 hover:text-emerald-600")}
+                title="Python"
+              >🐍 Py</button>
+              <button
+                onClick={() => setCodeLang("cpp")}
+                className={cn("px-2 py-0.5 rounded text-[10px] font-bold transition-all",
+                  codeLang === "cpp" ? "bg-blue-500 text-white" : "text-gray-500 hover:text-blue-600")}
+                title="C++"
+              >⚡ C++</button>
+            </div>
           </div>
 
           {isMastered && (
@@ -1146,40 +1160,6 @@ export default function StackQueuePage() {
           <p className="text-[10px] text-gray-500 mt-1 text-right tabular-nums">
             {completedChapters.size} / {CHAPTERS.length} {t("챕터 완료", "chapters done")}
           </p>
-        </div>
-
-        <div className="mb-4 bg-white rounded-2xl border-2 border-gray-200 p-4 shadow-sm">
-          {(() => {
-            const ch = CHAPTERS[current - 1]
-            return (
-              <>
-                <div className="flex items-center justify-between mb-1 gap-2">
-                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider truncate">
-                    {t(`챕터 ${current}/${CHAPTERS.length}`, `Ch ${current}/${CHAPTERS.length}`)} · ⏱ {ch.mins}{t("분", "min")}
-                  </span>
-                  {/* 작은 언어 토글 — 챕터 헤더 우측에 inline */}
-                  <div className="flex bg-gray-100 rounded-md p-0.5 gap-0.5 shrink-0">
-                    <button
-                      onClick={() => setCodeLang("py")}
-                      className={cn("px-2 py-0.5 rounded text-[10px] font-bold transition-all",
-                        codeLang === "py" ? "bg-emerald-500 text-white" : "text-gray-500 hover:text-emerald-600")}
-                      title="Python"
-                    >🐍 Py</button>
-                    <button
-                      onClick={() => setCodeLang("cpp")}
-                      className={cn("px-2 py-0.5 rounded text-[10px] font-bold transition-all",
-                        codeLang === "cpp" ? "bg-blue-500 text-white" : "text-gray-500 hover:text-blue-600")}
-                      title="C++"
-                    >⚡ C++</button>
-                  </div>
-                </div>
-                <h2 className="text-lg sm:text-xl font-black text-gray-900 flex items-center gap-2">
-                  <span className="text-2xl">{ch.emoji}</span>
-                  {t(ch.title, ch.titleEn)}
-                </h2>
-              </>
-            )
-          })()}
         </div>
 
         <div id="chapter-content" className="bg-white rounded-2xl border-2 border-gray-200 p-4 sm:p-5 shadow-sm scroll-mt-4">
