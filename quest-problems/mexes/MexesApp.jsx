@@ -136,7 +136,7 @@ export default function MexesApp(props = {}) {
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
         <AlgorithmTags E={E} tags={[
           { icon: "🎯", ko: "목표 mex 0..N 전수", en: "Try each target mex 0..N" },
-          { icon: "🧮", ko: "빈도 카운트", en: "Frequency count" },
+          { icon: "🧮", ko: "빈도 카운트", en: "Frequency count", href: "/algo/hashtable/learn?from=quest" },
           { icon: "⚡", ko: "ops = max(빠진 값, 목표 개수)", en: "ops = max(missing, count of target)" },
         ]} />
         <QuestProgressBar

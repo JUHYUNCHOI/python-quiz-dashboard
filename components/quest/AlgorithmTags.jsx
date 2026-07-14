@@ -11,6 +11,7 @@
 // 학생 시선 흐름: quest 열자마자 "아, 이거 [완전 시뮬레이션 + 가운데서 넓히기] 로 푸는구나!"
 // → 세부 챕터를 볼 때 이미 큰 그림을 알고 시작.
 
+import Link from "next/link";
 import { t } from "@/components/quest/theme";
 
 const COLORS = [
@@ -39,17 +40,29 @@ export function AlgorithmTags({ E, tags }) {
       {tags.map((tag, i) => {
         const c = COLORS[i % COLORS.length];
         const label = t(E, tag.en, tag.ko);
-        return (
-          <span key={i} style={{
-            display: "inline-flex", alignItems: "center", gap: 4,
-            fontSize: 12, fontWeight: 700,
-            padding: "3px 10px", borderRadius: 999,
-            background: c.bg, border: `1.5px solid ${c.border}`, color: c.text,
-            wordBreak: "keep-all",
-          }}>
+        const chipStyle = {
+          display: "inline-flex", alignItems: "center", gap: 4,
+          fontSize: 12, fontWeight: 700,
+          padding: "3px 10px", borderRadius: 999,
+          background: c.bg, border: `1.5px solid ${c.border}`, color: c.text,
+          wordBreak: "keep-all",
+          textDecoration: "none",
+          ...(tag.href ? { cursor: "pointer" } : {}),
+        };
+        const inner = (
+          <>
             {tag.icon && <span style={{ fontSize: 13 }}>{tag.icon}</span>}
             {label}
-          </span>
+            {/* href 있는 태그 = 배우러 가는 링크 (선생님 2026-07-13) */}
+            {tag.href && <span style={{ fontSize: 11, opacity: 0.7, marginLeft: 1 }}>↗</span>}
+          </>
+        );
+        // href 있으면 클릭해서 학습 페이지로, 없으면 그냥 칩
+        return tag.href ? (
+          <Link key={i} href={tag.href} style={chipStyle}
+            title={t(E, "Learn this →", "이거 배우러 가기 →")}>{inner}</Link>
+        ) : (
+          <span key={i} style={chipStyle}>{inner}</span>
         );
       })}
     </div>
