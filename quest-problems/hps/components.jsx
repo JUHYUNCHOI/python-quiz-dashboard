@@ -1300,7 +1300,7 @@ export function BitmaskColSim({ E }) {
             <ToBits3 x={cols[c]} color="#0891b2" />
             <span style={{ fontSize: 10, color: "#6b7280" }}>{t(E, "(card", "(카드")} {c + 1} {t(E, "beaten by:", "이기는 카드:")}
               {" "}
-              {intToBits(cols[c]).slice(WIDTH - 3).map((b, i) => b ? cardChip(i + 1) : null).filter(Boolean)}
+              {intToBits(cols[c]).slice(WIDTH - 3).map((b, i) => b ? <span key={i}>{cardChip(i + 1)}</span> : null).filter(Boolean)}
               )
             </span>
           </div>

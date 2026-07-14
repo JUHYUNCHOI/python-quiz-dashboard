@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 import { HpsProgressiveCode, downloadHpsPDF, getHpsSections, HpsSim } from "./components";
 import { makeHpsCh1, makeHpsCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
@@ -142,6 +143,12 @@ export default function HpsApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        {/* 풀이 방법 태그 — 다른 quest 와 동일한 상단 노출 (선생님 2026-07-14 hps 검토에서 누락 발견) */}
+        <AlgorithmTags E={E} tags={[
+          { icon: "🗺️", ko: "이김 표 만들기 (W/L/D → 2D)", en: "Build a beats table (W/L/D → 2D)" },
+          { icon: "🎯", ko: "여사건: N² − (못 이기는 패)²", en: "Complement: N² − (non-winning)²" },
+          { icon: "⚡", ko: "쿼리마다 O(N) 세기", en: "O(N) count per query" },
+        ]} />
         <QuestProgressBar
           tabs={TABS}
           states={states}

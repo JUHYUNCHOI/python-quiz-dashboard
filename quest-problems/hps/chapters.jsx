@@ -504,11 +504,51 @@ export function makeHpsCh2(E, lang = "py") {
       narr: t(E,
         "Brute is done — submit it.  The judge runs 12 test inputs against it.",
         "brute 코드 다 됐어. 제출! 채점기가 12 개 테스트 입력을 돌릴 거예요."),
+      // (2026-07-14 검토: 이 스텝이 낡은 안내문 하나만 있는 '빈 화면'이었음 → 제출 순간 도식으로 채움.
+      //  구체적 테스트 번호/시간은 확인된 바 없어 지어내지 않음 — 작은 입력 ✓ / 큰 입력 ⏰ 만.)
       content: (
-        <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
-          {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}
+        <div style={{ padding: 20 }}>
+          <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: C.text, marginBottom: 14 }}>
+            📮 {t(E, "Submitted — the judge starts running…", "제출 완료 — 채점기가 돌기 시작…")}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 480, margin: "0 auto" }}>
+            <div style={{
+              display: "flex", alignItems: "center", gap: 12, padding: "12px 16px",
+              background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 12,
+            }}>
+              <span style={{ fontSize: 22 }}>✅</span>
+              <div style={{ wordBreak: "keep-all" }}>
+                <div style={{ fontSize: 13, fontWeight: 800, color: "#166534" }}>
+                  {t(E, "Small inputs — pass", "작은 입력 — 통과")}
+                </div>
+                <div style={{ fontSize: 11.5, color: "#15803d", fontWeight: 600 }}>
+                  {t(E, "Sample and small N finish instantly. Answers correct!",
+                        "샘플·작은 N 은 순식간에 끝나요. 답도 다 맞아요!")}
+                </div>
+              </div>
+            </div>
+            <div style={{ textAlign: "center", fontSize: 16, color: C.dim }}>↓</div>
+            <div style={{
+              display: "flex", alignItems: "center", gap: 12, padding: "12px 16px",
+              background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 12,
+            }}>
+              <span style={{ fontSize: 22 }}>⏰</span>
+              <div style={{ wordBreak: "keep-all" }}>
+                <div style={{ fontSize: 13, fontWeight: 800, color: "#991b1b" }}>
+                  {t(E, "Big inputs — Time Limit Exceeded", "큰 입력 — 시간 초과 (TLE)")}
+                </div>
+                <div style={{ fontSize: 11.5, color: "#b91c1c", fontWeight: 600 }}>
+                  {t(E, "When N and M get big, the judge cuts us off — too slow.",
+                        "N 과 M 이 커지면 채점기가 끊어버려요 — 너무 느려서.")}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style={{ textAlign: "center", fontSize: 12, color: C.dim, fontWeight: 600, marginTop: 14, wordBreak: "keep-all" }}>
+            {t(E, "Answers are right… speed is the problem. WHERE is it slow? →",
+                  "답은 맞는데… 속도가 문제예요. 어디가 느린 걸까요? →")}
+          </div>
         </div>),
-
     },
     // Why brute force fails — show the actual nested-for code with the
     // N² loop highlighted, then count operations.  Previously this page
