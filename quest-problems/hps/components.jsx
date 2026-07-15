@@ -1647,7 +1647,7 @@ export function HpsFormulaGridSim({ E }) {
   // ⚡ 카드 먼저 → 지는 칸이 오른쪽 아래 2×2 로 모임
   const cards = [{ id: 2, win: true }, { id: 1, win: false }, { id: 3, win: false }];
   const steps = [
-    { phase: "test",  bubble: t(E, "Game 3: Elsie holds card 1 & card 1.  Which cards beat card 1?  Card 2 does — nothing else.\nSo the count of 'beats-both' cards = dom = 1.", "게임 3: Elsie 는 카드 1, 카드 1.  카드 1 을 이기는 건? → 카드 2 하나뿐.\n그래서 '둘 다 이기는 카드' 개수 = dom = 1.") },
+    { phase: "test",  bubble: t(E, "Game 3: Elsie plays card 1 TWICE (same card is allowed).  Which cards beat card 1?  Card 2 does — nothing else.\nSo the count of 'beats-both' cards = dom = 1.\n(With two DIFFERENT cards, no single card beats both → dom = 0 → answer 0.  Same card is the interesting case.)", "게임 3: Elsie 가 카드 1 을 두 장 냈어요 (같은 카드도 규칙상 OK).  카드 1 을 이기는 건? → 카드 2 하나뿐.\n그래서 '둘 다 이기는 카드' 개수 = dom = 1.\n(서로 다른 두 카드면 동시에 이기는 카드가 없어 dom = 0 → 답 0.  같은 카드일 때가 유일한 '비-0' 경우예요.)") },
     { phase: "grid",  bubble: t(E, "Now — Bessie picks 2 cards.  All her choices = 3 × 3 = 9 hands.  How many WIN?  Count in the grid.", "이제 — Bessie 는 카드 2 장을 골라요.  가능한 조합 = 3 × 3 = 9 패.  이 중 이기는 건 몇 개? 격자에서 세봐요.") },
     { phase: "green", bubble: t(E, "If a hand holds card 2 (⚡), Bessie plays it and wins whatever Elsie shows. Green = winning hands.", "패에 카드 2(⚡)가 한 장이라도 있으면 → 그걸 내서 이김 (Elsie 뭘 내든). 초록 = 이기는 패.") },
     { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ → the red 2 × 2 = 4.  (each slot has N − dom = 2 non-⚡ cards → (N − dom)²)", "둘 다 ⚡ 가 아닐 때만 짐 → 빨간 2 × 2 = 4.  (자리마다 ⚡ 아닌 카드 N − dom = 2 가지 → (N − dom)²)") },
@@ -1689,6 +1689,12 @@ export function HpsFormulaGridSim({ E }) {
         <div style={{ width: 0, height: 0, margin: "0 auto",
           borderLeft: "9px solid transparent", borderRight: "9px solid transparent",
           borderTop: "10px solid #fbbf24" }} />
+      </div>
+
+      {/* N·dom 정의 — 어느 스텝에서도 보이게 (선생님 2026-07-15: 앞 페이지 안 돌아가도 되게) */}
+      <div style={{ maxWidth: 480, margin: "8px auto 0", padding: "6px 10px", background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
+        <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N</b> = {t(E, "number of card types (here 3)", "카드 종류 수 (여기선 3)")}　·
+        <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#c2410c" }}>dom</b> = {t(E, "cards that beat BOTH of Elsie's cards", "Elsie 두 카드를 모두 이기는 카드 수")}
       </div>
 
       {showTest ? (

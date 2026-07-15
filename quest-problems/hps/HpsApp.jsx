@@ -143,11 +143,10 @@ export default function HpsApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
-        {/* 풀이 방법 태그 — 다른 quest 와 동일한 상단 노출 (선생님 2026-07-14 hps 검토에서 누락 발견) */}
+        {/* 태그 = 이 문제 풀려면 알아야 할 '공부 가능한 알고리즘' (선생님 2026-07-15:
+            구현 단계·복잡도 말고 학습할 개념 이름만). 여기선 여사건(complementary counting). */}
         <AlgorithmTags E={E} tags={[
-          { icon: "🗺️", ko: "이김 표 만들기 (W/L/D → 2D)", en: "Build a beats table (W/L/D → 2D)" },
-          { icon: "🎯", ko: "여사건: N² − (못 이기는 패)²", en: "Complement: N² − (non-winning)²" },
-          { icon: "⚡", ko: "쿼리마다 O(N) 세기", en: "O(N) count per query" },
+          { icon: "🎯", ko: "여사건 (complementary counting)", en: "Complementary counting" },
         ]} />
         <QuestProgressBar
           tabs={TABS}
