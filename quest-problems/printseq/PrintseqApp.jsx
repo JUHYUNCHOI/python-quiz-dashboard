@@ -137,9 +137,8 @@ export default function PrintseqApp(props = {}) {
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
         <AlgorithmTags E={E} tags={[
-          { icon: "🔁", ko: "재귀 분할", en: "Recursive split", href: "/algo/recursion/learn?from=quest" },
-          { icon: "🎯", ko: "세 모양 시도 (같음·반복·자르기)", en: "Try 3 shapes (same·repeat·split)" },
-          { icon: "💾", ko: "메모이제이션 = top-down DP", en: "Memoization = top-down DP", href: "/algo/dp/learn?from=quest" },
+          { icon: "🔁", ko: "재귀 (recursion)", en: "Recursion", href: "/algo/recursion/learn?from=quest" },
+          { icon: "🧠", ko: "메모이제이션 (DP)", en: "Memoization (DP)", href: "/algo/dp/learn?from=quest" },
         ]} />
 
         <QuestProgressBar

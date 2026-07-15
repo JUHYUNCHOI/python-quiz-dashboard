@@ -164,10 +164,7 @@ export default function Mooin2App(props = {}) {
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
         <AlgorithmTags E={E} tags={[
-          { icon: "🔢", ko: "빈도 카운트", en: "Frequency count", href: "/algo/hashtable/learn?from=quest" },
-          { icon: "📍", ko: "두 번째 마지막 자리", en: "Second-last position" },
-          { icon: "📊", ko: "앞 구역 서로 다른 값", en: "Distinct-prefix count", href: "/algo/prefixsum/learn?from=quest" },
-          { icon: "⚡", ko: "O(N³) → O(N) 최적화", en: "O(N³) → O(N) optimize" },
+          { icon: "🔢", ko: "빈도 세기 (counting)", en: "Frequency counting", href: "/algo/hashtable/learn?from=quest" },
         ]} />
         <QuestProgressBar
           tabs={TABS}

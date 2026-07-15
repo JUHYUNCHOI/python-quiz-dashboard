@@ -135,9 +135,7 @@ export default function ReflectionApp(props = {}) {
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
         <AlgorithmTags E={E} tags={[
-          { icon: "🪞", ko: "거울 짝 4칸 묶음", en: "Mirror-pair 4-cell groups" },
-          { icon: "🎯", ko: "묶음마다 min(#, 4−#)", en: "Per-group min(#, 4−#)" },
-          { icon: "⚡", ko: "뒤집을 때 한 묶음만 재계산 O(1)", en: "One-group delta update O(1)" },
+          { icon: "🔲", ko: "대칭 케이스워크 (casework)", en: "Symmetry casework" },
         ]} />
         <QuestProgressBar
           tabs={TABS}

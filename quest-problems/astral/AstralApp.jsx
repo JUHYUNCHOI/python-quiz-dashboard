@@ -149,10 +149,7 @@ export default function AstralApp(props = {}) {
         />
 
         <AlgorithmTags E={E} tags={[
-          { icon: "🎯", ko: "완전 시뮬레이션", en: "Full simulation" },
-          { icon: "⬅️", ko: "역방향 그리디", en: "Backward greedy", href: "/algo/greedy/learn?from=quest" },
-          { icon: "🔒", ko: "확정부터 처리", en: "Certain-first" },
-          { icon: "🧭", ko: "직전 칸 추적", en: "Predecessor lookup" },
+          { icon: "⬅️", ko: "역방향 그리디 (greedy)", en: "Backward greedy", href: "/algo/greedy/learn?from=quest" },
         ]} />
 
         {step.narr && <Narration key={`astr-${tab}-${cur}-${lang}`} text={step.narr} />}

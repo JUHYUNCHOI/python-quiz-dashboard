@@ -145,9 +145,7 @@ export default function CowPhotosApp(props = {}) {
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
         {/* 풀이 방법 태그 — 다른 quest 와 통일 (선생님 2026-07-14 cowphotos 검토에서 누락 발견) */}
         <AlgorithmTags E={E} tags={[
-          { icon: "🔢", ko: "빈도 세기 (Counter / freq 배열)", en: "Frequency count (Counter / freq array)", href: "/algo/hashtable/learn?from=quest" },
-          { icon: "🎯", ko: "공식: 2 × (peak보다 작은 반복 키) + 1", en: "Formula: 2 × (repeated keys below peak) + 1" },
-          { icon: "⚡", ko: "빈도 한 번만 → O(N)", en: "Count once → O(N)" },
+          { icon: "🔢", ko: "빈도 세기 (counting)", en: "Frequency counting", href: "/algo/hashtable/learn?from=quest" },
         ]} />
         <QuestProgressBar
           tabs={TABS}

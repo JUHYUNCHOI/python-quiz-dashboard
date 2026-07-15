@@ -167,10 +167,8 @@ export default function MooApp(props = {}) {
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
         <AlgorithmTags E={E} tags={[
-          { icon: "🎯", ko: "완전 탐색 (위치 × 26 글자)", en: "Brute force (position × 26 letters)" },
-          { icon: "🔁", ko: "빼기 → 시도 → 복원", en: "Remove → Try → Restore" },
-          { icon: "🪟", ko: "영향받는 3 윈도우만 갱신", en: "Update only ≤3 affected windows" },
-          { icon: "🗺️", ko: "해시맵 카운트 + 집합", en: "Hashmap count + set", href: "/algo/hashtable/learn?from=quest" },
+          { icon: "🔍", ko: "완전 탐색 (brute force)", en: "Brute force" },
+          { icon: "🗂️", ko: "해시맵·집합 (hash map / set)", en: "Hash map / set", href: "/algo/hashtable/learn?from=quest" },
         ]} />
 
         <QuestProgressBar
