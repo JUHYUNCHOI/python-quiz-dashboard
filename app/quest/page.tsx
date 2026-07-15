@@ -24,6 +24,9 @@ interface Problem {
   emoji: string
   title: string
   sub: string
+  /** 미완성/깨진 C++ 스텁 등으로 학생에게 숨김. 목록에서 제외되지만 기록·라우트는 유지.
+   *  현황: docs/BROKEN_QUESTS.md (선생님 2026-07-13). */
+  broken?: boolean
 }
 
 interface Section {
@@ -194,19 +197,19 @@ const SECTIONS: Section[] = [
       { id: "mcc19candy", emoji: "🍬", title: "Candy", sub: "MCC 2019 P3" },
       { id: "mcc19ditcoin", emoji: "💰", title: "Ditcoin", sub: "MCC 2019 P4" },
       { id: "mcc19elim", emoji: "🔢", title: "Elimination", sub: "MCC 2019 P5" },
-      { id: "mcc19palindrome", emoji: "🔄", title: "Palindrome", sub: "MCC 2019 P6" },
+      { broken: true, id: "mcc19palindrome", emoji: "🔄", title: "Palindrome", sub: "MCC 2019 P6" },
       { id: "mcc19rect2", emoji: "▭", title: "Rectangle 2", sub: "MCC 2019 P7" },
       { id: "mcc15rect", emoji: "▭", title: "Rectangle", sub: "MCC 2015 P1" },
-      { id: "mcc15equation", emoji: "➕", title: "Complete the Equation", sub: "MCC 2015 P2" },
-      { id: "mcc15bahasaf", emoji: "🗣️", title: "Bahasa F", sub: "MCC 2015 P3" },
+      { broken: true, id: "mcc15equation", emoji: "➕", title: "Complete the Equation", sub: "MCC 2015 P2" },
+      { broken: true, id: "mcc15bahasaf", emoji: "🗣️", title: "Bahasa F", sub: "MCC 2015 P3" },
       { id: "mcc15isthmus", emoji: "⛰️", title: "Isthmus", sub: "MCC 2015 P4" },
       { id: "mcc15choco", emoji: "🍫", title: "Chocolate Bars", sub: "MCC 2015 P5" },
-      { id: "mcc22grammar", emoji: "📖", title: "Grammar", sub: "MCC 2022 P1" },
-      { id: "mcc22aliens", emoji: "👽", title: "Aliens", sub: "MCC 2022 P2" },
-      { id: "mcc22maze", emoji: "🏰", title: "Maze", sub: "MCC 2022 P3" },
-      { id: "mcc22birthday", emoji: "🎂", title: "Cats' Birthday", sub: "MCC 2022 P4" },
-      { id: "mcc22cardshark", emoji: "🃏", title: "Card Shark", sub: "MCC 2022 P5" },
-      { id: "mcc22lamp", emoji: "💡", title: "Lamp", sub: "MCC 2022 P6" },
+      { broken: true, id: "mcc22grammar", emoji: "📖", title: "Grammar", sub: "MCC 2022 P1" },
+      { broken: true, id: "mcc22aliens", emoji: "👽", title: "Aliens", sub: "MCC 2022 P2" },
+      { broken: true, id: "mcc22maze", emoji: "🏰", title: "Maze", sub: "MCC 2022 P3" },
+      { broken: true, id: "mcc22birthday", emoji: "🎂", title: "Cats' Birthday", sub: "MCC 2022 P4" },
+      { broken: true, id: "mcc22cardshark", emoji: "🃏", title: "Card Shark", sub: "MCC 2022 P5" },
+      { broken: true, id: "mcc22lamp", emoji: "💡", title: "Lamp", sub: "MCC 2022 P6" },
       { id: "mcc21carrots", emoji: "🥕", title: "Carrots", sub: "MCC 2021 P1" },
       { id: "mcc21dvd", emoji: "📀", title: "DVD Screensaver", sub: "MCC 2021 P2" },
       { id: "mcc21marbles", emoji: "🔴", title: "Marbles and Boxes", sub: "MCC 2021 P3" },
@@ -310,7 +313,7 @@ export default function QuestPage() {
   // Filter problems by release stage (additive: full quests always shown).
   const visibleSections = SECTIONS.map(s => ({
     ...s,
-    problems: s.problems.filter(p => canSeeProblem(p.id)),
+    problems: s.problems.filter(p => !p.broken && canSeeProblem(p.id)),   // broken=미완성 C++ 스텁 → 학생 숨김 (docs/BROKEN_QUESTS.md)
   }))
 
   const totalProblems = visibleSections.reduce((acc, s) => acc + s.problems.length, 0)
