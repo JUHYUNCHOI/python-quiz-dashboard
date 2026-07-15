@@ -239,8 +239,8 @@ export function TrickySimulator({ E }) {
               <div>• [1, 2, 1] — a=1, peak=2</div>
               <div>• [1, 3, 1] — a=1, peak=3</div>
               <div>• [2, 3, 2] — a=2, peak=3</div>
-              <div>• [3, 1, 3] — a=3, peak=1 ← peak {"<"} a, mountain 모양 X</div>
-              <div>• [3, 2, 3] — a=3, peak=2 ← 같은 문제</div>
+              <div>• [3, 1, 3] — a=3, peak=1 ← peak {"<"} a, {t(E, "not a mountain", "mountain 모양 X")}</div>
+              <div>• [3, 2, 3] — a=3, peak=2 ← {t(E, "same problem", "같은 문제")}</div>
             </div>
             <div style={{ marginTop: 6, fontSize: 12, color: C.dim }}>
               {t(E, "▶ to try each — check both shape AND card availability.", "▶ 눌러서 하나씩 — 모양 + 카드 보유 둘 다 체크.")}
@@ -845,12 +845,39 @@ const CpAside = ({ E, highlight = [], note = null }) => {
   );
 };
 
+// 코드 배열의 한글 주석을 영어로 스왑 (코드 라인은 그대로 통과 → 코드 동일 보장).
+// (선생님 2026-07-14 cowphotos 검토: 영어 모드인데 코드 주석이 한글이었음.)
+const CP_CMT_EN = {
+  "    # 가장 큰 키 = peak 후보": "    # biggest key = the peak",
+  "// (앞부분 생략 — 입력 읽기)": "// (input reading omitted above)",
+  "        // 가장 큰 키 = peak 후보": "        // biggest key = the peak",
+  "    # ring 이 되려면: 값이 peak 보다 작고 (v < M), 같은 값 2 마리 이상": "    # a ring needs: value below peak (v < M) AND appears at least twice",
+  "// (앞부분 생략)": "// (earlier part omitted)",
+  "        // ring 이 되려면: v < M 이고 같은 값이 2 마리 이상": "        // a ring needs: v < M AND appears at least twice",
+  "            // v 를 이미 셌으면 skip": "            // skip v if we already counted it",
+  "            // v 가 몇 번 나오는지 세고 ≥ 2 면 ring": "            // count how many v's; >= 2 means a ring",
+  "    # 길이 = 2·rings + 1 (좌+우 mirror = 2 마리, peak 1 마리)": "    # length = 2*rings + 1 (left+right mirror = 2 cows, peak = 1)",
+  "        // 길이 = 2·rings + 1": "        // length = 2*rings + 1",
+  "# 매번 h.count(v) 대신 — 빈도를 한 번만 세두면?": "# instead of h.count(v) every time — count freq just once?",
+  "    freq[v] = freq.get(v, 0) + 1   # h 한 번만 훑음 → O(N)": "    freq[v] = freq.get(v, 0) + 1   # one pass over h -> O(N)",
+  "    if v < M and freq[v] >= 2:     # lookup 은 즉시 (O(1))": "    if v < M and freq[v] >= 2:     # lookup is instant (O(1))",
+  "// 키가 1..N 이라 — 그냥 freq[키] 인덱스로 빈도 저장하면 어떨까?": "// keys are 1..N — what if we index freq[key] directly?",
+  "    freq[h[i]]++;                  // h 한 번만 훑기 → O(N)": "    freq[h[i]]++;                  // one pass over h -> O(N)",
+  "        rings++;                   // lookup 은 즉시": "        rings++;                   // lookup is instant",
+  "    cnt = Counter(h)            # 한 줄로 dict 빈도 — O(N)": "    cnt = Counter(h)            # one line for the freq dict — O(N)",
+  "        vector<int> freq(N + 2, 0);    // 인덱스 = 키, 값 = 빈도": "        vector<int> freq(N + 2, 0);    // index = key, value = freq",
+  "            freq[h]++;                 // 입력 받으면서 빈도 누적": "            freq[h]++;                 // tally freq while reading",
+  "                M = h;                 // peak 도 같이": "                M = h;                 // track peak too",
+};
+const cx = (E, arr) => E ? arr.map(l => (CP_CMT_EN[l] !== undefined ? CP_CMT_EN[l] : l)) : arr;
+
+
 export function getCowPhotosSections(E) {
   return [
     {
       label: t(E, "1️⃣ Read input — T cases, then N + heights", "1️⃣ 입력 읽기 — T 케이스, N + 키"),
       color: "#d97706",
-      py: CP_STEP1_PY, cpp: CP_STEP1_CPP,
+      py: cx(E, CP_STEP1_PY), cpp: cx(E, CP_STEP1_CPP),
       why: [
         t(E, "T independent test cases. For each: read N, then N heights as a list.",
             "독립 테스트 T 개. 각 케이스: N 읽고, 그 다음 줄에서 키 N 개를 list 로."),
@@ -860,7 +887,7 @@ export function getCowPhotosSections(E) {
     {
       label: t(E, "2️⃣ Find max height (peak candidate)", "2️⃣ 가장 큰 키 찾기 (peak 후보)"),
       color: "#0891b2",
-      py: CP_STEP2_PY, cpp: CP_STEP2_CPP,
+      py: cx(E, CP_STEP2_PY), cpp: cx(E, CP_STEP2_CPP),
       why: [
         t(E, "Peak is always the LARGEST height — mountain top must be highest.",
             "peak 는 항상 가장 큰 키 — mountain 꼭대기는 제일 높음."),
@@ -871,7 +898,7 @@ export function getCowPhotosSections(E) {
     {
       label: t(E, "3️⃣ Count 'ring' values (v < M, freq ≥ 2)", "3️⃣ ring 값 세기 (v < M, freq ≥ 2)"),
       color: "#7c3aed",
-      py: CP_STEP3_PY, cpp: CP_STEP3_CPP,
+      py: cx(E, CP_STEP3_PY), cpp: cx(E, CP_STEP3_CPP),
       why: [
         t(E, "A value v can sit on both sides of the peak only if (a) at least 2 cows have height v AND (b) v < M (peak must be strictly higher).",
             "값 v 가 양옆에 들어가려면 (a) 그 키의 소가 2 마리 이상 AND (b) v < M (peak 가 더 커야)."),
@@ -882,7 +909,7 @@ export function getCowPhotosSections(E) {
     {
       label: t(E, "4️⃣ Apply formula 2·rings + 1 + print", "4️⃣ 공식 2·rings + 1 적용 + 출력"),
       color: "#16a34a",
-      py: CP_FULL_PY, cpp: CP_FULL_CPP,
+      py: cx(E, CP_FULL_PY), cpp: cx(E, CP_FULL_CPP),
       why: [
         t(E, "Each ring contributes 2 cows (one on each side, mirrored). The peak contributes 1. So length = 2·rings + 1.",
             "각 ring 이 2 마리 기여 (좌+우 mirror). peak 가 1 마리. 그래서 길이 = 2·rings + 1."),
@@ -897,7 +924,7 @@ export function getCowPhotosSections(E) {
       label: t(E, "5️⃣ Why is this slow on big N?", "5️⃣ 왜 큰 N 에선 느릴까?"),
       color: "#dc2626",
       // 같은 코드를 다시 보여줌 — 어디가 병목인지 분석하는 단계
-      py: CP_FULL_PY, cpp: CP_FULL_CPP,
+      py: cx(E, CP_FULL_PY), cpp: cx(E, CP_FULL_CPP),
       why: [
         t(E, "Look at the inner loop: `h.count(v)` scans the WHOLE array h once — O(N) work.",
             "안쪽 루프 보세요: `h.count(v)` 가 매번 h 전체를 한 번 훑어요 — O(N)."),
@@ -910,7 +937,7 @@ export function getCowPhotosSections(E) {
     {
       label: t(E, "6️⃣ Idea — count frequencies ONCE", "6️⃣ 아이디어 — 빈도를 한 번만 세두자"),
       color: "#0891b2",
-      py: CP_INSIGHT_PY, cpp: CP_INSIGHT_CPP,
+      py: cx(E, CP_INSIGHT_PY), cpp: cx(E, CP_INSIGHT_CPP),
       why: [
         t(E, "Frequencies of values in h don't change while we work. So why count v's appearances every time?",
             "h 안의 빈도는 우리가 작업하는 동안 안 바뀌는데, 왜 매번 셀까?"),
@@ -923,7 +950,7 @@ export function getCowPhotosSections(E) {
     {
       label: t(E, "7️⃣ Final fast code — Counter (Py) / freq array (C++)", "7️⃣ 최종 빠른 코드 — Counter (Py) / freq 배열 (C++)"),
       color: "#15803d",
-      py: CP_FAST_PY, cpp: CP_FAST_CPP,
+      py: cx(E, CP_FAST_PY), cpp: cx(E, CP_FAST_CPP),
       why: [
         t(E, "Python: `Counter(h)` builds the dict in one line. Same logic as before, just using `cnt[v]` instead of `h.count(v)`.",
             "Python: `Counter(h)` 한 줄로 dict 완성. 로직은 똑같고 `h.count(v)` 자리만 `cnt[v]` 로."),
