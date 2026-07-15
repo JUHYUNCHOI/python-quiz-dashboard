@@ -49,9 +49,21 @@ export function MexesIntroSim({ E }) {
   const TW = 44, GAP = 8;
   const CHECK = [0, 1, 2, 3, 4];
 
-  // 말풍선은 상자(봐야 할 그림) 위에 고정 — 아래로 내리면 상자를 덮어 가림
-  // (선생님 2026-07-13: "봐야 할 사진은 가리면 안 돼". transform 은 공간을 안 밀어 겹침.)
-  const shiftY = 0;
+  // 말풍선 시선유도(선생님 2026-07-13): 상자가 주인공인 스텝은 상자 위(꼬리↓),
+  // '0부터 확인' 스텝(체크 행이 주인공)은 체크 행 아래(꼬리↑)로 붙음.
+  // → 콘텐츠는 절대 안 가리고, 지금 볼 곳 바로 옆에 말풍선.
+  const atBottom = idx === 2 || idx === 3;
+  const _bd = st.goal ? "#c4b5fd" : (st.mex ? "#6ee7b7" : "#fbbf24");
+  const _bg = st.goal ? "#f5f3ff" : (st.mex ? "#ecfdf5" : "#fffbeb");
+  const _fg = st.goal ? "#5b21b6" : (st.mex ? "#065f46" : "#92400e");
+  const _tri = { width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent" };
+  const renderBubble = (pointDown) => (
+    <div style={{ maxWidth: 540, margin: pointDown ? "0 auto 14px" : "12px auto 2px", position: "relative", zIndex: 5 }}>
+      {!pointDown && <div style={{ ..._tri, borderBottom: `9px solid ${_bd}` }} />}
+      <div style={{ background: _bg, border: `1.5px solid ${_bd}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: _fg, lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>💬 {st.bubble}</div>
+      {pointDown && <div style={{ ..._tri, borderTop: `9px solid ${_bd}` }} />}
+    </div>
+  );
 
   return (
     <div style={{ padding: 16 }}>
@@ -59,11 +71,8 @@ export function MexesIntroSim({ E }) {
         🧮 {t(E, "What is mex, and what does this problem want?", "mex 가 뭐고, 이 문제는 뭘 시키나?")}
       </div>
 
-      {/* 말풍선 — 스텝에 따라 Y 로 슥 이동 (설명 중인 대상 옆으로) */}
-      <div style={{ maxWidth: 540, margin: "0 auto 14px", position: "relative", zIndex: 5, transform: `translateY(${shiftY}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)" }}>
-        <div style={{ background: st.goal ? "#f5f3ff" : (st.mex ? "#ecfdf5" : "#fffbeb"), border: `1.5px solid ${st.goal ? "#c4b5fd" : (st.mex ? "#6ee7b7" : "#fbbf24")}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.goal ? "#5b21b6" : (st.mex ? "#065f46" : "#92400e"), lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>💬 {st.bubble}</div>
-        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${st.goal ? "#c4b5fd" : (st.mex ? "#6ee7b7" : "#fbbf24")}` }} />
-      </div>
+      {/* 말풍선(위) — 상자가 주인공인 스텝 */}
+      {!atBottom && renderBubble(true)}
 
       {/* 배열 */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, marginBottom: 14 }}>
@@ -107,6 +116,9 @@ export function MexesIntroSim({ E }) {
           })}
         </div>
       </div>
+
+      {/* 말풍선(아래) — 체크 행이 주인공인 스텝: 상자 안 가리고 체크 행을 가리킴 */}
+      {atBottom && renderBubble(false)}
 
       {/* mex 결과 */}
       {st.mex && (
