@@ -961,6 +961,66 @@ export function getCowPhotosSections(E) {
   ];
 }
 
+/* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
+   mode: "brute"(쉬운 O(N²)) | "fast"(O(N)).  두 코드를 각각 CodeWalk 로 걷는다. ── */
+export function getCowPhotosWalk(E, lang = "py", mode = "brute") {
+  const vars = [
+    { v: "h", ko: "소들의 키 목록", en: "the heights" },
+    { v: "M", ko: "가장 큰 키 (= peak)", en: "biggest height (= peak)" },
+    { v: "rings", ko: "양옆 짝지을 키 개수", en: "# of ring keys" },
+  ];
+  if (mode === "brute") {
+    if (lang === "cpp") {
+      return {
+        code: cx(E, CP_FULL_CPP),
+        vars,
+        beats: [
+          { hi: [4, 6], bubble: t(E, "Start with input — read T (number of test cases). The loop repeats T times.", "언제나 입력부터 — T (테스트 케이스 수) 읽기. 아래 for 가 T 번 반복.") },
+          { hi: [7, 13], bubble: t(E, "Each case: read N, then N heights into vector h.", "각 케이스: N 을 읽고, 키 N 개를 vector h 로.") },
+          { hi: [15, 20], bubble: t(E, "The peak is the BIGGEST height (mountain top). Scan h for the max.", "산의 꼭대기(peak) = 가장 큰 키. h 를 훑어 최댓값 M.") },
+          { hi: [22, 47], bubble: t(E, "Count ring keys: value v works if v < M (below peak) AND appears ≥ 2 times. Here we count each v's occurrences by scanning h — that inner scan is the slow part.", "ring 세기: 키 v 가 peak 보다 작고(v < M) 2 마리 이상이면 ring. 여기선 v 마다 h 를 훑어 세요 — 이 안쪽 훑기가 느린 부분.") },
+          { hi: [49, 50], bubble: t(E, "Answer = 1 peak + 2 per ring = 2·rings + 1. Print it.", "답 = peak 1 마리 + ring 마다 2 마리 = 2·rings + 1. 출력!") },
+        ],
+      };
+    }
+    return {
+      code: cx(E, CP_FULL_PY),
+      vars,
+      beats: [
+        { hi: [0, 0], bubble: t(E, "Start with input — T = number of test cases. The for-loop below repeats T times.", "언제나 입력부터 — T = 테스트 케이스 수. 아래 for 가 T 번 반복.") },
+        { hi: [2, 4], bubble: t(E, "Each case: read N, then read the N heights into a list h.", "각 케이스: N 을 읽고, 다음 줄에서 키 N 개를 리스트 h 로.") },
+        { hi: [5, 5], bubble: t(E, "The peak is the BIGGEST height (mountain top). max(h) gets it in one go.", "산의 꼭대기(peak) = 가장 큰 키. max(h) 로 한 번에.") },
+        { hi: [7, 10], bubble: t(E, "Count ring keys: v works if v < M (below the peak) AND h.count(v) ≥ 2. But h.count scans ALL of h every time — the slow bit.", "ring 세기: v 가 peak 보다 작고(v < M) 2 마리 이상(h.count ≥ 2)이면 ring. 근데 h.count 가 매번 h 전체를 훑어요 — 느린 부분.") },
+        { hi: [12, 13], bubble: t(E, "Answer = 1 peak + 2 per ring = 2·rings + 1. Print it.", "답 = peak 1 마리 + ring 마다 2 마리 = 2·rings + 1. 출력!") },
+      ],
+    };
+  }
+  // fast
+  if (lang === "cpp") {
+    return {
+      code: cx(E, CP_FAST_CPP),
+      vars,
+      beats: [
+        { hi: [4, 9], bubble: t(E, "Same start — read T, then per case read N.", "시작은 같아요 — T 읽고, 케이스마다 N.") },
+        { hi: [10, 19], bubble: t(E, "The trick: a freq array indexed by the height itself. While reading input, tally freq[h] and track the peak M — all in one pass, O(N).", "핵심: 키 값을 인덱스로 쓰는 freq 배열. 입력 받으면서 freq[h] 누적 + peak(M) 갱신 — 한 번 훑기로 끝, O(N).") },
+        { hi: [20, 25], bubble: t(E, "Count rings: for each value below M, freq[v] ≥ 2 is an instant lookup (no re-scan).", "ring 세기: M 보다 작은 값마다 freq[v] ≥ 2 만 즉시 확인 (다시 안 훑음).") },
+        { hi: [26, 26], bubble: t(E, "Same formula 2·rings + 1. Logic identical — only faster.", "같은 공식 2·rings + 1. 로직 동일, 속도만 빨라짐.") },
+      ],
+    };
+  }
+  return {
+    code: cx(E, CP_FAST_PY),
+    vars,
+    beats: [
+      { hi: [0, 0], bubble: t(E, "We'll use Counter — it counts frequencies in one line.", "Counter 를 씀 — 빈도를 한 줄로 세요.") },
+      { hi: [2, 6], bubble: t(E, "Read input and find the peak M — same as the brute version.", "입력 읽고 peak(M) 찾기 — 브루트랑 같아요.") },
+      { hi: [8, 8], bubble: t(E, "The trick: Counter(h) builds the whole frequency table in ONE pass (O(N)). Brute re-scanned h every time with h.count — that's what was slow.", "핵심: Counter(h) 한 줄로 빈도표를 한 번에 완성 (O(N)). 브루트는 h.count 로 매번 h 를 훑어서 느렸죠.") },
+      { hi: [9, 12], bubble: t(E, "Count rings the same way, but cnt[v] is an instant lookup now — no more re-scanning.", "ring 세기는 똑같은데, 이제 cnt[v] 즉시 조회 (다시 안 훑음).") },
+      { hi: [14, 14], bubble: t(E, "Same formula 2·rings + 1. Logic identical — only faster.", "같은 공식 2·rings + 1. 로직 동일, 속도만 빨라짐.") },
+    ],
+  };
+}
+
 export function CowPhotosProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#d97706" />;
 }

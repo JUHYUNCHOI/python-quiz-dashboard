@@ -491,13 +491,16 @@ export function HpsCaseSimulator({ E }) {
     });
   };
 
-  const trace = [{ kind: "setup" }];
-  queries.forEach((_, qIdx) => {
-    trace.push({ kind: "show", qIdx });
-    trace.push({ kind: "try", qIdx });
-    trace.push({ kind: "count", qIdx });
-  });
-  trace.push({ kind: "summary" });
+  // 게임 3(답 5)만 자세히 걷기 — 게임 1·2(둘 다 0)는 setup 에서 한 줄 요약.
+  // (선생님 2026-07-14: 3게임 다 걸으면 재미없는 0을 두 번 보고 길고 반복적. 브루트 코드와도 겹침.)
+  const g3 = queries.length - 1;
+  const trace = [
+    { kind: "setup" },
+    { kind: "show", qIdx: g3 },
+    { kind: "try", qIdx: g3 },
+    { kind: "count", qIdx: g3 },
+    { kind: "summary" },
+  ];
 
   const ts = useTraceStep(trace);
   const s = trace[ts.safe];
@@ -664,20 +667,13 @@ export function HpsCaseSimulator({ E }) {
       <NarrativePanel minHeight={150} stepKey={ts.safe}>
         {s.kind === "setup" && (
           <>
-            <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6, fontSize: 14 }}>
-              📋 {t(E, "Game rule (recap)", "게임 룰 (다시)")}
+            <div style={{ marginBottom: 8, color: "#5b21b6", fontWeight: 700, fontSize: 13.5 }}>
+              {t(E, "→ Bessie wins NO MATTER what Elsie plays iff she has ONE card that beats BOTH of Elsie's cards.",
+                    "→ 핵심: Elsie 가 무엇을 내도 Bessie 가 이기려면 — Bessie 패에 Elsie 두 카드를 모두 이기는 카드가 한 장이라도 있으면 됨.")}
             </div>
-            <div style={{ marginBottom: 6 }}>
-              {t(E, "Both cows lay 2 cards face up. They each pick one to play AT THE SAME TIME, without seeing each other's pick. The card that beats the other wins.",
-                    "두 소가 카드 2 장씩 펼쳐 놓아요. 동시에 (서로 못 보고) 1 장씩 골라 내요. 이기는 카드를 낸 쪽이 승리.")}
-            </div>
-            <div style={{ marginBottom: 6, color: "#5b21b6", fontWeight: 700 }}>
-              {t(E, "→ Bessie wins NO MATTER what Elsie plays iff Bessie has ONE card in her hand that beats BOTH of Elsie's cards.",
-                    "→ Elsie 가 무엇을 내도 Bessie 가 이기려면: Bessie 패 에 Elsie 두 카드를 모두 이기는 카드가 한 장이라도 있어야 함.")}
-            </div>
-            <div style={{ fontSize: 11.5, color: C.dim }}>
-              {t(E, "We'll do all 3 queries from the sample: (1, 2) → 0, (2, 3) → 0, (1, 1) → 5.",
-                    "샘플 3 개 쿼리 다 따라가요: (1, 2) → 0, (2, 3) → 0, (1, 1) → 5.")}
+            <div style={{ fontSize: 12, color: "#1f2937", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: "8px 10px", lineHeight: 1.6, wordBreak: "keep-all" }}>
+              {t(E, "Games 1 (1, 2) and 2 (2, 3): no card beats both → answer 0.  Below we walk just Game 3 (1, 1) → 5 in detail.",
+                    "게임 1 (1, 2)·게임 2 (2, 3): 둘 다 이기는 카드가 없어 → 답 0. 아래에선 게임 3 (1, 1) → 5 만 자세히 봐요.")}
             </div>
           </>
         )}
@@ -1642,6 +1638,128 @@ export function getHpsSections(E) {
 
 export function HpsProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
+}
+
+/* HpsFormulaGridSim — 9-패 격자를 '말풍선 스텝'으로 (선생님 2026-07-14: 설명은 볼 것에 붙는 말풍선).
+   게임 3 (Elsie 카드1,카드1 · ⚡=카드2 · dom=1): 9칸 → 이기는 패(초록) → 지는 2×2(빨강) → 공식.
+   글이 격자 주위에 흩어진 벽을 대체. */
+export function HpsFormulaGridSim({ E }) {
+  // ⚡ 카드 먼저 → 지는 칸이 오른쪽 아래 2×2 로 모임
+  const cards = [{ id: 2, win: true }, { id: 1, win: false }, { id: 3, win: false }];
+  const steps = [
+    { phase: "test",  bubble: t(E, "Game 3: Elsie holds card 1 & card 1.  Which cards beat card 1?  Card 2 does — nothing else.\nSo the count of 'beats-both' cards = dom = 1.", "게임 3: Elsie 는 카드 1, 카드 1.  카드 1 을 이기는 건? → 카드 2 하나뿐.\n그래서 '둘 다 이기는 카드' 개수 = dom = 1.") },
+    { phase: "grid",  bubble: t(E, "Now — Bessie picks 2 cards.  All her choices = 3 × 3 = 9 hands.  How many WIN?  Count in the grid.", "이제 — Bessie 는 카드 2 장을 골라요.  가능한 조합 = 3 × 3 = 9 패.  이 중 이기는 건 몇 개? 격자에서 세봐요.") },
+    { phase: "green", bubble: t(E, "If a hand holds card 2 (⚡), Bessie plays it and wins whatever Elsie shows. Green = winning hands.", "패에 카드 2(⚡)가 한 장이라도 있으면 → 그걸 내서 이김 (Elsie 뭘 내든). 초록 = 이기는 패.") },
+    { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ → the red 2 × 2 = 4.  (each slot has N − dom = 2 non-⚡ cards → (N − dom)²)", "둘 다 ⚡ 가 아닐 때만 짐 → 빨간 2 × 2 = 4.  (자리마다 ⚡ 아닌 카드 N − dom = 2 가지 → (N − dom)²)") },
+    { phase: "count", bubble: t(E, "Wins = whole grid − losers = 9 − 4 = 5!\nIn letters: N² − (N − dom)² = 3² − 2² = 5 ✓", "이기는 패 = 전체 − 지는 것 = 9 − 4 = 5!\n글자로: N² − (N − dom)² = 3² − 2² = 5 ✓") },
+  ];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+  const showTest = s.phase === "test";
+  const lit = s.phase === "green" || s.phase === "red" || s.phase === "count";
+  const litRed = s.phase === "red" || s.phase === "count";
+
+  const cell = (rowWin, colWin, key) => {
+    const win = rowWin || colWin;
+    const showGreen = lit && win;
+    const showRed = litRed && !win;
+    return (
+      <div key={key} style={{
+        width: 48, height: 40, borderRadius: 6,
+        background: showGreen ? "#dcfce7" : showRed ? "#fee2e2" : "#f8fafc",
+        border: `1.5px solid ${showGreen ? "#86efac" : showRed ? "#fca5a5" : "#e5e7eb"}`,
+        color: showGreen ? "#15803d" : showRed ? "#991b1b" : "#cbd5e1",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        fontSize: 15, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+        transition: "background .2s, color .2s, border-color .2s",
+      }}>{lit ? (win ? "✓" : "✗") : "·"}</div>
+    );
+  };
+
+  return (
+    <div style={{ padding: 12 }}>
+      {/* 말풍선 — 격자 바로 위에 붙어 눈이 따라가게 */}
+      <div style={{ maxWidth: 480, margin: "0 auto 2px" }}>
+        <div style={{
+          background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 12,
+          padding: "11px 14px", fontSize: 13, color: "#92400e", fontWeight: 600,
+          lineHeight: 1.6, textAlign: "center", wordBreak: "keep-all", whiteSpace: "pre-line",
+          boxShadow: "0 4px 14px rgba(0,0,0,.07)",
+        }}>💬 {s.bubble}</div>
+        <div style={{ width: 0, height: 0, margin: "0 auto",
+          borderLeft: "9px solid transparent", borderRight: "9px solid transparent",
+          borderTop: "10px solid #fbbf24" }} />
+      </div>
+
+      {showTest ? (
+        /* 카드 시험 — 카드 1·2·3 각각 Elsie 의 카드 1 을 이기나? (카드 2 만 ✓ → dom=1 을 눈으로) */
+        <div style={{ marginTop: 12 }}>
+          <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 8, wordBreak: "keep-all" }}>
+            {t(E, "Test each card against Elsie's card 1:", "각 카드가 Elsie 의 카드 1 을 이기나?")}
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
+            {[
+              { id: 1, ok: false, label: t(E, "draws with card 1", "카드 1 과 비김") },
+              { id: 2, ok: true,  label: t(E, "BEATS card 1", "카드 1 이김") },
+              { id: 3, ok: false, label: t(E, "loses to card 1", "카드 1 에 짐") },
+            ].map(c => (
+              <div key={c.id} style={{
+                width: 118, textAlign: "center",
+                background: c.ok ? "#dcfce7" : "#f8fafc",
+                border: `1.5px solid ${c.ok ? "#86efac" : "#e5e7eb"}`,
+                borderRadius: 10, padding: "12px 8px",
+                boxShadow: c.ok ? "0 3px 12px rgba(22,163,74,.18)" : "none",
+              }}>
+                <div style={{ fontSize: 26, color: SHAPES[c.id]?.color, lineHeight: 1 }}>{SHAPES[c.id]?.glyph}</div>
+                <div style={{ fontSize: 12.5, fontWeight: 800, color: c.ok ? "#15803d" : "#6b7280", marginTop: 4 }}>
+                  {t(E, `card ${c.id}`, `카드 ${c.id}`)} {c.ok ? "⚡" : ""}
+                </div>
+                <div style={{ fontSize: 11.5, fontWeight: 700, color: c.ok ? "#15803d" : "#9ca3af", marginTop: 3, wordBreak: "keep-all" }}>
+                  {c.ok ? "✓ " : "✗ "}{c.label}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#c2410c", marginTop: 12 }}>
+            {t(E, "→ only card 2 beats both → dom = 1", "→ 카드 2 하나뿐 → dom = 1")}
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* 격자 */}
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
+            <div style={{ position: "relative" }}>
+              <div style={{ display: "flex", gap: 4, marginLeft: 56 }}>
+                {cards.map(c => (
+                  <div key={`h-${c.id}`} style={{ width: 48, textAlign: "center", fontSize: 11, fontWeight: 600, color: c.win ? "#15803d" : "#9ca3af" }}>
+                    {t(E, `card ${c.id}`, `카드 ${c.id}`)}{c.win ? " ⚡" : ""}
+                  </div>
+                ))}
+              </div>
+              {cards.map(rowCard => (
+                <div key={`r-${rowCard.id}`} style={{ display: "flex", gap: 4, marginTop: 4, alignItems: "center" }}>
+                  <div style={{ width: 52, fontSize: 11, fontWeight: 600, textAlign: "right", paddingRight: 4, color: rowCard.win ? "#15803d" : "#9ca3af" }}>
+                    {t(E, `card ${rowCard.id}`, `카드 ${rowCard.id}`)}{rowCard.win ? " ⚡" : ""}
+                  </div>
+                  {cards.map(colCard => cell(rowCard.win, colCard.win, `${rowCard.id}-${colCard.id}`))}
+                </div>
+              ))}
+              {litRed && (
+                <div style={{ position: "absolute", left: 56 + (48 + 4) - 4, top: (16 + 4) + (40 + 4) - 4, width: 2 * 48 + 4 + 8, height: 2 * 40 + 4 + 8, border: "2px dashed #dc2626", borderRadius: 10, pointerEvents: "none" }} />
+              )}
+            </div>
+          </div>
+          <div style={{ fontSize: 10.5, color: C.dim, textAlign: "center", marginTop: 8, wordBreak: "keep-all" }}>
+            {t(E, "↓ rows = Bessie's 1st card   ·   → cols = 2nd card", "↓ 행 = Bessie 첫 카드   ·   → 열 = 둘째 카드")}
+          </div>
+        </>
+      )}
+
+      <div style={{ marginTop: 12 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent="#d97706" isEn={E} showLabels />
+      </div>
+    </div>
+  );
 }
 
 /* CodeSectionView — renders ONE section from getHpsSections in the

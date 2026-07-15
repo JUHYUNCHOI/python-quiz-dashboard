@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { CodeBlock } from "@/components/quest/shared";
-import { getHpsSections, HpsCaseSimulator, ChartReadingTour, WinningRulesBanner, CodeSectionView, BitsLab, BitmaskColSim } from "./components";
+import { CodeBlock, highlight } from "@/components/quest/shared";
+import { getHpsSections, ChartReadingTour, CodeSectionView, BitsLab, BitmaskColSim, HpsFormulaGridSim } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    NSpeedSim — interactive bar showing how Brute (N²) and Smart (N)
@@ -255,11 +255,58 @@ LWD
 
               <code style={{ background: "#fff", padding: "2px 6px", borderRadius: 3, fontSize: 12 }}>D / WD / LWD</code>
               <div>
-                {t(E, "matchup chart (next N lines, row ", "매치업 차트 (다음 N 줄, ")}<b style={{ color: "#dc2626" }}>i</b>
-                {t(E, " has ", " 행은 ")}<b style={{ color: "#dc2626" }}>i</b>
-                {t(E, " characters of W/L/D)", " 글자: W/L/D)")}
-                <span style={{ marginLeft: 6, color: "#5b21b6", fontSize: 12 }}>
-                  → {t(E, "see next page", "다음 페이지 참고")}
+                {t(E, "matchup chart — a TRIANGLE. row ", "승패 차트 — 삼각형. ")}<b style={{ color: "#dc2626" }}>i</b>
+                {t(E, " = card ", " 행 = 카드 ")}<b style={{ color: "#dc2626" }}>i</b>
+                {t(E, "'s results vs cards 1..i.", " 의 결과 (카드 1..i 상대).")}
+                {/* 격자로 직접 그려줌 — 글 설명은 안 들어옴, LWD = '카드3의 한 줄' 을 눈으로 (선생님 2026-07-14) */}
+                <div style={{ marginTop: 8, background: "#fff", borderRadius: 8, padding: "10px 12px", fontSize: 11.5 }}>
+                  <div style={{ marginBottom: 8 }}>
+                    <b style={{ color: "#16a34a" }}>W</b> = {t(E, "win", "이김")}
+                    {" · "}<b style={{ color: "#dc2626" }}>L</b> = {t(E, "lose", "짐")}
+                    {" · "}<b style={{ color: "#6b7280" }}>D</b> = {t(E, "draw", "비김")}
+                    {" "}<span style={{ color: C.dim }}>({t(E, "cell = row card vs column card", "칸 = 행 카드 vs 열 카드")})</span>
+                  </div>
+                  {/* 열 헤더 */}
+                  <div style={{ display: "flex", gap: 4, marginBottom: 4 }}>
+                    <div style={{ width: 46 }} />
+                    {[1, 2, 3].map(j => (
+                      <div key={j} style={{ width: 28, textAlign: "center", fontSize: 9.5, color: C.dim, fontWeight: 700 }}>
+                        {t(E, "vs", "vs")}{j}
+                      </div>
+                    ))}
+                  </div>
+                  {/* 삼각 격자 — 행 i = 카드 i */}
+                  {[
+                    { card: 1, cells: [["D", "#6b7280"]] },
+                    { card: 2, cells: [["W", "#16a34a"], ["D", "#6b7280"]] },
+                    { card: 3, cells: [["L", "#dc2626"], ["W", "#16a34a"], ["D", "#6b7280"]], hot: true },
+                  ].map(row => (
+                    <div key={row.card} style={{ display: "flex", gap: 4, marginBottom: 4, alignItems: "center" }}>
+                      <div style={{ width: 46, fontSize: 10.5, fontWeight: 700, color: row.hot ? "#9a3412" : C.dim, textAlign: "right" }}>
+                        {t(E, "card ", "카드 ")}{row.card}
+                      </div>
+                      {row.cells.map(([ch, col], k) => (
+                        <div key={k} style={{
+                          width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+                          borderRadius: 5, background: row.hot ? "#fff7ed" : "#f8fafc",
+                          border: row.hot ? "1.5px solid #fdba74" : "1px solid #e2e8f0",
+                          color: col, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", fontSize: 13,
+                        }}>{ch}</div>
+                      ))}
+                    </div>
+                  ))}
+                  <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginTop: 3, wordBreak: "keep-all" }}>
+                    ↑ {t(E, "the 3rd row read left→right IS ", "3 행(카드 3) 을 왼→오로 읽으면 = ")}
+                    <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>LWD</code>
+                  </div>
+                  {/* 왜 대각선=D, 왜 삼각형인지 — 학생이 '두 번째 줄은 왜 다르지?' 물음 (선생님 2026-07-14) */}
+                  <div style={{ marginTop: 7, paddingTop: 6, borderTop: "1px dashed #e2e8f0", fontSize: 10.5, color: C.dim, lineHeight: 1.65, wordBreak: "keep-all" }}>
+                    <div>• {t(E, "The diagonal (card vs itself) is always ", "대각선(카드 vs 자기 자신)은 항상 ")}<b style={{ color: "#6b7280" }}>D</b>{t(E, " — you can't beat yourself. So each row ends in D.", " — 자기랑은 못 이겨요. 그래서 줄 끝은 항상 D.")}</div>
+                    <div style={{ marginTop: 3 }}>• {t(E, "Triangle only: card 2 vs card 3 is just card 3 vs card 2 flipped — so each pair is listed once (the lower half).", "삼각형인 이유: 카드 2 vs 카드 3 은 카드 3 vs 카드 2 를 뒤집은 것 → 짝마다 한 번씩만 (아래쪽 절반).")}</div>
+                  </div>
+                </div>
+                <span style={{ color: "#5b21b6", fontSize: 12 }}>
+                  → {t(E, "walk it cell by cell next page", "다음 페이지에서 한 칸씩")}
                 </span>
               </div>
 
@@ -294,205 +341,46 @@ LWD
       content: (<ChartReadingTour E={E} />),
     },
 
-    // 1-4: Walk-through of Game 3 from sample (Elsie hand = (1, 1) → 5)
+    // 1-5: 브루트포스로 해보자 — 짧은 안내 (선생님 2026-07-14: 쿼리 시뮬 제거,
+    //       브루트 코드가 어차피 '모든 패 시험'을 하니 시뮬은 겹침. 그냥 브루트로.)
     {
       type: "reveal",
       narr: t(E,
-        "Let's walk one of the sample games — Elsie holds (card 1, card 1).  What should Bessie do?",
-        "샘플 게임 한 번 따라가 보자 — Elsie 가 (카드 1, 카드 1). Bessie 는 어떻게 응답해야 할까?"),
-      content: (() => {
-        const C1 = { glyph: "●", color: "#2563eb" };
-        const C2 = { glyph: "■", color: "#7c3aed" };
-        const C3 = { glyph: "▲", color: "#ea580c" };
-        const Pill = ({ s, n, size = 22, bgTint = false }) => (
-          <span style={{
-            display: "inline-flex", alignItems: "center", gap: 5,
-            padding: "4px 10px", borderRadius: 8,
-            border: `1.5px solid ${s.color}50`,
-            background: bgTint ? `${s.color}10` : "#fff",
-          }}>
-            <span style={{ fontSize: size, color: s.color, lineHeight: 1 }}>{s.glyph}</span>
-            <span style={{ fontSize: 12, fontWeight: 600, color: C.text }}>{t(E, "card ", "카드 ")}{n}</span>
-          </span>
-        );
-        const TryCol = ({ card, n, beats1, label }) => (
-          <div style={{
-            display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
-            padding: "10px 8px", borderRadius: 10,
-            background: beats1 ? "#dcfce7" : "#fff",
-            border: `1px solid ${beats1 ? "#16a34a" : "#e5e7eb"}`,
-          }}>
-            <Pill s={card} n={n} size={24} bgTint={beats1} />
-            <div style={{ fontSize: 11, color: beats1 ? "#15803d" : C.dim, fontWeight: 700, textAlign: "center", lineHeight: 1.4 }}>
-              {beats1
-                ? t(E, "beats card 1 ✓", "카드 1 이김 ✓")
-                : t(E, "doesn't beat card 1", "카드 1 못 이김")}
+        "Problem's clear.  Simplest idea first — for each Elsie hand, just TRY every Bessie hand and count the wins.  That's brute force.  Let's code it.",
+        "문제는 다 이해했어요. 가장 단순한 방법부터 — 각 Elsie 패마다 Bessie 의 모든 패를 하나씩 시험해서 이기는 걸 세기. 이게 브루트포스. 코드로 짜보자."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#fff7ed", border: "1.5px solid #fb923c", borderRadius: 12, padding: "16px 18px", maxWidth: 480, margin: "0 auto", wordBreak: "keep-all" }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: "#c2410c", marginBottom: 12, textAlign: "center" }}>
+              🐢 {t(E, "Start simple — brute force", "가장 단순하게 — 브루트포스")}
             </div>
-            {label && <div style={{ fontSize: 10, color: "#15803d", fontWeight: 600 }}>{label}</div>}
-          </div>
-        );
-        return (
-          <div style={{ padding: 16 }}>
-            <WinningRulesBanner E={E} />
-            {/* Step 1: Elsie's hand */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, marginBottom: 12 }}>
-              <div style={{ fontSize: 11, color: C.dim, fontWeight: 700 }}>{t(E, "Elsie's hand (sample game 3)", "Elsie 의 패 (샘플 게임 3)")}</div>
-              <div style={{ display: "flex", gap: 12, padding: "8px 14px", background: "#fee2e2", borderRadius: 10, border: "1px solid #fca5a5" }}>
-                <Pill s={C1} n={1} size={24} />
-                <Pill s={C1} n={1} size={24} />
-              </div>
-              <div style={{ fontSize: 11.5, color: "#7f1d1d", fontWeight: 700, marginTop: 4 }}>
-                {t(E, "Both cards are card 1 — Bessie just needs ONE card that beats card 1.",
-                      "두 카드 다 카드 1 — Bessie 는 카드 1 을 이기는 카드 하나만 필요.")}
-              </div>
+            <div style={{ fontSize: 13.5, color: C.text, lineHeight: 1.9 }}>
+              <div>1. {t(E, "For each Elsie hand,", "각 Elsie 패마다,")}</div>
+              <div>2. {t(E, "TRY every possible Bessie hand,", "Bessie 의 모든 패를 하나씩 시험,")}</div>
+              <div>3. {t(E, "count the ones that ALWAYS win.", "무조건 이기는 걸 세요.")}</div>
             </div>
-
-            {/* Step 2: Try every card */}
-            <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 14, marginBottom: 12 }}>
-              <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 600, textAlign: "center", marginBottom: 10 }}>
-                {t(E, "Try every card 1..N — does it beat card 1?",
-                      "카드 1..N 시험 — 카드 1 을 이기는가?")}
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
-                <TryCol card={C1} n={1} beats1={false} />
-                <TryCol card={C2} n={2} beats1={true} label={t(E, "this one!", "이거!")} />
-                <TryCol card={C3} n={3} beats1={false} />
-              </div>
-              <div style={{ marginTop: 10, fontSize: 11, color: "#15803d", textAlign: "center", fontWeight: 700 }}>
-                → {t(E, "Only card 2 beats card 1.", "카드 2 만 카드 1 이김.")}
-              </div>
-            </div>
-
-            <div style={{ textAlign: "center", fontSize: 18, color: C.dim, margin: "0 0 8px" }}>↓</div>
-
-            {/* Step 3: All 9 Bessie hands laid out in a 3×3 grid;
-                highlight the ones with at least one card 2. */}
-            <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 10, padding: 14, marginBottom: 12 }}>
-              <div style={{ fontSize: 12, color: "#15803d", fontWeight: 600, textAlign: "center", marginBottom: 4 }}>
-                {t(E, "All 9 Bessie hands (a, b) — green ones contain card 2",
-                      "Bessie 패 9 가지 (a, b) 모두 — 초록 = 카드 2 가 들어 있는 패")}
-              </div>
-              <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 10 }}>
-                {t(E, "(rows = a / first card · columns = b / second card)",
-                      "(행 = a / 첫째 카드 · 열 = b / 둘째 카드)")}
-              </div>
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <div style={{
-                  display: "grid", gridTemplateColumns: "32px repeat(3, 60px)",
-                  gridAutoRows: "44px", gap: 0,
-                  fontFamily: "'JetBrains Mono',monospace",
-                }}>
-                  {/* header: empty + b labels */}
-                  <div />
-                  {[1, 2, 3].map((b) => (
-                    <div key={`h${b}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600, color: C.dim }}>
-                      b={b}
-                    </div>
-                  ))}
-                  {/* rows: a label + 3 cells */}
-                  {[1, 2, 3].map((a) => (
-                    <div key={`r${a}`} style={{ display: "contents" }}>
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 6, fontSize: 11, fontWeight: 600, color: C.dim }}>
-                        a={a}
-                      </div>
-                      {[1, 2, 3].map((b) => {
-                        const hasDom = a === 2 || b === 2;
-                        return (
-                          <div key={`${a}-${b}`} style={{
-                            margin: 3,
-                            border: `1px solid ${hasDom ? "#16a34a" : "#cbd5e1"}`,
-                            background: hasDom ? "#dcfce7" : "#fff",
-                            borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center",
-                            fontSize: 14, fontWeight: 600,
-                            color: hasDom ? "#15803d" : "#94a3b8",
-                          }}>
-                            ({a},{b}) {hasDom && <span style={{ marginLeft: 3, fontSize: 11 }}>✓</span>}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div style={{ marginTop: 12, paddingTop: 8, borderTop: "1px dashed #86efac", textAlign: "center", fontSize: 13, fontWeight: 600, color: "#15803d" }}>
-                {t(E, "Count the green cells: 5 hands win.", "초록 셀 세보면: 5 개 패 가 이김.")}
-              </div>
-            </div>
-
-            {/* Step 4: Answer */}
-            <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 12 }}>
-              <div style={{ fontSize: 18, fontWeight: 700, color: "#16a34a", textAlign: "center" }}>
-                {t(E, "answer = 5", "답 = 5")}
-              </div>
-              <div style={{ marginTop: 4, textAlign: "center", fontSize: 10.5, color: C.dim }}>
-                {t(E, "Matches the sample's third output line.", "샘플 출력 셋째 줄과 일치.")}
-              </div>
-            </div>
-
-            {/* Sidebar — what about other games? */}
-            <div style={{ marginTop: 12, fontSize: 11, color: "#5b21b6", textAlign: "center", lineHeight: 1.55 }}>
-              {t(E, "Games 1 (Elsie hand 1, 2) and 2 (hand 2, 3) — no card beats both Elsie cards → answer 0 each. Try them in the sim below.",
-                    "게임 1 (Elsie 패 1, 2) 과 2 (패 2, 3) — 두 카드 다 이기는 카드 없음 → 둘 다 답 0. 아래 sim 에서 따라가요.")}
+            <div style={{ marginTop: 12, paddingTop: 8, borderTop: "1px dashed #fed7aa", fontSize: 12.5, color: "#7c2d12", lineHeight: 1.65 }}>
+              {t(E, "'Try everything' = brute force.  Simple, and the answer is correct.  Fast enough?  We'll find out.  Let's code it 👇",
+                    "'전부 다 해보기' = 브루트포스. 단순하고 답은 정확해요. 빠른지는 짜보면 알아요. 코드로 →")}
             </div>
           </div>
-        );
-      })(),
-    },
-
-    // 1-5: Interactive walk — both sample games (Elsie (1,2)→0 and (1,1)→5)
-    {
-      type: "reveal",
-      narr: t(E,
-        "Walk all 3 sample games step by step. ▶ to advance.",
-        "샘플 3 게임 한 단계씩 따라가요. ▶ 눌러서 진행."),
-      content: (<><WinningRulesBanner E={E} /><HpsCaseSimulator E={E} /></>),
-    },
-    {
-      type: "quiz",
-      narr: t(E,
-        "Quick check.",
-        "간단 체크."),
-      question: t(E,
-        "Bessie = (card 2, card 1), Elsie = (card 1, card 1). Does Bessie always win?",
-        "Bessie = (카드 2, 카드 1), Elsie = (카드 1, 카드 1). Bessie 가 무조건 이기나?"),
-      options: [
-        t(E, "Yes — card 2 beats both of Elsie's card 1's", "네 — 카드 2 가 Elsie 의 카드 1 두 장을 다 이김"),
-        t(E, "No — card 1 doesn't beat card 1 (draw)", "아니 — 카드 1 은 카드 1 못 이김 (비김)"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Bessie plays card 2 — beats card 1 either way.",
-        "Bessie 는 카드 2 를 내면 됨 — 카드 1 어느 쪽이든 다 이김."),
-    },
-    {
-      type: "input",
-      narr: t(E,
-        "Your turn — count.",
-        "직접 세요."),
-      question: t(E,
-        "Elsie = (card 2, card 3). How many of Bessie's 9 hands always win?",
-        "Elsie 패 = (카드 2, 카드 3). Bessie 의 9 가지 패 중 무조건 이기는 패 는 몇 개?"),
-      hint: t(E, "No single card beats both card 2 and card 3.",
-                "카드 2 와 카드 3 둘 다 이기는 카드는 없어요."),
-      answer: 0,
+        </div>),
     },
   ];
 }
 
 export function makeHpsCh2(E, lang = "py") {
   return [
-    // 2-1..2-5: WRITE — one section per chapter step. Each step shows
-    // the cumulative code, the sample input with relevant lines lit up,
-    // and a brief "why this way?" note. Single navigation level: chapter
-    // prev/next walks all 5 sections naturally.
-    // Steps 1-6: input + table + brute force code (sections 1-6)
+    // 2-1..2-6: WRITE — cumulative code + why. 첫 스텝 narr 에 '작전 + 알고리즘' 한 줄
+    // (선생님 2026-07-14: 생각 사다리 박스는 반복·벽이라 제거, 요지는 한 줄로).
     ...getHpsSections(E).slice(0, 6).map((sec, i) => ({
+      section: "build",
       label: sec.label,
       preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
       type: "reveal",
       narr: i === 0
-        ? t(E, "Problem is clear — let's write the most natural solution first.  We'll grow it line by line.",
-              "문제는 다 이해했으니 가장 자연스러운 풀이부터. 한 줄씩 쌓아갈게요.")
+        ? t(E, "Plan: build a beats table, then per hand just count cards that beat both. No heavy algorithm — a table + counting. Let's write it 👇",
+              "작전은 간단해요 — 이김 표 만들고, 패마다 '둘 다 이기는 카드' 개수만 세기. 무거운 알고리즘 없이 표 + 세기. 한 줄씩 짜볼게요 👇")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
@@ -500,6 +388,7 @@ export function makeHpsCh2(E, lang = "py") {
     // The "why both languages fail" math comes on the NEXT page; here we
     // just show the raw result.
     {
+      section: "build",
       type: "reveal",
       narr: t(E,
         "Brute is done — submit it.  The judge runs 12 test inputs against it.",
@@ -555,6 +444,7 @@ export function makeHpsCh2(E, lang = "py") {
     // was empty narration only, so students had no concrete pin for
     // "where does N² come from".
     {
+      section: "optimize",
       type: "reveal",
       narr: t(E,
         "…and the bigger inputs time out.  Where is brute spending all its work?  Look at the nested loop.",
@@ -588,12 +478,11 @@ export function makeHpsCh2(E, lang = "py") {
                 const isInner = i === 4 || i === 5; // for a / for b lines
                 return (
                   <div key={i} style={{
-                    background: isInner ? "rgba(220, 38, 38, 0.18)" : "transparent",
+                    background: isInner ? "rgba(220, 38, 38, 0.22)" : "transparent",
                     borderLeft: isInner ? "3px solid #dc2626" : "3px solid transparent",
                     paddingLeft: 8, paddingRight: 4,
-                    color: isInner ? "#fecaca" : "#e2e8f0",
                     whiteSpace: "pre",
-                  }}>{line}</div>
+                  }}>{highlight(line, "py")}</div>
                 );
               })}
             </div>
@@ -642,387 +531,16 @@ export function makeHpsCh2(E, lang = "py") {
     // and what Bessie's a/b mean — earlier confusion was that the labels
     // dropped on the student without re-establishing context.
     {
+      section: "optimize",
       type: "reveal",
       narr: t(E,
         "10¹⁰ ops in 2 seconds is impossible.  Need to do less work per query.  Same question, drawn as a picture, makes a shortcut visible.",
         "10¹⁰ 연산을 2 초 안에 끝내는 건 불가능해. 한 쿼리당 일을 줄여야 해. 같은 문제를 그림으로 그리면 빠른 길이 보여요."),
-      content: (() => {
-        // Game 3: Elsie plays (card 1, card 1).  Card 2 beats card 1 → ⚡ = {2}.
-        // Reorder Bessie's cards so ⚡ card comes first → losing hands form
-        // a contiguous 2×2 block in the bottom-right corner.
-        const orderedCards = [
-          { id: 2, win: true },
-          { id: 1, win: false },
-          { id: 3, win: false },
-        ];
-        const cell = (rowWin, colWin, key) => {
-          const wins = rowWin || colWin;
-          return (
-            <div key={key} style={{
-              width: 52, height: 42, borderRadius: 6,
-              background: wins ? "#dcfce7" : "#fee2e2",
-              border: `1.5px solid ${wins ? "#86efac" : "#fca5a5"}`,
-              color: wins ? "#15803d" : "#991b1b",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 16, fontWeight: 700,
-              fontFamily: "'JetBrains Mono',monospace",
-            }}>{wins ? "✓" : "✗"}</div>
-          );
-        };
-        return (
-          <div style={{ padding: 16 }}>
-            {/* Strategy box — walks through one query (Game 3) step by step
-                so the abstract "count dom + plug formula" becomes concrete.
-                Cards 1..3 each get a ✓/✗ verdict; the count gives dom; the
-                formula gets actual numbers plugged in. */}
-            <div style={{
-              background: "#fff7ed", border: "1.5px solid #fb923c", borderRadius: 10,
-              padding: "12px 14px", marginBottom: 14, fontSize: 12.5, color: "#1f2937", lineHeight: 1.65,
-            }}>
-              <div style={{ fontWeight: 700, color: "#c2410c", marginBottom: 6 }}>
-                🎯 {t(E, "Plan — walk through one query (Game 3)", "작전 — 한 쿼리 직접 처리해 보기 (게임 3)")}
-              </div>
-              <div style={{ marginBottom: 10 }}>
-                {t(E,
-                  "Elsie plays (card 1, card 1).  Two simple steps replace the brute's N² loop:",
-                  "Elsie 가 (카드 1, 카드 1) 을 냄. 두 단계만으로 brute 의 N² 루프 대체:")}
-              </div>
-
-              {/* Step 1: card-by-card check — three small cards with verdicts */}
-              <div style={{
-                background: "#fff", border: "1px solid #fed7aa", borderRadius: 8,
-                padding: "8px 10px", marginBottom: 8,
-              }}>
-                <div style={{ fontSize: 11.5, fontWeight: 700, color: "#c2410c", marginBottom: 6 }}>
-                  {t(E, "1) Loop cards 1..N once — does each beat BOTH of Elsie's cards?",
-                        "1) 카드 1..N 한 번씩 시험 — '둘 다 이기는가?'")}
-                </div>
-                <div style={{
-                  display: "flex", justifyContent: "center", gap: 8, marginBottom: 6,
-                }}>
-                  {[
-                    { id: 1, label: t(E, "doesn't beat 1 (draw)", "1 못 이김 (비김)"), ok: false },
-                    { id: 2, label: t(E, "beats both 1's", "둘 다 이김"), ok: true },
-                    { id: 3, label: t(E, "doesn't beat 1", "1 못 이김"), ok: false },
-                  ].map(c => (
-                    <div key={c.id} style={{
-                      flex: 1, maxWidth: 130,
-                      background: c.ok ? "#dcfce7" : "#fee2e2",
-                      border: `1.5px solid ${c.ok ? "#86efac" : "#fca5a5"}`,
-                      borderRadius: 6, padding: "6px 4px", textAlign: "center",
-                    }}>
-                      <div style={{ fontWeight: 700, fontSize: 13, color: c.ok ? "#15803d" : "#9ca3af" }}>
-                        {t(E, "card ", "카드 ")}{c.id} {c.ok ? "⚡" : ""}
-                      </div>
-                      <div style={{ fontSize: 11, color: c.ok ? "#15803d" : "#7f1d1d", fontWeight: 600 }}>
-                        {c.ok ? "✓" : "✗"} {c.label}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ textAlign: "center", fontSize: 12, fontWeight: 700, color: "#1f2937" }}>
-                  → {t(E, "Count the ⚡ cards: ", "⚡ 카드 개수: ")}
-                  <span style={{ fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>dom = 1</span>
-                </div>
-
-              </div>
-
-              {/* Step 2: plug into formula */}
-              <div style={{
-                background: "#fff", border: "1px solid #fed7aa", borderRadius: 8,
-                padding: "8px 10px", marginBottom: 8,
-              }}>
-                <div style={{ fontSize: 11.5, fontWeight: 700, color: "#c2410c", marginBottom: 6 }}>
-                  {t(E, "2) Plug N=3, dom=1 into the formula", "2) N=3, dom=1 을 공식에 대입")}
-                </div>
-                <div style={{
-                  fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.85,
-                  textAlign: "center", color: "#1f2937",
-                }}>
-                  <div>
-                    {t(E, "answer", "답")} = <b style={{ color: "#15803d" }}>N²</b> − <b style={{ color: "#dc2626" }}>(N − dom)²</b>
-                  </div>
-                  <div>
-                    = <b style={{ color: "#15803d" }}>3²</b> − <b style={{ color: "#dc2626" }}>(3 − 1)²</b>
-                  </div>
-                  <div>
-                    = 9 − 4 = <b style={{ color: "#15803d", fontSize: 14 }}>5</b> ✓
-                  </div>
-                </div>
-              </div>
-
-              {/* Different dom values → different answers — kills the
-                  "is it always 2²?" misread.  The 2² shown above came
-                  from Game 3 where dom happens to be 1; with another
-                  query you get a totally different (N − dom)². */}
-              <div style={{
-                background: "#fff", border: "1px solid #fed7aa", borderRadius: 8,
-                padding: "8px 10px", marginBottom: 8,
-              }}>
-                <div style={{ fontSize: 11.5, fontWeight: 700, color: "#c2410c", marginBottom: 6 }}>
-                  ⚠️ {t(E, "Heads up — that 2² is NOT a fixed number",
-                            "주의 — 위의 2² 는 고정값이 아니에요")}
-                </div>
-                <div style={{ fontSize: 11.5, lineHeight: 1.55, marginBottom: 6 }}>
-                  {t(E,
-                    "It came from this query's dom = 1.  Other Elsie hands give other doms — and other answers:",
-                    "방금 2² 는 이 쿼리의 dom = 1 에서 나온 것. Elsie 패가 달라지면 dom 도 달라지고 답도 달라져요:")}
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "auto auto auto auto auto", gap: "4px 8px", fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", alignItems: "baseline" }}>
-                  <div style={{ fontWeight: 700, color: "#c2410c" }}>dom</div>
-                  <div style={{ fontWeight: 700, color: "#c2410c" }}>(N − dom)²</div>
-                  <div style={{ fontWeight: 700, color: "#c2410c" }}>N²</div>
-                  <div style={{ fontWeight: 700, color: "#c2410c" }}>{t(E, "answer", "답")}</div>
-                  <div style={{ fontWeight: 700, color: "#c2410c", fontFamily: "system-ui" }}>{t(E, "meaning", "의미")}</div>
-
-                  <div>0</div><div>3² = 9</div><div>9</div><div>9 − 9 = <b>0</b></div>
-                  <div style={{ fontFamily: "system-ui", color: C.dim }}>{t(E, "no card beats both", "둘 다 이기는 카드 0")}</div>
-
-                  <div>1</div><div>2² = 4</div><div>9</div><div>9 − 4 = <b>5</b></div>
-                  <div style={{ fontFamily: "system-ui", color: C.dim }}>{t(E, "Game 3 here", "지금 게임 3")}</div>
-
-                  <div>2</div><div>1² = 1</div><div>9</div><div>9 − 1 = <b>8</b></div>
-                  <div style={{ fontFamily: "system-ui", color: C.dim }}>{t(E, "two such cards", "2 장")}</div>
-
-                  <div>3</div><div>0² = 0</div><div>9</div><div>9 − 0 = <b>9</b></div>
-                  <div style={{ fontFamily: "system-ui", color: C.dim }}>{t(E, "every hand wins", "모든 패 이김")}</div>
-                </div>
-                <div style={{ marginTop: 6, fontSize: 11, color: "#7c2d12", lineHeight: 1.55 }}>
-                  {t(E,
-                    "The square comes from \"both cards must be non-⚡ to lose\" — (N − dom) choices for slot 1 × (N − dom) for slot 2.  That's why it's squared.",
-                    "제곱이 나오는 이유: 지려면 두 카드 모두 non-⚡ 이어야 함 — 자리 1 에 (N−dom) 가지 × 자리 2 에 (N−dom) 가지. 그래서 제곱.")}
-                </div>
-              </div>
-
-              {/* Speed summary */}
-              <div style={{
-                marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fed7aa",
-                fontSize: 11.5, color: "#7c2d12", lineHeight: 1.6,
-              }}>
-                <div>
-                  • {t(E,
-                    "1 query: card-loop O(N) + formula O(1) = ",
-                    "쿼리 1 개: 카드 루프 O(N) + 공식 O(1) = ")}
-                  <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>O(N)</b>
-                  {t(E, " (was O(N²) in brute).", " (brute 는 O(N²) 였음).")}
-                </div>
-                <div>
-                  • {t(E,
-                    "Total: M queries × O(N) = ",
-                    "전체: M 쿼리 × O(N) = ")}
-                  <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>M × N</b>
-                  {t(E,
-                    "  →  about N× faster (N=3000 ⇒ ~3000× faster, fits in time).",
-                    "  →  N 배 빠름 (N=3000 이면 약 3000 배, 시간 안에 끝남).")}
-                </div>
-              </div>
-
-              <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fed7aa", fontSize: 11.5, color: "#7c2d12", fontStyle: "italic" }}>
-                {t(E,
-                  "Why is the formula N² − (N − dom)²?  The grid below shows it visually.",
-                  "공식이 왜 N² − (N − dom)²?  ↓ 아래 격자가 그 이유를 그림으로 보여줘요.")}
-              </div>
-            </div>
-
-            <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", textAlign: "center", marginBottom: 10 }}>
-              💡 {t(E,
-                "9 hands as a grid — using the 3rd sample game",
-                "9 가지 패를 격자로 — 샘플 입력의 세 번째 게임 (Elsie 가 카드 1, 카드 1)")}
-            </div>
-
-            {/* Plain-words setup BEFORE the grid — re-establishes context. */}
-            <div style={{
-              background: "#faf5ff", border: "1px solid #c4b5fd", borderRadius: 10,
-              padding: "10px 12px", fontSize: 12.5, color: "#1f2937", lineHeight: 1.7, marginBottom: 12,
-            }}>
-              <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 4 }}>
-                {t(E, "Setup", "상황 정리")}
-              </div>
-              <div>
-                • {t(E, "Elsie holds two cards — both are card 1 (the same card twice).",
-                      "Elsie 가 카드 두 장을 들고 있는데, 둘 다 카드 1 (같은 카드 두 번).")}
-              </div>
-              <div>
-                • {t(E, "Bessie also holds two cards.  We list every (1st card, 2nd card) choice → ",
-                      "Bessie 도 카드 두 장을 골라요. (첫 번째 카드, 두 번째 카드) 가능한 조합 → ")}
-                <b>3 × 3 = 9 {t(E, "hands.", "가지 패.")}</b>
-              </div>
-              <div>
-                • {t(E,
-                  "Among all cards (1, 2, 3), only ",
-                  "전체 카드 (1, 2, 3) 중에서 ")}
-                <b style={{ color: "#15803d" }}>{t(E,
-                  "card 2 beats both of Elsie's card 1's",
-                  "카드 2 만 Elsie 의 두 카드를 모두 이김")}</b>
-                {" "}
-                {t(E, "(needs to beat BOTH, not just one).", "(둘 다 이겨야 하지 한 장만으로는 불충분).")}
-              </div>
-              <div>
-                • <span style={{ color: "#15803d", fontWeight: 700 }}>⚡</span> {t(E,
-                  "marks any 'beats-both card' wherever it appears in the grid.",
-                  "= 그 '둘 다 이기는 카드' 표시 (격자 어디에 나오든 같은 의미).")}
-              </div>
-            </div>
-
-            <div style={{ background: "#fafafa", border: "1px solid #e5e7eb", borderRadius: 10, padding: 14, marginBottom: 12 }}>
-              <div style={{ fontSize: 11.5, color: C.dim, marginBottom: 8, textAlign: "center" }}>
-                {t(E, "Each cell = one (row card, column card) hand.  Green ✓ = wins.  Red ✗ = loses.",
-                      "각 셀 = (행 카드, 열 카드) 한 패. 초록 ✓ = 이김, 빨강 ✗ = 짐.")}
-              </div>
-
-              {/* Helpful "what does ✓ mean here?" caller-out: pick one cell
-                  (row=card 2, col=card 1) and explain it concretely.  The
-                  picture without this leaves a student wondering why a
-                  cell that mixes a ⚡ row with a non-⚡ column is ✓. */}
-              <div style={{
-                fontSize: 11, color: "#6b21a8",
-                background: "#faf5ff", border: "1px dashed #c4b5fd", borderRadius: 6,
-                padding: "5px 8px", margin: "0 auto 10px", maxWidth: 460,
-                lineHeight: 1.5,
-              }}>
-                {t(E,
-                  "Example: cell (row=card 2 ⚡, col=card 1) is ✓ — Bessie holds those two cards, plays card 2 against either of Elsie's, and wins both ways.",
-                  "예: (행=카드 2 ⚡, 열=카드 1) 셀이 ✓ — Bessie 가 이 두 장을 들고 있으면 카드 2 로 응답, Elsie 의 어느 쪽이든 이김.")}
-              </div>
-
-              {/* Single horizontal axis caption — replaces the rotated row
-                  label which was hard to read.  One clean line up front:
-                  rows are first card, columns are second card. */}
-              <div style={{
-                fontSize: 11, color: "#6b7280", textAlign: "center", marginBottom: 6,
-                fontWeight: 500,
-              }}>
-                {t(E,
-                  "↓ rows = Bessie's 1st card   ·   → cols = Bessie's 2nd card",
-                  "↓ 행 = Bessie 첫 번째 카드   ·   → 열 = Bessie 두 번째 카드")}
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <div style={{ position: "relative" }}>
-                  {/* Column headers */}
-                  <div style={{ display: "flex", gap: 4, marginLeft: 60 }}>
-                    {orderedCards.map(c => (
-                      <div key={`h-${c.id}`} style={{
-                        width: 52, textAlign: "center", fontSize: 11.5, fontWeight: 600,
-                        color: c.win ? "#15803d" : "#9ca3af",
-                      }}>
-                        {t(E, `card ${c.id}`, `카드 ${c.id}`)}{c.win ? " ⚡" : ""}
-                      </div>
-                    ))}
-                  </div>
-                  {/* Rows */}
-                  {orderedCards.map((rowCard) => (
-                    <div key={`r-${rowCard.id}`} style={{ display: "flex", gap: 4, marginTop: 4, alignItems: "center" }}>
-                      <div style={{
-                        width: 56, fontSize: 11.5, fontWeight: 600, textAlign: "right", paddingRight: 4,
-                        color: rowCard.win ? "#15803d" : "#9ca3af",
-                      }}>
-                        {t(E, `card ${rowCard.id}`, `카드 ${rowCard.id}`)}{rowCard.win ? " ⚡" : ""}
-                      </div>
-                      {orderedCards.map(colCard => cell(rowCard.win, colCard.win, `${rowCard.id}-${colCard.id}`))}
-                    </div>
-                  ))}
-                  {/* Dashed bracket around the 4 red (losing) cells.
-                      No inline label — the colour and the box below the
-                      grid already say "red square = losing hands". An
-                      extra label inside the grid was overlapping ✓
-                      cells and confusing the picture. */}
-                  {(() => {
-                    // Stack: row-card label (56) + paddingRight (4) = 60 to first cell.
-                    // First col of losing cells = index 1 → left = 60 + 1 × (52 + 4) = 116.
-                    // Width = 2×52 + 4 = 108.
-                    // Top stack: col-header row (~14) + marginTop (4) ≈ 18.
-                    // First row of losing cells = index 1 → top = 18 + 4 + 1 × (42 + 4) = 68.
-                    // Height = 2×42 + 4 = 88.
-                    return (
-                      <div style={{
-                        position: "absolute",
-                        left: 116 - 4, top: 68 - 4,
-                        width: 108 + 8, height: 88 + 8,
-                        border: "2px dashed #dc2626",
-                        borderRadius: 10,
-                        pointerEvents: "none",
-                      }} />
-                    );
-                  })()}
-                </div>
-              </div>
-
-              {/* External label below the grid — points UP at the bracket.
-                  Sits in clean whitespace, no overlap with cells. */}
-              <div style={{
-                marginTop: 10, fontSize: 11, color: "#dc2626", fontWeight: 700,
-                textAlign: "center",
-              }}>
-                {t(E,
-                  "↑ red dashed square = 4 losing hands (the small block we'll count)",
-                  "↑ 빨간 점선 사각형 = 지는 패 4 칸 (우리가 세려는 작은 덩어리)")}
-              </div>
-
-              <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
-                {t(E, "Hand wins if EITHER card is ⚡.  Loses only when BOTH cards are non-⚡.",
-                      "둘 중 하나만 ⚡ 이면 이김. 둘 다 ⚡ 아닐 때만 짐.")}
-              </div>
-            </div>
-
-            {/* Read-the-picture box: literal NUMBERS first; formula form is a footnote. */}
-            <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 10, padding: "12px 14px", fontSize: 12.5, color: "#1f2937", lineHeight: 1.75 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>
-                🔍 {t(E, "Count the cells:", "셀 세기:")}
-              </div>
-              <div style={{ display: "flex", gap: 8, alignItems: "baseline" }}>
-                <span style={{
-                  display: "inline-block", width: 14, height: 14, borderRadius: 3,
-                  background: "#fee2e2", border: "1.5px solid #fca5a5", flexShrink: 0,
-                }} />
-                <div>
-                  {t(E, "Red square: ", "빨간 사각형: ")}
-                  <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>2 × 2 = 4</b> {t(E, "losing hands.", "지는 패.")}
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: 8, alignItems: "baseline", marginTop: 4 }}>
-                <span style={{
-                  display: "inline-block", width: 14, height: 14, borderRadius: 3,
-                  background: "#dcfce7", border: "1.5px solid #86efac", flexShrink: 0,
-                }} />
-                <div>
-                  {t(E, "Green L-shape: ", "초록 ㄱ-자: ")}
-                  <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>9 − 4 = 5</b> {t(E, "wins ✓", "이김 ✓")}
-                </div>
-              </div>
-              <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #86efac", fontSize: 11.5, color: "#1f2937", lineHeight: 1.6 }}>
-                <div style={{ fontWeight: 600, marginBottom: 2 }}>
-                  💡 {t(E, "Idea:", "핵심 아이디어:")}
-                </div>
-                <div>
-                  {t(E,
-                    "Count the small red square (easy) and subtract from the whole grid.  That's faster than tracing the L-shape.",
-                    "작은 빨간 사각형 (세기 쉬움) 을 세서 전체 격자에서 빼기. ㄱ-자 직접 따라가기보다 빨라.")}
-                </div>
-                <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #86efac", fontSize: 11, color: "#1f2937", lineHeight: 1.6 }}>
-                  <div style={{ color: C.dim, marginBottom: 4 }}>
-                    {t(E,
-                      "Later in the code we write this with letters:",
-                      "코드에선 글자로 적어요:")}
-                  </div>
-                  <div style={{ paddingLeft: 8, fontFamily: "'JetBrains Mono',monospace" }}>
-                    <div>N = 3  <span style={{ color: C.dim, fontFamily: "system-ui" }}>{t(E, "(deck size)", "(덱 크기)")}</span></div>
-                    <div>dom = 1  <span style={{ color: C.dim, fontFamily: "system-ui" }}>{t(E, "(cards that beat Elsie)", "(Elsie 이기는 카드 개수)")}</span></div>
-                  </div>
-                  <div style={{ marginTop: 4, paddingLeft: 8, fontFamily: "'JetBrains Mono',monospace" }}>
-                    <div><b style={{ color: "#1f2937" }}>N²</b> = 3² = <b>9</b>  <span style={{ color: C.dim, fontFamily: "system-ui" }}>{t(E, "(whole grid)", "(전체 격자)")}</span></div>
-                    <div><b style={{ color: "#dc2626" }}>(N − dom)²</b> = 2² = <b>4</b>  <span style={{ color: C.dim, fontFamily: "system-ui" }}>{t(E, "(red square)", "(빨간 사각형)")}</span></div>
-                    <div><b style={{ color: "#15803d" }}>N² − (N − dom)²</b> = 9 − 4 = <b style={{ color: "#15803d" }}>5</b>  <span style={{ color: C.dim, fontFamily: "system-ui" }}>{t(E, "(answer ✓)", "(답 ✓)")}</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      })(),
+      content: (<HpsFormulaGridSim E={E} />),
     },
     // Insight + smart code (sections 7-8)
     ...getHpsSections(E).slice(6, 8).map((sec, i) => ({
+      section: "optimize",
       label: sec.label,
       preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
       type: "reveal",
@@ -1044,8 +562,9 @@ export function makeHpsCh2(E, lang = "py") {
     //    crystal clear so a student who's done can stop and not feel
     //    like they're missing something required.
     {
+      section: "bonus",
       type: "reveal",
-      label: t(E, "Optional — bits", "선택 — 비트 (심화)"),
+      label: t(E, "🎁 Bonus — bits", "🎁 보너스 — 비트"),
       narr: t(E,
         "Quest's main path ends here.  From here on is optional — a deeper bits trick for students who want more.  Skipping is totally fine.",
         "여기까지가 메인 풀이. 여기부터는 선택 — 더 깊이 가고 싶은 학생만. 안 따라가도 전혀 문제 없어요."),
@@ -1074,7 +593,7 @@ export function makeHpsCh2(E, lang = "py") {
             color: "#92400e", fontSize: 11, fontWeight: 800, letterSpacing: 0.5,
             padding: "3px 10px", borderRadius: 999, marginBottom: 10,
           }}>
-            🎓 {t(E, "DEEP DIVE — OPTIONAL", "심화 — 선택")}
+            🎁 {t(E, "BONUS — OPTIONAL (harder)", "보너스 — 선택 · 더 어려움")}
           </div>
           <div style={{ fontSize: 14, fontWeight: 700, color: "#0891b2", marginBottom: 10 }}>
             🚀 {t(E, "Even smarter? Bits.", "더 똑똑해지려면? 비트.")}
@@ -1103,6 +622,7 @@ export function makeHpsCh2(E, lang = "py") {
     },
     // Bits primer
     {
+      section: "bonus",
       type: "reveal",
       narr: t(E,
         "Step 1: bits. Every number has a binary form — a row of 0s and 1s.",
@@ -1147,6 +667,7 @@ export function makeHpsCh2(E, lang = "py") {
     },
     // Bit operators primer
     {
+      section: "bonus",
       type: "reveal",
       narr: t(E,
         "Step 2: three operators we need — AND (&), OR (|), and popcount.",
@@ -1203,6 +724,7 @@ export function makeHpsCh2(E, lang = "py") {
     },
     // Apply to this problem
     {
+      section: "bonus",
       type: "reveal",
       narr: t(E,
         "Step 3: apply bits to this problem. One column per Elsie card; bit i means 'card i beats this column'.",
@@ -1262,6 +784,7 @@ export function makeHpsCh2(E, lang = "py") {
     },
     // Bonus: Python bitmask code (section 9)
     ...getHpsSections(E).slice(8, 9).map((sec, i) => ({
+      section: "bonus",
       label: sec.label,
       preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
       type: "reveal",

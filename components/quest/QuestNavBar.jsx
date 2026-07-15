@@ -61,6 +61,9 @@ export function QuestProgressBar({
   // 문제 / 코드 regions instantly distinguishable. Tab 0 = quest accent.
   const TAB_HUES = [accent, "#0d9488", "#d97706", "#0891b2"];
   const tabHue = (i) => TAB_HUES[i % TAB_HUES.length];
+  // 스텝별 구간 색 (step.section 이 있을 때) — 설명 단계가 바뀌면 진도바 색이 바뀜.
+  // bonus 는 회색으로 '선택/심화'임을 한눈에.
+  const SECTION_HUES = { build: "#0d9488", optimize: "#d97706", bonus: "#94a3b8" };
 
   const showHover = (e, tabIdx, i) => {
     const segRect = e.currentTarget.getBoundingClientRect();
@@ -100,7 +103,9 @@ export function QuestProgressBar({
                   const isCurrent = isCurTab && i === cur;
                   const isVisited = isPastTab || (isCurTab && i < cur);
                   const isHovered = hoverInfo && hoverInfo.tabIdx === tabIdx && hoverInfo.i === i;
-                  const hue = tabHue(tabIdx);
+                  // 스텝에 section 이 있으면 구간별 색 (설명 단계가 바뀌면 색이 바뀜),
+                  // 없으면 기존처럼 탭 색. (하위호환 — 다른 quest 영향 없음)
+                  const hue = (s && s.section && SECTION_HUES[s.section]) ? SECTION_HUES[s.section] : tabHue(tabIdx);
                   // current = full hue, visited = mostly filled, unvisited = a clear
                   // (not faint) tint so each tab's region stays its own color and
                   // neighbouring tabs' unvisited stretches don't blur into one another.
