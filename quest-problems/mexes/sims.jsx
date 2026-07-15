@@ -301,9 +301,20 @@ export function MexesMaxSim({ E }) {
   const st = steps[Math.min(idx, steps.length - 1)];
   const rv = st.reveal;
 
-  // 말풍선은 배열(봐야 할 그림) 위에 고정 — 아래로 내리면 배열/칩을 덮어 가림
-  // (선생님 2026-07-13: "봐야 할 사진은 가리면 안 돼".)
-  const shiftYMax = 0;
+  // 말풍선 시선유도(선생님 2026-07-13): need/fill/remove 스텝은 배열 위(꼬리↓),
+  // max/done(결론) 스텝은 결과 칩 아래(꼬리↑)로 붙어 배열 안 가리고 결론을 가리킴.
+  const atBottom = st.kind === "max" || st.kind === "done";
+  const _bd = rv.done ? "#6ee7b7" : "#fbbf24";
+  const _bg = rv.done ? "#ecfdf5" : "#fffbeb";
+  const _fg = rv.done ? "#065f46" : "#92400e";
+  const _tri = { width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent" };
+  const renderBubble = (pointDown) => (
+    <div style={{ maxWidth: 540, margin: pointDown ? "0 auto 12px" : "12px auto 2px", position: "relative", zIndex: 5 }}>
+      {!pointDown && <div style={{ ..._tri, borderBottom: `9px solid ${_bd}` }} />}
+      <div style={{ background: _bg, border: `1.5px solid ${_bd}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: _fg, lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>💬 {st.bubble}</div>
+      {pointDown && <div style={{ ..._tri, borderTop: `9px solid ${_bd}` }} />}
+    </div>
+  );
 
   const TW = 44, GAP = 8;
   const arrCell = (v, i) => {
@@ -341,11 +352,8 @@ export function MexesMaxSim({ E }) {
         ))}
       </div>
 
-      {/* 말풍선 — 스텝별로 Y 이동 (설명 중인 행 근처로) */}
-      <div style={{ maxWidth: 540, margin: "0 auto 12px", position: "relative", zIndex: 5, transform: `translateY(${shiftYMax}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)" }}>
-        <div style={{ background: rv.done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${rv.done ? "#6ee7b7" : "#fbbf24"}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: rv.done ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>💬 {st.bubble}</div>
-        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${rv.done ? "#6ee7b7" : "#fbbf24"}` }} />
-      </div>
+      {/* 말풍선(위) — need/fill/remove 스텝 (배열이 주인공) */}
+      {!atBottom && renderBubble(true)}
 
       {/* 배열 */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, marginBottom: 12 }}>
@@ -382,6 +390,9 @@ export function MexesMaxSim({ E }) {
         <span style={{ fontWeight: 800, color: C.dim }}>→ max =</span>
         {chip(t(E, "ops", "연산"), info.ops, A, "#f5f3ff", "#c4b5fd", rv.ops)}
       </div>
+
+      {/* 말풍선(아래) — max/done 결론 스텝: 결과 칩을 가리킴 (배열 안 가림) */}
+      {atBottom && renderBubble(false)}
 
       <div style={{ marginTop: 12 }}>
         <SimNav idx={idx} total={tot} onIdx={setIdx} accent={A} showLabels isEn={E} />
