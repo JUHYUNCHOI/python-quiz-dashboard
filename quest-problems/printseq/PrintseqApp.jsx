@@ -3,6 +3,7 @@ import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
 import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
+import { LearningSteps } from "@/components/quest/LearningSteps";
 import { PrintseqProgressiveCode, downloadPrintseqPDF, getPrintseqSections, PrintseqSim, PrintseqRunner } from "./components";
 import { makePrintseqCh1, makePrintseqCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
@@ -136,6 +137,7 @@ export default function PrintseqApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <LearningSteps E={E} />
         <AlgorithmTags E={E} tags={[
           { icon: "🔁", ko: "재귀 (recursion)", en: "Recursion", href: "/algo/recursion/learn?from=quest" },
           { icon: "🧠", ko: "메모이제이션 (DP)", en: "Memoization (DP)", href: "/algo/dp/learn?from=quest" },
