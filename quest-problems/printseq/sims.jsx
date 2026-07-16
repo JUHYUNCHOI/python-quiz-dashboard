@@ -476,7 +476,9 @@ export function PrintseqPlanSim({ E }) {
   );
 
   return (
-    <div style={{ padding: 16 }}>
+    /* min-height + flex 세로 + SimNav margin-top:auto → 스텝마다 내용 높이가 달라도
+       버튼이 위아래로 안 튐 (선생님 2026-07-16). */
+    <div style={{ padding: 16, minHeight: 545, display: "flex", flexDirection: "column" }}>
       {/* 말풍선 */}
       <div style={{ maxWidth: 520, margin: "0 auto 14px", position: "relative", zIndex: 5 }}>
         <div style={{ background: isFinal ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bColor}`, borderRadius: 12, padding: "12px 15px", fontSize: 13, color: isFinal ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>
@@ -538,7 +540,7 @@ export function PrintseqPlanSim({ E }) {
         )}
       </div>
 
-      <div style={{ marginTop: 14 }}>
+      <div style={{ marginTop: "auto", paddingTop: 14 }}>
         <SimNav idx={idx} total={tot} onIdx={setIdx} accent="#16a34a" showLabels isEn={E} />
       </div>
     </div>
