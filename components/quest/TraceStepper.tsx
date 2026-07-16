@@ -135,6 +135,89 @@ export function SimNav({
   );
 }
 
+export interface SimShellProps {
+  /** The step body (varies in height between steps). */
+  children: React.ReactNode;
+  idx: number;
+  total: number;
+  onIdx: (n: number) => void;
+  accent?: string;
+  isEn?: boolean;
+  showLabels?: boolean;
+  /** Seed floor in px. The frame never shrinks below the tallest step seen. */
+  minHeight?: number;
+  /** Cap (in vh) beyond which the body scrolls internally — keeps the frame
+   *  inside the viewport on short screens instead of causing a page scroll. */
+  maxHeightVh?: number;
+  /** Padding around the body. Defaults to 16. */
+  pad?: number;
+}
+
+/**
+ * SimShell — the "no-jump" frame for step simulators.
+ *
+ * Why: each sim step has a different content height, so the SimNav that
+ * follows the content used to slide up and down as you stepped. Reserving a
+ * fixed min-height per sim is fragile (needs hand-measuring) and leaves big
+ * gaps on short steps / overflows on small screens.
+ *
+ * SimShell fixes it generically, no per-sim numbers:
+ *   1) a ResizeObserver watches the body and grows the reserved floor to the
+ *      TALLEST step seen — and never shrinks it. Height is therefore
+ *      monotonic: the SimNav can only settle downward once (smoothly, 220ms),
+ *      never flip up-and-down. After the tallest step is visited it's locked.
+ *   2) SimNav is pinned to the frame bottom (margin-top:auto), so it sits at
+ *      the same Y on every step.
+ *   3) maxHeightVh caps the body on short viewports (internal scroll) so the
+ *      frame never pushes the page into a scroll.
+ *
+ * Usage: wrap the step body and hand SimShell the same idx/total/onIdx you'd
+ * have passed to <SimNav> — it renders the nav for you.
+ */
+export function SimShell({
+  children,
+  idx,
+  total,
+  onIdx,
+  accent = DEFAULT_ACCENT,
+  isEn = false,
+  showLabels = true,
+  minHeight = 360,
+  maxHeightVh = 76,
+  pad = 16,
+}: SimShellProps) {
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const [floor, setFloor] = useState(minHeight);
+  useEffect(() => {
+    const el = bodyRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const measure = () => setFloor((prev) => Math.max(prev, Math.ceil(el.offsetHeight)));
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  return (
+    <div
+      style={{
+        padding: pad,
+        minHeight: floor,
+        display: "flex",
+        flexDirection: "column",
+        boxSizing: "border-box",
+        transition: "min-height 220ms ease",
+      }}
+    >
+      <div ref={bodyRef} style={{ flex: "0 0 auto", maxHeight: `${maxHeightVh}vh`, overflowY: "auto" }}>
+        {children}
+      </div>
+      <div style={{ marginTop: "auto", paddingTop: 14 }}>
+        <SimNav idx={idx} total={total} onIdx={onIdx} accent={accent} isEn={isEn} showLabels={showLabels} />
+      </div>
+    </div>
+  );
+}
+
 export interface NarrativePanelProps {
   children: React.ReactNode;
   /** Min height in px (some panels reserve space for tall content). */

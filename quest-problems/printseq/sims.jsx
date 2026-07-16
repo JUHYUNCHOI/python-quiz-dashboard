@@ -2,7 +2,7 @@
 // (선생님 2026-07-13: "눈이 말풍선을 따라가며 보게 해달라니까. K? 어떻게 입력되는데? 그래서 뭐?")
 
 import { C, t } from "@/components/quest/theme";
-import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
+import { useTraceStep, SimNav, SimShell } from "@/components/quest/TraceStepper";
 
 const A = "#16a34a";
 const TARGET = [1, 1, 1, 1];
@@ -476,9 +476,9 @@ export function PrintseqPlanSim({ E }) {
   );
 
   return (
-    /* min-height + flex 세로 + SimNav margin-top:auto → 스텝마다 내용 높이가 달라도
-       버튼이 위아래로 안 튐 (선생님 2026-07-16). */
-    <div style={{ padding: 16, minHeight: 545, display: "flex", flexDirection: "column" }}>
+    /* SimShell = 스텝마다 내용 높이가 달라도 버튼이 위아래로 안 튀는 공통 프레임
+       (제일 큰 스텝에 맞춰 잠그고 SimNav 는 바닥 고정). 선생님 2026-07-16. */
+    <SimShell idx={idx} total={tot} onIdx={setIdx} accent="#16a34a" isEn={E} minHeight={545}>
       {/* 말풍선 */}
       <div style={{ maxWidth: 520, margin: "0 auto 14px", position: "relative", zIndex: 5 }}>
         <div style={{ background: isFinal ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bColor}`, borderRadius: 12, padding: "12px 15px", fontSize: 13, color: isFinal ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>
@@ -539,11 +539,7 @@ export function PrintseqPlanSim({ E }) {
           </div>
         )}
       </div>
-
-      <div style={{ marginTop: "auto", paddingTop: 14 }}>
-        <SimNav idx={idx} total={tot} onIdx={setIdx} accent="#16a34a" showLabels isEn={E} />
-      </div>
-    </div>
+    </SimShell>
   );
 }
 

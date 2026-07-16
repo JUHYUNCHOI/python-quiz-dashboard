@@ -9,6 +9,7 @@ export function makePrintseqCh1(E) {
     /* 1-1 — 스텝별 인트로 시뮬 (선생님 2026-07-13: "눈이 말풍선을 따라가며 보게 해달라니까").
        텍스트 벽 → SimNav 로 목표→N→K→명령→질문→나이브→REP→YES 8 스텝. */
     {
+      phase: 1,
       type: "reveal",
       narr: t(E,
         "Bessie's printer has only 2 commands — and a strict budget K. What exactly is K counting? Let's see.",
@@ -26,6 +27,7 @@ export function makePrintseqCh1(E) {
 
     /* 1-2 — Sample I/O with labeled callouts (선생님 2026-07-13: "K? 어떻게 입력되는데?"). */
     {
+      phase: 1,
       type: "reveal",
       narr: t(E,
         "Now the real input file. Each line has a label bubble — read top to bottom and you'll see where N, K, and the target live.",
@@ -113,6 +115,7 @@ export function makePrintseqCh1(E) {
 
     /* 1-2b — 세 모양 발견: 스텝 시뮬 (선생님 2026-07-13: 텍스트 벽 → 한 수열씩 눈으로 따라가기). */
     {
+      phase: 2,
       type: "reveal",
       narr: t(E,
         "Three tiny sequences, one at a time. For each: how would YOU build it? The trick is different each time.",
@@ -122,6 +125,7 @@ export function makePrintseqCh1(E) {
 
     /* 1-2c — Follow-up: name the shape. */
     {
+      phase: 2,
       type: "quiz",
       narr: t(E,
         "Your turn! A new sequence — which of the three tricks fits?",
@@ -142,6 +146,7 @@ export function makePrintseqCh1(E) {
 
     /* 1-3 — Explorer simulator. */
     {
+      phase: 2,
       type: "reveal",
       narr: t(E,
         "Playground time — pick a sequence and a budget K, and see YES or NO instantly. Try to find one that's NO with K=2 but YES with K=3!",
@@ -151,6 +156,7 @@ export function makePrintseqCh1(E) {
 
     /* 1-4 — Quiz. */
     {
+      phase: 2,
       type: "quiz",
       narr: t(E,
         "Quiz — remember, REP is free. Count only the PRINTs you'd have to write.",
@@ -171,6 +177,7 @@ export function makePrintseqCh1(E) {
     /* 1-5 — Input quiz: student tries to write a program for [1,1,2,2] with K=2.
        Hint nudges toward "split into blocks" without giving the program. */
     {
+      phase: 2,
       type: "input",
       narr: t(E,
         "Last one — imagine the program in your head first, then answer. (Hint: we solved this exact sequence in the shapes sim!)",
@@ -191,6 +198,7 @@ export function makePrintseqCh2(E, lang = "py") {
     /* 2-0 — 계획 시뮬: 코드 적기 전에 can() 이 뭘 할지 트리로 한 단계씩
        (선생님 2026-07-13: "코드를 보여주기 전에 어떻게 하겠다는걸 시뮬로"). */
     {
+      phase: 4,
       type: "reveal",
       narr: t(E,
         "Before any code — watch the plan run on [1 1 2 2] with budget 2. One function, three tricks, and a question that calls itself.",
@@ -201,6 +209,7 @@ export function makePrintseqCh2(E, lang = "py") {
     /* 2-0b — 블록 반복 탐지 시뮬: 요령②의 추상 코드를 구체 숫자로
        (선생님 2026-07-13: "저 코드가 머릿속에서 안 그려짐"). */
     {
+      phase: 6,
       type: "reveal",
       narr: t(E,
         "Trick ② in the code looked abstract — let's SEE it: try block sizes on 1 2 1 2 1 2 and find the repeat.",
@@ -212,6 +221,7 @@ export function makePrintseqCh2(E, lang = "py") {
        설명 말풍선이 밝아진 줄 바로 위에 붙어서 건너뛸 수 없음
        (선생님 2026-07-13: "코드 위에 설명을 안 읽게 되더라"). */
     {
+      phase: 7,
       type: "reveal",
       /* narr 없음 — CodeWalk 안 말풍선이 그 역할 (중복 바 제거로 세로 공간 확보). */
       narr: "",
