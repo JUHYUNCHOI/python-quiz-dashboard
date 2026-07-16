@@ -436,8 +436,8 @@ function _buildPlanSteps(E) {
         "양쪽 다 YES → 원래 질문도 YES! ✓") },
     { root: "yes", kids: "both", memo: true,
       bubble: t(E,
-        "Same question again? Don't re-solve — grab the stored answer.\n= MEMOIZATION (top-down DP). Now let's code it 👇",
-        "같은 질문이 또 나오면? 다시 안 풀고 저장해둔 답을 꺼내 써요.\n= 메모이제이션 (top-down DP). 이제 코드로 👇") },
+        "Here's the catch: trying ALL cut points, the SAME small question — like can([1 1], 1) — comes up over and over.\nPlain recursion re-solves it EVERY time → slow.\nStore each answer once, reuse it → fast. = MEMOIZATION (top-down DP). 👇",
+        "여기서 문제 — 자를 곳을 전부 시도하다 보면 같은 작은 질문(예: can([1 1], 1))이 자꾸자꾸 나와요.\n그냥 재귀면 그때마다 처음부터 다시 풀어요 → 느림.\n한 번 푼 답을 저장해두고 재사용하면 → 빠름. = 메모이제이션 (top-down DP). 👇") },
   ];
 }
 
@@ -509,16 +509,30 @@ export function PrintseqPlanSim({ E }) {
           </>
         )}
 
-        {/* 메모 카드 — 마지막 스텝 */}
+        {/* 메모 카드 — ④ 겹친 질문(느림)을 눈으로 → ⑤ memo(빠름) */}
         {st.memo && (
-          <div style={{ marginTop: 14, background: "#f5f3ff", border: "1.5px dashed #c4b5fd", borderRadius: 10, padding: "9px 14px", wordBreak: "keep-all", textAlign: "center" }}>
-            <div style={{ fontSize: 12, color: "#5b21b6", fontWeight: 700 }}>
-              📓 {t(E, "answer store (memo): { ([1 1], 1) → YES,  ([2 2], 1) → YES,  ([1 1 2 2], 2) → YES }",
-                      "답 저장소 (memo): { ([1 1], 1) → YES,  ([2 2], 1) → YES,  ([1 1 2 2], 2) → YES }")}
+          <div style={{ marginTop: 14, background: "#f5f3ff", border: "1.5px dashed #c4b5fd", borderRadius: 10, padding: "10px 14px", wordBreak: "keep-all", textAlign: "center" }}>
+            <div style={{ fontSize: 11, color: "#6d28d9", fontWeight: 700, marginBottom: 6 }}>
+              {t(E, "Across the full search, the SAME question repeats:", "전체 탐색에서 같은 질문이 자꾸자꾸 나와요:")}
             </div>
-            <div style={{ fontSize: 10.5, color: "#8b7fb8", fontWeight: 600, marginTop: 4 }}>
-              {t(E, "(here nothing repeated; on longer sequences the same question repeats → reuse it)",
-                    "(이 예엔 겹친 질문이 없었지만, 길면 같은 질문이 자꾸 → 그때 재사용)")}
+            <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginBottom: 8 }}>
+              {[0, 1, 2].map(i => (
+                <div key={i} style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, fontWeight: 800, color: "#0f172a", background: "#fff", border: "1.5px solid #c4b5fd", borderRadius: 8, padding: "4px 9px" }}>
+                  can([1 1], 1)
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+              <div style={{ fontSize: 11, color: "#b91c1c", background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 8, padding: "5px 10px", fontWeight: 700 }}>
+                🐢 {t(E, "plain recursion: re-solve each time → slow", "그냥 재귀: 매번 다시 풀기 → 느림")}
+              </div>
+              <div style={{ fontSize: 11, color: "#15803d", background: "#dcfce7", border: "1px solid #86efac", borderRadius: 8, padding: "5px 10px", fontWeight: 700 }}>
+                ⚡ {t(E, "memo: solve once, reuse → fast", "memo: 한 번만 풀고 재사용 → 빠름")}
+              </div>
+            </div>
+            <div style={{ fontSize: 10.5, color: "#5b21b6", fontWeight: 600, marginTop: 8 }}>
+              📓 {t(E, "answer store: { ([1 1],1): YES,  ([2 2],1): YES,  ([1 1 2 2],2): YES }",
+                      "답 저장소: { ([1 1],1): YES,  ([2 2],1): YES,  ([1 1 2 2],2): YES }")}
             </div>
           </div>
         )}
