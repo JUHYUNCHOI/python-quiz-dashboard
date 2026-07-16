@@ -70,6 +70,9 @@ code, pre, .font-mono, [class*="font-mono"] {
 .cpp-editor-dark .token.type { color: #79c0ff !important; }
 
 :root {
+  /* Let height:auto animate (quest SimShell smooth-follow). Chrome/Edge 129+;
+     other browsers ignore it and just snap — still correct. */
+  interpolate-size: allow-keywords;
   --background: #fffbf5;
   --foreground: #1a1a1a;
   --card: #ffffff;

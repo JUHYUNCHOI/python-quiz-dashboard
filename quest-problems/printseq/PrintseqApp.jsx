@@ -3,7 +3,7 @@ import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
 import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
-import { QuestPhaseHeader } from "@/components/quest/QuestPhaseHeader";
+import { QuestPhaseScreen } from "@/components/quest/QuestPhaseHeader";
 import { PrintseqProgressiveCode, downloadPrintseqPDF, getPrintseqSections, PrintseqSim, PrintseqRunner } from "./components";
 import { makePrintseqCh1, makePrintseqCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
@@ -101,6 +101,7 @@ export default function PrintseqApp(props = {}) {
   const showCodeControls = tab === 1;
 
   const renderContent = () => {
+    if (step.type === "phase") return <QuestPhaseScreen E={E} phase={step.phase} />;
     if (step.type === "quiz") return <Quiz {...step} onAnswer={handleAnswer} />;
     if (step.type === "input") return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
@@ -112,6 +113,7 @@ export default function PrintseqApp(props = {}) {
   };
 
   const renderPreviewBody = (s) => {
+    if (s.type === "phase") return <QuestPhaseScreen E={E} phase={s.phase} />;
     if (s.type === "quiz") return <Quiz {...s} onAnswer={() => {}} />;
     if (s.type === "input") return (
       <NumInput question={s.question} hint={s.hint} answer={s.answer} E={E} onSolve={() => {}} />
@@ -137,7 +139,6 @@ export default function PrintseqApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
-        <QuestPhaseHeader E={E} phase={step.phase} />
         <AlgorithmTags E={E} tags={[
           { icon: "🔁", ko: "재귀 (recursion)", en: "Recursion", href: "/algo/recursion/learn?from=quest" },
           { icon: "🧠", ko: "메모이제이션 (DP)", en: "Memoization (DP)", href: "/algo/dp/learn?from=quest" },

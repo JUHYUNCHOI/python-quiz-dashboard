@@ -144,35 +144,35 @@ export interface SimShellProps {
   accent?: string;
   isEn?: boolean;
   showLabels?: boolean;
-  /** Seed floor in px. The frame never shrinks below the tallest step seen. */
+  /** Small px floor so a one-line step doesn't collapse. Not per-sim tuning —
+   *  the default is fine for almost everything. */
   minHeight?: number;
-  /** Cap (in vh) beyond which the body scrolls internally — keeps the frame
-   *  inside the viewport on short screens instead of causing a page scroll. */
-  maxHeightVh?: number;
+  /** Viewport-relative cap so the sim never grows past the screen on ANY
+   *  monitor; taller content scrolls inside instead. CSS length. */
+  maxHeightCss?: string;
   /** Padding around the body. Defaults to 16. */
   pad?: number;
 }
 
 /**
- * SimShell — the "no-jump" frame for step simulators.
+ * SimShell — the "smooth-follow" frame for step simulators.
  *
- * Why: each sim step has a different content height, so the SimNav that
- * follows the content used to slide up and down as you stepped. Reserving a
- * fixed min-height per sim is fragile (needs hand-measuring) and leaves big
- * gaps on short steps / overflows on small screens.
+ * The tension: each step's content is a different height. If the SimNav simply
+ * follows the content it hugs it nicely but jumps abruptly step-to-step; if we
+ * pin it to a tall fixed frame it never moves but floats far below short steps
+ * (dead space). Neither is good.
  *
- * SimShell fixes it generically, no per-sim numbers:
- *   1) a ResizeObserver watches the body and grows the reserved floor to the
- *      TALLEST step seen — and never shrinks it. Height is therefore
- *      monotonic: the SimNav can only settle downward once (smoothly, 220ms),
- *      never flip up-and-down. After the tallest step is visited it's locked.
- *   2) SimNav is pinned to the frame bottom (margin-top:auto), so it sits at
- *      the same Y on every step.
- *   3) maxHeightVh caps the body on short viewports (internal scroll) so the
- *      frame never pushes the page into a scroll.
- *
- * Usage: wrap the step body and hand SimShell the same idx/total/onIdx you'd
- * have passed to <SimNav> — it renders the nav for you.
+ * This does both well, on ANY monitor — pure CSS, no measurement:
+ *  - `height: auto` → the box always hugs its content, so the SimNav sits right
+ *    under it on every step (never floating far below).
+ *  - `min-height` floor stops a one-line step from collapsing.
+ *  - `max-height` is viewport-relative (default `calc(100dvh - 340px)`) so the
+ *    sim never grows past the screen on any monitor; a step taller than that
+ *    scrolls inside (nav still visible) instead of pushing the page.
+ *  - `transition: height` + `interpolate-size: allow-keywords` (set globally on
+ *    :root) animate the auto-height change, so between steps the nav GLIDES to
+ *    its new spot instead of snapping. In browsers without interpolate-size
+ *    (Safari/Firefox) it simply snaps — still correct, just not animated.
  */
 export function SimShell({
   children,
@@ -182,36 +182,25 @@ export function SimShell({
   accent = DEFAULT_ACCENT,
   isEn = false,
   showLabels = true,
-  minHeight = 360,
-  maxHeightVh = 76,
+  minHeight = 280,
+  maxHeightCss = "calc(100dvh - 340px)",
   pad = 16,
 }: SimShellProps) {
-  const bodyRef = useRef<HTMLDivElement>(null);
-  const [floor, setFloor] = useState(minHeight);
-  useEffect(() => {
-    const el = bodyRef.current;
-    if (!el || typeof ResizeObserver === "undefined") return;
-    const measure = () => setFloor((prev) => Math.max(prev, Math.ceil(el.offsetHeight)));
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
   return (
-    <div
-      style={{
-        padding: pad,
-        minHeight: floor,
-        display: "flex",
-        flexDirection: "column",
-        boxSizing: "border-box",
-        transition: "min-height 220ms ease",
-      }}
-    >
-      <div ref={bodyRef} style={{ flex: "0 0 auto", maxHeight: `${maxHeightVh}vh`, overflowY: "auto" }}>
+    <div style={{ padding: pad, display: "flex", flexDirection: "column", boxSizing: "border-box" }}>
+      <div
+        style={{
+          height: "auto",
+          minHeight,
+          maxHeight: maxHeightCss,
+          overflowY: "auto",
+          overflowX: "hidden",
+          transition: "height 260ms cubic-bezier(.4,0,.2,1)",
+        }}
+      >
         {children}
       </div>
-      <div style={{ marginTop: "auto", paddingTop: 14 }}>
+      <div style={{ paddingTop: 14 }}>
         <SimNav idx={idx} total={total} onIdx={onIdx} accent={accent} isEn={isEn} showLabels={showLabels} />
       </div>
     </div>

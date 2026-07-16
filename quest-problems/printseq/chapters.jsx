@@ -6,6 +6,9 @@ import { CodeWalk } from "@/components/quest/CodeWalk";
 
 export function makePrintseqCh1(E) {
   return [
+    /* ── 단계 스크린 ①: 문제 이해 (선생님 2026-07-16: 배너 말고 화면으로 "지금 뭘 하는 단계") */
+    { phase: 1, type: "phase" },
+
     /* 1-1 — 스텝별 인트로 시뮬 (선생님 2026-07-13: "눈이 말풍선을 따라가며 보게 해달라니까").
        텍스트 벽 → SimNav 로 목표→N→K→명령→질문→나이브→REP→YES 8 스텝. */
     {
@@ -113,6 +116,9 @@ export function makePrintseqCh1(E) {
         </div>),
     },
 
+    /* ── 단계 스크린 ②: 이해 확인 (요령을 직접 찾아보며) */
+    { phase: 2, type: "phase" },
+
     /* 1-2b — 세 모양 발견: 스텝 시뮬 (선생님 2026-07-13: 텍스트 벽 → 한 수열씩 눈으로 따라가기). */
     {
       phase: 2,
@@ -195,6 +201,9 @@ export function makePrintseqCh1(E) {
 
 export function makePrintseqCh2(E, lang = "py") {
   return [
+    /* ── 단계 스크린 ⑥: 계획 (코드 짜기 전에 어떻게 풀지) */
+    { phase: 6, type: "phase" },
+
     /* 2-0 — 계획 시뮬: 코드 적기 전에 can() 이 뭘 할지 트리로 한 단계씩
        (선생님 2026-07-13: "코드를 보여주기 전에 어떻게 하겠다는걸 시뮬로"). */
     {
@@ -216,6 +225,9 @@ export function makePrintseqCh2(E, lang = "py") {
         "요령 ② 코드가 추상적이었죠 — 눈으로 봐요: 1 2 1 2 1 2 에 블록 크기를 바꿔가며 반복을 찾아요."),
       content: (<PrintseqBlockSim E={E} />),
     },
+
+    /* ── 단계 스크린 ⑦: 코드 짜기 */
+    { phase: 7, type: "phase" },
 
     /* 2-1 — 코드 워크: 전체 코드 위를 '한 조각씩 밝히며' 걷기.
        설명 말풍선이 밝아진 줄 바로 위에 붙어서 건너뛸 수 없음
