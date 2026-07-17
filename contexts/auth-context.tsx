@@ -74,6 +74,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (!error && data) {
           setProfile(data as Profile)
+          // 성공한 프로필을 캐시 — 다음에 조회가 실패해도 지난 role 로 선생님 UI 유지
+          try { localStorage.setItem("cached-profile", JSON.stringify(data)) } catch {}
           return
         }
         lastReason = error ? `${error.code || ""} ${error.message || error}`.trim() : "no data"
@@ -105,7 +107,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // 마지막 시도가 아니면 잠깐 쉬고 재시도
       if (attempt < 2) await new Promise((r) => setTimeout(r, 700))
     }
-    // 3번 다 실패: profile 은 null 로 남음 (호출부/홈 폴백이 처리)
+    // 3번 다 실패 → 캐시된 프로필로 폴백 (선생님 role 등 UI 유지). 같은 유저일 때만.
+    try {
+      const cached = localStorage.getItem("cached-profile")
+      if (cached) {
+        const p = JSON.parse(cached)
+        if (p?.id === userId) {
+          setProfile(p as Profile)
+          console.warn(`[auth] profile fetch failed (${lastReason}) — 캐시된 프로필로 폴백 (role: ${p.role}).`)
+          return
+        }
+      }
+    } catch {}
+    // 캐시도 없음: profile 은 null 로 남음 (호출부/홈 폴백이 처리)
     console.error(`[auth] profile fetch gave up after 3 tries — reason: ${lastReason}. (홈이 "이동 중"에 갇힐 수 있음)`)
   }, [supabase])
 
