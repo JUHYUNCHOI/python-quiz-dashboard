@@ -300,7 +300,9 @@ export function getMexesSections(E) {
       ],
     },
     {
-      label: t(E, "4️⃣ Output — ops = max(missing[i], cnt[i])", "4️⃣ 출력 — ops = max(missing[i], cnt[i])"),
+      /* 마지막 조각 = 전체 프로그램 (선생님 2026-07-17: "전체 코드 복사하는 부분이 없다" —
+         라벨이 '출력'뿐이라 여기가 전체 코드인 걸 몰랐음. 복사 버튼은 코드창 우상단 📋). */
+      label: t(E, "4️⃣ FULL CODE — output: ops = max(missing[i], cnt[i])", "4️⃣ 전체 코드 — 출력: ops = max(missing[i], cnt[i])"),
       color: "#dc2626",
       py: MEX_FULL_PY, cpp: MEX_FULL_CPP,
       why: [

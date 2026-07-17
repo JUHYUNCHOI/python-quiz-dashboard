@@ -11,19 +11,35 @@
 //     { hi: [0, 3], bubble: t(E, "...", "...") },   // hi = 밝힐 줄 범위 (0-based, 양끝 포함)
 //   ]} />
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { t } from "@/components/quest/theme";
 import { highlight } from "@/components/quest/shared";
 import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 
 // vars(선택): [{ v:"seq", ko:"수열", en:"the sequence" }, ...] — 코드창 위에 '변수 뜻' 범례로 항상 표시.
 // (선생님 2026-07-13: 코드 깊이 들어가면 "n이 뭐였지? seq가 뭐였지?" 함 → 늘 보이는 리마인더)
-export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars = null }) {
+// marks(선택): [{ from, to, ko, en }] — 항상 눈에 띄어야 하는 줄(예: 재귀의 베이스 케이스)을
+// 장미색 밴드 + 뱃지로 상시 표시 (선생님 2026-07-17: "base case 가 눈에 잘 보이게").
+export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars = null, marks = null }) {
   const { idx, setIdx, total } = useTraceStep(beats.length);
   const beat = beats[Math.min(idx, beats.length - 1)];
   const [lo, hi] = beat.hi;
   const done = idx >= beats.length - 1;
   const bColor = done ? "#6ee7b7" : "#fbbf24";
+
+  // 전체 코드 복사 (선생님 2026-07-17: "전체 코드 복사하는 부분이 없다")
+  const [copied, setCopied] = useState(false);
+  const copyAll = async () => {
+    const text = code.join("\n");
+    try { await navigator.clipboard.writeText(text); }
+    catch {
+      const ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch {}
+      document.body.removeChild(ta);
+    }
+    setCopied(true); setTimeout(() => setCopied(false), 1500);
+  };
 
   // 코드창: 스텝 바뀔 때마다 지금 밝아진 첫 줄(lo)을 창 맨 위로 스크롤.
   // box.children[lo] 로 직접 찾음 (ref 콜백 타이밍에 안 의존 → 앞/뒤 이동 모두 안정적).
@@ -85,13 +101,15 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
       }}>
         {code.map((line, i) => {
           const isHot = i >= lo && i <= hi;
+          // marks: 이 줄이 상시 강조 구간(베이스 케이스 등)에 속하나
+          const mk = marks && marks.find((m) => i >= m.from && i <= m.to);
           return (
             <div key={i}
               style={{
                 display: "flex", alignItems: "flex-start",
-                background: isHot ? "#1f2b3e" : "transparent",   // gray-900 보다 살짝 밝게 (어둡지 않음)
-                borderLeft: isHot ? `4px solid ${bColor}` : "4px solid transparent",
-                borderRadius: isHot ? 5 : 0,
+                background: isHot ? "#1f2b3e" : mk ? "rgba(244,63,94,.13)" : "transparent",   // gray-900 보다 살짝 밝게 (어둡지 않음)
+                borderLeft: isHot ? `4px solid ${bColor}` : mk ? "4px solid #f43f5e" : "4px solid transparent",
+                borderRadius: isHot || mk ? 5 : 0,
                 padding: "1px 6px 1px 6px",
                 opacity: 1,                                       // 흐림 없음 — 모든 줄 또렷
                 transition: "background .2s",
@@ -100,14 +118,33 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
               <span style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", flex: 1, minWidth: 0 }}>
                 {highlight(line, lang)}
               </span>
+              {mk && i === mk.from && (
+                <span style={{
+                  marginLeft: 8, alignSelf: "center", flexShrink: 0,
+                  fontSize: 10, fontWeight: 800, whiteSpace: "nowrap",
+                  color: "#fda4af", background: "rgba(244,63,94,.18)",
+                  border: "1px solid rgba(244,63,94,.45)", borderRadius: 999, padding: "1px 8px",
+                }}>{t(E, mk.en, mk.ko)}</span>
+              )}
             </div>
           );
         })}
       </div>
 
-      {/* 진행 표시: 지금 몇 번째 조각인지 (코드창 바로 아래) */}
-      <div style={{ textAlign: "center", fontSize: 11, color: "#94a3b8", fontWeight: 700, margin: "8px 0 2px" }}>
-        {t(E, `part ${idx + 1} of ${total}`, `${total} 조각 중 ${idx + 1} 번째`)}
+      {/* 진행 표시 + 전체 코드 복사 (코드창 바로 아래) */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, margin: "8px 0 2px" }}>
+        <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 700 }}>
+          {t(E, `part ${idx + 1} of ${total}`, `${total} 조각 중 ${idx + 1} 번째`)}
+        </span>
+        <button onClick={copyAll} style={{
+          fontSize: 11, fontWeight: 800, padding: "3px 10px", borderRadius: 999, cursor: "pointer",
+          background: copied ? "#059669" : "#fff",
+          border: `1.5px solid ${copied ? "#059669" : "#cbd5e1"}`,
+          color: copied ? "#fff" : "#475569",
+          transition: "all .15s",
+        }}>
+          {copied ? `✓ ${t(E, "copied!", "복사됨!")}` : `📋 ${t(E, "copy full code", "전체 코드 복사")}`}
+        </button>
       </div>
 
       {/* 버튼 — 코드창이 고정 높이라 항상 여기, 스크롤 없이 닿음 */}

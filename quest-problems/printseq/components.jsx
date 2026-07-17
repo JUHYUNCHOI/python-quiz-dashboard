@@ -244,7 +244,7 @@ const PSQ_FAST_PY = [
   "    result = False",
   "    n = len(seq)",
   "",
-  "    # 막다른 길: 빈 수열이거나 예산이 없으면 불가능",
+  "    # ✋ 베이스 케이스 (재귀가 멈추는 곳): 빈 수열이거나 예산이 없으면 불가능",
   "    if n == 0 or budget <= 0:",
   "        result = False",
   "",
@@ -342,7 +342,7 @@ const PSQ_FAST_CPP = [
   "    bool result = false;",
   "",
   "    if (n == 0 || budget <= 0) {",
-  "        result = false;              // 막다른 길",
+  "        result = false;              // ✋ 베이스 케이스 (재귀가 멈추는 곳)",
   "    } else {",
   "        // 요령 ① 다 같은 숫자 → PRINT 1 개면 충분",
   "        bool all_same = true;",
@@ -447,7 +447,7 @@ const PSQ_FAST_PY_EN = [
   "    result = False",
   "    n = len(seq)",
   "",
-  "    # dead ends: empty sequence or no budget left -> impossible",
+  "    # ✋ BASE CASE (where recursion stops): empty seq or no budget -> impossible",
   "    if n == 0 or budget <= 0:",
   "        result = False",
   "",
@@ -545,7 +545,7 @@ const PSQ_FAST_CPP_EN = [
   "    bool result = false;",
   "",
   "    if (n == 0 || budget <= 0) {",
-  "        result = false;              // dead end",
+  "        result = false;              // ✋ BASE CASE (recursion stops here)",
   "    } else {",
   "        // Trick 1: all same numbers -> one PRINT is enough",
   "        bool all_same = true;",
@@ -639,6 +639,8 @@ export function getPrintseqWalk(E, lang = "py") {
   if (lang === "cpp") {
     return {
       code: E ? PSQ_FAST_CPP_EN : PSQ_FAST_CPP,
+      // ✋ 베이스 케이스 상시 강조 (선생님 2026-07-17: "base case 가 눈에 잘 보이게")
+      marks: [{ from: 32, to: 33, ko: "✋ 베이스 케이스", en: "✋ base case" }],
       vars: [
         { v: "seq", ko: "지금 보는 수열", en: "current sequence" },
         { v: "n", ko: "seq 길이", en: "length of seq" },
@@ -657,8 +659,8 @@ export function getPrintseqWalk(E, lang = "py") {
           "Here we DEFINE the function can.\nIt takes a sequence (seq) and a budget, and answers ONE question:\n\"Can we make this sequence with ≤ budget PRINTs?\" → true / false.",
           "여기서 can 이라는 함수를 정의해요.\n수열(seq)과 예산(budget)을 받아서 딱 한 가지에 답해요:\n\"이 수열을 PRINT budget 개 이하로 만들 수 있나?\" → true / false.") },
         { hi: [29, 44], bubble: t(E,
-          "Inside can(): set up n and result, then dead ends FIRST (empty / no budget → impossible).\nThen trick ①: all same → 1 PRINT does it → true.",
-          "can() 안: n·result 준비하고, 막다른 길부터 (빈 수열 / 예산 0 → 불가능).\n그다음 요령 ①: 다 같음 → PRINT 1 개면 됨 → true.") },
+          "Inside can(): set up n and result, then the ✋ BASE CASE first (empty / no budget → impossible) — where the recursion STOPS.\nThen trick ①: all same → 1 PRINT does it → true.",
+          "can() 안: n·result 준비하고, ✋ 베이스 케이스부터 (빈 수열 / 예산 0 → 불가능) — 재귀가 멈추는 곳!\n그다음 요령 ①: 다 같음 → PRINT 1 개면 됨 → true.") },
         { hi: [46, 52], bubble: t(E,
           "Trick ① failed → move on (that's the `if (!result)`).\nTrick ②: could it be a small block repeated `copies` times?\nIf n splits evenly, block_len = n / copies.",
           "요령 ①이 안 됐으니 다음으로 (if (!result) 가 그 뜻).\n요령 ②: 작은 블록이 copies 번 반복된 모양일까?\nn 이 나눠떨어지면 block_len = n / copies.") },
@@ -685,6 +687,8 @@ export function getPrintseqWalk(E, lang = "py") {
   }
   return {
     code: E ? PSQ_FAST_PY_EN : PSQ_FAST_PY,
+    // ✋ 베이스 케이스 상시 강조 (선생님 2026-07-17: "base case 가 눈에 잘 보이게")
+    marks: [{ from: 14, to: 16, ko: "✋ 베이스 케이스", en: "✋ base case" }],
     vars: [
       { v: "seq", ko: "지금 보는 수열", en: "current sequence" },
       { v: "n", ko: "seq 길이", en: "length of seq" },
@@ -709,8 +713,8 @@ export function getPrintseqWalk(E, lang = "py") {
         "Here we DEFINE the function can.\nIt takes a sequence (seq) and a budget, and answers ONE question:\n\"Can we make this sequence with ≤ budget PRINTs?\" → True / False.",
         "여기서 can 이라는 함수를 정의해요.\n수열(seq)과 예산(budget)을 받아서 딱 한 가지에 답해요:\n\"이 수열을 PRINT budget 개 이하로 만들 수 있나?\" → True / False.") },
       { hi: [11, 16], bubble: t(E,
-        "Inside can(): set up result, then handle the dead ends FIRST —\nempty sequence or no budget left → impossible (False).",
-        "can() 안: result 를 준비하고, 막다른 길부터 —\n빈 수열이거나 예산이 없으면 → 불가능 (False).") },
+        "Inside can(): set up result, then the ✋ BASE CASE first —\nempty sequence or no budget → impossible (False).\nThis is where the recursion STOPS — without it, it never ends!",
+        "can() 안: result 준비하고, ✋ 베이스 케이스부터 —\n빈 수열이거나 예산이 없으면 → 불가능 (False).\n재귀가 '멈추는 곳' — 이게 없으면 영원히 안 끝나요!") },
       { hi: [19, 26], bubble: t(E,
         "Trick ①: is every number the same?\nThen 1 PRINT wrapped in REP does it → True.",
         "요령 ①: 숫자가 다 같아?\n그럼 PRINT 1 개를 REP 로 감싸면 끝 → True.") },
