@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getPrintseqSections, getPrintseqWalk, PrintseqExplorer } from "./components";
+import { getPrintseqSections, getPrintseqWalk, getPrintseqBuWalk, PrintseqExplorer } from "./components";
 import { PrintseqIntroSim, PrintseqShapesSim, PrintseqPlanSim, PrintseqBlockSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import { CodeWalk } from "@/components/quest/CodeWalk";
@@ -300,6 +300,18 @@ export function makePrintseqCh2(E, lang = "py") {
       /* narr 없음 — CodeWalk 안 말풍선이 그 역할 (중복 바 제거로 세로 공간 확보). */
       narr: "",
       content: (<CodeWalk E={E} lang={lang} {...getPrintseqWalk(E, lang)} accent="#16a34a" />),
+    },
+
+    /* 2-2 — 🎁 번외편: 재귀 없이 (bottom-up 표 채우기).
+       선생님 2026-07-17: "꼭 재귀로만 할 수 있는 건가? 번외편으로 다른 방법도."
+       본편의 ↺재귀 자리가 📖표 읽기로 바뀌는 대비 — top-down ↔ bottom-up = DP 두 얼굴. */
+    {
+      phase: 7,
+      type: "reveal",
+      narr: t(E,
+        "🎁 Bonus — the SAME problem with NO recursion at all: fill an answer table, small pieces first!",
+        "🎁 번외편 — 똑같은 문제를 재귀 '없이': 답 표를 작은 조각부터 채우면 돼요!"),
+      content: (<CodeWalk E={E} lang={lang} {...getPrintseqBuWalk(E, lang)} accent="#0d9488" />),
     },
   ];
 }
