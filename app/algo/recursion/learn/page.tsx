@@ -297,8 +297,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               {t("자기 자신을 부르니, 몇 겹이든 알아서 내려가요.", "It calls itself → handles any depth on its own.")}
             </p>
             <p className="text-[11px] text-gray-400 text-center break-keep">
-              {t("(while + 할 일 목록으로도 되긴 해요 — 근데 목록 관리는 우리 몫. 재귀는 자동!)",
-                 "(while + a to-do list works too — but YOU manage the list. Recursion does it for you.)")}
+              {t("(반복문으로 우겨넣으려 애쓰지 말아요 — '몇 겹인지 모르는' 문제엔 재귀가 딱이에요.)",
+                 "(Don't fight it with loops — recursion is the natural fit for 'unknown depth' problems.)")}
             </p>
           </div>
         )}
@@ -1125,6 +1125,12 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <p className="text-xs text-amber-700 mt-3 text-center italic">
               {t("재귀가 손에 잡히면 — DP, 백트래킹, 트리, 그래프 다 열려요!", "Once recursion clicks, DP/backtracking/trees/graphs all open up!")}
             </p>
+            <Link href="/algo/recursion/practice" className="mt-3 block bg-emerald-500 hover:bg-emerald-600 rounded-xl p-3 text-center transition-colors">
+              <p className="text-sm font-black text-white break-keep">🧩 {t("이제 직접 풀어봐요 — 작은 문제부터!", "Now try it yourself — start small!")}</p>
+              <p className="text-[11px] text-emerald-50 mt-0.5 break-keep">
+                {t("1~N 합 · 피보나치 · 유클리드 GCD … 쉬운 것부터 12문제", "sum 1..N · Fibonacci · Euclid GCD … 12 problems, easy first")}
+              </p>
+            </Link>
             <div className="mt-3 pt-3 border-t border-amber-200 space-y-2">
               <p className="text-[11px] text-purple-700 leading-relaxed">
                 🌲 {t("다음 토픽: 재귀 위에서 — DP, 백트래킹, 트리. ", "Next topics built on recursion: DP, backtracking, trees. ")}
