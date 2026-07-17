@@ -204,6 +204,68 @@ export function makePrintseqCh2(E, lang = "py") {
     /* ── 단계 스크린 ⑥: 계획 (코드 짜기 전에 어떻게 풀지) */
     { phase: 6, type: "phase" },
 
+    /* 2-0a — 재귀 다리: /algo/recursion/learn 의 '친구 릴레이' 모델을 이 문제로 연결
+       (선생님 2026-07-17: "printseq 재귀 이해하기 넘 힘들어" — 친구 모델 없이
+        '자기 자신을 부른다'로 점프해서 어려웠음). */
+    {
+      phase: 6,
+      type: "reveal",
+      narr: t(E,
+        "One thing before the plan — remember the friend relay?",
+        "계획 전에 딱 하나만 — '친구한테 시키기' 기억나요?"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ maxWidth: 500, margin: "0 auto" }}>
+            <div style={{ textAlign: "center", fontSize: 15, fontWeight: 800, color: "#16a34a", marginBottom: 12, wordBreak: "keep-all" }}>
+              🙋 {t(E, "Recursion = making a friend do it", "재귀 = 친구한테 시키기")}
+            </div>
+
+            {/* 1~5 합 복습 — 한 줄 릴레이 */}
+            <div style={{ background: "#f0f9ff", border: "1.5px solid #7dd3fc", borderRadius: 12, padding: "12px 14px", marginBottom: 10 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#0369a1", marginBottom: 8, wordBreak: "keep-all" }}>
+                {t(E, "The 1~5 sum, remember?", "1~5 더하기, 기억나죠?")}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", fontSize: 12, fontWeight: 700, color: "#0f172a" }}>
+                <span>🧑‍🎓</span>
+                <span style={{ background: "#fff", border: "1px solid #bae6fd", borderRadius: 8, padding: "3px 8px", wordBreak: "keep-all" }}>
+                  {t(E, "\"I'll add 5 — you sum 1~4!\"", "\"난 5만 더할게 — 1~4는 네가!\"")}
+                </span>
+                <span style={{ color: "#94a3b8" }}>→</span>
+                <span>🧒</span>
+                <span style={{ color: "#94a3b8" }}>→ … →</span>
+                <span>😎</span>
+                <span style={{ background: "#dcfce7", border: "1px solid #86efac", borderRadius: 8, padding: "3px 8px", color: "#15803d", wordBreak: "keep-all" }}>
+                  {t(E, "\"1? just 1!\" ✋", "\"1? 그냥 1이지!\" ✋")}
+                </span>
+              </div>
+            </div>
+
+            {/* 이 문제도 똑같다 */}
+            <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 12, padding: "12px 14px", marginBottom: 10 }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: "#92400e", lineHeight: 1.7, wordBreak: "keep-all" }}>
+                {t(E,
+                  <>This problem is the SAME game. The question <b>"can you make [1 1 2 2] with budget 2?"</b> is hard — so cut it into pieces and ask a friend the same (smaller) question: <b>"can you make [1 1] with budget 1?"</b></>,
+                  <>이 문제도 똑같은 놀이예요. <b>"[1 1 2 2] 를 예산 2 로 만들 수 있어?"</b> 는 어려우니 — 조각으로 잘라서, 같은 질문을 더 작게 친구에게 물어요: <b>"[1 1] 을 예산 1 로 만들 수 있어?"</b></>)}
+              </div>
+            </div>
+
+            <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 12, padding: "10px 14px", textAlign: "center" }}>
+              <div style={{ fontSize: 12.5, fontWeight: 800, color: "#065f46", wordBreak: "keep-all" }}>
+                {t(E, "A computer has no friends — so the function asks ITSELF: can() calls can().",
+                     "컴퓨터엔 친구가 없으니 — 함수가 자기 자신에게 물어요: can() 이 can() 을 부름.")}
+              </div>
+            </div>
+
+            <div style={{ textAlign: "center", marginTop: 10 }}>
+              <a href="/algo/recursion/learn?from=quest" style={{ fontSize: 11.5, fontWeight: 700, color: "#7c3aed", textDecoration: "underline", textDecorationStyle: "dotted" }}>
+                🎬 {t(E, "First time with recursion? 5-min lesson →", "재귀가 처음이면? 5분 수업 →")}
+              </a>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+
     /* 2-0 — 계획 시뮬: 코드 적기 전에 can() 이 뭘 할지 트리로 한 단계씩
        (선생님 2026-07-13: "코드를 보여주기 전에 어떻게 하겠다는걸 시뮬로"). */
     {
