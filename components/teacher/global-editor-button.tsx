@@ -20,8 +20,10 @@ export function GlobalTeacherEditorButton() {
     }
   }, [])
 
-  const isTeacher = profile?.role === "teacher"
   const isOwner = user?.email === OWNER_EMAIL
+  // owner(julia)는 email 로 인정 — profile 조회가 느리거나(timeout) 실패해도 에디터 유지.
+  // (선생님 2026-07-17: "선생님 모드/에디터가 없어졌다" — profile 미로드로 role 판정 실패가 원인)
+  const isTeacher = profile?.role === "teacher" || isOwner
   // /learn, /teach, /quest/[id] 는 일반 선생님에겐 가림 (콘텐츠 충돌).
   // 단, owner (julia) 는 *어디서든* 에디터 필요 → 예외 없이 모든 페이지 허용.
   const isLearnPage = pathname?.startsWith("/learn")

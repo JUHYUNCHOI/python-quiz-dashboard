@@ -10,6 +10,7 @@ import { LogOut, Trophy, Flame, Zap, ShieldCheck, Users, LogIn, Globe } from "lu
 import Link from "next/link"
 import { LanguageToggle } from "@/components/language-toggle"
 import { useLanguage } from "@/contexts/language-context"
+import { OWNER_EMAIL } from "@/components/owner-only-guard"
 import { createClient } from "@/lib/supabase/client"
 import { getQuizScores, getWrongBank } from "@/lib/mark-lesson-complete"
 import { getLessonName } from "@/lib/curriculum-data"
@@ -257,8 +258,9 @@ export default function ProfilePage() {
           )}
           <h2 className="text-xl font-bold text-gray-800">{profile?.display_name || t("학습자", "Learner")}</h2>
           <p className="text-sm text-gray-500 mt-1">{user?.email || ""}</p>
-          {/* 선생님 모드 토글 — DB role=teacher 인 계정만 노출 */}
-          {profile?.role === "teacher" && (
+          {/* 선생님 모드 토글 — DB role=teacher, 또는 owner(email). profile 조회가
+              느려도(timeout) owner 는 유지 (선생님 2026-07-17). */}
+          {(profile?.role === "teacher" || user?.email === OWNER_EMAIL) && (
             <TeacherModeToggle t={t} />
           )}
         </Card>
