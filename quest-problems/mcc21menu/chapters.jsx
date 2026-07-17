@@ -8,12 +8,6 @@ export const SOLUTION_CODE = [
   "input = sys.stdin.readline",
   "children = defaultdict(list)",
   "",
-  "def count(node):",
-  "    total = 1  # count self",
-  "    for c in children[node]:",
-  "        total += count(c)",
-  "    return total",
-  "",
   "N = int(input())",
   "for _ in range(N):",
   "    line = input().split()",
@@ -21,7 +15,16 @@ export const SOLUTION_CODE = [
   "    child = line[1]",
   "    children[parent].append(child)",
   "",
-  "print(count('root'))",
+  "# count every node with a stack, top to bottom (no recursion)",
+  "total = 0",
+  "stack = ['root']",
+  "while stack:",
+  "    node = stack.pop()          # take one node to count",
+  "    total += 1                  # this node counts as 1",
+  "    for c in children[node]:",
+  "        stack.append(c)         # add its children to the to-count list",
+  "",
+  "print(total)",
 ];
 
 export function makeMcc21MenuCh1(E) {
@@ -162,8 +165,8 @@ export function makeMcc21MenuCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Apply each \"add child X under parent Y\" operation by appending X to children[Y]. After all ops, do a DFS from the root counting nodes. Sections build it one piece at a time.",
-        "각 \"부모 Y 아래에 자식 X 추가\" 연산을 children[Y] 에 X 추가로 적용. 모든 연산 후 루트에서 DFS 로 노드 카운트. 아래 섹션이 한 단락씩 쌓아요."),
+        "Apply each \"add child X under parent Y\" operation by appending X to children[Y]. After all ops, walk the tree from the root with a stack (no recursion), counting every node. Sections build it one piece at a time.",
+        "각 \"부모 Y 아래에 자식 X 추가\" 연산을 children[Y] 에 X 추가로 적용. 모든 연산 후 루트에서 스택으로 (재귀 없이) 트리를 훑으며 노드를 세요. 아래 섹션이 한 단락씩 쌓아요."),
       sections: getMcc21MenuSections(E),
     },
   ];
