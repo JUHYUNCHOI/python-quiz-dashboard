@@ -24,7 +24,7 @@ import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
 
 // ── 챕터 메타 ────────────────────────────────────────────────────
 const CHAPTERS = [
-  { id: 1, emoji: "🤔", title: "재귀가 왜 필요해?",                titleEn: "Why Recursion?",                 mins: 3 },
+  { id: 1, emoji: "🤔", title: "재귀가 뭘까?",                     titleEn: "What is Recursion?",             mins: 3 },
   { id: 2, emoji: "📐", title: "베이스 + 재귀 호출",               titleEn: "Base + Recursive Call",          mins: 6 },
   { id: 3, emoji: "⚡", title: "분할 정복 (O(log N))",              titleEn: "Divide & Conquer (O(log N))",    mins: 7 },
   { id: 4, emoji: "🌲", title: "재귀 트리 + 메모이제이션",          titleEn: "Recursion Tree + Memoization",   mins: 7 },
@@ -199,106 +199,102 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
              같은 카드 문법으로 통일, 텍스트는 짧게·시각물을 주인공으로.) ── */}
         {step === 0 && (
           <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 border-2 border-amber-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">🔍</p>
+            <p className="text-5xl text-center mb-3">🎯</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
-              {t("재귀는 왜 필요할까?", "Why do we need recursion?")}
+              {t("미션: 1부터 5까지 더하기", "Mission: add 1 through 5")}
             </h3>
             <div className="bg-white/70 rounded-lg p-4 border border-amber-200 mb-3">
-              <p className="text-xs font-bold text-amber-800 mb-3 text-center break-keep">
-                <span className="mr-1">📷</span>{t("사진 한 장을 찾아요 — 폴더 속의 폴더 속…", "Find one photo — folders inside folders…")}
-              </p>
-              <div className="flex justify-center">
-                <div className="space-y-1.5">
-                  {folderRow(0, "📁", t("내 컴퓨터", "My PC"))}
-                  {folderRow(1, "📁", t("사진", "Photos"))}
-                  {folderRow(2, "📁", "2025")}
-                  {folderRow(3, "📁", t("… 몇 겹 더?", "… how much deeper?"), true)}
-                  <div className="flex items-center gap-2 text-sm" style={{ marginLeft: 80 }}>
-                    <span className="text-base">🖼️</span>
-                    <span className="font-black text-rose-600 break-keep">{t("찾는 사진!", "the photo!")}</span>
-                  </div>
-                </div>
+              <p className="text-center text-xl font-black text-gray-800 mb-3 font-mono">1 + 2 + 3 + 4 + 5 = 15</p>
+              <p className="text-xs font-bold text-emerald-700 mb-2 break-keep">✅ {t("이건 이미 할 줄 알아요 — for 로!", "You can already do this — with a for loop!")}</p>
+              <div className="bg-gray-900 rounded-lg p-3">
+                <pre className="text-xs text-emerald-200 font-mono leading-relaxed" style={{ fontVariantLigatures: "none" }}>
+{`total = 0
+for i in range(1, 6):
+    total += i        # 15`}
+                </pre>
               </div>
             </div>
             <p className="text-sm font-bold text-amber-700 text-center break-keep">
-              {t("몇 겹인지 아무도 몰라요.", "Nobody knows how deep it goes.")}
+              {t("오늘은 이 쉬운 문제를 — 전혀 새로운 생각법으로 풀어봐요.", "Today we'll solve this easy problem — with a brand-new way of thinking.")}
             </p>
           </div>
         )}
 
         {step === 1 && (
-          <div className="bg-gradient-to-br from-rose-50 to-orange-50 rounded-2xl p-6 border-2 border-rose-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">😵</p>
+          <div className="bg-gradient-to-br from-sky-50 to-blue-50 rounded-2xl p-6 border-2 border-sky-200 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🛋️</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
-              {t("배운 걸로 — for 문?", "Use what we know — for loops?")}
+              {t("새 생각법: \"하나만 하고, 나머지는 미루자\"", "New idea: \"do ONE piece, push the rest away\"")}
             </h3>
-            <div className="bg-white/70 rounded-lg p-3 border border-rose-200 mb-3">
-              <p className="text-xs font-bold text-rose-800 mb-2"><span className="mr-1">📝</span>{t("한 겹에 for 하나씩…", "one for per level…")}</p>
-              <div className="bg-gray-900 rounded-lg p-3">
-                <pre className="text-xs text-emerald-200 font-mono leading-relaxed" style={{ fontVariantLigatures: "none" }}>
-{t(`for A in 컴퓨터:
-    for B in A:
-        for C in B:
-            for ... ❓`, `for A in computer:
-    for B in A:
-        for C in B:
-            for ... ❓`)}
-                </pre>
-              </div>
+            <div className="bg-white/70 rounded-lg p-4 border border-sky-200 mb-3">
+              <p className="text-center text-base font-black text-gray-800 mb-2 break-keep">
+                1+2+3+4+5 = <span className="text-sky-700">5</span> + <span className="bg-amber-100 border-2 border-amber-300 rounded-lg px-2 py-0.5">1+2+3+4</span>
+              </p>
+              <p className="text-xs text-gray-600 text-center break-keep">
+                {t("내가 한 일은 '5 더하기' 딱 하나. 나머지는 노란 상자에 미뤘어요.", "I did just one thing: add 5. The rest got pushed into the yellow box.")}
+              </p>
             </div>
-            <p className="text-sm font-bold text-rose-700 text-center break-keep">
-              {t("깊이를 모르니 for 를 몇 개 쓸지 정할 수 없어요.", "Unknown depth → can't decide how many fors.")}
-            </p>
+            <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-3">
+              <p className="text-sm font-bold text-amber-800 text-center break-keep">
+                🤔 {t("근데 노란 상자(1~4 의 합)… 우리 문제랑 똑같이 생겼죠?", "But the yellow box (sum of 1~4)… looks exactly like our problem, right?")}
+              </p>
+              <p className="text-xs text-amber-700 text-center mt-1 break-keep">
+                {t("숫자만 하나 작아졌어요. 똑같은 문제니까 — 똑같은 방법으로 또 풀면 돼요!", "Just one smaller. Same problem — so solve it the same way again!")}
+              </p>
+            </div>
           </div>
         )}
 
         {step === 2 && (
           <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-6 border-2 border-indigo-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">💡</p>
+            <p className="text-5xl text-center mb-3">📮</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
-              {t("어느 겹이든 — 하는 일은 하나", "Every level — same one job")}
+              {t("'미루기'가 릴레이로 내려가요", "The 'pushing away' relays down")}
             </h3>
             <div className="bg-white/70 rounded-lg p-4 border border-indigo-200 mb-3">
-              <p className="text-sm font-black text-indigo-800 text-center mb-3">🔍 {t("뒤지기(폴더)", "search(folder)")}</p>
-              <div className="space-y-2 text-[13px] font-bold text-gray-700 break-keep max-w-xs mx-auto">
-                <div className="flex items-center gap-2"><span>🖼️</span><span>{t("사진이면 → 찾았다, 끝!", "photo → found, done!")}</span></div>
-                <div className="flex items-center gap-2 flex-wrap"><span>📁</span><span>{t("폴더면 →", "folder →")}</span>
-                  <span className="text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-lg">🔍 {t("뒤지기", "search")}</span>
-                  <span className="text-indigo-400 text-xs">↺ {t("자기 자신!", "itself!")}</span>
-                </div>
+              <div className="bg-gray-900 rounded-lg p-3">
+                <pre className="text-sm text-emerald-200 font-mono leading-loose" style={{ fontVariantLigatures: "none" }}>
+{t(`합(5) = 5 + 합(4)
+  합(4) = 4 + 합(3)
+    합(3) = 3 + 합(2)
+      합(2) = 2 + 합(1)
+        합(1) = 1  ✋`, `sum(5) = 5 + sum(4)
+  sum(4) = 4 + sum(3)
+    sum(3) = 3 + sum(2)
+      sum(2) = 2 + sum(1)
+        sum(1) = 1  ✋`)}
+                </pre>
               </div>
             </div>
             <p className="text-sm font-bold text-indigo-700 text-center break-keep">
-              {t("'또 뒤지기' = 자기 자신을 다시 부르기.", "'search again' = call yourself.")}
+              {t("합(1) 은 물어볼 것도 없이 그냥 1 — 여기서 미루기가 멈춰요! ✋", "sum(1) needs no asking — it's just 1. The pushing stops here! ✋")}
             </p>
           </div>
         )}
 
         {step === 3 && (
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border-2 border-emerald-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">🔁</p>
+            <p className="text-5xl text-center mb-3">🔙</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
-              {t("이게 바로 재귀예요", "That's recursion")}
+              {t("이제 답이 거꾸로 올라와요", "Now the answers climb back up")}
             </h3>
             <div className="bg-white/70 rounded-lg p-4 border border-emerald-200 mb-3">
-              <div className="flex items-center justify-center gap-3">
-                <div className="bg-rose-50 border-2 border-rose-200 rounded-xl px-4 py-3 text-center flex-1 max-w-[130px]">
-                  <p className="text-2xl mb-1">😵</p>
-                  <p className="text-[11px] font-black text-rose-700 break-keep">for — {t("깊이 미리 알아야", "need depth upfront")}</p>
-                </div>
-                <span className="text-2xl font-black text-gray-300">→</span>
-                <div className="bg-emerald-50 border-2 border-emerald-300 rounded-xl px-4 py-3 text-center flex-1 max-w-[130px]">
-                  <p className="text-2xl mb-1">🔍↺</p>
-                  <p className="text-[11px] font-black text-emerald-800 break-keep">{t("몇 겹이든 자동", "any depth, auto")}</p>
-                </div>
+              <div className="bg-gray-900 rounded-lg p-3">
+                <pre className="text-sm text-emerald-200 font-mono leading-loose" style={{ fontVariantLigatures: "none" }}>
+{t(`        합(1) = 1
+      합(2) = 2 + 1 = 3
+    합(3) = 3 + 3 = 6
+  합(4) = 4 + 6 = 10
+합(5) = 5 + 10 = 15 ✓`, `        sum(1) = 1
+      sum(2) = 2 + 1 = 3
+    sum(3) = 3 + 3 = 6
+  sum(4) = 4 + 6 = 10
+sum(5) = 5 + 10 = 15 ✓`)}
+                </pre>
               </div>
             </div>
-            <p className="text-sm font-bold text-emerald-700 text-center break-keep mb-2">
-              {t("자기 자신을 부르니, 몇 겹이든 알아서 내려가요.", "It calls itself → handles any depth on its own.")}
-            </p>
-            <p className="text-[11px] text-gray-400 text-center break-keep">
-              {t("(반복문으로 우겨넣으려 애쓰지 말아요 — '몇 겹인지 모르는' 문제엔 재귀가 딱이에요.)",
-                 "(Don't fight it with loops — recursion is the natural fit for 'unknown depth' problems.)")}
+            <p className="text-sm font-bold text-emerald-700 text-center break-keep">
+              {t("for 로 푼 것과 똑같은 15! — 답은 같고, '생각법'만 새로워요.", "Same 15 as the for loop! — same answer, new way of thinking.")}
             </p>
           </div>
         )}
@@ -307,13 +303,16 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
           <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border-2 border-amber-200 min-h-[280px]">
             <p className="text-5xl text-center mb-3">🪆</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
-              {t("재귀의 모양 = 마트료시카", "Recursion's shape = matryoshka")}
+              {t("이 생각법의 이름 — 재귀", "This way of thinking — recursion")}
             </h3>
+            <p className="text-sm text-gray-700 text-center mb-3 break-keep">
+              {t("\"같은 문제를, 조금 더 작게, 또 풀기\" — 모양이 꼭 마트료시카 인형이에요:", "\"Solve the same problem, a bit smaller, again\" — shaped just like matryoshka dolls:")}
+            </p>
             <div className="bg-white/70 rounded-lg p-3 border border-amber-200 mb-3">
               {dollSim(5, { base: true })}
             </div>
             <p className="text-sm font-bold text-amber-700 text-center break-keep">
-              {t("마지막 인형은 안 열려요 → 여기서 멈춤 (= 베이스 케이스!)", "The last doll won't open → stop here (= base case!)")}
+              {t("인형 속에 똑같은(더 작은) 인형 — 마지막 인형은 안 열려요 = 합(1) 처럼 '멈추는 곳'!", "Same doll inside, just smaller — and the last one won't open = a stopping point, like sum(1)!")}
             </p>
           </div>
         )}
@@ -327,40 +326,46 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <div className="space-y-3 mb-3">
               <div className="bg-white rounded-lg p-3 border-2 border-rose-200">
                 <p className="text-sm font-black text-rose-800 mb-1">
-                  1️⃣ {t("베이스 케이스 (멈춤 조건)", "Base case (stopping rule)")}
+                  1️⃣ {t("멈추는 곳 (베이스 케이스)", "Where to stop (base case)")}
                 </p>
-                <p className="text-xs text-gray-700 leading-relaxed">
+                <p className="text-xs text-gray-700 leading-relaxed break-keep">
                   {t(
-                    "\"여기서 그만! 답은 X 야.\" — 가장 작은 인형엔 더 작은 인형이 없죠. 멈춰야 해요.",
-                    "\"Stop here! Answer is X.\" — the smallest doll has nothing inside. We must stop.",
+                    "합(1) = 1. 물어볼 것도 없는 제일 쉬운 경우 — 여기 없으면 미루기가 영원히 안 끝나요!",
+                    "sum(1) = 1. The easiest case that needs no asking — without it, the pushing never ends!",
                   )}
                 </p>
               </div>
               <div className="bg-white rounded-lg p-3 border-2 border-indigo-200">
                 <p className="text-sm font-black text-indigo-800 mb-1">
-                  2️⃣ {t("재귀 호출 (자기 자신 부르기)", "Recursive call (call yourself)")}
+                  2️⃣ {t("하나만 하고 + 나머지는 미루기 (재귀 호출)", "Do one piece + push the rest (recursive call)")}
                 </p>
-                <p className="text-xs text-gray-700 leading-relaxed">
+                <p className="text-xs text-gray-700 leading-relaxed break-keep">
                   {t(
-                    "\"조금 더 작은 문제로 자기 자신에게 물어봐.\" — 인형 안에 같은 모양 작은 인형 들어있듯이.",
-                    "\"Ask yourself, but for a smaller problem.\" — like the smaller same-shape doll inside.",
+                    "합(n) = n + 합(n−1). '자기 자신'을 조금 더 작은 숫자로 다시 부르는 거예요.",
+                    "sum(n) = n + sum(n−1). Calling YOURSELF with a slightly smaller number.",
                   )}
                 </p>
               </div>
             </div>
             <div className="bg-gray-900 rounded-lg p-3 my-2">
               <pre className="text-xs text-emerald-200 font-mono leading-relaxed overflow-x-auto" style={{ fontVariantLigatures: "none" }}>
-{t(`def 뒤지기(폴더):
-    if 사진이면: return "찾았다!"   # ① 베이스 케이스 (멈춤)
-    return 뒤지기(폴더 속 폴더)     # ② 재귀 호출 (자기 자신)`, `def search(folder):
-    if is_photo: return "found it!"   # 1) base case (stop)
-    return search(folder_inside)      # 2) recursive call (itself)`)}
+{t(`def 합(n):
+    if n == 1:            # ① 멈추는 곳
+        return 1
+    return n + 합(n - 1)  # ② 하나만 하고 + 나머지 미루기
+
+print(합(5))   # 15`, `def sum_to(n):
+    if n == 1:                # 1) where to stop
+        return 1
+    return n + sum_to(n - 1)  # 2) one piece + push the rest
+
+print(sum_to(5))   # 15`)}
               </pre>
             </div>
             <p className="text-xs text-blue-700 text-center leading-relaxed break-keep">
               {t(
-                "아까 그 폴더 뒤지기가 — 딱 이 두 줄이에요.",
-                "Our folder search — exactly these two lines.",
+                "방금 그 릴레이 전체가 — 코드로는 딱 이 두 줄이에요.",
+                "That whole relay — just these two lines of code.",
               )}
             </p>
           </div>
@@ -368,50 +373,33 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
 
         {step === 6 && (
           <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border-2 border-purple-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">🗺️</p>
-            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("이 토픽에서 다룰 3 가지 패턴", "3 patterns we'll cover")}
+            <p className="text-5xl text-center mb-3">🤔</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
+              {t("\"근데 for 로도 되는데 왜 배워요?\"", "\"But the for loop worked — why learn this?\"")}
             </h3>
-            <p className="text-xs text-gray-600 text-center mb-4">
-              {t("미리 보기 — 다음 챕터부터 하나씩 깊게 봐요.", "Preview — we'll dive into each next.")}
-            </p>
-            <div className="space-y-2.5">
-              <div className="bg-white rounded-lg p-3 border-2 border-purple-200">
-                <p className="text-sm font-black text-purple-800 mb-1">
-                  📐 1. {t("단순 재귀 — factorial, sum", "Simple recursion — factorial, sum")}
-                </p>
-                <p className="text-xs text-gray-700 leading-relaxed">
-                  {t(
-                    "베이스 + 재귀 호출 그대로. 가장 기본형. (챕터 2)",
-                    "Base + recursive call straight. The basic form. (Ch 2)",
-                  )}
-                </p>
+            <div className="bg-white/70 rounded-lg p-3 border border-purple-200 mb-3">
+              <p className="text-xs font-bold text-purple-800 mb-2 break-keep">
+                ✅ {t("좋은 질문! 맞아요 — 1~5 합은 for 가 더 쉬워요. 근데 이런 문제는요?", "Great question! True — for IS easier for 1~5. But what about this?")}
+              </p>
+              <div className="flex justify-center mb-2">
+                <div className="space-y-1 w-fit">
+                  {folderRow(0, "📁", t("내 컴퓨터", "My PC"))}
+                  {folderRow(1, "📁", t("사진 — 안에 폴더가 또", "Photos — folders inside"))}
+                  {folderRow(1, "📁", t("문서 — 안에 또…", "Docs — and more inside…"))}
+                  {folderRow(2, "🖼️", t("어딘가에 찾는 사진!", "the photo, somewhere!"))}
+                </div>
               </div>
-              <div className="bg-white rounded-lg p-3 border-2 border-purple-200">
-                <p className="text-sm font-black text-purple-800 mb-1">
-                  ⚡ 2. {t("분할 정복 — 거듭제곱 O(log N)", "Divide & conquer — power O(log N)")}
-                </p>
-                <p className="text-xs text-gray-700 leading-relaxed">
-                  {t(
-                    "문제를 반으로 쪼개면 — N 번이 log N 번으로 줄어요. (챕터 3)",
-                    "Split in half → N steps shrink to log N. (Ch 3)",
-                  )}
-                </p>
-              </div>
-              <div className="bg-white rounded-lg p-3 border-2 border-purple-200">
-                <p className="text-sm font-black text-purple-800 mb-1">
-                  🌲 3. {t("재귀 트리 + 메모이제이션", "Recursion tree + memoization")}
-                </p>
-                <p className="text-xs text-gray-700 leading-relaxed">
-                  {t(
-                    "피보나치는 그냥 재귀로 짜면 *지수 폭발*. 한 줄 추가로 살림. (챕터 4)",
-                    "Plain fib recursion explodes exponentially. One line saves it. (Ch 4)",
-                  )}
-                </p>
-              </div>
+              <p className="text-[11px] text-gray-600 text-center break-keep">
+                {t("몇 겹인지, 몇 갈래인지 모름 — 반복문으로 짜면 아주 복잡해져요.", "Unknown depth, unknown branches — loops get very messy here.")}
+              </p>
             </div>
-            <p className="text-sm font-bold text-purple-800 text-center mt-4">
-              {t("천천히 가요. 다음 챕터부터! →", "Slowly. Onward! →")}
+            <div className="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-3 mb-3">
+              <p className="text-sm font-bold text-emerald-800 text-center break-keep">
+                {t("재귀는 여기서도 그대로 2줄 — \"사진이면 끝 ✋ / 폴더면 그 안을 또 뒤지기 ↺\"", "Recursion stays 2 lines even here — \"photo → done ✋ / folder → search inside ↺\"")}
+              </p>
+            </div>
+            <p className="text-xs text-purple-700 text-center break-keep">
+              {t("앞으로: 챕터2 합·팩토리얼로 손에 익히기 → 챕터3 반으로 쪼개기 → 챕터4 재귀 트리. 천천히 가요!", "Coming up: Ch2 sums & factorial → Ch3 halving → Ch4 recursion trees. One step at a time!")}
             </p>
           </div>
         )}
