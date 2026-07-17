@@ -64,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // 프로필이 로드돼야 홈(/)의 리디렉트가 동작함. 조회가 한 번 느리거나(4초 초과)
     // 일시적 네트워크 오류로 실패하면 예전엔 그냥 포기 → profile=null → "이동 중" 무한 대기.
     // → 일시적 실패는 몇 번 재시도해서 회복 (선생님 2026-07-17: "기린이 계속 이동중").
+    let lastReason = "unknown"
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
         const { data, error } = await Promise.race([
@@ -75,6 +76,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setProfile(data as Profile)
           return
         }
+        lastReason = error ? `${error.code || ""} ${error.message || error}`.trim() : "no data"
+        console.warn(`[auth] profile fetch attempt ${attempt + 1} failed:`, lastReason)
         if (error?.code === "PGRST116") {
           // 프로필이 없는 경우 (DB 재생성 등) 자동 생성 — 재시도 불필요 (확정적 '행 없음')
           const { data: { user: currentUser } } = await supabase.auth.getUser()
@@ -95,13 +98,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return
         }
         // 그 밖의 오류 → 아래 재시도
-      } catch {
-        // 타임아웃/네트워크 → 아래 재시도
+      } catch (e) {
+        lastReason = (e as Error)?.message || String(e)
+        console.warn(`[auth] profile fetch attempt ${attempt + 1} threw:`, lastReason)
       }
       // 마지막 시도가 아니면 잠깐 쉬고 재시도
       if (attempt < 2) await new Promise((r) => setTimeout(r, 700))
     }
     // 3번 다 실패: profile 은 null 로 남음 (호출부/홈 폴백이 처리)
+    console.error(`[auth] profile fetch gave up after 3 tries — reason: ${lastReason}. (홈이 "이동 중"에 갇힐 수 있음)`)
   }, [supabase])
 
   const refreshProfile = useCallback(async () => {
