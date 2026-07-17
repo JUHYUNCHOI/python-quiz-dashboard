@@ -26,6 +26,10 @@
 //     for copies → for block_len in range(1, n) 직접 순회 (같은 탐색 집합,
 //     n//copies 암산 불필요). 말풍선에 구체 예시([7 7 7]/[1 2 1 2]/[1 1 2 2]) 추가.
 //     로컬 검증: 직전 vs 300 랜덤 동일, CPP 컴파일·교차 동일. USACO 재제출 권장.**
+//   **2026-07-17-g (선생님 "재귀는 힘들어. 재귀 아니어도 되면 다 없애줘"): 주/번외 스왑 —
+//     bottom-up 표 채우기(PSQ_BU_*)를 **주 풀이**로 승격(chapters 2-1, 초록), 재귀본(PSQ_FAST_*)은
+//     **재귀 심화편**으로 강등(2-2, 청록). 재귀 스캐폴딩(재귀 다리·PlanSim)도 심화 앞으로 이동.
+//     getPrintseqBuWalk 말풍선을 '본편 참조' 제거하고 자립형으로 재작성. 코드 배열/검증 불변.**
 //   **2026-07-17-f (선생님): "번외편으로 재귀 아닌 방법도" — 🎁 bottom-up 표 채우기 추가.
 //     PSQ_BU_* 4벌 (신규 코드, 본편과 별개): made[(i,j,k)] 답 표를 작은 조각부터 채움 —
 //     ↺재귀 자리가 📖표 읽기로. 로컬 검증: 재귀 본편과 300 랜덤 + N=100 출력 동일(0.13s),
@@ -1130,72 +1134,72 @@ export function getPrintseqBuWalk(E, lang = "py") {
     return {
       code: E ? PSQ_BU_CPP_EN : PSQ_BU_CPP,
       vars,
-      // 📖 = 본편의 ↺재귀 자리가 '표 읽기'로 바뀐 곳 (청록)
+      // 📖 = 표에서 '더 작은 조각의 답'을 찾아 읽는 곳 (청록)
       marks: [
         { from: 55, to: 55, color: "#2dd4bf", ko: "📖 표에서!", en: "📖 from the table!" },
         { from: 65, to: 66, color: "#2dd4bf", ko: "📖 표에서!", en: "📖 from the table!" },
       ],
       beats: [
         { hi: [5, 6], bubble: t(E,
-          "Instead of recursion — an ANSWER TABLE: made[i][j][k].\nOne cell = one question: \"can piece target[i:j] be made with k PRINTs?\"",
-          "재귀 대신 — '답 표' made[i][j][k].\n칸 하나 = 질문 하나: \"조각 target[i:j] 를 k 개로 만들 수 있나?\"") },
+          "The plan: one ANSWER TABLE, made[i][j][k].\nOne cell = one question: \"can piece target[i:j] be made with k PRINTs?\"\nFill every cell, then read off the answer.",
+          "계획: '답 표' 하나, made[i][j][k].\n칸 하나 = 질문 하나: \"조각 target[i:j] 를 PRINT k 개로 만들 수 있나?\"\n칸을 다 채운 뒤, 답을 읽어내요.") },
         { hi: [87, 95], bubble: t(E,
-          "⭐ THE big idea: fill the table SMALL pieces first (length 1 → N).\nWhatever a bigger piece needs is already written down —\nso nobody ever has to call anybody. No recursion!",
-          "⭐ 핵심: 표를 '작은 조각부터' 채워요 (길이 1 → N).\n큰 조각이 찾는 답은 항상 이미 적혀 있으니 —\n누가 누굴 부를 일이 없어요. 재귀 없음!") },
+          "⭐ THE big idea: fill the table SMALL pieces first (length 1 → N).\nA big piece only ever needs answers for SHORTER pieces —\nand those are already written down. So we never get stuck.",
+          "⭐ 핵심: 표를 '작은 조각부터' 채워요 (길이 1 → N).\n큰 조각이 필요로 하는 건 늘 '더 짧은 조각'의 답뿐 —\n그건 이미 적혀 있어요. 그래서 막히는 일이 없어요.") },
         { hi: [41, 43], bubble: t(E,
-          "piece_answer: the answer for ONE piece.\nIt NEVER calls itself — it only READS the table.",
-          "piece_answer: 조각 하나의 답.\n자기 자신을 절대 안 불러요 — 표를 '읽기만' 해요.") },
+          "piece_answer: the answer for ONE piece.\nIt just READS the table — it never calls anything. No recursion.",
+          "piece_answer: 조각 하나의 답.\n표를 '읽기만' 해요 — 아무것도 안 불러요. 재귀 없음.") },
         { hi: [45, 48], bubble: t(E,
-          "Trick ① — same as the main version: all same → true.",
-          "요령 ① — 본편과 똑같아요: 다 같음 → true.") },
+          "Trick ① — all numbers the same → one PRINT does it. e.g. [7 7 7] → true.",
+          "요령 ① — 숫자가 다 같으면 → PRINT 한 번이면 끝. 예: [7 7 7] → true.") },
         { hi: [50, 60], bubble: t(E,
-          "Trick ② — where the main version did ↺ can(block)…\nhere it's 📖 made[i][i+block_len][k]: just LOOK IT UP.\nThe block is shorter → its answer is already in the table!",
-          "요령 ② — 본편에서 ↺ can(블록) 하던 자리가…\n여기선 📖 made[i][i+block_len][k]: 그냥 '찾아보기'.\n블록이 더 짧으니 → 답이 이미 표에 있거든요!") },
+          "Trick ② — a repeated block, e.g. [1 2 1 2] = block [1 2] twice.\nIs that block makable? 📖 LOOK IT UP: made[i][i+block_len][k].\nThe block is shorter, so its answer is already in the table.",
+          "요령 ② — 반복되는 블록, 예: [1 2 1 2] = 블록 [1 2] × 2.\n그 블록은 만들 수 있나? 📖 그냥 찾아봐요: made[i][i+block_len][k].\n블록이 더 짧으니 답이 이미 표에 있어요.") },
         { hi: [62, 71], bubble: t(E,
-          "Trick ③ — two lookups 📖📖 instead of two recursive calls.\nLeft piece and right piece are both shorter → both already in the table.",
-          "요령 ③ — 재귀 두 번 대신 표 읽기 두 번 📖📖.\n왼쪽·오른쪽 조각 다 더 짧으니 → 둘 다 이미 표에.") },
+          "Trick ③ — cut the piece in two. Both halves are shorter,\nso 📖📖 look up both: left makable AND right makable,\nsplitting the budget k between them.",
+          "요령 ③ — 조각을 둘로 잘라요. 양쪽 다 더 짧으니\n📖📖 둘 다 찾아봐요: 왼쪽도 되고 오른쪽도 되나,\n예산 k 를 둘로 나눠서.") },
         { hi: [73, 73], bubble: t(E,
-          "All three failed → false. (No notebook writing here — main() fills the table.)",
-          "세 요령 다 실패 → false. (여기선 공책 기록도 없어요 — 표는 main 이 채워요.)") },
+          "None of the three tricks worked → false for this cell.",
+          "세 요령 다 안 되면 → 이 칸은 false.") },
         { hi: [97, 101], bubble: t(E,
-          "The table's last cell made[0][N][K] = the answer for the WHOLE sequence!\nSame three tricks — but instead of CALLING (top-down), we FILL (bottom-up).\nThese are the two faces of DP. 🎭",
-          "표의 마지막 칸 made[0][N][K] = 전체 수열의 답!\n같은 세 요령 — '부르는(top-down)' 대신 '채우는(bottom-up)'.\n이게 DP 의 두 얼굴이에요. 🎭") },
+          "The table's last cell made[0][N][K] = the answer for the WHOLE sequence!\nNo recursion anywhere — we filled small→large and read the corner.\n(Curious? The 🎁 bonus does the same three tricks recursively.)",
+          "표의 마지막 칸 made[0][N][K] = 전체 수열의 답!\n재귀는 어디에도 없어요 — 작은→큰 순서로 채우고 모서리를 읽었을 뿐.\n(궁금하면? 🎁 번외편이 같은 세 요령을 재귀로 보여줘요.)") },
       ],
     };
   }
   return {
     code: E ? PSQ_BU_PY_EN : PSQ_BU_PY,
     vars,
-    // 📖 = 본편의 ↺재귀 자리가 '표 읽기'로 바뀐 곳 (청록)
+    // 📖 = 표에서 '더 작은 조각의 답'을 찾아 읽는 곳 (청록)
     marks: [
       { from: 36, to: 36, color: "#2dd4bf", ko: "📖 표에서!", en: "📖 from the table!" },
       { from: 42, to: 43, color: "#2dd4bf", ko: "📖 표에서!", en: "📖 from the table!" },
     ],
     beats: [
       { hi: [20, 21], bubble: t(E,
-        "Instead of recursion — an ANSWER TABLE: made.\nOne cell = one question: \"can piece target[i:j] be made with k PRINTs?\"",
-        "재귀 대신 — '답 표' made.\n칸 하나 = 질문 하나: \"조각 target[i:j] 를 k 개로 만들 수 있나?\"") },
+        "The plan: one ANSWER TABLE, made.\nOne cell = one question: \"can piece target[i:j] be made with k PRINTs?\"\nFill every cell, then read off the answer.",
+        "계획: '답 표' 하나, made.\n칸 하나 = 질문 하나: \"조각 target[i:j] 를 PRINT k 개로 만들 수 있나?\"\n칸을 다 채운 뒤, 답을 읽어내요.") },
       { hi: [52, 58], bubble: t(E,
-        "⭐ THE big idea: fill the table SMALL pieces first (length 1 → N).\nWhatever a bigger piece needs is already written down —\nso nobody ever has to call anybody. No recursion!",
-        "⭐ 핵심: 표를 '작은 조각부터' 채워요 (길이 1 → N).\n큰 조각이 찾는 답은 항상 이미 적혀 있으니 —\n누가 누굴 부를 일이 없어요. 재귀 없음!") },
+        "⭐ THE big idea: fill the table SMALL pieces first (length 1 → N).\nA big piece only ever needs answers for SHORTER pieces —\nand those are already written down. So we never get stuck.",
+        "⭐ 핵심: 표를 '작은 조각부터' 채워요 (길이 1 → N).\n큰 조각이 필요로 하는 건 늘 '더 짧은 조각'의 답뿐 —\n그건 이미 적혀 있어요. 그래서 막히는 일이 없어요.") },
       { hi: [23, 25], bubble: t(E,
-        "piece_answer: the answer for ONE piece.\nIt NEVER calls itself — it only READS the table.",
-        "piece_answer: 조각 하나의 답.\n자기 자신을 절대 안 불러요 — 표를 '읽기만' 해요.") },
+        "piece_answer: the answer for ONE piece.\nIt just READS the table — it never calls anything. No recursion.",
+        "piece_answer: 조각 하나의 답.\n표를 '읽기만' 해요 — 아무것도 안 불러요. 재귀 없음.") },
       { hi: [27, 29], bubble: t(E,
-        "Trick ① — same as the main version: all same → True.",
-        "요령 ① — 본편과 똑같아요: 다 같음 → True.") },
+        "Trick ① — all numbers the same → one PRINT does it. e.g. [7 7 7] → True.",
+        "요령 ① — 숫자가 다 같으면 → PRINT 한 번이면 끝. 예: [7 7 7] → True.") },
       { hi: [31, 37], bubble: t(E,
-        "Trick ② — where the main version did ↺ can(seq[:block_len])…\nhere it's 📖 made[(i, i+block_len, k)]: just LOOK IT UP.\nThe block is shorter → its answer is already in the table!",
-        "요령 ② — 본편에서 ↺ can(seq[:block_len]) 하던 자리가…\n여기선 📖 made[(i, i+block_len, k)]: 그냥 '찾아보기'.\n블록이 더 짧으니 → 답이 이미 표에 있거든요!") },
+        "Trick ② — a repeated block, e.g. [1 2 1 2] = block [1 2] twice.\nIs that block makable? 📖 LOOK IT UP: made[(i, i+block_len, k)].\nThe block is shorter, so its answer is already in the table.",
+        "요령 ② — 반복되는 블록, 예: [1 2 1 2] = 블록 [1 2] × 2.\n그 블록은 만들 수 있나? 📖 그냥 찾아봐요: made[(i, i+block_len, k)].\n블록이 더 짧으니 답이 이미 표에 있어요.") },
       { hi: [39, 44], bubble: t(E,
-        "Trick ③ — two lookups 📖📖 instead of two recursive calls.\nLeft piece and right piece are both shorter → both already in the table.",
-        "요령 ③ — 재귀 두 번 대신 표 읽기 두 번 📖📖.\n왼쪽·오른쪽 조각 다 더 짧으니 → 둘 다 이미 표에.") },
+        "Trick ③ — cut the piece in two. Both halves are shorter,\nso 📖📖 look up both: left makable AND right makable,\nsplitting the budget k between them.",
+        "요령 ③ — 조각을 둘로 잘라요. 양쪽 다 더 짧으니\n📖📖 둘 다 찾아봐요: 왼쪽도 되고 오른쪽도 되나,\n예산 k 를 둘로 나눠서.") },
       { hi: [46, 46], bubble: t(E,
-        "All three failed → False. (No notebook here — the loop below fills the table.)",
-        "세 요령 다 실패 → False. (공책 기록도 없어요 — 표는 아래 반복문이 채워요.)") },
+        "None of the three tricks worked → False for this cell.",
+        "세 요령 다 안 되면 → 이 칸은 False.") },
       { hi: [60, 63], bubble: t(E,
-        "The table's last cell made[(0, N, K)] = the answer for the WHOLE sequence!\nSame three tricks — but instead of CALLING (top-down), we FILL (bottom-up).\nThese are the two faces of DP. 🎭",
-        "표의 마지막 칸 made[(0, N, K)] = 전체 수열의 답!\n같은 세 요령 — '부르는(top-down)' 대신 '채우는(bottom-up)'.\n이게 DP 의 두 얼굴이에요. 🎭") },
+        "The table's last cell made[(0, N, K)] = the answer for the WHOLE sequence!\nNo recursion anywhere — we filled small→large and read the corner.\n(Curious? The 🎁 bonus does the same three tricks recursively.)",
+        "표의 마지막 칸 made[(0, N, K)] = 전체 수열의 답!\n재귀는 어디에도 없어요 — 작은→큰 순서로 채우고 모서리를 읽었을 뿐.\n(궁금하면? 🎁 번외편이 같은 세 요령을 재귀로 보여줘요.)") },
     ],
   };
 }

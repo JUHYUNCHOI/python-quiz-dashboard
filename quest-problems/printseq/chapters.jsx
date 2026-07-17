@@ -204,15 +204,41 @@ export function makePrintseqCh2(E, lang = "py") {
     /* ── 단계 스크린 ⑥: 계획 (코드 짜기 전에 어떻게 풀지) */
     { phase: 6, type: "phase" },
 
-    /* 2-0a — 재귀 다리: /algo/recursion/learn 의 '친구 릴레이' 모델을 이 문제로 연결
-       (선생님 2026-07-17: "printseq 재귀 이해하기 넘 힘들어" — 친구 모델 없이
-        '자기 자신을 부른다'로 점프해서 어려웠음). */
+    /* 2-0b — 블록 반복 탐지 시뮬: 요령②의 추상 코드를 구체 숫자로
+       (선생님 2026-07-13: "저 코드가 머릿속에서 안 그려짐"). */
     {
       phase: 6,
       type: "reveal",
       narr: t(E,
-        "One thing before the plan — remember the friend relay?",
-        "계획 전에 딱 하나만 — '친구한테 시키기' 기억나요?"),
+        "Trick ② in the code looked abstract — let's SEE it: try block sizes on 1 2 1 2 1 2 and find the repeat.",
+        "요령 ② 코드가 추상적이었죠 — 눈으로 봐요: 1 2 1 2 1 2 에 블록 크기를 바꿔가며 반복을 찾아요."),
+      content: (<PrintseqBlockSim E={E} />),
+    },
+
+    /* ── 단계 스크린 ⑦: 코드 짜기 */
+    { phase: 7, type: "phase" },
+
+    /* 2-1 — 주 풀이 코드 워크 (bottom-up 표 채우기, 재귀 없음).
+       선생님 2026-07-17 "재귀는 힘들어" → 재귀 없는 표 채우기를 주 풀이로.
+       전체 코드 위를 '한 조각씩 밝히며' 걷고, 말풍선이 밝아진 줄에 붙어 건너뛸 수 없음
+       (선생님 2026-07-13: "코드 위에 설명을 안 읽게 되더라"). */
+    {
+      phase: 7,
+      type: "reveal",
+      /* narr 없음 — CodeWalk 안 말풍선이 그 역할 (중복 바 제거로 세로 공간 확보). */
+      narr: "",
+      content: (<CodeWalk E={E} lang={lang} {...getPrintseqBuWalk(E, lang)} accent="#16a34a" />),
+    },
+
+    /* 2-0a (심화) — 재귀 다리: /algo/recursion/learn 의 '친구 릴레이' 모델을 이 문제로 연결.
+       선생님 2026-07-17 "재귀는 힘들어" → 주 풀이(2-1)는 bottom-up, 여기부터는 재귀 심화편.
+       친구 모델 없이 '자기 자신을 부른다'로 점프하면 어려우니 릴레이로 먼저 이어줌. */
+    {
+      phase: 7,
+      type: "reveal",
+      narr: t(E,
+        "🎁 Bonus — we just solved it by filling a table. There's another way to run the SAME three tricks: recursion. Remember the friend relay?",
+        "🎁 심화 — 방금은 표를 채워서 풀었죠. 똑같은 세 요령을 굴리는 다른 방법이 하나 더 있어요: 재귀. '친구한테 시키기' 기억나요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ maxWidth: 500, margin: "0 auto" }}>
@@ -266,52 +292,26 @@ export function makePrintseqCh2(E, lang = "py") {
       ),
     },
 
-    /* 2-0 — 계획 시뮬: 코드 적기 전에 can() 이 뭘 할지 트리로 한 단계씩
-       (선생님 2026-07-13: "코드를 보여주기 전에 어떻게 하겠다는걸 시뮬로"). */
+    /* 2-0 (심화) — 재귀 계획 시뮬: can() 이 자기를 부르며 세 요령을 굴리는 걸 트리로. */
     {
-      phase: 4,
+      phase: 7,
       type: "reveal",
       narr: t(E,
-        "Before any code — watch the plan run on [1 1 2 2] with budget 2. One function, three tricks, and a question that calls itself.",
-        "코드보다 계획 먼저 — [1 1 2 2] 에 예산 2 로 계획이 어떻게 돌아가는지 봐요. 함수 하나, 요령 셋, 그리고 자기 자신을 다시 부르는 질문."),
+        "Watch the recursive plan on [1 1 2 2] with budget 2. Same three tricks — but this time a piece ASKS a smaller piece the same question (can() calls can()).",
+        "재귀 계획을 [1 1 2 2] 예산 2 로 봐요. 똑같은 세 요령 — 대신 이번엔 조각이 더 작은 조각에게 같은 질문을 물어봐요 (can() 이 can() 을 부름)."),
       content: (<PrintseqPlanSim E={E} />),
     },
 
-    /* 2-0b — 블록 반복 탐지 시뮬: 요령②의 추상 코드를 구체 숫자로
-       (선생님 2026-07-13: "저 코드가 머릿속에서 안 그려짐"). */
-    {
-      phase: 6,
-      type: "reveal",
-      narr: t(E,
-        "Trick ② in the code looked abstract — let's SEE it: try block sizes on 1 2 1 2 1 2 and find the repeat.",
-        "요령 ② 코드가 추상적이었죠 — 눈으로 봐요: 1 2 1 2 1 2 에 블록 크기를 바꿔가며 반복을 찾아요."),
-      content: (<PrintseqBlockSim E={E} />),
-    },
-
-    /* ── 단계 스크린 ⑦: 코드 짜기 */
-    { phase: 7, type: "phase" },
-
-    /* 2-1 — 코드 워크: 전체 코드 위를 '한 조각씩 밝히며' 걷기.
-       설명 말풍선이 밝아진 줄 바로 위에 붙어서 건너뛸 수 없음
-       (선생님 2026-07-13: "코드 위에 설명을 안 읽게 되더라"). */
-    {
-      phase: 7,
-      type: "reveal",
-      /* narr 없음 — CodeWalk 안 말풍선이 그 역할 (중복 바 제거로 세로 공간 확보). */
-      narr: "",
-      content: (<CodeWalk E={E} lang={lang} {...getPrintseqWalk(E, lang)} accent="#16a34a" />),
-    },
-
-    /* 2-2 — 🎁 번외편: 재귀 없이 (bottom-up 표 채우기).
-       선생님 2026-07-17: "꼭 재귀로만 할 수 있는 건가? 번외편으로 다른 방법도."
-       본편의 ↺재귀 자리가 📖표 읽기로 바뀌는 대비 — top-down ↔ bottom-up = DP 두 얼굴. */
+    /* 2-2 (심화) — 🎁 재귀 버전 코드 워크.
+       선생님 2026-07-17: "재귀는 힘들어" → bottom-up(2-1)이 주 풀이, 재귀는 심화로 강등.
+       표를 '채우는' 대신 조각이 더 작은 조각을 직접 '부르는' 방식 (↺). */
     {
       phase: 7,
       type: "reveal",
       narr: t(E,
-        "🎁 Bonus — the SAME problem with NO recursion at all: fill an answer table, small pieces first!",
-        "🎁 번외편 — 똑같은 문제를 재귀 '없이': 답 표를 작은 조각부터 채우면 돼요!"),
-      content: (<CodeWalk E={E} lang={lang} {...getPrintseqBuWalk(E, lang)} accent="#0d9488" />),
+        "🎁 The recursive version — instead of filling a table, each piece directly CALLS smaller pieces (↺ can calls can). Same answer, same three tricks.",
+        "🎁 재귀 버전 — 표를 채우는 대신, 조각이 더 작은 조각을 직접 '불러요' (↺ can 이 can 을 부름). 답도 요령도 똑같아요."),
+      content: (<CodeWalk E={E} lang={lang} {...getPrintseqWalk(E, lang)} accent="#0d9488" />),
     },
   ];
 }

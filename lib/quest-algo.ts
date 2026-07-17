@@ -47,7 +47,7 @@ export const QUEST_ALGO: Record<string, string> = {
   milkfactory: "graph", milkorder: "topologicalsort",
   moo: "string", moohunt: "bitmanipulation", mooin2: "prefixsum", mooin3: "binarysearch",
   moolang: "greedy", mooloo: "greedy", palindrome: "dp", photoshoot: "greedy", photoshoot2: "greedy",
-  printseq: "recursion", productivity: "binarysearch", reach: "shortestpath", revegetation: "greedy",
+  printseq: "dp", productivity: "binarysearch", reach: "shortestpath", revegetation: "greedy",
   reverseeng: "greedy", sleepclass: "greedy", sleepysort: "greedy", socialdist1: "binarysearch",
   stalling: "sorting", subseqmedian: "dp", swaptowin: "greedy", tameherd: "dp",
   triangles: "hashtable", tricks: "hashtable", walkfence: "prefixsum", walkhome: "dp",
