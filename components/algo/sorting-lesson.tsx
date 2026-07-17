@@ -30,23 +30,31 @@ export function SortingLesson() {
       <section>
         <H>{t("2. 한 줄이면 끝 — sort()", "2. One line — sort()")}</H>
         <p>{t("직접 구현하지 않아요. 언어가 주는 sort() 를 써요.", "You don't write it yourself — use the built-in sort().")}</p>
-        <Code code={`vector<int> v = {5, 3, 1, 4, 2};
+        <Code code={t(`vector<int> v = {5, 3, 1, 4, 2};
 sort(v.begin(), v.end());                  // 오름차순 → 1 2 3 4 5
-sort(v.begin(), v.end(), greater<int>());  // 내림차순 → 5 4 3 2 1`} />
+sort(v.begin(), v.end(), greater<int>());  // 내림차순 → 5 4 3 2 1`, `vector<int> v = {5, 3, 1, 4, 2};
+sort(v.begin(), v.end());                  // ascending → 1 2 3 4 5
+sort(v.begin(), v.end(), greater<int>());  // descending → 5 4 3 2 1`)} />
         <p className="text-gray-500">{t("파이썬은 더 짧아요:", "Python is even shorter:")}</p>
-        <Code lang="python" code={`a = [5, 3, 1, 4, 2]
+        <Code lang="python" code={t(`a = [5, 3, 1, 4, 2]
 a.sort()               # 오름차순
-a.sort(reverse=True)   # 내림차순`} />
+a.sort(reverse=True)   # 내림차순`, `a = [5, 3, 1, 4, 2]
+a.sort()               # ascending
+a.sort(reverse=True)   # descending`)} />
       </section>
 
       <section>
         <H>{t("3. '무엇을 기준으로' 정렬?", "3. Sort by WHAT?")}</H>
         <p>{t("점수·시간·이름 등 기준을 정해요. 기준이 복잡하면 비교 함수를 직접 줘요.", "Pick a key — score, time, name… For complex keys, pass a compare function.")}</p>
-        <Code code={`// 점수 내림차순, 같으면 이름 오름차순
+        <Code code={t(`// 점수 내림차순, 같으면 이름 오름차순
 sort(s.begin(), s.end(), [](auto& a, auto& b){
     if (a.score != b.score) return a.score > b.score;
     return a.name < b.name;
-});`} />
+});`, `// score descending, then name ascending
+sort(s.begin(), s.end(), [](auto& a, auto& b){
+    if (a.score != b.score) return a.score > b.score;
+    return a.name < b.name;
+});`)} />
       </section>
 
       <section>

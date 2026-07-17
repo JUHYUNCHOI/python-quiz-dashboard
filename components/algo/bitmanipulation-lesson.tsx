@@ -30,11 +30,15 @@ export function BitManipulationLesson() {
       <section>
         <H>{t("2. 6가지 연산자", "2. Six operators")}</H>
         <p>{t("AND(&)·OR(|)·XOR(^)·NOT(~)·왼쪽 시프트(<<)·오른쪽 시프트(>>).", "AND(&), OR(|), XOR(^), NOT(~), left shift(<<), right shift(>>).")}</p>
-        <Code code={`6 & 3   // 110 & 011 = 010 = 2   (둘 다 1인 자리만)
+        <Code code={t(`6 & 3   // 110 & 011 = 010 = 2   (둘 다 1인 자리만)
 6 | 3   // 110 | 011 = 111 = 7   (하나라도 1)
 6 ^ 3   // 110 ^ 011 = 101 = 5   (서로 다르면 1)
 1 << 4  // 1 을 왼쪽으로 4칸 = 16 (= 2^4)
-20 >> 2 // 20 을 오른쪽으로 2칸 = 5`} />
+20 >> 2 // 20 을 오른쪽으로 2칸 = 5`, `6 & 3   // 110 & 011 = 010 = 2   (only bits that are 1 in both)
+6 | 3   // 110 | 011 = 111 = 7   (1 if either is 1)
+6 ^ 3   // 110 ^ 011 = 101 = 5   (1 if they differ)
+1 << 4  // shift 1 left by 4 = 16 (= 2^4)
+20 >> 2 // shift 20 right by 2 = 5`)} />
       </section>
 
       <section>
@@ -50,10 +54,13 @@ export function BitManipulationLesson() {
       <section>
         <H>{t("4. 비트마스크 — 집합을 정수 하나로", "4. Bitmask — a set in one integer")}</H>
         <p>{t("원소 N개의 '있다/없다'를 비트 N개로 표현해요. 부분집합 전체를 정수 0~2ᴺ-1 반복으로 훑을 수 있어요.", "Represent 'present/absent' of N items with N bits. You can loop over every subset as integers 0..2ᴺ-1.")}</p>
-        <Code lang="python" code={`for mask in range(1 << n):       # 모든 부분집합
+        <Code lang="python" code={t(`for mask in range(1 << n):       # 모든 부분집합
     for i in range(n):
         if mask & (1 << i):       # i 번째 원소가 포함됐나?
-            ...                   # 선택된 원소 처리`} />
+            ...                   # 선택된 원소 처리`, `for mask in range(1 << n):       # every subset
+    for i in range(n):
+        if mask & (1 << i):       # is element i included?
+            ...                   # handle selected element`)} />
       </section>
 
       <Link href="/algo/bitmanipulation/learn" className="inline-flex items-center gap-1 text-xs text-violet-500 hover:underline">

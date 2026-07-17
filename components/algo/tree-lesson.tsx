@@ -31,12 +31,16 @@ export function TreeLesson() {
       <section>
         <H>{t("2. 어떻게 저장해?", "2. How to store it?")}</H>
         <p>{t("각 노드마다 '내 자식들' 목록을 들고 있으면 돼요 (인접 리스트).", "Each node just keeps a list of its children (adjacency list).")}</p>
-        <Code code={`vector<int> child[100005];   // child[u] = u의 자식들
+        <Code code={t(`vector<int> child[100005];   // child[u] = u의 자식들
 child[1].push_back(2);       // 1의 자식으로 2
-child[1].push_back(3);       // 1의 자식으로 3`} />
-        <Code lang="python" code={`child = [[] for _ in range(n + 1)]
+child[1].push_back(3);       // 1의 자식으로 3`, `vector<int> child[100005];   // child[u] = children of u
+child[1].push_back(2);       // add 2 as a child of 1
+child[1].push_back(3);       // add 3 as a child of 1`)} />
+        <Code lang="python" code={t(`child = [[] for _ in range(n + 1)]
 child[1].append(2)   # 1의 자식으로 2
-child[1].append(3)   # 1의 자식으로 3`} />
+child[1].append(3)   # 1의 자식으로 3`, `child = [[] for _ in range(n + 1)]
+child[1].append(2)   # add 2 as a child of 1
+child[1].append(3)   # add 3 as a child of 1`)} />
       </section>
 
       <section>
@@ -47,14 +51,21 @@ child[1].append(3)   # 1의 자식으로 3`} />
           <li>{t("중위(in): 왼쪽 → 나 → 오른쪽 (이진트리)", "in-order: left → me → right (binary tree)")}</li>
           <li>{t("후위(post): 자식 먼저, 나는 마지막 (서브트리 합 계산에 유용)", "post-order: children first, me last (great for subtree sums)")}</li>
         </ul>
-        <Code code={`void dfs(int u, int parent) {
+        <Code code={t(`void dfs(int u, int parent) {
     // 전위: 여기서 u 처리
     for (int v : child[u]) {
         if (v == parent) continue;   // 부모로 되돌아가지 않기
         dfs(v, u);
     }
     // 후위: 여기서 u 처리
-}`} />
+}`, `void dfs(int u, int parent) {
+    // pre-order: process u here
+    for (int v : child[u]) {
+        if (v == parent) continue;   // don't go back to parent
+        dfs(v, u);
+    }
+    // post-order: process u here
+}`)} />
       </section>
 
       <section>

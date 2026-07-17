@@ -24,40 +24,59 @@ export function StackQueueLesson() {
       <section>
         <H>{t("1. 스택 = 마지막에 넣은 게 먼저 (LIFO)", "1. Stack = Last In, First Out (LIFO)")}</H>
         <p>{t("접시를 쌓듯, 맨 위에만 넣고 뺄 수 있어요. 마지막에 넣은 게 가장 먼저 나와요.", "Like a stack of plates — you add and remove only from the top. The last one in comes out first.")}</p>
-        <Code code={`stack<int> st;
+        <Code code={t(`stack<int> st;
 st.push(1); st.push(2); st.push(3);  // 바닥 1 2 3 위
 st.top();   // 3  (맨 위)
 st.pop();   // 3 제거 → 1 2 남음
-st.empty(); // 비었는지`} />
+st.empty(); // 비었는지`, `stack<int> st;
+st.push(1); st.push(2); st.push(3);  // bottom 1 2 3 top
+st.top();   // 3  (top)
+st.pop();   // remove 3 → 1 2 left
+st.empty(); // is empty?`)} />
       </section>
 
       <section>
         <H>{t("2. 큐 = 먼저 넣은 게 먼저 (FIFO)", "2. Queue = First In, First Out (FIFO)")}</H>
         <p>{t("줄 서기와 같아요. 먼저 온 사람이 먼저 나가요.", "Like a line — whoever arrives first leaves first.")}</p>
-        <Code code={`queue<int> q;
+        <Code code={t(`queue<int> q;
 q.push(1); q.push(2); q.push(3);  // 앞 1 2 3 뒤
 q.front(); // 1  (맨 앞)
-q.pop();   // 1 제거 → 2 3 남음`} />
+q.pop();   // 1 제거 → 2 3 남음`, `queue<int> q;
+q.push(1); q.push(2); q.push(3);  // front 1 2 3 back
+q.front(); // 1  (front)
+q.pop();   // remove 1 → 2 3 left`)} />
         <p className="text-gray-500">{t("파이썬은 리스트를 스택으로, collections.deque 를 큐로 써요:", "In Python, a list works as a stack, and collections.deque as a queue:")}</p>
-        <Code lang="python" code={`st = []
+        <Code lang="python" code={t(`st = []
 st.append(3); st.pop()          # 스택 (LIFO)
 
 from collections import deque
 q = deque()
-q.append(1); q.popleft()        # 큐 (FIFO)`} />
+q.append(1); q.popleft()        # 큐 (FIFO)`, `st = []
+st.append(3); st.pop()          # stack (LIFO)
+
+from collections import deque
+q = deque()
+q.append(1); q.popleft()        # queue (FIFO)`)} />
       </section>
 
       <section>
         <H>{t("3. 스택이 빛나는 곳 — 괄호 검사", "3. Where stacks shine — bracket matching")}</H>
         <p>{t("여는 괄호는 push, 닫는 괄호가 오면 top 과 짝이 맞는지 확인하며 pop. 끝에 비어 있으면 올바른 괄호예요.", "Push opening brackets; on a closing bracket, check the top matches and pop. If empty at the end, the brackets are balanced.")}</p>
-        <Code code={`for (char c : s) {
+        <Code code={t(`for (char c : s) {
     if (c == '(') st.push(c);
     else {
         if (st.empty()) { ok = false; break; }
         st.pop();                  // 짝 맞춰 제거
     }
 }
-// 끝까지 보고 st.empty() 면 정상`} />
+// 끝까지 보고 st.empty() 면 정상`, `for (char c : s) {
+    if (c == '(') st.push(c);
+    else {
+        if (st.empty()) { ok = false; break; }
+        st.pop();                  // pop the match
+    }
+}
+// after scanning, st.empty() means balanced`)} />
       </section>
 
       <section>

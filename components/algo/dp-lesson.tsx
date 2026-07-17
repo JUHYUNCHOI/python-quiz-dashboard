@@ -30,12 +30,17 @@ export function DpLesson() {
       <section>
         <H>{t("2. 메모이제이션 — 답을 적어두기", "2. Memoization — write the answer down")}</H>
         <p>{t("피보나치는 같은 값을 계속 다시 계산해요. 한 번 구한 값을 표에 적어두면 두 번 다시 안 풀어요.", "Fibonacci recomputes the same value over and over. Write each result in a table and you never solve it twice.")}</p>
-        <Code code={`int memo[N];
+        <Code code={t(`int memo[N];
 int fib(int n) {
     if (n <= 1) return n;
     if (memo[n]) return memo[n];          // 적어둔 게 있으면 재사용
     return memo[n] = fib(n-1) + fib(n-2); // 구하면서 저장
-}`} />
+}`, `int memo[N];
+int fib(int n) {
+    if (n <= 1) return n;
+    if (memo[n]) return memo[n];          // reuse if already stored
+    return memo[n] = fib(n-1) + fib(n-2); // compute and store
+}`)} />
         <p className="text-gray-500">{t("작은 것부터 표를 채우는 '바텀업(반복문)' 방식도 있어요:", "Or fill the table bottom-up with a loop:")}</p>
         <Code code={`dp[0] = 0; dp[1] = 1;
 for (int i = 2; i <= n; i++) dp[i] = dp[i-1] + dp[i-2];`} />
@@ -44,9 +49,11 @@ for (int i = 2; i <= n; i++) dp[i] = dp[i-1] + dp[i-2];`} />
       <section>
         <H>{t("3. 점화식 — '한 칸을 어떻게 채우나'", "3. The recurrence — 'how to fill one cell'")}</H>
         <p>{t("DP의 핵심은 'dp[i] 를 이전 답들로 어떻게 만드나'를 찾는 거예요. 배낭 문제는 '이 물건을 담느냐 마느냐' 중 더 좋은 쪽을 고르는 식이에요.", "The heart of DP is figuring out 'how dp[i] is built from earlier answers.' Knapsack picks the better of 'take this item or skip it.'")}</p>
-        <Code lang="python" code={`# 0/1 배낭: w 무게까지의 최대 가치
+        <Code lang="python" code={t(`# 0/1 배낭: w 무게까지의 최대 가치
 dp[i][w] = max(dp[i-1][w],                 # 안 담음
-               dp[i-1][w-weight[i]] + val[i])  # 담음`} />
+               dp[i-1][w-weight[i]] + val[i])  # 담음`, `# 0/1 knapsack: max value up to weight w
+dp[i][w] = max(dp[i-1][w],                 # skip item
+               dp[i-1][w-weight[i]] + val[i])  # take item`)} />
       </section>
 
       <section>

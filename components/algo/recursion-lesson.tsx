@@ -38,23 +38,32 @@ export function RecursionLesson() {
       <section>
         <H>{t("3. 팩토리얼 — 가장 기본", "3. Factorial — the classic")}</H>
         <p>{t("n! = n × (n-1)! 이고, 0! = 1 이에요.", "n! = n × (n-1)!, with 0! = 1.")}</p>
-        <Code code={`int fact(int n) {
+        <Code code={t(`int fact(int n) {
     if (n <= 1) return 1;       // 종료 조건
     return n * fact(n - 1);     // 자기 호출
-}`} />
-        <Code lang="python" code={`def fact(n):
+}`, `int fact(int n) {
+    if (n <= 1) return 1;       // base case
+    return n * fact(n - 1);     // recurse
+}`)} />
+        <Code lang="python" code={t(`def fact(n):
     if n <= 1:        # 종료 조건
         return 1
-    return n * fact(n - 1)   # 자기 호출`} />
+    return n * fact(n - 1)   # 자기 호출`, `def fact(n):
+    if n <= 1:        # base case
+        return 1
+    return n * fact(n - 1)   # recurse`)} />
       </section>
 
       <section>
         <H>{t("4. 피보나치 — 자기를 두 번 부르기", "4. Fibonacci — calling itself twice")}</H>
         <p>{t("F(n) = F(n-1) + F(n-2), F(0)=0, F(1)=1. 같은 값을 여러 번 계산하니 큰 n 에서는 느려요 → 메모이제이션으로 저장하면 빨라져요.", "F(n) = F(n-1) + F(n-2). It recomputes the same values, so it's slow for big n — caching (memoization) fixes that.")}</p>
-        <Code code={`int fib(int n) {
+        <Code code={t(`int fib(int n) {
     if (n < 2) return n;             // 종료 조건
     return fib(n-1) + fib(n-2);      // 두 번 자기 호출
-}`} />
+}`, `int fib(int n) {
+    if (n < 2) return n;             // base case
+    return fib(n-1) + fib(n-2);      // two recursive calls
+}`)} />
         <p className="text-gray-500 mt-1">{t("재귀는 트리·DFS·분할정복·백트래킹의 토대예요.", "Recursion is the foundation of trees, DFS, divide-and-conquer, and backtracking.")}</p>
       </section>
 

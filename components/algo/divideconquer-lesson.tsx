@@ -30,25 +30,37 @@ export function DivideConquerLesson() {
       <section>
         <H>{t("2. 병합 정렬 — 대표 예", "2. Merge sort — the classic")}</H>
         <p>{t("배열을 반으로 쪼개 각각 정렬한 뒤, 두 정렬된 반쪽을 하나로 합쳐요. O(N log N).", "Split the array in half, sort each half, then merge two sorted halves into one. O(N log N).")}</p>
-        <Code lang="python" code={`def merge_sort(a):
+        <Code lang="python" code={t(`def merge_sort(a):
     if len(a) <= 1:
         return a                       # 더 못 쪼개면 그대로
     mid = len(a) // 2
     L = merge_sort(a[:mid])            # 왼쪽 정복
     R = merge_sort(a[mid:])            # 오른쪽 정복
-    return merge(L, R)                 # 두 정렬된 반쪽을 합치기`} />
+    return merge(L, R)                 # 두 정렬된 반쪽을 합치기`, `def merge_sort(a):
+    if len(a) <= 1:
+        return a                       # can't split further, return as-is
+    mid = len(a) // 2
+    L = merge_sort(a[:mid])            # conquer left
+    R = merge_sort(a[mid:])            # conquer right
+    return merge(L, R)                 # combine the two sorted halves`)} />
       </section>
 
       <section>
         <H>{t("3. 이분 탐색도 같은 사고", "3. Binary search is the same idea")}</H>
         <p>{t("정렬된 데이터에서 가운데를 보고 절반을 버려요. 매번 후보가 반으로 → O(log N).", "On sorted data, check the middle and throw away half. The search space halves each step → O(log N).")}</p>
-        <Code code={`int lo = 0, hi = n - 1;
+        <Code code={t(`int lo = 0, hi = n - 1;
 while (lo <= hi) {
     int mid = (lo + hi) / 2;
     if (a[mid] == target) return mid;
     if (a[mid] < target) lo = mid + 1;   // 왼쪽 절반 버림
     else hi = mid - 1;                   // 오른쪽 절반 버림
-}`} />
+}`, `int lo = 0, hi = n - 1;
+while (lo <= hi) {
+    int mid = (lo + hi) / 2;
+    if (a[mid] == target) return mid;
+    if (a[mid] < target) lo = mid + 1;   // discard left half
+    else hi = mid - 1;                   // discard right half
+}`)} />
       </section>
 
       <section>

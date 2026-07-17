@@ -29,26 +29,39 @@ export function BacktrackingLesson() {
       <section>
         <H>{t("2. 기본 틀 — 선택·재귀·되돌리기", "2. The template — choose, recurse, undo")}</H>
         <p>{t("한 칸을 정하고 → 다음 칸으로 재귀 → 돌아오면 그 선택을 취소해요. 이 '취소'가 백트래킹의 핵심이에요.", "Fix one slot → recurse to the next → undo the choice when you return. That undo is what makes it backtracking.")}</p>
-        <Code code={`void solve(int depth) {
+        <Code code={t(`void solve(int depth) {
     if (depth == N) { record(); return; }   // 다 채움 → 답 기록
     for (int c : candidates) {
         choose(c);          // 선택
         solve(depth + 1);   // 다음으로
         unchoose(c);        // 되돌리기 ← 핵심
     }
-}`} />
+}`, `void solve(int depth) {
+    if (depth == N) { record(); return; }   // fully filled → record answer
+    for (int c : candidates) {
+        choose(c);          // choose
+        solve(depth + 1);   // recurse to next
+        unchoose(c);        // undo ← the key part
+    }
+}`)} />
       </section>
 
       <section>
         <H>{t("3. 가지치기 — 안 될 길은 일찍 끊기", "3. Pruning — cut dead branches early")}</H>
         <p>{t("'이 선택은 어차피 안 된다'를 미리 알면 그 가지로 안 들어가요. 모든 경우를 다 보면 너무 느리니, 가지치기가 백트래킹을 실용적으로 만들어요.", "If a choice clearly can't lead to a solution, don't explore it. Pruning is what makes backtracking fast enough to be useful.")}</p>
-        <Code lang="python" code={`def solve(depth):
+        <Code lang="python" code={t(`def solve(depth):
     if not is_valid(depth):   # 가지치기: 안 되면 바로 return
         return
     if depth == N:
         record(); return
     for c in candidates:
-        choose(c); solve(depth+1); unchoose(c)`} />
+        choose(c); solve(depth+1); unchoose(c)`, `def solve(depth):
+    if not is_valid(depth):   # pruning: return early if invalid
+        return
+    if depth == N:
+        record(); return
+    for c in candidates:
+        choose(c); solve(depth+1); unchoose(c)`)} />
       </section>
 
       <section>

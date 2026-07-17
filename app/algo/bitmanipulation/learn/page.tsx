@@ -379,7 +379,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`a = 12   # 0b00001100
+              py={t(`a = 12   # 0b00001100
 b = 10   # 0b00001010
 
 print(a & b)   # 8   = 0b00001000
@@ -389,8 +389,18 @@ print(a << 1)  # 24  = 0b00011000  (×2)
 print(a >> 1)  # 6   = 0b00000110  (÷2)
 
 # 특정 비트 검사 (3 번째 비트, 0 부터)
-print((a >> 3) & 1)   # 1`}
-              cpp={`#include <iostream>
+print((a >> 3) & 1)   # 1`, `a = 12   # 0b00001100
+b = 10   # 0b00001010
+
+print(a & b)   # 8   = 0b00001000
+print(a | b)   # 14  = 0b00001110
+print(a ^ b)   # 6   = 0b00000110
+print(a << 1)  # 24  = 0b00011000  (×2)
+print(a >> 1)  # 6   = 0b00000110  (÷2)
+
+# check a specific bit (bit 3, 0-indexed)
+print((a >> 3) & 1)   # 1`)}
+              cpp={t(`#include <iostream>
 using namespace std;
 
 int main() {
@@ -406,7 +416,23 @@ int main() {
     // 특정 비트 검사
     cout << ((a >> 3) & 1) << endl;   // 1
     return 0;
-}`}
+}`, `#include <iostream>
+using namespace std;
+
+int main() {
+    int a = 12;   // 0b00001100
+    int b = 10;   // 0b00001010
+
+    cout << (a & b) << endl;   // 8
+    cout << (a | b) << endl;   // 14
+    cout << (a ^ b) << endl;   // 6
+    cout << (a << 1) << endl;  // 24
+    cout << (a >> 1) << endl;  // 6
+
+    // check a specific bit
+    cout << ((a >> 3) & 1) << endl;   // 1
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -571,7 +597,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`# ① 짝 없는 원소 — O(N), 메모리 O(1)
+              py={t(`# ① 짝 없는 원소 — O(N), 메모리 O(1)
 arr = [4, 1, 2, 1, 2]
 ans = 0
 for x in arr:
@@ -583,8 +609,20 @@ a, b = 3, 7
 a ^= b
 b ^= a    # b = 원래 a
 a ^= b    # a = 원래 b
-print(a, b)   # 7 3`}
-              cpp={`#include <iostream>
+print(a, b)   # 7 3`, `# 1) lone unpaired element — O(N), O(1) memory
+arr = [4, 1, 2, 1, 2]
+ans = 0
+for x in arr:
+    ans ^= x
+print(ans)   # 4
+
+# 2) swap without temp — three XORs
+a, b = 3, 7
+a ^= b
+b ^= a    # b = original a
+a ^= b    # a = original b
+print(a, b)   # 7 3`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -602,7 +640,25 @@ int main() {
     a ^= b;   // a = 원래 b
     cout << a << ' ' << b << endl;   // 7 3
     return 0;
-}`}
+}`, `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    // 1) lone unpaired element
+    vector<int> arr = {4, 1, 2, 1, 2};
+    int ans = 0;
+    for (int x : arr) ans ^= x;
+    cout << ans << endl;   // 4
+
+    // 2) swap without temp
+    int a = 3, b = 7;
+    a ^= b;
+    b ^= a;   // b = original a
+    a ^= b;   // a = original b
+    cout << a << ' ' << b << endl;   // 7 3
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -680,11 +736,15 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 {t("핵심: mask 라는 정수의 비트 i 가 1 = 원소 i 포함", "Key: bit i of an integer 'mask' = item i is included")}
               </p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`for mask in range(1 << N):   # 0 ~ 2^N - 1
+{t(`for mask in range(1 << N):   # 0 ~ 2^N - 1
     for i in range(N):
         if (mask >> i) & 1:
             # 원소 i 사용
-            ...`}
+            ...`, `for mask in range(1 << N):   # 0 ~ 2^N - 1
+    for i in range(N):
+        if (mask >> i) & 1:
+            # use element i
+            ...`)}
               </pre>
             </div>
             <p className="text-sm font-bold text-pink-700 text-center">
@@ -758,7 +818,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`arr = [3, 1, 4]
+              py={t(`arr = [3, 1, 4]
 N = len(arr)
 
 # 모든 부분집합의 합
@@ -773,8 +833,23 @@ for mask in range(1 << N):
 
 # ⛳ 여기까지가 이 챕터 범위 — "부분집합 모두 순회".
 # (dp[mask][v] 같은 비트마스크 DP / TSP 는 Wave 3 DP 토픽에서 다뤄요.
-#  지금은 모르는 게 정상이니 안 봐도 돼요!)`}
-              cpp={`#include <iostream>
+#  지금은 모르는 게 정상이니 안 봐도 돼요!)`, `arr = [3, 1, 4]
+N = len(arr)
+
+# sum of every subset
+for mask in range(1 << N):
+    s = 0
+    items = []
+    for i in range(N):
+        if (mask >> i) & 1:
+            s += arr[i]
+            items.append(arr[i])
+    print(f"mask={mask}  subset={items}  sum={s}")
+
+# ⛳ this chapter stops here — "iterate all subsets".
+# (bitmask DP like dp[mask][v] / TSP is covered in the Wave 3 DP topic.
+#  It's fine if you don't know that yet!)`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -799,7 +874,32 @@ int main() {
     // ⛳ 여기까지가 이 챕터 범위 — "부분집합 모두 순회".
     // (dp[mask][v] 같은 비트마스크 DP / TSP 는 Wave 3 DP 토픽. 지금은 안 봐도 OK.)
     return 0;
-}`}
+}`, `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> arr = {3, 1, 4};
+    int N = arr.size();
+
+    for (int mask = 0; mask < (1 << N); mask++) {
+        int sum = 0;
+        cout << "mask=" << mask << "  subset={";
+        bool first = true;
+        for (int i = 0; i < N; i++) {
+            if ((mask >> i) & 1) {
+                if (!first) cout << ",";
+                cout << arr[i];
+                sum += arr[i];
+                first = false;
+            }
+        }
+        cout << "}  sum=" << sum << endl;
+    }
+    // ⛳ this chapter stops here — "iterate all subsets".
+    // (bitmask DP like dp[mask][v] / TSP is the Wave 3 DP topic. Fine to skip for now.)
+    return 0;
+}`)}
             />
             <div className="bg-indigo-50 rounded-lg p-3 border border-indigo-200">
               <p className="text-xs text-indigo-800 text-center leading-relaxed">

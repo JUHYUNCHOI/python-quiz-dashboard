@@ -29,21 +29,29 @@ export function GreedyLesson() {
       <section>
         <H>{t("2. 핵심은 '정렬 후 차례로'", "2. The pattern: sort, then go in order")}</H>
         <p>{t("대부분의 그리디는 '어떤 기준으로 정렬한 뒤, 앞에서부터 조건에 맞으면 고른다' 형태예요. 정렬 기준을 잘 정하는 게 전부예요.", "Most greedy solutions are: sort by some key, then go front to back and take items that fit. Choosing the right sort key is the whole game.")}</p>
-        <Code code={`sort(a.begin(), a.end());   // 기준에 맞게 정렬
+        <Code code={t(`sort(a.begin(), a.end());   // 기준에 맞게 정렬
 for (auto& x : a) {
     if (조건맞음) 선택();      // 앞에서부터 욕심껏
-}`} />
+}`, `sort(a.begin(), a.end());   // sort by the chosen key
+for (auto& x : a) {
+    if (fits()) choose();      // greedily take from the front
+}`)} />
       </section>
 
       <section>
         <H>{t("3. 대표 예 — 회의실 배정", "3. Classic — activity selection")}</H>
         <p>{t("끝나는 시간이 빠른 회의부터 고르면, 한 방에서 최대한 많은 회의를 넣을 수 있어요. '끝나는 시간' 기준 정렬이 비결.", "Pick the meeting that finishes earliest first — that packs the most meetings into one room. The trick is sorting by end time.")}</p>
-        <Code code={`sort(m.begin(), m.end(), [](auto& a, auto& b){
+        <Code code={t(`sort(m.begin(), m.end(), [](auto& a, auto& b){
     return a.end < b.end;          // 끝나는 시간 빠른 순
 });
 int last = -1, cnt = 0;
 for (auto& x : m)
-    if (x.start >= last) { cnt++; last = x.end; }  // 안 겹치면 선택`} />
+    if (x.start >= last) { cnt++; last = x.end; }  // 안 겹치면 선택`, `sort(m.begin(), m.end(), [](auto& a, auto& b){
+    return a.end < b.end;          // sort by earliest end time
+});
+int last = -1, cnt = 0;
+for (auto& x : m)
+    if (x.start >= last) { cnt++; last = x.end; }  // take if no overlap`)} />
       </section>
 
       <section>

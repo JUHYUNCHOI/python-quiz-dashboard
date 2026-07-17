@@ -396,7 +396,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def find_pair(arr, target):
+              py={t(`def find_pair(arr, target):
     L, R = 0, len(arr) - 1
     while L < R:
         s = arr[L] + arr[R]
@@ -410,8 +410,22 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
 
 arr = [1, 3, 5, 7, 9, 11]
 print(find_pair(arr, 14))   # (3, 11)
-print(find_pair(arr, 100))  # None`}
-              cpp={`#include <vector>
+print(find_pair(arr, 100))  # None`, `def find_pair(arr, target):
+    L, R = 0, len(arr) - 1
+    while L < R:
+        s = arr[L] + arr[R]
+        if s == target:
+            return (arr[L], arr[R])
+        elif s < target:
+            L += 1          # increase the sum
+        else:
+            R -= 1          # decrease the sum
+    return None             # not found
+
+arr = [1, 3, 5, 7, 9, 11]
+print(find_pair(arr, 14))   # (3, 11)
+print(find_pair(arr, 100))  # None`)}
+              cpp={t(`#include <vector>
 #include <iostream>
 using namespace std;
 
@@ -431,7 +445,27 @@ int main() {
     auto p = findPair(arr, 14);
     cout << p.first << " " << p.second << endl;  // 3 11
     return 0;
-}`}
+}`, `#include <vector>
+#include <iostream>
+using namespace std;
+
+pair<int,int> findPair(vector<int>& arr, int target) {
+    int L = 0, R = arr.size() - 1;
+    while (L < R) {
+        int s = arr[L] + arr[R];
+        if (s == target) return {arr[L], arr[R]};
+        else if (s < target) L++;   // increase the sum
+        else R--;                   // decrease the sum
+    }
+    return {-1, -1};                // not found
+}
+
+int main() {
+    vector<int> arr = {1, 3, 5, 7, 9, 11};
+    auto p = findPair(arr, 14);
+    cout << p.first << " " << p.second << endl;  // 3 11
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -587,7 +621,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def max_window_sum(arr, K):
+              py={t(`def max_window_sum(arr, K):
     # 첫 윈도우 합
     cur = sum(arr[:K])
     best = cur
@@ -601,8 +635,22 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
     return best
 
 arr = [2, 1, 5, 1, 3, 2]
-print(max_window_sum(arr, 3))   # 9`}
-              cpp={`#include <vector>
+print(max_window_sum(arr, 3))   # 9`, `def max_window_sum(arr, K):
+    # sum of first window
+    cur = sum(arr[:K])
+    best = cur
+
+    # slide one step at a time
+    for i in range(K, len(arr)):
+        cur += arr[i]            # add new right element
+        cur -= arr[i - K]        # remove left element leaving
+        if cur > best:
+            best = cur
+    return best
+
+arr = [2, 1, 5, 1, 3, 2]
+print(max_window_sum(arr, 3))   # 9`)}
+              cpp={t(`#include <vector>
 #include <iostream>
 using namespace std;
 
@@ -623,7 +671,28 @@ int main() {
     vector<int> arr = {2, 1, 5, 1, 3, 2};
     cout << maxWindowSum(arr, 3) << endl;   // 9
     return 0;
-}`}
+}`, `#include <vector>
+#include <iostream>
+using namespace std;
+
+int maxWindowSum(vector<int>& arr, int K) {
+    int cur = 0;
+    for (int i = 0; i < K; i++) cur += arr[i];   // first window
+    int best = cur;
+
+    for (int i = K; i < (int)arr.size(); i++) {
+        cur += arr[i];          // add new right element
+        cur -= arr[i - K];      // remove left element leaving
+        if (cur > best) best = cur;
+    }
+    return best;
+}
+
+int main() {
+    vector<int> arr = {2, 1, 5, 1, 3, 2};
+    cout << maxWindowSum(arr, 3) << endl;   // 9
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(

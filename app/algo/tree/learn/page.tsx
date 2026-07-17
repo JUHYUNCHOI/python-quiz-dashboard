@@ -317,11 +317,15 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-white/70 rounded-lg p-3 border border-cyan-200 mb-3">
               <p className="text-xs font-bold text-cyan-800 mb-2">📌 {t("입력 형식", "Input format")}</p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`5            ← 노드 수 N
+{t(`5            ← 노드 수 N
 1 2          ← 간선: 1 과 2 연결
 1 3
 2 4
-2 5`}
+2 5`, `5            ← number of nodes N
+1 2          ← edge: connect 1 and 2
+1 3
+2 4
+2 5`)}
               </pre>
               <p className="text-xs text-gray-700 mt-2 leading-relaxed">
                 {t(
@@ -454,7 +458,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`import sys
+              py={t(`import sys
 sys.setrecursionlimit(200000)
 input = sys.stdin.readline
 
@@ -468,8 +472,22 @@ for _ in range(n - 1):
 # 이진 트리는 left/right 분리
 left = [0] * (n + 1)
 right = [0] * (n + 1)
-# 예: left[1] = 2; right[1] = 3`}
-              cpp={`#include <bits/stdc++.h>
+# 예: left[1] = 2; right[1] = 3`, `import sys
+sys.setrecursionlimit(200000)
+input = sys.stdin.readline
+
+n = int(input())
+adj = [[] for _ in range(n + 1)]  # 1-indexed
+for _ in range(n - 1):
+    u, v = map(int, input().split())
+    adj[u].append(v)
+    adj[v].append(u)        # ← both directions!
+
+# binary tree splits into left/right
+left = [0] * (n + 1)
+right = [0] * (n + 1)
+# e.g. left[1] = 2; right[1] = 3`)}
+              cpp={t(`#include <bits/stdc++.h>
 using namespace std;
 
 int N;
@@ -488,7 +506,26 @@ int main() {
         adj[v].push_back(u);    // ← 양방향!
     }
     return 0;
-}`}
+}`, `#include <bits/stdc++.h>
+using namespace std;
+
+int N;
+vector<vector<int>> adj;     // general tree
+
+// binary tree kept separate
+vector<int> leftCh, rightCh;
+
+int main() {
+    cin >> N;
+    adj.assign(N + 1, {});
+    for (int i = 0; i < N - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);    // ← both directions!
+    }
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -735,7 +772,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`from collections import deque
+              py={t(`from collections import deque
 
 # 이진 트리: left[], right[] 배열 사용
 def preorder(u):
@@ -762,8 +799,35 @@ def bfs(root):
         u = q.popleft()
         print(u, end=' ')
         if left[u]:  q.append(left[u])
-        if right[u]: q.append(right[u])`}
-              cpp={`#include <bits/stdc++.h>
+        if right[u]: q.append(right[u])`, `from collections import deque
+
+# binary tree: uses left[], right[] arrays
+def preorder(u):
+    if u == 0: return
+    print(u, end=' ')      # ← me
+    preorder(left[u])      # left
+    preorder(right[u])     # right
+
+def inorder(u):
+    if u == 0: return
+    inorder(left[u])
+    print(u, end=' ')      # ← me (middle)
+    inorder(right[u])
+
+def postorder(u):
+    if u == 0: return
+    postorder(left[u])
+    postorder(right[u])
+    print(u, end=' ')      # ← me (last)
+
+def bfs(root):
+    q = deque([root])
+    while q:
+        u = q.popleft()
+        print(u, end=' ')
+        if left[u]:  q.append(left[u])
+        if right[u]: q.append(right[u])`)}
+              cpp={t(`#include <bits/stdc++.h>
 using namespace std;
 
 vector<int> leftCh, rightCh;
@@ -798,7 +862,42 @@ void bfs(int root) {
         if (leftCh[u])  q.push(leftCh[u]);
         if (rightCh[u]) q.push(rightCh[u]);
     }
-}`}
+}`, `#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> leftCh, rightCh;
+
+void preorder(int u) {
+    if (u == 0) return;
+    cout << u << ' ';            // me
+    preorder(leftCh[u]);
+    preorder(rightCh[u]);
+}
+
+void inorder(int u) {
+    if (u == 0) return;
+    inorder(leftCh[u]);
+    cout << u << ' ';            // me (middle)
+    inorder(rightCh[u]);
+}
+
+void postorder(int u) {
+    if (u == 0) return;
+    postorder(leftCh[u]);
+    postorder(rightCh[u]);
+    cout << u << ' ';            // me (last)
+}
+
+void bfs(int root) {
+    queue<int> q;
+    q.push(root);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        cout << u << ' ';
+        if (leftCh[u])  q.push(leftCh[u]);
+        if (rightCh[u]) q.push(rightCh[u]);
+    }
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -891,12 +990,17 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-white/70 rounded-lg p-3 border border-emerald-200 mb-3">
               <p className="text-xs font-bold text-emerald-800 mb-2">📌 {t("예: 서브트리 노드 수", "Example: subtree node count")}</p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`size(u) = 1 + Σ size(child)
+{t(`size(u) = 1 + Σ size(child)
                  ↑
                 자식들의 답을 합쳐서 +1 (자기 자신)
 
 리프 (자식 없음) → size = 1
-내부 노드 → 1 + (자식들의 size 합)`}
+내부 노드 → 1 + (자식들의 size 합)`, `size(u) = 1 + Σ size(child)
+                 ↑
+                sum the children's answers, +1 (itself)
+
+leaf (no children) → size = 1
+internal node → 1 + (sum of children's sizes)`)}
               </pre>
             </div>
             <div className="bg-amber-50 rounded-lg p-3 border border-amber-200">
@@ -980,7 +1084,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`import sys
+              py={t(`import sys
 sys.setrecursionlimit(200000)
 
 # adj: 일반 트리 인접 리스트, val[u] = 노드 u 의 값
@@ -998,8 +1102,26 @@ def dfs(u, parent):
 
 dfs(1, 0)   # 루트 1, 부모 없음 (0 표시)
 # size[1] = 전체 노드 수
-# subtree_sum[1] = 모든 노드 값의 합`}
-              cpp={`#include <bits/stdc++.h>
+# subtree_sum[1] = 모든 노드 값의 합`, `import sys
+sys.setrecursionlimit(200000)
+
+# adj: general tree adjacency list, val[u] = value of node u
+size = [0] * (n + 1)
+subtree_sum = [0] * (n + 1)
+
+def dfs(u, parent):
+    size[u] = 1                    # myself = 1
+    subtree_sum[u] = val[u]
+    for v in adj[u]:
+        if v == parent: continue   # skip parent direction
+        dfs(v, u)                  # ← children first!
+        size[u] += size[v]         # combine children's answers
+        subtree_sum[u] += subtree_sum[v]
+
+dfs(1, 0)   # root 1, no parent (marked 0)
+# size[1] = total node count
+# subtree_sum[1] = sum of all node values`)}
+              cpp={t(`#include <bits/stdc++.h>
 using namespace std;
 
 int N;
@@ -1022,7 +1144,30 @@ int main() {
     dfs(1, 0);
     // sz[1] = 전체, subSum[1] = 전체 합
     return 0;
-}`}
+}`, `#include <bits/stdc++.h>
+using namespace std;
+
+int N;
+vector<vector<int>> adj;
+vector<int> val, sz, subSum;
+
+void dfs(int u, int parent) {
+    sz[u] = 1;                     // myself = 1
+    subSum[u] = val[u];
+    for (int v : adj[u]) {
+        if (v == parent) continue;
+        dfs(v, u);                 // ← children first!
+        sz[u] += sz[v];            // combine children's answers
+        subSum[u] += subSum[v];
+    }
+}
+
+int main() {
+    // ... after reading input
+    dfs(1, 0);
+    // sz[1] = total, subSum[1] = total sum
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(

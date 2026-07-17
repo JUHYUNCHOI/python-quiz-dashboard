@@ -32,7 +32,7 @@ export function TopologicalSortLesson() {
         <H>{t("2. 진입차수 + 큐 (Kahn's)", "2. In-degree + queue (Kahn's)")}</H>
         <p>{t("진입차수 = '나보다 먼저 해야 할 일의 개수'. 0이면 지금 당장 할 수 있어요.", "In-degree = how many things must come before me. Zero means do-it-now.")}</p>
         <p>{t("진입차수 0인 것을 큐에 넣고, 꺼내면서 그 뒤 일들의 차수를 1씩 깎아요.", "Push all in-degree-0 nodes; as you pop one, decrement its successors' in-degree.")}</p>
-        <Code code={`queue<int> q;
+        <Code code={t(`queue<int> q;
 for (int u = 1; u <= n; u++)
     if (indeg[u] == 0) q.push(u);
 while (!q.empty()) {
@@ -40,19 +40,33 @@ while (!q.empty()) {
     order.push_back(u);
     for (int v : adj[u])
         if (--indeg[v] == 0) q.push(v);   // 차수 0 되면 가능
-}`} />
+}`, `queue<int> q;
+for (int u = 1; u <= n; u++)
+    if (indeg[u] == 0) q.push(u);
+while (!q.empty()) {
+    int u = q.front(); q.pop();
+    order.push_back(u);
+    for (int v : adj[u])
+        if (--indeg[v] == 0) q.push(v);   // ready once in-degree hits 0
+}`)} />
       </section>
 
       <section>
         <H>{t("3. DFS 후위 역순 (다른 방법)", "3. DFS post-order, reversed (alternative)")}</H>
         <p>{t("DFS로 끝까지 내려갔다가, 돌아 나오는 순서(후위)를 기록하고 뒤집으면 위상 순서예요.", "Run DFS, record nodes as you finish them (post-order), then reverse — that's a valid order.")}</p>
-        <Code lang="python" code={`def dfs(u):
+        <Code lang="python" code={t(`def dfs(u):
     visited[u] = True
     for v in adj[u]:
         if not visited[v]:
             dfs(v)
     order.append(u)   # 끝낸 순서로 쌓기
-# 모든 노드 dfs 후 order 를 뒤집으면 위상 정렬`} />
+# 모든 노드 dfs 후 order 를 뒤집으면 위상 정렬`, `def dfs(u):
+    visited[u] = True
+    for v in adj[u]:
+        if not visited[v]:
+            dfs(v)
+    order.append(u)   # stack in finish order
+# after dfs on all nodes, reverse order for topo sort`)} />
       </section>
 
       <section>

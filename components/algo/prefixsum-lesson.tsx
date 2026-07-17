@@ -38,8 +38,9 @@ for (int i = 0; i < n; i++)
       <section>
         <H>{t("3. 구간 합 — 한 번의 뺄셈 (핵심)", "3. Range sum — one subtraction (core)")}</H>
         <p>{t("a[l..r] 의 합은 prefix[r+1] − prefix[l]. 구간 길이가 아무리 길어도 O(1)! 질문이 많을수록 누적합이 이겨요.", "Sum of a[l..r] = prefix[r+1] − prefix[l]. O(1) no matter how long the range. The more queries, the bigger the win.")}</p>
-        <Code code={`// a[l..r] 합 (0-based, 양 끝 포함)
-long long rangeSum = prefix[r + 1] - prefix[l];`} />
+        <Code code={t(`// a[l..r] 합 (0-based, 양 끝 포함)
+long long rangeSum = prefix[r + 1] - prefix[l];`, `// sum of a[l..r] (0-based, both ends inclusive)
+long long rangeSum = prefix[r + 1] - prefix[l];`)} />
         <p className="text-gray-500">{t("매번 for 로 더하면 질문 q개 × 길이 n = O(qn). 누적합은 만들기 O(n) + 질문당 O(1).", "Re-summing each query is O(qn). Prefix sum is O(n) build + O(1) per query.")}</p>
       </section>
 

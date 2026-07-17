@@ -30,7 +30,7 @@ export function ShortestPathLesson() {
       <section>
         <H>{t("2. 가중치가 모두 1이면 — BFS", "2. All weights = 1 → BFS")}</H>
         <p>{t("간선마다 거리가 똑같이 1이면, 그냥 너비 우선 탐색(BFS)으로 칸 수를 세면 최단이에요.", "If every edge costs 1, plain BFS counting steps already gives the shortest path.")}</p>
-        <Code lang="python" code={`from collections import deque
+        <Code lang="python" code={t(`from collections import deque
 def bfs(start, g):
     dist = {start: 0}
     q = deque([start])
@@ -40,13 +40,23 @@ def bfs(start, g):
             if v not in dist:
                 dist[v] = dist[u] + 1
                 q.append(v)
-    return dist`} />
+    return dist`, `from collections import deque
+def bfs(start, g):
+    dist = {start: 0}
+    q = deque([start])
+    while q:
+        u = q.popleft()
+        for v in g[u]:            # neighbors
+            if v not in dist:
+                dist[v] = dist[u] + 1
+                q.append(v)
+    return dist`)} />
       </section>
 
       <section>
         <H>{t("3. 가중치가 제각각이면 — 다익스트라", "3. Varied weights → Dijkstra")}</H>
         <p>{t("거리가 다르면 BFS는 틀려요. '지금 가장 가까운 정점'을 우선순위 큐로 꺼내 확정하는 다익스트라를 써요. (가중치는 0 이상.)", "With different weights BFS fails. Use Dijkstra: pull the closest vertex from a priority queue and finalize it. (Weights ≥ 0.)")}</p>
-        <Code code={`priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;
+        <Code code={t(`priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;
 dist[src] = 0; pq.push({0, src});
 while (!pq.empty()) {
     auto [d, u] = pq.top(); pq.pop();
@@ -56,7 +66,17 @@ while (!pq.empty()) {
             dist[v] = d + w;
             pq.push({dist[v], v});        // 이웃 갱신(relax)
         }
-}`} />
+}`, `priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;
+dist[src] = 0; pq.push({0, src});
+while (!pq.empty()) {
+    auto [d, u] = pq.top(); pq.pop();
+    if (d != dist[u]) continue;          // skip stale entry
+    for (auto [v, w] : g[u])
+        if (d + w < dist[v]) {
+            dist[v] = d + w;
+            pq.push({dist[v], v});        // relax neighbor
+        }
+}`)} />
       </section>
 
       <section>

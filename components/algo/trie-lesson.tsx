@@ -36,16 +36,19 @@ export function TrieLesson() {
       <section>
         <H>{t("3. 노드 구조", "3. Node structure")}</H>
         <p>{t("각 노드는 '다음 글자 → 자식 노드' 맵과, '여기서 단어가 끝나는가' 표시를 가져요.", "Each node holds a 'next char → child' map plus a flag 'does a word end here?'.")}</p>
-        <Code lang="python" code={`class Node:
+        <Code lang="python" code={t(`class Node:
     def __init__(self):
         self.children = {}   # 글자 -> 자식 Node
-        self.end = False     # 여기서 끝나는 단어가 있나?`} />
+        self.end = False     # 여기서 끝나는 단어가 있나?`, `class Node:
+    def __init__(self):
+        self.children = {}   # char -> child Node
+        self.end = False     # does a word end here?`)} />
       </section>
 
       <section>
         <H>{t("4. 넣기 / 찾기", "4. Insert / search")}</H>
         <p>{t("글자를 따라 내려가며 없으면 새 노드를 만들고, 마지막에 end 표시. 찾을 때도 글자를 따라 내려가요.", "Walk down char by char, create nodes when missing, mark end at the last. Searching follows the same path.")}</p>
-        <Code lang="python" code={`def insert(root, word):
+        <Code lang="python" code={t(`def insert(root, word):
     node = root
     for ch in word:
         node = node.children.setdefault(ch, Node())
@@ -58,7 +61,20 @@ def search(root, word):
         if ch not in node.children:
             return False         # 길이 끊김 → 없음
         node = node.children[ch]
-    return node.end              # 정확히 그 단어로 끝나야 True`} />
+    return node.end              # 정확히 그 단어로 끝나야 True`, `def insert(root, word):
+    node = root
+    for ch in word:
+        node = node.children.setdefault(ch, Node())
+        # new Node if missing, else follow existing path
+    node.end = True
+
+def search(root, word):
+    node = root
+    for ch in word:
+        if ch not in node.children:
+            return False         # path breaks -> not found
+        node = node.children[ch]
+    return node.end              # True only if it ends exactly at this word`)} />
       </section>
 
       <Link href="/algo/trie/learn" className="inline-flex items-center gap-1 text-xs text-violet-500 hover:underline">

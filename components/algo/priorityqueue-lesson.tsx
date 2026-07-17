@@ -30,29 +30,43 @@ export function PriorityQueueLesson() {
       <section>
         <H>{t("2. 한 줄이면 끝 — heap", "2. One tool — the heap")}</H>
         <p>{t("직접 구현하지 않아요. C++은 priority_queue, 파이썬은 heapq.", "Don't build it yourself: C++ has priority_queue, Python has heapq.")}</p>
-        <Code code={`priority_queue<int> pq;          // 기본: 최대 힙 (가장 큰 게 top)
+        <Code code={t(`priority_queue<int> pq;          // 기본: 최대 힙 (가장 큰 게 top)
 pq.push(5); pq.push(1); pq.push(3);
 pq.top();  // 5   →  pq.pop();
-// 최소 힙: priority_queue<int, vector<int>, greater<int>>`} />
+// 최소 힙: priority_queue<int, vector<int>, greater<int>>`, `priority_queue<int> pq;          // default: max-heap (top is largest)
+pq.push(5); pq.push(1); pq.push(3);
+pq.top();  // 5   →  pq.pop();
+// min-heap: priority_queue<int, vector<int>, greater<int>>`)} />
         <p className="text-gray-500">{t("파이썬 heapq는 항상 최소 힙이에요:", "Python's heapq is always a min-heap:")}</p>
-        <Code lang="python" code={`import heapq
+        <Code lang="python" code={t(`import heapq
 pq = []
 heapq.heappush(pq, 5)
 heapq.heappush(pq, 1)
 heapq.heappop(pq)   # 1 (가장 작은 것)
-# 최대 힙이 필요하면 -값을 넣어요`} />
+# 최대 힙이 필요하면 -값을 넣어요`, `import heapq
+pq = []
+heapq.heappush(pq, 5)
+heapq.heappush(pq, 1)
+heapq.heappop(pq)   # 1 (the smallest)
+# for a max-heap, push negative values`)} />
       </section>
 
       <section>
         <H>{t("3. 대표 패턴 — K번째 / 상위 K개", "3. Core pattern — K-th / top-K")}</H>
         <p>{t("크기를 K로 유지하는 힙 하나면 '상위 K개'를 통째로 정렬하지 않고 뽑아요.", "Keep a heap of size K to grab the top-K without sorting everything.")}</p>
-        <Code code={`// 가장 큰 K개 → 크기 K짜리 '최소 힙'을 유지
+        <Code code={t(`// 가장 큰 K개 → 크기 K짜리 '최소 힙'을 유지
 priority_queue<int, vector<int>, greater<int>> pq;
 for (int x : a) {
     pq.push(x);
     if (pq.size() > K) pq.pop();   // 가장 작은 것 버림
 }
-// pq.top() = K번째로 큰 수`} />
+// pq.top() = K번째로 큰 수`, `// top K largest → keep a min-heap of size K
+priority_queue<int, vector<int>, greater<int>> pq;
+for (int x : a) {
+    pq.push(x);
+    if (pq.size() > K) pq.pop();   // drop the smallest
+}
+// pq.top() = the K-th largest`)} />
       </section>
 
       <section>

@@ -200,7 +200,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <div className="bg-white/80 rounded-lg p-3 border border-rose-200 mb-3">
               <p className="text-xs font-bold text-rose-800 mb-2">💡 {t("간단한 반례", "Tiny counterexample")}</p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`A ──── 10 ────> C
+{t(`A ──── 10 ────> C
 │              ▲
 1              │
 ▼              1
@@ -209,7 +209,16 @@ B ─── 1 ───────┘
 BFS 의 답: A→C (직접) = 간선 1 개 → "가깝다" 판정
 진짜 답:   A→B→C     = 1 + 1 = 2  (직접 A→C 는 10)
 → A→B→C 가 더 짧은데, BFS 는 간선 *수* 만 보고
-  가중치를 무시해 더 비싼 직접 간선을 골라 버림!`}
+  가중치를 무시해 더 비싼 직접 간선을 골라 버림!`, `A ──── 10 ────> C
+│              ▲
+1              │
+▼              1
+B ─── 1 ───────┘
+
+BFS's answer: A→C (direct) = 1 edge → judged "close"
+Real answer:  A→B→C        = 1 + 1 = 2  (direct A→C is 10)
+→ A→B→C is shorter, but BFS counts only the *number* of edges
+  and ignores weights — so it picks the pricier direct edge!`)}
               </pre>
             </div>
             <p className="text-sm font-bold text-rose-700 text-center">
@@ -422,7 +431,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`import heapq
+              py={t(`import heapq
 
 def dijkstra(n, src, g):           # g[u] = [(v, w), ...]
     dist = [float("inf")] * (n + 1)
@@ -439,8 +448,25 @@ def dijkstra(n, src, g):           # g[u] = [(v, w), ...]
                 heapq.heappush(pq, (nd, v))
     return dist
 
-# 호출: dijkstra(V, 시작, g) → 시작에서 모든 정점까지의 최단 거리`}
-              cpp={`#include <bits/stdc++.h>
+# 호출: dijkstra(V, 시작, g) → 시작에서 모든 정점까지의 최단 거리`, `import heapq
+
+def dijkstra(n, src, g):           # g[u] = [(v, w), ...]
+    dist = [float("inf")] * (n + 1)
+    dist[src] = 0
+    pq = [(0, src)]                # (dist, vertex)
+    while pq:
+        d, u = heapq.heappop(pq)
+        if d != dist[u]:           # skip stale entry
+            continue
+        for v, w in g[u]:
+            nd = d + w
+            if nd < dist[v]:
+                dist[v] = nd
+                heapq.heappush(pq, (nd, v))
+    return dist
+
+# call: dijkstra(V, src, g) -> shortest dist from src to every vertex`)}
+              cpp={t(`#include <bits/stdc++.h>
 using namespace std;
 
 vector<long long> dijkstra(int n, int src,
@@ -462,7 +488,29 @@ vector<long long> dijkstra(int n, int src,
         }
     }
     return dist;
-}`}
+}`, `#include <bits/stdc++.h>
+using namespace std;
+
+vector<long long> dijkstra(int n, int src,
+                           vector<vector<pair<int,int>>>& g) {
+    const long long INF = LLONG_MAX;
+    vector<long long> dist(n + 1, INF);
+    dist[src] = 0;
+    priority_queue<pair<long long,int>,
+                   vector<pair<long long,int>>, greater<>> pq;
+    pq.push({0, src});
+    while (!pq.empty()) {
+        auto [d, u] = pq.top(); pq.pop();
+        if (d != dist[u]) continue;          // skip stale entry
+        for (auto [v, w] : g[u]) {
+            if (d + w < dist[v]) {
+                dist[v] = d + w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    return dist;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -644,7 +692,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def bellman_ford(n, src, edges):     # edges = [(u, v, w), ...]
+              py={t(`def bellman_ford(n, src, edges):     # edges = [(u, v, w), ...]
     INF = float("inf")
     dist = [INF] * (n + 1)
     dist[src] = 0
@@ -659,8 +707,23 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
     for u, v, w in edges:
         if dist[u] != INF and dist[u] + w < dist[v]:
             return None   # 음수 사이클!
-    return dist`}
-              cpp={`#include <bits/stdc++.h>
+    return dist`, `def bellman_ford(n, src, edges):     # edges = [(u, v, w), ...]
+    INF = float("inf")
+    dist = [INF] * (n + 1)
+    dist[src] = 0
+
+    # V-1 relax rounds
+    for _ in range(n - 1):
+        for u, v, w in edges:
+            if dist[u] != INF and dist[u] + w < dist[v]:
+                dist[v] = dist[u] + w
+
+    # round V — if it still updates, there's a negative cycle
+    for u, v, w in edges:
+        if dist[u] != INF and dist[u] + w < dist[v]:
+            return None   # negative cycle!
+    return dist`)}
+              cpp={t(`#include <bits/stdc++.h>
 using namespace std;
 
 // 반환: 음수 사이클이면 empty, 아니면 dist
@@ -678,7 +741,25 @@ vector<long long> bellmanFord(int n, int src,
         if (dist[u] != INF && dist[u] + w < dist[v])
             return {};                 // negative cycle!
     return dist;
-}`}
+}`, `#include <bits/stdc++.h>
+using namespace std;
+
+// returns: empty if negative cycle, otherwise dist
+vector<long long> bellmanFord(int n, int src,
+                              vector<tuple<int,int,int>>& edges) {
+    const long long INF = LLONG_MAX;
+    vector<long long> dist(n + 1, INF);
+    dist[src] = 0;
+    for (int i = 0; i < n - 1; i++)
+        for (auto& [u, v, w] : edges)
+            if (dist[u] != INF && dist[u] + w < dist[v])
+                dist[v] = dist[u] + w;
+    // negative cycle check
+    for (auto& [u, v, w] : edges)
+        if (dist[u] != INF && dist[u] + w < dist[v])
+            return {};                 // negative cycle!
+    return dist;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -804,10 +885,13 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 )}
               </p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`dist[i][j] = min(
+{t(`dist[i][j] = min(
     dist[i][j],            # k 안 거침
     dist[i][k] + dist[k][j]  # k 거침
-)`}
+)`, `dist[i][j] = min(
+    dist[i][j],            # without k
+    dist[i][k] + dist[k][j]  # through k
+)`)}
               </pre>
               <p className="text-xs text-gray-700 mt-2 leading-relaxed">
                 {t(
@@ -900,7 +984,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`INF = float("inf")
+              py={t(`INF = float("inf")
 # dist[i][j] 를 직접 간선 / INF / 0 (i==j) 으로 초기화 후:
 
 for k in range(n):
@@ -909,8 +993,17 @@ for k in range(n):
             if dist[i][k] + dist[k][j] < dist[i][j]:
                 dist[i][j] = dist[i][k] + dist[k][j]
 
-# dist[i][j] = i 에서 j 로의 최단 거리`}
-              cpp={`// dist[i][j] 초기화 (i==j → 0, 직접 간선 → w, 그 외 INF)
+# dist[i][j] = i 에서 j 로의 최단 거리`, `INF = float("inf")
+# init dist[i][j] to direct edge / INF / 0 (i==j), then:
+
+for k in range(n):
+    for i in range(n):
+        for j in range(n):
+            if dist[i][k] + dist[k][j] < dist[i][j]:
+                dist[i][j] = dist[i][k] + dist[k][j]
+
+# dist[i][j] = shortest distance from i to j`)}
+              cpp={t(`// dist[i][j] 초기화 (i==j → 0, 직접 간선 → w, 그 외 INF)
 
 for (int k = 0; k < n; k++)
     for (int i = 0; i < n; i++)
@@ -918,7 +1011,15 @@ for (int k = 0; k < n; k++)
             if (dist[i][k] + dist[k][j] < dist[i][j])
                 dist[i][j] = dist[i][k] + dist[k][j];
 
-// 끝! dist[i][j] = i 에서 j 로의 최단 거리.`}
+// 끝! dist[i][j] = i 에서 j 로의 최단 거리.`, `// init dist[i][j] (i==j → 0, direct edge → w, else INF)
+
+for (int k = 0; k < n; k++)
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            if (dist[i][k] + dist[k][j] < dist[i][j])
+                dist[i][j] = dist[i][k] + dist[k][j];
+
+// done! dist[i][j] = shortest distance from i to j.`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(

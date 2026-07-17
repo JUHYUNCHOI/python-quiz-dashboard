@@ -534,14 +534,20 @@ f(1) = 1          ← 베이스!`}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def fact(n):
+              py={t(`def fact(n):
     if n <= 1:                # ① 베이스 케이스
         return 1
     return n * fact(n - 1)    # ② 재귀 호출 — 더 작은 문제
 
 print(fact(5))   # 120
-print(fact(1))   # 1   (베이스에서 바로 반환)`}
-              cpp={`#include <iostream>
+print(fact(1))   # 1   (베이스에서 바로 반환)`, `def fact(n):
+    if n <= 1:                # 1) base case
+        return 1
+    return n * fact(n - 1)    # 2) recursive call — smaller problem
+
+print(fact(5))   # 120
+print(fact(1))   # 1   (returns immediately at the base case)`)}
+              cpp={t(`#include <iostream>
 using namespace std;
 
 int fact(int n) {
@@ -553,7 +559,19 @@ int main() {
     cout << fact(5) << endl;   // 120
     cout << fact(1) << endl;   // 1
     return 0;
-}`}
+}`, `#include <iostream>
+using namespace std;
+
+int fact(int n) {
+    if (n <= 1) return 1;            // 1) base case
+    return n * fact(n - 1);          // 2) recursive call
+}
+
+int main() {
+    cout << fact(5) << endl;   // 120
+    cout << fact(1) << endl;   // 1
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -711,7 +729,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def power(b, n):
+              py={t(`def power(b, n):
     if n == 0:                       # ① 베이스
         return 1
     half = power(b, n // 2)          # ② 반만 재귀
@@ -721,8 +739,18 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
         return half * half * b       # 홀수: half² × b
 
 print(power(2, 10))   # 1024
-print(power(3, 5))    # 243`}
-              cpp={`#include <iostream>
+print(power(3, 5))    # 243`, `def power(b, n):
+    if n == 0:                       # 1) base case
+        return 1
+    half = power(b, n // 2)          # 2) recurse on half
+    if n % 2 == 0:
+        return half * half           # even: half²
+    else:
+        return half * half * b       # odd: half² × b
+
+print(power(2, 10))   # 1024
+print(power(3, 5))    # 243`)}
+              cpp={t(`#include <iostream>
 using namespace std;
 
 long long power(long long b, int n) {
@@ -736,7 +764,21 @@ int main() {
     cout << power(2, 10) << endl;   // 1024
     cout << power(3, 5) << endl;    // 243
     return 0;
-}`}
+}`, `#include <iostream>
+using namespace std;
+
+long long power(long long b, int n) {
+    if (n == 0) return 1;                  // 1) base case
+    long long half = power(b, n / 2);      // 2) recurse on half
+    if (n % 2 == 0) return half * half;    // even
+    return half * half * b;                // odd
+}
+
+int main() {
+    cout << power(2, 10) << endl;   // 1024
+    cout << power(3, 5) << endl;    // 243
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -920,7 +962,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`memo = {}                       # ← 추가: 결과 저장
+              py={t(`memo = {}                       # ← 추가: 결과 저장
 
 def fib(n):
     if n < 2: return n
@@ -929,8 +971,17 @@ def fib(n):
     return memo[n]
 
 print(fib(40))   # 102334155 — 0.001 초!
-# 메모 없으면 fib(40) → 1 초 넘게 걸림`}
-              cpp={`#include <iostream>
+# 메모 없으면 fib(40) → 1 초 넘게 걸림`, `memo = {}                       # <- added: store results
+
+def fib(n):
+    if n < 2: return n
+    if n in memo: return memo[n]    # <- cache hit!
+    memo[n] = fib(n-1) + fib(n-2)
+    return memo[n]
+
+print(fib(40))   # 102334155 — 0.001 s!
+# without memo, fib(40) takes over a second`)}
+              cpp={t(`#include <iostream>
 #include <unordered_map>
 using namespace std;
 
@@ -945,7 +996,22 @@ long long fib(int n) {
 int main() {
     cout << fib(40) << endl;   // 102334155 — 즉시!
     return 0;
-}`}
+}`, `#include <iostream>
+#include <unordered_map>
+using namespace std;
+
+unordered_map<int, long long> memo;   // <- added
+
+long long fib(int n) {
+    if (n < 2) return n;
+    if (memo.count(n)) return memo[n];   // <- cache hit!
+    return memo[n] = fib(n - 1) + fib(n - 2);
+}
+
+int main() {
+    cout << fib(40) << endl;   // 102334155 — instant!
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
