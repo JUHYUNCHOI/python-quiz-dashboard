@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react"
 import { createClient } from "@/lib/supabase/client"
-import type { User } from "@supabase/supabase-js"
+import type { User, AuthChangeEvent, Session } from "@supabase/supabase-js"
 import type { Profile } from "@/lib/supabase/types"
 import { migrateLocalStorageToSupabase, syncCompletionsToSupabase } from "@/lib/supabase/migrate-local-data"
 import { restoreFromCloud } from "@/lib/supabase/restore-from-cloud"
@@ -155,102 +155,102 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // 안전장치: 5초 후에도 로딩 중이면 강제 해제
     const timeout = setTimeout(() => setIsLoading(false), 5000)
 
-    // Auth 상태 변경 리스너
-    // ⚠️ supabase-js 함정(진짜 원인, 선생님 콘솔 2026-07-17): onAuthStateChange 콜백 '안'에서
-    // supabase 쿼리를 await 하면 라이브러리 내부 auth 락과 데드락 → 네트워크와 무관하게
-    // 항상 타임아웃 (profiles 조회가 3번 다 timeout 났던 이유). 콜백은 동기로 즉시 끝내고,
-    // 실제 작업은 setTimeout(0) 으로 락 '밖'에서 실행한다 (supabase 공식 권고 패턴).
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setTimeout(async () => {
-        const currentUser = session?.user ?? null
-        setUser(currentUser)
+    // 로그인/로그아웃 등 auth 이벤트의 실제 처리 — 콜백 '밖'에서 실행되는 본문.
+    const handleAuthChange = async (event: AuthChangeEvent, session: Session | null) => {
+      const currentUser = session?.user ?? null
+      setUser(currentUser)
 
-        if (currentUser) {
-          await fetchProfile(currentUser.id)
+      if (currentUser) {
+        await fetchProfile(currentUser.id)
 
-          // 선생님 대시보드 "마지막 접속일" 정확도를 위해 오늘 날짜 핑 (fire-and-forget)
-          if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
-            const today = new Date().toISOString().slice(0, 10)
-            supabase.from("gamification_data")
-              .upsert({ user_id: currentUser.id, last_active_date: today }, { onConflict: "user_id" })
-              .then(() => {})
-          }
-
-          // 로그인 시 양방향 동기화 (순차 실행: 업로드 완료 후 복원)
-          if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
-            // 🩹 일회성 자가 치유: '가짜 0점 복습완료' 정리 (선생님 2026-07-04).
-            //    반드시 migrate/restore 보다 *먼저* — 안 그러면 오염된 localStorage 가 다시 업로드됨.
-            await healReviewProgressOnce(currentUser.id)
-
-            const lastUserId = localStorage.getItem("last-user-id")
-            const isSameUser = lastUserId === currentUser.id
-            const isFirstLogin = lastUserId === null  // 이 기기에서 처음 로그인 (로그인 전 공부한 데이터 있을 수 있음)
-
-            if (!isSameUser && !isFirstLogin) {
-              // 진짜 계정 전환 (다른 user_id 가 기록돼 있는 상태에서 새 사용자 로그인)
-              // → 이전 사용자 데이터 삭제 후 클라우드 복원
-              clearUserLocalStorage()
-              restoreFromCloud(currentUser.id)
-                .then(() => {
-                  verifyRestore("[AuthContext after-clear]")
-                  localStorage.setItem("last-migrated-at", Date.now().toString())
-                })
-                .catch((e) => { console.error("[AuthContext] restore failed:", e) })
-            } else if (isFirstLogin) {
-              // 🔒 이 기기 첫 로그인 (브라우저 캐시 비어 있거나 첫 방문):
-              // ⚠️ clearUserLocalStorage 호출하지 않음 — 이전엔 호출했는데, restore 실패 시
-              //    학생 데이터가 모두 사라지는 사고 발생. 이제 *클라우드에서 가져온 후*
-              //    merge 하는 방식 (restoreFromCloud 가 Set 기반 merge 함).
-              //    이전 사용자 데이터 오염 위험은 isFirstLogin 케이스에서 거의 없음
-              //    (last-user-id 가 진짜 null 인 경우는 새 기기/새 브라우저).
-              restoreFromCloud(currentUser.id)
-                .then(() => {
-                  verifyRestore("[AuthContext first-login]")
-                  localStorage.setItem("last-migrated-at", Date.now().toString())
-                })
-                .catch((e) => { console.error("[AuthContext] restore failed:", e) })
-            } else {
-              // 같은 계정 재로그인:
-              // 항상: completedLessons + completedQuizzes를 Supabase에 즉시 동기화
-              // 24시간마다: 전체 마이그레이션 (question_mastery 등 무거운 데이터)
-              const lastMigratedAt = localStorage.getItem("last-migrated-at")
-              const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000
-              const needsMigration = !lastMigratedAt ||
-                (Date.now() - parseInt(lastMigratedAt, 10)) > TWENTY_FOUR_HOURS
-
-              if (needsMigration) {
-                migrateLocalStorageToSupabase(currentUser.id)
-                  .then(() => {
-                    localStorage.setItem("last-migrated-at", Date.now().toString())
-                    return restoreFromCloud(currentUser.id)
-                  })
-                  .catch((e) => { console.error("[AuthContext] migrate/restore failed:", e) })
-              } else {
-                syncCompletionsToSupabase(currentUser.id)
-                  .catch((e) => { console.error("[AuthContext] syncCompletions failed:", e) })
-                restoreFromCloud(currentUser.id)
-                  .catch((e) => { console.error("[AuthContext] restore failed:", e) })
-              }
-            }
-
-            localStorage.setItem("last-user-id", currentUser.id)
-          }
-        } else {
-          setProfile(null)
-
-          // 로그아웃 시: 학습 데이터는 유지 (재로그인 시 마이그레이션에서 업로드됨)
-          // 단, 마이그레이션 쿨다운만 초기화해서 재로그인 시 반드시 업로드 실행
-          // (다른 사용자가 로그인하면 isSameUser=false 분기에서 clearUserLocalStorage 호출됨)
-          if (event === "SIGNED_OUT") {
-            localStorage.removeItem("last-migrated-at")
-          }
+        // 선생님 대시보드 "마지막 접속일" 정확도를 위해 오늘 날짜 핑 (fire-and-forget)
+        if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
+          const today = new Date().toISOString().slice(0, 10)
+          supabase.from("gamification_data")
+            .upsert({ user_id: currentUser.id, last_active_date: today }, { onConflict: "user_id" })
+            .then(() => {})
         }
 
-        setIsLoading(false)
-        }, 0)
+        // 로그인 시 양방향 동기화 (순차 실행: 업로드 완료 후 복원)
+        if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
+          // 🩹 일회성 자가 치유: '가짜 0점 복습완료' 정리 (선생님 2026-07-04).
+          //    반드시 migrate/restore 보다 *먼저* — 안 그러면 오염된 localStorage 가 다시 업로드됨.
+          await healReviewProgressOnce(currentUser.id)
+
+          const lastUserId = localStorage.getItem("last-user-id")
+          const isSameUser = lastUserId === currentUser.id
+          const isFirstLogin = lastUserId === null  // 이 기기에서 처음 로그인 (로그인 전 공부한 데이터 있을 수 있음)
+
+          if (!isSameUser && !isFirstLogin) {
+            // 진짜 계정 전환 (다른 user_id 가 기록돼 있는 상태에서 새 사용자 로그인)
+            // → 이전 사용자 데이터 삭제 후 클라우드 복원
+            clearUserLocalStorage()
+            restoreFromCloud(currentUser.id)
+              .then(() => {
+                verifyRestore("[AuthContext after-clear]")
+                localStorage.setItem("last-migrated-at", Date.now().toString())
+              })
+              .catch((e) => { console.error("[AuthContext] restore failed:", e) })
+          } else if (isFirstLogin) {
+            // 🔒 이 기기 첫 로그인 (브라우저 캐시 비어 있거나 첫 방문):
+            // ⚠️ clearUserLocalStorage 호출하지 않음 — 이전엔 호출했는데, restore 실패 시
+            //    학생 데이터가 모두 사라지는 사고 발생. 이제 *클라우드에서 가져온 후*
+            //    merge 하는 방식 (restoreFromCloud 가 Set 기반 merge 함).
+            //    이전 사용자 데이터 오염 위험은 isFirstLogin 케이스에서 거의 없음
+            //    (last-user-id 가 진짜 null 인 경우는 새 기기/새 브라우저).
+            restoreFromCloud(currentUser.id)
+              .then(() => {
+                verifyRestore("[AuthContext first-login]")
+                localStorage.setItem("last-migrated-at", Date.now().toString())
+              })
+              .catch((e) => { console.error("[AuthContext] restore failed:", e) })
+          } else {
+            // 같은 계정 재로그인:
+            // 항상: completedLessons + completedQuizzes를 Supabase에 즉시 동기화
+            // 24시간마다: 전체 마이그레이션 (question_mastery 등 무거운 데이터)
+            const lastMigratedAt = localStorage.getItem("last-migrated-at")
+            const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000
+            const needsMigration = !lastMigratedAt ||
+              (Date.now() - parseInt(lastMigratedAt, 10)) > TWENTY_FOUR_HOURS
+
+            if (needsMigration) {
+              migrateLocalStorageToSupabase(currentUser.id)
+                .then(() => {
+                  localStorage.setItem("last-migrated-at", Date.now().toString())
+                  return restoreFromCloud(currentUser.id)
+                })
+                .catch((e) => { console.error("[AuthContext] migrate/restore failed:", e) })
+            } else {
+              syncCompletionsToSupabase(currentUser.id)
+                .catch((e) => { console.error("[AuthContext] syncCompletions failed:", e) })
+              restoreFromCloud(currentUser.id)
+                .catch((e) => { console.error("[AuthContext] restore failed:", e) })
+            }
+          }
+
+          localStorage.setItem("last-user-id", currentUser.id)
+        }
+      } else {
+        setProfile(null)
+
+        // 로그아웃 시: 학습 데이터는 유지 (재로그인 시 마이그레이션에서 업로드됨)
+        // 단, 마이그레이션 쿨다운만 초기화해서 재로그인 시 반드시 업로드 실행
+        // (다른 사용자가 로그인하면 isSameUser=false 분기에서 clearUserLocalStorage 호출됨)
+        if (event === "SIGNED_OUT") {
+          localStorage.removeItem("last-migrated-at")
+        }
       }
-    )
+
+      setIsLoading(false)
+    }
+
+    // Auth 상태 변경 리스너.
+    // ⚠️ supabase-js 함정(선생님 콘솔 2026-07-17): 이 콜백 '안'에서 supabase 쿼리를
+    // await 하면 라이브러리 내부 auth 락과 데드락 → 항상 타임아웃. 콜백은 동기로 즉시
+    // 끝내고, 본문(handleAuthChange)은 setTimeout(0) 으로 락 '밖'에서 실행 (공식 권고).
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setTimeout(() => { void handleAuthChange(event, session) }, 0)
+    })
 
     return () => {
       subscription.unsubscribe()
