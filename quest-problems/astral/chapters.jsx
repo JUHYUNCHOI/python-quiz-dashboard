@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getAstralSections, AstralComposite, AstralChainDiscovery, AstralDpSim } from "./components";
-import { CodeSectionView } from "@/components/quest/CodeSectionView";
+import { getAstralWalk, AstralComposite, AstralChainDiscovery, AstralDpSim } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ── 클릭형 궤도 시뮬레이터 ──────────────────────────────────────
    stepData: Array<{ cells: {letter,star,active}[], note: string, result?: string, ok?: boolean }>
@@ -973,13 +973,6 @@ GGG`}
 }
 
 export function makeAstralCh2(E, lang = "py") {
-  const sections = getAstralSections(E);
-  const sectionStep = (sec, narr = "") => ({
-    type: "reveal",
-    narr,
-    content: (<CodeSectionView section={sec} lang={lang} E={E} />),
-  });
-
   return [
     /* 2-0 — the one mechanic the whole solution rests on: a star moves ONE step,
        so any cell's photo-2 came from "one step back". (No chains/rails — not needed.) */
@@ -1225,12 +1218,14 @@ export function makeAstralCh2(E, lang = "py") {
        B/G/W rule box + tip were walls the code slides' comments already cover.
        Teacher: "이 페이지 필요한가? 밑에 칸 읽기 싫은데." Backward sim → code now flows directly. */
 
-    /* 2-G2 — full backward greedy program (teacher's verified code).
-       2-G1(sections[6] core) removed 2026-06-17 per teacher: it just repeated the same
-       logic already inside this passed program — keep only the real verified code. */
-    sectionStep(sections[7], t(E,
-      "The complete program: read input → the backward greedy → print the count (or -1). This is the actual code that passed USACO 12/12. Read it slowly — each B / G branch matches one line of the rule.",
-      "전체 코드예요: 입력 받기 → 뒤→앞 그리디 → 별 수 출력 (또는 -1). 이게 USACO 12/12 통과한 실제 코드예요. 천천히 읽어봐요 — 각 B / G 갈래가 규칙 한 줄에 대응해요.")),
+    /* 2-G2 — 코드를 '짜는 순서대로' 한 줄씩 밝히며 걷기 (선생님 2026-07-16:
+       "코드를 짠 순서대로 보여주는 게 안 되어 있네"). CodeSectionView(위 왜-노트, 금지)
+       → CodeWalk 로 교체. 🔒 검증된 뒤→앞 그리디 코드 그대로(주석만 언어별). */
+    {
+      type: "reveal",
+      narr: "",
+      content: (<CodeWalk E={E} lang={lang} {...getAstralWalk(E, lang)} accent="#4f46e5" />),
+    },
 
     /* 2-G3 — confidence check + the -1 edge case */
     {
