@@ -61,15 +61,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const supabase = createClient()
 
   const fetchProfile = useCallback(async (userId: string) => {
-    // 프로필이 로드돼야 홈(/)의 리디렉트가 동작함. 조회가 한 번 느리거나(4초 초과)
-    // 일시적 네트워크 오류로 실패하면 예전엔 그냥 포기 → profile=null → "이동 중" 무한 대기.
-    // → 일시적 실패는 몇 번 재시도해서 회복 (선생님 2026-07-17: "기린이 계속 이동중").
+    // 프로필이 로드돼야 홈(/)의 리디렉트·선생님 에디터가 동작함.
+    // 진단(선생님 2026-07-17): reason=timeout — Supabase 가 4초 안에 응답 못 함
+    //   (프로젝트 콜드스타트/일시중단/네트워크). RLS 는 using(true) 라 무죄.
+    // ① 캐시된 프로필을 '즉시' 적용 → 조회가 느려도 지난 role 로 UI 바로 동작.
+    try {
+      const cached = localStorage.getItem("cached-profile")
+      if (cached) {
+        const p = JSON.parse(cached)
+        if (p?.id === userId) setProfile(p as Profile)
+      }
+    } catch {}
+    // ② 그 다음 최신 프로필로 갱신 — 느린 응답도 잡도록 타임아웃 8초, 실패 시 재시도.
     let lastReason = "unknown"
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
         const { data, error } = await Promise.race([
           supabase.from("profiles").select("*").eq("id", userId).single(),
-          new Promise<never>((_, reject) => setTimeout(() => reject(new Error("timeout")), 4000)),
+          new Promise<never>((_, reject) => setTimeout(() => reject(new Error("timeout")), 8000)),
         ])
 
         if (!error && data) {
@@ -107,20 +116,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // 마지막 시도가 아니면 잠깐 쉬고 재시도
       if (attempt < 2) await new Promise((r) => setTimeout(r, 700))
     }
-    // 3번 다 실패 → 캐시된 프로필로 폴백 (선생님 role 등 UI 유지). 같은 유저일 때만.
-    try {
-      const cached = localStorage.getItem("cached-profile")
-      if (cached) {
-        const p = JSON.parse(cached)
-        if (p?.id === userId) {
-          setProfile(p as Profile)
-          console.warn(`[auth] profile fetch failed (${lastReason}) — 캐시된 프로필로 폴백 (role: ${p.role}).`)
-          return
-        }
-      }
-    } catch {}
-    // 캐시도 없음: profile 은 null 로 남음 (호출부/홈 폴백이 처리)
-    console.error(`[auth] profile fetch gave up after 3 tries — reason: ${lastReason}. (홈이 "이동 중"에 갇힐 수 있음)`)
+    // 3번 다 실패: 위 ①에서 캐시가 있었으면 이미 setProfile 됐으므로 UI 유지됨.
+    // 캐시조차 없던 첫 로그인이면 profile 은 null (홈 "이동 중" 폴백/재시도 버튼이 처리).
+    console.error(`[auth] profile fetch gave up after 3 tries — reason: ${lastReason}. (캐시 있으면 지난 프로필 유지 중)`)
   }, [supabase])
 
   const refreshProfile = useCallback(async () => {
