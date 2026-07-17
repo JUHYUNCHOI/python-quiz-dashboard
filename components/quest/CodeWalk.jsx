@@ -101,14 +101,16 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
       }}>
         {code.map((line, i) => {
           const isHot = i >= lo && i <= hi;
-          // marks: 이 줄이 상시 강조 구간(베이스 케이스 등)에 속하나
+          // marks: 이 줄이 상시 강조 구간에 속하나 (color 로 종류 구분 —
+          // 기본 장미 = ✋베이스 케이스, 남보라 = ↺재귀 호출 등)
           const mk = marks && marks.find((m) => i >= m.from && i <= m.to);
+          const mc = mk ? (mk.color || "#f43f5e") : null;
           return (
             <div key={i}
               style={{
                 display: "flex", alignItems: "flex-start",
-                background: isHot ? "#1f2b3e" : mk ? "rgba(244,63,94,.13)" : "transparent",   // gray-900 보다 살짝 밝게 (어둡지 않음)
-                borderLeft: isHot ? `4px solid ${bColor}` : mk ? "4px solid #f43f5e" : "4px solid transparent",
+                background: isHot ? "#1f2b3e" : mk ? `${mc}21` : "transparent",   // gray-900 보다 살짝 밝게 (어둡지 않음)
+                borderLeft: isHot ? `4px solid ${bColor}` : mk ? `4px solid ${mc}` : "4px solid transparent",
                 borderRadius: isHot || mk ? 5 : 0,
                 padding: "1px 6px 1px 6px",
                 opacity: 1,                                       // 흐림 없음 — 모든 줄 또렷
@@ -122,8 +124,8 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
                 <span style={{
                   marginLeft: 8, alignSelf: "center", flexShrink: 0,
                   fontSize: 10, fontWeight: 800, whiteSpace: "nowrap",
-                  color: "#fda4af", background: "rgba(244,63,94,.18)",
-                  border: "1px solid rgba(244,63,94,.45)", borderRadius: 999, padding: "1px 8px",
+                  color: "#fff", background: `${mc}40`,
+                  border: `1px solid ${mc}90`, borderRadius: 999, padding: "1px 8px",
                 }}>{t(E, mk.en, mk.ko)}</span>
               )}
             </div>
