@@ -176,8 +176,8 @@ export function makeBuyMilkCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Top-down recursion: for each query x, at deal i (largest first) try three options — use floor(x / 2^i) copies and recurse, use ceil copies and stop, or skip this deal. Take the min. Plus one shortcut: cheapest single-bulk deal that already covers x.",
-        "위에서 아래로 재귀: 각 쿼리 x 에 대해 거래 i (큰 것부터) 에서 세 가지 — floor(x / 2^i) 개 + 나머지 재귀, ceil 개 + 끝, 이 거래 건너뛰기 — 의 최솟값. 추가로 x 를 한 번에 덮는 가장 싼 거래도 후보."),
+        "No recursion needed! First normalize: c[i] = cheapest 2^i-bucket block (buy deal i, or two smaller blocks). Then bigger blocks are cheaper per bucket, so for each query just sweep big→small: at each size try 'round up and stop', else take the floor and carry on. O(N) per query.",
+        "재귀가 필요 없어요! 먼저 정규화: c[i] = 2^i 통 블록의 최저가 (거래 i 사거나, 작은 블록 두 개). 그러면 큰 블록이 통당 더 싸니, 쿼리마다 큰 것→작은 것으로 한 번 훑어요: 각 크기에서 '올림하고 멈추기'를 후보로, 아니면 내림만큼 쓰고 계속. 쿼리당 O(N)."),
       sections: getBuyMilkSections(E),
     },
   ];
