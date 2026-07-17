@@ -38,9 +38,18 @@ function useSlideChapter(initialStep: number = 0) {
   const [step, setStep] = useState(initialStep)
   const rootRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    if (step > 0) {
-      setTimeout(() => rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 30)
-    }
+    if (step === 0) return
+    const el = rootRef.current
+    if (!el) return
+    // 슬라이드 윗부분이 화면 밖(위로 잘렸거나 아래로 벗어남)일 때만 끌어옴.
+    // 이미 잘 보이면 스크롤하지 않음 — 안 그러면 다음 누를 때마다 화면이 위로 튐
+    // (선생님 2026-07-17: "다음을 누르면 자꾸 화면이 올라가").
+    setTimeout(() => {
+      const r = el.getBoundingClientRect()
+      if (r.top < 8 || r.top > window.innerHeight - 120) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" })
+      }
+    }, 30)
   }, [step])
   return { step, setStep, rootRef }
 }
