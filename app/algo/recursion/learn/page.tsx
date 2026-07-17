@@ -215,59 +215,65 @@ for i in range(1, 6):
               </div>
             </div>
             <p className="text-sm font-bold text-amber-700 text-center break-keep">
-              {t("오늘은 이 쉬운 문제를 — 전혀 새로운 생각법으로 풀어봐요.", "Today we'll solve this easy problem — with a brand-new way of thinking.")}
+              {t("오늘은 이걸 — 손 하나 까딱 안 하고 '친구한테 시켜서' 풀어볼 거예요. 😏", "Today we'll solve it — without lifting a finger, by making a friend do it. 😏")}
             </p>
           </div>
         )}
 
         {step === 1 && (
           <div className="bg-gradient-to-br from-sky-50 to-blue-50 rounded-2xl p-6 border-2 border-sky-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">🛋️</p>
+            <p className="text-5xl text-center mb-3">🙋</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
-              {t("새 생각법: \"하나만 하고, 나머지는 미루자\"", "New idea: \"do ONE piece, push the rest away\"")}
+              {t("귀찮은 나 — 옆 친구한테 시키자!", "Too lazy — make the friend next to me do it!")}
             </h3>
             <div className="bg-white/70 rounded-lg p-4 border border-sky-200 mb-3">
-              <p className="text-center text-base font-black text-gray-800 mb-2 break-keep">
-                1+2+3+4+5 = <span className="text-sky-700">5</span> + <span className="bg-amber-100 border-2 border-amber-300 rounded-lg px-2 py-0.5">1+2+3+4</span>
+              <p className="text-xs text-gray-600 text-center mb-3 break-keep">
+                {t("1부터 5까지 더해야 하는데… 마침 옆에 친구들이 줄줄이 앉아 있어요.", "I need 1+2+3+4+5… and friends happen to be sitting in a row next to me.")}
               </p>
-              <p className="text-xs text-gray-600 text-center break-keep">
-                {t("내가 한 일은 '5 더하기' 딱 하나. 나머지는 노란 상자에 미뤘어요.", "I did just one thing: add 5. The rest got pushed into the yellow box.")}
-              </p>
+              <div className="flex items-start justify-center gap-2">
+                <span className="text-3xl">🧑‍🎓</span>
+                <div className="bg-sky-100 border-2 border-sky-300 rounded-xl rounded-tl-none px-3 py-2 max-w-[300px]">
+                  <p className="text-sm font-bold text-sky-900 break-keep">
+                    {t("\"야, 나 대신 1부터 4까지만 더해줘. 그럼 난 거기에 5만 더하면 되잖아!\"", "\"Hey, add up 1 to 4 for me. Then all I do is add 5!\"")}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-3">
-              <p className="text-sm font-bold text-amber-800 text-center break-keep">
-                🤔 {t("근데 노란 상자(1~4 의 합)… 우리 문제랑 똑같이 생겼죠?", "But the yellow box (sum of 1~4)… looks exactly like our problem, right?")}
-              </p>
-              <p className="text-xs text-amber-700 text-center mt-1 break-keep">
-                {t("숫자만 하나 작아졌어요. 똑같은 문제니까 — 똑같은 방법으로 또 풀면 돼요!", "Just one smaller. Same problem — so solve it the same way again!")}
-              </p>
-            </div>
+            <p className="text-sm font-bold text-sky-700 text-center break-keep">
+              {t("이제 내가 할 일은 '5 더하기' 딱 하나예요.", "Now my only job is: add 5. That's it.")}
+            </p>
           </div>
         )}
 
         {step === 2 && (
           <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-6 border-2 border-indigo-200 min-h-[280px]">
-            <p className="text-5xl text-center mb-3">📮</p>
+            <p className="text-5xl text-center mb-3">😏</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
-              {t("'미루기'가 릴레이로 내려가요", "The 'pushing away' relays down")}
+              {t("근데 친구도 귀찮아요 — 릴레이!", "But the friend is lazy too — relay!")}
             </h3>
-            <div className="bg-white/70 rounded-lg p-4 border border-indigo-200 mb-3">
-              <div className="bg-gray-900 rounded-lg p-3">
-                <pre className="text-sm text-emerald-200 font-mono leading-loose" style={{ fontVariantLigatures: "none" }}>
-{t(`합(5) = 5 + 합(4)
-  합(4) = 4 + 합(3)
-    합(3) = 3 + 합(2)
-      합(2) = 2 + 합(1)
-        합(1) = 1  ✋`, `sum(5) = 5 + sum(4)
-  sum(4) = 4 + sum(3)
-    sum(3) = 3 + sum(2)
-      sum(2) = 2 + sum(1)
-        sum(1) = 1  ✋`)}
-                </pre>
+            <div className="space-y-1.5 max-w-sm mx-auto mb-3">
+              {[
+                { who: "🧑‍🎓", ko: "\"1~4 더해줘. 난 5만 더할게!\"", en: "\"Sum 1~4 for me. I'll add 5!\"" },
+                { who: "🧒", ko: "\"1~3 더해줘. 난 4만 더할게!\"", en: "\"Sum 1~3 for me. I'll add 4!\"" },
+                { who: "👧", ko: "\"1~2 더해줘. 난 3만 더할게!\"", en: "\"Sum 1~2 for me. I'll add 3!\"" },
+                { who: "🧑‍🦰", ko: "\"1까지 더해줘. 난 2만 더할게!\"", en: "\"Sum up to 1. I'll add 2!\"" },
+              ].map((r, i) => (
+                <div key={i} className="flex items-center gap-2" style={{ marginLeft: i * 14 }}>
+                  <span className="text-xl">{r.who}</span>
+                  <div className="bg-white border border-indigo-200 rounded-lg rounded-tl-none px-2.5 py-1">
+                    <p className="text-xs font-bold text-gray-700 break-keep">{t(r.ko, r.en)}</p>
+                  </div>
+                </div>
+              ))}
+              <div className="flex items-center gap-2" style={{ marginLeft: 56 }}>
+                <span className="text-xl">😎</span>
+                <div className="bg-emerald-50 border-2 border-emerald-300 rounded-lg rounded-tl-none px-2.5 py-1">
+                  <p className="text-xs font-black text-emerald-800 break-keep">{t("\"1까지의 합? 그건 그냥 1이지!\" ✋", "\"Sum up to 1? That's just 1!\" ✋")}</p>
+                </div>
               </div>
             </div>
             <p className="text-sm font-bold text-indigo-700 text-center break-keep">
-              {t("합(1) 은 물어볼 것도 없이 그냥 1 — 여기서 미루기가 멈춰요! ✋", "sum(1) needs no asking — it's just 1. The pushing stops here! ✋")}
+              {t("마지막 친구는 시킬 필요도 없이 바로 대답 — 릴레이가 여기서 멈춰요.", "The last friend answers instantly, no passing needed — the relay stops here.")}
             </p>
           </div>
         )}
@@ -276,25 +282,31 @@ for i in range(1, 6):
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border-2 border-emerald-200 min-h-[280px]">
             <p className="text-5xl text-center mb-3">🔙</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
-              {t("이제 답이 거꾸로 올라와요", "Now the answers climb back up")}
+              {t("이제 답이 거꾸로 전달돼요", "Now the answers pass back")}
             </h3>
-            <div className="bg-white/70 rounded-lg p-4 border border-emerald-200 mb-3">
-              <div className="bg-gray-900 rounded-lg p-3">
-                <pre className="text-sm text-emerald-200 font-mono leading-loose" style={{ fontVariantLigatures: "none" }}>
-{t(`        합(1) = 1
-      합(2) = 2 + 1 = 3
-    합(3) = 3 + 3 = 6
-  합(4) = 4 + 6 = 10
-합(5) = 5 + 10 = 15 ✓`, `        sum(1) = 1
-      sum(2) = 2 + 1 = 3
-    sum(3) = 3 + 3 = 6
-  sum(4) = 4 + 6 = 10
-sum(5) = 5 + 10 = 15 ✓`)}
-                </pre>
+            <div className="space-y-1.5 max-w-sm mx-auto mb-3">
+              {[
+                { who: "😎", ko: "\"1이야!\"", en: "\"It's 1!\"", ml: 56 },
+                { who: "🧑‍🦰", ko: "\"그럼 나는 2+1 = 3!\"", en: "\"Then mine is 2+1 = 3!\"", ml: 42 },
+                { who: "👧", ko: "\"그럼 나는 3+3 = 6!\"", en: "\"Then mine is 3+3 = 6!\"", ml: 28 },
+                { who: "🧒", ko: "\"그럼 나는 4+6 = 10!\"", en: "\"Then mine is 4+6 = 10!\"", ml: 14 },
+              ].map((r, i) => (
+                <div key={i} className="flex items-center gap-2" style={{ marginLeft: r.ml }}>
+                  <span className="text-xl">{r.who}</span>
+                  <div className="bg-white border border-emerald-200 rounded-lg rounded-tl-none px-2.5 py-1">
+                    <p className="text-xs font-bold text-gray-700 break-keep">{t(r.ko, r.en)}</p>
+                  </div>
+                </div>
+              ))}
+              <div className="flex items-center gap-2">
+                <span className="text-xl">🧑‍🎓</span>
+                <div className="bg-emerald-50 border-2 border-emerald-300 rounded-lg rounded-tl-none px-2.5 py-1">
+                  <p className="text-xs font-black text-emerald-800 break-keep">{t("\"그럼 나는 5+10 = 15! 끝!\" 🎉", "\"Then mine is 5+10 = 15! Done!\" 🎉")}</p>
+                </div>
               </div>
             </div>
             <p className="text-sm font-bold text-emerald-700 text-center break-keep">
-              {t("for 로 푼 것과 똑같은 15! — 답은 같고, '생각법'만 새로워요.", "Same 15 as the for loop! — same answer, new way of thinking.")}
+              {t("for 로 푼 것과 똑같은 15! — 다들 덧셈 '한 번'씩만 하고 풀렸어요.", "Same 15 as the for loop! — and everyone did just ONE addition each.")}
             </p>
           </div>
         )}
@@ -305,14 +317,22 @@ sum(5) = 5 + 10 = 15 ✓`)}
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center break-keep">
               {t("이 생각법의 이름 — 재귀", "This way of thinking — recursion")}
             </h3>
-            <p className="text-sm text-gray-700 text-center mb-3 break-keep">
-              {t("\"같은 문제를, 조금 더 작게, 또 풀기\" — 모양이 꼭 마트료시카 인형이에요:", "\"Solve the same problem, a bit smaller, again\" — shaped just like matryoshka dolls:")}
-            </p>
+            <div className="bg-white/70 rounded-lg p-3 border border-amber-200 mb-3">
+              <p className="text-sm font-bold text-gray-800 text-center break-keep mb-1">
+                {t("근데 컴퓨터엔 친구가 없죠. 그래서 —", "But a computer has no friends. So —")}
+              </p>
+              <p className="text-sm font-black text-amber-800 text-center break-keep">
+                {t("함수가 '자기 자신'을 친구처럼 불러요. 이게 재귀!", "the function calls ITSELF, like calling a friend. That's recursion!")}
+              </p>
+              <p className="text-xs text-gray-600 text-center mt-1.5 break-keep">
+                {t("합(5)가 합(4)를 부르는 것 = \"친구야, 1~4 합 구해줘\"와 똑같은 말이에요.", "sum(5) calling sum(4) = saying \"friend, sum 1~4 for me\".")}
+              </p>
+            </div>
             <div className="bg-white/70 rounded-lg p-3 border border-amber-200 mb-3">
               {dollSim(5, { base: true })}
             </div>
             <p className="text-sm font-bold text-amber-700 text-center break-keep">
-              {t("인형 속에 똑같은(더 작은) 인형 — 마지막 인형은 안 열려요 = 합(1) 처럼 '멈추는 곳'!", "Same doll inside, just smaller — and the last one won't open = a stopping point, like sum(1)!")}
+              {t("모양은 꼭 마트료시카 — 마지막 인형은 안 열려요 = '그냥 1이지!' 하던 마지막 친구!", "Shaped like matryoshka dolls — the last one won't open = the friend who said \"just 1!\"")}
             </p>
           </div>
         )}
@@ -326,23 +346,23 @@ sum(5) = 5 + 10 = 15 ✓`)}
             <div className="space-y-3 mb-3">
               <div className="bg-white rounded-lg p-3 border-2 border-rose-200">
                 <p className="text-sm font-black text-rose-800 mb-1">
-                  1️⃣ {t("멈추는 곳 (베이스 케이스)", "Where to stop (base case)")}
+                  1️⃣ {t("바로 대답하는 친구 (베이스 케이스)", "The friend who just answers (base case)")}
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed break-keep">
                   {t(
-                    "합(1) = 1. 물어볼 것도 없는 제일 쉬운 경우 — 여기 없으면 미루기가 영원히 안 끝나요!",
-                    "sum(1) = 1. The easiest case that needs no asking — without it, the pushing never ends!",
+                    "😎 \"1까지 합? 그냥 1이지!\" — 이 친구가 없으면 릴레이가 영원히 안 끝나요!",
+                    "😎 \"Sum to 1? Just 1!\" — without this friend, the relay never ends!",
                   )}
                 </p>
               </div>
               <div className="bg-white rounded-lg p-3 border-2 border-indigo-200">
                 <p className="text-sm font-black text-indigo-800 mb-1">
-                  2️⃣ {t("하나만 하고 + 나머지는 미루기 (재귀 호출)", "Do one piece + push the rest (recursive call)")}
+                  2️⃣ {t("한 번 더하고 + 옆에 시키기 (재귀 호출)", "Add once + pass it on (recursive call)")}
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed break-keep">
                   {t(
-                    "합(n) = n + 합(n−1). '자기 자신'을 조금 더 작은 숫자로 다시 부르는 거예요.",
-                    "sum(n) = n + sum(n−1). Calling YOURSELF with a slightly smaller number.",
+                    "다른 친구들: \"난 내 숫자만 더할게, 나머진 네가!\" — 합(n) = n + 합(n−1).",
+                    "Every other friend: \"I add MY number, you do the rest!\" — sum(n) = n + sum(n−1).",
                   )}
                 </p>
               </div>
@@ -350,22 +370,22 @@ sum(5) = 5 + 10 = 15 ✓`)}
             <div className="bg-gray-900 rounded-lg p-3 my-2">
               <pre className="text-xs text-emerald-200 font-mono leading-relaxed overflow-x-auto" style={{ fontVariantLigatures: "none" }}>
 {t(`def 합(n):
-    if n == 1:            # ① 멈추는 곳
+    if n == 1:            # ① 😎 "그냥 1이지!"
         return 1
-    return n + 합(n - 1)  # ② 하나만 하고 + 나머지 미루기
+    return n + 합(n - 1)  # ② 한 번 더하고 + 옆에 시키기
 
 print(합(5))   # 15`, `def sum_to(n):
-    if n == 1:                # 1) where to stop
+    if n == 1:                # 1) 😎 "just 1!"
         return 1
-    return n + sum_to(n - 1)  # 2) one piece + push the rest
+    return n + sum_to(n - 1)  # 2) add once + pass it on
 
 print(sum_to(5))   # 15`)}
               </pre>
             </div>
             <p className="text-xs text-blue-700 text-center leading-relaxed break-keep">
               {t(
-                "방금 그 릴레이 전체가 — 코드로는 딱 이 두 줄이에요.",
-                "That whole relay — just these two lines of code.",
+                "친구 릴레이 전체가 — 코드로는 딱 이 두 줄이에요.",
+                "The whole friend relay — just these two lines of code.",
               )}
             </p>
           </div>
