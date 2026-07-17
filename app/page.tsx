@@ -487,7 +487,7 @@ function LandingPage() {
 
 export default function DashboardPage() {
   const { t, lang } = useLanguage()
-  const { isAuthenticated, isLoading: authLoading, profile, user } = useAuth()
+  const { isAuthenticated, isLoading: authLoading, profile, user, refreshProfile } = useAuth()
   const router = useRouter()
   const { level, totalXp, xpInCurrentLevel, dailyStreak, xpToday } = useGamification()
   const levelInfo = getLevelTitle(level)
@@ -508,6 +508,17 @@ export default function DashboardPage() {
     else if (profile.role === "parent") router.replace("/parent")
     else router.replace("/journey")
   }, [isAuthenticated, profile, user, router])
+
+  // "이동 중" 무한 대기 방지: 인증됐는데 profile 이 안 뜨면 (조회 실패/타임아웃)
+  // 3초 후 한 번 더 재조회, 그래도 안 뜨면 새로고침 버튼 노출. (선생님 2026-07-17)
+  const [profileStuck, setProfileStuck] = useState(false)
+  useEffect(() => {
+    setProfileStuck(false)
+    if (authLoading || !isAuthenticated || profile) return
+    const retry = setTimeout(() => { refreshProfile() }, 3000)
+    const giveUp = setTimeout(() => setProfileStuck(true), 8000)
+    return () => { clearTimeout(retry); clearTimeout(giveUp) }
+  }, [authLoading, isAuthenticated, profile, refreshProfile])
 
   useEffect(() => {
     const course = readSelectedCourse()
@@ -597,6 +608,17 @@ export default function DashboardPage() {
       <div className="text-center space-y-3">
         <div className="text-4xl animate-bounce">🦒</div>
         <div className="text-sm text-gray-400">{t("이동 중...", "Redirecting...")}</div>
+        {profileStuck && (
+          <div className="space-y-2 pt-1">
+            <div className="text-xs text-gray-400">{t("연결이 지연되고 있어요.", "Connection is taking a while.")}</div>
+            <button
+              onClick={() => window.location.reload()}
+              className="text-sm font-bold text-orange-600 underline decoration-dotted"
+            >
+              {t("🔄 다시 시도", "🔄 Retry")}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
