@@ -156,8 +156,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const timeout = setTimeout(() => setIsLoading(false), 5000)
 
     // Auth 상태 변경 리스너
+    // ⚠️ supabase-js 함정(진짜 원인, 선생님 콘솔 2026-07-17): onAuthStateChange 콜백 '안'에서
+    // supabase 쿼리를 await 하면 라이브러리 내부 auth 락과 데드락 → 네트워크와 무관하게
+    // 항상 타임아웃 (profiles 조회가 3번 다 timeout 났던 이유). 콜백은 동기로 즉시 끝내고,
+    // 실제 작업은 setTimeout(0) 으로 락 '밖'에서 실행한다 (supabase 공식 권고 패턴).
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
+        setTimeout(async () => {
         const currentUser = session?.user ?? null
         setUser(currentUser)
 
@@ -243,6 +248,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         setIsLoading(false)
+        }, 0)
       }
     )
 
