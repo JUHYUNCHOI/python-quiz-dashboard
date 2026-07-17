@@ -353,7 +353,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def is_palindrome(s):
+              py={t(`def is_palindrome(s):
     L, R = 0, len(s) - 1
     while L < R:
         if s[L] != s[R]:
@@ -378,8 +378,33 @@ def expand(s, L, R):
     while L >= 0 and R < len(s) and s[L] == s[R]:
         L -= 1
         R += 1
-    return s[L+1:R]   # 마지막으로 일치했던 구간`}
-              cpp={`#include <string>
+    return s[L+1:R]   # 마지막으로 일치했던 구간`, `def is_palindrome(s):
+    L, R = 0, len(s) - 1
+    while L < R:
+        if s[L] != s[R]:
+            return False
+        L += 1
+        R -= 1
+    return True
+
+# longest palindromic substring — center at each index
+def longest_palindrome(s):
+    best = ""
+    for i in range(len(s)):
+        # odd length (center = i)
+        a = expand(s, i, i)
+        # even length (center = i, i+1)
+        b = expand(s, i, i + 1)
+        if len(a) > len(best): best = a
+        if len(b) > len(best): best = b
+    return best
+
+def expand(s, L, R):
+    while L >= 0 and R < len(s) and s[L] == s[R]:
+        L -= 1
+        R += 1
+    return s[L+1:R]   # last matching range`)}
+              cpp={t(`#include <string>
 using namespace std;
 
 bool isPalindrome(const string& s) {
@@ -410,7 +435,38 @@ string longestPalindrome(const string& s) {
         if (b.size() > best.size()) best = b;
     }
     return best;
-}`}
+}`, `#include <string>
+using namespace std;
+
+bool isPalindrome(const string& s) {
+    int L = 0, R = s.size() - 1;
+    while (L < R) {
+        if (s[L] != s[R]) return false;
+        L++;
+        R--;
+    }
+    return true;
+}
+
+// expand outward around each center
+string expand(const string& s, int L, int R) {
+    while (L >= 0 && R < (int)s.size() && s[L] == s[R]) {
+        L--;
+        R++;
+    }
+    return s.substr(L + 1, R - L - 1);
+}
+
+string longestPalindrome(const string& s) {
+    string best = "";
+    for (int i = 0; i < (int)s.size(); i++) {
+        string a = expand(s, i, i);       // odd
+        string b = expand(s, i, i + 1);   // even
+        if (a.size() > best.size()) best = a;
+        if (b.size() > best.size()) best = b;
+    }
+    return best;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center">
               {t("핵심: 각 인덱스마다 '홀수 중심' + '짝수 중심' 두 번 시도. 둘 다 안 하면 절반을 놓침.", "Key: at each index try BOTH odd-center and even-center expansion. Skip one → miss half the cases.")}
@@ -573,7 +629,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def longest_with_k_distinct(s, K):
+              py={t(`def longest_with_k_distinct(s, K):
     count = {}            # 글자 → 개수
     L = 0
     best = 0
@@ -589,8 +645,24 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
         best = max(best, R - L + 1)
     return best
 
-longest_with_k_distinct("abcba", 2)   # 3 ("bcb")`}
-              cpp={`#include <string>
+longest_with_k_distinct("abcba", 2)   # 3 ("bcb")`, `def longest_with_k_distinct(s, K):
+    count = {}            # char -> count
+    L = 0
+    best = 0
+    for R in range(len(s)):
+        count[s[R]] = count.get(s[R], 0) + 1
+        # if rule breaks, shrink by moving L
+        while len(count) > K:
+            count[s[L]] -= 1
+            if count[s[L]] == 0:
+                del count[s[L]]
+            L += 1
+        # at this point window [L..R] has distinct <= K
+        best = max(best, R - L + 1)
+    return best
+
+longest_with_k_distinct("abcba", 2)   # 3 ("bcb")`)}
+              cpp={t(`#include <string>
 #include <unordered_map>
 #include <algorithm>
 using namespace std;
@@ -612,7 +684,29 @@ int longestWithKDistinct(const string& s, int K) {
     return best;
 }
 
-// longestWithKDistinct("abcba", 2) == 3 ("bcb")`}
+// longestWithKDistinct("abcba", 2) == 3 ("bcb")`, `#include <string>
+#include <unordered_map>
+#include <algorithm>
+using namespace std;
+
+int longestWithKDistinct(const string& s, int K) {
+    unordered_map<char, int> count;
+    int L = 0, best = 0;
+    for (int R = 0; R < (int)s.size(); R++) {
+        count[s[R]]++;
+        // if rule breaks, shrink by moving L
+        while ((int)count.size() > K) {
+            count[s[L]]--;
+            if (count[s[L]] == 0) count.erase(s[L]);
+            L++;
+        }
+        // at this point window [L..R] has distinct <= K
+        best = max(best, R - L + 1);
+    }
+    return best;
+}
+
+// longestWithKDistinct("abcba", 2) == 3 ("bcb")`)}
             />
             <p className="text-xs text-gray-600 text-center">
               {t("R 은 N 번, L 도 최대 N 번 → 합쳐서 O(N). 글자 하나가 들어왔다가 나가는 비용만!", "R runs N times, L at most N times → total O(N). Each char enters and leaves once.")}
@@ -785,7 +879,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def is_anagram(a, b):
+              py={t(`def is_anagram(a, b):
     if len(a) != len(b):
         return False
     cnt = [0] * 26
@@ -797,8 +891,20 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
     return all(v == 0 for v in cnt)
 
 is_anagram("listen", "silent")   # True
-is_anagram("hello",  "world")    # False`}
-              cpp={`#include <string>
+is_anagram("hello",  "world")    # False`, `def is_anagram(a, b):
+    if len(a) != len(b):
+        return False
+    cnt = [0] * 26
+    for c in a:
+        cnt[ord(c) - ord('a')] += 1
+    for c in b:
+        cnt[ord(c) - ord('a')] -= 1
+    # anagram only if all slots are 0
+    return all(v == 0 for v in cnt)
+
+is_anagram("listen", "silent")   # True
+is_anagram("hello",  "world")    # False`)}
+              cpp={t(`#include <string>
 using namespace std;
 
 bool isAnagram(const string& a, const string& b) {
@@ -814,7 +920,23 @@ bool isAnagram(const string& a, const string& b) {
 }
 
 // isAnagram("listen", "silent") == true
-// isAnagram("hello",  "world")  == false`}
+// isAnagram("hello",  "world")  == false`, `#include <string>
+using namespace std;
+
+bool isAnagram(const string& a, const string& b) {
+    if (a.size() != b.size()) return false;
+    int cnt[26] = {0};
+    for (char c : a) cnt[c - 'a']++;
+    for (char c : b) cnt[c - 'a']--;
+    // anagram only if all slots are 0
+    for (int i = 0; i < 26; i++) {
+        if (cnt[i] != 0) return false;
+    }
+    return true;
+}
+
+// isAnagram("listen", "silent") == true
+// isAnagram("hello",  "world")  == false`)}
             />
             <p className="text-xs text-gray-600 text-center">
               {t("💡 트릭: 두 배열 만들 필요 없어요. 하나만 + - 로 더하고 빼면 끝!", "💡 Trick: no need for two arrays. Increment for a, decrement for b — done!")}

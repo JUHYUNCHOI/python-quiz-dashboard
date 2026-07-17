@@ -208,10 +208,13 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </div>
             <div className="bg-gray-900 rounded-lg p-3 my-2">
               <pre className="text-xs text-emerald-200 font-mono leading-relaxed overflow-x-auto">
-{`set:    "apple" in dict?     ✓
+{t(`set:    "apple" in dict?     ✓
         "ap" 로 시작?         ✗ 불가
 트라이:  "apple" in dict?     ✓
-        "ap" 로 시작?         ✓ 자식 다 보기`}
+        "ap" 로 시작?         ✓ 자식 다 보기`, `set:    "apple" in dict?     ✓
+        starts with "ap"?    ✗ not possible
+trie:   "apple" in dict?     ✓
+        starts with "ap"?    ✓ check all children`)}
               </pre>
             </div>
             <p className="text-xs text-blue-700 text-center leading-relaxed">
@@ -336,9 +339,11 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </div>
             <div className="bg-gray-900 rounded-lg p-3 my-2">
               <pre className="text-xs text-emerald-200 font-mono leading-relaxed overflow-x-auto">
-{`class TrieNode:
+{t(`class TrieNode:
     children = {}      # 글자 → 자식 노드
-    is_end = False     # 단어 끝?`}
+    is_end = False     # 단어 끝?`, `class TrieNode:
+    children = {}      # letter -> child node
+    is_end = False     # end of word?`)}
               </pre>
             </div>
             <p className="text-xs text-cyan-700 text-center leading-relaxed">
@@ -615,7 +620,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`class TrieNode:
+              py={t(`class TrieNode:
     def __init__(self):
         self.children = {}
         self.is_end = False
@@ -634,8 +639,27 @@ def search(root, word):
         if c not in cur.children:
             return False        # ← 자식 없음 즉시 실패
         cur = cur.children[c]
-    return cur.is_end          # ← prefix 만이면 False`}
-              cpp={`#include <iostream>
+    return cur.is_end          # ← prefix 만이면 False`, `class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.is_end = False
+
+def insert(root, word):
+    cur = root
+    for c in word:
+        if c not in cur.children:
+            cur.children[c] = TrieNode()
+        cur = cur.children[c]
+    cur.is_end = True          # <- mark end
+
+def search(root, word):
+    cur = root
+    for c in word:
+        if c not in cur.children:
+            return False        # <- no child, fail immediately
+        cur = cur.children[c]
+    return cur.is_end          # <- False if only a prefix`)}
+              cpp={t(`#include <iostream>
 #include <unordered_map>
 using namespace std;
 
@@ -661,7 +685,33 @@ bool search(Trie* root, const string& word) {
         cur = it->second;
     }
     return cur->is_end;          // ← prefix 만이면 false
-}`}
+}`, `#include <iostream>
+#include <unordered_map>
+using namespace std;
+
+struct Trie {
+    unordered_map<char, Trie*> children;
+    bool is_end = false;
+};
+
+void insert(Trie* root, const string& word) {
+    Trie* cur = root;
+    for (char c : word) {
+        if (!cur->children.count(c)) cur->children[c] = new Trie();
+        cur = cur->children[c];
+    }
+    cur->is_end = true;          // <- mark end
+}
+
+bool search(Trie* root, const string& word) {
+    Trie* cur = root;
+    for (char c : word) {
+        auto it = cur->children.find(c);
+        if (it == cur->children.end()) return false;  // no child
+        cur = it->second;
+    }
+    return cur->is_end;          // <- false if only a prefix
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -851,7 +901,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def autocomplete(root, prefix):
+              py={t(`def autocomplete(root, prefix):
     cur = root
     # 1) prefix 따라 내려가기
     for c in prefix:
@@ -870,8 +920,27 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
     return results
 
 # 사용:
-# autocomplete(root, "ca")  →  ["cat", "car", "card"]`}
-              cpp={`#include <iostream>
+# autocomplete(root, "ca")  →  ["cat", "car", "card"]`, `def autocomplete(root, prefix):
+    cur = root
+    # 1) walk down the prefix
+    for c in prefix:
+        if c not in cur.children:
+            return []           # prefix doesn't match
+        cur = cur.children[c]
+
+    # 2) DFS the subtree - collect at every is_end
+    results = []
+    def dfs(node, word):
+        if node.is_end:
+            results.append(word)
+        for c, child in node.children.items():
+            dfs(child, word + c)
+    dfs(cur, prefix)
+    return results
+
+# usage:
+# autocomplete(root, "ca")  ->  ["cat", "car", "card"]`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 #include <unordered_map>
 using namespace std;
@@ -901,7 +970,37 @@ vector<string> autocomplete(Trie* root, const string& prefix) {
     string word = prefix;
     dfs(cur, word, results);
     return results;
-}`}
+}`, `#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+struct Trie {
+    unordered_map<char, Trie*> children;
+    bool is_end = false;
+};
+
+void dfs(Trie* node, string& word, vector<string>& results) {
+    if (node->is_end) results.push_back(word);
+    for (auto& [c, child] : node->children) {
+        word.push_back(c);
+        dfs(child, word, results);
+        word.pop_back();          // backtrack
+    }
+}
+
+vector<string> autocomplete(Trie* root, const string& prefix) {
+    Trie* cur = root;
+    for (char c : prefix) {
+        auto it = cur->children.find(c);
+        if (it == cur->children.end()) return {};
+        cur = it->second;
+    }
+    vector<string> results;
+    string word = prefix;
+    dfs(cur, word, results);
+    return results;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(

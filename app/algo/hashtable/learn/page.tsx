@@ -404,7 +404,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`# Two Sum — O(N) one-pass
+              py={t(`# Two Sum — O(N) one-pass
 def two_sum(arr, target):
     seen = {}                  # value -> index
     for i, x in enumerate(arr):
@@ -417,8 +417,21 @@ def two_sum(arr, target):
 # arr = [2, 7, 11, 15], target = 9
 # i=0: x=2, need=7, not in seen → store {2:0}
 # i=1: x=7, need=2, found at 0! → return (0, 1)
-print(two_sum([2,7,11,15], 9))  # (0, 1)`}
-              cpp={`#include <unordered_map>
+print(two_sum([2,7,11,15], 9))  # (0, 1)`, `# Two Sum — O(N) one-pass
+def two_sum(arr, target):
+    seen = {}                  # value -> index
+    for i, x in enumerate(arr):
+        need = target - x
+        if need in seen:
+            return (seen[need], i)
+        seen[x] = i
+    return None
+
+# arr = [2, 7, 11, 15], target = 9
+# i=0: x=2, need=7, not in seen -> store {2:0}
+# i=1: x=7, need=2, found at 0! -> return (0, 1)
+print(two_sum([2,7,11,15], 9))  # (0, 1)`)}
+              cpp={t(`#include <unordered_map>
 #include <vector>
 using namespace std;
 
@@ -438,7 +451,27 @@ pair<int,int> two_sum(vector<int>& arr, int target) {
 
 // arr = {2,7,11,15}, target = 9
 // i=0: x=2, need=7, miss → store
-// i=1: x=7, need=2, hit! → (0,1)`}
+// i=1: x=7, need=2, hit! → (0,1)`, `#include <unordered_map>
+#include <vector>
+using namespace std;
+
+// Two Sum — O(N) one-pass
+pair<int,int> two_sum(vector<int>& arr, int target) {
+    unordered_map<int,int> seen;  // value -> index
+    for (int i = 0; i < (int)arr.size(); i++) {
+        int need = target - arr[i];
+        auto it = seen.find(need);
+        if (it != seen.end()) {
+            return {it->second, i};
+        }
+        seen[arr[i]] = i;
+    }
+    return {-1, -1};
+}
+
+// arr = {2,7,11,15}, target = 9
+// i=0: x=2, need=7, miss -> store
+// i=1: x=7, need=2, hit! -> (0,1)`)}
             />
             <p className="text-xs text-gray-600 text-center">
               {t("주의: x 를 \"먼저 저장하고\" 검색하면 자기 자신과 매칭될 수 있음. 항상 검색 → 저장 순서.", "Watch: if you store x *before* checking, you might match yourself. Always check first, then store.")}
@@ -621,7 +654,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`# 부분 배열 합 = K 개수 — O(N)
+              py={t(`# 부분 배열 합 = K 개수 — O(N)
 def subarray_sum(arr, K):
     cnt = {0: 1}        # ← 핵심! prefix=0 (배열 시작 전) 1 회
     prefix = 0
@@ -634,8 +667,21 @@ def subarray_sum(arr, K):
     return answer
 
 # [1,2,1,2,1], K=3 → 4
-print(subarray_sum([1,2,1,2,1], 3))`}
-              cpp={`#include <unordered_map>
+print(subarray_sum([1,2,1,2,1], 3))`, `# Subarray sum = K count — O(N)
+def subarray_sum(arr, K):
+    cnt = {0: 1}        # <- key! prefix=0 (before array starts) once
+    prefix = 0
+    answer = 0
+    for x in arr:
+        prefix += x
+        # how many earlier prefixes equal prefix - K?
+        answer += cnt.get(prefix - K, 0)
+        cnt[prefix] = cnt.get(prefix, 0) + 1
+    return answer
+
+# [1,2,1,2,1], K=3 -> 4
+print(subarray_sum([1,2,1,2,1], 3))`)}
+              cpp={t(`#include <unordered_map>
 #include <vector>
 using namespace std;
 
@@ -652,7 +698,24 @@ long long subarray_sum(vector<int>& arr, int K) {
     }
     return answer;
 }
-// arr={1,2,1,2,1}, K=3 → 4`}
+// arr={1,2,1,2,1}, K=3 → 4`, `#include <unordered_map>
+#include <vector>
+using namespace std;
+
+// Subarray sum = K count — O(N)
+long long subarray_sum(vector<int>& arr, int K) {
+    unordered_map<long long, int> cnt;
+    cnt[0] = 1;            // <- key! prefix=0 before start
+    long long prefix = 0, answer = 0;
+    for (int x : arr) {
+        prefix += x;
+        auto it = cnt.find(prefix - K);
+        if (it != cnt.end()) answer += it->second;
+        cnt[prefix]++;
+    }
+    return answer;
+}
+// arr={1,2,1,2,1}, K=3 -> 4`)}
             />
             <p className="text-xs text-gray-600 text-center">
               {t("cnt[0] = 1 빠뜨리면 \"배열 처음부터 시작\" 인 부분합을 놓침. 외워두기!", "Forgetting cnt[0] = 1 misses subarrays starting at index 0. Memorize!")}
@@ -842,7 +905,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`# 중복 없는 가장 긴 부분 문자열 — O(N)
+              py={t(`# 중복 없는 가장 긴 부분 문자열 — O(N)
 def longest_unique(s):
     seen = set()
     left = 0
@@ -858,8 +921,24 @@ def longest_unique(s):
 
 print(longest_unique("abcabcbb"))  # 3
 print(longest_unique("bbbbb"))     # 1
-print(longest_unique("pwwkew"))    # 3 ("wke")`}
-              cpp={`#include <unordered_set>
+print(longest_unique("pwwkew"))    # 3 ("wke")`, `# Longest substring without repeat — O(N)
+def longest_unique(s):
+    seen = set()
+    left = 0
+    best = 0
+    for right in range(len(s)):
+        # on dup, shrink left until past the dup
+        while s[right] in seen:
+            seen.remove(s[left])
+            left += 1
+        seen.add(s[right])
+        best = max(best, right - left + 1)
+    return best
+
+print(longest_unique("abcabcbb"))  # 3
+print(longest_unique("bbbbb"))     # 1
+print(longest_unique("pwwkew"))    # 3 ("wke")`)}
+              cpp={t(`#include <unordered_set>
 #include <string>
 using namespace std;
 
@@ -878,7 +957,26 @@ int longest_unique(const string& s) {
     }
     return best;
 }
-// "abcabcbb" → 3, "pwwkew" → 3 ("wke")`}
+// "abcabcbb" → 3, "pwwkew" → 3 ("wke")`, `#include <unordered_set>
+#include <string>
+using namespace std;
+
+// Longest substring without repeat — O(N)
+int longest_unique(const string& s) {
+    unordered_set<char> seen;
+    int left = 0, best = 0;
+    for (int right = 0; right < (int)s.size(); right++) {
+        // on dup, move left one step at a time
+        while (seen.count(s[right])) {
+            seen.erase(s[left]);
+            left++;
+        }
+        seen.insert(s[right]);
+        best = max(best, right - left + 1);
+    }
+    return best;
+}
+// "abcabcbb" -> 3, "pwwkew" -> 3 ("wke")`)}
             />
             <p className="text-xs text-gray-600 text-center">
               {t("각 문자는 set 에 들어왔다 나갈 뿐 → 총 작업 2N → O(N).", "Each char enters/leaves set once → ~2N ops → O(N).")}

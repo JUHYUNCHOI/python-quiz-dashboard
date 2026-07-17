@@ -227,10 +227,13 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               <p className="text-xs font-bold text-rose-800 mb-2"><span className="mr-1">📝</span>{t("한 겹에 for 하나씩…", "one for per level…")}</p>
               <div className="bg-gray-900 rounded-lg p-3">
                 <pre className="text-xs text-emerald-200 font-mono leading-relaxed" style={{ fontVariantLigatures: "none" }}>
-{`for A in 컴퓨터:
+{t(`for A in 컴퓨터:
     for B in A:
         for C in B:
-            for ... ❓`}
+            for ... ❓`, `for A in computer:
+    for B in A:
+        for C in B:
+            for ... ❓`)}
                 </pre>
               </div>
             </div>
@@ -338,9 +341,11 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </div>
             <div className="bg-gray-900 rounded-lg p-3 my-2">
               <pre className="text-xs text-emerald-200 font-mono leading-relaxed overflow-x-auto" style={{ fontVariantLigatures: "none" }}>
-{`def 뒤지기(폴더):
+{t(`def 뒤지기(폴더):
     if 사진이면: return "찾았다!"   # ① 베이스 케이스 (멈춤)
-    return 뒤지기(폴더 속 폴더)     # ② 재귀 호출 (자기 자신)`}
+    return 뒤지기(폴더 속 폴더)     # ② 재귀 호출 (자기 자신)`, `def search(folder):
+    if is_photo: return "found it!"   # 1) base case (stop)
+    return search(folder_inside)      # 2) recursive call (itself)`)}
               </pre>
             </div>
             <p className="text-xs text-blue-700 text-center leading-relaxed break-keep">
@@ -457,11 +462,15 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-white/70 rounded-lg p-3 border border-cyan-200 mb-3">
               <p className="text-xs font-bold text-cyan-800 mb-2">💡 {t("재귀로 다시 보기", "Recursive view")}</p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`f(5) = 5 × f(4)
+{t(`f(5) = 5 × f(4)
 f(4) = 4 × f(3)
 f(3) = 3 × f(2)
 f(2) = 2 × f(1)
-f(1) = 1          ← 베이스!`}
+f(1) = 1          ← 베이스!`, `f(5) = 5 × f(4)
+f(4) = 4 × f(3)
+f(3) = 3 × f(2)
+f(2) = 2 × f(1)
+f(1) = 1          ← base case!`)}
               </pre>
               <p className="text-xs text-gray-700 mt-2 leading-relaxed">
                 {t(
@@ -652,11 +661,15 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-white/70 rounded-lg p-3 border border-amber-200 mb-3">
               <p className="text-xs font-bold text-amber-800 mb-2">💡 {t("영리하게 — 반으로 쪼개기", "Smart way — halve it")}</p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`2^10 = (2^5)^2          ← 5 번 → 한 번 더 곱
+{t(`2^10 = (2^5)^2          ← 5 번 → 한 번 더 곱
 2^5  = 2 × (2^2)^2      ← 짝수 아니니 +1 곱
 2^2  = (2^1)^2
 2^1  = 2 × (2^0)^2
-2^0  = 1                ← 베이스!`}
+2^0  = 1                ← 베이스!`, `2^10 = (2^5)^2          ← even → just square
+2^5  = 2 × (2^2)^2      ← odd → one extra ×2
+2^2  = (2^1)^2
+2^1  = 2 × (2^0)^2
+2^0  = 1                ← base case!`)}
               </pre>
               <p className="text-xs text-gray-700 mt-2 leading-relaxed">
                 {t(

@@ -222,12 +222,17 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </div>
             <div className="bg-gray-900 rounded-lg p-3 my-2">
               <pre className="text-xs text-emerald-200 font-mono leading-relaxed overflow-x-auto">
-{`def backtrack(state):
+{t(`def backtrack(state):
     if 끝 도달: return 성공
     for 후보 in 가능한 값들:
         choose(후보)       # ①
         if backtrack(...): return True   # ② 탐험
-        un-choose(후보)    # ③ 되돌림!`}
+        un-choose(후보)    # ③ 되돌림!`, `def backtrack(state):
+    if reached_end: return success
+    for candidate in possible_values:
+        choose(candidate)       # 1
+        if backtrack(...): return True   # 2 explore
+        un-choose(candidate)    # 3 undo!`)}
               </pre>
             </div>
             <p className="text-xs text-blue-700 text-center leading-relaxed">
@@ -418,7 +423,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def solve_nqueens(n):
+              py={t(`def solve_nqueens(n):
     cols = [False] * n
     d1 = [False] * (2 * n)   # r + c
     d2 = [False] * (2 * n)   # r - c + n
@@ -440,8 +445,30 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
     return count
 
 print(solve_nqueens(4))   # 2
-print(solve_nqueens(8))   # 92`}
-              cpp={`#include <bits/stdc++.h>
+print(solve_nqueens(8))   # 92`, `def solve_nqueens(n):
+    cols = [False] * n
+    d1 = [False] * (2 * n)   # r + c
+    d2 = [False] * (2 * n)   # r - c + n
+    count = 0
+
+    def backtrack(row):
+        nonlocal count
+        if row == n:
+            count += 1
+            return
+        for c in range(n):
+            if cols[c] or d1[row + c] or d2[row - c + n]:
+                continue                  # prune!
+            cols[c] = d1[row + c] = d2[row - c + n] = True   # choose
+            backtrack(row + 1)                                # explore
+            cols[c] = d1[row + c] = d2[row - c + n] = False   # un-choose
+
+    backtrack(0)
+    return count
+
+print(solve_nqueens(4))   # 2
+print(solve_nqueens(8))   # 92`)}
+              cpp={t(`#include <bits/stdc++.h>
 using namespace std;
 
 int N, count_;
@@ -465,7 +492,31 @@ int main() {
     backtrack(0);
     cout << count_ << endl;   // 92
     return 0;
-}`}
+}`, `#include <bits/stdc++.h>
+using namespace std;
+
+int N, count_;
+vector<bool> cols, d1, d2;
+
+void backtrack(int row) {
+    if (row == N) { count_++; return; }
+    for (int c = 0; c < N; c++) {
+        if (cols[c] || d1[row + c] || d2[row - c + N]) continue;  // prune!
+        cols[c] = d1[row + c] = d2[row - c + N] = true;   // choose
+        backtrack(row + 1);                                // explore
+        cols[c] = d1[row + c] = d2[row - c + N] = false;  // un-choose
+    }
+}
+
+int main() {
+    N = 8; count_ = 0;
+    cols.assign(N, false);
+    d1.assign(2 * N, false);
+    d2.assign(2 * N, false);
+    backtrack(0);
+    cout << count_ << endl;   // 92
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -633,7 +684,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def permutations(n):
+              py={t(`def permutations(n):
     cur = []
     used = [False] * (n + 1)
     result = []
@@ -655,8 +706,30 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
     return result
 
 for p in permutations(3):
-    print(p)`}
-              cpp={`#include <bits/stdc++.h>
+    print(p)`, `def permutations(n):
+    cur = []
+    used = [False] * (n + 1)
+    result = []
+
+    def backtrack():
+        if len(cur) == n:
+            result.append(cur[:])     # copy before saving!
+            return
+        for v in range(1, n + 1):
+            if used[v]:
+                continue
+            used[v] = True            # choose
+            cur.append(v)
+            backtrack()               # explore
+            cur.pop()                 # un-choose
+            used[v] = False
+
+    backtrack()
+    return result
+
+for p in permutations(3):
+    print(p)`)}
+              cpp={t(`#include <bits/stdc++.h>
 using namespace std;
 
 int N;
@@ -684,7 +757,35 @@ int main() {
     used.assign(N + 1, false);
     backtrack();
     return 0;
-}`}
+}`, `#include <bits/stdc++.h>
+using namespace std;
+
+int N;
+vector<int> cur;
+vector<bool> used;
+
+void backtrack() {
+    if ((int)cur.size() == N) {
+        for (int v : cur) cout << v << ' ';
+        cout << '\\n';
+        return;
+    }
+    for (int v = 1; v <= N; v++) {
+        if (used[v]) continue;
+        used[v] = true;       // choose
+        cur.push_back(v);
+        backtrack();          // explore
+        cur.pop_back();       // un-choose
+        used[v] = false;
+    }
+}
+
+int main() {
+    N = 3;
+    used.assign(N + 1, false);
+    backtrack();
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -868,7 +969,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def subset_sum_exists(arr, K):
+              py={t(`def subset_sum_exists(arr, K):
     n = len(arr)
 
     def backtrack(idx, cur_sum):
@@ -887,8 +988,27 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
     return backtrack(0, 0)
 
 print(subset_sum_exists([3, 5, 7], 10))   # True ({3,7})
-print(subset_sum_exists([3, 5, 7], 4))    # False`}
-              cpp={`#include <bits/stdc++.h>
+print(subset_sum_exists([3, 5, 7], 4))    # False`, `def subset_sum_exists(arr, K):
+    n = len(arr)
+
+    def backtrack(idx, cur_sum):
+        if cur_sum == K:
+            return True            # found!
+        if idx == n or cur_sum > K:
+            return False           # <- prune (assumes positives)
+        # skip
+        if backtrack(idx + 1, cur_sum):
+            return True
+        # take
+        if backtrack(idx + 1, cur_sum + arr[idx]):
+            return True
+        return False
+
+    return backtrack(0, 0)
+
+print(subset_sum_exists([3, 5, 7], 10))   # True ({3,7})
+print(subset_sum_exists([3, 5, 7], 4))    # False`)}
+              cpp={t(`#include <bits/stdc++.h>
 using namespace std;
 
 vector<int> arr;
@@ -908,7 +1028,27 @@ int main() {
     arr = {3, 5, 7}; N = 3; K = 10;
     cout << (backtrack(0, 0) ? "YES" : "NO") << endl;
     return 0;
-}`}
+}`, `#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> arr;
+int N, K;
+
+bool backtrack(int idx, int curSum) {
+    if (curSum == K) return true;
+    if (idx == N || curSum > K) return false;   // <- prune
+    // skip
+    if (backtrack(idx + 1, curSum)) return true;
+    // take
+    if (backtrack(idx + 1, curSum + arr[idx])) return true;
+    return false;
+}
+
+int main() {
+    arr = {3, 5, 7}; N = 3; K = 10;
+    cout << (backtrack(0, 0) ? "YES" : "NO") << endl;
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(

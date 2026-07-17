@@ -329,13 +329,19 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-white/70 rounded-lg p-3 border border-cyan-200 mb-3">
               <p className="text-xs font-bold text-cyan-800 mb-2">💡 {t("알고리즘 한 눈에", "Algorithm at a glance")}</p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`low, high = 0, len(arr) - 1
+{t(`low, high = 0, len(arr) - 1
 while low <= high:
     mid = (low + high) // 2
     if arr[mid] == x:    return mid     ← 찾음!
     elif arr[mid] < x:   low  = mid + 1 ← 오른쪽 절반
     else:                high = mid - 1 ← 왼쪽 절반
-return -1                                ← 없음`}
+return -1                                ← 없음`, `low, high = 0, len(arr) - 1
+while low <= high:
+    mid = (low + high) // 2
+    if arr[mid] == x:    return mid     ← found!
+    elif arr[mid] < x:   low  = mid + 1 ← right half
+    else:                high = mid - 1 ← left half
+return -1                                ← not found`)}
               </pre>
             </div>
             <p className="text-sm font-bold text-cyan-700 text-center">
@@ -452,7 +458,7 @@ now low=2 > high=1 → range is empty → return -1`,
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def binary_search(arr, x):
+              py={t(`def binary_search(arr, x):
     low, high = 0, len(arr) - 1
     while low <= high:
         mid = (low + high) // 2
@@ -466,8 +472,22 @@ now low=2 > high=1 → range is empty → return -1`,
 
 arr = [1, 3, 5, 7, 9, 11, 13, 15]
 print(binary_search(arr, 11))   # 5
-print(binary_search(arr, 4))    # -1`}
-              cpp={`#include <iostream>
+print(binary_search(arr, 4))    # -1`, `def binary_search(arr, x):
+    low, high = 0, len(arr) - 1
+    while low <= high:
+        mid = (low + high) // 2
+        if arr[mid] == x:
+            return mid
+        elif arr[mid] < x:
+            low = mid + 1       # right half
+        else:
+            high = mid - 1      # left half
+    return -1                    # not found
+
+arr = [1, 3, 5, 7, 9, 11, 13, 15]
+print(binary_search(arr, 11))   # 5
+print(binary_search(arr, 4))    # -1`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 #include <algorithm>    // lower_bound, binary_search
 using namespace std;
@@ -484,7 +504,24 @@ int main() {
 
     cout << found << " " << idx << endl;
     return 0;
-}`}
+}`, `#include <iostream>
+#include <vector>
+#include <algorithm>    // lower_bound, binary_search
+using namespace std;
+
+int main() {
+    vector<int> arr = {1, 3, 5, 7, 9, 11, 13, 15};
+
+    // one-line STL check
+    bool found = binary_search(arr.begin(), arr.end(), 11);   // true
+
+    // get the position too — via lower_bound
+    auto it = lower_bound(arr.begin(), arr.end(), 11);
+    int idx = it - arr.begin();   // 5
+
+    cout << found << " " << idx << endl;
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -684,7 +721,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def lower_bound(arr, x):
+              py={t(`def lower_bound(arr, x):
     low, high = 0, len(arr)      # high = len (반열린)
     while low < high:            # = 없음!
         mid = (low + high) // 2
@@ -696,8 +733,20 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
 
 arr = [1, 3, 3, 3, 5, 7]
 print(lower_bound(arr, 3))   # 1
-print(lower_bound(arr, 6))   # 5 (삽입 위치)`}
-              cpp={`// 직접 구현 — 반열린 구간 [low, high)
+print(lower_bound(arr, 6))   # 5 (삽입 위치)`, `def lower_bound(arr, x):
+    low, high = 0, len(arr)      # high = len (half-open)
+    while low < high:            # no =!
+        mid = (low + high) // 2
+        if arr[mid] < x:
+            low = mid + 1        # mid too small → drop
+        else:
+            high = mid           # mid is a candidate → keep (not -1!)
+    return low                   # low == high = answer
+
+arr = [1, 3, 3, 3, 5, 7]
+print(lower_bound(arr, 3))   # 1
+print(lower_bound(arr, 6))   # 5 (insertion point)`)}
+              cpp={t(`// 직접 구현 — 반열린 구간 [low, high)
 int lower_bound_by_hand(const vector<int>& arr, int x) {
     int low = 0, high = arr.size();   // high = len
     while (low < high) {              // = 없음!
@@ -708,7 +757,18 @@ int lower_bound_by_hand(const vector<int>& arr, int x) {
             high = mid;               // 후보 → 남김 (mid-1 아님!)
     }
     return low;                       // low == high = 답
-}`}
+}`, `// hand-written — half-open range [low, high)
+int lower_bound_by_hand(const vector<int>& arr, int x) {
+    int low = 0, high = arr.size();   // high = len
+    while (low < high) {              // no =!
+        int mid = low + (high - low) / 2;
+        if (arr[mid] < x)
+            low = mid + 1;            // too small → drop
+        else
+            high = mid;               // candidate → keep (not mid-1!)
+    }
+    return low;                       // low == high = answer
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -724,7 +784,7 @@ int lower_bound_by_hand(const vector<int>& arr, int x) {
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`from bisect import bisect_left, bisect_right
+              py={t(`from bisect import bisect_left, bisect_right
 
 arr = [1, 3, 3, 3, 5, 7]
 
@@ -738,8 +798,22 @@ print(bisect_right(arr, 3))   # 4   (upper_bound)
 print(bisect_right(arr, 3) - bisect_left(arr, 3))  # 3
 
 # 6 을 삽입할 위치
-print(bisect_left(arr, 6))    # 5`}
-              cpp={`#include <iostream>
+print(bisect_left(arr, 6))    # 5`, `from bisect import bisect_left, bisect_right
+
+arr = [1, 3, 3, 3, 5, 7]
+
+# position of first 3
+print(bisect_left(arr, 3))    # 1   (lower_bound)
+
+# position just past the last 3
+print(bisect_right(arr, 3))   # 4   (upper_bound)
+
+# count of 3s — upper - lower
+print(bisect_right(arr, 3) - bisect_left(arr, 3))  # 3
+
+# insertion point for 6
+print(bisect_left(arr, 6))    # 5`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 #include <algorithm>
 using namespace std;
@@ -758,7 +832,26 @@ int main() {
     // 3 의 개수
     cout << (hi - lo) << endl;            // 3
     return 0;
-}`}
+}`, `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> arr = {1, 3, 3, 3, 5, 7};
+
+    // position of first 3
+    auto lo = lower_bound(arr.begin(), arr.end(), 3);
+    cout << (lo - arr.begin()) << endl;   // 1
+
+    // position just past the last 3
+    auto hi = upper_bound(arr.begin(), arr.end(), 3);
+    cout << (hi - arr.begin()) << endl;   // 4
+
+    // count of 3s
+    cout << (hi - lo) << endl;            // 3
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -944,7 +1037,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`trees = [20, 15, 10, 17]
+              py={t(`trees = [20, 15, 10, 17]
 m = 7
 
 def can(h):                       # 결정문제: h 가 가능한가?
@@ -959,8 +1052,23 @@ while low <= high:
     else:                         # 불가능 → 낮춰야
         high = mid - 1
 
-print(ans)   # 15`}
-              cpp={`#include <iostream>
+print(ans)   # 15`, `trees = [20, 15, 10, 17]
+m = 7
+
+def can(h):                       # decision problem: is h feasible?
+    return sum(max(0, t - h) for t in trees) >= m
+
+low, high, ans = 0, max(trees), 0
+while low <= high:
+    mid = (low + high) // 2
+    if can(mid):                  # feasible → try higher
+        ans = mid
+        low = mid + 1
+    else:                         # not feasible → go lower
+        high = mid - 1
+
+print(ans)   # 15`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -986,7 +1094,33 @@ int main() {
     }
     cout << ans << endl;   // 15
     return 0;
-}`}
+}`, `#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<int> trees = {20, 15, 10, 17};
+long long m = 7;
+
+bool can(int h) {                    // decision problem
+    long long sum = 0;
+    for (int t : trees) sum += max(0, t - h);
+    return sum >= m;
+}
+
+int main() {
+    int low = 0, high = 20, ans = 0;
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        if (can(mid)) {              // OK → try higher
+            ans = mid;
+            low = mid + 1;
+        } else {                     // NG → go lower
+            high = mid - 1;
+        }
+    }
+    cout << ans << endl;   // 15
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(

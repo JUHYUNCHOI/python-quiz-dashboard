@@ -366,7 +366,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`arr = [3, 1, 4, 1, 5, 9, 2, 6]
+              py={t(`arr = [3, 1, 4, 1, 5, 9, 2, 6]
 
 # 오름차순 (기본값)
 arr.sort()
@@ -376,8 +376,18 @@ arr.sort()
 arr.sort(reverse=True)
 
 # 원본 안 바꾸고 새 리스트 만들기
-new_arr = sorted(arr)   # arr 는 그대로`}
-              cpp={`#include <algorithm>
+new_arr = sorted(arr)   # arr 는 그대로`, `arr = [3, 1, 4, 1, 5, 9, 2, 6]
+
+# ascending (default)
+arr.sort()
+# now arr = [1, 1, 2, 3, 4, 5, 6, 9]
+
+# descending — just add one option
+arr.sort(reverse=True)
+
+# make a new list, keep the original
+new_arr = sorted(arr)   # arr stays unchanged`)}
+              cpp={t(`#include <algorithm>
 #include <vector>
 using namespace std;
 
@@ -387,7 +397,17 @@ vector<int> arr = {3, 1, 4, 1, 5, 9, 2, 6};
 sort(arr.begin(), arr.end());
 
 // 내림차순 — greater 비교자 추가
-sort(arr.begin(), arr.end(), greater<int>());`}
+sort(arr.begin(), arr.end(), greater<int>());`, `#include <algorithm>
+#include <vector>
+using namespace std;
+
+vector<int> arr = {3, 1, 4, 1, 5, 9, 2, 6};
+
+// ascending (default)
+sort(arr.begin(), arr.end());
+
+// descending — add the greater comparator
+sort(arr.begin(), arr.end(), greater<int>());`)}
             />
             <p className="text-xs text-gray-600 text-center">
               {t("어렵지 않죠? 다음 슬라이드에서 짧은 퀴즈로 확인해봐요 →", "Easy, right? Quick quiz on the next slide →")}
@@ -517,7 +537,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`# ❌ 이렇게 직접 짜지 말아요 — 너무 느려요
+              py={t(`# ❌ 이렇게 직접 짜지 말아요 — 너무 느려요
 def slow_sort(arr):
     for i in range(len(arr)):
         for j in range(i+1, len(arr)):
@@ -525,14 +545,28 @@ def slow_sort(arr):
                 arr[i], arr[j] = arr[j], arr[i]
 
 # ✅ 이렇게 — 한 줄
-arr.sort()`}
-              cpp={`// ❌ 이렇게 직접 짜지 말아요 — 너무 느려요
+arr.sort()`, `# ❌ Don't write it yourself — way too slow
+def slow_sort(arr):
+    for i in range(len(arr)):
+        for j in range(i+1, len(arr)):
+            if arr[i] > arr[j]:
+                arr[i], arr[j] = arr[j], arr[i]
+
+# ✅ Do this — one line
+arr.sort()`)}
+              cpp={t(`// ❌ 이렇게 직접 짜지 말아요 — 너무 느려요
 for (int i = 0; i < n; i++)
     for (int j = i + 1; j < n; j++)
         if (arr[i] > arr[j]) swap(arr[i], arr[j]);
 
 // ✅ 이렇게 — 한 줄
-sort(arr.begin(), arr.end());`}
+sort(arr.begin(), arr.end());`, `// ❌ Don't write it yourself — way too slow
+for (int i = 0; i < n; i++)
+    for (int j = i + 1; j < n; j++)
+        if (arr[i] > arr[j]) swap(arr[i], arr[j]);
+
+// ✅ Do this — one line
+sort(arr.begin(), arr.end());`)}
             />
           </div>
         )}
@@ -683,7 +717,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`people = [
+              py={t(`people = [
     {"name": "Alice", "age": 25},
     {"name": "Bob",   "age": 30},
     {"name": "Carol", "age": 22},
@@ -699,8 +733,24 @@ people.sort(key=lambda p: p["age"])
 people.sort(key=lambda p: p["age"], reverse=True)
 
 # 여러 기준: 나이 먼저 → 이름
-people.sort(key=lambda p: (p["age"], p["name"]))`}
-              cpp={`struct Person { string name; int age; };
+people.sort(key=lambda p: (p["age"], p["name"]))`, `people = [
+    {"name": "Alice", "age": 25},
+    {"name": "Bob",   "age": 30},
+    {"name": "Carol", "age": 22},
+]
+
+# alphabetical by name
+people.sort(key=lambda p: p["name"])
+
+# youngest first
+people.sort(key=lambda p: p["age"])
+
+# oldest first (reverse)
+people.sort(key=lambda p: p["age"], reverse=True)
+
+# multiple keys: age first, then name
+people.sort(key=lambda p: (p["age"], p["name"]))`)}
+              cpp={t(`struct Person { string name; int age; };
 vector<Person> people = {{"Alice",25},{"Bob",30},{"Carol",22}};
 
 // 이름 알파벳 순 (lambda 비교자)
@@ -713,7 +763,20 @@ sort(people.begin(), people.end(),
 sort(people.begin(), people.end(),
      [](const Person& a, const Person& b) {
          return a.age < b.age;
-     });`}
+     });`, `struct Person { string name; int age; };
+vector<Person> people = {{"Alice",25},{"Bob",30},{"Carol",22}};
+
+// alphabetical by name (lambda comparator)
+sort(people.begin(), people.end(),
+     [](const Person& a, const Person& b) {
+         return a.name < b.name;
+     });
+
+// youngest first
+sort(people.begin(), people.end(),
+     [](const Person& a, const Person& b) {
+         return a.age < b.age;
+     });`)}
             />
             <p className="text-xs text-gray-600 text-center">
               {codeLang === "py"

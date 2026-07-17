@@ -388,7 +388,7 @@ function Chapter2({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
               </p>
             </div>
             <CodeBlock lang={codeLang}
-              py={`# Next Greater Element — O(N)
+              py={t(`# Next Greater Element — O(N)
 def next_greater(arr):
     n = len(arr)
     ans = [-1] * n
@@ -404,8 +404,24 @@ def next_greater(arr):
     return ans
 
 print(next_greater([2, 5, 3, 1, 4]))
-# [5, -1, 4, 4, -1]`}
-              cpp={`// Next Greater Element — O(N)
+# [5, -1, 4, 4, -1]`, `# Next Greater Element — O(N)
+def next_greater(arr):
+    n = len(arr)
+    ans = [-1] * n
+    stack = []                       # stores indices only
+
+    for i in range(n):
+        # if current is bigger than value at stack top — top's answer = arr[i]
+        while stack and arr[stack[-1]] < arr[i]:
+            j = stack.pop()
+            ans[j] = arr[i]
+        stack.append(i)
+    # remaining indices have no answer → stay -1
+    return ans
+
+print(next_greater([2, 5, 3, 1, 4]))
+# [5, -1, 4, 4, -1]`)}
+              cpp={t(`// Next Greater Element — O(N)
 #include <vector>
 #include <stack>
 using namespace std;
@@ -413,7 +429,7 @@ using namespace std;
 vector<int> nextGreater(vector<int>& arr) {
     int n = arr.size();
     vector<int> ans(n, -1);
-    stack<int> st;                   // 인덱스 저장
+    stack<int> st;                   // stores indices
 
     for (int i = 0; i < n; i++) {
         while (!st.empty() && arr[st.top()] < arr[i]) {
@@ -422,10 +438,30 @@ vector<int> nextGreater(vector<int>& arr) {
         }
         st.push(i);
     }
-    // 남은 인덱스는 -1 그대로
+    // remaining indices stay -1
     return ans;
 }
-// nextGreater({2,5,3,1,4}) → {5,-1,4,4,-1}`}
+// nextGreater({2,5,3,1,4}) → {5,-1,4,4,-1}`, `// Next Greater Element — O(N)
+#include <vector>
+#include <stack>
+using namespace std;
+
+vector<int> nextGreater(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> ans(n, -1);
+    stack<int> st;                   // stores indices
+
+    for (int i = 0; i < n; i++) {
+        while (!st.empty() && arr[st.top()] < arr[i]) {
+            int j = st.top(); st.pop();
+            ans[j] = arr[i];
+        }
+        st.push(i);
+    }
+    // remaining indices stay -1
+    return ans;
+}
+// nextGreater({2,5,3,1,4}) → {5,-1,4,4,-1}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -646,7 +682,7 @@ function Chapter3({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
               </p>
             </div>
             <CodeBlock lang={codeLang}
-              py={`# BFS — 격자에서 최단 거리
+              py={t(`# BFS — 격자에서 최단 거리
 from collections import deque
 
 def bfs(grid, sr, sc):
@@ -665,8 +701,27 @@ def bfs(grid, sr, sc):
             if 0 <= nr < R and 0 <= nc < C and dist[nr][nc] == -1:
                 dist[nr][nc] = dist[r][c] + 1
                 q.append((nr, nc))     # 뒤에 추가
-    return dist`}
-              cpp={`// BFS — grid 최단 거리
+    return dist`, `# BFS — shortest distance on a grid
+from collections import deque
+
+def bfs(grid, sr, sc):
+    R, C = len(grid), len(grid[0])
+    dist = [[-1] * C for _ in range(R)]
+    dist[sr][sc] = 0
+    q = deque([(sr, sc)])
+
+    dr = [-1, 1, 0, 0]
+    dc = [0, 0, -1, 1]
+
+    while q:
+        r, c = q.popleft()         # pop from front (FIFO!)
+        for d in range(4):
+            nr, nc = r + dr[d], c + dc[d]
+            if 0 <= nr < R and 0 <= nc < C and dist[nr][nc] == -1:
+                dist[nr][nc] = dist[r][c] + 1
+                q.append((nr, nc))     # push to back
+    return dist`)}
+              cpp={t(`// BFS — grid 최단 거리
 #include <queue>
 #include <vector>
 using namespace std;
@@ -691,7 +746,32 @@ vector<vector<int>> bfs(vector<vector<int>>& grid, int sr, int sc) {
         }
     }
     return dist;
-}`}
+}`, `// BFS — shortest distance on a grid
+#include <queue>
+#include <vector>
+using namespace std;
+
+vector<vector<int>> bfs(vector<vector<int>>& grid, int sr, int sc) {
+    int R = grid.size(), C = grid[0].size();
+    vector<vector<int>> dist(R, vector<int>(C, -1));
+    queue<pair<int,int>> q;
+
+    dist[sr][sc] = 0;
+    q.push({sr, sc});
+    int dr[] = {-1, 1, 0, 0}, dc[] = {0, 0, -1, 1};
+
+    while (!q.empty()) {
+        auto [r, c] = q.front(); q.pop();   // from front!
+        for (int d = 0; d < 4; d++) {
+            int nr = r + dr[d], nc = c + dc[d];
+            if (nr < 0 || nr >= R || nc < 0 || nc >= C) continue;
+            if (dist[nr][nc] != -1) continue;       // already seen, skip
+            dist[nr][nc] = dist[r][c] + 1;
+            q.push({nr, nc});
+        }
+    }
+    return dist;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -868,7 +948,7 @@ function Chapter4({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
               </p>
             </div>
             <CodeBlock lang={codeLang}
-              py={`# 괄호 짝맞추기 — 스택 활용
+              py={t(`# 괄호 짝맞추기 — 스택 활용
 def is_valid(s):
     stack = []
     pairs = {')': '(', ']': '[', '}': '{'}
@@ -885,8 +965,25 @@ def is_valid(s):
 print(is_valid("([{}])"))   # True
 print(is_valid("(]"))        # False — 짝 안 맞음
 print(is_valid("([)]"))      # False — 중간에 깨짐
-print(is_valid("((("))       # False — 끝에 남음`}
-              cpp={`// 괄호 짝맞추기 — 스택 활용
+print(is_valid("((("))       # False — 끝에 남음`, `# Bracket matching — using a stack
+def is_valid(s):
+    stack = []
+    pairs = {')': '(', ']': '[', '}': '{'}
+    for ch in s:
+        if ch in '([{':
+            stack.append(ch)                  # opening → push
+        else:
+            # closing bracket
+            if not stack or stack[-1] != pairs[ch]:
+                return False                  # empty or mismatch
+            stack.pop()
+    return not stack                          # nothing left → OK
+
+print(is_valid("([{}])"))   # True
+print(is_valid("(]"))        # False — mismatch
+print(is_valid("([)]"))      # False — broken in the middle
+print(is_valid("((("))       # False — leftover at the end`)}
+              cpp={t(`// 괄호 짝맞추기 — 스택 활용
 #include <stack>
 #include <string>
 #include <unordered_map>
@@ -907,7 +1004,28 @@ bool isValid(string s) {
         }
     }
     return st.empty();                        // 남은 여는 괄호 없어야
-}`}
+}`, `// Bracket matching — using a stack
+#include <stack>
+#include <string>
+#include <unordered_map>
+using namespace std;
+
+bool isValid(string s) {
+    stack<char> st;
+    unordered_map<char, char> pairs = {
+        {')', '('}, {']', '['}, {'}', '{'}
+    };
+    for (char c : s) {
+        if (c == '(' || c == '[' || c == '{') {
+            st.push(c);                       // opening → push
+        } else {
+            // closing bracket
+            if (st.empty() || st.top() != pairs[c]) return false;
+            st.pop();
+        }
+    }
+    return st.empty();                        // nothing left → OK
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(

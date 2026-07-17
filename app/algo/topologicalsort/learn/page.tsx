@@ -486,7 +486,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`from collections import deque, defaultdict
+              py={t(`from collections import deque, defaultdict
 
 def topo_sort(n, edges):
     adj = defaultdict(list)
@@ -510,8 +510,32 @@ def topo_sort(n, edges):
 
 # 예: 7 노드 DAG
 edges = [(1,2),(1,3),(2,4),(3,4),(3,5),(4,6),(5,6),(6,7)]
-print(topo_sort(7, edges))   # [1, 2, 3, 4, 5, 6, 7]`}
-              cpp={`#include <bits/stdc++.h>
+print(topo_sort(7, edges))   # [1, 2, 3, 4, 5, 6, 7]`, `from collections import deque, defaultdict
+
+def topo_sort(n, edges):
+    adj = defaultdict(list)
+    indeg = defaultdict(int)
+    for u, v in edges:
+        adj[u].append(v)
+        indeg[v] += 1
+
+    # 1) queue nodes with in-degree 0
+    q = deque(i for i in range(1, n + 1) if indeg[i] == 0)
+    result = []
+
+    while q:
+        u = q.popleft()
+        result.append(u)
+        for v in adj[u]:
+            indeg[v] -= 1               # 2) neighbor -1
+            if indeg[v] == 0:           # 3) hits 0 -> queue
+                q.append(v)
+    return result
+
+# example: 7-node DAG
+edges = [(1,2),(1,3),(2,4),(3,4),(3,5),(4,6),(5,6),(6,7)]
+print(topo_sort(7, edges))   # [1, 2, 3, 4, 5, 6, 7]`)}
+              cpp={t(`#include <bits/stdc++.h>
 using namespace std;
 
 vector<int> topoSort(int n, vector<pair<int,int>>& edges) {
@@ -536,7 +560,32 @@ vector<int> topoSort(int n, vector<pair<int,int>>& edges) {
         }
     }
     return result;
-}`}
+}`, `#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> topoSort(int n, vector<pair<int,int>>& edges) {
+    vector<vector<int>> adj(n + 1);
+    vector<int> indeg(n + 1, 0);
+    for (auto [u, v] : edges) {
+        adj[u].push_back(v);
+        indeg[v]++;
+    }
+
+    queue<int> q;
+    for (int i = 1; i <= n; i++)
+        if (indeg[i] == 0) q.push(i);   // 1) start with 0
+
+    vector<int> result;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        result.push_back(u);
+        for (int v : adj[u]) {
+            if (--indeg[v] == 0)         // 2) neighbor -1, 3) hits 0 -> queue
+                q.push(v);
+        }
+    }
+    return result;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -699,7 +748,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`import sys
+              py={t(`import sys
 sys.setrecursionlimit(200000)
 from collections import defaultdict
 
@@ -726,8 +775,35 @@ def topo_dfs(n, edges):
     return result
 
 edges = [(1,2),(1,3),(2,4),(3,4),(4,5)]
-print(topo_dfs(5, edges))   # [1, 3, 2, 4, 5] 같은 유효한 순서`}
-              cpp={`#include <bits/stdc++.h>
+print(topo_dfs(5, edges))   # [1, 3, 2, 4, 5] 같은 유효한 순서`, `import sys
+sys.setrecursionlimit(200000)
+from collections import defaultdict
+
+def topo_dfs(n, edges):
+    adj = defaultdict(list)
+    for u, v in edges:
+        adj[u].append(v)
+
+    visited = [False] * (n + 1)
+    result = []
+
+    def dfs(u):
+        visited[u] = True
+        for v in adj[u]:
+            if not visited[v]:
+                dfs(v)
+        result.append(u)              # <- append at the END!
+
+    for i in range(1, n + 1):
+        if not visited[i]:
+            dfs(i)
+
+    result.reverse()                  # <- reverse at the end
+    return result
+
+edges = [(1,2),(1,3),(2,4),(3,4),(4,5)]
+print(topo_dfs(5, edges))   # e.g. [1, 3, 2, 4, 5] — any valid order`)}
+              cpp={t(`#include <bits/stdc++.h>
 using namespace std;
 
 vector<vector<int>> adj;
@@ -753,7 +829,33 @@ vector<int> topoDfs(int n, vector<pair<int,int>>& edges) {
 
     reverse(result.begin(), result.end());  // 뒤집기
     return result;
-}`}
+}`, `#include <bits/stdc++.h>
+using namespace std;
+
+vector<vector<int>> adj;
+vector<bool> visited;
+vector<int> result;
+
+void dfs(int u) {
+    visited[u] = true;
+    for (int v : adj[u]) {
+        if (!visited[v]) dfs(v);
+    }
+    result.push_back(u);              // push at the end
+}
+
+vector<int> topoDfs(int n, vector<pair<int,int>>& edges) {
+    adj.assign(n + 1, {});
+    visited.assign(n + 1, false);
+    result.clear();
+    for (auto [u, v] : edges) adj[u].push_back(v);
+
+    for (int i = 1; i <= n; i++)
+        if (!visited[i]) dfs(i);
+
+    reverse(result.begin(), result.end());  // reverse
+    return result;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -914,7 +1016,7 @@ result length = 0 < N (3) → cycle detected!`)}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`from collections import deque, defaultdict
+              py={t(`from collections import deque, defaultdict
 
 def topo_or_cycle(n, edges):
     adj = defaultdict(list)
@@ -939,8 +1041,33 @@ def topo_or_cycle(n, edges):
     return result
 
 # 사이클 있는 예
-print(topo_or_cycle(3, [(1,2),(2,3),(3,1)]))   # None`}
-              cpp={`#include <bits/stdc++.h>
+print(topo_or_cycle(3, [(1,2),(2,3),(3,1)]))   # None`, `from collections import deque, defaultdict
+
+def topo_or_cycle(n, edges):
+    adj = defaultdict(list)
+    indeg = defaultdict(int)
+    for u, v in edges:
+        adj[u].append(v)
+        indeg[v] += 1
+
+    q = deque(i for i in range(1, n + 1) if indeg[i] == 0)
+    result = []
+
+    while q:
+        u = q.popleft()
+        result.append(u)
+        for v in adj[u]:
+            indeg[v] -= 1
+            if indeg[v] == 0:
+                q.append(v)
+
+    if len(result) < n:               # <- cycle check
+        return None                   # or ["IMPOSSIBLE"]
+    return result
+
+# example with a cycle
+print(topo_or_cycle(3, [(1,2),(2,3),(3,1)]))   # None`)}
+              cpp={t(`#include <bits/stdc++.h>
 using namespace std;
 
 vector<int> topoOrCycle(int n, vector<pair<int,int>>& edges) {
@@ -966,7 +1093,33 @@ vector<int> topoOrCycle(int n, vector<pair<int,int>>& edges) {
     if ((int)result.size() < n)
         return {};                    // 사이클 있음
     return result;
-}`}
+}`, `#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> topoOrCycle(int n, vector<pair<int,int>>& edges) {
+    vector<vector<int>> adj(n + 1);
+    vector<int> indeg(n + 1, 0);
+    for (auto [u, v] : edges) {
+        adj[u].push_back(v);
+        indeg[v]++;
+    }
+
+    queue<int> q;
+    for (int i = 1; i <= n; i++)
+        if (indeg[i] == 0) q.push(i);
+
+    vector<int> result;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        result.push_back(u);
+        for (int v : adj[u])
+            if (--indeg[v] == 0) q.push(v);
+    }
+
+    if ((int)result.size() < n)
+        return {};                    // cycle found
+    return result;
+}`)}
             />
           </div>
         )}

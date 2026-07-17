@@ -199,10 +199,13 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <div className="bg-white/70 rounded-lg p-3 border border-blue-200 mb-3">
               <p className="text-xs font-bold text-blue-800 mb-2">{t("예: 1—2, 1—3, 2—4 연결된 그래프", "Example: graph with 1—2, 1—3, 2—4")}</p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`노드 1 의 이웃: [2, 3]
+{t(`노드 1 의 이웃: [2, 3]
 노드 2 의 이웃: [1, 4]
 노드 3 의 이웃: [1]
-노드 4 의 이웃: [2]`}
+노드 4 의 이웃: [2]`, `node 1's neighbors: [2, 3]
+node 2's neighbors: [1, 4]
+node 3's neighbors: [1]
+node 4's neighbors: [2]`)}
               </pre>
               <p className="text-xs text-gray-700 mt-2 leading-relaxed">
                 {t(
@@ -401,7 +404,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`n, m = map(int, input().split())
+              py={t(`n, m = map(int, input().split())
 adj = [[] for _ in range(n + 1)]   # 1-based, index 0 비움
 
 for _ in range(m):
@@ -410,8 +413,17 @@ for _ in range(m):
     adj[v].append(u)               # ← 둘 다 잊지 말기!
 
 # adj[3] 의 이웃 보기
-print(adj[3])`}
-              cpp={`#include <iostream>
+print(adj[3])`, `n, m = map(int, input().split())
+adj = [[] for _ in range(n + 1)]   # 1-based, leave index 0 unused
+
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj[u].append(v)               # undirected
+    adj[v].append(u)               # <- don't forget both!
+
+# check adj[3]'s neighbors
+print(adj[3])`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -427,7 +439,23 @@ int main() {
         adj[v].push_back(u);           // ← 둘 다!
     }
     return 0;
-}`}
+}`, `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> adj(n + 1);    // 1-based
+
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);           // undirected
+        adj[v].push_back(u);           // <- both!
+    }
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -638,7 +666,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`from collections import deque
+              py={t(`from collections import deque
 
 def bfs(start, n, adj):
     visited = [False] * (n + 1)
@@ -657,8 +685,27 @@ def bfs(start, n, adj):
     return dist
 
 # 호출 예: dist = bfs(1, n, adj)
-# dist[6] 이 1→6 의 최단 거리`}
-              cpp={`#include <iostream>
+# dist[6] 이 1→6 의 최단 거리`, `from collections import deque
+
+def bfs(start, n, adj):
+    visited = [False] * (n + 1)
+    dist = [-1] * (n + 1)
+    q = deque([start])
+    visited[start] = True
+    dist[start] = 0
+
+    while q:
+        cur = q.popleft()              # FIFO!
+        for nb in adj[cur]:
+            if not visited[nb]:
+                visited[nb] = True
+                dist[nb] = dist[cur] + 1
+                q.append(nb)
+    return dist
+
+# example call: dist = bfs(1, n, adj)
+# dist[6] is the shortest distance 1->6`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 #include <queue>
 using namespace std;
@@ -679,7 +726,28 @@ vector<int> bfs(int start, int n, vector<vector<int>>& adj) {
         }
     }
     return dist;
-}`}
+}`, `#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+vector<int> bfs(int start, int n, vector<vector<int>>& adj) {
+    vector<int> dist(n + 1, -1);
+    queue<int> q;
+    q.push(start);
+    dist[start] = 0;
+
+    while (!q.empty()) {
+        int cur = q.front(); q.pop();      // FIFO!
+        for (int nb : adj[cur]) {
+            if (dist[nb] == -1) {          // not visited
+                dist[nb] = dist[cur] + 1;
+                q.push(nb);
+            }
+        }
+    }
+    return dist;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -888,7 +956,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`import sys
+              py={t(`import sys
 sys.setrecursionlimit(10**6)        # ← 큰 그래프 필수!
 
 def dfs(u, adj, visited):
@@ -900,8 +968,20 @@ def dfs(u, adj, visited):
 
 # 호출 예
 visited = [False] * (n + 1)
-dfs(1, adj, visited)`}
-              cpp={`#include <iostream>
+dfs(1, adj, visited)`, `import sys
+sys.setrecursionlimit(10**6)        # <- needed for big graphs!
+
+def dfs(u, adj, visited):
+    visited[u] = True
+    # process node u here (e.g. print, count++)
+    for nb in adj[u]:
+        if not visited[nb]:
+            dfs(nb, adj, visited)
+
+# example call
+visited = [False] * (n + 1)
+dfs(1, adj, visited)`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -924,7 +1004,30 @@ int main() {
     // 간선 입력...
     dfs(1);
     return 0;
-}`}
+}`, `#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<vector<int>> adj;
+vector<bool> visited;
+
+void dfs(int u) {
+    visited[u] = true;
+    // process u here (e.g. cout, count++)
+    for (int nb : adj[u]) {
+        if (!visited[nb]) dfs(nb);
+    }
+}
+
+int main() {
+    int n;
+    cin >> n;
+    adj.assign(n + 1, {});
+    visited.assign(n + 1, false);
+    // read edges...
+    dfs(1);
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(

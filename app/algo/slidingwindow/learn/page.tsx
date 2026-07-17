@@ -331,7 +331,7 @@ function Chapter2({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
               {t("창마다 3개 다시 더하기(n×k번) 대신, 밀 때마다 딱 2번:", "Instead of re-adding k per window (n×k), just 2 ops per slide:")}
             </p>
             <CodeBlock lang={codeLang}
-              py={`a = [3, 1, 4, 1, 5, 2]
+              py={t(`a = [3, 1, 4, 1, 5, 2]
 k = 3
 cur = sum(a[0:k])          # 첫 창은 한 번만 더한다
 best = cur
@@ -339,8 +339,16 @@ for right in range(k, len(a)):
     cur += a[right]        # 들어온 칸 +
     cur -= a[right - k]    # 나간 칸 −
     best = max(best, cur)
-print(best)                # 10`}
-              cpp={`int a[] = {3, 1, 4, 1, 5, 2};
+print(best)                # 10`, `a = [3, 1, 4, 1, 5, 2]
+k = 3
+cur = sum(a[0:k])          # sum the first window just once
+best = cur
+for right in range(k, len(a)):
+    cur += a[right]        # add entering cell
+    cur -= a[right - k]    # drop leaving cell
+    best = max(best, cur)
+print(best)                # 10`)}
+              cpp={t(`int a[] = {3, 1, 4, 1, 5, 2};
 int n = 6, k = 3;
 int cur = 0;
 for (int i = 0; i < k; i++) cur += a[i];  // 첫 창
@@ -350,7 +358,17 @@ for (int right = k; right < n; right++) {
     cur -= a[right - k];   // 나간 칸 −
     best = max(best, cur);
 }
-cout << best << endl;      // 10`}
+cout << best << endl;      // 10`, `int a[] = {3, 1, 4, 1, 5, 2};
+int n = 6, k = 3;
+int cur = 0;
+for (int i = 0; i < k; i++) cur += a[i];  // first window
+int best = cur;
+for (int right = k; right < n; right++) {
+    cur += a[right];       // add entering cell
+    cur -= a[right - k];   // drop leaving cell
+    best = max(best, cur);
+}
+cout << best << endl;      // 10`)}
             />
             <div className="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-3 text-sm text-emerald-900 font-bold text-center">
               ✨ {t("기법 1 — 크기 고정이면: 밀면서 +1개 −1개만. 다시 세지 않기!", "Tech 1 — fixed size: slide with +1/−1. Never recount!")}
@@ -449,7 +467,7 @@ function Chapter3({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
         {step === 3 && (
           <div>
             <CodeBlock lang={codeLang}
-              py={`a = [3, 1, 4, 1, 5, 2]
+              py={t(`a = [3, 1, 4, 1, 5, 2]
 K = 7
 left = 0
 cur = 0
@@ -460,8 +478,19 @@ for right in range(len(a)):
         cur -= a[left]        # 왼쪽 줄이기
         left += 1
     best = max(best, right - left + 1)
-print(best)                   # 3  (자리 2~4: 1+4+1)`}
-              cpp={`int a[] = {3, 1, 4, 1, 5, 2};
+print(best)                   # 3  (자리 2~4: 1+4+1)`, `a = [3, 1, 4, 1, 5, 2]
+K = 7
+left = 0
+cur = 0
+best = 0
+for right in range(len(a)):
+    cur += a[right]           # grow right
+    while cur > K:            # overflowed
+        cur -= a[left]        # shrink left
+        left += 1
+    best = max(best, right - left + 1)
+print(best)                   # 3  (spots 2~4: 1+4+1)`)}
+              cpp={t(`int a[] = {3, 1, 4, 1, 5, 2};
 int n = 6, K = 7;
 int left = 0, cur = 0, best = 0;
 for (int right = 0; right < n; right++) {
@@ -472,7 +501,18 @@ for (int right = 0; right < n; right++) {
     }
     best = max(best, right - left + 1);
 }
-cout << best << endl;         // 3  (자리 2~4: 1+4+1)`}
+cout << best << endl;         // 3  (자리 2~4: 1+4+1)`, `int a[] = {3, 1, 4, 1, 5, 2};
+int n = 6, K = 7;
+int left = 0, cur = 0, best = 0;
+for (int right = 0; right < n; right++) {
+    cur += a[right];          // grow right
+    while (cur > K) {         // overflowed
+        cur -= a[left];       // shrink left
+        left++;
+    }
+    best = max(best, right - left + 1);
+}
+cout << best << endl;         // 3  (spots 2~4: 1+4+1)`)}
             />
             <div className="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-3 text-sm text-emerald-900 font-bold text-center">
               ✨ {t("기법 2 — 크기 모르면: 오른쪽 늘리고, 깨지면 왼쪽 줄이기. 양 끝 다 전진만!", "Tech 2 — unknown size: grow right, shrink left when broken. Both ends only forward!")}

@@ -377,18 +377,28 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`arr = [3, 1, 4, 1, 5]
+              py={t(`arr = [3, 1, 4, 1, 5]
 prefix = [0]                       # 시작값 0
 for i in range(len(arr)):
     prefix.append(prefix[i] + arr[i])
 
-# 결과: prefix = [0, 3, 4, 8, 9, 14]`}
-              cpp={`vector<int> arr = {3, 1, 4, 1, 5};
+# 결과: prefix = [0, 3, 4, 8, 9, 14]`, `arr = [3, 1, 4, 1, 5]
+prefix = [0]                       # start value 0
+for i in range(len(arr)):
+    prefix.append(prefix[i] + arr[i])
+
+# result: prefix = [0, 3, 4, 8, 9, 14]`)}
+              cpp={t(`vector<int> arr = {3, 1, 4, 1, 5};
 vector<int> prefix(arr.size() + 1, 0);
 for (int i = 0; i < arr.size(); i++)
     prefix[i + 1] = prefix[i] + arr[i];
 
-// 결과: prefix = {0, 3, 4, 8, 9, 14}`}
+// 결과: prefix = {0, 3, 4, 8, 9, 14}`, `vector<int> arr = {3, 1, 4, 1, 5};
+vector<int> prefix(arr.size() + 1, 0);
+for (int i = 0; i < arr.size(); i++)
+    prefix[i + 1] = prefix[i] + arr[i];
+
+// result: prefix = {0, 3, 4, 8, 9, 14}`)}
             />
             <p className="text-xs text-gray-600 text-center">
               {t("진짜 단순하죠? 마지막 슬라이드에서 한 번 확인해봐요 →", "Really simple, right? Quick check on the last slide →")}
@@ -541,21 +551,34 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def range_sum(prefix, L, R):
+              py={t(`def range_sum(prefix, L, R):
     """arr[L]~arr[R] 의 합 (1-indexed)"""
     return prefix[R] - prefix[L - 1]
 
 # 사용 예시
 prefix = [0, 3, 4, 8, 9, 14]
-print(range_sum(prefix, 2, 4))   # → 6`}
-              cpp={`int rangeSum(vector<int>& prefix, int L, int R) {
+print(range_sum(prefix, 2, 4))   # → 6`, `def range_sum(prefix, L, R):
+    """sum of arr[L]~arr[R] (1-indexed)"""
+    return prefix[R] - prefix[L - 1]
+
+# usage example
+prefix = [0, 3, 4, 8, 9, 14]
+print(range_sum(prefix, 2, 4))   # -> 6`)}
+              cpp={t(`int rangeSum(vector<int>& prefix, int L, int R) {
     // arr[L]~arr[R] 의 합 (1-indexed)
     return prefix[R] - prefix[L - 1];
 }
 
 // 사용 예시
 vector<int> prefix = {0, 3, 4, 8, 9, 14};
-cout << rangeSum(prefix, 2, 4) << endl;  // → 6`}
+cout << rangeSum(prefix, 2, 4) << endl;  // → 6`, `int rangeSum(vector<int>& prefix, int L, int R) {
+    // sum of arr[L]~arr[R] (1-indexed)
+    return prefix[R] - prefix[L - 1];
+}
+
+// usage example
+vector<int> prefix = {0, 3, 4, 8, 9, 14};
+cout << rangeSum(prefix, 2, 4) << endl;  // -> 6`)}
             />
             <p className="text-xs text-gray-600 text-center">
               {t("이게 누적합의 진짜 가치 — 한 번 만들고, 평생 O(1) 로 답 →", "This is prefix sum's real value — build once, O(1) forever →")}
@@ -661,7 +684,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`import sys
+              py={t(`import sys
 input = sys.stdin.readline
 
 N, M = map(int, input().split())
@@ -675,8 +698,22 @@ for v in arr:
 # 2. M 개의 질문 처리
 for _ in range(M):
     i, j = map(int, input().split())
-    print(prefix[j] - prefix[i - 1])`}
-              cpp={`#include <bits/stdc++.h>
+    print(prefix[j] - prefix[i - 1])`, `import sys
+input = sys.stdin.readline
+
+N, M = map(int, input().split())
+arr = list(map(int, input().split()))
+
+# 1. build prefix sum
+prefix = [0]
+for v in arr:
+    prefix.append(prefix[-1] + v)
+
+# 2. handle M queries
+for _ in range(M):
+    i, j = map(int, input().split())
+    print(prefix[j] - prefix[i - 1])`)}
+              cpp={t(`#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
@@ -693,7 +730,24 @@ int main() {
         int i, j; cin >> i >> j;
         cout << prefix[j] - prefix[i - 1] << "\\n";
     }
-}`}
+}`, `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false); cin.tie(0);
+
+    int N, M; cin >> N >> M;
+    vector<long long> prefix(N + 1, 0);
+    for (int i = 1; i <= N; i++) {
+        int v; cin >> v;
+        prefix[i] = prefix[i - 1] + v;
+    }
+
+    while (M--) {
+        int i, j; cin >> i >> j;
+        cout << prefix[j] - prefix[i - 1] << "\\n";
+    }
+}`)}
             />
             <p className="text-xs text-gray-600 text-center">
               {t("Python 은 빠른 입출력 (sys.stdin) 필수. C++ 는 ios::sync_with_stdio(false).", "Python needs fast I/O (sys.stdin). C++ uses ios::sync_with_stdio(false).")}

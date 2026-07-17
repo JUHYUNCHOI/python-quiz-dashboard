@@ -411,13 +411,19 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-white/70 rounded-lg p-3 border border-emerald-200 mb-3">
               <p className="text-xs font-bold text-emerald-800 mb-2">💡 {t("예: [2,5,8] + [1,3,9]", "Example: [2,5,8] + [1,3,9]")}</p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`A=[2,5,8] B=[1,3,9]  결과=[]
+{t(`A=[2,5,8] B=[1,3,9]  결과=[]
 2 vs 1 → 1 넣음.  A=[2,5,8] B=[3,9]  → [1]
 2 vs 3 → 2 넣음.  A=[5,8]   B=[3,9]  → [1,2]
 5 vs 3 → 3 넣음.  A=[5,8]   B=[9]    → [1,2,3]
 5 vs 9 → 5 넣음.  A=[8]     B=[9]    → [1,2,3,5]
 8 vs 9 → 8 넣음.  A=[]      B=[9]    → [1,2,3,5,8]
-A 비었음. B 남은거 붙임.        → [1,2,3,5,8,9]`}
+A 비었음. B 남은거 붙임.        → [1,2,3,5,8,9]`, `A=[2,5,8] B=[1,3,9]  result=[]
+2 vs 1 -> take 1.  A=[2,5,8] B=[3,9]  -> [1]
+2 vs 3 -> take 2.  A=[5,8]   B=[3,9]  -> [1,2]
+5 vs 3 -> take 3.  A=[5,8]   B=[9]    -> [1,2,3]
+5 vs 9 -> take 5.  A=[8]     B=[9]    -> [1,2,3,5]
+8 vs 9 -> take 8.  A=[]      B=[9]    -> [1,2,3,5,8]
+A empty. Dump rest of B.        -> [1,2,3,5,8,9]`)}
               </pre>
             </div>
             <p className="text-sm font-bold text-emerald-700 text-center">
@@ -438,7 +444,7 @@ A 비었음. B 남은거 붙임.        → [1,2,3,5,8,9]`}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def merge_sort(arr):
+              py={t(`def merge_sort(arr):
     if len(arr) <= 1:           # 베이스 — 1 개는 이미 정렬됨
         return arr
     mid = len(arr) // 2
@@ -458,8 +464,28 @@ def merge(a, b):
     result.extend(b[j:])
     return result
 
-print(merge_sort([5,2,8,1,9,3]))   # [1, 2, 3, 5, 8, 9]`}
-              cpp={`#include <iostream>
+print(merge_sort([5,2,8,1,9,3]))   # [1, 2, 3, 5, 8, 9]`, `def merge_sort(arr):
+    if len(arr) <= 1:           # base case — single item already sorted
+        return arr
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])    # recurse: left half
+    right = merge_sort(arr[mid:])   # recurse: right half
+    return merge(left, right)       # combine
+
+def merge(a, b):
+    result = []
+    i = j = 0
+    while i < len(a) and j < len(b):
+        if a[i] <= b[j]:
+            result.append(a[i]); i += 1
+        else:
+            result.append(b[j]); j += 1
+    result.extend(a[i:])    # dump remaining side
+    result.extend(b[j:])
+    return result
+
+print(merge_sort([5,2,8,1,9,3]))   # [1, 2, 3, 5, 8, 9]`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -490,7 +516,38 @@ int main() {
     auto sorted = mergeSort(a);
     for (int x : sorted) cout << x << " ";
     return 0;
-}`}
+}`, `#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<int> merge(vector<int>& a, vector<int>& b) {
+    vector<int> result;
+    int i = 0, j = 0;
+    while (i < (int)a.size() && j < (int)b.size()) {
+        if (a[i] <= b[j]) result.push_back(a[i++]);
+        else              result.push_back(b[j++]);
+    }
+    while (i < (int)a.size()) result.push_back(a[i++]);
+    while (j < (int)b.size()) result.push_back(b[j++]);
+    return result;
+}
+
+vector<int> mergeSort(vector<int> arr) {
+    if (arr.size() <= 1) return arr;
+    int mid = arr.size() / 2;
+    vector<int> left(arr.begin(), arr.begin() + mid);
+    vector<int> right(arr.begin() + mid, arr.end());
+    left = mergeSort(left);
+    right = mergeSort(right);
+    return merge(left, right);
+}
+
+int main() {
+    vector<int> a = {5,2,8,1,9,3};
+    auto sorted = mergeSort(a);
+    for (int x : sorted) cout << x << " ";
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -694,7 +751,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def quick_sort(arr):
+              py={t(`def quick_sort(arr):
     if len(arr) <= 1:
         return arr
     pivot = arr[-1]                        # 피벗 = 마지막
@@ -702,8 +759,16 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
     greater = [x for x in arr[:-1] if x > pivot]
     return quick_sort(less) + [pivot] + quick_sort(greater)
 
-print(quick_sort([5,2,8,1,9,3]))   # [1, 2, 3, 5, 8, 9]`}
-              cpp={`#include <iostream>
+print(quick_sort([5,2,8,1,9,3]))   # [1, 2, 3, 5, 8, 9]`, `def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[-1]                        # pivot = last element
+    less = [x for x in arr[:-1] if x <= pivot]
+    greater = [x for x in arr[:-1] if x > pivot]
+    return quick_sort(less) + [pivot] + quick_sort(greater)
+
+print(quick_sort([5,2,8,1,9,3]))   # [1, 2, 3, 5, 8, 9]`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -727,7 +792,31 @@ int main() {
     auto sorted = quickSort(a);
     for (int x : sorted) cout << x << " ";
     return 0;
-}`}
+}`, `#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<int> quickSort(vector<int> arr) {
+    if (arr.size() <= 1) return arr;
+    int pivot = arr.back();
+    vector<int> less, greater;
+    for (int i = 0; i < (int)arr.size() - 1; i++) {
+        if (arr[i] <= pivot) less.push_back(arr[i]);
+        else                 greater.push_back(arr[i]);
+    }
+    vector<int> L = quickSort(less);
+    vector<int> G = quickSort(greater);
+    L.push_back(pivot);
+    for (int x : G) L.push_back(x);
+    return L;
+}
+
+int main() {
+    vector<int> a = {5,2,8,1,9,3};
+    auto sorted = quickSort(a);
+    for (int x : sorted) cout << x << " ";
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -800,16 +889,21 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-white/70 rounded-lg p-3 border border-purple-200 mb-3">
               <p className="text-xs font-bold text-purple-800 mb-2">💡 {t("분할 정복 트릭", "D&C trick")}</p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`b^n = (b^(n/2))^2          ← n 짝수
+{t(`b^n = (b^(n/2))^2          ← n 짝수
 b^n = b · b^(n-1)          ← n 홀수
 b^0 = 1                    ← 베이스
 
 half 한 번만 계산해서 제곱.
-→ 매번 n 이 반으로 → O(log N)`}
+→ 매번 n 이 반으로 → O(log N)`, `b^n = (b^(n/2))^2          <- n even
+b^n = b * b^(n-1)          <- n odd
+b^0 = 1                    <- base case
+
+Compute half once, then square it.
+-> n halves each call -> O(log N)`)}
               </pre>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def power(b, n):
+              py={t(`def power(b, n):
     if n == 0:
         return 1
     half = power(b, n // 2)
@@ -817,13 +911,26 @@ half 한 번만 계산해서 제곱.
         return half * half       # half 두 번 부르지 X — 변수에 저장!
     return half * half * b
 
-print(power(2, 30))   # 1073741824 (10초도 안 걸림 ✓)`}
-              cpp={`long long power(long long b, int n) {
+print(power(2, 30))   # 1073741824 (10초도 안 걸림 ✓)`, `def power(b, n):
+    if n == 0:
+        return 1
+    half = power(b, n // 2)
+    if n % 2 == 0:
+        return half * half       # don't call half twice - save in a variable!
+    return half * half * b
+
+print(power(2, 30))   # 1073741824 (takes under 10 sec (: )`)}
+              cpp={t(`long long power(long long b, int n) {
     if (n == 0) return 1;
     long long half = power(b, n / 2);
     if (n % 2 == 0) return half * half;
     return half * half * b;
-}`}
+}`, `long long power(long long b, int n) {
+    if (n == 0) return 1;
+    long long half = power(b, n / 2);
+    if (n % 2 == 0) return half * half;
+    return half * half * b;
+}`)}
             />
             <p className="text-xs text-purple-700 text-center">
               {t("⚠️ 함정: half 를 두 번 부르면 다시 O(N)! 변수에 저장!", "⚠️ Trap: calling half twice → back to O(N)! Save in a variable!")}
@@ -855,12 +962,17 @@ print(power(2, 30))   # 1073741824 (10초도 안 걸림 ✓)`}
             </div>
             <div className="bg-gray-900 rounded-lg p-3 my-2">
               <pre className="text-xs text-emerald-200 font-mono leading-relaxed overflow-x-auto">
-{`# merge 안에서:
+{t(`# merge 안에서:
 if a[i] <= b[j]:
     result.append(a[i]); i += 1
 else:
     result.append(b[j]); j += 1
-    inv_count += len(a) - i   # ← 한 줄 추가!`}
+    inv_count += len(a) - i   # ← 한 줄 추가!`, `# inside merge:
+if a[i] <= b[j]:
+    result.append(a[i]); i += 1
+else:
+    result.append(b[j]); j += 1
+    inv_count += len(a) - i   # <- one line added!`)}
               </pre>
             </div>
             <p className="text-sm font-bold text-rose-700 text-center">

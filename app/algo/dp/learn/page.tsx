@@ -177,11 +177,15 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-orange-200 mb-3">
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`N=1 → 1 가지 (1)
+{t(`N=1 → 1 가지 (1)
 N=2 → 2 가지 (1+1, 2)
 N=3 → 3 가지 (1+1+1, 1+2, 2+1)
 N=4 → 5 가지
-N=5 → 8 가지`}
+N=5 → 8 가지`, `N=1 → 1 way (1)
+N=2 → 2 ways (1+1, 2)
+N=3 → 3 ways (1+1+1, 1+2, 2+1)
+N=4 → 5 ways
+N=5 → 8 ways`)}
               </pre>
               <p className="text-xs text-gray-700 mt-2 leading-relaxed">
                 {t(
@@ -210,9 +214,11 @@ N=5 → 8 가지`}
             </p>
             <div className="bg-gray-900 rounded-lg p-3 mb-3">
               <pre className="text-xs text-emerald-200 font-mono leading-relaxed">
-{`def ways(n):
+{t(`def ways(n):
     if n <= 1: return 1
-    return ways(n-1) + ways(n-2)`}
+    return ways(n-1) + ways(n-2)`, `def ways(n):
+    if n <= 1: return 1
+    return ways(n-1) + ways(n-2)`)}
               </pre>
             </div>
             <p className="text-xs text-gray-700 leading-relaxed mb-2">
@@ -223,7 +229,7 @@ N=5 → 8 가지`}
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-red-200 mb-3 overflow-x-auto">
               <pre className="text-[11px] text-gray-800 font-mono leading-relaxed">
-{`ways(5)
+{t(`ways(5)
 ├─ ways(4)
 │  ├─ ways(3)        ← 또 계산
 │  │  ├─ ways(2)     ← 또 계산
@@ -231,7 +237,15 @@ N=5 → 8 가지`}
 │  └─ ways(2)        ← 또 계산
 └─ ways(3)           ← 또 계산
    ├─ ways(2)        ← 또 계산
-   └─ ways(1)`}
+   └─ ways(1)`, `ways(5)
+├─ ways(4)
+│  ├─ ways(3)        ← recomputed
+│  │  ├─ ways(2)     ← recomputed
+│  │  └─ ways(1)
+│  └─ ways(2)        ← recomputed
+└─ ways(3)           ← recomputed
+   ├─ ways(2)        ← recomputed
+   └─ ways(1)`)}
               </pre>
             </div>
             <div className="bg-red-100 rounded-lg p-3 border border-red-300">
@@ -407,9 +421,11 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </div>
             <div className="bg-gray-900 rounded-lg p-3 my-2">
               <pre className="text-xs text-emerald-200 font-mono leading-relaxed text-center">
-{`dp[i] = dp[i-1] + dp[i-2]
+{t(`dp[i] = dp[i-1] + dp[i-2]
 dp[0] = 1   ← 베이스
-dp[1] = 1   ← 베이스`}
+dp[1] = 1   ← 베이스`, `dp[i] = dp[i-1] + dp[i-2]
+dp[0] = 1   ← base
+dp[1] = 1   ← base`)}
               </pre>
             </div>
             <p className="text-xs text-cyan-700 text-center leading-relaxed">
@@ -487,7 +503,7 @@ dp[1] = 1   ← 베이스`}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def stairs(n):
+              py={t(`def stairs(n):
     if n <= 1:
         return 1
     dp = [0] * (n + 1)
@@ -498,8 +514,19 @@ dp[1] = 1   ← 베이스`}
     return dp[n]
 
 print(stairs(10))   # 89
-print(stairs(40))   # 165580141 — 즉시!`}
-              cpp={`#include <iostream>
+print(stairs(40))   # 165580141 — 즉시!`, `def stairs(n):
+    if n <= 1:
+        return 1
+    dp = [0] * (n + 1)
+    dp[0] = 1                    # 1) base
+    dp[1] = 1                    # 2) base
+    for i in range(2, n + 1):    # 3) fill small to large
+        dp[i] = dp[i-1] + dp[i-2]   # 4) recurrence
+    return dp[n]
+
+print(stairs(10))   # 89
+print(stairs(40))   # 165580141 — instant!`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -518,7 +545,26 @@ int main() {
     cout << stairs(10) << endl;   // 89
     cout << stairs(40) << endl;   // 165580141
     return 0;
-}`}
+}`, `#include <iostream>
+#include <vector>
+using namespace std;
+
+long long stairs(int n) {
+    if (n <= 1) return 1;
+    vector<long long> dp(n + 1);
+    dp[0] = 1;                              // 1) base
+    dp[1] = 1;                              // 2) base
+    for (int i = 2; i <= n; i++) {          // 3) small to large
+        dp[i] = dp[i - 1] + dp[i - 2];      // 4) recurrence
+    }
+    return dp[n];
+}
+
+int main() {
+    cout << stairs(10) << endl;   // 89
+    cout << stairs(40) << endl;   // 165580141
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -537,7 +583,7 @@ int main() {
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`from functools import cache
+              py={t(`from functools import cache
 
 @cache                           # ← 캐시 한 줄! (또는 dict 로 직접)
 def stairs(n):
@@ -553,8 +599,24 @@ def stairs2(n):
     if n <= 1: return 1
     if n in memo: return memo[n]       # 이미 풀었으면 꺼내 쓰기
     memo[n] = stairs2(n-1) + stairs2(n-2)
-    return memo[n]`}
-              cpp={`#include <iostream>
+    return memo[n]`, `from functools import cache
+
+@cache                           # <- one line of caching! (or use a dict)
+def stairs(n):
+    if n <= 1:
+        return 1
+    return stairs(n-1) + stairs(n-2)   # 4) recurrence — plain recursion
+
+print(stairs(40))   # 165580141 — instant thanks to cache!
+
+# using a dict cache directly:
+memo = {}
+def stairs2(n):
+    if n <= 1: return 1
+    if n in memo: return memo[n]       # already solved -> reuse
+    memo[n] = stairs2(n-1) + stairs2(n-2)
+    return memo[n]`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -571,7 +633,24 @@ int main() {
     memo.assign(n + 1, -1);
     cout << stairs(n) << endl;   // 165580141 — 즉시!
     return 0;
-}`}
+}`, `#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<long long> memo;              // -1 = not solved yet
+
+long long stairs(int n) {
+    if (n <= 1) return 1;
+    if (memo[n] != -1) return memo[n];        // already solved -> reuse
+    return memo[n] = stairs(n-1) + stairs(n-2);   // 4) recurrence — plain recursion
+}
+
+int main() {
+    int n = 40;
+    memo.assign(n + 1, -1);
+    cout << stairs(n) << endl;   // 165580141 — instant!
+    return 0;
+}`)}
             />
             <div className="bg-amber-50 rounded-lg p-3 border border-amber-300">
               <p className="text-xs text-amber-900 leading-relaxed text-center">
@@ -598,7 +677,7 @@ int main() {
             </div>
             <div className="bg-gray-900 rounded-lg p-3">
               <pre className="text-xs text-emerald-200 font-mono leading-relaxed text-center">
-{`dp[i] = ________   ← 빈칸 채우기`}
+{t(`dp[i] = ________   ← 빈칸 채우기`, `dp[i] = ________   ← fill in the blank`)}
               </pre>
             </div>
             <MiniQuiz
@@ -829,7 +908,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def knapsack(weights, values, W):
+              py={t(`def knapsack(weights, values, W):
     n = len(weights)
     dp = [[0] * (W + 1) for _ in range(n + 1)]   # ① 0 으로 초기화 (베이스)
 
@@ -842,8 +921,21 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
 
     return dp[n][W]
 
-print(knapsack([2,3,4,5], [3,4,5,6], 5))   # 7 (물건 1+2: w=5, v=7)`}
-              cpp={`#include <iostream>
+print(knapsack([2,3,4,5], [3,4,5,6], 5))   # 7 (물건 1+2: w=5, v=7)`, `def knapsack(weights, values, W):
+    n = len(weights)
+    dp = [[0] * (W + 1) for _ in range(n + 1)]   # 1) init 0 (base)
+
+    for i in range(1, n + 1):                    # 2) each item
+        wi, vi = weights[i-1], values[i-1]
+        for w in range(W + 1):                   # 3) each capacity
+            dp[i][w] = dp[i-1][w]                # skip case
+            if w >= wi:
+                dp[i][w] = max(dp[i][w], dp[i-1][w - wi] + vi)  # take case
+
+    return dp[n][W]
+
+print(knapsack([2,3,4,5], [3,4,5,6], 5))   # 7 (items 1+2: w=5, v=7)`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -868,7 +960,32 @@ int main() {
     vector<int> v = {3, 4, 5, 6};
     cout << knapsack(w, v, 5) << endl;   // 7
     return 0;
-}`}
+}`, `#include <iostream>
+#include <vector>
+using namespace std;
+
+int knapsack(vector<int>& w, vector<int>& v, int W) {
+    int n = w.size();
+    vector<vector<int>> dp(n + 1, vector<int>(W + 1, 0));   // 1) base 0
+
+    for (int i = 1; i <= n; i++) {                          // 2) each item
+        for (int cap = 0; cap <= W; cap++) {                // 3) each capacity
+            dp[i][cap] = dp[i-1][cap];                      // skip
+            if (cap >= w[i-1]) {
+                dp[i][cap] = max(dp[i][cap],
+                                 dp[i-1][cap - w[i-1]] + v[i-1]);  // take
+            }
+        }
+    }
+    return dp[n][W];
+}
+
+int main() {
+    vector<int> w = {2, 3, 4, 5};
+    vector<int> v = {3, 4, 5, 6};
+    cout << knapsack(w, v, 5) << endl;   // 7
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -1029,7 +1146,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def lis(a):
+              py={t(`def lis(a):
     n = len(a)
     dp = [1] * n                      # ③ 베이스: 자기 자신 = 길이 1
     for i in range(n):                # ④ 작은 i 부터
@@ -1038,8 +1155,17 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 dp[i] = max(dp[i], dp[j] + 1)
     return max(dp)                    # 끝나는 위치 중 가장 긴 것
 
-print(lis([3,1,4,1,5,9,2,6]))   # 4`}
-              cpp={`#include <iostream>
+print(lis([3,1,4,1,5,9,2,6]))   # 4`, `def lis(a):
+    n = len(a)
+    dp = [1] * n                      # 3) base: self alone = length 1
+    for i in range(n):                # 4) small i first
+        for j in range(i):
+            if a[j] < a[i]:           # 2) recurrence: when a[j] < a[i]
+                dp[i] = max(dp[i], dp[j] + 1)
+    return max(dp)                    # longest, ending anywhere
+
+print(lis([3,1,4,1,5,9,2,6]))   # 4`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 #include <algorithm>
 using namespace std;
@@ -1061,7 +1187,29 @@ int main() {
     vector<int> a = {3, 1, 4, 1, 5, 9, 2, 6};
     cout << lis(a) << endl;   // 4
     return 0;
-}`}
+}`, `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int lis(vector<int>& a) {
+    int n = a.size();
+    vector<int> dp(n, 1);                     // 3) base = 1
+    for (int i = 0; i < n; i++) {             // 4) small i first
+        for (int j = 0; j < i; j++) {
+            if (a[j] < a[i]) {                // 2) recurrence
+                dp[i] = max(dp[i], dp[j] + 1);
+            }
+        }
+    }
+    return *max_element(dp.begin(), dp.end());
+}
+
+int main() {
+    vector<int> a = {3, 1, 4, 1, 5, 9, 2, 6};
+    cout << lis(a) << endl;   // 4
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(

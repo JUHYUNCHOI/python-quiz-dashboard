@@ -432,13 +432,19 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
 
             <div className="bg-white/80 rounded-lg p-3 border border-indigo-200 mb-3">
               <p className="text-[11px] font-bold text-indigo-700 mb-2 uppercase">{t("예: 1,3,5,8,7 을 넣으면", "e.g. after inserting 1,3,5,8,7")}</p>
-              <pre className="text-[12px] font-mono text-gray-800 leading-relaxed text-center">{`        1        ← ${t("루트 = 최솟값", "root = min")}
+              <pre className="text-[12px] font-mono text-gray-800 leading-relaxed text-center">{t(`        1        ← 루트 = 최솟값
       /   \\
      3     5
     / \\
    8   7
 
-${t("모든 부모 ≤ 자식 ✓", "every parent ≤ its children ✓")}`}</pre>
+모든 부모 ≤ 자식 ✓`, `        1        ← root = min
+      /   \\
+     3     5
+    / \\
+   8   7
+
+every parent ≤ its children ✓`)}</pre>
             </div>
 
             <div className="space-y-2 mb-3">
@@ -485,7 +491,7 @@ ${t("모든 부모 ≤ 자식 ✓", "every parent ≤ its children ✓")}`}</pre
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`import heapq
+              py={t(`import heapq
 
 # ── min-heap (기본) ──────────────────────────
 h = []
@@ -502,8 +508,25 @@ mx = []
 for v in [5, 3, 8, 1]:
     heapq.heappush(mx, -v)        # 음수로 push
 top = -heapq.heappop(mx)          # 부호 복구
-print(top)                # 8  (최댓값)`}
-              cpp={`#include <iostream>
+print(top)                # 8  (최댓값)`, `import heapq
+
+# ── min-heap (default) ──────────────────────
+h = []
+heapq.heappush(h, 5)
+heapq.heappush(h, 3)
+heapq.heappush(h, 8)
+heapq.heappush(h, 1)
+print(heapq.heappop(h))   # 1  (min)
+print(heapq.heappop(h))   # 3
+print(h[0])               # 5  (next min, peek only)
+
+# ── max-heap (flip sign) ─────────────────────
+mx = []
+for v in [5, 3, 8, 1]:
+    heapq.heappush(mx, -v)        # push negated
+top = -heapq.heappop(mx)          # restore sign
+print(top)                # 8  (max)`)}
+              cpp={t(`#include <iostream>
 #include <queue>
 #include <vector>
 using namespace std;
@@ -521,7 +544,25 @@ int main() {
     mn.push(5); mn.push(3); mn.push(8); mn.push(1);
     cout << mn.top() << endl;   // 1  (최솟값)
     return 0;
-}`}
+}`, `#include <iostream>
+#include <queue>
+#include <vector>
+using namespace std;
+
+int main() {
+    // ── max-heap (default) ──────────────────────
+    priority_queue<int> pq;
+    pq.push(5); pq.push(3); pq.push(8); pq.push(1);
+    cout << pq.top() << endl;   // 8  (max, peek only)
+    pq.pop();
+    cout << pq.top() << endl;   // 5
+
+    // ── min-heap (greater comparator) ───────────
+    priority_queue<int, vector<int>, greater<int>> mn;
+    mn.push(5); mn.push(3); mn.push(8); mn.push(1);
+    cout << mn.top() << endl;   // 1  (min)
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -725,7 +766,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`import heapq
+              py={t(`import heapq
 
 def top_k_largest(stream, k):
     h = []   # min-heap, 크기 ≤ k
@@ -737,8 +778,20 @@ def top_k_largest(stream, k):
     return sorted(h, reverse=True)
 
 print(top_k_largest([4,1,7,3,8,2,9,5,6], 3))
-# [9, 8, 7]`}
-              cpp={`#include <iostream>
+# [9, 8, 7]`, `import heapq
+
+def top_k_largest(stream, k):
+    h = []   # min-heap, size ≤ k
+    for v in stream:
+        if len(h) < k:
+            heapq.heappush(h, v)
+        elif v > h[0]:           # bigger than the smallest
+            heapq.heapreplace(h, v)   # pop + push at once
+    return sorted(h, reverse=True)
+
+print(top_k_largest([4,1,7,3,8,2,9,5,6], 3))
+# [9, 8, 7]`)}
+              cpp={t(`#include <iostream>
 #include <queue>
 #include <vector>
 using namespace std;
@@ -759,7 +812,28 @@ int main() {
         h.pop();
     }
     return 0;
-}`}
+}`, `#include <iostream>
+#include <queue>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> stream = {4,1,7,3,8,2,9,5,6};
+    int k = 3;
+    // min-heap — keeps top-K largest
+    priority_queue<int, vector<int>, greater<int>> h;
+
+    for (int v : stream) {
+        if ((int)h.size() < k) h.push(v);
+        else if (v > h.top()) { h.pop(); h.push(v); }
+    }
+    // h now holds top-3 (comes out smallest first)
+    while (!h.empty()) {
+        cout << h.top() << " ";   // 7 8 9
+        h.pop();
+    }
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -944,7 +1018,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`import heapq
+              py={t(`import heapq
 
 def dijkstra(graph, start, n):
     INF = float("inf")
@@ -959,8 +1033,23 @@ def dijkstra(graph, start, n):
             if dist[u] + w < dist[v]:
                 dist[v] = dist[u] + w
                 heapq.heappush(h, (dist[v], v))   # ← heap push
-    return dist`}
-              cpp={`#include <bits/stdc++.h>
+    return dist`, `import heapq
+
+def dijkstra(graph, start, n):
+    INF = float("inf")
+    dist = [INF] * n
+    dist[start] = 0
+    h = [(0, start)]                  # ← heap! (dist, node)
+
+    while h:
+        d, u = heapq.heappop(h)       # ← closest unsettled node
+        if d > dist[u]: continue      # stale entry, skip
+        for v, w in graph[u]:          # neighbors
+            if dist[u] + w < dist[v]:
+                dist[v] = dist[u] + w
+                heapq.heappush(h, (dist[v], v))   # ← heap push
+    return dist`)}
+              cpp={t(`#include <bits/stdc++.h>
 using namespace std;
 
 vector<long long> dijkstra(vector<vector<pair<int,int>>>& g, int start, int n) {
@@ -982,7 +1071,29 @@ vector<long long> dijkstra(vector<vector<pair<int,int>>>& g, int start, int n) {
         }
     }
     return dist;
-}`}
+}`, `#include <bits/stdc++.h>
+using namespace std;
+
+vector<long long> dijkstra(vector<vector<pair<int,int>>>& g, int start, int n) {
+    const long long INF = LLONG_MAX;
+    vector<long long> dist(n, INF);
+    dist[start] = 0;
+    // ← min-heap: (dist, node)
+    priority_queue<pair<long long,int>, vector<pair<long long,int>>, greater<>> pq;
+    pq.push({0, start});
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top(); pq.pop();   // ← closest
+        if (d > dist[u]) continue;
+        for (auto [v, w] : g[u]) {
+            if (dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+                pq.push({dist[v], v});       // ← push
+            }
+        }
+    }
+    return dist;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(

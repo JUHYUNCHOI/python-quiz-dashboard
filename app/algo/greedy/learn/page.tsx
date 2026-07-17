@@ -433,7 +433,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def max_meetings(meetings):
+              py={t(`def max_meetings(meetings):
     # (시작, 끝) 튜플 리스트. 끝나는 시간 기준 정렬!
     meetings.sort(key=lambda m: m[1])
 
@@ -447,8 +447,22 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
 
 meetings = [(1,4),(3,5),(0,6),(5,7),(3,9),
             (5,9),(6,10),(8,11),(8,12),(2,14),(12,16)]
-print(max_meetings(meetings))   # 4`}
-              cpp={`#include <vector>
+print(max_meetings(meetings))   # 4`, `def max_meetings(meetings):
+    # list of (start, end) tuples. Sort by end time!
+    meetings.sort(key=lambda m: m[1])
+
+    count = 0
+    last_end = -1
+    for s, e in meetings:
+        if s >= last_end:        # no overlap -> take it
+            count += 1
+            last_end = e
+    return count
+
+meetings = [(1,4),(3,5),(0,6),(5,7),(3,9),
+            (5,9),(6,10),(8,11),(8,12),(2,14),(12,16)]
+print(max_meetings(meetings))   # 4`)}
+              cpp={t(`#include <vector>
 #include <algorithm>
 #include <iostream>
 using namespace std;
@@ -473,7 +487,32 @@ int main() {
                                {5,9},{6,10},{8,11},{8,12},{2,14},{12,16}};
     cout << maxMeetings(m) << endl;   // 4
     return 0;
-}`}
+}`, `#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+int maxMeetings(vector<pair<int,int>>& m) {
+    // sort by end time (second)
+    sort(m.begin(), m.end(),
+         [](auto& a, auto& b){ return a.second < b.second; });
+
+    int count = 0, lastEnd = -1;
+    for (auto& [s, e] : m) {
+        if (s >= lastEnd) {       // no overlap -> take it
+            count++;
+            lastEnd = e;
+        }
+    }
+    return count;
+}
+
+int main() {
+    vector<pair<int,int>> m = {{1,4},{3,5},{0,6},{5,7},{3,9},
+                               {5,9},{6,10},{8,11},{8,12},{2,14},{12,16}};
+    cout << maxMeetings(m) << endl;   // 4
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -567,13 +606,19 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-white/70 rounded-lg p-3 border border-amber-200 mb-3">
               <p className="text-xs font-bold text-amber-800 mb-2">💡 {t("그리디 — 큰 단위부터 최대한", "Greedy — biggest first, as many as possible")}</p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`N = 730
+{t(`N = 730
 500 → 730 // 500 = 1 (남은 230)
 100 → 230 // 100 = 2 (남은 30)
  50 →  30 // 50  = 0 (남은 30)
  10 →  30 // 10  = 3 (남은 0)
 ─────────────────────
-총 1 + 2 + 0 + 3 = 6 개`}
+총 1 + 2 + 0 + 3 = 6 개`, `N = 730
+500 -> 730 // 500 = 1 (remaining 230)
+100 -> 230 // 100 = 2 (remaining 30)
+ 50 ->  30 // 50  = 0 (remaining 30)
+ 10 ->  30 // 10  = 3 (remaining 0)
+─────────────────────
+total 1 + 2 + 0 + 3 = 6 coins`)}
               </pre>
             </div>
             <p className="text-sm font-bold text-amber-700 text-center">
@@ -650,7 +695,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def coin_change(n, coins):
+              py={t(`def coin_change(n, coins):
     # coins는 큰 단위 → 작은 단위 순으로 미리 정렬되어 있다고 가정
     total = 0
     for c in coins:
@@ -659,8 +704,17 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
     return total
 
 print(coin_change(730, [500, 100, 50, 10]))   # 6
-print(coin_change(1260, [500, 100, 50, 10]))  # 9`}
-              cpp={`#include <vector>
+print(coin_change(1260, [500, 100, 50, 10]))  # 9`, `def coin_change(n, coins):
+    # assume coins are pre-sorted, biggest to smallest
+    total = 0
+    for c in coins:
+        total += n // c       # how many of this denomination?
+        n %= c                # remaining amount
+    return total
+
+print(coin_change(730, [500, 100, 50, 10]))   # 6
+print(coin_change(1260, [500, 100, 50, 10]))  # 9`)}
+              cpp={t(`#include <vector>
 #include <iostream>
 using namespace std;
 
@@ -679,7 +733,26 @@ int main() {
     cout << coinChange(730, coins) << endl;    // 6
     cout << coinChange(1260, coins) << endl;   // 9
     return 0;
-}`}
+}`, `#include <vector>
+#include <iostream>
+using namespace std;
+
+int coinChange(int n, vector<int>& coins) {
+    // assume coins are sorted descending
+    int total = 0;
+    for (int c : coins) {
+        total += n / c;       // how many of this denomination?
+        n %= c;               // remaining amount
+    }
+    return total;
+}
+
+int main() {
+    vector<int> coins = {500, 100, 50, 10};
+    cout << coinChange(730, coins) << endl;    // 6
+    cout << coinChange(1260, coins) << endl;   // 9
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -856,7 +929,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def total_wait(tasks):
+              py={t(`def total_wait(tasks):
     tasks.sort()                  # 짧은 순!
     acc = 0       # 현재까지 누적 시간
     total = 0     # 대기 시간 합
@@ -865,8 +938,17 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
         acc += p
     return total
 
-print(total_wait([3, 1, 4, 3, 2]))   # 19`}
-              cpp={`#include <vector>
+print(total_wait([3, 1, 4, 3, 2]))   # 19`, `def total_wait(tasks):
+    tasks.sort()                  # shortest first!
+    acc = 0       # running total so far
+    total = 0     # sum of all waits
+    for p in tasks:
+        total += acc              # P_i's wait = sum of those before
+        acc += p
+    return total
+
+print(total_wait([3, 1, 4, 3, 2]))   # 19`)}
+              cpp={t(`#include <vector>
 #include <algorithm>
 #include <iostream>
 using namespace std;
@@ -884,7 +966,25 @@ int totalWait(vector<int> tasks) {
 int main() {
     cout << totalWait({3, 1, 4, 3, 2}) << endl;   // 19
     return 0;
-}`}
+}`, `#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+int totalWait(vector<int> tasks) {
+    sort(tasks.begin(), tasks.end());     // shortest first!
+    int acc = 0, total = 0;
+    for (int p : tasks) {
+        total += acc;                     // sum of those before = wait
+        acc += p;
+    }
+    return total;
+}
+
+int main() {
+    cout << totalWait({3, 1, 4, 3, 2}) << endl;   // 19
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(

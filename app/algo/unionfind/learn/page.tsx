@@ -195,9 +195,11 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <div className="bg-white/70 rounded-lg p-3 border border-indigo-200 mb-3">
               <p className="text-xs font-bold text-indigo-800 mb-2">📊 {t("비교", "Compare")}</p>
               <pre className="text-[11px] text-gray-800 font-mono leading-relaxed">
-{`연결 쿼리 Q 번, 노드 N 개:
+{t(`연결 쿼리 Q 번, 노드 N 개:
 - 매번 BFS:   O(Q × (N + 간선))    😱
-- 유니온 파인드: O(Q × α(N)) ≈ O(Q)  ✅`}
+- 유니온 파인드: O(Q × α(N)) ≈ O(Q)  ✅`, `Q connectivity queries, N nodes:
+- BFS each time:   O(Q × (N + edges))    😱
+- Union-Find:      O(Q × α(N)) ≈ O(Q)  ✅`)}
               </pre>
               <p className="text-[11px] text-gray-700 mt-2 leading-relaxed">
                 {t(
@@ -305,13 +307,19 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-white/70 rounded-lg p-3 border border-cyan-200 mb-3">
               <p className="text-xs font-bold text-cyan-800 mb-2">📌 {t("parent 배열", "parent array")}</p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`처음:    parent = [_, 1, 2, 3, 4, 5]   ← 노드 i 의 부모 = parent[i]
+{t(`처음:    parent = [_, 1, 2, 3, 4, 5]   ← 노드 i 의 부모 = parent[i]
                   ↑  i = 1..5 모두 자기 자신
                   (혼자 그룹 5 개)
 
 union(1,2) 후: parent = [_, 1, 1, 3, 4, 5]
                               ↑ 2 의 부모가 1!
-                              (1 이 {1,2} 의 루트)`}
+                              (1 이 {1,2} 의 루트)`, `Init:    parent = [_, 1, 2, 3, 4, 5]   ← parent of node i = parent[i]
+                  ↑  i = 1..5 are all self-parents
+                  (5 singleton groups)
+
+after union(1,2): parent = [_, 1, 1, 3, 4, 5]
+                                ↑ 2's parent is now 1!
+                                (1 is root of {1,2})`)}
               </pre>
             </div>
             <div className="bg-white/70 rounded-lg p-3 border border-cyan-200">
@@ -404,7 +412,7 @@ union(1,2) 후: parent = [_, 1, 1, 3, 4, 5]
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`N = 5
+              py={t(`N = 5
 parent = [i for i in range(N + 1)]   # 0..N — 각자 자기 부모
 
 def find(x):
@@ -420,8 +428,24 @@ def union(a, b):
 union(1, 2)
 union(3, 4)
 union(2, 3)
-print(find(1) == find(4))   # True — 다 같은 그룹!`}
-              cpp={`#include <iostream>
+print(find(1) == find(4))   # True — 다 같은 그룹!`, `N = 5
+parent = [i for i in range(N + 1)]   # 0..N — each node its own parent
+
+def find(x):
+    while parent[x] != x:            # climb to the root
+        x = parent[x]
+    return x
+
+def union(a, b):
+    ra, rb = find(a), find(b)
+    if ra == rb: return              # already same group
+    parent[rb] = ra                  # b's root goes under a's root
+
+union(1, 2)
+union(3, 4)
+union(2, 3)
+print(find(1) == find(4))   # True — all in one group!`)}
+              cpp={t(`#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -450,7 +474,36 @@ int main() {
     unite(2, 3);
     cout << (find(1) == find(4)) << endl;   // 1 (true)
     return 0;
-}`}
+}`, `#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<int> parent;
+
+int find(int x) {
+    while (parent[x] != x) {       // climb to the root
+        x = parent[x];
+    }
+    return x;
+}
+
+void unite(int a, int b) {
+    int ra = find(a), rb = find(b);
+    if (ra == rb) return;          // already same group
+    parent[rb] = ra;
+}
+
+int main() {
+    int N = 5;
+    parent.resize(N + 1);
+    for (int i = 0; i <= N; i++) parent[i] = i;
+
+    unite(1, 2);
+    unite(3, 4);
+    unite(2, 3);
+    cout << (find(1) == find(4)) << endl;   // 1 (true)
+    return 0;
+}`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -544,13 +597,19 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-white/70 rounded-lg p-3 border border-orange-200 mb-3">
               <p className="text-xs font-bold text-orange-800 mb-2">📌 {t("전후 비교", "Before / after")}</p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{`전:   1 → 2 → 3 → 4         find(1) = 4 점프
+{t(`전:   1 → 2 → 3 → 4         find(1) = 4 점프
                               ↑
                               (체인)
 
 후:   1 → 4                  find(1) = 1 점프 ✨
       2 → 4                  find(2) = 1 점프
-      3 → 4                  find(3) = 1 점프`}
+      3 → 4                  find(3) = 1 점프`, `Before: 1 → 2 → 3 → 4       find(1) = 4 hops
+                              ↑
+                              (chain)
+
+After:  1 → 4                find(1) = 1 hop ✨
+        2 → 4                find(2) = 1 hop
+        3 → 4                find(3) = 1 hop`)}
               </pre>
               <p className="text-[11px] text-gray-700 mt-2 leading-relaxed">
                 {t(
@@ -654,7 +713,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`def find(x):
+              py={t(`def find(x):
     if parent[x] != x:
         parent[x] = find(parent[x])   # ✨ 핵심! 루트로 직접 매달기
     return parent[x]
@@ -663,8 +722,17 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
 parent = [i for i in range(N + 1)]
 union(1, 2); union(2, 3); union(3, 4)
 find(1)          # 1, 2, 3 모두 parent 가 4 로 바뀜
-print(parent)    # [_, 4, 4, 4, 4]`}
-              cpp={`int find(int x) {
+print(parent)    # [_, 4, 4, 4, 4]`, `def find(x):
+    if parent[x] != x:
+        parent[x] = find(parent[x])   # ✨ key! re-point directly to root
+    return parent[x]
+
+# usage:
+parent = [i for i in range(N + 1)]
+union(1, 2); union(2, 3); union(3, 4)
+find(1)          # 1, 2, 3 all get parent reset to 4
+print(parent)    # [_, 4, 4, 4, 4]`)}
+              cpp={t(`int find(int x) {
     if (parent[x] != x) {
         parent[x] = find(parent[x]);   // ✨ 핵심!
     }
@@ -675,7 +743,18 @@ print(parent)    # [_, 4, 4, 4, 4]`}
 // vector<int> parent(N + 1);
 // iota(parent.begin(), parent.end(), 0);
 // unite(1,2); unite(2,3); unite(3,4);
-// find(1);          // parent[1..3] 모두 4 로 평탄화`}
+// find(1);          // parent[1..3] 모두 4 로 평탄화`, `int find(int x) {
+    if (parent[x] != x) {
+        parent[x] = find(parent[x]);   // ✨ key!
+    }
+    return parent[x];
+}
+
+// usage:
+// vector<int> parent(N + 1);
+// iota(parent.begin(), parent.end(), 0);
+// unite(1,2); unite(2,3); unite(3,4);
+// find(1);          // parent[1..3] all flatten to 4`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
@@ -758,9 +837,11 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 )}
               </p>
               <pre className="text-[11px] text-gray-800 font-mono leading-relaxed">
-{`rank[i] = i 가 루트일 때 트리의 대략적 깊이
+{t(`rank[i] = i 가 루트일 때 트리의 대략적 깊이
 size[i] = i 가 루트일 때 트리의 노드 개수
-(둘 중 하나만 골라서 쓰면 됨)`}
+(둘 중 하나만 골라서 쓰면 됨)`, `rank[i] = approx depth of the tree when i is root
+size[i] = node count of the tree when i is root
+(pick just one of these to use)`)}
               </pre>
             </div>
             <p className="text-sm font-bold text-violet-700 text-center">
@@ -866,7 +947,7 @@ size[i] = i 가 루트일 때 트리의 노드 개수
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
-              py={`parent = [i for i in range(N + 1)]
+              py={t(`parent = [i for i in range(N + 1)]
 rank_ = [0] * (N + 1)
 
 def find(x):
@@ -882,8 +963,24 @@ def union(a, b):
         ra, rb = rb, ra
     parent[rb] = ra                    # 작은 ← 큰 밑에
     if rank_[ra] == rank_[rb]:         # rank 같으면 +1
-        rank_[ra] += 1`}
-              cpp={`vector<int> parent, rnk;
+        rank_[ra] += 1`, `parent = [i for i in range(N + 1)]
+rank_ = [0] * (N + 1)
+
+def find(x):
+    if parent[x] != x:
+        parent[x] = find(parent[x])   # path compression
+    return parent[x]
+
+def union(a, b):
+    ra, rb = find(a), find(b)
+    if ra == rb: return                # already same group
+    # bigger rank becomes parent (swap the smaller)
+    if rank_[ra] < rank_[rb]:
+        ra, rb = rb, ra
+    parent[rb] = ra                    # small ← under big
+    if rank_[ra] == rank_[rb]:         # equal ranks → +1
+        rank_[ra] += 1`)}
+              cpp={t(`vector<int> parent, rnk;
 
 int find(int x) {
     if (parent[x] != x) {
@@ -903,7 +1000,27 @@ void unite(int a, int b) {
 // 초기화:
 // int N = ...;
 // parent.resize(N+1); rnk.assign(N+1, 0);
-// for (int i = 0; i <= N; i++) parent[i] = i;`}
+// for (int i = 0; i <= N; i++) parent[i] = i;`, `vector<int> parent, rnk;
+
+int find(int x) {
+    if (parent[x] != x) {
+        parent[x] = find(parent[x]);    // path compression
+    }
+    return parent[x];
+}
+
+void unite(int a, int b) {
+    int ra = find(a), rb = find(b);
+    if (ra == rb) return;                // already same group
+    if (rnk[ra] < rnk[rb]) swap(ra, rb);
+    parent[rb] = ra;                     // small ← under big
+    if (rnk[ra] == rnk[rb]) rnk[ra]++;   // equal → +1
+}
+
+// init:
+// int N = ...;
+// parent.resize(N+1); rnk.assign(N+1, 0);
+// for (int i = 0; i <= N; i++) parent[i] = i;`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
