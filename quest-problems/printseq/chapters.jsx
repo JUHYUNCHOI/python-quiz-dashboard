@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getPrintseqSections, getPrintseqWalk, getPrintseqBuWalk, PrintseqExplorer } from "./components";
-import { PrintseqIntroSim, PrintseqShapesSim, PrintseqPlanSim, PrintseqBlockSim } from "./sims";
+import { PrintseqIntroSim, PrintseqShapesSim, PrintseqMixSim, PrintseqPlanSim, PrintseqBlockSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
@@ -148,6 +148,18 @@ export function makePrintseqCh1(E) {
       explain: t(E,
         "All same? No (3≠1). One block repeating? No — (3 3) then (1 1) are different. So cut: [3 3] ✂️ [1 1] — each piece is all-same. Trick ③!",
         "다 같나? 아니요 (3≠1). 블록 반복? 아니요 — (3 3) 다음 (1 1), 서로 달라요. 그러니 자르기: [3 3] ✂️ [1 1] — 조각마다 '다 같음'이 돼요. ③번 요령!"),
+    },
+
+    /* 1-2d — 섞인 예제: "진짜 1111·1212·1122 같은 것만 있어?" 의문 해소 (선생님 2026-07-18).
+       11111212 를 직접 풀어나가며 세 요령이 '겹쳐서' 어떤 수열도 푼다는 걸 보여줌.
+       순진한 컷(4개) vs 한 칸 일찍 자른 똑똑한 컷(3개) → "모든 컷을 다 시도하는 이유". */
+    {
+      phase: 2,
+      type: "reveal",
+      narr: t(E,
+        "\"Are the three tricks REALLY all there is? What about a messy one?\" — great question. Let's solve 1 1 1 1 1 2 1 2 together, step by step.",
+        "\"세 요령이 진짜 전부야? 막 섞인 건?\" — 좋은 질문이에요. 1 1 1 1 1 2 1 2 를 같이, 한 단계씩 풀어봐요."),
+      content: (<PrintseqMixSim E={E} />),
     },
 
     /* 1-3 — Explorer simulator. */

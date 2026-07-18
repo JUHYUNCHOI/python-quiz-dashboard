@@ -391,6 +391,154 @@ export function PrintseqShapesSim({ E }) {
 }
 
 /* ════════════════════════════════════════════════════════════════════
+   PrintseqMixSim — "진짜 1111·1212·1122 같은 것만 있어?" 의문 해소 (선생님 2026-07-18).
+   섞인 수열 11111212 를 학생이 직접 풀어나가며: 셋 중 뭐지? → 자르기 →
+   순진한 컷(4개) vs 한 칸 일찍 자른 똑똑한 컷(3개, 뒤가 반복이 됨) →
+   요령이 요령 안에 겹침(중첩) → "그래서 모든 컷을 다 시도한다". 8 스텝.
+   ════════════════════════════════════════════════════════════════════ */
+const MIX_SEQ = [1, 1, 1, 1, 1, 2, 1, 2];  // 11111212
+
+function _buildMixSteps(E) {
+  return [
+    { cut: null, bubble: t(E,
+      "Wait — are sequences always neat like 1111, 1212, 1122?\nLook at THIS one: 1 1 1 1 1 2 1 2.\nWhich of the three tricks is it??",
+      "잠깐 — 수열이 진짜 1111·1212·1122 처럼 '딱 떨어지는' 것만 있을까요?\n이걸 봐요: 1 1 1 1 1 2 1 2.\n셋 중 어느 요령이지??") },
+    { cut: null, bubble: t(E,
+      "All same? No — there are 1s AND 2s.\nOne repeating block over the whole thing? No either.\nSo the only move left is ③ CUT it in two!",
+      "다 같나? 아니요 — 1도 있고 2도 있어요.\n통째로 한 블록의 반복? 그것도 아니요.\n그럼 남은 건 ③ 둘로 자르기뿐!") },
+    { cut: 5, showCost: false, bubble: t(E,
+      "Where to cut? The obvious spot — right where the number changes,\njust after the run of 1s.",
+      "어디서 자를까? 눈에 띄는 자리 — 숫자가 바뀌는 곳,\n1 들이 끝나는 바로 뒤에서요.") },
+    { cut: 5, showCost: true,
+      left: { trick: t(E, "① all same", "① 다같음"), cost: 1, tone: "good" },
+      right: { trick: t(E, "no trick fits ✕", "어느 요령도 ✕"), cost: 3, tone: "bad" },
+      total: 4,
+      bubble: t(E,
+        "[1 1 1 1 1] = all same → 1 PRINT.\nBut [2 1 2] fits NO trick → 3 PRINTs.\nTotal = 4. Hmm… can we do better?",
+        "[1 1 1 1 1] = 다같음 → 1개.\n근데 [2 1 2] 는 어느 요령도 안 맞아 → 3개.\n합 = 4개. 음… 더 잘할 순 없을까?") },
+    { cut: 4, showCost: false, bubble: t(E,
+      "What if we cut just ONE step earlier?\nLet that last 1 go with the tail instead…",
+      "한 칸만 '일찍' 자르면 어떻게 될까?\n마지막 1 을 뒤쪽에 딸려 보내면…") },
+    { cut: 4, showCost: true,
+      left: { trick: t(E, "① all same", "① 다같음"), cost: 1, tone: "good" },
+      right: { trick: t(E, "② block (1 2)", "② 반복 (1 2)"), cost: 2, tone: "great" },
+      total: 3, best: true,
+      bubble: t(E,
+        "[1 1 1 1] = all same → 1 PRINT.\n[1 2 1 2] = block (1 2) repeated → 2 PRINTs!\nTotal = 3. Cheaper! 🎉",
+        "[1 1 1 1] = 다같음 → 1개.\n[1 2 1 2] = 블록 (1 2)의 반복! → 2개.\n합 = 3개. 더 싸다! 🎉") },
+    { cut: 4, showCost: true,
+      left: { trick: t(E, "① all same", "① 다같음"), cost: 1, tone: "good" },
+      right: { trick: t(E, "② → cut again", "② → 또 자르기"), cost: 2, tone: "great" },
+      total: 3,
+      bubble: t(E,
+        "And inside [1 2 1 2], the block [1 2] splits AGAIN into [1] + [2].\nTricks nest inside tricks — like nesting dolls 🪆.",
+        "그리고 [1 2 1 2] 안에서도 — 블록 [1 2] 가 또 [1] + [2] 로.\n요령이 요령 안에 겹쳐요 — 마트료시카처럼 🪆.") },
+    { recap: true, bubble: t(E,
+      "The lesson: we couldn't KNOW the smart cut ahead of time —\nso the code tries EVERY cut and keeps the cheapest.\nThree tricks, nested, solve ANY sequence.",
+      "교훈: 똑똑한 컷을 미리 알 순 없었어요 —\n그래서 코드는 '모든 자르는 자리'를 다 해보고 제일 싼 걸 골라요.\n세 요령이 겹쳐서 — 어떤 수열도 풀려요.") },
+  ];
+}
+
+const MIX_TONES = {
+  good:    { bg: "#dcfce7", color: "#16a34a", bd: "#86efac" },
+  great:   { bg: "#dbeafe", color: "#1d4ed8", bd: "#93c5fd" },
+  bad:     { bg: "#fee2e2", color: "#b91c1c", bd: "#fca5a5" },
+  neutral: { bg: "#f1f5f9", color: "#334155", bd: "#cbd5e1" },
+};
+
+export function PrintseqMixSim({ E }) {
+  const steps = _buildMixSteps(E);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const st = steps[Math.min(idx, steps.length - 1)];
+  const isRecap = st.recap === true;
+  const bColor = isRecap ? "#6ee7b7" : "#fbbf24";
+
+  const cell = (v, i, tone) => (
+    <div key={i} style={{
+      width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+      fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 16,
+      background: tone.bg, color: tone.color, border: `1.5px solid ${tone.bd}`, transition: "all .25s",
+    }}>{v}</div>
+  );
+
+  const pieceLabel = (info) => (
+    <div style={{ marginTop: 5, textAlign: "center" }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: MIX_TONES[info.tone].color, wordBreak: "keep-all" }}>{info.trick}</div>
+      <div style={{ fontSize: 12, fontWeight: 800, color: MIX_TONES[info.tone].color }}>🖨 {info.cost}</div>
+    </div>
+  );
+
+  const L = st.left ? MIX_TONES[st.left.tone] : MIX_TONES.neutral;
+  const R = st.right ? MIX_TONES[st.right.tone] : MIX_TONES.neutral;
+
+  return (
+    <SimShell idx={idx} total={tot} onIdx={setIdx} accent="#16a34a" isEn={E}>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#16a34a", marginBottom: 12 }}>
+        🧩 {t(E, "A mixed sequence — how do we solve it?", "섞인 수열 — 어떻게 풀까?")}
+      </div>
+
+      {/* 말풍선 */}
+      <div style={{ maxWidth: 520, margin: "0 auto 16px", position: "relative", zIndex: 5 }}>
+        <div style={{ background: isRecap ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bColor}`, borderRadius: 12, padding: "12px 15px", fontSize: 13, color: isRecap ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>
+          💬 {st.bubble}
+        </div>
+        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderTop: `10px solid ${bColor}` }} />
+      </div>
+
+      {/* 수열 / 컷 시각화 */}
+      {!isRecap && (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+          {st.cut == null ? (
+            <div style={{ display: "flex", gap: 4 }}>
+              {MIX_SEQ.map((v, i) => cell(v, i, MIX_TONES.neutral))}
+            </div>
+          ) : (
+            <>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", justifyContent: "center" }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                  <div style={{ display: "flex", gap: 4, padding: 5, borderRadius: 9, border: `2px dashed ${L.bd}` }}>
+                    {MIX_SEQ.slice(0, st.cut).map((v, i) => cell(v, i, L))}
+                  </div>
+                  {st.showCost && st.left && pieceLabel(st.left)}
+                </div>
+                <div style={{ fontSize: 18, padding: "0 2px" }}>✂️</div>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                  <div style={{ display: "flex", gap: 4, padding: 5, borderRadius: 9, border: `2px dashed ${R.bd}` }}>
+                    {MIX_SEQ.slice(st.cut).map((v, i) => cell(v, i, R))}
+                  </div>
+                  {st.showCost && st.right && pieceLabel(st.right)}
+                </div>
+              </div>
+              {st.showCost && (
+                <div style={{ fontSize: 14, fontWeight: 800, color: st.best ? "#16a34a" : "#92400e", background: st.best ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${st.best ? "#6ee7b7" : "#fde68a"}`, borderRadius: 999, padding: "4px 14px", wordBreak: "keep-all" }}>
+                  🖨 {t(E, "total", "합계")} = {st.total}{st.best ? ` ${t(E, "✓ fewest!", "✓ 최소!")}` : ""}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+
+      {/* recap 카드 */}
+      {isRecap && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 440, margin: "0 auto 4px" }}>
+          {[
+            { icon: "🧱", ko: "요령은 딱 셋 — ① 다같음 ② 반복 ③ 자르기", en: "Only 3 tricks — ① all same ② repeat ③ cut" },
+            { icon: "🪆", ko: "요령이 요령 안에 겹쳐서 어떤 수열도 풀린다", en: "Tricks nest inside tricks — they solve any sequence" },
+            { icon: "✂️", ko: "어디서 자를지 미리 모르니 → 모든 컷을 다 시도", en: "Can't know the best cut ahead → try EVERY cut" },
+          ].map((r, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 10, padding: "9px 13px" }}>
+              <span style={{ fontSize: 18 }}>{r.icon}</span>
+              <span style={{ fontSize: 12.5, fontWeight: 700, color: "#166534", wordBreak: "keep-all" }}>{t(E, r.en, r.ko)}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </SimShell>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════
    PrintseqPlanSim — 코드 챕터 도입 (선생님 2026-07-13: "코드를 보여주기 전에
    어떻게 하겠다는걸 시뮬로 하나씩").
    can([1 1 2 2], 2) 가 요령 ①→②→③ 을 차례로 시도하고, 자른 조각에
