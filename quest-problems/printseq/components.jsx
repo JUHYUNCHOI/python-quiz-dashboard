@@ -1140,6 +1140,9 @@ export function getPrintseqBuWalk(E, lang = "py") {
         { from: 65, to: 66, color: "#2dd4bf", ko: "📖 표에서!", en: "📖 from the table!" },
       ],
       beats: [
+        { hi: [76, 85], bubble: t(E,
+          "Start where we always start — the INPUT.\nmain reads T, then each case: N, K, and the target sequence.",
+          "언제나 시작은 — 입력부터.\nmain 에서 T, 그리고 케이스마다 N, K, 목표 수열을 읽어요.") },
         { hi: [5, 6], bubble: t(E,
           "The plan: one ANSWER TABLE, made[i][j][k].\nOne cell = one question: \"can piece target[i:j] be made with k PRINTs?\"\nFill every cell, then read off the answer.",
           "계획: '답 표' 하나, made[i][j][k].\n칸 하나 = 질문 하나: \"조각 target[i:j] 를 PRINT k 개로 만들 수 있나?\"\n칸을 다 채운 뒤, 답을 읽어내요.") },
@@ -1176,6 +1179,12 @@ export function getPrintseqBuWalk(E, lang = "py") {
       { from: 42, to: 43, color: "#2dd4bf", ko: "📖 표에서!", en: "📖 from the table!" },
     ],
     beats: [
+      { hi: [0, 0], bubble: t(E,
+        "Start where we always start — the INPUT.\nTop line: T = how many test cases.",
+        "언제나 시작은 — 입력부터.\n맨 윗줄: T = 테스트 케이스 수.") },
+      { hi: [48, 50], bubble: t(E,
+        "For each case: read N (length), K (PRINT budget), and the target sequence.\nCan we build this target? That's the question.",
+        "케이스마다: N(길이), K(PRINT 예산), 그리고 목표 수열을 읽어요.\n이 목표를 만들 수 있나? — 그게 우리 문제예요.") },
       { hi: [20, 21], bubble: t(E,
         "The plan: one ANSWER TABLE, made.\nOne cell = one question: \"can piece target[i:j] be made with k PRINTs?\"\nFill every cell, then read off the answer.",
         "계획: '답 표' 하나, made.\n칸 하나 = 질문 하나: \"조각 target[i:j] 를 PRINT k 개로 만들 수 있나?\"\n칸을 다 채운 뒤, 답을 읽어내요.") },
