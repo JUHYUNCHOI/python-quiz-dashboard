@@ -539,111 +539,128 @@ export function PrintseqMixSim({ E }) {
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   PrintseqTablePlanSim — "코드 짜기 전에 계획" 전체 개요 (선생님 2026-07-18:
-   재귀 걷어내기 스왑 후 계획 단계에 요령② 상세(BlockSim)만 남아 있던 구멍 메움).
-   bottom-up 주 풀이의 계획: 답 표 → 작은 조각부터 → 큰 조각은 표를 '찾아봄' →
-   마지막 칸 = 전체 답. 예제 [1 1 2 2] 예산 2. 6 스텝.
+   PrintseqTablePlanSim — "코드 짜기 전에 계획" (선생님 2026-07-18 재설계:
+   추상 요약 나열 ❌ → 목표 [1 1 2 2] 를 실제로 '표'에 채우며, 말풍선이 매 스텝
+   '지금 이 조각'을 브래킷으로 가리키고, 찾아보는 작은 칸은 반짝임).
+   작은 조각부터 → 큰 조각은 표를 📖 찾아봄 → 마지막 칸 = 답. 6 스텝.
    ════════════════════════════════════════════════════════════════════ */
-const PLAN_ROWS = [
-  { len: 1, pieces: "[1] [1] [2] [2]", note_ko: "다같음 → 바로 YES", note_en: "all same → instant YES" },
-  { len: 2, pieces: "[1 1] · [1 2] · [2 2]", note_ko: "요령이 길이 1 을 찾아봄", note_en: "tricks look up length 1" },
-  { len: 3, pieces: "[1 1 2] · [1 2 2]", note_ko: "요령이 길이 1·2 를 찾아봄", note_en: "tricks look up length 1·2" },
-  { len: 4, pieces: "[1 1 2 2]", note_ko: "= 전체 = 우리 답!", note_en: "= whole = our answer!" },
+const TP_TARGET = [1, 1, 2, 2];
+// 표에 채워지는 조각들 (id, 보이는 라벨, 값)
+const TP_CHIPS = [
+  { id: "a", label: "1",       vals: [1] },
+  { id: "b", label: "2",       vals: [2] },
+  { id: "c", label: "1 1",     vals: [1, 1] },
+  { id: "d", label: "2 2",     vals: [2, 2] },
+  { id: "e", label: "1 2",     vals: [1, 2] },
+  { id: "f", label: "1 1 2 2", vals: [1, 1, 2, 2] },
 ];
 
 function _buildTablePlanSteps(E) {
   return [
-    { upto: 0, bubble: t(E,
-      "Time to plan the CODE. We know the three tricks ①②③.\nBut a catch: tricks ② and ③ ask \"can the SMALLER piece be made?\"\nWe need those small answers ready first.",
-      "이제 코드 계획! 우리는 세 요령 ①②③ 을 알아요.\n근데 함정 — 요령 ②·③ 은 \"더 작은 조각도 만들 수 있나?\"를 물어요.\n그 작은 답들이 먼저 준비돼 있어야 해요.") },
-    { upto: 0, showTable: true, bubble: t(E,
-      "So we build an ANSWER TABLE.\nOne cell = \"can this piece be made with budget k?\" → YES / NO.\nExample: target [1 1 2 2], budget 2.",
-      "그래서 '답 표'를 만들어요.\n칸 하나 = \"이 조각을 예산 k 로 만들 수 있나?\" → YES / NO.\n예제: 목표 [1 1 2 2], 예산 2.") },
-    { upto: 1, showTable: true, bubble: t(E,
-      "Fill SMALL pieces first — length 1.\nA single number is 'all same' → instantly YES (trick ①).",
-      "작은 조각부터 채워요 — 길이 1.\n숫자 하나는 '다같음' → 바로 YES (요령 ①).") },
-    { upto: 3, showTable: true, lookup: true, bubble: t(E,
-      "Now longer pieces (length 2, 3…). Here's the payoff:\nwhen a trick needs a SMALLER piece's answer, it's already in the table — just 📖 look it up. No re-solving!",
-      "이제 더 긴 조각(길이 2, 3…). 여기가 핵심이에요:\n요령이 '더 작은 조각의 답'을 찾을 때, 이미 표에 있어요 — 그냥 📖 찾아보면 끝. 다시 안 풀어요!") },
-    { upto: 4, showTable: true, answer: true, bubble: t(E,
-      "Fill up to the biggest piece = the whole sequence.\nThat last cell (whole, budget 2) = OUR ANSWER. YES or NO!",
-      "제일 큰 조각 = 전체 수열까지 채워요.\n그 마지막 칸(전체, 예산 2) = 바로 우리 답. YES / NO!") },
-    { recap: true, bubble: t(E,
-      "The plan, in one line:\nbuild a table → fill small→large → each cell uses the 3 tricks (looking up smaller cells) → read the last cell.\nNow let's write it as code.",
-      "계획 한 줄 요약:\n표 만들기 → 작은 것→큰 것 → 각 칸은 세 요령 (더 작은 칸을 찾아봄) → 마지막 칸 읽기.\n이제 코드로 옮겨봐요.") },
+    { bracket: null, chips: {}, bubble: t(E,
+      "Before we code — let's solve the target [1 1 2 2] with a TABLE.\nOne cell of the table = \"this piece — can we make it?\"",
+      "코드로 옮기기 전 — 목표 [1 1 2 2] 를 '표'로 풀어봐요.\n표의 칸 하나 = \"이 조각, 만들 수 있어?\"") },
+    { bracket: [0, 1], chips: { a: "new", b: "new" }, bubble: t(E,
+      "Start with the SMALLEST pieces — a single number.\n[1] and [2] are 'all same' (trick ①) → instant YES ✓",
+      "가장 작은 조각부터 — 숫자 하나짜리.\n[1] 도 [2] 도 '다같음'(요령①) → 바로 YES ✓") },
+    { bracket: [0, 2], chips: { a: "done", b: "done", c: "new", d: "new" }, bubble: t(E,
+      "Length 2, the easy ones — [1 1] and [2 2].\nBoth 'all same' → YES ✓",
+      "길이 2 중 쉬운 것 — [1 1] 과 [2 2].\n둘 다 '다같음' → YES ✓") },
+    { bracket: [1, 3], chips: { a: "look", b: "look", c: "done", d: "done", e: "new" }, bubble: t(E,
+      "[1 2] can't be made as-is. So ✂️ cut it into [1] + [2].\nBut [1] and [2] are already in the table! 📖 Look them up → both YES → [1 2] is YES ✓",
+      "[1 2] 는 통째론 안 돼요. 그래서 ✂️ 잘라서 [1] + [2].\n근데 [1]·[2] 는 방금 표에 있죠? 📖 찾아보면 둘 다 YES → [1 2] 도 YES ✓") },
+    { bracket: [0, 4], chips: { a: "done", b: "done", c: "look", d: "look", e: "done", f: "answer" }, bubble: t(E,
+      "Now the BIGGEST piece = the whole [1 1 2 2].\n✂️ cut into [1 1] + [2 2] → 📖 look them up → both YES → the WHOLE thing is YES! ⭐",
+      "이제 제일 큰 조각 = 전체 [1 1 2 2].\n✂️ [1 1] + [2 2] 로 자르고 → 📖 표에서 찾아보니 둘 다 YES → 전체 YES! ⭐") },
+    { bracket: [0, 4], chips: { a: "done", b: "done", c: "done", d: "done", e: "done", f: "answer" }, bubble: t(E,
+      "See it? The big piece was never re-solved — we just 📖 looked up smaller answers.\nThat's only possible because we filled SMALL first. Now let's write it as code.",
+      "봤죠? 큰 조각은 '새로 안 풀고' 📖 표만 찾아봤어요.\n작은 것부터 채웠기에 가능한 일이에요. 이제 코드로 옮겨봐요.") },
   ];
 }
+
+const TP_STATE = {
+  new:    { bg: "#16a34a", fg: "#ffffff", bd: "#16a34a", tag: "✓" },
+  done:   { bg: "#dcfce7", fg: "#166534", bd: "#86efac", tag: "✓" },
+  look:   { bg: "#fef3c7", fg: "#92400e", bd: "#f59e0b", tag: "📖" },
+  answer: { bg: "#fef9c3", fg: "#a16207", bd: "#eab308", tag: "⭐" },
+};
 
 export function PrintseqTablePlanSim({ E }) {
   const steps = _buildTablePlanSteps(E);
   const { idx, setIdx, total: tot } = useTraceStep(steps.length);
   const st = steps[Math.min(idx, steps.length - 1)];
-  const isRecap = st.recap === true;
-  const bColor = isRecap ? "#6ee7b7" : "#fbbf24";
+  const bColor = "#fbbf24";
+  const inBracket = (i) => st.bracket && i >= st.bracket[0] && i < st.bracket[1];
 
   return (
     <SimShell idx={idx} total={tot} onIdx={setIdx} accent="#16a34a" isEn={E}>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#16a34a", marginBottom: 12 }}>
-        🗒️ {t(E, "The plan — before we code", "계획 — 코드 짜기 전에")}
+        🗒️ {t(E, "The plan — solve it with a table", "계획 — 표로 풀어보기")}
       </div>
 
       {/* 말풍선 */}
       <div style={{ maxWidth: 520, margin: "0 auto 16px", position: "relative", zIndex: 5 }}>
-        <div style={{ background: isRecap ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bColor}`, borderRadius: 12, padding: "12px 15px", fontSize: 13, color: isRecap ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>
+        <div style={{ background: "#fffbeb", border: `1.5px solid ${bColor}`, borderRadius: 12, padding: "12px 15px", fontSize: 13, color: "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>
           💬 {st.bubble}
         </div>
         <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderTop: `10px solid ${bColor}` }} />
       </div>
 
-      {/* 답 표 = 길이 사다리 (작은 조각 아래 → 큰 조각 위) */}
-      {st.showTable && (
-        <div style={{ display: "flex", flexDirection: "column-reverse", gap: 6, maxWidth: 460, margin: "0 auto 4px" }}>
-          {PLAN_ROWS.map((r) => {
-            const filled = r.len <= (st.upto || 0);
-            const isAnswer = st.answer && r.len === 4;
-            const showLookup = st.lookup && r.len === 4;
+      {/* 목표 수열 — 지금 보는 조각을 브래킷으로 강조 */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, marginBottom: 16 }}>
+        <div style={{ fontSize: 10.5, fontWeight: 700, color: C.dim, letterSpacing: 0.3 }}>{t(E, "TARGET", "목표")}</div>
+        <div style={{ display: "flex", gap: 5 }}>
+          {TP_TARGET.map((v, i) => {
+            const on = inBracket(i);
             return (
-              <div key={r.len} style={{
-                display: "flex", alignItems: "center", gap: 10,
-                background: isAnswer ? "#dcfce7" : filled ? "#f0fdf4" : "#f8fafc",
-                border: `1.5px solid ${isAnswer ? "#16a34a" : filled ? "#86efac" : "#e2e8f0"}`,
-                borderRadius: 10, padding: "8px 12px", transition: "all .3s",
-                opacity: filled ? 1 : 0.5,
-              }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: filled ? "#166534" : "#94a3b8", minWidth: 54, wordBreak: "keep-all" }}>
-                  {t(E, `length ${r.len}`, `길이 ${r.len}`)}
-                </span>
-                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 700, color: filled ? "#0f172a" : "#cbd5e1", flex: 1 }}>
-                  {r.pieces}
-                </span>
-                {showLookup && <span style={{ fontSize: 15 }}>📖⬇</span>}
-                {filled && !showLookup && (
-                  <span style={{ fontSize: 10.5, fontWeight: 700, color: isAnswer ? "#15803d" : "#16a34a", wordBreak: "keep-all", textAlign: "right", minWidth: 92 }}>
-                    {isAnswer ? "⭐ " : "✓ "}{t(E, r.note_en, r.note_ko)}
-                  </span>
-                )}
-              </div>
+              <div key={i} style={{
+                width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+                fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 16,
+                background: on ? "#fffbeb" : "#f1f5f9",
+                color: on ? "#92400e" : "#94a3b8",
+                border: on ? "2.5px solid #f59e0b" : "1.5px solid #e2e8f0",
+                boxShadow: on ? "0 0 0 3px rgba(245,158,11,.18)" : "none",
+                transition: "all .25s",
+              }}>{v}</div>
             );
           })}
         </div>
-      )}
+        {st.bracket && (
+          <div style={{ fontSize: 10.5, fontWeight: 700, color: "#b45309", wordBreak: "keep-all" }}>
+            ↑ {t(E, "this piece", "지금 이 조각")}
+          </div>
+        )}
+      </div>
 
-      {/* recap 카드 */}
-      {isRecap && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 440, margin: "0 auto 4px" }}>
-          {[
-            { icon: "🗂️", ko: "답 표를 만든다 (조각 → YES/NO)", en: "build an answer table (piece → YES/NO)" },
-            { icon: "🔢", ko: "작은 조각부터 큰 조각까지 채운다", en: "fill from small pieces up to large" },
-            { icon: "📖", ko: "각 칸은 세 요령 — 더 작은 칸을 '찾아본다'", en: "each cell uses the 3 tricks — looking up smaller cells" },
-            { icon: "⭐", ko: "마지막 칸(전체) = 우리 답", en: "the last cell (whole) = our answer" },
-          ].map((r, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 10, padding: "9px 13px" }}>
-              <span style={{ fontSize: 17 }}>{r.icon}</span>
-              <span style={{ fontSize: 12.5, fontWeight: 700, color: "#166534", wordBreak: "keep-all" }}>{t(E, r.en, r.ko)}</span>
-            </div>
-          ))}
+      {/* 답 표 = 풀린 조각 칩 */}
+      <div style={{ maxWidth: 460, margin: "0 auto 4px" }}>
+        <div style={{ fontSize: 10.5, fontWeight: 700, color: C.dim, textAlign: "center", marginBottom: 7, letterSpacing: 0.3 }}>
+          📋 {t(E, "ANSWER TABLE (piece → makeable?)", "답 표 (조각 → 만들 수 있나?)")}
         </div>
-      )}
+        {Object.keys(st.chips).length === 0 ? (
+          <div style={{ textAlign: "center", fontSize: 12, color: "#cbd5e1", fontStyle: "italic", padding: "8px 0" }}>
+            {t(E, "(empty — nothing filled yet)", "(아직 아무것도 안 채움)")}
+          </div>
+        ) : (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
+            {TP_CHIPS.filter((c) => st.chips[c.id]).map((c) => {
+              const s = TP_STATE[st.chips[c.id]];
+              const pulse = st.chips[c.id] === "new" || st.chips[c.id] === "answer";
+              return (
+                <div key={c.id} style={{
+                  display: "flex", alignItems: "center", gap: 6,
+                  background: s.bg, color: s.fg, border: `1.5px solid ${s.bd}`,
+                  borderRadius: 999, padding: "5px 11px", fontWeight: 800, fontSize: 12.5,
+                  boxShadow: pulse ? `0 0 0 3px ${s.bd}33` : "none", transition: "all .25s",
+                }}>
+                  <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{c.label}</span>
+                  <span>{s.tag}</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </SimShell>
   );
 }
