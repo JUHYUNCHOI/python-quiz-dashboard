@@ -478,8 +478,11 @@ function PracticeStep({
 
   // 파이썬 코드 스텝이면 Pyodide 를 미리 로드 (첫 '확인' 때 몇 초 기다리는 것 방지)
   useEffect(() => {
-    if (isFullCode && language === "python") loadPyodideForReview().catch(() => {})
-  }, [isFullCode, language])
+    // 전체 코드 문제 + 출력 채점 가능한 빈칸 문제 둘 다 미리 로드
+    if (language === "python" && (isFullCode || (blankCount > 0 && content.expect))) {
+      loadPyodideForReview().catch(() => {})
+    }
+  }, [isFullCode, language, blankCount, content.expect])
 
   // inputs 변경 시 localStorage에 저장 (제출 전에만)
   useEffect(() => {
@@ -626,6 +629,31 @@ function PracticeStep({
         }
         return
       }
+    }
+
+    // ── 빈칸 채우기(파이썬) 출력 채점 ─────────────────────────────
+    // 학생 입력을 template 의 ___ 자리에 끼워 넣어 실제 실행 → 출력이 expect 와
+    // 같으면 정답. (반복 변수로 name 대신 g 를 써도 출력이 같으면 맞음 — 글자
+    // 비교만 하면 맞는 코드를 오답 처리했음.) 실행 실패·출력 불일치 시엔 아래
+    // 텍스트 비교로 안전하게 폴백 → 기존에 맞던 답은 그대로 통과.
+    if (!isFullCode && blankCount > 0 && content.expect && language === "python") {
+      const expectedOut = String(displayExpect).trim()
+      const parts = template.split("___")
+      let fullCode = parts[0] ?? ""
+      for (let i = 0; i < blankCount; i++) {
+        fullCode += (inputs[i] ?? "").trim() + (parts[i + 1] ?? "")
+      }
+      setIsRunning(true)
+      const runResult = await runPythonReal(fullCode)
+      setIsRunning(false)
+      if (!runResult.error && (runResult.result ?? "").trim() === expectedOut) {
+        clearStorage()
+        setResult("correct")
+        onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
+        onCorrect()
+        return
+      }
+      // 출력이 안 맞으면 아래 텍스트 비교로 진행 (정석 정답은 여전히 통과)
     }
 
     // ── 텍스트 비교: 빈칸 채우기 또는 expect 없는 경우 ─────────────
