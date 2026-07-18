@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getPrintseqSections, getPrintseqWalk, getPrintseqBuWalk, PrintseqExplorer } from "./components";
-import { PrintseqIntroSim, PrintseqShapesSim, PrintseqMixSim, PrintseqPlanSim, PrintseqBlockSim } from "./sims";
+import { PrintseqIntroSim, PrintseqShapesSim, PrintseqMixSim, PrintseqTablePlanSim, PrintseqPlanSim, PrintseqBlockSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
@@ -216,14 +216,26 @@ export function makePrintseqCh2(E, lang = "py") {
     /* ── 단계 스크린 ⑥: 계획 (코드 짜기 전에 어떻게 풀지) */
     { phase: 6, type: "phase" },
 
+    /* 2-0a — 전체 계획 개요: bottom-up 표 채우기 계획 (선생님 2026-07-18:
+       재귀 스왑 후 계획에 요령② 상세만 남아 있던 구멍 메움 — 세 요령 전체 +
+       "작은 것부터 표 채우기 → 큰 조각은 찾아봄 → 마지막 칸 = 답"). */
+    {
+      phase: 6,
+      type: "reveal",
+      narr: t(E,
+        "Before writing code — the whole plan on one screen: an answer table, filled small pieces first.",
+        "코드 짜기 전에 — 전체 계획을 한 화면에: 답 표를 작은 조각부터 채우는 그림."),
+      content: (<PrintseqTablePlanSim E={E} />),
+    },
+
     /* 2-0b — 블록 반복 탐지 시뮬: 요령②의 추상 코드를 구체 숫자로
        (선생님 2026-07-13: "저 코드가 머릿속에서 안 그려짐"). */
     {
       phase: 6,
       type: "reveal",
       narr: t(E,
-        "Trick ② in the code looked abstract — let's SEE it: try block sizes on 1 2 1 2 1 2 and find the repeat.",
-        "요령 ② 코드가 추상적이었죠 — 눈으로 봐요: 1 2 1 2 1 2 에 블록 크기를 바꿔가며 반복을 찾아요."),
+        "Zoom in on trick ② — let's SEE it: try block sizes on 1 2 1 2 1 2 and find the repeat.",
+        "요령 ② 를 확대해서 — 눈으로 봐요: 1 2 1 2 1 2 에 블록 크기를 바꿔가며 반복을 찾아요."),
       content: (<PrintseqBlockSim E={E} />),
     },
 

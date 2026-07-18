@@ -539,6 +539,116 @@ export function PrintseqMixSim({ E }) {
 }
 
 /* ════════════════════════════════════════════════════════════════════
+   PrintseqTablePlanSim — "코드 짜기 전에 계획" 전체 개요 (선생님 2026-07-18:
+   재귀 걷어내기 스왑 후 계획 단계에 요령② 상세(BlockSim)만 남아 있던 구멍 메움).
+   bottom-up 주 풀이의 계획: 답 표 → 작은 조각부터 → 큰 조각은 표를 '찾아봄' →
+   마지막 칸 = 전체 답. 예제 [1 1 2 2] 예산 2. 6 스텝.
+   ════════════════════════════════════════════════════════════════════ */
+const PLAN_ROWS = [
+  { len: 1, pieces: "[1] [1] [2] [2]", note_ko: "다같음 → 바로 YES", note_en: "all same → instant YES" },
+  { len: 2, pieces: "[1 1] · [1 2] · [2 2]", note_ko: "요령이 길이 1 을 찾아봄", note_en: "tricks look up length 1" },
+  { len: 3, pieces: "[1 1 2] · [1 2 2]", note_ko: "요령이 길이 1·2 를 찾아봄", note_en: "tricks look up length 1·2" },
+  { len: 4, pieces: "[1 1 2 2]", note_ko: "= 전체 = 우리 답!", note_en: "= whole = our answer!" },
+];
+
+function _buildTablePlanSteps(E) {
+  return [
+    { upto: 0, bubble: t(E,
+      "Time to plan the CODE. We know the three tricks ①②③.\nBut a catch: tricks ② and ③ ask \"can the SMALLER piece be made?\"\nWe need those small answers ready first.",
+      "이제 코드 계획! 우리는 세 요령 ①②③ 을 알아요.\n근데 함정 — 요령 ②·③ 은 \"더 작은 조각도 만들 수 있나?\"를 물어요.\n그 작은 답들이 먼저 준비돼 있어야 해요.") },
+    { upto: 0, showTable: true, bubble: t(E,
+      "So we build an ANSWER TABLE.\nOne cell = \"can this piece be made with budget k?\" → YES / NO.\nExample: target [1 1 2 2], budget 2.",
+      "그래서 '답 표'를 만들어요.\n칸 하나 = \"이 조각을 예산 k 로 만들 수 있나?\" → YES / NO.\n예제: 목표 [1 1 2 2], 예산 2.") },
+    { upto: 1, showTable: true, bubble: t(E,
+      "Fill SMALL pieces first — length 1.\nA single number is 'all same' → instantly YES (trick ①).",
+      "작은 조각부터 채워요 — 길이 1.\n숫자 하나는 '다같음' → 바로 YES (요령 ①).") },
+    { upto: 3, showTable: true, lookup: true, bubble: t(E,
+      "Now longer pieces (length 2, 3…). Here's the payoff:\nwhen a trick needs a SMALLER piece's answer, it's already in the table — just 📖 look it up. No re-solving!",
+      "이제 더 긴 조각(길이 2, 3…). 여기가 핵심이에요:\n요령이 '더 작은 조각의 답'을 찾을 때, 이미 표에 있어요 — 그냥 📖 찾아보면 끝. 다시 안 풀어요!") },
+    { upto: 4, showTable: true, answer: true, bubble: t(E,
+      "Fill up to the biggest piece = the whole sequence.\nThat last cell (whole, budget 2) = OUR ANSWER. YES or NO!",
+      "제일 큰 조각 = 전체 수열까지 채워요.\n그 마지막 칸(전체, 예산 2) = 바로 우리 답. YES / NO!") },
+    { recap: true, bubble: t(E,
+      "The plan, in one line:\nbuild a table → fill small→large → each cell uses the 3 tricks (looking up smaller cells) → read the last cell.\nNow let's write it as code.",
+      "계획 한 줄 요약:\n표 만들기 → 작은 것→큰 것 → 각 칸은 세 요령 (더 작은 칸을 찾아봄) → 마지막 칸 읽기.\n이제 코드로 옮겨봐요.") },
+  ];
+}
+
+export function PrintseqTablePlanSim({ E }) {
+  const steps = _buildTablePlanSteps(E);
+  const { idx, setIdx, total: tot } = useTraceStep(steps.length);
+  const st = steps[Math.min(idx, steps.length - 1)];
+  const isRecap = st.recap === true;
+  const bColor = isRecap ? "#6ee7b7" : "#fbbf24";
+
+  return (
+    <SimShell idx={idx} total={tot} onIdx={setIdx} accent="#16a34a" isEn={E}>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#16a34a", marginBottom: 12 }}>
+        🗒️ {t(E, "The plan — before we code", "계획 — 코드 짜기 전에")}
+      </div>
+
+      {/* 말풍선 */}
+      <div style={{ maxWidth: 520, margin: "0 auto 16px", position: "relative", zIndex: 5 }}>
+        <div style={{ background: isRecap ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bColor}`, borderRadius: 12, padding: "12px 15px", fontSize: 13, color: isRecap ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>
+          💬 {st.bubble}
+        </div>
+        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderTop: `10px solid ${bColor}` }} />
+      </div>
+
+      {/* 답 표 = 길이 사다리 (작은 조각 아래 → 큰 조각 위) */}
+      {st.showTable && (
+        <div style={{ display: "flex", flexDirection: "column-reverse", gap: 6, maxWidth: 460, margin: "0 auto 4px" }}>
+          {PLAN_ROWS.map((r) => {
+            const filled = r.len <= (st.upto || 0);
+            const isAnswer = st.answer && r.len === 4;
+            const showLookup = st.lookup && r.len === 4;
+            return (
+              <div key={r.len} style={{
+                display: "flex", alignItems: "center", gap: 10,
+                background: isAnswer ? "#dcfce7" : filled ? "#f0fdf4" : "#f8fafc",
+                border: `1.5px solid ${isAnswer ? "#16a34a" : filled ? "#86efac" : "#e2e8f0"}`,
+                borderRadius: 10, padding: "8px 12px", transition: "all .3s",
+                opacity: filled ? 1 : 0.5,
+              }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: filled ? "#166534" : "#94a3b8", minWidth: 54, wordBreak: "keep-all" }}>
+                  {t(E, `length ${r.len}`, `길이 ${r.len}`)}
+                </span>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 700, color: filled ? "#0f172a" : "#cbd5e1", flex: 1 }}>
+                  {r.pieces}
+                </span>
+                {showLookup && <span style={{ fontSize: 15 }}>📖⬇</span>}
+                {filled && !showLookup && (
+                  <span style={{ fontSize: 10.5, fontWeight: 700, color: isAnswer ? "#15803d" : "#16a34a", wordBreak: "keep-all", textAlign: "right", minWidth: 92 }}>
+                    {isAnswer ? "⭐ " : "✓ "}{t(E, r.note_en, r.note_ko)}
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* recap 카드 */}
+      {isRecap && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 440, margin: "0 auto 4px" }}>
+          {[
+            { icon: "🗂️", ko: "답 표를 만든다 (조각 → YES/NO)", en: "build an answer table (piece → YES/NO)" },
+            { icon: "🔢", ko: "작은 조각부터 큰 조각까지 채운다", en: "fill from small pieces up to large" },
+            { icon: "📖", ko: "각 칸은 세 요령 — 더 작은 칸을 '찾아본다'", en: "each cell uses the 3 tricks — looking up smaller cells" },
+            { icon: "⭐", ko: "마지막 칸(전체) = 우리 답", en: "the last cell (whole) = our answer" },
+          ].map((r, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 10, padding: "9px 13px" }}>
+              <span style={{ fontSize: 17 }}>{r.icon}</span>
+              <span style={{ fontSize: 12.5, fontWeight: 700, color: "#166534", wordBreak: "keep-all" }}>{t(E, r.en, r.ko)}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </SimShell>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════
    PrintseqPlanSim — 코드 챕터 도입 (선생님 2026-07-13: "코드를 보여주기 전에
    어떻게 하겠다는걸 시뮬로 하나씩").
    can([1 1 2 2], 2) 가 요령 ①→②→③ 을 차례로 시도하고, 자른 조각에
