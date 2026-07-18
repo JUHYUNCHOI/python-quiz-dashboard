@@ -165,6 +165,8 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const didHydrateRef = useRef(false)
   // 현재 스텝의 자동 채점 함수 참조 (Next 누를 때 호출)
   const autoCheckRef = useRef<(() => boolean) | null>(null)
+  // 가장 최근 진도 스냅샷 — 페이지 이탈 시 즉시 저장(flush)용
+  const latestProgressRef = useRef<ReviewProgressData | null>(null)
 
   const isCurrentStepCompleted = completedSteps.has(currentIndex)
 
@@ -177,6 +179,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       scoredSteps: Array.from(scoredSteps),
       updatedAt: Date.now(),
     }
+    latestProgressRef.current = progressData
     // localStorage: 즉시 저장 (stepAnswers 포함)
     try {
       localStorage.setItem(storageKey, JSON.stringify({ ...progressData, stepAnswers }))
@@ -194,6 +197,27 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, score, totalAttempted, correctCount, completedSteps, wrongSteps, scoredSteps, storageKey])
+
+  // 페이지 이탈 시 즉시 저장(flush) — 디바운스(2초) 대기 중 나가버리면 마지막 점수가
+  // Supabase 에 안 써져 다음에(다른 기기·localStorage 만료·선생님 화면) 점수가 사라지던 버그 방지.
+  // visibilitychange(hidden)은 탭 전환·앱 백그라운드·닫기에서 모바일 Safari 포함 신뢰성 있게 발화.
+  useEffect(() => {
+    if (!user || effectiveTeacher) return
+    const flush = () => {
+      if (!didHydrateRef.current || !latestProgressRef.current) return
+      if (supabaseSaveTimer.current) { clearTimeout(supabaseSaveTimer.current); supabaseSaveTimer.current = null }
+      saveReviewProgressToSupabase(lessonId, latestProgressRef.current)
+    }
+    const onHide = () => { if (document.visibilityState === "hidden") flush() }
+    document.addEventListener("visibilitychange", onHide)
+    window.addEventListener("pagehide", flush)
+    return () => {
+      document.removeEventListener("visibilitychange", onHide)
+      window.removeEventListener("pagehide", flush)
+      flush()   // 컴포넌트 언마운트(다른 페이지로 이동)에서도 마지막 저장
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, lessonId])
 
   // Supabase에서 복습 진도 복원 (디바이스 간 동기화 — 마운트 후 딱 한 번)
   useEffect(() => {
@@ -300,6 +324,10 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
         // 채점을 막 실행했음 — 결과를 학생이 볼 수 있도록 한 페이지 머무름
         return
       }
+      // 여기까지 왔으면 = 안 푼 채점 스텝을 그냥 넘기려는 것 (MCQ 미선택·빈 코드).
+      // 자동으로 '틀림' 처리 → 창고(간격 복습)로 가고, 통계·완료 저장에 반영됨.
+      // (예전엔 조용히 스킵돼 completedSteps 를 못 채워서 '복습완료+점수'가 영영 저장 안 됨)
+      handleWrong()
     }
     if (currentIndex < reviewSteps.length - 1) {
       goToStep(currentIndex + 1)
