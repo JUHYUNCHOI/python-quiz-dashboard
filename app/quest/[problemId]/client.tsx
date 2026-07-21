@@ -449,16 +449,19 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
             onTouchStart={startDrag}
             onDoubleClick={() => setSplitRatio(0.5)}
             className="hidden md:flex flex-shrink-0 cursor-col-resize items-center justify-center group select-none relative"
-            style={{ width: 6 }}
+            // 손가락으로도 잡히도록 넉넉한 폭 + touchAction none (드래그가 스크롤로 안 새게).
+            // (선생님 2026-07-21 아이패드: "에디터 크기를 조절할 수가 없네" — 예전엔 6px 에
+            //  그립이 hover 에서만 보여서, hover 가 없는 터치에선 손잡이가 아예 안 보였음.)
+            style={{ width: 18, touchAction: "none" }}
             title={t("드래그해서 비율 조절 (더블클릭: 50/50)", "Drag to resize (double-click: reset to 50/50)")}
           >
-            {/* Hairline center line — barely visible */}
+            {/* 세로 선 — 항상 보이게 (터치엔 hover 가 없음) */}
             <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px bg-gray-200 group-hover:bg-violet-300 group-active:bg-violet-400 transition-colors" />
-            {/* Grip dots — appear on hover */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity">
-              <div className="w-1 h-1 rounded-full bg-violet-500" />
-              <div className="w-1 h-1 rounded-full bg-violet-500" />
-              <div className="w-1 h-1 rounded-full bg-violet-500" />
+            {/* 손잡이 — 항상 보이고, hover/드래그 시 진해짐 */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-1 rounded-full bg-white/90 border border-gray-200 px-[3px] py-1.5 shadow-sm opacity-80 group-hover:opacity-100 group-active:opacity-100 transition-opacity">
+              <div className="w-1 h-1 rounded-full bg-violet-400 group-hover:bg-violet-600 group-active:bg-violet-600 transition-colors" />
+              <div className="w-1 h-1 rounded-full bg-violet-400 group-hover:bg-violet-600 group-active:bg-violet-600 transition-colors" />
+              <div className="w-1 h-1 rounded-full bg-violet-400 group-hover:bg-violet-600 group-active:bg-violet-600 transition-colors" />
             </div>
           </div>
         )}

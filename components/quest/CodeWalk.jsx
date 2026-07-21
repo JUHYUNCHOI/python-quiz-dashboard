@@ -108,7 +108,13 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
       <div ref={boxRef} style={{
         background: "#111827", borderRadius: 12, padding: "12px 10px",
         overflowY: "auto", overflowX: "auto",
-        maxHeight: "min(48vh, 380px)",
+        // 기본은 적당한 높이, 그런데 학생·선생님이 아래 모서리를 끌어서 늘릴 수 있게.
+        // (선생님 2026-07-21: "에디터 크기를 조절할 수가 없네" — 큰 화면에선 좁은 창에
+        //  갇혀 스크롤만 하게 됨. resize 로 원하는 만큼 펼쳐서 코드 전체를 보게.)
+        height: "min(48vh, 380px)",
+        maxHeight: "none",
+        minHeight: 140,
+        resize: "vertical",
         fontFamily: "'JetBrains Mono',monospace",
         // ligature 끄기 — != 를 ≠ 로 합치지 말고 그대로 (선생님 2026-07-13)
         fontVariantLigatures: "none", fontFeatureSettings: '"liga" 0, "calt" 0',
