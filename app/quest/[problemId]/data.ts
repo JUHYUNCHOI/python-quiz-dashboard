@@ -17,7 +17,15 @@ export function getOriginalProblemUrl(p: ProblemMeta): string {
   if (p.section === "USACO") {
     return `https://www.google.com/search?q=${encodeURIComponent(`USACO ${p.title} ${p.sub} site:usaco.org`)}`
   }
-  // MCC 및 기타: 일반 검색
+  // MCC = IOI Malaysia 주최. 2025 는 문제별 페이지가 있어 위 url 로 직접 연결하고,
+  // 2024 이하는 문제별 페이지가 없어서 그 해 아카이브 페이지로 보낸다
+  // (거기서 문제 모음으로 들어감). 구글 검색으로 보내면 원문을 못 찾아서 바꿈.
+  if (p.section === "MCC") {
+    const year = /\b(20\d{2})\b/.exec(p.sub)?.[1]
+    if (year) return `https://ioimalaysia.org/competition/mcc/${year}`
+    return "https://ioimalaysia.org/competition/mcc/"
+  }
+  // 기타: 일반 검색
   return `https://www.google.com/search?q=${encodeURIComponent(`${p.section} ${p.title} ${p.sub}`)}`
 }
 
@@ -147,12 +155,14 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"blockgame",emoji:"🧊",title:"Block Game",sub:"Dec 2016 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=664"},
   {id:"cowsignal",emoji:"📡",title:"The Cow-Signal",sub:"Dec 2016 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=665"},
   // MCC
-  {id:"fences",emoji:"🏗️",title:"Building Fences",sub:"MCC 2025 P1",section:"MCC"},
-  {id:"fans",emoji:"🪭",title:"Fans",sub:"MCC 2025 P2",section:"MCC"},
-  {id:"tricks",emoji:"🎃",title:"Trick or Treat",sub:"MCC 2025 P3",section:"MCC"},
-  {id:"word",emoji:"📝",title:"Word Distance",sub:"MCC 2025 P4",section:"MCC"},
-  {id:"reach",emoji:"🐉",title:"Reachability Queries",sub:"MCC 2025 P5",section:"MCC"},
-  {id:"subseqmedian",emoji:"📊",title:"Subseq Median Sum",sub:"MCC 2025 P6",section:"MCC"},
+  // MCC 2025 는 문제별 페이지가 공개돼 있음 (아래 URL 은 실제 접속 확인함).
+  // 2024 이하는 문제별 페이지가 없어 연도 아카이브로 fallback — getOriginalProblemUrl 참고.
+  {id:"fences",emoji:"🏗️",title:"Building Fences",sub:"MCC 2025 P1",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2025/archive/p1/"},
+  {id:"fans",emoji:"🪭",title:"Fans",sub:"MCC 2025 P2",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2025/archive/p2/"},
+  {id:"tricks",emoji:"🎃",title:"Trick or Treat",sub:"MCC 2025 P3",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2025/archive/p3/"},
+  {id:"word",emoji:"📝",title:"Word Distance",sub:"MCC 2025 P4",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2025/archive/p4/"},
+  {id:"reach",emoji:"🐉",title:"Reachability Queries",sub:"MCC 2025 P5",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2025/archive/p5/"},
+  {id:"subseqmedian",emoji:"📊",title:"Subseq Median Sum",sub:"MCC 2025 P6",section:"MCC",url:"https://ioimalaysia.org/competition/mcc/2025/archive/p6/"},
   {id:"cornercover",emoji:"📐",title:"Corner Cover",sub:"MCC 2024 P1",section:"MCC"},
   {id:"gifts",emoji:"🎁",title:"Gifts",sub:"MCC 2024 P2",section:"MCC"},
   {id:"magicorbs",emoji:"🔮",title:"Magical Orbs",sub:"MCC 2024 P3",section:"MCC"},
