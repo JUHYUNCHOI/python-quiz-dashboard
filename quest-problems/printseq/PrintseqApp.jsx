@@ -140,7 +140,7 @@ export default function PrintseqApp(props = {}) {
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
         <AlgorithmTags E={E} tags={[
-          { icon: "📊", ko: "표 채우기 (DP)", en: "Table DP", href: "/algo/dp/learn?from=quest" },
+          { icon: "📋", ko: "할 일 목록 + 메모", en: "TO-DO list + memo", href: "/algo/dp/learn?from=quest" },
           { icon: "🔁", ko: "재귀 (심화)", en: "Recursion (bonus)", href: "/algo/recursion/learn?from=quest" },
         ]} />
 

@@ -216,15 +216,15 @@ export function makePrintseqCh2(E, lang = "py") {
     /* ── 단계 스크린 ⑥: 계획 (코드 짜기 전에 어떻게 풀지) */
     { phase: 6, type: "phase" },
 
-    /* 2-0a — 전체 계획 개요: bottom-up 표 채우기 계획 (선생님 2026-07-18:
-       재귀 스왑 후 계획에 요령② 상세만 남아 있던 구멍 메움 — 세 요령 전체 +
-       "작은 것부터 표 채우기 → 큰 조각은 찾아봄 → 마지막 칸 = 답"). */
+    /* 2-0a — 전체 계획 개요 (선생님 2026-07-18): 주 풀이인 '할 일 목록' 방식을
+       [1 1 2 2] 로 굴려 보여줌 — 필요한 조각만 목록에 올리고, 답은 공책에.
+       마지막에 "본 조각 3개 vs 표 전부 15,150칸" 대비로 왜 빠른지 체감. */
     {
       phase: 6,
       type: "reveal",
       narr: t(E,
-        "Before writing code — the whole plan on one screen: an answer table, filled small pieces first.",
-        "코드 짜기 전에 — 전체 계획을 한 화면에: 답 표를 작은 조각부터 채우는 그림."),
+        "Before writing code — the whole plan on one screen: a TO-DO list, solving only the pieces we actually need.",
+        "코드 짜기 전에 — 전체 계획을 한 화면에: '할 일 목록' 에서 필요한 조각만 꺼내 푸는 그림."),
       content: (<PrintseqTodoPlanSim E={E} />),
     },
 
@@ -242,8 +242,9 @@ export function makePrintseqCh2(E, lang = "py") {
     /* ── 단계 스크린 ⑦: 코드 짜기 */
     { phase: 7, type: "phase" },
 
-    /* 2-1 — 주 풀이 코드 워크 (bottom-up 표 채우기, 재귀 없음).
-       선생님 2026-07-17 "재귀는 힘들어" → 재귀 없는 표 채우기를 주 풀이로.
+    /* 2-1 — 주 풀이 코드 워크 (할 일 목록 + 메모, 재귀 없음).
+       선생님 2026-07-18 "난 재귀가 없는게 편하더라고" + 실제 제출 통과 확인.
+       (표 전부 채우기는 파이썬 TLE 였어서, '필요한 것만' 을 스택으로 구현.)
        전체 코드 위를 '한 조각씩 밝히며' 걷고, 말풍선이 밝아진 줄에 붙어 건너뛸 수 없음
        (선생님 2026-07-13: "코드 위에 설명을 안 읽게 되더라"). */
     {
@@ -281,14 +282,14 @@ export function makePrintseqCh2(E, lang = "py") {
     },
 
     /* 2-0a (심화) — 재귀 다리: /algo/recursion/learn 의 '친구 릴레이' 모델을 이 문제로 연결.
-       선생님 2026-07-17 "재귀는 힘들어" → 주 풀이(2-1)는 bottom-up, 여기부터는 재귀 심화편.
+       주 풀이(2-1)는 할 일 목록(비재귀), 여기부터는 재귀 심화편.
        친구 모델 없이 '자기 자신을 부른다'로 점프하면 어려우니 릴레이로 먼저 이어줌. */
     {
       phase: 7,
       type: "reveal",
       narr: t(E,
-        "🎁 Bonus — we just solved it by filling a table. There's another way to run the SAME three tricks: recursion. Remember the friend relay?",
-        "🎁 심화 — 방금은 표를 채워서 풀었죠. 똑같은 세 요령을 굴리는 다른 방법이 하나 더 있어요: 재귀. '친구한테 시키기' 기억나요?"),
+        "🎁 Bonus — we just solved it by driving a TO-DO list ourselves. There's a much shorter way to run the SAME three tricks: recursion. Remember the friend relay?",
+        "🎁 심화 — 방금은 '할 일 목록' 을 우리가 직접 굴려서 풀었죠. 똑같은 세 요령을 훨씬 짧게 쓰는 방법이 있어요: 재귀. '친구한테 시키기' 기억나요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ maxWidth: 500, margin: "0 auto" }}>
@@ -353,14 +354,14 @@ export function makePrintseqCh2(E, lang = "py") {
     },
 
     /* 2-2 (심화) — 🎁 재귀 버전 코드 워크.
-       선생님 2026-07-17: "재귀는 힘들어" → bottom-up(2-1)이 주 풀이, 재귀는 심화로 강등.
+       주 풀이(2-1)는 할 일 목록(비재귀), 재귀는 심화로 강등.
        표를 '채우는' 대신 조각이 더 작은 조각을 직접 '부르는' 방식 (↺). */
     {
       phase: 7,
       type: "reveal",
       narr: t(E,
-        "🎁 The recursive version — instead of filling a table, each piece directly CALLS smaller pieces (↺ can calls can). Same answer, same three tricks.",
-        "🎁 재귀 버전 — 표를 채우는 대신, 조각이 더 작은 조각을 직접 '불러요' (↺ can 이 can 을 부름). 답도 요령도 똑같아요."),
+        "🎁 The recursive version — instead of us driving a TO-DO list, each piece directly CALLS smaller pieces (↺ can calls can). Same answer, same three tricks.",
+        "🎁 재귀 버전 — 할 일 목록을 우리가 굴리는 대신, 조각이 더 작은 조각을 직접 '불러요' (↺ can 이 can 을 부름). 답도 요령도 똑같아요."),
       content: (<CodeWalk E={E} lang={lang} {...getPrintseqWalk(E, lang)} accent="#0d9488"
         badge={{ color: "#0d9488",
           ko: "🎁 번외 · 재귀 버전 — 주 풀이는 앞의 '할 일 목록' 방식이에요",
