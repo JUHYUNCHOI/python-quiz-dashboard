@@ -93,7 +93,72 @@ export function makeFansCh1(E) {
         );
       })(),
     },
-    // 1-3: Quiz — understanding the rule
+    // 1-3: 입출력 형식 + 제약 (MCC 2025 P2 원문 그대로)
+    // 규칙을 이해한 직후 "그래서 데이터가 어떻게 들어오는데?" 를 먼저 못박아 준다.
+    // (선생님 2026-07-21: "인풋과 아웃풋이 어떤지 모르겠고")
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now — how does the data actually arrive?\nFirst T (how many test cases), then each case gives N and the N counts.",
+        "그럼 데이터는 어떻게 들어올까?\n먼저 T (문제 개수), 그 다음 케이스마다 N 과 막대 개수 N 개."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>T</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(first line) — number of test cases", "(첫 줄) — 문제 개수")}</span></div>
+              <div style={{ marginTop: 6, paddingLeft: 10, borderLeft: `2px solid #fde68a` }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— how many colours", "— 색이 몇 가지")}</span></div>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>c₁ c₂ … c<sub>N</sub></span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— sticks of each colour", "— 색깔별 막대 개수")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ these 2 lines repeat T times", "↑ 이 2 줄이 T 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "T lines — for each case, the length of the longest row you can make.",
+                  "T 줄 — 케이스마다, 만들 수 있는 가장 긴 줄의 길이 하나씩.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ T ≤ 10</div>
+              <div>1 ≤ N ≤ 100,000 (= 10⁵)</div>
+              <div>1 ≤ cᵢ ≤ 1,000,000,000 (= 10⁹)</div>
+            </div>
+          </div>
+          {/* 샘플 */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc" }}>
+                <div>2</div>
+                <div>3</div>
+                <div>3 7 2</div>
+                <div>1</div>
+                <div>4</div>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac" }}>
+                <div>11</div>
+                <div>1</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
+            {t(E, "First case: colours 3, 7, 2 → answer 11. Second: only one colour with 4 sticks → you can place just 1.",
+                "첫 케이스: 3, 7, 2 개 → 답 11. 둘째: 색이 하나(4개)뿐이라 → 1개밖에 못 놔요.")}
+          </div>
+        </div>),
+    },
+    // 1-4: Quiz — understanding the rule
     {
       type: "quiz",
       narr: t(E,
