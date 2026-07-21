@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getPrintseqSections, getPrintseqWalk, getPrintseqBuWalk, PrintseqExplorer } from "./components";
-import { PrintseqIntroSim, PrintseqShapesSim, PrintseqMixSim, PrintseqTablePlanSim, PrintseqPlanSim, PrintseqBlockSim } from "./sims";
+import { getPrintseqSections, getPrintseqWalk, getPrintseqStkWalk, PrintseqExplorer } from "./components";
+import { PrintseqIntroSim, PrintseqShapesSim, PrintseqMixSim, PrintseqTodoPlanSim, PrintseqPlanSim, PrintseqBlockSim } from "./sims";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
@@ -225,7 +225,7 @@ export function makePrintseqCh2(E, lang = "py") {
       narr: t(E,
         "Before writing code — the whole plan on one screen: an answer table, filled small pieces first.",
         "코드 짜기 전에 — 전체 계획을 한 화면에: 답 표를 작은 조각부터 채우는 그림."),
-      content: (<PrintseqTablePlanSim E={E} />),
+      content: (<PrintseqTodoPlanSim E={E} />),
     },
 
     /* 2-0b — 블록 반복 탐지 시뮬: 요령②의 추상 코드를 구체 숫자로
@@ -251,7 +251,33 @@ export function makePrintseqCh2(E, lang = "py") {
       type: "reveal",
       /* narr 없음 — CodeWalk 안 말풍선이 그 역할 (중복 바 제거로 세로 공간 확보). */
       narr: "",
-      content: (<CodeWalk E={E} lang={lang} {...getPrintseqBuWalk(E, lang)} accent="#16a34a" />),
+      content: (<CodeWalk E={E} lang={lang} {...getPrintseqStkWalk(E, lang)} accent="#16a34a" />),
+    },
+
+    /* 2-0z — 🎁 번외 진입 스크린 (선생님 2026-07-18: 재귀 번외를 주 풀이로 착각 —
+       "아직도 recursion이 있는데?"). 여기부터 선택 구간임을 크게 알림. */
+    {
+      phase: 7,
+      type: "reveal",
+      narr: "",
+      content: (
+        <div style={{ padding: "40px 16px", textAlign: "center" }}>
+          <div style={{ fontSize: 44, marginBottom: 10 }}>🎁</div>
+          <div style={{ fontSize: 20, fontWeight: 900, color: "#0d9488", marginBottom: 10, wordBreak: "keep-all" }}>
+            {t(E, "From here: BONUS (optional)", "여기부터는 번외편 (선택)")}
+          </div>
+          <div style={{ fontSize: 13.5, color: C.text, lineHeight: 1.75, maxWidth: 420, margin: "0 auto", wordBreak: "keep-all" }}>
+            {t(E,
+              <>You already have the full solution — the <b style={{ color: "#16a34a" }}>TO-DO list</b> version, with no recursion.<br />
+                What follows is the <b style={{ color: "#0d9488" }}>same three tricks written with recursion</b>. Shorter code — but it needs recursion.</>,
+              <>풀이는 이미 다 끝났어요 — 앞의 <b style={{ color: "#16a34a" }}>할 일 목록</b> 방식, 재귀 없이요.<br />
+                여기부터는 <b style={{ color: "#0d9488" }}>똑같은 세 요령을 재귀로</b> 쓴 것 — 코드는 더 짧지만, 재귀가 필요해요.</>)}
+          </div>
+          <div style={{ marginTop: 16, display: "inline-block", background: "#f0fdfa", border: "1.5px dashed #0d9488", borderRadius: 999, padding: "6px 16px", fontSize: 12, fontWeight: 800, color: "#0d9488", wordBreak: "keep-all" }}>
+            {t(E, "Skipping is totally fine 👌", "건너뛰어도 전혀 괜찮아요 👌")}
+          </div>
+        </div>
+      ),
     },
 
     /* 2-0a (심화) — 재귀 다리: /algo/recursion/learn 의 '친구 릴레이' 모델을 이 문제로 연결.
@@ -335,7 +361,10 @@ export function makePrintseqCh2(E, lang = "py") {
       narr: t(E,
         "🎁 The recursive version — instead of filling a table, each piece directly CALLS smaller pieces (↺ can calls can). Same answer, same three tricks.",
         "🎁 재귀 버전 — 표를 채우는 대신, 조각이 더 작은 조각을 직접 '불러요' (↺ can 이 can 을 부름). 답도 요령도 똑같아요."),
-      content: (<CodeWalk E={E} lang={lang} {...getPrintseqWalk(E, lang)} accent="#0d9488" />),
+      content: (<CodeWalk E={E} lang={lang} {...getPrintseqWalk(E, lang)} accent="#0d9488"
+        badge={{ color: "#0d9488",
+          ko: "🎁 번외 · 재귀 버전 — 주 풀이는 앞의 '할 일 목록' 방식이에요",
+          en: "🎁 BONUS · recursive version — the main solution is the TO-DO list above" }} />),
     },
   ];
 }

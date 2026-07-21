@@ -20,7 +20,10 @@ import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 // (선생님 2026-07-13: 코드 깊이 들어가면 "n이 뭐였지? seq가 뭐였지?" 함 → 늘 보이는 리마인더)
 // marks(선택): [{ from, to, ko, en }] — 항상 눈에 띄어야 하는 줄(예: 재귀의 베이스 케이스)을
 // 장미색 밴드 + 뱃지로 상시 표시 (선생님 2026-07-17: "base case 가 눈에 잘 보이게").
-export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars = null, marks = null }) {
+// badge(선택): { ko, en, color } — 코드워크 맨 위에 '항상' 붙는 띠.
+// (선생님 2026-07-18: 재귀 번외편을 주 풀이로 착각 — "아직도 recursion이 있는데?".
+//  내레이션은 스크롤하면 안 보여서, 워크 안에 상시 표시가 필요.)
+export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars = null, marks = null, badge = null }) {
   const { idx, setIdx, total } = useTraceStep(beats.length);
   const beat = beats[Math.min(idx, beats.length - 1)];
   const [lo, hi] = beat.hi;
@@ -53,6 +56,20 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
 
   return (
     <div style={{ padding: 16 }}>
+      {/* 상시 배지 — 스크롤해도 항상 보이게 맨 위 고정 띠 (예: "🎁 번외 · 안 봐도 돼요") */}
+      {badge && (
+        <div style={{
+          maxWidth: 560, margin: "0 auto 10px",
+          background: `${badge.color || "#0d9488"}15`,
+          border: `1.5px dashed ${badge.color || "#0d9488"}`,
+          borderRadius: 999, padding: "5px 14px",
+          fontSize: 11.5, fontWeight: 800, textAlign: "center",
+          color: badge.color || "#0d9488", wordBreak: "keep-all", letterSpacing: 0.2,
+        }}>
+          {t(E, badge.en, badge.ko)}
+        </div>
+      )}
+
       {/* 말풍선 — 지금 밝아진 코드 조각을 설명 (코드창 바로 위, 항상 보임) */}
       <div style={{ maxWidth: 560, margin: "0 auto 8px", position: "relative", zIndex: 5 }}>
         <div style={{

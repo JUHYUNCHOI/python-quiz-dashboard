@@ -539,88 +539,81 @@ export function PrintseqMixSim({ E }) {
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   PrintseqTablePlanSim — "코드 짜기 전에 계획" (선생님 2026-07-18 재설계:
-   추상 요약 나열 ❌ → 목표 [1 1 2 2] 를 실제로 '표'에 채우며, 말풍선이 매 스텝
-   '지금 이 조각'을 브래킷으로 가리키고, 찾아보는 작은 칸은 반짝임).
-   작은 조각부터 → 큰 조각은 표를 📖 찾아봄 → 마지막 칸 = 답. 6 스텝.
+   PrintseqTodoPlanSim — "코드 짜기 전에 계획" (선생님 2026-07-18 재설계 2차:
+   주 풀이가 '표 전부 채우기'→'할 일 목록(스택)+답 공책, 필요한 것만' 으로 바뀜).
+   목표 [1 1 2 2] 예산 2 를 실제로 굴려보며, 말풍선이 '지금 이 조각'을 가리킴.
+   마지막에 "우리가 본 조각 3개 vs 표 전부 15,150칸" 대비. 6 스텝.
    ════════════════════════════════════════════════════════════════════ */
-const TP_TARGET = [1, 1, 2, 2];
-// 표에 채워지는 조각들 (id, 보이는 라벨, 값)
-const TP_CHIPS = [
-  { id: "a", label: "1",       vals: [1] },
-  { id: "b", label: "2",       vals: [2] },
-  { id: "c", label: "1 1",     vals: [1, 1] },
-  { id: "d", label: "2 2",     vals: [2, 2] },
-  { id: "e", label: "1 2",     vals: [1, 2] },
-  { id: "f", label: "1 1 2 2", vals: [1, 1, 2, 2] },
-];
+const TD_TARGET = [1, 1, 2, 2];
 
-function _buildTablePlanSteps(E) {
+function _buildTodoPlanSteps(E) {
   return [
-    { bracket: null, chips: {}, bubble: t(E,
-      "Before we code — let's solve the target [1 1 2 2] with a TABLE.\nOne cell of the table = \"this piece — can we make it?\"",
-      "코드로 옮기기 전 — 목표 [1 1 2 2] 를 '표'로 풀어봐요.\n표의 칸 하나 = \"이 조각, 만들 수 있어?\"") },
-    { bracket: [0, 1], chips: { a: "new", b: "new" }, bubble: t(E,
-      "Start with the SMALLEST pieces — a single number.\n[1] and [2] are 'all same' (trick ①) → instant YES ✓",
-      "가장 작은 조각부터 — 숫자 하나짜리.\n[1] 도 [2] 도 '다같음'(요령①) → 바로 YES ✓") },
-    { bracket: [0, 2], chips: { a: "done", b: "done", c: "new", d: "new" }, bubble: t(E,
-      "Length 2, the easy ones — [1 1] and [2 2].\nBoth 'all same' → YES ✓",
-      "길이 2 중 쉬운 것 — [1 1] 과 [2 2].\n둘 다 '다같음' → YES ✓") },
-    { bracket: [1, 3], chips: { a: "look", b: "look", c: "done", d: "done", e: "new" }, bubble: t(E,
-      "[1 2] can't be made as-is. So ✂️ cut it into [1] + [2].\nBut [1] and [2] are already in the table! 📖 Look them up → both YES → [1 2] is YES ✓",
-      "[1 2] 는 통째론 안 돼요. 그래서 ✂️ 잘라서 [1] + [2].\n근데 [1]·[2] 는 방금 표에 있죠? 📖 찾아보면 둘 다 YES → [1 2] 도 YES ✓") },
-    { bracket: [0, 4], chips: { a: "done", b: "done", c: "look", d: "look", e: "done", f: "answer" }, bubble: t(E,
-      "Now the BIGGEST piece = the whole [1 1 2 2].\n✂️ cut into [1 1] + [2 2] → 📖 look them up → both YES → the WHOLE thing is YES! ⭐",
-      "이제 제일 큰 조각 = 전체 [1 1 2 2].\n✂️ [1 1] + [2 2] 로 자르고 → 📖 표에서 찾아보니 둘 다 YES → 전체 YES! ⭐") },
-    { bracket: [0, 4], chips: { a: "done", b: "done", c: "done", d: "done", e: "done", f: "answer" }, bubble: t(E,
-      "See it? The big piece was never re-solved — we just 📖 looked up smaller answers.\nThat's only possible because we filled SMALL first. Now let's write it as code.",
-      "봤죠? 큰 조각은 '새로 안 풀고' 📖 표만 찾아봤어요.\n작은 것부터 채웠기에 가능한 일이에요. 이제 코드로 옮겨봐요.") },
+    { bracket: null, todo: ["[1 1 2 2] 예산2"], memo: [], bubble: t(E,
+      "Before we code — the plan. We keep a TO-DO list and an answer notebook.\nStart by putting just ONE thing on the list: the whole [1 1 2 2] with budget 2.",
+      "코드 짜기 전 계획 — '할 일 목록' 과 '답 공책' 을 씁니다.\n목록엔 딱 하나만 올려요: 전체 [1 1 2 2], 예산 2.") },
+    { bracket: [0, 4], todo: ["[1 1 2 2] 예산2"], memo: [], bubble: t(E,
+      "Take the top item and look at it: [1 1 2 2].\nAll same? No. One repeating block? No.\n→ So we must CUT it: [1 1] + [2 2]. But we don't know those answers yet!",
+      "목록 맨 위를 꺼내 봐요: [1 1 2 2].\n다 같나? 아니요. 한 블록의 반복? 아니요.\n→ 그럼 잘라야죠: [1 1] + [2 2]. 근데 그 답을 아직 모르잖아요!") },
+    { bracket: [0, 2], todo: ["[1 1] 예산1", "[1 1 2 2] 예산2"], memo: [], bubble: t(E,
+      "So we put the unknown piece on the list FIRST and come back later.\nNow [1 1] is on top — all same! → 1 PRINT.",
+      "그래서 모르는 조각을 목록에 '먼저' 올리고 나중에 다시 와요.\n이제 [1 1] 이 맨 위 — 다 같네요! → PRINT 1 개.") },
+    { bracket: [2, 4], todo: ["[2 2] 예산1", "[1 1 2 2] 예산2"], memo: ["[1 1] → 1개 ✓"], bubble: t(E,
+      "Write it in the notebook: [1 1] = 1 PRINT. Done, remove it.\nSame story for [2 2] — all same → 1 PRINT.",
+      "공책에 적어요: [1 1] = 1 개. 끝났으니 목록에서 치우고요.\n[2 2] 도 똑같아요 — 다 같음 → PRINT 1 개.") },
+    { bracket: [0, 4], todo: ["[1 1 2 2] 예산2"], memo: ["[1 1] → 1개 ✓", "[2 2] → 1개 ✓"], answer: true, bubble: t(E,
+      "Back to [1 1 2 2] — and now BOTH answers are in the notebook 📖\n1 + 1 = 2 PRINTs, and our budget is 2 → 2 ≤ 2 → YES! ⭐",
+      "다시 [1 1 2 2] 차례 — 이제 둘 다 공책에 있어요 📖\n1 + 1 = PRINT 2 개, 예산이 2 죠 → 2 ≤ 2 → YES! ⭐") },
+    { bracket: null, todo: [], memo: ["[1 1] → 1개 ✓", "[2 2] → 1개 ✓", "[1 1 2 2] → 2개 ⭐"], done: true, bubble: t(E,
+      "Notice: we only ever looked at 3 pieces — the ones we actually needed.\nFilling a whole table for N=100 would be 15,150 cells. That's why this is fast.",
+      "보세요: 우리가 본 조각은 딱 3 개 — 실제로 필요했던 것만요.\nN=100 에서 표를 전부 채우면 15,150 칸이에요. 그래서 이 방법이 빠른 거예요.") },
   ];
 }
 
-const TP_STATE = {
-  new:    { bg: "#16a34a", fg: "#ffffff", bd: "#16a34a", tag: "✓" },
-  done:   { bg: "#dcfce7", fg: "#166534", bd: "#86efac", tag: "✓" },
-  look:   { bg: "#fef3c7", fg: "#92400e", bd: "#f59e0b", tag: "📖" },
-  answer: { bg: "#fef9c3", fg: "#a16207", bd: "#eab308", tag: "⭐" },
-};
-
-export function PrintseqTablePlanSim({ E }) {
-  const steps = _buildTablePlanSteps(E);
+export function PrintseqTodoPlanSim({ E }) {
+  const steps = _buildTodoPlanSteps(E);
   const { idx, setIdx, total: tot } = useTraceStep(steps.length);
   const st = steps[Math.min(idx, steps.length - 1)];
-  const bColor = "#fbbf24";
+  const bColor = st.done ? "#6ee7b7" : "#fbbf24";
   const inBracket = (i) => st.bracket && i >= st.bracket[0] && i < st.bracket[1];
+
+  const box = (title, items, empty, color, bg, bd) => (
+    <div style={{ flex: 1, minWidth: 170, background: bg, border: `1.5px solid ${bd}`, borderRadius: 10, padding: "9px 11px" }}>
+      <div style={{ fontSize: 10.5, fontWeight: 800, color, marginBottom: 6, letterSpacing: 0.3 }}>{title}</div>
+      {items.length === 0
+        ? <div style={{ fontSize: 11.5, color: "#cbd5e1", fontStyle: "italic" }}>{empty}</div>
+        : items.map((x, i) => (
+            <div key={i} style={{ fontSize: 11.5, fontWeight: 700, color, fontFamily: "'JetBrains Mono',monospace",
+              padding: "3px 0", opacity: i === 0 ? 1 : 0.55 }}>{i === 0 ? "▸ " : "  "}{x}</div>
+          ))}
+    </div>
+  );
 
   return (
     <SimShell idx={idx} total={tot} onIdx={setIdx} accent="#16a34a" isEn={E}>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#16a34a", marginBottom: 12 }}>
-        🗒️ {t(E, "The plan — solve it with a table", "계획 — 표로 풀어보기")}
+        📋 {t(E, "The plan — a TO-DO list, no recursion", "계획 — '할 일 목록' 방식 (재귀 없이)")}
       </div>
 
-      {/* 말풍선 */}
       <div style={{ maxWidth: 520, margin: "0 auto 16px", position: "relative", zIndex: 5 }}>
-        <div style={{ background: "#fffbeb", border: `1.5px solid ${bColor}`, borderRadius: 12, padding: "12px 15px", fontSize: 13, color: "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>
+        <div style={{ background: st.done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bColor}`, borderRadius: 12, padding: "12px 15px", fontSize: 13, color: st.done ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 46, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.08)" }}>
           💬 {st.bubble}
         </div>
         <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderTop: `10px solid ${bColor}` }} />
       </div>
 
-      {/* 목표 수열 — 지금 보는 조각을 브래킷으로 강조 */}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, marginBottom: 16 }}>
+      {/* 목표 + 지금 보는 조각 */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, marginBottom: 14 }}>
         <div style={{ fontSize: 10.5, fontWeight: 700, color: C.dim, letterSpacing: 0.3 }}>{t(E, "TARGET", "목표")}</div>
         <div style={{ display: "flex", gap: 5 }}>
-          {TP_TARGET.map((v, i) => {
+          {TD_TARGET.map((v, i) => {
             const on = inBracket(i);
             return (
               <div key={i} style={{
                 width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
                 fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 16,
-                background: on ? "#fffbeb" : "#f1f5f9",
-                color: on ? "#92400e" : "#94a3b8",
+                background: on ? "#fffbeb" : "#f1f5f9", color: on ? "#92400e" : "#94a3b8",
                 border: on ? "2.5px solid #f59e0b" : "1.5px solid #e2e8f0",
-                boxShadow: on ? "0 0 0 3px rgba(245,158,11,.18)" : "none",
-                transition: "all .25s",
+                boxShadow: on ? "0 0 0 3px rgba(245,158,11,.18)" : "none", transition: "all .25s",
               }}>{v}</div>
             );
           })}
@@ -632,34 +625,10 @@ export function PrintseqTablePlanSim({ E }) {
         )}
       </div>
 
-      {/* 답 표 = 풀린 조각 칩 */}
-      <div style={{ maxWidth: 460, margin: "0 auto 4px" }}>
-        <div style={{ fontSize: 10.5, fontWeight: 700, color: C.dim, textAlign: "center", marginBottom: 7, letterSpacing: 0.3 }}>
-          📋 {t(E, "ANSWER TABLE (piece → makeable?)", "답 표 (조각 → 만들 수 있나?)")}
-        </div>
-        {Object.keys(st.chips).length === 0 ? (
-          <div style={{ textAlign: "center", fontSize: 12, color: "#cbd5e1", fontStyle: "italic", padding: "8px 0" }}>
-            {t(E, "(empty — nothing filled yet)", "(아직 아무것도 안 채움)")}
-          </div>
-        ) : (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
-            {TP_CHIPS.filter((c) => st.chips[c.id]).map((c) => {
-              const s = TP_STATE[st.chips[c.id]];
-              const pulse = st.chips[c.id] === "new" || st.chips[c.id] === "answer";
-              return (
-                <div key={c.id} style={{
-                  display: "flex", alignItems: "center", gap: 6,
-                  background: s.bg, color: s.fg, border: `1.5px solid ${s.bd}`,
-                  borderRadius: 999, padding: "5px 11px", fontWeight: 800, fontSize: 12.5,
-                  boxShadow: pulse ? `0 0 0 3px ${s.bd}33` : "none", transition: "all .25s",
-                }}>
-                  <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{c.label}</span>
-                  <span>{s.tag}</span>
-                </div>
-              );
-            })}
-          </div>
-        )}
+      {/* 할 일 목록 + 답 공책 */}
+      <div style={{ display: "flex", gap: 10, maxWidth: 500, margin: "0 auto 4px", flexWrap: "wrap" }}>
+        {box(`📋 ${t(E, "TO-DO list", "할 일 목록")}`, st.todo, t(E, "(empty — all done)", "(비었음 — 다 끝!)"), "#0d9488", "#f0fdfa", "#5eead4")}
+        {box(`📖 ${t(E, "answer notebook", "답 공책")}`, st.memo, t(E, "(nothing yet)", "(아직 없음)"), "#15803d", "#f0fdf4", "#86efac")}
       </div>
     </SimShell>
   );
