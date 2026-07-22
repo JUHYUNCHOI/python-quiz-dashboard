@@ -1647,7 +1647,8 @@ export function HpsFormulaGridSim({ E }) {
   // ⚡ 카드 먼저 → 지는 칸이 오른쪽 아래 2×2 로 모임
   const cards = [{ id: 2, win: true }, { id: 1, win: false }, { id: 3, win: false }];
   const steps = [
-    { phase: "test",  bubble: t(E, "Game 3: Elsie plays card 1 TWICE (same card is allowed).  Which cards beat card 1?  Card 2 does — nothing else.\nSo the count of 'beats-both' cards = dom = 1.\n(With two DIFFERENT cards, no single card beats both → dom = 0 → answer 0.  Same card is the interesting case.)", "게임 3: Elsie 가 카드 1 을 두 장 냈어요 (같은 카드도 규칙상 OK).  카드 1 을 이기는 건? → 카드 2 하나뿐.\n그래서 '둘 다 이기는 카드' 개수 = dom = 1.\n(서로 다른 두 카드면 동시에 이기는 카드가 없어 dom = 0 → 답 0.  같은 카드일 때가 유일한 '비-0' 경우예요.)") },
+    { phase: "test",    bubble: t(E, "Game 3 — Elsie played card 1 twice (same card is fine).\nSo: how many cards beat card 1?  Let's check each one 👇", "게임 3 — Elsie 가 카드 1 을 두 장 냈어요 (같은 카드도 OK).\n그럼 '카드 1 을 이기는 카드' 는 몇 개? 하나씩 봐요 👇") },
+    { phase: "testans", bubble: t(E, "Only card 2 beats it → that's our dom = 1.\n(dom = how many cards beat BOTH of Elsie's cards)", "카드 2 하나뿐 → 이게 dom = 1.\n(dom = Elsie 두 카드를 모두 이기는 카드 수)") },
     { phase: "grid",  bubble: t(E, "Now — Bessie picks 2 cards.  All her choices = 3 × 3 = 9 hands.  How many WIN?  Count in the grid.", "이제 — Bessie 는 카드 2 장을 골라요.  가능한 조합 = 3 × 3 = 9 패.  이 중 이기는 건 몇 개? 격자에서 세봐요.") },
     { phase: "green", bubble: t(E, "If a hand holds card 2 (⚡), Bessie plays it and wins whatever Elsie shows. Green = winning hands.", "패에 카드 2(⚡)가 한 장이라도 있으면 → 그걸 내서 이김 (Elsie 뭘 내든). 초록 = 이기는 패.") },
     { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ → the red 2 × 2 = 4.  (each slot has N − dom = 2 non-⚡ cards → (N − dom)²)", "둘 다 ⚡ 가 아닐 때만 짐 → 빨간 2 × 2 = 4.  (자리마다 ⚡ 아닌 카드 N − dom = 2 가지 → (N − dom)²)") },
@@ -1655,7 +1656,7 @@ export function HpsFormulaGridSim({ E }) {
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
-  const showTest = s.phase === "test";
+  const showTest = s.phase === "test" || s.phase === "testans";
   const lit = s.phase === "green" || s.phase === "red" || s.phase === "count";
   const litRed = s.phase === "red" || s.phase === "count";
 
