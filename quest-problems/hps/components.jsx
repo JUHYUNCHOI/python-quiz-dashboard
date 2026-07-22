@@ -323,19 +323,19 @@ export function ChartReadingTour({ E }) {
   const tour = [
     {
       i: null, j: null, kind: "intro", focus: null,
-      narr: <span>{t(E, "Example 1 — Elsie holds ", "1 번째 예제 — Elsie 는 ")}{C(1)}{t(E, " and ", " 과 ")}{C(2)}{t(E, ". To win for SURE, Bessie needs ONE card that beats BOTH. Let's read the chart 👇", " 를 가졌어요. 무조건 이기려면 Bessie 는 이 둘을 '모두' 이기는 카드 하나가 필요해요. 차트에서 찾아봐요 👇")}</span>,
+      narr: <span>{t(E, "Example 1 — Elsie holds ", "1 번째 예제 — Elsie 는 ")}{C(1)}{t(E, " and ", " 과 ")}{C(2)}{t(E, ". Bessie wins if she plays a card that BEATS Elsie's (makes Elsie lose). She needs ONE card that beats BOTH. Let's find it 👇", " 를 가졌어요. Bessie 는 Elsie 의 카드를 '이기는'(= Elsie 를 지게 만드는) 카드를 내면 이겨요. 두 카드를 '모두' 이기는 카드 하나가 필요해요. 찾아봐요 👇")}</span>,
     },
     {
       i: 2, j: 1, kind: "W", focus: 1,
-      narr: <span>{t(E, "First — who beats Elsie's ", "먼저 — Elsie 의 ")}{C(1)}{t(E, "?  The chart cell = W → ", " 은 누가 이기나?  차트 셀 = W → ")}{C(2)}{t(E, " beats it.", " 가 이겨요.")}</span>,
+      narr: <span>{t(E, "First — what does Bessie play to BEAT Elsie's ", "먼저 — Elsie 의 ")}{C(1)}{t(E, "?  The chart cell = W → play ", " 을 이기려면(지게 만들려면) Bessie 는 뭘 내야 하나?  차트 셀 = W → ")}{C(2)}{t(E, " beats it.", " 를 내면 이겨요.")}</span>,
     },
     {
       i: 3, j: 2, kind: "W", focus: 2,
-      narr: <span>{t(E, "Next — who beats Elsie's ", "다음 — Elsie 의 ")}{C(2)}{t(E, "?  → ", " 는 누가 이기나?  → ")}{C(3)}{t(E, " beats it.", " 가 이겨요.")}</span>,
+      narr: <span>{t(E, "Next — to beat Elsie's ", "다음 — Elsie 의 ")}{C(2)}{t(E, "?  → play ", " 를 이기려면?  → ")}{C(3)}{t(E, " beats it.", " 를 내면 이겨요.")}</span>,
     },
     {
       i: null, j: null, kind: "conclude", focus: null,
-      narr: <span>{t(E, "So — is there ONE card that beats BOTH?  ", "그럼 — 둘 다 이기는 카드가 하나라도 있나요?  ")}{C(2)}{t(E, " beats card 1 but loses to card 2;  ", " 는 카드 1 은 이겨도 카드 2 엔 짐;  ")}{C(3)}{t(E, " beats card 2 but loses to card 1.  → NO card beats both → Bessie can't force a win → output 0.", " 은 카드 2 는 이겨도 카드 1 엔 짐.  → 둘 다 이기는 카드 없음 → 확실히 못 이김 → 출력 0.")}</span>,
+      narr: <span>{t(E, "So — is there ONE card that beats BOTH?  ", "그럼 — 둘 다 이기는 카드가 하나라도 있나요?  ")}{C(2)}{t(E, " beats card 1 but loses to card 2;  ", " 는 카드 1 은 이겨도 카드 2 엔 짐;  ")}{C(3)}{t(E, " beats card 2 but loses to card 1.  → NO single card beats both → Bessie can't force a win → output 0.", " 은 카드 2 는 이겨도 카드 1 엔 짐.  → 둘 다 이기는 카드 없음 → Bessie 가 확실히 못 이김 → 출력 0.")}</span>,
     },
   ];
 
@@ -415,12 +415,12 @@ export function ChartReadingTour({ E }) {
           display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
           marginBottom: 10, fontSize: 13, fontWeight: 700, color: "#92400e", flexWrap: "wrap",
         }}>
-          <span>🔎 {t(E, "Who beats Elsie's", "누가 Elsie 의")}</span>
+          <span>🔎 {t(E, "What beats Elsie's", "Elsie 의")}</span>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "2px 8px", borderRadius: 999, background: "#fef3c7", border: "1px solid #f59e0b" }}>
             <span style={{ fontSize: 16, color: cards[cur.focus - 1].color, lineHeight: 1 }}>{cards[cur.focus - 1].glyph}</span>
             <span>{t(E, "card ", "카드 ")}{cur.focus}</span>
           </span>
-          <span>{t(E, "?", "를 이기나?")}</span>
+          <span>{t(E, "? (Bessie plays it to make Elsie lose)", "을 이기는 카드? (Bessie 가 내면 Elsie 가 짐)")}</span>
         </div>
       )}
 
