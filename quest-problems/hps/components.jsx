@@ -241,49 +241,45 @@ export function BeatsMatrix({ E, highlight = null }) {
   );
 }
 
+// 이김 규칙을 '고리(가위바위보 링)'로 — 3 개 따로 규칙이면 머리로 외워야 함 (선생님
+// 2026-07-22 "이김 규칙만으로 어땠는지 기억 안 나"). 페이지 3 '이김 지도가 고리처럼 돌아요'
+// 와 같은 언어로: ●1 → ▲3 → ■2 → (다시 ●1). 한 바퀴 = 한눈에 기억.
 export function WinningRulesBanner({ E }) {
-  const rules = [
-    { w: { n: 1, glyph: "●", color: "#2563eb" }, l: { n: 3, glyph: "▲", color: "#ea580c" } },
-    { w: { n: 2, glyph: "■", color: "#7c3aed" }, l: { n: 1, glyph: "●", color: "#2563eb" } },
-    { w: { n: 3, glyph: "▲", color: "#ea580c" }, l: { n: 2, glyph: "■", color: "#7c3aed" } },
-  ];
-  // Winner gets a green pill (visually obvious "this one wins"); loser stays plain.
-  const Pill = ({ card, winner }) => (
+  const c1 = { n: 1, glyph: "●", color: "#2563eb" };
+  const c2 = { n: 2, glyph: "■", color: "#7c3aed" };
+  const c3 = { n: 3, glyph: "▲", color: "#ea580c" };
+  const ring = [c1, c3, c2];   // 각 카드가 바로 '다음' 카드를 이김 (돌고 도는 고리)
+  const Card = ({ card, ghost }) => (
     <span style={{
-      display: "inline-flex", alignItems: "center", gap: 3,
-      padding: winner ? "2px 7px" : "2px 4px",
-      borderRadius: 999,
-      border: winner ? "2px solid #16a34a" : "1px solid transparent",
-      background: winner ? "#dcfce7" : "transparent",
-      opacity: winner ? 1 : 0.75,
+      display: "inline-flex", alignItems: "center", gap: 3, padding: "3px 9px", borderRadius: 999,
+      border: `2px solid ${ghost ? "#cbd5e1" : "#16a34a"}`,
+      background: ghost ? "#f8fafc" : "#dcfce7", opacity: ghost ? 0.55 : 1,
     }}>
-      <span style={{ fontSize: 15, color: card.color, lineHeight: 1 }}>{card.glyph}</span>
-      <span style={{ fontSize: 12, fontWeight: 600, color: winner ? "#15803d" : "#475569" }}>{card.n}</span>
+      <span style={{ fontSize: 16, color: card.color, lineHeight: 1 }}>{card.glyph}</span>
+      <span style={{ fontSize: 12, fontWeight: 800, color: ghost ? "#94a3b8" : "#15803d" }}>{card.n}</span>
+    </span>
+  );
+  const Arrow = () => (
+    <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", margin: "0 3px", color: "#15803d" }}>
+      <span style={{ fontSize: 9.5, fontWeight: 800, lineHeight: 1 }}>{t(E, "beats", "이김")}</span>
+      <span style={{ fontSize: 15, lineHeight: 1 }}>→</span>
     </span>
   );
   return (
     <div style={{
-      display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-      padding: "6px 10px", marginBottom: 10,
+      display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
+      padding: "8px 12px", marginBottom: 10,
       background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8,
-      flexWrap: "wrap",
     }}>
-      <div style={{ fontSize: 11, fontWeight: 600, color: "#166534" }}>
-        🎯 {t(E, "Beats rules", "이김 규칙")}
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#166534", wordBreak: "keep-all" }}>
+        🎯 {t(E, "Beats map — it loops, like rock-paper-scissors ↺", "이김 지도 — 가위바위보처럼 돌고 돌아요 ↺")}
       </div>
-      {rules.map((r, i) => (
-        <div key={i} style={{
-          display: "flex", alignItems: "center", gap: 6,
-          padding: "3px 8px", borderRadius: 8,
-          background: "#fff",
-          border: "1.5px solid #bbf7d0",
-          fontSize: 12, fontWeight: 700, color: "#166534",
-        }}>
-          <Pill card={r.w} winner />
-          <span style={{ color: "#15803d", fontWeight: 600, fontSize: 11 }}>{t(E, "beats", "이김")}</span>
-          <Pill card={r.l} />
-        </div>
-      ))}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
+        <Card card={ring[0]} />
+        <Arrow /><Card card={ring[1]} />
+        <Arrow /><Card card={ring[2]} />
+        <Arrow /><Card card={ring[0]} ghost />
+      </div>
     </div>
   );
 }
