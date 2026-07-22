@@ -1956,7 +1956,7 @@ export function HpsFormulaGridSim({ E }) {
       {/* N·dom 정의 — 어느 스텝에서도 보이게 (선생님 2026-07-15: 앞 페이지 안 돌아가도 되게) */}
       <div style={{ maxWidth: 480, margin: "8px auto 0", padding: "6px 10px", background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
         <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N</b> = {t(E, "number of card types (here 3)", "카드 종류 수 (여기선 3)")}　·
-        <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#c2410c" }}>dom</b> = {t(E, "count of ⚡ cards (beat BOTH of Elsie's cards)", "⚡ 카드 수 (Elsie 두 카드를 모두 이기는 카드)")}
+        <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#c2410c" }}>dom</b> = {t(E, "⚡ count — cards that beat BOTH of Elsie's (short for “dominates”)", "⚡ 카드 수 — Elsie 두 카드를 모두 이기는 카드 (‘dominate 제압’ 의 앞 세 글자)")}
       </div>
 
       {showTest ? (
@@ -2013,7 +2013,7 @@ export function HpsFormulaGridSim({ E }) {
           {/* dom 을 '외울 약자' 가 아니라 ⚡ 개수로 — 그 자리에서 정의 */}
           <div style={{ textAlign: "center", fontSize: 12.5, fontWeight: 700, color: "#c2410c", marginTop: 12, wordBreak: "keep-all", lineHeight: 1.6 }}>
             {t(E, <>→ only <b>card 2 (⚡)</b> beats card 1.  So <b>“cards that beat Elsie” = 1</b>.<br/><span style={{ color: C.dim, fontSize: 11 }}>(we’ll call this count <b style={{ color: "#c2410c" }}>dom</b> — the ⚡ count)</span></>,
-                  <>→ 카드 1 을 이기는 건 <b>카드 2 (⚡)</b> 하나.  그래서 <b>‘Elsie 를 이기는 카드’ = 1 개</b>.<br/><span style={{ color: C.dim, fontSize: 11 }}>(이 개수를 <b style={{ color: "#c2410c" }}>dom</b> 이라 부를게요 — ⚡ 개수)</span></>)}
+                  <>→ 카드 1 을 이기는 건 <b>카드 2 (⚡)</b> 하나.  그래서 <b>‘Elsie 를 이기는 카드’ = 1 개</b>.<br/><span style={{ color: C.dim, fontSize: 11 }}>(이 개수를 <b style={{ color: "#c2410c" }}>dom</b> 이라 부를게요 — ‘dominate(제압)’ 약자, ⚡ 개수)</span></>)}
           </div>
         </div>
       ) : (
@@ -2041,6 +2041,33 @@ export function HpsFormulaGridSim({ E }) {
           <div style={{ fontSize: 10.5, color: C.dim, textAlign: "center", marginTop: 8, wordBreak: "keep-all" }}>
             {t(E, "↓ rows = Bessie's 1st card   ·   → cols = 2nd card", "↓ 행 = Bessie 첫 카드   ·   → 열 = 둘째 카드")}
           </div>
+
+          {/* 공식 조립 — 각 기호를 격자 그림 조각에 대응 + 왜 '빼는지'(여사건) 동기.
+              (선생님 2026-07-22: "dom 약자·공식이 어떻게 만들어지는지 전혀 이해 안 돼") */}
+          {s.phase === "count" && (
+            <div style={{ maxWidth: 460, margin: "16px auto 0", background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "12px 14px" }}>
+              <div style={{ fontSize: 11.5, color: "#92400e", fontWeight: 700, textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.65 }}>
+                🧩 {t(E, "Why subtract? Winning hands are scattered (⚡ could be in slot 1, slot 2, or both) — messy to count. The NON-winning hands are one clean square, so count those and subtract.",
+                       "왜 빼요? 이기는 패는 흩어져 있어요 (⚡ 가 첫 자리·둘째 자리·둘 다 — 섞임) → 바로 세기 번거로움.  ‘안 이기는 패’ 는 네모 한 덩이 → 그걸 세서 빼는 게 쉬워요.")}
+                <div style={{ fontSize: 10, color: "#a16207", marginTop: 3 }}>({t(E, "this trick = complementary counting", "이 방법 = 여사건")})</div>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "auto auto auto", columnGap: 10, rowGap: 5, justifyContent: "center", alignItems: "center", fontSize: 12.5, fontFamily: "'JetBrains Mono',monospace" }}>
+                <span style={{ color: "#475569", fontFamily: "inherit", fontSize: 11.5 }}>{t(E, "all hands", "전체 패")}</span>
+                <span style={{ color: "#334155", fontWeight: 800 }}>N² = 3×3</span>
+                <span style={{ color: "#15803d", fontWeight: 800 }}>= 9</span>
+
+                <span style={{ color: "#991b1b", fontFamily: "inherit", fontSize: 11.5 }}>− {t(E, "non-winning", "안 이기는 패")}</span>
+                <span style={{ color: "#991b1b", fontWeight: 800 }}>(N−dom)² = 2×2</span>
+                <span style={{ color: "#991b1b", fontWeight: 800 }}>= 4</span>
+
+                <span style={{ gridColumn: "1 / -1", borderTop: "1px solid #fcd34d", margin: "2px 0" }} />
+
+                <span style={{ color: "#c2410c", fontFamily: "inherit", fontSize: 11.5, fontWeight: 800 }}>{t(E, "winning", "이기는 패")}</span>
+                <span style={{ color: "#c2410c", fontWeight: 800 }}>N²−(N−dom)²</span>
+                <span style={{ color: "#15803d", fontWeight: 900, fontSize: 16 }}>= 5</span>
+              </div>
+            </div>
+          )}
         </>
       )}
 
