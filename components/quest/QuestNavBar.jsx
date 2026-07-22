@@ -63,7 +63,16 @@ export function QuestProgressBar({
   const tabHue = (i) => TAB_HUES[i % TAB_HUES.length];
   // 스텝별 구간 색 (step.section 이 있을 때) — 설명 단계가 바뀌면 진도바 색이 바뀜.
   // bonus 는 회색으로 '선택/심화'임을 한눈에.
-  const SECTION_HUES = { build: "#0d9488", optimize: "#d97706", bonus: "#94a3b8" };
+  // understand→formula→practice 는 '문제 이해' 챕터의 단계별 색 (선생님 2026-07-22:
+  // "알록달록, 차이를 볼 수 있도록"). 이 이름을 안 쓰는 quest 는 영향 없음(하위호환).
+  const SECTION_HUES = {
+    understand: "#2563eb",  // 파랑 — 문제 이해/탐색
+    formula:    "#7c3aed",  // 보라 — 공식 세우기
+    practice:   "#db2777",  // 분홍 — 확인/연습
+    build:      "#0d9488",  // 청록 — 코드 작성
+    optimize:   "#d97706",  // 주황 — 최적화/성능
+    bonus:      "#94a3b8",  // 회색 — 보너스/심화
+  };
 
   const showHover = (e, tabIdx, i) => {
     const segRect = e.currentTarget.getBoundingClientRect();

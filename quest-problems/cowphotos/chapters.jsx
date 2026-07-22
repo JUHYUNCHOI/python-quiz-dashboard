@@ -6,6 +6,7 @@ export function makeCowPhotosCh1(E) {
   return [
     // 1-1: Problem statement
     {
+      section: "understand",
       type: "reveal",
       narr: t(E,
         "FJ wants a row of cows for a photo where the heights go UP then DOWN, mirror around the middle, and no two neighbors share the same height.\nPick as many cows as possible!",
@@ -79,6 +80,7 @@ export function makeCowPhotosCh1(E) {
 
     // 1-2: Sample input/output format — real USACO sample
     {
+      section: "understand",
       type: "reveal",
       narr: t(E,
         "First — what does the input look like?  Two test cases: each is N followed by N heights.",
@@ -137,6 +139,7 @@ export function makeCowPhotosCh1(E) {
 
     // 1-3: Hand-draw small example to discover the shape & first pattern
     {
+      section: "understand",
       type: "reveal",
       narr: t(E,
         "Heights = [1, 1, 2, 3].  Try arranging them on paper before reading any answer.",
@@ -146,6 +149,7 @@ export function makeCowPhotosCh1(E) {
 
     // 1-3: First natural formula (the kid's instinct)
     {
+      section: "formula",
       type: "reveal",
       narr: t(E,
         "Spotted a pattern from the paper?  Let's name the parts and write down a first-try formula.",
@@ -222,6 +226,7 @@ export function makeCowPhotosCh1(E) {
     //       Hint is intentionally NOT a formula spoiler — it nudges
     //       toward building.
     {
+      section: "formula",
       type: "input",
       narr: t(E,
         "Bigger input.  Try building it on paper — what's the longest valid arrangement?",
@@ -239,6 +244,7 @@ export function makeCowPhotosCh1(E) {
     //        is when manual building starts feeling repetitive — the
     //        natural moment to ask "is there a shortcut?".
     {
+      section: "formula",
       type: "reveal",
       narr: t(E,
         "Building these by hand works but it's getting tedious.  Same shape both times — peak in the middle, paired heights on the sides.  Maybe we can just COUNT.",
@@ -280,6 +286,7 @@ export function makeCowPhotosCh1(E) {
 
     // 1-4: TRICKY case — formula breaks
     {
+      section: "formula",
       type: "reveal",
       narr: t(E,
         "Before coding it up — try the formula on one more input.  [3, 3, 2, 1].  Does it still work?",
@@ -289,6 +296,7 @@ export function makeCowPhotosCh1(E) {
 
     // 1-5: Verify corrected formula on both cases
     {
+      section: "formula",
       type: "reveal",
       narr: t(E,
         "The fix turns out to be one tiny tweak.  Then double-check it against both cases.",
@@ -395,6 +403,7 @@ export function makeCowPhotosCh1(E) {
 
     // 1-7: Input quiz — apply corrected formula
     {
+      section: "practice",
       type: "input",
       narr: t(E,
         "Your turn — apply the corrected formula to a new input.",
@@ -409,6 +418,7 @@ export function makeCowPhotosCh1(E) {
 
     // 1-8: Free sim
     {
+      section: "practice",
       type: "sim",
       narr: t(E,
         "Free play: try your own heights. Compare your hand-prediction with the formula's output.",
