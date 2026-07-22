@@ -328,19 +328,27 @@ LWD
               <div style={{ fontSize: 12, fontWeight: 800, color: "#166534", marginBottom: 8, wordBreak: "keep-all" }}>
                 🎯 {t(E, "So what does Bessie play to win each one?", "그럼 각 패를 이기려면 Bessie 는 뭘 내야 하나?")}
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <div style={{ fontSize: 10.5, color: "#166534", marginBottom: 6, wordBreak: "keep-all" }}>
+                {t(E, "(reminder — card 1 = ", "(참고 — 카드 1 = ")}<span style={{ color: "#2563eb" }}>●</span>{t(E, ", card 2 = ", ", 카드 2 = ")}<span style={{ color: "#7c3aed" }}>■</span>{t(E, ", card 3 = ", ", 카드 3 = ")}<span style={{ color: "#ea580c" }}>▲</span>)
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
                 {[
-                  { elsie: [["●", "#2563eb"], ["■", "#7c3aed"]], win: null },
-                  { elsie: [["■", "#7c3aed"], ["▲", "#ea580c"]], win: null },
-                  { elsie: [["●", "#2563eb"], ["●", "#2563eb"]], win: ["■", "#7c3aed", "2"] },
+                  { elsie: [["●", "#2563eb", "1"], ["■", "#7c3aed", "2"]], win: null },
+                  { elsie: [["■", "#7c3aed", "2"], ["▲", "#ea580c", "3"]], win: null },
+                  { elsie: [["●", "#2563eb", "1"], ["●", "#2563eb", "1"]], win: ["■", "#7c3aed", "2"] },
                 ].map((r, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12.5, flexWrap: "wrap" }}>
-                    <span style={{ fontFamily: "'JetBrains Mono',monospace", background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 5, padding: "2px 7px" }}>
-                      {r.elsie.map(([g, c], j) => <span key={j} style={{ color: c, fontSize: 15, marginRight: 3 }}>{g}</span>)}
+                    <span style={{ display: "inline-flex", gap: 6, background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 5, padding: "3px 8px" }}>
+                      {r.elsie.map(([g, c, n], j) => (
+                        <span key={j} style={{ display: "inline-flex", alignItems: "center", gap: 1, fontWeight: 700 }}>
+                          <span style={{ color: c, fontSize: 15 }}>{g}</span>
+                          <span style={{ fontSize: 11, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>{n}</span>
+                        </span>
+                      ))}
                     </span>
                     <span style={{ color: "#9ca3af" }}>→</span>
                     {r.win
-                      ? <span style={{ fontWeight: 700, color: "#15803d", wordBreak: "keep-all" }}>{t(E, "play ", "")}<span style={{ color: r.win[1], fontSize: 16 }}>{r.win[0]}</span>{t(E, ` card ${r.win[2]} — it beats BOTH ✓`, ` 카드 ${r.win[2]} 내면 둘 다 이김 ✓`)}</span>
+                      ? <span style={{ fontWeight: 700, color: "#15803d", wordBreak: "keep-all", display: "inline-flex", alignItems: "center", gap: 3, flexWrap: "wrap" }}>{t(E, "play ", "")}<span style={{ display: "inline-flex", alignItems: "center", gap: 1 }}><span style={{ color: r.win[1], fontSize: 16 }}>{r.win[0]}</span><span style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace" }}>{r.win[2]}</span></span>{t(E, ` (card ${r.win[2]}) — it beats BOTH ✓`, ` (카드 ${r.win[2]}) 내면 둘 다 이김 ✓`)}</span>
                       : <span style={{ fontWeight: 700, color: "#b91c1c", wordBreak: "keep-all" }}>{t(E, "no single card beats both ✗ → can't force a win", "한 장으로 둘 다 이기는 카드 없음 ✗ → 확실히 못 이김")}</span>}
                   </div>
                 ))}

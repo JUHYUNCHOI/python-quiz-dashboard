@@ -188,6 +188,12 @@ export function BeatsMatrix({ E, highlight = null }) {
     }}>{children}</div>
   );
   const Glyph = ({ n, size = 16 }) => <span style={{ fontSize: size, color: SHAPES[n]?.color, lineHeight: 1 }}>{SHAPES[n]?.glyph}</span>;
+  // 모양+번호 (선생님 2026-07-21: "동그라미가 카드 1인지 2인지 몰라" — 헤더/라벨에 번호).
+  const GlyphNum = ({ n }) => (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 1 }}>
+      <Glyph n={n} size={14} /><span style={{ fontSize: 9, color: "#64748b", fontWeight: 700 }}>{n}</span>
+    </span>
+  );
   return (
     <div style={{ maxWidth: 320, margin: "0 auto 10px", background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 10, padding: "8px 10px" }}>
       <div style={{ fontSize: 10.5, fontWeight: 800, color: "#166534", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
@@ -200,13 +206,13 @@ export function BeatsMatrix({ E, highlight = null }) {
               <td><Cell head /></td>
               {ids.map(c => (
                 <td key={c} style={{ background: highlight === c ? "#fef3c7" : "transparent" }}>
-                  <Cell head hl={highlight === c}><Glyph n={c} /></Cell>
+                  <Cell head hl={highlight === c}><GlyphNum n={c} /></Cell>
                 </td>
               ))}
             </tr>
             {ids.map(r => (
               <tr key={r}>
-                <td><Cell head><Glyph n={r} /></Cell></td>
+                <td><Cell head><GlyphNum n={r} /></Cell></td>
                 {ids.map(c => {
                   const w = beats(r, c);
                   const inCol = highlight === c;
