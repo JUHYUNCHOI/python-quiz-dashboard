@@ -1,6 +1,7 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 6/8 (TLE 7-8, O(N^2) count)
-//   C++:    11/11 PASS
+// 🔒 USACO_VERIFIED (2026-05-13; Python 2026-07-22 재작성 — ⚠️ 재제출 대기)
+//   Python: Counter 로 O(N) 재작성 (구 brute h.count 는 6/8 TLE 7-8 였음).
+//           ⚠️ USACO 재제출로 8/8 확인 필요 — 확인 후 이 줄 갱신.
+//   C++:    11/11 PASS (freq 배열 O(N))
 //   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 
@@ -532,54 +533,39 @@ const CP_STEP2_CPP = [
 ];
 
 const CP_STEP3_PY = [
-  "T = int(input())",
+  "from collections import Counter",
   "",
+  "T = int(input())",
   "for _ in range(T):",
   "    N = int(input())",
   "    h = list(map(int, input().split()))",
   "    M = max(h)",
   "",
-  "    # ring 이 되려면: 값이 peak 보다 작고 (v < M), 같은 값 2 마리 이상",
+  "    # 빈도를 한 번에 세기 — O(N)  (h.count 로 매번 훑으면 O(N²) → TLE)",
+  "    cnt = Counter(h)",
+  "    # ring 이 되려면: v < M 이고 같은 값 2 마리 이상",
   "    rings = 0",
-  "    for v in set(h):",
-  "        if v < M and h.count(v) >= 2:",
+  "    for v in cnt:",
+  "        if v < M and cnt[v] >= 2:",
   "            rings += 1",
 ];
 const CP_STEP3_CPP = [
-  "// (앞부분 생략)",
-  "        int M = h[0];",
-  "        for (int i = 1; i < N; i++) {",
-  "            if (h[i] > M) {",
-  "                M = h[i];",
-  "            }",
+  "// (앞부분 생략 — h 로 입력 읽음)",
+  "        int M = 0;",
+  "        for (int i = 0; i < N; i++) {",
+  "            if (h[i] > M) M = h[i];",
   "        }",
   "",
-  "        // ring 이 되려면: v < M 이고 같은 값이 2 마리 이상",
-  "        int rings = 0;",
+  "        // 키가 1..N → 값 자체를 인덱스로 freq 세기 — O(N)",
+  "        vector<int> freq(N + 2, 0);",
   "        for (int i = 0; i < N; i++) {",
-  "            int v = h[i];",
-  "            if (v >= M) {",
-  "                continue;",
-  "            }",
-  "            // v 를 이미 셌으면 skip",
-  "            bool seen = false;",
-  "            for (int k = 0; k < i; k++) {",
-  "                if (h[k] == v) {",
-  "                    seen = true;",
-  "                    break;",
-  "                }",
-  "            }",
-  "            if (seen) {",
-  "                continue;",
-  "            }",
-  "            // v 가 몇 번 나오는지 세고 ≥ 2 면 ring",
-  "            int cnt = 0;",
-  "            for (int k = 0; k < N; k++) {",
-  "                if (h[k] == v) {",
-  "                    cnt++;",
-  "                }",
-  "            }",
-  "            if (cnt >= 2) {",
+  "            freq[h[i]]++;",
+  "        }",
+  "",
+  "        // ring: v < M 이고 같은 값이 2 마리 이상 (즉시 조회)",
+  "        int rings = 0;",
+  "        for (int v = 1; v < M; v++) {",
+  "            if (freq[v] >= 2) {",
   "                rings++;",
   "            }",
   "        }",
@@ -587,16 +573,18 @@ const CP_STEP3_CPP = [
 
 // Step 4 = full final program
 const CP_FULL_PY = [
-  "T = int(input())",
+  "from collections import Counter",
   "",
+  "T = int(input())",
   "for _ in range(T):",
   "    N = int(input())",
   "    h = list(map(int, input().split()))",
   "    M = max(h)",
   "",
+  "    cnt = Counter(h)          # 빈도 한 번에 — O(N)",
   "    rings = 0",
-  "    for v in set(h):",
-  "        if v < M and h.count(v) >= 2:",
+  "    for v in cnt:",
+  "        if v < M and cnt[v] >= 2:",
   "            rings += 1",
   "",
   "    # 길이 = 2·rings + 1 (좌+우 mirror = 2 마리, peak 1 마리)",
@@ -618,36 +606,20 @@ const CP_FULL_CPP = [
   "            cin >> h[i];",
   "        }",
   "",
-  "        int M = h[0];",
-  "        for (int i = 1; i < N; i++) {",
-  "            if (h[i] > M) {",
-  "                M = h[i];",
-  "            }",
+  "        int M = 0;",
+  "        for (int i = 0; i < N; i++) {",
+  "            if (h[i] > M) M = h[i];",
+  "        }",
+  "",
+  "        // 키가 1..N → 값을 인덱스로 freq 세기 — O(N)",
+  "        vector<int> freq(N + 2, 0);",
+  "        for (int i = 0; i < N; i++) {",
+  "            freq[h[i]]++;",
   "        }",
   "",
   "        int rings = 0;",
-  "        for (int i = 0; i < N; i++) {",
-  "            int v = h[i];",
-  "            if (v >= M) {",
-  "                continue;",
-  "            }",
-  "            bool seen = false;",
-  "            for (int k = 0; k < i; k++) {",
-  "                if (h[k] == v) {",
-  "                    seen = true;",
-  "                    break;",
-  "                }",
-  "            }",
-  "            if (seen) {",
-  "                continue;",
-  "            }",
-  "            int cnt = 0;",
-  "            for (int k = 0; k < N; k++) {",
-  "                if (h[k] == v) {",
-  "                    cnt++;",
-  "                }",
-  "            }",
-  "            if (cnt >= 2) {",
+  "        for (int v = 1; v < M; v++) {",
+  "            if (freq[v] >= 2) {",
   "                rings++;",
   "            }",
   "        }",
@@ -896,7 +868,7 @@ export function getCowPhotosSections(E) {
       ],
     },
     {
-      label: t(E, "3️⃣ Count 'ring' values (v < M, freq ≥ 2)", "3️⃣ ring 값 세기 (v < M, freq ≥ 2)"),
+      label: t(E, "3️⃣ Count 'ring' values with Counter/freq (v < M, freq ≥ 2)", "3️⃣ Counter/freq 로 ring 값 세기 (v < M, freq ≥ 2)"),
       color: "#7c3aed",
       py: cx(E, CP_STEP3_PY), cpp: cx(E, CP_STEP3_CPP),
       why: [
@@ -904,6 +876,8 @@ export function getCowPhotosSections(E) {
             "값 v 가 양옆에 들어가려면 (a) 그 키의 소가 2 마리 이상 AND (b) v < M (peak 가 더 커야)."),
         t(E, "This is the constraint the naive '2·pairs+1' formula MISSED — it's why [3,3,2,1] gives 1, not 3.",
             "단순 '2·페어+1' 공식이 놓친 제약 — [3,3,2,1] 의 답이 3 이 아니라 1 인 이유."),
+        t(E, "⚠️ Count frequencies ONCE (Counter / freq array) → O(N). Using h.count(v) inside the loop re-scans everything → O(N²) → TLE at N = 100,000.",
+            "⚠️ 빈도는 한 번에 세기 (Counter / freq 배열) → O(N). 루프 안에서 h.count(v) 를 쓰면 매번 전체를 다시 훑음 → O(N²) → N = 10만 에서 TLE."),
       ],
     },
     {
@@ -915,96 +889,31 @@ export function getCowPhotosSections(E) {
             "각 ring 이 2 마리 기여 (좌+우 mirror). peak 가 1 마리. 그래서 길이 = 2·rings + 1."),
         t(E, "Always at least 1: even with 0 rings, we can take any single cow alone (just a peak, no rings).",
             "항상 최소 1: ring 이 0 개여도 한 마리만으로 길이 1 사진 가능 (peak 만)."),
-        t(E, "Done — small inputs work. But what happens at N = 100,000? Next steps explore that.",
-            "끝 — 작은 입력에선 잘 돼요. 그런데 N = 10만 이면? 다음 단계에서 봐요."),
-      ],
-    },
-    /* ─────────── 5–7: WHY → BRAINSTORM → IMPLEMENT (procedural optimization) ─── */
-    {
-      label: t(E, "5️⃣ Why is this slow on big N?", "5️⃣ 왜 큰 N 에선 느릴까?"),
-      color: "#dc2626",
-      // 같은 코드를 다시 보여줌 — 어디가 병목인지 분석하는 단계
-      py: cx(E, CP_FULL_PY), cpp: cx(E, CP_FULL_CPP),
-      why: [
-        t(E, "Look at the inner loop: `h.count(v)` scans the WHOLE array h once — O(N) work.",
-            "안쪽 루프 보세요: `h.count(v)` 가 매번 h 전체를 한 번 훑어요 — O(N)."),
-        t(E, "And we do that for EACH distinct v (there can be up to N of them) → up to N × N work per case.",
-            "그리고 그걸 distinct v 마다 (최대 N 개) → 케이스당 최대 N × N 일."),
-        t(E, "USACO N can be 100,000. N² = 10 billion. Way too slow → TLE on big test cases.",
-            "USACO 의 N 은 10 만까지. N² = 100 억. 너무 느림 → 큰 테스트에서 TLE."),
-      ],
-    },
-    {
-      label: t(E, "6️⃣ Idea — count frequencies ONCE", "6️⃣ 아이디어 — 빈도를 한 번만 세두자"),
-      color: "#0891b2",
-      py: cx(E, CP_INSIGHT_PY), cpp: cx(E, CP_INSIGHT_CPP),
-      why: [
-        t(E, "Frequencies of values in h don't change while we work. So why count v's appearances every time?",
-            "h 안의 빈도는 우리가 작업하는 동안 안 바뀌는데, 왜 매번 셀까?"),
-        t(E, "Plan: walk h ONCE, build a freq table. Then ring-check is just `freq[v] >= 2` — instant lookup.",
-            "계획: h 를 한 번만 훑어 freq 표를 만든다. 그 다음 ring 검사는 그냥 `freq[v] >= 2` — 즉시."),
-        t(E, "Total: O(N) to build + O(distinct) to scan = O(N) per case. 100x–1000x faster on large inputs.",
-            "총 일: O(N) 으로 만들기 + O(distinct) 로 훑기 = O(N) per case. 큰 입력에서 100~1000 배 빨라짐."),
-      ],
-    },
-    {
-      label: t(E, "7️⃣ Final fast code — Counter (Py) / freq array (C++)", "7️⃣ 최종 빠른 코드 — Counter (Py) / freq 배열 (C++)"),
-      color: "#15803d",
-      py: cx(E, CP_FAST_PY), cpp: cx(E, CP_FAST_CPP),
-      why: [
-        t(E, "Python: `Counter(h)` builds the dict in one line. Same logic as before, just using `cnt[v]` instead of `h.count(v)`.",
-            "Python: `Counter(h)` 한 줄로 dict 완성. 로직은 똑같고 `h.count(v)` 자리만 `cnt[v]` 로."),
-        t(E, "C++: heights are guaranteed 1..N, so we use the value AS the index. No need to even store h — we accumulate freq while reading input.",
-            "C++: 키가 1..N 으로 보장 → 값 자체를 인덱스로. h 를 따로 저장할 필요 없이 입력 받으면서 freq 누적."),
+        t(E, "Because we counted with Counter / a freq array, the whole thing is O(N) per case — fast even at N = 100,000.",
+            "빈도를 Counter / freq 배열로 세서 케이스당 O(N) — N = 10만 에서도 빠름."),
       ],
     },
   ];
 }
 
 /* ── CodeWalk 데이터 — 설명을 코드 줄에 붙여 생각 순서로 (선생님 2026-07-14: 모든 quest 코드 이 방식).
-   mode: "brute"(쉬운 O(N²)) | "fast"(O(N)).  두 코드를 각각 CodeWalk 로 걷는다. ── */
-export function getCowPhotosWalk(E, lang = "py", mode = "brute") {
+   Counter/freq 로 바로 걷는다 (선생님 2026-07-22: 브루트 먼저 안 보여줌. mode 인자는 하위호환용, 무시). ── */
+export function getCowPhotosWalk(E, lang = "py", mode = "fast") {
   const vars = [
     { v: "h", ko: "소들의 키 목록", en: "the heights" },
     { v: "M", ko: "가장 큰 키 (= peak)", en: "biggest height (= peak)" },
     { v: "rings", ko: "양옆 짝지을 키 개수", en: "# of ring keys" },
   ];
-  if (mode === "brute") {
-    if (lang === "cpp") {
-      return {
-        code: cx(E, CP_FULL_CPP),
-        vars,
-        beats: [
-          { hi: [4, 6], bubble: t(E, "Start with input — read T (number of test cases). The loop repeats T times.", "언제나 입력부터 — T (테스트 케이스 수) 읽기. 아래 for 가 T 번 반복.") },
-          { hi: [7, 13], bubble: t(E, "Each case: read N, then N heights into vector h.", "각 케이스: N 을 읽고, 키 N 개를 vector h 로.") },
-          { hi: [15, 20], bubble: t(E, "The peak is the BIGGEST height (mountain top). Scan h for the max.", "산의 꼭대기(peak) = 가장 큰 키. h 를 훑어 최댓값 M.") },
-          { hi: [22, 47], bubble: t(E, "Count ring keys: value v works if v < M (below peak) AND appears ≥ 2 times. Here we count each v's occurrences by scanning h — that inner scan is the slow part.", "ring 세기: 키 v 가 peak 보다 작고(v < M) 2 마리 이상이면 ring. 여기선 v 마다 h 를 훑어 세요 — 이 안쪽 훑기가 느린 부분.") },
-          { hi: [49, 50], bubble: t(E, "Answer = 1 peak + 2 per ring = 2·rings + 1. Print it.", "답 = peak 1 마리 + ring 마다 2 마리 = 2·rings + 1. 출력!") },
-        ],
-      };
-    }
-    return {
-      code: cx(E, CP_FULL_PY),
-      vars,
-      beats: [
-        { hi: [0, 0], bubble: t(E, "Start with input — T = number of test cases. The for-loop below repeats T times.", "언제나 입력부터 — T = 테스트 케이스 수. 아래 for 가 T 번 반복.") },
-        { hi: [2, 4], bubble: t(E, "Each case: read N, then read the N heights into a list h.", "각 케이스: N 을 읽고, 다음 줄에서 키 N 개를 리스트 h 로.") },
-        { hi: [5, 5], bubble: t(E, "The peak is the BIGGEST height (mountain top). max(h) gets it in one go.", "산의 꼭대기(peak) = 가장 큰 키. max(h) 로 한 번에.") },
-        { hi: [7, 10], bubble: t(E, "Count ring keys: v works if v < M (below the peak) AND h.count(v) ≥ 2. But h.count scans ALL of h every time — the slow bit.", "ring 세기: v 가 peak 보다 작고(v < M) 2 마리 이상(h.count ≥ 2)이면 ring. 근데 h.count 가 매번 h 전체를 훑어요 — 느린 부분.") },
-        { hi: [12, 13], bubble: t(E, "Answer = 1 peak + 2 per ring = 2·rings + 1. Print it.", "답 = peak 1 마리 + ring 마다 2 마리 = 2·rings + 1. 출력!") },
-      ],
-    };
-  }
-  // fast
+  // Counter/freq 로 바로 (선생님 2026-07-22: 브루트 먼저 X — brute 모드 제거).
   if (lang === "cpp") {
     return {
       code: cx(E, CP_FAST_CPP),
       vars,
       beats: [
-        { hi: [4, 9], bubble: t(E, "Same start — read T, then per case read N.", "시작은 같아요 — T 읽고, 케이스마다 N.") },
-        { hi: [10, 19], bubble: t(E, "The trick: a freq array indexed by the height itself. While reading input, tally freq[h] and track the peak M — all in one pass, O(N).", "핵심: 키 값을 인덱스로 쓰는 freq 배열. 입력 받으면서 freq[h] 누적 + peak(M) 갱신 — 한 번 훑기로 끝, O(N).") },
+        { hi: [4, 9], bubble: t(E, "Input first — read T, then per case read N.", "입력부터 — T 읽고, 케이스마다 N.") },
+        { hi: [10, 19], bubble: t(E, "The key idea: a freq array indexed by the height itself (heights are 1..N). While reading input, tally freq[h] and track the peak M — all in one pass, O(N).  ⚠️ Re-counting each value by scanning h instead would be O(N²) → TLE.", "핵심: 키 값을 인덱스로 쓰는 freq 배열 (키가 1..N). 입력 받으면서 freq[h] 누적 + peak(M) 갱신 — 한 번 훑기로 끝, O(N).  ⚠️ 값마다 h 를 다시 훑어 세면 O(N²) → TLE.") },
         { hi: [20, 25], bubble: t(E, "Count rings: for each value below M, freq[v] ≥ 2 is an instant lookup (no re-scan).", "ring 세기: M 보다 작은 값마다 freq[v] ≥ 2 만 즉시 확인 (다시 안 훑음).") },
-        { hi: [26, 26], bubble: t(E, "Same formula 2·rings + 1. Logic identical — only faster.", "같은 공식 2·rings + 1. 로직 동일, 속도만 빨라짐.") },
+        { hi: [26, 26], bubble: t(E, "Answer = 2·rings + 1. Print it.", "답 = 2·rings + 1. 출력!") },
       ],
     };
   }
@@ -1013,10 +922,10 @@ export function getCowPhotosWalk(E, lang = "py", mode = "brute") {
     vars,
     beats: [
       { hi: [0, 0], bubble: t(E, "We'll use Counter — it counts frequencies in one line.", "Counter 를 씀 — 빈도를 한 줄로 세요.") },
-      { hi: [2, 6], bubble: t(E, "Read input and find the peak M — same as the brute version.", "입력 읽고 peak(M) 찾기 — 브루트랑 같아요.") },
-      { hi: [8, 8], bubble: t(E, "The trick: Counter(h) builds the whole frequency table in ONE pass (O(N)). Brute re-scanned h every time with h.count — that's what was slow.", "핵심: Counter(h) 한 줄로 빈도표를 한 번에 완성 (O(N)). 브루트는 h.count 로 매번 h 를 훑어서 느렸죠.") },
-      { hi: [9, 12], bubble: t(E, "Count rings the same way, but cnt[v] is an instant lookup now — no more re-scanning.", "ring 세기는 똑같은데, 이제 cnt[v] 즉시 조회 (다시 안 훑음).") },
-      { hi: [14, 14], bubble: t(E, "Same formula 2·rings + 1. Logic identical — only faster.", "같은 공식 2·rings + 1. 로직 동일, 속도만 빨라짐.") },
+      { hi: [2, 6], bubble: t(E, "Input first — read T, then per case read N and the heights, and take the peak M = max(h).", "입력부터 — T 읽고, 케이스마다 N 과 키를 읽고, peak M = max(h).") },
+      { hi: [8, 8], bubble: t(E, "The key line: Counter(h) builds the WHOLE frequency table in one pass → O(N).  ⚠️ If you wrote h.count(v) instead, it re-scans all of h every time → O(N²) → TLE on big N.", "핵심 줄: Counter(h) 한 줄로 빈도표를 한 번에 완성 → O(N).  ⚠️ 여기서 h.count(v) 를 쓰면 매번 h 전체를 훑어 O(N²) → 큰 N 에서 TLE.") },
+      { hi: [9, 12], bubble: t(E, "Count rings: v is a ring key if v < M and cnt[v] ≥ 2 — an instant O(1) lookup.", "ring 세기: v < M 이고 cnt[v] ≥ 2 면 ring 키 — 즉시 O(1) 조회.") },
+      { hi: [14, 14], bubble: t(E, "Answer = 1 peak + 2 per ring = 2·rings + 1. Print it.", "답 = peak 1 마리 + ring 마다 2 마리 = 2·rings + 1. 출력!") },
     ],
   };
 }

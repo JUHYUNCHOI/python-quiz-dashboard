@@ -419,59 +419,51 @@ export function makeCowPhotosCh1(E) {
 
 export function makeCowPhotosCh2(E, lang = "py") {
   return [
-    // 2-1: 쉬운 코드(브루트) — CodeWalk (입력부터 생각 순서, 설명은 코드 줄에 붙음)
-    // (선생님 2026-07-14: 모든 quest 코드는 CodeWalk 방식. CodeSectionView 위-노트 폐기.)
+    // 2-1: Counter 로 바로 — 처음부터 빠른 방법 (선생님 2026-07-22: 브루트 먼저 X,
+    //      Counter 부터 보여주고 '안 쓰면 TLE' 라고만 경고. 브루트 arc 제거.)
     {
       section: "build",
       type: "reveal",
-      narr: t(E, "Formula's settled.  Write the simplest version first — walk it line by line, input first.",
-                 "공식 확정. 가장 단순한 버전부터 — 입력부터 한 줄씩 따라가요."),
-      content: (<CodeWalk E={E} lang={lang} {...getCowPhotosWalk(E, lang, "brute")} accent="#d97706" />),
+      narr: t(E, "Formula's settled.  Write it with Counter from the start — count every height's frequency in one pass.  Walk it line by line, input first.",
+                 "공식 확정. 처음부터 Counter 로 — 각 키의 빈도를 한 번에 세는 방식으로 짜요. 입력부터 한 줄씩 따라가요."),
+      content: (<CodeWalk E={E} lang={lang} {...getCowPhotosWalk(E, lang, "fast")} accent="#d97706" />),
     },
-    // 2-2: 한계 — 왜 느린가
+    // 2-2: ⚠️ 왜 Counter? — 안 쓰면 TLE (짧은 경고, 브루트 먼저 짜보게 하지 않음)
     {
-      section: "optimize",
+      section: "build",
       type: "reveal",
-      narr: t(E, "Small inputs pass.  But it re-scans the whole list every time — on big N that's N² → too slow.",
-                 "작은 입력은 통과. 근데 매번 전체를 훑어서 — N 이 크면 N² → 너무 느림."),
+      narr: t(E, "One warning — why Counter and not h.count()?  Because h.count() re-scans everything each time → TLE on big N.",
+                 "한 가지 주의 — 왜 h.count() 말고 Counter 냐면, h.count() 는 매번 전체를 다시 훑어서 큰 N 에선 TLE 나요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", textAlign: "center", marginBottom: 14 }}>
-            🐌 {t(E, "Why the simple version is slow", "쉬운 버전이 왜 느릴까")}
+            ⚠️ {t(E, "If you count with h.count() instead", "Counter 대신 h.count() 로 세면")}
           </div>
           <div style={{ maxWidth: 460, margin: "0 auto 14px", display: "flex", flexDirection: "column", gap: 8 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 14px", background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 12, wordBreak: "keep-all" }}>
               <span style={{ fontSize: 22 }}>✅</span>
-              <div style={{ fontSize: 12.5, color: "#15803d", fontWeight: 700 }}>{t(E, "Small N — passes instantly.", "작은 N — 순식간에 통과.")}</div>
+              <div style={{ fontSize: 12.5, color: "#15803d", fontWeight: 700 }}>{t(E, "Small N — h.count() passes fine too.", "작은 N — h.count() 도 잘 통과.")}</div>
             </div>
             <div style={{ textAlign: "center", fontSize: 16, color: C.dim }}>↓</div>
             <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 14px", background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 12, wordBreak: "keep-all" }}>
               <span style={{ fontSize: 22 }}>⏰</span>
-              <div style={{ fontSize: 12.5, color: "#991b1b", fontWeight: 700 }}>{t(E, "Big N — Time Limit Exceeded.", "큰 N — 시간 초과 (TLE).")}</div>
+              <div style={{ fontSize: 12.5, color: "#991b1b", fontWeight: 700 }}>{t(E, "Big N — h.count() gets Time Limit Exceeded.", "큰 N — h.count() 는 시간 초과 (TLE).")}</div>
             </div>
           </div>
           <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#1f2937", lineHeight: 1.75, wordBreak: "keep-all" }}>
-            <div>• {t(E, "Counting one value re-scans ALL heights → O(N).", "값 하나 세는데 키 전체를 다시 훑음 → O(N).")}</div>
-            <div>• {t(E, "Doing that for each distinct value (up to N) → N × N = ", "그걸 값마다 (최대 N 개) → N × N = ")}<b style={{ color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>N²</b></div>
-            <div>• {t(E, "N up to 100,000 → N² = 10 billion → too slow.", "N 이 10 만까지 → N² = 100 억 → 너무 느림.")}</div>
+            <div>• {t(E, "h.count(v) re-scans ALL heights → O(N), for each distinct value.", "h.count(v) 는 매번 키 전체를 다시 훑음 → 값마다 O(N).")}</div>
+            <div>• {t(E, "Up to N distinct values → N × N = ", "distinct 값이 최대 N 개 → N × N = ")}<b style={{ color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>N²</b></div>
+            <div>• {t(E, "N up to 100,000 → 10 billion ops → too slow.", "N 이 10 만까지 → 100 억 연산 → 너무 느림.")}</div>
           </div>
-          <div style={{ marginTop: 10, textAlign: "center", fontSize: 12, color: "#7c2d12", fontWeight: 700, wordBreak: "keep-all" }}>
-            {t(E, "Fix: count every frequency just ONCE → O(N). Next 👇", "고침: 빈도를 딱 한 번만 세두면 → O(N). 다음 👇")}
+          <div style={{ marginTop: 10, textAlign: "center", fontSize: 12, color: "#15803d", fontWeight: 700, wordBreak: "keep-all" }}>
+            ✅ {t(E, "Counter(h) counts every frequency in ONE pass → O(N).  That's why we used it above.", "Counter(h) 는 빈도를 한 번에 다 세요 → O(N). 그래서 위에서 Counter 를 쓴 거예요.")}
           </div>
         </div>),
     },
-    // 2-3: 빠른 코드 — CodeWalk
-    {
-      section: "optimize",
-      type: "reveal",
-      narr: t(E, "Same logic, but count frequencies ONCE up front → O(N).  Walk the faster version.",
-                 "같은 로직인데, 빈도를 앞에서 한 번만 세면 → O(N). 빠른 버전을 따라가요."),
-      content: (<CodeWalk E={E} lang={lang} {...getCowPhotosWalk(E, lang, "fast")} accent="#d97706" />),
-    },
 
-    // 2-4: Free runner
+    // 2-3: Free runner
     {
-      section: "optimize",
+      section: "build",
       type: "runner",
       narr: t(E, "Try your own heights.", "직접 키 시도."),
     },
