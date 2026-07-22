@@ -86,73 +86,80 @@ export function makeMooin3Ch1(E) {
               </div>
             </div>
 
-            {/* Score — concrete tiny example.  Show the picks at positions
-                1, 2, 3 with arrows under them showing distance = 1 and 1.
-                "Left/right distance" gets its meaning from the picture, not
-                from definition. */}
+            {/* Score — the 3 picks can be SPREAD OUT.  Use positions 1, 3, 6
+                (gaps 2 and 3) so score = 2 × 3 = 6 makes the *product of the
+                two distances* unmistakable — a 1×1 example can't show that.
+                Faint '·' cells = skipped positions, so 1/3/6 reads as a real
+                string.  (선생님 2026-07-22: "점수를 어떻게 매긴다고?") */}
             <div style={{
-              padding: "10px 12px", background: "#ecfdf5", border: "1px solid #86efac",
+              padding: "12px 12px 10px", background: "#ecfdf5", border: "1px solid #86efac",
               borderRadius: 8, marginBottom: 6,
             }}>
-              <div style={{ fontSize: 11.5, fontWeight: 600, color: "#15803d", textAlign: "center", marginBottom: 8 }}>
-                {t(E, "Score = how spread-out the 3 picks are",
-                      "점수 = 3 글자가 얼마나 떨어져 있는가")}
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#15803d", textAlign: "center", marginBottom: 3 }}>
+                {t(E, "Score = (gap 1st→2nd) × (gap 2nd→3rd)",
+                      "점수 = (1번째~2번째 거리) × (2번째~3번째 거리)")}
               </div>
-              <div style={{ display: "flex", justifyContent: "center", marginBottom: 6 }}>
-                <div>
-                  {/* Letters with position numbers below */}
-                  <div style={{ display: "flex", gap: 8 }}>
-                    {[
-                      { ch: "a", bd: "#7c3aed", bg: "#f3e8ff" },
-                      { ch: "b", bd: "#0891b2", bg: "#cffafe" },
-                      { ch: "b", bd: "#0891b2", bg: "#cffafe" },
-                    ].map((c, i) => (
-                      <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                        <div style={{
-                          width: 30, height: 32, background: c.bg, border: `2px solid ${c.bd}`,
-                          borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center",
-                          fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 14, color: "#1f2937",
-                        }}>{c.ch}</div>
-                        <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>
-                          {t(E, "pos ", "위치 ")}{i + 1}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  {/* Distance arrows under cards */}
-                  <div style={{ display: "flex", gap: 0, marginTop: 6, alignItems: "center", justifyContent: "center" }}>
-                    <div style={{ width: 30 }} />
-                    <div style={{
-                      width: 38, height: 16, position: "relative",
-                      background: "#f3e8ff", border: "1.5px solid #7c3aed", borderRadius: 3,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 10, fontWeight: 700, color: "#7c3aed",
-                    }}>← 1 →</div>
-                    <div style={{
-                      width: 38, height: 16, position: "relative",
-                      background: "#cffafe", border: "1.5px solid #0891b2", borderRadius: 3,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 10, fontWeight: 700, color: "#0891b2",
-                    }}>← 1 →</div>
-                    <div style={{ width: 30 }} />
-                  </div>
-                </div>
+              <div style={{ fontSize: 10.5, color: "#15803d", textAlign: "center", marginBottom: 10, wordBreak: "keep-all" }}>
+                {t(E, "The 3 letters can sit far apart — multiply the two gaps.",
+                      "3 글자는 서로 떨어져 있어도 돼요 — 두 거리를 곱해요.")}
               </div>
-              <div style={{
-                fontSize: 12.5, fontWeight: 700, color: "#15803d", textAlign: "center", marginTop: 4,
-              }}>
+
+              {/* Mini-string: picks at pos 1, 3, 6.  Faint dots = skipped. */}
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 4, marginBottom: 4 }}>
+                {[
+                  { kind: "pick", ch: "a", bd: "#7c3aed", bg: "#f3e8ff", pos: 1 },
+                  { kind: "skip" },
+                  { kind: "pick", ch: "b", bd: "#0891b2", bg: "#cffafe", pos: 3 },
+                  { kind: "skip" },
+                  { kind: "skip" },
+                  { kind: "pick", ch: "b", bd: "#0891b2", bg: "#cffafe", pos: 6 },
+                ].map((c, i) => c.kind === "skip" ? (
+                  <div key={i} style={{
+                    width: 20, height: 30, borderRadius: 5, border: "1.5px dashed #cbd5e1",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "#cbd5e1", fontSize: 13, fontWeight: 700,
+                  }}>·</div>
+                ) : (
+                  <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+                    <div style={{
+                      width: 30, height: 34, background: c.bg, border: `2px solid ${c.bd}`,
+                      borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center",
+                      fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 15, color: "#1f2937",
+                    }}>{c.ch}</div>
+                    <div style={{ fontSize: 9, color: c.bd, fontWeight: 700 }}>
+                      {t(E, "pos ", "위치 ")}{c.pos}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Distance bridges — one spans pos 1→3 (=2), one spans pos 3→6 (=3). */}
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 4, marginBottom: 8 }}>
+                {/* under pick@1 (30) : half spacer */}
+                <div style={{ width: 15 }} />
+                <div style={{
+                  width: 30 + 4 + 20 + 4, height: 17, background: "#f3e8ff", border: "1.5px solid #7c3aed",
+                  borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 10.5, fontWeight: 800, color: "#7c3aed",
+                }}>← 2 →</div>
+                <div style={{
+                  width: 30 + 4 + 20 + 4 + 20 + 4, height: 17, background: "#cffafe", border: "1.5px solid #0891b2",
+                  borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 10.5, fontWeight: 800, color: "#0891b2",
+                }}>← 3 →</div>
+                <div style={{ width: 15 }} />
+              </div>
+
+              <div style={{ fontSize: 14, fontWeight: 800, color: "#15803d", textAlign: "center", marginTop: 2 }}>
                 {t(E, "Score = ", "점수 = ")}
-                <span style={{ color: "#7c3aed" }}>1</span>
+                <span style={{ color: "#7c3aed" }}>2</span>
                 {" × "}
-                <span style={{ color: "#0891b2" }}>1</span>
-                {" = 1 "}
-                <span style={{ color: C.dim, fontWeight: 400, fontSize: 11 }}>
-                  {t(E, "(adjacent picks → small score)", "(붙어있으면 → 작은 점수)")}
-                </span>
+                <span style={{ color: "#0891b2" }}>3</span>
+                {" = 6"}
               </div>
-              <div style={{ fontSize: 11, color: "#15803d", textAlign: "center", marginTop: 4 }}>
-                {t(E, "Picks farther apart → bigger score.  Mission: find the BIGGEST.",
-                      "픽이 멀리 있을수록 점수 큼. 미션: 그 중 최대 찾기.")}
+              <div style={{ fontSize: 11, color: "#15803d", textAlign: "center", marginTop: 6, wordBreak: "keep-all" }}>
+                {t(E, "Adjacent picks → tiny (1×1=1).  Farther apart → bigger.  Mission: find the BIGGEST score in the window.",
+                      "붙어있으면 작은 점수 (1×1=1), 멀리 떨어질수록 큰 점수.  미션: 윈도우 안에서 최대 점수 찾기.")}
               </div>
             </div>
 
