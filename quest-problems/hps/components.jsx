@@ -1905,7 +1905,7 @@ export function HpsFormulaGridSim({ E }) {
   const cards = [{ id: 1, win: false }, { id: 2, win: true }, { id: 3, win: false }];
   const steps = [
     { phase: "test",    bubble: t(E, "Game 3 — Elsie played card 1 twice (same card is fine).\nSo: how many cards beat card 1?  Let's check each one 👇", "게임 3 — Elsie 가 카드 1 을 두 장 냈어요 (같은 카드도 OK).\n그럼 '카드 1 을 이기는 카드' 는 몇 개? 하나씩 봐요 👇") },
-    { phase: "testans", bubble: t(E, "Only ⚡ card 2 beats card 1 → 'cards that beat Elsie' = 1.\n(we'll nickname this count dom — the number of ⚡ cards)", "카드 1 을 이기는 건 ⚡ 카드 2 하나 → 'Elsie 를 이기는 카드' = 1 개.\n(이 개수에 dom 이란 별명을 붙일게요 — ⚡ 카드 수)") },
+    { phase: "testans", bubble: t(E, "Only ⚡ card 2 beats card 1 → 'cards that beat Elsie' = 1.", "카드 1 을 이기는 건 ⚡ 카드 2 하나 → 'Elsie 를 이기는 카드' = 1 개.") },
     { phase: "grid",  bubble: t(E, "Now — Bessie picks 2 cards.  All her choices = 3 × 3 = 9 hands.  How many WIN?  Count in the grid.", "이제 — Bessie 는 카드 2 장을 골라요.  가능한 조합 = 3 × 3 = 9 패.  이 중 이기는 건 몇 개? 격자에서 세봐요.") },
     { phase: "green", bubble: t(E, "If a hand holds card 2 (⚡), Bessie plays it and wins whatever Elsie shows. Green = winning hands.", "패에 카드 2(⚡)가 한 장이라도 있으면 → 그걸 내서 이김 (Elsie 뭘 내든). 초록 = 이기는 패.") },
     { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ (card 1 or 3) → the 4 red corner cells.  (each slot has N − dom = 2 non-⚡ cards → (N − dom)² = 4)", "둘 다 ⚡ 가 아닐 때만 짐 (카드 1 또는 3) → 빨간 네 모서리 칸 4 개.  (자리마다 ⚡ 아닌 카드 N − dom = 2 가지 → (N − dom)² = 4)") },
@@ -1949,15 +1949,16 @@ export function HpsFormulaGridSim({ E }) {
           borderTop: "10px solid #fbbf24" }} />
       </div>
 
-      {/* 누가 누구 이기나 표 — Elsie 카드(1) 열 강조 → 그 열의 ✓ 가 'Elsie 이기는 카드'
-          라 머리로 안 구함 (선생님 2026-07-21: "기억용 표 + 둘 다 이기는 카드 머리로 X"). */}
-      <BeatsMatrix E={E} highlight={1} />
-
-      {/* N·dom 정의 — 어느 스텝에서도 보이게 (선생님 2026-07-15: 앞 페이지 안 돌아가도 되게) */}
-      <div style={{ maxWidth: 480, margin: "8px auto 0", padding: "6px 10px", background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
-        <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N</b> = {t(E, "number of card types (here 3)", "카드 종류 수 (여기선 3)")}　·
-        <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#c2410c" }}>dom</b> = {t(E, "⚡ count — cards that beat BOTH of Elsie's (short for “dominates”)", "⚡ 카드 수 — Elsie 두 카드를 모두 이기는 카드 (‘dominate 제압’ 의 앞 세 글자)")}
-      </div>
+      {/* N·dom 정의 — 격자/공식 단계에서만 (test/testans 는 타일이 dom 을 그 자리서
+          정의하니 forward-ref 박스는 정보 과부하, 선생님 2026-07-22 "한 화면에 정보 너무 많아").
+          BeatsMatrix 도 제거 — 아래 '맞대결 타일' 이 같은 사실(카드2 가 카드1 이김)을
+          더 구체적으로 보여줘 중복이었음. */}
+      {!showTest && (
+        <div style={{ maxWidth: 480, margin: "0 auto", padding: "6px 10px", background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
+          <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N</b> = {t(E, "number of card types (here 3)", "카드 종류 수 (여기선 3)")}　·
+          <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#c2410c" }}>dom</b> = {t(E, "⚡ count — cards that beat BOTH of Elsie's (short for “dominates”)", "⚡ 카드 수 — Elsie 두 카드를 모두 이기는 카드 (‘dominate 제압’ 의 앞 세 글자)")}
+        </div>
+      )}
 
       {showTest ? (
         /* 카드 시험 — 각 카드를 Elsie 의 카드 1(●) 과 '직접 맞대결' 시켜 결과를 눈으로.
