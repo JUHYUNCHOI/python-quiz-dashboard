@@ -1692,10 +1692,10 @@ export function HpsFormulaGridSim({ E }) {
           borderTop: "10px solid #fbbf24" }} />
       </div>
 
-      {/* 이김 규칙 — 어느 스텝에서도 보이게 (선생님 2026-07-21: "어떤 카드가 어떤 카드
-          이겼는지 머리로 기억할 필요 없이" — 말풍선이 '카드 2가 카드 1 이김' 이라 할 때
-          바로 눈으로 확인되게). 이 문제 샘플(N=3, 차트 D/WD/LWD)의 실제 이김 관계. */}
-      <WinningRulesBanner E={E} />
+      {/* 이김 규칙 — 격자/공식 단계에서만 (선생님 2026-07-21). test 단계는 타일이
+          '내 카드 vs ●1 → 결과' 를 직접 보여줘 배너가 중복이라 숨김. 나머지 단계(9칸
+          격자)엔 per-대결 표시가 없어 배너가 유일한 이김 규칙 참조라 유지. */}
+      {!showTest && <WinningRulesBanner E={E} />}
 
       {/* N·dom 정의 — 어느 스텝에서도 보이게 (선생님 2026-07-15: 앞 페이지 안 돌아가도 되게) */}
       <div style={{ maxWidth: 480, margin: "8px auto 0", padding: "6px 10px", background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
