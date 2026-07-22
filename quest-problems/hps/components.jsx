@@ -1648,7 +1648,7 @@ export function HpsFormulaGridSim({ E }) {
   const cards = [{ id: 2, win: true }, { id: 1, win: false }, { id: 3, win: false }];
   const steps = [
     { phase: "test",    bubble: t(E, "Game 3 — Elsie played card 1 twice (same card is fine).\nSo: how many cards beat card 1?  Let's check each one 👇", "게임 3 — Elsie 가 카드 1 을 두 장 냈어요 (같은 카드도 OK).\n그럼 '카드 1 을 이기는 카드' 는 몇 개? 하나씩 봐요 👇") },
-    { phase: "testans", bubble: t(E, "Only card 2 beats it → that's our dom = 1.\n(dom = how many cards beat BOTH of Elsie's cards)", "카드 2 하나뿐 → 이게 dom = 1.\n(dom = Elsie 두 카드를 모두 이기는 카드 수)") },
+    { phase: "testans", bubble: t(E, "Only ⚡ card 2 beats card 1 → 'cards that beat Elsie' = 1.\n(we'll nickname this count dom — the number of ⚡ cards)", "카드 1 을 이기는 건 ⚡ 카드 2 하나 → 'Elsie 를 이기는 카드' = 1 개.\n(이 개수에 dom 이란 별명을 붙일게요 — ⚡ 카드 수)") },
     { phase: "grid",  bubble: t(E, "Now — Bessie picks 2 cards.  All her choices = 3 × 3 = 9 hands.  How many WIN?  Count in the grid.", "이제 — Bessie 는 카드 2 장을 골라요.  가능한 조합 = 3 × 3 = 9 패.  이 중 이기는 건 몇 개? 격자에서 세봐요.") },
     { phase: "green", bubble: t(E, "If a hand holds card 2 (⚡), Bessie plays it and wins whatever Elsie shows. Green = winning hands.", "패에 카드 2(⚡)가 한 장이라도 있으면 → 그걸 내서 이김 (Elsie 뭘 내든). 초록 = 이기는 패.") },
     { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ → the red 2 × 2 = 4.  (each slot has N − dom = 2 non-⚡ cards → (N − dom)²)", "둘 다 ⚡ 가 아닐 때만 짐 → 빨간 2 × 2 = 4.  (자리마다 ⚡ 아닌 카드 N − dom = 2 가지 → (N − dom)²)") },
@@ -1700,40 +1700,64 @@ export function HpsFormulaGridSim({ E }) {
       {/* N·dom 정의 — 어느 스텝에서도 보이게 (선생님 2026-07-15: 앞 페이지 안 돌아가도 되게) */}
       <div style={{ maxWidth: 480, margin: "8px auto 0", padding: "6px 10px", background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
         <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N</b> = {t(E, "number of card types (here 3)", "카드 종류 수 (여기선 3)")}　·
-        <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#c2410c" }}>dom</b> = {t(E, "cards that beat BOTH of Elsie's cards", "Elsie 두 카드를 모두 이기는 카드 수")}
+        <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#c2410c" }}>dom</b> = {t(E, "count of ⚡ cards (beat BOTH of Elsie's cards)", "⚡ 카드 수 (Elsie 두 카드를 모두 이기는 카드)")}
       </div>
 
       {showTest ? (
-        /* 카드 시험 — 카드 1·2·3 각각 Elsie 의 카드 1 을 이기나? (카드 2 만 ✓ → dom=1 을 눈으로) */
+        /* 카드 시험 — 각 카드를 Elsie 의 카드 1(●) 과 '직접 맞대결' 시켜 결과를 눈으로.
+           (선생님 2026-07-21: "왜 2가 이겨? 기억할 필요 없이 시뮬 안에 다 넣어" —
+            타일마다 X vs ● 대결 + 결과, dom 은 ⚡ 개수로 그 자리에서.) */
         <div style={{ marginTop: 12 }}>
-          <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 8, wordBreak: "keep-all" }}>
-            {t(E, "Test each card against Elsie's card 1:", "각 카드가 Elsie 의 카드 1 을 이기나?")}
+          <div style={{ fontSize: 11.5, color: C.dim, textAlign: "center", marginBottom: 10, wordBreak: "keep-all" }}>
+            {t(E, "Line up each card against Elsie's card 1 and see who wins:",
+                  "각 카드를 Elsie 의 카드 1 과 맞대결시켜 누가 이기나 봐요:")}
           </div>
           <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
             {[
-              { id: 1, ok: false, label: t(E, "draws with card 1", "카드 1 과 비김") },
-              { id: 2, ok: true,  label: t(E, "BEATS card 1", "카드 1 이김") },
-              { id: 3, ok: false, label: t(E, "loses to card 1", "카드 1 에 짐") },
-            ].map(c => (
-              <div key={c.id} style={{
-                width: 118, textAlign: "center",
-                background: c.ok ? "#dcfce7" : "#f8fafc",
-                border: `1.5px solid ${c.ok ? "#86efac" : "#e5e7eb"}`,
-                borderRadius: 10, padding: "12px 8px",
-                boxShadow: c.ok ? "0 3px 12px rgba(22,163,74,.18)" : "none",
-              }}>
-                <div style={{ fontSize: 26, color: SHAPES[c.id]?.color, lineHeight: 1 }}>{SHAPES[c.id]?.glyph}</div>
-                <div style={{ fontSize: 12.5, fontWeight: 800, color: c.ok ? "#15803d" : "#6b7280", marginTop: 4 }}>
-                  {t(E, `card ${c.id}`, `카드 ${c.id}`)} {c.ok ? "⚡" : ""}
+              { id: 1, kind: "draw" },
+              { id: 2, kind: "win"  },
+              { id: 3, kind: "lose" },
+            ].map(c => {
+              const win = c.kind === "win";
+              const mine = SHAPES[c.id], foe = SHAPES[1];   // 상대 = Elsie 카드 1 (●)
+              // 결과는 '내 카드' 관점(✓이김/비김/✗짐). 누가 이기는지는 위 대결 글리프
+              // 하이라이트(그림자)가 보여줌 — winner 로 어느 글리프를 빛낼지만 지정.
+              const verdict = win
+                ? { txt: t(E, "✓ I win", "✓ 내가 이김"), color: "#15803d", winner: mine }
+                : c.kind === "draw"
+                  ? { txt: t(E, "draw (same card)", "비김 (같은 카드)"), color: "#6b7280", winner: null }
+                  : { txt: t(E, "✗ I lose", "✗ 내가 짐"), color: "#b91c1c", winner: foe };
+              return (
+                <div key={c.id} style={{
+                  width: 132, textAlign: "center",
+                  background: win ? "#dcfce7" : "#f8fafc",
+                  border: `1.5px solid ${win ? "#86efac" : "#e5e7eb"}`,
+                  borderRadius: 10, padding: "10px 8px",
+                  boxShadow: win ? "0 3px 12px rgba(22,163,74,.18)" : "none",
+                }}>
+                  <div style={{ fontSize: 11.5, fontWeight: 800, color: win ? "#15803d" : "#6b7280" }}>
+                    {t(E, `my card ${c.id}`, `내 카드 ${c.id}`)} {win ? "⚡" : ""}
+                  </div>
+                  {/* 직접 맞대결: 내 카드  vs  ●1 */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, margin: "6px 0" }}>
+                    <span style={{ fontSize: 24, color: mine?.color, lineHeight: 1,
+                      ...(verdict.winner === mine ? { filter: "drop-shadow(0 0 3px #86efac)" } : { opacity: 0.85 }) }}>{mine?.glyph}</span>
+                    <span style={{ fontSize: 11, color: "#9ca3af", fontWeight: 700 }}>vs</span>
+                    <span style={{ fontSize: 20, color: foe?.color, lineHeight: 1,
+                      ...(verdict.winner === foe ? { filter: "drop-shadow(0 0 3px #fca5a5)" } : { opacity: 0.85 }) }}>{foe?.glyph}</span>
+                    <span style={{ fontSize: 9, color: C.dim }}>{t(E, "(card 1)", "(카드1)")}</span>
+                  </div>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: verdict.color, wordBreak: "keep-all" }}>
+                    {verdict.txt}
+                  </div>
                 </div>
-                <div style={{ fontSize: 11.5, fontWeight: 700, color: c.ok ? "#15803d" : "#9ca3af", marginTop: 3, wordBreak: "keep-all" }}>
-                  {c.ok ? "✓ " : "✗ "}{c.label}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
-          <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#c2410c", marginTop: 12 }}>
-            {t(E, "→ only card 2 beats both → dom = 1", "→ 카드 2 하나뿐 → dom = 1")}
+          {/* dom 을 '외울 약자' 가 아니라 ⚡ 개수로 — 그 자리에서 정의 */}
+          <div style={{ textAlign: "center", fontSize: 12.5, fontWeight: 700, color: "#c2410c", marginTop: 12, wordBreak: "keep-all", lineHeight: 1.6 }}>
+            {t(E, <>→ only <b>card 2 (⚡)</b> beats card 1.  So <b>“cards that beat Elsie” = 1</b>.<br/><span style={{ color: C.dim, fontSize: 11 }}>(we’ll call this count <b style={{ color: "#c2410c" }}>dom</b> — the ⚡ count)</span></>,
+                  <>→ 카드 1 을 이기는 건 <b>카드 2 (⚡)</b> 하나.  그래서 <b>‘Elsie 를 이기는 카드’ = 1 개</b>.<br/><span style={{ color: C.dim, fontSize: 11 }}>(이 개수를 <b style={{ color: "#c2410c" }}>dom</b> 이라 부를게요 — ⚡ 개수)</span></>)}
           </div>
         </div>
       ) : (
