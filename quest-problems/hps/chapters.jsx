@@ -320,6 +320,37 @@ LWD
               <div>{t(E, "Elsie's 3rd hand: cards (1, 1)", "Elsie 의 셋째 패: 카드 (1, 1)")}</div>
             </div>
 
+            {/* 각 패, Bessie 는 뭘 내야 이기나 — 형식 스텝에서 바로 답이 보이게
+                (선생님 2026-07-21: "이거 봐선 각 예제마다 뭘 내야 이기는지 알 수 없다").
+                Bessie 는 Elsie 두 카드를 '모두' 이기는 카드가 하나 있어야 확실히 이김.
+                위 W/L/D 차트로 확인 가능 — 상세 카운트(→ 출력)는 다음 시뮬. */}
+            <div style={{ marginTop: 12, background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 10, padding: "10px 12px" }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#166534", marginBottom: 8, wordBreak: "keep-all" }}>
+                🎯 {t(E, "So what does Bessie play to win each one?", "그럼 각 패를 이기려면 Bessie 는 뭘 내야 하나?")}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {[
+                  { elsie: [["●", "#2563eb"], ["■", "#7c3aed"]], win: null },
+                  { elsie: [["■", "#7c3aed"], ["▲", "#ea580c"]], win: null },
+                  { elsie: [["●", "#2563eb"], ["●", "#2563eb"]], win: ["■", "#7c3aed", "2"] },
+                ].map((r, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12.5, flexWrap: "wrap" }}>
+                    <span style={{ fontFamily: "'JetBrains Mono',monospace", background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 5, padding: "2px 7px" }}>
+                      {r.elsie.map(([g, c], j) => <span key={j} style={{ color: c, fontSize: 15, marginRight: 3 }}>{g}</span>)}
+                    </span>
+                    <span style={{ color: "#9ca3af" }}>→</span>
+                    {r.win
+                      ? <span style={{ fontWeight: 700, color: "#15803d", wordBreak: "keep-all" }}>{t(E, "play ", "")}<span style={{ color: r.win[1], fontSize: 16 }}>{r.win[0]}</span>{t(E, ` card ${r.win[2]} — it beats BOTH ✓`, ` 카드 ${r.win[2]} 내면 둘 다 이김 ✓`)}</span>
+                      : <span style={{ fontWeight: 700, color: "#b91c1c", wordBreak: "keep-all" }}>{t(E, "no single card beats both ✗ → can't force a win", "한 장으로 둘 다 이기는 카드 없음 ✗ → 확실히 못 이김")}</span>}
+                  </div>
+                ))}
+              </div>
+              <div style={{ marginTop: 8, fontSize: 10.5, color: C.dim, wordBreak: "keep-all", lineHeight: 1.5 }}>
+                {t(E, "Bessie wins for sure only if she holds ONE card that beats BOTH of Elsie's.  (Check it on the W/L/D chart above.)  Next page counts the winning hands → the output number.",
+                      "Bessie 는 Elsie 두 카드를 '모두' 이기는 카드를 한 장이라도 들면 확실히 이겨요.  (위 W/L/D 차트로 확인!)  다음 페이지에서 이기는 패 수를 세서 → 출력 숫자.")}
+              </div>
+            </div>
+
             <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #c4b5fd", fontSize: 12, color: "#5b21b6" }}>
               💡 {t(E, "For each of the 3 Elsie hands, output how many Bessie hands let her win no matter what Elsie plays.",
                        "Elsie 의 3 개 패 각각에 대해, Elsie 가 무엇을 내도 이기는 Bessie 패 개수를 출력.")}
