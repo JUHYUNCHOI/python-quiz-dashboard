@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock, highlight } from "@/components/quest/shared";
-import { getHpsSections, ChartReadingTour, CodeSectionView, BitsLab, BitmaskColSim, HpsFormulaGridSim, WinningRulesBanner } from "./components";
+import { getHpsSections, ChartReadingTour, CodeSectionView, BitsLab, BitmaskColSim, HpsFormulaGridSim, HpsSampleIOSim, WinningRulesBanner } from "./components";
 
 /* ═══════════════════════════════════════════════════════════════
    NSpeedSim — interactive bar showing how Brute (N²) and Smart (N)
@@ -339,6 +339,16 @@ LWD
         "Walk the chart cell by cell. Each cell shows winner → loser. Press ▶ to step through.",
         "차트 셀 하나씩 따라가요. 각 셀은 '이기는 카드 → 지는 카드' 표시. ▶ 눌러서 진행."),
       content: (<ChartReadingTour E={E} />),
+    },
+
+    // 1-4: 샘플 입력 → 출력 시뮬 (선생님 2026-07-21: "이 인풋의 아웃풋이 어떻게 나오는지").
+    //      Elsie 3 패 → 0 / 0 / 5 가 각각 어떻게 나오는지 (둘 다 이기는 카드 → dom → 공식).
+    {
+      type: "reveal",
+      narr: t(E,
+        "Chart's clear — now watch the sample's 3 Elsie hands turn into the output 0, 0, 5, one at a time.",
+        "차트도 알았으니 — 샘플의 Elsie 3 패가 출력 0, 0, 5 로 어떻게 나오는지 하나씩 봐요."),
+      content: (<HpsSampleIOSim E={E} />),
     },
 
     // 1-5: 브루트포스로 해보자 — 짧은 안내 (선생님 2026-07-14: 쿼리 시뮬 제거,

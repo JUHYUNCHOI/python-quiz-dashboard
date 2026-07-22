@@ -1643,6 +1643,125 @@ export function HpsProgressiveCode(props) {
 /* HpsFormulaGridSim — 9-패 격자를 '말풍선 스텝'으로 (선생님 2026-07-14: 설명은 볼 것에 붙는 말풍선).
    게임 3 (Elsie 카드1,카드1 · ⚡=카드2 · dom=1): 9칸 → 이기는 패(초록) → 지는 2×2(빨강) → 공식.
    글이 격자 주위에 흩어진 벽을 대체. */
+/* ═══════════════════════════════════════════════════════════════
+   HpsSampleIOSim — 샘플 입력의 Elsie 3 패가 각각 출력 0 / 0 / 5 로
+   어떻게 나오는지 (선생님 2026-07-21: "이 인풋의 아웃풋이 어떻게 나오는지 시뮬로").
+   패마다: Bessie 카드 3 개를 'Elsie 두 카드 둘 다 이기나' 시험(대결 글리프+✓/✗)
+   → dom(=둘 다 이기는 카드 수) → 공식 N²−(N−dom)² → 출력 숫자.
+   ═══════════════════════════════════════════════════════════════ */
+export function HpsSampleIOSim({ E }) {
+  const N = 3;
+  // 샘플 차트(D / WD / LWD)의 이김 관계: 2→1, 1→3, 3→2  (a 가 b 를 이김)
+  const beats = (a, b) => (a === 2 && b === 1) || (a === 1 && b === 3) || (a === 3 && b === 2);
+  const queries = [
+    { e: [1, 2], out: 0 },
+    { e: [2, 3], out: 0 },
+    { e: [1, 1], out: 5 },
+  ];
+  const steps = [{ kind: "intro" }, { kind: "q", qi: 0 }, { kind: "q", qi: 1 }, { kind: "q", qi: 2 }, { kind: "summary" }];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+
+  const Glyph = ({ n, size = 20 }) => (
+    <span style={{ fontSize: size, color: SHAPES[n]?.color, lineHeight: 1 }}>{SHAPES[n]?.glyph}</span>
+  );
+
+  const bubble =
+    s.kind === "intro"
+      ? t(E, "The input gives Elsie 3 hands → the output has 3 lines.\nLet's watch each hand turn into its number 👇", "입력엔 Elsie 패가 3 개 → 출력도 3 줄.\n각 패가 어떻게 그 숫자가 되는지 봐요 👇")
+      : s.kind === "summary"
+        ? t(E, "That's the whole input → output: 0, 0, 5.\nTwo DIFFERENT cards → no card beats both → 0.  SAME card → the interesting case.", "이게 입력 → 출력 전부: 0, 0, 5.\n서로 다른 두 카드 → 둘 다 이기는 카드 없음 → 0.  같은 카드 → 유일한 재밌는 경우.")
+        : t(E, `Hand ${s.qi + 1}: Elsie plays (${queries[s.qi].e[0]}, ${queries[s.qi].e[1]}).  Which Bessie cards beat BOTH of them?`,
+              `${s.qi + 1} 번째 패: Elsie 가 (${queries[s.qi].e[0]}, ${queries[s.qi].e[1]}) 를 냈어요.  이 둘을 '모두' 이기는 Bessie 카드는?`);
+
+  return (
+    <div style={{ padding: 12 }}>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: "#059669", marginBottom: 10 }}>
+        📥 {t(E, "This input → this output", "이 입력 → 이 출력")}
+      </div>
+
+      {/* 말풍선 */}
+      <div style={{ maxWidth: 500, margin: "0 auto 12px", position: "relative", zIndex: 5 }}>
+        <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 12, padding: "11px 14px", fontSize: 13, color: "#92400e", fontWeight: 600, lineHeight: 1.6, textAlign: "center", wordBreak: "keep-all", whiteSpace: "pre-line", boxShadow: "0 4px 14px rgba(0,0,0,.07)" }}>💬 {bubble}</div>
+        <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderTop: "10px solid #fbbf24" }} />
+      </div>
+
+      {/* 입력 → 출력 대응표 (지금 보는 줄 강조) */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
+        {queries.map((q, i) => {
+          const active = s.kind === "q" && s.qi === i;
+          const revealed = s.kind === "summary" || (s.kind === "q" && s.qi >= i);
+          return (
+            <div key={i} style={{
+              display: "flex", alignItems: "center", gap: 7, padding: "5px 10px", borderRadius: 8,
+              background: active ? "#ecfdf5" : "#f8fafc",
+              border: `1.5px solid ${active ? "#16a34a" : "#e5e7eb"}`,
+            }}>
+              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#475569" }}>{q.e[0]} {q.e[1]}</span>
+              <span style={{ color: "#cbd5e1" }}>→</span>
+              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: revealed ? "#15803d" : "#cbd5e1" }}>{revealed ? q.out : "?"}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      {s.kind === "q" && (() => {
+        const q = queries[s.qi];
+        const rows = [1, 2, 3].map((c) => {
+          const b1 = beats(c, q.e[0]); const b2 = beats(c, q.e[1]);
+          return { c, b1, b2, both: b1 && b2 };
+        });
+        const dom = rows.filter((r) => r.both).length;
+        const answer = N * N - (N - dom) * (N - dom);
+        const Chk = ({ ok }) => ok
+          ? <span style={{ color: "#16a34a", fontWeight: 800 }}>✓</span>
+          : <span style={{ color: "#dc2626", fontWeight: 800 }}>✗</span>;
+        return (
+          <div>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 10 }}>
+              <span style={{ fontSize: 11, fontWeight: 700, color: "#b91c1c" }}>{t(E, "Elsie played:", "Elsie 가 낸 패:")}</span>
+              <span style={{ display: "inline-flex", gap: 8, padding: "4px 12px", background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 8 }}>
+                <Glyph n={q.e[0]} /><Glyph n={q.e[1]} />
+              </span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
+              {rows.map((r) => (
+                <div key={r.c} style={{
+                  width: 116, padding: "8px 6px", borderRadius: 10, textAlign: "center",
+                  background: r.both ? "#dcfce7" : "#f8fafc",
+                  border: `1.5px solid ${r.both ? "#86efac" : "#e5e7eb"}`,
+                  boxShadow: r.both ? "0 3px 12px rgba(22,163,74,.18)" : "none",
+                }}>
+                  <div style={{ fontSize: 11, fontWeight: 800, color: r.both ? "#15803d" : "#6b7280" }}>{t(E, `my card ${r.c}`, `내 카드 ${r.c}`)} {r.both ? "⚡" : ""}</div>
+                  <div style={{ margin: "5px 0" }}><Glyph n={r.c} size={22} /></div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 2, fontSize: 11.5 }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>vs <Glyph n={q.e[0]} size={13} /> <Chk ok={r.b1} /></div>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>vs <Glyph n={q.e[1]} size={13} /> <Chk ok={r.b2} /></div>
+                  </div>
+                  <div style={{ marginTop: 5, fontSize: 10.5, fontWeight: 800, color: r.both ? "#15803d" : "#9ca3af", wordBreak: "keep-all" }}>
+                    {r.both ? t(E, "beats BOTH ✓", "둘 다 이김 ✓") : t(E, "not both", "둘 다는 X")}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ textAlign: "center", marginTop: 12, fontSize: 12.5, color: "#334155", lineHeight: 1.95, wordBreak: "keep-all" }}>
+              <div><b style={{ color: "#c2410c" }}>{t(E, "cards that beat BOTH = dom", "둘 다 이기는 카드 = dom")} = {dom}</b></div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+                {t(E, "answer", "답")} = N² − (N − dom)² = {N * N} − {N - dom}² = <b style={{ color: "#15803d", fontSize: 16 }}>{answer}</b>
+              </div>
+              <div style={{ fontSize: 11, color: C.dim }}>{t(E, `→ output line ${s.qi + 1} = ${answer}`, `→ 출력 ${s.qi + 1} 번째 줄 = ${answer}`)}</div>
+            </div>
+          </div>
+        );
+      })()}
+
+      <div style={{ marginTop: 10 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent="#059669" isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}
+
 export function HpsFormulaGridSim({ E }) {
   // ⚡ 카드 먼저 → 지는 칸이 오른쪽 아래 2×2 로 모임
   const cards = [{ id: 2, win: true }, { id: 1, win: false }, { id: 3, win: false }];
