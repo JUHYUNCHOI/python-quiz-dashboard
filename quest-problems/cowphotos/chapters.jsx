@@ -429,8 +429,9 @@ export function makeCowPhotosCh2(E, lang = "py") {
       content: (<CodeWalk E={E} lang={lang} {...getCowPhotosWalk(E, lang, "fast")} accent="#d97706" />),
     },
     // 2-2: ⚠️ 왜 Counter? — 안 쓰면 TLE (짧은 경고, 브루트 먼저 짜보게 하지 않음)
+    //      성능/복잡도 얘기라 section=optimize → 진도바에서 build(초록)와 다른 색(주황).
     {
-      section: "build",
+      section: "optimize",
       type: "reveal",
       narr: t(E, "One warning — why Counter and not h.count()?  Because h.count() re-scans everything each time → TLE on big N.",
                  "한 가지 주의 — 왜 h.count() 말고 Counter 냐면, h.count() 는 매번 전체를 다시 훑어서 큰 N 에선 TLE 나요."),
