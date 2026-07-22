@@ -1802,12 +1802,17 @@ export function HpsSampleIOSim({ E }) {
         return (
           <div>
             <style>{`@keyframes hpsBlink{0%,100%{background:#fef9c3}50%{background:#fde047}}`}</style>
-            {/* Elsie 가 낸 패 (모양+번호) */}
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 6 }}>
-              <span style={{ fontSize: 11, fontWeight: 700, color: "#b91c1c" }}>{t(E, "Elsie played:", "Elsie 가 낸 패:")}</span>
-              <span style={{ display: "inline-flex", gap: 10, padding: "4px 12px", background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 8 }}>
-                {q.e.map((n, j) => <span key={j} style={{ display: "inline-flex", alignItems: "center", gap: 1, fontWeight: 700 }}><Glyph n={n} size={18} /><span style={{ fontSize: 11, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>{n}</span></span>)}
+            {/* 이 예제 — Elsie 가 어떤 두 카드를 가졌는지 분명히 (선생님 2026-07-21:
+                "각 예제마다 엘시가 카드 1, 카드 2 가지고 있다고 알려주고"). */}
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap", background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "8px 12px", maxWidth: 460, marginLeft: "auto", marginRight: "auto" }}>
+              <span style={{ fontSize: 12, fontWeight: 800, color: "#b91c1c", wordBreak: "keep-all" }}>
+                🎴 {t(E, `Example ${s.qi + 1} — Elsie holds:`, `${s.qi + 1} 번째 예제 — Elsie 가 가진 두 카드:`)}
               </span>
+              {q.e.map((n, j) => (
+                <span key={j} style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "3px 9px", background: "#fff", border: "1.5px solid #dc2626", borderRadius: 8, fontWeight: 800 }}>
+                  <Glyph n={n} size={18} /><span style={{ fontSize: 12, color: "#7f1d1d" }}>{t(E, `card ${n}`, `카드 ${n}`)}</span>
+                </span>
+              ))}
             </div>
             <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 8, wordBreak: "keep-all" }}>
               {t(E, "Light up Elsie's columns 💡 — find a card (row) with ✓ in ALL of them.",
