@@ -318,24 +318,30 @@ export function ChartReadingTour({ E }) {
   };
   // Tour: pick instructive cells. {i, j} are 1-indexed.
   // Narration uses inline card chips so the shape is always visible.
-  // 예제 1(Elsie = 카드 1, 카드 2) 기준으로 차트를 순서대로 읽음
-  // (선생님 2026-07-21: "첫 예제는 엘시가 카드1,2 가진 거잖아. 그거에 따라 차례대로").
+  // 세 예제를 골라 볼 수 있게 (선생님 2026-07-21: "1&2, 2&3, 1&1 예를 선택해서 모두").
+  // 각 예제(Elsie 두 카드) 기준으로 차트를 순서대로 읽음.
+  const beater = { 1: 2, 2: 3, 3: 1 };   // 카드 X 를 이기는 유일한 카드 (샘플: 2→1, 1→3, 3→2)
+  const queries = [{ e: [1, 2] }, { e: [2, 3] }, { e: [1, 1] }];
+  const [ex, setEx] = useState(0);
+  const q = queries[ex];
+  const [e0, e1] = q.e;
+  const same = e0 === e1;
+  const beatStep = (x) => ({
+    i: beater[x], j: x, kind: "W", focus: x,
+    narr: <span>{t(E, "To beat Elsie's ", "Elsie 의 ")}{C(x)}{t(E, " (make it lose) — chart cell = W → play ", " 을 이기려면(지게 만들려면) — 차트 셀 = W → ")}{C(beater[x])}{t(E, ".", " 를 내면 이겨요.")}</span>,
+  });
   const tour = [
     {
       i: null, j: null, kind: "intro", focus: null,
-      narr: <span>{t(E, "Example 1 — Elsie holds ", "1 번째 예제 — Elsie 는 ")}{C(1)}{t(E, " and ", " 과 ")}{C(2)}{t(E, ". Bessie wins if she plays a card that BEATS Elsie's (makes Elsie lose). She needs ONE card that beats BOTH. Let's find it 👇", " 를 가졌어요. Bessie 는 Elsie 의 카드를 '이기는'(= Elsie 를 지게 만드는) 카드를 내면 이겨요. 두 카드를 '모두' 이기는 카드 하나가 필요해요. 찾아봐요 👇")}</span>,
+      narr: <span>{t(E, `Example ${ex + 1} — Elsie holds `, `${ex + 1} 번째 예제 — Elsie 는 `)}{C(e0)}{t(E, " and ", " 과 ")}{C(e1)}{t(E, ". Bessie needs ONE card that BEATS both (makes Elsie lose). Let's read the chart 👇", " 를 가졌어요. Bessie 는 이 둘을 '모두' 이기는(= Elsie 를 지게 만드는) 카드 하나가 필요해요. 차트에서 찾아봐요 👇")}</span>,
     },
-    {
-      i: 2, j: 1, kind: "W", focus: 1,
-      narr: <span>{t(E, "First — what does Bessie play to BEAT Elsie's ", "먼저 — Elsie 의 ")}{C(1)}{t(E, "?  The chart cell = W → play ", " 을 이기려면(지게 만들려면) Bessie 는 뭘 내야 하나?  차트 셀 = W → ")}{C(2)}{t(E, " beats it.", " 를 내면 이겨요.")}</span>,
-    },
-    {
-      i: 3, j: 2, kind: "W", focus: 2,
-      narr: <span>{t(E, "Next — to beat Elsie's ", "다음 — Elsie 의 ")}{C(2)}{t(E, "?  → play ", " 를 이기려면?  → ")}{C(3)}{t(E, " beats it.", " 를 내면 이겨요.")}</span>,
-    },
+    beatStep(e0),
+    ...(same ? [] : [beatStep(e1)]),
     {
       i: null, j: null, kind: "conclude", focus: null,
-      narr: <span>{t(E, "So — is there ONE card that beats BOTH?  ", "그럼 — 둘 다 이기는 카드가 하나라도 있나요?  ")}{C(2)}{t(E, " beats card 1 but loses to card 2;  ", " 는 카드 1 은 이겨도 카드 2 엔 짐;  ")}{C(3)}{t(E, " beats card 2 but loses to card 1.  → NO single card beats both → Bessie can't force a win → output 0.", " 은 카드 2 는 이겨도 카드 1 엔 짐.  → 둘 다 이기는 카드 없음 → Bessie 가 확실히 못 이김 → 출력 0.")}</span>,
+      narr: same
+        ? <span>{t(E, "Both of Elsie's cards are ", "Elsie 의 두 카드가 모두 ")}{C(e0)}{t(E, " — so ", " — 그러니 ")}{C(beater[e0])}{t(E, " beats BOTH!  → 1 winning card → output 5.", " 를 내면 둘 다 이김!  → 이기는 카드 1 개 → 출력 5.")}</span>
+        : <span>{C(beater[e0])}{t(E, " beats only ", " 는 ")}{C(e0)}{t(E, ", ", " 만·")}{C(beater[e1])}{t(E, " beats only ", " 는 ")}{C(e1)}{t(E, ".  → NO single card beats BOTH → Bessie can't force a win → output 0.", " 만 이김.  → 둘 다 이기는 카드 없음 → Bessie 가 못 이김 → 출력 0.")}</span>,
     },
   ];
 
@@ -394,15 +400,34 @@ export function ChartReadingTour({ E }) {
         idx={ts.idx}
         total={ts.total}
         isEn={E}
-        title={t(E, "Reading the chart for Example 1 (Elsie's cards)",
-                    "예제 1 로 차트 읽기 (Elsie 의 카드 기준)")}
+        title={t(E, "Reading the chart, example by example",
+                    "예제별로 차트 읽기")}
       />
 
-      {/* 예제 1 — Elsie 가 가진 두 카드 상시 표시 (선생님 2026-07-21) */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 10, flexWrap: "wrap", background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "6px 12px", maxWidth: 440, margin: "0 auto 10px" }}>
-        <span style={{ fontSize: 12, fontWeight: 800, color: "#b91c1c", wordBreak: "keep-all" }}>🎴 {t(E, "Example 1 — Elsie holds:", "1 번째 예제 — Elsie 가 가진 두 카드:")}</span>
-        {[1, 2].map(n => (
-          <span key={n} style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "2px 8px", background: cur.focus === n ? "#fde047" : "#fff", border: "1.5px solid #dc2626", borderRadius: 8, fontWeight: 800 }}>
+      {/* 예제 선택기 (선생님 2026-07-21: "1&2, 2&3, 1&1 예를 선택해서 모두") */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: C.dim, alignSelf: "center" }}>{t(E, "Pick an example:", "예제 골라보기:")}</span>
+        {queries.map((qq, i) => (
+          <button key={i} onClick={() => { setEx(i); ts.setIdx(0); }} style={{
+            display: "inline-flex", alignItems: "center", gap: 4, padding: "4px 10px", borderRadius: 999, cursor: "pointer",
+            fontSize: 11.5, fontWeight: 800,
+            background: ex === i ? "#fee2e2" : "#fff",
+            border: `1.5px solid ${ex === i ? "#dc2626" : "#e5e7eb"}`,
+            color: ex === i ? "#b91c1c" : "#6b7280",
+          }}>
+            {t(E, `Ex ${i + 1}`, `예제 ${i + 1}`)}
+            <span style={{ display: "inline-flex", gap: 2, alignItems: "center" }}>
+              {qq.e.map((n, k) => <span key={k} style={{ fontSize: 13, color: cards[n - 1].color, lineHeight: 1 }}>{cards[n - 1].glyph}</span>)}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {/* 이 예제 — Elsie 가 가진 두 카드 상시 표시 */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap", background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "6px 12px", maxWidth: 460, margin: "0 auto 10px" }}>
+        <span style={{ fontSize: 12, fontWeight: 800, color: "#b91c1c", wordBreak: "keep-all" }}>🎴 {t(E, `Example ${ex + 1} — Elsie holds:`, `${ex + 1} 번째 예제 — Elsie 가 가진 두 카드:`)}</span>
+        {q.e.map((n, k) => (
+          <span key={k} style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "2px 8px", background: cur.focus === n ? "#fde047" : "#fff", border: "1.5px solid #dc2626", borderRadius: 8, fontWeight: 800 }}>
             <span style={{ fontSize: 15, color: cards[n - 1].color, lineHeight: 1 }}>{cards[n - 1].glyph}</span>
             <span style={{ fontSize: 12, color: "#7f1d1d" }}>{t(E, "card ", "카드 ")}{n}</span>
           </span>

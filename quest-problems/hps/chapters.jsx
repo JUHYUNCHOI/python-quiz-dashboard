@@ -343,8 +343,8 @@ LWD
     {
       type: "reveal",
       narr: t(E,
-        "Let's solve Example 1 together — Elsie holds card 1 and card 2.  We'll read the chart in order to find who beats them.",
-        "예제 1 을 같이 풀어봐요 — Elsie 는 카드 1 과 카드 2 를 가졌어요.  차트를 순서대로 읽어 이 둘을 이기는 카드를 찾아요."),
+        "Pick any of the 3 examples and walk it on the chart — find the card that beats BOTH of Elsie's (makes her lose).",
+        "3 개 예제 중 골라서 차트 위로 걸어봐요 — Elsie 의 두 카드를 '모두' 이기는(지게 만드는) 카드를 찾아요."),
       content: (<ChartReadingTour E={E} />),
     },
 
