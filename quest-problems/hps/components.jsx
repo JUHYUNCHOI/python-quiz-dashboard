@@ -1787,21 +1787,32 @@ export function HpsSampleIOSim({ E }) {
         <div style={{ width: 0, height: 0, margin: "0 auto", borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderTop: "10px solid #fbbf24" }} />
       </div>
 
-      {/* 입력 → 출력 대응표 (지금 보는 줄 강조) */}
+      {/* 입력 → 출력 대응표 — 클릭해서 예제 선택 (선생님 2026-07-21). 예제 i → 스텝 i+1 */}
+      <div style={{ fontSize: 10.5, color: C.dim, textAlign: "center", marginBottom: 5 }}>
+        👇 {t(E, "click an example to jump to it", "예제를 클릭하면 그 예제로 이동")}
+      </div>
       <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
-        {queries.map((q, i) => {
+        {queries.map((qq, i) => {
           const active = s.kind === "q" && s.qi === i;
           const revealed = s.kind === "summary" || (s.kind === "q" && s.qi >= i);
           return (
-            <div key={i} style={{
-              display: "flex", alignItems: "center", gap: 7, padding: "5px 10px", borderRadius: 8,
-              background: active ? "#ecfdf5" : "#f8fafc",
-              border: `1.5px solid ${active ? "#16a34a" : "#e5e7eb"}`,
+            <button key={i} onClick={() => ts.setIdx(i + 1)} style={{
+              display: "flex", alignItems: "center", gap: 7, padding: "6px 12px", borderRadius: 8, cursor: "pointer",
+              background: active ? "#ecfdf5" : "#fff",
+              border: `1.5px solid ${active ? "#16a34a" : "#cbd5e1"}`,
+              boxShadow: active ? "0 2px 8px rgba(22,163,74,.15)" : "none",
             }}>
-              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#475569" }}>{q.e[0]} {q.e[1]}</span>
+              <span style={{ display: "inline-flex", gap: 3 }}>
+                {qq.e.map((n, k) => (
+                  <span key={k} style={{ display: "inline-flex", alignItems: "center", gap: 1 }}>
+                    <span style={{ fontSize: 13, color: SHAPES[n]?.color, lineHeight: 1 }}>{SHAPES[n]?.glyph}</span>
+                    <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, color: "#64748b" }}>{n}</span>
+                  </span>
+                ))}
+              </span>
               <span style={{ color: "#cbd5e1" }}>→</span>
-              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: revealed ? "#15803d" : "#cbd5e1" }}>{revealed ? q.out : "?"}</span>
-            </div>
+              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800, color: revealed ? "#15803d" : "#cbd5e1" }}>{revealed ? qq.out : "?"}</span>
+            </button>
           );
         })}
       </div>
