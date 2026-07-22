@@ -316,32 +316,38 @@ export function ChartReadingTour({ E }) {
       </span>
     );
   };
-  // Tour: pick instructive cells. {i, j} are 1-indexed.
-  // Narration uses inline card chips so the shape is always visible.
-  // 세 예제를 골라 볼 수 있게 (선생님 2026-07-21: "1&2, 2&3, 1&1 예를 선택해서 모두").
-  // 각 예제(Elsie 두 카드) 기준으로 차트를 순서대로 읽음.
-  const beater = { 1: 2, 2: 3, 3: 1 };   // 카드 X 를 이기는 유일한 카드 (샘플: 2→1, 1→3, 3→2)
-  const queries = [{ e: [1, 2] }, { e: [2, 3] }, { e: [1, 1] }];
-  const [ex, setEx] = useState(0);
-  const q = queries[ex];
-  const [e0, e1] = q.e;
-  const same = e0 === e1;
-  const beatStep = (x) => ({
-    i: beater[x], j: x, kind: "W", focus: x,
-    narr: <span>{t(E, "To beat Elsie's ", "Elsie 의 ")}{C(x)}{t(E, " (make it lose) — chart cell = W → play ", " 을 이기려면(지게 만들려면) — 차트 셀 = W → ")}{C(beater[x])}{t(E, ".", " 를 내면 이겨요.")}</span>,
-  });
+  // 차트 '읽는 법' 만 가르침 — 입력 글자(W/L/D)를 한 칸씩 읽어 '이김 지도' 를 쌓음.
+  // 예제별 출력 계산은 다음 페이지 HpsSampleIOSim 담당 (겹치지 않게, 선생님 2026-07-22
+  // "페이지 3·4 겹침 → 학생 이해 잘되게: 3=차트 읽기, 4=그 지도로 답").
+  // 하삼각 입력 칸 3 개를 순서대로 읽음: (2,1)=W, (3,1)=L, (3,2)=W.
+  const walk = [
+    { i: 2, j: 1 },   // W → 줄 카드(■2) 이김
+    { i: 3, j: 1 },   // L → 줄 카드(▲3) 짐 = ●1 이김
+    { i: 3, j: 2 },   // W → 줄 카드(▲3) 이김
+  ];
+  // 읽어서 배우는 '이김' 관계 (winner→loser), 걷는 순서대로.
+  const learnedBeats = [
+    { w: 2, l: 1 },   // ■2 → ●1
+    { w: 1, l: 3 },   // ●1 → ▲3
+    { w: 3, l: 2 },   // ▲3 → ■2
+  ];
+  const letterOf = (i, j) => rows[i - 1].chars[j - 1];   // 그 칸의 입력 글자
   const tour = [
     {
-      i: null, j: null, kind: "intro", focus: null,
-      narr: <span>{t(E, `Example ${ex + 1} — Elsie holds `, `${ex + 1} 번째 예제 — Elsie 는 `)}{C(e0)}{t(E, " and ", " 과 ")}{C(e1)}{t(E, ". Bessie needs ONE card that BEATS both (makes Elsie lose). Let's read the chart 👇", " 를 가졌어요. Bessie 는 이 둘을 '모두' 이기는(= Elsie 를 지게 만드는) 카드 하나가 필요해요. 차트에서 찾아봐요 👇")}</span>,
+      i: null, j: null, kind: "intro",
+      narr: <span>{t(E, "This chart tells you who beats whom. Read the input letters one cell at a time — ", "이 차트가 '누가 누굴 이기나' 를 알려줘요. 입력 글자를 한 칸씩 읽어봐요 — ")}<b>W</b>{t(E, " = the row card wins, ", " = 그 줄 카드가 이김, ")}<b>L</b>{t(E, " = it loses (the other wins), ", " = 짐(상대가 이김), ")}<b>D</b>{t(E, " = draw. Let's build the beats map 👇", " = 비김.  이김 지도를 만들어봐요 👇")}</span>,
     },
-    beatStep(e0),
-    ...(same ? [] : [beatStep(e1)]),
+    ...walk.map(({ i, j }, k) => {
+      const b = learnedBeats[k];
+      const letter = letterOf(i, j);
+      return {
+        i, j, kind: "read",
+        narr: <span>{C(i)}{t(E, " vs ", " vs ")}{C(j)}{t(E, " cell = ", " 칸 = ")}<b>{letter}</b>{" → "}{C(b.w)}{t(E, " beats ", " 가 ")}{C(b.l)}{t(E, ".", " 를 이겨요.")}</span>,
+      };
+    }),
     {
-      i: null, j: null, kind: "conclude", focus: null,
-      narr: same
-        ? <span>{t(E, "Both of Elsie's cards are ", "Elsie 의 두 카드가 모두 ")}{C(e0)}{t(E, " — so ", " — 그러니 ")}{C(beater[e0])}{t(E, " beats BOTH!  → 1 winning card → output 5.", " 를 내면 둘 다 이김!  → 이기는 카드 1 개 → 출력 5.")}</span>
-        : <span>{C(beater[e0])}{t(E, " beats only ", " 는 ")}{C(e0)}{t(E, ", ", " 만·")}{C(beater[e1])}{t(E, " beats only ", " 는 ")}{C(e1)}{t(E, ".  → NO single card beats BOTH → Bessie can't force a win → output 0.", " 만 이김.  → 둘 다 이기는 카드 없음 → Bessie 가 못 이김 → 출력 0.")}</span>,
+      i: null, j: null, kind: "conclude",
+      narr: <span>{t(E, "Done! The beats map goes in a circle — like rock-paper-scissors. We'll use this map on the next page.", "다 읽었어요! 이김 지도가 고리처럼 돌아요 — 가위바위보처럼.  이 지도를 다음 페이지에서 써요.")}</span>,
     },
   ];
 
@@ -400,54 +406,14 @@ export function ChartReadingTour({ E }) {
         idx={ts.idx}
         total={ts.total}
         isEn={E}
-        title={t(E, "Reading the chart, example by example",
-                    "예제별로 차트 읽기")}
+        title={t(E, "Reading the chart — who beats whom",
+                    "차트 읽는 법 — 누가 누굴 이기나")}
       />
 
-      {/* 예제 선택기 (선생님 2026-07-21: "1&2, 2&3, 1&1 예를 선택해서 모두") */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: C.dim, alignSelf: "center" }}>{t(E, "Pick an example:", "예제 골라보기:")}</span>
-        {queries.map((qq, i) => (
-          <button key={i} onClick={() => { setEx(i); ts.setIdx(0); }} style={{
-            display: "inline-flex", alignItems: "center", gap: 4, padding: "4px 10px", borderRadius: 999, cursor: "pointer",
-            fontSize: 11.5, fontWeight: 800,
-            background: ex === i ? "#fee2e2" : "#fff",
-            border: `1.5px solid ${ex === i ? "#dc2626" : "#e5e7eb"}`,
-            color: ex === i ? "#b91c1c" : "#6b7280",
-          }}>
-            {t(E, `Ex ${i + 1}`, `예제 ${i + 1}`)}
-            <span style={{ display: "inline-flex", gap: 2, alignItems: "center" }}>
-              {qq.e.map((n, k) => <span key={k} style={{ fontSize: 13, color: cards[n - 1].color, lineHeight: 1 }}>{cards[n - 1].glyph}</span>)}
-            </span>
-          </button>
-        ))}
+      <div style={{ fontSize: 11.5, color: C.dim, textAlign: "center", marginBottom: 10, wordBreak: "keep-all" }}>
+        {t(E, "The map is the same no matter what Elsie holds — read it once, use it for every hand.",
+              "이 지도는 Elsie 가 뭘 가졌든 똑같아요 — 한 번 읽어두면 모든 패에 써요.")}
       </div>
-
-      {/* 이 예제 — Elsie 가 가진 두 카드 상시 표시 */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap", background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "6px 12px", maxWidth: 460, margin: "0 auto 10px" }}>
-        <span style={{ fontSize: 12, fontWeight: 800, color: "#b91c1c", wordBreak: "keep-all" }}>🎴 {t(E, `Example ${ex + 1} — Elsie holds:`, `${ex + 1} 번째 예제 — Elsie 가 가진 두 카드:`)}</span>
-        {q.e.map((n, k) => (
-          <span key={k} style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "2px 8px", background: cur.focus === n ? "#fde047" : "#fff", border: "1.5px solid #dc2626", borderRadius: 8, fontWeight: 800 }}>
-            <span style={{ fontSize: 15, color: cards[n - 1].color, lineHeight: 1 }}>{cards[n - 1].glyph}</span>
-            <span style={{ fontSize: 12, color: "#7f1d1d" }}>{t(E, "card ", "카드 ")}{n}</span>
-          </span>
-        ))}
-      </div>
-
-      {/* 지금 찾는 것 — Elsie 카드 focus 를 누가 이기나 */}
-      {cur.focus != null && (
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-          marginBottom: 10, fontSize: 13, fontWeight: 700, color: "#92400e", flexWrap: "wrap",
-        }}>
-          <span>🔎 {t(E, "What beats Elsie's", "Elsie 의")}</span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "2px 8px", borderRadius: 999, background: "#fef3c7", border: "1px solid #f59e0b" }}>
-            <span style={{ fontSize: 16, color: cards[cur.focus - 1].color, lineHeight: 1 }}>{cards[cur.focus - 1].glyph}</span>
-            <span>{t(E, "card ", "카드 ")}{cur.focus}</span>
-          </span>
-          <span>{t(E, "? (Bessie plays it to make Elsie lose)", "을 이기는 카드? (Bessie 가 내면 Elsie 가 짐)")}</span>
-        </div>
-      )}
 
       <div style={{ display: "flex", justifyContent: "center", marginBottom: 12, alignItems: "stretch", gap: 8 }}>
         {/* Left rail: literal input lines */}
@@ -555,6 +521,26 @@ export function ChartReadingTour({ E }) {
           ))}
         </div>
       </div>
+
+      {/* 🗺️ 배운 이김 지도 — 한 칸씩 읽을 때마다 채워짐 */}
+      {(() => {
+        const revealed = Math.min(ts.safe, walk.length);
+        const justRead = ts.safe >= 1 && ts.safe <= walk.length ? ts.safe - 1 : -1;
+        return (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, flexWrap: "wrap", background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "8px 12px", maxWidth: 480, margin: "0 auto 10px" }}>
+            <span style={{ fontSize: 12, fontWeight: 800, color: "#92400e", wordBreak: "keep-all" }}>🗺️ {t(E, "beats map", "이김 지도")}</span>
+            {learnedBeats.map((b, k) => {
+              const shown = k < revealed;
+              const isNew = k === justRead;
+              return (
+                <span key={k} style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "3px 8px", borderRadius: 8, background: isNew ? "#fde047" : shown ? "#fff" : "#f8fafc", border: `1.5px solid ${isNew ? "#f59e0b" : shown ? "#fcd34d" : "#e5e7eb"}`, opacity: shown ? 1 : 0.4, transition: "all .2s" }}>
+                  {shown ? <>{C(b.w)}<span style={{ color: "#16a34a", fontWeight: 800 }}>→</span>{C(b.l)}</> : <span style={{ fontSize: 13, color: "#cbd5e1" }}>?</span>}
+                </span>
+              );
+            })}
+          </div>
+        );
+      })()}
 
       <NarrativePanel minHeight={84} stepKey={ts.safe}>
         <div style={{ fontSize: 14, lineHeight: 1.65 }}>{cur.narr}</div>

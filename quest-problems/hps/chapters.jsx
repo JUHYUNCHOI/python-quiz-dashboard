@@ -323,8 +323,8 @@ LWD
             {/* '뭘 내야 이기나' 는 다음 페이지 시뮬(HpsSampleIOSim)에서 표 위 탐색으로 보여줌
                 (선생님 2026-07-21: "설명보다 표에서 열이 깜박이며 둘 다 이기는 카드 찾는 과정을 시뮬로"). */}
             <div style={{ marginTop: 12, background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 10, padding: "10px 12px", fontSize: 12, color: "#155e75", wordBreak: "keep-all", lineHeight: 1.6 }}>
-              🎯 {t(E, "So what does Bessie play to win each hand?  Next page walks it on the chart — light up Elsie's two columns and find a card that beats BOTH.",
-                       "그럼 각 패를 이기려면 Bessie 는 뭘 내야 할까?  다음 페이지에서 차트 위로 하나씩 — Elsie 의 두 열을 켜고, 둘 다 이기는 카드를 찾아요.")}
+              🎯 {t(E, "But first — how do you even read this chart?  Next page walks the letters cell by cell and builds the 'who beats whom' map.",
+                       "그런데 먼저 — 이 차트를 어떻게 읽지?  다음 페이지에서 글자를 한 칸씩 읽어 '누가 누굴 이기나' 지도를 만들어요.")}
             </div>
 
             <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #c4b5fd", fontSize: 12, color: "#5b21b6" }}>
@@ -343,8 +343,8 @@ LWD
     {
       type: "reveal",
       narr: t(E,
-        "Pick any of the 3 examples and walk it on the chart — find the card that beats BOTH of Elsie's (makes her lose).",
-        "3 개 예제 중 골라서 차트 위로 걸어봐요 — Elsie 의 두 카드를 '모두' 이기는(지게 만드는) 카드를 찾아요."),
+        "First, learn to READ the chart — walk the letters cell by cell and build the 'who beats whom' map.",
+        "먼저 차트 '읽는 법' 부터 — 글자를 한 칸씩 읽어서 '누가 누굴 이기나' 지도를 만들어요."),
       content: (<ChartReadingTour E={E} />),
     },
 
@@ -353,8 +353,8 @@ LWD
     {
       type: "reveal",
       narr: t(E,
-        "Chart's clear — now watch the sample's 3 Elsie hands turn into the output 0, 0, 5, one at a time.",
-        "차트도 알았으니 — 샘플의 Elsie 3 패가 출력 0, 0, 5 로 어떻게 나오는지 하나씩 봐요."),
+        "Now use that beats map — watch the sample's 3 Elsie hands turn into the output 0, 0, 5, one at a time.",
+        "이제 그 이김 지도를 써서 — 샘플의 Elsie 3 패가 출력 0, 0, 5 로 어떻게 나오는지 하나씩 봐요."),
       content: (<HpsSampleIOSim E={E} />),
     },
 
