@@ -320,43 +320,11 @@ LWD
               <div>{t(E, "Elsie's 3rd hand: cards (1, 1)", "Elsie 의 셋째 패: 카드 (1, 1)")}</div>
             </div>
 
-            {/* 각 패, Bessie 는 뭘 내야 이기나 — 형식 스텝에서 바로 답이 보이게
-                (선생님 2026-07-21: "이거 봐선 각 예제마다 뭘 내야 이기는지 알 수 없다").
-                Bessie 는 Elsie 두 카드를 '모두' 이기는 카드가 하나 있어야 확실히 이김.
-                위 W/L/D 차트로 확인 가능 — 상세 카운트(→ 출력)는 다음 시뮬. */}
-            <div style={{ marginTop: 12, background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 10, padding: "10px 12px" }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#166534", marginBottom: 8, wordBreak: "keep-all" }}>
-                🎯 {t(E, "So what does Bessie play to win each one?", "그럼 각 패를 이기려면 Bessie 는 뭘 내야 하나?")}
-              </div>
-              <div style={{ fontSize: 10.5, color: "#166534", marginBottom: 6, wordBreak: "keep-all" }}>
-                {t(E, "(reminder — card 1 = ", "(참고 — 카드 1 = ")}<span style={{ color: "#2563eb" }}>●</span>{t(E, ", card 2 = ", ", 카드 2 = ")}<span style={{ color: "#7c3aed" }}>■</span>{t(E, ", card 3 = ", ", 카드 3 = ")}<span style={{ color: "#ea580c" }}>▲</span>)
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-                {[
-                  { elsie: [["●", "#2563eb", "1"], ["■", "#7c3aed", "2"]], win: null },
-                  { elsie: [["■", "#7c3aed", "2"], ["▲", "#ea580c", "3"]], win: null },
-                  { elsie: [["●", "#2563eb", "1"], ["●", "#2563eb", "1"]], win: ["■", "#7c3aed", "2"] },
-                ].map((r, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12.5, flexWrap: "wrap" }}>
-                    <span style={{ display: "inline-flex", gap: 6, background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 5, padding: "3px 8px" }}>
-                      {r.elsie.map(([g, c, n], j) => (
-                        <span key={j} style={{ display: "inline-flex", alignItems: "center", gap: 1, fontWeight: 700 }}>
-                          <span style={{ color: c, fontSize: 15 }}>{g}</span>
-                          <span style={{ fontSize: 11, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>{n}</span>
-                        </span>
-                      ))}
-                    </span>
-                    <span style={{ color: "#9ca3af" }}>→</span>
-                    {r.win
-                      ? <span style={{ fontWeight: 700, color: "#15803d", wordBreak: "keep-all", display: "inline-flex", alignItems: "center", gap: 3, flexWrap: "wrap" }}>{t(E, "play ", "")}<span style={{ display: "inline-flex", alignItems: "center", gap: 1 }}><span style={{ color: r.win[1], fontSize: 16 }}>{r.win[0]}</span><span style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace" }}>{r.win[2]}</span></span>{t(E, ` (card ${r.win[2]}) — it beats BOTH ✓`, ` (카드 ${r.win[2]}) 내면 둘 다 이김 ✓`)}</span>
-                      : <span style={{ fontWeight: 700, color: "#b91c1c", wordBreak: "keep-all" }}>{t(E, "no single card beats both ✗ → can't force a win", "한 장으로 둘 다 이기는 카드 없음 ✗ → 확실히 못 이김")}</span>}
-                  </div>
-                ))}
-              </div>
-              <div style={{ marginTop: 8, fontSize: 10.5, color: C.dim, wordBreak: "keep-all", lineHeight: 1.5 }}>
-                {t(E, "Bessie wins for sure only if she holds ONE card that beats BOTH of Elsie's.  (Check it on the W/L/D chart above.)  Next page counts the winning hands → the output number.",
-                      "Bessie 는 Elsie 두 카드를 '모두' 이기는 카드를 한 장이라도 들면 확실히 이겨요.  (위 W/L/D 차트로 확인!)  다음 페이지에서 이기는 패 수를 세서 → 출력 숫자.")}
-              </div>
+            {/* '뭘 내야 이기나' 는 다음 페이지 시뮬(HpsSampleIOSim)에서 표 위 탐색으로 보여줌
+                (선생님 2026-07-21: "설명보다 표에서 열이 깜박이며 둘 다 이기는 카드 찾는 과정을 시뮬로"). */}
+            <div style={{ marginTop: 12, background: "#ecfeff", border: "1px solid #67e8f9", borderRadius: 10, padding: "10px 12px", fontSize: 12, color: "#155e75", wordBreak: "keep-all", lineHeight: 1.6 }}>
+              🎯 {t(E, "So what does Bessie play to win each hand?  Next page walks it on the chart — light up Elsie's two columns and find a card that beats BOTH.",
+                       "그럼 각 패를 이기려면 Bessie 는 뭘 내야 할까?  다음 페이지에서 차트 위로 하나씩 — Elsie 의 두 열을 켜고, 둘 다 이기는 카드를 찾아요.")}
             </div>
 
             <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #c4b5fd", fontSize: 12, color: "#5b21b6" }}>

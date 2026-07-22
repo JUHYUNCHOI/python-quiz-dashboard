@@ -1801,32 +1801,70 @@ export function HpsSampleIOSim({ E }) {
           : <span style={{ color: "#dc2626", fontWeight: 800 }}>✗</span>;
         return (
           <div>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 10 }}>
+            <style>{`@keyframes hpsBlink{0%,100%{background:#fef9c3}50%{background:#fde047}}`}</style>
+            {/* Elsie 가 낸 패 (모양+번호) */}
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 6 }}>
               <span style={{ fontSize: 11, fontWeight: 700, color: "#b91c1c" }}>{t(E, "Elsie played:", "Elsie 가 낸 패:")}</span>
-              <span style={{ display: "inline-flex", gap: 8, padding: "4px 12px", background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 8 }}>
-                <Glyph n={q.e[0]} /><Glyph n={q.e[1]} />
+              <span style={{ display: "inline-flex", gap: 10, padding: "4px 12px", background: "#fee2e2", border: "1px solid #fca5a5", borderRadius: 8 }}>
+                {q.e.map((n, j) => <span key={j} style={{ display: "inline-flex", alignItems: "center", gap: 1, fontWeight: 700 }}><Glyph n={n} size={18} /><span style={{ fontSize: 11, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>{n}</span></span>)}
               </span>
             </div>
-            <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
-              {rows.map((r) => (
-                <div key={r.c} style={{
-                  width: 116, padding: "8px 6px", borderRadius: 10, textAlign: "center",
-                  background: r.both ? "#dcfce7" : "#f8fafc",
-                  border: `1.5px solid ${r.both ? "#86efac" : "#e5e7eb"}`,
-                  boxShadow: r.both ? "0 3px 12px rgba(22,163,74,.18)" : "none",
-                }}>
-                  <div style={{ fontSize: 11, fontWeight: 800, color: r.both ? "#15803d" : "#6b7280" }}>{t(E, `my card ${r.c}`, `내 카드 ${r.c}`)} {r.both ? "⚡" : ""}</div>
-                  <div style={{ margin: "5px 0" }}><Glyph n={r.c} size={22} /></div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 2, fontSize: 11.5 }}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>vs <Glyph n={q.e[0]} size={13} /> <Chk ok={r.b1} /></div>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>vs <Glyph n={q.e[1]} size={13} /> <Chk ok={r.b2} /></div>
-                  </div>
-                  <div style={{ marginTop: 5, fontSize: 10.5, fontWeight: 800, color: r.both ? "#15803d" : "#9ca3af", wordBreak: "keep-all" }}>
-                    {r.both ? t(E, "beats BOTH ✓", "둘 다 이김 ✓") : t(E, "not both", "둘 다는 X")}
-                  </div>
-                </div>
-              ))}
+            <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 8, wordBreak: "keep-all" }}>
+              {t(E, "Light up Elsie's columns 💡 — find a card (row) with ✓ in ALL of them.",
+                    "Elsie 카드의 열을 켜고 💡 — 그 열이 '모두' ✓ 인 카드(행)를 찾아요.")}
             </div>
+            {/* 표 위 탐색: Elsie 열 깜박임 + 그 열이 모두 ✓ 인 행(=둘 다 이기는 카드) 강조 */}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <table style={{ borderCollapse: "separate", borderSpacing: 3 }}>
+                <tbody>
+                  <tr>
+                    <td style={{ fontSize: 9, color: C.dim, textAlign: "right", paddingRight: 4, verticalAlign: "bottom" }}>{t(E, "my↓ /vs→", "내카드↓ /상대→")}</td>
+                    {[1, 2, 3].map(c => {
+                      const on = q.e.includes(c);
+                      return (
+                        <td key={c} style={{ textAlign: "center", borderRadius: 5, ...(on ? { animation: "hpsBlink 1s ease-in-out infinite" } : {}) }}>
+                          <div style={{ display: "inline-flex", alignItems: "center", gap: 1, fontWeight: 700 }}><Glyph n={c} size={15} /><span style={{ fontSize: 10, color: "#64748b", fontFamily: "'JetBrains Mono',monospace" }}>{c}</span></div>
+                          <div style={{ fontSize: 10, height: 12 }}>{on ? "💡" : ""}</div>
+                        </td>
+                      );
+                    })}
+                    <td />
+                  </tr>
+                  {rows.map(r => (
+                    <tr key={r.c}>
+                      <td style={{ paddingRight: 4, textAlign: "right" }}>
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 1, fontWeight: 700, opacity: r.both ? 1 : 0.65 }}><Glyph n={r.c} size={15} /><span style={{ fontSize: 10, color: "#64748b", fontFamily: "'JetBrains Mono',monospace" }}>{r.c}</span></span>
+                      </td>
+                      {[1, 2, 3].map(c => {
+                        const w = beats(r.c, c);
+                        const on = q.e.includes(c);
+                        return (
+                          <td key={c} style={{
+                            width: 30, height: 28, textAlign: "center", borderRadius: 5,
+                            background: r.both ? "#dcfce7" : on ? "#fef9c3" : "#f8fafc",
+                            border: `1.5px solid ${r.both ? "#16a34a" : on ? "#fde047" : "#e5e7eb"}`,
+                            fontWeight: 800, fontSize: 13,
+                            ...(on && !r.both ? { animation: "hpsBlink 1s ease-in-out infinite" } : {}),
+                          }}>
+                            {r.c === c ? <span style={{ color: "#cbd5e1" }}>·</span>
+                              : w ? <span style={{ color: "#16a34a" }}>✓</span> : <span style={{ color: "#d1d5db" }}>✗</span>}
+                          </td>
+                        );
+                      })}
+                      <td style={{ paddingLeft: 6, fontSize: 11, fontWeight: 800, color: "#15803d", wordBreak: "keep-all" }}>
+                        {r.both ? t(E, "⚡ all ✓ → beats both!", "⚡ 모두 ✓ → 둘 다 이김!") : ""}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {dom === 0 && (
+              <div style={{ textAlign: "center", marginTop: 8, fontSize: 12, fontWeight: 700, color: "#b91c1c", wordBreak: "keep-all" }}>
+                {t(E, "No row is ✓ in every lit column → no card beats both → can't force a win.",
+                      "켜진 열이 모두 ✓ 인 행이 없음 → 둘 다 이기는 카드 없음 → 확실히 못 이김.")}
+              </div>
+            )}
             <div style={{ textAlign: "center", marginTop: 12, fontSize: 12.5, color: "#334155", lineHeight: 1.95, wordBreak: "keep-all" }}>
               <div><b style={{ color: "#c2410c" }}>{t(E, "cards that beat BOTH = dom", "둘 다 이기는 카드 = dom")} = {dom}</b></div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
