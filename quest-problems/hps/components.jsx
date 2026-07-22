@@ -1691,6 +1691,11 @@ export function HpsFormulaGridSim({ E }) {
           borderTop: "10px solid #fbbf24" }} />
       </div>
 
+      {/* 이김 규칙 — 어느 스텝에서도 보이게 (선생님 2026-07-21: "어떤 카드가 어떤 카드
+          이겼는지 머리로 기억할 필요 없이" — 말풍선이 '카드 2가 카드 1 이김' 이라 할 때
+          바로 눈으로 확인되게). 이 문제 샘플(N=3, 차트 D/WD/LWD)의 실제 이김 관계. */}
+      <WinningRulesBanner E={E} />
+
       {/* N·dom 정의 — 어느 스텝에서도 보이게 (선생님 2026-07-15: 앞 페이지 안 돌아가도 되게) */}
       <div style={{ maxWidth: 480, margin: "8px auto 0", padding: "6px 10px", background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
         <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N</b> = {t(E, "number of card types (here 3)", "카드 종류 수 (여기선 3)")}　·
