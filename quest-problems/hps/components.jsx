@@ -158,6 +158,83 @@ export function AlgorithmReasoningTour({ E }) {
    students to remember which shape is which card or to translate
    W/L/D into beats. Three rules, one glance.
    ═══════════════════════════════════════════════════════════════ */
+// BonusBadge — 보너스 구간 전체에 상시 표시 (선생님 2026-07-21: "여기부터는 보너스라
+// 안 봐도 된다고 더 확실히"). intro 스크린뿐 아니라 매 보너스 스텝 맨 위에 붙임.
+export function BonusBadge({ E }) {
+  return (
+    <div style={{
+      maxWidth: 560, margin: "0 auto 12px",
+      background: "#fffbeb", border: "1.5px dashed #f59e0b", borderRadius: 999,
+      padding: "6px 16px", fontSize: 12, fontWeight: 800, textAlign: "center",
+      color: "#b45309", wordBreak: "keep-all", letterSpacing: 0.2,
+    }}>
+      🎁 {t(E, "BONUS · optional — you don't need this to solve it 👌", "🎁 보너스 · 안 봐도 돼요 — 문제는 이미 다 풀었어요 👌")}
+    </div>
+  );
+}
+
+/* BeatsMatrix — '누가 누구를 이기나' 3×3 표 (선생님 2026-07-21: "기억하기 좋게 표로" +
+   "규칙만 보면 둘 다 이기는 카드를 머리로 구해야 함"). cell(r,c)=✓ 면 카드 r 이 c 를 이김.
+   highlight 로 'Elsie 카드' 열을 강조 → 그 열의 ✓ 가 곧 'Elsie 를 이기는 카드' → 머리로 안 구함.
+   샘플 차트(D/WD/LWD): 2→1, 1→3, 3→2. */
+export function BeatsMatrix({ E, highlight = null }) {
+  const beats = (a, b) => (a === 2 && b === 1) || (a === 1 && b === 3) || (a === 3 && b === 2);
+  const ids = [1, 2, 3];
+  const Cell = ({ children, hl, head }) => (
+    <div style={{
+      width: 34, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
+      background: hl ? "#fef3c7" : head ? "transparent" : "#fff",
+      borderRadius: 5, fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 13,
+    }}>{children}</div>
+  );
+  const Glyph = ({ n, size = 16 }) => <span style={{ fontSize: size, color: SHAPES[n]?.color, lineHeight: 1 }}>{SHAPES[n]?.glyph}</span>;
+  return (
+    <div style={{ maxWidth: 320, margin: "0 auto 10px", background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 10, padding: "8px 10px" }}>
+      <div style={{ fontSize: 10.5, fontWeight: 800, color: "#166534", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
+        🎯 {t(E, "who beats whom  (✓ = row card beats column card)", "누가 누구를 이기나  (✓ = 행 카드가 열 카드 이김)")}
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", border: "1px solid #bbf7d0", borderRadius: 6, background: "#fff", overflow: "hidden" }}>
+        <table style={{ borderCollapse: "collapse" }}>
+          <tbody>
+            <tr>
+              <td><Cell head /></td>
+              {ids.map(c => (
+                <td key={c} style={{ background: highlight === c ? "#fef3c7" : "transparent" }}>
+                  <Cell head hl={highlight === c}><Glyph n={c} /></Cell>
+                </td>
+              ))}
+            </tr>
+            {ids.map(r => (
+              <tr key={r}>
+                <td><Cell head><Glyph n={r} /></Cell></td>
+                {ids.map(c => {
+                  const w = beats(r, c);
+                  const inCol = highlight === c;
+                  return (
+                    <td key={c} style={{ background: inCol ? "#fef3c7" : "transparent" }}>
+                      <Cell hl={inCol}>
+                        {r === c ? <span style={{ color: "#cbd5e1" }}>·</span>
+                          : w ? <span style={{ color: inCol ? "#b45309" : "#16a34a" }}>✓</span>
+                              : <span style={{ color: "#e5e7eb" }}>✗</span>}
+                      </Cell>
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {highlight != null && (
+        <div style={{ fontSize: 10.5, color: "#b45309", fontWeight: 700, textAlign: "center", marginTop: 6, wordBreak: "keep-all" }}>
+          {t(E, <>↑ Elsie's card = <Glyph n={highlight} size={13} />.  The ✓ in that column = the card that beats it.</>,
+                <>↑ Elsie 카드 = <Glyph n={highlight} size={13} /> 열.  그 열의 ✓ = 이 카드를 이기는 카드.</>)}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function WinningRulesBanner({ E }) {
   const rules = [
     { w: { n: 1, glyph: "●", color: "#2563eb" }, l: { n: 3, glyph: "▲", color: "#ea580c" } },
@@ -1763,14 +1840,15 @@ export function HpsSampleIOSim({ E }) {
 }
 
 export function HpsFormulaGridSim({ E }) {
-  // ⚡ 카드 먼저 → 지는 칸이 오른쪽 아래 2×2 로 모임
-  const cards = [{ id: 2, win: true }, { id: 1, win: false }, { id: 3, win: false }];
+  // 자연스러운 1·2·3 순서 (선생님 2026-07-21: "왜 2,1,3? 헷갈려").
+  // ⚡ 카드(2)가 가운데 → 지는 칸은 네 모서리(⚡ 없는 카드끼리)로 남음.
+  const cards = [{ id: 1, win: false }, { id: 2, win: true }, { id: 3, win: false }];
   const steps = [
     { phase: "test",    bubble: t(E, "Game 3 — Elsie played card 1 twice (same card is fine).\nSo: how many cards beat card 1?  Let's check each one 👇", "게임 3 — Elsie 가 카드 1 을 두 장 냈어요 (같은 카드도 OK).\n그럼 '카드 1 을 이기는 카드' 는 몇 개? 하나씩 봐요 👇") },
     { phase: "testans", bubble: t(E, "Only ⚡ card 2 beats card 1 → 'cards that beat Elsie' = 1.\n(we'll nickname this count dom — the number of ⚡ cards)", "카드 1 을 이기는 건 ⚡ 카드 2 하나 → 'Elsie 를 이기는 카드' = 1 개.\n(이 개수에 dom 이란 별명을 붙일게요 — ⚡ 카드 수)") },
     { phase: "grid",  bubble: t(E, "Now — Bessie picks 2 cards.  All her choices = 3 × 3 = 9 hands.  How many WIN?  Count in the grid.", "이제 — Bessie 는 카드 2 장을 골라요.  가능한 조합 = 3 × 3 = 9 패.  이 중 이기는 건 몇 개? 격자에서 세봐요.") },
     { phase: "green", bubble: t(E, "If a hand holds card 2 (⚡), Bessie plays it and wins whatever Elsie shows. Green = winning hands.", "패에 카드 2(⚡)가 한 장이라도 있으면 → 그걸 내서 이김 (Elsie 뭘 내든). 초록 = 이기는 패.") },
-    { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ → the red 2 × 2 = 4.  (each slot has N − dom = 2 non-⚡ cards → (N − dom)²)", "둘 다 ⚡ 가 아닐 때만 짐 → 빨간 2 × 2 = 4.  (자리마다 ⚡ 아닌 카드 N − dom = 2 가지 → (N − dom)²)") },
+    { phase: "red",   bubble: t(E, "A hand LOSES only when BOTH cards are non-⚡ (card 1 or 3) → the 4 red corner cells.  (each slot has N − dom = 2 non-⚡ cards → (N − dom)² = 4)", "둘 다 ⚡ 가 아닐 때만 짐 (카드 1 또는 3) → 빨간 네 모서리 칸 4 개.  (자리마다 ⚡ 아닌 카드 N − dom = 2 가지 → (N − dom)² = 4)") },
     { phase: "count", bubble: t(E, "Wins = whole grid − losers = 9 − 4 = 5!\nIn letters: N² − (N − dom)² = 3² − 2² = 5 ✓", "이기는 패 = 전체 − 지는 것 = 9 − 4 = 5!\n글자로: N² − (N − dom)² = 3² − 2² = 5 ✓") },
   ];
   const ts = useTraceStep(steps);
@@ -1811,10 +1889,9 @@ export function HpsFormulaGridSim({ E }) {
           borderTop: "10px solid #fbbf24" }} />
       </div>
 
-      {/* 이김 규칙 — 격자/공식 단계에서만 (선생님 2026-07-21). test 단계는 타일이
-          '내 카드 vs ●1 → 결과' 를 직접 보여줘 배너가 중복이라 숨김. 나머지 단계(9칸
-          격자)엔 per-대결 표시가 없어 배너가 유일한 이김 규칙 참조라 유지. */}
-      {!showTest && <WinningRulesBanner E={E} />}
+      {/* 누가 누구 이기나 표 — Elsie 카드(1) 열 강조 → 그 열의 ✓ 가 'Elsie 이기는 카드'
+          라 머리로 안 구함 (선생님 2026-07-21: "기억용 표 + 둘 다 이기는 카드 머리로 X"). */}
+      <BeatsMatrix E={E} highlight={1} />
 
       {/* N·dom 정의 — 어느 스텝에서도 보이게 (선생님 2026-07-15: 앞 페이지 안 돌아가도 되게) */}
       <div style={{ maxWidth: 480, margin: "8px auto 0", padding: "6px 10px", background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
@@ -1899,9 +1976,6 @@ export function HpsFormulaGridSim({ E }) {
                   {cards.map(colCard => cell(rowCard.win, colCard.win, `${rowCard.id}-${colCard.id}`))}
                 </div>
               ))}
-              {litRed && (
-                <div style={{ position: "absolute", left: 56 + (48 + 4) - 4, top: (16 + 4) + (40 + 4) - 4, width: 2 * 48 + 4 + 8, height: 2 * 40 + 4 + 8, border: "2px dashed #dc2626", borderRadius: 10, pointerEvents: "none" }} />
-              )}
             </div>
           </div>
           <div style={{ fontSize: 10.5, color: C.dim, textAlign: "center", marginTop: 8, wordBreak: "keep-all" }}>

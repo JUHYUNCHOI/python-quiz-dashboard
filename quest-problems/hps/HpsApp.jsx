@@ -3,7 +3,7 @@ import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
 import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
-import { HpsProgressiveCode, downloadHpsPDF, getHpsSections, HpsSim } from "./components";
+import { HpsProgressiveCode, downloadHpsPDF, getHpsSections, HpsSim, BonusBadge } from "./components";
 import { makeHpsCh1, makeHpsCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -107,7 +107,7 @@ export default function HpsApp(props = {}) {
   const renderContent = () => {
     if (step.type === "quiz") return <Quiz {...step} onAnswer={handleAnswer} />;
     if (step.type === "input") return <NumInput key={`${tab}-${cur}-${lang}`} question={step.question} hint={step.hint} answer={step.answer} E={E} onSolve={handleSolve} />;
-    if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
+    if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.section === "bonus" && <BonusBadge E={E} />}{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <HpsProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     if (step.type === "sim") return <HpsSim E={E} />;
