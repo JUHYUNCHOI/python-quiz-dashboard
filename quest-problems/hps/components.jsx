@@ -1954,9 +1954,16 @@ export function HpsFormulaGridSim({ E }) {
           BeatsMatrix 도 제거 — 아래 '맞대결 타일' 이 같은 사실(카드2 가 카드1 이김)을
           더 구체적으로 보여줘 중복이었음. */}
       {!showTest && (
-        <div style={{ maxWidth: 480, margin: "0 auto", padding: "6px 10px", background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
-          <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N</b> = {t(E, "number of card types (here 3)", "카드 종류 수 (여기선 3)")}　·
-          <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#c2410c" }}>dom</b> = {t(E, "⚡ count — cards that beat BOTH of Elsie's (short for “dominates”)", "⚡ 카드 수 — Elsie 두 카드를 모두 이기는 카드 (‘dominate 제압’ 의 앞 세 글자)")}
+        <div style={{ maxWidth: 480, margin: "0 auto", padding: "8px 12px", background: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.65 }}>
+          <div>
+            <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N</b> = {t(E, "number of card types (here 3)", "카드 종류 수 (여기선 3)")}
+          </div>
+          <div style={{ marginTop: 3 }}>
+            <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#c2410c" }}>dom</b> = {t(E, "⚡ count — cards that beat BOTH of Elsie's", "⚡ 카드 수 — Elsie 두 카드를 모두 이기는 카드")}
+          </div>
+          <div style={{ fontSize: 10, color: "#94a3b8", marginTop: 1 }}>
+            {t(E, "(“dom” = short for “dominates”)", "(‘dom’ = ‘dominate 제압’ 의 앞 세 글자)")}
+          </div>
         </div>
       )}
 
