@@ -318,30 +318,24 @@ export function ChartReadingTour({ E }) {
   };
   // Tour: pick instructive cells. {i, j} are 1-indexed.
   // Narration uses inline card chips so the shape is always visible.
+  // 예제 1(Elsie = 카드 1, 카드 2) 기준으로 차트를 순서대로 읽음
+  // (선생님 2026-07-21: "첫 예제는 엘시가 카드1,2 가진 거잖아. 그거에 따라 차례대로").
   const tour = [
     {
-      i: 2, j: 1, kind: "W",
-      narr: <span>{t(E, "This cell = W. It says: ", "이 셀 = W. 뜻: ")}{C(2)} {t(E, " beats ", " 가 ")}{C(1)} {t(E, "", " 이김.")}</span>,
+      i: null, j: null, kind: "intro", focus: null,
+      narr: <span>{t(E, "Example 1 — Elsie holds ", "1 번째 예제 — Elsie 는 ")}{C(1)}{t(E, " and ", " 과 ")}{C(2)}{t(E, ". To win for SURE, Bessie needs ONE card that beats BOTH. Let's read the chart 👇", " 를 가졌어요. 무조건 이기려면 Bessie 는 이 둘을 '모두' 이기는 카드 하나가 필요해요. 차트에서 찾아봐요 👇")}</span>,
     },
     {
-      i: 3, j: 1, kind: "L",
-      narr: <span>{t(E, "This cell = L. ", "이 셀 = L. ")}{C(3)} {t(E, " loses to ", " 가 ")}{C(1)} {t(E, ". Flipped: ", " 한테 짐 — 뒤집으면: ")}{C(1)} {t(E, " beats ", " 가 ")}{C(3)} {t(E, ".", " 이김.")}</span>,
+      i: 2, j: 1, kind: "W", focus: 1,
+      narr: <span>{t(E, "First — who beats Elsie's ", "먼저 — Elsie 의 ")}{C(1)}{t(E, "?  The chart cell = W → ", " 은 누가 이기나?  차트 셀 = W → ")}{C(2)}{t(E, " beats it.", " 가 이겨요.")}</span>,
     },
     {
-      i: 3, j: 2, kind: "W",
-      narr: <span>{t(E, "This cell = W. ", "이 셀 = W. ")}{C(3)} {t(E, " beats ", " 가 ")}{C(2)} {t(E, ".", " 이김.")}</span>,
+      i: 3, j: 2, kind: "W", focus: 2,
+      narr: <span>{t(E, "Next — who beats Elsie's ", "다음 — Elsie 의 ")}{C(2)}{t(E, "?  → ", " 는 누가 이기나?  → ")}{C(3)}{t(E, " beats it.", " 가 이겨요.")}</span>,
     },
     {
-      i: 2, j: 2, kind: "D",
-      narr: <span>{t(E, "This cell = D. ", "이 셀 = D. ")}{C(2)} {t(E, " vs itself → draw. The diagonal is always D — a card always draws against itself.",
-        " 가 자기 자신과 붙으면 비김. 대각선은 항상 D — 자기랑 붙으면 비겨요.")}</span>,
-    },
-    {
-      i: null, j: null, kind: "summary",
-      narr: <span style={{ display: "inline-flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-        {t(E, "All three winning rules: ", "이김 규칙 3 개: ")}
-        {C(2)} → {C(1)}{" · "}{C(1)} → {C(3)}{" · "}{C(3)} → {C(2)}
-      </span>,
+      i: null, j: null, kind: "conclude", focus: null,
+      narr: <span>{t(E, "So — is there ONE card that beats BOTH?  ", "그럼 — 둘 다 이기는 카드가 하나라도 있나요?  ")}{C(2)}{t(E, " beats card 1 but loses to card 2;  ", " 는 카드 1 은 이겨도 카드 2 엔 짐;  ")}{C(3)}{t(E, " beats card 2 but loses to card 1.  → NO card beats both → Bessie can't force a win → output 0.", " 은 카드 2 는 이겨도 카드 1 엔 짐.  → 둘 다 이기는 카드 없음 → 확실히 못 이김 → 출력 0.")}</span>,
     },
   ];
 
@@ -400,34 +394,33 @@ export function ChartReadingTour({ E }) {
         idx={ts.idx}
         total={ts.total}
         isEn={E}
-        title={t(E, "Click ▶ to walk through the chart — 1 cell at a time",
-                    "▶ 눌러 차트 셀 하나씩 따라가기")}
+        title={t(E, "Reading the chart for Example 1 (Elsie's cards)",
+                    "예제 1 로 차트 읽기 (Elsie 의 카드 기준)")}
       />
 
-      {/* Match-up label — which two cards is the highlighted cell about? */}
-      {cur.i != null && (
+      {/* 예제 1 — Elsie 가 가진 두 카드 상시 표시 (선생님 2026-07-21) */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 10, flexWrap: "wrap", background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "6px 12px", maxWidth: 440, margin: "0 auto 10px" }}>
+        <span style={{ fontSize: 12, fontWeight: 800, color: "#b91c1c", wordBreak: "keep-all" }}>🎴 {t(E, "Example 1 — Elsie holds:", "1 번째 예제 — Elsie 가 가진 두 카드:")}</span>
+        {[1, 2].map(n => (
+          <span key={n} style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "2px 8px", background: cur.focus === n ? "#fde047" : "#fff", border: "1.5px solid #dc2626", borderRadius: 8, fontWeight: 800 }}>
+            <span style={{ fontSize: 15, color: cards[n - 1].color, lineHeight: 1 }}>{cards[n - 1].glyph}</span>
+            <span style={{ fontSize: 12, color: "#7f1d1d" }}>{t(E, "card ", "카드 ")}{n}</span>
+          </span>
+        ))}
+      </div>
+
+      {/* 지금 찾는 것 — Elsie 카드 focus 를 누가 이기나 */}
+      {cur.focus != null && (
         <div style={{
           display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-          marginBottom: 10, fontSize: 13, fontWeight: 600, color: "#92400e",
+          marginBottom: 10, fontSize: 13, fontWeight: 700, color: "#92400e", flexWrap: "wrap",
         }}>
-          <span>{t(E, "This match-up:", "이 매치업:")}</span>
-          <span style={{
-            display: "inline-flex", alignItems: "center", gap: 3,
-            padding: "2px 8px", borderRadius: 999,
-            background: "#fef3c7", border: "1px solid #f59e0b",
-          }}>
-            <span style={{ fontSize: 16, color: cards[cur.i - 1].color, lineHeight: 1 }}>{cards[cur.i - 1].glyph}</span>
-            <span>{t(E, "card ", "카드 ")}{cur.i}</span>
+          <span>🔎 {t(E, "Who beats Elsie's", "누가 Elsie 의")}</span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "2px 8px", borderRadius: 999, background: "#fef3c7", border: "1px solid #f59e0b" }}>
+            <span style={{ fontSize: 16, color: cards[cur.focus - 1].color, lineHeight: 1 }}>{cards[cur.focus - 1].glyph}</span>
+            <span>{t(E, "card ", "카드 ")}{cur.focus}</span>
           </span>
-          <span style={{ color: "#9ca3af", fontWeight: 700 }}>vs</span>
-          <span style={{
-            display: "inline-flex", alignItems: "center", gap: 3,
-            padding: "2px 8px", borderRadius: 999,
-            background: "#fef3c7", border: "1px solid #f59e0b",
-          }}>
-            <span style={{ fontSize: 16, color: cards[cur.j - 1].color, lineHeight: 1 }}>{cards[cur.j - 1].glyph}</span>
-            <span>{t(E, "card ", "카드 ")}{cur.j}</span>
-          </span>
+          <span>{t(E, "?", "를 이기나?")}</span>
         </div>
       )}
 

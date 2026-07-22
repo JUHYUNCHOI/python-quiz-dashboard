@@ -343,8 +343,8 @@ LWD
     {
       type: "reveal",
       narr: t(E,
-        "Walk the chart cell by cell. Each cell shows winner → loser. Press ▶ to step through.",
-        "차트 셀 하나씩 따라가요. 각 셀은 '이기는 카드 → 지는 카드' 표시. ▶ 눌러서 진행."),
+        "Let's solve Example 1 together — Elsie holds card 1 and card 2.  We'll read the chart in order to find who beats them.",
+        "예제 1 을 같이 풀어봐요 — Elsie 는 카드 1 과 카드 2 를 가졌어요.  차트를 순서대로 읽어 이 둘을 이기는 카드를 찾아요."),
       content: (<ChartReadingTour E={E} />),
     },
 
