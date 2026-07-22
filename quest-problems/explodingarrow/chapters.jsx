@@ -56,8 +56,8 @@ export function makeExplodingArrowCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Arrows are placed on a 2D grid, each pointing N/S/E/W. When an arrow EXPLODES, it ignites the NEXT arrow in its direction (the closest arrow in the same row/column on that side) — and that arrow then explodes too, in a chain reaction.\nGiven a start arrow, print how many arrows in total explode.",
-        "2D 격자 위에 N/S/E/W 한 방향을 가리키는 화살들이 놓여 있어요. 어떤 화살이 폭발하면, 그 방향의 다음 화살 (같은 행/열에서 그쪽 방향에 있는 가장 가까운 화살) 을 점화해요 — 그 화살도 폭발하며 연쇄가 이어져요.\n시작 화살이 주어졌을 때, 결국 폭발하는 화살의 총 개수를 출력해요."),
+        "Arrows are placed on a 2D grid, each pointing right/left/up/down (input letters R/L/U/D). When an arrow EXPLODES, it ignites the NEXT arrow in its direction (the closest arrow in the same row/column on that side) — and that arrow then explodes too, in a chain reaction.\nStarting from the first arrow, print how many arrows explode in total.",
+        "2D 격자 위에 오른쪽/왼쪽/위/아래 (입력 글자 R/L/U/D) 한 방향을 가리키는 화살들이 놓여 있어요. 어떤 화살이 폭발하면, 그 방향의 다음 화살 (같은 행/열에서 그쪽 방향에 있는 가장 가까운 화살) 을 점화해요 — 그 화살도 폭발하며 연쇄가 이어져요.\n첫 번째 화살부터 시작할 때, 결국 폭발하는 화살의 총 개수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>

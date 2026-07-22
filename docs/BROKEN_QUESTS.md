@@ -15,18 +15,19 @@
 - 목록 렌더 필터: `s.problems.filter(p => !p.broken && canSeeProblem(p.id))`.
 - **삭제 아님** — 항목·라우트(`/quest/<id>`)·튜토리얼 콘텐츠는 그대로. 선생님은 URL 로 직접 열어 고칠 수 있음.
 
-## 숨긴 quest 9개 (= 고쳐야 할 목록)
-| id | 제목 | 출처 |
-|---|---|---|
-| mcc15equation | Complete the Equation | MCC 2015 P2 |
-| mcc15bahasaf | Bahasa F | MCC 2015 P3 |
-| mcc19palindrome | Palindrome | MCC 2019 P6 |
-| mcc22grammar | Grammar | MCC 2022 P1 |
-| mcc22aliens | Aliens | MCC 2022 P2 |
-| mcc22maze | Maze | MCC 2022 P3 |
-| mcc22birthday | Cats' Birthday | MCC 2022 P4 |
-| mcc22cardshark | Card Shark | MCC 2022 P5 |
-| mcc22lamp | Lamp | MCC 2022 P6 |
+## 숨긴 quest 10개 (= 고쳐야 할 목록)
+| id | 제목 | 출처 | 왜 |
+|---|---|---|---|
+| mcc15equation | Complete the Equation | MCC 2015 P2 | C++ 자동번역 스텁 |
+| mcc15bahasaf | Bahasa F | MCC 2015 P3 | C++ 자동번역 스텁 |
+| mcc19palindrome | Palindrome | MCC 2019 P6 | C++ 자동번역 스텁 |
+| mcc22grammar | Grammar | MCC 2022 P1 | C++ 자동번역 스텁 |
+| mcc22aliens | Aliens | MCC 2022 P2 | C++ 자동번역 스텁 |
+| mcc22maze | Maze | MCC 2022 P3 | C++ 자동번역 스텁 |
+| mcc22birthday | Cats' Birthday | MCC 2022 P4 | C++ 자동번역 스텁 |
+| mcc22cardshark | Card Shark | MCC 2022 P5 | C++ 자동번역 스텁 |
+| mcc22lamp | Lamp | MCC 2022 P6 | C++ 자동번역 스텁 |
+| **subseqmedian** | Subseq Median Sum | MCC 2025 P6 | **Python 풀이 자체가 오답** (샘플 14인데 21 출력, 자기 답 박스와도 모순). C++ 는 0 만 출력. P6(매우 어려움)라 정확·효율 재작성 필요. 숨김 처리: 2026-07-22 |
 
 ## 고쳐서 다시 켜는 법
 1. 해당 `quest-problems/<id>/components.jsx` 의 C++ 풀이(`*_CPP` 상수)를 **제대로 작성** (배운 문법만, 람다 helper 금지).

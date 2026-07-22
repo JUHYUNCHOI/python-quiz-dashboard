@@ -179,7 +179,7 @@ const SECTIONS: Section[] = [
       { id: "tricks", emoji: "🎃", title: "Trick or Treat", sub: "MCC 2025 P3" },
       { id: "word", emoji: "📝", title: "Word Distance", sub: "MCC 2025 P4" },
       { id: "reach", emoji: "🐉", title: "Reachability Queries", sub: "MCC 2025 P5" },
-      { id: "subseqmedian", emoji: "📊", title: "Subseq Median Sum", sub: "MCC 2025 P6" },
+      { broken: true, id: "subseqmedian", emoji: "📊", title: "Subseq Median Sum", sub: "MCC 2025 P6" },
       { id: "cornercover", emoji: "📐", title: "Corner Cover", sub: "MCC 2024 P1" },
       { id: "gifts", emoji: "🎁", title: "Gifts", sub: "MCC 2024 P2" },
       { id: "magicorbs", emoji: "🔮", title: "Magical Orbs", sub: "MCC 2024 P3" },
