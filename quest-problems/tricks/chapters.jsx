@@ -171,7 +171,67 @@ export function makeTricksCh1(E) {
         );
       })(),
     },
-    // 1-3: Quiz — valid selection
+    // 1-3: 입출력 형식 + 제약 (MCC 2025 P3 원문 그대로)
+    // 봉지 개념을 잡은 직후 "그래서 데이터가 어떻게 들어오는데?" 를 못박아 준다.
+    // (선생님 2026-07-22: quest 검토 — fans 처럼 입출력이 앞에 없었음)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now — how does the data arrive?\nFirst N (how many bags), then N lines: the 2 candy colours in each bag.\nOutput: how many valid ways to pick 3 bags.",
+        "그럼 데이터는 어떻게 들어올까?\n먼저 N (봉지 개수), 그 다음 N 줄에 각 봉지의 두 사탕 색.\n출력: 3봉지를 성공으로 고르는 방법이 몇 가지인지."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(first line) — number of bags", "(첫 줄) — 봉지 개수")}</span></div>
+              <div style={{ marginTop: 6, paddingLeft: 10, borderLeft: `2px solid #fde68a` }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>a<sub>i</sub> b<sub>i</sub></span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the 2 candy colours in bag i", "— i번 봉지 두 사탕의 색")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "A single integer — the number of valid ways to choose 3 bags.",
+                  "정수 하나 — 3봉지를 고르는 성공 방법의 개수.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 200,000 (= 2 × 10⁵)</div>
+              <div>1 ≤ a<sub>i</sub>, b<sub>i</sub> ≤ 1,000,000,000 (= 10⁹)</div>
+            </div>
+          </div>
+          {/* 샘플 */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.55, color: "#f8fafc" }}>
+                <div>9</div>
+                <div>1 2</div><div>1 3</div><div>2 1</div><div>1 1</div><div>2 2</div>
+                <div>1 3</div><div>3 1</div><div>1 1</div><div>1 1</div>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac" }}>
+                <div>7</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
+            {t(E, "There are exactly 7 ways to pick 3 bags whose 6 candies split into two colours, 3 each.",
+                "6개 사탕이 두 색으로 3개씩 나뉘게 3봉지를 고르는 방법이 딱 7가지예요.")}
+          </div>
+        </div>),
+    },
+    // 1-4: Quiz — valid selection
     {
       type: "quiz",
       narr: t(E,
