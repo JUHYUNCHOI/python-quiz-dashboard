@@ -626,6 +626,11 @@ export function DeepAuditSim({ E }) {
           const r0 = revealed > slot0;
           const r1 = revealed > slot1;
           const isAuditing = revealed === slot0 || revealed === slot1 + 1 - 1;
+          // 이 봉지가 지금 색 쌍 (x,y) 기준 어떤 타입인지 — 탭 라벨(A/B/C)과 연결
+          const bagType = (a === b)
+            ? (a === cur.x ? "A" : a === cur.y ? "B" : "?")
+            : (((a === cur.x && b === cur.y) || (a === cur.y && b === cur.x)) ? "C" : "?");
+          const typeColor = bagType === "A" ? "#f97316" : bagType === "B" ? "#a855f7" : bagType === "C" ? "#22c55e" : "#94a3b8";
           return (
             <div key={bi} style={{
               background: "#fff7ed", border: `1px solid ${ABd}`, borderRadius: 12,
@@ -633,6 +638,12 @@ export function DeepAuditSim({ E }) {
               boxShadow: (revealed > slot0 && revealed <= slot1 + 1) ? `0 0 14px ${A}55` : "none",
               transition: "box-shadow .3s",
             }}>
+              <div style={{
+                display: "inline-block", fontSize: 10.5, fontWeight: 800, color: "#fff",
+                background: typeColor, borderRadius: 999, padding: "1px 8px", marginBottom: 5,
+              }}>
+                {bagType === "?" ? t(E, "other color", "다른 색") : t(E, `${bagType}-bag`, `${bagType}봉지`)}
+              </div>
               <div style={{ display: "flex", gap: 5, justifyContent: "center", marginBottom: 4 }}>
                 <div style={{
                   transform: r0 ? "scale(1)" : "scale(0.7)",
