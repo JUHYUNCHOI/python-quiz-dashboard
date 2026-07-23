@@ -183,6 +183,22 @@ export function TripletEnumSimulator({ E }) {
 
       {s.kind === "scale" && (
         <div style={{ marginBottom: 10 }}>
+          {/* Bridge: abba(4 triplets) → length-N string(~N³/6).  Without this the
+              jump from "4" to 1.6e14 is a mystery. (선생님 2026-07-22: 시뮬 이해 안 감) */}
+          <div style={{
+            background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 8,
+            padding: "9px 12px", marginBottom: 10, fontSize: 11.5, lineHeight: 1.65,
+            color: "#1f2937", wordBreak: "keep-all",
+          }}>
+            🐌 <b style={{ color: "#dc2626" }}>{t(E, "But on a big string?", "근데 큰 문자열이면?")}</b>{" "}
+            {t(E,
+              `"abba" (N=4) had only 4 triplets. A length-N string has about N³/6 of them — so the count EXPLODES as N grows.`,
+              `"abba"(N=4)는 (i,j,k) 조합이 4 개뿐이었죠. 길이 N 이면 ≈ N³/6 개 — N 이 커질수록 조합 수가 폭발해요.`)}
+            <div style={{ marginTop: 4, color: C.dim }}>
+              {t(E, "Each bar = how many (i,j,k) triplets you'd check for that N:",
+                    "아래 막대 = 그 N 일 때 확인해야 할 (i,j,k) 조합 수:")}
+            </div>
+          </div>
           {[
             { N: 4,    ops: 4,         okLabel: "✓" },
             { N: 100,  ops: 1.6e5,     okLabel: "✓" },
@@ -208,6 +224,13 @@ export function TripletEnumSimulator({ E }) {
               </div>
             );
           })}
+          <div style={{
+            marginTop: 8, fontSize: 10.5, color: C.dim, lineHeight: 1.6, wordBreak: "keep-all", textAlign: "center",
+          }}>
+            {t(E,
+              "Rule of thumb: ~100M (1e8) ops fit in the time limit.  ✓ fine · △ risky · ✗ way too slow.  And this is PER query — with many queries, brute is hopeless → we need a faster idea.",
+              "대략 1 억(1e8) 연산까지가 제한 시간 안.  ✓ 여유 · △ 위험 · ✗ 한참 초과.  게다가 이건 쿼리 1 개당 — 쿼리가 많으면 브루트는 가망 없음 → 더 빠른 방법이 필요해요.")}
+          </div>
         </div>
       )}
 
