@@ -319,104 +319,19 @@ abcabbacabac
 export function makeMooin3Ch2(E, lang = "py") {
   const sections = getMooin3Sections(E);
 
-  /* [결-a₁] — Level 1: just translate the problem to code.  Three
-     nested for loops over (i, j, k).  No insight — student writes
-     this straight from reading the problem.  Slow but correct.
-     Works for tiny inputs; obviously won't scale.  The "natural
-     first code" the standard demands.  Level 2 (fix-j) comes
-     after as a small refinement. */
-  const LEVEL1_PY = [
-    "N, Q = map(int, input().split())",
-    "s = input().strip()",
-    "",
-    "for q in range(Q):",
-    "    l, r = map(int, input().split())",
-    "    l -= 1",
-    "    r -= 1",
-    "    best = -1",
-    "    # Try every (i, j, k) inside the window — straight from the rules.",
-    "    for i in range(l, r + 1):",
-    "        for j in range(i + 1, r + 1):",
-    "            for k in range(j + 1, r + 1):",
-    "                if s[i] != s[j] and s[j] == s[k]:",
-    "                    val = (j - i) * (k - j)",
-    "                    if val > best:",
-    "                        best = val",
-    "    print(best)",
-  ];
-  const LEVEL1_CPP = [
-    "#include <iostream>",
-    "#include <string>",
-    "using namespace std;",
-    "",
-    "int main() {",
-    "    int N, Q;",
-    "    cin >> N >> Q;",
-    "    string s;",
-    "    cin >> s;",
-    "    for (int q = 0; q < Q; q++) {",
-    "        int l, r;",
-    "        cin >> l >> r;",
-    "        l--;",
-    "        r--;",
-    "        long long best = -1;",
-    "        // Try every (i, j, k) inside the window.",
-    "        for (int i = l; i <= r; i++) {",
-    "            for (int j = i + 1; j <= r; j++) {",
-    "                for (int k = j + 1; k <= r; k++) {",
-    "                    if (s[i] != s[j] && s[j] == s[k]) {",
-    "                        long long val = (long long)(j - i) * (k - j);",
-    "                        if (val > best) {",
-    "                            best = val;",
-    "                        }",
-    "                    }",
-    "                }",
-    "            }",
-    "        }",
-    "        cout << best << '\\n';",
-    "    }",
-    "    return 0;",
-    "}",
-  ];
-  const level1Section = {
-    label: t(E, "1️⃣ First code — try every (i, j, k)",
-                "1️⃣ 첫 코드 — 모든 (i, j, k) 시도"),
-    color: "#f59e0b",
-    py: LEVEL1_PY,
-    cpp: LEVEL1_CPP,
-    why: [
-      t(E,
-        "Straight from the problem definition: walk every triplet (i, j, k) inside the window, check the moo rule, track the best score.",
-        "문제 정의 그대로: 윈도우 안 모든 (i, j, k) 돌면서 moo 규칙 확인 + 최고 점수 추적."),
-      t(E,
-        "Three nested for-loops — outermost i, then j > i, then k > j.  No insight, just brute enumeration.",
-        "3 중 for — 바깥 i, 그 다음 j > i, 그 다음 k > j. 통찰 없이 그냥 다 시도."),
-      t(E,
-        "Works for tiny inputs (N ≤ ~30).  For real constraints (N up to 10⁵) it explodes — three loops over N each = O(N³) per query.  Next: a small refinement.",
-        "작은 입력 (N ≤ ~30) 엔 OK. 실제 제약 (N 최대 10⁵) 에선 폭발 — N 짜리 for 가 3 겹 = 쿼리당 O(N³). 다음: 작은 개선."),
-    ],
-  };
+  // Level 1(3중 for 브루트 코드)는 제거 — 문제 chapter 가 이미 브루트 개념·한계를
+  // 다뤘으므로 코드 chapter 에서 재탕하지 않음 (선생님 2026-07-23).
 
   return [
-    /* [결-a₁] — Level 1: try-every-triplet code (natural first code) */
-    {
-      type: "reveal",
-      label: level1Section.label,
-      preview: level1Section.why[0],
-      narr: t(E,
-        "Worked example clear — now write the code that just *does what the problem says*.  Three for loops.",
-        "예제 따라가기 끝났으니 코드로. 문제 그대로 옮기면 — 3 중 for."),
-      content: (<CodeSectionView section={level1Section} lang={lang} E={E} />),
-    },
-
-    /* [결-a sim] — MooTraceSim shows the fix-j idea right before the
-       student sees the Level 2 (refined) brute code. */
+    /* [결-a sim] — 문제 chapter 에서 브루트(모든 i,j,k)+한계를 이미 봤으니, 코드
+       chapter 는 브루트 재탕 없이 바로 '개선(가운데 j 고정)' 으로 (선생님 2026-07-23:
+       "페이지 1에서 이미 브루트 설명했잖아 — 뒤에서 또 나오지"). */
     {
       type: "reveal",
       label: t(E, "Idea: fix the middle j", "아이디어: 중간 j 고정"),
       narr: t(E,
-        "Three for loops — that's N × N × N work per query.  Even N = 100 means 10⁶ checks.  What if we fix the middle j and only search for i and k?  Drag j around and see.",
-        "3 중 for — 쿼리당 N × N × N. N = 100 만 돼도 100 만 번. 가운데 j 만 고정하고 i, k 따로 찾으면 어떻게 될까? j 드래그하면서 봐."),
+        "We already saw brute (every i, j, k) is N³ per query — too slow.  The fix: pin the middle j, then search once for the best i and once for the best k.  Drag j around and see.",
+        "브루트(모든 i, j, k)가 쿼리당 N³ 이라 느린 건 이미 봤죠.  개선은 — 가운데 j 를 고정하고, 최고의 i·k 를 한 번씩만 찾기.  j 드래그하면서 봐요."),
       content: (<MooTraceSimulator E={E} />),
     },
 
@@ -440,8 +355,8 @@ export function makeMooin3Ch2(E, lang = "py") {
       label: sec.label,
       preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
       narr: t(E,
-        "Brute solves the problem correctly — but how big can N actually get?  Let's count operations.",
-        "Brute 는 문제를 *정확히* 풀어요 — 근데 N 이 얼마나 커질 수 있지? 연산량을 세어 봐요."),
+        "The fix-j version solves it correctly — but how big can N get?  Let's count operations.",
+        "j 고정 버전은 문제를 *정확히* 풀어요 — 근데 N 이 얼마나 커질 수 있지? 연산량을 세어 봐요."),
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
 

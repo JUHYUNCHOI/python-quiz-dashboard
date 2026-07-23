@@ -1320,7 +1320,7 @@ export function getMooin3Sections(E) {
       ],
     },
     {
-      label: t(E, "🎯 4. Full Code (brute)", "🎯 4. 전체 코드 (brute)"),
+      label: t(E, "🎯 4. Full Code (fix-j, O(N²))", "🎯 4. 전체 코드 (j 고정, O(N²))"),
       color: "#7c3aed",
       py: M3_FULL_PY, cpp: M3_FULL_CPP,
       why: [
