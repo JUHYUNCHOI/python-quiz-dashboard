@@ -313,11 +313,14 @@ export function MooTraceSimulator({ E }) {
     const score = (left >= 0 && right >= 0) ? (j - left) * (right - j) : null;
     perJ.push({ j, sj, left, right, score });
   }
+  // 각 j 를 두 박자로 (선생님 2026-07-22: "스텝으로 안 하고 뛰어넘었다" — i·k 가 한꺼번에
+  // 튀어나오지 않게): ① 왼쪽 스캔 → left_i, ② 오른쪽 스캔 → right_k → 점수.
   const trace = [{ kind: "init", revealed: 0, best: -1 }];
   let best = -1;
   perJ.forEach((row, i) => {
+    trace.push({ kind: "step", row, phase: "left", revealed: i, best });
     if (row.score !== null && row.score > best) best = row.score;
-    trace.push({ kind: "step", row, revealed: i + 1, best });
+    trace.push({ kind: "step", row, phase: "right", revealed: i + 1, best });
   });
   trace.push({ kind: "final", revealed: perJ.length, best });
 
@@ -338,17 +341,15 @@ export function MooTraceSimulator({ E }) {
     if (s.kind !== "step") return "outside";
     if (i === s.row.j) return "j";
     if (i === s.row.left) return "left_i";
-    if (i === s.row.right) return "right_k";
     // Left scan walks l → j-1, stopping at first different letter.
-    // If left found: scanned-and-skipped = [l, s.row.left - 1].
-    // If NOT found: every position [l, j-1] was scanned, all skipped.
     const leftScanEnd = s.row.left >= 0 ? s.row.left : s.row.j;
     if (i >= l && i < leftScanEnd) return "skipped_left";
-    // Right scan walks r → j+1, stopping at first same letter.
-    // If right found: scanned-and-skipped = [s.row.right + 1, r].
-    // If NOT found: every position [j+1, r] was scanned, all skipped.
-    const rightScanStart = s.row.right >= 0 ? s.row.right : s.row.j;
-    if (i > rightScanStart && i <= r) return "skipped_right";
+    // right_k / right footprints only appear in the 2nd beat (phase "right").
+    if (s.phase === "right") {
+      if (i === s.row.right) return "right_k";
+      const rightScanStart = s.row.right >= 0 ? s.row.right : s.row.j;
+      if (i > rightScanStart && i <= r) return "skipped_right";
+    }
     return "outside";
   };
   const cellStyle = (i) => {
@@ -388,8 +389,8 @@ export function MooTraceSimulator({ E }) {
   // Anchored on the OUTSIDE end of each scan so the student sees "scan starts here, lands there".
   const arrowFor = (i) => {
     if (s.kind !== "step") return null;
-    if (i === l && (s.row.left >= 0 || s.row.left === -1)) return "▶";  // left scan start
-    if (i === r && (s.row.right >= 0 || s.row.right === -1)) return "◀";  // right scan start
+    if (i === l) return "▶";  // left scan start (both beats)
+    if (i === r && s.phase === "right") return "◀";  // right scan start (2nd beat only)
     return null;
   };
 
@@ -403,6 +404,20 @@ export function MooTraceSimulator({ E }) {
         title={t(E, `s = "${str}"`, `s = "${str}"`)}
         subtitle={`(${safe + 1} / ${trace.length})`}
       />
+
+      {/* Two-beat caption: ① scan left → i, ② scan right → k → score. */}
+      {s.kind === "step" && (
+        <div style={{
+          textAlign: "center", fontSize: 12, fontWeight: 700, marginBottom: 12, wordBreak: "keep-all",
+          color: s.phase === "left" ? "#dc2626" : "#16a34a",
+        }}>
+          {s.phase === "left"
+            ? t(E, "① Scan LEFT from the edge → first letter different from j = i (red).",
+                  "① 왼쪽 끝에서 스캔 → j 와 처음으로 다른 글자 = i (빨강).")
+            : t(E, "② Scan RIGHT from the edge → first letter same as j = k (green).  Score = (j−i)×(k−j).",
+                  "② 오른쪽 끝에서 스캔 → j 와 처음으로 같은 글자 = k (초록).  점수 = (j−i)×(k−j).")}
+        </div>
+      )}
 
       {/* No legend. The cells below carry all the meaning visually:
           color  → role (yellow=j, red=left_i, green=right_k)
