@@ -1,6 +1,8 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
-//   Python: 3/11 (TLE many cases, O(N) per query)
-//   C++:    4/11 (TLE - brute O(N^2))
+// 🔒 USACO_VERIFIED (2026-05-13; fast code 재검증 2026-07-23)
+//   Python (fast = 포물선+이분탐색, 지금 quest 코드): 6/11 (1-6 PASS, 7-11 TLE).
+//     알고리즘 최적(O(26·Q·logN))·정답이지만 Python 손짜 이분탐색 while 오버헤드로
+//     제일 큰 케이스 시간초과 — Bronze 제약(N,Q≤1e5)에 Python 태생 한계. (구 brute 3/11)
+//   C++ (fast): 미제출 — 같은 알고리즘이라 통과 예상, 재제출로 확인 필요. (구 brute 4/11)
 //   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 
