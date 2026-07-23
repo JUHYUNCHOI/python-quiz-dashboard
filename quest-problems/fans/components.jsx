@@ -76,8 +76,6 @@ function buildSimSteps(counts, E) {
 export function FanSimulator({ E }) {
   const [counts, setCounts] = useState([3, 7, 2]);
   const [step, setStep] = useState(0);
-  const timerRef = useRef(null);
-  const [playing, setPlaying] = useState(false);
 
   const total = counts.reduce((a, b) => a + b, 0);
   const maxC = Math.max(...counts);
@@ -90,9 +88,7 @@ export function FanSimulator({ E }) {
   const s = allSteps[cur];
   const maxSteps = allSteps.length;
 
-  const stopAnim = () => { if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; } };
-
-  const resetSim = () => { setStep(0); setPlaying(false); stopAnim(); };
+  const resetSim = () => { setStep(0); };
 
   // Reset when counts change
   const countsKey = counts.join(",");
@@ -101,21 +97,7 @@ export function FanSimulator({ E }) {
     if (prevKeyRef.current !== countsKey) { prevKeyRef.current = countsKey; resetSim(); }
   }, [countsKey]);
 
-  useEffect(() => () => stopAnim(), []);
-
   const nextStep = () => { if (step < maxSteps - 1) setStep(p => p + 1); };
-
-  const autoPlay = () => {
-    if (playing) { setPlaying(false); stopAnim(); return; }
-    setPlaying(true);
-    setStep(0);
-    let st = 0;
-    timerRef.current = setInterval(() => {
-      st++;
-      if (st >= maxSteps - 1) { clearInterval(timerRef.current); timerRef.current = null; setPlaying(false); }
-      setStep(st);
-    }, 400);
-  };
 
   const loadPreset = (p) => setCounts([...p.counts]);
   const adjustCount = (idx, delta) => { const nc = [...counts]; nc[idx] = Math.max(0, Math.min(20, nc[idx] + delta)); setCounts(nc); };
@@ -283,19 +265,13 @@ export function FanSimulator({ E }) {
       {/* Controls */}
       <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 8 }}>
         {!s.done ? (
-          <>
-            <button onClick={nextStep} disabled={playing} style={{
-              padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-              border: "none", cursor: playing ? "default" : "pointer",
-              color: "#fff", opacity: playing ? 0.5 : 1,
-              background: `linear-gradient(135deg,#b45309,${A})`,
-              boxShadow: "0 3px 12px rgba(217,119,6,.3)",
-            }}>▶ {E ? "Next" : "다음"}</button>
-            <button onClick={autoPlay} style={{
-              padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-              border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
-            }}>{playing ? "⏸" : "⏭"} {E ? (playing ? "Pause" : "Auto") : (playing ? "정지" : "자동")}</button>
-          </>
+          <button onClick={nextStep} style={{
+            padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: "none", cursor: "pointer",
+            color: "#fff",
+            background: `linear-gradient(135deg,#b45309,${A})`,
+            boxShadow: "0 3px 12px rgba(217,119,6,.3)",
+          }}>▶ {E ? "Next" : "다음"}</button>
         ) : (
           <button onClick={resetSim} style={{
             padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
@@ -376,8 +352,6 @@ function buildGreedySteps(counts) {
 export function FanPlacementViz({ E }) {
   const [caseIdx, setCaseIdx] = useState(0);
   const [step, setStep] = useState(0);
-  const timerRef = useRef(null);
-  const [playing, setPlaying] = useState(false);
 
   const tc = PLACEMENT_CASES[caseIdx];
   const allSteps = buildGreedySteps(tc.counts);
@@ -392,35 +366,13 @@ export function FanPlacementViz({ E }) {
   const switchCase = (idx) => {
     setCaseIdx(idx);
     setStep(0);
-    setPlaying(false);
-    if (timerRef.current) clearInterval(timerRef.current);
   };
 
   const nextStep = () => { if (step < maxSteps - 1) setStep(p => p + 1); };
 
   const reset = () => {
     setStep(0);
-    setPlaying(false);
-    if (timerRef.current) clearInterval(timerRef.current);
   };
-
-  const autoPlay = () => {
-    if (playing) {
-      setPlaying(false);
-      if (timerRef.current) clearInterval(timerRef.current);
-      return;
-    }
-    setPlaying(true);
-    setStep(0);
-    let st = 0;
-    timerRef.current = setInterval(() => {
-      st++;
-      if (st >= maxSteps - 1) { clearInterval(timerRef.current); setPlaying(false); }
-      setStep(st);
-    }, 450);
-  };
-
-  useEffect(() => () => { if (timerRef.current) clearInterval(timerRef.current); }, []);
 
   const stickW = 22, stickH = 36;
 
@@ -570,20 +522,13 @@ export function FanPlacementViz({ E }) {
       {/* Controls */}
       <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 7 }}>
         {!s.done ? (
-          <>
-            <button onClick={nextStep} disabled={playing} style={{
-              padding: "7px 16px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-              border: "none", cursor: playing ? "default" : "pointer",
-              color: "#fff", opacity: playing ? 0.5 : 1,
-              background: `linear-gradient(135deg,#b45309,${A})`,
-              boxShadow: "0 3px 12px rgba(217,119,6,.3)",
-            }}>▶ {E ? "Next" : "다음"}</button>
-            <button onClick={autoPlay} style={{
-              padding: "7px 12px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-              border: `1px solid ${ABd}`, background: ABg,
-              color: A, cursor: "pointer",
-            }}>{playing ? "⏸" : "⏭"} {E ? (playing ? "Pause" : "Auto") : (playing ? "정지" : "자동")}</button>
-          </>
+          <button onClick={nextStep} style={{
+            padding: "7px 16px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: "none", cursor: "pointer",
+            color: "#fff",
+            background: `linear-gradient(135deg,#b45309,${A})`,
+            boxShadow: "0 3px 12px rgba(217,119,6,.3)",
+          }}>▶ {E ? "Next" : "다음"}</button>
         ) : (
           <button onClick={reset} style={{
             padding: "7px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,

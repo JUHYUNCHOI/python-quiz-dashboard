@@ -198,28 +198,11 @@ const INITIAL_GAINS = ALL_LETTERS.map(c => {
 
 export function GreedySim({ E }) {
   const [step, setStep] = useState(-1); // -1 = not started
-  const [playing, setPlaying] = useState(false);
-  const timerRef = useRef(null);
 
   const done = step >= M;
 
-  const stopAnim = () => { if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; } };
-  useEffect(() => () => stopAnim(), []);
-
   const next = () => { if (step < M) setStep(s => s + 1); };
-  const reset = () => { setStep(-1); setPlaying(false); stopAnim(); };
-
-  const autoPlay = () => {
-    if (playing) { setPlaying(false); stopAnim(); return; }
-    setPlaying(true);
-    setStep(-1);
-    let idx = -1;
-    timerRef.current = setInterval(() => {
-      idx++;
-      if (idx > M) { stopAnim(); setPlaying(false); return; }
-      setStep(idx);
-    }, 1200);
-  };
+  const reset = () => { setStep(-1); };
 
   // Current step data
   const gs = step >= 0 && step < M ? GREEDY_STEPS[step] : null;
@@ -403,19 +386,13 @@ export function GreedySim({ E }) {
       {/* Controls */}
       <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
         {!done ? (
-          <>
-            <button onClick={next} disabled={playing} style={{
-              padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-              border: "none", cursor: playing ? "default" : "pointer",
-              color: "#fff", opacity: playing ? 0.5 : 1,
-              background: `linear-gradient(135deg,#1d4ed8,${A})`,
-              boxShadow: "0 3px 12px rgba(59,130,246,.3)",
-            }}>▶ {t(E, "Next slot", "다음 칸")}</button>
-            <button onClick={autoPlay} style={{
-              padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-              border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
-            }}>{playing ? "⏸" : "⏭"} {t(E, playing ? "Pause" : "Auto", playing ? "정지" : "자동")}</button>
-          </>
+          <button onClick={next} style={{
+            padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: "none", cursor: "pointer",
+            color: "#fff", opacity: 1,
+            background: `linear-gradient(135deg,#1d4ed8,${A})`,
+            boxShadow: "0 3px 12px rgba(59,130,246,.3)",
+          }}>▶ {t(E, "Next slot", "다음 칸")}</button>
         ) : (
           <button onClick={reset} style={{
             padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,

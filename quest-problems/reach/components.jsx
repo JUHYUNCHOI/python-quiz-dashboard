@@ -169,24 +169,6 @@ export function GraphViz({ E }) {
    ═══════════════════════════════════════════════════════════════ */
 export function ReachSim({ E }) {
   const [K, setK] = useState(6);
-  const [playing, setPlaying] = useState(false);
-  const timerRef = useRef(null);
-
-  const QUERIES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 18, 20, 25, 30];
-
-  useEffect(() => () => { if (timerRef.current) clearInterval(timerRef.current); }, []);
-
-  const autoPlay = () => {
-    if (playing) { setPlaying(false); if (timerRef.current) clearInterval(timerRef.current); return; }
-    setPlaying(true);
-    let idx = 0;
-    setK(QUERIES[0]);
-    timerRef.current = setInterval(() => {
-      idx++;
-      if (idx >= QUERIES.length) { clearInterval(timerRef.current); setPlaying(false); return; }
-      setK(QUERIES[idx]);
-    }, 600);
-  };
 
   const count = reachableCount(K);
 
@@ -295,14 +277,6 @@ export function ReachSim({ E }) {
       }}>
         K={K}: <span style={{ color: "#fbbf24", fontWeight: 700, fontSize: 16 }}>{count}</span>
         {t(E, " cities reachable", "개 도시 도달 가능")}
-      </div>
-
-      {/* Auto play */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 8 }}>
-        <button onClick={autoPlay} style={{
-          padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600,
-          border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
-        }}>{playing ? "⏸" : "⏭"} {t(E, playing ? "Pause" : "Auto", playing ? "정지" : "자동")}</button>
       </div>
     </div>
   );

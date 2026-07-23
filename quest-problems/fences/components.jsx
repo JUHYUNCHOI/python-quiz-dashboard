@@ -506,8 +506,6 @@ const VIZ_CODE = [
 
 export function RowColumnFillViz({ E }) {
   const [step, setStep] = useState(0);
-  const [autoPlay, setAutoPlay] = useState(false);
-  const timerRef = useRef(null);
   const [flashCol, setFlashCol] = useState(-1);
 
   const cur = ALL_STEPS[step];
@@ -528,25 +526,8 @@ export function RowColumnFillViz({ E }) {
     setFlashCol(-1);
   }, [step]);
 
-  // Auto-play
-  useEffect(() => {
-    if (!autoPlay || isDone) {
-      if (timerRef.current) clearInterval(timerRef.current);
-      setAutoPlay(false);
-      return;
-    }
-    timerRef.current = setInterval(() => {
-      setStep(s => {
-        if (s >= ALL_STEPS.length - 1) { setAutoPlay(false); return s; }
-        return s + 1;
-      });
-    }, 500);
-    return () => clearInterval(timerRef.current);
-  }, [autoPlay, isDone]);
-
   const next = () => { if (!isDone) setStep(s => s + 1); };
-  const reset = () => { setStep(0); setAutoPlay(false); setFlashCol(-1); };
-  const play = () => { if (!isDone) setAutoPlay(true); };
+  const reset = () => { setStep(0); setFlashCol(-1); };
 
   // Min value for final highlight
   const finalMin = cur.type === "done" ? cur.minVal : null;
@@ -785,19 +766,6 @@ export function RowColumnFillViz({ E }) {
               background: "linear-gradient(135deg,#047857,#059669)",
               boxShadow: "0 3px 12px rgba(5,150,105,.3)",
             }}>▶ {E ? "Next step" : "다음 스텝"}</button>
-            {!autoPlay ? (
-              <button onClick={play} style={{
-                padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 600,
-                border: `1.5px solid ${ABd}`, background: ABg,
-                color: A, cursor: "pointer",
-              }}>⏭ {E ? "Auto" : "자동"}</button>
-            ) : (
-              <button onClick={() => setAutoPlay(false)} style={{
-                padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 600,
-                border: "1.5px solid #fca5a5", background: "#fee2e2",
-                color: "#dc2626", cursor: "pointer",
-              }}>⏸ {E ? "Pause" : "멈춤"}</button>
-            )}
           </>
         ) : (
           <button onClick={reset} style={{
