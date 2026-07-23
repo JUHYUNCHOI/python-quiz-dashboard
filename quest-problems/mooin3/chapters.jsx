@@ -293,8 +293,8 @@ abcabbacabac
       type: "reveal",
       label: t(E, "Worked example", "풀이 예제"),
       narr: t(E,
-        "Try the rule on \"abcabbc\".  We'll walk a few key (i, j, k) — a fail, then moos that get bigger as the picks spread — and find the MAX.",
-        "\"abcabbc\" 로 규칙을 적용해 보자. 대표 (i, j, k) 몇 개를 걸으며 — 실패 하나, 그리고 픽이 벌어질수록 커지는 moo 들 — 최대 점수를 찾자."),
+        "Try the rule on \"abcabbc\", in order — (1,2,3), (1,2,4), (1,2,5)… sliding k right.  A moo scores more as k moves farther.  (All 35 triplets are summed up below.)",
+        "\"abcabbc\" 로 차례대로 — (1,2,3), (1,2,4), (1,2,5)… k 를 오른쪽으로 밀며 확인.  moo 면 k 가 멀수록 점수 큼.  (전체 35 개 결과는 아래에.)"),
       content: (<TripletEnumSimulator E={E} />),
     },
 

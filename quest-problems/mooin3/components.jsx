@@ -50,9 +50,10 @@ export function TripletEnumSimulator({ E }) {
   let best = -1;
   validMoos.forEach(t => { if (t.score > best) best = t.score; });
 
-  // Curated walk (0-indexed): (0,1,2) fail · (3,4,5) tight moo=1 · (0,4,5) spread=4 · (0,2,6) widest=8⭐.
-  const pick = (i, j, k) => allTrips.find(t => t.i === i && t.j === j && t.k === k);
-  const walk = [pick(0, 1, 2), pick(3, 4, 5), pick(0, 4, 5), pick(0, 2, 6)];
+  // Sequential walk (선생님 2026-07-22: "점프하지 말고 1,2,3 다음 1,2,4 처럼 차례로").
+  // 첫 그룹만: i=1·j=2 고정, k 를 3→7 로 밀며 (1,2,3)…(1,2,7).  moo 2 개 나옴(점수 3→4,
+  // k 가 오른쪽으로 갈수록 큼).  나머지 i·j 조합(총 35)은 verdict 가 요약(최대 8⭐).
+  const walk = allTrips.slice(0, 5);
   const trace = [{ kind: "intro" }, ...walk.map((t, idx) => ({ kind: "step", t, idx })), { kind: "verdict" }, { kind: "scale" }];
   const ts = useTraceStep(trace);
   const safe = ts.safe;
@@ -294,12 +295,13 @@ export function TripletEnumSimulator({ E }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MooTraceSimulator — interactive per-j walk on s = "abbab".
+   MooTraceSimulator — interactive per-j walk on s = "abcabbc".
    Press ▶ to scan one middle position j at a time, marking
    leftmost-different i (red), rightmost-same k (green), score.
+   (선생님 2026-07-22: 브루트 시뮬과 같은 예제로 통일 → abcabbc.)
    ═══════════════════════════════════════════════════════════════ */
 export function MooTraceSimulator({ E }) {
-  const str = "abbab";
+  const str = "abcabbc";
   const l = 0, r = str.length - 1;
   const perJ = [];
   for (let j = l + 1; j < r; j++) {
