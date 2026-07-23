@@ -285,15 +285,15 @@ abcabbacabac
         </div>),
     },
 
-    /* [전] — Worked example.  TripletEnumSim walks "abba" through
-       every (i, j, k), showing rule + score in action.  Tiny string
-       so the student sees the full picture without intimidation. */
+    /* [전] — Worked example.  TripletEnumSim walks "amoom" through
+       every (i, j, k) — 10 triplets, 3 valid moos with DIFFERENT scores
+       (1 / 2 / 3) so "find the MAX" actually has something to find. */
     {
       type: "reveal",
       label: t(E, "Worked example", "풀이 예제"),
       narr: t(E,
-        "Try the rule on a tiny string \"abba\".  Walk every (i, j, k) — only 4 triplets.",
-        "작은 문자열 \"abba\" 로 규칙을 직접 적용해 보자. (i, j, k) 4 개뿐 — 손으로 따라가기 쉬움."),
+        "Try the rule on \"amoom\".  Walk every (i, j, k) — 10 triplets, a few valid moos — and pick the BIGGEST score.",
+        "\"amoom\" 으로 규칙을 직접 적용해 보자. (i, j, k) 10 개를 하나씩 — 유효한 moo 여러 개 중 최대 점수 찾기."),
       content: (<TripletEnumSimulator E={E} />),
     },
 
@@ -305,12 +305,12 @@ abcabbacabac
         "Your turn — find the best moo on a small string.",
         "직접 — 작은 문자열에서 최선 moo."),
       question: t(E,
-        "Max (left·right) for s='abba' query [1, 4]?",
-        "s='abba' 쿼리 [1, 4] 의 최대 (왼쪽 거리 × 오른쪽 거리)?"),
+        "Max score for s='amoom' query [1, 4]?  (note: window stops at 4 — the last 'm' is out)",
+        "s='amoom' 쿼리 [1, 4] 의 최대 점수?  (주의: 윈도우가 4 까지 — 마지막 'm' 은 밖)"),
       hint: t(E,
-        "Try j ∈ {2, 3}.  For each j, find the leftmost i with s[i] ≠ s[j] and rightmost k with s[k] = s[j], inside [1, 4].",
-        "j ∈ {2, 3} 시도. j 마다 [1, 4] 안에서 s[i] ≠ s[j] 인 가장 왼쪽 i, s[k] = s[j] 인 가장 오른쪽 k."),
-      answer: 1,
+        "Inside [1, 4] the only repeated letter is 'o' (pos 3, 4).  Pick a different letter to its left as i → best moo is (1, 3, 4) = a,o,o → (3-1)×(4-3).",
+        "[1, 4] 안에서 반복되는 글자는 'o'(위치 3, 4)뿐.  왼쪽에 다른 글자를 i 로 → 최선 moo 는 (1, 3, 4) = a,o,o → (3-1)×(4-3)."),
+      answer: 2,
     },
   ];
 }

@@ -28,7 +28,11 @@ function SimNav({ idx, total, onIdx }) {
    one by one. Final realization: O(N³) doesn't scale.
    ═══════════════════════════════════════════════════════════════ */
 export function TripletEnumSimulator({ E }) {
-  const str = "abba";
+  // "amoom" (N=5, 10 triplets) — richer than a 4-char string: 3 valid moos with
+  // DIFFERENT scores (adjacent moo@1-3 = 1, the two o's = 2, the two m's spread
+  // wide = 3 ⭐) so "spread out = bigger → find the MAX" actually shows.
+  // (선생님 2026-07-22: "abba 예제가 너무 짧은거 아닌가?")
+  const str = "amoom";
   const trips = [];
   for (let i = 0; i < str.length; i++)
     for (let j = i + 1; j < str.length; j++)
@@ -192,15 +196,15 @@ export function TripletEnumSimulator({ E }) {
           }}>
             🐌 <b style={{ color: "#dc2626" }}>{t(E, "But on a big string?", "근데 큰 문자열이면?")}</b>{" "}
             {t(E,
-              `"abba" (N=4) had only 4 triplets. A length-N string has about N³/6 of them — so the count EXPLODES as N grows.`,
-              `"abba"(N=4)는 (i,j,k) 조합이 4 개뿐이었죠. 길이 N 이면 ≈ N³/6 개 — N 이 커질수록 조합 수가 폭발해요.`)}
+              `"amoom" (N=5) had 10 triplets. A length-N string has about N³/6 of them — so the count EXPLODES as N grows.`,
+              `"amoom"(N=5)는 (i,j,k) 조합이 10 개였죠. 길이 N 이면 ≈ N³/6 개 — N 이 커질수록 조합 수가 폭발해요.`)}
             <div style={{ marginTop: 4, color: C.dim }}>
               {t(E, "Each bar = how many (i,j,k) triplets you'd check for that N:",
                     "아래 막대 = 그 N 일 때 확인해야 할 (i,j,k) 조합 수:")}
             </div>
           </div>
           {[
-            { N: 4,    ops: 4,         okLabel: "✓" },
+            { N: 5,    ops: 10,        okLabel: "✓" },
             { N: 100,  ops: 1.6e5,     okLabel: "✓" },
             { N: 1000, ops: 1.6e8,     okLabel: "△" },
             { N: 1e5,  ops: 1.6e14,    okLabel: "✗" },
@@ -233,6 +237,21 @@ export function TripletEnumSimulator({ E }) {
           </div>
         </div>
       )}
+
+      {s.kind === "verdict" && (() => {
+        const validCount = trips.filter((tr) => tr.ok).length;
+        return (
+          <div style={{
+            background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8,
+            padding: "9px 12px", marginBottom: 10, fontSize: 12, lineHeight: 1.65,
+            color: "#15803d", textAlign: "center", wordBreak: "keep-all", fontWeight: 600,
+          }}>
+            {t(E,
+              `Checked all ${trips.length} triplets → ${validCount} are valid moos.  Biggest score = ${best} ⭐ — the two m's picked far apart beat the adjacent "moo" (score 1).`,
+              `${trips.length} 개 조합 다 확인 → 유효한 moo ${validCount} 개.  최대 점수 = ${best} ⭐ — 멀리 떨어진 m 두 개가 붙어있는 "moo"(점수 1)를 이겨요.`)}
+          </div>
+        );
+      })()}
 
       {/* Score strip — small card per triplet checked.  ✓ green = valid moo with score.
           ✗ red = rule failed.  Best gets ⭐ + dark green. */}
