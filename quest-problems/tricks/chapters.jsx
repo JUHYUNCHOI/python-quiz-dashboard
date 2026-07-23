@@ -355,6 +355,19 @@ export function makeTricksCh1(E) {
               <div style={{ background: "#fef3c7", borderRadius: 6, padding: "4px 8px", marginBottom: 4 }}>
                 <span style={{ color: "#a855f7" }}>Case 2:</span> C(countC, 3) = <span style={{ fontSize: 11 }}>countC×(countC-1)×(countC-2)/6</span>
               </div>
+              {/* Case 2 공식이 왜 이렇게 나오는지 — 구체 예시로 (선생님 2026-07-22 "이 공식이 이해가 안가") */}
+              <div style={{ background: "#faf5ff", border: "1px solid #e9d5ff", borderRadius: 8, padding: "8px 10px", marginBottom: 8, fontSize: 11.5, fontWeight: 400, color: C.text, lineHeight: 1.85, textAlign: "left", fontFamily: "inherit", wordBreak: "keep-all" }}>
+                <div style={{ fontWeight: 700, color: "#a855f7", marginBottom: 2 }}>
+                  {t(E, "Case 2 = choose 3 C-bags out of countC", "Case 2 = C봉지 countC개 중에서 3개 고르기")}
+                </div>
+                <div>
+                  {t(E, "1st pick: countC ways · 2nd: countC−1 · 3rd: countC−2. But the same 3 bags get counted 3×2×1 = 6 times (order doesn't matter), so divide by 6.",
+                      "첫째: countC가지 · 둘째: countC−1 · 셋째: countC−2. 그런데 같은 3개를 3×2×1 = 6번 세니까(순서는 상관없음) 6으로 나눠.")}
+                </div>
+                <div style={{ marginTop: 4, color: "#7c3aed", fontWeight: 700 }}>
+                  {t(E, "e.g. countC = 4 → 4×3×2 ÷ 6 = 4 ways", "예: C봉지가 4개면 → 4×3×2 ÷ 6 = 4가지")}
+                </div>
+              </div>
               <div style={{ background: "#f0fdf4", borderRadius: 6, padding: "6px 8px", border: "1.5px solid #6ee7b7", fontSize: 14 }}>
                 <span style={{ color: "#059669", fontWeight: 700 }}>{t(E, "answer", "답")}</span> = {t(E, <span style={{ fontSize: 11 }}>sum over all pairs</span>, <span style={{ fontSize: 11 }}>모든 색 쌍의 합</span>)} (Case1 + Case2)
               </div>
