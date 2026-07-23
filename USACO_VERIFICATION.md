@@ -37,7 +37,7 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `cowsplits` | COW Splits | Dec 2025 Bronze #2 | 3/14 (intentional k=1 only quest) | 3/14 (intentional k=1 only) |
 | `chipxchg` | Chip Exchange | Dec 2025 Bronze #1 | ✅ 12/12 PASS (Python passes - C++ has overflow) | 5/12 (overflow bug) |
 | `mooin3` | Mooin' Time III | Open 2025 Bronze #3 | 🟡 3/11 (TLE many cases, O(N) per query) | 🟡 4/11 (TLE - brute O(N^2)) |
-| `cowphotos` | More Cow Photos | Open 2025 Bronze #2 | ⏳ Counter O(N) 재작성 (2026-07-22) — 재제출 대기 (구 brute 6/8 TLE 7-8) | ✅ 11/11 PASS |
+| `cowphotos` | More Cow Photos | Open 2025 Bronze #2 | ✅ PASS (Counter O(N), 재제출 통과 2026-07-23; 구 brute 6/8 TLE) | ✅ 11/11 PASS |
 | `hps` | HPS Minus One | Open 2025 Bronze #1 | ✅ 12/12 PASS | ✅ 12/12 PASS |
 | `printseq` | Printing Sequences | Feb 2025 Bronze #3 | ✅ 13/13 PASS | ✅ 13/13 PASS (after dev fix) |
 | `mexes` | Making Mexes | Feb 2025 Bronze #2 | ✅ 11/11 PASS | ✅ 11/11 PASS |

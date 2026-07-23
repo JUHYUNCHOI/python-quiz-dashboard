@@ -1,6 +1,6 @@
-// 🔒 USACO_VERIFIED (2026-05-13; Python 2026-07-22 재작성 — ⚠️ 재제출 대기)
-//   Python: Counter 로 O(N) 재작성 (구 brute h.count 는 6/8 TLE 7-8 였음).
-//           ⚠️ USACO 재제출로 8/8 확인 필요 — 확인 후 이 줄 갱신.
+// 🔒 USACO_VERIFIED (2026-05-13; Python 재작성·재검증 2026-07-23)
+//   Python: ✅ PASS — Counter 로 O(N) 재작성 후 USACO 재제출 통과 (선생님 확인).
+//           (구 brute h.count 는 O(N²) 라 6/8 TLE 7-8 였음.)
 //   C++:    11/11 PASS (freq 배열 O(N))
 //   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
