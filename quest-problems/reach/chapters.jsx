@@ -222,6 +222,83 @@ export function makeReachCh1(E) {
           </div>
         </div>),
     },
+    // 1-4b: 입출력 형식 + 제약 (MCC 2025 P5 원문 그대로)
+    // 규칙까지 잡은 직후 "그래서 데이터가 어떻게 들어오는데?" 를 못박아 준다.
+    // 입력 순서는 SOLUTION_CODE 의 read 순서와 일치: N M → M줄 x y w → S → 손상번호 → Q → K들
+    {
+      type: "reveal",
+      narr: t(E,
+        "So how does the data arrive?\nThe graph, then which roads are damaged, then the K queries. Start is always city 1.",
+        "그럼 데이터는 어떻게 들어올까?\n그래프 → 손상 도로 → K 쿼리 순서. 출발은 언제나 도시 1이에요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N M</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(first line) — cities, roads", "(첫 줄) — 도시 수, 도로 수")}</span></div>
+              <div style={{ marginTop: 6, paddingLeft: 10, borderLeft: `2px solid #fde68a` }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>x y w</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— road: city x ↔ y, length w", "— 도로: 도시 x ↔ y, 길이 w")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats M times (road i = i-th line)", "↑ 이 줄이 M 번 반복 (i번째 줄 = i번 도로)")}</div>
+              </div>
+              <div style={{ marginTop: 6 }}><span style={{ color: "#92400e", fontWeight: 800 }}>S</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of damaged roads", "— 손상된 도로 개수")}</span></div>
+              <div style={{ paddingLeft: 10, borderLeft: `2px solid #fde68a` }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>d<sub>1</sub> … d<sub>S</sub></span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— indices of the damaged roads", "— 손상된 도로의 번호들")}</span></div>
+              </div>
+              <div style={{ marginTop: 6 }}><span style={{ color: "#92400e", fontWeight: 800 }}>Q</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of queries", "— 쿼리 개수")}</span></div>
+              <div style={{ paddingLeft: 10, borderLeft: `2px solid #fde68a` }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— apocalypse time for this query", "— 이 쿼리의 아포칼립스 시각")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ one K per line, Q times", "↑ 한 줄에 K 하나씩, Q 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "Q lines — for query i, how many cities are reachable from city 1.",
+                  "Q 줄 — 각 쿼리마다 도시 1에서 도달 가능한 도시 개수.")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N, M ≤ 300,000 (= 3 × 10⁵)</div>
+              <div>1 ≤ x, y ≤ N, x ≠ y</div>
+              <div>1 ≤ w ≤ 100,000 (= 10⁵)</div>
+              <div>0 ≤ S ≤ N</div>
+              <div>1 ≤ Q ≤ 100,000 (= 10⁵)</div>
+              <div>0 ≤ K ≤ 1,000,000,000 (= 10⁹)</div>
+            </div>
+          </div>
+          {/* 샘플 */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.55, color: "#f8fafc" }}>
+                <div>5 6</div>
+                <div>1 2 7</div><div>2 3 10</div><div>4 3 8</div>
+                <div>4 2 5</div><div>1 5 18</div><div>3 5 20</div>
+                <div>4</div>
+                <div>1 3 4 6</div>
+                <div>3</div>
+                <div>6</div><div>11</div><div>12</div>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac" }}>
+                <div>2</div><div>4</div><div>5</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
+            {t(E, "Roads 1, 3, 4, 6 are damaged. For K = 6, 11, 12 the dragon reaches 2, 4, 5 cities.",
+                "손상 도로는 1, 3, 4, 6번. K = 6, 11, 12일 때 용이 각각 2, 4, 5개 도시에 도달해요.")}
+          </div>
+        </div>),
+    },
     // 1-5: Quiz — K=6 example
     {
       type: "quiz",

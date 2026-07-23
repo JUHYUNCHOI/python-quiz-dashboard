@@ -159,6 +159,64 @@ export function makeFencesCh1(E) {
         );
       })(),
     },
+    // 1-2b: 입출력 형식 + 제약 (MCC 2025 P1 원문 그대로)
+    // 그리드 개념을 잡은 직후 "그래서 데이터가 어떻게 들어오는데?" 를 못박아 준다.
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now — how does the data arrive?\nFirst line: N M (rows, columns). Then N lines of the grid, each a string of '.' and '#'.\nOutput: one integer — the minimum fences to build a full vertical wall.",
+        "그럼 데이터는 어떻게 들어올까?\n첫 줄에 N M (행, 열). 그 다음 N 줄에 격자가, 각 줄은 '.' 과 '#' 로 된 문자열.\n출력: 정수 하나 — 완전한 세로 울타리를 만드는 최소 비용."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N M</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(first line) — rows, columns", "(첫 줄) — 행 수, 열 수")}</span></div>
+              <div style={{ marginTop: 6, paddingLeft: 10, borderLeft: `2px solid #fde68a` }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>row</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— M chars of '.' (grass) or '#' (fence)", "— '.' (풀) 또는 '#' (울타리) M 글자")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "A single integer — the minimum number of fences to build (= smallest grass '.' count over all columns).",
+                  "정수 하나 — 만들어야 할 최소 울타리 수 (= 모든 열 중 가장 작은 풀 '.' 개수).")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N, M ≤ 800</div>
+              <div style={{ color: C.dim, fontSize: 11 }}>{t(E, "grid contains only '.' and '#'", "격자는 '.' 과 '#' 로만 구성")}</div>
+            </div>
+          </div>
+          {/* 샘플 */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.55, color: "#f8fafc" }}>
+                <div>4 5</div>
+                <div>.....</div><div>...#.</div><div>.##..</div><div>...#.</div>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac" }}>
+                <div>2</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
+            {t(E, "Grass ('.') per column: 4, 3, 3, 2, 4. The smallest is 2 → that column is cheapest to wall off.",
+                "열별 풀('.') 수: 4, 3, 3, 2, 4. 가장 작은 값이 2 → 그 열을 울타리로 막는 게 제일 싸요.")}
+          </div>
+        </div>),
+    },
     // 1-3: Quiz — full fence column
     {
       type: "quiz",
