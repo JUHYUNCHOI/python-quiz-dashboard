@@ -521,6 +521,16 @@ export function MooTraceSimulator({ E }) {
         })}
       </div>
 
+      {/* '왜 빠른가 / 기법' — 마지막 단계에서 (선생님 2026-07-23: "왜 빨라? 기법은?"). */}
+      {s.kind === "final" && (
+        <div style={{ maxWidth: 500, margin: "0 auto 12px", background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "11px 14px", fontSize: 11.5, lineHeight: 1.7, color: "#1e3a8a", wordBreak: "keep-all" }}>
+          <div style={{ fontWeight: 800, marginBottom: 5, color: "#1d4ed8" }}>⚡ {t(E, "Why is this faster? (the technique)", "왜 빨라졌나 — 기법")}</div>
+          <div>• {t(E, "Triple loop tries every i, j, k → N³.", "3중 for 는 i·j·k 를 다 시도 → N³.")}</div>
+          <div>• {t(E, "Fix j: the two gaps (j−i) and (k−j) are INDEPENDENT → put i as far LEFT as possible, k as far RIGHT as possible.  No middle values to try.", "j 고정: 두 거리 (j−i)·(k−j) 는 서로 독립 → i 는 최대한 왼쪽, k 는 최대한 오른쪽.  중간값은 볼 필요 없음.")}</div>
+          <div style={{ fontWeight: 700, marginTop: 2 }}>→ {t(E, "one left scan + one right scan per j → N².  Technique: fix the middle + greedy extremes.", "j 마다 왼쪽·오른쪽 한 번씩 → N².  기법: 가운데 고정 + 양 끝 그리디.")}</div>
+        </div>
+      )}
+
       {/* Nav */}
       <SharedSimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
@@ -1343,8 +1353,8 @@ export function getMooin3Sections(E) {
             "바깥 j 루프가 쿼리당 O(N) 번 → 쿼리당 O(N²)."),
         t(E, "Q queries → total O(Q · N²). At N = 10⁵ and Q = 3·10⁴ that's ~3·10¹⁴ — way too slow.",
             "Q 쿼리 → 총 O(Q · N²). N = 10⁵, Q = 3·10⁴ 면 ~3·10¹⁴ — 너무 느려요."),
-        t(E, "Verified actual USACO submission: Python brute (O(N) per query) → 3/11 PASS. C++ brute (O(N²)) → 4/11 PASS. Small-N test cases pass; large-N cases TLE. We'll fix the rest next.",
-            "USACO 실제 제출 검증: Python brute (쿼리당 O(N)) → 3/11 통과. C++ brute (O(N²)) → 4/11 통과. N 작은 테스트는 통과, N 큰 테스트는 TLE. 나머지는 다음 단계에서."),
+        t(E, "So small-N test cases pass, but large-N cases TLE.  The next steps (6-8) turn this into a truly fast O(26 · Q · log N) solution.",
+            "그래서 N 작은 테스트는 통과, N 큰 테스트는 TLE.  다음 단계 (6-8) 에서 진짜 빠른 O(26 · Q · log N) 풀이로 바꿔요."),
       ],
     },
     /* ── 6️⃣ Stage A: 외곽 루프를 j → c (26 개) 로 ── */
