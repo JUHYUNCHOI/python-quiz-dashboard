@@ -35,7 +35,7 @@ export const QUEST_ALGO: Record<string, string> = {
   buymilk: "greedy", chipxchg: "binarysearch",
   // checkups: 제거 — center-expansion(대칭 증분)은 표준 알고 토픽 아님 (선생님 2026-07-02).
   cowcollege: "sorting", cowtipping: "greedy", crossroad1: "hashtable", crossroad3: "sorting",
-  explodingarrow: "graph", familytree: "tree", favperm2: "backtracking", feedcows: "greedy",
+  explodingarrow: "graph", familytree: "tree", fans: "greedy", favperm2: "backtracking", feedcows: "greedy",
   innovation: "greedy", interview: "priorityqueue", lc1480: "prefixsum", lc3: "hashtable",
   lc303: "prefixsum", lc560: "prefixsum", lc974: "prefixsum", livestock: "graph",
   magicorbs: "sorting", makedistinct: "sorting", mcc15bahasaf: "string", mcc15choco: "stackqueue",
