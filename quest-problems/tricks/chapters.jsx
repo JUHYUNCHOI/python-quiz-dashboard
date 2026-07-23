@@ -333,6 +333,15 @@ export function makeTricksCh1(E) {
             background: "#fff7ed", borderRadius: 12, padding: 14,
             border: "1px solid #fdba74",
           }}>
+            {/* 범례 — countA/B/C 가 뭔지 바로 그 자리에서 (선생님 2026-07-22: "이게 뭘 말하는건지 모르겠어") */}
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.9, marginBottom: 12, background: "#fff", borderRadius: 8, padding: "8px 12px", border: "1px solid #fde68a", wordBreak: "keep-all" }}>
+              <div style={{ fontWeight: 700, color: C.dim, fontSize: 11, marginBottom: 4, textAlign: "center" }}>
+                {t(E, "for the current color pair (x, y):", "지금 보는 색 쌍 (x, y) 에서:")}
+              </div>
+              <div><span style={{ color: "#f97316", fontWeight: 800 }}>countA</span> = {t(E, "# of A-bags (x,x)", "A봉지 (x,x) 개수")} <span style={{ color: C.dim }}>· 🟠🟠</span></div>
+              <div><span style={{ color: "#a855f7", fontWeight: 800 }}>countB</span> = {t(E, "# of B-bags (y,y)", "B봉지 (y,y) 개수")} <span style={{ color: C.dim }}>· 🟣🟣</span></div>
+              <div><span style={{ color: "#22c55e", fontWeight: 800 }}>countC</span> = {t(E, "# of C-bags (x,y)", "C봉지 (x,y) 개수")} <span style={{ color: C.dim }}>· 🟠🟣</span></div>
+            </div>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#f97316", marginBottom: 10, textAlign: "center" }}>
               {t(E, "The Formula", "공식")}
             </div>
