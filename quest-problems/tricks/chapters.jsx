@@ -599,13 +599,7 @@ export function makeTricksCh3(E) {
           </div>
         </div>),
     },
-    // 3-5: Formula trace
-    {
-      type: "formulaTrace",
-      narr: t(E,
-        "Let's trace through the sample, pair by pair! See how each color pair adds to the answer.", "예제를 색 쌍별로 따라가보자! 각 색 쌍에서 답이 얼마나 늘어나는지 봐요."),
-    },
-    // 3-6: Full code reveal
+    // 3-5: Full code reveal
     {
       type: "code",
       narr: t(E,
