@@ -134,14 +134,14 @@ export function makeWordCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
-                "Output a length-M word that minimizes total anagram distance to all N words — break ties by picking the lexicographically smallest.",
-                "N 개 단어 모두에 대한 애너그램 거리 합을 최소로 하는 길이 M 단어를 출력. 동률이면 사전순으로 가장 앞.")}
+                "Make a length-M word that shares as many letters as possible with all N words. If several words tie, pick the one that comes first in abc (dictionary) order.",
+                "모든 단어와 겹치는 글자가 가장 많은 길이 M 짜리 새 단어를 만들어요. 똑같이 좋은 답이 여러 개면 abc 순서(사전 순서)로 가장 앞선 걸 골라요.")}
             </div>
           </div>
 
           <div style={{ marginTop: 10, background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
-              "N words (length M each) → find a word → minimize total 'anagram distance' → output lex smallest!",
+              "N words (length M each) → build one new word → share as many letters as possible → if tied, output the abc-first one!",
               "단어 N개 (길이 M) → 새 단어 하나 만들기 → 모든 단어와 겹치는 글자 최대한 많게 → 같은 답이 여러 개면 abc순으로 가장 앞선 것!")}
           </div>
         </div>),
@@ -170,8 +170,8 @@ export function makeWordCh1(E) {
           <div style={{ marginBottom: 12 }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
-              {t(E, "A single length-M string — the lexicographically smallest word with minimum total distance.",
-                  "길이 M 문자열 하나 — 총 거리가 최소인 단어 중 사전순으로 가장 앞선 것.")}
+              {t(E, "One length-M word — the one that shares the most letters overall; if tied, the abc-first one.",
+                  "길이 M 짜리 단어 하나 — 겹치는 글자가 가장 많은 것. 여러 개면 abc 순서로 가장 앞선 것.")}
             </div>
           </div>
           {/* 제약 */}
@@ -200,8 +200,8 @@ export function makeWordCh1(E) {
             </div>
           </div>
           <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
-            {t(E, "\"ade\" has the smallest total anagram distance to all 5 words (and is lex smallest among ties).",
-                "\"ade\" 가 5개 단어 모두에 대한 애너그램 거리 합이 최소예요 (동률 중 사전순으로도 가장 앞).")}
+            {t(E, "\"ade\" shares the most letters with all 5 words overall — and among equally-good answers it comes first in abc order.",
+                "\"ade\" 가 5개 단어 모두와 겹치는 글자가 가장 많아요 — 똑같이 좋은 답 중 abc 순서로도 가장 앞이에요.")}
           </div>
         </div>),
     },
