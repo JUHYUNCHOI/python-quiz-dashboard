@@ -23,9 +23,8 @@ export const SOLUTION_CODE = [
   "",
   "Q = int(input())",
   "queries = []",
-  "for qi in range(Q):",
-  "    K = int(input())",
-  "    queries.append((K, qi))",
+  "for _ in range(Q):",
+  "    queries.append(int(input()))",
   "",
   "# Dijkstra with K constraint",
   "def solve(K):",
@@ -46,7 +45,7 @@ export const SOLUTION_CODE = [
   "    return sum(1 for i in range(1,N+1)",
   "               if dist[i] < float('inf'))",
   "",
-  "for K, qi in sorted(queries):",
+  "for K in queries:",
   "    print(solve(K))",
 ];
 
@@ -147,8 +146,8 @@ export function makeReachCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
-                "For each query K, output how many cities are reachable from city 1 within K minutes (using damaged roads only if start < K and arrive ≤ K).",
-                "쿼리 K 마다 — 도시 1 에서 K 분 안에 도달 가능한 도시 수 (손상 도로는 출발 < K 이고 도착 ≤ K 인 경우만) 출력.")}
+                "For each query K, output how many cities the dragon can reach from city 1 before the apocalypse hits at time K.",
+                "쿼리 K 마다 — 시간 K 의 아포칼립스가 오기 전에 용이 도시 1 에서 갈 수 있는 도시가 몇 개인지 출력.")}
             </div>
           </div>
 
@@ -299,41 +298,7 @@ export function makeReachCh1(E) {
           </div>
         </div>),
     },
-    // 1-5: Quiz — K=6 example
-    {
-      type: "quiz",
-      narr: t(E,
-        "K=6: The dragon is in city 1.\nRoad 1→2 is damaged (length 7).\nCan the dragon reach city 2 when K=6?", "K=6일 때: 용이 도시 1에 있어요. 도로 1→2는 손상 도로(길이 7)야. K=6이면 도시 2에 갈 수 있을까?"),
-      question: t(E,
-        "K=6: Road 1→2 (damaged, length 7). Start=0, arrive=7. Can dragon use it?",
-        "K=6: 도로 1→2 (손상, 길이 7). 출발=0, 도착=7.\n도착 시각 7 > K=6이니까..."),
-      options: [
-        t(E, "Yes (arrive before apocalypse)", "Yes (아포칼립스 전에 도착)"),
-        t(E, "No (arrive after apocalypse)", "No (도착이 K=6보다 늦어서 불가)"),
-      ],
-      correct: 1,
-      explain: t(E,
-        "Correct! Arrive time 7 > K=6, so the damaged road can't be used. Only city 1 and city 5 (via safe road, length 18) are reachable.",
-        "정답! 도착 시각 7 > K=6이라 손상 도로를 못 써요. 안전한 도로로 갈 수 있는 도시 1, 5만 도달 가능해 (답: 2개)."),
-    },
-    // 1-6: Quiz — K=12
-    {
-      type: "quiz",
-      narr: t(E,
-        "Now K=12: Road 1→2 (damaged, length 7).\nIf you start at time 0 and arrive at time 7, that's ≤ 12.\nThen from city 2, road 2→4 (damaged, length 5) — arrive at 12.\nExactly K!\nIs that allowed?", "K=12일 때: 도로 1→2 (손상, 길이 7) — 시각 0에 출발해서 7에 도착하면 ≤ 12니까 OK!\n그 다음 도시 2에서 도로 2→4 (손상, 길이 5) — 시각 7에 출발, 12에 도착.\n딱 K야!\n가능할까?"),
-      question: t(E,
-        "K=12: From city 2 (arrive time 7), take damaged road 2→4 (length 5). Arrive at 12 = K. Allowed?",
-        "K=12: 도시 2(시각 7)에서 손상 도로 2→4(길이 5) 이용.\n도착 시각 = 12 = K. 가능할까?"),
-      options: [
-        t(E, "Yes! Arriving exactly at K is allowed", "가능! 딱 K에 도착하는 건 허용"),
-        t(E, "No, K means it's too late", "불가, K가 되면 이미 늦음"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Correct! Arriving exactly at K is allowed. So all 5 cities are reachable when K=12.",
-        "정답! 딱 K에 도착하는 건 괜찮아. K=12면 5개 도시 모두 도달 가능!"),
-    },
-    // 1-7: Answer for K=11
+    // 1-5: Answer for K=11 (concrete example)
     {
       type: "input",
       narr: t(E,
@@ -356,26 +321,9 @@ export function makeReachCh2(E) {
     {
       type: "reachSim",
       narr: t(E,
-        "Move the K slider and watch which cities become reachable!\nGreen = reachable, red = unreachable.\nSee how it changes!", "K 슬라이더를 움직여봐요! 초록 = 도달 가능, 빨강 = 불가. K가 바뀌면 도달 가능한 도시가 어떻게 변하는지 보자!"),
+        "Move the K slider! Green = reachable, red = not. Notice: bigger K only ever adds more green (more time = more damaged roads usable).", "K 슬라이더를 움직여봐요! 초록 = 도달 가능, 빨강 = 불가. K를 키우면 초록이 늘기만 해요 (시간이 많을수록 손상 도로를 더 쓸 수 있으니까)."),
     },
-    // 2-2: Quiz — Key insight
-    {
-      type: "quiz",
-      narr: t(E,
-        "Notice something? As K increases, you can reach MORE cities (or stay the same). Why?", "눈치챘어? K가 커지면 갈 수 있는 도시가 늘어나거나 같아요! 왜 그럴까?"),
-      question: t(E,
-        "Why does increasing K never decrease reachable cities?",
-        "K가 커지면 도달 가능한 도시 수가 줄어들 수 있을까?"),
-      options: [
-        t(E, "No! More time = more damaged roads usable", "없어요! 시간이 많을수록 손상 도로를 더 쓸 수 있으니까"),
-        t(E, "Yes, it could decrease", "있어, 줄어들 수도 있어"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Right! Larger K means more time before apocalypse → can use damaged roads for longer → can only reach MORE cities.",
-        "정답! K가 클수록 아포칼립스 전 시간이 많아 → 손상 도로를 더 오래 쓸 수 있어 → 도달 가능 도시는 늘어나기만 해요!"),
-    },
-    // 2-3: Dijkstra concept (intro card lives in Ch3)
+    // 2-2: Dijkstra concept (intro card lives in Ch3)
     // 2-4: Dijkstra trace
     {
       type: "dijkstraTrace",
@@ -453,9 +401,8 @@ export function makeReachCh3(E) {
               "",
               "Q = int(input())",
               "queries = []",
-              "for qi in range(Q):",
-              "    K = int(input())",
-              "    queries.append((K, qi))",
+              "for _ in range(Q):",
+              "    queries.append(int(input()))",
             ]}
             highlight={[3, 4]}
           />
@@ -551,25 +498,7 @@ export function makeReachCh3(E) {
           </div>
         </div>),
     },
-    // 3-5: Time complexity
-    {
-      type: "quiz",
-      narr: t(E,
-        "What's the time complexity of this simple approach? We run Dijkstra once per query.", "이 단순한 방법의 시간복잡도는? 쿼리마다 다익스트라를 한 번 돌려."),
-      question: t(E,
-        "Dijkstra: O((N+M)logN) per query, Q queries total. What's the total?",
-        "다익스트라: 쿼리 당 O((N+M)logN). 쿼리 Q개면 총 시간복잡도는?"),
-      options: [
-        t(E, "O(Q(N+M)logN)", "O(Q(N+M)logN)"),
-        t(E, "O(NM)", "O(NM)"),
-        t(E, "O(N²)", "O(N²)"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Right! Each query runs a full Dijkstra. For full marks, you'd need to optimize using offline processing.",
-        "정답! 각 쿼리마다 다익스트라를 돌려. 만점을 받으려면 오프라인 처리로 최적화해야 해요!"),
-    },
-    // 3-6: Full code
+    // 3-5: Full code
     {
       type: "code",
       narr: t(E,
