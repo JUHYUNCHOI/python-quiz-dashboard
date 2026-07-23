@@ -95,9 +95,14 @@ export function makePhotoshoot25Ch1(E) {
               <div>0&nbsp;&nbsp;3&nbsp;&nbsp;1</div>
               <div>4&nbsp;&nbsp;0&nbsp;&nbsp;2</div>
             </div>
-            <div style={{ marginTop: 8, paddingLeft: 8, borderLeft: "3px solid #c4b5fd", display: "flex", flexDirection: "column", gap: 3 }}>
+            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, marginBottom: 2 }}>
+              {t(E, "All 4 windows (a 2×2 slides to 4 spots on a 3×3):", "창은 4 개 (3×3 위에서 2×2 가 4 군데로 미끄러짐):")}
+            </div>
+            <div style={{ paddingLeft: 8, borderLeft: "3px solid #c4b5fd", display: "flex", flexDirection: "column", gap: 3 }}>
               <div>{t(E, "top-left 2×2: ", "왼쪽 위 2×2: ")}1+2+0+3 = <b>6</b></div>
+              <div>{t(E, "top-right 2×2: ", "오른쪽 위 2×2: ")}2+0+3+1 = <b>6</b></div>
               <div style={{ color: "#7c3aed", fontWeight: 700 }}>{t(E, "bottom-left 2×2: ", "왼쪽 아래 2×2: ")}0+3+4+0 = 7 ← {t(E, "biggest!", "최대!")}</div>
+              <div>{t(E, "bottom-right 2×2: ", "오른쪽 아래 2×2: ")}3+1+0+2 = <b>6</b></div>
             </div>
             <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
               👉 {t(E, "Best photo = the largest sum among all K×K windows = ", "가장 멋진 사진 = 모든 K×K 창 합 중 최댓값 = ")}<b style={{ color: "#15803d" }}>7</b>
