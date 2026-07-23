@@ -199,9 +199,20 @@ export function makeWordCh1(E) {
               </div>
             </div>
           </div>
-          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
-            {t(E, "\"ade\" shares the most letters with all 5 words overall — and among equally-good answers it comes first in abc order.",
-                "\"ade\" 가 5개 단어 모두와 겹치는 글자가 가장 많아요 — 똑같이 좋은 답 중 abc 순서로도 가장 앞이에요.")}
+          {/* 왜 ade 인지 — 예제 바로 옆에서 구체 계산 (선생님 2026-07-23 "여기 예제에서는 왜 ade야?") */}
+          <div style={{ marginTop: 10, background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 10, padding: "10px 12px", fontSize: 12, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+            <div style={{ fontWeight: 800, color: "#1e40af", marginBottom: 6 }}>
+              {t(E, "Why \"ade\"? — fill each slot with the letter in the MOST words:",
+                  "왜 \"ade\"? — 각 자리에 '가장 많은 단어에 든 글자'를 하나씩 넣어요:")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 3, fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
+              <div><span style={{ color: "#2563eb", fontWeight: 800 }}>1) a</span> — {t(E, "in 3 words", "3개 단어")} (adb, zaf, aed) <span style={{ color: C.dim }}>← {t(E, "most", "최다")}</span></div>
+              <div><span style={{ color: "#2563eb", fontWeight: 800 }}>2) d</span> — {t(E, "in 3 words", "3개 단어")} (adb, dez, aed) <span style={{ color: C.dim }}>← {t(E, "most", "최다")}</span></div>
+              <div><span style={{ color: "#2563eb", fontWeight: 800 }}>3) e</span> — {t(E, "e and z tie (2 words each) → pick abc-first e", "e·z 동점 (각 2개 단어) → abc 앞선 e")}</div>
+            </div>
+            <div style={{ marginTop: 6, fontWeight: 700, color: "#166534" }}>
+              {t(E, "→ letters a, d, e → sort abc → \"ade\"", "→ 글자 a, d, e → abc 정렬 → \"ade\"")}
+            </div>
           </div>
         </div>),
     },
