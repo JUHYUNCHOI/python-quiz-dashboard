@@ -84,7 +84,55 @@ export function makeMagicOrbsCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Deep-audit sim — feel the algorithm before guessing
+    // 1-2: 입출력 형식 (예제 [5,3,4] pick 2 → 9)
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? Line 1: N and K. Line 2: the N orb powers. Output: one integer — the biggest total.",
+        "데이터는 어떻게 들어올까? 1줄: N 과 K. 2줄: N 개의 구슬 파워. 출력: 정수 하나 — 가장 큰 총 파워."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(first line) — number of orbs, and how many you may pick", "(첫 줄) — 구슬 개수, 그리고 고를 수 있는 개수")}</span></div>
+              <div style={{ marginTop: 6, paddingLeft: 10, borderLeft: `2px solid #fde68a` }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>p<sub>1</sub> p<sub>2</sub> … p<sub>N</sub></span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the N orb powers", "— N 개 구슬의 파워")}</span></div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "A single integer — the maximum total power from picking at most K orbs.",
+                  "정수 하나 — 최대 K 개를 골랐을 때의 총 파워 최댓값.")}
+            </div>
+          </div>
+          {/* 샘플 */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.55, color: "#f8fafc" }}>
+                <div>3 2</div>
+                <div>5 3 4</div>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac" }}>
+                <div>9</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
+            {t(E, "Pick the 2 strongest of [5, 3, 4] — that's 5 + 4 = 9.",
+                "[5, 3, 4] 중 가장 센 2 개 — 5 + 4 = 9.")}
+          </div>
+        </div>),
+    },
+    // 1-3: Deep-audit sim — feel the algorithm before guessing
     {
       type: "reveal",
       narr: t(E,

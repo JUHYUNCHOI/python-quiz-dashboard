@@ -203,6 +203,49 @@ export function makeCornerCoverCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 (quest 자체 코드/예제에서 도출 — MCC 2024 공개 원문 없음, 제약 미상 → CONSTRAINTS 생략)
+    {
+      type: "reveal",
+      narr: t(E,
+        "So how does the data come in?", "그럼 데이터는 어떻게 들어올까?"),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N M</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(one line) — grid rows N and columns M, space-separated", "(한 줄) — 격자의 행 N 과 열 M, 공백으로 구분")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "A single integer — the number of distinct corner cells in the grid.",
+                  "정수 하나 — 격자의 서로 다른 꼭짓점 칸의 개수.")}
+            </div>
+          </div>
+          {/* 샘플 */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc" }}>
+                <div>3 5</div>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac" }}>
+                <div>4</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
+            {t(E, "A 3 × 5 grid (both sides ≥ 2) is a full rectangle, so it has 4 distinct corner cells.",
+                "3 × 5 격자 (양변 모두 ≥ 2) 는 온전한 직사각형이라 서로 다른 꼭짓점 칸이 4개예요.")}
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

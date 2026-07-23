@@ -76,8 +76,8 @@ export function makeSimpleGameCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Two players take turns removing 1, 2, or 3 stones from a pile of N stones. The player who takes the LAST stone wins. Both play OPTIMALLY.\nPrint who wins (FIRST or SECOND).",
-        "두 플레이어가 N 개의 돌 더미에서 1, 2, 또는 3 개를 번갈아 가져가요. 마지막 돌을 가져가는 사람이 이겨요. 둘 다 최선을 다 해요.\n승자 (FIRST 또는 SECOND) 를 출력해요."),
+        "Two players take turns removing 1, 2, or 3 stones from a pile of N stones. The player who takes the LAST stone wins. Both play OPTIMALLY.\nPrint 1 if the first player wins, or 2 if the second player wins.",
+        "두 플레이어가 N 개의 돌 더미에서 1, 2, 또는 3 개를 번갈아 가져가요. 마지막 돌을 가져가는 사람이 이겨요. 둘 다 최선을 다 해요.\n선수(먼저 두는 사람)가 이기면 1, 후수가 이기면 2 를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -93,8 +93,8 @@ export function makeSimpleGameCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
-                "Output the winner (FIRST or SECOND) under optimal play.",
-                "최적의 수일 때 승자 (FIRST 또는 SECOND) 를 출력.")}
+                "Under optimal play, output 1 (first player wins) or 2 (second player wins).",
+                "최적의 수일 때, 1 (선수 승) 또는 2 (후수 승) 를 출력.")}
             </div>
           </div>
 
@@ -123,7 +123,7 @@ export function makeSimpleGameCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "winner (FIRST or SECOND) under optimal play", "최선의 수일 때 승자 (FIRST 또는 SECOND)")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "1 (first wins) or 2 (second wins) under optimal play", "최선의 수일 때 1 (선수 승) 또는 2 (후수 승)")}</b>
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>
@@ -131,6 +131,52 @@ export function makeSimpleGameCh1(E) {
           </div>
 
           <WinPatternSim E={E} />
+        </div>),
+    },
+    // 1-1b: 입출력 형식 (코드가 실제로 읽고 출력하는 것 기준)
+    // 코드는 정수 N 하나를 읽고, 1(선수 승)/2(후수 승) 를 출력한다.
+    // 문제 문장은 "FIRST/SECOND" 라고 하지만 실제 출력은 1/2 → 코드 기준으로 맞춤.
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data come in — and what do we print out?",
+        "데이터는 어떻게 들어오고, 무엇을 출력할까?"),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(one line) — number of stones in the pile", "(한 줄) — 돌 더미의 돌 개수")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "A single number: 1 = first player wins, 2 = second player wins (under optimal play).",
+                  "숫자 하나: 1 = 선수(먼저 두는 사람) 승, 2 = 후수 승 (둘 다 최선일 때).")}
+            </div>
+          </div>
+          {/* 샘플 */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc", textAlign: "center" }}>
+                <div>8</div>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac", textAlign: "center" }}>
+                <div>2</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
+            {t(E, "N = 8 is a multiple of 4, so the second player wins → we print 2.",
+                "N = 8 은 4 의 배수라 후수가 이겨요 → 2 를 출력.")}
+          </div>
         </div>),
     },
     // 1-2: Quiz

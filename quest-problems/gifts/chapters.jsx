@@ -81,6 +81,51 @@ export function makeGiftsCh1(E) {
           </div>
         </div>),
     },
+    // 1-1b: 입출력 형식 (문제 이해 직후 "데이터가 어떻게 들어오지?" 못박기)
+    // CONSTRAINTS 박스 생략 — MCC 2024 원문 공개 없음, 믿을 만한 숫자 범위 없음.
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? One line: N K. Output: a single integer.",
+        "데이터는 어떻게 들어올까? 한 줄에 N K. 출력은 정수 하나."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(one line) — N gifts, K people", "(한 줄) — 선물 N개, 사람 K명")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "A single integer — how many people receive an extra gift.",
+                  "정수 하나 — 추가 선물을 받는 사람의 수.")}
+            </div>
+          </div>
+          {/* 샘플 */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.55, color: "#f8fafc" }}>
+                <div>10 3</div>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac" }}>
+                <div>1</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
+            {t(E, "10 gifts, 3 people: each gets 3, and 1 is left over → 1 person gets an extra.",
+                "선물 10개, 3명: 각각 3개씩 받고 1개가 남아 → 1명이 추가로 받아요.")}
+          </div>
+        </div>),
+    },
     // 1-2: Quiz
     {
       type: "quiz",

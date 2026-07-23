@@ -87,7 +87,7 @@ export function makeExplodingArrowCh1(E) {
                 <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "A 2D grid contains arrows, each pointing in one of ", "2D 격자 위에 화살들이 있고, 각자 ")}
-                  <b style={{ color: "#f97316" }}>{t(E, "4 directions: N, S, E, W", "4 방향 N, S, E, W")}</b>
+                  <b style={{ color: "#f97316" }}>{t(E, "4 directions: R, L, U, D", "4 방향 R, L, U, D")}</b>
                   {t(E, ".", " 중 하나를 가리켜요.")}
                 </div>
               </div>
@@ -109,6 +109,60 @@ export function makeExplodingArrowCh1(E) {
                 </div>
               </div>
             </div>
+          </div>
+        </div>),
+    },
+    // 1-1b: 입출력 형식 (코드 FULL_PY 에서 유도 — MCC 2024 원문 비공개)
+    // 문제 소개 직후 "그래서 데이터가 어떻게 들어오는데?" 를 못박아 준다.
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now — how does the data arrive?\nFirst N (how many arrows), then N lines: each arrow's x y and direction letter.\nOutput: how many arrows explode in total.",
+        "그럼 데이터는 어떻게 들어올까?\n먼저 N (화살 개수), 그 다음 N 줄에 각 화살의 x y 와 방향 글자.\n출력: 결국 폭발하는 화살의 총 개수."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(first line) — number of arrows", "(첫 줄) — 화살 개수")}</span></div>
+              <div style={{ marginTop: 6, paddingLeft: 10, borderLeft: `2px solid #fde68a` }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>x<sub>i</sub> y<sub>i</sub> d<sub>i</sub></span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— arrow i's position and direction", "— i번 화살의 위치와 방향")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
+              </div>
+              <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fde68a", fontSize: 11.5, color: "#92400e" }}>
+                {t(E, "d ∈ { R, L, U, D } = right / left / up / down",
+                    "d ∈ { R, L, U, D } = 오른쪽 / 왼쪽 / 위 / 아래")}
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "A single integer — the total number of arrows that explode, starting from the first arrow.",
+                  "정수 하나 — 첫 번째 화살부터 시작해 폭발하는 화살의 총 개수.")}
+            </div>
+          </div>
+          {/* 샘플 */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.55, color: "#f8fafc" }}>
+                <div>3</div>
+                <div>0 0 R</div><div>1 0 R</div><div>2 0 R</div>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac" }}>
+                <div>3</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
+            {t(E, "Three arrows in a row, all pointing right: the first ignites the second, the second the third — all 3 explode.",
+                "일렬의 화살 3개가 모두 오른쪽: 첫째가 둘째를, 둘째가 셋째를 점화 — 3개 모두 폭발.")}
           </div>
         </div>),
     },

@@ -77,6 +77,53 @@ export function makeXorStringCh1(E) {
           </div>
         </div>),
     },
+    // 1-1.2: 입출력 형식 (문제의 예제 코드에서 유도 — MCC 2024 는 공개 원문 없음)
+    // 문제를 본 직후 "그래서 데이터가 어떻게 들어오는데?" 를 못박아 준다.
+    {
+      type: "reveal",
+      narr: t(E,
+        "So how does the data arrive?\nTwo binary strings, one per line — same length. Output the XOR string.",
+        "그럼 데이터는 어떻게 들어올까?\n한 줄에 하나씩 이진 문자열 두 개 — 길이가 같아. XOR 문자열을 출력해."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>A</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(first line) — a binary string (0/1)", "(첫 줄) — 이진 문자열 (0/1)")}</span></div>
+              <div style={{ marginTop: 6 }}><span style={{ color: "#92400e", fontWeight: 800 }}>B</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(second line) — a binary string of the SAME length", "(둘째 줄) — 같은 길이의 이진 문자열")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "The bitwise XOR string — same length as A and B. Position i is '0' if A[i] == B[i], else '1'.",
+                  "비트별 XOR 문자열 — A, B 와 같은 길이. i번째 자리는 A[i] == B[i] 면 '0', 다르면 '1'.")}
+            </div>
+          </div>
+          {/* 샘플 */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc" }}>
+                <div>10110100</div>
+                <div>11010001</div>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac" }}>
+                <div>01100101</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
+            {t(E, "Column by column: matching bits give 0, differing bits give 1 — so 10110100 ⊕ 11010001 = 01100101.",
+                "한 자리씩: 같은 비트는 0, 다른 비트는 1 — 그래서 10110100 ⊕ 11010001 = 01100101.")}
+          </div>
+        </div>),
+    },
     // 1-1.5: XOR Walker Sim (interactive)
     {
       type: "reveal",
