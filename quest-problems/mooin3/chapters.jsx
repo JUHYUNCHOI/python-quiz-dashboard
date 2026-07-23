@@ -285,15 +285,16 @@ abcabbacabac
         </div>),
     },
 
-    /* [전] — Worked example.  TripletEnumSim walks "amoom" through
-       every (i, j, k) — 10 triplets, 3 valid moos with DIFFERENT scores
-       (1 / 2 / 3) so "find the MAX" actually has something to find. */
+    /* [전] — Worked example.  TripletEnumSim on "abcabbc" (N=7, 35 triplets).
+       Too many to walk all → walk a curated story (fail → tight moo=1 →
+       spread=4 → widest=8⭐), then verdict shows all valid moos + max, then
+       the scale bars anchor at N=7 → 35 to motivate "brute explodes". */
     {
       type: "reveal",
       label: t(E, "Worked example", "풀이 예제"),
       narr: t(E,
-        "Try the rule on \"amoom\".  Walk every (i, j, k) — 10 triplets, a few valid moos — and pick the BIGGEST score.",
-        "\"amoom\" 으로 규칙을 직접 적용해 보자. (i, j, k) 10 개를 하나씩 — 유효한 moo 여러 개 중 최대 점수 찾기."),
+        "Try the rule on \"abcabbc\".  We'll walk a few key (i, j, k) — a fail, then moos that get bigger as the picks spread — and find the MAX.",
+        "\"abcabbc\" 로 규칙을 적용해 보자. 대표 (i, j, k) 몇 개를 걸으며 — 실패 하나, 그리고 픽이 벌어질수록 커지는 moo 들 — 최대 점수를 찾자."),
       content: (<TripletEnumSimulator E={E} />),
     },
 
@@ -305,12 +306,12 @@ abcabbacabac
         "Your turn — find the best moo on a small string.",
         "직접 — 작은 문자열에서 최선 moo."),
       question: t(E,
-        "Max score for s='amoom' query [1, 4]?  (note: window stops at 4 — the last 'm' is out)",
-        "s='amoom' 쿼리 [1, 4] 의 최대 점수?  (주의: 윈도우가 4 까지 — 마지막 'm' 은 밖)"),
+        "Max score for s='abcabbc' query [1, 5]?  (window stops at 5 — the far c's are out)",
+        "s='abcabbc' 쿼리 [1, 5] 의 최대 점수?  (윈도우가 5 까지 — 멀리 있는 c 들은 밖)"),
       hint: t(E,
-        "Inside [1, 4] the only repeated letter is 'o' (pos 3, 4).  Pick a different letter to its left as i → best moo is (1, 3, 4) = a,o,o → (3-1)×(4-3).",
-        "[1, 4] 안에서 반복되는 글자는 'o'(위치 3, 4)뿐.  왼쪽에 다른 글자를 i 로 → 최선 moo 는 (1, 3, 4) = a,o,o → (3-1)×(4-3)."),
-      answer: 2,
+        "Inside [1, 5] the repeated letter is 'b' (pos 2, 5).  Pick a different letter to its left as i → (1, 2, 5) = a,b,b → (2-1)×(5-2).",
+        "[1, 5] 안에서 반복되는 글자는 'b'(위치 2, 5).  왼쪽에 다른 글자를 i 로 → (1, 2, 5) = a,b,b → (2-1)×(5-2)."),
+      answer: 3,
     },
   ];
 }

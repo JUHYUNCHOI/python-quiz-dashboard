@@ -28,12 +28,12 @@ function SimNav({ idx, total, onIdx }) {
    one by one. Final realization: O(N³) doesn't scale.
    ═══════════════════════════════════════════════════════════════ */
 export function TripletEnumSimulator({ E }) {
-  // "amoom" (N=5, 10 triplets) — richer than a 4-char string: 3 valid moos with
-  // DIFFERENT scores (adjacent moo@1-3 = 1, the two o's = 2, the two m's spread
-  // wide = 3 ⭐) so "spread out = bigger → find the MAX" actually shows.
-  // (선생님 2026-07-22: "abba 예제가 너무 짧은거 아닌가?")
-  const str = "amoom";
-  const trips = [];
+  // "abcabbc" (N=7) — 선생님 지정 예제. C(7,3)=35 조합이라 다 걷기엔 너무 많음 →
+  // '대표 조합'만 이야기처럼 걷는다: 실패 → 붙은 moo(1) → 벌린 moo(4) → 가장 벌린 moo(8⭐).
+  // verdict 에서 유효 moo 전부 + 최대, scale 에서 '35 개 전부 확인 → 폭발'.
+  // (선생님 2026-07-22: "예제를 abcabbc 로 하자")
+  const str = "abcabbc";
+  const allTrips = [];
   for (let i = 0; i < str.length; i++)
     for (let j = i + 1; j < str.length; j++)
       for (let k = j + 1; k < str.length; k++) {
@@ -44,12 +44,16 @@ export function TripletEnumSimulator({ E }) {
               ? `s[i]='${str[i]}' = s[j]='${str[j]}'  ✗ (same)`
               : `s[j]='${str[j]}' ≠ s[k]='${str[k]}'  ✗`)
           : `s[i]≠s[j] ✓, s[j]=s[k] ✓ → score = (${j}-${i})·(${k}-${j}) = ${score}`;
-        trips.push({ i, j, k, ok, score, why });
+        allTrips.push({ i, j, k, ok, score, why });
       }
+  const validMoos = allTrips.filter(t => t.ok);
   let best = -1;
-  trips.forEach(t => { if (t.ok && t.score > best) best = t.score; });
+  validMoos.forEach(t => { if (t.score > best) best = t.score; });
 
-  const trace = [{ kind: "intro" }, ...trips.map((t, idx) => ({ kind: "step", t, idx })), { kind: "verdict" }, { kind: "scale" }];
+  // Curated walk (0-indexed): (0,1,2) fail · (3,4,5) tight moo=1 · (0,4,5) spread=4 · (0,2,6) widest=8⭐.
+  const pick = (i, j, k) => allTrips.find(t => t.i === i && t.j === j && t.k === k);
+  const walk = [pick(0, 1, 2), pick(3, 4, 5), pick(0, 4, 5), pick(0, 2, 6)];
+  const trace = [{ kind: "intro" }, ...walk.map((t, idx) => ({ kind: "step", t, idx })), { kind: "verdict" }, { kind: "scale" }];
   const ts = useTraceStep(trace);
   const safe = ts.safe;
   const s = trace[safe];
@@ -138,11 +142,12 @@ export function TripletEnumSimulator({ E }) {
     );
   };
 
-  // Compute per-step "revealed count" (how many triplets shown so far) for the score strip.
-  const revealedCount =
-    s.kind === "intro" ? 0 :
-    s.kind === "step" ? s.idx + 1 :
-    trips.length;  // verdict/scale: all revealed
+  // Score strip: during the walk show the curated triplets so far; at the end
+  // show ALL valid moos (so the max ⭐ and full picture appear).
+  const stripTrips =
+    s.kind === "intro" ? [] :
+    s.kind === "step" ? walk.slice(0, s.idx + 1) :
+    validMoos;  // verdict/scale
 
   // Persistent role labels above cells (so j/i/k meaning is visible without text).
   const labelForPos = (pos) => {
@@ -196,15 +201,15 @@ export function TripletEnumSimulator({ E }) {
           }}>
             🐌 <b style={{ color: "#dc2626" }}>{t(E, "But on a big string?", "근데 큰 문자열이면?")}</b>{" "}
             {t(E,
-              `"amoom" (N=5) had 10 triplets. A length-N string has about N³/6 of them — so the count EXPLODES as N grows.`,
-              `"amoom"(N=5)는 (i,j,k) 조합이 10 개였죠. 길이 N 이면 ≈ N³/6 개 — N 이 커질수록 조합 수가 폭발해요.`)}
+              `"abcabbc" (N=7) already has 35 triplets. A length-N string has about N³/6 of them — so the count EXPLODES as N grows.`,
+              `"abcabbc"(N=7)만 해도 (i,j,k) 조합이 35 개. 길이 N 이면 ≈ N³/6 개 — N 이 커질수록 조합 수가 폭발해요.`)}
             <div style={{ marginTop: 4, color: C.dim }}>
               {t(E, "Each bar = how many (i,j,k) triplets you'd check for that N:",
                     "아래 막대 = 그 N 일 때 확인해야 할 (i,j,k) 조합 수:")}
             </div>
           </div>
           {[
-            { N: 5,    ops: 10,        okLabel: "✓" },
+            { N: 7,    ops: 35,        okLabel: "✓" },
             { N: 100,  ops: 1.6e5,     okLabel: "✓" },
             { N: 1000, ops: 1.6e8,     okLabel: "△" },
             { N: 1e5,  ops: 1.6e14,    okLabel: "✗" },
@@ -239,7 +244,7 @@ export function TripletEnumSimulator({ E }) {
       )}
 
       {s.kind === "verdict" && (() => {
-        const validCount = trips.filter((tr) => tr.ok).length;
+        const validCount = validMoos.length;
         return (
           <div style={{
             background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8,
@@ -247,8 +252,8 @@ export function TripletEnumSimulator({ E }) {
             color: "#15803d", textAlign: "center", wordBreak: "keep-all", fontWeight: 600,
           }}>
             {t(E,
-              `Checked all ${trips.length} triplets → ${validCount} are valid moos.  Biggest score = ${best} ⭐ — the two m's picked far apart beat the adjacent "moo" (score 1).`,
-              `${trips.length} 개 조합 다 확인 → 유효한 moo ${validCount} 개.  최대 점수 = ${best} ⭐ — 멀리 떨어진 m 두 개가 붙어있는 "moo"(점수 1)를 이겨요.`)}
+              `${validCount} valid moos in here.  Biggest score = ${best} ⭐ — the two c's picked far apart (pos 3 & 7) beat every tighter moo.  (Brute would check all ${allTrips.length} triplets.)`,
+              `여기 유효한 moo 는 ${validCount} 개.  최대 점수 = ${best} ⭐ — 멀리 떨어진 c 두 개(위치 3·7)가 더 붙은 moo 들을 다 이겨요.  (브루트는 조합 ${allTrips.length} 개를 전부 확인.)`)}
           </div>
         );
       })()}
@@ -256,7 +261,7 @@ export function TripletEnumSimulator({ E }) {
       {/* Score strip — small card per triplet checked.  ✓ green = valid moo with score.
           ✗ red = rule failed.  Best gets ⭐ + dark green. */}
       <div style={{ display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap", marginBottom: 10 }}>
-        {trips.slice(0, revealedCount).map((tr, idx) => {
+        {stripTrips.map((tr, idx) => {
           const isCurrent = s.kind === "step" && idx === s.idx;
           const isBest = tr.ok && tr.score === best && best > 0;
           return (
