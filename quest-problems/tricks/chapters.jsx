@@ -342,8 +342,13 @@ export function makeTricksCh1(E) {
               <div><span style={{ color: "#a855f7", fontWeight: 800 }}>countB</span> = {t(E, "# of B-bags (y,y)", "B봉지 (y,y) 개수")} <span style={{ color: C.dim }}>· 🟣🟣</span></div>
               <div><span style={{ color: "#22c55e", fontWeight: 800 }}>countC</span> = {t(E, "# of C-bags (x,y)", "C봉지 (x,y) 개수")} <span style={{ color: C.dim }}>· 🟠🟣</span></div>
             </div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#f97316", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#f97316", marginBottom: 4, textAlign: "center" }}>
               {t(E, "The Formula", "공식")}
+            </div>
+            {/* 확률 아님 명시 (선생님 2026-07-22 "이거 확률 공식인가?") */}
+            <div style={{ fontSize: 11.5, color: C.dim, textAlign: "center", marginBottom: 10, wordBreak: "keep-all" }}>
+              {t(E, "Not probability — we just count how many ways (number of cases).",
+                  "확률이 아니라 '몇 가지 방법'인지 세는 거예요 (경우의 수).")}
             </div>
             <div style={{
               fontFamily: "'JetBrains Mono',monospace", fontSize: 13,
@@ -351,6 +356,19 @@ export function makeTricksCh1(E) {
             }}>
               <div style={{ background: "#fef3c7", borderRadius: 6, padding: "4px 8px", marginBottom: 4 }}>
                 <span style={{ color: "#f97316" }}>Case 1:</span> countA × countB × countC
+              </div>
+              {/* Case 1 이 왜 곱셈인지 — 구체 예시 (선생님 2026-07-22 "이거 확률 공식인가?") */}
+              <div style={{ background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 8, padding: "8px 10px", marginBottom: 8, fontSize: 11.5, fontWeight: 400, color: C.text, lineHeight: 1.85, textAlign: "left", fontFamily: "inherit", wordBreak: "keep-all" }}>
+                <div style={{ fontWeight: 700, color: "#ea580c", marginBottom: 2 }}>
+                  {t(E, "Case 1 = one A-bag + one B-bag + one C-bag", "Case 1 = A봉지 1개 + B봉지 1개 + C봉지 1개 뽑기")}
+                </div>
+                <div>
+                  {t(E, "countA choices for the A × countB for the B × countC for the C → multiply.",
+                      "A 고르는 법 countA가지 × B 고르는 법 countB가지 × C 고르는 법 countC가지 → 곱해요.")}
+                </div>
+                <div style={{ marginTop: 4, color: "#c2410c", fontWeight: 700 }}>
+                  {t(E, "e.g. A=2, B=1, C=2 → 2×1×2 = 4 ways", "예: A 2개, B 1개, C 2개 → 2×1×2 = 4가지")}
+                </div>
               </div>
               <div style={{ background: "#fef3c7", borderRadius: 6, padding: "4px 8px", marginBottom: 4 }}>
                 <span style={{ color: "#a855f7" }}>Case 2:</span> C(countC, 3) = <span style={{ fontSize: 11 }}>countC×(countC-1)×(countC-2)/6</span>
