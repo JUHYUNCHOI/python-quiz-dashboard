@@ -571,17 +571,6 @@ export function DeepAuditSim({ E }) {
     setRevealed(r => Math.min(6, r + 1));
   };
 
-  const auto = () => {
-    if (playing) { stop(); return; }
-    setPlaying(true);
-    setRevealed(0);
-    let r = 0;
-    playRef.current = setInterval(() => {
-      r++;
-      setRevealed(r);
-      if (r >= 6) { stop(); }
-    }, 480);
-  };
 
   // Tally by color, only over revealed candies
   const tally = {};
@@ -715,17 +704,13 @@ export function DeepAuditSim({ E }) {
 
       {/* Controls */}
       <div style={{ display: "flex", justifyContent: "center", gap: 6 }}>
-        <button onClick={stepOne} disabled={done || playing} style={{
+        <button onClick={stepOne} disabled={done} style={{
           padding: "7px 16px", borderRadius: 10, fontSize: 12, fontWeight: 700,
-          border: "none", cursor: (done || playing) ? "default" : "pointer",
-          color: "#fff", opacity: (done || playing) ? 0.4 : 1,
+          border: "none", cursor: done ? "default" : "pointer",
+          color: "#fff", opacity: done ? 0.4 : 1,
           background: `linear-gradient(135deg,#ea580c,${A})`,
           boxShadow: "0 3px 10px rgba(249,115,22,.3)",
         }}>▶ {t(E, "Reveal next", "다음 공개")}</button>
-        <button onClick={auto} style={{
-          padding: "7px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700,
-          border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
-        }}>{playing ? "⏸" : "⏭"} {t(E, playing ? "Pause" : "Auto", playing ? "정지" : "자동")}</button>
         <button onClick={() => reset()} style={{
           padding: "7px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700,
           border: `1px solid ${C.border}`, background: "#fff", color: C.dim, cursor: "pointer",
