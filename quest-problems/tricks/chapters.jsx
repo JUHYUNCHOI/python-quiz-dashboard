@@ -429,17 +429,11 @@ export function makeTricksCh2(E) {
       narr: t(E,
         "Now try picking 3 bags yourself!\nSee if you can get exactly 2 colors with 3 candies each.\n🎃", "이제 직접 봉지 3개를 골라봐요! 사탕 색이 딱 2가지 × 3개씩 나오는지 확인해보자! 🎃"),
     },
-    // 2-4: Color pair counter
-    {
-      type: "colorPairCounter",
-      narr: t(E,
-        "Watch the algorithm check each color pair and count the valid ways step by step!", "알고리즘이 색 쌍을 하나씩 확인하면서 가능한 방법을 세는 과정을 지켜봐요!"),
-    },
-    // 2-5: Final answer input
+    // 2-4: Final answer input
     {
       type: "input",
       narr: t(E,
-        "You saw the counting! What's the total for the 9-bag sample?", "세는 과정을 봤지! 봉지 9개짜리 예제의 최종 답은?"),
+        "Now count it yourself — what's the total for the 9-bag sample?", "이제 직접 세어보자 — 봉지 9개짜리 예제의 최종 답은?"),
       question: t(E,
         "Total valid ways for the sample?",
         "예제에서 가능한 방법은 총 몇 가지?"),
