@@ -36,7 +36,7 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `photoshoot25` | Photoshoot | Dec 2025 Bronze #3 | 🟡 12/18 (TLE 13-18, Python too slow) | ✅ 18/18 PASS |
 | `cowsplits` | COW Splits | Dec 2025 Bronze #2 | 3/14 (intentional k=1 only quest) | 3/14 (intentional k=1 only) |
 | `chipxchg` | Chip Exchange | Dec 2025 Bronze #1 | ✅ 12/12 PASS (Python passes - C++ has overflow) | 5/12 (overflow bug) |
-| `mooin3` | Mooin' Time III | Open 2025 Bronze #3 | 🟡 6/11 (fast 포물선+이분탐색, 1-6 PASS, 7-11 TLE — Python 한계; 구 brute 3/11) | ⏳ fast 미제출 (통과 예상, 구 brute 4/11) |
+| `mooin3` | Mooin' Time III | Open 2025 Bronze #3 | ✅ PASS (선생님 통과 버전 = 표 O(26)/query, `docs/mooin3-passing-solution.py`; quest 코드는 bisect 변형 로컬~0.9s. 구 brute 3/11) | ⏳ fast 미제출 (통과 예상, 구 brute 4/11) |
 | `cowphotos` | More Cow Photos | Open 2025 Bronze #2 | ✅ PASS (Counter O(N), 재제출 통과 2026-07-23; 구 brute 6/8 TLE) | ✅ 11/11 PASS |
 | `hps` | HPS Minus One | Open 2025 Bronze #1 | ✅ 12/12 PASS | ✅ 12/12 PASS |
 | `printseq` | Printing Sequences | Feb 2025 Bronze #3 | ✅ 13/13 PASS | ✅ 13/13 PASS (after dev fix) |

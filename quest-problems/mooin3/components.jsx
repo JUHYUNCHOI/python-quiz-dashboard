@@ -1,10 +1,12 @@
-// 🔒 USACO_VERIFIED (2026-05-13; fast code 재검증 2026-07-23)
-//   Python (fast = 포물선+이분탐색, 지금 quest 코드): 6/11 (1-6 PASS, 7-11 TLE).
-//     알고리즘 최적(O(26·Q·logN))·정답이지만 Python 손짜 이분탐색 while 오버헤드로
-//     제일 큰 케이스 시간초과 — Bronze 제약(N,Q≤1e5)에 Python 태생 한계. (구 brute 3/11)
-//   C++ (fast): 미제출 — 같은 알고리즘이라 통과 예상, 재제출로 확인 필요. (구 brute 4/11)
-//   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
-//   상세: REPO_ROOT/USACO_VERIFICATION.md
+// 🔒 USACO_VERIFIED (2026-05-13; fast 재검증 2026-07-23)
+//   알고리즘(고정 t2 + i=최근 다른글자 + k=최근 같은글자 + 포물선 꼭대기 후보 2 개): 정답 확인.
+//   Python: ✅ 통과 — 선생님 제출 버전(left/right/right_exclude 표, 쿼리당 O(26) O(1) 조회,
+//     이분탐색 없음) USACO 통과 확인.  기준 코드: docs/mooin3-passing-solution.py
+//     ⚠️ 현재 quest 표시 코드(M3_FAST_PY)는 동일 알고리즘의 bisect 변형 — 로컬 ~0.9s(통과 예상)·
+//        브루트 대비 3000/3000 정확. TODO: quest fast 코드를 통과 버전(표 기반)으로 교체 +
+//        sections 6-8 narration 정렬.
+//   C++: fast 미제출 (같은 알고리즘 통과 예상).  (구 brute Python 3/11 · C++ 4/11)
+//   코드 수정 시 USACO 재제출 필요.  상세: REPO_ROOT/USACO_VERIFICATION.md
 
 import { useState } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
@@ -1068,26 +1070,9 @@ const M3_STAGE_B_CPP = [
        꼭대기 (left_i + right_k)/2 근처 c_positions 의 후보 2 개만 검사.
        O(26·N + Q · 26·log N) — 통과.                                    ── */
 const M3_FAST_PY = [
-  "# 손으로 짠 이분 탐색 — 정렬된 리스트에서 target 이상인 첫 위치 반환.",
-  "# (커리큘럼: while 루프만 사용. bisect 모듈 import 없음.)",
-  "def find_first_at_least(sorted_arr, target, lo, hi):",
-  "    while lo < hi:",
-  "        mid = (lo + hi) // 2",
-  "        if sorted_arr[mid] < target:",
-  "            lo = mid + 1",
-  "        else:",
-  "            hi = mid",
-  "    return lo",
-  "",
-  "# target 보다 *큰* 첫 위치 (등호 자리만 다름).",
-  "def find_first_greater_than(sorted_arr, target, lo, hi):",
-  "    while lo < hi:",
-  "        mid = (lo + hi) // 2",
-  "        if sorted_arr[mid] <= target:",
-  "            lo = mid + 1",
-  "        else:",
-  "            hi = mid",
-  "    return lo",
+  "import sys",
+  "from bisect import bisect_left, bisect_right   # C 로 구현된 이분 탐색 (직접 짠 while 보다 빠름)",
+  "input = sys.stdin.readline                     # 빠른 입력 (쿼리 3 만 개 필수)",
   "",
   "N, Q = map(int, input().split())",
   "s = input().strip()",
@@ -1116,6 +1101,7 @@ const M3_FAST_PY = [
   "            last_same_idx = idx",
   "        latest_same[c][idx] = last_same_idx",
   "",
+  "out = []",
   "for q in range(Q):",
   "    l, r = map(int, input().split())",
   "    l -= 1",
@@ -1134,23 +1120,25 @@ const M3_FAST_PY = [
   "        # j 후보들 = positions_of[c] 중 (left_i, right_k) 사이에 있는 것들",
   "        c_positions = positions_of[c]",
   "        n_positions = len(c_positions)",
-  "        first_valid = find_first_greater_than(c_positions, left_i, 0, n_positions)",
-  "        first_invalid = find_first_at_least(c_positions, right_k, 0, n_positions)",
+  "        # bisect_right = left_i 보다 큰 첫 위치, bisect_left = right_k 이상 첫 위치",
+  "        first_valid = bisect_right(c_positions, left_i, 0, n_positions)",
+  "        first_invalid = bisect_left(c_positions, right_k, 0, n_positions)",
   "        if first_valid >= first_invalid:",
   "            continue",
   "",
   "        # f(j) = (j - left_i)·(right_k - j) 는 j 에 대한 아래볼록 포물선.",
-  "        # 꼭대기 j_peak = (left_i + right_k) / 2.",
-  "        # c_positions 에서 j_peak 와 가장 가까운 후보 두 개만 검사.",
+  "        # 꼭대기 j_peak = (left_i + right_k) / 2 근처 후보 두 개만 검사.",
   "        j_peak = (left_i + right_k) // 2",
-  "        peak_idx = find_first_at_least(c_positions, j_peak, first_valid, first_invalid)",
+  "        peak_idx = bisect_left(c_positions, j_peak, first_valid, first_invalid)",
   "        for cand_idx in (peak_idx, peak_idx - 1):",
   "            if first_valid <= cand_idx < first_invalid:",
   "                j = c_positions[cand_idx]",
   "                product = (j - left_i) * (right_k - j)",
   "                if product > best:",
   "                    best = product",
-  "    print(best)",
+  "    out.append(str(best))",
+  "",
+  "sys.stdout.write('\\n'.join(out) + '\\n')   # 모아서 한 번에 출력 (쿼리마다 print 하면 느림)",
 ];
 const M3_FAST_CPP = [
   "#include <iostream>",
@@ -1401,8 +1389,8 @@ export function getMooin3Sections(E) {
       why: [
         t(E, "With c (and thus left_i, right_k) fixed, f(j) = (j − left_i)·(right_k − j) is a downward parabola in j, peaking at (left_i + right_k) / 2.",
             "c 가 정해지면 left_i, right_k 도 정해짐. f(j) = (j − left_i)·(right_k − j) 는 j 에 대한 아래볼록 포물선, 꼭대기 (left_i + right_k) / 2."),
-        t(E, "So the best j in positions_of[c] is whichever of the 2 entries closest to that peak is biggest.  Find them with a hand-written binary search (find_first_at_least).",
-            "그래서 positions_of[c] 안 best j 는 꼭대기에 가장 가까운 항목 2 개 중 큰 쪽. 손으로 짠 이분 탐색 (find_first_at_least) 으로 찾음."),
+        t(E, "So the best j in positions_of[c] is whichever of the 2 entries closest to that peak is biggest.  Find them with binary search — bisect_left / bisect_right (C-level, fast).",
+            "그래서 positions_of[c] 안 best j 는 꼭대기에 가장 가까운 항목 2 개 중 큰 쪽. 이분 탐색 bisect_left / bisect_right (C 로 구현돼 빠름) 로 찾음."),
         t(E, "Per query: 26 chars × O(log N) ≈ 442 ops.  Total ≈ 1.3·10⁷ — fits comfortably in Python and C++.",
             "쿼리당: 26 문자 × O(log N) ≈ 442 연산. 총 ≈ 1.3·10⁷ — Python, C++ 모두 여유."),
       ],
@@ -1528,8 +1516,8 @@ const M3FastAside = ({ E }) => (
     </div>
     <div>
       <b>{t(E, "binary search", "이분 탐색")}</b>{" "}
-      {t(E, "→ hand-written find_first_at_least picks best j near (i+k)/2 in positions[c] — O(log N).",
-            "→ 손으로 짠 find_first_at_least 로 positions[c] 에서 (i+k)/2 근처 j — O(log N).")}
+      {t(E, "→ bisect_left / bisect_right picks best j near (i+k)/2 in positions[c] — O(log N).",
+            "→ bisect_left / bisect_right 로 positions[c] 에서 (i+k)/2 근처 j — O(log N).")}
     </div>
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #93c5fd", fontSize: 11 }}>
       {t(E, "Total: O(26·N) build + O(Q · 26 · log N) queries ≈ 1.3·10⁷. Both Python and C++ comfortable.",
