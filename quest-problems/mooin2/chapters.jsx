@@ -402,8 +402,8 @@ export function makeMooin2Ch3(E) {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13.5, color: C.text, lineHeight: 1.7, marginBottom: 4, textAlign: "center", wordBreak: "keep-all" }}>
-            {t(E, "So we don't recount every time, the code jots down 3 notes:",
-                  "매번 다시 세지 않으려고, 코드는 메모 3장을 적어둬요:")}
+            {t(E, "So we don't recount every time, the code jots down 2 notes:",
+                  "매번 다시 세지 않으려고, 코드는 메모 2장을 적어둬요:")}
           </div>
           <div style={{ fontSize: 11.5, color: C.dim, textAlign: "center", marginBottom: 12, wordBreak: "keep-all" }}>
             {t(E, "(a “number” = a value in the array · a “spot” = a position: 0, 1, 2, …)",
@@ -412,19 +412,14 @@ export function makeMooin2Ch3(E) {
           <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 500, margin: "0 auto" }}>
             {[
               {
-                plain: t(E, "Each number — how many times did it show up?", "숫자마다 — 몇 번 나왔지?"),
-                why: t(E, "It must show up at least twice to make a pair (y, y).", "같은 숫자 짝(y, y)을 만들려면 2번 이상 나와야 하니까."),
-                code: "count",
+                plain: t(E, "Each spot — how many DIFFERENT numbers (≠ this one) came before it?", "자리마다 — 그 앞에 (이 값과) 서로 다른 숫자가 몇 종류지?"),
+                why: t(E, "That count is exactly the x's we can pick for a moo ending here.", "그 종류 수가 곧 여기서 고를 수 있는 x 개수예요."),
+                code: "memo",
               },
               {
-                plain: t(E, "Each number — where does its pair start?", "숫자마다 — 그 짝이 어디서 시작하지?"),
-                why: t(E, "Everything before that spot is where x can come from.", "그 자리 앞쪽이 바로 'x 가 올 수 있는 구역'이라서."),
+                plain: t(E, "Each number — where's its 2nd-to-last spot?", "숫자마다 — ‘끝에서 두 번째’로 나온 자리는?"),
+                why: t(E, "A same y still sits after it, so that spot j completes the (y, y) pair — and everything before j is where x comes from.", "그 뒤에 같은 y 가 하나 더 있어 (y, y) 짝이 완성돼요 — 그리고 그 자리 앞쪽이 x 구역."),
                 code: "second_last",
-              },
-              {
-                plain: t(E, "Each spot — how many DIFFERENT numbers came before it?", "자리마다 — 그 앞에 서로 다른 숫자가 몇 종류지?"),
-                why: t(E, "That many numbers are exactly the x's we can choose.", "그 종류 수가 곧 고를 수 있는 x 개수예요."),
-                code: "D",
               },
             ].map((m, i) => (
               <div key={i} style={{ background: "#f8fafc", border: "1.5px solid #e2e8f0", borderRadius: 10, padding: "10px 12px" }}>
@@ -463,12 +458,12 @@ export function makeMooin2Ch4(E, lang = "py") {
   const narrs = [
     t(E, "Section 1: read the input. N first, then N numbers into the list a.",
          "섹션 1: 입력 읽기. 먼저 N, 그다음 N 개 숫자를 리스트 a 로."),
-    t(E, "Section 2: in one pass, build count[] and second_last[]. The trick: keep last_seen[v]; when v repeats, the OLD last_seen becomes the new second_last (that's p!).",
-         "섹션 2: 왼→오로 한 번 훑으며 count[] 와 second_last[] 만들기. 비결: last_seen[v] 를 기억하다가 v 가 반복되면 이전 last_seen 이 새 second_last (그게 p!) 가 돼요."),
-    t(E, "Section 3: build D[]. Walk left-to-right; D goes up by 1 only the FIRST time each value appears. D[k] = distinct values before position k.",
-         "섹션 3: D[] 만들기. 왼→오로 가며 각 값이 처음 나올 때만 D 가 1 증가. D[k] = 위치 k 앞 서로 다른 값 수."),
-    t(E, "Section 4: the payoff. For each y with count ≥ 2, add D[second_last[y]] — minus 1 when count ≥ 3. That whole loop is O(N). Done!",
-         "섹션 4: 결실. count ≥ 2 인 각 y 마다 D[second_last[y]] 더하기 — count ≥ 3 이면 1 빼기. 그 반복 전체가 O(N). 끝!"),
+    t(E, "Section 2: build memo[]. At each spot i, count the distinct values before it that DIFFER from a[i] — that's how many x's could sit there. (If a[i] already appeared, don't count itself.)",
+         "섹션 2: memo[] 만들기. 각 자리 i 에서, 그 앞에 나온 서로 다른 값 중 a[i] 와 '다른' 것의 개수 = 그 자리 앞에 올 수 있는 x 후보 수. (a[i] 가 앞에 이미 있었으면 자기 자신은 빼기.)"),
+    t(E, "Section 3: build second_last. Scan from the RIGHT; the moment a value's count hits 2, that spot j is its 2nd-to-last — a same y still sits after it, so the (j, k) pair is ready.",
+         "섹션 3: second_last 만들기. 오른쪽부터 세다가 어떤 값의 count 가 2 되는 순간 — 그 자리 j 가 '끝에서 두 번째'. 뒤에 같은 y 가 하나 더 있으니 (j, k) 짝 완성."),
+    t(E, "Section 4: the payoff. For each pair's j, add memo[j] — the distinct x's that can go before it. Sum them all. The whole thing is O(N). Done!",
+         "섹션 4: 결실. 짝의 j 마다 memo[j] (그 앞에 올 수 있는 서로 다른 x 수) 를 더하기. 다 합치면 끝. 전체가 O(N)!"),
   ];
   return sections.map((sec, i) => ({
     type: "code-section",
