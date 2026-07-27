@@ -1066,7 +1066,7 @@ const M3_STAGE_B_CPP = [
 ];
 
 /* ── Step 8 — Stage C (final fast): + 포물선 꼭대기 + binary search.
-       f(j) = (j - left_i)(right_k - j) 는 j 에 대한 아래볼록 포물선.
+       f(j) = (j - left_i)(right_k - j) 는 j 에 대한 위로 볼록 포물선(∩, 꼭짓점에서 최댓값).
        꼭대기 (left_i + right_k)/2 근처 c_positions 의 후보 2 개만 검사.
        O(26·N + Q · 26·log N) — 통과.                                    ── */
 const M3_FAST_PY = [
@@ -1126,7 +1126,7 @@ const M3_FAST_PY = [
   "        if first_valid >= first_invalid:",
   "            continue",
   "",
-  "        # f(j) = (j - left_i)·(right_k - j) 는 j 에 대한 아래볼록 포물선.",
+  "        # f(j) = (j - left_i)·(right_k - j) 는 j 에 대한 위로 볼록 포물선(∩, 꼭짓점에서 최댓값).",
   "        # 꼭대기 j_peak = (left_i + right_k) / 2 근처 후보 두 개만 검사.",
   "        j_peak = (left_i + right_k) // 2",
   "        peak_idx = bisect_left(c_positions, j_peak, first_valid, first_invalid)",
@@ -1233,7 +1233,7 @@ const M3_FAST_CPP = [
   "                continue;",
   "            }",
   "",
-  "            // f(j) = (j - left_i)·(right_k - j) 는 아래볼록 포물선.",
+  "            // f(j) = (j - left_i)·(right_k - j) 는 위로 볼록 포물선(∩, 꼭짓점에서 최댓값).",
   "            // 꼭대기 j_peak = (left_i + right_k) / 2.",
   "            // j_peak 와 가장 가까운 후보 두 개만 검사 (peak_idx, peak_idx - 1).",
   "            int j_peak = (left_i + right_k) / 2;",
@@ -1388,7 +1388,7 @@ export function getMooin3Sections(E) {
       py: M3_FAST_PY, cpp: M3_FAST_CPP,
       why: [
         t(E, "With c (and thus left_i, right_k) fixed, f(j) = (j − left_i)·(right_k − j) is a downward parabola in j, peaking at (left_i + right_k) / 2.",
-            "c 가 정해지면 left_i, right_k 도 정해짐. f(j) = (j − left_i)·(right_k − j) 는 j 에 대한 아래볼록 포물선, 꼭대기 (left_i + right_k) / 2."),
+            "c 가 정해지면 left_i, right_k 도 정해짐. f(j) = (j − left_i)·(right_k − j) 는 j 에 대한 위로 볼록 포물선(∩, 꼭짓점에서 최댓값), 꼭대기 (left_i + right_k) / 2."),
         t(E, "So the best j in positions_of[c] is whichever of the 2 entries closest to that peak is biggest.  Find them with binary search — bisect_left / bisect_right (C-level, fast).",
             "그래서 positions_of[c] 안 best j 는 꼭대기에 가장 가까운 항목 2 개 중 큰 쪽. 이분 탐색 bisect_left / bisect_right (C 로 구현돼 빠름) 로 찾음."),
         t(E, "Per query: 26 chars × O(log N) ≈ 442 ops.  Total ≈ 1.3·10⁷ — fits comfortably in Python and C++.",
@@ -1486,7 +1486,7 @@ const M3PeakAside = ({ E }) => (
     <div style={{ marginBottom: 6 }}>
       {t(E,
         "Coefficient of j² is −1 → opens DOWN. Maximum at the vertex j = (i + k)/2.",
-        "j² 계수 −1 → 아래로 볼록. 꼭대기 j = (i + k)/2.")}
+        "j² 계수 −1 → 위로 볼록(∩). 꼭대기(최댓값) j = (i + k)/2.")}
     </div>
     <div style={{ paddingTop: 6, borderTop: "1px dashed #fbbf24", fontSize: 11 }}>
       {t(E,
