@@ -1,11 +1,11 @@
-// 🔒 USACO_VERIFIED (2026-05-13; fast 재검증 2026-07-23)
-//   알고리즘(고정 t2 + i=최근 다른글자 + k=최근 같은글자 + 포물선 꼭대기 후보 2 개): 정답 확인.
-//   Python: ✅ 통과 — 선생님 제출 버전(left/right/right_exclude 표, 쿼리당 O(26) O(1) 조회,
-//     이분탐색 없음) USACO 통과 확인.  기준 코드: docs/mooin3-passing-solution.py
-//     ⚠️ 현재 quest 표시 코드(M3_FAST_PY)는 동일 알고리즘의 bisect 변형 — 로컬 ~0.9s(통과 예상)·
-//        브루트 대비 3000/3000 정확. TODO: quest fast 코드를 통과 버전(표 기반)으로 교체 +
-//        sections 6-8 narration 정렬.
-//   C++: fast 미제출 (같은 알고리즘 통과 예상).  (구 brute Python 3/11 · C++ 4/11)
+// 🔒 USACO_VERIFIED (2026-05-13; fast 재검증 2026-07-23; 표 기반 교체 2026-07-27)
+//   알고리즘(고정 c + i=최근 다른글자 + k=최근 같은글자 + 포물선 꼭짓점 후보 2 개): 정답 확인.
+//   Python: ✅ 통과 — 공식/선생님 표 방식(latest_same/earliest_same/nearest_diff, 쿼리당 O(26)
+//     O(1) 조회, 이분탐색 없음).  기준: docs/mooin3-passing-solution.py + 공식 sol_prob3_bronze_open25.html
+//     2026-07-27 quest 표시 코드(M3_FAST_PY/CPP)를 이 표 방식으로 교체 (기존 bisect 변형 제거) +
+//        sections 6-8 narration 정렬 완료.  로컬: 샘플 정확·브루트 3000/3000·Py 1.81s / C++ 0.14s (N=1e5, Q=3e4).
+//   C++: 표 방식, <bits/stdc++.h> 안 씀 (iostream/vector/string).  fast 미제출 — USACO 재제출로 최종 확인 권장.
+//     (구 brute Python 3/11 · C++ 4/11)
 //   코드 수정 시 USACO 재제출 필요.  상세: REPO_ROOT/USACO_VERIFICATION.md
 
 import { useState } from "react";
@@ -980,7 +980,7 @@ const M3_STAGE_B_PY = [
   "        right_k = latest_same[c][r]",
   "        if right_k <= left_i:",
   "            continue",
-  "        # j 는 여전히 positions_of[c] 모두 순회 (다음 단계에서 binary search 로 압축)",
+  "        # j 는 여전히 positions_of[c] 모두 순회 (다음 단계에서 표 하나 더로 O(1) 압축)",
   "        for j in positions_of[c]:",
   "            if j <= left_i:",
   "                continue",
@@ -1065,41 +1065,44 @@ const M3_STAGE_B_CPP = [
   "}",
 ];
 
-/* ── Step 8 — Stage C (final fast): + 포물선 꼭대기 + binary search.
-       f(j) = (j - left_i)(right_k - j) 는 j 에 대한 위로 볼록 포물선(∩, 꼭짓점에서 최댓값).
-       꼭대기 (left_i + right_k)/2 근처 c_positions 의 후보 2 개만 검사.
-       O(26·N + Q · 26·log N) — 통과.                                    ── */
+/* ── Step 8 — Stage C (final fast): 포물선 꼭짓점 + lookup 표 (이분 탐색 없음).
+       f(j) = (j - i)(k - j) 는 위로 볼록 포물선(∩) → 꼭짓점 (i+k)/2 근처 c 후보 2 개만.
+       그 2 개를 latest_same / earliest_same 표에서 O(1) 로 바로 조회 → 쿼리당 O(26).
+       공식 solution 과 동일 (표 기반, bisect 없음).  O(26·(N + Q)) — 통과.       ── */
 const M3_FAST_PY = [
   "import sys",
-  "from bisect import bisect_left, bisect_right   # C 로 구현된 이분 탐색 (직접 짠 while 보다 빠름)",
   "input = sys.stdin.readline                     # 빠른 입력 (쿼리 3 만 개 필수)",
   "",
   "N, Q = map(int, input().split())",
   "s = input().strip()",
   "",
-  "# positions_of[c] = 문자 chr(c+97) 가 등장하는 인덱스들 (왼→오 순서라 자동 정렬)",
-  "positions_of = [[] for _ in range(26)]",
-  "for idx in range(N):",
-  "    positions_of[ord(s[idx]) - 97].append(idx)",
-  "",
-  "# 두 lookup 표:",
-  "#   nearest_diff[c][i] = idx ≥ i 중 s[idx] ≠ chr(c) 인 가장 작은 idx",
-  "#   latest_same[c][i]  = idx ≤ i 중 s[idx] == chr(c) 인 가장 큰 idx",
+  "# 세 lookup 표 — 쿼리 전에 한 번만 만들어 둠 (전처리).  chr(c+97) = 글자 c",
+  "#   latest_same[c][i]   = idx ≤ i 중 글자 c 의 가장 오른쪽 (없으면 -1)",
+  "#   earliest_same[c][i] = idx ≥ i 중 글자 c 의 가장 왼쪽 (없으면 INF)",
+  "#   nearest_diff[c][i]  = idx ≥ i 중 c 아닌 가장 왼쪽 (없으면 INF)",
   "INF = N",
-  "nearest_diff = [[INF] * (N + 1) for _ in range(26)]",
-  "latest_same  = [[-1]  * (N + 1) for _ in range(26)]",
+  "latest_same   = [[-1]  * N for _ in range(26)]",
+  "earliest_same = [[INF] * N for _ in range(26)]",
+  "nearest_diff  = [[INF] * N for _ in range(26)]",
   "for c in range(26):",
   "    ch = chr(c + 97)",
-  "    next_diff_idx = INF",
-  "    for idx in range(N - 1, -1, -1):",
-  "        if s[idx] != ch:",
-  "            next_diff_idx = idx",
-  "        nearest_diff[c][idx] = next_diff_idx",
-  "    last_same_idx = -1",
-  "    for idx in range(N):",
-  "        if s[idx] == ch:",
-  "            last_same_idx = idx",
-  "        latest_same[c][idx] = last_same_idx",
+  "    ls = latest_same[c]",
+  "    last = -1",
+  "    for i in range(N):                         # 왼→오: 지금까지 본 c 의 마지막 위치",
+  "        if s[i] == ch:",
+  "            last = i",
+  "        ls[i] = last",
+  "    es = earliest_same[c]",
+  "    nd = nearest_diff[c]",
+  "    nxt_same = INF",
+  "    nxt_diff = INF",
+  "    for i in range(N - 1, -1, -1):             # 오→왼: 앞으로 나올 c / c아님 의 첫 위치",
+  "        if s[i] == ch:",
+  "            nxt_same = i",
+  "        else:",
+  "            nxt_diff = i",
+  "        es[i] = nxt_same",
+  "        nd[i] = nxt_diff",
   "",
   "out = []",
   "for q in range(Q):",
@@ -1108,32 +1111,20 @@ const M3_FAST_PY = [
   "    r -= 1",
   "    best = -1",
   "    for c in range(26):",
-  "        # left_i = (j-i) 최대화하려고 잡는 가장 왼쪽 i (s[i] ≠ chr(c))",
-  "        left_i = nearest_diff[c][l]",
-  "        if left_i >= r:",
+  "        # i = 가장 왼쪽 '다른 글자' → (j - i) 를 최대로",
+  "        i = nearest_diff[c][l]",
+  "        if i >= r:",
   "            continue",
-  "        # right_k = (k-j) 최대화하려고 잡는 가장 오른쪽 k (s[k] == chr(c))",
-  "        right_k = latest_same[c][r]",
-  "        if right_k <= left_i:",
+  "        # k = 가장 오른쪽 c → (k - j) 를 최대로",
+  "        k = latest_same[c][r]",
+  "        if k <= i:",
   "            continue",
-  "",
-  "        # j 후보들 = positions_of[c] 중 (left_i, right_k) 사이에 있는 것들",
-  "        c_positions = positions_of[c]",
-  "        n_positions = len(c_positions)",
-  "        # bisect_right = left_i 보다 큰 첫 위치, bisect_left = right_k 이상 첫 위치",
-  "        first_valid = bisect_right(c_positions, left_i, 0, n_positions)",
-  "        first_invalid = bisect_left(c_positions, right_k, 0, n_positions)",
-  "        if first_valid >= first_invalid:",
-  "            continue",
-  "",
-  "        # f(j) = (j - left_i)·(right_k - j) 는 j 에 대한 위로 볼록 포물선(∩, 꼭짓점에서 최댓값).",
-  "        # 꼭대기 j_peak = (left_i + right_k) / 2 근처 후보 두 개만 검사.",
-  "        j_peak = (left_i + right_k) // 2",
-  "        peak_idx = bisect_left(c_positions, j_peak, first_valid, first_invalid)",
-  "        for cand_idx in (peak_idx, peak_idx - 1):",
-  "            if first_valid <= cand_idx < first_invalid:",
-  "                j = c_positions[cand_idx]",
-  "                product = (j - left_i) * (right_k - j)",
+  "        # f(j) = (j - i)(k - j) 는 위로 볼록 포물선(∩) → 꼭짓점 m 에 가까운 j 가 최대",
+  "        m = (i + k) // 2",
+  "        # 꼭짓점 양옆 c 후보 2 개 = 두 표에서 O(1) 로 바로 (이분 탐색 불필요)",
+  "        for j in (latest_same[c][m], earliest_same[c][m]):",
+  "            if i < j < k:",
+  "                product = (j - i) * (k - j)",
   "                if product > best:",
   "                    best = product",
   "    out.append(str(best))",
@@ -1146,64 +1137,35 @@ const M3_FAST_CPP = [
   "#include <string>",
   "using namespace std;",
   "",
-  "// 손으로 짠 이분 탐색 — <algorithm> 의 lower_bound 안 써도 같은 일.",
-  "// 정렬된 sorted_arr 의 [lo, hi) 구간에서 target 이상인 첫 위치 반환.",
-  "int find_first_at_least(const vector<int>& sorted_arr, int target, int lo, int hi) {",
-  "    while (lo < hi) {",
-  "        int mid = (lo + hi) / 2;",
-  "        if (sorted_arr[mid] < target) {",
-  "            lo = mid + 1;",
-  "        } else {",
-  "            hi = mid;",
-  "        }",
-  "    }",
-  "    return lo;",
-  "}",
-  "",
-  "// target 보다 *큰* 첫 위치 (등호 자리만 다름).",
-  "int find_first_greater_than(const vector<int>& sorted_arr, int target, int lo, int hi) {",
-  "    while (lo < hi) {",
-  "        int mid = (lo + hi) / 2;",
-  "        if (sorted_arr[mid] <= target) {",
-  "            lo = mid + 1;",
-  "        } else {",
-  "            hi = mid;",
-  "        }",
-  "    }",
-  "    return lo;",
-  "}",
-  "",
   "int main() {",
+  "    ios_base::sync_with_stdio(false);",
+  "    cin.tie(0);",
   "    int N, Q;",
   "    cin >> N >> Q;",
   "    string s;",
   "    cin >> s;",
   "",
-  "    // positions_of[c] = 문자 ('a'+c) 가 등장하는 인덱스들 (정렬됨)",
-  "    vector<vector<int>> positions_of(26);",
-  "    for (int idx = 0; idx < N; idx++) {",
-  "        positions_of[s[idx] - 'a'].push_back(idx);",
-  "    }",
-  "",
-  "    // 두 lookup 표",
+  "    // 세 lookup 표 — 쿼리 전에 한 번만 (전처리).  ('a'+c) = 글자 c",
+  "    //   latest_same[c][i]   = idx ≤ i 중 c 의 가장 오른쪽 (없으면 -1)",
+  "    //   earliest_same[c][i] = idx ≥ i 중 c 의 가장 왼쪽 (없으면 INF)",
+  "    //   nearest_diff[c][i]  = idx ≥ i 중 c 아닌 가장 왼쪽 (없으면 INF)",
   "    int INF = N;",
-  "    vector<vector<int>> nearest_diff(26, vector<int>(N + 1, INF));",
-  "    vector<vector<int>> latest_same (26, vector<int>(N + 1, -1));",
+  "    vector<vector<int>> latest_same  (26, vector<int>(N, -1));",
+  "    vector<vector<int>> earliest_same(26, vector<int>(N, INF));",
+  "    vector<vector<int>> nearest_diff (26, vector<int>(N, INF));",
   "    for (int c = 0; c < 26; c++) {",
   "        char ch = 'a' + c;",
-  "        int next_diff_idx = INF;",
-  "        for (int idx = N - 1; idx >= 0; idx--) {",
-  "            if (s[idx] != ch) {",
-  "                next_diff_idx = idx;",
-  "            }",
-  "            nearest_diff[c][idx] = next_diff_idx;",
+  "        int last = -1;",
+  "        for (int i = 0; i < N; i++) {              // 왼→오",
+  "            if (s[i] == ch) last = i;",
+  "            latest_same[c][i] = last;",
   "        }",
-  "        int last_same_idx = -1;",
-  "        for (int idx = 0; idx < N; idx++) {",
-  "            if (s[idx] == ch) {",
-  "                last_same_idx = idx;",
-  "            }",
-  "            latest_same[c][idx] = last_same_idx;",
+  "        int nxt_same = INF, nxt_diff = INF;",
+  "        for (int i = N - 1; i >= 0; i--) {         // 오→왼",
+  "            if (s[i] == ch) nxt_same = i;",
+  "            else            nxt_diff = i;",
+  "            earliest_same[c][i] = nxt_same;",
+  "            nearest_diff[c][i]  = nxt_diff;",
   "        }",
   "    }",
   "",
@@ -1214,42 +1176,18 @@ const M3_FAST_CPP = [
   "        r--;",
   "        long long best = -1;",
   "        for (int c = 0; c < 26; c++) {",
-  "            // left_i = (j-i) 최대화하려고 잡는 가장 왼쪽 i (s[i] ≠ ('a'+c))",
-  "            int left_i = nearest_diff[c][l];",
-  "            if (left_i >= r) {",
-  "                continue;",
-  "            }",
-  "            // right_k = (k-j) 최대화하려고 잡는 가장 오른쪽 k (s[k] == ('a'+c))",
-  "            int right_k = latest_same[c][r];",
-  "            if (right_k <= left_i) {",
-  "                continue;",
-  "            }",
-  "",
-  "            // j 후보들 = positions_of[c] 중 (left_i, right_k) 사이",
-  "            int n_positions = positions_of[c].size();",
-  "            int first_valid   = find_first_greater_than(positions_of[c], left_i,  0, n_positions);",
-  "            int first_invalid = find_first_at_least    (positions_of[c], right_k, 0, n_positions);",
-  "            if (first_valid >= first_invalid) {",
-  "                continue;",
-  "            }",
-  "",
-  "            // f(j) = (j - left_i)·(right_k - j) 는 위로 볼록 포물선(∩, 꼭짓점에서 최댓값).",
-  "            // 꼭대기 j_peak = (left_i + right_k) / 2.",
-  "            // j_peak 와 가장 가까운 후보 두 개만 검사 (peak_idx, peak_idx - 1).",
-  "            int j_peak = (left_i + right_k) / 2;",
-  "            int peak_idx = find_first_at_least(positions_of[c], j_peak, first_valid, first_invalid);",
-  "            if (peak_idx < first_invalid) {",
-  "                int j = positions_of[c][peak_idx];",
-  "                long long product = (long long)(j - left_i) * (right_k - j);",
-  "                if (product > best) {",
-  "                    best = product;",
-  "                }",
-  "            }",
-  "            if (peak_idx - 1 >= first_valid) {",
-  "                int j = positions_of[c][peak_idx - 1];",
-  "                long long product = (long long)(j - left_i) * (right_k - j);",
-  "                if (product > best) {",
-  "                    best = product;",
+  "            int i = nearest_diff[c][l];            // 가장 왼쪽 '다른 글자'",
+  "            if (i >= r) continue;",
+  "            int k = latest_same[c][r];             // 가장 오른쪽 c",
+  "            if (k <= i) continue;",
+  "            int m = (i + k) / 2;                   // 포물선 꼭짓점",
+  "            // 꼭짓점 양옆 c 후보 2 개 — 두 표에서 O(1)",
+  "            int cand[2] = { latest_same[c][m], earliest_same[c][m] };",
+  "            for (int t = 0; t < 2; t++) {",
+  "                int j = cand[t];",
+  "                if (i < j && j < k) {",
+  "                    long long product = (long long)(j - i) * (k - j);",
+  "                    if (product > best) best = product;",
   "                }",
   "            }",
   "        }",
@@ -1343,8 +1281,8 @@ export function getMooin3Sections(E) {
             "바깥 j 루프가 쿼리당 O(N) 번 → 쿼리당 O(N²)."),
         t(E, "Q queries → total O(Q · N²). At N = 10⁵ and Q = 3·10⁴ that's ~3·10¹⁴ — way too slow.",
             "Q 쿼리 → 총 O(Q · N²). N = 10⁵, Q = 3·10⁴ 면 ~3·10¹⁴ — 너무 느려요."),
-        t(E, "So small-N test cases pass, but large-N cases TLE.  The next steps (6-8) turn this into a truly fast O(26 · Q · log N) solution.",
-            "그래서 N 작은 테스트는 통과, N 큰 테스트는 TLE.  다음 단계 (6-8) 에서 진짜 빠른 O(26 · Q · log N) 풀이로 바꿔요."),
+        t(E, "So small-N test cases pass, but large-N cases TLE.  The next steps (6-8) turn this into a truly fast O(26 · (N + Q)) solution.",
+            "그래서 N 작은 테스트는 통과, N 큰 테스트는 TLE.  다음 단계 (6-8) 에서 진짜 빠른 O(26 · (N + Q)) 풀이로 바꿔요."),
       ],
     },
     /* ── 6️⃣ Stage A: 외곽 루프를 j → c (26 개) 로 ── */
@@ -1380,27 +1318,27 @@ export function getMooin3Sections(E) {
       aside: <M3InsightAside E={E} />,
     },
 
-    /* ── 8️⃣ Stage C: 포물선 꼭대기 + binary search → 최종 ── */
+    /* ── 8️⃣ Stage C: 포물선 꼭짓점 + lookup 표 (이분 탐색 없음) → 최종 ── */
     {
-      label: t(E, "8️⃣ Parabola peak + binary search — only 2 j candidates per c",
-                  "8️⃣ 포물선 꼭대기 + 이분 탐색 — c 마다 후보 j 2 개만"),
+      label: t(E, "8️⃣ Parabola vertex + lookup tables — only 2 j candidates per c",
+                  "8️⃣ 포물선 꼭짓점 + lookup 표 — c 마다 후보 j 2 개만 (이분 탐색 없음)"),
       color: "#15803d",
       py: M3_FAST_PY, cpp: M3_FAST_CPP,
       why: [
-        t(E, "With c (and thus left_i, right_k) fixed, f(j) = (j − left_i)·(right_k − j) is a downward parabola in j, peaking at (left_i + right_k) / 2.",
-            "c 가 정해지면 left_i, right_k 도 정해짐. f(j) = (j − left_i)·(right_k − j) 는 j 에 대한 위로 볼록 포물선(∩, 꼭짓점에서 최댓값), 꼭대기 (left_i + right_k) / 2."),
-        t(E, "So the best j in positions_of[c] is whichever of the 2 entries closest to that peak is biggest.  Find them with binary search — bisect_left / bisect_right (C-level, fast).",
-            "그래서 positions_of[c] 안 best j 는 꼭대기에 가장 가까운 항목 2 개 중 큰 쪽. 이분 탐색 bisect_left / bisect_right (C 로 구현돼 빠름) 로 찾음."),
-        t(E, "Per query: 26 chars × O(log N) ≈ 442 ops.  Total ≈ 1.3·10⁷ — fits comfortably in Python and C++.",
-            "쿼리당: 26 문자 × O(log N) ≈ 442 연산. 총 ≈ 1.3·10⁷ — Python, C++ 모두 여유."),
+        t(E, "With c fixed, i = leftmost different char and k = rightmost c are fixed too.  f(j) = (j − i)·(k − j) is an upward-convex (∩) parabola, biggest at the vertex (i + k) / 2.",
+            "c 가 정해지면 i = 가장 왼쪽 다른 글자, k = 가장 오른쪽 c 도 정해짐. f(j) = (j − i)·(k − j) 는 위로 볼록(∩) 포물선 → 꼭짓점 (i + k) / 2 에서 최대."),
+        t(E, "So the best j is the c nearest the vertex.  The 2 nearest c (one on each side) come STRAIGHT from the tables — latest_same[c][m] and earliest_same[c][m] — O(1), no binary search.",
+            "그래서 best j 는 꼭짓점에 가장 가까운 c. 꼭짓점 양옆의 c 2 개는 표에서 바로 나와요 — latest_same[c][m] 와 earliest_same[c][m] — O(1), 이분 탐색 불필요."),
+        t(E, "Per query: 26 chars × O(1) ≈ 52 ops.  Build 26·N + queries → total O(26 · (N + Q)).  Same as the official table solution (no bisect).",
+            "쿼리당: 26 문자 × O(1) ≈ 52 연산. 표 만들기 26·N + 쿼리 → 총 O(26 · (N + Q)). 공식 표 solution 과 동일 (bisect 없음)."),
       ],
       pyOnly: [
-        t(E, "Hand-written find_first_at_least + find_first_greater_than — uses only Python lesson 14 (while) syntax, no bisect import.",
-            "손으로 짠 find_first_at_least + find_first_greater_than — Python 레슨 14 (while) 만 사용, bisect import 없이."),
+        t(E, "The only new table vs Step 7 is earliest_same (leftmost c at/after i) — built in the same right-to-left pass.  No bisect, no positions_of list.",
+            "Step 7 대비 새로 생긴 표는 earliest_same (i 이후 c 의 가장 왼쪽) 하나뿐 — 같은 오→왼 패스에서 함께 만듦. bisect 도, positions_of 리스트도 없음."),
       ],
       cppOnly: [
-        t(E, "Hand-written binary search — same shape as <algorithm>'s lower_bound / upper_bound, but pure cpp-7 (loops). Avoids any STL algorithm.",
-            "손으로 짠 이분 탐색 — <algorithm> 의 lower_bound / upper_bound 와 같은 모양이지만 cpp-7 (루프) 만으로 작성. STL algorithm 안 씀."),
+        t(E, "Only <iostream> / <vector> / <string> — no <bits/stdc++.h>, no binary search, no STL algorithm.  Just three tables and O(1) lookups.",
+            "<iostream> / <vector> / <string> 만 — <bits/stdc++.h> 도, 이분 탐색도, STL algorithm 도 안 씀. 표 세 개와 O(1) 조회뿐."),
       ],
       aside: <M3PerfFastAside E={E} />,
     },
@@ -1445,9 +1383,9 @@ const M3PerfFastAside = ({ E }) => (
       <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>{t(E, "precompute", "표 만들기")}</code>
       <div>{t(E, "26·N ≈ 2.6·10⁶ — fast ✓", "26·N ≈ 2.6·10⁶ — 빠름 ✓")}</div>
       <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>{t(E, "per query", "쿼리당")}</code>
-      <div>{t(E, "26·log N ≈ 442 — instant ✓", "26·log N ≈ 442 — 즉시 ✓")}</div>
+      <div>{t(E, "26 × O(1) ≈ 52 — instant ✓", "26 × O(1) ≈ 52 — 즉시 ✓")}</div>
       <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>{t(E, "total", "총합")}</code>
-      <div>{t(E, "≈ 1.3·10⁷ ops — fits ✓", "≈ 1.3·10⁷ — 통과 ✓")}</div>
+      <div>{t(E, "O(26·(N+Q)) — fits ✓", "O(26·(N+Q)) — 통과 ✓")}</div>
     </div>
   </div>
 );
@@ -1490,8 +1428,8 @@ const M3PeakAside = ({ E }) => (
     </div>
     <div style={{ paddingTop: 6, borderTop: "1px dashed #fbbf24", fontSize: 11 }}>
       {t(E,
-        "Constraint: j ∈ positions[c] (so s[j] = c).  Hand-written binary search picks the closest valid j to the vertex — only two candidates.",
-        "조건: j ∈ positions[c] (s[j] = c). 손으로 짠 이분 탐색으로 vertex 와 가장 가까운 j — 후보 2 개.")}
+        "Constraint: s[j] = c.  The two c nearest the vertex come straight from the tables — latest_same[c][m] (left side) and earliest_same[c][m] (right side).  Just two candidates, O(1).",
+        "조건: s[j] = c. 꼭짓점 양옆에서 가장 가까운 c 2 개는 표에서 바로 — latest_same[c][m] (왼쪽) 와 earliest_same[c][m] (오른쪽). 후보 2 개, O(1).")}
     </div>
   </div>
 );
@@ -1505,23 +1443,23 @@ const M3FastAside = ({ E }) => (
       ✅ {t(E, "Three pieces working together", "세 조각의 합")}
     </div>
     <div style={{ marginBottom: 4 }}>
-      <b>positions[c]</b>{" "}
-      {t(E, "→ sorted list of j with s[j] = c.",
-            "→ s[j] = c 인 j 의 정렬 리스트.")}
+      <b>nearest_diff / latest_same</b>{" "}
+      {t(E, "→ give i (leftmost different) and k (rightmost c) in O(1) per (c, l, r).",
+            "→ (c, l, r) 마다 i (가장 왼쪽 다른 글자) 와 k (가장 오른쪽 c) 를 O(1).")}
     </div>
     <div style={{ marginBottom: 4 }}>
-      <b>first_diff / last_same</b>{" "}
-      {t(E, "→ give i, k in O(1) per (c, l, r).",
-            "→ (c, l, r) 마다 i, k 를 O(1).")}
+      <b>latest_same / earliest_same</b>{" "}
+      {t(E, "→ at the vertex m = (i+k)/2, give the 2 nearest c directly — O(1), no binary search.",
+            "→ 꼭짓점 m = (i+k)/2 에서 가장 가까운 c 2 개를 바로 — O(1), 이분 탐색 없음.")}
     </div>
     <div>
-      <b>{t(E, "binary search", "이분 탐색")}</b>{" "}
-      {t(E, "→ bisect_left / bisect_right picks best j near (i+k)/2 in positions[c] — O(log N).",
-            "→ bisect_left / bisect_right 로 positions[c] 에서 (i+k)/2 근처 j — O(log N).")}
+      <b>{t(E, "parabola", "포물선")}</b>{" "}
+      {t(E, "→ f(j)=(j−i)(k−j) is ∩-shaped, so those 2 candidates are all we need to check.",
+            "→ f(j)=(j−i)(k−j) 는 ∩ 모양이라 그 후보 2 개만 확인하면 끝.")}
     </div>
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #93c5fd", fontSize: 11 }}>
-      {t(E, "Total: O(26·N) build + O(Q · 26 · log N) queries ≈ 1.3·10⁷. Both Python and C++ comfortable.",
-            "총: O(26·N) 만들기 + O(Q · 26 · log N) 쿼리 ≈ 1.3·10⁷. Python 도 C++ 도 여유.")}
+      {t(E, "Total: O(26·N) build + O(Q · 26) queries = O(26·(N+Q)). Both Python and C++ comfortable.",
+            "총: O(26·N) 만들기 + O(Q · 26) 쿼리 = O(26·(N+Q)). Python 도 C++ 도 여유.")}
     </div>
   </div>
 );

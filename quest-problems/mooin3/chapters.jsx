@@ -363,7 +363,7 @@ export function makeMooin3Ch2(E, lang = "py") {
     /* [결-c code] — smart code, in 3 stages:
         slice(5)[0] = Stage A: group j by character c (outer loop swap)
         slice(5)[1] = Stage B: precompute i, k lookup tables
-        slice(5)[2] = Stage C: parabola peak + binary search (final fast)  */
+        slice(5)[2] = Stage C: parabola vertex + lookup tables (final fast, no binary search)  */
     ...sections.slice(5).map((sec, i) => ({
       type: "reveal",
       label: sec.label,
@@ -379,8 +379,8 @@ export function makeMooin3Ch2(E, lang = "py") {
               "둘째 도약: nearest_diff, latest_same 표를 쿼리 전에 한 번만. 이제 (left_i, right_k) 가 표 한 번 조회로 끝.")
           : i === 2
           ? t(E,
-              "Third leap: f(j) = (j − left_i)·(right_k − j) is a parabola — peak at the midpoint.  Binary search positions_of[c] to land on the 2 closest j candidates.  Done — fits in time.",
-              "셋째 도약: f(j) = (j − left_i)·(right_k − j) 는 포물선 — 꼭대기 중점. positions_of[c] 에서 이분 탐색으로 가장 가까운 j 2 개만. 끝 — 시간 안에 들어옴.")
+              "Third leap: f(j) = (j − i)·(k − j) is an ∩-parabola — biggest at the midpoint.  One more table (earliest_same) hands us the 2 closest c straight away — O(1), no binary search.  Done — fits in time.",
+              "셋째 도약: f(j) = (j − i)·(k − j) 는 ∩ 포물선 — 중점에서 최대. 표 하나 더(earliest_same)면 가장 가까운 c 2 개가 바로 나와요 — O(1), 이분 탐색 없이. 끝 — 시간 안에 들어옴.")
           : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
