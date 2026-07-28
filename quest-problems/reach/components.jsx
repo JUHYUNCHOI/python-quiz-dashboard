@@ -856,20 +856,20 @@ export function GraphBuildSim({ E }) {
       ko: "도로 ⑥ 「3 5 20」 → 도시 3 ↔ 5, 길이 20. 도로 6개 완성! 각 도로 번호 ①~⑥ 을 기억해요.",
       en: "Road ⑥ “3 5 20” → city 3 ↔ 5, length 20. All 6 roads done! Note each road's number ①–⑥." },
     { line: "4  →  1 3 4 6", upto: 6, damaged: [], hi: null, q: false,
-      ko: "「4」 = 손상 도로 4개. 번호는 「1 3 4 6」. 이 번호의 도로를 하나씩 부숴볼게요 →",
-      en: "“4” = 4 damaged roads, numbered “1 3 4 6”. Let's break each numbered road one at a time →" },
+      ko: "「4」 = 약한 도로 4개. 번호는 「1 3 4 6」. 지금은 쓸 수 있지만 K분에 무너질 도로예요. 어느 도로인지 하나씩 표시할게요 →",
+      en: "“4” = 4 weak roads, numbered “1 3 4 6”. They still work now, but will collapse at minute K. Let's mark which roads they are, one at a time →" },
     { line: "damaged 1  →  road ① (1↔2)", upto: 6, damaged: [1], hi: 1, q: false,
-      ko: "번호 1 → 도로 ① = 도시 1 ↔ 2 (7). 이 도로가 손상! 🔴 빨간 점선.",
-      en: "Number 1 → road ① = city 1 ↔ 2 (7). This road breaks! 🔴 red dashed." },
+      ko: "번호 1 → 도로 ① = 도시 1 ↔ 2 (7). 이게 그 약한 도로예요 🔴 (K분에 무너짐, 지금은 OK).",
+      en: "Number 1 → road ① = city 1 ↔ 2 (7). This is one of the weak roads 🔴 (collapses at K, fine for now)." },
     { line: "damaged 3  →  road ③ (4↔3)", upto: 6, damaged: [1, 3], hi: 3, q: false,
-      ko: "번호 3 → 도로 ③ = 도시 4 ↔ 3 (8). 손상! 🔴",
-      en: "Number 3 → road ③ = city 4 ↔ 3 (8). Breaks! 🔴" },
+      ko: "번호 3 → 도로 ③ = 도시 4 ↔ 3 (8). 약한 도로 🔴",
+      en: "Number 3 → road ③ = city 4 ↔ 3 (8). Weak road 🔴" },
     { line: "damaged 4  →  road ④ (4↔2)", upto: 6, damaged: [1, 3, 4], hi: 4, q: false,
-      ko: "번호 4 → 도로 ④ = 도시 4 ↔ 2 (5). 손상! 🔴",
-      en: "Number 4 → road ④ = city 4 ↔ 2 (5). Breaks! 🔴" },
+      ko: "번호 4 → 도로 ④ = 도시 4 ↔ 2 (5). 약한 도로 🔴",
+      en: "Number 4 → road ④ = city 4 ↔ 2 (5). Weak road 🔴" },
     { line: "damaged 6  →  road ⑥ (3↔5)", upto: 6, damaged: [1, 3, 4, 6], hi: 6, q: false,
-      ko: "번호 6 → 도로 ⑥ = 도시 3 ↔ 5 (20). 손상! 🔴  이제 손상 도로 4개(①③④⑥) 완성. 나머지 ②⑤ 는 안전.",
-      en: "Number 6 → road ⑥ = city 3 ↔ 5 (20). Breaks! 🔴  All 4 damaged roads (①③④⑥) set; ②⑤ stay safe." },
+      ko: "번호 6 → 도로 ⑥ = 도시 3 ↔ 5 (20). 약한 도로 🔴  이제 약한 도로 4개(①③④⑥) 완성. 나머지 ②⑤ 는 튼튼(안 무너짐).",
+      en: "Number 6 → road ⑥ = city 3 ↔ 5 (20). Weak road 🔴  All 4 weak roads (①③④⑥) marked; ②⑤ are sturdy (never collapse)." },
     { line: "3  →  6 · 11 · 12", upto: 6, damaged: [1, 3, 4, 6], hi: null, q: true,
       ko: "「3」 그리고 「6 · 11 · 12」 → 쿼리 3개. K 마다 도달 도시 수를 물어요. (답은 다음 시뮬에서!)",
       en: "“3” then “6 · 11 · 12” → 3 queries. For each K, how many cities are reachable? (answer in the next sim!)" },
@@ -970,20 +970,20 @@ export function GraphBuildSim({ E }) {
             lineHeight: 1.65, wordBreak: "keep-all",
           }}>
             <div style={{ marginBottom: 5 }}>
-              {t(E, <><b>“3”</b> = 3 questions (we ask 3 times, changing the time).</>,
-                    <><b>「3」</b> = 질문 3개 (시각을 바꿔가며 3번 물어봐요).</>)}
+              {t(E, <>Red roads (①③④⑥) = <b>weak roads</b>: usable now, but <b>ALL collapse together at minute K</b>.</>,
+                    <>빨간 도로(①③④⑥) = <b>약한 도로</b>. 지금은 건널 수 있지만, <b>K분에 전부 한꺼번에 무너져요.</b></>)}
             </div>
             <div style={{ marginBottom: 5 }}>
-              {t(E, <><b>6, 11, 12 = a TIME (minutes)</b> — same “minutes” unit as the road lengths (7, 10, 8…).</>,
-                    <><b>6, 11, 12 = 시각(분)</b> — 도로 길이(7·10·8…)랑 똑같은 ‘분’ 단위예요.</>)}
+              {t(E, <><b>6, 11, 12 = the collapse TIME (minutes)</b> — same “minutes” as road lengths (7, 10, 8…). Not one road — the time they all fall.</>,
+                    <><b>6, 11, 12 = 무너지는 시각(분)</b> — 도로 길이(7·10·8…)랑 같은 ‘분’ 단위. 특정 도로가 아니라, 다 무너지는 시각이에요.</>)}
             </div>
             <div style={{ marginBottom: 5 }}>
-              {t(E, <>K = 6 means: <b>ALL the red roads (①③④⑥) collapse at once at minute 6</b> — not one specific road, the whole damaged set. So any red road you can't finish crossing by minute 6 is unusable.</>,
-                    <>K = 6 이면: <b>빨간 도로 ①③④⑥ 가 전부 6분에 한꺼번에 무너져요</b> — 하나만이 아니라 손상 도로 전부! 그래서 6분 안에 다 못 건너는 빨간 도로는 못 써요.</>)}
+              {t(E, <>So the 3 questions = <b>“what if they collapse at 6? at 11? at 12?”</b> — for each, how many cities can you reach before then. (Exactly as you said!)</>,
+                    <>그래서 질문 3개 = <b>“6분에 무너지면? 11분에 무너지면? 12분에 무너지면?”</b> — 각 경우에 무너지기 전 몇 곳 갈 수 있나. (선생님 말씀 그대로예요!)</>)}
             </div>
             <div>
-              {t(E, <>Bigger K (11, 12) = they collapse later = red roads usable longer = more cities reachable. (see it in the next sim!)</>,
-                    <>K 가 클수록(11, 12) 더 늦게 무너짐 = 빨간 도로를 더 오래 씀 = 더 많은 도시 도달. (다음 시뮬에서 확인!)</>)}
+              {t(E, <>Later collapse (bigger K) = weak roads usable longer = more cities. (answer in the next sim!)</>,
+                    <>늦게 무너질수록(K 큼) = 약한 도로를 더 오래 씀 = 더 많은 도시. (답은 다음 시뮬!)</>)}
             </div>
           </div>
         </div>
@@ -1001,7 +1001,7 @@ export function GraphBuildSim({ E }) {
       {/* legend */}
       <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginTop: 6, fontSize: 10.5, fontWeight: 700 }}>
         <span style={{ color: "#059669" }}>━━ {t(E, "road", "도로")}</span>
-        <span style={{ color: "#ef4444" }}>╌╌ {t(E, "damaged (breaks at K)", "손상(K 에 부서짐)")}</span>
+        <span style={{ color: "#ef4444" }}>╌╌ {t(E, "weak (collapses at K)", "약한 도로(K분에 무너짐)")}</span>
         <span style={{ color: "#8b5cf6" }}>{t(E, "①–⑥ = road number", "①–⑥ = 도로 번호")}</span>
       </div>
 
