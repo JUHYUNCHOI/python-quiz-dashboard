@@ -1197,6 +1197,42 @@ const M3_FAST_CPP = [
   "}",
 ];
 
+// CodeWalk provider — 코드 위 '왜 이렇게?' 노트 벽 대신, 설명을 코드 줄에 붙이는 말풍선.
+// (선생님 2026-07-23: "설명 줄줄이 쓰지 말고 봐야할 부분만, 필요하면 말풍선".)
+// 검증본 코드(M3_FULL_*, M3_FAST_*)는 그대로 두고 표시 방식만 CodeWalk 로.
+const _M3_VARS = [
+  { v: "s", ko: "문자열", en: "the string" },
+  { v: "j", ko: "가운데 자리", en: "middle spot" },
+  { v: "left_i", ko: "왼쪽 '다른 글자'", en: "left different" },
+  { v: "right_k", ko: "오른쪽 '같은 글자'", en: "right same" },
+];
+export function getMooin3Walk(E, lang = "py", mode = "brute") {
+  if (mode === "brute") {
+    if (lang === "cpp") {
+      return { code: M3_FULL_CPP, vars: _M3_VARS, beats: [
+        { hi: [4, 8],   bubble: t(E, "Input first — read N, Q, then the string s.", "입력부터 — N, Q 읽고 문자열 s.") },
+        { hi: [10, 15], bubble: t(E, "Each query: read l, r → 0-based (l--, r--). best = -1 (long long, the product gets big).", "쿼리마다 l, r 읽고 0-based (l--, r--). best = -1 (곱이 커서 long long).") },
+        { hi: [16, 16], bubble: t(E, "Pin the middle spot j — for each j we look both ways once.", "가운데 자리 j 를 하나씩 박아요 — j 마다 양쪽을 한 번씩.") },
+        { hi: [17, 23], bubble: t(E, "Left: first spot with a DIFFERENT letter than s[j] = left_i (smaller i → bigger j−i).", "왼쪽: s[j] 와 '다른' 글자가 처음 나오는 자리 = left_i (i 작을수록 j−i 큼).") },
+        { hi: [24, 30], bubble: t(E, "Right: last spot with the SAME letter as s[j] = right_k (bigger k → bigger k−j).", "오른쪽: s[j] 와 '같은' 글자가 마지막 자리 = right_k (k 클수록 k−j 큼).") },
+        { hi: [31, 36], bubble: t(E, "If both exist, (j−left_i)×(right_k−j) — keep the max. Cast to long long so it doesn't overflow.", "둘 다 있으면 (j−left_i)×(right_k−j) — 최댓값 유지. long long 캐스팅으로 오버플로 방지.") },
+        { hi: [38, 38], bubble: t(E, "Print this query's answer.", "이 쿼리의 답 출력.") },
+      ] };
+    }
+    return { code: M3_FULL_PY, vars: _M3_VARS, beats: [
+      { hi: [0, 1],   bubble: t(E, "Input first — read N, Q, then the string s.", "입력부터 — N, Q 읽고 문자열 s.") },
+      { hi: [3, 7],   bubble: t(E, "Each query: read l, r → 0-based (l−=1, r−=1). Start best = -1.", "쿼리마다 l, r 읽고 0-based (l−=1, r−=1). best = -1 로 시작.") },
+      { hi: [8, 9],   bubble: t(E, "Pin the middle spot j — for each j we look both ways once.", "가운데 자리 j 를 하나씩 박아요 — j 마다 양쪽을 한 번씩.") },
+      { hi: [10, 15], bubble: t(E, "Left: first spot with a DIFFERENT letter than s[j] = left_i (smaller i → bigger j−i).", "왼쪽: s[j] 와 '다른' 글자가 처음 나오는 자리 = left_i (i 작을수록 j−i 큼).") },
+      { hi: [16, 21], bubble: t(E, "Right: last spot with the SAME letter as s[j] = right_k (bigger k → bigger k−j).", "오른쪽: s[j] 와 '같은' 글자가 마지막 자리 = right_k (k 클수록 k−j 큼).") },
+      { hi: [22, 25], bubble: t(E, "If both exist, (j−left_i)×(right_k−j) — keep the max.", "둘 다 있으면 (j−left_i)×(right_k−j) — 최댓값 유지.") },
+      { hi: [26, 26], bubble: t(E, "Print this query's answer.", "이 쿼리의 답 출력.") },
+    ] };
+  }
+  // mode === "fast" — 다음 커밋에서 추가
+  return null;
+}
+
 export function getMooin3Sections(E) {
   return [
     {

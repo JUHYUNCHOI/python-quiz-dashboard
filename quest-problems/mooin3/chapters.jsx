@@ -1,6 +1,7 @@
 import { C, t } from "@/components/quest/theme";
-import { getMooin3Sections, MooTraceSimulator, TripletEnumSimulator } from "./components";
+import { getMooin3Sections, getMooin3Walk, MooTraceSimulator, TripletEnumSimulator } from "./components";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ═══════════════════════════════════════════════════════════════
    Mooin' Time III walkthrough — follows the 기·승·전·결 arc
@@ -335,19 +336,19 @@ export function makeMooin3Ch2(E, lang = "py") {
       content: (<MooTraceSimulator E={E} />),
     },
 
-    /* [결-a code] — brute code sections (input → fix-j loop → update → full).
-       Sections 1..4 from getMooin3Sections. */
-    ...sections.slice(0, 4).map((sec, i) => ({
-      type: "reveal",
-      label: sec.label,
-      preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
-      narr: i === 0
-        ? t(E,
-            "Same fix-j idea as the simulator — but now in code.  For each j, scan the left side once for the best i, scan the right side once for the best k.  Three nested for-loops shrink to two.",
-            "방금 시뮬에서 j 를 고정한 그 아이디어 그대로 — 이번엔 코드로.  매 j 마다 왼쪽에서 best i 를 한 번 훑고, 오른쪽에서 best k 를 한 번 훑어요.  3중 for 가 2중 for 로 줄어요.")
-        : "",
-      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
-    })),
+    /* [결-a code] — 브루트 fix-j 전체 코드를 CodeWalk 말풍선 하나로 (선생님 2026-07-23:
+       "설명 줄줄이 쓰지 말고 봐야할 부분만, 필요하면 말풍선"). 코드 위 노트 벽 4스텝 → 1스텝. */
+    (() => {
+      const w = getMooin3Walk(E, lang, "brute");
+      return {
+        type: "reveal",
+        label: t(E, "Code: fix-j", "코드: j 고정"),
+        narr: t(E,
+          "Same fix-j idea as the simulator — now in code.  Each part lights up with a bubble; read them in order.",
+          "방금 시뮬의 j 고정 아이디어 그대로 — 이번엔 코드로.  각 부분이 밝아지며 말풍선이 떠요, 순서대로 봐요."),
+        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
+      };
+    })(),
 
     /* [결-b 한계] — section 5 ("What if N is big?") */
     ...sections.slice(4, 5).map((sec) => ({
