@@ -124,7 +124,7 @@ const CodeSnippet = ({ lines, highlight: hl }) => (
 const A = "#8b5cf6";
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (6 steps)
+   Chapter 1: 📋 문제 이해 (5 steps) — 미션→규칙→형식→그래프시뮬→K별답시뮬
    ═══════════════════════════════════════════════════════════════ */
 export function makeReachCh1(E) {
   return [
@@ -151,11 +151,6 @@ export function makeReachCh1(E) {
             </div>
           </div>
 
-          <div style={{ marginTop: 10, background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
-            {t(E,
-              "N cities,\nM roads → some roads are weak → at minute K all weak roads collapse → how many cities reachable from city 1?",
-              "도시 N개,\n다리 M개 → 일부 다리는 약함 → K분에 약한 다리 전부 무너짐 → 도시 1에서 몇 개 도시에 갈 수 있어요?")}
-          </div>
         </div>),
     },
     // 1-2: Break rules — damaged roads break at time K (규칙을 시뮬보다 먼저!)
@@ -244,30 +239,9 @@ export function makeReachCh1(E) {
               <div>0 ≤ K ≤ 1,000,000,000 (= 10⁹)</div>
             </div>
           </div>
-          {/* 샘플 */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
-              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.55, color: "#f8fafc" }}>
-                <div>5 6</div>
-                <div>1 2 7</div><div>2 3 10</div><div>4 3 8</div>
-                <div>4 2 5</div><div>1 5 18</div><div>3 5 20</div>
-                <div>4</div>
-                <div>1 3 4 6</div>
-                <div>3</div>
-                <div>6</div><div>11</div><div>12</div>
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
-              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac" }}>
-                <div>2</div><div>4</div><div>5</div>
-              </div>
-            </div>
-          </div>
-          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
-            {t(E, "Roads 1, 3, 4, 6 are weak. For K = 6, 11, 12 the dragon reaches 2, 4, 5 cities.",
-                "약한 다리는 1, 3, 4, 6번. K = 6, 11, 12일 때 용이 각각 2, 4, 5개 도시에 도달해요.")}
+          <div style={{ fontSize: 11.5, color: C.dim, textAlign: "center", wordBreak: "keep-all" }}>
+            {t(E, "Next: watch the real sample input turn into a graph, line by line 👉",
+                "다음: 실제 샘플 입력이 한 줄씩 그래프로 변하는 걸 봐요 👉")}
           </div>
         </div>),
     },
@@ -285,22 +259,12 @@ export function makeReachCh1(E) {
         "Play out each query: pick K = 6, 11, or 12, then ▶ to watch each city get reached — or blocked — and see the answers land on 2, 4, 5.",
         "쿼리를 직접 돌려봐요: K = 6, 11, 12 중 골라 ▶ 를 누르면 도시가 하나씩 도달(또는 차단)돼요. 답이 2, 4, 5 로 떨어지는 걸 확인!"),
     },
-    // 1-6: Answer for K=11 (concrete example)
-    {
-      type: "input",
-      narr: t(E,
-        "K=11: City 4 needs time 12 via 1→2→4 (7+5=12 > 11).\nIs there another path?\nEvery road into city 4 is weak.\nSo how many cities are reachable?", "K=11: 도시 4까지 1→2→4 경로가 7+5=12분인데 12 > 11이라 불가! 도시 4로 가는 다리는 다 약한 다리예요. 도달 가능한 도시는 몇 개?"),
-      question: t(E,
-        "K=11: How many cities reachable? (city 4 needs 12 min)",
-        "K=11일 때 도달 가능한 도시 수는?\n(도시 4는 최소 12분 걸림)"),
-      answer: 4,
-    },
   ];
 }
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: 🧭 접근 — 다익스트라 (7 steps)
+   Chapter 2: 🧭 접근 — 다익스트라 (5 steps)
 
    스캐폴딩 순서 (feedback_first_concept_scaffolding):
      1. "그럼 어떻게 풀까? 생각해보자" — 필요한 것 = 가장 빠른 도착 시각
@@ -308,8 +272,7 @@ export function makeReachCh1(E) {
      3. 예제에서 끝까지 (trace 시뮬)
      4. 이름은 나중에: 다익스트라 + 왜 BFS는 안 되나
      5. 이 문제에 적용 — 빨간 다리 조건 하나만 추가
-     6. 확인 퀴즈
-   (K 슬라이더는 Ch1 의 reachSpread 와 중복이라 제거 — 2026-07-28 재정비)
+   (K 슬라이더·퀴즈는 중복/불필요라 제거 — 2026-07-28 선생님 요청)
    ═══════════════════════════════════════════════════════════════ */
 export function makeReachCh2(E) {
   const mono = "'JetBrains Mono',monospace";
@@ -325,10 +288,10 @@ export function makeReachCh2(E) {
           <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
             {t(E, "What do we actually need?", "우리한테 진짜 필요한 건 뭘까?")}
           </div>
-          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, lineHeight: 1.75, color: C.text, marginBottom: 10 }}>
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, lineHeight: 1.7, color: C.text, marginBottom: 10, textAlign: "center" }}>
             {t(E,
-              <>Page 1's sim showed the rule: a city is reachable when the red roads on the way are crossed <b>by minute K</b>.  So per city we just need one number — <b>the earliest possible arrival time</b>.  Compare it with K → done.</>,
-              <>1장 시뮬에서 봤듯, 도시에 갈 수 있냐는 결국 길에 있는 빨간 다리를 <b>K분 안에</b> 다 건너느냐예요.  그러니 도시마다 딱 숫자 하나 — <b>가장 빨리 도착할 수 있는 시각</b> — 만 알면 돼요.  그걸 K 랑 비교하면 끝.</>)}
+              <>Per city, ONE number is enough: <b>the earliest arrival time</b>.  Compare it with K → done.</>,
+              <>도시마다 숫자 하나면 충분해요: <b>가장 빨리 도착하는 시각</b>.  그걸 K 랑 비교하면 끝.</>)}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
             <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "8px 10px", fontSize: 12, lineHeight: 1.6, color: "#14532d" }}>
@@ -461,17 +424,6 @@ export function makeReachCh2(E) {
             {t(E, "Next chapter: this exact plan, as code 👉", "다음 챕터: 이 계획 그대로 코드로 👉")}
           </div>
         </div>),
-    },
-    // 2-7: 확인 퀴즈
-    {
-      type: "input",
-      narr: t(E,
-        "Check: with the sample, our plan gives K=6 → 2, K=11 → 4, K=12 → 5.\nWhat's the sum of the three answers?",
-        "확인해봐요: 예제에서 이 계획대로면 K=6 → 2, K=11 → 4, K=12 → 5.\n세 답의 합은?"),
-      question: t(E,
-        "Sum of answers: 2 + 4 + 5 = ?",
-        "세 쿼리의 답의 합: 2 + 4 + 5 = ?"),
-      answer: 11,
     },
   ];
 }
