@@ -151,6 +151,36 @@ export function getCowSplitsSections(E) {
   ];
 }
 
+// CodeWalk — 코드 위 노트 벽 대신 코드 줄에 붙는 말풍선 (선생님 규칙).
+// 3섹션이 하나의 연속 프로그램이라 그대로 이어 붙임. 코드 문자열은 그대로.
+const _CS_VARS = [
+  { v: "N", ko: "블록 수", en: "# of COW blocks" },
+  { v: "S", ko: "길이 3N 문자열", en: "the length-3N string" },
+  { v: "n3", ko: "전체 길이 3N", en: "total length 3N" },
+  { v: "M", ko: "연산 수(답)", en: "# operations (answer)" },
+];
+export function getCowSplitsWalk(E, lang = "py") {
+  const s = getCowSplitsSections(E);
+  if (lang === "cpp") {
+    const code = [...s[0].cpp, ...s[1].cpp, ...s[2].cpp];
+    // s0=17 (0-16), s1=9 (17-25), s2=15 (26-40)
+    return { code, vars: _CS_VARS, beats: [
+      { hi: [0, 12],  bubble: t(E, "Read T test cases. For each: read N and the C/O/W string S (length 3N = n3).", "T개 테스트. 각각 N과 COW 문자열 S(길이 3N = n3) 읽기.") },
+      { hi: [13, 16], bubble: t(E, "Every operation removes an even-length square, so the total 3N must be even → N must be even. If N is odd, the answer is -1.", "각 연산은 짝수 길이 '사각'을 지워요 → 총 3N이 짝수여야 함 → N이 짝수 필수. 홀수면 답은 -1.") },
+      { hi: [17, 25], bubble: t(E, "Try M = 1 first: S is one big square exactly when its first half equals its second half. If so, tag every letter with operation 1.", "먼저 M = 1 시도: S의 앞 절반 == 뒤 절반이면 S 자체가 사각. 그럼 모든 글자에 연산 1을 붙이면 끝.") },
+      { hi: [26, 41], bubble: t(E, "Otherwise the letter trick: each block has one C, one O, one W, so all the C's form C^N (even → a square), and same for O and W. Op 1 = every C, Op 2 = every O, Op 3 = every W → M = 3, always small enough. Print each answer.", "아니면 글자 트릭: 블록마다 C·O·W 하나씩이라 모든 C는 C^N(짝수→사각), O·W도 마찬가지. 연산1=모든 C, 2=모든 O, 3=모든 W → M = 3, 항상 충분히 작음. 각 답 출력.") },
+    ] };
+  }
+  const code = [...s[0].py, ...s[1].py, ...s[2].py];
+  // s0=12 (0-11), s1=5 (12-16), s2=5 (17-21)
+  return { code, vars: _CS_VARS, beats: [
+    { hi: [0, 8],   bubble: t(E, "Read T test cases. For each: read N and the C/O/W string S (length 3N = n3).", "T개 테스트. 각각 N과 COW 문자열 S(길이 3N = n3) 읽기.") },
+    { hi: [9, 11],  bubble: t(E, "Every operation removes an even-length square, so the total 3N must be even → N must be even. If N is odd, the answer is -1.", "각 연산은 짝수 길이 '사각'을 지워요 → 총 3N이 짝수여야 함 → N이 짝수 필수. 홀수면 답은 -1.") },
+    { hi: [12, 16], bubble: t(E, "Try M = 1 first: S is one big square exactly when its first half equals its second half. If so, tag every letter with operation 1.", "먼저 M = 1 시도: S의 앞 절반 == 뒤 절반이면 S 자체가 사각. 그럼 모든 글자에 연산 1을 붙이면 끝.") },
+    { hi: [17, 21], bubble: t(E, "Otherwise the letter trick: each block has one C, one O, one W, so all the C's form C^N (even → a square), and same for O and W. Op 1 = every C, Op 2 = every O, Op 3 = every W → M = 3, always small enough. Print each answer.", "아니면 글자 트릭: 블록마다 C·O·W 하나씩이라 모든 C는 C^N(짝수→사각), O·W도 마찬가지. 연산1=모든 C, 2=모든 O, 3=모든 W → M = 3, 항상 충분히 작음. 각 답 출력.") },
+  ] };
+}
+
 export function CowSplitsProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }

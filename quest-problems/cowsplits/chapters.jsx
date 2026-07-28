@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getCowSplitsSections } from "./components";
+import { getCowSplitsSections, getCowSplitsWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeCowSplitsCh1 (5 steps)
@@ -187,13 +188,17 @@ export function makeCowSplitsCh1(E) {
    Chapter 2: makeCowSplitsCh2 (1 progressive step)
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowSplitsCh2(E, lang = "py") {
+  const w = getCowSplitsWalk(E, lang);
   return [
     {
-      type: "progressive",
+      type: "reveal",
+      label: t(E, "Code", "코드"),
       narr: t(E,
-        "Read the input, handle the parity check, try M=1, otherwise apply the letter-group trick. The code builds up section by section.",
-        "입력을 읽고 짝수 체크 → M=1 시도 → 안 되면 글자-그룹 트릭. 아래 섹션이 한 단락씩 쌓아가요."),
-      sections: getCowSplitsSections(E),
+        "Read the solution top to bottom — each bubble sits on the lines it explains: read input, parity check, try M=1, otherwise the letter-group trick.",
+        "코드를 위에서 아래로 읽어보자 — 말풍선이 설명하는 코드 줄에 바로 붙어 있어: 입력 읽기 → 짝수 체크 → M=1 시도 → 안 되면 글자-그룹 트릭."),
+      content: (
+        <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#059669" />
+      ),
     },
   ];
 }
