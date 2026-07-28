@@ -277,37 +277,12 @@ export function makeReachCh1(E) {
 export function makeReachCh2(E) {
   const mono = "'JetBrains Mono',monospace";
   return [
-    // 2-1: 그럼 어떻게 풀까? — 필요한 건 '가장 빠른 도착 시각'
+    // 2-1: 그럼 어떻게 풀까? — 시각 자료: 도시 3까지 두 길 비교 → 가장 빠른 길만 보면 됨
     {
-      type: "reveal",
+      type: "fastestWay",
       narr: t(E,
-        "So how do we solve it? Let's think.\nFor each city, we only need ONE thing: the FASTEST way there. If even the fastest way is too late — that city is out.",
-        "그럼 어떻게 해결하면 될까? 생각해보자.\n도시마다 딱 하나만 알면 돼요: 거기까지 '가장 빨리 가는 길'. 가장 빠른 길로도 늦으면 — 그 도시는 못 가는 거예요."),
-      content: (
-        <div style={{ padding: 16, wordBreak: "keep-all" }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
-            {t(E, "What do we actually need?", "우리한테 진짜 필요한 건 뭘까?")}
-          </div>
-          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, lineHeight: 1.7, color: C.text, marginBottom: 10, textAlign: "center" }}>
-            {t(E,
-              <>Per city, ONE thing is enough: <b>the fastest way there</b>.  Check if that way fits in time → done.</>,
-              <>도시마다 하나면 충분해요: <b>가장 빨리 가는 길</b>.  그 길이 시간 안에 되는지 보면 끝.</>)}
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
-            <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "8px 10px", fontSize: 12, lineHeight: 1.6, color: "#14532d" }}>
-              {t(E, <><b>Fastest way arrives in time</b> → reachable ✓</>,
-                    <><b>가장 빠른 길이 시간 안</b> → 도달 ✓</>)}
-            </div>
-            <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "8px 10px", fontSize: 12, lineHeight: 1.6, color: "#7f1d1d" }}>
-              {t(E, <><b>Even the fastest way is late</b> → no path works ✗</>,
-                    <><b>가장 빠른 길도 늦으면</b> → 어떤 길도 안 됨 ✗</>)}
-            </div>
-          </div>
-          <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "8px 12px", fontSize: 12.5, fontWeight: 700, color: "#92400e", textAlign: "center" }}>
-            {t(E, "New goal: find the fastest way from city 1 to every city. How?",
-                  "새 목표: 도시 1에서 각 도시까지 '가장 빨리 가는 길' 찾기. 어떻게?")}
-          </div>
-        </div>),
+        "So how do we solve it? Look at city 3: two ways to get there — but we only ever need the FASTEST one.",
+        "그럼 어떻게 해결하면 될까? 도시 3을 봐요: 가는 길이 두 개인데 — 우리한테 필요한 건 '가장 빠른 길' 하나뿐이에요."),
     },
     // 2-3: 새 생각법 — 확실한 것부터 확정 (실제 숫자로)
     {

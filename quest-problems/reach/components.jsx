@@ -1097,3 +1097,86 @@ export function GraphBuildSim({ E }) {
     </div>
   );
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   FastestWayViz — 접근 1페이지용 시각 자료.
+   도시 3까지 가는 두 길을 그래프 위에 그려 비교:
+     길 A: 1→2→3 = 17분 (가장 빠름 ⭐)   길 B: 1→5→3 = 38분 (볼 필요 없음)
+   "도시마다 가장 빠른 길 하나만 보면 된다" 를 눈으로.
+   (선생님 2026-07-28: "긴 설명보다 시각적인 설명이 좋아")
+   ═══════════════════════════════════════════════════════════════ */
+export function FastestWayViz({ E }) {
+  const W = 360, H = 260, pad = 20;
+  const nodePos = (n) => ({ x: n.x + pad, y: n.y + pad });
+  const PATH_A = [1, 2];        // edge ids: 1→2 (7), 2→3 (10)
+  const PATH_B = [5, 6];        // edge ids: 1→5 (18), 3→5 (20)
+  const AC = "#8b5cf6", BC = "#94a3b8";
+
+  return (
+    <div style={{ padding: "10px 6px" }}>
+      <div style={{ fontSize: 12.5, fontWeight: 700, color: AC, textAlign: "center", marginBottom: 4, wordBreak: "keep-all" }}>
+        {t(E, "Many ways to city 3 — which do we care about?", "도시 3까지 가는 길은 여러 개 — 뭘 봐야 할까?")}
+      </div>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: "block", margin: "0 auto" }}>
+        {EDGES.map(e => {
+          const a = nodePos(getNode(e.u)), b = nodePos(getNode(e.v));
+          const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+          const onA = PATH_A.includes(e.id), onB = PATH_B.includes(e.id);
+          const stroke = onA ? AC : (onB ? BC : "#e2e8f0");
+          return (
+            <g key={e.id} opacity={onA || onB ? 1 : 0.45}>
+              <line x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+                stroke={stroke} strokeWidth={onA ? 5 : (onB ? 3.5 : 2)}
+                strokeDasharray={e.damaged ? "6,3" : "none"} />
+              <rect x={mx - 13} y={my - 9} width={26} height={18} rx={4}
+                fill="#fff" stroke={stroke} strokeWidth={onA || onB ? 1.5 : 1} />
+              <text x={mx} y={my + 4} textAnchor="middle" fontSize={10.5} fontWeight={800}
+                fill={onA ? AC : (onB ? "#64748b" : "#94a3b8")}
+                fontFamily="'JetBrains Mono',monospace">{e.w}</text>
+            </g>
+          );
+        })}
+        {NODES.map(n => {
+          const p = nodePos(n);
+          const isStart = n.id === 1, isTarget = n.id === 3;
+          return (
+            <g key={n.id}>
+              <circle cx={p.x} cy={p.y} r={isStart || isTarget ? 18 : 14}
+                fill={isStart ? AC : (isTarget ? "#fef3c7" : "#fff")}
+                stroke={isStart ? AC : (isTarget ? "#f59e0b" : "#cbd5e1")}
+                strokeWidth={isStart || isTarget ? 3 : 2} />
+              <text x={p.x} y={p.y + 5} textAnchor="middle" fontSize={isStart || isTarget ? 14 : 12}
+                fontWeight={900} fill={isStart ? "#fff" : C.text}
+                fontFamily="'JetBrains Mono',monospace">{n.id}</text>
+              {isTarget && <text x={p.x + 22} y={p.y - 14} fontSize={13}>🎯</text>}
+            </g>
+          );
+        })}
+      </svg>
+
+      {/* 두 길 비교 칩 */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, maxWidth: 420, margin: "6px auto 0" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#f5f3ff", border: `2px solid ${AC}`, borderRadius: 10, padding: "7px 12px" }}>
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: AC }}>1→2→3</span>
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, color: AC }}>7+10 = <b>17{t(E, "m", "분")}</b></span>
+          <span style={{ marginLeft: "auto", fontSize: 11.5, fontWeight: 800, color: AC }}>⭐ {t(E, "fastest", "가장 빠름")}</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#f8fafc", border: "1.5px solid #cbd5e1", borderRadius: 10, padding: "7px 12px", opacity: 0.8 }}>
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: "#64748b" }}>1→5→3</span>
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, color: "#64748b" }}>18+20 = <b>38{t(E, "m", "분")}</b></span>
+          <span style={{ marginLeft: "auto", fontSize: 11.5, fontWeight: 700, color: "#94a3b8" }}>{t(E, "ignore", "볼 필요 ✗")}</span>
+        </div>
+      </div>
+
+      {/* 결론 한 줄 */}
+      <div style={{ maxWidth: 420, margin: "8px auto 0", background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "8px 12px", fontSize: 12.5, fontWeight: 700, color: "#92400e", textAlign: "center", wordBreak: "keep-all" }}>
+        {t(E, "Per city, only the FASTEST way matters. If even it fails → that city is out.",
+              "도시마다 '가장 빠른 길' 하나만 보면 돼요. 그것마저 안 되면 → 그 도시는 못 가요.")}
+      </div>
+      <div style={{ textAlign: "center", marginTop: 6, fontSize: 11.5, color: C.dim, wordBreak: "keep-all" }}>
+        {t(E, "So: find the fastest way to EVERY city. How? 👉", "그래서: 모든 도시까지 가장 빠른 길 찾기. 어떻게? 👉")}
+      </div>
+    </div>
+  );
+}
