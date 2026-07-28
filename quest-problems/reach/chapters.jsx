@@ -219,6 +219,16 @@ export function makeReachCh1(E) {
               "After apocalypse, only safe roads remain!",
               "아포칼립스 후에는 안전한 도로만 남아!")}
           </div>
+          {/* 왜 도착=K 는 되고 출발=K 는 안 되나 — 이 비대칭이 이 문제의 핵심 함정 */}
+          <div style={{
+            marginTop: 10, background: "#eff6ff", borderRadius: 8, padding: "8px 12px",
+            border: "1.5px solid #93c5fd", fontSize: 12, color: "#1e3a8a",
+            lineHeight: 1.6, wordBreak: "keep-all",
+          }}>
+            🤔 {t(E,
+              "Why is arrive = K okay, but start = K not?  Arriving exactly at K means you finished crossing the instant it breaks → safe.  Starting at K means the road is already breaking → you can't get on.",
+              "왜 도착 = K 는 되고 출발 = K 는 안 될까?  딱 K 에 도착 = 부서지는 바로 그 순간 다 건넜다 → 세이프.  K 에 출발 = 도로가 이미 부서지는 중 → 올라탈 수 없어.")}
+          </div>
         </div>),
     },
     // 1-4b: 입출력 형식 + 제약 (MCC 2025 P5 원문 그대로)
@@ -313,7 +323,7 @@ export function makeReachCh1(E) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: 📝 시뮬레이션 (5 steps)
+   Chapter 2: 📝 시뮬레이션 (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeReachCh2(E) {
   return [
@@ -323,8 +333,45 @@ export function makeReachCh2(E) {
       narr: t(E,
         "Move the K slider! Green = reachable, red = not. Notice: bigger K only ever adds more green (more time = more damaged roads usable).", "K 슬라이더를 움직여봐요! 초록 = 도달 가능, 빨강 = 불가. K를 키우면 초록이 늘기만 해요 (시간이 많을수록 손상 도로를 더 쓸 수 있으니까)."),
     },
-    // 2-2: Dijkstra concept (intro card lives in Ch3)
-    // 2-4: Dijkstra trace
+    // 2-2: What IS Dijkstra? — introduce it before we trace/code it (why not BFS)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Before any code — what IS Dijkstra?\nOur real job: find the EARLIEST arrival time to each city.\nRoads have travel times, so 'fewest roads' isn't 'fastest' — that's why plain BFS fails and we reach for Dijkstra.",
+        "코드 전에 — 다익스트라가 뭘까?\n우리 진짜 할 일: 각 도시까지 '가장 빠른 도착 시간' 구하기.\n도로마다 시간이 달라서 '도로 개수 최소'가 '가장 빠름'이 아니에요 — 그래서 그냥 BFS로는 안 되고 다익스트라를 써요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
+            {t(E, "What is Dijkstra?", "다익스트라란?")}
+          </div>
+          {/* BFS vs Dijkstra — 왜 BFS 안 되나 */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
+            <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "8px 10px", fontSize: 12, lineHeight: 1.6, color: "#7f1d1d", wordBreak: "keep-all" }}>
+              <div style={{ fontWeight: 800, marginBottom: 2 }}>❌ BFS</div>
+              {t(E, "Counts roads (each = 1 hop). Ignores travel time → wrong when roads have different lengths.",
+                    "도로 '개수'만 셈 (하나 = 1칸). 시간을 무시 → 길이가 다른 도로엔 틀려요.")}
+            </div>
+            <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "8px 10px", fontSize: 12, lineHeight: 1.6, color: "#14532d", wordBreak: "keep-all" }}>
+              <div style={{ fontWeight: 800, marginBottom: 2 }}>✅ {t(E, "Dijkstra", "다익스트라")}</div>
+              {t(E, "Uses the real travel times → the earliest arrival time to every city.",
+                    "실제 이동 시간을 씀 → 각 도시까지 '가장 빠른 도착 시간'.")}
+            </div>
+          </div>
+          {/* 핵심 아이디어 */}
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, lineHeight: 1.7, color: C.text, wordBreak: "keep-all" }}>
+            <div style={{ fontWeight: 700, color: "#5b21b6", marginBottom: 4 }}>
+              💡 {t(E, "The idea", "핵심 아이디어")}
+            </div>
+            {t(E,
+              "Always finalize the CLOSEST not-yet-finalized city first. Once finalized, its time is the true shortest — any other path there is already longer.",
+              "아직 확정 안 된 도시 중 '가장 가까운 것'을 먼저 확정해요. 한 번 확정되면 그 시간이 진짜 최단 — 다른 경로로 오면 이미 더 걸리니까.")}
+          </div>
+          <div style={{ marginTop: 8, fontSize: 11.5, color: C.dim, textAlign: "center", wordBreak: "keep-all" }}>
+            {t(E, "The next sim traces exactly this, city by city 👇", "다음 시뮬이 이걸 도시별로 그대로 보여줘요 👇")}
+          </div>
+        </div>),
+    },
+    // 2-3: Dijkstra trace
     {
       type: "dijkstraTrace",
       narr: t(E,
@@ -488,23 +535,29 @@ export function makeReachCh3(E) {
               "단조 증가: K가 클수록 도로를 더 쓸 수 있어 → 도시 더 많이 도달")}</div>
           </div>
           <div style={{
-            marginTop: 10, background: "#fef3c7", borderRadius: 8, padding: "6px 10px",
-            border: "1.5px solid #fbbf24", fontSize: 12, color: "#92400e",
-            fontWeight: 700, textAlign: "center",
+            marginTop: 10, background: "#fff7ed", borderRadius: 8, padding: "8px 12px",
+            border: "1.5px solid #fdba74", fontSize: 12, color: "#9a3412",
+            lineHeight: 1.6, wordBreak: "keep-all",
           }}>
-            💡 {t(E,
-              "Optimization: sort queries by K, reuse computation!",
-              "최적화: K 기준으로 쿼리 정렬하면 계산 재활용 가능!")}
+            ⚠️ {t(E,
+              "Heads up: this runs a full Dijkstra PER query = O(Q · M log N).  Clear to read, but too slow for the biggest inputs (Q, M up to hundreds of thousands) — it would TLE.",
+              "짚고 가기: 이 코드는 쿼리마다 다익스트라를 처음부터 = O(Q · M log N).  읽기엔 명확하지만 큰 입력(Q, M 수십만)엔 너무 느려요 — 시간초과(TLE).")}
+            <div style={{ marginTop: 4, fontWeight: 700 }}>
+              💡 {t(E,
+                "Full score: sort queries by K and add roads incrementally (offline), so you don't recompute from scratch each time.",
+                "만점 풀이: 쿼리를 K 로 정렬해 도로를 점점 추가(오프라인)하면 매번 처음부터 다시 계산 안 해도 돼요.")}
+            </div>
           </div>
         </div>),
     },
-    // 3-5: Full code
+    // 3-5: Full code (clear, understand-first version — TLEs on huge inputs; see 3-4 badge)
     {
       type: "code",
       narr: t(E,
-        "Here's the complete solution! Read → Dijkstra per query → count reachable. 🐉", "전체 풀이 코드예요! 순서: 입력 읽기 → 쿼리마다 다익스트라 → 도달 가능 수 세기. 🐉"),
+        "The clear, understand-first version: read → Dijkstra per query → count reachable.  It's correct; for full score on the biggest inputs, use the sort-by-K offline trick from the last slide. 🐉",
+        "이해 우선의 명확한 버전이에요: 입력 읽기 → 쿼리마다 다익스트라 → 도달 가능 수 세기.  정답은 맞고, 큰 입력 만점은 앞 슬라이드의 'K 정렬 오프라인' 방법으로. 🐉"),
       code: SOLUTION_CODE,
-      label: t(E, "Show complete code", "전체 코드 보기"),
+      label: t(E, "Show the clear version", "명확한 버전 코드 보기"),
     },
   ];
 }
