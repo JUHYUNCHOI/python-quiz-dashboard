@@ -834,31 +834,43 @@ export function ReachSpreadSim({ E }) {
    ═══════════════════════════════════════════════════════════════ */
 export function GraphBuildSim({ E }) {
   const STEPS = [
-    { line: "5 6", upto: 0, dmg: false, q: false,
+    { line: "5 6", upto: 0, damaged: [], hi: null, q: false,
       ko: "첫 줄 「5 6」 → 도시 5개, 도로 6개. 도시 5개를 먼저 놓아요.",
       en: "First line “5 6” → 5 cities, 6 roads. Place the 5 cities first." },
-    { line: "1 2 7", upto: 1, dmg: false, q: false,
-      ko: "도로 1 「1 2 7」 → 도시 1 ↔ 2, 길이 7 을 그려요.",
-      en: "Road 1 “1 2 7” → draw city 1 ↔ 2, length 7." },
-    { line: "2 3 10", upto: 2, dmg: false, q: false,
-      ko: "도로 2 「2 3 10」 → 도시 2 ↔ 3, 길이 10.",
-      en: "Road 2 “2 3 10” → city 2 ↔ 3, length 10." },
-    { line: "4 3 8", upto: 3, dmg: false, q: false,
-      ko: "도로 3 「4 3 8」 → 도시 4 ↔ 3, 길이 8.",
-      en: "Road 3 “4 3 8” → city 4 ↔ 3, length 8." },
-    { line: "4 2 5", upto: 4, dmg: false, q: false,
-      ko: "도로 4 「4 2 5」 → 도시 4 ↔ 2, 길이 5.",
-      en: "Road 4 “4 2 5” → city 4 ↔ 2, length 5." },
-    { line: "1 5 18", upto: 5, dmg: false, q: false,
-      ko: "도로 5 「1 5 18」 → 도시 1 ↔ 5, 길이 18.",
-      en: "Road 5 “1 5 18” → city 1 ↔ 5, length 18." },
-    { line: "3 5 20", upto: 6, dmg: false, q: false,
-      ko: "도로 6 「3 5 20」 → 도시 3 ↔ 5, 길이 20. 도로 6개 완성!",
-      en: "Road 6 “3 5 20” → city 3 ↔ 5, length 20. All 6 roads done!" },
-    { line: "4  →  1 3 4 6", upto: 6, dmg: true, q: false,
-      ko: "「4」 그리고 「1 3 4 6」 → 손상 도로 4개: 1·3·4·6번. 빨간 점선 = 시간 K 에 부서져요.",
-      en: "“4” then “1 3 4 6” → 4 damaged roads: #1,3,4,6. Red dashed = they break at time K." },
-    { line: "3  →  6 · 11 · 12", upto: 6, dmg: true, q: true,
+    { line: "① road 1:  1 2 7", upto: 1, damaged: [], hi: 1, q: false,
+      ko: "도로 ① 「1 2 7」 → 도시 1 ↔ 2, 길이 7. (각 도로엔 번호가 있어요)",
+      en: "Road ① “1 2 7” → city 1 ↔ 2, length 7. (each road has a number)" },
+    { line: "② road 2:  2 3 10", upto: 2, damaged: [], hi: 2, q: false,
+      ko: "도로 ② 「2 3 10」 → 도시 2 ↔ 3, 길이 10.",
+      en: "Road ② “2 3 10” → city 2 ↔ 3, length 10." },
+    { line: "③ road 3:  4 3 8", upto: 3, damaged: [], hi: 3, q: false,
+      ko: "도로 ③ 「4 3 8」 → 도시 4 ↔ 3, 길이 8.",
+      en: "Road ③ “4 3 8” → city 4 ↔ 3, length 8." },
+    { line: "④ road 4:  4 2 5", upto: 4, damaged: [], hi: 4, q: false,
+      ko: "도로 ④ 「4 2 5」 → 도시 4 ↔ 2, 길이 5.",
+      en: "Road ④ “4 2 5” → city 4 ↔ 2, length 5." },
+    { line: "⑤ road 5:  1 5 18", upto: 5, damaged: [], hi: 5, q: false,
+      ko: "도로 ⑤ 「1 5 18」 → 도시 1 ↔ 5, 길이 18.",
+      en: "Road ⑤ “1 5 18” → city 1 ↔ 5, length 18." },
+    { line: "⑥ road 6:  3 5 20", upto: 6, damaged: [], hi: 6, q: false,
+      ko: "도로 ⑥ 「3 5 20」 → 도시 3 ↔ 5, 길이 20. 도로 6개 완성! 각 도로 번호 ①~⑥ 을 기억해요.",
+      en: "Road ⑥ “3 5 20” → city 3 ↔ 5, length 20. All 6 roads done! Note each road's number ①–⑥." },
+    { line: "4  →  1 3 4 6", upto: 6, damaged: [], hi: null, q: false,
+      ko: "「4」 = 손상 도로 4개. 번호는 「1 3 4 6」. 이 번호의 도로를 하나씩 부숴볼게요 →",
+      en: "“4” = 4 damaged roads, numbered “1 3 4 6”. Let's break each numbered road one at a time →" },
+    { line: "damaged 1  →  road ① (1↔2)", upto: 6, damaged: [1], hi: 1, q: false,
+      ko: "번호 1 → 도로 ① = 도시 1 ↔ 2 (7). 이 도로가 손상! 🔴 빨간 점선.",
+      en: "Number 1 → road ① = city 1 ↔ 2 (7). This road breaks! 🔴 red dashed." },
+    { line: "damaged 3  →  road ③ (4↔3)", upto: 6, damaged: [1, 3], hi: 3, q: false,
+      ko: "번호 3 → 도로 ③ = 도시 4 ↔ 3 (8). 손상! 🔴",
+      en: "Number 3 → road ③ = city 4 ↔ 3 (8). Breaks! 🔴" },
+    { line: "damaged 4  →  road ④ (4↔2)", upto: 6, damaged: [1, 3, 4], hi: 4, q: false,
+      ko: "번호 4 → 도로 ④ = 도시 4 ↔ 2 (5). 손상! 🔴",
+      en: "Number 4 → road ④ = city 4 ↔ 2 (5). Breaks! 🔴" },
+    { line: "damaged 6  →  road ⑥ (3↔5)", upto: 6, damaged: [1, 3, 4, 6], hi: 6, q: false,
+      ko: "번호 6 → 도로 ⑥ = 도시 3 ↔ 5 (20). 손상! 🔴  이제 손상 도로 4개(①③④⑥) 완성. 나머지 ②⑤ 는 안전.",
+      en: "Number 6 → road ⑥ = city 3 ↔ 5 (20). Breaks! 🔴  All 4 damaged roads (①③④⑥) set; ②⑤ stay safe." },
+    { line: "3  →  6 · 11 · 12", upto: 6, damaged: [1, 3, 4, 6], hi: null, q: true,
       ko: "「3」 그리고 「6 · 11 · 12」 → 쿼리 3개. K 마다 도달 도시 수를 물어요. (답은 다음 시뮬에서!)",
       en: "“3” then “6 · 11 · 12” → 3 queries. For each K, how many cities are reachable? (answer in the next sim!)" },
   ];
@@ -866,7 +878,6 @@ export function GraphBuildSim({ E }) {
   const maxStep = STEPS.length - 1;
   const idx = Math.min(step, maxStep);
   const cur = STEPS[idx];
-  const highlightEdge = (idx >= 1 && idx <= 6) ? idx : null;   // road steps highlight the edge just drawn
 
   const W = 360, H = 260, pad = 20;
   const nodePos = (n) => ({ x: n.x + pad, y: n.y + pad });
@@ -890,8 +901,10 @@ export function GraphBuildSim({ E }) {
         {EDGES.filter(e => e.id <= cur.upto).map(e => {
           const a = nodePos(getNode(e.u)), b = nodePos(getNode(e.v));
           const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
-          const isDmg = cur.dmg && e.damaged;
-          const isHi = highlightEdge === e.id;
+          const isDmg = (cur.damaged || []).includes(e.id);
+          const isHi = cur.hi === e.id;
+          // road-number badge, placed ~27% along the edge (away from the weight box)
+          const bx = a.x + 0.27 * (b.x - a.x), by = a.y + 0.27 * (b.y - a.y);
           return (
             <g key={e.id}>
               <line x1={a.x} y1={a.y} x2={b.x} y2={b.y}
@@ -909,6 +922,15 @@ export function GraphBuildSim({ E }) {
                 fill={isDmg ? "#dc2626" : "#059669"}
                 fontFamily="'JetBrains Mono',monospace"
               >{e.w}</text>
+              {/* road-number badge (red once damaged, purple otherwise) */}
+              <circle cx={bx} cy={by} r={8}
+                fill={isDmg ? "#dc2626" : "#8b5cf6"}
+                stroke="#fff" strokeWidth={1.5}
+                opacity={isHi || isDmg ? 1 : 0.85}
+              />
+              <text x={bx} y={by + 3.5} textAnchor="middle" fontSize={10} fontWeight={800}
+                fill="#fff" fontFamily="'JetBrains Mono',monospace"
+              >{e.id}</text>
             </g>
           );
         })}
@@ -953,9 +975,10 @@ export function GraphBuildSim({ E }) {
       </div>
 
       {/* legend */}
-      <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 6, fontSize: 10.5, fontWeight: 700 }}>
+      <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginTop: 6, fontSize: 10.5, fontWeight: 700 }}>
         <span style={{ color: "#059669" }}>━━ {t(E, "road", "도로")}</span>
         <span style={{ color: "#ef4444" }}>╌╌ {t(E, "damaged (breaks at K)", "손상(K 에 부서짐)")}</span>
+        <span style={{ color: "#8b5cf6" }}>{t(E, "①–⑥ = road number", "①–⑥ = 도로 번호")}</span>
       </div>
 
       {/* controls */}
