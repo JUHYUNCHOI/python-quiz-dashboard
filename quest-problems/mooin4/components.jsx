@@ -68,6 +68,32 @@ export const FULL_CPP = [
   "}",
 ];
 
+// CodeWalk — 코드 위 노트 벽 대신 코드 줄에 붙는 말풍선 (선생님 규칙). 검증본 코드 그대로.
+const _M4_VARS = [
+  { v: "S", ko: "화면 문자열", en: "the screen string" },
+  { v: "typed", ko: "실제 친 글자", en: "actually typed" },
+  { v: "flips", ko: "뒤에서 친 O 홀짝", en: "parity of later O's" },
+  { v: "k", ko: "출력 모드", en: "output mode" },
+];
+export function getMooin4Walk(E, lang = "py") {
+  if (lang === "cpp") {
+    return { code: FULL_CPP, vars: _M4_VARS, beats: [
+      { hi: [4, 9],   bubble: t(E, "Read T and k, then each test's N and the screen string S.", "T 와 k 읽고, 테스트마다 N 과 화면 문자열 S.") },
+      { hi: [10, 12], bubble: t(E, "Walk RIGHT→LEFT. flips = parity of the O's typed at later positions.", "오른쪽→왼쪽으로 훑어요. flips = 뒤 자리에서 친 O 의 홀짝.") },
+      { hi: [13, 22], bubble: t(E, "Each char: if flips is odd, M and O are swapped. Record what was really typed; if it's 'O', flips++.", "각 글자: flips 가 홀수면 M↔O 뒤집힘. 실제 친 글자를 기록, 'O' 면 flips++.") },
+      { hi: [23, 26], bubble: t(E, "Always YES. If k==1, also print the actual typed string.", "항상 YES. k==1 이면 실제 친 문자열도 출력.") },
+    ] };
+  }
+  return { code: FULL_PY, vars: _M4_VARS, beats: [
+    { hi: [0, 1],   bubble: t(E, "Fast input.", "빠른 입력.") },
+    { hi: [3, 7],   bubble: t(E, "Read T and k, then each test's N and the screen string S.", "T 와 k 읽고, 테스트마다 N 과 화면 문자열 S.") },
+    { hi: [8, 10],  bubble: t(E, "Walk RIGHT→LEFT. flips = parity of the O's typed at later positions.", "오른쪽→왼쪽으로 훑어요. flips = 뒤 자리에서 친 O 의 홀짝.") },
+    { hi: [11, 17], bubble: t(E, "Each char: if flips is odd, M and O are swapped. Record what was really typed; if it's 'O', flips++.", "각 글자: flips 가 홀수면 M↔O 뒤집힘. 실제 친 글자를 기록, 'O' 면 flips++.") },
+    { hi: [18, 20], bubble: t(E, "Always YES. If k==1, also output the actual typed string.", "항상 YES. k==1 이면 실제 친 문자열도 출력.") },
+    { hi: [21, 21], bubble: t(E, "Print all results at once.", "결과를 한 번에 출력.") },
+  ] };
+}
+
 export function getMooin4Sections(E) {
   return [
     {

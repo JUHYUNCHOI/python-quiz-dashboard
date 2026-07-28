@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getMooin4Sections } from "./components";
+import { getMooin4Sections, getMooin4Walk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooin4Ch1 (5 steps)
@@ -105,6 +106,17 @@ MOOMO`}
               "First line: T (test cases) and k. Each test: N then string S of length N. Output YES per test; if k=1 also a keystroke string of length N.",
               "첫 줄: T (케이스 수) 와 k. 각 케이스: N 그리고 길이 N 인 문자열 S. 케이스마다 YES 출력, k=1 이면 길이 N 인 키 입력 문자열도.")}
           </div>
+
+          {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
+          <div style={{ marginTop: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ T ≤ 10,000 (= 10⁴)</div>
+              <div>0 ≤ k ≤ 1</div>
+              <div>1 ≤ N ≤ 200,000 (= 2 × 10⁵)</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "sum of N across tests ≤ 4 × 10⁵", "모든 케이스 N 합 ≤ 4 × 10⁵")}</div>
+            </div>
+          </div>
         </div>),
     },
 
@@ -186,12 +198,17 @@ MOOMO`}
    ═══════════════════════════════════════════════════════════════ */
 export function makeMooin4Ch2(E, lang = "py") {
   return [
-    {
-      type: "progressive",
-      narr: t(E,
-        "Walk right→left. For each position, flip the target letter when an odd number of O's come after it. Sections build it one piece at a time.",
-        "오른쪽→왼쪽으로 걸어가요. 뒤에 O 가 홀수 개면 목표 글자를 뒤집어서 칠 키를 정해요. 아래 섹션이 한 단락씩 쌓아요."),
-      sections: getMooin4Sections(E),
-    },
+    /* 코드 위 '왜 이렇게?' 노트 벽 → 코드 줄에 붙는 CodeWalk 말풍선 (선생님 2026-07-27). */
+    (() => {
+      const w = getMooin4Walk(E, lang);
+      return {
+        type: "reveal",
+        label: t(E, "Code", "코드"),
+        narr: t(E,
+          "Walk right→left, flipping the letter when an odd number of O's come after it.  Each part lights up with a bubble.",
+          "오른쪽→왼쪽으로 걸으며, 뒤에 O 가 홀수 개면 글자를 뒤집어요.  각 부분이 밝아지며 말풍선이 떠요."),
+        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
+      };
+    })(),
   ];
 }
