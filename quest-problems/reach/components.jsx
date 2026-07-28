@@ -824,3 +824,168 @@ export function ReachSpreadSim({ E }) {
     </div>
   );
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   GraphBuildSim — step through the sample INPUT line by line and
+   DRAW the graph as each road is read, then mark the damaged roads
+   and show the K queries.  The student sees the graph appear FROM
+   the input values.  (선생님 2026-07-28: "입력값에 따라 그래프 그려지는걸 시뮬로")
+   ═══════════════════════════════════════════════════════════════ */
+export function GraphBuildSim({ E }) {
+  const STEPS = [
+    { line: "5 6", upto: 0, dmg: false, q: false,
+      ko: "첫 줄 「5 6」 → 도시 5개, 도로 6개. 도시 5개를 먼저 놓아요.",
+      en: "First line “5 6” → 5 cities, 6 roads. Place the 5 cities first." },
+    { line: "1 2 7", upto: 1, dmg: false, q: false,
+      ko: "도로 1 「1 2 7」 → 도시 1 ↔ 2, 길이 7 을 그려요.",
+      en: "Road 1 “1 2 7” → draw city 1 ↔ 2, length 7." },
+    { line: "2 3 10", upto: 2, dmg: false, q: false,
+      ko: "도로 2 「2 3 10」 → 도시 2 ↔ 3, 길이 10.",
+      en: "Road 2 “2 3 10” → city 2 ↔ 3, length 10." },
+    { line: "4 3 8", upto: 3, dmg: false, q: false,
+      ko: "도로 3 「4 3 8」 → 도시 4 ↔ 3, 길이 8.",
+      en: "Road 3 “4 3 8” → city 4 ↔ 3, length 8." },
+    { line: "4 2 5", upto: 4, dmg: false, q: false,
+      ko: "도로 4 「4 2 5」 → 도시 4 ↔ 2, 길이 5.",
+      en: "Road 4 “4 2 5” → city 4 ↔ 2, length 5." },
+    { line: "1 5 18", upto: 5, dmg: false, q: false,
+      ko: "도로 5 「1 5 18」 → 도시 1 ↔ 5, 길이 18.",
+      en: "Road 5 “1 5 18” → city 1 ↔ 5, length 18." },
+    { line: "3 5 20", upto: 6, dmg: false, q: false,
+      ko: "도로 6 「3 5 20」 → 도시 3 ↔ 5, 길이 20. 도로 6개 완성!",
+      en: "Road 6 “3 5 20” → city 3 ↔ 5, length 20. All 6 roads done!" },
+    { line: "4  →  1 3 4 6", upto: 6, dmg: true, q: false,
+      ko: "「4」 그리고 「1 3 4 6」 → 손상 도로 4개: 1·3·4·6번. 빨간 점선 = 시간 K 에 부서져요.",
+      en: "“4” then “1 3 4 6” → 4 damaged roads: #1,3,4,6. Red dashed = they break at time K." },
+    { line: "3  →  6 · 11 · 12", upto: 6, dmg: true, q: true,
+      ko: "「3」 그리고 「6 · 11 · 12」 → 쿼리 3개. K 마다 도달 도시 수를 물어요. (답은 다음 시뮬에서!)",
+      en: "“3” then “6 · 11 · 12” → 3 queries. For each K, how many cities are reachable? (answer in the next sim!)" },
+  ];
+  const [step, setStep] = useState(0);
+  const maxStep = STEPS.length - 1;
+  const idx = Math.min(step, maxStep);
+  const cur = STEPS[idx];
+  const highlightEdge = (idx >= 1 && idx <= 6) ? idx : null;   // road steps highlight the edge just drawn
+
+  const W = 360, H = 260, pad = 20;
+  const nodePos = (n) => ({ x: n.x + pad, y: n.y + pad });
+
+  return (
+    <div style={{ padding: "10px 6px" }}>
+      {/* current input line */}
+      <div style={{ textAlign: "center", marginBottom: 6 }}>
+        <div style={{ fontSize: 10.5, color: C.dim, fontWeight: 700, marginBottom: 3 }}>
+          {t(E, "Reading input, line by line", "입력을 한 줄씩 읽는 중")}
+        </div>
+        <span style={{
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 800,
+          color: "#f8fafc", background: "#0f172a", padding: "4px 12px", borderRadius: 6,
+          display: "inline-block", letterSpacing: 0.5,
+        }}>{cur.line}</span>
+      </div>
+
+      {/* Graph — nodes always, edges drawn up to cur.upto */}
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: "block", margin: "0 auto" }}>
+        {EDGES.filter(e => e.id <= cur.upto).map(e => {
+          const a = nodePos(getNode(e.u)), b = nodePos(getNode(e.v));
+          const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+          const isDmg = cur.dmg && e.damaged;
+          const isHi = highlightEdge === e.id;
+          return (
+            <g key={e.id}>
+              <line x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+                stroke={isHi ? A : (isDmg ? "#ef4444" : "#6ee7b7")}
+                strokeWidth={isHi ? 4 : (isDmg ? 2.5 : 2)}
+                strokeDasharray={isDmg ? "6,3" : "none"}
+                opacity={isHi ? 1 : 0.75}
+              />
+              <rect x={mx - 12} y={my - 8} width={24} height={16} rx={4}
+                fill={isDmg ? "#fef2f2" : "#ecfdf5"}
+                stroke={isHi ? A : (isDmg ? "#fca5a5" : "#6ee7b7")}
+                strokeWidth={isHi ? 2 : 1}
+              />
+              <text x={mx} y={my + 4} textAnchor="middle" fontSize={10} fontWeight={700}
+                fill={isDmg ? "#dc2626" : "#059669"}
+                fontFamily="'JetBrains Mono',monospace"
+              >{e.w}</text>
+            </g>
+          );
+        })}
+        {NODES.map(n => {
+          const p = nodePos(n);
+          const isStart = n.id === 1;
+          return (
+            <g key={n.id}>
+              <circle cx={p.x} cy={p.y} r={isStart ? 18 : 15}
+                fill={isStart ? A : "#fff"}
+                stroke={isStart ? A : "#94a3b8"} strokeWidth={isStart ? 3 : 2}
+              />
+              <text x={p.x} y={p.y + 5} textAnchor="middle" fontSize={isStart ? 14 : 12}
+                fontWeight={900} fill={isStart ? "#fff" : C.text}
+                fontFamily="'JetBrains Mono',monospace"
+              >{n.id}</text>
+            </g>
+          );
+        })}
+      </svg>
+
+      {/* K query chips (only at the queries step) */}
+      {cur.q && (
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", marginTop: 6 }}>
+          {[6, 11, 12].map(k => (
+            <span key={k} style={{
+              fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
+              color: "#92400e", background: "#fef3c7", border: "1.5px solid #fbbf24",
+              padding: "2px 10px", borderRadius: 6,
+            }}>K={k}</span>
+          ))}
+        </div>
+      )}
+
+      {/* explanation bubble */}
+      <div style={{
+        background: "#1e293b", borderRadius: 10, padding: "8px 12px", marginTop: 8,
+        fontSize: 11.5, color: "#e2e8f0", textAlign: "center", lineHeight: 1.6,
+        minHeight: 34, wordBreak: "keep-all",
+      }}>
+        {t(E, cur.en, cur.ko)}
+      </div>
+
+      {/* legend */}
+      <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 6, fontSize: 10.5, fontWeight: 700 }}>
+        <span style={{ color: "#059669" }}>━━ {t(E, "road", "도로")}</span>
+        <span style={{ color: "#ef4444" }}>╌╌ {t(E, "damaged (breaks at K)", "손상(K 에 부서짐)")}</span>
+      </div>
+
+      {/* controls */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 8 }}>
+        <button onClick={() => setStep(s => Math.max(0, s - 1))}
+          disabled={idx === 0}
+          style={{
+            padding: "7px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700,
+            border: `1px solid ${ABd}`,
+            background: idx === 0 ? "#f1f5f9" : ABg,
+            color: idx === 0 ? "#cbd5e1" : A,
+            cursor: idx === 0 ? "default" : "pointer",
+          }}>◀ {t(E, "Back", "이전")}</button>
+        {idx < maxStep ? (
+          <button onClick={() => setStep(s => Math.min(s + 1, maxStep))} style={{
+            padding: "7px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: "none", cursor: "pointer", color: "#fff",
+            background: `linear-gradient(135deg,#6d28d9,${A})`,
+            boxShadow: "0 3px 12px rgba(139,92,246,.3)",
+          }}>▶ {t(E, "Next", "다음")}</button>
+        ) : (
+          <button onClick={() => setStep(0)} style={{
+            padding: "7px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+          }}>↺ {t(E, "Restart", "처음부터")}</button>
+        )}
+      </div>
+      <div style={{ textAlign: "center", marginTop: 4, fontSize: 10, color: C.dim, fontWeight: 700 }}>
+        {idx + 1}/{maxStep + 1}
+      </div>
+    </div>
+  );
+}

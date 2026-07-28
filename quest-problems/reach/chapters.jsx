@@ -1,5 +1,4 @@
 import { C, t } from "@/components/quest/theme";
-import { GraphViz } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -159,68 +158,14 @@ export function makeReachCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Worked example — read the ACTUAL sample I/O and see WHY 2, 4, 5.
-    // (선생님 2026-07-28: "실제 input/output 예제가 뭘 의미하고 왜 그 결과인지 2페이지에서")
-    // The graph is embedded here (city 1 purple, 🟢 safe / 🔴 damaged) so the
-    // per-K reasoning has its visual right beside it — no separate graph page.
+    // 1-2: Graph-building sim — read the input line by line and DRAW the graph.
+    // (선생님 2026-07-28: "페이지2에서 입력값에 따라 그래프 그려지는걸 시뮬로")
+    // Output / why-2-4-5 is covered interactively by the next step (reachSpread).
     {
-      type: "reveal",
+      type: "graphBuild",
       narr: t(E,
-        "The real sample: what do these numbers mean — and why are the answers 2, 4, 5?\nRead the input, then walk each query on the graph below.",
-        "실제 샘플이에요: 이 숫자들이 무슨 뜻이고 — 왜 답이 2, 4, 5 일까?\n입력을 읽고, 아래 그래프에서 쿼리마다 따라가 봐요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          {/* 그래프 (참고 — 도시 1 보라, 🟢 안전 / 🔴 손상) */}
-          <div style={{ fontSize: 12, fontWeight: 700, color: A, textAlign: "center", marginBottom: 2, wordBreak: "keep-all" }}>
-            {t(E, "The sample graph — city 1 = start, 🟢 safe (anytime), 🔴 damaged (breaks at K)",
-                  "예제 그래프 — 도시 1 = 출발, 🟢 안전(항상), 🔴 손상(K 에 부서짐)")}
-          </div>
-          <GraphViz E={E} />
-
-          {/* 입력 / 출력 */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, margin: "8px 0" }}>
-            <div style={{ background: "#0f172a", borderRadius: 10, padding: "8px 10px", fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, lineHeight: 1.55, color: "#f8fafc" }}>
-              <div style={{ color: "#93c5fd", fontSize: 10, fontWeight: 700, marginBottom: 3 }}>{t(E, "INPUT", "입력")}</div>
-              <div>5 6 <span style={{ color: "#64748b" }}>{t(E, "← 5 cities, 6 roads", "← 도시 5, 도로 6")}</span></div>
-              <div style={{ color: "#94a3b8" }}>{t(E, "…6 road lines…", "…도로 6줄…")}</div>
-              <div>4</div>
-              <div><span style={{ color: "#f87171" }}>1 3 4 6</span> <span style={{ color: "#64748b" }}>{t(E, "← damaged road #s", "← 손상 도로 번호")}</span></div>
-              <div>3</div>
-              <div><span style={{ color: "#fbbf24" }}>6 / 11 / 12</span> <span style={{ color: "#64748b" }}>{t(E, "← the 3 K queries", "← K 쿼리 3개")}</span></div>
-            </div>
-            <div style={{ background: "#0f172a", borderRadius: 10, padding: "8px 10px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7 }}>
-              <div style={{ color: "#86efac", fontSize: 10, fontWeight: 700, marginBottom: 3 }}>{t(E, "OUTPUT", "출력")}</div>
-              <div style={{ color: "#86efac" }}>2 <span style={{ color: "#64748b", fontSize: 11 }}>(K=6)</span></div>
-              <div style={{ color: "#86efac" }}>4 <span style={{ color: "#64748b", fontSize: 11 }}>(K=11)</span></div>
-              <div style={{ color: "#86efac" }}>5 <span style={{ color: "#64748b", fontSize: 11 }}>(K=12)</span></div>
-            </div>
-          </div>
-
-          {/* 왜 2, 4, 5? — K 마다 */}
-          <div style={{ fontSize: 12.5, fontWeight: 800, color: A, marginBottom: 6 }}>
-            {t(E, "Why 2, 4, 5?", "왜 2, 4, 5 일까?")}
-          </div>
-          {[
-            { k: "K = 6", ans: "2", bg: "#fffbeb", bd: "#fcd34d", col: "#92400e",
-              en: <>Only city <b>1</b> (start) and city <b>5</b> (via the <b>safe</b> road 1–5 — safe roads ignore K).  Everything else needs a damaged road, and the earliest one (1→2) already takes <b>7 &gt; 6</b>.</>,
-              ko: <>도시 <b>1</b>(출발)과 도시 <b>5</b>(<b>안전</b> 도로 1–5 — 안전 도로는 K 와 무관)만.  나머지는 손상 도로를 건너야 하는데, 제일 빠른 1→2 도 <b>7분 &gt; 6</b>.</> },
-            { k: "K = 11", ans: "4", bg: "#eff6ff", bd: "#93c5fd", col: "#1e3a8a",
-              en: <>+ city <b>2</b> (1→2 arrives at <b>7 ≤ 11</b>) and city <b>3</b> (2→3 is a <b>safe</b> road, arrive 17).  City 4 needs <b>12 &gt; 11</b> → still blocked.</>,
-              ko: <>+ 도시 <b>2</b>(1→2 도착 <b>7 ≤ 11</b>)와 도시 <b>3</b>(2→3 은 <b>안전</b> 도로, 17분).  도시 4 는 <b>12 &gt; 11</b> → 아직 막힘.</> },
-            { k: "K = 12", ans: "5", bg: "#ecfdf5", bd: "#6ee7b7", col: "#14532d",
-              en: <>+ city <b>4</b>: 1→2→4 arrives at exactly <b>7+5 = 12 = K</b>.  Arriving <b>exactly at K</b> is allowed → all 5 cities!</>,
-              ko: <>+ 도시 <b>4</b>: 1→2→4 가 딱 <b>7+5 = 12 = K</b> 에 도착.  <b>정확히 K 도착</b>은 세이프 → 5개 전부!</> },
-          ].map((r, i) => (
-            <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", background: r.bg, border: `1.5px solid ${r.bd}`, borderRadius: 10, padding: "8px 10px", marginBottom: 6 }}>
-              <div style={{ flexShrink: 0, fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 11.5, color: r.col, minWidth: 48, textAlign: "center" }}>
-                {r.k}<div style={{ fontSize: 18 }}>→ {r.ans}</div>
-              </div>
-              <div style={{ fontSize: 12, lineHeight: 1.6, color: r.col, wordBreak: "keep-all" }}>
-                {t(E, r.en, r.ko)}
-              </div>
-            </div>
-          ))}
-        </div>),
+        "Watch the graph get built FROM the input — step ▶ through each line: the 5 cities, then each road, then which roads are damaged, then the K queries.",
+        "입력에서 그래프가 만들어지는 걸 봐요 — ▶ 로 한 줄씩: 도시 5개 → 도로 하나씩 → 어떤 도로가 손상인지 → K 쿼리."),
     },
     // 1-3: Step-sim — pick K, watch each city get reached (or blocked) one by one.
     // (선생님 2026-07-28: "시뮬로 각 입력값에 따라 어떻게 되는건지")
