@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getPhotoshoot25Sections } from "./components";
+import { getPhotoshoot25Sections, getPhotoshoot25Walk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makePhotoshoot25Ch1 (6 steps)
@@ -170,6 +171,47 @@ export function makePhotoshoot25Ch1(E) {
         "Beauties only go up, so every window sum only goes up. The global max is non-decreasing — we just compare new sums against cur_max.",
         "아름다움이 늘기만 하니 모든 윈도우 합도 늘기만 함. 전체 최대는 비감소 — 새로 갱신된 합만 cur_max 와 비교하면 끝."),
     },
+    // 1-4b: 입출력 형식 + 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive?  Grid size, then Q updates.  Print the best window after each one.",
+        "데이터는 어떻게 들어올까?  격자 크기, 그 다음 Q 개 업데이트.  매번 최고 창을 출력."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— grid size, camera size", "— 격자 크기, 카메라 크기")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>Q</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of updates", "— 업데이트 개수")}</span></div>
+              <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>r c v</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— set cell (r,c) to beauty v", "— 칸 (r,c) 를 아름다움 v 로")}</span></div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats Q times", "↑ 이 줄이 Q 번 반복")}</div>
+              </div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "After each update, the largest sum among all K×K windows (Q lines).",
+                  "각 업데이트 후, 모든 K×K 창 중 최대 합 (Q 줄).")}
+            </div>
+          </div>
+          {/* 제약 */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 500</div>
+              <div>1 ≤ K ≤ min(N, 25)</div>
+              <div>1 ≤ Q ≤ 30,000 (= 3 × 10⁴)</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "1 ≤ v ≤ 10⁶  ·  updates only increase a cell's value", "1 ≤ v ≤ 10⁶  ·  업데이트는 값을 올리기만 함")}</div>
+            </div>
+          </div>
+        </div>),
+    },
+
     // 1-5: Input — count affected windows
     {
       type: "input",
@@ -193,12 +235,17 @@ export function makePhotoshoot25Ch1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makePhotoshoot25Ch2(E, lang = "py") {
   return [
-    {
-      type: "progressive",
-      narr: t(E,
-        "Maintain S[i][j] = sum of the K x K window with top-left (i,j). On each update, only touch the ≤ K² windows that contain (r,c), and bump cur_max as needed.",
-        "S[i][j] = 좌상단 (i,j) 인 K x K 윈도우 합. 매 업데이트마다 (r,c) 를 포함하는 ≤ K² 개 윈도우만 갱신하고 cur_max 비교."),
-      sections: getPhotoshoot25Sections(E),
-    },
+    /* 코드 위 '왜 이렇게?' 노트 벽 → 코드 줄에 붙는 CodeWalk 말풍선 (선생님 2026-07-27). */
+    (() => {
+      const w = getPhotoshoot25Walk(E, lang);
+      return {
+        type: "reveal",
+        label: t(E, "Code", "코드"),
+        narr: t(E,
+          "Keep each window's sum in S. On each update, touch only the windows containing (r,c).  Each part lights up with a bubble.",
+          "각 창의 합을 S 에 유지. 업데이트마다 (r,c) 를 포함하는 창만 손대요.  각 부분이 밝아지며 말풍선이 떠요."),
+        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
+      };
+    })(),
   ];
 }

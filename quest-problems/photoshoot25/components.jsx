@@ -97,6 +97,35 @@ export const FULL_CPP = [
   "}",
 ];
 
+// CodeWalk — 코드 위 노트 벽 대신 코드 줄에 붙는 말풍선 (선생님 규칙). 검증본 코드 그대로.
+const _PS_VARS = [
+  { v: "beauty", ko: "각 칸 값", en: "cell values" },
+  { v: "S", ko: "각 K×K 창의 합", en: "window sums" },
+  { v: "cur_max", ko: "최대 창 합", en: "max window" },
+  { v: "delta", ko: "값 변화량", en: "the change" },
+];
+export function getPhotoshoot25Walk(E, lang = "py") {
+  if (lang === "cpp") {
+    return { code: FULL_CPP, vars: _PS_VARS, beats: [
+      { hi: [5, 9],   bubble: t(E, "Read N, K, and the number of updates Q.", "N, K 와 업데이트 수 Q 읽기.") },
+      { hi: [11, 18], bubble: t(E, "Set up grids: beauty (each cell's value), W = valid top-left range, S (sum of each K×K window), cur_max.", "격자 준비: beauty(각 칸 값), W = 창 시작 가능 범위, S(각 K×K 창의 합), cur_max.") },
+      { hi: [19, 23], bubble: t(E, "Each update: set (r,c) to v; delta = how much it changed.", "업데이트마다: (r,c) 를 v 로; delta = 얼마나 바뀌었나.") },
+      { hi: [25, 28], bubble: t(E, "The windows that CONTAIN (r,c) have top-left in [i_lo..i_hi] × [j_lo..j_hi].", "(r,c) 를 포함하는 창들의 top-left 범위 [i_lo..i_hi] × [j_lo..j_hi] 계산.") },
+      { hi: [30, 37], bubble: t(E, "Add delta to just those windows' sums, and update the running maximum.", "그 창들의 합에만 delta 를 더하고, 최대값을 갱신.") },
+      { hi: [38, 38], bubble: t(E, "Print the current max window sum.", "지금까지의 최대 창 합 출력.") },
+    ] };
+  }
+  return { code: FULL_PY, vars: _PS_VARS, beats: [
+    { hi: [0, 1],   bubble: t(E, "Fast input.", "빠른 입력.") },
+    { hi: [3, 4],   bubble: t(E, "Read N, K, and the number of updates Q.", "N, K 와 업데이트 수 Q 읽기.") },
+    { hi: [6, 16],  bubble: t(E, "Set up grids: beauty (each cell's value), W = valid top-left range, S (sum of each K×K window), cur_max.", "격자 준비: beauty(각 칸 값), W = 창 시작 가능 범위, S(각 K×K 창의 합), cur_max.") },
+    { hi: [18, 21], bubble: t(E, "Each update: set (r,c) to v; delta = how much it changed.", "업데이트마다: (r,c) 를 v 로; delta = 얼마나 바뀌었나.") },
+    { hi: [23, 28], bubble: t(E, "The windows that CONTAIN (r,c) have top-left in [i_lo..i_hi] × [j_lo..j_hi].", "(r,c) 를 포함하는 창들의 top-left 범위 [i_lo..i_hi] × [j_lo..j_hi] 계산.") },
+    { hi: [30, 34], bubble: t(E, "Add delta to just those windows' sums, and update the running maximum.", "그 창들의 합에만 delta 를 더하고, 최대값을 갱신.") },
+    { hi: [36, 38], bubble: t(E, "Save this update's answer; print them all at once.", "이 업데이트의 답 저장; 한 번에 출력.") },
+  ] };
+}
+
 export function getPhotoshoot25Sections(E) {
   return [
     {
