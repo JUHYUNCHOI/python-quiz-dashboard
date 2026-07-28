@@ -149,6 +149,39 @@ export function getChipXchgSections(E) {
   ];
 }
 
+// CodeWalk — 코드 위 노트 벽 대신 코드 줄에 붙는 말풍선 (선생님 규칙).
+// 섹션 3개 코드를 한 파일로 이어 붙여 위→아래로 읽게 함. 코드 문자열은 그대로.
+const _CX_VARS = [
+  { v: "A, B", ko: "시작 A·B 칩", en: "starting A, B chips" },
+  { v: "cA, cB", ko: "환전: cB개 B→cA개 A", en: "swap: cB B → cA A" },
+  { v: "fA", ko: "목표 A 개수", en: "target A count" },
+  { v: "x", ko: "얻는 칩 수(탐색 대상)", en: "chips gained (search var)" },
+  { v: "b", ko: "상대가 B로 준 수", en: "chips adversary sends to B" },
+];
+export function getChipXchgWalk(E, lang = "py") {
+  const s = getChipXchgSections(E);
+  if (lang === "cpp") {
+    const code = [...s[0].cpp, "", ...s[1].cpp, "", ...s[2].cpp];
+    // s0=7 (0-6), ""=7, s1=27 (8-34), ""=35, s2=13 (36-48)
+    return { code, vars: _CX_VARS, beats: [
+      { hi: [0, 6],   bubble: t(E, "One round: after x random chips, the adversary splits them (a, b). Bessie's final A = A + a + full c_B groups of B (each gives c_A). The adversary picks the split that MINIMIZES her A.", "한 시도: 랜덤 칩 x개를 상대가 (a, b)로 나눠요. 베시 최종 A = A + a + (B의 cB묶음마다 cA). 상대는 A가 가장 적어지게 나눔.") },
+      { hi: [8, 13],  bubble: t(E, "minFinalA: don't try every b — start with just 0 and x as candidates.", "minFinalA: b를 전부 시도 안 해요 — 후보로 0과 x만 먼저 담기.") },
+      { hi: [14, 34], bubble: t(E, "Raising b by c_B trades 'lose c_B raw A' for 'one more swap (+c_A)', so the best b sits at a residue boundary. Only two remainders matter: c_B−1 (max waste) and 0 (no waste). Take the min over those few candidates.", "b를 cB 늘리면 'A 직접 cB 손해' vs '환전 1회 +cA 이득' 트레이드 → 최적 b는 나머지 경계. 의미있는 나머지는 cB-1(자투리 최대)·0(없음)뿐. 이 몇 개 중 최솟값.") },
+      { hi: [36, 42], bubble: t(E, "solve: more chips never hurt Bessie (dump extras on A), so 'guaranteed to reach fA?' flips false→true just once as x grows.", "solve: 칩이 많아져도 절대 나빠지지 않아요(추가분은 A에) → 'fA 도달 보장?'은 x가 커질 때 딱 한 번 false→true.") },
+      { hi: [43, 48], bubble: t(E, "So binary-search the smallest x that guarantees fA.", "그래서 fA를 보장하는 가장 작은 x를 이분 탐색.") },
+    ] };
+  }
+  const code = [...s[0].py, "", ...s[1].py, "", ...s[2].py];
+  // s0=7 (0-6), ""=7, s1=15 (8-22), ""=23, s2=11 (24-34)
+  return { code, vars: _CX_VARS, beats: [
+    { hi: [0, 6],   bubble: t(E, "One round: after x random chips, the adversary splits them (a, b). Bessie's final A = A + a + full c_B groups of B (each gives c_A). The adversary picks the split that MINIMIZES her A.", "한 시도: 랜덤 칩 x개를 상대가 (a, b)로 나눠요. 베시 최종 A = A + a + (B의 cB묶음마다 cA). 상대는 A가 가장 적어지게 나눔.") },
+    { hi: [8, 11],  bubble: t(E, "min_final_A: don't try every b — start with just 0 and x as candidates.", "min_final_A: b를 전부 시도 안 해요 — 후보로 0과 x만 먼저 담기.") },
+    { hi: [12, 22], bubble: t(E, "Raising b by c_B trades 'lose c_B raw A' for 'one more swap (+c_A)', so the best b sits at a residue boundary. Only two remainders matter: c_B−1 (max waste) and 0 (no waste). Take the min over those few candidates.", "b를 cB 늘리면 'A 직접 cB 손해' vs '환전 1회 +cA 이득' 트레이드 → 최적 b는 나머지 경계. 의미있는 나머지는 cB-1(자투리 최대)·0(없음)뿐. 이 몇 개 중 최솟값.") },
+    { hi: [24, 29], bubble: t(E, "solve: more chips never hurt Bessie (dump extras on A), so 'guaranteed to reach fA?' flips false→true just once as x grows.", "solve: 칩이 많아져도 절대 나빠지지 않아요(추가분은 A에) → 'fA 도달 보장?'은 x가 커질 때 딱 한 번 false→true.") },
+    { hi: [30, 34], bubble: t(E, "So binary-search the smallest x that guarantees fA.", "그래서 fA를 보장하는 가장 작은 x를 이분 탐색.") },
+  ] };
+}
+
 export function ChipXchgProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#2563eb" />;
 }

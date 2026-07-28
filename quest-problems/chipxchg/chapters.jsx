@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getChipXchgSections } from "./components";
+import { getChipXchgSections, getChipXchgWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeChipXchgCh1 (6 steps)
@@ -186,13 +187,17 @@ export function makeChipXchgCh1(E) {
    Chapter 2: makeChipXchgCh2 (1 progressive step)
    ═══════════════════════════════════════════════════════════════ */
 export function makeChipXchgCh2(E, lang = "py") {
+  const w = getChipXchgWalk(E, lang);
   return [
     {
-      type: "progressive",
+      type: "reveal",
+      label: t(E, "Code", "코드"),
       narr: t(E,
-        "Three steps stack up: model one round, narrow b to a few candidates, then binary-search x. Walk through the sections one at a time.",
-        "세 단계로 쌓아요: 한 시도 모델링 → b 후보 좁히기 → x 이분 탐색. 한 섹션씩 따라가요."),
-      sections: getChipXchgSections(E),
+        "Read the solution top to bottom — each bubble sits on the lines it explains: model one round, narrow b to a few candidates, then binary-search x.",
+        "코드를 위에서 아래로 읽어보자 — 말풍선이 설명하는 코드 줄에 바로 붙어 있어: 한 시도 모델링 → b 후보 좁히기 → x 이분 탐색."),
+      content: (
+        <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />
+      ),
     },
   ];
 }
