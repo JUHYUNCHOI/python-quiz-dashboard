@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getSwapToWinSections } from "./components";
+import { getSwapToWinSections, getSwapToWinWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeSwapToWinCh1 (5 steps)
@@ -108,6 +109,16 @@ zzzzz`}</pre>
               "target = abcde, and s_1 = abcde already. Print 0 and we're done. (No operation lines follow.)",
               "target = abcde, s_1 = abcde 이미 같음. 0 을 출력하고 끝. (연산 줄 없음.)")}
           </div>
+
+          {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
+          <div style={{ marginTop: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ T ≤ 10</div>
+              <div>1 ≤ N, M ≤ 1000</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "all strings are lowercase a–z", "모든 문자열은 소문자 a–z")}</div>
+            </div>
+          </div>
         </div>),
     },
 
@@ -208,12 +219,17 @@ zzzzz`}</pre>
    ═══════════════════════════════════════════════════════════════ */
 export function makeSwapToWinCh2(E, lang = "py") {
   return [
-    {
-      type: "progressive",
-      narr: t(E,
-        "Per-position greedy: 0 ops if already matched, 1 op if same string has the char further right, else 2 ops via another string. Sections build it one piece at a time.",
-        "위치별 그리디: 이미 맞으면 0 ops, 같은 줄 뒤에 그 글자가 있으면 1 op, 아니면 다른 줄을 거쳐 2 ops. 섹션이 한 단락씩 쌓아가요."),
-      sections: getSwapToWinSections(E),
-    },
+    /* 코드 위 '왜 이렇게?' 노트 벽 → 코드 줄에 붙는 CodeWalk 말풍선 (선생님 2026-07-27). */
+    (() => {
+      const w = getSwapToWinWalk(E, lang);
+      return {
+        type: "reveal",
+        label: t(E, "Code", "코드"),
+        narr: t(E,
+          "Per-position greedy: 0 ops if matched, 1 op from the same string, else 2 via another.  Each part lights up with a bubble.",
+          "위치별 그리디: 이미 맞으면 0, 같은 줄에서 1, 아니면 다른 줄 거쳐 2 op.  각 부분이 밝아지며 말풍선이 떠요."),
+        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
+      };
+    })(),
   ];
 }

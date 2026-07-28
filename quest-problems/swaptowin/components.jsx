@@ -239,6 +239,33 @@ const SECTION_OUT_CPP = [
   "}",
 ];
 
+// CodeWalk — 코드 위 노트 벽 대신 코드 줄에 붙는 말풍선 (선생님 규칙). 검증본 코드 그대로.
+const _SW_VARS = [
+  { v: "target", ko: "목표 문자열", en: "the target" },
+  { v: "s", ko: "문자열들", en: "the strings" },
+  { v: "ops", ko: "조작 목록", en: "the operations" },
+  { v: "k", ko: "고치는 자리", en: "position to fix" },
+];
+export function getSwapToWinWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return { code: FULL_CPP, vars: _SW_VARS, beats: [
+      { hi: [5, 11],  bubble: t(E, "Each test: read N, M, the target string, and the N strings s.", "테스트마다: N, M, 목표 문자열 target, 문자열 N개 s 읽기.") },
+      { hi: [13, 17], bubble: t(E, "Fix s[0] one position at a time, left to right. If it already matches target, skip.", "s[0] 를 왼쪽부터 한 칸씩 target 에 맞춰요. 이미 맞으면 넘어감.") },
+      { hi: [19, 31], bubble: t(E, "Case 1: if target[k] sits further right in s[0], one swap fixes it (1 op).", "Case 1: target[k] 가 s[0] 뒤쪽에 있으면 → 한 번 스왑으로 해결 (1 op).") },
+      { hi: [33, 52], bubble: t(E, "Case 2: not in s[0] — borrow it from another string s_y (at most 2 ops: line it up, then swap the column).", "Case 2: s[0] 에 없으면 다른 문자열 s_y 에서 빌려옴 (최대 2 op: 자리 맞추고 열 스왑).") },
+      { hi: [55, 58], bubble: t(E, "Print how many operations, then the operations.", "조작 횟수 출력 후, 조작들 출력.") },
+    ] };
+  }
+  return { code: FULL_PY, vars: _SW_VARS, beats: [
+    { hi: [0, 1],   bubble: t(E, "Fast input.", "빠른 입력.") },
+    { hi: [3, 9],   bubble: t(E, "Each test: read N, M, the target string, the N strings s. ops = list of moves.", "테스트마다: N, M, 목표 문자열 target, 문자열 N개 s. ops = 조작 목록.") },
+    { hi: [10, 13], bubble: t(E, "Fix s[0] one position at a time, left to right. If it already matches, skip.", "s[0] 를 왼쪽부터 한 칸씩 target 에 맞춰요. 이미 맞으면 넘어감.") },
+    { hi: [15, 25], bubble: t(E, "Case 1: if target[k] sits further right in s[0], one swap fixes it (1 op).", "Case 1: target[k] 가 s[0] 뒤쪽에 있으면 → 한 번 스왑으로 해결 (1 op).") },
+    { hi: [27, 45], bubble: t(E, "Case 2: not in s[0] — borrow it from another string s_y (at most 2 ops: line it up, then swap the column).", "Case 2: s[0] 에 없으면 다른 문자열 s_y 에서 빌려옴 (최대 2 op: 자리 맞추고 열 스왑).") },
+    { hi: [47, 48], bubble: t(E, "Print how many operations, then the operations.", "조작 횟수 출력 후, 조작들 출력.") },
+  ] };
+}
+
 export function getSwapToWinSections(E) {
   return [
     {
