@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getMakeDistinctSections } from "./components";
+import { getMakeDistinctSections, getMakeDistinctWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMakeDistinctCh1 (5 steps: reveal / reveal / reveal / quiz / input)
@@ -107,6 +108,17 @@ export function makeMakeDistinctCh1(E) {
           <div style={{ marginTop: 8, fontSize: 11, color: C.dim }}>
             {t(E, "First line is T (number of test cases).", "첫 줄 T 는 테스트케이스 개수.")}
           </div>
+
+          {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
+          <div style={{ marginTop: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ T ≤ 10</div>
+              <div>1 ≤ N ≤ 200,000 (= 2 × 10⁵)</div>
+              <div>−N ≤ K ≤ N,  K ≠ 0</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "array values in [1, N]  ·  sum of N ≤ 10⁶", "배열 값 [1, N]  ·  N 합 ≤ 10⁶")}</div>
+            </div>
+          </div>
         </div>
       ),
     },
@@ -187,12 +199,17 @@ export function makeMakeDistinctCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMakeDistinctCh2(E, lang = "py") {
   return [
-    {
-      type: "progressive",
-      narr: t(E,
-        "Group by residue mod |K|, sort, greedy push to next valid slot. Sections build it one piece at a time.",
-        "잔여류로 묶고, 정렬, 한 칸씩 다음 빈 자리로 밀어. 아래 섹션이 한 단락씩 쌓아요."),
-      sections: getMakeDistinctSections(E),
-    },
+    /* 코드 위 '왜 이렇게?' 노트 벽 → 코드 줄에 붙는 CodeWalk 말풍선 (선생님 2026-07-27). */
+    (() => {
+      const w = getMakeDistinctWalk(E, lang);
+      return {
+        type: "reveal",
+        label: t(E, "Code", "코드"),
+        narr: t(E,
+          "Group by residue, sort, greedy-push.  Each part lights up with a bubble — read them in order.",
+          "나머지로 묶고, 정렬, 그리디로 밀기.  각 부분이 밝아지며 말풍선이 떠요, 순서대로 봐요."),
+        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />),
+      };
+    })(),
   ];
 }

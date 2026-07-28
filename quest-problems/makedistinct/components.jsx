@@ -92,6 +92,35 @@ const FULL_CPP = [
   "}",
 ];
 
+// CodeWalk — 코드 위 '왜 이렇게?' 노트 벽 대신 코드 줄에 붙는 말풍선 (선생님 규칙).
+// 검증본 코드(FULL_PY/CPP)는 그대로, 표시만 CodeWalk 로.
+const _MD_VARS = [
+  { v: "k", ko: "더하는 값", en: "the step" },
+  { v: "m", ko: "|K|", en: "|K|" },
+  { v: "groups", ko: "나머지별 그룹", en: "residue groups" },
+  { v: "cur", ko: "직전에 놓은 값", en: "last placed" },
+];
+export function getMakeDistinctWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return { code: FULL_CPP, vars: _MD_VARS, beats: [
+      { hi: [7, 13],  bubble: t(E, "Read T, then each test's n, k, and the array. m = |k|.", "T 읽고, 테스트마다 n, k, 배열. m = |k|.") },
+      { hi: [15, 20], bubble: t(E, "Key insight: adding K never changes a value's remainder mod |K| → group values by that remainder. Groups are independent!", "핵심: K 를 더해도 |K| 로 나눈 나머지는 안 변함 → 나머지별로 묶어요. 그룹끼리 독립!") },
+      { hi: [22, 31], bubble: t(E, "For each group: sort (K>0 ascending, K<0 descending). The first value stays put.", "그룹마다 정렬 (K>0 오름차순, K<0 내림차순). 첫 값은 그대로.") },
+      { hi: [32, 41], bubble: t(E, "Greedy: if the next value is already past cur, keep it; else push it to cur+K and add the operations.", "그리디: 다음 값이 이미 앞서면 두고, 아니면 cur+K 로 밀고 연산 수를 더해요.") },
+      { hi: [42, 42], bubble: t(E, "Print this test's answer.", "이 테스트의 답 출력.") },
+    ] };
+  }
+  return { code: FULL_PY, vars: _MD_VARS, beats: [
+    { hi: [0, 1],   bubble: t(E, "Fast input (sys.stdin.readline) — sum of N can reach 10^6.", "빠른 입력 (sys.stdin.readline) — N 합이 10^6 까지.") },
+    { hi: [3, 6],   bubble: t(E, "solve() handles ONE test: read n, k, the array. m = |k|.", "solve() 는 한 테스트: n, k, 배열 읽기. m = |k|.") },
+    { hi: [8, 11],  bubble: t(E, "Key insight: adding K never changes a value's remainder mod |K| → group values by that remainder. Groups are independent!", "핵심: K 를 더해도 |K| 로 나눈 나머지는 안 변함 → 나머지별로 묶어요. 그룹끼리 독립!") },
+    { hi: [13, 17], bubble: t(E, "For each group: sort (K>0 ascending, K<0 descending). The first value stays put.", "그룹마다 정렬 (K>0 오름차순, K<0 내림차순). 첫 값은 그대로.") },
+    { hi: [18, 24], bubble: t(E, "Greedy: if the next value is already past cur, keep it; else push it to cur+K and add the operations.", "그리디: 다음 값이 이미 앞서면 두고, 아니면 cur+K 로 밀고 연산 수를 더해요.") },
+    { hi: [25, 25], bubble: t(E, "Print this test's answer.", "이 테스트의 답 출력.") },
+    { hi: [27, 29], bubble: t(E, "Run solve() for all T tests.", "T 개 테스트를 solve() 로 반복.") },
+  ] };
+}
+
 export function getMakeDistinctSections(E) {
   return [
     {
