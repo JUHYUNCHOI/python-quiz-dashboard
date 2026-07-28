@@ -3,6 +3,7 @@ import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
 import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
+import Link from "next/link";
 import { GraphViz, GraphBuildSim, ReachSim, ReachSpreadSim, DijkstraTrace, DijkstraKAudit, FastestWayViz } from "./components";
 import { makeReachCh1, makeReachCh2, makeReachCh3 } from "./chapters";
 
@@ -134,6 +135,42 @@ export default function ReachApp(props = {}) {
           { icon: "⚡", ko: "최단 경로 — 다익스트라 (Dijkstra)", en: "Shortest path — Dijkstra", href: "/algo/shortestpath/learn?from=quest" },
           { icon: "🗺️", ko: "그래프 (graph)", en: "Graph", href: "/algo/graph/learn?from=quest" },
         ]} />
+
+        {/* 학습 순서 — "뭐부터 봐야 하지?" 를 quest 열자마자 (선생님 2026-07-28) */}
+        <div style={{
+          display: "flex", alignItems: "center", flexWrap: "wrap", gap: 6,
+          padding: "7px 12px", marginBottom: 8, fontSize: 12,
+          background: "#f5f3ff", border: `1px solid ${A}33`, borderRadius: 10,
+          wordBreak: "keep-all",
+        }}>
+          <span style={{ fontSize: 11.5, fontWeight: 800, color: "#5b21b6" }}>
+            {t(E, "New here? Study order", "처음이면 이 순서로")}
+          </span>
+          {[
+            { n: "1", ko: "그래프 기초", en: "Graph basics", href: "/algo/graph/learn?from=quest" },
+            { n: "2", ko: "다익스트라", en: "Dijkstra", href: "/algo/shortestpath/learn?from=quest" },
+          ].map(s => (
+            <span key={s.n} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+              <Link href={s.href} style={{
+                display: "inline-flex", alignItems: "center", gap: 4,
+                fontSize: 12, fontWeight: 700, padding: "2px 9px", borderRadius: 999,
+                background: "#fff", border: `1.5px solid ${A}`, color: "#5b21b6", textDecoration: "none",
+              }}>
+                <b>{s.n}</b> {t(E, s.en, s.ko)} <span style={{ fontSize: 10, opacity: .7 }}>↗</span>
+              </Link>
+              <span style={{ color: "#a78bfa", fontWeight: 800 }}>→</span>
+            </span>
+          ))}
+          <span style={{
+            fontSize: 12, fontWeight: 800, padding: "2px 9px", borderRadius: 999,
+            background: A, color: "#fff",
+          }}>
+            <b>3</b> {t(E, "this problem", "이 문제")}
+          </span>
+          <span style={{ fontSize: 11, color: C.dim }}>
+            {t(E, "(already know them? start right here)", "(이미 안다면 바로 시작!)")}
+          </span>
+        </div>
 
         <QuestProgressBar
           tabs={TABS}
