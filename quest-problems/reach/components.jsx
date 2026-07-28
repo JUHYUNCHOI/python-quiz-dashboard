@@ -632,13 +632,26 @@ export function DijkstraTrace({ E }) {
    student SEES why K = 6/11/12 → 2/4/5.
    (선생님 2026-07-28: "시뮬로 각 입력값에 따라 어떻게 되는건지")
    ═══════════════════════════════════════════════════════════════ */
+// Each city's path from city 1, broken into segments (weak = red road, gated by K).
 const SPREAD_ORDER = [
-  { city: 1, kind: "start",     path: [1] },
-  { city: 5, kind: "safe",      path: [1, 5],    cond: () => true },
-  { city: 2, kind: "damaged",   path: [1, 2],    cond: (K) => 7 <= K },
-  { city: 3, kind: "safeAfter", path: [1, 2, 3], cond: (K) => 7 <= K },
-  { city: 4, kind: "damaged2",  path: [1, 2, 4], cond: (K) => 12 <= K },
+  { city: 1, kind: "start", path: [1], segs: [] },
+  { city: 5, kind: "safe",      path: [1, 5],    segs: [{ to: 5, w: 18, weak: false }] },
+  { city: 2, kind: "damaged",   path: [1, 2],    segs: [{ to: 2, w: 7,  weak: true }] },
+  { city: 3, kind: "safeAfter", path: [1, 2, 3], segs: [{ to: 2, w: 7,  weak: true }, { to: 3, w: 10, weak: false }] },
+  { city: 4, kind: "damaged2",  path: [1, 2, 4], segs: [{ to: 2, w: 7,  weak: true }, { to: 4, w: 5,  weak: true }] },
 ];
+
+// Walk a path's segments: cumulative arrival time per step; gate = latest weak-road
+// arrival (the ONLY thing compared to K); total = final arrival (safe parts don't gate).
+function walkPath(segs) {
+  let cum = 0, gate = null;
+  const rows = segs.map(s => {
+    cum += s.w;
+    if (s.weak) gate = gate === null ? cum : Math.max(gate, cum);
+    return { to: s.to, w: s.w, weak: s.weak, arrive: cum };
+  });
+  return { rows, gate, total: cum };
+}
 
 function findEdge(a, b) {
   return EDGES.find(e => (e.u === a && e.v === b) || (e.u === b && e.v === a));
@@ -652,44 +665,36 @@ export function ReachSpreadSim({ E }) {
   const trace = (() => {
     const reached = new Set([1]);
     const tr = [{
-      city: 1, status: "start", path: [1], reached: new Set([1]),
+      city: 1, status: "start", path: [1], reached: new Set([1]), walk: null,
       msg: t(E, `Start at city 1 (0 min). The weak (red) roads collapse at minute K = ${K}.`,
                `도시 1 출발 (0분). 약한(빨간) 도로는 K = ${K} 분에 무너져요.`),
     }];
     for (const s of SPREAD_ORDER.slice(1)) {
-      const ok = s.cond(K);
+      const walk = walkPath(s.segs);
+      // Reachable iff every weak road is fully crossed by K (gate = latest weak arrival).
+      const ok = walk.gate === null || walk.gate <= K;
       if (ok) reached.add(s.city);
       let msg;
-      if (s.kind === "safe") {
+      if (walk.gate === null) {
+        msg = ok && t(E,
+          `City ${s.city}: all-green path. No weak road → K doesn't matter. Total ${walk.total} min, still reachable ✓`,
+          `도시 ${s.city}: 초록 다리뿐인 길. 약한 다리가 없으니 K 와 무관 — 총 ${walk.total}분 걸려도 도달 ✓`);
+      } else if (ok) {
+        const exact = walk.gate === K;
         msg = t(E,
-          `City ${s.city} → green (SAFE) road 1–5. Safe roads never collapse, so time doesn't matter — reachable even though it's 18 min ✓`,
-          `도시 ${s.city} → 초록(안전) 도로 1–5. 안전 도로는 안 무너져서 시간과 상관없어요 — 18분이어도 갈 수 있어요 ✓`);
-      } else if (s.kind === "damaged") {
-        msg = ok
-          ? t(E, `City ${s.city} → weak road 1→2 takes 7 min. It collapses at ${K}; 7 ≤ ${K}, so you arrive before it falls ✓`,
-                 `도시 ${s.city} → 약한 도로 1→2 는 건너는 데 7분. 이 도로는 ${K}분에 무너지는데 7 ≤ ${K} → 무너지기 전 도착 ✓`)
-          : t(E, `City ${s.city} → weak road 1→2 takes 7 min, but it collapses at ${K}. 7 > ${K}, so you can't finish crossing in time ✗`,
-                 `도시 ${s.city} → 약한 도로 1→2 는 건너는 데 7분. 근데 이 도로는 ${K}분에 무너져요. 7 > ${K} 라 ${K}분 안에 못 건너요 ✗`);
-      } else if (s.kind === "safeAfter") {
-        msg = ok
-          ? t(E, `City ${s.city} → from city 2 via green (SAFE) road 2→3. The weak road (1→2) is already crossed, and this one is safe → reachable ✓`,
-                 `도시 ${s.city} → 도시 2 에서 초록(안전) 도로 2→3. 약한 도로(1→2)는 이미 건넜고 이 도로는 안전 → 도달 ✓`)
-          : t(E, `City ${s.city} → city 2 was blocked (weak road 1→2), so city 3 is unreachable too ✗`,
-                 `도시 ${s.city} → 도시 2 에 못 갔으니(약한 도로 1→2 막힘) 여기도 못 감 ✗`);
-      } else { // damaged2 — city 4
-        const exact = K === 12;
-        msg = ok
-          ? t(E, `City ${s.city} → 1→2→4, total 12 min (incl. weak road 2→4). Collapses at ${K}; 12 ≤ ${K}${exact ? " (arrive right on time!)" : ""} → reachable ✓`,
-                 `도시 ${s.city} → 1→2→4, 마지막 약한 도로 2→4 까지 합쳐 12분. ${K}분에 무너지는데 12 ≤ ${K}${exact ? " (딱 맞춰 도착!)" : ""} → 도달 ✓`)
-          : t(E, `City ${s.city} → 1→2→4 is 12 min, but the weak roads collapse at ${K}. 12 > ${K} → blocked ✗`,
-                 `도시 ${s.city} → 1→2→4 는 12분인데 약한 도로가 ${K}분에 무너져요. 12 > ${K} 라 못 감 ✗`);
+          `City ${s.city}: last weak road crossed at min ${walk.gate} ≤ K(${K})${exact ? " — right on time!" : ""} ✓  (green part after has no limit → arrive at ${walk.total})`,
+          `도시 ${s.city}: 약한 다리를 ${walk.gate}분에 다 건넘 ≤ K(${K})${exact ? " — 딱 맞춰!" : ""} ✓  (그 뒤 초록 구간은 제한 없음 → 총 ${walk.total}분 도착)`);
+      } else {
+        msg = t(E,
+          `City ${s.city}: needs a weak road crossed by min ${walk.gate}, but they collapse at K(${K}). ${walk.gate} > ${K} ✗ → blocked`,
+          `도시 ${s.city}: 약한 다리를 ${walk.gate}분에야 다 건너는데, K(${K})분에 무너져요. ${walk.gate} > ${K} ✗ → 못 감`);
       }
-      tr.push({ city: s.city, status: ok ? "reach" : "block", path: s.path, reached: new Set(reached), msg });
+      tr.push({ city: s.city, status: ok ? "reach" : "block", path: s.path, reached: new Set(reached), walk, msg });
     }
     tr.push({
-      city: null, status: "done", path: [], reached: new Set(reached),
-      msg: t(E, `K = ${K} → ${reached.size} cities reachable before the weak roads collapse at ${K}.`,
-               `K = ${K} → 약한 도로가 ${K}분에 무너지기 전에 갈 수 있는 도시 = ${reached.size}개.`),
+      city: null, status: "done", path: [], reached: new Set(reached), walk: null,
+      msg: t(E, `Answer for K = ${K}: ${reached.size} cities reachable.`,
+               `K = ${K} 의 답: 갈 수 있는 도시 ${reached.size}개.`),
     });
     return tr;
   })();
@@ -798,6 +803,47 @@ export function ReachSpreadSim({ E }) {
           );
         })}
       </svg>
+
+      {/* Path breakdown — per-segment clock, weak arrival vs K, total arrival.
+          This is where "17 min but reachable at K=11" becomes visible. */}
+      {cur.walk && (
+        <div style={{
+          background: "#fff", border: `1.5px solid ${ABd}`, borderRadius: 10,
+          padding: "8px 10px", marginTop: 6,
+        }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, flexWrap: "wrap", fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+            {/* 출발 */}
+            <span style={{ fontWeight: 800, color: A }}>1</span>
+            <span style={{ fontSize: 10, color: C.dim }}>(0{t(E, "m", "분")})</span>
+            {cur.walk.rows.map((r, i) => (
+              <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                <span style={{
+                  fontSize: 11, fontWeight: 800, padding: "1px 7px", borderRadius: 5,
+                  color: r.weak ? "#dc2626" : "#059669",
+                  background: r.weak ? "#fef2f2" : "#ecfdf5",
+                  border: `1.5px ${r.weak ? "dashed #fca5a5" : "solid #6ee7b7"}`,
+                }}>+{r.w}</span>
+                <span style={{ fontWeight: 800, color: C.text }}>{r.to}</span>
+                <span style={{ fontSize: 10.5, fontWeight: 700, color: r.weak ? "#dc2626" : "#059669" }}>
+                  ({r.arrive}{t(E, "m", "분")})
+                </span>
+              </span>
+            ))}
+          </div>
+          {/* 판정 한 줄: 빨간 구간 도착 vs K (총 도착은 참고) */}
+          <div style={{ textAlign: "center", marginTop: 6, fontSize: 11.5, fontWeight: 700, wordBreak: "keep-all",
+                        color: cur.status === "block" ? "#dc2626" : "#059669" }}>
+            {cur.walk.gate === null
+              ? t(E, <>no red road → K irrelevant → ✓</>,
+                    <>빨간 다리 없음 → K 와 무관 → ✓</>)
+              : (cur.status === "reach"
+                ? t(E, <>red part done at <b>{cur.walk.gate}m</b> ≤ K({K}) ✓ — green part free, arrive {cur.walk.total}m</>,
+                      <>빨간 다리 통과 <b>{cur.walk.gate}분</b> ≤ K({K}) ✓ — 초록 구간은 자유, 총 {cur.walk.total}분 도착</>)
+                : t(E, <>red part needs <b>{cur.walk.gate}m</b> &gt; K({K}) ✗ — collapses first</>,
+                      <>빨간 다리 통과에 <b>{cur.walk.gate}분</b> 필요 &gt; K({K}) ✗ — 먼저 무너져요</>))}
+          </div>
+        </div>
+      )}
 
       {/* Step message bubble */}
       <div style={{
