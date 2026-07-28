@@ -24,7 +24,7 @@ const EDGES = [
 
 function getNode(id) { return NODES.find(n => n.id === id); }
 
-/* ── Dijkstra on the full graph (no apocalypse) ── */
+/* ── Dijkstra on the full graph (all roads still usable) ── */
 function dijkstraFull() {
   const dist = {};
   NODES.forEach(n => dist[n.id] = Infinity);
@@ -43,7 +43,7 @@ function dijkstraFull() {
   return dist;
 }
 
-/* ── Dijkstra ignoring damaged roads (post-apocalypse only safe roads) ── */
+/* ── Dijkstra ignoring damaged roads (after they break, only safe roads) ── */
 function dijkstraSafe() {
   const dist = {};
   NODES.forEach(n => dist[n.id] = Infinity);
@@ -86,7 +86,7 @@ function reachableCount(K) {
       const arriveTime = dist[u] + e.w;
       // If damaged: can only use if we start before K AND arrive <= K
       // "cannot travel on damaged roads starting K minutes"
-      // "cannot travel if apocalypse happens while on the road"
+      // "cannot travel if the road breaks while on it"
       // "can finish at exactly K"
       if (e.damaged && !(dist[u] < K && arriveTime <= K)) continue;
       if (arriveTime < dist[other]) dist[other] = arriveTime;

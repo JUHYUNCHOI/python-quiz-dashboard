@@ -146,15 +146,15 @@ export function makeReachCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
-                "For each query K, output how many cities the dragon can reach from city 1 before the apocalypse hits at time K.",
-                "쿼리 K 마다 — 시간 K 의 아포칼립스가 오기 전에 용이 도시 1 에서 갈 수 있는 도시가 몇 개인지 출력.")}
+                "For each query K, output how many cities the dragon can reach from city 1 before the damaged roads break at time K.",
+                "쿼리 K 마다 — 손상된 도로가 부서지는 시각 K 이전에 용이 도시 1 에서 갈 수 있는 도시가 몇 개인지 출력.")}
             </div>
           </div>
 
           <div style={{ marginTop: 10, background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8, whiteSpace: "pre-line" }}>
             {t(E,
-              "N cities,\nM roads → some roads are damaged → apocalypse at time K destroys damaged roads → how many cities reachable from city 1?",
-              "도시 N개,\n도로 M개 → 일부 도로 손상 → 시간 K에 아포칼립스 발생,\n손상 도로 파괴 → 도시 1에서 몇 개 도시에 갈 수 있어요?")}
+              "N cities,\nM roads → some roads are damaged → at time K the damaged roads break → how many cities reachable from city 1?",
+              "도시 N개,\n도로 M개 → 일부 도로 손상 → 시간 K에 손상된 도로가 부서짐 → 도시 1에서 몇 개 도시에 갈 수 있어요?")}
           </div>
         </div>),
     },
@@ -186,15 +186,15 @@ export function makeReachCh1(E) {
       narr: t(E,
         "Here's the graph visually.\nCity 1 is the starting point (purple).\nThe numbers on roads are their lengths (travel time in minutes).", "그래프를 눈으로 보자! 도시 1이 출발점(보라색)이에요. 도로 위의 숫자는 길이(이동 시간, 분 단위)야."),
     },
-    // 1-4: Apocalypse rules
+    // 1-4: Break rules — damaged roads break at time K
     {
       type: "reveal",
       narr: t(E,
-        "The rules: Damaged roads break at time K.\nYou CAN'T start a damaged road at time K or later.\nAnd if you're on a damaged road when the apocalypse hits, you can't use it — UNLESS you arrive exactly at time K.", "규칙을 알아보자! 손상 도로는 시간 K에 부서져. K 이후에는 못 써요. 이동 중에 K가 되면 안 되지만, 딱 K에 도착하면 괜찮아!"),
+        "The rules: Damaged roads break at time K.\nYou CAN'T start a damaged road at time K or later.\nAnd if you're still on a damaged road when it breaks, you can't use it — UNLESS you arrive exactly at time K.", "규칙을 알아보자! 손상 도로는 시간 K에 부서져. K 이후에는 못 써요. 이동 중에 K가 되면 안 되지만, 딱 K에 도착하면 괜찮아!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
-            {t(E, "Apocalypse Rules", "아포칼립스 규칙")}
+            {t(E, "When Roads Break", "도로가 부서지는 규칙")}
           </div>
           <div style={{
             background: "#f5f3ff", borderRadius: 12, padding: 14,
@@ -216,8 +216,8 @@ export function makeReachCh1(E) {
             fontWeight: 700, textAlign: "center",
           }}>
             💡 {t(E,
-              "After apocalypse, only safe roads remain!",
-              "아포칼립스 후에는 안전한 도로만 남아!")}
+              "After they break, only safe roads remain!",
+              "부서진 뒤에는 안전한 도로만 남아!")}
           </div>
           {/* 왜 도착=K 는 되고 출발=K 는 안 되나 — 이 비대칭이 이 문제의 핵심 함정 */}
           <div style={{
@@ -256,7 +256,7 @@ export function makeReachCh1(E) {
               </div>
               <div style={{ marginTop: 6 }}><span style={{ color: "#92400e", fontWeight: 800 }}>Q</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of queries", "— 쿼리 개수")}</span></div>
               <div style={{ paddingLeft: 10, borderLeft: `2px solid #fde68a` }}>
-                <div><span style={{ color: "#92400e", fontWeight: 800 }}>K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— apocalypse time for this query", "— 이 쿼리의 아포칼립스 시각")}</span></div>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the time the roads break, for this query", "— 이 쿼리에서 도로가 부서지는 시각")}</span></div>
                 <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ one K per line, Q times", "↑ 한 줄에 K 하나씩, Q 번 반복")}</div>
               </div>
             </div>
