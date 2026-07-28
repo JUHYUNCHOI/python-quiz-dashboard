@@ -4,7 +4,7 @@
  * 최단 경로 (Shortest Path) — 챕터식 학습 페이지 v1.
  *
  * Wave 3 — 가중치 그래프 위에서 최단 거리를 구하는 4 대 알고리즘:
- *   BFS (단위 가중치) / Dijkstra (양수) / Bellman-Ford (음수 OK) / Floyd-Warshall (모든 쌍).
+ *   BFS (단위 가중치) / 다익스트라 (0 이상) / Bellman-Ford (음수 OK) / Floyd-Warshall (모든 쌍).
  *
  * 교육 원칙: 한 챕터 = 한 알고리즘 + 한 인터랙션 + 한 미니 퀴즈.
  * 학생 입장: "지하철 노선도에서 환승 적은 길 찾기" — 익숙한 직관에서 시작.
@@ -26,7 +26,7 @@ import { JourneyBreadcrumb } from "@/components/journey-breadcrumb"
 // ── 챕터 메타 ────────────────────────────────────────────────────
 const CHAPTERS = [
   { id: 1, emoji: "🗺️", title: "왜 최단 경로?",            titleEn: "Why Shortest Path?",          mins: 4 },
-  { id: 2, emoji: "⚡", title: "Dijkstra — 한 점에서 모두",  titleEn: "Dijkstra — Single Source",    mins: 8 },
+  { id: 2, emoji: "⚡", title: "다익스트라 — 한 점에서 모두",  titleEn: "Dijkstra — Single Source",    mins: 8 },
   { id: 3, emoji: "➕", title: "Bellman-Ford — 음수 가중치", titleEn: "Bellman-Ford — Negative OK",  mins: 7 },
   { id: 4, emoji: "🌐", title: "Floyd-Warshall — 모든 쌍",   titleEn: "Floyd-Warshall — All Pairs",  mins: 6 },
   { id: 5, emoji: "🏆", title: "정리 + 선택 가이드",         titleEn: "Recap & Picker",              mins: 5 },
@@ -256,7 +256,7 @@ Real answer:  A→B→C        = 1 + 1 = 2  (direct A→C is 10)
               </div>
               <div className="bg-white rounded-lg p-2.5 border-2 border-amber-200">
                 <p className="text-sm font-black text-amber-800 mb-0.5">
-                  ⚡ {t("Dijkstra — 양수 가중치", "Dijkstra — non-negative weights")}
+                  ⚡ {t("다익스트라 — 0 이상 가중치", "Dijkstra — non-negative weights")}
                 </p>
                 <p className="text-[11px] text-gray-700 leading-relaxed">
                   {t("O((V+E) log V). 우선순위 큐. 가장 흔히 쓰는 도구.", "O((V+E) log V). Priority queue. The everyday tool.")}
@@ -299,15 +299,24 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   // Graph: 1↔2 (2), 1↔3 (5), 2↔3 (1), 2↔4 (2), 3↔5 (3), 4↔5 (1)
   // Start: 1. Order of finalization: 1(0) → 2(2) → 3(3) → 4(4) → 5(5)
   const dijkSteps: Array<{ visited: number[]; dist: (number | null)[]; msg: string; msgEn: string }> = [
-    { visited: [], dist: [null, 0, null, null, null, null], msg: "시작 — 1: dist=0, 나머지 INF. PQ = [(0, 1)]", msgEn: "Start — 1: 0, others ∞. PQ = [(0, 1)]" },
+    { visited: [], dist: [null, 0, null, null, null, null], msg: "시작 — 1: dist=0, 나머지 ∞. PQ = [(0,1)]", msgEn: "Start — 1: 0, others ∞. PQ = [(0, 1)]" },
     { visited: [1], dist: [null, 0, 2, 5, null, null], msg: "1 확정 (dist=0). 이웃 2 ← 2, 3 ← 5 갱신. PQ = [(2,2), (5,3)]", msgEn: "1 finalized (0). Relax 2 ← 2, 3 ← 5. PQ = [(2,2), (5,3)]" },
-    { visited: [1, 2], dist: [null, 0, 2, 3, 4, null], msg: "2 확정 (dist=2). 3 ← 2+1=3 (5 보다 작음), 4 ← 2+2=4. PQ 갱신.", msgEn: "2 finalized (2). Relax 3 ← 3 (better than 5), 4 ← 4." },
-    { visited: [1, 2, 3], dist: [null, 0, 2, 3, 4, 6], msg: "3 확정 (dist=3). 5 ← 3+3=6 갱신.", msgEn: "3 finalized (3). Relax 5 ← 6." },
-    { visited: [1, 2, 3, 4], dist: [null, 0, 2, 3, 4, 5], msg: "4 확정 (dist=4). 5 ← 4+1=5 (6 보다 작음).", msgEn: "4 finalized (4). Relax 5 ← 5 (better than 6)." },
-    { visited: [1, 2, 3, 4, 5], dist: [null, 0, 2, 3, 4, 5], msg: "5 확정 (dist=5). ✅ 모든 노드 완료!", msgEn: "5 finalized (5). ✅ All done!" },
+    { visited: [1, 2], dist: [null, 0, 2, 3, 4, null], msg: "2 확정 (dist=2). 3 ← 2+1=3 (5 보다 작음!), 4 ← 2+2=4. PQ 에 (3,3),(4,4) 추가 — 낡은 (5,3) 은 못 지우고 그냥 남아요.", msgEn: "2 finalized (2). Relax 3 ← 3 (beats 5), 4 ← 4. Push (3,3),(4,4) — the old (5,3) stays in the PQ (can't be removed)." },
+    { visited: [1, 2, 3], dist: [null, 0, 2, 3, 4, 6], msg: "3 확정 (dist=3). 5 ← 3+3=6 갱신. PQ = [(4,4), (5,3), (6,5)]", msgEn: "3 finalized (3). Relax 5 ← 6. PQ = [(4,4), (5,3), (6,5)]" },
+    { visited: [1, 2, 3, 4], dist: [null, 0, 2, 3, 4, 5], msg: "4 확정 (dist=4). 5 ← 4+1=5 (6 보다 작음). PQ 에 (5,5) 추가.", msgEn: "4 finalized (4). Relax 5 ← 5 (beats 6). Push (5,5)." },
+    { visited: [1, 2, 3, 4], dist: [null, 0, 2, 3, 4, 5], msg: "🗑️ PQ 에서 (5,3) 을 꺼냈는데 dist[3]=3 ≠ 5 → 낡은 항목! 그냥 버려요. (코드의 'd != dist[u] → skip' 이 바로 이것)", msgEn: "🗑️ Popped (5,3), but dist[3]=3 ≠ 5 → stale! Just discard. (This is the code's 'd != dist[u] → skip'.)" },
+    { visited: [1, 2, 3, 4, 5], dist: [null, 0, 2, 3, 4, 5], msg: "5 확정 (dist=5). 남은 (6,5) 도 낡은 항목이라 버려지고 → ✅ 모든 정점 완료!", msgEn: "5 finalized (5). The leftover (6,5) is stale too and gets discarded → ✅ all done!" },
   ]
   const [dIdx, setDIdx] = useState(0)
   const dCur = dijkSteps[dIdx]
+  // Planar layout — cycle 1-2-4-5-3-1 plus the chord 2-3, so no edges cross.
+  const NODE_XY: Record<number, { x: number; y: number }> = {
+    1: { x: 40, y: 60 }, 2: { x: 160, y: 28 }, 3: { x: 80, y: 168 },
+    4: { x: 280, y: 60 }, 5: { x: 240, y: 168 },
+  }
+  const GRAPH_EDGES: Array<[number, number, number]> = [
+    [1, 2, 2], [1, 3, 5], [2, 3, 1], [2, 4, 2], [3, 5, 3], [4, 5, 1],
+  ]
   const dStep = () => { if (dIdx < dijkSteps.length - 1) setDIdx(dIdx + 1) }
   const dReset = () => setDIdx(0)
 
@@ -318,7 +327,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
           <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 border-2 border-amber-300 min-h-[280px]">
             <p className="text-5xl text-center mb-3">⚡</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("Dijkstra 의 한 줄 아이디어", "Dijkstra in one line")}
+              {t("다익스트라 (Dijkstra) 의 한 줄 아이디어", "Dijkstra in one line")}
             </h3>
             <div className="bg-white/80 rounded-lg p-3 border border-amber-200 mb-3">
               <p className="text-sm text-gray-800 leading-relaxed">
@@ -377,15 +386,44 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               {t("시작 = 1. 가장 가까운 미확정 정점을 매 스텝 확정.", "Start = 1. Finalize the closest unvisited vertex each step.")}
             </p>
 
-            {/* Graph diagram (ASCII art) */}
-            <div className="bg-gray-50 rounded-lg p-3 mb-3 font-mono text-[10px] sm:text-[11px] text-gray-700 leading-tight">
-              <pre>{`     ┌──2──┐         ┌──3──┐
-     │     │         │     │
-   [1]    [2]──1───[3]    [5]
-     │     │         │     │
-     └──5──┴───2────[4]──1─┘`}</pre>
-              <p className="text-[10px] text-gray-500 mt-1">
-                {t("간선: 1-2:2, 1-3:5, 2-3:1, 2-4:2, 3-5:3, 4-5:1", "Edges: 1-2:2, 1-3:5, 2-3:1, 2-4:2, 3-5:3, 4-5:1")}
+            {/* Graph diagram — SVG (was ASCII art, which drew a different graph than the edge list) */}
+            <div className="bg-gray-50 rounded-lg p-2 mb-3">
+              <svg viewBox="0 0 320 200" className="w-full max-w-[340px] mx-auto block">
+                {GRAPH_EDGES.map(([u, v, w]) => {
+                  const a = NODE_XY[u], b = NODE_XY[v]
+                  const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2
+                  const done = dCur.visited.includes(u) && dCur.visited.includes(v)
+                  return (
+                    <g key={`${u}-${v}`}>
+                      <line x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+                        stroke={done ? "#16a34a" : "#cbd5e1"} strokeWidth={done ? 3 : 2} />
+                      <rect x={mx - 10} y={my - 9} width={20} height={18} rx={4}
+                        fill="#fff" stroke={done ? "#86efac" : "#e2e8f0"} strokeWidth={1.5} />
+                      <text x={mx} y={my + 4} textAnchor="middle" fontSize={11} fontWeight={800}
+                        fill={done ? "#15803d" : "#64748b"} fontFamily="monospace">{w}</text>
+                    </g>
+                  )
+                })}
+                {[1, 2, 3, 4, 5].map(v => {
+                  const p = NODE_XY[v]
+                  const isStart = v === 1
+                  const isVisited = dCur.visited.includes(v)
+                  return (
+                    <g key={v}>
+                      <circle cx={p.x} cy={p.y} r={17}
+                        fill={isVisited ? "#dcfce7" : "#fff"}
+                        stroke={isVisited ? "#16a34a" : (isStart ? "#f59e0b" : "#94a3b8")}
+                        strokeWidth={isVisited || isStart ? 3 : 2} />
+                      <text x={p.x} y={p.y + 5} textAnchor="middle" fontSize={14} fontWeight={900}
+                        fill={isVisited ? "#15803d" : "#334155"} fontFamily="monospace">{v}</text>
+                      {isStart && <text x={p.x} y={p.y - 22} textAnchor="middle" fontSize={10} fontWeight={800} fill="#b45309">start</text>}
+                    </g>
+                  )
+                })}
+              </svg>
+              <p className="text-[10px] text-gray-500 mt-1 text-center">
+                {t("간선: 1-2:2, 1-3:5, 2-3:1, 2-4:2, 3-5:3, 4-5:1 · 초록 = 확정된 정점",
+                   "Edges: 1-2:2, 1-3:5, 2-3:1, 2-4:2, 3-5:3, 4-5:1 · green = finalized")}
               </p>
             </div>
 
@@ -525,6 +563,12 @@ vector<long long> dijkstra(int n, int src,
               {t(
                 "체크포인트: ① dist 초기화 ② PQ 에 (거리, 정점) 푸시 ③ 꺼낼 때 stale 검사 ④ 이웃 relax — 4 단계로 분리해서 보기.",
                 "4-step checklist: ① init dist ② push (dist, node) ③ stale-skip ④ relax neighbors.",
+              )}
+            </p>
+            <p className="text-xs font-bold text-amber-800 text-center mt-2 bg-amber-50 border border-amber-200 rounded-lg py-1.5 px-2">
+              ⏱️ {t(
+                "시간복잡도 O((V+E) log V) — 간선마다 최대 한 번 push, 힙 연산이 log V.",
+                "Time O((V+E) log V) — at most one push per edge, each heap op is log V.",
               )}
             </p>
           </div>
@@ -1112,7 +1156,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                     <td className="py-1.5">O(V + E)</td>
                   </tr>
                   <tr className="border-b border-gray-200">
-                    <td className="py-1.5 pr-2">{t("양수 가중치, 한 점 → 모두", "Positive, single source")}</td>
+                    <td className="py-1.5 pr-2">{t("0 이상 가중치, 한 점 → 모두", "Non-negative, single source")}</td>
                     <td className="py-1.5 pr-2 font-bold text-amber-700">Dijkstra</td>
                     <td className="py-1.5">O((V+E) log V)</td>
                   </tr>
@@ -1140,7 +1184,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <h3 className="text-base font-black text-amber-900 mb-3">📌 {t("핵심 정리", "Key Takeaways")}</h3>
             <ol className="space-y-2 text-sm text-gray-800">
               <li><b>1.</b> {t("최단 경로 = ", "Shortest path = ")}<b>{t("가중치 합 최소", "minimum weight sum")}</b>. {t("BFS 는 단위 가중치 전용.", "BFS only works for unit weights.")}</li>
-              <li><b>2.</b> <b className="text-amber-700">Dijkstra</b> {t("— 양수 가중치 표준. PQ + dist[] + 낡은 항목 skip.", "— positive weights standard. PQ + dist[] + skip-stale.")}</li>
+              <li><b>2.</b> <b className="text-amber-700">Dijkstra</b> {t("— 0 이상 가중치 표준. PQ + dist[] + 낡은 항목 skip.", "— non-negative weights standard. PQ + dist[] + skip-stale.")}</li>
               <li><b>3.</b> <b className="text-purple-700">Bellman-Ford</b> {t("— 음수 OK. V-1 라운드 모든 간선 relax + 1 라운드로 음수 사이클 검출.", "— negatives OK. V-1 rounds relax all edges + 1 round for cycle check.")}</li>
               <li><b>4.</b> <b className="text-teal-700">Floyd-Warshall</b> {t("— 모든 쌍. 3 중 루프 (k → i → j). V ≤ 400 일 때만.", "— all pairs. Triple loop (k → i → j). V ≤ 400 only.")}</li>
               <li><b>5.</b> {t("필수: dist[u] == INF 일 때 + w 금지! 항상 INF 검사 후 갱신.", "Critical: don't add w to INF — always guard.")}</li>
