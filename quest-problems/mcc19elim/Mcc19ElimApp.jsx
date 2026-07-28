@@ -20,7 +20,7 @@ export default function Mcc19ElimApp(props = {}) {
     return "ko";
   });
   const E = lang === "en";
-  const [codeLang, setCodeLang] = useCodeLang();
+  const codeLang = "py";  // MCC: Python 전용 — C++ 토글 무시
   const _posKey = typeof window !== "undefined" ? `quest-pos-${window.location.pathname}` : "";
   const _loadPos = () => {
     if (typeof window === "undefined") return { tab: 0, si: 0 };

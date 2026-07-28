@@ -258,7 +258,8 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           <span className="text-[10px] text-gray-400 font-bold">{t("읽기", "Read")}</span>
           <LanguageToggle />
         </div>
-        {/* 코드 언어 — Py/C++. "코드" 라벨로 읽기 언어와 구분 */}
+        {/* 코드 언어 — Py/C++. MCC 퀘스트는 Python 전용이라 토글 숨김 */}
+        {meta?.section !== "MCC" && (
         <div className="flex-shrink-0 flex items-center gap-1">
           <span className="text-[10px] text-gray-400 font-bold hidden sm:inline">{t("코드", "Code")}</span>
           <div className="flex items-stretch border border-gray-300 rounded-md overflow-hidden text-[10px] font-bold">
@@ -274,6 +275,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
             >💻 C++</button>
           </div>
         </div>
+        )}
         {/* 원래 문제 — 한 그룹으로 묶음(중복 제거). 데스크톱: 옆에 띄우기 + 새 탭, 모바일: 새 탭만 */}
         <div className={`flex-shrink-0 flex items-stretch rounded-md border overflow-hidden transition-colors ${
           splitView ? "border-amber-400" : "border-gray-200"
