@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
+import { AlgorithmTags } from "@/components/quest/AlgorithmTags";
 import { GraphViz, GraphBuildSim, ReachSim, ReachSpreadSim, DijkstraTrace, DijkstraKAudit, FastestWayViz } from "./components";
 import { makeReachCh1, makeReachCh2, makeReachCh3 } from "./chapters";
 
@@ -129,6 +130,11 @@ export default function ReachApp(props = {}) {
   return (
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
+        <AlgorithmTags E={E} tags={[
+          { icon: "⚡", ko: "최단 경로 — 다익스트라 (Dijkstra)", en: "Shortest path — Dijkstra", href: "/algo/shortestpath/learn?from=quest" },
+          { icon: "🗺️", ko: "그래프 (graph)", en: "Graph", href: "/algo/graph/learn?from=quest" },
+        ]} />
+
         <QuestProgressBar
           tabs={TABS}
           states={states}
