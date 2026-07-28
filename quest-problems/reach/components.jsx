@@ -952,16 +952,27 @@ export function GraphBuildSim({ E }) {
         })}
       </svg>
 
-      {/* K query chips (only at the queries step) */}
+      {/* K query chips + what each K means (only at the queries step) */}
       {cur.q && (
-        <div style={{ display: "flex", gap: 6, justifyContent: "center", marginTop: 6 }}>
-          {[6, 11, 12].map(k => (
-            <span key={k} style={{
-              fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
-              color: "#92400e", background: "#fef3c7", border: "1.5px solid #fbbf24",
-              padding: "2px 10px", borderRadius: 6,
-            }}>K={k}</span>
-          ))}
+        <div style={{ marginTop: 6 }}>
+          <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+            {[6, 11, 12].map(k => (
+              <span key={k} style={{
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
+                color: "#92400e", background: "#fef3c7", border: "1.5px solid #fbbf24",
+                padding: "2px 10px", borderRadius: 6,
+              }}>K={k}</span>
+            ))}
+          </div>
+          <div style={{
+            marginTop: 6, background: "#fffbeb", border: "1.5px solid #fde68a",
+            borderRadius: 8, padding: "8px 10px", fontSize: 11.5, color: "#92400e",
+            lineHeight: 1.6, wordBreak: "keep-all",
+          }}>
+            {t(E,
+              "Each K is a separate question. K = the time the damaged roads break. For that K we ask: “starting at city 1, how many cities can the dragon reach BEFORE then?” Here we ask it 3 times — K = 6, then 11, then 12 — so the output has 3 numbers.",
+              "각 K 는 따로따로 묻는 질문이에요. K = 손상 도로가 부서지는 시각. 그 K 에 대해 “도시 1 에서 출발해 부서지기 전에 몇 개 도시에 갈 수 있나?” 를 물어요. 여기선 K = 6, 11, 12 세 번 물으니 출력도 숫자 3개예요.")}
+          </div>
         </div>
       )}
 
