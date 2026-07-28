@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getStrangeFnSections } from "./components";
+import { getStrangeFnSections, getStrangeFnWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeStrangeFnCh1
@@ -127,6 +128,16 @@ export function makeStrangeFnCh1(E) {
               <div style={{ marginTop: 4 }}><b style={{ color: "#15803d" }}>{t(E, "Total: 4 ops", "합계: 4 회")}</b></div>
             </div>
           </div>
+
+          {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
+          <div style={{ marginTop: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ T ≤ 100,000 (= 10⁵)</div>
+              <div>1 ≤ x &lt; 10^(2×10⁵)  <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(x can be astronomically large)", "(x 가 엄청 클 수 있음)")}</span></div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "total digits across all x ≤ 10⁶  ·  answer mod 10⁹+7", "모든 x 의 자릿수 합 ≤ 10⁶  ·  답은 10⁹+7 로 나눈 나머지")}</div>
+            </div>
+          </div>
         </div>),
     },
 
@@ -231,12 +242,17 @@ export function makeStrangeFnCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeStrangeFnCh2(E, lang = "py") {
   return [
-    {
-      type: "progressive",
-      narr: t(E,
-        "Binarize if needed (1 op), then compute floor(3n/2) mod p with modular n. Sections build it one piece at a time.",
-        "비-이진 디짓이 있으면 1 ops 로 이진화, 그 다음 모듈러로 floor(3n/2) 계산. 아래 섹션이 한 단락씩 쌓아요."),
-      sections: getStrangeFnSections(E),
-    },
+    /* 코드 위 '왜 이렇게?' 노트 벽 → 코드 줄에 붙는 CodeWalk 말풍선 (선생님 2026-07-27). */
+    (() => {
+      const w = getStrangeFnWalk(E, lang);
+      return {
+        type: "reveal",
+        label: t(E, "Code", "코드"),
+        narr: t(E,
+          "Binarize if needed, then a closed form for floor(3n/2) mod p.  Each part lights up with a bubble.",
+          "필요하면 이진화, 그 다음 floor(3n/2) mod p 를 닫힌 식으로.  각 부분이 밝아지며 말풍선이 떠요."),
+        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />),
+      };
+    })(),
   ];
 }
