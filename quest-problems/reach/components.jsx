@@ -966,12 +966,25 @@ export function GraphBuildSim({ E }) {
           </div>
           <div style={{
             marginTop: 6, background: "#fffbeb", border: "1.5px solid #fde68a",
-            borderRadius: 8, padding: "8px 10px", fontSize: 11.5, color: "#92400e",
-            lineHeight: 1.6, wordBreak: "keep-all",
+            borderRadius: 8, padding: "9px 11px", fontSize: 11.5, color: "#92400e",
+            lineHeight: 1.65, wordBreak: "keep-all",
           }}>
-            {t(E,
-              "Each K is a separate question. K = the time the damaged roads break. For that K we ask: “starting at city 1, how many cities can the dragon reach BEFORE then?” Here we ask it 3 times — K = 6, then 11, then 12 — so the output has 3 numbers.",
-              "각 K 는 따로따로 묻는 질문이에요. K = 손상 도로가 부서지는 시각. 그 K 에 대해 “도시 1 에서 출발해 부서지기 전에 몇 개 도시에 갈 수 있나?” 를 물어요. 여기선 K = 6, 11, 12 세 번 물으니 출력도 숫자 3개예요.")}
+            <div style={{ marginBottom: 5 }}>
+              {t(E, <><b>“3”</b> = 3 questions (we ask 3 times, changing the time).</>,
+                    <><b>「3」</b> = 질문 3개 (시각을 바꿔가며 3번 물어봐요).</>)}
+            </div>
+            <div style={{ marginBottom: 5 }}>
+              {t(E, <><b>6, 11, 12 = a TIME (minutes)</b> — same “minutes” unit as the road lengths (7, 10, 8…).</>,
+                    <><b>6, 11, 12 = 시각(분)</b> — 도로 길이(7·10·8…)랑 똑같은 ‘분’ 단위예요.</>)}
+            </div>
+            <div style={{ marginBottom: 5 }}>
+              {t(E, <>K = 6 means: <b>ALL the red roads (①③④⑥) collapse at once at minute 6</b> — not one specific road, the whole damaged set. So any red road you can't finish crossing by minute 6 is unusable.</>,
+                    <>K = 6 이면: <b>빨간 도로 ①③④⑥ 가 전부 6분에 한꺼번에 무너져요</b> — 하나만이 아니라 손상 도로 전부! 그래서 6분 안에 다 못 건너는 빨간 도로는 못 써요.</>)}
+            </div>
+            <div>
+              {t(E, <>Bigger K (11, 12) = they collapse later = red roads usable longer = more cities reachable. (see it in the next sim!)</>,
+                    <>K 가 클수록(11, 12) 더 늦게 무너짐 = 빨간 도로를 더 오래 씀 = 더 많은 도시 도달. (다음 시뮬에서 확인!)</>)}
+            </div>
           </div>
         </div>
       )}
