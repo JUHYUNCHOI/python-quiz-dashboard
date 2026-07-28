@@ -361,29 +361,18 @@ export function makeMooin3Ch2(E, lang = "py") {
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
 
-    /* [결-c code] — smart code, in 3 stages:
-        slice(5)[0] = Stage A: group j by character c (outer loop swap)
-        slice(5)[1] = Stage B: precompute i, k lookup tables
-        slice(5)[2] = Stage C: parabola vertex + lookup tables (final fast, no binary search)  */
-    ...sections.slice(5).map((sec, i) => ({
-      type: "reveal",
-      label: sec.label,
-      preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
-      narr:
-        i === 0
-          ? t(E,
-              "First leap: every j with the same s[j] asks the SAME left/right question.  So loop the OUTER over character c (just 26) instead of j (N positions).",
-              "첫 도약: s[j] 가 같은 j 들은 모두 같은 좌/우 질문을 함. 외곽 루프를 c (26 개) 로 — j (N 개) 대신.")
-          : i === 1
-          ? t(E,
-              "Second leap: build nearest_diff and latest_same tables once before any query.  Now (left_i, right_k) per (c, l, r) is just a table lookup.",
-              "둘째 도약: nearest_diff, latest_same 표를 쿼리 전에 한 번만. 이제 (left_i, right_k) 가 표 한 번 조회로 끝.")
-          : i === 2
-          ? t(E,
-              "Third leap: f(j) = (j − i)·(k − j) is an ∩-parabola — biggest at the midpoint.  One more table (earliest_same) hands us the 2 closest c straight away — O(1), no binary search.  Done — fits in time.",
-              "셋째 도약: f(j) = (j − i)·(k − j) 는 ∩ 포물선 — 중점에서 최대. 표 하나 더(earliest_same)면 가장 가까운 c 2 개가 바로 나와요 — O(1), 이분 탐색 없이. 끝 — 시간 안에 들어옴.")
-          : "",
-      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
-    })),
+    /* [결-c code] — 빠른 O(26) 코드를 CodeWalk 말풍선 하나로 (3단계 점진 코드 → 최종 코드 +
+       '도약' 말풍선). 코드 위 노트 벽 3스텝 → 1스텝 (선생님 2026-07-23). */
+    (() => {
+      const w = getMooin3Walk(E, lang, "fast");
+      return {
+        type: "reveal",
+        label: t(E, "Code: fast (O(26)/query)", "코드: 빠른 풀이 (쿼리당 O(26))"),
+        narr: t(E,
+          "Three leaps make it fast: precompute tables once, loop over the 26 letters (not j), and use the ∩-parabola vertex.  Watch each part light up.",
+          "세 번의 도약으로 빨라져요: 표를 한 번만 만들기 · j 대신 글자 26개로 · ∩ 포물선 꼭짓점 이용.  각 부분이 밝아질 때 봐요."),
+        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#7c3aed" />),
+      };
+    })(),
   ];
 }

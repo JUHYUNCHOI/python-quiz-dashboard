@@ -1229,8 +1229,25 @@ export function getMooin3Walk(E, lang = "py", mode = "brute") {
       { hi: [26, 26], bubble: t(E, "Print this query's answer.", "이 쿼리의 답 출력.") },
     ] };
   }
-  // mode === "fast" — 다음 커밋에서 추가
-  return null;
+  // mode === "fast" — O(26) per query: 3 lookup tables + parabola vertex
+  if (lang === "cpp") {
+    return { code: M3_FAST_CPP, vars: _M3_VARS, beats: [
+      { hi: [5, 11],  bubble: t(E, "Fast input (sync_with_stdio) + read N, Q, s — Q up to 30,000.", "빠른 입력(sync_with_stdio) + N, Q, s 읽기 — 쿼리 3만 개.") },
+      { hi: [13, 35], bubble: t(E, "PRECOMPUTE once, before any query: for each letter, 3 tables. Left→right fills latest_same; right→left fills earliest_same & nearest_diff. After this, each lookup is O(1).", "전처리 — 쿼리 전에 한 번만: 글자마다 표 3개. 왼→오로 latest_same, 오→왼으로 earliest_same·nearest_diff. 이러면 조회가 O(1).") },
+      { hi: [37, 42], bubble: t(E, "Each query: read l, r → 0-based. best = -1.", "쿼리마다 l, r 읽고 0-based. best = -1.") },
+      { hi: [43, 47], bubble: t(E, "Loop over the 26 LETTERS c (not j!). For each c, grab the leftmost 'different' i and the rightmost c = k straight from the tables.", "j 대신 글자 c 26개로 루프. c 마다 가장 왼쪽 '다른' i, 가장 오른쪽 c = k 를 표에서 바로.") },
+      { hi: [48, 57], bubble: t(E, "f(j) = (j−i)(k−j) is an ∩-parabola → biggest near the midpoint m. Check just the 2 candidates around m (O(1), no binary search).", "f(j)=(j−i)(k−j) 는 위로 볼록(∩) 포물선 → 꼭짓점 m 근처가 최대. m 양옆 후보 2개만 확인 (O(1), 이분 탐색 없이).") },
+      { hi: [59, 59], bubble: t(E, "Print the answer.", "답 출력.") },
+    ] };
+  }
+  return { code: M3_FAST_PY, vars: _M3_VARS, beats: [
+    { hi: [0, 4],   bubble: t(E, "Fast input (sys.stdin.readline) + read N, Q, s — Q up to 30,000.", "빠른 입력(sys.stdin.readline) + N, Q, s 읽기 — 쿼리 3만 개.") },
+    { hi: [6, 32],  bubble: t(E, "PRECOMPUTE once, before any query: for each letter, 3 tables. Left→right fills latest_same; right→left fills earliest_same & nearest_diff. After this, each lookup is O(1).", "전처리 — 쿼리 전에 한 번만: 글자마다 표 3개. 왼→오로 latest_same, 오→왼으로 earliest_same·nearest_diff. 이러면 조회가 O(1).") },
+    { hi: [34, 39], bubble: t(E, "Each query: read l, r → 0-based. best = -1.", "쿼리마다 l, r 읽고 0-based. best = -1.") },
+    { hi: [40, 46], bubble: t(E, "Loop over the 26 LETTERS c (not j!). For each c, grab the leftmost 'different' i and the rightmost c = k straight from the tables.", "j 대신 글자 c 26개로 루프. c 마다 가장 왼쪽 '다른' i, 가장 오른쪽 c = k 를 표에서 바로.") },
+    { hi: [47, 54], bubble: t(E, "f(j) = (j−i)(k−j) is an ∩-parabola → biggest near the midpoint m. Check just the 2 candidates around m (O(1), no binary search).", "f(j)=(j−i)(k−j) 는 위로 볼록(∩) 포물선 → 꼭짓점 m 근처가 최대. m 양옆 후보 2개만 확인 (O(1), 이분 탐색 없이).") },
+    { hi: [55, 57], bubble: t(E, "Collect answers and print them all at once.", "답을 모아서 한 번에 출력.") },
+  ] };
 }
 
 export function getMooin3Sections(E) {
