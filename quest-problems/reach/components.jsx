@@ -624,3 +624,203 @@ export function DijkstraTrace({ E }) {
     </div>
   );
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ReachSpreadSim — pick K (6/11/12), then step through the cities
+   being reached ONE AT A TIME with plain-language bubbles, so the
+   student SEES why K = 6/11/12 → 2/4/5.
+   (선생님 2026-07-28: "시뮬로 각 입력값에 따라 어떻게 되는건지")
+   ═══════════════════════════════════════════════════════════════ */
+const SPREAD_ORDER = [
+  { city: 1, kind: "start",     path: [1] },
+  { city: 5, kind: "safe",      path: [1, 5],    cond: () => true },
+  { city: 2, kind: "damaged",   path: [1, 2],    cond: (K) => 7 <= K },
+  { city: 3, kind: "safeAfter", path: [1, 2, 3], cond: (K) => 7 <= K },
+  { city: 4, kind: "damaged2",  path: [1, 2, 4], cond: (K) => 12 <= K },
+];
+
+function findEdge(a, b) {
+  return EDGES.find(e => (e.u === a && e.v === b) || (e.u === b && e.v === a));
+}
+
+export function ReachSpreadSim({ E }) {
+  const K_PRESETS = [6, 11, 12];
+  const [K, setK] = useState(6);
+  const [step, setStep] = useState(0);
+
+  const trace = (() => {
+    const reached = new Set([1]);
+    const tr = [{
+      city: 1, status: "start", path: [1], reached: new Set([1]),
+      msg: t(E, `Start at city 1 (0 min). K = ${K}.`, `도시 1 에서 출발 (0분). K = ${K}.`),
+    }];
+    for (const s of SPREAD_ORDER.slice(1)) {
+      const ok = s.cond(K);
+      if (ok) reached.add(s.city);
+      let msg;
+      if (s.kind === "safe") {
+        msg = t(E,
+          `City ${s.city}: safe road 1–5 (18 min). Safe roads ignore K → always reachable ✓`,
+          `도시 ${s.city}: 안전 도로 1–5 (18분). 안전 도로는 K 와 무관 → 항상 도달 ✓`);
+      } else if (s.kind === "damaged") {
+        msg = ok
+          ? t(E, `City ${s.city}: damaged road 1→2 arrives at 7. 7 ≤ K(${K}) ✓ → reachable`,
+                 `도시 ${s.city}: 손상 도로 1→2, 7분 도착. 7 ≤ K(${K}) ✓ → 도달`)
+          : t(E, `City ${s.city}: damaged road 1→2 takes 7, but 7 > K(${K}) ✗ → blocked`,
+                 `도시 ${s.city}: 손상 도로 1→2 는 7분인데 7 > K(${K}) ✗ → 못 감`);
+      } else if (s.kind === "safeAfter") {
+        msg = ok
+          ? t(E, `City ${s.city}: from city 2 via SAFE road 2→3 (arrive 17). The damaged part (1→2, 7) already passed → reachable ✓`,
+                 `도시 ${s.city}: 도시 2 에서 안전 도로 2→3 (17분 도착). 손상 도로(1→2, 7분)는 이미 건넜음 → 도달 ✓`)
+          : t(E, `City ${s.city}: city 2 was blocked (K < 7), so city 3 is too ✗`,
+                 `도시 ${s.city}: 도시 2 에 못 가서(K < 7) 여기도 ✗`);
+      } else { // damaged2 — city 4
+        const exact = K === 12;
+        msg = ok
+          ? t(E, `City ${s.city}: 1→2→4, damaged road 2→4 arrives at 12. 12 ≤ K(${K})${exact ? " — exactly K, still OK!" : ""} ✓ → reachable`,
+                 `도시 ${s.city}: 1→2→4, 손상 도로 2→4 는 12분. 12 ≤ K(${K})${exact ? " — 딱 K! 그래도 OK!" : ""} ✓ → 도달`)
+          : t(E, `City ${s.city}: 1→2→4 arrives at 12, but 12 > K(${K}) ✗ → blocked`,
+                 `도시 ${s.city}: 1→2→4 는 12분인데 12 > K(${K}) ✗ → 못 감`);
+      }
+      tr.push({ city: s.city, status: ok ? "reach" : "block", path: s.path, reached: new Set(reached), msg });
+    }
+    tr.push({
+      city: null, status: "done", path: [], reached: new Set(reached),
+      msg: t(E, `K = ${K} → ${reached.size} cities reachable.`, `K = ${K} → ${reached.size}개 도시 도달.`),
+    });
+    return tr;
+  })();
+
+  const maxStep = trace.length - 1;
+  const idx = Math.min(step, maxStep);
+  const cur = trace[idx];
+
+  const W = 360, H = 260, pad = 20;
+  const nodePos = (n) => ({ x: n.x + pad, y: n.y + pad });
+  const pathEdges = new Set();
+  for (let i = 0; i + 1 < (cur.path?.length || 0); i++) {
+    const e = findEdge(cur.path[i], cur.path[i + 1]);
+    if (e) pathEdges.add(e.id);
+  }
+
+  const statusColor = { reach: "#059669", block: "#dc2626", start: A, done: A }[cur.status] || A;
+
+  return (
+    <div style={{ padding: "10px 6px" }}>
+      {/* K preset buttons */}
+      <div style={{ textAlign: "center", marginBottom: 8 }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
+          {t(E, "Pick K, then step ▶ through the cities", "K 고르고 ▶ 로 도시 하나씩")}
+        </div>
+        <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+          {K_PRESETS.map(kv => (
+            <button key={kv}
+              onClick={() => { setK(kv); setStep(0); }}
+              style={{
+                padding: "5px 12px", borderRadius: 8, fontSize: 12, fontWeight: 700,
+                border: `1.5px solid ${K === kv ? A : ABd}`,
+                background: K === kv ? A : "#fff",
+                color: K === kv ? "#fff" : A, cursor: "pointer",
+              }}>K={kv}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Reached counter */}
+      <div style={{ textAlign: "center", marginBottom: 6, fontSize: 12, fontWeight: 700, color: "#059669" }}>
+        {t(E, "Reached", "도달")}: <span style={{ fontSize: 16 }}>{cur.reached.size}</span>
+      </div>
+
+      {/* Graph */}
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: "block", margin: "0 auto" }}>
+        {EDGES.map(e => {
+          const a = nodePos(getNode(e.u)), b = nodePos(getNode(e.v));
+          const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+          const onPath = pathEdges.has(e.id);
+          return (
+            <g key={e.id}>
+              <line x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+                stroke={onPath ? statusColor : (e.damaged ? "#ef4444" : "#6ee7b7")}
+                strokeWidth={onPath ? 4 : (e.damaged ? 2.5 : 2)}
+                strokeDasharray={e.damaged ? "6,3" : "none"}
+                opacity={onPath ? 1 : 0.4}
+              />
+              <rect x={mx - 12} y={my - 8} width={24} height={16} rx={4}
+                fill={e.damaged ? "#fef2f2" : "#ecfdf5"}
+                stroke={onPath ? statusColor : (e.damaged ? "#fca5a5" : "#6ee7b7")}
+                strokeWidth={onPath ? 2 : 1}
+              />
+              <text x={mx} y={my + 4} textAnchor="middle" fontSize={10} fontWeight={700}
+                fill={e.damaged ? "#dc2626" : "#059669"}
+                fontFamily="'JetBrains Mono',monospace"
+              >{e.w}</text>
+            </g>
+          );
+        })}
+        {NODES.map(n => {
+          const p = nodePos(n);
+          const isStart = n.id === 1;
+          const isReached = cur.reached.has(n.id);
+          const isCurrent = cur.city === n.id;
+          const isBlocked = isCurrent && cur.status === "block";
+          return (
+            <g key={n.id}>
+              {isCurrent && (
+                <circle cx={p.x} cy={p.y} r={22} fill="none" stroke={statusColor} strokeWidth={2} opacity={0.7} />
+              )}
+              <circle cx={p.x} cy={p.y} r={isStart ? 18 : 15}
+                fill={isStart ? A : (isBlocked ? "#fee2e2" : (isReached ? "#dcfce7" : "#fff"))}
+                stroke={isBlocked ? "#dc2626" : (isReached ? "#059669" : "#94a3b8")}
+                strokeWidth={isStart || isCurrent ? 3 : 2}
+              />
+              <text x={p.x} y={p.y + 5} textAnchor="middle" fontSize={isStart ? 14 : 12}
+                fontWeight={900} fill={isStart ? "#fff" : (isBlocked ? "#dc2626" : (isReached ? "#059669" : C.text))}
+                fontFamily="'JetBrains Mono',monospace"
+              >{n.id}</text>
+            </g>
+          );
+        })}
+      </svg>
+
+      {/* Step message bubble */}
+      <div style={{
+        background: "#1e293b", borderRadius: 10, padding: "8px 12px", marginTop: 6,
+        fontFamily: "'JetBrains Mono',monospace", fontSize: 11,
+        color: cur.status === "block" ? "#fca5a5" : (cur.status === "reach" ? "#86efac" : "#e2e8f0"),
+        textAlign: "center", lineHeight: 1.6, minHeight: 36,
+      }}>
+        {cur.msg}
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 8 }}>
+        <button onClick={() => setStep(s => Math.max(0, s - 1))}
+          disabled={idx === 0}
+          style={{
+            padding: "7px 14px", borderRadius: 10, fontSize: 12, fontWeight: 700,
+            border: `1px solid ${ABd}`,
+            background: idx === 0 ? "#f1f5f9" : ABg,
+            color: idx === 0 ? "#cbd5e1" : A,
+            cursor: idx === 0 ? "default" : "pointer",
+          }}>◀ {t(E, "Back", "이전")}</button>
+        {idx < maxStep ? (
+          <button onClick={() => setStep(s => Math.min(s + 1, maxStep))} style={{
+            padding: "7px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: "none", cursor: "pointer", color: "#fff",
+            background: `linear-gradient(135deg,#6d28d9,${A})`,
+            boxShadow: "0 3px 12px rgba(139,92,246,.3)",
+          }}>▶ {t(E, "Next", "다음")}</button>
+        ) : (
+          <button onClick={() => setStep(0)} style={{
+            padding: "7px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+            border: `1px solid ${ABd}`, background: ABg, color: A, cursor: "pointer",
+          }}>↺ {t(E, "Restart", "처음부터")}</button>
+        )}
+      </div>
+      <div style={{ textAlign: "center", marginTop: 4, fontSize: 10, color: C.dim, fontWeight: 700 }}>
+        {idx + 1}/{maxStep + 1}
+      </div>
+    </div>
+  );
+}

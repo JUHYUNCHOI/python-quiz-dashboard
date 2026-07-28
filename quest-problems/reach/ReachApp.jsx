@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { GraphViz, ReachSim, DijkstraTrace, DijkstraKAudit } from "./components";
+import { GraphViz, ReachSim, ReachSpreadSim, DijkstraTrace, DijkstraKAudit } from "./components";
 import { makeReachCh1, makeReachCh2, makeReachCh3 } from "./chapters";
 
 const A = "#8b5cf6";
@@ -100,6 +100,7 @@ export default function ReachApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "graphViz") return <GraphViz E={E} />;
     if (step.type === "reachSim") return <ReachSim E={E} />;
+    if (step.type === "reachSpread") return <ReachSpreadSim E={E} />;
     if (step.type === "dijkstraTrace") return <DijkstraTrace E={E} />;
     if (step.type === "dijkstraKAudit") return <DijkstraKAudit E={E} />;
     return null;
@@ -114,6 +115,7 @@ export default function ReachApp(props = {}) {
     if (s.type === "reveal") return <div style={{ padding: 16 }}>{s.content}</div>;
     if (s.type === "graphViz") return <GraphViz E={E} />;
     if (s.type === "reachSim") return <ReachSim E={E} />;
+    if (s.type === "reachSpread") return <ReachSpreadSim E={E} />;
     if (s.type === "dijkstraTrace") return <DijkstraTrace E={E} />;
     if (s.type === "dijkstraKAudit") return <DijkstraKAudit E={E} />;
     return null;

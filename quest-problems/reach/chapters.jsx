@@ -125,7 +125,7 @@ const CodeSnippet = ({ lines, highlight: hl }) => (
 const A = "#8b5cf6";
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: 📋 문제 이해 (5 steps)
+   Chapter 1: 📋 문제 이해 (6 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeReachCh1(E) {
   return [
@@ -221,6 +221,14 @@ export function makeReachCh1(E) {
             </div>
           ))}
         </div>),
+    },
+    // 1-3: Step-sim — pick K, watch each city get reached (or blocked) one by one.
+    // (선생님 2026-07-28: "시뮬로 각 입력값에 따라 어떻게 되는건지")
+    {
+      type: "reachSpread",
+      narr: t(E,
+        "Now play it out yourself: pick K = 6, 11, or 12, then step ▶ to watch each city get reached — or blocked — one at a time, and see the count land on 2, 4, or 5.",
+        "이제 직접 돌려봐요: K = 6, 11, 12 중 골라 ▶ 를 누르면 도시가 하나씩 도달(또는 차단)되는 걸 볼 수 있어요. 도달 수가 2, 4, 5 로 딱 맞는지 확인해요."),
     },
     // 1-4: Break rules — damaged roads break at time K
     {
