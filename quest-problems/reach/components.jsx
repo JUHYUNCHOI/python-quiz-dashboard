@@ -875,9 +875,11 @@ export function GraphBuildSim({ E }) {
       en: "“3” then “6 · 11 · 12” → 3 queries. For each K, how many cities are reachable? (answer in the next sim!)" },
   ];
   const [step, setStep] = useState(0);
+  const [qK, setQK] = useState(null);   // on the queries step: which K did the student click → collapse the weak roads at that minute
   const maxStep = STEPS.length - 1;
   const idx = Math.min(step, maxStep);
   const cur = STEPS[idx];
+  const collapsedNow = cur.q && qK !== null;   // weak roads shown collapsed (vanished) after clicking a K
 
   const W = 360, H = 260, pad = 20;
   const nodePos = (n) => ({ x: n.x + pad, y: n.y + pad });
@@ -903,12 +905,13 @@ export function GraphBuildSim({ E }) {
           const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
           const isDmg = (cur.damaged || []).includes(e.id);
           const isHi = cur.hi === e.id;
+          const gone = collapsedNow && isDmg;   // weak road collapsed after clicking K → faded/vanished
           // road-number badge, placed ~27% along the edge (away from the weight box)
           const bx = a.x + 0.27 * (b.x - a.x), by = a.y + 0.27 * (b.y - a.y);
           return (
-            <g key={e.id}>
+            <g key={e.id} opacity={gone ? 0.22 : 1}>
               <line x1={a.x} y1={a.y} x2={b.x} y2={b.y}
-                stroke={isHi ? A : (isDmg ? "#ef4444" : "#6ee7b7")}
+                stroke={gone ? "#94a3b8" : (isHi ? A : (isDmg ? "#ef4444" : "#6ee7b7"))}
                 strokeWidth={isHi ? 4 : (isDmg ? 2.5 : 2)}
                 strokeDasharray={isDmg ? "6,3" : "none"}
                 opacity={isHi ? 1 : 0.75}
@@ -952,39 +955,35 @@ export function GraphBuildSim({ E }) {
         })}
       </svg>
 
-      {/* K query chips + what each K means (only at the queries step) */}
+      {/* K queries — interactive: click a K, watch the weak roads collapse at that minute */}
       {cur.q && (
         <div style={{ marginTop: 6 }}>
+          <div style={{ fontSize: 10.5, color: C.dim, fontWeight: 700, textAlign: "center", marginBottom: 4, wordBreak: "keep-all" }}>
+            {t(E, "Click a K → watch the weak roads collapse at that minute",
+                  "K 를 눌러봐요 → 그 분에 약한 도로가 무너지는 걸 봐요")}
+          </div>
           <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
             {[6, 11, 12].map(k => (
-              <span key={k} style={{
+              <button key={k} onClick={() => setQK(k)} style={{
                 fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
-                color: "#92400e", background: "#fef3c7", border: "1.5px solid #fbbf24",
-                padding: "2px 10px", borderRadius: 6,
-              }}>K={k}</span>
+                color: qK === k ? "#fff" : "#92400e",
+                background: qK === k ? "#f59e0b" : "#fef3c7",
+                border: "1.5px solid #fbbf24", padding: "3px 12px", borderRadius: 6, cursor: "pointer",
+              }}>K={k}</button>
             ))}
           </div>
           <div style={{
             marginTop: 6, background: "#fffbeb", border: "1.5px solid #fde68a",
             borderRadius: 8, padding: "9px 11px", fontSize: 11.5, color: "#92400e",
-            lineHeight: 1.65, wordBreak: "keep-all",
+            lineHeight: 1.65, wordBreak: "keep-all", textAlign: "center",
           }}>
-            <div style={{ marginBottom: 5 }}>
-              {t(E, <>Red roads (①③④⑥) = <b>weak roads</b>: usable now, but <b>ALL collapse together at minute K</b>.</>,
-                    <>빨간 도로(①③④⑥) = <b>약한 도로</b>. 지금은 건널 수 있지만, <b>K분에 전부 한꺼번에 무너져요.</b></>)}
-            </div>
-            <div style={{ marginBottom: 5 }}>
-              {t(E, <><b>6, 11, 12 = the collapse TIME (minutes)</b> — same “minutes” as road lengths (7, 10, 8…). Not one road — the time they all fall.</>,
-                    <><b>6, 11, 12 = 무너지는 시각(분)</b> — 도로 길이(7·10·8…)랑 같은 ‘분’ 단위. 특정 도로가 아니라, 다 무너지는 시각이에요.</>)}
-            </div>
-            <div style={{ marginBottom: 5 }}>
-              {t(E, <>So the 3 questions = <b>“what if they collapse at 6? at 11? at 12?”</b> — for each, how many cities can you reach before then. (Exactly as you said!)</>,
-                    <>그래서 질문 3개 = <b>“6분에 무너지면? 11분에 무너지면? 12분에 무너지면?”</b> — 각 경우에 무너지기 전 몇 곳 갈 수 있나. (선생님 말씀 그대로예요!)</>)}
-            </div>
-            <div>
-              {t(E, <>Later collapse (bigger K) = weak roads usable longer = more cities. (answer in the next sim!)</>,
-                    <>늦게 무너질수록(K 큼) = 약한 도로를 더 오래 씀 = 더 많은 도시. (답은 다음 시뮬!)</>)}
-            </div>
+            {qK === null
+              ? t(E,
+                  <>Each K = a “what if the weak roads collapse at minute K?” question.  6, 11, 12 are 3 such times — click one 👆</>,
+                  <>각 K = “약한 도로가 K분에 무너지면?” 하는 질문.  6, 11, 12 는 그 시각 3개 — 하나 눌러봐요 👆</>)
+              : t(E,
+                  <>At minute <b>{qK}</b> the weak roads ①③④⑥ <b>collapse and vanish</b> — only green roads ②⑤ stay.  Bigger K = later collapse = usable longer.  (How far you get before then → next sim!)</>,
+                  <><b>{qK}분</b>이 되면 약한 도로 ①③④⑥ 가 <b>무너져 사라져요</b> — 초록 도로 ②⑤ 만 남아요.  K 클수록 늦게 무너져 더 오래 씀.  (그 전에 몇 곳 가는지는 다음 시뮬!)</>)}
           </div>
         </div>
       )}
