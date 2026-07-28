@@ -653,7 +653,8 @@ export function ReachSpreadSim({ E }) {
     const reached = new Set([1]);
     const tr = [{
       city: 1, status: "start", path: [1], reached: new Set([1]),
-      msg: t(E, `Start at city 1 (0 min). K = ${K}.`, `도시 1 에서 출발 (0분). K = ${K}.`),
+      msg: t(E, `Start at city 1 (0 min). The weak (red) roads collapse at minute K = ${K}.`,
+               `도시 1 출발 (0분). 약한(빨간) 도로는 K = ${K} 분에 무너져요.`),
     }];
     for (const s of SPREAD_ORDER.slice(1)) {
       const ok = s.cond(K);
@@ -661,33 +662,34 @@ export function ReachSpreadSim({ E }) {
       let msg;
       if (s.kind === "safe") {
         msg = t(E,
-          `City ${s.city}: safe road 1–5 (18 min). Safe roads ignore K → always reachable ✓`,
-          `도시 ${s.city}: 안전 도로 1–5 (18분). 안전 도로는 K 와 무관 → 항상 도달 ✓`);
+          `City ${s.city} → green (SAFE) road 1–5. Safe roads never collapse, so time doesn't matter — reachable even though it's 18 min ✓`,
+          `도시 ${s.city} → 초록(안전) 도로 1–5. 안전 도로는 안 무너져서 시간과 상관없어요 — 18분이어도 갈 수 있어요 ✓`);
       } else if (s.kind === "damaged") {
         msg = ok
-          ? t(E, `City ${s.city}: damaged road 1→2 arrives at 7. 7 ≤ K(${K}) ✓ → reachable`,
-                 `도시 ${s.city}: 손상 도로 1→2, 7분 도착. 7 ≤ K(${K}) ✓ → 도달`)
-          : t(E, `City ${s.city}: damaged road 1→2 takes 7, but 7 > K(${K}) ✗ → blocked`,
-                 `도시 ${s.city}: 손상 도로 1→2 는 7분인데 7 > K(${K}) ✗ → 못 감`);
+          ? t(E, `City ${s.city} → weak road 1→2 takes 7 min. It collapses at ${K}; 7 ≤ ${K}, so you arrive before it falls ✓`,
+                 `도시 ${s.city} → 약한 도로 1→2 는 건너는 데 7분. 이 도로는 ${K}분에 무너지는데 7 ≤ ${K} → 무너지기 전 도착 ✓`)
+          : t(E, `City ${s.city} → weak road 1→2 takes 7 min, but it collapses at ${K}. 7 > ${K}, so you can't finish crossing in time ✗`,
+                 `도시 ${s.city} → 약한 도로 1→2 는 건너는 데 7분. 근데 이 도로는 ${K}분에 무너져요. 7 > ${K} 라 ${K}분 안에 못 건너요 ✗`);
       } else if (s.kind === "safeAfter") {
         msg = ok
-          ? t(E, `City ${s.city}: from city 2 via SAFE road 2→3 (arrive 17). The damaged part (1→2, 7) already passed → reachable ✓`,
-                 `도시 ${s.city}: 도시 2 에서 안전 도로 2→3 (17분 도착). 손상 도로(1→2, 7분)는 이미 건넜음 → 도달 ✓`)
-          : t(E, `City ${s.city}: city 2 was blocked (K < 7), so city 3 is too ✗`,
-                 `도시 ${s.city}: 도시 2 에 못 가서(K < 7) 여기도 ✗`);
+          ? t(E, `City ${s.city} → from city 2 via green (SAFE) road 2→3. The weak road (1→2) is already crossed, and this one is safe → reachable ✓`,
+                 `도시 ${s.city} → 도시 2 에서 초록(안전) 도로 2→3. 약한 도로(1→2)는 이미 건넜고 이 도로는 안전 → 도달 ✓`)
+          : t(E, `City ${s.city} → city 2 was blocked (weak road 1→2), so city 3 is unreachable too ✗`,
+                 `도시 ${s.city} → 도시 2 에 못 갔으니(약한 도로 1→2 막힘) 여기도 못 감 ✗`);
       } else { // damaged2 — city 4
         const exact = K === 12;
         msg = ok
-          ? t(E, `City ${s.city}: 1→2→4, damaged road 2→4 arrives at 12. 12 ≤ K(${K})${exact ? " — exactly K, still OK!" : ""} ✓ → reachable`,
-                 `도시 ${s.city}: 1→2→4, 손상 도로 2→4 는 12분. 12 ≤ K(${K})${exact ? " — 딱 K! 그래도 OK!" : ""} ✓ → 도달`)
-          : t(E, `City ${s.city}: 1→2→4 arrives at 12, but 12 > K(${K}) ✗ → blocked`,
-                 `도시 ${s.city}: 1→2→4 는 12분인데 12 > K(${K}) ✗ → 못 감`);
+          ? t(E, `City ${s.city} → 1→2→4, total 12 min (incl. weak road 2→4). Collapses at ${K}; 12 ≤ ${K}${exact ? " (arrive right on time!)" : ""} → reachable ✓`,
+                 `도시 ${s.city} → 1→2→4, 마지막 약한 도로 2→4 까지 합쳐 12분. ${K}분에 무너지는데 12 ≤ ${K}${exact ? " (딱 맞춰 도착!)" : ""} → 도달 ✓`)
+          : t(E, `City ${s.city} → 1→2→4 is 12 min, but the weak roads collapse at ${K}. 12 > ${K} → blocked ✗`,
+                 `도시 ${s.city} → 1→2→4 는 12분인데 약한 도로가 ${K}분에 무너져요. 12 > ${K} 라 못 감 ✗`);
       }
       tr.push({ city: s.city, status: ok ? "reach" : "block", path: s.path, reached: new Set(reached), msg });
     }
     tr.push({
       city: null, status: "done", path: [], reached: new Set(reached),
-      msg: t(E, `K = ${K} → ${reached.size} cities reachable.`, `K = ${K} → ${reached.size}개 도시 도달.`),
+      msg: t(E, `K = ${K} → ${reached.size} cities reachable before the weak roads collapse at ${K}.`,
+               `K = ${K} → 약한 도로가 ${K}분에 무너지기 전에 갈 수 있는 도시 = ${reached.size}개.`),
     });
     return tr;
   })();
