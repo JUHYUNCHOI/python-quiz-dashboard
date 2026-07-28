@@ -44,7 +44,7 @@ export default function ReachApp(props = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propLang]);
 
-  const TABS = E ? ["📋 Problem", "📝 Sim", "⚡ Code"] : ["📋 문제", "📝 시뮬", "⚡ 코드"];
+  const TABS = E ? ["📋 Problem", "🧭 Approach", "⚡ Code"] : ["📋 문제", "🧭 접근", "⚡ 코드"];
   const setters = { 0: setCh1Q, 1: setCh2Q, 2: setCh3Q };
   const states  = { 0: ch1Q,    1: ch2Q,    2: ch3Q };
   const makers  = { 0: makeReachCh1, 1: makeReachCh2, 2: makeReachCh3 };

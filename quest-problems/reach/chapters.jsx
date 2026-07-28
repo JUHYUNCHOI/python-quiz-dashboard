@@ -312,65 +312,181 @@ export function makeReachCh1(E) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: 📝 시뮬레이션 (4 steps)
+   Chapter 2: 🧭 접근 — 다익스트라 (7 steps)
+
+   스캐폴딩 순서 (feedback_first_concept_scaffolding):
+     1. 문제 감각 (K 슬라이더)
+     2. "그럼 어떻게 풀까? 생각해보자" — 필요한 것 = 가장 빠른 도착 시각
+     3. 새 생각법: 확실한 것부터 확정 — 실제 숫자로
+     4. 예제에서 끝까지 (trace 시뮬)
+     5. 이름은 나중에: 다익스트라 + 왜 BFS는 안 되나
+     6. 이 문제에 적용 — 빨간 다리 조건 하나만 추가
+     7. 확인 퀴즈
    ═══════════════════════════════════════════════════════════════ */
 export function makeReachCh2(E) {
+  const mono = "'JetBrains Mono',monospace";
   return [
-    // 2-1: Reachability simulator
+    // 2-1: 문제 감각 — K 슬라이더
     {
       type: "reachSim",
       narr: t(E,
-        "Move the K slider! Green = reachable, red = not. Notice: bigger K only ever adds more green (more time = more damaged roads usable).", "K 슬라이더를 움직여봐요! 초록 = 도달 가능, 빨강 = 불가. K를 키우면 초록이 늘기만 해요 (시간이 많을수록 손상 도로를 더 쓸 수 있으니까)."),
+        "Move the K slider! Green = reachable, red = not. Bigger K only ever adds green. Now — how would a COMPUTER decide this? That's this chapter.",
+        "K 슬라이더를 움직여봐요! 초록 = 도달 가능, 빨강 = 불가. K를 키우면 초록이 늘기만 해요. 자 — 컴퓨터는 이걸 어떻게 판단할까요? 그게 이번 챕터예요."),
     },
-    // 2-2: What IS Dijkstra? — introduce it before we trace/code it (why not BFS)
+    // 2-2: 그럼 어떻게 풀까? — 필요한 건 '가장 빠른 도착 시각'
     {
       type: "reveal",
       narr: t(E,
-        "Before any code — what IS Dijkstra?\nOur real job: find the EARLIEST arrival time to each city.\nRoads have travel times, so 'fewest roads' isn't 'fastest' — that's why plain BFS fails and we reach for Dijkstra.",
-        "코드 전에 — 다익스트라가 뭘까?\n우리 진짜 할 일: 각 도시까지 '가장 빠른 도착 시간' 구하기.\n도로마다 시간이 달라서 '도로 개수 최소'가 '가장 빠름'이 아니에요 — 그래서 그냥 BFS로는 안 되고 다익스트라를 써요."),
+        "So how do we solve it? Let's think.\nFor each city, ONE number decides everything: the EARLIEST time we can finish crossing the red roads on the way there.",
+        "그럼 어떻게 해결하면 될까? 생각해보자.\n도시마다 숫자 하나가 모든 걸 결정해요: 그 도시로 가는 길의 빨간 다리를 '가장 빨리' 다 건너는 시각."),
       content: (
-        <div style={{ padding: 16 }}>
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
-            {t(E, "What is Dijkstra?", "다익스트라란?")}
+            {t(E, "What do we actually need?", "우리한테 진짜 필요한 건 뭘까?")}
           </div>
-          {/* BFS vs Dijkstra — 왜 BFS 안 되나 */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
-            <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "8px 10px", fontSize: 12, lineHeight: 1.6, color: "#7f1d1d", wordBreak: "keep-all" }}>
-              <div style={{ fontWeight: 800, marginBottom: 2 }}>❌ BFS</div>
-              {t(E, "Counts roads (each = 1 hop). Ignores travel time → wrong when roads have different lengths.",
-                    "도로 '개수'만 셈 (하나 = 1칸). 시간을 무시 → 길이가 다른 도로엔 틀려요.")}
-            </div>
-            <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "8px 10px", fontSize: 12, lineHeight: 1.6, color: "#14532d", wordBreak: "keep-all" }}>
-              <div style={{ fontWeight: 800, marginBottom: 2 }}>✅ {t(E, "Dijkstra", "다익스트라")}</div>
-              {t(E, "Uses the real travel times → the earliest arrival time to every city.",
-                    "실제 이동 시간을 씀 → 각 도시까지 '가장 빠른 도착 시간'.")}
-            </div>
-          </div>
-          {/* 핵심 아이디어 */}
-          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, lineHeight: 1.7, color: C.text, wordBreak: "keep-all" }}>
-            <div style={{ fontWeight: 700, color: "#5b21b6", marginBottom: 4 }}>
-              💡 {t(E, "The idea", "핵심 아이디어")}
-            </div>
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, lineHeight: 1.75, color: C.text, marginBottom: 10 }}>
             {t(E,
-              "Always finalize the CLOSEST not-yet-finalized city first. Once finalized, its time is the true shortest — any other path there is already longer.",
-              "아직 확정 안 된 도시 중 '가장 가까운 것'을 먼저 확정해요. 한 번 확정되면 그 시간이 진짜 최단 — 다른 경로로 오면 이미 더 걸리니까.")}
+              <>Page 1's sim showed the rule: a city is reachable when the red roads on the way are crossed <b>by minute K</b>.  So per city we just need one number — <b>the earliest possible arrival time</b>.  Compare it with K → done.</>,
+              <>1장 시뮬에서 봤듯, 도시에 갈 수 있냐는 결국 길에 있는 빨간 다리를 <b>K분 안에</b> 다 건너느냐예요.  그러니 도시마다 딱 숫자 하나 — <b>가장 빨리 도착할 수 있는 시각</b> — 만 알면 돼요.  그걸 K 랑 비교하면 끝.</>)}
           </div>
-          <div style={{ marginTop: 8, fontSize: 11.5, color: C.dim, textAlign: "center", wordBreak: "keep-all" }}>
-            {t(E, "The next sim traces exactly this, city by city 👇", "다음 시뮬이 이걸 도시별로 그대로 보여줘요 👇")}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
+            <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "8px 10px", fontSize: 12, lineHeight: 1.6, color: "#14532d" }}>
+              {t(E, <><b>Fastest way arrives in time</b> → reachable ✓</>,
+                    <><b>가장 빠른 길이 시간 안</b> → 도달 ✓</>)}
+            </div>
+            <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "8px 10px", fontSize: 12, lineHeight: 1.6, color: "#7f1d1d" }}>
+              {t(E, <><b>Even the fastest way is late</b> → no path works ✗</>,
+                    <><b>가장 빠른 길도 늦으면</b> → 어떤 길도 안 됨 ✗</>)}
+            </div>
+          </div>
+          <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "8px 12px", fontSize: 12.5, fontWeight: 700, color: "#92400e", textAlign: "center" }}>
+            {t(E, "New goal: for every city, find the fastest arrival time from city 1. How?",
+                  "새 목표: 모든 도시까지 '도시 1에서 가장 빨리 도착하는 시각' 구하기. 어떻게?")}
           </div>
         </div>),
     },
-    // 2-3: Dijkstra trace
+    // 2-3: 새 생각법 — 확실한 것부터 확정 (실제 숫자로)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Idea: start from what's 100% CERTAIN, and lock in one city at a time.",
+        "아이디어: 100% 확실한 것부터, 도시를 하나씩 '확정'해 나가요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
+            {t(E, "Lock in the certain one first", "확실한 것부터 확정하기")}
+          </div>
+          {/* 단계 1: 확실한 출발점 */}
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "9px 12px", fontSize: 12.5, lineHeight: 1.7, color: C.text, marginBottom: 8 }}>
+            ① {t(E, <>What do we know for sure right now?  <b>City 1 = minute 0.</b>  That's it — lock it in.</>,
+                   <>지금 100% 확실한 건?  <b>도시 1 = 0분.</b>  이것뿐이에요 — 확정!</>)}
+          </div>
+          {/* 단계 2: 후보 */}
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "9px 12px", fontSize: 12.5, lineHeight: 1.7, color: C.text, marginBottom: 8 }}>
+            ② {t(E, <>From city 1, two candidates open up:  city 2 = <b style={{ fontFamily: mono }}>7 min</b>,  city 5 = <b style={{ fontFamily: mono }}>18 min</b>.  Candidates — not certain yet.</>,
+                   <>도시 1에서 후보 두 개가 생겨요:  도시 2 = <b style={{ fontFamily: mono }}>7분</b>,  도시 5 = <b style={{ fontFamily: mono }}>18분</b>.  아직 '후보'일 뿐, 확정은 아님.</>)}
+          </div>
+          {/* 단계 3: 제일 이른 후보 확정 + why */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "9px 12px", fontSize: 12.5, lineHeight: 1.7, color: "#14532d", marginBottom: 8 }}>
+            ③ {t(E, <>The <b>earliest</b> candidate — city 2 at 7 min — can be locked in as certain.</>,
+                   <>후보 중 <b>제일 이른</b> 것 — 도시 2, 7분 — 은 확정해도 돼요.</>)}
+            <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #6ee7b7", fontSize: 12 }}>
+              🤔 <b>{t(E, "Why is 7 certain?", "왜 7분이 확실하지?")}</b>{" "}
+              {t(E,
+                "Any other route to city 2 must START with some other road — and every other road out of city 1 already takes longer than 7. It can't beat 7.",
+                "도시 2로 가는 다른 길은 어차피 다른 다리로 시작해야 하는데, 도시 1에서 나가는 다른 다리(18분…)는 시작부터 이미 7분보다 늦어요. 7분을 이길 수 없어요.")}
+            </div>
+          </div>
+          {/* 단계 4: 반복 */}
+          <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "8px 12px", fontSize: 12.5, lineHeight: 1.7, color: "#92400e" }}>
+            ④ {t(E, <>City 2 (7 min) locked → new candidates through it:  city 3 = 7+10 = <b style={{ fontFamily: mono }}>17</b>,  city 4 = 7+5 = <b style={{ fontFamily: mono }}>12</b>.  Repeat: “lock the earliest candidate” until every city is done!</>,
+                   <>도시 2(7분) 확정 → 2를 거치는 새 후보:  도시 3 = 7+10 = <b style={{ fontFamily: mono }}>17분</b>,  도시 4 = 7+5 = <b style={{ fontFamily: mono }}>12분</b>.  이제 “제일 이른 후보 확정”을 모든 도시가 끝날 때까지 반복!</>)}
+          </div>
+          <div style={{ marginTop: 8, fontSize: 11.5, color: C.dim, textAlign: "center" }}>
+            {t(E, "Watch it run to the end on our sample 👇", "예제에서 끝까지 돌아가는 걸 봐요 👇")}
+          </div>
+        </div>),
+    },
+    // 2-4: 예제로 끝까지 — trace 시뮬
     {
       type: "dijkstraTrace",
       narr: t(E,
-        "Let's trace Dijkstra on the full graph (all roads usable). Watch how distances update!", "전체 그래프에서 다익스트라를 따라가보자! (모든 도로 사용 가능) 거리가 어떻게 갱신되는지 봐요!"),
+        "Run 'lock the earliest candidate' to the end on our graph (all roads usable for now). ▶ each step: which city gets locked, which candidates update.",
+        "'제일 이른 후보 확정'을 예제 그래프에서 끝까지 돌려봐요 (일단 모든 다리 사용 가능). ▶ 마다: 어느 도시가 확정되고, 어떤 후보가 갱신되는지."),
     },
-    // 2-5: Input — verify sample answer
+    // 2-5: 이름 공개 — 다익스트라 + 왜 BFS 는 안 되나
+    {
+      type: "reveal",
+      narr: t(E,
+        "This method has a name: Dijkstra's algorithm — THE standard tool for shortest times on weighted graphs.",
+        "방금 그 방법의 이름 = 다익스트라(Dijkstra) 알고리즘. 시간이 각각 다른 그래프에서 최단 시간을 구하는 표준 도구예요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          <div style={{ textAlign: "center", marginBottom: 10 }}>
+            <div style={{ display: "inline-block", background: "#f5f3ff", border: `2px solid ${A}`, borderRadius: 10, padding: "8px 16px" }}>
+              <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6" }}>
+                🏷️ {t(E, "Dijkstra's algorithm", "다익스트라 (Dijkstra) 알고리즘")}
+              </div>
+              <div style={{ fontSize: 11.5, color: "#5b21b6", marginTop: 2 }}>
+                {t(E, "= “lock in the earliest candidate, one at a time”", "= “제일 이른 후보를 하나씩 확정”")}
+              </div>
+            </div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
+            <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "8px 10px", fontSize: 12, lineHeight: 1.6, color: "#7f1d1d" }}>
+              <div style={{ fontWeight: 800, marginBottom: 2 }}>❌ BFS</div>
+              {t(E, "Counts roads (1 hop each), ignores times. 1→2 direct (7 min) and 1→5 direct (18 min) look the same: “1 road”. Wrong tool here.",
+                    "다리 '개수'만 세요. 1→2 (7분)도 1→5 (18분)도 똑같이 “다리 1개”로 보여요. 시간이 다른 이 문제엔 안 맞아요.")}
+            </div>
+            <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "8px 10px", fontSize: 12, lineHeight: 1.6, color: "#14532d" }}>
+              <div style={{ fontWeight: 800, marginBottom: 2 }}>✅ {t(E, "Dijkstra", "다익스트라")}</div>
+              {t(E, "Uses real times → the earliest arrival to every city. Exactly the number we need.",
+                    "실제 시간을 써요 → 각 도시의 '가장 빠른 도착 시각'. 우리가 필요한 바로 그 숫자.")}
+            </div>
+          </div>
+          <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#1e3a8a", lineHeight: 1.65 }}>
+            📌 {t(E,
+              <><b>When to reach for Dijkstra:</b> roads (edges) have different costs/times, and the question is “fastest / shortest / cheapest way from a start”.</>,
+              <><b>다익스트라를 꺼내는 순간:</b> 다리(간선)마다 시간/비용이 다르고, “출발점에서 가장 빨리/짧게/싸게”를 물을 때.</>)}
+          </div>
+        </div>),
+    },
+    // 2-6: 이 문제에 적용 — 빨간 다리 조건 하나만 추가
+    {
+      type: "reveal",
+      narr: t(E,
+        "Back to OUR problem: plain Dijkstra + ONE extra check on red roads. That's the whole solution.",
+        "이제 우리 문제로: 그냥 다익스트라에 빨간 다리 검사 딱 하나만 추가하면 — 그게 풀이 전부예요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
+            {t(E, "Dijkstra + the red-road check", "다익스트라 + 빨간 다리 검사")}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "9px 12px", fontSize: 12.5, lineHeight: 1.7, color: "#14532d" }}>
+              🟢 {t(E, <>Green road → use it exactly like normal Dijkstra. No change.</>,
+                     <>초록 다리 → 그냥 평소 다익스트라처럼 사용. 바꿀 것 없음.</>)}
+            </div>
+            <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "9px 12px", fontSize: 12.5, lineHeight: 1.7, color: "#7f1d1d" }}>
+              🔴 {t(E, <>Red road → allowed only if you <b>start before K</b> and <b>finish by K</b> (finish time = current clock + road time). Otherwise skip that road.</>,
+                     <>빨간 다리 → <b>출발이 K 전</b>이고 <b>다 건넌 시각 ≤ K</b> 일 때만 사용 (건넌 시각 = 지금 시계 + 다리 시간). 아니면 그 다리는 건너뛰기.</>)}
+            </div>
+            <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "9px 12px", fontSize: 12.5, lineHeight: 1.7, color: C.text }}>
+              🔁 {t(E, <>Each query K = run this once and count the cities that got a time (not ∞). Q queries → Q runs.</>,
+                     <>쿼리 K 하나 = 이걸 한 번 돌리고, 시각이 매겨진(∞ 아닌) 도시 수를 세면 답. 쿼리 Q개 → Q번 실행.</>)}
+            </div>
+          </div>
+          <div style={{ marginTop: 10, background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "7px 12px", fontSize: 12, fontWeight: 700, color: "#92400e", textAlign: "center" }}>
+            {t(E, "Next chapter: this exact plan, as code 👉", "다음 챕터: 이 계획 그대로 코드로 👉")}
+          </div>
+        </div>),
+    },
+    // 2-7: 확인 퀴즈
     {
       type: "input",
       narr: t(E,
-        "In the sample, K=6 → answer is 2, K=11 → 4, K=12 → 5.\nWhat's the sum of all three answers?", "예제에서 K=6 → 답 2, K=11 → 답 4, K=12 → 답 5야. 세 답의 합은?"),
+        "Check: with the sample, our plan gives K=6 → 2, K=11 → 4, K=12 → 5.\nWhat's the sum of the three answers?",
+        "확인해봐요: 예제에서 이 계획대로면 K=6 → 2, K=11 → 4, K=12 → 5.\n세 답의 합은?"),
       question: t(E,
         "Sum of answers: 2 + 4 + 5 = ?",
         "세 쿼리의 답의 합: 2 + 4 + 5 = ?"),

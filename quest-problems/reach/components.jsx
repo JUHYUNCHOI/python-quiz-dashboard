@@ -532,7 +532,7 @@ export function DijkstraTrace({ E }) {
     NODES.forEach(n => dist[n.id] = Infinity);
     dist[1] = 0;
     const visited = new Set();
-    const trace = [{ visited: new Set(), dist: { ...dist }, msg: t(E, "Start: dist[1]=0", "시작: dist[1]=0") }];
+    const trace = [{ visited: new Set(), dist: { ...dist }, msg: t(E, "Certain: city 1 = 0 min. Everything else unknown (∞).", "확실한 것: 도시 1 = 0분. 나머지는 아직 모름(∞).") }];
 
     for (let i = 0; i < NODES.length; i++) {
       let u = -1;
@@ -554,8 +554,8 @@ export function DijkstraTrace({ E }) {
         dist: { ...dist },
         node: u,
         msg: t(E,
-          `Visit city ${u} (dist=${dist[u]}). ${updates.length ? "Update: " + updates.join(", ") : "No updates."}`,
-          `도시 ${u} 방문 (거리=${dist[u]}). ${updates.length ? "갱신: " + updates.join(", ") : "갱신 없음."}`),
+          `LOCK city ${u} — earliest candidate (${dist[u]} min). ${updates.length ? "New candidates: " + updates.join(", ") : "No new candidates."}`,
+          `도시 ${u} 확정 — 제일 이른 후보 (${dist[u]}분). ${updates.length ? "새 후보: " + updates.join(", ") : "새 후보 없음."}`),
       });
     }
     return trace;
