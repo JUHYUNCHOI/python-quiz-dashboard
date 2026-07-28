@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getMooHuntSections } from "./components";
+import { getMooHuntSections, getMooHuntWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooHuntCh1 (5 steps: reveal / reveal / reveal / quiz / input)
@@ -205,13 +206,17 @@ export function makeMooHuntCh1(E) {
    Chapter 2: makeMooHuntCh2 (1 step: progressive)
    ═══════════════════════════════════════════════════════════════ */
 export function makeMooHuntCh2(E, lang = "py") {
+  const w = getMooHuntWalk(E, lang);
   return [
     {
-      type: "progressive",
+      type: "reveal",
+      label: t(E, "Code", "코드"),
       narr: t(E,
-        "Build the solution in three sections: group moves, try every board with a bitmask, print best & count.",
-        "세 단계로 코드를 쌓아: 무브 묶기, 비트마스크로 모든 보드 시도, 최고 점수와 보드 개수 출력."),
-      sections: getMooHuntSections(E),
+        "Read the solution top to bottom — each bubble sits on the lines it explains: group moves, try every board with a bitmask, print best & count.",
+        "코드를 위에서 아래로 읽어보자 — 말풍선이 설명하는 코드 줄에 바로 붙어 있어: 무브 묶기, 비트마스크로 모든 보드 시도, 최고 점수와 보드 개수 출력."),
+      content: (
+        <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />
+      ),
     },
   ];
 }

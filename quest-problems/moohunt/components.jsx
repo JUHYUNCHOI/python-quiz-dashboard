@@ -91,6 +91,35 @@ const FULL_CPP = [
   "}",
 ];
 
+// CodeWalk — 코드 위 노트 벽 대신 코드 줄에 붙는 말풍선 (선생님 규칙). 검증본 코드 그대로.
+const _MH_VARS = [
+  { v: "N", ko: "자리 수", en: "spots" },
+  { v: "triples", ko: "무브(개수)", en: "moves (count)" },
+  { v: "b", ko: "보드(비트마스크)", en: "board (bitmask)" },
+  { v: "best", ko: "최고 점수", en: "best score" },
+  { v: "ways", ko: "보드 수", en: "# of boards" },
+];
+export function getMooHuntWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return { code: FULL_CPP, vars: _MH_VARS, beats: [
+      { hi: [6, 8],   bubble: t(E, "Read N (spots) and K (moves).", "N (자리 수) 와 K (무브 수) 읽기.") },
+      { hi: [10, 23], bubble: t(E, "Group identical moves: count each (x,y,z) triple so duplicates aren't re-scored. Build the triples list.", "같은 무브 묶기: (x,y,z) 삼중항을 개수로 세서 중복 재계산 방지. triples 목록 만들기.") },
+      { hi: [25, 27], bubble: t(E, "Start best & ways, then try EVERY board (2^N of them).", "best, ways 초기화 후, 모든 보드(2^N 개)를 시도.") },
+      { hi: [28, 37], bubble: t(E, "Bitmask brute: for each board (bit 1 = M, 0 = O), a triple scores if x is M and y, z are O — add its count.", "비트마스크 브루트: 보드마다(비트 1=M, 0=O), 삼중항의 x=M 이고 y,z=O 면 그 개수만큼 점수.") },
+      { hi: [38, 43], bubble: t(E, "Track the best score and how many boards reach it.", "최고 점수 갱신 + 그 점수에 이르는 보드 수 세기.") },
+      { hi: [45, 45], bubble: t(E, "Print the best score and the count.", "최고 점수와 보드 수 출력.") },
+    ] };
+  }
+  return { code: FULL_PY, vars: _MH_VARS, beats: [
+    { hi: [2, 2],   bubble: t(E, "Read N (spots) and K (moves).", "N (자리 수) 와 K (무브 수) 읽기.") },
+    { hi: [4, 9],   bubble: t(E, "Group identical moves: count each (x,y,z) triple so duplicates aren't re-scored.", "같은 무브 묶기: (x,y,z) 삼중항을 개수(Counter)로 세서 중복 재계산 방지.") },
+    { hi: [11, 14], bubble: t(E, "Start best & ways, then try EVERY board (2^N of them).", "best, ways 초기화 후, 모든 보드(2^N 개)를 시도.") },
+    { hi: [15, 19], bubble: t(E, "Bitmask brute: for each board (bit 1 = M, 0 = O), a triple scores if x is M and y, z are O — add its count.", "비트마스크 브루트: 보드마다(비트 1=M, 0=O), 삼중항의 x=M 이고 y,z=O 면 그 개수만큼 점수.") },
+    { hi: [20, 24], bubble: t(E, "Track the best score and how many boards reach it.", "최고 점수 갱신 + 그 점수에 이르는 보드 수 세기.") },
+    { hi: [26, 26], bubble: t(E, "Print the best score and the count.", "최고 점수와 보드 수 출력.") },
+  ] };
+}
+
 export function getMooHuntSections(E) {
   return [
     {
