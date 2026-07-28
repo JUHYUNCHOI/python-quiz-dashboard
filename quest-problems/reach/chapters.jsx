@@ -281,8 +281,8 @@ export function makeReachCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "So how do we solve it? Let's think.\nFor each city, ONE number decides everything: the EARLIEST time we can finish crossing the red roads on the way there.",
-        "그럼 어떻게 해결하면 될까? 생각해보자.\n도시마다 숫자 하나가 모든 걸 결정해요: 그 도시로 가는 길의 빨간 다리를 '가장 빨리' 다 건너는 시각."),
+        "So how do we solve it? Let's think.\nFor each city, we only need ONE thing: the FASTEST way there. If even the fastest way is too late — that city is out.",
+        "그럼 어떻게 해결하면 될까? 생각해보자.\n도시마다 딱 하나만 알면 돼요: 거기까지 '가장 빨리 가는 길'. 가장 빠른 길로도 늦으면 — 그 도시는 못 가는 거예요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
@@ -290,8 +290,8 @@ export function makeReachCh2(E) {
           </div>
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "10px 12px", fontSize: 12.5, lineHeight: 1.7, color: C.text, marginBottom: 10, textAlign: "center" }}>
             {t(E,
-              <>Per city, ONE number is enough: <b>the earliest arrival time</b>.  Compare it with K → done.</>,
-              <>도시마다 숫자 하나면 충분해요: <b>가장 빨리 도착하는 시각</b>.  그걸 K 랑 비교하면 끝.</>)}
+              <>Per city, ONE thing is enough: <b>the fastest way there</b>.  Check if that way fits in time → done.</>,
+              <>도시마다 하나면 충분해요: <b>가장 빨리 가는 길</b>.  그 길이 시간 안에 되는지 보면 끝.</>)}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
             <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "8px 10px", fontSize: 12, lineHeight: 1.6, color: "#14532d" }}>
@@ -304,8 +304,8 @@ export function makeReachCh2(E) {
             </div>
           </div>
           <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "8px 12px", fontSize: 12.5, fontWeight: 700, color: "#92400e", textAlign: "center" }}>
-            {t(E, "New goal: for every city, find the fastest arrival time from city 1. How?",
-                  "새 목표: 모든 도시까지 '도시 1에서 가장 빨리 도착하는 시각' 구하기. 어떻게?")}
+            {t(E, "New goal: find the fastest way from city 1 to every city. How?",
+                  "새 목표: 도시 1에서 각 도시까지 '가장 빨리 가는 길' 찾기. 어떻게?")}
           </div>
         </div>),
     },
