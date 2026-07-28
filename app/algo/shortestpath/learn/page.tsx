@@ -207,28 +207,44 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               )}
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-rose-200 mb-3">
-              <p className="text-xs font-bold text-rose-800 mb-2">💡 {t("간단한 반례", "Tiny counterexample")}</p>
-              <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{t(`A ──── 10 ────> C
-│              ▲
-1              │
-▼              1
-B ─── 1 ───────┘
-
-BFS 의 답: A→C (직접) = 간선 1 개 → "가깝다" 판정
-진짜 답:   A→B→C     = 1 + 1 = 2  (직접 A→C 는 10)
-→ A→B→C 가 더 짧은데, BFS 는 간선 *수* 만 보고
-  가중치를 무시해 더 비싼 직접 간선을 골라 버림!`, `A ──── 10 ────> C
-│              ▲
-1              │
-▼              1
-B ─── 1 ───────┘
-
-BFS's answer: A→C (direct) = 1 edge → judged "close"
-Real answer:  A→B→C        = 1 + 1 = 2  (direct A→C is 10)
-→ A→B→C is shorter, but BFS counts only the *number* of edges
-  and ignores weights — so it picks the pricier direct edge!`)}
-              </pre>
+              <p className="text-xs font-bold text-rose-800 mb-2 text-center">💡 {t("간단한 반례 — A 에서 C 까지", "Tiny counterexample — A to C")}</p>
+              <svg viewBox="0 0 280 150" className="w-full max-w-[300px] mx-auto block mb-2">
+                {/* A—C (10, 간선 1개) : BFS 가 고르는 길 */}
+                <line x1={40} y1={45} x2={240} y2={45} stroke="#f43f5e" strokeWidth={3} />
+                <rect x={128} y={33} width={24} height={20} rx={5} fill="#fff" stroke="#f43f5e" strokeWidth={2} />
+                <text x={140} y={48} textAnchor="middle" fontSize={12} fontWeight={900} fill="#e11d48" fontFamily="monospace">10</text>
+                {/* A—B—C (1+1) : 진짜 최단 */}
+                <line x1={40} y1={45} x2={140} y2={115} stroke="#10b981" strokeWidth={3} />
+                <rect x={78} y={70} width={18} height={20} rx={5} fill="#fff" stroke="#10b981" strokeWidth={2} />
+                <text x={87} y={85} textAnchor="middle" fontSize={12} fontWeight={900} fill="#059669" fontFamily="monospace">1</text>
+                <line x1={140} y1={115} x2={240} y2={45} stroke="#10b981" strokeWidth={3} />
+                <rect x={182} y={70} width={18} height={20} rx={5} fill="#fff" stroke="#10b981" strokeWidth={2} />
+                <text x={191} y={85} textAnchor="middle" fontSize={12} fontWeight={900} fill="#059669" fontFamily="monospace">1</text>
+                {[{ id: "A", x: 40, y: 45 }, { id: "C", x: 240, y: 45 }, { id: "B", x: 140, y: 115 }].map(n => (
+                  <g key={n.id}>
+                    <circle cx={n.x} cy={n.y} r={17} fill="#fff" stroke="#64748b" strokeWidth={2.5} />
+                    <text x={n.x} y={n.y + 5} textAnchor="middle" fontSize={14} fontWeight={900} fill="#334155" fontFamily="monospace">{n.id}</text>
+                  </g>
+                ))}
+              </svg>
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2 bg-rose-50 border-2 border-rose-300 rounded-lg px-2.5 py-1.5">
+                  <span className="font-mono text-xs font-black text-rose-700">A→C</span>
+                  <span className="text-[11px] text-rose-800">{t("간선 1 개", "1 edge")}</span>
+                  <span className="font-mono text-xs font-black text-rose-700 ml-auto">= 10</span>
+                  <span className="text-[10px] font-bold text-rose-600">{t("BFS 선택 ✗", "BFS picks ✗")}</span>
+                </div>
+                <div className="flex items-center gap-2 bg-emerald-50 border-2 border-emerald-400 rounded-lg px-2.5 py-1.5">
+                  <span className="font-mono text-xs font-black text-emerald-700">A→B→C</span>
+                  <span className="text-[11px] text-emerald-800">{t("간선 2 개", "2 edges")}</span>
+                  <span className="font-mono text-xs font-black text-emerald-700 ml-auto">= 1+1 = 2</span>
+                  <span className="text-[10px] font-bold text-emerald-600">{t("진짜 최단 ✓", "actually shortest ✓")}</span>
+                </div>
+              </div>
+              <p className="text-[11px] text-gray-700 leading-relaxed mt-2 text-center">
+                {t("BFS 는 간선 *개수* 만 세서 A→C 를 골라요 — 가중치 10 을 못 봐요!",
+                   "BFS counts only the *number* of edges, so it picks A→C — blind to the weight 10!")}
+              </p>
             </div>
             <p className="text-sm font-bold text-rose-700 text-center">
               {t("그래서 — 가중치를 *합산* 하는 알고리즘이 필요해요.", "So — we need algorithms that *sum weights*.")}
@@ -291,7 +307,7 @@ Real answer:  A→B→C        = 1 + 1 = 2  (direct A→C is 10)
 // ── Chapter 2: Dijkstra — 단일 시작 → 모든 노드 ─────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
+  const totalSteps = 5
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
 
@@ -338,21 +354,6 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 )}
               </p>
             </div>
-            <div className="bg-emerald-50 rounded-lg p-3 border border-emerald-200 mb-3">
-              <p className="text-xs font-bold text-emerald-800 mb-2">🤔 {t("왜 '가장 가까운 정점을 확정' 해도 안전할까?", "Why is 'finalize the closest vertex' safe?")}</p>
-              <p className="text-xs text-gray-700 leading-relaxed mb-2">
-                {t(
-                  "모든 간선이 0 이상이라, 지금 가장 가까운 미확정 정점은 *더 짧아질 길이 없어요*. 다른 경로로 거기에 가려면 이미 더 먼 정점을 한 번 거쳐야 하는데, 거기서 0 이상인 간선을 더하면 거리가 줄어들 수가 없거든요.",
-                  "Since every edge is ≥ 0, the closest unfinalized vertex *can't get any shorter*. Any other route would first pass through a farther vertex, then add a non-negative edge — so it can never beat the current distance.",
-                )}
-              </p>
-              <p className="text-xs text-gray-700 leading-relaxed">
-                {t(
-                  "→ 그래서 지금 거리로 *확정* 해도 안전. 음수 간선이 있으면 '더 먼 정점을 거치면 거리가 줄어드는' 일이 생겨 — 이 보장이 깨져요.",
-                  "→ So finalizing it now is safe. A negative edge would let a detour through a farther vertex shrink the distance — breaking this guarantee.",
-                )}
-              </p>
-            </div>
             <div className="bg-white/80 rounded-lg p-3 border border-amber-200 mb-3">
               <p className="text-xs font-bold text-amber-800 mb-2">🛠️ {t("필요한 도구", "Tools needed")}</p>
               <ul className="text-xs text-gray-700 leading-relaxed space-y-1">
@@ -367,15 +368,9 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 {t(" 먼저 보고 와요 — '가장 작은 걸 O(log n) 에 꺼낸다' 만 알면 OK.", " first — just knowing 'pop the smallest in O(log n)' is enough.")}
               </p>
             </div>
-            <div className="bg-rose-50 rounded-lg p-3 border border-rose-200">
-              <p className="text-xs text-rose-800 leading-relaxed">
-                ⚠️ <b>{t("음수 가중치 안 됨!", "No negative weights!")}</b>{" "}
-                {t(
-                  "음수가 있으면 '확정' 한 정점이 나중에 더 짧아질 수 있어 — 규칙이 깨짐. 음수면 Bellman-Ford (챕터 3).",
-                  "With negatives, a 'finalized' vertex could later be improved — the rule breaks. Use Bellman-Ford (Ch 3).",
-                )}
-              </p>
-            </div>
+            <p className="text-xs font-bold text-amber-800 text-center mt-3">
+              👉 {t("다음 슬라이드에서 직접 한 스텝씩 돌려봐요.", "Next slide: run it yourself, step by step.")}
+            </p>
           </div>
         )}
 
@@ -469,10 +464,61 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
           </div>
         )}
 
+        {/* 시뮬을 돌려본 *다음* 에 "왜 안전한가" — 방금 본 숫자로 설명 (추상 증명 먼저 X) */}
         {step === 2 && (
+          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border-2 border-emerald-300 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🤔</p>
+            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
+              {t("왜 '가장 가까운 것' 을 확정해도 될까?", "Why is finalizing 'the closest' safe?")}
+            </h3>
+
+            <div className="bg-white rounded-lg p-3 border border-emerald-200 mb-3">
+              <p className="text-xs font-bold text-emerald-800 mb-2 text-center">
+                {t("방금 시뮬 1 스텝 — 후보가 둘이었죠", "Step 1 of the sim you just ran — two candidates")}
+              </p>
+              <div className="flex items-center justify-center gap-3 mb-2">
+                <div className="px-3 py-1.5 rounded-lg bg-emerald-100 border-2 border-emerald-500 font-mono text-sm font-black text-emerald-800">
+                  {t("정점 2 = 2", "v2 = 2")}
+                </div>
+                <span className="text-gray-400 font-black text-xs">vs</span>
+                <div className="px-3 py-1.5 rounded-lg bg-gray-100 border-2 border-gray-300 font-mono text-sm font-black text-gray-500">
+                  {t("정점 3 = 5", "v3 = 5")}
+                </div>
+              </div>
+              <p className="text-xs text-gray-700 leading-relaxed text-center">
+                {t("가까운 정점 2 를 확정했어요. 그런데 — 나중에 2 보다 더 빨리 갈 길이 나올 수도 있지 않나요?",
+                   "We finalized vertex 2. But — could a better route to vertex 2 show up later?")}
+              </p>
+            </div>
+
+            <div className="bg-white rounded-lg p-3 border border-emerald-200 mb-3">
+              <p className="text-xs text-gray-700 leading-relaxed mb-2">
+                {t("2 로 가는 다른 길은 반드시 아직 확정 안 된 정점을 먼저 거쳐야 해요. 그런데 남은 후보는 5 부터 시작이에요. 거기서 간선을 더하면?",
+                   "Any other route to 2 must first pass through an unfinalized vertex — and the cheapest of those already costs 5. Add an edge on top of that:")}
+              </p>
+              <p className="text-base font-black text-emerald-800 text-center font-mono py-1">
+                5 + ({t("0 이상", "≥ 0")}) ≥ 5 &gt; 2 ✓
+              </p>
+              <p className="text-xs font-bold text-emerald-800 leading-relaxed text-center mt-1">
+                {t("돌아가는 길은 절대 2 를 못 이겨요 → 확정해도 안전!",
+                   "A detour can never beat 2 → safe to finalize!")}
+              </p>
+            </div>
+
+            <div className="bg-rose-50 rounded-lg p-3 border border-rose-200">
+              <p className="text-xs text-rose-800 leading-relaxed">
+                ⚠️ <b>{t("단, 음수 가중치는 안 돼요!", "But: no negative weights!")}</b>{" "}
+                {t("간선이 −4 라면 5 + (−4) = 1 < 2 — 돌아가는 길이 더 빨라져서 위 논리가 깨져요. 음수가 있으면 Bellman-Ford (챕터 3).",
+                   "With a −4 edge, 5 + (−4) = 1 < 2 — the detour wins and the argument breaks. For negatives use Bellman-Ford (Ch 3).")}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
           <div className="space-y-3">
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
-              <p className="text-sm font-black text-blue-900">📝 {t("코드 — Dijkstra (인접 리스트 + 우선순위 큐)", "Code — Dijkstra (adj list + PQ)")}</p>
+              <p className="text-sm font-black text-blue-900">📝 {t("코드 — 다익스트라 (인접 리스트 + 우선순위 큐)", "Code — Dijkstra (adj list + PQ)")}</p>
               <p className="text-xs text-gray-700 mt-1">
                 {t("PQ 에서 꺼낼 때 'd != dist[u]' 검사 — *낡은 항목* 스킵.", "On pop, check d != dist[u] — skip *stale* entries.")}
               </p>
@@ -574,7 +620,7 @@ vector<long long> dijkstra(int n, int src,
           </div>
         )}
 
-        {step === 3 && (
+        {step === 4 && (
           <MiniQuiz
             question={t(
               "Dijkstra 가 정확한 답을 *보장* 하려면 가중치 조건은?",
