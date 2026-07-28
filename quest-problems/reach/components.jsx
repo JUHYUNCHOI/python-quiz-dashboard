@@ -729,6 +729,20 @@ export function ReachSpreadSim({ E }) {
         </div>
       </div>
 
+      {/* Always-visible rule reminder — the #1 source of confusion */}
+      <div style={{
+        background: "#f8fafc", border: `1px solid ${C.border}`, borderRadius: 8,
+        padding: "7px 10px", marginBottom: 8, fontSize: 11, lineHeight: 1.6,
+        color: C.text, wordBreak: "keep-all",
+      }}>
+        <div>🧨 {t(E,
+          <><b style={{ color: "#dc2626" }}>Red (weak) roads collapse at minute K.</b>  Cross one only if your clock is ≤ K when you finish — the number on it is the crossing time.</>,
+          <><b style={{ color: "#dc2626" }}>빨간(약한) 다리는 K분에 무너져요.</b>  다 건넌 순간 시계가 K 이하일 때만 건널 수 있어요 — 다리 위 숫자 = 건너는 시간.</>)}</div>
+        <div style={{ marginTop: 2 }}>🟢 {t(E,
+          <><b style={{ color: "#059669" }}>Green (safe) roads never collapse</b> — no time limit, cross anytime.</>,
+          <><b style={{ color: "#059669" }}>초록(안전) 다리는 안 무너져요</b> — 시간 제한 없이 아무 때나.</>)}</div>
+      </div>
+
       {/* Reached counter */}
       <div style={{ textAlign: "center", marginBottom: 6, fontSize: 12, fontWeight: 700, color: "#059669" }}>
         {t(E, "Reached", "도달")}: <span style={{ fontSize: 16 }}>{cur.reached.size}</span>
