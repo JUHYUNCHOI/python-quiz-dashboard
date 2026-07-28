@@ -94,6 +94,34 @@ const FULL_CPP = [
   "}",
 ];
 
+// CodeWalk — 코드 위 노트 벽 대신 코드 줄에 붙는 말풍선 (선생님 규칙). 검증본 코드 그대로.
+const _BM_VARS = [
+  { v: "a", ko: "딜 가격들", en: "deal prices" },
+  { v: "c", ko: "블록 최저가", en: "cheapest per block" },
+  { v: "x", ko: "필요 버킷 수", en: "buckets needed" },
+  { v: "rem", ko: "남은 버킷", en: "buckets left" },
+];
+export function getBuyMilkWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return { code: FULL_CPP, vars: _BM_VARS, beats: [
+      { hi: [9, 12],  bubble: t(E, "Read N, Q and the deal prices a (deal i buys 2^i buckets).", "N, Q 와 딜 가격 배열 a 읽기 (딜 i 는 2^i 버킷).") },
+      { hi: [14, 19], bubble: t(E, "Normalize: c[i] = cheapest cost for a 2^i-block (buy deal i, or two smaller blocks). Then a bigger block is always cheaper per bucket → use big blocks first, no recursion.", "정규화: c[i] = 2^i 버킷 블록의 최저가 (딜 사거나 작은 블록 2개). 이러면 큰 블록이 버킷당 항상 싸요 → 큰 블록부터, 재귀 불필요.") },
+      { hi: [21, 23], bubble: t(E, "Each query: need x buckets. Start ans, cost, rem.", "쿼리마다: x 버킷 필요. ans, cost, rem 초기화.") },
+      { hi: [24, 32], bubble: t(E, "Big block → small: (A) round UP with this block and stop, or (B) take the floor and cover the rest with smaller blocks.", "큰 블록부터: (A) 이 블록으로 올림해서 끝, 또는 (B) 내림하고 나머지는 작은 블록으로.") },
+      { hi: [34, 35], bubble: t(E, "Also the exact-cover case; print the cheapest answer.", "딱 맞춘 경우도 후보; 최저 답 출력.") },
+    ] };
+  }
+  return { code: FULL_PY, vars: _BM_VARS, beats: [
+    { hi: [0, 1],   bubble: t(E, "Fast input.", "빠른 입력.") },
+    { hi: [3, 4],   bubble: t(E, "Read N, Q and the deal prices a (deal i buys 2^i buckets).", "N, Q 와 딜 가격 배열 a 읽기 (딜 i 는 2^i 버킷).") },
+    { hi: [6, 13],  bubble: t(E, "Normalize: c[i] = cheapest cost for a 2^i-block (buy deal i, or two smaller blocks). Then a bigger block is always cheaper per bucket → use big blocks first, no recursion.", "정규화: c[i] = 2^i 버킷 블록의 최저가 (딜 사거나 작은 블록 2개). 이러면 큰 블록이 버킷당 항상 싸요 → 큰 블록부터, 재귀 불필요.") },
+    { hi: [15, 20], bubble: t(E, "Each query: need x buckets. Start ans, cost, rem.", "쿼리마다: x 버킷 필요. ans, cost, rem 초기화.") },
+    { hi: [22, 30], bubble: t(E, "Big block → small: (A) round UP with this block and stop, or (B) take the floor and cover the rest with smaller blocks.", "큰 블록부터: (A) 이 블록으로 올림해서 끝, 또는 (B) 내림하고 나머지는 작은 블록으로.") },
+    { hi: [31, 32], bubble: t(E, "Also the exact-cover case; save the cheapest answer.", "딱 맞춘 경우도 후보; 최저 답 저장.") },
+    { hi: [34, 34], bubble: t(E, "Print all answers at once.", "답을 한 번에 출력.") },
+  ] };
+}
+
 export function getBuyMilkSections(E) {
   return [
     {

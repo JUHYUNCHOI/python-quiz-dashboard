@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getBuyMilkSections } from "./components";
+import { getBuyMilkSections, getBuyMilkWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeBuyMilkCh1 (5 steps)
@@ -105,6 +106,17 @@ export function makeBuyMilkCh1(E) {
             {t(E, "Notice for x=6: three of the 2-bucket deal cost 3 × 15 = 45. Six of the 1-bucket deal would cost 60. The bigger deal is cheaper per bucket here.",
                  "x=6 에서 주목: 2 통짜리 3 번 = 3 × 15 = 45. 1 통짜리 6 번 = 60. 큰 거래가 통당 더 싸요.")}
           </div>
+
+          {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
+          <div style={{ marginTop: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ N ≤ 100,000 (= 10⁵)</div>
+              <div>1 ≤ Q ≤ 10,000 (= 10⁴)</div>
+              <div>1 ≤ a<sub>i</sub> ≤ 10⁹ <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(strictly increasing)", "(순증가)")}</span></div>
+              <div>1 ≤ x ≤ 10⁹ <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "· use 64-bit ints", "· 64비트 정수 필요")}</span></div>
+            </div>
+          </div>
         </div>),
     },
 
@@ -173,12 +185,17 @@ export function makeBuyMilkCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeBuyMilkCh2(E, lang = "py") {
   return [
-    {
-      type: "progressive",
-      narr: t(E,
-        "No recursion needed! First normalize: c[i] = cheapest 2^i-bucket block (buy deal i, or two smaller blocks). Then bigger blocks are cheaper per bucket, so for each query just sweep big→small: at each size try 'round up and stop', else take the floor and carry on. O(N) per query.",
-        "재귀가 필요 없어요! 먼저 정규화: c[i] = 2^i 통 블록의 최저가 (거래 i 사거나, 작은 블록 두 개). 그러면 큰 블록이 통당 더 싸니, 쿼리마다 큰 것→작은 것으로 한 번 훑어요: 각 크기에서 '올림하고 멈추기'를 후보로, 아니면 내림만큼 쓰고 계속. 쿼리당 O(N)."),
-      sections: getBuyMilkSections(E),
-    },
+    /* 코드 위 '왜 이렇게?' 노트 벽 → 코드 줄에 붙는 CodeWalk 말풍선 (선생님 2026-07-27). */
+    (() => {
+      const w = getBuyMilkWalk(E, lang);
+      return {
+        type: "reveal",
+        label: t(E, "Code", "코드"),
+        narr: t(E,
+          "No recursion! Normalize the block prices, then sweep big→small per query.  Each part lights up with a bubble.",
+          "재귀 없이! 블록 가격을 정규화하고, 쿼리마다 큰 블록→작은 블록으로 훑어요.  각 부분이 밝아지며 말풍선이 떠요."),
+        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
+      };
+    })(),
   ];
 }
