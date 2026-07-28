@@ -623,7 +623,7 @@ vector<long long> dijkstra(int n, int src,
         {step === 4 && (
           <MiniQuiz
             question={t(
-              "Dijkstra 가 정확한 답을 *보장* 하려면 가중치 조건은?",
+              "다익스트라가 정확한 답을 *보장* 하려면 가중치 조건은?",
               "What weight condition does Dijkstra *require* for correctness?",
             )}
             options={[
@@ -634,7 +634,7 @@ vector<long long> dijkstra(int n, int src,
             ]}
             answerIdx={1}
             hint={t(
-              "음수 간선이 있으면 '한 번 확정한 정점이 나중에 더 짧아질 수 있어' — Dijkstra 의 기본 가정이 깨져요.",
+              "음수 간선이 있으면 '한 번 확정한 정점이 나중에 더 짧아질 수 있어' — 다익스트라의 기본 가정이 깨져요.",
               "Negative edges break Dijkstra's invariant: a finalized vertex could later be improved.",
             )}
             onCorrect={() => setQuizPassed(true)}
@@ -664,17 +664,16 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
 
-  // BF round-by-round on 4 nodes: 1→2 (4), 1→3 (5), 2→3 (-2), 3→4 (1)
-  // V-1 = 3 rounds. After round 1: dist = [INF, 0, 4, 5, INF]
-  // After round 2 (process all edges again): 2→3 relaxes (4-2=2 < 5), 3→4 relaxes (5+1=6)
-  // dist after 2: [INF, 0, 4, 2, 6]
-  // After round 3: 3→4 relaxes (2+1=3 < 6). dist: [INF, 0, 4, 2, 3]
+  // BF round-by-round on 4 nodes (V=4): 1→2 (4), 1→3 (5), 2→3 (-2), 3→4 (1)
+  // 이 시뮬은 "한 라운드는 *이전 라운드* 값으로 모든 간선을 검사" 하는 모델로 보여준다
+  // (간선 순서에 안 휘둘려서 라운드 개념이 또렷함).  V-1 = 3 갱신 라운드 + 1 검사 라운드.
+  //   R1 [0,4,5,∞] → R2 [0,4,2,6] → R3 [0,4,2,3] → R4(검사) 변화 없음
   const bfSteps: Array<{ dist: (number | null)[]; msg: string; msgEn: string }> = [
     { dist: [null, 0, null, null, null], msg: "시작 — dist[1] = 0, 나머지 ∞", msgEn: "Start — dist[1] = 0, others ∞" },
-    { dist: [null, 0, 4, 5, null], msg: "라운드 1 — 1→2 (4), 1→3 (5) 갱신. 3→4 시도 (5+1=6) → 6. 정확히는 이 라운드에 6 도 들어옴.", msgEn: "Round 1 — relax 1→2, 1→3; also 3→4 → 6." },
-    { dist: [null, 0, 4, 2, 6], msg: "라운드 1 끝 — 2→3 (4 + -2 = 2) 갱신! 3 의 거리가 5 → 2 로. dist[4] 도 6 (3→4 시도시).", msgEn: "Round 1 end — 2→3 relaxes (4-2=2). dist[3] 5→2." },
-    { dist: [null, 0, 4, 2, 3], msg: "라운드 2 — 3→4: 2+1=3 < 6 → 갱신. dist[4] 6 → 3.", msgEn: "Round 2 — 3→4: 2+1=3 < 6 → relax. dist[4] 6→3." },
-    { dist: [null, 0, 4, 2, 3], msg: "라운드 3 — 더 갱신 안 됨. 종료. ✅ 음수 가중치 처리 완료!", msgEn: "Round 3 — no changes. Done. ✅ Negative weight handled!" },
+    { dist: [null, 0, 4, 5, null], msg: "라운드 1 — 1→2 (0+4=4), 1→3 (0+5=5) 갱신. 2→3, 3→4 는 출발점이 아직 ∞ 라 통과.", msgEn: "Round 1 — relax 1→2 (4), 1→3 (5). 2→3 and 3→4 skip: their source is still ∞." },
+    { dist: [null, 0, 4, 2, 6], msg: "라운드 2 — 2→3: 4+(−2)=2 < 5 갱신! 3→4: 5+1=6 갱신.", msgEn: "Round 2 — 2→3: 4+(−2)=2 < 5 relax! 3→4: 5+1=6 relax." },
+    { dist: [null, 0, 4, 2, 3], msg: "라운드 3 — 3→4: 2+1=3 < 6 갱신. (V−1 = 3 라운드 끝 → 여기까지가 정답)", msgEn: "Round 3 — 3→4: 2+1=3 < 6 relax. (V−1 = 3 rounds done → this is the answer)" },
+    { dist: [null, 0, 4, 2, 3], msg: "검사 라운드 (V 번째) — 한 번 더 돌려도 변화 없음 → 음수 사이클 없음 ✅", msgEn: "Check round (the V-th) — one more pass, nothing changes → no negative cycle ✅" },
   ]
   const [bfIdx, setBfIdx] = useState(0)
   const bfCur = bfSteps[bfIdx]
@@ -692,7 +691,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "음수 간선? 통화 환전 (수익 / 손실), 게임 (HP 회복 / 데미지) — 흔해요. Dijkstra 가 못하는 영역.",
+                "음수 간선? 통화 환전 (수익 / 손실), 게임 (HP 회복 / 데미지) — 흔해요. 다익스트라가 못하는 영역.",
                 "Negative edges? Currency arbitrage, game HP gain/damage — common. Dijkstra can't handle them.",
               )}
             </p>
@@ -730,17 +729,45 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               {t("간선: 1→2 (4), 1→3 (5), 2→3 (-2), 3→4 (1)", "Edges: 1→2 (4), 1→3 (5), 2→3 (-2), 3→4 (1)")}
             </p>
 
-            <div className="bg-gray-50 rounded-lg p-3 mb-3 font-mono text-[11px] text-gray-700 leading-tight">
-              <pre>{`[1] ──4──> [2]
- │          │
- 5         -2
- ▼          ▼
-[3] <───────┘
- │
- 1
- ▼
-[4]`}</pre>
+            <div className="bg-gray-50 rounded-lg p-2 mb-3">
+              <svg viewBox="0 0 260 180" className="w-full max-w-[280px] mx-auto block">
+                <defs>
+                  <marker id="bfArrow" viewBox="0 0 10 10" refX={9} refY={5} markerWidth={5} markerHeight={5} orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#7c3aed" />
+                  </marker>
+                </defs>
+                {[
+                  { u: [45, 32], v: [200, 32], w: "4", lx: 122, ly: 22 },     // 1→2
+                  { u: [45, 32], v: [45, 105], w: "5", lx: 30, ly: 70 },      // 1→3
+                  { u: [200, 32], v: [62, 100], w: "−2", lx: 145, ly: 78 },   // 2→3  (음수)
+                  { u: [45, 118], v: [45, 148], w: "1", lx: 30, ly: 137 },    // 3→4
+                ].map((e, i) => (
+                  <g key={i}>
+                    <line x1={e.u[0]} y1={e.u[1]} x2={e.v[0]} y2={e.v[1]}
+                      stroke={e.w === "−2" ? "#e11d48" : "#7c3aed"} strokeWidth={2.5}
+                      markerEnd="url(#bfArrow)" />
+                    <rect x={e.lx - 11} y={e.ly - 10} width={22} height={19} rx={5}
+                      fill="#fff" stroke={e.w === "−2" ? "#fda4af" : "#c4b5fd"} strokeWidth={1.5} />
+                    <text x={e.lx} y={e.ly + 4} textAnchor="middle" fontSize={11} fontWeight={900}
+                      fill={e.w === "−2" ? "#e11d48" : "#6d28d9"} fontFamily="monospace">{e.w}</text>
+                  </g>
+                ))}
+                {[{ id: 1, x: 45, y: 32 }, { id: 2, x: 200, y: 32 }, { id: 3, x: 45, y: 110 }, { id: 4, x: 45, y: 158 }].map(n => (
+                  <g key={n.id}>
+                    <circle cx={n.x} cy={n.y} r={15} fill="#fff" stroke="#7c3aed" strokeWidth={2.5} />
+                    <text x={n.x} y={n.y + 5} textAnchor="middle" fontSize={13} fontWeight={900}
+                      fill="#5b21b6" fontFamily="monospace">{n.id}</text>
+                  </g>
+                ))}
+              </svg>
+              <p className="text-[10px] text-rose-700 font-bold text-center mt-1">
+                {t("빨간 −2 = 음수 간선 (다익스트라가 못 쓰는 이유)", "The red −2 is the negative edge (why Dijkstra can't be used)")}
+              </p>
             </div>
+            <p className="text-[11px] text-gray-600 text-center mb-2 leading-relaxed">
+              {t("※ 한 라운드 = 모든 간선을 '이전 라운드 값' 으로 한 번씩 검사.",
+                 "※ One round = check every edge once, using the previous round's values.")}
+            </p>
 
             <div className="grid grid-cols-4 gap-1.5 mb-3">
               {[1, 2, 3, 4].map(v => {
@@ -971,7 +998,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "'정점 A 에서 정점 B 로' 한 쌍이 아니라 — *모든 쌍* 최단 거리가 필요할 때? Dijkstra 를 V 번? 가능하지만, V 가 작으면 더 간단한 길이 있어요.",
+                "'정점 A 에서 정점 B 로' 한 쌍이 아니라 — *모든 쌍* 최단 거리가 필요할 때? 다익스트라를 V 번? 가능하지만, V 가 작으면 더 간단한 길이 있어요.",
                 "Need shortest path between *every pair*? You could run Dijkstra V times. But for small V there's a simpler way.",
               )}
             </p>
@@ -1102,28 +1129,34 @@ for k in range(n):
                 dist[i][j] = dist[i][k] + dist[k][j]
 
 # dist[i][j] = shortest distance from i to j`)}
-              cpp={t(`// dist[i][j] 초기화 (i==j → 0, 직접 간선 → w, 그 외 INF)
+              cpp={t(`const long long INF = 1e18;              // int 말고 long long!
+vector<vector<long long>> dist(n, vector<long long>(n, INF));
+// dist[i][i] = 0, 직접 간선은 dist[x][y] = w 로 미리 채워두기
 
 for (int k = 0; k < n; k++)
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
-            if (dist[i][k] + dist[k][j] < dist[i][j])
+            if (dist[i][k] != INF && dist[k][j] != INF        // ← INF 검사 필수!
+                && dist[i][k] + dist[k][j] < dist[i][j])
                 dist[i][j] = dist[i][k] + dist[k][j];
 
-// 끝! dist[i][j] = i 에서 j 로의 최단 거리.`, `// init dist[i][j] (i==j → 0, direct edge → w, else INF)
+// 끝! dist[i][j] = i 에서 j 로의 최단 거리.`, `const long long INF = 1e18;              // long long, not int!
+vector<vector<long long>> dist(n, vector<long long>(n, INF));
+// set dist[i][i] = 0 and dist[x][y] = w for each direct edge
 
 for (int k = 0; k < n; k++)
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
-            if (dist[i][k] + dist[k][j] < dist[i][j])
+            if (dist[i][k] != INF && dist[k][j] != INF        // ← guard required!
+                && dist[i][k] + dist[k][j] < dist[i][j])
                 dist[i][j] = dist[i][k] + dist[k][j];
 
 // done! dist[i][j] = shortest distance from i to j.`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "이게 전부예요. 단, INF + INF 오버플로우 주의 — 큰 값 (1e18) 으로 시작하거나, 더하기 전에 INF 검사.",
-                "That's the whole thing. Beware INF + INF overflow — use 1e18 or guard before adding.",
+                "삼중 루프가 전부! 단 k 가 반드시 바깥. INF 검사를 빼면 INF + INF 로 오버플로우 나요 — 위 코드엔 이미 넣어뒀어요.",
+                "The triple loop is the whole thing — k MUST be outermost. Without the INF guard you overflow on INF + INF — the code above already has it.",
               )}
             </p>
           </div>
@@ -1220,7 +1253,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               </table>
             </div>
             <p className="text-xs text-emerald-700 text-center mt-3 italic">
-              {t("90% 의 문제는 Dijkstra. 음수 보이면 Bellman-Ford, '모든 쌍' 키워드면 Floyd-Warshall.", "90% = Dijkstra. 'Negative' → Bellman-Ford. 'All pairs' → Floyd-Warshall.")}
+              {t("90% 의 문제는 다익스트라. 음수 보이면 Bellman-Ford, '모든 쌍' 키워드면 Floyd-Warshall.", "90% = Dijkstra. 'Negative' → Bellman-Ford. 'All pairs' → Floyd-Warshall.")}
             </p>
           </div>
         )}
@@ -1230,7 +1263,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <h3 className="text-base font-black text-amber-900 mb-3">📌 {t("핵심 정리", "Key Takeaways")}</h3>
             <ol className="space-y-2 text-sm text-gray-800">
               <li><b>1.</b> {t("최단 경로 = ", "Shortest path = ")}<b>{t("가중치 합 최소", "minimum weight sum")}</b>. {t("BFS 는 단위 가중치 전용.", "BFS only works for unit weights.")}</li>
-              <li><b>2.</b> <b className="text-amber-700">Dijkstra</b> {t("— 0 이상 가중치 표준. PQ + dist[] + 낡은 항목 skip.", "— non-negative weights standard. PQ + dist[] + skip-stale.")}</li>
+              <li><b>2.</b> <b className="text-amber-700">{t("다익스트라", "Dijkstra")}</b> {t("— 0 이상 가중치 표준. PQ + dist[] + 낡은 항목 skip.", "— non-negative weights standard. PQ + dist[] + skip-stale.")}</li>
               <li><b>3.</b> <b className="text-purple-700">Bellman-Ford</b> {t("— 음수 OK. V-1 라운드 모든 간선 relax + 1 라운드로 음수 사이클 검출.", "— negatives OK. V-1 rounds relax all edges + 1 round for cycle check.")}</li>
               <li><b>4.</b> <b className="text-teal-700">Floyd-Warshall</b> {t("— 모든 쌍. 3 중 루프 (k → i → j). V ≤ 400 일 때만.", "— all pairs. Triple loop (k → i → j). V ≤ 400 only.")}</li>
               <li><b>5.</b> {t("필수: dist[u] == INF 일 때 + w 금지! 항상 INF 검사 후 갱신.", "Critical: don't add w to INF — always guard.")}</li>
@@ -1246,7 +1279,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               </p>
               <ul className="text-[11px] text-gray-700 space-y-1.5 leading-relaxed">
                 <li>
-                  • <b>{t("아직 Dijkstra 어색해요?", "Dijkstra still fuzzy?")}</b>{" "}
+                  • <b>{t("아직 다익스트라 어색해요?", "Dijkstra still fuzzy?")}</b>{" "}
                   {t("종이에 5 노드 그래프 그려서 손으로 한 스텝씩 — dist[] 와 PQ 가 어떻게 바뀌는지. 손으로 한 번이면 평생.", "Draw a 5-node graph on paper and step through by hand. One pencil run = lifetime.")}
                 </li>
                 <li>
@@ -1257,7 +1290,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 <li>
                   • <b>{t("우선순위 큐가 처음이에요?", "Priority queue is new?")}</b>{" "}
                   <Link href="/algo/priorityqueue" className="font-bold underline text-rose-700">{t("우선순위 큐 챕터 →", "Priority Queue chapter →")}</Link>{" "}
-                  {t("로. Dijkstra 의 심장.", "— Dijkstra's heart.")}
+                  {t("로. 다익스트라의 심장.", "— Dijkstra's heart.")}
                 </li>
               </ul>
             </div>
