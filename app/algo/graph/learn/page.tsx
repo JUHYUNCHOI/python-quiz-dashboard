@@ -96,6 +96,7 @@ function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
 }
 
 function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang; setLang?: (l: CodeLang) => void }) {
+  const { t } = useLanguage()
   return (
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
@@ -570,7 +571,7 @@ int main() {
 // ── Chapter 3: BFS — 큐로 최단 거리 ──────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
+  const totalSteps = 5
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const [quizPassed, setQuizPassed] = useState(false)
 
@@ -721,7 +722,63 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
           </div>
         )}
 
+        {/* 시뮬을 돌려본 *다음* 에 "왜 최단인가" — 방금 본 d 값으로 (추상 규칙 먼저 X) */}
         {step === 2 && (
+          <div className="bg-gradient-to-br from-sky-50 to-cyan-50 rounded-2xl p-6 border-2 border-sky-300 min-h-[280px]">
+            <p className="text-5xl text-center mb-3">🤔</p>
+            <h3 className="text-lg font-black text-gray-900 mb-1 text-center">
+              {t("왜 BFS 가 '가장 적은 걸음' 을 보장할까?", "Why does BFS guarantee the fewest steps?")}
+            </h3>
+            <p className="text-xs text-gray-600 text-center mb-3">
+              {t("방금 돌린 시뮬에서 나온 순서를 그대로 늘어놓아 볼게요.",
+                 "Let's lay out the order that came out of the sim you just ran.")}
+            </p>
+
+            {/* 방금 시뮬의 d 값을 층으로 */}
+            <div className="bg-white rounded-lg p-3 border border-sky-200 mb-3 space-y-1.5">
+              {[
+                { d: 0, ns: [1], c: "bg-sky-600" },
+                { d: 1, ns: [2, 3], c: "bg-sky-500" },
+                { d: 2, ns: [4, 5], c: "bg-sky-400" },
+                { d: 3, ns: [6], c: "bg-sky-300" },
+              ].map(row => (
+                <div key={row.d} className="flex items-center gap-2">
+                  <span className="font-mono text-[11px] font-black text-sky-800 w-12 shrink-0">
+                    {row.d}{t(" 걸음", " step")}
+                  </span>
+                  <div className="flex gap-1.5">
+                    {row.ns.map(n => (
+                      <span key={n} className={cn("w-7 h-7 rounded-full text-white font-black text-xs flex items-center justify-center font-mono", row.c)}>{n}</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-white rounded-lg p-3 border-2 border-sky-300 mb-3">
+              <p className="text-xs text-gray-700 leading-relaxed">
+                {t(
+                  "큐에서 나온 순서가 정확히 걸음 수 순서였죠? 0 걸음 → 1 걸음 → 2 걸음 → 3 걸음. 큐는 먼저 넣은 게 먼저 나오니까, 가까운 층이 전부 끝나야 다음 층이 나와요.",
+                  "The pop order was exactly the step order: 0 → 1 → 2 → 3. Since the queue is first-in-first-out, a whole layer finishes before the next one starts.",
+                )}
+              </p>
+              <p className="text-sm font-black text-sky-800 text-center mt-2">
+                {t("→ 어떤 점을 “처음” 만났을 때가 곧 최단!", "→ The FIRST time you meet a dot is the shortest!")}
+              </p>
+            </div>
+
+            <div className="bg-amber-50 rounded-lg p-3 border border-amber-300">
+              <p className="text-xs text-amber-900 leading-relaxed">
+                🤔 {t(
+                  "나중에 다른 길로 그 점에 또 닿으면요? 그건 이미 더 뒤쪽 층에서 온 거라 걸음 수가 같거나 더 많아요. 그래서 visited 로 막아도 손해가 없어요.",
+                  "What if another path reaches it later? That path comes from a later layer, so it's the same or more steps. That's why blocking with visited loses nothing.",
+                )}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
           <div className="space-y-3">
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
               <p className="text-sm font-black text-blue-900">📝 {t("코드 — BFS 표준 템플릿", "Code — BFS standard template")}</p>
@@ -815,14 +872,14 @@ vector<int> bfs(int start, int n, vector<vector<int>>& adj) {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "체크: ① 큐에 push 하는 *순간* visited=true (꺼낼 때 X). 왜? — pop 할 때 표시하면 같은 노드가 여러 이웃을 통해 큐에 *여러 번* 들어갈 수 있어요. push 할 때 막으면 노드마다 딱 한 번만 큐에 들어가요. ② 선이 전부 똑같은 한 걸음일 때만 최단 보장 (= 가중치 없는 그래프).",
+                "체크: ① 큐에 push 하는 *순간* visited=true (꺼낼 때 X). 왜? — pop 할 때 표시하면 같은 노드가 여러 이웃을 통해 큐에 *여러 번* 들어갈 수 있어요. push 할 때 막으면 노드마다 딱 한 번만 큐에 들어가요. ② 선이 전부 똑같은 한 걸음일 때만 최단 보장 (= 가중치 없는 그래프). ③ 모든 점 한 번 + 모든 선 한 번 = 시간 O(V + E).",
                 "Check: ① mark visited *when pushing* (not on pop). Why? — marking on pop lets the same node get pushed *multiple times* via different neighbors. Marking on push means each node enters the queue exactly once. ② shortest only on unweighted graphs.",
               )}
             </p>
           </div>
         )}
 
-        {step === 3 && (
+        {step === 4 && (
           <MiniQuiz
             question={t(
               "BFS 가 가중치 없는 그래프에서 최단 거리를 *보장* 하는 이유는?",
@@ -936,16 +993,6 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 <li>• <b>BFS</b> — {t("큐, 한 층씩, *최단 거리* 강함", "queue, layer by layer, *shortest path* strong")}</li>
                 <li>• <b>DFS</b> — {t("한 길 끝까지 파고들기. *서로 이어진 덩어리 세기(연결 요소)·빙 도는 길 찾기(사이클)* 에 강함", "go all the way down one path. Strong for *counting connected blobs (components), finding loops (cycles)*")}</li>
               </ul>
-            </div>
-            <div className="bg-rose-50 rounded-lg p-3 border border-rose-200">
-              <p className="text-[11px] text-rose-800 leading-relaxed">
-                ⚠️ <b>{t("Python 함정", "Python pitfall")}:</b>{" "}
-                {t(
-                  "재귀 깊이 기본 1000. 큰 그래프엔 ",
-                  "Default recursion limit 1000. For big graphs: ",
-                )}<code className="bg-white px-1 rounded">sys.setrecursionlimit(10**6)</code>{" "}
-                {t("필수.", "is required.")}
-              </p>
             </div>
           </div>
         )}
@@ -1099,6 +1146,26 @@ int main() {
                 "Apply: for each node, if unvisited do dfs(i) → *count connected components*. Without visited, cycles → infinite loop!",
               )}
             </p>
+            {/* Python 재귀 한도 경고 — 코드 바로 옆으로 이동 (예전엔 DFS 코드도 보기 전 첫 슬라이드에 있었음) */}
+            <div className="bg-rose-50 rounded-lg p-3 border border-rose-200">
+              <p className="text-[11px] text-rose-800 leading-relaxed">
+                ⚠️ <b>{t("Python 함정", "Python pitfall")}:</b>{" "}
+                {t(
+                  "파이썬은 함수가 자기를 부르는 걸 1000 번까지만 허용해요. 점이 많은 그래프에선 그보다 깊이 들어가서 멈춰버려요 — 그래서 맨 위에 ",
+                  "Python only allows about 1000 nested self-calls. Big graphs go deeper and crash — so put ",
+                )}<code className="bg-white px-1 rounded">sys.setrecursionlimit(10**6)</code>{" "}
+                {t("을 꼭 적어요.", "at the top.")}
+              </p>
+            </div>
+            {/* 다음 슬라이드 퀴즈가 복잡도를 묻는데 정작 어디에도 안 나와 있었음 */}
+            <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+              <p className="text-[11px] text-blue-900 leading-relaxed text-center">
+                ⏱️ {t(
+                  "BFS 도 DFS 도 “모든 점 한 번 + 모든 선 한 번” 만 보면 끝나요 → 시간 O(V + E). (V = 점 개수, E = 선 개수)",
+                  "Both BFS and DFS look at “every dot once + every line once” → time O(V + E). (V = dots, E = lines)",
+                )}
+              </p>
+            </div>
           </div>
         )}
 
