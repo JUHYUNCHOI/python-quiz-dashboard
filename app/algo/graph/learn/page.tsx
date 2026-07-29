@@ -218,8 +218,8 @@ node 4's neighbors: [2]`)}
               </pre>
               <p className="text-xs text-gray-700 mt-2 leading-relaxed">
                 {t(
-                  "메모리: O(V + E) — 노드 수 + 간선 수. 큰 그래프에 딱 맞아요.",
-                  "Memory: O(V + E) — nodes + edges. Perfect for big graphs.",
+                  "적어두는 양이 딱 “점 개수 + 선 개수” 만큼이에요. 점이 아주 많아도 끄떡없어요. (O(V + E))",
+                  "You only write down about “number of dots + number of lines”. Fine even for huge graphs. (O(V + E))",
                 )}
               </p>
             </div>
@@ -244,34 +244,34 @@ node 4's neighbors: [2]`)}
             <div className="space-y-2.5">
               <div className="bg-white rounded-lg p-3 border-2 border-purple-200">
                 <p className="text-sm font-black text-purple-800 mb-1">
-                  📋 1. {t("인접 리스트 — 표준 표현", "Adjacency list — standard form")}
+                  📋 1. {t("인접 리스트 — 그래프를 적어두는 법", "Adjacency list — how to write a graph down")}
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "vector<vector<int>> 또는 list of list. 메모리 O(V+E). (챕터 2)",
-                    "vector<vector<int>> or list of list. O(V+E). (Ch 2)",
+                    "점마다 “내 이웃은 누구누구” 를 목록으로 적어둬요. 그래프를 컴퓨터에 담는 가장 흔한 방법. (챕터 2)",
+                    "For each dot, write a list of “who my neighbours are”. The usual way to store a graph. (Ch 2)",
                   )}
                 </p>
               </div>
               <div className="bg-white rounded-lg p-3 border-2 border-purple-200">
                 <p className="text-sm font-black text-purple-800 mb-1">
-                  🌊 2. {t("BFS — 큐로 최단 거리", "BFS — queue, shortest path")}
+                  🌊 2. {t("BFS — 가까운 곳부터 넓게", "BFS — near things first")}
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "한 층씩 퍼져나가요. 가중치 없는 그래프 최단 거리 보장. (챕터 3)",
-                    "Spreads layer by layer. Guarantees shortest path on unweighted graphs. (Ch 3)",
+                    "가까운 점부터 한 겹씩 넓혀가며 찾아요. “몇 걸음 만에 갈 수 있나” 를 딱 맞게 알려줘요. (챕터 3)",
+                    "Search outward one layer at a time. Tells you exactly “how many steps away” something is. (Ch 3)",
                   )}
                 </p>
               </div>
               <div className="bg-white rounded-lg p-3 border-2 border-purple-200">
                 <p className="text-sm font-black text-purple-800 mb-1">
-                  🌳 3. {t("DFS — 재귀로 깊이 먼저", "DFS — recursive depth-first")}
+                  🌳 3. {t("DFS — 한 길로 끝까지", "DFS — one path to the end")}
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "끝까지 갔다가 되돌아옴. 연결 요소, 사이클 검출에 강함. (챕터 4)",
-                    "Go deep, then backtrack. Strong for connected components, cycles. (Ch 4)",
+                    "한 길로 끝까지 가보고, 막히면 되돌아와 다른 길. “여기서 저기까지 이어져 있나?” 확인에 좋아요. (챕터 4)",
+                    "Follow one path to the end, then back up and try another. Great for “is this connected to that?” (Ch 4)",
                   )}
                 </p>
               </div>
@@ -879,7 +879,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               <p className="text-xs font-bold text-emerald-800 mb-2">💡 {t("BFS 와의 차이", "Difference from BFS")}</p>
               <ul className="text-xs text-gray-700 leading-relaxed space-y-1">
                 <li>• <b>BFS</b> — {t("큐, 한 층씩, *최단 거리* 강함", "queue, layer by layer, *shortest path* strong")}</li>
-                <li>• <b>DFS</b> — {t("재귀, 한 길 끝까지, *연결 요소·사이클·트리 순회* 강함", "recursion, all the way down, *connected components, cycles, tree traversal* strong")}</li>
+                <li>• <b>DFS</b> — {t("한 길 끝까지 파고들기. *서로 이어진 덩어리 세기(연결 요소)·빙 도는 길 찾기(사이클)* 에 강함", "go all the way down one path. Strong for *counting connected blobs (components), finding loops (cycles)*")}</li>
               </ul>
             </div>
             <div className="bg-rose-50 rounded-lg p-3 border border-rose-200">
@@ -1040,7 +1040,7 @@ int main() {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "응용: 모든 노드를 for 로 돌며 미방문이면 dfs(i) → *연결 요소 개수*. visited 안 쓰면 사이클에서 무한 루프!",
+                "응용: 모든 점을 훑으며 아직 안 가본 점에서 dfs 시작 → 몇 번 시작했나 = *서로 이어진 덩어리 개수(연결 요소)*. visited 안 쓰면 빙 도는 길에서 무한 루프!",
                 "Apply: for each node, if unvisited do dfs(i) → *count connected components*. Without visited, cycles → infinite loop!",
               )}
             </p>
@@ -1121,7 +1121,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <ol className="space-y-2 text-sm text-gray-800">
               <li><b>1.</b> {t("그래프 = ", "Graph = ")}<b>{t("노드 + 간선", "nodes + edges")}</b>. {t("코드로는 ", "In code: ")}<b>{t("인접 리스트", "adjacency list")}</b> {t("표준 (메모리 O(V+E)).", "standard (memory O(V+E)).")}</li>
               <li><b>2.</b> <b>BFS</b> = <code className="bg-white px-1 rounded text-xs">deque</code>/<code className="bg-white px-1 rounded text-xs">queue</code>, {t("FIFO. 가중치 없는 그래프 ", "FIFO. Unweighted ")}<b>{t("최단 거리", "shortest path")}</b> {t("보장.", "guaranteed.")}</li>
-              <li><b>3.</b> <b>DFS</b> = {t("재귀, call stack. ", "recursion, call stack. ")}<b>{t("연결 요소, 사이클, 트리 순회", "connected components, cycles, tree traversal")}</b> {t("강함.", "strong.")}</li>
+              <li><b>3.</b> <b>DFS</b> = {t("재귀, call stack. ", "recursion, call stack. ")}<b>{t("이어진 덩어리(연결 요소), 빙 도는 길(사이클), 트리 훑기", "connected blobs (components), loops (cycles), tree traversal")}</b> {t("강함.", "strong.")}</li>
               <li><b>4.</b> <b>visited</b> {t("배열 필수 — 안 쓰면 사이클에서 무한 루프!", "array required — without it, cycles → infinite loop!")}</li>
               <li><b>5.</b> {t("Python DFS: ", "Python DFS: ")}<code className="bg-white px-1 rounded text-xs">sys.setrecursionlimit(10**6)</code> {t("잊지 말기.", "don't forget.")}</li>
               <li><b>6.</b> {t("시간/공간: BFS & DFS 둘 다 ", "Time/space: both ")}<b>O(V+E)</b>.</li>
