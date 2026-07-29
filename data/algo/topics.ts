@@ -33,15 +33,24 @@ export const ALGO_TOPICS: AlgoTopic[] = [
   { id: "string",       title: "문자열",           titleEn: "String",          icon: "🔤", category: "기초 (Bronze~Silver)", categoryEn: "Basics (Bronze~Silver)",  wave: 1, lessonId: "algo-string" },
 
   // ── Wave 2 — Silver ────────────────────────────────────────────────────────
-  // Recursion을 가장 먼저 — Graph(DFS), DP, Backtracking 모두 재귀가 기반.
-  // DP를 마지막으로 — Silver에서 가장 어렵고 수학적 사고가 필요.
-  { id: "recursion",    title: "재귀",             titleEn: "Recursion",       icon: "🔄", category: "기법 (Silver)",       categoryEn: "Technique (Silver)",      wave: 2, lessonId: "algo-recursion" },
+  // ⚠️ 순서 = 학습 경로.  이 배열의 선언 순서가 그대로 학생에게 보이는 순서다
+  //    (lib/smart-next.ts 는 wave 로 stable sort → wave 내부는 선언 순서,
+  //     app/algo/page.tsx 도 선언 순서로 렌더).  바꾸기 전 lib/algo-path.ts 확인.
+  //
+  // 재귀를 앞에 두지 않는 이유 (2026-07-29, 선생님: "재귀는 아이들이 자꾸 어려워해서
+  // 허들이야. 그래서 알고리즘 배우다가 막혀"):
+  //   재귀는 Silver 의 선수과목이 아니다 — 이분탐색(while), 그리디, 그래프 BFS(큐),
+  //   유니온파인드, DP(바텀업) 전부 재귀 없이 된다. 재귀가 진짜 필요한 건 DFS·백트래킹.
+  //   재귀를 관문에 두면 제일 추상적인 걸 제일 먼저 만나 트랙 전체가 멈춘다.
+  //   그래프(BFS)를 먼저 하고 오면 "DFS 는 같은 걸 다른 순서로" 라고 가르칠 수 있어
+  //   재귀를 허공이 아니라 *동기가 생긴 상태* 에서 만난다.
   { id: "binarysearch", title: "이분탐색",          titleEn: "Binary Search",   icon: "🎯", category: "탐색 (Silver)",       categoryEn: "Search (Silver)",         wave: 2, lessonId: "algo-binarysearch" },
   { id: "greedy",       title: "그리디",            titleEn: "Greedy",          icon: "💡", category: "기법 (Silver)",       categoryEn: "Technique (Silver)",      wave: 2, lessonId: "algo-greedy" },
   { id: "graph",        title: "그래프 (BFS/DFS)",  titleEn: "Graph (BFS/DFS)", icon: "🕸️", category: "그래프 (Silver)",     categoryEn: "Graph (Silver)",          wave: 2, lessonId: "algo-graph",
     prerequisite: { lessonId: "cpp-18", title: "stack & queue",
       reason: "BFS 는 queue 가 핵심 (들어온 순서대로 처리), DFS 는 재귀 또는 stack. 시작 전에 cpp-18 의 stack/queue 5 분만 훑고 오면 코드가 훨씬 편해요.",
       reasonEn: "BFS needs a queue; DFS uses recursion or a stack. A 5-minute skim of cpp-18 stack/queue before diving in makes the code much smoother." } },
+  { id: "recursion",    title: "재귀",             titleEn: "Recursion",       icon: "🔄", category: "기법 (Silver)",       categoryEn: "Technique (Silver)",      wave: 2, lessonId: "algo-recursion" },
   { id: "unionfind",    title: "유니온 파인드",      titleEn: "Union Find",      icon: "🔵", category: "자료구조 (Silver)",   categoryEn: "Data Structures (Silver)", wave: 2, lessonId: "algo-unionfind" },
   { id: "dp",           title: "동적 프로그래밍",    titleEn: "Dynamic Programming", icon: "🧩", category: "기법 (Silver~Gold)", categoryEn: "Technique (Silver~Gold)", wave: 2, lessonId: "algo-dp" },
 
