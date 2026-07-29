@@ -102,7 +102,7 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
           {lang === "py" ? "🐍 Python" : "⚡ C++"}
         </span>
-        <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Py / C++' 버튼" : "Toggle above"}</span>
+        <span className="text-[10px] text-gray-500 italic">{t("토글: 위쪽 'Py / C++' 버튼", "Toggle above")}</span>
       </div>
       <HighlightedCode code={lang === "py" ? py : cpp} lang={lang} />
     </div>
@@ -318,39 +318,94 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
         {step === 0 && (
           <div className="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-2xl p-6 border-2 border-cyan-200 min-h-[280px]">
             <p className="text-5xl text-center mb-3">📋</p>
-            <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("행렬 vs 리스트 — 왜 리스트?", "Matrix vs list — why list?")}
+            <h3 className="text-lg font-black text-gray-900 mb-1 text-center">
+              {t("적는 방법이 두 가지 — 왜 '명단' 을 쓸까?", "Two ways to write it — why the 'list'?")}
             </h3>
-            <div className="space-y-3 mb-3">
+            <p className="text-xs text-gray-600 text-center mb-3">
+              {t("똑같은 그래프 (1—2, 1—3, 2—4) 를 두 방법으로 적어볼게요.",
+                 "Let's write the same graph (1—2, 1—3, 2—4) both ways.")}
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+              {/* 방법 A — 표 (모든 짝을 다 적음) */}
               <div className="bg-white rounded-lg p-3 border-2 border-rose-200">
-                <p className="text-sm font-black text-rose-800 mb-1">
-                  ❌ {t("인접 행렬 (adjacency matrix)", "Adjacency matrix")}
+                <p className="text-xs font-black text-rose-800 mb-2 text-center">
+                  {t("방법 A — 큰 표에 다 적기", "Way A — one big table")}
                 </p>
-                <p className="text-xs text-gray-700 leading-relaxed">
-                  {t(
-                    "N×N 표. mat[i][j]=1 이면 연결. 메모리 O(N²) — N=10만 이면 ",
-                    "N×N table. mat[i][j]=1 means linked. Memory O(N²) — at N=100k that's ",
-                  )}<b className="text-rose-700">100{t(" 억", " billion")}</b>{t(
-                    " 칸. 망함.",
-                    " cells. Dead.",
-                  )}
+                <div className="flex justify-center mb-2">
+                  <table className="border-collapse font-mono text-[11px]">
+                    <tbody>
+                      <tr>
+                        <td className="w-6 h-6" />
+                        {[1, 2, 3, 4].map(c => (
+                          <td key={c} className="w-6 h-6 text-center font-black text-gray-500">{c}</td>
+                        ))}
+                      </tr>
+                      {[1, 2, 3, 4].map(r => (
+                        <tr key={r}>
+                          <td className="w-6 h-6 text-center font-black text-gray-500">{r}</td>
+                          {[1, 2, 3, 4].map(c => {
+                            const linked = [[1, 2], [2, 1], [1, 3], [3, 1], [2, 4], [4, 2]]
+                              .some(([a, b]) => a === r && b === c)
+                            return (
+                              <td key={c} className={cn(
+                                "w-6 h-6 text-center border font-black",
+                                linked ? "bg-rose-100 border-rose-400 text-rose-700"
+                                       : "bg-gray-50 border-gray-200 text-gray-300",
+                              )}>{linked ? 1 : 0}</td>
+                            )
+                          })}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-[11px] text-gray-700 leading-relaxed text-center">
+                  {t("칸 16 개인데 쓸모있는 건 6 개. 나머지 10 개는 “안 이어짐” 만 적어둔 셈.",
+                     "16 cells, only 6 useful. The other 10 just say “not linked”.")}
                 </p>
               </div>
-              <div className="bg-white rounded-lg p-3 border-2 border-emerald-200">
-                <p className="text-sm font-black text-emerald-800 mb-1">
-                  ✅ {t("인접 리스트 (adjacency list)", "Adjacency list")}
+
+              {/* 방법 B — 이웃 명단 */}
+              <div className="bg-white rounded-lg p-3 border-2 border-emerald-300">
+                <p className="text-xs font-black text-emerald-800 mb-2 text-center">
+                  {t("방법 B — 점마다 이웃 명단", "Way B — a neighbour list per dot")}
                 </p>
-                <p className="text-xs text-gray-700 leading-relaxed">
-                  {t(
-                    "노드마다 이웃 명단. 메모리 O(V+E) — 보통 E ≪ N². 메모리 살림.",
-                    "Each node holds a neighbor list. Memory O(V+E) — usually E ≪ N². Memory saved.",
-                  )}
+                <div className="font-mono text-[11px] leading-relaxed bg-emerald-50 rounded p-2 mb-2">
+                  {[["1", "2, 3"], ["2", "1, 4"], ["3", "1"], ["4", "2"]].map(([n, nb]) => (
+                    <div key={n}>
+                      <b className="text-emerald-800">{n}</b>
+                      <span className="text-gray-500"> {t("의 이웃", "'s neighbours")}: </span>
+                      <b className="text-emerald-700">[{nb}]</b>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-[11px] text-gray-700 leading-relaxed text-center">
+                  {t("이어진 것만 6 개. 딱 필요한 만큼만 적어요.",
+                     "Just the 6 links. Only what's actually needed.")}
                 </p>
               </div>
             </div>
-            <p className="text-sm font-bold text-cyan-700 text-center">
-              {t("코딩테스트/USACO 그래프: 99% 인접 리스트.", "Competitive coding graphs: 99% adjacency list.")}
-            </p>
+
+            {/* 결정타 — 커지면 어떻게 되나 */}
+            <div className="bg-white rounded-lg p-3 border-2 border-cyan-300">
+              <p className="text-xs font-black text-cyan-900 mb-1 text-center">
+                {t("그럼 점이 10만 개면?", "So what if there are 100,000 dots?")}
+              </p>
+              <div className="flex items-center justify-center gap-3 text-[11px] font-mono">
+                <span className="px-2 py-1 rounded bg-rose-50 border border-rose-300 text-rose-700 font-black">
+                  {t("표: 100 억 칸 😱", "Table: 10 billion cells 😱")}
+                </span>
+                <span className="text-gray-400 font-black">vs</span>
+                <span className="px-2 py-1 rounded bg-emerald-50 border border-emerald-300 text-emerald-700 font-black">
+                  {t("명단: 이어진 만큼만 🙂", "List: only the links 🙂")}
+                </span>
+              </div>
+              <p className="text-[11px] text-gray-600 text-center mt-2 leading-relaxed">
+                {t("그래서 대회 문제 그래프는 거의 다 명단(인접 리스트) 을 써요. (표 = 인접 행렬 O(N²), 명단 = 인접 리스트 O(V+E))",
+                   "That's why contest graphs almost always use the list. (table = adjacency matrix O(N²), list = adjacency list O(V+E))")}
+              </p>
+            </div>
           </div>
         )}
 
@@ -581,15 +636,15 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-sky-700">{t("BFS = Breadth-First Search", "BFS = Breadth-First Search")}</b>.{" "}
               {t(
-                "큐 (FIFO) 로 같은 거리 노드들을 *함께* 처리. 가까운 곳부터 한 층씩.",
-                "A queue (FIFO) processes equal-distance nodes *together*. Nearest first, one layer at a time.",
+                "큐 — 줄 서기처럼 *먼저 넣은 게 먼저 나오는* 통 (FIFO) — 로 같은 거리에 있는 점들을 함께 처리해요. 가까운 곳부터 한 겹씩.",
+                "A queue — like a line, *first in, first out* (FIFO) — handles all the equally-distant dots together. Nearest first, one layer at a time.",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-sky-200 mb-3">
               <p className="text-xs font-bold text-sky-800 mb-2">💡 {t("핵심 약속", "Key promise")}</p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "가중치 없는 그래프에서 *최단 거리* 보장. 1 부터 6 까지 가는 가장 짧은 길은 BFS 가 자동으로 찾아줘요.",
+                  "선이 전부 똑같은 한 걸음짜리면 (= 가중치 없는 그래프) *최소 걸음 수* 를 보장해요. 1 에서 6 까지 몇 걸음인지 BFS 가 자동으로 알려줘요.",
                   "On unweighted graphs, BFS guarantees *shortest distance*. From 1 to 6, BFS finds the shortest path automatically.",
                 )}
               </p>
@@ -597,7 +652,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-white/70 rounded-lg p-3 border border-sky-200">
               <p className="text-xs font-bold text-sky-800 mb-1">🛠 {t("3 가지 도구", "3 tools")}</p>
               <ul className="text-xs text-gray-700 space-y-0.5">
-                <li>• <b>queue</b> — {t("처리할 순서 (FIFO)", "order to process (FIFO)")}</li>
+                <li>• <b>queue</b> — {t("처리할 순서. 먼저 넣은 게 먼저 나와요", "the order to process — first in, first out")}</li>
                 <li>• <b>visited</b> — {t("이미 본 노드 (중복 방지)", "already-seen nodes")}</li>
                 <li>• <b>dist[]</b> — {t("출발에서의 거리", "distance from start")}</li>
               </ul>
@@ -760,7 +815,7 @@ vector<int> bfs(int start, int n, vector<vector<int>>& adj) {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "체크: ① 큐에 push 하는 *순간* visited=true (꺼낼 때 X). 왜? — pop 할 때 표시하면 같은 노드가 여러 이웃을 통해 큐에 *여러 번* 들어갈 수 있어요. push 할 때 막으면 노드마다 딱 한 번만 큐에 들어가요. ② 가중치 없는 그래프만 최단 보장.",
+                "체크: ① 큐에 push 하는 *순간* visited=true (꺼낼 때 X). 왜? — pop 할 때 표시하면 같은 노드가 여러 이웃을 통해 큐에 *여러 번* 들어갈 수 있어요. push 할 때 막으면 노드마다 딱 한 번만 큐에 들어가요. ② 선이 전부 똑같은 한 걸음일 때만 최단 보장 (= 가중치 없는 그래프).",
                 "Check: ① mark visited *when pushing* (not on pop). Why? — marking on pop lets the same node get pushed *multiple times* via different neighbors. Marking on push means each node enters the queue exactly once. ② shortest only on unweighted graphs.",
               )}
             </p>
@@ -871,8 +926,8 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-emerald-700">{t("DFS = Depth-First Search", "DFS = Depth-First Search")}</b>.{" "}
               {t(
-                "재귀 (= 함수의 call stack) 로 한 길을 *끝까지* 파고든 뒤, 막히면 되돌아와서 다른 길.",
-                "Recursion (= function call stack) goes *all the way down* one path, then backtracks to try another.",
+                "재귀 — 함수가 자기 자신을 다시 부르는 것 — 로 한 길을 *끝까지* 파고든 뒤, 막히면 되돌아와서 다른 길로 가요.",
+                "Recursion — a function calling itself — goes *all the way down* one path, then backs up and tries another.",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-emerald-200 mb-3">
@@ -926,7 +981,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </svg>
             </div>
             <div className="bg-emerald-50 rounded-lg p-2 mb-2 min-h-[3.5rem]">
-              <p className="text-[10px] font-bold text-emerald-800 mb-1">{t("call stack (아래=가장 최근 호출)", "call stack (bottom = latest)")}</p>
+              <p className="text-[10px] font-bold text-emerald-800 mb-1">{t("지금 부른 함수들 (call stack) — 맨 위 = 가장 최근에 부른 것", "functions in progress (call stack) — top = most recent")}</p>
               <div className="flex flex-col-reverse gap-0.5">
                 {cur.stack.length === 0 ? (
                   <p className="text-[11px] text-gray-400 italic">{t("(비어 있음)", "(empty)")}</p>
@@ -970,7 +1025,7 @@ sys.setrecursionlimit(10**6)        # ← 큰 그래프 필수!
 
 def dfs(u, adj, visited):
     visited[u] = True
-    # 여기서 노드 u 처리 (예: print, count++)
+    # 여기서 노드 u 처리 (예: print, count += 1)
     for nb in adj[u]:
         if not visited[nb]:
             dfs(nb, adj, visited)
@@ -982,7 +1037,7 @@ sys.setrecursionlimit(10**6)        # <- needed for big graphs!
 
 def dfs(u, adj, visited):
     visited[u] = True
-    # process node u here (e.g. print, count++)
+    # process node u here (e.g. print, count += 1)
     for nb in adj[u]:
         if not visited[nb]:
             dfs(nb, adj, visited)
@@ -1131,7 +1186,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </p>
             <div className="mt-3 pt-3 border-t border-amber-200 space-y-2">
               <p className="text-[11px] text-purple-700 leading-relaxed">
-                🌲 {t("다음 토픽: 그래프 위에서 — 이분탐색, DP, 백트래킹. ", "Next topics on graphs: binary search, DP, backtracking. ")}
+                🌲 {t("다음 토픽: 선마다 걸리는 시간이 다르면? → 최단 경로(다익스트라). ", "Next: what if each line takes a different time? → Shortest path (Dijkstra). ")}
                 <Link href="/algo" className="font-bold underline hover:text-purple-900">{t("알고리즘 지도 →", "Algo map →")}</Link>
               </p>
             </div>
