@@ -187,8 +187,20 @@ export default function NextPath() {
           </>
         )}
 
+        {/* 알고리즘 학습 지도 — 본길 8개 흐름. /algo 는 네비에 없어서 여기가 유일한 인-네비 진입점.
+            (2026-07-29 선생님 결정: "지금 '할 것' 탭에 본길을 녹이기") */}
+        <a href="/algo" style={{
+          display: "block", marginTop: 20, padding: "11px 14px", borderRadius: 12,
+          border: "1.5px solid #c4b5fd", background: "#f5f3ff", textDecoration: "none",
+        }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: "#7c3aed", marginBottom: 2 }}>🧭 알고리즘 학습 지도</div>
+          <div style={{ fontSize: 12.5, color: "#5b21b6", wordBreak: "keep-all" }}>
+            본길 8개 순서대로 · 어려운 건 옆길로 빼뒀어요 →
+          </div>
+        </a>
+
         {/* 선생님용 점프 안내 */}
-        <a href="/course/ladder" style={{ display: "block", textAlign: "center", marginTop: 20, fontSize: 12.5, color: "#6366f1", textDecoration: "none" }}>
+        <a href="/course/ladder" style={{ display: "block", textAlign: "center", marginTop: 14, fontSize: 12.5, color: "#6366f1", textDecoration: "none" }}>
           전체 보기 · 토픽/난이도로 골라 풀기 (선생님) →
         </a>
       </main>

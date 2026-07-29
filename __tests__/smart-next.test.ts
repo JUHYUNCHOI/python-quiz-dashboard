@@ -1,9 +1,13 @@
 import { describe, it, expect } from "vitest"
 import { getSmartNext } from "@/lib/smart-next"
 import { ALGO_TOPICS } from "@/data/algo/topics"
+import { TRUNK_IDS } from "@/lib/algo-path"
 import { pythonParts } from "@/lib/curriculum-data"
 
 const wave1Lessons = ALGO_TOPICS.filter(t => t.wave === 1).map(t => t.lessonId)
+// 대회 단계 진입 기준 = 알고리즘 *본길* 8 개 (wave1 6 개가 아님).
+// lib/algo-path.ts 참고 — 본길은 문자열을 빼고 이분탐색·그리디·그래프를 포함한다.
+const trunkLessons = ALGO_TOPICS.filter(t => TRUNK_IDS.has(t.id)).map(t => t.lessonId)
 const allPython = pythonParts.flatMap(p => p.lessonIds)
 
 // 모델(코딩뱅크 별도 단계 없음): 수업 → 연습 → 알고리즘 → 대회
@@ -22,9 +26,21 @@ describe("getSmartNext — 레슨 → 알고리즘 → 대회", () => {
     expect(r.type).toBe("algo-topic")
   })
 
-  it("cpp + 알고리즘 Wave1 완료 → 대회", () => {
-    const r = getSmartNext(new Set(["cpp-16", ...wave1Lessons]), "cpp")
+  it("cpp + 알고리즘 본길(8) 완료 → 대회", () => {
+    const r = getSmartNext(new Set(["cpp-16", ...trunkLessons]), "cpp")
     expect(r.type).toBe("quest")
+  })
+
+  it("wave1 만 끝냈으면 아직 대회 아님 — 본길에 이분탐색·그리디·그래프가 남음", () => {
+    const r = getSmartNext(new Set(["cpp-16", ...wave1Lessons]), "cpp")
+    expect(r.type).toBe("algo-topic")
+    expect(r.href).toBe("/algo/binarysearch")
+  })
+
+  it("옆길(재귀)만 해도 본길 진도는 안 오름", () => {
+    const r = getSmartNext(new Set(["cpp-16", "algo-recursion"]), "cpp")
+    expect(r.type).toBe("algo-topic")
+    expect(r.href).toBe("/algo/array")
   })
 
   it("Python 레슨 미완 → 레슨 먼저", () => {

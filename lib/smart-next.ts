@@ -11,7 +11,7 @@
 
 import { pythonParts, cppParts, pseudoParts } from "./curriculum-data"
 import { ALL_CLUSTERS } from "@/data/practice"
-import { ALGO_TOPICS } from "@/data/algo/topics"
+import { getAlgoPath } from "./algo-path"
 
 export type SmartNextType =
   | "lesson"           // 다음 레슨 학습
@@ -112,23 +112,22 @@ export function getSmartNext(
 
   // 2. 레슨 끝 → 알고리즘 → 대회 (Python / C++ 트랙)
   if (preferredTrack === "python" || preferredTrack === "cpp") {
-    // 알고리즘 — Bronze(Wave 1) 핵심부터. Wave1 끝나면 대회 단계.
-    // graph/dp 등 Wave 2/3 는 선수조건이 아니라 "필요할 때 / Silver+" 에서.
-    const wave1Done = ALGO_TOPICS.filter(tp => tp.wave === 1).every(tp => completedIds.has(tp.lessonId))
-    if (!wave1Done) {
-      const sortedAlgo = [...ALGO_TOPICS].sort((a, b) => a.wave - b.wave)
-      const nextAlgo = sortedAlgo.find(tp => !completedIds.has(tp.lessonId))
-      if (nextAlgo) {
-        const waveLabel = nextAlgo.wave === 1 ? "Bronze" : nextAlgo.wave === 2 ? "Silver" : "Gold+"
-        return {
-          type: "algo-topic",
-          title: `${nextAlgo.title}`,
-          titleEn: `${nextAlgo.titleEn}`,
-          href: `/algo/${nextAlgo.id}`,
-          subtitle: `알고리즘 · Wave ${nextAlgo.wave} (${waveLabel})`,
-          emoji: nextAlgo.icon,
-          reason: `다음 알고리즘 토픽 (wave ${nextAlgo.wave})`,
-        }
+    // 알고리즘 — 본길(trunk) 8 개만 추천한다. 옆길(재귀·DP·Gold+ 등)은 "필요할 때".
+    // ⚠️ 본길 정의는 lib/algo-path.ts 단 한 곳. 여기서 따로 wave 로 계산하면
+    //    /algo 지도와 이 추천이 서로 다른 토픽을 가리키게 된다 (예전 wave1 기준은
+    //    문자열을 요구해서, 본길만 따라온 학생은 영영 대회 단계로 못 넘어갔다).
+    const path = getAlgoPath(completedIds)
+    if (!path.isTrunkDone && path.current) {
+      const nextAlgo = path.current
+      const step = path.done + 1
+      return {
+        type: "algo-topic",
+        title: `${nextAlgo.title}`,
+        titleEn: `${nextAlgo.titleEn}`,
+        href: `/algo/${nextAlgo.id}`,
+        subtitle: `알고리즘 본길 ${step}/${path.total}`,
+        emoji: nextAlgo.icon,
+        reason: `알고리즘 본길 ${step}번째`,
       }
     }
 

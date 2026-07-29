@@ -18,7 +18,7 @@
  * C++ 진도 있는 학생 → Python + Python 연습 자동 ✅ (Path 3)
  */
 
-import { ALGO_TOPICS } from "@/data/algo/topics"
+import { getAlgoPath } from "./algo-path"
 import { ALL_CLUSTERS } from "@/data/practice"
 
 export type StageType = "main" | "branch"
@@ -146,15 +146,16 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     emoji: "🧠",
     title: "알고리즘",
     titleEn: "Algorithm",
-    description: "Bronze 핵심 (정렬·배열·스택큐 등) · Silver/Gold는 선택 심화",
-    descriptionEn: "Bronze core (sort·array·stack/queue) · Silver/Gold optional",
+    description: "본길 8개 (배열·정렬·…·그래프) · 나머지는 필요할 때 옆길로",
+    descriptionEn: "8 core topics (array·sorting·…·graph) · the rest are side paths",
     href: "/algo",
     rank: "gold",
-    // 완료 기준 = Bronze(Wave 1) 핵심. Silver/Gold 는 '필요할 때' 심화 (smart-next 모델과 일치).
+    // 완료 기준 = 알고리즘 *본길* 8 개 (lib/algo-path.ts). 옆길(재귀·DP·Gold+)은 '필요할 때'.
+    // ⚠️ smart-next / /algo 지도와 반드시 같은 기준을 써야 한다 — 예전엔 여기만 wave1(6)
+    //    이라 "다음: 문자열"(journey) vs "다음: 이분탐색"(/algo) 처럼 서로 다른 말을 했다.
     computeProgress: (completedIds) => {
-      const bronze = ALGO_TOPICS.filter(tp => tp.wave === 1)
-      const done = bronze.filter(tp => completedIds.has(tp.lessonId)).length
-      return { done, total: bronze.length }
+      const { done, total } = getAlgoPath(completedIds)
+      return { done, total }
     },
   },
   {

@@ -5,18 +5,19 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
 import { ALGO_TOPICS } from "@/data/algo/topics"
+import { getAlgoPath, getSideNote } from "@/lib/algo-path"
 import { LanguageToggle } from "@/components/language-toggle"
 import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
 import { cn } from "@/lib/utils"
 import { createClient } from "@/lib/supabase/client"
 
-// 메달 등급 = 알고리즘 난이도 축 (토픽은 '기법 학습' 단위, 등급이 난이도)
-const TIERS = [
-  { wave: 1, ko: "🥉 Bronze — 기초", en: "🥉 Bronze — Basics", subKo: "USACO 입문에 필요한 기본기", subEn: "Foundations for USACO" },
-  { wave: 2, ko: "🥈 Silver", en: "🥈 Silver", subKo: "탐색 · 재귀 · DP 입문", subEn: "Search, recursion, intro DP" },
-  { wave: 3, ko: "🥇 Gold+", en: "🥇 Gold+", subKo: "고급 자료구조 · 알고리즘", subEn: "Advanced structures & algorithms" },
-] as const
+// 이 페이지 = 알고리즘 학습 지도.  등급(Bronze/Silver/Gold) 3 단 나열에서
+// **본길 8 + 옆길 12** 로 바꿨다 (2026-07-29, 선생님: "배우는 순서를 내가 알면
+// 좋겠어. 재귀는 아이들이 자꾸 어려워해서 허들이야").
+// 등급은 난이도 축일 뿐 *학습 순서* 가 아니어서, 재귀 같은 어려운 토픽이 관문에
+// 놓이면 트랙 전체가 멈췄다.  본길/옆길 정의는 lib/algo-path.ts 한 곳.
+// 잠금은 두지 않는다 — 이 앱의 기존 원칙(soft, 추천만 강조)과 선생님 결정.
 
 export default function AlgoPage() {
   const router = useRouter()
@@ -43,10 +44,8 @@ export default function AlgoPage() {
     load()
   }, [])
 
-  // 추천 다음 토픽 — 완료 안 한 첫 wave1, 없으면 첫 미완, 없으면 첫째
-  const recommendedNext = ALGO_TOPICS.find(tp => tp.wave === 1 && !completedIds.has(tp.lessonId))
-    || ALGO_TOPICS.find(tp => !completedIds.has(tp.lessonId))
-    || ALGO_TOPICS[0]
+  // 본길/옆길 + 다음 할 것 — lib/algo-path.ts 가 단일 원천 (smart-next·journey 와 동일 기준)
+  const path = getAlgoPath(completedIds)
   const doneCount = ALGO_TOPICS.filter(tp => completedIds.has(tp.lessonId)).length
   const isFresh = completedIds.size === 0
 
@@ -69,97 +68,135 @@ export default function AlgoPage() {
         </div>
       </div>
 
-      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 py-6 space-y-7">
-        <p className="text-sm text-gray-400">
-          {t("배우고 싶은 알고리즘을 눌러요 · 등급 순서대로 가면 자연스러워요", "Tap an algorithm to learn · following the tiers is the natural order")}
-        </p>
+      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 py-6 space-y-6">
 
-        {/* 📊 전체 진행 */}
-        <div className="rounded-xl border border-gray-200 bg-white px-4 py-3">
-          <div className="flex items-center justify-between text-xs font-bold mb-1.5">
-            <span className="text-gray-600">{t("전체 진행", "Overall")}</span>
-            <span className={doneCount > 0 ? "text-green-600" : "text-gray-400"}>
-              ✓ {doneCount} / {ALGO_TOPICS.length} ({Math.round((doneCount / ALGO_TOPICS.length) * 100)}%)
+        {/* ⭐ 지금 할 것 — 선택 고민 0. 큰 버튼 하나. */}
+        {path.current ? (
+          <Link
+            href={`/algo/${path.current.id}`}
+            className="block rounded-2xl border-2 border-violet-400 bg-violet-50 px-5 py-4 hover:shadow-md transition-all"
+          >
+            <p className="text-[11px] font-extrabold text-violet-500 tracking-wide mb-1">
+              ⭐ {isFresh ? t("여기서 시작", "START HERE") : t("지금 할 것", "DO THIS NOW")}
+            </p>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl shrink-0">{path.current.icon}</span>
+              <div className="min-w-0 flex-1">
+                <p className="text-lg font-black text-gray-900 truncate">
+                  {t(path.current.title, path.current.titleEn)}
+                </p>
+                <p className="text-xs text-violet-600 font-bold">
+                  {t(`본길 ${path.done + 1}번째 / ${path.total}`, `Trunk ${path.done + 1} of ${path.total}`)}
+                </p>
+              </div>
+              <span className="text-violet-400 text-xl shrink-0">▶</span>
+            </div>
+          </Link>
+        ) : (
+          <Link
+            href="/quest"
+            className="block rounded-2xl border-2 border-amber-300 bg-amber-50 px-5 py-4 hover:shadow-md transition-all"
+          >
+            <p className="text-[11px] font-extrabold text-amber-600 tracking-wide mb-1">🎉 {t("본길 완주!", "TRUNK COMPLETE!")}</p>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl shrink-0">🏆</span>
+              <div className="min-w-0 flex-1">
+                <p className="text-lg font-black text-amber-900">{t("이제 실전 대회 문제", "Now: contest problems")}</p>
+                <p className="text-xs text-amber-600 font-bold">{t("USACO Bronze · MCC", "USACO Bronze · MCC")}</p>
+              </div>
+              <span className="text-amber-400 text-xl shrink-0">▶</span>
+            </div>
+          </Link>
+        )}
+
+        {/* 🌳 본길 — 꼭 해야 하는 8 개. 번호가 곧 학습 순서 (선생님 수업 순서표로도 사용). */}
+        <section>
+          <div className="flex items-baseline gap-2 mb-1.5">
+            <h2 className="text-sm font-extrabold text-gray-700">🌳 {t("본길", "Main path")}</h2>
+            <span className={cn("text-xs font-bold", path.done > 0 ? "text-green-600" : "text-gray-400")}>
+              {path.done}/{path.total}
+            </span>
+            <span className="text-xs text-gray-400">· {t("여기까지가 USACO Silver 입구", "gets you to USACO Silver")}</span>
+          </div>
+          <div className="mb-3 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-full bg-green-400 transition-all" style={{ width: `${Math.round((path.done / path.total) * 100)}%` }} />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {path.trunk.map((tp, i) => {
+              const done = completedIds.has(tp.lessonId)
+              const current = tp.id === path.current?.id
+              return (
+                <Link
+                  key={tp.id}
+                  href={`/algo/${tp.id}`}
+                  className={cn(
+                    "group flex items-center gap-3 rounded-xl border px-4 py-3 transition-all",
+                    done ? "border-green-200 bg-green-50/60"
+                      : current ? "border-violet-400 bg-violet-50 ring-2 ring-violet-200"
+                        : "border-gray-200 bg-white hover:border-violet-300 hover:shadow-sm"
+                  )}
+                >
+                  <span className={cn(
+                    "shrink-0 w-6 h-6 rounded-full grid place-items-center text-[11px] font-black",
+                    done ? "bg-green-500 text-white"
+                      : current ? "bg-violet-500 text-white"
+                        : "bg-gray-100 text-gray-400"
+                  )}>{i + 1}</span>
+                  <span className="text-xl shrink-0">{tp.icon}</span>
+                  <div className="min-w-0 flex-1">
+                    <p className={cn("text-sm font-bold truncate", done ? "text-gray-500" : "text-gray-900")}>
+                      {t(tp.title, tp.titleEn)}
+                    </p>
+                  </div>
+                  {done ? <span className="text-green-500 shrink-0">✓</span>
+                        : <span className="text-gray-300 shrink-0 group-hover:text-violet-400">→</span>}
+                </Link>
+              )
+            })}
+          </div>
+        </section>
+
+        {/* 🌿 옆길 — 순서 없음. "언제 필요한지" 를 적어 학생이 건너뛰어도 불안하지 않게. */}
+        <section>
+          <div className="flex items-baseline gap-2 mb-1.5">
+            <h2 className="text-sm font-extrabold text-gray-700">🌿 {t("옆길", "Side paths")}</h2>
+            <span className="text-xs text-gray-400">
+              · {t("필요할 때 오면 돼요 (순서 없음)", "come when you need them — any order")}
             </span>
           </div>
-          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-            <div className="h-full bg-green-400 transition-all" style={{ width: `${Math.round((doneCount / ALGO_TOPICS.length) * 100)}%` }} />
-          </div>
-        </div>
-
-        {TIERS.map(tier => {
-          const topics = ALGO_TOPICS.filter(tp => tp.wave === tier.wave)
-          if (topics.length === 0) return null
-          const tierDone = topics.filter(tp => completedIds.has(tp.lessonId)).length
-          return (
-            <section key={tier.wave}>
-              {/* 등급 헤더 */}
-              <div className="flex items-baseline gap-2 mb-1.5">
-                <h2 className="text-sm font-extrabold text-gray-700">{t(tier.ko, tier.en)}</h2>
-                <span className={cn("text-xs font-bold", tierDone > 0 ? "text-green-600" : "text-gray-400")}>
-                  {tierDone}/{topics.length}
-                </span>
-                <span className="text-xs text-gray-300 hidden sm:inline">· {t(tier.subKo, tier.subEn)}</span>
-              </div>
-              {/* 등급별 진행 바 */}
-              <div className="mb-3 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full bg-green-400 transition-all" style={{ width: `${topics.length ? Math.round((tierDone / topics.length) * 100) : 0}%` }} />
-              </div>
-
-              {/* 토픽 카드 그리드 */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {topics.map(tp => {
-                  const done = completedIds.has(tp.lessonId)
-                  const current = tp.id === recommendedNext?.id && !done
-                  return (
-                    <Link
-                      key={tp.id}
-                      href={`/algo/${tp.id}`}
-                      className={cn(
-                        "group flex items-center gap-3 rounded-xl border px-4 py-3 transition-all",
-                        done
-                          ? "border-green-200 bg-green-50/60"
-                          : current
-                            ? "border-violet-400 bg-violet-50 ring-2 ring-violet-200"
-                            : "border-gray-200 bg-white hover:border-violet-300 hover:shadow-sm"
-                      )}
-                    >
-                      <span className="text-xl shrink-0">{tp.icon}</span>
-                      <div className="min-w-0 flex-1">
-                        {current && (
-                          <span className="text-[10px] font-bold text-violet-500">
-                            ▶ {isFresh ? t("여기서 시작", "Start here") : t("이어서", "Continue")}
-                          </span>
-                        )}
-                        <p className={cn("text-sm font-bold truncate", done ? "text-gray-500" : "text-gray-900")}>
-                          {t(tp.title, tp.titleEn)}
-                        </p>
-                      </div>
-                      {done
-                        ? <span className="text-green-500 shrink-0">✓</span>
-                        : <span className="text-gray-300 shrink-0 group-hover:text-violet-400">→</span>}
-                    </Link>
-                  )
-                })}
-              </div>
-
-              {/* Bronze 끝 → USACO 대회 도전 마일스톤 */}
-              {tier.wave === 1 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {path.side.map(tp => {
+              const done = completedIds.has(tp.lessonId)
+              const note = getSideNote(tp.id)
+              return (
                 <Link
-                  href="/quest"
-                  className="mt-3 flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 hover:shadow-sm transition-all"
+                  key={tp.id}
+                  href={`/algo/${tp.id}`}
+                  className={cn(
+                    "group flex items-start gap-3 rounded-xl border px-4 py-3 transition-all",
+                    done ? "border-green-200 bg-green-50/60"
+                         : "border-gray-200 bg-white hover:border-violet-300 hover:shadow-sm"
+                  )}
                 >
-                  <span className="text-xl shrink-0">🏆</span>
+                  <span className="text-xl shrink-0 mt-0.5">{tp.icon}</span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-bold text-amber-800">{t("USACO 대회 도전", "Try USACO Contest")}</p>
-                    <p className="text-xs text-amber-600">{t("Bronze 기초 끝 — 이제 실전 문제!", "Bronze done — real problems!")}</p>
+                    <p className={cn("text-sm font-bold truncate", done ? "text-gray-500" : "text-gray-800")}>
+                      {t(tp.title, tp.titleEn)}
+                    </p>
+                    {note && (
+                      <p className="text-[11px] text-gray-400 leading-snug mt-0.5" style={{ wordBreak: "keep-all" }}>
+                        {t(note.ko, note.en)}
+                      </p>
+                    )}
                   </div>
-                  <span className="text-amber-400 shrink-0">→</span>
+                  {done ? <span className="text-green-500 shrink-0">✓</span>
+                        : <span className="text-gray-300 shrink-0 group-hover:text-violet-400">→</span>}
                 </Link>
-              )}
-            </section>
-          )
-        })}
+              )
+            })}
+          </div>
+        </section>
       </div>
       <BottomNav />
     </div>
