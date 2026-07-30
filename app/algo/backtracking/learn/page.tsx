@@ -409,7 +409,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 <p className="text-[11px] text-gray-700 leading-relaxed">
                   <b className="text-purple-800">{t("미니 장면 — 1 행에 둘 곳 찾기:", "Mini scene — placing in row 1:")}</b><br />
                   {t(
-                    "0 행은 1 열에 퀸. 1 행 0 열 시도 → 대각선 충돌! ✗ 치움. 1 열 → 같은 열! ✗ 치움. 2 열 → 또 대각선! ✗ 치움. 3 열 → OK! ✓ 놓고 다음 행으로.",
+                    "0 행은 1 열에 퀸. 1 행 0 열 시도 → 대각선 충돌! ✗ 아예 안 놓음. 1 열 → 같은 열! ✗ 안 놓음. 2 열 → 또 대각선! ✗ 안 놓음. 3 열 → OK! ✓ 놓고 다음 행으로. (놓은 걸 치우는 건 다음 행이 전부 막혔을 때예요.)",
                     "Row 0 has its queen at col 1. Row 1 try col 0 → diagonal conflict! ✗ undo. Col 1 → same column! ✗ undo. Col 2 → diagonal again! ✗ undo. Col 3 → OK! ✓ place & go to next row.",
                   )}
                 </p>
@@ -583,16 +583,27 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
 
   // 시뮬레이션: 1..3 순열 생성 — 단계별 'cur' 상태
   // 순서: [], [1], [1,2], [1,2,3]✓, [1,3], [1,3,2]✓, [2], [2,1], [2,1,3]✓, [2,3], [2,3,1]✓, [3], [3,1], [3,1,2]✓, [3,2], [3,2,1]✓
-  const permSteps = [
-    { cur: [] as number[], used: [false, false, false], note: "start" },
-    { cur: [1], used: [true, false, false], note: "choose 1" },
-    { cur: [1, 2], used: [true, true, false], note: "choose 2" },
-    { cur: [1, 2, 3], used: [true, true, true], note: "✅ [1,2,3]" },
-    { cur: [1, 3], used: [true, false, true], note: "un-choose 2, choose 3" },
-    { cur: [1, 3, 2], used: [true, true, true], note: "✅ [1,3,2]" },
-    { cur: [2], used: [false, true, false], note: "back to root, choose 2" },
-    { cur: [2, 1, 3], used: [true, true, true], note: "✅ [2,1,3]" },
-    { cur: [3, 2, 1], used: [true, true, true], note: "...✅ [3,2,1] (마지막)" },
+  // ⚠️ 예전엔 9 단계뿐이라 6 개 순열 중 4 개만 보여주고([2,3,1], [3,1,2] 없음),
+  //    [2] → [2,1,3] 처럼 한 프레임에서 두 수를 건너뛰었다. 위 주석의 16 단계를
+  //    그대로 채웠다. 이 챕터의 핵심이 'un-choose(되돌리기)' 라서 되돌리는 순간이
+  //    빠지면 배울 게 사라진다. (2026-07-29 수정)
+  const permSteps: { cur: number[]; used: boolean[]; note: string; noteEn: string }[] = [
+    { cur: [],        used: [false, false, false], note: "시작 — 아무것도 안 고름", noteEn: "start — nothing chosen" },
+    { cur: [1],       used: [true, false, false],  note: "1 고르기", noteEn: "choose 1" },
+    { cur: [1, 2],    used: [true, true, false],   note: "2 고르기", noteEn: "choose 2" },
+    { cur: [1, 2, 3], used: [true, true, true],    note: "✅ [1,2,3] 완성", noteEn: "✅ [1,2,3] done" },
+    { cur: [1],       used: [true, false, false],  note: "↩ 3, 2 를 되돌리기 (un-choose)", noteEn: "↩ un-choose 3 and 2" },
+    { cur: [1, 3],    used: [true, false, true],   note: "이번엔 3 고르기", noteEn: "choose 3 this time" },
+    { cur: [1, 3, 2], used: [true, true, true],    note: "✅ [1,3,2] 완성", noteEn: "✅ [1,3,2] done" },
+    { cur: [2],       used: [false, true, false],  note: "↩ 처음으로 되돌리고 2 고르기", noteEn: "↩ back to the start, choose 2" },
+    { cur: [2, 1],    used: [true, true, false],   note: "1 고르기", noteEn: "choose 1" },
+    { cur: [2, 1, 3], used: [true, true, true],    note: "✅ [2,1,3] 완성", noteEn: "✅ [2,1,3] done" },
+    { cur: [2, 3],    used: [false, true, true],   note: "↩ 되돌리고 3 고르기", noteEn: "↩ un-choose, then choose 3" },
+    { cur: [2, 3, 1], used: [true, true, true],    note: "✅ [2,3,1] 완성", noteEn: "✅ [2,3,1] done" },
+    { cur: [3],       used: [false, false, true],  note: "↩ 처음으로 되돌리고 3 고르기", noteEn: "↩ back to the start, choose 3" },
+    { cur: [3, 1],    used: [true, false, true],   note: "1 고르기", noteEn: "choose 1" },
+    { cur: [3, 1, 2], used: [true, true, true],    note: "✅ [3,1,2] 완성", noteEn: "✅ [3,1,2] done" },
+    { cur: [3, 2, 1], used: [true, true, true],    note: "↩ 되돌리고 2 → ✅ [3,2,1] — 6 개 전부!", noteEn: "↩ un-choose, then 2 → ✅ [3,2,1] — all 6!" },
   ]
   const [pIdx, setPIdx] = useState(0)
   const pCur = permSteps[pIdx]
@@ -670,7 +681,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </div>
             </div>
             <div className="bg-cyan-50 rounded-lg p-3 mb-3 text-center min-h-[3rem]">
-              <p className="text-sm font-mono text-cyan-800">{pCur.note}</p>
+              <p className="text-sm font-mono text-cyan-800">{t(pCur.note, pCur.noteEn)}</p>
               <p className="text-[10px] text-cyan-600 mt-1">{t("스텝", "Step")} {pIdx + 1} / {permSteps.length}</p>
             </div>
             <div className="flex gap-2">
@@ -846,31 +857,47 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   const [pruneOn, setPruneOn] = useState(true)
 
-  // arr = [3, 5, 7], K = 10
-  // 전체 트리 — 'take/skip' 결정 트리
-  // (idx, sum), 진행: take=오른쪽, skip=왼쪽
-  type Node = { idx: number; sum: number; prunable?: boolean; isLeaf?: boolean; isAns?: boolean }
+  // arr = [3, 12, 7], K = 10  (정답 = {3, 7})
+  //
+  // ⚠️ 예전 예제는 [3,5,7], K=10 이었는데 **가지치기가 아무것도 자르지 않았다**:
+  //    prunable 로 표시한 두 노드가 둘 다 *리프*(idx===n)여서, 코드가 어차피
+  //    `if idx == n ... return False` 로 끝내는 자리였다. 자를 서브트리가 없었다.
+  //    게다가 정답이 그 앞에서 나와 조기 종료되니 절약이 0 이었는데도 화면은
+  //    "가지친 2 개" 라고 했다. (2026-07-29 수정)
+  //
+  //    [3,12,7] 로 바꾸면 (2, 12) 가 **내부 노드**이면서 12 > 10 이라 그 아래
+  //    서브트리(2 노드)가 실제로 잘린다.  손 검산: ON 10 노드 / OFF 12 노드.
+  //
+  // (idx, sum), 탐색 순서: skip 먼저 → take
+  type Node = { idx: number; sum: number; prunable?: boolean; isLeaf?: boolean; isAns?: boolean
+                cut?: boolean        // 가지치기 켜면 아예 안 들어가는 노드 (prunable 의 자식)
+                afterAns?: boolean } // 정답 찾은 뒤라 어느 쪽이든 방문 안 함
   const subsetTree: Node[] = [
     { idx: 0, sum: 0 },                                            // root
     { idx: 1, sum: 0 },                                            // skip 3
-    { idx: 2, sum: 0 },                                            // skip 3, skip 5
+    { idx: 2, sum: 0 },                                            // skip 3, skip 12
     { idx: 3, sum: 0, isLeaf: true },                              // skip all
-    { idx: 3, sum: 7, isLeaf: true },                              // skip 3,5, take 7
-    { idx: 2, sum: 5 },                                            // skip 3, take 5
-    { idx: 3, sum: 5, isLeaf: true },                              // skip 3, take 5, skip 7
-    { idx: 3, sum: 12, isLeaf: true, prunable: true },             // skip 3, take 5, take 7 = 12 > 10
+    { idx: 3, sum: 7, isLeaf: true },                              // take 7
+    { idx: 2, sum: 12, prunable: true },                           // skip 3, take 12 = 12 > 10 ← 내부!
+    { idx: 3, sum: 12, isLeaf: true, cut: true },                  //   └ 가지치기로 안 들어감
+    { idx: 3, sum: 19, isLeaf: true, cut: true },                  //   └ 가지치기로 안 들어감
     { idx: 1, sum: 3 },                                            // take 3
-    { idx: 2, sum: 3 },                                            // take 3, skip 5
+    { idx: 2, sum: 3 },                                            // take 3, skip 12
     { idx: 3, sum: 3, isLeaf: true },
-    { idx: 3, sum: 10, isLeaf: true, isAns: true },                // take 3, skip 5, take 7 = 10 ✓
-    { idx: 2, sum: 8 },                                            // take 3, take 5
-    { idx: 3, sum: 8, isLeaf: true },
-    { idx: 3, sum: 15, isLeaf: true, prunable: true },             // take 3, take 5, take 7 = 15 > 10
+    { idx: 3, sum: 10, isLeaf: true, isAns: true },                // 3 + 7 = 10 ✓ 여기서 종료
+    { idx: 2, sum: 15, prunable: true, afterAns: true },           // 정답 뒤 — 방문 안 함
+    { idx: 3, sum: 15, isLeaf: true, cut: true, afterAns: true },
+    { idx: 3, sum: 22, isLeaf: true, cut: true, afterAns: true },
   ]
-  const visited = pruneOn
-    ? subsetTree.filter(n => !n.prunable).length
-    : subsetTree.length
-  const totalNodes = subsetTree.length
+  // 정답을 찾으면 곧바로 return True → 그 뒤 노드는 가지치기와 무관하게 방문 안 함.
+  // 그래서 "절약" 은 *정답 이전* 에 잘린 노드만 세는 게 정직하다.
+  const ansIdx = subsetTree.findIndex(n => n.isAns)
+  const explored = subsetTree.slice(0, ansIdx + 1)
+  const visitedOff = explored.length                              // 12
+  const visitedOn = explored.filter(n => !n.cut).length            // 10
+  const visited = pruneOn ? visitedOn : visitedOff
+  const savedByPrune = visitedOff - visitedOn                      // 2
+  const totalNodes = visitedOff
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
@@ -884,8 +911,8 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-emerald-700">{t("문제", "Problem")}:</b>{" "}
               {t(
-                "N 개 양수 원소 중 *몇 개를 골라* 합이 정확히 K 가 되는 부분집합이 있는지? 예: [3, 5, 7], K=10 → {3, 7} 또는 {5, 5 X} → YES.",
-                "Given N positive ints, can we pick *some* with sum exactly K? Example: [3, 5, 7], K=10 → {3, 7} works → YES.",
+                "N 개 양수 원소 중 *몇 개를 골라* 합이 정확히 K 가 되는 부분집합이 있는지? 예: [3, 12, 7], K=10 → {3, 7} → YES.",
+                "Given N positive ints, can we pick *some* with sum exactly K? Example: [3, 12, 7], K=10 → {3, 7} works → YES.",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-emerald-200 mb-3">
@@ -905,14 +932,14 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <p className="text-sm font-bold text-emerald-700 text-center">
-              {t("이 가지치기 한 줄이 속도를 *수십 배* 높여요.", "This one pruning line speeds it up *tens of times*.")}
+              {t("이 한 줄이 가능성 없는 가지를 통째로 잘라요. 얼마나 줄어드는지는 숫자에 따라 달라요.", "This one line cuts whole hopeless branches. How much it saves depends on the numbers.")}
             </p>
           </div>
         )}
 
         {step === 1 && (
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
-            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("[3, 5, 7], K=10 — 결정 트리", "[3, 5, 7], K=10 — decision tree")}</p>
+            <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("[3, 12, 7], K=10 — 결정 트리", "[3, 12, 7], K=10 — decision tree")}</p>
             <p className="text-xs text-gray-600 text-center mb-3">
               {t("가지치기 켜고 끄기 — 노드 수 비교!", "Toggle pruning — see node count change!")}
             </p>
@@ -926,7 +953,8 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </div>
             <div className="bg-gray-50 rounded-lg p-3 mb-3 font-mono text-[11px] leading-relaxed">
               {subsetTree.map((node, i) => {
-                const skipped = pruneOn && node.prunable
+                // 가지치기 ON 이면 cut 노드는 아예 안 들어감. 정답 뒤 노드는 어느 쪽이든 안 들어감.
+                const skipped = node.afterAns || (pruneOn && node.cut)
                 return (
                   <div key={i} className={cn(
                     "flex items-center",
@@ -936,15 +964,15 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                     <span className={cn(
                       "ml-1 px-1.5 rounded",
                       node.isAns && "bg-emerald-100 text-emerald-800 font-bold",
-                      node.prunable && !pruneOn && "bg-rose-100 text-rose-700",
-                      node.prunable && pruneOn && "text-gray-400",
+                      node.prunable && !node.afterAns && "bg-rose-100 text-rose-700",
                       !node.isAns && !node.prunable && "text-gray-800",
                     )}>
-                      sum={node.sum}{node.isLeaf ? " (leaf)" : ""}
+                      sum={node.sum}{node.isLeaf ? t(" (끝)", " (leaf)") : ""}
                     </span>
-                    {node.isAns && <span className="ml-1 text-[10px] text-emerald-600">{t("← 정답!", "← answer!")}</span>}
-                    {node.prunable && !pruneOn && <span className="ml-1 text-[10px] text-rose-600">{t("← 초과 (낭비)", "← overshoot (waste)")}</span>}
-                    {node.prunable && pruneOn && <span className="ml-1 text-[10px] text-emerald-600">{t("← 가지치기!", "← pruned!")}</span>}
+                    {node.isAns && <span className="ml-1 text-[10px] text-emerald-600">{t("← 정답! 여기서 멈춰요", "← answer! stop here")}</span>}
+                    {node.prunable && !node.afterAns && pruneOn && <span className="ml-1 text-[10px] text-emerald-700 font-bold">{t("← 10 초과 → 아래는 안 봐요 ✂️", "← over 10 → skip everything below ✂️")}</span>}
+                    {node.prunable && !node.afterAns && !pruneOn && <span className="ml-1 text-[10px] text-rose-600">{t("← 10 초과인데도 아래를 다 봄 (낭비)", "← over 10 but still explores below (waste)")}</span>}
+                    {node.afterAns && <span className="ml-1 text-[10px] text-gray-400">{t("← 정답 찾은 뒤 (안 봄)", "← after the answer (never visited)")}</span>}
                   </div>
                 )
               })}
@@ -954,17 +982,17 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               <p className="text-sm font-mono">
                 {pruneOn ? (
                   <span className="text-emerald-800">
-                    {t("방문 노드", "Visited")}: <b>{visited}</b> ({t("가지친 ", "pruned ")}<b>{totalNodes - visited}</b>{t(" 개", "")})
+                    {t("방문 노드", "Visited")}: <b>{visitedOn}</b> ({t("안 본 노드 ", "skipped ")}<b>{savedByPrune}</b>{t(" 개", "")})
                   </span>
                 ) : (
                   <span className="text-rose-800">
-                    {t("방문 노드", "Visited")}: <b>{totalNodes}</b> ({t("초과 노드 ", "wasted ")}<b>{subsetTree.filter(n => n.prunable).length}</b>{t(" 개", "")})
+                    {t("방문 노드", "Visited")}: <b>{visitedOff}</b> ({t("가지치기를 켜면 ", "with pruning: ")}<b>{visitedOn}</b>{t(" 개", "")})
                   </span>
                 )}
               </p>
-              <p className="text-[11px] text-gray-600 mt-1">
-                {t("N=20, sum 가지치기 — ", "N=20, sum-prune — ")}
-                {pruneOn ? t("실제 ~5 만 노드", "actual ~50K nodes") : t("최악 2^20 ≈ 100 만", "worst 2^20 ≈ 1M")}
+              <p className="text-[11px] text-gray-600 mt-1" style={{ wordBreak: "keep-all" }}>
+                {t("여긴 3 개짜리 작은 예라 2 노드만 줄었어요. 물건이 20 개면 잘려나가는 가지가 통째로 커져서 차이가 훨씬 큽니다.",
+                   "This tiny 3-item example only saves 2 nodes. With 20 items each cut removes a whole branch, so the gap gets far bigger.")}
               </p>
             </div>
           </div>
@@ -997,8 +1025,8 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
 
     return backtrack(0, 0)
 
-print(subset_sum_exists([3, 5, 7], 10))   # True ({3,7})
-print(subset_sum_exists([3, 5, 7], 4))    # False`, `def subset_sum_exists(arr, K):
+print(subset_sum_exists([3, 12, 7], 10))   # True ({3,7})
+print(subset_sum_exists([3, 12, 7], 4))    # False`, `def subset_sum_exists(arr, K):
     n = len(arr)
 
     def backtrack(idx, cur_sum):
@@ -1016,8 +1044,8 @@ print(subset_sum_exists([3, 5, 7], 4))    # False`, `def subset_sum_exists(arr, 
 
     return backtrack(0, 0)
 
-print(subset_sum_exists([3, 5, 7], 10))   # True ({3,7})
-print(subset_sum_exists([3, 5, 7], 4))    # False`)}
+print(subset_sum_exists([3, 12, 7], 10))   # True ({3,7})
+print(subset_sum_exists([3, 12, 7], 4))    # False`)}
               cpp={t(`#include <bits/stdc++.h>
 using namespace std;
 
@@ -1035,7 +1063,7 @@ bool backtrack(int idx, int curSum) {
 }
 
 int main() {
-    arr = {3, 5, 7}; N = 3; K = 10;
+    arr = {3, 12, 7}; N = 3; K = 10;
     cout << (backtrack(0, 0) ? "YES" : "NO") << endl;
     return 0;
 }`, `#include <bits/stdc++.h>
@@ -1055,7 +1083,7 @@ bool backtrack(int idx, int curSum) {
 }
 
 int main() {
-    arr = {3, 5, 7}; N = 3; K = 10;
+    arr = {3, 12, 7}; N = 3; K = 10;
     cout << (backtrack(0, 0) ? "YES" : "NO") << endl;
     return 0;
 }`)}
