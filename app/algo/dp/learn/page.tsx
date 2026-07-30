@@ -319,6 +319,39 @@ N=5 → 8 ways`)}
                 {t("저장하는 방향(위→아래 / 아래→위)만 다를 뿐.", "Only the direction (top→down / bottom→up) differs.")}
               </p>
             </div>
+            {/* DP 가 언제 이득인지 — 쉬운 말로 먼저. 공식 용어는 뒤에 (챕터 5 정리에서 이 이름을 다시 씀) */}
+            <div className="mt-3 bg-white rounded-lg p-3 border-2 border-gray-200">
+              <p className="text-sm font-black text-gray-800 mb-2" style={{ wordBreak: "keep-all" }}>
+                🤔 {t("그럼 아무 문제나 DP 로 되나요?", "So does DP work on any problem?")}
+              </p>
+              <p className="text-xs text-gray-700 leading-relaxed mb-2" style={{ wordBreak: "keep-all" }}>
+                {t("아니에요. 두 가지가 맞아떨어질 때만 이득이에요.", "No. It only pays off when two things line up.")}
+              </p>
+              <ul className="text-xs text-gray-700 space-y-1.5 leading-relaxed" style={{ wordBreak: "keep-all" }}>
+                <li>
+                  <b className="text-blue-700">{t("① 큰 답을 작은 답으로 만들 수 있어야", "① The big answer must be buildable from smaller ones")}</b>
+                  {" — "}
+                  {t(
+                    "방금 ways(5) = ways(4) + ways(3) 이었죠? 이렇게 이어지지 않으면 점화식을 쓸 수가 없어요.",
+                    "We just had ways(5) = ways(4) + ways(3), right? Without that link there's no recurrence to write.",
+                  )}
+                </li>
+                <li>
+                  <b className="text-blue-700">{t("② 같은 작은 문제가 여러 번 나와야", "② The same small problem must show up many times")}</b>
+                  {" — "}
+                  {t(
+                    "앞 트리에서 ways(3) 을 두 번, ways(2) 를 세 번 다시 계산했죠? 그래서 저장이 이득이었어요. 답을 딱 한 번씩만 쓰는 문제면 저장해도 남는 게 없어요.",
+                    "In that tree we recomputed ways(3) twice and ways(2) three times — that's why caching paid off. If every answer is used just once, caching gains nothing.",
+                  )}
+                </li>
+              </ul>
+              <p className="text-[10px] text-gray-500 mt-2 leading-relaxed" style={{ wordBreak: "keep-all" }}>
+                {t(
+                  "📎 책이나 대회 해설에서는 ① 을 «최적 부분 구조», ② 를 «중복 부분 문제» 라고 불러요. 이름보다 위 두 문장이 중요해요.",
+                  "📎 Books call ① «optimal substructure» and ② «overlapping subproblems». The two sentences matter more than the names.",
+                )}
+              </p>
+            </div>
           </div>
         )}
 
@@ -1233,19 +1266,19 @@ int main() {
         {step === 3 && (
           <MiniQuiz
             question={t(
-              "어떤 문제에 DP 를 *항상* 적용할 수 있는 조건은?",
-              "When can DP *always* be applied to a problem?",
+              "위 LIS 코드에서 바깥 for 를 거꾸로 (i = N-1 → 0) 돌리면 어떻게 될까요?",
+              "In the LIS code above, what if the outer for went backwards (i = N-1 → 0)?",
             )}
             options={[
-              t("입력 크기가 작을 때", "When input size is small"),
-              t("재귀로 풀 수 있을 때", "When solvable by recursion"),
-              t("최적 부분 구조 (optimal substructure) + 중복 부분 문제 (overlapping subproblems) 둘 다 있을 때", "Both optimal substructure AND overlapping subproblems"),
-              t("배열이 정렬되어 있을 때", "When the array is sorted"),
+              t("dp[j] (j<i) 가 아직 안 채워져 있어서 답이 작게 나와요", "dp[j] (j<i) isn't filled yet, so the answer comes out too small"),
+              t("결과는 똑같아요 — 순서는 상관없어요", "Same result — order doesn't matter"),
+              t("무한 루프에 빠져요", "It falls into an infinite loop"),
+              t("메모리가 부족해서 터져요", "It runs out of memory"),
             ]}
-            answerIdx={2}
+            answerIdx={0}
             hint={t(
-              "최적 부분 구조 = 큰 문제 답을 작은 문제 답으로 만들 수 있다 (점화식 가능). 중복 부분 문제 = 같은 작은 문제가 여러 번 등장 (저장하면 이득). 둘 중 하나라도 빠지면 DP 가 의미 없어요.",
-              "Optimal substructure = big answer built from smaller answers (recurrence exists). Overlapping subproblems = same subproblem appears many times (caching helps). Missing either → DP doesn't help.",
+              "4️⃣ 순서 단계를 떠올려요. dp[i] 는 자기보다 *앞* 에 있는 dp[j] 를 봐요. 그런데 i 를 뒤에서부터 돌면 dp[j] 는 아직 처음 값 1 인 상태예요 → 1 + 1 = 2 밖에 안 나와요. 필요한 값이 *이미 채워져 있어야* 한다는 게 4 단계의 뜻.",
+              "Recall step 4️⃣. dp[i] looks at dp[j] *before* it. Going backwards, those dp[j] are still the initial 1 → you only ever get 1 + 1 = 2. Step 4 means the values you need must *already be filled*.",
             )}
             onCorrect={() => setQuizPassed(true)}
           />

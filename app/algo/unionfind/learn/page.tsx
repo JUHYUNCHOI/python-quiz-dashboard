@@ -772,25 +772,34 @@ print(parent)    # [_, 4, 4, 4, 4]`)}
                 "Compare: the while version (Ch 2) only *finds* the root. This recursive version *re-points every node on the path* to the root.",
               )}
             </p>
+            <div className="mt-3 bg-gray-50 rounded-lg p-2 border border-gray-200">
+              <p className="text-[11px] text-gray-700 leading-relaxed" style={{ wordBreak: "keep-all" }}>
+                📌 <b>{t("그럼 얼마나 빨라졌나요?", "So how much faster is it?")}</b>{" "}
+                {t(
+                  "평탄화를 해도 *한 번* 은 길을 걸어 올라가야 해요. 그래서 path compression 만 쓰면 평균 O(log N) 정도. 거의 상수 시간은 다음 챕터의 union by rank 까지 *같이* 써야 나와요.",
+                  "Even with flattening you must still walk up the path *once*. So path compression alone averages about O(log N). Near-constant time needs union by rank from the next chapter *as well*.",
+                )}
+              </p>
+            </div>
           </div>
         )}
 
         {step === 3 && (
           <MiniQuiz
             question={t(
-              "Path compression *만* 적용 (union by rank 없이) 시, find 의 amortized (분할 상환) 시간복잡도는?",
-              "With path compression *only* (no union by rank), what's the amortized time of find?",
+              "1 → 2 → 3 → 4 로 길게 이어진 상태에서 find(1) 을 부르고 나면, 그 다음 find(1) 은 왜 더 빠를까요?",
+              "In a long chain 1 → 2 → 3 → 4, after calling find(1) once, why is the next find(1) faster?",
             )}
             options={[
-              "O(1)",
-              "O(log N)",
-              "O(N)",
-              "O(α(N))",
+              t("첫 find 가 1 을 루트에 *직접* 매달아서 한 칸만 보면 됨", "The first find re-pointed 1 *straight* to the root, so it's one hop"),
+              t("컴퓨터가 앞의 답을 기억(캐시)해 둬서", "The computer remembers (caches) the earlier answer"),
+              t("parent 배열이 작은 수부터 정렬돼서", "The parent array got sorted smallest-first"),
+              t("반복문보다 재귀가 원래 빨라서", "Recursion is simply faster than a loop"),
             ]}
-            answerIdx={1}
+            answerIdx={0}
             hint={t(
-              "Path compression 만으로는 amortized O(log N). α(N) ≈ O(1) 같은 거의 상수 시간은 path compression + union by rank *둘 다* 적용해야 나와요. 이게 다음 챕터!",
-              "Path compression alone gives amortized O(log N). The near-constant α(N) needs *both* path compression AND union by rank. That's next chapter!",
+              "위 코드에서 parent[x] = find(parent[x]) 가 하는 일을 봐요. 돌아오는 길에 *지나온 노드마다* parent 를 루트로 바꿔 써요. 그래서 1, 2, 3 이 전부 4 를 직접 가리키게 되고 (parent = [_, 4, 4, 4, 4]), 다음엔 한 칸이면 끝.",
+              "Look at what parent[x] = find(parent[x]) does. On the way back it rewrites parent for *every node it passed*. So 1, 2, 3 all point straight at 4 (parent = [_, 4, 4, 4, 4]) and the next lookup is one hop.",
             )}
             onCorrect={() => setQuizPassed(true)}
           />
@@ -869,23 +878,24 @@ size[i] = node count of the tree when i is root
 
             <div className="bg-gray-50 rounded-lg p-4 mb-3 min-h-[180px]">
               {ubrPhase === 0 && (
-                <div className="flex items-center justify-around">
+                <div className="flex items-start justify-around">
+                  {/* 트리 A = rank 2 → 루트 아래로 *두 단* (1 → a → b). 세로로 쌓아서 깊이를 보여줌 */}
                   <div className="text-center">
                     <p className="text-[10px] text-gray-500 mb-1">{t("트리 A", "Tree A")}</p>
                     <div className="w-10 h-10 mx-auto flex items-center justify-center rounded-full border-2 bg-violet-100 border-violet-400 text-violet-800 font-mono text-sm font-bold">1</div>
-                    <div className="flex gap-1 justify-center mt-1">
-                      <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 bg-blue-100 border-blue-300 text-blue-700 font-mono text-xs font-bold">a</div>
-                      <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 bg-blue-100 border-blue-300 text-blue-700 font-mono text-xs font-bold">b</div>
-                    </div>
-                    <p className="text-[10px] text-violet-700 mt-1 font-bold">rank = 2</p>
+                    <p className="text-[9px] text-gray-400 leading-none my-0.5">↓</p>
+                    <div className="w-8 h-8 mx-auto flex items-center justify-center rounded-full border-2 bg-blue-100 border-blue-300 text-blue-700 font-mono text-xs font-bold">a</div>
+                    <p className="text-[9px] text-gray-400 leading-none my-0.5">↓</p>
+                    <div className="w-8 h-8 mx-auto flex items-center justify-center rounded-full border-2 bg-blue-100 border-blue-300 text-blue-700 font-mono text-xs font-bold">b</div>
+                    <p className="text-[10px] text-violet-700 mt-1 font-bold">{t("rank = 2 (아래로 2 단)", "rank = 2 (2 levels down)")}</p>
                   </div>
+                  {/* 트리 B = rank 1 → 한 단 (2 → c) */}
                   <div className="text-center">
                     <p className="text-[10px] text-gray-500 mb-1">{t("트리 B", "Tree B")}</p>
                     <div className="w-10 h-10 mx-auto flex items-center justify-center rounded-full border-2 bg-violet-100 border-violet-400 text-violet-800 font-mono text-sm font-bold">2</div>
-                    <div className="flex gap-1 justify-center mt-1">
-                      <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 bg-blue-100 border-blue-300 text-blue-700 font-mono text-xs font-bold">c</div>
-                    </div>
-                    <p className="text-[10px] text-violet-700 mt-1 font-bold">rank = 1</p>
+                    <p className="text-[9px] text-gray-400 leading-none my-0.5">↓</p>
+                    <div className="w-8 h-8 mx-auto flex items-center justify-center rounded-full border-2 bg-blue-100 border-blue-300 text-blue-700 font-mono text-xs font-bold">c</div>
+                    <p className="text-[10px] text-violet-700 mt-1 font-bold">{t("rank = 1 (아래로 1 단)", "rank = 1 (1 level down)")}</p>
                   </div>
                 </div>
               )}
@@ -902,20 +912,30 @@ size[i] = node count of the tree when i is root
                 <div className="text-center">
                   <p className="text-[10px] text-gray-500 mb-1">{t("합친 후", "After merge")}</p>
                   <div className="w-10 h-10 mx-auto flex items-center justify-center rounded-full border-2 bg-emerald-100 border-emerald-400 text-emerald-800 font-mono text-sm font-bold">1</div>
-                  <div className="flex gap-2 justify-center mt-1">
+                  <p className="text-[9px] text-gray-400 leading-none my-0.5">↓</p>
+                  {/* 두 가지 모두 아래로 2 단 → 합친 트리 깊이도 2 (안 늘어남) */}
+                  <div className="flex gap-6 justify-center">
                     <div className="flex flex-col items-center">
                       <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 bg-blue-100 border-blue-300 text-blue-700 font-mono text-xs font-bold">a</div>
-                    </div>
-                    <div className="flex flex-col items-center">
+                      <p className="text-[9px] text-gray-400 leading-none my-0.5">↓</p>
                       <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 bg-blue-100 border-blue-300 text-blue-700 font-mono text-xs font-bold">b</div>
+                      <p className="text-[9px] text-gray-500 mt-1">{t("2 단", "2 down")}</p>
                     </div>
                     <div className="flex flex-col items-center">
                       <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 bg-violet-100 border-violet-300 text-violet-700 font-mono text-xs font-bold">2</div>
-                      <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 bg-blue-100 border-blue-300 text-blue-700 font-mono text-xs font-bold mt-1">c</div>
+                      <p className="text-[9px] text-gray-400 leading-none my-0.5">↓</p>
+                      <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 bg-blue-100 border-blue-300 text-blue-700 font-mono text-xs font-bold">c</div>
+                      <p className="text-[9px] text-gray-500 mt-1">{t("2 단", "2 down")}</p>
                     </div>
                   </div>
                   <p className="text-[11px] text-emerald-700 mt-2 font-bold">
                     {t("rank 그대로 2 (트리 깊이 안 늘어남!)", "rank stays 2 (depth didn't grow!)")}
+                  </p>
+                  <p className="text-[10px] text-gray-600 mt-1 leading-relaxed" style={{ wordBreak: "keep-all" }}>
+                    {t(
+                      "B 는 아래로 1 단이었으니 1 밑에 붙어도 1 + 1 = 2 단. A 가 이미 2 단이라 가장 깊은 길은 그대로 2 단이에요.",
+                      "B was 1 level deep, so under 1 it becomes 1 + 1 = 2. A was already 2, so the longest path is still 2.",
+                    )}
                   </p>
                 </div>
               )}
@@ -1044,8 +1064,8 @@ void unite(int a, int b) {
         {step === 3 && (
           <MiniQuiz
             question={t(
-              "Path compression + union by rank 둘 다 적용했을 때, find / union 한 번의 amortized 시간복잡도는?",
-              "With BOTH path compression and union by rank, amortized time per find / union?",
+              "Path compression + union by rank 둘 다 적용했을 때, find / union 한 번이 평균적으로 얼마나 걸릴까요?",
+              "With BOTH path compression and union by rank, how long does one find / union take on average?",
             )}
             options={[
               "O(N)",
@@ -1055,8 +1075,8 @@ void unite(int a, int b) {
             ]}
             answerIdx={2}
             hint={t(
-              "두 기법 같이 쓰면 amortized α(N) — 역 애커만 함수. 현실의 모든 N 에서 ≤ 4 → 사실상 상수.",
-              "Combined gives amortized α(N) — the inverse Ackermann. ≤ 4 for any realistic N → effectively constant.",
+              "두 기법을 같이 쓰면 α(N) 이 나와요. 어쩌다 한 번은 좀 오래 걸릴 수 있지만 *여러 번 부르면 평균* 이 이만큼 — 이걸 «amortized(분할 상환)» 라고 불러요. α(N) 은 현실의 어떤 N 에서도 4 를 안 넘어서 사실상 상수예요.",
+              "Together they give α(N). One call can occasionally be slow, but *averaged over many calls* it's this — that's what «amortized» means. α(N) never exceeds 4 for any realistic N, so it's effectively constant.",
             )}
             onCorrect={() => setQuizPassed(true)}
           />
