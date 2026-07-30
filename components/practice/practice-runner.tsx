@@ -52,20 +52,24 @@ function buildHighlightHtml(code: string, patterns: Array<{ re: RegExp; cls: str
   for (const m of matches) {
     if (m.start >= cursor) { filtered.push(m); cursor = m.end }
   }
+  // 기본(토큰이 아닌) 글자색 — 어두운 코드블록(bg-gray-900 등) 위에서 변수명·괄호가
+  // 묻히지 않도록 밝게. 예전엔 색 없이 내보내 페이지 기본 어두운 색을 물려받아 안 보였음.
+  const BASE = "#e6edf3"
   const colorMap: Record<string, string> = {
     keyword: "#ff7b72", comment: "#b0bec5", string: "#a5d6ff",
     preprocessor: "#ff7b72", number: "#ffa657", decorator: "#d2a8ff",
   }
+  const baseSpan = (text: string) => `<span style="color:${BASE}">${escapeHtml(text)}</span>`
   cursor = 0
   let html = ""
   for (const m of filtered) {
-    if (m.start > cursor) html += escapeHtml(code.slice(cursor, m.start))
-    const color = colorMap[m.cls] || "#e6edf3"
+    if (m.start > cursor) html += baseSpan(code.slice(cursor, m.start))
+    const color = colorMap[m.cls] || BASE
     const style = m.cls === "comment" ? `color:${color};font-style:italic` : `color:${color}`
     html += `<span style="${style}">${escapeHtml(m.text)}</span>`
     cursor = m.end
   }
-  if (cursor < code.length) html += escapeHtml(code.slice(cursor))
+  if (cursor < code.length) html += baseSpan(code.slice(cursor))
   return html
 }
 
