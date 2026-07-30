@@ -99,11 +99,12 @@ function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
 }
 
 function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang; setLang?: (l: CodeLang) => void }) {
+  const { t } = useLanguage()
   return (
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {lang === "py" ? "🐍 Python" : "⚡ C++"}
+          {t("🐍 Python", "⚡ C++")}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Python / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -479,7 +480,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </p>
             <p className="text-sm text-gray-700 leading-relaxed mb-3">
               {t(
-                "직접 정렬을 만들면 보통 O(N²) — 데이터 N 만 개 정도까지는 OK, 100 만 개 넘으면 시간초과예요.",
+                "직접 정렬을 만들면 보통 O(N²) — 1 만 개까지는 OK, 10 만 개부터 시간초과예요.",
                 "If you write sort yourself, usually O(N²) — fine up to ~10K items, dies past 1M.",
               )}
             </p>

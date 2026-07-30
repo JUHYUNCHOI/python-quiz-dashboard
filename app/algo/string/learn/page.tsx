@@ -96,11 +96,12 @@ function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
 }
 
 function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang; setLang?: (l: CodeLang) => void }) {
+  const { t } = useLanguage()
   return (
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {lang === "py" ? "🐍 Python" : "⚡ C++"}
+          {t("🐍 Python", "⚡ C++")}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Python / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -486,15 +487,17 @@ string longestPalindrome(const string& s) {
         {/* Slide 3 — Quiz */}
         {step === 3 && (
           <MiniQuiz
-            question={t("가장 긴 회문 부분문자열에서 'expand around center' 가 잡지 못하는 케이스는?", "Which case does 'expand around center' miss?")}
+            // ⚠️ 예전엔 "놓치는 케이스는?" 이라 묻고 정답이 *해결책*(각 인덱스에서 두 번
+            //    시도)을 가리켰다. 질문대로면 짝수 길이가 정답이다. (2026-07-29 수정)
+            question={t("가운데 한 글자에서만 좌우로 넓히면 — 어떤 회문을 놓칠까요?", "If you only expand from a single centre letter, which palindromes do you miss?")}
             options={[
               t("홀수 길이 회문 (예: aba)", "Odd-length palindromes (e.g. aba)"),
               t("짝수 길이 회문 (예: abba)", "Even-length palindromes (e.g. abba)"),
-              t("둘 다 잡으려면 각 인덱스마다 두 가지 (홀수 + 짝수) 시도", "To catch both, try BOTH odd and even at each index"),
-              t("잡지 못함", "Cannot catch them"),
+              t("한 글자 회문 (예: a)", "Single-letter palindromes (e.g. a)"),
+              t("아무것도 놓치지 않는다", "Nothing is missed"),
             ]}
-            answerIdx={2}
-            hint={t('"babad" 와 "abba" 둘 다 처리하려면 — 한 인덱스에서 (i, i) 와 (i, i+1) 두 번 expand 해야 해요.', 'To handle both "babad" and "abba" — at each index, expand TWICE: (i, i) and (i, i+1).')}
+            answerIdx={1}
+            hint={t('"abba" 는 가운데가 글자 하나가 아니라 b|b 사이의 *틈* 이에요. 그래서 각 자리에서 (i, i) 와 (i, i+1) 두 번 넓혀야 둘 다 잡아요.', '"abba" has its centre in the *gap* between the two b\'s, not on a letter. So at each spot you expand twice: (i, i) and (i, i+1).')}
             onCorrect={() => setQuizPassed(true)}
           />
         )}
@@ -531,7 +534,9 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
     { L: 0, R: 1, note: "R 확장: 'ab' (distinct 2 ≤ 2 ✓)", noteEn: "R extend: 'ab' (distinct 2 ≤ 2 ✓)" },
     { L: 1, R: 2, note: "R 확장 'abc' → distinct 3 > 2 → L 이동해서 'bc'", noteEn: "R extend 'abc' → distinct 3 > 2 → shrink L → 'bc'" },
     { L: 1, R: 3, note: "R 확장: 'bcb' (distinct 2 ≤ 2 ✓)", noteEn: "R extend: 'bcb' (distinct 2 ≤ 2 ✓)" },
-    { L: 2, R: 4, note: "R 확장 'bcba' → distinct 3 > 2 → L 이동해서 'cba' → 여전히 3 → L 또 이동 → 'ba'", noteEn: "R extend 'bcba' → distinct 3 > 2 → shrink → eventually 'ba'" },
+    // ⚠️ L:3 이어야 한다. 예전엔 L:2 라 화면이 'cba'(서로 다른 글자 3개 — K=2 위반)를
+    //    창으로 칠하면서 설명은 'ba' 라고 해 자기모순이었다. (2026-07-29 수정)
+    { L: 3, R: 4, note: "R 확장 'bcba' → distinct 3 > 2 → L 을 두 번 밀어서 'ba' (distinct 2 ✓)", noteEn: "R extend 'bcba' → distinct 3 > 2 → shrink L twice → 'ba' (distinct 2 ✓)" },
   ], [])
   const [winStep, setWinStep] = useState(-1)
   const cur = winStep >= 0 && winStep < windowSteps.length ? windowSteps[winStep] : null
@@ -950,6 +955,12 @@ bool isAnagram(const string& a, const string& b) {
             <p className="text-xs text-gray-600 text-center">
               {t("💡 트릭: 두 배열 만들 필요 없어요. 하나만 + - 로 더하고 빼면 끝!", "💡 Trick: no need for two arrays. Increment for a, decrement for b — done!")}
             </p>
+            {/* '왜 26칸 세기가 정렬보다 빠른가' 가 예전엔 퀴즈 오답 힌트에만 있었다.
+                정답 맞힌 학생은 못 봤다 → 퀴즈 앞 본문으로. (2026-07-29) */}
+            <p className="text-xs text-gray-600 text-center leading-relaxed mt-1">
+              {t("글자가 a~z 26 개뿐이라 '몇 번 나왔나' 를 26 칸에 세면 한 번만 훑고 끝나요. 정렬해서 비교하는 것보다 빨라요.",
+                 "Since there are only 26 letters a–z, counting into 26 slots needs just one pass — faster than sorting both and comparing.")}
+            </p>
           </div>
         )}
 
@@ -958,13 +969,16 @@ bool isAnagram(const string& a, const string& b) {
           <MiniQuiz
             question={t("anagram 검사 가장 빠른 방법은? (lowercase a-z 만)", "Fastest anagram check? (lowercase a-z only)")}
             options={[
-              t("정렬 후 비교 O(N log N)", "Sort both then compare O(N log N)"),
-              t("count[26] 배열 둘 비교 O(N)", "Two count[26] arrays compared O(N)"),
-              t("set 둘 비교 (중복 무시)", "Compare two sets (ignores duplicates)"),
-              t("map<char,int> 둘 비교 O(N)", "Compare two map<char,int> O(N)"),
+              // ⚠️ 예전 정답은 "count[26] 배열 *둘* 비교" 였는데, 바로 앞 슬라이드에서
+              //    "두 배열 만들 필요 없다, 하나만 +/-" 를 가르친다 → 서로 모순이었다.
+              //    map<char,int> 같은 C++ 문법도 언어중립 퀴즈에서 뺐다. (2026-07-29)
+              t("둘 다 정렬해서 비교하기", "Sort both, then compare"),
+              t("26 칸에 세면서 한쪽은 +1, 다른 쪽은 −1 → 전부 0 이면 참", "Count into 26 slots: +1 for one, −1 for the other → all zeros means yes"),
+              t("서로 다른 글자 집합만 비교하기 (개수는 무시)", "Compare just the sets of letters (ignore counts)"),
+              t("두 문자열의 길이만 비교하기", "Compare only the two lengths"),
             ]}
             answerIdx={1}
-            hint={t("고정 크기 배열 (26 칸) 이 해시 맵보다 빠르고 정렬보다 빠르며, set 은 중복을 무시해서 틀린 답.", "Fixed-size array (26 slots) beats hash maps and sort. Set ignores duplicates so it's wrong.")}
+            hint={t("글자가 26 개뿐이니 한 번만 훑으면 돼요. 집합만 비교하면 'aab' 와 'abb' 를 같다고 해서 틀려요.", "Only 26 letters, so one pass is enough. Comparing sets alone wrongly says 'aab' equals 'abb'.")}
             onCorrect={() => setQuizPassed(true)}
           />
         )}

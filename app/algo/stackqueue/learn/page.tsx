@@ -97,11 +97,12 @@ function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
 }
 
 function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang }) {
+  const { t } = useLanguage()
   return (
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {lang === "py" ? "🐍 Python" : "⚡ C++"}
+          {t("🐍 Python", "⚡ C++")}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Python / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -472,10 +473,20 @@ vector<int> nextGreater(vector<int>& arr) {
 }
 // nextGreater({2,5,3,1,4}) → {5,-1,4,4,-1}`)}
             />
+            {/* 이 규칙(스택이 늘 내려가는 순서)이 예전엔 *퀴즈 오답 힌트에만* 있었다.
+                정답을 맞힌 학생은 영영 못 봤다. 퀴즈 앞 본문으로 끌어올림. (2026-07-29) */}
+            <div className="rounded-lg bg-indigo-50 border border-indigo-200 px-3 py-2 mb-2">
+              <p className="text-xs text-indigo-900 leading-relaxed" style={{ wordBreak: "keep-all" }}>
+                🔎 {t(
+                  "시뮬을 다시 보면 — 스택에 남아 있는 값은 언제나 아래에서 위로 갈수록 작아져요. 지금 값보다 작은 것들은 바로 답을 찾고 빠져나가니까, 남는 건 '내려가는 순서' 뿐이에요.",
+                  "Look back at the sim — the values left in the stack always get smaller from bottom to top. Anything smaller than the current value finds its answer and leaves, so only a 'descending' pile remains.",
+                )}
+              </p>
+            </div>
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "💡 각 인덱스가 최대 1번 push / 1번 pop → 총 연산 2N → O(N). 겉으로는 이중 루프 같지만 실제는 선형.",
-                "💡 Each index pushed/popped at most once → 2N total ops → O(N). Looks nested but is actually linear.",
+                "💡 각 인덱스가 최대 1번 push / 1번 pop → 총 연산 2N → O(N) (= 개수에 비례, 아주 빠름). 겉으로는 이중 루프 같지만 실제는 선형.",
+                "💡 Each index pushed/popped at most once → 2N total ops → O(N) (grows with the count — very fast). Looks nested but is actually linear.",
               )}
             </p>
           </div>
@@ -484,12 +495,15 @@ vector<int> nextGreater(vector<int>& arr) {
         {step === 3 && (
           <MiniQuiz
             question={t(
-              "monotonic stack 의 핵심 invariant 는?",
-              "What's the key invariant of a monotonic stack?",
+              "스택에 남아 있는 값들은 늘 어떤 모양일까요? (항상 지켜지는 규칙)",
+              "What's always true about the values left in the stack?",
             )}
             options={[
-              t("스택은 항상 정렬됨", "The stack is always sorted"),
-              t("스택 안의 원소 (값) 는 강(엄)감소 — top 으로 갈수록 작아짐", "Stack values are strictly decreasing — smaller toward top"),
+              // ⚠️ 예전엔 정답이 "강(엄)감소" 였는데 pop 조건이 `arr[top] < arr[i]` (등호 없음)
+              //    이라 같은 값은 안 빠진다 → 실제로는 '작아지거나 같음'. 게다가 오답이던
+              //    "항상 정렬됨" 도 (내림차순으로) 사실이라 정답이 둘이었다. (2026-07-29 수정)
+              t("항상 오름차순 — top 으로 갈수록 커진다", "Always ascending — bigger toward the top"),
+              t("아래 → 위로 갈수록 값이 작아진다 (같을 수는 있음)", "Values get smaller from bottom to top (equal is possible)"),
               t("스택은 항상 비어 있음", "The stack is always empty"),
               t("스택에는 한 원소만 들어 있음", "The stack holds only one element"),
             ]}
@@ -534,35 +548,46 @@ function Chapter3({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
       queue: [[0,0]],
       note: t("시작: (0,0) 을 큐에 넣고 거리 0", "Start: push (0,0), distance 0"),
     },
+    // ⚠️ 아래 프레임은 이 페이지 코드의 이웃 순서(dr=[-1,1,0,0], dc=[0,0,-1,1]
+    //    = 위·아래·왼·오)를 그대로 따라 손으로 계산한 것이다.
+    //    예전 프레임은 (a) push 순서가 코드와 반대였고((0,1) 을 (1,0) 보다 먼저),
+    //    (b) 마지막에 "(2,0) pop → (2,2) 도달" 이라 했는데 (2,2) 는 (2,0) 의
+    //    이웃이 아니다. 학생이 코드를 손으로 따라가면 매 프레임 큐가 달라졌다.
+    //    (2026-07-29 수정 — 고칠 때 반드시 다시 손으로 검산할 것)
     {
       dist: [[0,1,-1],[1,-1,-1],[-1,-1,-1]],
-      queue: [[0,1],[1,0]],
-      note: t("(0,0) pop → 이웃 (0,1), (1,0) push, 거리 1", "Pop (0,0) → push neighbors (0,1), (1,0), dist 1"),
+      queue: [[1,0],[0,1]],
+      note: t("(0,0) pop → 아래 (1,0), 오른쪽 (0,1) push, 거리 1", "Pop (0,0) → push down (1,0), right (0,1), dist 1"),
     },
     {
-      dist: [[0,1,2],[1,2,-1],[-1,-1,-1]],
-      queue: [[1,0],[0,2],[1,1]],
-      note: t("(0,1) pop → (0,2), (1,1) push, 거리 2", "Pop (0,1) → push (0,2), (1,1), dist 2"),
+      dist: [[0,1,-1],[1,2,-1],[2,-1,-1]],
+      queue: [[0,1],[2,0],[1,1]],
+      note: t("(1,0) pop → (2,0), (1,1) push, 거리 2", "Pop (1,0) → push (2,0), (1,1), dist 2"),
     },
     {
       dist: [[0,1,2],[1,2,-1],[2,-1,-1]],
-      queue: [[0,2],[1,1],[2,0]],
-      note: t("(1,0) pop → (2,0) push, 거리 2 (이미 본 (0,0), (1,1) 은 skip)", "Pop (1,0) → push (2,0), dist 2 (skip visited)"),
+      queue: [[2,0],[1,1],[0,2]],
+      note: t("(0,1) pop → (0,2) push, 거리 2 (나머지 이웃은 이미 방문)", "Pop (0,1) → push (0,2), dist 2 (others already visited)"),
     },
     {
-      dist: [[0,1,2],[1,2,3],[2,-1,-1]],
-      queue: [[1,1],[2,0],[1,2]],
-      note: t("(0,2) pop → (1,2) push, 거리 3", "Pop (0,2) → push (1,2), dist 3"),
+      dist: [[0,1,2],[1,2,-1],[2,3,-1]],
+      queue: [[1,1],[0,2],[2,1]],
+      note: t("(2,0) pop → (2,1) push, 거리 3", "Pop (2,0) → push (2,1), dist 3"),
     },
     {
       dist: [[0,1,2],[1,2,3],[2,3,-1]],
-      queue: [[2,0],[1,2],[2,1]],
-      note: t("(1,1) pop → (2,1) push, 거리 3", "Pop (1,1) → push (2,1), dist 3"),
+      queue: [[0,2],[2,1],[1,2]],
+      note: t("(1,1) pop → (1,2) push, 거리 3", "Pop (1,1) → push (1,2), dist 3"),
+    },
+    {
+      dist: [[0,1,2],[1,2,3],[2,3,-1]],
+      queue: [[2,1],[1,2]],
+      note: t("(0,2) pop → 이웃이 모두 이미 방문 → push 없음 (이런 스텝도 있어요)", "Pop (0,2) → all neighbours already visited → nothing pushed (this happens too)"),
     },
     {
       dist: [[0,1,2],[1,2,3],[2,3,4]],
-      queue: [[1,2],[2,1],[2,2]],
-      note: t("(2,0) pop → (2,2) 도달! 거리 4", "Pop (2,0) → reached (2,2)! distance 4"),
+      queue: [[1,2],[2,2]],
+      note: t("(2,1) pop → (2,2) 도달! 거리 4", "Pop (2,1) → reached (2,2)! distance 4"),
     },
   ]
   const [vizStep, setVizStep] = useState(0)

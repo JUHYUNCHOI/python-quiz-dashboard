@@ -96,11 +96,12 @@ function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
 }
 
 function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang; setLang?: (l: CodeLang) => void }) {
+  const { t } = useLanguage()
   return (
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {lang === "py" ? "🐍 Python" : "⚡ C++"}
+          {t("🐍 Python", "⚡ C++")}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Py / C++' 버튼" : "Toggle above"}</span>
       </div>

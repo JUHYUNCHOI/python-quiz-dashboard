@@ -94,11 +94,12 @@ function SlideNav({ step, total, setStep, onFinish, finishLabel }: {
 }
 
 function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang; setLang?: (l: CodeLang) => void }) {
+  const { t } = useLanguage()
   return (
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {lang === "py" ? "🐍 Python" : "⚡ C++"}
+          {t("🐍 Python", "⚡ C++")}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "위쪽 'Python/C++' 토글로 변경" : "Toggle above"}</span>
       </div>
@@ -679,7 +680,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <p className="text-xs text-gray-600 text-center italic">
-              {t("같은 문제, 5,000 만 배 차이! 다음 슬라이드에서 코드 봐요 →", "Same problem, 50,000,000× faster! Code on next slide →")}
+              {t("같은 문제, 5 만 배 차이! 다음 슬라이드에서 코드 봐요 →", "Same problem, 50,000× faster! Code on next slide →")}
             </p>
           </div>
         )}

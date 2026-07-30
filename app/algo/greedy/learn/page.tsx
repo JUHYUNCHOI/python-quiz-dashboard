@@ -96,11 +96,12 @@ function SlideNav({ step, total, setStep, onFinish, nextLabel, finishLabel }: {
 }
 
 function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang; setLang?: (l: CodeLang) => void }) {
+  const { t } = useLanguage()
   return (
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {lang === "py" ? "🐍 Python" : "⚡ C++"}
+          {t("🐍 Python", "⚡ C++")}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Py / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -713,7 +714,7 @@ total 1 + 2 + 0 + 3 = 6 coins`)}
     return total
 
 print(coin_change(730, [500, 100, 50, 10]))   # 6
-print(coin_change(1260, [500, 100, 50, 10]))  # 9`, `def coin_change(n, coins):
+print(coin_change(1260, [500, 100, 50, 10]))  # 6`, `def coin_change(n, coins):
     # assume coins are pre-sorted, biggest to smallest
     total = 0
     for c in coins:
@@ -722,7 +723,7 @@ print(coin_change(1260, [500, 100, 50, 10]))  # 9`, `def coin_change(n, coins):
     return total
 
 print(coin_change(730, [500, 100, 50, 10]))   # 6
-print(coin_change(1260, [500, 100, 50, 10]))  # 9`)}
+print(coin_change(1260, [500, 100, 50, 10]))  # 6`)}
               cpp={t(`#include <vector>
 #include <iostream>
 using namespace std;
@@ -740,7 +741,7 @@ int coinChange(int n, vector<int>& coins) {
 int main() {
     vector<int> coins = {500, 100, 50, 10};
     cout << coinChange(730, coins) << endl;    // 6
-    cout << coinChange(1260, coins) << endl;   // 9
+    cout << coinChange(1260, coins) << endl;   // 6
     return 0;
 }`, `#include <vector>
 #include <iostream>
@@ -759,7 +760,7 @@ int coinChange(int n, vector<int>& coins) {
 int main() {
     vector<int> coins = {500, 100, 50, 10};
     cout << coinChange(730, coins) << endl;    // 6
-    cout << coinChange(1260, coins) << endl;   // 9
+    cout << coinChange(1260, coins) << endl;   // 6
     return 0;
 }`)}
             />
