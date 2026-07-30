@@ -219,7 +219,11 @@ export function TopicPracticePage({ topicId, cluster, lesson }: TopicPracticePag
         <div className="mb-4">
           <JourneyBreadcrumb items={[
             { label: "알고리즘", labelEn: "Algorithms", href: "/algo", emoji: "🧩" },
-            { label: "재귀", labelEn: "Recursion", href: `/algo/${topicId}`, emoji: "📊" },
+            // 토픽 이름은 반드시 topicId 에서 유도 — 하드코딩하면 20 개 토픽이 전부
+            // 같은 이름으로 보인다. (2026-07-30: 20 개 중복 파일을 이 컴포넌트로 합칠 때
+            // recursion 버전을 원본으로 써서 "재귀 📊" 가 그대로 남아 있었다.)
+            { label: meta?.title ?? cluster.title, labelEn: meta?.titleEn ?? cluster.en?.title ?? cluster.title,
+              href: `/algo/${topicId}`, emoji: meta?.icon ?? cluster.emoji },
             { label: "문제 풀이", labelEn: "Practice" },
           ]} />
           <div className="flex items-center gap-2 mb-2">
