@@ -119,7 +119,7 @@ export function getSmartNext(
     const path = getAlgoPath(completedIds)
     if (!path.isTrunkDone && path.current) {
       const nextAlgo = path.current
-      const step = path.done + 1
+      const step = path.currentStep   // done+1 아님 — 순서대로 안 하면 어긋남
       return {
         type: "algo-topic",
         title: `${nextAlgo.title}`,

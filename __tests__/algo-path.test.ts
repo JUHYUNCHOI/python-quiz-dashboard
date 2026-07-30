@@ -55,6 +55,7 @@ describe("algo-path — 진도 계산", () => {
   it("아무것도 안 했으면 첫 본길이 current", () => {
     const s = getAlgoPath(new Set())
     expect(s.current?.id).toBe("array")
+    expect(s.currentStep).toBe(1)
     expect(s.done).toBe(0)
     expect(s.total).toBe(8)
     expect(s.isTrunkDone).toBe(false)
@@ -63,7 +64,22 @@ describe("algo-path — 진도 계산", () => {
   it("앞 2 개를 끝내면 3 번째가 current", () => {
     const s = getAlgoPath(new Set(["algo-array", "algo-sorting"]))
     expect(s.current?.id).toBe("stackqueue")
+    expect(s.currentStep).toBe(3)
     expect(s.done).toBe(2)
+  })
+
+  it("순서를 건너뛰어도 번호가 정확하다 — done+1 로 계산하면 안 됨", () => {
+    // 정렬(2번)만 끝낸 학생: 다음은 배열(1번) 이고, 표시도 "1번째" 여야 한다.
+    // (예전엔 done+1 = 2 라 배열을 "2번째" 라고 표시했다 — 2026-07-29 수정)
+    const s = getAlgoPath(new Set(["algo-sorting"]))
+    expect(s.current?.id).toBe("array")
+    expect(s.currentStep).toBe(1)
+    expect(s.done).toBe(1)
+  })
+
+  it("본길을 다 하면 currentStep 은 0", () => {
+    const all = new Set([...TRUNK_IDS].map(id => ALGO_TOPIC_MAP[id].lessonId))
+    expect(getAlgoPath(all).currentStep).toBe(0)
   })
 
   it("옆길을 끝내도 본길 진도는 안 오른다", () => {

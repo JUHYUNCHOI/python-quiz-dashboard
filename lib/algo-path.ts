@@ -74,6 +74,12 @@ export interface AlgoPathState {
   side: AlgoTopic[]
   /** 다음에 할 본길 토픽 (전부 끝났으면 null) */
   current: AlgoTopic | null
+  /**
+   * current 가 본길에서 몇 번째인지 (1-based). current 가 null 이면 0.
+   * ⚠️ done+1 로 계산하면 안 된다 — 학생이 순서대로 안 하면 어긋난다.
+   *    (정렬(2번)만 끝낸 학생에게 배열(1번)을 "2번째" 라고 표시하던 버그)
+   */
+  currentStep: number
   /** 완료한 본길 개수 */
   done: number
   /** 본길 총 개수 */
@@ -100,11 +106,13 @@ export function getAlgoPath(completedIds: Set<string | number>): AlgoPathState {
   const trunk = ALGO_TOPICS.filter(tp => TRUNK_IDS.has(tp.id))
   const side = ALGO_TOPICS.filter(tp => !TRUNK_IDS.has(tp.id))
   const done = trunk.filter(tp => completedIds.has(tp.lessonId)).length
-  const current = trunk.find(tp => !completedIds.has(tp.lessonId)) ?? null
+  const currentIdx = trunk.findIndex(tp => !completedIds.has(tp.lessonId))
+  const current = currentIdx === -1 ? null : trunk[currentIdx]
   return {
     trunk,
     side,
     current,
+    currentStep: currentIdx === -1 ? 0 : currentIdx + 1,
     done,
     total: trunk.length,
     isTrunkDone: current === null,

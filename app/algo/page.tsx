@@ -86,7 +86,7 @@ export default function AlgoPage() {
                   {t(path.current.title, path.current.titleEn)}
                 </p>
                 <p className="text-xs text-violet-600 font-bold">
-                  {t(`본길 ${path.done + 1}번째 / ${path.total}`, `Trunk ${path.done + 1} of ${path.total}`)}
+                  {t(`본길 ${path.currentStep}번째 / ${path.total}`, `Trunk ${path.currentStep} of ${path.total}`)}
                 </p>
               </div>
               <span className="text-violet-400 text-xl shrink-0">▶</span>
