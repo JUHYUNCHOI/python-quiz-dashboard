@@ -189,10 +189,20 @@ export function TripletEnumSimulator({ E }) {
                 {lab || " "}
               </div>
               <div style={cellStyle(pos, s.kind === "step" ? s.t : null)}>{ch}</div>
+              {/* 1-based — 문제 지문의 말 (쿼리도 "1 12" 처럼 1 부터).
+                  뒤 fix-j 시뮬은 코드의 0-based 를 쓴다 (그 시뮬 상단 주석 참고) —
+                  둘이 다른 건 '문제의 말 → 코드의 말' 로 넘어가기 때문이고, 양쪽 다
+                  화면에 한 줄로 밝혀 둔다. */}
               <div style={{ fontSize: 9, color: C.dim }}>{pos + 1}</div>
             </div>
           );
         })}
+      </div>
+
+      {/* 번호 규칙 한 줄 — 뒤 시뮬에서 0 부터로 바뀌므로 여기서 기준을 밝혀 둔다. */}
+      <div style={{ textAlign: "center", fontSize: 9.5, color: C.dim, marginBottom: 10 }}>
+        {t(E, "spots are numbered from 1 — same as the problem statement",
+              "칸 번호는 1 부터 — 문제 지문과 같아요")}
       </div>
 
       {/* Step body: rule-check card on step, scale-bars on scale, otherwise empty */}
@@ -639,10 +649,17 @@ export function MooTraceSimulator({ E, lang = "py" }) {
         })}
       </div>
 
-      {/* 번호 규칙 한 줄 — 코드가 0-based 라 셀 번호도 0 부터. */}
-      <div style={{ textAlign: "center", fontSize: 9.5, color: C.dim, marginBottom: 12 }}>
-        {t(E, "cell numbers are 0-based — same as idx in the code below",
-              "칸 번호는 0 부터 — 아래 코드의 idx 와 같은 수예요")}
+      {/* 번호가 여기서 0 부터로 바뀌는 이유를 짚는다.
+          앞 브루트 시뮬은 지문의 1-based, 이 시뮬은 코드의 0-based — 우연이 아니라
+          '문제의 말 → 코드의 말' 로 넘어가는 지점이고, 코드에 l -= 1 이 있는 이유다.
+          (USACO 에서 애들이 실제로 제일 많이 틀리는 off-by-one 이라 숨기지 않는다.) */}
+      <div style={{
+        maxWidth: 460, margin: "0 auto 12px", textAlign: "center",
+        fontSize: 9.5, color: C.dim, lineHeight: 1.6, wordBreak: "keep-all",
+      }}>
+        {t(E,
+          <>📎 Numbers start at <b>0</b> here — the code converts with <code>l -= 1</code>. So the problem's <b>1st</b> spot is <code>s[0]</code> in the code.</>,
+          <>📎 여기부터 번호가 <b>0</b> 부터예요 — 코드가 <code>l -= 1</code> 로 바꿔 쓰기 때문. 문제의 <b>1 번째</b> 칸이 코드에선 <code>s[0]</code>.</>)}
       </div>
 
       {/* ── 코드 + 변수판 — 포인터가 '코드대로' 움직이는 걸 보여주는 부분.
