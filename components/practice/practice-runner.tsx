@@ -94,6 +94,15 @@ type TestResult = { passed: boolean; output: string; expected: string }
 interface PracticeRunnerProps {
   problem: PracticeProblem
   onSuccess?: (starred: boolean) => void
+  /**
+   * 알고리즘 연습 전용 — "🤔 막혔어요" 사다리를 켠다. (기본 off)
+   * 켜면 학생이 스스로 풀이를 열 수 있다 (2 회 실패 대기 없이).
+   * ⚠️ 다른 연습 화면(문법 클러스터 등)의 ⭐ 베끼기 방지 규칙을 바꾸지 않으려고
+   *    옵트인으로 뒀다. 이 prop 을 지우면 원래 동작으로 완전히 되돌아온다.
+   */
+  stuckLadder?: boolean
+  /** 막혔을 때 "건너뛰기" — 없으면 건너뛰기 항목이 안 뜬다. */
+  onSkip?: () => void
 }
 
 function localizeInitialCode(code: string, isEn: boolean): string {
@@ -198,7 +207,7 @@ function localizeInitialCode(code: string, isEn: boolean): string {
     .replace(/\/\/ 곱을 반환하세요/g, "// return the product")
 }
 
-export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunnerProps) {
+export function PracticeRunner({ problem: rawProblem, onSuccess, stuckLadder = false, onSkip }: PracticeRunnerProps) {
   const { t, lang: locale } = useLanguage()
   const isEn = locale === "en"
   const problem = localizeProblem(rawProblem, locale)
@@ -269,6 +278,7 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
   const [allPassed, setAllPassed] = useState(false)
   const [hintsShown, setHintsShown] = useState(0)
   const [showSolution, setShowSolution] = useState(false)
+  const [stuckOpen, setStuckOpen] = useState(false)   // 🤔 막혔어요 패널 열림 (stuckLadder 전용)
   const [failCount, setFailCount] = useState(0)
   const [scaffoldShown, setScaffoldShown] = useState(false)
 
@@ -345,10 +355,16 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
       }
     }
     setIsLoading(false)
-  }, [code, problem, isLoading, onSuccess, storageKey, hintsShown, showSolution, t])
+  // scaffoldShown 이 starred 계산에 쓰이므로 deps 에 필요 (없으면 stale closure 로
+  // scaffold 를 보고도 ⭐ 를 받을 수 있었다 — 2026-07-29 수정)
+  }, [code, problem, isLoading, onSuccess, storageKey, hintsShown, showSolution, scaffoldShown, t])
 
   const showScaffold = () => {
-    const scaffold = localizeInitialCode(problem.scaffoldCode ?? "", isEn)
+    // ⚠️ scaffoldCode 가 없으면 절대 실행하지 않는다 — 예전엔 `?? ""` 때문에
+    //    에디터와 autosave 가 빈 문자열로 덮여 학생이 쓰던 코드가 날아갔다.
+    //    (algo 연습 데이터엔 scaffoldCode 가 아예 없다 — 2026-07-29 확인)
+    if (!problem.scaffoldCode) return
+    const scaffold = localizeInitialCode(problem.scaffoldCode, isEn)
     setCode(scaffold)
     setScaffoldShown(true)
     try { localStorage.setItem(storageKey, scaffold) } catch {}
@@ -580,10 +596,67 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
         </div>
       )}
 
-      {/* 정답 코드 — 베끼기 방지: 학생은 2회 시도 또는 힌트 다 본 뒤에만. 선생님은 항상. */}
+      {/* 🤔 막혔어요 — 알고리즘 연습에서만 (stuckLadder). 기본 화면엔 안 나옴.
+          왜: 막힌 학생에게 "더 쉬운 문제" 를 또 주면 같은 종류로 다시 막힌다.
+          선생님 레슨 기준의 난이도 사다리("따라치기 → 빈칸 → 처음부터") 를 그대로 —
+          단 빈칸(scaffoldCode) 은 algo 데이터에 없어서 2 단으로 운영한다.
+          (2026-07-29 선생님: "재귀는 아이들이 자꾸 어려워해서 허들이야") */}
+      {stuckLadder && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-3">
+          {!stuckOpen ? (
+            <button
+              onClick={() => setStuckOpen(true)}
+              className="text-sm font-bold text-amber-800 hover:text-amber-900 transition-colors"
+            >
+              🤔 {t("막혔어요", "I'm stuck")}
+            </button>
+          ) : (
+            <div className="space-y-2">
+              <p className="text-xs font-bold text-amber-800">
+                {t("괜찮아요. 순서대로 해볼까요?", "That's fine. Let's go step by step.")}
+              </p>
+              <button
+                onClick={() => setShowSolution(true)}
+                className="w-full text-left rounded-lg border border-amber-300 bg-white px-3 py-2 hover:border-amber-400 transition-colors"
+              >
+                <span className="text-sm font-bold text-amber-900">1️⃣ {t("따라 쓰기", "Copy it out")}</span>
+                <span className="block text-[11px] text-gray-500 mt-0.5" style={{ wordBreak: "keep-all" }}>
+                  {t("풀이를 보면서 직접 타이핑해요. 손으로 쓰면 머리에 남아요.",
+                     "Read the solution and type it yourself — typing makes it stick.")}
+                </span>
+              </button>
+              <button
+                onClick={() => { setShowSolution(false); setStuckOpen(false); reset() }}
+                className="w-full text-left rounded-lg border border-amber-300 bg-white px-3 py-2 hover:border-amber-400 transition-colors"
+              >
+                <span className="text-sm font-bold text-amber-900">2️⃣ {t("처음부터 혼자", "Try again alone")}</span>
+                <span className="block text-[11px] text-gray-500 mt-0.5" style={{ wordBreak: "keep-all" }}>
+                  {t("이제 보지 않고 다시. 이게 진짜 익힌 거예요.",
+                     "Now without looking. That's when it's really yours.")}
+                </span>
+              </button>
+              {onSkip && (
+                <button
+                  onClick={onSkip}
+                  className="w-full text-left rounded-lg border border-gray-200 bg-white px-3 py-2 hover:border-gray-300 transition-colors"
+                >
+                  <span className="text-sm font-bold text-gray-600">⏭ {t("건너뛰기", "Skip")}</span>
+                  <span className="block text-[11px] text-gray-400 mt-0.5" style={{ wordBreak: "keep-all" }}>
+                    {t("나중에 와도 돼요. 여기서 멈추지 말고 계속 가요.",
+                       "You can come back later. Don't stall here.")}
+                  </span>
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 정답 코드 — 베끼기 방지: 학생은 2회 시도 또는 힌트 다 본 뒤에만. 선생님은 항상.
+          stuckLadder 화면에선 "막혔어요 → 따라 쓰기" 로 학생이 스스로 열 수 있다. */}
       {(() => {
         const allHints = (problem.hints ?? []).length
-        const canSeeSolution = isTeacher || isOwner || failCount >= 2 || (allHints > 0 && hintsShown >= allHints)
+        const canSeeSolution = isTeacher || isOwner || stuckLadder || failCount >= 2 || (allHints > 0 && hintsShown >= allHints)
         if (!canSeeSolution) {
           return (
             <p className="text-xs text-gray-400 py-1 flex items-center gap-1.5">
@@ -599,7 +672,10 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
               className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-600 transition-colors py-1"
             >
               <Eye className="w-4 h-4" />
-              {showSolution ? t("정답 숨기기", "Hide solution") : t("정답 보기", "Show solution")}
+              {showSolution
+                ? t("접기", "Hide")
+                : stuckLadder ? t("따라 쓰기 — 풀이 보기", "Copy it out — show solution")
+                              : t("정답 보기", "Show solution")}
               <ChevronDown className={cn("w-4 h-4 transition-transform", showSolution && "rotate-180")} />
             </button>
             {showSolution && (
