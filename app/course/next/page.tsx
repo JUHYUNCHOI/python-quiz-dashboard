@@ -157,6 +157,21 @@ export default function NextPath() {
           </div>
         )}
 
+        {/* 알고리즘 학습 지도 — /algo 는 네비 5탭에 없어서 여기가 유일한 인-네비 진입점.
+            (2026-07-29 선생님 결정: "'할 것' 탭에 본길을 녹이기")
+            2026-07-30: 페이지 맨 아래 → '지금 할 것' 바로 밑으로 올림.
+            선생님이 "코더린 들어가니까 알고리즘 푸는 메뉴가 안 보인다" 고 함 —
+            '다음에 올 것' 목록 + '더 보기' 밑이라 스크롤해야 보였다. 탭은 5 개 유지. */}
+        <a href="/algo" style={{
+          display: "block", marginBottom: 18, padding: "13px 15px", borderRadius: 14,
+          border: "2px solid #a78bfa", background: "#f5f3ff", textDecoration: "none",
+        }}>
+          <div style={{ fontSize: 11.5, fontWeight: 800, color: "#7c3aed", marginBottom: 3 }}>🧭 알고리즘 학습 지도</div>
+          <div style={{ fontSize: 13, color: "#5b21b6", wordBreak: "keep-all", lineHeight: 1.45 }}>
+            본길 8개 순서대로 · 어려운 건 옆길로 빼뒀어요 →
+          </div>
+        </a>
+
         {/* 다음에 올 것 — 잠금 X. 잘하면 눌러서 바로 시작하거나 건너뛰기 */}
         {upcoming.length > 0 && (
           <>
@@ -186,18 +201,6 @@ export default function NextPath() {
             </button>
           </>
         )}
-
-        {/* 알고리즘 학습 지도 — 본길 8개 흐름. /algo 는 네비에 없어서 여기가 유일한 인-네비 진입점.
-            (2026-07-29 선생님 결정: "지금 '할 것' 탭에 본길을 녹이기") */}
-        <a href="/algo" style={{
-          display: "block", marginTop: 20, padding: "11px 14px", borderRadius: 12,
-          border: "1.5px solid #c4b5fd", background: "#f5f3ff", textDecoration: "none",
-        }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: "#7c3aed", marginBottom: 2 }}>🧭 알고리즘 학습 지도</div>
-          <div style={{ fontSize: 12.5, color: "#5b21b6", wordBreak: "keep-all" }}>
-            본길 8개 순서대로 · 어려운 건 옆길로 빼뒀어요 →
-          </div>
-        </a>
 
         {/* 선생님용 점프 안내 */}
         <a href="/course/ladder" style={{ display: "block", textAlign: "center", marginTop: 14, fontSize: 12.5, color: "#6366f1", textDecoration: "none" }}>
