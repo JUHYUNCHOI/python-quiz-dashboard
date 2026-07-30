@@ -101,7 +101,7 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {t("🐍 Python", "⚡ C++")}
+          {lang === "py" ? "🐍 Python" : "⚡ C++"}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Python / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -247,7 +247,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   const word = "racecar"
   // L/R 두 포인터 step: 0(시작) → 1(L=0,R=6) → 2(L=1,R=5) → 3(L=2,R=4) → 4(L=R=3, 회문!)
   const [twoP, setTwoP] = useState(0)
@@ -523,7 +523,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   const word = "abcba"
   const K = 2
   // window step. 각 step: [L, R] (inclusive)
@@ -765,7 +765,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   const s1 = "listen"
   const s2 = "silent"
   const [revealed, setRevealed] = useState(false)

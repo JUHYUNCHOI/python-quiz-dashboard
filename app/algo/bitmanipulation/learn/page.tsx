@@ -101,7 +101,7 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {t("🐍 Python", "⚡ C++")}
+          {lang === "py" ? "🐍 Python" : "⚡ C++"}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Py / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -308,7 +308,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 인터랙티브 — 두 8-bit 수 입력 후 AND/OR/XOR/NOT/SHIFT 결과
   const [a, setA] = useState(12)   // 0b00001100
@@ -339,7 +339,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 <p className="text-[11px] text-gray-500 mt-1">{t("왜 음수? 컴퓨터는 음수를 '2의 보수' 로 저장해서 ~x = -x-1 이 돼요. (예: ~5 = -6). 특정 비트 폭만 보려면 & 0xff 처럼 마스킹.", "Why negative? Computers store negatives in 'two's complement', so ~x = -x-1 (e.g. ~5 = -6). Mask with & 0xff to keep a fixed bit width.")}</p>
               </div>
               <div className="bg-white rounded-lg p-2.5 border border-cyan-200">
-                <p><b className="text-cyan-700">SHIFT (&lt;&lt; &gt;&gt;)</b>{t(" — 비트 자리 이동. &lt;&lt; 1 = ×2, &gt;&gt; 1 = ÷2.", " — shift bits. << 1 = ×2, >> 1 = ÷2.")}</p>
+                <p><b className="text-cyan-700">SHIFT (&lt;&lt; &gt;&gt;)</b>{t(" — 비트 자리 이동. << 1 = ×2, >> 1 = ÷2.", " — shift bits. << 1 = ×2, >> 1 = ÷2.")}</p>
               </div>
             </div>
             <p className="text-xs text-cyan-700 text-center mt-3">
@@ -495,7 +495,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 인터랙티브 — 짝 없는 원소 찾기 시뮬레이션
   const arr = [4, 1, 2, 1, 2]
@@ -716,7 +716,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 인터랙티브 — N=3 부분집합 mask 0..7
   const items = ["A", "B", "C"]

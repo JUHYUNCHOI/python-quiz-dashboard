@@ -101,7 +101,7 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {t("🐍 Python", "⚡ C++")}
+          {lang === "py" ? "🐍 Python" : "⚡ C++"}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Py / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -436,7 +436,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: factorial(5) 호출 스택 한 칸씩
   // phase: 0 = 시작 전, 1..5 = push (f(5)..f(1)), 6..10 = pop (반환)
@@ -454,8 +454,10 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
       return t(`f(${cur}) 호출 → ${cur} × f(${cur - 1}) 필요`, `Call f(${cur}) → need ${cur} × f(${cur - 1})`)
     }
     const ret = phase - factN
+    // values[k-1] = f(k). 예전엔 f(ret + 1) 이라 f(2) 가 1 을 반환한다고 표시됐다.
+    // (2026-07-29 수정 — 네 메시지가 전부 한 칸씩 틀렸음)
     const values = [1, 2, 6, 24, 120]
-    return t(`f(${ret + 1}) 반환: ${values[ret - 1]}`, `f(${ret + 1}) returns ${values[ret - 1]}`)
+    return t(`f(${ret}) 반환: ${values[ret - 1]}`, `f(${ret}) returns ${values[ret - 1]}`)
   })()
   const factDone = phase >= 2 * factN
   const factStep = () => { if (!factDone) setPhase(phase + 1) }
@@ -513,17 +515,20 @@ f(1) = 1          ← base case!`)}
               {factStack.length === 0 ? (
                 <p className="text-xs text-gray-400 text-center self-center">{t("(스택 비어 있음)", "(stack empty)")}</p>
               ) : (
-                factStack.map((v, i) => (
+                factStack.map((v, i) => {
+                  // 지금 실행 중인 프레임 = 스택의 마지막 원소 (factStack[0] 은 맨 처음 f(5)).
+                  const isTop = i === factStack.length - 1
+                  return (
                   <div key={i} className={cn(
                     "px-3 py-2 rounded-md border-2 font-mono text-xs font-bold transition-all text-center",
-                    i === 0 && phase <= factN && v === 1 && "bg-rose-100 border-rose-400 text-rose-800",
-                    i === 0 && phase > factN && "bg-emerald-100 border-emerald-400 text-emerald-800",
-                    !(i === 0 && (phase <= factN && v === 1 || phase > factN)) && "bg-blue-100 border-blue-300 text-blue-800",
+                    isTop && phase <= factN && v === 1 && "bg-rose-100 border-rose-400 text-rose-800",
+                    isTop && phase > factN && "bg-emerald-100 border-emerald-400 text-emerald-800",
+                    !(isTop && (phase <= factN && v === 1 || phase > factN)) && "bg-blue-100 border-blue-300 text-blue-800",
                   )}>
-                    f({v}) {i === 0 && phase <= factN && v === 1 && t("← 베이스!", "← base!")}
-                    {i === 0 && phase > factN && t("← 반환 중", "← returning")}
+                    f({v}) {isTop && phase <= factN && v === 1 && t("← 베이스!", "← base!")}
+                    {isTop && phase > factN && t("← 반환 중", "← returning")}
                   </div>
-                ))
+                  )})
               )}
             </div>
             <div className="bg-cyan-50 rounded-lg p-3 mb-3 text-center min-h-[3rem]">
@@ -651,7 +656,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: pow(2, 10) 분할 정복 호출 — 한 칸씩 n 을 반으로
   // n: 10 → 5 → 2 → 1 → 0
@@ -679,8 +684,8 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-white/70 rounded-lg p-3 border border-amber-200 mb-3">
               <p className="text-xs font-bold text-amber-800 mb-2">💡 {t("영리하게 — 반으로 쪼개기", "Smart way — halve it")}</p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{t(`2^10 = (2^5)^2          ← 5 번 → 한 번 더 곱
-2^5  = 2 × (2^2)^2      ← 짝수 아니니 +1 곱
+{t(`2^10 = (2^5)^2          ← 10 은 짝수 → 제곱만
+2^5  = 2 × (2^2)^2      ← 5 는 홀수 → 2 를 한 번 더 곱
 2^2  = (2^1)^2
 2^1  = 2 × (2^0)^2
 2^0  = 1                ← 베이스!`, `2^10 = (2^5)^2          ← even → just square
@@ -731,7 +736,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 {dcIdx === 1 && t("n = 5. 반으로 줄었어요!", "n = 5. Halved!")}
                 {dcIdx === 2 && t("n = 2. 또 반으로.", "n = 2. Halved again.")}
                 {dcIdx === 3 && t("n = 1. 거의 끝!", "n = 1. Almost there!")}
-                {dcIdx === 4 && <b className="text-emerald-700">✅ {t("n = 0. 베이스 도달! 4 번 호출 → 2^10 = 1024 완성", "n = 0. Base hit! 4 calls → 2^10 = 1024 done")}</b>}
+                {dcIdx === 4 && <b className="text-emerald-700">✅ {t("n = 0. 베이스 도달! 5 번 호출 (반으로 4 번) → 2^10 = 1024 완성", "n = 0. Base hit! 5 calls (halved 4×) → 2^10 = 1024 done")}</b>}
               </p>
               {dcIdx > 0 && (
                 <p className="text-[11px] text-amber-700 mt-1">
@@ -823,14 +828,14 @@ int main() {
         {step === 3 && (
           <MiniQuiz
             question={t(
-              "위 power 함수로 pow(2, 16) 을 계산할 때 호출 횟수는? (베이스 케이스 도달까지)",
-              "How many calls does power(2, 16) make until base case?",
+              "위 power 함수로 pow(2, 16) 을 계산할 때 — n 을 반으로 줄이는 횟수는?",
+              "With the power function above, how many times does n get halved for pow(2, 16)?",
             )}
             options={["16", "8", "5", "1"]}
             answerIdx={2}
             hint={t(
-              "n 이 매번 //2 로 줄어요: 16 → 8 → 4 → 2 → 1 → 0. 총 5 단계!",
-              "n halves each call: 16 → 8 → 4 → 2 → 1 → 0. That's 5 steps!",
+              "n 이 매번 //2 로 줄어요: 16 → 8 → 4 → 2 → 1 → 0. 화살표가 5 개 = 5 번 반으로! (호출 자체는 베이스까지 6 번)",
+              "n halves each call: 16 → 8 → 4 → 2 → 1 → 0. Five arrows = halved 5 times! (that's 6 calls counting the base.)",
             )}
             onCorrect={() => setQuizPassed(true)}
           />
@@ -857,7 +862,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   const [memoOn, setMemoOn] = useState(false)
 
   // 시뮬레이션: fib(5) 호출 트리 — 중복 강조
@@ -976,8 +981,8 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
               <p className="text-[11px] text-gray-600 mt-1">
                 {t(
-                  "fib(40) — 끄면 ~10 억 번, 켜면 ~40 번.",
-                  "fib(40) — OFF: ~1 billion calls, ON: ~40 calls.",
+                  "fib(40) — 끄면 ~3 억 번, 켜면 ~40 번.",
+                  "fib(40) — OFF: ~300 million calls, ON: ~40 calls.",
                 )}
               </p>
             </div>
@@ -1137,7 +1142,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <Link href="/algo/recursion/practice" className="mt-3 block bg-emerald-500 hover:bg-emerald-600 rounded-xl p-3 text-center transition-colors">
               <p className="text-sm font-black text-white break-keep">🧩 {t("이제 직접 풀어봐요 — 작은 문제부터!", "Now try it yourself — start small!")}</p>
               <p className="text-[11px] text-emerald-50 mt-0.5 break-keep">
-                {t("1~N 합 · 피보나치 · 유클리드 GCD … 쉬운 것부터 12문제", "sum 1..N · Fibonacci · Euclid GCD … 12 problems, easy first")}
+                {t("1~N 합 · 피보나치 · 유클리드 GCD … 쉬운 것부터 15문제", "sum 1..N · Fibonacci · Euclid GCD … 15 problems, easy first")}
               </p>
             </Link>
             <div className="mt-3 pt-3 border-t border-amber-200 space-y-2">
@@ -1288,7 +1293,7 @@ export default function RecursionPage() {
                 <span className="text-2xl">🏆</span>
                 <div>
                   <p className="font-black text-sm leading-tight">{t("문제 풀러 가기", "Practice problems")}</p>
-                  <p className="text-[11px] text-emerald-50">{t("재귀 문제 12 개 — 손으로 그려가며!", "12 recursion challenges — draw the tree!")}</p>
+                  <p className="text-[11px] text-emerald-50">{t("재귀 문제 15 개 — 손으로 그려가며!", "12 recursion challenges — draw the tree!")}</p>
                 </div>
               </div>
               <ArrowRight className="w-5 h-5" />

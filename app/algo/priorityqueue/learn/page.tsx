@@ -101,7 +101,7 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {t("🐍 Python", "⚡ C++")}
+          {lang === "py" ? "🐍 Python" : "⚡ C++"}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Py / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -233,7 +233,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </div>
             <p className="text-xs text-blue-700 text-center leading-relaxed">
               {t(
-                "N=100만, 꺼내기 100만 번 — sort: 10조 연산. heap: 2천만 연산. *50만 배 차이*.",
+                "N=100만, 꺼내기 100만 번 — 매번 sort: 20조 연산. heap: 2천만 연산. *100만 배 차이*.",
                 "N=1M, 1M pops — sort: 10 trillion ops. heap: 20 million. *500,000× faster*.",
               )}
             </p>
@@ -301,7 +301,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 5
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: heap push/pop — heap = min-heap
   // ops 시퀀스: push 5, push 3, push 8, push 1, push 7, pop, pop, pop
@@ -644,7 +644,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬: K=3, stream = [4, 1, 7, 3, 8, 2, 9, 5, 6]. min-heap 크기 K 유지 → 마지막에 heap = 큰 3개.
   const stream = [4, 1, 7, 3, 8, 2, 9, 5, 6]
@@ -706,7 +706,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <p className="text-sm font-bold text-orange-700 text-center">
-              {t("시간 O(N log K). N=100만, K=10 → 약 2천만 연산.", "Time O(N log K). N=1M, K=10 → ~20M ops.")}
+              {t("시간 O(N log K). N=100만, K=10 → 약 330만 연산.", "Time O(N log K). N=1M, K=10 → ~3.3M ops.")}
             </p>
           </div>
         )}
@@ -896,7 +896,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 작은 그래프 시뮬: 노드 0..4, edges (간선) + 가중치.
   // 0 -- 4 --> 1

@@ -101,7 +101,7 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {t("🐍 Python", "⚡ C++")}
+          {lang === "py" ? "🐍 Python" : "⚡ C++"}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Py / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -297,7 +297,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: [1,3,5,7,9,11,13,15] 에서 7 찾기
   const arr = [1, 3, 5, 7, 9, 11, 13, 15]
@@ -584,7 +584,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: [1,3,3,3,5,7] 에서 lower_bound(3) 찾기
   const arr = [1, 3, 3, 3, 5, 7]
@@ -914,7 +914,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: 나무 자르기 (BOJ 2805 축약)
   // 나무 높이 [20, 15, 10, 17]. 필요 길이 m = 7.

@@ -101,7 +101,7 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {t("🐍 Python", "⚡ C++")}
+          {lang === "py" ? "🐍 Python" : "⚡ C++"}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Py / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -280,24 +280,27 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 5
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: [5,2,8,1,9,3] split → merge
+  // ⚠️ 분할 모양은 이 페이지 코드의 `mid = len(arr) // 2` 를 그대로 따라야 한다.
+  //    len 3 이면 mid=1 → [5] | [2,8] 이다.  예전 시뮬은 [5,2] | [8] 이라
+  //    두 슬라이드 뒤 코드와 어긋났다. (2026-07-29 수정)
   // phases:
   // 0 = 시작
   // 1 = split [5,2,8] | [1,9,3]
-  // 2 = split [5,2] [8] | [1,9] [3]
+  // 2 = split [5] [2,8] | [1] [9,3]     ← mid=1
   // 3 = split [5] [2] [8] | [1] [9] [3]
-  // 4 = merge [2,5] [8] | [1,9] [3]
+  // 4 = merge [5] [2,8] | [1] [3,9]
   // 5 = merge [2,5,8] | [1,3,9]
   // 6 = merge [1,2,3,5,8,9]
   const [phase, setPhase] = useState(0)
   const phases: { groups: number[][]; label: string; labelEn: string }[] = [
     { groups: [[5, 2, 8, 1, 9, 3]], label: "시작: 정렬되지 않은 배열", labelEn: "Start: unsorted array" },
     { groups: [[5, 2, 8], [1, 9, 3]], label: "Divide: 반으로", labelEn: "Divide: in half" },
-    { groups: [[5, 2], [8], [1, 9], [3]], label: "Divide: 또 반으로", labelEn: "Divide: halve again" },
+    { groups: [[5], [2, 8], [1], [9, 3]], label: "Divide: 또 반으로 (3 개면 1 개 + 2 개)", labelEn: "Divide: halve again (3 → 1 + 2)" },
     { groups: [[5], [2], [8], [1], [9], [3]], label: "Divide: 원소 1개씩 — 이미 정렬됨!", labelEn: "Divide: singletons — already sorted!" },
-    { groups: [[2, 5], [8], [1, 9], [3]], label: "Combine: 두 개씩 정렬해 합치기", labelEn: "Combine: merge in pairs" },
+    { groups: [[5], [2, 8], [1], [3, 9]], label: "Combine: 작은 것부터 순서 맞춰 합치기", labelEn: "Combine: merge the small ones in order" },
     { groups: [[2, 5, 8], [1, 3, 9]], label: "Combine: 더 큰 단위로", labelEn: "Combine: larger groups" },
     { groups: [[1, 2, 3, 5, 8, 9]], label: "✅ 정렬 완료!", labelEn: "✅ Sorted!" },
   ]
@@ -610,7 +613,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: 퀵 소트 partition — [5,2,8,1,9,3], 피벗=3 (마지막)
   // phases:
@@ -879,7 +882,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
@@ -921,7 +924,7 @@ Compute half once, then square it.
         return half * half       # half 두 번 부르지 X — 변수에 저장!
     return half * half * b
 
-print(power(2, 30))   # 1073741824 (10초도 안 걸림 ✓)`, `def power(b, n):
+print(power(2, 30))   # 1073741824 (곱셈 약 30 번 — 즉시 ✓)`, `def power(b, n):
     if n == 0:
         return 1
     half = power(b, n // 2)
@@ -929,7 +932,7 @@ print(power(2, 30))   # 1073741824 (10초도 안 걸림 ✓)`, `def power(b, n):
         return half * half       # don't call half twice - save in a variable!
     return half * half * b
 
-print(power(2, 30))   # 1073741824 (takes under 10 sec (: )`)}
+print(power(2, 30))   # 1073741824 (~30 multiplications — instant)`)}
               cpp={t(`long long power(long long b, int n) {
     if (n == 0) return 1;
     long long half = power(b, n / 2);
@@ -1133,7 +1136,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </p>
             <div className="mt-3 pt-3 border-t border-amber-200 space-y-2">
               <p className="text-[11px] text-blue-700 leading-relaxed">
-                💡 {t("아직 부족해요? ", "Need more? ")}<b>{t("옆길:", "Side path:")}</b> {t("연습 문제 12 개로 손에 익히기. ", "12 problems to lock it in. ")}
+                💡 {t("아직 부족해요? ", "Need more? ")}<b>{t("옆길:", "Side path:")}</b> {t("연습 문제 12 개로 손에 익히기. ", "15 problems to lock it in. ")}
                 <Link href="/algo/divideconquer" className="font-bold underline hover:text-blue-900">{t("문제 풀러 →", "Go practice →")}</Link>
               </p>
               <p className="text-[11px] text-purple-700 leading-relaxed">

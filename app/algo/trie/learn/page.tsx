@@ -99,7 +99,7 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {t("🐍 Python", "⚡ C++")}
+          {lang === "py" ? "🐍 Python" : "⚡ C++"}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Py / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -288,7 +288,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // Insert simulation: cat → car → card
   // phase 0: empty. 1: cat done. 2: car done. 3: card done.
@@ -417,8 +417,8 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="mt-3 bg-emerald-50 rounded-lg p-2 border border-emerald-200">
               <p className="text-[11px] text-emerald-800 leading-relaxed">
                 💡 {t(
-                  "세 단어 합쳐 11 글자 → 트라이는 5 노드만 사용. 공통 prefix 'ca' 는 단 한 번 저장돼요.",
-                  "11 letters across 3 words → only 5 trie nodes. 'ca' is stored exactly once.",
+                  "세 단어 합쳐 10 글자 → 트라이는 5 노드만 사용. 앞부분이 같은 'ca' 는 단 한 번만 저장돼요.",
+                  "10 letters across 3 words → only 5 trie nodes. The shared start 'ca' is stored just once.",
                 )}
               </p>
             </div>
@@ -506,7 +506,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // search simulation: searching "car" in trie {cat, car, card}
   // phase 0: at root. 1: at c. 2: at c→a. 3: at c→a→r. check is_end.
@@ -774,7 +774,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // Autocomplete simulation: prefix "ca" in {cat, car, card, dog}
   // phase 0: nothing. 1: walked to c. 2: at a. 3: DFS subtree → cat, car, card

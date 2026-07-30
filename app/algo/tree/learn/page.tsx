@@ -99,7 +99,7 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {t("🐍 Python", "⚡ C++")}
+          {lang === "py" ? "🐍 Python" : "⚡ C++"}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Py / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -293,7 +293,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 6
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 5-node tree visualization
   //       1
@@ -637,7 +637,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // Same 5-node binary tree
   //       1
@@ -960,7 +960,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // Subtree node count visualization
   // Tree:    1
@@ -1247,7 +1247,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               <li><b>5.</b> {t("재귀 깊이 주의 — Python 은 ", "Mind recursion depth — Python ")}<code className="bg-white px-1 rounded text-xs">sys.setrecursionlimit</code> {t("필수.", "required.")}</li>
             </ol>
             <p className="text-xs text-amber-700 mt-3 text-center italic">
-              {t("트리는 그래프의 '쉬운 친구' — 다음은 그래프 (BFS/DFS)!", "Tree is graph's 'easy friend' — next: graphs (BFS/DFS)!")}
+              {t("트리는 그래프의 '쉬운 친구' — 다음은 우선순위 큐! (그래프는 이미 배운 선수 토픽)", "Tree is graph's 'easy friend' — next: graphs (BFS/DFS)!")}
             </p>
             <div className="mt-3 pt-3 border-t border-amber-200 space-y-2">
               <p className="text-[11px] text-emerald-700 leading-relaxed">
@@ -1399,7 +1399,7 @@ export default function TreePage() {
                 <span className="text-2xl">🏆</span>
                 <div>
                   <p className="font-black text-sm leading-tight">{t("문제 풀러 가기", "Practice problems")}</p>
-                  <p className="text-[11px] text-emerald-50">{t("트리 문제 12 개 — 손으로 그려가며!", "12 tree challenges — draw the tree!")}</p>
+                  <p className="text-[11px] text-emerald-50">{t("트리 문제 15 개 — 손으로 그려가며!", "12 tree challenges — draw the tree!")}</p>
                 </div>
               </div>
               <ArrowRight className="w-5 h-5" />

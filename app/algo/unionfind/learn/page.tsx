@@ -100,7 +100,7 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {t("🐍 Python", "⚡ C++")}
+          {lang === "py" ? "🐍 Python" : "⚡ C++"}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Py / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -282,7 +282,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: 노드 5개, 연산 시퀀스 union(1,2), union(3,4), find(1), find(3), union(2,3)
   // 각 스텝마다 parent 배열 상태 표시
@@ -517,7 +517,7 @@ int main() {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "주의: union 은 C++ 예약어 비슷한 느낌이라 unite 로 써요. Python 은 union 그대로 OK.",
+                "주의: union 은 C++ 에서 실제 예약어(키워드)라 함수 이름으로 쓸 수 없어요 → unite 로 써요. Python 은 union 그대로 OK.",
                 "Note: C++ uses 'unite' (union is set-related keyword vibe). Python 'union' is fine.",
               )}
             </p>
@@ -566,7 +566,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: 1→2→3→4 체인. find(1) 호출 → 모두 parent=4 로 평탄화
   // phase: 0 = 초기, 1 = find(1) 시작, 2 = 1 → 2 따라감, 3 = 2 → 3 따라감, 4 = 3 → 4 (루트!), 5 = 평탄화 완료
@@ -577,7 +577,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   })()
   const pcMsg = (() => {
     const phases = [
-      { ko: "초기: 1 → 2 → 3 → 4 체인. find(1) 호출하면 4 번 점프 (O(N))", en: "Init: 1 → 2 → 3 → 4 chain. find(1) takes 4 hops (O(N))" },
+      { ko: "초기: 1 → 2 → 3 → 4 체인. find(1) 호출하면 3 번 점프 (O(N))", en: "Init: 1 → 2 → 3 → 4 chain. find(1) takes 3 hops (O(N))" },
       { ko: "find(1): parent[1]=2 → 1 에서 2 로 점프", en: "find(1): parent[1]=2 → hop from 1 to 2" },
       { ko: "find(1): parent[2]=3 → 2 에서 3 으로 점프", en: "find(1): parent[2]=3 → hop from 2 to 3" },
       { ko: "find(1): parent[3]=4 → 3 에서 4 로 점프", en: "find(1): parent[3]=4 → hop from 3 to 4" },
@@ -607,13 +607,13 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-white/70 rounded-lg p-3 border border-orange-200 mb-3">
               <p className="text-xs font-bold text-orange-800 mb-2">📌 {t("전후 비교", "Before / after")}</p>
               <pre className="text-xs text-gray-800 font-mono leading-relaxed">
-{t(`전:   1 → 2 → 3 → 4         find(1) = 4 점프
+{t(`전:   1 → 2 → 3 → 4         find(1) = 3 점프
                               ↑
                               (체인)
 
 후:   1 → 4                  find(1) = 1 점프 ✨
       2 → 4                  find(2) = 1 점프
-      3 → 4                  find(3) = 1 점프`, `Before: 1 → 2 → 3 → 4       find(1) = 4 hops
+      3 → 4                  find(3) = 1 점프`, `Before: 1 → 2 → 3 → 4       find(1) = 3 hops
                               ↑
                               (chain)
 
@@ -730,7 +730,7 @@ After:  1 → 4                find(1) = 1 hop ✨
 
 # 사용:
 parent = [i for i in range(N + 1)]
-union(1, 2); union(2, 3); union(3, 4)
+union(2, 1); union(3, 2); union(4, 3)   # 1→2→3→4 체인 만들기
 find(1)          # 1, 2, 3 모두 parent 가 4 로 바뀜
 print(parent)    # [_, 4, 4, 4, 4]`, `def find(x):
     if parent[x] != x:
@@ -739,7 +739,7 @@ print(parent)    # [_, 4, 4, 4, 4]`, `def find(x):
 
 # usage:
 parent = [i for i in range(N + 1)]
-union(1, 2); union(2, 3); union(3, 4)
+union(2, 1); union(3, 2); union(4, 3)   # 1→2→3→4 체인 만들기
 find(1)          # 1, 2, 3 all get parent reset to 4
 print(parent)    # [_, 4, 4, 4, 4]`)}
               cpp={t(`int find(int x) {
@@ -817,7 +817,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: 트리 A (루트 1, 크기 5) + 트리 B (루트 2, 크기 2) → 작은 쪽을 큰 쪽 밑에
   // phase 0 = 두 그룹 따로, 1 = 비교 (rank), 2 = 작은쪽이 큰쪽으로 합쳐짐

@@ -101,7 +101,7 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {t("🐍 Python", "⚡ C++")}
+          {lang === "py" ? "🐍 Python" : "⚡ C++"}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Py / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -303,7 +303,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 인터랙티브 4-Queens — 한 행씩 퀸 배치 단계 (사전 계산된 해)
   // 정답 중 하나: (0,1), (1,3), (2,0), (3,2)
@@ -579,7 +579,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: 1..3 순열 생성 — 단계별 'cur' 상태
   // 순서: [], [1], [1,2], [1,2,3]✓, [1,3], [1,3,2]✓, [2], [2,1], [2,1,3]✓, [2,3], [2,3,1]✓, [3], [3,1], [3,1,2]✓, [3,2], [3,2,1]✓
@@ -843,7 +843,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   const [pruneOn, setPruneOn] = useState(true)
 
   // arr = [3, 5, 7], K = 10
@@ -1316,7 +1316,7 @@ export default function BacktrackingPage() {
                 <span className="text-2xl">🏆</span>
                 <div>
                   <p className="font-black text-sm leading-tight">{t("문제 풀러 가기", "Practice problems")}</p>
-                  <p className="text-[11px] text-emerald-50">{t("백트래킹 문제 12 개 — 결정 트리 그려가며!", "12 backtracking challenges — sketch the tree!")}</p>
+                  <p className="text-[11px] text-emerald-50">{t("백트래킹 문제 15 개 — 결정 트리 그려가며!", "12 backtracking challenges — sketch the tree!")}</p>
                 </div>
               </div>
               <ArrowRight className="w-5 h-5" />

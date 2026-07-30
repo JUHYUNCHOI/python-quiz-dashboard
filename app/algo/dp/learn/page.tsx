@@ -102,7 +102,7 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
     <div className="rounded-xl bg-gray-900 overflow-hidden my-3">
       <div className="flex items-center justify-between bg-gray-800 px-3 py-1.5">
         <span className={cn("text-[11px] font-bold", lang === "py" ? "text-emerald-300" : "text-blue-300")}>
-          {t("🐍 Python", "⚡ C++")}
+          {lang === "py" ? "🐍 Python" : "⚡ C++"}
         </span>
         <span className="text-[10px] text-gray-500 italic">{lang === "py" ? "토글: 위쪽 'Py / C++' 버튼" : "Toggle above"}</span>
       </div>
@@ -383,7 +383,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 5
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   const [fillPassed, setFillPassed] = useState(false)
   void fillPassed
 
@@ -753,7 +753,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: knapsack — 작은 예
   // 물건: w=[2,3,4,5], v=[3,4,5,6], 배낭 용량 W=5
@@ -1048,7 +1048,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { t } = useLanguage()
   const totalSteps = 4
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(false)
+  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
@@ -1134,7 +1134,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               <p className="text-xs text-gray-800"><b className="text-blue-700">1️⃣ {t("상태", "State")}:</b> {t("dp[i] = i 번째로 끝나는 증가 부분 수열의 최대 길이", "dp[i] = max length of increasing subseq ending at i")}</p>
               <p className="text-xs text-gray-800"><b className="text-blue-700">2️⃣ {t("점화식", "Recurrence")}:</b> dp[i] = 1 + max(dp[j]) {t("for j<i 이고 a[j]<a[i]", "for j<i and a[j]<a[i]")}</p>
               <p className="text-xs text-gray-800"><b className="text-blue-700">3️⃣ {t("베이스", "Base")}:</b> {t("모든 dp[i] = 1 (자기 자신만 포함하면 길이 1)", "all dp[i] = 1 (self alone = length 1)")}</p>
-              <p className="text-xs text-gray-800"><b className="text-blue-700">4️⃣ {t("순서", "Order")}:</b> i = 0 → N-1 ({t("dp[i] 가 dp[j] (j&lt;i) 만 보니까 OK", "dp[i] only looks at dp[j] for j&lt;i — OK")})</p>
+              <p className="text-xs text-gray-800"><b className="text-blue-700">4️⃣ {t("순서", "Order")}:</b> i = 0 → N-1 ({t("dp[i] 가 dp[j] (j<i) 만 보니까 OK", "dp[i] only looks at dp[j] for j<i — OK")})</p>
             </div>
             <div className="bg-emerald-50 rounded-lg p-2 border border-emerald-300">
               <p className="text-[11px] text-emerald-900 leading-relaxed">
