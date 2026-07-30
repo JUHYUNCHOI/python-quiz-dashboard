@@ -11,7 +11,7 @@
 //     실행 줄 byte 동일. (2) C++ fast 에서 ios_base::sync_with_stdio/cin.tie 제거(학생 노이즈, 이 크기엔 불필요).
 //     알고리즘 로직 불변. algo 태그(binarysearch) 제거 — 실제는 애드혹(표 precompute).
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
@@ -302,12 +302,17 @@ export function TripletEnumSimulator({ E }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MooTraceSimulator — interactive per-j walk on s = "abcabbc".
-   Press ▶ to scan one middle position j at a time, marking
-   leftmost-different i (red), rightmost-same k (green), score.
+   MooTraceSimulator — s = "abcabbc" 위에서 포인터를 한 칸씩 걸리며 보는 시뮬.
+   비교 한 번 = 스텝 하나. 오른쪽에 *실제 제출 코드의 그 줄* 을 같이 비춘다.
    (선생님 2026-07-22: 브루트 시뮬과 같은 예제로 통일 → abcabbc.)
+   (선생님 2026-07-30: "진짜 포인터가 하나씩 코드대로 움직이는걸 보여줬으면 좋겠어".)
+
+   ⚠️ 번호는 0-based — 코드가 l -= 1 로 0-based 로 바꿔 쓰기 때문에, 셀 번호와
+      코드의 idx 가 *같은 수* 여야 "코드대로" 가 성립한다. (형제 시뮬인 브루트
+      TripletEnumSimulator 는 문제 지문의 1-based 를 쓴다 — 이 시뮬만 예외이고
+      화면에 그 사실을 한 줄로 적어 둔다.)
    ═══════════════════════════════════════════════════════════════ */
-export function MooTraceSimulator({ E }) {
+export function MooTraceSimulator({ E, lang = "py" }) {
   const str = "abcabbc";
   const l = 0, r = str.length - 1;
   const perJ = [];
@@ -374,6 +379,59 @@ export function MooTraceSimulator({ E }) {
   const safe = ts.safe;
   const s = trace[safe];
   const hasRow = s.kind === "scan" || s.kind === "score";
+
+  /* ── 코드 패널 ──────────────────────────────────────────────
+     코드를 여기 다시 베껴 쓰지 않는다 — 뒤 챕터가 보여주는 M3_FULL_* 에서
+     안쪽 블록만 잘라 쓴다. 그래야 코드를 고쳐도 시뮬이 어긋나지 않는다.
+     (slice 범위가 밀리면 하이라이트가 엉뚱한 줄을 짚으므로 아래 주석의
+      줄 번호를 기준으로 확인할 것.)                              */
+  const isCpp = lang === "cpp";
+  // py:  9 = "for j in range(l + 1, r):"  … 25 = "best = score"
+  // cpp: 16 = "for (int j = l + 1; ...)"  … 36 = 그 for 의 닫는 }
+  const CODE = isCpp ? M3_FULL_CPP.slice(16, 37) : M3_FULL_PY(E).slice(9, 26);
+  // 스텝 → 지금 실행 중인 줄 (위 slice 기준의 지역 인덱스, [from, to] 포함)
+  const hiRange = (() => {
+    if (s.kind === "scan") {
+      if (s.dir === "left")  return s.isMatch ? (isCpp ? [3, 5]   : [4, 6])
+                                              : (isCpp ? [2, 3]   : [3, 4]);
+      return                       s.isMatch ? (isCpp ? [10, 12] : [10, 12])
+                                              : (isCpp ? [9, 10]  : [9, 10]);
+    }
+    if (s.kind === "score") {
+      return s.row.score === null ? (isCpp ? [15, 15] : [13, 13])
+                                  : (isCpp ? [15, 18] : [13, 16]);
+    }
+    return null;   // init / final — 코드 하이라이트 없음
+  })();
+
+  /* 실행 중인 줄이 화면 밖으로 나가면 "코드대로" 가 안 보인다 (2026-07-30 스크린샷에서
+     오른쪽 스캔 줄이 패널 아래로 잘려 있었음). 패널은 높이를 제한해 스크롤 가능하게 하고,
+     스텝이 바뀔 때마다 그 줄을 패널 안에서만 가운데로 끌어온다.
+     block:"nearest" + 컨테이너 직접 스크롤 → 페이지 전체가 튀지 않음. */
+  const codeBoxRef = useRef(null);
+  const activeLineRef = useRef(null);
+  useEffect(() => {
+    const box = codeBoxRef.current, line = activeLineRef.current;
+    if (!box || !line) return;
+    const target = line.offsetTop - box.clientHeight / 2 + line.offsetHeight / 2;
+    box.scrollTop = Math.max(0, target);
+  }, [safe]);
+
+  /* 변수 판 — 이 순간 코드 안 변수들이 실제로 든 값. 포인터 위치(idx)를 코드
+     변수로 보여줘야 "코드대로 움직인다" 가 눈으로 확인된다. */
+  const codeVars = (() => {
+    if (!hasRow) return null;
+    if (s.kind === "scan") {
+      return {
+        j: s.row.j,
+        idx: s.cursor,
+        left_i: s.dir === "left" ? s.leftFound : s.row.left,
+        right_k: s.dir === "left" ? -1 : s.rightFound,
+        best: s.best,
+      };
+    }
+    return { j: s.row.j, idx: null, left_i: s.row.left, right_k: s.row.right, best: s.best };
+  })();
 
   /* cellRole — what each cell IS in the current step:
        "j"            → middle (yellow, locked)
@@ -495,7 +553,7 @@ export function MooTraceSimulator({ E }) {
           }}>
             <span style={{ color: C.dim, fontWeight: 600 }}>{t(E, dirEn, dirKo)}</span>{"  "}
             <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>
-              {s.cursor + 1}{t(E, "", "번")} = '{cch}'
+              s[{s.cursor}] = '{cch}'
             </span>
             {" "}{s.dir === "left"
               ? (s.isMatch ? "≠" : "=")
@@ -504,8 +562,8 @@ export function MooTraceSimulator({ E }) {
             <br />
             {s.isMatch
               ? (s.dir === "left"
-                  ? t(E, <>different! → <b>i = {s.cursor + 1}</b> decided ✔</>, <>다르다! → <b>i = {s.cursor + 1}</b> 확정 ✔</>)
-                  : t(E, <>same! → <b>k = {s.cursor + 1}</b> decided ✔</>, <>같다! → <b>k = {s.cursor + 1}</b> 확정 ✔</>))
+                  ? t(E, <>different! → <b>left_i = {s.cursor}</b> decided ✔</>, <>다르다! → <b>left_i = {s.cursor}</b> 확정 ✔</>)
+                  : t(E, <>same! → <b>right_k = {s.cursor}</b> decided ✔</>, <>같다! → <b>right_k = {s.cursor}</b> 확정 ✔</>))
               : (s.dir === "left"
                   ? t(E, "same — not what we want, keep going →", "같네 — 우리가 찾는 게 아니에요, 계속 →")
                   : t(E, "different — keep going ←", "다르네 — 계속 ←"))}
@@ -525,7 +583,7 @@ export function MooTraceSimulator({ E }) {
             ? t(E, <span style={{ fontFamily: "inherit" }}>No i or no k for this j → skip ✗</span>,
                   <span style={{ fontFamily: "inherit" }}>이 j 는 i 나 k 가 없어요 → 건너뜀 ✗</span>)
             : <>
-                ({s.row.j + 1} − <span style={{ color: "#dc2626" }}>{s.row.left + 1}</span>) × (<span style={{ color: "#16a34a" }}>{s.row.right + 1}</span> − {s.row.j + 1})
+                ({s.row.j} − <span style={{ color: "#dc2626" }}>{s.row.left}</span>) × (<span style={{ color: "#16a34a" }}>{s.row.right}</span> − {s.row.j})
                 {" = "}
                 <span style={{ color: "#dc2626" }}>{s.row.j - s.row.left}</span>×<span style={{ color: "#16a34a" }}>{s.row.right - s.row.j}</span>
                 {" = "}<b style={{ fontSize: 14 }}>{s.row.score}</b>
@@ -562,7 +620,7 @@ export function MooTraceSimulator({ E }) {
                 {labelFor(i) || "·"}
               </div>
               {/* The cell itself with optional ✗ overlay for scanned-but-skipped positions */}
-              <div style={cellStyle(i)}>
+              <div style={cellStyle(i)} data-cell={i}>
                 {ch}
                 {overlay && (
                   <span style={{
@@ -574,11 +632,75 @@ export function MooTraceSimulator({ E }) {
                   }}>{overlay}</span>
                 )}
               </div>
-              <div style={{ fontSize: 9, color: C.dim }}>{i + 1}</div>
+              {/* 0-based — 코드의 idx 와 같은 수여야 "코드대로" 가 성립 (컴포넌트 상단 주석). */}
+              <div style={{ fontSize: 9, color: isCursor(i) ? "#4338ca" : C.dim, fontWeight: isCursor(i) ? 800 : 400 }}>{i}</div>
             </div>
           );
         })}
       </div>
+
+      {/* 번호 규칙 한 줄 — 코드가 0-based 라 셀 번호도 0 부터. */}
+      <div style={{ textAlign: "center", fontSize: 9.5, color: C.dim, marginBottom: 12 }}>
+        {t(E, "cell numbers are 0-based — same as idx in the code below",
+              "칸 번호는 0 부터 — 아래 코드의 idx 와 같은 수예요")}
+      </div>
+
+      {/* ── 코드 + 변수판 — 포인터가 '코드대로' 움직이는 걸 보여주는 부분.
+             (선생님 2026-07-30) 하이라이트된 줄이 이번 스텝에 실행된 줄. ── */}
+      {CODE.length > 0 && (
+        <div style={{ maxWidth: 520, margin: "0 auto 12px" }}>
+          {codeVars && (
+            <div style={{
+              display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap", marginBottom: 6,
+              fontFamily: "'JetBrains Mono',monospace", fontSize: 10.5,
+            }}>
+              {[
+                ["j", codeVars.j, "#92400e", "#fef3c7", "#fcd34d"],
+                ["idx", codeVars.idx, "#3730a3", "#eef2ff", "#c7d2fe"],
+                ["left_i", codeVars.left_i, "#7f1d1d", "#fef2f2", "#fca5a5"],
+                ["right_k", codeVars.right_k, "#15803d", "#f0fdf4", "#86efac"],
+                ["best", codeVars.best, "#334155", "#f8fafc", "#e2e8f0"],
+              ].map(([name, val, fg, bg, bd]) => (
+                <span key={name} style={{
+                  padding: "2px 7px", borderRadius: 6, background: bg,
+                  border: `1px solid ${bd}`, color: fg, fontWeight: 700,
+                }}>
+                  {name} = {val === null ? "—" : val}
+                </span>
+              ))}
+            </div>
+          )}
+          <div ref={codeBoxRef} style={{
+            background: "#0f172a", borderRadius: 10, padding: "9px 0", overflowX: "auto",
+            // 높이 제한 + 자동 스크롤 → 실행 줄이 항상 보인다 (useEffect 참고)
+            maxHeight: 190, overflowY: "auto", scrollBehavior: "smooth",
+          }}>
+            {CODE.map((line, li) => {
+              const on = hiRange && li >= hiRange[0] && li <= hiRange[1];
+              const isFirstOn = on && li === hiRange[0];
+              return (
+                <div key={li} ref={isFirstOn ? activeLineRef : null} style={{
+                  display: "flex", alignItems: "flex-start", gap: 8,
+                  padding: "0 10px",
+                  background: on ? "rgba(99,102,241,.28)" : "transparent",
+                  borderLeft: `3px solid ${on ? "#818cf8" : "transparent"}`,
+                }}>
+                  <span style={{
+                    fontFamily: "'JetBrains Mono',monospace", fontSize: 9.5,
+                    color: on ? "#c7d2fe" : "#475569", minWidth: 14, textAlign: "right",
+                    userSelect: "none", lineHeight: 1.65,
+                  }}>{on ? "▸" : " "}</span>
+                  <pre style={{
+                    margin: 0, fontFamily: "'JetBrains Mono',monospace", fontSize: 11,
+                    lineHeight: 1.65, color: on ? "#e0e7ff" : "#94a3b8",
+                    whiteSpace: "pre", fontWeight: on ? 700 : 400,
+                  }}>{line || " "}</pre>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Score strip — one card per j tried so far.
           Shows: which j, and where the score COMES FROM as a formula.
@@ -588,7 +710,7 @@ export function MooTraceSimulator({ E }) {
           not the j position.  No prose. */}
       <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
         {perJ.slice(0, s.revealed).map((row) => {
-          const isCurrent = s.kind === "step" && row.j === s.row.j;
+          const isCurrent = hasRow && row.j === s.row.j;
           const isBest = row.score !== null && row.score === s.best && s.best >= 0;
           // (j - left_i) × (right_k - j) = score
           const f1 = row.left >= 0 ? row.j - row.left : null;
@@ -605,7 +727,7 @@ export function MooTraceSimulator({ E }) {
             }}>
               {/* Top: which j this card is about (small, dim) */}
               <div style={{ fontSize: 9.5, color: isCurrent ? "#92400e" : C.dim, fontWeight: 700 }}>
-                j = {row.j + 1}
+                j = {row.j}
               </div>
               {/* Bottom: the score, shown as a formula so '3' can't be mistaken for j.
                   Uses red/green colored factor numbers matching left_i (red) and right_k (green) cells. */}

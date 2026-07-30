@@ -333,7 +333,7 @@ export function makeMooin3Ch2(E, lang = "py") {
       narr: t(E,
         "We already saw brute (every i, j, k) is N³ per query — too slow.  The fix: pin the middle j, then search once for the best i and once for the best k.  Drag j around and see.",
         "브루트(모든 i, j, k)가 쿼리당 N³ 이라 느린 건 이미 봤죠.  개선은 — 가운데 j 를 고정하고, 최고의 i·k 를 한 번씩만 찾기.  j 드래그하면서 봐요."),
-      content: (<MooTraceSimulator E={E} />),
+      content: (<MooTraceSimulator E={E} lang={lang} />),
     },
 
     /* [결-a code] — 브루트 fix-j 전체 코드를 CodeWalk 말풍선 하나로 (선생님 2026-07-23:
