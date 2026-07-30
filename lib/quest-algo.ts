@@ -45,7 +45,10 @@ export const QUEST_ALGO: Record<string, string> = {
   mcc21menu: "tree", mcc22cardshark: "sorting", mcc22grammar: "graph", mcc22lamp: "prefixsum",
   mcc22maze: "graph", mco15honey: "greedy", mco15secret: "string", mco15trains: "shortestpath",
   milkfactory: "graph", milkorder: "topologicalsort",
-  moo: "string", moohunt: "bitmanipulation", mooin2: "prefixsum", mooin3: "binarysearch",
+  moo: "string", moohunt: "bitmanipulation", mooin2: "prefixsum",
+  // mooin3: 제거 — 검증된 통과 풀이는 이분탐색을 안 씀(2026-07-27 표+그리디로 교체).
+  //   실제 기법 = 글자별 lookup 표 precompute + 포물선 꼭짓점. 20개 표준 토픽에 딱 맞는 게 없음 → 애드혹.
+  //   greedy(가운데 고정+양끝) 만으론 O(N²) TLE 라 greedy 태그도 오해 유발 → 링크 안 띄우는 게 정확.
   moolang: "greedy", mooloo: "greedy", palindrome: "dp", photoshoot: "greedy", photoshoot2: "greedy",
   printseq: "dp", productivity: "binarysearch", reach: "shortestpath", revegetation: "greedy",
   reverseeng: "greedy", sleepclass: "greedy", sleepysort: "greedy", socialdist1: "binarysearch",

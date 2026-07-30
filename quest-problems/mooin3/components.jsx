@@ -7,6 +7,9 @@
 //   C++: 표 방식, <bits/stdc++.h> 안 씀 (iostream/vector/string).  fast 미제출 — USACO 재제출로 최종 확인 권장.
 //     (구 brute Python 3/11 · C++ 4/11)
 //   코드 수정 시 USACO 재제출 필요.  상세: REPO_ROOT/USACO_VERIFICATION.md
+//   2026-07-30 (선생님): 표시용 수정만 — (1) 코드 주석 en/ko 이중언어(M3_FULL_PY/M3_FAST_PY/CPP → (E)=>t()),
+//     실행 줄 byte 동일. (2) C++ fast 에서 ios_base::sync_with_stdio/cin.tie 제거(학생 노이즈, 이 크기엔 불필요).
+//     알고리즘 로직 불변. algo 태그(binarysearch) 제거 — 실제는 애드혹(표 precompute).
 
 import { useState } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
@@ -746,24 +749,24 @@ const M3_UPDATE_CPP = [
 ];
 
 /* Section 4: full code */
-const M3_FULL_PY = [
+const M3_FULL_PY = (E) => [
   "N, Q = map(int, input().split())",
   "s = input().strip()",
   "",
   "for q in range(Q):",
   "    l, r = map(int, input().split())",
-  "    l -= 1   # 0-based 로 변환",
+  t(E, "    l -= 1   # convert to 0-based", "    l -= 1   # 0-based 로 변환"),
   "    r -= 1",
   "    best = -1",
-  "    # 모든 가운데 자리 j 한 번씩 시도 — j 가 박힌 동안 양쪽으로 훑기.",
+  t(E, "    # Try every middle spot j — while j is pinned, scan both sides.", "    # 모든 가운데 자리 j 한 번씩 시도 — j 가 박힌 동안 양쪽으로 훑기."),
   "    for j in range(l + 1, r):",
-  "        # 왼쪽 훑기: s[j] 와 다른 글자가 *처음* 나오는 자리 → left_i",
+  t(E, "        # Left scan: FIRST spot with a different letter than s[j] -> left_i", "        # 왼쪽 훑기: s[j] 와 다른 글자가 *처음* 나오는 자리 → left_i"),
   "        left_i = -1",
   "        for idx in range(l, j):",
   "            if s[idx] != s[j]:",
   "                left_i = idx",
   "                break",
-  "        # 오른쪽 훑기: s[j] 와 같은 글자가 *마지막* 으로 있는 자리 → right_k",
+  t(E, "        # Right scan: LAST spot with the same letter as s[j] -> right_k", "        # 오른쪽 훑기: s[j] 와 같은 글자가 *마지막* 으로 있는 자리 → right_k"),
   "        right_k = -1",
   "        for idx in range(r, j, -1):",
   "            if s[idx] == s[j]:",
@@ -1069,17 +1072,17 @@ const M3_STAGE_B_CPP = [
        f(j) = (j - i)(k - j) 는 위로 볼록 포물선(∩) → 꼭짓점 (i+k)/2 근처 c 후보 2 개만.
        그 2 개를 latest_same / earliest_same 표에서 O(1) 로 바로 조회 → 쿼리당 O(26).
        공식 solution 과 동일 (표 기반, bisect 없음).  O(26·(N + Q)) — 통과.       ── */
-const M3_FAST_PY = [
+const M3_FAST_PY = (E) => [
   "import sys",
-  "input = sys.stdin.readline                     # 빠른 입력 (쿼리 3 만 개 필수)",
+  t(E, "input = sys.stdin.readline                     # fast input (essential for 30k queries)", "input = sys.stdin.readline                     # 빠른 입력 (쿼리 3 만 개 필수)"),
   "",
   "N, Q = map(int, input().split())",
   "s = input().strip()",
   "",
-  "# 세 lookup 표 — 쿼리 전에 한 번만 만들어 둠 (전처리).  chr(c+97) = 글자 c",
-  "#   latest_same[c][i]   = idx ≤ i 중 글자 c 의 가장 오른쪽 (없으면 -1)",
-  "#   earliest_same[c][i] = idx ≥ i 중 글자 c 의 가장 왼쪽 (없으면 INF)",
-  "#   nearest_diff[c][i]  = idx ≥ i 중 c 아닌 가장 왼쪽 (없으면 INF)",
+  t(E, "# Three lookup tables — built once, before any query (precompute).  chr(c+97) = letter c", "# 세 lookup 표 — 쿼리 전에 한 번만 만들어 둠 (전처리).  chr(c+97) = 글자 c"),
+  t(E, "#   latest_same[c][i]   = rightmost idx <= i that is letter c (-1 if none)", "#   latest_same[c][i]   = idx ≤ i 중 글자 c 의 가장 오른쪽 (없으면 -1)"),
+  t(E, "#   earliest_same[c][i] = leftmost idx >= i that is letter c (INF if none)", "#   earliest_same[c][i] = idx ≥ i 중 글자 c 의 가장 왼쪽 (없으면 INF)"),
+  t(E, "#   nearest_diff[c][i]  = leftmost idx >= i that is NOT c (INF if none)", "#   nearest_diff[c][i]  = idx ≥ i 중 c 아닌 가장 왼쪽 (없으면 INF)"),
   "INF = N",
   "latest_same   = [[-1]  * N for _ in range(26)]",
   "earliest_same = [[INF] * N for _ in range(26)]",
@@ -1088,7 +1091,7 @@ const M3_FAST_PY = [
   "    ch = chr(c + 97)",
   "    ls = latest_same[c]",
   "    last = -1",
-  "    for i in range(N):                         # 왼→오: 지금까지 본 c 의 마지막 위치",
+  t(E, "    for i in range(N):                         # left->right: last position of c seen so far", "    for i in range(N):                         # 왼→오: 지금까지 본 c 의 마지막 위치"),
   "        if s[i] == ch:",
   "            last = i",
   "        ls[i] = last",
@@ -1096,7 +1099,7 @@ const M3_FAST_PY = [
   "    nd = nearest_diff[c]",
   "    nxt_same = INF",
   "    nxt_diff = INF",
-  "    for i in range(N - 1, -1, -1):             # 오→왼: 앞으로 나올 c / c아님 의 첫 위치",
+  t(E, "    for i in range(N - 1, -1, -1):             # right->left: first upcoming c / non-c position", "    for i in range(N - 1, -1, -1):             # 오→왼: 앞으로 나올 c / c아님 의 첫 위치"),
   "        if s[i] == ch:",
   "            nxt_same = i",
   "        else:",
@@ -1111,17 +1114,17 @@ const M3_FAST_PY = [
   "    r -= 1",
   "    best = -1",
   "    for c in range(26):",
-  "        # i = 가장 왼쪽 '다른 글자' → (j - i) 를 최대로",
+  t(E, "        # i = leftmost DIFFERENT letter -> maximize (j - i)", "        # i = 가장 왼쪽 '다른 글자' → (j - i) 를 최대로"),
   "        i = nearest_diff[c][l]",
   "        if i >= r:",
   "            continue",
-  "        # k = 가장 오른쪽 c → (k - j) 를 최대로",
+  t(E, "        # k = rightmost c -> maximize (k - j)", "        # k = 가장 오른쪽 c → (k - j) 를 최대로"),
   "        k = latest_same[c][r]",
   "        if k <= i:",
   "            continue",
-  "        # f(j) = (j - i)(k - j) 는 위로 볼록 포물선(∩) → 꼭짓점 m 에 가까운 j 가 최대",
+  t(E, "        # f(j) = (j - i)(k - j) is an upside-down parabola (∩) -> j near the vertex m is largest", "        # f(j) = (j - i)(k - j) 는 위로 볼록 포물선(∩) → 꼭짓점 m 에 가까운 j 가 최대"),
   "        m = (i + k) // 2",
-  "        # 꼭짓점 양옆 c 후보 2 개 = 두 표에서 O(1) 로 바로 (이분 탐색 불필요)",
+  t(E, "        # the 2 c-candidates around the vertex = O(1) straight from the tables (no binary search)", "        # 꼭짓점 양옆 c 후보 2 개 = 두 표에서 O(1) 로 바로 (이분 탐색 불필요)"),
   "        for j in (latest_same[c][m], earliest_same[c][m]):",
   "            if i < j < k:",
   "                product = (j - i) * (k - j)",
@@ -1129,26 +1132,24 @@ const M3_FAST_PY = [
   "                    best = product",
   "    out.append(str(best))",
   "",
-  "sys.stdout.write('\\n'.join(out) + '\\n')   # 모아서 한 번에 출력 (쿼리마다 print 하면 느림)",
+  t(E, "sys.stdout.write('\\n'.join(out) + '\\n')   # print all at once (printing per query is slow)", "sys.stdout.write('\\n'.join(out) + '\\n')   # 모아서 한 번에 출력 (쿼리마다 print 하면 느림)"),
 ];
-const M3_FAST_CPP = [
+const M3_FAST_CPP = (E) => [
   "#include <iostream>",
   "#include <vector>",
   "#include <string>",
   "using namespace std;",
   "",
   "int main() {",
-  "    ios_base::sync_with_stdio(false);",
-  "    cin.tie(0);",
   "    int N, Q;",
   "    cin >> N >> Q;",
   "    string s;",
   "    cin >> s;",
   "",
-  "    // 세 lookup 표 — 쿼리 전에 한 번만 (전처리).  ('a'+c) = 글자 c",
-  "    //   latest_same[c][i]   = idx ≤ i 중 c 의 가장 오른쪽 (없으면 -1)",
-  "    //   earliest_same[c][i] = idx ≥ i 중 c 의 가장 왼쪽 (없으면 INF)",
-  "    //   nearest_diff[c][i]  = idx ≥ i 중 c 아닌 가장 왼쪽 (없으면 INF)",
+  t(E, "    // Three lookup tables — once, before any query (precompute).  ('a'+c) = letter c", "    // 세 lookup 표 — 쿼리 전에 한 번만 (전처리).  ('a'+c) = 글자 c"),
+  t(E, "    //   latest_same[c][i]   = rightmost idx <= i that is c (-1 if none)", "    //   latest_same[c][i]   = idx ≤ i 중 c 의 가장 오른쪽 (없으면 -1)"),
+  t(E, "    //   earliest_same[c][i] = leftmost idx >= i that is c (INF if none)", "    //   earliest_same[c][i] = idx ≥ i 중 c 의 가장 왼쪽 (없으면 INF)"),
+  t(E, "    //   nearest_diff[c][i]  = leftmost idx >= i that is NOT c (INF if none)", "    //   nearest_diff[c][i]  = idx ≥ i 중 c 아닌 가장 왼쪽 (없으면 INF)"),
   "    int INF = N;",
   "    vector<vector<int>> latest_same  (26, vector<int>(N, -1));",
   "    vector<vector<int>> earliest_same(26, vector<int>(N, INF));",
@@ -1156,12 +1157,12 @@ const M3_FAST_CPP = [
   "    for (int c = 0; c < 26; c++) {",
   "        char ch = 'a' + c;",
   "        int last = -1;",
-  "        for (int i = 0; i < N; i++) {              // 왼→오",
+  t(E, "        for (int i = 0; i < N; i++) {              // left->right", "        for (int i = 0; i < N; i++) {              // 왼→오"),
   "            if (s[i] == ch) last = i;",
   "            latest_same[c][i] = last;",
   "        }",
   "        int nxt_same = INF, nxt_diff = INF;",
-  "        for (int i = N - 1; i >= 0; i--) {         // 오→왼",
+  t(E, "        for (int i = N - 1; i >= 0; i--) {         // right->left", "        for (int i = N - 1; i >= 0; i--) {         // 오→왼"),
   "            if (s[i] == ch) nxt_same = i;",
   "            else            nxt_diff = i;",
   "            earliest_same[c][i] = nxt_same;",
@@ -1176,12 +1177,12 @@ const M3_FAST_CPP = [
   "        r--;",
   "        long long best = -1;",
   "        for (int c = 0; c < 26; c++) {",
-  "            int i = nearest_diff[c][l];            // 가장 왼쪽 '다른 글자'",
+  t(E, "            int i = nearest_diff[c][l];            // leftmost DIFFERENT letter", "            int i = nearest_diff[c][l];            // 가장 왼쪽 '다른 글자'"),
   "            if (i >= r) continue;",
-  "            int k = latest_same[c][r];             // 가장 오른쪽 c",
+  t(E, "            int k = latest_same[c][r];             // rightmost c", "            int k = latest_same[c][r];             // 가장 오른쪽 c"),
   "            if (k <= i) continue;",
-  "            int m = (i + k) / 2;                   // 포물선 꼭짓점",
-  "            // 꼭짓점 양옆 c 후보 2 개 — 두 표에서 O(1)",
+  t(E, "            int m = (i + k) / 2;                   // parabola vertex", "            int m = (i + k) / 2;                   // 포물선 꼭짓점"),
+  t(E, "            // the 2 c-candidates around the vertex — O(1) from the tables", "            // 꼭짓점 양옆 c 후보 2 개 — 두 표에서 O(1)"),
   "            int cand[2] = { latest_same[c][m], earliest_same[c][m] };",
   "            for (int t = 0; t < 2; t++) {",
   "                int j = cand[t];",
@@ -1219,7 +1220,7 @@ export function getMooin3Walk(E, lang = "py", mode = "brute") {
         { hi: [38, 38], bubble: t(E, "Print this query's answer.", "이 쿼리의 답 출력.") },
       ] };
     }
-    return { code: M3_FULL_PY, vars: _M3_VARS, beats: [
+    return { code: M3_FULL_PY(E), vars: _M3_VARS, beats: [
       { hi: [0, 1],   bubble: t(E, "Input first — read N, Q, then the string s.", "입력부터 — N, Q 읽고 문자열 s.") },
       { hi: [3, 7],   bubble: t(E, "Each query: read l, r → 0-based (l−=1, r−=1). Start best = -1.", "쿼리마다 l, r 읽고 0-based (l−=1, r−=1). best = -1 로 시작.") },
       { hi: [8, 9],   bubble: t(E, "Pin the middle spot j — for each j we look both ways once.", "가운데 자리 j 를 하나씩 박아요 — j 마다 양쪽을 한 번씩.") },
@@ -1231,16 +1232,16 @@ export function getMooin3Walk(E, lang = "py", mode = "brute") {
   }
   // mode === "fast" — O(26) per query: 3 lookup tables + parabola vertex
   if (lang === "cpp") {
-    return { code: M3_FAST_CPP, vars: _M3_VARS, beats: [
-      { hi: [5, 11],  bubble: t(E, "Fast input (sync_with_stdio) + read N, Q, s — Q up to 30,000.", "빠른 입력(sync_with_stdio) + N, Q, s 읽기 — 쿼리 3만 개.") },
-      { hi: [13, 35], bubble: t(E, "PRECOMPUTE once, before any query: for each letter, 3 tables. Left→right fills latest_same; right→left fills earliest_same & nearest_diff. After this, each lookup is O(1).", "전처리 — 쿼리 전에 한 번만: 글자마다 표 3개. 왼→오로 latest_same, 오→왼으로 earliest_same·nearest_diff. 이러면 조회가 O(1).") },
-      { hi: [37, 42], bubble: t(E, "Each query: read l, r → 0-based. best = -1.", "쿼리마다 l, r 읽고 0-based. best = -1.") },
-      { hi: [43, 47], bubble: t(E, "Loop over the 26 LETTERS c (not j!). For each c, grab the leftmost 'different' i and the rightmost c = k straight from the tables.", "j 대신 글자 c 26개로 루프. c 마다 가장 왼쪽 '다른' i, 가장 오른쪽 c = k 를 표에서 바로.") },
-      { hi: [48, 57], bubble: t(E, "f(j) = (j−i)(k−j) is an ∩-parabola → biggest near the midpoint m. Check just the 2 candidates around m (O(1), no binary search).", "f(j)=(j−i)(k−j) 는 위로 볼록(∩) 포물선 → 꼭짓점 m 근처가 최대. m 양옆 후보 2개만 확인 (O(1), 이분 탐색 없이).") },
-      { hi: [59, 59], bubble: t(E, "Print the answer.", "답 출력.") },
+    return { code: M3_FAST_CPP(E), vars: _M3_VARS, beats: [
+      { hi: [5, 9],   bubble: t(E, "Read N, Q, and the string s — Q up to 30,000.", "N, Q 와 문자열 s 읽기 — 쿼리 3만 개.") },
+      { hi: [11, 33], bubble: t(E, "PRECOMPUTE once, before any query: for each letter, 3 tables. Left→right fills latest_same; right→left fills earliest_same & nearest_diff. After this, each lookup is O(1).", "전처리 — 쿼리 전에 한 번만: 글자마다 표 3개. 왼→오로 latest_same, 오→왼으로 earliest_same·nearest_diff. 이러면 조회가 O(1).") },
+      { hi: [35, 40], bubble: t(E, "Each query: read l, r → 0-based. best = -1.", "쿼리마다 l, r 읽고 0-based. best = -1.") },
+      { hi: [41, 45], bubble: t(E, "Loop over the 26 LETTERS c (not j!). For each c, grab the leftmost 'different' i and the rightmost c = k straight from the tables.", "j 대신 글자 c 26개로 루프. c 마다 가장 왼쪽 '다른' i, 가장 오른쪽 c = k 를 표에서 바로.") },
+      { hi: [46, 55], bubble: t(E, "f(j) = (j−i)(k−j) is an ∩-parabola → biggest near the midpoint m. Check just the 2 candidates around m (O(1), no binary search).", "f(j)=(j−i)(k−j) 는 위로 볼록(∩) 포물선 → 꼭짓점 m 근처가 최대. m 양옆 후보 2개만 확인 (O(1), 이분 탐색 없이).") },
+      { hi: [57, 57], bubble: t(E, "Print the answer.", "답 출력.") },
     ] };
   }
-  return { code: M3_FAST_PY, vars: _M3_VARS, beats: [
+  return { code: M3_FAST_PY(E), vars: _M3_VARS, beats: [
     { hi: [0, 4],   bubble: t(E, "Fast input (sys.stdin.readline) + read N, Q, s — Q up to 30,000.", "빠른 입력(sys.stdin.readline) + N, Q, s 읽기 — 쿼리 3만 개.") },
     { hi: [6, 32],  bubble: t(E, "PRECOMPUTE once, before any query: for each letter, 3 tables. Left→right fills latest_same; right→left fills earliest_same & nearest_diff. After this, each lookup is O(1).", "전처리 — 쿼리 전에 한 번만: 글자마다 표 3개. 왼→오로 latest_same, 오→왼으로 earliest_same·nearest_diff. 이러면 조회가 O(1).") },
     { hi: [34, 39], bubble: t(E, "Each query: read l, r → 0-based. best = -1.", "쿼리마다 l, r 읽고 0-based. best = -1.") },
@@ -1313,7 +1314,7 @@ export function getMooin3Sections(E) {
     {
       label: t(E, "🎯 4. Full Code (fix-j, O(N²))", "🎯 4. 전체 코드 (j 고정, O(N²))"),
       color: "#7c3aed",
-      py: M3_FULL_PY, cpp: M3_FULL_CPP,
+      py: M3_FULL_PY(E), cpp: M3_FULL_CPP,
       why: [
         t(E, "All four parts wired together. Reads input, walks every j, tracks the best product.",
             "네 조각이 합쳐진 모습. 입력 읽고, 모든 j 훑고, 최고 곱 추적."),
@@ -1326,7 +1327,7 @@ export function getMooin3Sections(E) {
       label: t(E, "5️⃣ What if N is big?", "5️⃣ N 이 크면 어떻게 될까?"),
       color: "#dc2626",
       // 같은 brute 코드를 다시 보여주고 — 이번엔 분석.
-      py: M3_FULL_PY, cpp: M3_FULL_CPP,
+      py: M3_FULL_PY(E), cpp: M3_FULL_CPP,
       why: [
         t(E, "The inner two scans (left for i, right for k) walk the array — O(N) each, so per-j work is O(N).",
             "안쪽 두 스캔 (왼쪽으로 i, 오른쪽으로 k) 가 배열을 훑어요 — 각 O(N), j 마다 O(N) 일."),
@@ -1376,7 +1377,7 @@ export function getMooin3Sections(E) {
       label: t(E, "8️⃣ Parabola vertex + lookup tables — only 2 j candidates per c",
                   "8️⃣ 포물선 꼭짓점 + lookup 표 — c 마다 후보 j 2 개만 (이분 탐색 없음)"),
       color: "#15803d",
-      py: M3_FAST_PY, cpp: M3_FAST_CPP,
+      py: M3_FAST_PY(E), cpp: M3_FAST_CPP(E),
       why: [
         t(E, "With c fixed, i = leftmost different char and k = rightmost c are fixed too.  f(j) = (j − i)·(k − j) is an upward-convex (∩) parabola, biggest at the vertex (i + k) / 2.",
             "c 가 정해지면 i = 가장 왼쪽 다른 글자, k = 가장 오른쪽 c 도 정해짐. f(j) = (j − i)·(k − j) 는 위로 볼록(∩) 포물선 → 꼭짓점 (i + k) / 2 에서 최대."),
