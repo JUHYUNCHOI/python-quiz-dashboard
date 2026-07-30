@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMooin3Sections, getMooin3Walk, MooTraceSimulator, TripletEnumSimulator } from "./components";
+import { getMooin3Sections, getMooin3Walk, MooTraceSimulator, TripletEnumSimulator, Mooin3FastSim } from "./components";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
@@ -360,6 +360,17 @@ export function makeMooin3Ch2(E, lang = "py") {
         "j 고정 버전은 문제를 *정확히* 풀어요 — 근데 N 이 얼마나 커질 수 있지? 연산량을 세어 봐요."),
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
+
+    /* [결-c 시뮬] — 빠른 풀이(글자로 묶기→i·k→포물선)를 코드 前에 눈으로 (선생님 2026-07-30:
+       "쉽고 시뮬로 이해가 다 되고 모든 테스트 통과"). fix-j 와 같은 예제로 답 8 재확인. */
+    {
+      type: "reveal",
+      label: t(E, "Idea: check by letter", "아이디어: 글자로 확인"),
+      narr: t(E,
+        "The fast solution has one big leap — instead of every middle spot j, check per LETTER.  Step through it here first, then the code will just be what you already saw.",
+        "빠른 풀이의 핵심 도약은 하나 — 모든 가운데 자리 j 말고 '글자'마다 확인하는 거예요.  여기서 먼저 한 단계씩 보고 나면, 코드는 이미 본 걸 그대로 옮긴 게 돼요."),
+      content: (<Mooin3FastSim E={E} />),
+    },
 
     /* [결-c code] — 빠른 O(26) 코드를 CodeWalk 말풍선 하나로 (3단계 점진 코드 → 최종 코드 +
        '도약' 말풍선). 코드 위 노트 벽 3스텝 → 1스텝 (선생님 2026-07-23). */

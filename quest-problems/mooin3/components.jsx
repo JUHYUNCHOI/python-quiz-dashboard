@@ -320,20 +320,60 @@ export function MooTraceSimulator({ E }) {
     const score = (left >= 0 && right >= 0) ? (j - left) * (right - j) : null;
     perJ.push({ j, sj, left, right, score });
   }
-  // 각 j 를 두 박자로 (선생님 2026-07-22: "스텝으로 안 하고 뛰어넘었다" — i·k 가 한꺼번에
-  // 튀어나오지 않게): ① 왼쪽 스캔 → left_i, ② 오른쪽 스캔 → right_k → 점수.
+  // 한 칸에 한 스텝 (선생님 2026-07-30: "이거 스텝바이스텝으로 보여주면 안되나?").
+  //
+  // 이력: 원래는 j 하나에 한 스텝 → 2026-07-22 "스텝으로 안 하고 뛰어넘었다" 지적으로
+  // ①왼쪽/②오른쪽 두 박자로 쪼갰다. 그런데 한 박자 *안에서* 스캔 결과(i 또는 k)와 ✗
+  // 발자국이 통째로 나타나서, 정작 "한 칸씩 걸어가며 비교하는" 장면은 여전히 없었다.
+  // → 이제 비교 한 번 = 스텝 하나. 각 스텝은 커서가 놓인 칸 하나와 그 비교 결과만 보여준다.
+  //
+  // 스텝 종류:
+  //   scan  — 커서가 cursor 칸에 있고, str[cursor] 를 j 글자와 비교하는 순간.
+  //           isMatch=true 면 그 스캔이 여기서 끝난다(i 또는 k 확정).
+  //   score — 스캔 둘 다 끝난 뒤 점수를 계산해 카드로 공개.
   const trace = [{ kind: "init", revealed: 0, best: -1 }];
   let best = -1;
-  perJ.forEach((row, i) => {
-    trace.push({ kind: "step", row, phase: "left", revealed: i, best });
+  perJ.forEach((row, ri) => {
+    const leftSeen = [];
+    // 왼쪽 스캔: 왼쪽 끝(l)부터 오른쪽으로. j 와 *다른* 글자를 처음 만나면 거기가 i.
+    for (let i = l; i < row.j; i++) {
+      const isMatch = str[i] !== row.sj;
+      trace.push({
+        kind: "scan", row, dir: "left", cursor: i, isMatch,
+        leftSeen: [...leftSeen], leftFound: isMatch ? i : -1,
+        rightSeen: [], rightFound: -1,
+        revealed: ri, best,
+      });
+      if (isMatch) break;
+      leftSeen.push(i);           // 같은 글자였음 → ✗ 발자국으로 남김
+    }
+    const rightSeen = [];
+    // 오른쪽 스캔: 오른쪽 끝(r)부터 왼쪽으로. j 와 *같은* 글자를 처음 만나면 거기가 k.
+    for (let k = r; k > row.j; k--) {
+      const isMatch = str[k] === row.sj;
+      trace.push({
+        kind: "scan", row, dir: "right", cursor: k, isMatch,
+        leftSeen: [...leftSeen], leftFound: row.left,
+        rightSeen: [...rightSeen], rightFound: isMatch ? k : -1,
+        revealed: ri, best,
+      });
+      if (isMatch) break;
+      rightSeen.push(k);
+    }
     if (row.score !== null && row.score > best) best = row.score;
-    trace.push({ kind: "step", row, phase: "right", revealed: i + 1, best });
+    trace.push({
+      kind: "score", row,
+      leftSeen: [...leftSeen], leftFound: row.left,
+      rightSeen: [...rightSeen], rightFound: row.right,
+      revealed: ri + 1, best,
+    });
   });
   trace.push({ kind: "final", revealed: perJ.length, best });
 
   const ts = useTraceStep(trace);
   const safe = ts.safe;
   const s = trace[safe];
+  const hasRow = s.kind === "scan" || s.kind === "score";
 
   /* cellRole — what each cell IS in the current step:
        "j"            → middle (yellow, locked)
@@ -344,19 +384,20 @@ export function MooTraceSimulator({ E }) {
        "outside"      → not scanned at all in this j
      The "skipped_*" roles let the student SEE the scan path
      without reading text — footprints from outside-l → j and outside-r → j. */
+  // 커서 = 지금 이 순간 비교하고 있는 칸 하나. 색은 cellRole 이, 링은 isCursor 가 담당.
+  const isCursor = (i) => s.kind === "scan" && i === s.cursor;
+
   const cellRole = (i) => {
-    if (s.kind !== "step") return "outside";
+    if (!hasRow) return "outside";
     if (i === s.row.j) return "j";
-    if (i === s.row.left) return "left_i";
-    // Left scan walks l → j-1, stopping at first different letter.
-    const leftScanEnd = s.row.left >= 0 ? s.row.left : s.row.j;
-    if (i >= l && i < leftScanEnd) return "skipped_left";
-    // right_k / right footprints only appear in the 2nd beat (phase "right").
-    if (s.phase === "right") {
-      if (i === s.row.right) return "right_k";
-      const rightScanStart = s.row.right >= 0 ? s.row.right : s.row.j;
-      if (i > rightScanStart && i <= r) return "skipped_right";
-    }
+    // 확정된 i / k 는 커서보다 우선 — "찾았다" 가 색으로 남아야 하니까.
+    if (s.leftFound >= 0 && i === s.leftFound) return "left_i";
+    if (s.rightFound >= 0 && i === s.rightFound) return "right_k";
+    // 아직 비교 중인 칸 (확정 아님)
+    if (isCursor(i)) return s.dir === "left" ? "cursor_left" : "cursor_right";
+    // 이미 보고 지나간 칸 → ✗ 발자국
+    if (s.leftSeen.includes(i)) return "skipped_left";
+    if (s.rightSeen.includes(i)) return "skipped_right";
     return "outside";
   };
   const cellStyle = (i) => {
@@ -365,17 +406,25 @@ export function MooTraceSimulator({ E }) {
       j:             { bg: "#fef3c7", bd: "#f59e0b", fg: "#92400e", op: 1 },
       left_i:        { bg: "#fee2e2", bd: "#dc2626", fg: "#7f1d1d", op: 1 },
       right_k:       { bg: "#dcfce7", bd: "#16a34a", fg: "#15803d", op: 1 },
+      // 비교 중 — 확정색(빨강/초록)과 구별되게 남색. "아직 결정 안 됨" 을 뜻함.
+      cursor_left:   { bg: "#eef2ff", bd: "#6366f1", fg: "#3730a3", op: 1 },
+      cursor_right:  { bg: "#eef2ff", bd: "#6366f1", fg: "#3730a3", op: 1 },
       skipped_left:  { bg: "#fef2f2", bd: "#fca5a5", fg: "#991b1b", op: 0.55 },
       skipped_right: { bg: "#f0fdf4", bd: "#86efac", fg: "#166534", op: 0.55 },
       outside:       { bg: "#fff",    bd: "#cbd5e1", fg: "#475569", op: 1 },
     };
     const p = PALETTE[role];
+    const cur = isCursor(i);
     return {
       width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
       borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16,
-      background: p.bg, border: `1px solid ${p.bd}`, color: p.fg, opacity: p.op,
+      background: p.bg, border: `${cur ? 2 : 1}px solid ${p.bd}`, color: p.fg, opacity: p.op,
       transition: "all .2s",
       position: "relative",
+      // 커서 칸만 살짝 키우고 링 — 눈이 "지금 여기" 를 바로 찾게.
+      transform: cur ? "scale(1.12)" : "none",
+      boxShadow: cur ? "0 0 0 3px rgba(99,102,241,.25)" : "none",
+      zIndex: cur ? 1 : 0,
     };
   };
   const labelFor = (i) => {
@@ -383,6 +432,8 @@ export function MooTraceSimulator({ E }) {
     if (role === "j") return "j";
     if (role === "left_i") return "left_i";
     if (role === "right_k") return "right_k";
+    // 비교 중인 칸엔 이름을 안 붙임 — 아직 i/k 가 아니니까. 대신 '보는 중' 표시.
+    if (role === "cursor_left" || role === "cursor_right") return "?";
     return "";
   };
   const overlayFor = (i) => {
@@ -395,9 +446,12 @@ export function MooTraceSimulator({ E }) {
   //                     and ◀◀◀ from r-edge toward where right_k was found.
   // Anchored on the OUTSIDE end of each scan so the student sees "scan starts here, lands there".
   const arrowFor = (i) => {
-    if (s.kind !== "step") return null;
-    if (i === l) return "▶";  // left scan start (both beats)
-    if (i === r && s.phase === "right") return "◀";  // right scan start (2nd beat only)
+    if (!hasRow) return null;
+    // 스캔 중이면 화살표가 *커서 위* 에 온다 — 어느 방향으로 걸어가는 중인지 보이게.
+    if (s.kind === "scan") return i === s.cursor ? (s.dir === "left" ? "▶" : "◀") : null;
+    // 점수 단계에선 두 스캔이 시작한 양 끝을 표시.
+    if (i === l) return "▶";
+    if (i === r) return "◀";
     return null;
   };
 
@@ -412,17 +466,70 @@ export function MooTraceSimulator({ E }) {
         subtitle={`(${safe + 1} / ${trace.length})`}
       />
 
-      {/* Two-beat caption: ① scan left → i, ② scan right → k → score. */}
-      {s.kind === "step" && (
+      {/* 항상 보이는 규칙 한 줄 — 학생이 "뭘 찾는 중이었지?" 로 돌아오지 않게. */}
+      {hasRow && (
         <div style={{
-          textAlign: "center", fontSize: 12, fontWeight: 700, marginBottom: 12, wordBreak: "keep-all",
-          color: s.phase === "left" ? "#dc2626" : "#16a34a",
+          textAlign: "center", fontSize: 10.5, color: C.dim, marginBottom: 6,
+          wordBreak: "keep-all", lineHeight: 1.5,
         }}>
-          {s.phase === "left"
-            ? t(E, "① Scan LEFT from the edge → first letter different from j = i (red).",
-                  "① 왼쪽 끝에서 스캔 → j 와 처음으로 다른 글자 = i (빨강).")
-            : t(E, "② Scan RIGHT from the edge → first letter same as j = k (green).  Score = (j−i)×(k−j).",
-                  "② 오른쪽 끝에서 스캔 → j 와 처음으로 같은 글자 = k (초록).  점수 = (j−i)×(k−j).")}
+          {t(E,
+            <>j is fixed (yellow). Find <b style={{ color: "#dc2626" }}>i</b> = leftmost letter <b>different</b> from j, and <b style={{ color: "#16a34a" }}>k</b> = rightmost letter <b>same</b> as j.</>,
+            <>j 는 고정 (노랑). <b style={{ color: "#dc2626" }}>i</b> = j 와 <b>다른</b> 글자 중 가장 왼쪽, <b style={{ color: "#16a34a" }}>k</b> = j 와 <b>같은</b> 글자 중 가장 오른쪽.</>)}
+        </div>
+      )}
+
+      {/* 스텝 말풍선 — 이번 한 번의 비교를 글자와 번호로 그대로 말해준다.
+          (추상적인 "i 를 찾는다" 대신 "2번 = 'a' vs j = 'b' → 다르다") */}
+      {s.kind === "scan" && (() => {
+        const cch = str[s.cursor], jch = s.row.sj;
+        const dirKo = s.dir === "left" ? "왼쪽에서 →" : "오른쪽에서 ←";
+        const dirEn = s.dir === "left" ? "from the left →" : "from the right ←";
+        const col = s.isMatch ? (s.dir === "left" ? "#dc2626" : "#16a34a") : "#4338ca";
+        return (
+          <div style={{
+            maxWidth: 460, margin: "0 auto 12px", padding: "9px 13px", borderRadius: 10,
+            background: s.isMatch ? (s.dir === "left" ? "#fef2f2" : "#f0fdf4") : "#eef2ff",
+            border: `1.5px solid ${s.isMatch ? (s.dir === "left" ? "#fca5a5" : "#86efac") : "#c7d2fe"}`,
+            fontSize: 12, fontWeight: 700, color: col, textAlign: "center",
+            wordBreak: "keep-all", lineHeight: 1.6,
+          }}>
+            <span style={{ color: C.dim, fontWeight: 600 }}>{t(E, dirEn, dirKo)}</span>{"  "}
+            <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>
+              {s.cursor + 1}{t(E, "", "번")} = '{cch}'
+            </span>
+            {" "}{s.dir === "left"
+              ? (s.isMatch ? "≠" : "=")
+              : (s.isMatch ? "=" : "≠")}{" "}
+            <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>j = '{jch}'</span>
+            <br />
+            {s.isMatch
+              ? (s.dir === "left"
+                  ? t(E, <>different! → <b>i = {s.cursor + 1}</b> decided ✔</>, <>다르다! → <b>i = {s.cursor + 1}</b> 확정 ✔</>)
+                  : t(E, <>same! → <b>k = {s.cursor + 1}</b> decided ✔</>, <>같다! → <b>k = {s.cursor + 1}</b> 확정 ✔</>))
+              : (s.dir === "left"
+                  ? t(E, "same — not what we want, keep going →", "같네 — 우리가 찾는 게 아니에요, 계속 →")
+                  : t(E, "different — keep going ←", "다르네 — 계속 ←"))}
+          </div>
+        );
+      })()}
+
+      {/* 점수 단계 — 스캔이 다 끝난 뒤에만 계산식을 보여준다. */}
+      {s.kind === "score" && (
+        <div style={{
+          maxWidth: 460, margin: "0 auto 12px", padding: "9px 13px", borderRadius: 10,
+          background: "#fffbeb", border: "1.5px solid #fcd34d",
+          fontSize: 12, fontWeight: 700, color: "#92400e", textAlign: "center",
+          wordBreak: "keep-all", lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace",
+        }}>
+          {s.row.score === null
+            ? t(E, <span style={{ fontFamily: "inherit" }}>No i or no k for this j → skip ✗</span>,
+                  <span style={{ fontFamily: "inherit" }}>이 j 는 i 나 k 가 없어요 → 건너뜀 ✗</span>)
+            : <>
+                ({s.row.j + 1} − <span style={{ color: "#dc2626" }}>{s.row.left + 1}</span>) × (<span style={{ color: "#16a34a" }}>{s.row.right + 1}</span> − {s.row.j + 1})
+                {" = "}
+                <span style={{ color: "#dc2626" }}>{s.row.j - s.row.left}</span>×<span style={{ color: "#16a34a" }}>{s.row.right - s.row.j}</span>
+                {" = "}<b style={{ fontSize: 14 }}>{s.row.score}</b>
+              </>}
         </div>
       )}
 
@@ -540,6 +647,183 @@ export function MooTraceSimulator({ E }) {
 
       {/* Nav */}
       <SharedSimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Mooin3FastSim — 빠른 풀이(글자로 묶기 → i·k → 포물선 j)를 코드 前에 눈으로.
+   fix-j 시뮬과 같은 예제(abcabbc)로 이어받아, "모든 j" 대신 "글자 3개"만
+   확인해도 같은 답 8 이 나오는 걸 보여줌. 마지막에 그 3동작을 표 3개에 연결.
+   (선생님 2026-07-30: "쉽고 시뮬로 이해가 다 되고 모든 테스트 통과".)
+   ═══════════════════════════════════════════════════════════════ */
+export function Mooin3FastSim({ E }) {
+  const FA = "#7c3aed";
+  const str = "abcabbc";           // fix-j 시뮬과 동일 예제
+  const l = 0, r = str.length - 1;
+  const LETTERS = [...new Set(str.split(""))].sort();   // a, b, c
+
+  // 글자마다: i=가장 왼쪽 '다른 글자', k=가장 오른쪽 그 글자, j=i·k 사이 중간(m)에 가장 가까운 그 글자
+  const perC = LETTERS.map((c) => {
+    let i = -1; for (let x = l; x <= r; x++) if (str[x] !== c) { i = x; break; }
+    let k = -1; for (let x = r; x >= l; x--) if (str[x] === c) { k = x; break; }
+    let j = -1, area = null, m = null;
+    if (i >= 0 && k >= 0 && i < k) {
+      m = (i + k) / 2;
+      let bd = Infinity;
+      for (let x = i + 1; x < k; x++) if (str[x] === c) { const d = Math.abs(x - m); if (d < bd) { bd = d; j = x; } }
+      if (j >= 0) area = (j - i) * (k - j);
+    }
+    return { c, i, k, j, area, m };
+  });
+
+  const trace = [{ kind: "intro", revealed: 0 }];
+  perC.forEach((row, ci) => {
+    trace.push({ kind: "letter", ci, phase: "ik", revealed: ci });
+    trace.push({ kind: "letter", ci, phase: "j", revealed: ci + 1 });
+  });
+  trace.push({ kind: "final", revealed: perC.length });
+
+  const ts = useTraceStep(trace);
+  const s = trace[ts.safe];
+  const cur = s.kind === "letter" ? perC[s.ci] : null;
+
+  const cellStyle = (x) => {
+    let role = "outside";
+    if (cur) {
+      if (s.phase === "j" && x === cur.j) role = "j";
+      else if (x === cur.i) role = "i";
+      else if (x === cur.k) role = "k";
+      else if (str[x] === cur.c) role = "cpos";
+    }
+    const P = {
+      j:       { bg: "#fef3c7", bd: "#f59e0b", fg: "#92400e", op: 1 },
+      i:       { bg: "#fee2e2", bd: "#dc2626", fg: "#7f1d1d", op: 1 },
+      k:       { bg: "#dcfce7", bd: "#16a34a", fg: "#15803d", op: 1 },
+      cpos:    { bg: "#f3e8ff", bd: "#c4b5fd", fg: "#6b21a8", op: 1 },
+      outside: { bg: "#fff",    bd: "#cbd5e1", fg: "#94a3b8", op: 0.6 },
+    }[role];
+    return {
+      width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+      borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 16,
+      background: P.bg, border: `1px solid ${P.bd}`, color: P.fg, opacity: P.op,
+      transition: "all .2s", position: "relative",
+    };
+  };
+  const labelFor = (x) => {
+    if (!cur) return "";
+    if (s.phase === "j" && x === cur.j) return "j";
+    if (x === cur.i) return "i";
+    if (x === cur.k) return "k";
+    return "";
+  };
+  const labelColor = (x) => {
+    if (!cur) return "transparent";
+    if (s.phase === "j" && x === cur.j) return "#92400e";
+    if (x === cur.i) return "#dc2626";
+    if (x === cur.k) return "#16a34a";
+    return "transparent";
+  };
+  // 중간점 m 마커 (phase j 에서만) — m 에 가장 가까운 칸 아래 ▲
+  const mCell = (cur && s.phase === "j" && cur.m !== null) ? Math.round(cur.m) : -1;
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader
+        accent={FA}
+        idx={ts.safe}
+        total={trace.length}
+        isEn={E}
+        title={t(E, `s = "${str}"  —  fast: check by LETTER`, `s = "${str}"  —  빠른 풀이: 글자로 확인`)}
+        subtitle={`(${ts.safe + 1} / ${trace.length})`}
+      />
+
+      {/* 말풍선 — 이 단계에서 무슨 일이 일어나는지 (코드 前 이해용). */}
+      <div style={{
+        maxWidth: 560, margin: "0 auto 14px", background: "#faf5ff", border: `1.5px solid ${FA}`,
+        borderRadius: 12, padding: "11px 15px", fontSize: 13, lineHeight: 1.65, color: "#5b21b6",
+        wordBreak: "keep-all", textAlign: "center",
+      }}>
+        {s.kind === "intro" && t(E,
+          "Fix-j checked every middle spot (5 here). But notice: in every moo the middle and the right are the SAME letter. So instead of every spot, just check per LETTER — only a, b, c here.",
+          "fix-j 는 가운데 자리를 전부(여기선 5개) 확인했죠. 근데 보세요 — 모든 moo 에서 '가운데'와 '오른쪽'은 같은 글자예요. 그러니 자리마다 말고, 글자마다만 확인하면 돼요 — 여기선 a, b, c 셋뿐.")}
+        {s.kind === "letter" && s.phase === "ik" && t(E,
+          `Letter c = '${cur.c}':  far-right '${cur.c}' = k (green, biggest k−j room),  far-left NON-'${cur.c}' = i (red, biggest j−i room).`,
+          `글자 c = '${cur.c}':  가장 오른쪽 '${cur.c}' = k (초록, k−j 최대),  가장 왼쪽 '${cur.c} 아닌 글자' = i (빨강, j−i 최대).`)}
+        {s.kind === "letter" && s.phase === "j" && (cur.area !== null
+          ? t(E,
+              `Put j (a '${cur.c}') near the midpoint m — (j−i)(k−j) is a rectangle, biggest in the middle. Only the '${cur.c}' closest to m matters.  Area = (${cur.j - cur.i})×(${cur.k - cur.j}) = ${cur.area}.`,
+              `j (='${cur.c}') 는 중간 m 근처에 — (j−i)(k−j) 는 직사각형 넓이라 가운데서 최대. m 에 가장 가까운 '${cur.c}' 하나만 보면 돼요.  넓이 = (${cur.j - cur.i})×(${cur.k - cur.j}) = ${cur.area}.`)
+          : t(E,
+              `No '${cur.c}' sits strictly between i and k → letter '${cur.c}' makes no moo. Skip it.`,
+              `i 와 k 사이에 '${cur.c}' 가 없어요 → 글자 '${cur.c}' 로는 moo 없음. 넘어가요.`))}
+        {s.kind === "final" && t(E,
+          "Same answer as fix-j: 8 ⭐ (from c = 'c').  But we checked only 3 LETTERS, not every spot.",
+          "fix-j 와 같은 답: 8 ⭐ (c = 'c' 에서).  근데 자리 전부가 아니라 글자 3개만 확인했어요.")}
+      </div>
+
+      {/* 문자열 행 */}
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 4 }}>
+        {str.split("").map((ch, x) => (
+          <div key={x} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+            <div style={{ fontSize: 11, height: 14, fontWeight: 700, color: labelColor(x) }}>{labelFor(x) || "·"}</div>
+            <div style={cellStyle(x)}>{ch}</div>
+            <div style={{ fontSize: 11, height: 13, fontWeight: 800, color: x === mCell ? FA : "transparent" }}>
+              {x === mCell ? "▲" : "·"}
+            </div>
+            <div style={{ fontSize: 9, color: C.dim }}>{x + 1}</div>
+          </div>
+        ))}
+      </div>
+      {mCell >= 0 && (
+        <div style={{ textAlign: "center", fontSize: 10.5, color: FA, marginBottom: 10, fontWeight: 700 }}>
+          {t(E, "▲ m = midpoint of i and k", "▲ m = i 와 k 의 가운데")}
+        </div>
+      )}
+
+      {/* 글자별 결과 카드 */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
+        {perC.slice(0, s.revealed).map((row) => {
+          const isCur = cur && row.c === cur.c;
+          const isBest = row.area !== null && row.area === Math.max(...perC.map((p) => p.area ?? -1)) && row.area >= 0;
+          return (
+            <div key={row.c} style={{
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
+              padding: "5px 10px", borderRadius: 8, minWidth: 66,
+              background: isBest ? "#dcfce7" : isCur ? "#faf5ff" : "#f8fafc",
+              border: `${isCur ? 2 : 1.5}px solid ${isBest ? "#16a34a" : isCur ? FA : "#e2e8f0"}`,
+              fontFamily: "'JetBrains Mono',monospace",
+            }}>
+              <div style={{ fontSize: 10, color: isCur ? "#6b21a8" : C.dim, fontWeight: 700 }}>c = '{row.c}'</div>
+              <div style={{ fontSize: 12, fontWeight: 700, lineHeight: 1.2, color: row.area === null ? "#9ca3af" : "#1f2937", whiteSpace: "nowrap" }}>
+                {row.area === null ? <span style={{ fontSize: 16 }}>✗</span> : (
+                  <>
+                    <span style={{ color: "#dc2626" }}>{row.j - row.i}</span>
+                    <span style={{ color: C.dim }}>×</span>
+                    <span style={{ color: "#16a34a" }}>{row.k - row.j}</span>
+                    <span style={{ color: C.dim }}>=</span>
+                    <span style={{ fontSize: 14, fontWeight: 800, color: isBest ? "#15803d" : "#1f2937" }}>{row.area}</span>
+                    {isBest && " ⭐"}
+                  </>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* final — 왜 빠른가 + 표 3개 연결 */}
+      {s.kind === "final" && (
+        <div style={{ maxWidth: 540, margin: "0 auto 12px", background: "#faf5ff", border: `1.5px solid ${FA}`, borderRadius: 10, padding: "12px 15px", fontSize: 12, lineHeight: 1.7, color: "#5b21b6", wordBreak: "keep-all" }}>
+          <div style={{ fontWeight: 800, marginBottom: 6, color: FA }}>⚡ {t(E, "Why it's fast — 3 tables answer each move instantly", "왜 빠른가 — 표 3개가 각 동작을 즉시 답해줌")}</div>
+          <div>1. {t(E, "rightmost letter c  →  k", "가장 오른쪽 글자 c  →  k")} <span style={{ color: C.dim }}>(latest_same)</span></div>
+          <div>2. {t(E, "leftmost NON-c  →  i", "가장 왼쪽 c 아닌 글자  →  i")} <span style={{ color: C.dim }}>(nearest_diff)</span></div>
+          <div>3. {t(E, "the c nearest the midpoint m  →  j", "중간 m 에 가장 가까운 c  →  j")} <span style={{ color: C.dim }}>(earliest/latest_same)</span></div>
+          <div style={{ fontWeight: 700, marginTop: 5 }}>→ {t(E, "Built once beforehand, each lookup is instant → only 26 letters per query → passes N = 100,000.", "미리 한 번 만들어 두면 조회가 즉시 → 쿼리당 글자 26개뿐 → N = 100,000 도 통과.")}</div>
+        </div>
+      )}
+
+      <SharedSimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={FA} isEn={E} showLabels />
     </div>
   );
 }
