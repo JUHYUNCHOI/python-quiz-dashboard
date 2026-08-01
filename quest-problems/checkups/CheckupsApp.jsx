@@ -155,7 +155,7 @@ export default function CheckupsApp(props = {}) {
     <div>
       <div style={{ maxWidth: "min(880px, 100%)", margin: "0 auto", padding: "0 clamp(4px, 2vw, 16px)" }}>
         <AlgorithmTags E={E} tags={[
-          { icon: "📏", ko: "중심에서 넓히기 (center expansion)", en: "Center expansion" },
+          { icon: "📏", ko: "중심에서 넓히기 (center expansion)", en: "Center expansion", href: "/algo/centerexpansion/learn" },
         ]} />
         <QuestProgressBar
           tabs={TABS}
