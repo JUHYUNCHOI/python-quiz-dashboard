@@ -559,24 +559,18 @@ export function MooTraceSimulator({ E, lang = "py" }) {
         subtitle={`(${safe + 1} / ${trace.length})`}
       />
 
-      {/* 규칙 설명은 시작 화면에서만. 스캔이 시작되면 말풍선이 매 스텝 같은 말을
-          더 구체적으로 하므로 겹친다. (선생님 2026-07-30: "너무 많은 정보가 있어") */}
+      {/* 시작 화면 — 문단으로 쓰지 않는다 (선생님 2026-07-30: "읽기 싫어. 설명할건
+          말풍선으로 보여줘야 할곳에 달리게").  한 줄 말풍선만 두고, 나머지는 아래
+          칸 위에 직접 붙는 뱃지(j✗ / j 가능)로 보여준다. */}
       {s.kind === "init" && (
         <div style={{
-          textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10,
-          wordBreak: "keep-all", lineHeight: 1.6,
+          maxWidth: 430, margin: "0 auto 10px", padding: "8px 12px", borderRadius: 10,
+          background: "#fffbeb", border: "1.5px solid #fcd34d",
+          fontSize: 12, fontWeight: 700, color: "#92400e",
+          textAlign: "center", wordBreak: "keep-all", lineHeight: 1.55,
         }}>
-          {t(E,
-            <>j is fixed (yellow). Find <b style={{ color: "#dc2626" }}>i</b> = leftmost letter <b>different</b> from j, and <b style={{ color: "#16a34a" }}>k</b> = rightmost letter <b>same</b> as j.</>,
-            <>j 는 고정 (노랑). <b style={{ color: "#dc2626" }}>i</b> = j 와 <b>다른</b> 글자 중 가장 왼쪽, <b style={{ color: "#16a34a" }}>k</b> = j 와 <b>같은</b> 글자 중 가장 오른쪽.</>)}
-          {/* 코드 첫 줄 range(l + 1, r) 이 왜 그 범위인지.
-              (선생님 2026-07-30: "왜 l + 1 부터야?") j 는 가운데라 양옆에 자리가
-              있어야 하고, 그래서 양 끝 l·r 은 j 가 될 수 없다. */}
-          <div style={{ marginTop: 6 }}>
-            {t(E,
-              <>j is the <b>middle</b>, so it needs room on both sides — <b>i</b> to its left, <b>k</b> to its right. So j runs from <b>l+1</b> to <b>r−1</b>, which is exactly <code>range(l + 1, r)</code>.</>,
-              <>j 는 <b>가운데</b>라 양옆에 자리가 있어야 해요 — 왼쪽에 <b>i</b>, 오른쪽에 <b>k</b>. 그래서 j 는 <b>l+1</b> 부터 <b>r−1</b> 까지, 그게 코드의 <code>range(l + 1, r)</code> 예요.</>)}
-          </div>
+          {t(E, <>Pin a middle <b>j</b> — then look both ways.</>,
+                <>가운데 <b>j</b> 를 하나 박고 — 양쪽을 봐요.</>)}
         </div>
       )}
 
@@ -675,10 +669,21 @@ export function MooTraceSimulator({ E, lang = "py" }) {
                 color: arrow === "▶" ? "#dc2626" : arrow === "◀" ? "#16a34a" : "transparent" }}>
                 {arrow || " "}
               </div>
-              {/* Role label (j / left / right) */}
-              <div style={{ fontSize: 10, height: 14, fontWeight: 600, color: labelColor }}>
-                {labelFor(i) || "·"}
-              </div>
+              {/* Role label (j / left / right).  시작 화면에선 대신 "이 칸이 j 가 될 수
+                  있나" 를 칸 위에 직접 붙인다 — "왜 l+1 부터냐" 를 글이 아니라 그림으로
+                  답하는 자리. (선생님 2026-07-30: "말풍선으로 보여줘야 할곳에 달리게") */}
+              {s.kind === "init" ? (
+                <div style={{
+                  fontSize: 9.5, height: 14, fontWeight: 800,
+                  color: (i === l || i === r) ? "#dc2626" : "#16a34a",
+                }}>
+                  {(i === l || i === r) ? t(E, "j ✗", "j ✗") : t(E, "j ○", "j ○")}
+                </div>
+              ) : (
+                <div style={{ fontSize: 10, height: 14, fontWeight: 600, color: labelColor }}>
+                  {labelFor(i) || "·"}
+                </div>
+              )}
               {/* The cell itself with optional ✗ overlay for scanned-but-skipped positions */}
               <div style={cellStyle(i)} data-cell={i}>
                 {ch}
@@ -699,21 +704,30 @@ export function MooTraceSimulator({ E, lang = "py" }) {
         })}
       </div>
 
-      {/* 번호가 여기서 0 부터로 바뀌는 이유를 짚는다.
-          앞 브루트 시뮬은 지문의 1-based, 이 시뮬은 코드의 0-based — 우연이 아니라
-          '문제의 말 → 코드의 말' 로 넘어가는 지점이고, 코드에 l -= 1 이 있는 이유다.
-          (USACO 에서 애들이 실제로 제일 많이 틀리는 off-by-one 이라 숨기지 않는다.) */}
-      {/* 번호 기준 안내는 시작 화면에서만 — 매 스텝 붙어 있으면 읽을 게 늘기만 한다.
-          문구 주의: "여기부터" 라고 쓰면 안 된다. 뒤의 빠른-풀이 시뮬(코드 4/5)은
-          다시 1-based 라서 "이 시뮬만" 이라고 범위를 못 박아야 한다. */}
+      {/* 양 끝이 왜 j 가 못 되는지 — 그 두 칸 바로 아래에, 화살표로 가리키며 짧게.
+          문단으로 쓰지 않는다 (선생님 2026-07-30: "읽기 싫어").
+          이게 곧 코드의 range(l + 1, r) 이유이기도 해서 마지막에 한 조각만 덧붙인다. */}
       {s.kind === "init" && (
         <div style={{
-          maxWidth: 460, margin: "0 auto 12px", textAlign: "center",
-          fontSize: 10, color: C.dim, lineHeight: 1.6, wordBreak: "keep-all",
+          display: "flex", justifyContent: "center", gap: 4, marginBottom: 10,
+          fontSize: 9.5, fontWeight: 700, color: "#b91c1c",
         }}>
-          {t(E,
-            <>📎 In <b>this</b> sim numbers start at <b>0</b> — it follows the code, which converts with <code>l -= 1</code>. The problem's <b>1st</b> spot is <code>s[0]</code> in the code.</>,
-            <>📎 <b>이 시뮬만</b> 번호가 <b>0</b> 부터예요 — 아래 코드를 그대로 따라가는데, 코드가 <code>l -= 1</code> 로 바꿔 쓰기 때문. 문제의 <b>1 번째</b> 칸이 코드에선 <code>s[0]</code>.</>)}
+          {str.split("").map((_, i) => (
+            <div key={i} style={{ width: 36, textAlign: "center", lineHeight: 1.35, wordBreak: "keep-all" }}>
+              {i === l ? <>↑<br />{t(E, "no room for i", "왼쪽에 i 자리 없음")}</>
+                : i === r ? <>↑<br />{t(E, "no room for k", "오른쪽에 k 자리 없음")}</>
+                : null}
+            </div>
+          ))}
+        </div>
+      )}
+      {s.kind === "init" && (
+        <div style={{
+          textAlign: "center", fontSize: 10, color: C.dim, marginBottom: 12,
+          wordBreak: "keep-all",
+        }}>
+          {t(E, <>→ that is why the code says <code>range(l + 1, r)</code>. Numbers start at <b>0</b> here, like the code.</>,
+                <>→ 그래서 코드가 <code>range(l + 1, r)</code>. 번호도 코드처럼 <b>0</b> 부터예요.</>)}
         </div>
       )}
 
