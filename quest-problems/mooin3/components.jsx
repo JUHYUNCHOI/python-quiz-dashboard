@@ -490,6 +490,12 @@ export function MooTraceSimulator({ E, lang = "py" }) {
     const box = codeBoxRef.current, line = activeLineRef.current;
     if (!box || !line) return;
     const target = line.offsetTop - box.clientHeight / 2 + line.offsetHeight / 2;
+    // ⚠️ 즉시 이동만 쓴다.
+    //   · CSS scroll-behavior: smooth 를 쓰면 애니메이션 도중 프레임이 끊길 때
+    //     중간값(예: scrollTop 5)에 멈춰서 실행 줄이 화면 밖에 남는다.
+    //   · requestAnimationFrame 으로 미루는 것도 안 된다 — 탭이 숨겨져 있으면
+    //     rAF 가 아예 안 돌아 스크롤이 영영 반영되지 않는다.
+    //   (둘 다 2026-07-30 에 실제로 겪음.)
     box.scrollTop = Math.max(0, target);
   }, [safe]);
 
@@ -612,7 +618,7 @@ export function MooTraceSimulator({ E, lang = "py" }) {
           그래서 말풍선을 흐름에서 빼서(absolute) *지금 보고 있는 칸* 위에 띄우고
           꼬리(▼)로 그 칸을 가리킨다. 커서가 움직이면 말풍선도 따라간다.
           absolute 라 높이에 영향이 없어 스텝마다 화면이 흔들리지도 않는다. */}
-      <div style={{ position: "relative", width: ROW_W, height: 104, margin: "0 auto" }}>
+      <div style={{ position: "relative", width: ROW_W, height: 112, margin: "0 auto" }}>
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
       {/* 시작 화면 — 문단으로 쓰지 않는다 (선생님 2026-07-30: "읽기 싫어. 설명할건
           말풍선으로 보여줘야 할곳에 달리게").  한 줄 말풍선만 두고, 나머지는 아래
@@ -703,7 +709,7 @@ export function MooTraceSimulator({ E, lang = "py" }) {
       {/* String row with j/left/right labels + scan footprints (✗) + scan-direction arrows. */}
       {/* 폭·간격을 위 말풍선 무대와 똑같이 (CELL_W / CELL_GAP / ROW_W) 맞춰야
           꼬리가 정확한 칸을 가리킨다. */}
-      <div style={{ display: "flex", gap: CELL_GAP, justifyContent: "center", width: ROW_W, margin: "0 auto 6px" }}>
+      <div style={{ display: "flex", gap: CELL_GAP, justifyContent: "center", width: ROW_W, margin: "0 auto 12px" }}>
         {str.split("").map((ch, i) => {
           const role = cellRole(i);
           const labelColor =
@@ -764,7 +770,7 @@ export function MooTraceSimulator({ E, lang = "py" }) {
       {/* 칸 아래 한 자리를 시작 화면(왜 양 끝이 j 가 못 되나)과 점수 단계(거리 눈금)가
           *같이 쓴다*. 둘은 동시에 안 나오므로 자리를 하나만 잡으면 되고, 그만큼
           빈 공간이 줄어든다. 둘 다 absolute 라 높이도 안 흔들린다. */}
-      <div style={{ height: 46, position: "relative", width: ROW_W, margin: "0 auto 4px" }}>
+      <div style={{ height: 52, position: "relative", width: ROW_W, margin: "0 auto 26px" }}>
         {s.kind === "score" && s.row.score !== null && (() => {
           const segs = [
             { a: s.row.left, b: s.row.j, col: "#dc2626", n: s.row.j - s.row.left },
@@ -818,7 +824,7 @@ export function MooTraceSimulator({ E, lang = "py" }) {
       {CODE.length > 0 && (
         <div style={{ maxWidth: 520, margin: "0 auto 12px" }}>
           {/* 시작 화면엔 칩이 없어 그만큼 화면이 줄었다 → 자리를 늘 잡아둔다. */}
-          <div style={{ minHeight: 24, marginBottom: 6 }}>
+          <div style={{ minHeight: 24, marginBottom: 12 }}>
           {codeVars && (
             <div style={{
               display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap",
@@ -845,7 +851,7 @@ export function MooTraceSimulator({ E, lang = "py" }) {
           <div ref={codeBoxRef} style={{
             background: "#0f172a", borderRadius: 10, padding: "9px 0", overflowX: "auto",
             // 높이 제한 + 자동 스크롤 → 실행 줄이 항상 보인다 (useEffect 참고)
-            maxHeight: 170, overflowY: "auto", scrollBehavior: "smooth",
+            maxHeight: 170, overflowY: "auto",   // scrollBehavior 는 안 쓴다 — 위 useEffect 가 즉시 이동
             // ⚠️ 필수 — 이게 없으면 자식의 offsetTop 이 이 박스가 아니라 바깥 조상
             // 기준으로 잡혀서 값이 과도하게 커지고, 스크롤이 늘 맨 아래로 튄다.
             // (2026-07-30 선생님 스크린샷: 2/22 인데 오른쪽 스캔 부분이 보이고
