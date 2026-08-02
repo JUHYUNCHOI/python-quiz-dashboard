@@ -299,21 +299,10 @@ abcabbacabac
       content: (<TripletEnumSimulator E={E} />),
     },
 
-    /* [확인] — Quick input quiz on a tiny case.  Hint nudges only. */
-    {
-      type: "input",
-      label: t(E, "Your turn", "직접 풀어보기"),
-      narr: t(E,
-        "Your turn — find the best moo on a small string.",
-        "직접 — 작은 문자열에서 최선 moo."),
-      question: t(E,
-        "Max score for s='abcabbc' query [1, 5]?  (window stops at 5 — the far c's are out)",
-        "s='abcabbc' 쿼리 [1, 5] 의 최대 점수?  (윈도우가 5 까지 — 멀리 있는 c 들은 밖)"),
-      hint: t(E,
-        "Inside [1, 5] the repeated letter is 'b' (pos 2, 5).  Pick a different letter to its left as i → (1, 2, 5) = a,b,b → (2-1)×(5-2).",
-        "[1, 5] 안에서 반복되는 글자는 'b'(위치 2, 5).  왼쪽에 다른 글자를 i 로 → (1, 2, 5) = a,b,b → (2-1)×(5-2)."),
-      answer: 3,
-    },
+    /* [확인] 퀴즈 스텝 제거 (선생님 2026-07-30: "퀴즈 없애줘").
+       reach quest 때와 같은 판단 — 학생이 흐름을 따라가는 게 우선이고, 중간에
+       답을 맞혀야 넘어가는 관문은 흐름을 끊는다. 확인은 시뮬이 대신한다.
+       (되돌리려면 type:"input" / question / hint / answer:3 스텝을 여기 다시 넣으면 됨.) */
   ];
 }
 

@@ -398,20 +398,33 @@ export function MooTraceSimulator({ E, lang = "py" }) {
   const isCpp = lang === "cpp";
   // py:  9 = "for j in range(l + 1, r):"  … 25 = "best = score"
   // cpp: 16 = "for (int j = l + 1; ...)"  … 36 = 그 for 의 닫는 }
-  const CODE = isCpp ? M3_FULL_CPP.slice(16, 37) : M3_FULL_PY(E).slice(9, 26);
-  // 스텝 → 지금 실행 중인 줄 (위 slice 기준의 지역 인덱스, [from, to] 포함)
+  const RAW = isCpp ? M3_FULL_CPP.slice(16, 37) : M3_FULL_PY(E).slice(9, 26);
+  // 주석 줄은 뺀다 (선생님 2026-07-30: "너무 많은 정보가 있어").
+  // 여기 주석은 한 줄이 길어서 패널을 잡아먹고, 바로 위 말풍선과 내용이 겹친다.
+  const KEPT = RAW.map((L, i) => ({ L, i })).filter(({ L }) => !/^\s*(#|\/\/)/.test(L));
+  const CODE = KEPT.map(k => k.L);
+  // 주석을 빼면 줄 번호가 밀리므로 원본→표시 인덱스 맵으로 하이라이트를 옮긴다.
+  const IDX = new Map(KEPT.map((k, n) => [k.i, n]));
+  const toShown = ([a, b]) => {
+    const from = IDX.get(a), to = IDX.get(b);
+    return from === undefined || to === undefined ? null : [from, to];
+  };
+  // 스텝 → 지금 실행 중인 줄 (RAW 기준 [from, to] 포함 → toShown 으로 변환)
   const hiRange = (() => {
-    if (s.kind === "scan") {
-      if (s.dir === "left")  return s.isMatch ? (isCpp ? [3, 5]   : [4, 6])
-                                              : (isCpp ? [2, 3]   : [3, 4]);
-      return                       s.isMatch ? (isCpp ? [10, 12] : [10, 12])
-                                              : (isCpp ? [9, 10]  : [9, 10]);
-    }
-    if (s.kind === "score") {
-      return s.row.score === null ? (isCpp ? [15, 15] : [13, 13])
-                                  : (isCpp ? [15, 18] : [13, 16]);
-    }
-    return null;   // init / final — 코드 하이라이트 없음
+    const raw = (() => {
+      if (s.kind === "scan") {
+        if (s.dir === "left") return s.isMatch ? (isCpp ? [3, 5] : [4, 6])
+                                               : (isCpp ? [2, 3] : [3, 4]);
+        return                      s.isMatch ? (isCpp ? [10, 12] : [10, 12])
+                                               : (isCpp ? [9, 10]  : [9, 10]);
+      }
+      if (s.kind === "score") {
+        return s.row.score === null ? (isCpp ? [15, 15] : [13, 13])
+                                    : (isCpp ? [15, 18] : [13, 16]);
+      }
+      return null;   // init / final — 코드 하이라이트 없음
+    })();
+    return raw ? toShown(raw) : null;
   })();
 
   /* 실행 중인 줄이 화면 밖으로 나가면 "코드대로" 가 안 보인다 (2026-07-30 스크린샷에서
@@ -534,11 +547,12 @@ export function MooTraceSimulator({ E, lang = "py" }) {
         subtitle={`(${safe + 1} / ${trace.length})`}
       />
 
-      {/* 항상 보이는 규칙 한 줄 — 학생이 "뭘 찾는 중이었지?" 로 돌아오지 않게. */}
-      {hasRow && (
+      {/* 규칙 설명은 시작 화면에서만. 스캔이 시작되면 말풍선이 매 스텝 같은 말을
+          더 구체적으로 하므로 겹친다. (선생님 2026-07-30: "너무 많은 정보가 있어") */}
+      {s.kind === "init" && (
         <div style={{
-          textAlign: "center", fontSize: 10.5, color: C.dim, marginBottom: 6,
-          wordBreak: "keep-all", lineHeight: 1.5,
+          textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10,
+          wordBreak: "keep-all", lineHeight: 1.6,
         }}>
           {t(E,
             <>j is fixed (yellow). Find <b style={{ color: "#dc2626" }}>i</b> = leftmost letter <b>different</b> from j, and <b style={{ color: "#16a34a" }}>k</b> = rightmost letter <b>same</b> as j.</>,
@@ -653,14 +667,17 @@ export function MooTraceSimulator({ E, lang = "py" }) {
           앞 브루트 시뮬은 지문의 1-based, 이 시뮬은 코드의 0-based — 우연이 아니라
           '문제의 말 → 코드의 말' 로 넘어가는 지점이고, 코드에 l -= 1 이 있는 이유다.
           (USACO 에서 애들이 실제로 제일 많이 틀리는 off-by-one 이라 숨기지 않는다.) */}
-      <div style={{
-        maxWidth: 460, margin: "0 auto 12px", textAlign: "center",
-        fontSize: 9.5, color: C.dim, lineHeight: 1.6, wordBreak: "keep-all",
-      }}>
-        {t(E,
-          <>📎 Numbers start at <b>0</b> here — the code converts with <code>l -= 1</code>. So the problem's <b>1st</b> spot is <code>s[0]</code> in the code.</>,
-          <>📎 여기부터 번호가 <b>0</b> 부터예요 — 코드가 <code>l -= 1</code> 로 바꿔 쓰기 때문. 문제의 <b>1 번째</b> 칸이 코드에선 <code>s[0]</code>.</>)}
-      </div>
+      {/* 번호 기준 안내도 시작 화면에서만 — 매 스텝 붙어 있으면 읽을 게 늘기만 한다. */}
+      {s.kind === "init" && (
+        <div style={{
+          maxWidth: 460, margin: "0 auto 12px", textAlign: "center",
+          fontSize: 10, color: C.dim, lineHeight: 1.6, wordBreak: "keep-all",
+        }}>
+          {t(E,
+            <>📎 Numbers start at <b>0</b> here — the code converts with <code>l -= 1</code>. So the problem's <b>1st</b> spot is <code>s[0]</code> in the code.</>,
+            <>📎 여기부터 번호가 <b>0</b> 부터예요 — 코드가 <code>l -= 1</code> 로 바꿔 쓰기 때문. 문제의 <b>1 번째</b> 칸이 코드에선 <code>s[0]</code>.</>)}
+        </div>
+      )}
 
       {/* ── 코드 + 변수판 — 포인터가 '코드대로' 움직이는 걸 보여주는 부분.
              (선생님 2026-07-30) 하이라이트된 줄이 이번 스텝에 실행된 줄. ── */}
@@ -671,12 +688,13 @@ export function MooTraceSimulator({ E, lang = "py" }) {
               display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap", marginBottom: 6,
               fontFamily: "'JetBrains Mono',monospace", fontSize: 10.5,
             }}>
+              {/* 칩을 최소로 (선생님 2026-07-30: "너무 많은 정보가 있어").
+                  j 는 셀에 노란 라벨로 이미 있고, best 는 점수 단계에서만 의미가 있다. */}
               {[
-                ["j", codeVars.j, "#92400e", "#fef3c7", "#fcd34d"],
                 ["idx", codeVars.idx, "#3730a3", "#eef2ff", "#c7d2fe"],
                 ["left_i", codeVars.left_i, "#7f1d1d", "#fef2f2", "#fca5a5"],
                 ["right_k", codeVars.right_k, "#15803d", "#f0fdf4", "#86efac"],
-                ["best", codeVars.best, "#334155", "#f8fafc", "#e2e8f0"],
+                ...(s.kind === "score" ? [["best", codeVars.best, "#334155", "#f8fafc", "#e2e8f0"]] : []),
               ].map(([name, val, fg, bg, bd]) => (
                 <span key={name} style={{
                   padding: "2px 7px", borderRadius: 6, background: bg,
@@ -690,7 +708,12 @@ export function MooTraceSimulator({ E, lang = "py" }) {
           <div ref={codeBoxRef} style={{
             background: "#0f172a", borderRadius: 10, padding: "9px 0", overflowX: "auto",
             // 높이 제한 + 자동 스크롤 → 실행 줄이 항상 보인다 (useEffect 참고)
-            maxHeight: 190, overflowY: "auto", scrollBehavior: "smooth",
+            maxHeight: 170, overflowY: "auto", scrollBehavior: "smooth",
+            // ⚠️ 필수 — 이게 없으면 자식의 offsetTop 이 이 박스가 아니라 바깥 조상
+            // 기준으로 잡혀서 값이 과도하게 커지고, 스크롤이 늘 맨 아래로 튄다.
+            // (2026-07-30 선생님 스크린샷: 2/22 인데 오른쪽 스캔 부분이 보이고
+            //  하이라이트가 화면 밖이었음.)
+            position: "relative",
           }}>
             {CODE.map((line, li) => {
               const on = hiRange && li >= hiRange[0] && li <= hiRange[1];
