@@ -7,12 +7,15 @@
 //   C++: 표 방식, <bits/stdc++.h> 안 씀 (iostream/vector/string).  fast 미제출 — USACO 재제출로 최종 확인 권장.
 //     (구 brute Python 3/11 · C++ 4/11)
 //   코드 수정 시 USACO 재제출 필요.  상세: REPO_ROOT/USACO_VERIFICATION.md
-//   2026-07-30 (선생님 요청): 변수명 left_i → left, right_k → right (fix-j 계열 코드 전체:
-//     M3_FULL_PY/CPP, M3_STAGE_A/B, 말풍선·범례·시뮬).  순수 이름 변경, 로직·구조 불변.
-//     재검증 완료: C++ g++ -Wall -Wshadow 컴파일 통과(경고 0 — using namespace std 아래
-//     std::left/std::right 섀도잉 문제 없음), 샘플 28 6 1 -1 12 Py/C++ 일치,
-//     브루트 3중 루프와 300 케이스 × 3 쿼리 대조 불일치 0.  USACO 재제출은 미실시
-//     (실행 로직이 그대로라 결과 동일할 것으로 보지만, 규칙상 재제출 권장).
+//   2026-07-30 (선생님 요청): 변수명 left_i/right_k → left_pointer/right_pointer.
+//     (중간에 left/right 로 갔다가, 쿼리 경계 변수 l·r 과 헷갈린다는 선생님 지적으로 확정.)
+//     적용 범위: M3_FULL_PY/CPP, M3_STAGE_A/B, M3_FAST_PY/CPP + 말풍선·범례·시뮬 라벨.
+//     순수 이름 변경, 로직·구조 불변.  ⚠️ 방향을 뜻하는 "left/right"(스캔 방향, CSS,
+//     dir 값, 산문 "first slot left of j")는 일부러 안 건드림.
+//     재검증 완료: g++ -std=c++17 -Wall -Wshadow 로 fix-j·fast C++ 둘 다 컴파일 통과(경고 0),
+//     샘플 28 6 1 -1 12 를 네 구현(fix-j Py/C++, fast Py/C++) 모두 일치,
+//     브루트 3중 루프와 250 케이스 × 3 쿼리 대조 — 네 구현 모두 불일치 0.
+//     USACO 재제출은 미실시 (실행 로직 동일이라 결과도 같을 것으로 보지만 규칙상 재제출 권장).
 //   2026-07-30 (선생님): 표시용 수정만 — (1) 코드 주석 en/ko 이중언어(M3_FULL_PY/M3_FAST_PY/CPP → (E)=>t()),
 //     실행 줄 byte 동일. (2) C++ fast 에서 ios_base::sync_with_stdio/cin.tie 제거(학생 노이즈, 이 크기엔 불필요).
 //     알고리즘 로직 불변. algo 태그(binarysearch) 제거 — 실제는 애드혹(표 precompute).
@@ -334,6 +337,9 @@ export function MooTraceSimulator({ E, lang = "py" }) {
   const perJ = [];
   for (let j = l + 1; j < r; j++) {
     const sj = str[j];
+    // ⚠️ 여기는 시뮬레이터의 JS 내부 변수 — 학생에게 보이는 코드가 아니다.
+    //    아래 perJ 필드(row.left/row.right)를 파일 곳곳에서 쓰므로 이름을 유지한다.
+    //    (학생 화면에 뜨는 이름은 라벨/칩/코드 문자열에서 left_pointer 로 나간다.)
     let left = -1;
     for (let i = l; i < j; i++) if (str[i] !== sj) { left = i; break; }
     let right = -1;
@@ -517,8 +523,8 @@ export function MooTraceSimulator({ E, lang = "py" }) {
   const labelFor = (i) => {
     const role = cellRole(i);
     if (role === "j") return "j";
-    if (role === "left") return "left";
-    if (role === "right") return "right";
+    if (role === "left") return "left_pointer";
+    if (role === "right") return "right_pointer";
     // 비교 중인 칸엔 이름을 안 붙임 — 아직 i/k 가 아니니까. 대신 '보는 중' 표시.
     if (role === "cursor_left" || role === "cursor_right") return "?";
     return "";
@@ -563,6 +569,14 @@ export function MooTraceSimulator({ E, lang = "py" }) {
           {t(E,
             <>j is fixed (yellow). Find <b style={{ color: "#dc2626" }}>i</b> = leftmost letter <b>different</b> from j, and <b style={{ color: "#16a34a" }}>k</b> = rightmost letter <b>same</b> as j.</>,
             <>j 는 고정 (노랑). <b style={{ color: "#dc2626" }}>i</b> = j 와 <b>다른</b> 글자 중 가장 왼쪽, <b style={{ color: "#16a34a" }}>k</b> = j 와 <b>같은</b> 글자 중 가장 오른쪽.</>)}
+          {/* 코드 첫 줄 range(l + 1, r) 이 왜 그 범위인지.
+              (선생님 2026-07-30: "왜 l + 1 부터야?") j 는 가운데라 양옆에 자리가
+              있어야 하고, 그래서 양 끝 l·r 은 j 가 될 수 없다. */}
+          <div style={{ marginTop: 6 }}>
+            {t(E,
+              <>j is the <b>middle</b>, so it needs room on both sides — <b>i</b> to its left, <b>k</b> to its right. So j runs from <b>l+1</b> to <b>r−1</b>, which is exactly <code>range(l + 1, r)</code>.</>,
+              <>j 는 <b>가운데</b>라 양옆에 자리가 있어야 해요 — 왼쪽에 <b>i</b>, 오른쪽에 <b>k</b>. 그래서 j 는 <b>l+1</b> 부터 <b>r−1</b> 까지, 그게 코드의 <code>range(l + 1, r)</code> 예요.</>)}
+          </div>
         </div>
       )}
 
@@ -592,25 +606,25 @@ export function MooTraceSimulator({ E, lang = "py" }) {
             <br />
             {s.isMatch
               ? (s.dir === "left"
-                  ? t(E, <>different! → <b>left = {s.cursor}</b> decided ✔</>, <>다르다! → <b>left = {s.cursor}</b> 확정 ✔</>)
-                  : t(E, <>same! → <b>right = {s.cursor}</b> decided ✔</>, <>같다! → <b>right = {s.cursor}</b> 확정 ✔</>))
+                  ? t(E, <>different! → <b>left_pointer = {s.cursor}</b> decided ✔</>, <>다르다! → <b>left_pointer = {s.cursor}</b> 확정 ✔</>)
+                  : t(E, <>same! → <b>right_pointer = {s.cursor}</b> decided ✔</>, <>같다! → <b>right_pointer = {s.cursor}</b> 확정 ✔</>))
               : (s.dir === "left"
                   ? t(E, "same — not what we want, keep going →", "같네 — 우리가 찾는 게 아니에요, 계속 →")
                   : t(E, "different — keep going ←", "다르네 — 계속 ←"))}
             {/* '왜 여기서 멈추나' — 결정하는 그 순간에만 한 줄.
                 선생님 2026-07-30: "왜 right이 맨 뒤에서 오면서 처음 나타나는
                 똑같은 j를 찾는거지?" — 끝에서 와서 처음 만나는 = 가장 바깥쪽이고,
-                점수 (j−left)×(right−j) 의 그 쪽 거리가 최대가 되기 때문. */}
+                점수 (j−left_pointer)×(right_pointer−j) 의 그 쪽 거리가 최대가 되기 때문. */}
             {s.isMatch && (
               <div style={{
                 marginTop: 5, paddingTop: 5, borderTop: "1px dashed rgba(0,0,0,.12)",
                 fontSize: 10.5, fontWeight: 600, color: C.dim, wordBreak: "keep-all",
               }}>
                 {s.dir === "left"
-                  ? t(E, <>Why stop here? We came from the left end, so this is the <b>leftmost</b> one → <b>j − left</b> is as big as possible.</>,
-                        <>왜 여기서 멈출까? 왼쪽 끝에서 왔으니 이게 <b>가장 왼쪽</b> → <b>j − left</b> 가 최대가 돼요.</>)
-                  : t(E, <>Why stop here? We came from the right end, so this is the <b>rightmost</b> one → <b>right − j</b> is as big as possible.</>,
-                        <>왜 여기서 멈출까? 오른쪽 끝에서 왔으니 이게 <b>가장 오른쪽</b> → <b>right − j</b> 가 최대가 돼요.</>)}
+                  ? t(E, <>Why stop here? We came from the left end, so this is the <b>leftmost</b> one → <b>j − left_pointer</b> is as big as possible.</>,
+                        <>왜 여기서 멈출까? 왼쪽 끝에서 왔으니 이게 <b>가장 왼쪽</b> → <b>j − left_pointer</b> 가 최대가 돼요.</>)
+                  : t(E, <>Why stop here? We came from the right end, so this is the <b>rightmost</b> one → <b>right_pointer − j</b> is as big as possible.</>,
+                        <>왜 여기서 멈출까? 오른쪽 끝에서 왔으니 이게 <b>가장 오른쪽</b> → <b>right_pointer − j</b> 가 최대가 돼요.</>)}
               </div>
             )}
           </div>
@@ -716,8 +730,8 @@ export function MooTraceSimulator({ E, lang = "py" }) {
                   j 는 셀에 노란 라벨로 이미 있고, best 는 점수 단계에서만 의미가 있다. */}
               {[
                 ["idx", codeVars.idx, "#3730a3", "#eef2ff", "#c7d2fe"],
-                ["left", codeVars.left, "#7f1d1d", "#fef2f2", "#fca5a5"],
-                ["right", codeVars.right, "#15803d", "#f0fdf4", "#86efac"],
+                ["left_pointer", codeVars.left, "#7f1d1d", "#fef2f2", "#fca5a5"],
+                ["right_pointer", codeVars.right, "#15803d", "#f0fdf4", "#86efac"],
                 ...(s.kind === "score" ? [["best", codeVars.best, "#334155", "#f8fafc", "#e2e8f0"]] : []),
               ].map(([name, val, fg, bg, bd]) => (
                 <span key={name} style={{
@@ -783,7 +797,7 @@ export function MooTraceSimulator({ E, lang = "py" }) {
         {perJ.slice(0, s.revealed).map((row) => {
           const isCurrent = hasRow && row.j === s.row.j;
           const isBest = row.score !== null && row.score === s.best && s.best >= 0;
-          // (j - left) × (right - j) = score
+          // (j - left_pointer) × (right_pointer - j) = score
           const f1 = row.left >= 0 ? row.j - row.left : null;
           const f2 = row.right >= 0 ? row.right - row.j : null;
           return (
@@ -1158,19 +1172,19 @@ const M3_LOOP_PY = (E) => [
   t(E, "    # Try every middle position j; for each, scan left + right.",
         "    # 모든 가운데 자리 j 시도 — j 박힌 동안 왼쪽 + 오른쪽 훑기."),
   "    for j in range(l + 1, r):",
-  t(E, "        # left = first slot in [l, j) with a DIFFERENT letter from s[j].",
-        "        # left = [l, j) 에서 s[j] 와 다른 글자가 *처음* 나오는 자리"),
-  "        left = -1",
+  t(E, "        # left_pointer = first slot in [l, j) with a DIFFERENT letter from s[j].",
+        "        # left_pointer = [l, j) 에서 s[j] 와 다른 글자가 *처음* 나오는 자리"),
+  "        left_pointer = -1",
   "        for idx in range(l, j):",
   "            if s[idx] != s[j]:",
-  "                left = idx",
+  "                left_pointer = idx",
   "                break",
-  t(E, "        # right = last slot in (j, r] with the SAME letter as s[j].",
-        "        # right = (j, r] 에서 s[j] 와 같은 글자가 *마지막* 으로 있는 자리"),
-  "        right = -1",
+  t(E, "        # right_pointer = last slot in (j, r] with the SAME letter as s[j].",
+        "        # right_pointer = (j, r] 에서 s[j] 와 같은 글자가 *마지막* 으로 있는 자리"),
+  "        right_pointer = -1",
   "        for idx in range(r, j, -1):",
   "            if s[idx] == s[j]:",
-  "                right = idx",
+  "                right_pointer = idx",
   "                break",
 ];
 const M3_LOOP_CPP = (E) => [
@@ -1183,37 +1197,37 @@ const M3_LOOP_CPP = (E) => [
   "        long long best = -1;",
   "",
   "        for (int j = l + 1; j < r; j++) {",
-  t(E, "            // left = first slot left of j with a DIFFERENT letter from s[j].",
-        "            // left = j 왼쪽에서 s[j] 와 다른 글자가 *처음* 나오는 자리"),
-  "            int left = -1;",
+  t(E, "            // left_pointer = first slot left of j with a DIFFERENT letter from s[j].",
+        "            // left_pointer = j 왼쪽에서 s[j] 와 다른 글자가 *처음* 나오는 자리"),
+  "            int left_pointer = -1;",
   "            for (int idx = l; idx < j; idx++) {",
   "                if (s[idx] != s[j]) {",
-  "                    left = idx;",
+  "                    left_pointer = idx;",
   "                    break;",
   "                }",
   "            }",
-  t(E, "            // right = last slot right of j with the SAME letter as s[j].",
-        "            // right = j 오른쪽에서 s[j] 와 같은 글자가 *마지막* 자리"),
-  "            int right = -1;",
+  t(E, "            // right_pointer = last slot right of j with the SAME letter as s[j].",
+        "            // right_pointer = j 오른쪽에서 s[j] 와 같은 글자가 *마지막* 자리"),
+  "            int right_pointer = -1;",
   "            for (int idx = r; idx > j; idx--) {",
   "                if (s[idx] == s[j]) {",
-  "                    right = idx;",
+  "                    right_pointer = idx;",
   "                    break;",
   "                }",
   "            }",
 ];
 
-/* Section 3: update best with (j - left) * (right - j) */
+/* Section 3: update best with (j - left_pointer) * (right_pointer - j) */
 const M3_UPDATE_PY = [
-  "        if left != -1 and right != -1:",
-  "            score = (j - left) * (right - j)",
+  "        if left_pointer != -1 and right_pointer != -1:",
+  "            score = (j - left_pointer) * (right_pointer - j)",
   "            if score > best:",
   "                best = score",
   "    print(best)",
 ];
 const M3_UPDATE_CPP = [
-  "            if (left != -1 && right != -1) {",
-  "                long long score = (long long)(j - left) * (right - j);",
+  "            if (left_pointer != -1 && right_pointer != -1) {",
+  "                long long score = (long long)(j - left_pointer) * (right_pointer - j);",
   "                if (score > best) {",
   "                    best = score;",
   "                }",
@@ -1237,20 +1251,20 @@ const M3_FULL_PY = (E) => [
   "    best = -1",
   t(E, "    # Try every middle spot j — while j is pinned, scan both sides.", "    # 모든 가운데 자리 j 한 번씩 시도 — j 가 박힌 동안 양쪽으로 훑기."),
   "    for j in range(l + 1, r):",
-  t(E, "        # Left scan: FIRST spot with a different letter than s[j] -> left", "        # 왼쪽 훑기: s[j] 와 다른 글자가 *처음* 나오는 자리 → left"),
-  "        left = -1",
+  t(E, "        # Left scan: FIRST spot with a different letter than s[j] -> left_pointer", "        # 왼쪽 훑기: s[j] 와 다른 글자가 *처음* 나오는 자리 → left_pointer"),
+  "        left_pointer = -1",
   "        for idx in range(l, j):",
   "            if s[idx] != s[j]:",
-  "                left = idx",
+  "                left_pointer = idx",
   "                break",
-  t(E, "        # Right scan: LAST spot with the same letter as s[j] -> right", "        # 오른쪽 훑기: s[j] 와 같은 글자가 *마지막* 으로 있는 자리 → right"),
-  "        right = -1",
+  t(E, "        # Right scan: LAST spot with the same letter as s[j] -> right_pointer", "        # 오른쪽 훑기: s[j] 와 같은 글자가 *마지막* 으로 있는 자리 → right_pointer"),
+  "        right_pointer = -1",
   "        for idx in range(r, j, -1):",
   "            if s[idx] == s[j]:",
-  "                right = idx",
+  "                right_pointer = idx",
   "                break",
-  "        if left != -1 and right != -1:",
-  "            score = (j - left) * (right - j)",
+  "        if left_pointer != -1 and right_pointer != -1:",
+  "            score = (j - left_pointer) * (right_pointer - j)",
   "            if score > best:",
   "                best = score",
   "    print(best)",
@@ -1273,22 +1287,22 @@ const M3_FULL_CPP = [
   "        r--;",
   "        long long best = -1;",
   "        for (int j = l + 1; j < r; j++) {",
-  "            int left = -1;",
+  "            int left_pointer = -1;",
   "            for (int idx = l; idx < j; idx++) {",
   "                if (s[idx] != s[j]) {",
-  "                    left = idx;",
+  "                    left_pointer = idx;",
   "                    break;",
   "                }",
   "            }",
-  "            int right = -1;",
+  "            int right_pointer = -1;",
   "            for (int idx = r; idx > j; idx--) {",
   "                if (s[idx] == s[j]) {",
-  "                    right = idx;",
+  "                    right_pointer = idx;",
   "                    break;",
   "                }",
   "            }",
-  "            if (left != -1 && right != -1) {",
-  "                long long score = (long long)(j - left) * (right - j);",
+  "            if (left_pointer != -1 && right_pointer != -1) {",
+  "                long long score = (long long)(j - left_pointer) * (right_pointer - j);",
   "                if (score > best) {",
   "                    best = score;",
   "                }",
@@ -1322,28 +1336,28 @@ const M3_STAGE_A_PY = [
   "    for c in range(26):",
   "        ch = chr(c + 97)",
   "        # 가장 왼쪽 i (s[i] ≠ ch) — 매번 스캔 (다음 단계에서 lookup 표로 교체)",
-  "        left = -1",
+  "        left_pointer = -1",
   "        for idx in range(l, r):",
   "            if s[idx] != ch:",
-  "                left = idx",
+  "                left_pointer = idx",
   "                break",
-  "        if left == -1:",
+  "        if left_pointer == -1:",
   "            continue",
   "        # 가장 오른쪽 k (s[k] = ch) — 매번 스캔",
-  "        right = -1",
+  "        right_pointer = -1",
   "        for idx in range(r, left, -1):",
   "            if s[idx] == ch:",
-  "                right = idx",
+  "                right_pointer = idx",
   "                break",
-  "        if right <= left:",
+  "        if right_pointer <= left_pointer:",
   "            continue",
-  "        # 그 사이의 j 후보들 = positions_of[c] 중 (left, right) 안",
+  "        # 그 사이의 j 후보들 = positions_of[c] 중 (left_pointer, right_pointer) 안",
   "        for j in positions_of[c]:",
-  "            if j <= left:",
+  "            if j <= left_pointer:",
   "                continue",
-  "            if j >= right:",
+  "            if j >= right_pointer:",
   "                break",
-  "            product = (j - left) * (right - j)",
+  "            product = (j - left_pointer) * (right_pointer - j)",
   "            if product > best:",
   "                best = product",
   "    print(best)",
@@ -1376,36 +1390,36 @@ const M3_STAGE_A_CPP = [
   "        for (int c = 0; c < 26; c++) {",
   "            char ch = 'a' + c;",
   "            // 가장 왼쪽 i (s[i] != ch) — 매번 스캔",
-  "            int left = -1;",
+  "            int left_pointer = -1;",
   "            for (int idx = l; idx < r; idx++) {",
   "                if (s[idx] != ch) {",
-  "                    left = idx;",
+  "                    left_pointer = idx;",
   "                    break;",
   "                }",
   "            }",
-  "            if (left == -1) {",
+  "            if (left_pointer == -1) {",
   "                continue;",
   "            }",
   "            // 가장 오른쪽 k (s[k] == ch)",
-  "            int right = -1;",
+  "            int right_pointer = -1;",
   "            for (int idx = r; idx > left; idx--) {",
   "                if (s[idx] == ch) {",
-  "                    right = idx;",
+  "                    right_pointer = idx;",
   "                    break;",
   "                }",
   "            }",
-  "            if (right <= left) {",
+  "            if (right_pointer <= left_pointer) {",
   "                continue;",
   "            }",
   "            // 그 사이의 j 후보들",
   "            for (int j : positions_of[c]) {",
-  "                if (j <= left) {",
+  "                if (j <= left_pointer) {",
   "                    continue;",
   "                }",
-  "                if (j >= right) {",
+  "                if (j >= right_pointer) {",
   "                    break;",
   "                }",
-  "                long long product = (long long)(j - left) * (right - j);",
+  "                long long product = (long long)(j - left_pointer) * (right_pointer - j);",
   "                if (product > best) {",
   "                    best = product;",
   "                }",
@@ -1454,19 +1468,19 @@ const M3_STAGE_B_PY = [
   "    best = -1",
   "    for c in range(26):",
   "        # NEW: 매번 스캔하던 left / right 가 표 한 번 조회로 끝.",
-  "        left = nearest_diff[c][l]",
-  "        if left >= r:",
+  "        left_pointer = nearest_diff[c][l]",
+  "        if left_pointer >= r:",
   "            continue",
-  "        right = latest_same[c][r]",
-  "        if right <= left:",
+  "        right_pointer = latest_same[c][r]",
+  "        if right_pointer <= left_pointer:",
   "            continue",
   "        # j 는 여전히 positions_of[c] 모두 순회 (다음 단계에서 표 하나 더로 O(1) 압축)",
   "        for j in positions_of[c]:",
-  "            if j <= left:",
+  "            if j <= left_pointer:",
   "                continue",
-  "            if j >= right:",
+  "            if j >= right_pointer:",
   "                break",
-  "            product = (j - left) * (right - j)",
+  "            product = (j - left_pointer) * (right_pointer - j)",
   "            if product > best:",
   "                best = product",
   "    print(best)",
@@ -1518,22 +1532,22 @@ const M3_STAGE_B_CPP = [
   "        long long best = -1;",
   "        for (int c = 0; c < 26; c++) {",
   "            // NEW: 표 조회 O(1)",
-  "            int left = nearest_diff[c][l];",
-  "            if (left >= r) {",
+  "            int left_pointer = nearest_diff[c][l];",
+  "            if (left_pointer >= r) {",
   "                continue;",
   "            }",
-  "            int right = latest_same[c][r];",
-  "            if (right <= left) {",
+  "            int right_pointer = latest_same[c][r];",
+  "            if (right_pointer <= left_pointer) {",
   "                continue;",
   "            }",
   "            for (int j : positions_of[c]) {",
-  "                if (j <= left) {",
+  "                if (j <= left_pointer) {",
   "                    continue;",
   "                }",
-  "                if (j >= right) {",
+  "                if (j >= right_pointer) {",
   "                    break;",
   "                }",
-  "                long long product = (long long)(j - left) * (right - j);",
+  "                long long product = (long long)(j - left_pointer) * (right_pointer - j);",
   "                if (product > best) {",
   "                    best = product;",
   "                }",
@@ -1682,8 +1696,8 @@ const M3_FAST_CPP = (E) => [
 const _M3_VARS = [
   { v: "s", ko: "문자열", en: "the string" },
   { v: "j", ko: "가운데 자리", en: "middle spot" },
-  { v: "left", ko: "왼쪽 '다른 글자'", en: "left different" },
-  { v: "right", ko: "오른쪽 '같은 글자'", en: "right same" },
+  { v: "left_pointer", ko: "왼쪽 '다른 글자'", en: "left different" },
+  { v: "right_pointer", ko: "오른쪽 '같은 글자'", en: "right same" },
 ];
 // 빠른 풀이는 변수가 완전히 다르다 (표 3 개). 예전엔 여기서도 _M3_VARS 를 써서
 // 코드에 없는 j / left / right 를 범례로 보여줬다. (2026-07-30 페이지 훑다 발견)
@@ -1700,9 +1714,9 @@ export function getMooin3Walk(E, lang = "py", mode = "brute") {
         { hi: [4, 8],   bubble: t(E, "Input first — read N, Q, then the string s.", "입력부터 — N, Q 읽고 문자열 s.") },
         { hi: [10, 15], bubble: t(E, "Each query: read l, r → 0-based (l--, r--). best = -1 (long long, the product gets big).", "쿼리마다 l, r 읽고 0-based (l--, r--). best = -1 (곱이 커서 long long).") },
         { hi: [16, 16], bubble: t(E, "Pin the middle spot j — for each j we look both ways once.", "가운데 자리 j 를 하나씩 박아요 — j 마다 양쪽을 한 번씩.") },
-        { hi: [17, 23], bubble: t(E, "Left: first spot with a DIFFERENT letter than s[j] = left (smaller i → bigger j−i).", "왼쪽: s[j] 와 '다른' 글자가 처음 나오는 자리 = left (i 작을수록 j−i 큼).") },
-        { hi: [24, 30], bubble: t(E, "Right: last spot with the SAME letter as s[j] = right (bigger k → bigger k−j).", "오른쪽: s[j] 와 '같은' 글자가 마지막 자리 = right (k 클수록 k−j 큼).") },
-        { hi: [31, 36], bubble: t(E, "If both exist, (j−left)×(right−j) — keep the max. Cast to long long so it doesn't overflow.", "둘 다 있으면 (j−left)×(right−j) — 최댓값 유지. long long 캐스팅으로 오버플로 방지.") },
+        { hi: [17, 23], bubble: t(E, "Left: first spot with a DIFFERENT letter than s[j] = left_pointer (smaller i → bigger j−i).", "왼쪽: s[j] 와 '다른' 글자가 처음 나오는 자리 = left_pointer (i 작을수록 j−i 큼).") },
+        { hi: [24, 30], bubble: t(E, "Right: last spot with the SAME letter as s[j] = right_pointer (bigger k → bigger k−j).", "오른쪽: s[j] 와 '같은' 글자가 마지막 자리 = right_pointer (k 클수록 k−j 큼).") },
+        { hi: [31, 36], bubble: t(E, "If both exist, (j−left_pointer)×(right_pointer−j) — keep the max. Cast to long long so it doesn't overflow.", "둘 다 있으면 (j−left_pointer)×(right_pointer−j) — 최댓값 유지. long long 캐스팅으로 오버플로 방지.") },
         { hi: [38, 38], bubble: t(E, "Print this query's answer.", "이 쿼리의 답 출력.") },
       ] };
     }
@@ -1710,9 +1724,9 @@ export function getMooin3Walk(E, lang = "py", mode = "brute") {
       { hi: [0, 1],   bubble: t(E, "Input first — read N, Q, then the string s.", "입력부터 — N, Q 읽고 문자열 s.") },
       { hi: [3, 7],   bubble: t(E, "Each query: read l, r → 0-based (l−=1, r−=1). Start best = -1.", "쿼리마다 l, r 읽고 0-based (l−=1, r−=1). best = -1 로 시작.") },
       { hi: [8, 9],   bubble: t(E, "Pin the middle spot j — for each j we look both ways once.", "가운데 자리 j 를 하나씩 박아요 — j 마다 양쪽을 한 번씩.") },
-      { hi: [10, 15], bubble: t(E, "Left: first spot with a DIFFERENT letter than s[j] = left (smaller i → bigger j−i).", "왼쪽: s[j] 와 '다른' 글자가 처음 나오는 자리 = left (i 작을수록 j−i 큼).") },
-      { hi: [16, 21], bubble: t(E, "Right: last spot with the SAME letter as s[j] = right (bigger k → bigger k−j).", "오른쪽: s[j] 와 '같은' 글자가 마지막 자리 = right (k 클수록 k−j 큼).") },
-      { hi: [22, 25], bubble: t(E, "If both exist, (j−left)×(right−j) — keep the max.", "둘 다 있으면 (j−left)×(right−j) — 최댓값 유지.") },
+      { hi: [10, 15], bubble: t(E, "Left: first spot with a DIFFERENT letter than s[j] = left_pointer (smaller i → bigger j−i).", "왼쪽: s[j] 와 '다른' 글자가 처음 나오는 자리 = left_pointer (i 작을수록 j−i 큼).") },
+      { hi: [16, 21], bubble: t(E, "Right: last spot with the SAME letter as s[j] = right_pointer (bigger k → bigger k−j).", "오른쪽: s[j] 와 '같은' 글자가 마지막 자리 = right_pointer (k 클수록 k−j 큼).") },
+      { hi: [22, 25], bubble: t(E, "If both exist, (j−left_pointer)×(right_pointer−j) — keep the max.", "둘 다 있으면 (j−left_pointer)×(right_pointer−j) — 최댓값 유지.") },
       { hi: [26, 26], bubble: t(E, "Print this query's answer.", "이 쿼리의 답 출력.") },
     ] };
   }
@@ -1836,8 +1850,8 @@ export function getMooin3Sections(E) {
             "핵심 관찰: s[j] = c 인 모든 j 가 같은 좌/우 스캔 질문을 함 (s[i] ≠ c 인 가장 왼쪽 i, s[k] = c 인 가장 오른쪽 k)."),
         t(E, "So loop the OUTER over c (just 26 letters) instead of j (N positions).  Inside each c, iterate positions_of[c] to find the best j.",
             "외곽 루프를 c (26 글자) 로 — j (N 개) 대신. c 안에서 positions_of[c] 를 돌며 best j 를 찾음."),
-        t(E, "Per query still O(26·N) because we scan to find left / right each time. Conceptual win, not yet a speed win — but the next step plugs that hole.",
-            "쿼리당 아직 O(26·N) — 매번 left / right 를 스캔해서. 개념 압축은 끝, 속도 압축은 다음 단계."),
+        t(E, "Per query still O(26·N) because we scan to find left_pointer / right_pointer each time. Conceptual win, not yet a speed win — but the next step plugs that hole.",
+            "쿼리당 아직 O(26·N) — 매번 left_pointer / right_pointer 를 스캔해서. 개념 압축은 끝, 속도 압축은 다음 단계."),
       ],
     },
 
@@ -1850,8 +1864,8 @@ export function getMooin3Sections(E) {
       why: [
         t(E, "Build two tables ONCE before any query: nearest_diff[c][i] (smallest idx ≥ i with s[idx] ≠ c) and latest_same[c][i] (largest idx ≤ i with s[idx] = c).",
             "쿼리 전에 한 번만: nearest_diff[c][i] (idx ≥ i 중 s[idx] ≠ c 인 가장 작은 idx) 와 latest_same[c][i] (idx ≤ i 중 s[idx] = c 인 가장 큰 idx) 표 작성."),
-        t(E, "Precompute is O(26·N).  Per query, getting (left, right) for each c is now a single table lookup — no scan.",
-            "Precompute O(26·N). 쿼리에선 c 마다 (left, right) 가 표 한 번 조회로 끝 — 스캔 없음."),
+        t(E, "Precompute is O(26·N).  Per query, getting (left_pointer, right_pointer) for each c is now a single table lookup — no scan.",
+            "Precompute O(26·N). 쿼리에선 c 마다 (left_pointer, right_pointer) 가 표 한 번 조회로 끝 — 스캔 없음."),
         t(E, "But we still iterate every position in positions_of[c] to find best j — per query O(N) total. One more leap to go.",
             "그래도 best j 를 찾으려고 positions_of[c] 를 다 도는 건 그대로 — 쿼리당 O(N). 마지막 한 걸음 남음."),
       ],
