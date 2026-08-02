@@ -14,7 +14,7 @@
 import { useState, useRef, useEffect } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";
-import { CodeBlock } from "@/components/quest/shared";
+import { CodeBlock, highlight } from "@/components/quest/shared";
 import { SimNav as SharedSimNav, useTraceStep, StepHeader, NarrativePanel } from "@/components/quest/TraceStepper";
 import { SampleInputAside } from "@/components/quest/SampleInputAside";
 
@@ -667,15 +667,17 @@ export function MooTraceSimulator({ E, lang = "py" }) {
           앞 브루트 시뮬은 지문의 1-based, 이 시뮬은 코드의 0-based — 우연이 아니라
           '문제의 말 → 코드의 말' 로 넘어가는 지점이고, 코드에 l -= 1 이 있는 이유다.
           (USACO 에서 애들이 실제로 제일 많이 틀리는 off-by-one 이라 숨기지 않는다.) */}
-      {/* 번호 기준 안내도 시작 화면에서만 — 매 스텝 붙어 있으면 읽을 게 늘기만 한다. */}
+      {/* 번호 기준 안내는 시작 화면에서만 — 매 스텝 붙어 있으면 읽을 게 늘기만 한다.
+          문구 주의: "여기부터" 라고 쓰면 안 된다. 뒤의 빠른-풀이 시뮬(코드 4/5)은
+          다시 1-based 라서 "이 시뮬만" 이라고 범위를 못 박아야 한다. */}
       {s.kind === "init" && (
         <div style={{
           maxWidth: 460, margin: "0 auto 12px", textAlign: "center",
           fontSize: 10, color: C.dim, lineHeight: 1.6, wordBreak: "keep-all",
         }}>
           {t(E,
-            <>📎 Numbers start at <b>0</b> here — the code converts with <code>l -= 1</code>. So the problem's <b>1st</b> spot is <code>s[0]</code> in the code.</>,
-            <>📎 여기부터 번호가 <b>0</b> 부터예요 — 코드가 <code>l -= 1</code> 로 바꿔 쓰기 때문. 문제의 <b>1 번째</b> 칸이 코드에선 <code>s[0]</code>.</>)}
+            <>📎 In <b>this</b> sim numbers start at <b>0</b> — it follows the code, which converts with <code>l -= 1</code>. The problem's <b>1st</b> spot is <code>s[0]</code> in the code.</>,
+            <>📎 <b>이 시뮬만</b> 번호가 <b>0</b> 부터예요 — 아래 코드를 그대로 따라가는데, 코드가 <code>l -= 1</code> 로 바꿔 쓰기 때문. 문제의 <b>1 번째</b> 칸이 코드에선 <code>s[0]</code>.</>)}
         </div>
       )}
 
@@ -730,11 +732,15 @@ export function MooTraceSimulator({ E, lang = "py" }) {
                     color: on ? "#c7d2fe" : "#475569", minWidth: 14, textAlign: "right",
                     userSelect: "none", lineHeight: 1.65,
                   }}>{on ? "▸" : " "}</span>
+                  {/* 구문 강조 — quest 의 다른 코드 블록과 같은 하이라이터를 쓴다
+                      (선생님 2026-07-30: "syntax highlight 아직도 안되어 있는것 같아").
+                      토큰이 자기 색을 갖고 오므로, 실행 중이 아닌 줄은 색 대신
+                      opacity 로 죽여서 활성 줄이 눈에 띄게 한다. */}
                   <pre style={{
                     margin: 0, fontFamily: "'JetBrains Mono',monospace", fontSize: 11,
-                    lineHeight: 1.65, color: on ? "#e0e7ff" : "#94a3b8",
-                    whiteSpace: "pre", fontWeight: on ? 700 : 400,
-                  }}>{line || " "}</pre>
+                    lineHeight: 1.65, whiteSpace: "pre",
+                    opacity: on ? 1 : 0.45,
+                  }}>{line ? highlight(line, isCpp ? "cpp" : "py") : " "}</pre>
                 </div>
               );
             })}
@@ -1647,11 +1653,20 @@ const M3_FAST_CPP = (E) => [
 // CodeWalk provider — 코드 위 '왜 이렇게?' 노트 벽 대신, 설명을 코드 줄에 붙이는 말풍선.
 // (선생님 2026-07-23: "설명 줄줄이 쓰지 말고 봐야할 부분만, 필요하면 말풍선".)
 // 검증본 코드(M3_FULL_*, M3_FAST_*)는 그대로 두고 표시 방식만 CodeWalk 로.
+// fix-j (브루트) 코드가 쓰는 변수
 const _M3_VARS = [
   { v: "s", ko: "문자열", en: "the string" },
   { v: "j", ko: "가운데 자리", en: "middle spot" },
   { v: "left_i", ko: "왼쪽 '다른 글자'", en: "left different" },
   { v: "right_k", ko: "오른쪽 '같은 글자'", en: "right same" },
+];
+// 빠른 풀이는 변수가 완전히 다르다 (표 3 개). 예전엔 여기서도 _M3_VARS 를 써서
+// 코드에 없는 j / left_i / right_k 를 범례로 보여줬다. (2026-07-30 페이지 훑다 발견)
+const _M3_FAST_VARS = [
+  { v: "s", ko: "문자열", en: "the string" },
+  { v: "latest_same", ko: "왼쪽으로 가장 가까운 같은 글자", en: "nearest same on the left" },
+  { v: "earliest_same", ko: "오른쪽으로 가장 가까운 같은 글자", en: "nearest same on the right" },
+  { v: "nearest_diff", ko: "오른쪽으로 가장 가까운 다른 글자", en: "nearest different on the right" },
 ];
 export function getMooin3Walk(E, lang = "py", mode = "brute") {
   if (mode === "brute") {
@@ -1678,7 +1693,7 @@ export function getMooin3Walk(E, lang = "py", mode = "brute") {
   }
   // mode === "fast" — O(26) per query: 3 lookup tables + parabola vertex
   if (lang === "cpp") {
-    return { code: M3_FAST_CPP(E), vars: _M3_VARS, beats: [
+    return { code: M3_FAST_CPP(E), vars: _M3_FAST_VARS, beats: [
       { hi: [5, 9],   bubble: t(E, "Read N, Q, and the string s — Q up to 30,000.", "N, Q 와 문자열 s 읽기 — 쿼리 3만 개.") },
       { hi: [11, 33], bubble: t(E, "PRECOMPUTE once, before any query: for each letter, 3 tables. Left→right fills latest_same; right→left fills earliest_same & nearest_diff. After this, each lookup is O(1).", "전처리 — 쿼리 전에 한 번만: 글자마다 표 3개. 왼→오로 latest_same, 오→왼으로 earliest_same·nearest_diff. 이러면 조회가 O(1).") },
       { hi: [35, 40], bubble: t(E, "Each query: read l, r → 0-based. best = -1.", "쿼리마다 l, r 읽고 0-based. best = -1.") },
@@ -1687,7 +1702,7 @@ export function getMooin3Walk(E, lang = "py", mode = "brute") {
       { hi: [57, 57], bubble: t(E, "Print the answer.", "답 출력.") },
     ] };
   }
-  return { code: M3_FAST_PY(E), vars: _M3_VARS, beats: [
+  return { code: M3_FAST_PY(E), vars: _M3_FAST_VARS, beats: [
     { hi: [0, 4],   bubble: t(E, "Fast input (sys.stdin.readline) + read N, Q, s — Q up to 30,000.", "빠른 입력(sys.stdin.readline) + N, Q, s 읽기 — 쿼리 3만 개.") },
     { hi: [6, 32],  bubble: t(E, "PRECOMPUTE once, before any query: for each letter, 3 tables. Left→right fills latest_same; right→left fills earliest_same & nearest_diff. After this, each lookup is O(1).", "전처리 — 쿼리 전에 한 번만: 글자마다 표 3개. 왼→오로 latest_same, 오→왼으로 earliest_same·nearest_diff. 이러면 조회가 O(1).") },
     { hi: [34, 39], bubble: t(E, "Each query: read l, r → 0-based. best = -1.", "쿼리마다 l, r 읽고 0-based. best = -1.") },
