@@ -402,6 +402,47 @@ export function MooTraceSimulator({ E, lang = "py" }) {
   const s = trace[safe];
   const hasRow = s.kind === "scan" || s.kind === "score";
 
+  /* 칸 줄 좌표 — 말풍선/눈금을 특정 칸에 정확히 붙이기 위한 값.
+     (칸 너비·간격을 바꾸면 여기만 고치면 된다.) */
+  const CELL_W = 36, CELL_GAP = 4;
+  const PITCH = CELL_W + CELL_GAP;
+  const ROW_W = str.length * CELL_W + (str.length - 1) * CELL_GAP;
+  const cellCx = (i) => i * PITCH + CELL_W / 2;
+
+  /* 말풍선 — 흐름에서 빠져(absolute) 지정한 칸 위에 뜨고, 꼬리로 그 칸을 가리킨다.
+     화면 밖으로 나가지 않게 상자는 살짝 밀되, 꼬리는 원래 칸을 계속 가리킨다. */
+  const Bubble = ({ cx, bg, bd, fg, children }) => {
+    const W = 300;
+    const rawLeft = cx - W / 2;
+    const left = Math.max(-28, Math.min(rawLeft, ROW_W - W + 28));
+    const tail = cx - left;                       // 상자 안에서의 꼬리 위치
+    return (
+      <div style={{ position: "absolute", bottom: 16, left, width: W }}>
+        <div style={{
+          padding: "8px 12px", borderRadius: 10, background: bg,
+          border: `1.5px solid ${bd}`, color: fg,
+          fontSize: 12, fontWeight: 700, textAlign: "center",
+          wordBreak: "keep-all", lineHeight: 1.6,
+        }}>
+          {children}
+        </div>
+        {/* 꼬리 ▼ — 테두리색 삼각형 위에 배경색 삼각형을 겹쳐 얇은 테두리를 살림 */}
+        <div style={{
+          position: "absolute", top: "100%", left: tail, transform: "translateX(-50%)",
+          width: 0, height: 0,
+          borderLeft: "7px solid transparent", borderRight: "7px solid transparent",
+          borderTop: `8px solid ${bd}`,
+        }} />
+        <div style={{
+          position: "absolute", top: "100%", left: tail, transform: "translateX(-50%)",
+          width: 0, height: 0, marginTop: -1.6,
+          borderLeft: "6px solid transparent", borderRight: "6px solid transparent",
+          borderTop: `7px solid ${bg}`,
+        }} />
+      </div>
+    );
+  };
+
   /* ── 코드 패널 ──────────────────────────────────────────────
      코드를 여기 다시 베껴 쓰지 않는다 — 뒤 챕터가 보여주는 M3_FULL_* 에서
      안쪽 블록만 잘라 쓴다. 그래야 코드를 고쳐도 시뮬이 어긋나지 않는다.
@@ -540,8 +581,10 @@ export function MooTraceSimulator({ E, lang = "py" }) {
   // Anchored on the OUTSIDE end of each scan so the student sees "scan starts here, lands there".
   const arrowFor = (i) => {
     if (!hasRow) return null;
-    // 스캔 중이면 화살표가 *커서 위* 에 온다 — 어느 방향으로 걸어가는 중인지 보이게.
-    if (s.kind === "scan") return i === s.cursor ? (s.dir === "left" ? "▶" : "◀") : null;
+    // 스캔 중에는 말풍선 꼬리(▼)가 이미 그 칸을 가리킨다. 여기에 화살표까지 두면
+    // 같은 칸을 둘이 가리키며 겹쳐 보인다 (선생님 2026-07-30: "근데 겹치네").
+    // 방향은 말풍선 첫 줄("오른쪽에서 ←")이 말해주므로 화살표는 생략.
+    if (s.kind === "scan") return null;
     // 점수 단계에선 두 스캔이 시작한 양 끝을 표시.
     if (i === l) return "▶";
     if (i === r) return "◀";
@@ -559,19 +602,26 @@ export function MooTraceSimulator({ E, lang = "py" }) {
         subtitle={`(${safe + 1} / ${trace.length})`}
       />
 
+      {/* ── 말풍선 자리 — 높이 고정 ──────────────────────────────────────
+          스텝마다 말풍선 줄 수가 달라(확정 스텝엔 '왜' 한 줄 더) 화면이 커졌다
+          작아졌다 했다. (선생님 2026-07-30: "다음을 누르면 화면이 커졌다 작아졌다")
+          가장 큰 경우에 맞춰 자리를 미리 잡아두면 아래 요소들이 안 흔들린다. */}
+      {/* ⬇ 말풍선 무대 — 칸 줄 바로 위에 겹쳐 뜨는 레이어.
+          선생님 2026-07-30: "저건 모양만 말풍선이야. 고정되어 있잖아 —
+          우리 화면 위에 올라가 있는게 말풍선이지."
+          그래서 말풍선을 흐름에서 빼서(absolute) *지금 보고 있는 칸* 위에 띄우고
+          꼬리(▼)로 그 칸을 가리킨다. 커서가 움직이면 말풍선도 따라간다.
+          absolute 라 높이에 영향이 없어 스텝마다 화면이 흔들리지도 않는다. */}
+      <div style={{ position: "relative", width: ROW_W, height: 104, margin: "0 auto" }}>
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
       {/* 시작 화면 — 문단으로 쓰지 않는다 (선생님 2026-07-30: "읽기 싫어. 설명할건
           말풍선으로 보여줘야 할곳에 달리게").  한 줄 말풍선만 두고, 나머지는 아래
           칸 위에 직접 붙는 뱃지(j✗ / j 가능)로 보여준다. */}
       {s.kind === "init" && (
-        <div style={{
-          maxWidth: 430, margin: "0 auto 10px", padding: "8px 12px", borderRadius: 10,
-          background: "#fffbeb", border: "1.5px solid #fcd34d",
-          fontSize: 12, fontWeight: 700, color: "#92400e",
-          textAlign: "center", wordBreak: "keep-all", lineHeight: 1.55,
-        }}>
+        <Bubble cx={ROW_W / 2} bg="#fffbeb" bd="#fcd34d" fg="#92400e">
           {t(E, <>Pin a middle <b>j</b> — then look both ways.</>,
                 <>가운데 <b>j</b> 를 하나 박고 — 양쪽을 봐요.</>)}
-        </div>
+        </Bubble>
       )}
 
       {/* 스텝 말풍선 — 이번 한 번의 비교를 글자와 번호로 그대로 말해준다.
@@ -582,13 +632,12 @@ export function MooTraceSimulator({ E, lang = "py" }) {
         const dirEn = s.dir === "left" ? "from the left →" : "from the right ←";
         const col = s.isMatch ? (s.dir === "left" ? "#dc2626" : "#16a34a") : "#4338ca";
         return (
-          <div style={{
-            maxWidth: 460, margin: "0 auto 12px", padding: "9px 13px", borderRadius: 10,
-            background: s.isMatch ? (s.dir === "left" ? "#fef2f2" : "#f0fdf4") : "#eef2ff",
-            border: `1.5px solid ${s.isMatch ? (s.dir === "left" ? "#fca5a5" : "#86efac") : "#c7d2fe"}`,
-            fontSize: 12, fontWeight: 700, color: col, textAlign: "center",
-            wordBreak: "keep-all", lineHeight: 1.6,
-          }}>
+          <Bubble
+            cx={cellCx(s.cursor)}
+            bg={s.isMatch ? (s.dir === "left" ? "#fef2f2" : "#f0fdf4") : "#eef2ff"}
+            bd={s.isMatch ? (s.dir === "left" ? "#fca5a5" : "#86efac") : "#c7d2fe"}
+            fg={col}
+          >
             <span style={{ color: C.dim, fontWeight: 600 }}>{t(E, dirEn, dirKo)}</span>{"  "}
             <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>
               s[{s.cursor}] = '{cch}'
@@ -621,29 +670,29 @@ export function MooTraceSimulator({ E, lang = "py" }) {
                         <>왜 여기서 멈출까? 오른쪽 끝에서 왔으니 이게 <b>가장 오른쪽</b> → <b>right_pointer − j</b> 가 최대가 돼요.</>)}
               </div>
             )}
-          </div>
+          </Bubble>
         );
       })()}
 
-      {/* 점수 단계 — 스캔이 다 끝난 뒤에만 계산식을 보여준다. */}
+      {/* 점수 단계 — 말풍선은 j 위에. 거리 두 개가 어떻게 곱해지는지는 아래
+          칸 밑의 눈금(브래킷)이 보여준다. (선생님: "이 다음에 어떻게 계산되는지를
+          보여줘야지") */}
       {s.kind === "score" && (
-        <div style={{
-          maxWidth: 460, margin: "0 auto 12px", padding: "9px 13px", borderRadius: 10,
-          background: "#fffbeb", border: "1.5px solid #fcd34d",
-          fontSize: 12, fontWeight: 700, color: "#92400e", textAlign: "center",
-          wordBreak: "keep-all", lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace",
-        }}>
+        <Bubble cx={cellCx(s.row.j)} bg="#fffbeb" bd="#fcd34d" fg="#92400e">
           {s.row.score === null
-            ? t(E, <span style={{ fontFamily: "inherit" }}>No i or no k for this j → skip ✗</span>,
-                  <span style={{ fontFamily: "inherit" }}>이 j 는 i 나 k 가 없어요 → 건너뜀 ✗</span>)
-            : <>
-                ({s.row.j} − <span style={{ color: "#dc2626" }}>{s.row.left}</span>) × (<span style={{ color: "#16a34a" }}>{s.row.right}</span> − {s.row.j})
-                {" = "}
-                <span style={{ color: "#dc2626" }}>{s.row.j - s.row.left}</span>×<span style={{ color: "#16a34a" }}>{s.row.right - s.row.j}</span>
-                {" = "}<b style={{ fontSize: 14 }}>{s.row.score}</b>
-              </>}
-        </div>
+            ? t(E, "No i or no k for this j → skip ✗", "이 j 는 i 나 k 가 없어요 → 건너뜀 ✗")
+            : <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>
+                <span style={{ color: "#dc2626" }}>{s.row.j - s.row.left}</span>
+                {" × "}
+                <span style={{ color: "#16a34a" }}>{s.row.right - s.row.j}</span>
+                {" = "}<b style={{ fontSize: 15 }}>{s.row.score}</b>
+              </span>}
+        </Bubble>
       )}
+
+      </div>
+      </div>
+      {/* ── 말풍선 자리 끝 ─────────────────────────────────────────────── */}
 
       {/* No legend. The cells below carry all the meaning visually:
           color  → role (yellow=j, red=left, green=right)
@@ -652,7 +701,9 @@ export function MooTraceSimulator({ E, lang = "py" }) {
           label  → which name (j / left / right) */}
 
       {/* String row with j/left/right labels + scan footprints (✗) + scan-direction arrows. */}
-      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 14 }}>
+      {/* 폭·간격을 위 말풍선 무대와 똑같이 (CELL_W / CELL_GAP / ROW_W) 맞춰야
+          꼬리가 정확한 칸을 가리킨다. */}
+      <div style={{ display: "flex", gap: CELL_GAP, justifyContent: "center", width: ROW_W, margin: "0 auto 6px" }}>
         {str.split("").map((ch, i) => {
           const role = cellRole(i);
           const labelColor =
@@ -707,37 +758,70 @@ export function MooTraceSimulator({ E, lang = "py" }) {
       {/* 양 끝이 왜 j 가 못 되는지 — 그 두 칸 바로 아래에, 화살표로 가리키며 짧게.
           문단으로 쓰지 않는다 (선생님 2026-07-30: "읽기 싫어").
           이게 곧 코드의 range(l + 1, r) 이유이기도 해서 마지막에 한 조각만 덧붙인다. */}
-      {s.kind === "init" && (
-        <div style={{
-          display: "flex", justifyContent: "center", gap: 4, marginBottom: 10,
-          fontSize: 9.5, fontWeight: 700, color: "#b91c1c",
-        }}>
-          {str.split("").map((_, i) => (
-            <div key={i} style={{ width: 36, textAlign: "center", lineHeight: 1.35, wordBreak: "keep-all" }}>
-              {i === l ? <>↑<br />{t(E, "no room for i", "왼쪽에 i 자리 없음")}</>
-                : i === r ? <>↑<br />{t(E, "no room for k", "오른쪽에 k 자리 없음")}</>
-                : null}
+      {/* 점수 단계 — 두 거리를 칸 아래 눈금으로 그려서 '어떻게 곱해지는지' 를 보여준다.
+          (선생님 2026-07-30: "이 다음에 어떻게 계산되는지를 보여줘야지")
+          문제 페이지 1 의 ←2→ ←3→ 눈금과 같은 표현이라 학생이 이미 본 그림이다. */}
+      {/* 칸 아래 한 자리를 시작 화면(왜 양 끝이 j 가 못 되나)과 점수 단계(거리 눈금)가
+          *같이 쓴다*. 둘은 동시에 안 나오므로 자리를 하나만 잡으면 되고, 그만큼
+          빈 공간이 줄어든다. 둘 다 absolute 라 높이도 안 흔들린다. */}
+      <div style={{ height: 46, position: "relative", width: ROW_W, margin: "0 auto 4px" }}>
+        {s.kind === "score" && s.row.score !== null && (() => {
+          const segs = [
+            { a: s.row.left, b: s.row.j, col: "#dc2626", n: s.row.j - s.row.left },
+            { a: s.row.j, b: s.row.right, col: "#16a34a", n: s.row.right - s.row.j },
+          ];
+          return segs.map((g, gi) => {
+            const x1 = cellCx(g.a), x2 = cellCx(g.b);
+            return (
+              <div key={gi} style={{
+                position: "absolute", left: x1, width: x2 - x1, top: 4,
+                borderTop: `2px solid ${g.col}`, borderLeft: `2px solid ${g.col}`,
+                borderRight: `2px solid ${g.col}`, height: 8, borderRadius: "3px 3px 0 0",
+              }}>
+                <div style={{
+                  position: "absolute", top: 6, left: "50%", transform: "translateX(-50%)",
+                  fontSize: 11, fontWeight: 800, color: g.col, background: "#fff", padding: "0 3px",
+                  fontFamily: "'JetBrains Mono',monospace",
+                }}>{g.n}</div>
+              </div>
+            );
+          });
+        })()}
+        {/* 같은 자리 — 시작 화면에선 '양 끝은 j 가 못 된다' 를 그 칸 아래에 붙인다. */}
+        {s.kind === "init" && (
+          <>
+            <div style={{
+              position: "absolute", inset: 0, display: "flex", gap: CELL_GAP,
+              fontSize: 9.5, fontWeight: 700, color: "#b91c1c",
+            }}>
+              {str.split("").map((_, i) => (
+                <div key={i} style={{ width: CELL_W, textAlign: "center", lineHeight: 1.3, wordBreak: "keep-all" }}>
+                  {i === l ? <>↑<br />{t(E, "no room for i", "왼쪽에 i 자리 없음")}</>
+                    : i === r ? <>↑<br />{t(E, "no room for k", "오른쪽에 k 자리 없음")}</>
+                    : null}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      )}
-      {s.kind === "init" && (
-        <div style={{
-          textAlign: "center", fontSize: 10, color: C.dim, marginBottom: 12,
-          wordBreak: "keep-all",
-        }}>
-          {t(E, <>→ that is why the code says <code>range(l + 1, r)</code>. Numbers start at <b>0</b> here, like the code.</>,
-                <>→ 그래서 코드가 <code>range(l + 1, r)</code>. 번호도 코드처럼 <b>0</b> 부터예요.</>)}
-        </div>
-      )}
+            <div style={{
+              position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)",
+              whiteSpace: "nowrap", fontSize: 10, color: C.dim,
+            }}>
+              {t(E, <>→ code: <code>range(l + 1, r)</code> · numbers from <b>0</b>, like the code</>,
+                    <>→ 그래서 코드가 <code>range(l + 1, r)</code> · 번호도 코드처럼 <b>0</b> 부터</>)}
+            </div>
+          </>
+        )}
+      </div>
 
       {/* ── 코드 + 변수판 — 포인터가 '코드대로' 움직이는 걸 보여주는 부분.
              (선생님 2026-07-30) 하이라이트된 줄이 이번 스텝에 실행된 줄. ── */}
       {CODE.length > 0 && (
         <div style={{ maxWidth: 520, margin: "0 auto 12px" }}>
+          {/* 시작 화면엔 칩이 없어 그만큼 화면이 줄었다 → 자리를 늘 잡아둔다. */}
+          <div style={{ minHeight: 24, marginBottom: 6 }}>
           {codeVars && (
             <div style={{
-              display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap", marginBottom: 6,
+              display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap",
               fontFamily: "'JetBrains Mono',monospace", fontSize: 10.5,
             }}>
               {/* 칩을 최소로 (선생님 2026-07-30: "너무 많은 정보가 있어").
@@ -757,6 +841,7 @@ export function MooTraceSimulator({ E, lang = "py" }) {
               ))}
             </div>
           )}
+          </div>
           <div ref={codeBoxRef} style={{
             background: "#0f172a", borderRadius: 10, padding: "9px 0", overflowX: "auto",
             // 높이 제한 + 자동 스크롤 → 실행 줄이 항상 보인다 (useEffect 참고)
@@ -807,7 +892,8 @@ export function MooTraceSimulator({ E, lang = "py" }) {
                    1×3=3   ⭐
           The "1×3=3" makes it unambiguous that 3 is the SCORE (result of multiplication),
           not the j position.  No prose. */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
+      {/* 카드가 0 개 → 1 개로 늘 때 한 칸 커지던 것도 자리를 미리 잡아 막는다. */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 10, flexWrap: "wrap", minHeight: 46 }}>
         {perJ.slice(0, s.revealed).map((row) => {
           const isCurrent = hasRow && row.j === s.row.j;
           const isBest = row.score !== null && row.score === s.best && s.best >= 0;
