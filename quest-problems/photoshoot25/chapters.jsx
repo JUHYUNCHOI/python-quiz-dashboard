@@ -77,62 +77,6 @@ export function makePhotoshoot25Ch1(E) {
           </div>
         </div>),
     },
-    // 1-1b: Numbers-first warm-up — compute K×K window sums on a tiny grid before the big-O talk
-    {
-      type: "reveal",
-      narr: t(E,
-        "Before the big-O talk, let's slide a 2×2 photo over a tiny 3×3 grid and add up real numbers.",
-        "빅오 얘기 전에, 작은 3×3 격자 위에서 2×2 사진을 옮겨가며 실제 숫자를 더해봐요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: 14, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
-            <div style={{ fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
-              🔢 {t(E, "K×K window sum — with numbers", "K×K 창 합 — 숫자로")}
-            </div>
-            <div style={{ marginBottom: 6 }}>
-              {t(E, "Grid N=3, photo size K=2. Beauty:", "격자 N=3, 사진 크기 K=2. 아름다움:")}
-            </div>
-            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, background: "#fff", border: "1px solid #c4b5fd", borderRadius: 6, padding: "6px 10px", display: "inline-block", lineHeight: 1.5 }}>
-              <div>1&nbsp;&nbsp;2&nbsp;&nbsp;0</div>
-              <div>0&nbsp;&nbsp;3&nbsp;&nbsp;1</div>
-              <div>4&nbsp;&nbsp;0&nbsp;&nbsp;2</div>
-            </div>
-            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, marginBottom: 2 }}>
-              {t(E, "All 4 windows (a 2×2 slides to 4 spots on a 3×3):", "창은 4 개 (3×3 위에서 2×2 가 4 군데로 미끄러짐):")}
-            </div>
-            <div style={{ paddingLeft: 8, borderLeft: "3px solid #c4b5fd", display: "flex", flexDirection: "column", gap: 3 }}>
-              <div>{t(E, "top-left 2×2: ", "왼쪽 위 2×2: ")}1+2+0+3 = <b>6</b></div>
-              <div>{t(E, "top-right 2×2: ", "오른쪽 위 2×2: ")}2+0+3+1 = <b>6</b></div>
-              <div style={{ color: "#7c3aed", fontWeight: 700 }}>{t(E, "bottom-left 2×2: ", "왼쪽 아래 2×2: ")}0+3+4+0 = 7 ← {t(E, "biggest!", "최대!")}</div>
-              <div>{t(E, "bottom-right 2×2: ", "오른쪽 아래 2×2: ")}3+1+0+2 = <b>6</b></div>
-            </div>
-            <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
-              👉 {t(E, "Best photo = the largest sum among all K×K windows = ", "가장 멋진 사진 = 모든 K×K 창 합 중 최댓값 = ")}<b style={{ color: "#15803d" }}>7</b>
-              <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
-                {t(E, "An update raises one cell — some window sums change, and we reprint the max.",
-                     "업데이트는 한 칸을 키워요 — 일부 창 합이 바뀌고, 최댓값을 다시 출력해요.")}
-              </div>
-            </div>
-          </div>
-        </div>),
-    },
-    /* [전-1] 퀴즈 3 개(느린 비용 / 영향받는 창 수 / 최대 단조) → 시뮬 2 개로 교체.
-       셋 다 "말로 물어보고 말로 답" 이었는데, 이 문제는 답이 통째로 그림이다.
-       (선생님: "퀴즈는 없는게 좋은것 같아", "설명은 시뮬로") */
-    {
-      type: "reveal",
-      narr: t(E,
-        "First — what IS a photo's score?  Slide the K x K square everywhere and keep the best.",
-        "먼저 — 사진 점수가 뭔지부터.  K x K 정사각형을 다 밀어보고 제일 좋은 걸 기억해요."),
-      content: (<PhotoWindowSim E={E} />),
-    },
-    {
-      type: "reveal",
-      narr: t(E,
-        "Now the key: when ONE cow gets prettier, which photos change?  Only the ones containing her — and their top-left corners form a rectangle.",
-        "이제 핵심: 소 한 마리가 예뻐지면 어떤 사진이 바뀔까?  그 소가 들어간 사진만 — 그리고 그 사진들의 왼쪽위가 직사각형을 이뤄요."),
-      content: (<PhotoUpdateSim E={E} />),
-    },
     // 1-4b: 입출력 형식 + 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화
     {
       type: "reveal",
@@ -173,20 +117,57 @@ export function makePhotoshoot25Ch1(E) {
           </div>
         </div>),
     },
-
-    // 1-5: Input — count affected windows
+    /* [전-1] 퀴즈 3 개(느린 비용 / 영향받는 창 수 / 최대 단조) → 시뮬 2 개로 교체.
+       셋 다 "말로 물어보고 말로 답" 이었는데, 이 문제는 답이 통째로 그림이다.
+       (선생님: "퀴즈는 없는게 좋은것 같아", "설명은 시뮬로") */
     {
-      type: "input",
+      type: "reveal",
       narr: t(E,
-        "Sample 1: N=4, K=2. Update at (3,1). How many K x K windows contain (3,1)?",
-        "예제 1: N=4, K=2. (3,1) 갱신. 이 칸을 포함하는 K x K 윈도우 수는?"),
-      question: t(E,
-        "N=4, K=2, cell (3,1): how many 2 x 2 windows contain it?",
-        "N=4, K=2, 칸 (3,1): 포함하는 2 x 2 윈도우 수는?"),
-      hint: t(E,
-        "Top-left i ranges over max(1,r-K+1)..min(r,N-K+1). Same for j.",
-        "좌상단 i 범위: max(1,r-K+1)..min(r,N-K+1). j 도 동일."),
-      answer: 2,
+        "First — what IS a photo's score?  Slide the K x K square everywhere and keep the best.",
+        "먼저 — 사진 점수가 뭔지부터.  K x K 정사각형을 다 밀어보고 제일 좋은 걸 기억해요."),
+      content: (<PhotoWindowSim E={E} />),
+    },
+    /* [결-b 한계] — 브루트가 왜 안 되는지 숫자로. 원래 퀴즈에 있던 값인데
+       퀴즈를 없애면서 사라졌다. 문제 최대 크기로 직접 비교. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "So we could just recompute every photo after every update.  Would that finish in time?",
+        "그럼 업데이트마다 모든 사진을 다시 더하면 되지 않을까?  시간 안에 끝날까?"),
+      content: (
+        <div style={{ padding: 20, wordBreak: "keep-all" }}>
+          <div style={{
+            maxWidth: 470, margin: "0 auto", background: "#fef2f2",
+            border: "1.5px solid #fca5a5", borderRadius: 12, padding: "14px 16px",
+          }}>
+            <div style={{ fontWeight: 800, color: "#b91c1c", marginBottom: 8, fontSize: 13 }}>
+              🐌 {t(E, "Recompute everything, every time", "매번 전부 다시 더하면")}
+            </div>
+            <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.9, fontFamily: "'JetBrains Mono',monospace" }}>
+              <div>{t(E, "biggest case", "최대 크기")}: N = 500, K = 25, Q = 30000</div>
+              <div>{t(E, "photos", "사진")} = (500−25+1)² = <b>226,576</b></div>
+              <div>{t(E, "cells per photo", "사진 한 장의 칸")} = 25² = <b>625</b></div>
+              <div style={{ color: "#b91c1c", fontWeight: 800, marginTop: 4 }}>
+                → 226,576 × 625 × 30,000 ≈ <b>4×10¹²</b>
+              </div>
+            </div>
+            <div style={{ fontSize: 11.5, color: "#7f1d1d", marginTop: 8, lineHeight: 1.6 }}>
+              {t(E, "Way over the limit — a computer does roughly 10⁸~10⁹ simple steps per second.",
+                    "제한을 한참 넘어요 — 컴퓨터는 1 초에 대략 10⁸~10⁹ 번 정도 계산해요.")}
+            </div>
+          </div>
+          <div style={{ maxWidth: 470, margin: "12px auto 0", fontSize: 12.5, color: "#5b21b6", textAlign: "center", fontWeight: 700 }}>
+            {t(E, "→ So: don't recompute.  Only fix what actually changed.",
+                  "→ 그러니 다시 더하지 말고, 진짜 바뀐 것만 고치자.")}
+          </div>
+        </div>),
+    },
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now the key: when ONE cow gets prettier, which photos change?  Only the ones containing her — and their top-left corners form a rectangle.",
+        "이제 핵심: 소 한 마리가 예뻐지면 어떤 사진이 바뀔까?  그 소가 들어간 사진만 — 그리고 그 사진들의 왼쪽위가 직사각형을 이뤄요."),
+      content: (<PhotoUpdateSim E={E} />),
     },
   ];
 }
