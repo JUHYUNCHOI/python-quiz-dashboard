@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getPhotoshoot25Sections, getPhotoshoot25Walk } from "./components";
+import { PhotoWindowSim, PhotoUpdateSim } from "./sims";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ═══════════════════════════════════════════════════════════════
@@ -115,61 +116,22 @@ export function makePhotoshoot25Ch1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz — naive cost
+    /* [전-1] 퀴즈 3 개(느린 비용 / 영향받는 창 수 / 최대 단조) → 시뮬 2 개로 교체.
+       셋 다 "말로 물어보고 말로 답" 이었는데, 이 문제는 답이 통째로 그림이다.
+       (선생님: "퀴즈는 없는게 좋은것 같아", "설명은 시뮬로") */
     {
-      type: "quiz",
+      type: "reveal",
       narr: t(E,
-        "Naive idea: after each update, recompute every K x K window sum from scratch. Why is that too slow?",
-        "단순 아이디어: 매 업데이트마다 모든 K x K 윈도우 합을 처음부터 계산. 왜 느릴까?"),
-      question: t(E,
-        "If we recompute every window sum from scratch after each of Q updates, roughly how many operations?",
-        "Q 번 업데이트마다 모든 윈도우 합을 처음부터 계산하면 대략 몇 연산?"),
-      options: [
-        t(E, "About Q · N² · K² ≈ 30000 · 250000 · 625 — way too slow", "약 Q · N² · K² ≈ 30000 · 250000 · 625 — 너무 느림"),
-        t(E, "About Q · K² ≈ 30000 · 625 — very fast", "약 Q · K² ≈ 30000 · 625 — 아주 빠름"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Right — recomputing all (N-K+1)² windows × K² cells each, Q times, is far over the time limit. We need a smarter update.",
-        "맞아 — (N-K+1)² 개 윈도우 × K² 칸을 Q 번 다시 계산하면 시간 초과. 더 똑똑한 업데이트가 필요해."),
+        "First — what IS a photo's score?  Slide the K x K square everywhere and keep the best.",
+        "먼저 — 사진 점수가 뭔지부터.  K x K 정사각형을 다 밀어보고 제일 좋은 걸 기억해요."),
+      content: (<PhotoWindowSim E={E} />),
     },
-    // 1-3: Quiz — which windows are affected
     {
-      type: "quiz",
+      type: "reveal",
       narr: t(E,
-        "When one cow's beauty changes, only some windows change. How many?",
-        "한 마리 소의 값이 바뀔 때 몇 개의 윈도우가 영향을 받을까?"),
-      question: t(E,
-        "Updating cow at (r,c) changes the sum of how many K x K windows (at most)?",
-        "(r,c) 갱신 시 영향받는 K x K 윈도우 수는 최대 몇 개?"),
-      options: [
-        t(E, "All windows in the grid", "격자의 모든 윈도우"),
-        t(E, "At most K · K = K²", "최대 K · K = K²"),
-        t(E, "Exactly N - K + 1", "정확히 N - K + 1"),
-      ],
-      correct: 1,
-      explain: t(E,
-        "A window contains (r,c) only if its top-left (i,j) satisfies r-K+1 ≤ i ≤ r and c-K+1 ≤ j ≤ c — at most K choices for i and K for j.",
-        "(r,c) 를 포함하는 윈도우는 좌상단 (i,j) 가 r-K+1 ≤ i ≤ r, c-K+1 ≤ j ≤ c 를 만족 — i 후보 K 개, j 후보 K 개."),
-    },
-    // 1-4: Quiz — monotone max
-    {
-      type: "quiz",
-      narr: t(E,
-        "Each update only INCREASES a beauty (problem guarantees v > old). What does that say about the global max?",
-        "각 업데이트는 아름다움을 늘리기만 해요 (v > 이전값 보장). 전체 최대는?"),
-      question: t(E,
-        "Since beauties only increase, the maximum window sum across the whole grid is...",
-        "아름다움이 늘기만 하니까 전체 격자의 최대 윈도우 합은...")
-      ,
-      options: [
-        t(E, "Non-decreasing — never goes down", "단조 비감소 — 절대 줄지 않음"),
-        t(E, "Could go up or down", "오를 수도 내릴 수도 있음"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Beauties only go up, so every window sum only goes up. The global max is non-decreasing — we just compare new sums against cur_max.",
-        "아름다움이 늘기만 하니 모든 윈도우 합도 늘기만 함. 전체 최대는 비감소 — 새로 갱신된 합만 cur_max 와 비교하면 끝."),
+        "Now the key: when ONE cow gets prettier, which photos change?  Only the ones containing her — and their top-left corners form a rectangle.",
+        "이제 핵심: 소 한 마리가 예뻐지면 어떤 사진이 바뀔까?  그 소가 들어간 사진만 — 그리고 그 사진들의 왼쪽위가 직사각형을 이뤄요."),
+      content: (<PhotoUpdateSim E={E} />),
     },
     // 1-4b: 입출력 형식 + 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화
     {
