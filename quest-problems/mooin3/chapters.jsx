@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMooin3Sections, getMooin3Walk, MooTraceSimulator, TripletEnumSimulator, Mooin3FastSim } from "./components";
+import { getMooin3Sections, getMooin3Walk, MooTraceSimulator, TripletEnumSimulator, Mooin3FastSim, Mooin3TableSim } from "./components";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
@@ -359,6 +359,17 @@ export function makeMooin3Ch2(E, lang = "py") {
         "The fast solution has one big leap — instead of every middle spot j, check per LETTER.  Step through it here first, then the code will just be what you already saw.",
         "빠른 풀이의 핵심 도약은 하나 — 모든 가운데 자리 j 말고 '글자'마다 확인하는 거예요.  여기서 먼저 한 단계씩 보고 나면, 코드는 이미 본 걸 그대로 옮긴 게 돼요."),
       content: (<Mooin3FastSim E={E} />),
+    },
+
+    /* [결-c sim2] — 표가 *어떻게 채워지는지* 한 칸씩. (선생님 2026-07-30: 글자 묶기는
+       시뮬이 있는데 정작 속도를 만드는 '표' 는 코드로만 있었다.) 글자 하나만 따라간다. */
+    {
+      type: "reveal",
+      label: t(E, "Building the table", "표 만들기"),
+      narr: t(E,
+        "Grouping by letter alone is still O(26·N) per query — we still scan.  The speed comes from building three small tables ONCE, before any query.  Here is how they fill up.",
+        "글자로 묶어도 쿼리마다 훑으면 아직 O(26·N) 이에요.  속도는 쿼리 전에 표 3 개를 *한 번만* 만들어 두는 데서 나와요.  그 표가 어떻게 채워지는지 봐요."),
+      content: (<Mooin3TableSim E={E} lang={lang} />),
     },
 
     /* [결-c code] — 빠른 O(26) 코드를 CodeWalk 말풍선 하나로 (3단계 점진 코드 → 최종 코드 +

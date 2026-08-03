@@ -320,6 +320,41 @@ export function TripletEnumSimulator({ E }) {
   );
 }
 
+/* ── 시뮬 공용 — 칸 크기와 '진짜 말풍선' ────────────────────────────
+   말풍선은 흐름에서 빠져(absolute) 지정한 칸 위에 뜨고 꼬리로 그 칸을 가리킨다.
+   (선생님 2026-07-30: "우리 화면 위에 올라가 있는게 말풍선이지")
+   화면 밖으로 나갈 땐 상자만 밀고 꼬리는 원래 칸을 계속 가리킨다.        ── */
+const SIM_CELL_W = 36, SIM_CELL_GAP = 4;
+const simRowW = (n) => n * SIM_CELL_W + (n - 1) * SIM_CELL_GAP;
+const simCellCx = (i) => i * (SIM_CELL_W + SIM_CELL_GAP) + SIM_CELL_W / 2;
+
+function SimBubble({ cx, rowW, bg, bd, fg, children, width = 300, bottom = 16 }) {
+  const W = width;
+  const left = Math.max(-28, Math.min(cx - W / 2, rowW - W + 28));
+  const tail = cx - left;
+  return (
+    <div style={{ position: "absolute", bottom, left, width: W }}>
+      <div style={{
+        padding: "8px 12px", borderRadius: 10, background: bg,
+        border: `1.5px solid ${bd}`, color: fg,
+        fontSize: 12, fontWeight: 700, textAlign: "center",
+        wordBreak: "keep-all", lineHeight: 1.6,
+      }}>{children}</div>
+      {/* 꼬리 ▼ — 테두리색 삼각형 위에 배경색 삼각형을 겹쳐 얇은 테두리를 살림 */}
+      <div style={{
+        position: "absolute", top: "100%", left: tail, transform: "translateX(-50%)",
+        width: 0, height: 0, borderLeft: "7px solid transparent",
+        borderRight: "7px solid transparent", borderTop: `8px solid ${bd}`,
+      }} />
+      <div style={{
+        position: "absolute", top: "100%", left: tail, transform: "translateX(-50%)",
+        width: 0, height: 0, marginTop: -1.6, borderLeft: "6px solid transparent",
+        borderRight: "6px solid transparent", borderTop: `7px solid ${bg}`,
+      }} />
+    </div>
+  );
+}
+
 /* ═══════════════════════════════════════════════════════════════
    MooTraceSimulator — s = "abcabbc" 위에서 포인터를 한 칸씩 걸리며 보는 시뮬.
    비교 한 번 = 스텝 하나. 오른쪽에 *실제 제출 코드의 그 줄* 을 같이 비춘다.
@@ -409,39 +444,7 @@ export function MooTraceSimulator({ E, lang = "py" }) {
   const ROW_W = str.length * CELL_W + (str.length - 1) * CELL_GAP;
   const cellCx = (i) => i * PITCH + CELL_W / 2;
 
-  /* 말풍선 — 흐름에서 빠져(absolute) 지정한 칸 위에 뜨고, 꼬리로 그 칸을 가리킨다.
-     화면 밖으로 나가지 않게 상자는 살짝 밀되, 꼬리는 원래 칸을 계속 가리킨다. */
-  const Bubble = ({ cx, bg, bd, fg, children }) => {
-    const W = 300;
-    const rawLeft = cx - W / 2;
-    const left = Math.max(-28, Math.min(rawLeft, ROW_W - W + 28));
-    const tail = cx - left;                       // 상자 안에서의 꼬리 위치
-    return (
-      <div style={{ position: "absolute", bottom: 16, left, width: W }}>
-        <div style={{
-          padding: "8px 12px", borderRadius: 10, background: bg,
-          border: `1.5px solid ${bd}`, color: fg,
-          fontSize: 12, fontWeight: 700, textAlign: "center",
-          wordBreak: "keep-all", lineHeight: 1.6,
-        }}>
-          {children}
-        </div>
-        {/* 꼬리 ▼ — 테두리색 삼각형 위에 배경색 삼각형을 겹쳐 얇은 테두리를 살림 */}
-        <div style={{
-          position: "absolute", top: "100%", left: tail, transform: "translateX(-50%)",
-          width: 0, height: 0,
-          borderLeft: "7px solid transparent", borderRight: "7px solid transparent",
-          borderTop: `8px solid ${bd}`,
-        }} />
-        <div style={{
-          position: "absolute", top: "100%", left: tail, transform: "translateX(-50%)",
-          width: 0, height: 0, marginTop: -1.6,
-          borderLeft: "6px solid transparent", borderRight: "6px solid transparent",
-          borderTop: `7px solid ${bg}`,
-        }} />
-      </div>
-    );
-  };
+  const Bubble = (props) => <SimBubble rowW={ROW_W} {...props} />;
 
   /* ── 코드 패널 ──────────────────────────────────────────────
      코드를 여기 다시 베껴 쓰지 않는다 — 뒤 챕터가 보여주는 M3_FULL_* 에서
@@ -1813,6 +1816,216 @@ const _M3_FAST_VARS = [
   { v: "earliest_same", ko: "오른쪽으로 가장 가까운 같은 글자", en: "nearest same on the right" },
   { v: "nearest_diff", ko: "오른쪽으로 가장 가까운 다른 글자", en: "nearest different on the right" },
 ];
+
+/* ═══════════════════════════════════════════════════════════════
+   Mooin3TableSim — 전처리 '표' 가 어떻게 채워지는지 한 칸씩.
+   (선생님 2026-07-30: "표 만드는 과정도 시뮬로" — 정작 '왜 빨라지는가' 의
+    핵심인데 코드 5/5 에 코드로만 있었다.)
+
+   글자 하나('b')만 본다. 26 글자를 다 보여주면 읽을 게 폭발하고, 나머지
+   글자는 똑같은 일의 반복이라 배울 게 없다.
+   왼→오 한 번(latest_same), 오→왼 한 번(earliest_same·nearest_diff).
+   번호는 코드와 같은 0-based.
+   ═══════════════════════════════════════════════════════════════ */
+export function Mooin3TableSim({ E, lang = "py" }) {
+  const TA = "#0891b2";
+  const str = "abcabbc";
+  const CH = "b";                       // 이 시뮬이 따라가는 글자
+  const N = str.length;
+  const INF = N;                        // 코드와 같은 표기 (없으면 INF = N)
+  const ROW_W = simRowW(N);
+
+  /* 코드가 하는 그대로 두 번 훑으며 스텝을 쌓는다. */
+  const steps = [{ kind: "intro" }];
+  {
+    let last = -1;
+    const ls = Array(N).fill(null);
+    for (let i = 0; i < N; i++) {
+      const hit = str[i] === CH;
+      if (hit) last = i;
+      ls[i] = last;
+      steps.push({ kind: "L", i, hit, last, ls: [...ls] });
+    }
+    let nxtSame = INF, nxtDiff = INF;
+    const es = Array(N).fill(null), nd = Array(N).fill(null);
+    for (let i = N - 1; i >= 0; i--) {
+      const hit = str[i] === CH;
+      if (hit) nxtSame = i; else nxtDiff = i;
+      es[i] = nxtSame; nd[i] = nxtDiff;
+      steps.push({ kind: "R", i, hit, ls: [...ls], es: [...es], nd: [...nd] });
+    }
+    steps.push({ kind: "final", ls: [...ls], es: [...es], nd: [...nd] });
+  }
+
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+  const cur = (s.kind === "L" || s.kind === "R") ? s.i : null;
+
+  /* 코드 — 실제 제출 코드(M3_FAST_*)에서 표 만드는 부분만 잘라 쓴다.
+     py 16~32 / cpp 는 같은 블록. 베껴 쓰지 않아야 코드를 고쳐도 안 어긋난다. */
+  const isCpp = lang === "cpp";
+  const CODE = (isCpp ? M3_FAST_CPP(E) : M3_FAST_PY(E)).slice(...(isCpp ? [21, 39] : [16, 33]));
+  /* 이번 스텝에 *실제로 실행된* 줄만 (범위가 아니라 목록 — else 가지를 안 켜려고). */
+  const hiLines = (() => {
+    if (isCpp) return null;                    // cpp 매핑은 아래 CPP_HI 에서
+    if (s.kind === "L") return s.hit ? [3, 4, 5] : [3, 5];
+    if (s.kind === "R") return s.hit ? [11, 12, 15, 16] : [11, 13, 14, 15, 16];
+    return null;
+  })();
+
+  const codeBoxRef = useRef(null), activeLineRef = useRef(null);
+  useEffect(() => {
+    const box = codeBoxRef.current, line = activeLineRef.current;
+    if (!box || !line) return;                 // smooth·rAF 금지 (MooTraceSimulator 주석 참고)
+    box.scrollTop = Math.max(0, line.offsetTop - box.clientHeight / 2 + line.offsetHeight / 2);
+  }, [ts.safe]);
+
+  const cellBox = (i) => {
+    const on = i === cur;
+    return {
+      width: SIM_CELL_W, height: SIM_CELL_W, display: "flex", alignItems: "center",
+      justifyContent: "center", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace",
+      fontWeight: 700, fontSize: 16,
+      background: on ? "#ecfeff" : str[i] === CH ? "#fef9c3" : "#fff",
+      border: `${on ? 2 : 1}px solid ${on ? TA : str[i] === CH ? "#fcd34d" : "#cbd5e1"}`,
+      color: str[i] === CH ? "#92400e" : "#475569",
+      transform: on ? "scale(1.1)" : "none",
+      boxShadow: on ? `0 0 0 3px ${TA}33` : "none",
+      transition: "all .15s",
+    };
+  };
+
+  /* 표 한 줄 — 아직 안 채운 칸은 비워 둔다. 채워지는 순서가 보여야 하니까. */
+  const TableRow = ({ label, vals, color, fresh }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+      <div style={{ width: 132, textAlign: "right", fontSize: 10, fontWeight: 700,
+                    color, fontFamily: "'JetBrains Mono',monospace" }}>{label}</div>
+      <div style={{ display: "flex", gap: SIM_CELL_GAP }}>
+        {Array.from({ length: N }).map((_, i) => {
+          const v = vals ? vals[i] : null;
+          const isNew = fresh === i;
+          return (
+            <div key={i} style={{
+              width: SIM_CELL_W, height: 22, display: "flex", alignItems: "center",
+              justifyContent: "center", borderRadius: 5, fontSize: 11, fontWeight: 700,
+              fontFamily: "'JetBrains Mono',monospace",
+              background: v === null ? "#f8fafc" : isNew ? "#cffafe" : "#fff",
+              border: `${isNew ? 2 : 1}px solid ${v === null ? "#e2e8f0" : isNew ? TA : "#cbd5e1"}`,
+              color: v === null ? "#cbd5e1" : color,
+            }}>
+              {v === null ? "·" : v === INF ? "∞" : v}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={TA} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, `Building the tables for '${CH}'`, `'${CH}' 의 표 만들기`)}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+
+      {/* 말풍선 무대 — 지금 보고 있는 칸 위에 뜬다 */}
+      <div style={{ position: "relative", width: ROW_W, height: 104, margin: "0 auto" }}>
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          {s.kind === "intro" && (
+            <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#ecfeff" bd="#67e8f9" fg="#155e75">
+              {t(E, <>Two passes fill the tables — left→right, then right→left.</>,
+                    <>표는 두 번만 훑으면 다 채워져요 — 왼→오, 그 다음 오→왼.</>)}
+            </SimBubble>
+          )}
+          {s.kind === "L" && (
+            <SimBubble cx={simCellCx(s.i)} rowW={ROW_W} bg="#ecfeff" bd="#67e8f9" fg="#155e75">
+              <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>s[{s.i}] = '{str[s.i]}'</span>
+              {" "}{s.hit ? "=" : "≠"}{" "}
+              <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>'{CH}'</span>
+              <br />
+              {s.hit
+                ? t(E, <>found one → <b>last = {s.i}</b></>, <>여기 있네 → <b>last = {s.i}</b></>)
+                : t(E, <>not it → <b>last</b> stays <b>{s.last}</b></>, <>아니네 → <b>last</b> 는 <b>{s.last}</b> 그대로</>)}
+              {" · "}
+              <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>ls[{s.i}] = {s.last}</span>
+            </SimBubble>
+          )}
+          {s.kind === "R" && (
+            <SimBubble cx={simCellCx(s.i)} rowW={ROW_W} bg="#f0fdf4" bd="#86efac" fg="#15803d">
+              <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>s[{s.i}] = '{str[s.i]}'</span>
+              {" "}{s.hit ? "=" : "≠"}{" "}
+              <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>'{CH}'</span>
+              <br />
+              {s.hit
+                ? t(E, <>same → <b>nxt_same = {s.i}</b></>, <>같으니 → <b>nxt_same = {s.i}</b></>)
+                : t(E, <>different → <b>nxt_diff = {s.i}</b></>, <>다르니 → <b>nxt_diff = {s.i}</b></>)}
+            </SimBubble>
+          )}
+          {s.kind === "final" && (
+            <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#fffbeb" bd="#fcd34d" fg="#92400e">
+              {t(E, <>Done — two passes, <b>O(N)</b> per letter. Now every query is just a lookup.</>,
+                    <>끝 — 두 번 훑어서 <b>O(N)</b>. 이제 쿼리는 표를 <b>한 번 보는 것</b>으로 끝나요.</>)}
+            </SimBubble>
+          )}
+        </div>
+      </div>
+
+      {/* 글자 줄 */}
+      <div style={{ display: "flex", gap: SIM_CELL_GAP, width: ROW_W, margin: "0 auto 4px" }}>
+        {str.split("").map((ch, i) => (
+          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+            <div style={cellBox(i)}>{ch}</div>
+            <div style={{ fontSize: 9, color: i === cur ? TA : C.dim, fontWeight: i === cur ? 800 : 400 }}>{i}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* 방향 표시 — 지금 어느 쪽으로 훑는 중인지 */}
+      <div style={{ height: 16, textAlign: "center", fontSize: 10, fontWeight: 700, color: C.dim, marginBottom: 8 }}>
+        {s.kind === "L" ? t(E, "pass 1 — left → right", "1 번째 훑기 — 왼쪽 → 오른쪽 →")
+          : s.kind === "R" ? t(E, "pass 2 — right → left", "← 2 번째 훑기 — 오른쪽 → 왼쪽")
+          : " "}
+      </div>
+
+      {/* 표 세 줄 */}
+      <div style={{ width: ROW_W + 138, margin: "0 auto 12px" }}>
+        <TableRow label={`latest_same[${CH}]`}   vals={s.ls} color="#0e7490" fresh={s.kind === "L" ? s.i : null} />
+        <TableRow label={`earliest_same[${CH}]`} vals={s.es} color="#15803d" fresh={s.kind === "R" ? s.i : null} />
+        <TableRow label={`nearest_diff[${CH}]`}  vals={s.nd} color="#b45309" fresh={s.kind === "R" ? s.i : null} />
+      </div>
+
+      {/* 코드 — 실행된 줄만 하이라이트 */}
+      <div style={{ maxWidth: 520, margin: "0 auto 12px" }}>
+        <div ref={codeBoxRef} style={{
+          background: "#0f172a", borderRadius: 10, padding: "9px 0",
+          maxHeight: 170, overflowY: "auto", overflowX: "auto", position: "relative",
+        }}>
+          {CODE.map((line, li) => {
+            const on = !!hiLines && hiLines.includes(li);
+            const isFirstOn = on && li === hiLines[0];
+            return (
+              <div key={li} ref={isFirstOn ? activeLineRef : null} style={{
+                display: "flex", alignItems: "flex-start", gap: 8, padding: "0 10px",
+                background: on ? "rgba(8,145,178,.28)" : "transparent",
+                borderLeft: `3px solid ${on ? "#22d3ee" : "transparent"}`,
+              }}>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 9.5,
+                  color: on ? "#a5f3fc" : "#475569", minWidth: 14, textAlign: "right",
+                  userSelect: "none", lineHeight: 1.7 }}>{on ? "▸" : " "}</span>
+                <pre style={{ margin: 0, fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5,
+                  lineHeight: 1.7, whiteSpace: "pre", opacity: on ? 1 : 0.82 }}>
+                  {line ? highlight(line, isCpp ? "cpp" : "py") : " "}
+                </pre>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <SharedSimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={TA} isEn={E} showLabels />
+    </div>
+  );
+}
+
 export function getMooin3Walk(E, lang = "py", mode = "brute") {
   if (mode === "brute") {
     if (lang === "cpp") {
