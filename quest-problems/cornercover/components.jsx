@@ -27,38 +27,16 @@ const FULL_PY = [
   "    print(\"YES\" if ok else \"NO\")",
 ];
 
-const FULL_CPP = [
-  "#include <iostream>",
-  "using namespace std;",
-  "",
-  "// h x w 로 놓았을 때 코너 2 개를 덮을 수 있나?",
-  "bool works(long long n, long long m, long long h, long long w) {",
-  "    if (h > n || w > m) return false;   // ① 격자 안에 들어가나",
-  "    return h == n || w == m;            // ② 한 방향을 끝까지 꽉 채우나",
-  "}",
-  "",
-  "int main() {",
-  "    int T;",
-  "    cin >> T;",
-  "    while (T--) {",
-  "        long long n, m, A, B;      // 10^18 까지 → long long",
-  "        cin >> n >> m >> A >> B;",
-  "",
-  "        // A x B 로 놓거나, 눕혀서 B x A 로 놓거나 — 하나만 되면 YES",
-  "        bool ok = works(n, m, A, B) || works(n, m, B, A);",
-  "",
-  "        cout << (ok ? \"YES\" : \"NO\") << '\\n';",
-  "    }",
-  "    return 0;",
-  "}",
-];
+/* C++ 코드는 2026-07-30 삭제 — MCC quest 는 App 에서 codeLang="py" 로 고정돼
+   학생에게 C++ 이 아예 안 보인다 (선생님: "MCC는 c++ 다 없애줘").
+   안 보이는 코드를 유지하면 검증 대상만 늘고 학생에겐 도움이 0. */
 
 export function getCornerCoverSections(E) {
   return [
     {
       label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: FULL_PY,
       why: [
         t(E, "Two corner cells are always neighbours along one side — top pair, bottom pair, left pair or right pair. To hold both, the subgrid must reach that side end to end.",
             "코너 두 개는 항상 한 변의 양 끝이에요 — 위 둘, 아래 둘, 왼쪽 둘, 오른쪽 둘. 둘 다 품으려면 그 변을 끝에서 끝까지 닿아야 해요."),
@@ -72,12 +50,6 @@ export function getCornerCoverSections(E) {
       pyOnly: [
         t(E, "Python ints are arbitrary precision — n, m, A, B up to 10^18 need no special care.",
             "파이썬 정수는 크기 제한이 없어서 10^18 이 와도 그냥 돼요."),
-      ],
-      cppOnly: [
-        t(E, "n, m, A, B reach 10^18 — `int` overflows. Use `long long` (holds up to ~9.2 x 10^18).",
-            "n, m, A, B 가 10^18 까지예요 — `int` 는 넘쳐요. `long long` 을 써야 해요 (약 9.2 x 10^18 까지)."),
-        t(E, "Up to 200 test cases only, so plain cin/cout is fast enough here.",
-            "테스트가 최대 200 개뿐이라 여기선 cin/cout 그대로도 충분해요."),
       ],
     },
   ];

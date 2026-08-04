@@ -23,11 +23,12 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-/** questId → { file, varName, source }  (source = 샘플 출처, 사람이 확인용) */
+/** questId → { file, varName, source }  (source = 샘플 출처, 사람이 확인용)
+    cppVar 는 선택 — MCC quest 는 Python 전용이라 없다. */
 const REGISTRY = {
-  cornercover: { file: "quest-problems/cornercover/components.jsx", varName: "FULL_PY", cppVar: "FULL_CPP",
+  cornercover: { file: "quest-problems/cornercover/components.jsx", varName: "FULL_PY",
                  source: "public/problems/mcc-2024-statements.pdf p.1-2" },
-  gifts:       { file: "quest-problems/gifts/components.jsx",       varName: "FULL_PY", cppVar: "FULL_CPP",
+  gifts:       { file: "quest-problems/gifts/components.jsx",       varName: "FULL_PY",
                  source: "public/problems/mcc-2024-statements.pdf p.3-4" },
 };
 
