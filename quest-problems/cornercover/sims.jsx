@@ -14,7 +14,13 @@ const CELL = 34, GAP = 3;
    "코너 몇 개를 덮었나" 를 즉시 센다.
    크기를 바꾸면 YES/NO 가 왜 그렇게 되는지도 같이 나온다.
    ═══════════════════════════════════════════════════════════════ */
-export function CornerCoverSim({ E }) {
+/* reveal:
+     false — 탐색용. 판정(YES/NO)도 공식도 숨긴다. 학생은 "덮은 코너 수" 만 보고
+             언제 2 개가 되는지 스스로 찾는다.
+     true  — 확인용. 규칙을 말한 뒤, 그 규칙이 화면의 숫자와 맞는지 대조.
+   (같은 화면에서 답을 미리 보여주면 '직접 놓아보기' 가 답 공개가 된다 —
+    quest_problem_standard 의 "관찰 → 추론, 답 미리 X".) */
+export function CornerCoverSim({ E, reveal = true }) {
   const n = 4, m = 5;                     // 고정 격자 (숫자가 작아야 눈이 따라옴)
   const [h, setH] = useState(4);          // 부분격자 세로
   const [w, setW] = useState(2);          // 부분격자 가로
@@ -48,8 +54,8 @@ export function CornerCoverSim({ E }) {
               <>부분격자를 옮기고 크기도 바꿔보세요. 코너 칸을 몇 개 품나요?</>)}
       </div>
 
-      {/* 판정 — 지금 크기로 가능한가 */}
-      <div style={{
+      {/* 판정 — reveal 일 때만. 탐색 중엔 답을 숨긴다. */}
+      {reveal && <div style={{
         maxWidth: 430, margin: "0 auto 12px", padding: "9px 13px", borderRadius: 10,
         background: spans ? "#ecfdf5" : "#fef2f2",
         border: `1.5px solid ${spans ? "#86efac" : "#fca5a5"}`,
@@ -64,7 +70,19 @@ export function CornerCoverSim({ E }) {
                   <>{h}×{w} 는 한 변을 끝까지 닿을 수 있어요 → <b>YES</b></>)
             : t(E, <>{h}×{w} fits, but never reaches a whole side → <b>NO</b></>,
                   <>{h}×{w} 는 들어가지만 한 변을 끝까지 못 닿아요 → <b>NO</b></>)}
-      </div>
+      </div>}
+
+      {/* 탐색 모드 — 답 대신 '무엇을 찾아야 하는지' 만 */}
+      {!reveal && (
+        <div style={{
+          maxWidth: 430, margin: "0 auto 12px", padding: "9px 13px", borderRadius: 10,
+          background: "#fffbeb", border: "1.5px solid #fcd34d", color: "#92400e",
+          fontSize: 12.5, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6,
+        }}>
+          {t(E, <>Find a size that catches <b>two</b> corners — and one that never can. What is different?</>,
+                <>코너를 <b>2 개</b> 잡을 수 있는 크기와, 아무리 옮겨도 못 잡는 크기를 찾아보세요. 뭐가 다른가요?</>)}
+        </div>
+      )}
 
       {/* 격자 */}
       <div style={{ width: m * CELL + (m - 1) * GAP, margin: "0 auto 4px" }}>
@@ -116,8 +134,8 @@ export function CornerCoverSim({ E }) {
         <Slider label={t(E, "col", "열")} val={cc} set={setC} min={1} max={maxC} color="#64748b" />
       </div>
 
-      {/* 코드와 이어주기 — 화면의 h·w 가 코드의 그 변수 */}
-      <div style={{
+      {/* 코드와 이어주기 — 화면의 h·w 가 코드의 그 변수. reveal 일 때만. */}
+      {reveal && <div style={{
         maxWidth: 430, margin: "12px auto 0", padding: "9px 13px", borderRadius: 10,
         background: "#f8fafc", border: "1px solid #e2e8f0",
         fontSize: 11.5, fontFamily: "'JetBrains Mono',monospace", color: "#334155", lineHeight: 1.8,
@@ -131,7 +149,7 @@ export function CornerCoverSim({ E }) {
         <div style={{ marginTop: 3, fontWeight: 800, color: spans ? "#15803d" : "#b91c1c" }}>
           → {spans ? "YES" : "NO"}
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

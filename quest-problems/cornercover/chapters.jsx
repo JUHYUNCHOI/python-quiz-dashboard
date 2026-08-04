@@ -1,137 +1,10 @@
-import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getCornerCoverSections } from "./components";
 import { CornerCoverSim } from "./sims";
 
-/* ================================================================
-   Deep-audit sim — adjust N and M, watch the algorithm classify
-   each case and highlight the distinct corner cells.
-   ================================================================ */
-function CornerAuditSim({ E }) {
-  const [N, setN] = useState(3);
-  const [M, setM] = useState(5);
-
-  const isCorner = (r, c) => (r === 0 || r === N - 1) && (c === 0 || c === M - 1);
-  const branch = N === 1 && M === 1 ? "1x1" : (N === 1 || M === 1) ? "line" : "rect";
-  const expected = branch === "1x1" ? 1 : branch === "line" ? 2 : 4;
-
-  // Count DISTINCT corner cells (degenerate cases collapse)
-  const seen = new Set();
-  for (let r = 0; r < N; r++) for (let c = 0; c < M; c++) {
-    if (isCorner(r, c)) seen.add(`${r},${c}`);
-  }
-  const distinct = seen.size;
-
-  const CELL = N <= 4 && M <= 6 ? 36 : N <= 6 && M <= 8 ? 28 : 22;
-
-  const branchColor = branch === "1x1" ? "#dc2626" : branch === "line" ? "#d97706" : "#059669";
-  const branchLabel = branch === "1x1"
-    ? t(E, "N == 1 and M == 1  →  print(1)", "N == 1 그리고 M == 1  →  print(1)")
-    : branch === "line"
-      ? t(E, "N == 1 or M == 1  →  print(2)", "N == 1 또는 M == 1  →  print(2)")
-      : t(E, "else  →  print(4)", "그 외  →  print(4)");
-
-  const Slider = ({ label, val, set, min, max }) => (
-    <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
-      <span style={{ fontWeight: 700, color: "#065f46", minWidth: 16 }}>{label}</span>
-      <button onClick={() => set(Math.max(min, val - 1))} style={{
-        width: 26, height: 26, borderRadius: 6, border: "1.5px solid #059669",
-        background: "#fff", color: "#059669", fontWeight: 800, cursor: "pointer",
-      }}>−</button>
-      <span style={{ minWidth: 22, textAlign: "center", fontWeight: 800, color: "#059669" }}>{val}</span>
-      <button onClick={() => set(Math.min(max, val + 1))} style={{
-        width: 26, height: 26, borderRadius: 6, border: "1.5px solid #059669",
-        background: "#fff", color: "#059669", fontWeight: 800, cursor: "pointer",
-      }}>+</button>
-    </div>
-  );
-
-  return (
-    <div style={{ padding: 14 }}>
-      <div style={{
-        background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10,
-        padding: "10px 14px", marginBottom: 10,
-      }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 6 }}>
-          🔬 {t(E, "Deep audit — pick N and M, watch the branches", "딥 오딧 — N, M 을 골라보고 분기를 살펴봐요")}
-        </div>
-        <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-          <Slider label="N" val={N} set={setN} min={1} max={6} />
-          <Slider label="M" val={M} set={setM} min={1} max={8} />
-        </div>
-      </div>
-
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-        <div style={{
-          display: "grid",
-          gridTemplateRows: `repeat(${N}, ${CELL}px)`,
-          gridTemplateColumns: `repeat(${M}, ${CELL}px)`,
-          gap: 2, background: "#d1fae5", padding: 4, borderRadius: 8,
-        }}>
-          {Array.from({ length: N }).map((_, r) =>
-            Array.from({ length: M }).map((__, c) => {
-              const corner = isCorner(r, c);
-              return (
-                <div key={`${r}-${c}`} style={{
-                  background: corner ? branchColor : "#fff",
-                  color: corner ? "#fff" : "#9ca3af",
-                  borderRadius: 4,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 11, fontWeight: 800,
-                  boxShadow: corner ? `0 0 0 2px ${branchColor}` : "none",
-                  transition: "background .2s, box-shadow .2s",
-                }}>
-                  {corner ? "★" : ""}
-                </div>
-              );
-            })
-          )}
-        </div>
-      </div>
-
-      <div style={{
-        background: "#fff", border: `1.5px solid ${branchColor}`, borderRadius: 10,
-        padding: "10px 14px", display: "flex", flexDirection: "column", gap: 6,
-      }}>
-        <div style={{ fontSize: 12, color: C.dim }}>
-          {t(E, "Active branch:", "선택된 분기:")}
-          <b style={{ color: branchColor, marginLeft: 6 }}>{branchLabel}</b>
-        </div>
-        <div style={{ fontSize: 13, color: C.text }}>
-          {t(E, "Distinct corner cells (★):", "서로 다른 꼭짓점 칸 (★):")}
-          <b style={{ color: branchColor, marginLeft: 6 }}>{distinct}</b>
-          <span style={{ color: C.dim, marginLeft: 8, fontSize: 12 }}>
-            {t(E, `→ matches print(${expected})`, `→ print(${expected}) 와 일치`)}
-          </span>
-        </div>
-        <div style={{ fontSize: 12, color: "#065f46", lineHeight: 1.5 }}>
-          {t(E,
-            "Try N=1, M=1 (1 corner), N=1 and M≥2 (a line, 2 corners), then N≥2 and M≥2 (full rectangle, 4 corners). The grid collapses, but the formula still holds.",
-            "N=1, M=1 (꼭짓점 1) → N=1 이면서 M≥2 (직선, 2) → N≥2 이면서 M≥2 (직사각형, 4) 순서로 눌러봐요. 격자가 무너져도 공식은 그대로.")}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N, M = map(int, input().split())",
-  "",
-  "# An N x M grid always has 4 corners",
-  "# unless N == 1 or M == 1 (then 2 corners)",
-  "# unless N == 1 and M == 1 (then 1 corner)",
-  "",
-  "if N == 1 and M == 1:",
-  "    print(1)",
-  "elif N == 1 or M == 1:",
-  "    print(2)",
-  "else:",
-  "    print(4)",
-];
-
+/* 옛 문제(꼭짓점 개수 세기)용 CornerAuditSim 과 SOLUTION_CODE 는 2026-07-30 삭제 —
+   quest 를 진짜 MCC 2024 P1 로 교체하면서 아무도 참조하지 않는 죽은 코드가 됐다.
+   (남겨두면 다음에 읽는 사람이 "이 문제는 1/2/4 를 세는 거구나" 로 오해한다.) */
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (4 steps)
@@ -199,15 +72,10 @@ export function makeCornerCoverCh1(E) {
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 7, fontSize: 13, color: C.text, lineHeight: 1.6, wordBreak: "keep-all" }}>
-              <div>• {t(E, "The grid is ", "격자는 ")}<b style={{ color: "#059669" }}>n × m</b>{t(E, ".", " 이에요.")}</div>
               <div>• {t(E, "You pick one subgrid of size ", "크기 ")}<b style={{ color: "#059669" }}>A × B</b>
                 {t(E, " or ", " 또는 ")}<b style={{ color: "#059669" }}>B × A</b>
                 {t(E, " (so you may rotate it).", " 인 부분격자 하나를 골라요 (눕혀도 돼요).")}</div>
               <div>• {t(E, "It must sit inside the grid, aligned to the cells.", "부분격자는 격자 안에 칸에 맞춰 들어가야 해요.")}</div>
-              <div style={{ marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
-                👉 <b style={{ color: "#15803d" }}>{t(E, "At least two corner cells inside", "코너 칸이 2 개 이상 안에 들어오면")}</b>
-                {t(E, " → YES, otherwise NO.", " → YES, 아니면 NO.")}
-              </div>
             </div>
           </div>
         </div>),
@@ -256,8 +124,8 @@ YES`}</pre>
       type: "reveal",
       narr: t(E,
         "Before any rule: put the stamp down yourself. Try to catch two corners — and notice when it becomes impossible.",
-        "규칙을 말하기 전에 직접 놓아봐요. 코너 두 개를 잡아보고, 언제 불가능해지는지 느껴봐요."),
-      content: (<CornerCoverSim E={E} />),
+        "아직 규칙은 안 알려줄게요. 직접 놓아보면서 — 어떤 크기는 코너 2 개를 잡고 어떤 크기는 아무리 옮겨도 못 잡아요. 그 차이를 찾아보세요."),
+      content: (<CornerCoverSim E={E} reveal={false} />),
     },
 
     /* [결] 규칙 정리 — 시뮬에서 본 것을 문장 하나로. */
@@ -288,6 +156,15 @@ YES`}</pre>
             </div>
             {t(E, "To hold (1,1) and (n,m) the stamp must span BOTH directions — that is the whole grid, which already spans a side. So it needs no extra case.",
                   "(1,1) 과 (n,m) 을 같이 품으려면 양쪽 방향을 다 채워야 해요 — 그건 격자 전체고, 이미 한 변을 꽉 채운 경우예요. 그래서 따로 볼 필요가 없어요.")}
+          </div>
+
+          {/* 같은 시뮬을 '확인 모드' 로 한 번 더 — 방금 말한 규칙이 화면의 숫자와
+              맞는지 학생이 직접 대조한다. 관찰(3 장) → 추론 → 확인(여기). */}
+          <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px dashed #cbd5e1" }}>
+            <div style={{ textAlign: "center", fontSize: 11.5, fontWeight: 700, color: "#475569", marginBottom: 4 }}>
+              {t(E, "check the rule against the sim", "규칙이 맞는지 시뮬로 확인해보세요")}
+            </div>
+            <CornerCoverSim E={E} reveal={true} />
           </div>
         </div>),
     },
