@@ -10,9 +10,13 @@ export function makeChipXchgCh1(E) {
     // 1-1: Title reveal & mission
     {
       type: "reveal",
+      /* 도입에 기호를 쓰지 않는다 (선생님 2026-07-30: "뭔말이지?", "굳이 처음에
+         _ 이게 왜 있는지 모르겠더라고").  옛 첫 문장은 A·B·c_A·c_B·f_A 다섯 기호를
+         정의 없이 한꺼번에 던졌다 — checkups 6원칙의 "기호 정의 먼저" 위반.
+         구체적인 색·숫자로 먼저 말하고, 이름은 아래 📎 에서 마지막에. */
       narr: t(E,
-        "Bessie has A chips of type A and B chips of type B. She can repeatedly trade c_B B-chips for c_A A-chips. Random chips arrive, but the adversary picks the split. How many chips does she need so she's guaranteed to reach f_A type-A chips?",
-        "Bessie 는 A 종류 칩 A 개, B 종류 칩 B 개를 가지고 있어요. B 칩 c_B 개를 A 칩 c_A 개로 계속 바꿀 수 있어요. 랜덤 칩이 오는데 분배는 적이 정해요. f_A 개 A 칩에 도달이 보장되려면 몇 개가 필요할까?"),
+        "Bessie has red chips and blue chips. At the exchange, 3 blue chips get her 1 red chip — as many times as she likes. She wants 4 red chips. More chips are coming, but a trickster decides how many go red and how many go blue. How many chips does she need so she gets there no matter what?",
+        "Bessie 는 빨간 칩과 파란 칩을 갖고 있어요. 교환소에서 파란 칩 3 개를 내면 빨간 칩 1 개를 줘요 — 몇 번이든. 목표는 빨간 칩 4 개. 칩을 더 받는데, 빨강으로 갈지 파랑으로 갈지는 심술쟁이가 정해요. 심술쟁이가 어떻게 나눠도 목표를 채우려면 몇 개를 받아야 할까?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,8 +32,8 @@ export function makeChipXchgCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
-                "Find the smallest x so that for every adversarial split of x extra chips, Bessie can still reach f_A type-A chips.",
-                "추가 x 개를 적이 어떻게 나눠 줘도 f_A 개 A 칩에 도달 가능한 가장 작은 x 를 구하기.")}
+                "However the trickster splits the extra chips, Bessie must still reach her red-chip goal. Find the smallest number of extra chips that guarantees it.",
+                "심술쟁이가 추가 칩을 어떻게 나눠 줘도 빨간 칩 목표를 채울 수 있어야 해요. 그걸 보장하는 가장 작은 추가 칩 개수를 구하기.")}
             </div>
           </div>
 
@@ -41,34 +45,64 @@ export function makeChipXchgCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Start: ", "시작: ")}
-                  <b style={{ color: "#2563eb" }}>{t(E, "A type-A chips and B type-B chips.", "A 종류 칩 A 개, B 종류 칩 B 개.")}</b>
+                  {t(E, "You have: ", "지금 있는 것: ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "some red chips and some blue chips.", "빨간 칩 몇 개, 파란 칩 몇 개.")}</b>
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Exchange: trade ", "환전: ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "c_B B-chips for c_A A-chips", "B 칩 c_B 개 → A 칩 c_A 개")}</b>
-                  {t(E, " (one direction, repeat as you like).", " (한 방향, 원하는 만큼 반복).")}
+                  {t(E, "Exchange: ", "교환소: ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "hand in blue chips \u2192 get red chips", "파란 칩 몇 개를 내면 \u2192 빨간 칩 몇 개")}</b>
+                  {t(E, " (blue \u2192 red only, repeat as you like).", " (파랑 \u2192 빨강 한 방향, 몇 번이든).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "x extra chips arrive, but ", "추가 x 개가 오는데, ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "an adversary picks how many go to A vs. B.", "A 와 B 로 몇 개씩 갈지 적이 정함.")}</b>
+                  {t(E, "More chips arrive, but ", "칩을 더 받는데, ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "a trickster decides how many go red and how many go blue.", "빨강 몇 개, 파랑 몇 개로 갈지 심술쟁이가 정해요.")}</b>
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print the smallest ", "가장 작은 ")}
-                  <b style={{ color: "#15803d" }}>{t(E, "x", "x")}</b>
-                  {t(E, " that guarantees reaching f_A A-chips. (Up to 10^4 test cases, answer up to 10^18 — use 64-bit.)",
-                       " 를 출력. (테스트 최대 10^4, 답 최대 10^18 — 64비트 사용.)")}
+                  {t(E, "Print the fewest ", "가장 적은 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "extra chips", "추가 칩 개수")}</b>
+                  {t(E, " that always reaches the red-chip goal. (Up to 10^4 test cases; the answer can reach 10^18 \u2014 use 64-bit.)",
+                       " 를 출력 \u2014 어떻게 나뉘어도 목표를 채우는 개수. (테스트 최대 10^4, 답이 10^18 까지 커서 64비트 필요.)")}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* 📎 이름 붙이기 — *마지막에.*  위에서 색·숫자로 이해한 다음에야 기호가
+              의미를 갖는다.  다음 슬라이드부터 A칩/B칩·c_A·c_B 를 쓰므로 여기서
+              다리를 놓아야 한다 (안 그러면 빨강/파랑 ↔ A/B 가 따로 논다).
+              선생님이 막힌 지점이 정확히 "_ 가 왜 있는지" 라 그것도 한 줄. */}
+          <div style={{
+            background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10,
+            padding: "10px 13px", fontSize: 12, color: "#475569", lineHeight: 1.75,
+            wordBreak: "keep-all",
+          }}>
+            <div style={{ fontWeight: 700, color: "#334155", marginBottom: 4 }}>
+              📎 {t(E, "Names for these (used from the next page)", "여기에 이름 붙이기 (다음 장부터 이 이름을 써요)")}
+            </div>
+            <div>
+              🔴 {t(E, "red chip", "빨간 칩")} = <b>{t(E, "type-A chip", "A 칩")}</b>
+              {" · "}🔵 {t(E, "blue chip", "파란 칩")} = <b>{t(E, "type-B chip", "B 칩")}</b>
+            </div>
+            <div>
+              {t(E, "The trade numbers change from test to test, so they get names: ",
+                    "교환 숫자는 문제마다 달라서 이름이 붙어요: ")}
+              <b style={{ color: "#0891b2" }}>c_B</b>{t(E, " blue in → ", " 개 파랑 내고 → ")}
+              <b style={{ color: "#0891b2" }}>c_A</b>{t(E, " red out", " 개 빨강 받기")}
+              {t(E, ", goal ", ", 목표는 ")}<b style={{ color: "#15803d" }}>f_A</b>
+              {t(E, " red chips.", " 개 빨강.")}
+            </div>
+            <div style={{ color: "#64748b" }}>
+              {t(E, "( the _ is just a small letter written below: c_B means “c, the blue one” )",
+                    "( _ 는 아래에 작게 쓰는 글자예요. c_B = “c 인데 파랑 쪽” )")}
             </div>
           </div>
         </div>),
