@@ -4,19 +4,27 @@ import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
 
+/* ⚠️ 2026-07-30 전면 교체 — 이 파일에 있던 코드는 *다른 문제* 를 풀고 있었다.
+   옛 내용: "N×M 격자의 꼭짓점 칸 개수" → print(1/2/4).
+   진짜 MCC 2024 P1: T 케이스마다 n m A B 를 읽어, A×B(또는 B×A) 부분격자로
+   코너 칸 2 개 이상을 덮을 수 있는지 YES/NO.
+   (선생님이 원문 PDF 를 주셔서 확인. Statements 3/statement-en.pdf p.1-2) */
+
 const FULL_PY = [
-  "N, M = map(int, input().split())",
+  "import sys",
+  "input = sys.stdin.readline",
   "",
-  "# An N x M grid always has 4 corners",
-  "# unless N == 1 or M == 1 (then 2 corners)",
-  "# unless N == 1 and M == 1 (then 1 corner)",
+  "T = int(input())",
+  "for _ in range(T):",
+  "    n, m, A, B = map(int, input().split())",
   "",
-  "if N == 1 and M == 1:",
-  "    print(1)",
-  "elif N == 1 or M == 1:",
-  "    print(2)",
-  "else:",
-  "    print(4)",
+  "    ok = False",
+  "    for h, w in ((A, B), (B, A)):      # 눕혀서 놓는 것도 허용",
+  "        if h <= n and w <= m:          # ① 격자 안에 들어가나",
+  "            if h == n or w == m:       # ② 한 방향을 끝까지 꽉 채우나",
+  "                ok = True",
+  "",
+  "    print(\"YES\" if ok else \"NO\")",
 ];
 
 const FULL_CPP = [
@@ -24,14 +32,20 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    int N, M;",
-  "    cin >> N >> M;",
-  "    if (N == 1 && M == 1) {",
-  "        cout << 1 << \"\\n\";",
-  "    } else if (N == 1 || M == 1) {",
-  "        cout << 2 << \"\\n\";",
-  "    } else {",
-  "        cout << 4 << \"\\n\";",
+  "    int T;",
+  "    cin >> T;",
+  "    while (T--) {",
+  "        long long n, m, A, B;      // 10^18 까지 → long long",
+  "        cin >> n >> m >> A >> B;",
+  "",
+  "        bool ok = false;",
+  "        long long hs[2] = {A, B}, ws[2] = {B, A};   // 두 방향",
+  "        for (int i = 0; i < 2; i++) {",
+  "            long long h = hs[i], w = ws[i];",
+  "            if (h <= n && w <= m && (h == n || w == m)) ok = true;",
+  "        }",
+  "",
+  "        cout << (ok ? \"YES\" : \"NO\") << '\\n';",
   "    }",
   "    return 0;",
   "}",
@@ -44,20 +58,24 @@ export function getCornerCoverSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+        t(E, "Two corner cells are always neighbours along one side — top pair, bottom pair, left pair or right pair. To hold both, the subgrid must reach that side end to end.",
+            "코너 두 개는 항상 한 변의 양 끝이에요 — 위 둘, 아래 둘, 왼쪽 둘, 오른쪽 둘. 둘 다 품으려면 그 변을 끝에서 끝까지 닿아야 해요."),
+        t(E, "So only two things matter: does it FIT (h ≤ n, w ≤ m), and does it SPAN (h == n or w == m)?",
+            "그래서 볼 건 딱 둘이에요 — 들어가나 (h ≤ n, w ≤ m), 그리고 꽉 채우나 (h == n 또는 w == m)?"),
+        t(E, "The two diagonal corners need the whole grid, which already satisfies 'span' — no extra case.",
+            "대각선 두 코너는 격자 전체가 필요한데 그건 이미 '꽉 채움' 이라 따로 볼 필요 없어요."),
+        t(E, "A x B may be laid down either way, so try (A,B) and (B,A).",
+            "A × B 는 눕혀도 되니 (A,B) 와 (B,A) 두 방향을 시도해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "Python ints are arbitrary precision — n, m, A, B up to 10^18 need no special care.",
+            "파이썬 정수는 크기 제한이 없어서 10^18 이 와도 그냥 돼요."),
       ],
       cppOnly: [
-        t(E, "Only iostream needed here — keep #includes minimal.",
-            "여기선 iostream 만 필요 — #include 는 필요한 것만."),
-        t(E, "Three branches map directly to the three cases — no clever shortcut needed.",
-            "세 경우를 if/else if/else 로 그대로 — 잔재주 없이 깔끔하게."),
+        t(E, "n, m, A, B reach 10^18 — `int` overflows. Use `long long` (holds up to ~9.2 x 10^18).",
+            "n, m, A, B 가 10^18 까지예요 — `int` 는 넘쳐요. `long long` 을 써야 해요 (약 9.2 x 10^18 까지)."),
+        t(E, "Up to 200 test cases only, so plain cin/cout is fast enough here.",
+            "테스트가 최대 200 개뿐이라 여기선 cin/cout 그대로도 충분해요."),
       ],
     },
   ];
