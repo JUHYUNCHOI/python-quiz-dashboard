@@ -180,9 +180,11 @@ export function makeCornerCoverCh2(E, lang = "py") {
     // 2-1: Code
     {
       type: "progressive",
+      /* 앞 슬라이드가 규칙(들어가나·꽉 채우나)을 이미 말했다. 여기선 그 두 검사가
+         코드의 어느 줄인지만. (선생님 2026-07-30: "반복된건 없는지") */
       narr: t(E,
-        "Read T, then four numbers per test. Lay the stamp both ways — (A,B) and (B,A) — and for each ask: does it fit, and does it span a whole side?",
-        "T 를 읽고 테스트마다 네 숫자. 도장을 두 방향 — (A,B) 와 (B,A) — 으로 놓아보며 각각 물어요: 들어가나, 그리고 한 변을 꽉 채우나?"),
+        "Those two checks are two lines of code. Find them — and notice the loop that lays the stamp on its side.",
+        "방금 그 두 검사가 코드에선 두 줄이에요. 어디인지 찾아보고, 도장을 눕히는 반복문도 같이 보세요."),
       sections: getCornerCoverSections(E),
     },
   ];

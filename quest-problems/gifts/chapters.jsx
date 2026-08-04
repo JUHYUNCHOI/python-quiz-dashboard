@@ -144,9 +144,11 @@ export function makeGiftsCh2(E, lang = "py") {
     // 2-1: Progressive code
     {
       type: "progressive",
+      /* 앞 슬라이드(세 동작)와 같은 말을 반복하지 않는다 — 여기서는 그 세 동작이
+         *코드의 어느 줄* 인지만 짚어준다. (선생님 2026-07-30: "반복된건 없는지") */
       narr: t(E,
-        "Sort by (tier, arrival), give to the first m in line, then print in the original guest order.",
-        "(티어, 도착 순) 으로 정렬 → 줄 앞에서 m 명에게 → 원래 손님 번호 순으로 출력."),
+        "Those three moves are three lines of code. Find them: the sort, the slice, the print.",
+        "방금 그 세 동작이 코드에선 딱 세 줄이에요. 어느 줄인지 찾아보세요 — 정렬, 앞에서 자르기, 출력."),
       sections: getGiftsSections(E),
     },
   ];

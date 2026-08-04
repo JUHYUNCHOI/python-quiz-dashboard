@@ -37,15 +37,16 @@ export function getCornerCoverSections(E) {
       label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
       color: A,
       py: FULL_PY,
+      /* 규칙(들어가나·꽉 채우나)은 앞 슬라이드가 이미 말했다. 여기서는 *코드가 그걸
+         어떻게 담았는지* 만 — 안 그러면 같은 말이 세 번 나온다.
+         (선생님 2026-07-30: "반복된건 없는지") */
       why: [
-        t(E, "Two corner cells are always neighbours along one side — top pair, bottom pair, left pair or right pair. To hold both, the subgrid must reach that side end to end.",
-            "코너 두 개는 항상 한 변의 양 끝이에요 — 위 둘, 아래 둘, 왼쪽 둘, 오른쪽 둘. 둘 다 품으려면 그 변을 끝에서 끝까지 닿아야 해요."),
-        t(E, "So only two things matter: does it FIT (h ≤ n, w ≤ m), and does it SPAN (h == n or w == m)?",
-            "그래서 볼 건 딱 둘이에요 — 들어가나 (h ≤ n, w ≤ m), 그리고 꽉 채우나 (h == n 또는 w == m)?"),
-        t(E, "The two diagonal corners need the whole grid, which already satisfies 'span' — no extra case.",
-            "대각선 두 코너는 격자 전체가 필요한데 그건 이미 '꽉 채움' 이라 따로 볼 필요 없어요."),
-        t(E, "A x B may be laid down either way, so try (A,B) and (B,A).",
-            "A × B 는 눕혀도 되니 (A,B) 와 (B,A) 두 방향을 시도해요."),
+        t(E, "for h, w in ((A, B), (B, A)) is the 'you may lay it on its side' part — one loop tries both orientations.",
+            "for h, w in ((A, B), (B, A)) 이 '눕혀도 된다' 를 담아요 — 반복문 한 번으로 두 방향을 다 시도해요."),
+        t(E, "The two ifs are nested on purpose: the outer one asks 'does it fit', the inner one 'does it span'. Reading top to bottom follows the same order you checked in the sim.",
+            "if 두 개를 일부러 겹쳐 놨어요 — 바깥이 '들어가나', 안쪽이 '꽉 채우나'. 위에서 아래로 읽으면 시뮬에서 확인한 순서 그대로예요."),
+        t(E, "ok starts False and only ever turns True — one working placement is enough, so we never need to undo it.",
+            "ok 는 False 로 시작해서 True 로만 바뀌어요 — 되는 배치가 하나만 있으면 되니까, 되돌릴 일이 없어요."),
       ],
       pyOnly: [
         t(E, "Python ints are arbitrary precision — n, m, A, B up to 10^18 need no special care.",

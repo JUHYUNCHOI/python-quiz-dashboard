@@ -47,13 +47,15 @@ export function getGiftsSections(E) {
       /* ⚠️ 2026-07-30 — 여기 설명이 옛 문제(N % K) 것으로 남아 있었다. 코드만 바꾸고
          옆의 why/pyOnly 를 안 고쳐서, 학생이 새 코드를 보며 옛 문제 설명을 읽게 됐다.
          코드를 갈아엎을 땐 *그 옆 노트도 같이* 봐야 한다. */
+      /* 규칙 자체는 앞 슬라이드(세 동작)가 이미 말했다. 여기서는 *코드가 그 규칙을
+         어떻게 담았는지* 만 — 안 그러면 같은 말이 네 번 나온다. */
       why: [
-        t(E, "The whole problem is one line-up: sort by (tier, arrival), and the first m in line get a gift.",
-            "문제 전체가 줄 세우기 하나예요 — (티어, 도착 순) 으로 세우고, 줄 앞에서 m 명이 선물을 받아요."),
-        t(E, "zip(t, range(n)) pairs each tier with its guest number. Tuples compare front to back, so tier decides first and the guest number breaks ties — exactly the two rules.",
-            "zip(t, range(n)) 은 티어와 손님 번호를 짝지어요. 튜플은 앞에서부터 비교하니 티어가 먼저 정하고, 같으면 번호가 작은 사람이 앞 — 문제의 두 규칙 그대로예요."),
-        t(E, "Careful: the answer must come out in the ORIGINAL guest order, not the queue order. That is why we mark x[i] instead of printing as we go.",
-            "주의: 답은 줄 순서가 아니라 *원래 손님 번호 순* 으로 나가야 해요. 그래서 바로 출력하지 않고 x[i] 에 표시해 두는 거예요."),
+        t(E, "zip(t, range(n)) pairs each tier with its guest number. Tuples compare front to back, so tier decides first and the guest number breaks ties — the two rules land in one sort.",
+            "zip(t, range(n)) 은 티어와 손님 번호를 짝지어요. 튜플은 앞에서부터 비교하니 티어가 먼저 정하고, 같으면 번호가 작은 사람이 앞 — 규칙 두 개가 정렬 한 번에 들어가요."),
+        t(E, "order[:m] is 'the first m in line'. Slicing does the counting for us — no need to track how many gifts are left.",
+            "order[:m] 이 '줄 앞에서 m 명' 이에요. 슬라이싱이 세는 일을 대신해 줘서, 선물이 몇 개 남았는지 따로 셀 필요가 없어요."),
+        t(E, "x[i] = 1 writes the mark at the guest's own spot, so printing x gives guest order for free.",
+            "x[i] = 1 은 그 손님의 원래 자리에 표시를 남겨요. 그래서 x 를 그냥 출력하면 손님 번호 순이 저절로 맞아요."),
       ],
       pyOnly: [
         t(E, "for _, i in order[:m] — the _ means 'we do not need the tier here, only the guest number'.",
