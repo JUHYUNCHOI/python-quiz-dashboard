@@ -152,31 +152,52 @@ export function GiftsSim({ E }) {
   );
 }
 
+/* ⚠️ 2026-07-30 전면 교체 — 이 파일의 코드는 *다른 문제* 를 풀고 있었다.
+   옛 내용: "선물 N 개를 K 명에게 고르게 → 추가로 받는 사람 수" → print(N % K).
+   진짜 MCC 2024 P2 (Gifts): 손님 n 명, 선물 m 개 (m < n). 손님마다 티어 t_i.
+   티어 낮은 사람부터, 같은 티어면 먼저 온(번호 작은) 사람부터 선물을 준다.
+   출력 = 손님 1..n 순서로 0/1 (받았으면 1).
+   원문: public/problems/mcc-2024-statements.pdf p.3 */
+
 const FULL_PY = [
-  "N, K = map(int, input().split())",
+  "import sys",
+  "input = sys.stdin.readline",
   "",
-  "# Each person gets at least N // K gifts",
-  "base = N // K",
-  "# N % K people get one extra gift",
-  "extra = N % K",
+  "n, m = map(int, input().split())",
+  "t = list(map(int, input().split()))",
   "",
-  "print(extra)",
+  "# (티어, 번호) 쌍으로 줄 세우기.",
+  "# 튜플은 앞에서부터 비교 → 티어가 먼저, 같으면 번호가 작은 사람이 먼저.",
+  "order = sorted(zip(t, range(n)))",
+  "",
+  "x = [0] * n",
+  "for _, i in order[:m]:      # 앞에서 m 명만 선물을 받음",
+  "    x[i] = 1",
+  "",
+  "print(*x)",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
+  "#include <vector>",
+  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
-  "    int N, K;",
-  "    cin >> N >> K;",
+  "    int n, m;",
+  "    cin >> n >> m;",
+  "    vector<int> t(n);",
+  "    for (int i = 0; i < n; i++) cin >> t[i];",
   "",
-  "    // 각 사람은 최소 N / K 개를 받음",
-  "    int base = N / K;",
-  "    // N % K 명이 하나 더 받음",
-  "    int extra = N % K;",
+  "    // (티어, 번호) 쌍 — pair 도 앞에서부터 비교해서 정렬돼요.",
+  "    vector<pair<int,int>> order(n);",
+  "    for (int i = 0; i < n; i++) order[i] = {t[i], i};",
+  "    sort(order.begin(), order.end());",
   "",
-  "    cout << extra << \"\\n\";",
+  "    vector<int> x(n, 0);",
+  "    for (int k = 0; k < m; k++) x[order[k].second] = 1;",
+  "",
+  "    for (int i = 0; i < n; i++) cout << x[i] << \" \\n\"[i == n - 1];",
   "    return 0;",
   "}",
 ];

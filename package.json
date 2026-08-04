@@ -21,7 +21,8 @@
     "validate-solutions": "node scripts/validate-solutions.mjs",
     "build:mobile": "next build && npx cap sync",
     "cap:open:ios": "npx cap open ios",
-    "cap:open:android": "npx cap open android"
+    "cap:open:android": "npx cap open android",
+    "check-quests": "node scripts/check-quest-samples.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.82.0",

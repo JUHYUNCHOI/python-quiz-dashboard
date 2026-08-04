@@ -1,169 +1,136 @@
 import { C, t } from "@/components/quest/theme";
-import { getGiftsSections, GiftsSim } from "./components";
+import { getGiftsSections } from "./components";
+import { GiftQueueSim } from "./sims";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N, K = map(int, input().split())",
-  "",
-  "# Each person gets at least N // K gifts",
-  "base = N // K",
-  "# N % K people get one extra gift",
-  "extra = N % K",
-  "",
-  "print(extra)",
-];
+/* 옛 문제(N 개를 K 명에게)용 SOLUTION_CODE 는 2026-07-30 삭제 — quest 를
+   진짜 MCC 2024 P2 로 교체하면서 아무도 참조하지 않는 죽은 코드가 됐다.
+   남겨두면 다음에 읽는 사람이 "이 문제는 N % K 구나" 로 오해한다. */
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: Problem (3 steps)
+   Chapter 1: Problem (4 steps)
+
+   ⚠️ 2026-07-30 전면 재작성 — 이 챕터는 *다른 문제* 를 설명하고 있었다.
+      옛 내용: "선물 N 개를 K 명에게 고르게 → 추가로 받는 사람 수" (답 = N % K).
+      진짜 MCC 2024 P2: 손님 n 명 · 선물 m 개(m < n), 티어 낮은 사람부터,
+      같은 티어면 먼저 온 사람부터. 출력은 손님 1..n 순서로 0/1.
+      원문: public/problems/mcc-2024-statements.pdf p.3-4
    ═══════════════════════════════════════════════════════════════ */
 export function makeGiftsCh1(E) {
   return [
-    // 1-1: Title reveal
+    /* [기] 도입 */
     {
       type: "reveal",
       narr: t(E,
-        "There are N gifts to distribute among K people as evenly as possible — every person gets at least N/K (integer division), and some get one extra to use up the leftover.\nPrint how many people receive an EXTRA gift.",
-        "N개의 선물을 K명에게 최대한 고르게 나눠줘요 — 모두가 최소 N/K (정수 나눗셈) 개를 받고, 일부는 남은 선물을 위해 1개 더 받아요.\n추가 선물을 받는 사람의 수를 출력해요."),
+        "You invited more guests than you have gifts. You hand them out by tier — closest friends (tier 1) first. If a tier runs out of gifts partway, whoever arrived earlier gets it. Who ends up with a gift?",
+        "손님보다 선물이 적어요. 친한 순서(티어)대로 나눠줘요 — 티어 1 이 제일 친한 친구. 어떤 티어에서 선물이 도중에 떨어지면, 먼저 온 사람이 가져가요. 누가 선물을 받게 될까요?"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 8 }}>
-            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83c\udf81"}</div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: "#d97706" }}>Gifts</div>
+          <div style={{ textAlign: "center", marginBottom: 10 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🎁</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#a21caf" }}>Gifts</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P2</div>
           </div>
 
-          {/* 🎯 Mission box */}
-          <div style={{ background: "#fef3c7", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", letterSpacing: 0.5, marginBottom: 4 }}>
+          <div style={{ background: "#fdf4ff", border: "1.5px solid #d946ef", borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#86198f", letterSpacing: 0.5, marginBottom: 4 }}>
               🎯 {t(E, "Mission", "미션")}
             </div>
-            <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
-              {t(E,
-                "Output the number of people who receive an extra gift after the most-even split.",
-                "최대한 고른 분배 후 추가 선물을 받는 사람의 수를 출력.")}
+            <div style={{ fontSize: 13, color: "#86198f", lineHeight: 1.6, wordBreak: "keep-all" }}>
+              {t(E, "For each guest, print 1 if they receive a gift and 0 if they do not.",
+                    "손님마다 선물을 받으면 1, 못 받으면 0 을 출력하기.")}
             </div>
           </div>
 
-          <div style={{ background: "#fef3c7", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "#92400e", marginBottom: 10 }}>
-              📖 {t(E, "Problem", "문제")}
+          <div style={{ background: "#fdf4ff", border: "1px solid #f0abfc", borderRadius: 12, padding: 14 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#86198f", marginBottom: 8 }}>
+              📖 {t(E, "The rule", "규칙")}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E, "There are ", "")}
-                  <b style={{ color: "#d97706" }}>{t(E, "N gifts and K people", "N개의 선물과 K명")}</b>
-                  {t(E, ".", "이 있어요.")}
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#d97706", fontWeight: 600, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E, "Distribute the gifts ", "선물을 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "as evenly as possible", "최대한 고르게")}</b>
-                  {t(E, " — every person gets the base count, and some get one extra to cover the leftover.",
-                        " 나눠요 — 모두가 기본 개수를 받고, 일부가 남은 만큼 1개 더 받아요.")}
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
-                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
-                <div>
-                  {t(E, "Print ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "how many people receive an extra gift", "추가 선물을 받는 사람의 수")}</b>
-                  {t(E, ".", "를 출력해요.")}
-                </div>
-              </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 7, fontSize: 13, color: C.text, lineHeight: 1.6, wordBreak: "keep-all" }}>
+              <div>• {t(E, "There are ", "손님이 ")}<b style={{ color: "#a21caf" }}>n</b>
+                {t(E, " guests but only ", " 명인데 선물은 ")}<b style={{ color: "#a21caf" }}>m</b>
+                {t(E, " gifts, and m is always smaller.", " 개뿐이고, 선물이 항상 모자라요.")}</div>
+              <div>• {t(E, "Each guest has a ", "손님마다 ")}<b style={{ color: "#a21caf" }}>{t(E, "tier", "티어")}</b>
+                {t(E, " — smaller means closer to you.", " 가 있어요 — 숫자가 작을수록 친한 사이예요.")}</div>
+              <div>• {t(E, "Give to tier 1 first, then tier 2, then tier 3 …",
+                          "티어 1 에게 먼저, 그 다음 티어 2, 티어 3 …")}</div>
+              <div>• {t(E, "Not enough gifts inside one tier? ", "한 티어 안에서 선물이 모자라면? ")}
+                <b style={{ color: "#a21caf" }}>{t(E, "the earlier guest wins", "먼저 온 손님이 받아요")}</b>
+                {t(E, " (guest 1 arrives before guest 2, and so on).", " (손님 1 이 손님 2 보다 먼저 왔어요).")}</div>
             </div>
           </div>
         </div>),
     },
-    // 1-1b: 입출력 형식 (문제 이해 직후 "데이터가 어떻게 들어오지?" 못박기)
-    // CONSTRAINTS 박스 생략 — MCC 2024 원문 공개 없음, 믿을 만한 숫자 범위 없음.
+
+    /* [승] 입출력 + 공식 샘플 */
     {
       type: "reveal",
       narr: t(E,
-        "How does the data arrive? One line: N K. Output: a single integer.",
-        "데이터는 어떻게 들어올까? 한 줄에 N K. 출력은 정수 하나."),
+        "Two lines in: the counts, then every guest's tier. One line out: n zeros and ones.",
+        "입력은 두 줄 — 개수, 그리고 손님들의 티어. 출력은 한 줄 — 0 과 1 이 n 개."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
-          {/* INPUT */}
-          <div style={{ marginBottom: 12 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
-            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
-              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(one line) — N gifts, K people", "(한 줄) — 선물 N개, 사람 K명")}</span></div>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 12 }}>
+            <div style={{ background: "#fffbeb", border: "1.5px solid #fcd34d", borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 6 }}>{t(E, "Input", "입력")}</div>
+              <pre style={{ margin: 0, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.7, color: "#334155" }}>{`8 6
+3 1 4 1 5 9 2 5`}</pre>
+            </div>
+            <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>{t(E, "Output", "출력")}</div>
+              <pre style={{ margin: 0, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.7, color: "#334155" }}>{`1 1 1 1 1 0 1 0`}</pre>
             </div>
           </div>
-          {/* OUTPUT */}
-          <div style={{ marginBottom: 12 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
-            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
-              {t(E, "A single integer — how many people receive an extra gift.",
-                  "정수 하나 — 추가 선물을 받는 사람의 수.")}
+
+          <div style={{ maxWidth: 470, margin: "0 auto", background: "#f5f3ff", border: "1px solid #ddd6fe", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#4c1d95", lineHeight: 1.85 }}>
+            <div style={{ fontWeight: 800, marginBottom: 4 }}>🔍 {t(E, "line by line", "한 줄씩")}</div>
+            <div><code>8 6</code> — {t(E, "8 guests, 6 gifts (so 2 go home empty)", "손님 8 명, 선물 6 개 (2 명은 못 받아요)")}</div>
+            <div><code>3 1 4 1 5 9 2 5</code> — {t(E, "guest 1 is tier 3, guest 2 is tier 1, …", "손님 1 은 티어 3, 손님 2 는 티어 1, …")}</div>
+            <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #ddd6fe" }}>
+              {t(E, "The output is in ", "출력은 ")}<b>{t(E, "guest order", "손님 번호 순")}</b>
+              {t(E, " — the 6th number is 0, so guest 6 got nothing.",
+                    " 이에요 — 6 번째가 0 이니 손님 6 이 못 받았어요.")}
             </div>
-          </div>
-          {/* 샘플 */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
-              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.55, color: "#f8fafc" }}>
-                <div>10 3</div>
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
-              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac" }}>
-                <div>1</div>
-              </div>
-            </div>
-          </div>
-          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
-            {t(E, "10 gifts, 3 people: each gets 3, and 1 is left over → 1 person gets an extra.",
-                "선물 10개, 3명: 각각 3개씩 받고 1개가 남아 → 1명이 추가로 받아요.")}
           </div>
         </div>),
     },
-    // 1-2: Quiz
-    {
-      type: "quiz",
-      narr: t(E,
-        "10 gifts among 3 people: each gets 3, with 1 left over. Who gets the extra?", "선물 10개를 3명에게: 각각 3개씩, 1개 남아. 누가 추가 선물을 받을까?"),
-      question: t(E,
-        "10 gifts, 3 people. Each gets 3 (total 9). How many leftover?",
-        "선물 10개, 3명. 각각 3개씩 (총 9개). 남는 선물은?"),
-      options: [
-        t(E, "0", "0개"),
-        t(E, "1", "1개"),
-        t(E, "3", "3개"),
-      ],
-      correct: 1,
-      explain: t(E,
-        "Correct! 10 mod 3 = 1. One person gets an extra gift.",
-        "맞아! 10 mod 3 = 1. 한 명이 추가 선물을 받아요."),
-    },
-    // 1-3: Sim — play with N and K
+
+    /* [전] 시뮬 — 줄 서는 장면과 선물이 떨어지는 순간 */
     {
       type: "reveal",
       narr: t(E,
-        "Drag N and K. Watch how the gifts split — most-even share for everyone, then the leftovers go out as ⭐ extras. Count the stars.",
-        "N과 K를 움직여 봐. 모두에게 최대한 고르게 나눠 준 뒤, 남는 선물이 ⭐로 가는 게 보여. 별 개수를 세어 봐."),
-      content: <GiftsSim E={E} />,
+        "Watch the line form, then hand the gifts out one at a time. Keep an eye on the moment they run out.",
+        "줄이 서는 걸 보고, 선물을 한 개씩 나눠줘요. 선물이 떨어지는 순간을 눈여겨 보세요."),
+      content: (<GiftQueueSim E={E} />),
     },
-    // 1-4: Input
+
+    /* [결] 규칙 → 코드로 가는 다리 */
     {
-      type: "input",
+      type: "reveal",
       narr: t(E,
-        "If you have 10 gifts and 3 people, how many people get an extra gift?", "선물 10개와 3명이 있으면, 추가 선물을 받는 사람은 몇 명?"),
-      question: t(E,
-        "N=10, K=3. How many people get an extra gift?",
-        "N=10, K=3. 추가 선물을 받는 사람은 몇 명?"),
-      hint: t(E,
-        "After base-share goes out, how many gifts are left over to hand out as extras?",
-        "기본 몫을 나눠 준 뒤 남은 선물은 추가 선물로 가니까 — 몇 개 남을까?"),
-      answer: 1,
+        "So the whole problem is one line-up. Sort by (tier, arrival), hand gifts to the first m, and print in the original order.",
+        "결국 줄 세우기 하나예요. (티어, 도착 순) 으로 정렬하고, 앞에서 m 명에게 주고, 원래 번호 순으로 출력."),
+      content: (
+        <div style={{ padding: 18, wordBreak: "keep-all" }}>
+          <div style={{ maxWidth: 470, margin: "0 auto 12px", background: "#fdf4ff", border: "1.5px solid #f0abfc", borderRadius: 12, padding: "13px 16px" }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#86198f", marginBottom: 8 }}>
+              💡 {t(E, "Three moves", "세 동작")}
+            </div>
+            <div style={{ fontSize: 13, color: "#334155", lineHeight: 1.95 }}>
+              <div>① {t(E, "line up by ", "줄 세우기 — ")}<b>{t(E, "(tier, arrival)", "(티어, 도착 순)")}</b></div>
+              <div>② {t(E, "the first ", "앞에서 ")}<b>m</b>{t(E, " in line get a gift", " 명이 선물을 받음")}</div>
+              <div>③ {t(E, "print in the ", "출력은 ")}<b>{t(E, "original guest order", "원래 손님 번호 순")}</b></div>
+            </div>
+          </div>
+
+          <div style={{ maxWidth: 470, margin: "0 auto", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: "11px 14px", fontSize: 12, color: "#475569", lineHeight: 1.8 }}>
+            <div style={{ fontWeight: 700, color: "#334155", marginBottom: 4 }}>
+              ⚠️ {t(E, "The easy mistake", "흔한 실수")}
+            </div>
+            {t(E, "Printing in the queue order. The queue is only for deciding WHO gets a gift — the answer still has to come out guest 1, guest 2, guest 3 …",
+                  "줄 순서대로 출력하는 것. 줄은 '누가 받나' 를 정하는 데만 쓰고, 답은 손님 1, 2, 3 … 순서로 나가야 해요.")}
+          </div>
+        </div>),
     },
   ];
 }
@@ -178,8 +145,8 @@ export function makeGiftsCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Even split → each person gets at least N//K. The remaining N % K people get one extra each — that's the answer. Sections build it one piece at a time.",
-        "고른 분배 → 모두 최소 N//K. 남은 N % K 명이 1 개씩 더 받음 — 그게 답. 아래 섹션이 한 단락씩 쌓아요."),
+        "Sort by (tier, arrival), give to the first m in line, then print in the original guest order.",
+        "(티어, 도착 순) 으로 정렬 → 줄 앞에서 m 명에게 → 원래 손님 번호 순으로 출력."),
       sections: getGiftsSections(E),
     },
   ];
