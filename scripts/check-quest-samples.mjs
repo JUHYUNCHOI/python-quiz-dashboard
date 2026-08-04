@@ -15,7 +15,8 @@
  *   quest-samples/<questId>/in.txt  +  out.txt  를 만들고 아래 REGISTRY 에 한 줄.
  *   in/out 은 반드시 **원문(공식 문제 PDF/사이트)** 에서 그대로 옮길 것.
  */
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { execFileSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -24,9 +25,9 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 /** questId → { file, varName, source }  (source = 샘플 출처, 사람이 확인용) */
 const REGISTRY = {
-  cornercover: { file: "quest-problems/cornercover/components.jsx", varName: "FULL_PY",
+  cornercover: { file: "quest-problems/cornercover/components.jsx", varName: "FULL_PY", cppVar: "FULL_CPP",
                  source: "public/problems/mcc-2024-statements.pdf p.1-2" },
-  gifts:       { file: "quest-problems/gifts/components.jsx",       varName: "FULL_PY",
+  gifts:       { file: "quest-problems/gifts/components.jsx",       varName: "FULL_PY", cppVar: "FULL_CPP",
                  source: "public/problems/mcc-2024-statements.pdf p.3-4" },
 };
 
@@ -80,8 +81,26 @@ for (const id of ids) {
     failed++; continue;
   }
 
+  // C++ 도 같은 샘플로 — Python 과 답이 같아야 하고, 컴파일도 돼야 한다.
+  let cppNote = "";
+  if (reg.cppVar) {
+    try {
+      const cppCode = extractCode(join(ROOT, reg.file), reg.cppVar);
+      const src = join(tmpdir(), `q_${id}.cpp`), bin = join(tmpdir(), `q_${id}`);
+      writeFileSync(src, cppCode);
+      execFileSync("g++", ["-std=c++17", "-O2", "-o", bin, src], { stdio: "pipe" });
+      const cppGot = execFileSync(bin, { input, encoding: "utf8", timeout: 15000 })
+        .trim().split(/\s+/).join(" ");
+      cppNote = cppGot === expect ? " · C++ ✅" : ` · C++ ❌(${cppGot})`;
+      if (cppGot !== expect) failed++;
+    } catch (e) {
+      cppNote = ` · C++ ❌(${(e.stderr || e.message).toString().split("\n")[0].slice(0, 60)})`;
+      failed++;
+    }
+  }
+
   if (got === expect) {
-    console.log(`✅ ${id} — 공식 샘플 통과   (${reg.source})`);
+    console.log(`✅ ${id} — 공식 샘플 통과${cppNote}   (${reg.source})`);
   } else {
     console.log(`❌ ${id} — 공식 샘플 불일치   (${reg.source})`);
     console.log(`     기대: ${expect}`);

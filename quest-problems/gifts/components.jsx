@@ -197,7 +197,11 @@ const FULL_CPP = [
   "    vector<int> x(n, 0);",
   "    for (int k = 0; k < m; k++) x[order[k].second] = 1;",
   "",
-  "    for (int i = 0; i < n; i++) cout << x[i] << \" \\n\"[i == n - 1];",
+  "    for (int i = 0; i < n; i++) {",
+  "        cout << x[i];",
+  "        if (i < n - 1) cout << ' ';   // 마지막 뒤에는 공백 없이",
+  "    }",
+  "    cout << '\\n';",
   "    return 0;",
   "}",
 ];
