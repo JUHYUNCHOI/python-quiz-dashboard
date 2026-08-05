@@ -76,7 +76,7 @@ export function GiftQueueSim({ E }) {
       const g = s.guest + 1;
       return s.got
         ? t(E, <>guest {g} (tier {tier[s.guest]}) gets one — <b>{s.left - 1}</b> gifts left</>,
-              <>손님 {g} (티어 {tier[s.guest]}) 받았어요 — 남은 선물 <b>{s.left - 1}</b> 개</>)
+              <>손님 {g} (티어 {tier[s.guest]}) 받았어요 — 남은 선물 <b>{s.left - 1}</b>개</>)
         : t(E, <>guest {g} (tier {tier[s.guest]}) — <b>no gifts left</b></>,
               <>손님 {g} (티어 {tier[s.guest]}) — <b>선물이 없어요</b></>);
     }
@@ -91,10 +91,12 @@ export function GiftQueueSim({ E }) {
         title={t(E, `${n} guests, ${m} gifts`, `손님 ${n} 명, 선물 ${m} 개`)}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
 
+      {/* 말풍선 — 스텝마다 줄 수가 달라 흔들리므로 가장 긴 경우에 맞춰 자리를 잡는다. */}
       <div style={{
         maxWidth: 440, margin: "0 auto 14px", padding: "9px 13px", borderRadius: 10,
         background: "#fdf4ff", border: `1.5px solid #f0abfc`, color: "#86198f",
         fontSize: 12, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6,
+        minHeight: 62, display: "flex", alignItems: "center", justifyContent: "center",
       }}>{bubble}</div>
 
       {/* 줄 */}
@@ -107,24 +109,25 @@ export function GiftQueueSim({ E }) {
           : t(E, "original guest order", "원래 손님 번호 순")}
       </div>
 
-      {/* 결과 줄 — 원래 번호 순 0/1 */}
-      {(s.kind === "final" || s.kind === "give") && (
-        <div style={{
-          maxWidth: 440, margin: "0 auto 12px", padding: "9px 13px", borderRadius: 10,
-          background: "#f8fafc", border: "1px solid #e2e8f0",
-          fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, textAlign: "center", color: "#334155",
-        }}>
-          <div style={{ fontSize: 10, color: C.dim, marginBottom: 3 }}>
-            {t(E, "output (guest 1 … 8)", "출력 (손님 1 … 8)")}
-          </div>
-          {[...Array(n).keys()].map(i => (
-            <span key={i} style={{
-              margin: "0 4px", fontWeight: 800,
-              color: given.has(i) ? "#15803d" : "#94a3b8",
-            }}>{given.has(i) ? 1 : 0}</span>
-          ))}
+      {/* 결과 줄 — 원래 번호 순 0/1.
+          ⚠️ 3 스텝째에 갑자기 생기면 화면이 90px 커진다 (mooin3 에서 겪은 그 문제).
+             자리는 처음부터 잡아두고 내용만 나중에 채운다. */}
+      <div style={{
+        maxWidth: 440, margin: "0 auto 12px", padding: "9px 13px", borderRadius: 10,
+        background: "#f8fafc", border: "1px solid #e2e8f0",
+        fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, textAlign: "center", color: "#334155",
+        opacity: (s.kind === "final" || s.kind === "give") ? 1 : 0.45,
+      }}>
+        <div style={{ fontSize: 10, color: C.dim, marginBottom: 3 }}>
+          {t(E, "output (guest 1 … 8)", "출력 (손님 1 … 8)")}
         </div>
-      )}
+        {[...Array(n).keys()].map(i => (
+          <span key={i} style={{
+            margin: "0 4px", fontWeight: 800,
+            color: given.has(i) ? "#15803d" : "#94a3b8",
+          }}>{(s.kind === "final" || s.kind === "give") ? (given.has(i) ? 1 : 0) : "·"}</span>
+        ))}
+      </div>
 
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
