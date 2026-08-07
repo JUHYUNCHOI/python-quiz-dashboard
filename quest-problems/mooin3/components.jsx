@@ -1038,12 +1038,15 @@ export function Mooin3FastSim({ E }) {
 
   // 한 스텝에 한 가지만 (선생님 2026-07-30: "뭔말인지 조금도 이해가 안가").
   // 예전엔 i 와 k 를 한꺼번에 보여주면서, 아직 정하지도 않은 j 를 근거로 들었다.
-  // intro 를 3 개 짧은 스텝으로 (선생님 2026-08-01: "첫 말풍선은 5 자리만, 중앙을 가리키고.
-  // 논문 읽니?"). 한 스텝에 하나씩: ① 노란 5 자리 → ② moo 관찰 → ③ 글자로 도약.
+  // intro 를 흐르는 4 스텝으로 (선생님 2026-08-01: "양쪽을 뺀 노란 부분... 이런식으로 흘러야
+  // 자연스럽지. 위 박스는 말풍선이 아니야, 애니도 없고"). 셀이 단계마다 바뀌며(양 끝 ✗ →
+  // 가운데 노랑) 애니가 되고, 말풍선은 💬+꼬리로 셀을 가리킨다.
+  //   sub0 = 왜 양 끝이 안 되나 · sub1 = 양 끝 빼면 노란 5칸 · sub2 = moo 관찰 · sub3 = 글자로 도약
   const trace = [
     { kind: "intro", sub: 0, revealed: 0 },
     { kind: "intro", sub: 1, revealed: 0 },
     { kind: "intro", sub: 2, revealed: 0 },
+    { kind: "intro", sub: 3, revealed: 0 },
   ];
   perC.forEach((row, ci) => {
     trace.push({ kind: "letter", ci, phase: "i", revealed: ci });
@@ -1058,9 +1061,12 @@ export function Mooin3FastSim({ E }) {
 
   const cellStyle = (x) => {
     let role = "outside";
-    // 시작 화면 — "가운데 자리가 5 개" 를 말로만 하지 않고 그 칸들을 직접 칠한다.
-    // (선생님 2026-07-30: "시뮬에서 가운데 5칸을 표시하면서 5개가 있다고 설명하고")
-    if (s.kind === "intro" && x > l && x < r) role = "mid";
+    // 시작 화면 — 셀을 단계별로 바꾸며 흐름을 보여준다 (선생님 2026-08-01: "양쪽을 뺀 노란 부분").
+    // sub0: 전부 그대로 · sub1+: 양 끝 ✗(excluded) → 가운데 노랑(mid).  CSS transition 으로 애니.
+    if (s.kind === "intro" && s.sub >= 1) {
+      if (x === l || x === r) role = "excluded";
+      else if (x > l && x < r) role = "mid";
+    }
     if (cur) {
       if (s.phase === "j" && x === cur.j) role = "j";
       else if (x === cur.i) role = "i";
@@ -1069,6 +1075,7 @@ export function Mooin3FastSim({ E }) {
     }
     const P = {
       mid:     { bg: "#fef9c3", bd: "#fcd34d", fg: "#92400e", op: 1 },
+      excluded:{ bg: "#f8fafc", bd: "#e2e8f0", fg: "#cbd5e1", op: 0.5 },
       j:       { bg: "#fef3c7", bd: "#f59e0b", fg: "#92400e", op: 1 },
       i:       { bg: "#fee2e2", bd: "#dc2626", fg: "#7f1d1d", op: 1 },
       k:       { bg: "#dcfce7", bd: "#16a34a", fg: "#15803d", op: 1 },
@@ -1083,7 +1090,11 @@ export function Mooin3FastSim({ E }) {
     };
   };
   const labelFor = (x) => {
-    if (s.kind === "intro") return (x > l && x < r) ? "•" : "";
+    if (s.kind === "intro") {
+      if (s.sub >= 1 && (x === l || x === r)) return "✗";
+      if (s.sub >= 1 && x > l && x < r) return "•";
+      return "";
+    }
     if (!cur) return "";
     if (s.phase === "j" && x === cur.j) return "j";
     if (x === cur.i) return "i";
@@ -1091,7 +1102,11 @@ export function Mooin3FastSim({ E }) {
     return "";
   };
   const labelColor = (x) => {
-    if (s.kind === "intro") return (x > l && x < r) ? "#d97706" : "transparent";
+    if (s.kind === "intro") {
+      if (s.sub >= 1 && (x === l || x === r)) return "#94a3b8";
+      if (s.sub >= 1 && x > l && x < r) return "#d97706";
+      return "transparent";
+    }
     if (!cur) return "transparent";
     if (s.phase === "j" && x === cur.j) return "#92400e";
     if (x === cur.i) return "#dc2626";
@@ -1115,21 +1130,28 @@ export function Mooin3FastSim({ E }) {
         subtitle={`(${ts.safe + 1} / ${trace.length})`}
       />
 
-      {/* 말풍선 — 이 단계에서 무슨 일이 일어나는지 (코드 前 이해용). */}
-      <div style={{
-        maxWidth: 560, margin: "0 auto 14px", background: "#faf5ff", border: `1.5px solid ${FA}`,
-        borderRadius: 12, padding: "11px 15px", fontSize: 13, lineHeight: 1.65, color: "#5b21b6",
-        wordBreak: "keep-all", textAlign: "center",
+      {/* 스텝마다 pop 애니 (선생님 2026-08-01: "말풍선은 생동감이 있어야지"). */}
+      <style>{`@keyframes m3fastPop{from{opacity:0;transform:translateY(-7px) scale(.96)}to{opacity:1;transform:none}}`}</style>
+      {/* 말풍선 — 💬 + 아래 꼬리로 셀을 가리킴. key 로 스텝마다 등장 애니 재생. */}
+      <div key={ts.safe} style={{
+        maxWidth: 560, margin: "0 auto", background: "#faf5ff", border: `1.5px solid ${FA}`,
+        borderRadius: 14, padding: "11px 16px", fontSize: 13, lineHeight: 1.65, color: "#5b21b6",
+        wordBreak: "keep-all", textAlign: "center", fontWeight: 600,
+        animation: "m3fastPop .32s cubic-bezier(.34,1.56,.64,1)",
       }}>
+        💬{" "}
         {s.kind === "intro" && s.sub === 0 && t(E,
-          `The yellow cells are the ${r - l - 1} spots where the middle (j) could sit — the two ends can't be the middle.`,
-          `노란 칸들이 가운데(j)가 될 수 있는 자리예요 — ${r - l - 1} 개. 양 끝은 가운데가 못 돼요.`)}
+          `The middle (j) needs letters on both sides — so the two very ends can't be the middle.`,
+          `가운데(j)는 양옆에 글자가 있어야 해요 — 그래서 맨 양 끝은 가운데가 못 돼요.`)}
         {s.kind === "intro" && s.sub === 1 && t(E,
-          `Before, we tried all ${r - l - 1} of them one by one. But look — in every moo, the middle and the right end are the SAME letter.`,
-          `앞에선 이 ${r - l - 1} 개를 하나씩 다 옮겨가며 확인했죠. 근데 보세요 — moo 는 가운데와 오른쪽 끝이 늘 '같은 글자'예요.`)}
+          `Drop the two ends — the middle (j) can only be one of these ${r - l - 1} yellow cells.`,
+          `양 끝을 빼면 — 가운데(j)에 올 수 있는 건 이 노란 ${r - l - 1} 칸이에요.`)}
         {s.kind === "intro" && s.sub === 2 && t(E,
-          `So instead of checking spots, we check by LETTER — and here there are only 3: a, b, c.`,
-          `그러니 자리 말고 '글자'로 확인하면 돼요 — 여기선 a, b, c 셋뿐이에요.`)}
+          `And in every moo, the middle and the right end are the SAME letter.`,
+          `그리고 moo 는 가운데와 오른쪽 끝이 늘 '같은 글자'예요.`)}
+        {s.kind === "intro" && s.sub === 3 && t(E,
+          `So instead of checking spots, we check by LETTER — only a, b, c here.`,
+          `그러니 자리 말고 '글자'로 확인하면 돼요 — 여기선 a, b, c 셋뿐.`)}
 
         {s.kind === "letter" && s.phase === "i" && t(E,
           `Let's try to make a moo out of '${cur.c}'. First the left end: find the leftmost letter that is NOT '${cur.c}' — that is spot ${cur.i + 1}. The further left it is, the longer that side becomes.`,
@@ -1151,6 +1173,8 @@ export function Mooin3FastSim({ E }) {
           "We checked three letters instead of every spot, and still got 8 — the same answer as before.",
           "자리를 다 보지 않고 글자 셋만 봤는데도 답은 8 이에요. 앞에서 구한 것과 같죠.")}
       </div>
+      {/* 꼬리 — 아래(셀) 를 가리킴 (진짜 말풍선). */}
+      <div style={{ width: 0, height: 0, margin: "0 auto 14px", borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: `9px solid ${FA}` }} />
 
       {/* 문자열 행 */}
       <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 4 }}>
