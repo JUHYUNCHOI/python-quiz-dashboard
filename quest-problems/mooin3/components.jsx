@@ -1021,14 +1021,19 @@ export function Mooin3FastSim({ E }) {
   const perC = LETTERS.map((c) => {
     let i = -1; for (let x = l; x <= r; x++) if (str[x] !== c) { i = x; break; }
     let k = -1; for (let x = r; x >= l; x--) if (str[x] === c) { k = x; break; }
-    let j = -1, area = null, m = null;
+    let j = -1, area = null, m = null, tied = 0;
     if (i >= 0 && k >= 0 && i < k) {
       m = (i + k) / 2;
       let bd = Infinity;
       for (let x = i + 1; x < k; x++) if (str[x] === c) { const d = Math.abs(x - m); if (d < bd) { bd = d; j = x; } }
-      if (j >= 0) area = (j - i) * (k - j);
+      // m 에서 똑같이 떨어진 후보가 둘일 수 있다 (m 이 x.5 일 때). 말풍선이 이걸 숨기면
+      // "한가운데에 가까운 게 이긴다" 는 설명이 화면과 어긋나 보인다.
+      if (j >= 0) {
+        area = (j - i) * (k - j);
+        for (let x = i + 1; x < k; x++) if (str[x] === c && Math.abs(x - m) === bd) tied++;
+      }
     }
-    return { c, i, k, j, area, m };
+    return { c, i, k, j, area, m, tied };
   });
 
   // 한 스텝에 한 가지만 (선생님 2026-07-30: "뭔말인지 조금도 이해가 안가").
@@ -1047,6 +1052,9 @@ export function Mooin3FastSim({ E }) {
 
   const cellStyle = (x) => {
     let role = "outside";
+    // 시작 화면 — "가운데 자리가 5 개" 를 말로만 하지 않고 그 칸들을 직접 칠한다.
+    // (선생님 2026-07-30: "시뮬에서 가운데 5칸을 표시하면서 5개가 있다고 설명하고")
+    if (s.kind === "intro" && x > l && x < r) role = "mid";
     if (cur) {
       if (s.phase === "j" && x === cur.j) role = "j";
       else if (x === cur.i) role = "i";
@@ -1054,6 +1062,7 @@ export function Mooin3FastSim({ E }) {
       else if (str[x] === cur.c) role = "cpos";
     }
     const P = {
+      mid:     { bg: "#fef9c3", bd: "#fcd34d", fg: "#92400e", op: 1 },
       j:       { bg: "#fef3c7", bd: "#f59e0b", fg: "#92400e", op: 1 },
       i:       { bg: "#fee2e2", bd: "#dc2626", fg: "#7f1d1d", op: 1 },
       k:       { bg: "#dcfce7", bd: "#16a34a", fg: "#15803d", op: 1 },
@@ -1068,6 +1077,7 @@ export function Mooin3FastSim({ E }) {
     };
   };
   const labelFor = (x) => {
+    if (s.kind === "intro") return (x > l && x < r) ? "•" : "";
     if (!cur) return "";
     if (s.phase === "j" && x === cur.j) return "j";
     if (x === cur.i) return "i";
@@ -1075,14 +1085,18 @@ export function Mooin3FastSim({ E }) {
     return "";
   };
   const labelColor = (x) => {
+    if (s.kind === "intro") return (x > l && x < r) ? "#d97706" : "transparent";
     if (!cur) return "transparent";
     if (s.phase === "j" && x === cur.j) return "#92400e";
     if (x === cur.i) return "#dc2626";
     if (x === cur.k && s.phase !== "i") return "#16a34a";
     return "transparent";
   };
-  // 중간점 m 마커 (phase j 에서만) — m 에 가장 가까운 칸 아래 ▲
-  const mCell = (cur && s.phase === "j" && cur.m !== null) ? Math.round(cur.m) : -1;
+  // 중간점 m 마커 (phase j 에서만) — m 이 x.5 면 양옆 두 칸에 찍는다.
+  // 한 칸만 찍으면 "가운데" 가 실제와 반 칸 어긋나 보인다.
+  const mCells = (cur && s.phase === "j" && cur.m !== null)
+    ? (Number.isInteger(cur.m) ? [cur.m] : [Math.floor(cur.m), Math.ceil(cur.m)])
+    : [];
 
   return (
     <div style={{ padding: 16 }}>
@@ -1102,8 +1116,8 @@ export function Mooin3FastSim({ E }) {
         wordBreak: "keep-all", textAlign: "center",
       }}>
         {s.kind === "intro" && t(E,
-          "Before, we moved the middle spot one place at a time. But look — in every moo, the middle letter and the right letter are the same. So we do not have to try every spot. We can go letter by letter, and here there are only three: a, b, c.",
-          "앞에서는 가운데 자리를 한 칸씩 옮겨봤어요. 그런데 잘 보면, moo 는 가운데와 오른쪽이 늘 같은 글자예요. 그러니 자리를 다 볼 필요가 없어요. 글자 하나씩만 보면 되고, 여기 글자는 a, b, c 셋뿐이에요.")}
+          `Yellow are the ${r - l - 1} spots the middle could sit in — the ends can't be the middle. Before, we tried all ${r - l - 1}, one at a time. But look: in every moo the middle and the right are the same letter. So we can go letter by letter instead — and here there are only 3 letters: a, b, c.`,
+          `노란 칸이 가운데가 될 수 있는 자리예요. ${r - l - 1} 개죠 — 양 끝은 가운데가 못 되니까요. 앞에서는 이 ${r - l - 1} 개를 하나씩 다 옮겨가며 확인했어요. 그런데 보세요, moo 는 가운데와 오른쪽이 늘 같은 글자예요. 그러니 자리 말고 글자로 확인하면 돼요. 글자는 a, b, c 셋뿐이고요.`)}
 
         {s.kind === "letter" && s.phase === "i" && t(E,
           `Let's try to make a moo out of '${cur.c}'. First the left end: find the leftmost letter that is NOT '${cur.c}' — that is spot ${cur.i + 1}. The further left it is, the longer that side becomes.`,
@@ -1115,8 +1129,8 @@ export function Mooin3FastSim({ E }) {
 
         {s.kind === "letter" && s.phase === "j" && (cur.area !== null
           ? t(E,
-              `The middle has to be a '${cur.c}' too, and it must sit between them. Among those, the one nearest the centre wins, because the score is the two distances multiplied — and a rectangle is biggest when its two sides are even. Here: ${cur.j - cur.i} × ${cur.k - cur.j} = ${cur.area}.`,
-              `가운데도 '${cur.c}' 여야 하고, 두 끝 사이에 있어야 해요. 그 중에서는 한가운데에 가까운 게 이겨요. 점수가 두 거리를 곱한 값이라, 직사각형처럼 두 변이 비슷할 때 제일 커지거든요. 여기선 ${cur.j - cur.i} × ${cur.k - cur.j} = ${cur.area} 예요.`)
+              `The middle has to be a '${cur.c}' too, and it must sit between the two ends. Among those, pick the one closest to ▲ — the score is the two distances multiplied, so it is biggest when the two sides are as even as possible.${cur.tied > 1 ? ` Here two of them are the same distance from ▲, so either one gives the same score.` : ""} Score: ${cur.j - cur.i} × ${cur.k - cur.j} = ${cur.area}.`,
+              `가운데도 '${cur.c}' 여야 하고, 두 끝 사이에 있어야 해요. 그 중에서 ▲ 에 가장 가까운 걸 고르면 돼요. 점수는 두 거리를 곱한 값이라, 두 쪽이 비슷할수록 커지거든요.${cur.tied > 1 ? ` 여기선 ▲ 에서 똑같이 떨어진 '${cur.c}' 가 ${cur.tied} 개예요. 어느 쪽을 골라도 점수는 같아요.` : ""} 점수는 ${cur.j - cur.i} × ${cur.k - cur.j} = ${cur.area} 예요.`)
           : t(E,
               `But there is no '${cur.c}' sitting between those two ends, so '${cur.c}' cannot make a moo at all. On to the next letter.`,
               `그런데 두 끝 사이에 '${cur.c}' 가 하나도 없어요. 그러면 '${cur.c}' 로는 moo 를 못 만들어요. 다음 글자로 넘어가요.`))}
@@ -1132,8 +1146,8 @@ export function Mooin3FastSim({ E }) {
           <div key={x} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
             <div style={{ fontSize: 11, height: 14, fontWeight: 700, color: labelColor(x) }}>{labelFor(x) || "·"}</div>
             <div style={cellStyle(x)}>{ch}</div>
-            <div style={{ fontSize: 11, height: 13, fontWeight: 800, color: x === mCell ? FA : "transparent" }}>
-              {x === mCell ? "▲" : "·"}
+            <div style={{ fontSize: 11, height: 13, fontWeight: 800, color: mCells.includes(x) ? FA : "transparent" }}>
+              {mCells.includes(x) ? "▲" : "·"}
             </div>
             <div style={{ fontSize: 9, color: C.dim }}>{x + 1}</div>
           </div>
@@ -1162,13 +1176,18 @@ export function Mooin3FastSim({ E }) {
         ))}
       </div>
 
-      {mCell >= 0 && (
+      {mCells.length > 0 && (
         <div style={{ textAlign: "center", fontSize: 10.5, color: FA, marginBottom: 10, fontWeight: 700 }}>
-          {t(E, "▲ m = midpoint of i and k", "▲ m = i 와 k 의 가운데")}
+          {t(E, `▲ m = midpoint of i and k (${cur.m + 1})`, `▲ m = i 와 k 의 한가운데 (${cur.m + 1} 번 자리)`)}
         </div>
       )}
 
-      {/* 글자별 결과 카드 */}
+      {/* 글자별 결과 카드 — 라벨이 없으면 "앞 글자 게 안 지워졌나?" 로 읽힌다. */}
+      {s.revealed > 0 && (
+        <div style={{ textAlign: "center", fontSize: 10.5, color: C.dim, marginBottom: 4, wordBreak: "keep-all" }}>
+          {t(E, "checked so far", "지금까지 확인한 글자")}
+        </div>
+      )}
       <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
         {perC.slice(0, s.revealed).map((row) => {
           const isCur = cur && row.c === cur.c;
