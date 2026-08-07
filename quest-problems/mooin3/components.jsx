@@ -2042,7 +2042,7 @@ export function Mooin3TableSim({ E, lang = "py" }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={TA} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, `Building the tables for '${CH}'`, `'${CH}' 의 표 만들기`)}
+        title={t(E, `Build '${CH}' tables — once (precompute)`, `'${CH}' 표 만들기 — 딱 한 번 (전처리)`)}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
 
       {/* 말풍선 무대 — 지금 보고 있는 칸 위에 뜬다 */}
@@ -2050,8 +2050,8 @@ export function Mooin3TableSim({ E, lang = "py" }) {
         <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
           {s.kind === "intro" && (
             <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#ecfeff" bd="#67e8f9" fg="#155e75">
-              {t(E, <>Two passes fill the tables — left→right, then right→left.</>,
-                    <>표는 두 번만 훑으면 다 채워져요 — 왼→오, 그 다음 오→왼.</>)}
+              {t(E, <>This table is built <b>once, before any query</b>. Two passes fill it — left→right, then right→left.</>,
+                    <>이 표는 <b>맨 처음 딱 한 번만</b> 만들어요 (전처리). 두 번 훑으면 끝 — 왼→오, 그 다음 오→왼.</>)}
             </SimBubble>
           )}
           {s.kind === "L" && (
@@ -2080,8 +2080,8 @@ export function Mooin3TableSim({ E, lang = "py" }) {
           )}
           {s.kind === "final" && (
             <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#fffbeb" bd="#fcd34d" fg="#92400e">
-              {t(E, <>Done — two passes, <b>O(N)</b> per letter. Now every query is just a lookup.</>,
-                    <>끝 — 두 번 훑어서 <b>O(N)</b>. 이제 쿼리는 표를 <b>한 번 보는 것</b>으로 끝나요.</>)}
+              {t(E, <>Done! We <b>never rebuild it</b> — no matter how many queries come, they just <b>look it up</b>.</>,
+                    <>완성! 이제 <b>다시 안 만들어요</b> — 쿼리가 아무리 많아도 이 표를 <b>그냥 찾아보기만</b> 해요.</>)}
             </SimBubble>
           )}
         </div>
