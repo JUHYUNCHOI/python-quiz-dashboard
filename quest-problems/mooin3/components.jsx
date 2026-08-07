@@ -1148,8 +1148,8 @@ export function Mooin3FastSim({ E }) {
           `그럼 그 '같은 글자'가 뭔지로 나눠서 찾으면 돼요 — a? b? c? 세 경우뿐이에요.`)}
 
         {s.kind === "letter" && s.phase === "i" && t(E,
-          `An '${cur.c}'-moo is [different][${cur.c}][${cur.c}] — the last two are '${cur.c}'. So the front (left end i) must NOT be '${cur.c}': the leftmost non-'${cur.c}' is '${str[cur.i]}' (the ${ordEn(cur.i + 1)} cell).`,
-          `'${cur.c}' moo 는 [다른 글자][${cur.c}][${cur.c}] 꼴이에요 — 뒤 두 개가 '${cur.c}'. 그럼 앞(왼쪽 끝 i)은 '${cur.c}' 가 아니어야죠. '${cur.c}' 가 아닌 가장 왼쪽 글자는 ${ordKo(cur.i + 1)} 칸 '${str[cur.i]}' 예요.`)}
+          `'${cur.c}'-moo = [different][${cur.c}][${cur.c}]. So the left end i isn't '${cur.c}' → leftmost non-'${cur.c}' = '${str[cur.i]}' (${ordEn(cur.i + 1)} cell).`,
+          `'${cur.c}' moo = [다른][${cur.c}][${cur.c}] 꼴. 앞(왼쪽 끝 i)은 '${cur.c}' 가 아니어야죠 → '${cur.c}' 아닌 가장 왼쪽 = ${ordKo(cur.i + 1)} 칸 '${str[cur.i]}'.`)}
 
         {s.kind === "letter" && s.phase === "k" && t(E,
           `The right end (k) is the rightmost '${cur.c}' — the ${ordEn(cur.k + 1)} cell.`,
@@ -1157,11 +1157,11 @@ export function Mooin3FastSim({ E }) {
 
         {s.kind === "letter" && s.phase === "j" && (cur.area !== null
           ? t(E,
-              `The middle has to be a '${cur.c}' too, and it must sit between the two ends. Among those, pick the one closest to ▲ — the score is the two distances multiplied, so it is biggest when the two sides are as even as possible.${cur.tied > 1 ? ` Here two of them are the same distance from ▲, so either one gives the same score.` : ""} Score: ${cur.j - cur.i} × ${cur.k - cur.j} = ${cur.area}.`,
-              `가운데도 '${cur.c}' 여야 하고, 두 끝 사이에 있어야 해요. 그 중에서 ▲ 에 가장 가까운 걸 고르면 돼요. 점수는 두 거리를 곱한 값이라, 두 쪽이 비슷할수록 커지거든요.${cur.tied > 1 ? ` 여기선 ▲ 에서 똑같이 떨어진 '${cur.c}' 가 ${cur.tied} 개예요. 어느 쪽을 골라도 점수는 같아요.` : ""} 점수는 ${cur.j - cur.i} × ${cur.k - cur.j} = ${cur.area} 예요.`)
+              `Middle j = the '${cur.c}' between the ends, closest to ▲. Score = ${cur.j - cur.i} × ${cur.k - cur.j} = ${cur.area}.`,
+              `가운데 j = 두 끝 사이 '${cur.c}' 중 ▲ 에 가장 가까운 것. 점수 = ${cur.j - cur.i} × ${cur.k - cur.j} = ${cur.area}.`)
           : t(E,
-              `But there is no '${cur.c}' sitting between those two ends, so '${cur.c}' cannot make a moo at all. On to the next letter.`,
-              `그런데 두 끝 사이에 '${cur.c}' 가 하나도 없어요. 그러면 '${cur.c}' 로는 moo 를 못 만들어요. 다음 글자로 넘어가요.`))}
+              `No '${cur.c}' between the ends → no moo for '${cur.c}'. Next letter.`,
+              `두 끝 사이에 '${cur.c}' 가 없어요 → '${cur.c}' 로는 moo 못 만들어요. 다음 글자.`))}
 
         {s.kind === "final" && t(E,
           "We checked three letters instead of every spot, and still got 8 — the same answer as before.",
