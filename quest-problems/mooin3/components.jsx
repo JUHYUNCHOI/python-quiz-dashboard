@@ -1251,11 +1251,9 @@ export function Mooin3FastSim({ E }) {
       {/* final — 왜 빠른가 + 표 3개 연결 */}
       {s.kind === "final" && (
         <div style={{ maxWidth: 540, margin: "0 auto 12px", background: "#faf5ff", border: `1.5px solid ${FA}`, borderRadius: 10, padding: "12px 15px", fontSize: 12, lineHeight: 1.7, color: "#5b21b6", wordBreak: "keep-all" }}>
-          <div style={{ fontWeight: 800, marginBottom: 6, color: FA }}>⚡ {t(E, "Why it's fast — 3 tables answer each move instantly", "왜 빠른가 — 표 3개가 각 동작을 즉시 답해줌")}</div>
-          <div>1. {t(E, "rightmost letter c  →  k", "가장 오른쪽 글자 c  →  k")} <span style={{ color: C.dim }}>(latest_same)</span></div>
-          <div>2. {t(E, "leftmost NON-c  →  i", "가장 왼쪽 c 아닌 글자  →  i")} <span style={{ color: C.dim }}>(nearest_diff)</span></div>
-          <div>3. {t(E, "the c nearest the midpoint m  →  j", "중간 m 에 가장 가까운 c  →  j")} <span style={{ color: C.dim }}>(earliest/latest_same)</span></div>
-          <div style={{ fontWeight: 700, marginTop: 5 }}>→ {t(E, "Built once beforehand, each lookup is instant → only 26 letters per query → passes N = 100,000.", "미리 한 번 만들어 두면 조회가 즉시 → 쿼리당 글자 26개뿐 → N = 100,000 도 통과.")}</div>
+          <div style={{ fontWeight: 800, marginBottom: 4, color: FA }}>⚡ {t(E, "Why it's fast", "왜 빠른가")}</div>
+          <div>{t(E, "i, k, j all come from 3 tables you build once — each lookup is instant.", "i, k, j 를 미리 만든 표 3개에서 즉시 찾아요.")}</div>
+          <div style={{ fontWeight: 700, marginTop: 3 }}>→ {t(E, "Only 26 letters per query → passes N = 100,000.", "쿼리당 글자 26개뿐 → N = 100,000 도 통과.")}</div>
         </div>
       )}
 
