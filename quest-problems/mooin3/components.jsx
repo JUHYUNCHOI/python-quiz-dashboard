@@ -1031,9 +1031,12 @@ export function Mooin3FastSim({ E }) {
     return { c, i, k, j, area, m };
   });
 
+  // 한 스텝에 한 가지만 (선생님 2026-07-30: "뭔말인지 조금도 이해가 안가").
+  // 예전엔 i 와 k 를 한꺼번에 보여주면서, 아직 정하지도 않은 j 를 근거로 들었다.
   const trace = [{ kind: "intro", revealed: 0 }];
   perC.forEach((row, ci) => {
-    trace.push({ kind: "letter", ci, phase: "ik", revealed: ci });
+    trace.push({ kind: "letter", ci, phase: "i", revealed: ci });
+    trace.push({ kind: "letter", ci, phase: "k", revealed: ci });
     trace.push({ kind: "letter", ci, phase: "j", revealed: ci + 1 });
   });
   trace.push({ kind: "final", revealed: perC.length });
@@ -1047,7 +1050,7 @@ export function Mooin3FastSim({ E }) {
     if (cur) {
       if (s.phase === "j" && x === cur.j) role = "j";
       else if (x === cur.i) role = "i";
-      else if (x === cur.k) role = "k";
+      else if (x === cur.k && s.phase !== "i") role = "k";   // i 단계에선 아직 안 보여줌
       else if (str[x] === cur.c) role = "cpos";
     }
     const P = {
@@ -1068,14 +1071,14 @@ export function Mooin3FastSim({ E }) {
     if (!cur) return "";
     if (s.phase === "j" && x === cur.j) return "j";
     if (x === cur.i) return "i";
-    if (x === cur.k) return "k";
+    if (x === cur.k && s.phase !== "i") return "k";
     return "";
   };
   const labelColor = (x) => {
     if (!cur) return "transparent";
     if (s.phase === "j" && x === cur.j) return "#92400e";
     if (x === cur.i) return "#dc2626";
-    if (x === cur.k) return "#16a34a";
+    if (x === cur.k && s.phase !== "i") return "#16a34a";
     return "transparent";
   };
   // 중간점 m 마커 (phase j 에서만) — m 에 가장 가까운 칸 아래 ▲
@@ -1099,21 +1102,28 @@ export function Mooin3FastSim({ E }) {
         wordBreak: "keep-all", textAlign: "center",
       }}>
         {s.kind === "intro" && t(E,
-          "Fix-j checked every middle spot (5 here). But notice: in every moo the middle and the right are the SAME letter. So instead of every spot, just check per LETTER — only a, b, c here.",
-          "fix-j 는 가운데 자리를 전부(여기선 5개) 확인했죠. 근데 보세요 — 모든 moo 에서 '가운데'와 '오른쪽'은 같은 글자예요. 그러니 자리마다 말고, 글자마다만 확인하면 돼요 — 여기선 a, b, c 셋뿐.")}
-        {s.kind === "letter" && s.phase === "ik" && t(E,
-          `Letter c = '${cur.c}':  far-right '${cur.c}' = k (green, biggest k−j room),  far-left NON-'${cur.c}' = i (red, biggest j−i room).`,
-          `글자 c = '${cur.c}':  가장 오른쪽 '${cur.c}' = k (초록, k−j 최대),  가장 왼쪽 '${cur.c} 아닌 글자' = i (빨강, j−i 최대).`)}
+          "Before, we moved the middle spot one place at a time. But look — in every moo, the middle letter and the right letter are the same. So we do not have to try every spot. We can go letter by letter, and here there are only three: a, b, c.",
+          "앞에서는 가운데 자리를 한 칸씩 옮겨봤어요. 그런데 잘 보면, moo 는 가운데와 오른쪽이 늘 같은 글자예요. 그러니 자리를 다 볼 필요가 없어요. 글자 하나씩만 보면 되고, 여기 글자는 a, b, c 셋뿐이에요.")}
+
+        {s.kind === "letter" && s.phase === "i" && t(E,
+          `Let's try to make a moo out of '${cur.c}'. First the left end: find the leftmost letter that is NOT '${cur.c}' — that is spot ${cur.i + 1}. The further left it is, the longer that side becomes.`,
+          `'${cur.c}' 로 moo 를 만들어 볼게요. 먼저 왼쪽 끝 — '${cur.c}' 가 아닌 글자 중에 가장 왼쪽 것을 잡아요. ${cur.i + 1} 번 칸이에요. 왼쪽으로 멀수록 그 쪽 거리가 길어지거든요.`)}
+
+        {s.kind === "letter" && s.phase === "k" && t(E,
+          `Now the right end: the last '${cur.c}' in the row — spot ${cur.k + 1}. The further right it is, the longer that side becomes.`,
+          `이번엔 오른쪽 끝 — 줄에서 마지막 '${cur.c}' 예요. ${cur.k + 1} 번 칸이죠. 오른쪽으로 멀수록 그 쪽 거리가 길어져요.`)}
+
         {s.kind === "letter" && s.phase === "j" && (cur.area !== null
           ? t(E,
-              `Put j (a '${cur.c}') near the midpoint m — (j−i)(k−j) is a rectangle, biggest in the middle. Only the '${cur.c}' closest to m matters.  Area = (${cur.j - cur.i})×(${cur.k - cur.j}) = ${cur.area}.`,
-              `j (='${cur.c}') 는 중간 m 근처에 — (j−i)(k−j) 는 직사각형 넓이라 가운데서 최대. m 에 가장 가까운 '${cur.c}' 하나만 보면 돼요.  넓이 = (${cur.j - cur.i})×(${cur.k - cur.j}) = ${cur.area}.`)
+              `The middle has to be a '${cur.c}' too, and it must sit between them. Among those, the one nearest the centre wins, because the score is the two distances multiplied — and a rectangle is biggest when its two sides are even. Here: ${cur.j - cur.i} × ${cur.k - cur.j} = ${cur.area}.`,
+              `가운데도 '${cur.c}' 여야 하고, 두 끝 사이에 있어야 해요. 그 중에서는 한가운데에 가까운 게 이겨요. 점수가 두 거리를 곱한 값이라, 직사각형처럼 두 변이 비슷할 때 제일 커지거든요. 여기선 ${cur.j - cur.i} × ${cur.k - cur.j} = ${cur.area} 예요.`)
           : t(E,
-              `No '${cur.c}' sits strictly between i and k → letter '${cur.c}' makes no moo. Skip it.`,
-              `i 와 k 사이에 '${cur.c}' 가 없어요 → 글자 '${cur.c}' 로는 moo 없음. 넘어가요.`))}
+              `But there is no '${cur.c}' sitting between those two ends, so '${cur.c}' cannot make a moo at all. On to the next letter.`,
+              `그런데 두 끝 사이에 '${cur.c}' 가 하나도 없어요. 그러면 '${cur.c}' 로는 moo 를 못 만들어요. 다음 글자로 넘어가요.`))}
+
         {s.kind === "final" && t(E,
-          "Same answer as fix-j: 8 ⭐ (from c = 'c').  But we checked only 3 LETTERS, not every spot.",
-          "fix-j 와 같은 답: 8 ⭐ (c = 'c' 에서).  근데 자리 전부가 아니라 글자 3개만 확인했어요.")}
+          "We checked three letters instead of every spot, and still got 8 — the same answer as before.",
+          "자리를 다 보지 않고 글자 셋만 봤는데도 답은 8 이에요. 앞에서 구한 것과 같죠.")}
       </div>
 
       {/* 문자열 행 */}
@@ -1129,6 +1139,29 @@ export function Mooin3FastSim({ E }) {
           </div>
         ))}
       </div>
+
+      {/* 색 범례 — 안 알려주면 학생이 화면을 못 읽는다.
+          (선생님 2026-07-30: "파란색 칸도 뭔말인지 모르겠어") */}
+      <div style={{
+        display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap",
+        fontSize: 10.5, color: C.dim, marginBottom: 10, wordBreak: "keep-all",
+      }}>
+        {[
+          ["#fee2e2", "#dc2626", "i", t(E, "left end", "왼쪽 끝")],
+          ["#fef3c7", "#f59e0b", "j", t(E, "middle", "가운데")],
+          ["#dcfce7", "#16a34a", "k", t(E, "right end", "오른쪽 끝")],
+          ["#f3e8ff", "#c4b5fd", "", cur ? t(E, `other '${cur.c}'s`, `다른 '${cur.c}' 자리`) : t(E, "same letter", "같은 글자")],
+        ].map(([bg, bd, name, label], idx) => (
+          <span key={idx}>
+            <span style={{
+              display: "inline-block", width: 10, height: 10, borderRadius: 3,
+              background: bg, border: `1px solid ${bd}`, marginRight: 4, verticalAlign: "-1px",
+            }} />
+            {name && <b style={{ color: bd }}>{name} </b>}{label}
+          </span>
+        ))}
+      </div>
+
       {mCell >= 0 && (
         <div style={{ textAlign: "center", fontSize: 10.5, color: FA, marginBottom: 10, fontWeight: 700 }}>
           {t(E, "▲ m = midpoint of i and k", "▲ m = i 와 k 의 가운데")}
