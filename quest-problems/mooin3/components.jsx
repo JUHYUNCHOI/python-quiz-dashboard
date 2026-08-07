@@ -1016,6 +1016,10 @@ export function Mooin3FastSim({ E }) {
   const str = "abcabbc";           // fix-j 시뮬과 동일 예제
   const l = 0, r = str.length - 1;
   const LETTERS = [...new Set(str.split(""))].sort();   // a, b, c
+  // 자연스러운 우리말 서수 (선생님 2026-08-01: "2번 칸 → 두 번째 칸"). nbsp 로 묶어 줄바꿈 방지.
+  const ORD_KO = ["", "첫", "두", "세", "네", "다섯", "여섯", "일곱", "여덟", "아홉", "열"];
+  const ordKo = (n) => `${ORD_KO[n] || n} 번째`;
+  const ordEn = (n) => ["", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"][n] || `#${n}`;
 
   // 글자마다: i=가장 왼쪽 '다른 글자', k=가장 오른쪽 그 글자, j=i·k 사이 중간(m)에 가장 가까운 그 글자
   const perC = LETTERS.map((c) => {
@@ -1071,7 +1075,7 @@ export function Mooin3FastSim({ E }) {
       if (s.phase === "j" && x === cur.j) role = "j";
       else if (x === cur.i) role = "i";
       else if (x === cur.k && s.phase !== "i") role = "k";   // i 단계에선 아직 안 보여줌
-      else if (str[x] === cur.c) role = "cpos";
+      else if (s.phase === "j" && str[x] === cur.c) role = "cpos";   // 다른 '글자' 자리는 가운데 고를 때만 (선생님 2026-08-01)
     }
     const P = {
       mid:     { bg: "#fef9c3", bd: "#fcd34d", fg: "#92400e", op: 1 },
@@ -1154,12 +1158,12 @@ export function Mooin3FastSim({ E }) {
           `그러니 자리 말고 '글자'로 확인하면 돼요 — 여기선 a, b, c 셋뿐.`)}
 
         {s.kind === "letter" && s.phase === "i" && t(E,
-          `Let's try to make a moo out of '${cur.c}'. First the left end: find the leftmost letter that is NOT '${cur.c}' — that is spot ${cur.i + 1}. The further left it is, the longer that side becomes.`,
-          `'${cur.c}' 로 moo 를 만들어 볼게요. 먼저 왼쪽 끝 — '${cur.c}' 가 아닌 글자 중에 가장 왼쪽 것을 잡아요. ${cur.i + 1} 번 칸이에요. 왼쪽으로 멀수록 그 쪽 거리가 길어지거든요.`)}
+          `Let's make a moo from '${cur.c}'. The left end (i) is the leftmost letter that is NOT '${cur.c}' — the ${ordEn(cur.i + 1)} cell.`,
+          `'${cur.c}' 로 moo 를 만들어 봐요. 왼쪽 끝(i)은 '${cur.c}' 가 아닌 가장 왼쪽 글자 — ${ordKo(cur.i + 1)} 칸이에요.`)}
 
         {s.kind === "letter" && s.phase === "k" && t(E,
-          `Now the right end: the last '${cur.c}' in the row — spot ${cur.k + 1}. The further right it is, the longer that side becomes.`,
-          `이번엔 오른쪽 끝 — 줄에서 마지막 '${cur.c}' 예요. ${cur.k + 1} 번 칸이죠. 오른쪽으로 멀수록 그 쪽 거리가 길어져요.`)}
+          `The right end (k) is the rightmost '${cur.c}' — the ${ordEn(cur.k + 1)} cell.`,
+          `오른쪽 끝(k)은 가장 오른쪽 '${cur.c}' — ${ordKo(cur.k + 1)} 칸이에요.`)}
 
         {s.kind === "letter" && s.phase === "j" && (cur.area !== null
           ? t(E,
