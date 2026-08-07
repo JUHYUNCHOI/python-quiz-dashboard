@@ -396,6 +396,14 @@ export function MooTraceSimulator({ E, lang = "py" }) {
   const trace = [{ kind: "init", revealed: 0, best: -1 }];
   let best = -1;
   perJ.forEach((row, ri) => {
+    // ── j 가 다음 자리로 옮겨가는 순간 (선생님 2026-07-30: "건너뛰는거 없이").
+    //    전엔 j 가 스텝 사이에서 소리 없이 바뀌고, 코드의 `for j ...` 와
+    //    `left_pointer = -1` 두 줄은 한 번도 켜지지 않았다.
+    trace.push({
+      kind: "jmove", row,
+      leftSeen: [], leftFound: -1, rightSeen: [], rightFound: -1,
+      revealed: ri, best,
+    });
     const leftSeen = [];
     // 왼쪽 스캔: 왼쪽 끝(l)부터 오른쪽으로. j 와 *다른* 글자를 처음 만나면 거기가 i.
     for (let i = l; i < row.j; i++) {
@@ -410,6 +418,14 @@ export function MooTraceSimulator({ E, lang = "py" }) {
       leftSeen.push(i);           // 같은 글자였음 → ✗ 발자국으로 남김
     }
     const rightSeen = [];
+    // ── 오른쪽 스캔을 시작하기 전, right_pointer 를 -1 로 두는 순간.
+    //    이 줄도 전엔 한 번도 안 켜졌다.
+    trace.push({
+      kind: "rreset", row,
+      leftSeen: [...leftSeen], leftFound: row.left,
+      rightSeen: [], rightFound: -1,
+      revealed: ri, best,
+    });
     // 오른쪽 스캔: 오른쪽 끝(r)부터 왼쪽으로. j 와 *같은* 글자를 처음 만나면 거기가 k.
     for (let k = r; k > row.j; k--) {
       const isMatch = str[k] === row.sj;
@@ -435,7 +451,7 @@ export function MooTraceSimulator({ E, lang = "py" }) {
   const ts = useTraceStep(trace);
   const safe = ts.safe;
   const s = trace[safe];
-  const hasRow = s.kind === "scan" || s.kind === "score";
+  const hasRow = s.kind === "scan" || s.kind === "score" || s.kind === "jmove" || s.kind === "rreset";
 
   /* 칸 줄 좌표 — 말풍선/눈금을 특정 칸에 정확히 붙이기 위한 값.
      (칸 너비·간격을 바꾸면 여기만 고치면 된다.) */
@@ -478,6 +494,10 @@ export function MooTraceSimulator({ E, lang = "py" }) {
         return s.row.score === null ? (isCpp ? [15, 15] : [13, 13])
                                     : (isCpp ? [15, 18] : [13, 16]);
       }
+      // j 가 옮겨가는 순간 = for j 줄 + left_pointer 초기화
+      if (s.kind === "jmove")  return isCpp ? [0, 1] : [0, 2];
+      // 오른쪽 스캔 직전 = right_pointer 초기화 + 그 for 줄
+      if (s.kind === "rreset") return isCpp ? [8, 9] : [8, 9];
       return null;   // init / final — 코드 하이라이트 없음
     })();
     return raw ? toShown(raw) : null;
@@ -506,6 +526,8 @@ export function MooTraceSimulator({ E, lang = "py" }) {
      변수로 보여줘야 "코드대로 움직인다" 가 눈으로 확인된다. */
   const codeVars = (() => {
     if (!hasRow) return null;
+    if (s.kind === "jmove")  return { j: s.row.j, idx: null, left: -1, right: -1, best: s.best };
+    if (s.kind === "rreset") return { j: s.row.j, idx: null, left: s.row.left, right: -1, best: s.best };
     if (s.kind === "scan") {
       return {
         j: s.row.j,
@@ -682,6 +704,22 @@ export function MooTraceSimulator({ E, lang = "py" }) {
           </Bubble>
         );
       })()}
+
+      {/* j 가 옮겨가는 순간 — 어느 칸이 새 j 인지 그 칸 위에서 말한다. */}
+      {s.kind === "jmove" && (
+        <Bubble cx={cellCx(s.row.j)} bg="#fef3c7" bd="#fcd34d" fg="#92400e">
+          {t(E, <>Now pin <b>j = {s.row.j}</b> (letter '{s.row.sj}'). Both pointers start empty (−1).</>,
+                <>이번엔 <b>j = {s.row.j}</b> 에 박아요 (글자 '{s.row.sj}'). 양쪽 포인터는 아직 비어 있어요 (−1).</>)}
+        </Bubble>
+      )}
+
+      {/* 오른쪽 스캔 시작 전 — right_pointer 를 비우는 순간 */}
+      {s.kind === "rreset" && (
+        <Bubble cx={cellCx(r)} bg="#f0fdf4" bd="#86efac" fg="#15803d">
+          {t(E, <>Left side done. Now start from the right end — <b>right_pointer</b> is still empty (−1).</>,
+                <>왼쪽은 끝났어요. 이제 오른쪽 끝에서 시작 — <b>right_pointer</b> 는 아직 비어 있어요 (−1).</>)}
+        </Bubble>
+      )}
 
       {/* 점수 단계 — 말풍선은 j 위에. 거리 두 개가 어떻게 곱해지는지는 아래
           칸 밑의 눈금(브래킷)이 보여준다. (선생님: "이 다음에 어떻게 계산되는지를
