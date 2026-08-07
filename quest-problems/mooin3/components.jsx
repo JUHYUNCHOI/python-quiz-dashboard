@@ -1038,7 +1038,13 @@ export function Mooin3FastSim({ E }) {
 
   // 한 스텝에 한 가지만 (선생님 2026-07-30: "뭔말인지 조금도 이해가 안가").
   // 예전엔 i 와 k 를 한꺼번에 보여주면서, 아직 정하지도 않은 j 를 근거로 들었다.
-  const trace = [{ kind: "intro", revealed: 0 }];
+  // intro 를 3 개 짧은 스텝으로 (선생님 2026-08-01: "첫 말풍선은 5 자리만, 중앙을 가리키고.
+  // 논문 읽니?"). 한 스텝에 하나씩: ① 노란 5 자리 → ② moo 관찰 → ③ 글자로 도약.
+  const trace = [
+    { kind: "intro", sub: 0, revealed: 0 },
+    { kind: "intro", sub: 1, revealed: 0 },
+    { kind: "intro", sub: 2, revealed: 0 },
+  ];
   perC.forEach((row, ci) => {
     trace.push({ kind: "letter", ci, phase: "i", revealed: ci });
     trace.push({ kind: "letter", ci, phase: "k", revealed: ci });
@@ -1115,9 +1121,15 @@ export function Mooin3FastSim({ E }) {
         borderRadius: 12, padding: "11px 15px", fontSize: 13, lineHeight: 1.65, color: "#5b21b6",
         wordBreak: "keep-all", textAlign: "center",
       }}>
-        {s.kind === "intro" && t(E,
-          `Yellow are the ${r - l - 1} spots the middle could sit in — the ends can't be the middle. Before, we tried all ${r - l - 1}, one at a time. But look: in every moo the middle and the right are the same letter. So we can go letter by letter instead — and here there are only 3 letters: a, b, c.`,
-          `노란 칸이 가운데가 될 수 있는 자리예요. ${r - l - 1} 개죠 — 양 끝은 가운데가 못 되니까요. 앞에서는 이 ${r - l - 1} 개를 하나씩 다 옮겨가며 확인했어요. 그런데 보세요, moo 는 가운데와 오른쪽이 늘 같은 글자예요. 그러니 자리 말고 글자로 확인하면 돼요. 글자는 a, b, c 셋뿐이고요.`)}
+        {s.kind === "intro" && s.sub === 0 && t(E,
+          `The yellow cells are the ${r - l - 1} spots where the middle (j) could sit — the two ends can't be the middle.`,
+          `노란 칸들이 가운데(j)가 될 수 있는 자리예요 — ${r - l - 1} 개. 양 끝은 가운데가 못 돼요.`)}
+        {s.kind === "intro" && s.sub === 1 && t(E,
+          `Before, we tried all ${r - l - 1} of them one by one. But look — in every moo, the middle and the right end are the SAME letter.`,
+          `앞에선 이 ${r - l - 1} 개를 하나씩 다 옮겨가며 확인했죠. 근데 보세요 — moo 는 가운데와 오른쪽 끝이 늘 '같은 글자'예요.`)}
+        {s.kind === "intro" && s.sub === 2 && t(E,
+          `So instead of checking spots, we check by LETTER — and here there are only 3: a, b, c.`,
+          `그러니 자리 말고 '글자'로 확인하면 돼요 — 여기선 a, b, c 셋뿐이에요.`)}
 
         {s.kind === "letter" && s.phase === "i" && t(E,
           `Let's try to make a moo out of '${cur.c}'. First the left end: find the leftmost letter that is NOT '${cur.c}' — that is spot ${cur.i + 1}. The further left it is, the longer that side becomes.`,
