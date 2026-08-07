@@ -1148,8 +1148,8 @@ export function Mooin3FastSim({ E }) {
           `그럼 그 '같은 글자'가 뭔지로 나눠서 찾으면 돼요 — a? b? c? 세 경우뿐이에요.`)}
 
         {s.kind === "letter" && s.phase === "i" && t(E,
-          `Let's make a moo from '${cur.c}'. The left end (i) is the leftmost letter that is NOT '${cur.c}' — the ${ordEn(cur.i + 1)} cell.`,
-          `'${cur.c}' 로 moo 를 만들어 봐요. 왼쪽 끝(i)은 '${cur.c}' 가 아닌 가장 왼쪽 글자 — ${ordKo(cur.i + 1)} 칸이에요.`)}
+          `An '${cur.c}'-moo is [different][${cur.c}][${cur.c}] — the last two are '${cur.c}'. So the front (left end i) must NOT be '${cur.c}': the leftmost non-'${cur.c}' is '${str[cur.i]}' (the ${ordEn(cur.i + 1)} cell).`,
+          `'${cur.c}' moo 는 [다른 글자][${cur.c}][${cur.c}] 꼴이에요 — 뒤 두 개가 '${cur.c}'. 그럼 앞(왼쪽 끝 i)은 '${cur.c}' 가 아니어야죠. '${cur.c}' 가 아닌 가장 왼쪽 글자는 ${ordKo(cur.i + 1)} 칸 '${str[cur.i]}' 예요.`)}
 
         {s.kind === "letter" && s.phase === "k" && t(E,
           `The right end (k) is the rightmost '${cur.c}' — the ${ordEn(cur.k + 1)} cell.`,
