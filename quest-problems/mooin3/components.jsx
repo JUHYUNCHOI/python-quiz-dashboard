@@ -1042,15 +1042,12 @@ export function Mooin3FastSim({ E }) {
 
   // 한 스텝에 한 가지만 (선생님 2026-07-30: "뭔말인지 조금도 이해가 안가").
   // 예전엔 i 와 k 를 한꺼번에 보여주면서, 아직 정하지도 않은 j 를 근거로 들었다.
-  // intro 를 흐르는 4 스텝으로 (선생님 2026-08-01: "양쪽을 뺀 노란 부분... 이런식으로 흘러야
-  // 자연스럽지. 위 박스는 말풍선이 아니야, 애니도 없고"). 셀이 단계마다 바뀌며(양 끝 ✗ →
-  // 가운데 노랑) 애니가 되고, 말풍선은 💬+꼬리로 셀을 가리킨다.
-  //   sub0 = 왜 양 끝이 안 되나 · sub1 = 양 끝 빼면 노란 5칸 · sub2 = moo 관찰 · sub3 = 글자로 도약
+  // intro 2 스텝 (선생님 2026-08-01: "노란 5칸=가운데 후보 프레임이 뒤(글자로 묶기)와 안 맞아,
+  // 왜 b가 왼쪽 끝?"). '가운데 후보 5칸'은 fix-j 사고라 제거 → 빠른 풀이의 '글자로 묶기' 로 직행:
+  //   sub0 = moo 꼴(앞 다름·뒤 둘 같음) 예시 · sub1 = 그 '같은 글자'로 나눔 (a/b/c)
   const trace = [
     { kind: "intro", sub: 0, revealed: 0 },
     { kind: "intro", sub: 1, revealed: 0 },
-    { kind: "intro", sub: 2, revealed: 0 },
-    { kind: "intro", sub: 3, revealed: 0 },
   ];
   perC.forEach((row, ci) => {
     trace.push({ kind: "letter", ci, phase: "i", revealed: ci });
@@ -1065,11 +1062,10 @@ export function Mooin3FastSim({ E }) {
 
   const cellStyle = (x) => {
     let role = "outside";
-    // 시작 화면 — 셀을 단계별로 바꾸며 흐름을 보여준다 (선생님 2026-08-01: "양쪽을 뺀 노란 부분").
-    // sub0: 전부 그대로 · sub1+: 양 끝 ✗(excluded) → 가운데 노랑(mid).  CSS transition 으로 애니.
-    if (s.kind === "intro" && s.sub >= 1) {
-      if (x === l || x === r) role = "excluded";
-      else if (x > l && x < r) role = "mid";
+    // 인트로 sub0: moo 꼴 예시(a‑b‑b: 0=다름, 1·5=같음)를 셀에 직접 칠함. sub1: 중립.
+    if (s.kind === "intro" && s.sub === 0) {
+      if (x === 0) role = "diff";
+      else if (x === 1 || x === 5) role = "same";
     }
     if (cur) {
       if (s.phase === "j" && x === cur.j) role = "j";
@@ -1078,8 +1074,8 @@ export function Mooin3FastSim({ E }) {
       else if (s.phase === "j" && str[x] === cur.c) role = "cpos";   // 다른 '글자' 자리는 가운데 고를 때만 (선생님 2026-08-01)
     }
     const P = {
-      mid:     { bg: "#fef9c3", bd: "#fcd34d", fg: "#92400e", op: 1 },
-      excluded:{ bg: "#f8fafc", bd: "#e2e8f0", fg: "#cbd5e1", op: 0.5 },
+      diff:    { bg: "#e0e7ff", bd: "#818cf8", fg: "#3730a3", op: 1 },
+      same:    { bg: "#fef9c3", bd: "#fcd34d", fg: "#92400e", op: 1 },
       j:       { bg: "#fef3c7", bd: "#f59e0b", fg: "#92400e", op: 1 },
       i:       { bg: "#fee2e2", bd: "#dc2626", fg: "#7f1d1d", op: 1 },
       k:       { bg: "#dcfce7", bd: "#16a34a", fg: "#15803d", op: 1 },
@@ -1095,8 +1091,8 @@ export function Mooin3FastSim({ E }) {
   };
   const labelFor = (x) => {
     if (s.kind === "intro") {
-      if (s.sub >= 1 && (x === l || x === r)) return "✗";
-      if (s.sub >= 1 && x > l && x < r) return "•";
+      if (s.sub === 0 && x === 0) return t(E, "diff", "다름");
+      if (s.sub === 0 && (x === 1 || x === 5)) return t(E, "same", "같음");
       return "";
     }
     if (!cur) return "";
@@ -1107,8 +1103,8 @@ export function Mooin3FastSim({ E }) {
   };
   const labelColor = (x) => {
     if (s.kind === "intro") {
-      if (s.sub >= 1 && (x === l || x === r)) return "#94a3b8";
-      if (s.sub >= 1 && x > l && x < r) return "#d97706";
+      if (s.sub === 0 && x === 0) return "#4f46e5";
+      if (s.sub === 0 && (x === 1 || x === 5)) return "#d97706";
       return "transparent";
     }
     if (!cur) return "transparent";
@@ -1145,17 +1141,11 @@ export function Mooin3FastSim({ E }) {
       }}>
         💬{" "}
         {s.kind === "intro" && s.sub === 0 && t(E,
-          `The middle (j) needs letters on both sides — so the two very ends can't be the middle.`,
-          `가운데(j)는 양옆에 글자가 있어야 해요 — 그래서 맨 양 끝은 가운데가 못 돼요.`)}
+          `A moo is 3 letters — the first is DIFFERENT, the last two are the SAME letter (like a-b-b here).`,
+          `moo 는 세 글자예요 — 앞은 '다른 글자', 뒤 두 개는 '같은 글자'. (여기선 a-b-b 처럼)`)}
         {s.kind === "intro" && s.sub === 1 && t(E,
-          `Drop the two ends — the middle (j) can only be one of these ${r - l - 1} yellow cells.`,
-          `양 끝을 빼면 — 가운데(j)에 올 수 있는 건 이 노란 ${r - l - 1} 칸이에요.`)}
-        {s.kind === "intro" && s.sub === 2 && t(E,
-          `And in every moo, the middle and the right end are the SAME letter.`,
-          `그리고 moo 는 가운데와 오른쪽 끝이 늘 '같은 글자'예요.`)}
-        {s.kind === "intro" && s.sub === 3 && t(E,
-          `So instead of checking spots, we check by LETTER — only a, b, c here.`,
-          `그러니 자리 말고 '글자'로 확인하면 돼요 — 여기선 a, b, c 셋뿐.`)}
+          `So we split by that repeated letter — is it a? b? c? Only 3 cases.`,
+          `그럼 그 '같은 글자'가 뭔지로 나눠서 찾으면 돼요 — a? b? c? 세 경우뿐이에요.`)}
 
         {s.kind === "letter" && s.phase === "i" && t(E,
           `Let's make a moo from '${cur.c}'. The left end (i) is the leftmost letter that is NOT '${cur.c}' — the ${ordEn(cur.i + 1)} cell.`,
@@ -1194,9 +1184,9 @@ export function Mooin3FastSim({ E }) {
         ))}
       </div>
 
-      {/* 색 범례 — 안 알려주면 학생이 화면을 못 읽는다.
-          (선생님 2026-07-30: "파란색 칸도 뭔말인지 모르겠어") */}
-      <div style={{
+      {/* 색 범례 — 안 알려주면 화면을 못 읽는다. 단 인트로(다름/같음 개념)엔 i/j/k 범례 숨김
+          (선생님 2026-07-30 "파란색 칸도 뭔말인지 모르겠어" · 2026-08-01 인트로=글자로 묶기). */}
+      {s.kind !== "intro" && <div style={{
         display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap",
         fontSize: 10.5, color: C.dim, marginBottom: 10, wordBreak: "keep-all",
       }}>
@@ -1214,7 +1204,7 @@ export function Mooin3FastSim({ E }) {
             {name && <b style={{ color: bd }}>{name} </b>}{label}
           </span>
         ))}
-      </div>
+      </div>}
 
       {mCells.length > 0 && (
         <div style={{ textAlign: "center", fontSize: 10.5, color: FA, marginBottom: 10, fontWeight: 700 }}>
