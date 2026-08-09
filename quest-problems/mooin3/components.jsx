@@ -2050,8 +2050,8 @@ export function Mooin3TableSim({ E, lang = "py" }) {
         <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
           {s.kind === "intro" && (
             <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#ecfeff" bd="#67e8f9" fg="#155e75">
-              {t(E, <>This table is built <b>once, before any query</b>. Two passes fill it — left→right, then right→left.</>,
-                    <>이 표는 <b>맨 처음 딱 한 번만</b> 만들어요 (전처리). 두 번 훑으면 끝 — 왼→오, 그 다음 오→왼.</>)}
+              {t(E, <>First fill <b>latest_same[{CH}]</b> — for each spot, the <b>rightmost '{CH}' so far</b> (<b>−1</b> = none yet). Scan left→right.</>,
+                    <>먼저 <b>latest_same[{CH}]</b> 를 채워요 — 각 자리까지 중 <b>가장 오른쪽 '{CH}'</b>가 어디인지 (<b>−1</b> = 아직 없음). 왼→오로 훑어요.</>)}
             </SimBubble>
           )}
           {s.kind === "L" && (
@@ -2061,10 +2061,15 @@ export function Mooin3TableSim({ E, lang = "py" }) {
               <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>'{CH}'</span>
               <br />
               {s.hit
-                ? t(E, <>found one → <b>last = {s.i}</b></>, <>여기 있네 → <b>last = {s.i}</b></>)
-                : t(E, <>not it → <b>last</b> stays <b>{s.last}</b></>, <>아니네 → <b>last</b> 는 <b>{s.last}</b> 그대로</>)}
+                ? t(E, <>a '{CH}'! → rightmost '{CH}' so far = <b>{s.i}</b></>,
+                      <>'{CH}' 발견! → 지금까지 가장 오른쪽 '{CH}' = <b>{s.i}</b>번</>)
+                : (s.last < 0
+                    ? t(E, <>not '{CH}' → no '{CH}' seen yet → <b>−1</b></>,
+                          <>'{CH}' 아님 → 아직 '{CH}' 못 봤음 → <b>−1</b></>)
+                    : t(E, <>not '{CH}' → rightmost '{CH}' still <b>{s.last}</b></>,
+                          <>'{CH}' 아님 → 가장 오른쪽 '{CH}'는 아직 <b>{s.last}</b>번</>))}
               {" · "}
-              <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>ls[{s.i}] = {s.last}</span>
+              <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>latest_same[{CH}][{s.i}] = {s.last}</span>
             </SimBubble>
           )}
           {s.kind === "R" && (
