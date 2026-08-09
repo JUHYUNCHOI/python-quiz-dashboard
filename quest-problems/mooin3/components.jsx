@@ -2116,8 +2116,14 @@ export function Mooin3TableSim({ E, lang = "py" }) {
               <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>'{CH}'</span>
               <br />
               {s.hit
-                ? t(E, <>same → <b>nxt_same = {s.i}</b></>, <>같으니 → <b>nxt_same = {s.i}</b></>)
-                : t(E, <>different → <b>nxt_diff = {s.i}</b></>, <>다르니 → <b>nxt_diff = {s.i}</b></>)}
+                ? t(E, <>a '{CH}'! → nearest '{CH}' to the right = <b>{s.i}</b></>,
+                      <>'{CH}' 발견! → 오른쪽으로 가장 가까운 '{CH}' = <b>{s.i}</b>번</>)
+                : t(E, <>not '{CH}' → nearest non-'{CH}' to the right = <b>{s.i}</b></>,
+                      <>'{CH}' 아님 → 오른쪽으로 가장 가까운 '{CH} 아닌 글자' = <b>{s.i}</b>번</>)}
+              {" · "}
+              <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>
+                {s.hit ? `earliest_same[${CH}][${s.i}] = ${s.i}` : `nearest_diff[${CH}][${s.i}] = ${s.i}`}
+              </span>
             </SimBubble>
           )}
           {s.kind === "final" && (
