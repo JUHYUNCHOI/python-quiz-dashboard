@@ -1973,6 +1973,27 @@ export function Mooin3TableSim({ E, lang = "py" }) {
       steps.push({ kind: "R", i, hit, ls: [...ls], es: [...es], nd: [...nd] });
     }
     steps.push({ kind: "final", ls: [...ls], es: [...es], nd: [...nd] });
+
+    // USE — 방금 만든 표로 쿼리 하나 풀기 (build → use). (선생님 2026-08-01: '어떻게 풀었는지 없다')
+    const uL = 0, uR = N - 1;
+    const ui = nd[uL];      // = nearest_diff[CH][uL]  (왼쪽 끝, CH 아님)
+    const uk = ls[uR];      // = latest_same[CH][uR]   (오른쪽 끝, CH)
+    let uj = -1, uscore = -1, um = null;
+    if (ui >= 0 && uk >= 0 && ui < uk) {
+      um = Math.floor((ui + uk) / 2);
+      for (const cand of [ls[um], es[um]]) {
+        if (cand != null && cand > ui && cand < uk && cand < N && str[cand] === CH) {
+          const sc = (cand - ui) * (uk - cand);
+          if (sc > uscore) { uscore = sc; uj = cand; }
+        }
+      }
+    }
+    const uBase = { ls: [...ls], es: [...es], nd: [...nd], uL, uR, ui, uk, uj, uscore };
+    steps.push({ kind: "use", phase: "q", ...uBase });
+    steps.push({ kind: "use", phase: "k", showK: true, ...uBase });
+    steps.push({ kind: "use", phase: "i", showK: true, showI: true, ...uBase });
+    steps.push({ kind: "use", phase: "j", showK: true, showI: true, showJ: true, ...uBase });
+    steps.push({ kind: "use", phase: "done", showK: true, showI: true, showJ: true, ...uBase });
   }
 
   const ts = useTraceStep(steps);
@@ -2000,17 +2021,33 @@ export function Mooin3TableSim({ E, lang = "py" }) {
 
   const cellBox = (i) => {
     const on = i === cur;
+    let bg = on ? "#ecfeff" : str[i] === CH ? "#fef9c3" : "#fff";
+    let bd = on ? TA : str[i] === CH ? "#fcd34d" : "#cbd5e1";
+    let fg = str[i] === CH ? "#92400e" : "#475569";
+    let bw = on ? 2 : 1, scale = on ? 1.1 : 1;
+    // use 스텝: 표로 푸는 중 — i(왼쪽 끝) 빨강 · k(오른쪽 끝) 초록 · j(가운데) 노랑
+    if (s.kind === "use") {
+      if (s.showK && i === s.uk)      { bg = "#dcfce7"; bd = "#16a34a"; fg = "#15803d"; bw = 2; scale = 1.1; }
+      else if (s.showI && i === s.ui) { bg = "#fee2e2"; bd = "#dc2626"; fg = "#7f1d1d"; bw = 2; scale = 1.1; }
+      else if (s.showJ && i === s.uj) { bg = "#fef3c7"; bd = "#f59e0b"; fg = "#92400e"; bw = 2; scale = 1.1; }
+    }
     return {
       width: SIM_CELL_W, height: SIM_CELL_W, display: "flex", alignItems: "center",
       justifyContent: "center", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace",
       fontWeight: 700, fontSize: 16,
-      background: on ? "#ecfeff" : str[i] === CH ? "#fef9c3" : "#fff",
-      border: `${on ? 2 : 1}px solid ${on ? TA : str[i] === CH ? "#fcd34d" : "#cbd5e1"}`,
-      color: str[i] === CH ? "#92400e" : "#475569",
-      transform: on ? "scale(1.1)" : "none",
+      background: bg, border: `${bw}px solid ${bd}`, color: fg,
+      transform: scale !== 1 ? `scale(${scale})` : "none",
       boxShadow: on ? `0 0 0 3px ${TA}33` : "none",
       transition: "all .15s",
     };
+  };
+  // use 스텝에서 셀 위 라벨 (i/j/k)
+  const useLabel = (i) => {
+    if (s.kind !== "use") return null;
+    if (s.showI && i === s.ui) return ["i", "#dc2626"];
+    if (s.showK && i === s.uk) return ["k", "#16a34a"];
+    if (s.showJ && i === s.uj) return ["j", "#f59e0b"];
+    return null;
   };
 
   /* 표 한 줄 — 아직 안 채운 칸은 비워 둔다. 채워지는 순서가 보여야 하니까. */
@@ -2089,23 +2126,46 @@ export function Mooin3TableSim({ E, lang = "py" }) {
                     <>완성! 이제 <b>다시 안 만들어요</b> — 쿼리가 아무리 많아도 이 표를 <b>그냥 찾아보기만</b> 해요.</>)}
             </SimBubble>
           )}
+          {s.kind === "use" && (
+            <SimBubble
+              cx={s.phase === "k" ? simCellCx(s.uk) : s.phase === "i" ? simCellCx(s.ui) : (s.phase === "j" && s.uj >= 0) ? simCellCx(s.uj) : ROW_W / 2}
+              rowW={ROW_W} bg="#faf5ff" bd="#c4b5fd" fg="#5b21b6">
+              {s.phase === "q" && t(E, <>Table done! Now use it to solve query [{s.uL + 1}, {s.uR + 1}] for a '{CH}'-moo.</>,
+                    <>표 완성! 이제 이 표로 쿼리 [{s.uL + 1}, {s.uR + 1}] 에서 '{CH}' moo 를 풀어봐요.</>)}
+              {s.phase === "k" && t(E, <>right end <b>k = latest_same[{CH}][{s.uR}] = {s.uk}</b> — straight from the table!</>,
+                    <>오른쪽 끝 <b>k = latest_same[{CH}][{s.uR}] = {s.uk}</b> — 표에서 바로 꺼냄!</>)}
+              {s.phase === "i" && t(E, <>left end <b>i = nearest_diff[{CH}][{s.uL}] = {s.ui}</b> — leftmost non-'{CH}'.</>,
+                    <>왼쪽 끝 <b>i = nearest_diff[{CH}][{s.uL}] = {s.ui}</b> — '{CH}' 아닌 가장 왼쪽.</>)}
+              {s.phase === "j" && (s.uj >= 0
+                    ? t(E, <>middle <b>j = {s.uj}</b> → score = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b></>,
+                          <>가운데 <b>j = {s.uj}</b> → 점수 = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b></>)
+                    : t(E, <>no '{CH}' between i and k → no '{CH}'-moo</>, <>i·k 사이에 '{CH}' 없음 → '{CH}' moo 없음</>))}
+              {s.phase === "done" && t(E, <>Best '{CH}'-moo = <b>{s.uscore}</b>. Do the same for every letter → the biggest wins (here 'c' gives 8).</>,
+                    <>'{CH}' 로 만든 최고 moo = <b>{s.uscore}</b>. 다른 글자도 표로 똑같이 → 그 중 최댓값이 답 (여기선 'c' 로 8).</>)}
+            </SimBubble>
+          )}
         </div>
       </div>
 
       {/* 글자 줄 */}
       <div style={{ display: "flex", gap: SIM_CELL_GAP, width: ROW_W, margin: "0 auto 4px" }}>
-        {str.split("").map((ch, i) => (
+        {str.split("").map((ch, i) => {
+          const ul = useLabel(i);
+          return (
           <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+            <div style={{ fontSize: 11, height: 13, fontWeight: 800, color: ul ? ul[1] : "transparent" }}>{ul ? ul[0] : "·"}</div>
             <div style={cellBox(i)}>{ch}</div>
             <div style={{ fontSize: 9, color: i === cur ? TA : C.dim, fontWeight: i === cur ? 800 : 400 }}>{i}</div>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* 방향 표시 — 지금 어느 쪽으로 훑는 중인지 */}
       <div style={{ height: 16, textAlign: "center", fontSize: 10, fontWeight: 700, color: C.dim, marginBottom: 8 }}>
         {s.kind === "L" ? t(E, "pass 1 — left → right", "1 번째 훑기 — 왼쪽 → 오른쪽 →")
           : s.kind === "R" ? t(E, "pass 2 — right → left", "← 2 번째 훑기 — 오른쪽 → 왼쪽")
+          : s.kind === "use" ? t(E, "▶ now SOLVE a query with the table", "▶ 이제 이 표로 쿼리 풀기")
           : " "}
       </div>
 
