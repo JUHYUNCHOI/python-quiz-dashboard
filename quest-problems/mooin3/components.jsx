@@ -2632,14 +2632,21 @@ export function Mooin3MapSim({ E }) {
               if (v === null) { bg = "#f8fafc"; col = "#cbd5e1"; }
               if (isFresh) { bg = "#fff7ed"; bd = "#f97316"; col = "#9a3412"; }
               if (isRead) { bg = "#fee2e2"; bd = "#dc2626"; col = "#7f1d1d"; }
+              const showL = s.kind === "use" && i === s.uL;   // 문자열 행과 같은 쿼리 경계선
+              const showR = s.kind === "use" && i === s.uR;
+              const div = <div style={{ alignSelf: "center", width: 3, height: 26, borderRadius: 2, background: MA, margin: "0 2px" }} />;
               return (
-                <div key={i} style={{
-                  width: SIM_CELL_W, height: 22, display: "flex", alignItems: "center",
-                  justifyContent: "center", borderRadius: 5, fontSize: 11, fontWeight: 700,
-                  fontFamily: "'JetBrains Mono',monospace",
-                  background: bg, border: `${isFresh || isRead ? 2 : 1}px solid ${bd}`,
-                  boxShadow: isRead ? `0 0 0 2px #dc262655` : "none", color: col,
-                }}>{v === null ? "·" : v === N ? "∅" : v}</div>
+                <Fragment key={i}>
+                  {showL && div}
+                  <div style={{
+                    width: SIM_CELL_W, height: 22, display: "flex", alignItems: "center",
+                    justifyContent: "center", borderRadius: 5, fontSize: 11, fontWeight: 700,
+                    fontFamily: "'JetBrains Mono',monospace",
+                    background: bg, border: `${isFresh || isRead ? 2 : 1}px solid ${bd}`,
+                    boxShadow: isRead ? `0 0 0 2px #dc262655` : "none", color: col,
+                  }}>{v === null ? "·" : v === N ? "∅" : v}</div>
+                  {showR && div}
+                </Fragment>
               );
             })}
           </div>
