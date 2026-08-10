@@ -1,5 +1,60 @@
 import { C, t } from "@/components/quest/theme";
-import { getPresentsSections } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+
+// CodeWalk 코드 — 설명은 밝아진 줄 위 말풍선으로 (선생님 스타일).
+const PR_WALK_PY = [
+  "N, Q = map(int, input().split())",
+  "stack = list(map(int, input().split()))",
+  "",
+  "for _ in range(Q):",
+  "    target = int(input())",
+  "    pos = stack.index(target)",
+  "    print(pos)",
+  "    stack.pop(pos)",
+];
+const PR_WALK_CPP = [
+  "#include <iostream>",
+  "#include <vector>",
+  "using namespace std;",
+  "",
+  "int main() {",
+  "    int N, Q;",
+  "    cin >> N >> Q;",
+  "    vector<int> stack(N);",
+  "    for (int i = 0; i < N; i++) {",
+  "        cin >> stack[i];",
+  "    }",
+  "",
+  "    for (int q = 0; q < Q; q++) {",
+  "        int target;",
+  "        cin >> target;",
+  "        int pos = 0;",
+  "        while (stack[pos] != target) {",
+  "            pos++;",
+  "        }",
+  "        cout << pos << endl;",
+  "        stack.erase(stack.begin() + pos);",
+  "    }",
+  "    return 0;",
+  "}",
+];
+function getPresentsWalk(E, lang) {
+  if (lang === "cpp") {
+    return { code: PR_WALK_CPP, beats: [
+      { hi: [5, 10],  bubble: t(E, "Read N presents and Q queries, then the stack (top → bottom).", "선물 N개·쿼리 Q개 읽고, stack(위→아래)에 선물 담기.") },
+      { hi: [12, 14], bubble: t(E, "For each query, read which present (target) to grab.", "쿼리마다 찾을 선물 target 읽기.") },
+      { hi: [15, 18], bubble: t(E, "Count from the top until target — pos = how many presents sit above it.", "위에서부터 세서 target 위치 pos = 위에 쌓인 선물 수.") },
+      { hi: [19, 19], bubble: t(E, "Print pos — you must lift off that many to reach it.", "pos 출력 — 그 만큼 위 선물을 치워야 꺼낼 수 있으니까.") },
+      { hi: [20, 20], bubble: t(E, "Take the target out of the stack.", "그 선물을 stack 에서 꺼냄(제거).") },
+    ] };
+  }
+  return { code: PR_WALK_PY, beats: [
+    { hi: [0, 1], bubble: t(E, "Read N presents & Q queries; stack is listed top → bottom.", "선물 N개·쿼리 Q개; stack 은 위→아래 순서.") },
+    { hi: [3, 4], bubble: t(E, "For each query, read which present (target) to grab.", "쿼리마다 찾을 선물 target 읽기.") },
+    { hi: [5, 6], bubble: t(E, "pos = target's index = how many presents sit above it → print it.", "pos = target 의 위치 = 위에 쌓인 선물 수 → 출력.") },
+    { hi: [7, 7], bubble: t(E, "Take the target out of the stack.", "그 선물을 stack 에서 꺼냄(제거).") },
+  ] };
+}
 
 export const SOLUTION_CODE = [
   "N, Q = map(int, input().split())",
@@ -232,11 +287,14 @@ export function makePresentsCh1(E) {
 export function makePresentsCh2(E, lang = "py") {
   return [
     {
-      type: "progressive",
+      type: "reveal",
       narr: t(E,
-        "For each query: find target's position, print it, then remove.  Sections build the loop one piece at a time.",
-        "쿼리마다 타깃 위치 찾기 → 출력 → 제거. 아래 섹션이 한 단락씩 쌓아요."),
-      sections: getPresentsSections(E),
+        "For each query: find target's position, print it, then remove — each line lights up with a note above it.",
+        "쿼리마다 타깃 위치 찾기 → 출력 → 제거. 각 줄이 밝아지며 위에 설명 말풍선이 떠요."),
+      content: (() => {
+        const w = getPresentsWalk(E, lang);
+        return <CodeWalk E={E} lang={lang} code={w.code} beats={w.beats} accent="#f97316" />;
+      })(),
     },
     {
       type: "runner",
