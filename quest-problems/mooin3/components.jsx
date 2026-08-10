@@ -25,7 +25,7 @@
 //     C++ 0.16s / Py 0.64s (최악 26글자, N=1e5 Q=3e4).  기존 표 방식(M3_FAST_*)은 주 풀이로 유지,
 //     map 은 '부록: 다른 방법' 챕터로 곁들임(초보 직관용).  코드 수정 시 USACO 재제출 필요.
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Fragment } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock, highlight } from "@/components/quest/shared";
@@ -2338,6 +2338,286 @@ export function Mooin3TableSim({ E, lang = "py" }) {
           표 만들기 시뮬은 '표가 채워지는 것'만 시각적으로 — 초보한테 화면 덜 빽빽하게. */}
 
       <SharedSimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={TA} isEn={E} showLabels />
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Mooin3MapSim — '다른 방법(map)' 시뮬. 표 3개 대신 '글자 → 위치 리스트' 를
+   만들고, 쿼리는 그 리스트에서 이분탐색으로 k·j 를 콕 집는다.
+   표 시뮬(Mooin3TableSim)과 같은 예제(abcabbc)·같은 글자(b)·같은 쿼리 → 나란히 비교됨.
+   (선생님 2026-08-10: "map 으로 한건 시뮬로도 나오게 · 다른 방법이라고 알려주고".)
+   ═══════════════════════════════════════════════════════════════ */
+export function Mooin3MapSim({ E }) {
+  const MA = "#0d9488";
+  const str = "abcabbc";
+  const CH = "b";
+  const N = str.length;
+  const ROW_W = simRowW(N);
+  const LETTERS = ["a", "b", "c"];
+
+  const steps = [{ kind: "intro" }];
+  {
+    const lists = { a: [], b: [], c: [] };
+    for (let i = 0; i < N; i++) {
+      lists[str[i]] = [...lists[str[i]], i];
+      steps.push({ kind: "build", i, ch: str[i], lists: { a: [...lists.a], b: [...lists.b], c: [...lists.c] } });
+    }
+    const finalLists = { a: [...lists.a], b: [...lists.b], c: [...lists.c] };
+    steps.push({ kind: "built", lists: finalLists });
+
+    // use — 쿼리 [0, N-1], 글자 b (표 시뮬과 동일)
+    const uL = 0, uR = N - 1;
+    const blist = finalLists[CH];                 // [1, 4, 5]
+    let uk = -1; for (let x = blist.length - 1; x >= 0; x--) if (blist[x] <= uR) { uk = blist[x]; break; }
+    let ui = -1; for (let x = uL; x <= uR; x++) if (str[x] !== CH) { ui = x; break; }
+    const um = Math.floor((ui + uk) / 2);
+    let below = -1, above = -1;
+    for (let x = 0; x < blist.length; x++) { if (blist[x] <= um) below = blist[x]; if (blist[x] >= um && above === -1) above = blist[x]; }
+    let uj = -1, uscore = -1;
+    for (const cand of [below, above]) if (cand > ui && cand < uk) { const sc = (cand - ui) * (uk - cand); if (sc > uscore) { uscore = sc; uj = cand; } }
+    const base = { lists: finalLists, blist, uL, uR, uk, ui, um, below, above, uj, uscore };
+    steps.push({ kind: "use", phase: "q", ...base });
+    steps.push({ kind: "use", phase: "k", showK: true, ...base });
+    steps.push({ kind: "use", phase: "i", showK: true, showI: true, ...base });
+    steps.push({ kind: "use", phase: "jm", showK: true, showI: true, ...base });
+    steps.push({ kind: "use", phase: "jpick", showK: true, showI: true, showJ: true, ...base });
+    steps.push({ kind: "use", phase: "done", showK: true, showI: true, showJ: true, ...base });
+  }
+
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+
+  const cellBox = (i) => {
+    const isCur = s.kind === "build" && i === s.i;
+    let bg = str[i] === CH ? "#ccfbf1" : "#fff";
+    let bd = str[i] === CH ? "#5eead4" : "#cbd5e1";
+    let fg = str[i] === CH ? "#0f766e" : "#475569";
+    let bw = 1, scale = 1;
+    if (isCur) { bd = MA; bg = "#f0fdfa"; bw = 2; scale = 1.1; }
+    if (s.kind === "use") {
+      if (s.showJ && i === s.uj) { bg = "#fef3c7"; bd = "#f59e0b"; fg = "#92400e"; bw = 2; scale = 1.1; }
+      else if (s.phase === "jm" && (i === s.below || i === s.above)) { bg = "#fefce8"; bd = "#fcd34d"; fg = "#92400e"; bw = 2; scale = 1.05; }
+      else if (s.showK && i === s.uk) { bg = "#dcfce7"; bd = "#16a34a"; fg = "#15803d"; bw = 2; scale = 1.1; }
+      else if (s.showI && i === s.ui) { bg = "#fee2e2"; bd = "#dc2626"; fg = "#7f1d1d"; bw = 2; scale = 1.1; }
+    }
+    return {
+      width: SIM_CELL_W, height: SIM_CELL_W, display: "flex", alignItems: "center",
+      justifyContent: "center", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace",
+      fontWeight: 700, fontSize: 16, background: bg, border: `${bw}px solid ${bd}`, color: fg,
+      transform: scale !== 1 ? `scale(${scale})` : "none", transition: "all .15s",
+    };
+  };
+  const useLabel = (i) => {
+    if (s.kind !== "use") return null;
+    if (s.showJ && i === s.uj) return ["j", "#f59e0b"];
+    if (s.phase === "jm" && (i === s.below || i === s.above)) return ["j?", "#d97706"];
+    if (s.showI && i === s.ui) return ["i", "#dc2626"];
+    if (s.showK && i === s.uk) return ["k", "#16a34a"];
+    return null;
+  };
+
+  // 글자별 위치 리스트 한 줄
+  const ListRow = ({ letter }) => {
+    const arr = (s.lists && s.lists[letter]) || [];
+    const isFocus = s.kind === "use" && letter === CH;
+    const isBuildCh = s.kind === "build" && s.ch === letter;
+    return (
+      <div style={{
+        display: "flex", alignItems: "center", gap: 8, marginBottom: 6,
+        opacity: (s.kind === "use" && letter !== CH) ? 0.4 : 1, transition: "opacity .2s",
+      }}>
+        <div style={{ width: 108, textAlign: "right", fontSize: 12, fontWeight: 800,
+          color: isFocus ? MA : "#475569", fontFamily: "'JetBrains Mono',monospace" }}>
+          {letter} {t(E, "→ spots", "→ 위치")}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          <span style={{ color: "#94a3b8", fontFamily: "'JetBrains Mono',monospace" }}>[</span>
+          {arr.length === 0 && <span style={{ color: "#cbd5e1", fontSize: 12 }}>·</span>}
+          {arr.map((pos, k) => {
+            const isNew = isBuildCh && pos === s.i;
+            let bg = "#fff", bd = "#cbd5e1", col = "#0f172a";
+            if (isNew) { bg = "#ccfbf1"; bd = MA; }
+            if (isFocus) {
+              if (s.showJ && pos === s.uj) { bg = "#fef3c7"; bd = "#f59e0b"; col = "#92400e"; }
+              else if (s.phase === "jm" && (pos === s.below || pos === s.above)) { bg = "#fefce8"; bd = "#fcd34d"; col = "#92400e"; }
+              else if (s.showK && pos === s.uk) { bg = "#dcfce7"; bd = "#16a34a"; col = "#15803d"; }
+            }
+            return (
+              <span key={k} style={{
+                minWidth: 22, height: 22, padding: "0 5px", display: "inline-flex",
+                alignItems: "center", justifyContent: "center", borderRadius: 5,
+                fontSize: 12, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+                background: bg, border: `${bg === "#fff" ? 1 : 2}px solid ${bd}`, color: col,
+              }}>{pos}</span>
+            );
+          })}
+          <span style={{ color: "#94a3b8", fontFamily: "'JetBrains Mono',monospace" }}>]</span>
+        </div>
+      </div>
+    );
+  };
+
+  const bubbleCx = (() => {
+    if (s.kind === "build") return simCellCx(s.i);
+    if (s.kind === "use") {
+      if (s.phase === "k") return simCellCx(s.uk);
+      if (s.phase === "i") return simCellCx(s.ui);
+      if (s.phase === "jm") return simCellCx(s.um);
+      if (s.phase === "jpick" || s.phase === "done") return simCellCx(s.uj);
+    }
+    return ROW_W / 2;
+  })();
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={MA} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, `Another way (map): letter → its spots`, `다른 방법 (map): 글자 → 위치 리스트`)}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+
+      {/* 말풍선 무대 */}
+      <div style={{ position: "relative", width: ROW_W, height: 104, margin: "0 auto" }}>
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+          {s.kind === "intro" && (
+            <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={330}>
+              {t(E, <>Instead of 3 tables — keep <b>one list of spots per letter</b>. (a map / dict.)</>,
+                    <>표 3개 대신 — <b>글자마다 '나온 위치 리스트' 하나</b>만 만들어요. (map / dict.)</>)}
+            </SimBubble>
+          )}
+          {s.kind === "build" && (
+            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59">
+              <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>s[{s.i}] = '{s.ch}'</span>
+              {" → "}
+              {t(E, <>add <b>{s.i}</b> to '{s.ch}' list.</>, <>'{s.ch}' 리스트에 <b>{s.i}</b> 추가.</>)}
+            </SimBubble>
+          )}
+          {s.kind === "built" && (
+            <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={330}>
+              {t(E, <>Done — 3 lists, no tables. Now a query <b>binary-searches</b> a list.</>,
+                    <>끝 — 리스트 3개, 표 없음. 이제 쿼리는 리스트에서 <b>이분탐색</b>.</>)}
+            </SimBubble>
+          )}
+          {s.kind === "use" && s.phase === "q" && (
+            <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={320}>
+              {t(E, <>Query <b>[{s.uL}, {s.uR}]</b>, letter <b>'{CH}'</b> — solve it from the list.</>,
+                    <>쿼리 <b>[{s.uL}, {s.uR}]</b>, 글자 <b>'{CH}'</b> — 리스트로 풀어봐요.</>)}
+            </SimBubble>
+          )}
+          {s.kind === "use" && s.phase === "k" && (
+            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#dcfce7" bd="#16a34a" fg="#15803d" width={320}>
+              {t(E, <><b>k</b> = rightmost '{CH}' ≤ {s.uR} → binary-search the list → <b>{s.uk}</b>.</>,
+                    <><b>k</b> = {s.uR} 이하 '{CH}' 중 가장 오른쪽 → 리스트 이분탐색 → <b>{s.uk}</b>.</>)}
+            </SimBubble>
+          )}
+          {s.kind === "use" && s.phase === "i" && (
+            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fee2e2" bd="#dc2626" fg="#7f1d1d" width={320}>
+              {t(E, <><b>i</b> = leftmost letter ≠ '{CH}' → <b>{s.ui}</b> ('{str[s.ui]}').</>,
+                    <><b>i</b> = '{CH}' 아닌 가장 왼쪽 → <b>{s.ui}</b> ('{str[s.ui]}').</>)}
+            </SimBubble>
+          )}
+          {s.kind === "use" && s.phase === "jm" && (
+            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fefce8" bd="#f59e0b" fg="#92400e" width={330}>
+              {t(E, <>Middle m = {s.um}. In the '{CH}' list, the two around m → <b>{s.below}</b> & <b>{s.above}</b>.</>,
+                    <>가운데 m = {s.um}. '{CH}' 리스트에서 m 양옆 → <b>{s.below}</b>, <b>{s.above}</b>.</>)}
+            </SimBubble>
+          )}
+          {s.kind === "use" && s.phase === "jpick" && (
+            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fef3c7" bd="#f59e0b" fg="#92400e" width={320}>
+              {t(E, <>Pick <b>j = {s.uj}</b>. Score = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b>.</>,
+                    <><b>j = {s.uj}</b> 선택. 점수 = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b>.</>)}
+            </SimBubble>
+          )}
+          {s.kind === "use" && s.phase === "done" && (
+            <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={340}>
+              {t(E, <>Same answer — no tables, just <b>binary search</b> on a list. That's the map way.</>,
+                    <>같은 답 — 표 없이 리스트 <b>이분탐색</b>만. 이게 map 방식이에요.</>)}
+            </SimBubble>
+          )}
+        </div>
+      </div>
+
+      {/* 문자열 행 */}
+      <div style={{ display: "flex", gap: SIM_CELL_GAP, justifyContent: "center", marginBottom: 4 }}>
+        {str.split("").map((ch, i) => {
+          const lab = useLabel(i);
+          return (
+            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+              <div style={{ fontSize: 11, height: 14, fontWeight: 800, color: lab ? lab[1] : "transparent" }}>{lab ? lab[0] : "·"}</div>
+              <div style={cellBox(i)}>{ch}</div>
+              <div style={{ fontSize: 9, color: C.dim }}>{i}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* 글자별 위치 리스트 (map) */}
+      <div style={{ width: "fit-content", margin: "14px auto 4px" }}>
+        {LETTERS.map((L) => <ListRow key={L} letter={L} />)}
+      </div>
+
+      <SharedSimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={MA} isEn={E} showLabels />
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Mooin3Compare — 두 방법(표 vs map) 나란히 비교. 부록의 마지막.
+   (선생님 2026-08-10: "가장 마지막은 이 두개를 비교해주고".)
+   ═══════════════════════════════════════════════════════════════ */
+export function Mooin3Compare({ E }) {
+  const TA = "#0891b2", MA = "#0d9488";
+  const rows = [
+    { k: t(E, "Data structure", "자료구조"),
+      a: t(E, "3 tables (26 × N)", "표 3개 (26 × N)"),
+      b: t(E, "letter → list of spots (map)", "글자 → 위치 리스트 (map)") },
+    { k: t(E, "Precompute", "전처리"),
+      a: t(E, "two scans fill the tables", "두 번 훑어 표 채움"),
+      b: t(E, "one scan fills the lists", "한 번 훑어 리스트 채움") },
+    { k: t(E, "Look-up in a query", "쿼리에서 조회"),
+      a: t(E, "read the table — O(1)", "표에서 바로 — O(1)"),
+      b: t(E, "binary-search the list — O(log N)", "리스트 이분탐색 — O(log N)") },
+    { k: t(E, "Time / query", "쿼리당 시간"),
+      a: "O(26)",
+      b: "O(26 · log N)" },
+    { k: t(E, "Memory", "메모리"),
+      a: t(E, "26 × N ints × 3 (large)", "26 × N 정수 × 3 (큼)"),
+      b: t(E, "N spots total (small)", "위치 N개 (작음)") },
+    { k: t(E, "Feel", "느낌"),
+      a: t(E, "compute everything up front", "미리 다 계산해 둠"),
+      b: t(E, "look it up when needed", "필요할 때 찾음") },
+  ];
+  return (
+    <div style={{ padding: 16, maxWidth: 640, margin: "0 auto" }}>
+      <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, color: "#0f172a", marginBottom: 4, wordBreak: "keep-all" }}>
+        {t(E, "Two ways, same idea", "두 방법, 같은 아이디어")}
+      </div>
+      <div style={{ textAlign: "center", fontSize: 12, color: "#64748b", marginBottom: 14, wordBreak: "keep-all" }}>
+        {t(E, "Both find i · k · j the same way — they just store the info differently.",
+              "i · k · j 를 고르는 논리는 똑같아요 — 정보를 담는 방법만 달라요.")}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.15fr 1.15fr", gap: 8, alignItems: "stretch" }}>
+        <div />
+        <div style={{ textAlign: "center", fontWeight: 800, fontSize: 13, color: "#fff", background: TA, borderRadius: 8, padding: "7px 6px", wordBreak: "keep-all" }}>
+          {t(E, "Table (main)", "표 방식 (주 풀이)")}
+        </div>
+        <div style={{ textAlign: "center", fontWeight: 800, fontSize: 13, color: "#fff", background: MA, borderRadius: 8, padding: "7px 6px", wordBreak: "keep-all" }}>
+          {t(E, "Map (bonus)", "map 방식 (부록)")}
+        </div>
+        {rows.map((r, i) => (
+          <Fragment key={i}>
+            <div style={{ fontSize: 11.5, fontWeight: 700, color: "#475569", display: "flex", alignItems: "center", justifyContent: "flex-end", textAlign: "right", wordBreak: "keep-all", paddingRight: 2 }}>{r.k}</div>
+            <div style={{ fontSize: 12, color: "#155e75", background: "#ecfeff", border: `1px solid #a5f3fc`, borderRadius: 8, padding: "8px 10px", wordBreak: "keep-all", lineHeight: 1.5 }}>{r.a}</div>
+            <div style={{ fontSize: 12, color: "#115e59", background: "#f0fdfa", border: `1px solid #99f6e4`, borderRadius: 8, padding: "8px 10px", wordBreak: "keep-all", lineHeight: 1.5 }}>{r.b}</div>
+          </Fragment>
+        ))}
+      </div>
+
+      <div style={{ marginTop: 16, background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#92400e", wordBreak: "keep-all", lineHeight: 1.65 }}>
+        {t(E,
+          <>👉 <b>Both pass USACO.</b> The table is a bit faster to look up (O(1)); the map uses less memory and feels more intuitive. The algorithm (nearest_diff = nextDiff, table read = binary search) is exactly the same — pick whichever you find clearer.</>,
+          <>👉 <b>둘 다 USACO 통과.</b> 표는 조회가 조금 더 빠르고(O(1)), map 은 메모리가 작고 더 직관적이에요. 알고리즘(nearest_diff = nextDiff, 표 조회 = 이분탐색)은 완전히 같아요 — 더 편한 쪽을 고르면 돼요.</>)}
+      </div>
     </div>
   );
 }

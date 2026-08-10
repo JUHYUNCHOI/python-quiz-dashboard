@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMooin3Sections, getMooin3Walk, getMooin3MapWalk, MooTraceSimulator, TripletEnumSimulator, Mooin3FastSim, Mooin3TableSim } from "./components";
+import { getMooin3Sections, getMooin3Walk, getMooin3MapWalk, MooTraceSimulator, TripletEnumSimulator, Mooin3FastSim, Mooin3TableSim, Mooin3MapSim, Mooin3Compare } from "./components";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
@@ -385,20 +385,38 @@ export function makeMooin3Ch2(E, lang = "py") {
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#7c3aed" />),
       };
     })(),
-    /* [부록] map 으로 같은 풀이 (선생님 2026-08-10 USACO 채점기 통과 → 부록으로 추가).
-       표 방식과 같은 아이디어(nextDiff=nearest_diff, map 이분탐색=latest/earliest_same),
-       같은 속도. 초보에겐 map 이 더 직관적일 수 있어 '다른 방법' 으로 곁들임. */
+    /* ── 부록: map 이라는 '다른 방법' (선생님 2026-08-10 USACO 통과 → 부록 추가).
+       ① 시뮬로 방법 소개 → ② 코드 → ③ 표 vs map 비교. 표 방식은 주 풀이로 유지. ── */
+    /* [부록 ①] map 시뮬 — 리스트 만들고 이분탐색으로 푸는 걸 눈으로 */
+    {
+      type: "reveal",
+      label: t(E, "Bonus ① Another way: map", "부록 ① 다른 방법: map"),
+      narr: t(E,
+        "A different tool for the same problem: instead of 3 tables, keep one 'letter → its spots' list and binary-search it.  Watch it build, then solve a query.",
+        "같은 문제를 다른 도구로: 표 3개 대신 '글자 → 위치 리스트' 하나를 만들고 이분탐색으로 풀어요.  만들어지는 것과 쿼리 푸는 걸 눈으로 봐요."),
+      content: (<Mooin3MapSim E={E} />),
+    },
+    /* [부록 ②] map 코드 */
     (() => {
       const w = getMooin3MapWalk(E, lang);
       return {
         type: "reveal",
-        label: t(E, "Bonus: same idea with a map", "부록: map 으로 같은 풀이"),
+        label: t(E, "Bonus ② The map code", "부록 ② map 코드"),
         narr: t(E,
-          "Same speed, different tool: instead of 3 tables, keep 'letter → positions' in a map and binary-search it.  (nextDiff = nearest_diff, the binary search = latest/earliest_same.)  This one passed the real USACO judge too.",
-          "속도는 같고 도구만 달라요: 표 3개 대신 '글자 → 위치들' 을 map 에 담고 이분탐색.  (nextDiff = nearest_diff, 이분탐색 = latest/earliest_same.)  이 코드도 실제 USACO 채점기 통과."),
+          "The same idea as the tables, in code: nextDiff = nearest_diff, and the binary search plays the role of latest/earliest_same.  This one passed the real USACO judge too.",
+          "표 방식과 같은 아이디어를 코드로: nextDiff = nearest_diff, 이분탐색이 latest/earliest_same 역할.  이 코드도 실제 USACO 채점기 통과."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0d9488"
           badge={{ ko: "부록 · map 으로 같은 풀이 (안 봐도 돼요)", en: "Bonus · same solution with a map (optional)", color: "#0d9488" }} />),
       };
     })(),
+    /* [부록 ③] 표 vs map 비교 — 마지막 */
+    {
+      type: "reveal",
+      label: t(E, "Bonus ③ Table vs map", "부록 ③ 표 vs map 비교"),
+      narr: t(E,
+        "So which one? Same algorithm, different trade-offs — here they are side by side.",
+        "그래서 뭘 쓸까? 알고리즘은 같고 장단점만 달라요 — 나란히 비교해볼게요."),
+      content: (<Mooin3Compare E={E} />),
+    },
   ];
 }
