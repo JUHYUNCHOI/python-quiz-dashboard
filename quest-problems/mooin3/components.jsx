@@ -1206,6 +1206,16 @@ export function Mooin3FastSim({ E }) {
         ))}
       </div>}
 
+      {/* 왜 이 자리들? — 결정하는 슬라이드에 '왜' 를 한 줄로 (선생님 2026-08-10:
+          "왜 양 끝 i·k, 왜 가운데 j" 근거를 결정 시점에 보이게). 말풍선은 안 늘림. */}
+      {s.kind === "letter" && (
+        <div style={{ textAlign: "center", fontSize: 10.5, color: "#6b21a8", marginBottom: 10, fontWeight: 700, wordBreak: "keep-all" }}>
+          {t(E,
+            "Why here: push the ends far apart (i leftmost · k rightmost), j in the middle → (j−i)×(k−j) is biggest.",
+            "왜 이 자리냐: 양 끝을 최대한 벌리고 (i 왼쪽 끝 · k 오른쪽 끝) j 는 가운데 → (j−i)×(k−j) 가 최대.")}
+        </div>
+      )}
+
       {mCells.length > 0 && (
         <div style={{ textAlign: "center", fontSize: 10.5, color: FA, marginBottom: 10, fontWeight: 700 }}>
           {t(E, `▲ m = midpoint of i and k (${cur.m + 1})`, `▲ m = i 와 k 의 한가운데 (${cur.m + 1} 번 자리)`)}
