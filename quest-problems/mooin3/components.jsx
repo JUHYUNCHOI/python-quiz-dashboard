@@ -2050,8 +2050,8 @@ export function Mooin3TableSim({ E, lang = "py" }) {
     return null;
   };
 
-  /* 표 한 줄 — 아직 안 채운 칸은 비워 둔다. 채워지는 순서가 보여야 하니까. */
-  const TableRow = ({ label, vals, color, fresh }) => (
+  /* 표 한 줄 — 아직 안 채운 칸은 비워 둔다. readIdx = 지금 '읽는' 칸(use 스텝) 하이라이트. */
+  const TableRow = ({ label, vals, color, fresh, readIdx, readColor }) => (
     <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
       <div style={{ width: 132, textAlign: "right", fontSize: 10, fontWeight: 700,
                     color, fontFamily: "'JetBrains Mono',monospace" }}>{label}</div>
@@ -2059,14 +2059,16 @@ export function Mooin3TableSim({ E, lang = "py" }) {
         {Array.from({ length: N }).map((_, i) => {
           const v = vals ? vals[i] : null;
           const isNew = fresh === i;
+          const isRead = readIdx != null && readIdx === i;
           return (
             <div key={i} style={{
               width: SIM_CELL_W, height: 22, display: "flex", alignItems: "center",
               justifyContent: "center", borderRadius: 5, fontSize: 11, fontWeight: 700,
               fontFamily: "'JetBrains Mono',monospace",
-              background: v === null ? "#f8fafc" : isNew ? "#cffafe" : "#fff",
-              border: `${isNew ? 2 : 1}px solid ${v === null ? "#e2e8f0" : isNew ? TA : "#cbd5e1"}`,
-              color: v === null ? "#cbd5e1" : color,
+              background: isRead ? `${readColor}22` : v === null ? "#f8fafc" : isNew ? "#cffafe" : "#fff",
+              border: `${isRead || isNew ? 2 : 1}px solid ${isRead ? readColor : v === null ? "#e2e8f0" : isNew ? TA : "#cbd5e1"}`,
+              boxShadow: isRead ? `0 0 0 2px ${readColor}55` : "none",
+              color: isRead ? readColor : v === null ? "#cbd5e1" : color,
             }}>
               {v === null ? "·" : v === INF ? "∞" : v}
             </div>
@@ -2177,13 +2179,15 @@ export function Mooin3TableSim({ E, lang = "py" }) {
 
       {/* 표 세 줄 */}
       <div style={{ width: ROW_W + 138, margin: "0 auto 12px" }}>
-        <TableRow label={`latest_same[${CH}]`}   vals={s.ls} color="#0e7490" fresh={s.kind === "L" ? s.i : null} />
+        <TableRow label={`latest_same[${CH}]`}   vals={s.ls} color="#0e7490" fresh={s.kind === "L" ? s.i : null}
+                  readIdx={s.kind === "use" && s.showK ? s.uR : null} readColor="#16a34a" />
         <TableRow label={`earliest_same[${CH}]`} vals={s.es} color="#15803d" fresh={s.kind === "R" ? s.i : null} />
-        <TableRow label={`nearest_diff[${CH}]`}  vals={s.nd} color="#b45309" fresh={s.kind === "R" ? s.i : null} />
+        <TableRow label={`nearest_diff[${CH}]`}  vals={s.nd} color="#b45309" fresh={s.kind === "R" ? s.i : null}
+                  readIdx={s.kind === "use" && s.showI ? s.uL : null} readColor="#dc2626" />
       </div>
 
-      {/* 코드 — 실행된 줄만 하이라이트 */}
-      <div style={{ maxWidth: 520, margin: "0 auto 12px" }}>
+      {/* 코드 — 실행된 줄만 하이라이트. use(표로 풀기) 스텝엔 build 코드 숨김 (선생님 2026-08-01). */}
+      {s.kind !== "use" && <div style={{ maxWidth: 520, margin: "0 auto 12px" }}>
         <div ref={codeBoxRef} style={{
           background: "#0f172a", borderRadius: 10, padding: "9px 0",
           maxHeight: 170, overflowY: "auto", overflowX: "auto", position: "relative",
@@ -2208,7 +2212,7 @@ export function Mooin3TableSim({ E, lang = "py" }) {
             );
           })}
         </div>
-      </div>
+      </div>}
 
       <SharedSimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={TA} isEn={E} showLabels />
     </div>
