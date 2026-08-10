@@ -2350,7 +2350,9 @@ export function Mooin3TableSim({ E, lang = "py" }) {
    ═══════════════════════════════════════════════════════════════ */
 export function Mooin3MapSim({ E }) {
   const MA = "#0d9488";
-  const str = "abcabbc";
+  // 9자 예제 (선생님 2026-08-10: 쿼리를 끝에 붙이지 말고 '가운데 구간'으로 — 양 끝 한 칸씩 여백).
+  // 인접 'bb'(3·4) 가 있어 nextDiff 의 '같으면 이어받기' 가지도 시연됨.
+  const str = "ababbcbac";
   const CH = "b";
   const N = str.length;
   const ROW_W = simRowW(N);
@@ -2379,8 +2381,10 @@ export function Mooin3MapSim({ E }) {
     const finalND = [...nd];
     steps.push({ kind: "builtND", lists: finalLists, nd: finalND });
 
-    // use — 쿼리 [1, N-1], 글자 b : s[L]='b'==c 라 i 를 nextDiff 로 구함 (트릭 시연)
-    const uL = 1, uR = N - 1;
+    // use — 쿼리 [1, N-2], 글자 b : 양 끝(0·N-1)을 한 칸씩 남긴 '가운데 구간'
+    //   (선생님 2026-08-10: 끝에 붙이지 말고 중간 것을 가져오게, 양쪽 끝에 하나씩 여백).
+    //   s[L]='b'==c 라 i 를 nextDiff 로 구하는 트릭도 그대로 시연.
+    const uL = 1, uR = N - 2;
     const blist = finalLists[CH];                 // [1, 4, 5]
     let uk = -1; for (let x = blist.length - 1; x >= 0; x--) if (blist[x] <= uR) { uk = blist[x]; break; }
     const usedND = str[uL] === CH;                // s[L]=='b' → nextDiff 사용
@@ -2407,13 +2411,14 @@ export function Mooin3MapSim({ E }) {
     let bg = str[i] === CH ? "#ccfbf1" : "#fff";
     let bd = str[i] === CH ? "#5eead4" : "#cbd5e1";
     let fg = str[i] === CH ? "#0f766e" : "#475569";
-    let bw = 1, scale = 1;
+    let bw = 1, scale = 1, op = 1;
     if (isCur) { bd = MA; bg = "#f0fdfa"; bw = 2; scale = 1.1; }
     if (s.kind === "buildND") {
       if (i === s.i) { bg = "#fff7ed"; bd = "#f97316"; fg = "#9a3412"; bw = 2; scale = 1.1; }
       else if (i === s.i + 1) { bg = "#fffbeb"; bd = "#fcd34d"; }
     }
     if (s.kind === "use") {
+      if (i < s.uL || i > s.uR) op = 0.3;      // 쿼리 밖 — 양 끝 한 칸씩 여백을 흐리게
       if (s.showJ && i === s.uj) { bg = "#fef3c7"; bd = "#f59e0b"; fg = "#92400e"; bw = 2; scale = 1.1; }
       else if (s.phase === "jm" && (i === s.below || i === s.above)) { bg = "#fefce8"; bd = "#fcd34d"; fg = "#92400e"; bw = 2; scale = 1.05; }
       else if (s.showK && i === s.uk) { bg = "#dcfce7"; bd = "#16a34a"; fg = "#15803d"; bw = 2; scale = 1.1; }
@@ -2423,7 +2428,7 @@ export function Mooin3MapSim({ E }) {
       width: SIM_CELL_W, height: SIM_CELL_W, display: "flex", alignItems: "center",
       justifyContent: "center", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace",
       fontWeight: 700, fontSize: 16, background: bg, border: `${bw}px solid ${bd}`, color: fg,
-      transform: scale !== 1 ? `scale(${scale})` : "none", transition: "all .15s",
+      opacity: op, transform: scale !== 1 ? `scale(${scale})` : "none", transition: "all .15s",
     };
   };
   const useLabel = (i) => {
@@ -2544,8 +2549,8 @@ export function Mooin3MapSim({ E }) {
           )}
           {s.kind === "use" && s.phase === "q" && (
             <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={320}>
-              {t(E, <>Query <b>[{s.uL}, {s.uR}]</b>, letter <b>'{CH}'</b> — solve it from the list.</>,
-                    <>쿼리 <b>[{s.uL}, {s.uR}]</b>, 글자 <b>'{CH}'</b> — 리스트로 풀어봐요.</>)}
+              {t(E, <>Query <b>[{s.uL}, {s.uR}]</b> — a middle window (the two ends stay outside, dimmed). Letter <b>'{CH}'</b>.</>,
+                    <>쿼리 <b>[{s.uL}, {s.uR}]</b> — 가운데 구간 (양 끝 한 칸씩은 바깥, 흐리게). 글자 <b>'{CH}'</b>.</>)}
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "k" && (
@@ -2562,8 +2567,11 @@ export function Mooin3MapSim({ E }) {
           )}
           {s.kind === "use" && s.phase === "jm" && (
             <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fefce8" bd="#f59e0b" fg="#92400e" width={330}>
-              {t(E, <>Middle m = {s.um}. In the '{CH}' list, the two around m → <b>{s.below}</b> & <b>{s.above}</b>.</>,
-                    <>가운데 m = {s.um}. '{CH}' 리스트에서 m 양옆 → <b>{s.below}</b>, <b>{s.above}</b>.</>)}
+              {s.below === s.above
+                ? t(E, <>Middle m = {s.um}. The '{CH}' list has one right at m → <b>{s.below}</b>.</>,
+                      <>가운데 m = {s.um}. '{CH}' 리스트에서 m 자리가 바로 '{CH}' → <b>{s.below}</b>.</>)
+                : t(E, <>Middle m = {s.um}. In the '{CH}' list, the two around m → <b>{s.below}</b> & <b>{s.above}</b>.</>,
+                      <>가운데 m = {s.um}. '{CH}' 리스트에서 m 양옆 → <b>{s.below}</b>, <b>{s.above}</b>.</>)}
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "jpick" && (
