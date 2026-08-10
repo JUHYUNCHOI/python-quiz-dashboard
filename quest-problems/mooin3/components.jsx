@@ -19,6 +19,11 @@
 //   2026-07-30 (선생님): 표시용 수정만 — (1) 코드 주석 en/ko 이중언어(M3_FULL_PY/M3_FAST_PY/CPP → (E)=>t()),
 //     실행 줄 byte 동일. (2) C++ fast 에서 ios_base::sync_with_stdio/cin.tie 제거(학생 노이즈, 이 크기엔 불필요).
 //     알고리즘 로직 불변. algo 태그(binarysearch) 제거 — 실제는 애드혹(표 precompute).
+//   2026-08-10 (선생님): 부록 추가 — map 풀이(M3_MAP_PY/CPP + getMooin3MapWalk).
+//     ✅ 선생님이 USACO 채점기에 직접 제출해 통과 확인. 표 방식과 같은 아이디어(nextDiff=nearest_diff,
+//     map 이분탐색=latest/earliest_same), 쿼리당 O(26·logN). 로컬: 브루트 3400+/3400+ 일치,
+//     C++ 0.16s / Py 0.64s (최악 26글자, N=1e5 Q=3e4).  기존 표 방식(M3_FAST_*)은 주 풀이로 유지,
+//     map 은 '부록: 다른 방법' 챕터로 곁들임(초보 직관용).  코드 수정 시 USACO 재제출 필요.
 
 import { useState, useRef, useEffect } from "react";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
@@ -1945,6 +1950,128 @@ const _M3_FAST_VARS = [
   { v: "nearest_diff", ko: "오른쪽으로 가장 가까운 다른 글자", en: "nearest different on the right" },
 ];
 
+// ── 부록: map 풀이 (선생님 2026-08-10 USACO 채점기 통과 확인 → quest 부록으로 추가) ──
+// 표 3개 대신 '글자 → 위치들' map + 이분탐색. 같은 아이디어(nextDiff=nearest_diff,
+// map 이분탐색=latest/earliest_same), 같은 속도(쿼리당 O(26·logN)).
+const M3_MAP_PY = (E) => [
+  "import sys",
+  "from bisect import bisect_left, bisect_right",
+  "",
+  "data = sys.stdin.buffer.read().split()",
+  "p = 0",
+  "N = int(data[p]); Q = int(data[p + 1]); p += 2",
+  "s = data[p].decode(); p += 1",
+  "",
+  t(E, "# (1) letter -> its positions (sorted).  Built ONCE, before any query.", "# (1) 글자 -> 그 글자가 나온 위치들 (오름차순).  쿼리 전에 딱 한 번."),
+  "pos_of = {}",
+  "for idx, ch in enumerate(s):",
+  "    pos_of.setdefault(ch, []).append(idx)",
+  "",
+  t(E, "# (2) next_diff[idx] = first spot from idx whose letter differs from s[idx] (N if none)", "# (2) next_diff[idx] = idx 부터 글자가 s[idx] 와 처음 '달라지는' 자리 (없으면 N)"),
+  "next_diff = [N] * N",
+  "for idx in range(N - 2, -1, -1):",
+  "    next_diff[idx] = next_diff[idx + 1] if s[idx] == s[idx + 1] else idx + 1",
+  "",
+  "out = []",
+  "items = list(pos_of.items())",
+  "for _ in range(Q):",
+  "    L = int(data[p]) - 1; R = int(data[p + 1]) - 1; p += 2",
+  "    best = -1",
+  t(E, "    for c, positions in items:              # try every letter c", "    for c, positions in items:              # 모든 글자 c 시도"),
+  t(E, "        # k = rightmost c with position <= R  (binary search, no scan)", "        # k = R 이하 중 가장 오른쪽 c  (이분탐색, 훑지 않음)"),
+  "        a = bisect_right(positions, R)",
+  "        if a == 0:",
+  "            continue",
+  "        k = positions[a - 1]",
+  "        if k < L:",
+  "            continue",
+  t(E, "        # i = leftmost letter different from c  (O(1) via next_diff)", "        # i = c 와 다른 가장 왼쪽 글자  (next_diff 로 O(1))"),
+  "        i = next_diff[L] if s[L] == c else L",
+  "        if i > R or i >= k:",
+  "            continue",
+  t(E, "        # j = a c near the midpoint m — check the two around m", "        # j = 가운데 m 근처의 c — m 양옆 둘만 확인"),
+  "        m = (i + k) // 2",
+  "        b = bisect_left(positions, m)",
+  "        if b < len(positions):",
+  "            j = positions[b]",
+  "            if i < j < k:",
+  "                v = (j - i) * (k - j)",
+  "                if v > best: best = v",
+  "        if b > 0:",
+  "            j = positions[b - 1]",
+  "            if i < j < k:",
+  "                v = (j - i) * (k - j)",
+  "                if v > best: best = v",
+  "    out.append(best)",
+  "",
+  "sys.stdout.write('\\n'.join(map(str, out)) + '\\n')",
+];
+const M3_MAP_CPP = (E) => [
+  "#include <iostream>",
+  "#include <string>",
+  "#include <vector>",
+  "#include <map>",
+  "#include <algorithm>",
+  "using namespace std;",
+  "",
+  t(E, "// loudness of one moo = (j - i)*(k - j).  long long — the product gets big (~2.5e9).", "// moo 하나의 소리크기 = (j - i)*(k - j).  곱이 커서(~25억) long long."),
+  "long long loudness(int i, int j, int k) {",
+  "    return (long long)(j - i) * (k - j);",
+  "}",
+  "",
+  "int main() {",
+  "    ios_base::sync_with_stdio(false);",
+  "    cin.tie(nullptr);",
+  "",
+  "    int N, Q;",
+  "    cin >> N >> Q;",
+  "    string s;",
+  "    cin >> s;",
+  "",
+  t(E, "    // (1) letter -> its positions (sorted).  Built ONCE, before any query.", "    // (1) 글자 -> 그 글자가 나온 위치들 (오름차순).  쿼리 전에 딱 한 번."),
+  "    map<char, vector<int>> posOf;",
+  "    for (int idx = 0; idx < N; idx++)",
+  "        posOf[s[idx]].push_back(idx);",
+  "",
+  t(E, "    // (2) nextDiff[idx] = first spot from idx whose letter differs from s[idx] (N if none)", "    // (2) nextDiff[idx] = idx 부터 글자가 s[idx] 와 처음 '달라지는' 자리 (없으면 N)"),
+  "    vector<int> nextDiff(N);",
+  "    nextDiff[N - 1] = N;",
+  "    for (int idx = N - 2; idx >= 0; idx--)",
+  "        nextDiff[idx] = (s[idx] == s[idx + 1]) ? nextDiff[idx + 1] : idx + 1;",
+  "",
+  "    string output;",
+  "    for (int query = 0; query < Q; query++) {",
+  "        int L, R;",
+  "        cin >> L >> R;",
+  "        L--; R--;",
+  "",
+  "        long long best = -1;",
+  "",
+  t(E, "        for (auto& [c, positions] : posOf) {   // try every letter c", "        for (auto& [c, positions] : posOf) {   // 모든 글자 c 시도"),
+  t(E, "            // k = rightmost c with position <= R  (binary search)", "            // k = R 이하 중 가장 오른쪽 c  (이분탐색)"),
+  "            auto after = upper_bound(positions.begin(), positions.end(), R);",
+  "            if (after == positions.begin()) continue;",
+  "            int k = *(after - 1);",
+  "            if (k < L) continue;",
+  "",
+  t(E, "            // i = leftmost letter different from c  (O(1) via nextDiff)", "            // i = c 와 다른 가장 왼쪽 글자  (nextDiff 로 O(1))"),
+  "            int i = (s[L] == c) ? nextDiff[L] : L;",
+  "            if (i > R || i >= k) continue;",
+  "",
+  t(E, "            // j = a c near the midpoint m — check the two around m", "            // j = 가운데 m 근처의 c — m 양옆 둘만 확인"),
+  "            int m = (i + k) / 2;",
+  "            auto it = lower_bound(positions.begin(), positions.end(), m);",
+  "            if (it != positions.end()   && i < *it     && *it     < k) best = max(best, loudness(i, *it, k));",
+  "            if (it != positions.begin() && i < *(it-1) && *(it-1) < k) best = max(best, loudness(i, *(it-1), k));",
+  "        }",
+  "        output += to_string(best);",
+  "        output += '\\n';",
+  "    }",
+  "    cout << output;",
+  "    return 0;",
+  "}",
+];
+
 /* ═══════════════════════════════════════════════════════════════
    Mooin3TableSim — 전처리 '표' 가 어떻게 채워지는지 한 칸씩.
    (선생님 2026-07-30: "표 만드는 과정도 시뮬로" — 정작 '왜 빨라지는가' 의
@@ -2269,6 +2396,50 @@ export function getMooin3Walk(E, lang = "py", mode = "brute") {
     { hi: [51, 54], bubble: t(E, "If i < j < k, score = (j-i)(k-j) — keep the max.", "i < j < k 면 점수 = (j-i)(k-j) — 최댓값 유지.") },
     { hi: [55, 57], bubble: t(E, "Collect answers, print all at once.", "답 모아서 한 번에 출력.") },
   ] };
+}
+
+// 부록 CodeWalk — map 풀이 (USACO 통과). 표 방식과 같은 아이디어, 표현만 map+이분탐색.
+export function getMooin3MapWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: M3_MAP_CPP(E),
+      vars: [
+        { v: "posOf", ko: "글자 → 위치 목록 (이분탐색)", en: "letter → its positions (binary search)" },
+        { v: "nextDiff", ko: "다음 '다른 글자' 위치", en: "next different-letter spot" },
+        { v: "i · k", ko: "왼쪽 끝(다른 글자) · 오른쪽 끝(같은 글자)", en: "left end (different) · right end (same)" },
+        { v: "j", ko: "가운데 근처 같은 글자", en: "middle same-letter spot" },
+      ],
+      beats: [
+        { hi: [16, 19], bubble: t(E, "Read N, Q, and the string s.", "N, Q, 문자열 s 읽기.") },
+        { hi: [22, 24], bubble: t(E, "Build posOf = letter → its positions.  ONCE, before any query — this is what makes it fast.", "posOf = 글자 → 위치 목록.  쿼리 전에 딱 한 번 — 이게 빠름의 핵심.") },
+        { hi: [27, 30], bubble: t(E, "Precompute nextDiff: the first spot where the letter changes (used to find i in O(1)).", "nextDiff 미리 계산: 글자가 처음 바뀌는 자리 (i 를 O(1) 로 찾는 데 씀).") },
+        { hi: [33, 38], bubble: t(E, "Each query: read L, R → 0-based, best = -1.", "쿼리마다: L, R 읽고 0-based, best = -1.") },
+        { hi: [40, 45], bubble: t(E, "Try every letter c. k = rightmost c ≤ R, found by binary search (no scanning).", "모든 글자 c 시도. k = R 이하 가장 오른쪽 c — 이분탐색으로 (훑지 않음).") },
+        { hi: [47, 49], bubble: t(E, "i = leftmost letter different from c — O(1): L itself, or nextDiff[L] if s[L] is c.", "i = c 와 다른 가장 왼쪽 글자 — O(1): L 이거나, s[L]=c 면 nextDiff[L].") },
+        { hi: [51, 55], bubble: t(E, "j = a c near the midpoint m (binary search) — check the two around m, score = (j-i)(k-j), keep the max.", "j = 가운데 m 근처 c (이분탐색) — m 양옆 둘 확인, 점수 = (j-i)(k-j), 최댓값 유지.") },
+        { hi: [57, 61], bubble: t(E, "Collect the answer and print all at once.", "답 모아서 한 번에 출력.") },
+      ],
+    };
+  }
+  return {
+    code: M3_MAP_PY(E),
+    vars: [
+      { v: "pos_of", ko: "글자 → 위치 목록 (이분탐색)", en: "letter → its positions (binary search)" },
+      { v: "next_diff", ko: "다음 '다른 글자' 위치", en: "next different-letter spot" },
+      { v: "i · k", ko: "왼쪽 끝(다른 글자) · 오른쪽 끝(같은 글자)", en: "left end (different) · right end (same)" },
+      { v: "j", ko: "가운데 근처 같은 글자", en: "middle same-letter spot" },
+    ],
+    beats: [
+      { hi: [3, 6],   bubble: t(E, "Read N, Q, and the string s (fast buffered input).", "N, Q, 문자열 s 읽기 (빠른 버퍼 입력).") },
+      { hi: [8, 11],  bubble: t(E, "Build pos_of = letter → its positions.  ONCE, before any query — this is what makes it fast.", "pos_of = 글자 → 위치 목록.  쿼리 전에 딱 한 번 — 이게 빠름의 핵심.") },
+      { hi: [13, 16], bubble: t(E, "Precompute next_diff: the first spot where the letter changes (used to find i in O(1)).", "next_diff 미리 계산: 글자가 처음 바뀌는 자리 (i 를 O(1) 로 찾는 데 씀).") },
+      { hi: [20, 22], bubble: t(E, "Each query: read L, R → 0-based, best = -1.", "쿼리마다: L, R 읽고 0-based, best = -1.") },
+      { hi: [23, 30], bubble: t(E, "Try every letter c. k = rightmost c ≤ R, found by binary search (no scanning).", "모든 글자 c 시도. k = R 이하 가장 오른쪽 c — 이분탐색으로 (훑지 않음).") },
+      { hi: [31, 34], bubble: t(E, "i = leftmost letter different from c — O(1): L itself, or next_diff[L] if s[L] is c.", "i = c 와 다른 가장 왼쪽 글자 — O(1): L 이거나, s[L]=c 면 next_diff[L].") },
+      { hi: [35, 47], bubble: t(E, "j = a c near the midpoint m (binary search) — check the two around m, score = (j-i)(k-j), keep the max.", "j = 가운데 m 근처 c (이분탐색) — m 양옆 둘 확인, 점수 = (j-i)(k-j), 최댓값 유지.") },
+      { hi: [48, 50], bubble: t(E, "Collect answers and print all at once.", "답 모아서 한 번에 출력.") },
+    ],
+  };
 }
 
 export function getMooin3Sections(E) {

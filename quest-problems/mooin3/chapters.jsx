@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMooin3Sections, getMooin3Walk, MooTraceSimulator, TripletEnumSimulator, Mooin3FastSim, Mooin3TableSim } from "./components";
+import { getMooin3Sections, getMooin3Walk, getMooin3MapWalk, MooTraceSimulator, TripletEnumSimulator, Mooin3FastSim, Mooin3TableSim } from "./components";
 import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
@@ -383,6 +383,21 @@ export function makeMooin3Ch2(E, lang = "py") {
           "Three leaps make it fast: precompute tables once, loop over the 26 letters (not j), and use the ∩-parabola vertex.  Watch each part light up.",
           "세 번의 도약으로 빨라져요: 표를 한 번만 만들기 · j 대신 글자 26개로 · ∩ 포물선 꼭짓점 이용.  각 부분이 밝아질 때 봐요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#7c3aed" />),
+      };
+    })(),
+    /* [부록] map 으로 같은 풀이 (선생님 2026-08-10 USACO 채점기 통과 → 부록으로 추가).
+       표 방식과 같은 아이디어(nextDiff=nearest_diff, map 이분탐색=latest/earliest_same),
+       같은 속도. 초보에겐 map 이 더 직관적일 수 있어 '다른 방법' 으로 곁들임. */
+    (() => {
+      const w = getMooin3MapWalk(E, lang);
+      return {
+        type: "reveal",
+        label: t(E, "Bonus: same idea with a map", "부록: map 으로 같은 풀이"),
+        narr: t(E,
+          "Same speed, different tool: instead of 3 tables, keep 'letter → positions' in a map and binary-search it.  (nextDiff = nearest_diff, the binary search = latest/earliest_same.)  This one passed the real USACO judge too.",
+          "속도는 같고 도구만 달라요: 표 3개 대신 '글자 → 위치들' 을 map 에 담고 이분탐색.  (nextDiff = nearest_diff, 이분탐색 = latest/earliest_same.)  이 코드도 실제 USACO 채점기 통과."),
+        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0d9488"
+          badge={{ ko: "부록 · map 으로 같은 풀이 (안 봐도 돼요)", en: "Bonus · same solution with a map (optional)", color: "#0d9488" }} />),
       };
     })(),
   ];
