@@ -36,6 +36,9 @@ interface Section {
   problems: Problem[]
 }
 
+// 선생님이 '어려움' 으로 표시한 quest (수업 경험 기반). 목록에서 배지로 노출.
+const HARD_QUESTS = new Set(["mooin3", "printseq"])
+
 const SECTIONS: Section[] = [
   {
     label: "USACO",
@@ -673,6 +676,11 @@ export default function QuestPage() {
                                           {ready && (
                                             <span className="text-[9px] font-black px-1 py-px rounded bg-purple-100 text-purple-700 border border-purple-300 flex-shrink-0" title={t("준비된 quest — 필요한 개념 다 배웠어요", "Ready — prereqs satisfied")}>
                                               🎯
+                                            </span>
+                                          )}
+                                          {HARD_QUESTS.has(problem.id) && (
+                                            <span className="text-[9px] font-black px-1 py-px rounded bg-red-100 text-red-700 border border-red-300 flex-shrink-0" title={t("어려운 문제 — 시간을 넉넉히", "A hard one — take your time")}>
+                                              🔥 {t("어려움", "hard")}
                                             </span>
                                           )}
                                           <button
