@@ -1,5 +1,49 @@
 import { C, t } from "@/components/quest/theme";
-import { getBalancedSections } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+
+// CodeWalk 코드 — 설명은 코드 주석 대신 '밝아진 줄 위 말풍선' 으로 (선생님 스타일).
+const BAL_WALK_PY = [
+  "import sys",
+  "input = sys.stdin.readline",
+  "",
+  "T = int(input())",
+  "for _ in range(T):",
+  "    N, M = map(int, input().split())",
+  "    print(2 * min(N, M))",
+];
+const BAL_WALK_CPP = [
+  "#include <iostream>",
+  "#include <algorithm>",
+  "using namespace std;",
+  "",
+  "int main() {",
+  "    int T;",
+  "    cin >> T;",
+  "    for (int tc = 0; tc < T; tc++) {",
+  "        long long N, M;",
+  "        cin >> N >> M;",
+  "        cout << 2 * min(N, M) << endl;",
+  "    }",
+  "    return 0;",
+  "}",
+];
+function getBalancedWalk(E, lang) {
+  if (lang === "cpp") {
+    return { code: BAL_WALK_CPP, beats: [
+      { hi: [5, 6],   bubble: t(E, "Read T — how many test cases.", "T 읽기 — 풀 케이스가 몇 개인지.") },
+      { hi: [7, 7],   bubble: t(E, "Repeat for each test case.", "케이스마다 반복.") },
+      { hi: [8, 9],   bubble: t(E, "Read N (open '(') and M (close ')').  long long — the answer can get big.", "N (여는 '(') 과 M (닫는 ')') 읽기.  답이 커질 수 있어 long long.") },
+      { hi: [10, 10], bubble: t(E, "Pairs = the smaller side = min(N,M). Each pair = 2 chars → print 2 × min(N,M).", "짝은 적은 쪽만큼 = min(N,M) 개. 한 짝 = 2 글자 → 2 × min(N,M) 출력.") },
+    ] };
+  }
+  return { code: BAL_WALK_PY, beats: [
+    { hi: [0, 1], bubble: t(E, "Fast input (there can be many test cases).", "빠른 입력 (케이스가 많을 수 있어서).") },
+    { hi: [3, 3], bubble: t(E, "Read T — how many test cases.", "T 읽기 — 풀 케이스가 몇 개인지.") },
+    { hi: [4, 4], bubble: t(E, "Repeat for each test case.", "케이스마다 반복.") },
+    { hi: [5, 5], bubble: t(E, "Read N (open '(') and M (close ')').", "N (여는 '(') 과 M (닫는 ')') 읽기.") },
+    { hi: [6, 6], bubble: t(E, "Pairs = the smaller side = min(N,M). Each pair = 2 chars → print 2 × min(N,M).", "짝은 적은 쪽만큼 = min(N,M) 개. 한 짝 = 2 글자 → 2 × min(N,M) 출력.") },
+  ] };
+}
 
 export const SOLUTION_CODE = [
   "T = int(input())",
@@ -334,11 +378,14 @@ export function makeBalancedCh2(E) {
 export function makeBalancedCh3(E, lang = "py") {
   return [
     {
-      type: "progressive",
+      type: "reveal",
       narr: t(E,
-        "Read T, then for each test case read N, M and print 2 × min(N, M). Sections build it line by line.",
-        "T 읽고, 매 케이스마다 N, M 받아 2 × min(N, M) 출력. 아래 섹션이 한 단락씩 쌓아요."),
-      sections: getBalancedSections(E),
+        "The whole solution is short — each part lights up with a note right above it.",
+        "풀이는 짧아요 — 각 부분이 밝아지며 바로 위에 설명 말풍선이 떠요."),
+      content: (() => {
+        const w = getBalancedWalk(E, lang);
+        return <CodeWalk E={E} lang={lang} code={w.code} beats={w.beats} accent="#f97316" />;
+      })(),
     },
     {
       type: "runner",
