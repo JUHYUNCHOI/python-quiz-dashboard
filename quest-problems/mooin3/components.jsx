@@ -2582,12 +2582,12 @@ export function Mooin3MapSim({ E }) {
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "jm" && (
-            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fefce8" bd="#f59e0b" fg="#92400e" width={330}>
+            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fefce8" bd="#f59e0b" fg="#92400e" width={360}>
               {s.below === s.above
-                ? t(E, <>Middle m = {s.um}. The '{CH}' list has one right at m → <b>{s.below}</b>.</>,
-                      <>가운데 m = {s.um}. '{CH}' 리스트에서 m 자리가 바로 '{CH}' → <b>{s.below}</b>.</>)
-                : t(E, <>Middle m = {s.um}. In the '{CH}' list, the two around m → <b>{s.below}</b> & <b>{s.above}</b>.</>,
-                      <>가운데 m = {s.um}. '{CH}' 리스트에서 m 양옆 → <b>{s.below}</b>, <b>{s.above}</b>.</>)}
+                ? t(E, <>Middle m = {s.um}. The sorted '{CH}' list → <b>binary-search to it</b> (no scanning). One sits right at m → <b>{s.below}</b>.</>,
+                      <>가운데 m = {s.um}. 정렬된 '{CH}' 리스트라 <b>이분탐색으로 콕</b> (사이를 다 안 돌아요). m 자리가 바로 '{CH}' → <b>{s.below}</b>.</>)
+                : t(E, <>Middle m = {s.um}. The sorted '{CH}' list → <b>binary-search to it</b> (no scanning). The two around m → <b>{s.below}</b>, <b>{s.above}</b>.</>,
+                      <>가운데 m = {s.um}. 정렬된 '{CH}' 리스트라 <b>이분탐색으로 콕</b> (사이를 다 안 돌아요). m 양옆 → <b>{s.below}</b>, <b>{s.above}</b>.</>)}
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "jpick" && (
