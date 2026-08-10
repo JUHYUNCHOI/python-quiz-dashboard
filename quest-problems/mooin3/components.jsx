@@ -2400,6 +2400,11 @@ export function Mooin3MapSim({ E }) {
     steps.push({ kind: "use", phase: "i", showK: true, showI: true, ...base });
     steps.push({ kind: "use", phase: "jm", showK: true, showI: true, ...base });
     steps.push({ kind: "use", phase: "jpick", showK: true, showI: true, showJ: true, ...base });
+    // 엣지 케이스: 다른 글자 c 는 구간 [uL,uR] 안에 하나뿐 → j·k 둘을 못 채움 → moo 없음
+    const clist = finalLists["c"];                              // [5, 8]
+    const cIn = clist.filter((x) => x >= uL && x <= uR);        // 구간 안 c (여기선 [5])
+    steps.push({ kind: "edge", phase: "cq",    ...base, clist, cIn });
+    steps.push({ kind: "edge", phase: "cfail", ...base, clist, cIn });
     steps.push({ kind: "use", phase: "done", showK: true, showI: true, showJ: true, ...base });
   }
 
@@ -2423,6 +2428,11 @@ export function Mooin3MapSim({ E }) {
       else if (s.showK && i === s.uk) { bg = "#dcfce7"; bd = "#16a34a"; fg = "#15803d"; bw = 2; scale = 1.1; }
       else if (s.showI && i === s.ui) { bg = "#fee2e2"; bd = "#dc2626"; fg = "#7f1d1d"; bw = 2; scale = 1.1; }
     }
+    if (s.kind === "edge" && str[i] === "c") {          // 엣지: 글자 c 강조 (구간 안/밖 구분)
+      const inWin = i >= s.uL && i <= s.uR;
+      bg = inWin ? "#fef9c3" : "#f1f5f9"; bd = inWin ? "#f59e0b" : "#cbd5e1";
+      fg = inWin ? "#92400e" : "#94a3b8"; bw = 2; if (inWin) scale = 1.08;
+    }
     return {
       width: SIM_CELL_W, height: SIM_CELL_W, display: "flex", alignItems: "center",
       justifyContent: "center", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace",
@@ -2442,12 +2452,13 @@ export function Mooin3MapSim({ E }) {
   // 글자별 위치 리스트 한 줄
   const ListRow = ({ letter }) => {
     const arr = (s.lists && s.lists[letter]) || [];
-    const isFocus = s.kind === "use" && letter === CH;
+    const isFocus = (s.kind === "use" && letter === CH) || (s.kind === "edge" && letter === "c");
     const isBuildCh = s.kind === "buildPos" && s.ch === letter;
+    const dim = (s.kind === "use" && letter !== CH) || (s.kind === "edge" && letter !== "c");
     return (
       <div style={{
         display: "flex", alignItems: "center", gap: 8, marginBottom: 6,
-        opacity: (s.kind === "use" && letter !== CH) ? 0.4 : 1, transition: "opacity .2s",
+        opacity: dim ? 0.4 : 1, transition: "opacity .2s",
       }}>
         <div style={{ width: 108, textAlign: "right", fontSize: 12, fontWeight: 800,
           color: isFocus ? MA : "#475569", fontFamily: "'JetBrains Mono',monospace" }}>
@@ -2460,10 +2471,14 @@ export function Mooin3MapSim({ E }) {
             const isNew = isBuildCh && pos === s.i;
             let bg = "#fff", bd = "#cbd5e1", col = "#0f172a";
             if (isNew) { bg = "#ccfbf1"; bd = MA; }
-            if (isFocus) {
+            if (s.kind === "use" && letter === CH) {
               if (s.showJ && pos === s.uj) { bg = "#fef3c7"; bd = "#f59e0b"; col = "#92400e"; }
               else if (s.phase === "jm" && (pos === s.below || pos === s.above)) { bg = "#fefce8"; bd = "#fcd34d"; col = "#92400e"; }
               else if (s.showK && pos === s.uk) { bg = "#dcfce7"; bd = "#16a34a"; col = "#15803d"; }
+            }
+            if (s.kind === "edge" && letter === "c") {         // 엣지: 구간 안 c(노랑) vs 밖 c(회색)
+              const inWin = pos >= s.uL && pos <= s.uR;
+              bg = inWin ? "#fef9c3" : "#f1f5f9"; bd = inWin ? "#f59e0b" : "#cbd5e1"; col = inWin ? "#92400e" : "#94a3b8";
             }
             return (
               <span key={k} style={{
@@ -2489,6 +2504,7 @@ export function Mooin3MapSim({ E }) {
       if (s.phase === "jm") return simCellCx(s.um);
       if (s.phase === "jpick" || s.phase === "done") return simCellCx(s.uj);
     }
+    if (s.kind === "edge") return s.cIn.length ? simCellCx(s.cIn[0]) : ROW_W / 2;
     return ROW_W / 2;
   })();
 
@@ -2579,10 +2595,22 @@ export function Mooin3MapSim({ E }) {
                     <>i 와 k 사이인 건 <b>{s.uj}</b> 뿐 → j = <b>{s.uj}</b>. 점수 = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b>.</>)}
             </SimBubble>
           )}
+          {s.kind === "edge" && s.phase === "cq" && (
+            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fefce8" bd="#fcd34d" fg="#92400e" width={330}>
+              {t(E, <>What about letter <b>'c'</b>? Its spots are <b>[{s.clist.join(", ")}]</b>.</>,
+                    <>다른 글자 <b>'c'</b> 는? 위치가 <b>[{s.clist.join(", ")}]</b> 예요.</>)}
+            </SimBubble>
+          )}
+          {s.kind === "edge" && s.phase === "cfail" && (
+            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fee2e2" bd="#f87171" fg="#991b1b" width={360}>
+              {t(E, <><b>8</b> is outside the lines! Inside [{s.uL},{s.uR}] there's only <b>one</b> 'c' ({s.cIn.join(", ")}) → can't fill both j and k → <b>no moo</b> for 'c'.</>,
+                    <><b>8</b>은 선 밖! 구간 [{s.uL},{s.uR}] 안엔 'c'가 <b>하나뿐</b> ({s.cIn.join(", ")}) → j·k 둘을 못 채워요 → 'c'로는 <b>moo 없음</b>.</>)}
+            </SimBubble>
+          )}
           {s.kind === "use" && s.phase === "done" && (
-            <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={340}>
-              {t(E, <>Same answer — no tables, just <b>binary search</b> on a list. That's the map way.</>,
-                    <>같은 답 — 표 없이 리스트 <b>이분탐색</b>만. 이게 map 방식이에요.</>)}
+            <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={350}>
+              {t(E, <>So the answer is b's <b>4</b> — no tables, just lists + <b>binary search</b>. That's the map way.</>,
+                    <>그래서 답은 b로 만든 <b>4</b> — 표 없이 리스트 + <b>이분탐색</b>만. 이게 map 방식이에요.</>)}
             </SimBubble>
           )}
         </div>
@@ -2592,8 +2620,8 @@ export function Mooin3MapSim({ E }) {
       <div style={{ display: "flex", gap: SIM_CELL_GAP, justifyContent: "center", marginBottom: 4 }}>
         {str.split("").map((ch, i) => {
           const lab = useLabel(i);
-          const showL = s.kind === "use" && i === s.uL;   // uL 앞에 선
-          const showR = s.kind === "use" && i === s.uR;   // uR 뒤에 선
+          const showL = (s.kind === "use" || s.kind === "edge") && i === s.uL;   // uL 앞에 선
+          const showR = (s.kind === "use" || s.kind === "edge") && i === s.uR;   // uR 뒤에 선
           const divider = (
             <div style={{ alignSelf: "flex-start", marginTop: 16, marginLeft: 2, marginRight: 2,
               width: 3, height: 40, borderRadius: 2, background: MA }} />
@@ -2632,8 +2660,8 @@ export function Mooin3MapSim({ E }) {
               if (v === null) { bg = "#f8fafc"; col = "#cbd5e1"; }
               if (isFresh) { bg = "#fff7ed"; bd = "#f97316"; col = "#9a3412"; }
               if (isRead) { bg = "#fee2e2"; bd = "#dc2626"; col = "#7f1d1d"; }
-              const showL = s.kind === "use" && i === s.uL;   // 문자열 행과 같은 쿼리 경계선
-              const showR = s.kind === "use" && i === s.uR;
+              const showL = (s.kind === "use" || s.kind === "edge") && i === s.uL;   // 문자열 행과 같은 쿼리 경계선
+              const showR = (s.kind === "use" || s.kind === "edge") && i === s.uR;
               const div = <div style={{ alignSelf: "center", width: 3, height: 26, borderRadius: 2, background: MA, margin: "0 2px" }} />;
               return (
                 <Fragment key={i}>
