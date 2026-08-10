@@ -2418,7 +2418,6 @@ export function Mooin3MapSim({ E }) {
       else if (i === s.i + 1) { bg = "#fffbeb"; bd = "#fcd34d"; }
     }
     if (s.kind === "use") {
-      if (i < s.uL || i > s.uR) op = 0.3;      // 쿼리 밖 — 양 끝 한 칸씩 여백을 흐리게
       if (s.showJ && i === s.uj) { bg = "#fef3c7"; bd = "#f59e0b"; fg = "#92400e"; bw = 2; scale = 1.1; }
       else if (s.phase === "jm" && (i === s.below || i === s.above)) { bg = "#fefce8"; bd = "#fcd34d"; fg = "#92400e"; bw = 2; scale = 1.05; }
       else if (s.showK && i === s.uk) { bg = "#dcfce7"; bd = "#16a34a"; fg = "#15803d"; bw = 2; scale = 1.1; }
@@ -2549,8 +2548,8 @@ export function Mooin3MapSim({ E }) {
           )}
           {s.kind === "use" && s.phase === "q" && (
             <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={320}>
-              {t(E, <>Query <b>[{s.uL}, {s.uR}]</b> — a middle window (the two ends stay outside, dimmed). Letter <b>'{CH}'</b>.</>,
-                    <>쿼리 <b>[{s.uL}, {s.uR}]</b> — 가운데 구간 (양 끝 한 칸씩은 바깥, 흐리게). 글자 <b>'{CH}'</b>.</>)}
+              {t(E, <>Query <b>[{s.uL}, {s.uR}]</b> — a middle window; the two ends sit outside the lines. Letter <b>'{CH}'</b>.</>,
+                    <>쿼리 <b>[{s.uL}, {s.uR}]</b> — 가운데 구간 (양 끝 한 칸씩은 선 밖). 글자 <b>'{CH}'</b>.</>)}
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "k" && (
@@ -2589,16 +2588,26 @@ export function Mooin3MapSim({ E }) {
         </div>
       </div>
 
-      {/* 문자열 행 */}
+      {/* 문자열 행 — use 단계에선 쿼리 [uL,uR] 경계를 세로 구분선으로 나눔 (양 끝은 바깥) */}
       <div style={{ display: "flex", gap: SIM_CELL_GAP, justifyContent: "center", marginBottom: 4 }}>
         {str.split("").map((ch, i) => {
           const lab = useLabel(i);
+          const showL = s.kind === "use" && i === s.uL;   // uL 앞에 선
+          const showR = s.kind === "use" && i === s.uR;   // uR 뒤에 선
+          const divider = (
+            <div style={{ alignSelf: "flex-start", marginTop: 16, marginLeft: 2, marginRight: 2,
+              width: 3, height: 40, borderRadius: 2, background: MA }} />
+          );
           return (
-            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-              <div style={{ fontSize: 11, height: 14, fontWeight: 800, color: lab ? lab[1] : "transparent" }}>{lab ? lab[0] : "·"}</div>
-              <div style={cellBox(i)}>{ch}</div>
-              <div style={{ fontSize: 9, color: C.dim }}>{i}</div>
-            </div>
+            <Fragment key={i}>
+              {showL && divider}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+                <div style={{ fontSize: 11, height: 14, fontWeight: 800, color: lab ? lab[1] : "transparent" }}>{lab ? lab[0] : "·"}</div>
+                <div style={cellBox(i)}>{ch}</div>
+                <div style={{ fontSize: 9, color: C.dim }}>{i}</div>
+              </div>
+              {showR && divider}
+            </Fragment>
           );
         })}
       </div>
