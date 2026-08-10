@@ -2358,25 +2358,39 @@ export function Mooin3MapSim({ E }) {
 
   const steps = [{ kind: "intro" }];
   {
+    // ── Build A: pos_of (글자 → 위치 리스트) ──
     const lists = { a: [], b: [], c: [] };
     for (let i = 0; i < N; i++) {
       lists[str[i]] = [...lists[str[i]], i];
-      steps.push({ kind: "build", i, ch: str[i], lists: { a: [...lists.a], b: [...lists.b], c: [...lists.c] } });
+      steps.push({ kind: "buildPos", i, ch: str[i], lists: { a: [...lists.a], b: [...lists.b], c: [...lists.c] } });
     }
     const finalLists = { a: [...lists.a], b: [...lists.b], c: [...lists.c] };
-    steps.push({ kind: "built", lists: finalLists });
+    steps.push({ kind: "builtPos", lists: finalLists });
 
-    // use — 쿼리 [0, N-1], 글자 b (표 시뮬과 동일)
-    const uL = 0, uR = N - 1;
+    // ── Build B: nextDiff (오→왼: 글자가 처음 '달라지는' 자리; 없으면 N) ──
+    const nd = Array(N).fill(null);
+    nd[N - 1] = N;
+    steps.push({ kind: "buildND", i: N - 1, same: null, nd: [...nd], lists: finalLists });
+    for (let i = N - 2; i >= 0; i--) {
+      const same = str[i] === str[i + 1];
+      nd[i] = same ? nd[i + 1] : i + 1;
+      steps.push({ kind: "buildND", i, same, nd: [...nd], lists: finalLists });
+    }
+    const finalND = [...nd];
+    steps.push({ kind: "builtND", lists: finalLists, nd: finalND });
+
+    // use — 쿼리 [1, N-1], 글자 b : s[L]='b'==c 라 i 를 nextDiff 로 구함 (트릭 시연)
+    const uL = 1, uR = N - 1;
     const blist = finalLists[CH];                 // [1, 4, 5]
     let uk = -1; for (let x = blist.length - 1; x >= 0; x--) if (blist[x] <= uR) { uk = blist[x]; break; }
-    let ui = -1; for (let x = uL; x <= uR; x++) if (str[x] !== CH) { ui = x; break; }
+    const usedND = str[uL] === CH;                // s[L]=='b' → nextDiff 사용
+    const ui = usedND ? finalND[uL] : uL;
     const um = Math.floor((ui + uk) / 2);
     let below = -1, above = -1;
     for (let x = 0; x < blist.length; x++) { if (blist[x] <= um) below = blist[x]; if (blist[x] >= um && above === -1) above = blist[x]; }
     let uj = -1, uscore = -1;
     for (const cand of [below, above]) if (cand > ui && cand < uk) { const sc = (cand - ui) * (uk - cand); if (sc > uscore) { uscore = sc; uj = cand; } }
-    const base = { lists: finalLists, blist, uL, uR, uk, ui, um, below, above, uj, uscore };
+    const base = { lists: finalLists, nd: finalND, blist, uL, uR, uk, ui, um, below, above, uj, uscore, usedND };
     steps.push({ kind: "use", phase: "q", ...base });
     steps.push({ kind: "use", phase: "k", showK: true, ...base });
     steps.push({ kind: "use", phase: "i", showK: true, showI: true, ...base });
@@ -2389,12 +2403,16 @@ export function Mooin3MapSim({ E }) {
   const s = steps[ts.safe];
 
   const cellBox = (i) => {
-    const isCur = s.kind === "build" && i === s.i;
+    const isCur = s.kind === "buildPos" && i === s.i;
     let bg = str[i] === CH ? "#ccfbf1" : "#fff";
     let bd = str[i] === CH ? "#5eead4" : "#cbd5e1";
     let fg = str[i] === CH ? "#0f766e" : "#475569";
     let bw = 1, scale = 1;
     if (isCur) { bd = MA; bg = "#f0fdfa"; bw = 2; scale = 1.1; }
+    if (s.kind === "buildND") {
+      if (i === s.i) { bg = "#fff7ed"; bd = "#f97316"; fg = "#9a3412"; bw = 2; scale = 1.1; }
+      else if (i === s.i + 1) { bg = "#fffbeb"; bd = "#fcd34d"; }
+    }
     if (s.kind === "use") {
       if (s.showJ && i === s.uj) { bg = "#fef3c7"; bd = "#f59e0b"; fg = "#92400e"; bw = 2; scale = 1.1; }
       else if (s.phase === "jm" && (i === s.below || i === s.above)) { bg = "#fefce8"; bd = "#fcd34d"; fg = "#92400e"; bw = 2; scale = 1.05; }
@@ -2421,7 +2439,7 @@ export function Mooin3MapSim({ E }) {
   const ListRow = ({ letter }) => {
     const arr = (s.lists && s.lists[letter]) || [];
     const isFocus = s.kind === "use" && letter === CH;
-    const isBuildCh = s.kind === "build" && s.ch === letter;
+    const isBuildCh = s.kind === "buildPos" && s.ch === letter;
     return (
       <div style={{
         display: "flex", alignItems: "center", gap: 8, marginBottom: 6,
@@ -2459,8 +2477,9 @@ export function Mooin3MapSim({ E }) {
   };
 
   const bubbleCx = (() => {
-    if (s.kind === "build") return simCellCx(s.i);
+    if (s.kind === "buildPos" || s.kind === "buildND") return simCellCx(s.i);
     if (s.kind === "use") {
+      if (s.phase === "i" && s.usedND) return simCellCx(s.uL);
       if (s.phase === "k") return simCellCx(s.uk);
       if (s.phase === "i") return simCellCx(s.ui);
       if (s.phase === "jm") return simCellCx(s.um);
@@ -2484,17 +2503,43 @@ export function Mooin3MapSim({ E }) {
                     <>표 3개 대신 — <b>글자마다 '나온 위치 리스트' 하나</b>만 만들어요. (map / dict.)</>)}
             </SimBubble>
           )}
-          {s.kind === "build" && (
+          {s.kind === "buildPos" && (
             <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59">
               <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>s[{s.i}] = '{s.ch}'</span>
               {" → "}
               {t(E, <>add <b>{s.i}</b> to '{s.ch}' list.</>, <>'{s.ch}' 리스트에 <b>{s.i}</b> 추가.</>)}
             </SimBubble>
           )}
-          {s.kind === "built" && (
-            <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={330}>
-              {t(E, <>Done — 3 lists, no tables. Now a query <b>binary-searches</b> a list.</>,
-                    <>끝 — 리스트 3개, 표 없음. 이제 쿼리는 리스트에서 <b>이분탐색</b>.</>)}
+          {s.kind === "builtPos" && (
+            <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#fff7ed" bd="#f97316" fg="#9a3412" width={350}>
+              {t(E, <>Lists done. But <b>i</b> (leftmost DIFFERENT letter) isn't in these lists → we also prebuild <b>nextDiff</b>.</>,
+                    <>리스트 완성. 그런데 <b>i</b>(다른 글자 왼쪽 끝)는 이 리스트론 못 찾아요 → <b>nextDiff</b> 도 미리 하나 만들어요.</>)}
+            </SimBubble>
+          )}
+          {s.kind === "buildND" && s.same === null && (
+            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fff7ed" bd="#f97316" fg="#9a3412" width={340}>
+              {t(E, <><b>nextDiff[i]</b> = first spot from i where the letter changes. The last spot has nothing after → <b>N</b> (none). Scan right→left.</>,
+                    <><b>nextDiff[i]</b> = i 부터 글자가 처음 바뀌는 자리. 맨 끝은 뒤가 없으니 <b>N</b>(없음). 오→왼으로 훑어요.</>)}
+            </SimBubble>
+          )}
+          {s.kind === "buildND" && s.same === true && (
+            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fff7ed" bd="#f97316" fg="#9a3412" width={340}>
+              <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>s[{s.i}]='{str[s.i]}' = s[{s.i + 1}]='{str[s.i + 1]}'</span>{" "}
+              {t(E, <>same → copy the next value: nextDiff[{s.i}] = <b>{s.nd[s.i]}</b>.</>,
+                    <>같음 → 뒤 값 이어받기: nextDiff[{s.i}] = <b>{s.nd[s.i]}</b>.</>)}
+            </SimBubble>
+          )}
+          {s.kind === "buildND" && s.same === false && (
+            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fff7ed" bd="#f97316" fg="#9a3412" width={340}>
+              <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>s[{s.i}]='{str[s.i]}' ≠ s[{s.i + 1}]='{str[s.i + 1]}'</span>{" "}
+              {t(E, <>changes here → nextDiff[{s.i}] = <b>{s.i + 1}</b>.</>,
+                    <>여기서 바뀜 → nextDiff[{s.i}] = <b>{s.i + 1}</b>.</>)}
+            </SimBubble>
+          )}
+          {s.kind === "builtND" && (
+            <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={340}>
+              {t(E, <>Now both are ready — <b>lists</b> (for k, j) and <b>nextDiff</b> (for i). Let's solve a query.</>,
+                    <>이제 둘 다 준비 — <b>리스트</b>(k·j 용)와 <b>nextDiff</b>(i 용). 쿼리를 풀어봐요.</>)}
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "q" && (
@@ -2510,9 +2555,9 @@ export function Mooin3MapSim({ E }) {
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "i" && (
-            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fee2e2" bd="#dc2626" fg="#7f1d1d" width={320}>
-              {t(E, <><b>i</b> = leftmost letter ≠ '{CH}' → <b>{s.ui}</b> ('{str[s.ui]}').</>,
-                    <><b>i</b> = '{CH}' 아닌 가장 왼쪽 → <b>{s.ui}</b> ('{str[s.ui]}').</>)}
+            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fee2e2" bd="#dc2626" fg="#7f1d1d" width={350}>
+              {t(E, <>s[{s.uL}]='{CH}' — same as '{CH}'! So i isn't L; jump via <b>nextDiff[{s.uL}]</b> = <b>{s.ui}</b> ('{str[s.ui]}'). O(1)!</>,
+                    <>s[{s.uL}]='{CH}' — 글자 '{CH}' 랑 같죠! 그래서 i 는 L 이 아니라 <b>nextDiff[{s.uL}]</b> = <b>{s.ui}</b> ('{str[s.ui]}') 로 점프. O(1)!</>)}
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "jm" && (
@@ -2523,8 +2568,8 @@ export function Mooin3MapSim({ E }) {
           )}
           {s.kind === "use" && s.phase === "jpick" && (
             <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fef3c7" bd="#f59e0b" fg="#92400e" width={320}>
-              {t(E, <>Pick <b>j = {s.uj}</b>. Score = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b>.</>,
-                    <><b>j = {s.uj}</b> 선택. 점수 = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b>.</>)}
+              {t(E, <>Only <b>{s.uj}</b> is between i and k → j = <b>{s.uj}</b>. Score = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b>.</>,
+                    <>i 와 k 사이인 건 <b>{s.uj}</b> 뿐 → j = <b>{s.uj}</b>. 점수 = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b>.</>)}
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "done" && (
@@ -2554,6 +2599,35 @@ export function Mooin3MapSim({ E }) {
       <div style={{ width: "fit-content", margin: "14px auto 4px" }}>
         {LETTERS.map((L) => <ListRow key={L} letter={L} />)}
       </div>
+
+      {/* nextDiff 표 — 오→왼으로 채워지고, i 구할 때 읽음 (없으면 ∅) */}
+      {s.nd && (
+        <div style={{ display: "flex", alignItems: "center", gap: 8, width: "fit-content", margin: "10px auto 4px" }}>
+          <div style={{ width: 108, textAlign: "right", fontSize: 12, fontWeight: 800,
+            color: (s.kind === "use" && s.phase === "i" && s.usedND) ? "#dc2626" : "#b45309",
+            fontFamily: "'JetBrains Mono',monospace" }}>nextDiff</div>
+          <div style={{ display: "flex", gap: SIM_CELL_GAP }}>
+            {Array.from({ length: N }).map((_, i) => {
+              const v = s.nd[i];
+              const isFresh = s.kind === "buildND" && i === s.i;
+              const isRead = s.kind === "use" && s.phase === "i" && s.usedND && i === s.uL;
+              let bg = "#fff", bd = "#e2e8f0", col = "#b45309";
+              if (v === null) { bg = "#f8fafc"; col = "#cbd5e1"; }
+              if (isFresh) { bg = "#fff7ed"; bd = "#f97316"; col = "#9a3412"; }
+              if (isRead) { bg = "#fee2e2"; bd = "#dc2626"; col = "#7f1d1d"; }
+              return (
+                <div key={i} style={{
+                  width: SIM_CELL_W, height: 22, display: "flex", alignItems: "center",
+                  justifyContent: "center", borderRadius: 5, fontSize: 11, fontWeight: 700,
+                  fontFamily: "'JetBrains Mono',monospace",
+                  background: bg, border: `${isFresh || isRead ? 2 : 1}px solid ${bd}`,
+                  boxShadow: isRead ? `0 0 0 2px #dc262655` : "none", color: col,
+                }}>{v === null ? "·" : v === N ? "∅" : v}</div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       <SharedSimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={MA} isEn={E} showLabels />
     </div>
