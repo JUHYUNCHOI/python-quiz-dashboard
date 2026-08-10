@@ -2350,9 +2350,9 @@ export function Mooin3TableSim({ E, lang = "py" }) {
    ═══════════════════════════════════════════════════════════════ */
 export function Mooin3MapSim({ E }) {
   const MA = "#0d9488";
-  // 9자 예제 (선생님 2026-08-10: 쿼리를 끝에 붙이지 말고 '가운데 구간'으로 — 양 끝 한 칸씩 여백).
-  // 인접 'bb'(3·4) 가 있어 nextDiff 의 '같으면 이어받기' 가지도 시연됨.
-  const str = "ababbcbac";
+  // 9자 예제 (선생님 2026-08-10). 쿼리는 '가운데 구간'(양 끝 한 칸씩 여백).
+  // 인접 'bb'(5·6) 로 nextDiff '이어받기' 시연. c 는 구간 안에 하나뿐(4) → 엣지 케이스.
+  const str = "ababcbbac";
   const CH = "b";
   const N = str.length;
   const ROW_W = simRowW(N);
@@ -2401,10 +2401,11 @@ export function Mooin3MapSim({ E }) {
     steps.push({ kind: "use", phase: "jm", showK: true, showI: true, ...base });
     steps.push({ kind: "use", phase: "jpick", showK: true, showI: true, showJ: true, ...base });
     // 엣지 케이스: 다른 글자 c 는 구간 [uL,uR] 안에 하나뿐 → j·k 둘을 못 채움 → moo 없음
-    const clist = finalLists["c"];                              // [5, 8]
-    const cIn = clist.filter((x) => x >= uL && x <= uR);        // 구간 안 c (여기선 [5])
-    steps.push({ kind: "edge", phase: "cq",    ...base, clist, cIn });
-    steps.push({ kind: "edge", phase: "cfail", ...base, clist, cIn });
+    const clist = finalLists["c"];                              // [4, 8]
+    const cIn = clist.filter((x) => x >= uL && x <= uR);        // 구간 안 c (여기선 [4])
+    const cOut = clist.filter((x) => x < uL || x > uR);         // 구간 밖 c (여기선 [8])
+    steps.push({ kind: "edge", phase: "cq",    ...base, clist, cIn, cOut });
+    steps.push({ kind: "edge", phase: "cfail", ...base, clist, cIn, cOut });
     steps.push({ kind: "use", phase: "done", showK: true, showI: true, showJ: true, ...base });
   }
 
@@ -2591,26 +2592,26 @@ export function Mooin3MapSim({ E }) {
           )}
           {s.kind === "use" && s.phase === "jpick" && (
             <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fef3c7" bd="#f59e0b" fg="#92400e" width={320}>
-              {t(E, <>Only <b>{s.uj}</b> is between i and k → j = <b>{s.uj}</b>. Score = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b>.</>,
-                    <>i 와 k 사이인 건 <b>{s.uj}</b> 뿐 → j = <b>{s.uj}</b>. 점수 = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b>.</>)}
+              {t(E, <>Pick the '{CH}' nearest the middle → j = <b>{s.uj}</b>. Score = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b>. (best with '{CH}'.)</>,
+                    <>가운데에 가장 가까운 '{CH}' → j = <b>{s.uj}</b>. 점수 = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b>. ('{CH}'로 낼 수 있는 최대.)</>)}
             </SimBubble>
           )}
           {s.kind === "edge" && s.phase === "cq" && (
-            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fefce8" bd="#fcd34d" fg="#92400e" width={330}>
-              {t(E, <>What about letter <b>'c'</b>? Its spots are <b>[{s.clist.join(", ")}]</b>.</>,
-                    <>다른 글자 <b>'c'</b> 는? 위치가 <b>[{s.clist.join(", ")}]</b> 예요.</>)}
+            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fefce8" bd="#fcd34d" fg="#92400e" width={340}>
+              {t(E, <>Every letter is checked the same way. Now <b>'c'</b> — its spots are <b>[{s.clist.join(", ")}]</b>.</>,
+                    <>글자마다 똑같이 확인해요. 이제 <b>'c'</b> — 위치는 <b>[{s.clist.join(", ")}]</b> 예요.</>)}
             </SimBubble>
           )}
           {s.kind === "edge" && s.phase === "cfail" && (
-            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fee2e2" bd="#f87171" fg="#991b1b" width={360}>
-              {t(E, <><b>8</b> is outside the lines! Inside [{s.uL},{s.uR}] there's only <b>one</b> 'c' ({s.cIn.join(", ")}) → can't fill both j and k → <b>no moo</b> for 'c'.</>,
-                    <><b>8</b>은 선 밖! 구간 [{s.uL},{s.uR}] 안엔 'c'가 <b>하나뿐</b> ({s.cIn.join(", ")}) → j·k 둘을 못 채워요 → 'c'로는 <b>moo 없음</b>.</>)}
+            <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fee2e2" bd="#f87171" fg="#991b1b" width={370}>
+              {t(E, <>The 'c' at <b>{s.cOut.join(", ")}</b> is outside the lines. Inside [{s.uL},{s.uR}] there's only <b>one</b> 'c' ({s.cIn.join(", ")}) → can't pick two (j and k) → <b>no moo</b> with 'c'.</>,
+                    <><b>{s.cOut.join(", ")}</b> 의 'c'는 선 밖. 구간 [{s.uL},{s.uR}] 안엔 'c'가 <b>하나뿐</b> ({s.cIn.join(", ")}) → 같은 글자 2개(j·k)를 못 골라요 → 'c'로는 <b>moo 없음</b>.</>)}
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "done" && (
-            <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={350}>
-              {t(E, <>So the answer is b's <b>4</b> — no tables, just lists + <b>binary search</b>. That's the map way.</>,
-                    <>그래서 답은 b로 만든 <b>4</b> — 표 없이 리스트 + <b>이분탐색</b>만. 이게 map 방식이에요.</>)}
+            <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={360}>
+              {t(E, <>Do this for <b>every letter</b> and take the biggest score — that's the answer. No tables, just lists + <b>binary search</b>.</>,
+                    <>글자마다 이렇게 해서 (되는 것 중) <b>가장 큰 점수</b>가 답이에요. 표 없이 리스트 + <b>이분탐색</b>만.</>)}
             </SimBubble>
           )}
         </div>
