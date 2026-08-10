@@ -1988,11 +1988,15 @@ export function Mooin3TableSim({ E, lang = "py" }) {
         }
       }
     }
-    const uBase = { ls: [...ls], es: [...es], nd: [...nd], uL, uR, ui, uk, uj, uscore };
+    // 가운데 후보 두 개: m 왼쪽 b(latest_same[m]) · m 오른쪽 b(earliest_same[m]) — earliest_same 이 쓰이는 곳!
+    const cand1 = (um != null) ? ls[um] : -1;   // m 이하 가장 오른쪽 b
+    const cand2 = (um != null) ? es[um] : INF;  // m 이상 가장 왼쪽 b
+    const uBase = { ls: [...ls], es: [...es], nd: [...nd], uL, uR, ui, uk, uj, uscore, um, cand1, cand2 };
     steps.push({ kind: "use", phase: "q", ...uBase });
     steps.push({ kind: "use", phase: "k", showK: true, ...uBase });
     steps.push({ kind: "use", phase: "i", showK: true, showI: true, ...uBase });
-    steps.push({ kind: "use", phase: "j", showK: true, showI: true, showJ: true, ...uBase });
+    steps.push({ kind: "use", phase: "jm", showK: true, showI: true, ...uBase });      // 가운데 후보 2개
+    steps.push({ kind: "use", phase: "jpick", showK: true, showI: true, showJ: true, ...uBase });
     steps.push({ kind: "use", phase: "done", showK: true, showI: true, showJ: true, ...uBase });
   }
 
@@ -2027,9 +2031,10 @@ export function Mooin3TableSim({ E, lang = "py" }) {
     let bw = on ? 2 : 1, scale = on ? 1.1 : 1;
     // use 스텝: 표로 푸는 중 — i(왼쪽 끝) 빨강 · k(오른쪽 끝) 초록 · j(가운데) 노랑
     if (s.kind === "use") {
-      if (s.showK && i === s.uk)      { bg = "#dcfce7"; bd = "#16a34a"; fg = "#15803d"; bw = 2; scale = 1.1; }
+      if (s.showJ && i === s.uj)      { bg = "#fef3c7"; bd = "#f59e0b"; fg = "#92400e"; bw = 2; scale = 1.1; }
+      else if (s.phase === "jm" && (i === s.cand1 || i === s.cand2)) { bg = "#fefce8"; bd = "#fcd34d"; fg = "#92400e"; bw = 2; scale = 1.05; }  // 가운데 후보 두 개
+      else if (s.showK && i === s.uk) { bg = "#dcfce7"; bd = "#16a34a"; fg = "#15803d"; bw = 2; scale = 1.1; }
       else if (s.showI && i === s.ui) { bg = "#fee2e2"; bd = "#dc2626"; fg = "#7f1d1d"; bw = 2; scale = 1.1; }
-      else if (s.showJ && i === s.uj) { bg = "#fef3c7"; bd = "#f59e0b"; fg = "#92400e"; bw = 2; scale = 1.1; }
     }
     return {
       width: SIM_CELL_W, height: SIM_CELL_W, display: "flex", alignItems: "center",
@@ -2044,9 +2049,10 @@ export function Mooin3TableSim({ E, lang = "py" }) {
   // use 스텝에서 셀 위 라벨 (i/j/k)
   const useLabel = (i) => {
     if (s.kind !== "use") return null;
+    if (s.showJ && i === s.uj) return ["j", "#f59e0b"];
+    if (s.phase === "jm" && (i === s.cand1 || i === s.cand2)) return ["j?", "#d97706"];
     if (s.showI && i === s.ui) return ["i", "#dc2626"];
     if (s.showK && i === s.uk) return ["k", "#16a34a"];
-    if (s.showJ && i === s.uj) return ["j", "#f59e0b"];
     return null;
   };
 
@@ -2136,7 +2142,7 @@ export function Mooin3TableSim({ E, lang = "py" }) {
           )}
           {s.kind === "use" && (
             <SimBubble
-              cx={s.phase === "k" ? simCellCx(s.uk) : s.phase === "i" ? simCellCx(s.ui) : (s.phase === "j" && s.uj >= 0) ? simCellCx(s.uj) : ROW_W / 2}
+              cx={s.phase === "k" ? simCellCx(s.uk) : s.phase === "i" ? simCellCx(s.ui) : (s.phase === "jpick" && s.uj >= 0) ? simCellCx(s.uj) : ROW_W / 2}
               rowW={ROW_W} bg="#faf5ff" bd="#c4b5fd" fg="#5b21b6">
               {s.phase === "q" && t(E, <>Table done! Now use it to solve query [{s.uL + 1}, {s.uR + 1}] for a '{CH}'-moo.</>,
                     <>표 완성! 이제 이 표로 쿼리 [{s.uL + 1}, {s.uR + 1}] 에서 '{CH}' moo 를 풀어봐요.</>)}
@@ -2144,9 +2150,12 @@ export function Mooin3TableSim({ E, lang = "py" }) {
                     <>오른쪽 끝 <b>k = latest_same[{CH}][{s.uR}] = {s.uk}</b> — 표에서 바로 꺼냄!</>)}
               {s.phase === "i" && t(E, <>left end <b>i = nearest_diff[{CH}][{s.uL}] = {s.ui}</b> — leftmost non-'{CH}'.</>,
                     <>왼쪽 끝 <b>i = nearest_diff[{CH}][{s.uL}] = {s.ui}</b> — '{CH}' 아닌 가장 왼쪽.</>)}
-              {s.phase === "j" && (s.uj >= 0
-                    ? t(E, <>middle <b>j = {s.uj}</b> → score = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b></>,
-                          <>가운데 <b>j = {s.uj}</b> → 점수 = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b></>)
+              {s.phase === "jm" && t(E,
+                    <>Middle j = a '{CH}' near the center m={s.um}. Two candidates: <b>latest_same[{CH}][{s.um}]={s.cand1 < 0 ? "—" : s.cand1}</b> (left of m) & <b>earliest_same[{CH}][{s.um}]={s.cand2 >= N ? "—" : s.cand2}</b> (right of m). ← that's what earliest_same is for!</>,
+                    <>가운데 j 는 한가운데 m={s.um} 근처의 '{CH}'. 후보 둘: <b>latest_same[{CH}][{s.um}]={s.cand1 < 0 ? "—" : s.cand1}</b> (m 왼쪽) · <b>earliest_same[{CH}][{s.um}]={s.cand2 >= N ? "—" : s.cand2}</b> (m 오른쪽). ← earliest_same 이 여기 쓰여요!</>)}
+              {s.phase === "jpick" && (s.uj >= 0
+                    ? t(E, <>pick the bigger score → <b>j = {s.uj}</b>. score = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b></>,
+                          <>점수 큰 걸 골라 <b>j = {s.uj}</b>. 점수 = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b></>)
                     : t(E, <>no '{CH}' between i and k → no '{CH}'-moo</>, <>i·k 사이에 '{CH}' 없음 → '{CH}' moo 없음</>))}
               {s.phase === "done" && t(E, <>Best '{CH}'-moo = <b>{s.uscore}</b>. Do the same for every letter → the biggest wins (here 'c' gives 8).</>,
                     <>'{CH}' 로 만든 최고 moo = <b>{s.uscore}</b>. 다른 글자도 표로 똑같이 → 그 중 최댓값이 답 (여기선 'c' 로 8).</>)}
@@ -2180,39 +2189,16 @@ export function Mooin3TableSim({ E, lang = "py" }) {
       {/* 표 세 줄 */}
       <div style={{ width: ROW_W + 138, margin: "0 auto 12px" }}>
         <TableRow label={`latest_same[${CH}]`}   vals={s.ls} color="#0e7490" fresh={s.kind === "L" ? s.i : null}
-                  readIdx={s.kind === "use" && s.showK ? s.uR : null} readColor="#16a34a" />
-        <TableRow label={`earliest_same[${CH}]`} vals={s.es} color="#15803d" fresh={s.kind === "R" ? s.i : null} />
+                  readIdx={s.kind === "use" ? (s.phase === "k" ? s.uR : s.phase === "jm" ? s.um : null) : null}
+                  readColor={s.phase === "jm" ? "#d97706" : "#16a34a"} />
+        <TableRow label={`earliest_same[${CH}]`} vals={s.es} color="#15803d" fresh={s.kind === "R" ? s.i : null}
+                  readIdx={s.kind === "use" && s.phase === "jm" ? s.um : null} readColor="#d97706" />
         <TableRow label={`nearest_diff[${CH}]`}  vals={s.nd} color="#b45309" fresh={s.kind === "R" ? s.i : null}
                   readIdx={s.kind === "use" && s.showI ? s.uL : null} readColor="#dc2626" />
       </div>
 
-      {/* 코드 — 실행된 줄만 하이라이트. use(표로 풀기) 스텝엔 build 코드 숨김 (선생님 2026-08-01). */}
-      {s.kind !== "use" && <div style={{ maxWidth: 520, margin: "0 auto 12px" }}>
-        <div ref={codeBoxRef} style={{
-          background: "#0f172a", borderRadius: 10, padding: "9px 0",
-          maxHeight: 170, overflowY: "auto", overflowX: "auto", position: "relative",
-        }}>
-          {CODE.map((line, li) => {
-            const on = !!hiLines && hiLines.includes(li);
-            const isFirstOn = on && li === hiLines[0];
-            return (
-              <div key={li} ref={isFirstOn ? activeLineRef : null} style={{
-                display: "flex", alignItems: "flex-start", gap: 8, padding: "0 10px",
-                background: on ? "rgba(8,145,178,.28)" : "transparent",
-                borderLeft: `3px solid ${on ? "#22d3ee" : "transparent"}`,
-              }}>
-                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 9.5,
-                  color: on ? "#a5f3fc" : "#475569", minWidth: 14, textAlign: "right",
-                  userSelect: "none", lineHeight: 1.7 }}>{on ? "▸" : " "}</span>
-                <pre style={{ margin: 0, fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5,
-                  lineHeight: 1.7, whiteSpace: "pre", opacity: on ? 1 : 0.82 }}>
-                  {line ? highlight(line, isCpp ? "cpp" : "py") : " "}
-                </pre>
-              </div>
-            );
-          })}
-        </div>
-      </div>}
+      {/* 코드박스 제거 (선생님 2026-08-01): 전체 코드는 다음 챕터(CodeWalk)에 있음.
+          표 만들기 시뮬은 '표가 채워지는 것'만 시각적으로 — 초보한테 화면 덜 빽빽하게. */}
 
       <SharedSimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={TA} isEn={E} showLabels />
     </div>
