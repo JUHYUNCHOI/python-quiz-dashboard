@@ -36,8 +36,18 @@ interface Section {
   problems: Problem[]
 }
 
-// 선생님이 '어려움' 으로 표시한 quest (수업 경험 기반). 목록에서 배지로 노출.
-const HARD_QUESTS = new Set(["mooin3", "printseq"])
+// '어려운 편' 표시(작은 ◆) — 선생님 참고용. 어려움은 주관이라 자유롭게 가감.
+//   근거: 알고리즘 난도(DP·그래프·최단경로 등) + quest-meta 난이도4 + 애드혹 발상 난도.
+const HARD_QUESTS = new Set([
+  // DP (동적계획법)
+  "printseq", "palindrome", "walkhome", "subseqmedian", "tameherd", "mcc20kitty", "mcc20zigzag",
+  // 그래프 BFS/DFS
+  "bucketbrigade", "explodingarrow", "livestock", "mcc20citytour", "mcc20knight", "mcc22grammar", "mcc22maze", "milkfactory",
+  // 최단경로 · 위상정렬 · 트리 · 백트래킹
+  "mco15trains", "reach", "milkorder", "familytree", "mcc21menu", "favperm2",
+  // 애드혹(발상이 까다로움)
+  "mooin3", "astral", "moo", "moolang", "rounding",
+])
 
 const SECTIONS: Section[] = [
   {
@@ -679,8 +689,8 @@ export default function QuestPage() {
                                             </span>
                                           )}
                                           {HARD_QUESTS.has(problem.id) && (
-                                            <span className="text-[9px] font-black px-1 py-px rounded bg-red-100 text-red-700 border border-red-300 flex-shrink-0" title={t("어려운 문제 — 시간을 넉넉히", "A hard one — take your time")}>
-                                              🔥 {t("어려움", "hard")}
+                                            <span className="text-amber-400/80 text-[11px] leading-none flex-shrink-0 cursor-default" title={t("어려운 편 (선생님 메모)", "harder one (teacher note)")}>
+                                              ◆
                                             </span>
                                           )}
                                           <button
