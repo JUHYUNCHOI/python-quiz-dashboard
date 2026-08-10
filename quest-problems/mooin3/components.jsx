@@ -2231,21 +2231,33 @@ export function getMooin3Walk(E, lang = "py", mode = "brute") {
   // mode === "fast" — O(26) per query: 3 lookup tables + parabola vertex
   if (lang === "cpp") {
     return { code: M3_FAST_CPP(E), vars: _M3_FAST_VARS, beats: [
-      { hi: [5, 9],   bubble: t(E, "Read N, Q, and the string s — Q up to 30,000.", "N, Q 와 문자열 s 읽기 — 쿼리 3만 개.") },
-      { hi: [11, 33], bubble: t(E, "PRECOMPUTE once, before any query: for each letter, 3 tables. Left→right fills latest_same; right→left fills earliest_same & nearest_diff. After this, each lookup is O(1).", "전처리 — 쿼리 전에 한 번만: 글자마다 표 3개. 왼→오로 latest_same, 오→왼으로 earliest_same·nearest_diff. 이러면 조회가 O(1).") },
-      { hi: [35, 40], bubble: t(E, "Each query: read l, r → 0-based. best = -1.", "쿼리마다 l, r 읽고 0-based. best = -1.") },
-      { hi: [41, 45], bubble: t(E, "Loop over the 26 LETTERS c (not j!). For each c, grab the leftmost 'different' i and the rightmost c = k straight from the tables.", "j 대신 글자 c 26개로 루프. c 마다 가장 왼쪽 '다른' i, 가장 오른쪽 c = k 를 표에서 바로.") },
-      { hi: [46, 55], bubble: t(E, "f(j) = (j−i)(k−j) is an ∩-parabola → biggest near the midpoint m. Check just the 2 candidates around m (O(1), no binary search).", "f(j)=(j−i)(k−j) 는 위로 볼록(∩) 포물선 → 꼭짓점 m 근처가 최대. m 양옆 후보 2개만 확인 (O(1), 이분 탐색 없이).") },
+      { hi: [5, 9],   bubble: t(E, "Read N, Q, and the string s.", "N, Q, 문자열 s 읽기.") },
+      { hi: [15, 18], bubble: t(E, "Make the 3 tables (26 × N). Empty for now (-1 / INF).", "표 3개 만들기 (글자 26 × 자리 N). 처음엔 -1 / INF.") },
+      { hi: [19, 21], bubble: t(E, "For each letter c: ch = the letter, last = none yet (-1).", "글자 c 마다: ch = 그 글자, last = 아직 없음 (-1).") },
+      { hi: [22, 25], bubble: t(E, "Pass 1 (left→right): fill latest_same — last c seen so far.", "1차 왼→오: latest_same 채우기 — 지금까지 본 마지막 c.") },
+      { hi: [26, 32], bubble: t(E, "Pass 2 (right→left): fill earliest_same (nearest c right) & nearest_diff (nearest non-c right).", "2차 오→왼: earliest_same(오른쪽 가장 가까운 c)·nearest_diff(오른쪽 가장 가까운 다른 글자) 채우기.") },
+      { hi: [35, 40], bubble: t(E, "Each query: read l, r → 0-based, best = -1.", "쿼리마다: l, r 읽고 0-based, best = -1.") },
+      { hi: [41, 43], bubble: t(E, "Loop 26 letters. Left end i = nearest_diff[c][l]. Skip if out of range.", "글자 26개 루프. 왼쪽 끝 i = nearest_diff[c][l]. 범위 밖이면 건너뜀.") },
+      { hi: [44, 46], bubble: t(E, "Right end k = latest_same[c][r]. Middle m = (i+k)/2.", "오른쪽 끝 k = latest_same[c][r]. 가운데 m = (i+k)/2.") },
+      { hi: [47, 48], bubble: t(E, "Two candidates: latest_same[c][m], earliest_same[c][m].", "후보 둘: latest_same[c][m], earliest_same[c][m].") },
+      { hi: [49, 55], bubble: t(E, "For each candidate j with i<j<k, score = (j-i)(k-j) — keep the max.", "후보 j 가 i<j<k 면 점수 = (j-i)(k-j) — 최댓값 유지.") },
       { hi: [57, 57], bubble: t(E, "Print the answer.", "답 출력.") },
     ] };
   }
   return { code: M3_FAST_PY(E), vars: _M3_FAST_VARS, beats: [
-    { hi: [0, 4],   bubble: t(E, "Fast input (sys.stdin.readline) + read N, Q, s — Q up to 30,000.", "빠른 입력(sys.stdin.readline) + N, Q, s 읽기 — 쿼리 3만 개.") },
-    { hi: [6, 32],  bubble: t(E, "PRECOMPUTE once, before any query: for each letter, 3 tables. Left→right fills latest_same; right→left fills earliest_same & nearest_diff. After this, each lookup is O(1).", "전처리 — 쿼리 전에 한 번만: 글자마다 표 3개. 왼→오로 latest_same, 오→왼으로 earliest_same·nearest_diff. 이러면 조회가 O(1).") },
-    { hi: [34, 39], bubble: t(E, "Each query: read l, r → 0-based. best = -1.", "쿼리마다 l, r 읽고 0-based. best = -1.") },
-    { hi: [40, 46], bubble: t(E, "Loop over the 26 LETTERS c (not j!). For each c, grab the leftmost 'different' i and the rightmost c = k straight from the tables.", "j 대신 글자 c 26개로 루프. c 마다 가장 왼쪽 '다른' i, 가장 오른쪽 c = k 를 표에서 바로.") },
-    { hi: [47, 54], bubble: t(E, "f(j) = (j−i)(k−j) is an ∩-parabola → biggest near the midpoint m. Check just the 2 candidates around m (O(1), no binary search).", "f(j)=(j−i)(k−j) 는 위로 볼록(∩) 포물선 → 꼭짓점 m 근처가 최대. m 양옆 후보 2개만 확인 (O(1), 이분 탐색 없이).") },
-    { hi: [55, 57], bubble: t(E, "Collect answers and print them all at once.", "답을 모아서 한 번에 출력.") },
+    { hi: [0, 1],   bubble: t(E, "Fast input (needed for 30,000 queries).", "빠른 입력 준비 (쿼리 3만 개라 필요).") },
+    { hi: [3, 4],   bubble: t(E, "Read N, Q, and the string s.", "N, Q, 문자열 s 읽기.") },
+    { hi: [10, 13], bubble: t(E, "Make the 3 tables (26 letters × N spots). Empty for now (-1 / INF).", "표 3개 만들기 (글자 26 × 자리 N). 처음엔 비어있음 (-1 / INF).") },
+    { hi: [14, 17], bubble: t(E, "For each letter c: ch = the letter, last = none yet (-1).", "글자 c 마다: ch = 그 글자, last = 아직 없음 (-1).") },
+    { hi: [18, 21], bubble: t(E, "Pass 1 (left→right): fill latest_same — each spot keeps the last c seen so far.", "1차 왼→오: latest_same 채우기 — 각 자리에 '지금까지 본 마지막 c'.") },
+    { hi: [22, 25], bubble: t(E, "Set up for the right side: nxt_same, nxt_diff = none yet (INF).", "오른쪽 정보 준비: nxt_same, nxt_diff = 아직 없음 (INF).") },
+    { hi: [26, 32], bubble: t(E, "Pass 2 (right→left): fill earliest_same (nearest c on the right) & nearest_diff (nearest non-c on the right).", "2차 오→왼: earliest_same(오른쪽 가장 가까운 c)·nearest_diff(오른쪽 가장 가까운 다른 글자) 채우기.") },
+    { hi: [34, 39], bubble: t(E, "Each query: read l, r → 0-based, best = -1.", "쿼리마다: l, r 읽고 0-based, best = -1.") },
+    { hi: [40, 43], bubble: t(E, "Loop 26 letters. Left end i = nearest_diff[c][l] (from the table). Skip if out of range.", "글자 26개 루프. 왼쪽 끝 i = nearest_diff[c][l] (표에서 바로). 범위 밖이면 건너뜀.") },
+    { hi: [44, 46], bubble: t(E, "Right end k = latest_same[c][r]. Skip if k ≤ i.", "오른쪽 끝 k = latest_same[c][r]. k ≤ i 면 건너뜀.") },
+    { hi: [47, 50], bubble: t(E, "Middle m = (i+k)//2. Two candidates: latest_same[c][m], earliest_same[c][m].", "가운데 m = (i+k)//2. 후보 둘: latest_same[c][m], earliest_same[c][m].") },
+    { hi: [51, 54], bubble: t(E, "If i < j < k, score = (j-i)(k-j) — keep the max.", "i < j < k 면 점수 = (j-i)(k-j) — 최댓값 유지.") },
+    { hi: [55, 57], bubble: t(E, "Collect answers, print all at once.", "답 모아서 한 번에 출력.") },
   ] };
 }
 
