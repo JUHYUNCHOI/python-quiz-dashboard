@@ -11,7 +11,7 @@
 //     { hi: [0, 3], bubble: t(E, "...", "...") },   // hi = 밝힐 줄 범위 (0-based, 양끝 포함)
 //   ]} />
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, Fragment } from "react";
 import { t } from "@/components/quest/theme";
 import { highlight } from "@/components/quest/shared";
 import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
@@ -44,14 +44,16 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
     setCopied(true); setTimeout(() => setCopied(false), 1500);
   };
 
-  // 코드창: 스텝 바뀔 때마다 지금 밝아진 첫 줄(lo)을 창 맨 위로 스크롤.
-  // box.children[lo] 로 직접 찾음 (ref 콜백 타이밍에 안 의존 → 앞/뒤 이동 모두 안정적).
+  // 코드창: 스텝 바뀔 때마다 '지금 밝아진 줄 바로 위 말풍선'을 창 맨 위로 스크롤.
+  // (선생님 2026-08-10: 말풍선을 위에 고정하지 말고 '진짜 설명되는 코드 줄 위'에 띄우기.
+  //  말풍선이 코드 흐름 안(밝아진 줄 lo 직전)에 들어가므로, 그 말풍선으로 스크롤하면
+  //  말풍선 + 밝아진 줄이 한 번에 창 위쪽에 보인다.)
   const boxRef = useRef(null);
+  const inlineBubbleRef = useRef(null);
   useEffect(() => {
     const box = boxRef.current;
-    if (!box) return;
-    const row = box.children[lo];   // lo 번째 코드 줄 div (box 직속 자식이 각 줄)
-    if (row) box.scrollTop = Math.max(0, row.offsetTop - 12);
+    const bub = inlineBubbleRef.current;
+    if (box && bub) box.scrollTop = Math.max(0, bub.offsetTop - 10);
   }, [idx, lo]);
 
   return (
@@ -70,20 +72,7 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
         </div>
       )}
 
-      {/* 말풍선 — 지금 밝아진 코드 조각을 설명 (코드창 바로 위, 항상 보임) */}
-      <div style={{ maxWidth: 560, margin: "0 auto 8px", position: "relative", zIndex: 5 }}>
-        <div style={{
-          background: done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bColor}`,
-          borderRadius: 12, padding: "11px 14px", fontSize: 13,
-          color: done ? "#065f46" : "#92400e", lineHeight: 1.55, minHeight: 42,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          textAlign: "center", fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line",
-          boxShadow: "0 4px 14px rgba(0,0,0,.08)",
-        }}>💬 {beat.bubble}</div>
-        <div style={{ width: 0, height: 0, margin: "0 auto",
-          borderLeft: "9px solid transparent", borderRight: "9px solid transparent",
-          borderTop: `10px solid ${bColor}` }} />
-      </div>
+      {/* 말풍선은 이제 코드창 안, '지금 밝아진 줄 바로 위'에 뜬다 (아래 code.map 참고). */}
 
       {/* 변수 뜻 범례 — 늘 보이게 (코드 깊이 들어가도 "n이 뭐였지?" 안 하게) */}
       {vars && vars.length > 0 && (
@@ -129,29 +118,48 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
           const mk = marks && marks.find((m) => i >= m.from && i <= m.to);
           const mc = mk ? (mk.color || "#f43f5e") : null;
           return (
-            <div key={i}
-              style={{
-                display: "flex", alignItems: "flex-start",
-                background: isHot ? "#1f2b3e" : mk ? `${mc}21` : "transparent",   // gray-900 보다 살짝 밝게 (어둡지 않음)
-                borderLeft: isHot ? `4px solid ${bColor}` : mk ? `4px solid ${mc}` : "4px solid transparent",
-                borderRadius: isHot || mk ? 5 : 0,
-                padding: "1px 6px 1px 6px",
-                opacity: 1,                                       // 흐림 없음 — 모든 줄 또렷
-                transition: "background .2s",
-              }}>
-              <span style={{ color: isHot ? "#a3b3c9" : "#5b6675", width: 24, textAlign: "right", marginRight: 12, flexShrink: 0, userSelect: "none", fontSize: 11.5 }}>{i + 1}</span>
-              <span style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", flex: 1, minWidth: 0 }}>
-                {highlight(line, lang)}
-              </span>
-              {mk && i === mk.from && (
-                <span style={{
-                  marginLeft: 8, alignSelf: "center", flexShrink: 0,
-                  fontSize: 10, fontWeight: 800, whiteSpace: "nowrap",
-                  color: "#fff", background: `${mc}40`,
-                  border: `1px solid ${mc}90`, borderRadius: 999, padding: "1px 8px",
-                }}>{t(E, mk.en, mk.ko)}</span>
+            <Fragment key={i}>
+              {/* 지금 밝아진 줄(lo) 바로 위에 말풍선을 흐름 안으로 끼워 넣음 — 그 줄을 가리킴 */}
+              {i === lo && (
+                <div ref={inlineBubbleRef} style={{ margin: "3px 2px 7px" }}>
+                  <div style={{
+                    background: done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bColor}`,
+                    borderRadius: 12, padding: "9px 13px", fontSize: 13,
+                    color: done ? "#065f46" : "#92400e", lineHeight: 1.5,
+                    fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line",
+                    fontFamily: "system-ui, -apple-system, 'Apple SD Gothic Neo', sans-serif", // 코드폰트 아닌 읽기폰트
+                    boxShadow: "0 6px 16px rgba(0,0,0,.30)",
+                  }}>💬 {beat.bubble}</div>
+                  {/* 아래(밝아진 코드 줄)를 가리키는 꼬리 */}
+                  <div style={{ width: 0, height: 0, marginLeft: 26,
+                    borderLeft: "8px solid transparent", borderRight: "8px solid transparent",
+                    borderTop: `9px solid ${bColor}` }} />
+                </div>
               )}
-            </div>
+              <div
+                style={{
+                  display: "flex", alignItems: "flex-start",
+                  background: isHot ? "#1f2b3e" : mk ? `${mc}21` : "transparent",   // gray-900 보다 살짝 밝게 (어둡지 않음)
+                  borderLeft: isHot ? `4px solid ${bColor}` : mk ? `4px solid ${mc}` : "4px solid transparent",
+                  borderRadius: isHot || mk ? 5 : 0,
+                  padding: "1px 6px 1px 6px",
+                  opacity: 1,                                       // 흐림 없음 — 모든 줄 또렷
+                  transition: "background .2s",
+                }}>
+                <span style={{ color: isHot ? "#a3b3c9" : "#5b6675", width: 24, textAlign: "right", marginRight: 12, flexShrink: 0, userSelect: "none", fontSize: 11.5 }}>{i + 1}</span>
+                <span style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", flex: 1, minWidth: 0 }}>
+                  {highlight(line, lang)}
+                </span>
+                {mk && i === mk.from && (
+                  <span style={{
+                    marginLeft: 8, alignSelf: "center", flexShrink: 0,
+                    fontSize: 10, fontWeight: 800, whiteSpace: "nowrap",
+                    color: "#fff", background: `${mc}40`,
+                    border: `1px solid ${mc}90`, borderRadius: 999, padding: "1px 8px",
+                  }}>{t(E, mk.en, mk.ko)}</span>
+                )}
+              </div>
+            </Fragment>
           );
         })}
       </div>
