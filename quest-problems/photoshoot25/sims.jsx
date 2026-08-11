@@ -371,6 +371,10 @@ export function PhotoTraceSim({ E }) {
   const inRect = (i, j) => sActive && i >= s.iLo && i <= s.iHi && j >= s.jLo && j <= s.jHi;
   const wr = (n) => (s.wr || []).includes(n);
   const rd = (n) => (s.rd || []).includes(n);
+  // beauty·S 도 이 단계에 저장(초록)/꺼냄(파랑) 되는지 태그
+  const gridTag = (n) => wr(n) ? { txt: t(E, "← store", "← 저장"), c: "#16a34a" }
+                        : rd(n) ? { txt: t(E, "read →", "꺼냄 →"), c: "#2563eb" } : null;
+  const bTag = gridTag("beauty"), sTag = gridTag("S");
 
   const FC = 30, SC = 46, gp = 3, sgp = 9;
 
@@ -446,8 +450,9 @@ export function PhotoTraceSim({ E }) {
             <div style={{ fontSize: 12, fontWeight: 800, color: "#9a3412", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
               beauty {t(E, "(cell values)", "(칸 값)")}
             </div>
-            <div style={{ fontSize: 10, fontWeight: 700, color: "#c2833f", textAlign: "center", marginTop: 4 }}>
-              {t(E, "field 5×5", "들판 5×5")}
+            <div style={{ fontSize: 10.5, fontWeight: 800, textAlign: "center", marginTop: 4, height: 13,
+              color: bTag ? bTag.c : "#c2833f" }}>
+              {bTag ? bTag.txt : t(E, "field 5×5", "들판 5×5")}
             </div>
           </div>
           {Array.from({ length: N }).map((_, ri) => (
@@ -456,14 +461,22 @@ export function PhotoTraceSim({ E }) {
                 const R = ri + 1, Cc = ci + 1;
                 const val = (s.beauty && s.beauty[R][Cc]) || 0;
                 const hot = beautyHot && q && R === q.r && Cc === q.c;
-                const hotW = hot && s.kind === "delta";   // 저장(초록) vs 꺼냄(주황)
+                const hotW = hot && s.kind === "delta";   // 저장(초록) vs 꺼냄(파랑)
                 return (
                   <div key={ci} style={{ width: FC, height: FC, display: "flex", alignItems: "center",
                     justifyContent: "center", borderRadius: 5, fontFamily: "'JetBrains Mono',monospace",
-                    fontWeight: 700, fontSize: 13, transition: "all .12s",
-                    background: hot ? (hotW ? "#16a34a" : "#fb923c") : "#fff",
-                    border: `${hot ? 2 : 1}px solid ${hot ? (hotW ? "#15803d" : "#ea580c") : "#e2e8f0"}`,
-                    color: hot ? "#fff" : val === 0 ? "#94a3b8" : "#1f2937" }}>{val}</div>
+                    fontWeight: 700, fontSize: 13, transition: "all .12s", position: "relative",
+                    background: hot ? (hotW ? "#16a34a" : "#2563eb") : "#fff",
+                    border: `${hot ? 2 : 1}px solid ${hot ? (hotW ? "#15803d" : "#1d4ed8") : "#e2e8f0"}`,
+                    color: hot ? "#fff" : val === 0 ? "#94a3b8" : "#1f2937" }}>
+                    {val}
+                    {hotW && (
+                      <span style={{ position: "absolute", top: -8, right: -7, fontSize: 9.5, fontWeight: 800,
+                        color: "#fff", background: "#15803d", borderRadius: 999, padding: "0 5px", whiteSpace: "nowrap" }}>
+                        {s.old}→{q.v}
+                      </span>
+                    )}
+                  </div>
                 );
               })}
             </div>
@@ -476,8 +489,9 @@ export function PhotoTraceSim({ E }) {
             <div style={{ fontSize: 12, fontWeight: 800, color: "#5b21b6", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
               S {t(E, "(photo scores)", "(사진 점수)")}
             </div>
-            <div style={{ fontSize: 10, fontWeight: 800, color: "#7c3aed", textAlign: "center", marginTop: 4, wordBreak: "keep-all" }}>
-              {t(E, "9 photos · 1 cell = 1", "사진 9장 · 한 칸 = 1장")}
+            <div style={{ fontSize: 10.5, fontWeight: 800, textAlign: "center", marginTop: 4, height: 13, wordBreak: "keep-all",
+              color: sTag ? sTag.c : "#7c3aed" }}>
+              {sTag ? sTag.txt : t(E, "9 photos · 1 cell = 1", "사진 9장 · 한 칸 = 1장")}
             </div>
           </div>
           {Array.from({ length: W }).map((_, ii) => (
@@ -486,18 +500,20 @@ export function PhotoTraceSim({ E }) {
                 const I = ii + 1, J = jj + 1;
                 const val = (s.S && s.S[I][J]) || 0;
                 const rect = inRect(I, J);
+                const writing = s.kind === "storeS" && rect;   // 저장(초록)
+                const reading = s.kind === "max" && rect;       // 꺼냄(파랑 테두리)
                 const isMax = s.hasMax && val === curMax && val > 0;
                 const filled = val > 0;
                 return (
                   <div key={jj} style={{ width: SC, height: SC, display: "flex", alignItems: "center",
                     justifyContent: "center", borderRadius: 8, fontFamily: "'JetBrains Mono',monospace",
                     fontWeight: 800, fontSize: 23, transition: "all .12s", position: "relative",
-                    background: rect ? "#16a34a" : isMax ? "#16a34a" : filled ? "#7c3aed" : "#f8fafc",
-                    boxShadow: (isMax || filled || rect) ? "0 3px 9px rgba(124,58,237,.35)" : "0 1px 2px rgba(0,0,0,.04)",
-                    border: rect ? "2.5px solid #15803d" : (isMax || filled) ? "2px solid transparent" : "1.5px solid #e5e7eb",
-                    color: (isMax || filled || rect) ? "#fff" : "#cbd5e1" }}>
+                    background: writing ? "#16a34a" : isMax ? "#16a34a" : filled ? "#7c3aed" : "#f8fafc",
+                    boxShadow: (isMax || filled || writing) ? "0 3px 9px rgba(124,58,237,.35)" : "0 1px 2px rgba(0,0,0,.04)",
+                    border: reading ? "3px solid #2563eb" : writing ? "2.5px solid #15803d" : (isMax || filled) ? "2px solid transparent" : "1.5px solid #e5e7eb",
+                    color: (isMax || filled || writing) ? "#fff" : "#cbd5e1" }}>
                     {val}
-                    {rect && s.kind === "storeS" && (
+                    {writing && (
                       <span style={{ position: "absolute", top: -9, right: -8, fontSize: 11.5, fontWeight: 800,
                         color: "#fff", background: "#ea580c", borderRadius: 999, padding: "1px 6px",
                         boxShadow: "0 2px 5px rgba(0,0,0,.2)", whiteSpace: "nowrap" }}>+{s.delta}</span>
