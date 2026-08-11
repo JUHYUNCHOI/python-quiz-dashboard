@@ -46,8 +46,8 @@ function CowSplitsIntro({ E }) {
 
       <div style={{ maxWidth: 520, margin: "0 auto", display: "grid", gap: 8 }}>
         <div style={ruleBox}><span style={{ fontSize: 18 }}>✂️</span>
-          <div>{t(E, <>One <b>operation</b>: erase letters that form a <b>square</b> (Y+Y) — even if they're far apart.</>,
-                    <>한 <b>연산</b>: <b>사각</b>(Y+Y)을 이루는 글자들을 골라 지움 — 서로 떨어져 있어도 OK.</>)}</div>
+          <div>{t(E, <>One <b>operation</b>: pick some letters (even far apart) that form <b>Y+Y</b> (same piece twice), and erase them together. <span style={{ color: "#94a3b8" }}>— we'll unpack this next.</span></>,
+                    <>한 <b>연산</b>: <b>같은 조각을 두 번(Y+Y)</b> 이루도록 글자를 골라(떨어져 있어도 OK) 한꺼번에 지움. <span style={{ color: "#94a3b8" }}>— 바로 다음에 풀어서 봐요.</span></>)}</div>
         </div>
         <div style={ruleBox}><span style={{ fontSize: 18 }}>🎯</span>
           <div>{t(E, <><b>Goal</b>: empty S in the <b>fewest</b> operations. If it's impossible → print <b>−1</b>.</>,
@@ -107,8 +107,8 @@ export function makeCowSplitsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The key word is 'square'. Let's make sure that's crystal clear before anything else.",
-        "핵심 단어는 '사각'. 다른 것보다 이걸 먼저 확실히 해요."),
+        "'Erase a square subsequence' packs two hard words. Let's unpack them one at a time: pick (subsequence), then square.",
+        "'사각 부분수열을 지운다' — 어려운 낱말 두 개예요. 하나씩 풀어봐요: 골라 빼기(부분수열) → 사각."),
       content: (<SquareSim E={E} />),
     },
     {

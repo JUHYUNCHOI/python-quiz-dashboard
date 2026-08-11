@@ -32,36 +32,40 @@ function Tile({ ch, size = 42, bg = "#fff", bd = "#e2e8f0", fg = "#1f2937", fade
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SquareSim — '사각 문자열' 이 뭔지, 그리고 '지우기' 가 뭔지.
+   SquareSim — 어려운 말 '사각 부분수열' 을 둘로 쪼개서:
+   ① 부분수열 = 글자 골라 빼기(떨어져도 OK)   ② 사각 = Y+Y   ③ 둘을 합침
    ═══════════════════════════════════════════════════════════════ */
 export function SquareSim({ E }) {
   const steps = [
-    { kind: "def",  str: "COWCOW", Y: "COW", ok: true },
-    { kind: "def",  str: "CC",     Y: "C",   ok: true },
-    { kind: "bad",  str: "COWOWC", left: "COW", right: "OWC" },
-    { kind: "sub" },
+    { kind: "pick" },                          // 부분수열 = 골라 빼기
+    { kind: "def", str: "CC", Y: "C" },        // 사각 = C+C
+    { kind: "def", str: "COWCOW", Y: "COW" },  // 사각 = COW+COW
+    { kind: "bad", str: "COW" },               // 홀수 → 사각 아님
+    { kind: "combine" },                        // 한 연산 = 사각 되게 골라 빼기
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
 
   const bubble =
-    s.kind === "def" ? t(E,
-        <>A <b>square</b> string = the same piece <b>Y</b> written twice (<b>Y+Y</b>). Here Y = <b>{s.Y}</b>, so both halves match → it's a square ✓</>,
-        <><b>사각 문자열</b> = 같은 조각 <b>Y</b> 를 두 번 붙인 것 (<b>Y+Y</b>). 여기선 Y = <b>{s.Y}</b>, 두 절반이 똑같죠 → 사각 ✓</>)
+    s.kind === "pick" ? t(E,
+        <>Erasing = <b>pick some letters</b> and take them out. They don't have to be next to each other — just keep the order. (This picked group is called a <b>subsequence</b>.)</>,
+        <>지우기 = S 에서 <b>글자를 몇 개 골라</b> 빼는 거예요. 붙어있지 않아도 돼요 — 순서만 지키면. (이렇게 골라낸 묶음 = <b>부분수열</b>.)</>)
+    : s.kind === "def" ? t(E,
+        <>But you can't pick just anything — the picked string must be a <b>square</b>: the same piece <b>Y</b> twice (<b>Y+Y</b>). Here Y = <b>{s.Y}</b>.</>,
+        <>근데 아무거나 못 골라요 — 골라낸 게 <b>사각</b> 이어야 해요: 같은 조각 <b>Y</b> 를 두 번(<b>Y+Y</b>). 여기서 Y = <b>{s.Y}</b>.</>)
     : s.kind === "bad" ? t(E,
-        <>Halves differ (<b>{s.left}</b> ≠ <b>{s.right}</b>) → <b>not</b> a square. So we can't erase all of S in one go.</>,
-        <>두 절반이 달라요 (<b>{s.left}</b> ≠ <b>{s.right}</b>) → <b>사각 아님</b>. 그래서 S 를 한 번에 다 못 지워요.</>)
+        <><b>COW</b>? Length 3 is <b>odd</b> — can't split into two equal halves → <b>not a square</b> ✗</>,
+        <><b>COW</b> 는? 길이 3, <b>홀수</b> 라 반으로 뚝같이 못 나눠요 → <b>사각 아님</b> ✗</>)
     : t(E,
-        <>But one erase picks a <b>subsequence</b> — letters that form a square even if far apart. E.g. the two <b>C</b>'s → <b>CC</b> (a square!).</>,
-        <>하지만 한 번 지우기는 <b>부분수열</b> — 떨어져 있어도 사각을 이루는 글자들을 골라요. 예: <b>C</b> 두 개 → <b>CC</b> (사각!).</>);
+        <>So one erase = <b>pick letters that form a square</b>. E.g. pick the two <b>C</b>'s (far apart!) → <b>CC</b> = C+C ✓. Erase them together.</>,
+        <>그래서 한 연산 = <b>사각이 되도록 글자를 골라</b> 빼기. 예: 떨어진 <b>C</b> 두 개 골라 → <b>CC</b> = C+C ✓. 한꺼번에 지움.</>);
 
-  // 'sub' 스텝용 예제 문자열 (COWOWC 에서 C 두 개 골라내기)
-  const subStr = "COWOWC".split("");
+  const pickStr = "COWOWC".split("");
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "What is a 'square' string?", "'사각 문자열' 이 뭐지?")}
+        title={t(E, "'Erase a square' — what does it mean?", "'사각을 지운다' — 무슨 뜻?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
 
       <div style={{ maxWidth: 520, margin: "6px auto 18px", padding: "12px 16px", borderRadius: 11,
@@ -70,57 +74,66 @@ export function SquareSim({ E }) {
         {bubble}
       </div>
 
-      {/* 정의/사각 스텝: 두 절반을 나눠 보여줌 */}
-      {(s.kind === "def" || s.kind === "bad") && (() => {
-        const arr = s.str.split("");
-        const half = arr.length / 2;
-        const okMatch = s.kind === "def";
-        const halfCol = okMatch ? "#059669" : "#dc2626";
-        return (
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
-            {arr.map((ch, i) => {
-              const secondHalf = i >= half;
-              return (
-                <span key={i} style={{ display: "flex", alignItems: "center" }}>
-                  {i === half && (
-                    <span style={{ margin: "0 10px", fontSize: 22, fontWeight: 800, color: halfCol }}>
-                      {okMatch ? "=" : "≠"}
-                    </span>
-                  )}
-                  <Tile ch={ch} size={46}
-                    bg={secondHalf ? OPBG[1] : "#fff"}
-                    bd={halfCol} fg="#1f2937" />
-                </span>
-              );
-            })}
+      {/* ① pick / ③ combine : 문자열에서 C 두 개 골라내 아래로 빼내기 */}
+      {(s.kind === "pick" || s.kind === "combine") && (
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>
+            S = COWOWC
           </div>
-        );
-      })()}
-
-      {(s.kind === "def" || s.kind === "bad") && (
-        <div style={{ textAlign: "center", marginTop: 14, fontSize: 13.5, fontWeight: 800,
-          color: s.kind === "def" ? "#059669" : "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>
-          {s.kind === "def"
-            ? t(E, `${s.str}  =  ${s.Y} + ${s.Y}   ✓ square`, `${s.str}  =  ${s.Y} + ${s.Y}   ✓ 사각`)
-            : t(E, `${s.str}  →  ${s.left} ≠ ${s.right}   ✗ not square`, `${s.str}  →  ${s.left} ≠ ${s.right}   ✗ 사각 아님`)}
-        </div>
-      )}
-
-      {/* subsequence 스텝: 떨어진 C 두 개 골라 CC */}
-      {s.kind === "sub" && (
-        <>
-          <div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
-            {subStr.map((ch, i) => {
+          <div style={{ display: "flex", justifyContent: "center", gap: 7 }}>
+            {pickStr.map((ch, i) => {
               const pick = ch === "C";
               return <Tile key={i} ch={ch} size={46}
                 bg={pick ? OPCOL[1] : "#fff"} bd={pick ? OPCOL[1] : "#e2e8f0"}
-                fg={pick ? "#fff" : "#94a3b8"} />;
+                fg={pick ? "#fff" : "#cbd5e1"} />;
             })}
           </div>
-          <div style={{ textAlign: "center", marginTop: 14, fontSize: 14, fontWeight: 800, color: OPCOL[1], fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, "picked C's  →  C + C  =  CC   ✓ square", "고른 C 들  →  C + C  =  CC   ✓ 사각")}
+          <div style={{ textAlign: "center", fontSize: 20, color: OPCOL[1], margin: "4px 0" }}>↓</div>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8 }}>
+            <Tile ch="C" size={44} bg={OPCOL[1]} bd={OPCOL[1]} fg="#fff" />
+            <Tile ch="C" size={44} bg={OPCOL[1]} bd={OPCOL[1]} fg="#fff" />
+            <span style={{ fontSize: 13, fontWeight: 800, color: OPCOL[1], wordBreak: "keep-all", marginLeft: 6 }}>
+              {s.kind === "pick"
+                ? t(E, "= subsequence (picked, in order)", "= 부분수열 (순서 유지)")
+                : t(E, "CC = C+C  ✓ square → erase!", "CC = C+C  ✓ 사각 → 지운다!")}
+            </span>
           </div>
-        </>
+        </div>
+      )}
+
+      {/* ② def : 사각 (두 절반 =) */}
+      {s.kind === "def" && (() => {
+        const arr = s.str.split("");
+        const half = arr.length / 2;
+        return (
+          <>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
+              {arr.map((ch, i) => (
+                <span key={i} style={{ display: "flex", alignItems: "center" }}>
+                  {i === half && <span style={{ margin: "0 10px", fontSize: 22, fontWeight: 800, color: "#059669" }}>=</span>}
+                  <Tile ch={ch} size={46} bg={i >= half ? OPBG[1] : "#fff"} bd="#059669" fg="#1f2937" />
+                </span>
+              ))}
+            </div>
+            <div style={{ textAlign: "center", marginTop: 14, fontSize: 13.5, fontWeight: 800, color: "#059669", fontFamily: "'JetBrains Mono',monospace" }}>
+              {t(E, `${s.str} = ${s.Y}+${s.Y}   ✓ square`, `${s.str} = ${s.Y}+${s.Y}   ✓ 사각`)}
+            </div>
+          </>
+        );
+      })()}
+
+      {/* ② bad : 홀수 → 반 못 나눠 */}
+      {s.kind === "bad" && (
+        <div style={{ textAlign: "center" }}>
+          <div style={{ display: "flex", justifyContent: "center", gap: 8 }}>
+            {s.str.split("").map((ch, i) => (
+              <Tile key={i} ch={ch} size={46} bg="#fff" bd="#dc2626" fg="#1f2937" />
+            ))}
+          </div>
+          <div style={{ marginTop: 14, fontSize: 13.5, fontWeight: 800, color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, `length ${s.str.length} (odd) → can't halve → ✗ not square`, `길이 ${s.str.length} (홀수) → 반으로 못 나눠 → ✗ 사각 아님`)}
+          </div>
+        </div>
       )}
 
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
