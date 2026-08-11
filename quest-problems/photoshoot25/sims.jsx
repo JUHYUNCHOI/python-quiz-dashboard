@@ -471,12 +471,10 @@ export function PhotoTraceSim({ E }) {
         </div>
       </div>
 
-      {/* 변수 칩 */}
-      <div style={{ display: "flex", gap: 7, justifyContent: "center", flexWrap: "wrap", marginTop: 16 }}>
+      {/* 변수 칩 — 의미 있는 것만 (범위 i_lo/j_lo 는 색칠된 칸이 이미 보여줌) */}
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginTop: 20 }}>
         <Pill on={showQ}>{showQ ? `r=${q.r} c=${q.c} v=${q.v}` : "r=· c=· v=·"}</Pill>
         <Pill on={showQ}>delta = {showQ ? s.delta : "·"}</Pill>
-        <Pill on={hasRange}>i_lo..i_hi = {hasRange ? `${s.iLo}..${s.iHi}` : "·"}</Pill>
-        <Pill on={hasRange}>j_lo..j_hi = {hasRange ? `${s.jLo}..${s.jHi}` : "·"}</Pill>
         <Pill on={s.kind === "apply" || s.kind === "done"}>cur_max = {curMax}</Pill>
       </div>
 
