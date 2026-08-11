@@ -64,11 +64,11 @@ export function IntroSim({ E }) {
 
   const say =
     s.kind === "what" ? t(E, <>This row of letters — I want to <b>wipe it all out</b>. And do it in as <b>few moves</b> as I can. How?</>,
-                            <>이 글자 줄, <b>다 지워서 없애고</b> 싶어. 그것도 되도록 <b>적은 횟수</b>로. 어떻게 하지?</>)
+                            <>이 글자 줄을 <b>다 지워서 없애고</b> 싶어요. 되도록 <b>적은 횟수</b>로. 어떻게 할까요?</>)
     : s.kind === "try" ? t(E, <>Wait — <b>COWCOW</b> is <b>COW</b> then <b>COW</b> again. The same chunk twice!</>,
-                             <>어라 — <b>COWCOW</b> 는 <b>COW</b> 다음에 또 <b>COW</b> 네. 같은 덩어리가 두 번이야!</>)
+                             <>어? <b>COWCOW</b> 는 <b>COW</b> 다음에 또 <b>COW</b> 네요. 같은 덩어리가 두 번이에요!</>)
     : t(E, <>When it's the same chunk twice, I can wipe the <b>whole thing in one move</b> → empty! Just <b>1 move</b>. 🎉</>,
-           <>같은 덩어리가 두 번이면 <b>한 방에 통째로</b> 지울 수 있어 → 빈 줄! 딱 <b>1번</b>. 🎉</>);
+           <>같은 덩어리가 두 번이면 <b>한 방에 통째로</b> 지울 수 있어요 → 빈 줄! 딱 <b>1번</b>. 🎉</>);
 
   return (
     <div style={{ padding: 16 }}>
@@ -110,13 +110,13 @@ export function EraseRuleSim({ E }) {
 
   const say =
     s.kind === "intro" ? t(E, <>One move can wipe <b>several letters at once</b> — not just one. The catch: the ones I pick must read as <b>the same chunk twice</b> (like C·C or COW·COW).</>,
-                             <>한 번의 지우기로 <b>여러 글자를 한꺼번에</b> 없앨 수 있어 — 하나씩이 아니라. 단, 고른 글자가 <b>같은 덩어리 두 번</b>이어야 해 (C·C 나 COW·COW 처럼).</>)
+                             <>한 번의 지우기로 <b>여러 글자를 한꺼번에</b> 없앨 수 있어요 — 하나씩이 아니고요. 단, 고른 글자가 <b>같은 덩어리 두 번</b>이어야 해요 (C·C 나 COW·COW 처럼).</>)
     : s.kind === "pick" ? t(E, <>They don't need to be next to each other! Pick the two <b>C</b>'s (far apart) → <b>C·C</b> = "C twice" ✓</>,
-                              <>딱 붙어있을 필요 없어! 떨어진 <b>C</b> 두 개를 골라 → <b>C·C</b> = "C 두 번" ✓</>)
+                              <>딱 붙어있을 필요 없어요! 떨어진 <b>C</b> 두 개를 골라봐요 → <b>C·C</b> = "C 두 번" ✓</>)
     : s.kind === "poof" ? t(E, <>Both C's vanish <b>in that one move</b> — together! What's left is <b>OWOW</b>. (So yes, one move erased two letters.)</>,
-                              <>그 <b>한 번의 지우기</b>로 C 두 개가 <b>같이</b> 사라져! 남은 건 <b>OWOW</b>. (한 번에 두 글자를 지운 거야.)</>)
+                              <>그 <b>한 번의 지우기</b>로 C 두 개가 <b>같이</b> 사라져요! 남은 건 <b>OWOW</b>. (한 번에 두 글자를 지운 거예요.)</>)
     : t(E, <>But I can't pick just anything: <b>C·O·W</b> isn't "same twice" → <b>can't wipe</b> ✗</>,
-           <>아무거나는 안 돼: <b>C·O·W</b> 는 "같은 것 두 번"이 아니야 → <b>못 지워</b> ✗</>);
+           <>아무거나는 안 돼요: <b>C·O·W</b> 는 "같은 것 두 번"이 아니에요 → <b>못 지워요</b> ✗</>);
 
   const bigRow = { display: "flex", justifyContent: "center", alignItems: "center", gap: 12, flexWrap: "wrap" };
 
@@ -199,9 +199,9 @@ export function StuckSim({ E }) {
 
   const say = ok
     ? t(E, <>Best case: if the <b>whole S</b> is "same chunk twice" (front half = back half), I win in <b>1 move</b>.</>,
-          <>제일 좋은 경우: <b>S 통째로</b> "같은 덩어리 두 번"(앞 절반 = 뒤 절반)이면 <b>1번</b>에 끝!</>)
+          <>제일 좋은 경우: <b>S 통째로</b> "같은 덩어리 두 번"(앞 절반 = 뒤 절반)이면 <b>1번</b>에 끝나요!</>)
     : t(E, <>But usually the front and back <b>don't match</b> (COW ≠ OWC). One move won't do it… <b>now what?</b> 🤔</>,
-          <>근데 보통은 앞뒤가 <b>안 맞아</b> (COW ≠ OWC). 한 방으론 안 되네… <b>이제 어쩌지?</b> 🤔</>);
+          <>근데 보통은 앞뒤가 <b>안 맞아요</b> (COW ≠ OWC). 한 방으론 안 되네요… <b>이제 어떡하죠?</b> 🤔</>);
 
   return (
     <div style={{ padding: 16 }}>
@@ -238,13 +238,13 @@ export function InsightSim({ E }) {
 
   const say =
     s.kind === "idea" ? t(E, <>Since I can pick letters from anywhere… what if I gather <b>all of the same letter</b>? All the C's → <b>CCCC…</b></>,
-                             <>여기저기서 골라도 되니까… <b>같은 글자끼리</b> 다 모아볼까? C 를 다 모으면 → <b>CCCC…</b></>)
+                             <>여기저기서 골라도 되니까… <b>같은 글자끼리</b> 다 모아볼까요? C 를 다 모으면 → <b>CCCC…</b></>)
     : s.kind === "count" ? t(E, <>How many C's? Every block has <b>exactly one C</b> (and one O, one W). So there are <b>N</b> C's.</>,
-                              <>C 가 몇 개지? 블록마다 <b>C 가 딱 하나씩</b> (O 도, W 도 하나씩). 그러니 C 는 <b>N 개</b>.</>)
+                              <>C 가 몇 개일까요? 블록마다 <b>C 가 딱 하나씩</b> (O 도, W 도 하나씩). 그러니 C 는 <b>N 개</b>예요.</>)
     : s.kind === "why" ? t(E, <>If <b>N is even</b>, N C's is even → <b>CC…C</b> splits into two equal halves → "same twice" → <b>wipe every C in one move!</b> Same for O, W → <b>3 moves</b>.</>,
-                             <><b>N 이 짝수</b>면 C 가 짝수개 → <b>CC…C</b> 를 반+반으로 딱 나눠 → "같은 것 두 번" → <b>C 를 한 번에 다 지운다!</b> O, W 도 똑같이 → <b>3번</b>.</>)
+                             <><b>N 이 짝수</b>면 C 가 짝수개 → <b>CC…C</b> 가 반+반으로 딱 나눠져요 → "같은 것 두 번" → <b>C 를 한 번에 다 지워요!</b> O, W 도 똑같이 → <b>3번</b>.</>)
     : t(E, <>And if <b>N is odd</b>? Then C is an odd count → can't halve → can't wipe → the whole thing is <b>impossible → −1</b>.</>,
-           <>만약 <b>N 이 홀수</b>면? C 가 홀수개 → 반 못 나눠 → 못 지워 → 아예 <b>불가능 → −1</b>.</>);
+           <>만약 <b>N 이 홀수</b>면? C 가 홀수개 → 반 못 나눠요 → 못 지워요 → 아예 <b>불가능 → −1</b>.</>);
 
   const cCount = blocks.length; // N
   return (
@@ -306,11 +306,11 @@ export function LetterGroupSim({ E }) {
 
   const say =
     s.kind === "intro" ? t(E, <>Let's do it on <b>COWOWC</b>: gather each letter, one move at a time.</>,
-                             <><b>COWOWC</b> 로 해보자: 글자별로 한 번씩 모아 지우기.</>)
+                             <><b>COWOWC</b> 로 해볼까요: 글자별로 한 번씩 모아 지우기.</>)
     : s.kind === "op" ? t(E, <>Move <b>{s.op}</b>: grab every <b>{s.letter}</b> → <b>{s.letter.repeat(N)}</b> ({s.letter}+{s.letter}) → wipe! ✓</>,
-                            <>연산 <b>{s.op}</b>: <b>{s.letter}</b> 전부 집기 → <b>{s.letter.repeat(N)}</b> ({s.letter}+{s.letter}) → 지운다! ✓</>)
+                            <>연산 <b>{s.op}</b>: <b>{s.letter}</b> 전부 집기 → <b>{s.letter.repeat(N)}</b> ({s.letter}+{s.letter}) → 지워요! ✓</>)
     : t(E, <>Empty in <b>3 moves</b>! Each letter now has its move number — <b>that's the answer</b>.</>,
-           <><b>3번</b>에 빈 줄! 각 글자에 연산 번호가 붙었어 — <b>이게 답</b>이야.</>);
+           <><b>3번</b>에 빈 줄! 각 글자에 연산 번호가 붙었죠 — <b>이게 답</b>이에요.</>);
 
   return (
     <div style={{ padding: 16 }}>
