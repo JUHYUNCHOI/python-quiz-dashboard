@@ -112,8 +112,8 @@ export function makeChipXchgCh1(E) {
       type: "reveal",
       label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
-        "Bessie has red chips and blue chips. At the exchange, 3 blue chips get her 1 red chip — as many times as she likes. She wants 4 red chips. More chips are coming, but a trickster decides how many go red and how many go blue. How many chips does she need so she gets there no matter what?",
-        "Bessie 는 빨간 칩과 파란 칩을 갖고 있어요. 교환소에서 파란 칩 3 개를 내면 빨간 칩 1 개를 줘요 — 몇 번이든. 목표는 빨간 칩 4 개. 칩을 더 받는데, 빨강으로 갈지 파랑으로 갈지는 심술쟁이가 정해요. 심술쟁이가 어떻게 나눠도 목표를 채우려면 몇 개를 받아야 할까?"),
+        "Bessie's chip-swap game. Let's see what it is.",
+        "Bessie 의 칩 교환 게임이에요. 어떤 게임인지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -150,17 +150,7 @@ export function makeChipXchgCh1(E) {
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>{t(E, "More chips arrive, but ", "칩을 더 받는데, ")}<b style={{ color: "#dc2626" }}>{t(E, "a trickster decides how many go red and how many go blue.", "빨강 몇 개, 파랑 몇 개로 갈지 심술쟁이가 정해요.")}</b></div>
               </div>
-              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
-                <div>{t(E, "Print the fewest ", "가장 적은 ")}<b style={{ color: "#15803d" }}>{t(E, "extra chips", "추가 칩 개수")}</b>{t(E, " that always reaches the red-chip goal.", " 를 출력 — 어떻게 나뉘어도 목표를 채우는 개수.")}</div>
-              </div>
             </div>
-          </div>
-
-          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: "10px 13px", fontSize: 12, color: "#475569", lineHeight: 1.75, wordBreak: "keep-all" }}>
-            <div style={{ fontWeight: 700, color: "#334155", marginBottom: 4 }}>📎 {t(E, "Names for these (used from the next page)", "여기에 이름 붙이기 (다음 장부터 이 이름을 써요)")}</div>
-            <div>🔴 {t(E, "red chip", "빨간 칩")} = <b>{t(E, "type-A chip", "A 칩")}</b>{" · "}🔵 {t(E, "blue chip", "파란 칩")} = <b>{t(E, "type-B chip", "B 칩")}</b></div>
-            <div>{t(E, "Trade numbers get names: ", "교환 숫자엔 이름이 붙어요: ")}<b style={{ color: "#0891b2" }}>c_B</b>{t(E, " blue in → ", " 개 파랑 내고 → ")}<b style={{ color: "#0891b2" }}>c_A</b>{t(E, " red out", " 개 빨강 받기")}{t(E, ", goal ", ", 목표는 ")}<b style={{ color: "#15803d" }}>f_A</b>{t(E, " red chips.", " 개 빨강.")}</div>
           </div>
         </div>),
     },
