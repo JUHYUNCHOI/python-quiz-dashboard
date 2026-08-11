@@ -103,58 +103,83 @@ export function IntroSim({ E }) {
    같은 덩어리 두 번(Y+Y) + 떨어진 것도 골라도 됨.
    ═══════════════════════════════════════════════════════════════ */
 export function EraseRuleSim({ E }) {
-  const steps = [{ kind: "rule" }, { kind: "short" }, { kind: "no" }, { kind: "far" }];
+  const S = "COWOWC".split("");
+  const steps = [{ kind: "intro" }, { kind: "pick" }, { kind: "poof" }, { kind: "bad" }];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
 
   const say =
-    s.kind === "rule" ? t(E, <>So the rule: I can wipe letters only if they read as <b>the same chunk twice</b> — like <b>COW·COW</b>.</>,
-                            <>그러니까 규칙은: 골라낸 글자가 <b>같은 덩어리 두 번</b>일 때만 지울 수 있어 — <b>COW·COW</b> 처럼.</>)
-    : s.kind === "short" ? t(E, <>Even a tiny one counts: <b>C·C</b> is "C twice" → I can wipe it.</>,
-                               <>짧아도 돼: <b>C·C</b> 는 "C 두 번" → 지울 수 있어.</>)
-    : s.kind === "no" ? t(E, <><b>COW</b> alone? 3 letters — can't split into two equal halves. <b>Nope.</b></>,
-                            <><b>COW</b> 하나는? 3 글자 — 똑같이 반으로 못 나눠. <b>안 돼.</b></>)
-    : t(E, <>Big trick: they don't need to be side by side! I can <b>pick from anywhere</b> (keep the order). Grab the two <b>C</b>'s → <b>C·C</b> ✓</>,
-           <>중요한 꿀팁: 딱 붙어있을 필요 없어! <b>여기저기서 골라</b> 와도 돼 (순서만 지키면). 떨어진 <b>C</b> 두 개 집으면 → <b>C·C</b> ✓</>);
+    s.kind === "intro" ? t(E, <>One move can wipe <b>several letters at once</b> — not just one. The catch: the ones I pick must read as <b>the same chunk twice</b> (like C·C or COW·COW).</>,
+                             <>한 번의 지우기로 <b>여러 글자를 한꺼번에</b> 없앨 수 있어 — 하나씩이 아니라. 단, 고른 글자가 <b>같은 덩어리 두 번</b>이어야 해 (C·C 나 COW·COW 처럼).</>)
+    : s.kind === "pick" ? t(E, <>They don't need to be next to each other! Pick the two <b>C</b>'s (far apart) → <b>C·C</b> = "C twice" ✓</>,
+                              <>딱 붙어있을 필요 없어! 떨어진 <b>C</b> 두 개를 골라 → <b>C·C</b> = "C 두 번" ✓</>)
+    : s.kind === "poof" ? t(E, <>Both C's vanish <b>in that one move</b> — together! What's left is <b>OWOW</b>. (So yes, one move erased two letters.)</>,
+                              <>그 <b>한 번의 지우기</b>로 C 두 개가 <b>같이</b> 사라져! 남은 건 <b>OWOW</b>. (한 번에 두 글자를 지운 거야.)</>)
+    : t(E, <>But I can't pick just anything: <b>C·O·W</b> isn't "same twice" → <b>can't wipe</b> ✗</>,
+           <>아무거나는 안 돼: <b>C·O·W</b> 는 "같은 것 두 번"이 아니야 → <b>못 지워</b> ✗</>);
+
+  const bigRow = { display: "flex", justifyContent: "center", alignItems: "center", gap: 12, flexWrap: "wrap" };
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "What can I wipe in one move?", "한 번에 뭘 지울 수 있지?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <Say tone={s.kind === "no" ? "stuck" : "go"}>{say}</Say>
+      <Say tone={s.kind === "bad" ? "stuck" : s.kind === "poof" ? "aha" : "go"}>{say}</Say>
 
-      {(s.kind === "rule" || s.kind === "short") && (() => {
-        const str = s.kind === "rule" ? "COWCOW" : "CC";
-        const arr = str.split(""); const half = arr.length / 2;
-        return <>
-          <Row>{arr.map((ch, i) => (
-            <span key={i} style={{ display: "flex", alignItems: "center" }}>
-              {i === half && <span style={{ margin: "0 9px", fontSize: 20, fontWeight: 800, color: "#059669" }}>=</span>}
-              <Tile ch={ch} size={46} bg={i >= half ? "#ecfdf5" : "#fff"} bd="#059669" />
-            </span>))}</Row>
-          <Caption color="#059669">{str} = {arr.slice(0, half).join("")}+{arr.slice(half).join("")}  ✓ {t(E, "same twice", "같은 것 두 번")}</Caption>
-        </>;
-      })()}
+      {s.kind !== "bad" && (
+        <>
+          <div style={{ fontSize: 12, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 10, fontFamily: "'JetBrains Mono',monospace" }}>
+            S = COWOWC
+          </div>
+          <div style={bigRow}>
+            {S.map((ch, i) => {
+              const isC = ch === "C";
+              const gone = s.kind === "poof" && isC;
+              const lit = (s.kind === "pick") && isC;
+              return (
+                <div key={i} style={{ width: 52, height: 52, display: "flex", alignItems: "center", justifyContent: "center",
+                  borderRadius: 10, fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 24,
+                  transition: "all .15s",
+                  background: gone ? "transparent" : lit ? OPCOL[1] : "#fff",
+                  border: gone ? "2px dashed #fca5a5" : `2px solid ${lit ? OPCOL[1] : "#e2e8f0"}`,
+                  color: gone ? "transparent" : lit ? "#fff" : "#1f2937" }}>
+                  {gone ? "" : ch}
+                </div>
+              );
+            })}
+          </div>
+          {s.kind === "pick" && (
+            <div style={{ ...bigRow, marginTop: 14 }}>
+              <div style={{ fontSize: 20, color: OPCOL[1] }}>↓</div>
+            </div>
+          )}
+          {s.kind === "pick" && (
+            <div style={{ ...bigRow, marginTop: 6 }}>
+              <div style={{ width: 46, height: 46, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 9, background: OPCOL[1], color: "#fff", fontWeight: 800, fontSize: 22, fontFamily: "'JetBrains Mono',monospace" }}>C</div>
+              <div style={{ width: 46, height: 46, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 9, background: OPCOL[1], color: "#fff", fontWeight: 800, fontSize: 22, fontFamily: "'JetBrains Mono',monospace" }}>C</div>
+              <span style={{ fontSize: 14, fontWeight: 800, color: OPCOL[1], marginLeft: 8, wordBreak: "keep-all" }}>C·C  ✓</span>
+            </div>
+          )}
+          {s.kind === "poof" && (
+            <div style={{ textAlign: "center", marginTop: 16, fontSize: 14, fontWeight: 800, color: "#059669", fontFamily: "'JetBrains Mono',monospace" }}>
+              {t(E, "left over → OWOW", "남은 글자 → OWOW")}
+            </div>
+          )}
+        </>
+      )}
 
-      {s.kind === "no" && <>
-        <Row>{"COW".split("").map((ch, i) => <Tile key={i} ch={ch} size={46} bg="#fff" bd="#dc2626" />)}</Row>
-        <Caption color="#dc2626">{t(E, "3 letters (odd) → can't halve → ✗", "3 글자(홀수) → 반 못 나눠 → ✗")}</Caption>
-      </>}
-
-      {s.kind === "far" && <>
-        <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>S = COWOWC</div>
-        <Row>{"COWOWC".split("").map((ch, i) => {
-          const pick = ch === "C";
-          return <Tile key={i} ch={ch} size={46} bg={pick ? OPCOL[1] : "#fff"} bd={pick ? OPCOL[1] : "#e2e8f0"} fg={pick ? "#fff" : "#cbd5e1"} />;
-        })}</Row>
-        <div style={{ textAlign: "center", fontSize: 20, color: OPCOL[1], margin: "4px 0" }}>↓</div>
-        <Row>
-          <Tile ch="C" size={42} bg={OPCOL[1]} bd={OPCOL[1]} fg="#fff" />
-          <Tile ch="C" size={42} bg={OPCOL[1]} bd={OPCOL[1]} fg="#fff" />
-          <span style={{ fontSize: 13, fontWeight: 800, color: OPCOL[1], marginLeft: 6, wordBreak: "keep-all" }}>{t(E, "C·C ✓ can wipe!", "C·C ✓ 지울 수 있어!")}</span>
-        </Row>
-      </>}
+      {s.kind === "bad" && (
+        <>
+          <div style={bigRow}>
+            {"COW".split("").map((ch, i) => (
+              <div key={i} style={{ width: 52, height: 52, display: "flex", alignItems: "center", justifyContent: "center",
+                borderRadius: 10, background: "#fff", border: "2px solid #dc2626", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 24, color: "#1f2937" }}>{ch}</div>
+            ))}
+          </div>
+          <Caption color="#dc2626">{t(E, "C·O·W → all different → ✗", "C·O·W → 다 달라 → ✗")}</Caption>
+        </>
+      )}
 
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
