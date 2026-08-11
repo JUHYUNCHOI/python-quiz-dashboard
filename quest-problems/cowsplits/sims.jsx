@@ -1,24 +1,24 @@
 // COW Splits (Dec 2025 Bronze #2) 용 시뮬 — 🔒 USACO_VERIFIED components.jsx 는
 // 건드리지 않고 여기에만 (photoshoot25 / checkups 와 같은 방식).
 //
-// 학생 이해 최우선 (선생님 2026-08-11: "학생들이 이해하기 쉬운거에 집중해"):
-//   ① SquareSim  — '사각 문자열 = Y+Y' 가 뭔지, '지우기 = 사각 부분수열 빼기'
-//   ② LetterGroupSim — 핵심 풀이. C→CC, O→OO, W→WW 3번에 비우기 (M=3)
+// 원칙 (quest_problem_standard + pain_points):
+//   · 학생이 주인공 — 학생 목소리로("어떻게 지우지?", "오 되네!", "어쩌지?")
+//   · 관찰 → 추론 — 핵심 알고리즘(글자별로 모으면 사각)을 *발견*시킴, 통보 X
+//   · 흐름: 이해 → 뭘 지울 수 있나 → 한 방(운 좋으면) → 막힘 → 핵심 발견 → 실행
 
 import { t } from "@/components/quest/theme";
 import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceStepper";
 
 const A = "#059669";
-const OPCOL = { 1: "#ef4444", 2: "#f59e0b", 3: "#8b5cf6" };   // C / O / W 연산 색
+const OPCOL = { 1: "#ef4444", 2: "#f59e0b", 3: "#8b5cf6" };   // C / O / W
 const OPBG  = { 1: "#fef2f2", 2: "#fffbeb", 3: "#f5f3ff" };
 
-/* 한 글자 타일 */
 function Tile({ ch, size = 42, bg = "#fff", bd = "#e2e8f0", fg = "#1f2937", faded = false, badge = null }) {
   return (
     <div style={{ position: "relative", width: size, height: size, display: "flex", alignItems: "center",
       justifyContent: "center", borderRadius: 9, background: bg, border: `2px solid ${bd}`,
       fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: size * 0.5, color: fg,
-      opacity: faded ? 0.32 : 1, transition: "all .15s" }}>
+      opacity: faded ? 0.3 : 1, transition: "all .15s" }}>
       {ch}
       {badge != null && (
         <span style={{ position: "absolute", top: -9, right: -8, minWidth: 17, height: 17, borderRadius: 999,
@@ -31,110 +31,130 @@ function Tile({ ch, size = 42, bg = "#fff", bd = "#e2e8f0", fg = "#1f2937", fade
   );
 }
 
+/* 학생 목소리 말풍선 (초록 = 관찰/진행, 노랑 = 막힘, 파랑 = 발견) */
+function Say({ children, tone = "go" }) {
+  const c = tone === "stuck" ? { bg: "#fffbeb", bd: "#fbbf24", fg: "#92400e" }
+          : tone === "aha"   ? { bg: "#eff6ff", bd: "#60a5fa", fg: "#1e40af" }
+          : { bg: "#ecfdf5", bd: "#6ee7b7", fg: "#065f46" };
+  return (
+    <div style={{ maxWidth: 540, margin: "6px auto 16px", padding: "12px 16px", borderRadius: 12,
+      background: c.bg, border: `1.5px solid ${c.bd}`, color: c.fg,
+      fontSize: 13.5, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
+      {children}
+    </div>
+  );
+}
+
+function Row({ children }) {
+  return <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, flexWrap: "wrap" }}>{children}</div>;
+}
+function Caption({ color, children }) {
+  return <div style={{ textAlign: "center", marginTop: 13, fontSize: 13.5, fontWeight: 800, color, fontFamily: "'JetBrains Mono',monospace" }}>{children}</div>;
+}
+
 /* ═══════════════════════════════════════════════════════════════
-   SquareSim — 어려운 말 '사각 부분수열' 을 둘로 쪼개서:
-   ① 부분수열 = 글자 골라 빼기(떨어져도 OK)   ② 사각 = Y+Y   ③ 둘을 합침
+   IntroSim — [이해] 게임이 뭔지. 학생 목소리.
    ═══════════════════════════════════════════════════════════════ */
-export function SquareSim({ E }) {
-  const steps = [
-    { kind: "pick" },                          // 부분수열 = 골라 빼기
-    { kind: "def", str: "CC", Y: "C" },        // 사각 = C+C
-    { kind: "def", str: "COWCOW", Y: "COW" },  // 사각 = COW+COW
-    { kind: "bad", str: "COW" },               // 홀수 → 사각 아님
-    { kind: "combine" },                        // 한 연산 = 사각 되게 골라 빼기
-  ];
+export function IntroSim({ E }) {
+  const arr = "COWCOW".split("");
+  const steps = [{ kind: "what" }, { kind: "try" }, { kind: "win" }];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+  const half = arr.length / 2;
+
+  const say =
+    s.kind === "what" ? t(E, <>This row of letters — I want to <b>wipe it all out</b>. And do it in as <b>few moves</b> as I can. How?</>,
+                            <>이 글자 줄, <b>다 지워서 없애고</b> 싶어. 그것도 되도록 <b>적은 횟수</b>로. 어떻게 하지?</>)
+    : s.kind === "try" ? t(E, <>Wait — <b>COWCOW</b> is <b>COW</b> then <b>COW</b> again. The same chunk twice!</>,
+                             <>어라 — <b>COWCOW</b> 는 <b>COW</b> 다음에 또 <b>COW</b> 네. 같은 덩어리가 두 번이야!</>)
+    : t(E, <>When it's the same chunk twice, I can wipe the <b>whole thing in one move</b> → empty! Just <b>1 move</b>. 🎉</>,
+           <>같은 덩어리가 두 번이면 <b>한 방에 통째로</b> 지울 수 있어 → 빈 줄! 딱 <b>1번</b>. 🎉</>);
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ textAlign: "center", marginBottom: 4 }}>
+        <div style={{ fontSize: 24 }}>🐄✂️</div>
+        <div style={{ fontSize: 15, fontWeight: 800, color: "#065f46" }}>{t(E, "COW Splits — the wipe-it-all game", "COW 분할 — 다 지우기 게임")}</div>
+        <div style={{ fontSize: 10, color: "#94a3b8" }}>USACO Dec 2025 Bronze #2</div>
+      </div>
+      <Say>{say}</Say>
+      <Row>
+        {s.kind === "win"
+          ? <div style={{ fontSize: 15, fontWeight: 800, color: "#059669", fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "( empty! )   1 move ✓", "( 빈 줄! )   1번 ✓")}</div>
+          : arr.map((ch, i) => (
+              <span key={i} style={{ display: "flex", alignItems: "center" }}>
+                {s.kind === "try" && i === half && <span style={{ margin: "0 9px", fontSize: 20, fontWeight: 800, color: "#059669" }}>|</span>}
+                <Tile ch={ch} size={48} bg={s.kind === "try" && i >= half ? "#ecfdf5" : "#fff"} bd={s.kind === "try" ? "#059669" : "#cbd5e1"} />
+              </span>
+            ))}
+      </Row>
+      {s.kind === "try" && <Caption color="#059669">COW | COW  {t(E, "→ same chunk twice!", "→ 같은 덩어리 두 번!")}</Caption>}
+      <div style={{ maxWidth: 520, margin: "18px auto 0", fontSize: 10.5, color: "#94a3b8", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.5 }}>
+        {t(E, "(The letters are C, O, W only — S is N blocks, each COW/OWC/WCO. If you can't empty it → −1.)",
+             "(글자는 C, O, W 뿐 — S 는 N 개 블록, 각 블록은 COW/OWC/WCO. 못 비우면 → −1.)")}
+      </div>
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EraseRuleSim — [뭘 지울 수 있나] 학생이 규칙을 직접 발견.
+   같은 덩어리 두 번(Y+Y) + 떨어진 것도 골라도 됨.
+   ═══════════════════════════════════════════════════════════════ */
+export function EraseRuleSim({ E }) {
+  const steps = [{ kind: "rule" }, { kind: "short" }, { kind: "no" }, { kind: "far" }];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
 
-  const bubble =
-    s.kind === "pick" ? t(E,
-        <>Erasing = <b>pick some letters</b> and take them out. They don't have to be next to each other — just keep the order. (This picked group is called a <b>subsequence</b>.)</>,
-        <>지우기 = S 에서 <b>글자를 몇 개 골라</b> 빼는 거예요. 붙어있지 않아도 돼요 — 순서만 지키면. (이렇게 골라낸 묶음 = <b>부분수열</b>.)</>)
-    : s.kind === "def" ? t(E,
-        <>But you can't pick just anything — the picked string must be a <b>square</b>: the same piece <b>Y</b> twice (<b>Y+Y</b>). Here Y = <b>{s.Y}</b>.</>,
-        <>근데 아무거나 못 골라요 — 골라낸 게 <b>사각</b> 이어야 해요: 같은 조각 <b>Y</b> 를 두 번(<b>Y+Y</b>). 여기서 Y = <b>{s.Y}</b>.</>)
-    : s.kind === "bad" ? t(E,
-        <><b>COW</b>? Length 3 is <b>odd</b> — can't split into two equal halves → <b>not a square</b> ✗</>,
-        <><b>COW</b> 는? 길이 3, <b>홀수</b> 라 반으로 뚝같이 못 나눠요 → <b>사각 아님</b> ✗</>)
-    : t(E,
-        <>So one erase = <b>pick letters that form a square</b>. E.g. pick the two <b>C</b>'s (far apart!) → <b>CC</b> = C+C ✓. Erase them together.</>,
-        <>그래서 한 연산 = <b>사각이 되도록 글자를 골라</b> 빼기. 예: 떨어진 <b>C</b> 두 개 골라 → <b>CC</b> = C+C ✓. 한꺼번에 지움.</>);
-
-  const pickStr = "COWOWC".split("");
+  const say =
+    s.kind === "rule" ? t(E, <>So the rule: I can wipe letters only if they read as <b>the same chunk twice</b> — like <b>COW·COW</b>.</>,
+                            <>그러니까 규칙은: 골라낸 글자가 <b>같은 덩어리 두 번</b>일 때만 지울 수 있어 — <b>COW·COW</b> 처럼.</>)
+    : s.kind === "short" ? t(E, <>Even a tiny one counts: <b>C·C</b> is "C twice" → I can wipe it.</>,
+                               <>짧아도 돼: <b>C·C</b> 는 "C 두 번" → 지울 수 있어.</>)
+    : s.kind === "no" ? t(E, <><b>COW</b> alone? 3 letters — can't split into two equal halves. <b>Nope.</b></>,
+                            <><b>COW</b> 하나는? 3 글자 — 똑같이 반으로 못 나눠. <b>안 돼.</b></>)
+    : t(E, <>Big trick: they don't need to be side by side! I can <b>pick from anywhere</b> (keep the order). Grab the two <b>C</b>'s → <b>C·C</b> ✓</>,
+           <>중요한 꿀팁: 딱 붙어있을 필요 없어! <b>여기저기서 골라</b> 와도 돼 (순서만 지키면). 떨어진 <b>C</b> 두 개 집으면 → <b>C·C</b> ✓</>);
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "'Erase a square' — what does it mean?", "'사각을 지운다' — 무슨 뜻?")}
+        title={t(E, "What can I wipe in one move?", "한 번에 뭘 지울 수 있지?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Say tone={s.kind === "no" ? "stuck" : "go"}>{say}</Say>
 
-      <div style={{ maxWidth: 520, margin: "6px auto 18px", padding: "12px 16px", borderRadius: 11,
-        background: "#ecfdf5", border: "1.5px solid #6ee7b7", color: "#065f46",
-        fontSize: 13, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
-        {bubble}
-      </div>
-
-      {/* ① pick / ③ combine : 문자열에서 C 두 개 골라내 아래로 빼내기 */}
-      {(s.kind === "pick" || s.kind === "combine") && (
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>
-            S = COWOWC
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", gap: 7 }}>
-            {pickStr.map((ch, i) => {
-              const pick = ch === "C";
-              return <Tile key={i} ch={ch} size={46}
-                bg={pick ? OPCOL[1] : "#fff"} bd={pick ? OPCOL[1] : "#e2e8f0"}
-                fg={pick ? "#fff" : "#cbd5e1"} />;
-            })}
-          </div>
-          <div style={{ textAlign: "center", fontSize: 20, color: OPCOL[1], margin: "4px 0" }}>↓</div>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8 }}>
-            <Tile ch="C" size={44} bg={OPCOL[1]} bd={OPCOL[1]} fg="#fff" />
-            <Tile ch="C" size={44} bg={OPCOL[1]} bd={OPCOL[1]} fg="#fff" />
-            <span style={{ fontSize: 13, fontWeight: 800, color: OPCOL[1], wordBreak: "keep-all", marginLeft: 6 }}>
-              {s.kind === "pick"
-                ? t(E, "= subsequence (picked, in order)", "= 부분수열 (순서 유지)")
-                : t(E, "CC = C+C  ✓ square → erase!", "CC = C+C  ✓ 사각 → 지운다!")}
-            </span>
-          </div>
-        </div>
-      )}
-
-      {/* ② def : 사각 (두 절반 =) */}
-      {s.kind === "def" && (() => {
-        const arr = s.str.split("");
-        const half = arr.length / 2;
-        return (
-          <>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
-              {arr.map((ch, i) => (
-                <span key={i} style={{ display: "flex", alignItems: "center" }}>
-                  {i === half && <span style={{ margin: "0 10px", fontSize: 22, fontWeight: 800, color: "#059669" }}>=</span>}
-                  <Tile ch={ch} size={46} bg={i >= half ? OPBG[1] : "#fff"} bd="#059669" fg="#1f2937" />
-                </span>
-              ))}
-            </div>
-            <div style={{ textAlign: "center", marginTop: 14, fontSize: 13.5, fontWeight: 800, color: "#059669", fontFamily: "'JetBrains Mono',monospace" }}>
-              {t(E, `${s.str} = ${s.Y}+${s.Y}   ✓ square`, `${s.str} = ${s.Y}+${s.Y}   ✓ 사각`)}
-            </div>
-          </>
-        );
+      {(s.kind === "rule" || s.kind === "short") && (() => {
+        const str = s.kind === "rule" ? "COWCOW" : "CC";
+        const arr = str.split(""); const half = arr.length / 2;
+        return <>
+          <Row>{arr.map((ch, i) => (
+            <span key={i} style={{ display: "flex", alignItems: "center" }}>
+              {i === half && <span style={{ margin: "0 9px", fontSize: 20, fontWeight: 800, color: "#059669" }}>=</span>}
+              <Tile ch={ch} size={46} bg={i >= half ? "#ecfdf5" : "#fff"} bd="#059669" />
+            </span>))}</Row>
+          <Caption color="#059669">{str} = {arr.slice(0, half).join("")}+{arr.slice(half).join("")}  ✓ {t(E, "same twice", "같은 것 두 번")}</Caption>
+        </>;
       })()}
 
-      {/* ② bad : 홀수 → 반 못 나눠 */}
-      {s.kind === "bad" && (
-        <div style={{ textAlign: "center" }}>
-          <div style={{ display: "flex", justifyContent: "center", gap: 8 }}>
-            {s.str.split("").map((ch, i) => (
-              <Tile key={i} ch={ch} size={46} bg="#fff" bd="#dc2626" fg="#1f2937" />
-            ))}
-          </div>
-          <div style={{ marginTop: 14, fontSize: 13.5, fontWeight: 800, color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, `length ${s.str.length} (odd) → can't halve → ✗ not square`, `길이 ${s.str.length} (홀수) → 반으로 못 나눠 → ✗ 사각 아님`)}
-          </div>
-        </div>
-      )}
+      {s.kind === "no" && <>
+        <Row>{"COW".split("").map((ch, i) => <Tile key={i} ch={ch} size={46} bg="#fff" bd="#dc2626" />)}</Row>
+        <Caption color="#dc2626">{t(E, "3 letters (odd) → can't halve → ✗", "3 글자(홀수) → 반 못 나눠 → ✗")}</Caption>
+      </>}
+
+      {s.kind === "far" && <>
+        <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>S = COWOWC</div>
+        <Row>{"COWOWC".split("").map((ch, i) => {
+          const pick = ch === "C";
+          return <Tile key={i} ch={ch} size={46} bg={pick ? OPCOL[1] : "#fff"} bd={pick ? OPCOL[1] : "#e2e8f0"} fg={pick ? "#fff" : "#cbd5e1"} />;
+        })}</Row>
+        <div style={{ textAlign: "center", fontSize: 20, color: OPCOL[1], margin: "4px 0" }}>↓</div>
+        <Row>
+          <Tile ch="C" size={42} bg={OPCOL[1]} bd={OPCOL[1]} fg="#fff" />
+          <Tile ch="C" size={42} bg={OPCOL[1]} bd={OPCOL[1]} fg="#fff" />
+          <span style={{ fontSize: 13, fontWeight: 800, color: OPCOL[1], marginLeft: 6, wordBreak: "keep-all" }}>{t(E, "C·C ✓ can wipe!", "C·C ✓ 지울 수 있어!")}</span>
+        </Row>
+      </>}
 
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
@@ -142,266 +162,159 @@ export function SquareSim({ E }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   LetterGroupSim — 핵심 풀이. S 를 한 번에 못 지우면 글자별 3번에.
-   예제 S = COWOWC (N=2). C→CC, O→OO, W→WW. 각각 사각 → M=3.
+   StuckSim — [한 방 시도 → 막힘] 운 좋으면 1번. 근데 안 맞으면?
+   ═══════════════════════════════════════════════════════════════ */
+export function StuckSim({ E }) {
+  const steps = [{ kind: "lucky" }, { kind: "stuck" }];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+  const str = s.kind === "lucky" ? "COWCOW" : "COWOWC";
+  const arr = str.split(""); const half = arr.length / 2;
+  const ok = s.kind === "lucky";
+
+  const say = ok
+    ? t(E, <>Best case: if the <b>whole S</b> is "same chunk twice" (front half = back half), I win in <b>1 move</b>.</>,
+          <>제일 좋은 경우: <b>S 통째로</b> "같은 덩어리 두 번"(앞 절반 = 뒤 절반)이면 <b>1번</b>에 끝!</>)
+    : t(E, <>But usually the front and back <b>don't match</b> (COW ≠ OWC). One move won't do it… <b>now what?</b> 🤔</>,
+          <>근데 보통은 앞뒤가 <b>안 맞아</b> (COW ≠ OWC). 한 방으론 안 되네… <b>이제 어쩌지?</b> 🤔</>);
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "One move — when does it work?", "한 방 — 언제 될까?")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Say tone={ok ? "go" : "stuck"}>{say}</Say>
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>S = {str}</div>
+      <Row>{arr.map((ch, i) => (
+        <span key={i} style={{ display: "flex", alignItems: "center" }}>
+          {i === half && <span style={{ margin: "0 10px", fontSize: 22, fontWeight: 800, color: ok ? "#059669" : "#dc2626" }}>{ok ? "=" : "≠"}</span>}
+          <Tile ch={ch} size={46} bg={ok && i >= half ? "#ecfdf5" : "#fff"} bd={ok ? "#059669" : "#dc2626"} />
+        </span>))}</Row>
+      <Caption color={ok ? "#059669" : "#dc2626"}>
+        {ok ? t(E, "COW = COW → wipe all → 1 move ✓", "COW = COW → 통째로 → 1번 ✓")
+            : t(E, "COW ≠ OWC → one move can't → ✗", "COW ≠ OWC → 한 방 불가 → ✗")}
+      </Caption>
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   InsightSim — [핵심 발견] 이 문제의 진짜 알고리즘.
+   떨어진 것도 골라도 되니 → 같은 글자끼리 모으자 → 왜 항상 사각?
+   블록마다 C·O·W 하나씩 → C가 N개 → N짝수면 짝수 → 반+반 = 사각.
+   (그리고 N홀수면 홀수개 → 못 나눔 → 아예 못 비움 = -1)
+   ═══════════════════════════════════════════════════════════════ */
+export function InsightSim({ E }) {
+  const blocks = [["C", "O", "W"], ["O", "W", "C"]];   // N=2, COWOWC
+  const steps = [{ kind: "idea" }, { kind: "count" }, { kind: "why" }, { kind: "odd" }];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+
+  const say =
+    s.kind === "idea" ? t(E, <>Since I can pick letters from anywhere… what if I gather <b>all of the same letter</b>? All the C's → <b>CCCC…</b></>,
+                             <>여기저기서 골라도 되니까… <b>같은 글자끼리</b> 다 모아볼까? C 를 다 모으면 → <b>CCCC…</b></>)
+    : s.kind === "count" ? t(E, <>How many C's? Every block has <b>exactly one C</b> (and one O, one W). So there are <b>N</b> C's.</>,
+                              <>C 가 몇 개지? 블록마다 <b>C 가 딱 하나씩</b> (O 도, W 도 하나씩). 그러니 C 는 <b>N 개</b>.</>)
+    : s.kind === "why" ? t(E, <>If <b>N is even</b>, N C's is even → <b>CC…C</b> splits into two equal halves → "same twice" → <b>wipe every C in one move!</b> Same for O, W → <b>3 moves</b>.</>,
+                             <><b>N 이 짝수</b>면 C 가 짝수개 → <b>CC…C</b> 를 반+반으로 딱 나눠 → "같은 것 두 번" → <b>C 를 한 번에 다 지운다!</b> O, W 도 똑같이 → <b>3번</b>.</>)
+    : t(E, <>And if <b>N is odd</b>? Then C is an odd count → can't halve → can't wipe → the whole thing is <b>impossible → −1</b>.</>,
+           <>만약 <b>N 이 홀수</b>면? C 가 홀수개 → 반 못 나눠 → 못 지워 → 아예 <b>불가능 → −1</b>.</>);
+
+  const cCount = blocks.length; // N
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "The idea: gather same letters", "핵심: 같은 글자끼리 모으기")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Say tone={s.kind === "idea" ? "aha" : s.kind === "odd" ? "stuck" : "go"}>{say}</Say>
+
+      {/* 블록 그림 — count·why 스텝에서 C 강조 */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 16, marginBottom: 10 }}>
+        {blocks.map((b, bi) => (
+          <div key={bi} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+            <div style={{ display: "flex", gap: 4 }}>
+              {b.map((ch, i) => {
+                const hl = (s.kind === "count" || s.kind === "why") && ch === "C";
+                return <Tile key={i} ch={ch} size={40} bg={hl ? OPCOL[1] : "#fff"} bd={hl ? OPCOL[1] : "#cbd5e1"} fg={hl ? "#fff" : "#1f2937"} />;
+              })}
+            </div>
+            <div style={{ fontSize: 9.5, fontWeight: 800, color: "#94a3b8", fontFamily: "'JetBrains Mono',monospace" }}>{t(E, `block ${bi + 1}`, `블록 ${bi + 1}`)}</div>
+          </div>
+        ))}
+      </div>
+
+      {s.kind === "count" && <Caption color={OPCOL[1]}>{t(E, `C once per block → N = ${cCount} C's`, `블록마다 C 하나 → C 는 N = ${cCount} 개`)}</Caption>}
+      {s.kind === "why" && <>
+        <Row>
+          {Array.from({ length: cCount }).map((_, i) => (
+            <span key={i} style={{ display: "flex", alignItems: "center" }}>
+              {i === cCount / 2 && <span style={{ margin: "0 8px", fontSize: 20, fontWeight: 800, color: "#059669" }}>=</span>}
+              <Tile ch="C" size={42} bg="#ecfdf5" bd="#059669" />
+            </span>
+          ))}
+        </Row>
+        <Caption color="#059669">{t(E, "CC = C+C ✓ square → wipe every C (move 1)", "CC = C+C ✓ 사각 → C 전부 한 번에 (연산 1)")}</Caption>
+      </>}
+      {s.kind === "odd" && <>
+        <Row>{"CCC".split("").map((ch, i) => <Tile key={i} ch={ch} size={42} bg="#fff" bd="#dc2626" />)}</Row>
+        <Caption color="#dc2626">{t(E, "odd # of C → can't halve → −1", "C 홀수개 → 반 못 나눠 → −1")}</Caption>
+      </>}
+
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LetterGroupSim — [실행/payoff] 그 아이디어로 COWOWC 를 3번에.
    ═══════════════════════════════════════════════════════════════ */
 export function LetterGroupSim({ E }) {
-  const S = "COWOWC";
-  const chars = S.split("");
+  const chars = "COWOWC".split("");
   const label = { C: 1, O: 2, W: 3 };
-  const N = chars.filter((c) => c === "C").length; // 2
-
-  const steps = [
-    { kind: "intro" },
-    { kind: "op", op: 1, letter: "C" },
-    { kind: "op", op: 2, letter: "O" },
-    { kind: "op", op: 3, letter: "W" },
-    { kind: "done" },
-  ];
+  const N = chars.filter((c) => c === "C").length;
+  const steps = [{ kind: "intro" }, { kind: "op", op: 1, letter: "C" }, { kind: "op", op: 2, letter: "O" }, { kind: "op", op: 3, letter: "W" }, { kind: "done" }];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
   const opsDone = s.kind === "op" ? s.op : s.kind === "done" ? 3 : 0;
   const activeOp = s.kind === "op" ? s.op : null;
 
-  const bubble =
-    s.kind === "intro" ? t(E,
-        <>S isn't a square (halves differ), so we can't erase it in one op. Trick: <b>erase one letter-type at a time</b>.</>,
-        <>S 는 사각이 아니라(앞·뒤 절반이 다름) 한 번에 못 지워요. 트릭: <b>글자 종류별로 한 번씩</b> 지우기.</>)
-    : s.kind === "op" ? t(E,
-        <>Op <b>{s.op}</b>: pick every <b>{s.letter}</b> → <b>{s.letter.repeat(N)}</b> = <b>{s.letter.repeat(N / 2)}</b>+<b>{s.letter.repeat(N / 2)}</b>, a square ✓ (N is even, so the count is even). Erase them together.</>,
-        <>연산 <b>{s.op}</b>: 모든 <b>{s.letter}</b> 골라내기 → <b>{s.letter.repeat(N)}</b> = <b>{s.letter.repeat(N / 2)}</b>+<b>{s.letter.repeat(N / 2)}</b>, 사각 ✓ (N 짝수라 개수도 짝수). 한꺼번에 지워요.</>)
-    : t(E,
-        <>Empty in <b>3</b> ops → <b>M = 3</b>. Every letter gets its op number below — that's the answer we print.</>,
-        <><b>3</b> 번에 다 지웠어요 → <b>M = 3</b>. 각 글자에 연산 번호가 붙었죠 — 이걸 출력하면 답.</>);
+  const say =
+    s.kind === "intro" ? t(E, <>Let's do it on <b>COWOWC</b>: gather each letter, one move at a time.</>,
+                             <><b>COWOWC</b> 로 해보자: 글자별로 한 번씩 모아 지우기.</>)
+    : s.kind === "op" ? t(E, <>Move <b>{s.op}</b>: grab every <b>{s.letter}</b> → <b>{s.letter.repeat(N)}</b> ({s.letter}+{s.letter}) → wipe! ✓</>,
+                            <>연산 <b>{s.op}</b>: <b>{s.letter}</b> 전부 집기 → <b>{s.letter.repeat(N)}</b> ({s.letter}+{s.letter}) → 지운다! ✓</>)
+    : t(E, <>Empty in <b>3 moves</b>! Each letter now has its move number — <b>that's the answer</b>.</>,
+           <><b>3번</b>에 빈 줄! 각 글자에 연산 번호가 붙었어 — <b>이게 답</b>이야.</>);
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Erase by letter → 3 ops", "글자별로 지우기 → 3연산")}
+        title={t(E, "Wipe COWOWC → 3 moves", "COWOWC 지우기 → 3연산")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-
-      <div style={{ maxWidth: 540, margin: "6px auto 8px", padding: "12px 16px", borderRadius: 11,
-        background: "#ecfdf5", border: "1.5px solid #6ee7b7", color: "#065f46",
-        fontSize: 13, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
-        {bubble}
-      </div>
-
-      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
-        S = COWOWC   (N = {N})
-      </div>
-
-      {/* 문자열 타일 */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap", marginTop: 4 }}>
+      <Say tone="aha">{say}</Say>
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>S = COWOWC</div>
+      <Row>
         {chars.map((ch, i) => {
-          const op = label[ch];
-          const assigned = op <= opsDone;
-          const active = activeOp === op;
-          const doneEarlier = assigned && !active;
-          return (
-            <Tile key={i} ch={ch} size={46}
-              bg={active ? OPCOL[op] : "#fff"}
-              bd={active ? OPCOL[op] : assigned ? OPCOL[op] : "#e2e8f0"}
-              fg={active ? "#fff" : "#1f2937"}
-              faded={doneEarlier}
-              badge={assigned ? op : null} />
-          );
+          const op = label[ch]; const assigned = op <= opsDone; const active = activeOp === op;
+          return <Tile key={i} ch={ch} size={46}
+            bg={active ? OPCOL[op] : "#fff"} bd={active ? OPCOL[op] : assigned ? OPCOL[op] : "#e2e8f0"}
+            fg={active ? "#fff" : "#1f2937"} faded={assigned && !active} badge={assigned ? op : null} />;
         })}
-      </div>
-
-      {/* 골라낸 조각 */}
-      <div style={{ height: 54, display: "flex", alignItems: "center", justifyContent: "center", marginTop: 12 }}>
+      </Row>
+      <div style={{ height: 40, display: "flex", alignItems: "center", justifyContent: "center", marginTop: 12 }}>
         {s.kind === "op" && (
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "8px 16px", borderRadius: 10,
-            background: OPBG[s.op], border: `2px solid ${OPCOL[s.op]}` }}>
-            <span style={{ fontSize: 15, fontWeight: 800, color: OPCOL[s.op], fontFamily: "'JetBrains Mono',monospace", letterSpacing: 2 }}>
-              {s.letter.repeat(N)}
-            </span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: OPCOL[s.op], wordBreak: "keep-all" }}>
-              = {s.letter.repeat(N / 2)}+{s.letter.repeat(N / 2)} {t(E, "square ✓", "사각 ✓")}
-            </span>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "7px 14px", borderRadius: 10, background: OPBG[s.op], border: `2px solid ${OPCOL[s.op]}` }}>
+            <span style={{ fontSize: 15, fontWeight: 800, color: OPCOL[s.op], fontFamily: "'JetBrains Mono',monospace", letterSpacing: 2 }}>{s.letter.repeat(N)}</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: OPCOL[s.op] }}>= {s.letter}+{s.letter} ✓</span>
           </div>
         )}
         {s.kind === "done" && (
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
-              {t(E, "answer (op number per letter):", "답 (글자별 연산 번호):")}
-            </div>
-            <div style={{ fontSize: 16, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#065f46", letterSpacing: 3 }}>
-              {chars.map((ch) => label[ch]).join(" ")}
-            </div>
+          <div style={{ fontSize: 16, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#065f46", letterSpacing: 3 }}>
+            {chars.map((ch) => label[ch]).join(" ")}
           </div>
         )}
       </div>
-
-      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   DecideSim — 언제 몇 번? 세 경우를 단계로.
-   ① N 홀수 → 못 비움(-1)   ② S 통째로 사각 → 1번(M=1)   ③ 아니면 → 글자 트릭
-   ═══════════════════════════════════════════════════════════════ */
-export function DecideSim({ E }) {
-  const steps = [{ kind: "parity" }, { kind: "m1" }, { kind: "bridge" }];
-  const ts = useTraceStep(steps);
-  const s = steps[ts.safe];
-
-  const bubble =
-    s.kind === "parity" ? t(E,
-        <>Each op erases an <b>even</b> count (a square Y+Y). If <b>N is odd</b>, total 3N is odd → one letter is always left over → <b>impossible, print −1</b>.</>,
-        <>한 번 지우기는 <b>짝수 개</b>(사각 Y+Y)를 지워요. <b>N 이 홀수</b>면 전체 3N 도 홀수 → 항상 한 글자가 남아요 → <b>못 비움, −1 출력</b>.</>)
-    : s.kind === "m1" ? t(E,
-        <>N even, and <b>S itself is a square</b> (first half = second half)? Then erase it all at once → <b>M = 1</b>, tag every letter 1.</>,
-        <>N 짝수이고 <b>S 자체가 사각</b>(앞 절반 = 뒤 절반)이면? 한 번에 다 지움 → <b>M = 1</b>, 모든 글자에 1.</>)
-    : t(E,
-        <>But if the halves <b>differ</b>, one op isn't enough. We split it up by letter → next.</>,
-        <>그런데 앞·뒤가 <b>다르면</b> 한 번으론 안 돼요. 글자별로 나눠 지워요 → 다음.</>);
-
-  return (
-    <div style={{ padding: 16 }}>
-      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "When? How many ops?", "언제? 몇 번?")}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-
-      <div style={{ maxWidth: 540, margin: "6px auto 18px", padding: "12px 16px", borderRadius: 11,
-        background: "#ecfdf5", border: "1.5px solid #6ee7b7", color: "#065f46",
-        fontSize: 13, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
-        {bubble}
-      </div>
-
-      {/* ① 홀수 → -1 : COW(길이 3) 에서 짝수 지워도 1개 남음 */}
-      {s.kind === "parity" && (
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, "N = 1 (odd) → S = COW, length 3", "N = 1 (홀수) → S = COW, 길이 3")}
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", gap: 8 }}>
-            {["C", "O", "W"].map((ch, i) => (
-              <Tile key={i} ch={ch} size={46}
-                bg={i < 2 ? "#f1f5f9" : "#fef2f2"} bd={i < 2 ? "#cbd5e1" : "#ef4444"}
-                fg={i < 2 ? "#94a3b8" : "#dc2626"} faded={i < 2} />
-            ))}
-          </div>
-          <div style={{ marginTop: 12, fontSize: 13.5, fontWeight: 800, color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, "erase 2 → 1 left → can't reach 0 → −1", "2 개 지움 → 1 개 남음 → 0 못 됨 → −1")}
-          </div>
-        </div>
-      )}
-
-      {/* ② S 사각 → M=1 : COWCOW 앞==뒤 */}
-      {s.kind === "m1" && (
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, "N = 2 → S = COWCOW", "N = 2 → S = COWCOW")}
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 4 }}>
-            {"COWCOW".split("").map((ch, i) => (
-              <span key={i} style={{ display: "flex", alignItems: "center" }}>
-                {i === 3 && <span style={{ margin: "0 10px", fontSize: 22, fontWeight: 800, color: "#059669" }}>=</span>}
-                <Tile ch={ch} size={46} bg="#ecfdf5" bd="#059669" fg="#065f46" badge={1} />
-              </span>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, fontSize: 13.5, fontWeight: 800, color: "#059669", fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, "COW = COW → all op 1 → M = 1", "COW = COW → 모두 연산 1 → M = 1")}
-          </div>
-        </div>
-      )}
-
-      {/* ③ 앞≠뒤 → 글자 트릭으로 */}
-      {s.kind === "bridge" && (
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, "N = 2 → S = COWOWC", "N = 2 → S = COWOWC")}
-          </div>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 4 }}>
-            {"COWOWC".split("").map((ch, i) => (
-              <span key={i} style={{ display: "flex", alignItems: "center" }}>
-                {i === 3 && <span style={{ margin: "0 10px", fontSize: 22, fontWeight: 800, color: "#dc2626" }}>≠</span>}
-                <Tile ch={ch} size={46} bg="#fff" bd="#dc2626" fg="#1f2937" />
-              </span>
-            ))}
-          </div>
-          <div style={{ marginTop: 12, fontSize: 13.5, fontWeight: 800, color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, "COW ≠ OWC → split by letter →", "COW ≠ OWC → 글자별로 나누기 →")}
-          </div>
-        </div>
-      )}
-
-      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   IntroSim — 첫 페이지. "이게 무슨 문제야?" 를 완전한 데모 한 판으로.
-   글자 줄을 '지우기'로 다 비우는 게임. 적은 횟수로. (COWCOW → 1번)
-   ═══════════════════════════════════════════════════════════════ */
-export function IntroSim({ E }) {
-  const arr = "COWCOW".split("");
-  const steps = [{ kind: "what" }, { kind: "move" }, { kind: "empty" }];
-  const ts = useTraceStep(steps);
-  const s = steps[ts.safe];
-
-  const bubble =
-    s.kind === "what" ? t(E,
-        <>Bessie has a row of letters <b>S</b> (only C, O, W). <b>Goal: erase them all</b> — empty the row — in as <b>few moves</b> as possible.</>,
-        <>Bessie 앞에 글자 줄 <b>S</b> 가 있어요 (C, O, W 만). <b>목표: 다 지워서</b> 빈 줄 만들기 — 되도록 <b>적은 횟수</b>로.</>)
-    : s.kind === "move" ? t(E,
-        <>One <b>move</b> erases letters that form <b>the same piece twice</b>. Here <b>COWCOW = COW + COW</b> — so one move wipes the whole row!</>,
-        <>한 번의 <b>지우기</b> = <b>같은 묶음을 두 번</b> 이룬 글자들을 빼요. 여기 <b>COWCOW = COW + COW</b> — 그래서 한 번에 통째로!</>)
-    : t(E,
-        <>Empty in <b>1 move</b>! But if the front and back <b>don't</b> match, we need more moves — that's the puzzle. (Impossible → −1.)</>,
-        <><b>1번</b>에 빈 줄! 근데 앞·뒤가 <b>안 맞으면</b> 여러 번 필요해요 — 그게 이 문제의 핵심. (못 지우면 −1.)</>);
-
-  const half = arr.length / 2;
-
-  return (
-    <div style={{ padding: 16 }}>
-      <div style={{ textAlign: "center", marginBottom: 8 }}>
-        <div style={{ fontSize: 26 }}>🐄✂️</div>
-        <div style={{ fontSize: 16, fontWeight: 800, color: "#065f46" }}>{t(E, "COW Splits — the erase game", "COW 분할 — 지우기 게임")}</div>
-        <div style={{ fontSize: 10.5, color: "#94a3b8", marginTop: 1 }}>USACO Dec 2025 Bronze #2</div>
-      </div>
-
-      <div style={{ maxWidth: 520, margin: "4px auto 18px", padding: "12px 16px", borderRadius: 11,
-        background: "#ecfdf5", border: "1.5px solid #6ee7b7", color: "#065f46",
-        fontSize: 13, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
-        {bubble}
-      </div>
-
-      {/* 글자 줄 (move 스텝은 반으로 나눠 =, empty 스텝은 사라짐) */}
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 4, minHeight: 60, flexWrap: "wrap" }}>
-        {s.kind === "empty" ? (
-          <div style={{ fontSize: 15, fontWeight: 800, color: "#059669", fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, "( empty row )  ✓  cleared in 1 move", "( 빈 줄 )  ✓  1번에 비움")}
-          </div>
-        ) : (
-          arr.map((ch, i) => (
-            <span key={i} style={{ display: "flex", alignItems: "center" }}>
-              {s.kind === "move" && i === half && (
-                <span style={{ margin: "0 10px", fontSize: 22, fontWeight: 800, color: "#059669" }}>=</span>
-              )}
-              <Tile ch={ch} size={48}
-                bg={s.kind === "move" ? (i >= half ? "#ecfdf5" : "#fff") : "#fff"}
-                bd={s.kind === "move" ? "#059669" : "#cbd5e1"} fg="#1f2937" />
-            </span>
-          ))
-        )}
-      </div>
-
-      {s.kind === "move" && (
-        <div style={{ textAlign: "center", marginTop: 12, fontSize: 13.5, fontWeight: 800, color: "#059669", fontFamily: "'JetBrains Mono',monospace" }}>
-          COWCOW = COW + COW  →  {t(E, "erase all at once", "한 번에 다 지움")}
-        </div>
-      )}
-
-      <div style={{ maxWidth: 520, margin: "18px auto 0", fontSize: 11, color: "#64748b", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.55 }}>
-        {t(E, "(S is made of N blocks, each COW / OWC / WCO. Output: how many moves M, and which move erased each letter.)",
-             "(S 는 N 개 블록, 각 블록은 COW / OWC / WCO. 출력: 지우기 횟수 M, 그리고 각 글자가 몇 번째 지우기였는지.)")}
-      </div>
-
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
   );

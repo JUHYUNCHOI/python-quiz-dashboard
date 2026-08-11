@@ -1,72 +1,13 @@
 import { C, t } from "@/components/quest/theme";
-import { getCowSplitsSections, getCowSplitsWalk } from "./components";
+import { getCowSplitsWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { IntroSim, SquareSim, DecideSim, LetterGroupSim } from "./sims";
+import { IntroSim, EraseRuleSim, StuckSim, InsightSim, LetterGroupSim } from "./sims";
 
 const A = "#059669";
 
-/* 도입 — 문제를 눈으로 (블록 그림 + 규칙). 텍스트 벽/퀴즈 대신. */
-function CowSplitsIntro({ E }) {
-  const blocks = [["C", "O", "W"], ["O", "W", "C"]];   // N=2 예시
-  const blockCol = ["#059669", "#0891b2"];
-  const ruleBox = {
-    display: "flex", gap: 9, alignItems: "flex-start", background: "#fff",
-    border: "1px solid #e2e8f0", borderRadius: 10, padding: "10px 13px",
-    fontSize: 13, color: "#334155", lineHeight: 1.6, wordBreak: "keep-all",
-  };
-  return (
-    <div style={{ padding: 16 }}>
-      <div style={{ textAlign: "center", marginBottom: 12 }}>
-        <div style={{ fontSize: 30 }}>🐄✂️</div>
-        <div style={{ fontSize: 17, fontWeight: 800, color: "#065f46" }}>{t(E, "COW Splits", "COW 분할")}</div>
-        <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>USACO Dec 2025 Bronze #2</div>
-      </div>
-
-      <div style={{ fontSize: 12.5, fontWeight: 700, color: "#334155", textAlign: "center", marginBottom: 10, wordBreak: "keep-all", lineHeight: 1.6 }}>
-        {t(E, <>String <b>S</b> = <b>N</b> blocks; each block is <b>COW</b> / <b>OWC</b> / <b>WCO</b>. (example N = 2)</>,
-             <>문자열 <b>S</b> = <b>N</b> 개 블록, 각 블록은 <b>COW</b> / <b>OWC</b> / <b>WCO</b> 중 하나. (예: N = 2)</>)}
-      </div>
-
-      <div style={{ display: "flex", justifyContent: "center", gap: 16, marginBottom: 16 }}>
-        {blocks.map((b, bi) => (
-          <div key={bi} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
-            <div style={{ display: "flex", gap: 5 }}>
-              {b.map((ch, i) => (
-                <div key={i} style={{ width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center",
-                  borderRadius: 8, background: "#fff", border: `2px solid ${blockCol[bi]}`,
-                  fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 18, color: "#1f2937" }}>{ch}</div>
-              ))}
-            </div>
-            <div style={{ fontSize: 10, fontWeight: 800, color: blockCol[bi], fontFamily: "'JetBrains Mono',monospace" }}>
-              {t(E, `block ${bi + 1}`, `블록 ${bi + 1}`)} · {b.join("")}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ maxWidth: 520, margin: "0 auto", display: "grid", gap: 8 }}>
-        <div style={ruleBox}><span style={{ fontSize: 18 }}>✂️</span>
-          <div>{t(E, <>One <b>operation</b>: pick some letters (even far apart) that form <b>Y+Y</b> (same piece twice), and erase them together. <span style={{ color: "#94a3b8" }}>— we'll unpack this next.</span></>,
-                    <>한 <b>연산</b>: <b>같은 조각을 두 번(Y+Y)</b> 이루도록 글자를 골라(떨어져 있어도 OK) 한꺼번에 지움. <span style={{ color: "#94a3b8" }}>— 바로 다음에 풀어서 봐요.</span></>)}</div>
-        </div>
-        <div style={ruleBox}><span style={{ fontSize: 18 }}>🎯</span>
-          <div>{t(E, <><b>Goal</b>: empty S in the <b>fewest</b> operations. If it's impossible → print <b>−1</b>.</>,
-                    <><b>목표</b>: <b>가장 적은</b> 연산으로 S 를 다 비우기. 못 비우면 <b>−1</b> 출력.</>)}</div>
-        </div>
-      </div>
-
-      <div style={{ maxWidth: 520, margin: "11px auto 0", fontSize: 11, color: "#92400e", background: "#fffbeb",
-        border: "1px solid #fcd34d", borderRadius: 8, padding: "7px 11px", lineHeight: 1.5, wordBreak: "keep-all" }}>
-        ⚠️ {t(E, "This tutorial does the k = 1 version (any M ≤ best + 1 is accepted).",
-                 "이 튜토리얼은 k = 1 버전 (최적값 + 1 이하 아무 M 이나 통과).")}
-      </div>
-    </div>
-  );
-}
-
-/* 결 — 전체 판단 한눈에 (정리). */
-function CowSplitsWrap({ E }) {
-  const Row = ({ q, arrow, res, col, bg }) => (
+/* 계획/정리 — 발견한 걸 한 판단으로. 학생 목소리. */
+function CowSplitsPlan({ E }) {
+  const Row = ({ q, res, col, bg }) => (
     <div style={{ display: "flex", alignItems: "center", gap: 10, background: bg, border: `1.5px solid ${col}`,
       borderRadius: 10, padding: "11px 14px" }}>
       <div style={{ flex: 1, fontSize: 13, fontWeight: 700, color: "#334155", wordBreak: "keep-all" }}>{q}</div>
@@ -76,61 +17,65 @@ function CowSplitsWrap({ E }) {
   );
   return (
     <div style={{ padding: 16 }}>
-      <div style={{ fontSize: 14, fontWeight: 800, color: "#065f46", textAlign: "center", marginBottom: 14 }}>
-        🧭 {t(E, "The whole decision, at a glance", "전체 판단 한눈에")}
+      <div style={{ fontSize: 14, fontWeight: 800, color: "#065f46", textAlign: "center", marginBottom: 6 }}>
+        🧭 {t(E, "So here's my plan", "그래서 내 계획은")}
       </div>
-      <div style={{ maxWidth: 460, margin: "0 auto", display: "grid", gap: 10 }}>
-        <Row q={t(E, "N is odd?", "N 이 홀수?")} res="−1" col="#dc2626" bg="#fef2f2" />
-        <Row q={t(E, "S is a square (first half = second half)?", "S 가 사각 (앞 절반 = 뒤 절반)?")} res={t(E, "M = 1", "M = 1")} col="#059669" bg="#ecfdf5" />
-        <Row q={t(E, "Otherwise → split by letter (C, O, W)", "그 외 → 글자별로 (C, O, W)")} res={t(E, "M = 3", "M = 3")} col="#8b5cf6" bg="#f5f3ff" />
+      <div style={{ fontSize: 12, color: C.dim, textAlign: "center", marginBottom: 14, wordBreak: "keep-all" }}>
+        {t(E, "Check these in order — the first one that fits is the answer.", "위에서부터 확인 — 처음 맞는 게 답.")}
+      </div>
+      <div style={{ maxWidth: 470, margin: "0 auto", display: "grid", gap: 10 }}>
+        <Row q={t(E, "Is N odd?", "N 이 홀수야?")} res="−1" col="#dc2626" bg="#fef2f2" />
+        <Row q={t(E, "Is S already 'same chunk twice'? (front = back)", "S 가 통째로 '같은 것 두 번'? (앞 = 뒤)")} res={t(E, "1 move", "1번")} col="#059669" bg="#ecfdf5" />
+        <Row q={t(E, "Otherwise → gather each letter (C, O, W)", "아니면 → 글자별로 모으기 (C, O, W)")} res={t(E, "3 moves", "3번")} col="#8b5cf6" bg="#f5f3ff" />
       </div>
       <div style={{ textAlign: "center", marginTop: 14, fontSize: 12, color: C.dim, wordBreak: "keep-all" }}>
-        {t(E, "Now let's read the code that does exactly this →", "이제 이걸 그대로 하는 코드를 봐요 →")}
+        {t(E, "Now let's write the code that does exactly this →", "이제 이걸 그대로 하는 코드를 써보자 →")}
       </div>
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: makeCowSplitsCh1 — 시각 시뮬 흐름 (퀴즈 없음)
-   도입 → 사각이 뭔지 → 언제 몇 번 → 글자 트릭 → 정리
+   Chapter 1: 학생이 스스로 발견하는 흐름 (퀴즈 없음, 학생 목소리)
+   이해 → 뭘 지울 수 있나 → 한 방(운) → 막힘 → 핵심 발견 → 실행 → 계획
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowSplitsCh1(E) {
   return [
     {
       type: "reveal",
-      narr: t(E,
-        "First, what even is this problem? Watch one full solve: erase a row of letters, in the fewest moves.",
-        "먼저, 이게 대체 무슨 문제야? 한 판 완전히 풀어보며 감 잡기: 글자 줄을 적은 횟수로 다 지우기."),
+      narr: t(E, "A game: wipe the whole row of letters, in as few moves as you can.",
+                 "게임 하나: 글자 줄을 통째로 지우기, 되도록 적은 횟수로."),
       content: (<IntroSim E={E} />),
     },
     {
       type: "reveal",
-      narr: t(E,
-        "'Erase a square subsequence' packs two hard words. Let's unpack them one at a time: pick (subsequence), then square.",
-        "'사각 부분수열을 지운다' — 어려운 낱말 두 개예요. 하나씩 풀어봐요: 골라 빼기(부분수열) → 사각."),
-      content: (<SquareSim E={E} />),
+      narr: t(E, "First figure out the rule: what letters am I even allowed to wipe in one move?",
+                 "먼저 규칙부터: 한 번에 어떤 글자를 지울 수 있는 거지?"),
+      content: (<EraseRuleSim E={E} />),
     },
     {
       type: "reveal",
-      narr: t(E,
-        "When can we empty S, and in how few ops? It splits into three cases.",
-        "언제 비울 수 있고, 몇 번이면 될까? 세 경우로 갈려요."),
-      content: (<DecideSim E={E} />),
+      narr: t(E, "If I'm lucky one move clears it. But usually I get stuck — what then?",
+                 "운 좋으면 한 방에 끝. 근데 보통은 막혀 — 그럼 어쩌지?"),
+      content: (<StuckSim E={E} />),
     },
     {
       type: "reveal",
-      narr: t(E,
-        "The main trick: when one op isn't enough, erase one letter-type at a time — three ops, always works.",
-        "핵심 트릭: 한 번으로 안 되면 글자 종류별로 한 번씩 — 세 번, 항상 통해요."),
+      narr: t(E, "I can pick letters from anywhere… so gather the same letters. Watch why this always works.",
+                 "여기저기서 골라도 되니까… 같은 글자끼리 모으자. 왜 항상 되는지 보자."),
+      content: (<InsightSim E={E} />),
+    },
+    {
+      type: "reveal",
+      narr: t(E, "Now use that idea to actually clear COWOWC.",
+                 "그 아이디어로 COWOWC 를 실제로 지워보자."),
       content: (<LetterGroupSim E={E} />),
     },
     {
       type: "reveal",
-      narr: t(E,
-        "So the whole answer is one small decision. Here it is in one picture.",
-        "그래서 답 전체가 작은 판단 하나예요. 한 그림으로 정리."),
-      content: (<CowSplitsWrap E={E} />),
+      narr: t(E, "Everything I found = one small decision.",
+                 "찾은 걸 다 모으면 = 작은 판단 하나."),
+      content: (<CowSplitsPlan E={E} />),
     },
   ];
 }
@@ -146,8 +91,8 @@ export function makeCowSplitsCh2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Code", "코드"),
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains: read input, parity check, try M=1, otherwise the letter-group trick.",
-        "코드를 위에서 아래로 읽어보자 — 말풍선이 설명하는 코드 줄에 바로 붙어 있어: 입력 읽기 → 짝수 체크 → M=1 시도 → 안 되면 글자-그룹 트릭."),
+        "Now the code — you just found each step. Read top to bottom; each bubble sits on the lines it explains.",
+        "이제 코드 — 방금 단계를 다 찾았지. 위에서 아래로, 말풍선이 설명하는 줄에 붙어 있어."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#059669" />
       ),
