@@ -344,3 +344,83 @@ export function LetterGroupSim({ E }) {
     </div>
   );
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   FormatSim — [승 · 형식] 주어지는 것 / 제곱 정의(✓✗) / 출력(=M그룹 분할).
+   선생님 2026-08-11: 실제 문제의 입력·제곱정의·출력형식이 학생에게 전달돼야.
+   ═══════════════════════════════════════════════════════════════ */
+export function FormatSim({ E }) {
+  const steps = [{ kind: "given" }, { kind: "square" }, { kind: "output" }];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+  const label = { C: 1, O: 2, W: 3 };
+
+  const say =
+    s.kind === "given" ? t(E, <>You're given <b>S</b> — <b>N</b> blocks glued together, each block <b>COW</b>/<b>OWC</b>/<b>WCO</b> (so length <b>3N</b>). Plus a number <b>k</b> (0 or 1).</>,
+                             <>주어지는 건 <b>S</b> — <b>N</b> 개 블록을 이어붙인 것, 각 블록은 <b>COW</b>/<b>OWC</b>/<b>WCO</b> (길이 <b>3N</b>). 그리고 숫자 <b>k</b> (0 또는 1).</>)
+    : s.kind === "square" ? t(E, <>A <b>square</b> string = <b>Y+Y</b> (same piece twice). <b>COWCOW, CC</b> ✓ · <b>COWO, OC</b> ✗</>,
+                                <><b>제곱 문자열</b> = <b>Y+Y</b> (같은 조각 두 번). <b>COWCOW, CC</b> ✓ · <b>COWO, OC</b> ✗</>)
+    : t(E, <>Output: if impossible → <b>−1</b>. Else <b>M</b>, then a move-number for <b>every letter</b> — i.e. split all letters into <b>M groups</b>, each group a square. (k=0: M smallest · k=1: smallest+1 ok)</>,
+           <>출력: 못 비우면 <b>−1</b>. 되면 <b>M</b>, 그다음 <b>글자마다</b> 몇 번째 연산인지 — 즉 모든 글자를 <b>M개 그룹</b>으로 나눠 각 그룹이 제곱. (k=0: M 최소 · k=1: 최소+1까지 OK)</>);
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "What you're given / what to output", "주어지는 것 / 출력할 것")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Say>{say}</Say>
+
+      {s.kind === "given" && (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 22, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 16 }}>
+            {[["C", "O", "W"], ["O", "W", "C"]].map((b, bi) => (
+              <div key={bi} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                <div style={{ display: "flex", gap: 4 }}>{b.map((ch, i) => <Tile key={i} ch={ch} size={42} bd="#059669" />)}</div>
+                <div style={{ fontSize: 9.5, fontWeight: 800, color: "#94a3b8" }}>{t(E, `block ${bi + 1}`, `블록 ${bi + 1}`)}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+            <div style={{ width: 42, height: 42, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 9,
+              background: "#f1f5f9", border: "2px dashed #94a3b8", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 16, color: "#475569" }}>k</div>
+            <div style={{ fontSize: 9.5, fontWeight: 800, color: "#94a3b8" }}>0 / 1</div>
+          </div>
+        </div>
+      )}
+
+      {s.kind === "square" && (
+        <div style={{ display: "grid", gap: 12, maxWidth: 420, margin: "0 auto" }}>
+          {[{ ok: true, ex: ["COWCOW", "CC"] }, { ok: false, ex: ["COWO", "OC"] }].map((g, gi) => (
+            <div key={gi} style={{ display: "flex", alignItems: "center", gap: 12, justifyContent: "center",
+              background: g.ok ? "#ecfdf5" : "#fef2f2", border: `1.5px solid ${g.ok ? "#6ee7b7" : "#fca5a5"}`, borderRadius: 10, padding: "8px 12px" }}>
+              <span style={{ fontSize: 20, fontWeight: 800, color: g.ok ? "#059669" : "#dc2626" }}>{g.ok ? "✓" : "✗"}</span>
+              {g.ex.map((w, wi) => (
+                <span key={wi} style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 15, color: g.ok ? "#065f46" : "#991b1b" }}>{w}</span>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {s.kind === "output" && (
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, "e.g. S = COWOWC →", "예: S = COWOWC →")}
+          </div>
+          <Row>
+            {"COWOWC".split("").map((ch, i) => <Tile key={i} ch={ch} size={44} badge={label[ch]}
+              bg={OPBG[label[ch]]} bd={OPCOL[label[ch]]} fg="#1f2937" />)}
+          </Row>
+          <div style={{ textAlign: "center", marginTop: 12, fontSize: 15, fontWeight: 800, color: "#065f46", fontFamily: "'JetBrains Mono',monospace", letterSpacing: 3 }}>
+            M = 3 · 1 2 3 2 3 1
+          </div>
+          <div style={{ textAlign: "center", marginTop: 6, fontSize: 11.5, color: "#64748b", wordBreak: "keep-all" }}>
+            {t(E, "group 1 = C·C, group 2 = O·O, group 3 = W·W — each a square ✓", "1번끼리 = C·C, 2번끼리 = O·O, 3번끼리 = W·W — 각각 제곱 ✓")}
+          </div>
+        </div>
+      )}
+
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+    </div>
+  );
+}

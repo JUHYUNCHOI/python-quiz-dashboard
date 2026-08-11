@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getCowSplitsWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { IntroSim, EraseRuleSim, StuckSim, InsightSim, LetterGroupSim } from "./sims";
+import { IntroSim, FormatSim, EraseRuleSim, StuckSim, InsightSim, LetterGroupSim } from "./sims";
 
 const A = "#059669";
 
@@ -46,6 +46,12 @@ export function makeCowSplitsCh1(E) {
       narr: t(E, "A game: wipe the whole row of letters, in as few moves as you can.",
                  "게임 하나: 글자 줄을 통째로 지우기, 되도록 적은 횟수로."),
       content: (<IntroSim E={E} />),
+    },
+    {
+      type: "reveal",
+      narr: t(E, "The exact rules: what you're given, what a 'square' is, and what to output.",
+                 "정확한 규칙: 뭐가 주어지고, '제곱'이 뭔지, 뭘 출력하는지."),
+      content: (<FormatSim E={E} />),
     },
     {
       type: "reveal",
