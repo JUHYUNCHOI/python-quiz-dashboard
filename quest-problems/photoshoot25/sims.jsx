@@ -363,8 +363,8 @@ export function PhotoTraceSim({ E }) {
 
   const caption =
     s.kind === "intro" ? t(E,
-        <>Watch the code run. Left = each cell's value (<b>beauty</b>), right = each photo's score (<b>S</b>). All 0 at first.</>,
-        <>코드가 실제로 도는 모습이에요. 왼쪽 = 각 칸 값(<b>beauty</b>), 오른쪽 = 각 사진 점수(<b>S</b>). 처음엔 다 0.</>)
+        <>Watch the values change. Left = each cell's value (<b>beauty</b>), right = each photo's score (<b>S</b>). All 0 at first.</>,
+        <>값들이 어떻게 변하는지 볼게요. 왼쪽 = 각 칸 값(<b>beauty</b>), 오른쪽 = 각 사진 점수(<b>S</b>). 처음엔 다 0.</>)
     : s.kind === "arrive" ? t(E,
         <>Query: set cell (<b>{q.r},{q.c}</b>) to <b>{q.v}</b>. <b>delta</b> = {q.v} − {s.old} = <b>{s.delta}</b> (the increase).</>,
         <>쿼리: 칸 (<b>{q.r},{q.c}</b>) 을 <b>{q.v}</b> 로. <b>delta</b> = {q.v} − {s.old} = <b>{s.delta}</b> (늘어난 만큼).</>)

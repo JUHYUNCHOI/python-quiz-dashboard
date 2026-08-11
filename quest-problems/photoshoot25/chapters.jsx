@@ -238,26 +238,26 @@ export function makePhotoshoot25Ch2(E, lang = "py") {
         "코드 전에 — 시뮬이 알려준 것과, 정확한 계획(곧 볼 변수 이름과 함께)."),
       content: (<Photoshoot25Plan E={E} />),
     },
-    /* 코드 위 '왜 이렇게?' 노트 벽 → 코드 줄에 붙는 CodeWalk 말풍선 (선생님 2026-07-27). */
+    /* 코드 전: 값이 실제로 어떻게 변하는지 먼저 눈으로 (선생님 2026-08-11: '코드 시뮬을 코드 보여주기 전에'). */
+    {
+      type: "reveal",
+      label: t(E, "Run", "실행"),
+      narr: t(E,
+        "Before the code — watch the values change on a real example, so the code reads easy after.",
+        "코드를 보기 전에 — 값들이 실제 예제에서 어떻게 변하는지 먼저 눈으로 따라가요."),
+      content: (<PhotoTraceSim E={E} />),
+    },
+    /* 그 다음 실제 코드 — 코드 줄에 붙는 CodeWalk 말풍선 (선생님 2026-07-27). */
     (() => {
       const w = getPhotoshoot25Walk(E, lang);
       return {
         type: "reveal",
         label: t(E, "Code", "코드"),
         narr: t(E,
-          "Keep each window's sum in S. On each update, touch only the windows containing (r,c).  Each part lights up with a bubble.",
-          "각 창의 합을 S 에 유지. 업데이트마다 (r,c) 를 포함하는 창만 손대요.  각 부분이 밝아지며 말풍선이 떠요."),
+          "Now the code — you just saw these variables move. S keeps each photo's score; each update touches only the cow's rectangle.",
+          "이제 코드예요 — 방금 이 변수들이 움직이는 걸 봤죠. S 는 각 사진 점수, 업데이트는 소의 사각형만 건드려요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
       };
     })(),
-    /* 코드가 실제로 도는 모습 — 변수(beauty·S·delta·i_lo..·cur_max)가 쿼리마다 변하는 걸 눈으로. */
-    {
-      type: "reveal",
-      label: t(E, "Run", "실행"),
-      narr: t(E,
-        "Now watch the code actually run — the variables change with each query, right on the picture.",
-        "이제 코드가 실제로 도는 모습 — 변수가 쿼리마다 그림 위에서 함께 변해요."),
-      content: (<PhotoTraceSim E={E} />),
-    },
   ];
 }
