@@ -79,6 +79,7 @@ export function PhotoWindowSim({ E }) {
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
   const ROW_W = gridW(N);
+  const PAD_TOP = 84;   // 말풍선이 맨 윗줄 창 위에 뜰 공간
 
   const inWin = (r, c) =>
     s.kind === "win" && r >= s.i && r < s.i + K && c >= s.j && c < s.j + K;
@@ -93,38 +94,48 @@ export function PhotoWindowSim({ E }) {
         title={t(E, `${N}×${N} field, ${K}×${K} photo`, `${N}×${N} 들판, ${K}×${K} 사진`)}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
 
-      {/* 말풍선 무대 */}
-      <div style={{ position: "relative", width: ROW_W, height: 92, margin: "0 auto" }}>
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-          {s.kind === "intro" && (
-            <Bubble cx={ROW_W / 2} rowW={ROW_W} bg="#f5f3ff" bd="#c4b5fd" fg="#5b21b6">
-              {t(E, <>A photo is any <b>{K}×{K}</b> square. Its score = sum inside. Slide it everywhere.</>,
-                    <>사진은 아무 <b>{K}×{K}</b> 정사각형. 점수 = 안에 든 값의 합. 다 밀어봐요.</>)}
-            </Bubble>
-          )}
-          {s.kind === "win" && (
-            <Bubble cx={(s.j + K / 2) * PITCH - GAP / 2} rowW={ROW_W}
-              bg={s.isNew ? "#ecfdf5" : "#f5f3ff"} bd={s.isNew ? "#86efac" : "#c4b5fd"}
-              fg={s.isNew ? "#15803d" : "#5b21b6"}>
-              {t(E, <>top-left ({s.i + 1}, {s.j + 1}) → score <b>{s.v}</b></>,
-                    <>왼쪽위 ({s.i + 1}, {s.j + 1}) → 점수 <b>{s.v}</b></>)}
-              <br />
-              {s.isNew
-                ? t(E, <>new best! <b>{s.best}</b></>, <>최고 기록! <b>{s.best}</b></>)
-                : t(E, <>best stays <b>{s.best}</b></>, <>최고는 <b>{s.best}</b> 그대로</>)}
-            </Bubble>
-          )}
-          {s.kind === "final" && (
-            <Bubble cx={ROW_W / 2} rowW={ROW_W} bg="#ecfdf5" bd="#86efac" fg="#15803d">
-              {t(E, <>Checked all <b>{W}×{W} = {W * W}</b> photos. Best = <b>{s.best}</b>.</>,
-                    <>창 <b>{W}×{W} = {W * W}</b> 개를 다 봤어요. 최고 = <b>{s.best}</b>.</>)}
-            </Bubble>
-          )}
-        </div>
-      </div>
+      {/* 격자 + 말풍선 오버레이 — 말풍선이 '지금 그 창' 바로 위에 떠서 꼬리로 지목.
+          (선생님: 풍선은 고정이 아니라 설명하는 그 부분 위에.) */}
+      <div style={{ position: "relative", width: ROW_W, margin: "0 auto 10px", paddingTop: PAD_TOP }}>
+        {(() => {
+          const isWin = s.kind === "win";
+          const cx = isWin ? (s.j + K / 2) * PITCH - GAP / 2 : ROW_W / 2;
+          const winTopY = PAD_TOP + (isWin ? s.i * PITCH : 0);   // 창 top (container 좌표)
+          const good = s.kind === "final" || (isWin && s.isNew);
+          const bg = good ? "#ecfdf5" : "#f5f3ff";
+          const bd = good ? "#86efac" : "#c4b5fd";
+          const fg = good ? "#15803d" : "#5b21b6";
+          const BW = 232;
+          const left = Math.max(-46, Math.min(cx - BW / 2, ROW_W - BW + 46));
+          const tail = cx - left;
+          return (
+            <div style={{ position: "absolute", top: winTopY, left, width: BW, transform: "translateY(calc(-100% - 9px))", zIndex: 5 }}>
+              <div style={{
+                padding: "8px 12px", borderRadius: 10, background: bg, border: `1.5px solid ${bd}`,
+                color: fg, fontSize: 12, fontWeight: 700, textAlign: "center", wordBreak: "keep-all",
+                lineHeight: 1.55, boxShadow: "0 5px 16px rgba(0,0,0,.14)",
+              }}>
+                {s.kind === "intro" && t(E, <>A photo is any <b>{K}×{K}</b> square. Its score = sum inside. Slide it everywhere.</>,
+                      <>사진은 아무 <b>{K}×{K}</b> 정사각형. 점수 = 안에 든 값의 합. 다 밀어봐요.</>)}
+                {isWin && <>
+                  {t(E, <>top-left ({s.i + 1}, {s.j + 1}) → score <b>{s.v}</b></>, <>왼쪽위 ({s.i + 1}, {s.j + 1}) → 점수 <b>{s.v}</b></>)}
+                  <br />
+                  {s.isNew ? t(E, <>new best! <b>{s.best}</b></>, <>최고 기록! <b>{s.best}</b></>)
+                           : t(E, <>best stays <b>{s.best}</b></>, <>최고는 <b>{s.best}</b> 그대로</>)}
+                </>}
+                {s.kind === "final" && t(E, <>Checked all <b>{W}×{W} = {W * W}</b> photos. Best = <b>{s.best}</b>.</>,
+                      <>창 <b>{W}×{W} = {W * W}</b> 개를 다 봤어요. 최고 = <b>{s.best}</b>.</>)}
+              </div>
+              {/* 꼬리 ▼ — 아래 창을 가리킴 */}
+              <div style={{ position: "absolute", top: "100%", left: tail, transform: "translateX(-50%)",
+                width: 0, height: 0, borderLeft: "7px solid transparent", borderRight: "7px solid transparent", borderTop: `8px solid ${bd}` }} />
+              <div style={{ position: "absolute", top: "100%", left: tail, transform: "translateX(-50%)", marginTop: -1.6,
+                width: 0, height: 0, borderLeft: "6px solid transparent", borderRight: "6px solid transparent", borderTop: `7px solid ${bg}` }} />
+            </div>
+          );
+        })()}
 
-      {/* 격자 */}
-      <div style={{ width: ROW_W, margin: "0 auto 10px" }}>
+        {/* 격자 */}
         {g.map((row, r) => (
           <div key={r} style={{ display: "flex", gap: GAP, marginBottom: GAP }}>
             {row.map((v, c) => {
