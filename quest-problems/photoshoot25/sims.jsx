@@ -169,21 +169,40 @@ export function PhotoWindowSim({ E }) {
    → 매번 전부 더할 필요 없이 그 직사각형만 += delta.
    ═══════════════════════════════════════════════════════════════ */
 export function PhotoUpdateSim({ E }) {
-  // ⚠️ N 은 K 보다 넉넉히 커야 한다. N=5, K=3 이면 영향받는 창(최대 9)이 전체
-  //    창(3×3=9)과 같아져서 "몇 장만 바뀐다" 는 이득이 화면에 0 으로 보인다.
-  //    N=8, K=3 → 전체 36 장 중 많아야 9 장. 그래야 절약이 눈에 보인다.
+  // N 은 K 보다 넉넉히 커야 "몇 장만 바뀐다" 이득이 보인다. N=8,K=3 → 전체 36 중 최대 9.
   const N = 8, K = 3;
   const W = N - K + 1;                        // 6 → 36 장
-  const [r, setR] = useState(4);              // 1-indexed (지문과 같게)
-  const [c, setC] = useState(4);
+  const r = 4, c = 4;                         // 고정 예제 소 (1-indexed, 지문과 같게)
+  const iLo = Math.max(1, r - K + 1), iHi = Math.min(r, W);  // 2..4
+  const jLo = Math.max(1, c - K + 1), jHi = Math.min(c, W);  // 2..4
+  const hit = (iHi - iLo + 1) * (jHi - jLo + 1);             // 9
 
-  // 영향받는 창들의 왼쪽위 범위 — 코드의 i_lo/i_hi/j_lo/j_hi 그대로
-  const iLo = Math.max(1, r - K + 1), iHi = Math.min(r, W);
-  const jLo = Math.max(1, c - K + 1), jHi = Math.min(c, W);
-  const hit = Math.max(0, iHi - iLo + 1) * Math.max(0, jHi - jLo + 1);
+  // 관찰 → 추론, 한 스텝씩: 소 → 이 사진이 품네(예시) → 저것도 → 직사각형 → 개수 → 결론
+  const steps = [
+    { kind: "intro" },
+    { kind: "one", ti: iLo, tj: jLo },        // 예시 사진 1 (왼쪽위)
+    { kind: "one", ti: iHi, tj: jHi },        // 예시 사진 2
+    { kind: "rect" },                          // 품는 사진 전체 = 직사각형
+    { kind: "count" },                         // 개수 세기
+    { kind: "done" },                          // 결론
+  ];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
 
   const ROW_W = gridW(N);
-  const PAD_TOP2 = 78;   // 말풍선이 맨 윗줄 소 위에 뜰 공간
+  const PAD_TOP2 = 78;                         // 말풍선이 맨 윗줄 위에 뜰 공간
+  const rectSteps = s.kind === "rect" || s.kind === "count" || s.kind === "done";
+
+  // 오른쪽 '사진' 표에서 지금 켤 칸
+  const photoOn = (I, J) =>
+    s.kind === "one" ? (I === s.ti && J === s.tj)
+    : rectSteps ? (I >= iLo && I <= iHi && J >= jLo && J <= jHi)
+    : false;
+  // 왼쪽 '들판' 에서 강조할 K×K 영역 (one: 그 사진 창 / rect: 합집합)
+  const fieldOn = (R, Cc) =>
+    s.kind === "one" ? (R >= s.ti && R < s.ti + K && Cc >= s.tj && Cc < s.tj + K)
+    : rectSteps ? (R >= iLo && R <= iHi + K - 1 && Cc >= jLo && Cc <= jHi + K - 1)
+    : false;
 
   const Cell = ({ children, style }) => (
     <div style={{
@@ -193,59 +212,61 @@ export function PhotoUpdateSim({ E }) {
     }}>{children}</div>
   );
 
+  const bubble =
+    s.kind === "intro" ? t(E, <>Cow <b>({r},{c})</b> got prettier. Only photos that <b>contain her</b> change. Which ones?</>,
+                              <>소 <b>({r},{c})</b> 가 예뻐졌어요. <b>그 소가 든</b> 사진만 점수가 바뀌어요. 어떤 사진들일까요?</>)
+    : s.kind === "one" ? t(E, <>e.g. photo top-left <b>({s.ti},{s.tj})</b> — its 3×3 covers ({r},{c}) → this one changes.</>,
+                             <>예: 왼쪽위 <b>({s.ti},{s.tj})</b> 사진 — 그 3×3 안에 ({r},{c}) 가 있죠 → 이 사진 바뀜.</>)
+    : s.kind === "rect" ? t(E, <>All photos covering ({r},{c}): their top-lefts form <b>this rectangle</b>.</>,
+                              <>({r},{c}) 를 품는 사진들: 왼쪽위가 <b>이 직사각형</b> 을 이뤄요.</>)
+    : s.kind === "count" ? t(E, <>How many? <b>{iHi - iLo + 1}×{jHi - jLo + 1} = {hit}</b> — not all {W * W}!</>,
+                               <>몇 장? <b>{iHi - iLo + 1}×{jHi - jLo + 1} = {hit}</b> 장 — 전체 {W * W} 장이 아니라!</>)
+    : t(E, <>So don't recompute everything — just <b>+Δ</b> to these <b>{hit}</b> photos.</>,
+           <>그러니 전부 다시 더하지 말고, 이 <b>{hit}</b> 장만 <b>+Δ</b> 하면 돼요.</>);
+
+  const cxx = (c - 0.5) * PITCH - GAP / 2;
+  const cowTopY = PAD_TOP2 + (r - 1) * PITCH;
+  const BW = 252;
+  const bLeft = Math.max(-30, Math.min(cxx - BW / 2, ROW_W - BW + 30));
+  const bTail = cxx - bLeft;
+
   return (
     <div style={{ padding: 16 }}>
-      <div style={{ textAlign: "center", fontSize: 12, color: C.dim, marginBottom: 8, wordBreak: "keep-all" }}>
-        {t(E, <>Click a cow to raise her beauty — watch which photos change.</>,
-              <>소를 눌러서 아름다움을 올려보세요 — 어떤 사진이 바뀌는지 보세요.</>)}
-      </div>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "One cow gets prettier → which photos change?", "소 한 마리가 예뻐지면 → 어떤 사진이 바뀔까?")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
 
-      <div style={{ display: "flex", gap: 26, justifyContent: "center", flexWrap: "wrap" }}>
-        {/* 왼쪽 — 들판. 고른 소 + 그 소를 품는 창들의 합집합 */}
+      <div style={{ display: "flex", gap: 26, justifyContent: "center", flexWrap: "wrap", marginTop: 6 }}>
+        {/* 왼쪽 — 들판 (소 + 지금 보는 사진의 K×K 영역) */}
         <div>
           <div style={{ fontSize: 11, fontWeight: 800, color: "#9a3412", textAlign: "center", marginBottom: 6 }}>
-            {t(E, `field ${N}×${N} — click a cow`, `들판 ${N}×${N} — 소를 클릭`)}
+            {t(E, `field ${N}×${N}`, `들판 ${N}×${N}`)}
           </div>
           <div style={{ width: ROW_W, position: "relative", paddingTop: PAD_TOP2 }}>
-            {/* 말풍선 — 클릭한 소 바로 위에 떠서 지목 */}
-            {(() => {
-              const cxx = (c - 0.5) * PITCH - GAP / 2;
-              const cowTopY = PAD_TOP2 + (r - 1) * PITCH;
-              const BW = 236;
-              const left = Math.max(-30, Math.min(cxx - BW / 2, ROW_W - BW + 30));
-              const tail = cxx - left;
-              return (
-                <div style={{ position: "absolute", top: cowTopY, left, width: BW, transform: "translateY(calc(-100% - 9px))", zIndex: 5 }}>
-                  <div style={{
-                    padding: "8px 12px", borderRadius: 10, background: "#fff7ed", border: "1.5px solid #fdba74",
-                    color: "#9a3412", fontSize: 12, fontWeight: 700, textAlign: "center", wordBreak: "keep-all",
-                    lineHeight: 1.55, boxShadow: "0 5px 16px rgba(0,0,0,.14)",
-                  }}>
-                    {t(E, <>cow ({r}, {c}) got prettier → only <b>{hit}</b> photos change</>,
-                          <>({r}, {c}) 소가 예뻐졌어요 → 바뀌는 사진은 <b>{hit}</b> 장뿐</>)}
-                  </div>
-                  <div style={{ position: "absolute", top: "100%", left: tail, transform: "translateX(-50%)",
-                    width: 0, height: 0, borderLeft: "7px solid transparent", borderRight: "7px solid transparent", borderTop: "8px solid #fdba74" }} />
-                  <div style={{ position: "absolute", top: "100%", left: tail, transform: "translateX(-50%)", marginTop: -1.6,
-                    width: 0, height: 0, borderLeft: "6px solid transparent", borderRight: "6px solid transparent", borderTop: "7px solid #fff7ed" }} />
-                </div>
-              );
-            })()}
+            {/* 말풍선 — 소 바로 위에서 지목 */}
+            <div style={{ position: "absolute", top: cowTopY, left: bLeft, width: BW, transform: "translateY(calc(-100% - 9px))", zIndex: 5 }}>
+              <div style={{
+                padding: "8px 12px", borderRadius: 10, background: "#fff7ed", border: "1.5px solid #fdba74",
+                color: "#9a3412", fontSize: 12, fontWeight: 700, textAlign: "center", wordBreak: "keep-all",
+                lineHeight: 1.55, boxShadow: "0 5px 16px rgba(0,0,0,.14)",
+              }}>{bubble}</div>
+              <div style={{ position: "absolute", top: "100%", left: bTail, transform: "translateX(-50%)",
+                width: 0, height: 0, borderLeft: "7px solid transparent", borderRight: "7px solid transparent", borderTop: "8px solid #fdba74" }} />
+              <div style={{ position: "absolute", top: "100%", left: bTail, transform: "translateX(-50%)", marginTop: -1.6,
+                width: 0, height: 0, borderLeft: "6px solid transparent", borderRight: "6px solid transparent", borderTop: "7px solid #fff7ed" }} />
+            </div>
             {Array.from({ length: N }).map((_, ri) => (
               <div key={ri} style={{ display: "flex", gap: GAP, marginBottom: GAP }}>
                 {Array.from({ length: N }).map((_, ci) => {
                   const R = ri + 1, Cc = ci + 1;
                   const picked = R === r && Cc === c;
-                  // 이 칸이 '영향받는 창 중 하나' 에 들어가나 (합집합 표시)
-                  const covered = R >= iLo && R <= iHi + K - 1 && Cc >= jLo && Cc <= jHi + K - 1;
+                  const cov = fieldOn(R, Cc);
                   return (
-                    <div key={ci} onClick={() => { setR(R); setC(Cc); }} style={{ cursor: "pointer" }}>
-                      <Cell style={{
-                        background: picked ? "#fb923c" : covered ? "#ffedd5" : "#fff",
-                        border: `${picked ? 2 : 1}px solid ${picked ? "#ea580c" : covered ? "#fdba74" : "#e2e8f0"}`,
-                        color: picked ? "#fff" : "#9a3412",
-                      }}>{picked ? "🐄" : ""}</Cell>
-                    </div>
+                    <Cell key={ci} style={{
+                      background: picked ? "#fb923c" : cov ? "#ffedd5" : "#fff",
+                      border: `${picked ? 2 : 1}px solid ${picked ? "#ea580c" : cov ? "#fdba74" : "#e2e8f0"}`,
+                      color: picked ? "#fff" : "#9a3412",
+                    }}>{picked ? "🐄" : ""}</Cell>
                   );
                 })}
               </div>
@@ -253,17 +274,17 @@ export function PhotoUpdateSim({ E }) {
           </div>
         </div>
 
-        {/* 오른쪽 — 창 표. 왼쪽위 좌표 하나가 사진 한 장 */}
+        {/* 오른쪽 — 사진(창) 표. 왼쪽위 좌표 하나 = 사진 한 장 */}
         <div>
           <div style={{ fontSize: 11, fontWeight: 800, color: "#5b21b6", textAlign: "center", marginBottom: 6 }}>
             {t(E, `photos ${W}×${W} (by top-left)`, `사진 ${W}×${W} 장 (왼쪽위 기준)`)}
           </div>
-          <div style={{ width: gridW(W) }}>
+          <div style={{ width: gridW(W), paddingTop: PAD_TOP2 }}>
             {Array.from({ length: W }).map((_, ii) => (
               <div key={ii} style={{ display: "flex", gap: GAP, marginBottom: GAP }}>
                 {Array.from({ length: W }).map((_, jj) => {
                   const I = ii + 1, J = jj + 1;
-                  const on = I >= iLo && I <= iHi && J >= jLo && J <= jHi;
+                  const on = photoOn(I, J);
                   return (
                     <Cell key={jj} style={{
                       background: on ? "#ede9fe" : "#f8fafc",
@@ -278,19 +299,23 @@ export function PhotoUpdateSim({ E }) {
         </div>
       </div>
 
-      {/* 범위 식 — 코드의 그 네 줄과 같은 수 */}
-      <div style={{
-        maxWidth: 420, margin: "12px auto 0", padding: "9px 13px", borderRadius: 10,
-        background: "#f8fafc", border: "1px solid #e2e8f0", fontSize: 11.5,
-        fontFamily: "'JetBrains Mono',monospace", color: "#334155", lineHeight: 1.75,
-      }}>
-        <div>i_lo = max(1, {r}−{K}+1) = <b>{iLo}</b> · i_hi = min({r}, {W}) = <b>{iHi}</b></div>
-        <div>j_lo = max(1, {c}−{K}+1) = <b>{jLo}</b> · j_hi = min({c}, {W}) = <b>{jHi}</b></div>
-        <div style={{ marginTop: 4, color: "#5b21b6", fontWeight: 800 }}>
-          → {t(E, "photos to update", "고칠 사진")} = {Math.max(0, iHi - iLo + 1)} × {Math.max(0, jHi - jLo + 1)} = {hit}
-          <span style={{ color: C.dim, fontWeight: 600 }}>  ({t(E, "not", "전부")} {W * W}{t(E, "", " 장이 아니라")})</span>
+      {/* 범위 식 — 개수 세는 단계부터만 (코드의 네 줄과 같은 수) */}
+      {(s.kind === "count" || s.kind === "done") && (
+        <div style={{
+          maxWidth: 430, margin: "12px auto 0", padding: "9px 13px", borderRadius: 10,
+          background: "#f8fafc", border: "1px solid #e2e8f0", fontSize: 11.5,
+          fontFamily: "'JetBrains Mono',monospace", color: "#334155", lineHeight: 1.75,
+        }}>
+          <div>i_lo = max(1, {r}−{K}+1) = <b>{iLo}</b> · i_hi = min({r}, {W}) = <b>{iHi}</b></div>
+          <div>j_lo = max(1, {c}−{K}+1) = <b>{jLo}</b> · j_hi = min({c}, {W}) = <b>{jHi}</b></div>
+          <div style={{ marginTop: 4, color: "#5b21b6", fontWeight: 800 }}>
+            → {t(E, "photos to update", "고칠 사진")} = {iHi - iLo + 1} × {jHi - jLo + 1} = {hit}
+            <span style={{ color: C.dim, fontWeight: 600 }}>  ({t(E, "not", "전부")} {W * W}{t(E, "", " 장이 아니라")})</span>
+          </div>
         </div>
-      </div>
+      )}
+
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
   );
 }
