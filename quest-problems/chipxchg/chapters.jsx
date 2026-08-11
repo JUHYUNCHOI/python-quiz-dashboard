@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, AdversarySim } from "./sims";
+import { ChipCountSim, AdversarySim, GameBoardSim } from "./sims";
 
 const A = "#2563eb";
 
@@ -133,26 +133,20 @@ export function makeChipXchgCh1(E) {
             </div>
           </div>
 
-          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
-              📖 {t(E, "Problem", "문제")}
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
-                <div>{t(E, "You have: ", "지금 있는 것: ")}<b style={{ color: "#2563eb" }}>{t(E, "some red chips and some blue chips.", "빨간 칩 몇 개, 파란 칩 몇 개.")}</b></div>
-              </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
-                <div>{t(E, "Exchange: ", "교환소: ")}<b style={{ color: "#0891b2" }}>{t(E, "hand in blue chips → get red chips", "파란 칩 몇 개를 내면 → 빨간 칩 몇 개")}</b>{t(E, " (blue → red only, repeat as you like).", " (파랑 → 빨강 한 방향, 몇 번이든).")}</div>
-              </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
-                <div>{t(E, "More chips arrive, but ", "칩을 더 받는데, ")}<b style={{ color: "#dc2626" }}>{t(E, "a trickster decides how many go red and how many go blue.", "빨강 몇 개, 파랑 몇 개로 갈지 심술쟁이가 정해요.")}</b></div>
-              </div>
-            </div>
+          <div style={{ textAlign: "center", fontSize: 12.5, color: C.dim, marginTop: 2, wordBreak: "keep-all", lineHeight: 1.6 }}>
+            {t(E, "A chip game: swap blue chips into red ones to reach a goal — with a trickster in your way. Let's watch one round.",
+                 "파란 칩을 빨간 칩으로 바꿔 목표를 채우는 게임이에요 — 심술쟁이가 방해하죠. 한 판 같이 봐요.")}
           </div>
         </div>),
+    },
+
+    // [승] 게임 한 판 — 구체 그림으로 premise 잡기
+    {
+      type: "reveal",
+      label: t(E, "One round", "게임 한 판"),
+      narr: t(E, "Before any code — let's just watch the game happen once, with real chips.",
+                 "코드 얘기 전에 — 게임이 어떻게 굴러가는지 진짜 칩으로 한 번만 봐요."),
+      content: (<GameBoardSim E={E} />),
     },
 
     // [승] 샘플 입출력
