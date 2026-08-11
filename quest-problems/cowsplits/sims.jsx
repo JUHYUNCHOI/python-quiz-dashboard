@@ -333,3 +333,76 @@ export function DecideSim({ E }) {
     </div>
   );
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   IntroSim — 첫 페이지. "이게 무슨 문제야?" 를 완전한 데모 한 판으로.
+   글자 줄을 '지우기'로 다 비우는 게임. 적은 횟수로. (COWCOW → 1번)
+   ═══════════════════════════════════════════════════════════════ */
+export function IntroSim({ E }) {
+  const arr = "COWCOW".split("");
+  const steps = [{ kind: "what" }, { kind: "move" }, { kind: "empty" }];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+
+  const bubble =
+    s.kind === "what" ? t(E,
+        <>Bessie has a row of letters <b>S</b> (only C, O, W). <b>Goal: erase them all</b> — empty the row — in as <b>few moves</b> as possible.</>,
+        <>Bessie 앞에 글자 줄 <b>S</b> 가 있어요 (C, O, W 만). <b>목표: 다 지워서</b> 빈 줄 만들기 — 되도록 <b>적은 횟수</b>로.</>)
+    : s.kind === "move" ? t(E,
+        <>One <b>move</b> erases letters that form <b>the same piece twice</b>. Here <b>COWCOW = COW + COW</b> — so one move wipes the whole row!</>,
+        <>한 번의 <b>지우기</b> = <b>같은 묶음을 두 번</b> 이룬 글자들을 빼요. 여기 <b>COWCOW = COW + COW</b> — 그래서 한 번에 통째로!</>)
+    : t(E,
+        <>Empty in <b>1 move</b>! But if the front and back <b>don't</b> match, we need more moves — that's the puzzle. (Impossible → −1.)</>,
+        <><b>1번</b>에 빈 줄! 근데 앞·뒤가 <b>안 맞으면</b> 여러 번 필요해요 — 그게 이 문제의 핵심. (못 지우면 −1.)</>);
+
+  const half = arr.length / 2;
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ textAlign: "center", marginBottom: 8 }}>
+        <div style={{ fontSize: 26 }}>🐄✂️</div>
+        <div style={{ fontSize: 16, fontWeight: 800, color: "#065f46" }}>{t(E, "COW Splits — the erase game", "COW 분할 — 지우기 게임")}</div>
+        <div style={{ fontSize: 10.5, color: "#94a3b8", marginTop: 1 }}>USACO Dec 2025 Bronze #2</div>
+      </div>
+
+      <div style={{ maxWidth: 520, margin: "4px auto 18px", padding: "12px 16px", borderRadius: 11,
+        background: "#ecfdf5", border: "1.5px solid #6ee7b7", color: "#065f46",
+        fontSize: 13, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
+        {bubble}
+      </div>
+
+      {/* 글자 줄 (move 스텝은 반으로 나눠 =, empty 스텝은 사라짐) */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 4, minHeight: 60, flexWrap: "wrap" }}>
+        {s.kind === "empty" ? (
+          <div style={{ fontSize: 15, fontWeight: 800, color: "#059669", fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, "( empty row )  ✓  cleared in 1 move", "( 빈 줄 )  ✓  1번에 비움")}
+          </div>
+        ) : (
+          arr.map((ch, i) => (
+            <span key={i} style={{ display: "flex", alignItems: "center" }}>
+              {s.kind === "move" && i === half && (
+                <span style={{ margin: "0 10px", fontSize: 22, fontWeight: 800, color: "#059669" }}>=</span>
+              )}
+              <Tile ch={ch} size={48}
+                bg={s.kind === "move" ? (i >= half ? "#ecfdf5" : "#fff") : "#fff"}
+                bd={s.kind === "move" ? "#059669" : "#cbd5e1"} fg="#1f2937" />
+            </span>
+          ))
+        )}
+      </div>
+
+      {s.kind === "move" && (
+        <div style={{ textAlign: "center", marginTop: 12, fontSize: 13.5, fontWeight: 800, color: "#059669", fontFamily: "'JetBrains Mono',monospace" }}>
+          COWCOW = COW + COW  →  {t(E, "erase all at once", "한 번에 다 지움")}
+        </div>
+      )}
+
+      <div style={{ maxWidth: 520, margin: "18px auto 0", fontSize: 11, color: "#64748b", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.55 }}>
+        {t(E, "(S is made of N blocks, each COW / OWC / WCO. Output: how many moves M, and which move erased each letter.)",
+             "(S 는 N 개 블록, 각 블록은 COW / OWC / WCO. 출력: 지우기 횟수 M, 그리고 각 글자가 몇 번째 지우기였는지.)")}
+      </div>
+
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+    </div>
+  );
+}

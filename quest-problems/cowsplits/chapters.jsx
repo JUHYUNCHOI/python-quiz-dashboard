@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getCowSplitsSections, getCowSplitsWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { SquareSim, DecideSim, LetterGroupSim } from "./sims";
+import { IntroSim, SquareSim, DecideSim, LetterGroupSim } from "./sims";
 
 const A = "#059669";
 
@@ -100,9 +100,9 @@ export function makeCowSplitsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie empties a C/O/W string by erasing 'square' subsequences. First, let's see what S looks like and what one erase does.",
-        "Bessie 는 COW 문자열을 '사각' 부분수열을 지워서 비워요. 먼저 S 가 어떻게 생겼고 한 번 지우면 뭐가 되는지 봐요."),
-      content: (<CowSplitsIntro E={E} />),
+        "First, what even is this problem? Watch one full solve: erase a row of letters, in the fewest moves.",
+        "먼저, 이게 대체 무슨 문제야? 한 판 완전히 풀어보며 감 잡기: 글자 줄을 적은 횟수로 다 지우기."),
+      content: (<IntroSim E={E} />),
     },
     {
       type: "reveal",
