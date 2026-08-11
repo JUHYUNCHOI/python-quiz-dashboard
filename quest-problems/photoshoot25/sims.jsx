@@ -167,7 +167,7 @@ export function PhotoUpdateSim({ E }) {
     { kind: "one" },     // 사진 하나: 소 담김 ✓
     { kind: "two" },     // 겹치는 두 사진이 소를 공유 → '한 장이 아니다'
     { kind: "miss" },    // 소 밖 → 안 바뀜 ✗
-    { kind: "count" },   // 밀어도 소가 안 빠지는 자리 9곳 → 9장
+    { kind: "count" },   // 사진 9장 콘택트시트 (소가 9칸 중 어디에)
     { kind: "done" },
   ];
   const ts = useTraceStep(steps);
@@ -183,8 +183,6 @@ export function PhotoUpdateSim({ E }) {
   : s.kind === "miss" ? [{ ti: 5, tj: 5, col: RED,   label: t(E, "photo ✗", "사진 ✗") }]
   : [];
   const isCount = s.kind === "count" || s.kind === "done";
-  // 소를 담는 3×3 의 '가운데'가 될 수 있는 자리 = 세로 3..5, 가로 3..5 (소 둘레 9곳)
-  const isCenter = (R, Cc) => isCount && R >= 3 && R <= 5 && Cc >= 3 && Cc <= 5;
 
   const ROW_W = gridW(N);
   const PAD_TOP = 96;
@@ -208,11 +206,11 @@ export function PhotoUpdateSim({ E }) {
         <>This 3×3 <b>misses the cow</b> → this photo stays the same ✗</>,
         <>이 3×3 은 <b>소를 못 담아요</b> → 이 사진은 그대로 ✗</>)
     : s.kind === "count" ? t(E,
-        <>All the 3×3 photos holding the cow → just <b>9</b>, clustered around it (each dot = one photo). Not all {(N - K + 1) * (N - K + 1)}!</>,
-        <>소를 담는 3×3 사진은 소 둘레 이 <b>9장</b> 뿐 (점 하나 = 사진 한 장). 전체 {(N - K + 1) * (N - K + 1)}장이 아니에요!</>)
+        <>Here are all the photos holding the cow: the cow can be in <b>any of a photo's 9 cells</b> → <b>9 photos</b>. Not all {(N - K + 1) * (N - K + 1)}!</>,
+        <>소를 담는 사진을 다 모으면: 소가 <b>사진 속 9칸 중 어디</b>에 있어도 소가 담긴 사진 → <b>9장</b>. 전체 {(N - K + 1) * (N - K + 1)}장이 아니에요!</>)
     : t(E,
-        <>So one prettier cow → fix just <b>9 photos</b>, not all {(N - K + 1) * (N - K + 1)}. That's why it's fast.</>,
-        <>그래서 소 하나 예뻐지면 → <b>9장만</b> 고치면 끝 (전체 {(N - K + 1) * (N - K + 1)}장 X). 그래서 빠름.</>);
+        <>So one prettier cow → fix just these <b>9 photos</b>, not all {(N - K + 1) * (N - K + 1)}. That's why it's fast.</>,
+        <>그래서 소 하나 예뻐지면 → 이 <b>9장만</b> 고치면 끝 (전체 {(N - K + 1) * (N - K + 1)}장 X). 그래서 빠름.</>);
 
   const tailX = frames.length === 1
     ? (frames[0].tj - 1) * PITCH + FRAME / 2
@@ -229,62 +227,89 @@ export function PhotoUpdateSim({ E }) {
     }}>{children}</div>
   );
 
+  // 콘택트시트용 미니 사진 (3×3), 소가 (mr,mc) 칸
+  const MC = 19, MG = 2, MW = 3 * MC + 2 * MG, SHEET_GAP = 15;
+  const MiniPhoto = ({ mr, mc }) => (
+    <div style={{ border: "2.5px solid #7c3aed", borderRadius: 8, padding: 3, background: "#faf5ff" }}>
+      {[0, 1, 2].map((pr) => (
+        <div key={pr} style={{ display: "flex", gap: MG, marginBottom: pr < 2 ? MG : 0 }}>
+          {[0, 1, 2].map((pc) => {
+            const isCow = pr === mr && pc === mc;
+            return (
+              <div key={pc} style={{ width: MC, height: MC, borderRadius: 3, display: "flex",
+                alignItems: "center", justifyContent: "center", fontSize: 12,
+                background: isCow ? "#fb923c" : "#fff", border: `1px solid ${isCow ? "#ea580c" : "#e9d5ff"}` }}>
+                {isCow ? "🐄" : ""}
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "How many 3×3 photos contain this cow?", "이 소가 담긴 3×3 사진은 몇 장?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
 
-      <div style={{ display: "flex", justifyContent: "center", marginTop: 6 }}>
-        <div style={{ width: ROW_W, position: "relative", paddingTop: PAD_TOP }}>
-          {/* 말풍선 */}
-          <div style={{ position: "absolute", top: PAD_TOP - 8, left: bLeft, width: BW, transform: "translateY(-100%)", zIndex: 7 }}>
-            <div style={{ padding: "9px 13px", borderRadius: 11, background: "#fff7ed", border: "1.5px solid #fdba74", color: "#9a3412", fontSize: 12.5, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.55, boxShadow: "0 5px 16px rgba(0,0,0,.14)" }}>{bubble}</div>
-            <div style={{ position: "absolute", top: "100%", left: bTail, transform: "translateX(-50%)", width: 0, height: 0, borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: "9px solid #fdba74" }} />
-            <div style={{ position: "absolute", top: "100%", left: bTail, transform: "translateX(-50%)", marginTop: -1.7, width: 0, height: 0, borderLeft: "7px solid transparent", borderRight: "7px solid transparent", borderTop: "8px solid #fff7ed" }} />
-          </div>
+      {!isCount ? (
+        <div style={{ display: "flex", justifyContent: "center", marginTop: 6 }}>
+          <div style={{ width: ROW_W, position: "relative", paddingTop: PAD_TOP }}>
+            {/* 말풍선 */}
+            <div style={{ position: "absolute", top: PAD_TOP - 8, left: bLeft, width: BW, transform: "translateY(-100%)", zIndex: 7 }}>
+              <div style={{ padding: "9px 13px", borderRadius: 11, background: "#fff7ed", border: "1.5px solid #fdba74", color: "#9a3412", fontSize: 12.5, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.55, boxShadow: "0 5px 16px rgba(0,0,0,.14)" }}>{bubble}</div>
+              <div style={{ position: "absolute", top: "100%", left: bTail, transform: "translateX(-50%)", width: 0, height: 0, borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: "9px solid #fdba74" }} />
+              <div style={{ position: "absolute", top: "100%", left: bTail, transform: "translateX(-50%)", marginTop: -1.7, width: 0, height: 0, borderLeft: "7px solid transparent", borderRight: "7px solid transparent", borderTop: "8px solid #fff7ed" }} />
+            </div>
 
-          {/* 액자 오버레이 (1~2개) */}
-          {frames.map((f, k) => (
-            <div key={k} style={{ position: "absolute", zIndex: 4 + k, pointerEvents: "none",
-              top: PAD_TOP + (f.ti - 1) * PITCH - 2, left: (f.tj - 1) * PITCH - 2,
-              width: FRAME + 4, height: FRAME + 4,
-              border: `3px solid ${f.col}`, borderRadius: 9, boxShadow: `0 0 0 3px ${f.col}22` }}>
-              <div style={{ position: "absolute", top: -11, left: 6, fontSize: 10, fontWeight: 800,
-                color: "#fff", background: f.col, borderRadius: 999, padding: "1px 7px", whiteSpace: "nowrap" }}>
-                {f.label}
+            {/* 액자 오버레이 */}
+            {frames.map((f, k) => (
+              <div key={k} style={{ position: "absolute", zIndex: 4 + k, pointerEvents: "none",
+                top: PAD_TOP + (f.ti - 1) * PITCH - 2, left: (f.tj - 1) * PITCH - 2,
+                width: FRAME + 4, height: FRAME + 4,
+                border: `3px solid ${f.col}`, borderRadius: 9, boxShadow: `0 0 0 3px ${f.col}22` }}>
+                <div style={{ position: "absolute", top: -11, left: 6, fontSize: 10, fontWeight: 800,
+                  color: "#fff", background: f.col, borderRadius: 999, padding: "1px 7px", whiteSpace: "nowrap" }}>
+                  {f.label}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
 
-          {Array.from({ length: N }).map((_, ri) => (
-            <div key={ri} style={{ display: "flex", gap: GAP, marginBottom: GAP }}>
-              {Array.from({ length: N }).map((_, ci) => {
-                const R = ri + 1, Cc = ci + 1;
-                const cow = R === r && Cc === c;
-                const f = cellFrame(R, Cc);
-                const ctr = isCenter(R, Cc);
-                return (
-                  <Cell key={ci} style={{
-                    background: cow ? "#fb923c" : f ? tintOf(f.col) : ctr ? "#ede9fe" : "#fff",
-                    border: `${cow ? 2 : 1}px solid ${cow ? "#ea580c" : f ? f.col : ctr ? "#a78bfa" : "#e2e8f0"}`,
-                  }}>
-                    {cow ? "🐄" : ctr ? <span style={{ width: 9, height: 9, borderRadius: 999, background: "#7c3aed", display: "block" }} /> : ""}
-                  </Cell>
-                );
-              })}
-            </div>
-          ))}
-
-          {isCount && (
-            <div style={{ position: "absolute", top: PAD_TOP + 5 * PITCH + 6, left: 6 * PITCH + 8,
-              padding: "7px 12px", borderRadius: 10, background: "#5b21b6", color: "#fff",
-              fontSize: 13, fontWeight: 800, boxShadow: "0 4px 12px rgba(0,0,0,.2)", whiteSpace: "nowrap" }}>
-              {t(E, "9 photos", "9장")}
-            </div>
-          )}
+            {Array.from({ length: N }).map((_, ri) => (
+              <div key={ri} style={{ display: "flex", gap: GAP, marginBottom: GAP }}>
+                {Array.from({ length: N }).map((_, ci) => {
+                  const R = ri + 1, Cc = ci + 1;
+                  const cow = R === r && Cc === c;
+                  const f = cellFrame(R, Cc);
+                  return (
+                    <Cell key={ci} style={{
+                      background: cow ? "#fb923c" : f ? tintOf(f.col) : "#fff",
+                      border: `${cow ? 2 : 1}px solid ${cow ? "#ea580c" : f ? f.col : "#e2e8f0"}`,
+                    }}>{cow ? "🐄" : ""}</Cell>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div style={{ maxWidth: 540, margin: "8px auto 0" }}>
+          {/* 말풍선 */}
+          <div style={{ maxWidth: 430, margin: "0 auto 16px", padding: "10px 14px", borderRadius: 12, background: "#fff7ed", border: "1.5px solid #fdba74", color: "#9a3412", fontSize: 12.5, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6, boxShadow: "0 5px 16px rgba(0,0,0,.14)" }}>{bubble}</div>
+          {/* 사진 9장 — 소가 9칸 중 어디에 */}
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(3, ${MW}px)`, gap: SHEET_GAP, justifyContent: "center" }}>
+            {Array.from({ length: 9 }).map((_, idx) => (
+              <MiniPhoto key={idx} mr={Math.floor(idx / 3)} mc={idx % 3} />
+            ))}
+          </div>
+          <div style={{ textAlign: "center", marginTop: 13, fontSize: 14, fontWeight: 800, color: "#5b21b6" }}>
+            {t(E, "= 9 photos", "= 사진 9장")}
+            <span style={{ color: "#94a3b8", fontWeight: 600, marginLeft: 6 }}>({t(E, "not", "전체")} {(N - K + 1) * (N - K + 1)})</span>
+          </div>
+        </div>
+      )}
 
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
