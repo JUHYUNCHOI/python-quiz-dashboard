@@ -176,8 +176,81 @@ export function makePhotoshoot25Ch1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: makePhotoshoot25Ch2 (1 progressive step)
    ═══════════════════════════════════════════════════════════════ */
+/* 코드 전 '그래서 뭘 어떻게 했나' 계획 카드 (선생님 2026-08-11).
+   두 시뮬에서 알아낸 것 → 그걸로 세운 코드 순서. 변수 이름(S·cur_max·delta·i_lo…)을
+   여기서 먼저 만나서, CodeWalk 에 들어갈 때 낯설지 않게. */
+function Photoshoot25Plan({ E }) {
+  const box = { background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, padding: "12px 14px", wordBreak: "keep-all" };
+  const Insight = ({ icon, head, body, color }) => (
+    <div style={{ display: "flex", gap: 11, alignItems: "flex-start", ...box, borderLeft: `4px solid ${color}` }}>
+      <span style={{ fontSize: 20, lineHeight: 1.2 }}>{icon}</span>
+      <div style={{ fontSize: 13.5, lineHeight: 1.6, color: "#334155" }}>
+        <b style={{ color: "#0f172a" }}>{head}</b><br />{body}
+      </div>
+    </div>
+  );
+  const codeTag = (s) => (
+    <code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: "#0e7490", background: "#ecfeff", border: "1px solid #a5f3fc", borderRadius: 5, padding: "0 5px" }}>{s}</code>
+  );
+  const Line = ({ n, children }) => (
+    <div style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 7 }}>
+      <span style={{ flexShrink: 0, width: 20, height: 20, borderRadius: 999, background: "#0891b2", color: "#fff", fontSize: 11.5, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{n}</span>
+      <div style={{ fontSize: 13, lineHeight: 1.65, color: "#334155" }}>{children}</div>
+    </div>
+  );
+  return (
+    <div style={{ padding: 16, maxWidth: 620, margin: "0 auto" }}>
+      <div style={{ fontSize: 14, fontWeight: 800, color: "#0f172a", marginBottom: 4 }}>
+        🧩 {t(E, "What the two sims told us", "두 시뮬에서 알아낸 것")}
+      </div>
+      <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
+        <Insight icon="📊" color="#8b5cf6"
+          head={t(E, "Every photo has a score (its sum).", "사진마다 '점수(합)'가 있다.")}
+          body={t(E, <>Keep each one in a table {codeTag("S")} — don't re-add from scratch every time.</>,
+                     <>각 점수를 표 {codeTag("S")} 에 저장해두자 — 매번 처음부터 다시 안 더하게.</>)} />
+        <Insight icon="🐄" color="#f97316"
+          head={t(E, "One cow changes → only the photos holding it change.", "소 하나가 바뀌면 → 그 소를 품는 사진만 바뀐다.")}
+          body={t(E, "Those photos form a small rectangle — touch just them, not all of them.",
+                     "그 사진들은 작은 직사각형 — 전부 말고 그 몇 장만 손대자.")} />
+        <Insight icon="📈" color="#059669"
+          head={t(E, "Beauty only grows → the best score never drops.", "값은 커지기만 → 최고 점수는 줄지 않는다.")}
+          body={t(E, <>So only compare the changed photos against {codeTag("cur_max")}.</>,
+                     <>그러니 바뀐 사진만 {codeTag("cur_max")} 와 비교하면 돼.</>)} />
+      </div>
+
+      <div style={{ fontSize: 14, fontWeight: 800, color: "#0f172a", marginBottom: 8 }}>
+        ⚙️ {t(E, "So the code does exactly this:", "그래서 코드는 이 순서로:")}
+      </div>
+      <div style={{ ...box, background: "#f8fafc" }}>
+        <Line n="1">{t(E, <>Prepare the table {codeTag("S")} (photo scores) and {codeTag("cur_max")} (best so far).</>,
+                          <>표 {codeTag("S")}(사진 점수)와 {codeTag("cur_max")}(지금까지 최고)를 준비.</>)}</Line>
+        <div style={{ fontSize: 12, fontWeight: 800, color: "#64748b", margin: "2px 0 6px 30px" }}>
+          {t(E, "then for each update:", "그리고 업데이트마다:")}
+        </div>
+        <Line n="2">{t(E, <>{codeTag("delta")} = how much this cow grew.</>, <>{codeTag("delta")} = 이 소가 얼마나 커졌나.</>)}</Line>
+        <Line n="3">{t(E, <>Find the rectangle of photos to touch: {codeTag("i_lo..i_hi")}, {codeTag("j_lo..j_hi")}.</>,
+                          <>손댈 사진 직사각형 범위: {codeTag("i_lo..i_hi")}, {codeTag("j_lo..j_hi")}.</>)}</Line>
+        <Line n="4">{t(E, <>Add {codeTag("delta")} to just those photos in {codeTag("S")}.</>,
+                          <>그 사진들만 {codeTag("S")} 에 {codeTag("+= delta")}.</>)}</Line>
+        <Line n="5">{t(E, <>Lift {codeTag("cur_max")} if any of them is now bigger.</>,
+                          <>그 중 하나가 더 커졌으면 {codeTag("cur_max")} 갱신.</>)}</Line>
+        <Line n="6">{t(E, <>Print {codeTag("cur_max")}.</>, <>{codeTag("cur_max")} 출력.</>)}</Line>
+      </div>
+    </div>
+  );
+}
+
 export function makePhotoshoot25Ch2(E, lang = "py") {
   return [
+    /* 코드 전: 두 시뮬 → 코드 순서 다리 놓기 (변수 미리 소개). */
+    {
+      type: "reveal",
+      label: t(E, "Plan", "계획"),
+      narr: t(E,
+        "Before the code — here's what the sims told us, and the exact plan (with the variable names you'll see).",
+        "코드 전에 — 시뮬이 알려준 것과, 정확한 계획(곧 볼 변수 이름과 함께)."),
+      content: (<Photoshoot25Plan E={E} />),
+    },
     /* 코드 위 '왜 이렇게?' 노트 벽 → 코드 줄에 붙는 CodeWalk 말풍선 (선생님 2026-07-27). */
     (() => {
       const w = getPhotoshoot25Walk(E, lang);
