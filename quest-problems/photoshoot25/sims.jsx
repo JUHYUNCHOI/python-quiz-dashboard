@@ -183,7 +183,7 @@ export function PhotoUpdateSim({ E }) {
   const hit = Math.max(0, iHi - iLo + 1) * Math.max(0, jHi - jLo + 1);
 
   const ROW_W = gridW(N);
-  const cx = (c - 0.5) * PITCH - GAP / 2;
+  const PAD_TOP2 = 78;   // 말풍선이 맨 윗줄 소 위에 뜰 공간
 
   const Cell = ({ children, style }) => (
     <div style={{
@@ -200,23 +200,37 @@ export function PhotoUpdateSim({ E }) {
               <>소를 눌러서 아름다움을 올려보세요 — 어떤 사진이 바뀌는지 보세요.</>)}
       </div>
 
-      {/* 말풍선 — 지금 고른 칸 위에 */}
-      <div style={{ position: "relative", width: ROW_W, height: 84, margin: "0 auto" }}>
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-          <Bubble cx={cx} rowW={ROW_W} bg="#fff7ed" bd="#fdba74" fg="#9a3412">
-            {t(E, <>cow ({r}, {c}) got prettier → only <b>{hit}</b> photos change</>,
-                  <>({r}, {c}) 소가 예뻐졌어요 → 바뀌는 사진은 <b>{hit}</b> 장뿐</>)}
-          </Bubble>
-        </div>
-      </div>
-
       <div style={{ display: "flex", gap: 26, justifyContent: "center", flexWrap: "wrap" }}>
         {/* 왼쪽 — 들판. 고른 소 + 그 소를 품는 창들의 합집합 */}
         <div>
           <div style={{ fontSize: 11, fontWeight: 800, color: "#9a3412", textAlign: "center", marginBottom: 6 }}>
             {t(E, `field ${N}×${N} — click a cow`, `들판 ${N}×${N} — 소를 클릭`)}
           </div>
-          <div style={{ width: ROW_W }}>
+          <div style={{ width: ROW_W, position: "relative", paddingTop: PAD_TOP2 }}>
+            {/* 말풍선 — 클릭한 소 바로 위에 떠서 지목 */}
+            {(() => {
+              const cxx = (c - 0.5) * PITCH - GAP / 2;
+              const cowTopY = PAD_TOP2 + (r - 1) * PITCH;
+              const BW = 236;
+              const left = Math.max(-30, Math.min(cxx - BW / 2, ROW_W - BW + 30));
+              const tail = cxx - left;
+              return (
+                <div style={{ position: "absolute", top: cowTopY, left, width: BW, transform: "translateY(calc(-100% - 9px))", zIndex: 5 }}>
+                  <div style={{
+                    padding: "8px 12px", borderRadius: 10, background: "#fff7ed", border: "1.5px solid #fdba74",
+                    color: "#9a3412", fontSize: 12, fontWeight: 700, textAlign: "center", wordBreak: "keep-all",
+                    lineHeight: 1.55, boxShadow: "0 5px 16px rgba(0,0,0,.14)",
+                  }}>
+                    {t(E, <>cow ({r}, {c}) got prettier → only <b>{hit}</b> photos change</>,
+                          <>({r}, {c}) 소가 예뻐졌어요 → 바뀌는 사진은 <b>{hit}</b> 장뿐</>)}
+                  </div>
+                  <div style={{ position: "absolute", top: "100%", left: tail, transform: "translateX(-50%)",
+                    width: 0, height: 0, borderLeft: "7px solid transparent", borderRight: "7px solid transparent", borderTop: "8px solid #fdba74" }} />
+                  <div style={{ position: "absolute", top: "100%", left: tail, transform: "translateX(-50%)", marginTop: -1.6,
+                    width: 0, height: 0, borderLeft: "6px solid transparent", borderRight: "6px solid transparent", borderTop: "7px solid #fff7ed" }} />
+                </div>
+              );
+            })()}
             {Array.from({ length: N }).map((_, ri) => (
               <div key={ri} style={{ display: "flex", gap: GAP, marginBottom: GAP }}>
                 {Array.from({ length: N }).map((_, ci) => {
