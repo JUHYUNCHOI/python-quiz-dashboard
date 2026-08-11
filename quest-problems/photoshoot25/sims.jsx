@@ -315,3 +315,163 @@ export function PhotoUpdateSim({ E }) {
     </div>
   );
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   PhotoTraceSim — 코드 변수가 실제로 도는 모습 (선생님 2026-08-11:
+   "코드의 변수를 보여주면서 시뮬. 어떻게 그렇게 되는지 가시적으로").
+   작은 예제(5×5, 3×3, W=3)로 beauty / S / delta / i_lo..j_hi / cur_max 가
+   쿼리마다 변하는 걸 왼쪽(칸 값)·오른쪽(사진 점수 S)·변수 칩으로 동시에 보여줌.
+   ═══════════════════════════════════════════════════════════════ */
+export function PhotoTraceSim({ E }) {
+  const N = 5, K = 3, W = N - K + 1; // 3
+  const queries = [{ r: 2, c: 2, v: 5 }, { r: 4, c: 4, v: 3 }];
+
+  const steps = [{ kind: "intro" }];
+  {
+    const beauty = Array.from({ length: N + 1 }, () => Array(N + 1).fill(0));
+    const S = Array.from({ length: W + 1 }, () => Array(W + 1).fill(0));
+    let curMax = 0; const out = [];
+    const snap = (extra) => ({
+      beauty: beauty.map((row) => row.slice()),
+      S: S.map((row) => row.slice()),
+      curMax, out: out.slice(), ...extra,
+    });
+    queries.forEach((qq, qi) => {
+      const old = beauty[qq.r][qq.c];
+      const delta = qq.v - old;
+      beauty[qq.r][qq.c] = qq.v;
+      steps.push(snap({ kind: "arrive", qi, q: qq, delta, old }));
+      const iLo = Math.max(1, qq.r - K + 1), iHi = Math.min(qq.r, W);
+      const jLo = Math.max(1, qq.c - K + 1), jHi = Math.min(qq.c, W);
+      steps.push(snap({ kind: "range", qi, q: qq, delta, old, iLo, iHi, jLo, jHi }));
+      for (let i = iLo; i <= iHi; i++) for (let j = jLo; j <= jHi; j++) { S[i][j] += delta; if (S[i][j] > curMax) curMax = S[i][j]; }
+      out.push(curMax);
+      steps.push(snap({ kind: "apply", qi, q: qq, delta, old, iLo, iHi, jLo, jHi }));
+    });
+    steps.push(snap({ kind: "done" }));
+  }
+
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+  const q = s.q;
+  const hasRange = s.iLo != null;
+  const curMax = s.curMax ?? 0;
+  const showQ = s.kind === "arrive" || s.kind === "range" || s.kind === "apply";
+
+  const FC = 30, SC = 40, gp = 3;
+  const inRect = (i, j) => hasRange && i >= s.iLo && i <= s.iHi && j >= s.jLo && j <= s.jHi;
+
+  const caption =
+    s.kind === "intro" ? t(E,
+        <>Watch the code run. Left = each cell's value (<b>beauty</b>), right = each photo's score (<b>S</b>). All 0 at first.</>,
+        <>코드가 실제로 도는 모습이에요. 왼쪽 = 각 칸 값(<b>beauty</b>), 오른쪽 = 각 사진 점수(<b>S</b>). 처음엔 다 0.</>)
+    : s.kind === "arrive" ? t(E,
+        <>Query: set cell (<b>{q.r},{q.c}</b>) to <b>{q.v}</b>. <b>delta</b> = {q.v} − {s.old} = <b>{s.delta}</b> (the increase).</>,
+        <>쿼리: 칸 (<b>{q.r},{q.c}</b>) 을 <b>{q.v}</b> 로. <b>delta</b> = {q.v} − {s.old} = <b>{s.delta}</b> (늘어난 만큼).</>)
+    : s.kind === "range" ? t(E,
+        <>Photos holding that cell: i <b>{s.iLo}~{s.iHi}</b>, j <b>{s.jLo}~{s.jHi}</b> → this rectangle in <b>S</b> (right).</>,
+        <>그 칸을 품는 사진 범위: i <b>{s.iLo}~{s.iHi}</b>, j <b>{s.jLo}~{s.jHi}</b> → 오른쪽 <b>S</b> 의 이 사각형.</>)
+    : s.kind === "apply" ? t(E,
+        <>Add <b>{s.delta}</b> to each S cell in the rectangle. New best <b>cur_max = {curMax}</b> → print it.</>,
+        <>사각형 S 칸마다 <b>+{s.delta}</b>. 최고값 <b>cur_max = {curMax}</b> → 출력.</>)
+    : t(E,
+        <>Each query touches only a <b>small rectangle</b> of S, then prints <b>cur_max</b>. That's the whole trick!</>,
+        <>쿼리마다 S 의 <b>작은 사각형</b>만 건드리고 <b>cur_max</b> 출력. 이게 전부예요!</>);
+
+  const Pill = ({ on, children }) => (
+    <span style={{
+      fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
+      padding: "3px 9px", borderRadius: 7, whiteSpace: "nowrap",
+      background: on ? "#0891b2" : "#f1f5f9", color: on ? "#fff" : "#94a3b8",
+      border: `1px solid ${on ? "#0891b2" : "#e2e8f0"}`, transition: "all .15s",
+    }}>{children}</span>
+  );
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Watch the variables run", "변수가 도는 모습")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+
+      {/* 설명 */}
+      <div style={{ maxWidth: 500, margin: "4px auto 12px", padding: "9px 13px", borderRadius: 11,
+        background: "#fff7ed", border: "1.5px solid #fdba74", color: "#9a3412",
+        fontSize: 12.5, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.55 }}>
+        {caption}
+      </div>
+
+      {/* 두 격자 */}
+      <div style={{ display: "flex", gap: 30, justifyContent: "center", flexWrap: "wrap", alignItems: "flex-start" }}>
+        {/* beauty */}
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 800, color: "#9a3412", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+            beauty {t(E, "(cell values)", "(칸 값)")}
+          </div>
+          {Array.from({ length: N }).map((_, ri) => (
+            <div key={ri} style={{ display: "flex", gap: gp, marginBottom: gp }}>
+              {Array.from({ length: N }).map((_, ci) => {
+                const R = ri + 1, Cc = ci + 1;
+                const val = (s.beauty && s.beauty[R][Cc]) || 0;
+                const hot = showQ && R === q.r && Cc === q.c;
+                return (
+                  <div key={ci} style={{ width: FC, height: FC, display: "flex", alignItems: "center",
+                    justifyContent: "center", borderRadius: 5, fontFamily: "'JetBrains Mono',monospace",
+                    fontWeight: 700, fontSize: 13, transition: "all .12s",
+                    background: hot ? "#fb923c" : "#fff",
+                    border: `${hot ? 2 : 1}px solid ${hot ? "#ea580c" : "#e2e8f0"}`,
+                    color: hot ? "#fff" : val === 0 ? "#cbd5e1" : "#1f2937" }}>{val}</div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+
+        {/* S */}
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 800, color: "#5b21b6", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+            S {t(E, "(photo scores)", "(사진 점수)")}
+          </div>
+          {Array.from({ length: W }).map((_, ii) => (
+            <div key={ii} style={{ display: "flex", gap: gp, marginBottom: gp }}>
+              {Array.from({ length: W }).map((_, jj) => {
+                const I = ii + 1, J = jj + 1;
+                const val = (s.S && s.S[I][J]) || 0;
+                const rect = inRect(I, J);
+                const isMax = (s.kind === "apply" || s.kind === "done") && val === curMax && val > 0;
+                return (
+                  <div key={jj} style={{ width: SC, height: SC, display: "flex", alignItems: "center",
+                    justifyContent: "center", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace",
+                    fontWeight: 800, fontSize: 15, transition: "all .12s", position: "relative",
+                    background: rect ? "#ede9fe" : "#fff",
+                    border: `${rect ? 2 : isMax ? 2 : 1}px solid ${rect ? "#7c3aed" : isMax ? "#16a34a" : "#e2e8f0"}`,
+                    color: val === 0 ? "#cbd5e1" : "#4c1d95" }}>
+                    {val}
+                    {rect && s.kind === "range" && (
+                      <span style={{ position: "absolute", bottom: -7, fontSize: 8.5, fontWeight: 800, color: "#7c3aed" }}>+{s.delta}</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 변수 칩 */}
+      <div style={{ display: "flex", gap: 7, justifyContent: "center", flexWrap: "wrap", marginTop: 16 }}>
+        <Pill on={showQ}>{showQ ? `r=${q.r} c=${q.c} v=${q.v}` : "r=· c=· v=·"}</Pill>
+        <Pill on={showQ}>delta = {showQ ? s.delta : "·"}</Pill>
+        <Pill on={hasRange}>i_lo..i_hi = {hasRange ? `${s.iLo}..${s.iHi}` : "·"}</Pill>
+        <Pill on={hasRange}>j_lo..j_hi = {hasRange ? `${s.jLo}..${s.jHi}` : "·"}</Pill>
+        <Pill on={s.kind === "apply" || s.kind === "done"}>cur_max = {curMax}</Pill>
+      </div>
+
+      {/* 출력 */}
+      <div style={{ textAlign: "center", marginTop: 10, fontSize: 12.5, color: "#334155", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+        {t(E, "output", "출력")}: <span style={{ color: "#0891b2", fontWeight: 800 }}>{(s.out && s.out.join("  ")) || "—"}</span>
+      </div>
+
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+    </div>
+  );
+}

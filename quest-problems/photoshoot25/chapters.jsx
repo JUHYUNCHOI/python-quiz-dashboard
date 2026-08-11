@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getPhotoshoot25Sections, getPhotoshoot25Walk } from "./components";
-import { PhotoWindowSim, PhotoUpdateSim } from "./sims";
+import { PhotoWindowSim, PhotoUpdateSim, PhotoTraceSim } from "./sims";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ═══════════════════════════════════════════════════════════════
@@ -250,5 +250,14 @@ export function makePhotoshoot25Ch2(E, lang = "py") {
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
       };
     })(),
+    /* 코드가 실제로 도는 모습 — 변수(beauty·S·delta·i_lo..·cur_max)가 쿼리마다 변하는 걸 눈으로. */
+    {
+      type: "reveal",
+      label: t(E, "Run", "실행"),
+      narr: t(E,
+        "Now watch the code actually run — the variables change with each query, right on the picture.",
+        "이제 코드가 실제로 도는 모습 — 변수가 쿼리마다 그림 위에서 함께 변해요."),
+      content: (<PhotoTraceSim E={E} />),
+    },
   ];
 }
