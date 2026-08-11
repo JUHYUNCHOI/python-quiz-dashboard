@@ -394,18 +394,23 @@ export function PhotoTraceSim({ E }) {
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
 
       {/* 설명 */}
-      <div style={{ maxWidth: 500, margin: "4px auto 12px", padding: "9px 13px", borderRadius: 11,
+      <div style={{ maxWidth: 520, margin: "4px auto 18px", padding: "12px 16px", borderRadius: 11,
         background: "#fff7ed", border: "1.5px solid #fdba74", color: "#9a3412",
-        fontSize: 12.5, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.55 }}>
+        fontSize: 13, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.75 }}>
         {caption}
       </div>
 
-      {/* 두 격자 */}
-      <div style={{ display: "flex", gap: 30, justifyContent: "center", flexWrap: "wrap", alignItems: "flex-start" }}>
+      {/* 두 격자 — 헤더 높이를 같게 맞춰 좌우 정렬 */}
+      <div style={{ display: "flex", gap: 44, justifyContent: "center", flexWrap: "wrap", alignItems: "flex-start" }}>
         {/* beauty */}
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 800, color: "#9a3412", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
-            beauty {t(E, "(cell values)", "(칸 값)")}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div style={{ height: 44, display: "flex", flexDirection: "column", justifyContent: "flex-end", marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#9a3412", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+              beauty {t(E, "(cell values)", "(칸 값)")}
+            </div>
+            <div style={{ fontSize: 10, fontWeight: 700, color: "#c2833f", textAlign: "center", marginTop: 4 }}>
+              {t(E, "field 5×5", "들판 5×5")}
+            </div>
           </div>
           {Array.from({ length: N }).map((_, ri) => (
             <div key={ri} style={{ display: "flex", gap: gp, marginBottom: gp }}>
@@ -427,12 +432,14 @@ export function PhotoTraceSim({ E }) {
         </div>
 
         {/* S */}
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 800, color: "#5b21b6", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
-            S {t(E, "(photo scores)", "(사진 점수)")}
-          </div>
-          <div style={{ fontSize: 10, fontWeight: 800, color: "#7c3aed", textAlign: "center", marginBottom: 7, wordBreak: "keep-all" }}>
-            {t(E, "9 photos · 1 cell = 1 photo", "사진 9장 · 한 칸 = 1장")}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div style={{ height: 44, display: "flex", flexDirection: "column", justifyContent: "flex-end", marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#5b21b6", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+              S {t(E, "(photo scores)", "(사진 점수)")}
+            </div>
+            <div style={{ fontSize: 10, fontWeight: 800, color: "#7c3aed", textAlign: "center", marginTop: 4, wordBreak: "keep-all" }}>
+              {t(E, "9 photos · 1 cell = 1", "사진 9장 · 한 칸 = 1장")}
+            </div>
           </div>
           {Array.from({ length: W }).map((_, ii) => (
             <div key={ii} style={{ display: "flex", gap: sgp, marginBottom: sgp }}>
