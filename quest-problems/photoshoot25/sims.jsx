@@ -358,7 +358,7 @@ export function PhotoTraceSim({ E }) {
   const curMax = s.curMax ?? 0;
   const showQ = s.kind === "arrive" || s.kind === "range" || s.kind === "apply";
 
-  const FC = 30, SC = 40, gp = 3;
+  const FC = 30, SC = 50, gp = 3, sgp = 9;
   const inRect = (i, j) => hasRange && i >= s.iLo && i <= s.iHi && j >= s.jLo && j <= s.jHi;
 
   const caption =
@@ -419,7 +419,7 @@ export function PhotoTraceSim({ E }) {
                     fontWeight: 700, fontSize: 13, transition: "all .12s",
                     background: hot ? "#fb923c" : "#fff",
                     border: `${hot ? 2 : 1}px solid ${hot ? "#ea580c" : "#e2e8f0"}`,
-                    color: hot ? "#fff" : val === 0 ? "#cbd5e1" : "#1f2937" }}>{val}</div>
+                    color: hot ? "#fff" : val === 0 ? "#94a3b8" : "#1f2937" }}>{val}</div>
                 );
               })}
             </div>
@@ -431,11 +431,11 @@ export function PhotoTraceSim({ E }) {
           <div style={{ fontSize: 11, fontWeight: 800, color: "#5b21b6", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
             S {t(E, "(photo scores)", "(사진 점수)")}
           </div>
-          <div style={{ fontSize: 9.5, fontWeight: 700, color: "#a78bfa", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
-            {t(E, "1 cell = 1 photo (3×3)", "한 칸 = 사진 1장(3×3)")}
+          <div style={{ fontSize: 10, fontWeight: 800, color: "#7c3aed", textAlign: "center", marginBottom: 7, wordBreak: "keep-all" }}>
+            {t(E, "9 photos · 1 cell = 1 photo", "사진 9장 · 한 칸 = 1장")}
           </div>
           {Array.from({ length: W }).map((_, ii) => (
-            <div key={ii} style={{ display: "flex", gap: gp, marginBottom: gp }}>
+            <div key={ii} style={{ display: "flex", gap: sgp, marginBottom: sgp }}>
               {Array.from({ length: W }).map((_, jj) => {
                 const I = ii + 1, J = jj + 1;
                 const val = (s.S && s.S[I][J]) || 0;
@@ -443,14 +443,17 @@ export function PhotoTraceSim({ E }) {
                 const isMax = (s.kind === "apply" || s.kind === "done") && val === curMax && val > 0;
                 return (
                   <div key={jj} style={{ width: SC, height: SC, display: "flex", alignItems: "center",
-                    justifyContent: "center", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace",
-                    fontWeight: 800, fontSize: 15, transition: "all .12s", position: "relative",
+                    justifyContent: "center", borderRadius: 8, fontFamily: "'JetBrains Mono',monospace",
+                    fontWeight: 800, fontSize: 22, transition: "all .12s", position: "relative",
                     background: rect ? "#ede9fe" : "#fff",
-                    border: `${rect ? 2 : isMax ? 2 : 1}px solid ${rect ? "#7c3aed" : isMax ? "#16a34a" : "#e2e8f0"}`,
-                    color: val === 0 ? "#cbd5e1" : "#4c1d95" }}>
+                    boxShadow: isMax ? "0 0 0 3px #16a34a33" : "0 1px 3px rgba(0,0,0,.06)",
+                    border: `${rect || isMax ? 2.5 : 1.5}px solid ${rect ? "#7c3aed" : isMax ? "#16a34a" : "#e2e8f0"}`,
+                    color: val === 0 ? "#94a3b8" : "#4c1d95" }}>
                     {val}
                     {rect && s.kind === "range" && (
-                      <span style={{ position: "absolute", bottom: -7, fontSize: 8.5, fontWeight: 800, color: "#7c3aed" }}>+{s.delta}</span>
+                      <span style={{ position: "absolute", top: -9, right: -8, fontSize: 11, fontWeight: 800,
+                        color: "#fff", background: "#16a34a", borderRadius: 999, padding: "1px 6px",
+                        boxShadow: "0 2px 5px rgba(0,0,0,.2)", whiteSpace: "nowrap" }}>+{s.delta}</span>
                     )}
                   </div>
                 );
