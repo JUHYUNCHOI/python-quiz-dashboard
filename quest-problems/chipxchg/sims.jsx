@@ -171,6 +171,8 @@ export function AdversarySim({ E }) {
 export function GameBoardSim({ E }) {
   const steps = [{ kind: "setup" }, { kind: "swap" }, { kind: "goal" }, { kind: "twist" }, { kind: "ask" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
+  // 파랑을 교환에 다 써버린 이후 상태 (빨강 =4, 파랑 흐림) — goal/twist/ask 공통
+  const spent = s.kind === "goal" || s.kind === "twist" || s.kind === "ask";
 
   const say =
     s.kind === "setup" ? t(E, <>Bessie starts with <b style={{color:RED}}>2 red chips</b> and <b style={{color:BLU}}>3 blue chips</b>. That's her whole pile.</>,
@@ -192,37 +194,50 @@ export function GameBoardSim({ E }) {
 
       {/* 내 칩 — 항상 표시 */}
       <div style={{ maxWidth: 460, margin: "0 auto" }}>
+        {/* 빨강 줄 — goal 부터 교환으로 얻은 +2 를 붙여 =4 를 계속 보여줌 */}
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
           <span style={{ fontSize: 11, fontWeight: 800, color: RED, width: 56, textAlign: "right" }}>{t(E, "red", "빨강")}</span>
           {Array.from({ length: 2 }).map((_, i) => <Chip key={i} color="red" />)}
-          {(s.kind === "goal") && <><span style={{ color: "#94a3b8", fontWeight: 800 }}>+</span>
+          {spent && <><span style={{ color: "#94a3b8", fontWeight: 800 }}>+</span>
             {Array.from({ length: 2 }).map((_, i) => <Chip key={"e" + i} color="red" label="+" />)}
-            <span style={{ fontSize: 12, fontWeight: 800, color: "#dc2626", marginLeft: 4 }}>= 4</span></>}
+            <span style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginLeft: 4, fontFamily: "'JetBrains Mono',monospace" }}>= 4</span></>}
         </div>
+        {/* 파랑 줄 — swap 에서 교환, 이후엔 흐리게(소모됨) 유지 */}
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
           <span style={{ fontSize: 11, fontWeight: 800, color: BLU, width: 56, textAlign: "right" }}>{t(E, "blue", "파랑")}</span>
-          {(s.kind === "swap" || s.kind === "goal") ? (
+          {s.kind === "setup" ? (
+            Array.from({ length: 3 }).map((_, i) => <Chip key={i} color="blue" />)
+          ) : (
             <div style={{ display: "flex", gap: 3, padding: 4, borderRadius: 10, border: `2px dashed ${BLU}`, background: "#f8fbff" }}>
-              {Array.from({ length: 3 }).map((_, i) => <Chip key={i} color="blue" faded={s.kind === "goal"} />)}
+              {Array.from({ length: 3 }).map((_, i) => <Chip key={i} color="blue" faded={spent} />)}
             </div>
-          ) : Array.from({ length: 3 }).map((_, i) => <Chip key={i} color="blue" />)}
+          )}
           {s.kind === "swap" && <><span style={{ color: "#94a3b8", fontWeight: 800 }}>→</span>
-            {Array.from({ length: 2 }).map((_, i) => <Chip key={"r" + i} color="red" />)}</>}
+            {Array.from({ length: 2 }).map((_, i) => <Chip key={"r" + i} color="red" />)}
+            <span style={{ fontSize: 11, fontWeight: 800, color: "#94a3b8", marginLeft: 2, wordBreak: "keep-all" }}>{t(E, "(2 more red)", "(빨강 2개 더)")}</span></>}
+          {spent && <span style={{ fontSize: 11, fontWeight: 800, color: "#94a3b8", marginLeft: 2, wordBreak: "keep-all" }}>{t(E, "(spent)", "(다 씀)")}</span>}
         </div>
 
-        {/* 교환소 규칙 배지 */}
-        <div style={{ textAlign: "center", fontSize: 11.5, fontWeight: 800, color: "#64748b", fontFamily: "'JetBrains Mono',monospace", marginTop: 6 }}>
-          🔄 {t(E, "3 blue → 2 red", "파랑 3 → 빨강 2")} · 🎯 {t(E, "goal 5 red", "목표 빨강 5")}
-        </div>
+        {/* 교환소 규칙 배지 — setup 에선 숨김(아직 교환·목표 얘기 전) */}
+        {s.kind !== "setup" && (
+          <div style={{ textAlign: "center", fontSize: 11.5, fontWeight: 800, color: "#64748b", fontFamily: "'JetBrains Mono',monospace", marginTop: 6, wordBreak: "keep-all" }}>
+            🔄 {t(E, "3 blue → 2 red", "파랑 3 → 빨강 2")} · 🎯 {t(E, "goal 5 red", "목표 빨강 5")}
+          </div>
+        )}
 
-        {/* twist / ask — 심술쟁이 등장 */}
+        {/* twist / ask — 심술쟁이 등장. 색·개수 미정 → 회색 ? 칩 */}
         {(s.kind === "twist" || s.kind === "ask") && (
-          <div style={{ marginTop: 12, display: "flex", justifyContent: "center", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-            <div style={{ fontSize: 26 }}>😈</div>
+          <div style={{ marginTop: 16, paddingTop: 12, borderTop: "1px dashed #e2e8f0", display: "flex", justifyContent: "center", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+            <div style={{ fontSize: 28 }}>😈</div>
+            <span style={{ fontSize: 12, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "extra chips", "추가 칩")}</span>
             <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
-              <Chip color="red" size={22} /><Chip color="blue" size={22} /><Chip color="blue" size={22} />
-              <span style={{ fontSize: 11, fontWeight: 800, color: "#dc2626" }}>{t(E, "?? worst split", "?? 최악 분배")}</span>
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} style={{ width: 22, height: 22, borderRadius: 999, background: "#f1f5f9", border: "2px dashed #94a3b8",
+                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "#64748b" }}>?</div>
+              ))}
+              <span style={{ fontSize: 16, fontWeight: 800, color: "#94a3b8" }}>…</span>
             </div>
+            <span style={{ fontSize: 11, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "color = worst for me", "색은 나한테 최악")}</span>
           </div>
         )}
       </div>
