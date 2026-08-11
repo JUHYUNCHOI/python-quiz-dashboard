@@ -64,7 +64,13 @@ export function PhotoWindowSim({ E }) {
     return s;
   };
 
-  const steps = [{ kind: "intro" }];
+  // 사진 점수 개념을 1×1 → 2×2 → 3×3 으로 쌓아 올림 (갑자기 3×3 점프 방지 — 선생님)
+  const sumTL = (size) => { let x = 0; for (let a = 0; a < size; a++) for (let b = 0; b < size; b++) x += g[a][b]; return x; };
+  const steps = [
+    { kind: "build", size: 1, bv: sumTL(1) },
+    { kind: "build", size: 2, bv: sumTL(2) },
+    { kind: "build", size: 3, bv: sumTL(3) },
+  ];
   let best = -1, bestAt = null;
   for (let i = 0; i < W; i++) {
     for (let j = 0; j < W; j++) {
@@ -82,7 +88,9 @@ export function PhotoWindowSim({ E }) {
   const PAD_TOP = 84;   // 말풍선이 맨 윗줄 창 위에 뜰 공간
 
   const inWin = (r, c) =>
-    s.kind === "win" && r >= s.i && r < s.i + K && c >= s.j && c < s.j + K;
+    s.kind === "win" ? (r >= s.i && r < s.i + K && c >= s.j && c < s.j + K)
+    : s.kind === "build" ? (r < s.size && c < s.size)
+    : false;
   const inBest = (r, c) => {
     const b = s.bestAt;
     return !!b && r >= b[0] && r < b[0] + K && c >= b[1] && c < b[1] + K;
@@ -99,8 +107,11 @@ export function PhotoWindowSim({ E }) {
       <div style={{ position: "relative", width: ROW_W, margin: "0 auto 10px", paddingTop: PAD_TOP }}>
         {(() => {
           const isWin = s.kind === "win";
-          const cx = isWin ? (s.j + K / 2) * PITCH - GAP / 2 : ROW_W / 2;
-          const winTopY = PAD_TOP + (isWin ? s.i * PITCH : 0);   // 창 top (container 좌표)
+          const isBuild = s.kind === "build";
+          const cx = isWin ? (s.j + K / 2) * PITCH - GAP / 2
+                   : isBuild ? (s.size / 2) * PITCH - GAP / 2
+                   : ROW_W / 2;
+          const winTopY = PAD_TOP + (isWin ? s.i * PITCH : 0);   // build/final: 맨 위(i=0)
           const good = s.kind === "final" || (isWin && s.isNew);
           const bg = good ? "#ecfdf5" : "#f5f3ff";
           const bd = good ? "#86efac" : "#c4b5fd";
@@ -115,8 +126,14 @@ export function PhotoWindowSim({ E }) {
                 color: fg, fontSize: 12, fontWeight: 700, textAlign: "center", wordBreak: "keep-all",
                 lineHeight: 1.55, boxShadow: "0 5px 16px rgba(0,0,0,.14)",
               }}>
-                {s.kind === "intro" && t(E, <>A photo is any <b>{K}×{K}</b> square. Its score = sum inside. Slide it everywhere.</>,
-                      <>사진은 아무 <b>{K}×{K}</b> 정사각형. 점수 = 안에 든 값의 합. 다 밀어봐요.</>)}
+                {isBuild && (s.size === 1
+                  ? t(E, <>Smallest photo <b>1×1</b> → just that one cell = <b>{s.bv}</b>.</>,
+                        <>가장 작은 사진 <b>1×1</b> → 그 칸 하나 = <b>{s.bv}</b>.</>)
+                  : s.size === 2
+                  ? t(E, <>A <b>2×2</b> photo → sum of 4 cells = <b>{s.bv}</b>.</>,
+                        <><b>2×2</b> 사진 → 4칸 합 = <b>{s.bv}</b>.</>)
+                  : t(E, <>Here a photo is <b>3×3</b> → sum of 9 = <b>{s.bv}</b>. Now slide it everywhere!</>,
+                        <>이 문제 사진은 <b>3×3</b> → 9칸 합 = <b>{s.bv}</b>. 이제 이걸 다 밀어봐요!</>))}
                 {isWin && <>
                   {t(E, <>top-left ({s.i + 1}, {s.j + 1}) → score <b>{s.v}</b></>, <>왼쪽위 ({s.i + 1}, {s.j + 1}) → 점수 <b>{s.v}</b></>)}
                   <br />
