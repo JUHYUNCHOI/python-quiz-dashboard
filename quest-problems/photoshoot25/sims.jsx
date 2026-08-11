@@ -363,20 +363,20 @@ export function PhotoTraceSim({ E }) {
 
   const caption =
     s.kind === "intro" ? t(E,
-        <>Watch the values change. Left = each cell's value (<b>beauty</b>), right = each photo's score (<b>S</b>). All 0 at first.</>,
-        <>값들이 어떻게 변하는지 볼게요. 왼쪽 = 각 칸 값(<b>beauty</b>), 오른쪽 = 각 사진 점수(<b>S</b>). 처음엔 다 0.</>)
+        <>Left = field cell values (<b>beauty</b>). Right = photo scores (<b>S</b>): this field has <b>9</b> different 3×3 photos → 9 cells, each = that photo's sum. All 0 at first.</>,
+        <>왼쪽 = 들판 칸 값(<b>beauty</b>). 오른쪽 = 사진 점수(<b>S</b>): 이 들판엔 3×3 사진이 <b>9장</b> → 9칸, 각 칸 = 그 사진 속 합. 처음엔 다 0.</>)
     : s.kind === "arrive" ? t(E,
-        <>Query: set cell (<b>{q.r},{q.c}</b>) to <b>{q.v}</b>. <b>delta</b> = {q.v} − {s.old} = <b>{s.delta}</b> (the increase).</>,
-        <>쿼리: 칸 (<b>{q.r},{q.c}</b>) 을 <b>{q.v}</b> 로. <b>delta</b> = {q.v} − {s.old} = <b>{s.delta}</b> (늘어난 만큼).</>)
+        <>Query: raise cell (<b>{q.r},{q.c}</b>) to <b>{q.v}</b>. <b>delta</b> = {q.v} − {s.old} = <b>{s.delta}</b> (how much it grew).</>,
+        <>쿼리: 칸 (<b>{q.r},{q.c}</b>) 을 <b>{q.v}</b> 로. <b>delta</b> = {q.v} − {s.old} = <b>{s.delta}</b> (얼마나 커졌나).</>)
     : s.kind === "range" ? t(E,
-        <>Photos holding that cell: i <b>{s.iLo}~{s.iHi}</b>, j <b>{s.jLo}~{s.jHi}</b> → this rectangle in <b>S</b> (right).</>,
-        <>그 칸을 품는 사진 범위: i <b>{s.iLo}~{s.iHi}</b>, j <b>{s.jLo}~{s.jHi}</b> → 오른쪽 <b>S</b> 의 이 사각형.</>)
+        <>Only the <b>photos containing that cell</b> gain score — the <b>purple cells</b> on the right. Just those few!</>,
+        <>그 칸을 <b>품는 사진들만</b> 점수가 올라요 — 오른쪽 <b>보라 칸</b>이 그 사진들이에요. 딱 그 몇 장만!</>)
     : s.kind === "apply" ? t(E,
-        <>Add <b>{s.delta}</b> to each S cell in the rectangle. New best <b>cur_max = {curMax}</b> → print it.</>,
-        <>사각형 S 칸마다 <b>+{s.delta}</b>. 최고값 <b>cur_max = {curMax}</b> → 출력.</>)
+        <>Add <b>{s.delta}</b> to those photos. Best photo score so far <b>cur_max = {curMax}</b> → print it.</>,
+        <>그 사진들 점수에 <b>+{s.delta}</b>. 지금까지 사진 중 최고 <b>cur_max = {curMax}</b> → 출력.</>)
     : t(E,
-        <>Each query touches only a <b>small rectangle</b> of S, then prints <b>cur_max</b>. That's the whole trick!</>,
-        <>쿼리마다 S 의 <b>작은 사각형</b>만 건드리고 <b>cur_max</b> 출력. 이게 전부예요!</>);
+        <>Each query fixes only the <b>few photos holding the cow</b>, then prints <b>cur_max</b>. That's the whole trick!</>,
+        <>쿼리마다 <b>소를 품는 사진 몇 장</b>만 고치고 <b>cur_max</b> 출력. 이게 전부예요!</>);
 
   const Pill = ({ on, children }) => (
     <span style={{
@@ -428,8 +428,11 @@ export function PhotoTraceSim({ E }) {
 
         {/* S */}
         <div>
-          <div style={{ fontSize: 11, fontWeight: 800, color: "#5b21b6", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: "#5b21b6", textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
             S {t(E, "(photo scores)", "(사진 점수)")}
+          </div>
+          <div style={{ fontSize: 9.5, fontWeight: 700, color: "#a78bfa", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
+            {t(E, "1 cell = 1 photo (3×3)", "한 칸 = 사진 1장(3×3)")}
           </div>
           {Array.from({ length: W }).map((_, ii) => (
             <div key={ii} style={{ display: "flex", gap: gp, marginBottom: gp }}>
