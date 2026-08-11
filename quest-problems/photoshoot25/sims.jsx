@@ -441,17 +441,18 @@ export function PhotoTraceSim({ E }) {
                 const val = (s.S && s.S[I][J]) || 0;
                 const rect = inRect(I, J);
                 const isMax = (s.kind === "apply" || s.kind === "done") && val === curMax && val > 0;
+                const filled = val > 0;                 // 점수가 생긴 칸 = 꽉 채워서 튀게
                 return (
                   <div key={jj} style={{ width: SC, height: SC, display: "flex", alignItems: "center",
                     justifyContent: "center", borderRadius: 8, fontFamily: "'JetBrains Mono',monospace",
-                    fontWeight: 800, fontSize: 22, transition: "all .12s", position: "relative",
-                    background: rect ? "#ede9fe" : "#fff",
-                    boxShadow: isMax ? "0 0 0 3px #16a34a33" : "0 1px 3px rgba(0,0,0,.06)",
-                    border: `${rect || isMax ? 2.5 : 1.5}px solid ${rect ? "#7c3aed" : isMax ? "#16a34a" : "#e2e8f0"}`,
-                    color: val === 0 ? "#94a3b8" : "#4c1d95" }}>
+                    fontWeight: 800, fontSize: 23, transition: "all .12s", position: "relative",
+                    background: isMax ? "#16a34a" : filled ? "#7c3aed" : rect ? "#f3f0ff" : "#f8fafc",
+                    boxShadow: (isMax || filled) ? "0 3px 9px rgba(124,58,237,.35)" : "0 1px 2px rgba(0,0,0,.04)",
+                    border: rect && !filled ? "2.5px solid #7c3aed" : (isMax || filled) ? "2px solid transparent" : "1.5px solid #e5e7eb",
+                    color: (isMax || filled) ? "#fff" : "#cbd5e1" }}>
                     {val}
                     {rect && s.kind === "range" && (
-                      <span style={{ position: "absolute", top: -9, right: -8, fontSize: 11, fontWeight: 800,
+                      <span style={{ position: "absolute", top: -9, right: -8, fontSize: 11.5, fontWeight: 800,
                         color: "#fff", background: "#16a34a", borderRadius: 999, padding: "1px 6px",
                         boxShadow: "0 2px 5px rgba(0,0,0,.2)", whiteSpace: "nowrap" }}>+{s.delta}</span>
                     )}
