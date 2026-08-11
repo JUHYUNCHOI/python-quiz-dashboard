@@ -97,7 +97,8 @@ export const FULL_CPP = [
   "}",
 ];
 
-// CodeWalk — 코드 위 노트 벽 대신 코드 줄에 붙는 말풍선 (선생님 규칙). 검증본 코드 그대로.
+// CodeWalk — 코드 줄에 붙는 말풍선. 화면 표시용은 '주석 없는 깨끗한 코드'(검증본 로직 그대로, 주석만 제거).
+// (선생님 2026-08-11: 한국어 버전에 영어 주석이 떠서 헷갈림 + "정보가 넘 많아". 설명은 말풍선에만.)
 const _PS_VARS = [
   { v: "beauty", ko: "각 칸의 현재 값", en: "each cell's value" },
   { v: "S", ko: "각 사진(K×K)의 점수 합", en: "each photo's sum" },
@@ -105,35 +106,115 @@ const _PS_VARS = [
   { v: "delta", ko: "이번에 늘어난 양", en: "how much it grew" },
   { v: "W", ko: "한 줄당 사진 수 = N−K+1", en: "photos per row = N−K+1" },
 ];
+
+// 표시용(주석 제거). 실행/PDF 는 위 FULL_PY/FULL_CPP 그대로.
+const VIEW_PY = [
+  "import sys",
+  "input = sys.stdin.readline",
+  "",
+  "N, K = map(int, input().split())",
+  "Q = int(input())",
+  "",
+  "beauty = [[0] * (N + 2) for _ in range(N + 2)]",
+  "W = N - K + 1",
+  "S = [[0] * (W + 2) for _ in range(W + 2)]",
+  "",
+  "cur_max = 0",
+  "out = []",
+  "",
+  "for _ in range(Q):",
+  "    r, c, v = map(int, input().split())",
+  "    delta = v - beauty[r][c]",
+  "    beauty[r][c] = v",
+  "",
+  "    i_lo = max(1, r - K + 1)",
+  "    i_hi = min(r, W)",
+  "    j_lo = max(1, c - K + 1)",
+  "    j_hi = min(c, W)",
+  "",
+  "    for i in range(i_lo, i_hi + 1):",
+  "        for j in range(j_lo, j_hi + 1):",
+  "            S[i][j] += delta",
+  "            if S[i][j] > cur_max:",
+  "                cur_max = S[i][j]",
+  "",
+  "    out.append(str(cur_max))",
+  "",
+  "sys.stdout.write('\\n'.join(out) + '\\n')",
+];
+
+const VIEW_CPP = [
+  "#include <iostream>",
+  "#include <vector>",
+  "#include <algorithm>",
+  "using namespace std;",
+  "",
+  "int main() {",
+  "    int N, K;",
+  "    cin >> N >> K;",
+  "    int Q;",
+  "    cin >> Q;",
+  "",
+  "    vector<vector<int>> beauty(N + 2, vector<int>(N + 2, 0));",
+  "",
+  "    int W = N - K + 1;",
+  "    vector<vector<int>> S(W + 2, vector<int>(W + 2, 0));",
+  "",
+  "    int cur_max = 0;",
+  "",
+  "    for (int q = 0; q < Q; q++) {",
+  "        int r, c, v;",
+  "        cin >> r >> c >> v;",
+  "        int delta = v - beauty[r][c];",
+  "        beauty[r][c] = v;",
+  "",
+  "        int i_lo = max(1, r - K + 1);",
+  "        int i_hi = min(r, W);",
+  "        int j_lo = max(1, c - K + 1);",
+  "        int j_hi = min(c, W);",
+  "",
+  "        for (int i = i_lo; i <= i_hi; i++) {",
+  "            for (int j = j_lo; j <= j_hi; j++) {",
+  "                S[i][j] += delta;",
+  "                if (S[i][j] > cur_max) {",
+  "                    cur_max = S[i][j];",
+  "                }",
+  "            }",
+  "        }",
+  "        cout << cur_max << \"\\n\";",
+  "    }",
+  "    return 0;",
+  "}",
+];
+
 export function getPhotoshoot25Walk(E, lang = "py") {
   if (lang === "cpp") {
-    // 더 작은 조각으로 (선생님 2026-08-11) — 계획 슬라이드의 순서를 그대로 따라감.
-    return { code: FULL_CPP, vars: _PS_VARS, beats: [
+    return { code: VIEW_CPP, vars: _PS_VARS, beats: [
       { hi: [0, 3],   bubble: t(E, "Include the tools we need.", "필요한 도구 include.") },
       { hi: [5, 9],   bubble: t(E, "Start main → read N, K, and the number of updates Q.", "main 시작 → N, K, 업데이트 수 Q 읽기.") },
-      { hi: [11, 12], bubble: t(E, "beauty: each cell's current value — all 0 at first.", "beauty: 각 칸의 현재 값 — 처음엔 다 0.") },
-      { hi: [14, 14], bubble: t(E, "W = how many photos fit in a row = N−K+1.", "W = 한 줄에 들어가는 사진 수 = N−K+1.") },
-      { hi: [15, 15], bubble: t(E, "S = each photo's score (its K×K sum). THE key idea — keep it, don't re-add every time.", "S = 각 사진의 점수(그 K×K 합). 핵심 아이디어 — 저장해두고 매번 다시 안 더함.") },
-      { hi: [17, 17], bubble: t(E, "cur_max = best photo score so far.", "cur_max = 지금까지 최고 점수.") },
-      { hi: [19, 23], bubble: t(E, "For each update: set (r,c) to v. delta = how much it grew.", "업데이트마다: (r,c) 를 v 로. delta = 얼마나 커졌나.") },
-      { hi: [25, 28], bubble: t(E, "Which photos hold this cow? Their top-left range — that little rectangle from the sim.", "이 소를 품는 사진들의 top-left 범위 — 시뮬의 그 작은 직사각형.") },
-      { hi: [30, 32], bubble: t(E, "Add delta to ONLY those photos' scores (not all of them).", "그 사진들의 점수에만 += delta (전부 말고 이 몇 장).") },
-      { hi: [33, 35], bubble: t(E, "Values only grow, so just lift cur_max if a photo beats it.", "값은 커지기만 하니, 한 사진이 넘으면 cur_max 만 올려줌.") },
-      { hi: [38, 38], bubble: t(E, "Print the best score after this update.", "이번 업데이트 뒤 최고 점수 출력.") },
+      { hi: [11, 11], bubble: t(E, "beauty = each cell's value (all 0 at first). (+2 is just spare room — don't worry about it.)", "beauty = 각 칸의 값 (처음엔 다 0). (+2 는 자리만 넉넉히 — 신경 안 써도 돼요.)") },
+      { hi: [13, 13], bubble: t(E, "W = how many photos fit in a row (N−K+1).", "W = 한 줄에 들어가는 사진 수 (N−K+1).") },
+      { hi: [14, 14], bubble: t(E, "S = each photo's score. THE key idea — keep it, don't re-add every time.", "S = 각 사진의 점수. 핵심 — 저장해두고 매번 다시 안 더함.") },
+      { hi: [16, 16], bubble: t(E, "cur_max = best score so far.", "cur_max = 지금까지 최고 점수.") },
+      { hi: [19, 22], bubble: t(E, "delta = new v − old value. The photo sums already hold the old value, so add just the change — no recompute (that's the speed!). Then store the new value.", "delta = 새 값 v − 옛 값. 사진 점수엔 옛 값이 이미 있어서, 다시 다 더하지 말고 '늘어난 만큼'만 더하면 돼요 (그래서 빠름!). 그 다음 칸 값을 새 값으로 갱신.") },
+      { hi: [24, 27], bubble: t(E, "Range of photos holding this cow — that rectangle from the sim.", "이 소를 품는 사진들의 범위 — 시뮬의 그 직사각형.") },
+      { hi: [29, 31], bubble: t(E, "Add delta to only those photos.", "그 사진들만 S 에 += delta.") },
+      { hi: [32, 34], bubble: t(E, "A photo grew — lift cur_max if it beats it.", "사진이 커졌으니, 넘으면 cur_max 갱신.") },
+      { hi: [37, 37], bubble: t(E, "Print the best score.", "최고 점수 출력.") },
     ] };
   }
-  return { code: FULL_PY, vars: _PS_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "Fast input — big inputs won't be slow.", "빠른 입력 — 큰 입력도 안 느리게.") },
+  return { code: VIEW_PY, vars: _PS_VARS, beats: [
+    { hi: [0, 1],   bubble: t(E, "Fast input.", "빠른 입력.") },
     { hi: [3, 4],   bubble: t(E, "Read N, K, and the number of updates Q.", "N, K, 업데이트 수 Q 읽기.") },
-    { hi: [6, 7],   bubble: t(E, "beauty: each cell's current value — all 0 at first.", "beauty: 각 칸의 현재 값 — 처음엔 다 0.") },
-    { hi: [9, 10],  bubble: t(E, "W = how many photos fit in a row = N−K+1.", "W = 한 줄에 들어가는 사진 수 = N−K+1.") },
-    { hi: [12, 13], bubble: t(E, "S = each photo's score (its K×K sum). THE key idea — keep it, don't re-add every time.", "S = 각 사진의 점수(그 K×K 합). 핵심 아이디어 — 저장해두고 매번 다시 안 더함.") },
-    { hi: [15, 16], bubble: t(E, "cur_max = best score so far. out = where we collect answers.", "cur_max = 지금까지 최고 점수. out = 답을 모아둘 곳.") },
-    { hi: [18, 21], bubble: t(E, "For each update: set (r,c) to v. delta = how much it grew.", "업데이트마다: (r,c) 를 v 로. delta = 얼마나 커졌나.") },
-    { hi: [23, 28], bubble: t(E, "Which photos hold this cow? Their top-left range — that little rectangle from the sim.", "이 소를 품는 사진들의 top-left 범위 — 시뮬의 그 작은 직사각형.") },
-    { hi: [30, 32], bubble: t(E, "Add delta to ONLY those photos' scores (not all of them).", "그 사진들의 점수에만 += delta (전부 말고 이 몇 장).") },
-    { hi: [33, 34], bubble: t(E, "Values only grow, so just lift cur_max if a photo beats it.", "값은 커지기만 하니, 한 사진이 넘으면 cur_max 만 올려줌.") },
-    { hi: [36, 38], bubble: t(E, "Save this update's answer; print them all at once.", "이 업데이트의 답 저장; 마지막에 한 번에 출력.") },
+    { hi: [6, 6],   bubble: t(E, "beauty = each cell's value (all 0 at first). (+2 is just spare room — don't worry about it.)", "beauty = 각 칸의 값 (처음엔 다 0). (+2 는 자리만 넉넉히 — 신경 안 써도 돼요.)") },
+    { hi: [7, 7],   bubble: t(E, "W = how many photos fit in a row (N−K+1).", "W = 한 줄에 들어가는 사진 수 (N−K+1).") },
+    { hi: [8, 8],   bubble: t(E, "S = each photo's score. THE key idea — keep it, don't re-add every time.", "S = 각 사진의 점수. 핵심 — 저장해두고 매번 다시 안 더함.") },
+    { hi: [10, 11], bubble: t(E, "cur_max = best score so far. out = collect answers.", "cur_max = 지금까지 최고 점수. out = 답 모음.") },
+    { hi: [14, 16], bubble: t(E, "delta = new v − old value. The photo sums already hold the old value, so add just the change — no recompute (that's the speed!). Then store the new value.", "delta = 새 값 v − 옛 값. 사진 점수엔 옛 값이 이미 있어서, 다시 다 더하지 말고 '늘어난 만큼'만 더하면 돼요 (그래서 빠름!). 그 다음 칸 값을 새 값으로 갱신.") },
+    { hi: [18, 21], bubble: t(E, "Range of photos holding this cow — that rectangle from the sim.", "이 소를 품는 사진들의 범위 — 시뮬의 그 직사각형.") },
+    { hi: [23, 25], bubble: t(E, "Add delta to only those photos.", "그 사진들만 S 에 += delta.") },
+    { hi: [26, 27], bubble: t(E, "A photo grew — lift cur_max if it beats it.", "사진이 커졌으니, 넘으면 cur_max 갱신.") },
+    { hi: [29, 31], bubble: t(E, "Save the answer; print all at the end.", "답 저장; 마지막에 한 번에 출력.") },
   ] };
 }
 

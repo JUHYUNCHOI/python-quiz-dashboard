@@ -208,8 +208,8 @@ export function PhotoUpdateSim({ E }) {
         <>This 3×3 <b>misses the cow</b> → this photo stays the same ✗</>,
         <>이 3×3 은 <b>소를 못 담아요</b> → 이 사진은 그대로 ✗</>)
     : s.kind === "count" ? t(E,
-        <>Center a 3×3 on the cow, or nudge it 1 step any way — the cow stays in. Those center spots: <b>3 × 3 = 9</b>. (not all {(N - K + 1) * (N - K + 1)}!)</>,
-        <>3×3 의 <b>가운데</b>를 소에 두거나, 상하좌우로 한 칸씩 밀어도 소가 안에 남아요. 그 가운데 자리가 <b>3 × 3 = 9곳 = 9장</b>. (전체 {(N - K + 1) * (N - K + 1)}장이 아니라!)</>)
+        <>All the 3×3 photos holding the cow → just <b>9</b>, clustered around it (each dot = one photo). Not all {(N - K + 1) * (N - K + 1)}!</>,
+        <>소를 담는 3×3 사진은 소 둘레 이 <b>9장</b> 뿐 (점 하나 = 사진 한 장). 전체 {(N - K + 1) * (N - K + 1)}장이 아니에요!</>)
     : t(E,
         <>So one prettier cow → fix just <b>9 photos</b>, not all {(N - K + 1) * (N - K + 1)}. That's why it's fast.</>,
         <>그래서 소 하나 예뻐지면 → <b>9장만</b> 고치면 끝 (전체 {(N - K + 1) * (N - K + 1)}장 X). 그래서 빠름.</>);

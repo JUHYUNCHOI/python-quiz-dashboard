@@ -218,23 +218,10 @@ function Photoshoot25Plan({ E }) {
                      <>그러니 바뀐 사진만 {codeTag("cur_max")} 와 비교하면 돼.</>)} />
       </div>
 
-      <div style={{ fontSize: 14, fontWeight: 800, color: "#0f172a", marginBottom: 8 }}>
-        ⚙️ {t(E, "So the code does exactly this:", "그래서 코드는 이 순서로:")}
-      </div>
-      <div style={{ ...box, background: "#f8fafc" }}>
-        <Line n="1">{t(E, <>Prepare the table {codeTag("S")} (photo scores) and {codeTag("cur_max")} (best so far).</>,
-                          <>표 {codeTag("S")}(사진 점수)와 {codeTag("cur_max")}(지금까지 최고)를 준비.</>)}</Line>
-        <div style={{ fontSize: 12, fontWeight: 800, color: "#64748b", margin: "2px 0 6px 30px" }}>
-          {t(E, "then for each update:", "그리고 업데이트마다:")}
-        </div>
-        <Line n="2">{t(E, <>{codeTag("delta")} = how much this cow grew.</>, <>{codeTag("delta")} = 이 소가 얼마나 커졌나.</>)}</Line>
-        <Line n="3">{t(E, <>Find the rectangle of photos to touch: {codeTag("i_lo..i_hi")}, {codeTag("j_lo..j_hi")}.</>,
-                          <>손댈 사진 직사각형 범위: {codeTag("i_lo..i_hi")}, {codeTag("j_lo..j_hi")}.</>)}</Line>
-        <Line n="4">{t(E, <>Add {codeTag("delta")} to just those photos in {codeTag("S")}.</>,
-                          <>그 사진들만 {codeTag("S")} 에 {codeTag("+= delta")}.</>)}</Line>
-        <Line n="5">{t(E, <>Lift {codeTag("cur_max")} if any of them is now bigger.</>,
-                          <>그 중 하나가 더 커졌으면 {codeTag("cur_max")} 갱신.</>)}</Line>
-        <Line n="6">{t(E, <>Print {codeTag("cur_max")}.</>, <>{codeTag("cur_max")} 출력.</>)}</Line>
+      <div style={{ ...box, background: "#f8fafc", fontSize: 13, lineHeight: 1.75, color: "#334155" }}>
+        ⚙️ {t(E,
+          <>So: keep table {codeTag("S")}. Each update — add {codeTag("delta")} to just the cow's photos, then lift {codeTag("cur_max")}.</>,
+          <>그래서: 표 {codeTag("S")} 를 유지. 업데이트마다 — 소를 품는 사진에만 {codeTag("delta")} 를 더하고, {codeTag("cur_max")} 를 갱신.</>)}
       </div>
     </div>
   );
