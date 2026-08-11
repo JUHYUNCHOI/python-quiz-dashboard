@@ -1,235 +1,151 @@
-import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
-import { CodeBlock } from "@/components/quest/shared";
+import { MobileSim } from "./sims";
 
 const A = "#d97706";
 
 /* ═══════════════════════════════════════════════════════════════
-   MobileGameSim — play levels one by one, watch total grow
-   Bilingual via t(E, EN, KO)
+   MobileGameSim — App 이 import 하는 이름 유지. 실제 시뮬은 sims.jsx.
+   (예전 '점수 합' 시뮬은 잘못된 문제였음 → 올바른 그리디 시뮬로 교체)
    ═══════════════════════════════════════════════════════════════ */
-const _MG_PRESETS = [
-  {
-    label: { en: "Tiny (3 levels)", ko: "초간단 (3 레벨)" },
-    scores: [10, 20, 30],
-  },
-  {
-    label: { en: "Mixed (5 levels)", ko: "혼합 (5 레벨)" },
-    scores: [7, 15, 3, 22, 8],
-  },
-  {
-    label: { en: "Big run (6 levels)", ko: "대형 (6 레벨)" },
-    scores: [50, 25, 100, 40, 15, 70],
-  },
-];
-
-const _MG_ICONS = ["🎮", "🕹️", "🎯", "⭐", "💎", "🏆", "🔥", "⚡"];
-
-export function MobileGameSim({ E }) {
-  const [pi, setPi] = useState(0);
-  const [step, setStep] = useState(0);
-  const scores = _MG_PRESETS[pi].scores;
-  const N = scores.length;
-
-  // Build running totals up through current step
-  const totals = [0];
-  for (let i = 0; i < N; i++) totals.push(totals[i] + scores[i]);
-  const curTotal = totals[step];
-  const maxTotal = totals[N];
-
-  const reset = (newPi) => { setPi(newPi); setStep(0); };
-
-  return (
-    <div style={{ padding: 14 }}>
-      {/* preset selector */}
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
-        {_MG_PRESETS.map((p, i) => (
-          <button key={i} onClick={() => reset(i)} style={{
-            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
-            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
-            fontSize: 12, fontWeight: 600, cursor: "pointer",
-          }}>
-            {E ? p.label.en : p.label.ko}
-          </button>
-        ))}
-      </div>
-
-      {/* total counter (big phone screen) */}
-      <div style={{
-        background: "linear-gradient(135deg,#1f2937,#111827)", border: `2px solid ${A}`,
-        borderRadius: 14, padding: "12px 16px", marginBottom: 12, textAlign: "center",
-        boxShadow: "0 4px 14px rgba(217,119,6,.18)",
-      }}>
-        <div style={{ fontSize: 10, fontWeight: 800, color: "#fcd34d", letterSpacing: 0.6 }}>
-          📱 {t(E, "TOTAL SCORE", "총 점수")}
-        </div>
-        <div style={{
-          fontSize: 32, fontWeight: 800, color: "#fbbf24",
-          fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.1, marginTop: 2,
-          transition: "color 0.2s",
-        }}>
-          {curTotal}
-        </div>
-        <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 2 }}>
-          {t(E, "Levels played", "플레이한 레벨")}: <b style={{ color: "#fbbf24" }}>{step}</b> / {N}
-        </div>
-      </div>
-
-      {/* level list */}
-      <div style={{
-        background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10,
-        padding: 8, marginBottom: 10,
-      }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", padding: "2px 6px 6px", letterSpacing: 0.4 }}>
-          {t(E, "LEVELS (in order)", "레벨 (순서대로)")}
-        </div>
-        {scores.map((s, i) => {
-          const played = i < step;
-          const isCurrent = i === step - 1;
-          return (
-            <div key={i} style={{
-              display: "flex", alignItems: "center", gap: 8,
-              padding: "5px 8px", borderRadius: 6, marginBottom: 2,
-              background: isCurrent ? "#fde68a" : (played ? "#fef3c7" : "transparent"),
-              opacity: played ? 1 : 0.5,
-              fontFamily: "'JetBrains Mono',monospace",
-              border: isCurrent ? `1px solid ${A}` : "1px solid transparent",
-            }}>
-              <span style={{ width: 24, color: C.dim, fontSize: 11 }}>#{i + 1}</span>
-              <span style={{ fontSize: 16 }}>{_MG_ICONS[i % _MG_ICONS.length]}</span>
-              <span style={{ minWidth: 80, fontSize: 12, color: C.dim }}>
-                {t(E, `Level ${i + 1}`, `레벨 ${i + 1}`)}
-              </span>
-              <span style={{ fontWeight: 800, color: played ? "#15803d" : C.dim, marginLeft: "auto" }}>
-                +{s}
-              </span>
-              {played && (
-                <span style={{
-                  fontSize: 10, fontWeight: 800, color: "#92400e",
-                  background: "#fcd34d", padding: "2px 6px", borderRadius: 4,
-                  fontFamily: "system-ui",
-                }}>
-                  {t(E, `total = ${totals[i + 1]}`, `합 = ${totals[i + 1]}`)}
-                </span>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* progress bar */}
-      <div style={{ marginBottom: 10 }}>
-        <div style={{
-          background: "#fef3c7", border: `1px solid ${A}`, borderRadius: 8,
-          height: 12, overflow: "hidden", position: "relative",
-        }}>
-          <div style={{
-            width: `${maxTotal === 0 ? 0 : (curTotal / maxTotal) * 100}%`,
-            height: "100%",
-            background: `linear-gradient(90deg,${A},#fbbf24)`,
-            transition: "width 0.3s",
-          }} />
-        </div>
-        <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginTop: 3 }}>
-          {curTotal} / {maxTotal} {t(E, "points", "점")}
-        </div>
-      </div>
-
-      {/* controls */}
-      <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
-        <button onClick={() => setStep(0)} disabled={step === 0} style={{
-          padding: "6px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
-          background: "#fff", color: step === 0 ? C.dim : C.text,
-          fontSize: 12, fontWeight: 700, cursor: step === 0 ? "default" : "pointer",
-        }}>
-          ⏮ {t(E, "Reset", "처음")}
-        </button>
-        <button onClick={() => setStep(Math.max(0, step - 1))} disabled={step === 0} style={{
-          padding: "6px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
-          background: "#fff", color: step === 0 ? C.dim : C.text,
-          fontSize: 12, fontWeight: 700, cursor: step === 0 ? "default" : "pointer",
-        }}>
-          ◀ {t(E, "Back", "뒤로")}
-        </button>
-        <button onClick={() => setStep(Math.min(N, step + 1))} disabled={step >= N} style={{
-          padding: "6px 14px", borderRadius: 8, border: `1px solid ${A}`,
-          background: step >= N ? "#e5e7eb" : A,
-          color: step >= N ? C.dim : "#fff",
-          fontSize: 12, fontWeight: 800, cursor: step >= N ? "default" : "pointer",
-        }}>
-          {t(E, "Play next level", "다음 레벨 ▶")} ▶
-        </button>
-        <button onClick={() => setStep(N)} disabled={step >= N} style={{
-          padding: "6px 12px", borderRadius: 8, border: `1px solid ${A}`,
-          background: "#fff", color: step >= N ? C.dim : A,
-          fontSize: 12, fontWeight: 700, cursor: step >= N ? "default" : "pointer",
-        }}>
-          ⏭ {t(E, "Play all", "전부")}
-        </button>
-      </div>
-
-      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginTop: 10 }}>
-        {t(E,
-          "Play levels one by one. Each level adds its score to the total. After all N levels, total = sum(scores).",
-          "레벨을 하나씩 플레이. 매 레벨마다 점수가 총합에 더해져요. 모든 N 레벨 후, 총합 = 점수들의 합.")}
-      </div>
-    </div>
-  );
+export function MobileGameSim(props) {
+  return <MobileSim {...props} />;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   SOLUTION CODE — 그리디 + max-heap (usaco/mcc 검증된 접근)
+   Alice 파워는 커지기만 → 매번 '먹을 수 있는 가장 큰 적'을 먹으면 최소 처치.
+   ═══════════════════════════════════════════════════════════════ */
 const FULL_PY = [
-  "N = int(input())",
-  "scores = list(map(int, input().split()))",
+  "import sys, heapq",
+  "input = sys.stdin.readline",
   "",
-  "# Play all levels, sum all scores",
-  "total = sum(scores)",
-  "",
-  "print(total)",
+  "T = int(input())",
+  "for _ in range(T):",
+  "    N, A, B = map(int, input().split())",
+  "    p = sorted(map(int, input().split()))",
+  "    heap = []          # 먹을 수 있는 적 (max-heap: -값 저장)",
+  "    ptr = 0",
+  "    kills = 0",
+  "    cur = A",
+  "    while cur < B:",
+  "        while ptr < N and p[ptr] < cur:   # 지금 먹을 수 있는 적 넣기",
+  "            heapq.heappush(heap, -p[ptr])",
+  "            ptr += 1",
+  "        if not heap:",
+  "            break                          # 더 먹을 적이 없음",
+  "        cur += -heapq.heappop(heap)        # 가장 큰 적을 먹어 최대 성장",
+  "        kills += 1",
+  "    print(kills if cur >= B else -1)",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
+  "#include <vector>",
+  "#include <algorithm>",
+  "#include <queue>",
+  "#include <string>",
   "using namespace std;",
   "",
   "int main() {",
-  "    int N;",
-  "    cin >> N;",
-  "    long long total = 0;",
-  "    for (int i = 0; i < N; i++) {",
-  "        int x;",
-  "        cin >> x;",
-  "        total += x;",
+  "    int T; cin >> T;",
+  "    while (T--) {",
+  "        long long N, A, B;",
+  "        cin >> N >> A >> B;",
+  "        vector<long long> p(N);",
+  "        for (auto& x : p) cin >> x;",
+  "        sort(p.begin(), p.end());            // 파워 오름차순",
+  "",
+  "        priority_queue<long long> pq;         // 먹을 수 있는 적 (max-heap)",
+  "        int ptr = 0, kills = 0;",
+  "        long long cur = A;",
+  "        while (cur < B) {",
+  "            while (ptr < N && p[ptr] < cur) { pq.push(p[ptr]); ptr++; }",
+  "            if (pq.empty()) break;            // 더 먹을 적이 없음",
+  "            cur += pq.top(); pq.pop();        // 가장 큰 적을 먹어 최대 성장",
+  "            kills++;",
+  "        }",
+  "        cout << (cur >= B ? to_string(kills) : string(\"-1\")) << \"\\n\";",
   "    }",
-  "    cout << total << \"\\n\";",
-  "    return 0;",
   "}",
 ];
 
 export function getMobileGameSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "🎯 Greedy + max-heap", "🎯 그리디 + 최대힙"),
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+        t(E, "Alice's power only grows, so the set of beatable enemies only grows too — eating the biggest beatable enemy each time gives the fewest kills.",
+            "Alice 파워는 커지기만 하니 먹을 수 있는 적도 늘기만 해요 — 매번 가장 큰 적을 먹으면 최소 처치."),
+        t(E, "Sort enemies, push each one that becomes beatable (p < cur) into a max-heap, then pop the biggest to eat.",
+            "적을 정렬하고, 먹을 수 있게 된(p < cur) 적을 최대힙에 넣은 뒤, 가장 큰 것을 꺼내 먹어요."),
+        t(E, "Strictly less (p < cur): equal power can't be beaten. Stop and print -1 when the heap is empty but power < B.",
+            "strictly less (p < cur): 같은 파워는 못 먹어요. 힙이 비었는데 파워 < B 면 멈추고 -1 출력."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "Python's heapq is a min-heap, so store -p to pop the largest. sorted() gives ascending powers.",
+            "파이썬 heapq 는 최소힙이라 -p 로 넣어 가장 큰 걸 꺼내요. sorted() 로 파워 오름차순."),
       ],
       cppOnly: [
-        t(E, "Plain for-loop reading N scores — no while(N--) tricks needed.",
-            "평범한 for 루프로 N 개 점수 읽기 — while(N--) 같은 트릭 안 씀."),
-        t(E, "long long for total in case the sum is large.",
-            "합계가 클 수 있으니 total 만 long long."),
+        t(E, "priority_queue<long long> is a max-heap by default — pq.top() is the biggest. Use long long since powers add up.",
+            "priority_queue<long long> 는 기본이 최대힙 — pq.top() 이 가장 큼. 파워가 쌓이니 long long."),
       ],
     },
   ];
+}
+
+/* CodeWalk 용 — 코드 줄에 붙는 스텝별 설명 말풍선 (해요체) */
+const _MG_VARS = [
+  { v: "cur", ko: "지금 Alice 파워", en: "Alice's current power" },
+  { v: "B", ko: "목표 파워", en: "goal power" },
+  { v: "p", ko: "적 파워들 (정렬됨)", en: "enemy powers (sorted)" },
+  { v: "heap / pq", ko: "먹을 수 있는 적 (최대)", en: "beatable enemies (max)" },
+  { v: "kills", ko: "처치 수 = 답", en: "kills = answer" },
+];
+
+export function getMobileGameWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP, vars: _MG_VARS, beats: [
+        { hi: [0, 14], bubble: t(E,
+          "For each of T tests, read N, A, B (enemy count · start power · goal) and the enemy powers, then sort the powers ascending.",
+          "T개 테스트마다 N·A·B(적 수·시작 파워·목표)와 적 파워들을 읽고, 파워를 오름차순으로 정렬해요.") },
+        { hi: [16, 18], bubble: t(E,
+          "pq = beatable enemies as a max-heap. ptr = how far we've added, kills = kill count, cur = current power (starts at A).",
+          "pq = 먹을 수 있는 적(최대힙). ptr = 어디까지 후보에 넣었나, kills = 처치 수, cur = 지금 파워(A로 시작).") },
+        { hi: [19, 20], bubble: t(E,
+          "While power is below the goal: first push every enemy weaker than cur (p[ptr] < cur) into the heap.",
+          "파워가 목표에 못 미치는 동안: 먼저 지금 파워보다 약한 적(p[ptr] < cur)을 전부 힙에 넣어요.") },
+        { hi: [21, 24], bubble: t(E,
+          "If none are beatable, stop. Otherwise eat the biggest (pq.top) to grow the most, and count one kill.",
+          "먹을 적이 없으면 멈춰요. 있으면 가장 큰 적(pq.top)을 먹어 최대로 성장하고, 처치 하나 세요.") },
+        { hi: [25, 25], bubble: t(E,
+          "Reached B → print kills. Never reached it → print -1.",
+          "목표 B 에 닿았으면 kills, 끝내 못 닿았으면 -1 을 출력해요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY, vars: _MG_VARS, beats: [
+      { hi: [0, 6], bubble: t(E,
+        "For each of T tests, read N, A, B (enemy count · start power · goal) and the enemy powers, then sort the powers ascending.",
+        "T개 테스트마다 N·A·B(적 수·시작 파워·목표)와 적 파워들을 읽고, 파워를 오름차순으로 정렬해요.") },
+      { hi: [7, 10], bubble: t(E,
+        "heap = beatable enemies (Python's heapq is a min-heap, so store -p to pop the largest). ptr, kills, and cur (starts at A).",
+        "heap = 먹을 수 있는 적(파이썬 heapq 는 최소힙이라 -p 로 넣어 가장 큰 걸 꺼냄). ptr, kills, cur(A로 시작).") },
+      { hi: [11, 14], bubble: t(E,
+        "While power is below the goal: first push every enemy weaker than cur (p[ptr] < cur) into the heap.",
+        "파워가 목표에 못 미치는 동안: 먼저 지금 파워보다 약한 적(p[ptr] < cur)을 전부 힙에 넣어요.") },
+      { hi: [15, 18], bubble: t(E,
+        "If none are beatable, stop. Otherwise eat the biggest to grow the most, and count one kill.",
+        "먹을 적이 없으면 멈춰요. 있으면 가장 큰 적을 먹어 최대로 성장하고, 처치 하나 세요.") },
+      { hi: [19, 19], bubble: t(E,
+        "Reached B → print kills. Never reached it → print -1.",
+        "목표 B 에 닿았으면 kills, 끝내 못 닿았으면 -1 을 출력해요.") },
+    ],
+  };
 }
 
 export function MobileGameProgressiveCode(props) {
@@ -237,8 +153,8 @@ export function MobileGameProgressiveCode(props) {
 }
 
 
-const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
-const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
+const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs","heapq"];
+const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set","queue","priority_queue","to_string"];
 function highlightHTML(line, lang) {
   const escHTML = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const keywords = lang === "py" ? PY_KEYWORDS : CPP_KEYWORDS;
@@ -275,7 +191,7 @@ export function downloadMobileGamePDF(E, sections, lang = "py") {
   if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
-  const fileTitle = t(E, "MobileGame — Full Study Guide", "MobileGame — 종합 풀이 노트");
+  const fileTitle = t(E, "Mobile Game — Full Study Guide", "Mobile Game — 종합 풀이 노트");
   const codeBlock = (lines) => `<pre>${highlightCode(lines, lang)}</pre>`;
   const sectionCode = (s) => codeBlock(lang === "py" ? s.py : s.cpp);
   const html = `<!doctype html>
@@ -297,7 +213,7 @@ export function downloadMobileGamePDF(E, sections, lang = "py") {
 </style></head><body>
 <div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<div class="sub">MCC 2023 P2 · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>
@@ -309,4 +225,3 @@ ${sections.map(s => `
   win.document.close();
   setTimeout(() => { win.focus(); win.print(); }, 500);
 }
-

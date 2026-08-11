@@ -1,57 +1,123 @@
 import { C, t } from "@/components/quest/theme";
-import { getInnovationSections } from "./components";
+import { getInnovationWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+import { InnovationSim } from "./sims";
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N, H = map(int, input().split())",
-  "tasks = list(map(int, input().split()))",
-  "",
-  "# Sort tasks by duration (greedy)",
-  "tasks.sort()",
-  "",
-  "count = 0",
-  "time_left = H",
-  "for dur in tasks:",
-  "    if time_left >= dur:",
-  "        time_left -= dur",
-  "        count += 1",
-  "    else:",
-  "        break",
-  "",
-  "print(count)",
-];
+const A = "#2563eb";
 
+/* 샘플 입출력 — 시즌 표준 (구체 숫자 INPUT/OUTPUT + 한 줄씩). */
+function InnovationSample({ E }) {
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: A, textAlign: "center", marginBottom: 10 }}>
+        📥 {t(E, "Input / Output Format", "입력 / 출력 형식")}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 10, marginBottom: 10 }}>
+        <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
+{`5 3
+3 5 6 6
+4 9 1 2
+1 2 3 4
+2 2 9 8
+8 10 2 3`}
+          </div>
+        </div>
+        <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>
+{`52`}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+        <div style={{ fontWeight: 700, color: "#1e3a8a", marginBottom: 6 }}>🔍 {t(E, "Line by line", "한 줄씩")}</div>
+        <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>5 3</code> — {t(E, "n = 5 cards, m = 3 to choose", "n = 5 (카드 5장), m = 3 (고를 장수)")}</div>
+        <div style={{ marginTop: 4 }}>
+          {t(E, "Each next line: ", "그다음 각 줄: ")}
+          <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>a b c d</code>
+          {t(E, " — one card's four numbers (a top, b·c·d bottom).", " — 카드 하나의 네 숫자 (a 위, b·c·d 아래).")}
+        </div>
+        <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #93c5fd" }}>
+          {t(E, "Output ", "출력 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>52</code>{t(E, " = the biggest possible visible sum.", " = 만들 수 있는 최대 보이는 합.")}
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #93c5fd", borderRadius: 10, padding: "8px 12px", fontSize: 11.5, color: C.text, lineHeight: 1.6, wordBreak: "keep-all" }}>
+        {t(E, <>Best pick here: cards <b>②⑤④</b> → a+b of all three = 13+18+4 = <b>35</b>, plus the biggest c+d (card ④) = <b>17</b> → <b style={{ color: "#15803d" }}>52</b>.</>,
+             <>여기 최선의 선택: <b>②⑤④</b> 카드 → 세 장의 a+b = 13+18+4 = <b>35</b>, 거기에 가장 큰 c+d (④ 카드) = <b>17</b> → <b style={{ color: "#15803d" }}>52</b>.</>)}
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all" }}>
+        {t(E, "📌 1 ≤ m ≤ n ≤ 20000 · each value ≤ 10⁹ → the sum can be large, use 64-bit.",
+             "📌 1 ≤ m ≤ n ≤ 20000 · 각 값 ≤ 10⁹ → 합이 커질 수 있어 64비트 필요.")}
+      </div>
+    </div>
+  );
+}
+
+/* 정리 — 발견한 걸 한 판단으로. */
+function InnovationRecap({ E }) {
+  const Row = ({ q, res, col, bg }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, background: bg, border: `1.5px solid ${col}`,
+      borderRadius: 10, padding: "11px 14px" }}>
+      <div style={{ flex: 1, fontSize: 13, fontWeight: 700, color: "#334155", wordBreak: "keep-all" }}>{q}</div>
+      <div style={{ fontSize: 16, color: col }}>→</div>
+      <div style={{ fontSize: 14, fontWeight: 800, color: col, fontFamily: "'JetBrains Mono',monospace", whiteSpace: "nowrap" }}>{res}</div>
+    </div>
+  );
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ fontSize: 14, fontWeight: 800, color: "#1e3a8a", textAlign: "center", marginBottom: 6 }}>
+        🧭 {t(E, "The whole idea, at a glance", "핵심 한눈에")}
+      </div>
+      <div style={{ fontSize: 12, color: C.dim, textAlign: "center", marginBottom: 14, wordBreak: "keep-all" }}>
+        {t(E, "Don't be fooled by the picture — c·d only counts for ONE card.", "그림에 속지 말 것 — c·d 는 딱 한 장만 세요.")}
+      </div>
+      <div style={{ maxWidth: 480, margin: "0 auto", display: "grid", gap: 10 }}>
+        <Row q={t(E, "Every chosen card contributes a+b", "고른 카드마다 a+b 는 다 더해요")} res="Σ(a+b)" col="#2563eb" bg="#eff6ff" />
+        <Row q={t(E, "Only the last (rightmost) card also shows c+d", "마지막(맨 오른쪽) 카드만 c+d 도 보여요")} res="+ max(c+d)" col="#d97706" bg="#fffbeb" />
+        <Row q={t(E, "So: fix 'the special one' by sorting on c+d", "그래서: c+d 로 정렬해 '특별한 한 장' 고정")} res={t(E, "sort ↑", "정렬 ↑")} col="#059669" bg="#ecfdf5" />
+        <Row q={t(E, "Keep the top m−1 of a+b in a min-heap", "나머지는 a+b 상위 m−1개를 min-heap 으로")} res={t(E, "top m−1", "상위 m−1")} col="#7c3aed" bg="#f5f3ff" />
+      </div>
+      <div style={{ textAlign: "center", marginTop: 14, fontSize: 12, color: C.dim, wordBreak: "keep-all" }}>
+        {t(E, "Now let's read the code that does exactly this →", "이제 이걸 그대로 하는 코드를 봐요 →")}
+      </div>
+    </div>
+  );
+}
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: Problem (3 steps)
+   Chapter 1: makeInnovationCh1 — 시즌 표준 (라벨 + 구체 샘플 + 시뮬)
+   문제(도입) → 샘플 입출력 → 무엇이 보이나 → 정리
    ═══════════════════════════════════════════════════════════════ */
 export function makeInnovationCh1(E) {
   return [
-    // 1-1: Title reveal
+    // [기] 문제 (도입)
     {
       type: "reveal",
+      label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
-        "You have H hours total and N tasks; task i takes t[i] hours. You may complete a task only if you spend its full duration on it.\nPrint the MAXIMUM number of tasks you can complete within H hours (any subset, in any order).",
-        "총 H 시간이 있고 N 개의 작업이 있어요. i번 작업은 t[i] 시간이 걸려요. 작업을 완료하려면 그 시간 전부를 써야 해요.\nH 시간 안에 완료할 수 있는 작업의 최대 개수를 출력해요 (어떤 부분집합이든, 순서 무관)."),
+        "You have n cards, each with four numbers a, b, c, d. Choose m of them and lay them left-to-right, overlapping. Every card then shows only a and b — except the last card, which shows all four. Maximize the total visible sum.",
+        "카드가 n장 있고, 각 카드엔 네 숫자 a, b, c, d 가 있어요. 그중 m장을 골라 왼쪽부터 겹쳐 놓아요. 그러면 각 카드는 a·b만 보이고, 맨 마지막 카드만 네 개 다 보여요. 보이는 수의 합을 최대로 만들어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
-            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udca1"}</div>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>💡</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Innovation</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P3</div>
           </div>
 
-          {/* \ud83c\udfaf Mission box */}
           <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
-              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+              🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
-                "Output the maximum number of tasks completable within H hours total.",
-                "\ucd1d H \uc2dc\uac04 \uc548\uc5d0 \uc644\ub8cc \uac00\ub2a5\ud55c \uc791\uc5c5\uc758 \ucd5c\ub300 \uac1c\uc218\ub97c \ucd9c\ub825.")}
+                "Pick m cards and overlap them so the total of the visible numbers is as large as possible.",
+                "m장을 골라 겹쳐 놓아 보이는 숫자들의 합을 가능한 크게 만들기.")}
             </div>
           </div>
 
@@ -63,92 +129,95 @@ export function makeInnovationCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "You have ", "총 ")}
-                  <b style={{ color: "#2563eb" }}>{t(E, "H hours total", "H 시간")}</b>
-                  {t(E, " and ", " 가 있고, ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "N tasks", "N 개의 작업")}</b>
-                  {t(E, " — task i takes ", " — i번 작업은 ")}
-                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>t[i]</code>
-                  {t(E, " hours.", " 시간 걸려요.")}
+                  {t(E, "There are ", "카드가 ")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "n cards", "n장")}</b>
+                  {t(E, ". Each card has 4 non-negative numbers: ", " 있어요. 각 카드엔 0 이상 숫자 4개: ")}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4 }}>a</code>{t(E, " on top, ", " 는 위, ")}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4 }}>b</code>{" · "}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4 }}>c</code>{" · "}
+                  <code style={{ background: "#dbeafe", padding: "1px 5px", borderRadius: 4 }}>d</code>{t(E, " on the bottom (left·mid·right).", " 는 아래 (왼·가운데·오른쪽).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "A task counts as completed only if you spend its ", "작업을 완료하려면 ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "FULL duration on it", "그 시간 전체")}</b>
-                  {t(E, ".", "를 써야 해요.")}
+                  {t(E, "Choose ", "그중 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "m cards", "m장")}</b>
+                  {t(E, " and lay them ", " 을 골라 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "left → right, overlapping", "왼쪽 → 오른쪽으로 겹쳐")}</b>
+                  {t(E, ". Each card then covers the ones before it.", " 놓아요. 뒤 카드가 앞 카드를 덮어요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Because of the overlap, every card shows only ", "겹치기 때문에 각 카드는 ")}
+                  <b style={{ color: "#2563eb" }}>a·b</b>
+                  {t(E, " — EXCEPT the ", " 만 보여요 — 단, ")}
+                  <b style={{ color: "#d97706" }}>{t(E, "rightmost (last) card", "맨 오른쪽(마지막) 카드")}</b>
+                  {t(E, ", which shows all four a·b·c·d.", " 만 네 개 a·b·c·d 다 보여요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "maximum number of tasks completable within H hours", "H 시간 안에 완료할 수 있는 작업의 최대 개수")}</b>
-                  {t(E, ".", "를 출력해요.")}
+                  <b style={{ color: "#15803d" }}>{t(E, "maximum possible sum of all visible numbers", "보이는 모든 숫자의 최대 합")}</b>
+                  {t(E, ".", "을 출력해요.")}
                 </div>
               </div>
             </div>
           </div>
         </div>),
     },
-    // 1-2: Quiz
+
+    // [승] 샘플 입출력 (구체 숫자)
     {
-      type: "quiz",
+      type: "reveal",
+      label: t(E, "Sample I/O", "샘플 입출력"),
       narr: t(E,
-        "5 tasks need [2, 3, 1, 4, 2] hours, 8 hours total.  Which tasks should you pick to fit the most?",
-        "5 개 작업 [2, 3, 1, 4, 2] 시간, 총 8 시간. 가장 많이 끝내려면 어떤 작업들?"),
-      question: t(E,
-        "Tasks=[2,3,1,4,2], H=8. Max tasks completed?",
-        "작업=[2,3,1,4,2], H=8. 최대 완료 작업 수?"),
-      options: [
-        t(E, "3 tasks", "3개"),
-        t(E, "4 tasks", "4개"),
-        t(E, "5 tasks", "5개"),
-        t(E, "2 tasks", "2개"),
-      ],
-      correct: 1,
-      explain: t(E,
-        "Correct! Sorted: [1,2,2,3,4]. Take 1+2+2+3=8 hours, fitting 4 tasks.",
-        "맞아! 정렬: [1,2,2,3,4]. 1+2+2+3=8시간, 4개 작업이 들어가요."),
+        "A concrete example — five cards, and the answer we must print.",
+        "구체적인 예 하나 — 카드 다섯 장과, 우리가 출력해야 할 답."),
+      content: (<InnovationSample E={E} />),
     },
-    // 1-3: Sim — slide K, watch the time bar fill, find the greedy peak
+
+    // [전] 무엇이 보이나 — 겹치면 c·d 는 가려짐 → 합 = Σ(a+b) + max(c+d)
     {
-      type: "sim",
+      type: "reveal",
+      label: t(E, "What's visible", "무엇이 보이나"),
       narr: t(E,
-        "Tasks already sorted shortest → longest. Slide K — bars light up as you take them, the time bar fills toward H. The biggest K that stays green is the greedy answer.",
-        "작업은 짧은 순 → 긴 순으로 정렬됨. K 를 움직여봐 — 선택한 작업 막대가 진해지고, 시간 막대가 H 까지 차요. 초록색을 유지하는 가장 큰 K 가 그리디 정답이에요."),
+        "Overlap the cards and look: front cards show only a·b, the last shows all four. So the total is Σ(a+b) plus just one c+d.",
+        "카드를 겹쳐 놓고 봐요: 앞 카드는 a·b만, 마지막 카드만 네 개 다. 그래서 합은 Σ(a+b) 에 c+d 한 개만 더한 값이에요."),
+      content: (<InnovationSim E={E} />),
     },
-    // 1-4: Input
+
+    // 정리
     {
-      type: "input",
-      narr: t(E,
-        "Pick tasks yourself for [2, 3, 1, 4, 2], H = 8.  How many fit?",
-        "[2, 3, 1, 4, 2], H = 8 — 직접 골라봐. 몇 개 들어가?"),
-      question: t(E,
-        "Tasks=[2,3,1,4,2], H=8. Enter max tasks:",
-        "작업=[2,3,1,4,2], H=8. 최대 작업 수 입력:"),
-      hint: t(E,
-        "If you pick the shortest tasks first, how many fit before time runs out?",
-        "가장 짧은 작업부터 골랐을 때, 시간 다 떨어지기 전까지 몇 개 들어가?"),
-      answer: 4,
+      type: "reveal",
+      label: t(E, "Recap", "정리"),
+      narr: t(E, "Everything boils down to one small decision.",
+                 "결국 작은 판단 하나로 정리돼요."),
+      content: (<InnovationRecap E={E} />),
     },
   ];
 }
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: Code (2 steps)
+   Chapter 2: makeInnovationCh2 (CodeWalk)
    ═══════════════════════════════════════════════════════════════ */
 export function makeInnovationCh2(E, lang = "py") {
+  const w = getInnovationWalk(E, lang);
   return [
-    // 2-1: Progressive code — straight in.
     {
-      type: "progressive",
+      type: "reveal",
+      label: t(E, "Code", "코드"),
       narr: t(E,
-        "Sort durations ascending, accumulate, count how many fit before the running total exceeds H.  Sections build it one piece at a time.",
-        "소요시간 오름차순 정렬, 누적, 합이 H 를 넘기 전까지 들어가는 개수. 아래 섹션이 한 단락씩 쌓아요."),
-      sections: getInnovationSections(E),
+        "Read the solution top to bottom — each bubble sits on the lines it explains: store (c+d, a+b) and sort, keep the top m−1 of a+b, and try each card as the special last one.",
+        "코드를 위에서 아래로 읽어봐요 — 말풍선이 설명하는 줄에 붙어 있어요: (c+d, a+b) 로 저장·정렬 → a+b 상위 m−1개 유지 → 각 카드를 특별한 마지막 장으로 시도."),
+      content: (
+        <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />
+      ),
     },
   ];
 }

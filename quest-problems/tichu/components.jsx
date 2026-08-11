@@ -1,175 +1,47 @@
-import { useState, useMemo } from "react";
-import { C, t } from "@/components/quest/theme";
+import { t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
-import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
 
 /* ================================================================
-   Pair Audit Sim — visualize every pair for a small hand of N cards.
-   Student slides N (2..7) and steps through pairs one-by-one,
-   confirming the count matches C(N,2) = N*(N-1)/2.
+   정답 코드 — 정렬 + 중복제거 + 투포인터 (와일드카드 채우기)
+   run 길이 = (값차 − 개수차) ≤ K 인 최대 창 + K   (최대 N)
    ================================================================ */
-export function TichuPairAuditSim({ E }) {
-  const [N, setN] = useState(5);
-  const [step, setStep] = useState(0);
-
-  const pairs = useMemo(() => {
-    const out = [];
-    for (let i = 0; i < N; i++) {
-      for (let j = i + 1; j < N; j++) out.push([i, j]);
-    }
-    return out;
-  }, [N]);
-
-  const total = pairs.length; // C(N,2)
-  const formula = `${N} · ${N - 1} / 2 = ${total}`;
-  const visible = Math.min(step, total);
-
-  const reset = (newN) => { setN(newN); setStep(0); };
-  const next = () => setStep(s => Math.min(s + 1, total));
-  const showAll = () => setStep(total);
-
-  // Card layout — circular arrangement so edges (pairs) are easy to see.
-  const W = 320, H = 220, cx = W / 2, cy = H / 2;
-  const R = N <= 4 ? 70 : 85;
-  const cardPos = (i) => {
-    const ang = -Math.PI / 2 + (2 * Math.PI * i) / N;
-    return { x: cx + R * Math.cos(ang), y: cy + R * Math.sin(ang) };
-  };
-
-  const pairKey = (a, b) => `${a}-${b}`;
-  const visiblePairs = pairs.slice(0, visible);
-  const currentPair = visible > 0 ? pairs[visible - 1] : null;
-  const currentKey = currentPair ? pairKey(currentPair[0], currentPair[1]) : null;
-
-  const btnBase = {
-    border: `1.5px solid ${A}`, borderRadius: 8, padding: "5px 12px",
-    fontSize: 12, fontWeight: 700, cursor: "pointer",
-  };
-
-  return (
-    <div style={{ background: "#fff7f7", border: `1.5px solid ${A}`, borderRadius: 12, padding: 12 }}>
-      <div style={{ fontSize: 12, fontWeight: 800, color: A, letterSpacing: 0.4, marginBottom: 8, textAlign: "center" }}>
-        🔍 {t(E, "Pair Audit", "페어 감사")}
-      </div>
-
-      {/* N slider */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap", justifyContent: "center" }}>
-        <span style={{ fontSize: 12, fontWeight: 700, color: C.text }}>N =</span>
-        <input
-          type="range" min={2} max={7} value={N}
-          onChange={(e) => reset(parseInt(e.target.value, 10))}
-          style={{ accentColor: A, width: 140 }}
-        />
-        <span style={{ fontSize: 14, fontWeight: 800, color: A, minWidth: 18, textAlign: "center" }}>{N}</span>
-      </div>
-
-      {/* SVG */}
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <svg width={W} height={H} style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 8 }}>
-          {/* Pair edges */}
-          {visiblePairs.map(([a, b]) => {
-            const pa = cardPos(a), pb = cardPos(b);
-            const isCur = pairKey(a, b) === currentKey;
-            return (
-              <line
-                key={`e-${a}-${b}`}
-                x1={pa.x} y1={pa.y} x2={pb.x} y2={pb.y}
-                stroke={isCur ? A : "#fca5a5"}
-                strokeWidth={isCur ? 3 : 1.5}
-                strokeOpacity={isCur ? 0.95 : 0.55}
-              />
-            );
-          })}
-          {/* Cards */}
-          {Array.from({ length: N }).map((_, i) => {
-            const p = cardPos(i);
-            const inCurrent = currentPair && (currentPair[0] === i || currentPair[1] === i);
-            return (
-              <g key={`c-${i}`}>
-                <rect
-                  x={p.x - 16} y={p.y - 22} width={32} height={44} rx={5}
-                  fill={inCurrent ? A : "#fff"}
-                  stroke={A} strokeWidth={1.8}
-                />
-                <text
-                  x={p.x} y={p.y + 5} textAnchor="middle"
-                  fontSize={14} fontWeight={800}
-                  fill={inCurrent ? "#fff" : A}
-                  style={{ fontFamily: "system-ui, sans-serif" }}
-                >
-                  {i + 1}
-                </text>
-              </g>
-            );
-          })}
-        </svg>
-      </div>
-
-      {/* Counter row */}
-      <div style={{
-        display: "flex", justifyContent: "space-between", alignItems: "center",
-        background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 8,
-        padding: "6px 10px", margin: "8px 0", fontSize: 12,
-      }}>
-        <span style={{ color: "#7f1d1d", fontWeight: 700 }}>
-          {t(E, "Pairs counted", "센 페어")}: <b style={{ color: A }}>{visible}</b> / {total}
-        </span>
-        <span style={{ color: "#7f1d1d", fontFamily: "JetBrains Mono, monospace" }}>
-          C({N},2) = {formula}
-        </span>
-      </div>
-
-      {/* Controls */}
-      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-        <button onClick={next} disabled={visible >= total}
-          style={{ ...btnBase, background: visible >= total ? "#fca5a5" : A, color: "#fff", opacity: visible >= total ? 0.6 : 1 }}>
-          ▶ {t(E, "Next pair", "다음 페어")}
-        </button>
-        <button onClick={showAll}
-          style={{ ...btnBase, background: "#fff", color: A }}>
-          {t(E, "Show all", "전부 보기")}
-        </button>
-        <button onClick={() => setStep(0)}
-          style={{ ...btnBase, background: "#fff", color: A }}>
-          ↺ {t(E, "Reset", "초기화")}
-        </button>
-      </div>
-
-      {visible >= total && (
-        <div style={{
-          marginTop: 8, textAlign: "center", fontSize: 12, color: "#15803d",
-          background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 8,
-          padding: "6px 10px", fontWeight: 700,
-        }}>
-          ✓ {t(E,
-            `Confirmed — ${total} pairs match N·(N−1)/2.`,
-            `확인 완료 — 페어 ${total} 개가 N·(N−1)/2 와 일치.`)}
-        </div>
-      )}
-    </div>
-  );
-}
-
 const FULL_PY = [
-  "N = int(input())",
-  "",
-  "# C(N, 2) = N * (N-1) / 2",
-  "# Number of ways to pick 2 cards from N",
-  "result = N * (N - 1) // 2",
-  "",
-  "print(result)",
+  "n, k = map(int, input().split())",
+  "c = sorted(set(map(int, input().split())))",
+  "m = len(c)",
+  "win = 0",
+  "i = 0",
+  "for j in range(m):",
+  "    while c[j] - c[i] - (j - i) > k:",
+  "        i += 1",
+  "    win = max(win, j - i + 1)",
+  "print(min(n, win + k))",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
+  "#include <vector>",
+  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
-  "    long long N; cin >> N;",
-  "    cout << N * (N - 1) / 2 << \"\\n\";",
-  "    return 0;",
+  "    long long N, K; cin >> N >> K;",
+  "    int cnt = N - K;",
+  "    vector<long long> c(cnt);",
+  "    for (auto& x : c) cin >> x;",
+  "    sort(c.begin(), c.end());",
+  "    c.erase(unique(c.begin(), c.end()), c.end());   // 중복 제거",
+  "    int M = c.size();",
+  "",
+  "    long long win = 0;",
+  "    int i = 0;",
+  "    for (int j = 0; j < M; j++) {",
+  "        while (c[j] - c[i] - (j - i) > K) i++;",
+  "        win = max(win, (long long)(j - i + 1));",
+  "    }",
+  "    cout << min(N, win + K) << \"\\n\";",
   "}",
 ];
 
@@ -180,23 +52,66 @@ export function getTichuSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+        t(E, "Duplicate values are useless in a run — sort and dedupe first (sorted(set(...))).",
+            "같은 값 중복은 run에 쓸모없어요 — 먼저 정렬 + 중복 제거 (sorted(set(...)))."),
+        t(E, "Two pointers: keep the widest window [i..j] whose inner gap (value-diff − count-diff) ≤ k.",
+            "투포인터: 내부 빈칸 (값차 − 개수차) ≤ k 인 가장 넓은 창 [i..j] 을 유지."),
+        t(E, "Answer = window size + k (fill inner gaps, extend the ends), capped at n.",
+            "답 = 창 크기 + k (내부 빈칸 메꾸고 양끝 확장), 최대 n."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "sorted(set(...)) sorts and dedupes in one line — perfect for the distinct values.",
+            "sorted(set(...)) 한 줄로 정렬 + 중복 제거 — 서로 다른 값 만들기에 딱."),
       ],
       cppOnly: [
-        t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
-        t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+        t(E, "sort then erase(unique(...)) is the C++ way to get distinct sorted values.",
+            "C++ 에선 sort 후 erase(unique(...)) 로 서로 다른 값을 정렬해 얻어요."),
+        t(E, "Cᵢ can reach 10⁹ and N up to 10⁵ — use long long to be safe.",
+            "Cᵢ 는 10⁹, N 은 최대 10⁵ — 안전하게 long long."),
       ],
     },
   ];
+}
+
+/* CodeWalk 용 — 정답 코드 + 말풍선(beats). Ch2 에서 사용. */
+const _TICHU_VARS = [
+  { v: "c", ko: "정렬·중복제거한 값들", en: "sorted distinct values" },
+  { v: "k", ko: "와일드 수", en: "# wildcards" },
+  { v: "win", ko: "최대 창 크기", en: "biggest window" },
+  { v: "i / j", ko: "투포인터", en: "two pointers" },
+];
+
+export function getTichuWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return { code: FULL_CPP, vars: _TICHU_VARS, beats: [
+      { hi: [5, 12], bubble: t(E,
+        "Read N and K, read the N-K numbered cards, then sort and dedupe them — duplicates never help a run.",
+        "N 과 K 를 읽고, 수 카드 N-K개를 읽어요. 그다음 정렬 + 중복 제거 — 중복은 run에 소용없어요.") },
+      { hi: [14, 15], bubble: t(E,
+        "win = biggest window found so far. i = left end of the sliding window.",
+        "win = 지금까지 찾은 최대 창 크기. i = 슬라이딩 창의 왼쪽 끝.") },
+      { hi: [16, 19], bubble: t(E,
+        "Slide j right. The inner gap of window [i..j] is (value-diff) − (count-diff) = c[j]−c[i] − (j−i). If it exceeds K, we can't fill it → shrink from the left. Keep the biggest window size.",
+        "j 를 오른쪽으로. 창 [i..j] 의 내부 빈칸 = (값차) − (개수차) = c[j]−c[i] − (j−i). K 를 넘으면 못 메꿔요 → 왼쪽 i 를 좁혀요. 최대 창 크기를 계속 갱신.") },
+      { hi: [20, 20], bubble: t(E,
+        "Answer = window + K (fill inner gaps, spend leftover wildcards on the ends), capped at N.",
+        "답 = 창 + K (내부 빈칸 메꾸고, 남는 와일드는 양끝에). 최대 N.") },
+    ] };
+  }
+  return { code: FULL_PY, vars: _TICHU_VARS, beats: [
+    { hi: [0, 1], bubble: t(E,
+      "Read N and K on the first line. On the second line, read the numbered cards — set(...) drops duplicates, sorted(...) orders them.",
+      "첫 줄에서 N 과 K 를 읽어요. 둘째 줄의 수 카드는 set(...) 으로 중복을 없애고 sorted(...) 로 정렬해요 (중복은 run에 소용없어요).") },
+    { hi: [2, 4], bubble: t(E,
+      "m = how many distinct values. win = biggest window so far, i = left end of the window.",
+      "m = 서로 다른 값 개수. win = 지금까지 최대 창, i = 창의 왼쪽 끝.") },
+    { hi: [5, 8], bubble: t(E,
+      "Slide j right. The inner gap of window [i..j] is c[j]−c[i] − (j−i). If it's more than k wildcards can fill, shrink from the left (i += 1). Track the biggest window size j−i+1.",
+      "j 를 오른쪽으로. 창 [i..j] 의 내부 빈칸 = c[j]−c[i] − (j−i). 와일드 k개로 못 메꿀 만큼 크면 왼쪽을 좁혀요 (i += 1). 최대 창 크기 j−i+1 을 기록.") },
+    { hi: [9, 9], bubble: t(E,
+      "Answer = window + k (fill the inner gaps, then spend leftover wildcards extending the ends), but never more than n cards.",
+      "답 = 창 + k (내부 빈칸을 메꾸고, 남는 와일드로 양끝 확장). 단, 카드 수 n 을 넘을 순 없어요.") },
+  ] };
 }
 
 export function TichuProgressiveCode(props) {
@@ -205,7 +120,7 @@ export function TichuProgressiveCode(props) {
 
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
-const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
+const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set","unique","erase","begin","end"];
 function highlightHTML(line, lang) {
   const escHTML = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const keywords = lang === "py" ? PY_KEYWORDS : CPP_KEYWORDS;
@@ -259,12 +174,12 @@ export function downloadTichuPDF(E, sections, lang = "py") {
   pre { background: #0f172a; padding: 10px 14px; border-radius: 8px; font-family: "JetBrains Mono", monospace; font-size: 11.5px; overflow-x: auto; white-space: pre; word-break: keep-all; page-break-inside: avoid; margin: 8px 0 12px; line-height: 1.55; }
   pre span { font-family: inherit; }
   .lang-tag { display: inline-block; background: ${A}; color: white; padding: 3px 10px; border-radius: 5px; font-size: 12px; margin-left: 8px; vertical-align: middle; font-weight: 800; }
-  .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
+  .hint { background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #7f1d1d; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
 <div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<div class="sub">MCC 2023 P4 · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>
@@ -276,4 +191,3 @@ ${sections.map(s => `
   win.document.close();
   setTimeout(() => { win.focus(); win.print(); }, 500);
 }
-

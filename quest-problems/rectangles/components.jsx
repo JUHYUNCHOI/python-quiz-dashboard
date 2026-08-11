@@ -1,178 +1,154 @@
-import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
-import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
 
-/* ═══════════════════════════════════════════════════════════════
-   RectangleCountSim — pick 2 horizontal + 2 vertical lines
-   from the (N+1) × (M+1) grid lines and watch a rectangle form.
-   Cycles through every C(N+1,2) × C(M+1,2) combination so the
-   student SEES the formula instead of just trusting it.
-   ═══════════════════════════════════════════════════════════════ */
-const _RECT_PRESETS = [
-  { N: 1, M: 1 },
-  { N: 2, M: 2 },
-  { N: 3, M: 2 },
-];
-
-function _comb2(x) { return (x * (x - 1)) / 2; }
-
-function _enumPairs(k) {
-  const out = [];
-  for (let i = 0; i < k; i++) for (let j = i + 1; j < k; j++) out.push([i, j]);
-  return out;
-}
-
-export function RectangleCountSim({ E }) {
-  const [pi, setPi] = useState(1);
-  const [idx, setIdx] = useState(0);
-  const preset = _RECT_PRESETS[pi];
-  const N = preset.N, M = preset.M;
-
-  const hPairs = _enumPairs(N + 1);  // pairs of horizontal lines (y values 0..N)
-  const vPairs = _enumPairs(M + 1);  // pairs of vertical lines (x values 0..M)
-  const total = hPairs.length * vPairs.length;
-  const safeIdx = Math.min(idx, total - 1);
-  const hp = hPairs[Math.floor(safeIdx / vPairs.length)];
-  const vp = vPairs[safeIdx % vPairs.length];
-
-  const W = 320, H = 220;
-  const padL = 28, padR = 16, padT = 16, padB = 28;
-  const cw = (W - padL - padR) / M;
-  const ch = (H - padT - padB) / N;
-  const sx = (x) => padL + x * cw;
-  const sy = (y) => padT + (N - y) * ch;  // flip so y grows up
-
-  const reset = (newPi) => { setPi(newPi); setIdx(0); };
-
-  return (
-    <div style={{ padding: 14 }}>
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
-        {_RECT_PRESETS.map((p, i) => (
-          <button key={i} onClick={() => reset(i)} style={{
-            padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
-            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
-            fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
-          }}>{p.N}×{p.M}</button>
-        ))}
-      </div>
-
-      <svg width={W} height={H} style={{ display: "block", margin: "0 auto", background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8 }}>
-        {/* horizontal grid lines (y = 0..N) */}
-        {Array.from({ length: N + 1 }, (_, y) => {
-          const sel = y === hp[0] || y === hp[1];
-          return (
-            <g key={`h${y}`}>
-              <line x1={sx(0)} y1={sy(y)} x2={sx(M)} y2={sy(y)}
-                stroke={sel ? A : "#cbd5e1"} strokeWidth={sel ? 2.5 : 1} />
-              <text x={padL - 6} y={sy(y) + 3} fontSize="9" fill={sel ? A : "#94a3b8"} textAnchor="end" fontWeight={sel ? 800 : 400}>{y}</text>
-            </g>
-          );
-        })}
-        {/* vertical grid lines (x = 0..M) */}
-        {Array.from({ length: M + 1 }, (_, x) => {
-          const sel = x === vp[0] || x === vp[1];
-          return (
-            <g key={`v${x}`}>
-              <line x1={sx(x)} y1={sy(0)} x2={sx(x)} y2={sy(N)}
-                stroke={sel ? A : "#cbd5e1"} strokeWidth={sel ? 2.5 : 1} />
-              <text x={sx(x)} y={sy(0) + 14} fontSize="9" fill={sel ? A : "#94a3b8"} textAnchor="middle" fontWeight={sel ? 800 : 400}>{x}</text>
-            </g>
-          );
-        })}
-        {/* highlighted rectangle fill */}
-        <rect
-          x={sx(vp[0])} y={sy(hp[1])}
-          width={(vp[1] - vp[0]) * cw}
-          height={(hp[1] - hp[0]) * ch}
-          fill={A} fillOpacity="0.25" stroke={A} strokeWidth="2.5"
-        />
-      </svg>
-
-      <div style={{ background: "#fff7ed", border: `1.5px solid #fdba74`, borderRadius: 10, padding: "10px 12px", marginTop: 10, marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.7 }}>
-        {t(E,
-          `H-lines picked: y = ${hp[0]}, ${hp[1]}  ·  V-lines picked: x = ${vp[0]}, ${vp[1]}`,
-          `수평선 선택: y = ${hp[0]}, ${hp[1]}  ·  수직선 선택: x = ${vp[0]}, ${vp[1]}`)}<br/>
-        {t(E,
-          `rectangle ${safeIdx + 1} / ${total}  ·  C(${N + 1},2) × C(${M + 1},2) = ${_comb2(N + 1)} × ${_comb2(M + 1)} = `,
-          `직사각형 ${safeIdx + 1} / ${total}  ·  C(${N + 1},2) × C(${M + 1},2) = ${_comb2(N + 1)} × ${_comb2(M + 1)} = `)}
-        <b style={{ color: A }}>{total}</b>
-      </div>
-
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
-        <button onClick={() => setIdx(Math.max(0, safeIdx - 1))} disabled={safeIdx === 0} style={{
-          background: safeIdx === 0 ? "#e5e7eb" : "#fff", border: `1px solid ${safeIdx === 0 ? "#e5e7eb" : A}`,
-          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600, color: safeIdx === 0 ? "#b0b5c3" : A,
-          cursor: safeIdx === 0 ? "default" : "pointer",
-        }}>←</button>
-        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{safeIdx + 1} / {total}</span>
-        <button onClick={() => setIdx(Math.min(total - 1, safeIdx + 1))} disabled={safeIdx === total - 1} style={{
-          background: safeIdx === total - 1 ? "#e5e7eb" : A, border: `1px solid ${safeIdx === total - 1 ? "#e5e7eb" : A}`,
-          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 600,
-          color: safeIdx === total - 1 ? "#b0b5c3" : "#fff", cursor: safeIdx === total - 1 ? "default" : "pointer",
-        }}>→</button>
-      </div>
-    </div>
-  );
-}
-
+/* ================================================================
+   Rectangles (MCC 2023 P5) — 구간 분할 DP
+   빨강 N개를 파랑 ≤ K개(연속 구간)로 덮어 총면적 최소.
+   구간 비용 = (폭 합) × (최고 높이).  dp[kk][i] = 앞 i개를 파랑 kk개로.
+   ================================================================ */
 const FULL_PY = [
-  "N, M = map(int, input().split())",
-  "",
-  "# Count axis-aligned rectangles in an N x M grid",
-  "# Choose 2 horizontal lines from (N+1) and",
-  "# 2 vertical lines from (M+1)",
-  "# C(N+1, 2) * C(M+1, 2)",
-  "",
-  "def comb2(x):",
-  "    return x * (x - 1) // 2",
-  "",
-  "result = comb2(N + 1) * comb2(M + 1)",
-  "print(result)",
+  "n, k = map(int, input().split())",
+  "h = [0] * n",
+  "w = [0] * n",
+  "for i in range(n):",
+  "    h[i], w[i] = map(int, input().split())",
+  "if k > n:",
+  "    k = n",
+  "INF = float('inf')",
+  "dp = [[INF] * (n + 1) for _ in range(k + 1)]",
+  "dp[0][0] = 0",
+  "for kk in range(1, k + 1):",
+  "    for i in range(1, n + 1):",
+  "        sw = 0",
+  "        mh = 0",
+  "        for j in range(i, 0, -1):",
+  "            sw += w[j - 1]",
+  "            mh = max(mh, h[j - 1])",
+  "            if dp[kk - 1][j - 1] < INF:",
+  "                dp[kk][i] = min(dp[kk][i], dp[kk - 1][j - 1] + sw * mh)",
+  "print(min(dp[kk][n] for kk in range(1, k + 1)))",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
+  "#include <vector>",
+  "#include <algorithm>",
   "using namespace std;",
   "",
-  "long long comb2(long long x) {",
-  "    return x * (x - 1) / 2;",
-  "}",
-  "",
   "int main() {",
-  "    long long N, M;",
-  "    cin >> N >> M;",
-  "    cout << comb2(N + 1) * comb2(M + 1) << \"\\n\";",
+  "    long long n, k;",
+  "    cin >> n >> k;",
+  "    vector<long long> h(n), w(n);",
+  "    for (int i = 0; i < n; i++) cin >> h[i] >> w[i];",
+  "    if (k > n) k = n;",
+  "",
+  "    const long long INF = 1e18;",
+  "    vector<vector<long long>> dp(k + 1, vector<long long>(n + 1, INF));",
+  "    dp[0][0] = 0;",
+  "    for (int kk = 1; kk <= k; kk++)",
+  "        for (int i = 1; i <= n; i++) {",
+  "            long long sw = 0, mh = 0;",
+  "            for (int j = i; j >= 1; j--) {",
+  "                sw += w[j - 1];",
+  "                mh = max(mh, h[j - 1]);",
+  "                if (dp[kk - 1][j - 1] < INF)",
+  "                    dp[kk][i] = min(dp[kk][i], dp[kk - 1][j - 1] + sw * mh);",
+  "            }",
+  "        }",
+  "    long long ans = INF;",
+  "    for (int kk = 1; kk <= k; kk++) ans = min(ans, dp[kk][n]);",
+  "    cout << ans << \"\\n\";",
   "    return 0;",
   "}",
 ];
 
+const _RECT_VARS = [
+  { v: "n", ko: "빨강 사각형 개수", en: "# of red rects" },
+  { v: "k", ko: "파랑 최대 개수", en: "max # of blue rects" },
+  { v: "dp[kk][i]", ko: "앞 i개를 파랑 kk개로 덮는 최소 면적", en: "min area: first i reds, kk blues" },
+  { v: "sw · mh", ko: "구간 폭합 × 최고높이 = 그 파랑 면적", en: "Σwidth × max-height = blue area" },
+];
+
+
+/* ═══════════════════════════════════════════════════════════════
+   getRectanglesSections — PDF/progressive 용 (App 이 import).
+   ═══════════════════════════════════════════════════════════════ */
 export function getRectanglesSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "🎯 Interval-Partition DP", "🎯 구간 분할 DP"),
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+        t(E, "Each red must sit inside exactly one blue, and the reds are adjacent — so every blue covers a contiguous group of reds.",
+            "각 빨강은 정확히 한 파랑 안, 빨강들은 붙어 있어요 — 그래서 파랑 하나는 빨강의 연속 구간을 덮어요."),
+        t(E, "A group's blue = (sum of widths) × (max height). We partition the reds into ≤ K contiguous groups to minimize the total.",
+            "한 구간의 파랑 = (폭의 합) × (최고 높이). 빨강을 ≤ K개 연속 구간으로 나눠 총면적을 최소화."),
+        t(E, "dp[kk][i] = min area to cover the first i reds with kk blues. Try each last group [j..i].",
+            "dp[kk][i] = 앞 i개 빨강을 파랑 kk개로 덮는 최소 면적. 마지막 구간 [j..i] 를 모두 시도."),
+        t(E, "K can be up to 10⁹, but more than N blues is pointless — cap K = min(K, N).",
+            "K 는 10⁹ 까지지만 N 보다 많은 파랑은 의미 없어 — K = min(K, N) 로 캡."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "float('inf') as the DP sentinel; a generator in min(...) reads the final answer over all kk.",
+            "DP 초기값은 float('inf'); min(...) 안 제너레이터로 모든 kk 중 최종 답을 읽어요."),
       ],
       cppOnly: [
-        t(E, "Plain helper function `comb2` — easier to read than a lambda for a single use.",
-            "평범한 함수 `comb2` — 한 번 쓰는 람다보다 읽기 쉬움."),
-        t(E, "long long for N, M and the product — answer = C(N+1,2)*C(M+1,2) can exceed int.",
-            "N, M 과 곱은 long long — 답 C(N+1,2)*C(M+1,2) 가 int 범위 초과 가능."),
+        t(E, "Area can reach 200×1000×1000 → use long long for h, w, dp, and the answer.",
+            "면적이 200×1000×1000 까지 → h, w, dp, 답 모두 long long."),
+        t(E, "INF = 1e18 as the sentinel; guard dp[kk-1][j-1] < INF before extending.",
+            "INF = 1e18 를 초기값으로; 확장 전에 dp[kk-1][j-1] < INF 확인."),
       ],
     },
   ];
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   getRectanglesWalk — CodeWalk 용 {code, vars, beats} (Ch2 가 import).
+   ═══════════════════════════════════════════════════════════════ */
+export function getRectanglesWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP, vars: _RECT_VARS, beats: [
+        { hi: [5, 9], bubble: t(E,
+          "Read n reds and k. For each rect i, read its height h[i] and width w[i].",
+          "빨강 n개와 k를 읽어요. 각 사각형 i마다 높이 h[i]·폭 w[i]를 읽어요.") },
+        { hi: [10, 10], bubble: t(E,
+          "k can be up to 10⁹, but you never need more than n blues (one per red). Cap k = min(k, n).",
+          "k는 10⁹까지지만 파랑이 n개보다 많을 이유가 없어요 (하나씩이면 n개). k = min(k, n)로 캡.") },
+        { hi: [12, 14], bubble: t(E,
+          "dp[kk][i] = the smallest total area to cover the first i reds using kk blues. Start from dp[0][0] = 0 (nothing covered, no area).",
+          "dp[kk][i] = 앞 i개 빨강을 파랑 kk개로 덮는 최소 총면적. dp[0][0] = 0(아무것도 안 덮음, 면적 0)에서 시작.") },
+        { hi: [15, 24], bubble: t(E,
+          "Fill the table: let the last blue cover the group [j..i]. Widen it from i down to j, tracking sw (sum of widths) and mh (max height) — that group's blue = sw × mh. The rest is dp[kk-1][j-1]. Keep the minimum.",
+          "표를 채워요: 마지막 파랑이 구간 [j..i]를 덮는다고 봐요. i에서 j까지 넓히며 sw(폭 합)·mh(최고 높이)를 갱신 — 그 파랑 = sw × mh. 앞부분은 dp[kk-1][j-1]. 최소로 갱신.") },
+        { hi: [25, 27], bubble: t(E,
+          "The answer is the smallest dp[kk][n] over kk = 1..k — the best way using at most K blues.",
+          "답은 kk = 1..k 중 가장 작은 dp[kk][n] — 파랑을 최대 K개 써서 전체를 덮는 최선.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY, vars: _RECT_VARS, beats: [
+      { hi: [0, 4], bubble: t(E,
+        "Read n reds and k. For each rect i, read its height h[i] and width w[i].",
+        "빨강 n개와 k를 읽어요. 각 사각형 i마다 높이 h[i]·폭 w[i]를 읽어요.") },
+      { hi: [5, 6], bubble: t(E,
+        "k can be up to 10⁹, but you never need more than n blues (one per red). Cap k = min(k, n).",
+        "k는 10⁹까지지만 파랑이 n개보다 많을 이유가 없어요 (하나씩이면 n개). k = min(k, n)로 캡.") },
+      { hi: [7, 9], bubble: t(E,
+        "dp[kk][i] = the smallest total area to cover the first i reds using kk blues. Start from dp[0][0] = 0 (nothing covered, no area).",
+        "dp[kk][i] = 앞 i개 빨강을 파랑 kk개로 덮는 최소 총면적. dp[0][0] = 0(아무것도 안 덮음, 면적 0)에서 시작.") },
+      { hi: [10, 18], bubble: t(E,
+        "Fill the table: let the last blue cover the group [j..i]. Widen it from i down to j, tracking sw (sum of widths) and mh (max height) — that group's blue = sw × mh. The rest is dp[kk-1][j-1]. Keep the minimum.",
+        "표를 채워요: 마지막 파랑이 구간 [j..i]를 덮는다고 봐요. i에서 j까지 넓히며 sw(폭 합)·mh(최고 높이)를 갱신 — 그 파랑 = sw × mh. 앞부분은 dp[kk-1][j-1]. 최소로 갱신.") },
+      { hi: [19, 19], bubble: t(E,
+        "The answer is the smallest dp[kk][n] over kk = 1..k — the best way using at most K blues.",
+        "답은 kk = 1..k 중 가장 작은 dp[kk][n] — 파랑을 최대 K개 써서 전체를 덮는 최선.") },
+    ],
+  };
 }
 
 export function RectanglesProgressiveCode(props) {
@@ -235,12 +211,12 @@ export function downloadRectanglesPDF(E, sections, lang = "py") {
   pre { background: #0f172a; padding: 10px 14px; border-radius: 8px; font-family: "JetBrains Mono", monospace; font-size: 11.5px; overflow-x: auto; white-space: pre; word-break: keep-all; page-break-inside: avoid; margin: 8px 0 12px; line-height: 1.55; }
   pre span { font-family: inherit; }
   .lang-tag { display: inline-block; background: ${A}; color: white; padding: 3px 10px; border-radius: 5px; font-size: 12px; margin-left: 8px; vertical-align: middle; font-weight: 800; }
-  .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
+  .hint { background: #fff7ed; border: 1px solid #fdba74; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #9a3412; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
 <div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<div class="sub">MCC 2023 P5 · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>
@@ -252,4 +228,3 @@ ${sections.map(s => `
   win.document.close();
   setTimeout(() => { win.focus(); win.print(); }, 500);
 }
-

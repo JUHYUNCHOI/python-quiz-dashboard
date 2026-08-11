@@ -1,177 +1,149 @@
-import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getSumKSections } from "./components";
+import { getSumkWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
+import { SumkSim } from "./sims";
 
-/* ================================================================
-   Interactive "Sum of K-th Powers" simulator —
-   pick K, watch each a[i]^K being computed and accumulated.
-   ================================================================ */
-function PowerSumSim({ E }) {
-  const [arr, setArr] = useState([1, 2, 3, 4]);
-  const [K, setK] = useState(2);
-  const [step, setStep] = useState(0); // 0..arr.length (step==arr.length means done)
+const A = "#8b5cf6";
 
-  const partials = [];
-  let running = 0;
-  for (let i = 0; i < arr.length; i++) {
-    const p = Math.pow(arr[i], K);
-    running += p;
-    partials.push({ x: arr[i], pow: p, running });
-  }
-  const finalSum = partials.length ? partials[partials.length - 1].running : 0;
-  const visibleRunning = step === 0 ? 0 : partials[step - 1].running;
-
-  const setN = (idx, v) => {
-    const n = Math.max(0, Math.min(9, parseInt(v || "0", 10)));
-    setArr(a => a.map((x, i) => (i === idx ? n : x)));
-    setStep(0);
-  };
-
-  const reset = () => setStep(0);
-  const stepOnce = () => setStep(s => Math.min(arr.length, s + 1));
-  const showAll = () => setStep(arr.length);
-
+/* 샘플 입출력 — 시즌 표준 모양 (구체 숫자 INPUT/OUTPUT + 한 줄씩). */
+function SumKSample({ E }) {
   return (
-    <div style={{ background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 12, padding: 12, marginBottom: 8 }}>
-      <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", marginBottom: 10, textAlign: "center" }}>
-        🧪 {t(E, "Pick K and array values — step through the sum", "K 와 배열 값을 골라봐 — 합을 한 칸씩 따라가요")}
+    <div style={{ padding: 16 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: A, textAlign: "center", marginBottom: 10 }}>
+        📥 {t(E, "Input / Output Format", "입력 / 출력 형식")}
       </div>
-
-      {/* Controls */}
-      <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", flexWrap: "wrap", marginBottom: 10 }}>
-        <div style={{ fontSize: 12, color: "#5b21b6", fontWeight: 700 }}>K =</div>
-        <select value={K} onChange={e => { setK(parseInt(e.target.value, 10)); setStep(0); }} style={{
-          padding: "4px 8px", fontSize: 13, fontWeight: 700, color: "#5b21b6",
-          background: "#fff", border: "1.5px solid #8b5cf6", borderRadius: 6, cursor: "pointer",
-        }}>
-          {[1,2,3,4].map(k => <option key={k} value={k}>{k}</option>)}
-        </select>
-        <div style={{ fontSize: 12, color: "#5b21b6", fontWeight: 700, marginLeft: 8 }}>a =</div>
-        {arr.map((v, i) => (
-          <input
-            key={i}
-            type="number"
-            min={0}
-            max={9}
-            value={v}
-            onChange={e => setN(i, e.target.value)}
-            style={{
-              width: 36, padding: "3px 4px", textAlign: "center",
-              fontSize: 13, fontWeight: 700, color: "#5b21b6",
-              background: "#fff", border: "1.5px solid #c4b5fd", borderRadius: 6,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Element row */}
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 8, flexWrap: "wrap" }}>
-        {arr.map((v, i) => {
-          const done = i < step;
-          const active = i === step - 1;
-          return (
-            <div key={i} style={{
-              minWidth: 78, padding: "6px 8px", borderRadius: 8,
-              background: active ? "#8b5cf6" : done ? "#ddd6fe" : "#fff",
-              color: active ? "#fff" : "#5b21b6",
-              border: `1.5px solid ${active ? "#5b21b6" : "#c4b5fd"}`,
-              textAlign: "center", fontSize: 12, fontWeight: 700,
-              transition: "all .15s",
-            }}>
-              <div>{`a[${i}] = ${v}`}</div>
-              <div style={{ fontSize: 11, marginTop: 2, opacity: done || active ? 1 : 0.45 }}>
-                {`${v}^${K} = ${partials[i].pow}`}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Running sum */}
-      <div style={{ background: "#fff", border: "1.5px solid #c4b5fd", borderRadius: 8, padding: "8px 12px", textAlign: "center", marginBottom: 8 }}>
-        <div style={{ fontSize: 11, color: "#7c3aed", fontWeight: 700, letterSpacing: 0.5, marginBottom: 2 }}>
-          {t(E, "RUNNING SUM", "현재까지 합")}
-        </div>
-        <div style={{ fontSize: 15, fontWeight: 800, color: "#5b21b6", fontFamily: "ui-monospace, monospace" }}>
-          {step === 0
-            ? "0"
-            : partials.slice(0, step).map(p => p.pow).join(" + ") + " = " + visibleRunning}
-        </div>
-        {step === arr.length && (
-          <div style={{ fontSize: 11, color: "#15803d", fontWeight: 700, marginTop: 4 }}>
-            ✅ {t(E, "Final answer", "최종 답")}: {finalSum}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10, marginBottom: 10 }}>
+        <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
+{`3 2
+1 2 3`}
           </div>
-        )}
+        </div>
+        <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>
+{`100`}
+          </div>
+        </div>
       </div>
 
-      {/* Buttons */}
-      <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
-        <button onClick={reset} style={{
-          padding: "5px 12px", fontSize: 12, fontWeight: 700,
-          background: "#fff", color: "#8b5cf6", border: "1.5px solid #8b5cf6",
-          borderRadius: 6, cursor: "pointer",
-        }}>↺ {t(E, "Reset", "처음")}</button>
-        <button onClick={stepOnce} disabled={step >= arr.length} style={{
-          padding: "5px 12px", fontSize: 12, fontWeight: 700,
-          background: step >= arr.length ? "#e5e7eb" : "#8b5cf6",
-          color: step >= arr.length ? "#9ca3af" : "#fff",
-          border: "1.5px solid " + (step >= arr.length ? "#e5e7eb" : "#8b5cf6"),
-          borderRadius: 6, cursor: step >= arr.length ? "not-allowed" : "pointer",
-        }}>▶ {t(E, "Step", "한 칸")}</button>
-        <button onClick={showAll} style={{
-          padding: "5px 12px", fontSize: 12, fontWeight: 700,
-          background: "#fff", color: "#7c3aed", border: "1.5px solid #c4b5fd",
-          borderRadius: 6, cursor: "pointer",
-        }}>⏭ {t(E, "Run all", "모두 보기")}</button>
+      <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+        <div style={{ fontWeight: 700, color: "#5b21b6", marginBottom: 6 }}>🔍 {t(E, "Line by line", "한 줄씩")}</div>
+        <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>3 2</code> — {t(E, "N = 3 numbers, K = 2 (the exponent)", "N = 3 (숫자 3개), K = 2 (거듭제곱 지수)")}</div>
+        <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 2 3</code> — {t(E, "the array A", "다음 줄 = 배열 A")}</div>
+        <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #c4b5fd" }}>
+          {t(E, "Output ", "출력 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>100</code>
+          {t(E, " = the sum of (subset sum)^K over every non-empty subset, mod 998244353.",
+               " = 모든 비어있지 않은 부분집합의 (합)^K 를 다 더한 값, mod 998244353.")}
+        </div>
+      </div>
+
+      {/* 출력 의미 시각화: 7개 부분집합의 점수 */}
+      <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #c4b5fd", borderRadius: 10, padding: "10px 12px" }}>
+        <div style={{ fontSize: 11.5, fontWeight: 700, color: "#5b21b6", marginBottom: 8, textAlign: "center", wordBreak: "keep-all" }}>
+          {t(E, "Every non-empty subset scores (its sum)² — add them all:", "각 부분집합의 점수 = (합)² — 다 더해요:")}
+        </div>
+        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 6, marginBottom: 8 }}>
+          {[["{1}", 1], ["{2}", 4], ["{3}", 9], ["{1,2}", 9], ["{1,3}", 16], ["{2,3}", 25], ["{1,2,3}", 36]].map(([lab, sc], i) => (
+            <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "3px 8px", borderRadius: 999,
+              background: "#f5f3ff", border: "1px solid #c4b5fd", fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, fontWeight: 700 }}>
+              <span style={{ color: "#5b21b6" }}>{lab}</span>
+              <span style={{ color: "#94a3b8" }}>→</span>
+              <span style={{ color: "#7c3aed" }}>{sc}</span>
+            </span>
+          ))}
+        </div>
+        <div style={{ fontSize: 12, color: "#166534", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>
+          1+4+9+9+16+25+36 = 100 ✓
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #c4b5fd", borderRadius: 10, padding: "8px 12px", fontSize: 11.5, color: C.text, lineHeight: 1.6, wordBreak: "keep-all" }}>
+        <b style={{ color: "#5b21b6" }}>{t(E, "Another test", "다른 테스트")}</b> {t(E, ": ", ": ")}<code style={{ background: "#f5f3ff", padding: "1px 5px", borderRadius: 3 }}>2 1 / 3 3</code>
+        {t(E, " → subsets {3},{3},{3,3}: 3+3+6 = ", " → 부분집합 {3},{3},{3,3}: 3+3+6 = ")}<b style={{ color: "#15803d" }}>12</b>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
+        {t(E, "📌 Constraints: N up to 10⁵ with small K, or N and K up to 200. Answer is taken mod 998244353.",
+             "📌 제약: N 은 최대 10⁵ (K 작음), 또는 N·K 최대 200. 답은 998244353 로 나눈 나머지.")}
       </div>
     </div>
   );
 }
 
-/* ================================================================
-   SOLUTION CODE
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "N, K = map(int, input().split())",
-  "a = list(map(int, input().split()))",
-  "",
-  "# Compute sum of each element raised to power K",
-  "result = 0",
-  "for x in a:",
-  "    result += x ** K",
-  "",
-  "print(result)",
-];
+/* 왜 DP? — 정리 카드. */
+function SumKWhyDP({ E }) {
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", textAlign: "center", marginBottom: 6 }}>
+        🤔 {t(E, "7 subsets was easy — but N up to 10⁵?", "7개는 쉬웠죠 — 근데 N 이 10⁵ 이면?")}
+      </div>
+      <div style={{ maxWidth: 500, margin: "0 auto 14px", fontSize: 12.5, color: C.text, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
+        {t(E, "There are ", "부분집합은 ")}<b style={{ color: "#dc2626" }}>2ᴺ</b>
+        {t(E, " subsets — for N = 60 that's already more than all the atoms we could count. We can't list them one by one.",
+             " 개예요 — N = 60 만 돼도 온 우주 원자보다 많아요. 하나씩 나열은 불가능.")}
+      </div>
 
+      <div style={{ maxWidth: 500, margin: "0 auto", display: "grid", gap: 10 }}>
+        <div style={{ background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#5b21b6", lineHeight: 1.7, wordBreak: "keep-all" }}>
+          <b>💡 {t(E, "The trick", "핵심 아이디어")}</b><br />
+          {t(E, "Add the elements one at a time. Keep ", "원소를 하나씩 넣어요. 그리고 ")}
+          <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>P[t]</code>
+          {t(E, " = the sum of (subset sum)ᵗ over all subsets so far, for every t = 0..K.",
+               " = 지금까지 부분집합들의 (합)ᵗ 합 을 t = 0..K 마다 유지해요.")}
+        </div>
+        <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#1e3a8a", lineHeight: 1.7, wordBreak: "keep-all" }}>
+          <b>➕ {t(E, "Adding element a", "새 원소 a 넣기")}</b><br />
+          {t(E, "A subset either skips a (old P[t] stays) or includes a → its sum becomes (old sum + a). Expand ",
+               "부분집합은 a 를 빼거나(옛 P[t] 그대로) 넣거나 → 합이 (옛합 + a) 가 돼요. ")}
+          <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>(old + a)ᵗ</code>
+          {t(E, " with the binomial theorem to update all P[t] at once.",
+               " 를 이항정리로 펼치면 모든 P[t] 를 한 번에 갱신할 수 있어요.")}
+        </div>
+        <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#065f46", lineHeight: 1.7, wordBreak: "keep-all", textAlign: "center" }}>
+          🏁 {t(E, "The answer is ", "답은 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>P[K]</code>
+          {t(E, ". (For K ≥ 1 the empty subset scores 0ᴷ = 0, so it drops out on its own.)",
+               ". (K ≥ 1 이면 공집합은 0ᴷ = 0 이라 저절로 빠져요.)")}
+        </div>
+      </div>
+
+      <div style={{ textAlign: "center", marginTop: 14, fontSize: 12, color: C.dim, wordBreak: "keep-all" }}>
+        {t(E, "Now let's read the code that does exactly this →", "이제 이걸 그대로 하는 코드를 봐요 →")}
+      </div>
+    </div>
+  );
+}
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: Problem (4 steps)
+   Chapter 1: makeSumKCh1 — 시즌 표준 (라벨 + 구체 샘플 + 시뮬 + 정리)
+   문제(도입) → 샘플 입출력 → 작은 예로 직접 → 왜 DP?
    ═══════════════════════════════════════════════════════════════ */
 export function makeSumKCh1(E) {
   return [
-    // 1-1: Title reveal
+    // [기] 문제 (도입)
     {
       type: "reveal",
+      label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
-        "Given an array of N numbers a[0..N−1] and an integer K, compute Σ a[i]^K — the sum of every element raised to the K-th power.",
-        "N 개의 숫자 배열 a[0..N−1] 와 정수 K 가 주어져요. 각 원소를 K 제곱한 값들의 총합 Σ a[i]^K 를 구해요."),
+        "Given an array A of N integers and a number K, look at EVERY non-empty subset. Each subset scores (its sum) raised to the K-th power. Add up all those scores (mod 998244353).",
+        "N 개 정수 배열 A 와 숫자 K 가 주어져요. 모든 비어있지 않은 부분집합을 봐요. 각 부분집합의 점수 = (원소 합)의 K 제곱. 그 점수들을 다 더해요 (mod 998244353)."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
-            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u2211"}</div>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"∑"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#8b5cf6" }}>{"Sum^K"}</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2023 P6</div>
           </div>
 
-          {/* 🎯 Mission box */}
           <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
               🎯 {t(E, "Mission", "미션")}
             </div>
-            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5, wordBreak: "keep-all" }}>
               {t(E,
-                "Output the sum a[0]^K + a[1]^K + … + a[N−1]^K.",
-                "합 a[0]^K + a[1]^K + … + a[N−1]^K 을 출력.")}
+                "Add up (subset sum)^K over ALL non-empty subsets of A, and print it modulo 998244353.",
+                "A 의 모든 비어있지 않은 부분집합에 대해 (합)^K 을 더한 값을 998244353 로 나눈 나머지로 출력.")}
             </div>
           </div>
 
@@ -183,90 +155,89 @@ export function makeSumKCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Given an ", "")}
-                  <b style={{ color: "#8b5cf6" }}>{t(E, "array of N numbers a[0..N−1]", "N 개의 숫자 배열 a[0..N−1]")}</b>
-                  {t(E, " and an integer ", " 와 정수 ")}
-                  <b style={{ color: "#7c3aed" }}>K</b>
-                  {t(E, ".", " 이 주어져요.")}
+                  {t(E, "You're given an ", "주어지는 것: ")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "array A of N integers", "정수 N 개짜리 배열 A")}</b>
+                  {t(E, " and a number ", " 와 숫자 ")}
+                  <b style={{ color: "#7c3aed" }}>K</b>.
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "한 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "subset", "부분집합")}</b>
+                  {t(E, " picks any of the elements. Its ", " 은 원소를 골라 담은 것. 그 ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "score", "점수")}</b>
+                  {t(E, " = (sum of chosen elements)", " = (고른 원소들의 합)")}
+                  <sup>K</sup>.
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "Look at ", "")}
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "every non-empty subset", "모든 비어있지 않은 부분집합")}</b>
+                  {t(E, " — there are 2ᴺ − 1 of them.", " — 총 2ᴺ − 1 개.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "a[0]^K + a[1]^K + … + a[N−1]^K", "a[0]^K + a[1]^K + … + a[N−1]^K")}</b>
-                  {t(E, ".", " 를 출력해요.")}
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "total of all scores", "모든 점수의 총합")}</b>
+                  {t(E, ", taken modulo 998244353.", " 을 998244353 로 나눈 나머지로 출력해요.")}
                 </div>
               </div>
             </div>
           </div>
         </div>),
     },
-    // 1-2: Sim — pick K, watch sum of powers accumulate
+
+    // [승] 샘플 입출력
     {
       type: "reveal",
-      narr: t(E,
-        "Try the sim — pick K, change a[i] values, then step through one element at a time and watch the running total grow.",
-        "직접 해봐 — K 와 a[i] 를 바꿔보고, '한 칸' 버튼으로 한 원소씩 더해지는 합을 따라가요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <PowerSumSim E={E} />
-          <div style={{ fontSize: 12, color: C.dim, textAlign: "center", marginTop: 6 }}>
-            {t(E,
-              "Each card shows a[i]^K. The running sum is a[0]^K + a[1]^K + … so far.",
-              "각 카드는 a[i]^K. 합 박스는 지금까지의 a[0]^K + a[1]^K + … 누적값.")}
-          </div>
-        </div>
-      ),
+      label: t(E, "Sample I/O", "샘플 입출력"),
+      narr: t(E, "A concrete example — one array, and the answer we must print.",
+                 "구체적인 예 하나 — 배열 하나와, 우리가 출력할 답."),
+      content: (<SumKSample E={E} />),
     },
-    // 1-3: Quiz
+
+    // [전] 작은 예로 직접 — 7개 부분집합 시뮬
     {
-      type: "quiz",
-      narr: t(E,
-        "Array = [1, 2, 3], K = 2. Sum of squares: 1^2 + 2^2 + 3^2 = 1 + 4 + 9 = 14.", "배열 = [1, 2, 3], K = 2. 제곱의 합: 1^2 + 2^2 + 3^2 = 1 + 4 + 9 = 14."),
-      question: t(E,
-        "Array=[1,2,3], K=2. What is the sum of squares?",
-        "배열=[1,2,3], K=2. 제곱의 합은?"),
-      options: [
-        t(E, "6", "6"),
-        t(E, "14", "14"),
-        t(E, "36", "36"),
-        t(E, "9", "9"),
-      ],
-      correct: 1,
-      explain: t(E,
-        "Correct! 1^2 + 2^2 + 3^2 = 1 + 4 + 9 = 14.",
-        "맞아! 1^2 + 2^2 + 3^2 = 1 + 4 + 9 = 14야."),
+      type: "reveal",
+      label: t(E, "Try a small case", "작은 예로 직접"),
+      narr: t(E, "Let's actually count it for [1, 2, 3], K = 2: enumerate all 7 subsets and add each (sum)².",
+                 "[1, 2, 3], K = 2 로 직접 세어봐요: 7개 부분집합을 다 나열해 각 (합)² 을 더해요."),
+      content: (<SumkSim E={E} />),
     },
-    // 1-4: Input
+
+    // [결] 왜 DP?
     {
-      type: "input",
-      narr: t(E,
-        "Calculate sum of squares for [1, 2, 3]!", "[1, 2, 3]의 제곱의 합을 계산해봐요!"),
-      question: t(E,
-        "Array=[1,2,3], K=2. Enter the sum:",
-        "배열=[1,2,3], K=2. 합을 입력해:"),
-      hint: t(E,
-        "Square each element and add them up.",
-        "각 원소를 제곱한 뒤 다 더해 봐."),
-      answer: 14,
+      type: "reveal",
+      label: t(E, "Why DP?", "왜 DP?"),
+      narr: t(E, "Listing 2ᴺ subsets is impossible for big N. Here's the idea that avoids it entirely.",
+                 "N 이 크면 2ᴺ 개 나열은 불가능해요. 그걸 아예 피하는 아이디어예요."),
+      content: (<SumKWhyDP E={E} />),
     },
   ];
 }
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: Code (2 steps)
+   Chapter 2: makeSumKCh2 (CodeWalk)
    ═══════════════════════════════════════════════════════════════ */
 export function makeSumKCh2(E, lang = "py") {
+  const w = getSumkWalk(E, lang);
   return [
-    // 2-1: Progressive code
     {
-      type: "progressive",
+      type: "reveal",
+      label: t(E, "Code", "코드"),
       narr: t(E,
-        "Iterate the array; for each element x, add x**K to the running total (Python's ** uses fast exponentiation). Sections build it one piece at a time.",
-        "배열을 순회 — 각 원소 x 에 x**K 를 누적 (Python 의 ** 는 빠른 거듭제곱). 아래 섹션이 한 단락씩 쌓아요."),
-      sections: getSumKSections(E),
+        "Read the solution top to bottom — each bubble sits on the lines it explains: read input, build binomials, keep P[t], update per element with the binomial theorem, print P[K].",
+        "코드를 위에서 아래로 읽어봐요 — 말풍선이 설명하는 줄에 붙어 있어요: 입력 읽기 → 이항계수 → P[t] 유지 → 원소마다 이항정리로 갱신 → P[K] 출력."),
+      content: (
+        <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />
+      ),
     },
   ];
 }
