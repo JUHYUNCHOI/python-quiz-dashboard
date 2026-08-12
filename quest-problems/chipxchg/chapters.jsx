@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, AdversarySim, GameBoardSim } from "./sims";
+import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim } from "./sims";
 
 const A = "#2563eb";
 
@@ -53,53 +53,6 @@ function ChipXchgSample({ E }) {
   );
 }
 
-/* 답 찾기 — f(x)=최악 최종빨강 이 x에 대해 안 줄어듦(계단) → 이분탐색. */
-function ChipXchgSearch({ E }) {
-  const cA = 2, cB = 3, fA = 5;
-  const f = (x) => { let m = Infinity; for (let b = 0; b <= x; b++) m = Math.min(m, (x - b) + Math.floor(b / cB) * cA); return m; };
-  const xs = Array.from({ length: 11 }, (_, x) => ({ x, v: f(x) }));
-  const maxV = Math.max(...xs.map((d) => d.v), fA);
-  const firstOk = xs.find((d) => d.v >= fA)?.x;
-  return (
-    <div style={{ padding: 16 }}>
-      <div style={{ fontSize: 14, fontWeight: 800, color: "#1e3a8a", textAlign: "center", marginBottom: 4 }}>
-        🎯 {t(E, "Find the smallest x", "가장 작은 x 찾기")}
-      </div>
-      <div style={{ maxWidth: 520, margin: "0 auto 12px", fontSize: 12.5, color: C.text, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
-        {t(E, "More chips can never hurt (dump extras on red). So the worst-case final red f(x) ",
-             "칩이 많아져서 손해일 린 없어요 (남는 건 빨강에 얹으면 되니). 그래서 최악의 최종 빨강 f(x) 는 ")}
-        <b style={{ color: "#2563eb" }}>{t(E, "never goes down as x grows", "x 가 커질수록 안 줄어요")}</b>
-        {t(E, " — a staircase ↗.", " — 계단 ↗.")}
-      </div>
-
-      {/* f(x) 막대 그래프 + 목표선 */}
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 6, height: 150, position: "relative", maxWidth: 520, margin: "0 auto" }}>
-        {/* 목표선 */}
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: (fA / maxV) * 120 + 22, borderTop: "2px dashed #dc2626", zIndex: 2 }}>
-          <span style={{ position: "absolute", right: 0, top: -16, fontSize: 10, fontWeight: 800, color: "#dc2626" }}>{t(E, `goal ${fA}`, `목표 ${fA}`)}</span>
-        </div>
-        {xs.map((d) => {
-          const ok = d.v >= fA, first = d.x === firstOk;
-          return (
-            <div key={d.x} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-              <div style={{ fontSize: 10, fontWeight: 800, color: ok ? "#15803d" : "#94a3b8" }}>{d.v}</div>
-              <div style={{ width: 26, height: (d.v / maxV) * 120 + 2, borderRadius: "4px 4px 0 0",
-                background: first ? "#15803d" : ok ? "#86efac" : "#bfdbfe",
-                border: first ? "2px solid #15803d" : "none", transition: "all .15s" }} />
-              <div style={{ fontSize: 10, fontWeight: first ? 800 : 600, color: first ? "#15803d" : "#64748b", fontFamily: "'JetBrains Mono',monospace" }}>{d.x}</div>
-            </div>
-          );
-        })}
-      </div>
-      <div style={{ textAlign: "center", fontSize: 10.5, color: C.dim, marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>x →</div>
-
-      <div style={{ maxWidth: 460, margin: "14px auto 0", background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#1e3a8a", lineHeight: 1.7, wordBreak: "keep-all", textAlign: "center" }}>
-        {t(E, <>The first x that reaches the goal is <b>x = {firstOk}</b>. Since it's a staircase, we don't test every x — <b>binary search</b> jumps straight to it. (x up to ~10¹⁸)</>,
-             <>목표에 처음 닿는 x 는 <b>x = {firstOk}</b>. 계단이니 모든 x 를 안 돌아요 — <b>이분탐색</b>으로 콕 집어요. (x 는 최대 ~10¹⁸)</>)}
-      </div>
-    </div>
-  );
-}
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeChipXchgCh1 — mooin3 모양 (라벨 + 구체 샘플 + 시뮬)
@@ -107,45 +60,12 @@ function ChipXchgSearch({ E }) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeChipXchgCh1(E) {
   return [
-    // [기] 문제 (도입) — 빨강/파랑 칩 + 심술쟁이 (기호는 마지막에)
+    // [기] 문제 (도입) = 게임 한 판을 구체 그림으로 (첫 화면부터 단계별 시뮬)
     {
       type: "reveal",
-      label: t(E, "Problem (intro)", "문제 (도입)"),
-      narr: t(E,
-        "Bessie's chip-swap game. Let's see what it is.",
-        "Bessie 의 칩 교환 게임이에요. 어떤 게임인지 봐요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 8 }}>
-            <div style={{ fontSize: 32, marginBottom: 4 }}>{"🔵"}</div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>Chip Exchange</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2025 Bronze #1</div>
-          </div>
-
-          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
-              🎯 {t(E, "Mission", "미션")}
-            </div>
-            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
-              {t(E,
-                "However the trickster splits the extra chips, Bessie must still reach her red-chip goal. Find the smallest number of extra chips that guarantees it.",
-                "심술쟁이가 추가 칩을 어떻게 나눠 줘도 빨간 칩 목표를 채울 수 있어야 해요. 그걸 보장하는 가장 작은 추가 칩 개수를 구하기.")}
-            </div>
-          </div>
-
-          <div style={{ textAlign: "center", fontSize: 12.5, color: C.dim, marginTop: 2, wordBreak: "keep-all", lineHeight: 1.6 }}>
-            {t(E, "A chip game: swap blue chips into red ones to reach a goal — with a trickster in your way. Let's watch one round.",
-                 "파란 칩을 빨간 칩으로 바꿔 목표를 채우는 게임이에요 — 심술쟁이가 방해하죠. 한 판 같이 봐요.")}
-          </div>
-        </div>),
-    },
-
-    // [승] 게임 한 판 — 구체 그림으로 premise 잡기
-    {
-      type: "reveal",
-      label: t(E, "One round", "게임 한 판"),
-      narr: t(E, "Before any code — let's just watch the game happen once, with real chips.",
-                 "코드 얘기 전에 — 게임이 어떻게 굴러가는지 진짜 칩으로 한 번만 봐요."),
+      label: t(E, "The game", "게임 이해"),
+      narr: t(E, "Bessie's chip-swap game — let's just watch one round with real chips, step by step.",
+                 "Bessie 의 칩 교환 게임 — 진짜 칩으로 한 판을 한 단계씩 같이 봐요."),
       content: (<GameBoardSim E={E} />),
     },
 
@@ -181,7 +101,7 @@ export function makeChipXchgCh1(E) {
       label: t(E, "Find x: binary search", "답 찾기: 이분탐색"),
       narr: t(E, "The worst-case result only grows as x grows — so we binary-search the smallest x that reaches the goal.",
                  "최악 결과는 x 가 커질수록 커지기만 해요 — 그래서 목표에 닿는 가장 작은 x 를 이분탐색해요."),
-      content: (<ChipXchgSearch E={E} />),
+      content: (<SearchSim E={E} />),
     },
   ];
 }

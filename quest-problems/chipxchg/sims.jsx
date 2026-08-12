@@ -102,61 +102,177 @@ export function ChipCountSim({ E }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   AdversarySim — 심술쟁이가 최악으로 분배.
-   예: A=0, B=0, cA=2, cB=3, 목표 fA=5. 추가 x개를 빨강 a·파랑 b 로 나눔.
-   최종 A = a + (b // 3)×2. 심술쟁이는 이걸 최소로. → 파랑에 몰아 자투리 낭비.
+   AdversarySim — 한 x(=8)에서 심술쟁이가 나눌 수 있는 모든 분배를
+   파랑 b=0,1,…,8 차례로 다 따져 최악(최소 최종빨강)을 찾음.
+   최종 빨강 = a + (b // cB)×cA, a = 8-b. 심술쟁이는 이 값이 최소인 걸 고름.
    ═══════════════════════════════════════════════════════════════ */
 export function AdversarySim({ E }) {
-  const cA = 2, cB = 3, fA = 5;
-  const finalA = (a, b) => a + Math.floor(b / cB) * cA;
-  const minOver = (x) => { let m = Infinity, bb = 0; for (let b = 0; b <= x; b++) { const v = finalA(x - b, b); if (v < m) { m = v; bb = b; } } return { m, b: bb, a: x - bb }; };
-  const steps = [{ kind: "who" }, { kind: "worse" }, { kind: "x8" }, { kind: "x9" }];
+  const cA = 2, cB = 3, fA = 5, X = 8;
+  const rows = Array.from({ length: X + 1 }, (_, b) => {
+    const a = X - b, g = Math.floor(b / cB), w = b % cB;
+    return { b, a, g, w, val: a + g * cA };
+  });
+  const steps = [{ kind: "intro" }, ...rows.map((r) => ({ kind: "b", b: r.b }))];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
 
-  const say =
-    s.kind === "who" ? t(E, <>Extra chips come, but a <b>trickster</b> splits them: <b style={{color:RED}}>a red</b> + <b style={{color:BLU}}>b blue</b>. They pick the split that makes my <b>final red as SMALL as possible</b>.</>,
-                          <>추가 칩이 오는데 <b>심술쟁이</b>가 나눠요: <b style={{color:RED}}>빨강 a개</b> + <b style={{color:BLU}}>파랑 b개</b>. 내 <b>최종 빨강이 최소</b>가 되게 골라요.</>)
-    : s.kind === "worse" ? t(E, <><b>Blue is worse for me</b>: 1 red chip = 1 red, but 3 blue = only 2 red (and leftovers waste). So the trickster <b>dumps onto blue</b>, just below a group of 3.</>,
-                              <><b>파랑이 나한테 손해</b>예요: 빨강 1개 = 빨강 1, 근데 파랑 3개 = 빨강 2개뿐 (자투리는 낭비). 그래서 심술쟁이는 <b>파랑에 몰아요</b>, 3 묶음 바로 아래에 멈춰서.</>)
-    : s.kind === "x8" ? t(E, <><b>x = 8</b>: worst split → all 8 blue = 3+3+<b>2 wasted</b> → 2 groups → <b>4 red</b>. Goal is 5 → <b>not enough ✗</b>.</>,
-                           <><b>x = 8</b>: 최악 분배 → 8개 다 파랑 = 3+3+<b>자투리 2</b> → 묶음 2개 → <b>빨강 4개</b>. 목표 5 → <b>부족 ✗</b>.</>)
-    : t(E, <><b>x = 9</b>: even the trickster's best is <b>5 red</b> (e.g. 1 red + 8 blue → 1+4). Goal reached <b>no matter what ✓</b>. So answer = <b>9</b>.</>,
-           <><b>x = 9</b>: 심술쟁이가 최선을 다해도 <b>빨강 5개</b> (예: 빨강 1 + 파랑 8 → 1+4). 어떻게 나눠도 목표 달성 <b>✓</b>. 답 = <b>9</b>.</>);
+  const curB = s.kind === "b" ? s.b : -1;
+  const cur = curB >= 0 ? rows[curB] : null;
+  // 지금까지(0..curB) 최솟값 = 심술쟁이가 노리는 최악
+  const seen = curB >= 0 ? rows.slice(0, curB + 1) : [];
+  const worstSoFar = seen.length ? Math.min(...seen.map((r) => r.val)) : null;
+  const worstB = seen.length ? seen.reduce((mi, r) => (r.val < rows[mi].val ? r.b : mi), 0) : -1;
+  const isNewMin = cur && cur.val === worstSoFar && (curB === 0 || cur.val < Math.min(...rows.slice(0, curB).map((r) => r.val)));
+  const isLast = curB === X;
 
-  const showX = s.kind === "x8" ? 8 : s.kind === "x9" ? 9 : null;
-  const res = showX != null ? minOver(showX) : null;
+  const say =
+    s.kind === "intro"
+      ? t(E, <><b>x = 8</b> extra chips arrive. The <b>trickster</b> splits them: <b style={{color:RED}}>a red</b> + <b style={{color:BLU}}>b blue</b> (a+b=8). Which split hurts me most? Let's try <b>every b = 0…8</b> and count my final red.</>,
+             <><b>추가 칩 8개</b>가 왔어요. <b>심술쟁이</b>가 나눠요: <b style={{color:RED}}>빨강 a개</b> + <b style={{color:BLU}}>파랑 b개</b> (a+b=8). 어느 분배가 제일 나쁠까요? <b>파랑 b = 0…8</b> 을 하나씩 넣어보며 최종 빨강을 세어봐요.</>)
+      : isLast
+      ? t(E, <><b>b = 8</b>: all blue = 3+3+<b>2 wasted</b> → 2 groups → <b style={{color:"#dc2626"}}>4 red</b>. This is the <b>worst</b>. 4 &lt; goal 5 → with x=8 the trickster wins <b>✗</b>.</>,
+             <><b>b = 8</b>: 다 파랑 = 3+3+<b>자투리 2 낭비</b> → 묶음 2개 → <b style={{color:"#dc2626"}}>빨강 4개</b>. 이게 <b>최악</b>이에요. 4 &lt; 목표 5 → x=8 로는 심술쟁이가 이겨요 <b>✗</b>.</>)
+      : t(E,
+          <>b = {cur.b}: <b style={{color:BLU}}>{cur.b} blue</b> = {cur.g} group{cur.g!==1?"s":""} (+{cur.g*cA} red){cur.w?<>, {cur.w} wasted</>:null}, plus <b style={{color:RED}}>{cur.a} red</b> → final <b>{cur.val}</b>.{isNewMin?<> <b style={{color:"#dc2626"}}>worst so far 😈</b></>:null}</>,
+          <>b = {cur.b}: <b style={{color:BLU}}>파랑 {cur.b}</b> = 묶음 {cur.g}개(+빨강 {cur.g*cA}){cur.w?<>, 자투리 {cur.w} 낭비</>:null}, 빨강 {cur.a}는 그대로 → 최종 <b>{cur.val}</b>.{isNewMin?<> <b style={{color:"#dc2626"}}>지금까지 최악 😈</b></>:null}</>);
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "The trickster splits for the worst", "심술쟁이의 최악 분배")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 4, fontFamily: "'JetBrains Mono',monospace" }}>
-        {t(E, "start A=0, B=0 · 3 blue → 2 red · goal 5 red", "시작 A=0, B=0 · 파랑 3 → 빨강 2 · 목표 빨강 5")}
+        title={t(E, "Try every split — find the worst", "모든 분배 다 따지기 — 최악 찾기")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+        {t(E, "start A=0, B=0 · 3 blue → 2 red · goal 5 · extra x=8", "시작 A=0, B=0 · 파랑 3 → 빨강 2 · 목표 5 · 추가 x=8")}
       </div>
-      <Say tone={s.kind === "x8" ? "stuck" : s.kind === "x9" ? "aha" : "go"}>{say}</Say>
+      <Say tone={isLast ? "stuck" : isNewMin ? "stuck" : "go"}>{say}</Say>
 
-      {showX != null && (
-        <div style={{ maxWidth: 460, margin: "0 auto" }}>
-          {/* 최악 분배 그림: a 빨강 + b 파랑 (묶음) */}
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 8 }}>
-            {Array.from({ length: res.a }).map((_, i) => <Chip key={"a" + i} color="red" />)}
-            {res.a > 0 && <span style={{ color: "#94a3b8", fontWeight: 800 }}>+</span>}
-            {Array.from({ length: Math.floor(res.b / cB) }).map((_, g) => (
-              <div key={g} style={{ display: "flex", gap: 3, padding: 3, borderRadius: 8, border: `2px dashed ${BLU}` }}>
-                {Array.from({ length: cB }).map((_, i) => <Chip key={i} color="blue" size={22} />)}
+      {cur && (
+        <div style={{ maxWidth: 480, margin: "0 auto" }}>
+          {/* 현재 분배 그림: a 빨강 + b 파랑(3묶음, 자투리 낭비) */}
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, flexWrap: "wrap", minHeight: 40, marginBottom: 10 }}>
+            {Array.from({ length: cur.a }).map((_, i) => <Chip key={"a" + i} color="red" size={18} />)}
+            {cur.a > 0 && cur.b > 0 && <span style={{ color: "#94a3b8", fontWeight: 800 }}>+</span>}
+            {Array.from({ length: cur.g }).map((_, g) => (
+              <div key={g} style={{ display: "flex", gap: 4, padding: 4, borderRadius: 8, border: `2px dashed ${BLU}`, background: "#f8fbff" }}>
+                {Array.from({ length: cB }).map((_, i) => <Chip key={i} color="blue" size={18} />)}
               </div>
             ))}
-            {res.b % cB > 0 && (
-              <div style={{ display: "flex", gap: 3, padding: 3, borderRadius: 8, border: "2px dashed #dc2626", background: "#fef2f2" }}>
-                {Array.from({ length: res.b % cB }).map((_, i) => <Chip key={i} color="blue" size={22} />)}
-                <span style={{ fontSize: 10, fontWeight: 800, color: "#dc2626", alignSelf: "center" }}>{t(E, "waste", "낭비")}</span>
+            {cur.w > 0 && (
+              <div style={{ display: "flex", gap: 4, padding: 4, borderRadius: 8, border: "2px dashed #dc2626", background: "#fef2f2", alignItems: "center" }}>
+                {Array.from({ length: cur.w }).map((_, i) => <Chip key={i} color="blue" size={18} faded />)}
+                <span style={{ fontSize: 10, fontWeight: 800, color: "#dc2626" }}>{t(E, "waste", "낭비")}</span>
               </div>
             )}
           </div>
-          <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
-            color: res.m >= fA ? "#15803d" : "#dc2626" }}>
-            {t(E, "final red = ", "최종 빨강 = ")}{res.a} + ({res.b}÷{cB})×{cA} = <b>{res.m}</b> {res.m >= fA ? `≥ ${fA} ✓` : `< ${fA} ✗`}
+          <div style={{ textAlign: "center", fontSize: 13.5, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#334155", marginBottom: 12 }}>
+            {cur.a} + ({cur.b}÷{cB})×{cA} = <b style={{ color: cur.val === worstSoFar ? "#dc2626" : "#334155" }}>{cur.val}</b>
           </div>
+
+          {/* b=0..8 결과 셀 — 지금까지 revealed, 최악 셀 😈 표시 */}
+          <div style={{ display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap" }}>
+            {rows.map((r) => {
+              const shown = r.b <= curB;
+              const isWorst = shown && r.val === worstSoFar && r.b === worstB;
+              return (
+                <div key={r.b} style={{ width: 40, textAlign: "center", opacity: shown ? 1 : 0.25, transition: "all .15s" }}>
+                  <div style={{ fontSize: 9, fontWeight: 700, color: "#94a3b8" }}>b={r.b}</div>
+                  <div style={{ marginTop: 2, height: 26, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+                    background: isWorst ? "#fee2e2" : shown ? "#f1f5f9" : "#f8fafc",
+                    border: isWorst ? "2px solid #dc2626" : "1px solid #e2e8f0",
+                    color: isWorst ? "#dc2626" : "#334155" }}>
+                    {shown ? r.val : "·"}
+                  </div>
+                  {isWorst && <div style={{ fontSize: 12 }}>😈</div>}
+                </div>
+              );
+            })}
+          </div>
+          {worstSoFar != null && (
+            <div style={{ textAlign: "center", marginTop: 10, fontSize: 12.5, fontWeight: 800, wordBreak: "keep-all",
+              color: isLast ? (worstSoFar >= fA ? "#15803d" : "#dc2626") : "#dc2626" }}>
+              {t(E, "worst so far = ", "지금까지 최악 = ")}<b>{worstSoFar}</b>
+              {isLast && <> {worstSoFar >= fA ? `≥ ${fA} ✓` : `< ${fA} ✗ ` + t(E, "(x=8 not enough)", "(x=8 부족)")}</>}
+            </div>
+          )}
+        </div>
+      )}
+
+      <div style={{ marginTop: 24 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SearchSim — 바깥 루프: x = 0,1,2,… 를 차례로 훑으며 각 x 의 최악 f(x)
+   (AdversarySim 이 한 x 에서 구한 그 값) 를 계단으로 쌓아, 목표에 처음 닿는 x 를 찾음.
+   f(x) 는 안 줄어듦(계단) → 이분탐색으로 콕. 답 x=9.
+   ═══════════════════════════════════════════════════════════════ */
+export function SearchSim({ E }) {
+  const cA = 2, cB = 3, fA = 5;
+  const worst = (x) => { let m = Infinity; for (let b = 0; b <= x; b++) m = Math.min(m, (x - b) + Math.floor(b / cB) * cA); return m; };
+  const XS = Array.from({ length: 10 }, (_, x) => ({ x, v: worst(x) })); // x=0..9
+  const firstOk = XS.find((d) => d.v >= fA)?.x;               // 9
+  const maxV = Math.max(fA, ...XS.map((d) => d.v)) + 1;        // headroom
+  const steps = [{ kind: "intro" }, ...XS.map((d) => ({ kind: "x", x: d.x })), { kind: "search" }];
+  const ts = useTraceStep(steps); const s = steps[ts.safe];
+
+  const curX = s.kind === "x" ? s.x : s.kind === "search" ? 9 : -1;
+  const cur = curX >= 0 ? XS[curX] : null;
+  const reached = cur && cur.v >= fA;
+  const firstReach = s.kind === "x" && cur.x === firstOk;
+
+  const say =
+    s.kind === "intro"
+      ? t(E, <>Now the real question: the <b>fewest x</b>. For each x, the trickster's worst gives <b>f(x)</b> (just like we counted). Sweep <b>x = 0, 1, 2, …</b> and watch where f(x) first reaches goal <b>{fA}</b>.</>,
+             <>이제 진짜 질문 — <b>최소 x</b>. 각 x 마다 심술쟁이 최악이 <b>f(x)</b> 예요 (방금 센 그 값). <b>x = 0, 1, 2, …</b> 를 훑으며 f(x) 가 목표 <b>{fA}</b> 에 처음 닿는 곳을 봐요.</>)
+      : s.kind === "search"
+      ? t(E, <>Notice f(x) <b>never drops</b> — more chips can't hurt (dump extras on red). A <b>staircase ↗</b>. So we don't test every x — <b>binary search</b> jumps to the first one. Answer <b>x = {firstOk}</b>. (x can be up to ~10¹⁸)</>,
+             <>보세요 — f(x) 는 <b>절대 안 줄어요</b> (칩 많아져 손해는 없으니, 남는 건 빨강에). <b>계단 ↗</b>. 그래서 모든 x 를 안 돌고 <b>이분탐색</b>으로 처음 닿는 x 를 콕 집어요. 답 <b>x = {firstOk}</b>. (x 는 최대 ~10¹⁸)</>)
+      : firstReach
+      ? t(E, <><b>x = {cur.x}</b>: worst f = <b style={{color:"#15803d"}}>{cur.v}</b> ≥ goal {fA} — <b style={{color:"#15803d"}}>reached ✓</b>. This is the first x that always wins.</>,
+             <><b>x = {cur.x}</b>: 최악 f = <b style={{color:"#15803d"}}>{cur.v}</b> ≥ 목표 {fA} — <b style={{color:"#15803d"}}>도달 ✓</b>. 어떻게 나눠도 이기는 첫 x 예요.</>)
+      : t(E, <>x = {cur.x}: worst f = <b>{cur.v}</b> {cur.v >= fA ? <>≥ {fA} ✓</> : <>&lt; {fA} — <b style={{color:"#dc2626"}}>still not enough ✗</b></>}</>,
+             <>x = {cur.x}: 최악 f = <b>{cur.v}</b> {cur.v >= fA ? <>≥ {fA} ✓</> : <>&lt; {fA} — <b style={{color:"#dc2626"}}>아직 부족 ✗</b></>}</>);
+
+  const H = 130;
+  const showUpTo = s.kind === "search" ? 9 : curX;
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Sweep x — find the smallest that wins", "x 를 훑어 — 이기는 가장 작은 x")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+        {t(E, "3 blue → 2 red · goal 5 · f(x) = trickster's worst", "파랑 3 → 빨강 2 · 목표 5 · f(x) = 심술쟁이 최악")}
+      </div>
+      <Say tone={s.kind === "search" ? "aha" : firstReach ? "aha" : "go"}>{say}</Say>
+
+      {/* f(x) 계단 막대 — x' <= showUpTo 만 노출 */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 8, height: H + 24, position: "relative", maxWidth: 500, margin: "0 auto" }}>
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: (fA / maxV) * H + 20, borderTop: "2px dashed #dc2626", zIndex: 2 }}>
+          <span style={{ position: "absolute", right: 0, top: -15, fontSize: 10, fontWeight: 800, color: "#dc2626" }}>{t(E, `goal ${fA}`, `목표 ${fA}`)}</span>
+        </div>
+        {XS.map((d) => {
+          const shown = d.x <= showUpTo;
+          const ok = d.v >= fA, first = d.x === firstOk;
+          const isCur = s.kind === "x" && d.x === curX;
+          return (
+            <div key={d.x} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, opacity: shown ? 1 : 0.2, transition: "all .15s" }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: shown ? (ok ? "#15803d" : "#64748b") : "#cbd5e1" }}>{shown ? d.v : ""}</div>
+              <div style={{ width: 30, height: shown ? (d.v / maxV) * H + 2 : 2, borderRadius: "4px 4px 0 0",
+                background: !shown ? "#e2e8f0" : first ? "#15803d" : ok ? "#86efac" : "#bfdbfe",
+                boxShadow: isCur ? "0 0 0 3px #fde68a" : "none", transition: "all .18s" }} />
+              <div style={{ fontSize: 11, fontWeight: (isCur || first) ? 800 : 600, color: first ? "#15803d" : isCur ? "#b45309" : "#94a3b8", fontFamily: "'JetBrains Mono',monospace" }}>{d.x}</div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ textAlign: "center", fontSize: 10.5, color: "#94a3b8", marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>x →</div>
+
+      {s.kind === "search" && (
+        <div style={{ maxWidth: 460, margin: "12px auto 0", background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 12.5, color: "#065f46", lineHeight: 1.7, wordBreak: "keep-all", textAlign: "center", fontWeight: 700 }}>
+          {t(E, <>Staircase ↗ → <b>binary search</b> → answer <b>x = {firstOk}</b></>,
+               <>계단 ↗ → <b>이분탐색</b> → 답 <b>x = {firstOk}</b></>)}
         </div>
       )}
 
@@ -192,6 +308,11 @@ export function GameBoardSim({ E }) {
 
   return (
     <div style={{ padding: 16 }}>
+      {/* 문제 제목 (정적 인트로 대신 여기 한 줄로) */}
+      <div style={{ textAlign: "center", marginBottom: 10 }}>
+        <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>🔵 Chip Exchange</div>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", marginTop: 2 }}>USACO Dec 2025 Bronze #1</div>
+      </div>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "One round of the game", "이 게임 한 판")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Say tone={s.kind === "goal" ? "stuck" : s.kind === "ask" ? "aha" : "go"}>{say}</Say>
