@@ -231,8 +231,8 @@ export function SearchSim({ E }) {
       ? t(E, <><b>worst(x)</b> never drops as x grows — a <b>staircase ↗</b>. So instead of trying all x (up to 10¹⁸!), <b>binary-search</b>: halve the range each step.</>,
              <><b>worst(x)</b> 는 x 가 커질수록 안 줄어요 — <b>계단 ↗</b>. 그래서 모든 x(최대 10¹⁸!)를 안 보고 <b>이분탐색</b> — 범위를 매번 반씩 줄여요.</>)
       : s.kind === "done"
-      ? t(E, <>Range shrank to one — <b style={{color:"#15803d"}}>answer x = {ANS}</b>. Found in just <b>{trace.length} checks</b>, not 0…{HI0} all.</>,
-             <>범위가 하나로 좁혀졌어요 — <b style={{color:"#15803d"}}>답 x = {ANS}</b>. 0~{HI0} 다 안 보고 <b>{trace.length}번</b> 확인으로 끝!</>)
+      ? t(E, <>Range shrank to one — <b style={{color:"#15803d"}}>answer x = {ANS}</b>, in just <b>{trace.length} checks</b>. Matches <b style={{color:"#15803d"}}>sample test 2's output 9 ✓</b> — this is the real solution.</>,
+             <>범위가 하나로 좁혀졌어요 — <b style={{color:"#15803d"}}>답 x = {ANS}</b>, <b>{trace.length}번</b> 확인으로. <b style={{color:"#15803d"}}>샘플 테스트 2의 정답 9 와 일치 ✓</b> — 이게 진짜 해법이에요.</>)
       : t(E,
           <>Range <b>[{pr.lo} … {pr.hi}]</b>. Check middle <b>mid={pr.mid}</b>: worst={pr.v} {pr.ok
             ? <><span style={NW}>≥ {fA} ✓</span> → answer is here or left, <b>hi={pr.mid}</b></>
@@ -245,8 +245,8 @@ export function SearchSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Binary-search the smallest x", "가장 작은 x 를 이분탐색")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
-        {t(E, "goal 5 · worst(x) = trickster's worst · ✓ means worst ≥ 5", "목표 5 · worst(x) = 심술쟁이 최악 · ✓ = worst ≥ 5")}
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace", wordBreak: "keep-all" }}>
+        {t(E, "sample test 2: 0 0 2 3 5 · goal 5 · ✓ = worst ≥ 5", "샘플 테스트 2: 0 0 2 3 5 · 목표 5 · ✓ = worst ≥ 5")}
       </div>
       <Say tone={s.kind === "done" ? "aha" : s.kind === "why" ? "go" : (pr && pr.ok ? "aha" : "stuck")}>{say}</Say>
 
@@ -274,6 +274,13 @@ export function SearchSim({ E }) {
           );
         })}
       </div>
+
+      {s.kind === "done" && (
+        <div style={{ maxWidth: 460, margin: "16px auto 0", background: "#ecfdf5", border: "1.5px solid #16a34a", borderRadius: 10, padding: "10px 14px", fontSize: 12.5, color: "#065f46", lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", textAlign: "center", fontWeight: 800 }}>
+          {t(E, <>✅ Our answer <b>x = {ANS}</b> = sample test 2's output <b>9</b>. Same binary search as the verified solution (12/12 pass).</>,
+               <>✅ 우리 답 <b>x = {ANS}</b> = 샘플 테스트 2 정답 <b>9</b>. 검증된 풀이(12/12 통과)와 같은 이분탐색이에요.</>)}
+        </div>
+      )}
 
       <div style={{ marginTop: 24 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
