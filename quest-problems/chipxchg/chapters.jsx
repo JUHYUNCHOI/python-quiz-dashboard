@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim, CheckSim, StrategySlide, BruteLimitSlide, PlanSlide } from "./sims";
+import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim, CheckSim, StrategySlide, PlanSlide } from "./sims";
 
 const A = "#2563eb";
 
@@ -144,21 +144,12 @@ export function makeChipXchgCh1(E) {
       content: (<AdversarySim E={E} />),
     },
 
-    // [전] ④ 브루트 한계 → 재전략(계단)
-    {
-      type: "reveal",
-      label: t(E, "Why not try all x", "브루트 한계"),
-      narr: t(E, "Question ② — trying every x is too slow. But the worst case is a staircase.",
-                 "질문 ② — 모든 x 를 다 해보면 느려요. 근데 최악이 계단이에요."),
-      content: (<BruteLimitSlide E={E} />),
-    },
-
-    // [결] ⑤ 답 찾기 — 이분탐색으로 최소 x
+    // [결] ⑤ 답 찾기 (질문②) — 브루트 한계(10¹⁸)→계단→이분탐색까지 한 시뮬에서
     {
       type: "reveal",
       label: t(E, "Find x: binary search", "답 찾기: 이분탐색"),
-      narr: t(E, "Sweep x to see the staircase, then binary-search the smallest x that reaches the goal.",
-                 "x 를 훑어 계단을 보고, 목표에 처음 닿는 가장 작은 x 를 이분탐색해요."),
+      narr: t(E, "Question ② — trying every x is too slow (up to 10¹⁸). But the worst case is a staircase → binary-search it.",
+                 "질문 ② — 모든 x 를 다 해보면 느려요 (10¹⁸까지). 근데 최악이 계단 → 이분탐색으로 콕."),
       content: (<SearchSim E={E} />),
     },
 

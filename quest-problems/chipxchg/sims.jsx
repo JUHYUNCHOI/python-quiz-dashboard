@@ -484,33 +484,6 @@ export function StrategySlide({ E }) {
   );
 }
 
-/* ═══ ④ 브루트 한계 → 재전략 다리 ═══ */
-export function BruteLimitSlide({ E }) {
-  const steps = [{ kind: "brute" }, { kind: "why" }];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
-  return (
-    <div style={{ padding: 16 }}>
-      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Can't we just try every x?", "모든 x 를 다 해보면 안 될까?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <Say tone={s.kind === "brute" ? "stuck" : "aha"}>
-        {s.kind === "brute"
-          ? t(E, <>We could check x = 0, 1, 2, 3, … one by one. But the answer can reach <b>10¹⁸</b> — <b>way too many to try ✗</b>.</>,
-                 <>x = 0, 1, 2, 3, … 하나씩 확인할 수 있죠. 근데 답이 <b>10¹⁸</b> 까지 갈 수 있어요 — <b>다 해보긴 너무 많아 ✗</b>.</>)
-          : t(E, <>Good news: the trickster's worst f(x) <b>never drops</b> as x grows (more chips can't hurt). A <b>staircase ↗</b> → we can <b>binary-search</b> the jump.</>,
-                 <>다행: 심술쟁이 최악 f(x) 는 x 가 커져도 <b>절대 안 줄어요</b> (칩 많아 손해 없음). <b>계단 ↗</b> → 넘어가는 지점을 <b>이분탐색</b>할 수 있어요.</>)}
-      </Say>
-      <div style={{ maxWidth: 460, margin: "0 auto", display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap", alignItems: "flex-end", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800, color: "#94a3b8" }}>
-        {["0", "1", "2", "3", "…", "10¹⁸"].map((x, i) => (
-          <div key={i} style={{ padding: "6px 9px", borderRadius: 8, border: "1.5px dashed #cbd5e1", background: s.kind === "brute" ? "#fff" : "#f8fafc", opacity: s.kind === "why" && i < 5 ? 0.4 : 1 }}>{x}</div>
-        ))}
-      </div>
-      <div style={{ marginTop: 24 }}>
-        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
-      </div>
-    </div>
-  );
-}
-
 /* ═══ ⑥ 계획 — 코드 짜는 순서 (코드 전에 말로) ═══ */
 export function PlanSlide({ E }) {
   return (
