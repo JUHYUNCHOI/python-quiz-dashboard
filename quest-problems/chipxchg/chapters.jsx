@@ -29,7 +29,7 @@ function ChipXchgSample({ E }) {
           </div>
         </div>
       </div>
-      <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+      <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7, wordBreak: "keep-all", textWrap: "balance" }}>
         <div style={{ fontWeight: 700, color: "#1e3a8a", marginBottom: 6 }}>🔍 {t(E, "Line by line", "한 줄씩")}</div>
         <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>2</code> — {t(E, "T = 2 test cases", "T = 2 (테스트 2개)")}</div>
         <div style={{ marginTop: 4 }}>
@@ -42,11 +42,11 @@ function ChipXchgSample({ E }) {
           {t(E, "Output = fewest extra chips ", "출력 = 필요한 최소 추가 칩 ")}<b>x</b>{t(E, " that reaches the goal no matter how the trickster splits.", " — 심술쟁이가 어떻게 나눠도 목표 도달.")}
         </div>
       </div>
-      <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #93c5fd", borderRadius: 10, padding: "8px 12px", fontSize: 11.5, color: C.text, lineHeight: 1.6, wordBreak: "keep-all" }}>
+      <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #93c5fd", borderRadius: 10, padding: "8px 12px", fontSize: 11.5, color: C.text, lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance" }}>
         <div><b style={{ color: "#2563eb" }}>{t(E, "Test 1", "테스트 1")}</b> {t(E, "(A=2,B=3,cA=cB=1,fA=4): every blue → a red, already have 2+3=5 ≥ 4 → ", "(A=2,B=3,cA=cB=1,fA=4): 파랑 하나가 빨강 하나로, 이미 2+3=5 ≥ 4 → ")}<b style={{ color: "#15803d" }}>x = 0</b></div>
         <div style={{ marginTop: 3 }}><b style={{ color: "#2563eb" }}>{t(E, "Test 2", "테스트 2")}</b> {t(E, "(A=0,B=0,cA=2,cB=3,fA=5): trickster wastes blue → need ", "(A=0,B=0,cA=2,cB=3,fA=5): 심술쟁이가 파랑을 낭비 → ")}<b style={{ color: "#15803d" }}>x = 9</b> {t(E, "(we'll see why!)", "(왜인지 곧!)")}</div>
       </div>
-      <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all" }}>
+      <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
         {t(E, "📌 Up to 10⁴ tests · answer can reach 10¹⁸ → use 64-bit.", "📌 테스트 최대 10⁴ · 답이 10¹⁸ 까지 → 64비트 필요.")}
       </div>
     </div>
