@@ -205,77 +205,75 @@ export function AdversarySim({ E }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SearchSim — 바깥 루프: x = 0,1,2,… 를 차례로 훑으며 각 x 의 최악 f(x)
-   (AdversarySim 이 한 x 에서 구한 그 값) 를 계단으로 쌓아, 목표에 처음 닿는 x 를 찾음.
-   f(x) 는 안 줄어듦(계단) → 이분탐색으로 콕. 답 x=9.
+   SearchSim — 실제 해법: 이분탐색. worst(x) 가 계단(안 줄어듦)이라
+   범위 [lo,hi] 를 mid 로 반씩 줄여 목표에 처음 닿는 x 를 콕. (다 안 봄)
    ═══════════════════════════════════════════════════════════════ */
 export function SearchSim({ E }) {
-  const cA = 2, cB = 3, fA = 5;
+  const cA = 2, cB = 3, fA = 5, HI0 = 12;
   const worst = (x) => { let m = Infinity; for (let b = 0; b <= x; b++) m = Math.min(m, (x - b) + Math.floor(b / cB) * cA); return m; };
-  const XS = Array.from({ length: 10 }, (_, x) => ({ x, v: worst(x) })); // x=0..9
-  const firstOk = XS.find((d) => d.v >= fA)?.x;               // 9
-  const maxV = Math.max(fA, ...XS.map((d) => d.v)) + 1;        // headroom
-  const steps = [{ kind: "intro" }, ...XS.map((d) => ({ kind: "x", x: d.x })), { kind: "search" }];
+  const XS = Array.from({ length: HI0 + 1 }, (_, x) => ({ x, v: worst(x) }));
+  // 이분탐색 발자취 (worst(x) ≥ fA 인 가장 작은 x)
+  const trace = []; { let lo = 0, hi = HI0; while (lo < hi) { const mid = Math.floor((lo + hi) / 2); const v = worst(mid); const ok = v >= fA; trace.push({ lo, hi, mid, v, ok }); if (ok) hi = mid; else lo = mid + 1; } }
+  let _lo = 0, _hi = HI0; while (_lo < _hi) { const mid = Math.floor((_lo + _hi) / 2); if (worst(mid) >= fA) _hi = mid; else _lo = mid + 1; } const ANS = _lo;
+
+  const steps = [{ kind: "why" }, ...trace.map((_, i) => ({ kind: "probe", i })), { kind: "done" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
 
-  const curX = s.kind === "x" ? s.x : s.kind === "search" ? 9 : -1;
-  const cur = curX >= 0 ? XS[curX] : null;
-  const reached = cur && cur.v >= fA;
-  const firstReach = s.kind === "x" && cur.x === firstOk;
+  const pr = s.kind === "probe" ? trace[s.i] : null;
+  const lo = pr ? pr.lo : (s.kind === "done" ? ANS : 0);
+  const hi = pr ? pr.hi : (s.kind === "done" ? ANS : HI0);
+  const mid = pr ? pr.mid : -1;
+  const H = 96;
+  const maxV = Math.max(...XS.map((d) => d.v)) + 1;
 
   const say =
-    s.kind === "intro"
-      ? t(E, <>Now the real question: the <b>fewest x</b>. For each x, the trickster's worst gives <b>f(x)</b> (just like we counted). Sweep <b>x = 0, 1, 2, …</b> and watch where f(x) first reaches goal <b>{fA}</b>.</>,
-             <>이제 진짜 질문 — <b>최소 x</b>. 각 x 마다 심술쟁이 최악이 <b>f(x)</b> 예요 (방금 센 그 값). <b>x = 0, 1, 2, …</b> 를 훑으며 f(x) 가 목표 <b>{fA}</b> 에 처음 닿는 곳을 봐요.</>)
-      : s.kind === "search"
-      ? t(E, <>Notice f(x) <b>never drops</b> — more chips can't hurt (dump extras on red). A <b>staircase ↗</b>. So we don't test every x — <b>binary search</b> jumps to the first one. Answer <b>x = {firstOk}</b>. (x can be up to ~10¹⁸)</>,
-             <>보세요 — f(x) 는 <b>절대 안 줄어요</b> (칩 많아져 손해는 없으니, 남는 건 빨강에). <b>계단 ↗</b>. 그래서 모든 x 를 안 돌고 <b>이분탐색</b>으로 처음 닿는 x 를 콕 집어요. 답 <b>x = {firstOk}</b>. (x 는 최대 ~10¹⁸)</>)
-      : firstReach
-      ? t(E, <><b>x = {cur.x}</b>: worst f = <b style={{color:"#15803d"}}>{cur.v}</b> ≥ goal {fA} — <b style={{color:"#15803d"}}>reached ✓</b>. This is the first x that always wins.</>,
-             <><b>x = {cur.x}</b>: 최악 f = <b style={{color:"#15803d"}}>{cur.v}</b> ≥ 목표 {fA} — <b style={{color:"#15803d"}}>도달 ✓</b>. 어떻게 나눠도 이기는 첫 x 예요.</>)
-      : t(E, <>x = {cur.x}: worst f = <b>{cur.v}</b> {cur.v >= fA ? <>≥ {fA} ✓</> : <>&lt; {fA} — <b style={{color:"#dc2626"}}>still not enough ✗</b></>}</>,
-             <>x = {cur.x}: 최악 f = <b>{cur.v}</b> {cur.v >= fA ? <>≥ {fA} ✓</> : <>&lt; {fA} — <b style={{color:"#dc2626"}}>아직 부족 ✗</b></>}</>);
-
-  const H = 130;
-  const showUpTo = s.kind === "search" ? 9 : curX;
+    s.kind === "why"
+      ? t(E, <><b>worst(x)</b> never drops as x grows — a <b>staircase ↗</b>. So instead of trying all x (up to 10¹⁸!), <b>binary-search</b>: halve the range each step.</>,
+             <><b>worst(x)</b> 는 x 가 커질수록 안 줄어요 — <b>계단 ↗</b>. 그래서 모든 x(최대 10¹⁸!)를 안 보고 <b>이분탐색</b> — 범위를 매번 반씩 줄여요.</>)
+      : s.kind === "done"
+      ? t(E, <>Range shrank to one — <b style={{color:"#15803d"}}>answer x = {ANS}</b>. Found in just <b>{trace.length} checks</b>, not 0…{HI0} all.</>,
+             <>범위가 하나로 좁혀졌어요 — <b style={{color:"#15803d"}}>답 x = {ANS}</b>. 0~{HI0} 다 안 보고 <b>{trace.length}번</b> 확인으로 끝!</>)
+      : t(E,
+          <>Range <b>[{pr.lo} … {pr.hi}]</b>. Check middle <b>mid={pr.mid}</b>: worst={pr.v} {pr.ok
+            ? <><span style={NW}>≥ {fA} ✓</span> → answer is here or left, <b>hi={pr.mid}</b></>
+            : <><span style={NW}>&lt; {fA} ✗</span> → answer is to the right, <b>lo={pr.mid + 1}</b></>}.</>,
+          <>범위 <b>[{pr.lo} … {pr.hi}]</b>. 가운데 <b>mid={pr.mid}</b> 확인: worst={pr.v} {pr.ok
+            ? <><span style={NW}>≥ {fA} ✓</span> → 답은 여기거나 왼쪽, <b>hi={pr.mid}</b></>
+            : <><span style={NW}>&lt; {fA} ✗</span> → 답은 오른쪽, <b>lo={pr.mid + 1}</b></>}.</>);
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Sweep x — find the smallest that wins", "x 를 훑어 — 이기는 가장 작은 x")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "Binary-search the smallest x", "가장 작은 x 를 이분탐색")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
-        {t(E, "3 blue → 2 red · goal 5 · f(x) = trickster's worst", "파랑 3 → 빨강 2 · 목표 5 · f(x) = 심술쟁이 최악")}
+        {t(E, "goal 5 · worst(x) = trickster's worst · ✓ means worst ≥ 5", "목표 5 · worst(x) = 심술쟁이 최악 · ✓ = worst ≥ 5")}
       </div>
-      <Say tone={s.kind === "search" ? "aha" : firstReach ? "aha" : "go"}>{say}</Say>
+      <Say tone={s.kind === "done" ? "aha" : s.kind === "why" ? "go" : (pr && pr.ok ? "aha" : "stuck")}>{say}</Say>
 
-      {/* f(x) 계단 막대 — x' <= showUpTo 만 노출 */}
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 8, height: H + 24, position: "relative", maxWidth: 500, margin: "0 auto" }}>
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: (fA / maxV) * H + 20, borderTop: "2px dashed #dc2626", zIndex: 2 }}>
-          <span style={{ position: "absolute", right: 0, top: -15, fontSize: 10, fontWeight: 800, color: "#dc2626" }}>{t(E, `goal ${fA}`, `목표 ${fA}`)}</span>
-        </div>
+      {/* 숫자 줄 0..12 — 범위 [lo,hi] 안만 진하게, mid 강조, worst 값 위에 */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 2, maxWidth: 490, margin: "0 auto", flexWrap: "nowrap" }}>
         {XS.map((d) => {
-          const shown = d.x <= showUpTo;
-          const ok = d.v >= fA, first = d.x === firstOk;
-          const isCur = s.kind === "x" && d.x === curX;
+          const inRange = d.x >= lo && d.x <= hi;
+          const isMid = d.x === mid;
+          const isAns = s.kind === "done" && d.x === ANS;
+          const ok = d.v >= fA;
           return (
-            <div key={d.x} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, opacity: shown ? 1 : 0.2, transition: "all .15s" }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: shown ? (ok ? "#15803d" : "#64748b") : "#cbd5e1" }}>{shown ? d.v : ""}</div>
-              <div style={{ width: 30, height: shown ? (d.v / maxV) * H + 2 : 2, borderRadius: "4px 4px 0 0",
-                background: !shown ? "#e2e8f0" : first ? "#15803d" : ok ? "#86efac" : "#bfdbfe",
-                boxShadow: isCur ? "0 0 0 3px #fde68a" : "none", transition: "all .18s" }} />
-              <div style={{ fontSize: 11, fontWeight: (isCur || first) ? 800 : 600, color: first ? "#15803d" : isCur ? "#b45309" : "#94a3b8", fontFamily: "'JetBrains Mono',monospace" }}>{d.x}</div>
+            <div key={d.x} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, width: 34, opacity: inRange ? 1 : 0.25, transition: "all .15s" }}>
+              <div style={{ fontSize: 10, fontWeight: 800, color: ok ? "#15803d" : "#94a3b8" }}>{d.v}</div>
+              <div style={{ width: 26, height: 26, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 12, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+                background: isAns ? "#15803d" : isMid ? "#fef3c7" : ok ? "#dcfce7" : "#eff6ff",
+                border: isAns ? "2px solid #15803d" : isMid ? "2px solid #d97706" : "1px solid #e2e8f0",
+                color: isAns ? "#fff" : isMid ? "#b45309" : ok ? "#15803d" : "#475569" }}>{d.x}</div>
+              <div style={{ height: 26 }}>
+                {isMid && <div style={{ fontSize: 9, fontWeight: 800, color: "#b45309", textAlign: "center" }}>▲<br/>mid</div>}
+                {!isMid && d.x === lo && s.kind !== "done" && <div style={{ fontSize: 9, fontWeight: 800, color: "#2563eb" }}>lo</div>}
+                {!isMid && d.x === hi && d.x !== lo && s.kind !== "done" && <div style={{ fontSize: 9, fontWeight: 800, color: "#2563eb" }}>hi</div>}
+              </div>
             </div>
           );
         })}
       </div>
-      <div style={{ textAlign: "center", fontSize: 10.5, color: "#94a3b8", marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>x →</div>
-
-      {s.kind === "search" && (
-        <div style={{ maxWidth: 460, margin: "12px auto 0", background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 12.5, color: "#065f46", lineHeight: 1.7, wordBreak: "keep-all", textAlign: "center", fontWeight: 700 }}>
-          {t(E, <>Staircase ↗ → <b>binary search</b> → answer <b>x = {firstOk}</b></>,
-               <>계단 ↗ → <b>이분탐색</b> → 답 <b>x = {firstOk}</b></>)}
-        </div>
-      )}
 
       <div style={{ marginTop: 24 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
