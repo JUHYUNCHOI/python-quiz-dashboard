@@ -395,3 +395,150 @@ export function GameBoardSim({ E }) {
     </div>
   );
 }
+
+/* 작은 카드(전략/계획 슬라이드용) */
+function Slab({ n, color, bg, title, children }) {
+  return (
+    <div style={{ display: "flex", gap: 10, alignItems: "flex-start", background: bg, border: `1.5px solid ${color}`, borderRadius: 12, padding: "12px 14px", marginBottom: 10 }}>
+      {n != null && <div style={{ flexShrink: 0, minWidth: 26, height: 26, padding: "0 6px", borderRadius: 999, background: color, color: "#fff", fontWeight: 800, fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center" }}>{n}</div>}
+      <div style={{ fontSize: 12.5, color: "#334155", lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance" }}>
+        {title && <div style={{ fontWeight: 800, color, marginBottom: 3 }}>{title}</div>}
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/* ═══ ② 이해 확인 — '우리가 뭘 구하는가'를 스스로 확인 (predict→reveal) ═══ */
+export function CheckSim({ E }) {
+  const steps = [{ kind: "ask" }, { kind: "reveal" }];
+  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const opts = [
+    t(E, "A. the final number of red chips", "A. 최종 빨강 칩 개수"),
+    t(E, "B. the fewest extra chips that guarantee the goal", "B. 목표를 보장하는 가장 적은 추가 칩 개수"),
+    t(E, "C. how many times we swap blue for red", "C. 파랑을 빨강으로 몇 번 바꾸는지"),
+  ];
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Quick check — did I get it?", "잠깐 확인 — 제대로 이해했나?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Say tone={s.kind === "reveal" ? "aha" : "go"}>
+        {s.kind === "ask"
+          ? t(E, <>What number do we actually <b>print</b> for each test? Pick one, then flip.</>,
+                 <>각 테스트에서 우리가 실제로 <b>출력</b>하는 숫자는 뭘까요? 하나 고르고 넘겨봐요.</>)
+          : t(E, <>It's <b>B</b> — the fewest extra chips so that <b>however the trickster splits them</b>, we still reach the goal. (Not the final red count!)</>,
+                 <>정답은 <b>B</b> — <b>심술쟁이가 어떻게 나눠도</b> 목표를 채우는 가장 적은 추가 칩 개수예요. (최종 빨강 개수가 아니에요!)</>)}
+      </Say>
+      <div style={{ maxWidth: 440, margin: "0 auto", display: "flex", flexDirection: "column", gap: 8 }}>
+        {opts.map((o, i) => {
+          const isB = i === 1, lit = s.kind === "reveal" && isB;
+          return (
+            <div key={i} style={{ padding: "10px 14px", borderRadius: 10, fontSize: 12.5, fontWeight: 700, wordBreak: "keep-all",
+              background: lit ? "#dcfce7" : "#f8fafc", border: lit ? "2px solid #16a34a" : "1px solid #e2e8f0",
+              color: lit ? "#15803d" : "#475569" }}>{o}{lit ? "  ✓" : ""}</div>
+          );
+        })}
+      </div>
+      <div style={{ marginTop: 24 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}
+
+/* ═══ ③ 전략 — 어떻게 풀지 큰 그림 + 두 하위 질문 ═══ */
+export function StrategySlide({ E }) {
+  const steps = [{ kind: "plan" }, { kind: "two" }];
+  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "How will we solve it?", "어떻게 풀까?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Say>
+        {s.kind === "plan"
+          ? t(E, <>We can't read off the answer. So we <b>test a candidate</b> count x.</>,
+                 <>답을 바로 못 읽어내요. 그러니 후보 개수 x 를 <b>하나 정해서 시험</b>해요.</>)
+          : t(E, <>The whole plan needs just <b>two things</b>:</>, <>이 계획은 딱 <b>두 가지</b>만 해결하면 돼요:</>)}
+      </Say>
+      {s.kind === "plan" ? (
+        <div style={{ maxWidth: 470, margin: "0 auto" }}>
+          <Slab n="1" color="#2563eb" bg="#eff6ff">{t(E, <>Pick an extra-chip count <b>x</b>.</>, <>추가 칩 개수 <b>x</b> 를 하나 정해요.</>)}</Slab>
+          <Slab n="2" color="#dc2626" bg="#fef2f2">{t(E, <>Let the trickster split those x chips the <b>worst</b> way → count my final red.</>, <>심술쟁이가 그 x 개를 <b>최악</b>으로 나눴을 때 최종 빨강을 세요.</>)}</Slab>
+          <Slab n="3" color="#15803d" bg="#f0fdf4">{t(E, <>Does it still reach the goal? The <b>smallest x</b> that does = the answer.</>, <>그래도 목표를 넘나요? 넘는 <b>가장 작은 x</b> = 답.</>)}</Slab>
+        </div>
+      ) : (
+        <div style={{ maxWidth: 470, margin: "0 auto" }}>
+          <Slab n="①" color="#dc2626" bg="#fef2f2" title={t(E, "For one x, what's the trickster's WORST?", "한 x 에서 심술쟁이 '최악'은?")}>
+            {t(E, "→ next: count a pile (Counting red) + the trickster (Worst split).", "→ 다음: 환전 세기 + 심술쟁이 시뮬로 구해요.")}
+          </Slab>
+          <Slab n="②" color="#2563eb" bg="#eff6ff" title={t(E, "How to find that x FAST?", "그 x 를 어떻게 빨리 찾지?")}>
+            {t(E, "→ next: sweep x, spot the staircase, binary-search (Find x).", "→ 다음: x 를 훑어 계단을 발견 → 이분탐색 (답 찾기).")}
+          </Slab>
+        </div>
+      )}
+      <div style={{ marginTop: 24 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}
+
+/* ═══ ④ 브루트 한계 → 재전략 다리 ═══ */
+export function BruteLimitSlide({ E }) {
+  const steps = [{ kind: "brute" }, { kind: "why" }];
+  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Can't we just try every x?", "모든 x 를 다 해보면 안 될까?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Say tone={s.kind === "brute" ? "stuck" : "aha"}>
+        {s.kind === "brute"
+          ? t(E, <>We could check x = 0, 1, 2, 3, … one by one. But the answer can reach <b>10¹⁸</b> — <b>way too many to try ✗</b>.</>,
+                 <>x = 0, 1, 2, 3, … 하나씩 확인할 수 있죠. 근데 답이 <b>10¹⁸</b> 까지 갈 수 있어요 — <b>다 해보긴 너무 많아 ✗</b>.</>)
+          : t(E, <>Good news: the trickster's worst f(x) <b>never drops</b> as x grows (more chips can't hurt). A <b>staircase ↗</b> → we can <b>binary-search</b> the jump.</>,
+                 <>다행: 심술쟁이 최악 f(x) 는 x 가 커져도 <b>절대 안 줄어요</b> (칩 많아 손해 없음). <b>계단 ↗</b> → 넘어가는 지점을 <b>이분탐색</b>할 수 있어요.</>)}
+      </Say>
+      <div style={{ maxWidth: 460, margin: "0 auto", display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap", alignItems: "flex-end", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800, color: "#94a3b8" }}>
+        {["0", "1", "2", "3", "…", "10¹⁸"].map((x, i) => (
+          <div key={i} style={{ padding: "6px 9px", borderRadius: 8, border: "1.5px dashed #cbd5e1", background: s.kind === "brute" ? "#fff" : "#f8fafc", opacity: s.kind === "why" && i < 5 ? 0.4 : 1 }}>{x}</div>
+        ))}
+      </div>
+      <div style={{ marginTop: 24 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}
+
+/* ═══ ⑥ 계획 — 코드 짜는 순서 (코드 전에 말로) ═══ */
+export function PlanSlide({ E }) {
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ fontSize: 14, fontWeight: 800, color: "#1e3a8a", textAlign: "center", marginBottom: 4 }}>
+        📝 {t(E, "The plan — before any code", "계획 — 코드 짜기 전에 말로")}
+      </div>
+      <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 12, wordBreak: "keep-all", textWrap: "balance" }}>
+        {t(E, "We turn the strategy into steps we can code.", "전략을 코드로 옮길 순서로 바꿔요.")}
+      </div>
+      <div style={{ maxWidth: 480, margin: "0 auto" }}>
+        <Slab n="1" color="#dc2626" bg="#fef2f2" title={<code>worst(x)</code>}>
+          {t(E, <>final red when the trickster splits x chips the worst way (dump into blue, waste leftovers).</>,
+               <>추가 x 개를 심술쟁이가 최악으로 나눴을 때 최종 빨강 (파랑에 몰아 자투리 낭비).</>)}
+        </Slab>
+        <Slab n="2" color="#15803d" bg="#f0fdf4" title={<code>ok(x) = worst(x) ≥ f_A ?</code>}>
+          {t(E, <>true once x is big enough — and it stays true (staircase).</>,
+               <>x 가 충분히 크면 참 — 한 번 참이면 계속 참 (계단).</>)}
+        </Slab>
+        <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "binary-search the smallest x with ok(x)", "ok(x) 가 처음 참 되는 가장 작은 x 이분탐색")}>
+          {t(E, <>jump straight to the answer instead of trying all x.</>, <>모든 x 를 안 돌고 답으로 바로 점프.</>)}
+        </Slab>
+        <Slab n="4" color="#7c3aed" bg="#f5f3ff" title={t(E, "print that x for each test", "테스트마다 그 x 를 출력")}>
+          {t(E, <>use 64-bit — the answer can reach 10¹⁸.</>, <>64비트 쓰기 — 답이 10¹⁸ 까지.</>)}
+        </Slab>
+      </div>
+      <div style={{ marginTop: 12, textAlign: "center", fontSize: 12, fontWeight: 800, color: "#15803d", wordBreak: "keep-all", textWrap: "balance" }}>
+        {t(E, "→ Now the code (next chapter) follows exactly these 4 steps.", "→ 이제 코드(다음 챕터)는 이 4 단계 그대로예요.")}
+      </div>
+    </div>
+  );
+}

@@ -1,50 +1,81 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim } from "./sims";
+import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim, CheckSim, StrategySlide, BruteLimitSlide, PlanSlide } from "./sims";
 
 const A = "#2563eb";
 
-/* 샘플 입출력 — mooin3 모양 (구체 숫자 + 한 줄씩). */
+/* 숫자 하나 + 그 아래 바로 라벨·뜻 (봐야 할 곳에 설명) */
+function AnnTok({ v, label, ko, color, bg }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, width: 62 }}>
+      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 17, fontWeight: 800, color, background: bg,
+        border: `1.5px solid ${color}`, borderRadius: 8, width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center" }}>{v}</div>
+      <div style={{ fontSize: 10, fontWeight: 800, color, fontFamily: "'JetBrains Mono',monospace" }}>{label}</div>
+      <div style={{ fontSize: 9.5, fontWeight: 700, color: "#475569", wordBreak: "keep-all", textAlign: "center", lineHeight: 1.2 }}>{ko}</div>
+    </div>
+  );
+}
+
+/* 한 테스트 = 입력 숫자(주석 달림) → 출력 + 한 줄 이유 */
+function ChipXchgTestCard({ E, n, toks, out, reason }) {
+  return (
+    <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, padding: "10px 12px 12px" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8, flexWrap: "wrap", gap: 6 }}>
+        <span style={{ fontSize: 12, fontWeight: 800, color: "#1e3a8a" }}>{t(E, `Test ${n}`, `테스트 ${n}`)}</span>
+        <span style={{ fontSize: 11.5, fontWeight: 700, color: "#166534" }}>
+          {t(E, "output ", "출력 ")}<b style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, color: "#15803d" }}>{out}</b>
+        </span>
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap" }}>
+        {toks.map((tk, i) => <AnnTok key={i} {...tk} />)}
+      </div>
+      <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px dashed #e2e8f0", fontSize: 11.5, color: C.text, lineHeight: 1.55, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>{reason}</div>
+    </div>
+  );
+}
+
+/* 샘플 입출력 — 입력 숫자마다 뜻을 바로 아래 붙임 (CodeWalk 원칙). */
 function ChipXchgSample({ E }) {
+  const RED = "#dc2626", RBG = "#fef2f2", BLU = "#2563eb", BBG = "#eff6ff",
+        CY = "#0891b2", CBG = "#ecfeff", GR = "#15803d", GBG = "#f0fdf4";
+  const test1 = [
+    { v: "2", label: "A", ko: t(E, "start red", "시작 빨강"), color: RED, bg: RBG },
+    { v: "3", label: "B", ko: t(E, "start blue", "시작 파랑"), color: BLU, bg: BBG },
+    { v: "1", label: "c_A", ko: t(E, "swap→red", "환전: 받는 빨강"), color: CY, bg: CBG },
+    { v: "1", label: "c_B", ko: t(E, "swap: blue in", "환전: 내는 파랑"), color: CY, bg: CBG },
+    { v: "4", label: "f_A", ko: t(E, "goal red", "목표 빨강"), color: GR, bg: GBG },
+  ];
+  const test2 = [
+    { v: "0", label: "A", ko: t(E, "start red", "시작 빨강"), color: RED, bg: RBG },
+    { v: "0", label: "B", ko: t(E, "start blue", "시작 파랑"), color: BLU, bg: BBG },
+    { v: "2", label: "c_A", ko: t(E, "swap→red", "환전: 받는 빨강"), color: CY, bg: CBG },
+    { v: "3", label: "c_B", ko: t(E, "swap: blue in", "환전: 내는 파랑"), color: CY, bg: CBG },
+    { v: "5", label: "f_A", ko: t(E, "goal red", "목표 빨강"), color: GR, bg: GBG },
+  ];
   return (
     <div style={{ padding: 16 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: A, textAlign: "center", marginBottom: 10 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: A, textAlign: "center", marginBottom: 8 }}>
         📥 {t(E, "Input / Output Format", "입력 / 출력 형식")}
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 10, marginBottom: 10 }}>
-        <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
-{`2
-2 3 1 1 4
-0 0 2 3 5`}
-          </div>
-        </div>
-        <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>
-{`0
-9`}
-          </div>
-        </div>
+      {/* 첫 줄 = T */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 12, wordBreak: "keep-all" }}>
+        <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, fontWeight: 800, color: "#7c3aed", background: "#f5f3ff",
+          border: "1.5px solid #7c3aed", borderRadius: 8, width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center" }}>2</div>
+        <span style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6" }}>{t(E, "first line = T (number of tests)", "첫 줄 = T (테스트 개수)")}</span>
       </div>
-      <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7, wordBreak: "keep-all", textWrap: "balance" }}>
-        <div style={{ fontWeight: 700, color: "#1e3a8a", marginBottom: 6 }}>🔍 {t(E, "Line by line", "한 줄씩")}</div>
-        <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>2</code> — {t(E, "T = 2 test cases", "T = 2 (테스트 2개)")}</div>
-        <div style={{ marginTop: 4 }}>
-          {t(E, "Each test: ", "각 테스트: ")}
-          <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>A B c_A c_B f_A</code>
-          {" — "}
-          {t(E, "start red / start blue / swap out / swap in / goal red.", "시작 빨강 / 시작 파랑 / 환전 나오는 수 / 환전 내는 수 / 목표 빨강.")}
-        </div>
-        <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #93c5fd" }}>
-          {t(E, "Output = fewest extra chips ", "출력 = 필요한 최소 추가 칩 ")}<b>x</b>{t(E, " that reaches the goal no matter how the trickster splits.", " — 심술쟁이가 어떻게 나눠도 목표 도달.")}
-        </div>
+      {/* 각 테스트: 숫자마다 뜻이 바로 아래 */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <ChipXchgTestCard E={E} n={1} toks={test1} out="0"
+          reason={t(E, <>1 blue → 1 red, and I already have 2+3=5 <b style={{color:"#15803d"}}>≥ goal 4</b> → <b style={{color:"#15803d"}}>0 extra</b>.</>,
+                       <>파랑 1개가 빨강 1개, 이미 2+3=5 <b style={{color:"#15803d"}}>≥ 목표 4</b> → <b style={{color:"#15803d"}}>추가 0개</b>.</>)} />
+        <ChipXchgTestCard E={E} n={2} toks={test2} out="9"
+          reason={t(E, <>Start empty; the trickster wastes blue → need <b style={{color:"#15803d"}}>9 extra</b> <span style={{color:"#94a3b8"}}>(we'll see why!)</span></>,
+                       <>빈손 시작인데 심술쟁이가 파랑을 낭비 → <b style={{color:"#15803d"}}>추가 9개</b> 필요 <span style={{color:"#94a3b8"}}>(왜인지 곧!)</span></>)} />
       </div>
-      <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #93c5fd", borderRadius: 10, padding: "8px 12px", fontSize: 11.5, color: C.text, lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance" }}>
-        <div><b style={{ color: "#2563eb" }}>{t(E, "Test 1", "테스트 1")}</b> {t(E, "(A=2,B=3,cA=cB=1,fA=4): every blue → a red, already have 2+3=5 ≥ 4 → ", "(A=2,B=3,cA=cB=1,fA=4): 파랑 하나가 빨강 하나로, 이미 2+3=5 ≥ 4 → ")}<b style={{ color: "#15803d" }}>x = 0</b></div>
-        <div style={{ marginTop: 3 }}><b style={{ color: "#2563eb" }}>{t(E, "Test 2", "테스트 2")}</b> {t(E, "(A=0,B=0,cA=2,cB=3,fA=5): trickster wastes blue → need ", "(A=0,B=0,cA=2,cB=3,fA=5): 심술쟁이가 파랑을 낭비 → ")}<b style={{ color: "#15803d" }}>x = 9</b> {t(E, "(we'll see why!)", "(왜인지 곧!)")}</div>
+      {/* 출력 뜻 */}
+      <div style={{ marginTop: 10, background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "9px 12px", fontSize: 12, color: C.text, lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
+        {t(E, "Output = fewest extra chips ", "출력 = 필요한 최소 추가 칩 ")}<b>x</b>{t(E, " that reaches the goal no matter how the trickster splits.", " — 심술쟁이가 어떻게 나눠도 목표 도달.")}
       </div>
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
         {t(E, "📌 Up to 10⁴ tests · answer can reach 10¹⁸ → use 64-bit.", "📌 테스트 최대 10⁴ · 답이 10¹⁸ 까지 → 64비트 필요.")}
@@ -69,39 +100,75 @@ export function makeChipXchgCh1(E) {
       content: (<GameBoardSim E={E} />),
     },
 
-    // [승] 샘플 입출력
+    // [승] 샘플 입출력 — 입력 숫자마다 뜻이 바로 아래
     {
       type: "reveal",
       label: t(E, "Sample I/O", "샘플 입출력"),
-      narr: t(E, "Two concrete tests — and the answers we must print.", "구체적인 테스트 두 개 — 그리고 우리가 출력할 답."),
+      narr: t(E, "Two concrete tests — each input number labeled right under it.", "구체적인 테스트 두 개 — 입력 숫자마다 뜻이 바로 아래."),
       content: (<ChipXchgSample E={E} />),
     },
 
-    // [전] 환전 계산 — 최종 A 공식
+    // [승] ② 이해 확인 — 우리가 뭘 구하는지 자가 확인
     {
       type: "reveal",
-      label: t(E, "Counting red chips", "빨강 칩 세기"),
-      narr: t(E, "First — if I hold some red and some blue, how many red do I end with? Group the blue.",
-                 "먼저 — 빨강 약간, 파랑 약간이면 최종 빨강은 몇 개? 파랑을 묶어봐요."),
+      label: t(E, "Quick check", "이해 확인"),
+      narr: t(E, "Before strategy — check you know what we're actually asked to print.",
+                 "전략 전에 — 우리가 뭘 출력하는 건지 스스로 확인해봐요."),
+      content: (<CheckSim E={E} />),
+    },
+
+    // [전] ③ 전략 — 어떻게 풀지 큰 그림 + 두 하위 질문
+    {
+      type: "reveal",
+      label: t(E, "Strategy", "전략"),
+      narr: t(E, "The plan: test a candidate x, and it splits into two questions.",
+                 "계획 — 후보 x 를 시험해요. 이게 두 가지 질문으로 갈려요."),
+      content: (<StrategySlide E={E} />),
+    },
+
+    // [전] 도구 ①-a: 환전 계산 (최악 계산의 기초)
+    {
+      type: "reveal",
+      label: t(E, "Tool ①a: counting red", "도구 ①a: 환전 세기"),
+      narr: t(E, "Question ①, part a — given a pile, how many red do I end with? Group the blue; leftovers waste.",
+                 "질문 ① 의 준비 — 어떤 더미면 최종 빨강 몇 개? 파랑을 묶고, 자투리는 버려요."),
       content: (<ChipCountSim E={E} />),
     },
 
-    // [전] 심술쟁이 — 최악 분배
+    // [전] 도구 ①-b: 심술쟁이 최악 (한 x)
     {
       type: "reveal",
-      label: t(E, "The trickster", "심술쟁이"),
-      narr: t(E, "Why is this tricky? The trickster splits the extra chips to make my final red as small as possible.",
-                 "왜 어렵냐면 — 심술쟁이가 추가 칩을 내 최종 빨강이 최소가 되게 나눠요."),
+      label: t(E, "Tool ①b: worst split", "도구 ①b: 심술쟁이 최악"),
+      narr: t(E, "Question ① — for one x, try every split; the trickster picks the worst.",
+                 "질문 ① — 한 x 에서 모든 분배를 따져 심술쟁이가 최악을 골라요."),
       content: (<AdversarySim E={E} />),
     },
 
-    // [전/결] 답 찾기 — 이분탐색
+    // [전] ④ 브루트 한계 → 재전략(계단)
+    {
+      type: "reveal",
+      label: t(E, "Why not try all x", "브루트 한계"),
+      narr: t(E, "Question ② — trying every x is too slow. But the worst case is a staircase.",
+                 "질문 ② — 모든 x 를 다 해보면 느려요. 근데 최악이 계단이에요."),
+      content: (<BruteLimitSlide E={E} />),
+    },
+
+    // [결] ⑤ 답 찾기 — 이분탐색으로 최소 x
     {
       type: "reveal",
       label: t(E, "Find x: binary search", "답 찾기: 이분탐색"),
-      narr: t(E, "The worst-case result only grows as x grows — so we binary-search the smallest x that reaches the goal.",
-                 "최악 결과는 x 가 커질수록 커지기만 해요 — 그래서 목표에 닿는 가장 작은 x 를 이분탐색해요."),
+      narr: t(E, "Sweep x to see the staircase, then binary-search the smallest x that reaches the goal.",
+                 "x 를 훑어 계단을 보고, 목표에 처음 닿는 가장 작은 x 를 이분탐색해요."),
       content: (<SearchSim E={E} />),
+    },
+
+    // [결] ⑥ 계획 — 코드 짜는 순서 (코드 전에 말로)
+    {
+      type: "reveal",
+      label: t(E, "The plan (before code)", "계획"),
+      narr: t(E, "Turn the strategy into the exact steps the code will follow.",
+                 "전략을 코드가 따라갈 순서로 정리해요 — 다음 챕터 코드가 이대로예요."),
+      content: (<PlanSlide E={E} />),
     },
   ];
 }
