@@ -11,6 +11,7 @@ import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceSteppe
 const A = "#2563eb";
 const RED = "#ef4444", REDBG = "#fef2f2";
 const BLU = "#3b82f6", BLUBG = "#eff6ff";
+const NW = { whiteSpace: "nowrap" }; // 수식·숫자단위 한 덩어리로 (읽기 좋은 줄바꿈)
 
 function Chip({ color, size = 26, faded = false, label = null }) {
   const c = color === "red" ? RED : BLU;
@@ -47,14 +48,14 @@ export function ChipCountSim({ E }) {
   const ts = useTraceStep(steps); const s = steps[ts.safe];
 
   const say =
-    s.kind === "have" ? t(E, <>I'm holding <b style={{color:RED}}>2 red (A)</b> and <b style={{color:BLU}}>7 blue (B)</b>. Exchange: <b>3 blue → 1 red</b>. How many red can I end with?</>,
-                           <>지금 <b style={{color:RED}}>빨강(A) 2개</b>, <b style={{color:BLU}}>파랑(B) 7개</b>. 환전: <b>파랑 3개 → 빨강 1개</b>. 빨강을 최대 몇 개까지?</>)
-    : s.kind === "group" ? t(E, <>Group the blue in <b>3</b>s: <b>7 = 3 + 3 + 1</b> → <b>2 full groups</b>, and <b>1 leftover</b>.</>,
-                              <>파랑을 <b>3개씩</b> 묶어요: <b>7 = 3 + 3 + 1</b> → <b>완성 묶음 2개</b>, <b>자투리 1개</b>.</>)
-    : s.kind === "convert" ? t(E, <>Each full group → <b>1 red</b>. So +2 red. The <b>leftover can't convert</b> — it's stuck.</>,
-                                <>완성 묶음마다 → <b>빨강 1개</b>. 그래서 +2 빨강. <b>자투리는 못 바꿔요</b> — 그냥 남아요.</>)
-    : t(E, <>Final red = <b>2 + 2 = 4</b>. Rule: <b>final A = A + (B ÷ cB) × cA</b> (÷ = drop leftovers).</>,
-           <>최종 빨강 = <b>2 + 2 = 4</b>. 공식: <b>최종 A = A + (B ÷ cB) × cA</b> (÷ = 자투리 버림).</>);
+    s.kind === "have" ? t(E, <>I'm holding <b style={{color:RED,...NW}}>2 red (A)</b> and <b style={{color:BLU,...NW}}>7 blue (B)</b>. Exchange: <b style={NW}>3 blue → 1 red</b>. How many red can I end with?</>,
+                           <>지금 <b style={{color:RED,...NW}}>빨강(A) 2개</b>, <b style={{color:BLU,...NW}}>파랑(B) 7개</b>. 환전: <b style={NW}>파랑 3개 → 빨강 1개</b>. 빨강을 최대 몇 개까지?</>)
+    : s.kind === "group" ? t(E, <>Group the blue in <b>3</b>s: <b style={NW}>7 = 3 + 3 + 1</b> → <b style={NW}>2 full groups</b>, and <b style={NW}>1 leftover</b>.</>,
+                              <>파랑을 <b style={NW}>3개씩</b> 묶어요: <b style={NW}>7 = 3 + 3 + 1</b> → <b style={NW}>완성 묶음 2개</b>, <b style={NW}>자투리 1개</b>.</>)
+    : s.kind === "convert" ? t(E, <>Each full group → <b style={NW}>1 red</b>. So +2 red. The <b style={NW}>leftover can't convert</b> — it's stuck.</>,
+                                <>완성 묶음마다 → <b style={NW}>빨강 1개</b>. 그래서 <b style={NW}>+2 빨강</b>. <b style={NW}>자투리는 못 바꿔요</b> — 그냥 남아요.</>)
+    : t(E, <>Final red = <b style={NW}>2 + 2 = 4</b>. Rule: <b style={NW}>final A = A + (B ÷ cB) × cA</b> (÷ = drop leftovers).</>,
+           <>최종 빨강 <b style={NW}>= 2 + 2 = 4</b>. 공식: <b style={NW}>최종 A = A + (B÷cB)×cA</b> <span style={NW}>(자투리 버림)</span>.</>);
 
   return (
     <div style={{ padding: 16 }}>
@@ -126,14 +127,14 @@ export function AdversarySim({ E }) {
 
   const say =
     s.kind === "intro"
-      ? t(E, <><b>x = 8</b> extra chips arrive. The <b>trickster</b> splits them: <b style={{color:RED}}>a red</b> + <b style={{color:BLU}}>b blue</b> (a+b=8). Which split hurts me most? Let's try <b>every b = 0…8</b> and count my final red.</>,
-             <><b>추가 칩 8개</b>가 왔어요. <b>심술쟁이</b>가 나눠요: <b style={{color:RED}}>빨강 a개</b> + <b style={{color:BLU}}>파랑 b개</b> (a+b=8). 어느 분배가 제일 나쁠까요? <b>파랑 b = 0…8</b> 을 하나씩 넣어보며 최종 빨강을 세어봐요.</>)
+      ? t(E, <>Let's test one candidate from the strategy — say <b style={NW}>x = 8</b>. What's the trickster's <b>worst</b> split? Slide <b>b</b> (blue) from 0 up.</>,
+             <>전략에서 말한 <b>후보 하나</b>를 시험해요 — 예로 <b style={NW}>x = 8</b>. 심술쟁이의 <b>최악 분배</b>는? 아래 <b>b</b>(파랑)를 0부터 늘려봐요.</>)
       : isLast
-      ? t(E, <><b>b = 8</b>: all blue = 3+3+<b>2 wasted</b> → 2 groups → <b style={{color:"#dc2626"}}>4 red</b>. This is the <b>worst</b>. 4 &lt; goal 5 → with x=8 the trickster wins <b>✗</b>.</>,
-             <><b>b = 8</b>: 다 파랑 = 3+3+<b>자투리 2 낭비</b> → 묶음 2개 → <b style={{color:"#dc2626"}}>빨강 4개</b>. 이게 <b>최악</b>이에요. 4 &lt; 목표 5 → x=8 로는 심술쟁이가 이겨요 <b>✗</b>.</>)
+      ? t(E, <><b style={NW}>b = 8</b>: all blue → <span style={NW}>2 groups + 2 wasted</span> = <b style={{color:"#dc2626",...NW}}>4 red</b>. The <b>worst</b>! <span style={NW}>4 &lt; 5</span> → <b style={NW}>x=8 not enough ✗</b>.</>,
+             <><b style={NW}>b = 8</b>: 다 파랑 → <span style={NW}>묶음 2 + 자투리 2 버림</span> = <b style={{color:"#dc2626",...NW}}>빨강 4</b>. <b>최악!</b> <span style={NW}>4 &lt; 5</span> → <b style={NW}>x=8 부족 ✗</b></>)
       : t(E,
-          <>b = {cur.b}: <b style={{color:BLU}}>{cur.b} blue</b> = {cur.g} group{cur.g!==1?"s":""} (+{cur.g*cA} red){cur.w?<>, {cur.w} wasted</>:null}, plus <b style={{color:RED}}>{cur.a} red</b> → final <b>{cur.val}</b>.{isNewMin?<> <b style={{color:"#dc2626"}}>worst so far 😈</b></>:null}</>,
-          <>b = {cur.b}: <b style={{color:BLU}}>파랑 {cur.b}</b> = 묶음 {cur.g}개(+빨강 {cur.g*cA}){cur.w?<>, 자투리 {cur.w} 낭비</>:null}, 빨강 {cur.a}는 그대로 → 최종 <b>{cur.val}</b>.{isNewMin?<> <b style={{color:"#dc2626"}}>지금까지 최악 😈</b></>:null}</>);
+          <><b style={NW}>b={cur.b}</b> · <span style={NW}><b style={{color:BLU}}>{cur.b} blue</b> → +{cur.g*cA} red{cur.w?` (${cur.w} wasted)`:""}</span> · <span style={NW}>{cur.a} red kept</span> = <b>{cur.val}</b>{isNewMin?" 😈":""}</>,
+          <><b style={NW}>b={cur.b}</b> · <span style={NW}><b style={{color:BLU}}>파랑 {cur.b}</b> → +빨강 {cur.g*cA}{cur.w?` (${cur.w} 버림)`:""}</span> · <span style={NW}>빨강 {cur.a} 그대로</span> = <b>{cur.val}</b>{isNewMin?<> <b style={{color:"#dc2626"}}>← 최악 😈</b></>:null}</>);
 
   return (
     <div style={{ padding: 16 }}>
