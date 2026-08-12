@@ -42,20 +42,21 @@ function Cap({ color, children }) {
    B 를 cB 씩 묶어 → 묶음마다 A cA 개, 자투리는 버림.
    ═══════════════════════════════════════════════════════════════ */
 export function ChipCountSim({ E }) {
-  const Anow = 2, Bnow = 7, cB = 3, cA = 1;
+  const Anow = 2, Bnow = 7, cB = 3, cA = 2;
   const groups = Math.floor(Bnow / cB), left = Bnow % cB;
+  const gain = groups * cA, total = Anow + gain;
   const steps = [{ kind: "have" }, { kind: "group" }, { kind: "convert" }, { kind: "total" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
 
   const say =
-    s.kind === "have" ? t(E, <>I'm holding <b style={{color:RED,...NW}}>2 red (A)</b> and <b style={{color:BLU,...NW}}>7 blue (B)</b>. Exchange: <b style={NW}>3 blue → 1 red</b>. How many red can I end with?</>,
-                           <>지금 <b style={{color:RED,...NW}}>빨강(A) 2개</b>, <b style={{color:BLU,...NW}}>파랑(B) 7개</b>. 환전: <b style={NW}>파랑 3개 → 빨강 1개</b>. 빨강을 최대 몇 개까지?</>)
+    s.kind === "have" ? t(E, <>I'm holding <b style={{color:RED,...NW}}>2 red (A)</b> and <b style={{color:BLU,...NW}}>7 blue (B)</b>. Exchange: <b style={NW}>3 blue → 2 red</b>. How many red can I end with?</>,
+                           <>지금 <b style={{color:RED,...NW}}>빨강(A) 2개</b>, <b style={{color:BLU,...NW}}>파랑(B) 7개</b>. 환전: <b style={NW}>파랑 3개 → 빨강 2개</b>. 빨강을 최대 몇 개까지?</>)
     : s.kind === "group" ? t(E, <>Group the blue in <b>3</b>s: <b style={NW}>7 = 3 + 3 + 1</b> → <b style={NW}>2 full groups</b>, and <b style={NW}>1 leftover</b>.</>,
                               <>파랑을 <b style={NW}>3개씩</b> 묶어요: <b style={NW}>7 = 3 + 3 + 1</b> → <b style={NW}>완성 묶음 2개</b>, <b style={NW}>자투리 1개</b>.</>)
-    : s.kind === "convert" ? t(E, <>Each full group → <b style={NW}>1 red</b>. So +2 red. The <b style={NW}>leftover can't convert</b> — it's stuck.</>,
-                                <>완성 묶음마다 → <b style={NW}>빨강 1개</b>. 그래서 <b style={NW}>+2 빨강</b>. <b style={NW}>자투리는 못 바꿔요</b> — 그냥 남아요.</>)
-    : t(E, <>Final red = <b style={NW}>2 + 2 = 4</b>. Rule: <b style={NW}>final A = A + (B ÷ cB) × cA</b> (÷ = drop leftovers).</>,
-           <>최종 빨강 <b style={NW}>= 2 + 2 = 4</b>. 공식: <b style={NW}>최종 A = A + (B÷cB)×cA</b> <span style={NW}>(자투리 버림)</span>.</>);
+    : s.kind === "convert" ? t(E, <>Each full group → <b style={NW}>2 red</b>. So <b style={NW}>+4 red</b>. The <b style={NW}>leftover can't convert</b> — it's stuck.</>,
+                                <>완성 묶음마다 → <b style={NW}>빨강 2개</b>. 그래서 <b style={NW}>+4 빨강</b>. <b style={NW}>자투리는 못 바꿔요</b> — 그냥 남아요.</>)
+    : t(E, <>Final red = <b style={NW}>2 + 4 = 6</b>. Rule: <b style={NW}>final A = A + (B ÷ cB) × cA</b> (÷ = drop leftovers).</>,
+           <>최종 빨강 <b style={NW}>= 2 + 4 = 6</b>. 공식: <b style={NW}>최종 A = A + (B÷cB)×cA</b> <span style={NW}>(자투리 버림)</span>.</>);
 
   return (
     <div style={{ padding: 16 }}>
@@ -68,7 +69,7 @@ export function ChipCountSim({ E }) {
         <span style={{ fontSize: 11, fontWeight: 800, color: RED, width: 60, textAlign: "right" }}>{t(E, "red (A)", "빨강 A")}</span>
         {Array.from({ length: Anow }).map((_, i) => <Chip key={i} color="red" />)}
         {s.kind === "convert" || s.kind === "total"
-          ? Array.from({ length: groups }).map((_, i) => <Chip key={"g" + i} color="red" label="+" />)
+          ? Array.from({ length: gain }).map((_, i) => <Chip key={"g" + i} color="red" label="+" />)
           : null}
       </div>
       {/* 파랑(B) — group 스텝부터 묶음 표시 */}
@@ -92,8 +93,8 @@ export function ChipCountSim({ E }) {
         )}
       </div>
       {s.kind === "group" && <Cap color={BLU}>{t(E, "2 groups + 1 leftover", "묶음 2개 + 자투리 1개")}</Cap>}
-      {s.kind === "convert" && <Cap color={RED}>{t(E, "2 groups → +2 red · leftover stuck", "묶음 2개 → 빨강 +2 · 자투리 남음")}</Cap>}
-      {s.kind === "total" && <Cap color="#15803d">final A = 2 + (7 ÷ 3)×1 = 4</Cap>}
+      {s.kind === "convert" && <Cap color={RED}>{t(E, "2 groups → +4 red · leftover stuck", "묶음 2개 → 빨강 +4 · 자투리 남음")}</Cap>}
+      {s.kind === "total" && <Cap color="#15803d">final A = 2 + (7 ÷ 3)×2 = 6</Cap>}
 
       <div style={{ marginTop: 24 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
