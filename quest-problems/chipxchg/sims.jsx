@@ -289,10 +289,10 @@ export function SearchSim({ E }) {
    setup → exchange → goal(모자람) → 반전(심술쟁이) → 우리 질문
    ═══════════════════════════════════════════════════════════════ */
 export function GameBoardSim({ E }) {
-  const steps = [{ kind: "setup" }, { kind: "swap" }, { kind: "goal" }, { kind: "twist" }, { kind: "ask" }];
+  const steps = [{ kind: "setup" }, { kind: "swap" }, { kind: "goal" }, { kind: "want" }, { kind: "block" }, { kind: "ask" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
-  // 파랑을 교환에 다 써버린 이후 상태 (빨강 =4, 파랑 흐림) — goal/twist/ask 공통
-  const spent = s.kind === "goal" || s.kind === "twist" || s.kind === "ask";
+  // 파랑을 교환에 다 써버린 이후 상태 (빨강 =4, 파랑 흐림)
+  const spent = s.kind === "goal" || s.kind === "want" || s.kind === "block" || s.kind === "ask";
 
   const say =
     s.kind === "setup" ? t(E, <>Bessie starts with <b style={{color:RED}}>2 red chips</b> and <b style={{color:BLU}}>3 blue chips</b>. That's her whole pile.</>,
@@ -301,10 +301,12 @@ export function GameBoardSim({ E }) {
                              <>교환소가 있어요: <b>파랑 3개를 내면 → 빨강 2개</b>. 한 방향만 (파랑 → 빨강), 몇 번이든.</>)
     : s.kind === "goal" ? t(E, <>Goal: reach <b style={{color:"#15803d"}}>5 red chips</b>. Best I can do now: 2 red + (swap 3 blue) 2 red = <b>4 red</b>. <b style={{color:"#dc2626"}}>1 short ✗</b>.</>,
                              <>목표: <b style={{color:"#15803d"}}>빨강 5개</b> 모으기. 지금 최선: 빨강 2 + (파랑 3 교환) 빨강 2 = <b>빨강 4개</b>. <b style={{color:"#dc2626"}}>1개 모자라 ✗</b>.</>)
-    : s.kind === "twist" ? t(E, <>So I grab <b>extra chips</b>. The catch: <b>I can't pick their color</b> — a <b style={{color:"#dc2626"}}>trickster</b> paints each one red or blue, in the meanest way for me.</>,
-                              <>그래서 <b>칩을 더 받아요</b>. 함정: <b>색은 내가 못 골라요</b> — <b style={{color:"#dc2626"}}>심술쟁이</b>가 하나씩 빨강·파랑으로 칠해요, 나한테 제일 나쁘게.</>)
-    : t(E, <><b>Our question:</b> however the trickster paints them, I must still reach 5 red. <b>What's the fewest extra chips</b> that guarantees it? → that number is the answer.</>,
-           <><b>우리 질문:</b> 심술쟁이가 어떻게 칠해도 빨강 5개는 채워야 해요. <b>그걸 보장하는 가장 적은 추가 칩 개수</b>는? → 그 개수가 답이에요.</>);
+    : s.kind === "want" ? t(E, <>Just <b style={{color:"#16a34a"}}>1 more red</b> and I hit 5! So I grab <b>1 extra chip</b>. If only I could take it as red…</>,
+                             <>빨강 <b style={{color:"#16a34a"}}>1개만 더</b> 있으면 5예요! 그래서 <b>칩 1개</b>를 더 받아요. 그 1개를 빨강으로 받을 수만 있다면…</>)
+    : s.kind === "block" ? t(E, <>But <b>I can't choose the color</b> — the <b style={{color:"#dc2626"}}>trickster</b> makes it <b style={{color:BLU}}>blue</b>. <b>1 blue can't be exchanged</b> (needs 3) → still <b>4 red</b>, still short <b style={{color:"#dc2626"}}>✗</b>.</>,
+                              <>근데 <b>색은 내가 못 골라요</b> — <b style={{color:"#dc2626"}}>심술쟁이</b>가 <b style={{color:BLU}}>파랑</b>으로 줘버려요. <b>파랑 1개는 못 바꿔요</b> (3개 필요) → 여전히 <b>빨강 4</b>, 아직 부족 <b style={{color:"#dc2626"}}>✗</b>.</>)
+    : t(E, <><b>Our question:</b> 1 chip wasn't enough. How many must I grab so that <b>no matter how he colors them</b>, I still reach 5 red? <b>That fewest count is the answer.</b></>,
+           <><b>우리 질문:</b> 1개론 안 됐어요. 심술쟁이가 <b>어떻게 색칠해도</b> 빨강 5를 채우려면 몇 개를 받아야 할까요? <b>그 최소 개수가 답이에요.</b></>);
 
   return (
     <div style={{ padding: 16 }}>
@@ -315,7 +317,7 @@ export function GameBoardSim({ E }) {
       </div>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "One round of the game", "이 게임 한 판")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <Say tone={s.kind === "goal" ? "stuck" : s.kind === "ask" ? "aha" : "go"}>{say}</Say>
+      <Say tone={s.kind === "goal" || s.kind === "block" ? "stuck" : s.kind === "ask" ? "aha" : "go"}>{say}</Say>
 
       {/* 내 칩 — 항상 표시 */}
       <div style={{ maxWidth: 460, margin: "0 auto" }}>
@@ -326,6 +328,13 @@ export function GameBoardSim({ E }) {
           {spent && <><span style={{ color: "#94a3b8", fontWeight: 800 }}>+</span>
             {Array.from({ length: 2 }).map((_, i) => <Chip key={"e" + i} color="red" label="+" />)}
             <span style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginLeft: 4, fontFamily: "'JetBrains Mono',monospace" }}>= 4</span></>}
+          {/* want: 원하는 빨강 1개(희망) */}
+          {s.kind === "want" && <>
+            <span style={{ color: "#16a34a", fontWeight: 800 }}>+</span>
+            <div style={{ width: 26, height: 26, borderRadius: 999, background: "#f0fdf4", border: "2px dashed #16a34a",
+              display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "#16a34a" }}>?</div>
+            <span style={{ fontSize: 13, fontWeight: 800, color: "#16a34a", marginLeft: 4, fontFamily: "'JetBrains Mono',monospace" }}>= 5?</span>
+          </>}
         </div>
         {/* 파랑 줄 — swap 에서 교환, 이후엔 흐리게(소모됨) 유지 */}
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
@@ -350,8 +359,21 @@ export function GameBoardSim({ E }) {
           </div>
         )}
 
-        {/* twist / ask — 심술쟁이 등장. 색·개수 미정 → 회색 ? 칩 */}
-        {(s.kind === "twist" || s.kind === "ask") && (
+        {/* block — 심술쟁이가 그 1개를 파랑으로! 못 바꿈 → 여전히 부족 */}
+        {s.kind === "block" && (
+          <div style={{ marginTop: 16, paddingTop: 12, borderTop: "1px dashed #e2e8f0", display: "flex", justifyContent: "center", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+            <div style={{ fontSize: 26 }}>😈</div>
+            <span style={{ fontSize: 15, fontWeight: 800, color: "#94a3b8" }}>→</span>
+            <div style={{ display: "flex", gap: 4, padding: 4, borderRadius: 10, border: "2px dashed #dc2626", background: "#fef2f2", alignItems: "center" }}>
+              <Chip color="blue" size={22} />
+              <span style={{ fontSize: 10.5, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "1 blue — can't swap (needs 3)", "파랑 1개 — 못 바꿈 (3개 필요)")}</span>
+            </div>
+            <span style={{ fontSize: 12.5, fontWeight: 800, color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "red still 4 ✗", "빨강 그대로 4 ✗")}</span>
+          </div>
+        )}
+
+        {/* ask — 그럼 몇 개나? 색·개수 미정 → 회색 ? 칩 */}
+        {s.kind === "ask" && (
           <div style={{ marginTop: 16, paddingTop: 12, borderTop: "1px dashed #e2e8f0", display: "flex", justifyContent: "center", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
             <div style={{ fontSize: 28 }}>😈</div>
             <span style={{ fontSize: 12, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "extra chips", "추가 칩")}</span>
@@ -362,7 +384,7 @@ export function GameBoardSim({ E }) {
               ))}
               <span style={{ fontSize: 16, fontWeight: 800, color: "#94a3b8" }}>…</span>
             </div>
-            <span style={{ fontSize: 11, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "color = worst for me", "색은 나한테 최악")}</span>
+            <span style={{ fontSize: 11, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "how many?", "몇 개?")}</span>
           </div>
         )}
       </div>
