@@ -158,27 +158,29 @@ const _CX_VARS = [
   { v: "x", ko: "얻는 칩 수(탐색 대상)", en: "chips gained (search var)" },
   { v: "b", ko: "상대가 B로 준 수", en: "chips adversary sends to B" },
 ];
+// 표시용: 주석(논문)은 걷어내고 실행 로직 줄만 (설명은 말풍선으로). 로직/변수 그대로.
+const _noComment = (arr) => arr.filter((l) => !/^\s*(#|\/\/)/.test(l));
 export function getChipXchgWalk(E, lang = "py") {
   const s = getChipXchgSections(E);
   if (lang === "cpp") {
-    const code = [...s[0].cpp, "", ...s[1].cpp, "", ...s[2].cpp];
-    // s0=7 (0-6), ""=7, s1=27 (8-34), ""=35, s2=13 (36-48)
+    const code = [..._noComment(s[1].cpp), "", ..._noComment(s[2].cpp)];
+    // minFinalA 0-26, ""=27, solve 28-40
     return { code, vars: _CX_VARS, beats: [
-      { hi: [0, 6],   bubble: t(E, "One round: after x random chips, the adversary splits them (a, b). Bessie's final A = A + a + full c_B groups of B (each gives c_A). The adversary picks the split that MINIMIZES her A.", "한 시도: 랜덤 칩 x개를 상대가 (a, b)로 나눠요. 베시 최종 A = A + a + (B의 cB묶음마다 cA). 상대는 A가 가장 적어지게 나눔.") },
-      { hi: [8, 13],  bubble: t(E, "minFinalA: don't try every b — start with just 0 and x as candidates.", "minFinalA: b를 전부 시도 안 해요 — 후보로 0과 x만 먼저 담기.") },
-      { hi: [14, 34], bubble: t(E, "Raising b by c_B trades 'lose c_B raw A' for 'one more swap (+c_A)', so the best b sits at a residue boundary. Only two remainders matter: c_B−1 (max waste) and 0 (no waste). Take the min over those few candidates.", "b를 cB 늘리면 'A 직접 cB 손해' vs '환전 1회 +cA 이득' 트레이드 → 최적 b는 나머지 경계. 의미있는 나머지는 cB-1(자투리 최대)·0(없음)뿐. 이 몇 개 중 최솟값.") },
-      { hi: [36, 42], bubble: t(E, "solve: more chips never hurt Bessie (dump extras on A), so 'guaranteed to reach fA?' flips false→true just once as x grows.", "solve: 칩이 많아져도 절대 나빠지지 않아요(추가분은 A에) → 'fA 도달 보장?'은 x가 커질 때 딱 한 번 false→true.") },
-      { hi: [43, 48], bubble: t(E, "So binary-search the smallest x that guarantees fA.", "그래서 fA를 보장하는 가장 작은 x를 이분 탐색.") },
+      { hi: [0, 3],   bubble: t(E, "minFinalA(x): the trickster's worst at this x. If x=0, straight to the formula.", "minFinalA(x): 이 x에서 심술쟁이 최악. x=0이면 바로 공식.") },
+      { hi: [4, 16],  bubble: t(E, "Don't try every b — just a few candidates: max leftover (r1) and no leftover (r0).", "b 다 안 봐요 — 후보 몇 개만: 자투리 최대(r1)·자투리 없음(r0).") },
+      { hi: [17, 25], bubble: t(E, "Take the smallest final red over those candidates = the worst. O(1).", "그 후보 중 최종 빨강 최솟값 = 최악. O(1).") },
+      { hi: [28, 32], bubble: t(E, "solve: binary-search the smallest x that reaches the goal (0 … 2e18).", "solve: 목표 넘는 가장 작은 x 를 이분탐색 (0 … 2e18).") },
+      { hi: [33, 40], bubble: t(E, "worst(mid) ≥ goal? move hi = mid, else lo = mid+1. lo is the answer.", "worst(mid) ≥ 목표면 hi=mid, 아니면 lo=mid+1. lo 가 답.") },
     ] };
   }
-  const code = [...s[0].py, "", ...s[1].py, "", ...s[2].py];
-  // s0=7 (0-6), ""=7, s1=15 (8-22), ""=23, s2=11 (24-34)
+  const code = [..._noComment(s[1].py), "", ..._noComment(s[2].py)];
+  // min_final_A 0-12, ""=13, solve 14-22
   return { code, vars: _CX_VARS, beats: [
-    { hi: [0, 6],   bubble: t(E, "One round: after x random chips, the adversary splits them (a, b). Bessie's final A = A + a + full c_B groups of B (each gives c_A). The adversary picks the split that MINIMIZES her A.", "한 시도: 랜덤 칩 x개를 상대가 (a, b)로 나눠요. 베시 최종 A = A + a + (B의 cB묶음마다 cA). 상대는 A가 가장 적어지게 나눔.") },
-    { hi: [8, 11],  bubble: t(E, "min_final_A: don't try every b — start with just 0 and x as candidates.", "min_final_A: b를 전부 시도 안 해요 — 후보로 0과 x만 먼저 담기.") },
-    { hi: [12, 22], bubble: t(E, "Raising b by c_B trades 'lose c_B raw A' for 'one more swap (+c_A)', so the best b sits at a residue boundary. Only two remainders matter: c_B−1 (max waste) and 0 (no waste). Take the min over those few candidates.", "b를 cB 늘리면 'A 직접 cB 손해' vs '환전 1회 +cA 이득' 트레이드 → 최적 b는 나머지 경계. 의미있는 나머지는 cB-1(자투리 최대)·0(없음)뿐. 이 몇 개 중 최솟값.") },
-    { hi: [24, 29], bubble: t(E, "solve: more chips never hurt Bessie (dump extras on A), so 'guaranteed to reach fA?' flips false→true just once as x grows.", "solve: 칩이 많아져도 절대 나빠지지 않아요(추가분은 A에) → 'fA 도달 보장?'은 x가 커질 때 딱 한 번 false→true.") },
-    { hi: [30, 34], bubble: t(E, "So binary-search the smallest x that guarantees fA.", "그래서 fA를 보장하는 가장 작은 x를 이분 탐색.") },
+    { hi: [0, 2],   bubble: t(E, "min_final_A(x): the trickster's worst at this x. If x=0, straight to the formula.", "min_final_A(x): 이 x에서 심술쟁이 최악. x=0이면 바로 공식.") },
+    { hi: [3, 11],  bubble: t(E, "Don't try every b — just a few candidates: max leftover (r1) and no leftover (r0).", "b 다 안 봐요 — 후보 몇 개만: 자투리 최대(r1)·자투리 없음(r0).") },
+    { hi: [12, 12], bubble: t(E, "Take the smallest final red over those candidates = the worst. O(1).", "그 후보 중 최종 빨강 최솟값 = 최악. O(1).") },
+    { hi: [14, 17], bubble: t(E, "solve: binary-search the smallest x that reaches the goal (0 … 2e18).", "solve: 목표 넘는 가장 작은 x 를 이분탐색 (0 … 2e18).") },
+    { hi: [18, 22], bubble: t(E, "worst(mid) ≥ goal? move hi = mid, else lo = mid+1. lo is the answer.", "worst(mid) ≥ 목표면 hi=mid, 아니면 lo=mid+1. lo 가 답.") },
   ] };
 }
 
