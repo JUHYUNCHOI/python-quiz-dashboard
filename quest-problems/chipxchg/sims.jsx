@@ -63,7 +63,7 @@ export function ChipCountSim({ E }) {
       <Say tone={s.kind === "total" ? "aha" : "go"}>{say}</Say>
 
       {/* 빨강(A) */}
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginBottom: 10, flexWrap: "wrap" }}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
         <span style={{ fontSize: 11, fontWeight: 800, color: RED, width: 60, textAlign: "right" }}>{t(E, "red (A)", "빨강 A")}</span>
         {Array.from({ length: Anow }).map((_, i) => <Chip key={i} color="red" />)}
         {s.kind === "convert" || s.kind === "total"
@@ -71,19 +71,19 @@ export function ChipCountSim({ E }) {
           : null}
       </div>
       {/* 파랑(B) — group 스텝부터 묶음 표시 */}
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, flexWrap: "wrap", rowGap: 10 }}>
         <span style={{ fontSize: 11, fontWeight: 800, color: BLU, width: 60, textAlign: "right" }}>{t(E, "blue (B)", "파랑 B")}</span>
         {s.kind === "have" ? (
           Array.from({ length: Bnow }).map((_, i) => <Chip key={i} color="blue" />)
         ) : (
           <>
             {Array.from({ length: groups }).map((_, g) => (
-              <div key={g} style={{ display: "flex", gap: 4, padding: 4, borderRadius: 10, border: `2px dashed ${BLU}`, background: "#f8fbff" }}>
+              <div key={g} style={{ display: "flex", gap: 6, padding: 5, borderRadius: 10, border: `2px dashed ${BLU}`, background: "#f8fbff" }}>
                 {Array.from({ length: cB }).map((_, i) => <Chip key={i} color="blue" faded={s.kind === "convert" || s.kind === "total"} />)}
               </div>
             ))}
             {Array.from({ length: left }).map((_, i) => (
-              <div key={"l" + i} style={{ display: "flex", gap: 4, padding: 4, borderRadius: 10, border: "2px dashed #cbd5e1" }}>
+              <div key={"l" + i} style={{ display: "flex", gap: 6, padding: 5, borderRadius: 10, border: "2px dashed #cbd5e1" }}>
                 <Chip color="blue" />
               </div>
             ))}
@@ -94,7 +94,9 @@ export function ChipCountSim({ E }) {
       {s.kind === "convert" && <Cap color={RED}>{t(E, "2 groups → +2 red · leftover stuck", "묶음 2개 → 빨강 +2 · 자투리 남음")}</Cap>}
       {s.kind === "total" && <Cap color="#15803d">final A = 2 + (7 ÷ 3)×1 = 4</Cap>}
 
-      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      <div style={{ marginTop: 24 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
     </div>
   );
 }
@@ -158,7 +160,9 @@ export function AdversarySim({ E }) {
         </div>
       )}
 
-      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      <div style={{ marginTop: 24 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
     </div>
   );
 }
@@ -242,7 +246,9 @@ export function GameBoardSim({ E }) {
         )}
       </div>
 
-      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      <div style={{ marginTop: 24 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
     </div>
   );
 }
