@@ -162,25 +162,65 @@ const _CX_VARS = [
 const _noComment = (arr) => arr.filter((l) => !/^\s*(#|\/\/)/.test(l));
 export function getChipXchgWalk(E, lang = "py") {
   const s = getChipXchgSections(E);
+  const worstPy = _noComment(s[1].py), solvePy = _noComment(s[2].py);
+  const worstCpp = _noComment(s[1].cpp), solveCpp = _noComment(s[2].cpp);
   if (lang === "cpp") {
-    const code = [..._noComment(s[1].cpp), "", ..._noComment(s[2].cpp)];
-    // minFinalA 0-26, ""=27, solve 28-40
+    // 입력부터: main → solve → minFinalA (호출 순서 위→아래, 함수는 앞서 선언)
+    const code = [
+      "#include <bits/stdc++.h>",
+      "using namespace std;",
+      "typedef long long ll;",
+      "ll minFinalA(ll A, ll B, ll cA, ll cB, ll x);",
+      "ll solve(ll A, ll B, ll cA, ll cB, ll fA);",
+      "",
+      "int main() {",
+      "    int T; cin >> T;",
+      "    while (T--) {",
+      "        ll A, B, cA, cB, fA;",
+      "        cin >> A >> B >> cA >> cB >> fA;",
+      '        cout << solve(A, B, cA, cB, fA) << "\\n";',
+      "    }",
+      "}",
+      "",
+      ...solveCpp,   // 15 .. 15+solveCpp.len-1
+      "",
+      ...worstCpp,
+    ];
+    const solveStart = 15, solveEnd = solveStart + solveCpp.length - 1;
+    const worstStart = solveEnd + 2;
     return { code, vars: _CX_VARS, beats: [
-      { hi: [0, 3],   bubble: t(E, "① Build the tool first — worst(x): the trickster's worst at this x. x=0 → straight to the formula.", "① 먼저 도구부터 — worst(x): 이 x의 심술쟁이 최악. x=0이면 바로 공식.") },
-      { hi: [4, 16],  bubble: t(E, "Don't loop every b — just a few candidates (max leftover r1, no leftover r0).", "b 다 안 돌아요 — 후보 몇 개만 (자투리 최대 r1·없음 r0).") },
-      { hi: [17, 25], bubble: t(E, "Min over those candidates = worst(x). Tool done, O(1).", "그 후보 중 최솟값 = worst(x). 도구 완성, O(1).") },
-      { hi: [28, 32], bubble: t(E, "③ Now use the tool: binary-search the smallest x (0 … 2e18).", "③ 이제 그 도구로: 가장 작은 x 를 이분탐색 (0 … 2e18).") },
-      { hi: [33, 40], bubble: t(E, "② worst(mid) ≥ goal? hi = mid, else lo = mid+1 → lo is the answer (④ print per test).", "② worst(mid) ≥ 목표면 hi=mid, 아니면 lo=mid+1 → lo 가 답 (④ 테스트마다 출력).") },
+      { hi: [6, 13], bubble: t(E, "Input first — read T tests; each line is A B cA cB fA; print solve() for each.", "입력부터 — 테스트 T개, 각 줄 A B cA cB fA. 하나씩 solve 해서 출력.") },
+      { hi: [solveStart, solveEnd], bubble: t(E, "solve: binary-search the smallest x. worst(mid) ≥ goal → hi=mid, else lo=mid+1; lo is the answer.", "solve: 답(최소 x)을 이분탐색. worst(mid)≥목표면 hi=mid, 아니면 lo=mid+1 → lo 가 답.") },
+      { hi: [worstStart, worstStart + 3], bubble: t(E, "worst = minFinalA: the trickster's worst at this x. x=0 → straight to the formula.", "그 안의 worst = minFinalA: 이 x의 심술쟁이 최악. x=0이면 바로 공식.") },
+      { hi: [worstStart + 4, worstStart + 16], bubble: t(E, "Not every b — just a few candidates (max leftover r1, no leftover r0).", "b 다 안 봐요 — 후보 몇 개만 (자투리 최대 r1·없음 r0).") },
+      { hi: [worstStart + 17, worstStart + 26], bubble: t(E, "Min over candidates = worst(x). O(1).", "후보 중 최솟값 = worst(x). O(1).") },
     ] };
   }
-  const code = [..._noComment(s[1].py), "", ..._noComment(s[2].py)];
-  // min_final_A 0-12, ""=13, solve 14-22
+  // 입력부터: main → solve → min_final_A (파이썬은 main()을 맨 아래서 호출 → 앞 참조 OK)
+  const code = [
+    "import sys",
+    "input = sys.stdin.readline",
+    "",
+    "def main():",
+    "    T = int(input())",
+    "    for _ in range(T):",
+    "        A, B, cA, cB, fA = map(int, input().split())",
+    "        print(solve(A, B, cA, cB, fA))",
+    "",
+    ...solvePy,   // 9 .. 9+solvePy.len-1
+    "",
+    ...worstPy,
+    "",
+    "main()",
+  ];
+  const solveStart = 9, solveEnd = solveStart + solvePy.length - 1;   // 9..17
+  const worstStart = solveEnd + 2;                                    // 19
   return { code, vars: _CX_VARS, beats: [
-    { hi: [0, 2],   bubble: t(E, "① Build the tool first — worst(x): the trickster's worst at this x. x=0 → straight to the formula.", "① 먼저 도구부터 — worst(x): 이 x의 심술쟁이 최악. x=0이면 바로 공식.") },
-    { hi: [3, 11],  bubble: t(E, "Don't loop every b — just a few candidates (max leftover r1, no leftover r0).", "b 다 안 돌아요 — 후보 몇 개만 (자투리 최대 r1·없음 r0).") },
-    { hi: [12, 12], bubble: t(E, "Min over those candidates = worst(x). Tool done, O(1).", "그 후보 중 최솟값 = worst(x). 도구 완성, O(1).") },
-    { hi: [14, 17], bubble: t(E, "③ Now use the tool: binary-search the smallest x (0 … 2e18).", "③ 이제 그 도구로: 가장 작은 x 를 이분탐색 (0 … 2e18).") },
-    { hi: [18, 22], bubble: t(E, "② worst(mid) ≥ goal? hi = mid, else lo = mid+1 → lo is the answer (④ print per test).", "② worst(mid) ≥ 목표면 hi=mid, 아니면 lo=mid+1 → lo 가 답 (④ 테스트마다 출력).") },
+    { hi: [0, 7], bubble: t(E, "Input first — read T tests; each line is A B cA cB fA; print solve() for each.", "입력부터 — 테스트 T개, 각 줄 A B cA cB fA. 하나씩 solve 해서 출력.") },
+    { hi: [solveStart, solveEnd], bubble: t(E, "solve: binary-search the smallest x. worst(mid) ≥ goal → hi=mid, else lo=mid+1; lo is the answer.", "solve: 답(최소 x)을 이분탐색. worst(mid)≥목표면 hi=mid, 아니면 lo=mid+1 → lo 가 답.") },
+    { hi: [worstStart, worstStart + 2], bubble: t(E, "worst = min_final_A: the trickster's worst at this x. x=0 → straight to the formula.", "그 안의 worst = min_final_A: 이 x의 심술쟁이 최악. x=0이면 바로 공식.") },
+    { hi: [worstStart + 3, worstStart + 11], bubble: t(E, "Not every b — just a few candidates (max leftover r1, no leftover r0).", "b 다 안 봐요 — 후보 몇 개만 (자투리 최대 r1·없음 r0).") },
+    { hi: [worstStart + 12, worstStart + 12], bubble: t(E, "Min over candidates = worst(x). O(1).", "후보 중 최솟값 = worst(x). O(1).") },
   ] };
 }
 

@@ -175,8 +175,8 @@ export function makeChipXchgCh2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Code", "코드"),
       narr: t(E,
-        "Follow the build order from the plan: ① make the tool worst(x), then ③ binary-search with it. Bubbles are numbered in that order.",
-        "계획의 짜는 순서 그대로 — ① 도구 worst(x) 만들고 → ③ 그걸로 이분탐색. 말풍선이 그 순서(①②③④)로 붙어 있어요."),
+        "Read it the way you'd write it — input first: main reads each test and calls solve; then unpack solve and worst.",
+        "짜는 순서대로 — 입력부터. main 이 각 테스트를 받아 solve·출력, 그다음 solve·worst 를 뜯어봐요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />
       ),
