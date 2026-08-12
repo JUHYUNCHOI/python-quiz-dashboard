@@ -113,22 +113,26 @@ export function AdversarySim({ E }) {
     const a = X - b, g = Math.floor(b / cB), w = b % cB;
     return { b, a, g, w, val: a + g * cA };
   });
-  const steps = [{ kind: "intro" }, ...rows.map((r) => ({ kind: "b", b: r.b }))];
+  const steps = [{ kind: "intro" }, ...rows.map((r) => ({ kind: "b", b: r.b })), { kind: "smart" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
 
-  const curB = s.kind === "b" ? s.b : -1;
+  const isSmart = s.kind === "smart";
+  const curB = s.kind === "b" ? s.b : (isSmart ? X : -1);
   const cur = curB >= 0 ? rows[curB] : null;
-  // 지금까지(0..curB) 최솟값 = 심술쟁이가 노리는 최악
+  // 지금까지(0..curB) 최솟값 = 심술쟁이가 노리는 최악 (smart 면 전체)
   const seen = curB >= 0 ? rows.slice(0, curB + 1) : [];
   const worstSoFar = seen.length ? Math.min(...seen.map((r) => r.val)) : null;
   const worstB = seen.length ? seen.reduce((mi, r) => (r.val < rows[mi].val ? r.b : mi), 0) : -1;
-  const isNewMin = cur && cur.val === worstSoFar && (curB === 0 || cur.val < Math.min(...rows.slice(0, curB).map((r) => r.val)));
-  const isLast = curB === X;
+  const isNewMin = !isSmart && cur && cur.val === worstSoFar && (curB === 0 || cur.val < Math.min(...rows.slice(0, curB).map((r) => r.val)));
+  const isLast = s.kind === "b" && curB === X;
 
   const say =
     s.kind === "intro"
       ? t(E, <>Let's test one candidate from the strategy — say <b style={NW}>x = 8</b>. What's the trickster's <b>worst</b> split? Slide <b>b</b> (blue) from 0 up.</>,
              <>전략에서 말한 <b>후보 하나</b>를 시험해요 — 예로 <b style={NW}>x = 8</b>. 심술쟁이의 <b>최악 분배</b>는? 아래 <b>b</b>(파랑)를 0부터 늘려봐요.</>)
+      : isSmart
+      ? t(E, <><b>Shortcut:</b> the trickster always <b>dumps into blue</b> and leaves the <b>most leftover</b>. So only <b style={NW}>b = 8</b> matters — <b>worst = 4</b> in <b>one formula (O(1))</b>, no matter how big x is.</>,
+             <><b>단축:</b> 심술쟁이는 늘 <b>파랑에 몰고</b> <b>자투리를 최대</b>로 남겨요. 그래서 <b style={NW}>b = 8</b> 하나만 보면 돼요 — <b>worst = 4</b> 를 <b>공식 한 방(O(1))</b>으로, x 가 아무리 커도.</>)
       : isLast
       ? t(E, <><b style={NW}>b = 8</b>: all blue → <span style={NW}>2 groups + 2 wasted</span> = <b style={{color:"#dc2626",...NW}}>4 red</b>. The <b>worst</b>! <span style={NW}>4 &lt; 5</span> → <b style={NW}>x=8 not enough ✗</b>.</>,
              <><b style={NW}>b = 8</b>: 다 파랑 → <span style={NW}>묶음 2 + 자투리 2 버림</span> = <b style={{color:"#dc2626",...NW}}>빨강 4</b>. <b>최악!</b> <span style={NW}>4 &lt; 5</span> → <b style={NW}>x=8 부족 ✗</b></>)
@@ -139,11 +143,11 @@ export function AdversarySim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Try every split — find the worst", "모든 분배 다 따지기 — 최악 찾기")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "The trickster's worst (and a shortcut)", "심술쟁이 최악 — 그리고 단축")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
         {t(E, "start A=0, B=0 · 3 blue → 2 red · goal 5 · extra x=8", "시작 A=0, B=0 · 파랑 3 → 빨강 2 · 목표 5 · 추가 x=8")}
       </div>
-      <Say tone={isLast ? "stuck" : isNewMin ? "stuck" : "go"}>{say}</Say>
+      <Say tone={isSmart ? "aha" : isLast ? "stuck" : isNewMin ? "stuck" : "go"}>{say}</Say>
 
       {cur && (
         <div style={{ maxWidth: 480, margin: "0 auto" }}>
@@ -172,8 +176,9 @@ export function AdversarySim({ E }) {
             {rows.map((r) => {
               const shown = r.b <= curB;
               const isWorst = shown && r.val === worstSoFar && r.b === worstB;
+              const op = isSmart ? (r.b === worstB ? 1 : 0.28) : (shown ? 1 : 0.25);
               return (
-                <div key={r.b} style={{ width: 40, textAlign: "center", opacity: shown ? 1 : 0.25, transition: "all .15s" }}>
+                <div key={r.b} style={{ width: 40, textAlign: "center", opacity: op, transition: "all .15s" }}>
                   <div style={{ fontSize: 9, fontWeight: 700, color: "#94a3b8" }}>b={r.b}</div>
                   <div style={{ marginTop: 2, height: 26, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center",
                     fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
@@ -187,11 +192,17 @@ export function AdversarySim({ E }) {
               );
             })}
           </div>
-          {worstSoFar != null && (
+          {worstSoFar != null && !isSmart && (
             <div style={{ textAlign: "center", marginTop: 10, fontSize: 12.5, fontWeight: 800, wordBreak: "keep-all",
               color: isLast ? (worstSoFar >= fA ? "#15803d" : "#dc2626") : "#dc2626" }}>
               {t(E, "worst so far = ", "지금까지 최악 = ")}<b>{worstSoFar}</b>
               {isLast && <> {worstSoFar >= fA ? `≥ ${fA} ✓` : `< ${fA} ✗ ` + t(E, "(x=8 not enough)", "(x=8 부족)")}</>}
+            </div>
+          )}
+          {isSmart && (
+            <div style={{ maxWidth: 440, margin: "12px auto 0", background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "9px 13px", fontSize: 12, color: "#1e3a8a", lineHeight: 1.55, wordBreak: "keep-all", textWrap: "balance", textAlign: "center", fontWeight: 800 }}>
+              {t(E, <>💡 No need to loop b = 0…x. The code computes <b>worst(x)</b> in <b>O(1)</b> (max-leftover formula) — that's why huge x is fine.</>,
+                   <>💡 b = 0…x 를 다 돌 필요 없어요. 코드는 <b>worst(x)</b> 를 <b>O(1)</b> 공식(자투리 최대)으로 계산 — 그래서 x 가 커도 괜찮아요.</>)}
             </div>
           )}
         </div>
