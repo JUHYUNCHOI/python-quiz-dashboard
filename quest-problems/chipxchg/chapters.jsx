@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim, CheckSim, StrategySlide, PlanSlide, FormulaDeriveSim, FormulaBuildSim } from "./sims";
+import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim, CheckSim, StrategySlide, PlanSlide, CandidateSim } from "./sims";
 
 const A = "#2563eb";
 
@@ -144,22 +144,14 @@ export function makeChipXchgCh1(E) {
       content: (<AdversarySim E={E} />),
     },
 
-    // [전] 도구 ①-c: 표에서 최악 b 가 어디인지 찾기 (자투리 최대인 가장 큰 b).
+    // [전] 도구 ①-c: 브루트(b 다 재기) → 후보 몇 개만 재기 (O(1) 다리).
+    //   모듈러 공식 유도는 안 함 (Bronze 범위 밖) — 후보 4개로 최악 찾는 아이디어만.
     {
       type: "reveal",
-      label: t(E, "Tool ①c: worst b in the table", "도구 ①c: 표에서 최악 b"),
-      narr: t(E, "x can be huge, so we can't scan every b — first spot where the worst b sits in the table.",
-                 "x 가 크면 b 를 다 못 봐요 — 최악 b 가 표에서 어디인지 먼저 찾아요."),
-      content: (<FormulaDeriveSim E={E} />),
-    },
-
-    // [전] 도구 ①-d: 그 최악 b 를 계산하는 r1 공식을 자투리 트레이로 하나씩 유도.
-    {
-      type: "reveal",
-      label: t(E, "Tool ①d: build the r1 formula", "도구 ①d: r1 공식 유도"),
-      narr: t(E, "Now build the O(1) formula for that worst b, one piece at a time — with a leftover tray.",
-                 "이제 그 최악 b 를 브루트 없이 구하는 O(1) 공식을 자투리 트레이로 한 조각씩 만들어요."),
-      content: (<FormulaBuildSim E={E} />),
+      label: t(E, "Tool ①c: check a few suspects", "도구 ①c: 후보 몇 개만"),
+      narr: t(E, "x can be huge, so we can't try every split — the worst is always one of a few candidates; check only those.",
+                 "x 가 크면 모든 분배를 못 해요 — 최악은 늘 후보 몇 개 중 하나. 그 몇 개만 재요."),
+      content: (<CandidateSim E={E} />),
     },
 
     // [결] ⑤ 답 찾기 (질문②) — 브루트 한계(10¹⁸)→계단→이분탐색까지 한 시뮬에서
