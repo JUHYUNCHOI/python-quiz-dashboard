@@ -52,7 +52,7 @@ export function getCowSplitsSections(E) {
       ],
       why: [
         t(E, "Each operation removes a square (even length). Total length 3N must be even, so N must be even.",
-            "각 연산은 짝수 길이 사각 문자열을 제거. 총 길이 3N 도 짝수여야 하므로 N 이 짝수여야 함."),
+            "각 연산은 짝수 길이 제곱 문자열을 제거. 총 길이 3N 도 짝수여야 하므로 N 이 짝수여야 함."),
         t(E, "If N is odd, immediately print -1 and skip to the next test case.",
             "N 이 홀수면 즉시 -1 을 출력하고 다음 테스트로 넘어감."),
       ],
@@ -88,7 +88,7 @@ export function getCowSplitsSections(E) {
       ],
       why: [
         t(E, "M=1 means S itself is a square Y+Y. That happens iff first half == second half.",
-            "M=1 은 S 자체가 사각 Y+Y 라는 뜻. 앞 절반 == 뒤 절반일 때 성립."),
+            "M=1 은 S 자체가 제곱 Y+Y 라는 뜻. 앞 절반 == 뒤 절반일 때 성립."),
         t(E, "Print 1, then label every character with operation 1.",
             "1 을 출력하고 모든 문자에 연산 번호 1 을 부여."),
       ],
@@ -133,9 +133,9 @@ export function getCowSplitsSections(E) {
         t(E, "Each block has exactly one C, one O, one W → total counts are N, N, N.",
             "각 블록엔 C, O, W 가 하나씩 → 총 개수는 각각 N."),
         t(E, "When N is even, each letter count is even. The subsequence of all C's is C^N — a square (Y = C^(N/2)).",
-            "N 이 짝수면 각 글자 개수도 짝수. 모든 C 의 부분수열은 C^N — 사각 (Y = C^(N/2))."),
+            "N 이 짝수면 각 글자 개수도 짝수. 모든 C 의 부분수열은 C^N — 제곱 (Y = C^(N/2))."),
         t(E, "Op 1 takes every C, Op 2 every O, Op 3 every W. Three valid square operations → M = 3.",
-            "Op 1 은 모든 C, Op 2 는 모든 O, Op 3 은 모든 W. 사각 연산 3 개 → M = 3."),
+            "Op 1 은 모든 C, Op 2 는 모든 O, Op 3 은 모든 W. 제곱 연산 3 개 → M = 3."),
         t(E, "M = 3 is at most min+1 (since min is 1 or 2 when N even), so this is accepted whenever k = 1.",
             "M = 3 은 항상 min+1 이하 (N 짝수일 때 min 은 1 또는 2), 그래서 k = 1 이면 항상 통과."),
       ],
@@ -166,18 +166,18 @@ export function getCowSplitsWalk(E, lang = "py") {
     // s0=17 (0-16), s1=9 (17-25), s2=15 (26-40)
     return { code, vars: _CS_VARS, beats: [
       { hi: [0, 12],  bubble: t(E, "Read T test cases. For each: read N and the C/O/W string S (length 3N = n3).", "T개 테스트. 각각 N과 COW 문자열 S(길이 3N = n3) 읽기.") },
-      { hi: [13, 16], bubble: t(E, "Every operation removes an even-length square, so the total 3N must be even → N must be even. If N is odd, the answer is -1.", "각 연산은 짝수 길이 '사각'을 지워요 → 총 3N이 짝수여야 함 → N이 짝수 필수. 홀수면 답은 -1.") },
-      { hi: [17, 25], bubble: t(E, "Try M = 1 first: S is one big square exactly when its first half equals its second half. If so, tag every letter with operation 1.", "먼저 M = 1 시도: S의 앞 절반 == 뒤 절반이면 S 자체가 사각. 그럼 모든 글자에 연산 1을 붙이면 끝.") },
-      { hi: [26, 41], bubble: t(E, "Otherwise the letter trick: each block has one C, one O, one W, so all the C's form C^N (even → a square), and same for O and W. Op 1 = every C, Op 2 = every O, Op 3 = every W → M = 3, always small enough. Print each answer.", "아니면 글자 트릭: 블록마다 C·O·W 하나씩이라 모든 C는 C^N(짝수→사각), O·W도 마찬가지. 연산1=모든 C, 2=모든 O, 3=모든 W → M = 3, 항상 충분히 작음. 각 답 출력.") },
+      { hi: [13, 16], bubble: t(E, "Every operation removes an even-length square, so the total 3N must be even → N must be even. If N is odd, the answer is -1.", "각 연산은 짝수 길이 '제곱'을 지워요 → 총 3N이 짝수여야 함 → N이 짝수 필수. 홀수면 답은 -1.") },
+      { hi: [17, 25], bubble: t(E, "Try M = 1 first: S is one big square exactly when its first half equals its second half. If so, tag every letter with operation 1.", "먼저 M = 1 시도: S의 앞 절반 == 뒤 절반이면 S 자체가 제곱. 그럼 모든 글자에 연산 1을 붙이면 끝.") },
+      { hi: [26, 41], bubble: t(E, "Otherwise the letter trick: each block has one C, one O, one W, so all the C's form C^N (even → a square), and same for O and W. Op 1 = every C, Op 2 = every O, Op 3 = every W → M = 3, always small enough. Print each answer.", "아니면 글자 트릭: 블록마다 C·O·W 하나씩이라 모든 C는 C^N(짝수→제곱), O·W도 마찬가지. 연산1=모든 C, 2=모든 O, 3=모든 W → M = 3, 항상 충분히 작음. 각 답 출력.") },
     ] };
   }
   const code = [...s[0].py, ...s[1].py, ...s[2].py];
   // s0=12 (0-11), s1=5 (12-16), s2=5 (17-21)
   return { code, vars: _CS_VARS, beats: [
     { hi: [0, 8],   bubble: t(E, "Read T test cases. For each: read N and the C/O/W string S (length 3N = n3).", "T개 테스트. 각각 N과 COW 문자열 S(길이 3N = n3) 읽기.") },
-    { hi: [9, 11],  bubble: t(E, "Every operation removes an even-length square, so the total 3N must be even → N must be even. If N is odd, the answer is -1.", "각 연산은 짝수 길이 '사각'을 지워요 → 총 3N이 짝수여야 함 → N이 짝수 필수. 홀수면 답은 -1.") },
-    { hi: [12, 16], bubble: t(E, "Try M = 1 first: S is one big square exactly when its first half equals its second half. If so, tag every letter with operation 1.", "먼저 M = 1 시도: S의 앞 절반 == 뒤 절반이면 S 자체가 사각. 그럼 모든 글자에 연산 1을 붙이면 끝.") },
-    { hi: [17, 21], bubble: t(E, "Otherwise the letter trick: each block has one C, one O, one W, so all the C's form C^N (even → a square), and same for O and W. Op 1 = every C, Op 2 = every O, Op 3 = every W → M = 3, always small enough. Print each answer.", "아니면 글자 트릭: 블록마다 C·O·W 하나씩이라 모든 C는 C^N(짝수→사각), O·W도 마찬가지. 연산1=모든 C, 2=모든 O, 3=모든 W → M = 3, 항상 충분히 작음. 각 답 출력.") },
+    { hi: [9, 11],  bubble: t(E, "Every operation removes an even-length square, so the total 3N must be even → N must be even. If N is odd, the answer is -1.", "각 연산은 짝수 길이 '제곱'을 지워요 → 총 3N이 짝수여야 함 → N이 짝수 필수. 홀수면 답은 -1.") },
+    { hi: [12, 16], bubble: t(E, "Try M = 1 first: S is one big square exactly when its first half equals its second half. If so, tag every letter with operation 1.", "먼저 M = 1 시도: S의 앞 절반 == 뒤 절반이면 S 자체가 제곱. 그럼 모든 글자에 연산 1을 붙이면 끝.") },
+    { hi: [17, 21], bubble: t(E, "Otherwise the letter trick: each block has one C, one O, one W, so all the C's form C^N (even → a square), and same for O and W. Op 1 = every C, Op 2 = every O, Op 3 = every W → M = 3, always small enough. Print each answer.", "아니면 글자 트릭: 블록마다 C·O·W 하나씩이라 모든 C는 C^N(짝수→제곱), O·W도 마찬가지. 연산1=모든 C, 2=모든 O, 3=모든 W → M = 3, 항상 충분히 작음. 각 답 출력.") },
   ] };
 }
 

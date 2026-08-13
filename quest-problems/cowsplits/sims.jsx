@@ -279,7 +279,7 @@ export function InsightSim({ E }) {
             </span>
           ))}
         </Row>
-        <Caption color="#059669">{t(E, "CC = C+C ✓ square → wipe every C (move 1)", "CC = C+C ✓ 사각 → C 전부 한 번에 (연산 1)")}</Caption>
+        <Caption color="#059669">{t(E, "CC = C+C ✓ square → wipe every C (move 1)", "CC = C+C ✓ 제곱 → C 전부 한 번에 (연산 1)")}</Caption>
       </>}
       {s.kind === "odd" && <>
         <Row>{"CCC".split("").map((ch, i) => <Tile key={i} ch={ch} size={42} bg="#fff" bd="#dc2626" />)}</Row>
