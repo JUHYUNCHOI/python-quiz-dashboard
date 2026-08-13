@@ -348,11 +348,11 @@ export function FormulaBuildSim({ E }) {
       ? t(E, <><span style={NW}>1 more → leftover <b style={{color:"#15803d"}}>2</b></span> ✓ that's the max! <span style={NW}>We gave <b>2</b>.</span></>,
              <><span style={NW}>1개 더 → 자투리 <b style={{color:"#15803d"}}>2</b></span> ✓ 최대예요! <span style={NW}>준 파랑 = <b>2개</b>.</span></>)
     : s.kind === "formula"
-      ? t(E, <>That <b>2</b> is the answer — call it <b style={{color:"#2563eb"}}>r1</b>. It's just <span style={NW}><b>max leftover 2 − start leftover 0</b></span>.</>,
-             <>그 <b>2</b> 가 답이에요 — 이름은 <b style={{color:"#2563eb"}}>r1</b>. <span style={NW}><b>최대자투리 2 − 시작자투리 0</b></span> 이에요.</>)
+      ? t(E, <>Skip counting — get it <b>directly</b>. Filling from <span style={NW}><b>now 0</b> to <b>goal 2</b></span> = <span style={NW}><b>2 − 0 = 2</b></span> (like 3rd→7th floor is 4). This <span style={NW}>'goal − now'</span> is <b style={{color:"#2563eb"}}>r1</b>.</>,
+             <>이제 세지 않고 <b>바로</b> 구해요. 자투리를 <span style={NW}><b>지금 0</b>에서 <b>목표 2</b>까지</span> = <span style={NW}><b>2 − 0 = 2칸</b></span> (3층→7층이 4칸이듯). 이 <span style={NW}>'목표 − 지금'</span> 이 <b style={{color:"#2563eb"}}>r1</b>.</>)
     : s.kind === "other"
-      ? t(E, <>What if we <b>start with 4 blue</b>? <span style={NW}>4 = 3 + 1</span> → <span style={NW}>already <b>1</b> leftover</span>. Only <b>1 more</b> needed → <span style={NW}>r1 = 2 − 1 = <b>1</b></span>.</>,
-             <>만약 <b>파랑 4개로 시작</b>하면? <span style={NW}>4 = 3 + 1</span> → <span style={NW}>이미 자투리 <b>1</b></span>. <b>1개만</b> 더 주면 돼요 → <span style={NW}>r1 = 2 − 1 = <b>1</b></span>.</>)
+      ? t(E, <><b>Why subtract?</b> It shines when you <b>start with blue</b>. Start <b>4 blue</b>: <span style={NW}>4 = 3 + 1</span> → <span style={NW}>now leftover <b>1</b></span>. To goal 2: <span style={NW}><b>2 − 1 = 1</b></span> — only 1 more!</>,
+             <><b>왜 빼기냐면</b> — <b>시작 파랑이 있을 때</b> 빛나요. 파랑 <b>4개</b>로 시작하면 <span style={NW}>4 = 3 + 1</span> → <span style={NW}>지금 자투리 <b>1</b></span>. 목표 2까지 <span style={NW}><b>2 − 1 = 1칸</b></span> — 1개만 더!</>)
     : t(E, <>From r1, add <b>+3</b> to keep leftover 2: <span style={NW}>2 → 5 → 8</span>. <span style={NW}>Largest ≤ 8 = <b>8</b></span> → worst <b style={{color:"#dc2626"}}>b = 8</b>.</>,
            <>r1 에서 <b>3개씩</b> 더 주면 자투리 2 그대로: <span style={NW}>2 → 5 → 8</span>. <span style={NW}>8 이하 최대 = <b>8</b></span> → 최악 <b style={{color:"#dc2626"}}>b = 8</b>.</>);
 
@@ -397,7 +397,7 @@ export function FormulaBuildSim({ E }) {
       {(s.kind === "formula" || s.kind === "other") && (
         <div style={{ maxWidth: 440, margin: "14px auto 0", background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", textAlign: "center", wordBreak: "keep-all" }}>
           <div style={{ fontSize: 13.5, fontWeight: 800, color: "#1e3a8a" }}>
-            {t(E, "r1 = max leftover − start leftover", "r1 = 최대자투리 − 시작자투리")}
+            {t(E, "r1 = goal leftover − now leftover", "r1 = 목표 자투리 − 지금 자투리")}
           </div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#1e3a8a", marginTop: 4, fontFamily: "'JetBrains Mono',monospace" }}>
             {s.kind === "formula"
