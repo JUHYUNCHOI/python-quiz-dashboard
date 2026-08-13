@@ -114,26 +114,36 @@ export function AdversarySim({ E }) {
     const a = X - b, g = Math.floor(b / cB), w = b % cB;
     return { b, a, g, w, val: a + g * cA };
   });
-  const steps = [{ kind: "intro" }, ...rows.map((r) => ({ kind: "b", b: r.b })), { kind: "smart" }];
+  // 공식 유도(der1 관찰 → der2 추론 → der3 공식)로 마무리
+  const steps = [{ kind: "intro" }, ...rows.map((r) => ({ kind: "b", b: r.b })), { kind: "der1" }, { kind: "der2" }, { kind: "der3" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
 
-  const isSmart = s.kind === "smart";
-  const curB = s.kind === "b" ? s.b : (isSmart ? X : -1);
+  const isDer = s.kind === "der1" || s.kind === "der2" || s.kind === "der3";
+  const curB = s.kind === "b" ? s.b : (isDer ? X : -1);
   const cur = curB >= 0 ? rows[curB] : null;
-  // 지금까지(0..curB) 최솟값 = 심술쟁이가 노리는 최악 (smart 면 전체)
+  // 전체 최솟값 = 심술쟁이 최악
   const seen = curB >= 0 ? rows.slice(0, curB + 1) : [];
   const worstSoFar = seen.length ? Math.min(...seen.map((r) => r.val)) : null;
   const worstB = seen.length ? seen.reduce((mi, r) => (r.val < rows[mi].val ? r.b : mi), 0) : -1;
-  const isNewMin = !isSmart && cur && cur.val === worstSoFar && (curB === 0 || cur.val < Math.min(...rows.slice(0, curB).map((r) => r.val)));
+  const isNewMin = !isDer && cur && cur.val === worstSoFar && (curB === 0 || cur.val < Math.min(...rows.slice(0, curB).map((r) => r.val)));
   const isLast = s.kind === "b" && curB === X;
+  // 자투리 최대(w = cB-1)인 후보들 = 최악 후보. 공식으로 바로 구함.
+  const r1 = (cB - 1 - (0 % cB) + cB) % cB;                 // 나머지가 cB-1 되는 가장 작은 b
+  const r1big = r1 + Math.floor((X - r1) / cB) * cB;        // 그중 x 이하 가장 큰 b (= worstB)
 
   const say =
     s.kind === "intro"
       ? t(E, <>Let's test one candidate from the strategy — say <b style={NW}>x = 8</b>. What's the trickster's <b>worst</b> split? Slide <b>b</b> (blue) from 0 up.</>,
              <>전략에서 말한 <b>후보 하나</b>를 시험해요 — 예로 <b style={NW}>x = 8</b>. 심술쟁이의 <b>최악 분배</b>는? 아래 <b>b</b>(파랑)를 0부터 늘려봐요.</>)
-      : isSmart
-      ? t(E, <><b>Shortcut:</b> the trickster always <b>dumps into blue</b> and leaves the <b>most leftover</b>. So only <b style={NW}>b = 8</b> matters — <b>worst = 4</b> in <b>one formula (O(1))</b>, no matter how big x is.</>,
-             <><b>단축:</b> 심술쟁이는 늘 <b>파랑에 몰고</b> <b>자투리를 최대</b>로 남겨요. 그래서 <b style={NW}>b = 8</b> 하나만 보면 돼요 — <b>worst = 4</b> 를 <b>공식 한 방(O(1))</b>으로, x 가 아무리 커도.</>)
+      : s.kind === "der1"
+      ? t(E, <><b>Observe:</b> where are the worst (small) values? <b>b = 2, 5, 8</b>. What do they share — all leave the <b>most leftover</b> (cB−1 = 2 blue wasted).</>,
+             <><b>관찰:</b> 표에서 최악(작은 값)은 어디? <b>b = 2, 5, 8</b>. 공통점 — 다 <b>자투리 최대</b> (cB−1 = 2개 버려짐).</>)
+      : s.kind === "der2"
+      ? t(E, <><b>And</b> among those, bigger b is worse (6 → 5 → 4) — you dump would-be-red chips into blue too. So the <b>largest b with max leftover</b> (b = 8) is the real worst.</>,
+             <><b>그리고</b> 그중 <b>b가 클수록 더 최악</b> (6 → 5 → 4) — 빨강 될 칩까지 파랑에 버리니까. → 자투리 최대인 <b>가장 큰 b</b>(=8)가 진짜 최악.</>)
+      : s.kind === "der3"
+      ? t(E, <><b>So compute it directly:</b> the b with leftover cB−1 is <b>r1 = (cB−1 − B%cB) % cB</b>, then take the largest ≤ x. No looping — O(1).</>,
+             <><b>그래서 공식으로 바로:</b> 자투리가 cB−1 되는 b = <b>r1 = (cB−1 − B%cB) % cB</b>, 거기서 x 이하 가장 큰 것. b 다 안 봐도 O(1).</>)
       : isLast
       ? t(E, <><b style={NW}>b = 8</b>: all blue → <span style={NW}>2 groups + 2 wasted</span> = <b style={{color:"#dc2626",...NW}}>4 red</b>. The <b>worst</b>! <span style={NW}>4 &lt; 5</span> → <b style={NW}>x=8 not enough ✗</b>.</>,
              <><b style={NW}>b = 8</b>: 다 파랑 → <span style={NW}>묶음 2 + 자투리 2 버림</span> = <b style={{color:"#dc2626",...NW}}>빨강 4</b>. <b>최악!</b> <span style={NW}>4 &lt; 5</span> → <b style={NW}>x=8 부족 ✗</b></>)
@@ -144,11 +154,11 @@ export function AdversarySim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "The trickster's worst (and a shortcut)", "심술쟁이 최악 — 그리고 단축")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "The trickster's worst → the formula", "심술쟁이 최악 → 공식 유도")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
         {t(E, "start A=0, B=0 · 3 blue → 2 red · goal 5 · extra x=8", "시작 A=0, B=0 · 파랑 3 → 빨강 2 · 목표 5 · 추가 x=8")}
       </div>
-      <Say tone={isSmart ? "aha" : isLast ? "stuck" : isNewMin ? "stuck" : "go"}>{say}</Say>
+      <Say tone={s.kind === "der3" ? "aha" : isLast || s.kind === "der1" || s.kind === "der2" ? "stuck" : isNewMin ? "stuck" : "go"}>{say}</Say>
 
       {cur && (
         <div style={{ maxWidth: 480, margin: "0 auto" }}>
@@ -172,38 +182,44 @@ export function AdversarySim({ E }) {
             {cur.a} + ({cur.b}÷{cB})×{cA} = <b style={{ color: cur.val === worstSoFar ? "#dc2626" : "#334155" }}>{cur.val}</b>
           </div>
 
-          {/* b=0..8 결과 셀 — 지금까지 revealed, 최악 셀 😈 표시 */}
+          {/* b=0..8 결과 셀 — der1: 자투리최대 파랑강조 / der2·3: 최악만 / b스텝: 최악 😈 */}
           <div style={{ display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap" }}>
             {rows.map((r) => {
               const shown = r.b <= curB;
-              const isWorst = shown && r.val === worstSoFar && r.b === worstB;
-              const op = isSmart ? (r.b === worstB ? 1 : 0.28) : (shown ? 1 : 0.25);
+              const isMaxLeft = r.w === cB - 1;                     // 자투리 최대 후보
+              const isWorst = r.val === worstSoFar && r.b === worstB;
+              let op, mark;
+              if (s.kind === "der1")      { op = isMaxLeft ? 1 : 0.28; mark = isMaxLeft ? "maxleft" : null; }
+              else if (isDer)             { op = isWorst ? 1 : 0.28;   mark = isWorst ? "worst" : null; }
+              else                        { op = shown ? 1 : 0.25;    mark = (shown && isWorst) ? "worst" : null; }
+              const bg = mark === "worst" ? "#fee2e2" : mark === "maxleft" ? "#dbeafe" : shown ? "#f1f5f9" : "#f8fafc";
+              const bd = mark === "worst" ? "2px solid #dc2626" : mark === "maxleft" ? "2px solid #2563eb" : "1px solid #e2e8f0";
+              const fg = mark === "worst" ? "#dc2626" : mark === "maxleft" ? "#1e40af" : "#334155";
               return (
                 <div key={r.b} style={{ width: 40, textAlign: "center", opacity: op, transition: "all .15s" }}>
                   <div style={{ fontSize: 9, fontWeight: 700, color: "#94a3b8" }}>b={r.b}</div>
                   <div style={{ marginTop: 2, height: 26, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
-                    background: isWorst ? "#fee2e2" : shown ? "#f1f5f9" : "#f8fafc",
-                    border: isWorst ? "2px solid #dc2626" : "1px solid #e2e8f0",
-                    color: isWorst ? "#dc2626" : "#334155" }}>
+                    fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", background: bg, border: bd, color: fg }}>
                     {shown ? r.val : "·"}
                   </div>
-                  {isWorst && <div style={{ fontSize: 12 }}>😈</div>}
+                  {mark === "worst" && <div style={{ fontSize: 12 }}>😈</div>}
+                  {mark === "maxleft" && <div style={{ fontSize: 8.5, fontWeight: 800, color: "#2563eb" }}>{t(E, "waste 2", "자투리2")}</div>}
                 </div>
               );
             })}
           </div>
-          {worstSoFar != null && !isSmart && (
+          {worstSoFar != null && !isDer && (
             <div style={{ textAlign: "center", marginTop: 10, fontSize: 12.5, fontWeight: 800, wordBreak: "keep-all",
               color: isLast ? (worstSoFar >= fA ? "#15803d" : "#dc2626") : "#dc2626" }}>
               {t(E, "worst so far = ", "지금까지 최악 = ")}<b>{worstSoFar}</b>
               {isLast && <> {worstSoFar >= fA ? `≥ ${fA} ✓` : `< ${fA} ✗ ` + t(E, "(x=8 not enough)", "(x=8 부족)")}</>}
             </div>
           )}
-          {isSmart && (
-            <div style={{ maxWidth: 440, margin: "12px auto 0", background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "9px 13px", fontSize: 12, color: "#1e3a8a", lineHeight: 1.55, wordBreak: "keep-all", textWrap: "balance", textAlign: "center", fontWeight: 800 }}>
-              {t(E, <>💡 No need to loop b = 0…x. The code computes <b>worst(x)</b> in <b>O(1)</b> (max-leftover formula) — that's why huge x is fine.</>,
-                   <>💡 b = 0…x 를 다 돌 필요 없어요. 코드는 <b>worst(x)</b> 를 <b>O(1)</b> 공식(자투리 최대)으로 계산 — 그래서 x 가 커도 괜찮아요.</>)}
+          {s.kind === "der3" && (
+            <div style={{ maxWidth: 460, margin: "12px auto 0", background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#1e3a8a", lineHeight: 1.7, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>r1 = (cB−1 − B%cB) % cB = (3−1−0)%3 = <b style={{color:"#2563eb"}}>2</b></div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, marginTop: 2 }}>가장 큰 것 = 2 + ((8−2)÷3)×3 = <b style={{color:"#dc2626"}}>8</b></div>
+              <div style={{ marginTop: 5, fontWeight: 700 }}>{t(E, "→ that's the code's r1 lines. No loop over b — O(1).", "→ 이게 코드의 r1 두 줄이에요. b 안 돌아 — O(1).")}</div>
             </div>
           )}
         </div>
