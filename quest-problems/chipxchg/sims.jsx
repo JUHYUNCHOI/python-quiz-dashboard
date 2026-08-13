@@ -240,8 +240,8 @@ export function SearchSim({ E }) {
 
   const say =
     s.kind === "why"
-      ? t(E, <><b>worst(x)</b> never drops as x grows — a <b>staircase ↗</b>. So instead of trying all x (up to 10¹⁸!), <b>binary-search</b>: halve the range each step.</>,
-             <><b>worst(x)</b> 는 x 가 커질수록 안 줄어요 — <b>계단 ↗</b>. 그래서 모든 x(최대 10¹⁸!)를 안 보고 <b>이분탐색</b> — 범위를 매번 반씩 줄여요.</>)
+      ? t(E, <>Why binary search? <b>①</b> worst(x) only rises (staircase) → all <b style={{color:"#475569"}}>✗</b> then all <b style={{color:"#15803d"}}>✓</b>, one boundary — binary search pins it. <b>②</b> x can hit 10¹⁸, so one-by-one is impossible (~60 checks instead).</>,
+             <>왜 이분탐색? <b>①</b> worst(x)가 오르기만 함(계단) → <b style={{color:"#475569"}}>✗</b>들 다음 <b style={{color:"#15803d"}}>✓</b>들, 경계가 딱 하나 — 이분탐색이 그걸 콕. <b>②</b> x가 10¹⁸까지라 하나씩은 불가 (이분탐색 ~60번).</>)
       : s.kind === "done"
       ? t(E, <>Range shrank to one — <b style={{color:"#15803d"}}>answer x = {ANS}</b>, in just <b>{trace.length} checks</b>. Matches <b style={{color:"#15803d"}}>sample test 2's output 9 ✓</b> — this is the real solution.</>,
              <>범위가 하나로 좁혀졌어요 — <b style={{color:"#15803d"}}>답 x = {ANS}</b>, <b>{trace.length}번</b> 확인으로. <b style={{color:"#15803d"}}>샘플 테스트 2의 정답 9 와 일치 ✓</b> — 이게 진짜 해법이에요.</>)
@@ -286,6 +286,14 @@ export function SearchSim({ E }) {
           );
         })}
       </div>
+
+      {s.kind === "why" && (
+        <div style={{ maxWidth: 440, margin: "12px auto 0", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, fontSize: 12, fontWeight: 800, wordBreak: "keep-all" }}>
+          <span style={{ color: "#64748b" }}>{t(E, "✗ short", "✗ 부족")}</span>
+          <span style={{ flex: "0 0 auto", padding: "2px 8px", borderRadius: 999, background: "#fef3c7", border: "1.5px solid #d97706", color: "#b45309", fontSize: 11 }}>{t(E, "one boundary", "경계 딱 1개")}</span>
+          <span style={{ color: "#15803d" }}>{t(E, "reached ✓", "도달 ✓")}</span>
+        </div>
+      )}
 
       {s.kind === "done" && (
         <div style={{ maxWidth: 460, margin: "16px auto 0", background: "#ecfdf5", border: "1.5px solid #16a34a", borderRadius: 10, padding: "10px 14px", fontSize: 12.5, color: "#065f46", lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", textAlign: "center", fontWeight: 800 }}>
