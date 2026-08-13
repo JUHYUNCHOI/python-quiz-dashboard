@@ -176,8 +176,8 @@ export function makeChipXchgCh2(E, lang = "py") {
       label: t(E, "Code", "코드"),
       narr: lang === "cpp"
         ? t(E,
-            "Read it the way you'd write it — define the functions (worst → solve) first, then main reads input and uses them.",
-            "짜는 순서대로 — 함수(worst → solve)부터 정의하고, 아래 main 이 입력받아 써요.")
+            "Follow the flow — header → main (input) → the solve/worst it calls. (C++ defines the functions above main.)",
+            "흐름 따라 — 헤더 → main(입력) → 거기서 부르는 solve·worst. (C++ 은 함수를 main 위에 정의)")
         : t(E,
             "Read it the way you'd write it — input first: main reads each test and calls solve; then unpack solve and worst.",
             "짜는 순서대로 — 입력부터. main 이 각 테스트를 받아 solve·출력, 그다음 solve·worst 를 뜯어봐요."),

@@ -187,20 +187,21 @@ export function getChipXchgWalk(E, lang = "py") {
     const W = 4;                              // worst(minFinalA) start
     const S = W + worstCpp.length + 1;        // solve start
     const M = S + solveCpp.length + 1;        // main start
+    // 읽는 순서(호출 순서): 헤더 → main(입력) → solve → worst. (파일은 함수-먼저지만 말풍선은 이 순서)
     return { code, vars: _CX_VARS, beats: [
       { hi: [0, 2],       bubble: t(E, "Headers — bits/stdc++.h, and ll = long long.", "헤더 — bits/stdc++.h, ll = long long.") },
-      { hi: [W, W + 3],   bubble: t(E, "worst(x): with 0 extra chips, just count now (B into cB groups).", "worst(x): 추가 0개면 지금 그대로 세기 (B 를 cB 묶음).") },
-      { hi: [W + 4, W + 6], bubble: t(E, "Candidate b's — start with 0 (all red) and x (all blue).", "후보 b — 우선 0(다 빨강)·x(다 파랑).") },
-      { hi: [W + 7, W + 11], bubble: t(E, "Add the b that leaves max leftover (r1) — what the trickster aims for.", "자투리 최대(r1) 만드는 b 추가 — 심술쟁이가 노리는 것.") },
-      { hi: [W + 12, W + 16], bubble: t(E, "Add the b with no leftover (r0) — for comparison.", "자투리 없음(r0) 만드는 b 추가 — 비교용.") },
-      { hi: [W + 17, W + 25], bubble: t(E, "Smallest final red over the candidates = the worst. O(1).", "후보 중 최종 빨강 최솟값 = 최악. O(1).") },
+      { hi: [M, M + 1],   bubble: t(E, "Start at main — read T, the number of tests.", "main 부터 — 테스트 개수 T 읽기.") },
+      { hi: [M + 2, M + 6], bubble: t(E, "Each test: read A B cA cB fA → call solve → print. (solve is below)", "각 테스트: A B cA cB fA 읽어 → solve 호출 → 출력. (solve 는 아래)") },
       { hi: [S, S + 2],   bubble: t(E, "solve: the answer x lies in [0, 2×10¹⁸] — set that range.", "solve: 답 x 는 [0, 2×10¹⁸] 안. 그 범위부터 잡아요.") },
       { hi: [S + 3, S + 4], bubble: t(E, "While the range holds, pick the middle mid.", "범위가 남은 동안, 가운데 mid 를 골라요.") },
       { hi: [S + 5, S + 6], bubble: t(E, "worst(mid) ≥ goal? then the answer is mid or to its left → hi = mid.", "worst(mid) ≥ 목표면 → 답은 mid 이거나 왼쪽 → hi = mid.") },
       { hi: [S + 7, S + 8], bubble: t(E, "Not enough? the answer is to the right → lo = mid+1.", "모자라면 → 답은 오른쪽 → lo = mid+1.") },
       { hi: [S + 11, S + 11], bubble: t(E, "Range down to one point — lo is the answer.", "범위가 한 점으로 좁혀지면 lo 가 답.") },
-      { hi: [M, M + 1],   bubble: t(E, "Now main: read T — the number of tests.", "이제 main — 테스트 개수 T 읽기.") },
-      { hi: [M + 2, M + 6], bubble: t(E, "Each test: read A B cA cB fA → solve → print.", "각 테스트: A B cA cB fA 읽어 → solve → 출력.") },
+      { hi: [W, W + 3],   bubble: t(E, "That worst = minFinalA: with 0 extra chips, count now (B into cB groups).", "그 worst = minFinalA: 추가 0개면 지금 그대로 세기 (B 를 cB 묶음).") },
+      { hi: [W + 4, W + 6], bubble: t(E, "Candidate b's — start with 0 (all red) and x (all blue).", "후보 b — 우선 0(다 빨강)·x(다 파랑).") },
+      { hi: [W + 7, W + 11], bubble: t(E, "Add the b that leaves max leftover (r1) — what the trickster aims for.", "자투리 최대(r1) 만드는 b 추가 — 심술쟁이가 노리는 것.") },
+      { hi: [W + 12, W + 16], bubble: t(E, "Add the b with no leftover (r0) — for comparison.", "자투리 없음(r0) 만드는 b 추가 — 비교용.") },
+      { hi: [W + 17, W + 25], bubble: t(E, "Smallest final red over the candidates = the worst. O(1).", "후보 중 최종 빨강 최솟값 = 최악. O(1).") },
     ] };
   }
   // 입력부터: main → solve → min_final_A (파이썬은 main()을 맨 아래서 호출 → 앞 참조 OK)
