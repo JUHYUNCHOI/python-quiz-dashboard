@@ -216,7 +216,7 @@ export function FormulaDeriveSim({ E }) {
     return { b, a, g, w, val: a + g * cA };
   });
   const worstB = rows.reduce((mi, r) => (r.val < rows[mi].val ? r.b : mi), 0);
-  const steps = [{ kind: "why" }, { kind: "obs" }, { kind: "infer" }, { kind: "formula" }];
+  const steps = [{ kind: "why" }, { kind: "obs" }, { kind: "infer" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
 
   const worst = rows[worstB];
@@ -228,20 +228,20 @@ export function FormulaDeriveSim({ E }) {
       ? t(E, <><b>Observe:</b> the value dips hardest where a split <b>wastes 2 blue</b> (leftover cB−1 = 2). Those b = <span style={NW}><b>2, 5, 8</b></span> — the candidates for worst.</>,
              <><b>관찰:</b> <b>파랑 2개를 버릴 때</b>(자투리 cB−1 = 2) 값이 훅 낮아져요. 그런 b = <span style={NW}><b>2, 5, 8</b></span> — 최악 후보들.</>)
       : s.kind === "infer"
-      ? t(E, <><b>Biggest of them = worst.</b> Blue loses <span style={NW}>(3 blue → 2 red)</span>, so bigger b → fewer red: <span style={NW}>b=2 → 6</span>, <span style={NW}>b=5 → 5</span>, <span style={NW}>b=8 → 4</span>. → worst <b>b = 8</b>.</>,
-             <><b>이 중 가장 큰 게 최악.</b> 파랑은 손해라 <span style={NW}>(파랑 3 → 빨강 2)</span> b 클수록 빨강이 줄어요: <span style={NW}>b=2 → 6</span>, <span style={NW}>b=5 → 5</span>, <span style={NW}>b=8 → 4</span>. → 최악 <b>b = 8</b>.</>)
+      ? t(E, <><b>Biggest of them = worst.</b> Blue loses <span style={NW}>(3 blue → 2 red)</span>, so bigger b → fewer red: <span style={NW}>b=2 → 6</span>, <span style={NW}>b=5 → 5</span>, <span style={NW}>b=8 → 4</span>. → worst <b>b = 8</b>. <span style={{color:"#2563eb"}}>Next: build the formula for it.</span></>,
+             <><b>이 중 가장 큰 게 최악.</b> 파랑은 손해라 <span style={NW}>(파랑 3 → 빨강 2)</span> b 클수록 빨강이 줄어요: <span style={NW}>b=2 → 6</span>, <span style={NW}>b=5 → 5</span>, <span style={NW}>b=8 → 4</span>. → 최악 <b>b = 8</b>. <span style={{color:"#2563eb"}}>다음: 이 b 의 공식을 만들어요.</span></>)
       : t(E, <><b>As a formula:</b> get that worst <b>b = 8</b> directly — no brute loop. Steps <b>①②③</b> below are the calc.</>,
              <><b>공식으로:</b> 그 최악 <b>b = 8</b> 을 브루트 없이 바로 계산해요. 아래 <b>①②③</b> 이 그 계산이에요.</>);
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "From brute to an O(1) formula", "브루트 → O(1) 공식 유도")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "Find the worst b from the table", "표에서 최악 b 찾기")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all", lineHeight: 1.5 }}>
         {t(E, "start red 0 · blue 0 · swap: 3 blue → 2 red · goal 5 · extra x=8", "시작 빨강 0 · 파랑 0 · 환전: 파랑 3 → 빨강 2 · 목표 5 · 추가 x=8")}
         <br/>{t(E, "b = blue chips given · value = my final red (smaller = worse)", "b = 파랑에 준 칩 · 값 = 그때 내 최종 빨강 (작을수록 최악)")}
       </div>
-      <Say tone={s.kind === "formula" ? "aha" : "stuck"}>{say}</Say>
+      <Say tone={s.kind === "infer" ? "aha" : "stuck"}>{say}</Say>
 
       {/* why: 앞에서 본 칩 분배 그림 하나 복습 (예: 최악 b=8) */}
       {s.kind === "why" && (
@@ -305,6 +305,113 @@ export function FormulaDeriveSim({ E }) {
             {t(E, <>= “how many more blue to reach remainder 2?” (start blue 0 → 2). Then +cB up to x. No loop — <b>O(1)</b>.</>,
                   <>= “나머지 2 되려면 파랑 몇 개 더?” <span style={NW}>(시작 파랑 0 → 2)</span>. 그다음 x 까지 +cB. 반복 없이 — <b>O(1)</b>.</>)}
           </div>
+        </div>
+      )}
+
+      <div style={{ marginTop: 24 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FormulaBuildSim — r1 공식을 '자투리 트레이'로 하나씩 유도.
+   what(자투리 뜻) → goal(최대 cB−1) → start(B=0) → +1 → +1(도착) →
+   formula(r1 식) → other(B≠0 예로 −B%cB 이유) → extend(+cB: 2→5→8, x이하 최대)
+   ═══════════════════════════════════════════════════════════════ */
+export function FormulaBuildSim({ E }) {
+  const cB = 3, X = 8, target = cB - 1;
+  const steps = [
+    { kind: "what" }, { kind: "goal" }, { kind: "start" },
+    { kind: "add1" }, { kind: "add2" }, { kind: "formula" },
+    { kind: "other" }, { kind: "extend" },
+  ];
+  const ts = useTraceStep(steps); const s = steps[ts.safe];
+
+  const addedByKind = { what: 0, goal: 0, start: 0, add1: 1, add2: 2, formula: 2, other: 0, extend: X };
+  const B = s.kind === "other" ? 4 : 0;
+  const added = addedByKind[s.kind];
+  const total = B + added;
+  const groups = Math.floor(total / cB);
+  const left = total % cB;
+  const hit = left === target;
+  const showTarget = s.kind === "goal";
+
+  const say =
+    s.kind === "what"
+      ? t(E, <>Blue swaps only in <b>groups of 3</b>. Whatever can't fill a group is <b style={{color:"#dc2626"}}>leftover</b> — <b>wasted</b>.</>,
+             <>파랑은 <b>3개씩</b> 묶여야 교환돼요. 3개 못 채운 나머지 = <b style={{color:"#dc2626"}}>자투리</b>, 교환 못 하고 <b>버려져요</b>.</>)
+    : s.kind === "goal"
+      ? t(E, <>The trickster wants the <b style={{color:"#dc2626"}}>most leftover</b>. 3 would re-group, so the max is <b>2</b> <span style={NW}>(cB−1)</span>.</>,
+             <>심술쟁이는 <b style={{color:"#dc2626"}}>자투리를 최대</b>로 만들고 싶어요. 3개면 또 묶이니 — 최대는 <b>2개</b> <span style={NW}>(cB−1)</span>.</>)
+    : s.kind === "start"
+      ? t(E, <>Start blue <b>B = 0</b> → tray empty, leftover <b>0</b>. <span style={NW}>How many more to reach 2?</span></>,
+             <>시작 파랑 <b>B = 0개</b> → 트레이가 비었어요. 자투리 <b>0</b>. <span style={NW}>얼마나 더 주면 자투리 2?</span></>)
+    : s.kind === "add1"
+      ? t(E, <>Take <b>1 blue</b> → leftover <b>1</b>. Not 2 yet.</>,
+             <>파랑 <b>1개</b> 받음 → 자투리 <b>1</b>. 아직 2 아니에요.</>)
+    : s.kind === "add2"
+      ? t(E, <><b>1 more</b> → leftover <b style={{color:"#15803d"}}>2</b> ✓ reached! How many did we give? → <b>2</b>.</>,
+             <><b>1개 더</b> → 자투리 <b style={{color:"#15803d"}}>2</b> ✓ 도착! 몇 개 줬죠? → <b>2개</b>.</>)
+    : s.kind === "formula"
+      ? t(E, <>That <b>2</b> is <b style={{color:"#2563eb"}}>r1</b>. It's just <span style={NW}>target 2 − start-leftover 0</span> → <span style={NW}><b>r1 = (cB−1) − (B%cB) = 2</b></span>.</>,
+             <>그 <b>2</b> 가 <b style={{color:"#2563eb"}}>r1</b> 이에요. <span style={NW}>목표 2 − 시작자투리 0</span> 일 뿐 → <span style={NW}><b>r1 = (cB−1) − (B%cB) = 2</b></span>.</>)
+    : s.kind === "other"
+      ? t(E, <><b>Another case:</b> start blue <b>4</b>? <span style={NW}>4 = 3 + 1</span> → already leftover <b>1</b>. Only <b>1 more</b> to 2 → <span style={NW}>r1 = 2 − 1 = 1</span>. <span style={NW}>(that's the −B%cB!)</span></>,
+             <><b>다른 예:</b> 시작 파랑 <b>4개</b>면? <span style={NW}>4 = 3 + 1</span> → 이미 자투리 <b>1</b>. 목표 2까지 <b>1개만</b> 더 → <span style={NW}>r1 = 2 − 1 = 1</span>. <span style={NW}>(이게 −B%cB!)</span></>)
+    : t(E, <>Keep leftover 2 and add <b>+3</b> each time: <span style={NW}>2 → 5 → 8</span> — a whole group doesn't change leftover. <span style={NW}>largest ≤ x=8 = 8</span> → worst <b style={{color:"#dc2626"}}>b = 8</b>.</>,
+           <>자투리 2 <b>유지</b>하며 <b>3개씩</b> 더: <span style={NW}>2 → 5 → 8</span> — 한 그룹 통째라 자투리 안 변해요. <span style={NW}>x=8 이하 최대 = 8</span> → 최악 <b style={{color:"#dc2626"}}>b = 8</b>.</>);
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Build the r1 formula, one step at a time", "r1 공식을 하나씩 만들기")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all", lineHeight: 1.5 }}>
+        {t(E, "leftover = blue that can't fill a group of 3 (wasted) · max leftover = 2", "자투리 = 3개 못 채운 나머지 파랑(버려짐) · 최대 자투리 = 2")}
+      </div>
+      <Say tone={hit ? "aha" : s.kind === "goal" ? "stuck" : "go"}>{say}</Say>
+
+      {/* 자투리 트레이: 완성 묶음(교환됨) + cB 슬롯의 자투리 */}
+      <div style={{ maxWidth: 470, margin: "0 auto", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", justifyContent: "center", minHeight: 60 }}>
+        {groups > 0 && (
+          <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+            {Array.from({ length: groups }).map((_, g) => (
+              <div key={g} style={{ display: "flex", gap: 3, padding: 4, borderRadius: 8, border: `2px solid ${BLU}`, background: "#eff6ff", opacity: 0.5 }}>
+                {Array.from({ length: cB }).map((_, i) => <Chip key={i} color="blue" size={16} faded />)}
+              </div>
+            ))}
+            <span style={{ fontSize: 10.5, fontWeight: 800, color: "#94a3b8", wordBreak: "keep-all" }}>{t(E, `${groups} full`, `완성 ${groups}묶음`)}</span>
+          </div>
+        )}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+          <div style={{ display: "flex", gap: 4, padding: 5, borderRadius: 10,
+            border: `2px dashed ${hit ? "#16a34a" : showTarget ? "#dc2626" : "#94a3b8"}`,
+            background: hit ? "#f0fdf4" : "#fff" }}>
+            {Array.from({ length: cB }).map((_, i) => (
+              i < left
+                ? <Chip key={i} color="blue" size={18} />
+                : <div key={i} style={{ width: 18, height: 18, borderRadius: 999, border: "2px dashed #cbd5e1" }} />
+            ))}
+          </div>
+          <div style={{ fontSize: 10, fontWeight: 800, color: "#94a3b8" }}>{t(E, "leftover tray", "자투리 트레이")}</div>
+        </div>
+        <div style={{ fontSize: 15, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: hit ? "#15803d" : "#334155", whiteSpace: "nowrap" }}>
+          = {left}{hit ? " ✓" : ""}{showTarget ? ` (${t(E, "want", "목표")} ${target})` : ""}
+        </div>
+      </div>
+
+      {(s.kind === "formula" || s.kind === "other") && (
+        <div style={{ maxWidth: 440, margin: "14px auto 0", background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: "#1e3a8a", wordBreak: "break-word" }}>
+          {s.kind === "formula"
+            ? <>r1 = (cB−1) − (B%cB) = 2 − 0 = <b style={{ color: "#2563eb" }}>2</b></>
+            : <>r1 = (cB−1) − (B%cB) = 2 − <b style={{color:"#dc2626"}}>1</b> = <b style={{ color: "#2563eb" }}>1</b></>}
+        </div>
+      )}
+      {s.kind === "extend" && (
+        <div style={{ maxWidth: 440, margin: "14px auto 0", background: "#f0fdf4", border: "1.5px solid #16a34a", borderRadius: 10, padding: "10px 14px", textAlign: "center", fontSize: 12.5, fontWeight: 800, color: "#065f46", wordBreak: "keep-all", lineHeight: 1.6 }}>
+          {t(E, <><span style={NW}>largest ≤ x</span> = r1 + <span style={NW}>⌊(x−r1)/cB⌋×cB</span> = <span style={NW}>2 + 2×3</span> = <b>8</b></>,
+                <><span style={NW}>x 이하 최대</span> = r1 + <span style={NW}>⌊(x−r1)/cB⌋×cB</span> = <span style={NW}>2 + 2×3</span> = <b>8</b></>)}
         </div>
       )}
 
