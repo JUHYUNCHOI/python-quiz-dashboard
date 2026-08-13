@@ -131,11 +131,11 @@ export function AdversarySim({ E }) {
       ? t(E, <>Let's test one candidate from the strategy — say <b style={NW}>x = 8</b>. What's the trickster's <b>worst</b> split? Slide <b>b</b> (blue) from 0 up.</>,
              <>전략에서 말한 <b>후보 하나</b>를 시험해요 — 예로 <b style={NW}>x = 8</b>. 심술쟁이의 <b>최악 분배</b>는? 아래 <b>b</b>(파랑)를 0부터 늘려봐요.</>)
       : isLast
-      ? t(E, <><b style={NW}>b = 8</b>: all blue → <span style={NW}>2 groups + 2 wasted</span> = <b style={{color:"#dc2626",...NW}}>4 red</b>. The <b>worst</b>! <span style={NW}>4 &lt; 5</span> → <b style={NW}>x=8 not enough ✗</b>.</>,
-             <><b style={NW}>b = 8</b>: 다 파랑 → <span style={NW}>묶음 2 + 자투리 2 버림</span> = <b style={{color:"#dc2626",...NW}}>빨강 4</b>. <b>최악!</b> <span style={NW}>4 &lt; 5</span> → <b style={NW}>x=8 부족 ✗</b></>)
+      ? t(E, <><b style={NW}>b=8 (all blue):</b> <span style={NW}>2 groups → +4 red</span>, <span style={NW}>2 wasted</span> → <b style={{color:"#dc2626",...NW}}>final 4</b>. <span style={NW}>4 &lt; goal 5</span> → <b style={NW}>x=8 not enough ✗</b></>,
+             <><b style={NW}>b=8 (다 파랑):</b> <span style={NW}>묶음 2 → +빨강 4</span>, <span style={NW}>자투리 2 버림</span> → <b style={{color:"#dc2626",...NW}}>최종 4</b>. <span style={NW}>4 &lt; 목표 5</span> → <b style={NW}>x=8 부족 ✗</b></>)
       : t(E,
-          <><b style={NW}>b={cur.b}</b> · <span style={NW}><b style={{color:BLU}}>{cur.b} blue</b> → +{cur.g*cA} red{cur.w?` (${cur.w} wasted)`:""}</span> · <span style={NW}>{cur.a} red kept</span> = <b>{cur.val}</b>{isNewMin?" 😈":""}</>,
-          <><b style={NW}>b={cur.b}</b> · <span style={NW}><b style={{color:BLU}}>파랑 {cur.b}</b> → +빨강 {cur.g*cA}{cur.w?` (${cur.w} 버림)`:""}</span> · <span style={NW}>빨강 {cur.a} 그대로</span> = <b>{cur.val}</b>{isNewMin?<> <b style={{color:"#dc2626"}}>← 최악 😈</b></>:null}</>);
+          <><b style={NW}>b={cur.b} ({cur.b} blue):</b> <span style={NW}>swap → <b style={{color:cur.g?"#15803d":"#94a3b8"}}>+{cur.g*cA} red</b>{cur.w?` (${cur.w} wasted)`:""}</span>, <span style={NW}>{cur.a} red kept</span> → <b>final {cur.val}</b></>,
+          <><b style={NW}>b={cur.b} (파랑 {cur.b}개):</b> <span style={NW}>환전 → <b style={{color:cur.g?"#15803d":"#94a3b8"}}>+빨강 {cur.g*cA}</b>{cur.w?` (자투리 ${cur.w} 버림)`:""}</span>, <span style={NW}>빨강 {cur.a}개는 그대로</span> → <b>최종 {cur.val}</b></>);
 
   return (
     <div style={{ padding: 16 }}>
@@ -225,20 +225,21 @@ export function FormulaDeriveSim({ E }) {
       ? t(E, <>The same table we built. <span style={NW}>If x hits 10¹⁸</span> we can't scan all b — <span style={NW}>let's find the pattern.</span></>,
              <>앞에서 만든 그 표예요. <span style={NW}>x 가 10¹⁸ 면</span> <span style={NW}>b 다 못 봐</span> → <span style={NW}>규칙을 찾아요.</span></>)
       : s.kind === "obs"
-      ? t(E, <><b>Observe:</b> the worst (small) values sit at <b>b = 2, 5, 8</b> — all leave the <b>most leftover</b> (cB−1 = 2 blue wasted).</>,
-             <><b>관찰:</b> 최악(작은 값)은 <b>b = 2, 5, 8</b> — 다 <b>자투리 최대</b> (cB−1 = 2개 버려짐).</>)
+      ? t(E, <><b>Observe:</b> the worst values sit at <span style={NW}><b>b = 2, 5, 8</b></span> — all leave the <span style={NW}><b>most leftover</b> (cB−1 = 2 wasted)</span>.</>,
+             <><b>관찰:</b> 최악(작은 값)은 <span style={NW}><b>b = 2, 5, 8</b></span> — 다 <span style={NW}><b>자투리 최대</b> (cB−1 = 2개 버림)</span>.</>)
       : s.kind === "infer"
-      ? t(E, <><b>Infer:</b> among those, bigger b is worse (6 → 5 → 4) — would-be-red chips get dumped into blue. So the <b>largest max-leftover b</b> (b = 8) is the true worst.</>,
-             <><b>추론:</b> 그중 <b>b 클수록 더 최악</b> (6 → 5 → 4) — 빨강 될 칩까지 파랑에 버리니까. → 자투리 최대인 <b>가장 큰 b</b>(=8)가 진짜 최악.</>)
-      : t(E, <><b>Formula:</b> the b with leftover cB−1 is <b>r1 = (cB−1 − B%cB) % cB</b>, then take the largest ≤ x. No loop — O(1).</>,
-             <><b>공식:</b> 자투리가 cB−1 되는 b = <b>r1 = (cB−1 − B%cB) % cB</b>, 거기서 x 이하 가장 큰 것. b 안 돌아 — O(1).</>);
+      ? t(E, <><b>Why?</b> <span style={NW}>blue is worse than red</span> — <span style={NW}>3 blue → only 2 red</span>. So the more you push into blue <span style={NW}>(bigger b)</span>, the fewer red <span style={NW}>(6 → 5 → 4)</span>. → <b>largest b = 8</b> wins.</>,
+             <><b>왜?</b> <span style={NW}>파랑이 빨강보다 손해</span> — <span style={NW}>파랑 3개 → 빨강 2개뿐</span>. 그러니 파랑에 많이 넣을수록 <span style={NW}>(b 클수록)</span> 빨강이 줄어요 <span style={NW}>(6 → 5 → 4)</span>. → <b>가장 큰 b = 8</b>.</>)
+      : t(E, <><b>Formula:</b> the b with leftover cB−1 is <span style={NW}><b>r1 = (cB−1 − B%cB) % cB</b></span>, then the <span style={NW}>largest ≤ x</span>. No loop — O(1).</>,
+             <><b>공식:</b> 자투리가 cB−1 되는 b = <span style={NW}><b>r1 = (cB−1 − B%cB) % cB</b></span>, 거기서 <span style={NW}>x 이하 가장 큰 것</span>. b 안 돌아 — O(1).</>);
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "From brute to an O(1) formula", "브루트 → O(1) 공식 유도")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
-        {t(E, "x=8 · b = blue chips given · value = my final red (smaller = worse)", "x=8 · b = 파랑에 준 칩 · 값 = 그때 내 최종 빨강 (작을수록 최악)")}
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all", lineHeight: 1.5 }}>
+        {t(E, "start red 0 · blue 0 · swap: 3 blue → 2 red · goal 5 · extra x=8", "시작 빨강 0 · 파랑 0 · 환전: 파랑 3 → 빨강 2 · 목표 5 · 추가 x=8")}
+        <br/>{t(E, "b = blue chips given · value = my final red (smaller = worse)", "b = 파랑에 준 칩 · 값 = 그때 내 최종 빨강 (작을수록 최악)")}
       </div>
       <Say tone={s.kind === "formula" ? "aha" : "stuck"}>{say}</Say>
 
