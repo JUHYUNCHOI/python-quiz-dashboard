@@ -221,8 +221,8 @@ export function FormulaDeriveSim({ E }) {
 
   const say =
     s.kind === "why"
-      ? t(E, <>Brute tried every b. But if x is up to 10¹⁸, there are too many b to try. Let's find a <b>pattern</b> in the table → a formula.</>,
-             <>브루트는 b 를 다 봤죠. 근데 x 가 10¹⁸ 까지면 b 도 그만큼 많아 다 못 봐요. 표에서 <b>규칙</b>을 찾아 공식으로 바꿔요.</>)
+      ? t(E, <><b>Recap:</b> the trickster splits x=8 extra chips into red + blue to make my red smallest. Earlier we tried <b>b (blue) = 0…8</b> → this table (each value = my final red; worst = smallest = 4). But if x hits 10¹⁸ we can't scan all b → find the pattern.</>,
+             <><b>복습:</b> 심술쟁이가 추가 8개를 빨강·파랑으로 나눠 내 빨강을 <b>최소</b>로 만들어요. 앞에서 <b>b(파랑)=0…8</b> 다 해본 결과가 이 표 (값 = 그때 최종 빨강, 최악 = 최솟값 4). 근데 x 가 10¹⁸ 면 b 다 못 봐 → 표에서 규칙을.</>)
       : s.kind === "obs"
       ? t(E, <><b>Observe:</b> the worst (small) values sit at <b>b = 2, 5, 8</b> — all leave the <b>most leftover</b> (cB−1 = 2 blue wasted).</>,
              <><b>관찰:</b> 최악(작은 값)은 <b>b = 2, 5, 8</b> — 다 <b>자투리 최대</b> (cB−1 = 2개 버려짐).</>)
@@ -236,8 +236,8 @@ export function FormulaDeriveSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "From brute to an O(1) formula", "브루트 → O(1) 공식 유도")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
-        {t(E, "the b=0…8 worst table (from the brute, x=8)", "브루트가 만든 b=0…8 최악 표 (x=8)")}
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
+        {t(E, "x=8 · b = blue chips given · value = my final red (smaller = worse)", "x=8 · b = 파랑에 준 칩 · 값 = 그때 내 최종 빨강 (작을수록 최악)")}
       </div>
       <Say tone={s.kind === "formula" ? "aha" : "stuck"}>{say}</Say>
 
