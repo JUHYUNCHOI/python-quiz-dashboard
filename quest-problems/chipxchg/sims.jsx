@@ -430,58 +430,46 @@ export function CandidateSim({ E }) {
     return { b, a, g, w, val: a + g * cA };
   });
   const candBs = [0, 2, 6, 8];
-  const reason = { 0: t(E, "all red", "다 빨강"), 2: t(E, "max waste", "자투리 최대"), 6: t(E, "no waste", "자투리 0"), 8: t(E, "all blue", "다 파랑") };
   const worstB = 8;
-  const steps = [{ kind: "why" }, { kind: "cands" }, { kind: "min" }];
+  const steps = [{ kind: "brute" }, { kind: "fast" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
-  const lit = s.kind === "cands" || s.kind === "min";
 
   const say =
-    s.kind === "why"
-      ? t(E, <>The brute just tried <b>all 9</b> splits (b=0…8). If x is huge we can't. But the <b>worst is always one of a few suspects</b> — the trickster maxes the <b style={{color:"#dc2626"}}>waste</b>.</>,
-             <>앞 브루트는 <b>9개(b=0~8)</b>를 다 쟀죠. x 가 크면 못 해요. 근데 <b>최악은 늘 몇 후보 중 하나</b> — 심술쟁이는 <b style={{color:"#dc2626"}}>자투리(낭비)</b>를 최대로 만드니까요.</>)
-    : s.kind === "cands"
-      ? t(E, <>So check just <b>4 suspects</b>: <span style={NW}>all-red (0)</span> · <span style={NW}>max waste (2)</span> · <span style={NW}>no waste (6)</span> · <span style={NW}>all-blue (8)</span>. Final red for each.</>,
-             <>그래서 <b>후보 4개</b>만 재요: <span style={NW}>다 빨강(0)</span> · <span style={NW}>자투리 최대(2)</span> · <span style={NW}>자투리 0(6)</span> · <span style={NW}>다 파랑(8)</span>. 각각 최종 빨강만 봐요.</>)
-    : t(E, <>Smallest is the trickster's worst — <b style={{color:"#dc2626"}}>4 at b=8</b>. Just <b>4 calculations</b>, no loop → O(1). <span style={NW}>(the code's <code>cands</code>)</span></>,
-           <>제일 작은 게 심술쟁이 최악 — <b style={{color:"#dc2626"}}>4 (b=8)</b>. <b>4번 계산</b>이면 끝, 반복 없음 → O(1). <span style={NW}>(코드의 <code>cands</code> 가 이거예요)</span></>);
+    s.kind === "brute"
+      ? t(E, <>The brute tried <b>every b (0–8)</b>. The <b>worst</b> <span style={NW}>(my fewest red)</span> is <b style={{color:"#dc2626"}}>4</b>, at <span style={NW}>b=8</span> <span style={NW}>(all blue, tail wasted)</span>.</>,
+             <>브루트는 <b>b 를 0~8 전부</b> 쟀어요. <b>최악</b> <span style={NW}>(내 빨강 최소)</span>은 <b style={{color:"#dc2626"}}>4</b>, <span style={NW}>b=8 에서</span> <span style={NW}>(다 파랑, 자투리 버림)</span>.</>)
+      : t(E, <>If <span style={NW}>x is huge</span> we can't try every b. So the code checks only <b>a few likely spots</b> and gets the same <b style={{color:"#dc2626"}}>4</b> — no loop, <b>O(1)</b>.</>,
+             <><span style={NW}>x 가 크면</span> b 를 전부는 못 재요. 그래서 코드는 <b>최악 될 만한 몇 군데</b>만 재서 똑같이 <b style={{color:"#dc2626"}}>4</b> 를 구해요 — 반복 없이 <b>O(1)</b>.</>);
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Only check a few suspects", "후보 몇 개만 재기")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "Brute → a few smart spots", "브루트 → 몇 군데만")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all", lineHeight: 1.5 }}>
-        {t(E, "x=8 · final red = (8−b) + (b÷3)×2 · trickster wants the smallest", "x=8 · 최종 빨강 = (8−b) + (b÷3)×2 · 심술쟁이는 최솟값을 노림")}
+        {t(E, "x=8 · each cell = my final red for that split · trickster wants the smallest", "x=8 · 칸 = 그 분배일 때 내 최종 빨강 · 심술쟁이는 최소를 노림")}
       </div>
-      <Say tone={s.kind === "min" ? "aha" : "stuck"}>{say}</Say>
+      <Say tone={s.kind === "fast" ? "aha" : "stuck"}>{say}</Say>
 
       <div style={{ maxWidth: 480, margin: "0 auto", display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap" }}>
         {rows.map((r) => {
+          const isWorst = r.b === worstB;
           const isCand = candBs.includes(r.b);
-          const isWorst = s.kind === "min" && r.b === worstB;
-          const on = lit && isCand;
-          const op = s.kind === "why" ? 0.4 : on ? 1 : 0.2;
-          const bg = isWorst ? "#fee2e2" : on ? "#dbeafe" : "#f1f5f9";
-          const bd = isWorst ? "2px solid #dc2626" : on ? "2px solid #2563eb" : "1px solid #e2e8f0";
-          const fg = isWorst ? "#dc2626" : on ? "#1e40af" : "#334155";
+          const dim = s.kind === "fast" && !isCand;
+          const op = dim ? 0.2 : 1;
+          const bg = isWorst ? "#fee2e2" : "#f1f5f9";
+          const bd = isWorst ? "2px solid #dc2626" : "1px solid #e2e8f0";
+          const fg = isWorst ? "#dc2626" : "#334155";
           return (
-            <div key={r.b} style={{ width: 46, textAlign: "center", opacity: op, transition: "all .15s" }}>
+            <div key={r.b} style={{ width: 44, textAlign: "center", opacity: op, transition: "all .15s" }}>
               <div style={{ fontSize: 9, fontWeight: 700, color: "#94a3b8" }}>b={r.b}</div>
               <div style={{ marginTop: 2, height: 26, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", background: bg, border: bd, color: fg }}>{r.val}</div>
-              {on && <div style={{ fontSize: 8, fontWeight: 800, color: isWorst ? "#dc2626" : "#2563eb", marginTop: 1, wordBreak: "keep-all", lineHeight: 1.1 }}>{reason[r.b]}</div>}
               {isWorst && <div style={{ fontSize: 11 }}>😈</div>}
+              {s.kind === "fast" && isCand && !isWorst && <div style={{ fontSize: 8.5, fontWeight: 800, color: "#2563eb", marginTop: 1 }}>{t(E, "check", "재봄")}</div>}
             </div>
           );
         })}
       </div>
-
-      {s.kind === "min" && (
-        <div style={{ maxWidth: 440, margin: "14px auto 0", background: "#ecfdf5", border: "1.5px solid #16a34a", borderRadius: 10, padding: "10px 14px", textAlign: "center", fontSize: 12.5, fontWeight: 800, color: "#065f46", wordBreak: "keep-all", lineHeight: 1.6 }}>
-          {t(E, <>4 suspects → <span style={NW}>min = 4</span> → <span style={NW}>worst(8) = <b style={{color:"#15803d"}}>4</b></span>. Same as the brute, in O(1).</>,
-                <>후보 4개 → <span style={NW}>최소 = 4</span> → <span style={NW}>worst(8) = <b style={{color:"#15803d"}}>4</b></span>. 브루트와 같은 답을 O(1)로.</>)}
-        </div>
-      )}
 
       <div style={{ marginTop: 24 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
