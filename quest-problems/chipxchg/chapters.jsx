@@ -174,9 +174,13 @@ export function makeChipXchgCh2(E, lang = "py") {
     {
       type: "reveal",
       label: t(E, "Code", "코드"),
-      narr: t(E,
-        "Read it the way you'd write it — input first: main reads each test and calls solve; then unpack solve and worst.",
-        "짜는 순서대로 — 입력부터. main 이 각 테스트를 받아 solve·출력, 그다음 solve·worst 를 뜯어봐요."),
+      narr: lang === "cpp"
+        ? t(E,
+            "Read it the way you'd write it — define the functions (worst → solve) first, then main reads input and uses them.",
+            "짜는 순서대로 — 함수(worst → solve)부터 정의하고, 아래 main 이 입력받아 써요.")
+        : t(E,
+            "Read it the way you'd write it — input first: main reads each test and calls solve; then unpack solve and worst.",
+            "짜는 순서대로 — 입력부터. main 이 각 테스트를 받아 solve·출력, 그다음 solve·worst 를 뜯어봐요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />
       ),
