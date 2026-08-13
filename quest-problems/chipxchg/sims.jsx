@@ -328,8 +328,8 @@ export function SearchSim({ E }) {
 
   const say =
     s.kind === "why"
-      ? t(E, <>Why binary search? <b>①</b> worst(x) only rises (staircase) → all <b style={{color:"#475569"}}>✗</b> then all <b style={{color:"#15803d"}}>✓</b>, one boundary — binary search pins it. <b>②</b> x can hit 10¹⁸, so one-by-one is impossible (~60 checks instead).</>,
-             <>왜 이분탐색? <b>①</b> worst(x)가 오르기만 함(계단) → <b style={{color:"#475569"}}>✗</b>들 다음 <b style={{color:"#15803d"}}>✓</b>들, 경계가 딱 하나 — 이분탐색이 그걸 콕. <b>②</b> x가 10¹⁸까지라 하나씩은 불가 (이분탐색 ~60번).</>)
+      ? t(E, <>Why binary search? <b>①</b> worst(x) <span style={NW}>only rises (staircase)</span> → all <b style={{color:"#475569"}}>✗</b> then all <b style={{color:"#15803d"}}>✓</b>, <span style={NW}>one boundary</span> — binary search pins it. <b>②</b> <span style={NW}>x can hit 10¹⁸</span>, so one-by-one is impossible <span style={NW}>(~60 checks instead)</span>.</>,
+             <>왜 이분탐색? <b>①</b> worst(x)가 <span style={NW}>오르기만 함 (계단)</span> → <span style={NW}><b style={{color:"#475569"}}>✗</b>들</span> 다음 <span style={NW}><b style={{color:"#15803d"}}>✓</b>들</span>, <span style={NW}>경계가 딱 하나</span> — 이분탐색이 그걸 콕. <b>②</b> <span style={NW}>x가 10¹⁸까지라</span> 하나씩은 불가 <span style={NW}>(이분탐색 ~60번)</span>.</>)
       : s.kind === "done"
       ? t(E, <>Range shrank to one — <b style={{color:"#15803d"}}>answer x = {ANS}</b>, in just <b>{trace.length} checks</b>. Matches <b style={{color:"#15803d"}}>sample test 2's output 9 ✓</b> — this is the real solution.</>,
              <>범위가 하나로 좁혀졌어요 — <b style={{color:"#15803d"}}>답 x = {ANS}</b>, <b>{trace.length}번</b> 확인으로. <b style={{color:"#15803d"}}>샘플 테스트 2의 정답 9 와 일치 ✓</b> — 이게 진짜 해법이에요.</>)
