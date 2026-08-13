@@ -219,10 +219,11 @@ export function FormulaDeriveSim({ E }) {
   const steps = [{ kind: "why" }, { kind: "obs" }, { kind: "infer" }, { kind: "formula" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
 
+  const worst = rows[worstB];
   const say =
     s.kind === "why"
-      ? t(E, <><b>Recap:</b> the trickster splits x=8 extra chips into red + blue to make my red smallest. Earlier we tried <b>b (blue) = 0…8</b> → this table (each value = my final red; worst = smallest = 4). But if x hits 10¹⁸ we can't scan all b → find the pattern.</>,
-             <><b>복습:</b> 심술쟁이가 추가 8개를 빨강·파랑으로 나눠 내 빨강을 <b>최소</b>로 만들어요. 앞에서 <b>b(파랑)=0…8</b> 다 해본 결과가 이 표 (값 = 그때 최종 빨강, 최악 = 최솟값 4). 근데 x 가 10¹⁸ 면 b 다 못 봐 → 표에서 규칙을.</>)
+      ? t(E, <>Same table we built (each value = final red, like below). If x hits 10¹⁸ we can't scan all b → find the pattern.</>,
+             <>앞에서 만든 그 표예요 (각 값 = 최종 빨강, 아래처럼). x 가 10¹⁸ 면 b 다 못 봐 → 규칙을 찾아요.</>)
       : s.kind === "obs"
       ? t(E, <><b>Observe:</b> the worst (small) values sit at <b>b = 2, 5, 8</b> — all leave the <b>most leftover</b> (cB−1 = 2 blue wasted).</>,
              <><b>관찰:</b> 최악(작은 값)은 <b>b = 2, 5, 8</b> — 다 <b>자투리 최대</b> (cB−1 = 2개 버려짐).</>)
@@ -240,6 +241,28 @@ export function FormulaDeriveSim({ E }) {
         {t(E, "x=8 · b = blue chips given · value = my final red (smaller = worse)", "x=8 · b = 파랑에 준 칩 · 값 = 그때 내 최종 빨강 (작을수록 최악)")}
       </div>
       <Say tone={s.kind === "formula" ? "aha" : "stuck"}>{say}</Say>
+
+      {/* why: 앞에서 본 칩 분배 그림 하나 복습 (예: 최악 b=8) */}
+      {s.kind === "why" && (
+        <div style={{ maxWidth: 460, margin: "0 auto 12px", background: "#f8fafc", border: "1px dashed #cbd5e1", borderRadius: 10, padding: "8px 12px" }}>
+          <div style={{ fontSize: 10.5, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6 }}>{t(E, `e.g. b=${worst.b} split:`, `예: b=${worst.b} 분배`)}</div>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+            {Array.from({ length: worst.a }).map((_, i) => <Chip key={"a" + i} color="red" size={16} />)}
+            {Array.from({ length: worst.g }).map((_, g) => (
+              <div key={g} style={{ display: "flex", gap: 3, padding: 3, borderRadius: 7, border: `2px dashed ${BLU}`, background: "#f8fbff" }}>
+                {Array.from({ length: cB }).map((_, i) => <Chip key={i} color="blue" size={16} />)}
+              </div>
+            ))}
+            {worst.w > 0 && (
+              <div style={{ display: "flex", gap: 3, padding: 3, borderRadius: 7, border: "2px dashed #dc2626", background: "#fef2f2", alignItems: "center" }}>
+                {Array.from({ length: worst.w }).map((_, i) => <Chip key={i} color="blue" size={16} faded />)}
+                <span style={{ fontSize: 9, fontWeight: 800, color: "#dc2626" }}>{t(E, "waste", "낭비")}</span>
+              </div>
+            )}
+            <span style={{ fontSize: 12.5, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#334155", marginLeft: 4 }}>= <b style={{ color: "#dc2626" }}>{worst.val}</b></span>
+          </div>
+        </div>
+      )}
 
       {/* b=0..8 결과 표 — obs: 자투리최대 파랑 / infer·formula: 최악 빨강 */}
       <div style={{ maxWidth: 480, margin: "0 auto", display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap" }}>
