@@ -225,13 +225,13 @@ export function FormulaDeriveSim({ E }) {
       ? t(E, <>The same table we built. <span style={NW}>If x hits 10¹⁸</span> we can't scan all b — <span style={NW}>let's find the pattern.</span></>,
              <>앞에서 만든 그 표예요. <span style={NW}>x 가 10¹⁸ 면</span> <span style={NW}>b 다 못 봐</span> → <span style={NW}>규칙을 찾아요.</span></>)
       : s.kind === "obs"
-      ? t(E, <><b>Observe:</b> the worst values sit at <span style={NW}><b>b = 2, 5, 8</b></span> — all leave the <span style={NW}><b>most leftover</b> (cB−1 = 2 wasted)</span>.</>,
-             <><b>관찰:</b> 최악(작은 값)은 <span style={NW}><b>b = 2, 5, 8</b></span> — 다 <span style={NW}><b>자투리 최대</b> (cB−1 = 2개 버림)</span>.</>)
+      ? t(E, <><b>Observe:</b> the value dips hardest where a split <b>wastes 2 blue</b> (leftover cB−1 = 2). Those b = <span style={NW}><b>2, 5, 8</b></span> — the candidates for worst.</>,
+             <><b>관찰:</b> <b>파랑 2개를 버릴 때</b>(자투리 cB−1 = 2) 값이 훅 낮아져요. 그런 b = <span style={NW}><b>2, 5, 8</b></span> — 최악 후보들.</>)
       : s.kind === "infer"
-      ? t(E, <><b>Why?</b> <span style={NW}>blue is worse than red</span> — <span style={NW}>3 blue → only 2 red</span>. So the more you push into blue <span style={NW}>(bigger b)</span>, the fewer red <span style={NW}>(6 → 5 → 4)</span>. → <b>largest b = 8</b> wins.</>,
-             <><b>왜?</b> <span style={NW}>파랑이 빨강보다 손해</span> — <span style={NW}>파랑 3개 → 빨강 2개뿐</span>. 그러니 파랑에 많이 넣을수록 <span style={NW}>(b 클수록)</span> 빨강이 줄어요 <span style={NW}>(6 → 5 → 4)</span>. → <b>가장 큰 b = 8</b>.</>)
-      : t(E, <><b>Formula:</b> the b with leftover cB−1 is <span style={NW}><b>r1 = (cB−1 − B%cB) % cB</b></span>, then the <span style={NW}>largest ≤ x</span>. No loop — O(1).</>,
-             <><b>공식:</b> 자투리가 cB−1 되는 b = <span style={NW}><b>r1 = (cB−1 − B%cB) % cB</b></span>, 거기서 <span style={NW}>x 이하 가장 큰 것</span>. b 안 돌아 — O(1).</>);
+      ? t(E, <><b>Biggest of them = worst.</b> Blue loses <span style={NW}>(3 blue → 2 red)</span>, so bigger b → fewer red: <span style={NW}>b=2 → 6</span>, <span style={NW}>b=5 → 5</span>, <span style={NW}>b=8 → 4</span>. → worst <b>b = 8</b>.</>,
+             <><b>이 중 가장 큰 게 최악.</b> 파랑은 손해라 <span style={NW}>(파랑 3 → 빨강 2)</span> b 클수록 빨강이 줄어요: <span style={NW}>b=2 → 6</span>, <span style={NW}>b=5 → 5</span>, <span style={NW}>b=8 → 4</span>. → 최악 <b>b = 8</b>.</>)
+      : t(E, <><b>As a formula:</b> get that worst <b>b = 8</b> directly — no brute loop. Steps <b>①②③</b> below are the calc.</>,
+             <><b>공식으로:</b> 그 최악 <b>b = 8</b> 을 브루트 없이 바로 계산해요. 아래 <b>①②③</b> 이 그 계산이에요.</>);
 
   return (
     <div style={{ padding: 16 }}>
@@ -272,7 +272,8 @@ export function FormulaDeriveSim({ E }) {
           const isWorst = r.b === worstB;
           let op, mark;
           if (s.kind === "obs") { op = isMaxLeft ? 1 : 0.3; mark = isMaxLeft ? "maxleft" : null; }
-          else if (s.kind === "infer" || s.kind === "formula") { op = isWorst ? 1 : 0.3; mark = isWorst ? "worst" : null; }
+          else if (s.kind === "infer") { op = isWorst ? 1 : 0.3; mark = isWorst ? "worst" : null; }
+          else if (s.kind === "formula") { op = (isMaxLeft || isWorst) ? 1 : 0.25; mark = isWorst ? "worst" : isMaxLeft ? "maxleft" : null; }
           else { op = 1; mark = null; }
           const bg = mark === "worst" ? "#fee2e2" : mark === "maxleft" ? "#dbeafe" : "#f1f5f9";
           const bd = mark === "worst" ? "2px solid #dc2626" : mark === "maxleft" ? "2px solid #2563eb" : "1px solid #e2e8f0";
@@ -290,10 +291,20 @@ export function FormulaDeriveSim({ E }) {
       </div>
 
       {s.kind === "formula" && (
-        <div style={{ maxWidth: 460, margin: "14px auto 0", background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#1e3a8a", lineHeight: 1.7, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>r1 = (cB−1 − B%cB) % cB = (3−1−0)%3 = <b style={{color:"#2563eb"}}>2</b></div>
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, marginTop: 2 }}>{t(E, "largest ≤ x", "x 이하 가장 큰 것")} = 2 + ((8−2)÷3)×3 = <b style={{color:"#dc2626"}}>8</b></div>
-          <div style={{ marginTop: 5, fontWeight: 700 }}>{t(E, "→ that's the code's r1 lines. O(1).", "→ 이게 코드의 r1 두 줄이에요. O(1).")}</div>
+        <div style={{ maxWidth: 480, margin: "14px auto 0", background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "12px 16px", fontSize: 12.5, color: "#1e3a8a", lineHeight: 1.7, wordBreak: "keep-all", textAlign: "left" }}>
+          <div style={{ marginBottom: 5 }}>{t(E, <><b>①</b> waste 2 = total blue leaves <b>remainder 2</b> (÷3). Start blue 0 → first such <b style={{color:"#2563eb"}}>b = 2</b>.</>,
+                                              <><b>①</b> 파랑 2개 버리기 = 총 파랑을 <b>3으로 나눠 2 남기기</b>. 시작 파랑 0 → 처음 그런 <b style={{color:"#2563eb"}}>b = 2</b>.</>)}</div>
+          <div style={{ marginBottom: 5 }}>{t(E, <><b>②</b> add <b>+3</b> each time — same remainder: <span style={NW}><b>2 → 5 → 8</b></span>.</>,
+                                              <><b>②</b> <b>+3</b>씩 더하기 — 나머지 그대로: <span style={NW}><b>2 → 5 → 8</b></span>.</>)}</div>
+          <div>{t(E, <><b>③</b> largest ≤ <span style={NW}>x = 8</span> → worst <b style={{color:"#dc2626"}}>b = 8</b>, final red <b style={{color:"#dc2626"}}>4</b>.</>,
+                     <><b>③</b> <span style={NW}>x = 8</span> 이하 가장 큰 것 → 최악 <b style={{color:"#dc2626"}}>b = 8</b>, 최종 빨강 <b style={{color:"#dc2626"}}>4</b>.</>)}</div>
+          <div style={{ marginTop: 9, paddingTop: 9, borderTop: "1px dashed #93c5fd", fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, fontWeight: 800, color: "#1e40af", wordBreak: "break-word" }}>
+            r1 = (cB−1 − B%cB)%cB = (2−0)%3 = 2
+          </div>
+          <div style={{ marginTop: 3, fontSize: 11, color: "#475569", wordBreak: "keep-all" }}>
+            {t(E, <>= “how many more blue to reach remainder 2?” (start blue 0 → 2). Then +cB up to x. No loop — <b>O(1)</b>.</>,
+                  <>= “나머지 2 되려면 파랑 몇 개 더?” <span style={NW}>(시작 파랑 0 → 2)</span>. 그다음 x 까지 +cB. 반복 없이 — <b>O(1)</b>.</>)}
+          </div>
         </div>
       )}
 
@@ -316,7 +327,7 @@ export function SearchSim({ E }) {
   const trace = []; { let lo = 0, hi = HI0; while (lo < hi) { const mid = Math.floor((lo + hi) / 2); const v = worst(mid); const ok = v >= fA; trace.push({ lo, hi, mid, v, ok }); if (ok) hi = mid; else lo = mid + 1; } }
   let _lo = 0, _hi = HI0; while (_lo < _hi) { const mid = Math.floor((_lo + _hi) / 2); if (worst(mid) >= fA) _hi = mid; else _lo = mid + 1; } const ANS = _lo;
 
-  const steps = [{ kind: "why" }, ...trace.map((_, i) => ({ kind: "probe", i })), { kind: "done" }];
+  const steps = [{ kind: "obs" }, { kind: "why" }, ...trace.map((_, i) => ({ kind: "probe", i })), { kind: "done" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
 
   const pr = s.kind === "probe" ? trace[s.i] : null;
@@ -327,9 +338,12 @@ export function SearchSim({ E }) {
   const maxV = Math.max(...XS.map((d) => d.v)) + 1;
 
   const say =
-    s.kind === "why"
-      ? t(E, <>Why binary search? <b>①</b> worst(x) <span style={NW}>only rises (staircase)</span> → all <b style={{color:"#475569"}}>✗</b> then all <b style={{color:"#15803d"}}>✓</b>, <span style={NW}>one boundary</span> — binary search pins it. <b>②</b> <span style={NW}>x can hit 10¹⁸</span>, so one-by-one is impossible <span style={NW}>(~60 checks instead)</span>.</>,
-             <>왜 이분탐색? <b>①</b> worst(x)가 <span style={NW}>오르기만 함 (계단)</span> → <span style={NW}><b style={{color:"#475569"}}>✗</b>들</span> 다음 <span style={NW}><b style={{color:"#15803d"}}>✓</b>들</span>, <span style={NW}>경계가 딱 하나</span> — 이분탐색이 그걸 콕. <b>②</b> <span style={NW}>x가 10¹⁸까지라</span> 하나씩은 불가 <span style={NW}>(이분탐색 ~60번)</span>.</>)
+    s.kind === "obs"
+      ? t(E, <>First, the <b>top row</b> = the worst for each x. Read left→right: it <b>only stays or climbs — never drops</b>. (extra chips can't shrink my worst case)</>,
+             <>먼저 <b>맨 윗줄</b> = 각 x 의 최악이에요. 왼→오로 읽으면 <b>계속 같거나 오르기만 — 절대 안 내려가요</b>. (칩이 늘어도 최악은 안 작아짐)</>)
+      : s.kind === "why"
+      ? t(E, <>So goal <b>5</b> is first hit at <b style={{color:"#15803d",...NW}}>x=9</b>: before it all <b style={{color:"#475569"}}>✗</b>, after all <b style={{color:"#15803d"}}>✓</b> — <span style={NW}>one boundary</span>. To find it we don't test every x — we <b>halve the range</b> = binary search. <span style={NW}>(x reaches 10¹⁸)</span></>,
+             <>그래서 목표 <b>5</b> 에 처음 닿는 <b style={{color:"#15803d",...NW}}>x=9</b> 앞은 다 <b style={{color:"#475569"}}>✗</b>, 뒤는 다 <b style={{color:"#15803d"}}>✓</b> — <span style={NW}>경계가 딱 하나</span>. 이걸 찾을 때 x 를 하나씩 안 보고 <b>범위를 반씩</b> 줄여요 = 이분탐색. <span style={NW}>(x 는 10¹⁸까지)</span></>)
       : s.kind === "done"
       ? t(E, <>Range shrank to one — <b style={{color:"#15803d"}}>answer x = {ANS}</b>, in just <b>{trace.length} checks</b>. Matches <b style={{color:"#15803d"}}>sample test 2's output 9 ✓</b> — this is the real solution.</>,
              <>범위가 하나로 좁혀졌어요 — <b style={{color:"#15803d"}}>답 x = {ANS}</b>, <b>{trace.length}번</b> 확인으로. <b style={{color:"#15803d"}}>샘플 테스트 2의 정답 9 와 일치 ✓</b> — 이게 진짜 해법이에요.</>)
@@ -348,7 +362,7 @@ export function SearchSim({ E }) {
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace", wordBreak: "keep-all" }}>
         {t(E, "sample test 2: 0 0 2 3 5 · goal 5 · ✓ = worst ≥ 5", "샘플 테스트 2: 0 0 2 3 5 · 목표 5 · ✓ = worst ≥ 5")}
       </div>
-      <Say tone={s.kind === "done" ? "aha" : s.kind === "why" ? "go" : (pr && pr.ok ? "aha" : "stuck")}>{say}</Say>
+      <Say tone={s.kind === "done" ? "aha" : (s.kind === "obs" || s.kind === "why") ? "go" : (pr && pr.ok ? "aha" : "stuck")}>{say}</Say>
 
       {/* 숫자 줄 0..12 — 범위 [lo,hi] 안만 진하게, mid 강조, worst 값 위에 */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 2, maxWidth: 490, margin: "0 auto", flexWrap: "nowrap" }}>
