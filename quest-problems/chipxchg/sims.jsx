@@ -222,8 +222,8 @@ export function FormulaDeriveSim({ E }) {
   const worst = rows[worstB];
   const say =
     s.kind === "why"
-      ? t(E, <>Same table we built (each value = final red, like below). If x hits 10¹⁸ we can't scan all b → find the pattern.</>,
-             <>앞에서 만든 그 표예요 (각 값 = 최종 빨강, 아래처럼). x 가 10¹⁸ 면 b 다 못 봐 → 규칙을 찾아요.</>)
+      ? t(E, <>The same table we built. <span style={NW}>If x hits 10¹⁸</span> we can't scan all b — <span style={NW}>let's find the pattern.</span></>,
+             <>앞에서 만든 그 표예요. <span style={NW}>x 가 10¹⁸ 면</span> <span style={NW}>b 다 못 봐</span> → <span style={NW}>규칙을 찾아요.</span></>)
       : s.kind === "obs"
       ? t(E, <><b>Observe:</b> the worst (small) values sit at <b>b = 2, 5, 8</b> — all leave the <b>most leftover</b> (cB−1 = 2 blue wasted).</>,
              <><b>관찰:</b> 최악(작은 값)은 <b>b = 2, 5, 8</b> — 다 <b>자투리 최대</b> (cB−1 = 2개 버려짐).</>)
