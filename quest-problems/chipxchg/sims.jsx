@@ -324,12 +324,12 @@ export function FormulaBuildSim({ E }) {
   const cB = 3, X = 8, target = cB - 1;
   const steps = [
     { kind: "rule" }, { kind: "add1" }, { kind: "add2" },
-    { kind: "formula" }, { kind: "other" }, { kind: "extend" },
+    { kind: "formula" }, { kind: "extend" },
   ];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
 
-  const addedByKind = { rule: 0, add1: 1, add2: 2, formula: 2, other: 0, extend: X };
-  const B = s.kind === "other" ? 4 : 0;
+  const addedByKind = { rule: 0, add1: 1, add2: 2, formula: 2, extend: X };
+  const B = 0;
   const added = addedByKind[s.kind];
   const total = B + added;
   const groups = Math.floor(total / cB);
@@ -350,9 +350,6 @@ export function FormulaBuildSim({ E }) {
     : s.kind === "formula"
       ? t(E, <>Skip counting — get it <b>directly</b>. Filling from <span style={NW}><b>now 0</b> to <b>goal 2</b></span> = <span style={NW}><b>2 − 0 = 2</b></span> (like 3rd→7th floor is 4). This <span style={NW}>'goal − now'</span> is <b style={{color:"#2563eb"}}>r1</b>.</>,
              <>이제 세지 않고 <b>바로</b> 구해요. 자투리를 <span style={NW}><b>지금 0</b>에서 <b>목표 2</b>까지</span> = <span style={NW}><b>2 − 0 = 2칸</b></span> (3층→7층이 4칸이듯). 이 <span style={NW}>'목표 − 지금'</span> 이 <b style={{color:"#2563eb"}}>r1</b>.</>)
-    : s.kind === "other"
-      ? t(E, <><b>Why subtract?</b> It shines when you <b>start with blue</b>. Start <b>4 blue</b>: <span style={NW}>4 = 3 + 1</span> → <span style={NW}>now leftover <b>1</b></span>. To goal 2: <span style={NW}><b>2 − 1 = 1</b></span> — only 1 more!</>,
-             <><b>왜 빼기냐면</b> — <b>시작 파랑이 있을 때</b> 빛나요. 파랑 <b>4개</b>로 시작하면 <span style={NW}>4 = 3 + 1</span> → <span style={NW}>지금 자투리 <b>1</b></span>. 목표 2까지 <span style={NW}><b>2 − 1 = 1칸</b></span> — 1개만 더!</>)
     : t(E, <>From r1, add <b>+3</b> to keep leftover 2: <span style={NW}>2 → 5 → 8</span>. <span style={NW}>Largest ≤ 8 = <b>8</b></span> → worst <b style={{color:"#dc2626"}}>b = 8</b>.</>,
            <>r1 에서 <b>3개씩</b> 더 주면 자투리 2 그대로: <span style={NW}>2 → 5 → 8</span>. <span style={NW}>8 이하 최대 = <b>8</b></span> → 최악 <b style={{color:"#dc2626"}}>b = 8</b>.</>);
 
@@ -394,15 +391,13 @@ export function FormulaBuildSim({ E }) {
         </div>
       </div>
 
-      {(s.kind === "formula" || s.kind === "other") && (
+      {s.kind === "formula" && (
         <div style={{ maxWidth: 440, margin: "14px auto 0", background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", textAlign: "center", wordBreak: "keep-all" }}>
           <div style={{ fontSize: 13.5, fontWeight: 800, color: "#1e3a8a" }}>
             {t(E, "r1 = goal leftover − now leftover", "r1 = 목표 자투리 − 지금 자투리")}
           </div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#1e3a8a", marginTop: 4, fontFamily: "'JetBrains Mono',monospace" }}>
-            {s.kind === "formula"
-              ? <>= 2 − 0 = <b style={{ color: "#2563eb" }}>2</b></>
-              : <>= 2 − <b style={{color:"#dc2626"}}>1</b> = <b style={{ color: "#2563eb" }}>1</b></>}
+            = 2 − 0 = <b style={{ color: "#2563eb" }}>2</b>
           </div>
           <div style={{ marginTop: 7, fontSize: 10.5, color: "#94a3b8", fontFamily: "'JetBrains Mono',monospace" }}>
             {t(E, "in code: (cB−1) − (B%cB)", "코드에선: (cB−1) − (B%cB)")}
