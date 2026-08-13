@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim, CheckSim, StrategySlide, PlanSlide } from "./sims";
+import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim, CheckSim, StrategySlide, PlanSlide, FormulaDeriveSim } from "./sims";
 
 const A = "#2563eb";
 
@@ -142,6 +142,15 @@ export function makeChipXchgCh1(E) {
       narr: t(E, "Question ① — for one x, try every split; the trickster picks the worst.",
                  "질문 ① — 한 x 에서 모든 분배를 따져 심술쟁이가 최악을 골라요."),
       content: (<AdversarySim E={E} />),
+    },
+
+    // [전] 도구 ①-c: 공식 유도 (브루트 표 → O(1) r1 공식). 브루트와 분리.
+    {
+      type: "reveal",
+      label: t(E, "Tool ①c: the O(1) formula", "도구 ①c: O(1) 공식"),
+      narr: t(E, "Brute can't scan every b when x is huge — derive the worst directly from the table's pattern.",
+                 "x 가 크면 b 를 다 못 봐요 — 표의 규칙에서 최악을 바로 구하는 공식을 유도해요."),
+      content: (<FormulaDeriveSim E={E} />),
     },
 
     // [결] ⑤ 답 찾기 (질문②) — 브루트 한계(10¹⁸)→계단→이분탐색까지 한 시뮬에서
