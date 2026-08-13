@@ -160,20 +160,36 @@ const _CX_VARS = [
 ];
 // 표시용: 주석(논문)은 걷어내고 실행 로직 줄만 (설명은 말풍선으로). 로직/변수 그대로.
 const _noComment = (arr) => arr.filter((l) => !/^\s*(#|\/\/)/.test(l));
-export function getChipXchgWalk(E, lang = "py") {
-  const s = getChipXchgSections(E);
-  const worstPy = _noComment(s[1].py), solvePy = _noComment(s[2].py);
-  const worstCpp = _noComment(s[1].cpp), solveCpp = _noComment(s[2].cpp);
+// ── 코드 ① 쉬운 브루트포스 (작은 입력용) ─────────────────────────
+//   worst_red = b(파랑에 줄 수)를 0..x 전부 시도해 최소 최종빨강.
+//   solve = 목표 닿을 때까지 x 를 0부터 하나씩. (느림 → 다음 빠른 코드)
+export function getChipXchgBruteWalk(E, lang = "py") {
+  const c = (en, ko) => (E ? en : ko);
   if (lang === "cpp") {
-    // C++ 는 자연스러운 순서: 함수(worst→solve) 정의 → 아래 main. 프로토타입 없음.
     const code = [
       "#include <bits/stdc++.h>",
       "using namespace std;",
       "typedef long long ll;",
       "",
-      ...worstCpp,   // 4 ..
+      "// " + c("worst = trickster splits x into (a red, b blue) to make my red smallest", "심술쟁이 최악: x 를 (빨강 a, 파랑 b)로 나눠 내 빨강을 최소로"),
+      "// " + c("try EVERY b from 0..x and keep the smallest final red", "→ b 를 0..x 전부 해보고 최소 최종빨강을 고른다"),
+      "ll worstRed(ll A, ll B, ll cA, ll cB, ll x) {",
+      "    ll worst = LLONG_MAX;",
+      "    for (ll b = 0; b <= x; b++) {",
+      "        ll red = A + (x - b) + (B + b) / cB * cA;",
+      "        worst = min(worst, red);",
+      "    }",
+      "    return worst;",
+      "}",
       "",
-      ...solveCpp,   // S ..
+      "// " + c("raise x from 0 until the worst case reaches the goal fA", "목표 fA 에 닿을 때까지 x 를 0부터 하나씩 늘린다"),
+      "ll solve(ll A, ll B, ll cA, ll cB, ll fA) {",
+      "    ll x = 0;",
+      "    while (worstRed(A, B, cA, cB, x) < fA) {",
+      "        x++;",
+      "    }",
+      "    return x;",
+      "}",
       "",
       "int main() {",
       "    int T; cin >> T;",
@@ -184,27 +200,15 @@ export function getChipXchgWalk(E, lang = "py") {
       "    }",
       "}",
     ];
-    const W = 4;                              // worst(minFinalA) start
-    const S = W + worstCpp.length + 1;        // solve start
-    const M = S + solveCpp.length + 1;        // main start
-    // 읽는 순서(호출 순서): 헤더 → main(입력) → solve → worst. (파일은 함수-먼저지만 말풍선은 이 순서)
     return { code, vars: _CX_VARS, beats: [
-      { hi: [0, 2],       bubble: t(E, "Headers — bits/stdc++.h, and ll = long long.", "헤더 — bits/stdc++.h, ll = long long.") },
-      { hi: [M, M + 1],   bubble: t(E, "Start at main — read T, the number of tests.", "main 부터 — 테스트 개수 T 읽기.") },
-      { hi: [M + 2, M + 6], bubble: t(E, "Each test: read A B cA cB fA → call solve → print. (solve is below)", "각 테스트: A B cA cB fA 읽어 → solve 호출 → 출력. (solve 는 아래)") },
-      { hi: [S, S + 2],   bubble: t(E, "solve: the answer x lies in [0, 2×10¹⁸] — set that range.", "solve: 답 x 는 [0, 2×10¹⁸] 안. 그 범위부터 잡아요.") },
-      { hi: [S + 3, S + 4], bubble: t(E, "While the range holds, pick the middle mid.", "범위가 남은 동안, 가운데 mid 를 골라요.") },
-      { hi: [S + 5, S + 6], bubble: t(E, "worst(mid) ≥ goal? then the answer is mid or to its left → hi = mid.", "worst(mid) ≥ 목표면 → 답은 mid 이거나 왼쪽 → hi = mid.") },
-      { hi: [S + 7, S + 8], bubble: t(E, "Not enough? the answer is to the right → lo = mid+1.", "모자라면 → 답은 오른쪽 → lo = mid+1.") },
-      { hi: [S + 11, S + 11], bubble: t(E, "Range down to one point — lo is the answer.", "범위가 한 점으로 좁혀지면 lo 가 답.") },
-      { hi: [W, W + 3],   bubble: t(E, "That worst = minFinalA: with 0 extra chips, count now (B into cB groups).", "그 worst = minFinalA: 추가 0개면 지금 그대로 세기 (B 를 cB 묶음).") },
-      { hi: [W + 4, W + 6], bubble: t(E, "Candidate b's — start with 0 (all red) and x (all blue).", "후보 b — 우선 0(다 빨강)·x(다 파랑).") },
-      { hi: [W + 7, W + 11], bubble: t(E, "Add the b that leaves max leftover (r1) — what the trickster aims for.", "자투리 최대(r1) 만드는 b 추가 — 심술쟁이가 노리는 것.") },
-      { hi: [W + 12, W + 16], bubble: t(E, "Add the b with no leftover (r0) — for comparison.", "자투리 없음(r0) 만드는 b 추가 — 비교용.") },
-      { hi: [W + 17, W + 25], bubble: t(E, "Smallest final red over the candidates = the worst. O(1).", "후보 중 최종 빨강 최솟값 = 최악. O(1).") },
+      { hi: [0, 2], bubble: t(E, "Headers. Read main first (input), then the functions it calls.", "헤더. main(입력)부터 보고, 부르는 함수 순서로.") },
+      { hi: [24, 25], bubble: t(E, "main — read T tests.", "main — 테스트 T개 읽기.") },
+      { hi: [26, 30], bubble: t(E, "Each test: read the 5 numbers → solve → print.", "각 테스트: 숫자 5개 읽어 → solve → 출력.") },
+      { hi: [4, 8], bubble: t(E, "worstRed = the trickster's worst. Try every b (0…x).", "worstRed = 심술쟁이 최악. b 를 0~x 전부 시도. (브루트 시뮬 그대로)") },
+      { hi: [9, 13], bubble: t(E, "Final red for that b; keep the smallest.", "그 b 로 최종 빨강 계산 → 제일 작은 걸 worst 로.") },
+      { hi: [15, 21], bubble: t(E, "solve: raise x by 1 until the goal is reached. ← but x can be 10¹⁸, so this is FAR too slow.", "solve: 목표 닿을 때까지 x 를 하나씩 ↑. ← 근데 x 가 10¹⁸까지라 이건 너무 느려요.") },
     ] };
   }
-  // 입력부터: main → solve → min_final_A (파이썬은 main()을 맨 아래서 호출 → 앞 참조 OK)
   const code = [
     "import sys",
     "input = sys.stdin.readline",
@@ -215,27 +219,155 @@ export function getChipXchgWalk(E, lang = "py") {
     "        A, B, cA, cB, fA = map(int, input().split())",
     "        print(solve(A, B, cA, cB, fA))",
     "",
-    ...solvePy,   // 9 .. 9+solvePy.len-1
+    "# " + c("worst = trickster splits x into (a red, b blue) to make my red smallest", "심술쟁이 최악: x 를 (빨강 a, 파랑 b)로 나눠 내 빨강을 최소로"),
+    "# " + c("try EVERY b from 0..x and keep the smallest final red", "→ b 를 0..x 전부 해보고 최소 최종빨강을 고른다"),
+    "def worst_red(A, B, cA, cB, x):",
+    "    worst = None",
+    "    for b in range(x + 1):",
+    "        red = A + (x - b) + (B + b) // cB * cA",
+    "        if worst is None or red < worst:",
+    "            worst = red",
+    "    return worst",
     "",
-    ...worstPy,
+    "# " + c("raise x from 0 until the worst case reaches the goal fA", "목표 fA 에 닿을 때까지 x 를 0부터 하나씩 늘린다"),
+    "def solve(A, B, cA, cB, fA):",
+    "    x = 0",
+    "    while worst_red(A, B, cA, cB, x) < fA:",
+    "        x += 1",
+    "    return x",
     "",
     "main()",
   ];
-  const S = 9, W = S + solvePy.length + 1;   // solve start 9, worst start 19
   return { code, vars: _CX_VARS, beats: [
-    { hi: [0, 1],       bubble: t(E, "Fast input setup.", "빠른 입력 세팅.") },
-    { hi: [3, 4],       bubble: t(E, "Read T — the number of tests.", "테스트 개수 T 읽기.") },
-    { hi: [5, 7],       bubble: t(E, "Each test: read A B cA cB fA → solve → print.", "각 테스트: A B cA cB fA 읽어 → solve → 출력.") },
-    { hi: [S, S + 1],   bubble: t(E, "solve: the answer x lies in [0, 2×10¹⁸] — set that range.", "solve: 답 x 는 [0, 2×10¹⁸] 안. 그 범위부터 잡아요.") },
-    { hi: [S + 2, S + 3], bubble: t(E, "While the range holds, pick the middle mid.", "범위가 남은 동안, 가운데 mid 를 골라요.") },
-    { hi: [S + 4, S + 5], bubble: t(E, "worst(mid) ≥ goal? then the answer is mid or to its left → hi = mid.", "worst(mid) ≥ 목표면 → 답은 mid 이거나 왼쪽 → hi = mid.") },
-    { hi: [S + 6, S + 7], bubble: t(E, "Not enough? the answer is to the right → lo = mid+1.", "모자라면 → 답은 오른쪽 → lo = mid+1.") },
-    { hi: [S + 8, S + 8], bubble: t(E, "Range down to one point — lo is the answer.", "범위가 한 점으로 좁혀지면 lo 가 답.") },
-    { hi: [W, W + 2],   bubble: t(E, "worst(x): with 0 extra chips, just count now (B into cB groups).", "worst(x): 추가 0개면 지금 그대로 세기 (B 를 cB 묶음).") },
-    { hi: [W + 3, W + 3], bubble: t(E, "Candidate b's — start with 0 (all red) and x (all blue).", "후보 b — 우선 0(다 빨강)·x(다 파랑).") },
-    { hi: [W + 4, W + 7], bubble: t(E, "Add the b that leaves max leftover (r1) — what the trickster aims for.", "자투리 최대(r1) 만드는 b 추가 — 심술쟁이가 노리는 것.") },
-    { hi: [W + 8, W + 11], bubble: t(E, "Add the b with no leftover (r0) — for comparison.", "자투리 없음(r0) 만드는 b 추가 — 비교용.") },
-    { hi: [W + 12, W + 12], bubble: t(E, "Smallest final red over the candidates = the worst. O(1).", "후보 중 최종 빨강 최솟값 = 최악. O(1).") },
+    { hi: [0, 1], bubble: t(E, "Fast input. Read it input-first.", "빠른 입력. 입력부터 읽어요.") },
+    { hi: [3, 7], bubble: t(E, "main — each test: read the 5 numbers → solve → print.", "main — 각 테스트: 숫자 5개 읽어 → solve → 출력.") },
+    { hi: [9, 12], bubble: t(E, "worst_red = the trickster's worst. Try every b (0…x).", "worst_red = 심술쟁이 최악. b 를 0~x 전부 시도. (브루트 시뮬 그대로)") },
+    { hi: [13, 16], bubble: t(E, "Final red for that b; keep the smallest.", "그 b 로 최종 빨강 계산 → 제일 작은 걸 worst 로.") },
+    { hi: [19, 24], bubble: t(E, "solve: raise x by 1 until the goal is reached. ← but x can be 10¹⁸, so this is FAR too slow.", "solve: 목표 닿을 때까지 x 를 하나씩 ↑. ← 근데 x 가 10¹⁸까지라 이건 너무 느려요.") },
+  ] };
+}
+
+// ── 코드 ② 빠른 코드 (이분탐색 × 후보 몇 개) ───────────────────────
+//   solve = x 를 이분탐색. worst_red = 후보 b 몇 개만 재서 O(1).
+//   변수/로직은 검증 코드(getChipXchgSections)와 동일 — 이름·주석만 읽기 쉽게.
+export function getChipXchgWalk(E, lang = "py") {
+  const c = (en, ko) => (E ? en : ko);
+  if (lang === "cpp") {
+    const code = [
+      "#include <bits/stdc++.h>",
+      "using namespace std;",
+      "typedef long long ll;",
+      "",
+      "// " + c("worst final red when the trickster splits x the worst way", "추가 x개를 심술쟁이가 최악으로 나눴을 때 내 최종 빨강"),
+      "ll worstRed(ll A, ll B, ll cA, ll cB, ll x) {",
+      "    if (x == 0) return A + (B / cB) * cA;",
+      "    // " + c("the worst is always one of a few candidate b's — check only those", "최악은 늘 후보 b 몇 개 중 하나 — 그것만 재요"),
+      "    vector<ll> cands;",
+      "    cands.push_back(0);          // " + c("all red", "다 빨강"),
+      "    cands.push_back(x);          // " + c("all blue", "다 파랑"),
+      "    // " + c("b that wastes the most blue — what the trickster aims for", "파랑 자투리를 최대로 만드는 b (심술쟁이 최악)"),
+      "    ll maxWasteB = ((cB - 1 - (B % cB)) % cB + cB) % cB;",
+      "    if (maxWasteB <= x) {",
+      "        cands.push_back(maxWasteB);",
+      "        cands.push_back(maxWasteB + ((x - maxWasteB) / cB) * cB);",
+      "    }",
+      "    // " + c("b that wastes no blue — for comparison", "자투리를 0으로 만드는 b (비교용)"),
+      "    ll noWasteB = ((-B) % cB + cB) % cB;",
+      "    if (noWasteB <= x) {",
+      "        cands.push_back(noWasteB);",
+      "        cands.push_back(noWasteB + ((x - noWasteB) / cB) * cB);",
+      "    }",
+      "    // " + c("final red for each candidate → smallest is the worst", "후보마다 최종 빨강 → 그중 최소가 최악"),
+      "    ll worst = LLONG_MAX;",
+      "    for (ll b : cands) worst = min(worst, A + (x - b) + (B + b) / cB * cA);",
+      "    return worst;",
+      "}",
+      "",
+      "// " + c("answer x = extra chips needed; binary-search it", "답 x = 추가로 받을 칩 수. 이분탐색으로 찾는다"),
+      "ll solve(ll A, ll B, ll cA, ll cB, ll fA) {",
+      "    ll lo = 0, hi = (ll)2e18;",
+      "    while (lo < hi) {",
+      "        ll mid = lo + (hi - lo) / 2;",
+      "        if (worstRed(A, B, cA, cB, mid) >= fA) hi = mid;   // " + c("enough → shrink", "도달 → 줄임"),
+      "        else lo = mid + 1;                                // " + c("short → grow", "부족 → 늘림"),
+      "    }",
+      "    return lo;",
+      "}",
+      "",
+      "int main() {",
+      "    int T; cin >> T;",
+      "    while (T--) {",
+      "        ll A, B, cA, cB, fA;",
+      "        cin >> A >> B >> cA >> cB >> fA;",
+      '        cout << solve(A, B, cA, cB, fA) << "\\n";',
+      "    }",
+      "}",
+    ];
+    return { code, vars: _CX_VARS, beats: [
+      { hi: [0, 2], bubble: t(E, "Headers. Read main first, then solve, then worstRed.", "헤더. main → solve → worstRed 순으로 읽어요.") },
+      { hi: [40, 41], bubble: t(E, "main — read T tests.", "main — 테스트 T개 읽기.") },
+      { hi: [42, 46], bubble: t(E, "Each test: read the 5 numbers → solve → print.", "각 테스트: 숫자 5개 읽어 → solve → 출력.") },
+      { hi: [30, 33], bubble: t(E, "solve: binary-search x in [0, 2×10¹⁸] (instead of +1 each time).", "solve: x 를 [0, 2×10¹⁸]에서 이분탐색 (하나씩 대신).") },
+      { hi: [34, 38], bubble: t(E, "worstRed(mid) ≥ goal → shrink (hi); else grow (lo). ~60 steps.", "worstRed(mid) ≥ 목표면 줄이고, 아니면 늘림. 약 60번.") },
+      { hi: [4, 6], bubble: t(E, "worstRed — now O(1). x=0 → just count now.", "worstRed — 이제 O(1). x=0이면 지금 그대로.") },
+      { hi: [7, 10], bubble: t(E, "Only check a few candidate b's — first the ends (0, x).", "후보 b 몇 개만 재요 (후보 시뮬). 우선 양끝 0·x.") },
+      { hi: [11, 16], bubble: t(E, "maxWasteB = the max-waste b — that's the trickster's worst (b=8 in the sim).", "maxWasteB = 자투리 최대 b — 심술쟁이 최악 (시뮬의 b=8).") },
+      { hi: [17, 22], bubble: t(E, "noWasteB = the no-waste b, checked just in case.", "noWasteB = 자투리 0 b, 혹시 몰라 비교용.") },
+      { hi: [23, 26], bubble: t(E, "Final red for each candidate → smallest = the worst. No loop over all b → O(1).", "후보마다 최종 빨강 → 최소 = 최악. b 전부 안 돌아 O(1).") },
+    ] };
+  }
+  const code = [
+    "import sys",
+    "input = sys.stdin.readline",
+    "",
+    "def main():",
+    "    T = int(input())",
+    "    for _ in range(T):",
+    "        A, B, cA, cB, fA = map(int, input().split())",
+    "        print(solve(A, B, cA, cB, fA))",
+    "",
+    "# " + c("answer x = extra chips needed; binary-search it", "답 x = 추가로 받을 칩 수. 이분탐색으로 찾는다"),
+    "def solve(A, B, cA, cB, fA):",
+    "    lo, hi = 0, 2 * 10**18",
+    "    while lo < hi:",
+    "        mid = (lo + hi) // 2",
+    "        if worst_red(A, B, cA, cB, mid) >= fA:",
+    "            hi = mid          # " + c("enough → shrink", "도달 → 줄임"),
+    "        else:",
+    "            lo = mid + 1      # " + c("short → grow", "부족 → 늘림"),
+    "    return lo",
+    "",
+    "# " + c("worst final red when the trickster splits x the worst way", "추가 x개를 심술쟁이가 최악으로 나눴을 때 내 최종 빨강"),
+    "def worst_red(A, B, cA, cB, x):",
+    "    if x == 0:",
+    "        return A + (B // cB) * cA",
+    "    # " + c("the worst is always one of a few candidate b's — check only those", "최악은 늘 후보 b 몇 개 중 하나 — 그것만 재요"),
+    "    candidates = {0, x}                    # " + c("all red / all blue", "다 빨강 / 다 파랑"),
+    "    # " + c("b that wastes the most blue — the trickster's worst", "파랑 자투리를 최대로 만드는 b (심술쟁이 최악)"),
+    "    max_waste_b = (cB - 1 - B % cB) % cB",
+    "    if max_waste_b <= x:",
+    "        candidates.add(max_waste_b)",
+    "        candidates.add(max_waste_b + (x - max_waste_b) // cB * cB)",
+    "    # " + c("b that wastes no blue — for comparison", "자투리를 0으로 만드는 b (비교용)"),
+    "    no_waste_b = (-B) % cB",
+    "    if no_waste_b <= x:",
+    "        candidates.add(no_waste_b)",
+    "        candidates.add(no_waste_b + (x - no_waste_b) // cB * cB)",
+    "    # " + c("final red for each candidate → smallest is the worst", "후보마다 최종 빨강 → 그중 최소가 최악"),
+    "    return min(A + (x - b) + (B + b) // cB * cA for b in candidates)",
+    "",
+    "main()",
+  ];
+  return { code, vars: _CX_VARS, beats: [
+    { hi: [0, 1], bubble: t(E, "Fast input. Read it input-first: main → solve → worst_red.", "빠른 입력. 입력부터: main → solve → worst_red.") },
+    { hi: [3, 7], bubble: t(E, "main — each test: read the 5 numbers → solve → print.", "main — 각 테스트: 숫자 5개 읽어 → solve → 출력.") },
+    { hi: [9, 11], bubble: t(E, "solve: binary-search x in [0, 2×10¹⁸] (instead of +1 each time).", "solve: x 를 [0, 2×10¹⁸]에서 이분탐색 (하나씩 대신).") },
+    { hi: [12, 18], bubble: t(E, "worst_red(mid) ≥ goal → shrink (hi); else grow (lo). ~60 steps → lo is the answer.", "worst_red(mid) ≥ 목표면 줄이고, 아니면 늘림. 약 60번 → lo 가 답.") },
+    { hi: [20, 23], bubble: t(E, "worst_red — now O(1). x=0 → just count now.", "worst_red — 이제 O(1). x=0이면 지금 그대로.") },
+    { hi: [24, 25], bubble: t(E, "Only check a few candidate b's — first the ends (0, x).", "후보 b 몇 개만 재요 (후보 시뮬). 우선 양끝 0·x.") },
+    { hi: [26, 30], bubble: t(E, "max_waste_b = the max-waste b — the trickster's worst (b=8 in the sim).", "max_waste_b = 자투리 최대 b — 심술쟁이 최악 (시뮬의 b=8).") },
+    { hi: [31, 35], bubble: t(E, "no_waste_b = the no-waste b, checked just in case.", "no_waste_b = 자투리 0 b, 혹시 몰라 비교용.") },
+    { hi: [36, 37], bubble: t(E, "Final red for each candidate → smallest = the worst. No loop over all b → O(1).", "후보마다 최종 빨강 → 최소 = 최악. b 전부 안 돌아 O(1).") },
   ] };
 }
 

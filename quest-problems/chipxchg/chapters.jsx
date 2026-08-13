@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getChipXchgWalk } from "./components";
+import { getChipXchgWalk, getChipXchgBruteWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim, CheckSim, StrategySlide, PlanSlide, CandidateSim } from "./sims";
 
@@ -179,20 +179,29 @@ export function makeChipXchgCh1(E) {
    Chapter 2: makeChipXchgCh2 (CodeWalk)
    ═══════════════════════════════════════════════════════════════ */
 export function makeChipXchgCh2(E, lang = "py") {
-  const w = getChipXchgWalk(E, lang);
+  const brute = getChipXchgBruteWalk(E, lang);
+  const fast = getChipXchgWalk(E, lang);
   return [
+    // 코드 ① 쉬운 브루트포스 — 먼저 이해되는 버전 (느림)
     {
       type: "reveal",
-      label: t(E, "Code", "코드"),
-      narr: lang === "cpp"
-        ? t(E,
-            "Follow the flow — header → main (input) → the solve/worst it calls. (C++ defines the functions above main.)",
-            "흐름 따라 — 헤더 → main(입력) → 거기서 부르는 solve·worst. (C++ 은 함수를 main 위에 정의)")
-        : t(E,
-            "Read it the way you'd write it — input first: main reads each test and calls solve; then unpack solve and worst.",
-            "짜는 순서대로 — 입력부터. main 이 각 테스트를 받아 solve·출력, 그다음 solve·worst 를 뜯어봐요."),
+      label: t(E, "Code ① brute force", "코드 ① 쉬운 브루트"),
+      narr: t(E,
+        "Start with the simple, readable version — try every split b, and raise x one at a time.",
+        "먼저 쉽고 그대로 읽히는 버전 — 나눔 b 를 다 해보고, x 를 하나씩 늘려요."),
       content: (
-        <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />
+        <CodeWalk E={E} lang={lang} code={brute.code} vars={brute.vars} beats={brute.beats} accent="#2563eb" />
+      ),
+    },
+    // 코드 ② 빠른 코드 — 브루트 한계 → 이분탐색 × 후보
+    {
+      type: "reveal",
+      label: t(E, "Code ② fast", "코드 ② 빠른 코드"),
+      narr: t(E,
+        "x can reach 10¹⁸, so the brute is far too slow. Binary-search x, and check only a few candidate b's (O(1)). Same names, now with the shortcuts.",
+        "x 가 10¹⁸까지라 브루트는 너무 느려요. x 는 이분탐색으로, b 는 후보 몇 개만 (O(1)). 같은 이름, 지름길만 추가."),
+      content: (
+        <CodeWalk E={E} lang={lang} code={fast.code} vars={fast.vars} beats={fast.beats} accent="#2563eb" />
       ),
     },
   ];
