@@ -321,93 +321,120 @@ export function FormulaDeriveSim({ E }) {
    formula(r1 식) → other(B≠0 예로 −B%cB 이유) → extend(+cB: 2→5→8, x이하 최대)
    ═══════════════════════════════════════════════════════════════ */
 export function FormulaBuildSim({ E }) {
-  const cB = 3, X = 8, target = cB - 1;
+  const cB = 3, X = 8, target = cB - 1;   // 최대 자투리 = cB−1 = 2
   const steps = [
-    { kind: "rule" }, { kind: "add1" }, { kind: "add2" },
-    { kind: "formula" }, { kind: "extend" },
+    { kind: "anchor" }, { kind: "formula" }, { kind: "whyB" },
+    { kind: "wrap" }, { kind: "largest" }, { kind: "codemap" },
   ];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
 
-  const addedByKind = { rule: 0, add1: 1, add2: 2, formula: 2, extend: X };
-  const B = 0;
-  const added = addedByKind[s.kind];
+  // 트레이 상태: whyB 만 시작 파랑 4개 예시, 나머지는 샘플(시작 0)
+  const B = s.kind === "whyB" ? 4 : 0;
+  const added = { anchor: 0, formula: 2, whyB: 0, wrap: 2, largest: X, codemap: 0 }[s.kind];
   const total = B + added;
   const groups = Math.floor(total / cB);
   const left = total % cB;
-  const hit = left === target;
-  const showTarget = s.kind === "rule";
+  const hit = left === target && (s.kind === "formula" || s.kind === "largest");
+  const showTarget = s.kind === "anchor";
+  const showTray = ["anchor", "formula", "whyB", "largest"].includes(s.kind);
 
   const say =
-    s.kind === "rule"
-      ? t(E, <>Blue swaps in <b>3s</b>. Whatever can't fill a group is <b style={{color:"#dc2626"}}>leftover</b> — wasted. The trickster wants <span style={NW}><b>2 leftover</b> (the max)</span>.</>,
-             <>파랑은 <b>3개</b> 모여야 교환돼요. 못 채운 나머지 = <b style={{color:"#dc2626"}}>자투리</b>, 버려져요. 심술쟁이는 <span style={NW}>이걸 <b>최대 2개</b></span> 만들고 싶어요.</>)
-    : s.kind === "add1"
-      ? t(E, <>Give blue one at a time from <b>0</b>: <span style={NW}>1 → leftover <b>1</b></span>. Not 2 yet.</>,
-             <>0개에서 하나씩 줘봐요: <span style={NW}>1개 → 자투리 <b>1</b></span>. 아직 2 아니에요.</>)
-    : s.kind === "add2"
-      ? t(E, <><span style={NW}>1 more → leftover <b style={{color:"#15803d"}}>2</b></span> ✓ that's the max! <span style={NW}>We gave <b>2</b>.</span></>,
-             <><span style={NW}>1개 더 → 자투리 <b style={{color:"#15803d"}}>2</b></span> ✓ 최대예요! <span style={NW}>준 파랑 = <b>2개</b>.</span></>)
+    s.kind === "anchor"
+      ? t(E, <>Beat the <b>worst case</b> and the rest follows. Worst = <b style={{color:"#dc2626"}}>most blue leftover</b> (blue that can't fill a group of 3) — <span style={NW}>at most <b>cB−1 = 2</b></span>. Let's get the <b>b</b> that makes it.</>,
+             <>최악만 막으면 나머지는 저절로 풀려요. 최악 = <b style={{color:"#dc2626"}}>파랑 자투리</b>(3개로 못 묶어 버리는 나머지)<b>가 가장 많을 때</b> — <span style={NW}>최대 <b>cB−1 = 2</b>개</span>. 그걸 만드는 <b>b</b>를 공식으로 구해요.</>)
     : s.kind === "formula"
-      ? t(E, <>Skip counting — get it <b>directly</b>. Filling from <span style={NW}><b>now 0</b> to <b>goal 2</b></span> = <span style={NW}><b>2 − 0 = 2</b></span> (like 3rd→7th floor is 4). This <span style={NW}>'goal − now'</span> is <b style={{color:"#2563eb"}}>r1</b>.</>,
-             <>이제 세지 않고 <b>바로</b> 구해요. 자투리를 <span style={NW}><b>지금 0</b>에서 <b>목표 2</b>까지</span> = <span style={NW}><b>2 − 0 = 2칸</b></span> (3층→7층이 4칸이듯). 이 <span style={NW}>'목표 − 지금'</span> 이 <b style={{color:"#2563eb"}}>r1</b>.</>)
-    : t(E, <>From r1, add <b>+3</b> to keep leftover 2: <span style={NW}>2 → 5 → 8</span>. <span style={NW}>Largest ≤ 8 = <b>8</b></span> → worst <b style={{color:"#dc2626"}}>b = 8</b>.</>,
-           <>r1 에서 <b>3개씩</b> 더 주면 자투리 2 그대로: <span style={NW}>2 → 5 → 8</span>. <span style={NW}>8 이하 최대 = <b>8</b></span> → 최악 <b style={{color:"#dc2626"}}>b = 8</b>.</>);
+      ? t(E, <>Leftover = <span style={NW}>(total blue) mod cB</span>. To make it <b>2</b>: start blue is 0, so <span style={NW}>now-leftover <b>0</b></span> → give <span style={NW}><b>2 − 0 = 2</b></span>. That b is <b style={{color:"#2563eb"}}>r1</b>.</>,
+             <>자투리 = <span style={NW}>(총 파랑) ÷ cB 나머지</span>. 이걸 <b>목표 2</b>로? 시작 파랑 0이라 <span style={NW}>지금 자투리 <b>0</b></span> → <span style={NW}><b>2 − 0 = 2</b>개</span> 주면 돼요. 이 b가 <b style={{color:"#2563eb"}}>r1</b>.</>)
+    : s.kind === "whyB"
+      ? t(E, <><b>What if start blue isn't 0?</b> Say <b>4</b>: <span style={NW}>4 = 3 + 1</span> → <span style={NW}>now-leftover <b>1</b></span>. To goal 2, only <span style={NW}><b>2 − 1 = 1</b></span>! <span style={NW}>→ that's the <b>− B%cB</b></span>.</>,
+             <><b>시작 파랑이 0이 아니면?</b> 예로 <b>4개</b>: <span style={NW}>4 = 3 + 1</span> → <span style={NW}>지금 자투리 <b>1</b></span>. 목표 2까지 <span style={NW}><b>2 − 1 = 1</b></span>개만! <span style={NW}>→ 이게 <b>− B%cB</b></span> 예요.</>)
+    : s.kind === "wrap"
+      ? t(E, <>Code wraps the subtraction in <span style={NW}><b>(… % cB + cB) % cB</b></span> — a <b>safety net</b>: keep it a valid <span style={NW}>0…cB−1</span> remainder <span style={NW}>(C++ can give a negative mod)</span>. The meaning is still <b>'goal − now'</b>.</>,
+             <>코드는 이 뺄셈을 <span style={NW}><b>(… % cB + cB) % cB</b></span> 로 감싸요 — <b>안전장치</b>예요. 나머지를 항상 <span style={NW}>0~cB−1</span> 로, <span style={NW}>C++는 음수 나머지</span>가 나올 수 있어서요. 뜻은 그대로 <b>'목표 − 지금'</b>.</>)
+    : s.kind === "largest"
+      ? t(E, <>From r1, <b>+cB (3)</b> keeps leftover 2: <span style={NW}>2 → 5 → 8</span>. <b>Largest ≤ x</b> = <span style={NW}>r1 + ((x−r1)÷cB)×cB</span> = <span style={NW}>2 + 6 = <b style={{color:"#dc2626"}}>8</b></span>.</>,
+             <>r1 에서 <b>+cB(3)</b> 씩 더 줘도 자투리는 2 그대로: <span style={NW}>2 → 5 → 8</span>. <b>x 이하 가장 큰</b> b = <span style={NW}>r1 + ((x−r1)÷cB)×cB</span> = <span style={NW}>2 + 6 = <b style={{color:"#dc2626"}}>8</b></span>.</>)
+    : t(E, <>That's the two code lines — everything we just built.</>,
+           <>이게 코드 두 줄이에요 — 방금 만든 그대로.</>);
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Build the r1 formula, one step at a time", "r1 공식을 하나씩 만들기")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "Build the max-leftover formula", "자투리 최대 b 공식 만들기")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all", lineHeight: 1.5 }}>
-        {t(E, "leftover = blue that can't fill a group of 3 (wasted) · max leftover = 2", "자투리 = 3개 못 채운 나머지 파랑(버려짐) · 최대 자투리 = 2")}
+        {t(E, "leftover = total blue mod cB(3) · max = cB−1 = 2", "자투리 = 총 파랑을 cB(3)로 나눈 나머지 · 최대 = cB−1 = 2")}
       </div>
-      <Say tone={hit ? "aha" : s.kind === "rule" ? "stuck" : "go"}>{say}</Say>
+      <Say tone={hit ? "aha" : s.kind === "anchor" || s.kind === "wrap" ? "stuck" : "go"}>{say}</Say>
 
-      {/* 자투리 트레이: 완성 묶음(교환됨) + cB 슬롯의 자투리 */}
-      <div style={{ maxWidth: 470, margin: "0 auto", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", justifyContent: "center", minHeight: 60 }}>
-        {groups > 0 && (
-          <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-            {Array.from({ length: groups }).map((_, g) => (
-              <div key={g} style={{ display: "flex", gap: 3, padding: 4, borderRadius: 8, border: `2px solid ${BLU}`, background: "#eff6ff", opacity: 0.5 }}>
-                {Array.from({ length: cB }).map((_, i) => <Chip key={i} color="blue" size={16} faded />)}
+      {showTray && (
+        <>
+          {s.kind === "whyB" && (
+            <div style={{ textAlign: "center", fontSize: 11, fontWeight: 800, color: "#b45309", marginBottom: 4, wordBreak: "keep-all" }}>
+              {t(E, "side example — start blue = 4", "다른 예 — 시작 파랑 = 4")}
+            </div>
+          )}
+          <div style={{ maxWidth: 470, margin: "0 auto", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", justifyContent: "center", minHeight: 60 }}>
+            {groups > 0 && (
+              <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                {Array.from({ length: groups }).map((_, g) => (
+                  <div key={g} style={{ display: "flex", gap: 3, padding: 4, borderRadius: 8, border: `2px solid ${BLU}`, background: "#eff6ff", opacity: 0.5 }}>
+                    {Array.from({ length: cB }).map((_, i) => <Chip key={i} color="blue" size={16} faded />)}
+                  </div>
+                ))}
+                <span style={{ fontSize: 10.5, fontWeight: 800, color: "#94a3b8", wordBreak: "keep-all" }}>{t(E, `${groups} full`, `완성 ${groups}묶음`)}</span>
               </div>
-            ))}
-            <span style={{ fontSize: 10.5, fontWeight: 800, color: "#94a3b8", wordBreak: "keep-all" }}>{t(E, `${groups} full`, `완성 ${groups}묶음`)}</span>
+            )}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+              <div style={{ display: "flex", gap: 4, padding: 5, borderRadius: 10,
+                border: `2px dashed ${hit ? "#16a34a" : showTarget ? "#dc2626" : "#94a3b8"}`,
+                background: hit ? "#f0fdf4" : "#fff" }}>
+                {Array.from({ length: cB }).map((_, i) => (
+                  i < left
+                    ? <Chip key={i} color="blue" size={18} />
+                    : <div key={i} style={{ width: 18, height: 18, borderRadius: 999, border: "2px dashed #cbd5e1" }} />
+                ))}
+              </div>
+              <div style={{ fontSize: 10, fontWeight: 800, color: "#94a3b8" }}>{t(E, "leftover", "자투리")}</div>
+            </div>
+            <div style={{ fontSize: 15, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: hit ? "#15803d" : "#334155", whiteSpace: "nowrap" }}>
+              = {left}{hit ? " ✓" : ""}{showTarget ? ` (${t(E, "want", "목표")} ${target})` : ""}
+            </div>
           </div>
-        )}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-          <div style={{ display: "flex", gap: 4, padding: 5, borderRadius: 10,
-            border: `2px dashed ${hit ? "#16a34a" : showTarget ? "#dc2626" : "#94a3b8"}`,
-            background: hit ? "#f0fdf4" : "#fff" }}>
-            {Array.from({ length: cB }).map((_, i) => (
-              i < left
-                ? <Chip key={i} color="blue" size={18} />
-                : <div key={i} style={{ width: 18, height: 18, borderRadius: 999, border: "2px dashed #cbd5e1" }} />
-            ))}
-          </div>
-          <div style={{ fontSize: 10, fontWeight: 800, color: "#94a3b8" }}>{t(E, "leftover", "자투리")}</div>
-        </div>
-        <div style={{ fontSize: 15, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: hit ? "#15803d" : "#334155", whiteSpace: "nowrap" }}>
-          = {left}{hit ? " ✓" : ""}{showTarget ? ` (${t(E, "want", "목표")} ${target})` : ""}
-        </div>
-      </div>
+        </>
+      )}
 
-      {s.kind === "formula" && (
+      {(s.kind === "formula" || s.kind === "whyB") && (
         <div style={{ maxWidth: 440, margin: "14px auto 0", background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", textAlign: "center", wordBreak: "keep-all" }}>
-          <div style={{ fontSize: 13.5, fontWeight: 800, color: "#1e3a8a" }}>
-            {t(E, "r1 = goal leftover − now leftover", "r1 = 목표 자투리 − 지금 자투리")}
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a" }}>
+            {t(E, "r1 = goal leftover (cB−1) − now leftover (B%cB)", "r1 = 목표 자투리(cB−1) − 지금 자투리(B%cB)")}
           </div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#1e3a8a", marginTop: 4, fontFamily: "'JetBrains Mono',monospace" }}>
-            = 2 − 0 = <b style={{ color: "#2563eb" }}>2</b>
-          </div>
-          <div style={{ marginTop: 7, fontSize: 10.5, color: "#94a3b8", fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, "in code: (cB−1) − (B%cB)", "코드에선: (cB−1) − (B%cB)")}
+            {s.kind === "formula"
+              ? <>= 2 − 0 = <b style={{ color: "#2563eb" }}>2</b></>
+              : <>= 2 − <b style={{color:"#dc2626"}}>1</b> = <b style={{ color: "#2563eb" }}>1</b></>}
           </div>
         </div>
       )}
-      {s.kind === "extend" && (
-        <div style={{ maxWidth: 440, margin: "14px auto 0", background: "#f0fdf4", border: "1.5px solid #16a34a", borderRadius: 10, padding: "10px 14px", textAlign: "center", fontSize: 14, fontWeight: 800, color: "#065f46", wordBreak: "keep-all", lineHeight: 1.6 }}>
-          {t(E, <><span style={NW}>2 → 5 → 8</span> <span style={{fontSize:11,color:"#16a34a"}}>(+3 each)</span> · <span style={NW}>largest ≤ 8 = <b style={{color:"#15803d"}}>8</b></span></>,
-                <><span style={NW}>2 → 5 → 8</span> <span style={{fontSize:11,color:"#16a34a"}}>(3개씩)</span> · <span style={NW}>8 이하 최대 = <b style={{color:"#15803d"}}>8</b></span></>)}
+      {s.kind === "wrap" && (
+        <div style={{ maxWidth: 460, margin: "14px auto 0", background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 14px", textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: "#92400e", wordBreak: "break-word" }}>
+          r1 = ((cB−1 − B%cB) % cB + cB) % cB
+          <div style={{ marginTop: 6, fontFamily: "inherit", fontSize: 11, fontWeight: 700, color: "#b45309", wordBreak: "keep-all" }}>
+            {t(E, "(cB−1 − B%cB) = goal − now · the outer (…%cB+cB)%cB = safety wrap", "(cB−1 − B%cB) = 목표 − 지금 · 바깥 (…%cB+cB)%cB = 안전 감쌈")}
+          </div>
+        </div>
+      )}
+      {s.kind === "largest" && (
+        <div style={{ maxWidth: 460, margin: "14px auto 0", background: "#f0fdf4", border: "1.5px solid #16a34a", borderRadius: 10, padding: "10px 14px", textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 13.5, fontWeight: 800, color: "#065f46", wordBreak: "break-word" }}>
+          r1 + ((x−r1) / cB) × cB = 2 + ((8−2)/3)×3 = <b style={{color:"#15803d"}}>8</b>
+        </div>
+      )}
+      {s.kind === "codemap" && (
+        <div style={{ maxWidth: 480, margin: "6px auto 0", background: "#0f172a", borderRadius: 10, padding: "12px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.9, color: "#e2e8f0", wordBreak: "break-word" }}>
+          <div>maxWasteB = ((cB−1 − B%cB)%cB + cB)%cB<span style={{ color: "#64748b" }}>{t(E, "  // goal − now (+safe)", "  // 목표 − 지금 (+안전)")}</span></div>
+          <div>maxWasteB + ((x−maxWasteB)/cB)*cB<span style={{ color: "#64748b" }}>{t(E, "  // largest ≤ x", "  // x 이하 최대")}</span></div>
+          <div style={{ marginTop: 8, fontFamily: "inherit", fontSize: 11.5, fontWeight: 700, color: "#93c5fd", wordBreak: "keep-all" }}>
+            {t(E, "Our sample: start blue 0 → r1 = 2 → b = 8.", "우리 샘플: 시작 파랑 0 → r1 = 2 → b = 8.")}
+          </div>
         </div>
       )}
 

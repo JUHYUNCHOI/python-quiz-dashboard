@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk, getChipXchgBruteWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim, CheckSim, StrategySlide, PlanSlide, CandidateSim } from "./sims";
+import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim, CheckSim, StrategySlide, PlanSlide, CandidateSim, FormulaBuildSim } from "./sims";
 
 const A = "#2563eb";
 
@@ -152,6 +152,15 @@ export function makeChipXchgCh1(E) {
       narr: t(E, "x can be huge, so we can't try every split — the worst is always one of a few candidates; check only those.",
                  "x 가 크면 모든 분배를 못 해요 — 최악은 늘 후보 몇 개 중 하나. 그 몇 개만 재요."),
       content: (<CandidateSim E={E} />),
+    },
+
+    // [전] 도구 ①-d: 그 '자투리 최대 b' 를 구하는 긴 공식을 조각별로 유도
+    {
+      type: "reveal",
+      label: t(E, "Tool ①d: the max-leftover formula", "도구 ①d: 자투리 최대 공식"),
+      narr: t(E, "The worst is max leftover — derive the (long) code formula for that b, piece by piece.",
+                 "최악 = 자투리 최대. 그 b 를 구하는 (긴) 코드 공식을 조각 하나씩 유도해요."),
+      content: (<FormulaBuildSim E={E} />),
     },
 
     // [결] ⑤ 답 찾기 (질문②) — 브루트 한계(10¹⁸)→계단→이분탐색까지 한 시뮬에서
