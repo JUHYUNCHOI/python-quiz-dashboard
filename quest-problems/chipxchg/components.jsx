@@ -324,19 +324,30 @@ export function getChipXchgWalk(E, lang = "py") {
   ] };
 }
 
-// ── 도구: 심술쟁이 최악 → 공식 유도 (CodeWalk — 말풍선이 그 줄에). 코드②와 같은 식. ──
-export function getChipXchgFormulaWalk(E) {
+// ── 도구: 심술쟁이 최악 → 공식 유도 (CodeWalk — 말풍선이 그 줄에). 코드②와 같은 식·언어. ──
+export function getChipXchgFormulaWalk(E, lang = "py") {
   const c = (en, ko) => (E ? en : ko);
-  const code = [
+  const code = lang === "cpp" ? [
+    "// " + c("first: can I reach the goal with what I have now?", "먼저: 지금 가진 걸로 목표에 닿나?"),
+    "ll init = A + B / cB * cA;        // " + c("red I can make now (convert my blue)", "지금 가진 걸로 만드는 빨강 (내 파랑 환전)"),
+    "//   " + c("if init >= fA: answer is 0", "→ init 이 목표 이상이면 답 0"),
+    "ll deficit = fA - 1 - init;       // " + c("red I'm still short by", "아직 부족한 빨강"),
+    "ll waste = cB - 1 - B % cB;       // " + c("trickster step 1: waste blue to the max (leftover cB-1)", "심술쟁이 1단계: 파랑을 최대로 버림 (자투리 cB−1)"),
+    "ll need;                          // " + c("trickster step 2:", "심술쟁이 2단계:"),
+    "if (cA >= cB) need = deficit;                     //   " + c("swap pays → red (1 each)", "환전 이득 → 빨강 (1개당 1)"),
+    "else need = deficit / cA * cB + deficit % cA;     //   " + c("swap loses → blue in groups", "환전 손해 → 파랑 그룹 (cB개당 cA)"),
+    "//   " + c("(fill the deficit with the least-helpful color)", "(부족분을 가장 덜 도와주는 색으로)"),
+    "ll answer = waste + need + 1;",
+  ] : [
     "# " + c("first: can I reach the goal with what I have now?", "먼저: 지금 가진 걸로 목표에 닿나?"),
     "init = A + B // cB * cA           # " + c("red I can make now (convert my blue)", "지금 가진 걸로 만드는 빨강 (내 파랑 환전)"),
     "#   " + c("if init >= fA: answer is 0", "→ init 이 목표 이상이면 답 0"),
     "deficit = fA - 1 - init           # " + c("red I'm still short by", "아직 부족한 빨강"),
     "waste = cB - 1 - B % cB           # " + c("trickster step 1: waste blue to the max (leftover cB-1)", "심술쟁이 1단계: 파랑을 최대로 버림 (자투리 cB−1)"),
-    "if cA >= cB:                      # " + c("trickster step 2: if swapping pays,", "심술쟁이 2단계: 환전이 이득이면"),
-    "    need = deficit                #   " + c("give red (1 red each)", "빨강으로 (1개당 1)"),
-    "else:                             # " + c("if swapping loses (our sample),", "환전이 손해면 (우리 샘플)"),
-    "    need = deficit // cA * cB + deficit % cA   #   " + c("give blue in groups (cB per cA)", "파랑 그룹으로 (cB개당 cA)"),
+    "if cA >= cB:                      # " + c("trickster step 2: swap pays →", "심술쟁이 2단계: 환전이 이득이면"),
+    "    need = deficit                #   " + c("red (1 each)", "빨강으로 (1개당 1)"),
+    "else:                             # " + c("swap loses (our sample) →", "환전이 손해면 (우리 샘플)"),
+    "    need = deficit // cA * cB + deficit % cA   #   " + c("blue in groups (cB per cA)", "파랑 그룹으로 (cB개당 cA)"),
     "answer = waste + need + 1",
   ];
   return { code, vars: _CX_VARS, beats: [

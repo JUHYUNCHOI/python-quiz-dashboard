@@ -31,10 +31,11 @@ export default function ChipXchgApp(props = {}) {
   const [si, setSi] = useState(typeof _initial.si === "number" ? _initial.si : 0);
   const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
-  const [ch1Q, setCh1Q] = useState(() => makeChipXchgCh1(lang === "en"));
+  const [ch1Q, setCh1Q] = useState(() => makeChipXchgCh1(lang === "en", "py"));
   const [ch2Q, setCh2Q] = useState(() => makeChipXchgCh2(lang === "en", "py"));
 
   useEffect(() => {
+    setCh1Q(prev => makeChipXchgCh1(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
     setCh2Q(prev => makeChipXchgCh2(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   }, [codeLang, E]);
 
@@ -51,7 +52,7 @@ export default function ChipXchgApp(props = {}) {
   const TABS = E ? ["📋 Problem", "⚡ Code"] : ["📋 문제", "⚡ 코드"];
   const setters = { 0: setCh1Q, 1: setCh2Q };
   const states  = { 0: ch1Q,    1: ch2Q };
-  const makers  = { 0: makeChipXchgCh1, 1: (e) => makeChipXchgCh2(e, codeLang) };
+  const makers  = { 0: (e) => makeChipXchgCh1(e, codeLang), 1: (e) => makeChipXchgCh2(e, codeLang) };
 
   const switchLang = nl => {
     const ne = nl === "en"; setLang(nl);

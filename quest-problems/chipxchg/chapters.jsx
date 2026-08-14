@@ -90,8 +90,8 @@ function ChipXchgSample({ E }) {
    문제(도입) → 샘플입출력 → 이해확인 → 전략 → 환전(init) → 심술쟁이 최악→공식 → 계획
    (USACO 공식 풀이 = O(1) 닫힌 공식. 이분탐색·후보 안 씀)
    ═══════════════════════════════════════════════════════════════ */
-export function makeChipXchgCh1(E) {
-  const fw = getChipXchgFormulaWalk(E);   // ①d 공식 유도 CodeWalk
+export function makeChipXchgCh1(E, lang = "py") {
+  const fw = getChipXchgFormulaWalk(E, lang);   // 공식 유도 CodeWalk (코드 언어 따라감)
   return [
     // [기] 문제 (도입) = 게임 한 판을 구체 그림으로 (첫 화면부터 단계별 시뮬)
     {
@@ -144,7 +144,7 @@ export function makeChipXchgCh1(E) {
       narr: t(E, "If short: the trickster wastes blue, then fills with the least-helpful color. Build the O(1) formula line by line.",
                  "부족하면: 심술쟁이가 파랑을 버리고, 가장 덜 도와주는 색으로 채워요. O(1) 공식을 한 줄씩 만들어요."),
       content: (
-        <CodeWalk E={E} lang="py" code={fw.code} vars={fw.vars} beats={fw.beats} accent="#2563eb" />
+        <CodeWalk E={E} lang={lang} code={fw.code} vars={fw.vars} beats={fw.beats} accent="#2563eb" />
       ),
     },
 
