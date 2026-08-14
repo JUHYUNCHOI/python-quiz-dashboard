@@ -774,23 +774,22 @@ export function StrategySlide({ E }) {
         title={t(E, "How will we solve it?", "어떻게 풀까?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Say>
         {s.kind === "plan"
-          ? t(E, <>We can't read off the answer. So we <b>test a candidate</b> count x.</>,
-                 <>답을 바로 못 읽어내요. 그러니 후보 개수 x 를 <b>하나 정해서 시험</b>해요.</>)
-          : t(E, <>The whole plan needs just <b>two things</b>:</>, <>이 계획은 딱 <b>두 가지</b>만 해결하면 돼요:</>)}
+          ? t(E, <>No search needed — we <b>compute the answer directly</b>. It splits into two cases.</>,
+                 <>탐색 필요 없어요 — 답을 <b>바로 계산</b>해요. 두 경우로 갈려요.</>)
+          : t(E, <>Just <b>two cases</b>:</>, <>딱 <b>두 경우</b>예요:</>)}
       </Say>
       {s.kind === "plan" ? (
         <div style={{ maxWidth: 470, margin: "0 auto" }}>
-          <Slab n="1" color="#2563eb" bg="#eff6ff">{t(E, <>Pick an extra-chip count <b>x</b>.</>, <>추가 칩 개수 <b>x</b> 를 하나 정해요.</>)}</Slab>
-          <Slab n="2" color="#dc2626" bg="#fef2f2">{t(E, <>Let the trickster split those x chips the <b>worst</b> way → count my final red.</>, <>심술쟁이가 그 x 개를 <b>최악</b>으로 나눴을 때 최종 빨강을 세요.</>)}</Slab>
-          <Slab n="3" color="#15803d" bg="#f0fdf4">{t(E, <>Does it still reach the goal? The <b>smallest x</b> that does = the answer.</>, <>그래도 목표를 넘나요? 넘는 <b>가장 작은 x</b> = 답.</>)}</Slab>
+          <Slab n="1" color="#15803d" bg="#f0fdf4">{t(E, <>How many red can I make <b>right now</b> (convert my blue)? Call it <b>init</b>.</>, <>지금 가진 걸로 빨강 몇 개(내 파랑 환전)? 이걸 <b>init</b> 이라 해요.</>)}</Slab>
+          <Slab n="2" color="#2563eb" bg="#eff6ff">{t(E, <>If <b>init &lt; goal</b>, count the fewest extra chips — assuming the <b>trickster splits them worst</b>.</>, <><b>init 이 목표보다 작으면</b>, 심술쟁이가 <b>최악으로 나눌 때</b> 필요한 최소 추가 칩을 세요.</>)}</Slab>
         </div>
       ) : (
         <div style={{ maxWidth: 470, margin: "0 auto" }}>
-          <Slab n="①" color="#dc2626" bg="#fef2f2" title={t(E, "For one x, what's the trickster's WORST?", "한 x 에서 심술쟁이 '최악'은?")}>
-            {t(E, "→ next: count a pile (Counting red) + the trickster (Worst split).", "→ 다음: 환전 세기 + 심술쟁이 시뮬로 구해요.")}
+          <Slab n="①" color="#15803d" bg="#f0fdf4" title={t(E, "init ≥ goal", "init ≥ 목표")}>
+            {t(E, "→ already there, the answer is 0.", "→ 이미 도달, 답은 0.")}
           </Slab>
-          <Slab n="②" color="#2563eb" bg="#eff6ff" title={t(E, "How to find that x FAST?", "그 x 를 어떻게 빨리 찾지?")}>
-            {t(E, "→ next: sweep x, spot the staircase, binary-search (Find x).", "→ 다음: x 를 훑어 계단을 발견 → 이분탐색 (답 찾기).")}
+          <Slab n="②" color="#2563eb" bg="#eff6ff" title={t(E, "init < goal", "init < 목표")}>
+            {t(E, "→ a direct O(1) formula for the extra chips (next tools). No search, no loop.", "→ 추가 칩을 O(1) 공식으로 바로 (다음 도구). 탐색도 반복도 없이.")}
           </Slab>
         </div>
       )}
@@ -809,26 +808,27 @@ export function PlanSlide({ E }) {
         📝 {t(E, "The plan — before any code", "계획 — 코드 짜기 전에 말로")}
       </div>
       <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 12, wordBreak: "keep-all", textWrap: "balance" }}>
-        {t(E, "We turn the strategy into steps we can code.", "전략을 코드로 옮길 순서로 바꿔요.")}
+        {t(E, "We turn the formula into steps we can code.", "공식을 코드로 옮길 순서로 바꿔요.")}
       </div>
       <div style={{ maxWidth: 480, margin: "0 auto" }}>
-        <Slab n="1" color="#dc2626" bg="#fef2f2" title={<code>worst(x)</code>}>
-          {t(E, <>final red when the trickster splits x chips the worst way (dump into blue, waste leftovers).</>,
-               <>추가 x 개를 심술쟁이가 최악으로 나눴을 때 최종 빨강 (파랑에 몰아 자투리 낭비).</>)}
+        <Slab n="1" color="#15803d" bg="#f0fdf4" title={<code>init = A + B//cB*cA</code>}>
+          {t(E, <>red I can make now. If <b>init ≥ fA</b> → answer <b>0</b>.</>,
+               <>지금 만드는 빨강. <b>init ≥ fA</b> 면 답 <b>0</b>.</>)}
         </Slab>
-        <Slab n="2" color="#15803d" bg="#f0fdf4" title={<code>ok(x) = worst(x) ≥ f_A ?</code>}>
-          {t(E, <>true once x is big enough — and it stays true (staircase).</>,
-               <>x 가 충분히 크면 참 — 한 번 참이면 계속 참 (계단).</>)}
+        <Slab n="2" color="#dc2626" bg="#fef2f2" title={<code>waste = cB−1 − B%cB</code>}>
+          {t(E, <>the trickster wastes blue first (leftover cB−1).</>,
+               <>심술쟁이가 먼저 파랑을 버림 (자투리 cB−1).</>)}
         </Slab>
-        <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "binary-search the smallest x with ok(x)", "ok(x) 가 처음 참 되는 가장 작은 x 이분탐색")}>
-          {t(E, <>jump straight to the answer instead of trying all x.</>, <>모든 x 를 안 돌고 답으로 바로 점프.</>)}
+        <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "fill the deficit: red or blue?", "부족분 채우기: 빨강? 파랑?")}>
+          {t(E, <>cA ≥ cB → red (1 each); otherwise blue in groups.</>,
+               <>cA ≥ cB → 빨강(1개씩), 아니면 파랑 그룹으로.</>)}
         </Slab>
-        <Slab n="4" color="#7c3aed" bg="#f5f3ff" title={t(E, "print that x for each test", "테스트마다 그 x 를 출력")}>
+        <Slab n="4" color="#7c3aed" bg="#f5f3ff" title={t(E, "answer = waste + need + 1", "답 = waste + need + 1")}>
           {t(E, <>use 64-bit — the answer can reach 10¹⁸.</>, <>64비트 쓰기 — 답이 10¹⁸ 까지.</>)}
         </Slab>
       </div>
       <div style={{ marginTop: 12, textAlign: "center", fontSize: 12, fontWeight: 800, color: "#15803d", wordBreak: "keep-all", textWrap: "balance" }}>
-        {t(E, "→ Now the code (next chapter) follows exactly these 4 steps.", "→ 이제 코드(다음 챕터)는 이 4 단계 그대로예요.")}
+        {t(E, "→ Now the code (next chapter) is exactly these steps.", "→ 이제 코드(다음 챕터)는 이 순서 그대로예요.")}
       </div>
     </div>
   );

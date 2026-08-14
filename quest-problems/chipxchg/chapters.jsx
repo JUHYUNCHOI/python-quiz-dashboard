@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk, getChipXchgBruteWalk, getChipXchgFormulaWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim, CheckSim, StrategySlide, PlanSlide, CandidateSim } from "./sims";
+import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide } from "./sims";
 
 const A = "#2563eb";
 
@@ -87,7 +87,8 @@ function ChipXchgSample({ E }) {
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeChipXchgCh1 — mooin3 모양 (라벨 + 구체 샘플 + 시뮬)
-   문제(도입) → 샘플입출력 → 환전계산 → 심술쟁이 → 답찾기(이분탐색)
+   문제(도입) → 샘플입출력 → 이해확인 → 전략 → 환전(init) → 심술쟁이 최악→공식 → 계획
+   (USACO 공식 풀이 = O(1) 닫힌 공식. 이분탐색·후보 안 씀)
    ═══════════════════════════════════════════════════════════════ */
 export function makeChipXchgCh1(E) {
   const fw = getChipXchgFormulaWalk(E);   // ①d 공식 유도 CodeWalk
@@ -118,69 +119,41 @@ export function makeChipXchgCh1(E) {
       content: (<CheckSim E={E} />),
     },
 
-    // [전] ③ 전략 — 어떻게 풀지 큰 그림 + 두 하위 질문
+    // [전] 전략 — 공식 큰 그림 (지금 걸로 되나? 안 되면 심술쟁이 최악에 몇 개?)
     {
       type: "reveal",
       label: t(E, "Strategy", "전략"),
-      narr: t(E, "The plan: test a candidate x, and it splits into two questions.",
-                 "계획 — 후보 x 를 시험해요. 이게 두 가지 질문으로 갈려요."),
+      narr: t(E, "First check what I can make now; if short, count the extra against the trickster's worst.",
+                 "먼저 지금 걸로 되는지 보고, 부족하면 심술쟁이 최악을 감안해 추가 칩을 세요."),
       content: (<StrategySlide E={E} />),
     },
 
-    // [전] 도구 ①-a: 환전 계산 (최악 계산의 기초)
+    // [전] 도구: 환전 세기 = init (지금 가진 걸로 만드는 빨강)
     {
       type: "reveal",
-      label: t(E, "Tool ①a: counting red", "도구 ①a: 환전 세기"),
-      narr: t(E, "Question ①, part a — given a pile, how many red do I end with? Group the blue; leftovers waste.",
-                 "질문 ① 의 준비 — 어떤 더미면 최종 빨강 몇 개? 파랑을 묶고, 자투리는 버려요."),
+      label: t(E, "Tool: red I can make now (init)", "도구: 지금 만드는 빨강 (init)"),
+      narr: t(E, "How many red can I make right now? Group my blue by cB; leftovers waste. That's init.",
+                 "지금 가진 걸로 빨강 몇 개? 내 파랑을 cB 로 묶고, 자투리는 버려요. 그게 init."),
       content: (<ChipCountSim E={E} />),
     },
 
-    // [전] 도구 ①-b: 심술쟁이 최악 (한 x)
+    // [전] 도구: 심술쟁이 최악 → 공식 (CodeWalk — 말풍선이 그 줄에). 코드②와 같은 식.
     {
       type: "reveal",
-      label: t(E, "Tool ①b: worst split", "도구 ①b: 심술쟁이 최악"),
-      narr: t(E, "Question ① — for one x, try every split; the trickster picks the worst.",
-                 "질문 ① — 한 x 에서 모든 분배를 따져 심술쟁이가 최악을 골라요."),
-      content: (<AdversarySim E={E} />),
-    },
-
-    // [전] 도구 ①-c: 브루트(b 다 재기) → 후보 몇 개만 재기 (O(1) 다리).
-    //   모듈러 공식 유도는 안 함 (Bronze 범위 밖) — 후보 4개로 최악 찾는 아이디어만.
-    {
-      type: "reveal",
-      label: t(E, "Tool ①c: check a few suspects", "도구 ①c: 후보 몇 개만"),
-      narr: t(E, "x can be huge, so we can't try every split — the worst is always one of a few candidates; check only those.",
-                 "x 가 크면 모든 분배를 못 해요 — 최악은 늘 후보 몇 개 중 하나. 그 몇 개만 재요."),
-      content: (<CandidateSim E={E} />),
-    },
-
-    // [전] 도구 ①-d: 그 '자투리 최대 b' 긴 공식을 한 줄씩 (CodeWalk — 말풍선이 그 줄에)
-    {
-      type: "reveal",
-      label: t(E, "Tool ①d: the max-leftover formula", "도구 ①d: 자투리 최대 공식"),
-      narr: t(E, "The worst is max leftover — build that b's (long) formula one line at a time.",
-                 "최악 = 자투리 최대. 그 b 의 (긴) 공식을 한 줄씩 만들어요 — 말풍선이 그 줄에 붙어요."),
+      label: t(E, "Tool: trickster's worst → formula", "도구: 심술쟁이 최악 → 공식"),
+      narr: t(E, "If short: the trickster wastes blue, then fills with the least-helpful color. Build the O(1) formula line by line.",
+                 "부족하면: 심술쟁이가 파랑을 버리고, 가장 덜 도와주는 색으로 채워요. O(1) 공식을 한 줄씩 만들어요."),
       content: (
         <CodeWalk E={E} lang="py" code={fw.code} vars={fw.vars} beats={fw.beats} accent="#2563eb" />
       ),
     },
 
-    // [결] ⑤ 답 찾기 (질문②) — 브루트 한계(10¹⁸)→계단→이분탐색까지 한 시뮬에서
-    {
-      type: "reveal",
-      label: t(E, "Find x: binary search", "답 찾기: 이분탐색"),
-      narr: t(E, "Question ② — trying every x is too slow (up to 10¹⁸). But the worst case is a staircase → binary-search it.",
-                 "질문 ② — 모든 x 를 다 해보면 느려요 (10¹⁸까지). 근데 최악이 계단 → 이분탐색으로 콕."),
-      content: (<SearchSim E={E} />),
-    },
-
-    // [결] ⑥ 계획 — 코드 짜는 순서 (코드 전에 말로)
+    // [결] 계획 — 코드 짜는 순서 (코드 전에 말로)
     {
       type: "reveal",
       label: t(E, "The plan (before code)", "계획"),
-      narr: t(E, "Turn the strategy into the exact steps the code will follow.",
-                 "전략을 코드가 따라갈 순서로 정리해요 — 다음 챕터 코드가 이대로예요."),
+      narr: t(E, "Turn it into the exact steps the code will follow.",
+                 "코드가 따라갈 순서로 정리해요 — 다음 챕터 코드가 이대로예요."),
       content: (<PlanSlide E={E} />),
     },
   ];
@@ -205,13 +178,13 @@ export function makeChipXchgCh2(E, lang = "py") {
         <CodeWalk E={E} lang={lang} code={brute.code} vars={brute.vars} beats={brute.beats} accent="#2563eb" />
       ),
     },
-    // 코드 ② 빠른 코드 — 브루트 한계 → 이분탐색 × 후보
+    // 코드 ② 공식 — 브루트 한계 → 직접 계산 (USACO 공식 풀이)
     {
       type: "reveal",
-      label: t(E, "Code ② fast", "코드 ② 빠른 코드"),
+      label: t(E, "Code ② formula", "코드 ② 공식"),
       narr: t(E,
-        "x can reach 10¹⁸, so the brute is far too slow. Binary-search x, and check only a few candidate b's (O(1)). Same names, now with the shortcuts.",
-        "x 가 10¹⁸까지라 브루트는 너무 느려요. x 는 이분탐색으로, b 는 후보 몇 개만 (O(1)). 같은 이름, 지름길만 추가."),
+        "The brute is far too slow (x up to 10¹⁸). The official solution computes the answer directly — no loop, no search. O(1).",
+        "브루트는 너무 느려요 (x 10¹⁸까지). 공식 풀이는 답을 바로 계산해요 — 반복도 탐색도 없이. O(1)."),
       content: (
         <CodeWalk E={E} lang={lang} code={fast.code} vars={fast.vars} beats={fast.beats} accent="#2563eb" />
       ),

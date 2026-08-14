@@ -32,7 +32,9 @@ export const TOPIC_KO: Record<string, string> = {
 export const QUEST_ALGO: Record<string, string> = {
   abcs: "sorting", acowdemia1: "binarysearch", aircond1: "prefixsum", alchemy: "recursion",
   astral: "greedy", bacteria: "prefixsum", bucketbrigade: "graph", bucketlist: "prefixsum",
-  buymilk: "greedy", chipxchg: "binarysearch",
+  buymilk: "greedy",
+  // chipxchg: 제거 — USACO 공식 풀이는 이분탐색이 아니라 O(1) 닫힌 공식(애드혹 수학+경우나눔).
+  //   심술쟁이 최악을 직접 계산 → 표준 알고 토픽 없음 → 링크 안 띄우는 게 정확.
   // checkups: 제거 — center-expansion(대칭 증분)은 표준 알고 토픽 아님 (선생님 2026-07-02).
   cowcollege: "sorting", cowtipping: "greedy", crossroad1: "hashtable", crossroad3: "sorting",
   explodingarrow: "graph", familytree: "tree", fans: "greedy", favperm2: "backtracking", feedcows: "greedy",
