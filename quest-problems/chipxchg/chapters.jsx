@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getChipXchgWalk, getChipXchgBruteWalk, getChipXchgFormulaWalk } from "./components";
+import { getChipXchgWalk, getChipXchgBruteWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide } from "./sims";
 
@@ -90,8 +90,7 @@ function ChipXchgSample({ E }) {
    문제(도입) → 샘플입출력 → 이해확인 → 전략 → 환전(init) → 심술쟁이 최악→공식 → 계획
    (USACO 공식 풀이 = O(1) 닫힌 공식. 이분탐색·후보 안 씀)
    ═══════════════════════════════════════════════════════════════ */
-export function makeChipXchgCh1(E, lang = "py") {
-  const fw = getChipXchgFormulaWalk(E, lang);   // 공식 유도 CodeWalk (코드 언어 따라감)
+export function makeChipXchgCh1(E) {
   return [
     // [기] 문제 (도입) = 게임 한 판을 구체 그림으로 (첫 화면부터 단계별 시뮬)
     {
@@ -137,18 +136,8 @@ export function makeChipXchgCh1(E, lang = "py") {
       content: (<ChipCountSim E={E} />),
     },
 
-    // [전] 도구: 심술쟁이 최악 → 공식 (CodeWalk — 말풍선이 그 줄에). 코드②와 같은 식.
-    {
-      type: "reveal",
-      label: t(E, "Tool: trickster's worst → formula", "도구: 심술쟁이 최악 → 공식"),
-      narr: t(E, "If short: the trickster wastes blue, then fills with the least-helpful color. Build the O(1) formula line by line.",
-                 "부족하면: 심술쟁이가 파랑을 버리고, 가장 덜 도와주는 색으로 채워요. O(1) 공식을 한 줄씩 만들어요."),
-      content: (
-        <CodeWalk E={E} lang={lang} code={fw.code} vars={fw.vars} beats={fw.beats} accent="#2563eb" />
-      ),
-    },
+    // [결] 계획 — 공식 단계 (개념 슬라이드, 코드는 다음 챕터에서)
 
-    // [결] 계획 — 코드 짜는 순서 (코드 전에 말로)
     {
       type: "reveal",
       label: t(E, "The plan (before code)", "계획"),
