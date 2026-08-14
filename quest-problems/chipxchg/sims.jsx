@@ -128,11 +128,11 @@ export function AdversarySim({ E }) {
 
   const say =
     s.kind === "intro"
-      ? t(E, <>Let's test one candidate from the strategy — say <b style={NW}>x = 8</b>. What's the trickster's <b>worst</b> split? Slide <b>b</b> (blue) from 0 up.</>,
-             <>전략에서 말한 <b>후보 하나</b>를 시험해요 — 예로 <b style={NW}>x = 8</b>. 심술쟁이의 <b>최악 분배</b>는? 아래 <b>b</b>(파랑)를 0부터 늘려봐요.</>)
+      ? t(E, <>How does the trickster split the extra chips? Say <b style={NW}>8 chips</b>. Slide <b>b</b> (blue) up — the more blue, the worse for me.</>,
+             <>심술쟁이는 추가 칩을 어떻게 나눌까? 예로 <b style={NW}>8개</b>. 아래 <b>b</b>(파랑)를 늘려봐요 — 파랑에 몰수록 나한텐 나빠져요.</>)
       : isLast
-      ? t(E, <><b style={NW}>b=8 (all blue):</b> <span style={NW}>2 groups → +4 red</span>, <span style={NW}>2 wasted</span> → <b style={{color:"#dc2626",...NW}}>final 4</b>. <span style={NW}>4 &lt; goal 5</span> → <b style={NW}>x=8 not enough ✗</b></>,
-             <><b style={NW}>b=8 (다 파랑):</b> <span style={NW}>묶음 2 → +빨강 4</span>, <span style={NW}>자투리 2 버림</span> → <b style={{color:"#dc2626",...NW}}>최종 4</b>. <span style={NW}>4 &lt; 목표 5</span> → <b style={NW}>x=8 부족 ✗</b></>)
+      ? t(E, <><b style={NW}>b=8 (all blue):</b> <span style={NW}>2 groups → +4 red</span>, but <span style={NW}><b style={{color:"#dc2626"}}>2 blue wasted</b></span> → <b style={{color:"#dc2626",...NW}}>final 4</b> (the lowest). <b>The trickster piles blue and wastes the leftover.</b></>,
+             <><b style={NW}>b=8 (다 파랑):</b> <span style={NW}>묶음 2 → +빨강 4</span>, 근데 <span style={NW}><b style={{color:"#dc2626"}}>파랑 2개 버림</b></span> → <b style={{color:"#dc2626",...NW}}>최종 4</b> (최저). <b>심술쟁이는 파랑에 몰아 자투리를 버려요.</b></>)
       : t(E,
           <><b style={NW}>b={cur.b} ({cur.b} blue):</b> <span style={NW}>swap → <b style={{color:cur.g?"#15803d":"#94a3b8"}}>+{cur.g*cA} red</b>{cur.w?` (${cur.w} wasted)`:""}</span>, <span style={NW}>{cur.a} red kept</span> → <b>final {cur.val}</b></>,
           <><b style={NW}>b={cur.b} (파랑 {cur.b}개):</b> <span style={NW}>환전 → <b style={{color:cur.g?"#15803d":"#94a3b8"}}>+빨강 {cur.g*cA}</b>{cur.w?` (자투리 ${cur.w} 버림)`:""}</span>, <span style={NW}>빨강 {cur.a}개는 그대로</span> → <b>최종 {cur.val}</b></>);
@@ -192,7 +192,7 @@ export function AdversarySim({ E }) {
             <div style={{ textAlign: "center", marginTop: 10, fontSize: 12.5, fontWeight: 800, wordBreak: "keep-all",
               color: isLast ? (worstSoFar >= fA ? "#15803d" : "#dc2626") : "#dc2626" }}>
               {t(E, "worst so far = ", "지금까지 최악 = ")}<b>{worstSoFar}</b>
-              {isLast && <> {worstSoFar >= fA ? `≥ ${fA} ✓` : `< ${fA} ✗ ` + t(E, "(x=8 not enough)", "(x=8 부족)")}</>}
+              {isLast && <> {worstSoFar >= fA ? `≥ ${fA} ✓` : `< ${fA} ` + t(E, "(trickster's worst)", "(심술쟁이 최악)")}</>}
             </div>
           )}
         </div>
