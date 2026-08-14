@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
-import { getChipXchgWalk, getChipXchgBruteWalk } from "./components";
+import { getChipXchgWalk, getChipXchgBruteWalk, getChipXchgFormulaWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim, CheckSim, StrategySlide, PlanSlide, CandidateSim, FormulaBuildSim } from "./sims";
+import { ChipCountSim, AdversarySim, GameBoardSim, SearchSim, CheckSim, StrategySlide, PlanSlide, CandidateSim } from "./sims";
 
 const A = "#2563eb";
 
@@ -90,6 +90,7 @@ function ChipXchgSample({ E }) {
    문제(도입) → 샘플입출력 → 환전계산 → 심술쟁이 → 답찾기(이분탐색)
    ═══════════════════════════════════════════════════════════════ */
 export function makeChipXchgCh1(E) {
+  const fw = getChipXchgFormulaWalk(E);   // ①d 공식 유도 CodeWalk
   return [
     // [기] 문제 (도입) = 게임 한 판을 구체 그림으로 (첫 화면부터 단계별 시뮬)
     {
@@ -154,13 +155,15 @@ export function makeChipXchgCh1(E) {
       content: (<CandidateSim E={E} />),
     },
 
-    // [전] 도구 ①-d: 그 '자투리 최대 b' 를 구하는 긴 공식을 조각별로 유도
+    // [전] 도구 ①-d: 그 '자투리 최대 b' 긴 공식을 한 줄씩 (CodeWalk — 말풍선이 그 줄에)
     {
       type: "reveal",
       label: t(E, "Tool ①d: the max-leftover formula", "도구 ①d: 자투리 최대 공식"),
-      narr: t(E, "The worst is max leftover — derive the (long) code formula for that b, piece by piece.",
-                 "최악 = 자투리 최대. 그 b 를 구하는 (긴) 코드 공식을 조각 하나씩 유도해요."),
-      content: (<FormulaBuildSim E={E} />),
+      narr: t(E, "The worst is max leftover — build that b's (long) formula one line at a time.",
+                 "최악 = 자투리 최대. 그 b 의 (긴) 공식을 한 줄씩 만들어요 — 말풍선이 그 줄에 붙어요."),
+      content: (
+        <CodeWalk E={E} lang="py" code={fw.code} vars={fw.vars} beats={fw.beats} accent="#2563eb" />
+      ),
     },
 
     // [결] ⑤ 답 찾기 (질문②) — 브루트 한계(10¹⁸)→계단→이분탐색까지 한 시뮬에서
