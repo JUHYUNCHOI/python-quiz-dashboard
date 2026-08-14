@@ -225,66 +225,140 @@ export function StuckSim({ E }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   InsightSim — [핵심 발견] 이 문제의 진짜 알고리즘.
-   떨어진 것도 골라도 되니 → 같은 글자끼리 모으자 → 왜 항상 사각?
-   블록마다 C·O·W 하나씩 → C가 N개 → N짝수면 짝수 → 반+반 = 사각.
-   (그리고 N홀수면 홀수개 → 못 나눔 → 아예 못 비움 = -1)
+   InsightSim — [핵심 발견] M=2 트릭.
+   앞쪽 블록 i 와 뒤쪽 파트너 블록 (i + N/2) 을 짝지어 봐요.
+   {COW, OWC, WCO} 어느 두 블록도 2 글자가 겹쳐요.
+   → 겹치는 2 글자는 op 1, 겹치지 않는 1 글자씩은 op 2. M=2!
+   (그리고 N 홀수면 3N 홀수 → 짝수 지우기로 못 비움 → -1)
    ═══════════════════════════════════════════════════════════════ */
 export function InsightSim({ E }) {
-  const blocks = [["C", "O", "W"], ["O", "W", "C"]];   // N=2, COWOWC
-  const steps = [{ kind: "idea" }, { kind: "count" }, { kind: "why" }, { kind: "odd" }];
+  const steps = [
+    { kind: "pair" },
+    { kind: "overlap" },
+    { kind: "split" },
+    { kind: "odd" },
+  ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
 
-  const say =
-    s.kind === "idea" ? t(E, <>Since I can pick letters from anywhere… what if I gather <b>all of the same letter</b>? All the C's → <b>CCCC…</b></>,
-                             <>여기저기서 골라도 되니까… <b>같은 글자끼리</b> 다 모아볼까요? C 를 다 모으면 → <b>CCCC…</b></>)
-    : s.kind === "count" ? t(E, <>How many C's? Every block has <b>exactly one C</b> (and one O, one W). So there are <b>N</b> C's.</>,
-                              <>C 가 몇 개일까요? 블록마다 <b>C 가 딱 하나씩</b> (O 도, W 도 하나씩). 그러니 C 는 <b>N 개</b>예요.</>)
-    : s.kind === "why" ? t(E, <>If <b>N is even</b>, N C's is even → <b>CC…C</b> splits into two equal halves → "same twice" → <b>wipe every C in one move!</b> Same for O, W → <b>3 moves</b>.</>,
-                             <><b>N 이 짝수</b>면 C 가 짝수개 → <b>CC…C</b> 가 반+반으로 딱 나눠져요 → "같은 것 두 번" → <b>C 를 한 번에 다 지워요!</b> O, W 도 똑같이 → <b>3번</b>.</>)
-    : t(E, <>And if <b>N is odd</b>? Then C is an odd count → can't halve → can't wipe → the whole thing is <b>impossible → −1</b>.</>,
-           <>만약 <b>N 이 홀수</b>면? C 가 홀수개 → 반 못 나눠요 → 못 지워요 → 아예 <b>불가능 → −1</b>.</>);
+  // 샘플 N=2: 앞 블록 COW + 뒤 블록 OWC
+  const A_BLOCK = ["C", "O", "W"];
+  const B_BLOCK = ["O", "W", "C"];
+  // COW vs OWC: a[1:]="OW" == b[:2]="OW" → 겹치는 2 글자는 OW.
+  //  겹치지 않는 1 글자: a[0]="C", b[2]="C". 둘 다 C — 같은 글자! → op 2.
+  //  op 1 은 a[1], a[2], b[0], b[1] = O, W, O, W.
 
-  const cCount = blocks.length; // N
+  const say =
+    s.kind === "pair" ? t(E,
+      <>Idea: <b>pair each front block with its back partner</b>. Block <b>i</b> ↔ block <b>i + N/2</b>. Here N=2 so front block <b>COW</b> pairs with back block <b>OWC</b>.</>,
+      <>아이디어: <b>앞쪽 블록 i 를 뒤쪽 파트너 블록 (i + N/2) 과 짝지어요</b>. 여기 N=2 니 앞 블록 <b>COW</b> 와 뒤 블록 <b>OWC</b> 가 짝.</>)
+    : s.kind === "overlap" ? t(E,
+      <>Any two of <b>{"{COW, OWC, WCO}"}</b> share a <b>2-letter overlap</b>. Look: <b>COW</b> vs <b>OWC</b> — the middle "<b>OW</b>" appears in both!</>,
+      <><b>{"{COW, OWC, WCO}"}</b> 어떤 두 블록도 <b>2 글자가 겹쳐요</b>. 봐요: <b>COW</b> 와 <b>OWC</b> — 가운데 "<b>OW</b>" 가 둘 다에 있어요!</>)
+    : s.kind === "split" ? t(E,
+      <>Split it: the <b>overlapping 2 letters</b> (OW) go to <b>op 1</b> — front OW matches back OW. The <b>leftover 1 letter each side</b> (C and C) go to <b>op 2</b> — same letter! Both ops are squares → <b>M = 2</b>.</>,
+      <>나눠요: <b>겹치는 2 글자</b> (OW) 는 <b>op 1</b> — 앞의 OW 와 뒤의 OW 가 일치. <b>양쪽에 남는 1 글자</b> (C 와 C) 는 <b>op 2</b> — 같은 글자! 두 op 다 제곱 → <b>M = 2</b>.</>)
+    : t(E,
+      <>And if <b>N is odd</b>? Total length 3N is odd → each op removes an even count → <b>impossible → −1</b>.</>,
+      <>만약 <b>N 이 홀수</b>면? 총 길이 3N 이 홀수 → 각 연산은 짝수 개 지우기 → <b>불가능 → −1</b>.</>);
+
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "The idea: gather same letters", "핵심: 같은 글자끼리 모으기")}
+        title={t(E, "Pair blocks & share the overlap → M = 2", "블록 쌍 · 겹치는 부분 나누기 → M = 2")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <Say tone={s.kind === "idea" ? "aha" : s.kind === "odd" ? "stuck" : "go"}>{say}</Say>
+      <Say tone={s.kind === "overlap" ? "aha" : s.kind === "odd" ? "stuck" : "go"}>{say}</Say>
 
-      {/* 블록 그림 — count·why 스텝에서 C 강조 */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 16, marginBottom: 10 }}>
-        {blocks.map((b, bi) => (
-          <div key={bi} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+      {/* pair 스텝 — 앞 블록 ↔ 뒤 블록 짝 시각화 */}
+      {s.kind === "pair" && (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 18, marginBottom: 10 }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
             <div style={{ display: "flex", gap: 4 }}>
-              {b.map((ch, i) => {
-                const hl = (s.kind === "count" || s.kind === "why") && ch === "C";
-                return <Tile key={i} ch={ch} size={40} bg={hl ? OPCOL[1] : "#fff"} bd={hl ? OPCOL[1] : "#cbd5e1"} fg={hl ? "#fff" : "#1f2937"} />;
-              })}
+              {A_BLOCK.map((ch, i) => <Tile key={i} ch={ch} size={44} bd="#059669" bg="#ecfdf5" />)}
             </div>
-            <div style={{ fontSize: 9.5, fontWeight: 800, color: "#94a3b8", fontFamily: "'JetBrains Mono',monospace" }}>{t(E, `block ${bi + 1}`, `블록 ${bi + 1}`)}</div>
+            <div style={{ fontSize: 10, fontWeight: 800, color: "#059669", fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "front block 0", "앞 블록 0")}</div>
           </div>
-        ))}
-      </div>
+          <div style={{ fontSize: 22, fontWeight: 800, color: "#8b5cf6" }}>↔</div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+            <div style={{ display: "flex", gap: 4 }}>
+              {B_BLOCK.map((ch, i) => <Tile key={i} ch={ch} size={44} bd="#8b5cf6" bg="#f5f3ff" />)}
+            </div>
+            <div style={{ fontSize: 10, fontWeight: 800, color: "#8b5cf6", fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "back partner (block 1)", "뒤 파트너 (블록 1)")}</div>
+          </div>
+        </div>
+      )}
 
-      {s.kind === "count" && <Caption color={OPCOL[1]}>{t(E, `C once per block → N = ${cCount} C's`, `블록마다 C 하나 → C 는 N = ${cCount} 개`)}</Caption>}
-      {s.kind === "why" && <>
-        <Row>
-          {Array.from({ length: cCount }).map((_, i) => (
-            <span key={i} style={{ display: "flex", alignItems: "center" }}>
-              {i === cCount / 2 && <span style={{ margin: "0 8px", fontSize: 20, fontWeight: 800, color: "#059669" }}>=</span>}
-              <Tile ch="C" size={42} bg="#ecfdf5" bd="#059669" />
-            </span>
-          ))}
-        </Row>
-        <Caption color="#059669">{t(E, "CC = C+C ✓ square → wipe every C (move 1)", "CC = C+C ✓ 제곱 → C 전부 한 번에 (연산 1)")}</Caption>
-      </>}
-      {s.kind === "odd" && <>
-        <Row>{"CCC".split("").map((ch, i) => <Tile key={i} ch={ch} size={42} bg="#fff" bd="#dc2626" />)}</Row>
-        <Caption color="#dc2626">{t(E, "odd # of C → can't halve → −1", "C 홀수개 → 반 못 나눠 → −1")}</Caption>
-      </>}
+      {/* overlap 스텝 — 겹치는 2 글자 강조 (OW) */}
+      {s.kind === "overlap" && (
+        <>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 18, marginBottom: 10 }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+              <div style={{ display: "flex", gap: 4 }}>
+                {A_BLOCK.map((ch, i) => {
+                  const isOverlap = i === 1 || i === 2;  // a[1:]="OW"
+                  return <Tile key={i} ch={ch} size={44}
+                    bd={isOverlap ? "#059669" : "#cbd5e1"} bg={isOverlap ? "#ecfdf5" : "#fff"} fg="#1f2937" />;
+                })}
+              </div>
+              <div style={{ fontSize: 10, fontWeight: 800, color: "#059669" }}>{t(E, "front: a[1:] = OW", "앞: a[1:] = OW")}</div>
+            </div>
+            <div style={{ fontSize: 20, fontWeight: 800, color: "#059669" }}>=</div>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+              <div style={{ display: "flex", gap: 4 }}>
+                {B_BLOCK.map((ch, i) => {
+                  const isOverlap = i === 0 || i === 1;  // b[:2]="OW"
+                  return <Tile key={i} ch={ch} size={44}
+                    bd={isOverlap ? "#059669" : "#cbd5e1"} bg={isOverlap ? "#ecfdf5" : "#fff"} fg="#1f2937" />;
+                })}
+              </div>
+              <div style={{ fontSize: 10, fontWeight: 800, color: "#059669" }}>{t(E, "back: b[:2] = OW", "뒤: b[:2] = OW")}</div>
+            </div>
+          </div>
+          <Caption color="#059669">{t(E, "OW overlaps ✓  · leftover: C on front + C on back — same letter ✓",
+                                          "OW 겹침 ✓  · 남은 것: 앞의 C + 뒤의 C — 같은 글자 ✓")}</Caption>
+        </>
+      )}
+
+      {/* split 스텝 — op 1 = 겹치는 2 글자, op 2 = 남는 1 글자 */}
+      {s.kind === "split" && (
+        <>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 18, marginBottom: 10 }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+              <div style={{ display: "flex", gap: 4 }}>
+                {A_BLOCK.map((ch, i) => {
+                  const op = i === 0 ? 2 : 1;
+                  return <Tile key={i} ch={ch} size={44} bd={OPCOL[op]} bg={OPBG[op]} fg="#1f2937" badge={op} />;
+                })}
+              </div>
+              <div style={{ fontSize: 10, fontWeight: 800, color: "#94a3b8" }}>{t(E, "front block", "앞 블록")}</div>
+            </div>
+            <div style={{ fontSize: 22, color: "#94a3b8" }}>+</div>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+              <div style={{ display: "flex", gap: 4 }}>
+                {B_BLOCK.map((ch, i) => {
+                  const op = i === 2 ? 2 : 1;
+                  return <Tile key={i} ch={ch} size={44} bd={OPCOL[op]} bg={OPBG[op]} fg="#1f2937" badge={op} />;
+                })}
+              </div>
+              <div style={{ fontSize: 10, fontWeight: 800, color: "#94a3b8" }}>{t(E, "back block", "뒤 블록")}</div>
+            </div>
+          </div>
+          <div style={{ marginTop: 6, fontSize: 12, textAlign: "center", color: "#065f46", lineHeight: 1.7, wordBreak: "keep-all" }}>
+            <div><b style={{ color: OPCOL[1] }}>op 1</b> {t(E, "picks OW + OW = ", "= OW + OW = ")}<code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>OWOW</code> = OW+OW ✓</div>
+            <div><b style={{ color: OPCOL[2] }}>op 2</b> {t(E, "picks C + C = ", "= C + C = ")}<code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>CC</code> = C+C ✓</div>
+            <div style={{ marginTop: 4, fontWeight: 800, color: "#059669" }}>M = 2 🎉</div>
+          </div>
+        </>
+      )}
+
+      {/* odd 스텝 — 홀수면 불가능 */}
+      {s.kind === "odd" && (
+        <>
+          <Row>{"COW".split("").map((ch, i) => <Tile key={i} ch={ch} size={42} bg="#fff" bd="#dc2626" />)}</Row>
+          <Caption color="#dc2626">{t(E, "N=1 → 3N=3 odd → can't empty with even-length ops → −1",
+                                          "N=1 → 3N=3 홀수 → 짝수 길이 연산으로 못 비움 → −1")}</Caption>
+        </>
+      )}
 
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
@@ -292,54 +366,94 @@ export function InsightSim({ E }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   LetterGroupSim — [실행/payoff] 그 아이디어로 COWOWC 를 3번에.
+   LetterGroupSim — [실행/payoff] COWOWC 를 2 번에 (M=2 block-pair).
+   4 스텝: intro → 앞 블록 · 뒤 블록 짝지어 겹치는 2 글자 찾기 → op 1 · op 2 라벨 부여 → 최종 답.
    ═══════════════════════════════════════════════════════════════ */
 export function LetterGroupSim({ E }) {
   const chars = "COWOWC".split("");
-  const label = { C: 1, O: 2, W: 3 };
-  const N = chars.filter((c) => c === "C").length;
-  const steps = [{ kind: "intro" }, { kind: "op", op: 1, letter: "C" }, { kind: "op", op: 2, letter: "O" }, { kind: "op", op: 3, letter: "W" }, { kind: "done" }];
+  // 최종 라벨: [2, 1, 1, 1, 1, 2] (M=2 block-pair 결과)
+  const finalLabels = [2, 1, 1, 1, 1, 2];
+  const steps = [
+    { kind: "intro" },
+    { kind: "pair" },        // 블록 짝지어 겹치는 부분 강조
+    { kind: "label" },       // 라벨 부여 (op 1 = 겹치는 4 글자, op 2 = 남는 2 글자)
+    { kind: "verify" },      // op 1 = OWOW, op 2 = CC — 두 제곱 확인
+    { kind: "done" },        // 최종 답
+  ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
-  const opsDone = s.kind === "op" ? s.op : s.kind === "done" ? 3 : 0;
-  const activeOp = s.kind === "op" ? s.op : null;
 
   const say =
-    s.kind === "intro" ? t(E, <>Let's do it on <b>COWOWC</b>: gather each letter, one move at a time.</>,
-                             <><b>COWOWC</b> 로 해볼까요: 글자별로 한 번씩 모아 지우기.</>)
-    : s.kind === "op" ? t(E, <>Move <b>{s.op}</b>: grab every <b>{s.letter}</b> → <b>{s.letter.repeat(N)}</b> ({s.letter}+{s.letter}) → wipe! ✓</>,
-                            <>연산 <b>{s.op}</b>: <b>{s.letter}</b> 전부 집기 → <b>{s.letter.repeat(N)}</b> ({s.letter}+{s.letter}) → 지워요! ✓</>)
-    : t(E, <>Empty in <b>3 moves</b>! Each letter now has its move number — <b>that's the answer</b>.</>,
-           <><b>3번</b>에 빈 줄! 각 글자에 연산 번호가 붙었죠 — <b>이게 답</b>이에요.</>);
+    s.kind === "intro" ? t(E,
+      <>Let's solve <b>COWOWC</b> with the block-pair trick — <b>2 moves</b>.</>,
+      <>블록 쌍 트릭으로 <b>COWOWC</b> 를 풀어봐요 — <b>2번</b>이에요.</>)
+    : s.kind === "pair" ? t(E,
+      <>N=2, so front block <b>COW</b> pairs with back block <b>OWC</b>. Where do they overlap 2 chars? <b>a[1:] = OW = b[:2]</b> — so keep <b>OW · OW</b> together in op 1.</>,
+      <>N=2, 앞 블록 <b>COW</b> ↔ 뒤 블록 <b>OWC</b>. 2 글자가 어디서 겹치나? <b>a[1:] = OW = b[:2]</b> — <b>OW · OW</b> 를 op 1 에 함께.</>)
+    : s.kind === "label" ? t(E,
+      <>Label them: the 4 overlap chars → <b style={{ color: OPCOL[1] }}>op 1</b>. The leftover 1 char per side (C from front, C from back) → <b style={{ color: OPCOL[2] }}>op 2</b>.</>,
+      <>라벨 부여: 겹치는 4 글자 → <b style={{ color: OPCOL[1] }}>op 1</b>. 양쪽 남는 1 글자씩 (앞의 C, 뒤의 C) → <b style={{ color: OPCOL[2] }}>op 2</b>.</>)
+    : s.kind === "verify" ? t(E,
+      <>Check both are squares: op 1 subseq = <b>OWOW</b> = OW+OW ✓. op 2 subseq = <b>CC</b> = C+C ✓. Both work in one move each!</>,
+      <>둘 다 제곱인지 확인: op 1 수열 = <b>OWOW</b> = OW+OW ✓. op 2 수열 = <b>CC</b> = C+C ✓. 각각 한 번에 지워요!</>)
+    : t(E,
+      <>Done in <b>2 moves</b> — output <b>M = 2</b> and the labels below.</>,
+      <><b>2번</b>에 끝 — <b>M = 2</b> 와 아래 라벨을 출력해요.</>);
+
+  const showBadge = s.kind === "label" || s.kind === "verify" || s.kind === "done";
+  const highlightPair = s.kind === "pair";
+
+  // pair 스텝에서 겹치는 4 글자 강조 (positions 1,2,3,4 = OWOW)
+  const isOverlapPos = (i) => i === 1 || i === 2 || i === 3 || i === 4;
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Wipe COWOWC → 3 moves", "COWOWC 지우기 → 3연산")}
+        title={t(E, "Solve COWOWC → 2 moves", "COWOWC 풀기 → 2연산")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <Say tone="aha">{say}</Say>
-      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>S = COWOWC</div>
+      <Say tone={s.kind === "done" ? "aha" : "go"}>{say}</Say>
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+        S = COWOWC · {t(E, "front COW · back OWC", "앞 COW · 뒤 OWC")}
+      </div>
       <Row>
         {chars.map((ch, i) => {
-          const op = label[ch]; const assigned = op <= opsDone; const active = activeOp === op;
+          const op = finalLabels[i];
+          const hl = highlightPair && isOverlapPos(i);
           return <Tile key={i} ch={ch} size={46}
-            bg={active ? OPCOL[op] : "#fff"} bd={active ? OPCOL[op] : assigned ? OPCOL[op] : "#e2e8f0"}
-            fg={active ? "#fff" : "#1f2937"} faded={assigned && !active} badge={assigned ? op : null} />;
+            bg={hl ? "#ecfdf5" : "#fff"}
+            bd={hl ? "#059669" : showBadge ? OPCOL[op] : "#e2e8f0"}
+            fg="#1f2937"
+            badge={showBadge ? op : null} />;
         })}
       </Row>
-      <div style={{ height: 40, display: "flex", alignItems: "center", justifyContent: "center", marginTop: 12 }}>
-        {s.kind === "op" && (
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "7px 14px", borderRadius: 10, background: OPBG[s.op], border: `2px solid ${OPCOL[s.op]}` }}>
-            <span style={{ fontSize: 15, fontWeight: 800, color: OPCOL[s.op], fontFamily: "'JetBrains Mono',monospace", letterSpacing: 2 }}>{s.letter.repeat(N)}</span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: OPCOL[s.op] }}>= {s.letter}+{s.letter} ✓</span>
+
+      <div style={{ minHeight: 60, display: "flex", alignItems: "center", justifyContent: "center", marginTop: 14 }}>
+        {s.kind === "pair" && (
+          <div style={{ fontSize: 12, color: "#065f46", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700 }}>
+            {t(E, "positions 1-4: OWOW ← overlap 2 (front OW) + 2 (back OW)",
+                  "위치 1~4: OWOW ← 겹침 앞 OW + 뒤 OW")}
+          </div>
+        )}
+        {s.kind === "verify" && (
+          <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center" }}>
+            <div style={{ padding: "6px 12px", borderRadius: 8, background: OPBG[1], border: `2px solid ${OPCOL[1]}`, fontSize: 13, fontWeight: 800, color: OPCOL[1], fontFamily: "'JetBrains Mono',monospace" }}>
+              op 1 · OWOW = OW+OW ✓
+            </div>
+            <div style={{ padding: "6px 12px", borderRadius: 8, background: OPBG[2], border: `2px solid ${OPCOL[2]}`, fontSize: 13, fontWeight: 800, color: OPCOL[2], fontFamily: "'JetBrains Mono',monospace" }}>
+              op 2 · CC = C+C ✓
+            </div>
           </div>
         )}
         {s.kind === "done" && (
-          <div style={{ fontSize: 16, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: "#065f46", letterSpacing: 3 }}>
-            {chars.map((ch) => label[ch]).join(" ")}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#065f46", fontFamily: "'JetBrains Mono',monospace", letterSpacing: 3 }}>M = 2</div>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#065f46", fontFamily: "'JetBrains Mono',monospace", letterSpacing: 3 }}>
+              {finalLabels.join(" ")}
+            </div>
           </div>
         )}
       </div>
+
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
   );

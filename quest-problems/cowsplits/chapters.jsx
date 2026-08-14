@@ -1,104 +1,146 @@
 import { C, t } from "@/components/quest/theme";
-import { getCowSplitsWalk, getCowSplitsSections } from "./components";
+import { getCowSplitsWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import { EraseRuleSim, StuckSim, InsightSim, LetterGroupSim } from "./sims";
 
 const A = "#059669";
-const GRPCOL = { C: "#ef4444", O: "#f59e0b", W: "#8b5cf6" };   // 그룹(연산) 색
-const GRPNUM = { C: 1, O: 2, W: 3 };
+// M=2 결과 시각화용: op 1 (겹치는 4 글자), op 2 (남는 2 글자)
+const OP1_COL = "#059669";  // green
+const OP2_COL = "#8b5cf6";  // purple
+const OP1_BG  = "#ecfdf5";
+const OP2_BG  = "#f5f3ff";
 
-/* 계획/정리 — 발견한 걸 한 판단으로. */
+/* Plan — photoshoot25 스타일. 시뮬에서 알아낸 것 → 코드 변수 이름 (ans, a, b, M) 미리 소개.
+   Ch2 첫 페이지: CodeWalk 진입 준비. */
 function CowSplitsPlan({ E }) {
-  const Row = ({ q, res, col, bg }) => (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, background: bg, border: `1.5px solid ${col}`,
-      borderRadius: 10, padding: "11px 14px" }}>
-      <div style={{ flex: 1, fontSize: 13, fontWeight: 700, color: "#334155", wordBreak: "keep-all" }}>{q}</div>
-      <div style={{ fontSize: 16, color: col }}>→</div>
-      <div style={{ fontSize: 15, fontWeight: 800, color: col, fontFamily: "'JetBrains Mono',monospace", whiteSpace: "nowrap" }}>{res}</div>
+  const box = { background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, padding: "12px 14px", wordBreak: "keep-all" };
+  const Insight = ({ icon, head, body, color }) => (
+    <div style={{ display: "flex", gap: 11, alignItems: "flex-start", ...box, borderLeft: `4px solid ${color}` }}>
+      <span style={{ fontSize: 20, lineHeight: 1.2 }}>{icon}</span>
+      <div style={{ fontSize: 13.5, lineHeight: 1.6, color: "#334155" }}>
+        <b style={{ color: "#0f172a" }}>{head}</b><br />{body}
+      </div>
     </div>
   );
+  const codeTag = (s) => (
+    <code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: "#065f46", background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 5, padding: "0 5px" }}>{s}</code>
+  );
   return (
-    <div style={{ padding: 16 }}>
-      <div style={{ fontSize: 14, fontWeight: 800, color: "#065f46", textAlign: "center", marginBottom: 6 }}>
-        🧭 {t(E, "The whole decision, at a glance", "전체 판단 한눈에")}
+    <div style={{ padding: 16, maxWidth: 620, margin: "0 auto" }}>
+      <div style={{ fontSize: 14, fontWeight: 800, color: "#0f172a", marginBottom: 4 }}>
+        🧩 {t(E, "What the sims told us", "시뮬에서 알아낸 것")}
       </div>
-      <div style={{ fontSize: 12, color: C.dim, textAlign: "center", marginBottom: 14, wordBreak: "keep-all" }}>
-        {t(E, "Check these in order — the first one that fits is the answer.", "위에서부터 확인 — 처음 맞는 게 답이에요.")}
+      <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
+        <Insight icon="🚫" color="#dc2626"
+          head={t(E, "If N is odd → impossible.", "N 이 홀수면 → 불가능.")}
+          body={t(E,
+            <>3N is odd, and each op removes an even count. Print −1 and move on.</>,
+            <>3N 이 홀수인데 각 연산은 짝수 개 지우기. −1 출력하고 다음으로.</>)} />
+        <Insight icon="🎯" color="#059669"
+          head={t(E, "If S itself is a square → M = 1.", "S 자체가 제곱이면 → M = 1.")}
+          body={t(E,
+            <>front half == back half? Label every letter with 1.</>,
+            <>앞 절반 == 뒤 절반이면 모든 글자에 라벨 1.</>)} />
+        <Insight icon="🔀" color="#8b5cf6"
+          head={t(E, "Otherwise → pair blocks, share the overlap → M = 2.", "아니면 → 블록 짝짓기, 겹치는 부분 공유 → M = 2.")}
+          body={t(E,
+            <>For each front block <b>a</b> ↔ back partner <b>b</b>: keep the 2 overlapping chars in op 1, move the leftover 1 char per side to op 2.</>,
+            <>앞 블록 <b>a</b> ↔ 뒤 파트너 <b>b</b> 마다: 겹치는 2 글자는 op 1, 양쪽에 남는 1 글자씩은 op 2.</>)} />
       </div>
-      <div style={{ maxWidth: 470, margin: "0 auto", display: "grid", gap: 10 }}>
-        <Row q={t(E, "Is N odd?", "N 이 홀수?")} res="−1" col="#dc2626" bg="#fef2f2" />
-        <Row q={t(E, "Is S itself a square? (front half = back half)", "S 자체가 제곱? (앞 절반 = 뒤 절반)")} res={t(E, "M = 1", "M = 1")} col="#059669" bg="#ecfdf5" />
-        <Row q={t(E, "Otherwise → gather each letter (C, O, W)", "아니면 → 글자별로 모으기 (C, O, W)")} res={t(E, "M = 3", "M = 3")} col="#8b5cf6" bg="#f5f3ff" />
-      </div>
-      <div style={{ textAlign: "center", marginTop: 14, fontSize: 12, color: C.dim, wordBreak: "keep-all" }}>
-        {t(E, "Now let's read the code that does exactly this →", "이제 이걸 그대로 하는 코드를 봐요 →")}
+
+      <div style={{ ...box, background: "#f8fafc", fontSize: 13, lineHeight: 1.75, color: "#334155" }}>
+        ⚙️ {t(E,
+          <>So: build the labels list {codeTag("ans")} (start all 1). Loop front-half blocks, grab {codeTag("a")} and {codeTag("b")}, patch op 2 where needed. Finally {codeTag("M")} = max({codeTag("ans")}).</>,
+          <>그래서: 라벨 리스트 {codeTag("ans")} 를 만들고 (처음엔 다 1). 앞 절반 블록을 순회하며 {codeTag("a")}·{codeTag("b")} 꺼내 필요한 자리에 op 2 표시. 마지막에 {codeTag("M")} = max({codeTag("ans")}).</>)}
       </div>
     </div>
   );
 }
 
-/* 샘플 입출력 — mooin3 모양 (구체 숫자 INPUT/OUTPUT + 한 줄씩 + 출력의미 시각화). */
+/* 입출력 형식 — photoshoot25 3-박스 스타일: INPUT(amber) / OUTPUT(green) / CONSTRAINTS(white monospace).
+   샘플 정답 시각화는 자연스레 아래 별도 카드로 (기존 유지). */
 function CowSplitsSample({ E }) {
   const S = "COWOWC".split("");
+  const LABELS = [2, 1, 1, 1, 1, 2];
+  const colFor = (op) => op === 1 ? OP1_COL : OP2_COL;
+  const bgFor = (op) => op === 1 ? OP1_BG : OP2_BG;
   return (
-    <div style={{ padding: 16 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: "#059669", textAlign: "center", marginBottom: 10 }}>
-        📥 {t(E, "Input / Output Format", "입력 / 출력 형식")}
+    <div style={{ padding: 16, wordBreak: "keep-all" }}>
+      {/* INPUT */}
+      <div style={{ marginBottom: 12 }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+        <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+          <div><span style={{ color: "#92400e", fontWeight: 800 }}>T k</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— # of tests, k mode (0 = exact M, 1 = M ≤ opt+1)", "— 테스트 개수, k 모드 (0 = M 정확, 1 = M ≤ 최적+1)")}</span></div>
+          <div style={{ marginTop: 4, paddingLeft: 10, borderLeft: "2px solid #fde68a" }}>
+            <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— # of blocks (S has length 3N)", "— 블록 개수 (S 길이 = 3N)")}</span></div>
+            <div><span style={{ color: "#92400e", fontWeight: 800 }}>S</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the string, N blocks glued from COW/OWC/WCO", "— N 개 블록을 이은 문자열 (블록마다 COW/OWC/WCO 중 하나)")}</span></div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ these two lines repeat T times", "↑ 이 두 줄이 T 번 반복")}</div>
+          </div>
+        </div>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10, marginBottom: 10 }}>
-        <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
-{`1 1
+
+      {/* OUTPUT */}
+      <div style={{ marginBottom: 12 }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+        <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+          {t(E,
+            "For each test — if impossible, one line: -1.  Otherwise: M on one line, then 3N move numbers (space-separated) telling which move erased each letter.",
+            "각 테스트에 대해 — 불가능하면 한 줄에 -1.  가능하면 M 한 줄, 그다음 3N 개 연산 번호를 공백으로 (각 글자가 몇 번째 연산에서 지워졌는지).")}
+        </div>
+      </div>
+
+      {/* CONSTRAINTS */}
+      <div style={{ marginBottom: 12 }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+        <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+          <div>1 ≤ T ≤ 10⁴</div>
+          <div>1 ≤ N (sum of N over all tests ≤ 10⁵)</div>
+          <div>k ∈ {"{0, 1}"}</div>
+          <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "S consists of characters C, O, W only", "S 는 C, O, W 로만 이루어짐")}</div>
+        </div>
+      </div>
+
+      {/* 샘플 예시 (구체 숫자 + 정답 시각화) */}
+      <div style={{ marginTop: 4, background: "#f8fafc", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "12px 14px" }}>
+        <div style={{ fontSize: 11.5, fontWeight: 800, color: "#065f46", marginBottom: 8 }}>
+          {t(E, "🔍 Worked sample", "🔍 샘플 예시")}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8, marginBottom: 8 }}>
+          <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 8, padding: 8 }}>
+            <div style={{ fontSize: 10.5, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>{t(E, "sample input", "입력 예")}</div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
+{`1 0
 2
 COWOWC`}
+            </div>
+          </div>
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
+            <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "sample output", "출력 예")}</div>
+            <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>
+{`2
+2 1 1 1 1 2`}
+            </div>
           </div>
         </div>
-        <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>
-{`3
-1 2 3 2 3 1`}
-          </div>
+        <div style={{ fontSize: 11.5, color: "#065f46", marginBottom: 8, lineHeight: 1.6 }}>
+          {t(E, "M = 2 moves.  Each letter is labeled with its move number:", "M = 2 (연산 2번).  각 글자에 연산 번호가 붙어요:")}
         </div>
-      </div>
-
-      <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
-        <div style={{ fontWeight: 700, color: "#065f46", marginBottom: 6 }}>🔍 {t(E, "Line by line", "한 줄씩")}</div>
-        <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 1</code> — {t(E, "T = 1 test, k = 1", "T = 1 (테스트 1개), k = 1")}</div>
-        <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>2</code> — {t(E, "N = 2 blocks → S has length 6", "N = 2 (블록 2개) → S 길이 6")}</div>
-        <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>COWOWC</code> — {t(E, "the string S (blocks COW + OWC)", "문자열 S (블록 COW + OWC)")}</div>
-        <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #6ee7b7" }}>
-          {t(E, "Output ", "출력 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>3</code>{t(E, " = M (3 operations), then ", " = M (연산 3번), 그다음 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 2 3 2 3 1</code>{t(E, " = which operation erased each letter.", " = 각 글자가 몇 번째 연산에서 지워졌는지.")}
-        </div>
-      </div>
-
-      {/* 출력 의미 시각화: COWOWC 를 그룹 번호로 색칠 */}
-      <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #6ee7b7", borderRadius: 10, padding: "10px 12px" }}>
-        <div style={{ fontSize: 11.5, fontWeight: 700, color: "#065f46", marginBottom: 8, textAlign: "center", wordBreak: "keep-all" }}>
-          {t(E, "The numbers split the letters into M groups — each group is a square:", "이 숫자들이 글자를 M개 그룹으로 나눠요 — 각 그룹이 제곱:")}
-        </div>
-        <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 8 }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 6 }}>
           {S.map((ch, i) => {
-            const g = GRPNUM[ch], col = GRPCOL[ch];
+            const op = LABELS[i];
             return (
               <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-                <div style={{ width: 34, height: 34, borderRadius: 7, background: "#fff", border: `2px solid ${col}`,
+                <div style={{ width: 34, height: 34, borderRadius: 7, background: bgFor(op), border: `2px solid ${colFor(op)}`,
                   display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 16, color: "#1f2937" }}>{ch}</div>
-                <div style={{ width: 18, height: 18, borderRadius: 999, background: col, color: "#fff", fontSize: 11, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{g}</div>
+                <div style={{ width: 18, height: 18, borderRadius: 999, background: colFor(op), color: "#fff", fontSize: 11, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{op}</div>
               </div>
             );
           })}
         </div>
-        <div style={{ fontSize: 11, color: "#166534", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
-          {t(E, "group 1 = C·C, group 2 = O·O, group 3 = W·W  →  each a square ✓", "1번끼리 = C·C, 2번끼리 = O·O, 3번끼리 = W·W  →  각각 제곱 ✓")}
+        <div style={{ fontSize: 11, color: "#166534", textAlign: "center", lineHeight: 1.6 }}>
+          {t(E, "op 1 = OWOW = OW+OW ✓  ·  op 2 = CC = C+C ✓",
+                "op 1 = OWOW = OW+OW ✓  ·  op 2 = CC = C+C ✓")}
         </div>
-      </div>
-
-      <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
-        {t(E, "📌 Constraints: T ≤ 10⁴ · sum of N ≤ 10⁵.  This tutorial: k=1 (M ≤ optimal+1 accepted).",
-             "📌 제약: T ≤ 10⁴ · N 의 합 ≤ 10⁵.  이 튜토리얼은 k=1 (최적값+1 이하 M 이면 정답).")}
       </div>
     </div>
   );
@@ -110,112 +152,95 @@ COWOWC`}
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowSplitsCh1(E) {
   return [
-    // [기] 문제 (도입) — mooin3 스타일: 미션 배너 + 제곱 시각 정의 + 짧은 불릿
+    // [기] 문제 도입 — photoshoot25 형태 (Dec 2025 Bronze 표준):
+    //   이모지 → 제목 → USACO 메타 → 🎯 미션 → 📖 문제 • 불릿 → 👉 목표
     {
       type: "reveal",
-      label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
-        "Bessie has a string S made of N blocks (each COW/OWC/WCO). Each move erases a 'square' subsequence — same piece twice. Goal: empty S in as few moves as possible.",
-        "Bessie 에게 문자열 S 가 있어요 — N 개 블록 (COW/OWC/WCO 중 하나) 을 이어붙인 것. 한 번의 지우기는 '제곱' 부분수열 — 같은 조각 두 번 — 을 없애요. 목표: 최소 횟수로 S 비우기."),
+        "Bessie has a string S built from N blocks (each COW/OWC/WCO). Each move erases a 'square' subsequence — same piece twice. Empty S in as few moves as possible.",
+        "Bessie 에게 문자열 S — N 개 블록 (COW/OWC/WCO 중 하나) 을 이은 것. 한 번의 지우기는 '제곱' 부분수열, 즉 같은 조각 두 번을 없애요. 가능한 적은 횟수로 S 를 비워봐요."),
       content: (
-        <div style={{ padding: 20 }}>
-          <div style={{
-            background: C.accentBg, border: `1px solid ${C.accentBd}`, borderRadius: 12,
-            padding: "16px 18px", maxWidth: 480, margin: "0 auto",
-          }}>
-            {/* 🎯 미션 — 한 줄. 다음 페이지 (Sample I/O) 봐도 뭘 하는지 각인 */}
-            <div style={{
-              background: "#fff", border: `2px solid ${C.accentBd}`, borderRadius: 10,
-              padding: "10px 14px", marginBottom: 16, fontSize: 13, lineHeight: 1.6, color: C.text,
-            }}>
-              <div style={{ fontWeight: 700, color: "#059669", marginBottom: 4 }}>
-                🎯 {t(E, "Mission", "미션")}
-              </div>
+        <div style={{ padding: 16 }}>
+          <div style={{ textAlign: "center", marginBottom: 8 }}>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>🐄</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#065f46" }}>{t(E, "COW Splits", "COW 분할")}</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Dec 2025 Bronze #2</div>
+          </div>
+
+          {/* 🎯 Mission box */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
-                "Empty S with as few moves as possible — each move erases a 'square' subsequence.",
-                "S 를 최소 횟수로 비우기 — 한 번의 지우기는 '제곱' 부분수열을 없애요.")}
+                "Empty S with as few moves as possible — each move erases a square subsequence (Y+Y).",
+                "S 를 가능한 적은 횟수로 비우기 — 한 번의 지우기는 제곱 부분수열 (Y+Y) 을 없애요.")}
             </div>
+          </div>
 
-            {/* 제곱 문자열 정의 카드 — Y+Y 시각. 학생이 '사각'이란 말에 걸리지 않게 그림으로 즉시 정의 */}
-            <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 11.5, fontWeight: 600, color: "#059669", textAlign: "center", marginBottom: 8 }}>
-                {t(E, "What's a 'square' string?  Same piece twice:",
-                      "'제곱' 문자열이 뭐지?  같은 조각 두 번:")}
-              </div>
-              <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 6, alignItems: "center" }}>
-                {["C", "O", "W"].map((ch, i) => (
-                  <div key={"a" + i} style={{
-                    width: 32, height: 38, background: "#ecfdf5", border: "2px solid #059669",
-                    borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center",
-                    fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 17, color: "#065f46",
-                  }}>{ch}</div>
-                ))}
-                <span style={{ fontSize: 20, fontWeight: 800, color: "#059669", margin: "0 6px" }}>+</span>
-                {["C", "O", "W"].map((ch, i) => (
-                  <div key={"b" + i} style={{
-                    width: 32, height: 38, background: "#ecfdf5", border: "2px solid #059669",
-                    borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center",
-                    fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 17, color: "#065f46",
-                  }}>{ch}</div>
-                ))}
-              </div>
-              <div style={{ fontSize: 12, textAlign: "center", color: C.text, marginBottom: 8 }}>
-                <code style={{ background: "#ecfdf5", padding: "1px 5px", borderRadius: 4, color: "#065f46", fontWeight: 700 }}>COW</code>
-                {" + "}
-                <code style={{ background: "#ecfdf5", padding: "1px 5px", borderRadius: 4, color: "#065f46", fontWeight: 700 }}>COW</code>
-                {" = "}
-                <code style={{ background: "#ecfdf5", padding: "1px 5px", borderRadius: 4, color: "#065f46", fontWeight: 700 }}>COWCOW</code>
-                {t(E, " ✓ square", " ✓ 제곱")}
-              </div>
-              <div style={{ fontSize: 11, textAlign: "center", color: C.dim, wordBreak: "keep-all" }}>
-                {t(E, "Any piece Y works — even Y=\"C\" gives CC ✓.  Anything else (COWO, OC) → ✗.",
-                      "어떤 조각 Y 든 OK — Y=\"C\" 면 CC ✓.  아니면 (COWO, OC) → ✗.")}
-              </div>
+          {/* 📖 Problem bullets */}
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
+              📖 {t(E, "Problem", "문제")}
             </div>
-
-            {/* 짧은 불릿 — 텍스트 벽 X, 3 줄 */}
-            <div style={{ background: "#fff", border: "1px solid #d1fae5", borderRadius: 8, padding: "10px 12px", fontSize: 12, lineHeight: 1.7, color: C.text }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "#059669", marginBottom: 6 }}>
-                📖 {t(E, "The rules", "규칙")}
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "S has length ", "S 는 길이 ")}
+                  <b style={{ color: "#059669" }}>3N</b>
+                  {t(E, " — N blocks, each one of ", " — N 개 블록, 각 블록은 ")}
+                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>COW</code>
+                  {", "}<code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>OWC</code>
+                  {", "}<code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>WCO</code>.
+                </div>
               </div>
-              <div style={{ display: "flex", gap: 6 }}>
-                <span style={{ color: "#059669", fontWeight: 700 }}>•</span>
-                <div>{t(E, "S = N blocks glued together, length ", "S = N 개 블록을 이은 것, 길이 ")}<b style={{ color: "#059669" }}>3N</b>.</div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "A ", "")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "square", "제곱")}</b>
+                  {t(E, " string = ", " 문자열 = ")}
+                  <b style={{ color: "#0891b2" }}>Y+Y</b>
+                  {t(E, " for some piece Y (e.g. ", " (조각 Y 는 무엇이든; 예: ")}
+                  <code>COWCOW</code>, <code>CC</code>{t(E, ").", ").")}
+                </div>
               </div>
-              <div style={{ display: "flex", gap: 6 }}>
-                <span style={{ color: "#059669", fontWeight: 700 }}>•</span>
-                <div>{t(E, "One move erases a square subsequence (letters can be far apart).",
-                            "한 번의 지우기는 제곱 부분수열을 없애요 (글자가 떨어져 있어도 OK).")}</div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "One move erases any subsequence that is a square (letters kept in order, need not be adjacent).",
+                        "한 번의 지우기는 S 에서 제곱이 되는 부분수열을 제거해요 (순서 유지, 붙어있지 않아도 OK).")}
+                </div>
               </div>
-              <div style={{ display: "flex", gap: 6 }}>
-                <span style={{ color: "#059669", fontWeight: 700 }}>•</span>
-                <div>{t(E, "Output M and label every letter with its move number.  If impossible → ",
-                            "M 과 각 글자의 연산 번호를 출력.  불가능하면 → ")}<code>-1</code>.</div>
+              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
+                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
+                <div>
+                  {t(E, "Output ", "출력 ")}
+                  <b style={{ color: "#15803d" }}>M</b>
+                  {t(E, " and label every letter with its move number. If impossible → ",
+                        " 과 각 글자의 연산 번호를 출력.  불가능하면 → ")}
+                  <code>-1</code>.
+                </div>
               </div>
-            </div>
-
-            <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
-              {t(E, "Sample input + rule sim on the next pages.",
-                    "샘플 입력 + 규칙 시뮬은 다음 페이지에서.")}
             </div>
           </div>
         </div>),
     },
 
-    // [승] 샘플 입출력 (구체 숫자)
+    // [승] 입출력 형식 (photoshoot25 3-박스: INPUT/OUTPUT/CONSTRAINTS + 샘플 예시)
     {
       type: "reveal",
-      label: t(E, "Sample I/O", "샘플 입출력"),
       narr: t(E,
-        "A concrete example — one string, and the answer we must print.",
-        "구체적인 예 하나 — 문자열 하나와, 우리가 출력해야 할 답."),
+        "How does the data arrive? Read T tests; each has N and the string S. Print M and the labels — or -1.",
+        "데이터는 어떻게 들어올까? T 개 테스트, 각각 N 과 문자열 S. M 과 라벨을 출력, 아니면 -1."),
       content: (<CowSplitsSample E={E} />),
     },
 
     // [전] 규칙 — 한 연산 = 제곱 부분수열
     {
       type: "reveal",
-      label: t(E, "Rule: one operation", "규칙: 한 연산"),
       narr: t(E, "First — one operation erases a 'square subsequence'. Let's see exactly what that means.",
                  "먼저 — 한 연산은 '제곱 부분수열'을 지워요. 그게 정확히 뭔지 봐요."),
       content: (<EraseRuleSim E={E} />),
@@ -223,34 +248,23 @@ export function makeCowSplitsCh1(E) {
     // [전] 언제 1번? → 막힘
     {
       type: "reveal",
-      label: t(E, "When 1 op? → stuck", "언제 1번? → 막힘"),
       narr: t(E, "If S itself is a square, one op clears it. But usually it isn't — so what then?",
                  "S 자체가 제곱이면 한 번에 끝. 근데 보통은 아니에요 — 그럼 어떡할까요?"),
       content: (<StuckSim E={E} />),
     },
-    // [전] 아이디어 — 같은 글자끼리
+    // [전] 아이디어 — 블록 쌍 + 겹치는 2 글자
     {
       type: "reveal",
-      label: t(E, "Idea: gather same letters", "아이디어: 같은 글자끼리"),
-      narr: t(E, "The key idea: we can pick letters from anywhere, so gather the same letters. Let's see why it always works.",
-                 "핵심 아이디어: 글자를 여기저기서 골라도 되니, 같은 글자끼리 모아요. 왜 항상 되는지 봐요."),
+      narr: t(E, "The key idea: pair each front block with its back partner. Any two of {COW, OWC, WCO} share a 2-letter overlap — so op 1 keeps the overlap, op 2 takes the leftover 1 letter each side.",
+                 "핵심 아이디어: 앞 블록을 뒤 파트너 블록과 짝지어요. {COW, OWC, WCO} 어떤 두 블록도 2 글자가 겹쳐요 — op 1 은 겹치는 부분, op 2 는 양쪽에 남는 1 글자씩."),
       content: (<InsightSim E={E} />),
     },
-    // [전] 풀이 예제 — 샘플 COWOWC 를 3번에
+    // [전] 풀이 예제 — 샘플 COWOWC 를 2번에
     {
       type: "reveal",
-      label: t(E, "Worked example", "풀이 예제"),
-      narr: t(E, "Now solve the sample: watch COWOWC get emptied in 3 ops — giving 1 2 3 2 3 1.",
-                 "이제 샘플을 풀어봐요: COWOWC 가 3번에 비워지는 걸 봐요 — 답 1 2 3 2 3 1."),
+      narr: t(E, "Now solve the sample: watch COWOWC get emptied in 2 ops — giving 2 1 1 1 1 2.",
+                 "이제 샘플을 풀어봐요: COWOWC 가 2번에 비워지는 걸 봐요 — 답 2 1 1 1 1 2."),
       content: (<LetterGroupSim E={E} />),
-    },
-    // 정리
-    {
-      type: "reveal",
-      label: t(E, "Recap", "정리"),
-      narr: t(E, "Everything boils down to one small decision.",
-                 "결국 작은 판단 하나로 정리돼요."),
-      content: (<CowSplitsPlan E={E} />),
     },
   ];
 }
@@ -261,45 +275,26 @@ export function makeCowSplitsCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeCowSplitsCh2(E, lang = "py") {
   const w = getCowSplitsWalk(E, lang);
-  const sections = getCowSplitsSections(E);
   return [
-    // [결-1] 전체 코드 CodeWalk — 위→아래 말풍선으로 흐름 익히기
+    // Plan — photoshoot25 표준. 시뮬 알아낸 것 → 변수 이름 소개
     {
       type: "reveal",
-      label: t(E, "The full code (walkthrough)", "전체 코드 (말풍선)"),
+      label: t(E, "Plan", "계획"),
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains: read input, parity check, try M=1, otherwise the letter-group trick.",
-        "코드를 위에서 아래로 읽어봐요 — 말풍선이 설명하는 줄에 붙어 있어요: 입력 읽기 → 짝수 체크 → M=1 시도 → 안 되면 글자 그룹 트릭."),
+        "Before the code — here's what the sims told us, and the exact plan (with the variable names you'll see).",
+        "코드 전에 — 시뮬이 알려준 것과, 정확한 계획 (곧 볼 변수 이름과 함께)."),
+      content: (<CowSplitsPlan E={E} />),
+    },
+    // Code — mooin3 스타일 CodeWalk. ◀▶ 로 구현 조각씩 말풍선 이동
+    {
+      type: "reveal",
+      label: t(E, "Code", "코드"),
+      narr: t(E,
+        "Now the code — you just met the variables (ans, a, b, M). Watch each piece light up in build order: read input → parity → M=1 try → M=2 block-pair fallback → print.",
+        "이제 코드 — 방금 변수 (ans, a, b, M) 를 만났죠. 구현 순서대로 조각이 밝아져요: 입력 → 홀짝 → M=1 시도 → M=2 블록 쌍 → 출력."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#059669" />
       ),
-    },
-    // [결-2] 섹션 1 — 셋업 + 짝수 판단
-    {
-      type: "reveal",
-      label: sections[0].label,
-      narr: t(E,
-        "First piece — read the input, and drop out early if N is odd (each op removes an even number of letters, so total 3N must be even → N even).",
-        "첫 조각 — 입력을 읽고, N 이 홀수면 바로 -1 (각 연산이 짝수 개 글자를 지우니 총 3N 도 짝수여야 함 → N 짝수)."),
-      content: (<CodeSectionView section={sections[0]} lang={lang} E={E} />),
-    },
-    // [결-3] 섹션 2 — M=1 시도
-    {
-      type: "reveal",
-      label: sections[1].label,
-      narr: t(E,
-        "Lucky case first: if S itself is a square (front half = back half), one move clears everything.",
-        "운 좋은 경우 먼저: S 자체가 제곱 (앞 절반 = 뒤 절반) 이면 한 번에 끝."),
-      content: (<CodeSectionView section={sections[1]} lang={lang} E={E} />),
-    },
-    // [결-4] 섹션 3 — 글자 그룹 트릭 (M=3)
-    {
-      type: "reveal",
-      label: sections[2].label,
-      narr: t(E,
-        "Fallback: gather every C, every O, every W separately. Three moves, always works when N is even.",
-        "안 되면: C 끼리, O 끼리, W 끼리 모으기. 3 번의 지우기 — N 짝수면 항상 통과."),
-      content: (<CodeSectionView section={sections[2]} lang={lang} E={E} />),
     },
   ];
 }
