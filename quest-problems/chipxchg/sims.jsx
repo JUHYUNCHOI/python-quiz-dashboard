@@ -177,6 +177,64 @@ export function TricksterWasteSim({ E }) {
   );
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   TricksterRedSim — 환전이 이득(cA ≥ cB)일 땐 심술쟁이가 '빨강'을 줌 (파랑 아님).
+   파랑을 주면 오히려 이득이라, 빨강 1개씩 줘서 덜 도와줌. (공식의 cA≥cB 가지)
+   ═══════════════════════════════════════════════════════════════ */
+export function TricksterRedSim({ E }) {
+  const steps = [{ k: "rule" }, { k: "bluegood" }, { k: "givered" }, { k: "concl" }];
+  const ts = useTraceStep(steps); const s = steps[ts.safe];
+
+  const say =
+    s.k === "rule"    ? t(E, <>A different swap this time — <span style={NW}><b style={{color:BLU}}>2 blue</b> → <b style={{color:RED}}>3 red</b></span>. Here converting <b>gains</b> red!</>,
+                           <>이번엔 환전이 달라요 — <span style={NW}><b style={{color:BLU}}>파랑 2개</b> → <b style={{color:RED}}>빨강 3개</b></span>. 환전하면 오히려 <b>이득</b>이에요!</>)
+    : s.k === "bluegood" ? t(E, <>If the trickster gave me <b style={{color:BLU}}>blue</b>, I'd <b>gain</b> (2 → 3 red). No way it does that.</>,
+                           <>심술쟁이가 <b style={{color:BLU}}>파랑</b>을 주면 나한텐 <b>이득</b> (2 → 3). 심술쟁이가 그럴 리 없죠.</>)
+    : s.k === "givered" ? t(E, <>So it gives <b style={{color:RED}}>red, 1 at a time</b> — one red chip is just one red, the <b>least help</b>.</>,
+                           <>그래서 <b style={{color:RED}}>빨강을 1개씩</b>만 줘요 — 빨강 1개는 딱 1개, 나를 <b>제일 덜</b> 도와주니까.</>)
+    : t(E, <>So when swapping <b>pays</b> (cA ≥ cB) → the extra chips are <b style={{color:RED}}>all red</b>, no waste. <span style={{color:"#94a3b8"}}>(when it loses → all blue + waste, the step before)</span></>,
+           <>환전이 <b>이득</b>(cA ≥ cB)이면 → 추가 칩은 <b style={{color:RED}}>다 빨강</b>, 낭비 없음. <span style={{color:"#94a3b8"}}>(손해면 반대 = 파랑 낭비, 앞 스텝)</span></>);
+
+  const showRed = s.k === "givered" || s.k === "concl";
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "When swapping pays: red, not blue", "환전이 이득이면: 파랑 아니라 빨강")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
+        {t(E, "this example · swap: 2 blue → 3 red (cA ≥ cB)", "이 예시 · 환전: 파랑 2 → 빨강 3 (cA ≥ cB)")}
+      </div>
+      <Say tone={s.k === "concl" ? "aha" : "go"}>{say}</Say>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, flexWrap: "wrap", minHeight: 48, marginTop: 8 }}>
+        {!showRed ? (
+          <>
+            <div style={{ display: "flex", gap: 5, padding: 5, borderRadius: 10, border: `2px dashed ${BLU}`, background: "#f8fbff" }}>
+              {Array.from({ length: 2 }).map((_, i) => <Chip key={i} color="blue" size={22} />)}
+            </div>
+            <span style={{ fontSize: 18, fontWeight: 800, color: "#15803d" }}>→</span>
+            <div style={{ display: "flex", gap: 5 }}>
+              {Array.from({ length: 3 }).map((_, i) => <Chip key={i} color="red" size={22} />)}
+            </div>
+            <span style={{ fontSize: 12, fontWeight: 800, color: "#15803d", wordBreak: "keep-all" }}>{t(E, "(gain!)", "(이득!)")}</span>
+          </>
+        ) : (
+          <>
+            <span style={{ fontSize: 24 }}>😈</span>
+            <span style={{ fontSize: 15, fontWeight: 800, color: "#94a3b8" }}>→</span>
+            {Array.from({ length: 4 }).map((_, i) => <Chip key={i} color="red" size={22} />)}
+            <span style={{ fontSize: 11.5, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "all red, 1 each", "다 빨강, 1개씩")}</span>
+          </>
+        )}
+      </div>
+
+      <div style={{ marginTop: 24 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}
+
 export function AdversarySim({ E }) {
   const cA = 2, cB = 3, fA = 5, X = 8;
   const rows = Array.from({ length: X + 1 }, (_, b) => {
