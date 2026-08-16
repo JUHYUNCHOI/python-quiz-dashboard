@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getChipXchgWalk, getChipXchgBruteWalk } from "./components";
+import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim, TricksterRedSim } from "./sims";
 
@@ -171,29 +171,17 @@ export function makeChipXchgCh1(E) {
    Chapter 2: makeChipXchgCh2 (CodeWalk)
    ═══════════════════════════════════════════════════════════════ */
 export function makeChipXchgCh2(E, lang = "py") {
-  const brute = getChipXchgBruteWalk(E, lang);
-  const fast = getChipXchgWalk(E, lang);
+  const w = getChipXchgWalk(E, lang);
   return [
-    // 코드 ① 쉬운 브루트포스 — 먼저 이해되는 버전 (느림)
+    // 코드 — 개념에서 유도한 공식 그대로 (O(1), 제출용). 브루트는 없음.
     {
       type: "reveal",
-      label: t(E, "Code ① brute force", "코드 ① 쉬운 브루트"),
+      label: t(E, "Code", "코드"),
       narr: t(E,
-        "Start with the simple, readable version — try every split b, and raise x one at a time.",
-        "먼저 쉽고 그대로 읽히는 버전 — 나눔 b 를 다 해보고, x 를 하나씩 늘려요."),
+        "The formula we derived, in code — no loop, no search. One calculation per test (O(1)).",
+        "개념에서 만든 공식 그대로 — 반복도 탐색도 없이. 테스트당 계산 한 번 (O(1))."),
       content: (
-        <CodeWalk E={E} lang={lang} code={brute.code} vars={brute.vars} beats={brute.beats} accent="#2563eb" />
-      ),
-    },
-    // 코드 ② 공식 — 브루트 한계 → 직접 계산 (USACO 공식 풀이)
-    {
-      type: "reveal",
-      label: t(E, "Code ② formula", "코드 ② 공식"),
-      narr: t(E,
-        "The brute is far too slow (x up to 10¹⁸). The official solution computes the answer directly — no loop, no search. O(1).",
-        "브루트는 너무 느려요 (x 10¹⁸까지). 공식 풀이는 답을 바로 계산해요 — 반복도 탐색도 없이. O(1)."),
-      content: (
-        <CodeWalk E={E} lang={lang} code={fast.code} vars={fast.vars} beats={fast.beats} accent="#2563eb" />
+        <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />
       ),
     },
   ];
