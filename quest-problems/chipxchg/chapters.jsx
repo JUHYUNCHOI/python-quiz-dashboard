@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk, getChipXchgBruteWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, AdversarySim } from "./sims";
+import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim } from "./sims";
 
 const A = "#2563eb";
 
@@ -136,13 +136,13 @@ export function makeChipXchgCh1(E) {
       content: (<ChipCountSim E={E} />),
     },
 
-    // [전] 도구: 심술쟁이 최악 = 파랑 낭비 (칩 시각, 코드 아님). 공식의 waste 항의 근거.
+    // [전] 도구: 심술쟁이가 색칠 → 파랑 자투리 버림 = 최악 (칩 시각, 슬라이드 없음).
     {
       type: "reveal",
       label: t(E, "Tool: trickster's worst = wasted blue", "도구: 심술쟁이 최악 (파랑 낭비)"),
-      narr: t(E, "The trickster piles the extra chips into blue and wastes the leftover — that's my worst case. Watch it with real chips.",
-                 "심술쟁이는 추가 칩을 파랑에 몰아 자투리로 버려요 — 그게 나한텐 최악. 진짜 칩으로 봐요."),
-      content: (<AdversarySim E={E} />),
+      narr: t(E, "The trickster colors the extra chips all blue and wastes the leftover — that's my worst case. Watch with real chips.",
+                 "심술쟁이가 추가 칩을 다 파랑으로 색칠하고 자투리를 버려요 — 그게 나한텐 최악. 진짜 칩으로 봐요."),
+      content: (<TricksterWasteSim E={E} />),
     },
 
     // [결] 계획 — 공식 단계 (개념 슬라이드, 코드는 다음 챕터에서)

@@ -108,6 +108,75 @@ export function ChipCountSim({ E }) {
    파랑 b=0,1,…,8 차례로 다 따져 최악(최소 최종빨강)을 찾음.
    최종 빨강 = a + (b // cB)×cA, a = 8-b. 심술쟁이는 이 값이 최소인 걸 고름.
    ═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════
+   TricksterWaseSim — 심술쟁이가 추가 칩을 '색칠'(다 파랑) → 자투리 버림 = 최악.
+   슬라이드/분배 없음. 색 미정 → 다 파랑 → 묶기 → 자투리 낭비 → 최악.
+   ═══════════════════════════════════════════════════════════════ */
+export function TricksterWasteSim({ E }) {
+  const cB = 3, cA = 2, X = 8;
+  const groups = Math.floor(X / cB), left = X % cB, redFromSwap = groups * cA;
+  const steps = [{ k: "give" }, { k: "allblue" }, { k: "group" }, { k: "waste" }, { k: "worst" }];
+  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const showGroups = s.k === "group" || s.k === "waste" || s.k === "worst";
+  const wasted = s.k === "waste" || s.k === "worst";
+
+  const say =
+    s.k === "give"    ? t(E, <>Short of the goal, so I get <b>extra chips</b> — but the <b style={{color:"#dc2626"}}>trickster picks each color</b> (red or blue).</>,
+                           <>목표에 부족해서 <b>추가 칩</b>을 받아요 — 근데 <b style={{color:"#dc2626"}}>색(빨강·파랑)은 심술쟁이가 정해요</b>.</>)
+    : s.k === "allblue" ? t(E, <>The trickster makes them <b style={{color:BLU}}>all blue</b> — blue needs 3 to convert, so it helps me the least.</>,
+                           <>심술쟁이는 <b style={{color:BLU}}>전부 파랑</b>으로 색칠해요 — 파랑은 3개 모여야 빨강 되니, 나한텐 제일 손해거든요.</>)
+    : s.k === "group" ? t(E, <>Group the blue by 3 and swap: <span style={NW}><b>8 = 2 groups</b></span> → <b style={{color:RED}}>+4 red</b>. And what's left?</>,
+                           <>파랑을 <b>3개씩</b> 묶어 환전: <span style={NW}><b>8 = 2묶음</b></span> → <b style={{color:RED}}>빨강 4개</b>. 남은 건?</>)
+    : s.k === "waste" ? t(E, <>The leftover <b style={{color:BLU}}>2 blue</b> can't make a group of 3 → <b style={{color:"#dc2626"}}>wasted</b>. That leftover is the 자투리.</>,
+                           <>남은 <b style={{color:BLU}}>파랑 2개</b>는 3개가 안 돼서 못 묶어요 → <b style={{color:"#dc2626"}}>그냥 버려져요</b>. 이 남는 게 자투리예요.</>)
+    : t(E, <><b>8 chips, but only 4 red!</b> The trickster piles blue and <b>wastes the leftover</b> — that's my worst case.</>,
+           <><b>8개나 받아도 빨강은 4개뿐!</b> 심술쟁이는 파랑에 몰아 <b>자투리를 버리게</b> 해서 나를 최악으로 만들어요.</>);
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "The trickster wastes blue", "심술쟁이의 파랑 낭비")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
+        {t(E, "extra chips = 8 · swap: 3 blue → 2 red", "추가 칩 = 8개 · 환전: 파랑 3 → 빨강 2")}
+      </div>
+      <Say tone={s.k === "worst" ? "stuck" : "go"}>{say}</Say>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, flexWrap: "wrap", minHeight: 48, marginTop: 8 }}>
+        {!showGroups ? (
+          Array.from({ length: X }).map((_, i) =>
+            s.k === "allblue"
+              ? <Chip key={i} color="blue" size={22} />
+              : <div key={i} style={{ width: 22, height: 22, borderRadius: 999, border: "2px dashed #94a3b8", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "#94a3b8" }}>?</div>)
+        ) : (
+          <>
+            {Array.from({ length: groups }).map((_, g) => (
+              <div key={g} style={{ display: "flex", gap: 4, padding: 4, borderRadius: 8, border: `2px dashed ${BLU}`, background: "#f8fbff", opacity: wasted ? 0.5 : 1 }}>
+                {Array.from({ length: cB }).map((_, i) => <Chip key={i} color="blue" size={20} faded={wasted} />)}
+              </div>
+            ))}
+            <div style={{ display: "flex", gap: 4, padding: 4, borderRadius: 8, alignItems: "center",
+              border: `2px dashed ${wasted ? "#dc2626" : "#cbd5e1"}`, background: wasted ? "#fef2f2" : "#fff" }}>
+              {Array.from({ length: left }).map((_, i) => <Chip key={i} color="blue" size={20} />)}
+              {wasted && <span style={{ fontSize: 10, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "waste", "낭비")}</span>}
+            </div>
+          </>
+        )}
+      </div>
+      {showGroups && (
+        <Cap color={wasted ? "#dc2626" : RED}>
+          {wasted
+            ? t(E, "2 groups → 4 red · 2 wasted → only 4 red", "2묶음 → 빨강 4 · 자투리 2 버림 → 빨강 4개뿐")
+            : t(E, "2 groups → 4 red · 2 blue left over", "2묶음 → 빨강 4 · 파랑 2개 남음")}
+        </Cap>
+      )}
+
+      <div style={{ marginTop: 24 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}
+
 export function AdversarySim({ E }) {
   const cA = 2, cB = 3, fA = 5, X = 8;
   const rows = Array.from({ length: X + 1 }, (_, b) => {
