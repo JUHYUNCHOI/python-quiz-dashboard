@@ -871,8 +871,8 @@ export function CheckSim({ E }) {
         {s.kind === "ask"
           ? t(E, <>What number do we actually <b>print</b> for each test? Pick one, then flip.</>,
                  <>각 테스트에서 우리가 실제로 <b>출력</b>하는 숫자는 뭘까요? 하나 고르고 넘겨봐요.</>)
-          : t(E, <>It's <b>B</b> — the fewest extra chips so that <b>however the trickster splits them</b>, we still reach the goal. (Not the final red count!)</>,
-                 <>정답은 <b>B</b> — <b>심술쟁이가 어떻게 나눠도</b> 목표를 채우는 가장 적은 추가 칩 개수예요. (최종 빨강 개수가 아니에요!)</>)}
+          : t(E, <>It's <b>B</b> — the fewest extra chips so that <b>however the trickster colors them</b>, we still reach the goal. (Not the final red count!)</>,
+                 <>정답은 <b>B</b> — <b>심술쟁이가 어떻게 색칠해도</b> 목표를 채우는 가장 적은 추가 칩 개수예요. (최종 빨강 개수가 아니에요!)</>)}
       </Say>
       <div style={{ maxWidth: 440, margin: "0 auto", display: "flex", flexDirection: "column", gap: 8 }}>
         {opts.map((o, i) => {
@@ -908,7 +908,7 @@ export function StrategySlide({ E }) {
       {s.kind === "plan" ? (
         <div style={{ maxWidth: 470, margin: "0 auto" }}>
           <Slab n="1" color="#15803d" bg="#f0fdf4">{t(E, <>How many red can I make <b>right now</b> (convert my blue)? Call it <b>init</b>.</>, <>지금 가진 걸로 빨강 몇 개(내 파랑 환전)? 이걸 <b>init</b> 이라 해요.</>)}</Slab>
-          <Slab n="2" color="#2563eb" bg="#eff6ff">{t(E, <>If <b>init &lt; goal</b>, count the fewest extra chips — assuming the <b>trickster splits them worst</b>.</>, <><b>init 이 목표보다 작으면</b>, 심술쟁이가 <b>최악으로 나눌 때</b> 필요한 최소 추가 칩을 세요.</>)}</Slab>
+          <Slab n="2" color="#2563eb" bg="#eff6ff">{t(E, <>If <b>init &lt; goal</b>, count the fewest extra chips — assuming the <b>trickster colors them worst</b>.</>, <><b>init 이 목표보다 작으면</b>, 심술쟁이가 <b>최악으로 색칠할 때</b> 필요한 최소 추가 칩을 세요.</>)}</Slab>
         </div>
       ) : (
         <div style={{ maxWidth: 470, margin: "0 auto" }}>

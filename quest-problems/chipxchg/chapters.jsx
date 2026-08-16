@@ -75,7 +75,7 @@ function ChipXchgSample({ E }) {
       </div>
       {/* 출력 뜻 */}
       <div style={{ marginTop: 10, background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "9px 12px", fontSize: 12, color: C.text, lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
-        {t(E, "Output = fewest extra chips ", "출력 = 필요한 최소 추가 칩 ")}<b>x</b>{t(E, " that reaches the goal no matter how the trickster splits.", " — 심술쟁이가 어떻게 나눠도 목표 도달.")}
+        {t(E, "Output = fewest extra chips ", "출력 = 필요한 최소 추가 칩 ")}<b>x</b>{t(E, " that reaches the goal no matter how the trickster colors them.", " — 심술쟁이가 어떻게 색칠해도 목표 도달.")}
       </div>
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
         {t(E, "📌 Up to 10⁴ tests · answer can reach 10¹⁸ → use 64-bit.", "📌 테스트 최대 10⁴ · 답이 10¹⁸ 까지 → 64비트 필요.")}
