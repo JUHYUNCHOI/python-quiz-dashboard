@@ -962,21 +962,24 @@ export function PlanSlide({ E }) {
         {t(E, "We turn the formula into steps we can code.", "공식을 코드로 옮길 순서로 바꿔요.")}
       </div>
       <div style={{ maxWidth: 480, margin: "0 auto" }}>
-        <Slab n="1" color="#15803d" bg="#f0fdf4" title={<code>init = A + (B//cB)*cA</code>}>
-          {t(E, <>red I can make now. If <b>init ≥ fA</b> → answer <b>0</b>.</>,
-               <>지금 만드는 빨강. <b>init ≥ fA</b> 면 답 <b>0</b>.</>)}
+        <Slab n="1" color="#15803d" bg="#f0fdf4" title={t(E, "First, make all the red I can right now", "먼저, 가진 걸로 빨강을 최대한 만들어요")}>
+          {t(E, <>If it reaches the goal → answer <b>0</b>. If not, see <b>how much more</b> red I need.</>,
+               <>목표에 닿으면 → 답 <b>0</b>. 아니면 빨강이 <b>얼마나 더</b> 필요한지 봐요.</>)}
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", marginTop: 4, wordBreak: "break-word" }}>init = A + (B//cB)*cA</div>
         </Slab>
-        <Slab n="2" color="#dc2626" bg="#fef2f2" title={<code>waste = (cB−1) − (B%cB)</code>}>
-          {t(E, <>the trickster wastes blue first (leftover cB−1). ← 파랑 낭비 step.</>,
-               <>심술쟁이가 먼저 파랑을 버림 (자투리 cB−1). ← 파랑 낭비 스텝.</>)}
+        <Slab n="2" color="#dc2626" bg="#fef2f2" title={t(E, "The trickster wastes blue first", "심술쟁이는 먼저 파랑을 버리게 해요")}>
+          {t(E, <>it makes blue that can't be swapped — the leftover (cB−1) is thrown away. <span style={{color:"#94a3b8"}}>← 파랑 낭비 step</span></>,
+               <>환전 못 하는 파랑(자투리 cB−1개)으로 낭비시켜요. <span style={{color:"#94a3b8"}}>← 파랑 낭비 스텝</span></>)}
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", marginTop: 4, wordBreak: "break-word" }}>waste = (cB−1) − (B%cB)</div>
         </Slab>
-        <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "fill the deficit: red or blue?", "부족분 채우기: 빨강? 파랑?")}>
-          {t(E, <>cA ≥ cB → red (1 each); otherwise blue in groups. ← 빨강 / 파랑 steps.</>,
-               <>cA ≥ cB → 빨강(1개씩), 아니면 파랑 그룹으로. ← 빨강 / 파랑 스텝.</>)}
+        <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "Fill the rest with the least-helpful color", "남은 부족분을 가장 덜 도와주는 색으로 채워요")}>
+          {t(E, <>swapping pays → red (1 each); otherwise blue in groups. <span style={{color:"#94a3b8"}}>← 빨강 / 파랑 steps</span></>,
+               <>환전이 이득이면 빨강(1개씩), 손해면 파랑 그룹으로. <span style={{color:"#94a3b8"}}>← 빨강 / 파랑 스텝</span></>)}
         </Slab>
-        <Slab n="4" color="#7c3aed" bg="#f5f3ff" title={t(E, "answer = waste + need + 1", "답 = waste + need + 1")}>
-          {t(E, <>the <b>+1</b> = the last red (one chip, not a group). Use 64-bit — answer up to 10¹⁸.</>,
-               <><b>+1</b> = 마지막 빨강 1개 (그룹 아니라 칩 하나). 64비트 — 답이 10¹⁸ 까지.</>)}
+        <Slab n="4" color="#7c3aed" bg="#f5f3ff" title={t(E, "Add them up — that's the answer", "다 더하면 그게 답이에요")}>
+          {t(E, <>the last red is just <b>one chip</b> (the <b>+1</b>). Use 64-bit — the answer can reach 10¹⁸.</>,
+               <>마지막 빨강 1개는 <b>칩 하나</b>면 돼요 (<b>+1</b>). 답이 크니 64비트.</>)}
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", marginTop: 4, wordBreak: "break-word" }}>답 = waste + need + 1</div>
         </Slab>
       </div>
       <div style={{ marginTop: 12, textAlign: "center", fontSize: 12, fontWeight: 800, color: "#15803d", wordBreak: "keep-all", textWrap: "balance" }}>
