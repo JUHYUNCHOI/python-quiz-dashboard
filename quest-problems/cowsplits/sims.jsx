@@ -256,8 +256,8 @@ export function InsightSim({ E }) {
       <>Any two of <b>{"{COW, OWC, WCO}"}</b> share a <b>2-letter overlap</b>. Look: <b>COW</b> vs <b>OWC</b> — the middle "<b>OW</b>" appears in both!</>,
       <><b>{"{COW, OWC, WCO}"}</b> 어떤 두 블록도 <b>2 글자가 겹쳐요</b>. 봐요: <b>COW</b> 와 <b>OWC</b> — 가운데 "<b>OW</b>" 가 둘 다에 있어요!</>)
     : s.kind === "split" ? t(E,
-      <>Split it: the <b>overlapping 2 letters</b> (OW) go to <b>op 1</b> — front OW matches back OW. The <b>leftover 1 letter each side</b> (C and C) go to <b>op 2</b> — same letter! Both ops are squares → <b>M = 2</b>.</>,
-      <>나눠요: <b>겹치는 2 글자</b> (OW) 는 <b>op 1</b> — 앞의 OW 와 뒤의 OW 가 일치. <b>양쪽에 남는 1 글자</b> (C 와 C) 는 <b>op 2</b> — 같은 글자! 두 op 다 제곱 → <b>M = 2</b>.</>)
+      <>Split it: the <b>overlapping 2 letters</b> (OW) go to <b>op 1</b> — front OW matches back OW. The <b>leftover 1 letter each side</b> (C and C) go to <b>op 2</b> — same letter! Both ops read as Y+Y → <b>M = 2</b>.</>,
+      <>나눠요: <b>겹치는 2 글자</b> (OW) 는 <b>op 1</b> — 앞의 OW 와 뒤의 OW 가 일치. <b>양쪽에 남는 1 글자</b> (C 와 C) 는 <b>op 2</b> — 같은 글자! 두 op 다 Y+Y 형태 → <b>M = 2</b>.</>)
     : t(E,
       <>And if <b>N is odd</b>? Total length 3N is odd → each op removes an even count → <b>impossible → −1</b>.</>,
       <>만약 <b>N 이 홀수</b>면? 총 길이 3N 이 홀수 → 각 연산은 짝수 개 지우기 → <b>불가능 → −1</b>.</>);
@@ -394,8 +394,8 @@ export function LetterGroupSim({ E }) {
       <>Label them: the 4 overlap chars → <b style={{ color: OPCOL[1] }}>op 1</b>. The leftover 1 char per side (C from front, C from back) → <b style={{ color: OPCOL[2] }}>op 2</b>.</>,
       <>라벨 부여: 겹치는 4 글자 → <b style={{ color: OPCOL[1] }}>op 1</b>. 양쪽 남는 1 글자씩 (앞의 C, 뒤의 C) → <b style={{ color: OPCOL[2] }}>op 2</b>.</>)
     : s.kind === "verify" ? t(E,
-      <>Check both are squares: op 1 subseq = <b>OWOW</b> = OW+OW ✓. op 2 subseq = <b>CC</b> = C+C ✓. Both work in one move each!</>,
-      <>둘 다 제곱인지 확인: op 1 수열 = <b>OWOW</b> = OW+OW ✓. op 2 수열 = <b>CC</b> = C+C ✓. 각각 한 번에 지워요!</>)
+      <>Check both read as Y+Y: op 1 subseq = <b>OWOW</b> = OW+OW ✓. op 2 subseq = <b>CC</b> = C+C ✓. Both work in one move each!</>,
+      <>둘 다 Y+Y (같은 조각 두 번) 인지 확인: op 1 수열 = <b>OWOW</b> = OW+OW ✓. op 2 수열 = <b>CC</b> = C+C ✓. 각각 한 번에 지워요!</>)
     : t(E,
       <>Done in <b>2 moves</b> — output <b>M = 2</b> and the labels below.</>,
       <><b>2번</b>에 끝 — <b>M = 2</b> 와 아래 라벨을 출력해요.</>);

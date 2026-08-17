@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim, TricksterRedSim } from "./sims";
+import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim, TricksterRedSim, LastStepSlide } from "./sims";
 
 const A = "#2563eb";
 
@@ -87,7 +87,7 @@ function ChipXchgSample({ E }) {
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeChipXchgCh1 — mooin3 모양 (라벨 + 구체 샘플 + 시뮬)
-   문제(도입) → 샘플입출력 → 이해확인 → 전략 → 환전(init) → 심술쟁이 최악→공식 → 계획
+   문제(도입) → 샘플입출력 → 이해확인 → 전략 → 환전(red_now) → 심술쟁이 최악→공식 → 계획
    (USACO 공식 풀이 = O(1) 닫힌 공식. 이분탐색·후보 안 씀)
    ═══════════════════════════════════════════════════════════════ */
 export function makeChipXchgCh1(E) {
@@ -127,12 +127,12 @@ export function makeChipXchgCh1(E) {
       content: (<StrategySlide E={E} />),
     },
 
-    // [전] 도구: 환전 세기 = init (지금 가진 걸로 만드는 빨강)
+    // [전] 도구: 환전 세기 = red_now (지금 가진 걸로 만드는 빨강)
     {
       type: "reveal",
-      label: t(E, "Tool: red I can make now (init)", "도구: 지금 만드는 빨강 (init)"),
-      narr: t(E, "How many red can I make right now? Group my blue by cB; leftovers waste. That's init.",
-                 "지금 가진 걸로 빨강 몇 개? 내 파랑을 cB 로 묶고, 자투리는 버려요. 그게 init."),
+      label: t(E, "Tool: red I can make now (red_now)", "도구: 지금 만드는 빨강 (red_now)"),
+      narr: t(E, "How many red can I make right now? Group my blue by cB; leftovers waste. That's red_now.",
+                 "지금 가진 걸로 빨강 몇 개? 내 파랑을 cB 로 묶고, 자투리는 버려요. 그게 red_now."),
       content: (<ChipCountSim E={E} />),
     },
 
@@ -152,6 +152,15 @@ export function makeChipXchgCh1(E) {
       narr: t(E, "What if converting gains red (cA ≥ cB)? Then blue would help me, so the trickster gives red instead.",
                  "환전이 이득이면(cA ≥ cB)? 파랑이 오히려 나를 도와주니, 심술쟁이는 대신 빨강을 줘요."),
       content: (<TricksterRedSim E={E} />),
+    },
+
+    // [전] 도구: 마지막 한 개는 따로 (경계/off-by-one) — 왜 −1 했다 +1 하나. 도장카드 비유 + 언제 쓰나.
+    {
+      type: "reveal",
+      label: t(E, "Tool: the last one is special (±1)", "도구: 마지막 한 개는 따로 (±1)"),
+      narr: t(E, "Why −1 then +1? Right before the goal, one chip finishes it — the last red isn't a whole group.",
+                 "왜 −1 했다 +1? 목표 직전엔 칩 하나면 끝나거든요 — 마지막 빨강은 묶음이 아니에요."),
+      content: (<LastStepSlide E={E} />),
     },
 
     // [결] 계획 — 공식 단계 (개념 슬라이드, 코드는 다음 챕터에서)

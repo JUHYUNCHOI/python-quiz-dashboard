@@ -931,15 +931,15 @@ export function StrategySlide({ E }) {
       </Say>
       {s.kind === "plan" ? (
         <div style={{ maxWidth: 470, margin: "0 auto" }}>
-          <Slab n="1" color="#15803d" bg="#f0fdf4">{t(E, <>How many red can I make <b>right now</b> (convert my blue)? Call it <b>init</b>.</>, <>지금 가진 걸로 빨강 몇 개(내 파랑 환전)? 이걸 <b>init</b> 이라 해요.</>)}</Slab>
-          <Slab n="2" color="#2563eb" bg="#eff6ff">{t(E, <>If <b>init &lt; goal</b>, count the fewest extra chips — assuming the <b>trickster colors them worst</b>.</>, <><b>init 이 목표보다 작으면</b>, 심술쟁이가 <b>최악으로 색칠할 때</b> 필요한 최소 추가 칩을 세요.</>)}</Slab>
+          <Slab n="1" color="#15803d" bg="#f0fdf4">{t(E, <>How many red can I make <b>right now</b> (convert my blue)? Call it <b>red_now</b>.</>, <>지금 가진 걸로 빨강 몇 개(내 파랑 환전)? 이걸 <b>red_now</b>라 해요.</>)}</Slab>
+          <Slab n="2" color="#2563eb" bg="#eff6ff">{t(E, <>If <b>red_now &lt; goal</b>, count the fewest extra chips — assuming the <b>trickster colors them worst</b>.</>, <><b style={NW}>red_now가 목표보다 작으면</b>, 심술쟁이가 <b style={NW}>최악으로 색칠할 때</b> 필요한 최소 추가 칩을 세요.</>)}</Slab>
         </div>
       ) : (
         <div style={{ maxWidth: 470, margin: "0 auto" }}>
-          <Slab n="①" color="#15803d" bg="#f0fdf4" title={t(E, "init ≥ goal", "init ≥ 목표")}>
+          <Slab n="①" color="#15803d" bg="#f0fdf4" title={t(E, "red_now ≥ goal", "red_now ≥ 목표")}>
             {t(E, "→ already there, the answer is 0.", "→ 이미 도달, 답은 0.")}
           </Slab>
-          <Slab n="②" color="#2563eb" bg="#eff6ff" title={t(E, "init < goal", "init < 목표")}>
+          <Slab n="②" color="#2563eb" bg="#eff6ff" title={t(E, "red_now < goal", "red_now < 목표")}>
             {t(E, "→ a direct O(1) formula for the extra chips (next tools). No search, no loop.", "→ 추가 칩을 O(1) 공식으로 바로 (다음 도구). 탐색도 반복도 없이.")}
           </Slab>
         </div>
@@ -965,25 +965,81 @@ export function PlanSlide({ E }) {
         <Slab n="1" color="#15803d" bg="#f0fdf4" title={t(E, "First, make all the red I can right now", "먼저, 가진 걸로 빨강을 최대한 만들어요")}>
           {t(E, <>If it reaches the goal → answer <b>0</b>. If not, see <b>how much more</b> red I need.</>,
                <>목표에 닿으면 → 답 <b>0</b>. 아니면 빨강이 <b>얼마나 더</b> 필요한지 봐요.</>)}
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", marginTop: 4, wordBreak: "break-word" }}>init = A + (B//cB)*cA</div>
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", marginTop: 4, wordBreak: "break-word" }}>red_now = A + (B//cB)*cA</div>
         </Slab>
         <Slab n="2" color="#dc2626" bg="#fef2f2" title={t(E, "The trickster fills the leftover to the max", "심술쟁이는 자투리를 최대로 채우게 해요")}>
           {t(E, <>from now <b>(B%cB)</b> up to the max <b>(cB−1)</b> — that many blue are wasted (goal − now). <span style={{color:"#94a3b8"}}>← 파랑 낭비 step</span></>,
                <>지금 자투리 <b>(B%cB)</b>에서 최대 <b>(cB−1)</b>까지 — 그 차이만큼 파랑이 낭비돼요 (목표−지금). <span style={{color:"#94a3b8"}}>← 파랑 낭비 스텝</span></>)}
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", marginTop: 4, wordBreak: "break-word" }}>waste = (cB−1) − (B%cB)</div>
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", marginTop: 4, wordBreak: "break-word" }}>wasted_blue = (cB−1) − (B%cB)</div>
         </Slab>
         <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "Fill the rest with the least-helpful color", "남은 부족분을 가장 덜 도와주는 색으로 채워요")}>
           {t(E, <>swapping pays → red (1 each); otherwise blue in groups. <span style={{color:"#94a3b8"}}>← 빨강 / 파랑 steps</span></>,
                <>환전이 이득이면 빨강(1개씩), 손해면 파랑 그룹으로. <span style={{color:"#94a3b8"}}>← 빨강 / 파랑 스텝</span></>)}
         </Slab>
         <Slab n="4" color="#7c3aed" bg="#f5f3ff" title={t(E, "Add them up — that's the answer", "다 더하면 그게 답이에요")}>
-          {t(E, <>the last red is just <b>one chip</b> (the <b>+1</b>). Use 64-bit — the answer can reach 10¹⁸.</>,
-               <>마지막 빨강 1개는 <b>칩 하나</b>면 돼요 (<b>+1</b>). 답이 크니 64비트.</>)}
-          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", marginTop: 4, wordBreak: "break-word" }}>답 = waste + need + 1</div>
+          {t(E, <>the last red is just <b>one chip</b> (the <b>+1</b>) <span style={{color:"#94a3b8"}}>← 'last one is special' step</span>. Use 64-bit — the answer can reach 10¹⁸.</>,
+               <>마지막 빨강 1개는 <b>칩 하나</b>면 돼요 (<b>+1</b>) <span style={{color:"#94a3b8"}}>← '마지막 한 개' 스텝</span>. 답이 크니 64비트.</>)}
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", marginTop: 4, wordBreak: "break-word" }}>답 = wasted_blue + to_fill + 1</div>
         </Slab>
       </div>
       <div style={{ marginTop: 12, textAlign: "center", fontSize: 12, fontWeight: 800, color: "#15803d", wordBreak: "keep-all", textWrap: "balance" }}>
         {t(E, "→ Now the code (next chapter) is exactly these steps.", "→ 이제 코드(다음 챕터)는 이 순서 그대로예요.")}
+      </div>
+    </div>
+  );
+}
+
+/* ═══ 도구: 마지막 한 개는 따로 (경계 / off-by-one) — 왜 −1 했다 +1 하나 ═══ */
+export function LastStepSlide({ E }) {
+  const steps = [{ kind: "setup" }, { kind: "why" }, { kind: "when" }];
+  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "The last one is special", "마지막 한 개는 따로")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Say tone={s.kind === "why" ? "aha" : "go"}>
+        {s.kind === "setup"
+          ? t(E, <>Look at the moment <b>right before the goal</b>. Once wasting is done, <b>any one more chip</b> finishes a red — blue completes the pair, red counts directly.</>,
+                 <>목표 <b>딱 직전</b>을 봐요. 낭비가 끝나면, 아무 칩이나 <b style={NW}>하나만 더</b> 받아도 빨강이 완성돼요 — 파랑이면 짝이 채워지고, 빨강이면 그대로.</>)
+          : s.kind === "why"
+          ? t(E, <>So the last red isn't a group. <b>Subtract 1</b> from the shortage, compute the rest, then add that one chip back as <b>+1</b> at the very end.</>,
+                 <>그래서 마지막 빨강 1개는 묶음으로 안 세요. 부족분에서 <b style={NW}>1개를 빼고(−1)</b> 나머지를 계산한 뒤, 맨 끝에 그 한 칩을 <b style={NW}>+1</b> 해요.</>)
+          : t(E, <>This trick shows up in <b>other problems</b> too:</>, <>이건 <b>다른 문제</b>에서도 나와요:</>)}
+      </Say>
+      {s.kind === "setup" ? (
+        <div style={{ maxWidth: 470, margin: "0 auto" }}>
+          <Slab n="☕" color="#b45309" bg="#fffbeb" title={t(E, "Like a coffee stamp card", "커피 도장 카드처럼")}>
+            {t(E, <>You need many stamps for a free coffee. But an <b>almost-full card</b> needs just <b>1 stamp</b> — the last coffee isn't a whole card.</>,
+                 <>도장 여러 개 모아야 커피 1잔. 근데 <b>거의 다 찬 카드</b>는 도장 <b style={NW}>1개</b>면 커피가 나와요 — 마지막 한 잔은 "카드 통째"가 아니에요.</>)}
+          </Slab>
+        </div>
+      ) : s.kind === "why" ? (
+        <div style={{ maxWidth: 470, margin: "0 auto" }}>
+          <Slab n="−1" color={RED} bg={REDBG} title={t(E, "hold back the last red", "마지막 빨강 1개는 빼둠")}>
+            {t(E, <>count only <b>shortage − 1</b> the group way.</>, <>부족분에서 <b style={NW}>1개를 빼고</b> 나머지만 묶음으로 세요.</>)}
+          </Slab>
+          <Slab n="+1" color="#15803d" bg="#f0fdf4" title={t(E, "give it back at the end", "맨 끝에 되돌림")}>
+            {t(E, <>that last red is just <b>one chip</b> → <b>+ 1</b>.</>, <>그 마지막 빨강은 <b style={NW}>칩 하나</b>면 완성 → <b style={NW}>+ 1</b>.</>)}
+          </Slab>
+        </div>
+      ) : (
+        <div style={{ maxWidth: 470, margin: "0 auto" }}>
+          <Slab n="1" color="#2563eb" bg="#eff6ff" title={t(E, "When?", "언제 쓰나?")}>
+            {t(E, <>filling something in <b>fixed-size groups</b>, where the <b>very last one is an exception</b>.</>,
+                 <>뭔가를 <b>고정 크기 묶음</b> 단위로 채우는데, <b>맨 끝 하나가 예외</b>일 때.</>)}
+          </Slab>
+          <Slab n="2" color="#7c3aed" bg="#f5f3ff" title={t(E, "Habit", "습관")}>
+            {t(E, <>counting loops/groups? always ask <b>"is the first or last one different?"</b> (fencepost)</>,
+                 <>반복·묶음을 셀 땐 늘 <b>"맨 처음/맨 끝이 다르지 않나?"</b> 자문해요. (fencepost)</>)}
+          </Slab>
+          <Slab n="3" color="#0f766e" bg="#f0fdfa" title={t(E, "Check it", "검산")}>
+            {t(E, <>plug the smallest edge case (<b>fA = 1</b>, short by exactly 1) by hand to confirm the formula.</>,
+                 <>가장 작은 경계값(<b style={NW}>fA = 1</b>, 딱 1개 부족)을 손으로 넣어 공식이 맞는지 확인.</>)}
+          </Slab>
+        </div>
+      )}
+      <div style={{ marginTop: 20 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
       </div>
     </div>
   );
