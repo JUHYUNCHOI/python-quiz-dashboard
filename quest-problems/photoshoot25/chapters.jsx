@@ -256,7 +256,18 @@ export function makePhotoshoot25Ch2(E, lang = "py") {
         narr: t(E,
           "Now the code — you just saw these variables move. S keeps each photo's score; each update touches only the cow's rectangle.",
           "이제 코드예요 — 방금 이 변수들이 움직이는 걸 봤죠. S 는 각 사진 점수, 업데이트는 소의 사각형만 건드려요."),
-        content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
+        content: (
+          <div>
+            {lang === "py" && (
+              <div style={{ margin: "0 16px 6px", padding: "9px 13px", borderRadius: 10, background: "#fffbeb", border: "1.5px solid #fbbf24", color: "#92400e", fontSize: 12.5, fontWeight: 700, lineHeight: 1.6, wordBreak: "keep-all", textAlign: "center" }}>
+                {t(E,
+                  <>⚠️ This problem's data is large, so Python <b>times out on the later tests (12/18)</b>. The algorithm is identical — great for understanding — but submit in <b>C++</b> for full marks.</>,
+                  <>⚠️ 이 문제는 데이터가 커서 Python은 <b>뒷 테스트에서 시간초과 (12/18)</b>. 알고리즘은 똑같으니 이해용으론 완벽하지만, USACO 만점은 <b>C++</b>로 제출해요.</>)}
+              </div>
+            )}
+            <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />
+          </div>
+        ),
       };
     })(),
   ];

@@ -237,8 +237,8 @@ export function getPhotoshoot25Sections(E) {
       ],
       pyOnly: [
         t(E,
-          "sys.stdin.readline + collected output is essential for 30000 queries in Python.",
-          "Python 에서 30000 쿼리는 sys.stdin.readline + 출력 모아서 한 번에 필수."),
+          "Even with sys.stdin.readline + collected output, Python is too slow here — it times out on the larger tests (12/18). Same algorithm; submit in C++ for full marks.",
+          "sys.stdin.readline + 출력 모으기를 써도 Python 은 이 문제엔 느려서 큰 테스트에서 시간초과 (12/18). 알고리즘은 같고, 만점은 C++ 로 제출."),
       ],
       cppOnly: [
         t(E,
@@ -314,7 +314,7 @@ export function downloadPhotoshoot25PDF(E, sections, lang = "py") {
 </style></head><body>
 <div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO 2026 First Contest, Bronze #3 · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<div class="sub">USACO Dec 2025, Bronze #3 · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>
