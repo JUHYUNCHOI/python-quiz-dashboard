@@ -967,9 +967,9 @@ export function PlanSlide({ E }) {
                <>목표에 닿으면 → 답 <b>0</b>. 아니면 빨강이 <b>얼마나 더</b> 필요한지 봐요.</>)}
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", marginTop: 4, wordBreak: "break-word" }}>init = A + (B//cB)*cA</div>
         </Slab>
-        <Slab n="2" color="#dc2626" bg="#fef2f2" title={t(E, "The trickster wastes blue first", "심술쟁이는 먼저 파랑을 버리게 해요")}>
-          {t(E, <>it makes blue that can't be swapped — the leftover (cB−1) is thrown away. <span style={{color:"#94a3b8"}}>← 파랑 낭비 step</span></>,
-               <>환전 못 하는 파랑(자투리 cB−1개)으로 낭비시켜요. <span style={{color:"#94a3b8"}}>← 파랑 낭비 스텝</span></>)}
+        <Slab n="2" color="#dc2626" bg="#fef2f2" title={t(E, "The trickster fills the leftover to the max", "심술쟁이는 자투리를 최대로 채우게 해요")}>
+          {t(E, <>from now <b>(B%cB)</b> up to the max <b>(cB−1)</b> — that many blue are wasted (goal − now). <span style={{color:"#94a3b8"}}>← 파랑 낭비 step</span></>,
+               <>지금 자투리 <b>(B%cB)</b>에서 최대 <b>(cB−1)</b>까지 — 그 차이만큼 파랑이 낭비돼요 (목표−지금). <span style={{color:"#94a3b8"}}>← 파랑 낭비 스텝</span></>)}
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", marginTop: 4, wordBreak: "break-word" }}>waste = (cB−1) − (B%cB)</div>
         </Slab>
         <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "Fill the rest with the least-helpful color", "남은 부족분을 가장 덜 도와주는 색으로 채워요")}>

@@ -285,7 +285,7 @@ export function getChipXchgWalk(E, lang = "py") {
       { hi: [18, 22], bubble: t(E, "Each test: read the 5 numbers → call solve → print.", "각 테스트: 숫자 5개 읽어 → solve 호출 → 출력.") },
       { hi: [5, 7], bubble: t(E, "init = red I can make now (convert my blue). If it already reaches fA → 0 extra.", "init = 지금 가진 걸로 만드는 빨강 (내 파랑 환전). 목표 이상이면 추가 0.") },
       { hi: [8, 8], bubble: t(E, "Shortfall = fA − init. But the LAST red comes free from one chip (not a whole group), so subtract 1 here and add it back at the +1. That's deficit.", "부족분 = fA − init. 근데 마지막 빨강 1개는 그룹 없이 칩 하나로 채워져요 → 여기서 1 빼고(deficit), 답에서 +1 로 되돌려요. (경계)") },
-      { hi: [9, 9], bubble: t(E, "Trickster step 1: waste blue — leftover to cB−1 (0 red). ← the '파랑 낭비' step.", "심술쟁이 1단계: 파랑을 자투리 cB−1 로 버림 (빨강 0). ← '파랑 낭비' 스텝.") },
+      { hi: [9, 9], bubble: t(E, "Trickster step 1: max out the leftover. From now (B%cB) up to the max (cB−1) → (cB−1)−(B%cB) more blue, all wasted. Like deficit: goal − now.", "심술쟁이 1단계: 자투리를 꽉 채워요. 지금(B%cB)에서 최대(cB−1)까지 → (cB−1)−(B%cB)개 더, 다 낭비. deficit 처럼 '목표 − 지금'. ← '파랑 낭비' 스텝.") },
       { hi: [10, 12], bubble: t(E, "Fill the rest with the least-helpful color: red (1 each) if swap pays, blue-in-groups if it loses. ← the '빨강 / 파랑' steps.", "남은 부족분은 덜 도와주는 색으로: 환전 이득이면 빨강(1개씩), 손해면 파랑 그룹. ← '파랑 낭비 / 빨강' 스텝.") },
       { hi: [13, 13], bubble: t(E, "answer = wasted blue + filled + the last red (+1). One calc — no loop, no search. O(1).", "답 = 버린 파랑 + 채운 것 + 마지막 빨강(+1). 계산 한 번 — 반복도 탐색도 없이 O(1).") },
     ] };
@@ -320,7 +320,7 @@ export function getChipXchgWalk(E, lang = "py") {
     { hi: [3, 7], bubble: t(E, "main — each test: read the 5 numbers → call solve → print.", "main — 각 테스트: 숫자 5개 읽어 → solve 호출 → 출력.") },
     { hi: [9, 13], bubble: t(E, "init = red I can make now (convert my blue). If it already reaches fA → 0 extra.", "init = 지금 가진 걸로 만드는 빨강 (내 파랑 환전). 목표 이상이면 추가 0.") },
     { hi: [14, 14], bubble: t(E, "Shortfall = fA − init. But the LAST red comes free from one chip (not a whole group), so subtract 1 here and add it back at the +1. That's deficit.", "부족분 = fA − init. 근데 마지막 빨강 1개는 그룹 없이 칩 하나로 채워져요 → 여기서 1 빼고(deficit), 답에서 +1 로 되돌려요. (경계)") },
-    { hi: [15, 15], bubble: t(E, "Trickster step 1: waste blue — leftover to cB−1 (0 red). ← the '파랑 낭비' step.", "심술쟁이 1단계: 파랑을 자투리 cB−1 로 버림 (빨강 0). ← '파랑 낭비' 스텝.") },
+    { hi: [15, 15], bubble: t(E, "Trickster step 1: max out the leftover. From now (B%cB) up to the max (cB−1) → (cB−1)−(B%cB) more blue, all wasted. Like deficit: goal − now.", "심술쟁이 1단계: 자투리를 꽉 채워요. 지금(B%cB)에서 최대(cB−1)까지 → (cB−1)−(B%cB)개 더, 다 낭비. deficit 처럼 '목표 − 지금'. ← '파랑 낭비' 스텝.") },
     { hi: [16, 19], bubble: t(E, "Fill the rest with the least-helpful color: red (1 each) if swap pays, blue-in-groups if it loses. ← the '빨강 / 파랑' steps.", "남은 부족분은 덜 도와주는 색으로: 환전 이득이면 빨강(1개씩), 손해면 파랑 그룹. ← '파랑 낭비 / 빨강' 스텝.") },
     { hi: [20, 20], bubble: t(E, "answer = wasted blue + filled + the last red (+1). One calc — no loop, no search. O(1).", "답 = 버린 파랑 + 채운 것 + 마지막 빨강(+1). 계산 한 번 — 반복도 탐색도 없이 O(1).") },
   ] };
