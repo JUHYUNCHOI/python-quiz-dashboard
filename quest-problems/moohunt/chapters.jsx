@@ -34,7 +34,7 @@ export function makeMooHuntCh1(E) {
           </div>
 
           {/* ⚠️ Performance note */}
-          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, fontSize: 12, color: "#92400e", lineHeight: 1.5 }}>
+          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, fontSize: 12, color: "#92400e", lineHeight: 1.5, wordBreak: "keep-all" }}>
             ⚠️ {t(E,
               "The Python solution is correct on samples but may TLE at max constraints (N = 20) under USACO's 2-second Python limit. The C++ version handles full constraints comfortably.",
               "Python 풀이는 샘플에선 통과하지만 최대 제약 (N = 20) 에서 USACO 의 2초 Python 제한에 걸려 부분 점수만 받을 수 있어요. C++ 풀이는 풀 제약에서도 여유롭게 통과해요.")}
@@ -44,7 +44,7 @@ export function makeMooHuntCh1(E) {
             <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6, wordBreak: "keep-all" }}>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
@@ -112,7 +112,7 @@ export function makeMooHuntCh1(E) {
               <div>4 2</div>
             </div>
           </div>
-          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: 12, fontSize: 12, color: "#7f1d1d", lineHeight: 1.6 }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: 12, fontSize: 12, color: "#7f1d1d", lineHeight: 1.6, wordBreak: "keep-all" }}>
             {t(E, "Two boards reach the max score of 4:", "최고 점수 4 에 도달하는 보드는 두 가지:")}
             <div style={{ marginTop: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#dc2626" }}>
               MOOOM &nbsp; · &nbsp; MOOMM
@@ -176,13 +176,13 @@ export function makeMooHuntCh1(E) {
         "How many distinct boards exist when N ≤ 20?",
         "N ≤ 20 일 때 서로 다른 보드는 몇 개?"),
       options: [
-        t(E, "About 1,000,000 (2^N) — small enough to try all", "약 100만 (2^N) — 전부 시도 가능"),
+        t(E, "About 1,000,000 (2^N) — representable with a bitmask", "약 100만 (2^N) — 비트마스크로 표현"),
         t(E, "About N! — way too many to enumerate", "약 N! — 너무 많아 열거 불가"),
       ],
       correct: 0,
       explain: t(E,
-        "Right! 2^20 ≈ 1M. Each cell is M or O — that's a binary choice, perfect for a bitmask. We can try every board.",
-        "맞아! 2^20 ≈ 100 만. 각 칸이 M/O 이진 선택이라 비트마스크로 표현. 전부 시도해 볼 수 있어."),
+        "Right! 2^20 ≈ 1M. Each cell is M or O — a binary choice, perfect for a bitmask, so one number defines a whole board. Enumerating them is fine — but scoring each board still costs work (next).",
+        "맞아! 2^20 ≈ 100 만. 각 칸이 M/O 이진 선택이라 비트마스크로 한 보드를 숫자 하나로 딱 표현해. 보드를 다 훑는 건 되는데 — 보드마다 점수 매기는 비용이 남았어 (다음)."),
     },
     // 1-5: NumInput - count distinct triples to dedup
     {
@@ -197,6 +197,35 @@ export function makeMooHuntCh1(E) {
         "Pick x first, then y, then z — each from a shrinking pool.",
         "x 를 먼저, 그 다음 y, 그 다음 z 를 골라봐 — 풀이 줄어들지."),
       answer: 6840,
+    },
+    // 1-6: 브루트 한계 — 1M 보드 × 6840 삼중쌍 = 7×10⁹ 벽 (배너와 일관). review 2026-08-18.
+    {
+      type: "reveal",
+      narr: t(E,
+        "So: build all 1M boards, score each against every distinct triple. Does that finish in time?",
+        "그럼: 100만 보드를 다 만들어 각각을 모든 삼중쌍으로 채점. 시간 안에 끝날까?"),
+      content: (
+        <div style={{ padding: 20, wordBreak: "keep-all" }}>
+          <div style={{ maxWidth: 470, margin: "0 auto", background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 12, padding: "14px 16px" }}>
+            <div style={{ fontWeight: 800, color: "#b91c1c", marginBottom: 8, fontSize: 13 }}>
+              🐌 {t(E, "Every board × every triple", "보드마다 × 삼중쌍마다")}
+            </div>
+            <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.9, fontFamily: "'JetBrains Mono',monospace" }}>
+              <div>{t(E, "boards", "보드")} = 2²⁰ ≈ <b>1,000,000</b></div>
+              <div>{t(E, "distinct triples", "삼중쌍")} ≈ <b>6,840</b></div>
+              <div style={{ color: "#b91c1c", fontWeight: 800, marginTop: 4 }}>→ 1,000,000 × 6,840 ≈ <b>7×10⁹</b></div>
+            </div>
+            <div style={{ fontSize: 11.5, color: "#7f1d1d", marginTop: 8, lineHeight: 1.6 }}>
+              {t(E, "A computer does about 10⁸~10⁹ simple steps per second — 7×10⁹ is over the limit, so this brute force times out on the biggest cases (partial credit).",
+                    "컴퓨터는 1 초에 대략 10⁸~10⁹ 번 계산해요 — 7×10⁹ 는 제한을 넘어서, 이 완전탐색은 큰 케이스에서 시간초과 (부분 점수).")}
+            </div>
+          </div>
+          <div style={{ maxWidth: 470, margin: "12px auto 0", fontSize: 12.5, color: "#5b21b6", textAlign: "center", fontWeight: 700, wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E, "→ The idea is right, and the code next is exactly this brute. Full marks would need a smarter count (beyond this quest).",
+                  "→ 아이디어는 맞고, 다음 코드가 바로 이 완전탐색이에요. 만점은 더 똑똑한 세기가 필요해요 (이 quest 범위 밖).")}
+          </div>
+        </div>
+      ),
     },
   ];
 }
