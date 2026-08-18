@@ -265,6 +265,7 @@ export default function QuestPage() {
   const [algoTopicsDone, setAlgoTopicsDone] = useState(0)
   const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set())
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(["USACO", "MCC", "MCO"]))
+  const [mccDiff, setMccDiff] = useState<number | null>(null)   // MCC 난이도 필터 (null=전체)
   const [betaOptIn, setBetaOptIn] = useReleasePref()
 
   // Phase 5: Filter helper. A quest is visible if:
@@ -599,6 +600,34 @@ export default function QuestPage() {
                 {/* Contest-grouped problem list (USACO: Season → 4-col grid of contest cards) */}
                 {isExpanded && (
                   <div className="border-t-2 border-black bg-gray-50">
+                    {section.label === "MCC" && (
+                      <div className="flex items-center gap-1.5 flex-wrap px-3 py-2 border-b-2 border-gray-200 bg-white">
+                        <span className="text-[11px] font-bold text-gray-500 mr-1">🎚️ 난이도</span>
+                        {([null, 1, 2, 3, 4, 5] as (number | null)[]).map(lv => {
+                          const on = mccDiff === lv
+                          const label = lv === null ? "전체" : `Lv${lv}`
+                          const color = lv === null ? "#334155" : DIFF_COLOR[lv as 1 | 2 | 3 | 4 | 5]
+                          const pool = lv === null
+                            ? section.problems
+                            : section.problems.filter(p => MCC_DIFFICULTY[p.id] === lv)
+                          const cnt = pool.length
+                          const done = pool.filter(p => solvedSet.has(p.id)).length
+                          if (cnt === 0) return null   // 그 난이도에 (보이는) 문제가 없으면 칩 숨김
+                          return (
+                            <button
+                              key={String(lv)}
+                              onClick={() => setMccDiff(lv)}
+                              className="text-[11px] font-black px-2 py-0.5 rounded-full border-2 transition-colors"
+                              style={on
+                                ? { background: color, color: "#fff", borderColor: color }
+                                : { background: "#fff", color, borderColor: color }}
+                            >
+                              {label} <span className="font-bold opacity-80">{done}/{cnt}</span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    )}
                     {(section.label === "USACO"
                       ? groupBySeason(groups)
                       : [{ season: "", contests: groups }]
@@ -621,12 +650,16 @@ export default function QuestPage() {
                           {/* Contest cards: responsive grid */}
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 p-2">
                             {contests.map(({ contest, items }) => {
-                              const groupSolved = items.filter(p => solvedSet.has(p.id)).length
-                              const allDone = groupSolved === items.length && items.length > 0
-                              // MCC: 쉬운 것부터 (난이도 오름차순). 다른 섹션은 원래 순서 유지.
-                              const rows = section.label === "MCC"
+                              // MCC: 쉬운 것부터 (난이도 오름차순) + 난이도 필터. 다른 섹션은 원래 순서.
+                              const sorted = section.label === "MCC"
                                 ? [...items].sort((a, b) => (MCC_DIFFICULTY[a.id] ?? 9) - (MCC_DIFFICULTY[b.id] ?? 9))
                                 : items
+                              const rows = (section.label === "MCC" && mccDiff !== null)
+                                ? sorted.filter(p => MCC_DIFFICULTY[p.id] === mccDiff)
+                                : sorted
+                              if (rows.length === 0) return null   // 필터에 안 걸리는 대회 카드는 숨김
+                              const groupSolved = rows.filter(p => solvedSet.has(p.id)).length
+                              const allDone = groupSolved === rows.length && rows.length > 0
                               return (
                                 <div key={contest} className={`rounded-lg border-2 overflow-hidden ${
                                   allDone ? "border-green-400 bg-green-50"
@@ -647,7 +680,7 @@ export default function QuestPage() {
                                       : groupSolved > 0 ? "bg-amber-200 text-amber-800"
                                       : "bg-gray-200 text-gray-600"
                                     }`}>
-                                      {groupSolved}/{items.length}
+                                      {groupSolved}/{rows.length}
                                     </span>
                                   </div>
                                   {/* Problems list inside the card */}
