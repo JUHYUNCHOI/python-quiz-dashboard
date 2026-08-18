@@ -95,7 +95,7 @@ export function SimNav({
   const atStart = safe === 0;
   const atEnd = safe === total - 1;
   return (
-    <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
+    <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
       <button
         onClick={() => onIdx(0)}
         disabled={atStart}

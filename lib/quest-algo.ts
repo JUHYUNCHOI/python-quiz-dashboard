@@ -35,6 +35,8 @@ export const QUEST_ALGO: Record<string, string> = {
   buymilk: "greedy",
   // chipxchg: 제거 — USACO 공식 풀이는 이분탐색이 아니라 O(1) 닫힌 공식(애드혹 수학+경우나눔).
   //   심술쟁이 최악을 직접 계산 → 표준 알고 토픽 없음 → 링크 안 띄우는 게 정확.
+  // cowsplits: 미수록 — 고전 알고리즘 없음. 관찰(답은 −1/1/2뿐)+경우나눔+블록쌍 직접 구성(constructive/ad-hoc).
+  //   20개 토픽 어디에도 안 맞음 → 태그 붙이면 무관한 학습페이지로 보냄 → 안 띄우는 게 정확 (선생님 확인 2026-08-18).
   // checkups: 제거 — center-expansion(대칭 증분)은 표준 알고 토픽 아님 (선생님 2026-07-02).
   cowcollege: "sorting", cowtipping: "greedy", crossroad1: "hashtable", crossroad3: "sorting",
   explodingarrow: "graph", familytree: "tree", fans: "greedy", favperm2: "backtracking", feedcows: "greedy",

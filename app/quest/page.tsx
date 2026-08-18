@@ -11,6 +11,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { ALL_TOPICS } from "@/data/algorithm/topics"
 import { isVisibleInCatalog, getReleaseStage, getQuestMeta } from "@/lib/quest-meta"
+import { MCC_DIFFICULTY, DIFF_COLOR } from "@/lib/mcc-difficulty"
 import { masteredConcepts, suggestNextConcepts } from "@/lib/concept-graph"
 import { CONCEPT_ONTOLOGY, type ConceptId } from "@/lib/quest-meta"
 import { useReleasePref } from "@/components/quest/use-release-pref"
@@ -622,6 +623,10 @@ export default function QuestPage() {
                             {contests.map(({ contest, items }) => {
                               const groupSolved = items.filter(p => solvedSet.has(p.id)).length
                               const allDone = groupSolved === items.length && items.length > 0
+                              // MCC: 쉬운 것부터 (난이도 오름차순). 다른 섹션은 원래 순서 유지.
+                              const rows = section.label === "MCC"
+                                ? [...items].sort((a, b) => (MCC_DIFFICULTY[a.id] ?? 9) - (MCC_DIFFICULTY[b.id] ?? 9))
+                                : items
                               return (
                                 <div key={contest} className={`rounded-lg border-2 overflow-hidden ${
                                   allDone ? "border-green-400 bg-green-50"
@@ -647,8 +652,9 @@ export default function QuestPage() {
                                   </div>
                                   {/* Problems list inside the card */}
                                   <div className="flex flex-col">
-                                    {items.map((problem, idx) => {
+                                    {rows.map((problem, idx) => {
                                       const isSolved = solvedSet.has(problem.id)
+                                      const diff = MCC_DIFFICULTY[problem.id]
                                       const stage = getReleaseStage(problem.id)
                                       const ready = isReady(problem.id)
                                       const numMatch = problem.sub.match(/#(\d+)$/) || problem.sub.match(/P(\d+)$/)
@@ -673,6 +679,15 @@ export default function QuestPage() {
                                           }`}>
                                             {problem.title}
                                           </span>
+                                          {diff && (
+                                            <span
+                                              title={`난이도 ${diff}/5`}
+                                              className="text-[9px] font-black px-1.5 py-px rounded-full flex-shrink-0 text-white"
+                                              style={{ background: DIFF_COLOR[diff] }}
+                                            >
+                                              Lv{diff}
+                                            </span>
+                                          )}
                                           {stage === "internal" && (
                                             <span className="text-[9px] font-black uppercase px-1 py-px rounded bg-rose-100 text-rose-700 border border-rose-300 flex-shrink-0">
                                               internal
