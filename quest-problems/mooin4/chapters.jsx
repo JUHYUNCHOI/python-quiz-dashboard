@@ -149,7 +149,7 @@ MOOMO`}
           </div>
           <div style={{ marginTop: 10, padding: 10, background: "#ecfdf5", border: "1px solid #86efac", borderRadius: 8, fontSize: 12, color: "#166534", lineHeight: 1.6 }}>
             {t(E,
-              "Final screen = OOMOO. So typing MOOMO produces OOMOO. Notice the LAST key M is the only key that never gets flipped after — it appears as O in S because the final O flipped it.",
+              "Final screen = OOMOO. So typing MOOMO produces OOMOO. The second-to-last key you typed (M) gets flipped once by that final O, so it shows up as O in S.",
               "최종 화면 = OOMOO. MOOMO 를 치면 OOMOO 가 나와요. 마지막에서 두 번째로 친 M 은 마지막 O 한 번에 의해 뒤집혀서 S 에서는 O 로 보여요.")}
           </div>
         </div>),
@@ -188,6 +188,38 @@ MOOMO`}
         "Just count the letter O in the string MMO.",
         "문자열 MMO 안의 O 글자 개수만 세면 돼."),
       answer: 1,
+    },
+    // 1-6: 통찰 — 뒤→앞 재구성 + O 홀짝 (코드 전에 평이하게). review 2026-08-18.
+    {
+      type: "reveal",
+      narr: t(E,
+        "We know the LAST key. How do we get the key before it… and the one before that? Here's the whole idea — in plain words, before any code.",
+        "마지막 키는 알아요. 그럼 그 앞 키는? 또 그 앞은? 코드 보기 전에, 핵심을 말로 먼저 잡아요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, color: "#5b21b6", marginBottom: 12, textWrap: "balance" }}>
+            💡 {t(E, "Work backwards — only the O parity matters", "핵심: 뒤에서부터, O 홀짝만 세면 돼요")}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 480, margin: "0 auto" }}>
+            {[
+              t(E, <><b>Start at the end.</b> Nothing flips after the last keystroke, so the last key = <b>S[N-1]</b>. That's our foothold.</>,
+                   <><b>맨 끝부터.</b> 마지막 키 뒤엔 뒤집힘이 없어요 → 마지막 키 = <b>S[N-1]</b>. 이게 발판이에요.</>),
+              t(E, <>Each key shows up flipped once for <b>every O typed after it</b>. But O flips M↔O, and flipping twice undoes itself — so only <b>whether that count is even or odd (parity)</b> matters.</>,
+                   <>각 키는 <b>그 뒤에 친 O 개수</b>만큼 뒤집혀 화면에 나와요. 근데 O는 M↔O로 뒤집고, 두 번 뒤집으면 원래대로 → <b>그 개수의 홀짝(parity)만</b> 중요해요.</>),
+              t(E, <>So sweep <b>right → left</b> holding the running O-parity (<b>flips</b>). Un-flip each S[i] by that parity to recover the real key; if that key is O, flip the parity. One backward pass — that's the code.</>,
+                   <>그래서 <b>뒤에서 앞으로</b> 훑어요. 지금까지 본 O의 홀짝(<b>flips</b>)을 들고, S[i]를 그 홀짝만큼 되돌리면 진짜 친 키. 그 키가 O면 flips를 뒤집어요. 거꾸로 한 번 훑기 — 그게 코드예요.</>),
+            ].map((body, i) => (
+              <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "#faf5ff", border: "1.5px solid #c4b5fd", borderRadius: 12, padding: "11px 14px" }}>
+                <span style={{ flexShrink: 0, width: 22, height: 22, borderRadius: 999, background: "#7c3aed", color: "#fff", fontSize: 12, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</span>
+                <div style={{ fontSize: 13, lineHeight: 1.65, color: "#334155" }}>{body}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, textAlign: "center", fontSize: 12.5, fontWeight: 700, color: "#15803d", wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E, "→ Next chapter: this exact idea, line by line.", "→ 다음 챕터: 이 생각 그대로, 코드 한 줄씩.")}
+          </div>
+        </div>
+      ),
     },
   ];
 }

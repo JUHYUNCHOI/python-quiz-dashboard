@@ -190,7 +190,7 @@ export function downloadMooin4PDF(E, sections, lang = "py") {
 </style></head><body>
 <div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO 2026 Second Contest, Bronze #1 · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<div class="sub">USACO Jan 2026, Bronze #1 · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>
