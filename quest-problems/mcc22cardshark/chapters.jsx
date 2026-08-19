@@ -219,7 +219,7 @@ export function makeMcc22CardSharkCh1(E) {
       hint: t(E,
         "Picking highest each turn: who picks first, and how many turns does P1 get?",
         "매 턴 가장 큰 것을 가져가요. 누가 먼저 가져가고, P1 은 몇 번 가져가?"),
-      answer: 3,
+      answer: 4,
     },
   ];
 }

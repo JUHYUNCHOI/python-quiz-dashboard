@@ -19,14 +19,10 @@ function BakeryAuditSim({ E }) {
   const [revealed, setRevealed] = useState(false);
 
   const sorted = [...arr].sort((a, b) => b - a);
-  // Group of 4: indices 0..3 → cheapest of group = sorted[3] (the smaller one in top-4)
-  // The "free" pick in each group of 4 = the 2nd cheapest of that group
-  // = sorted[2] of group (i.e. global indices 2, 6, 10, ...) when greedy takes top-4 each block?
-  // SOLUTION_CODE marks (i+1) % 4 == 0 → indices 3, 7, 11, ... as free.
-  // That's the cheapest of each block of 4 in the descending list — the 2nd cheapest of the block-of-4.
-  // (Top-4 sorted desc: [20,15,10,5] → cheapest "5" = 2nd cheapest in group, since the 1st cheapest is the leftover.)
-  // We mirror SOLUTION_CODE exactly: index i with (i+1)%4==0 in sorted desc is FREE.
-  const isFree = (i) => (i + 1) % 4 === 0;
+  // Descending sort. Each FULL group of 4 (from the top) gives its 2nd-cheapest for free.
+  // In a block [big, mid, 2nd-cheapest, cheapest] that's index 2 → global i % 4 === 2.
+  // Only full groups of 4 count (i + 2 <= N), so a leftover <4 tail pays full.
+  const isFree = (i) => i % 4 === 2 && i + 2 <= sorted.length;
   const total = sorted.reduce((s, v, i) => s + (isFree(i) ? 0 : v), 0);
   const saved = sorted.reduce((s, v, i) => s + (isFree(i) ? v : 0), 0);
 
@@ -42,7 +38,7 @@ function BakeryAuditSim({ E }) {
       padding: "12px 14px", marginBottom: 10,
     }}>
       <div style={{ fontSize: 12, fontWeight: 800, color: "#9a3412", marginBottom: 8, textAlign: "center" }}>
-        🔍 {t(E, "Audit Sim — sort DESC & mark every 4th as FREE", "감사 시뮬 — 내림차순 정렬 후 4 번째마다 무료 표시")}
+        🔍 {t(E, "Audit Sim — sort DESC, 2nd-cheapest of each 4 is FREE", "감사 시뮬 — 내림차순 정렬, 각 4개 묶음의 2번째로 싼 것이 무료")}
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center", marginBottom: 8 }}>
@@ -77,7 +73,7 @@ function BakeryAuditSim({ E }) {
       </div>
 
       <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>
-        {t(E, "Sorted DESC (every 4th = FREE):", "내림차순 정렬 (4 번째마다 무료):")}
+        {t(E, "Sorted DESC (2nd-cheapest of each 4 = FREE):", "내림차순 정렬 (각 4개 묶음의 2번째로 싼 것 = 무료):")}
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 10 }}>
         {sorted.map((v, i) => {
@@ -138,10 +134,10 @@ export const SOLUTION_CODE = [
   "",
   "total = 0",
   "for i in range(N):",
-  "    # Every 4th item (index 3,7,11,...) is free",
-  "    # The 2nd cheapest in each group of 4",
-  "    if (i + 1) % 4 == 0:",
-  "        continue  # skip this item (free)",
+  "    # In each FULL group of 4 (from the top), the 2nd-cheapest is free.",
+  "    # Descending sort → that's index 2 of the block (i % 4 == 2).",
+  "    if i % 4 == 2 and i + 2 <= N:",
+  "        continue  # this item is free",
   "    total += prices[i]",
   "",
   "print(total)",
