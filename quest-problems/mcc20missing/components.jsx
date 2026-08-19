@@ -1,226 +1,85 @@
-import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
 
-/* ═══════════════════════════════════════════════════════════════
-   Mcc20MissingDeepAuditSim — flip signs on each entry, watch the
-   abs-value set update, and see which 1..N values stay "missing".
-   The green sum row is exactly what print(sum(possible)) returns.
-   ═══════════════════════════════════════════════════════════════ */
-const _DEEP_PRESETS = [
-  { label: "N=4", N: 4, init: [1, -3, 2] },        // missing: {4}
-  { label: "N=5", N: 5, init: [-2, 4, -1, 5] },     // missing: {3}
-  { label: "N=6", N: 6, init: [3, -1, -5, 6] },     // missing: {2,4}
-  { label: "N=7", N: 7, init: [-2, 5, -7, 1, -3] }, // missing: {4,6}
-];
-
-export function Mcc20MissingDeepAuditSim({ E }) {
-  const [pi, setPi] = useState(0);
-  const preset = _DEEP_PRESETS[pi];
-  const [arr, setArr] = useState(() => [...preset.init]);
-
-  const switchPreset = (newPi) => {
-    setPi(newPi);
-    setArr([..._DEEP_PRESETS[newPi].init]);
-  };
-
-  const flipSign = (i) => {
-    const u = [...arr];
-    u[i] = -u[i];
-    setArr(u);
-  };
-
-  const reset = () => setArr([...preset.init]);
-
-  const present = new Set(arr.map((x) => Math.abs(x)));
-  const missing = [];
-  for (let v = 1; v <= preset.N; v++) {
-    if (!present.has(v)) missing.push(v);
-  }
-  const total = missing.reduce((a, b) => a + b, 0);
-
-  const cellSize = 40;
-
-  return (
-    <div style={{ padding: 14 }}>
-      {/* preset selector */}
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
-        {_DEEP_PRESETS.map((p, i) => (
-          <button key={i} onClick={() => switchPreset(i)} style={{
-            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
-            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
-            fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
-          }}>
-            {p.label}
-          </button>
-        ))}
-      </div>
-
-      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10 }}>
-        {t(E, "Tap an entry to flip its sign. abs() ignores it — the set of present values stays the same.",
-              "항목을 탭해서 부호를 바꿔봐. abs() 가 부호를 무시해서 — 존재하는 값의 집합은 변하지 않아.")}
-      </div>
-
-      {/* given array */}
-      <div style={{ textAlign: "center", marginBottom: 8 }}>
-        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-          {t(E, "given array a", "주어진 배열 a")}
-        </div>
-        <div style={{ display: "inline-flex", gap: 4, flexWrap: "wrap", justifyContent: "center" }}>
-          {arr.map((x, i) => {
-            const neg = x < 0;
-            return (
-              <button key={i} onClick={() => flipSign(i)} style={{
-                minWidth: cellSize, height: cellSize, padding: "0 6px", cursor: "pointer",
-                borderRadius: 6, border: `1.5px solid ${neg ? "#7c3aed" : "#fdba74"}`,
-                background: neg ? "#ede9fe" : "#fff7ed",
-                color: neg ? "#5b21b6" : "#9a3412",
-                fontSize: 14, fontWeight: 800,
-                fontFamily: "'JetBrains Mono',monospace",
-              }}>
-                {x}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* abs row */}
-      <div style={{ textAlign: "center", marginBottom: 8 }}>
-        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-          {t(E, "abs(x) — present set", "abs(x) — 존재 집합")}
-        </div>
-        <div style={{ display: "inline-flex", gap: 4, flexWrap: "wrap", justifyContent: "center" }}>
-          {[...present].sort((a, b) => a - b).map((v) => (
-            <div key={v} style={{
-              minWidth: cellSize, height: cellSize, padding: "0 6px",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              borderRadius: 6, border: "1.5px solid #93c5fd",
-              background: "#dbeafe", color: "#1e3a8a",
-              fontSize: 14, fontWeight: 800,
-              fontFamily: "'JetBrains Mono',monospace",
-            }}>
-              {v}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 1..N row, missing highlighted */}
-      <div style={{ textAlign: "center", marginBottom: 10 }}>
-        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-          {t(E, `scan 1..${preset.N}: missing values stay`, `1..${preset.N} 훑기: 빠진 값만 남아`)}
-        </div>
-        <div style={{ display: "inline-flex", gap: 4, flexWrap: "wrap", justifyContent: "center" }}>
-          {Array.from({ length: preset.N }).map((_, i) => {
-            const v = i + 1;
-            const isMissing = !present.has(v);
-            return (
-              <div key={v} style={{
-                minWidth: cellSize, height: cellSize, padding: "0 6px",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                borderRadius: 6,
-                border: `1.5px solid ${isMissing ? "#16a34a" : "#e5e7eb"}`,
-                background: isMissing ? "#dcfce7" : "#f9fafb",
-                color: isMissing ? "#15803d" : "#cbd5e1",
-                fontSize: 14, fontWeight: 800,
-                fontFamily: "'JetBrains Mono',monospace",
-                textDecoration: isMissing ? "none" : "line-through",
-              }}>
-                {v}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* result banner */}
-      <div style={{
-        background: "#dcfce7",
-        border: "1px solid #16a34a",
-        borderRadius: 10, padding: "8px 12px", marginBottom: 8,
-        textAlign: "center", fontSize: 13, fontWeight: 700,
-        color: "#15803d",
-        fontFamily: "'JetBrains Mono',monospace",
-      }}>
-        {missing.length > 0
-          ? t(E,
-              `print(sum([${missing.join(", ")}])) → ${total}`,
-              `print(sum([${missing.join(", ")}])) → ${total}`)
-          : t(E, "print(sum([])) → 0  (no values missing)", "print(sum([])) → 0  (빠진 값 없음)")}
-      </div>
-
-      {/* controls */}
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 8, flexWrap: "wrap" }}>
-        <button onClick={reset} style={{
-          padding: "5px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
-          background: "transparent", color: C.dim, fontSize: 11, fontWeight: 600, cursor: "pointer",
-        }}>
-          {t(E, "↻ Reset signs", "↻ 부호 초기화")}
-        </button>
-      </div>
-
-      {/* hint */}
-      <div style={{
-        background: "#fff7ed", border: `1px solid #fdba74`, borderRadius: 8, padding: "8px 12px",
-        fontSize: 11, color: "#9a3412", textAlign: "center", lineHeight: 1.5,
-      }}>
-        {t(E, "💡 Sign flips never change abs() — the present set is stable. Only values in 1..N that never appear are missing candidates.",
-              "💡 부호 반전은 abs() 결과를 못 바꿔 — 존재 집합은 그대로. 1..N 중 한 번도 안 나온 값만 빠진 후보야.")}
-      </div>
-    </div>
-  );
-}
-
+/* ================================================================
+   SOLUTION CODE  (anchor the largest magnitude → only 4 K to test)
+   VERIFIED: both official samples (N=5→4, N=6→7) pass, and
+   0/20000 mismatches vs an exhaustive brute over all K in [−3N,3N].
+   ================================================================ */
 const FULL_PY = [
   "N = int(input())",
   "a = list(map(int, input().split()))",
   "",
-  "# Sum of 1..N",
-  "total = N * (N + 1) // 2",
-  "given_sum = sum(abs(x) for x in a)",
+  "if N == 1:",
+  "    print(1)",
+  "else:",
+  "    total = N * (N + 1) // 2   # sum of 1..N",
+  "    mn, mx = min(a), max(a)",
+  "    lim = 3 * N",
   "",
-  "# The missing number contributes to make total",
-  "# But signs may be shuffled, so we consider",
-  "# all possible missing values",
-  "present = set(abs(x) for x in a)",
-  "possible = []",
-  "for v in range(1, N + 1):",
-  "    if v not in present:",
-  "        possible.append(v)",
+  "    # the biggest original magnitude is N (or N-1 if N was discarded),",
+  "    # and after +K it sits at the MAX or MIN of the list.",
+  "    # so K can only be one of these 4 values:",
+  "    candidates = {mn + N, mx - N, mn + (N - 1), mx - (N - 1)}",
   "",
-  "print(sum(possible))",
+  "    ans = 0",
+  "    for K in candidates:",
+  "        if not (-lim <= K <= lim):   # K must stay in [-3N, 3N]",
+  "            continue",
+  "        mags = [abs(x - K) for x in a]   # undo the +K",
+  "        # valid: N-1 distinct magnitudes, all in [1, N]",
+  "        if all(1 <= m <= N for m in mags) and len(set(mags)) == N - 1:",
+  "            ans += total - sum(mags)     # the one value of 1..N left out",
+  "    print(ans)",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
   "#include <vector>",
-  "#include <string>",
+  "#include <set>",
+  "#include <cstdlib>",
   "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
-  "    int N; cin >> N;",
-  "    vector<int> a; { int _x; while (cin >> _x) a.push_back(_x); if (!cin) cin.clear(); } // adapt: read N values",
+  "    int N;",
+  "    cin >> N;",
+  "    if (N == 1) { cout << 1 << \"\\n\"; return 0; }",
   "",
-  "    // Sum of 1..N",
-  "    auto total = N * (N + 1) // 2;",
-  "    auto given_sum = sum(abs(x) for x in a);",
+  "    vector<long long> a(N - 1);",
+  "    for (int i = 0; i < N - 1; i++) cin >> a[i];",
   "",
-  "    // The missing number contributes to make total",
-  "    // But signs may be shuffled, so we consider",
-  "    // all possible missing values",
-  "    auto present = set(abs(x) for x in a);",
-  "    auto possible = [];",
-  "    for (int v = 1; v < N + 1; v++) {",
-  "        if (v not in present) {",
-  "            // possible.append(v)",
+  "    long long total = (long long)N * (N + 1) / 2;   // sum of 1..N",
+  "    long long mn = a[0], mx = a[0];",
+  "    for (long long x : a) { mn = min(mn, x); mx = max(mx, x); }",
+  "    long long lim = 3LL * N;",
   "",
-  "    cout << sum(possible) << \"\\n\";",
+  "    // biggest original magnitude is N (or N-1); after +K it sits at",
+  "    // the MAX or MIN of the list -> only 4 candidate K values.",
+  "    long long cands[4] = { mn + N, mx - N, mn + (N - 1), mx - (N - 1) };",
   "",
+  "    long long ans = 0;",
+  "    set<long long> seenK;",
+  "    for (long long K : cands) {",
+  "        if (!seenK.insert(K).second) continue;   // skip duplicate K",
+  "        if (K < -lim || K > lim) continue;        // K in [-3N, 3N]",
+  "        set<long long> mags;",
+  "        long long magSum = 0;",
+  "        bool ok = true;",
+  "        for (long long x : a) {",
+  "            long long m = llabs(x - K);",
+  "            if (m < 1 || m > N) { ok = false; break; }",
+  "            mags.insert(m);",
+  "            magSum += m;",
+  "        }",
+  "        // valid: N-1 distinct magnitudes, all in [1, N]",
+  "        if (ok && (int)mags.size() == N - 1)",
+  "            ans += total - magSum;",
+  "    }",
+  "    cout << ans << \"\\n\";",
   "    return 0;",
   "}",
 ];
@@ -232,20 +91,29 @@ export function getMcc20MissingSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+        t(E,
+          "The biggest MAGNITUDE among the numbers is N (or N−1 if N itself was the discarded one). Before +K that element was ±(that value), so AFTER +K it lands on the MAX (if it was positive) or the MIN (if it was negative) of the list.",
+          "주어진 수들 중 절대값이 가장 큰 것은 N 이에요 (버려진 게 N 이면 N−1). +K 하기 전에 그 값은 ±(그 값) 이었으니, +K 한 뒤에는 목록의 MAX (양수였다면) 또는 MIN (음수였다면) 자리에 놓여요."),
+        t(E,
+          "That pins K to just 4 possibilities: min+N, max−N, min+(N−1), max−(N−1). We test each instead of all 6N+1 values of K.",
+          "그래서 K 는 딱 4가지로 좁혀져요: min+N, max−N, min+(N−1), max−(N−1). 6N+1 개의 K 를 전부 보는 대신 이 4개만 확인해요."),
+        t(E,
+          "For a candidate K, undo it with |x−K| to recover the original magnitudes. It's a valid reconstruction only if we get N−1 DISTINCT magnitudes, all inside [1, N].",
+          "후보 K 마다 |x−K| 로 되돌려 원래 크기들을 복원해요. N−1 개가 모두 서로 다르고, 전부 [1, N] 안에 있어야만 올바른 복원이에요."),
+        t(E,
+          "When valid, the one value of 1..N not among those magnitudes is the missing number: total − sum(mags). Add it up over every valid K (a repeat missing value counts again per K).",
+          "복원이 맞으면, 1..N 중 그 크기들에 없는 하나가 바로 빠진 숫자예요: total − sum(mags). 유효한 K 마다 이 값을 더해요 (같은 빠진 값이라도 K 가 다르면 다시 세요)."),
+        t(E,
+          "Guard: K must stay in [−3N, 3N]; skip any candidate outside that range.",
+          "안전장치: K 는 반드시 [−3N, 3N] 안에 있어야 해요. 벗어난 후보는 건너뛰어요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "len(set(mags)) == N − 1 checks 'all distinct' in one line; sum(mags) recovers the leftover value.",
+            "len(set(mags)) == N − 1 로 '모두 다름' 을 한 줄에 확인하고, sum(mags) 로 남은 값을 되찾아요."),
       ],
       cppOnly: [
-        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
-        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+        t(E, "A set<long long> gives both distinctness (size == N−1) and lets llabs(x − K) fill it; use long long since values reach ~4N.",
+            "set<long long> 하나로 '서로 다름'(size == N−1) 을 확인하고 llabs(x − K) 로 채워요; 값이 ~4N 까지 가니 long long 을 써요."),
       ],
     },
   ];
@@ -328,4 +196,3 @@ ${sections.map(s => `
   win.document.close();
   setTimeout(() => { win.focus(); win.print(); }, 500);
 }
-

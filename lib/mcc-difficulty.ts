@@ -7,22 +7,24 @@ export type Difficulty = 1 | 2 | 3 | 4 | 5;
 
 export const MCC_DIFFICULTY: Record<string, Difficulty> = {
   // 1 — 쉬움 (단순 스캔/정렬/한 줄 관찰)
-  mcc15bahasaf: 1, magicorbs: 1, mcc19rect: 1, mcc21simplemath: 1, xorstring: 1,
+  mcc15bahasaf: 1, magicorbs: 1, mcc19rect: 1, xorstring: 1,
 
   // 2 — 기본 (시뮬/경우나눔/집합·딕셔너리)
   collatz: 2, cornercover: 2, fences: 2, mcc15rect: 2, mcc19candy: 2,
-  mcc19rect2: 2, mcc20cipher: 2, mcc20kitty: 2, mcc20missing: 2, mcc21carrots: 2,
-  mcc21dvd: 2, mcc21glass: 2, mcc22aliens: 2, mcc22cardshark: 2, mcc22grammar: 2,
+  mcc19rect2: 2, mcc21carrots: 2,
+  mcc22aliens: 2, mcc22cardshark: 2, mcc22grammar: 2,
   simplegame: 2,
 
   // 3 — 표준 기법 (그리디/정렬활용/스택·투포인터/BFS 기본)
   fans: 3, gifts: 3, mcc15equation: 3, mcc15isthmus: 3, mcc15choco: 3,
-  mcc19bakery: 3, mcc19ditcoin: 3, mcc19elim: 3, mcc20citytour: 3, mcc20knight: 3,
+  mcc19bakery: 3, mcc19ditcoin: 3, mcc19elim: 3, mcc20citytour: 3, mcc20cipher: 3,
+  mcc20missing: 3, mcc21dvd: 3,
   mcc21marbles: 3, mcc21menu: 3, mcc22birthday: 3, mcc22lamp: 3, mcc22maze: 3,
   tichu: 3, tricks: 3, word: 3,
 
   // 4 — 어려움 (다단계/DP/BFS 응용)
-  explodingarrow: 4, mcc19palindrome: 4, mcc20zigzag: 4, mobilegame: 4,
+  explodingarrow: 4, mcc19palindrome: 4, mcc20zigzag: 4, mcc20kitty: 4, mcc20knight: 4,
+  mcc21glass: 4, mcc21simplemath: 4, mobilegame: 4,
 
   // 5 — 매우 어려움 (구간 DP/다익스트라/조합 DP)
   innovation: 5, reach: 5, rectangles: 5, subseqmedian: 5, sumk: 5,

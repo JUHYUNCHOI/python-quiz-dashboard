@@ -208,10 +208,12 @@ export const SOLUTION_CODE = [
   "K = int(input())",
   "N = len(s)",
   "",
+  "MOD = 1000   # answer is printed modulo 1000",
+  "",
   "if K > N:",
   "    print(0)",
   "elif K == 1:",
-  "    print(N)",
+  "    print(N % MOD)",
   "else:",
   "    # up[i][j] / dn[i][j] = # length-j zig-zags ending at i",
   "    # whose LAST step went up / down. Counts BOTH start directions.",
@@ -227,8 +229,10 @@ export const SOLUTION_CODE = [
   "                else:",
   "                    if s[p] < s[i]: up[i][j] += dn[p][j - 1]",
   "                    if s[p] > s[i]: dn[i][j] += up[p][j - 1]",
+  "            up[i][j] %= MOD",
+  "            dn[i][j] %= MOD",
   "",
-  "    ans = sum(up[i][K] + dn[i][K] for i in range(N))",
+  "    ans = sum(up[i][K] + dn[i][K] for i in range(N)) % MOD",
   "    print(ans)",
 ];
 
@@ -237,8 +241,8 @@ export function makeMcc20ZigzagCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Given a sequence of characters and an integer K, count the number of length-K subsequences that 'zig-zag' — values strictly alternating between going UP and going DOWN at each consecutive step.\nPrint the count.",
-        "문자 수열과 정수 K 가 주어져요. 길이 K 의 부분수열 중 인접한 두 항이 매번 한 번 올라갔다 한 번 내려갔다 하며 엄격하게 번갈아 가는 '지그재그' 의 개수를 세요.\n그 개수를 출력해요."),
+        "Given a sequence of characters and an integer K, count the number of length-K subsequences that 'zig-zag' — values strictly alternating between going UP and going DOWN at each consecutive step.\nPrint the count modulo 1000.",
+        "문자 수열과 정수 K 가 주어져요. 길이 K 의 부분수열 중 인접한 두 항이 매번 한 번 올라갔다 한 번 내려갔다 하며 엄격하게 번갈아 가는 '지그재그' 의 개수를 세요.\n그 개수를 1000 으로 나눈 나머지를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -253,7 +257,7 @@ export function makeMcc20ZigzagCh1(E) {
               🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
-              {t(E, "Print the count of length-K zig-zag subsequences of the given string.", "주어진 문자열에서 길이 K 인 지그재그 부분수열의 개수를 출력해요.")}
+              {t(E, "Print the count of length-K zig-zag subsequences of the given string, modulo 1000.", "주어진 문자열에서 길이 K 인 지그재그 부분수열의 개수를 1000 으로 나눈 나머지를 출력해요.")}
             </div>
           </div>
 
@@ -283,9 +287,35 @@ export function makeMcc20ZigzagCh1(E) {
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "count of length-K zig-zag subsequences", "길이 K 지그재그 부분수열의 개수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "count of length-K zig-zag subsequences, modulo 1000", "길이 K 지그재그 부분수열의 개수 (1000 으로 나눈 나머지)")}</b>
                   {t(E, ".", "를 출력해요.")}
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Constraints + official sample */}
+          <div style={{ background: "#faf5ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10, wordBreak: "keep-all" }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 8 }}>
+              📐 {t(E, "Limits & sample", "제약 & 예시")}
+            </div>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
+              <div>• 1 ≤ |S| ≤ 20000, {t(E, "lowercase letters", "소문자")}</div>
+              <div>• 1 ≤ K ≤ 100</div>
+              <div>• {t(E, "answer printed modulo 1000", "정답은 1000 으로 나눈 나머지로 출력")}</div>
+            </div>
+            <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap", fontSize: 12.5 }}>
+              <div style={{ background: "#fff", border: "1px solid #e9d5ff", borderRadius: 8, padding: "6px 10px", fontFamily: "monospace" }}>
+                <div style={{ color: C.dim, fontSize: 11 }}>{t(E, "input", "입력")}</div>
+                <div>bcade</div>
+                <div>3</div>
+              </div>
+              <div style={{ background: "#fff", border: "1px solid #e9d5ff", borderRadius: 8, padding: "6px 10px", fontFamily: "monospace" }}>
+                <div style={{ color: C.dim, fontSize: 11 }}>{t(E, "output", "출력")}</div>
+                <div>5</div>
+              </div>
+              <div style={{ flex: 1, minWidth: 140, color: C.dim, fontSize: 11.5, lineHeight: 1.5, alignSelf: "center" }}>
+                {t(E, "bca, bad, bae, cad, cae — 5 length-3 zig-zags.", "bca, bad, bae, cad, cae — 길이 3 지그재그 5 개.")}
               </div>
             </div>
           </div>

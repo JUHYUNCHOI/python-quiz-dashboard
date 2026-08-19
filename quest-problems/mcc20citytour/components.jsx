@@ -4,210 +4,144 @@ import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeSteppe
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+const NW = { whiteSpace: "nowrap" };
+const KA = { wordBreak: "keep-all" };
 
-/* ───────────────── Deep-audit BFS simulator ─────────────────
-   Fluffy hops through a 4x4 building grid via BFS.
-   Step-by-step: queue pops a cell, paints visited, enqueues adjacent buildings.
-   ──────────────────────────────────────────────────────────── */
-const SIM_GRID = [
-  [1, 1, 0, 1],
-  [0, 1, 0, 1],
-  [1, 1, 1, 1],
-  [1, 0, 0, 0],
+/* ───────────────── Height-reachability concept sim ─────────────────
+   Each cell is a building HEIGHT. Fluffy hops to a neighbor only when
+   |height difference| < D. Change D and watch the reachable region
+   (green) flood-fill out from the start (1,1) grow or shrink.
+   The point: the edge rule is about the DIFFERENCE to a neighbor,
+   not the height itself — so adjacency is dynamic, set by D.
+   ─────────────────────────────────────────────────────────────────── */
+// The official 4×5 sample grid — at D = 5 exactly 18 cells are reachable.
+const SIM_H = [
+  [1, 3, 7, 9, 16],
+  [6, 2, 4, 1, 8],
+  [8, 9, 10, 12, 14],
+  [7, 5, 1, 4, 11],
 ];
-const SIM_START = [0, 0];
 
-function buildBfsTrace(grid, start) {
-  const R = grid.length, C = grid[0].length;
-  const visited = Array.from({ length: R }, () => Array(C).fill(false));
-  const [sr, sc] = start;
-  visited[sr][sc] = true;
-  const queue = [[sr, sc]];
-  const trace = [];
-  trace.push({
-    queue: [...queue],
-    visited: visited.map(r => [...r]),
-    popped: null,
-    enqueued: [],
-    count: 1,
-    note: { en: "Start. Push start cell, mark visited, count = 1.", ko: "시작. 출발 칸 push, 방문 표시, count = 1." },
-  });
+function reachableMask(H, D) {
+  const R = H.length, Cn = H[0].length;
+  const vis = Array.from({ length: R }, () => Array(Cn).fill(false));
+  vis[0][0] = true;
+  const q = [[0, 0]];
   const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
-  while (queue.length) {
-    const [r, c] = queue.shift();
-    const enqueued = [];
+  while (q.length) {
+    const [r, c] = q.shift();
     for (const [dr, dc] of dirs) {
       const nr = r + dr, nc = c + dc;
-      if (nr >= 0 && nr < R && nc >= 0 && nc < C && !visited[nr][nc] && grid[nr][nc] === 1) {
-        visited[nr][nc] = true;
-        queue.push([nr, nc]);
-        enqueued.push([nr, nc]);
+      if (nr >= 0 && nr < R && nc >= 0 && nc < Cn && !vis[nr][nc] &&
+          Math.abs(H[nr][nc] - H[r][c]) < D) {
+        vis[nr][nc] = true;
+        q.push([nr, nc]);
       }
     }
-    const count = visited.flat().filter(Boolean).length;
-    trace.push({
-      queue: [...queue],
-      visited: visited.map(r => [...r]),
-      popped: [r, c],
-      enqueued,
-      count,
-      note: enqueued.length
-        ? { en: `Pop (${r},${c}). Enqueue ${enqueued.length} new building(s). count = ${count}.`,
-            ko: `(${r},${c}) pop. 새 건물 ${enqueued.length}개 enqueue. count = ${count}.` }
-        : { en: `Pop (${r},${c}). No new neighbours. count = ${count}.`,
-            ko: `(${r},${c}) pop. 새 이웃 없음. count = ${count}.` },
-    });
   }
-  return trace;
+  return vis;
 }
 
 export function Mcc20CityTourBfsSim({ E }) {
-  const trace = useMemo(() => buildBfsTrace(SIM_GRID, SIM_START), []);
-  const [step, setStep] = useState(0);
-  const cur = trace[step];
-  const R = SIM_GRID.length, Cn = SIM_GRID[0].length;
+  const [D, setD] = useState(5);
+  const vis = useMemo(() => reachableMask(SIM_H, D), [D]);
+  const R = SIM_H.length, Cn = SIM_H[0].length;
+  const count = vis.flat().filter(Boolean).length;
 
   const cellStyle = (r, c) => {
-    const isBuilding = SIM_GRID[r][c] === 1;
-    const visited = cur.visited[r][c];
-    const isPopped = cur.popped && cur.popped[0] === r && cur.popped[1] === c;
-    const isEnqueued = cur.enqueued.some(([er, ec]) => er === r && ec === c);
-    let bg = isBuilding ? "#fef3c7" : "#f3f4f6";
-    let border = isBuilding ? "#fcd34d" : "#e5e7eb";
-    let color = isBuilding ? "#92400e" : "#9ca3af";
-    if (visited) { bg = "#fde68a"; border = A; color = "#78350f"; }
-    if (isEnqueued) { bg = "#a7f3d0"; border = "#15803d"; }
-    if (isPopped) { bg = A; border = "#78350f"; color = "#fff"; }
+    const on = vis[r][c];
+    const isStart = r === 0 && c === 0;
     return {
-      width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
-      background: bg, border: `2px solid ${border}`, borderRadius: 6,
-      color, fontWeight: 700, fontSize: 14,
-      transition: "background 180ms, border-color 180ms",
+      width: 46, height: 46, display: "flex", flexDirection: "column",
+      alignItems: "center", justifyContent: "center", gap: 1,
+      background: on ? "#d1fae5" : "#f3f4f6",
+      border: isStart ? "2.5px solid #059669" : on ? "2px solid #6ee7b7" : "2px solid #e5e7eb",
+      borderRadius: 8, color: on ? "#065f46" : "#9ca3af",
+      fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", fontSize: 14,
+      transition: "background 160ms, border-color 160ms",
     };
   };
 
-  const cellLabel = (r, c) => {
-    const isPopped = cur.popped && cur.popped[0] === r && cur.popped[1] === c;
-    if (isPopped) return "🐰";
-    if (SIM_GRID[r][c] === 1) return cur.visited[r][c] ? "✓" : "1";
-    return "·";
-  };
-
   return (
-    <div style={{ padding: 14 }}>
-      <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 12, marginBottom: 10 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>
-          🐰 {t(E, "Fluffy's BFS hop-by-hop", "Fluffy 의 BFS 한 칸씩")}
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, ...KA }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 8 }}>
+          🐰 {t(E, "Where can Fluffy reach?", "Fluffy 는 어디까지 갈 수 있을까?")}
         </div>
-        <div style={{ fontSize: 12, color: "#92400e", lineHeight: 1.5 }}>
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
-            "Step through BFS on a 4×4 city. Watch the queue, the visited mark, and the count grow.",
-            "4×4 도시에서 BFS 를 한 단계씩. 큐, 방문 표시, count 가 어떻게 늘어나는지 봐.")}
+            "Each cell shows a building HEIGHT. Fluffy hops to a neighbor only when the HEIGHT DIFFERENCE is less than D. Change D and watch the reachable region (green) grow or shrink from the start 🐰.",
+            "각 칸은 건물 높이예요. Fluffy 는 이웃과의 높이 차이가 D 보다 작을 때만 건너가요. D 를 바꿔서 시작 🐰 에서 갈 수 있는 영역 (초록) 이 커지고 작아지는 걸 봐요.")}
         </div>
-      </div>
 
-      <div style={{ display: "flex", gap: 14, alignItems: "flex-start", flexWrap: "wrap", justifyContent: "center" }}>
-        <div>
-          <div style={{ fontSize: 11, color: C.dim, marginBottom: 4, textAlign: "center", fontWeight: 600 }}>
-            {t(E, "Grid", "격자")}
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Cn}, 44px)`, gap: 4 }}>
-            {SIM_GRID.map((row, r) => row.map((_, c) => (
-              <div key={`${r}-${c}`} style={cellStyle(r, c)}>{cellLabel(r, c)}</div>
+        {/* D stepper */}
+        <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 12, flexWrap: "wrap" }}>
+          <span style={{ fontSize: 12, color: "#92400e", fontWeight: 700 }}>D =</span>
+          <button onClick={() => setD(Math.max(1, D - 1))} style={dBtn}>−</button>
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 800, color: A, minWidth: 22, textAlign: "center" }}>{D}</span>
+          <button onClick={() => setD(Math.min(16, D + 1))} style={dBtn}>+</button>
+          <span style={{ fontSize: 11.5, color: C.dim, ...KA }}>
+            {t(E, "(hop allowed if |Δheight| < D)", "(높이 차이 < D 이면 건너기 가능)")}
+          </span>
+        </div>
+
+        {/* height grid */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Cn}, 46px)`, gap: 4 }}>
+            {SIM_H.map((row, r) => row.map((h, c) => (
+              <div key={`${r}-${c}`} style={cellStyle(r, c)}>
+                {r === 0 && c === 0 && <span style={{ fontSize: 11, lineHeight: 1 }}>🐰</span>}
+                <span>{h}</span>
+              </div>
             )))}
           </div>
         </div>
 
-        <div style={{ minWidth: 180 }}>
-          <div style={{ fontSize: 11, color: C.dim, marginBottom: 4, fontWeight: 600 }}>
-            {t(E, "Queue (front → back)", "Queue (앞 → 뒤)")}
-          </div>
-          <div style={{
-            background: "#0f172a", color: "#fde68a", padding: 8, borderRadius: 8,
-            fontFamily: "JetBrains Mono, monospace", fontSize: 12, minHeight: 40,
-          }}>
-            {cur.queue.length === 0
-              ? <span style={{ color: "#64748b" }}>∅ {t(E, "empty", "비어있음")}</span>
-              : cur.queue.map(([r, c], i) => (
-                  <span key={i} style={{
-                    display: "inline-block", padding: "2px 6px", margin: 2,
-                    background: i === 0 ? A : "#334155", color: "#fff", borderRadius: 4, fontSize: 11,
-                  }}>({r},{c})</span>
-                ))}
-          </div>
-          <div style={{ marginTop: 10, fontSize: 12, color: C.text }}>
-            <b style={{ color: A }}>count = {cur.count}</b>
-          </div>
-          <div style={{ marginTop: 6, fontSize: 11, color: C.dim, lineHeight: 1.5 }}>
-            {E ? cur.note.en : cur.note.ko}
-          </div>
+        <div style={{ background: "#0f172a", color: "#f8fafc", padding: "10px 12px", borderRadius: 8,
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 13, textAlign: "center" }}>
+          {t(E, "reachable = ", "갈 수 있는 칸 = ")}<b style={{ color: "#34d399" }}>{count}</b>
+          <span style={{ color: "#64748b" }}> / {R * Cn}</span>
         </div>
-      </div>
 
-      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 14, alignItems: "center" }}>
-        <button
-          onClick={() => setStep(Math.max(0, step - 1))}
-          disabled={step === 0}
-          style={{
-            background: step === 0 ? "#e5e7eb" : "#fff", color: step === 0 ? "#9ca3af" : A,
-            border: `1.5px solid ${step === 0 ? "#e5e7eb" : A}`, borderRadius: 8,
-            padding: "5px 12px", fontWeight: 700, fontSize: 12,
-            cursor: step === 0 ? "default" : "pointer",
-          }}
-        >◀ {t(E, "Prev", "이전")}</button>
-        <span style={{ fontSize: 12, color: C.dim, minWidth: 70, textAlign: "center" }}>
-          {step + 1} / {trace.length}
-        </span>
-        <button
-          onClick={() => setStep(Math.min(trace.length - 1, step + 1))}
-          disabled={step === trace.length - 1}
-          style={{
-            background: step === trace.length - 1 ? "#e5e7eb" : A,
-            color: step === trace.length - 1 ? "#9ca3af" : "#fff",
-            border: `1.5px solid ${step === trace.length - 1 ? "#e5e7eb" : A}`, borderRadius: 8,
-            padding: "5px 12px", fontWeight: 700, fontSize: 12,
-            cursor: step === trace.length - 1 ? "default" : "pointer",
-          }}
-        >{t(E, "Next", "다음")} ▶</button>
-        <button
-          onClick={() => setStep(0)}
-          style={{
-            background: "#fff", color: C.dim, border: `1.5px solid #e5e7eb`,
-            borderRadius: 8, padding: "5px 10px", fontWeight: 600, fontSize: 11, cursor: "pointer",
-          }}
-        >↺ {t(E, "Reset", "처음")}</button>
-      </div>
-
-      <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.6 }}>
-        🐰 = {t(E, "current pop", "현재 pop")} ·
-        <span style={{ color: A, fontWeight: 700 }}> ✓</span> = {t(E, "visited", "방문")} ·
-        <span style={{ color: "#15803d", fontWeight: 700 }}> 1</span> = {t(E, "building", "건물")} ·
-        · = {t(E, "empty", "빈칸")}
+        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+          {t(E,
+            "The rule is about the DIFFERENCE to a neighbor — not the height itself. Two tall buildings side by side is an easy hop; a tall one next to a short one can be a wall. So there is no fixed wall map: the same edge opens for a big D and closes for a small D.",
+            "규칙은 이웃과의 '차이' 예요 — 높이 자체가 아니라. 높은 건물 둘이 나란히 있으면 쉽게 건너지만, 높은 건물 옆 낮은 건물은 벽이 될 수 있어요. 그래서 고정된 벽 지도는 없어요: 같은 간선도 D 가 크면 열리고 작으면 막혀요.")}
+        </div>
       </div>
     </div>
   );
 }
+const dBtn = {
+  width: 28, height: 28, borderRadius: 6, border: "1px solid #fcd34d", background: "#fff",
+  color: "#92400e", fontSize: 17, fontWeight: 800, cursor: "pointer", lineHeight: 1,
+};
 
+/* ================================================================
+   SOLUTION CODE  (flood-fill / BFS with the |Δheight| < D edge rule)
+   Input format:  line 1 = "M N",  then M lines of N heights,  last line = "D".
+   Start is fixed at (1,1) = index (0,0). Count reachable cells.
+   ================================================================ */
 const FULL_PY = [
   "from collections import deque",
   "",
-  "R, C_ = map(int, input().split())",
-  "grid = []",
-  "for _ in range(R):",
-  "    grid.append(list(map(int, input().split())))",
+  "M, N = map(int, input().split())",
+  "H = []",
+  "for _ in range(M):",
+  "    H.append(list(map(int, input().split())))",
+  "D = int(input())",
   "",
-  "sr, sc = map(int, input().split())",
-  "",
-  "visited = [[False]*C_ for _ in range(R)]",
-  "visited[sr][sc] = True",
-  "q = deque([(sr, sc)])",
+  "visited = [[False]*N for _ in range(M)]",
+  "visited[0][0] = True          # start at (1,1) = index (0,0)",
+  "q = deque([(0, 0)])",
   "count = 1",
   "",
   "while q:",
   "    r, c = q.popleft()",
   "    for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:",
   "        nr, nc = r+dr, c+dc",
-  "        if 0<=nr<R and 0<=nc<C_ and not visited[nr][nc] and grid[nr][nc]==1:",
+  "        if 0<=nr<M and 0<=nc<N and not visited[nr][nc] \\",
+  "                and abs(H[nr][nc]-H[r][c]) < D:",
   "            visited[nr][nc] = True",
   "            q.append((nr, nc))",
   "            count += 1",
@@ -218,35 +152,38 @@ const FULL_PY = [
 const FULL_CPP = [
   "#include <iostream>",
   "#include <vector>",
-  "#include <string>",
-  "#include <algorithm>",
+  "#include <queue>",
+  "#include <cstdlib>   // abs",
   "using namespace std;",
   "",
   "int main() {",
+  "    int M, N; cin >> M >> N;",
+  "    vector<vector<int>> H(M, vector<int>(N));",
+  "    for (int i = 0; i < M; i++)",
+  "        for (int j = 0; j < N; j++) cin >> H[i][j];",
+  "    int D; cin >> D;",
   "",
-  "    int R, C_; cin >> R >> C_;",
-  "    auto grid = [];",
-  "    for (int _ = 0; _ < R; _++) {",
-  "        // grid.append(list(map(int, input().split())))",
+  "    vector<vector<bool>> visited(M, vector<bool>(N, false));",
+  "    visited[0][0] = true;          // start at (1,1) = index (0,0)",
+  "    queue<pair<int,int>> q;",
+  "    q.push({0, 0});",
+  "    int count = 1;",
   "",
-  "    int sr, sc; cin >> sr >> sc;",
-  "",
-  "    auto visited = [[False]*C_ for _ in range(R)];",
-  "    // visited[sr][sc] = True",
-  "    auto q = deque([(sr, sc)]);",
-  "    auto count = 1;",
-  "",
-  "    while (q) {",
-  "        // r, c = q.popleft()",
-  "        // for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:",
-  "            // nr, nc = r+dr, c+dc",
-  "            if (0<=nr<R and 0<=nc<C_ and not visited[nr][nc] and grid[nr][nc]==1) {",
-  "                // visited[nr][nc] = True",
-  "                // q.append((nr, nc))",
-  "                count += 1;",
-  "",
+  "    int dr[4] = {-1, 1, 0, 0};",
+  "    int dc[4] = {0, 0, -1, 1};",
+  "    while (!q.empty()) {",
+  "        auto [r, c] = q.front(); q.pop();",
+  "        for (int d = 0; d < 4; d++) {",
+  "            int nr = r + dr[d], nc = c + dc[d];",
+  "            if (nr >= 0 && nr < M && nc >= 0 && nc < N &&",
+  "                !visited[nr][nc] && abs(H[nr][nc] - H[r][c]) < D) {",
+  "                visited[nr][nc] = true;",
+  "                q.push({nr, nc});",
+  "                count++;",
+  "            }",
+  "        }",
+  "    }",
   "    cout << count << \"\\n\";",
-  "",
   "    return 0;",
   "}",
 ];
@@ -258,20 +195,24 @@ export function getMcc20CityTourSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+        t(E, "Flood-fill (BFS) from the start (1,1): pop a cell, then for each of its 4 neighbors, step in only if it hasn't been visited AND the height gap |H[nr][nc] − H[r][c]| < D.",
+            "시작 (1,1) 에서 플러드필 (BFS): 칸을 꺼내고, 4 이웃 각각에 대해 아직 방문 안 했고 높이 차 |H[nr][nc] − H[r][c]| < D 일 때만 들어가요."),
+        t(E, "Mark visited AT PUSH time and bump count then — so every reachable cell is counted exactly once. The answer is how many cells got visited.",
+            "push 하는 순간 방문 표시하고 그때 count 를 올려요 — 그래야 갈 수 있는 칸이 정확히 한 번씩만 세어져요. 답은 방문된 칸의 개수예요."),
+        t(E, "There is no fixed wall map: whether an edge is open depends on the two heights AND D. The same neighbor can be open for a large D and blocked for a small D — adjacency is dynamic.",
+            "고정된 벽 지도는 없어요: 어떤 간선이 열리는지는 두 높이 와 D 에 따라 달라져요. 같은 이웃도 D 가 크면 열리고 작으면 막혀요 — 인접 관계가 D 에 따라 바뀌어요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "deque.popleft() is O(1) — that is what makes this BFS, not a slow list.pop(0) each step.",
+            "deque 의 popleft() 는 O(1) — 그래서 매 스텝 느린 list.pop(0) 대신 진짜 BFS 가 돼요."),
+        t(E, "abs(H[nr][nc] - H[r][c]) < D is the whole edge rule — the height DIFFERENCE, strictly less than D.",
+            "abs(H[nr][nc] - H[r][c]) < D 가 간선 규칙 전부예요 — 높이 '차이' 가 D 보다 엄격히 작을 때만."),
       ],
       cppOnly: [
-        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
-        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+        t(E, "Use queue<pair<int,int>> and abs() from <cstdlib>; visited is a vector<vector<bool>>.",
+            "queue<pair<int,int>> 와 <cstdlib> 의 abs() 사용; visited 는 vector<vector<bool>>."),
+        t(E, "int is plenty here: heights fit (|H| ≤ 10^6) and the cell count is small (M×N ≤ 10^5).",
+            "여기선 int 로 충분해요: 높이 (|H| ≤ 10^6) 와 칸 수 (M×N ≤ 10^5) 모두 int 범위."),
       ],
     },
   ];
@@ -283,7 +224,7 @@ export function Mcc20CityTourProgressiveCode(props) {
 
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
-const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
+const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set","queue"];
 function highlightHTML(line, lang) {
   const escHTML = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const keywords = lang === "py" ? PY_KEYWORDS : CPP_KEYWORDS;
@@ -354,4 +295,3 @@ ${sections.map(s => `
   win.document.close();
   setTimeout(() => { win.focus(); win.print(); }, 500);
 }
-

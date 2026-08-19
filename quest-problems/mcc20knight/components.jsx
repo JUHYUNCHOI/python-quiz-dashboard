@@ -4,183 +4,248 @@ import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeSteppe
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#2563eb";
+const KA = { wordBreak: "keep-all" };
+const NW = { whiteSpace: "nowrap" };
 
-// 8 knight L-moves: (dr, dc) — 2 in one axis, 1 in the perpendicular.
-const KNIGHT_MOVES = [
-  { dr: -2, dc: -1 }, { dr: -2, dc:  1 },
-  { dr: -1, dc: -2 }, { dr: -1, dc:  2 },
-  { dr:  1, dc: -2 }, { dr:  1, dc:  2 },
-  { dr:  2, dc: -1 }, { dr:  2, dc:  1 },
-];
+// 8 knight L-moves: 2 in one axis, 1 in the perpendicular.
+const MOVES = [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
 
-export function KnightMovesSim({ E }) {
-  const N = 5;            // 5x5 mini board, knight in center
-  const SR = 2, SC = 2;
-  const [pickedIdx, setPickedIdx] = useState(null);
-  const picked = pickedIdx == null ? null : KNIGHT_MOVES[pickedIdx];
-  const targetR = picked ? SR + picked.dr : null;
-  const targetC = picked ? SC + picked.dc : null;
+// Minimum knight moves from (0,0) to (dx,dy) on an INFINITE board.
+// BFS with a small negative margin so a short path may dip below 0
+// (e.g. reaching (1,1) really needs 2 moves, not 4).
+function minKnight(dx, dy) {
+  dx = Math.abs(dx); dy = Math.abs(dy);
+  const M = 4, LO = -M, HI = Math.max(dx, dy) + M, SIZE = HI - LO + 1;
+  const ix = (v) => v - LO;
+  const dist = Array.from({ length: SIZE }, () => new Array(SIZE).fill(-1));
+  dist[ix(0)][ix(0)] = 0;
+  const q = [[0, 0]]; let head = 0;
+  while (head < q.length) {
+    const [x, y] = q[head++];
+    const d = dist[ix(x)][ix(y)];
+    for (const [mx, my] of MOVES) {
+      const nx = x + mx, ny = y + my;
+      if (nx >= LO && nx <= HI && ny >= LO && ny <= HI && dist[ix(nx)][ix(ny)] === -1) {
+        dist[ix(nx)][ix(ny)] = d + 1;
+        q.push([nx, ny]);
+      }
+    }
+  }
+  return dist[ix(dx)][ix(dy)];
+}
 
-  const reachable = (r, c) =>
-    KNIGHT_MOVES.some(m => SR + m.dr === r && SC + m.dc === c);
+/* ─────────────────────────────────────────────────────────────
+   Concept sim: pick a target square, see its MINIMUM moves, then
+   nudge K. Green when K ≥ min AND (K − min) is even → reachable in
+   EXACTLY K. Red otherwise. Teaches: extra moves come in pairs.
+   ───────────────────────────────────────────────────────────── */
+export function KnightExactSim({ E }) {
+  const N = 7, SR = 3, SC = 3;          // 7×7 board, knight in the center
+  const [pick, setPick] = useState({ r: 0, c: 0 });  // start target: offset (3,3)
+  const dx = Math.abs(pick.r - SR), dy = Math.abs(pick.c - SC);
+  const need = minKnight(dx, dy);
+  const [k, setK] = useState(need);
 
-  const cellSize = 44;
+  const reachable = k >= need && (k - need) % 2 === 0;
+  const reason = k < need
+    ? t(E, "K is smaller than the minimum — you can't even get there yet.",
+          "K가 최소 이동보다 작아요 — 아직 도착조차 못 해요.")
+    : ((k - need) % 2 === 1
+        ? t(E, "Leftover K − min is ODD — those wasted moves can't pair up.",
+              "남는 K − 최소가 홀수예요 — 낭비할 이동이 짝을 못 지어요.")
+        : t(E, "Leftover K − min is EVEN — waste it as go-and-come-back pairs.",
+              "남는 K − 최소가 짝수예요 — 갔다 오기 짝으로 딱 낭비돼요."));
+
+  const cellSize = 40;
+
+  const clickCell = (r, c) => {
+    if (r === SR && c === SC) return;
+    const ndx = Math.abs(r - SR), ndy = Math.abs(c - SC);
+    setPick({ r, c });
+    setK(minKnight(ndx, ndy));   // reset K to the fresh minimum for a clean demo
+  };
 
   return (
     <div style={{ padding: 14 }}>
-      <div style={{
-        background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12,
-        padding: 12, marginBottom: 12, fontSize: 12, color: "#1e3a8a", lineHeight: 1.55,
-      }}>
-        <b style={{ color: A }}>{t(E, "Try a move", "이동 해 보기")}</b>
-        {t(E,
-          " — click any blue ★ cell. The knight (♞) jumps in an L-shape: 2 in one axis, 1 in the other.",
-          " — 파란 ★ 칸 아무거나 눌러 봐요. 나이트 (♞) 가 L 자로 점프 — 한 축 2 칸, 다른 축 1 칸.")}
-      </div>
-
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${N}, ${cellSize}px)`,
-          gridTemplateRows: `repeat(${N}, ${cellSize}px)`,
-          border: `2px solid ${A}`, borderRadius: 8, overflow: "hidden",
-          boxShadow: "0 2px 8px rgba(37,99,235,.15)",
-        }}>
-          {Array.from({ length: N * N }, (_, k) => {
-            const r = Math.floor(k / N), c = k % N;
-            const isStart = r === SR && c === SC;
-            const isTarget = picked && r === targetR && c === targetC;
-            const isReach = reachable(r, c);
-            const checker = (r + c) % 2 === 0 ? "#f1f5f9" : "#cbd5e1";
-            let bg = checker;
-            if (isReach) bg = "#dbeafe";
-            if (isTarget) bg = "#86efac";
-            const showKnight = picked ? isTarget : isStart;
-            const trailKnight = picked && isStart;
-            return (
-              <button
-                key={k}
-                disabled={!isReach}
-                onClick={() => {
-                  const idx = KNIGHT_MOVES.findIndex(m => SR + m.dr === r && SC + m.dc === c);
-                  if (idx >= 0) setPickedIdx(idx);
-                }}
-                style={{
-                  background: bg,
-                  border: "1px solid #94a3b8",
-                  cursor: isReach ? "pointer" : "default",
-                  fontSize: 22, fontWeight: 700,
-                  color: trailKnight ? "#94a3b8" : "#1e293b",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  padding: 0,
-                  transition: "background .25s ease",
-                }}
-                title={isReach ? `(${r},${c})` : ""}
-              >
-                {showKnight ? "♞" : trailKnight ? "·" : (isReach ? "★" : "")}
-              </button>
-            );
-          })}
+      <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, ...KA }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 8 }}>
+          ♞ {t(E, "Can it arrive in EXACTLY K moves?", "정확히 K번에 도착할 수 있을까?")}
         </div>
-      </div>
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+          {t(E,
+            "Click a square to pick a target. See its MINIMUM moves. Then change K and watch: green means the knight can land there in exactly K moves.",
+            "칸을 눌러 목표를 골라요. 그 칸까지 최소 이동이 나와요. 그다음 K를 바꿔봐요: 초록이면 정확히 K번에 도착할 수 있어요.")}
+        </div>
 
-      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 8 }}>
-        {KNIGHT_MOVES.map((m, i) => {
-          const active = pickedIdx === i;
-          const sign = (n) => (n > 0 ? `+${n}` : `${n}`);
-          return (
-            <button key={i} onClick={() => setPickedIdx(i)} style={{
-              background: active ? A : "#fff",
-              color: active ? "#fff" : A,
-              border: `1.5px solid ${A}`,
-              borderRadius: 6,
-              padding: "4px 8px",
-              fontSize: 11, fontWeight: 700,
-              cursor: "pointer",
-              fontFamily: "monospace",
-            }}>
-              ({sign(m.dr)},{sign(m.dc)})
-            </button>
-          );
-        })}
-      </div>
+        {/* board */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${N}, ${cellSize}px)`,
+            gridTemplateRows: `repeat(${N}, ${cellSize}px)`,
+            border: `2px solid ${A}`, borderRadius: 8, overflow: "hidden",
+            boxShadow: "0 2px 8px rgba(37,99,235,.15)",
+          }}>
+            {Array.from({ length: N * N }, (_, idx) => {
+              const r = Math.floor(idx / N), c = idx % N;
+              const isStart = r === SR && c === SC;
+              const isTarget = r === pick.r && c === pick.c && !isStart;
+              const checker = (r + c) % 2 === 0 ? "#f1f5f9" : "#dbe3ee";
+              let bg = checker;
+              if (isTarget) bg = reachable ? "#bbf7d0" : "#fecaca";
+              return (
+                <button
+                  key={idx}
+                  onClick={() => clickCell(r, c)}
+                  disabled={isStart}
+                  title={isStart ? t(E, "knight", "나이트") : `(${Math.abs(r - SR)},${Math.abs(c - SC)})`}
+                  style={{
+                    background: bg,
+                    border: "1px solid #94a3b8",
+                    cursor: isStart ? "default" : "pointer",
+                    fontSize: isStart ? 22 : 15, fontWeight: 800,
+                    color: isStart ? "#1e293b" : (isTarget ? (reachable ? "#166534" : "#991b1b") : "#94a3b8"),
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    padding: 0, transition: "background .2s ease",
+                  }}
+                >
+                  {isStart ? "♞" : isTarget ? String(need) : ""}
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
-      <div style={{ textAlign: "center", fontSize: 12, color: C.dim, minHeight: 18 }}>
-        {picked ? (
-          <span>
-            <b style={{ color: A }}>(+{picked.dr},{picked.dc})</b>
-            {" "}
-            {t(E, "→ knight moves to", "→ 나이트 이동")}
-            {" "}
-            <b style={{ color: "#15803d" }}>({targetR},{targetC})</b>
-            {". "}
-            {t(E, "One axis ±2, the other ±1.", "한 축 ±2, 다른 축 ±1.")}
-          </span>
-        ) : (
-          <span>{t(E, "Pick one of the 8 ★ cells (or a button below).", "8 개의 ★ 칸 중 하나를 골라요 (또는 아래 버튼).")}</span>
-        )}
+        {/* offset + min readout */}
+        <div style={{ textAlign: "center", fontSize: 12.5, color: C.text, marginBottom: 10, ...KA }}>
+          {t(E, "target offset ", "목표 오프셋 ")}
+          <b style={{ color: A, fontFamily: "'JetBrains Mono',monospace" }}>({dx}, {dy})</b>
+          {t(E, "  ·  minimum moves = ", "  ·  최소 이동 = ")}
+          <b style={{ color: A }}>{need}</b>
+        </div>
+
+        {/* K stepper */}
+        <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+          <span style={{ fontSize: 12.5, color: "#1e3a8a", fontWeight: 700 }}>K =</span>
+          <button onClick={() => setK(Math.max(0, k - 1))} style={kBtn}>−</button>
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 800, color: A, minWidth: 26, textAlign: "center" }}>{k}</span>
+          <button onClick={() => setK(k + 1)} style={kBtn}>+</button>
+        </div>
+
+        {/* verdict */}
+        <div style={{
+          background: reachable ? "#ecfdf5" : "#fef2f2",
+          border: `1.5px solid ${reachable ? "#6ee7b7" : "#fca5a5"}`,
+          borderRadius: 10, padding: "12px 14px", ...KA,
+        }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: reachable ? "#065f46" : "#b91c1c", marginBottom: 4 }}>
+            {reachable
+              ? t(E, `✅ YES — reachable in exactly ${k} moves`, `✅ YES — 정확히 ${k}번에 도착 가능`)
+              : t(E, `❌ NO — not in exactly ${k} moves`, `❌ NO — 정확히 ${k}번엔 불가능`)}
+          </div>
+          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>{reason}</div>
+        </div>
+
+        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+          {t(E,
+            "The rule: reachable in exactly K  ⇔  K ≥ min AND (K − min) is even. Extra moves are wasted two at a time — step out and come right back.",
+            "규칙: 정확히 K번 도착  ⇔  K ≥ 최소 그리고 (K − 최소)가 짝수. 남는 이동은 두 번씩 낭비돼요 — 한 칸 나갔다 바로 돌아오기.")}
+        </div>
       </div>
     </div>
   );
 }
+const kBtn = {
+  width: 30, height: 30, borderRadius: 7, border: "1px solid #93c5fd", background: "#fff",
+  color: "#1e3a8a", fontSize: 18, fontWeight: 800, cursor: "pointer", lineHeight: 1,
+};
 
 
+/* ================================================================
+   SOLUTION CODE
+   Precompute min knight moves once (BFS), then answer each query
+   with:  exactly K  ⇔  K ≥ min  AND  (K − min) is even.
+   ================================================================ */
 const FULL_PY = [
   "from collections import deque",
   "",
-  "N = int(input())",
-  "sr, sc = map(int, input().split())",
-  "tr, tc = map(int, input().split())",
-  "",
-  "moves = [(-2,-1),(-2,1),(-1,-2),(-1,2),",
+  "# 8 knight L-moves (2 in one axis, 1 in the other)",
+  "MOVES = [(-2,-1),(-2,1),(-1,-2),(-1,2),",
   "         (1,-2),(1,2),(2,-1),(2,1)]",
   "",
-  "dist = [[-1]*N for _ in range(N)]",
-  "dist[sr][sc] = 0",
-  "q = deque([(sr, sc)])",
-  "",
+  "# minimum moves to cover any offset (dx, dy), 0 <= dx, dy <= 2000.",
+  "# BFS once from (0,0); a small negative margin lets a short path",
+  "# dip below 0 (needed to reach (1,1) in 2 moves).",
+  "M = 4",
+  "LO, HI = -M, 2000 + M",
+  "SIZE = HI - LO + 1",
+  "best = [[-1] * SIZE for _ in range(SIZE)]",
+  "best[0 - LO][0 - LO] = 0",
+  "q = deque([(0, 0)])",
   "while q:",
-  "    r, c = q.popleft()",
-  "    if r == tr and c == tc:",
-  "        print(dist[r][c])",
-  "        break",
-  "    for dr, dc in moves:",
-  "        nr, nc = r+dr, c+dc",
-  "        if 0<=nr<N and 0<=nc<N and dist[nr][nc]==-1:",
-  "            dist[nr][nc] = dist[r][c] + 1",
-  "            q.append((nr, nc))",
+  "    x, y = q.popleft()",
+  "    for dx, dy in MOVES:",
+  "        nx, ny = x + dx, y + dy",
+  "        if LO <= nx <= HI and LO <= ny <= HI and best[nx - LO][ny - LO] == -1:",
+  "            best[nx - LO][ny - LO] = best[x - LO][y - LO] + 1",
+  "            q.append((nx, ny))",
+  "",
+  "T = int(input())",
+  "out = []",
+  "for _ in range(T):",
+  "    K, X, Y, A, B = map(int, input().split())",
+  "    dx, dy = abs(X - A), abs(Y - B)",
+  "    need = best[dx - LO][dy - LO]",
+  "    # exactly K  <=>  K >= need and leftover (K - need) is even",
+  "    if K >= need and (K - need) % 2 == 0:",
+  "        out.append('YES')",
+  "    else:",
+  "        out.append('NO')",
+  "print('\\n'.join(out))",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
   "#include <vector>",
-  "#include <string>",
+  "#include <queue>",
+  "#include <cmath>",
   "using namespace std;",
   "",
+  "int dr[8] = {-2,-2,-1,-1, 1, 1, 2, 2};",
+  "int dc[8] = {-1, 1,-2, 2,-2, 2,-1, 1};",
+  "",
+  "const int M = 4, LO = -M, HI = 2000 + M, SIZE = HI - LO + 1;",
+  "vector<vector<int>> best(SIZE, vector<int>(SIZE, -1));",
+  "",
   "int main() {",
+  "    ios::sync_with_stdio(false);",
+  "    cin.tie(nullptr);",
   "",
-  "    int N; cin >> N;",
-  "    int sr, sc; cin >> sr >> sc;",
-  "    int tr, tc; cin >> tr >> tc;",
+  "    // BFS once: minimum knight moves to every offset",
+  "    best[0 - LO][0 - LO] = 0;",
+  "    queue<pair<int,int>> q;",
+  "    q.push(make_pair(0, 0));",
+  "    while (!q.empty()) {",
+  "        int x = q.front().first, y = q.front().second; q.pop();",
+  "        for (int i = 0; i < 8; i++) {",
+  "            int nx = x + dr[i], ny = y + dc[i];",
+  "            if (nx>=LO && nx<=HI && ny>=LO && ny<=HI && best[nx-LO][ny-LO]==-1) {",
+  "                best[nx-LO][ny-LO] = best[x-LO][y-LO] + 1;",
+  "                q.push(make_pair(nx, ny));",
+  "            }",
+  "        }",
+  "    }",
   "",
-  "    auto moves = [(-2,-1),(-2,1),(-1,-2),(-1,2),;",
-  "            // (1,-2),(1,2),(2,-1),(2,1)]",
-  "",
-  "    auto dist = [[-1]*N for _ in range(N)];",
-  "    // dist[sr][sc] = 0",
-  "    auto q = deque([(sr, sc)]);",
-  "",
-  "    while (q) {",
-  "        // r, c = q.popleft()",
-  "        if (r == tr and c == tc) {",
-  "            cout << dist[r][c] << \"\\n\";",
-  "            break;",
-  "        // for dr, dc in moves:",
-  "            // nr, nc = r+dr, c+dc",
-  "            if (0<=nr<N and 0<=nc<N and dist[nr][nc]==-1) {",
-  "                // dist[nr][nc] = dist[r][c] + 1",
-  "                // q.append((nr, nc))",
-  "",
+  "    int T; cin >> T;",
+  "    while (T--) {",
+  "        int K, X, Y, A, B;",
+  "        cin >> K >> X >> Y >> A >> B;",
+  "        int dx = abs(X - A), dy = abs(Y - B);",
+  "        int need = best[dx - LO][dy - LO];",
+  "        // exactly K  <=>  K >= need and leftover (K - need) is even",
+  "        if (K >= need && (K - need) % 2 == 0) cout << \"YES\\n\";",
+  "        else cout << \"NO\\n\";",
+  "    }",
   "    return 0;",
   "}",
 ];
@@ -192,20 +257,24 @@ export function getMcc20KnightSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+        t(E, "Reaching (A,B) from (X,Y) is the same as covering the offset (dx,dy) = (|X−A|, |Y−B|) from (0,0) — so one BFS from the origin answers every query.",
+            "(X,Y) 에서 (A,B) 로 가는 건 (0,0) 에서 오프셋 (dx,dy) = (|X−A|, |Y−B|) 를 덮는 것과 같아요 — 그래서 원점에서 BFS 한 번이면 모든 질문에 답해요."),
+        t(E, "BFS gives the MINIMUM moves to each offset. Then the exact-K test is just: K ≥ min AND (K − min) is even — extra moves are wasted two at a time (out and back).",
+            "BFS 는 각 오프셋까지의 최소 이동을 줘요. 그다음 정확히-K 판정은 딱: K ≥ 최소 그리고 (K − 최소)가 짝수 — 남는 이동은 두 번씩(나갔다 돌아오기) 낭비돼요."),
+        t(E, "Why parity is forced: a knight flips square color every move, so the number of moves and (dx+dy) always share the same parity. That's why the leftover must be even.",
+            "왜 홀짝이 강제될까: 나이트는 한 번 움직일 때마다 칸 색이 바뀌어서, 이동 횟수와 (dx+dy)는 항상 같은 홀짝이에요. 그래서 남는 값이 짝수여야 해요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "best[nx - LO][ny - LO] shifts coordinates by LO so negative cells fit into a normal 2D list.",
+            "best[nx - LO][ny - LO] 는 좌표를 LO 만큼 밀어 음수 칸도 보통 2차원 리스트에 담아요."),
+        t(E, "Collect answers in a list and print once with '\\n'.join — faster than printing T times.",
+            "답을 리스트에 모아 '\\n'.join 으로 한 번에 출력해요 — T 번 출력보다 빨라요."),
       ],
       cppOnly: [
-        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
-        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+        t(E, "dr[]/dc[] list the 8 L-moves; LO shifts coordinates so negatives index a plain vector.",
+            "dr[]/dc[] 는 8 개 L-이동; LO 로 좌표를 밀어 음수도 보통 vector 로 인덱싱해요."),
+        t(E, "ios::sync_with_stdio(false) speeds up cin/cout for up to 400 queries.",
+            "ios::sync_with_stdio(false) 로 최대 400 질문의 cin/cout 을 빠르게 해요."),
       ],
     },
   ];
@@ -288,4 +357,3 @@ ${sections.map(s => `
   win.document.close();
   setTimeout(() => { win.focus(); win.print(); }, 500);
 }
-
