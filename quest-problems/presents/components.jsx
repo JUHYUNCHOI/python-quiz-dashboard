@@ -202,10 +202,10 @@ const PR_FIND_CPP = [
 
 /* Section 3: Remove target */
 const PR_POP_PY = [
-  "    stack.pop(pos)              # target taken out, others stay in order",
+  "    del stack[:pos + 1]        # target + everything above: gone forever",
 ];
 const PR_POP_CPP = [
-  "        stack.erase(stack.begin() + pos);     // remove target, keep order",
+  "        stack.erase(stack.begin(), stack.begin() + pos + 1);  // target + above gone",
   "    }",
   "    return 0;",
   "}",
@@ -220,7 +220,7 @@ const PR_FULL_PY = [
   "    target = int(input())",
   "    pos = stack.index(target)",
   "    print(pos)",
-  "    stack.pop(pos)",
+  "    del stack[:pos + 1]  # target + everything above it: gone forever",
 ];
 const PR_FULL_CPP = [
   "#include <iostream>",
@@ -243,7 +243,7 @@ const PR_FULL_CPP = [
   "            pos++;",
   "        }",
   "        cout << pos << endl;",
-  "        stack.erase(stack.begin() + pos);",
+  "        stack.erase(stack.begin(), stack.begin() + pos + 1);",
   "    }",
   "    return 0;",
   "}",

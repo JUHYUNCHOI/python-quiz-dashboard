@@ -37,7 +37,7 @@ export const SOLUTION_CODE = [
   "    else:",
   "        clusters = 1",
   "        for i in range(1, len(sick)):",
-  "            if sick[i] - sick[i-1] > 2 * max_R:",
+  "            if sick[i] - sick[i-1] > max_R:",
   "                clusters += 1",
   "        print(clusters)",
 ];

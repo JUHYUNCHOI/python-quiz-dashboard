@@ -35,7 +35,7 @@ export function SocDist2Sim({ E }) {
   const sortedSick = [...sick].sort((a, b) => a - b);
   let clusters = sortedSick.length > 0 ? 1 : 0;
   for (let i = 1; i < sortedSick.length; i++) {
-    if (sortedSick[i] - sortedSick[i - 1] > 2 * R) clusters++;
+    if (sortedSick[i] - sortedSick[i - 1] > R) clusters++;
   }
 
   const U = 26;
@@ -159,7 +159,7 @@ export function SocDist2Sim({ E }) {
           <span>{t(E, "sick gaps:", "감염 간격:")}</span>
           {sortedSick.slice(1).map((p, i) => {
             const g = p - sortedSick[i];
-            const newCluster = g > 2 * R;
+            const newCluster = g > R;
             return (
               <span key={i} style={{ color: newCluster ? "#db2777" : "#16a34a", fontWeight: 700 }}>
                 {g}{newCluster ? " ▶" : ""}{i < sortedSick.length - 2 ? "," : ""}

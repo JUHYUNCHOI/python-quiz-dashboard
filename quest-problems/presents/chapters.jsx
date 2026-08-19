@@ -10,7 +10,7 @@ const PR_WALK_PY = [
   "    target = int(input())",
   "    pos = stack.index(target)",
   "    print(pos)",
-  "    stack.pop(pos)",
+  "    del stack[:pos + 1]  # target + everything above it: gone forever",
 ];
 const PR_WALK_CPP = [
   "#include <iostream>",
@@ -33,7 +33,7 @@ const PR_WALK_CPP = [
   "            pos++;",
   "        }",
   "        cout << pos << endl;",
-  "        stack.erase(stack.begin() + pos);",
+  "        stack.erase(stack.begin(), stack.begin() + pos + 1);",
   "    }",
   "    return 0;",
   "}",
@@ -69,7 +69,7 @@ export const SOLUTION_CODE = [
   "    # Must remove pos presents above it (0-indexed: remove 0..pos-1)",
   "    print(pos)",
   "    # Remove target from stack (it's taken out)",
-  "    stack.pop(pos)",
+  "    del stack[:pos + 1]  # target + everything above it: gone forever",
 ];
 
 export function makePresentsCh1(E) {
