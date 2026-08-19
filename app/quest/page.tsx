@@ -11,7 +11,9 @@ import { useAuth } from "@/contexts/auth-context"
 import { useEffectiveIsTeacher } from "@/lib/effective-role"
 import { ALL_TOPICS } from "@/data/algorithm/topics"
 import { isVisibleInCatalog, getReleaseStage, getQuestMeta } from "@/lib/quest-meta"
-import { MCC_DIFFICULTY, DIFF_COLOR } from "@/lib/mcc-difficulty"
+import { questDifficulty, DIFF_COLOR } from "@/lib/quest-difficulty"
+
+const DIFF_SECTIONS = new Set(["MCC", "USACO", "MCO"])   // 난이도 뱃지·필터 붙는 섹션
 import { masteredConcepts, suggestNextConcepts } from "@/lib/concept-graph"
 import { CONCEPT_ONTOLOGY, type ConceptId } from "@/lib/quest-meta"
 import { useReleasePref } from "@/components/quest/use-release-pref"
@@ -600,7 +602,7 @@ export default function QuestPage() {
                 {/* Contest-grouped problem list (USACO: Season → 4-col grid of contest cards) */}
                 {isExpanded && (
                   <div className="border-t-2 border-black bg-gray-50">
-                    {section.label === "MCC" && (
+                    {DIFF_SECTIONS.has(section.label) && (
                       <div className="flex items-center gap-1.5 flex-wrap px-3 py-2 border-b-2 border-gray-200 bg-white">
                         <span className="text-[11px] font-bold text-gray-500 mr-1">🎚️ 난이도</span>
                         {([null, 1, 2, 3, 4, 5] as (number | null)[]).map(lv => {
@@ -609,7 +611,7 @@ export default function QuestPage() {
                           const color = lv === null ? "#334155" : DIFF_COLOR[lv as 1 | 2 | 3 | 4 | 5]
                           const pool = lv === null
                             ? section.problems
-                            : section.problems.filter(p => MCC_DIFFICULTY[p.id] === lv)
+                            : section.problems.filter(p => questDifficulty(p.id, p.sub) === lv)
                           const cnt = pool.length
                           const done = pool.filter(p => solvedSet.has(p.id)).length
                           if (cnt === 0) return null   // 그 난이도에 (보이는) 문제가 없으면 칩 숨김
@@ -650,12 +652,13 @@ export default function QuestPage() {
                           {/* Contest cards: responsive grid */}
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 p-2">
                             {contests.map(({ contest, items }) => {
-                              // MCC: 쉬운 것부터 (난이도 오름차순) + 난이도 필터. 다른 섹션은 원래 순서.
-                              const sorted = section.label === "MCC"
-                                ? [...items].sort((a, b) => (MCC_DIFFICULTY[a.id] ?? 9) - (MCC_DIFFICULTY[b.id] ?? 9))
+                              // 난이도 섹션(MCC·USACO·MCO): 쉬운 것부터 정렬 + 난이도 필터. 그 외는 원래 순서.
+                              const hasDiff = DIFF_SECTIONS.has(section.label)
+                              const sorted = hasDiff
+                                ? [...items].sort((a, b) => (questDifficulty(a.id, a.sub) ?? 9) - (questDifficulty(b.id, b.sub) ?? 9))
                                 : items
-                              const rows = (section.label === "MCC" && mccDiff !== null)
-                                ? sorted.filter(p => MCC_DIFFICULTY[p.id] === mccDiff)
+                              const rows = (hasDiff && mccDiff !== null)
+                                ? sorted.filter(p => questDifficulty(p.id, p.sub) === mccDiff)
                                 : sorted
                               if (rows.length === 0) return null   // 필터에 안 걸리는 대회 카드는 숨김
                               const groupSolved = rows.filter(p => solvedSet.has(p.id)).length
@@ -687,7 +690,7 @@ export default function QuestPage() {
                                   <div className="flex flex-col">
                                     {rows.map((problem, idx) => {
                                       const isSolved = solvedSet.has(problem.id)
-                                      const diff = MCC_DIFFICULTY[problem.id]
+                                      const diff = questDifficulty(problem.id, problem.sub)
                                       const stage = getReleaseStage(problem.id)
                                       const ready = isReady(problem.id)
                                       const numMatch = problem.sub.match(/#(\d+)$/) || problem.sub.match(/P(\d+)$/)
