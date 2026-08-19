@@ -4,219 +4,262 @@ import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeSteppe
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#d97706";
+const KA = { wordBreak: "keep-all" };
+const NW = { whiteSpace: "nowrap" };
 
-/* ═══════════════════════════════════════════════════════════════
-   Mcc21DvdBounceSim — step-by-step audit of the bouncing DVD logo.
-   Student picks a preset, advances one step at a time, and watches
-   each (x, y) update + which wall flipped which component. Reveals
-   exactly when dx or dy changes sign.
-   ═══════════════════════════════════════════════════════════════ */
-const _DVD_PRESETS = [
-  { W: 5, H: 4, x0: 0, y0: 0, dx0: 1,  dy0: 1,  T: 8 },
-  { W: 6, H: 5, x0: 2, y0: 1, dx0: 1,  dy0: 1,  T: 10 },
-  { W: 4, H: 6, x0: 3, y0: 5, dx0: -1, dy0: -1, T: 9 },
-];
-
-function _simulateDvd(p, steps) {
-  let { x0: x, y0: y, dx0: dx, dy0: dy, W, H } = p;
-  const trace = [{ step: 0, x, y, dx, dy, flipX: false, flipY: false }];
-  for (let s = 1; s <= steps; s++) {
-    x += dx;
-    y += dy;
-    let flipX = false, flipY = false;
-    if (x <= 0 || x >= W - 1) { dx = -dx; flipX = true; }
-    if (y <= 0 || y >= H - 1) { dy = -dy; flipY = true; }
-    trace.push({ step: s, x, y, dx, dy, flipX, flipY });
-  }
-  return trace;
+/* one axis (length N) after t seconds — a triangle wave that bounces
+   between 1 and N with period 2(N-1). */
+function oneAxis(N, t) {
+  const period = 2 * (N - 1);
+  const p = ((t % period) + period) % period;
+  return N - Math.abs((N - 1) - p);
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   Mcc21DvdBounceSim — the row and the column are TWO independent
+   1-D bouncers. The student steps T; each axis traces a triangle
+   wave (1→N→1→N…). We overlay the closed-form formula so they see
+   the position comes straight from T, not from stepping. Period is
+   2(N-1), so even T = 10^16 is one modulo away.
+   ═══════════════════════════════════════════════════════════════ */
+const SIM_H = 3; // rows  (matches the PDF's h=3 example)
+const SIM_W = 5; // cols  (matches the PDF's w=5 example)
+const SIM_TMAX = 16;
+
 export function Mcc21DvdBounceSim({ E }) {
-  const [pi, setPi] = useState(0);
-  const [step, setStep] = useState(0);
-  const p = _DVD_PRESETS[pi];
+  const [tt, setTt] = useState(0);
 
-  const trace = _simulateDvd(p, p.T);
-  const cur = trace[Math.min(step, p.T)];
-  const prev = step > 0 ? trace[step - 1] : null;
+  const r = oneAxis(SIM_H, tt); // row from the bottom, 1..H
+  const c = oneAxis(SIM_W, tt); // col from the left, 1..W
+  const hPeriod = 2 * (SIM_H - 1);
+  const wPeriod = 2 * (SIM_W - 1);
 
-  const pickPreset = (i) => { setPi(i); setStep(0); };
-  const stepFwd = () => setStep((s) => Math.min(s + 1, p.T));
-  const stepBack = () => setStep((s) => Math.max(s - 1, 0));
-  const reset = () => setStep(0);
-
-  // Build grid cells, marking the current logo cell + the prior cell
-  const cellSize = Math.min(40, Math.floor(280 / Math.max(p.W, p.H)));
-  const rows = [];
-  for (let r = 0; r < p.H; r++) {
+  // grid: draw top→bottom, so display row index dr maps to r-value (H - dr)
+  const gridRows = [];
+  for (let dr = 0; dr < SIM_H; dr++) {
+    const rowVal = SIM_H - dr;
     const cells = [];
-    for (let c = 0; c < p.W; c++) {
-      const isLogo = (c === cur.x && r === cur.y);
-      const isPrev = prev && (c === prev.x && r === prev.y);
-      const onWall = (c === 0 || c === p.W - 1 || r === 0 || r === p.H - 1);
+    for (let col = 1; col <= SIM_W; col++) {
+      const isLogo = rowVal === r && col === c;
+      const onWall = rowVal === 1 || rowVal === SIM_H || col === 1 || col === SIM_W;
       cells.push(
-        <div key={c} style={{
-          width: cellSize, height: cellSize,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          background: isLogo ? "#d97706" : (isPrev ? "#fde68a" : (onWall ? "#fef3c7" : "#fff")),
-          color: isLogo ? "#fff" : "#92400e",
+        <div key={col} style={{
+          width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
+          background: isLogo ? A : onWall ? "#fef3c7" : "#fff",
           border: `1px solid ${onWall ? "#fcd34d" : "#e5e7eb"}`,
-          fontSize: 14, fontWeight: 700,
-        }}>
-          {isLogo ? "📀" : (isPrev ? "·" : "")}
-        </div>
+          fontSize: 16,
+        }}>{isLogo ? "📀" : ""}</div>
       );
     }
-    rows.push(<div key={r} style={{ display: "flex" }}>{cells}</div>);
+    gridRows.push(<div key={dr} style={{ display: "flex" }}>{cells}</div>);
   }
 
-  const flipMsg = (() => {
-    if (step === 0) return t(E, "Pick a preset and step forward to watch it bounce.",
-                                "프리셋 골라서 단계를 진행해봐. 튕기는 걸 볼 수 있어.");
-    if (cur.flipX && cur.flipY) return t(E, "💥 Hit a corner — both dx and dy flipped.",
-                                            "💥 모서리 충돌 — dx, dy 둘 다 반전.");
-    if (cur.flipX) return t(E, "↔️ Hit a vertical wall — dx flipped.", "↔️ 좌우 벽 — dx 반전.");
-    if (cur.flipY) return t(E, "↕️ Hit a horizontal wall — dy flipped.", "↕️ 위아래 벽 — dy 반전.");
-    return t(E, "Free flight — no wall this step.", "자유 비행 — 이번 단계는 벽 안 만남.");
-  })();
+  // a horizontal 1-D strip of length N, with the dot at `pos`
+  const strip = (N, pos, tone) => (
+    <div style={{ display: "flex", gap: 3 }}>
+      {Array.from({ length: N }, (_, i) => {
+        const v = i + 1;
+        const here = v === pos;
+        return (
+          <div key={v} style={{
+            width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center",
+            borderRadius: 6, fontSize: 11, fontWeight: 800,
+            fontFamily: "'JetBrains Mono',monospace",
+            border: here ? `2px solid ${tone}` : "1px solid #fcd34d",
+            background: here ? tone : "#fff",
+            color: here ? "#fff" : "#92400e",
+          }}>{v}</div>
+        );
+      })}
+    </div>
+  );
 
-  const btnStyle = (active) => ({
-    padding: "5px 10px", borderRadius: 8,
-    border: `1px solid ${active ? A : C.border}`,
-    background: active ? A : "transparent",
-    color: active ? "#fff" : C.dim,
-    fontSize: 12, fontWeight: 700, cursor: "pointer",
-    fontFamily: "'JetBrains Mono',monospace",
-  });
+  const btn = (label, onClick, disabled) => (
+    <button onClick={onClick} disabled={disabled} style={{
+      padding: "5px 12px", borderRadius: 8, border: `1px solid ${A}`,
+      background: disabled ? "#fff" : A, color: disabled ? C.dim : "#fff",
+      fontSize: 12, fontWeight: 800, cursor: disabled ? "default" : "pointer",
+      opacity: disabled ? 0.45 : 1, fontFamily: "'JetBrains Mono',monospace",
+    }}>{label}</button>
+  );
 
   return (
-    <div style={{ padding: 14 }}>
-      {/* preset selector */}
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
-        {_DVD_PRESETS.map((q, i) => (
-          <button key={i} onClick={() => pickPreset(i)} style={btnStyle(i === pi)}>
-            {q.W}×{q.H} · ({q.x0},{q.y0}) · ({q.dx0 > 0 ? "+" : "-"}{Math.abs(q.dx0)},{q.dy0 > 0 ? "+" : "-"}{Math.abs(q.dy0)}) · T={q.T}
-          </button>
-        ))}
-      </div>
-
-      {/* grid */}
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
-        <div style={{ border: `2px solid ${A}`, borderRadius: 6, padding: 2, background: "#fffbeb" }}>
-          {rows}
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, ...KA }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 8 }}>
+          🎞️ {t(E, "The row and the column bounce on their own", "행과 열은 따로따로 튕겨요")}
         </div>
-      </div>
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+          {t(E,
+            "Each second the logo moves one row up and one column right, turning back at the walls. The row (height H) and the column (width W) never affect each other — each is just a dot bouncing 1→N→1→N on its own line.",
+            "매 초 로고는 한 행 위로, 한 열 오른쪽으로 움직이고 벽에서 되돌아와요. 행(높이 H)과 열(너비 W)은 서로 전혀 간섭하지 않아요 — 각각 자기 선 위에서 1→N→1→N 으로 튕기는 점 하나일 뿐이에요.")}
+        </div>
 
-      {/* step status */}
-      <div style={{
-        background: "#fff", border: `1px solid ${C.border}`, borderRadius: 10,
-        padding: "10px 14px", marginBottom: 10,
-        display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 6, fontSize: 12,
-        fontFamily: "'JetBrains Mono',monospace", textAlign: "center",
-      }}>
-        <div><div style={{ color: C.dim, fontSize: 10 }}>{t(E, "step", "단계")}</div><b style={{ color: A }}>{cur.step}/{p.T}</b></div>
-        <div><div style={{ color: C.dim, fontSize: 10 }}>(x, y)</div><b style={{ color: A }}>({cur.x}, {cur.y})</b></div>
-        <div><div style={{ color: C.dim, fontSize: 10 }}>dx</div><b style={{ color: cur.flipX ? "#dc2626" : A }}>{cur.dx > 0 ? "+1" : "-1"}</b></div>
-        <div><div style={{ color: C.dim, fontSize: 10 }}>dy</div><b style={{ color: cur.flipY ? "#dc2626" : A }}>{cur.dy > 0 ? "+1" : "-1"}</b></div>
-      </div>
+        {/* T stepper */}
+        <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+          {btn("⏮", () => setTt(0), tt === 0)}
+          {btn("◀ T−1", () => setTt((v) => Math.max(0, v - 1)), tt === 0)}
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, fontWeight: 800, color: A, minWidth: 74, textAlign: "center" }}>
+            T = {tt}
+          </span>
+          {btn("T+1 ▶", () => setTt((v) => Math.min(SIM_TMAX, v + 1)), tt === SIM_TMAX)}
+        </div>
 
-      <div style={{
-        background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 10,
-        padding: "8px 12px", textAlign: "center", marginBottom: 10,
-        fontSize: 12, color: "#92400e", minHeight: 18,
-      }}>
-        {flipMsg}
-      </div>
-
-      {/* controls */}
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 8 }}>
-        <button onClick={reset} style={btnStyle(false)}>⏮ {t(E, "Reset", "처음")}</button>
-        <button onClick={stepBack} disabled={step === 0} style={{ ...btnStyle(false), opacity: step === 0 ? 0.4 : 1 }}>◀ {t(E, "Back", "뒤로")}</button>
-        <button onClick={stepFwd} disabled={step >= p.T} style={{ ...btnStyle(true), opacity: step >= p.T ? 0.4 : 1 }}>{t(E, "Step ▶", "단계 ▶")}</button>
-      </div>
-
-      {step >= p.T && (
-        <div style={{
-          background: "#fff7ed", border: `1px solid ${A}`, borderRadius: 10,
-          padding: "10px 14px", textAlign: "center",
-        }}>
-          <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-            {t(E, `Final position after T = ${p.T} steps`, `T = ${p.T} 단계 후 최종 위치`)}
-          </div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
-            print({cur.x}, {cur.y})
+        {/* grid */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+          <div style={{ border: `2px solid ${A}`, borderRadius: 6, padding: 2, background: "#fff" }}>
+            {gridRows}
           </div>
         </div>
-      )}
+
+        {/* two independent 1-D bouncers */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 16, justifyContent: "center", marginBottom: 12 }}>
+          <div style={{ textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 4, ...NW }}>
+              {t(E, "row axis (H = 3)", "행 축 (H = 3)")} → r = <b>{r}</b>
+            </div>
+            {strip(SIM_H, r, "#0891b2")}
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 4, ...NW }}>
+              {t(E, "col axis (W = 5)", "열 축 (W = 5)")} → c = <b>{c}</b>
+            </div>
+            {strip(SIM_W, c, "#7c3aed")}
+          </div>
+        </div>
+
+        {/* closed-form readout */}
+        <div style={{ background: "#0f172a", color: "#f8fafc", padding: "10px 12px", borderRadius: 8,
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, ...KA }}>
+          <div>
+            r = H − |(H−1) − (T mod 2(H−1))| = 3 − |2 − ({tt} mod {hPeriod})| = <b style={{ color: "#22d3ee" }}>{r}</b>
+          </div>
+          <div>
+            c = W − |(W−1) − (T mod 2(W−1))| = 5 − |4 − ({tt} mod {wPeriod})| = <b style={{ color: "#c4b5fd" }}>{c}</b>
+          </div>
+          <div style={{ marginTop: 6, color: "#fbbf24", fontWeight: 800 }}>
+            {t(E, "answer: ", "정답: ")}{r} {c}
+          </div>
+        </div>
+
+        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, ...KA }}>
+          {t(E,
+            "The row repeats every 2(H−1) = 4 seconds and the column every 2(W−1) = 8 seconds. So even T = 10^16 needs no stepping — one modulo folds T back into the first cycle and the formula gives the answer instantly.",
+            "행은 2(H−1) = 4 초마다, 열은 2(W−1) = 8 초마다 똑같이 반복돼요. 그래서 T = 10^16 이라도 한 칸씩 셀 필요가 없어요 — 나머지 연산 한 번이면 T 를 첫 주기로 접어 넣고, 공식이 곧바로 답을 줘요.")}
+        </div>
+      </div>
     </div>
   );
 }
 
-const FULL_PY = [
-  "W, H = map(int, input().split())",
-  "x, y = map(int, input().split())",
-  "dx, dy = 1, 1",
-  "T = int(input())",
-  "",
-  "for _ in range(T):",
-  "    x += dx",
-  "    y += dy",
-  "    if x <= 0 or x >= W - 1:",
-  "        dx = -dx",
-  "    if y <= 0 or y >= H - 1:",
-  "        dy = -dy",
-  "",
-  "print(x, y)",
+/* ================================================================
+   SOLUTION CODE  (fast: each axis is an independent triangle wave)
+   ================================================================ */
+const READ_PY = [
+  "Q = int(input())",
+  "H = list(map(int, input().split()))",
+  "W = list(map(int, input().split()))",
+  "T = list(map(int, input().split()))",
 ];
+const ONE_PY = [
+  "def one(N, t):",
+  "    # one axis bounces between 1 and N, repeating every 2*(N-1)",
+  "    p = t % (2 * (N - 1))",
+  "    return N - abs((N - 1) - p)",
+];
+const LOOP_PY = [
+  "for i in range(Q):",
+  "    # row uses H, column uses W — the same t, two separate waves",
+  "    print(one(H[i], T[i]), one(W[i], T[i]))",
+];
+const FULL_PY = [...READ_PY, "", ...ONE_PY, "", ...LOOP_PY];
 
+const READ_CPP = [
+  "int Q;",
+  "cin >> Q;",
+  "vector<long long> H(Q), W(Q), T(Q);",
+  "for (int i = 0; i < Q; i++) cin >> H[i];",
+  "for (int i = 0; i < Q; i++) cin >> W[i];",
+  "for (int i = 0; i < Q; i++) cin >> T[i];",
+];
+const ONE_CPP = [
+  "long long one(long long N, long long t) {",
+  "    // one axis bounces between 1 and N, repeating every 2*(N-1)",
+  "    long long p = t % (2 * (N - 1));",
+  "    long long d = (N - 1) - p;",
+  "    if (d < 0) d = -d;",
+  "    return N - d;",
+  "}",
+];
+const LOOP_CPP = [
+  "for (int i = 0; i < Q; i++) {",
+  "    // row uses H, column uses W — the same t, two separate waves",
+  "    cout << one(H[i], T[i]) << ' ' << one(W[i], T[i]) << '\\n';",
+  "}",
+];
 const FULL_CPP = [
   "#include <iostream>",
   "#include <vector>",
-  "#include <string>",
-  "#include <algorithm>",
   "using namespace std;",
   "",
+  ...ONE_CPP,
+  "",
   "int main() {",
-  "    int W, H; cin >> W >> H;",
-  "    int x, y; cin >> x >> y;",
-  "    // dx, dy = 1, 1",
-  "    int T; cin >> T;",
-  "",
-  "    for (int _ = 0; _ < T; _++) {",
-  "        x += dx;",
-  "        y += dy;",
-  "        if (x <= 0 or x >= W - 1) {",
-  "            auto dx = -dx;",
-  "        if (y <= 0 or y >= H - 1) {",
-  "            auto dy = -dy;",
-  "",
-  "    cout << x, y << \"\\n\";",
-  "",
+  ...READ_CPP.map((l) => "    " + l),
+  ...LOOP_CPP.map((l) => "    " + l),
   "    return 0;",
   "}",
 ];
 
+export { FULL_PY, FULL_CPP };
+
 export function getMcc21DvdSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "① Read the queries", "① 쿼리 읽기"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: READ_PY, cpp: READ_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
-      ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "There are Q independent test cases. Read H, W, T as three arrays — H[i], W[i], T[i] describe query i.",
+            "독립적인 쿼리가 Q 개예요. H, W, T 를 배열 세 개로 읽어요 — H[i], W[i], T[i] 가 i 번째 쿼리를 이뤄요."),
+        t(E, "Q ≤ 1000, so reading and answering each query in O(1) is plenty fast.",
+            "Q ≤ 1000 이라, 쿼리마다 O(1) 로 답하면 충분히 빨라요."),
       ],
       cppOnly: [
-        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
-        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+        t(E, "H, W ≤ 10^12 and T ≤ 10^16 overflow int — use long long.",
+            "H, W ≤ 10^12, T ≤ 10^16 은 int 를 넘쳐요 — long long 을 써요."),
+      ],
+    },
+    {
+      label: t(E, "② One axis = a triangle wave", "② 한 축 = 삼각파"),
+      color: "#0891b2",
+      py: ONE_PY, cpp: ONE_CPP,
+      why: [
+        t(E, "Key idea: the row and the column move independently. Each is a dot bouncing 1→N→1 on a line of length N.",
+            "핵심: 행과 열은 서로 독립적으로 움직여요. 각각은 길이 N 인 선 위에서 1→N→1 로 튕기는 점 하나예요."),
+        t(E, "That bounce repeats every 2(N−1) seconds, so t mod 2(N−1) folds any time into the first cycle. Then N − |(N−1) − p| reads off the position — no stepping.",
+            "그 튕김은 2(N−1) 초마다 반복돼요. 그래서 t mod 2(N−1) 로 어떤 시각이든 첫 주기로 접어 넣고, N − |(N−1) − p| 로 위치를 바로 읽어요 — 한 칸씩 세지 않아요."),
+        t(E, "Why we can't just step T: T ≤ 10^16 and Q ≤ 1000 means up to 10^19 steps. The formula answers each query in O(1).",
+            "T 를 한 칸씩 셀 수 없는 이유: T ≤ 10^16, Q ≤ 1000 이면 최대 10^19 스텝이에요. 공식은 쿼리당 O(1) 로 끝나요."),
+      ],
+      cppOnly: [
+        t(E, "abs on long long: subtract and flip the sign by hand (or use llabs / <cstdlib>).",
+            "long long 절댓값: 빼고 부호를 직접 뒤집거나 llabs (<cstdlib>) 를 써요."),
+      ],
+    },
+    {
+      label: t(E, "③ Answer each query", "③ 각 쿼리 답 출력"),
+      color: "#7c3aed",
+      py: LOOP_PY, cpp: LOOP_CPP,
+      why: [
+        t(E, "For each query, apply the same one() twice: once to H for the row, once to W for the column — using the same T[i].",
+            "각 쿼리마다 같은 one() 을 두 번 써요: 행은 H 에, 열은 W 에 — 둘 다 같은 T[i] 로."),
+        t(E, "Print 'r c' on its own line, in the original query order.",
+            "'r c' 를 쿼리 순서대로 한 줄씩 출력해요."),
+      ],
+      pyOnly: [
+        t(E, "print(a, b) already puts one space between the two numbers.",
+            "print(a, b) 는 두 수 사이에 공백 하나를 자동으로 넣어줘요."),
       ],
     },
   ];
@@ -287,7 +330,7 @@ export function downloadMcc21DvdPDF(E, sections, lang = "py") {
 </style></head><body>
 <div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<div class="sub">MCC · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>
@@ -299,4 +342,3 @@ ${sections.map(s => `
   win.document.close();
   setTimeout(() => { win.focus(); win.print(); }, 500);
 }
-

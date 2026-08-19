@@ -1,27 +1,38 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+const KA = { wordBreak: "keep-all" };
 
+/* ── full programs (used for the PDF export & as the canonical reference) ── */
 const FULL_PY = [
+  "MOD = 10**9 + 7",
   "N, P = map(int, input().split())",
   "a = list(map(int, input().split()))",
   "",
-  "if P == 1:",
-  "    # Sum with addition",
-  "    ans = sum(a)",
-  "elif P == 2:",
-  "    # Product",
-  "    ans = 1",
+  "if P == 1:                       # ➕ 더하기",
+  "    # 각 수는 2^(N-1) 개의 부분집합에 등장한다",
+  "    ans = pow(2, N - 1, MOD) * (sum(a) % MOD) % MOD",
+  "",
+  "elif P == 2:                     # ✖️ 곱하기",
+  "    # 모든 부분집합 곱의 합 = (1+A1)(1+A2)...(1+An) - 1",
+  "    prod = 1",
   "    for x in a:",
-  "        ans *= x",
-  "elif P == 3:",
-  "    # Sequential floor division",
-  "    ans = a[0]",
-  "    for i in range(1, N):",
-  "        ans = ans // a[i]",
+  "        prod = prod * (1 + x) % MOD",
+  "    ans = (prod - 1) % MOD",
+  "",
+  "else:                            # ⊕ XOR (P == 3)",
+  "    # 비트마다: 그 비트를 홀수 개 고른 부분집합만 기여",
+  "    ans = 0",
+  "    for bit in range(31):",
+  "        k = sum(1 for x in a if (x >> bit) & 1)",
+  "        if k == 0:",
+  "            continue",
+  "        factor = pow(2, k - 1, MOD) * pow(2, N - k, MOD) % MOD",
+  "        ans = (ans + (1 << bit) % MOD * factor) % MOD",
+  "    ans %= MOD",
   "",
   "print(ans)",
 ];
@@ -29,65 +40,363 @@ const FULL_PY = [
 const FULL_CPP = [
   "#include <iostream>",
   "#include <vector>",
-  "#include <string>",
   "using namespace std;",
+  "const long long MOD = 1000000007LL;",
+  "",
+  "long long pw(long long b, long long e) {   // (b^e) mod MOD",
+  "    long long r = 1; b %= MOD;",
+  "    while (e > 0) { if (e & 1) r = r * b % MOD; b = b * b % MOD; e >>= 1; }",
+  "    return r;",
+  "}",
   "",
   "int main() {",
   "    int N, P; cin >> N >> P;",
-  "    vector<int> a; { int _x; while (cin >> _x) a.push_back(_x); if (!cin) cin.clear(); } // adapt: read N values",
+  "    vector<long long> a(N);",
+  "    for (int i = 0; i < N; i++) cin >> a[i];",
   "",
-  "    if (P == 1) {",
-  "        // Sum with addition",
-  "        auto ans = sum(a);",
-  "    else if (P == 2) {",
-  "        // Product",
-  "        auto ans = 1;",
-  "        // for x in a:",
-  "            ans *= x;",
-  "    else if (P == 3) {",
-  "        // Sequential floor division",
-  "        auto ans = a[0];",
-  "        for (int i = 1; i < N; i++) {",
-  "            auto ans = ans // a[i];",
+  "    long long ans = 0;",
+  "    if (P == 1) {                       // ➕ 더하기",
+  "        long long s = 0;",
+  "        for (int i = 0; i < N; i++) s = (s + a[i]) % MOD;",
+  "        ans = pw(2, N - 1) * s % MOD;",
+  "    } else if (P == 2) {                // ✖️ 곱하기",
+  "        long long prod = 1;",
+  "        for (int i = 0; i < N; i++) prod = prod * ((1 + a[i]) % MOD) % MOD;",
+  "        ans = (prod - 1 + MOD) % MOD;",
+  "    } else {                            // ⊕ XOR",
+  "        for (int bit = 0; bit < 31; bit++) {",
+  "            long long k = 0;",
+  "            for (int i = 0; i < N; i++) if ((a[i] >> bit) & 1) k++;",
+  "            if (k == 0) continue;",
+  "            long long f = pw(2, k - 1) * pw(2, N - k) % MOD;",
+  "            ans = (ans + ((1LL << bit) % MOD) * f) % MOD;",
+  "        }",
+  "    }",
   "",
   "    cout << ans << \"\\n\";",
-  "",
   "    return 0;",
   "}",
 ];
 
+/* ── per-section fragments for the progressive stepper ── */
+const PY_SETUP = [
+  "MOD = 10**9 + 7",
+  "N, P = map(int, input().split())",
+  "a = list(map(int, input().split()))",
+];
+const CPP_SETUP = [
+  "#include <iostream>",
+  "#include <vector>",
+  "using namespace std;",
+  "const long long MOD = 1000000007LL;",
+  "",
+  "long long pw(long long b, long long e) {   // (b^e) mod MOD",
+  "    long long r = 1; b %= MOD;",
+  "    while (e > 0) { if (e & 1) r = r * b % MOD; b = b * b % MOD; e >>= 1; }",
+  "    return r;",
+  "}",
+  "int N, P; vector<long long> a;   // 입력은 main() 에서 읽음",
+];
+
+const PY_ADD = [
+  "if P == 1:                       # ➕ 더하기",
+  "    # 수 하나를 고정하면 나머지 N-1 개는 자유",
+  "    # → 2^(N-1) 개의 부분집합에 그 수가 들어간다",
+  "    ans = pow(2, N - 1, MOD) * (sum(a) % MOD) % MOD",
+];
+const CPP_ADD = [
+  "if (P == 1) {                       // ➕ 더하기",
+  "    long long s = 0;",
+  "    for (int i = 0; i < N; i++) s = (s + a[i]) % MOD;",
+  "    ans = pw(2, N - 1) * s % MOD;   // 각 수 x 2^(N-1)",
+  "}",
+];
+
+const PY_MUL = [
+  "elif P == 2:                     # ✖️ 곱하기",
+  "    # (1+A1)(1+A2)...(1+An) 를 펼치면",
+  "    # 각 항이 부분집합 하나의 곱 (빈 집합 = 1 만 빼면 됨)",
+  "    prod = 1",
+  "    for x in a:",
+  "        prod = prod * (1 + x) % MOD",
+  "    ans = (prod - 1) % MOD",
+];
+const CPP_MUL = [
+  "else if (P == 2) {                  // ✖️ 곱하기",
+  "    long long prod = 1;",
+  "    for (int i = 0; i < N; i++) prod = prod * ((1 + a[i]) % MOD) % MOD;",
+  "    ans = (prod - 1 + MOD) % MOD;   // 빈 집합(=1) 만 빼기",
+  "}",
+];
+
+const PY_XOR = [
+  "else:                            # ⊕ XOR (P == 3)",
+  "    ans = 0",
+  "    for bit in range(31):",
+  "        # 이 비트를 가진 원소가 k 개일 때,",
+  "        # 홀수 개 고르기: 2^(k-1) 가지, 나머지 자유: 2^(N-k)",
+  "        k = sum(1 for x in a if (x >> bit) & 1)",
+  "        if k == 0:",
+  "            continue",
+  "        factor = pow(2, k - 1, MOD) * pow(2, N - k, MOD) % MOD",
+  "        ans = (ans + (1 << bit) % MOD * factor) % MOD",
+  "    ans %= MOD",
+];
+const CPP_XOR = [
+  "else {                              // ⊕ XOR",
+  "    for (int bit = 0; bit < 31; bit++) {",
+  "        long long k = 0;",
+  "        for (int i = 0; i < N; i++) if ((a[i] >> bit) & 1) k++;",
+  "        if (k == 0) continue;",
+  "        long long f = pw(2, k - 1) * pw(2, N - k) % MOD;   // 2^(k-1)·2^(N-k)",
+  "        ans = (ans + ((1LL << bit) % MOD) * f) % MOD;",
+  "    }",
+  "}",
+];
+
+const PY_OUT = ["print(ans)"];
+const CPP_OUT = ["cout << ans << \"\\n\";"];
+
 export function getMcc21SimpleMathSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "📥 1. Read input & why counting", "📥 1. 입력 읽기 · 왜 세는가"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: PY_SETUP, cpp: CPP_SETUP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+        t(E,
+          "N numbers give 2^N − 1 nonempty subsets — up to 2^50000. We can NEVER list them all, so we count each part's contribution instead of enumerating subsets.",
+          "N 개의 수는 부분집합이 2^N − 1 개 — 최대 2^50000 개예요. 절대 다 나열할 수 없으니, 부분집합을 하나하나 만드는 대신 각 부분의 '기여'를 세요."),
+        t(E,
+          "MOD = 10^9 + 7: keep every running value mod MOD so numbers stay small.",
+          "MOD = 10^9 + 7: 계산 값을 항상 MOD 로 나눈 나머지로 유지해 수를 작게 지켜요."),
       ],
-      pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+    },
+    {
+      label: t(E, "➕ 2. P = 1  (addition)", "➕ 2. P = 1  (덧셈)"),
+      color: A,
+      py: PY_ADD, cpp: CPP_ADD,
+      why: [
+        t(E,
+          "Pin one number down. The other N−1 numbers are each either in or out, so it sits in 2^(N-1) different subsets.",
+          "수 하나를 고정해요. 나머지 N−1 개는 각각 있거나 없거나이니, 그 수는 2^(N-1) 개의 부분집합에 들어가요."),
+        t(E,
+          "So every number is added 2^(N-1) times → answer = 2^(N-1) · (sum of all numbers).",
+          "그래서 모든 수는 2^(N-1) 번 더해져요 → 답 = 2^(N-1) · (전체 합)."),
       ],
-      cppOnly: [
-        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
-        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+    },
+    {
+      label: t(E, "✖️ 3. P = 2  (multiplication)", "✖️ 3. P = 2  (곱셈)"),
+      color: A,
+      py: PY_MUL, cpp: CPP_MUL,
+      why: [
+        t(E,
+          "Expand (1+A₁)(1+A₂)…(1+Aₙ). Every way of picking '1 or Aᵢ' from each factor is one term — exactly one subset's product.",
+          "(1+A₁)(1+A₂)…(1+Aₙ) 를 펼쳐요. 각 괄호에서 '1 또는 Aᵢ' 를 고르는 모든 방법이 한 항 — 정확히 한 부분집합의 곱이에요."),
+        t(E,
+          "That covers ALL subsets including the empty one (all 1's → product 1). Subtract that 1 → sum over nonempty subsets.",
+          "그러면 빈 집합(모두 1 → 곱 1)까지 모든 부분집합이 나와요. 그 1 만 빼면 → 비어있지 않은 부분집합들의 합."),
+      ],
+    },
+    {
+      label: t(E, "⊕ 4. P = 3  (bitwise XOR)", "⊕ 4. P = 3  (비트 XOR)"),
+      color: A,
+      py: PY_XOR, cpp: CPP_XOR,
+      why: [
+        t(E,
+          "XOR works bit by bit, independently. A bit of the result is 1 only when an ODD number of chosen elements have that bit.",
+          "XOR 는 비트마다 따로 작동해요. 결과의 어떤 비트가 1 이 되려면, 그 비트를 가진 원소를 홀수 개 골라야 해요."),
+        t(E,
+          "If k elements have that bit: odd-count ways = 2^(k-1), and the other N−k elements are free = 2^(N-k). Multiply, times the bit's value, sum over bits.",
+          "그 비트를 가진 원소가 k 개면: 홀수 개 고르기 = 2^(k-1) 가지, 나머지 N−k 개는 자유 = 2^(N-k) 가지. 둘을 곱하고 비트 값을 곱해 모든 비트에 대해 더해요."),
+      ],
+    },
+    {
+      label: t(E, "🖨️ 5. Print the answer", "🖨️ 5. 답 출력"),
+      color: A,
+      py: PY_OUT, cpp: CPP_OUT,
+      why: [
+        t(E,
+          "All three branches already keep ans mod 10^9+7, so we just print it.",
+          "세 분기 모두 ans 를 이미 10^9+7 로 나눈 나머지로 유지했으니, 그대로 출력해요."),
+        t(E,
+          "Each branch is O(N) (XOR is O(31·N)) — fast even for N = 50000, while listing 2^N subsets would be impossible.",
+          "각 분기는 O(N) (XOR 은 O(31·N)) — N = 50000 도 빨라요. 2^N 개 부분집합을 나열하는 건 불가능하죠."),
       ],
     },
   ];
 }
 
 export function Mcc21SimpleMathProgressiveCode(props) {
-  return <ProgressiveCodeStepper {...props} accentColor="#f97316" />;
+  return <ProgressiveCodeStepper {...props} accentColor={A} />;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   Concept sim — for the set {1,2,3}, pick an operator (+ / × / ⊕),
+   LIST all 7 nonempty subsets with each subset's combined value and
+   the running total, then reveal the counting shortcut that gives
+   the same total without listing anything.
+   ═══════════════════════════════════════════════════════════════ */
+const SET = [1, 2, 3];
+const N = SET.length;
 
-const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
+// all nonempty subsets, ordered by size then value
+const SUBSETS = [];
+for (let mask = 1; mask < (1 << N); mask++) {
+  const items = [];
+  for (let i = 0; i < N; i++) if (mask & (1 << i)) items.push(SET[i]);
+  SUBSETS.push(items);
+}
+SUBSETS.sort((x, y) => x.length - y.length || x.join(",").localeCompare(y.join(",")));
+
+function combine(items, P) {
+  if (P === 1) return items.reduce((s, v) => s + v, 0);
+  if (P === 2) return items.reduce((s, v) => s * v, 1);
+  return items.reduce((s, v) => s ^ v, 0);
+}
+
+export function Mcc21SimpleMathOpSim({ E }) {
+  const [P, setP] = useState(1);
+  const [showShortcut, setShowShortcut] = useState(false);
+
+  const opSym = P === 1 ? "+" : P === 2 ? "×" : "⊕";
+  const opName = P === 1
+    ? t(E, "add (+)", "더하기 (+)")
+    : P === 2
+      ? t(E, "multiply (×)", "곱하기 (×)")
+      : t(E, "XOR (⊕)", "XOR (⊕)");
+
+  let running = 0;
+  const rows = SUBSETS.map((items) => {
+    const v = combine(items, P);
+    running += v;
+    return { items, v, total: running };
+  });
+  const finalTotal = running; // 24 / 23 / 12
+
+  const chip = (n) => (
+    <span key={n} style={{
+      display: "inline-flex", alignItems: "center", justifyContent: "center",
+      minWidth: 22, height: 22, padding: "0 5px", borderRadius: 6,
+      fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800,
+      border: "1px solid #fdba74", background: "#fff", color: "#9a3412",
+    }}>{n}</span>
+  );
+
+  const shortcut = () => {
+    if (P === 1) {
+      return t(E,
+        "Each number sits in 2^(N-1) = 4 subsets → 4 × (1+2+3) = 4 × 6 = 24.",
+        "각 수는 2^(N-1) = 4 개의 부분집합에 등장 → 4 × (1+2+3) = 4 × 6 = 24.");
+    }
+    if (P === 2) {
+      return t(E,
+        "∏(1+Aᵢ) − 1 = (1+1)(1+2)(1+3) − 1 = 2·3·4 − 1 = 24 − 1 = 23.",
+        "∏(1+Aᵢ) − 1 = (1+1)(1+2)(1+3) − 1 = 2·3·4 − 1 = 24 − 1 = 23.");
+    }
+    return t(E,
+      "Per bit: bit0(=1) is in {1,3}, k=2 → 2^(k-1)·2^(N-k)=2·2=4 subsets → 1×4=4. bit1(=2) is in {2,3}, k=2 → 4 subsets → 2×4=8. Total 4+8 = 12.",
+      "비트마다: 비트0(값 1)은 {1,3}에, k=2 → 2^(k-1)·2^(N-k)=2·2=4 개 → 1×4=4. 비트1(값 2)은 {2,3}에, k=2 → 4 개 → 2×4=8. 합 4+8 = 12.");
+  };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, ...KA }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", marginBottom: 6 }}>
+          🧮 {t(E, "Set A = {1, 2, 3} — every nonempty subset", "집합 A = {1, 2, 3} — 비어있지 않은 모든 부분집합")}
+        </div>
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+          {t(E,
+            "Combine each subset with the operator, then SUM those values over all subsets. Switch the operator and watch the total.",
+            "각 부분집합을 연산자로 합치고, 그 값들을 모든 부분집합에 대해 다 더해요. 연산자를 바꿔가며 합계를 봐요.")}
+        </div>
+
+        {/* operator toggle */}
+        <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
+          {[1, 2, 3].map((p) => (
+            <button key={p} onClick={() => { setP(p); setShowShortcut(false); }} style={{
+              flex: 1, padding: "8px 0", borderRadius: 8,
+              border: P === p ? `2px solid ${A}` : `1px solid ${C.border}`,
+              background: P === p ? "#ffedd5" : "#fff",
+              color: P === p ? "#9a3412" : C.text,
+              fontSize: 12.5, fontWeight: 800, cursor: "pointer",
+            }}>
+              {p === 1 ? "P=1  +" : p === 2 ? "P=2  ×" : "P=3  ⊕"}
+            </button>
+          ))}
+        </div>
+
+        {/* the 7 subsets */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          <div style={{ display: "flex", fontSize: 10.5, color: C.dim, fontWeight: 800, letterSpacing: 0.3, padding: "0 8px", marginBottom: 2 }}>
+            <span style={{ flex: 1 }}>{t(E, "subset", "부분집합")}</span>
+            <span style={{ width: 96, textAlign: "right" }}>{t(E, "combined", "합친 값")}</span>
+            <span style={{ width: 88, textAlign: "right" }}>{t(E, "running sum", "누적 합")}</span>
+          </div>
+          {rows.map((r, i) => (
+            <div key={i} style={{
+              display: "flex", alignItems: "center", background: "#fff",
+              border: "1px solid #fed7aa", borderRadius: 8, padding: "6px 8px",
+            }}>
+              <span style={{ flex: 1, display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
+                <span style={{ color: C.dim, fontSize: 11 }}>{"{"}</span>
+                {r.items.map((n, j) => (
+                  <span key={j} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+                    {j > 0 && <span style={{ color: A, fontWeight: 800, fontSize: 12 }}>{opSym}</span>}
+                    {chip(n)}
+                  </span>
+                ))}
+                <span style={{ color: C.dim, fontSize: 11 }}>{"}"}</span>
+              </span>
+              <span style={{ width: 96, textAlign: "right", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700, color: "#9a3412" }}>
+                = {r.v}
+              </span>
+              <span style={{ width: 88, textAlign: "right", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: A }}>
+                {r.total}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* total */}
+        <div style={{ marginTop: 10, background: "#0f172a", color: "#f8fafc", padding: "10px 12px", borderRadius: 8,
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 13, ...KA }}>
+          {t(E, "sum over all 7 subsets ", "7 개 부분집합의 합 ")}
+          (<b style={{ color: "#fdba74" }}>{opName}</b>) = <b style={{ color: "#fb923c", fontSize: 15 }}>{finalTotal}</b>
+        </div>
+
+        {/* shortcut */}
+        <div style={{ marginTop: 12 }}>
+          <button onClick={() => setShowShortcut((v) => !v)} style={{
+            padding: "6px 12px", borderRadius: 8, border: `1.5px solid ${A}`,
+            background: showShortcut ? A : "#fff", color: showShortcut ? "#fff" : A,
+            fontSize: 12, fontWeight: 800, cursor: "pointer",
+          }}>
+            {showShortcut ? t(E, "▲ hide the shortcut", "▲ 지름길 접기") : t(E, "▼ show the counting shortcut", "▼ 세는 지름길 보기")}
+          </button>
+          {showShortcut && (
+            <div style={{ marginTop: 10, background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", ...KA }}>
+              <div style={{ fontSize: 11.5, fontWeight: 800, color: "#065f46", marginBottom: 4 }}>
+                🚀 {t(E, "same total, no listing", "나열 없이 같은 합")}
+              </div>
+              <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, fontFamily: "'JetBrains Mono',monospace" }}>
+                {shortcut()}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div style={{ marginTop: 12, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+          {t(E,
+            "With just 3 numbers we can list all 7 subsets. But N can be 50000 → 2^N subsets, far too many to list. So we count each number's / each bit's contribution instead.",
+            "수가 3 개뿐이면 7 개 부분집합을 다 적을 수 있어요. 하지만 N 은 50000 까지 → 2^N 개 부분집합, 도저히 나열 못 해요. 그래서 각 수 · 각 비트의 기여를 대신 세요.")}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs","pow"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
 function highlightHTML(line, lang) {
   const escHTML = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -119,213 +428,6 @@ function highlightCode(lines, lang) {
   }).join("\n");
 }
 
-
-/* ═══════════════════════════════════════════════════════════════
-   Mcc21SimpleMathOpSim — Pick P (1/2/3) and watch the operation
-   roll left-to-right across A. Live running value + step trail.
-   ═══════════════════════════════════════════════════════════════ */
-export function Mcc21SimpleMathOpSim({ E }) {
-  const [arrText, setArrText] = useState("8 4 2");
-  const [P, setP] = useState(1);
-  const [running, setRunning] = useState(false);
-  const [step, setStep] = useState(0);     // 0 .. arr.length (0 = before start)
-  const [trail, setTrail] = useState([]);  // [{idx, before, op, val, after}]
-  const alive = useRef(false);
-
-  const parseArr = () => {
-    const parts = arrText.trim().split(/\s+/).map(Number);
-    if (parts.some(isNaN) || parts.length === 0) return null;
-    if (P === 3 && parts.slice(1).some(v => v === 0)) return null; // floor-div by 0
-    return parts;
-  };
-  const arr = parseArr();
-  const valid = arr !== null;
-
-  const opSymbol = P === 1 ? "+" : P === 2 ? "×" : "//";
-  const opLabel = P === 1
-    ? t(E, "Sum (P=1)", "합 (P=1)")
-    : P === 2
-      ? t(E, "Product (P=2)", "곱 (P=2)")
-      : t(E, "Floor-div (P=3)", "정수 나눗셈 (P=3)");
-
-  const initial = (a) => P === 1 ? 0 : P === 2 ? 1 : a[0];
-  const apply = (acc, v) => P === 1 ? acc + v : P === 2 ? acc * v : Math.trunc(acc / v);
-
-  const reset = () => { alive.current = false; setRunning(false); setStep(0); setTrail([]); };
-
-  useEffect(() => { reset(); /* eslint-disable-next-line */ }, [arrText, P]);
-
-  const run = () => {
-    if (!valid) return;
-    alive.current = true;
-    setRunning(true);
-    setTrail([]);
-    // For P=3 we start from a[0], so first "applied" index is 1.
-    const startIdx = P === 3 ? 1 : 0;
-    let acc = initial(arr);
-    setStep(P === 3 ? 1 : 0);
-    let i = startIdx;
-    const localTrail = [];
-    const tick = () => {
-      if (!alive.current) { setRunning(false); return; }
-      if (i >= arr.length) { setRunning(false); return; }
-      const before = acc;
-      const v = arr[i];
-      acc = apply(acc, v);
-      localTrail.push({ idx: i, before, op: opSymbol, val: v, after: acc });
-      setTrail([...localTrail]);
-      setStep(i + 1);
-      i++;
-      setTimeout(tick, 650);
-    };
-    setTimeout(tick, 400);
-  };
-  const stop = () => { alive.current = false; setRunning(false); };
-
-  const finalValue = trail.length > 0 ? trail[trail.length - 1].after : (valid ? initial(arr) : null);
-  const done = !running && trail.length > 0 && step >= (arr ? arr.length : 0);
-
-  return (
-    <div style={{ padding: 14 }}>
-      {/* Inputs row */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 12 }}>
-        <div>
-          <label style={{ fontSize: 11, color: C.dim, fontWeight: 700, display: "block", marginBottom: 4 }}>
-            {t(E, "Array A (space-separated)", "배열 A (공백으로 구분)")}
-          </label>
-          <input
-            value={arrText}
-            onChange={e => setArrText(e.target.value)}
-            disabled={running}
-            placeholder="8 4 2"
-            style={{
-              width: "100%", padding: "8px 10px", borderRadius: 8,
-              border: `1px solid ${C.border}`, fontSize: 14,
-              fontFamily: "'JetBrains Mono',monospace", color: A,
-              boxSizing: "border-box",
-            }}
-          />
-        </div>
-        <div>
-          <label style={{ fontSize: 11, color: C.dim, fontWeight: 700, display: "block", marginBottom: 4 }}>
-            {t(E, "Pick operation P", "연산 P 선택")}
-          </label>
-          <div style={{ display: "flex", gap: 6 }}>
-            {[1, 2, 3].map(p => (
-              <button
-                key={p}
-                onClick={() => setP(p)}
-                disabled={running}
-                style={{
-                  flex: 1, padding: "8px 0", borderRadius: 8,
-                  border: P === p ? `2px solid ${A}` : `1px solid ${C.border}`,
-                  background: P === p ? "#fff7ed" : "#fff",
-                  color: P === p ? "#9a3412" : C.text,
-                  fontSize: 12, fontWeight: 700, cursor: running ? "not-allowed" : "pointer",
-                }}
-              >
-                {p === 1 ? t(E, `P=1 (+)`, `P=1 (+)`) : p === 2 ? t(E, `P=2 (×)`, `P=2 (×)`) : t(E, `P=3 (//)`, `P=3 (//)`)}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Run / Stop / Reset */}
-      <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
-        <button
-          onClick={running ? stop : run}
-          disabled={!valid}
-          style={{
-            flex: 1, padding: "10px 0", borderRadius: 10, border: "none",
-            cursor: valid ? "pointer" : "not-allowed",
-            fontSize: 14, fontWeight: 700,
-            background: !valid ? "#cbd5e1" : running ? "#dc2626" : A, color: "#fff",
-          }}
-        >
-          {running ? t(E, "⏹ Stop", "⏹ 중지") : t(E, "▶ Run", "▶ 실행")}
-        </button>
-        <button
-          onClick={reset}
-          disabled={running}
-          style={{
-            padding: "10px 14px", borderRadius: 10, border: `1.5px solid ${A}`,
-            background: "#fff", color: A, fontSize: 13, fontWeight: 700,
-            cursor: running ? "not-allowed" : "pointer",
-          }}
-        >
-          {t(E, "↺ Reset", "↺ 초기화")}
-        </button>
-      </div>
-
-      {!valid && (
-        <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#b91c1c", marginBottom: 10 }}>
-          {P === 3
-            ? t(E, "Numbers only — and no zeros after the first (P=3 divides).", "숫자만 입력 — 그리고 첫 값 이후 0 금지 (P=3 은 나눗셈).")
-            : t(E, "Numbers only, separated by spaces.", "공백으로 구분된 숫자만 입력.")}
-        </div>
-      )}
-
-      {/* Array visualization */}
-      {valid && (
-        <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10, padding: 12, marginBottom: 10 }}>
-          <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 8 }}>
-            {opLabel} — {t(E, "left-to-right walk", "왼쪽→오른쪽 진행")}
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 8 }}>
-            {arr.map((v, i) => {
-              const consumed = i < step;
-              const cursor = i === step && running;
-              return (
-                <div key={i} style={{
-                  minWidth: 36, padding: "8px 10px", borderRadius: 8,
-                  border: cursor ? `2px solid ${A}` : `1px solid ${consumed ? "#fdba74" : C.border}`,
-                  background: consumed ? "#fed7aa" : cursor ? "#fff" : "#fff",
-                  color: consumed ? "#9a3412" : C.text,
-                  fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700,
-                  textAlign: "center",
-                  boxShadow: cursor ? `0 0 0 3px ${A}33` : "none",
-                  transition: "all 200ms",
-                }}>
-                  {v}
-                </div>
-              );
-            })}
-          </div>
-          <div style={{ fontSize: 12, color: C.dim }}>
-            {t(E, "Running value: ", "현재 값: ")}
-            <span style={{ color: A, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace" }}>
-              {finalValue ?? "—"}
-            </span>
-          </div>
-        </div>
-      )}
-
-      {/* Trail */}
-      {trail.length > 0 && (
-        <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px" }}>
-          <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6 }}>
-            {t(E, "Step trail:", "단계 기록:")}
-          </div>
-          {trail.map((s, i) => (
-            <div key={i} style={{
-              fontSize: 13, fontFamily: "'JetBrains Mono',monospace",
-              color: A, fontWeight: 600, lineHeight: 1.7,
-            }}>
-              {`step ${i + 1}: ${s.before} ${s.op} ${s.val} = ${s.after}`}
-            </div>
-          ))}
-          {done && (
-            <div style={{ marginTop: 6, fontSize: 12, color: "#15803d", fontWeight: 700 }}>
-              {t(E, `✅ Final answer: ${finalValue}`, `✅ 최종 답: ${finalValue}`)}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
 export function downloadMcc21SimpleMathPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
   if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
@@ -334,6 +436,7 @@ export function downloadMcc21SimpleMathPDF(E, sections, lang = "py") {
   const fileTitle = t(E, "Mcc21SimpleMath — Full Study Guide", "Mcc21SimpleMath — 종합 풀이 노트");
   const codeBlock = (lines) => `<pre>${highlightCode(lines, lang)}</pre>`;
   const sectionCode = (s) => codeBlock(lang === "py" ? s.py : s.cpp);
+  const fullCode = codeBlock(lang === "py" ? FULL_PY : FULL_CPP);
   const html = `<!doctype html>
 <html><head><meta charset="utf-8"><title>${fileTitle}</title>
 <style>
@@ -353,16 +456,17 @@ export function downloadMcc21SimpleMathPDF(E, sections, lang = "py") {
 </style></head><body>
 <div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<div class="sub">MCC 2021 P5 · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
-  <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>
+  <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${(s.why || []).map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>
   ${sectionCode(s)}
 `).join("")}
+  <h3 style="background:${A}20;color:${A};padding:6px 10px;border-radius:6px;">🧩 ${t(E, "Full program", "전체 코드")}</h3>
+  ${fullCode}
 <div style="margin-top:30px;font-size:10px;color:#94a3b8;text-align:center;border-top:1px solid #e5e7eb;padding-top:8px;">© Coderin · 코드린</div>
 </body></html>`;
   win.document.write(html);
   win.document.close();
   setTimeout(() => { win.focus(); win.print(); }, 500);
 }
-
