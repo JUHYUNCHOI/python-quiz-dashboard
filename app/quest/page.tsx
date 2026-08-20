@@ -221,7 +221,7 @@ const SECTIONS: Section[] = [
       { id: "mcc15isthmus", emoji: "⛰️", title: "Isthmus", sub: "MCC 2015 P4" },
       { id: "mcc15choco", emoji: "🍫", title: "Chocolate Bars", sub: "MCC 2015 P5" },
       { id: "mcc22grammar", emoji: "📖", title: "Grammar", sub: "MCC 2022 P1" },
-      { broken: true, id: "mcc22aliens", emoji: "👽", title: "Aliens", sub: "MCC 2022 P2" },
+      { id: "mcc22aliens", emoji: "👽", title: "Aliens", sub: "MCC 2022 P2" },
       { id: "mcc22maze", emoji: "🏰", title: "Maze", sub: "MCC 2022 P3" },
       { id: "mcc22birthday", emoji: "🎂", title: "Cats' Birthday", sub: "MCC 2022 P4" },
       { id: "mcc22cardshark", emoji: "🃏", title: "Card Shark", sub: "MCC 2022 P5" },

@@ -4,86 +4,130 @@ import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeSteppe
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+const KA = { wordBreak: "keep-all" };
 
 /* ============================================================
-   Mcc22GrammarSim — pick a sentence, step through each word
-   pair, watch each consecutive (X, Y) get checked against
-   the grammar's edge SET. Verdict turns VALID / INVALID.
+   Mcc22GrammarSim — the grammar is FIXED (given in the problem,
+   not read from input). Pick a sentence and step through it one
+   WORD at a time. Each new word can fail two ways:
+     ① it is not one of the 5 valid words  (unknown word)
+     ② there is no arrow from the previous word to it  (no edge)
+   The verdict turns YES only when every word survives both checks.
    ============================================================ */
-const _SIM_EDGES = [
-  ["WE", "DONT"], ["WE", "KNOW"],
-  ["THEY", "DONT"], ["THEY", "KNOW"],
-  ["DONT", "KNOW"],
-  ["KNOW", "THAT"],
-  ["THAT", "WE"], ["THAT", "THEY"],
-];
-const _SIM_EDGE_SET = new Set(_SIM_EDGES.map(([a, b]) => `${a}|${b}`));
-const _SIM_SENTENCES = [
+
+// The fixed grammar: adj[x] = the words allowed right after x.
+const _ADJ = {
+  WE:   ["DONT", "KNOW"],
+  THEY: ["DONT", "KNOW"],
+  DONT: ["KNOW"],
+  KNOW: ["WE", "THEY", "THAT"],
+  THAT: ["WE", "THEY"],
+};
+const _EDGES = [];
+for (const u of Object.keys(_ADJ)) for (const v of _ADJ[u]) _EDGES.push([u, v]);
+const _EDGE_SET = new Set(_EDGES.map(([a, b]) => `${a}|${b}`));
+const _KNOWN = new Set(Object.keys(_ADJ));
+
+// The four official sample sentences.
+const _SENTENCES = [
   ["WE", "KNOW"],
-  ["WE", "KNOW", "THAT", "THEY", "KNOW"],
-  ["THEY", "DONT", "KNOW", "THAT"],
-  ["KNOW", "WE", "DONT"],
+  ["THEY", "KNOW", "WE", "DONT", "KNOW"],
+  ["WE", "THEY"],
+  ["I", "KNEW", "THAT", "THEY", "KNOW"],
 ];
+
+// Node layout for the 5 words.
+const _POS = {
+  WE:   { cx: 55,  cy: 45 },
+  THEY: { cx: 55,  cy: 150 },
+  DONT: { cx: 200, cy: 45 },
+  KNOW: { cx: 200, cy: 150 },
+  THAT: { cx: 345, cy: 98 },
+};
+const _SVG_W = 400, _SVG_H = 200;
+
+// Find the first word that breaks the sentence, and why.
+function _analyze(words) {
+  for (let i = 0; i < words.length; i++) {
+    if (!_KNOWN.has(words[i])) return { bad: i, kind: "unknown" };
+    if (i > 0 && !_EDGE_SET.has(`${words[i - 1]}|${words[i]}`)) return { bad: i, kind: "noedge" };
+  }
+  return { bad: -1, kind: null };
+}
+
+// Geometry for one directed edge, nudged to the perpendicular so that
+// two opposite arrows (WE↔KNOW, THEY↔KNOW) don't overlap.
+function _edgeGeom(u, v) {
+  const a = _POS[u], b = _POS[v];
+  const dx = b.cx - a.cx, dy = b.cy - a.cy;
+  const len = Math.hypot(dx, dy) || 1;
+  const ux = dx / len, uy = dy / len;
+  const px = -uy, py = ux;         // perpendicular (left of travel)
+  const off = 7;
+  const ox = ux * 28, oy = uy * 15;
+  return {
+    x1: a.cx + ox + px * off, y1: a.cy + oy + py * off,
+    x2: b.cx - ox + px * off, y2: b.cy - oy + py * off,
+  };
+}
 
 export function Mcc22GrammarSim({ E }) {
   const [sIdx, setSIdx] = useState(0);
   const [step, setStep] = useState(0);
 
-  const sentence = _SIM_SENTENCES[sIdx];
-  const totalPairs = Math.max(0, sentence.length - 1);
-  const checked = Math.min(step, totalPairs);
+  const sentence = _SENTENCES[sIdx];
+  const n = sentence.length;
+  const checked = Math.min(step, n);   // how many words examined
+  const doneAll = checked >= n;
 
-  const { firstBadIdx, doneAll } = useMemo(() => {
-    let bad = -1;
-    for (let i = 0; i < totalPairs; i++) {
-      const ok = _SIM_EDGE_SET.has(`${sentence[i]}|${sentence[i + 1]}`);
-      if (!ok) { bad = i; break; }
-    }
-    return { firstBadIdx: bad, doneAll: checked >= totalPairs };
-  }, [sIdx, totalPairs, checked, sentence]);
+  const { bad, kind } = useMemo(() => _analyze(sentence), [sIdx, sentence]);
 
-  const sentenceBroken = doneAll && firstBadIdx !== -1 && checked > firstBadIdx;
-  const verdict = doneAll
-    ? (firstBadIdx === -1
-        ? t(E, "VALID — every pair has an edge", "VALID — 모든 쌍에 화살표 있음")
-        : t(E, "INVALID — pair without edge", "INVALID — 화살표 없는 쌍"))
-    : t(E, "checking…", "확인 중…");
-
-  const pickSentence = (i) => { setSIdx(i); setStep(0); };
-  const stepNext = () => setStep(s => Math.min(s + 1, totalPairs));
+  const pick = (i) => { setSIdx(i); setStep(0); };
+  const stepNext = () => setStep(s => Math.min(s + 1, n));
   const stepReset = () => setStep(0);
 
-  // Layout positions for the 5 distinct words
-  const WORDS = ["WE", "THEY", "DONT", "KNOW", "THAT"];
-  const _POS = {
-    WE:    { cx: 70,  cy: 40  },
-    THEY:  { cx: 70,  cy: 130 },
-    DONT:  { cx: 200, cy: 40  },
-    KNOW:  { cx: 200, cy: 130 },
-    THAT:  { cx: 330, cy: 85  },
-  };
-  const svgW = 400, svgH = 175;
+  // Which word is under the spotlight right now?
+  const curIdx = doneAll && bad !== -1 ? bad : checked - 1;   // last examined, or the failure
+  const fromW = curIdx > 0 ? sentence[curIdx - 1] : null;
+  const toW   = curIdx >= 0 ? sentence[curIdx] : null;
+  const edgeKey = fromW && toW ? `${fromW}|${toW}` : null;
+  const edgeExists = edgeKey ? _EDGE_SET.has(edgeKey) : false;
+  const toKnown = toW ? _KNOWN.has(toW) : true;
 
-  // Currently being inspected pair (the one just checked, or the next one)
-  const inspectIdx = doneAll
-    ? (firstBadIdx === -1 ? totalPairs - 1 : firstBadIdx)
-    : checked;
-  const fromW = sentence[inspectIdx];
-  const toW   = sentence[inspectIdx + 1];
-  const inspectKey = fromW && toW ? `${fromW}|${toW}` : null;
-  const inspectExists = inspectKey ? _SIM_EDGE_SET.has(inspectKey) : false;
+  const isValid = bad === -1;
+  const verdict = !doneAll
+    ? t(E, "checking…", "확인 중…")
+    : isValid
+      ? "YES"
+      : "NO";
+
+  const reason = (doneAll && !isValid)
+    ? (kind === "unknown"
+        ? t(E, `"${sentence[bad]}" is not one of the 5 grammar words`, `"${sentence[bad]}" 는 문법의 5개 단어에 없어요`)
+        : t(E, `no arrow ${sentence[bad - 1]} → ${sentence[bad]} in the grammar`, `문법에 ${sentence[bad - 1]} → ${sentence[bad]} 화살표가 없어요`))
+    : null;
 
   return (
     <div style={{ padding: 14 }}>
-      <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 12 }}>
+      {/* Two-failure-mode bubble */}
+      <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 12, ...KA }}>
         <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", marginBottom: 8, textAlign: "center" }}>
-          {t(E, "🔎 Pick a sentence — step through each word pair", "🔎 문장을 골라 — 단어 쌍을 한 번에 하나씩 확인")}
+          {t(E, "🔎 Pick a sentence — check it one word at a time", "🔎 문장을 골라 — 한 단어씩 확인해요")}
+        </div>
+        <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 10 }}>
+          {t(E,
+            "The grammar is fixed (below) — the 5 words and the arrows never change. A sentence is YES only if every word survives two checks: ",
+            "문법은 아래로 고정돼 있어요 — 5개 단어와 화살표는 변하지 않아요. 문장이 YES 이려면 모든 단어가 두 가지 검사를 통과해야 해요: ")}
+          <b style={{ color: "#dc2626" }}>①</b> {t(E, "the word is one of the 5", "5개 단어 중 하나")}
+          {t(E, ", ", ", ")}
+          <b style={{ color: "#dc2626" }}>②</b> {t(E, "there is an arrow from the word before it", "바로 앞 단어에서 오는 화살표가 있음")}
+          {t(E, ".", ".")}
         </div>
 
         {/* Sentence pickers */}
         <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginBottom: 10 }}>
-          {_SIM_SENTENCES.map((s, i) => (
-            <button key={i} onClick={() => pickSentence(i)} style={{
+          {_SENTENCES.map((s, i) => (
+            <button key={i} onClick={() => pick(i)} style={{
               background: i === sIdx ? A : "#fff",
               color: i === sIdx ? "#fff" : A,
               border: `1.5px solid ${A}`,
@@ -97,7 +141,7 @@ export function Mcc22GrammarSim({ E }) {
 
         {/* SVG grammar graph */}
         <div style={{ background: "#fff", borderRadius: 10, border: "1px solid #6ee7b7", padding: 4, overflowX: "auto" }}>
-          <svg width={svgW} height={svgH} style={{ display: "block", margin: "0 auto", maxWidth: "100%" }}>
+          <svg width={_SVG_W} height={_SVG_H} style={{ display: "block", margin: "0 auto", maxWidth: "100%" }}>
             <defs>
               <marker id="arr-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="#cbd5e1" />
@@ -110,51 +154,43 @@ export function Mcc22GrammarSim({ E }) {
               </marker>
             </defs>
 
-            {/* Edges */}
-            {_SIM_EDGES.map(([u, v]) => {
-              const a = _POS[u], b = _POS[v];
-              const dx = b.cx - a.cx, dy = b.cy - a.cy;
-              const len = Math.hypot(dx, dy) || 1;
-              const ox = (dx / len) * 26, oy = (dy / len) * 14;
-              const isInspect = inspectKey === `${u}|${v}`;
-              const stroke = isInspect ? (inspectExists ? A : "#dc2626") : "#cbd5e1";
-              const marker = isInspect ? (inspectExists ? "arr-ok" : "arr-bad") : "arr-dim";
-              const sw = isInspect ? 2.5 : 1.2;
+            {/* Fixed grammar edges */}
+            {_EDGES.map(([u, v]) => {
+              const g = _edgeGeom(u, v);
+              const isActive = edgeKey === `${u}|${v}`;
+              const stroke = isActive ? A : "#cbd5e1";
+              const marker = isActive ? "arr-ok" : "arr-dim";
+              const sw = isActive ? 3 : 1.2;
               return (
                 <line key={`${u}-${v}`}
-                  x1={a.cx + ox} y1={a.cy + oy}
-                  x2={b.cx - ox} y2={b.cy - oy}
+                  x1={g.x1} y1={g.y1} x2={g.x2} y2={g.y2}
                   stroke={stroke} strokeWidth={sw}
                   markerEnd={`url(#${marker})`} />
               );
             })}
 
-            {/* Missing edge attempt — draw a dashed red line if pair is not in the grammar */}
-            {inspectKey && !inspectExists && fromW && toW && _POS[fromW] && _POS[toW] && (() => {
-              const a = _POS[fromW], b = _POS[toW];
-              const dx = b.cx - a.cx, dy = b.cy - a.cy;
-              const len = Math.hypot(dx, dy) || 1;
-              const ox = (dx / len) * 26, oy = (dy / len) * 14;
+            {/* No-edge attempt: both words are known but no arrow exists → dashed red */}
+            {edgeKey && !edgeExists && fromW && toW && _POS[fromW] && _POS[toW] && (() => {
+              const g = _edgeGeom(fromW, toW);
               return (
                 <line
-                  x1={a.cx + ox} y1={a.cy + oy}
-                  x2={b.cx - ox} y2={b.cy - oy}
+                  x1={g.x1} y1={g.y1} x2={g.x2} y2={g.y2}
                   stroke="#dc2626" strokeWidth={2.5} strokeDasharray="5,4"
                   markerEnd="url(#arr-bad)" />
               );
             })()}
 
             {/* Nodes */}
-            {WORDS.map(w => {
+            {Object.keys(_ADJ).map(w => {
               const p = _POS[w];
-              const isFrom = inspectKey && fromW === w;
-              const isTo   = inspectKey && toW === w;
+              const isFrom = edgeKey && fromW === w;
+              const isTo   = toKnown && toW === w;
               const fill = isFrom ? "#7c3aed" : isTo ? "#0891b2" : "#fff";
               const stroke = isFrom ? "#7c3aed" : isTo ? "#0891b2" : A;
               const textColor = isFrom || isTo ? "#fff" : "#065f46";
               return (
                 <g key={w}>
-                  <rect x={p.cx - 26} y={p.cy - 14} width={52} height={28} rx={8}
+                  <rect x={p.cx - 28} y={p.cy - 15} width={56} height={30} rx={8}
                     fill={fill} stroke={stroke} strokeWidth={2} />
                   <text x={p.cx} y={p.cy + 4} textAnchor="middle"
                     style={{ fontSize: 11, fontWeight: 800, fill: textColor, fontFamily: "system-ui, sans-serif" }}>
@@ -163,39 +199,56 @@ export function Mcc22GrammarSim({ E }) {
                 </g>
               );
             })}
+
+            {/* Unknown word floating near the graph */}
+            {toW && !toKnown && (
+              <g>
+                <rect x={_SVG_W / 2 - 42} y={_SVG_H - 30} width={84} height={24} rx={7}
+                  fill="#dc2626" stroke="#dc2626" strokeWidth={2} />
+                <text x={_SVG_W / 2} y={_SVG_H - 13} textAnchor="middle"
+                  style={{ fontSize: 11, fontWeight: 800, fill: "#fff", fontFamily: "system-ui, sans-serif" }}>
+                  {toW} ?
+                </text>
+              </g>
+            )}
           </svg>
         </div>
 
         {/* Legend */}
         <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 6, flexWrap: "wrap", fontSize: 11, color: "#065f46" }}>
-          <span><b style={{ color: "#7c3aed" }}>■</b> X</span>
-          <span><b style={{ color: "#0891b2" }}>■</b> Y</span>
-          <span><b style={{ color: A }}>→</b> {t(E, "edge in grammar", "문법에 있는 화살표")}</span>
-          <span><b style={{ color: "#dc2626" }}>⇢</b> {t(E, "missing edge", "없는 화살표")}</span>
+          <span><b style={{ color: "#7c3aed" }}>■</b> {t(E, "prev word", "앞 단어")}</span>
+          <span><b style={{ color: "#0891b2" }}>■</b> {t(E, "this word", "이 단어")}</span>
+          <span><b style={{ color: A }}>→</b> {t(E, "arrow exists", "화살표 있음")}</span>
+          <span><b style={{ color: "#dc2626" }}>⇢</b> {t(E, "no arrow / unknown word", "화살표 없음 / 없는 단어")}</span>
         </div>
       </div>
 
-      {/* Sentence with per-pair markers */}
+      {/* Sentence with per-word status */}
       <div style={{
         background: "#fff", border: `1.5px solid ${A}`, borderRadius: 12, padding: "10px 14px", marginBottom: 10,
         textAlign: "center", fontFamily: "'JetBrains Mono', monospace",
       }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 6 }}>
-          {t(E, "Sentence", "문장")} · {checked} / {totalPairs} {t(E, "pairs checked", "쌍 확인됨")}
+          {t(E, "Sentence", "문장")} · {checked} / {n} {t(E, "words checked", "단어 확인됨")}
         </div>
         <div style={{ fontSize: 15, fontWeight: 800, color: A, lineHeight: 1.7 }}>
           {sentence.map((w, i) => {
-            const isInspectFrom = i === inspectIdx && !doneAll;
-            const isBad = sentenceBroken && i > firstBadIdx;
-            const color = isBad ? "#dc2626" : isInspectFrom ? "#7c3aed" : A;
+            const seen = i < checked;
+            const isFailWord = doneAll && bad === i;
+            const afterFail = doneAll && bad !== -1 && i > bad;
+            const isSpotlight = !doneAll && i === checked - 1;
+            let color = "#cbd5e1";               // not yet checked
+            if (seen && !doneAll) color = isSpotlight ? "#7c3aed" : A;
+            if (doneAll) color = bad === -1 ? A : (i < bad ? A : isFailWord ? "#dc2626" : "#94a3b8");
             return (
               <span key={i}>
-                <span style={{ color, textDecoration: isBad ? "line-through" : "none" }}>{w}</span>
-                {i < sentence.length - 1 && (() => {
-                  const ok = _SIM_EDGE_SET.has(`${sentence[i]}|${sentence[i + 1]}`);
-                  const done = i < checked;
-                  const sym = !done ? "·" : ok ? "→" : "✗";
-                  const c = !done ? "#cbd5e1" : ok ? A : "#dc2626";
+                <span style={{ color, textDecoration: isFailWord || afterFail ? "line-through" : "none" }}>{w}</span>
+                {i < n - 1 && (() => {
+                  const bothKnown = _KNOWN.has(sentence[i]) && _KNOWN.has(sentence[i + 1]);
+                  const ok = bothKnown && _EDGE_SET.has(`${sentence[i]}|${sentence[i + 1]}`);
+                  const pairDone = i + 1 < checked || (doneAll);
+                  const sym = !pairDone ? "·" : ok ? "→" : "✗";
+                  const c = !pairDone ? "#cbd5e1" : ok ? A : "#dc2626";
                   return <span style={{ color: c, margin: "0 6px" }}>{sym}</span>;
                 })()}
               </span>
@@ -219,30 +272,28 @@ export function Mcc22GrammarSim({ E }) {
           borderRadius: 8, padding: "5px 14px", fontSize: 12, fontWeight: 800,
           cursor: doneAll ? "not-allowed" : "pointer",
         }}>
-          {t(E, "Check next pair ▶", "다음 쌍 확인 ▶")}
+          {t(E, "Check next word ▶", "다음 단어 확인 ▶")}
         </button>
       </div>
 
       {/* Verdict card */}
       <div style={{
-        background: "#fff", border: `2px solid ${doneAll ? (firstBadIdx === -1 ? A : "#dc2626") : "#cbd5e1"}`,
-        borderRadius: 12, padding: "12px 14px", textAlign: "center",
+        background: "#fff", border: `2px solid ${doneAll ? (isValid ? A : "#dc2626") : "#cbd5e1"}`,
+        borderRadius: 12, padding: "12px 14px", textAlign: "center", ...KA,
       }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 6 }}>
           🎯 {t(E, "Verdict", "판정")}
         </div>
         <div style={{
-          fontSize: 15, fontWeight: 800,
-          color: doneAll ? (firstBadIdx === -1 ? A : "#dc2626") : C.dim,
+          fontSize: 18, fontWeight: 800,
+          color: doneAll ? (isValid ? A : "#dc2626") : C.dim,
           fontFamily: "'JetBrains Mono', monospace",
         }}>
           {verdict}
         </div>
-        {doneAll && firstBadIdx !== -1 && (
-          <div style={{ fontSize: 11, color: C.dim, marginTop: 6 }}>
-            {t(E,
-              `No edge ${sentence[firstBadIdx]} → ${sentence[firstBadIdx + 1]} in the grammar`,
-              `문법에 ${sentence[firstBadIdx]} → ${sentence[firstBadIdx + 1]} 화살표가 없어요`)}
+        {reason && (
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6 }}>
+            {reason}
           </div>
         )}
       </div>
@@ -252,95 +303,78 @@ export function Mcc22GrammarSim({ E }) {
 
 const FULL_PY = [
   "import sys",
-  "from collections import deque",
   "",
-  "def solve():",
-  "    input_data = sys.stdin.read().split()",
-  "    idx = 0",
-  "    W = int(input_data[idx])",
-  "    idx += 1",
-  "    words = []",
-  "    word_id = {}",
-  "    for i in range(W):",
-  "        w = input_data[idx]",
-  "        idx += 1",
-  "        words.append(w)",
-  "        word_id[w] = i",
+  "# The grammar is FIXED — it is given in the problem, NOT read from input.",
+  "# adj[x] = the set of words allowed right after x.",
+  "adj = {",
+  "    'WE':   {'DONT', 'KNOW'},",
+  "    'THEY': {'DONT', 'KNOW'},",
+  "    'DONT': {'KNOW'},",
+  "    'KNOW': {'WE', 'THEY', 'THAT'},",
+  "    'THAT': {'WE', 'THEY'},",
+  "}",
   "",
-  "    E = int(input_data[idx])",
-  "    idx += 1",
-  "    adj = [[] for _ in range(W)]",
-  "    for _ in range(E):",
-  "        u = word_id[input_data[idx]]",
-  "        idx += 1",
-  "        v = word_id[input_data[idx]]",
-  "        idx += 1",
-  "        adj[u].append(v)",
+  "data = sys.stdin.read().split('\\n')",
+  "idx = 0",
+  "T = int(data[idx]); idx += 1",
+  "out = []",
+  "for _ in range(T):",
+  "    n = int(data[idx]); idx += 1",
+  "    words = data[idx].split(); idx += 1",
   "",
-  "    S = int(input_data[idx])",
-  "    idx += 1",
-  "    for _ in range(S):",
-  "        n = int(input_data[idx])",
-  "        idx += 1",
-  "        sentence = []",
-  "        for _ in range(n):",
-  "            sentence.append(word_id[input_data[idx]])",
-  "            idx += 1",
-  "        valid = True",
-  "        for i in range(n - 1):",
-  "            if sentence[i+1] not in adj[sentence[i]]:",
-  "                valid = False; break",
-  "        print('YES' if valid else 'NO')",
+  "    ok = True",
+  "    # check ①: every word must be one of the 5 valid words",
+  "    for w in words:",
+  "        if w not in adj:",
+  "            ok = False",
+  "            break",
+  "    # check ②: every consecutive pair must have an arrow",
+  "    if ok:",
+  "        for i in range(len(words) - 1):",
+  "            if words[i + 1] not in adj[words[i]]:",
+  "                ok = False",
+  "                break",
   "",
-  "solve()",
+  "    out.append('YES' if ok else 'NO')",
+  "",
+  "print('\\n'.join(out))",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
   "#include <vector>",
   "#include <string>",
-  "#include <unordered_map>",
+  "#include <map>",
+  "#include <set>",
   "using namespace std;",
   "",
   "int main() {",
-  "    int W;",
-  "    cin >> W;",
-  "    vector<string> words(W);",
-  "    unordered_map<string, int> word_id;",
-  "    for (int i = 0; i < W; i++) {",
-  "        cin >> words[i];",
-  "        word_id[words[i]] = i;",
-  "    }",
+  "    // The grammar is FIXED — given in the problem, not read from input.",
+  "    // adj[x] = the words allowed right after x.",
+  "    map<string, set<string>> adj;",
+  "    adj[\"WE\"]   = {\"DONT\", \"KNOW\"};",
+  "    adj[\"THEY\"] = {\"DONT\", \"KNOW\"};",
+  "    adj[\"DONT\"] = {\"KNOW\"};",
+  "    adj[\"KNOW\"] = {\"WE\", \"THEY\", \"THAT\"};",
+  "    adj[\"THAT\"] = {\"WE\", \"THEY\"};",
   "",
-  "    int E;",
-  "    cin >> E;",
-  "    vector<vector<int>> adj(W);   // adj[x] = words allowed after x",
-  "    for (int e = 0; e < E; e++) {",
-  "        string a, b;",
-  "        cin >> a >> b;",
-  "        adj[word_id[a]].push_back(word_id[b]);",
-  "    }",
-  "",
-  "    int S;",
-  "    cin >> S;",
-  "    for (int s = 0; s < S; s++) {",
+  "    int T;",
+  "    cin >> T;",
+  "    while (T--) {",
   "        int n;",
   "        cin >> n;",
-  "        vector<int> sentence(n);",
-  "        for (int i = 0; i < n; i++) {",
-  "            string w;",
-  "            cin >> w;",
-  "            sentence[i] = word_id[w];",
-  "        }",
-  "        bool valid = true;",
-  "        for (int i = 0; i < n - 1; i++) {",
-  "            bool found = false;",
-  "            for (int nxt : adj[sentence[i]]) {",
-  "                if (nxt == sentence[i + 1]) { found = true; break; }",
-  "            }",
-  "            if (!found) { valid = false; break; }",
-  "        }",
-  "        cout << (valid ? \"YES\" : \"NO\") << \"\\n\";",
+  "        vector<string> words(n);",
+  "        for (int i = 0; i < n; i++) cin >> words[i];",
+  "",
+  "        bool ok = true;",
+  "        // check ①: every word must be one of the 5 valid words",
+  "        for (int i = 0; i < n && ok; i++)",
+  "            if (adj.find(words[i]) == adj.end()) ok = false;",
+  "        // check ②: every consecutive pair must have an arrow",
+  "        for (int i = 0; i + 1 < n && ok; i++)",
+  "            if (adj[words[i]].count(words[i + 1]) == 0) ok = false;",
+  "",
+  "        cout << (ok ? \"YES\" : \"NO\") << \"\\n\";",
   "    }",
   "    return 0;",
   "}",
@@ -353,20 +387,22 @@ export function getMcc22GrammarSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "The C++ version maps each word to an id with unordered_map, stores allowed successors in vector<vector<int>>, and scans that list to check each consecutive pair — the same logic as Python's 'in adj[...]'.",
-            "C++ 버전은 unordered_map 으로 단어를 id 로 바꾸고, 허용된 다음 단어를 vector<vector<int>> 에 담아, 그 목록을 훑어 연속 쌍을 확인해요 — Python 의 'in adj[...]' 와 같은 방식이에요."),
+        t(E, "The grammar never changes, so we hard-code adj[x] = the set of words allowed after x. Membership in a set/map is one instant lookup — no scanning a list of edges each time.",
+            "문법은 변하지 않으니 adj[x] = x 다음에 올 수 있는 단어 집합 을 코드에 그대로 적어둬요. 집합/맵 조회는 한 번에 끝나요 — 매번 간선 목록을 훑을 필요가 없어요."),
+        t(E, "Two failure checks: ① every word must be a key of adj (one of the 5), and ② for each neighbor pair, words[i+1] must be in adj[words[i]]. Fail either one → NO.",
+            "실패 검사 두 가지: ① 모든 단어가 adj 의 키 (5개 중 하나) 여야 하고, ② 이웃한 쌍마다 words[i+1] 이 adj[words[i]] 안에 있어야 해요. 하나라도 어기면 → NO."),
+        t(E, "The C++ version uses map<string,set<string>> for the same instant lookup; cin >> reads T, then n and n words per test.",
+            "C++ 버전은 같은 즉시 조회를 위해 map<string,set<string>> 를 써요; cin >> 로 T 를 읽고, 테스트마다 n 과 n 개 단어를 읽어요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "'w in adj' checks the keys (the 5 words); 'words[i+1] in adj[words[i]]' checks the arrow — both are O(1) set lookups.",
+            "'w in adj' 는 키 (5개 단어) 를, 'words[i+1] in adj[words[i]]' 는 화살표를 확인해요 — 둘 다 O(1) 집합 조회예요."),
       ],
       cppOnly: [
-        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
-        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+        t(E, "adj.find(w) == adj.end() means the word is not a key — an unknown word (check ①).",
+            "adj.find(w) == adj.end() 는 그 단어가 키에 없다는 뜻 — 없는 단어예요 (검사 ①)."),
+        t(E, "adj[words[i]].count(words[i+1]) == 0 means there is no arrow between the pair (check ②).",
+            "adj[words[i]].count(words[i+1]) == 0 은 그 쌍 사이에 화살표가 없다는 뜻이에요 (검사 ②)."),
       ],
     },
   ];
@@ -449,4 +485,3 @@ ${sections.map(s => `
   win.document.close();
   setTimeout(() => { win.focus(); win.print(); }, 500);
 }
-

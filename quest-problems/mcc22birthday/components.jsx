@@ -4,250 +4,293 @@ import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeSteppe
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+const KA = { wordBreak: "keep-all" };
+const NW = { whiteSpace: "nowrap" };
 
 /* ═══════════════════════════════════════════════════════════════
-   Mcc22BirthdayDeepAuditSim — toggle each cat's availability per
-   time slot, watch the column counts update live, and see which
-   slot wins the party. Mirrors the greedy column-scan in solve().
+   Cookie flips.
+   B flips a cookie HORIZONTALLY (left↔right):  p↔q,  b↔d
+   C flips a cookie VERTICALLY   (up↔down):     p↔b,  q↔d
    ═══════════════════════════════════════════════════════════════ */
-const _DEEP_PRESETS = [
-  { label: "3×2", cats: ["🐈", "🐱", "🐈‍⬛"], slots: 2, init: [[1,0],[1,1],[0,1]] },
-  { label: "4×3", cats: ["🐈", "🐱", "🐈‍⬛", "😺"], slots: 3, init: [[1,0,1],[0,1,1],[1,1,0],[0,0,1]] },
-  { label: "5×4", cats: ["🐈", "🐱", "🐈‍⬛", "😺", "😻"], slots: 4, init: [[1,0,0,1],[1,1,0,0],[0,1,1,0],[0,0,1,1],[1,0,1,0]] },
-];
+const FLIP_H = { p: "q", q: "p", b: "d", d: "b" };
+const FLIP_V = { p: "b", b: "p", q: "d", d: "q" };
+const SHAPE_COLOR = { p: "#ea580c", q: "#0284c7", b: "#16a34a", d: "#9333ea" };
 
-export function Mcc22BirthdayDeepAuditSim({ E }) {
-  const [pi, setPi] = useState(0);
-  const preset = _DEEP_PRESETS[pi];
-  const [grid, setGrid] = useState(() => preset.init.map(row => [...row]));
-
-  const switchPreset = (newPi) => {
-    setPi(newPi);
-    setGrid(_DEEP_PRESETS[newPi].init.map(row => [...row]));
-  };
-
-  const toggle = (r, c) => {
-    const u = grid.map(row => [...row]);
-    u[r][c] = u[r][c] ? 0 : 1;
-    setGrid(u);
-  };
-
-  const counts = [];
-  for (let c = 0; c < preset.slots; c++) {
-    let s = 0;
-    for (let r = 0; r < preset.cats.length; r++) s += grid[r]?.[c] || 0;
-    counts.push(s);
+function buildGrid(scroll) {
+  let grid = [["p"]];
+  for (const op of scroll) {
+    if (op === "A") {
+      // copy to the RIGHT, unchanged
+      grid = grid.map((row) => [...row, ...row]);
+    } else if (op === "B") {
+      // copy to the RIGHT, each cookie flipped horizontally
+      grid = grid.map((row) => [...row, ...row.map((ch) => FLIP_H[ch])]);
+    } else {
+      // copy BELOW, each cookie flipped vertically
+      grid = [...grid.map((r) => [...r]), ...grid.map((row) => row.map((ch) => FLIP_V[ch]))];
+    }
   }
-  const best = counts.reduce((a, b) => Math.max(a, b), 0);
-  const winners = counts.map((v, i) => v === best ? i : -1).filter(i => i >= 0);
+  return grid;
+}
 
-  const reset = () => setGrid(preset.init.map(row => [...row]));
-  const fillAll = () => setGrid(preset.cats.map(() => Array(preset.slots).fill(1)));
-  const clearAll = () => setGrid(preset.cats.map(() => Array(preset.slots).fill(0)));
+/* ═══════════════════════════════════════════════════════════════
+   Mcc22BirthdayCookieSim — start from a single 'p' cookie, click
+   A / B / C to grow the grid one step at a time and SEE the copy +
+   flips. Click any cookie to read its row-major number. Kept tiny
+   (≤ 8×8) so the doubling is visible before it explodes to 2^N.
+   ═══════════════════════════════════════════════════════════════ */
+export function Mcc22BirthdayCookieSim({ E }) {
+  const [scroll, setScroll] = useState(["A", "B", "C"]);
+  const [sel, setSel] = useState(null); // { r, c } or null
 
-  const cellSize = 40;
+  const grid = buildGrid(scroll);
+  const rows = grid.length;
+  const cols = grid[0].length;
+
+  const canGrowRight = cols * 2 <= 8;
+  const canGrowDown = rows * 2 <= 8;
+
+  const add = (op) => { setScroll([...scroll, op]); setSel(null); };
+  const undo = () => { setScroll(scroll.slice(0, -1)); setSel(null); };
+  const reset = () => { setScroll([]); setSel(null); };
+
+  const selIndex = sel ? sel.r * cols + sel.c + 1 : null;
+  const selShape = sel ? grid[sel.r][sel.c] : null;
+
+  const cellSize = cols <= 4 ? 34 : cols <= 6 ? 28 : 24;
+
+  const opBtn = (op, label, on) => (
+    <button
+      key={op}
+      onClick={() => add(op)}
+      disabled={!on}
+      style={{
+        padding: "7px 10px", borderRadius: 8, cursor: on ? "pointer" : "not-allowed",
+        border: `1.5px solid ${on ? A : "#e5e7eb"}`,
+        background: on ? "#fff7ed" : "#f9fafb", color: on ? "#9a3412" : "#cbd5e1",
+        fontSize: 12, fontWeight: 700, lineHeight: 1.35, textAlign: "left", flex: 1, minWidth: 132, ...KA,
+      }}
+    >
+      <div style={{ fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace" }}>{op}</div>
+      <div style={{ fontSize: 10.5, fontWeight: 600 }}>{label}</div>
+    </button>
+  );
 
   return (
     <div style={{ padding: 14 }}>
-      {/* preset selector */}
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
-        {_DEEP_PRESETS.map((p, i) => (
-          <button key={i} onClick={() => switchPreset(i)} style={{
-            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
-            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
-            fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
-          }}>
-            {p.label}
-          </button>
-        ))}
-      </div>
+      <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, ...KA }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", marginBottom: 6 }}>
+          🍪 {t(E, "Grow the cookie grid", "쿠키 격자 키우기")}
+        </div>
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+          {t(E,
+            "Start with one 'p' cookie. Add a letter and watch the grid DOUBLE: A copies right, B copies right + flips left↔right, C copies down + flips up↔down.",
+            "'p' 쿠키 한 개로 시작해요. 글자를 더하면 격자가 두 배로 늘어나요: A 는 오른쪽 복사, B 는 오른쪽 복사 + 좌우 뒤집기, C 는 아래쪽 복사 + 위아래 뒤집기.")}
+        </div>
 
-      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10 }}>
-        {t(E, "Tap a cell to toggle a cat's availability. Watch each slot's count update live.",
-              "셀을 탭해서 고양이의 참석 가능 여부를 토글해 봐. 각 시간대 인원수가 바로바로 갱신돼.")}
-      </div>
+        {/* scroll so far */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center", marginBottom: 12 }}>
+          <span style={{ fontSize: 11, color: "#9a3412", fontWeight: 700 }}>{t(E, "scroll:", "두루마리:")}</span>
+          {scroll.length === 0 && (
+            <span style={{ fontSize: 12, color: C.dim, fontStyle: "italic" }}>{t(E, "(empty — one 'p')", "(비어 있음 — 'p' 하나)")}</span>
+          )}
+          {scroll.map((op, i) => (
+            <span key={i} style={{
+              ...NW, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800,
+              color: "#9a3412", background: "#fff", border: "1px solid #fdba74", borderRadius: 6, padding: "2px 8px",
+            }}>{op}</span>
+          ))}
+          <span style={{ fontSize: 11, color: C.dim, marginLeft: "auto", ...NW }}>
+            {rows} × {cols} = {rows * cols}{t(E, " cookies", "개")}
+          </span>
+        </div>
 
-      {/* matrix */}
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
-        <div style={{ display: "inline-block" }}>
-          {/* header row: slot labels */}
-          <div style={{ display: "flex", gap: 4, marginBottom: 4 }}>
-            <div style={{ width: cellSize + 4, height: cellSize, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: C.dim, fontWeight: 700 }}>
-              {t(E, "cat \\ slot", "고양이 \\ 시간대")}
-            </div>
-            {Array.from({ length: preset.slots }).map((_, c) => (
-              <div key={c} style={{
-                width: cellSize, height: cellSize, display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 12, fontWeight: 700, color: A, background: "#fff7ed", borderRadius: 6, border: "1px solid #fdba74",
-                fontFamily: "'JetBrains Mono',monospace",
-              }}>
-                {`s${c + 1}`}
+        {/* the grid */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 12, overflowX: "auto" }}>
+          <div style={{ display: "inline-block" }}>
+            {grid.map((row, r) => (
+              <div key={r} style={{ display: "flex", gap: 3, marginBottom: 3 }}>
+                {row.map((ch, c) => {
+                  const isSel = sel && sel.r === r && sel.c === c;
+                  return (
+                    <button
+                      key={c}
+                      onClick={() => setSel(isSel ? null : { r, c })}
+                      style={{
+                        width: cellSize, height: cellSize, padding: 0, cursor: "pointer",
+                        borderRadius: 7, border: `2px solid ${isSel ? "#111827" : "#fde4c8"}`,
+                        background: isSel ? "#111827" : "#fff",
+                        color: isSel ? "#fff" : SHAPE_COLOR[ch],
+                        fontFamily: "'JetBrains Mono',monospace",
+                        fontSize: cellSize <= 24 ? 15 : 18, fontWeight: 800,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                      }}
+                    >{ch}</button>
+                  );
+                })}
               </div>
             ))}
           </div>
-
-          {/* body rows */}
-          {preset.cats.map((cat, r) => (
-            <div key={r} style={{ display: "flex", gap: 4, marginBottom: 4 }}>
-              <div style={{ width: cellSize + 4, height: cellSize, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>
-                {cat}
-              </div>
-              {Array.from({ length: preset.slots }).map((_, c) => {
-                const on = !!grid[r]?.[c];
-                return (
-                  <button key={c} onClick={() => toggle(r, c)} style={{
-                    width: cellSize, height: cellSize, padding: 0, cursor: "pointer",
-                    borderRadius: 6, border: `1.5px solid ${on ? "#f97316" : "#e5e7eb"}`,
-                    background: on ? "#fed7aa" : "#f9fafb",
-                    color: on ? "#9a3412" : "#cbd5e1",
-                    fontSize: 16, fontWeight: 700,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    {on ? "✓" : "·"}
-                  </button>
-                );
-              })}
-            </div>
-          ))}
-
-          {/* footer row: column sums */}
-          <div style={{ display: "flex", gap: 4, marginTop: 6, paddingTop: 6, borderTop: "1px dashed #fdba74" }}>
-            <div style={{ width: cellSize + 4, height: cellSize, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#15803d" }}>
-              {t(E, "count", "인원수")}
-            </div>
-            {counts.map((v, c) => {
-              const isWin = v === best && best > 0;
-              return (
-                <div key={c} style={{
-                  width: cellSize, height: cellSize, display: "flex", alignItems: "center", justifyContent: "center",
-                  borderRadius: 6, fontSize: 16, fontWeight: 800,
-                  background: isWin ? "#dcfce7" : "#f3f4f6",
-                  border: `1.5px solid ${isWin ? "#16a34a" : "#e5e7eb"}`,
-                  color: isWin ? "#15803d" : C.dim,
-                  fontFamily: "'JetBrains Mono',monospace",
-                }}>
-                  {v}
-                </div>
-              );
-            })}
-          </div>
         </div>
-      </div>
 
-      {/* result banner */}
-      <div style={{
-        background: best > 0 ? "#dcfce7" : "#fee2e2",
-        border: `1px solid ${best > 0 ? "#16a34a" : "#dc2626"}`,
-        borderRadius: 10, padding: "8px 12px", marginBottom: 8,
-        textAlign: "center", fontSize: 13, fontWeight: 700,
-        color: best > 0 ? "#15803d" : "#991b1b",
-      }}>
-        {best > 0
-          ? t(E, `🎂 Best slot: ${winners.map(i => `s${i + 1}`).join(", ")} → ${best} cat${best === 1 ? "" : "s"}`,
-                `🎂 최고 시간대: ${winners.map(i => `s${i + 1}`).join(", ")} → ${best}마리`)
-          : t(E, "✗ Nobody can attend any slot — pick at least one ✓.",
-                "✗ 어느 시간대도 참석자가 없어 — ✓ 를 하나라도 켜봐.")}
-      </div>
+        {/* selected cell read-out */}
+        <div style={{
+          background: sel ? "#111827" : "#fffbeb", color: sel ? "#f8fafc" : "#92400e",
+          border: `1px solid ${sel ? "#111827" : "#fde68a"}`, borderRadius: 8, padding: "8px 12px",
+          fontSize: 12.5, textAlign: "center", marginBottom: 12, ...KA,
+        }}>
+          {sel
+            ? (<span style={{ fontFamily: "'JetBrains Mono',monospace" }}>
+                {t(E, "cookie #", "쿠키 #")}<b style={{ color: "#fbbf24" }}>{selIndex}</b>
+                {"  ( "}{t(E, "row ", "행 ")}{sel.r + 1}, {t(E, "col ", "열 ")}{sel.c + 1}{" )  →  "}
+                <b style={{ color: "#34d399", fontSize: 15 }}>'{selShape}'</b>
+              </span>)
+            : t(E, "👆 Tap any cookie to see its number (left→right, top→bottom).",
+                  "👆 아무 쿠키나 눌러 번호를 봐요 (왼→오, 위→아래 순서).")}
+        </div>
 
-      {/* controls */}
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 8, flexWrap: "wrap" }}>
-        <button onClick={reset} style={{
-          padding: "5px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
-          background: "transparent", color: C.dim, fontSize: 11, fontWeight: 600, cursor: "pointer",
-        }}>
-          {t(E, "↻ Reset", "↻ 초기화")}
-        </button>
-        <button onClick={fillAll} style={{
-          padding: "5px 12px", borderRadius: 8, border: `1px solid ${A}`,
-          background: A, color: "#fff", fontSize: 11, fontWeight: 700, cursor: "pointer",
-        }}>
-          {t(E, "✓ All available", "✓ 모두 참석")}
-        </button>
-        <button onClick={clearAll} style={{
-          padding: "5px 12px", borderRadius: 8, border: `1px solid #d1d5db`,
-          background: "#f9fafb", color: C.dim, fontSize: 11, fontWeight: 700, cursor: "pointer",
-        }}>
-          {t(E, "· Clear", "· 모두 비우기")}
-        </button>
-      </div>
+        {/* controls */}
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+          {opBtn("A", t(E, "copy right", "오른쪽 복사"), canGrowRight)}
+          {opBtn("B", t(E, "copy right, flip ↔", "오른쪽 복사, 좌우 뒤집기"), canGrowRight)}
+          {opBtn("C", t(E, "copy down, flip ↕", "아래 복사, 위아래 뒤집기"), canGrowDown)}
+        </div>
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10 }}>
+          <button onClick={undo} disabled={scroll.length === 0} style={{
+            padding: "5px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
+            background: "transparent", color: scroll.length ? C.dim : "#d1d5db",
+            fontSize: 11, fontWeight: 700, cursor: scroll.length ? "pointer" : "not-allowed",
+          }}>{t(E, "↶ Undo", "↶ 되돌리기")}</button>
+          <button onClick={reset} disabled={scroll.length === 0} style={{
+            padding: "5px 12px", borderRadius: 8, border: `1px solid ${C.border}`,
+            background: "transparent", color: scroll.length ? C.dim : "#d1d5db",
+            fontSize: 11, fontWeight: 700, cursor: scroll.length ? "pointer" : "not-allowed",
+          }}>{t(E, "↻ Reset", "↻ 초기화")}</button>
+        </div>
 
-      {/* hint */}
-      <div style={{
-        background: "#fff7ed", border: `1px solid #fdba74`, borderRadius: 8, padding: "8px 12px",
-        fontSize: 11, color: "#9a3412", textAlign: "center", lineHeight: 1.5,
-      }}>
-        {t(E, "💡 The solution scans each column and counts ✓'s — exactly what the green row shows. The max wins.",
-              "💡 풀이 코드도 각 열을 훑으며 ✓ 개수를 세 — 초록색 줄이 바로 그 결과. 그중 최댓값이 답.")}
+        {(!canGrowRight || !canGrowDown) && (
+          <div style={{ fontSize: 11, color: "#9a3412", textAlign: "center", marginBottom: 8, ...KA }}>
+            {t(E, "(Grid capped at 8×8 here so you can still see it.)",
+                  "(여기서는 8×8 까지만 — 눈에 보이게 하려고 제한했어요.)")}
+          </div>
+        )}
+
+        <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 8, padding: "8px 12px", fontSize: 11.5, color: "#92400e", lineHeight: 1.55, ...KA }}>
+          {t(E,
+            "💡 Each letter DOUBLES the grid. After N letters it is 2^N cookies — with N up to 10000 that's astronomically huge. So we can never build it. Instead, for a queried number, we'll trace it BACKWARD through the scroll.",
+            "💡 글자 하나가 격자를 두 배로 늘려요. N 글자 뒤엔 2^N 개 — N 이 최대 10000 이면 천문학적으로 커요. 그래서 절대 직접 만들 수 없어요. 대신 물어본 번호 하나를 두루마리를 거꾸로 따라가며 추적할 거예요.")}
+        </div>
       </div>
     </div>
   );
 }
 
+/* ================================================================
+   SOLUTION CODE  (verified → pqpdppdd, 0/20000 brute mismatches)
+   Fast: never build the 2^N grid. For each queried number, convert
+   it to (row, col) in the final grid, then walk the scroll BACKWARD.
+   Saturating-doubling row/col counts (capped just above the max
+   index) tell us, at each step, whether the query sits in the
+   original half or the copied half; the copy carries a flip, so we
+   accumulate horizontal/vertical flip parity, then read off p/q/b/d.
+   ================================================================ */
 const FULL_PY = [
   "import sys",
   "",
   "def solve():",
-  "    input_data = sys.stdin.read().split()",
-  "    idx = 0",
-  "    N = int(input_data[idx]); idx += 1  # cats",
-  "    T = int(input_data[idx]); idx += 1  # time slots",
+  "    data = sys.stdin.read().split('\\n')",
+  "    N, S, Q = map(int, data[0].split())      # N letters, S scrolls, Q friends",
+  "    scrolls = [data[1 + i].strip() for i in range(S)]",
+  "    friends = list(map(int, data[1 + S].split()))",
   "",
-  "    # Each cat has a set of available time slots",
-  "    avail = []",
-  "    for i in range(N):",
-  "        k = int(input_data[idx])",
-  "        idx += 1",
-  "        slots = set()",
-  "        for _ in range(k):",
-  "            slots.add(int(input_data[idx]))",
-  "            idx += 1",
-  "        avail.append(slots)",
+  "    CAP = 2 * 10**9                           # a ceiling just above the biggest index",
+  "    shape = {(0, 0): 'p', (1, 0): 'q', (0, 1): 'b', (1, 1): 'd'}",
+  "    answer = []",
   "",
-  "    # Greedy: pick the time slot that accommodates most cats",
-  "    best = 0",
-  "    for slot in range(1, T + 1):",
-  "        count = sum(1 for i in range(N) if slot in avail[i])",
-  "        best = max(best, count)",
+  "    for scroll in scrolls:",
+  "        # grid width / height after each of the N steps (doubling, but capped)",
+  "        rows = [1] * (N + 1)",
+  "        cols = [1] * (N + 1)",
+  "        for i in range(1, N + 1):",
+  "            if scroll[i - 1] in 'AB':          # A / B grow RIGHT -> width doubles",
+  "                cols[i] = min(cols[i - 1] * 2, CAP)",
+  "                rows[i] = rows[i - 1]",
+  "            else:                              # C grows DOWN -> height doubles",
+  "                rows[i] = min(rows[i - 1] * 2, CAP)",
+  "                cols[i] = cols[i - 1]",
+  "        width = cols[N]",
   "",
-  "    print(best)",
+  "        for f in friends:",
+  "            r = (f - 1) // width + 1           # 1-D number -> (row, col)",
+  "            c = (f - 1) % width + 1",
+  "            flip_h = flip_v = 0",
+  "            for i in range(N, 0, -1):          # walk the scroll BACKWARD",
+  "                if scroll[i - 1] in 'AB':",
+  "                    if c > cols[i - 1]:        # in the copied RIGHT half?",
+  "                        c -= cols[i - 1]",
+  "                        if scroll[i - 1] == 'B':",
+  "                            flip_h ^= 1        # B flipped this copy horizontally",
+  "                else:",
+  "                    if r > rows[i - 1]:        # in the copied BOTTOM half?",
+  "                        r -= rows[i - 1]",
+  "                        flip_v ^= 1            # C flipped this copy vertically",
+  "            answer.append(shape[(flip_h, flip_v)])",
+  "",
+  "    print(''.join(answer))",
   "",
   "solve()",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
+  "#include <string>",
   "#include <vector>",
-  "#include <set>",
   "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
-  "    int N, T;",
-  "    cin >> N >> T;   // N cats, T time slots",
+  "    int N, S, Q;",
+  "    cin >> N >> S >> Q;                 // N letters, S scrolls, Q friends",
+  "    vector<string> scrolls(S);",
+  "    for (int i = 0; i < S; i++) cin >> scrolls[i];",
+  "    vector<long long> friends(Q);",
+  "    for (int i = 0; i < Q; i++) cin >> friends[i];",
   "",
-  "    // Each cat has a set of available time slots",
-  "    vector<set<int>> avail(N);",
-  "    for (int i = 0; i < N; i++) {",
-  "        int k;",
-  "        cin >> k;",
-  "        for (int j = 0; j < k; j++) {",
-  "            int s;",
-  "            cin >> s;",
-  "            avail[i].insert(s);",
+  "    const long long CAP = 2000000000LL; // just above the biggest index",
+  "    string answer;",
+  "    for (const string& scroll : scrolls) {",
+  "        // grid width / height after each step (doubling, but capped)",
+  "        vector<long long> rows(N + 1, 1), cols(N + 1, 1);",
+  "        for (int i = 1; i <= N; i++) {",
+  "            if (scroll[i - 1] == 'A' || scroll[i - 1] == 'B') {",
+  "                cols[i] = min(cols[i - 1] * 2, CAP); rows[i] = rows[i - 1];",
+  "            } else {",
+  "                rows[i] = min(rows[i - 1] * 2, CAP); cols[i] = cols[i - 1];",
+  "            }",
+  "        }",
+  "        long long width = cols[N];",
+  "        for (long long f : friends) {",
+  "            long long r = (f - 1) / width + 1;   // 1-D number -> (row, col)",
+  "            long long c = (f - 1) % width + 1;",
+  "            int flipH = 0, flipV = 0;",
+  "            for (int i = N; i >= 1; i--) {       // walk the scroll BACKWARD",
+  "                if (scroll[i - 1] == 'A' || scroll[i - 1] == 'B') {",
+  "                    if (c > cols[i - 1]) {       // in the copied RIGHT half?",
+  "                        c -= cols[i - 1];",
+  "                        if (scroll[i - 1] == 'B') flipH ^= 1;",
+  "                    }",
+  "                } else {",
+  "                    if (r > rows[i - 1]) {       // in the copied BOTTOM half?",
+  "                        r -= rows[i - 1];",
+  "                        flipV ^= 1;",
+  "                    }",
+  "                }",
+  "            }",
+  "            char ch = flipV ? (flipH ? 'd' : 'b') : (flipH ? 'q' : 'p');",
+  "            answer += ch;",
   "        }",
   "    }",
-  "",
-  "    // Greedy: pick the time slot that accommodates most cats",
-  "    int best = 0;",
-  "    for (int slot = 1; slot <= T; slot++) {",
-  "        int count = 0;",
-  "        for (int i = 0; i < N; i++) {",
-  "            if (avail[i].count(slot)) count++;",
-  "        }",
-  "        best = max(best, count);",
-  "    }",
-  "",
-  "    cout << best << \"\\n\";",
+  "    cout << answer << \"\\n\";",
   "    return 0;",
   "}",
 ];
@@ -259,20 +302,24 @@ export function getMcc22BirthdaySections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "The C++ mirrors the Python line by line: store each cat's slots in a set<int>, then scan every slot 1..T and count how many cats have it.",
-            "C++ 는 Python 을 한 줄씩 그대로 옮긴 거예요: 각 고양이의 시간대를 set<int> 에 담고, 슬롯 1..T 를 훑으며 그 슬롯을 가진 고양이 수를 세요."),
+        t(E, "The grid after N letters is 2^N cookies (N up to 10000) — never build it. We answer each queried NUMBER on its own.",
+            "N 글자 뒤 격자는 2^N 개 (N 최대 10000) — 절대 만들지 않아요. 물어본 번호 하나하나를 따로 풀어요."),
+        t(E, "rows[i] / cols[i] hold the grid size after each step. A and B double the width; C doubles the height. We cap at CAP so huge sizes stay safe integers.",
+            "rows[i] / cols[i] 는 각 단계 뒤의 격자 크기예요. A·B 는 가로를, C 는 세로를 두 배로. 너무 커지지 않게 CAP 으로 상한을 둬요."),
+        t(E, "Turn the number into (row, col), then walk the scroll BACKWARD. At each step ask: was I in the ORIGINAL half or the COPIED half? A copy made by B/C is flipped, so a copied step toggles the flip parity.",
+            "번호를 (행, 열) 로 바꾼 뒤 두루마리를 거꾸로 따라가요. 매 단계 물어요: 나는 원본 쪽이었나, 복사본 쪽이었나? B·C 로 만든 복사본은 뒤집혀 있으니, 복사본 쪽이면 뒤집힘 상태를 토글해요."),
+        t(E, "Two on/off flips (left↔right, up↔down) give exactly four shapes: (no,no)=p, (H,no)=q, (no,V)=b, (H,V)=d. That's the whole p/q/b/d family.",
+            "좌우·상하 두 뒤집힘(켜짐/꺼짐)이 정확히 네 모양을 만들어요: (안,안)=p, (좌우,안)=q, (안,상하)=b, (좌우,상하)=d. 이게 p/q/b/d 한 묶음이에요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "shape[(flip_h, flip_v)] reads the final cookie straight from the two flip switches — no if/elif ladder needed.",
+            "shape[(flip_h, flip_v)] 로 두 스위치에서 바로 모양을 읽어요 — if/elif 사다리 없이."),
       ],
       cppOnly: [
-        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
-        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+        t(E, "Use long long for indices and sizes: capped sizes reach ~2×10^9, past the int limit.",
+            "인덱스·크기는 long long 으로 — 상한이 약 2×10^9 라 int 범위를 넘어요."),
+        t(E, "The nested ?: picks the shape from flipV/flipH, matching the Python dict.",
+            "중첩 삼항 ?: 로 flipV/flipH 에서 모양을 골라 Python dict 와 똑같이 동작해요."),
       ],
     },
   ];
@@ -343,7 +390,7 @@ export function downloadMcc22BirthdayPDF(E, sections, lang = "py") {
 </style></head><body>
 <div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<div class="sub">MCC · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>
@@ -355,4 +402,3 @@ ${sections.map(s => `
   win.document.close();
   setTimeout(() => { win.focus(); win.print(); }, 500);
 }
-

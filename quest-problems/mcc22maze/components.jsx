@@ -1,219 +1,374 @@
-import { useState, useMemo } from "react";
+import { useState, Fragment } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+const KA = { wordBreak: "keep-all" };
 
 /* ════════════════════════════════════════════════════════════
-   Mcc22MazeBfsSim — clickable maze + BFS step-through
+   Mcc22MazeConnectSim — the CONNECTIVITY sim for the real problem.
+   Pick a small grid, then clear whole rows / columns of walls and
+   watch whether (top-left) reaches (bottom-right). Shows the op
+   count and the 0 / 1 / 2 answer live.
    Bilingual via E prop. Theme: red (#dc2626).
    ════════════════════════════════════════════════════════════ */
-const SIM_GRID = [
-  "....#",
-  ".#..#",
-  ".#...",
-  ".###.",
-  ".....",
+const PRESETS = [
+  {
+    en: "already open · 0", ko: "이미 이어짐 · 0",
+    grid: ["...", "##.", "..."],
+  },
+  {
+    en: "one clear · 1", ko: "한 번이면 · 1",
+    grid: [".#.", ".#.", ".#."],
+  },
+  {
+    en: "needs two · 2", ko: "두 번 필요 · 2",
+    grid: [".###", "####", "####", "###."],
+  },
 ];
 
-function runBfsSteps(grid) {
-  const R = grid.length, Cw = grid[0].length;
-  const dist = Array.from({ length: R }, () => Array(Cw).fill(-1));
-  dist[0][0] = 0;
-  const order = [{ r: 0, c: 0, d: 0 }];
-  const q = [[0, 0]];
+// flood-fill the component of open cells that contains (0,0)
+function startComponent(n, isOpen) {
+  const seen = Array.from({ length: n }, () => Array(n).fill(false));
+  if (!isOpen(0, 0)) return seen;
+  const stack = [[0, 0]];
+  seen[0][0] = true;
   const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
-  while (q.length) {
-    const [r, c] = q.shift();
+  while (stack.length) {
+    const [r, c] = stack.pop();
     for (const [dr, dc] of dirs) {
       const nr = r + dr, nc = c + dc;
-      if (nr >= 0 && nr < R && nc >= 0 && nc < Cw && grid[nr][nc] === "." && dist[nr][nc] === -1) {
-        dist[nr][nc] = dist[r][c] + 1;
-        order.push({ r: nr, c: nc, d: dist[nr][nc] });
-        q.push([nr, nc]);
+      if (nr >= 0 && nr < n && nc >= 0 && nc < n && !seen[nr][nc] && isOpen(nr, nc)) {
+        seen[nr][nc] = true;
+        stack.push([nr, nc]);
       }
     }
   }
-  return order;
+  return seen;
 }
 
-export function Mcc22MazeBfsSim({ E }) {
-  const order = useMemo(() => runBfsSteps(SIM_GRID), []);
-  const [step, setStep] = useState(0);
+export function Mcc22MazeConnectSim({ E }) {
+  const [pi, setPi] = useState(1); // start on the "needs 1" case
+  const [rows, setRows] = useState(() => new Set());
+  const [cols, setCols] = useState(() => new Set());
 
-  const R = SIM_GRID.length, Cw = SIM_GRID[0].length;
-  const visited = new Map();
-  for (let i = 0; i <= step && i < order.length; i++) {
-    visited.set(`${order[i].r},${order[i].c}`, order[i].d);
-  }
-  const frontier = step < order.length ? `${order[step].r},${order[step].c}` : null;
-  const goalKey = `${R - 1},${Cw - 1}`;
-  const goalReached = visited.has(goalKey);
-  const goalDist = visited.get(goalKey);
+  const grid = PRESETS[pi].grid;
+  const n = grid.length;
 
-  const cellSize = 38;
+  const isOpen = (r, c) => grid[r][c] === "." || rows.has(r) || cols.has(c);
+  const comp = startComponent(n, isOpen);
+  const connected = comp[n - 1][n - 1];
+  const ops = rows.size + cols.size;
+
+  const loadPreset = (idx) => { setPi(idx); setRows(new Set()); setCols(new Set()); };
+  const toggle = (set, setter, k) => {
+    const nx = new Set(set);
+    if (nx.has(k)) nx.delete(k); else nx.add(k);
+    setter(nx);
+  };
+  const reset = () => { setRows(new Set()); setCols(new Set()); };
+
+  const cellSize = 40;
+  const rowBtnW = 44;
+
+  const colBtn = (c) => {
+    const on = cols.has(c);
+    return (
+      <button key={`c${c}`} onClick={() => toggle(cols, setCols, c)} style={{
+        height: 26, borderRadius: 6, cursor: "pointer",
+        fontSize: 11, fontWeight: 800, fontFamily: "monospace",
+        border: `1.5px solid ${on ? A : "#cbd5e1"}`,
+        background: on ? A : "#fff", color: on ? "#fff" : "#64748b",
+      }}>{c}</button>
+    );
+  };
+  const rowBtn = (r) => {
+    const on = rows.has(r);
+    return (
+      <button onClick={() => toggle(rows, setRows, r)} style={{
+        width: rowBtnW, height: cellSize, borderRadius: 6, cursor: "pointer",
+        fontSize: 11, fontWeight: 800, fontFamily: "monospace",
+        border: `1.5px solid ${on ? A : "#cbd5e1"}`,
+        background: on ? A : "#fff", color: on ? "#fff" : "#64748b",
+      }}>{r}</button>
+    );
+  };
 
   return (
     <div style={{ padding: 16 }}>
-      <div style={{ background: "#fef2f2", border: `1.5px solid ${A}`, borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center" }}>
+      <div style={{ background: "#fef2f2", border: `1.5px solid ${A}`, borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center", ...KA }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
-          🧭 {t(E, "BFS Walkthrough", "BFS 시뮬레이션")}
+          🧨 {t(E, "Clear a Row or Column", "행/열 부수기 놀이터")}
         </div>
-        <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+        <div style={{ fontSize: 12.5, color: "#7f1d1d", lineHeight: 1.55 }}>
           {t(E,
-            "Click NEXT to expand BFS one cell at a time. Numbers show distance from start.",
-            "다음 버튼으로 BFS가 한 칸씩 퍼져요. 숫자는 시작점에서의 거리예요.")}
+            "One operation = pick a whole row or column and smash every wall in it. Try to link the top-left (S) to the bottom-right (G) with the FEWEST operations.",
+            "조작 1번 = 한 행 또는 한 열을 골라 그 안의 벽을 전부 부숴요. 좌상단 (S) 과 우하단 (G) 을 최소 조작으로 이어봐요.")}
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-        <div style={{ display: "inline-block", background: "#0f172a", padding: 8, borderRadius: 8 }}>
-          {SIM_GRID.map((row, r) => (
-            <div key={r} style={{ display: "flex" }}>
+      {/* preset switcher */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+        {PRESETS.map((p, i) => (
+          <button key={i} onClick={() => loadPreset(i)} style={{
+            padding: "5px 10px", borderRadius: 8, cursor: "pointer",
+            fontSize: 11.5, fontWeight: 700, ...KA,
+            border: `1.5px solid ${i === pi ? A : "#e5e7eb"}`,
+            background: i === pi ? "#fee2e2" : "#fff", color: i === pi ? "#7f1d1d" : "#64748b",
+          }}>{t(E, p.en, p.ko)}</button>
+        ))}
+      </div>
+
+      {/* grid with row/col clear buttons */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 6 }}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: `${rowBtnW}px repeat(${n}, ${cellSize}px)`,
+          gap: 4,
+        }}>
+          {/* top-left corner spacer */}
+          <div />
+          {/* column-clear buttons */}
+          {Array.from({ length: n }, (_, c) => colBtn(c))}
+          {/* rows */}
+          {grid.map((row, r) => (
+            <Fragment key={r}>
+              {rowBtn(r)}
               {row.split("").map((ch, c) => {
-                const k = `${r},${c}`;
-                const isWall = ch === "#";
+                const open = isOpen(r, c);
+                const inComp = comp[r][c];
                 const isStart = r === 0 && c === 0;
-                const isGoal = r === R - 1 && c === Cw - 1;
-                const isFrontier = k === frontier;
-                const d = visited.get(k);
-                const visitedHere = d != null;
-                let bg = "#1e293b";
-                if (isWall) bg = "#475569";
-                else if (isFrontier) bg = "#fbbf24";
-                else if (visitedHere) bg = "#fca5a5";
-                const border = isStart ? "2px solid #15803d" : isGoal ? `2px solid ${A}` : "1px solid #334155";
+                const isGoal = r === n - 1 && c === n - 1;
+                let bg = "#475569";               // wall
+                if (open) bg = inComp ? "#fca5a5" : "#e2e8f0"; // reachable vs open-but-cut-off
+                if (isGoal && inComp) bg = "#86efac";
+                const border = isStart ? "2px solid #15803d"
+                  : isGoal ? `2px solid ${A}` : "1px solid #334155";
                 return (
                   <div key={c} style={{
-                    width: cellSize, height: cellSize, margin: 1, background: bg,
-                    color: isWall ? "#cbd5e1" : "#0f172a", border,
+                    width: cellSize, height: cellSize, background: bg, border,
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 13, fontWeight: 700, borderRadius: 4, fontFamily: "monospace",
+                    fontSize: 14, fontWeight: 800, borderRadius: 5, fontFamily: "monospace",
+                    color: open ? "#0f172a" : "#cbd5e1",
                   }}>
-                    {isWall ? "#" : visitedHere ? d : isStart ? "S" : isGoal ? "G" : ""}
+                    {isStart ? "S" : isGoal ? "G" : open ? "" : "#"}
                   </div>
                 );
               })}
-            </div>
+            </Fragment>
           ))}
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
-        <button
-          onClick={() => setStep(s => Math.max(0, s - 1))}
-          disabled={step === 0}
-          style={{
-            background: step === 0 ? "#e5e7eb" : "#fff", color: step === 0 ? "#9ca3af" : A,
-            border: `1.5px solid ${step === 0 ? "#d1d5db" : A}`, borderRadius: 8,
-            padding: "6px 14px", fontSize: 12, fontWeight: 800, cursor: step === 0 ? "default" : "pointer",
-          }}>← {t(E, "Back", "뒤로")}</button>
-        <button
-          onClick={() => setStep(s => Math.min(order.length - 1, s + 1))}
-          disabled={step >= order.length - 1}
-          style={{
-            background: step >= order.length - 1 ? "#e5e7eb" : A,
-            color: step >= order.length - 1 ? "#9ca3af" : "#fff",
-            border: `1.5px solid ${step >= order.length - 1 ? "#d1d5db" : A}`, borderRadius: 8,
-            padding: "6px 14px", fontSize: 12, fontWeight: 800,
-            cursor: step >= order.length - 1 ? "default" : "pointer",
-          }}>{t(E, "Next", "다음")} →</button>
-        <button
-          onClick={() => setStep(0)}
-          style={{
-            background: "#fff", color: "#475569", border: "1.5px solid #cbd5e1", borderRadius: 8,
-            padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer",
-          }}>↺ {t(E, "Reset", "처음")}</button>
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10, ...KA }}>
+        {t(E, "Tap a number to clear that row / column. Tap again to undo.",
+             "숫자를 누르면 그 행/열을 부숴요. 다시 누르면 취소.")}
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", gap: 10, fontSize: 11, color: C.dim, flexWrap: "wrap", marginBottom: 8 }}>
-        <span><span style={{ display: "inline-block", width: 10, height: 10, background: "#fbbf24", borderRadius: 2, marginRight: 4 }} />{t(E, "current", "현재")}</span>
-        <span><span style={{ display: "inline-block", width: 10, height: 10, background: "#fca5a5", borderRadius: 2, marginRight: 4 }} />{t(E, "visited", "방문")}</span>
-        <span><span style={{ display: "inline-block", width: 10, height: 10, background: "#475569", borderRadius: 2, marginRight: 4 }} />{t(E, "wall", "벽")}</span>
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+        <button onClick={reset} style={{
+          background: "#fff", color: "#475569", border: "1.5px solid #cbd5e1", borderRadius: 8,
+          padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer",
+        }}>↺ {t(E, "Reset", "처음")}</button>
       </div>
 
-      <div style={{ textAlign: "center", fontSize: 12, color: C.text }}>
-        {t(E, "Step ", "단계 ")}<b style={{ color: A }}>{step + 1}</b>{t(E, " of ", " / ")}<b>{order.length}</b>
-        {goalReached && (
-          <div style={{ marginTop: 6, fontSize: 13, fontWeight: 700, color: "#15803d" }}>
-            ✅ {t(E, "Goal reached! Shortest distance = ", "도착! 최단 거리 = ")}<span style={{ color: A }}>{goalDist}</span>
-          </div>
-        )}
+      {/* verdict */}
+      <div style={{
+        background: connected ? "#f0fdf4" : "#fef2f2",
+        border: `1.5px solid ${connected ? "#86efac" : "#fca5a5"}`,
+        borderRadius: 10, padding: "10px 14px", textAlign: "center", ...KA,
+      }}>
+        <div style={{ fontSize: 13, color: C.text }}>
+          {t(E, "operations used: ", "사용한 조작: ")}
+          <b style={{ color: A, fontSize: 15 }}>{ops}</b>
+        </div>
+        <div style={{ marginTop: 4, fontSize: 13.5, fontWeight: 800, color: connected ? "#15803d" : "#b91c1c" }}>
+          {connected
+            ? t(E, `✅ S reaches G — done in ${ops} operation${ops === 1 ? "" : "s"}!`,
+                   `✅ S 가 G 에 닿았어요 — 조작 ${ops}번!`)
+            : t(E, "❌ S can't reach G yet — clear another row or column.",
+                   "❌ 아직 S 가 G 에 못 닿아요 — 행이나 열을 더 부숴요.")}
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+        {t(E,
+          "You never need more than 2: clearing the TOP row and the LAST column always links the two corners. So the answer is only ever 0, 1, or 2.",
+          "2번을 넘길 일은 없어요: 맨 윗 행과 맨 오른쪽 열을 부수면 두 모서리는 언제나 이어져요. 그래서 정답은 늘 0, 1, 2 중 하나예요.")}
       </div>
     </div>
   );
 }
 
-const FULL_PY = [
-  "from collections import deque",
+/* ================================================================
+   SOLUTION CODE — split into teachable sections (DSU connectivity)
+   ================================================================ */
+const S1_PY = [
   "import sys",
   "",
-  "def solve():",
-  "    input_data = sys.stdin.read().split()",
-  "    idx = 0",
-  "    R = int(input_data[idx])",
-  "    idx += 1",
-  "    C_ = int(input_data[idx])",
-  "    idx += 1",
-  "    grid = []",
-  "    for i in range(R):",
-  "        grid.append(input_data[idx])",
-  "        idx += 1",
-  "",
-  "    # BFS from (0,0) to (R-1,C-1)",
-  "    dist = [[-1]*C_ for _ in range(R)]",
-  "    dist[0][0] = 0",
-  "    q = deque([(0, 0)])",
-  "    while q:",
-  "        r, c = q.popleft()",
-  "        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:",
-  "            nr, nc = r+dr, c+dc",
-  "            if 0<=nr<R and 0<=nc<C_ and grid[nr][nc]=='.' and dist[nr][nc]==-1:",
-  "                dist[nr][nc] = dist[r][c] + 1",
-  "                q.append((nr, nc))",
-  "",
-  "    print(dist[R-1][C_-1])",
-  "",
-  "solve()",
+  "class DSU:                       # 유니온-파인드 (되돌리기 지원)",
+  "    def __init__(self, n):",
+  "        self.p = list(range(n))  # 각 칸의 대표",
+  "        self.sz = [1]*n          # 묶음 크기",
+  "        self.history = []        # 합친 기록 (되돌리기용)",
+  "    def find(self, x):",
+  "        while self.p[x] != x: x = self.p[x]",
+  "        return x",
+  "    def union(self, a, b):",
+  "        ra, rb = self.find(a), self.find(b)",
+  "        if ra == rb: self.history.append(None); return",
+  "        if self.sz[ra] < self.sz[rb]: ra, rb = rb, ra",
+  "        self.p[rb] = ra; self.sz[ra] += self.sz[rb]",
+  "        self.history.append((rb, ra))",
+  "    def snapshot(self): return len(self.history)",
+  "    def rollback_to(self, mark):",
+  "        while len(self.history) > mark:",
+  "            op = self.history.pop()",
+  "            if op is None: continue",
+  "            rb, ra = op",
+  "            self.sz[ra] -= self.sz[rb]; self.p[rb] = rb",
 ];
 
-const FULL_CPP = [
-  "#include <iostream>",
-  "#include <vector>",
-  "#include <string>",
-  "#include <queue>",
+const S2_PY = [
+  "def solve_case(n, grid):",
+  "    if n == 1: return 0",
+  "    def cid(r, c): return r*n + c      # 칸 (r,c) 에 번호 붙이기",
+  "    dsu = DSU(n*n)",
+  "",
+  "    # 원래 통로끼리 인접하면 같은 묶음으로",
+  "    for r in range(n):",
+  "        for c in range(n):",
+  "            if grid[r][c] != '.': continue",
+  "            for dr, dc in ((0,1),(1,0)):",
+  "                nr, nc = r+dr, c+dc",
+  "                if 0<=nr<n and 0<=nc<n and grid[nr][nc]=='.':",
+  "                    dsu.union(cid(r,c), cid(nr,nc))",
+  "",
+  "    S, G = cid(0,0), cid(n-1,n-1)",
+  "    if dsu.find(S) == dsu.find(G): return 0   # 이미 이어짐",
+];
+
+const S3_PY = [
+  "    # 각 '행'을 하나씩 시험 삼아 부숴보기",
+  "    for i in range(n):",
+  "        mark = dsu.snapshot()",
+  "        for c in range(n-1): dsu.union(cid(i,c), cid(i,c+1))   # 그 행을 통로로",
+  "        for c in range(n):                                     # 위·아래 통로와 연결",
+  "            if i>0   and grid[i-1][c]=='.': dsu.union(cid(i,c), cid(i-1,c))",
+  "            if i<n-1 and grid[i+1][c]=='.': dsu.union(cid(i,c), cid(i+1,c))",
+  "        ok = dsu.find(S) == dsu.find(G)",
+  "        dsu.rollback_to(mark)                                  # 원상복구",
+  "        if ok: return 1",
+  "",
+  "    # 각 '열'도 똑같이 시험",
+  "    for j in range(n):",
+  "        mark = dsu.snapshot()",
+  "        for r in range(n-1): dsu.union(cid(r,j), cid(r+1,j))",
+  "        for r in range(n):",
+  "            if j>0   and grid[r][j-1]=='.': dsu.union(cid(r,j), cid(r,j-1))",
+  "            if j<n-1 and grid[r][j+1]=='.': dsu.union(cid(r,j), cid(r,j+1))",
+  "        ok = dsu.find(S) == dsu.find(G)",
+  "        dsu.rollback_to(mark)",
+  "        if ok: return 1",
+  "",
+  "    return 2                                                   # 하나로는 안 되면 2",
+];
+
+const S4_PY = [
+  "def main():",
+  "    data = sys.stdin.buffer.read().split()   # 테스트가 많아 한 번에 읽기",
+  "    idx = 0",
+  "    T = int(data[idx]); idx += 1",
+  "    out = []",
+  "    for _ in range(T):",
+  "        n = int(data[idx]); idx += 1",
+  "        grid = [data[idx+i].decode() for i in range(n)]",
+  "        idx += n",
+  "        out.append(str(solve_case(n, grid)))",
+  "    sys.stdout.write(\"\\n\".join(out) + \"\\n\")",
+  "",
+  "main()",
+];
+
+const S1_CPP = [
+  "#include <bits/stdc++.h>",
   "using namespace std;",
   "",
-  "int main() {",
-  "    int R, C;",
-  "    cin >> R >> C;",
-  "    vector<string> grid(R);",
-  "    for (int i = 0; i < R; i++) {",
-  "        cin >> grid[i];",
+  "struct DSU {                       // union-find with rollback",
+  "    vector<int> p, sz;",
+  "    vector<pair<int,int>> hist;    // (rb, ra); (-1,-1) = no-op",
+  "    DSU(int n): p(n), sz(n, 1) { for (int i=0;i<n;i++) p[i]=i; }",
+  "    int find(int x){ while (p[x]!=x) x=p[x]; return x; }",
+  "    void unite(int a, int b){",
+  "        int ra=find(a), rb=find(b);",
+  "        if (ra==rb){ hist.push_back({-1,-1}); return; }",
+  "        if (sz[ra]<sz[rb]) swap(ra, rb);",
+  "        p[rb]=ra; sz[ra]+=sz[rb]; hist.push_back({rb, ra});",
   "    }",
-  "",
-  "    // BFS from (0,0) to (R-1,C-1)",
-  "    vector<vector<int>> dist(R, vector<int>(C, -1));",
-  "    dist[0][0] = 0;",
-  "    queue<pair<int,int>> q;",
-  "    q.push({0, 0});",
-  "    int dr[4] = {-1, 1, 0, 0};",
-  "    int dc[4] = {0, 0, -1, 1};",
-  "    while (!q.empty()) {",
-  "        pair<int,int> cur = q.front(); q.pop();",
-  "        int r = cur.first, c = cur.second;",
-  "        for (int k = 0; k < 4; k++) {",
-  "            int nr = r + dr[k], nc = c + dc[k];",
-  "            if (nr >= 0 && nr < R && nc >= 0 && nc < C &&",
-  "                grid[nr][nc] == '.' && dist[nr][nc] == -1) {",
-  "                dist[nr][nc] = dist[r][c] + 1;",
-  "                q.push({nr, nc});",
-  "            }",
+  "    int snapshot(){ return (int)hist.size(); }",
+  "    void rollback_to(int mark){",
+  "        while ((int)hist.size() > mark){",
+  "            auto [rb, ra] = hist.back(); hist.pop_back();",
+  "            if (rb < 0) continue;",
+  "            sz[ra] -= sz[rb]; p[rb] = rb;",
   "        }",
   "    }",
-  "",
-  "    cout << dist[R-1][C-1] << \"\\n\";",
+  "};",
+];
+
+const S2_CPP = [
+  "int solve_case(int n, vector<string>& g){",
+  "    if (n == 1) return 0;",
+  "    auto cid = [&](int r, int c){ return r*n + c; };",
+  "    DSU dsu(n*n);",
+  "    for (int r=0;r<n;r++)",
+  "        for (int c=0;c<n;c++){",
+  "            if (g[r][c] != '.') continue;",
+  "            if (c+1<n && g[r][c+1]=='.') dsu.unite(cid(r,c), cid(r,c+1));",
+  "            if (r+1<n && g[r+1][c]=='.') dsu.unite(cid(r,c), cid(r+1,c));",
+  "        }",
+  "    int S = cid(0,0), G = cid(n-1,n-1);",
+  "    if (dsu.find(S) == dsu.find(G)) return 0;",
+];
+
+const S3_CPP = [
+  "    for (int i=0;i<n;i++){                 // try clearing each row",
+  "        int mark = dsu.snapshot();",
+  "        for (int c=0;c+1<n;c++) dsu.unite(cid(i,c), cid(i,c+1));",
+  "        for (int c=0;c<n;c++){",
+  "            if (i>0   && g[i-1][c]=='.') dsu.unite(cid(i,c), cid(i-1,c));",
+  "            if (i+1<n && g[i+1][c]=='.') dsu.unite(cid(i,c), cid(i+1,c));",
+  "        }",
+  "        bool ok = dsu.find(S) == dsu.find(G);",
+  "        dsu.rollback_to(mark);",
+  "        if (ok) return 1;",
+  "    }",
+  "    for (int j=0;j<n;j++){                 // try clearing each column",
+  "        int mark = dsu.snapshot();",
+  "        for (int r=0;r+1<n;r++) dsu.unite(cid(r,j), cid(r+1,j));",
+  "        for (int r=0;r<n;r++){",
+  "            if (j>0   && g[r][j-1]=='.') dsu.unite(cid(r,j), cid(r,j-1));",
+  "            if (j+1<n && g[r][j+1]=='.') dsu.unite(cid(r,j), cid(r,j+1));",
+  "        }",
+  "        bool ok = dsu.find(S) == dsu.find(G);",
+  "        dsu.rollback_to(mark);",
+  "        if (ok) return 1;",
+  "    }",
+  "    return 2;",
+  "}",
+];
+
+const S4_CPP = [
+  "int main(){",
+  "    ios::sync_with_stdio(false); cin.tie(nullptr);",
+  "    int T; cin >> T;",
+  "    while (T--){",
+  "        int n; cin >> n;",
+  "        vector<string> g(n);",
+  "        for (int i=0;i<n;i++) cin >> g[i];",
+  "        cout << solve_case(n, g) << \"\\n\";",
+  "    }",
   "    return 0;",
   "}",
 ];
@@ -221,24 +376,57 @@ const FULL_CPP = [
 export function getMcc22MazeSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "① Union-Find (with rollback)", "① 유니온-파인드 (되돌리기)"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: S1_PY, cpp: S1_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "The C++ version reads the grid with cin, uses a queue<pair<int,int>> for BFS and a 2D dist vector initialized to -1 — the same layer-by-layer expansion as Python's deque.",
-            "C++ 버전은 cin 으로 격자를 읽고 BFS 에 queue<pair<int,int>>, 거리엔 -1 로 초기화한 2D vector 를 써요 — Python deque 와 같은 층별 확장이에요."),
+        t(E, "The problem asks 'can the two corners be connected?' — that's a CONNECTIVITY question, not a shortest-path one. Union-Find joins cells into groups; two corners in the same group means 'linked'.",
+            "이 문제는 '두 모서리가 이어지나?' 를 물어요 — 최단 거리가 아니라 '연결' 문제예요. 유니온-파인드는 칸들을 묶음으로 합쳐요; 두 모서리가 같은 묶음이면 '이어짐'."),
+        t(E, "We keep a history of every merge, so after test-clearing one row we can rollback_to and undo it — instead of rebuilding the whole structure for every row and column.",
+            "합칠 때마다 기록을 남겨서, 한 행을 시험 삼아 부순 뒤 rollback_to 로 되돌릴 수 있어요 — 행·열마다 처음부터 다시 만들 필요가 없어요."),
+      ],
+    },
+    {
+      label: t(E, "② Grid → groups · already linked? (0)", "② 격자를 묶음으로 · 이미 이어졌나? (0)"),
+      color: A,
+      py: S2_PY, cpp: S2_CPP,
+      why: [
+        t(E, "Give each cell a number cid(r,c), then union every pair of neighbouring open cells. That captures the maze's current connectivity.",
+            "각 칸에 번호 cid(r,c) 를 붙이고, 인접한 두 통로를 union 해요. 이러면 지금 미로의 연결 상태가 담겨요."),
+        t(E, "If S (top-left) and G (bottom-right) are already the same group with nothing cleared, the answer is 0.",
+            "아무것도 안 부쉈는데 S(왼위)와 G(오른아래)가 이미 같은 묶음이면 답은 0."),
+      ],
+    },
+    {
+      label: t(E, "③ Try one row / one column (1), else 2", "③ 행 하나 / 열 하나 시험 (1), 아니면 2"),
+      color: A,
+      py: S3_PY, cpp: S3_CPP,
+      why: [
+        t(E, "Clearing row i turns that whole row into a corridor: union its cells side-by-side, then union them with any open cell just above or below.",
+            "행 i 를 부수면 그 행 전체가 통로가 돼요: 옆칸끼리 union 하고, 바로 위·아래의 통로와도 union 해요."),
+        t(E, "Check S–G after each single row/column. rollback_to(mark) cleans it up before trying the next one, so every attempt starts fresh.",
+            "행·열 하나마다 S–G 를 확인하고, rollback_to(mark) 로 깨끗이 되돌린 뒤 다음을 시험해요 — 매 시도가 새 출발이에요."),
+        t(E, "If any single clear links them, the answer is 1. If none does, the answer is 2 — clearing the top row plus the last column always works, so it never exceeds 2.",
+            "하나라도 이어지면 답 1. 아무것도 안 되면 답 2 — 맨 윗 행+맨 오른쪽 열이면 늘 되니까 2를 넘지 않아요."),
+      ],
+    },
+    {
+      label: t(E, "④ Read input · solve each test", "④ 입력 읽기 · 테스트마다 풀기"),
+      color: A,
+      py: S4_PY, cpp: S4_CPP,
+      why: [
+        t(E, "Up to 100000 tests, so read all input at once instead of calling input() over and over.",
+            "테스트가 최대 10만 개라, input() 을 반복하지 않고 입력을 한 번에 읽어요."),
+        t(E, "For each test, solve_case returns 0, 1, or 2; collect them and print at the end.",
+            "각 테스트마다 solve_case 가 0/1/2 를 돌려줘요; 모아 두었다가 마지막에 출력."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "data[idx+i].decode() turns each raw byte-row from stdin into a normal string.",
+            "data[idx+i].decode() 로 stdin 의 바이트 줄을 보통 문자열로 바꿔요."),
       ],
       cppOnly: [
-        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
-        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+        t(E, "ios::sync_with_stdio(false) speeds up cin for the large number of tests.",
+            "ios::sync_with_stdio(false) 로 많은 테스트에서 cin 을 빠르게 해요."),
       ],
     },
   ];
@@ -249,8 +437,8 @@ export function Mcc22MazeProgressiveCode(props) {
 }
 
 
-const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
-const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
+const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs","class","self"];
+const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set","swap"];
 function highlightHTML(line, lang) {
   const escHTML = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const keywords = lang === "py" ? PY_KEYWORDS : CPP_KEYWORDS;
@@ -309,7 +497,7 @@ export function downloadMcc22MazePDF(E, sections, lang = "py") {
 </style></head><body>
 <div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<div class="sub">MCC · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>
@@ -321,4 +509,3 @@ ${sections.map(s => `
   win.document.close();
   setTimeout(() => { win.focus(); win.print(); }, 500);
 }
-

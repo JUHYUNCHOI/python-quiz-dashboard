@@ -1,72 +1,98 @@
 import { C, t } from "@/components/quest/theme";
 import { getMcc22LampSections } from "./components";
 
+const KA = { wordBreak: "keep-all" };
+
 /* ================================================================
-   SOLUTION CODE
+   VERIFIED SOLUTION CODE (sample → 2, 0/500 brute mismatches)
+   Summed triangular brightness: count integer x with total >= k.
    ================================================================ */
 export const SOLUTION_CODE = [
   "import sys",
+  "from collections import defaultdict",
   "",
-  "def solve():",
-  "    input_data = sys.stdin.read().split()",
+  "def count_ge(F, s, k, L):",
+  "    if L < 0:",
+  "        return 0",
+  "    if s == 0:",
+  "        return (L + 1) if F >= k else 0",
+  "    if s > 0:",
+  "        num = k - F",
+  "        dmin = -(-num // s) if num > 0 else 0",
+  "        return 0 if dmin > L else L - dmin + 1",
+  "    else:",
+  "        dmax = (k - F) // s",
+  "        if dmax < 0:",
+  "            return 0",
+  "        return min(dmax, L) + 1",
+  "",
+  "def solve_one(n, k, p, b):",
+  "    delta = defaultdict(int)",
+  "    for pi, bi in zip(p, b):",
+  "        delta[pi - bi] += 1",
+  "        delta[pi]      -= 2",
+  "        delta[pi + bi] += 1",
+  "    xs = sorted(delta.keys())",
+  "    s = 0",
+  "    F = 0",
+  "    total = 0",
+  "    for j in range(len(xs) - 1):",
+  "        s += delta[xs[j]]",
+  "        lo, hi = xs[j], xs[j + 1]",
+  "        total += count_ge(F, s, k, hi - lo - 1)",
+  "        F += s * (hi - lo)",
+  "    return total",
+  "",
+  "def main():",
+  "    data = sys.stdin.read().split()",
   "    idx = 0",
-  "    N = int(input_data[idx]); idx += 1  # number of lamps",
-  "    M = int(input_data[idx]); idx += 1  # number of toggle ops",
+  "    T = int(data[idx]); idx += 1",
+  "    out = []",
+  "    for _ in range(T):",
+  "        n, k = int(data[idx]), int(data[idx + 1]); idx += 2",
+  "        p = list(map(int, data[idx:idx + n])); idx += n",
+  "        b = list(map(int, data[idx:idx + n])); idx += n",
+  "        out.append(str(solve_one(n, k, p, b)))",
+  "    print(\"\\n\".join(out))",
   "",
-  "    # Each toggle operation: toggle lamps from L to R",
-  "    toggles = [0] * (N + 2)  # difference array",
-  "    for _ in range(M):",
-  "        L = int(input_data[idx])",
-  "        idx += 1",
-  "        R = int(input_data[idx])",
-  "        idx += 1",
-  "        toggles[L] += 1",
-  "        toggles[R + 1] -= 1",
-  "",
-  "    # Prefix sum to get toggle count per lamp",
-  "    count = 0",
-  "    ans = 0",
-  "    for i in range(1, N + 1):",
-  "        count += toggles[i]",
-  "        if count % 2 == 1:  # odd toggles = ON",
-  "            ans += 1",
-  "",
-  "    print(ans)",
-  "",
-  "solve()",
+  "main()",
 ];
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: Problem (3 steps)
+   Chapter 1: Problem (4 steps)
+   title+mission+problem → input+sample → concept sim → quiz
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc22LampCh1(E) {
   return [
-    // 1-1: Title reveal
+    // 1-1: Title + mission + problem
     {
       type: "reveal",
       narr: t(E,
-        "N lamps numbered 1..N are all OFF initially. M toggle operations are applied; each operation has a range [L, R] and toggles every lamp in that range (ON↔OFF).\nPrint how many lamps are ON after all operations.",
-        "1..N 번호의 N 개 램프가 모두 꺼진 상태로 시작해요. M 번의 켜고 끄기 연산이 있고, 각 연산은 범위 [L, R] 의 모든 램프를 켜고 끄기 (ON ↔ OFF) 해요.\n모든 연산 후 켜진 램프의 수를 출력해요."),
+        "n lamps sit on a number line. Lamp i at position p shines brightness b right under it, fading by 1 every step away. At a position x the brightnesses of all lamps add up.\nCount the integer positions where the total brightness is at least k.",
+        "수직선 위에 램프 n 개가 있어요. 위치 p 의 램프 i 는 바로 아래에서 밝기 b, 한 칸 멀어질수록 1씩 약해져요. 어떤 위치 x 에서는 모든 램프의 밝기가 더해져요.\n총 밝기가 k 이상인 정수 위치의 개수를 세요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
-            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udca1"}</div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: "#8b5cf6" }}>Lamp</div>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"💡"}</div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: "#8b5cf6" }}>Lamp</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2022 P6</div>
           </div>
 
-          {/* \ud83c\udfaf Mission box */}
-          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+          {/* 🎯 Mission */}
+          <div style={{ background: "#f5f3ff", border: "1.5px solid #8b5cf6", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center", ...KA }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
-              \ud83c\udfaf {t(E, "Mission", "\ubbf8\uc158")}
+              🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
-              {t(E, "Count lamps left ON after M range-toggle operations on N lamps.", "N \uac1c \ub7a8\ud504\uc5d0 M \ubc88\uc758 \ubc94\uc704 \ud1a0\uae00 \ud6c4 \ucf1c\uc838 \uc788\ub294 \ub7a8\ud504 \uc218\ub97c \uc138\uc694.")}
+              {t(E,
+                "Count the integer positions where the lamps' total brightness is at least k.",
+                "램프들의 총 밝기가 k 이상인 정수 위치의 개수를 세요.")}
             </div>
           </div>
 
-          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          {/* 📖 Problem */}
+          <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
@@ -74,23 +100,28 @@ export function makeMcc22LampCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  <b style={{ color: "#8b5cf6" }}>{t(E, "N lamps numbered 1..N, all OFF initially", "1..N 번호의 N 개 램프, 모두 꺼진 상태로 시작")}</b>
-                  {t(E, ".", ".")}
+                  {t(E, "A lamp at position ", "위치 ")}
+                  <b style={{ color: "#8b5cf6" }}>p</b>
+                  {t(E, " with brightness ", " 의 램프(밝기 ")}
+                  <b style={{ color: "#7c3aed" }}>b</b>
+                  {t(E, " shines ", ")는 위치 x 에서 ")}
+                  <b style={{ color: "#7c3aed" }}>max(0, b − |p − x|)</b>
+                  {t(E, " at position x — a triangular \"tent\".", " 만큼 밝아요 — 삼각형 \"텐트\" 예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "M operations apply, each ", "M 번의 연산, 각각 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "toggles every lamp in a range [L, R]", "범위 [L, R] 의 모든 램프를 켜고 끄기")}</b>
-                  {t(E, " (ON ↔ OFF).", " (ON ↔ OFF).")}
+                  {t(E, "The total brightness at x is the ", "위치 x 의 총 밝기는 ")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "sum over all lamps", "모든 램프의 밝기 합")}</b>
+                  {t(E, ".", " 이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "number of lamps that are ON after all operations", "모든 연산 후 켜진 램프의 수")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "number of integer positions x where the total brightness is ≥ k", "총 밝기가 k 이상인 정수 위치 x 의 개수")}</b>
                   {t(E, ".", "를 출력해요.")}
                 </div>
               </div>
@@ -98,59 +129,129 @@ export function makeMcc22LampCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+
+    // 1-2: I/O format + official sample
     {
-      type: "quiz",
+      type: "reveal",
       narr: t(E,
-        "5 lamps all OFF.\nToggle 1-5 (all flip ON), then toggle 2-4 (lamps 2,3,4 flip back OFF).\nWhich lamps are ON?", "5개 램프 모두 꺼짐. 1-5 토글 (모두 켜짐), 그 다음 2-4 토글 (램프 2,3,4 다시 꺼짐). 어떤 램프가 켜져 있어요?"),
-      question: t(E,
-        "After toggle(1-5) then toggle(2-4): which lamps are ON?",
-        "toggle(1-5) 후 toggle(2-4): 어떤 램프가 켜져 있어요?"),
-      options: [
-        t(E, "Lamps 1 and 5 (toggled once each)", "램프 1과 5 (각각 한 번 토글)"),
-        t(E, "Lamps 2, 3, 4 (toggled twice)", "램프 2, 3, 4 (두 번 토글)"),
-        t(E, "All 5 lamps", "5개 모두"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Correct! Lamps 1 and 5 were toggled once (ON). Lamps 2,3,4 were toggled twice (OFF again). 2 lamps are ON.",
-        "맞아! 램프 1과 5는 한 번 토글 (켜짐). 램프 2,3,4는 두 번 토글 (다시 꺼짐). 2개의 램프가 켜져 있어요."),
+        "Read the input format and the official example. Positions p are strictly increasing; the answer counts x with total brightness ≥ k.",
+        "입력 형식과 공식 예제를 봐요. 위치 p 는 오름차순이고, 답은 총 밝기가 k 이상인 x 의 개수예요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#faf5ff", border: "1px solid #e9d5ff", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 8 }}>
+              📥 {t(E, "Input", "입력")}
+            </div>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
+              <div>• <b>T</b> — {t(E, "number of test cases", "테스트 케이스 수")}</div>
+              <div>• {t(E, "each test: ", "각 테스트: ")}<b>n k</b> {t(E, "(lamp count, threshold)", "(램프 수, 기준값)")}</div>
+              <div>• <b>p₁ … pₙ</b> — {t(E, "positions (strictly increasing)", "위치 (오름차순)")}</div>
+              <div>• <b>b₁ … bₙ</b> — {t(E, "brightnesses", "밝기")}</div>
+            </div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 8 }}>
+              {t(E,
+                "Limits: T ≤ 2×10⁵, n ≤ 2×10⁵ (Σn ≤ 10⁵), k ≤ 10¹⁸, |p| ≤ 10¹², b ≤ 10¹². Use big integers / 64-bit.",
+                "제약: T ≤ 2×10⁵, n ≤ 2×10⁵ (Σn ≤ 10⁵), k ≤ 10¹⁸, |p| ≤ 10¹², b ≤ 10¹². 큰 정수 / 64비트 필요.")}
+            </div>
+          </div>
+
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
+            <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, flex: 1, minWidth: 150 }}>
+              <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
+              <div>1</div>
+              <div>4 6</div>
+              <div style={{ overflowX: "auto" }}>-5 -3 0 7</div>
+              <div style={{ overflowX: "auto" }}>3 2 6 1</div>
+            </div>
+            <div style={{ background: "#0f172a", color: "#c4b5fd", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
+              <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
+              <div style={{ fontWeight: 800 }}>2</div>
+            </div>
+          </div>
+          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+            {t(E,
+              "Only x = −3 and x = 0 reach a total brightness of 6, so the answer is 2. The next step lets you feel why.",
+              "총 밝기가 6 에 닿는 곳은 x = −3 과 x = 0 뿐이라 답은 2. 다음 단계에서 직접 느껴봐요.")}
+          </div>
+        </div>),
     },
-    // 1-3: Input
-    {
-      type: "input",
-      narr: t(E,
-        "How many lamps are ON after toggle(1-5) then toggle(2-4)?", "toggle(1-5) 후 toggle(2-4) 후 켜진 램프 수는?"),
-      question: t(E,
-        "5 lamps, toggle(1-5), toggle(2-4). How many ON?",
-        "램프 5개, toggle(1-5), toggle(2-4). 켜진 수?"),
-      hint: t(E,
-        "For each lamp, count how many of the two operations cover it. Odd count = ON, even count = OFF. Then count the ON lamps.",
-        "램프마다 두 연산 중 몇 개가 그 램프를 덮는지 세어 봐요. 홀수면 켜짐, 짝수면 꺼짐. 그 다음 켜진 램프를 세요."),
-      answer: 2,
-    },
-    // 1-4: Deep-audit sim — feel the diff-array trick
+
+    // 1-3: concept sim (rendered by the App via type "deepAuditSim")
     {
       type: "deepAuditSim",
       narr: t(E,
-        "Tap any operation to skip / include it. Three rows update live: raw toggle count, diff array (+1 at L, -1 at R+1), and prefix-sum of diff. Notice the prefix row always matches count — but it builds in O(N+M).",
-        "연산을 탭해서 빼거나 포함해 봐. 세 줄이 동시에 변해요: 토글 횟수, 차분 배열 (L 에 +1, R+1 에 -1), 차분의 누적합. 누적합 줄이 항상 토글 횟수와 똑같지만, O(N+M) 으로 만들어져요."),
+        "Each lamp is a triangular tent; the bars show the SUMMED brightness at every integer x. Drag k up and down, and bump each lamp's brightness b — watch which positions stay above the line, and notice the hill only bends at the breakpoints p−b, p, p+b.",
+        "램프 하나하나가 삼각 텐트예요. 막대는 모든 정수 x 에서의 합쳐진 밝기예요. k 를 올리고 내려 보고, 각 램프의 밝기 b 도 바꿔 봐요 — 어떤 위치가 선 위에 남는지 보고, 언덕이 꺾이는 곳이 p−b, p, p+b 뿐임을 확인해요."),
+    },
+
+    // 1-4: understanding check
+    {
+      type: "quiz",
+      narr: t(E,
+        "One lamp at p=0 with b=6 shines 6 at x=0, then 5,4,3,… stepping away. A second lamp at p=−3 with b=2 shines 2 at x=−3, 1 at x=−2 and x=−4. Add them up at each x.",
+        "p=0, b=6 램프는 x=0 에서 6, 멀어지며 5,4,3,… 이에요. p=−3, b=2 램프는 x=−3 에서 2, x=−2 와 x=−4 에서 1 이에요. 각 x 에서 더해요."),
+      question: t(E,
+        "Two lamps: (p=0, b=6) and (p=−3, b=2). What is the total brightness at x = −3?",
+        "램프 둘: (p=0, b=6), (p=−3, b=2). x = −3 에서 총 밝기는?"),
+      options: [
+        t(E, "5", "5"),
+        t(E, "6", "6"),
+        t(E, "3", "3"),
+      ],
+      correct: 0,
+      explain: t(E,
+        "The lamp at p=0 gives max(0, 6 − |0−(−3)|) = 6 − 3 = 3. The lamp at p=−3 gives max(0, 2 − 0) = 2. Add them: 3 + 2 = 5. Every position's total is just the sum of the tents.",
+        "p=0 램프는 max(0, 6 − |0−(−3)|) = 6 − 3 = 3. p=−3 램프는 max(0, 2 − 0) = 2. 더하면 3 + 2 = 5. 어느 위치든 총 밝기는 텐트들의 합이에요."),
     },
   ];
 }
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: Code (2 steps)
+   Chapter 2: Code (2 steps) — slow vs fast plan → progressive code
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc22LampCh2(E, lang = "py") {
   return [
-    // 2-1: Code
+    // 2-1: plan — brute limit → fast idea
+    {
+      type: "reveal",
+      narr: t(E,
+        "The slow way visits every integer position and sums every lamp: with positions spanning up to 10^12 that is impossible. The fast way turns each lamp into three slope events (+1, −2, +1), sweeps only the breakpoints, and counts integers per straight segment with exact arithmetic.",
+        "느린 방법은 모든 정수 위치를 방문해 모든 램프를 더해요: 위치가 최대 10^12 까지 퍼지니 불가능해요. 빠른 방법은 램프마다 기울기 이벤트 3개(+1, −2, +1)로 바꿔 꺾인점만 훑고, 직선 구간마다 정수를 정확한 계산으로 세요."),
+      content: (
+        <div style={{ padding: 16, ...KA }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
+                🐢 {t(E, "Slow: check every position, sum every lamp", "느림: 모든 위치를 돌며 모든 램프 더하기")}
+              </div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
+                {t(E,
+                  "Positions can span 10^12 and there are up to 10^5 lamps — visiting each x is hopeless. Times out.",
+                  "위치는 10^12 까지 퍼지고 램프는 최대 10^5 개 — x 를 하나씩 방문하는 건 불가능. 시간 초과.")}
+              </div>
+            </div>
+            <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: "#5b21b6", marginBottom: 4 }}>
+                🚀 {t(E, "Fast: slope events + sweep the breakpoints", "빠름: 기울기 이벤트 + 꺾인점 훑기")}
+              </div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
+                {t(E,
+                  "Each tent = +1 at p−b, −2 at p, +1 at p+b. Sort the 3n breakpoints, sweep once, and count integers per segment. About n log n per test.",
+                  "각 텐트 = p−b 에 +1, p 에 −2, p+b 에 +1. 꺾인점 3n 개를 정렬해 한 번 훑고, 구간마다 정수를 세요. 테스트당 약 n log n.")}
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
+            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+          </div>
+        </div>),
+    },
+    // 2-2: progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Difference array: for each toggle(L, R), do diff[L] += 1, diff[R+1] -= 1. Prefix-sum diff to get toggle COUNT per lamp. Count lamps with ODD toggle counts (those are ON). Sections build it one piece at a time.",
-        "차분 배열: toggle(L, R) 마다 diff[L] += 1, diff[R+1] -= 1. 누적합으로 램프별 토글 횟수 계산. 홀수 토글된 램프 카운트 (켜진 것). 아래 섹션이 한 단락씩 쌓아요."),
+        "Solution code — read part by part.", "풀이 코드 — 부분별로 읽어봐요."),
       sections: getMcc22LampSections(E),
     },
   ];
