@@ -157,9 +157,9 @@ export function makeChipXchgCh1(E) {
     // [전] 도구: 마지막 한 개는 따로 (경계/off-by-one) — 왜 −1 했다 +1 하나. 도장카드 비유 + 언제 쓰나.
     {
       type: "reveal",
-      label: t(E, "Tool: the last one is special (±1)", "도구: 마지막 한 개는 따로 (±1)"),
-      narr: t(E, "Why −1 then +1? Right before the goal, one chip finishes it — the last red isn't a whole group.",
-                 "왜 −1 했다 +1? 목표 직전엔 칩 하나면 끝나거든요 — 마지막 빨강은 묶음이 아니에요."),
+      label: t(E, "Tool: why 7, not 8?", "도구: 왜 8이 아니라 7?"),
+      narr: t(E, "A concrete case: giving 6 chips falls short, but 7 reaches the goal — one extra red chip, not a whole blue group.",
+                 "구체적인 예: 6개 주면 부족하고 7개면 도달해요 — 파랑 묶음이 아니라 빨강 칩 딱 하나 차이예요."),
       content: (<LastStepSlide E={E} />),
     },
 
