@@ -4,215 +4,201 @@ import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeSteppe
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
+const KA = { wordBreak: "keep-all" };
 
 /* ═══════════════════════════════════════════════════════════════
-   MagicOrbsDeepAuditSim — pick a sample of orbs, sort them
-   descending by power, then choose K. Watch which orbs get
-   selected (the top K) and the running sum update live.
-   "Audit all K" enumerates every K from 0..N to show how the
-   maximum total grows as you're allowed to pick more orbs.
+   MagicOrbsMergeSim — the student fuses orbs by hand.
+   Fusion rule: pick x, then pick y → new orb = x + 2·y (y doubled).
+   Repeat until one orb remains. The "best" reference is the verified
+   optimum: sort ascending, k-th smallest worth value × 2^k. Students
+   discover that always doubling the growing/bigger cluster wins.
    ═══════════════════════════════════════════════════════════════ */
 const _ORB_PRESETS = [
-  { vals: [5, 3, 4],            label: "[5,3,4]" },
-  { vals: [7, 2, 9, 1, 6],      label: "[7,2,9,1,6]" },
-  { vals: [4, 4, 4, 1, 8, 3],   label: "[4,4,4,1,8,3]" },
-  { vals: [10, 1, 2, 9, 3, 8, 4], label: "[10,1,2,9,3,8,4] (N=7)" },
+  { vals: [3, 1] },
+  { vals: [1, 2, 1] },
+  { vals: [1, 2, 3, 2] },
 ];
 
-export function MagicOrbsDeepAuditSim({ E }) {
-  const [pi, setPi] = useState(0);
-  const [k, setK] = useState(2);
-  const [audited, setAudited] = useState(false);
+// verified optimum: sort ascending, coefficient 2^k for the k-th smallest
+function bestFinal(vals) {
+  const a = [...vals].sort((p, q) => p - q);
+  let ans = 0, p = 1;
+  for (const v of a) { ans += v * p; p *= 2; }
+  return ans;
+}
 
-  const { vals } = _ORB_PRESETS[pi];
-  const N = vals.length;
-  const safeK = Math.min(k, N);
+export function MagicOrbsMergeSim({ E }) {
+  const [pi, setPi] = useState(1);
+  const [orbs, setOrbs] = useState(() => _ORB_PRESETS[1].vals.map((v, i) => ({ id: i, val: v })));
+  const [nextId, setNextId] = useState(() => _ORB_PRESETS[1].vals.length);
+  const [xId, setXId] = useState(null);
+  const [yId, setYId] = useState(null);
 
-  // Sort descending, but keep original index for the "before" row
-  const indexed = vals.map((v, i) => ({ v, i }));
-  const sorted = [...indexed].sort((a, b) => b.v - a.v);
-  const pickedSet = new Set(sorted.slice(0, safeK).map(o => o.i));
-  const total = sorted.slice(0, safeK).reduce((s, o) => s + o.v, 0);
+  const best = bestFinal(_ORB_PRESETS[pi].vals);
+  const done = orbs.length === 1;
+  const finalVal = done ? orbs[0].val : null;
+  const hitBest = done && finalVal === best;
 
-  const switchPreset = (newPi) => {
+  const reset = (newPi = pi) => {
     setPi(newPi);
-    const newN = _ORB_PRESETS[newPi].vals.length;
-    setK(prev => Math.min(prev, newN));
-    setAudited(false);
+    setOrbs(_ORB_PRESETS[newPi].vals.map((v, i) => ({ id: i, val: v })));
+    setNextId(_ORB_PRESETS[newPi].vals.length);
+    setXId(null); setYId(null);
   };
 
-  // Audit: enumerate K = 0..N → max total for each
-  const auditRows = [];
-  for (let kk = 0; kk <= N; kk++) {
-    const sum = sorted.slice(0, kk).reduce((s, o) => s + o.v, 0);
-    auditRows.push({ k: kk, sum });
-  }
-  const bestRow = auditRows[auditRows.length - 1];
+  const clickOrb = (id) => {
+    if (done) return;
+    if (xId === null) { setXId(id); return; }
+    if (id === xId) { setXId(null); setYId(null); return; }   // deselect x
+    if (yId === null) { setYId(id); return; }
+    if (id === yId) { setYId(null); return; }                 // deselect y
+    // both already chosen → start over with this orb as x
+    setXId(id); setYId(null);
+  };
+
+  const fuse = () => {
+    if (xId === null || yId === null) return;
+    const x = orbs.find(o => o.id === xId).val;
+    const y = orbs.find(o => o.id === yId).val;
+    const merged = { id: nextId, val: x + 2 * y };
+    setOrbs(prev => [...prev.filter(o => o.id !== xId && o.id !== yId), merged]);
+    setNextId(nextId + 1);
+    setXId(null); setYId(null);
+  };
+
+  const preview = (xId !== null && yId !== null)
+    ? orbs.find(o => o.id === xId).val + 2 * orbs.find(o => o.id === yId).val
+    : null;
+
+  const orbChip = (o) => {
+    const role = o.id === xId ? "x" : o.id === yId ? "y" : null;
+    const bg = role === "x" ? "#ede9fe" : role === "y" ? "#fef3c7" : "#f5f3ff";
+    const border = role === "x" ? A : role === "y" ? "#f59e0b" : "#c4b5fd";
+    const color = role === "y" ? "#92400e" : "#5b21b6";
+    return (
+      <button key={o.id} onClick={() => clickOrb(o.id)} disabled={done} style={{
+        position: "relative", minWidth: 46, height: 50, padding: "0 8px",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        borderRadius: 12, fontSize: 16, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+        background: bg, border: `2px solid ${border}`, color, cursor: done ? "default" : "pointer",
+        boxShadow: role ? `0 0 0 3px ${border}33` : "none",
+      }}>
+        {o.val}
+        {role && (
+          <span style={{
+            position: "absolute", top: -9, right: -9, width: 20, height: 20, borderRadius: 10,
+            background: role === "x" ? A : "#f59e0b", color: "#fff", fontSize: 11, fontWeight: 800,
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>{role}</span>
+        )}
+      </button>
+    );
+  };
 
   return (
-    <div style={{ padding: 14 }}>
+    <div style={{ padding: 14, ...KA }}>
       {/* preset selector */}
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
         {_ORB_PRESETS.map((p, i) => (
-          <button key={i} onClick={() => switchPreset(i)} style={{
+          <button key={i} onClick={() => reset(i)} style={{
             padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
             fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           }}>
-            {p.label}
+            [{p.vals.join(",")}]
           </button>
         ))}
       </div>
 
-      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 8 }}>
-        {t(E, "Use − / + to change K. Watch which orbs get picked and the total power grow.",
-              "− / + 로 K 를 바꿔봐. 어떤 구슬이 뽑히는지, 총 파워가 어떻게 자라는지 봐.")}
+      {/* rule reminder */}
+      <div style={{ textAlign: "center", fontSize: 11.5, color: C.dim, marginBottom: 10, lineHeight: 1.5 }}>
+        {t(E, "Tap an orb for ", "구슬을 눌러 ")}
+        <b style={{ color: A }}>x</b>{t(E, ", then another for ", ", 그다음 다른 구슬을 ")}
+        <b style={{ color: "#f59e0b" }}>y</b>{t(E, " (doubled). Fuse: ", " 로 (두 배). 융합: ")}
+        <b style={{ color: "#7c3aed", fontFamily: "'JetBrains Mono',monospace" }}>x + 2·y</b>
       </div>
 
-      {/* original order row */}
-      <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginBottom: 4, fontWeight: 700, letterSpacing: 0.4 }}>
-        {t(E, "ORIGINAL ORDER", "원래 순서")}
-      </div>
-      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
-        {indexed.map((o, i) => (
-          <div key={i} style={{
-            width: 38, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
-            borderRadius: 8, fontSize: 16, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
-            background: "#f5f3ff", border: "1.5px solid #c4b5fd", color: "#5b21b6",
-          }}>
-            {o.v}
-          </div>
-        ))}
+      {/* orbs */}
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 12, minHeight: 50 }}>
+        {orbs.map(orbChip)}
       </div>
 
-      {/* arrow */}
-      <div style={{ textAlign: "center", fontSize: 14, color: A, marginBottom: 4 }}>
-        ↓ {t(E, "sort descending", "내림차순 정렬")} ↓
-      </div>
-
-      {/* sorted row with picked highlight */}
-      <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginBottom: 4, fontWeight: 700, letterSpacing: 0.4 }}>
-        {t(E, "SORTED — top K picked", "정렬됨 — 앞에서 K 개")}
-      </div>
-      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 4, flexWrap: "wrap" }}>
-        {sorted.map((o, i) => {
-          const picked = i < safeK;
-          const bg = picked ? "#dcfce7" : "#f1f5f9";
-          const border = picked ? "#86efac" : "#cbd5e1";
-          const color = picked ? "#166534" : "#64748b";
-          return (
-            <div key={i} style={{
-              width: 38, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
-              borderRadius: 8, fontSize: 16, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
-              background: bg, border: `1.5px solid ${border}`, color,
-              outline: picked ? `2px dashed ${A}` : "none",
-              outlineOffset: picked ? -4 : 0,
-              opacity: picked ? 1 : 0.6,
-            }}>
-              {o.v}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* tick row to mark which positions are within top K */}
-      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
-        {sorted.map((_, i) => (
-          <div key={i} style={{
-            width: 38, textAlign: "center", fontSize: 11,
-            color: i < safeK ? "#15803d" : "#94a3b8",
-            fontWeight: i < safeK ? 700 : 400,
-            fontFamily: "'JetBrains Mono',monospace",
-          }}>
-            {i < safeK ? "✓" : "·"}
-          </div>
-        ))}
-      </div>
-
-      {/* K controls + total */}
-      <div style={{
-        background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 10,
-        padding: "8px 12px", marginBottom: 10,
-        display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <button onClick={() => { setK(Math.max(0, safeK - 1)); setAudited(false); }} style={{
-            width: 28, height: 28, borderRadius: 6, border: `1px solid ${A}`,
-            background: "#fff", color: A, fontWeight: 800, cursor: "pointer", fontSize: 14,
-          }}>−</button>
-          <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", fontFamily: "'JetBrains Mono',monospace", minWidth: 60, textAlign: "center" }}>
-            K = {safeK} / {N}
-          </div>
-          <button onClick={() => { setK(Math.min(N, safeK + 1)); setAudited(false); }} style={{
-            width: 28, height: 28, borderRadius: 6, border: `1px solid ${A}`,
-            background: "#fff", color: A, fontWeight: 800, cursor: "pointer", fontSize: 14,
-          }}>+</button>
-        </div>
-        <div style={{ fontSize: 13, fontWeight: 800, color: "#5b21b6", fontFamily: "'JetBrains Mono',monospace" }}>
-          {t(E, "total power", "총 파워")} = {total}
-        </div>
-      </div>
-
-      {/* audit button */}
-      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
-        <button onClick={() => setAudited(true)} style={{
-          padding: "6px 14px", borderRadius: 8, border: `1px solid ${A}`,
-          background: A, color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer",
-        }}>
-          {t(E, `🔍 Audit all K = 0..${N}`, `🔍 K = 0..${N} 모두 점검`)}
-        </button>
-      </div>
-
-      {/* audit panel */}
-      {audited && (
-        <div style={{
-          background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10,
-          padding: 10, fontSize: 11.5, color: "#9a3412", lineHeight: 1.6,
-        }}>
-          <div style={{ fontWeight: 700, marginBottom: 6, color: "#7c2d12" }}>
-            {t(E, "Each K → max total power", "각 K → 최대 총 파워")}
-          </div>
+      {/* preview + fuse button */}
+      {!done && (
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", alignItems: "center", flexWrap: "wrap", marginBottom: 12 }}>
           <div style={{
-            display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(90px, 1fr))",
-            gap: 4, marginBottom: 8, fontFamily: "'JetBrains Mono',monospace",
+            fontSize: 13, fontFamily: "'JetBrains Mono',monospace", color: preview === null ? C.dim : "#5b21b6",
+            background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: "6px 12px", fontWeight: 700,
           }}>
-            {auditRows.map((r) => (
-              <div key={r.k} style={{
-                background: r.k === safeK ? "#fef3c7" : "#fff",
-                border: `1px solid ${r.k === safeK ? "#f59e0b" : "#fed7aa"}`,
-                borderRadius: 6, padding: "3px 6px", fontSize: 11, color: "#7c2d12",
-                display: "flex", justifyContent: "space-between", gap: 4,
-                fontWeight: r.k === safeK ? 800 : 500,
-              }}>
-                <span>K={r.k}</span>
-                <b>{r.sum}</b>
-              </div>
-            ))}
+            {preview === null
+              ? t(E, "x + 2·y = ?", "x + 2·y = ?")
+              : `${orbs.find(o => o.id === xId).val} + 2·${orbs.find(o => o.id === yId).val} = ${preview}`}
           </div>
-          <div style={{
-            background: "#dcfce7", border: "1px solid #86efac", borderRadius: 8,
-            padding: "6px 10px", color: "#166534", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
+          <button onClick={fuse} disabled={preview === null} style={{
+            padding: "7px 18px", borderRadius: 8, border: `1px solid ${A}`,
+            background: preview === null ? "#e9e5f8" : A, color: preview === null ? "#a99fd0" : "#fff",
+            fontSize: 13, fontWeight: 800, cursor: preview === null ? "default" : "pointer",
           }}>
-            {t(E, "non-decreasing — bigger K never hurts.", "단조 비감소 — K 가 커지면 절대 손해 안 봐.")}
-            {" "}{t(E, "max at K=", "최댓값 K=")}{bestRow.k} → {bestRow.sum}
-          </div>
+            ✨ {t(E, "Fuse", "융합")}
+          </button>
         </div>
       )}
+
+      {/* result vs best */}
+      {done ? (
+        <div style={{
+          background: hitBest ? "#dcfce7" : "#ede9fe",
+          border: `1px solid ${hitBest ? "#86efac" : "#c4b5fd"}`,
+          borderRadius: 10, padding: "10px 14px", textAlign: "center",
+        }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: hitBest ? "#166534" : "#5b21b6", fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, "final power = ", "마지막 파워 = ")}{finalVal}
+            {" "}<span style={{ color: C.dim, fontWeight: 600 }}>/ {t(E, "best ", "최고 ")}{best}</span>
+          </div>
+          <div style={{ fontSize: 12, color: hitBest ? "#166534" : "#7c3aed", marginTop: 4, fontWeight: 600 }}>
+            {hitBest
+              ? t(E, "🎉 You matched the best! You kept doubling the bigger cluster.", "🎉 최고 기록 달성! 큰 덩어리를 계속 두 배로 만들었어요.")
+              : t(E, "Not the max yet — try doubling the BIGGER orb each time (put it as y).", "아직 최댓값이 아니에요 — 매번 더 큰 구슬을 두 배로 (y 자리에) 해봐요.")}
+          </div>
+        </div>
+      ) : (
+        <div style={{ textAlign: "center", fontSize: 11.5, color: C.dim, ...KA }}>
+          {t(E, "Best possible for this set: ", "이 세트의 최댓값: ")}
+          <b style={{ color: A, fontFamily: "'JetBrains Mono',monospace" }}>{best}</b>
+          {t(E, ". Fuse down to one orb and try to reach it.", ". 구슬 하나까지 융합해서 도전해봐요.")}
+        </div>
+      )}
+
+      {/* reset */}
+      <div style={{ display: "flex", justifyContent: "center", marginTop: 12 }}>
+        <button onClick={() => reset()} style={{
+          padding: "5px 14px", borderRadius: 8, border: `1px solid ${C.border}`,
+          background: "transparent", color: C.dim, fontSize: 12, fontWeight: 600, cursor: "pointer",
+        }}>
+          ↺ {t(E, "Reset", "다시")}
+        </button>
+      </div>
     </div>
   );
 }
 
 const FULL_PY = [
-  "N, K = map(int, input().split())",
-  "vals = list(map(int, input().split()))",
+  "import sys",
+  "input = sys.stdin.readline",
+  "MOD = 10**9 + 7",
   "",
-  "# Sort values in descending order",
-  "vals.sort(reverse=True)",
+  "T = int(input())",
+  "for _ in range(T):",
+  "    n = int(input())",
+  "    a = list(map(int, input().split()))",
+  "    a.sort()                 # smallest first",
   "",
-  "# Pick the top K orbs for maximum sum",
-  "ans = sum(vals[:K])",
-  "",
-  "print(ans)",
+  "    ans = 0",
+  "    p = 1                    # coefficient: 1, 2, 4, 8, ...",
+  "    for v in a:",
+  "        ans = (ans + v * p) % MOD",
+  "        p = (p * 2) % MOD",
+  "    print(ans)",
 ];
 
 const FULL_CPP = [
@@ -220,21 +206,26 @@ const FULL_CPP = [
   "#include <vector>",
   "#include <algorithm>",
   "using namespace std;",
+  "const long long MOD = 1000000007;",
   "",
   "int main() {",
-  "    int N, K;",
-  "    cin >> N >> K;",
-  "    vector<int> vals(N);",
-  "    for (int i = 0; i < N; i++) cin >> vals[i];",
+  "    int T;",
+  "    cin >> T;",
+  "    while (T--) {",
+  "        int n;",
+  "        cin >> n;",
+  "        vector<long long> a(n);",
+  "        for (int i = 0; i < n; i++) cin >> a[i];",
   "",
-  "    // 값을 내림차순 정렬",
-  "    sort(vals.rbegin(), vals.rend());",
+  "        sort(a.begin(), a.end());   // smallest first",
   "",
-  "    // 상위 K 개를 더해 최댓값",
-  "    long long ans = 0;",
-  "    for (int i = 0; i < K; i++) ans += vals[i];",
-  "",
-  "    cout << ans << \"\\n\";",
+  "        long long ans = 0, p = 1;   // coefficient: 1, 2, 4, ...",
+  "        for (int i = 0; i < n; i++) {",
+  "            ans = (ans + (a[i] % MOD) * p) % MOD;",
+  "            p = (p * 2) % MOD;",
+  "        }",
+  "        cout << ans << \"\\n\";",
+  "    }",
   "    return 0;",
   "}",
 ];
@@ -246,20 +237,22 @@ export function getMagicOrbsSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "Sort descending, then add the first K — that's the biggest possible sum.",
-            "내림차순 정렬 후 앞 K 개를 더하면 = 가능한 가장 큰 합."),
+        t(E, "Fusing x, y → x + 2·y doubles y. Over the whole game, the orb that stays in the doubled slot the longest earns the most doublings — so we want the biggest orb doubled the most.",
+            "x, y → x + 2·y 는 y 를 두 배로 해요. 게임 전체로 보면, 두 배 자리에 가장 오래 남는 구슬이 가장 많이 두 배가 돼요 — 그래서 가장 큰 구슬을 가장 많이 두 배로 만들고 싶어요."),
+        t(E, "That optimum is exactly: sort ascending, and the k-th smallest orb is worth value × 2^k (coefficients 1, 2, 4, 8, …). One sort, one pass, mod 1e9+7.",
+            "그 최적해가 바로: 오름차순 정렬 후 k 번째로 작은 구슬은 값 × 2^k (계수 1, 2, 4, 8, …). 한 번 정렬, 한 번 훑기, 1e9+7 나머지."),
       ],
       pyOnly: [
-        t(E, "vals.sort(reverse=True) then sum(vals[:K]) — two lines.",
-            "vals.sort(reverse=True) 후 sum(vals[:K]) — 두 줄."),
+        t(E, "a.sort() puts smallest first; p doubles each step so the LAST (biggest) value gets the largest coefficient.",
+            "a.sort() 로 작은 것부터; p 가 매 단계 두 배라 마지막(가장 큰) 값이 가장 큰 계수를 받아요."),
+        t(E, "Take % MOD every step — the coefficient p can grow to 2^200000, so keep it small.",
+            "매 단계 % MOD — 계수 p 가 2^200000 까지 커질 수 있으니 작게 유지해요."),
       ],
       cppOnly: [
-        t(E, "sort(vals.rbegin(), vals.rend()) sorts descending using reverse iterators.",
-            "sort(vals.rbegin(), vals.rend())로 역방향 반복자를 써서 내림차순 정렬."),
-        t(E, "Use long long for the sum — K values up to 10^9 can overflow int.",
-            "합은 long long — 10^9 값 K 개면 int 를 넘칠 수 있어."),
+        t(E, "a[i] can be up to 10^18, so store it as long long and reduce (a[i] % MOD) before multiplying.",
+            "a[i] 가 10^18 까지 가능하니 long long 에 담고, 곱하기 전에 (a[i] % MOD) 로 줄여요."),
+        t(E, "Multiply modded values so the product stays under ~10^18 and never overflows long long.",
+            "나머지끼리 곱하면 곱이 ~10^18 아래로 유지돼 long long 을 넘지 않아요."),
       ],
     },
   ];

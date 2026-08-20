@@ -4,232 +4,197 @@ import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeSteppe
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+const KA = { wordBreak: "keep-all" };
+const NW = { whiteSpace: "nowrap" };
 
 /* ═══════════════════════════════════════════════════════════════
-   Mcc19CandyDeepAuditSim — pick N, step through each elimination
-   round, watch odd-position people drop, see who survives.
+   Mcc19CandyShoutSim — set each round's shout (odd / even), watch
+   the line thin out round by round on a full line of 2^R people,
+   and see which STARTING position ends up as the sole survivor.
+   Ties the answer to bits: an "odd" round puts a 1 in that bit,
+   an "even" round puts a 0.  Self-contained, no autoplay.
    ═══════════════════════════════════════════════════════════════ */
-const _MCC_PRESETS = [
-  { n: 4,  label: "N=4"  },
-  { n: 6,  label: "N=6"  },
-  { n: 8,  label: "N=8"  },
-  { n: 10, label: "N=10" },
-  { n: 13, label: "N=13" },
-];
+export function Mcc19CandyShoutSim({ E }) {
+  // default matches the official sample: even, even, odd  →  5
+  const [shouts, setShouts] = useState(["even", "even", "odd"]);
+  const R = shouts.length;
 
-export function Mcc19CandyDeepAuditSim({ E }) {
-  const [pi, setPi] = useState(0);
-  const { n: N } = _MCC_PRESETS[pi];
+  const toggle = (i) =>
+    setShouts((prev) => prev.map((s, j) => (j === i ? (s === "odd" ? "even" : "odd") : s)));
+  const addRound = () => setShouts((prev) => (prev.length >= 4 ? prev : [...prev, "even"]));
+  const dropRound = () => setShouts((prev) => (prev.length <= 1 ? prev : prev.slice(0, -1)));
 
-  // history[r] = { alive: [original numbers alive at start of round r], eliminated: [...] }
-  const buildHistory = (n) => {
-    const h = [];
-    let cur = Array.from({ length: n }, (_, i) => i + 1);
-    h.push({ alive: [...cur], eliminated: [] });
-    while (cur.length > 1) {
-      const elim = cur.filter((_, i) => (i + 1) % 2 === 1);
-      const surv = cur.filter((_, i) => (i + 1) % 2 === 0);
-      h.push({ alive: surv, eliminated: elim, prev: [...cur] });
-      cur = surv;
-    }
-    return h;
-  };
+  // Build the elimination on a full line of 2^R people, position 1-indexed.
+  const rounds = [];
+  let people = Array.from({ length: 2 ** R }, (_, i) => i + 1);
+  rounds.push({ before: [...people], shout: null, elim: new Set() });
+  shouts.forEach((s) => {
+    const before = people;
+    const elim = new Set();
+    const survivors = [];
+    before.forEach((num, i) => {
+      const pos1 = i + 1;
+      const isOddPos = pos1 % 2 === 1;
+      const killed = (s === "odd" && isOddPos) || (s === "even" && !isOddPos);
+      if (killed) elim.add(i);
+      else survivors.push(num);
+    });
+    rounds.push({ before, after: survivors, shout: s, elim });
+    people = survivors;
+  });
+  const survivor = people[0]; // the one original number left standing
 
-  const history = buildHistory(N);
-  const totalRounds = history.length - 1;
-  const [round, setRound] = useState(0);
-  const [done, setDone] = useState(false);
+  // Bit view: pos - 1 has a 1 in bit i exactly when shout[i] === "odd".
+  const bits = shouts.map((s) => (s === "odd" ? 1 : 0));
+  const answerFromBits = 1 + bits.reduce((acc, b, i) => acc + b * 2 ** i, 0);
 
-  const switchPreset = (newPi) => {
-    setPi(newPi);
-    setRound(0);
-    setDone(false);
-  };
-
-  const advance = () => {
-    if (round < totalRounds) setRound(round + 1);
-    else setDone(true);
-  };
-  const reset = () => { setRound(0); setDone(false); };
-
-  const cur = history[round];
-  const survivor = history[totalRounds].alive[0];
-
-  // Render a row of numbered candy chips. If `prev` provided, mark odd positions as eliminated.
-  const renderRow = (people, prev) => {
-    const list = prev || people;
-    return (
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
-        {list.map((num, i) => {
-          const odd = (i + 1) % 2 === 1;
-          const eliminated = !!prev && odd;
-          return (
-            <div key={`${num}-${i}`} style={{
-              minWidth: 36, height: 44, padding: "0 8px",
-              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-              borderRadius: 10,
-              background: eliminated ? "#f3f4f6" : "#fef2f2",
-              border: `1.5px solid ${eliminated ? "#d1d5db" : "#dc2626"}`,
-              color: eliminated ? "#9ca3af" : "#7f1d1d",
-              textDecoration: eliminated ? "line-through" : "none",
-              boxShadow: eliminated ? "none" : "0 1px 2px rgba(220,38,38,0.15)",
-              opacity: eliminated ? 0.55 : 1,
-            }}>
-              <div style={{ fontSize: 14, lineHeight: 1 }}>🍬</div>
-              <div style={{ fontSize: 11, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", marginTop: 2 }}>
-                {num}
-              </div>
-              <div style={{ fontSize: 8, color: C.dim, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1 }}>
-                #{i + 1}
-              </div>
-            </div>
-          );
-        })}
+  const chip = (num, i, killed) => (
+    <div
+      key={`${num}-${i}`}
+      style={{
+        minWidth: 30, height: 40, padding: "0 6px",
+        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+        borderRadius: 9,
+        background: killed ? "#f3f4f6" : num === survivor ? "#dc2626" : "#fef2f2",
+        border: `1.5px solid ${killed ? "#d1d5db" : num === survivor ? "#dc2626" : "#fca5a5"}`,
+        color: killed ? "#9ca3af" : num === survivor ? "#fff" : "#7f1d1d",
+        textDecoration: killed ? "line-through" : "none",
+        opacity: killed ? 0.5 : 1,
+      }}
+    >
+      <div style={{ fontSize: 12, lineHeight: 1 }}>🍬</div>
+      <div style={{ fontSize: 11, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", marginTop: 1 }}>
+        {num}
       </div>
-    );
-  };
+    </div>
+  );
 
   return (
-    <div style={{ padding: 14 }}>
-      {/* preset selector */}
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
-        {_MCC_PRESETS.map((p, i) => (
-          <button key={i} onClick={() => switchPreset(i)} style={{
-            padding: "5px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
-            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
-            fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
-          }}>
-            {p.label}
-          </button>
-        ))}
-      </div>
-
-      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 8 }}>
-        {t(E,
-          "Step through each round. Odd-position candies (#1, #3, #5, …) drop out; the rest renumber from 1.",
-          "한 라운드씩 살펴봐. 홀수 위치 사탕 (#1, #3, #5, …) 이 탈락하고, 나머지가 1 부터 다시 번호 매겨져요.")}
-      </div>
-
-      {/* Round header */}
-      <div style={{
-        background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10,
-        padding: "6px 10px", marginBottom: 8, textAlign: "center",
-        fontSize: 12, fontWeight: 700, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace",
-      }}>
-        {round === 0
-          ? t(E, `Round 0 — start: ${N} people lined up`, `라운드 0 — 시작: ${N} 명 정렬`)
-          : t(E,
-              `Round ${round}: ${cur.prev.length} → ${cur.alive.length} (eliminated ${cur.eliminated.length})`,
-              `라운드 ${round}: ${cur.prev.length} → ${cur.alive.length} (탈락 ${cur.eliminated.length})`)}
-      </div>
-
-      {/* Visualization */}
-      <div style={{
-        background: "#fff", border: "1px solid #e5e7eb", borderRadius: 10,
-        padding: "10px 8px", marginBottom: 10, minHeight: 70,
-      }}>
-        {round === 0
-          ? renderRow(cur.alive, null)
-          : renderRow(cur.alive, cur.prev)}
-        {round > 0 && (
-          <div style={{
-            fontSize: 11, color: C.dim, textAlign: "center", marginTop: 6,
-            fontFamily: "'JetBrains Mono',monospace",
-          }}>
-            {t(E,
-              `Eliminated this round: [${cur.eliminated.join(", ")}]   ·   Surviving: [${cur.alive.join(", ")}]`,
-              `이번 라운드 탈락: [${cur.eliminated.join(", ")}]   ·   생존: [${cur.alive.join(", ")}]`)}
-          </div>
-        )}
-      </div>
-
-      {/* Tally */}
-      <div style={{
-        background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10,
-        padding: "8px 12px", marginBottom: 10,
-        display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 6,
-      }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: "#7f1d1d", fontFamily: "'JetBrains Mono',monospace" }}>
-          {t(E, "alive", "생존")} = {cur.alive.length} &nbsp; {t(E, "round", "라운드")} = {round} / {totalRounds}
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, ...KA }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#7f1d1d", marginBottom: 8 }}>
+          🗣️ {t(E, "Set each round's shout, watch the line thin out", "라운드마다 외침을 정하고, 줄이 줄어드는 걸 봐요")}
         </div>
-        <div style={{ fontSize: 12, color: "#7f1d1d" }}>
-          {round < totalRounds
-            ? t(E, "more rounds to go…", "더 많은 라운드 남았어…")
-            : t(E, "one survivor ✓", "한 명 생존 ✓")}
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+          {t(E,
+            "A full line of 2^R people stands here. \"odd\" removes everyone at an odd position; \"even\" removes the even positions. Survivors renumber from 1. Toggle the shouts and find which STARTING number is the last one left (shown in red).",
+            "여기 2^R 명이 한 줄로 서 있어요. \"odd\" 는 홀수 자리를, \"even\" 은 짝수 자리를 없애요. 살아남은 사람은 1 부터 다시 번호를 매겨요. 외침을 바꿔가며, 마지막까지 남는 시작 번호(빨간색)를 찾아봐요.")}
         </div>
-      </div>
 
-      {/* Controls */}
-      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
-        <button onClick={advance} disabled={done} style={{
-          padding: "6px 14px", borderRadius: 8, border: `1px solid ${A}`,
-          background: done ? "#e5e7eb" : A, color: done ? "#9ca3af" : "#fff",
-          fontSize: 12, fontWeight: 700, cursor: done ? "default" : "pointer",
-        }}>
-          {round < totalRounds
-            ? t(E, "▶ Next round", "▶ 다음 라운드")
-            : t(E, "🔍 Reveal survivor", "🔍 생존자 공개")}
-        </button>
-        <button onClick={reset} style={{
-          padding: "6px 14px", borderRadius: 8, border: `1px solid ${C.border}`,
-          background: "transparent", color: C.dim, fontSize: 12, fontWeight: 600, cursor: "pointer",
-        }}>
-          {t(E, "↻ Reset", "↻ 초기화")}
-        </button>
-      </div>
+        {/* round shout toggles */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", marginBottom: 12 }}>
+          <span style={{ fontSize: 12, color: "#7f1d1d", fontWeight: 700 }}>{t(E, "shouts:", "외침:")}</span>
+          {shouts.map((s, i) => (
+            <button key={i} onClick={() => toggle(i)} style={{
+              ...NW, display: "inline-flex", flexDirection: "column", alignItems: "center",
+              padding: "4px 10px", borderRadius: 8, cursor: "pointer",
+              border: `1.5px solid ${s === "odd" ? "#dc2626" : "#7c3aed"}`,
+              background: s === "odd" ? "#dc2626" : "#7c3aed", color: "#fff",
+              fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 12.5,
+            }}>
+              <span style={{ fontSize: 9, opacity: 0.85, fontWeight: 700 }}>{t(E, `round ${i}`, `라운드 ${i}`)}</span>
+              {s}
+            </button>
+          ))}
+          <span style={{ display: "inline-flex", gap: 4, marginLeft: 4 }}>
+            <button onClick={dropRound} style={rBtn}>−</button>
+            <button onClick={addRound} style={rBtn}>+</button>
+          </span>
+        </div>
 
-      {/* Verdict */}
-      {done && (
-        <div style={{
-          background: "#ecfdf5", border: "1px solid #6ee7b7",
-          borderRadius: 10, padding: "10px 14px",
-          color: "#065f46", fontSize: 13, lineHeight: 1.6,
-        }}>
-          <div style={{ fontWeight: 800, marginBottom: 4, fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, `N=${N} → survivor = ${survivor}`, `N=${N} → 생존자 = ${survivor}`)}
+        {/* round-by-round elimination */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 12 }}>
+          {rounds.map((rd, r) => (
+            <div key={r} style={{ background: "#fff", border: "1px solid #f3d0d0", borderRadius: 9, padding: "8px 10px" }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
+                {r === 0
+                  ? t(E, `start — ${rd.before.length} people`, `시작 — ${rd.before.length} 명`)
+                  : t(E,
+                      `round ${r}: shout "${rd.shout}"  →  keep ${rd.shout === "odd" ? "even" : "odd"} positions`,
+                      `라운드 ${r}: 외침 "${rd.shout}"  →  ${rd.shout === "odd" ? "짝수" : "홀수"} 자리 생존`)}
+              </div>
+              <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                {rd.before.map((num, i) => chip(num, i, rd.elim.has(i)))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* answer + bit mapping */}
+        <div style={{ background: "#0f172a", color: "#f8fafc", padding: "10px 12px", borderRadius: 8,
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.7, ...KA }}>
+          <div>
+            {t(E, "sole survivor started at position ", "혼자 남은 사람의 시작 위치 = ")}
+            <b style={{ color: "#fbbf24", fontSize: 15 }}>{survivor}</b>
           </div>
-          <div style={{ fontSize: 12 }}>
-            {t(E,
-              `After ${totalRounds} round${totalRounds === 1 ? "" : "s"} of odd-position elimination, only person ${survivor} remains. Notice the survivor is always the largest power of 2 that is ≤ N.`,
-              `홀수 위치 탈락을 ${totalRounds} 라운드 반복하면 ${survivor} 번만 남아. 생존자는 항상 N 이하의 가장 큰 2의 거듭제곱이라는 점이 보여.`)}
+          <div style={{ marginTop: 6, color: "#cbd5e1" }}>
+            {shouts.map((s, i) => (
+              <span key={i} style={{ marginRight: 10, ...NW }}>
+                {t(E, `bit ${i} `, `비트 ${i} `)}
+                <b style={{ color: s === "odd" ? "#f87171" : "#a78bfa" }}>{s === "odd" ? 1 : 0}</b>
+              </span>
+            ))}
+          </div>
+          <div style={{ marginTop: 6, color: "#6ee7b7" }}>
+            1 + {bits.map((b, i) => (b ? `2^${i}` : null)).filter(Boolean).join(" + ") || "0"} ={" "}
+            <b style={{ color: "#34d399" }}>{answerFromBits}</b>
           </div>
         </div>
-      )}
+
+        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+          {t(E,
+            "See the pattern? An \"odd\" round in slot i puts a 1 in bit i of (answer − 1); an \"even\" round puts a 0. So the whole answer is just 1 + the number those bits spell out — no need to simulate.",
+            "패턴이 보여요? 슬롯 i 의 \"odd\" 라운드는 (답 − 1) 의 비트 i 를 1 로, \"even\" 라운드는 0 으로 만들어요. 그래서 답은 그 비트들이 나타내는 수에 1 을 더한 것뿐 — 시뮬레이션이 필요 없어요.")}
+        </div>
+      </div>
     </div>
   );
 }
+const rBtn = {
+  width: 26, height: 26, borderRadius: 6, border: "1px solid #fca5a5", background: "#fff",
+  color: "#7f1d1d", fontSize: 16, fontWeight: 800, cursor: "pointer", lineHeight: 1,
+};
 
+/* ================================================================
+   SOLUTION CODE  (fast: read the shouts, sum a bit per "odd" round)
+   ================================================================ */
 const FULL_PY = [
-  "N = int(input())",
+  "R = int(input())",
+  "shouts = input().split()",
   "",
-  "# Simulate: people in a queue numbered 1..N",
-  "people = list(range(1, N + 1))",
+  "# the position we are solving for",
+  "pos = 1",
   "",
-  "while len(people) > 1:",
-  "    # Remove people at odd positions (1-indexed)",
-  "    people = [people[i] for i in range(len(people)) if (i + 1) % 2 == 0]",
+  "# each round decides one bit of (pos - 1):",
+  "#   an \"odd\" round in slot i adds 2**i",
+  "for i in range(R):",
+  "    if shouts[i] == \"odd\":",
+  "        pos += 2 ** i",
   "",
-  "print(people[0])",
+  "print(pos)",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
-  "#include <vector>",
   "#include <string>",
   "using namespace std;",
   "",
   "int main() {",
-  "    int N; cin >> N;",
+  "    int R;",
+  "    cin >> R;",
   "",
-  "    // Simulate: people in a queue numbered 1..N",
-  "    auto people = list(range(1, N + 1));",
+  "    // the position we are solving for",
+  "    long long pos = 1;",
   "",
-  "    while (len(people) > 1) {",
-  "        // Remove people at odd positions (1-indexed)",
-  "        auto people = [people[i] for i in range(len(people)) if (i + 1) % 2 == 0];",
+  "    // each round decides one bit of (pos - 1):",
+  "    //   an \"odd\" round in slot i adds 2^i",
+  "    for (int i = 0; i < R; i++) {",
+  "        string s;",
+  "        cin >> s;",
+  "        if (s == \"odd\") pos += (1LL << i);",
+  "    }",
   "",
-  "    cout << people[0] << \"\\n\";",
-  "",
+  "    cout << pos << \"\\n\";",
   "    return 0;",
   "}",
 ];
@@ -241,20 +206,22 @@ export function getMcc19CandySections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+        t(E, "Work backwards from the end: Bob must finish at position 1, so undo the rounds from last to first.",
+            "끝에서부터 거꾸로 봐요: Bob 은 자리 1 로 끝나야 하니, 마지막 라운드부터 하나씩 되돌려요."),
+        t(E, "Each round doubles the position on the way back, and an \"even\" round subtracts 1 — that is exactly writing one bit per round into (pos − 1): an \"odd\" round in slot i sets bit i to 1, an \"even\" round leaves it 0.",
+            "되돌릴 때 라운드마다 위치가 두 배가 되고 \"even\" 라운드는 1 을 빼요 — 이건 정확히 (pos − 1) 에 라운드마다 비트 하나를 쓰는 것이에요: 슬롯 i 의 \"odd\" 라운드는 비트 i 를 1 로, \"even\" 라운드는 0 으로.",),
+        t(E, "So instead of simulating the line, just add 2**i for every \"odd\" round to a starting pos of 1. O(R) time.",
+            "그래서 줄을 시뮬레이션하는 대신, 시작값 1 에 \"odd\" 라운드마다 2**i 만 더하면 돼요. O(R) 시간.",),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "input().split() gives the shouts as a list of words; 2 ** i is Python's power operator.",
+            "input().split() 은 외침을 단어 리스트로 줘요; 2 ** i 는 파이썬의 거듭제곱이에요.",),
       ],
       cppOnly: [
-        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
-        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+        t(E, "1LL << i is 2^i using a bit shift; the LL keeps it a 64-bit long long so large R doesn't overflow.",
+            "1LL << i 는 비트 시프트로 2^i 를 만들어요; LL 을 붙여 64비트 long long 으로 두면 R 이 커도 넘치지 않아요.",),
+        t(E, "Read each shout word into a std::string with cin >> s inside the loop.",
+            "반복문 안에서 cin >> s 로 외침 단어를 std::string 에 하나씩 읽어요.",),
       ],
     },
   ];
@@ -337,4 +304,3 @@ ${sections.map(s => `
   win.document.close();
   setTimeout(() => { win.focus(); win.print(); }, 500);
 }
-

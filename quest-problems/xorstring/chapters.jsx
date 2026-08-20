@@ -1,182 +1,245 @@
 import { C, t } from "@/components/quest/theme";
-import { getXorStringSections, XorWalkerSim } from "./components";
+import { getXorStringSections, TransformSim } from "./components";
+
+const KA = { wordBreak: "keep-all" };
 
 /* ================================================================
-   SOLUTION CODE
+   SOLUTION CODE (full program — verified 4 and 75497471)
    ================================================================ */
 export const SOLUTION_CODE = [
-  "S = input().strip()",
-  "T = input().strip()",
-  "",
-  "# XOR two binary strings of equal length",
-  "result = []",
-  "for i in range(len(S)):",
-  "    if S[i] == T[i]:",
-  "        result.append('0')",
-  "    else:",
-  "        result.append('1')",
-  "",
-  "print(''.join(result))",
+  "MOD = 998244353",
+  "inv3 = pow(3, MOD - 2, MOD)",
+  "n, k = map(int, input().split())",
+  "s = input().strip()",
+  "pow2k = pow(2, k, MOD)",
+  "sign  = 1 if k % 2 == 0 else MOD - 1",
+  "f00 = pow2k % MOD",
+  "f11 = (pow2k + 2 * sign) % MOD * inv3 % MOD",
+  "f01 = (pow2k - sign) % MOD * inv3 % MOD",
+  "total = 0",
+  "for j in range(n - 1):",
+  "    i = j + 1",
+  "    w = i * (n - i) % MOD",
+  "    x, y = s[j], s[j + 1]",
+  "    f = f00 if (x == '0' and y == '0') else (f11 if (x == '1' and y == '1') else f01)",
+  "    total = (total + w * f) % MOD",
+  "print(total % MOD)",
 ];
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: Problem (3 steps)
+   Chapter 1: Problem
    ═══════════════════════════════════════════════════════════════ */
 export function makeXorStringCh1(E) {
   return [
-    // 1-1: Title reveal
+    // 1-1: Title + Mission + Problem
     {
       type: "reveal",
       narr: t(E,
-        "Two binary strings A and B of EQUAL length are given.\nPrint the bitwise XOR — a string the same length where each position is 0 if A and B match there, else 1.",
-        "같은 길이의 두 이진 문자열 A, B 가 주어져요.\n비트별 XOR 을 출력해요. 결과는 같은 길이의 문자열이고, 각 위치에서 A 와 B 가 같으면 0, 다르면 1 이에요."),
+        "\"Transforming\" a string inserts (neighbor XOR neighbor) between every adjacent pair. Its \"beauty\" counts equal-adjacent pairs. Sum the beauty-after-k-transforms over ALL substrings of s.",
+        "문자열을 \"변신\"시키면 이웃한 두 글자마다 그 사이에 (이웃 XOR 이웃) 을 끼워 넣어요. \"beauty\" 는 이웃이 같은 쌍의 개수예요. s 의 모든 부분문자열에 대해 'k번 변신 후의 beauty' 를 더해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
-            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\u2295"}</div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: "#2563eb" }}>XOR The String</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P6</div>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"⊕"}</div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: "#2563eb" }}>XOR The String</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P6 · Lv5</div>
           </div>
 
-          {/* 🎯 Mission box */}
-          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
+          {/* 🎯 Mission */}
+          <div style={{ background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center", ...KA }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
               🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
-                "Output the bitwise XOR string of A and B.",
-                "A 와 B 의 비트별 XOR 문자열을 출력.")}
+                "Add up g(substring) over every substring of s (length ≥ 2), then print it mod 998244353.",
+                "s 의 모든 부분문자열(길이 ≥ 2)에 대해 g(부분문자열) 을 더해서 998244353 으로 나눈 나머지를 출력해요.")}
             </div>
           </div>
 
-          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
+          {/* 📖 Problem */}
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
+                <span style={{ color: "#2563eb", fontWeight: 700, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Two ", "두 ")}
-                  <b style={{ color: "#2563eb" }}>{t(E, "binary strings A, B of equal length", "같은 길이의 이진 문자열 A, B")}</b>
-                  {t(E, " are given.", " 가 주어져요.")}
+                  <b style={{ color: "#2563eb" }}>{t(E, "Transform", "변신")}</b>
+                  {t(E, ": between every adjacent pair, insert their ", ": 이웃한 두 글자마다 그 사이에 ")}
+                  <b>XOR</b>{t(E, " (same → 0, different → 1). A length-m string becomes ", " (같으면 0, 다르면 1) 을 끼워요. 길이 m 은 ")}
+                  <b>2m − 1</b>{t(E, ".", " 이 돼요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 700, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#7c3aed" }}>{t(E, "Beauty f(t)", "Beauty f(t)")}</b>
+                  {t(E, ": how many neighboring pairs are ", ": 이웃한 두 글자가 ")}
+                  <b>{t(E, "equal", "같은")}</b>{t(E, ".", " 쌍이 몇 개인지.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 700, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#dc2626" }}>g(t)</b>
+                  {t(E, " = beauty AFTER transforming t exactly ", " = t 를 정확히 ")}
+                  <b style={{ color: "#dc2626" }}>k</b>{t(E, " times.", " 번 변신시킨 뒤의 beauty.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
-                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
+                <span style={{ color: "#15803d", fontWeight: 700, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "bitwise XOR string", "비트별 XOR 문자열")}</b>
-                  {t(E, " — same bits → 0, different bits → 1.",
-                        " — 같은 비트는 0, 다른 비트는 1.")}
+                  {t(E, "Print ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "Σ g(s[l..r])", "Σ g(s[l..r])")}</b>
+                  {t(E, " over all substrings of length ≥ 2, mod 998244353.", " 를 길이 ≥ 2 인 모든 부분문자열에 대해 더한 값, mod 998244353.")}
                 </div>
               </div>
             </div>
           </div>
+
+          {/* tiny worked example */}
+          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: C.text, lineHeight: 1.7, ...KA }}>
+            <b style={{ color: "#2563eb" }}>{t(E, "Example transform: ", "변신 예시: ")}</b>
+            <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>101</span>
+            {t(E, " → insert 1⊕0=1 and 0⊕1=1 → ", " → 1⊕0=1, 0⊕1=1 끼워넣기 → ")}
+            <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: "#2563eb" }}>11011</span>
+            {t(E, " (beauty 2: the two 11 pairs).", " (beauty 2: 11 쌍이 두 개).")}
+          </div>
         </div>),
     },
-    // 1-1.2: 입출력 형식 (문제의 예제 코드에서 유도 — MCC 2024 는 공개 원문 없음)
-    // 문제를 본 직후 "그래서 데이터가 어떻게 들어오는데?" 를 못박아 준다.
+
+    // 1-2: Input format + official samples
     {
       type: "reveal",
       narr: t(E,
-        "So how does the data arrive?\nTwo binary strings, one per line — same length. Output the XOR string.",
-        "그럼 데이터는 어떻게 들어올까?\n한 줄에 하나씩 이진 문자열 두 개 — 길이가 같아. XOR 문자열을 출력해."),
+        "Read the input format and the two official samples. Line 1 is n and k; line 2 is the binary string s.",
+        "입력 형식과 공식 예제 두 개를 봐요. 첫 줄은 n 과 k, 둘째 줄은 이진 문자열 s 예요."),
       content: (
-        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+        <div style={{ padding: 16, ...KA }}>
           {/* INPUT */}
-          <div style={{ marginBottom: 12 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
-            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
-              <div><span style={{ color: "#92400e", fontWeight: 800 }}>A</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(first line) — a binary string (0/1)", "(첫 줄) — 이진 문자열 (0/1)")}</span></div>
-              <div style={{ marginTop: 6 }}><span style={{ color: "#92400e", fontWeight: 800 }}>B</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(second line) — a binary string of the SAME length", "(둘째 줄) — 같은 길이의 이진 문자열")}</span></div>
+          <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 8 }}>
+              📥 {t(E, "Input", "입력")}
+            </div>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
+              <div>• {t(E, "line 1: ", "첫 줄: ")}<b>n k</b> — {t(E, "length of s, and the transform count", "s 의 길이, 변신 횟수")}</div>
+              <div>• {t(E, "line 2: ", "둘째 줄: ")}<b>s</b> — {t(E, "a binary string (0/1) of length n", "길이 n 의 이진 문자열 (0/1)")}</div>
+            </div>
+            <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
+              {t(E, "Limits: 2 ≤ n ≤ 2·10^5, 0 ≤ k ≤ 10^18. Output the sum mod 998244353.",
+                  "제약: 2 ≤ n ≤ 2·10^5, 0 ≤ k ≤ 10^18. 합을 998244353 으로 나눈 나머지를 출력.")}
             </div>
           </div>
-          {/* OUTPUT */}
-          <div style={{ marginBottom: 12 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
-            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
-              {t(E, "The bitwise XOR string — same length as A and B. Position i is '0' if A[i] == B[i], else '1'.",
-                  "비트별 XOR 문자열 — A, B 와 같은 길이. i번째 자리는 A[i] == B[i] 면 '0', 다르면 '1'.")}
-            </div>
-          </div>
-          {/* 샘플 */}
+
+          {/* official samples */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
-              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc" }}>
-                <div>10110100</div>
-                <div>11010001</div>
+            {[
+              { in1: "3 2", in2: "101", out: "4" },
+              { in1: "2 30", in2: "00", out: "75497471" },
+            ].map((ex, idx) => (
+              <div key={idx} style={{ display: "flex", gap: 8, alignItems: "stretch" }}>
+                <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.7, flex: 1, minWidth: 70 }}>
+                  <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "input", "입력")}</div>
+                  <div>{ex.in1}</div>
+                  <div>{ex.in2}</div>
+                </div>
+                <div style={{ background: "#0f172a", color: "#86efac", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.7, minWidth: 70, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                  <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
+                  <div style={{ fontWeight: 800 }}>{ex.out}</div>
+                </div>
               </div>
-            </div>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
-              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac" }}>
-                <div>01100101</div>
-              </div>
-            </div>
+            ))}
           </div>
-          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
-            {t(E, "Column by column: matching bits give 0, differing bits give 1 — so 10110100 ⊕ 11010001 = 01100101.",
-                "한 자리씩: 같은 비트는 0, 다른 비트는 1 — 그래서 10110100 ⊕ 11010001 = 01100101.")}
+
+          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, ...KA }}>
+            {t(E,
+              "In sample 2 the answer is a huge number taken mod 998244353 — a hint that even for tiny input the true count is astronomically large, because transforming 30 times blows the string up.",
+              "예제 2 의 답이 998244353 으로 나눈 큰 수인 것만 봐도, 입력이 작아도 실제 값은 어마어마하게 크다는 걸 알 수 있어요 — 30번 변신하면 문자열이 폭발하니까요.")}
           </div>
         </div>),
     },
-    // 1-1.5: XOR Walker Sim (interactive)
+
+    // 1-3: concept sim
     {
       type: "reveal",
       narr: t(E,
-        "Try the XOR walker — edit A and B, then step or play to watch each position compare. Same → green 0, different → red 1.",
-        "XOR 워커를 직접 해 봐 — A 와 B 를 바꾸고, 한 칸씩 또는 자동 재생으로 각 자리 비교를 봐. 같으면 초록 0, 다르면 빨강 1."),
-      content: <XorWalkerSim E={E} />,
+        "Feel the transform. Press it and watch the tiny string grow, and count its beauty each time.",
+        "변신을 직접 느껴봐요. 눌러서 작은 문자열이 커지는 걸 보고, 매번 beauty 를 세어봐요."),
+      content: <TransformSim E={E} />,
     },
-    // 1-2: Quiz
+
+    // 1-4: understanding check
     {
       type: "quiz",
       narr: t(E,
-        "XOR basics: what is 1 XOR 1?", "XOR 기초: 1 XOR 1은?"),
+        "Transform '10' once: insert 1 XOR 0 = 1 between them → '110'.",
+        "'10' 을 한 번 변신: 사이에 1 XOR 0 = 1 을 끼워요 → '110'."),
       question: t(E,
-        "What is 1 XOR 1?",
-        "1 XOR 1은?"),
+        "Transforming '10' once gives '110'. What is its beauty (equal-adjacent pairs)?",
+        "'10' 을 한 번 변신하면 '110' 이에요. 이것의 beauty (이웃이 같은 쌍의 수)는?"),
       options: [
-        t(E, "0 (same bits = 0)", "0 (같은 비트 = 0)"),
-        t(E, "1 (both are 1)", "1 (둘 다 1이니까)"),
+        t(E, "1  (the '11' pair)", "1  ('11' 쌍 하나)"),
+        t(E, "0  (no equal pairs)", "0  (같은 쌍 없음)"),
+        t(E, "2  (both pairs)", "2  (두 쌍 모두)"),
       ],
       correct: 0,
       explain: t(E,
-        "Correct! XOR of same bits is always 0. 1 XOR 1 = 0.",
-        "맞아! 같은 비트의 XOR은 항상 0이에요. 1 XOR 1 = 0."),
-    },
-    // 1-3: Input
-    {
-      type: "input",
-      narr: t(E,
-        "What is 1 XOR 1? Enter the result.", "1 XOR 1은? 결과를 입력해요."),
-      question: t(E,
-        "1 XOR 1 = ?",
-        "1 XOR 1 = ?"),
-      hint: t(E,
-        "Recall the XOR rule for matching bits.",
-        "같은 비트끼리의 XOR 규칙을 떠올려 봐."),
-      answer: 0,
+        "'110' has pairs (1,1) equal and (1,0) different → beauty = 1. Counting equal neighbors is exactly f(t).",
+        "'110' 의 쌍은 (1,1) 같음, (1,0) 다름 → beauty = 1. 이웃이 같은 걸 세는 게 바로 f(t) 예요."),
     },
   ];
 }
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: Code (2 steps)
+   Chapter 2: Code
    ═══════════════════════════════════════════════════════════════ */
 export function makeXorStringCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: slow vs fast
+    {
+      type: "reveal",
+      narr: t(E,
+        "The slow way actually transforms every substring k times — impossible: the string grows like 2^k and k reaches 10^18. The fast way treats each adjacent pair on its own, uses a closed formula for its beauty, and weights it by how many substrings contain it.",
+        "느린 방법은 모든 부분문자열을 실제로 k번 변신시켜요 — 불가능해요: 문자열은 2^k 로 커지고 k 는 10^18 까지예요. 빠른 방법은 각 이웃 쌍을 따로 보고, beauty 를 닫힌 공식으로 구한 뒤, 그 쌍을 담은 부분문자열 개수만큼 가중치를 곱해요."),
+      content: (
+        <div style={{ padding: 16, ...KA }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 12.5, fontWeight: 800, color: "#b91c1c", marginBottom: 4 }}>
+                🐢 {t(E, "Slow: transform every substring k times", "느림: 모든 부분문자열을 k번 변신")}
+              </div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
+                {t(E,
+                  "Two walls at once: there are ~n²/2 substrings (up to 2·10^10), AND each transformed string is length ~2^k — for k = 10^18 it can never be built. Hopeless.",
+                  "벽이 두 개예요: 부분문자열이 ~n²/2 개(최대 2·10^10)인 데다, 변신한 문자열은 길이 ~2^k — k = 10^18 이면 절대 만들 수 없어요. 가망 없어요.")}
+              </div>
+            </div>
+            <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", marginBottom: 4 }}>
+                🚀 {t(E, "Fast: per-pair formula × substring count", "빠름: 쌍별 공식 × 부분문자열 개수")}
+              </div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
+                {t(E,
+                  "Each adjacent pair transforms independently. Its beauty after k steps has a closed form from the pair type (00 / 11 / 01) and 2^k, (-1)^k. Weight the pair at i by i·(n−i) substrings. One pass: O(n).",
+                  "이웃 쌍은 각자 독립으로 변신해요. k번 뒤 beauty 는 쌍 종류(00 / 11 / 01) 와 2^k, (-1)^k 로 닫힌 공식이 돼요. 위치 i 쌍에 i·(n−i) 개의 부분문자열만큼 가중치. 한 번 훑기: O(n).")}
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", ...KA }}>
+            {t(E, "↓ the fast code below — read the why-notes first.", "↓ 아래에 빠른 코드 — 먼저 '왜 이렇게?' 노트를 읽어요.")}
+          </div>
+        </div>),
+    },
+
+    // 2-2: progressive code
     {
       type: "progressive",
       narr: t(E,
-        "Walk both strings in parallel — at each position, output '0' if A[i] == B[i] else '1'. Sections build it one piece at a time.",
-        "두 문자열을 동시에 순회 — 각 위치에서 A[i] == B[i] 면 '0', 아니면 '1' 출력. 아래 섹션이 한 단락씩 쌓아요."),
+        "Solution code — read the why-notes, then the code.", "풀이 코드 — '왜 이렇게?' 노트를 읽고 코드를 봐요."),
       sections: getXorStringSections(E),
     },
   ];

@@ -4,97 +4,89 @@ import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeSteppe
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
+const KA = { wordBreak: "keep-all" };
+const NW = { whiteSpace: "nowrap" };
 
 /* ============================================================
-   PalSim — drag K (base) and N (rank). Watch palindromes
-   enumerate length-by-length: count per length L equals
-   (K−1)·K^(⌈L/2⌉−1). When the running total covers N, that
-   length holds the answer; decode the front half digits in
-   base K, mirror, and print the full palindrome.
+   PalSim — drag K (digit count) and N (rank). Watch palindrome
+   STRINGS line up by length first, then alphabetically. Leading
+   zeros are allowed, so "0","00","010" are all valid. Each
+   length L holds k^⌈L/2⌉ strings: choose the front ⌈L/2⌉ digits
+   freely, then mirror. This is STRING order, not numeric value.
    ============================================================ */
-function _baseKDigits(val, k) {
-  if (val === 0) return [0];
-  const out = [];
-  let v = val;
-  while (v > 0) { out.push(v % k); v = Math.floor(v / k); }
-  return out.reverse();
-}
+function _ceilHalf(l) { return Math.floor((l + 1) / 2); }   // ceil(l/2)
 
-function _nthPalindromeBaseK(k, n) {
-  // 1..k-1 single digits
-  if (n <= k - 1) return _baseKDigits(n, k);
-  let m = n - (k - 1);
-  let length = 2;
-  while (true) {
-    const half = Math.floor((length + 1) / 2);
-    const count = (k - 1) * Math.pow(k, half - 1);
-    if (m <= count) {
-      m -= 1;
-      const digits = [];
-      for (let i = 0; i < half; i++) {
-        let d;
-        if (i === 0) d = Math.floor(m / Math.pow(k, half - 1)) + 1;
-        else d = Math.floor(m / Math.pow(k, half - 1 - i)) % k;
-        digits.push(d);
-      }
-      const tail = digits.slice(0, Math.floor(length / 2)).reverse();
-      return digits.concat(tail);
-    }
-    m -= count;
-    length += 1;
-  }
+// The N-th (1-indexed) palindrome STRING in Book k. Mirrors the
+// verified Python solution exactly (count = k^ceil(l/2)).
+function _nthPalStr(n, k) {
+  let s = 0, c = 0;
+  while (s < n) { c += 1; s += Math.pow(k, _ceilHalf(c)); }
+  let r = n;
+  for (let i = 1; i < c; i++) r -= Math.pow(k, _ceilHalf(i));
+  r -= 1;                                   // 0-indexed within length c
+  let half = "";
+  let rr = r;
+  if (rr === 0) half = "0";
+  while (rr > 0) { half += String(rr % k); rr = Math.floor(rr / k); }
+  while (half.length * 2 < c) half += "0";  // left-pad the front half
+  half = half.split("").reverse().join("");  // most-significant first
+  const rev = (str) => str.split("").reverse().join("");
+  if (c % 2 === 0) return half + rev(half);
+  return half + rev(half.slice(0, -1));
 }
 
 function _enumerateLengths(k, n) {
-  // Build per-length info up to and including the length holding n
+  // per-length rows up to and including the length that holds n
   const rows = [];
-  // Length 1
-  const len1 = k - 1;
-  rows.push({ length: 1, half: 1, count: len1, cumulative: len1 });
-  if (n <= len1) return rows;
-  let cum = len1;
-  let length = 2;
+  let cum = 0, length = 0;
   while (true) {
-    const half = Math.floor((length + 1) / 2);
-    const count = (k - 1) * Math.pow(k, half - 1);
+    length += 1;
+    const half = _ceilHalf(length);
+    const count = Math.pow(k, half);
     cum += count;
     rows.push({ length, half, count, cumulative: cum });
     if (n <= cum) return rows;
-    length += 1;
-    if (length > 12) return rows; // safety
+    if (length > 14) return rows; // safety
   }
 }
 
 export function Mcc19PalSim({ E }) {
-  const [K, setK] = useState(3);
-  const [N, setN] = useState(8);
+  const [K, setK] = useState(2);
+  const [N, setN] = useState(6);
 
   const rows = _enumerateLengths(K, N);
   const hitRow = rows[rows.length - 1];
   const prevCum = rows.length >= 2 ? rows[rows.length - 2].cumulative : 0;
-  const localRank = N - prevCum; // 1-indexed within hit length
-  const digits = _nthPalindromeBaseK(K, N);
-  const baseKStr = digits.join("");
-  let base10 = 0;
-  for (const d of digits) base10 = base10 * K + d;
-  const halfDigits = digits.slice(0, Math.ceil(digits.length / 2));
+  const localRank = N - prevCum;                 // 1-indexed within hit length
+  const answer = _nthPalStr(N, K);
+  const half = _ceilHalf(answer.length);
+  const frontHalf = answer.slice(0, half);       // the chosen front-half digits
+
+  // ordered list of the first few palindrome strings (for the chip row)
+  const listMax = Math.min(Math.max(N + 3, 8), 44);
+  const list = [];
+  for (let i = 1; i <= listMax; i++) list.push(_nthPalStr(i, K));
 
   return (
     <div style={{ padding: 14 }}>
-      <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 12 }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", marginBottom: 10, textAlign: "center" }}>
-          {t(E, "🔄 Palindrome Counter — drag K (base) and N (rank)",
-                "🔄 회문 카운터 — K (진법) 와 N (순위) 를 움직여 봐")}
+      <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 12, ...KA }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", marginBottom: 4, textAlign: "center" }}>
+          {t(E, "🔄 Palindrome Book — drag K (digits) and N (rank)",
+                "🔄 회문 책 — K (숫자 개수) 와 N (순위) 을 움직여 봐요")}
+        </div>
+        <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 10, lineHeight: 1.5 }}>
+          {t(E, "Digits 0…K−1 · leading zeros allowed · ordered by length, then alphabetically (string order, not numeric).",
+                "숫자 0…K−1 · 앞자리 0 허용 · 길이 순, 같으면 사전 순 (문자열 순서, 숫자 값 아님).")}
         </div>
 
         {/* K and N sliders */}
         <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "0 4px" }}>
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-              <span style={{ fontSize: 12, color: C.dim }}>{t(E, "base K", "진법 K")}</span>
+              <span style={{ fontSize: 12, color: C.dim }}>{t(E, "digits K", "숫자 개수 K")}</span>
               <span style={{ fontSize: 13, fontWeight: 800, color: A, fontFamily: "'JetBrains Mono',monospace" }}>K = {K}</span>
             </div>
-            <input type="range" min={2} max={10} step={1} value={K}
+            <input type="range" min={2} max={5} step={1} value={K}
               onChange={e => setK(Number(e.target.value))}
               style={{ width: "100%", accentColor: A }} />
           </div>
@@ -103,17 +95,39 @@ export function Mcc19PalSim({ E }) {
               <span style={{ fontSize: 12, color: C.dim }}>{t(E, "rank N", "순위 N")}</span>
               <span style={{ fontSize: 13, fontWeight: 800, color: A, fontFamily: "'JetBrains Mono',monospace" }}>N = {N}</span>
             </div>
-            <input type="range" min={1} max={50} step={1} value={N}
+            <input type="range" min={1} max={40} step={1} value={N}
               onChange={e => setN(Number(e.target.value))}
               style={{ width: "100%", accentColor: A }} />
           </div>
         </div>
       </div>
 
-      {/* Per-length table — count = (K-1)*K^(half-1), cumulative builds up */}
-      <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 12, padding: 10, marginBottom: 10 }}>
+      {/* Ordered list of palindrome STRINGS — N-th highlighted */}
+      <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 12, padding: 10, marginBottom: 10, ...KA }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 6, textAlign: "center", letterSpacing: 0.5 }}>
-          {t(E, "PALINDROMES BY LENGTH", "길이별 회문 개수")}
+          {t(E, "BOOK ORDER (length → alphabetical)", "책 순서 (길이 → 사전 순)")}
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+          {list.map((s, i) => {
+            const rank = i + 1;
+            const isHit = rank === N;
+            return (
+              <span key={i} style={{ ...NW, display: "inline-flex", alignItems: "center", gap: 4,
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
+                border: isHit ? `2px solid ${A}` : "1px solid #e5e7eb",
+                background: isHit ? "#ede9fe" : "#fafafa", borderRadius: 6, padding: "2px 7px" }}>
+                <span style={{ color: C.dim, fontSize: 10 }}>{rank}.</span>
+                <b style={{ color: isHit ? A : "#5b21b6" }}>{s}</b>
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Per-length count table — count = K^⌈L/2⌉, cumulative builds up */}
+      <div style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 12, padding: 10, marginBottom: 10, ...KA }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 6, textAlign: "center", letterSpacing: 0.5 }}>
+          {t(E, "HOW MANY PER LENGTH", "길이별 개수")}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           {rows.map((r, i) => {
@@ -126,11 +140,11 @@ export function Mcc19PalSim({ E }) {
                 border: isHit ? `2px solid ${A}` : `1px solid ${C.border}`,
                 fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
               }}>
-                <span style={{ width: 70, color: C.text, fontWeight: 700 }}>
+                <span style={{ width: 62, color: C.text, fontWeight: 700 }}>
                   L = {r.length}
                 </span>
                 <span style={{ flex: 1, color: C.dim }}>
-                  (K−1)·K^({r.half}−1) = <b style={{ color: isHit ? A : C.text }}>{r.count}</b>
+                  K^⌈{r.length}/2⌉ = K^{r.half} = <b style={{ color: isHit ? A : C.text }}>{r.count}</b>
                 </span>
                 <span style={{ color: isHit ? A : C.dim, fontWeight: isHit ? 800 : 500 }}>
                   Σ = {r.cumulative}
@@ -144,7 +158,7 @@ export function Mcc19PalSim({ E }) {
       {/* Live answer card */}
       <div style={{
         background: "#ede9fe", border: `2px solid ${A}`,
-        borderRadius: 12, padding: "10px 14px",
+        borderRadius: 12, padding: "10px 14px", ...KA,
       }}>
         <div style={{ fontSize: 12, color: "#5b21b6", marginBottom: 6 }}>
           <b>N = {N}</b>{" · "}
@@ -155,108 +169,116 @@ export function Mcc19PalSim({ E }) {
           <b style={{ color: A }}>{localRank}</b>
         </div>
         <div style={{ fontSize: 12, color: "#5b21b6", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
-          {t(E, "front half digits (base K): ", "앞 절반 자릿수 (K 진법): ")}
-          <b style={{ color: A }}>[{halfDigits.join(", ")}]</b>
+          {t(E, "front half (choose freely): ", "앞 절반 (자유롭게 고름): ")}
+          <b style={{ color: A }}>{frontHalf}</b>
+          {t(E, "  →  mirror  →  ", "  →  거울 대칭  →  ")}
+          <b style={{ color: A }}>{answer}</b>
         </div>
-        <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", fontFamily: "'JetBrains Mono',monospace", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
-          <span>{t(E, "answer (base K):", "정답 (K 진법):")} <span style={{ fontSize: 18, color: A }}>{baseKStr}</span></span>
-          <span style={{ color: C.dim, fontWeight: 600 }}>{t(E, "= ", "= ")}{base10}<span style={{ fontSize: 11 }}>{t(E, " (base 10)", " (10진법)")}</span></span>
+        <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", fontFamily: "'JetBrains Mono',monospace" }}>
+          {t(E, "answer: ", "정답: ")}<span style={{ fontSize: 18, color: A }}>&quot;{answer}&quot;</span>
         </div>
       </div>
 
-      <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
+      <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.5, ...KA }}>
         {t(E,
-          "Subtract counts length-by-length until N fits → decode the front half in base K → mirror to get the full palindrome.",
-          "길이별 개수를 빼가며 N 이 들어가는 길이를 찾고 → 앞 절반을 K 진법으로 디코드 → 거울 대칭으로 회문 완성.")}
+          "Subtract counts length-by-length until N fits → write the local rank in base K as the front half → mirror it to get the palindrome string.",
+          "길이별 개수를 빼가며 N 이 들어가는 길이를 찾고 → 그 안 순위를 K 진법으로 적어 앞 절반을 만들고 → 거울 대칭으로 회문 문자열을 완성해요.")}
       </div>
     </div>
   );
 }
 
 const FULL_PY = [
+  "import math",
+  "",
+  "def nth_palindrome(n, k):",
+  "    # count of length-l palindromes = k ** ceil(l/2)",
+  "    # walk lengths, adding counts, until we reach n",
+  "    s, c = 0, 0",
+  "    while s < n:",
+  "        c += 1",
+  "        s += k ** math.ceil(c / 2)",
+  "",
+  "    # find the 0-indexed rank r inside length c",
+  "    r = n",
+  "    for i in range(1, c):",
+  "        r -= k ** math.ceil(i / 2)",
+  "    r -= 1",
+  "",
+  "    # write r in base k -> the front half (least digit first)",
+  "    half = ''",
+  "    rr = r",
+  "    if rr == 0:",
+  "        half = '0'",
+  "    while rr > 0:",
+  "        half += str(rr % k); rr //= k",
+  "",
+  "    # left-pad to ceil(c/2) digits, then most-significant first",
+  "    while len(half) * 2 < c:",
+  "        half += '0'",
+  "    half = half[::-1]",
+  "",
+  "    # mirror the front half to build the palindrome string",
+  "    if c % 2 == 0:",
+  "        return half + half[::-1]",
+  "    else:",
+  "        return half + half[-2::-1]",
+  "",
   "K, N = map(int, input().split())",
-  "",
-  "def get_nth_palindrome(k, n):",
-  "    # Generate palindromes in base k in order",
-  "    # Single digit palindromes: 1..k-1 (n=1..k-1)",
-  "    if n <= k - 1:",
-  "        return n",
-  "    ",
-  "    # For longer palindromes, enumerate by length",
-  "    n -= (k - 1)  # skip single digits",
-  "    length = 2",
-  "    while True:",
-  "        half = (length + 1) // 2",
-  "        # First digit: 1..k-1, rest: 0..k-1",
-  "        count = (k - 1) * (k ** (half - 1))",
-  "        if n <= count:",
-  "            # Build the n-th palindrome of this length",
-  "            n -= 1  # 0-indexed",
-  "            digits = []",
-  "            for i in range(half):",
-  "                if i == 0:",
-  "                    d = n // (k ** (half - 1)) + 1",
-  "                else:",
-  "                    d = (n // (k ** (half - 1 - i))) % k",
-  "                digits.append(d)",
-  "            # Mirror to form full palindrome",
-  "            full = digits + digits[:(length // 2)][::-1]",
-  "            # Convert to base 10",
-  "            val = 0",
-  "            for d in full:",
-  "                val = val * k + d",
-  "            return val",
-  "        n -= count",
-  "        length += 1",
-  "",
-  "print(get_nth_palindrome(K, N))",
+  "print(nth_palindrome(N, K))",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
-  "#include <vector>",
   "#include <string>",
   "#include <algorithm>",
   "using namespace std;",
   "",
+  "long long ipow(long long base, int exp) {",
+  "    long long r = 1;",
+  "    for (int i = 0; i < exp; i++) r *= base;",
+  "    return r;",
+  "}",
+  "",
   "int main() {",
-  "    int K, N; cin >> K >> N;",
+  "    long long K, N;",
+  "    cin >> K >> N;",
   "",
-  "    auto get_nth_palindrome = [&](k, n) {   // TODO: type args",
-  "        // Generate palindromes in base k in order",
-  "        // Single digit palindromes: 1..k-1 (n=1..k-1)",
-  "        if (n <= k - 1) {",
-  "            return n;",
+  "    // count of length-l palindromes = K^ceil(l/2)",
+  "    // walk lengths, adding counts, until we reach N",
+  "    long long s = 0;",
+  "    int c = 0;",
+  "    while (s < N) {",
+  "        c++;",
+  "        s += ipow(K, (c + 1) / 2);   // (c+1)/2 = ceil(c/2)",
+  "    }",
   "",
-  "        // For longer palindromes, enumerate by length",
-  "        n -= (k - 1)  # skip single digits;",
-  "        auto length = 2;",
-  "        while (True) {",
-  "            auto half = (length + 1) // 2;",
-  "            // First digit: 1..k-1, rest: 0..k-1",
-  "            auto count = (k - 1) * (k ** (half - 1));",
-  "            if (n <= count) {",
-  "                // Build the n-th palindrome of this length",
-  "                n -= 1  # 0-indexed;",
-  "                auto digits = [];",
-  "                for (int i = 0; i < half; i++) {",
-  "                    if (i == 0) {",
-  "                        auto d = n // (k ** (half - 1)) + 1;",
-  "                    else {",
-  "                        auto d = (n // (k ** (half - 1 - i))) % k;",
-  "                    // digits.append(d)",
-  "                // Mirror to form full palindrome",
-  "                auto full = digits + digits[:(length // 2)][::-1];",
-  "                // Convert to base 10",
-  "                auto val = 0;",
-  "                // for d in full:",
-  "                    auto val = val * k + d;",
-  "                return val;",
-  "            n -= count;",
-  "            length += 1;",
+  "    // find the 0-indexed rank r inside length c",
+  "    long long r = N;",
+  "    for (int i = 1; i < c; i++) r -= ipow(K, (i + 1) / 2);",
+  "    r -= 1;",
   "",
-  "    cout << get_nth_palindrome(K, N) << \"\\n\";",
+  "    // write r in base K -> the front half (least digit first)",
+  "    string half = \"\";",
+  "    long long rr = r;",
+  "    if (rr == 0) half = \"0\";",
+  "    while (rr > 0) { half += char('0' + rr % K); rr /= K; }",
   "",
+  "    // left-pad to ceil(c/2) digits, then most-significant first",
+  "    while ((int)half.size() * 2 < c) half += '0';",
+  "    reverse(half.begin(), half.end());",
+  "",
+  "    // mirror the front half to build the palindrome string",
+  "    string ans;",
+  "    if (c % 2 == 0) {",
+  "        string rev = half; reverse(rev.begin(), rev.end());",
+  "        ans = half + rev;",
+  "    } else {",
+  "        string rev = half.substr(0, half.size() - 1);",
+  "        reverse(rev.begin(), rev.end());",
+  "        ans = half + rev;",
+  "    }",
+  "    cout << ans << \"\\n\";",
   "    return 0;",
   "}",
 ];
@@ -268,20 +290,22 @@ export function getMcc19PalSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+        t(E, "Length L holds exactly K^⌈L/2⌉ palindromes — the front ⌈L/2⌉ digits are chosen freely, and the rest is their mirror. Add these counts length by length until you pass N; that tells you the answer's length c.",
+            "길이 L 은 정확히 K^⌈L/2⌉ 개예요 — 앞 ⌈L/2⌉ 자리는 자유롭게 고르고, 나머지는 그 거울이에요. 이 개수를 길이별로 더해 N 을 넘기면, 그게 답의 길이 c 예요."),
+        t(E, "Within length c, the 0-indexed rank r written in base K IS the front half. Left-pad it to ⌈c/2⌉ digits, then mirror to get the answer string — no need to list every palindrome.",
+            "길이 c 안에서, 0-인덱스 순위 r 을 K 진법으로 적으면 그게 바로 앞 절반이에요. ⌈c/2⌉ 자리로 앞을 0 채운 뒤 거울 대칭하면 정답 문자열 — 모든 회문을 나열할 필요가 없어요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "half[::-1] reverses the front half; half[-2::-1] mirrors it while skipping the shared middle digit (for odd lengths).",
+            "half[::-1] 는 앞 절반을 뒤집고, half[-2::-1] 는 홀수 길이일 때 가운데 공유 자리를 빼고 거울 대칭해요."),
+        t(E, "Leading zeros are kept because we build a STRING, not a number — '000' stays '000'.",
+            "숫자가 아니라 문자열을 만들기 때문에 앞자리 0 이 유지돼요 — '000' 은 그대로 '000'."),
       ],
       cppOnly: [
-        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
-        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+        t(E, "char('0' + digit) turns a digit 0…9 into its character; K ≤ 10 keeps every digit a single character.",
+            "char('0' + 숫자) 로 0…9 숫자를 문자로 바꿔요; K ≤ 10 이라 모든 자리가 한 글자예요."),
+        t(E, "reverse(half.begin(), half.end()) mirrors the front half in place — the same trick as Python's slicing.",
+            "reverse(half.begin(), half.end()) 로 앞 절반을 그 자리에서 뒤집어요 — 파이썬 슬라이싱과 같은 방법."),
       ],
     },
   ];

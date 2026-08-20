@@ -4,50 +4,108 @@ import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeSteppe
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+const KA = { wordBreak: "keep-all" };
+const NW = { whiteSpace: "nowrap" };
 
 /* ═══════════════════════════════════════════════════════════════
-   SubseqMedianSim — pick elements from A to build a subsequence,
-   and watch whether it's "good" (strictly increasing + odd length)
-   and what its median is. Live-updating.
+   SubseqMedianSim — "median center" explorer.
+   Pick a position i as the median center v = A[i].  We highlight the
+   strictly-increasing choices smaller than v BEFORE it and larger than
+   v AFTER it.  Pairing k picks on each side makes a good (odd-length,
+   strictly-increasing) subsequence of length 2k+1 with v in the middle.
+   The panel counts L_k · R_k for every k and shows each center's
+   contribution v·Σ_k L_k·R_k — the pieces add up to the answer.
    ═══════════════════════════════════════════════════════════════ */
+
+// count[k] = number of strictly-increasing subsequences of length k
+// that can be formed from the given value list (order preserved).
+// count[0] = 1 (the empty pick).
+function incrCountsByLen(vals) {
+  const n = vals.length;
+  // dp[i][L] = # strictly-increasing subseqs of length L ending at i
+  const dp = vals.map(() => [0]); // dp[i][1..]
+  for (let i = 0; i < n; i++) {
+    dp[i][1] = 1;
+    for (let j = 0; j < i; j++) {
+      if (vals[j] < vals[i]) {
+        for (let L = 1; L < dp[j].length; L++) {
+          dp[i][L + 1] = (dp[i][L + 1] || 0) + (dp[j][L] || 0);
+        }
+      }
+    }
+  }
+  const counts = [1]; // length 0
+  for (let i = 0; i < n; i++) {
+    for (let L = 1; L < dp[i].length; L++) {
+      counts[L] = (counts[L] || 0) + (dp[i][L] || 0);
+    }
+  }
+  return counts; // counts[k] for k = 0,1,2,...
+}
+
+// contribution of choosing index i as the median center
+function centerContribution(arr, i) {
+  const v = arr[i];
+  const leftVals = [];
+  for (let j = 0; j < i; j++) if (arr[j] < v) leftVals.push(arr[j]);
+  const rightVals = [];
+  for (let j = i + 1; j < arr.length; j++) if (arr[j] > v) rightVals.push(arr[j]);
+  const L = incrCountsByLen(leftVals);
+  const R = incrCountsByLen(rightVals);
+  const maxK = Math.min(L.length, R.length);
+  const perK = [];
+  let total = 0;
+  for (let k = 0; k < maxK; k++) {
+    const lk = L[k] || 0, rk = R[k] || 0;
+    perK.push({ k, lk, rk, prod: lk * rk });
+    total += lk * rk;
+  }
+  return { v, total, perK, contribution: v * total };
+}
+
 const _SSM_PRESETS = [
   { name: "[1,2,4,3]", arr: [1, 2, 4, 3] },
-  { name: "[1,2,3]",   arr: [1, 2, 3] },
+  { name: "[1,2,3]", arr: [1, 2, 3] },
   { name: "[3,1,4,1,5]", arr: [3, 1, 4, 1, 5] },
 ];
 
 export function SubseqMedianSim({ E }) {
   const [pi, setPi] = useState(0);
-  const [picked, setPicked] = useState([]); // indices into arr (in click order)
+  const [center, setCenter] = useState(1); // selected center index
   const arr = _SSM_PRESETS[pi].arr;
+  const ci = Math.min(center, arr.length - 1);
+  const v = arr[ci];
 
-  const reset = () => setPicked([]);
-  const togglePick = (i) => {
-    setPicked((prev) => {
-      if (prev.includes(i)) return prev.filter((x) => x !== i);
-      // insert at the right index-position (preserve original order)
-      const next = [...prev, i].sort((a, b) => a - b);
-      return next;
-    });
+  // classify each cell relative to the center
+  const kind = (j) => {
+    if (j === ci) return "center";
+    if (j < ci) return arr[j] < v ? "leftPick" : "leftSkip";
+    return arr[j] > v ? "rightPick" : "rightSkip";
   };
 
-  // The picked indices are kept sorted by index — which gives the
-  // subsequence in original order. Now check the "good" criteria.
-  const sub = picked.map((i) => arr[i]);
-  const len = sub.length;
-  const oddLen = len > 0 && len % 2 === 1;
-  let strictInc = true;
-  for (let k = 1; k < len; k++) {
-    if (sub[k] <= sub[k - 1]) { strictInc = false; break; }
-  }
-  const good = oddLen && strictInc;
-  const median = good ? sub[(len - 1) / 2] : null;
+  // full table: every center's contribution (builds toward the answer)
+  const rows = arr.map((_, i) => ({ i, ...centerContribution(arr, i) }));
+  const grand = rows.reduce((s, r) => s + r.contribution, 0);
+  const here = rows[ci];
+
+  const cellStyle = (k) => {
+    const base = {
+      width: 40, height: 40, borderRadius: 8, cursor: "pointer",
+      fontSize: 16, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+      transition: "all 120ms", border: "2px solid",
+    };
+    if (k === "center") return { ...base, borderColor: A, background: A, color: "#fff" };
+    if (k === "leftPick") return { ...base, borderColor: "#059669", background: "#d1fae5", color: "#065f46" };
+    if (k === "rightPick") return { ...base, borderColor: "#7c3aed", background: "#ede9fe", color: "#5b21b6" };
+    return { ...base, borderColor: C.border, background: "#fff", color: "#9ca3af" };
+  };
 
   return (
-    <div style={{ padding: 14 }}>
+    <div style={{ padding: 14, ...KA }}>
+      {/* preset picker */}
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
         {_SSM_PRESETS.map((p, i) => (
-          <button key={i} onClick={() => { setPi(i); setPicked([]); }} style={{
+          <button key={i} onClick={() => { setPi(i); setCenter(0); }} style={{
             padding: "4px 10px", borderRadius: 8, border: `1px solid ${i === pi ? A : C.border}`,
             background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
             fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
@@ -55,170 +113,225 @@ export function SubseqMedianSim({ E }) {
         ))}
       </div>
 
-      <div style={{ fontSize: 11, color: C.dim, textAlign: "center", marginBottom: 8 }}>
-        {t(E, "Click cells to add/remove from the subsequence (kept in original order).",
-             "칸을 눌러서 부분수열에 넣었다 뺐다 해봐 (원래 순서 그대로 유지돼).")}
+      <div style={{ fontSize: 11.5, color: C.dim, textAlign: "center", marginBottom: 8, ...KA }}>
+        {t(E, "Click a cell to make it the median center. Then look at what's around it.",
+             "칸을 눌러 가운데(중앙값)로 삼아봐요. 그 다음 양옆을 살펴봐요.")}
       </div>
 
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
-        {arr.map((v, i) => {
-          const on = picked.includes(i);
-          return (
-            <button key={i} onClick={() => togglePick(i)} style={{
-              width: 44, height: 44, borderRadius: 8,
-              border: `2px solid ${on ? A : C.border}`,
-              background: on ? A : "#fff",
-              color: on ? "#fff" : C.text,
-              fontSize: 16, fontWeight: 800, cursor: "pointer",
-              fontFamily: "'JetBrains Mono',monospace",
-              transition: "all 120ms",
-            }}>{v}</button>
-          );
-        })}
+      {/* the array */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 6, flexWrap: "wrap" }}>
+        {arr.map((val, j) => (
+          <button key={j} onClick={() => setCenter(j)} style={cellStyle(kind(j))}>{val}</button>
+        ))}
       </div>
 
-      <div style={{ background: "#f0fdf4", border: `1.5px solid #86efac`, borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.8 }}>
-        <div>
-          {t(E, "subsequence", "부분수열")} = [{sub.join(", ")}]
-          &nbsp;·&nbsp;{t(E, "length", "길이")} = {len}
+      {/* legend */}
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", fontSize: 11, marginBottom: 12 }}>
+        <span style={{ ...NW, color: "#065f46" }}>🟩 {t(E, "smaller · before", "작은 값 · 왼쪽")}</span>
+        <span style={{ ...NW, color: A, fontWeight: 700 }}>⬛ {t(E, "center (median)", "가운데 (중앙값)")}</span>
+        <span style={{ ...NW, color: "#5b21b6" }}>🟪 {t(E, "larger · after", "큰 값 · 오른쪽")}</span>
+      </div>
+
+      {/* the pairing story for THIS center */}
+      <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12.5, color: C.text, lineHeight: 1.7, ...KA }}>
+        <div style={{ marginBottom: 6 }}>
+          {t(E, "Center", "가운데")} <b style={{ color: A, fontFamily: "'JetBrains Mono',monospace" }}>v = {v}</b>.{" "}
+          {t(E,
+            "To make v the median, pick the SAME number k of increasing values on each side — k smaller-and-before, k larger-and-after. That's a good subsequence of length 2k+1 with v in the middle.",
+            "v 를 중앙값으로 만들려면 양쪽에서 같은 개수 k 만큼 증가하는 값을 골라요 — 왼쪽 작은 값 k 개, 오른쪽 큰 값 k 개. 그러면 길이 2k+1 의 좋은 부분수열, 가운데가 v 예요.")}
         </div>
-        <div>
-          {t(E, "odd length?", "홀수 길이?")} {oddLen ? "✅" : "❌"}
-          &nbsp;·&nbsp;
-          {t(E, "strictly increasing?", "엄격히 증가?")} {len <= 1 ? "—" : (strictInc ? "✅" : "❌")}
-        </div>
-        <div>
-          {good ? (
-            <b style={{ color: A }}>
-              {t(E, "GOOD ✓ median = ", "좋은 부분수열 ✓ 중앙값 = ")}{median}
-            </b>
-          ) : (
-            <span style={{ color: "#9ca3af" }}>
-              {len === 0
-                ? t(E, "(pick some cells)", "(칸을 골라봐)")
-                : t(E, "(not a good subsequence)", "(좋은 부분수열이 아니야)")}
-            </span>
-          )}
+        {/* per-k table: L_k · R_k */}
+        <div style={{ background: "#fff", borderRadius: 8, padding: "6px 8px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+          {here.perK.map((row) => (
+            <div key={row.k} style={{ display: "flex", justifyContent: "space-between", padding: "2px 0", color: row.prod > 0 ? C.text : "#9ca3af" }}>
+              <span>k={row.k}: {t(E, "len", "길이")} {2 * row.k + 1}</span>
+              <span>L<sub>{row.k}</sub>·R<sub>{row.k}</sub> = {row.lk}·{row.rk} = <b style={{ color: row.prod > 0 ? A : "#9ca3af" }}>{row.prod}</b></span>
+            </div>
+          ))}
+          <div style={{ borderTop: "1px dashed #86efac", marginTop: 4, paddingTop: 4, display: "flex", justifyContent: "space-between", fontWeight: 800 }}>
+            <span>{t(E, "contribution", "기여")} = v · Σ</span>
+            <span style={{ color: A }}>{v} · {here.total} = {here.contribution}</span>
+          </div>
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <button onClick={reset} style={{
-          background: "#fff", border: `1px solid ${A}`, borderRadius: 8,
-          padding: "5px 14px", fontSize: 12, fontWeight: 700, color: A, cursor: "pointer",
-        }}>{t(E, "↺ reset", "↺ 초기화")}</button>
+      {/* ledger: all centers add up to the answer */}
+      <div style={{ background: "#0f172a", color: "#f8fafc", borderRadius: 10, padding: "10px 12px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.7, ...KA }}>
+        <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 4 }}>
+          {t(E, "every position as a center, added up", "모든 위치를 가운데로 삼아 더하면")}
+        </div>
+        {rows.map((r) => (
+          <div key={r.i} style={{ display: "flex", justifyContent: "space-between", color: r.i === ci ? "#6ee7b7" : "#cbd5e1", fontWeight: r.i === ci ? 800 : 400 }}>
+            <span>{t(E, "center", "가운데")} A[{r.i}]={r.v}</span>
+            <span>{r.v} · {r.total} = {r.contribution}</span>
+          </div>
+        ))}
+        <div style={{ borderTop: "1px solid #334155", marginTop: 6, paddingTop: 6, display: "flex", justifyContent: "space-between", fontWeight: 800 }}>
+          <span style={{ color: "#fbbf24" }}>{t(E, "SUM", "합")}</span>
+          <span style={{ color: "#34d399" }}>{grand}</span>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", ...KA }}>
+        {t(E,
+          "For [1,2,4,3] the pieces are 1 + 6 + 4 + 3 = 14 — the answer.",
+          "[1,2,4,3] 이면 조각들이 1 + 6 + 4 + 3 = 14 — 바로 답이에요.")}
       </div>
     </div>
   );
 }
 
+/* ================================================================
+   SOLUTION CODE  (correct, but only fast enough for small inputs)
+   For A[i]=v to be the median of a good subseq of length 2k+1, we need
+   k strictly-increasing elements < v before i, AND k strictly-increasing
+   elements > v after i.  Contribution = v · Σ_k L_k(i)·R_k(i).
+   L_k, R_k are built level-by-level with a Fenwick tree over compressed
+   values.  Worst case O(N^2 log N) — passes small subtasks, TLEs at N=8000.
+   ================================================================ */
 const FULL_PY = [
   "import sys",
-  "input = sys.stdin.readline",
+  "def main():",
+  "    MOD = 998244353",
+  "    data = sys.stdin.buffer.read().split()",
+  "    n = int(data[0])",
+  "    A = [int(x) for x in data[1:1+n]]",
   "",
-  "MOD = 998244353",
-  "N = int(input())",
-  "A = list(map(int, input().split()))",
+  "    # compress values to ranks 1..m (A_i up to 1e9)",
+  "    vals = sorted(set(A))",
+  "    rank = {v: i + 1 for i, v in enumerate(vals)}",
+  "    m = len(vals)",
   "",
-  "# Sort indices by value for easier DP",
-  "# For each element A[i], count good subsequences",
-  "# where A[i] is the median.",
-  "# A good subseq is strictly increasing, odd length.",
-  "# Median = middle element of sorted subseq.",
+  "    # Fenwick (BIT) over compressed values",
+  "    def upd(bit, pos, val):",
+  "        while pos <= m:",
+  "            bit[pos] = (bit[pos] + val) % MOD",
+  "            pos += pos & (-pos)",
+  "    def qry(bit, pos):",
+  "        s = 0",
+  "        while pos > 0:",
+  "            s = (s + bit[pos]) % MOD",
+  "            pos -= pos & (-pos)",
+  "        return s",
   "",
-  "# Key idea: for element v = A[i],",
-  "#   count pairs (L, R) where",
-  "#   L = # elements < v chosen on the left,",
-  "#   R = # elements > v chosen on the right,",
-  "#   and L == R (so v is the median).",
+  "    # level 0: every element is its own length-1 subseq",
+  "    Lprev = [1] * n   # L_k[i] = # incr subseqs of length k",
+  "    Rprev = [1] * n   #          < A[i] before i (L) / > after (R)",
+  "    contrib = [(Lprev[i] * Rprev[i]) % MOD for i in range(n)]",
   "",
-  "# dp_left[i] = list where dp_left[i][k] = number of",
-  "#   strictly increasing subsequences of length k",
-  "#   ending before position i with all values < A[i]",
+  "    k = 1",
+  "    while True:",
+  "        # L_k: extend left chains by one, smaller value, earlier index",
+  "        bit = [0] * (m + 1); Lk = [0] * n",
+  "        for i in range(n):",
+  "            r = rank[A[i]]",
+  "            Lk[i] = qry(bit, r - 1)      # sum of L_{k-1} over < A[i]",
+  "            upd(bit, r, Lprev[i])",
+  "        # R_k: same idea from the right, larger value, later index",
+  "        bit2 = [0] * (m + 1); Rk = [0] * n",
+  "        for i in range(n - 1, -1, -1):",
+  "            r = rank[A[i]]",
+  "            tot = qry(bit2, m)",
+  "            Rk[i] = (tot - qry(bit2, r)) % MOD   # sum over > A[i]",
+  "            upd(bit2, r, Rprev[i])",
+  "        if not any(Lk) and not any(Rk):",
+  "            break",
+  "        for i in range(n):",
+  "            contrib[i] = (contrib[i] + Lk[i] * Rk[i]) % MOD",
+  "        Lprev, Rprev = Lk, Rk",
+  "        k += 1",
+  "        if k > n + 2:",
+  "            break",
   "",
-  "ans = 0",
+  "    print(sum(A[i] * contrib[i] for i in range(n)) % MOD)",
   "",
-  "for i in range(N):",
-  "    v = A[i]",
-  "    # Count increasing subseqs of length k",
-  "    # from elements < v to the left",
-  "    left = []  # left[k] = count of length-k inc subseqs",
-  "    for j in range(i):",
-  "        if A[j] < v:",
-  "            # extend existing subsequences",
-  "            new_left = [0] * (len(left) + 1)",
-  "            new_left[0] = 1  # empty subseq",
-  "            for k in range(len(left)):",
-  "                new_left[k] = (new_left[k] + left[k]) % MOD",
-  "                new_left[k+1] = (new_left[k+1] + left[k]) % MOD",
-  "            left = new_left",
-  "        # (skip elements >= v)",
-  "    if not left:",
-  "        left = [1]  # just the empty subsequence",
-  "",
-  "    # Similarly count on the right",
-  "    right = []",
-  "    for j in range(N - 1, i, -1):",
-  "        if A[j] > v:",
-  "            new_right = [0] * (len(right) + 1)",
-  "            new_right[0] = 1",
-  "            for k in range(len(right)):",
-  "                new_right[k] = (new_right[k] + right[k]) % MOD",
-  "                new_right[k+1] = (new_right[k+1] + right[k]) % MOD",
-  "            right = new_right",
-  "    if not right:",
-  "        right = [1]",
-  "",
-  "    # Match: sum over k where left has k and right has k",
-  "    max_k = min(len(left), len(right))",
-  "    contrib = 0",
-  "    for k in range(max_k):",
-  "        contrib = (contrib + left[k] * right[k]) % MOD",
-  "",
-  "    ans = (ans + v * contrib) % MOD",
-  "",
-  "print(ans)",
+  "main()",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
   "#include <vector>",
+  "#include <algorithm>",
   "using namespace std;",
+  "const long long MOD = 998244353;",
+  "int n, m;",
+  "",
+  "void upd(vector<long long>& b, int pos, long long val) {",
+  "    for (; pos <= m; pos += pos & (-pos)) b[pos] = (b[pos] + val) % MOD;",
+  "}",
+  "long long qry(vector<long long>& b, int pos) {",
+  "    long long s = 0;",
+  "    for (; pos > 0; pos -= pos & (-pos)) s = (s + b[pos]) % MOD;",
+  "    return s;",
+  "}",
   "",
   "int main() {",
-  "    const long long MOD = 998244353;",
-  "    int N; cin >> N;",
-  "    vector<long long> A(N);",
+  "    cin >> n;",
+  "    vector<long long> A(n);",
   "    for (auto& x : A) cin >> x;",
-  "    // Bronze brute: count odd-length increasing subseqs by median",
-  "    // (Full solution requires DP with binomial coefficients)",
+  "    // compress values to ranks 1..m",
+  "    vector<long long> sv(A.begin(), A.end());",
+  "    sort(sv.begin(), sv.end());",
+  "    sv.erase(unique(sv.begin(), sv.end()), sv.end());",
+  "    m = sv.size();",
+  "    vector<int> rk(n);",
+  "    for (int i = 0; i < n; i++)",
+  "        rk[i] = lower_bound(sv.begin(), sv.end(), A[i]) - sv.begin() + 1;",
+  "",
+  "    vector<long long> Lprev(n, 1), Rprev(n, 1), contrib(n);",
+  "    for (int i = 0; i < n; i++) contrib[i] = (Lprev[i] * Rprev[i]) % MOD;",
+  "",
+  "    for (int k = 1; ; k++) {",
+  "        vector<long long> b(m + 1, 0), Lk(n, 0);",
+  "        for (int i = 0; i < n; i++) {",
+  "            Lk[i] = qry(b, rk[i] - 1);",
+  "            upd(b, rk[i], Lprev[i]);",
+  "        }",
+  "        vector<long long> b2(m + 1, 0), Rk(n, 0);",
+  "        for (int i = n - 1; i >= 0; i--) {",
+  "            long long tot = qry(b2, m);",
+  "            Rk[i] = ((tot - qry(b2, rk[i])) % MOD + MOD) % MOD;",
+  "            upd(b2, rk[i], Rprev[i]);",
+  "        }",
+  "        bool any = false;",
+  "        for (int i = 0; i < n; i++) if (Lk[i] || Rk[i]) { any = true; break; }",
+  "        if (!any || k > n + 2) break;",
+  "        for (int i = 0; i < n; i++) contrib[i] = (contrib[i] + Lk[i] * Rk[i]) % MOD;",
+  "        Lprev = Lk; Rprev = Rk;",
+  "    }",
+  "",
   "    long long ans = 0;",
-  "    cout << ans << \"\\n\";   // placeholder",
+  "    for (int i = 0; i < n; i++) ans = (ans + (A[i] % MOD) * contrib[i]) % MOD;",
+  "    cout << ans << \"\\n\";",
   "    return 0;",
   "}",
 ];
 
+export const SOLUTION_CODE = FULL_PY;
+
 export function getSubseqMedianSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "🎯 Solution Code (small inputs)", "🎯 풀이 코드 (작은 입력용)"),
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+        t(E, "For each element v = A[i], count k strictly-increasing values < v BEFORE it and k > v AFTER it. Pair them up → v is the median of a length-(2k+1) good subsequence. So v's contribution is v · Σ_k L_k·R_k.",
+            "각 원소 v = A[i] 마다, 앞쪽에서 v 보다 작은 증가값 k 개, 뒤쪽에서 v 보다 큰 증가값 k 개를 세요. 짝지으면 v 가 길이 2k+1 좋은 부분수열의 중앙값이에요. 그래서 v 의 기여 = v · Σ_k L_k·R_k."),
+        t(E, "L_k and R_k are built level by level: a Fenwick tree adds up the previous level's counts over 'smaller-and-earlier' (for L) or 'larger-and-later' (for R). Level 0 = every element on its own.",
+            "L_k, R_k 는 레벨별로 쌓아요: 펜윅 트리로 이전 레벨 값을 '작고-앞선'(L) 또는 '크고-뒤선'(R) 범위에서 합해요. 레벨 0 = 원소 각각 하나씩."),
+        t(E, "⚠️ Honest note: this is CORRECT, but worst case is O(N² log N) — it comfortably passes the small subtasks (N up to a few hundred), yet TIMES OUT at the full N = 8000. The full-constraints solution needs CDQ divide-and-conquer + NTT, which is beyond this quest. Here we learn the correct idea and a correct implementation for small inputs.",
+            "⚠️ 솔직히 말하면: 이 코드는 정답이 맞지만 최악의 경우 O(N² log N) 이에요 — 작은 서브태스크(N 수백 정도)는 넉넉히 통과하지만, 전체 N = 8000 에서는 시간 초과예요. 전체 제약 만점 풀이는 CDQ 분할정복 + NTT 가 필요한데, 이 퀘스트 범위 밖이에요. 여기서는 올바른 아이디어와 작은 입력용 올바른 구현을 배워요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "sys.stdin.buffer.read().split() reads all input at once — much faster than line-by-line for big arrays.",
+            "sys.stdin.buffer.read().split() 로 입력을 한 번에 읽어요 — 큰 배열에서 줄단위보다 훨씬 빨라요."),
       ],
       cppOnly: [
-        t(E, "Use specific includes (<iostream>, <vector>, ...) — keeps code clear.",
-            "필요한 헤더만 (<iostream>, <vector>, ...) — 코드 의도가 명확해져."),
-        t(E, "Use long long when sums or products may exceed ~2×10^9.",
-            "합/곱이 약 2×10^9를 넘을 수 있으면 long long 사용."),
+        t(E, "Coordinate-compress with sort + unique + lower_bound so the Fenwick tree is sized by distinct values, not 1e9.",
+            "sort + unique + lower_bound 로 좌표압축해서 펜윅 트리를 값 1e9 이 아닌 '서로 다른 값 수' 만큼만 잡아요."),
+        t(E, "Keep counts in long long and take % MOD after every add/multiply.",
+            "카운트는 long long 으로, 더하고 곱할 때마다 % MOD 를 취해요."),
       ],
     },
   ];
@@ -229,8 +342,8 @@ export function SubseqMedianProgressiveCode(props) {
 }
 
 
-const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
-const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
+const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs","any"];
+const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set","unique","lower_bound"];
 function highlightHTML(line, lang) {
   const escHTML = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const keywords = lang === "py" ? PY_KEYWORDS : CPP_KEYWORDS;
@@ -289,7 +402,7 @@ export function downloadSubseqMedianPDF(E, sections, lang = "py") {
 </style></head><body>
 <div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<div class="sub">MCC · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>
@@ -301,4 +414,3 @@ ${sections.map(s => `
   win.document.close();
   setTimeout(() => { win.focus(); win.print(); }, 500);
 }
-

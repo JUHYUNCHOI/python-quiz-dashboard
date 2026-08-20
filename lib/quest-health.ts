@@ -132,12 +132,6 @@ export const QUEST_HEALTH: Record<string, QuestHealthStatus> = {
     detail: "C++ visited-set 처리 위험.",
     detailEn: "C++ has risky visited-set handling.",
   },
-  magicorbs: {
-    category: "py-cpp-mismatch",
-    severity: "critical",
-    detail: "C++ 가 distinct color 카운트, 문제와 다른 알고리즘.",
-    detailEn: "C++ counts distinct colors; wrong algorithm.",
-  },
   milkexchange: {
     category: "py-cpp-mismatch",
     severity: "critical",
@@ -223,12 +217,6 @@ export const QUEST_HEALTH: Record<string, QuestHealthStatus> = {
     severity: "critical",
     detail: "C++ 가 INFINITY 하드코딩 placeholder. Python 사용 권장.",
     detailEn: "C++ hardcodes INFINITY. Use Python.",
-  },
-  subseqmedian: {
-    category: "stub-cpp",
-    severity: "critical",
-    detail: "C++ 가 0 출력 placeholder. Python 사용 권장.",
-    detailEn: "C++ outputs 0 placeholder. Use Python.",
   },
   tameherd: {
     category: "stub-cpp",

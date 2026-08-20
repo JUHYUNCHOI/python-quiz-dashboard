@@ -1,286 +1,398 @@
+import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { getExplodingArrowSections } from "./components";
 
+const A = "#f97316";      // orange accent
+const P = "#7c3aed";      // purple secondary
+const KA = { wordBreak: "keep-all" };
+const NW = { whiteSpace: "nowrap" };
+
 /* ================================================================
-   SOLUTION CODE
+   SOLUTION CODE  (fast: binary-search X, O(N) feasibility)
    ================================================================ */
 export const SOLUTION_CODE = [
-  "N = int(input())",
-  "arrows = []",
-  "for _ in range(N):",
-  "    x, y, d = input().split()",
-  "    arrows.append((int(x), int(y), d))",
+  "import sys",
+  "from math import isqrt",
   "",
-  "# Build position map for BFS",
-  "pos_map = {}",
-  "for i, (x, y, d) in enumerate(arrows):",
-  "    pos_map[(x, y)] = i",
+  "def solve(N, M, K, a):",
+  "    # X 가 커질수록 쉬워짐 → 정답 X 를 이분 탐색",
+  "    hi = 1",
+  "    for j in range(N):",
+  "        need = (a[j] + j*j + M - 1) // M   # j 를 혼자 없앨 최소 X",
+  "        if need > hi:",
+  "            hi = need",
+  "    lo = 1",
   "",
-  "# Direction deltas: R, L, U, D",
-  "dx = {'R': 1, 'L': -1, 'U': 0, 'D': 0}",
-  "dy = {'R': 0, 'L': 0, 'U': 1, 'D': -1}",
+  "    def feasible(X):                       # 화살 K 개로 X 가 될까?",
+  "        MX = M * X",
+  "        L = isqrt(MX - 1)                  # 데미지가 닿는 최대 거리 (d*d < M*X)",
+  "        if L > N - 1:",
+  "            L = N - 1",
+  "        VAL = [0]*(N+1); D1 = [0]*(N+1); D2 = [0]*(N+1)",
+  "        val = 0; slope = 0; accel = 0; used = 0",
+  "        for x in range(N):",
+  "            if x > 0:",
+  "                val += slope; slope += accel",
+  "            val += VAL[x]; slope += D1[x]; accel += D2[x]",
+  "            deficit = a[x] - val           # 아직 남은 체력",
+  "            if deficit > 0:",
+  "                c = (deficit + MX - 1) // MX   # 여기서 쏠 화살 수",
+  "                used += c",
+  "                if used > K:",
+  "                    return False",
+  "                val += c*MX; slope += -c; accel += -2*c",
+  "                p = x + L + 1              # 이 포물선이 끝나는 위치",
+  "                if p <= N - 1:",
+  "                    VAL[p] += c*((L+1)*(L+1) - MX)",
+  "                    D1[p]  += c*(2*L + 3)",
+  "                    D2[p]  += 2*c",
+  "        return True",
   "",
-  "# BFS from arrow 0",
-  "from collections import deque",
-  "visited = [False] * N",
-  "queue = deque([0])",
-  "visited[0] = True",
-  "count = 1",
+  "    while lo < hi:                         # 이분 탐색: 가능한 가장 작은 X",
+  "        mid = (lo + hi) // 2",
+  "        if feasible(mid):",
+  "            hi = mid",
+  "        else:",
+  "            lo = mid + 1",
+  "    return lo",
   "",
-  "while queue:",
-  "    i = queue.popleft()",
-  "    x, y, d = arrows[i]",
-  "    # Follow direction until hitting another arrow",
-  "    nx, ny = x + dx[d], y + dy[d]",
-  "    while (nx, ny) not in pos_map and \\",
-  "          abs(nx) <= 1000 and abs(ny) <= 1000:",
-  "        nx += dx[d]",
-  "        ny += dy[d]",
-  "    if (nx, ny) in pos_map:",
-  "        j = pos_map[(nx, ny)]",
-  "        if not visited[j]:",
-  "            visited[j] = True",
-  "            count += 1",
-  "            queue.append(j)",
-  "",
-  "print(count)",
+  "data = sys.stdin.read().split()",
+  "N, M, K = int(data[0]), int(data[1]), int(data[2])",
+  "a = [int(x) for x in data[3:3+N]]",
+  "print(solve(N, M, K, a))",
 ];
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: Problem (3 steps)
+   Concept sim: binary search on the answer X.
+   Sample data (matches the official example): N=4, M=1, K=2,
+   hp = [3,3,2,4] → the minimum feasible X is 5.
+   The student picks X and sees (1) the arrow's splash damage,
+   (2) whether every target dies with ≤ K arrows, and (3) that
+   feasibility flips exactly once as X grows → binary-searchable.
+   ═══════════════════════════════════════════════════════════════ */
+const SIM_M = 1, SIM_K = 2, SIM_A = [3, 3, 2, 4];
+
+function greedyFire(X) {
+  const N = SIM_A.length, MX = SIM_M * X;
+  const dmg = new Array(N).fill(0);
+  const fireCount = new Array(N).fill(0);
+  let used = 0;
+  for (let x = 0; x < N; x++) {
+    const deficit = SIM_A[x] - dmg[x];
+    if (deficit > 0) {
+      const c = Math.ceil(deficit / MX);
+      fireCount[x] = c;
+      used += c;
+      for (let j = x; j < N; j++) {
+        const d = j - x, per = MX - d * d;
+        if (per <= 0) break;
+        dmg[j] += c * per;
+      }
+    }
+  }
+  return { dmg, fireCount, used, ok: used <= SIM_K };
+}
+
+// splash values of ONE arrow at power X, by distance (only positive ones)
+function splash(X) {
+  const MX = SIM_M * X, out = [];
+  for (let d = 0; ; d++) {
+    const v = MX - d * d;
+    if (v <= 0) break;
+    out.push(v);
+  }
+  return out;
+}
+
+function BinarySearchXSim({ E }) {
+  const [X, setX] = useState(3);
+  const MX = SIM_M * X;
+  const res = greedyFire(X);
+  const strip = [];
+  for (let x = 1; x <= 8; x++) strip.push({ x, ok: greedyFire(x).ok });
+  const minFeasible = strip.find((s) => s.ok)?.x;
+  const maxHp = Math.max(...SIM_A);
+
+  const xBtn = {
+    width: 30, height: 30, borderRadius: 7, border: "1px solid #fdba74",
+    background: "#fff", color: "#9a3412", fontSize: 18, fontWeight: 800,
+    cursor: "pointer", lineHeight: 1,
+  };
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, ...KA }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", marginBottom: 8 }}>
+          🎯 {t(E, "Guess the arrow power X", "화살의 힘 X 를 정해봐요")}
+        </div>
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+          {t(E,
+            "4 targets in a row with hp [3, 3, 2, 4]. You have K = 2 arrows (M = 1). An arrow of power X fired at target i deals max(0, M·X − d²) to the target d steps to its right. Pick X, place arrows greedily, and see if everyone dies.",
+            "일렬의 표적 4개, 체력 [3, 3, 2, 4]. 화살은 K = 2개 (M = 1). 힘 X 짜리 화살을 표적 i 에 쏘면, 오른쪽으로 d 칸 떨어진 표적에게 max(0, M·X − d²) 데미지를 줘요. X 를 골라 화살을 놓고, 다 쓰러지는지 봐요.")}
+        </div>
+
+        {/* X control */}
+        <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 12 }}>
+          <span style={{ fontSize: 13, color: "#9a3412", fontWeight: 700 }}>X =</span>
+          <button onClick={() => setX(Math.max(1, X - 1))} style={xBtn}>−</button>
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 800, color: A, minWidth: 22, textAlign: "center" }}>{X}</span>
+          <button onClick={() => setX(Math.min(8, X + 1))} style={xBtn}>+</button>
+          <span style={{ ...NW, fontSize: 12, color: C.dim, marginLeft: 4 }}>
+            {t(E, "so M·X = ", "그래서 M·X = ")}<b style={{ color: A }}>{MX}</b>
+          </span>
+        </div>
+
+        {/* splash profile */}
+        <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 4 }}>
+          {t(E, "one arrow's splash (by distance)", "화살 한 발의 퍼짐 (거리별)")}
+        </div>
+        <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
+          {splash(X).map((v, d) => (
+            <span key={d} style={{ ...NW, display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+              <span style={{ fontSize: 10, color: C.dim }}>d={d}</span>
+              <span style={{
+                minWidth: 26, textAlign: "center", padding: "3px 6px", borderRadius: 6,
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800,
+                background: "#fde68a", color: "#92400e", border: "1px solid #f59e0b",
+              }}>{v}</span>
+            </span>
+          ))}
+          <span style={{ fontSize: 11, color: C.dim, alignSelf: "flex-end", paddingBottom: 4 }}>
+            {t(E, "→ farther = weaker, then 0", "→ 멀수록 약해지다 0")}
+          </span>
+        </div>
+
+        {/* targets */}
+        <div style={{ display: "flex", gap: 10, alignItems: "flex-end", justifyContent: "center", marginBottom: 6, minHeight: 120 }}>
+          {SIM_A.map((hp, j) => {
+            const remaining = hp - res.dmg[j];
+            const dead = remaining <= 0;
+            const barH = 22 * maxHp;
+            const fillFrac = Math.max(0, remaining) / hp;
+            return (
+              <div key={j} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+                {/* fired arrows on top of this position */}
+                <div style={{ height: 18, fontSize: 12, fontWeight: 800, color: A }}>
+                  {res.fireCount[j] > 0 ? `↓×${res.fireCount[j]}` : ""}
+                </div>
+                <div style={{ position: "relative", width: 28, height: barH, background: "#f1f5f9", borderRadius: 5, overflow: "hidden", border: "1px solid #e2e8f0" }}>
+                  <div style={{
+                    position: "absolute", bottom: 0, left: 0, right: 0,
+                    height: `${fillFrac * 100}%`,
+                    background: dead ? "#86efac" : "#fb923c",
+                    transition: "height .15s",
+                  }} />
+                  {dead && <div style={{ position: "absolute", top: 2, left: 0, right: 0, textAlign: "center", fontSize: 12 }}>✅</div>}
+                </div>
+                <div style={{ fontSize: 10, color: C.dim }}>t{j}</div>
+                <div style={{ ...NW, fontSize: 10.5, color: dead ? "#15803d" : "#9a3412", fontWeight: 700 }}>
+                  {dead ? t(E, "dead", "제거") : `hp ${remaining}`}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* verdict */}
+        <div style={{
+          marginTop: 8, padding: "10px 12px", borderRadius: 8, ...KA,
+          background: res.ok ? "#ecfdf5" : "#fef2f2",
+          border: `1px solid ${res.ok ? "#6ee7b7" : "#fca5a5"}`,
+        }}>
+          <div style={{ fontSize: 12.5, fontWeight: 800, color: res.ok ? "#065f46" : "#b91c1c" }}>
+            {res.ok
+              ? t(E, `✓ Feasible — used ${res.used} of ${SIM_K} arrows`, `✓ 가능 — 화살 ${res.used}/${SIM_K}개 사용`)
+              : t(E, `✗ Not enough — this greedy needed ${res.used} arrows, but K = ${SIM_K}`, `✗ 부족 — 이 그리디로 ${res.used}개 필요, 하지만 K = ${SIM_K}`)}
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 3 }}>
+            {res.ok
+              ? t(E, "Every target reached hp ≤ 0 within the arrow budget.", "예산 안에서 모든 표적이 체력 ≤ 0 에 도달했어요.")
+              : t(E, "The splash is too weak, so it takes too many arrows. Raise X.", "퍼짐이 약해서 화살이 너무 많이 들어요. X 를 올려봐요.")}
+          </div>
+        </div>
+
+        {/* monotonicity strip */}
+        <div style={{ marginTop: 14 }}>
+          <div style={{ fontSize: 11, color: "#9a3412", fontWeight: 700, marginBottom: 5 }}>
+            {t(E, "feasible? across X — watch it flip ONCE", "X 별 가능 여부 — 딱 한 번 뒤집혀요")}
+          </div>
+          <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+            {strip.map((s) => (
+              <button key={s.x} onClick={() => setX(s.x)} style={{
+                ...NW, cursor: "pointer",
+                display: "inline-flex", flexDirection: "column", alignItems: "center",
+                width: 34, padding: "4px 0", borderRadius: 6,
+                border: s.x === X ? `2px solid ${A}` : "1px solid #e2e8f0",
+                background: s.ok ? "#ecfdf5" : "#fef2f2",
+              }}>
+                <span style={{ fontSize: 10, color: C.dim }}>X={s.x}</span>
+                <span style={{ fontSize: 13 }}>{s.ok ? "✓" : "✗"}</span>
+              </button>
+            ))}
+          </div>
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, ...KA }}>
+            {t(E,
+              `✗ ✗ ✗ ✗ then ✓ ✓ ✓ ✓ — never back to ✗. The smallest feasible X is ${minFeasible}. Because it flips only once, binary search jumps straight to that boundary instead of trying every X.`,
+              `✗ ✗ ✗ ✗ 이후 ✓ ✓ ✓ ✓ — 다시 ✗ 로 안 돌아가요. 가능한 가장 작은 X 는 ${minFeasible}. 한 번만 뒤집히니, 모든 X 를 시험하지 않고 이분 탐색이 그 경계로 바로 뛰어요.`)}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   Chapter 1: Problem (4 steps)
    ═══════════════════════════════════════════════════════════════ */
 export function makeExplodingArrowCh1(E) {
   return [
-    // 1-1: Title reveal
+    // 1-1: Title + mission + problem
     {
       type: "reveal",
       narr: t(E,
-        "Arrows are placed on a 2D grid, each pointing right/left/up/down (input letters R/L/U/D). When an arrow EXPLODES, it ignites the NEXT arrow in its direction (the closest arrow in the same row/column on that side) — and that arrow then explodes too, in a chain reaction.\nStarting from the first arrow, print how many arrows explode in total.",
-        "2D 격자 위에 오른쪽/왼쪽/위/아래 (입력 글자 R/L/U/D) 한 방향을 가리키는 화살들이 놓여 있어요. 어떤 화살이 폭발하면, 그 방향의 다음 화살 (같은 행/열에서 그쪽 방향에 있는 가장 가까운 화살) 을 점화해요 — 그 화살도 폭발하며 연쇄가 이어져요.\n첫 번째 화살부터 시작할 때, 결국 폭발하는 화살의 총 개수를 출력해요."),
+        "N targets stand in a row with health a[0..N-1]. You have K arrows. Firing an arrow of power X at target i drops the health of every target j ≥ i by max(0, M·X − (j−i)²) — strong up close, fading with distance, then nothing.\nFind the SMALLEST power X so that, placing arrows optimally, every target reaches health ≤ 0.",
+        "표적 N개가 일렬로 서 있고 체력은 a[0..N-1]. 화살은 K개. 힘 X 짜리 화살을 표적 i 에 쏘면, i 오른쪽의 모든 표적 j 의 체력이 max(0, M·X − (j−i)²) 만큼 줄어요 — 가까울수록 세고, 멀수록 약해지다 0.\n화살을 잘 배치해서 모든 표적을 체력 ≤ 0 으로 만드는 가장 작은 힘 X 를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
-            <div style={{ fontSize: 32, marginBottom: 4 }}>{"\ud83d\udca5"}</div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: "#f97316" }}>Exploding Arrow</div>
+            <div style={{ fontSize: 32, marginBottom: 4 }}>{"💥"}</div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: A }}>Exploding Arrow</div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2024 P5</div>
+            <div style={{ fontSize: 11, color: "#b91c1c", marginTop: 3, fontWeight: 700 }}>
+              {t(E, "Very hard (Division 1) — take it slow.", "아주 어려움 (디비전 1) — 천천히 가요.")}
+            </div>
           </div>
 
-          {/* 🎯 Mission box */}
-          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+          {/* 🎯 Mission */}
+          <div style={{ background: "#fff7ed", border: "1.5px solid #f97316", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center", ...KA }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", letterSpacing: 0.5, marginBottom: 4 }}>
               🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
               {t(E,
-                "Output the total number of arrows that explode in the chain reaction from the start.",
-                "시작 화살의 연쇄 반응으로 폭발하는 화살의 총 개수를 출력.")}
+                "Output the minimum arrow power X that clears every target within K arrows.",
+                "화살 K개로 모든 표적을 없앨 수 있는 최소 힘 X 를 출력해요.")}
             </div>
           </div>
 
-          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10 }}>
+          {/* 📖 Problem */}
+          <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#9a3412", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
+                <span style={{ color: A, fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "A 2D grid contains arrows, each pointing in one of ", "2D 격자 위에 화살들이 있고, 각자 ")}
-                  <b style={{ color: "#f97316" }}>{t(E, "4 directions: R, L, U, D", "4 방향 R, L, U, D")}</b>
-                  {t(E, ".", " 중 하나를 가리켜요.")}
+                  {t(E, "There are ", "표적 ")}<b style={{ color: A }}>N</b>
+                  {t(E, " targets in a line with health ", " 개가 일렬로 있고 체력은 ")}
+                  <b style={{ color: A }}>a[0], a[1], …, a[N−1]</b>{t(E, ".", ".")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#f97316", fontWeight: 600, flexShrink: 0 }}>•</span>
+                <span style={{ color: A, fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "When an arrow explodes, it ignites the ", "어떤 화살이 폭발하면, 그 방향의 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "next arrow in its direction", "다음 화살")}</b>
-                  {t(E, " (closest arrow in same row/column on that side) — chain reaction.",
-                        " (같은 행/열에서 그쪽 방향의 가장 가까운 화살) 을 점화 — 연쇄 반응.")}
+                  {t(E, "An arrow of power ", "힘 ")}<b style={{ color: A }}>X</b>
+                  {t(E, " fired at target ", " 짜리 화살을 표적 ")}<b style={{ color: A }}>i</b>
+                  {t(E, " reduces every target ", " 에 쏘면, ")}<b style={{ color: A }}>j ≥ i</b>
+                  {t(E, "'s health by ", " 인 모든 표적의 체력을 ")}
+                  <b style={{ color: P }}>max(0, M·X − (j−i)²)</b>{t(E, ".", " 만큼 줄여요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: A, fontWeight: 600, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E, "You have ", "화살은 ")}<b style={{ color: A }}>K</b>
+                  {t(E, " arrows and place them wherever you like.", " 개이고 어디든 원하는 곳에 놓을 수 있어요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fdba74" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Given a start arrow, print the ", "시작 화살이 주어지면 ")}
-                  <b style={{ color: "#15803d" }}>{t(E, "TOTAL number of arrows that explode", "폭발하는 화살의 총 개수")}</b>
-                  {t(E, ".", "를 출력해요.")}
+                  {t(E, "Print the ", "")}
+                  <b style={{ color: "#15803d" }}>{t(E, "smallest X", "가장 작은 X")}</b>
+                  {t(E, " that makes every target's health ≤ 0.", " — 모든 표적의 체력을 ≤ 0 으로 만드는 값 — 를 출력해요.")}
                 </div>
               </div>
             </div>
           </div>
         </div>),
     },
-    // 1-1b: 입출력 형식 (코드 FULL_PY 에서 유도 — MCC 2024 원문 비공개)
-    // 문제 소개 직후 "그래서 데이터가 어떻게 들어오는데?" 를 못박아 준다.
+
+    // 1-2: I/O format + official sample
     {
       type: "reveal",
       narr: t(E,
-        "Now — how does the data arrive?\nFirst N (how many arrows), then N lines: each arrow's x y and direction letter.\nOutput: how many arrows explode in total.",
-        "그럼 데이터는 어떻게 들어올까?\n먼저 N (화살 개수), 그 다음 N 줄에 각 화살의 x y 와 방향 글자.\n출력: 결국 폭발하는 화살의 총 개수."),
+        "How does the data arrive?\nLine 1: N M K. Line 2: the N health values.\nOutput: one integer — the minimum power X.",
+        "데이터는 어떻게 들어올까요?\n1번 줄: N M K. 2번 줄: 체력 N개.\n출력: 정수 하나 — 최소 힘 X."),
       content: (
-        <div style={{ padding: 16, wordBreak: "keep-all" }}>
-          {/* INPUT */}
-          <div style={{ marginBottom: 12 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
-            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
-              <div><span style={{ color: "#92400e", fontWeight: 800 }}>N</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(first line) — number of arrows", "(첫 줄) — 화살 개수")}</span></div>
-              <div style={{ marginTop: 6, paddingLeft: 10, borderLeft: `2px solid #fde68a` }}>
-                <div><span style={{ color: "#92400e", fontWeight: 800 }}>x<sub>i</sub> y<sub>i</sub> d<sub>i</sub></span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— arrow i's position and direction", "— i번 화살의 위치와 방향")}</span></div>
-                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats N times", "↑ 이 줄이 N 번 반복")}</div>
-              </div>
-              <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fde68a", fontSize: 11.5, color: "#92400e" }}>
-                {t(E, "d ∈ { R, L, U, D } = right / left / up / down",
-                    "d ∈ { R, L, U, D } = 오른쪽 / 왼쪽 / 위 / 아래")}
-              </div>
+        <div style={{ padding: 16, ...KA }}>
+          <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 12, padding: 14, marginBottom: 12 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 8 }}>
+              📥 {t(E, "Input", "입력")}
+            </div>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.75 }}>
+              <div><b>N M K</b> — {t(E, "targets, damage scale, arrows", "표적 수, 데미지 배율, 화살 수")}</div>
+              <div><b>a[0] … a[N−1]</b> — {t(E, "each target's health", "각 표적의 체력")}</div>
+            </div>
+            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fde68a" }}>
+              {t(E, "Limits: N ≤ 2·10^5; M, K, a[i] ≤ 10^9. Everything is big — use 64-bit integers.",
+                  "제약: N ≤ 2·10^5; M, K, a[i] ≤ 10^9. 값이 커요 — 64비트 정수 사용.")}
             </div>
           </div>
-          {/* OUTPUT */}
-          <div style={{ marginBottom: 12 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
-            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
-              {t(E, "A single integer — the total number of arrows that explode, starting from the first arrow.",
-                  "정수 하나 — 첫 번째 화살부터 시작해 폭발하는 화살의 총 개수.")}
-            </div>
-          </div>
-          {/* 샘플 */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10 }}>
             <div>
               <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
-              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.55, color: "#f8fafc" }}>
-                <div>3</div>
-                <div>0 0 R</div><div>1 0 R</div><div>2 0 R</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#f8fafc" }}>
+                <div>4 1 2</div>
+                <div>3 3 2 4</div>
               </div>
             </div>
             <div>
               <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE OUTPUT", "샘플 출력")}</div>
-              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#86efac" }}>
-                <div>3</div>
+              <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 15, lineHeight: 1.7, color: "#86efac", fontWeight: 800 }}>
+                <div>5</div>
               </div>
             </div>
           </div>
-          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
-            {t(E, "Three arrows in a row, all pointing right: the first ignites the second, the second the third — all 3 explode.",
-                "일렬의 화살 3개가 모두 오른쪽: 첫째가 둘째를, 둘째가 셋째를 점화 — 3개 모두 폭발.")}
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 10, lineHeight: 1.6, ...KA }}>
+            {t(E,
+              "N=4 targets with hp [3,3,2,4], M=1, K=2 arrows. With X=5 (so M·X=5) one arrow at target 0 and one at target 2 clears everyone. No smaller X works — the answer is 5.",
+              "표적 4개, 체력 [3,3,2,4], M=1, 화살 K=2개. X=5 (M·X=5) 이면 표적 0 에 한 발, 표적 2 에 한 발로 전부 제거돼요. 더 작은 X 는 안 되니 정답은 5.")}
           </div>
         </div>),
     },
-    // 1-2: Quiz
-    {
-      type: "quiz",
-      narr: t(E,
-        "3 arrows in a line, all pointing right: A -> B -> C. If A explodes first, how many total?", "3개의 화살이 일렬로 모두 오른쪽을 가리켜: A -> B -> C. A가 먼저 폭발하면 총 몇 개?"),
-      question: t(E,
-        "3 arrows in a row, all pointing right. First one triggers. Total explosions?",
-        "화살 3개가 일렬로 모두 오른쪽. 첫 번째가 발동. 총 폭발 수?"),
-      options: [
-        t(E, "1", "1개"),
-        t(E, "2", "2개"),
-        t(E, "3", "3개"),
-      ],
-      correct: 2,
-      explain: t(E,
-        "Correct! A triggers B, B triggers C. All 3 explode in a chain reaction.",
-        "맞아! A가 B를 발동, B가 C를 발동. 연쇄 반응으로 3개 모두 폭발."),
-    },
-    // 1-3: Input
-    {
-      type: "input",
-      narr: t(E,
-        "3 arrows in a chain, all triggering the next one. How many explode?", "3개의 화살이 연쇄적으로 다음을 발동해요. 몇 개가 폭발할까?"),
-      question: t(E,
-        "Chain of 3 arrows. How many explode total?",
-        "화살 3개 체인. 총 몇 개 폭발?"),
-      hint: t(E,
-        "Trace the chain — every arrow that gets ignited counts.",
-        "연쇄를 따라가 봐 — 점화되는 화살을 모두 세어 봐."),
-      answer: 3,
-    },
-    // 1-4: Deep-audit sim — trace the chain step by step
+
+    // 1-3: concept sim
     {
       type: "reveal",
       narr: t(E,
-        "Let's audit a tiny example carefully. 5 arrows on a grid. Start arrow A explodes — trace the chain row/column-by-direction, mark visited, count. Notice how a 'dead end' (no arrow ahead) just stops — it doesn't fail.",
-        "작은 예제를 꼼꼼히 살펴봐요. 격자 위 화살 5개. 시작 화살 A가 폭발 — 방향대로 같은 행/열을 추적, 방문 표시, 카운트. '막다른 길' (앞에 화살 없음) 은 그냥 멈춰 — 실패가 아니에요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ textAlign: "center", marginBottom: 10 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: "#f97316" }}>
-              🔍 {t(E, "Deep Audit: Trace 5-Arrow Chain", "심층 추적: 화살 5개 연쇄")}
-            </div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>
-              {t(E, "Grid view + step-by-step BFS log", "격자 + 단계별 BFS 로그")}
-            </div>
-          </div>
+        "Play with the answer directly. Pick a power X, watch the arrow's splash and whether K arrows finish everyone — then notice the feasibility flips exactly once.",
+        "정답을 직접 만져봐요. 힘 X 를 골라 화살의 퍼짐과 K개로 다 끝나는지 보고 — 가능 여부가 딱 한 번 뒤집히는 걸 확인해요."),
+      content: <BinarySearchXSim E={E} />,
+    },
 
-          {/* Grid sim — 5x5 layout */}
-          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 12, padding: 12, marginBottom: 10 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "#9a3412", marginBottom: 8, textAlign: "center" }}>
-              {t(E, "Initial Grid (5 arrows)", "초기 격자 (화살 5개)")}
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 4, maxWidth: 280, margin: "0 auto" }}>
-              {[
-                { r: 0, c: 0, label: "" }, { r: 0, c: 1, label: "" }, { r: 0, c: 2, label: "C", dir: "↓", color: "#dc2626" }, { r: 0, c: 3, label: "" }, { r: 0, c: 4, label: "E", dir: "←", color: "#7c3aed" },
-                { r: 1, c: 0, label: "" }, { r: 1, c: 1, label: "" }, { r: 1, c: 2, label: "" }, { r: 1, c: 3, label: "" }, { r: 1, c: 4, label: "" },
-                { r: 2, c: 0, label: "A", dir: "→", color: "#15803d" }, { r: 2, c: 1, label: "" }, { r: 2, c: 2, label: "B", dir: "↑", color: "#f97316" }, { r: 2, c: 3, label: "" }, { r: 2, c: 4, label: "D", dir: "→", color: "#0891b2" },
-                { r: 3, c: 0, label: "" }, { r: 3, c: 1, label: "" }, { r: 3, c: 2, label: "" }, { r: 3, c: 3, label: "" }, { r: 3, c: 4, label: "" },
-                { r: 4, c: 0, label: "" }, { r: 4, c: 1, label: "" }, { r: 4, c: 2, label: "" }, { r: 4, c: 3, label: "" }, { r: 4, c: 4, label: "" },
-              ].map((cell, i) => (
-                <div key={i} style={{
-                  aspectRatio: "1",
-                  background: cell.label ? "#fff" : "#fef3c7",
-                  border: `1.5px solid ${cell.label ? cell.color : "#fde68a"}`,
-                  borderRadius: 6,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "column",
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: cell.color || "#fbbf24",
-                }}>
-                  {cell.label && (
-                    <>
-                      <div style={{ fontSize: 13 }}>{cell.label}</div>
-                      <div style={{ fontSize: 11 }}>{cell.dir}</div>
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-            <div style={{ fontSize: 10, color: "#9a3412", marginTop: 8, textAlign: "center" }}>
-              {t(E, "A→ at (2,0), B↑ at (2,2), C↓ at (0,2), D→ at (2,4), E← at (0,4)",
-                  "A→ (2,0), B↑ (2,2), C↓ (0,2), D→ (2,4), E← (0,4)")}
-            </div>
-          </div>
-
-          {/* BFS audit log */}
-          <div style={{ background: "#0f172a", border: "1.5px solid #1e293b", borderRadius: 12, padding: 12, marginBottom: 10 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "#fdba74", marginBottom: 8 }}>
-              📋 {t(E, "BFS Audit Log", "BFS 추적 로그")}
-            </div>
-            <div style={{ fontSize: 11, color: "#e2e8f0", lineHeight: 1.7, fontFamily: "monospace" }}>
-              <div><span style={{ color: "#94a3b8" }}>step 0:</span> queue=[A], visited={"{A}"}, count=1</div>
-              <div><span style={{ color: "#94a3b8" }}>step 1:</span> pop A (→). {t(E, "Same row r=2: nearest right = B", "같은 행 r=2: 오른쪽 가장 가까운 = B")} → <span style={{ color: "#fbbf24" }}>visit B</span>, count=2</div>
-              <div><span style={{ color: "#94a3b8" }}>step 2:</span> pop B (↑). {t(E, "Same col c=2: nearest up = C", "같은 열 c=2: 위쪽 가장 가까운 = C")} → <span style={{ color: "#fbbf24" }}>visit C</span>, count=3</div>
-              <div><span style={{ color: "#94a3b8" }}>step 3:</span> pop C (↓). {t(E, "Same col c=2: nearest down = B (already visited)", "같은 열 c=2: 아래쪽 = B (이미 방문)")} → <span style={{ color: "#94a3b8" }}>skip</span></div>
-              <div><span style={{ color: "#94a3b8" }}>step 4:</span> {t(E, "queue empty → done", "큐 비음 → 종료")}. count = <b style={{ color: "#15803d" }}>3</b></div>
-            </div>
-          </div>
-
-          {/* Audit insight */}
-          <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 14px" }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>
-              💡 {t(E, "Audit Insight", "심층 통찰")}
-            </div>
-            <div style={{ fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
-              {t(E,
-                "D and E never explode — A's chain never reaches them. The 'visited' set prevents re-counting B. A dead end (arrow has no neighbor in its direction) just stops that branch — the BFS keeps going.",
-                "D와 E는 폭발하지 않아요 — A의 연쇄가 닿지 않아. 'visited' 집합이 B를 두 번 세는 것을 막아요. 막다른 길 (방향에 이웃 없음) 은 그 가지만 멈추고 BFS는 계속 진행.")}
-            </div>
-          </div>
-        </div>),
+    // 1-4: understanding check (monotonicity = why binary search works)
+    {
+      type: "quiz",
+      narr: t(E,
+        "Stronger arrows can only help: any target a weak arrow kills, a stronger one kills too. So once some X works, every larger X works.",
+        "더 센 화살은 손해가 없어요: 약한 화살이 없앤 표적은 센 화살도 없애요. 그러니 어떤 X 가 되면, 더 큰 X 는 모두 돼요."),
+      question: t(E,
+        "Suppose X = 5 clears every target within K arrows. What can we say about X = 6?",
+        "X = 5 로 K개 안에 모든 표적을 없앨 수 있다고 해요. X = 6 은 어떨까요?"),
+      options: [
+        t(E, "X = 6 also works — bigger power is never worse", "X = 6 도 돼요 — 더 큰 힘은 절대 손해가 아니에요"),
+        t(E, "X = 6 might fail — too much damage wastes arrows", "X = 6 은 실패할 수 있어요 — 데미지가 너무 커서 화살 낭비"),
+        t(E, "We can't tell without recomputing", "다시 계산하지 않으면 알 수 없어요"),
+      ],
+      correct: 0,
+      explain: t(E,
+        "Feasibility is monotonic: works at 5 ⇒ works at 6, 7, 8, … It flips from ✗ to ✓ exactly once. That single flip is what lets binary search find the smallest working X in log steps.",
+        "가능 여부는 단조로워요: 5 에서 되면 6, 7, 8, … 에서도 돼요. ✗ 에서 ✓ 로 딱 한 번 뒤집혀요. 이 한 번의 전환 덕분에 이분 탐색이 log 번 만에 가장 작은 X 를 찾아요."),
     },
   ];
 }
@@ -291,12 +403,53 @@ export function makeExplodingArrowCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeExplodingArrowCh2(E, lang = "py") {
   return [
-    // 2-1: Progressive code
+    // 2-1: plan — slow vs fast
+    {
+      type: "reveal",
+      narr: t(E,
+        "Trying every X and re-simulating every arrow is far too slow. Instead: binary-search the answer X (each guess is a yes/no), and answer each yes/no in O(N) with a greedy sweep that stamps parabola-shaped damage using a difference array.",
+        "모든 X 를 시도하며 화살을 매번 다시 시뮬레이션하면 너무 느려요. 대신: 정답 X 를 이분 탐색하고 (각 추측은 예/아니오), 각 예/아니오를 그리디 훑기 + 차분 배열로 O(N) 에 답해요."),
+      content: (
+        <div style={{ padding: 16, ...KA }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
+                🐢 {t(E, "Slow: try each X, re-place arrows from scratch", "느림: X 마다 화살을 처음부터 다시 배치")}
+              </div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
+                {t(E,
+                  "X can be up to ~10^9 and each check touches N ≤ 2·10^5 targets with a parabola each. Way past the time limit.",
+                  "X 는 최대 ~10^9, 매 검사가 표적 N ≤ 2·10^5 개에 포물선을 하나씩 그려요. 시간 제한을 한참 초과.")}
+              </div>
+            </div>
+            <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
+                🚀 {t(E, "Fast: binary-search X, O(N) feasibility check", "빠름: X 이분 탐색 + O(N) 가능성 검사")}
+              </div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
+                {t(E,
+                  "Because feasibility flips only once, ~log(10^9) ≈ 30 guesses suffice. Each guess is an O(N) greedy sweep. Total ≈ 30 × N.",
+                  "가능 여부가 한 번만 뒤집히니 ~log(10^9) ≈ 30번 추측이면 충분해요. 각 추측은 O(N) 그리디 훑기. 합계 ≈ 30 × N.")}
+              </div>
+            </div>
+            <div style={{ background: "#faf5ff", border: "1px solid #d8b4fe", borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 12, color: "#6b21a8", lineHeight: 1.55, ...KA }}>
+                {t(E,
+                  "The two hard ideas: (1) binary-search the ANSWER, not the damage; (2) add a whole parabola of damage to a range in O(1) with a 2nd-order difference array. Honest heads-up: this is a Division-1 problem — read each note twice.",
+                  "어려운 두 아이디어: (1) 데미지가 아니라 정답을 이분 탐색; (2) 2차 차분 배열로 포물선 데미지를 구간에 O(1) 로 더하기. 솔직히 말하면 디비전 1 문제예요 — 각 노트를 두 번씩 읽어요.")}
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
+            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+          </div>
+        </div>),
+    },
+    // 2-2: progressive code
     {
       type: "progressive",
       narr: t(E,
-        "BFS from the start arrow. For each exploding arrow, scan its row/column in its direction to find the nearest other arrow → push to queue if not yet exploded. Count exploded arrows. Sections build it one piece at a time.",
-        "시작 화살에서 BFS. 폭발하는 각 화살의 방향으로 같은 행/열에서 가장 가까운 화살 → 미폭발이면 큐 추가. 폭발 수 카운트. 아래 섹션이 한 단락씩 쌓아요."),
+        "Solution code — read part by part.", "풀이 코드 — 부분별로 읽어봐요."),
       sections: getExplodingArrowSections(E),
     },
   ];
