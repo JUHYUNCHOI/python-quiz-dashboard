@@ -1033,17 +1033,17 @@ export function LastStepSlide({ E }) {
 
   const say =
     s.k === "goal" ? t(E,
-        <>I have <b style={{ color: RED }}>1 red</b>, goal <b>5</b> → I need <b style={{ color: RED }}>4 more red</b>. Swap: <b style={{ color: BLU }}>3 blue</b> → <b style={{ color: RED }}>2 red</b>. The trickster colors each chip to hurt me.</>,
-        <>지금 <b style={{ color: RED }}>빨강 1</b>, 목표 <b>5</b> → <b style={{ color: RED }}>빨강 4개</b> 더 필요해요. 환전은 <b style={{ color: BLU }}>파랑 3</b> → <b style={{ color: RED }}>빨강 2</b>. 칩 색은 심술쟁이가 최악으로 골라요.</>)
+        <>Flip the question: not <i>"how many chips reach 5?"</i> but <b>"how many chips can the trickster give while KEEPING me below 5?"</b> That stall limit + 1 is the answer.</>,
+        <>질문을 뒤집어요. <i>"몇 개면 5가 돼?"</i> 가 아니라 <b>"심술쟁이는 몇 개까지 주면서도 나를 5 미만에 묶어둘 수 있어?"</b> — 그 <b>버티기 한계 + 1</b> 이 답이에요.</>)
     : s.k === "x6" ? t(E,
-        <>Get <b>6</b> chips. Worst: <b style={{ color: RED }}>1 red</b> + <b style={{ color: BLU }}>5 blue</b>. Count the red I can make…</>,
-        <><b>6</b>개 받으면? 최악은 <b style={{ color: RED }}>빨강 1</b> + <b style={{ color: BLU }}>파랑 5</b>. 만들 수 있는 빨강을 세봐요…</>)
+        <>The trickster can stall only up to <b style={{ color: RED }}>red 4</b> (one below the goal — reaching 5 means losing). Max stall = <b>6 chips</b>: <b style={{ color: RED }}>1 red</b> + <b style={{ color: BLU }}>5 blue</b> pins me at total 4.</>,
+        <>심술쟁이가 버틸 수 있는 건 <b style={{ color: RED }}>빨강 4</b>까지 (목표보다 1 작게 — 5를 만들어주는 순간 지니까). 최대 버티기 = <b>6개</b>: <b style={{ color: RED }}>빨강 1</b> + <b style={{ color: BLU }}>파랑 5</b> 로 나를 총 4에 묶어요.</>)
     : s.k === "x7" ? t(E,
-        <>Now <b>7</b>. Worst: <b style={{ color: RED }}>2 red</b> + <b style={{ color: BLU }}>5 blue</b> — <b>one more red chip</b> and I hit 4!</>,
-        <>이번엔 <b>7</b>. 최악은 <b style={{ color: RED }}>빨강 2</b> + <b style={{ color: BLU }}>파랑 5</b> — <b>빨강 칩 하나</b> 더인데 4개 도달!</>)
+        <>The 7th chip can't stall: <b style={{ color: BLU }}>blue</b> completes a group (+2 red), <b style={{ color: RED }}>red</b> adds 1 — <b>either color</b> reaches 5.</>,
+        <>7개째는 못 버텨요: <b style={{ color: BLU }}>파랑</b>이면 묶음 완성(+빨강 2), <b style={{ color: RED }}>빨강</b>이면 +1 — <b>무슨 색이든</b> 5 도달.</>)
     : t(E,
-        <>The only difference: <b>one red chip</b> — not a whole 3-blue group. So the answer is <b style={{ color: A }}>7</b>, not 8.</>,
-        <>차이는 딱 <b>빨강 칩 1개</b> — 파랑 3개 묶음이 아니에요. 그래서 답은 <b style={{ color: A }}>7</b>, 8이 아니에요.</>);
+        <>So the code counts <b>"max stall + 1"</b>. The <b>−1</b>: the stall limit is one below the goal (red 4), so shortage measures "up to 4". The <b>+1</b>: the one chip that ends the stall. Not a trick — it's the question we asked.</>,
+        <>그래서 코드는 <b>"최대 버티기 + 1"</b> 을 세요. <b>−1</b> 은 버티기 한계가 목표보다 1 작아서 (빨강 4까지의 부족분을 세는 것), <b>+1</b> 은 버티기를 끝내는 다음 칩 하나. 빼봤다 넣어봤다가 아니라, 질문 자체가 그렇게 생겼어요.</>);
 
   const dist = s.k === "x6" ? { red: 1, blue: 5 } : s.k === "x7" ? { red: 2, blue: 5 } : null;
 
@@ -1071,16 +1071,16 @@ export function LastStepSlide({ E }) {
         <div style={{ maxWidth: 470, margin: "0 auto", display: "flex", flexDirection: "column", gap: 8 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "8px 12px", borderRadius: 10, border: "1.5px solid #fca5a5", background: REDBG, wordBreak: "keep-all", fontSize: 12.5, fontWeight: 700 }}>
             <b style={{ color: "#b91c1c" }}>x = 6</b>
-            <span>{t(E, "1 red + 5 blue → 3 red → total 4", "빨강 1 + 파랑 5 → 빨강 3 → 총 4")}</span>
+            <span>{t(E, "max stall — pinned at total 4 (one short)", "최대 버티기 — 총 4에 묶임 (딱 1 부족)")}</span>
             <b style={{ color: "#dc2626" }}>✗</b>
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "8px 12px", borderRadius: 10, border: "1.5px solid #86efac", background: "#f0fdf4", wordBreak: "keep-all", fontSize: 12.5, fontWeight: 700 }}>
             <b style={{ color: "#15803d" }}>x = 7</b>
-            <span>{t(E, "2 red + 5 blue → 4 red → total 5", "빨강 2 + 파랑 5 → 빨강 4 → 총 5")}</span>
+            <span>{t(E, "= stall 6 + the finishing chip 1 → total 5", "= 버티기 6 + 끝내는 칩 1 → 총 5")}</span>
             <b style={{ color: "#15803d" }}>✓</b>
           </div>
           <div style={{ textAlign: "center", fontSize: 12.5, fontWeight: 800, color: A, wordBreak: "keep-all" }}>
-            {t(E, "one extra red chip = the answer 7", "빨강 칩 1개 차이 = 답 7")}
+            {t(E, "in code: −1 = count up to goal−1 (red 4), +1 = the finishing chip", "코드에서: −1 = 목표−1(빨강 4)까지 세기, +1 = 끝내는 칩")}
           </div>
         </div>
       )}

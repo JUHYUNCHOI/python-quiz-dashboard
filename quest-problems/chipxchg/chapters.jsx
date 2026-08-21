@@ -158,8 +158,8 @@ export function makeChipXchgCh1(E) {
     {
       type: "reveal",
       label: t(E, "Tool: why 7, not 8?", "도구: 왜 8이 아니라 7?"),
-      narr: t(E, "A concrete case: giving 6 chips falls short, but 7 reaches the goal — one extra red chip, not a whole blue group.",
-                 "구체적인 예: 6개 주면 부족하고 7개면 도달해요 — 파랑 묶음이 아니라 빨강 칩 딱 하나 차이예요."),
+      narr: t(E, "Flip the question: how long can the trickster STALL me below the goal? Max stall (6) + 1 finishing chip = 7 — that's where the −1/+1 comes from.",
+                 "질문을 뒤집어요: 심술쟁이는 나를 목표 아래에 몇 개까지 묶어둘 수 있나? 최대 버티기(6) + 끝내는 칩 1 = 7 — −1/+1 은 여기서 나와요."),
       content: (<LastStepSlide E={E} />),
     },
 

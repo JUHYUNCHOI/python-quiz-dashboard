@@ -263,7 +263,7 @@ export function getChipXchgWalk(E, lang = "py") {
       "ll solve(ll A, ll B, ll cA, ll cB, ll fA) {",
       "    ll red_now = A + (B / cB) * cA;",
       "    if (red_now >= fA) return 0;",
-      "    ll shortage = (fA - red_now) - 1;   // " + c("last red → final +1", "마지막 1개는 뒤 +1로"),
+      "    ll shortage = (fA - red_now) - 1;   // " + c("stall limit = goal−1", "버티기 한계 = 목표−1"),
       "    ll wasted_blue = (cB - 1) - (B % cB);",
       "    ll to_fill;",
       "    if (cA >= cB) {                     // " + c("swap pays → red", "환전 이득 → 빨강"),
@@ -288,10 +288,10 @@ export function getChipXchgWalk(E, lang = "py") {
       { hi: [18, 19], bubble: t(E, "main — read T tests.", "main — 테스트 T개 읽기.") },
       { hi: [20, 24], bubble: t(E, "Each test: read the 5 numbers → call solve → print.", "각 테스트: 숫자 5개 읽어 → solve 호출 → 출력.") },
       { hi: [4, 6], bubble: t(E, "red_now = red I can make now (convert my blue). If it already reaches fA → 0 extra.", "red_now = 지금 가진 걸로 만드는 빨강 (내 파랑 환전). 목표 이상이면 추가 0.") },
-      { hi: [7, 7], bubble: t(E, "shortage = red shortage (fA − red_now) minus the last one. The −1 is the 'last one is special' idea from the concept step — the last red needs only 1 chip, guaranteed by the final +1. (sanity-check with fA=1)", "shortage = 부족한 빨강(fA − red_now)에서 마지막 1개 뺀 것. −1은 '마지막 한 개는 따로' 개념 스텝에서 배운 거예요 — 마지막 빨강은 1칩이면 완성돼서 맨 끝 +1로 보장. (fA=1로 검산)") },
+      { hi: [7, 7], bubble: t(E, "shortage = (fA−1) − red_now. We count the trickster's STALL: they can pin me only up to goal−1 red (giving the goal = losing), so this is the shortfall to fA−1 — that's the whole meaning of the −1. (concept step 'why 7, not 8')", "shortage = (fA−1) − red_now. 심술쟁이의 '버티기'를 세는 거예요: 목표를 만들어주는 순간 지니까 버티기 한계는 목표보다 1 작은 빨강(fA−1)까지 — 거기까지의 부족분. 이게 −1의 전부예요. (개념 스텝 '왜 8이 아니라 7')") },
       { hi: [8, 8], bubble: t(E, "Trickster step 1: max out the leftover. From now (B%cB) up to the max (cB−1) → (cB−1)−(B%cB) more blue, all wasted. Like shortage: goal − now.", "심술쟁이 1단계: 자투리를 꽉 채워요. 지금(B%cB)에서 최대(cB−1)까지 → (cB−1)−(B%cB)개 더, 다 낭비. shortage 처럼 '목표 − 지금'. ← '파랑 낭비' 스텝.") },
       { hi: [9, 14], bubble: t(E, "Fill the rest with the least-helpful color. If swap loses (cA<cB), the trickster gives blue in GROUPS: cB blue = cA red (the '환전세기' step, reversed) → shortage÷cA groups × cB blue, plus the remainder as red.", "남은 부족분을 덜 도와주는 색으로 채워요. 환전 손해(cA<cB)면 파랑을 '그룹'으로 줘요: 파랑 cB개 = 빨강 cA개 ('환전세기' 스텝의 역) → shortage÷cA 그룹 × cB 파랑, 나머지는 빨강. ← '파랑 낭비 / 빨강' 스텝.") },
-      { hi: [15, 15], bubble: t(E, "answer = wasted_blue + to_fill + 1. e.g. sample 2 (0 0 2 3 5): red_now 0 → shortage 4 → wasted_blue 2, to_fill 6 → 2 + 6 + 1 = 9 ✓ (matches sample 2). One calc — no loop, no search. O(1).", "답 = wasted_blue + to_fill + 1. 예로 샘플 2 (0 0 2 3 5): red_now 0 → shortage 4 → wasted_blue 2, to_fill 6 → 2 + 6 + 1 = 9 ✓ (샘플 2 정답과 일치). 계산 한 번 — 반복도 탐색도 없이 O(1).") },
+      { hi: [15, 15], bubble: t(E, "answer = MAX STALL (wasted_blue + to_fill) + 1 finishing chip. After the stall, ANY chip reaches the goal — blue completes a group, red adds 1. e.g. (1 0 2 3 5): red_now 1 → shortage 3 → stall 2+4=6, +1 → 7 ✓. One calc, O(1).", "답 = 최대 버티기(wasted_blue + to_fill) + 끝내는 칩 1. 버티기가 끝나면 무슨 색이든 목표 도달 — 파랑은 묶음 완성, 빨강은 +1. 예: (1 0 2 3 5): red_now 1 → shortage 3 → 버티기 2+4=6, +1 → 7 ✓. 계산 한 번, O(1).") },
     ] };
   }
   const code = [
@@ -308,7 +308,7 @@ export function getChipXchgWalk(E, lang = "py") {
     "    red_now = A + (B // cB) * cA",
     "    if red_now >= fA:",
     "        return 0",
-    "    shortage = (fA - red_now) - 1       # " + c("last red → final +1", "마지막 1개는 뒤 +1로"),
+    "    shortage = (fA - red_now) - 1       # " + c("stall limit = goal−1", "버티기 한계 = 목표−1"),
     "    wasted_blue = (cB - 1) - (B % cB)",
     "    if cA >= cB:                        # " + c("swap pays → red", "환전 이득 → 빨강"),
     "        to_fill = shortage",
@@ -322,10 +322,10 @@ export function getChipXchgWalk(E, lang = "py") {
     { hi: [0, 1], bubble: t(E, "Fast input. Read it input-first: main → solve.", "빠른 입력. 입력부터: main → solve.") },
     { hi: [3, 7], bubble: t(E, "main — each test: read the 5 numbers → call solve → print.", "main — 각 테스트: 숫자 5개 읽어 → solve 호출 → 출력.") },
     { hi: [9, 12], bubble: t(E, "red_now = red I can make now (convert my blue). If it already reaches fA → 0 extra.", "red_now = 지금 가진 걸로 만드는 빨강 (내 파랑 환전). 목표 이상이면 추가 0.") },
-    { hi: [13, 13], bubble: t(E, "shortage = red shortage (fA − red_now) minus the last one. The −1 is the 'last one is special' idea from the concept step — the last red needs only 1 chip, guaranteed by the final +1. (sanity-check with fA=1)", "shortage = 부족한 빨강(fA − red_now)에서 마지막 1개 뺀 것. −1은 '마지막 한 개는 따로' 개념 스텝에서 배운 거예요 — 마지막 빨강은 1칩이면 완성돼서 맨 끝 +1로 보장. (fA=1로 검산)") },
+    { hi: [13, 13], bubble: t(E, "shortage = (fA−1) − red_now. We count the trickster's STALL: they can pin me only up to goal−1 red (giving the goal = losing), so this is the shortfall to fA−1 — that's the whole meaning of the −1. (concept step 'why 7, not 8')", "shortage = (fA−1) − red_now. 심술쟁이의 '버티기'를 세는 거예요: 목표를 만들어주는 순간 지니까 버티기 한계는 목표보다 1 작은 빨강(fA−1)까지 — 거기까지의 부족분. 이게 −1의 전부예요. (개념 스텝 '왜 8이 아니라 7')") },
     { hi: [14, 14], bubble: t(E, "Trickster step 1: max out the leftover. From now (B%cB) up to the max (cB−1) → (cB−1)−(B%cB) more blue, all wasted. Like shortage: goal − now.", "심술쟁이 1단계: 자투리를 꽉 채워요. 지금(B%cB)에서 최대(cB−1)까지 → (cB−1)−(B%cB)개 더, 다 낭비. shortage 처럼 '목표 − 지금'. ← '파랑 낭비' 스텝.") },
     { hi: [15, 18], bubble: t(E, "Fill the rest with the least-helpful color. If swap loses (cA<cB), the trickster gives blue in GROUPS: cB blue = cA red (the '환전세기' step, reversed) → shortage÷cA groups × cB blue, plus the remainder as red.", "남은 부족분을 덜 도와주는 색으로 채워요. 환전 손해(cA<cB)면 파랑을 '그룹'으로 줘요: 파랑 cB개 = 빨강 cA개 ('환전세기' 스텝의 역) → shortage÷cA 그룹 × cB 파랑, 나머지는 빨강. ← '파랑 낭비 / 빨강' 스텝.") },
-    { hi: [19, 19], bubble: t(E, "answer = wasted_blue + to_fill + 1. e.g. sample 2 (0 0 2 3 5): red_now 0 → shortage 4 → wasted_blue 2, to_fill 6 → 2 + 6 + 1 = 9 ✓ (matches sample 2). One calc — no loop, no search. O(1).", "답 = wasted_blue + to_fill + 1. 예로 샘플 2 (0 0 2 3 5): red_now 0 → shortage 4 → wasted_blue 2, to_fill 6 → 2 + 6 + 1 = 9 ✓ (샘플 2 정답과 일치). 계산 한 번 — 반복도 탐색도 없이 O(1).") },
+    { hi: [19, 19], bubble: t(E, "answer = MAX STALL (wasted_blue + to_fill) + 1 finishing chip. After the stall, ANY chip reaches the goal — blue completes a group, red adds 1. e.g. (1 0 2 3 5): red_now 1 → shortage 3 → stall 2+4=6, +1 → 7 ✓. One calc, O(1).", "답 = 최대 버티기(wasted_blue + to_fill) + 끝내는 칩 1. 버티기가 끝나면 무슨 색이든 목표 도달 — 파랑은 묶음 완성, 빨강은 +1. 예: (1 0 2 3 5): red_now 1 → shortage 3 → 버티기 2+4=6, +1 → 7 ✓. 계산 한 번, O(1).") },
   ] };
 }
 
