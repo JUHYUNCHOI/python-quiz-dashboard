@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
-import { getMexesSections, MexesSlider } from "./components";
+import { getMexesWalk, MexesSlider } from "./components";
 import { MexesMaxSim, MexesIntroSim, MexesSampleSim } from "./sims";
-import { CodeSectionView } from "@/components/quest/CodeSectionView";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 export function makeMexesCh1(E) {
   return [
@@ -91,16 +91,15 @@ export function makeMexesCh1(E) {
 }
 
 export function makeMexesCh2(E, lang = "py") {
+  const w = getMexesWalk(E, lang);
   return [
-    /* 2-1..2-N — sections directly. */
-    ...getMexesSections(E).map((sec, i) => ({
+    {
       type: "reveal",
-      narr: i === 0
-        ? t(E,
-            "Each target mex: ops = max(missing values, count of mex).",
-            "각 목표 mex: ops = max(빠진 값 수, mex 개수).")
-        : "",
-      content: (<CodeSectionView section={sec} lang={lang} E={E} />),
-    })),
+      label: t(E, "Code", "코드"),
+      narr: t(E,
+        "The whole solution, read line by line — count frequencies, prefix-count the missing, then max per target mex.",
+        "풀이 전체를 한 줄씩 — 빈도 세고, 빠진 값 prefix 누적, 그다음 목표 mex 마다 max."),
+      content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#7c3aed" />),
+    },
   ];
 }

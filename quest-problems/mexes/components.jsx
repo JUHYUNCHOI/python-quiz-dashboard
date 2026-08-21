@@ -180,7 +180,11 @@ const MEX_S3_PY = [
   "# (these are values we need to ADD to make mex = i)",
   "missing = [0] * (N + 2)",
   "for i in range(1, N + 2):",
-  "    missing[i] = missing[i-1] + (1 if cnt[i-1] == 0 else 0)",
+  "    if cnt[i-1] == 0:",
+  "        # value i-1 is absent → one more missing",
+  "        missing[i] = missing[i-1] + 1",
+  "    else:",
+  "        missing[i] = missing[i-1]",
 ];
 const MEX_S3_CPP = [
   "    // missing[i] = number of v in {0..i-1} with cnt[v] == 0",
@@ -208,7 +212,11 @@ const MEX_FULL_PY = [
   "",
   "missing = [0] * (N + 2)",
   "for i in range(1, N + 2):",
-  "    missing[i] = missing[i-1] + (1 if cnt[i-1] == 0 else 0)",
+  "    if cnt[i-1] == 0:",
+  "        # value i-1 is absent → one more missing",
+  "        missing[i] = missing[i-1] + 1",
+  "    else:",
+  "        missing[i] = missing[i-1]",
   "",
   "# For each target mex i (0..N):",
   "#   ops = max(missing[i], cnt[i])",
@@ -321,6 +329,38 @@ export function getMexesSections(E) {
 
 export function MexesProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor={A} />;
+}
+
+/* ─── CodeWalk (설명 말풍선을 코드 줄에 붙여 스텝별로) — 페이지식 CodeSectionView 대체 ─── */
+const _MEX_VARS = [
+  { v: "cnt[v]", ko: "값 v 가 배열에 나온 횟수", en: "how many times value v appears" },
+  { v: "missing[i]", ko: "{0..i−1} 중 배열에 없는 값의 수", en: "absent values among {0..i−1}" },
+  { v: "ops", ko: "그 mex 를 만드는 최소 연산 수", en: "min ops to reach that mex" },
+];
+
+export function getMexesWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return { code: MEX_FULL_CPP, vars: _MEX_VARS, beats: [
+      { hi: [0, 10], bubble: t(E, "Headers + main. Read N, then the N array values into a. Read it input-first.",
+                                  "헤더 + main. N 읽고, N 개 값을 배열 a 로. 입력부터 읽어요.") },
+      { hi: [12, 17], bubble: t(E, "cnt[v] = how many array elements equal v. Values are in [0, N], so one pass fills it.",
+                                   "cnt[v] = 배열에서 v 인 원소 수. 값은 [0, N] 이라 한 번 훑으면 채워져요.") },
+      { hi: [19, 26], bubble: t(E, "missing[i] = how many of {0..i−1} are absent — a running count. If cnt[i−1] is 0, value i−1 is absent → add 1; otherwise carry the same count.",
+                                   "missing[i] = {0..i−1} 중 빠진 값 수 — 누적 카운트. cnt[i−1] 이 0 이면 값 i−1 이 빠진 것 → +1, 아니면 그대로 이어받아요.") },
+      { hi: [28, 36], bubble: t(E, "For each target mex i: must ADD missing[i], must REMOVE cnt[i] copies of i. One op can do both, so ops = max(missing[i], cnt[i]).",
+                                   "각 목표 mex i: missing[i] 개 추가, i 의 복사본 cnt[i] 개 제거. 한 op 가 둘을 겸할 수 있어 ops = max(missing[i], cnt[i]).") },
+    ] };
+  }
+  return { code: MEX_FULL_PY, vars: _MEX_VARS, beats: [
+    { hi: [0, 4], bubble: t(E, "Read it input-first: N (the length), then the N values into array a.",
+                               "입력부터: N (길이) 읽고, N 개 값을 배열 a 로.") },
+    { hi: [6, 9], bubble: t(E, "cnt[v] = how many array elements equal v. Values are guaranteed in [0, N], so one pass fills the whole count.",
+                               "cnt[v] = 배열에서 v 인 원소 수. 값이 [0, N] 보장이라 한 번 훑으면 다 채워져요.") },
+    { hi: [11, 17], bubble: t(E, "missing[i] = how many of {0, 1, …, i−1} are absent from the array — a running (prefix) count. If cnt[i−1] is 0, the value i−1 is absent → one more (+1); otherwise carry the same count. (Written as if/else so each case is clear.)",
+                                 "missing[i] = 값 {0, 1, …, i−1} 중 배열에 없는 것의 수 — 누적(prefix) 카운트. cnt[i−1] 이 0 이면 값 i−1 이 빠진 것 → 하나 더(+1), 아니면 그대로 이어받아요. (경우가 잘 보이게 if/else 로 풀어 썼어요.)") },
+    { hi: [19, 26], bubble: t(E, "For each target mex i: must ADD missing[i] absent values, must REMOVE cnt[i] copies of i. Removing a copy of i can double as adding a missing value — one op does both — so ops = max(missing[i], cnt[i]), not the sum.",
+                                 "각 목표 mex i: 빠진 값 missing[i] 개 추가, i 의 복사본 cnt[i] 개 제거. i 를 제거하면서 빠진 값으로 바꿀 수 있어(한 op 가 둘) — 그래서 ops = max(missing[i], cnt[i]), 합이 아니라.") },
+  ] };
 }
 
 /* ─── PDF helpers (same template as other quests) ─── */
