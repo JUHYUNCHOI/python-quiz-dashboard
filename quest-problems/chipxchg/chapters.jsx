@@ -157,9 +157,9 @@ export function makeChipXchgCh1(E) {
     // [전] 도구: 마지막 한 개는 따로 (경계/off-by-one) — 왜 −1 했다 +1 하나. 도장카드 비유 + 언제 쓰나.
     {
       type: "reveal",
-      label: t(E, "Tool: receive chips one by one", "도구: 칩 하나씩 받아보기"),
-      narr: t(E, "Watch the trickster hand chips one at a time: they can stall for 6 chips (red stuck at 4), and the 7th chip — any color — finishes it. Answer 7.",
-                 "심술쟁이가 칩을 하나씩 주는 걸 따라가요: 6개까지는 버티고(빨강 4에서 멈춤), 7번째는 무슨 색이든 끝나요. 답 7."),
+      label: t(E, "Tool: why −1 then +1", "도구: 왜 −1 했다 +1?"),
+      narr: t(E, "Receive the chips one by one and watch the price of each red: earlier reds need a whole 3-blue group, but the LAST red costs just 1 chip. That gap is the −1/+1.",
+                 "칩을 하나씩 받아보며 빨강 1개의 값을 봐요: 앞의 빨강은 파랑 3개 묶음이 필요한데, 마지막 빨강은 칩 1개면 돼요. 그 차이가 −1/+1 이에요."),
       content: (<LastStepSlide E={E} />),
     },
 
