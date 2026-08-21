@@ -158,8 +158,8 @@ export function makeChipXchgCh1(E) {
     {
       type: "reveal",
       label: t(E, "Tool: why −1 then +1", "도구: 왜 −1 했다 +1?"),
-      narr: t(E, "Receive the chips one by one and watch the price of each red: earlier reds need a whole 3-blue group, but the LAST red costs just 1 chip. That gap is the −1/+1.",
-                 "칩을 하나씩 받아보며 빨강 1개의 값을 봐요: 앞의 빨강은 파랑 3개 묶음이 필요한데, 마지막 빨강은 칩 1개면 돼요. 그 차이가 −1/+1 이에요."),
+      narr: t(E, "1 chip is worth at least 1 red, so the last red is always guaranteed by one chip. Set it aside (−1), price the rest, add it back (+1).",
+                 "칩 1개는 최소 빨강 1개 값이라, 마지막 빨강은 늘 칩 1개로 보장돼요. 그 1개는 빼두고(−1) 나머지를 센 뒤, 다시 더해요(+1)."),
       content: (<LastStepSlide E={E} />),
     },
 

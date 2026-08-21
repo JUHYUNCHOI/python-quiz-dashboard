@@ -263,7 +263,7 @@ export function getChipXchgWalk(E, lang = "py") {
       "ll solve(ll A, ll B, ll cA, ll cB, ll fA) {",
       "    ll red_now = A + (B / cB) * cA;",
       "    if (red_now >= fA) return 0;",
-      "    ll shortage = (fA - red_now) - 1;   // " + c("last red is cheaper → +1 later", "마지막 빨강은 싸다 → 뒤에서 +1"),
+      "    ll shortage = (fA - red_now) - 1;   // " + c("last red = 1 chip, guaranteed", "마지막 빨강 = 칩 1개로 보장"),
       "    ll wasted_blue = (cB - 1) - (B % cB);",
       "    ll to_fill;",
       "    if (cA >= cB) {                     // " + c("swap pays → red", "환전 이득 → 빨강"),
@@ -288,10 +288,10 @@ export function getChipXchgWalk(E, lang = "py") {
       { hi: [18, 19], bubble: t(E, "main — read T tests.", "main — 테스트 T개 읽기.") },
       { hi: [20, 24], bubble: t(E, "Each test: read the 5 numbers → call solve → print.", "각 테스트: 숫자 5개 읽어 → solve 호출 → 출력.") },
       { hi: [4, 6], bubble: t(E, "red_now = red I can make now (convert my blue). If it already reaches fA → 0 extra.", "red_now = 지금 가진 걸로 만드는 빨강 (내 파랑 환전). 목표 이상이면 추가 0.") },
-      { hi: [7, 7], bubble: t(E, "shortage = how many red I still need, MINUS the last one. Why minus? Reds bought the group way cost cB chips each group, but the LAST red costs just 1 chip (the leftover blue is already waiting). So we price only these, and add the last red back as +1 at the end. Pricing all of them the group way overcounts.", "shortage = 아직 필요한 빨강 수에서 마지막 1개를 뺀 것. 왜 뺄까요? 묶음으로 사는 빨강은 파랑 cB개씩 들지만, 마지막 빨강은 칩 1개면 돼요 (남은 파랑이 이미 대기 중이라). 그래서 이것들만 묶음 값으로 세고, 마지막 빨강은 맨 끝에 +1 로 더해요. 전부 묶음 값으로 세면 과다 계산.") },
+      { hi: [7, 7], bubble: t(E, "shortage = red still needed, MINUS 1. Why minus one? Because 1 chip is worth at least 1 red (a red chip is +1 outright; blue can't be worse). So the last red is guaranteed by a single chip no matter what — set it aside here, price only the rest the expensive way, and add that chip back as +1 at the end.", "shortage = 아직 필요한 빨강에서 1개를 뺀 것. 왜 1개를 뺄까요? 칩 1개는 최소 빨강 1개 값을 하거든요 (빨강 칩이면 그대로 +1, 파랑이라도 그보다 나쁠 순 없어요). 그래서 마지막 빨강 1개는 뭘 받든 칩 1개로 보장돼요 — 여기선 빼두고, 나머지만 비싼 값으로 센 뒤, 맨 끝에 그 칩 1개를 +1 로 더해요.") },
       { hi: [8, 8], bubble: t(E, "Trickster step 1: max out the leftover. From now (B%cB) up to the max (cB−1) → (cB−1)−(B%cB) more blue, all wasted. Like shortage: goal − now.", "심술쟁이 1단계: 자투리를 꽉 채워요. 지금(B%cB)에서 최대(cB−1)까지 → (cB−1)−(B%cB)개 더, 다 낭비. shortage 처럼 '목표 − 지금'. ← '파랑 낭비' 스텝.") },
       { hi: [9, 14], bubble: t(E, "Fill the rest with the least-helpful color. If swap loses (cA<cB), the trickster gives blue in GROUPS: cB blue = cA red (the '환전세기' step, reversed) → shortage÷cA groups × cB blue, plus the remainder as red.", "남은 부족분을 덜 도와주는 색으로 채워요. 환전 손해(cA<cB)면 파랑을 '그룹'으로 줘요: 파랑 cB개 = 빨강 cA개 ('환전세기' 스텝의 역) → shortage÷cA 그룹 × cB 파랑, 나머지는 빨강. ← '파랑 낭비 / 빨강' 스텝.") },
-      { hi: [15, 15], bubble: t(E, "answer = wasted_blue + to_fill + 1. The +1 is the LAST red — it costs a single chip (any color finishes it). e.g. (1 0 2 3 5): need 4 red → price only 3 (shortage 3) → 2 wasted + 4 = 6 chips, then +1 → 7 ✓ (pricing all 4 the group way would give 8). One calc, O(1).", "답 = wasted_blue + to_fill + 1. +1 이 바로 마지막 빨강 — 칩 하나면 완성돼요 (무슨 색이든). 예: (1 0 2 3 5): 빨강 4개 필요 → 3개만 값으로 세고(shortage 3) → 버려질 파랑 2 + 4 = 6개, 그다음 +1 → 7 ✓ (4개를 다 묶음 값으로 세면 8). 계산 한 번, O(1).") },
+      { hi: [15, 15], bubble: t(E, "answer = wasted_blue + to_fill + 1, where +1 is that guaranteed last red. Check with (1 0 2 3 5): with 6 chips my red is exactly 4 — one short, always. The 7th chip (any color) makes 5 → answer 7. One calc, O(1).", "답 = wasted_blue + to_fill + 1, 여기서 +1 이 보장된 마지막 빨강. (1 0 2 3 5) 로 확인: 6개 받으면 내 빨강은 정확히 4 — 늘 딱 1개 부족. 7번째 칩이 무슨 색이든 5로 만들어요 → 답 7. 계산 한 번, O(1).") },
     ] };
   }
   const code = [
@@ -308,7 +308,7 @@ export function getChipXchgWalk(E, lang = "py") {
     "    red_now = A + (B // cB) * cA",
     "    if red_now >= fA:",
     "        return 0",
-    "    shortage = (fA - red_now) - 1       # " + c("last red is cheaper → +1 later", "마지막 빨강은 싸다 → 뒤에서 +1"),
+    "    shortage = (fA - red_now) - 1       # " + c("last red = 1 chip, guaranteed", "마지막 빨강 = 칩 1개로 보장"),
     "    wasted_blue = (cB - 1) - (B % cB)",
     "    if cA >= cB:                        # " + c("swap pays → red", "환전 이득 → 빨강"),
     "        to_fill = shortage",
@@ -322,10 +322,10 @@ export function getChipXchgWalk(E, lang = "py") {
     { hi: [0, 1], bubble: t(E, "Fast input. Read it input-first: main → solve.", "빠른 입력. 입력부터: main → solve.") },
     { hi: [3, 7], bubble: t(E, "main — each test: read the 5 numbers → call solve → print.", "main — 각 테스트: 숫자 5개 읽어 → solve 호출 → 출력.") },
     { hi: [9, 12], bubble: t(E, "red_now = red I can make now (convert my blue). If it already reaches fA → 0 extra.", "red_now = 지금 가진 걸로 만드는 빨강 (내 파랑 환전). 목표 이상이면 추가 0.") },
-    { hi: [13, 13], bubble: t(E, "shortage = how many red I still need, MINUS the last one. Why minus? Reds bought the group way cost cB chips each group, but the LAST red costs just 1 chip (the leftover blue is already waiting). So we price only these, and add the last red back as +1 at the end. Pricing all of them the group way overcounts.", "shortage = 아직 필요한 빨강 수에서 마지막 1개를 뺀 것. 왜 뺄까요? 묶음으로 사는 빨강은 파랑 cB개씩 들지만, 마지막 빨강은 칩 1개면 돼요 (남은 파랑이 이미 대기 중이라). 그래서 이것들만 묶음 값으로 세고, 마지막 빨강은 맨 끝에 +1 로 더해요. 전부 묶음 값으로 세면 과다 계산.") },
+    { hi: [13, 13], bubble: t(E, "shortage = red still needed, MINUS 1. Why minus one? Because 1 chip is worth at least 1 red (a red chip is +1 outright; blue can't be worse). So the last red is guaranteed by a single chip no matter what — set it aside here, price only the rest the expensive way, and add that chip back as +1 at the end.", "shortage = 아직 필요한 빨강에서 1개를 뺀 것. 왜 1개를 뺄까요? 칩 1개는 최소 빨강 1개 값을 하거든요 (빨강 칩이면 그대로 +1, 파랑이라도 그보다 나쁠 순 없어요). 그래서 마지막 빨강 1개는 뭘 받든 칩 1개로 보장돼요 — 여기선 빼두고, 나머지만 비싼 값으로 센 뒤, 맨 끝에 그 칩 1개를 +1 로 더해요.") },
     { hi: [14, 14], bubble: t(E, "Trickster step 1: max out the leftover. From now (B%cB) up to the max (cB−1) → (cB−1)−(B%cB) more blue, all wasted. Like shortage: goal − now.", "심술쟁이 1단계: 자투리를 꽉 채워요. 지금(B%cB)에서 최대(cB−1)까지 → (cB−1)−(B%cB)개 더, 다 낭비. shortage 처럼 '목표 − 지금'. ← '파랑 낭비' 스텝.") },
     { hi: [15, 18], bubble: t(E, "Fill the rest with the least-helpful color. If swap loses (cA<cB), the trickster gives blue in GROUPS: cB blue = cA red (the '환전세기' step, reversed) → shortage÷cA groups × cB blue, plus the remainder as red.", "남은 부족분을 덜 도와주는 색으로 채워요. 환전 손해(cA<cB)면 파랑을 '그룹'으로 줘요: 파랑 cB개 = 빨강 cA개 ('환전세기' 스텝의 역) → shortage÷cA 그룹 × cB 파랑, 나머지는 빨강. ← '파랑 낭비 / 빨강' 스텝.") },
-    { hi: [19, 19], bubble: t(E, "answer = wasted_blue + to_fill + 1. The +1 is the LAST red — it costs a single chip (any color finishes it). e.g. (1 0 2 3 5): need 4 red → price only 3 (shortage 3) → 2 wasted + 4 = 6 chips, then +1 → 7 ✓ (pricing all 4 the group way would give 8). One calc, O(1).", "답 = wasted_blue + to_fill + 1. +1 이 바로 마지막 빨강 — 칩 하나면 완성돼요 (무슨 색이든). 예: (1 0 2 3 5): 빨강 4개 필요 → 3개만 값으로 세고(shortage 3) → 버려질 파랑 2 + 4 = 6개, 그다음 +1 → 7 ✓ (4개를 다 묶음 값으로 세면 8). 계산 한 번, O(1).") },
+    { hi: [19, 19], bubble: t(E, "answer = wasted_blue + to_fill + 1, where +1 is that guaranteed last red. Check with (1 0 2 3 5): with 6 chips my red is exactly 4 — one short, always. The 7th chip (any color) makes 5 → answer 7. One calc, O(1).", "답 = wasted_blue + to_fill + 1, 여기서 +1 이 보장된 마지막 빨강. (1 0 2 3 5) 로 확인: 6개 받으면 내 빨강은 정확히 4 — 늘 딱 1개 부족. 7번째 칩이 무슨 색이든 5로 만들어요 → 답 7. 계산 한 번, O(1).") },
   ] };
 }
 

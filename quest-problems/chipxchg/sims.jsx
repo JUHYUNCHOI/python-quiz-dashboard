@@ -1021,8 +1021,8 @@ export function LastStepSlide({ E }) {
         <>Blue is too risky now, so: <b style={{ color: RED }}>one red</b>. Red 4 — <b>exactly one short</b>. That's 6 chips, and the trickster <b>can't stall any further</b>. This is the max stall.</>,
         <>파랑은 더 못 주니 <b style={{ color: RED }}>빨강 1개</b>. 빨강 4 — <b>딱 1개 부족</b>. 여기까지 6개, 심술쟁이는 <b>더는 못 버텨요</b>. 이게 최대 버티기예요.</>)
     : s.k === "limits" ? t(E,
-        <>Look at the <b>price of each red</b>. Reds 2·3·4 came from a <b>full group of 3 blue</b>. But the <b>last red</b> (the 5th) costs just <b>1 chip</b> — 2 blue are already waiting, so any chip finishes it. <b>The last one is cheaper.</b></>,
-        <><b>빨강 1개의 값</b>을 봐요. 2·3·4번째 빨강은 <b>파랑 3개 묶음</b>을 받아야 생겼어요. 그런데 <b>마지막 빨강</b>(5번째)은 <b>칩 1개</b>면 돼요 — 파랑 2개가 이미 대기 중이라 아무 칩이나 끝내주거든요. <b>마지막 하나만 값이 싸요.</b></>)
+        <>Key fact: <b>1 chip is worth at least 1 red</b> — a red chip is +1 outright, and blue can never be worse than that. So <b>whatever the situation, the last red is always buyable with 1 chip</b>.</>,
+        <>핵심: <b>칩 1개는 최소 빨강 1개 값</b>을 해요 — 빨강 칩이면 그대로 +1, 파랑이라도 그보다 나쁠 순 없어요. 그래서 <b>어떤 상황이든 마지막 빨강 1개는 칩 1개로 살 수 있어요</b>.</>)
     : s.k === "x7" ? t(E,
         <>The 7th chip — <b>either color ends it</b>: red → 5 ✓, blue → completes the group → +2 → 6 ✓. So the answer is <b style={{ color: A }}>7</b>.</>,
         <>7번째 칩 — <b>무슨 색이든 끝나요</b>: 빨강이면 5 ✓, 파랑이면 묶음 완성 → +2 → 6 ✓. 그래서 답은 <b style={{ color: A }}>7</b>.</>)
@@ -1064,38 +1064,32 @@ export function LastStepSlide({ E }) {
         </div>
       ) : s.k === "limits" ? (
         <div style={{ maxWidth: 500, margin: "0 auto", display: "flex", flexDirection: "column", gap: 9 }}>
-          {/* 앞의 빨강들: 묶음 값 */}
-          <div style={{ border: `1.5px solid ${BLU}`, background: BLUBG, borderRadius: 10, padding: "9px 12px", wordBreak: "keep-all" }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#1e40af", marginBottom: 5 }}>
-              {t(E, "reds before the last — need a whole group", "마지막 앞의 빨강 — 묶음을 통째로 받아야")}
+          {/* 칩 1개의 최소 가치 */}
+          <div style={{ border: "2px solid #15803d", background: "#f0fdf4", borderRadius: 10, padding: "9px 12px", wordBreak: "keep-all" }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+              {t(E, "1 chip is worth at least 1 red", "칩 1개 = 최소 빨강 1개 값")}
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", fontSize: 12, fontWeight: 700, marginBottom: 4 }}>
+              <Chip color="red" size={18} />
+              <span style={{ color: "#15803d" }}>{t(E, "red → +1 red, right away", "빨강이면 → 빨강 +1, 바로")}</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", fontSize: 12, fontWeight: 700 }}>
-              <Chip color="blue" size={18} /><Chip color="blue" size={18} /><Chip color="blue" size={18} />
-              <span style={{ color: A, fontWeight: 800 }}>→</span>
-              <Chip color="red" size={18} /><Chip color="red" size={18} />
-              <span style={{ color: "#1e40af" }}>{t(E, "3 chips → 2 red", "칩 3개 → 빨강 2")}</span>
+              <Chip color="blue" size={18} />
+              <span style={{ color: "#1e40af" }}>{t(E, "blue → never worse than that", "파랑이라도 → 그보다 나쁠 순 없어요")}</span>
             </div>
           </div>
-          {/* 마지막 빨강: 칩 1개 */}
-          <div style={{ border: "2px solid #15803d", background: "#f0fdf4", borderRadius: 10, padding: "9px 12px", wordBreak: "keep-all" }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 5 }}>
-              {t(E, "the LAST red — just 1 chip", "마지막 빨강 — 칩 딱 1개")}
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", fontSize: 12, fontWeight: 700 }}>
-              <Chip color="blue" size={18} faded /><Chip color="blue" size={18} faded />
-              <span style={{ color: "#64748b", fontSize: 11 }}>{t(E, "(already waiting)", "(이미 대기 중)")}</span>
-              <span style={{ color: "#64748b" }}>+</span>
-              <div style={{ width: 18, height: 18, borderRadius: 999, border: "2px dashed #15803d", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color: "#15803d" }}>?</div>
-              <span style={{ color: "#15803d", fontWeight: 800 }}>→ {t(E, "done ✓", "끝 ✓")}</span>
-            </div>
+          {/* 그래서 마지막 1개는 항상 보장 */}
+          <div style={{ border: `1.5px solid ${RED}`, background: REDBG, borderRadius: 10, padding: "9px 12px", wordBreak: "keep-all", fontSize: 12, fontWeight: 700, color: "#7f1d1d", lineHeight: 1.6 }}>
+            {t(E, <>So the <b>last red is guaranteed</b> by 1 chip — no matter what the trickster does. The <b>other</b> reds are the expensive ones (the trickster drags them out with blue groups).</>,
+                 <>그래서 <b>마지막 빨강 1개는 칩 1개로 보장</b>돼요 — 심술쟁이가 뭘 하든. 비싼 건 <b>나머지</b> 빨강들이에요 (심술쟁이가 파랑 묶음으로 질질 끌거든요).</>)}
           </div>
           {/* 그래서 −1 / +1 */}
           <div style={{ border: `1.5px solid ${A}`, background: "#eff6ff", borderRadius: 10, padding: "10px 12px", wordBreak: "keep-all", lineHeight: 1.65, fontSize: 12.5, fontWeight: 700, color: "#1e3a8a" }}>
-            {t(E, <>So: price the <b>first 3</b> reds the group way (<b style={{ color: RED }}>−1</b>: hold the last one back), then add the last red as <b>1 chip</b> (<b style={{ color: "#15803d" }}>+1</b>).</>,
-                 <>그래서: <b>앞의 3개</b>만 묶음 값으로 세고 (<b style={{ color: RED }}>−1</b>: 마지막 1개는 빼두기), 마지막 빨강은 <b>칩 1개</b>로 더해요 (<b style={{ color: "#15803d" }}>+1</b>).</>)}
+            {t(E, <><b style={{ color: RED }}>−1</b>: set the last red aside (it's the guaranteed one) and price only the rest the expensive way. <b style={{ color: "#15803d" }}>+1</b>: add that one chip back at the end.</>,
+                 <><b style={{ color: RED }}>−1</b>: 보장된 마지막 빨강 1개는 빼두고, 나머지만 비싼 값으로 세요. <b style={{ color: "#15803d" }}>+1</b>: 맨 끝에 그 칩 1개를 더해요.</>)}
             <div style={{ marginTop: 6, fontSize: 12, color: "#7f1d1d" }}>
-              {t(E, <>If we priced all 4 the group way → 8. <b>That's overcounting</b> — the last red never needs a full group.</>,
-                   <>4개를 다 묶음 값으로 세면 → 8. <b>그건 과다 계산</b>이에요 — 마지막 빨강은 묶음을 통째로 받을 일이 없거든요.</>)}
+              {t(E, <>Check: with <b>6 chips</b> my red is <b>4</b> — always exactly one short. The 7th chip (any color) makes it 5. → <b>7</b></>,
+                   <>확인: <b>6개</b> 받으면 내 빨강은 <b>4</b> — 늘 딱 1개 부족. 7번째 칩이 (무슨 색이든) 5로 만들어요. → <b>7</b></>)}
             </div>
           </div>
         </div>
