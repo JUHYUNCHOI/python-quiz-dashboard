@@ -157,9 +157,9 @@ export function makeChipXchgCh1(E) {
     // [전] 도구: 마지막 한 개는 따로 (경계/off-by-one) — 왜 −1 했다 +1 하나. 도장카드 비유 + 언제 쓰나.
     {
       type: "reveal",
-      label: t(E, "Tool: why 7, not 8?", "도구: 왜 8이 아니라 7?"),
-      narr: t(E, "Start from the usual count (8) and see why it's not the minimum: the trickster never fills the goal — they stall. Max stall (6) + 1 = 7.",
-                 "하던 대로 센 8부터 — 왜 그게 최소가 아닌지: 심술쟁이는 채워주지 않고 버텨요. 최대 버티기(6) + 1 = 7."),
+      label: t(E, "Tool: receive chips one by one", "도구: 칩 하나씩 받아보기"),
+      narr: t(E, "Watch the trickster hand chips one at a time: they can stall for 6 chips (red stuck at 4), and the 7th chip — any color — finishes it. Answer 7.",
+                 "심술쟁이가 칩을 하나씩 주는 걸 따라가요: 6개까지는 버티고(빨강 4에서 멈춤), 7번째는 무슨 색이든 끝나요. 답 7."),
       content: (<LastStepSlide E={E} />),
     },
 
