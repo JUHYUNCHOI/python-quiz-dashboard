@@ -48,6 +48,44 @@ function Say({ children, tone = "go" }) {
 function Row({ children }) {
   return <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, flexWrap: "wrap" }}>{children}</div>;
 }
+
+/* 재사용 pair visual — 두 블록 나란히, 겹치는 2 글자 초록, 남는 1 글자 보라. */
+function PairOverlapVisual({ E, aBlock, bBlock, aOvIdx, bOvIdx, aLoIdx, bLoIdx, overlapStr, loLetter, aLabelEn, aLabelKo, bLabelEn, bLabelKo }) {
+  const OV = "#059669", OV_BG = "#ecfdf5";
+  const LO = "#8b5cf6", LO_BG = "#f5f3ff";
+  const idle = { bd: "#cbd5e1", bg: "#fff" };
+  const cell = (isOv, isLo) => isOv
+    ? { bd: OV, bg: OV_BG }
+    : isLo ? { bd: LO, bg: LO_BG } : idle;
+  return (
+    <>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 18, marginBottom: 10 }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+          <div style={{ display: "flex", gap: 4 }}>
+            {aBlock.map((ch, i) => {
+              const c = cell(aOvIdx.includes(i), i === aLoIdx);
+              return <Tile key={i} ch={ch} size={44} bd={c.bd} bg={c.bg} fg="#1f2937" />;
+            })}
+          </div>
+          <div style={{ fontSize: 10, fontWeight: 800, color: OV }}>{t(E, aLabelEn, aLabelKo)}</div>
+        </div>
+        <div style={{ fontSize: 20, fontWeight: 800, color: OV }}>=</div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+          <div style={{ display: "flex", gap: 4 }}>
+            {bBlock.map((ch, i) => {
+              const c = cell(bOvIdx.includes(i), i === bLoIdx);
+              return <Tile key={i} ch={ch} size={44} bd={c.bd} bg={c.bg} fg="#1f2937" />;
+            })}
+          </div>
+          <div style={{ fontSize: 10, fontWeight: 800, color: OV }}>{t(E, bLabelEn, bLabelKo)}</div>
+        </div>
+      </div>
+      <Caption color={OV}>
+        {overlapStr} {t(E, "overlaps ✓", "겹침 ✓")}  ·  <span style={{ color: LO }}>{loLetter}·{loLetter} {t(E, "leftover — same letter ✓", "남음 — 같은 글자 ✓")}</span>
+      </Caption>
+    </>
+  );
+}
 function Caption({ color, children }) {
   return <div style={{ textAlign: "center", marginTop: 13, fontSize: 13.5, fontWeight: 800, color, fontFamily: "'JetBrains Mono',monospace" }}>{children}</div>;
 }
@@ -141,7 +179,9 @@ export function EraseRuleSim({ E }) {
 export function InsightSim({ E }) {
   const steps = [
     { kind: "pair" },
-    { kind: "overlap" },
+    { kind: "overlap" },     // Case 1/3: COW × OWC — 겹침 OW, 남음 C·C
+    { kind: "case2" },       // Case 2/3: COW × WCO — 겹침 CO, 남음 W·W
+    { kind: "case3" },       // Case 3/3: OWC × WCO — 겹침 WC, 남음 O·O + 요약
     { kind: "split" },
     { kind: "odd" },
   ];
@@ -160,8 +200,14 @@ export function InsightSim({ E }) {
       <><b>Surprise:</b> whenever it's possible, the answer is <b>always exactly 2</b> — never 3 or more! Why? Idea: <b>pair each front block with its back partner</b> (block <b>i</b> ↔ block <b>i + N/2</b>). Here N=2, so <b>COW</b> ↔ <b>OWC</b>.</>,
       <><b>놀랍게도</b> — 될 때는 답이 <b>언제나 딱 2번</b>이에요. 3번 이상은 절대 안 들어요! 왜일까요? 아이디어: <b>앞쪽 블록 i 를 뒤쪽 파트너 (i + N/2) 와 짝지어요</b>. 여기 N=2 니 <b>COW</b> ↔ <b>OWC</b>.</>)
     : s.kind === "overlap" ? t(E,
-      <>Any two of <b>{"{COW, OWC, WCO}"}</b> share a <b>2-letter overlap</b>. Look: <b>COW</b> vs <b>OWC</b> — the middle "<b>OW</b>" appears in both!</>,
-      <><b>{"{COW, OWC, WCO}"}</b> 어떤 두 블록도 <b>2 글자가 겹쳐요</b>. 봐요: <b>COW</b> 와 <b>OWC</b> — 가운데 "<b>OW</b>" 가 둘 다에 있어요!</>)
+      <><b>Case 1 / 3.</b> <b>COW × OWC</b> — the middle "<b>OW</b>" appears in both. Leftover: <b>C</b> on front + <b>C</b> on back (same letter).</>,
+      <><b>1 / 3 케이스.</b> <b>COW × OWC</b> — 가운데 "<b>OW</b>" 가 양쪽에 다 있어요. 남는 건: 앞 <b>C</b> + 뒤 <b>C</b> (같은 글자).</>)
+    : s.kind === "case2" ? t(E,
+      <><b>Case 2 / 3.</b> <b>COW × WCO</b> — this time "<b>CO</b>" overlaps (front's start = back's end). Leftover: <b>W</b> · <b>W</b> — same letter again!</>,
+      <><b>2 / 3 케이스.</b> <b>COW × WCO</b> — 이번엔 "<b>CO</b>" 가 겹쳐요 (앞의 시작 = 뒤의 끝). 남는 건: <b>W</b> · <b>W</b> — 이번에도 같은 글자!</>)
+    : s.kind === "case3" ? t(E,
+      <><b>Case 3 / 3.</b> <b>OWC × WCO</b> — "<b>WC</b>" overlaps. Leftover: <b>O</b> · <b>O</b>. So all 3 possible pairs have 2-letter overlap + same-letter leftover → <b>M = 2 always works</b>.</>,
+      <><b>3 / 3 케이스.</b> <b>OWC × WCO</b> — "<b>WC</b>" 가 겹치고 남는 건 <b>O</b> · <b>O</b>. 서로 다른 3 쌍 다 확인 → 2 글자 겹침 + 같은 문자 남음이 항상 성립 → <b>M = 2 는 언제나 성공</b>.</>)
     : s.kind === "split" ? t(E,
       <>Split it: the <b>overlapping 2 letters</b> (OW) go to <b>op 1</b> — front OW matches back OW. The <b>leftover 1 letter each side</b> (C and C) go to <b>op 2</b> — same letter! Both ops read as Y+Y → <b>M = 2</b>.</>,
       <>나눠요: <b>겹치는 2 글자</b> (OW) 는 <b>op 1</b> — 앞의 OW 와 뒤의 OW 가 일치. <b>양쪽에 남는 1 글자</b> (C 와 C) 는 <b>op 2</b> — 같은 글자! 두 op 다 Y+Y 형태 → <b>M = 2</b>.</>)
@@ -174,7 +220,7 @@ export function InsightSim({ E }) {
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Why is 2 always enough?", "왜 항상 2번이면 될까?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <Say tone={s.kind === "overlap" ? "aha" : s.kind === "odd" ? "stuck" : "go"}>{say}</Say>
+      <Say tone={s.kind === "overlap" || s.kind === "case2" || s.kind === "case3" ? "aha" : s.kind === "odd" ? "stuck" : "go"}>{say}</Say>
 
       {/* pair 스텝 — 앞 블록 ↔ 뒤 블록 짝 시각화 */}
       {s.kind === "pair" && (
@@ -195,34 +241,40 @@ export function InsightSim({ E }) {
         </div>
       )}
 
-      {/* overlap 스텝 — 겹치는 2 글자 강조 (OW) */}
+      {/* overlap 스텝 — Case 1/3: COW × OWC. 헬퍼로 통일 */}
       {s.kind === "overlap" && (
+        <PairOverlapVisual E={E}
+          aBlock={["C","O","W"]} bBlock={["O","W","C"]}
+          aOvIdx={[1,2]} bOvIdx={[0,1]} aLoIdx={0} bLoIdx={2}
+          overlapStr="OW" loLetter="C"
+          aLabelEn="front: a[1:] = OW" aLabelKo="앞: a[1:] = OW"
+          bLabelEn="back: b[:2] = OW" bLabelKo="뒤: b[:2] = OW" />
+      )}
+
+      {/* case2 스텝 — COW × WCO. overlap 과 같은 레이아웃 재사용, 값만 다름 */}
+      {s.kind === "case2" && (
+        <PairOverlapVisual E={E}
+          aBlock={["C","O","W"]} bBlock={["W","C","O"]}
+          aOvIdx={[0,1]} bOvIdx={[1,2]} aLoIdx={2} bLoIdx={0}
+          overlapStr="CO" loLetter="W"
+          aLabelEn="front: a[:2] = CO" aLabelKo="앞: a[:2] = CO"
+          bLabelEn="back: b[1:] = CO" bLabelKo="뒤: b[1:] = CO" />
+      )}
+
+      {/* case3 스텝 — OWC × WCO + 요약 */}
+      {s.kind === "case3" && (
         <>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 18, marginBottom: 10 }}>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-              <div style={{ display: "flex", gap: 4 }}>
-                {A_BLOCK.map((ch, i) => {
-                  const isOverlap = i === 1 || i === 2;  // a[1:]="OW"
-                  return <Tile key={i} ch={ch} size={44}
-                    bd={isOverlap ? "#059669" : "#cbd5e1"} bg={isOverlap ? "#ecfdf5" : "#fff"} fg="#1f2937" />;
-                })}
-              </div>
-              <div style={{ fontSize: 10, fontWeight: 800, color: "#059669" }}>{t(E, "front: a[1:] = OW", "앞: a[1:] = OW")}</div>
-            </div>
-            <div style={{ fontSize: 20, fontWeight: 800, color: "#059669" }}>=</div>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-              <div style={{ display: "flex", gap: 4 }}>
-                {B_BLOCK.map((ch, i) => {
-                  const isOverlap = i === 0 || i === 1;  // b[:2]="OW"
-                  return <Tile key={i} ch={ch} size={44}
-                    bd={isOverlap ? "#059669" : "#cbd5e1"} bg={isOverlap ? "#ecfdf5" : "#fff"} fg="#1f2937" />;
-                })}
-              </div>
-              <div style={{ fontSize: 10, fontWeight: 800, color: "#059669" }}>{t(E, "back: b[:2] = OW", "뒤: b[:2] = OW")}</div>
-            </div>
+          <PairOverlapVisual E={E}
+            aBlock={["O","W","C"]} bBlock={["W","C","O"]}
+            aOvIdx={[1,2]} bOvIdx={[0,1]} aLoIdx={0} bLoIdx={2}
+            overlapStr="WC" loLetter="O"
+            aLabelEn="front: a[1:] = WC" aLabelKo="앞: a[1:] = WC"
+            bLabelEn="back: b[:2] = WC" bLabelKo="뒤: b[:2] = WC" />
+          <div style={{ maxWidth: 500, margin: "14px auto 0", padding: "10px 14px", background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, fontSize: 12.5, color: "#065f46", lineHeight: 1.65, textAlign: "center", wordBreak: "keep-all" }}>
+            🎉 {t(E,
+              <>All <b>3 possible different-pairs</b> checked. Every one: 2-letter overlap + same-letter leftover. <b>M = 2 works no matter what.</b></>,
+              <>서로 다른 쌍은 <b>이 3 가지가 전부</b>. 3 가지 다 확인 — 2 글자 겹침 + 같은 문자 남음. <b>M = 2 는 무조건 성공.</b></>)}
           </div>
-          <Caption color="#059669">{t(E, "OW overlaps ✓  · leftover: C on front + C on back — same letter ✓",
-                                          "OW 겹침 ✓  · 남은 것: 앞의 C + 뒤의 C — 같은 글자 ✓")}</Caption>
         </>
       )}
 
