@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getMobileGameWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { MobileSim } from "./sims";
+import { MobileSim, HeapTraceSim } from "./sims";
 
 const A = "#d97706";
 
@@ -182,14 +182,6 @@ export function makeMobileGameCh1(E) {
                  "직접 해봐요: 매 라운드, 먹을 수 있는 가장 큰 적을 먹기. 파워가 올라가는 걸 봐요."),
       content: (<MobileSim E={E} />),
     },
-
-    // [결] 정리
-    {
-      type: "reveal",
-      label: t(E, "Recap", "정리"),
-      narr: t(E, "Everything boils down to one simple rule.", "결국 간단한 규칙 하나로 정리돼요."),
-      content: (<MobileGamePlan E={E} />),
-    },
   ];
 }
 
@@ -200,12 +192,31 @@ export function makeMobileGameCh1(E) {
 export function makeMobileGameCh2(E, lang = "py") {
   const w = getMobileGameWalk(E, lang);
   return [
+    // Plan — photoshoot25 표준. 시뮬에서 알아낸 규칙 한눈에 + 코드 변수 소개
+    {
+      type: "reveal",
+      label: t(E, "Plan", "계획"),
+      narr: t(E,
+        "Before the code — here's the rule (from the greedy sim) and the tool we'll use (a max-heap).",
+        "코드 전에 — 그리디 시뮬에서 알아낸 규칙과, 쓸 도구 (최대힙) 를 정리."),
+      content: (<MobileGamePlan E={E} />),
+    },
+    // Run — 힙이 회차별로 어떻게 push/pop 되는지 (선생님 지적: "heap 이 어떻게 되는지 안 보임")
+    {
+      type: "reveal",
+      label: t(E, "Run · heap trace", "실행 · 힙 트레이스"),
+      narr: t(E,
+        "Before the code — watch the heap actually push and pop, round by round, on the sample enemies.",
+        "코드 보기 전에 — 힙이 회차마다 어떻게 push 하고 pop 하는지, 샘플에서 눈으로 따라가요."),
+      content: (<HeapTraceSim E={E} />),
+    },
+    // Code — CodeWalk 로 말풍선이 구현 조각씩 이동
     {
       type: "reveal",
       label: t(E, "Code", "코드"),
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains: read input, sort, push beatable enemies into a heap, eat the biggest, print the answer.",
-        "코드를 위에서 아래로 읽어봐요 — 말풍선이 설명하는 줄에 붙어 있어요: 입력 → 정렬 → 먹을 수 있는 적 힙에 넣기 → 가장 큰 적 먹기 → 답."),
+        "Now the code — you just saw the heap in action. Each bubble sits on the lines it explains.",
+        "이제 코드예요 — 방금 힙이 움직이는 걸 봤죠. 말풍선이 설명하는 줄에 붙어 있어요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#d97706" />
       ),
