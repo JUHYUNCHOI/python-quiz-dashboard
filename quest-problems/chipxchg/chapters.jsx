@@ -157,9 +157,9 @@ export function makeChipXchgCh1(E) {
     // [전] 도구: 마지막 한 개는 따로 (경계/off-by-one) — 왜 −1 했다 +1 하나. 도장카드 비유 + 언제 쓰나.
     {
       type: "reveal",
-      label: t(E, "Tool: why −1 then +1", "도구: 왜 −1 했다 +1?"),
-      narr: t(E, "1 chip is worth at least 1 red, so the last red is always guaranteed by one chip. Set it aside (−1), price the rest, add it back (+1).",
-                 "칩 1개는 최소 빨강 1개 값이라, 마지막 빨강은 늘 칩 1개로 보장돼요. 그 1개는 빼두고(−1) 나머지를 센 뒤, 다시 더해요(+1)."),
+      label: t(E, "Tool: try every case", "도구: 모든 경우 다 해보기"),
+      narr: t(E, "Take x = 1, 2, 3… and list EVERY color combo each time. Up to 6 there's always one bad case left; at 7 every case reaches the goal.",
+                 "1개, 2개, 3개… 받을 때마다 색 조합을 전부 적어봐요. 6개까진 늘 나쁜 경우가 하나 남고, 7개에서 모든 경우가 목표에 닿아요."),
       content: (<LastStepSlide E={E} />),
     },
 

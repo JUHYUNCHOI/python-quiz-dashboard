@@ -989,152 +989,91 @@ export function PlanSlide({ E }) {
   );
 }
 
-/* ═══ 도구: 왜 8이 아니라 7? — 심술쟁이가 칩을 하나씩 주는 걸 직접 따라가는 트레이스 ═══ */
+/* ═══ 도구: 왜 7? — x 를 1부터 올리며 '모든 색 조합' 을 다 펼쳐 보기 ═══
+   선생님 방식: 1개 받을 때 빨/파, 2개 받을 때 빨빨·빨파·파파 … 전부 나열해
+   그중 최악을 아이가 직접 찾게. 6개까진 구멍이 남고, 7개에서 전부 ✓ 가 되는 걸 봄. */
 export function LastStepSlide({ E }) {
-  // 시작 빨강 1, 목표 5, 환전 파랑 3 → 빨강 2. 최대 버티기 = 6개, 답 = 7.
-  const steps = [
-    { k: "intro", got: [], red: 1, blue: 0 },
-    { k: "b2", got: ["b", "b"], red: 1, blue: 2 },
-    { k: "b3", got: ["b", "b", "b"], red: 3, blue: 0, trade: true },
-    { k: "b45", got: ["b", "b", "b", "b", "b"], red: 3, blue: 2 },
-    { k: "r6", got: ["b", "b", "b", "b", "b", "r"], red: 4, blue: 2 },
-    { k: "limits" },
-    { k: "x7", got: ["b", "b", "b", "b", "b", "r", "?"], red: 4, blue: 2 },
-    { k: "recap" },
-  ];
+  const START = 1, GOAL = 5, CA = 2, CB = 3;   // 시작 빨강 1, 목표 5, 파랑 3 → 빨강 2
+  const finalRed = (r, b) => START + r + Math.floor(b / CB) * CA;
+
+  const steps = [{ x: 1 }, { x: 2 }, { x: 3 }, { x: 4 }, { x: 5 }, { x: 6 }, { x: 7 }, { k: "recap" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
 
-  const say =
-    s.k === "intro" ? t(E,
-        <>I have <b style={{ color: RED }}>1 red</b>, goal <b>5</b>. The trickster hands me chips <b>one at a time</b>, picking each color to slow me down. Let's just watch what they do.</>,
-        <>지금 <b style={{ color: RED }}>빨강 1</b>, 목표 <b>5</b>. 심술쟁이가 칩을 <b>하나씩</b> 주는데, 색은 나를 느리게 하려고 골라요. 뭘 주는지 직접 따라가 봐요.</>)
-    : s.k === "b2" ? t(E,
-        <>First two chips: <b style={{ color: BLU }}>blue, blue</b>. Blue only turns into red at <b>3</b> — with 2, nothing happens. My red is still <b style={{ color: RED }}>1</b>.</>,
-        <>처음 두 개: <b style={{ color: BLU }}>파랑, 파랑</b>. 파랑은 <b>3개</b>가 모여야 빨강으로 바꿔요 — 2개론 아무 일도 없어요. 내 빨강 그대로 <b style={{ color: RED }}>1</b>.</>)
-    : s.k === "b3" ? t(E,
-        <>3rd chip: blue again → <b>a full group!</b> I trade 3 blue for <b style={{ color: RED }}>2 red</b> → red 3. Why blue? If they'd given 3 <b style={{ color: RED }}>red</b>, I'd have 4. Blue pays less (3 chips → only +2) — <b>blue is stingier</b>.</>,
-        <>3개째도 파랑 → <b>묶음 완성!</b> 파랑 3개를 <b style={{ color: RED }}>빨강 2개</b>로 바꿔요 → 빨강 3. 왜 파랑으로 줄까요? <b style={{ color: RED }}>빨강</b>으로 3개 줬으면 내 빨강이 4가 됐어요. 파랑 3개는 겨우 +2 — <b>파랑이 더 짜요</b>.</>)
-    : s.k === "b45" ? t(E,
-        <>Two more blues… and here the trickster <b>stops giving blue</b>. A 3rd would complete another group (+2 → red 5 = goal!). So these 2 blues just sit there — <b>wasted forever</b>.</>,
-        <>또 파랑 2개… 그리고 심술쟁이는 여기서 <b>파랑을 멈춰요</b>. 3개째를 주면 또 묶음(+2 → 빨강 5 = 목표!)이 되니까. 이 파랑 2개는 그냥 놀아요 — <b>영원히 버려지는 파랑</b>.</>)
-    : s.k === "r6" ? t(E,
-        <>Blue is too risky now, so: <b style={{ color: RED }}>one red</b>. Red 4 — <b>exactly one short</b>. That's 6 chips, and the trickster <b>can't stall any further</b>. This is the max stall.</>,
-        <>파랑은 더 못 주니 <b style={{ color: RED }}>빨강 1개</b>. 빨강 4 — <b>딱 1개 부족</b>. 여기까지 6개, 심술쟁이는 <b>더는 못 버텨요</b>. 이게 최대 버티기예요.</>)
-    : s.k === "limits" ? t(E,
-        <>Key fact: <b>1 chip is worth at least 1 red</b> — a red chip is +1 outright, and blue can never be worse than that. So <b>whatever the situation, the last red is always buyable with 1 chip</b>.</>,
-        <>핵심: <b>칩 1개는 최소 빨강 1개 값</b>을 해요 — 빨강 칩이면 그대로 +1, 파랑이라도 그보다 나쁠 순 없어요. 그래서 <b>어떤 상황이든 마지막 빨강 1개는 칩 1개로 살 수 있어요</b>.</>)
-    : s.k === "x7" ? t(E,
-        <>The 7th chip — <b>either color ends it</b>: red → 5 ✓, blue → completes the group → +2 → 6 ✓. So the answer is <b style={{ color: A }}>7</b>.</>,
-        <>7번째 칩 — <b>무슨 색이든 끝나요</b>: 빨강이면 5 ✓, 파랑이면 묶음 완성 → +2 → 6 ✓. 그래서 답은 <b style={{ color: A }}>7</b>.</>)
-    : t(E,
-        <>That's the whole idea: count the trickster's <b>max stall</b>, then <b>+1</b>.</>,
-        <>이게 전부예요: 심술쟁이의 <b>최대 버티기</b>를 세고, <b>+1</b>.</>);
+  const rowsFor = (x) => {
+    const rows = [];
+    for (let r = x; r >= 0; r--) rows.push({ r, b: x - r, v: finalRed(r, x - r) });
+    const worst = Math.min(...rows.map((o) => o.v));
+    return { rows, worst, allOk: worst >= GOAL };
+  };
 
-  const chipRow = (arr) => (
-    <div style={{ display: "flex", justifyContent: "center", gap: 5, flexWrap: "wrap" }}>
-      {arr.map((c, i) => c === "?" ? (
-        <div key={i} style={{ width: 24, height: 24, borderRadius: 999, border: "2.5px dashed #94a3b8", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "#94a3b8" }}>?</div>
-      ) : (
-        <div key={i} style={{ borderRadius: 999, outline: i === arr.length - 1 && s.k !== "x7" ? "2.5px solid #f59e0b" : "none", outlineOffset: 2 }}>
-          <Chip color={c === "b" ? "blue" : "red"} size={22} />
-        </div>
-      ))}
-    </div>
+  const info = s.k === "recap" ? null : rowsFor(s.x);
+
+  const say = s.k === "recap"
+    ? t(E, <>Every case reached 5 only when <b style={{ color: A }}>x = 7</b>. Up to 6 there was always one bad case left. So the answer is <b style={{ color: A }}>7</b>.</>,
+           <><b style={{ color: A }}>7개</b>일 때 비로소 모든 경우가 5 이상이 됐어요. 6개까진 늘 나쁜 경우가 하나씩 남았고요. 그래서 답은 <b style={{ color: A }}>7</b>.</>)
+    : info.allOk
+    ? t(E, <><b>7 chips</b>: now <b>every single case</b> reaches 5 — even the worst one. No matter what colors come, I'm safe. <b>This is the answer.</b></>,
+           <><b>7개</b>: 이제 <b>모든 경우</b>가 5 이상이에요 — 제일 나쁜 것까지. 무슨 색이 와도 안전해요. <b>이게 답이에요.</b></>)
+    : t(E, <>With <b>{s.x} chip{s.x > 1 ? "s" : ""}</b>, list every color combo. The worst gives only <b style={{ color: RED }}>{info.worst}</b> red — <b>still short of 5</b>, so {s.x} isn't enough.</>,
+           <><b>{s.x}개</b> 받을 때, 색 조합을 전부 적어봐요. 제일 나쁜 게 빨강 <b style={{ color: RED }}>{info.worst}</b>개 — <b>아직 5에 못 미쳐요</b>. 그래서 {s.x}개론 부족.</>);
+
+  const chipStr = (r, b) => (
+    <span style={{ display: "inline-flex", gap: 2, alignItems: "center" }}>
+      {Array.from({ length: r }).map((_, i) => <Chip key={"r" + i} color="red" size={15} />)}
+      {Array.from({ length: b }).map((_, i) => <Chip key={"b" + i} color="blue" size={15} />)}
+    </span>
   );
-
-  const lbl = { fontSize: 10.5, fontWeight: 800, color: "#64748b", textAlign: "center", margin: "10px 0 4px", wordBreak: "keep-all" };
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Receive the chips one by one", "칩을 하나씩 받아보기")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={s.k === "recap" ? t(E, "So the answer is 7", "그래서 답은 7")
+                               : t(E, `If I get ${s.x} chip${s.x > 1 ? "s" : ""} — every case`, `${s.x}개 받으면 — 모든 경우`)}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
         {t(E, "start red 1 · goal 5 · swap 3 blue → 2 red", "시작 빨강 1 · 목표 5 · 환전 파랑 3 → 빨강 2")}
       </div>
-      <Say tone={s.k === "b45" || s.k === "r6" ? "stuck" : s.k === "x7" || s.k === "recap" ? "aha" : "go"}>{say}</Say>
+      <Say tone={s.k === "recap" ? "aha" : info.allOk ? "aha" : "stuck"}>{say}</Say>
 
-      {s.k === "intro" ? (
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, flexWrap: "wrap", minHeight: 56 }}>
-          <Chip color="red" size={26} />
-          <span style={{ color: "#94a3b8", fontWeight: 800, fontSize: 16 }}>+</span>
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} style={{ width: 26, height: 26, borderRadius: 999, border: `2px dashed ${RED}`, opacity: 0.45 }} />
-          ))}
-          <span style={{ marginLeft: 8, fontWeight: 800, color: RED, fontSize: 13, wordBreak: "keep-all" }}>{t(E, "need 4 more red", "빨강 4개 더 필요")}</span>
-        </div>
-      ) : s.k === "limits" ? (
-        <div style={{ maxWidth: 500, margin: "0 auto", display: "flex", flexDirection: "column", gap: 9 }}>
-          {/* 칩 1개의 최소 가치 */}
-          <div style={{ border: "2px solid #15803d", background: "#f0fdf4", borderRadius: 10, padding: "9px 12px", wordBreak: "keep-all" }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
-              {t(E, "1 chip is worth at least 1 red", "칩 1개 = 최소 빨강 1개 값")}
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", fontSize: 12, fontWeight: 700, marginBottom: 4 }}>
-              <Chip color="red" size={18} />
-              <span style={{ color: "#15803d" }}>{t(E, "red → +1 red, right away", "빨강이면 → 빨강 +1, 바로")}</span>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", fontSize: 12, fontWeight: 700 }}>
-              <Chip color="blue" size={18} />
-              <span style={{ color: "#1e40af" }}>{t(E, "blue → never worse than that", "파랑이라도 → 그보다 나쁠 순 없어요")}</span>
-            </div>
-          </div>
-          {/* 그래서 마지막 1개는 항상 보장 */}
-          <div style={{ border: `1.5px solid ${RED}`, background: REDBG, borderRadius: 10, padding: "9px 12px", wordBreak: "keep-all", fontSize: 12, fontWeight: 700, color: "#7f1d1d", lineHeight: 1.6 }}>
-            {t(E, <>So the <b>last red is guaranteed</b> by 1 chip — no matter what the trickster does. The <b>other</b> reds are the expensive ones (the trickster drags them out with blue groups).</>,
-                 <>그래서 <b>마지막 빨강 1개는 칩 1개로 보장</b>돼요 — 심술쟁이가 뭘 하든. 비싼 건 <b>나머지</b> 빨강들이에요 (심술쟁이가 파랑 묶음으로 질질 끌거든요).</>)}
-          </div>
-          {/* 그래서 −1 / +1 */}
-          <div style={{ border: `1.5px solid ${A}`, background: "#eff6ff", borderRadius: 10, padding: "10px 12px", wordBreak: "keep-all", lineHeight: 1.65, fontSize: 12.5, fontWeight: 700, color: "#1e3a8a" }}>
-            {t(E, <><b style={{ color: RED }}>−1</b>: set the last red aside (it's the guaranteed one) and price only the rest the expensive way. <b style={{ color: "#15803d" }}>+1</b>: add that one chip back at the end.</>,
-                 <><b style={{ color: RED }}>−1</b>: 보장된 마지막 빨강 1개는 빼두고, 나머지만 비싼 값으로 세요. <b style={{ color: "#15803d" }}>+1</b>: 맨 끝에 그 칩 1개를 더해요.</>)}
-            <div style={{ marginTop: 6, fontSize: 12, color: "#7f1d1d" }}>
-              {t(E, <>Check: with <b>6 chips</b> my red is <b>4</b> — always exactly one short. The 7th chip (any color) makes it 5. → <b>7</b></>,
-                   <>확인: <b>6개</b> 받으면 내 빨강은 <b>4</b> — 늘 딱 1개 부족. 7번째 칩이 (무슨 색이든) 5로 만들어요. → <b>7</b></>)}
-            </div>
-          </div>
-        </div>
-      ) : s.k === "recap" ? (
-        <div style={{ maxWidth: 480, margin: "0 auto", display: "flex", flexDirection: "column", gap: 8 }}>
-          <div style={{ padding: "9px 13px", borderRadius: 10, border: "1.5px solid #fca5a5", background: REDBG, wordBreak: "keep-all", fontSize: 12.5, fontWeight: 700, textAlign: "center" }}>
-            {t(E, <><b style={{ color: RED }}>−1</b>: hold the last red back → price only <b>3</b> reds the group way = <b>6 chips</b> (2 idle blue + 3 blue + 1 red) → red 4 ✗</>,
-                 <><b style={{ color: RED }}>−1</b>: 마지막 빨강 빼두기 → <b>3개</b>만 묶음 값으로 = <b>6개</b> (노는 파랑 2 + 파랑 3 + 빨강 1) → 빨강 4 ✗</>)}
-          </div>
-          <div style={{ padding: "9px 13px", borderRadius: 10, border: "1.5px solid #86efac", background: "#f0fdf4", wordBreak: "keep-all", fontSize: 12.5, fontWeight: 700, textAlign: "center" }}>
-            {t(E, <><b style={{ color: "#15803d" }}>+1</b>: the last red costs <b>1 chip</b> → 6 + 1 = <b style={{ color: "#15803d" }}>7</b> ✓</>,
-                 <><b style={{ color: "#15803d" }}>+1</b>: 마지막 빨강은 <b>칩 1개</b> → 6 + 1 = <b style={{ color: "#15803d" }}>7</b> ✓</>)}
-          </div>
-          <div style={{ textAlign: "center", fontSize: 12, fontWeight: 800, color: A, wordBreak: "keep-all" }}>
-            {t(E, "counting all 4 the group way gives 8 — one too many", "4개를 다 묶음 값으로 세면 8 — 하나 더 세는 셈")}
-          </div>
+      {s.k === "recap" ? (
+        <div style={{ maxWidth: 420, margin: "0 auto", display: "flex", flexDirection: "column", gap: 5 }}>
+          {[1, 2, 3, 4, 5, 6, 7].map((x) => {
+            const o = rowsFor(x);
+            return (
+              <div key={x} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
+                padding: "6px 12px", borderRadius: 8, fontSize: 12.5, fontWeight: 800, wordBreak: "keep-all",
+                border: `1.5px solid ${o.allOk ? "#86efac" : "#fecaca"}`, background: o.allOk ? "#f0fdf4" : REDBG }}>
+                <span>{t(E, `${x} chips`, `${x}개`)}</span>
+                <span style={{ color: o.allOk ? "#15803d" : "#b91c1c" }}>
+                  {t(E, `worst = ${o.worst} red`, `최악 = 빨강 ${o.worst}`)}
+                </span>
+                <span style={{ color: o.allOk ? "#15803d" : "#dc2626" }}>{o.allOk ? "✓" : "✗"}</span>
+              </div>
+            );
+          })}
         </div>
       ) : (
-        <div style={{ maxWidth: 500, margin: "0 auto" }}>
-          <div style={lbl}>{t(E, `chips received (${s.got.length})`, `심술쟁이가 준 칩 (${s.got.length}개)`)}</div>
-          {chipRow(s.got)}
-          <div style={lbl}>{t(E, "my hand", "내 손")}</div>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 5, flexWrap: "wrap" }}>
-            {Array.from({ length: s.red }).map((_, i) => <Chip key={"r" + i} color="red" size={22} />)}
-            {Array.from({ length: s.blue }).map((_, i) => <Chip key={"u" + i} color="blue" size={22} />)}
-            {s.trade && <span style={{ fontSize: 11, fontWeight: 800, color: "#15803d", background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 6, padding: "2px 8px", wordBreak: "keep-all" }}>{t(E, "traded 3 blue → 2 red!", "파랑 3개 → 빨강 2개로 바꿈!")}</span>}
-          </div>
-          {s.k === "x7" ? (
-            <div style={{ maxWidth: 420, margin: "12px auto 0", display: "flex", flexDirection: "column", gap: 6 }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, fontSize: 12.5, fontWeight: 700, wordBreak: "keep-all" }}>
-                <Chip color="red" size={18} /><span>{t(E, "if red → red 5 ✓", "빨강이면 → 빨강 5 ✓")}</span>
+        <div style={{ maxWidth: 460, margin: "0 auto", display: "flex", flexDirection: "column", gap: 4 }}>
+          {info.rows.map((o, i) => {
+            const isWorst = o.v === info.worst;
+            const ok = o.v >= GOAL;
+            return (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 10px", borderRadius: 8,
+                border: `1.5px solid ${isWorst ? "#f59e0b" : "#e2e8f0"}`, background: isWorst ? "#fffbeb" : "#fff",
+                fontSize: 12, fontWeight: 700, wordBreak: "keep-all" }}>
+                {chipStr(o.r, o.b)}
+                <span style={{ color: "#94a3b8" }}>→</span>
+                <span style={{ color: ok ? "#15803d" : RED }}>{t(E, `red ${o.v}`, `빨강 ${o.v}`)}</span>
+                <span style={{ marginLeft: "auto", color: ok ? "#15803d" : "#dc2626", fontWeight: 800 }}>
+                  {ok ? "✓" : "✗"}{isWorst && !info.allOk ? t(E, "  ← worst", "  ← 최악") : ""}
+                </span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, fontSize: 12.5, fontWeight: 700, wordBreak: "keep-all" }}>
-                <Chip color="blue" size={18} /><span>{t(E, "if blue → 3rd blue, group! → red 6 ✓", "파랑이면 → 3개째, 묶음! → 빨강 6 ✓")}</span>
-              </div>
-            </div>
-          ) : (
-            <Cap color={s.red >= 5 ? "#15803d" : RED}>
-              {t(E, `red ${s.red} / 5 · ${5 - s.red} short`, `빨강 ${s.red} / 5 · ${5 - s.red}개 부족`)}
-            </Cap>
-          )}
+            );
+          })}
         </div>
       )}
 
-      <div style={{ marginTop: 20 }}>
+      <div style={{ marginTop: 18 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
       </div>
     </div>
