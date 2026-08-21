@@ -917,19 +917,34 @@ export function CheckSim({ E }) {
 
 /* ═══ ③ 전략 — 어떻게 풀지 큰 그림 + 두 하위 질문 ═══ */
 export function StrategySlide({ E }) {
-  const steps = [{ kind: "plan" }, { kind: "two" }];
+  const steps = [{ kind: "why" }, { kind: "plan" }, { kind: "two" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "How will we solve it?", "어떻게 풀까?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <Say>
-        {s.kind === "plan"
+      <Say tone={s.kind === "why" ? "aha" : "go"}>
+        {s.kind === "why"
+          ? t(E, <>The problem says the chips come <b>at random</b>, and it must be <b>guaranteed</b>. Guaranteed = it works <b>even in the unluckiest color combo</b>. From here on we'll call that unluckiest combo <b>the trickster</b> — it's just a nickname for the worst case.</>,
+                 <>문제에선 칩이 <b>무작위</b>로 오고, 그래도 <b>보장</b>돼야 한다고 해요. 보장 = <b>제일 운 나쁜 색 조합에서도</b> 된다는 뜻이에요. 앞으로 그 제일 나쁜 조합을 <b>심술쟁이</b>라고 부를게요 — 최악의 경우에 붙인 별명이에요.</>)
+          : s.kind === "plan"
           ? t(E, <>No search needed — we <b>compute the answer directly</b>. It splits into two cases.</>,
                  <>탐색 필요 없어요 — 답을 <b>바로 계산</b>해요. 두 경우로 갈려요.</>)
           : t(E, <>Just <b>two cases</b>:</>, <>딱 <b>두 경우</b>예요:</>)}
       </Say>
-      {s.kind === "plan" ? (
+      {s.kind === "why" ? (
+        <div style={{ maxWidth: 470, margin: "0 auto", display: "flex", flexDirection: "column", gap: 8 }}>
+          <div style={{ border: "1.5px solid #cbd5e1", background: "#f8fafc", borderRadius: 10, padding: "9px 12px", fontSize: 12.5, fontWeight: 700, color: "#334155", wordBreak: "keep-all", lineHeight: 1.6 }}>
+            {t(E, <>problem: “after receiving x <b>random</b> chips, it is <b>guaranteed</b> …”</>,
+                 <>문제: “x 개의 <b>무작위</b> 칩을 받은 뒤 … <b>보장</b>된다”</>)}
+          </div>
+          <div style={{ textAlign: "center", color: A, fontWeight: 800, fontSize: 13 }}>↓</div>
+          <div style={{ border: `1.5px solid ${A}`, background: "#eff6ff", borderRadius: 10, padding: "9px 12px", fontSize: 12.5, fontWeight: 800, color: "#1e3a8a", wordBreak: "keep-all", lineHeight: 1.6 }}>
+            {t(E, <>so we must survive the <b>worst</b> color combo — our nickname: <b>the trickster</b></>,
+                 <>그러니 <b>제일 나쁜</b> 색 조합에서도 돼야 해요 — 별명: <b>심술쟁이</b></>)}
+          </div>
+        </div>
+      ) : s.kind === "plan" ? (
         <div style={{ maxWidth: 470, margin: "0 auto" }}>
           <Slab n="1" color="#15803d" bg="#f0fdf4">{t(E, <>How many red can I make <b>right now</b> (convert my blue)? Call it <b>red_now</b>.</>, <>지금 가진 걸로 빨강 몇 개(내 파랑 환전)? 이걸 <b>red_now</b>라 해요.</>)}</Slab>
           <Slab n="2" color="#2563eb" bg="#eff6ff">{t(E, <>If <b>red_now &lt; goal</b>, count the fewest extra chips — assuming the <b>trickster colors them worst</b>.</>, <><b style={NW}>red_now가 목표보다 작으면</b>, 심술쟁이가 <b style={NW}>최악으로 색칠할 때</b> 필요한 최소 추가 칩을 세요.</>)}</Slab>
