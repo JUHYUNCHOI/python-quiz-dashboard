@@ -158,8 +158,8 @@ export function makeChipXchgCh1(E) {
     {
       type: "reveal",
       label: t(E, "Tool: why 7, not 8?", "도구: 왜 8이 아니라 7?"),
-      narr: t(E, "Flip the question: how long can the trickster STALL me below the goal? Max stall (6) + 1 finishing chip = 7 — that's where the −1/+1 comes from.",
-                 "질문을 뒤집어요: 심술쟁이는 나를 목표 아래에 몇 개까지 묶어둘 수 있나? 최대 버티기(6) + 끝내는 칩 1 = 7 — −1/+1 은 여기서 나와요."),
+      narr: t(E, "Start from the usual count (8) and see why it's not the minimum: the trickster never fills the goal — they stall. Max stall (6) + 1 = 7.",
+                 "하던 대로 센 8부터 — 왜 그게 최소가 아닌지: 심술쟁이는 채워주지 않고 버텨요. 최대 버티기(6) + 1 = 7."),
       content: (<LastStepSlide E={E} />),
     },
 

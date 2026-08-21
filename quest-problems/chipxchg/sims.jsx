@@ -1028,13 +1028,19 @@ function DistView({ E, red, blue, start, goal }) {
 export function LastStepSlide({ E }) {
   // 구체 예시: 시작 빨강 1, 목표 5 → 빨강 4개 더 필요. 환전 파랑 3 → 빨강 2.
   const START = 1, GOAL = 5, NEED = GOAL - START;
-  const steps = [{ k: "goal" }, { k: "x6" }, { k: "x7" }, { k: "done" }];
+  const steps = [{ k: "goal" }, { k: "naive" }, { k: "flip" }, { k: "x6" }, { k: "x7" }, { k: "done" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
 
   const say =
     s.k === "goal" ? t(E,
-        <>Flip the question: not <i>"how many chips reach 5?"</i> but <b>"how many chips can the trickster give while KEEPING me below 5?"</b> That stall limit + 1 is the answer.</>,
-        <>질문을 뒤집어요. <i>"몇 개면 5가 돼?"</i> 가 아니라 <b>"심술쟁이는 몇 개까지 주면서도 나를 5 미만에 묶어둘 수 있어?"</b> — 그 <b>버티기 한계 + 1</b> 이 답이에요.</>)
+        <>I have <b style={{ color: RED }}>1 red</b>, goal <b>5</b> → need <b style={{ color: RED }}>4 more red</b>. Swap: <b style={{ color: BLU }}>3 blue</b> → <b style={{ color: RED }}>2 red</b>. The trickster colors every chip against me.</>,
+        <>지금 <b style={{ color: RED }}>빨강 1</b>, 목표 <b>5</b> → <b style={{ color: RED }}>빨강 4개</b> 더 필요해요. 환전은 <b style={{ color: BLU }}>파랑 3</b> → <b style={{ color: RED }}>빨강 2</b>. 색은 심술쟁이가 최악으로 골라요.</>)
+    : s.k === "naive" ? t(E,
+        <>The usual way: price the 4 red — <b>2 groups</b> (<b style={{ color: BLU }}>6 blue</b>) + <b style={{ color: BLU }}>2 wasted</b> = <b>8 chips</b>. And yes, 8 works! But the problem asks the <b>MINIMUM</b>… is 8 really it?</>,
+        <>하던 대로 세보면: 빨강 4개 값 = <b>2묶음</b>(<b style={{ color: BLU }}>파랑 6</b>) + <b style={{ color: BLU }}>버려질 파랑 2</b> = <b>8개</b>. 실제로 8개면 돼요! 근데 문제는 <b>최소</b>를 물어요… 8이 정말 최소일까요?</>)
+    : s.k === "flip" ? t(E,
+        <>The trap: that 8 is the story where the trickster <b>fills in</b> all 4 red for me. But the trickster never fills the goal — they <b>stall at one short (red 4)</b>. So the real question: <b>"how many chips can they stall with?" + 1</b>.</>,
+        <>함정: 그 8은 심술쟁이가 빨강 4개를 <b>끝까지 채워주는</b> 스토리예요. 심술쟁이는 절대 목표를 채워주지 않아요 — <b>딱 1개 부족(빨강 4)에서 버텨요</b>. 그래서 진짜 질문은 <b>"몇 개까지 버틸 수 있나? + 1"</b>.</>)
     : s.k === "x6" ? t(E,
         <>The trickster can stall only up to <b style={{ color: RED }}>red 4</b> (one below the goal — reaching 5 means losing). Max stall = <b>6 chips</b>: <b style={{ color: RED }}>1 red</b> + <b style={{ color: BLU }}>5 blue</b> pins me at total 4.</>,
         <>심술쟁이가 버틸 수 있는 건 <b style={{ color: RED }}>빨강 4</b>까지 (목표보다 1 작게 — 5를 만들어주는 순간 지니까). 최대 버티기 = <b>6개</b>: <b style={{ color: RED }}>빨강 1</b> + <b style={{ color: BLU }}>파랑 5</b> 로 나를 총 4에 묶어요.</>)
@@ -1045,7 +1051,7 @@ export function LastStepSlide({ E }) {
         <>So the code counts <b>"max stall + 1"</b>. The <b>−1</b>: the stall limit is one below the goal (red 4), so shortage measures "up to 4". The <b>+1</b>: the one chip that ends the stall. Not a trick — it's the question we asked.</>,
         <>그래서 코드는 <b>"최대 버티기 + 1"</b> 을 세요. <b>−1</b> 은 버티기 한계가 목표보다 1 작아서 (빨강 4까지의 부족분을 세는 것), <b>+1</b> 은 버티기를 끝내는 다음 칩 하나. 빼봤다 넣어봤다가 아니라, 질문 자체가 그렇게 생겼어요.</>);
 
-  const dist = s.k === "x6" ? { red: 1, blue: 5 } : s.k === "x7" ? { red: 2, blue: 5 } : null;
+  const dist = s.k === "naive" ? { red: 0, blue: 8 } : s.k === "x6" ? { red: 1, blue: 5 } : s.k === "x7" ? { red: 2, blue: 5 } : null;
 
   return (
     <div style={{ padding: 16 }}>
@@ -1054,7 +1060,7 @@ export function LastStepSlide({ E }) {
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
         {t(E, "start red 1 · goal 5 · swap 3 blue → 2 red", "시작 빨강 1 · 목표 5 · 환전 파랑 3 → 빨강 2")}
       </div>
-      <Say tone={s.k === "x6" ? "stuck" : s.k === "done" ? "aha" : "go"}>{say}</Say>
+      <Say tone={s.k === "naive" || s.k === "x6" ? "stuck" : s.k === "flip" || s.k === "done" ? "aha" : "go"}>{say}</Say>
 
       {s.k === "goal" ? (
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, flexWrap: "wrap", minHeight: 60 }}>
@@ -1064,6 +1070,17 @@ export function LastStepSlide({ E }) {
             <div key={i} style={{ width: 26, height: 26, borderRadius: 999, border: `2px dashed ${RED}`, opacity: 0.45 }} />
           ))}
           <span style={{ marginLeft: 8, fontWeight: 800, color: RED, fontSize: 13, wordBreak: "keep-all" }}>{t(E, "need 4 more red", "빨강 4개 더")}</span>
+        </div>
+      ) : s.k === "flip" ? (
+        <div style={{ maxWidth: 470, margin: "0 auto", display: "flex", flexDirection: "column", gap: 8 }}>
+          <div style={{ padding: "9px 13px", borderRadius: 10, border: "1.5px solid #fca5a5", background: REDBG, wordBreak: "keep-all", fontSize: 12.5, fontWeight: 700, textAlign: "center" }}>
+            {t(E, <>"fill it up for me" story → 8 — <b style={{ color: "#b91c1c" }}>the trickster never does that</b> ✗</>,
+                 <>"채워주는" 스토리 → 8 — <b style={{ color: "#b91c1c" }}>심술쟁이는 절대 그렇게 안 해요</b> ✗</>)}
+          </div>
+          <div style={{ padding: "9px 13px", borderRadius: 10, border: "1.5px solid #86efac", background: "#f0fdf4", wordBreak: "keep-all", fontSize: 12.5, fontWeight: 700, textAlign: "center" }}>
+            {t(E, <>"stall" story → <b style={{ color: "#15803d" }}>max stall + 1</b> — count it next ▶</>,
+                 <>"버티는" 스토리 → <b style={{ color: "#15803d" }}>최대 버티기 + 1</b> — 다음 스텝에서 세봐요 ▶</>)}
+          </div>
         </div>
       ) : dist ? (
         <DistView E={E} red={dist.red} blue={dist.blue} start={START} goal={GOAL} />
