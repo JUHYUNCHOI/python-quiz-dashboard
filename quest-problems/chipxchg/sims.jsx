@@ -5,6 +5,7 @@
 //   ① ChipCountSim — 최종 A = A + (B // cB) × cA (묶음/자투리 시각)
 //   ② AdversarySim — 심술쟁이가 파랑에 몰아 자투리 낭비 → 최악 분배
 
+import { useState } from "react";
 import { t } from "@/components/quest/theme";
 import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceStepper";
 
@@ -1004,15 +1005,23 @@ export function PlanSlide({ E }) {
   );
 }
 
-/* ═══ 도구: 왜 7? — x 를 1부터 올리며 '모든 색 조합' 을 다 펼쳐 보기 ═══
+/* ═══ 도구: 왜 이 답? — x 를 1부터 올리며 '모든 색 조합' 을 다 펼쳐 보기 ═══
    선생님 방식: 1개 받을 때 빨/파, 2개 받을 때 빨빨·빨파·파파 … 전부 나열해
-   그중 최악을 아이가 직접 찾게. 6개까진 구멍이 남고, 7개에서 전부 ✓ 가 되는 걸 봄. */
+   그중 최악을 아이가 직접 찾게. 예시 2개를 버튼으로 전환 — 특히 '딱 나누어떨어지는'
+   케이스(목표 3)는 파랑 묶음을 통째로 못 받는 걸 보여줌(−1/+1 의 근거). */
 export function LastStepSlide({ E }) {
-  const START = 1, GOAL = 5, CA = 2, CB = 3;   // 시작 빨강 1, 목표 5, 파랑 3 → 빨강 2
+  const CA = 2, CB = 3, START = 1;              // 시작 빨강 1, 환전 파랑 3 → 빨강 2
+  const EX = [
+    { goal: 5, ans: 7, key: "g5" },
+    { goal: 3, ans: 4, key: "g3" },
+  ];
+  const [ei, setEi] = useState(0);
+  const GOAL = EX[ei].goal, ANS = EX[ei].ans;
   const finalRed = (r, b) => START + r + Math.floor(b / CB) * CA;
 
-  const steps = [{ x: 1 }, { x: 2 }, { x: 3 }, { x: 4 }, { x: 5 }, { x: 6 }, { x: 7 }, { k: "recap" }];
-  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const xs = Array.from({ length: ANS }, (_, i) => ({ x: i + 1 }));
+  const steps = [...xs, { k: "recap" }];
+  const ts = useTraceStep(steps); const s = steps[Math.min(ts.safe, steps.length - 1)];
 
   const rowsFor = (x) => {
     const rows = [];
@@ -1020,17 +1029,16 @@ export function LastStepSlide({ E }) {
     const worst = Math.min(...rows.map((o) => o.v));
     return { rows, worst, allOk: worst >= GOAL };
   };
-
   const info = s.k === "recap" ? null : rowsFor(s.x);
 
   const say = s.k === "recap"
-    ? t(E, <>Every case reached 5 only when <b style={{ color: A }}>x = 7</b>. Up to 6 there was always one bad case left. So the answer is <b style={{ color: A }}>7</b>.</>,
-           <><b style={{ color: A }}>7개</b>일 때 비로소 모든 경우가 5 이상이 됐어요. 6개까진 늘 나쁜 경우가 하나씩 남았고요. 그래서 답은 <b style={{ color: A }}>7</b>.</>)
+    ? t(E, <>Every case reached the goal only at <b style={{ color: A }}>x = {ANS}</b>. Before that, one bad case always remained.</>,
+           <><b style={{ color: A }}>{ANS}개</b>일 때 비로소 모든 경우가 목표에 닿았어요. 그전엔 늘 나쁜 경우가 하나씩 남았고요.</>)
     : info.allOk
-    ? t(E, <><b>7 chips</b>: now <b>every single case</b> reaches 5 — even the worst one. No matter what colors come, I'm safe. <b>This is the answer.</b></>,
-           <><b>7개</b>: 이제 <b>모든 경우</b>가 5 이상이에요 — 제일 나쁜 것까지. 무슨 색이 와도 안전해요. <b>이게 답이에요.</b></>)
-    : t(E, <>With <b>{s.x} chip{s.x > 1 ? "s" : ""}</b>, list every color combo. The worst gives only <b style={{ color: RED }}>{info.worst}</b> red — <b>still short of 5</b>, so {s.x} isn't enough.</>,
-           <><b>{s.x}개</b> 받을 때, 색 조합을 전부 적어봐요. 제일 나쁜 게 빨강 <b style={{ color: RED }}>{info.worst}</b>개 — <b>아직 5에 못 미쳐요</b>. 그래서 {s.x}개론 부족.</>);
+    ? t(E, <><b>{s.x} chips</b>: now <b>every case</b> reaches {GOAL} — even the worst. <b>This is the answer.</b></>,
+           <><b>{s.x}개</b>: 이제 <b>모든 경우</b>가 {GOAL} 이상이에요 — 제일 나쁜 것까지. <b>이게 답이에요.</b></>)
+    : t(E, <>With <b>{s.x} chip{s.x > 1 ? "s" : ""}</b>, list every combo. Worst gives only <b style={{ color: RED }}>{info.worst}</b> red — <b>still short of {GOAL}</b>.</>,
+           <><b>{s.x}개</b> 받을 때, 색 조합을 전부 적어봐요. 제일 나쁜 게 빨강 <b style={{ color: RED }}>{info.worst}</b>개 — <b>아직 {GOAL}에 못 미쳐요</b>.</>);
 
   const chipStr = (r, b) => (
     <span style={{ display: "inline-flex", gap: 2, alignItems: "center" }}>
@@ -1039,39 +1047,56 @@ export function LastStepSlide({ E }) {
     </span>
   );
 
+  const exBtn = (idx, label) => (
+    <button onClick={() => { setEi(idx); ts.setIdx(0); }}
+      style={{ padding: "3px 9px", borderRadius: 999, fontSize: 11, fontWeight: 800, cursor: "pointer", wordBreak: "keep-all",
+        border: `1.5px solid ${ei === idx ? A : "#cbd5e1"}`, background: ei === idx ? "#eff6ff" : "#fff", color: ei === idx ? A : "#64748b" }}>
+      {label}
+    </button>
+  );
+
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={s.k === "recap" ? t(E, "So the answer is 7", "그래서 답은 7")
+        title={s.k === "recap" ? t(E, `So the answer is ${ANS}`, `그래서 답은 ${ANS}`)
                                : t(E, `If I get ${s.x} chip${s.x > 1 ? "s" : ""} — every case`, `${s.x}개 받으면 — 모든 경우`)}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
-        {t(E, "start red 1 · goal 5 · swap 3 blue → 2 red", "시작 빨강 1 · 목표 5 · 환전 파랑 3 → 빨강 2")}
+
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 6, flexWrap: "wrap" }}>
+        {exBtn(0, t(E, "goal 5", "목표 5"))}
+        {exBtn(1, t(E, "goal 3 (exact fit)", "목표 3 (딱 떨어짐)"))}
       </div>
-      <Say tone={s.k === "recap" ? "aha" : info.allOk ? "aha" : "stuck"}>{say}</Say>
+      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
+        {t(E, `start red 1 · goal ${GOAL} · swap 3 blue → 2 red`, `시작 빨강 1 · 목표 ${GOAL} · 환전 파랑 3 → 빨강 2`)}
+      </div>
+      <Say tone={s.k === "recap" || (info && info.allOk) ? "aha" : "stuck"}>{say}</Say>
 
       {s.k === "recap" ? (
-        <div style={{ maxWidth: 420, margin: "0 auto", display: "flex", flexDirection: "column", gap: 5 }}>
-          {[1, 2, 3, 4, 5, 6, 7].map((x) => {
+        <div style={{ maxWidth: 440, margin: "0 auto", display: "flex", flexDirection: "column", gap: 5 }}>
+          {xs.map(({ x }) => {
             const o = rowsFor(x);
             return (
               <div key={x} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
                 padding: "6px 12px", borderRadius: 8, fontSize: 12.5, fontWeight: 800, wordBreak: "keep-all",
                 border: `1.5px solid ${o.allOk ? "#86efac" : "#fecaca"}`, background: o.allOk ? "#f0fdf4" : REDBG }}>
                 <span>{t(E, `${x} chips`, `${x}개`)}</span>
-                <span style={{ color: o.allOk ? "#15803d" : "#b91c1c" }}>
-                  {t(E, `worst = ${o.worst} red`, `최악 = 빨강 ${o.worst}`)}
-                </span>
+                <span style={{ color: o.allOk ? "#15803d" : "#b91c1c" }}>{t(E, `worst = ${o.worst} red`, `최악 = 빨강 ${o.worst}`)}</span>
                 <span style={{ color: o.allOk ? "#15803d" : "#dc2626" }}>{o.allOk ? "✓" : "✗"}</span>
               </div>
             );
           })}
+          {ei === 1 && (
+            <div style={{ marginTop: 4, border: `1.5px solid ${A}`, background: "#eff6ff", borderRadius: 10, padding: "9px 12px",
+              fontSize: 12, fontWeight: 700, color: "#1e3a8a", wordBreak: "keep-all", lineHeight: 1.65 }}>
+              {t(E, <>Notice at <b>3 chips</b>: <b style={{ color: BLU }}>blue·blue·blue</b> ✓ (the group completes!) but <b>red·blue·blue</b> ✗. So the trickster can't hand over a <b>whole group</b> — it stalls only until <b>one chip before</b> the group finishes. That's exactly why the code counts one less and adds <b>+1</b> at the end.</>,
+                   <><b>3개</b>일 때를 보세요: <b style={{ color: BLU }}>파·파·파</b> 는 ✓ (묶음이 완성돼요!) 인데 <b>빨·파·파</b> 는 ✗. 즉 심술쟁이는 <b>묶음을 통째로</b> 줄 수 없고, 묶음 완성 <b>딱 한 칩 전</b>까지만 버텨요. 코드가 하나를 덜 세고 맨 끝에 <b>+1</b> 하는 이유가 바로 이거예요.</>)}
+            </div>
+          )}
         </div>
       ) : (
         <div style={{ maxWidth: 460, margin: "0 auto", display: "flex", flexDirection: "column", gap: 4 }}>
           {info.rows.map((o, i) => {
-            const isWorst = o.v === info.worst;
-            const ok = o.v >= GOAL;
+            const isWorst = o.v === info.worst, ok = o.v >= GOAL;
             return (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 10px", borderRadius: 8,
                 border: `1.5px solid ${isWorst ? "#f59e0b" : "#e2e8f0"}`, background: isWorst ? "#fffbeb" : "#fff",
@@ -1085,6 +1110,13 @@ export function LastStepSlide({ E }) {
               </div>
             );
           })}
+          {ei === 1 && s.x === 3 && (
+            <div style={{ marginTop: 4, border: `1.5px solid ${BLU}`, background: BLUBG, borderRadius: 10, padding: "8px 11px",
+              fontSize: 11.5, fontWeight: 700, color: "#1e40af", wordBreak: "keep-all", lineHeight: 1.6 }}>
+              {t(E, <>Look: <b>blue·blue·blue</b> is ✓ — the group completed and gave 2 red at once. So the trickster avoids giving the 3rd blue; it stalls only up to <b>2 blue</b>.</>,
+                   <>보세요: <b>파·파·파</b> 는 ✓ — 묶음이 완성돼 빨강 2개가 한꺼번에 생겼어요. 그래서 심술쟁이는 3번째 파랑을 못 줘요. <b>파랑 2개</b>까지만 버텨요.</>)}
+            </div>
+          )}
         </div>
       )}
 
