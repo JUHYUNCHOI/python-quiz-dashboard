@@ -118,12 +118,22 @@ export function makeChipXchgCh1(E) {
       content: (<CheckSim E={E} />),
     },
 
+    // [전] 먼저 손으로: x=1,2,3… 받을 때 색 조합을 전부 적어보며 답을 찾아냄.
+    //      (선생님 수업 방식 — 규칙은 여기서 '해보고' 나온다. 뒤 도구들이 이걸 정리.)
+    {
+      type: "reveal",
+      label: t(E, "Try it by hand first", "먼저 손으로 다 해보기"),
+      narr: t(E, "Before any rule — take x = 1, 2, 3… and write out every color combo, one at a time. The answer shows up on its own.",
+                 "규칙 배우기 전에 — 1개, 2개, 3개… 받을 때 색 조합을 하나씩 다 적어봐요. 답이 저절로 드러나요."),
+      content: (<LastStepSlide E={E} />),
+    },
+
     // [전] 전략 — 공식 큰 그림 (지금 걸로 되나? 안 되면 심술쟁이 최악에 몇 개?)
     {
       type: "reveal",
       label: t(E, "Strategy", "전략"),
-      narr: t(E, "First check what I can make now; if short, count the extra against the trickster's worst.",
-                 "먼저 지금 걸로 되는지 보고, 부족하면 심술쟁이 최악을 감안해 추가 칩을 세요."),
+      narr: t(E, "We found the answer by hand — now let's turn what we saw into a rule we can compute.",
+                 "손으로 답을 찾았으니, 이제 방금 본 걸 계산할 수 있는 규칙으로 바꿔요."),
       content: (<StrategySlide E={E} />),
     },
 
@@ -131,8 +141,8 @@ export function makeChipXchgCh1(E) {
     {
       type: "reveal",
       label: t(E, "Tool: red I can make now (red_now)", "도구: 지금 만드는 빨강 (red_now)"),
-      narr: t(E, "How many red can I make right now? Group my blue by cB; leftovers waste. That's red_now.",
-                 "지금 가진 걸로 빨강 몇 개? 내 파랑을 cB 로 묶고, 자투리는 버려요. 그게 red_now."),
+      narr: t(E, "Rule piece 1 — the red I already have. Group my blue by cB; leftovers waste. That's red_now.",
+                 "규칙 조각 1 — 이미 가진 빨강. 내 파랑을 cB 로 묶고, 자투리는 버려요. 그게 red_now."),
       content: (<ChipCountSim E={E} />),
     },
 
@@ -152,15 +162,6 @@ export function makeChipXchgCh1(E) {
       narr: t(E, "What if converting gains red (cA ≥ cB)? Then blue would help me, so the trickster gives red instead.",
                  "환전이 이득이면(cA ≥ cB)? 파랑이 오히려 나를 도와주니, 심술쟁이는 대신 빨강을 줘요."),
       content: (<TricksterRedSim E={E} />),
-    },
-
-    // [전] 도구: 마지막 한 개는 따로 (경계/off-by-one) — 왜 −1 했다 +1 하나. 도장카드 비유 + 언제 쓰나.
-    {
-      type: "reveal",
-      label: t(E, "Tool: try every case", "도구: 모든 경우 다 해보기"),
-      narr: t(E, "Take x = 1, 2, 3… and list EVERY color combo each time. Up to 6 there's always one bad case left; at 7 every case reaches the goal.",
-                 "1개, 2개, 3개… 받을 때마다 색 조합을 전부 적어봐요. 6개까진 늘 나쁜 경우가 하나 남고, 7개에서 모든 경우가 목표에 닿아요."),
-      content: (<LastStepSlide E={E} />),
     },
 
     // [결] 계획 — 공식 단계 (개념 슬라이드, 코드는 다음 챕터에서)

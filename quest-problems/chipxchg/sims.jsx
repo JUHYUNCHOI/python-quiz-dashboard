@@ -1019,7 +1019,15 @@ export function LastStepSlide({ E }) {
   const GOAL = EX[ei].goal, ANS = EX[ei].ans;
   const finalRed = (r, b) => START + r + Math.floor(b / CB) * CA;
 
-  const xs = Array.from({ length: ANS }, (_, i) => ({ x: i + 1 }));
+  // 각 x 마다 (조합 개수) 만큼 서브스텝 → 한 줄씩 누적으로 나타남
+  // 처음 3개(x=1,2,3)는 조합을 한 줄씩 누적으로 — '다음' 누르면 뭐가 늘었는지 보이게.
+  // 그 뒤부터는 x 마다 한 화면에 전부 (이미 방법을 익혔으니 빠르게).
+  const xs = [];
+  for (let x = 1; x <= ANS; x++) {
+    const nRows = x + 1;
+    if (x <= 3) for (let n = 1; n <= nRows; n++) xs.push({ x, show: n });
+    else xs.push({ x, show: nRows });
+  }
   const steps = [...xs, { k: "recap" }];
   const ts = useTraceStep(steps); const s = steps[Math.min(ts.safe, steps.length - 1)];
 
@@ -1030,15 +1038,21 @@ export function LastStepSlide({ E }) {
     return { rows, worst, allOk: worst >= GOAL };
   };
   const info = s.k === "recap" ? null : rowsFor(s.x);
+  const shown = s.k === "recap" ? [] : info.rows.slice(0, s.show);
+  const doneListing = s.k === "recap" ? true : s.show >= info.rows.length;
+  const lastRow = s.k === "recap" ? null : shown[shown.length - 1];
 
   const say = s.k === "recap"
     ? t(E, <>Every case reached the goal only at <b style={{ color: A }}>x = {ANS}</b>. Before that, one bad case always remained.</>,
            <><b style={{ color: A }}>{ANS}개</b>일 때 비로소 모든 경우가 목표에 닿았어요. 그전엔 늘 나쁜 경우가 하나씩 남았고요.</>)
+    : !doneListing
+    ? t(E, <>Getting <b>{s.x} chip{s.x > 1 ? "s" : ""}</b> — one more combo: <b>{lastRow.r} red + {lastRow.b} blue</b> → red <b style={{ color: lastRow.v >= GOAL ? "#15803d" : RED }}>{lastRow.v}</b>. Keep going…</>,
+           <><b>{s.x}개</b> 받을 때 — 조합 하나 더: <b>빨강 {lastRow.r} + 파랑 {lastRow.b}</b> → 빨강 <b style={{ color: lastRow.v >= GOAL ? "#15803d" : RED }}>{lastRow.v}</b>. 계속 적어봐요…</>)
     : info.allOk
     ? t(E, <><b>{s.x} chips</b>: now <b>every case</b> reaches {GOAL} — even the worst. <b>This is the answer.</b></>,
            <><b>{s.x}개</b>: 이제 <b>모든 경우</b>가 {GOAL} 이상이에요 — 제일 나쁜 것까지. <b>이게 답이에요.</b></>)
-    : t(E, <>With <b>{s.x} chip{s.x > 1 ? "s" : ""}</b>, list every combo. Worst gives only <b style={{ color: RED }}>{info.worst}</b> red — <b>still short of {GOAL}</b>.</>,
-           <><b>{s.x}개</b> 받을 때, 색 조합을 전부 적어봐요. 제일 나쁜 게 빨강 <b style={{ color: RED }}>{info.worst}</b>개 — <b>아직 {GOAL}에 못 미쳐요</b>.</>);
+    : t(E, <>All combos for <b>{s.x} chip{s.x > 1 ? "s" : ""}</b> are listed. Worst gives only <b style={{ color: RED }}>{info.worst}</b> red — <b>still short of {GOAL}</b>.</>,
+           <><b>{s.x}개</b> 조합을 다 적었어요. 제일 나쁜 게 빨강 <b style={{ color: RED }}>{info.worst}</b>개 — <b>아직 {GOAL}에 못 미쳐요</b>.</>);
 
   const chipStr = (r, b) => (
     <span style={{ display: "inline-flex", gap: 2, alignItems: "center" }}>
@@ -1095,8 +1109,8 @@ export function LastStepSlide({ E }) {
         </div>
       ) : (
         <div style={{ maxWidth: 460, margin: "0 auto", display: "flex", flexDirection: "column", gap: 4 }}>
-          {info.rows.map((o, i) => {
-            const isWorst = o.v === info.worst, ok = o.v >= GOAL;
+          {shown.map((o, i) => {
+            const isWorst = doneListing && o.v === info.worst, ok = o.v >= GOAL;
             return (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 10px", borderRadius: 8,
                 border: `1.5px solid ${isWorst ? "#f59e0b" : "#e2e8f0"}`, background: isWorst ? "#fffbeb" : "#fff",
@@ -1110,7 +1124,7 @@ export function LastStepSlide({ E }) {
               </div>
             );
           })}
-          {ei === 1 && s.x === 3 && (
+          {ei === 1 && s.x === 3 && doneListing && (
             <div style={{ marginTop: 4, border: `1.5px solid ${BLU}`, background: BLUBG, borderRadius: 10, padding: "8px 11px",
               fontSize: 11.5, fontWeight: 700, color: "#1e40af", wordBreak: "keep-all", lineHeight: 1.6 }}>
               {t(E, <>Look: <b>blue·blue·blue</b> is ✓ — the group completed and gave 2 red at once. So the trickster avoids giving the 3rd blue; it stalls only up to <b>2 blue</b>.</>,
