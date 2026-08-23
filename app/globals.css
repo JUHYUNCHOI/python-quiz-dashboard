@@ -7,6 +7,23 @@
 input, textarea, select {
   font-size: 16px;
 }
+/* ⚠️ 코드 에디터 예외 —
+   하이라이트 <pre> 위에 투명 <textarea> 를 겹치는 구조라, 두 레이어의 폰트 크기가
+   1px 만 달라도 커서가 실제 글자와 어긋난다. 위 16px 규칙이 Tailwind 의 text-[13px]
+   를 덮어써서 커서가 엉뚱한 곳에 찍히던 버그 수정 (2026-08-22).
+   .code-editor-textarea 를 단 곳은 자기 클래스의 크기를 그대로 쓴다. */
+textarea.code-editor-textarea {
+  font-size: 13px;
+  line-height: 1.8;
+}
+textarea.code-editor-textarea-14 {
+  font-size: 14px;
+  line-height: 1.8;
+}
+@media (min-width: 768px) {
+  textarea.code-editor-textarea,
+  textarea.code-editor-textarea-14 { font-size: 15px; }
+}
 
 /* 모바일 터치 최적화 */
 * {

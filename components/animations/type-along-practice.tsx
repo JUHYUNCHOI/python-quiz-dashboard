@@ -351,7 +351,7 @@ export function TypeAlongPractice({
                   if ((e.nativeEvent as KeyboardEvent)?.isComposing || e.keyCode === 229) return
                 }}
                 className={cn(
-                  "w-full p-4 font-mono text-[14px] md:text-[15px] leading-[1.8] bg-transparent outline-none resize-none relative z-10 whitespace-pre-wrap break-words",
+                  "code-editor-textarea-14 w-full p-4 font-mono text-[14px] md:text-[15px] leading-[1.8] bg-transparent outline-none resize-none relative z-10 whitespace-pre-wrap break-words",
                   isFullMatch ? "text-green-300" : "text-yellow-300"
                 )}
                 style={{ fontFeatureSettings: '"liga" 0, "calt" 0', tabSize: 4 }}

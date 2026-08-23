@@ -400,7 +400,7 @@ export function PythonRunner({
             placeholder={t("Python 코드 입력...", "Enter Python code...")}
             wrap="off"
             className={cn(
-              "w-full bg-transparent font-mono p-3 md:p-4 resize-none focus:outline-none placeholder:text-gray-600 relative z-10 whitespace-pre overflow-x-auto overflow-y-hidden",
+              "code-editor-textarea w-full bg-transparent font-mono p-3 md:p-4 resize-none focus:outline-none placeholder:text-gray-600 relative z-10 whitespace-pre overflow-x-auto overflow-y-hidden",
               "text-[13px] md:text-[15px] leading-[1.8] text-transparent caret-white selection:bg-blue-500/40"
             )}
             style={{ minHeight: editorMinHeight, tabSize: 4, fontFeatureSettings: '"liga" 0, "calt" 0' }}

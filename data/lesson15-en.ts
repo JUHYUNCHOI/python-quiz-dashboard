@@ -85,8 +85,8 @@ empty = set()                  # empty set (⚠️ NOT {})
         {
           id: "tryit-list-basic",
           type: "tryit",
-          title: "💻 Try it — run all 4 data structures in one go",
-          task: "Run the code as-is and see the 4 different outputs side by side!",
+          title: "▶️ Just run it — see the 4 results side by side",
+          task: "Nothing to write. Just hit ▶ Run and watch how the 4 results differ.",
           initialCode: `# 1. List - ordered and modifiable!
 fruits = ['apple', 'banana', 'grape']
 print(f'List: {fruits}')
@@ -290,8 +290,8 @@ Empty \`{}\` was claimed by **dict**. For empty set, write \`set()\`.
         {
           id: "tryit-when",
           type: "tryit",
-          title: "💻 Try it — all 4 in real situations",
-          task: "Shopping → coordinates → student scores → attendance: run each and see why!",
+          title: "▶️ Just run it — which one fits each situation",
+          task: "Nothing to write. Just hit ▶ Run to see which structure fits each situation.",
           initialCode: `# Situation 1: Shopping list → List! (ordered, modifiable)
 shopping = ['milk', 'bread', 'eggs']
 shopping.append('cheese')
