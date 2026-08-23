@@ -46,35 +46,7 @@ Python has **4 data structures**:
 - 🏷️ **Dictionary (dict)** \`{ }\` — name tag → value
 - ✋ **Set** \`{ }\` — auto-removes duplicates
 
-Today is just an **overview**. **Lessons 16–21** cover each one in detail. Next up: a one-table comparison 👇`
-        },
-        {
-          id: "compare-table",
-          type: "explain",
-          title: "📋 4 Data Structures — At a Glance",
-          content: `Key properties in one table:
-
-| | List \`[ ]\` | Tuple \`( )\` | Dict \`{ }\` | Set \`{ }\` |
-|---|---|---|---|---|
-| **Order** | ✅ yes | ✅ yes | ✅ yes (3.7+) | ❌ no |
-| **Duplicates** | ✅ OK | ✅ OK | keys ❌ | ❌ auto-removed |
-| **Modify** | ✅ OK | ❌ no | ✅ OK | ✅ OK |
-| **Index** | \`a[0]\` | \`a[0]\` | \`d["key"]\` | ❌ |
-| **Create** | \`[1, 2, 3]\` | \`(1, 2, 3)\` | \`{"a": 1}\` | \`{1, 2, 3}\` |
-| **Fast lookup** | ❌ slow | ❌ slow | ✅ fast | ✅ fast |
-
-### One-line summary
-
-- 🧊 **List**: anything ordered (cart, roster, score log)
-- 🔒 **Tuple**: bundles that don't change (coords, RGB, weekdays)
-- 🏷️ **Dict**: name → value (name→score, ID→info)
-- ✋ **Set**: unique-only collection (signed-up IDs, tags)
-
-> ⚠️ Dict and set both use \`{ }\` — don't mix them up!
-> - \`{}\` = empty dict (NOT a set)
-> - \`set()\` = empty set
-> - \`{1, 2}\` = set (just values)
-> - \`{"a": 1}\` = dict (key:value)`
+Today is just an **overview**. **Lessons 16–21** cover each one in detail. First let's see how to build them, then run them yourself 👇`
         },
         {
           id: "creation-syntax",
@@ -219,6 +191,34 @@ On the next screen, **click each tab** and feel the difference!`
       title: "Summary",
       emoji: "📊",
       steps: [
+        {
+          id: "compare-table",
+          type: "explain",
+          title: "📋 4 Data Structures — At a Glance",
+          content: `Key properties in one table:
+
+| | List \`[ ]\` | Tuple \`( )\` | Dict \`{ }\` | Set \`{ }\` |
+|---|---|---|---|---|
+| **Order** | ✅ yes | ✅ yes | ✅ yes (3.7+) | ❌ no |
+| **Duplicates** | ✅ OK | ✅ OK | keys ❌ | ❌ auto-removed |
+| **Modify** | ✅ OK | ❌ no | ✅ OK | ✅ OK |
+| **Index** | \`a[0]\` | \`a[0]\` | \`d["key"]\` | ❌ |
+| **Create** | \`[1, 2, 3]\` | \`(1, 2, 3)\` | \`{"a": 1}\` | \`{1, 2, 3}\` |
+| **Fast lookup** | ❌ slow | ❌ slow | ✅ fast | ✅ fast |
+
+### One-line summary
+
+- 🧊 **List**: anything ordered (cart, roster, score log)
+- 🔒 **Tuple**: bundles that don't change (coords, RGB, weekdays)
+- 🏷️ **Dict**: name → value (name→score, ID→info)
+- ✋ **Set**: unique-only collection (signed-up IDs, tags)
+
+> ⚠️ Dict and set both use \`{ }\` — don't mix them up!
+> - \`{}\` = empty dict (NOT a set)
+> - \`set()\` = empty set
+> - \`{1, 2}\` = set (just values)
+> - \`{"a": 1}\` = dict (key:value)`
+        },
         {
           id: "decision-flow",
           type: "explain",
