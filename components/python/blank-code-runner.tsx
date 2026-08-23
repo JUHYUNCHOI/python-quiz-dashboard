@@ -333,6 +333,26 @@ export function BlankCodeRunner({
     setTimeout(() => inputRefs.current[0]?.focus(), 0)
   }
 
+  // 빈칸 박스 폭 계산용 — 실제 렌더된 모노폰트의 한 글자 폭(px)을 측정한다.
+  // ch 단위는 웹폰트 로딩 타이밍에 따라 1px 로 잘못 잡히는 경우가 있어 직접 잰다.
+  const measureRef = useRef<HTMLSpanElement>(null)
+  const [charW, setCharW] = useState(7.8)
+  useEffect(() => {
+    const measure = () => {
+      const el = measureRef.current
+      if (el) {
+        const w = el.getBoundingClientRect().width / 10
+        if (w > 3) setCharW(w)
+      }
+    }
+    measure()
+    if (typeof document !== "undefined" && (document as any).fonts?.ready) {
+      (document as any).fonts.ready.then(measure).catch(() => {})
+    }
+    window.addEventListener("resize", measure)
+    return () => window.removeEventListener("resize", measure)
+  }, [])
+
   // 코드를 줄별로 렌더링 (빈칸은 input 필드로)
   const renderCodeWithBlanks = () => {
     const lines = initialCode.split('\n')
@@ -360,7 +380,9 @@ export function BlankCodeRunner({
         const value = filledValues[currentBlankId] || ''
         // 박스 너비: 학생이 입력한 만큼만 자람 (빈칸일 땐 작게).
         // 정답 길이로 잡으면 (1) 답 길이 유출 (2) hint2 가 전체 힌트일 때 박스가 과하게 넓어짐 → 둘 다 방지.
-        const boxWidth = Math.max(value.length + 1, 4)
+        // 입력 길이에 따라 넉넉히 늘어나게 — +2 는 좌우 패딩(px-1)과 커서 자리.
+        // (선생님 수업 중 'class_a+class_b' 가 잘려 보이던 버그 수정)
+        const boxWidth = Math.max(value.length + 2, 5)
 
         if (choices.length > 0) {
           // 보기 선택 모드: 클릭 가능한 디스플레이 박스
@@ -439,7 +461,7 @@ export function BlankCodeRunner({
               }}
               placeholder="___"
               className={cn(
-                "inline-block font-mono text-center rounded-md border-2 mx-0.5 px-1 py-0 transition-all",
+                "code-editor-textarea inline-block font-mono text-center rounded-md border-2 mx-0.5 px-1 py-0 transition-all",
                 "text-[13px] md:text-[15px] leading-[1.8] bg-gray-800 outline-none",
                 focusedBlank === currentBlankId
                   ? "border-amber-400 text-amber-300 ring-1 ring-amber-400/50"
@@ -447,7 +469,7 @@ export function BlankCodeRunner({
                     ? "border-purple-400 text-purple-300"
                     : "border-gray-500 text-gray-400"
               )}
-              style={{ width: `${boxWidth}ch` }}
+              style={{ width: `${boxWidth * charW}px`, minWidth: `${boxWidth * charW}px` }}
               spellCheck={false}
               autoComplete="off"
             />
@@ -524,6 +546,13 @@ export function BlankCodeRunner({
         </div>
 
         <div className="font-mono p-3 md:p-4 text-[13px] md:text-[15px] overflow-x-auto" style={{ minHeight: computedMinHeight }}>
+          {/* 폭 측정용 — 코드와 같은 폰트/크기로 10 글자를 그려 한 글자 폭을 잰다 (화면엔 안 보임) */}
+          <span
+            ref={measureRef}
+            aria-hidden="true"
+            className="font-mono absolute opacity-0 pointer-events-none whitespace-pre"
+            style={{ left: -9999, top: 0 }}
+          >0000000000</span>
           {renderCodeWithBlanks()}
         </div>
       </div>

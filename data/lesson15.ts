@@ -343,22 +343,22 @@ print(f'출석: {attendance} ({len(attendance)}명)')`,
           id: "mission1",
           type: "mission",
           title: "🎯 미션 1 — 빈칸 3 개로 자료구조 완성",
-          task: "리스트 시작 괄호 / 딕셔너리 키 / 개수 함수 — 3 개 빈칸을 채우세요!",
-          initialCode: `# 1. 과일 목록 → 리스트!
-fruits = ___'딸기', '포도', '망고']
+          task: "빈칸 3 개: 리스트 만들기 / 딕셔너리에서 꺼내기 / 중복 빼고 세기",
+          initialCode: `# 1. 과일 목록 → 리스트 (대괄호로 감싸기)
+fruits = ___
 print(f'과일: {fruits}')
 print(f'개수: {len(fruits)}개')
 
-# 2. 학생 정보 → 딕셔너리!
+# 2. 학생 정보 → 딕셔너리 ('이름' 으로 값 꺼내기)
 student = {'이름': '철수', '나이': 15, '취미': '축구'}
-print(f'이름: {student[___]}')
+print(f'이름: {___}')
 
-# 3. 중복 제거 → 집합!
-colors = {'빨강', '파랑', '빨강', '초록', '파랑'}
-print(f'색상 종류: {___(colors)}개')`,
+# 3. 중복 있는 리스트 → 집합으로 바꿔서 종류 세기
+colors = ['빨강', '파랑', '빨강', '초록', '파랑']
+print(f'색상 종류: {___}개')`,
           expectedOutput: `과일: ['딸기', '포도', '망고']\n개수: 3개\n이름: 철수\n색상 종류: 3개`,
-          hint: "리스트는 [, 딕셔너리는 키로 접근, len()으로 개수!",
-          hint2: "[ / '이름' / len"
+          hint: "1) [ ] 안에 '딸기', '포도', '망고'  2) student['이름']  3) set() 으로 중복 제거 후 len()",
+          hint2: "fruits = ['딸기', '포도', '망고'] / student['이름'] / len(set(colors))"
         },
         {
           id: "mission2",
