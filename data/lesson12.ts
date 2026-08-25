@@ -52,6 +52,25 @@ if age >= 13 and age < 19:
 ➡️ **하나라도 False 면 전체 False.** (자물쇠 여러 개가 *전부* 풀려야 문이 열리는 것처럼!)`
         },
         {
+          id: "pre-try1",
+          type: "quiz",
+          title: "🤔 어떤 종류?",
+          content: "**점수가 80 이상 *그리고* 100 이하면 합격!** — 이건 어떤 종류 조건?",
+          options: ["둘 다 만족 (and)", "하나만 만족 (or)", "반대 (not)"],
+          answer: 0,
+          explanation: "둘 다 만족! → 다음 빈칸엔 **and** 가 들어가."
+        },
+        {
+          id: "try1",
+          type: "tryit",
+          title: "🖥️ 직접 해보기 — and",
+          task: "시험 점수가 80~100점 사이면 합격! *그리고* 가 어디 들어갈까?",
+          initialCode: "score = 85\n\n# 둘 다 만족? = and ✨ 빈칸에 직접 써봐!\nif score >= 80 ___ score <= 100:\n    print(\"합격!\")\nelse:\n    print(\"불합격\")",
+          expectedOutput: "합격!",
+          hint: "둘 다 만족? → and!",
+          hint2: "and"
+        },
+        {
           id: "or-explain",
           type: "explain",
           title: "🔗 or = 또는",
@@ -72,62 +91,6 @@ if day == "토요일" or day == "일요일":
 | False | or | False | **False** ❌ |
 
 ➡️ **하나라도 True 면 전체 True.** (둘 다 틀려야 비로소 False!)`
-        },
-        {
-          id: "not-explain",
-          type: "explain",
-          title: "🔄 not = 아닌 (뒤집기)",
-          content: `\`not\` 은 True ↔ False 를 뒤집어요. **"~ 가 *아닐* 때 뭔가 하고 싶을 때"** 딱이에요. 예를 들어 로그인이 **안** 돼 있으면 "로그인하세요" 라고 안내하고 싶죠? 그럴 때 \`not\`.
-
-\`\`\`python
-is_raining = False
-
-if not is_raining:
-    print("산책 가자!")  # 비 안 오니까 출력 ✅
-\`\`\`
-
-| 원래 | → | not |
-|---|---|---|
-| True | → | False |
-| False | → | True |
-
-> 💡 **자주 쓰는 곳:** \`if not is_logged_in:\` → 로그인 *안* 했으면 안내. \`if not found:\` → 못 찾았으면 알림.
->
-> \`is_raining == False\` 라고 길게 쓰는 대신 \`not is_raining\` — 영어 문장처럼 *"비 안 오면"* 하고 읽혀서 훨씬 깔끔해요.`
-        },
-        {
-          id: "match-game",
-          type: "interactive",
-          title: "🎮 한국말 → and / or / not 빠르게!",
-          description: "한국말 문장을 보고 and(둘 다) / or(하나만) / not(반대) 중 하나 골라봐요. 10문제 빠르게 풀고 머릿속에 자동화!",
-          component: "pyAndOrNotMatcher"
-        },
-        {
-          id: "circuit-andor",
-          type: "interactive",
-          title: "🎬 스위치로 느껴보기 — and / or / not",
-          description: "스위치 A, B 를 켜고 꺼봐요. 위 모드 버튼으로 and / or / not 도 바꿔봐요 — and 는 둘 다, or 는 하나만, not 은 뒤집기!",
-          component: "pyAndOrCircuit",
-          componentProps: { initialMode: "and" }
-        },
-        {
-          id: "pre-try1",
-          type: "quiz",
-          title: "🤔 어떤 종류?",
-          content: "**점수가 80 이상 *그리고* 100 이하면 합격!** — 이건 어떤 종류 조건?",
-          options: ["둘 다 만족 (and)", "하나만 만족 (or)", "반대 (not)"],
-          answer: 0,
-          explanation: "둘 다 만족! → 다음 빈칸엔 **and** 가 들어가."
-        },
-        {
-          id: "try1",
-          type: "tryit",
-          title: "🖥️ 직접 해보기 — and",
-          task: "시험 점수가 80~100점 사이면 합격! *그리고* 가 어디 들어갈까?",
-          initialCode: "score = 85\n\n# 둘 다 만족? = and ✨ 빈칸에 직접 써봐!\nif score >= 80 ___ score <= 100:\n    print(\"합격!\")\nelse:\n    print(\"불합격\")",
-          expectedOutput: "합격!",
-          hint: "둘 다 만족? → and!",
-          hint2: "and"
         },
         {
           id: "pre-try2",
@@ -156,7 +119,33 @@ if not is_raining:
           options: ["True", "False", "에러", "None"],
           answer: 1,
           explanation: "and 는 **둘 다** True 여야 True. 하나라도 False 면 False!"
-        }
+        },
+        {
+          id: "match-game",
+          type: "interactive",
+          title: "🎮 한국말 → and / or / not 빠르게!",
+          description: "한국말 문장을 보고 and(둘 다) / or(하나만) / not(반대) 중 하나 골라봐요. 10문제 빠르게 풀고 머릿속에 자동화!",
+          component: "pyAndOrNotMatcher"
+        },
+        {
+          id: "circuit-andor",
+          type: "interactive",
+          title: "🎬 스위치로 느껴보기 — and / or / not",
+          description: "스위치 A, B 를 켜고 꺼봐요. 위 모드 버튼으로 and / or / not 도 바꿔봐요 — and 는 둘 다, or 는 하나만, not 은 뒤집기!",
+          component: "pyAndOrCircuit",
+          componentProps: { initialMode: "and" }
+        },
+
+
+
+
+
+
+
+
+
+
+
       ]
     },
     {
@@ -164,6 +153,28 @@ if not is_raining:
       title: "not 과 우선순위",
       emoji: "🔄",
       steps: [
+        {
+          id: "not-explain",
+          type: "explain",
+          title: "🔄 not = 아닌 (뒤집기)",
+          content: `\`not\` 은 True ↔ False 를 뒤집어요. **"~ 가 *아닐* 때 뭔가 하고 싶을 때"** 딱이에요. 예를 들어 로그인이 **안** 돼 있으면 "로그인하세요" 라고 안내하고 싶죠? 그럴 때 \`not\`.
+
+\`\`\`python
+is_raining = False
+
+if not is_raining:
+    print("산책 가자!")  # 비 안 오니까 출력 ✅
+\`\`\`
+
+| 원래 | → | not |
+|---|---|---|
+| True | → | False |
+| False | → | True |
+
+> 💡 **자주 쓰는 곳:** \`if not is_logged_in:\` → 로그인 *안* 했으면 안내. \`if not found:\` → 못 찾았으면 알림.
+>
+> \`is_raining == False\` 라고 길게 쓰는 대신 \`not is_raining\` — 영어 문장처럼 *"비 안 오면"* 하고 읽혀서 훨씬 깔끔해요.`
+        },
         {
           id: "pre-try3",
           type: "quiz",
@@ -236,7 +247,13 @@ if (age >= 13 and age <= 19) or is_student:
           expectedOutput: "할인 적용!",
           hint: "괄호 안 = 13 이상 '그리고' 19 이하 (둘 다). 괄호 밖 = '또는' 학생 (둘 중 하나).",
           hint2: "and / or"
-        }
+        },
+
+
+
+
+
+
       ]
     },
     {

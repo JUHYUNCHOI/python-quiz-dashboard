@@ -52,6 +52,25 @@ Slip an \`and\` **between** the conditions and Python checks each one. **Both** 
 ➡️ **One False makes the whole thing False.** (Like several locks that must *all* open before the door does!)`
         },
         {
+          id: "pre-try1",
+          type: "quiz",
+          title: "🤔 Which kind?",
+          content: "**Pass if the score is 80+ *AND* 100 or below!** — What kind of condition is this?",
+          options: ["Both must be true (and)", "Either one (or)", "Flip / negate (not)"],
+          answer: 0,
+          explanation: "Both must be true! → The blank takes **and**."
+        },
+        {
+          id: "try1",
+          type: "tryit",
+          title: "🖥️ Try It — and",
+          task: "Pass if the test score is between 80 and 100! Which operator goes in for *AND*?",
+          initialCode: "score = 85\n\n# Both true? = and ✨ Type it in!\nif score >= 80 ___ score <= 100:\n    print(\"Pass!\")\nelse:\n    print(\"Fail\")",
+          expectedOutput: "Pass!",
+          hint: "Both true? → and!",
+          hint2: "and"
+        },
+        {
           id: "or-explain",
           type: "explain",
           title: "🔗 or — At Least One",
@@ -72,40 +91,6 @@ if day == "Saturday" or day == "Sunday":
 | False | or | False | **False** ❌ |
 
 ➡️ **One True makes the whole thing True.** (Only when *both* are false does it turn False!)`
-        },
-        {
-          id: "match-game",
-          type: "interactive",
-          title: "🎮 English → and / or / not — Speed Round!",
-          description: "Read each sentence and pick and (both) / or (either) / not (flip). 10 quick rounds — make it automatic in your head!",
-          component: "pyAndOrNotMatcher"
-        },
-        {
-          id: "circuit-andor",
-          type: "interactive",
-          title: "🎬 Feel It with Switches — and / or",
-          description: "Flip switches A and B. With AND both must be ON; with OR even one ON lights the bulb!",
-          component: "pyAndOrCircuit",
-          componentProps: { initialMode: "and" }
-        },
-        {
-          id: "pre-try1",
-          type: "quiz",
-          title: "🤔 Which kind?",
-          content: "**Pass if the score is 80+ *AND* 100 or below!** — What kind of condition is this?",
-          options: ["Both must be true (and)", "Either one (or)", "Flip / negate (not)"],
-          answer: 0,
-          explanation: "Both must be true! → The blank takes **and**."
-        },
-        {
-          id: "try1",
-          type: "tryit",
-          title: "🖥️ Try It — and",
-          task: "Pass if the test score is between 80 and 100! Which operator goes in for *AND*?",
-          initialCode: "score = 85\n\n# Both true? = and ✨ Type it in!\nif score >= 80 ___ score <= 100:\n    print(\"Pass!\")\nelse:\n    print(\"Fail\")",
-          expectedOutput: "Pass!",
-          hint: "Both true? → and!",
-          hint2: "and"
         },
         {
           id: "pre-try2",
@@ -134,7 +119,32 @@ if day == "Saturday" or day == "Sunday":
           options: ["True", "False", "Error", "None"],
           answer: 1,
           explanation: "With and, **both** must be True. One False → False!"
-        }
+        },
+        {
+          id: "match-game",
+          type: "interactive",
+          title: "🎮 English → and / or / not — Speed Round!",
+          description: "Read each sentence and pick and (both) / or (either) / not (flip). 10 quick rounds — make it automatic in your head!",
+          component: "pyAndOrNotMatcher"
+        },
+        {
+          id: "circuit-andor",
+          type: "interactive",
+          title: "🎬 Feel It with Switches — and / or",
+          description: "Flip switches A and B. With AND both must be ON; with OR even one ON lights the bulb!",
+          component: "pyAndOrCircuit",
+          componentProps: { initialMode: "and" }
+        },
+
+
+
+
+
+
+
+
+
+
       ]
     },
     {
