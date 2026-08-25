@@ -43,7 +43,7 @@ export const QUEST_ALGO: Record<string, string> = {
   innovation: "greedy", interview: "priorityqueue", lc1480: "prefixsum", lc3: "hashtable",
   lc303: "prefixsum", lc560: "prefixsum", lc974: "prefixsum", livestock: "graph",
   magicorbs: "sorting", makedistinct: "sorting", mcc15bahasaf: "string", mcc15choco: "stackqueue",
-  mcc15rect: "bitmanipulation", mcc19bakery: "greedy", mcc19ditcoin: "greedy", mcc19rect: "sorting",
+  mcc19bakery: "greedy", mcc19ditcoin: "greedy", mcc19rect: "sorting",
   mcc19rect2: "bitmanipulation", mcc20cipher: "hashtable", mcc20citytour: "graph", mcc20kitty: "dp",
   mcc20knight: "graph", mcc20zigzag: "dp", mcc21marbles: "prefixsum",
   // mcc20missing: 제거 — 핵심은 "가장 큰 크기(N/N-1)가 극단에 온다"는 anchor 경우나눔(ad-hoc). set 은 부수적. 표준 토픽 없음.

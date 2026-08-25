@@ -1,161 +1,45 @@
-import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
 
-/* ================================================================
-   Mcc15RectCornerSim — pick 3 corners, watch the 4th reveal via XOR
-   pairing. Bilingual. Theme-matched (#059669 emerald).
-   ================================================================ */
-const PRESETS = [
-  { corners: [[0, 0], [4, 0], [0, 3]], missing: [4, 3] },
-  { corners: [[1, 1], [5, 1], [1, 4]], missing: [5, 4] },
-  { corners: [[2, 0], [2, 5], [6, 0]], missing: [6, 5] },
-  { corners: [[0, 2], [3, 2], [3, 6]], missing: [0, 6] },
-];
-
-export function Mcc15RectCornerSim({ E }) {
-  const [pi, setPi] = useState(0);
-  const [revealed, setRevealed] = useState(false);
-  const preset = PRESETS[pi];
-  const [a, b, c] = preset.corners;
-  const [mx, my] = preset.missing;
-
-  const allX = [a[0], b[0], c[0], mx];
-  const allY = [a[1], b[1], c[1], my];
-  const minX = Math.min(...allX), maxX = Math.max(...allX);
-  const minY = Math.min(...allY), maxY = Math.max(...allY);
-  const padX = 1, padY = 1;
-  const W = 240, H = 180;
-  const sx = (x) => 20 + ((x - minX + padX) / (maxX - minX + 2 * padX)) * (W - 40);
-  const sy = (y) => H - 20 - ((y - minY + padY) / (maxY - minY + 2 * padY)) * (H - 40);
-
-  const x1 = a[0], x2 = b[0], x3 = c[0];
-  const y1 = a[1], y2 = b[1], y3 = c[1];
-  const xorX = x1 ^ x2 ^ x3;
-  const xorY = y1 ^ y2 ^ y3;
-
-  const next = () => { setPi((pi + 1) % PRESETS.length); setRevealed(false); };
-
-  const dot = (x, y, color, label, key) => (
-    <g key={key}>
-      <circle cx={sx(x)} cy={sy(y)} r="6" fill={color} stroke="#fff" strokeWidth="2" />
-      <text x={sx(x) + 9} y={sy(y) - 8} fontSize="11" fontWeight="700" fill={color}>{label}</text>
-    </g>
-  );
-
-  return (
-    <div style={{ background: "#fff", border: `1.5px solid ${A}`, borderRadius: 12, padding: 12, marginBottom: 10 }}>
-      <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", marginBottom: 8, textAlign: "center" }}>
-        🧪 {t(E, "Sim — Spot the missing corner", "시뮬 — 빠진 꼭짓점 찾기")}
-      </div>
-
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
-        <svg width={W} height={H} style={{ background: "#f0fdf4", borderRadius: 8 }}>
-          {/* grid */}
-          {Array.from({ length: maxX - minX + 2 * padX + 1 }).map((_, i) => {
-            const gx = sx(minX - padX + i);
-            return <line key={`vx${i}`} x1={gx} y1={20} x2={gx} y2={H - 20} stroke="#d1fae5" strokeWidth="1" />;
-          })}
-          {Array.from({ length: maxY - minY + 2 * padY + 1 }).map((_, i) => {
-            const gy = sy(minY - padY + i);
-            return <line key={`hy${i}`} x1={20} y1={gy} x2={W - 20} y2={gy} stroke="#d1fae5" strokeWidth="1" />;
-          })}
-          {/* rectangle outline if revealed */}
-          {revealed && (() => {
-            const xs = [...new Set(allX)].sort((p, q) => p - q);
-            const ys = [...new Set(allY)].sort((p, q) => p - q);
-            if (xs.length !== 2 || ys.length !== 2) return null;
-            return <rect x={sx(xs[0])} y={sy(ys[1])} width={sx(xs[1]) - sx(xs[0])} height={sy(ys[0]) - sy(ys[1])}
-              fill="none" stroke={A} strokeWidth="2" strokeDasharray="4 3" />;
-          })()}
-          {/* given corners */}
-          {dot(a[0], a[1], "#059669", "A", "a")}
-          {dot(b[0], b[1], "#059669", "B", "b")}
-          {dot(c[0], c[1], "#059669", "C", "c")}
-          {/* 4th corner */}
-          {revealed
-            ? dot(mx, my, "#dc2626", "?", "m")
-            : <g>
-                <circle cx={sx(mx)} cy={sy(my)} r="6" fill="#fde68a" stroke="#a16207" strokeWidth="2" strokeDasharray="2 2" />
-                <text x={sx(mx) + 9} y={sy(my) - 8} fontSize="11" fontWeight="700" fill="#a16207">?</text>
-              </g>}
-        </svg>
-      </div>
-
-      <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, padding: "0 4px" }}>
-        <div><b style={{ color: A }}>{t(E, "Given:", "주어진 꼭짓점:")}</b>{` (${a[0]},${a[1]}), (${b[0]},${b[1]}), (${c[0]},${c[1]})`}</div>
-        {revealed && (
-          <div style={{ marginTop: 6, padding: 8, background: "#ecfdf5", border: "1px dashed #6ee7b7", borderRadius: 6, fontSize: 11.5 }}>
-            <div>{`x: ${x1} ^ ${x2} ^ ${x3} = `}<b style={{ color: "#dc2626" }}>{xorX}</b></div>
-            <div>{`y: ${y1} ^ ${y2} ^ ${y3} = `}<b style={{ color: "#dc2626" }}>{xorY}</b></div>
-            <div style={{ marginTop: 4, color: "#065f46" }}>
-              {t(E, "Each side appears twice — XOR cancels the duplicates, leaving the lonely one.",
-                  "각 좌표는 변마다 2번 등장 — XOR이 짝꿍을 지워서 짝 없는 값만 남아요.")}
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginTop: 10 }}>
-        <button onClick={() => setRevealed(true)} disabled={revealed} style={{
-          background: revealed ? "#d1fae5" : A, color: revealed ? "#065f46" : "#fff",
-          border: "none", borderRadius: 6, padding: "5px 12px", fontSize: 12, fontWeight: 700,
-          cursor: revealed ? "default" : "pointer",
-        }}>
-          {revealed ? t(E, "Revealed", "공개됨") : t(E, "Reveal 4th corner", "4번째 꼭짓점 공개")}
-        </button>
-        <button onClick={next} style={{
-          background: "#fff", color: A, border: `1.5px solid ${A}`,
-          borderRadius: 6, padding: "5px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer",
-        }}>
-          {t(E, "Try another", "다른 예제")}
-        </button>
-      </div>
-    </div>
-  );
-}
-
 const FULL_PY = [
-  "T = int(input())",
-  "for _ in range(T):",
-  "    coords = []",
-  "    for i in range(3):",
-  "        x, y = map(int, input().split())",
-  "        coords.append((x, y))",
-  "    x1, y1 = coords[0]",
-  "    x2, y2 = coords[1]",
-  "    x3, y3 = coords[2]",
-  "    # XOR trick: the missing coordinate",
-  "    x4 = x1 ^ x2 ^ x3",
-  "    y4 = y1 ^ y2 ^ y3",
-  "    print(x4, y4)",
+  "x1, y1 = map(int, input().split())",
+  "x2, y2 = map(int, input().split())",
+  "x3, y3 = map(int, input().split())",
+  "",
+  "# 축에 평행한 직사각형 → x 좌표는 왼쪽 변에 2번, 오른쪽 변에 2번 등장해요.",
+  "# 주어진 3개 중 짝이 있는 두 개를 빼면, 짝 없는 하나가 답이에요.",
+  "if x1 == x2: x4 = x3",
+  "elif x1 == x3: x4 = x2",
+  "else: x4 = x1",
+  "",
+  "if y1 == y2: y4 = y3",
+  "elif y1 == y3: y4 = y2",
+  "else: y4 = y1",
+  "",
+  "print(x4, y4)",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
-  "#include <vector>",
-  "#include <string>",
-  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
-  "    int T; cin >> T;",
-  "    for (int _ = 0; _ < T; _++) {",
-  "        auto coords = [];",
-  "        for (int i = 0; i < 3; i++) {",
-  "            int x, y; cin >> x >> y;",
-  "            // coords.append((x, y))",
-  "        // x1, y1 = coords[0]",
-  "        // x2, y2 = coords[1]",
-  "        // x3, y3 = coords[2]",
-  "        // XOR trick: the missing coordinate",
-  "        auto x4 = x1 ^ x2 ^ x3;",
-  "        auto y4 = y1 ^ y2 ^ y3;",
-  "        cout << x4, y4 << \"\\n\";",
+  "    int x1, y1, x2, y2, x3, y3;",
+  "    cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;",
   "",
+  "    int x4, y4;",
+  "    if (x1 == x2) x4 = x3;",
+  "    else if (x1 == x3) x4 = x2;",
+  "    else x4 = x1;",
+  "",
+  "    if (y1 == y2) y4 = y3;",
+  "    else if (y1 == y3) y4 = y2;",
+  "    else y4 = y1;",
+  "",
+  "    cout << x4 << \" \" << y4 << \"\\n\";",
   "    return 0;",
   "}",
 ];
@@ -167,20 +51,30 @@ export function getMcc15RectSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+        t(E, "Because the rectangle is parallel to the axes, only two different x values exist in it (left side and right side) — and only two different y values.",
+            "직사각형이 축에 평행하니까 x 좌표는 딱 두 종류(왼쪽 변·오른쪽 변)뿐이에요. y 도 아래쪽·위쪽 두 종류뿐이고요."),
+        t(E, "Each value is shared by two corners, so among the 3 given x's exactly two match and one is left without a partner — that lonely x is the answer's x. Same for y.",
+            "값 하나를 꼭짓점 두 개가 나눠 쓰니, 주어진 x 3개 중 두 개는 같고 하나는 짝이 없어요 — 그 짝 없는 x 가 답의 x 예요. y 도 똑같아요."),
+        t(E, "Negative coordinates work exactly the same — we never compare sizes, only whether two values are equal.",
+            "좌표가 음수여도 그대로 동작해요 — 크기 비교가 아니라 같은지만 보니까요."),
+        t(E, "The order of the 3 given corners does not matter: whichever two share an x, the remaining one is the lonely one.",
+            "주어진 꼭짓점 3개의 순서는 상관없어요. 어느 둘이 x 를 공유하든, 남는 하나가 짝 없는 값이에요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "map(int, input().split()) reads x and y from one line at once and turns both into numbers.",
+            "map(int, input().split()) 로 한 줄에서 x, y 를 한 번에 받아 숫자로 바꿔요."),
+        t(E, "if x1 == x2: x4 = x3 fits on one line — a short body may sit right after the colon.",
+            "if x1 == x2: x4 = x3 처럼 짧은 본문은 콜론 뒤에 한 줄로 써도 돼요."),
+        t(E, "print(x4, y4) already puts a space between the two numbers, which is exactly the required output format.",
+            "print(x4, y4) 는 두 숫자 사이에 공백을 알아서 넣어줘요 — 요구하는 출력 형식 그대로예요."),
       ],
       cppOnly: [
-        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
-        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+        t(E, "cin >> x1 >> y1 >> ... skips spaces and newlines on its own, so all 3 lines can be read in one statement.",
+            "cin >> x1 >> y1 >> ... 는 줄바꿈·공백을 알아서 건너뛰어요 — 3줄을 한 문장으로 읽어도 괜찮아요."),
+        t(E, "int is plenty here: coordinates stay within −1,000 to 1,000.",
+            "좌표가 −1,000 ~ 1,000 이라 int 로 충분해요."),
+        t(E, "Print the space yourself: cout << x4 << \" \" << y4 — C++ does not insert one for you.",
+            "공백은 직접 넣어요: cout << x4 << \" \" << y4 — C++ 는 자동으로 넣어주지 않아요."),
       ],
     },
   ];

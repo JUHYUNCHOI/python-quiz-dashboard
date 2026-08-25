@@ -6,17 +6,42 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#8b5cf6";
 
 /* ================================================================
-   StackSim — bilingual stack walkthrough for [3, 3, 5, 5]
-   Step through bars left → right, watch stack grow / pop and total update.
+   StackSim — 공식 샘플 [3, 4, 4, 5, 9, 9, 5, 2] 를 한 바씩 따라가요.
+   9,9 를 지우면 5 와 5 가 붙는 "연쇄"가 눈에 보이는 게 핵심.
    ================================================================ */
-const SIM_BARS = [3, 3, 5, 5];
-// Each frame: {idx, stack[], total, action}
+const SIM_BARS = [3, 4, 4, 5, 9, 9, 5, 2];
+// Each frame: {idx, stack[], total, removed[], action}
 const SIM_FRAMES = [
-  { idx: -1, stack: [],         total: 0,  actionEN: "Start: stack empty, total = 0.",                       actionKO: "시작: 스택 비었음, 총합 = 0." },
-  { idx: 0,  stack: [3],        total: 0,  actionEN: "Bar 3: stack empty → push 3.",                         actionKO: "바 3: 스택 비었음 → 3 push." },
-  { idx: 1,  stack: [],         total: 6,  actionEN: "Bar 3: top is 3, equal! Pop and add 2×3 = 6.",         actionKO: "바 3: top 이 3, 같음! pop 하고 2×3 = 6 더함." },
-  { idx: 2,  stack: [5],        total: 6,  actionEN: "Bar 5: stack empty → push 5.",                         actionKO: "바 5: 스택 비었음 → 5 push." },
-  { idx: 3,  stack: [],         total: 16, actionEN: "Bar 5: top is 5, equal! Pop and add 2×5 = 10. Total = 16.", actionKO: "바 5: top 이 5, 같음! pop 하고 2×5 = 10 더함. 총합 = 16." },
+  { idx: -1, stack: [], total: 0, removed: [],
+    actionEN: "Start: the stack is empty and nothing has been taken yet.",
+    actionKO: "시작: 스택은 비었고, 아직 가져간 초콜릿은 없어요." },
+  { idx: 0, stack: [3], total: 0, removed: [],
+    actionEN: "Bar 3: nothing to compare with → keep it on the stack.",
+    actionKO: "바 3: 비교할 게 없어요 → 스택에 올려둬요." },
+  { idx: 1, stack: [3, 4], total: 0, removed: [],
+    actionEN: "Bar 4: the top is 3, different → keep 4 on the stack too.",
+    actionKO: "바 4: 맨 위가 3, 달라요 → 4 도 올려둬요." },
+  { idx: 2, stack: [3], total: 8, removed: [1, 2],
+    actionEN: "Bar 4: the top is 4 — same! Take the pair and add 2×4 = 8.",
+    actionKO: "바 4: 맨 위가 4 — 같아요! 짝을 가져가고 2×4 = 8 을 더해요." },
+  { idx: 3, stack: [3, 5], total: 8, removed: [1, 2],
+    actionEN: "Bar 5: the top is 3, different → keep 5 on the stack.",
+    actionKO: "바 5: 맨 위가 3, 달라요 → 5 를 올려둬요." },
+  { idx: 4, stack: [3, 5, 9], total: 8, removed: [1, 2],
+    actionEN: "Bar 9: the top is 5, different → keep 9 on the stack.",
+    actionKO: "바 9: 맨 위가 5, 달라요 → 9 를 올려둬요." },
+  { idx: 5, stack: [3, 5], total: 26, removed: [1, 2, 4, 5],
+    actionEN: "Bar 9: the top is 9 — same! Take the pair and add 2×9 = 18. Total 26.",
+    actionKO: "바 9: 맨 위가 9 — 같아요! 짝을 가져가고 2×9 = 18 을 더해요. 총 26." },
+  { idx: 6, stack: [3], total: 36, removed: [1, 2, 3, 4, 5, 6],
+    actionEN: "Bar 5: the 9s are gone, so 5 meets 5 — same! Add 2×5 = 10. Total 36. ← this is the chain reaction.",
+    actionKO: "바 5: 9 두 개가 사라져서 5 와 5 가 만났어요 — 같아요! 2×5 = 10 을 더해요. 총 36. ← 이게 연쇄예요." },
+  { idx: 7, stack: [3, 2], total: 36, removed: [1, 2, 3, 4, 5, 6],
+    actionEN: "Bar 2: the top is 3, different → keep 2 on the stack.",
+    actionKO: "바 2: 맨 위가 3, 달라요 → 2 를 올려둬요." },
+  { idx: 8, stack: [3, 2], total: 36, removed: [1, 2, 3, 4, 5, 6],
+    actionEN: "Done. Bars 3 and 2 never found a partner. Answer = 36.",
+    actionKO: "끝. 바 3 과 2 는 끝내 짝을 못 찾았어요. 답 = 36." },
 ];
 
 export function Mcc15ChocoStackSim({ E }) {
@@ -30,7 +55,7 @@ export function Mcc15ChocoStackSim({ E }) {
     <div style={{ padding: 16 }}>
       <div style={{ textAlign: "center", marginBottom: 10 }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: A }}>
-          {t(E, "🥞 Stack Walkthrough — bars [3, 3, 5, 5]", "🥞 스택 시뮬레이션 — 바 [3, 3, 5, 5]")}
+          {t(E, "🥞 Walkthrough — the official sample [3, 4, 4, 5, 9, 9, 5, 2]", "🥞 한 바씩 따라가기 — 공식 샘플 [3, 4, 4, 5, 9, 9, 5, 2]")}
         </div>
         <div style={{ fontSize: 11, color: C.dim, marginTop: 3 }}>
           {t(E, `Step ${f + 1} / ${SIM_FRAMES.length}`, `${f + 1} 단계 / ${SIM_FRAMES.length}`)}
@@ -38,20 +63,19 @@ export function Mcc15ChocoStackSim({ E }) {
       </div>
 
       {/* Bars row — highlight current */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 14 }}>
+      <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
         {SIM_BARS.map((b, i) => {
           const cur = i === frame.idx;
-          const past = i < frame.idx;
+          const gone = frame.removed.includes(i);
           return (
             <div key={i} style={{
-              minWidth: 40, padding: "10px 12px",
+              minWidth: 34, padding: "9px 10px",
               borderRadius: 8,
-              background: cur ? A : past ? "#e9d5ff" : "#fff",
-              color: cur ? "#fff" : past ? "#7c3aed" : C.text,
-              border: `2px solid ${cur ? A : past ? "#c4b5fd" : C.border}`,
-              fontWeight: 700, textAlign: "center",
-              opacity: past ? 0.5 : 1,
-              textDecoration: past ? "line-through" : "none",
+              background: gone ? "#f1f5f9" : cur ? A : "#fff",
+              color: gone ? "#94a3b8" : cur ? "#fff" : C.text,
+              border: `2px solid ${gone ? "#e2e8f0" : cur ? A : C.border}`,
+              fontWeight: 700, textAlign: "center", fontSize: 13,
+              textDecoration: gone ? "line-through" : "none",
             }}>{b}</div>
           );
         })}
@@ -132,12 +156,12 @@ const FULL_PY = [
   "N = int(input())",
   "bars = list(map(int, input().split()))",
   "",
-  "stack = []",
-  "total = 0",
+  "stack = []      # 아직 짝을 못 찾은 바들",
+  "total = 0       # 지금까지 가져간 초콜릿 길이",
   "",
   "for bar in bars:",
   "    if stack and stack[-1] == bar:",
-  "        # Adjacent equal pair found",
+  "        # 맨 위 바와 길이가 같아요 → 둘을 가져가요",
   "        total += 2 * bar",
   "        stack.pop()",
   "    else:",
@@ -149,27 +173,29 @@ const FULL_PY = [
 const FULL_CPP = [
   "#include <iostream>",
   "#include <vector>",
-  "#include <string>",
-  "#include <algorithm>",
   "using namespace std;",
   "",
   "int main() {",
-  "    int N; cin >> N;",
-  "    vector<int> bars; { int _x; while (cin >> _x) bars.push_back(_x); if (!cin) cin.clear(); } // adapt: read N values",
+  "    ios::sync_with_stdio(false); cin.tie(nullptr);",
+  "    int N;",
+  "    cin >> N;",
   "",
-  "    auto stack = [];",
-  "    auto total = 0;",
+  "    vector<long long> stack;   // 아직 짝을 못 찾은 바들",
+  "    long long total = 0;       // 지금까지 가져간 초콜릿 길이",
   "",
-  "    // for bar in bars:",
-  "        if (stack and stack[-1] == bar) {",
-  "            // Adjacent equal pair found",
+  "    for (int i = 0; i < N; i++) {",
+  "        long long bar;",
+  "        cin >> bar;",
+  "        if (!stack.empty() && stack.back() == bar) {",
+  "            // 맨 위 바와 길이가 같아요 → 둘을 가져가요",
   "            total += 2 * bar;",
-  "            // stack.pop()",
-  "        else {",
-  "            // stack.append(bar)",
+  "            stack.pop_back();",
+  "        } else {",
+  "            stack.push_back(bar);",
+  "        }",
+  "    }",
   "",
   "    cout << total << \"\\n\";",
-  "",
   "    return 0;",
   "}",
 ];
@@ -181,20 +207,28 @@ export function getMcc15ChocoSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+        t(E, "The stack holds exactly the bars that have not found a partner yet. The bar on top is the one currently sitting next to the bar we are reading.",
+            "스택에는 '아직 짝을 못 찾은 바' 들만 남아요. 그래서 맨 위 바가, 지금 읽는 바의 실제 왼쪽 이웃이에요."),
+        t(E, "That is why the chain reaction is free: when 9 and 9 leave, the stack top automatically becomes 5 — the two 5s meet without us moving anything.",
+            "그래서 연쇄가 저절로 처리돼요. 9 두 개가 빠지면 스택 맨 위가 저절로 5 가 되고, 아무것도 옮기지 않아도 5 와 5 가 만나요."),
+        t(E, "Every bar is pushed at most once and popped at most once, so the whole scan is one pass over N bars — fast enough for N up to 1,000,000.",
+            "바 하나는 최대 한 번 쌓이고 최대 한 번 빠져요. 그래서 전체가 N 번 훑기 한 번이에요 — N 이 1,000,000 이어도 충분히 빨라요."),
+        t(E, "We add 2 × bar, not bar: a pair is two bars of the same length.",
+            "bar 가 아니라 2 × bar 를 더해요 — 짝은 같은 길이의 바 두 개니까요."),
       ],
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+        t(E, "A plain list is already a stack: append() puts one on top, pop() takes the top one off, stack[-1] peeks at it.",
+            "파이썬 리스트가 곧 스택이에요. append() 로 위에 올리고, pop() 으로 맨 위를 빼고, stack[-1] 로 맨 위를 봐요."),
+        t(E, "if stack and stack[-1] == bar checks 'not empty' first — reading stack[-1] on an empty list would crash.",
+            "if stack and stack[-1] == bar 는 '비었는지' 를 먼저 봐요. 빈 리스트에 stack[-1] 을 쓰면 에러가 나거든요."),
       ],
       cppOnly: [
-        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
-        t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
-            "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
+        t(E, "vector works as a stack: push_back / pop_back / back(). std::stack would work too.",
+            "vector 를 스택처럼 써요: push_back / pop_back / back(). std::stack 을 써도 돼요."),
+        t(E, "The total needs long long: 1,000,000 bars of length 1,000,000 would overflow int.",
+            "총합은 long long 이어야 해요. 길이 1,000,000 짜리 바가 1,000,000 개면 int 로는 넘쳐요."),
+        t(E, "ios::sync_with_stdio(false) speeds up reading up to a million numbers.",
+            "숫자를 최대 100만 개 읽으니 ios::sync_with_stdio(false) 로 입력 속도를 올려요."),
       ],
     },
   ];
