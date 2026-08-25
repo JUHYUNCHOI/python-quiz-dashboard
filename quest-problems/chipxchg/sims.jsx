@@ -38,6 +38,21 @@ function Cap({ color, children }) {
   return <div style={{ textAlign: "center", marginTop: 12, fontSize: 13.5, fontWeight: 800, color, fontFamily: "'JetBrains Mono',monospace", wordBreak: "keep-all", textWrap: "balance" }}>{children}</div>;
 }
 
+/* chip 묶음 + 아래 짧은 라벨. LastStepSlide RowExplain 이 사용. */
+function ChipGroup({ label, labelColor = "#94a3b8", children }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+      <div style={{ display: "flex", gap: 3, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+        {children}
+      </div>
+      <span style={{ fontSize: 10, color: labelColor, fontWeight: 700, letterSpacing: 0.2 }}>{label}</span>
+    </div>
+  );
+}
+function BigOp({ children }) {
+  return <span style={{ fontSize: 18, fontWeight: 900, color: "#475569", flexShrink: 0 }}>{children}</span>;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    ChipCountSim — 최종 A 칩 세기. 예: A=2, B=7, 환전 3파랑→1빨강.
    B 를 cB 씩 묶어 → 묶음마다 A cA 개, 자투리는 버림.
@@ -1046,20 +1061,86 @@ export function LastStepSlide({ E }) {
     ? t(E, <>Every case reached the goal only at <b style={{ color: A }}>x = {ANS}</b>. Before that, one bad case always remained.</>,
            <><b style={{ color: A }}>{ANS}개</b>일 때 비로소 모든 경우가 목표에 닿았어요. 그전엔 늘 나쁜 경우가 하나씩 남았고요.</>)
     : !doneListing
-    ? t(E, <>Getting <b>{s.x} chip{s.x > 1 ? "s" : ""}</b> — one more combo: <b>{lastRow.r} red + {lastRow.b} blue</b> → red <b style={{ color: lastRow.v >= GOAL ? "#15803d" : RED }}>{lastRow.v}</b>. Keep going…</>,
-           <><b>{s.x}개</b> 받을 때 — 조합 하나 더: <b>빨강 {lastRow.r} + 파랑 {lastRow.b}</b> → 빨강 <b style={{ color: lastRow.v >= GOAL ? "#15803d" : RED }}>{lastRow.v}</b>. 계속 적어봐요…</>)
+    ? t(E,
+        <>Getting <b>{s.x} chip{s.x > 1 ? "s" : ""}</b> — listing every possible combo…</>,
+        <><b>{s.x}개</b> 받을 때 — 가능한 조합을 하나씩 적어봐요…</>)
     : info.allOk
-    ? t(E, <><b>{s.x} chips</b>: now <b>every case</b> reaches {GOAL} — even the worst. <b>This is the answer.</b></>,
-           <><b>{s.x}개</b>: 이제 <b>모든 경우</b>가 {GOAL} 이상이에요 — 제일 나쁜 것까지. <b>이게 답이에요.</b></>)
-    : t(E, <>All combos for <b>{s.x} chip{s.x > 1 ? "s" : ""}</b> are listed. Worst gives only <b style={{ color: RED }}>{info.worst}</b> red — <b>still short of {GOAL}</b>.</>,
-           <><b>{s.x}개</b> 조합을 다 적었어요. 제일 나쁜 게 빨강 <b style={{ color: RED }}>{info.worst}</b>개 — <b>아직 {GOAL}에 못 미쳐요</b>.</>);
+    ? t(E, <><b>{s.x} chips</b>: every case reaches <b>{GOAL}</b> — even the worst. <b>This is the answer.</b></>,
+           <><b>{s.x}개</b>: 모든 경우가 <b>{GOAL}</b> 이상 ✓ — 최악까지도. <b>답은 여기.</b></>)
+    : t(E, <>All combos for <b>{s.x} chip{s.x > 1 ? "s" : ""}</b> listed. Worst = <b style={{ color: RED }}>{info.worst}</b> red — <b>still short of {GOAL}</b>.</>,
+           <><b>{s.x}개</b> 조합 다 확인. 최악 = 빨강 <b style={{ color: RED }}>{info.worst}</b> — <b>{GOAL} 못 미침</b>.</>);
 
-  const chipStr = (r, b) => (
-    <span style={{ display: "inline-flex", gap: 2, alignItems: "center" }}>
-      {Array.from({ length: r }).map((_, i) => <Chip key={"r" + i} color="red" size={15} />)}
-      {Array.from({ length: b }).map((_, i) => <Chip key={"b" + i} color="blue" size={15} />)}
-    </span>
-  );
+  // 순수 chip 파이프라인 — 계산식 없이 그림만으로 학생이 눈으로 이해.
+  //   시작 [🔴×START]  +  받음 [🔴×r + 🔵×b]  =  총 [🔴×v]
+  //   파랑 ≥ 3 이면 받음 안에 → 환전 arrow → 얻은 빨강 표시
+  //   파랑 < 3 잔여는 흐리게 + X (못 씀 표시)
+  const RowExplain = ({ r, b, v, ok, isWorst }) => {
+    const swapPairs = Math.floor(b / CB);
+    const gotRedFromSwap = swapPairs * CA;
+    const remainB = b - swapPairs * CB;
+    const CHIP = 22;
+    const GRAY = "#cbd5e1";
+
+    return (
+      <div style={{
+        display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 10,
+        border: `2px solid ${isWorst ? "#f59e0b" : "#e2e8f0"}`,
+        background: isWorst ? "#fffbeb" : "#fff",
+        flexWrap: "wrap", wordBreak: "keep-all",
+      }}>
+        {/* 시작 chip (항상 같음: 🔴×START) */}
+        <ChipGroup label={t(E, "start", "시작")} labelColor="#94a3b8">
+          {Array.from({ length: START }).map((_, i) => <Chip key={i} color="red" size={CHIP} />)}
+        </ChipGroup>
+
+        <BigOp>+</BigOp>
+
+        {/* 받음 chip: 받은 빨강 + 받은 파랑 (환전 3-묶음 시각 처리) */}
+        <ChipGroup label={t(E, "received", "받음")} labelColor="#94a3b8">
+          {Array.from({ length: r }).map((_, i) => <Chip key={"r" + i} color="red" size={CHIP} />)}
+          {/* 환전 가능한 파랑 3-묶음: 각 묶음마다 [🔵🔵🔵 → 🔴🔴] 인라인 */}
+          {Array.from({ length: swapPairs }).map((_, pi) => (
+            <span key={"sw" + pi} style={{ display: "inline-flex", alignItems: "center", gap: 3,
+              padding: "2px 5px", background: "#eff6ff", border: "1.5px dashed #60a5fa", borderRadius: 8 }}>
+              <Chip color="blue" size={CHIP - 4} />
+              <Chip color="blue" size={CHIP - 4} />
+              <Chip color="blue" size={CHIP - 4} />
+              <span style={{ fontSize: 12, color: "#1e40af", fontWeight: 800 }}>→</span>
+              <Chip color="red" size={CHIP - 4} />
+              <Chip color="red" size={CHIP - 4} />
+            </span>
+          ))}
+          {/* 자투리 파랑 (환전 못 함) — 파랑색 그대로 유지, 빨간 점선 테두리로 "못 씀" 표시 + ✗ 배지 */}
+          {Array.from({ length: remainB }).map((_, i) => (
+            <span key={"rb" + i} style={{ position: "relative", display: "inline-flex",
+              padding: 2, borderRadius: 999, border: "2px dashed #dc2626", background: "#fef2f2" }}>
+              <Chip color="blue" size={CHIP - 6} />
+              <span style={{ position: "absolute", top: -6, right: -6,
+                background: "#dc2626", color: "#fff", width: 14, height: 14, borderRadius: 999,
+                fontSize: 9, fontWeight: 900, display: "flex", alignItems: "center", justifyContent: "center",
+                boxShadow: "0 1px 3px rgba(0,0,0,.25)" }}>✗</span>
+            </span>
+          ))}
+          {r === 0 && swapPairs === 0 && remainB === 0 && (
+            <span style={{ fontSize: 11, color: "#94a3b8" }}>—</span>
+          )}
+        </ChipGroup>
+
+        <BigOp>=</BigOp>
+
+        {/* 총 빨강 chip 파일 (= v 개) */}
+        <ChipGroup label={t(E, `total ${v}`, `총 ${v}개`)} labelColor={ok ? "#15803d" : RED}>
+          {Array.from({ length: v }).map((_, i) => <Chip key={i} color="red" size={CHIP} />)}
+        </ChipGroup>
+
+        {/* 결과 판정 */}
+        <span style={{ marginLeft: "auto", fontSize: 12, fontWeight: 800, color: ok ? "#15803d" : "#dc2626", flexShrink: 0 }}>
+          {ok ? `✓` : `✗`} {t(E, ok ? `≥ ${GOAL}` : `< ${GOAL}`, ok ? `${GOAL} 넘음` : `${GOAL} 못 넘음`)}
+          {isWorst && !ok ? t(E, "  ← worst", "  ← 최악") : ""}
+        </span>
+      </div>
+    );
+  };
 
   const exBtn = (idx, label) => (
     <button onClick={() => { setEi(idx); ts.setIdx(0); }}
@@ -1076,13 +1157,41 @@ export function LastStepSlide({ E }) {
                                : t(E, `If I get ${s.x} chip${s.x > 1 ? "s" : ""} — every case`, `${s.x}개 받으면 — 모든 경우`)}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
 
-      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 6, flexWrap: "wrap" }}>
-        {exBtn(0, t(E, "goal 5", "목표 5"))}
-        {exBtn(1, t(E, "goal 3 (exact fit)", "목표 3 (딱 떨어짐)"))}
+      {/* 탭: 두 예제 비교 (일반 vs 딱 떨어짐) */}
+      <div style={{ fontSize: 10.5, color: "#94a3b8", textAlign: "center", marginBottom: 4, wordBreak: "keep-all" }}>
+        {t(E, "▼ compare 2 examples", "▼ 두 예제 비교")}
       </div>
-      <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
-        {t(E, `start red 1 · goal ${GOAL} · swap 3 blue → 2 red`, `시작 빨강 1 · 목표 ${GOAL} · 환전 파랑 3 → 빨강 2`)}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 8, flexWrap: "wrap" }}>
+        {exBtn(0, t(E, "goal 5 (regular)", "목표 5 (일반)"))}
+        {exBtn(1, t(E, "goal 3 (blue×3 fits exactly)", "목표 3 (파랑 3개 딱 떨어짐)"))}
       </div>
+
+      {/* 📌 상태 카드 — 시작·환전·목표 항상 보이게. 매 row 는 이 상태에서 얼마나 늘어나는지 대조. */}
+      <div style={{ maxWidth: 480, margin: "0 auto 10px", background: "#f8fafc", border: `1.5px solid #cbd5e1`, borderRadius: 10,
+        padding: "8px 12px", display: "flex", alignItems: "center", justifyContent: "center", gap: 14, flexWrap: "wrap" }}>
+        {/* 시작 */}
+        <ChipGroup label={t(E, "start", "시작")} labelColor="#475569">
+          {Array.from({ length: START }).map((_, i) => <Chip key={i} color="red" size={22} />)}
+        </ChipGroup>
+        <span style={{ color: "#cbd5e1" }}>|</span>
+        {/* 환전 규칙 */}
+        <ChipGroup label={t(E, "swap rule", "환전")} labelColor="#475569">
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
+            <Chip color="blue" size={18} />
+            <Chip color="blue" size={18} />
+            <Chip color="blue" size={18} />
+            <span style={{ fontSize: 13, fontWeight: 800, color: "#1e40af" }}>→</span>
+            <Chip color="red" size={18} />
+            <Chip color="red" size={18} />
+          </span>
+        </ChipGroup>
+        <span style={{ color: "#cbd5e1" }}>|</span>
+        {/* 목표 */}
+        <ChipGroup label={t(E, "goal", "목표")} labelColor="#475569">
+          {Array.from({ length: GOAL }).map((_, i) => <Chip key={i} color="red" size={18} />)}
+        </ChipGroup>
+      </div>
+
       <Say tone={s.k === "recap" || (info && info.allOk) ? "aha" : "stuck"}>{say}</Say>
 
       {s.k === "recap" ? (
@@ -1108,21 +1217,10 @@ export function LastStepSlide({ E }) {
           )}
         </div>
       ) : (
-        <div style={{ maxWidth: 460, margin: "0 auto", display: "flex", flexDirection: "column", gap: 4 }}>
+        <div style={{ maxWidth: 520, margin: "0 auto", display: "flex", flexDirection: "column", gap: 5 }}>
           {shown.map((o, i) => {
             const isWorst = doneListing && o.v === info.worst, ok = o.v >= GOAL;
-            return (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 10px", borderRadius: 8,
-                border: `1.5px solid ${isWorst ? "#f59e0b" : "#e2e8f0"}`, background: isWorst ? "#fffbeb" : "#fff",
-                fontSize: 12, fontWeight: 700, wordBreak: "keep-all" }}>
-                {chipStr(o.r, o.b)}
-                <span style={{ color: "#94a3b8" }}>→</span>
-                <span style={{ color: ok ? "#15803d" : RED }}>{t(E, `red ${o.v}`, `빨강 ${o.v}`)}</span>
-                <span style={{ marginLeft: "auto", color: ok ? "#15803d" : "#dc2626", fontWeight: 800 }}>
-                  {ok ? "✓" : "✗"}{isWorst && !info.allOk ? t(E, "  ← worst", "  ← 최악") : ""}
-                </span>
-              </div>
-            );
+            return <RowExplain key={i} r={o.r} b={o.b} v={o.v} ok={ok} isWorst={isWorst && !info.allOk} />;
           })}
           {ei === 1 && s.x === 3 && doneListing && (
             <div style={{ marginTop: 4, border: `1.5px solid ${BLU}`, background: BLUBG, borderRadius: 10, padding: "8px 11px",
