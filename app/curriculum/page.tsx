@@ -113,7 +113,7 @@ export default function CurriculumPage() {
       title: t("Part 3: 자료구조", "Part 3: Data Structures"),
       description: t("데이터를 효율적으로 저장하고 관리하는 방법! 리스트, 튜플, 딕셔너리, 집합을 활용해요.", "Store and manage data efficiently! Learn lists, tuples, dictionaries, and sets."),
       lessons: [
-        { id: 15, title: t("15. 자료구조 개요", "15. Data Structures Overview"), description: t("4가지 자료구조 소개", "Introduction to 4 data structures"), duration: t("15분", "15 min"), hasQuiz: true },
+        { id: 15, title: t("15. 자료구조 개요", "15. Data Structures Overview"), description: t("앞으로 배울 것들의 지도", "A map of what's coming"), duration: t("5분", "5 min"), hasQuiz: false },
         { id: 16, title: t("16. 리스트 기초", "16. List Basics"), description: t("여러 데이터를 한 번에 저장", "Store multiple data at once"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: 17, title: t("17. 리스트와 반복문", "17. Lists & Loops"), description: t("for문으로 리스트 순회", "Iterating lists with for loops"), duration: t("20분", "20 min"), hasQuiz: true },
         { id: 18, title: t("18. split()과 join()", "18. split() & join()"), description: t("문자열 쪼개고 합치기", "Splitting and joining strings"), duration: t("20분", "20 min"), hasQuiz: true },
