@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim, TricksterRedSim, LastStepSlide } from "./sims";
+import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim, TricksterRedSim } from "./sims";
 
 const A = "#2563eb";
 
@@ -87,7 +87,7 @@ function ChipXchgSample({ E }) {
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeChipXchgCh1 — mooin3 모양 (라벨 + 구체 샘플 + 시뮬)
-   문제(도입) → 샘플입출력 → 이해확인 → 전략 → 환전(red_now) → 심술쟁이 최악→공식 → 계획
+   문제(도입) → 샘플입출력 → 이해확인 → 전략 → 환전(init) → 심술쟁이 최악→공식 → 계획
    (USACO 공식 풀이 = O(1) 닫힌 공식. 이분탐색·후보 안 씀)
    ═══════════════════════════════════════════════════════════════ */
 export function makeChipXchgCh1(E) {
@@ -118,31 +118,21 @@ export function makeChipXchgCh1(E) {
       content: (<CheckSim E={E} />),
     },
 
-    // [전] 먼저 손으로: x=1,2,3… 받을 때 색 조합을 전부 적어보며 답을 찾아냄.
-    //      (선생님 수업 방식 — 규칙은 여기서 '해보고' 나온다. 뒤 도구들이 이걸 정리.)
-    {
-      type: "reveal",
-      label: t(E, "Try it by hand first", "먼저 손으로 다 해보기"),
-      narr: t(E, "Before any rule — take x = 1, 2, 3… and write out every color combo, one at a time. The answer shows up on its own.",
-                 "규칙 배우기 전에 — 1개, 2개, 3개… 받을 때 색 조합을 하나씩 다 적어봐요. 답이 저절로 드러나요."),
-      content: (<LastStepSlide E={E} />),
-    },
-
     // [전] 전략 — 공식 큰 그림 (지금 걸로 되나? 안 되면 심술쟁이 최악에 몇 개?)
     {
       type: "reveal",
       label: t(E, "Strategy", "전략"),
-      narr: t(E, "We found the answer by hand — now let's turn what we saw into a rule we can compute.",
-                 "손으로 답을 찾았으니, 이제 방금 본 걸 계산할 수 있는 규칙으로 바꿔요."),
+      narr: t(E, "First check what I can make now; if short, count the extra against the trickster's worst.",
+                 "먼저 지금 걸로 되는지 보고, 부족하면 심술쟁이 최악을 감안해 추가 칩을 세요."),
       content: (<StrategySlide E={E} />),
     },
 
-    // [전] 도구: 환전 세기 = red_now (지금 가진 걸로 만드는 빨강)
+    // [전] 도구: 환전 세기 = init (지금 가진 걸로 만드는 빨강)
     {
       type: "reveal",
-      label: t(E, "Tool: red I can make now (red_now)", "도구: 지금 만드는 빨강 (red_now)"),
-      narr: t(E, "Rule piece 1 — the red I already have. Group my blue by cB; leftovers waste. That's red_now.",
-                 "규칙 조각 1 — 이미 가진 빨강. 내 파랑을 cB 로 묶고, 자투리는 버려요. 그게 red_now."),
+      label: t(E, "Tool: red I can make now (init)", "도구: 지금 만드는 빨강 (init)"),
+      narr: t(E, "How many red can I make right now? Group my blue by cB; leftovers waste. That's init.",
+                 "지금 가진 걸로 빨강 몇 개? 내 파랑을 cB 로 묶고, 자투리는 버려요. 그게 init."),
       content: (<ChipCountSim E={E} />),
     },
 
