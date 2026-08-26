@@ -984,15 +984,17 @@ export function LastOneWhySlide({ E }) {
           <>심술쟁이는 당연히 나한테 나쁜 쪽 — <b>빨강, +1</b> — 을 고르겠죠. 그런데 그것도 <b>최소 1개</b>는 늘어요. 그러니 <b>마지막 빨강 1개는 칩 하나면 보장</b>이에요 — 그 1개를 미리 빼두고 <b>(−1)</b>, 나머지만 비싼 값으로 센 뒤, 그 칩을 도로 더해요 <b>(+1)</b>.</>)}
       </div>
 
-      {/* 샘플로 확인 — 칩 몇 개 쓰고 빨강 몇 개 얻는지 한 줄씩 (숫자가 어디서 왔는지 추적 가능하게) */}
+      {/* 확인 — 1페이지 게임 그대로 (빨강2·파랑3·목표5). 1개만 모자라서 '비싼 조각' 이 0 →
+          이 페이지 주제(마지막 1개)만 남아 산수가 방해하지 않음. 큰 예는 아래 한 줄로 연결. */}
       <div style={{ marginTop: 10, fontSize: 11.5, color: "#334155", wordBreak: "keep-all", lineHeight: 1.6 }}>
         <div style={{ marginBottom: 5 }}>
-          {t(E, "Check on sample 2 ", "샘플 2 로 확인 ")}
-          <code style={{ fontFamily: "'JetBrains Mono',monospace", color: "#64748b" }}>(0 0 2 3 5)</code>
-          {t(E, " — I have 0 red, goal 5, so ", " — 지금 빨강 0, 목표 5 → ")}
-          <b>{t(E, "5 missing", "5개 모자람")}</b>
+          {t(E, "Check on the game from page 1 ", "1페이지 게임으로 확인 ")}
+          <span style={{ color: "#64748b" }}>{t(E, "(2 red, 3 blue, goal 5)", "(빨강 2, 파랑 3, 목표 5)")}</span>
+          {t(E, " — my blue swaps into red, so I'm at ", " — 파랑 3개를 환전해서 지금 ")}
+          <b>{t(E, "4 red", "빨강 4개")}</b>
+          {t(E, " → just ", " → 딱 ")}
+          <b style={{ color: "#dc2626" }}>{t(E, "1 missing", "1개 모자람")}</b>
         </div>
-        {/* 표 머리 */}
         <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "0 8px", fontSize: 10, fontWeight: 800, color: "#94a3b8" }}>
           <span style={{ flex: 1 }}>{t(E, "what the trickster gives", "심술쟁이가 주는 것")}</span>
           <span style={{ width: 52, textAlign: "right" }}>{t(E, "red", "빨강")}</span>
@@ -1001,8 +1003,6 @@ export function LastOneWhySlide({ E }) {
         {[
           { n: 2, color: "blue", red: 0, chips: 2, tone: "#dc2626",
             why: t(E, "wasted leftover (max 2)", "버리는 자투리 (최대 2개)") },
-          { n: 6, color: "blue", red: 4, chips: 6, tone: "#2563eb",
-            why: t(E, "the 4 expensive ones: 3 blue = 2 red, so 4 red costs 6 blue", "비싸게 채울 4개: 파랑 3개당 빨강 2개 → 빨강 4개 = 파랑 6개") },
           { n: 1, color: "red", red: 1, chips: 1, tone: "#7c3aed",
             why: t(E, "the last one — any color, ≥1 red", "마지막 1개 — 무슨 색이든 빨강 ≥1") },
         ].map((r, i) => (
@@ -1016,17 +1016,25 @@ export function LastOneWhySlide({ E }) {
             <span style={{ width: 40, textAlign: "right", fontWeight: 800, color: r.tone, fontFamily: "'JetBrains Mono',monospace" }}>{r.chips}</span>
           </div>
         ))}
-        {/* 합계 */}
         <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 8px", marginTop: 4,
           borderTop: "1.5px solid #cbd5e1", fontWeight: 800 }}>
           <span style={{ flex: 1, fontSize: 10.5, color: "#334155" }}>{t(E, "total", "합계")}</span>
           <span style={{ width: 52, textAlign: "right", color: "#15803d", fontFamily: "'JetBrains Mono',monospace" }}>
-            5 {t(E, "= goal ✓", "= 목표 ✓")}
+            1 {t(E, "✓ enough", "✓ 충분")}
           </span>
-          <span style={{ width: 40, textAlign: "right", color: "#15803d", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>9</span>
+          <span style={{ width: 40, textAlign: "right", color: "#15803d", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>3</span>
         </div>
         <div style={{ marginTop: 4, fontSize: 10.5, color: "#94a3b8", textAlign: "right" }}>
-          {t(E, "↑ that 9 is the answer on the Sample page", "↑ 이 9 가 샘플 페이지의 그 답")}
+          {t(E, "↑ 3 chips — nothing in between, so it's just waste + the last one",
+               "↑ 답 3개 — 중간에 낄 게 없어서 '버림 + 마지막 1개' 가 전부")}
+        </div>
+
+        {/* 큰 예로 연결 — 여기선 '비싼 조각' 이 끼어든다는 것만 한 줄 */}
+        <div style={{ marginTop: 9, padding: "7px 10px", borderRadius: 8, background: "#f8fafc",
+          border: "1px dashed #cbd5e1", fontSize: 11, color: "#475569", lineHeight: 1.6 }}>
+          {t(E,
+            <>Short by more than 1? Then a middle piece appears — the <b>expensive</b> ones (③). Sample 2 <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>(0 0 2 3 5)</code> is short by 5: <b>2 wasted + 6 expensive + 1 last = 9</b>.</>,
+            <>1개보다 더 모자라면? 그때 가운데 조각이 생겨요 — <b>비싸게 채울 것</b> (③). 샘플 2 <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>(0 0 2 3 5)</code> 는 5개 모자라서: <b>버림 2 + 비싼 6 + 마지막 1 = 9</b>.</>)}
         </div>
       </div>
 
