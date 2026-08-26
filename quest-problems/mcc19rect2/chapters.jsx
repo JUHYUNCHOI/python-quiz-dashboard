@@ -39,6 +39,18 @@ export function makeMcc19Rect2Ch1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>MCC 2019 P7</div>
           </div>
 
+          {/* 🎯 Mission box — photoshoot25 표준 */}
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: 10, padding: "10px 14px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", letterSpacing: 0.5, marginBottom: 4 }}>
+              🎯 {t(E, "Mission", "미션")}
+            </div>
+            <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
+              {t(E,
+                "Given 3 corners of an axis-aligned rectangle, print the 4th (missing) corner.",
+                "축에 평행한 직사각형의 꼭짓점 3 개가 주어졌을 때, 4 번째 (누락) 꼭짓점을 출력.")}
+            </div>
+          </div>
+
           <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
@@ -53,6 +65,14 @@ export function makeMcc19Rect2Ch1(E) {
                         " 가 주어져요 (변이 x, y 축에 평행).")}
                 </div>
               </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
+                <div>
+                  {t(E,
+                    "In a rectangle, each x-coordinate appears exactly twice among the 4 corners, and the same for y.",
+                    "직사각형에서 각 x 좌표는 4 꼭짓점 중 정확히 2 번, y 좌표도 마찬가지.")}
+                </div>
+              </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
@@ -65,7 +85,66 @@ export function makeMcc19Rect2Ch1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+
+    // 1-2: 입출력 형식 (photoshoot25 3-박스 스타일) — 선생님 2026-08-26 THIN 카드 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? 3 lines of (x y) coordinates. Print the 4th corner as x y.",
+        "데이터는 어떻게 들어올까? (x y) 좌표 3 줄. 4 번째 꼭짓점을 x y 로 출력."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>x1 y1</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— 1st corner", "— 1 번째 꼭짓점")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>x2 y2</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— 2nd corner", "— 2 번째 꼭짓점")}</span></div>
+              <div><span style={{ color: "#92400e", fontWeight: 800 }}>x3 y3</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— 3rd corner", "— 3 번째 꼭짓점")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: the 4th corner's coordinates x y (space-separated).",
+                    "한 줄: 4 번째 꼭짓점의 좌표 x y (공백으로 구분).")}
+            </div>
+          </div>
+          {/* Sample */}
+          <div style={{ marginBottom: 12, background: "#f8fafc", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#065f46", marginBottom: 8 }}>🔍 {t(E, "Sample", "샘플")}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
+              <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#92400e", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
+{`0 0
+2 0
+0 3`}
+                </div>
+              </div>
+              <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`2 3`}</div>
+              </div>
+            </div>
+            <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
+              {t(E, "Why 2 3? — the sim below reveals it bit by bit.",
+                    "왜 2 3 일까? — 아래 시뮬이 비트 단위로 밝혀요.")}
+            </div>
+          </div>
+          {/* CONSTRAINTS */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>0 ≤ x, y ≤ 10⁹</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "The 3 corners uniquely determine a rectangle with sides parallel to axes.", "3 꼭짓점은 축에 평행한 직사각형을 유일하게 결정.")}</div>
+            </div>
+          </div>
+        </div>),
+    },
+
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,

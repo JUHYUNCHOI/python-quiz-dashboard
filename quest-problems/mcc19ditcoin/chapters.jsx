@@ -90,7 +90,63 @@ export function makeMcc19DitcoinCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: Quiz
+    // 1-2: 입출력 형식 (photoshoot25 3-박스) — 선생님 2026-08-26 THIN 카드 표준화
+    {
+      type: "reveal",
+      narr: t(E,
+        "How does the data arrive? First line D (days), second line D prices. Print one number — the max total.",
+        "데이터는 어떻게 들어올까? 첫 줄 D (일 수), 둘째 줄 D 개 가격. 한 줄로 최대 총액 출력."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          {/* INPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#fff7ed", border: "2px solid #fdba74", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
+              <div><span style={{ color: "#9a3412", fontWeight: 800 }}>D</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of days", "— 일 수")}</span></div>
+              <div><span style={{ color: "#9a3412", fontWeight: 800 }}>p₁ p₂ … p_D</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— selling price on each day", "— 각 날의 판매 가격")}</span></div>
+            </div>
+          </div>
+          {/* OUTPUT */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+              {t(E, "One line: the maximum total money earnable over the D days.",
+                    "한 줄: D 일 동안 벌 수 있는 최대 총액.")}
+            </div>
+          </div>
+          {/* Sample */}
+          <div style={{ marginBottom: 12, background: "#f8fafc", border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#9a3412", marginBottom: 8 }}>🔍 {t(E, "Sample", "샘플")}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
+              <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#9a3412", marginBottom: 4 }}>{t(E, "input", "입력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
+{`3
+3 1 5`}
+                </div>
+              </div>
+              <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 8, padding: 8 }}>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>{t(E, "output", "출력")}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`15`}</div>
+              </div>
+            </div>
+            <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
+              {t(E, "Why 15? Save all 3 coins for day 3 (price 5) → 3 × 5. Next pages figure out the general rule.",
+                    "왜 15? 3 개 코인을 3 일까지 모아뒀다 5 에 판매 → 3 × 5. 다음 페이지에서 일반 규칙 발견.")}
+            </div>
+          </div>
+          {/* CONSTRAINTS */}
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+            <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+              <div>1 ≤ D ≤ 10⁵</div>
+              <div>1 ≤ p[i] ≤ 10⁹</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "You always earn exactly 1 coin per day (never more, never less).", "매일 정확히 코인 1 개씩 벌어요 (더 많지도 적지도 않음).")}</div>
+            </div>
+          </div>
+        </div>),
+    },
+    // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
