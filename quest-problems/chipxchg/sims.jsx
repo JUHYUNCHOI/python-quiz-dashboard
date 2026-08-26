@@ -927,6 +927,80 @@ export function StrategySlide({ E }) {
   );
 }
 
+/* ═══ −1 / +1 이 왜 있는지 (계획 ④ 안에 들어감. 페이지 추가 아님) ═══
+   선생님 2026-08-26: "난 단지 +1 -1이 이해가 안되었던거지."
+   핵심: 심술쟁이가 파랑 자투리를 이미 최대(cB−1)로 채워둔 상태에서 칩 1개를 더 받으면
+   빨강이면 +1, 파랑이면 자투리가 꽉 차 묶음 완성 → +cA. 무슨 색이든 최소 빨강 1개.
+   그래서 마지막 빨강 1개는 '칩 1개' 로 보장 → 미리 빼두고(−1) 나머지만 비싼 값으로 센 뒤
+   그 칩을 도로 더함(+1). */
+function LastOneWhy({ E }) {
+  const cA = 2, cB = 3;
+  const Row = ({ chip, result, gain, color, bg }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 8,
+      background: bg, border: `1.5px solid ${color}`, fontSize: 11.5, fontWeight: 700, wordBreak: "keep-all" }}>
+      <Chip color={chip} size={20} />
+      <span style={{ color: "#94a3b8" }}>→</span>
+      <span style={{ color: "#334155", flex: 1 }}>{result}</span>
+      <span style={{ color, fontWeight: 800, flexShrink: 0, fontFamily: "'JetBrains Mono',monospace" }}>{gain}</span>
+    </div>
+  );
+  return (
+    <div>
+      {/* 상황 — 자투리가 이미 꽉 참 */}
+      <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+        <span>{t(E, "Leftover blue is already maxed:", "파랑 자투리가 이미 꽉 찬 상태:")}</span>
+        <span style={{ display: "inline-flex", gap: 3, padding: "2px 5px", borderRadius: 999,
+          border: "1.5px dashed #dc2626", background: "#fef2f2" }}>
+          {Array.from({ length: cB - 1 }).map((_, i) => <Chip key={i} color="blue" size={17} />)}
+        </span>
+        <span style={{ color: "#94a3b8", fontSize: 11 }}>{t(E, `(${cB - 1} — one short of a group)`, `(${cB - 1}개 — 묶음 ${cB}개에 딱 하나 모자람)`)}</span>
+      </div>
+
+      {/* 여기서 칩 1개 더 받으면? */}
+      <div style={{ fontWeight: 800, color: "#7c3aed", marginBottom: 5 }}>
+        {t(E, "Now one more chip — either color:", "여기서 칩 1개를 더 받으면? 색이 뭐든:")}
+      </div>
+      <div style={{ display: "grid", gap: 4, marginBottom: 8 }}>
+        <Row chip="red" color="#dc2626" bg="#fef2f2"
+          result={t(E, "red adds straight on", "빨강은 그대로 더해져요")}
+          gain={t(E, "+1 red", "빨강 +1")} />
+        <Row chip="blue" color="#2563eb" bg="#eff6ff"
+          result={t(E, `leftover hits ${cB} → group completes!`, `자투리가 ${cB}개 → 묶음 완성!`)}
+          gain={t(E, `+${cA} red`, `빨강 +${cA}`)} />
+      </div>
+
+      {/* 결론 */}
+      <div style={{ background: "#f5f3ff", border: "1.5px solid #7c3aed", borderRadius: 8, padding: "8px 10px",
+        fontSize: 12, fontWeight: 700, color: "#5b21b6", wordBreak: "keep-all", lineHeight: 1.6 }}>
+        {t(E,
+          <>Whatever color comes, red goes up by <b>at least 1</b>. So the <b>last red is guaranteed by one single chip</b> — set it aside <b>(−1)</b>, price only the rest the expensive way, then add that chip back <b>(+1)</b>.</>,
+          <>무슨 색이 와도 빨강이 <b>최소 1개</b>는 늘어요. 그러니 <b>마지막 빨강 1개는 칩 하나면 보장</b>이에요 — 그 1개를 미리 빼두고 <b>(−1)</b>, 나머지만 비싼 값으로 센 뒤, 그 칩을 도로 더해요 <b>(+1)</b>.</>)}
+      </div>
+
+      {/* 샘플로 확인 */}
+      <div style={{ marginTop: 8, fontSize: 11.5, color: "#334155", wordBreak: "keep-all", lineHeight: 1.7 }}>
+        {t(E, "Check on sample 2 ", "샘플 2 로 확인 ")}
+        <code style={{ fontFamily: "'JetBrains Mono',monospace", color: "#64748b" }}>(0 0 2 3 5)</code>:
+        <div style={{ display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap", marginTop: 4 }}>
+          <span style={{ display: "inline-flex", gap: 2 }}>{Array.from({ length: 2 }).map((_, i) => <Chip key={i} color="blue" size={15} />)}</span>
+          <span style={{ color: "#dc2626", fontWeight: 800 }}>{t(E, "wasted 2", "버림 2")}</span>
+          <span style={{ color: "#94a3b8" }}>+</span>
+          <span style={{ display: "inline-flex", gap: 2 }}>{Array.from({ length: 6 }).map((_, i) => <Chip key={i} color="blue" size={15} />)}</span>
+          <span style={{ color: "#2563eb", fontWeight: 800 }}>{t(E, "6 → 4 red", "6개 → 빨강 4")}</span>
+          <span style={{ color: "#94a3b8" }}>+</span>
+          <Chip color="red" size={15} />
+          <span style={{ color: "#7c3aed", fontWeight: 800 }}>{t(E, "last 1", "마지막 1")}</span>
+          <span style={{ marginLeft: 4, fontWeight: 800, color: "#15803d", fontFamily: "'JetBrains Mono',monospace" }}>= 9 ✓</span>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 8, fontSize: 11, color: "#94a3b8", wordBreak: "keep-all" }}>
+        {t(E, "(Use 64-bit — the answer can reach 10¹⁸.)", "(64비트 쓰기 — 답이 10¹⁸ 까지 커져요.)")}
+      </div>
+    </div>
+  );
+}
+
 /* ═══ ⑥ 계획 — 코드 짜는 순서 (코드 전에 말로) ═══ */
 export function PlanSlide({ E }) {
   return (
@@ -949,9 +1023,13 @@ export function PlanSlide({ E }) {
         <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "fill the deficit: red or blue?", "부족분 채우기: 빨강? 파랑?")}>
           {t(E, <>cA ≥ cB → red (1 each); otherwise blue in groups.</>,
                <>cA ≥ cB → 빨강(1개씩), 아니면 파랑 그룹으로.</>)}
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", marginTop: 4, wordBreak: "break-word" }}>
+            deficit = fA − init − 1 <span style={{ color: "#7c3aed" }}>{t(E, "  // why −1? → ④", "  // 왜 1을 뺄까? → ④")}</span>
+          </div>
         </Slab>
-        <Slab n="4" color="#7c3aed" bg="#f5f3ff" title={t(E, "answer = waste + need + 1", "답 = waste + need + 1")}>
-          {t(E, <>use 64-bit — the answer can reach 10¹⁸.</>, <>64비트 쓰기 — 답이 10¹⁸ 까지.</>)}
+        <Slab n="4" color="#7c3aed" bg="#f5f3ff"
+          title={t(E, "The last red is cheap — that's the −1 and the +1", "마지막 빨강 1개는 싸요 — 그게 −1 과 +1")}>
+          <LastOneWhy E={E} />
         </Slab>
       </div>
       <div style={{ marginTop: 12, textAlign: "center", fontSize: 12, fontWeight: 800, color: "#15803d", wordBreak: "keep-all", textWrap: "balance" }}>

@@ -262,12 +262,12 @@ export function getChipXchgWalk(E, lang = "py") {
       "ll solve(ll A, ll B, ll cA, ll cB, ll fA) {",
       "    ll init = A + B / cB * cA;          // " + c("red I can make right now", "지금 가진 것으로 만드는 빨강"),
       "    if (init >= fA) return 0;           // " + c("already reached → 0 extra", "이미 목표 → 추가 0"),
-      "    ll deficit = fA - 1 - init;         // " + c("red still short (−1: boundary)", "아직 부족한 빨강 (경계 −1)"),
+      "    ll deficit = fA - 1 - init;         // " + c("red still short, minus the last one (guaranteed by 1 chip)", "아직 부족한 빨강 − 1 (마지막 1개는 칩 하나로 보장)"),
       "    ll waste = cB - 1 - B % cB;         // " + c("trickster step 1: waste blue to the max", "심술쟁이 1: 파랑을 최대로 버림 (자투리 cB−1)"),
       "    ll need;",
       "    if (cA >= cB) need = deficit;                    // " + c("swap pays → gives red (1 each)", "환전 이득 → 빨강으로 (1개씩)"),
       "    else need = deficit / cA * cB + deficit % cA;    // " + c("swap loses → gives blue in groups", "환전 손해 → 파랑 그룹으로"),
-      "    return waste + need + 1;            // " + c("wasted + filled + boundary", "버린 + 채운 + 경계"),
+      "    return waste + need + 1;            // " + c("wasted + filled + that guaranteed last chip", "버린 + 채운 + 보장된 마지막 칩 1개"),
       "}",
       "",
       "int main() {",
@@ -286,7 +286,7 @@ export function getChipXchgWalk(E, lang = "py") {
       { hi: [5, 7], bubble: t(E, "init = red I can make now (convert my blue). If it already reaches fA → 0 extra.", "init = 지금 가진 걸로 만드는 빨강 (내 파랑 환전). 목표 이상이면 추가 0.") },
       { hi: [8, 9], bubble: t(E, "Short by deficit. The trickster first wastes blue: leftover to cB−1, those chips give me 0.", "deficit 만큼 부족. 심술쟁이는 먼저 파랑을 자투리 cB−1 로 버려요 — 그 칩들은 나한테 0.") },
       { hi: [10, 13], bubble: t(E, "For the rest, the trickster gives the LEAST helpful color: red (1 each) if swapping pays, blue-in-groups if swapping loses.", "남은 부족분은 가장 덜 도와주는 색으로: 환전 이득이면 빨강(1개씩), 손해면 파랑 그룹(cB개당 cA).") },
-      { hi: [14, 14], bubble: t(E, "answer = wasted + filled + 1. One calculation — no loop, no search. O(1).", "답 = 버린 파랑 + 부족분 채우기 + 1. 계산 한 번 — 반복도 탐색도 없이 O(1).") },
+      { hi: [14, 14], bubble: t(E, "answer = wasted + filled + 1, where the +1 is that guaranteed last chip we set aside. Check (0 0 2 3 5): 2 wasted + 6 blue (→4 red) + 1 last = 9. One calculation, O(1).", "답 = 버린 파랑 + 부족분 채우기 + 1. 여기 +1 이 아까 빼둔 '보장된 마지막 칩'. (0 0 2 3 5) 로 확인: 버림 2 + 파랑 6(→빨강 4) + 마지막 1 = 9. 계산 한 번, O(1).") },
     ] };
   }
   const code = [
@@ -304,13 +304,13 @@ export function getChipXchgWalk(E, lang = "py") {
     "    init = A + B // cB * cA          # " + c("red I can make right now", "지금 가진 것으로 만드는 빨강"),
     "    if init >= fA:",
     "        return 0                      # " + c("already reached → 0 extra", "이미 목표 → 추가 0"),
-    "    deficit = fA - 1 - init           # " + c("red still short (−1: boundary)", "아직 부족한 빨강 (경계 −1)"),
+    "    deficit = fA - 1 - init           # " + c("red still short, minus the last one (guaranteed by 1 chip)", "아직 부족한 빨강 − 1 (마지막 1개는 칩 하나로 보장)"),
     "    waste = cB - 1 - B % cB           # " + c("trickster 1: waste blue to the max", "심술쟁이 1: 파랑을 최대로 버림 (자투리 cB−1)"),
     "    if cA >= cB:                      # " + c("swap pays → red (1 each)", "환전 이득 → 빨강으로 (1개씩)"),
     "        need = deficit",
     "    else:                             # " + c("swap loses → blue in groups", "환전 손해 → 파랑 그룹으로"),
     "        need = deficit // cA * cB + deficit % cA",
-    "    return waste + need + 1           # " + c("wasted + filled + boundary", "버린 + 채운 + 경계"),
+    "    return waste + need + 1           # " + c("wasted + filled + that guaranteed last chip", "버린 + 채운 + 보장된 마지막 칩 1개"),
     "",
     "main()",
   ];
@@ -318,9 +318,9 @@ export function getChipXchgWalk(E, lang = "py") {
     { hi: [0, 1], bubble: t(E, "Fast input. Read it input-first: main → solve.", "빠른 입력. 입력부터: main → solve.") },
     { hi: [3, 7], bubble: t(E, "main — each test: read the 5 numbers → call solve → print.", "main — 각 테스트: 숫자 5개 읽어 → solve 호출 → 출력.") },
     { hi: [9, 13], bubble: t(E, "init = red I can make now (convert my blue). If it already reaches fA → 0 extra.", "init = 지금 가진 걸로 만드는 빨강 (내 파랑 환전). 목표 이상이면 추가 0.") },
-    { hi: [14, 15], bubble: t(E, "Short by deficit. The trickster first wastes blue: leftover to cB−1 (those chips give me 0).", "deficit 만큼 부족. 심술쟁이는 먼저 파랑을 자투리 cB−1 로 버려요 (그 칩들은 나한테 0).") },
+    { hi: [14, 15], bubble: t(E, "Short by deficit — note the −1. Once the leftover is already cB−1, ONE more chip gives at least 1 red whatever its color (red → +1, blue → completes the group → +cA). So the last red is guaranteed by a single chip: set it aside here, add it back as +1 at the end.", "deficit 만큼 부족 — 여기 −1 을 보세요. 자투리가 이미 cB−1 이면, 칩을 1개만 더 받아도 색이 뭐든 빨강이 최소 1개 늘어요 (빨강이면 +1, 파랑이면 묶음이 완성돼 +cA). 그래서 마지막 빨강 1개는 칩 하나로 보장 — 여기서 빼뒀다가 맨 끝에 +1 로 도로 더해요.") },
     { hi: [16, 20], bubble: t(E, "For the rest, the trickster gives the LEAST helpful color: red (1 each) if swapping pays, blue-in-groups if swapping loses.", "남은 부족분은 가장 덜 도와주는 색으로: 환전 이득이면 빨강(1개씩), 손해면 파랑 그룹(cB개당 cA).") },
-    { hi: [21, 21], bubble: t(E, "answer = wasted + filled + 1. One calculation — no loop, no search. O(1).", "답 = 버린 파랑 + 부족분 채우기 + 1. 계산 한 번 — 반복도 탐색도 없이 O(1).") },
+    { hi: [21, 21], bubble: t(E, "answer = wasted + filled + 1, where the +1 is that guaranteed last chip we set aside. Check (0 0 2 3 5): 2 wasted + 6 blue (→4 red) + 1 last = 9. One calculation, O(1).", "답 = 버린 파랑 + 부족분 채우기 + 1. 여기 +1 이 아까 빼둔 '보장된 마지막 칩'. (0 0 2 3 5) 로 확인: 버림 2 + 파랑 6(→빨강 4) + 마지막 1 = 9. 계산 한 번, O(1).") },
   ] };
 }
 
