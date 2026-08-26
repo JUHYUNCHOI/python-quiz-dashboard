@@ -1020,11 +1020,14 @@ export function PlanSlide({ E }) {
           {t(E, <>the trickster wastes blue first (leftover cB−1).</>,
                <>심술쟁이가 먼저 파랑을 버림 (자투리 cB−1).</>)}
         </Slab>
-        <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "fill the deficit: red or blue?", "부족분 채우기: 빨강? 파랑?")}>
+        <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "how many are missing — and who fills them?", "몇 개 모자라? — 그걸 누가 채워주나?")}>
           {t(E, <>cA ≥ cB → red (1 each); otherwise blue in groups.</>,
                <>cA ≥ cB → 빨강(1개씩), 아니면 파랑 그룹으로.</>)}
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", marginTop: 4, wordBreak: "break-word" }}>
-            deficit = fA − init − 1 <span style={{ color: "#7c3aed" }}>{t(E, "  // why −1? → ④", "  // 왜 1을 뺄까? → ④")}</span>
+            missing = fA − init <span style={{ color: "#64748b" }}>{t(E, "  // red still missing: goal − now", "  // 모자란 빨강: 목표 − 지금")}</span>
+          </div>
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", wordBreak: "break-word" }}>
+            expensive = missing − 1 <span style={{ color: "#7c3aed" }}>{t(E, "  // why −1? → ④", "  // 왜 1을 뺄까? → ④")}</span>
           </div>
         </Slab>
         <Slab n="4" color="#7c3aed" bg="#f5f3ff"
