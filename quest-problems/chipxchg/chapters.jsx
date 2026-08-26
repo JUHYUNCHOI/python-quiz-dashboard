@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim, TricksterRedSim } from "./sims";
+import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim, TricksterRedSim, LastOneWhySlide } from "./sims";
 
 const A = "#2563eb";
 
@@ -152,6 +152,17 @@ export function makeChipXchgCh1(E) {
       narr: t(E, "What if converting gains red (cA ≥ cB)? Then blue would help me, so the trickster gives red instead.",
                  "환전이 이득이면(cA ≥ cB)? 파랑이 오히려 나를 도와주니, 심술쟁이는 대신 빨강을 줘요."),
       content: (<TricksterRedSim E={E} />),
+    },
+
+    // [전] 도구 ④: 마지막 1개는 왜 싼가 = −1/+1 의 근거.
+    //      원래 '계획' 슬랩 ④ 안에 있었는데 계획 페이지가 너무 길어져서 형제 도구들 옆으로 옮김
+    //      (선생님 2026-08-26: "이걸 다음 페이지에 나두는건? 이 페이지가 넘 긴데").
+    {
+      type: "reveal",
+      label: t(E, "Tool: the last one is cheap (−1 / +1)", "도구: 마지막 1개는 싸다 (−1 / +1)"),
+      narr: t(E, "Last piece — why the formula subtracts 1 and then adds it back at the end.",
+                 "마지막 조각 — 공식이 왜 1을 뺐다가 맨 끝에 도로 더하는지."),
+      content: (<LastOneWhySlide E={E} />),
     },
 
     // [결] 계획 — 공식 단계 (개념 슬라이드, 코드는 다음 챕터에서)

@@ -933,7 +933,7 @@ export function StrategySlide({ E }) {
    빨강이면 +1, 파랑이면 자투리가 꽉 차 묶음 완성 → +cA. 무슨 색이든 최소 빨강 1개.
    그래서 마지막 빨강 1개는 '칩 1개' 로 보장 → 미리 빼두고(−1) 나머지만 비싼 값으로 센 뒤
    그 칩을 도로 더함(+1). */
-function LastOneWhy({ E }) {
+export function LastOneWhySlide({ E }) {
   const cA = 2, cB = 3;
   const Row = ({ chip, result, gain, color, bg }) => (
     <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 8,
@@ -945,7 +945,13 @@ function LastOneWhy({ E }) {
     </div>
   );
   return (
-    <div>
+    <div style={{ padding: 16, maxWidth: 520, margin: "0 auto", fontSize: 12.5, color: "#334155", lineHeight: 1.6, wordBreak: "keep-all" }}>
+      <div style={{ fontSize: 14, fontWeight: 800, color: "#7c3aed", textAlign: "center", marginBottom: 2 }}>
+        🎁 {t(E, "The last red is cheap — that's the −1 and the +1", "마지막 빨강 1개는 싸요 — 그게 −1 과 +1")}
+      </div>
+      <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 12 }}>
+        {t(E, "the 4th piece of the formula", "공식의 네 번째 조각")}
+      </div>
       {/* 상황 — 자투리가 이미 꽉 참 (② 에서 온 상태임을 명시) */}
       <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
         <span style={{ color: "#dc2626", fontWeight: 800 }}>{t(E, "From ② :", "②에서 :")}</span>
@@ -1057,12 +1063,12 @@ export function PlanSlide({ E }) {
             missing = fA − init <span style={{ color: "#64748b" }}>{t(E, "  // red still missing: goal − now", "  // 모자란 빨강: 목표 − 지금")}</span>
           </div>
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#94a3b8", wordBreak: "break-word" }}>
-            expensive = missing − 1 <span style={{ color: "#7c3aed" }}>{t(E, "  // why −1? → ④", "  // 왜 1을 뺄까? → ④")}</span>
+            expensive = missing − 1 <span style={{ color: "#7c3aed" }}>{t(E, "  // why −1? → previous page", "  // 왜 1을 뺄까? → 앞 페이지")}</span>
           </div>
         </Slab>
-        <Slab n="4" color="#7c3aed" bg="#f5f3ff"
-          title={t(E, "The last red is cheap — that's the −1 and the +1", "마지막 빨강 1개는 싸요 — 그게 −1 과 +1")}>
-          <LastOneWhy E={E} />
+        <Slab n="4" color="#7c3aed" bg="#f5f3ff" title={t(E, "answer = waste + need + 1", "답 = waste + need + 1")}>
+          {t(E, <>the <b>+1</b> is that guaranteed last chip — the page just before. Use 64-bit: the answer can reach 10¹⁸.</>,
+               <><b>+1</b> 은 보장된 마지막 칩 (바로 앞 페이지). 64비트 쓰기 — 답이 10¹⁸ 까지.</>)}
         </Slab>
       </div>
       <div style={{ marginTop: 12, textAlign: "center", fontSize: 12, fontWeight: 800, color: "#15803d", wordBreak: "keep-all", textWrap: "balance" }}>
