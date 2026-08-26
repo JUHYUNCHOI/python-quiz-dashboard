@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim, TricksterRedSim, LastStepSlide } from "./sims";
+import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim, TricksterRedSim, LastOneWhySlide } from "./sims";
 
 const A = "#2563eb";
 
@@ -87,7 +87,7 @@ function ChipXchgSample({ E }) {
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeChipXchgCh1 — mooin3 모양 (라벨 + 구체 샘플 + 시뮬)
-   문제(도입) → 샘플입출력 → 이해확인 → 전략 → 환전(red_now) → 심술쟁이 최악→공식 → 계획
+   문제(도입) → 샘플입출력 → 이해확인 → 전략 → 환전(init) → 심술쟁이 최악→공식 → 계획
    (USACO 공식 풀이 = O(1) 닫힌 공식. 이분탐색·후보 안 씀)
    ═══════════════════════════════════════════════════════════════ */
 export function makeChipXchgCh1(E) {
@@ -118,31 +118,21 @@ export function makeChipXchgCh1(E) {
       content: (<CheckSim E={E} />),
     },
 
-    // [전] 먼저 손으로: x=1,2,3… 받을 때 색 조합을 전부 적어보며 답을 찾아냄.
-    //      (선생님 수업 방식 — 규칙은 여기서 '해보고' 나온다. 뒤 도구들이 이걸 정리.)
-    {
-      type: "reveal",
-      label: t(E, "Try it by hand first", "먼저 손으로 다 해보기"),
-      narr: t(E, "Before any rule — take x = 1, 2, 3… and write out every color combo, one at a time. The answer shows up on its own.",
-                 "규칙 배우기 전에 — 1개, 2개, 3개… 받을 때 색 조합을 하나씩 다 적어봐요. 답이 저절로 드러나요."),
-      content: (<LastStepSlide E={E} />),
-    },
-
     // [전] 전략 — 공식 큰 그림 (지금 걸로 되나? 안 되면 심술쟁이 최악에 몇 개?)
     {
       type: "reveal",
       label: t(E, "Strategy", "전략"),
-      narr: t(E, "We found the answer by hand — now let's turn what we saw into a rule we can compute.",
-                 "손으로 답을 찾았으니, 이제 방금 본 걸 계산할 수 있는 규칙으로 바꿔요."),
+      narr: t(E, "First check what I can make now; if short, count the extra against the trickster's worst.",
+                 "먼저 지금 걸로 되는지 보고, 부족하면 심술쟁이 최악을 감안해 추가 칩을 세요."),
       content: (<StrategySlide E={E} />),
     },
 
-    // [전] 도구: 환전 세기 = red_now (지금 가진 걸로 만드는 빨강)
+    // [전] 도구: 환전 세기 = init (지금 가진 걸로 만드는 빨강)
     {
       type: "reveal",
-      label: t(E, "Tool: red I can make now (red_now)", "도구: 지금 만드는 빨강 (red_now)"),
-      narr: t(E, "Rule piece 1 — the red I already have. Group my blue by cB; leftovers waste. That's red_now.",
-                 "규칙 조각 1 — 이미 가진 빨강. 내 파랑을 cB 로 묶고, 자투리는 버려요. 그게 red_now."),
+      label: t(E, "Tool: red I can make now (init)", "도구: 지금 만드는 빨강 (init)"),
+      narr: t(E, "How many red can I make right now? Group my blue by cB; leftovers waste. That's init.",
+                 "지금 가진 걸로 빨강 몇 개? 내 파랑을 cB 로 묶고, 자투리는 버려요. 그게 init."),
       content: (<ChipCountSim E={E} />),
     },
 
@@ -162,6 +152,17 @@ export function makeChipXchgCh1(E) {
       narr: t(E, "What if converting gains red (cA ≥ cB)? Then blue would help me, so the trickster gives red instead.",
                  "환전이 이득이면(cA ≥ cB)? 파랑이 오히려 나를 도와주니, 심술쟁이는 대신 빨강을 줘요."),
       content: (<TricksterRedSim E={E} />),
+    },
+
+    // [전] 도구 ④: 마지막 1개는 왜 싼가 = −1/+1 의 근거.
+    //      원래 '계획' 슬랩 ④ 안에 있었는데 계획 페이지가 너무 길어져서 형제 도구들 옆으로 옮김
+    //      (선생님 2026-08-26: "이걸 다음 페이지에 나두는건? 이 페이지가 넘 긴데").
+    {
+      type: "reveal",
+      label: t(E, "Tool: the last one is cheap (−1 / +1)", "도구: 마지막 1개는 싸다 (−1 / +1)"),
+      narr: t(E, "Last piece — why the formula subtracts 1 and then adds it back at the end.",
+                 "마지막 조각 — 공식이 왜 1을 뺐다가 맨 끝에 도로 더하는지."),
+      content: (<LastOneWhySlide E={E} />),
     },
 
     // [결] 계획 — 공식 단계 (개념 슬라이드, 코드는 다음 챕터에서)
