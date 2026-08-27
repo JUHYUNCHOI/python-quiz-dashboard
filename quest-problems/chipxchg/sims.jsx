@@ -976,65 +976,46 @@ export function LastOneWhySlide({ E }) {
           gain={t(E, `+${cA} red`, `빨강 +${cA}`)} />
       </div>
 
-      {/* 결론 */}
-      <div style={{ background: "#f5f3ff", border: "1.5px solid #7c3aed", borderRadius: 8, padding: "8px 10px",
-        fontSize: 12, fontWeight: 700, color: "#5b21b6", wordBreak: "keep-all", lineHeight: 1.6 }}>
+      {/* 결론 ① — 게임 이야기만. 큰 글씨 한 방 */}
+      <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8, padding: "9px 11px",
+        fontSize: 12.5, fontWeight: 700, color: "#15803d", wordBreak: "keep-all", lineHeight: 1.7 }}>
         {t(E,
-          <>The trickster will of course pick the worse one for me — <b>red, +1</b>. But even that is <b>at least 1</b>. So the <b>last red is guaranteed by one single chip</b> — set it aside <b>(−1)</b>, price only the rest the expensive way, then add that chip back <b>(+1)</b>.</>,
-          <>심술쟁이는 당연히 나한테 나쁜 쪽 — <b>빨강, +1</b> — 을 고르겠죠. 그런데 그것도 <b>최소 1개</b>는 늘어요. 그러니 <b>마지막 빨강 1개는 칩 하나면 보장</b>이에요 — 그 1개를 미리 빼두고 <b>(−1)</b>, 나머지만 비싼 값으로 센 뒤, 그 칩을 도로 더해요 <b>(+1)</b>.</>)}
+          <>Both go up! The trickster gives the smaller one — <b>red, +1</b>.<br />
+            <b style={{ fontSize: 13.5 }}>→ So the last red only costs 1 chip.</b></>,
+          <>둘 다 빨강이 늘죠? 심술쟁이는 적은 쪽인 <b>빨강 +1</b> 을 줄 거예요.<br />
+            <b style={{ fontSize: 13.5 }}>→ 그러니 마지막 빨강 1개는 칩 1개면 끝!</b></>)}
       </div>
 
-      {/* 확인 — 1페이지 게임 그대로 (빨강2·파랑3·목표5). 1개만 모자라서 '비싼 조각' 이 0 →
-          이 페이지 주제(마지막 1개)만 남아 산수가 방해하지 않음. 큰 예는 아래 한 줄로 연결. */}
-      <div style={{ marginTop: 10, fontSize: 11.5, color: "#334155", wordBreak: "keep-all", lineHeight: 1.6 }}>
-        <div style={{ marginBottom: 5 }}>
-          {t(E, "Check on the game from page 1 ", "1페이지 게임으로 확인 ")}
-          <span style={{ color: "#64748b" }}>{t(E, "(2 red, 3 blue, goal 5)", "(빨강 2, 파랑 3, 목표 5)")}</span>
-          {t(E, " — my blue swaps into red, so I'm at ", " — 파랑 3개를 환전해서 지금 ")}
-          <b>{t(E, "4 red", "빨강 4개")}</b>
-          {t(E, " → just ", " → 딱 ")}
-          <b style={{ color: "#dc2626" }}>{t(E, "1 missing", "1개 모자람")}</b>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "0 8px", fontSize: 10, fontWeight: 800, color: "#94a3b8" }}>
-          <span style={{ flex: 1 }}>{t(E, "what the trickster gives", "심술쟁이가 주는 것")}</span>
-          <span style={{ width: 52, textAlign: "right" }}>{t(E, "red", "빨강")}</span>
-          <span style={{ width: 40, textAlign: "right" }}>{t(E, "chips", "칩")}</span>
-        </div>
-        {[
-          { n: 2, color: "blue", red: 0, chips: 2, tone: "#dc2626",
-            why: t(E, "wasted leftover (max 2)", "버리는 자투리 (최대 2개)") },
-          { n: 1, color: "red", red: 1, chips: 1, tone: "#7c3aed",
-            why: t(E, "the last one — any color, ≥1 red", "마지막 1개 — 무슨 색이든 빨강 ≥1") },
-        ].map((r, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 8px", borderRadius: 7,
-            background: "#fff", border: `1px solid ${r.tone}40`, marginTop: 3 }}>
-            <span style={{ display: "inline-flex", gap: 2, flexShrink: 0 }}>
-              {Array.from({ length: r.n }).map((_, j) => <Chip key={j} color={r.color} size={14} />)}
-            </span>
-            <span style={{ flex: 1, fontSize: 10.5, color: "#475569", wordBreak: "keep-all" }}>{r.why}</span>
-            <span style={{ width: 52, textAlign: "right", fontWeight: 800, color: r.red ? "#15803d" : "#94a3b8", fontFamily: "'JetBrains Mono',monospace" }}>+{r.red}</span>
-            <span style={{ width: 40, textAlign: "right", fontWeight: 800, color: r.tone, fontFamily: "'JetBrains Mono',monospace" }}>{r.chips}</span>
-          </div>
-        ))}
-        <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 8px", marginTop: 4,
-          borderTop: "1.5px solid #cbd5e1", fontWeight: 800 }}>
-          <span style={{ flex: 1, fontSize: 10.5, color: "#334155" }}>{t(E, "total", "합계")}</span>
-          <span style={{ width: 52, textAlign: "right", color: "#15803d", fontFamily: "'JetBrains Mono',monospace" }}>
-            1 {t(E, "✓ enough", "✓ 충분")}
-          </span>
-          <span style={{ width: 40, textAlign: "right", color: "#15803d", fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>3</span>
-        </div>
-        <div style={{ marginTop: 4, fontSize: 10.5, color: "#94a3b8", textAlign: "right" }}>
-          {t(E, "↑ 3 chips — nothing in between, so it's just waste + the last one",
-               "↑ 답 3개 — 중간에 낄 게 없어서 '버림 + 마지막 1개' 가 전부")}
-        </div>
+      {/* 결론 ② — 공식 이야기는 따로, 작게 (모드 전환을 눈에 보이게) */}
+      <div style={{ marginTop: 7, padding: "7px 10px", borderRadius: 8, background: "#f5f3ff",
+        border: "1px dashed #c4b5fd", fontSize: 11.5, color: "#5b21b6", wordBreak: "keep-all", lineHeight: 1.6 }}>
+        {t(E,
+          <><b>That's where −1 and +1 come from:</b> the formula sets that 1 chip aside <b>(−1)</b>, then adds it back at the very end <b>(+1)</b>.</>,
+          <><b>공식의 −1 과 +1 이 이것 때문이에요:</b> 그 칩 1개를 따로 빼놨다가 <b>(−1)</b>, 맨 끝에 도로 더해요 <b>(+1)</b>.</>)}
+      </div>
 
-        {/* 큰 예로 연결 — 여기선 '비싼 조각' 이 끼어든다는 것만 한 줄 */}
-        <div style={{ marginTop: 9, padding: "7px 10px", borderRadius: 8, background: "#f8fafc",
-          border: "1px dashed #cbd5e1", fontSize: 11, color: "#475569", lineHeight: 1.6 }}>
-          {t(E,
-            <>Short by more than 1? Then a middle piece appears — the <b>expensive</b> ones (③). Sample 2 <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>(0 0 2 3 5)</code> is short by 5: <b>2 wasted + 6 expensive + 1 last = 9</b>.</>,
-            <>1개보다 더 모자라면? 그때 가운데 조각이 생겨요 — <b>비싸게 채울 것</b> (③). 샘플 2 <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>(0 0 2 3 5)</code> 는 5개 모자라서: <b>버림 2 + 비싼 6 + 마지막 1 = 9</b>.</>)}
+      {/* 확인 — 표 없이 칩 한 줄로 (1페이지 게임) */}
+      <div style={{ marginTop: 10, fontSize: 11.5, color: "#334155", wordBreak: "keep-all", lineHeight: 1.7 }}>
+        <div style={{ marginBottom: 4 }}>
+          {t(E, "The game from page 1: I'm at 4 red, goal 5 — just 1 missing. So the answer is:",
+               "1페이지 게임: 지금 빨강 4개, 목표 5개 — 딱 1개 모자라요. 그래서 답은:")}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap",
+          background: "#fff", border: "1.5px solid #cbd5e1", borderRadius: 8, padding: "8px 10px" }}>
+          <span style={{ display: "inline-flex", gap: 3 }}>
+            <Chip color="blue" size={17} /><Chip color="blue" size={17} />
+          </span>
+          <span style={{ fontSize: 11, color: "#dc2626", fontWeight: 700 }}>{t(E, "thrown away", "버려짐")}</span>
+          <span style={{ color: "#94a3b8", fontWeight: 800 }}>+</span>
+          <Chip color="red" size={17} />
+          <span style={{ fontSize: 11, color: "#7c3aed", fontWeight: 700 }}>{t(E, "the last one", "마지막 1개")}</span>
+          <span style={{ marginLeft: "auto", fontWeight: 800, color: "#15803d", fontFamily: "'JetBrains Mono',monospace" }}>
+            {t(E, "= 3 chips", "= 칩 3개")}
+          </span>
+        </div>
+        <div style={{ marginTop: 6, fontSize: 10.5, color: "#94a3b8", wordBreak: "keep-all" }}>
+          {t(E, "(Missing more than 1? Then middle pieces appear too — that's ③.)",
+               "(1개보다 더 모자라면? 가운데 조각이 더 생겨요 — 그게 ③.)")}
         </div>
       </div>
 
