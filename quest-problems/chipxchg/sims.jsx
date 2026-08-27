@@ -933,17 +933,50 @@ export function StrategySlide({ E }) {
    낱개 빨강 = 칩 1개 < 묶음 (칩 cB개에 빨강 cA개) → 마지막 묶음 대신 낱개 cA개.
    예: 빨강 4개 필요 → 묶음 2개 통째 = 칩 6 vs 묶음1+낱개2 = 칩 5 ✓ */
 export function LastOneWhySlide({ E }) {
-  const Row = ({ chips, formula, result, ok }) => (
-    <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 10px", borderRadius: 8,
-      background: ok ? "#f0fdf4" : "#fef2f2", border: `${ok ? 2 : 1.5}px solid ${ok ? "#15803d" : "#fca5a5"}`,
-      fontSize: 11.5, fontWeight: 700, wordBreak: "keep-all" }}>
-      <span style={{ display: "inline-flex", gap: 3, flexShrink: 0 }}>{chips}</span>
-      <span style={{ color: "#334155", flex: 1 }}>{formula}</span>
-      <span style={{ color: ok ? "#15803d" : "#dc2626", fontWeight: 800, flexShrink: 0 }}>{result}</span>
+  const blue = (n, sz=17) => Array.from({ length: n }).map((_, i) => <Chip key={"b"+i} color="blue" size={sz} />);
+  const red  = (n, sz=17) => Array.from({ length: n }).map((_, i) => <Chip key={"r"+i} color="red" size={sz} />);
+  const Pile = ({ label, children, dashed }) => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+      <div style={{ display: "flex", gap: 3, padding: "3px 6px", borderRadius: 8,
+        border: `1.5px ${dashed ? "dashed" : "solid"} ${dashed ? "#dc2626" : "#cbd5e1"}`,
+        background: dashed ? "#fef2f2" : "#fff" }}>{children}</div>
+      <span style={{ fontSize: 9.5, fontWeight: 800, color: "#94a3b8" }}>{label}</span>
     </div>
   );
-  const blue = (n, sz=19) => Array.from({ length: n }).map((_, i) => <Chip key={"b"+i} color="blue" size={sz} />);
-  const red  = (n, sz=19) => Array.from({ length: n }).map((_, i) => <Chip key={"r"+i} color="red" size={sz} />);
+
+  /* 한 경우 = 칩 그림(깔림 + 받음) 과 계산이 한 카드 안에 */
+  const Case = ({ chips, r, b, ok }) => {
+    const totBlue = 2 + b, g = Math.floor(totBlue / 3), fromG = g * 2, total = r + fromG;
+    return (
+      <div style={{ padding: "9px 11px", borderRadius: 10,
+        border: `${ok ? 2 : 1.5}px solid ${ok ? "#15803d" : "#fca5a5"}`,
+        background: ok ? "#f0fdf4" : "#fef2f2", marginBottom: 6 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6, flexWrap: "wrap", gap: 6 }}>
+          <span style={{ fontSize: 12, fontWeight: 800, color: "#334155" }}>
+            {t(E, `Get ${chips} chips`, `칩 ${chips}개 받으면`)}
+          </span>
+          <span style={{ fontSize: 12.5, fontWeight: 800, color: ok ? "#15803d" : "#dc2626" }}>
+            {t(E, `red ${total}`, `빨강 ${total}개`)} {ok ? "✓" : "✗"}
+          </span>
+        </div>
+        {/* 칩 그림 — 깔림 · 받음 을 따로 */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap", marginBottom: 7 }}>
+          <Pile label={t(E, "already there", "깔림")} dashed>{blue(2)}</Pile>
+          <span style={{ fontSize: 15, fontWeight: 800, color: "#94a3b8" }}>+</span>
+          <Pile label={t(E, `got ${chips}`, `받은 ${chips}개`)}>{red(r)}{blue(b)}</Pile>
+        </div>
+        {/* 계산 — 총 파랑을 명시 */}
+        <div style={{ fontSize: 11.5, color: "#334155", textAlign: "center", lineHeight: 1.6, wordBreak: "keep-all" }}>
+          {t(E, `blue ${2}+${b} = ${totBlue} → ${g} group${g>1?"s":""} = red ${fromG}`,
+               `파랑 ${2}+${b} = ${totBlue}개 → 묶음 ${g}개 = 빨강 ${fromG}`)}
+          <span style={{ color: "#94a3b8" }}> · </span>
+          {t(E, `red chips ${r}`, `빨강칩 ${r}개`)}
+          <span style={{ color: "#94a3b8" }}> → </span>
+          <b style={{ color: ok ? "#15803d" : "#dc2626" }}>{t(E, `red ${fromG} + ${r} = ${total}`, `빨강 ${fromG} + ${r} = ${total}`)}</b>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div style={{ padding: 16, maxWidth: 540, margin: "0 auto", fontSize: 12.5, color: "#334155", lineHeight: 1.65, wordBreak: "keep-all" }}>
@@ -954,38 +987,26 @@ export function LastOneWhySlide({ E }) {
         {t(E, "I pick the count. The trickster picks the colors.", "개수는 내가, 색은 심술쟁이가 정해요.")}
       </div>
 
-      {/* 함정 짚기 — '빨강 4개 받으면 되잖아' */}
+      {/* 함정 짚기 */}
       <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "8px 11px",
         marginBottom: 10, fontSize: 12, color: "#92400e", lineHeight: 1.65 }}>
         {t(E,
-          <>"Just take 4 red chips = 4 chips!" — that would be best. But <b>the trickster picks the colors</b>, and red helps me most, so it hands red as little as it can.</>,
-          <>"빨강 4개만 받으면 칩 4개로 끝이잖아!" — 그게 최고죠. 근데 <b>색은 심술쟁이가 정해요</b>. 빨강은 나한테 제일 좋으니까 심술쟁이는 빨강을 최대한 안 줘요.</>)}
+          <>"Just take 4 red chips = 4 chips!" — that would be best. But <b>the trickster picks the colors</b>, so it hands red as little as it can.</>,
+          <>"빨강 4개만 받으면 칩 4개로 끝이잖아!" — 그게 최고죠. 근데 <b>색은 심술쟁이가 정해요</b>. 빨강을 최대한 안 줍니다.</>)}
       </div>
 
-      {/* 전제: ② 에서 자투리 2개 */}
-      <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
-        <span style={{ color: "#dc2626", fontWeight: 800 }}>{t(E, "From ② :", "②에서 :")}</span>
-        <span>{t(E, "2 wasted blues are already sitting there", "버려진 파랑 2개가 이미 깔려 있어요")}</span>
-        <span style={{ display: "inline-flex", gap: 3, padding: "2px 5px", borderRadius: 999, border: "1.5px dashed #dc2626", background: "#fef2f2" }}>
-          {blue(2, 16)}
-        </span>
-        <span style={{ fontSize: 11, color: "#94a3b8" }}>{t(E, "(1 short of a group)", "(묶음에 1개 모자람)")}</span>
+      {/* 전제 한 줄 */}
+      <div style={{ fontSize: 11.5, color: "#475569", marginBottom: 8 }}>
+        <b style={{ color: "#dc2626" }}>{t(E, "From ② :", "②에서 :")}</b>{" "}
+        {t(E, "2 wasted blues are already sitting there — 1 short of a group of 3. Every case below starts from them.",
+             "버려진 파랑 2개가 이미 깔려 있어요 — 묶음 3개에 1개 모자란 상태. 아래 두 경우 모두 여기서 시작해요.")}
       </div>
 
-      {/* 칩 개수별로 심술쟁이의 최악 — 여기가 답 */}
-      <div style={{ fontWeight: 800, color: "#7c3aed", marginBottom: 5 }}>
-        {t(E, "So — for each count, the trickster's meanest coloring:", "그래서 — 개수마다 심술쟁이의 제일 못된 색칠은:")}
+      <div style={{ fontWeight: 800, color: "#7c3aed", marginBottom: 6 }}>
+        {t(E, "The trickster's meanest coloring, per count:", "개수마다 심술쟁이의 제일 못된 색칠:")}
       </div>
-      <div style={{ display: "grid", gap: 5, marginBottom: 10 }}>
-        <Row ok={false}
-          chips={<>{red(1)}{blue(3)}</>}
-          formula={t(E, "4 chips: red 1 + (blue 3 + the 2 waiting → group +2)", "칩 4개: 빨강 1 + (파랑 3, 깔린 2개와 묶여 +2)")}
-          result={t(E, "red 3 ✗", "빨강 3 ✗")} />
-        <Row ok={true}
-          chips={<>{red(2)}{blue(3)}</>}
-          formula={t(E, "5 chips: even the meanest gives red 2 + group 2", "칩 5개: 아무리 못되게 줘도 빨강 2 + 묶음 2")}
-          result={t(E, "red 4 ✓", "빨강 4 ✓")} />
-      </div>
+      <Case chips={4} r={1} b={3} ok={false} />
+      <Case chips={5} r={2} b={3} ok={true} />
 
       {/* 결론 */}
       <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8, padding: "9px 11px",
@@ -995,14 +1016,14 @@ export function LastOneWhySlide({ E }) {
           <>칩 4개까진 심술쟁이가 빨강 3개로 막아요. <b>5개부터는 못 막아요</b> — 어떻게 색칠해도 4개가 돼요.</>)}
       </div>
 
-      {/* 코드 대응 — ✓줄 모양이 곧 공식 */}
+      {/* 코드 대응 */}
       <div style={{ padding: "8px 10px", borderRadius: 8, background: "#f5f3ff",
         border: "1px dashed #c4b5fd", fontSize: 11.5, color: "#5b21b6", lineHeight: 1.65 }}>
         {t(E,
-          <>Look at the ✓ row: <b>1 group</b> (not 2!) <b>+ 2 reds</b>. That shape is case ② in the code:<br />
+          <>Look at the ✓ case: <b>1 group</b> (not 2!) <b>+ 2 red chips</b>. That shape is case ② in the code:<br />
             <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>to_fill = (missing // cA − 1) * cB + cA</code><br />
             <span style={{ color: "#7c3aed" }}>groups, one fewer</span> … <span style={{ color: "#7c3aed" }}>plus cA reds</span></>,
-          <>✓ 줄 모양을 보세요: <b>묶음 1개</b> (2개 아님!) <b>+ 빨강 2개</b>. 이 모양이 코드의 경우 ②예요:<br />
+          <>✓ 경우를 보세요: <b>묶음 1개</b> (2개 아님!) <b>+ 빨강칩 2개</b>. 이 모양이 코드의 경우 ②예요:<br />
             <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>to_fill = (missing // cA − 1) * cB + cA</code><br />
             <span style={{ color: "#7c3aed" }}>묶음 하나 덜</span> … <span style={{ color: "#7c3aed" }}>대신 빨강 cA개</span></>)}
       </div>
