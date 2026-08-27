@@ -64,12 +64,6 @@ export const QUEST_HEALTH: Record<string, QuestHealthStatus> = {
     detail: "감속 공식이 의심 — 일부 sample 답 안 맞음.",
     detailEn: "Deceleration formula suspicious; sample mismatch.",
   },
-  sumk: {
-    category: "algorithm-bug",
-    severity: "critical",
-    detail: "C++ 코드가 완전히 다른 문제 풀고 있음 (Σa[i]^K 가 아님).",
-    detailEn: "C++ code solves a different problem entirely.",
-  },
 
   // ─── Python / C++ algorithm mismatches ──────────────────────────
   acowdemia1: {
@@ -193,12 +187,6 @@ export const QUEST_HEALTH: Record<string, QuestHealthStatus> = {
     severity: "critical",
     detail: "C++ 미완성. Python 사용 권장.",
     detailEn: "C++ incomplete. Use Python.",
-  },
-  reach: {
-    category: "stub-cpp",
-    severity: "critical",
-    detail: "C++ 구현 없음. Python 사용 권장.",
-    detailEn: "No C++ implementation. Use Python.",
   },
   reverseeng: {
     category: "stub-cpp",
