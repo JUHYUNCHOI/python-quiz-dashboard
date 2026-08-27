@@ -856,6 +856,116 @@ function Slab({ n, color, bg, title, children }) {
 }
 
 /* ═══ ② 이해 확인 — '우리가 뭘 구하는가'를 스스로 확인 (predict→reveal) ═══ */
+/* ═══════════════════════════════════════════════════════════════
+   WorstCaseWhySim — "왜 최악의 경우를 세나?" (선생님 2026-08-27 요청)
+   1페이지의 그 예제 그대로: 빨강 2 · 파랑 3 · 파랑3→빨강2 · 목표 5.
+   칩을 1→2→3개 받아 가며 올 수 있는 조합을 전부 펼침. 답 3.
+   숫자 전부 완전탐색 확인함 (칩1 최악4 ✗ · 칩2 최악4 ✗ · 칩3 최악5 ✓).
+   ═══════════════════════════════════════════════════════════════ */
+export function WorstCaseWhySim({ E }) {
+  const A0 = 2, B0 = 3, CA = 2, CB = 3, GOAL = 5;
+  const steps = [{ k: "now" }, { k: "one" }, { k: "two" }, { k: "three" }, { k: "rule" }];
+  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const X = { one: 1, two: 2, three: 3 }[s.k] || 0;
+
+  const rows = (x) => Array.from({ length: x + 1 }).map((_, i) => {
+    const r = x - i, b = i, tot = B0 + b, g = Math.floor(tot / CB);
+    return { r, b, tot, g, v: A0 + r + g * CA };
+  });
+  const worstOf = (x) => Math.min(...rows(x).map((o) => o.v));
+
+  const say =
+    s.k === "now" ? t(E, <>I have <b style={{color:RED,...NW}}>2 red</b> and <b style={{color:BLU,...NW}}>3 blue</b>. Swapping the blue gives <b style={{color:RED,...NW}}>red 4</b> — the goal is <b style={NW}>5</b>. <b>One short.</b> I need extra chips.</>,
+                        <>지금 <b style={{color:RED,...NW}}>빨강 2개</b>, <b style={{color:BLU,...NW}}>파랑 3개</b>. 파랑을 바꾸면 <b style={{color:RED,...NW}}>빨강 4개</b> — 목표는 <b style={NW}>5개</b>. <b>하나 모자라요.</b> 칩을 더 받아야 해요.</>)
+  : s.k === "one" ? t(E, <>Take <b style={NW}>1 chip</b>. <b>I can't know what colour it will be</b> — so both of these can happen.</>,
+                         <>칩을 <b style={NW}>1개</b> 받아 볼게요. <b>무슨 색이 올지는 알 수 없어요</b> — 그래서 아래 둘 다 일어날 수 있어요.</>)
+  : s.k === "two" ? t(E, <><b style={NW}>2 chips</b>, three combinations. Two of them reach the goal… but <b style={{color:BLU,...NW}}>2 blue</b> still leaves me at <b style={{color:RED,...NW}}>red 4</b>.</>,
+                         <>칩 <b style={NW}>2개</b>, 조합은 3가지. 두 개는 목표에 닿는데… <b style={{color:BLU,...NW}}>파랑 2개</b>가 오면 여전히 <b style={{color:RED,...NW}}>빨강 4개</b>예요.</>)
+  : s.k === "three" ? t(E, <><b style={NW}>3 chips</b> — now <b>every</b> combination reaches 5. <b style={{color:"#15803d"}}>The answer is 3.</b></>,
+                           <>칩 <b style={NW}>3개</b> — 이제 <b>모든</b> 조합이 5에 닿아요. <b style={{color:"#15803d"}}>답은 3개.</b></>)
+  : t(E, <>2 chips work <b>if I'm lucky</b>. But the question asks for a count that works <b>every time</b> — so we always count the <b>worst combination</b>.</>,
+         <>칩 2개도 <b>운이 좋으면</b> 돼요. 하지만 문제는 <b>언제나</b> 되는 개수를 물어요 — 그래서 우리는 늘 <b>제일 나쁜 조합</b>을 기준으로 세요.</>);
+
+  const Table = ({ x }) => {
+    const rs = rows(x), w = worstOf(x), ok = w >= GOAL;
+    return (
+      <div style={{ maxWidth: 480, margin: "0 auto", border: `2px solid ${ok ? "#15803d" : "#fca5a5"}`,
+        borderRadius: 10, background: ok ? "#f0fdf4" : "#fef2f2", padding: "8px 10px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5, flexWrap: "wrap", gap: 6 }}>
+          <span style={{ fontSize: 12, fontWeight: 800, color: "#334155" }}>
+            {t(E, `${x} chip${x > 1 ? "s" : ""} — all ${rs.length} combinations`, `칩 ${x}개 — 올 수 있는 조합 ${rs.length}가지`)}
+          </span>
+          <span style={{ fontSize: 12.5, fontWeight: 800, color: ok ? "#15803d" : "#dc2626" }}>
+            {t(E, `worst = red ${w}`, `제일 나쁜 경우 = 빨강 ${w}`)} {ok ? "✓" : "✗"}
+          </span>
+        </div>
+        <div style={{ overflowX: "auto" }}>
+          {rs.map((o, i) => {
+            const bad = o.v === w, good = o.v >= GOAL;
+            return (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "3px 7px", borderRadius: 6,
+                marginBottom: 2, minWidth: 400, ...NW, background: bad ? "#fff" : "transparent",
+                border: `${bad ? 2 : 1}px solid ${bad ? (ok ? "#15803d" : "#dc2626") : "transparent"}`,
+                fontSize: 10.5, fontWeight: 700, color: "#475569" }}>
+                <span style={{ minWidth: 84, flexShrink: 0, display: "inline-flex", gap: 3, alignItems: "center" }}>
+                  {Array.from({ length: o.r }).map((_, k) => <Chip key={"r" + k} color="red" size={15} />)}
+                  {Array.from({ length: o.b }).map((_, k) => <Chip key={"b" + k} color="blue" size={15} />)}
+                </span>
+                <span style={{ flex: 1, fontFamily: "'JetBrains Mono',monospace", ...NW }}>
+                  {t(E, `blue ${B0}+${o.b}=${o.tot} → ${o.g} grp`, `파랑 ${B0}+${o.b}=${o.tot} → 묶음 ${o.g}`)}
+                </span>
+                <span style={{ fontWeight: 800, flexShrink: 0, color: good ? "#15803d" : "#dc2626" }}>
+                  {t(E, `red ${o.v}`, `빨강 ${o.v}`)} {good ? "✓" : "✗"}
+                </span>
+                <span style={{ width: 74, textAlign: "right", flexShrink: 0, fontSize: 10,
+                  color: ok ? "#15803d" : "#dc2626" }}>
+                  {bad ? t(E, "← worst", "← 제일 나쁨") : ""}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div style={{ padding: 16, paddingBottom: 120 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Why do we count the worst case?", "왜 제일 나쁜 경우를 셀까요?")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Say tone={s.k === "three" || s.k === "rule" ? "aha" : s.k === "now" ? "go" : "stuck"}>{say}</Say>
+
+      {s.k === "now" && (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, flexWrap: "wrap", fontSize: 12, fontWeight: 800 }}>
+          <span style={{ display: "inline-flex", gap: 4 }}>
+            {Array.from({ length: A0 }).map((_, i) => <Chip key={"a" + i} color="red" size={24} />)}
+            {Array.from({ length: B0 }).map((_, i) => <Chip key={"b" + i} color="blue" size={24} />)}
+          </span>
+          <span style={{ color: "#94a3b8" }}>→</span>
+          <span style={{ display: "inline-flex", gap: 4 }}>
+            {Array.from({ length: 4 }).map((_, i) => <Chip key={"f" + i} color="red" size={24} />)}
+          </span>
+          <span style={{ color: "#dc2626" }}>{t(E, "red 4 · goal 5 ✗", "빨강 4 · 목표 5 ✗")}</span>
+        </div>
+      )}
+      {X > 0 && <Table x={X} />}
+      {s.k === "rule" && (
+        <div style={{ maxWidth: 470, margin: "0 auto", padding: "12px 14px", borderRadius: 10,
+          background: "#f5f3ff", border: "2px solid #c4b5fd", textAlign: "center",
+          fontSize: 13, fontWeight: 800, color: "#5b21b6", wordBreak: "keep-all", lineHeight: 1.8 }}>
+          {t(E, <>answer = the fewest chips such that <b>even the worst combination</b> reaches the goal</>,
+                <>답 = <b>제일 나쁜 조합이 와도</b> 목표에 닿는 가장 적은 칩 수</>)}
+        </div>
+      )}
+
+      <div style={{ marginTop: 22 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}
+
 export function CheckSim({ E }) {
   const steps = [{ kind: "ask" }, { kind: "reveal" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];

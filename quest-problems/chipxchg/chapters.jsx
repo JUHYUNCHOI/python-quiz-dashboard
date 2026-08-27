@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, AllBlueWorstSim, AllRedWorstSim, LastOneWhySlide, WhyMinusPlusSim } from "./sims";
+import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, AllBlueWorstSim, AllRedWorstSim, LastOneWhySlide, WhyMinusPlusSim, WorstCaseWhySim } from "./sims";
 
 const A = "#2563eb";
 
@@ -116,6 +116,17 @@ export function makeChipXchgCh1(E) {
       narr: t(E, "Before strategy — check you know what we're actually asked to print.",
                  "전략으로 넘어가기 전에, 우리가 무엇을 출력해야 하는 건지 스스로 확인해봐요."),
       content: (<CheckSim E={E} />),
+    },
+
+    // [승] ②-2 왜 '제일 나쁜 조합' 을 세나 — 랜덤이라 운에 맡길 수 없다는 걸 먼저 못박음.
+    //      (선생님 2026-08-27: "랜덤으로 받기 때문에 최악인 경우를 해결해야한다는걸 시뮬로")
+    //      1페이지 예제 그대로(빨강2·파랑3·목표5) 라서 답이 3 — 조합을 전부 펼쳐도 짧음.
+    {
+      type: "reveal",
+      label: t(E, "Why the worst case?", "왜 제일 나쁜 경우?"),
+      narr: t(E, "The chips arrive without me knowing their colours — so luck can't be part of the answer.",
+                 "칩은 무슨 색인지 모른 채로 와요 — 그러니 운에 기댈 수는 없어요."),
+      content: (<WorstCaseWhySim E={E} />),
     },
 
     // [전] 전략 — 공식 큰 그림 (지금 걸로 되나? 안 되면 최악의 경우에 몇 개?)
