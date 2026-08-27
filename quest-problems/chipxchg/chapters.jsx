@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim, TricksterRedSim, LastOneWhySlide } from "./sims";
+import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim, TricksterRedSim, LastOneWhySlide, FormulaFromTableSlide } from "./sims";
 
 const A = "#2563eb";
 
@@ -159,10 +159,22 @@ export function makeChipXchgCh1(E) {
     //      (선생님 2026-08-26: "이걸 다음 페이지에 나두는건? 이 페이지가 넘 긴데").
     {
       type: "reveal",
-      label: t(E, "Tool: last reds — one-by-one is better", "도구: 마지막 빨강은 낱개로 받는 게 더 좋다"),
+      label: t(E, "Tool: how many chips force 4 red?", "도구: 빨강 4개를 받으려면 칩 몇 개?"),
       narr: t(E, "Last piece — how many chips force the goal even with the meanest coloring?",
                  "마지막 조각 — 심술쟁이가 아무리 못되게 색칠해도 채워지려면 몇 개?"),
       content: (<LastOneWhySlide E={E} />),
+    },
+
+    // [전] 도구 ④-2: 위 관찰을 칩 개수마다 다 해보면 사다리가 나오고, 거기서 식이 그냥 읽힌다.
+    //      한 페이지에 관찰 + 식 유도를 같이 두니 너무 길고, 유도가 '먼저 틀리게 세고 −1 로 고치는'
+    //      모양이라 설명이 안 됐음 (선생님 2026-08-27: "결론적으로 −1을 안하면 6이 된다는건 설명이 아니지").
+    //      → 식을 missing + eaten*(cB−cA) 로 바꿔 보정을 없애고, 사다리로 관찰→식 순서를 만듦.
+    {
+      type: "reveal",
+      label: t(E, "Tool: turn it into a formula", "도구: 그걸 식으로"),
+      narr: t(E, "Do the same count for every chip number — a pattern falls out.",
+                 "칩 개수마다 똑같이 세어 보면 규칙이 보여요."),
+      content: (<FormulaFromTableSlide E={E} />),
     },
 
     // [결] 계획 — 공식 단계 (개념 슬라이드, 코드는 다음 챕터에서)
