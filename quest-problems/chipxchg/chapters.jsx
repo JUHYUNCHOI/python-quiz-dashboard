@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim, TricksterRedSim, LastOneWhySlide, FormulaFromTableSlide } from "./sims";
+import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim, TricksterRedSim, LastOneWhySlide, WhyMinusPlusSim } from "./sims";
 
 const A = "#2563eb";
 
@@ -171,10 +171,10 @@ export function makeChipXchgCh1(E) {
     //      → 식을 missing + eaten*(cB−cA) 로 바꿔 보정을 없애고, 사다리로 관찰→식 순서를 만듦.
     {
       type: "reveal",
-      label: t(E, "Tool: turn it into a formula", "도구: 그걸 식으로"),
-      narr: t(E, "Do the same count for every chip number — a pattern falls out.",
-                 "앞 페이지에서 한 세기를 칩 개수마다 똑같이 해 보면 규칙이 보여요."),
-      content: (<FormulaFromTableSlide E={E} />),
+      label: t(E, "Tool: why −1 and why +1", "도구: 왜 −1 이고 왜 +1 인가"),
+      narr: t(E, "The formula has a −1 and a +1. Here is where each of them comes from.",
+                 "식에 −1 과 +1 이 있어요. 그게 각각 어디서 나온 건지 한 단계씩 봐요."),
+      content: (<WhyMinusPlusSim E={E} />),
     },
 
     // [결] 계획 — 공식 단계 (개념 슬라이드, 코드는 다음 챕터에서)
