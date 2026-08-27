@@ -5,6 +5,7 @@
 //   ① ChipCountSim — 최종 A = A + (B // cB) × cA (묶음/자투리 시각)
 //   ② AdversarySim — 심술쟁이가 파랑에 몰아 자투리 낭비 → 최악 분배
 
+import React from "react";
 import { t } from "@/components/quest/theme";
 import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceStepper";
 
@@ -1052,15 +1053,17 @@ export function LastOneWhySlide({ E }) {
 /* ═══ 도구 ④-2 (유도) — 그 결과를 식으로. −1 을 뺐을 때와 대비해서 차이를 보임 ═══
    선생님 2026-08-26: "−1을 하지 않는 것과의 차이를 모르겠는데" → 6 vs 5 를 나란히. */
 export function FormulaFromTableSlide({ E }) {
-  /* 칩 1~6 각각의 '심술쟁이 최선' — 전부 완전탐색으로 최소임을 확인함.
-     핵심은 빨강이 안 늘어난 줄(칩 3, 칩 6): 빨강이 cA(2)개 될 때마다 다음 칩 하나가 먹힌다.
-     선생님 2026-08-27 "설명을 조금도 이해 못하겠는데" → 식을 말로 정당화하지 말고
-     학생이 사다리에서 직접 셀 수 있는 규칙으로. */
+  /* 선생님 2026-08-27: "먹혀? 어느 부분을 봐야하는거야?"
+     → 내가 지어낸 말('먹힌다')을 버리고, 화면에 실제로 보이는 것만 씀: '빨강이 제자리'.
+     → '어디를 보라'를 글로 말하지 말고, 목표별로 세어 놓은 표를 옆에 둬서 규칙이 눈에 보이게. */
   const ROWS = [
     { x: 1, b: 0, r: 1 }, { x: 2, b: 2, r: 0 }, { x: 3, b: 3, r: 0 },
     { x: 4, b: 3, r: 1 }, { x: 5, b: 3, r: 2 }, { x: 6, b: 6, r: 0 },
   ].map((o) => { const tot = T4.LAID + o.b, g = Math.floor(tot / T4.CB);
     return { ...o, tot, g, v: o.r + g * T4.CA }; });
+  /* 목표별 필요한 칩 — 완전탐색으로 확인된 값 (제자리 횟수 = (목표−1)//cA) */
+  const GOALS = [1, 2, 3, 4, 5, 6].map((m) => ({ m, s: Math.floor((m - 1) / T4.CA) }))
+    .map((o) => ({ ...o, chips: o.m + o.s * (T4.CB - T4.CA) }));
 
   return (
     <div style={{ padding: 16, maxWidth: 560, margin: "0 auto", fontSize: 12.5, color: "#334155", lineHeight: 1.65, wordBreak: "keep-all" }}>
@@ -1071,16 +1074,21 @@ export function FormulaFromTableSlide({ E }) {
         {t(E, "each row = the meanest coloring for that chip count (same picture as the last page)",
              "한 줄 = 그 칩 개수에서 심술쟁이가 제일 못되게 준 모습 (앞 페이지와 같은 그림)")}
       </div>
+      <div style={{ fontSize: 11.5, fontWeight: 700, color: "#7c3aed", textAlign: "center", marginBottom: 9,
+        background: "#f5f3ff", border: "1px solid #ddd6fe", borderRadius: 7, padding: "5px 9px" }}>
+        {t(E, "I still need 4 more red. Where does red first reach 4?",
+             "지금 나한테 더 필요한 빨강은 4개. 빨강이 4가 처음 되는 곳은 어디일까요?")}
+      </div>
 
-      <div style={{ display: "grid", gap: 4, marginBottom: 11 }}>
+      <div style={{ display: "grid", gap: 4, marginBottom: 10 }}>
         {ROWS.map((o, i) => {
-          const stuck = i > 0 && o.v === ROWS[i - 1].v;
+          const same = i > 0 && o.v === ROWS[i - 1].v;
           const goal = o.v >= T4.GOAL && (i === 0 || ROWS[i - 1].v < T4.GOAL);
           return (
             <div key={o.x} style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap",
               padding: "6px 9px", borderRadius: 9,
-              border: `${goal || stuck ? 2 : 1}px solid ${goal ? "#15803d" : stuck ? "#dc2626" : "#e2e8f0"}`,
-              background: goal ? "#f0fdf4" : stuck ? "#fef2f2" : "#fff" }}>
+              border: `${goal || same ? 2 : 1}px solid ${goal ? "#15803d" : same ? "#dc2626" : "#e2e8f0"}`,
+              background: goal ? "#f0fdf4" : same ? "#fef2f2" : "#fff" }}>
               <span style={{ minWidth: 48, fontSize: 11.5, fontWeight: 800, color: "#334155", flexShrink: 0 }}>
                 {t(E, `${o.x} chip${o.x > 1 ? "s" : ""}`, `칩 ${o.x}개`)}
               </span>
@@ -1096,89 +1104,83 @@ export function FormulaFromTableSlide({ E }) {
                 </span>
               </span>
               <span style={{ marginLeft: "auto", fontSize: 12.5, fontWeight: 800, flexShrink: 0,
-                color: goal ? "#15803d" : stuck ? "#dc2626" : "#334155" }}>
+                color: goal ? "#15803d" : same ? "#dc2626" : "#334155" }}>
                 {t(E, `red ${o.v}`, `빨강 ${o.v}`)}
               </span>
-              <span style={{ width: 96, textAlign: "right", fontSize: 10.5, fontWeight: 800, flexShrink: 0,
+              <span style={{ width: 104, textAlign: "right", fontSize: 10.5, fontWeight: 800, flexShrink: 0,
                 color: goal ? "#15803d" : "#dc2626" }}>
-                {goal ? t(E, "✓ goal!", "✓ 목표!") : stuck ? t(E, "✗ didn't grow", "✗ 안 늘었어요") : ""}
+                {goal ? t(E, "✓ goal!", "✓ 목표!") : same ? t(E, "← same as above", "← 윗줄과 똑같아요") : ""}
               </span>
             </div>
           );
         })}
       </div>
 
-      {/* 왜 안 늘었나 — 한 줄로 */}
       <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 8, padding: "8px 11px",
-        marginBottom: 9, fontSize: 12, color: "#7f1d1d", lineHeight: 1.75 }}>
+        marginBottom: 10, fontSize: 12, color: "#7f1d1d", lineHeight: 1.75 }}>
         {t(E,
-          <><b>Why row 3?</b> One more chip, but it came as blue: 2 laid + 3 = <b>5 blue</b>, still only <b>1 group</b>. That chip did nothing for me — it got <b>eaten</b>. Row 6 is the same.</>,
-          <><b>3번째 줄은 왜?</b> 칩을 하나 더 줬는데 파랑으로 왔어요. 깔린 2개까지 <b>파랑 5개</b>인데 묶음은 아직 <b>1개</b>뿐. 그 칩은 나한테 아무것도 안 준 거예요 — <b>먹혔어요</b>. 6번째 줄도 똑같아요.</>)}
+          <><b>The two red rows:</b> I gave one more chip, but red is the same as the row above. The trickster sent blue, and it still doesn't finish a new group — so that chip changed nothing for me. Call those rows <b>"stuck"</b>.</>,
+          <><b>빨간 두 줄:</b> 칩을 하나 더 줬는데 빨강이 윗줄과 똑같아요. 심술쟁이가 파랑으로 줬고, 그걸로도 묶음이 새로 안 채워지거든요. 그 칩은 나한테 아무 변화도 안 준 거예요. 이런 줄을 <b>"제자리"</b> 라고 부를게요.</>)}
       </div>
 
-      {/* 규칙 — 사다리에서 직접 셀 수 있게 */}
-      <div style={{ background: "#fffbeb", border: "2px solid #fbbf24", borderRadius: 10, padding: "10px 12px", marginBottom: 9 }}>
-        <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 6, lineHeight: 1.6 }}>
-          📏 {t(E, <>Every time red reaches <b>2</b>, the next chip gets eaten.</>,
-                  <>빨강이 <b>2개</b> 될 때마다, 그 다음 칩 하나가 먹혀요.</>)}
+      {/* 목표별로 세어 놓은 표 — 규칙을 말로 말하지 않고 보여줌 */}
+      <div style={{ border: "2px solid #fbbf24", background: "#fffbeb", borderRadius: 10, padding: "10px 11px", marginBottom: 10 }}>
+        <div style={{ fontSize: 12.5, fontWeight: 800, color: "#92400e", marginBottom: 4 }}>
+          📏 {t(E, "Now: what if I needed a different number of red?", "그럼 더 필요한 빨강이 4개가 아니면?")}
         </div>
-        <div style={{ fontSize: 11.5, color: "#92400e", lineHeight: 1.8 }}>
-          {t(E, "Check it on the ladder:", "사다리에서 확인해 보세요:")}
-          <div style={{ paddingLeft: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>
-            {t(E, "red 2 (chip 2) → chip 3 eaten ✗", "빨강 2 (칩 2) → 칩 3 먹힘 ✗")}<br />
-            {t(E, "red 4 (chip 5) → chip 6 eaten ✗", "빨강 4 (칩 5) → 칩 6 먹힘 ✗")}
-          </div>
-          <div style={{ marginTop: 4 }}>
-            {t(E, <>(2 is <b>cA</b> — how many red one group makes.)</>,
-                  <>(2 는 <b>cA</b> — 묶음 하나가 만드는 빨강 개수예요.)</>)}
-          </div>
+        <div style={{ fontSize: 11.5, color: "#92400e", marginBottom: 8, lineHeight: 1.7 }}>
+          {t(E,
+            <>The goal <code>fA</code> doesn't change — but <b>how many I'm still missing</b> does, in every test (the two samples are 4 and 5). So I need to count it for <b>any</b> number, not just 4. Same ladder, different finish line:</>,
+            <>목표 <code>fA</code> 는 그대로예요. 대신 <b>내가 얼마나 모자란지</b>가 테스트마다 달라져요 (샘플 두 개도 4 와 5). 그래서 4개일 때만이 아니라 <b>아무 개수</b>나 셀 수 있어야 해요. 사다리는 그대로, 멈추는 지점만 바꿔서 세어 봅니다:</>)}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0 6px", fontSize: 11.5 }}>
+          <div style={{ fontWeight: 800, color: "#92400e", paddingBottom: 3 }}>{t(E, "red I still need", "더 필요한 빨강")}</div>
+          <div style={{ fontWeight: 800, color: "#92400e", paddingBottom: 3, textAlign: "center" }}>{t(E, "stuck rows", "제자리 줄")}</div>
+          <div style={{ fontWeight: 800, color: "#92400e", paddingBottom: 3, textAlign: "right" }}>{t(E, "chips needed", "필요한 칩")}</div>
+          {GOALS.map((o) => {
+            const hi = o.m === T4.GOAL;
+            const st = { padding: "2px 0", fontWeight: hi ? 800 : 700, color: hi ? "#b45309" : "#78350f",
+              background: hi ? "#fef3c7" : "transparent", fontFamily: "'JetBrains Mono',monospace" };
+            return (
+              <React.Fragment key={o.m}>
+                <div style={{ ...st, borderRadius: "6px 0 0 6px", paddingLeft: 5 }}>{o.m}{t(E, "", "개")}</div>
+                <div style={{ ...st, textAlign: "center" }}>{o.s}</div>
+                <div style={{ ...st, textAlign: "right", borderRadius: "0 6px 6px 0", paddingRight: 5 }}>
+                  {o.m} + {o.s} = {o.chips}
+                </div>
+              </React.Fragment>
+            );
+          })}
+        </div>
+        <div style={{ marginTop: 8, paddingTop: 7, borderTop: "1px dashed #fbbf24", fontSize: 11.5, color: "#92400e", lineHeight: 1.75 }}>
+          {t(E,
+            <>The middle column goes <b>0, 0, 1, 1, 2, 2</b> — one more stuck row for every <b>2</b> extra red. That 2 is <b>cA</b>, the red one group makes.</>,
+            <>가운데 칸이 <b>0, 0, 1, 1, 2, 2</b> — 필요한 빨강이 <b>2개</b> 늘 때마다 제자리 줄이 하나씩 늘어요. 그 2 가 <b>cA</b>, 묶음 하나가 만드는 빨강 개수예요.</>)}
         </div>
       </div>
 
-      {/* 세기 */}
-      <div style={{ border: "2px solid #86efac", background: "#f0fdf4", borderRadius: 10, padding: "10px 12px", marginBottom: 9 }}>
-        <div style={{ fontSize: 12.5, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
-          {t(E, "So — how many chips to get 4 red?", "그럼 빨강 4개를 받으려면 칩이 몇 개?")}
-        </div>
-        <div style={{ display: "grid", gap: 4, fontSize: 12, color: "#334155", lineHeight: 1.7 }}>
-          <div>{t(E, <>4 red, one chip each → <b>4 chips</b></>, <>빨강 4개, 하나당 칩 1개 → <b>칩 4개</b></>)}</div>
-          <div>{t(E,
-            <>on the way, red passes <b>2</b> once (it stops at 4, so 4 isn't passed) → <b>1 chip eaten</b></>,
-            <>가는 길에 빨강이 <b>2</b>를 한 번 지나요 (4에서 멈추니까 4는 안 지남) → <b>먹힌 칩 1개</b></>)}</div>
-          <div style={{ borderTop: "1px solid #86efac", paddingTop: 5, fontWeight: 800, color: "#15803d" }}>
-            {t(E, "4 + 1 = 5 chips ✓ — the ✓ row above", "4 + 1 = 칩 5개 ✓ — 위 사다리의 ✓ 줄")}
-          </div>
-        </div>
-      </div>
-
-      {/* 식 */}
       <div style={{ padding: "10px 12px", borderRadius: 8, background: "#f5f3ff", border: "1.5px solid #c4b5fd" }}>
-        <div style={{ fontSize: 11, fontWeight: 800, color: "#7c3aed", marginBottom: 5 }}>
-          {t(E, "the same two lines, in symbols", "위 두 줄을 기호로 쓰면")}
+        <div style={{ fontSize: 11, fontWeight: 800, color: "#7c3aed", marginBottom: 6 }}>
+          {t(E, "the table above, in symbols", "위 표를 기호로 쓰면")}
         </div>
         <div style={{ display: "grid", gap: 5, fontSize: 11.5, color: "#475569", lineHeight: 1.7 }}>
           <div>
-            <code style={{ color: "#5b21b6", fontWeight: 800 }}>missing</code>{" "}
-            {t(E, "— red I want (4), one chip each", "— 받고 싶은 빨강 (4), 하나당 칩 1개")}
+            <code style={{ color: "#5b21b6", fontWeight: 800 }}>stuck = (missing − 1) // cA</code><br />
+            <span style={{ fontSize: 11, color: "#64748b" }}>
+              {t(E, "0,0,1,1,2,2 … — try it: (1−1)//2 = 0, (3−1)//2 = 1, (5−1)//2 = 2 ✓",
+                   "0,0,1,1,2,2 … — 넣어 보세요: (1−1)//2 = 0, (3−1)//2 = 1, (5−1)//2 = 2 ✓")}
+            </span>
           </div>
           <div>
-            <code style={{ color: "#5b21b6", fontWeight: 800 }}>eaten = (missing − 1) // cA</code>{" "}
-            {t(E, "— how many times red passes cA = (4−1)//2 = 1", "— 빨강이 cA 를 지나는 횟수 = (4−1)//2 = 1")}
+            <code style={{ color: "#5b21b6", fontWeight: 800 }}>to_fill = missing + stuck * (cB − cA)</code><br />
+            <span style={{ fontSize: 11, color: "#64748b" }}>
+              {t(E, "one stuck row costs cB − cA = 3 − 2 = 1 chip here",
+                   "제자리 줄 하나가 칩 cB − cA = 3 − 2 = 1 개")}
+            </span>
           </div>
-          <div style={{ fontSize: 11, color: "#64748b", paddingLeft: 8 }}>
-            {t(E, "the −1 is \"4 is the finish line, not a place we pass\".",
-                 "−1 은 \"4 는 도착점이지 지나가는 곳이 아니다\" 라는 뜻이에요.")}
-          </div>
         </div>
-        <div style={{ marginTop: 8, textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: "#5b21b6" }}>
-          to_fill = missing + eaten * (cB − cA)
-        </div>
-        <div style={{ marginTop: 4, textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800, color: "#15803d" }}>
-          = 4 + 1 × (3 − 2) = {t(E, "5 chips ✓", "칩 5개 ✓")}
-        </div>
-        <div style={{ marginTop: 5, fontSize: 10.5, color: "#94a3b8", textAlign: "center" }}>
-          {t(E, "(cB − cA) = chips eaten per group; here 3 − 2 = 1",
-               "(cB − cA) = 묶음 한 번에 먹히는 칩 수, 여기선 3 − 2 = 1")}
+        <div style={{ marginTop: 8, textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: "#15803d" }}>
+          {t(E, "missing 4", "모자란 빨강 4")} → stuck = (4−1)//2 = 1 → 4 + 1 × 1 = {t(E, "5 chips ✓", "칩 5개 ✓")}
         </div>
       </div>
     </div>
@@ -1213,10 +1215,10 @@ export function PlanSlide({ E }) {
           <div style={{ display: "grid", gap: 3, fontSize: 11.5, lineHeight: 1.55 }}>
             <div>① {t(E, <><b>cA ≥ cB</b> (swap pays) → red, 1 each · <code>to_fill = missing</code></>,
                         <><b>cA ≥ cB</b> (환전 이득) → 빨강 1개씩 · <code>to_fill = missing</code></>)}</div>
-            <div>② {t(E, <><b>cA &lt; cB</b> (swap loses) → it stalls with blue groups, each eating <code>cB−cA</code> chips <span style={{ color: "#7c3aed" }}>(why? → previous page)</span></>,
+            <div>② {t(E, <><b>cA &lt; cB</b> (swap loses) → it stalls with blue, and each stuck row costs <code>cB−cA</code> chips <span style={{ color: "#7c3aed" }}>(why? → previous page)</span></>,
                         <><b>cA &lt; cB</b> (환전 손해) → 파랑 묶음으로 끌기, 묶음마다 칩 <code>cB−cA</code> 개 먹힘 <span style={{ color: "#7c3aed" }}>(왜? → 앞 페이지)</span></>)}</div>
             <div style={{ paddingLeft: 12, fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#5b21b6" }}>
-              eaten = (missing − 1) // cA · to_fill = missing + eaten * (cB − cA)
+              stuck = (missing − 1) // cA · to_fill = missing + stuck * (cB − cA)
             </div>
           </div>
           <div style={{ marginTop: 5, paddingTop: 5, borderTop: "1px dashed #c4b5fd", fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#334155" }}>

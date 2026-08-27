@@ -2,7 +2,7 @@
 //   Python: 12/12 PASS (Python passes - C++ has overflow)
 //   C++:    5/12 (overflow bug)
 //   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
-//   2026-08-27: to_fill 을 3분기 → 2분기로 (missing + eaten*(cB−cA)). 답은 그대로 —
+//   2026-08-27: to_fill 을 3분기 → 2분기로 (missing + stuck*(cB−cA)). 답은 그대로 —
 //     m=1..300 × cA,cB=1..39 전수 + 랜덤 40,000건 완전탐색 대조 모두 불일치 0 으로 동치 확인.
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 
@@ -160,7 +160,7 @@ const _CX_VARS = [
   { v: "red_now", ko: "지금 만드는 빨강", en: "red I can make now" },
   { v: "missing", ko: "모자란 빨강 (목표−지금)", en: "red still missing" },
   { v: "wasted_blue", ko: "심술쟁이가 버리는 파랑", en: "blue the trickster wastes" },
-  { v: "eaten", ko: "묶음마다 먹히는 칩 수", en: "chips eaten per group" },
+  { v: "stuck", ko: "빨강이 제자리인 줄 수", en: "stuck rows" },
   { v: "to_fill", ko: "채우는 데 드는 칩", en: "chips to fill" },
 ];
 // 표시용: 주석(논문)은 걷어내고 실행 로직 줄만 (설명은 말풍선으로). 로직/변수 그대로.
@@ -273,8 +273,8 @@ export function getChipXchgWalk(E, lang = "py") {
       "    if (cA >= cB) {                     // " + c("swap pays -> trickster hands red only", "환전이 이득 → 심술쟁이는 빨강만 줌"),
       "        to_fill = missing;                 //   " + c("1 red = 1 chip", "빨강 1개 = 칩 1개"),
       "    } else {                            // " + c("swap loses -> trickster stalls with blue groups", "환전이 손해 → 심술쟁이는 파랑 묶음으로 끌기"),
-      "        ll eaten = (missing - 1) / cA;     //   " + c("how many groups it can still run", "묶음을 몇 번 돌릴 수 있나"),
-      "        to_fill = missing + eaten * (cB - cA);  //   " + c("chips needed + chips eaten per group", "필요한 칩 + 묶음마다 먹히는 칩"),
+      "        ll stuck = (missing - 1) / cA;     //   " + c("stuck rows on the way (Tool 4)", "가는 길에 빨강이 제자리인 줄 수 (도구④)"),
+      "        to_fill = missing + stuck * (cB - cA);  //   " + c("red I want + chips lost to stuck rows", "받고 싶은 빨강 + 제자리 줄에서 날아간 칩"),
       "    }",
       "    return wasted_blue + to_fill;                // " + c("wasted blue + chips to fill", "버린 파랑 + 채우는 데 든 칩"),
       "}",
@@ -295,8 +295,8 @@ export function getChipXchgWalk(E, lang = "py") {
       { hi: [5, 7], bubble: t(E, "red_now = red I can make now (convert my blue). If it already reaches fA → 0 extra.", "red_now = 지금 가진 걸로 만드는 빨강 (내 파랑 환전). 목표 이상이면 추가 0.") },
       { hi: [8, 9], bubble: t(E, "missing = red still needed (goal − now). waste = blue the trickster throws away — it fills the leftover to cB−1, and those chips give me 0 red.", "missing = 모자란 빨강 (목표 − 지금). waste = 심술쟁이가 버리는 파랑 — 자투리를 cB−1 까지 채워요. 그 칩들은 나한테 빨강 0.") },
       { hi: [11, 12], bubble: t(E, "Case 1 — swapping pays (cA ≥ cB). Then blue would help me, so the trickster hands red only: 1 red per chip.", "경우 1 — 환전이 이득 (cA ≥ cB). 파랑은 나를 도와주니 심술쟁이는 빨강만 줘요: 칩 1개 = 빨강 1개.") },
-      { hi: [13, 15], bubble: t(E, "Case 2 — swapping loses, so the trickster stalls with blue groups (Tool ④): every group it runs eats cB − cA chips. It can run (missing−1)//cA of them, so I hand over that many extra on top of `missing`.", "경우 2 — 환전이 손해라 심술쟁이는 파랑 묶음으로 끌어요 (도구 ④). 묶음 한 번마다 칩 cB − cA 개가 먹혀요. 묶음은 (missing−1)//cA 번 돌릴 수 있으니, missing 개 위에 그만큼 더 얹어 줍니다.") },
-      { hi: [17, 17], bubble: t(E, "answer = wasted blue + chips to fill. Check (0 0 2 3 5): missing 5, wasted_blue 2, eaten = 4//2 = 2 → to_fill = 5 + 2×1 = 7, so 2 + 7 = 9. One calculation, O(1).", "답 = 버린 파랑 + 채우는 데 든 칩. (0 0 2 3 5) 로 확인: missing 5, wasted_blue 2, eaten = 4//2 = 2 → to_fill = 5 + 2×1 = 7, 그래서 2 + 7 = 9. 계산 한 번, O(1).") },
+      { hi: [13, 15], bubble: t(E, "Case 2 — swapping loses, so the trickster stalls with blue groups (Tool ④): on the way, some rows are STUCK — one more chip, same red (Tool ④). There are (missing−1)//cA of them, and each costs cB − cA chips.", "경우 2 — 환전이 손해라 심술쟁이는 파랑 묶음으로 끌어요 (도구 ④). 가는 길에 빨강이 제자리인 줄이 생겨요 (도구 ④). 그런 줄이 (missing−1)//cA 개이고, 한 줄마다 칩 cB − cA 개가 날아가요.") },
+      { hi: [17, 17], bubble: t(E, "answer = wasted blue + chips to fill. Check (0 0 2 3 5): missing 5, wasted_blue 2, stuck = (5−1)//2 = 2 → to_fill = 5 + 2×1 = 7, so 2 + 7 = 9. One calculation, O(1).", "답 = 버린 파랑 + 채우는 데 든 칩. (0 0 2 3 5) 로 확인: missing 5, wasted_blue 2, stuck = (5−1)//2 = 2 → to_fill = 5 + 2×1 = 7, 그래서 2 + 7 = 9. 계산 한 번, O(1).") },
     ] };
   }
   const code = [
@@ -320,8 +320,8 @@ export function getChipXchgWalk(E, lang = "py") {
     "    if cA >= cB:                      # " + c("swap pays -> trickster hands red only", "환전이 이득 → 심술쟁이는 빨강만 줌"),
     "        to_fill = missing                #   " + c("1 red = 1 chip", "빨강 1개 = 칩 1개"),
     "    else:                             # " + c("swap loses -> trickster stalls with blue groups", "환전이 손해 → 심술쟁이는 파랑 묶음으로 끌기"),
-    "        eaten = (missing - 1) // cA      #   " + c("how many groups it can still run", "묶음을 몇 번 돌릴 수 있나"),
-    "        to_fill = missing + eaten * (cB - cA)   #   " + c("chips needed + chips eaten per group", "필요한 칩 + 묶음마다 먹히는 칩"),
+    "        stuck = (missing - 1) // cA      #   " + c("stuck rows on the way (Tool 4)", "가는 길에 빨강이 제자리인 줄 수 (도구④)"),
+    "        to_fill = missing + stuck * (cB - cA)   #   " + c("red I want + chips lost to stuck rows", "받고 싶은 빨강 + 제자리 줄에서 날아간 칩"),
     "",
     "    return wasted_blue + to_fill               # " + c("wasted blue + chips to fill", "버린 파랑 + 채우는 데 든 칩"),
     "",
@@ -333,8 +333,8 @@ export function getChipXchgWalk(E, lang = "py") {
     { hi: [9, 13], bubble: t(E, "red_now = red I can make now (convert my blue). If it already reaches fA → 0 extra.", "red_now = 지금 가진 걸로 만드는 빨강 (내 파랑 환전). 목표 이상이면 추가 0.") },
     { hi: [14, 15], bubble: t(E, "missing = red still needed (goal − now). waste = blue the trickster throws away — it fills the leftover to cB−1, and those chips give me 0 red.", "missing = 모자란 빨강 (목표 − 지금). waste = 심술쟁이가 버리는 파랑 — 자투리를 cB−1 까지 채워요. 그 칩들은 나한테 빨강 0.") },
     { hi: [17, 18], bubble: t(E, "Case 1 — swapping pays (cA ≥ cB). Then blue would help me, so the trickster hands red only: 1 red per chip.", "경우 1 — 환전이 이득 (cA ≥ cB). 파랑은 나를 도와주니 심술쟁이는 빨강만 줘요: 칩 1개 = 빨강 1개.") },
-    { hi: [19, 21], bubble: t(E, "Case 2 — swapping loses, so the trickster stalls with blue groups (Tool ④): every group it runs eats cB − cA chips. It can run (missing−1)//cA of them, so I hand over that many extra on top of `missing`.", "경우 2 — 환전이 손해라 심술쟁이는 파랑 묶음으로 끌어요 (도구 ④). 묶음 한 번마다 칩 cB − cA 개가 먹혀요. 묶음은 (missing−1)//cA 번 돌릴 수 있으니, missing 개 위에 그만큼 더 얹어 줍니다.") },
-    { hi: [23, 23], bubble: t(E, "answer = wasted blue + chips to fill. Check (0 0 2 3 5): missing 5, wasted_blue 2, eaten = 4//2 = 2 → to_fill = 5 + 2×1 = 7, so 2 + 7 = 9. One calculation, O(1).", "답 = 버린 파랑 + 채우는 데 든 칩. (0 0 2 3 5) 로 확인: missing 5, wasted_blue 2, eaten = 4//2 = 2 → to_fill = 5 + 2×1 = 7, 그래서 2 + 7 = 9. 계산 한 번, O(1).") },
+    { hi: [19, 21], bubble: t(E, "Case 2 — swapping loses, so the trickster stalls with blue groups (Tool ④): on the way, some rows are STUCK — one more chip, same red (Tool ④). There are (missing−1)//cA of them, and each costs cB − cA chips.", "경우 2 — 환전이 손해라 심술쟁이는 파랑 묶음으로 끌어요 (도구 ④). 가는 길에 빨강이 제자리인 줄이 생겨요 (도구 ④). 그런 줄이 (missing−1)//cA 개이고, 한 줄마다 칩 cB − cA 개가 날아가요.") },
+    { hi: [23, 23], bubble: t(E, "answer = wasted blue + chips to fill. Check (0 0 2 3 5): missing 5, wasted_blue 2, stuck = (5−1)//2 = 2 → to_fill = 5 + 2×1 = 7, so 2 + 7 = 9. One calculation, O(1).", "답 = 버린 파랑 + 채우는 데 든 칩. (0 0 2 3 5) 로 확인: missing 5, wasted_blue 2, stuck = (5−1)//2 = 2 → to_fill = 5 + 2×1 = 7, 그래서 2 + 7 = 9. 계산 한 번, O(1).") },
   ] };
 }
 
@@ -350,8 +350,8 @@ export function getChipXchgFormulaWalk(E, lang = "py") {
     "ll to_fill;                          // " + c("trickster step 2: fill with the least-helpful color", "심술쟁이 2단계: 가장 덜 도와주는 색으로 채움"),
     "if (cA >= cB) to_fill = missing;                         //   " + c("swap pays → red (1 each)", "환전 이득 → 빨강 (1개당 1)"),
     "else {                                                   //   " + c("swap loses → stall with blue groups", "환전 손해 → 파랑 묶음으로 끌기"),
-    "    ll eaten = (missing - 1) / cA;                       //     " + c("how many groups it can run", "묶음을 몇 번 돌릴 수 있나"),
-    "    to_fill = missing + eaten * (cB - cA);               //     " + c("chips needed + chips eaten per group", "필요한 칩 + 묶음마다 먹히는 칩"),
+    "    ll stuck = (missing - 1) / cA;                       //     " + c("stuck rows on the way", "가는 길에 빨강이 제자리인 줄 수"),
+    "    to_fill = missing + stuck * (cB - cA);               //     " + c("red I want + chips lost to stuck rows", "받고 싶은 빨강 + 제자리 줄에서 날아간 칩"),
     "}",
     "ll answer = wasted_blue + to_fill;",
   ] : [
@@ -363,8 +363,8 @@ export function getChipXchgFormulaWalk(E, lang = "py") {
     "if cA >= cB:                      # " + c("trickster step 2: swap pays →", "심술쟁이 2단계: 환전이 이득이면"),
     "    to_fill = missing                #   " + c("red (1 each)", "빨강으로 (1개당 1)"),
     "else:                             # " + c("swap loses → stall with blue groups", "환전이 손해면 → 파랑 묶음으로 끌기"),
-    "    eaten = (missing - 1) // cA      #   " + c("how many groups it can run", "묶음을 몇 번 돌릴 수 있나"),
-    "    to_fill = missing + eaten * (cB - cA)   #   " + c("chips needed + chips eaten per group", "필요한 칩 + 묶음마다 먹히는 칩"),
+    "    stuck = (missing - 1) // cA      #   " + c("stuck rows on the way", "가는 길에 빨강이 제자리인 줄 수"),
+    "    to_fill = missing + stuck * (cB - cA)   #   " + c("red I want + chips lost to stuck rows", "받고 싶은 빨강 + 제자리 줄에서 날아간 칩"),
     "answer = wasted_blue + to_fill",
   ];
   const last = code.length - 1;
@@ -372,7 +372,7 @@ export function getChipXchgFormulaWalk(E, lang = "py") {
     { hi: [0, 2], bubble: t(E, "First: how much red can I make now, converting my own blue? = init. If init already ≥ goal → answer 0.", "먼저: 지금 가진 걸로 빨강 몇 개? 내 파랑을 환전 = init. init 이 목표 이상이면 답 0.") },
     { hi: [3, 3], bubble: t(E, "missing = red still needed (goal − now).", "missing = 모자란 빨강 (목표 − 지금).") },
     { hi: [4, 4], bubble: t(E, "Trickster step 1: waste blue — fill the leftover to cB−1. Those chips give me 0 red (can't group them).", "심술쟁이 1단계: 파랑 낭비 — 자투리를 cB−1 까지 채워요. 그 칩들은 나한테 빨강 0 (못 묶어서).") },
-    { hi: [5, last - 1], bubble: t(E, "Step 2 — two cases. Swap pays (cA≥cB) → the trickster hands red, 1 per chip. Swap loses → it stalls with blue groups: every group it runs eats cB − cA chips (Tool ④), and it can run (missing−1)//cA of them. So: `missing` chips, plus the eaten ones.", "2단계 — 경우 둘. 환전 이득(cA≥cB)이면 심술쟁이는 빨강을 줘요, 칩 1개당 1개. 손해면 파랑 묶음으로 끌어요: 묶음 한 번마다 칩 cB − cA 개가 먹히고 (도구 ④), 묶음은 (missing−1)//cA 번 돌릴 수 있어요. 그래서 missing 개 + 먹히는 칩.") },
+    { hi: [5, last - 1], bubble: t(E, "Step 2 — two cases. Swap pays (cA≥cB) → the trickster hands red, 1 per chip. Swap loses → it stalls with blue groups: on the way some rows are STUCK — one more chip, same red (Tool ④). There are (missing−1)//cA of them, each costing cB − cA chips.", "2단계 — 경우 둘. 환전 이득(cA≥cB)이면 심술쟁이는 빨강을 줘요, 칩 1개당 1개. 손해면 파랑 묶음으로 끌어요: 가는 길에 빨강이 제자리인 줄이 생겨요 (도구 ④). 그런 줄이 (missing−1)//cA 개, 한 줄마다 칩 cB − cA 개.") },
     { hi: [last, last], bubble: t(E, "answer = wasted blue + chips to fill. One calculation — that's code ②.", "답 = 버린 파랑 + 채우는 데 든 칩. 계산 한 번 — 이게 코드 ②예요.") },
   ] };
 }
