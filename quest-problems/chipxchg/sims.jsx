@@ -61,7 +61,7 @@ export function ChipCountSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "How many red chips do I end with?", "빨강 칩 몇 개로 끝날까?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "How many red chips do I end with?", "빨강 칩은 몇 개가 될까요?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Say tone={s.kind === "total" ? "aha" : "go"}>{say}</Say>
 
       {/* 빨강(A) */}
@@ -92,8 +92,8 @@ export function ChipCountSim({ E }) {
           </>
         )}
       </div>
-      {s.kind === "group" && <Cap color={BLU}>{t(E, "2 groups + 1 leftover", "묶음 2개 + 자투리 1개")}</Cap>}
-      {s.kind === "convert" && <Cap color={RED}>{t(E, "2 groups → +4 red · leftover stuck", "묶음 2개 → 빨강 +4 · 자투리 남음")}</Cap>}
+      {s.kind === "group" && <Cap color={BLU}>{t(E, "2 groups + 1 leftover", "파랑 7개 = 묶음 2개 + 자투리 1개")}</Cap>}
+      {s.kind === "convert" && <Cap color={RED}>{t(E, "2 groups → +4 red · leftover stuck", "묶음 2개를 바꿔서 빨강이 4개 늘었어요. 자투리 1개는 못 바꿔요.")}</Cap>}
       {s.kind === "total" && <Cap color="#15803d">final A = 2 + (7 ÷ 3)×2 = 6</Cap>}
 
       <div style={{ marginTop: 24 }}>
@@ -165,8 +165,8 @@ export function TricksterWasteSim({ E }) {
       {showGroups && (
         <Cap color={wasted ? "#dc2626" : RED}>
           {wasted
-            ? t(E, "2 groups → 4 red · 2 wasted → only 4 red", "2묶음 → 빨강 4 · 자투리 2 버림 → 빨강 4개뿐")
-            : t(E, "2 groups → 4 red · 2 blue left over", "2묶음 → 빨강 4 · 파랑 2개 남음")}
+            ? t(E, "2 groups → 4 red · 2 wasted → only 4 red", "묶음 2개로 빨강 4개. 자투리 파랑 2개는 버려져서 빨강은 4개뿐이에요.")
+            : t(E, "2 groups → 4 red · 2 blue left over", "묶음 2개로 빨강 4개. 파랑 2개가 남아요.")}
         </Cap>
       )}
 
@@ -223,7 +223,7 @@ export function TricksterRedSim({ E }) {
             <span style={{ fontSize: 24 }}>😈</span>
             <span style={{ fontSize: 15, fontWeight: 800, color: "#94a3b8" }}>→</span>
             {Array.from({ length: 4 }).map((_, i) => <Chip key={i} color="red" size={22} />)}
-            <span style={{ fontSize: 11.5, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "all red, 1 each", "다 빨강, 1개씩")}</span>
+            <span style={{ fontSize: 11.5, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "all red, 1 each", "전부 빨강으로 줘요 — 칩 1개당 빨강 1개")}</span>
           </>
         )}
       </div>
@@ -811,9 +811,9 @@ export function GameBoardSim({ E }) {
             <span style={{ fontSize: 15, fontWeight: 800, color: "#94a3b8" }}>→</span>
             <div style={{ display: "flex", gap: 4, padding: 4, borderRadius: 10, border: "2px dashed #dc2626", background: "#fef2f2", alignItems: "center" }}>
               <Chip color="blue" size={22} />
-              <span style={{ fontSize: 10.5, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "1 blue — can't swap (needs 3)", "파랑 1개 — 못 바꿈 (3개 필요)")}</span>
+              <span style={{ fontSize: 10.5, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "1 blue — can't swap (needs 3)", "파랑이 1개뿐이라 못 바꿔요 (3개 있어야 해요)")}</span>
             </div>
-            <span style={{ fontSize: 12.5, fontWeight: 800, color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "red still 4 ✗", "빨강 그대로 4 ✗")}</span>
+            <span style={{ fontSize: 12.5, fontWeight: 800, color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "red still 4 ✗", "빨강은 4개 그대로 — 목표 5에 못 미쳐요 ✗")}</span>
           </div>
         )}
 
@@ -821,7 +821,7 @@ export function GameBoardSim({ E }) {
         {s.kind === "ask" && (
           <div style={{ marginTop: 16, paddingTop: 12, borderTop: "1px dashed #e2e8f0", display: "flex", justifyContent: "center", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
             <div style={{ fontSize: 28 }}>😈</div>
-            <span style={{ fontSize: 12, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "extra chips", "추가 칩")}</span>
+            <span style={{ fontSize: 12, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "the trickster hands me extra chips —", "심술쟁이가 추가 칩을 줘요 —")}</span>
             <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
               {Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} style={{ width: 22, height: 22, borderRadius: 999, background: "#f1f5f9", border: "2px dashed #94a3b8",
@@ -829,7 +829,7 @@ export function GameBoardSim({ E }) {
               ))}
               <span style={{ fontSize: 16, fontWeight: 800, color: "#94a3b8" }}>…</span>
             </div>
-            <span style={{ fontSize: 11, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "how many?", "몇 개?")}</span>
+            <span style={{ fontSize: 11.5, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "how many are enough, no matter the colors?", "색이 어떻게 나오든 목표에 닿으려면 몇 개면 될까요?")}</span>
           </div>
         )}
       </div>
@@ -866,7 +866,7 @@ export function CheckSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Quick check — did I get it?", "잠깐 확인 — 제대로 이해했나?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "Quick check — did I get it?", "잠깐 확인 — 제대로 이해했나요?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Say tone={s.kind === "reveal" ? "aha" : "go"}>
         {s.kind === "ask"
           ? t(E, <>What number do we actually <b>print</b> for each test? Pick one, then flip.</>,
@@ -898,7 +898,7 @@ export function StrategySlide({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "How will we solve it?", "어떻게 풀까?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "How will we solve it?", "어떻게 풀까요?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Say>
         {s.kind === "plan"
           ? t(E, <>No search needed — we <b>compute the answer directly</b>. It splits into two cases.</>,
@@ -913,10 +913,10 @@ export function StrategySlide({ E }) {
       ) : (
         <div style={{ maxWidth: 470, margin: "0 auto" }}>
           <Slab n="①" color="#15803d" bg="#f0fdf4" title={t(E, "red_now ≥ goal", "red_now ≥ 목표")}>
-            {t(E, "→ already there, the answer is 0.", "→ 이미 도달, 답은 0.")}
+            {t(E, "→ already there, the answer is 0.", "→ 이미 목표에 닿았으니 답은 0이에요.")}
           </Slab>
           <Slab n="②" color="#2563eb" bg="#eff6ff" title={t(E, "red_now < goal", "red_now < 목표")}>
-            {t(E, "→ count the extra chips with a few lines of arithmetic (next tools). No search, no loop.", "→ 추가 칩을 산수 몇 줄로 바로 세요 (다음 도구들). 하나씩 넣어보며 찾을 필요 없이.")}
+            {t(E, "→ count the extra chips with a few lines of arithmetic (next tools). No search, no loop.", "→ 추가 칩이 몇 개인지 산수 몇 줄로 바로 셀 수 있어요 (다음 도구들). 하나씩 넣어보며 찾지 않아도 돼요.")}
           </Slab>
         </div>
       )}
@@ -1007,7 +1007,7 @@ export function LastOneWhySlide({ E }) {
   return (
     <div style={{ padding: 16, maxWidth: 560, margin: "0 auto", fontSize: 12.5, color: "#334155", lineHeight: 1.65, wordBreak: "keep-all" }}>
       <div style={{ fontSize: 14, fontWeight: 800, color: "#7c3aed", textAlign: "center", marginBottom: 2 }}>
-        📦 {t(E, "I need 4 more red — how many chips?", "빨강 4개가 더 필요해요 — 칩을 몇 개 받아야 할까?")}
+        📦 {t(E, "I need 4 more red — how many chips?", "빨강 4개가 더 필요해요 — 칩을 몇 개 받아야 할까요?")}
       </div>
       <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 12 }}>
         {t(E, "I pick the count. The trickster picks the colors.", "개수는 내가, 색은 심술쟁이가 정해요.")}
@@ -1021,7 +1021,7 @@ export function LastOneWhySlide({ E }) {
       </div>
 
       <div style={{ fontSize: 11.5, color: "#475569", marginBottom: 8 }}>
-        <b style={{ color: "#dc2626" }}>{t(E, "From ② :", "②에서 :")}</b>{" "}
+        <b style={{ color: "#dc2626" }}>{t(E, "From ② :", "앞의 도구 ② 에서 :")}</b>{" "}
         {t(E, "2 wasted blues are already sitting there — 1 short of a group of 3. They are the red-dashed pair at the start of every row below.",
              "버려진 파랑 2개가 이미 깔려 있어요 — 묶음 3개에 1개 모자란 상태. 아래 모든 줄 맨 앞의 빨간 점선이 그 2개예요.")}
       </div>
@@ -1052,76 +1052,133 @@ export function LastOneWhySlide({ E }) {
 /* ═══ 도구 ④-2 (유도) — 그 결과를 식으로. −1 을 뺐을 때와 대비해서 차이를 보임 ═══
    선생님 2026-08-26: "−1을 하지 않는 것과의 차이를 모르겠는데" → 6 vs 5 를 나란히. */
 export function FormulaFromTableSlide({ E }) {
-  const XS = [0, 1, 2, 3, 4, 5, 6];
-  const w = (x) => { let m = Infinity; for (let r = 0; r <= x; r++) m = Math.min(m, r + Math.floor((T4.LAID + (x - r)) / T4.CB) * T4.CA); return m; };
-  const cell = { padding: "3px 0", textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800 };
+  /* 칩 1~6 각각의 '심술쟁이 최선' — 전부 완전탐색으로 최소임을 확인함.
+     핵심은 빨강이 안 늘어난 줄(칩 3, 칩 6): 빨강이 cA(2)개 될 때마다 다음 칩 하나가 먹힌다.
+     선생님 2026-08-27 "설명을 조금도 이해 못하겠는데" → 식을 말로 정당화하지 말고
+     학생이 사다리에서 직접 셀 수 있는 규칙으로. */
+  const ROWS = [
+    { x: 1, b: 0, r: 1 }, { x: 2, b: 2, r: 0 }, { x: 3, b: 3, r: 0 },
+    { x: 4, b: 3, r: 1 }, { x: 5, b: 3, r: 2 }, { x: 6, b: 6, r: 0 },
+  ].map((o) => { const tot = T4.LAID + o.b, g = Math.floor(tot / T4.CB);
+    return { ...o, tot, g, v: o.r + g * T4.CA }; });
+
   return (
     <div style={{ padding: 16, maxWidth: 560, margin: "0 auto", fontSize: 12.5, color: "#334155", lineHeight: 1.65, wordBreak: "keep-all" }}>
       <div style={{ fontSize: 14, fontWeight: 800, color: "#7c3aed", textAlign: "center", marginBottom: 2 }}>
-        🪜 {t(E, "Add one chip at a time and watch", "칩을 하나씩 늘려 보면")}
+        🪜 {t(E, "Give one more chip each time", "칩을 하나씩 늘려 보면")}
       </div>
-      <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 12 }}>
-        {t(E, "the previous page, but for every chip count", "앞 페이지를 칩 개수마다 다 해본 것")}
-      </div>
-
-      {/* 사다리 */}
-      <div style={{ border: "1.5px solid #cbd5e1", borderRadius: 10, background: "#fff", padding: "9px 10px", marginBottom: 9, overflowX: "auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: `92px repeat(${XS.length}, 1fr)`, minWidth: 400 }}>
-          <div style={{ ...cell, textAlign: "left", fontSize: 11, color: "#64748b" }}>{t(E, "chips I give", "내가 준 칩")}</div>
-          {XS.map((x) => <div key={"x" + x} style={{ ...cell, color: "#334155" }}>{x}</div>)}
-          <div style={{ ...cell, textAlign: "left", fontSize: 11, color: "#dc2626" }}>{t(E, "worst red", "최악 빨강")}</div>
-          {XS.map((x) => {
-            const hit = w(x) >= T4.GOAL && w(x - 1) < T4.GOAL;
-            return <div key={"w" + x} style={{ ...cell, color: hit ? "#15803d" : "#dc2626",
-              background: hit ? "#dcfce7" : "transparent", borderRadius: 6 }}>{w(x)}</div>;
-          })}
-          <div style={{ ...cell, textAlign: "left", fontSize: 11, color: "#94a3b8" }}>{t(E, "gained", "늘어난 빨강")}</div>
-          {XS.map((x) => {
-            const d = x === 0 ? null : w(x) - w(x - 1);
-            return <div key={"d" + x} style={{ ...cell, fontSize: 11.5,
-              color: d === 0 ? "#dc2626" : "#94a3b8" }}>{d === null ? "" : d === 0 ? t(E, "0 ✗", "0 ✗") : "+" + d}</div>;
-          })}
-        </div>
+      <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 11 }}>
+        {t(E, "each row = the meanest coloring for that chip count (same picture as the last page)",
+             "한 줄 = 그 칩 개수에서 심술쟁이가 제일 못되게 준 모습 (앞 페이지와 같은 그림)")}
       </div>
 
-      <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "9px 11px",
-        marginBottom: 9, fontSize: 12, color: "#92400e", lineHeight: 1.7 }}>
-        <b>{t(E, "Every 3rd chip gains me nothing.", "3번째 칩마다 빨강이 안 늘어요.")}</b>{" "}
+      <div style={{ display: "grid", gap: 4, marginBottom: 11 }}>
+        {ROWS.map((o, i) => {
+          const stuck = i > 0 && o.v === ROWS[i - 1].v;
+          const goal = o.v >= T4.GOAL && (i === 0 || ROWS[i - 1].v < T4.GOAL);
+          return (
+            <div key={o.x} style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap",
+              padding: "6px 9px", borderRadius: 9,
+              border: `${goal || stuck ? 2 : 1}px solid ${goal ? "#15803d" : stuck ? "#dc2626" : "#e2e8f0"}`,
+              background: goal ? "#f0fdf4" : stuck ? "#fef2f2" : "#fff" }}>
+              <span style={{ minWidth: 48, fontSize: 11.5, fontWeight: 800, color: "#334155", flexShrink: 0 }}>
+                {t(E, `${o.x} chip${o.x > 1 ? "s" : ""}`, `칩 ${o.x}개`)}
+              </span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 3, flexShrink: 0 }}>
+                <span style={{ display: "inline-flex", gap: 2, padding: "1px 3px", borderRadius: 6,
+                  border: "1.5px dashed #dc2626", background: "#fff5f5" }}>
+                  {Array.from({ length: T4.LAID }).map((_, k) => <Chip key={"l" + k} color="blue" size={13} />)}
+                </span>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#94a3b8" }}>+</span>
+                <span style={{ display: "inline-flex", gap: 2 }}>
+                  {Array.from({ length: o.b }).map((_, k) => <Chip key={"b" + k} color="blue" size={15} />)}
+                  {Array.from({ length: o.r }).map((_, k) => <Chip key={"r" + k} color="red" size={15} />)}
+                </span>
+              </span>
+              <span style={{ marginLeft: "auto", fontSize: 12.5, fontWeight: 800, flexShrink: 0,
+                color: goal ? "#15803d" : stuck ? "#dc2626" : "#334155" }}>
+                {t(E, `red ${o.v}`, `빨강 ${o.v}`)}
+              </span>
+              <span style={{ width: 96, textAlign: "right", fontSize: 10.5, fontWeight: 800, flexShrink: 0,
+                color: goal ? "#15803d" : "#dc2626" }}>
+                {goal ? t(E, "✓ goal!", "✓ 목표!") : stuck ? t(E, "✗ didn't grow", "✗ 안 늘었어요") : ""}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* 왜 안 늘었나 — 한 줄로 */}
+      <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 8, padding: "8px 11px",
+        marginBottom: 9, fontSize: 12, color: "#7f1d1d", lineHeight: 1.75 }}>
         {t(E,
-          <>Chip 3 and chip 6 are the trickster's: it takes <b>3 blues</b> and gives back only <b>2 red</b> — so one of those three chips is <b>eaten</b>. (Handing 3 red chips would have given me 3.)</>,
-          <>3번째, 6번째 칩이 심술쟁이 몫이에요. <b>파랑 3개</b>를 받아서 빨강은 <b>2개</b>만 돌려주니까, 그 셋 중 <b>1개가 먹힌</b> 거죠. (빨강칩 3개였으면 빨강 3개였어요.)</>)}
+          <><b>Why row 3?</b> One more chip, but it came as blue: 2 laid + 3 = <b>5 blue</b>, still only <b>1 group</b>. That chip did nothing for me — it got <b>eaten</b>. Row 6 is the same.</>,
+          <><b>3번째 줄은 왜?</b> 칩을 하나 더 줬는데 파랑으로 왔어요. 깔린 2개까지 <b>파랑 5개</b>인데 묶음은 아직 <b>1개</b>뿐. 그 칩은 나한테 아무것도 안 준 거예요 — <b>먹혔어요</b>. 6번째 줄도 똑같아요.</>)}
       </div>
 
-      {/* 카운팅 */}
-      <div style={{ border: "2px solid #86efac", background: "#f0fdf4", borderRadius: 10, padding: "10px 12px", marginBottom: 9 }}>
-        <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
-          {t(E, "So, to get 4 red:", "그래서 빨강 4개를 받으려면:")}
+      {/* 규칙 — 사다리에서 직접 셀 수 있게 */}
+      <div style={{ background: "#fffbeb", border: "2px solid #fbbf24", borderRadius: 10, padding: "10px 12px", marginBottom: 9 }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 6, lineHeight: 1.6 }}>
+          📏 {t(E, <>Every time red reaches <b>2</b>, the next chip gets eaten.</>,
+                  <>빨강이 <b>2개</b> 될 때마다, 그 다음 칩 하나가 먹혀요.</>)}
         </div>
-        <div style={{ display: "grid", gap: 4, fontSize: 12, color: "#334155" }}>
-          <div>{t(E, <>red I want → <b>4 chips</b></>, <>받고 싶은 빨강 → <b>칩 4개</b></>)}</div>
+        <div style={{ fontSize: 11.5, color: "#92400e", lineHeight: 1.8 }}>
+          {t(E, "Check it on the ladder:", "사다리에서 확인해 보세요:")}
+          <div style={{ paddingLeft: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>
+            {t(E, "red 2 (chip 2) → chip 3 eaten ✗", "빨강 2 (칩 2) → 칩 3 먹힘 ✗")}<br />
+            {t(E, "red 4 (chip 5) → chip 6 eaten ✗", "빨강 4 (칩 5) → 칩 6 먹힘 ✗")}
+          </div>
+          <div style={{ marginTop: 4 }}>
+            {t(E, <>(2 is <b>cA</b> — how many red one group makes.)</>,
+                  <>(2 는 <b>cA</b> — 묶음 하나가 만드는 빨강 개수예요.)</>)}
+          </div>
+        </div>
+      </div>
+
+      {/* 세기 */}
+      <div style={{ border: "2px solid #86efac", background: "#f0fdf4", borderRadius: 10, padding: "10px 12px", marginBottom: 9 }}>
+        <div style={{ fontSize: 12.5, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>
+          {t(E, "So — how many chips to get 4 red?", "그럼 빨강 4개를 받으려면 칩이 몇 개?")}
+        </div>
+        <div style={{ display: "grid", gap: 4, fontSize: 12, color: "#334155", lineHeight: 1.7 }}>
+          <div>{t(E, <>4 red, one chip each → <b>4 chips</b></>, <>빨강 4개, 하나당 칩 1개 → <b>칩 4개</b></>)}</div>
           <div>{t(E,
-            <>the trickster runs <b>1</b> blue group before that, and each group eats <b>3 − 2 = 1 chip</b> → <b>+1 chip</b></>,
-            <>그 사이 심술쟁이가 파랑 묶음을 <b>1번</b> 돌리고, 묶음마다 <b>3 − 2 = 1칩</b>이 먹혀요 → <b>칩 +1</b></>)}</div>
+            <>on the way, red passes <b>2</b> once (it stops at 4, so 4 isn't passed) → <b>1 chip eaten</b></>,
+            <>가는 길에 빨강이 <b>2</b>를 한 번 지나요 (4에서 멈추니까 4는 안 지남) → <b>먹힌 칩 1개</b></>)}</div>
           <div style={{ borderTop: "1px solid #86efac", paddingTop: 5, fontWeight: 800, color: "#15803d" }}>
-            {t(E, "4 + 1 = 5 chips ✓ (matches the ladder)", "4 + 1 = 칩 5개 ✓ (사다리와 같아요)")}
+            {t(E, "4 + 1 = 5 chips ✓ — the ✓ row above", "4 + 1 = 칩 5개 ✓ — 위 사다리의 ✓ 줄")}
           </div>
         </div>
       </div>
 
       {/* 식 */}
       <div style={{ padding: "10px 12px", borderRadius: 8, background: "#f5f3ff", border: "1.5px solid #c4b5fd" }}>
-        <div style={{ textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: "#5b21b6" }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: "#7c3aed", marginBottom: 5 }}>
+          {t(E, "the same two lines, in symbols", "위 두 줄을 기호로 쓰면")}
+        </div>
+        <div style={{ display: "grid", gap: 5, fontSize: 11.5, color: "#475569", lineHeight: 1.7 }}>
+          <div>
+            <code style={{ color: "#5b21b6", fontWeight: 800 }}>missing</code>{" "}
+            {t(E, "— red I want (4), one chip each", "— 받고 싶은 빨강 (4), 하나당 칩 1개")}
+          </div>
+          <div>
+            <code style={{ color: "#5b21b6", fontWeight: 800 }}>eaten = (missing − 1) // cA</code>{" "}
+            {t(E, "— how many times red passes cA = (4−1)//2 = 1", "— 빨강이 cA 를 지나는 횟수 = (4−1)//2 = 1")}
+          </div>
+          <div style={{ fontSize: 11, color: "#64748b", paddingLeft: 8 }}>
+            {t(E, "the −1 is \"4 is the finish line, not a place we pass\".",
+                 "−1 은 \"4 는 도착점이지 지나가는 곳이 아니다\" 라는 뜻이에요.")}
+          </div>
+        </div>
+        <div style={{ marginTop: 8, textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: "#5b21b6" }}>
           to_fill = missing + eaten * (cB − cA)
         </div>
-        <div style={{ marginTop: 6, display: "grid", gap: 3, fontSize: 11.5, color: "#475569" }}>
-          <div><code style={{ color: "#5b21b6", fontWeight: 800 }}>missing</code> — {t(E, "the red I want, 1 chip each", "받고 싶은 빨강, 1개당 칩 1개")}</div>
-          <div><code style={{ color: "#5b21b6", fontWeight: 800 }}>cB − cA</code> — {t(E, "chips eaten per group (3 blue in, 2 red out)", "묶음 한 번에 먹히는 칩 (파랑 3 들어가고 빨강 2 나옴)")}</div>
-          <div><code style={{ color: "#5b21b6", fontWeight: 800 }}>eaten = (missing − 1) // cA</code> — {t(E,
-            "how many groups it can run: the last red never needs a group, so count groups for missing − 1",
-            "묶음을 몇 번 돌릴 수 있나: 마지막 빨강 하나는 묶음 없이도 오니까 missing − 1 로 세요")}</div>
+        <div style={{ marginTop: 4, textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800, color: "#15803d" }}>
+          = 4 + 1 × (3 − 2) = {t(E, "5 chips ✓", "칩 5개 ✓")}
         </div>
-        <div style={{ marginTop: 7, textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800, color: "#15803d" }}>
-          = 4 + (4−1)//2 × (3−2) = 4 + 1 = {t(E, "5 chips ✓", "칩 5개 ✓")}
+        <div style={{ marginTop: 5, fontSize: 10.5, color: "#94a3b8", textAlign: "center" }}>
+          {t(E, "(cB − cA) = chips eaten per group; here 3 − 2 = 1",
+               "(cB − cA) = 묶음 한 번에 먹히는 칩 수, 여기선 3 − 2 = 1")}
         </div>
       </div>
     </div>
@@ -1147,12 +1204,12 @@ export function PlanSlide({ E }) {
           {t(E, <>the trickster wastes blue first (leftover cB−1).</>,
                <>심술쟁이가 먼저 파랑을 버림 (자투리 cB−1).</>)}
         </Slab>
-        <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "how many are missing?", "몇 개 모자라?")}>
+        <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "how many are missing?", "빨강이 몇 개 모자랄까요?")}>
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#334155", wordBreak: "break-word" }}>
             missing = fA − red_now <span style={{ color: "#94a3b8" }}>{t(E, "  // goal − now", "  // 목표 − 지금")}</span>
           </div>
         </Slab>
-        <Slab n="4" color="#7c3aed" bg="#f5f3ff" title={t(E, "who fills them? — two cases", "그걸 누가 채워주나? — 경우 둘")}>
+        <Slab n="4" color="#7c3aed" bg="#f5f3ff" title={t(E, "who fills them? — two cases", "그 모자란 빨강은 누가 채워줄까요? — 경우 둘")}>
           <div style={{ display: "grid", gap: 3, fontSize: 11.5, lineHeight: 1.55 }}>
             <div>① {t(E, <><b>cA ≥ cB</b> (swap pays) → red, 1 each · <code>to_fill = missing</code></>,
                         <><b>cA ≥ cB</b> (환전 이득) → 빨강 1개씩 · <code>to_fill = missing</code></>)}</div>

@@ -78,7 +78,7 @@ function ChipXchgSample({ E }) {
         {t(E, "Output = fewest extra chips ", "출력 = 필요한 최소 추가 칩 ")}<b>x</b>{t(E, " that reaches the goal no matter how the trickster colors them.", " — 심술쟁이가 어떻게 색칠해도 목표 도달.")}
       </div>
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
-        {t(E, "📌 Up to 10⁴ tests · answer can reach 10¹⁸ → use 64-bit.", "📌 테스트 최대 10⁴ · 답이 10¹⁸ 까지 → 64비트 필요.")}
+        {t(E, "📌 Up to 10⁴ tests · answer can reach 10¹⁸ → use 64-bit.", "📌 테스트는 최대 10⁴ 개이고 답이 10¹⁸ 까지 커져요. 그래서 64비트 정수가 필요해요.")}
       </div>
     </div>
   );
@@ -97,7 +97,7 @@ export function makeChipXchgCh1(E) {
       type: "reveal",
       label: t(E, "The game", "게임 이해"),
       narr: t(E, "Bessie's chip-swap game — let's just watch one round with real chips, step by step.",
-                 "Bessie 의 칩 교환 게임 — 진짜 칩으로 한 판을 한 단계씩 같이 봐요."),
+                 "Bessie 의 칩 교환 게임이에요. 진짜 칩으로 한 판을 한 단계씩 같이 봐요."),
       content: (<GameBoardSim E={E} />),
     },
 
@@ -105,7 +105,7 @@ export function makeChipXchgCh1(E) {
     {
       type: "reveal",
       label: t(E, "Sample I/O", "샘플 입출력"),
-      narr: t(E, "Two concrete tests — each input number labeled right under it.", "구체적인 테스트 두 개 — 입력 숫자마다 뜻이 바로 아래."),
+      narr: t(E, "Two concrete tests — each input number labeled right under it.", "구체적인 테스트 두 개예요. 입력 숫자가 각각 무슨 뜻인지 바로 아래에 적어 뒀어요."),
       content: (<ChipXchgSample E={E} />),
     },
 
@@ -114,7 +114,7 @@ export function makeChipXchgCh1(E) {
       type: "reveal",
       label: t(E, "Quick check", "이해 확인"),
       narr: t(E, "Before strategy — check you know what we're actually asked to print.",
-                 "전략 전에 — 우리가 뭘 출력하는 건지 스스로 확인해봐요."),
+                 "전략으로 넘어가기 전에, 우리가 무엇을 출력해야 하는 건지 스스로 확인해봐요."),
       content: (<CheckSim E={E} />),
     },
 
@@ -123,7 +123,7 @@ export function makeChipXchgCh1(E) {
       type: "reveal",
       label: t(E, "Strategy", "전략"),
       narr: t(E, "First check what I can make now; if short, count the extra against the trickster's worst.",
-                 "먼저 지금 걸로 되는지 보고, 부족하면 심술쟁이 최악을 감안해 추가 칩을 세요."),
+                 "먼저 지금 가진 걸로 목표에 닿는지 보고, 부족하면 심술쟁이가 제일 못되게 굴 때를 감안해서 추가 칩을 세요."),
       content: (<StrategySlide E={E} />),
     },
 
@@ -132,7 +132,7 @@ export function makeChipXchgCh1(E) {
       type: "reveal",
       label: t(E, "Tool: red I can make now (red_now)", "도구: 지금 만드는 빨강 (red_now)"),
       narr: t(E, "How many red can I make right now? Group my blue by cB; leftovers waste. That's red_now.",
-                 "지금 가진 걸로 빨강 몇 개? 내 파랑을 cB 로 묶고, 자투리는 버려요. 그게 red_now."),
+                 "지금 가진 걸로 빨강을 몇 개까지 만들 수 있을까요? 내 파랑을 cB 개씩 묶어서 바꾸고, 남는 자투리는 버려요. 그 결과가 red_now 예요."),
       content: (<ChipCountSim E={E} />),
     },
 
@@ -141,7 +141,7 @@ export function makeChipXchgCh1(E) {
       type: "reveal",
       label: t(E, "Tool: cA < cB (swap loses) → he gives blue", "도구: cA < cB (바꾸면 손해) → 파랑을 준다"),
       narr: t(E, "Swap rate here: 3 blue → 2 red. Blue gives me less — so the trickster hands blue. Watch with real chips.",
-                 "여기 환전 비율: 파랑 3개 → 빨강 2개. 파랑이 나한테 덜 되니 — 심술쟁이는 파랑으로 줘요. 진짜 칩으로 봐요."),
+                 "이 예시의 환전 비율은 파랑 3개 → 빨강 2개예요. 파랑을 받으면 빨강보다 손해라서, 심술쟁이는 파랑으로 줍니다. 진짜 칩으로 한 단계씩 봐요."),
       content: (<TricksterWasteSim E={E} />),
     },
 
@@ -150,7 +150,7 @@ export function makeChipXchgCh1(E) {
       type: "reveal",
       label: t(E, "Tool: cA ≥ cB (swap gains) → he gives red", "도구: cA ≥ cB (바꾸면 이득) → 빨강을 준다"),
       narr: t(E, "Opposite rate: 2 blue → 3 red. Now blue gives me MORE — so the trickster hands red instead.",
-                 "반대 비율: 파랑 2개 → 빨강 3개. 이번엔 파랑이 더 되니 — 심술쟁이는 빨강으로 줘요."),
+                 "이번엔 반대로 파랑 2개 → 빨강 3개예요. 파랑을 받는 게 오히려 이득이라서, 심술쟁이는 빨강으로 줍니다."),
       content: (<TricksterRedSim E={E} />),
     },
 
@@ -161,7 +161,7 @@ export function makeChipXchgCh1(E) {
       type: "reveal",
       label: t(E, "Tool: how many chips force 4 red?", "도구: 빨강 4개를 받으려면 칩 몇 개?"),
       narr: t(E, "Last piece — how many chips force the goal even with the meanest coloring?",
-                 "마지막 조각 — 심술쟁이가 아무리 못되게 색칠해도 채워지려면 몇 개?"),
+                 "마지막 조각이에요. 심술쟁이가 아무리 못되게 색을 골라도 목표에 닿으려면 칩이 몇 개 필요할까요?"),
       content: (<LastOneWhySlide E={E} />),
     },
 
@@ -173,7 +173,7 @@ export function makeChipXchgCh1(E) {
       type: "reveal",
       label: t(E, "Tool: turn it into a formula", "도구: 그걸 식으로"),
       narr: t(E, "Do the same count for every chip number — a pattern falls out.",
-                 "칩 개수마다 똑같이 세어 보면 규칙이 보여요."),
+                 "앞 페이지에서 한 세기를 칩 개수마다 똑같이 해 보면 규칙이 보여요."),
       content: (<FormulaFromTableSlide E={E} />),
     },
 
@@ -202,7 +202,7 @@ export function makeChipXchgCh2(E, lang = "py") {
       label: t(E, "Code", "코드"),
       narr: t(E,
         "The formula we derived, in code — no loop, no search. One calculation per test (O(1)).",
-        "개념에서 만든 공식 그대로 — 반복도 탐색도 없이. 테스트당 계산 한 번 (O(1))."),
+        "앞에서 만든 공식 그대로예요. 반복도 탐색도 없이 테스트 하나당 계산을 한 번만 해요 (O(1))."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />
       ),
