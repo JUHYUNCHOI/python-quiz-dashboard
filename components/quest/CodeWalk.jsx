@@ -76,7 +76,7 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
 
       {/* 변수 뜻 범례 — 늘 보이게 (코드 깊이 들어가도 "n이 뭐였지?" 안 하게) */}
       {vars && vars.length > 0 && (
-        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 6, maxWidth: 640, margin: "0 auto 8px" }}>
+        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 6, maxWidth: 740, margin: "0 auto 8px" }}>
           {vars.map((vr, i) => (
             <span key={i} style={{
               display: "inline-flex", alignItems: "center", gap: 5,
@@ -107,7 +107,7 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
         fontFamily: "'JetBrains Mono',monospace",
         // ligature 끄기 — != 를 ≠ 로 합치지 말고 그대로 (선생님 2026-07-13)
         fontVariantLigatures: "none", fontFeatureSettings: '"liga" 0, "calt" 0',
-        fontSize: 13.5, lineHeight: 1.85, maxWidth: 640, margin: "0 auto",
+        fontSize: 13.5, lineHeight: 1.85, maxWidth: 740, margin: "0 auto",
         position: "relative",
         boxShadow: "inset 0 -10px 12px -10px rgba(0,0,0,.4)",   // 아래에 더 있다는 힌트
       }}>

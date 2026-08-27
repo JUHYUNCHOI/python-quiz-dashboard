@@ -916,7 +916,7 @@ export function StrategySlide({ E }) {
             {t(E, "→ already there, the answer is 0.", "→ 이미 도달, 답은 0.")}
           </Slab>
           <Slab n="②" color="#2563eb" bg="#eff6ff" title={t(E, "init < goal", "init < 목표")}>
-            {t(E, "→ a direct O(1) formula for the extra chips (next tools). No search, no loop.", "→ 추가 칩을 O(1) 공식으로 바로 (다음 도구). 탐색도 반복도 없이.")}
+            {t(E, "→ count the extra chips with a few lines of arithmetic (next tools). No search, no loop.", "→ 추가 칩을 산수 몇 줄로 바로 세요 (다음 도구들). 하나씩 넣어보며 찾을 필요 없이.")}
           </Slab>
         </div>
       )}
@@ -927,12 +927,11 @@ export function StrategySlide({ E }) {
   );
 }
 
-/* ═══ −1 / +1 이 왜 있는지 (계획 ④ 안에 들어감. 페이지 추가 아님) ═══
-   선생님 2026-08-26: "난 단지 +1 -1이 이해가 안되었던거지."
-   핵심: 심술쟁이가 파랑 자투리를 이미 최대(cB−1)로 채워둔 상태에서 칩 1개를 더 받으면
-   빨강이면 +1, 파랑이면 자투리가 꽉 차 묶음 완성 → +cA. 무슨 색이든 최소 빨강 1개.
-   그래서 마지막 빨강 1개는 '칩 1개' 로 보장 → 미리 빼두고(−1) 나머지만 비싼 값으로 센 뒤
-   그 칩을 도로 더함(+1). */
+/* ═══ 도구 ④ — 마지막 묶음은 통째로 안 산다 (경우 ② 의 근거) ═══
+   선생님 2026-08-26: −1/+1 트릭은 "뭔말인지는 알겠지만 이해가 안가" → if/elif/else 로 확정.
+   이 페이지는 elif (묶음으로 딱 떨어질 때) 가 왜 묶음 하나를 빼는지:
+   낱개 빨강 = 칩 1개 < 묶음 (칩 cB개에 빨강 cA개) → 마지막 묶음 대신 낱개 cA개.
+   예: 빨강 4개 필요 → 묶음 2개 통째 = 칩 6 vs 묶음1+낱개2 = 칩 5 ✓ */
 export function LastOneWhySlide({ E }) {
   const cA = 2, cB = 3;
   const Row = ({ chips, label, cost, color, bg, win }) => (
