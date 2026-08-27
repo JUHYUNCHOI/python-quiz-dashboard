@@ -1043,13 +1043,47 @@ export function LastOneWhySlide({ E }) {
           <>칩 4개까진 심술쟁이가 빨강 3개로 막아요. <b>5개부터는 못 막아요</b> — 어떤 색칠이든 4개가 돼요.</>)}
       </div>
 
-      <div style={{ padding: "8px 10px", borderRadius: 8, background: "#f5f3ff",
-        border: "1px dashed #c4b5fd", fontSize: 11.5, color: "#5b21b6", lineHeight: 1.65 }}>
-        {t(E,
-          <>The worst row at 5 chips: <b>1 group</b> (not 2!) <b>+ 2 red chips</b>. That shape is case ② in the code:<br />
-            <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>to_fill = (missing // cA − 1) * cB + cA</code></>,
-          <>칩 5개의 제일 나쁜 줄: <b>묶음 1개</b> (2개 아님!) <b>+ 빨강칩 2개</b>. 이 모양이 코드의 경우 ②예요:<br />
-            <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>to_fill = (missing // cA − 1) * cB + cA</code></>)}
+      {/* 공식이 표에서 어떻게 나오는지 — 4단계 (선생님 2026-08-26: "이 공식이 어떻게 생겨난거지?") */}
+      <div style={{ padding: "10px 12px", borderRadius: 8, background: "#f5f3ff", border: "1.5px solid #c4b5fd" }}>
+        <div style={{ fontSize: 12, fontWeight: 800, color: "#5b21b6", marginBottom: 7 }}>
+          {t(E, "Where the formula comes from — read the worst row at 5 chips:",
+               "이 공식이 어떻게 나왔나 — 칩 5개의 제일 나쁜 줄을 읽어봐요:")}
+        </div>
+        <div style={{ display: "grid", gap: 4 }}>
+          {[
+            { n: "①", ko: <>빨강 <b>4개</b> 필요, 묶음 하나 = 빨강 <b>2개</b> → 묶음 <b>4÷2 = 2개</b> 면 되겠네?</>,
+                       en: <>Need <b>4 red</b>, one group = <b>2 red</b> → <b>4÷2 = 2 groups</b>?</>,
+              code: "missing // cA" },
+            { n: "②", ko: <>근데 표의 제일 나쁜 줄엔 묶음이 <b>1개뿐</b> → <b>하나 덜</b></>,
+                       en: <>But the worst row has only <b>1 group</b> → <b>one fewer</b></>,
+              code: "missing // cA − 1" },
+            { n: "③", ko: <>묶음 1개 = 파랑 <b>3개</b> → <b>1 × 3 = 칩 3개</b></>,
+                       en: <>1 group = <b>3 blue</b> → <b>1 × 3 = 3 chips</b></>,
+              code: "( … ) * cB" },
+            { n: "④", ko: <>모자란 빨강 <b>2개</b>는 빨강칩으로 → <b>칩 2개</b></>,
+                       en: <>the remaining <b>2 red</b> come as red chips → <b>2 chips</b></>,
+              code: "+ cA" },
+          ].map((r, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 11.5, color: "#334155", lineHeight: 1.55 }}>
+              <span style={{ flexShrink: 0, fontWeight: 800, color: "#7c3aed" }}>{r.n}</span>
+              <span style={{ flex: 1, wordBreak: "keep-all" }}>{t(E, r.en, r.ko)}</span>
+              <code style={{ flexShrink: 0, fontFamily: "'JetBrains Mono',monospace", fontSize: 10.5, fontWeight: 800,
+                color: "#5b21b6", background: "#fff", border: "1px solid #ddd6fe", borderRadius: 5, padding: "0 5px" }}>{r.code}</code>
+            </div>
+          ))}
+        </div>
+        {/* 합치면 */}
+        <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #c4b5fd", textAlign: "center" }}>
+          <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: "#5b21b6" }}>
+            to_fill = (missing // cA − 1) * cB + cA
+          </div>
+          <div style={{ marginTop: 3, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800, color: "#15803d" }}>
+            = (4 // 2 − 1) * 3 + 2 = 3 + 2 = {t(E, "5 chips ✓", "칩 5개 ✓")}
+          </div>
+          <div style={{ marginTop: 4, fontSize: 10.5, color: "#94a3b8" }}>
+            {t(E, "↑ exactly the worst row above", "↑ 위 표의 제일 나쁜 줄과 똑같아요")}
+          </div>
+        </div>
       </div>
     </div>
   );
