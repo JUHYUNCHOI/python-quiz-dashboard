@@ -910,6 +910,14 @@ export function WorstCaseWhySim({ E }) {
   const rows = (x) => Array.from({ length: x + 1 }).map((_, i) => mk(x, i));
   const worstOf = (x) => Math.min(...rows(x).map((o) => o.v));
 
+  /* 조합을 한국어답게 부르기: "파랑 2개만 오면", "빨강 1개와 파랑 2개가 오면" */
+  const comboKo = (r, b) =>
+    r === 0 ? `파랑 ${b}개만 오면`
+    : b === 0 ? `빨강 ${r}개만 오면`
+    : `빨강 ${r}개와 파랑 ${b}개가 오면`;
+  const comboEn = (r, b) =>
+    r === 0 ? `if all ${b} come blue` : b === 0 ? `if all ${r} come red` : `if ${r} red and ${b} blue come`;
+
   const steps = [{ k: "now" }];
   [1, 2, 3].forEach((x) => rows(x).forEach((_, i) => steps.push({ k: "row", x, i })));
   steps.push({ k: "rule" });
@@ -919,23 +927,23 @@ export function WorstCaseWhySim({ E }) {
   const lastOfX = cur && cur.i === cur.x;
 
   const say =
-    s.k === "now" ? t(E, <>I have <b style={{color:RED,...NW}}>2 red</b> and <b style={{color:BLU,...NW}}>3 blue</b>. Swapping the blue gives <b style={{color:RED,...NW}}>red 4</b> — the goal is <b style={NW}>5</b>. <b>One short.</b></>,
-                        <>지금 <b style={{color:RED,...NW}}>빨강 2개</b>, <b style={{color:BLU,...NW}}>파랑 3개</b>. 파랑을 바꾸면 <b style={{color:RED,...NW}}>빨강 4개</b> — 목표는 <b style={NW}>5개</b>. <b>하나 모자라요.</b></>)
-  : s.k === "rule" ? t(E, <><b style={NW}>2 chips</b> work <b>if I'm lucky</b>. The question asks for a count that works <b>every time</b> — so we always count the <b>worst combination</b>.</>,
-                          <>칩 <b style={NW}>2개</b>도 <b>운이 좋으면</b> 돼요. 문제는 <b>언제나</b> 되는 개수를 물어요 — 그래서 늘 <b>제일 나쁜 조합</b>을 기준으로 세요.</>)
+    s.k === "now" ? t(E, <>I start with <b style={{color:RED,...NW}}>2 red</b> and <b style={{color:BLU,...NW}}>3 blue</b>. Swapping the 3 blue gives me 2 more red, so <b style={{color:RED,...NW}}>4 red</b> — the goal is <b style={NW}>5</b>, so I'm <b>one short</b>.</>,
+                        <><b style={{color:RED,...NW}}>빨강 2개</b>, <b style={{color:BLU,...NW}}>파랑 3개</b>로 시작해요. 파랑 3개를 바꾸면 빨강이 2개 늘어서 <b style={{color:RED,...NW}}>4개</b>. 목표가 <b style={NW}>5개</b>니까 <b>하나가 모자라요.</b></>)
+  : s.k === "rule" ? t(E, <>With <b style={NW}>2 chips</b> I reach the goal <b>if I'm lucky</b>. But the question asks for a count that works <b>whatever comes</b> — so we always look at the <b>worst combination</b>.</>,
+                          <>칩 <b style={NW}>2개</b>로도 <b>운이 좋으면</b> 목표에 닿아요. 하지만 문제가 묻는 건 <b>무엇이 와도 되는 개수</b>예요 — 그래서 늘 <b>제일 나쁜 조합</b>을 봅니다.</>)
   : (() => {
       const head = firstOfX
-        ? t(E, <>Take <b style={NW}>{cur.x} chip{cur.x > 1 ? "s" : ""}</b>. I can't know the colours, so let's try them one by one. </>,
-              <>칩 <b style={NW}>{cur.x}개</b>를 받아 볼게요. 색은 모르니 하나씩 따져 봐요. </>)
+        ? t(E, <>Now take <b style={NW}>{cur.x} chip{cur.x > 1 ? "s" : ""}</b>. I can't know the colours, so let's try them all. </>,
+              <>이번엔 칩을 <b style={NW}>{cur.x}개</b> 받아 볼게요. 무슨 색이 올지 모르니 다 따져 봐요. </>)
         : "";
       const body = cur.v >= GOAL
-        ? t(E, <>{cur.r} red + {cur.b} blue → <b style={{color:"#15803d",...NW}}>red {cur.v} ✓</b></>,
-              <>빨강 {cur.r} + 파랑 {cur.b} 이 오면 → <b style={{color:"#15803d",...NW}}>빨강 {cur.v}개 ✓</b></>)
-        : t(E, <>{cur.r} red + {cur.b} blue → <b style={{color:RED,...NW}}>only red {cur.v} ✗</b> — <b>so {cur.x} chip{cur.x > 1 ? "s are" : " is"} not enough.</b></>,
-              <>빨강 {cur.r} + 파랑 {cur.b} 이 오면 → <b style={{color:RED,...NW}}>빨강 {cur.v}개뿐 ✗</b> — <b>그래서 칩 {cur.x}개로는 안 돼요.</b></>);
+        ? t(E, <>{comboEn(cur.r, cur.b)} → <b style={{color:"#15803d",...NW}}>red {cur.v}</b>, goal reached ✓</>,
+              <>{comboKo(cur.r, cur.b)} <b style={{color:"#15803d",...NW}}>빨강 {cur.v}개</b>, 목표 달성이에요 ✓</>)
+        : t(E, <>{comboEn(cur.r, cur.b)} → <b style={{color:RED,...NW}}>red {cur.v}</b>, still short of {GOAL} ✗ <b>— {cur.x} chip{cur.x > 1 ? "s aren't" : " isn't"} enough.</b></>,
+              <>{comboKo(cur.r, cur.b)} <b style={{color:RED,...NW}}>빨강 {cur.v}개</b>, 목표 {GOAL}개에 아직 모자라요 ✗ <b>— 칩 {cur.x}개로는 안 되겠네요.</b></>);
       const tail = lastOfX && worstOf(cur.x) >= GOAL
-        ? t(E, <> <b style={{color:"#15803d"}}>Every combination reaches 5 → the answer is {cur.x}.</b></>,
-              <> <b style={{color:"#15803d"}}>모든 조합이 5에 닿았어요 → 답은 {cur.x}개.</b></>)
+        ? t(E, <> <b style={{color:"#15803d"}}>Every combination reached the goal — so {cur.x} chips is enough.</b></>,
+              <> <b style={{color:"#15803d"}}>어떤 조합이 와도 목표에 닿았어요 — 칩 {cur.x}개면 확실해요.</b></>)
         : "";
       return <>{head}{body}{tail}</>;
     })();
@@ -952,7 +960,7 @@ export function WorstCaseWhySim({ E }) {
     return (
       <div style={{ margin: "6px 0 8px 20px", padding: "8px 11px", borderRadius: 9,
         background: "#fff", border: `1.5px solid ${o.v >= GOAL ? "#86efac" : "#fca5a5"}` }}>
-        <Line label={t(E, "chips came", "받은 칩")}>
+        <Line label={t(E, "chips I got", "받은 칩")}>
           <span style={{ display: "inline-flex", gap: 3 }}>
             {Array.from({ length: o.r }).map((_, k) => <Chip key={"r" + k} color="red" size={18} />)}
             {Array.from({ length: o.b }).map((_, k) => <Chip key={"b" + k} color="blue" size={18} />)}
@@ -982,8 +990,9 @@ export function WorstCaseWhySim({ E }) {
               {Array.from({ length: o.r }).map((_, k) => <Chip key={"gr" + k} color="red" size={18} />)}
               {Array.from({ length: o.g * CA }).map((_, k) => <Chip key={"c" + k} color="red" size={18} />)}
             </span>
-            <span style={{ fontSize: 12.5, fontWeight: 800, color: o.v >= GOAL ? "#15803d" : "#dc2626" }}>
-              = {o.v} {o.v >= GOAL ? t(E, "✓ goal", "✓ 목표") : t(E, "✗ short", "✗ 모자람")}
+            <span style={{ fontSize: 12, fontWeight: 800, color: o.v >= GOAL ? "#15803d" : "#dc2626", wordBreak: "keep-all" }}>
+              {o.v >= GOAL ? t(E, `${o.v} — goal reached ✓`, `${o.v}개 — 목표 달성 ✓`)
+                           : t(E, `${o.v} — ${GOAL - o.v} short ✗`, `${o.v}개 — 목표 ${GOAL}개에 ${GOAL - o.v}개 모자람 ✗`)}
             </span>
           </Line>
         </div>
@@ -1022,10 +1031,10 @@ export function WorstCaseWhySim({ E }) {
                   {Array.from({ length: o.b }).map((_, k) => <Chip key={"b" + k} color="blue" size={14} />)}
                 </span>
                 <span style={{ flex: 1, fontFamily: "'JetBrains Mono',monospace", ...NW }}>
-                  {t(E, `blue ${B0}+${o.b}=${o.tot} → ${o.g} grp`, `파랑 ${B0}+${o.b}=${o.tot} → 묶음 ${o.g}`)}
+                  {t(E, `blue ${B0}+${o.b}=${o.tot} → ${o.g} group${o.g === 1 ? "" : "s"}`, `파랑 ${B0}+${o.b}=${o.tot}개 → 묶음 ${o.g}개`)}
                 </span>
                 <span style={{ fontWeight: 800, flexShrink: 0, color: good ? "#15803d" : "#dc2626" }}>
-                  {t(E, `red ${o.v}`, `빨강 ${o.v}`)} {good ? "✓" : "✗"}
+                  {t(E, `red ${o.v}`, `빨강 ${o.v}개`)} {good ? "✓" : "✗"}
                 </span>
               </div>
               {cur2 && <Detail o={o} />}
@@ -1043,6 +1052,17 @@ export function WorstCaseWhySim({ E }) {
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Say tone={s.k === "rule" ? "aha" : s.k === "now" ? "go" : (cur && cur.v >= GOAL ? "go" : "stuck")}>{say}</Say>
 
+      {/* 목표는 늘 보이게 (선생님: "몇 개를 만드는 게 목표인데?") */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 7, marginBottom: 10,
+        fontSize: 12, fontWeight: 800, color: "#15803d", wordBreak: "keep-all" }}>
+        <span style={{ padding: "3px 10px", borderRadius: 999, background: "#f0fdf4", border: "1.5px solid #86efac" }}>
+          🎯 {t(E, "goal", "목표")} {t(E, `${GOAL} red`, `빨강 ${GOAL}개`)}
+        </span>
+        <span style={{ display: "inline-flex", gap: 3 }}>
+          {Array.from({ length: GOAL }).map((_, i) => <Chip key={i} color="red" size={15} />)}
+        </span>
+      </div>
+
       {s.k === "now" && (
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, flexWrap: "wrap", fontSize: 12, fontWeight: 800 }}>
           <span style={{ display: "inline-flex", gap: 4 }}>
@@ -1053,7 +1073,7 @@ export function WorstCaseWhySim({ E }) {
           <span style={{ display: "inline-flex", gap: 4 }}>
             {Array.from({ length: 4 }).map((_, i) => <Chip key={"f" + i} color="red" size={24} />)}
           </span>
-          <span style={{ color: "#dc2626" }}>{t(E, "red 4 · goal 5 ✗", "빨강 4 · 목표 5 ✗")}</span>
+          <span style={{ color: "#dc2626" }}>{t(E, "red 4 — one short of 5 ✗", "빨강 4개 — 목표 5개에 하나 모자람 ✗")}</span>
         </div>
       )}
       {cur && <Table x={cur.x} upto={cur.i} />}
