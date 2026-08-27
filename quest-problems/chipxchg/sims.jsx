@@ -135,7 +135,7 @@ export function TricksterWasteSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "The trickster wastes blue", "심술쟁이의 파랑 낭비")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "3 blue in → 2 red out: swapping LOSES (cA < cB)", "파랑 3개 내면 → 빨강 2개: 바꾸면 손해 (cA < cB)")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
         {t(E, "extra chips = 8 · swap: 3 blue → 2 red", "추가 칩 = 8개 · 환전: 파랑 3 → 빨강 2")}
       </div>
@@ -200,7 +200,7 @@ export function TricksterRedSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "When swapping pays: red, not blue", "환전이 이득이면: 파랑 아니라 빨강")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "2 blue in → 3 red out: swapping GAINS (cA ≥ cB)", "파랑 2개 내면 → 빨강 3개: 바꾸면 이득 (cA ≥ cB)")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
         {t(E, "this example · swap: 2 blue → 3 red (cA ≥ cB)", "이 예시 · 환전: 파랑 2 → 빨강 3 (cA ≥ cB)")}
       </div>
@@ -907,15 +907,15 @@ export function StrategySlide({ E }) {
       </Say>
       {s.kind === "plan" ? (
         <div style={{ maxWidth: 470, margin: "0 auto" }}>
-          <Slab n="1" color="#15803d" bg="#f0fdf4">{t(E, <>How many red can I make <b>right now</b> (convert my blue)? Call it <b>init</b>.</>, <>지금 가진 걸로 빨강 몇 개(내 파랑 환전)? 이걸 <b>init</b> 이라 해요.</>)}</Slab>
+          <Slab n="1" color="#15803d" bg="#f0fdf4">{t(E, <>How many red can I make <b>right now</b> (convert my blue)? Call it <b>red_now</b>.</>, <>지금 가진 걸로 빨강 몇 개(내 파랑 환전)? 이걸 <b>red_now</b> 라 해요.</>)}</Slab>
           <Slab n="2" color="#2563eb" bg="#eff6ff">{t(E, <>If <b>init &lt; goal</b>, count the fewest extra chips — assuming the <b>trickster colors them worst</b>.</>, <><b>init 이 목표보다 작으면</b>, 심술쟁이가 <b>최악으로 색칠할 때</b> 필요한 최소 추가 칩을 세요.</>)}</Slab>
         </div>
       ) : (
         <div style={{ maxWidth: 470, margin: "0 auto" }}>
-          <Slab n="①" color="#15803d" bg="#f0fdf4" title={t(E, "init ≥ goal", "init ≥ 목표")}>
+          <Slab n="①" color="#15803d" bg="#f0fdf4" title={t(E, "red_now ≥ goal", "red_now ≥ 목표")}>
             {t(E, "→ already there, the answer is 0.", "→ 이미 도달, 답은 0.")}
           </Slab>
-          <Slab n="②" color="#2563eb" bg="#eff6ff" title={t(E, "init < goal", "init < 목표")}>
+          <Slab n="②" color="#2563eb" bg="#eff6ff" title={t(E, "red_now < goal", "red_now < 목표")}>
             {t(E, "→ count the extra chips with a few lines of arithmetic (next tools). No search, no loop.", "→ 추가 칩을 산수 몇 줄로 바로 세요 (다음 도구들). 하나씩 넣어보며 찾을 필요 없이.")}
           </Slab>
         </div>
@@ -948,10 +948,10 @@ export function LastOneWhySlide({ E }) {
   return (
     <div style={{ padding: 16, maxWidth: 520, margin: "0 auto", fontSize: 12.5, color: "#334155", lineHeight: 1.6, wordBreak: "keep-all" }}>
       <div style={{ fontSize: 14, fontWeight: 800, color: "#7c3aed", textAlign: "center", marginBottom: 2 }}>
-        📦 {t(E, "The last group — buy it whole, or not?", "마지막 묶음 — 통째로 살까, 말까?")}
+        📦 {t(E, "Group = 3 chips for 2 red · single = 1 chip for 1 red", "묶음 = 칩 3개에 빨강 2개 · 낱개 = 칩 1개에 빨강 1개")}
       </div>
       <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 12 }}>
-        {t(E, "why case ② subtracts one group", "경우 ② 가 묶음 하나를 빼는 이유")}
+        {t(E, "so for the last reds, singles are cheaper — that is case ②", "그래서 마지막 빨강은 낱개가 싸요 — 코드의 경우 ②")}
       </div>
 
       {/* 상황 */}
@@ -983,10 +983,10 @@ export function LastOneWhySlide({ E }) {
       <div style={{ marginTop: 8, padding: "8px 10px", borderRadius: 8, background: "#f5f3ff",
         border: "1px dashed #c4b5fd", fontSize: 11.5, color: "#5b21b6", lineHeight: 1.65 }}>
         {t(E, <>That's exactly case ② in the code:<br />
-               <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>need = (missing / cA − 1) * cB + cA</code><br />
+               <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>to_fill = (missing / cA − 1) * cB + cA</code><br />
                <span style={{ color: "#7c3aed" }}>one group fewer</span> … <span style={{ color: "#7c3aed" }}>plus cA singles</span></>,
              <>코드의 경우 ② 가 딱 이거예요:<br />
-               <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>need = (missing // cA − 1) * cB + cA</code><br />
+               <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>to_fill = (missing // cA − 1) * cB + cA</code><br />
                <span style={{ color: "#7c3aed" }}>묶음 하나 덜</span> … <span style={{ color: "#7c3aed" }}>대신 낱개 cA개</span></>)}
       </div>
 
@@ -1009,30 +1009,30 @@ export function PlanSlide({ E }) {
         {t(E, "We turn the formula into steps we can code.", "공식을 코드로 옮길 순서로 바꿔요.")}
       </div>
       <div style={{ maxWidth: 480, margin: "0 auto" }}>
-        <Slab n="1" color="#15803d" bg="#f0fdf4" title={<code>init = A + B//cB*cA</code>}>
-          {t(E, <>red I can make now. If <b>init ≥ fA</b> → answer <b>0</b>.</>,
-               <>지금 만드는 빨강. <b>init ≥ fA</b> 면 답 <b>0</b>.</>)}
+        <Slab n="1" color="#15803d" bg="#f0fdf4" title={<code>red_now = A + B//cB*cA</code>}>
+          {t(E, <>red I can make now. If <b>red_now ≥ fA</b> → answer <b>0</b>.</>,
+               <>지금 만드는 빨강. <b>red_now ≥ fA</b> 면 답 <b>0</b>.</>)}
         </Slab>
-        <Slab n="2" color="#dc2626" bg="#fef2f2" title={<code>waste = cB−1 − B%cB</code>}>
+        <Slab n="2" color="#dc2626" bg="#fef2f2" title={<code>wasted_blue = cB−1 − B%cB</code>}>
           {t(E, <>the trickster wastes blue first (leftover cB−1).</>,
                <>심술쟁이가 먼저 파랑을 버림 (자투리 cB−1).</>)}
         </Slab>
         <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "how many are missing?", "몇 개 모자라?")}>
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#334155", wordBreak: "break-word" }}>
-            missing = fA − init <span style={{ color: "#94a3b8" }}>{t(E, "  // goal − now", "  // 목표 − 지금")}</span>
+            missing = fA − red_now <span style={{ color: "#94a3b8" }}>{t(E, "  // goal − now", "  // 목표 − 지금")}</span>
           </div>
         </Slab>
         <Slab n="4" color="#7c3aed" bg="#f5f3ff" title={t(E, "who fills them? — three cases", "그걸 누가 채워주나? — 경우 셋")}>
           <div style={{ display: "grid", gap: 3, fontSize: 11.5, lineHeight: 1.55 }}>
-            <div>① {t(E, <><b>cA ≥ cB</b> (swap pays) → red, 1 each · <code>need = missing</code></>,
-                        <><b>cA ≥ cB</b> (환전 이득) → 빨강 1개씩 · <code>need = missing</code></>)}</div>
+            <div>① {t(E, <><b>cA ≥ cB</b> (swap pays) → red, 1 each · <code>to_fill = missing</code></>,
+                        <><b>cA ≥ cB</b> (환전 이득) → 빨강 1개씩 · <code>to_fill = missing</code></>)}</div>
             <div>② {t(E, <>groups divide it exactly → <b>skip the last group</b>, take cA singles <span style={{ color: "#7c3aed" }}>(why? → previous page)</span></>,
                         <>묶음으로 딱 떨어짐 → <b>마지막 묶음은 안 삼</b>, 낱개 cA개로 <span style={{ color: "#7c3aed" }}>(왜? → 앞 페이지)</span></>)}</div>
             <div>③ {t(E, <>otherwise → whole groups + the rest as singles</>,
                         <>아니면 → 묶음들 + 남는 건 낱개로</>)}</div>
           </div>
           <div style={{ marginTop: 5, paddingTop: 5, borderTop: "1px dashed #c4b5fd", fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#334155" }}>
-            {t(E, "answer = waste + need", "답 = waste + need")}
+            {t(E, "answer = wasted_blue + to_fill", "답 = wasted_blue + to_fill")}
             <span style={{ color: "#94a3b8", fontFamily: "system-ui" }}>{t(E, "  (64-bit — up to 10¹⁸)", "  (64비트 — 10¹⁸ 까지)")}</span>
           </div>
         </Slab>

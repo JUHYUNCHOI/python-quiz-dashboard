@@ -87,7 +87,7 @@ function ChipXchgSample({ E }) {
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeChipXchgCh1 — mooin3 모양 (라벨 + 구체 샘플 + 시뮬)
-   문제(도입) → 샘플입출력 → 이해확인 → 전략 → 환전(init) → 심술쟁이 최악→공식 → 계획
+   문제(도입) → 샘플입출력 → 이해확인 → 전략 → 환전(red_now) → 심술쟁이 최악→공식 → 계획
    (USACO 공식 풀이 = O(1) 닫힌 공식. 이분탐색·후보 안 씀)
    ═══════════════════════════════════════════════════════════════ */
 export function makeChipXchgCh1(E) {
@@ -130,27 +130,27 @@ export function makeChipXchgCh1(E) {
     // [전] 도구: 환전 세기 = init (지금 가진 걸로 만드는 빨강)
     {
       type: "reveal",
-      label: t(E, "Tool: red I can make now (init)", "도구: 지금 만드는 빨강 (init)"),
-      narr: t(E, "How many red can I make right now? Group my blue by cB; leftovers waste. That's init.",
-                 "지금 가진 걸로 빨강 몇 개? 내 파랑을 cB 로 묶고, 자투리는 버려요. 그게 init."),
+      label: t(E, "Tool: red I can make now (red_now)", "도구: 지금 만드는 빨강 (red_now)"),
+      narr: t(E, "How many red can I make right now? Group my blue by cB; leftovers waste. That's red_now.",
+                 "지금 가진 걸로 빨강 몇 개? 내 파랑을 cB 로 묶고, 자투리는 버려요. 그게 red_now."),
       content: (<ChipCountSim E={E} />),
     },
 
     // [전] 도구: 심술쟁이가 색칠 → 파랑 자투리 버림 = 최악 (칩 시각, 슬라이드 없음).
     {
       type: "reveal",
-      label: t(E, "Tool: trickster's worst = wasted blue", "도구: 심술쟁이 최악 (파랑 낭비)"),
-      narr: t(E, "The trickster colors the extra chips all blue and wastes the leftover — that's my worst case. Watch with real chips.",
-                 "심술쟁이가 추가 칩을 다 파랑으로 색칠하고 자투리를 버려요 — 그게 나한텐 최악. 진짜 칩으로 봐요."),
+      label: t(E, "Tool: cA < cB (swap loses) → he gives blue", "도구: cA < cB (바꾸면 손해) → 파랑을 준다"),
+      narr: t(E, "Swap rate here: 3 blue → 2 red. Blue gives me less — so the trickster hands blue. Watch with real chips.",
+                 "여기 환전 비율: 파랑 3개 → 빨강 2개. 파랑이 나한테 덜 되니 — 심술쟁이는 파랑으로 줘요. 진짜 칩으로 봐요."),
       content: (<TricksterWasteSim E={E} />),
     },
 
     // [전] 도구: 환전이 이득(cA≥cB)이면 심술쟁이는 '빨강'을 줌 (파랑 아님). 공식의 다른 가지.
     {
       type: "reveal",
-      label: t(E, "Tool: if swapping pays → red", "도구: 환전 이득이면 빨강"),
-      narr: t(E, "What if converting gains red (cA ≥ cB)? Then blue would help me, so the trickster gives red instead.",
-                 "환전이 이득이면(cA ≥ cB)? 파랑이 오히려 나를 도와주니, 심술쟁이는 대신 빨강을 줘요."),
+      label: t(E, "Tool: cA ≥ cB (swap gains) → he gives red", "도구: cA ≥ cB (바꾸면 이득) → 빨강을 준다"),
+      narr: t(E, "Opposite rate: 2 blue → 3 red. Now blue gives me MORE — so the trickster hands red instead.",
+                 "반대 비율: 파랑 2개 → 빨강 3개. 이번엔 파랑이 더 되니 — 심술쟁이는 빨강으로 줘요."),
       content: (<TricksterRedSim E={E} />),
     },
 
@@ -159,7 +159,7 @@ export function makeChipXchgCh1(E) {
     //      (선생님 2026-08-26: "이걸 다음 페이지에 나두는건? 이 페이지가 넘 긴데").
     {
       type: "reveal",
-      label: t(E, "Tool: skip the last group", "도구: 마지막 묶음은 안 산다"),
+      label: t(E, "Tool: last reds — singles beat a group", "도구: 마지막 빨강은 묶음보다 낱개가 싸다"),
       narr: t(E, "Last piece — when groups divide it exactly, why the code buys one group fewer.",
                  "마지막 조각 — 묶음으로 딱 떨어질 때, 코드가 왜 묶음 하나를 덜 사는지."),
       content: (<LastOneWhySlide E={E} />),
