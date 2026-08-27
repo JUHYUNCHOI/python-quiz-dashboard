@@ -962,6 +962,14 @@ export function LastOneWhySlide({ E }) {
             {t(E, `worst = red ${min}`, `최악 = 빨강 ${min}`)} {ok ? "✓" : "✗"}
           </span>
         </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "0 7px 3px", fontSize: 9.5, fontWeight: 800, color: "#94a3b8" }}>
+          <span style={{ minWidth: 150 }}>
+            <span style={{ color: "#dc2626" }}>{t(E, "already laid", "깔림")}</span>
+            {" + "}
+            {t(E, "what I got", "받은 것")}
+          </span>
+          <span style={{ flex: 1 }}>{t(E, "total blue → groups", "총 파랑 → 묶음")}</span>
+        </div>
         <div style={{ display: "grid", gap: 2 }}>
           {rs.map((o, i) => {
             const worst = o.v === min;
@@ -970,7 +978,13 @@ export function LastOneWhySlide({ E }) {
                 background: worst ? "#fff" : "transparent",
                 border: `1px solid ${worst ? (ok ? "#15803d" : "#dc2626") : "transparent"}`,
                 fontSize: 10.5, fontWeight: 700, color: "#475569", wordBreak: "keep-all" }}>
-                <span style={{ display: "inline-flex", gap: 2, flexShrink: 0, minWidth: 92 }}>{red(o.r)}{blue(o.b)}</span>
+                {/* 깔린 파랑 2개(점선) + 받은 칩 — 각 줄이 자기완결이 되게 (선생님 2026-08-26) */}
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 3, flexShrink: 0, minWidth: 150 }}>
+                  <span style={{ display: "inline-flex", gap: 2, padding: "1px 3px", borderRadius: 6,
+                    border: "1.5px dashed #dc2626", background: "#fff5f5" }}>{blue(LAID, 13)}</span>
+                  <span style={{ fontSize: 11, fontWeight: 800, color: "#94a3b8" }}>+</span>
+                  <span style={{ display: "inline-flex", gap: 2 }}>{red(o.r)}{blue(o.b)}</span>
+                </span>
                 <span style={{ flex: 1, fontFamily: "'JetBrains Mono',monospace" }}>
                   {t(E, `blue ${LAID}+${o.b}=${o.tot} → ${o.g} grp`, `파랑 ${LAID}+${o.b}=${o.tot} → 묶음 ${o.g}`)}
                 </span>
@@ -1006,8 +1020,8 @@ export function LastOneWhySlide({ E }) {
 
       <div style={{ fontSize: 11.5, color: "#475569", marginBottom: 8 }}>
         <b style={{ color: "#dc2626" }}>{t(E, "From ② :", "②에서 :")}</b>{" "}
-        {t(E, "2 wasted blues are already sitting there — 1 short of a group of 3. Every row below starts from them.",
-             "버려진 파랑 2개가 이미 깔려 있어요 — 묶음 3개에 1개 모자란 상태. 아래 모든 줄이 여기서 시작해요.")}
+        {t(E, "2 wasted blues are already sitting there — 1 short of a group of 3. They are the red-dashed pair at the start of every row below.",
+             "버려진 파랑 2개가 이미 깔려 있어요 — 묶음 3개에 1개 모자란 상태. 아래 모든 줄 맨 앞의 빨간 점선이 그 2개예요.")}
       </div>
 
       <AllColorings x={4} />
