@@ -133,8 +133,8 @@ export function makeChipXchgCh1(E) {
     {
       type: "reveal",
       label: t(E, "Strategy", "전략"),
-      narr: t(E, "First check what I can make now; if short, the answer has one shape: the last chip the worst case survives, plus 1.",
-                 "먼저 지금 가진 걸로 목표에 닿는지 보고, 부족하면 — 답의 모양은 '아직 목표에 못 닿을 수 있는 마지막 칩 + 1' 이에요."),
+      narr: t(E, "First check what I can make now; if it falls short, count how many extra chips are needed.",
+                 "먼저 지금 가진 걸로 되는지 보고, 모자라면 칩을 몇 개 받아야 하는지 세요."),
       content: (<StrategySlide E={E} />),
     },
 
