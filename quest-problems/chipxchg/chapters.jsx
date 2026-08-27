@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, TricksterWasteSim, TricksterRedSim, LastOneWhySlide, WhyMinusPlusSim } from "./sims";
+import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, AllBlueWorstSim, AllRedWorstSim, LastOneWhySlide, WhyMinusPlusSim } from "./sims";
 
 const A = "#2563eb";
 
@@ -70,12 +70,12 @@ function ChipXchgSample({ E }) {
           reason={t(E, <>1 blue → 1 red, and I already have 2+3=5 <b style={{color:"#15803d"}}>≥ goal 4</b> → <b style={{color:"#15803d"}}>0 extra</b>.</>,
                        <>파랑 1개가 빨강 1개, 이미 2+3=5 <b style={{color:"#15803d"}}>≥ 목표 4</b> → <b style={{color:"#15803d"}}>추가 0개</b>.</>)} />
         <ChipXchgTestCard E={E} n={2} toks={test2} out="9"
-          reason={t(E, <>Start empty; the trickster wastes blue → need <b style={{color:"#15803d"}}>9 extra</b> <span style={{color:"#94a3b8"}}>(we'll see why!)</span></>,
-                       <>빈손 시작인데 심술쟁이가 파랑을 낭비 → <b style={{color:"#15803d"}}>추가 9개</b> 필요 <span style={{color:"#94a3b8"}}>(왜인지 곧!)</span></>)} />
+          reason={t(E, <>Start empty; the worst case wastes blue → need <b style={{color:"#15803d"}}>9 extra</b> <span style={{color:"#94a3b8"}}>(we'll see why!)</span></>,
+                       <>빈손 시작인데 최악의 경우 파랑을 낭비 → <b style={{color:"#15803d"}}>추가 9개</b> 필요 <span style={{color:"#94a3b8"}}>(왜인지 곧!)</span></>)} />
       </div>
       {/* 출력 뜻 */}
       <div style={{ marginTop: 10, background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "9px 12px", fontSize: 12, color: C.text, lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
-        {t(E, "Output = fewest extra chips ", "출력 = 필요한 최소 추가 칩 ")}<b>x</b>{t(E, " that reaches the goal no matter how the trickster hands them over.", " — 심술쟁이가 어떻게 줘도 목표 도달.")}
+        {t(E, "Output = fewest extra chips ", "출력 = 필요한 최소 추가 칩 ")}<b>x</b>{t(E, " that reaches the goal no matter which combination comes.", " — 어떤 조합이 와도 목표 도달.")}
       </div>
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
         {t(E, "📌 Up to 10⁴ tests · answer can reach 10¹⁸ → use 64-bit.", "📌 테스트는 최대 10⁴ 개이고 답이 10¹⁸ 까지 커져요. 그래서 64비트 정수가 필요해요.")}
@@ -87,7 +87,7 @@ function ChipXchgSample({ E }) {
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeChipXchgCh1 — mooin3 모양 (라벨 + 구체 샘플 + 시뮬)
-   문제(도입) → 샘플입출력 → 이해확인 → 전략 → 환전(red_now) → 심술쟁이 최악→공식 → 계획
+   문제(도입) → 샘플입출력 → 이해확인 → 전략 → 환전(red_now) → 최악의 경우→공식 → 계획
    (USACO 공식 풀이 = O(1) 닫힌 공식. 이분탐색·후보 안 씀)
    ═══════════════════════════════════════════════════════════════ */
 export function makeChipXchgCh1(E) {
@@ -118,12 +118,12 @@ export function makeChipXchgCh1(E) {
       content: (<CheckSim E={E} />),
     },
 
-    // [전] 전략 — 공식 큰 그림 (지금 걸로 되나? 안 되면 심술쟁이 최악에 몇 개?)
+    // [전] 전략 — 공식 큰 그림 (지금 걸로 되나? 안 되면 최악의 경우에 몇 개?)
     {
       type: "reveal",
       label: t(E, "Strategy", "전략"),
-      narr: t(E, "First check what I can make now; if short, count the extra against the trickster's worst.",
-                 "먼저 지금 가진 걸로 목표에 닿는지 보고, 부족하면 심술쟁이가 제일 못되게 굴 때를 감안해서 추가 칩을 세요."),
+      narr: t(E, "First check what I can make now; if short, the answer has one shape: the last chip the worst case survives, plus 1.",
+                 "먼저 지금 가진 걸로 목표에 닿는지 보고, 부족하면 — 답의 모양은 '아직 목표에 못 닿을 수 있는 마지막 칩 + 1' 이에요."),
       content: (<StrategySlide E={E} />),
     },
 
@@ -136,22 +136,22 @@ export function makeChipXchgCh1(E) {
       content: (<ChipCountSim E={E} />),
     },
 
-    // [전] 도구: 심술쟁이가 파랑으로 줌 → 자투리 버림 = 최악 (칩 시각, 슬라이드 없음).
+    // [전] 도구: 최악의 경우 파랑으로 줌 → 자투리 버림 = 최악 (칩 시각, 슬라이드 없음).
     {
       type: "reveal",
       label: t(E, "Tool: cA < cB (swap loses) → he gives blue", "도구: cA < cB (바꾸면 손해) → 파랑을 준다"),
-      narr: t(E, "Swap rate here: 3 blue → 2 red. Blue gives me less — so the trickster hands blue. Watch with real chips.",
-                 "이 예시의 환전 비율은 파랑 3개 → 빨강 2개예요. 파랑을 받으면 빨강보다 손해라서, 심술쟁이는 파랑으로 줍니다. 진짜 칩으로 한 단계씩 봐요."),
-      content: (<TricksterWasteSim E={E} />),
+      narr: t(E, "Swap rate here: 3 blue → 2 red. Blue gives me less — so the worst case hands blue. Watch with real chips.",
+                 "이 예시의 환전 비율은 파랑 3개 → 빨강 2개예요. 파랑을 받으면 빨강보다 손해라서, 최악의 경우엔 파랑으로 줍니다. 진짜 칩으로 한 단계씩 봐요."),
+      content: (<AllBlueWorstSim E={E} />),
     },
 
-    // [전] 도구: 환전이 이득(cA≥cB)이면 심술쟁이는 '빨강'을 줌 (파랑 아님). 공식의 다른 가지.
+    // [전] 도구: 환전이 이득(cA≥cB)이면 최악의 경우엔 '빨강'을 줌 (파랑 아님). 공식의 다른 가지.
     {
       type: "reveal",
       label: t(E, "Tool: cA ≥ cB (swap gains) → he gives red", "도구: cA ≥ cB (바꾸면 이득) → 빨강을 준다"),
-      narr: t(E, "Opposite rate: 2 blue → 3 red. Now blue gives me MORE — so the trickster hands red instead.",
-                 "이번엔 반대로 파랑 2개 → 빨강 3개예요. 파랑을 받는 게 오히려 이득이라서, 심술쟁이는 빨강으로 줍니다."),
-      content: (<TricksterRedSim E={E} />),
+      narr: t(E, "Opposite rate: 2 blue → 3 red. Now blue gives me MORE — so the worst case hands red instead.",
+                 "이번엔 반대로 파랑 2개 → 빨강 3개예요. 파랑을 받는 게 오히려 이득이라서, 최악의 경우엔 빨강으로 줍니다."),
+      content: (<AllRedWorstSim E={E} />),
     },
 
     // [전] 도구 ④: 마지막 빨강은 묶음(손해) 말고 낱개로 = 코드 경우 ② 의 근거.
@@ -160,8 +160,8 @@ export function makeChipXchgCh1(E) {
     {
       type: "reveal",
       label: t(E, "Tool: how many chips force 4 red?", "도구: 빨강 4개를 받으려면 칩 몇 개?"),
-      narr: t(E, "How many chips reach the goal no matter how it hands them over?",
-                 "심술쟁이가 어떻게 줘도 목표에 닿으려면 칩이 몇 개 필요할까요?"),
+      narr: t(E, "How many chips reach the goal no matter which combination comes?",
+                 "어떤 조합이 와도 목표에 닿으려면 칩이 몇 개 필요할까요?"),
       content: (<LastOneWhySlide E={E} />),
     },
 
