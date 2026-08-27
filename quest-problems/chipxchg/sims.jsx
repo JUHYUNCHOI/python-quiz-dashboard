@@ -986,12 +986,39 @@ export function LastOneWhySlide({ E }) {
             <b style={{ fontSize: 13.5 }}>→ 그러니 마지막 빨강 1개는 칩 1개면 끝!</b></>)}
       </div>
 
-      {/* 결론 ② — 공식 이야기는 따로, 작게 (모드 전환을 눈에 보이게) */}
-      <div style={{ marginTop: 7, padding: "7px 10px", borderRadius: 8, background: "#f5f3ff",
-        border: "1px dashed #c4b5fd", fontSize: 11.5, color: "#5b21b6", wordBreak: "keep-all", lineHeight: 1.6 }}>
-        {t(E,
-          <><b>That's where −1 and +1 come from:</b> the formula sets that 1 chip aside <b>(−1)</b>, then adds it back at the very end <b>(+1)</b>.</>,
-          <><b>공식의 −1 과 +1 이 이것 때문이에요:</b> 그 칩 1개를 따로 빼놨다가 <b>(−1)</b>, 맨 끝에 도로 더해요 <b>(+1)</b>.</>)}
+      {/* 결론 ② — 공식 이야기. "빼놨다 더한다" 로 쓰면 서로 지워지는 걸로 읽힘
+          (선생님 2026-08-26: "빨강 1개를 주면 한개가 느는거지 왜 빼놔?").
+          → 빼는 대상(빨강)과 더하는 대상(칩)이 다르다는 걸 두 줄로 못박음. */}
+      <div style={{ marginTop: 7, padding: "9px 11px", borderRadius: 8, background: "#f5f3ff",
+        border: "1.5px solid #c4b5fd", wordBreak: "keep-all" }}>
+        <div style={{ fontSize: 12, fontWeight: 800, color: "#5b21b6", marginBottom: 6 }}>
+          {t(E, "−1 and +1 don't cancel out — they count different things:",
+               "−1 과 +1 은 서로 지워지는 게 아니에요 — 세는 게 달라요:")}
+        </div>
+        <div style={{ display: "grid", gap: 4, marginBottom: 7 }}>
+          {[
+            { sign: "−1", what: t(E, "off the RED count", "빨강 개수 에서 뺌"), color: "#dc2626" },
+            { sign: "+1", what: t(E, "onto the CHIP count", "칩 개수 에 더함"), color: "#15803d" },
+          ].map((r, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, fontWeight: 700 }}>
+              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 14,
+                color: r.color, minWidth: 28 }}>{r.sign}</span>
+              <span style={{ color: "#94a3b8" }}>→</span>
+              <span style={{ color: "#334155" }}>{r.what}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ fontSize: 11.5, color: "#5b21b6", lineHeight: 1.65 }}>
+          {t(E,
+            <><b>Why?</b> Other reds are expensive — the trickster gives blue, so <b>3 chips for 2 red</b>. But the last red takes <b>just 1 chip</b>. Counting it at the expensive price would cost a chip too many.</>,
+            <><b>왜?</b> 다른 빨강은 비싸요 — 심술쟁이가 파랑으로 주니까 <b>칩 3개에 빨강 2개</b>. 그런데 마지막 빨강만 <b>칩 1개</b>면 끝. 그걸 비싼 값으로 세면 칩을 하나 더 세게 돼요.</>)}
+        </div>
+        <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #c4b5fd",
+          fontSize: 11, color: "#475569", lineHeight: 1.6 }}>
+          {t(E,
+            <>Need <b>4 more red</b>? Counting it all at the expensive price says <b>6 chips</b> — but <b>5 is enough</b>. <b style={{ color: "#dc2626" }}>Skip the −1/+1 and the answer comes out 1 too big — just wrong.</b></>,
+            <>빨강 <b>4개</b>가 더 필요할 때 — 전부 비싼 값으로 세면 <b>칩 6개</b>인데, 실제론 <b>5개면 충분</b>. <b style={{ color: "#dc2626" }}>−1/+1 을 안 쓰면 답이 1 커져서 틀려요.</b></>)}
+        </div>
       </div>
 
       {/* 확인 — 표 없이 칩 한 줄로 (1페이지 게임) */}
