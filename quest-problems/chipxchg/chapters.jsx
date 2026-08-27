@@ -159,9 +159,9 @@ export function makeChipXchgCh1(E) {
     //      (선생님 2026-08-26: "이걸 다음 페이지에 나두는건? 이 페이지가 넘 긴데").
     {
       type: "reveal",
-      label: t(E, "Tool: the last one is cheap (−1 / +1)", "도구: 마지막 1개는 싸다 (−1 / +1)"),
-      narr: t(E, "Last piece — why the formula subtracts 1 and then adds it back at the end.",
-                 "마지막 조각 — 공식이 왜 1을 뺐다가 맨 끝에 도로 더하는지."),
+      label: t(E, "Tool: skip the last group", "도구: 마지막 묶음은 안 산다"),
+      narr: t(E, "Last piece — when groups divide it exactly, why the code buys one group fewer.",
+                 "마지막 조각 — 묶음으로 딱 떨어질 때, 코드가 왜 묶음 하나를 덜 사는지."),
       content: (<LastOneWhySlide E={E} />),
     },
 
