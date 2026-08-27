@@ -957,14 +957,32 @@ function T4Piles({ r, b, sz=15 }) {
   );
 }
 
-/* ═══ 도구 ④-1 (관찰) — 칩 몇 개부터 어떤 색칠이든 빨강 4개가 되나? ═══ */
+/* ═══ 도구 ④-1 (관찰) — 칩 몇 개부터 어떤 색칠이든 빨강 4개가 되나?
+   선생님 2026-08-27: "설명하고자 하는 곳을 말풍선으로 해주면 되잖아".
+   → 표 아래 글 벽을 없애고, 설명을 그 줄 바로 밑 말풍선으로 붙임 (CodeWalk 와 같은 규칙). ═══ */
 export function LastOneWhySlide({ E }) {
-  const AllColorings = ({ x }) => {
+  /* 줄 밑에 붙는 말풍선 */
+  const RowNote = ({ tone = "warn", children }) => {
+    const c = tone === "good" ? { bg: "#dcfce7", bd: "#15803d", fg: "#14532d" }
+            : tone === "info" ? { bg: "#dbeafe", bd: "#3b82f6", fg: "#1e3a8a" }
+            : { bg: "#fee2e2", bd: "#dc2626", fg: "#7f1d1d" };
+    return (
+      <div style={{ position: "relative", margin: "5px 0 7px 26px", padding: "7px 10px", borderRadius: 9,
+        background: c.bg, border: `1.5px solid ${c.bd}`, color: c.fg,
+        fontSize: 11.5, fontWeight: 700, lineHeight: 1.7, wordBreak: "keep-all" }}>
+        <span style={{ position: "absolute", top: -6, left: 16, width: 10, height: 10, background: c.bg,
+          borderLeft: `1.5px solid ${c.bd}`, borderTop: `1.5px solid ${c.bd}`, transform: "rotate(45deg)" }} />
+        {children}
+      </div>
+    );
+  };
+
+  const AllColorings = ({ x, notes = {} }) => {
     const { rs, min } = t4Rows(x);
     const ok = min >= T4.GOAL;
     return (
       <div style={{ border: `${ok ? 2 : 1.5}px solid ${ok ? "#15803d" : "#fca5a5"}`, borderRadius: 10,
-        background: ok ? "#f0fdf4" : "#fef2f2", padding: "9px 11px", marginBottom: 8 }}>
+        background: ok ? "#f0fdf4" : "#fef2f2", padding: "9px 11px", marginBottom: 12 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 5, flexWrap: "wrap", gap: 6 }}>
           <span style={{ fontSize: 12, fontWeight: 800, color: "#334155" }}>
             {t(E, `Get ${x} chips — all ${rs.length} colorings`, `칩 ${x}개 — 색칠 ${rs.length}가지 전부`)}
@@ -973,30 +991,33 @@ export function LastOneWhySlide({ E }) {
             {t(E, `worst = red ${min}`, `최악 = 빨강 ${min}`)} {ok ? "✓" : "✗"}
           </span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "0 7px 3px", fontSize: 9.5, fontWeight: 800, color: "#94a3b8" }}>
-          <span style={{ minWidth: 150 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "0 7px 3px", fontSize: 9.5, fontWeight: 800, color: "#94a3b8", minWidth: 430, ...NW }}>
+          <span style={{ minWidth: 148, flexShrink: 0 }}>
             <span style={{ color: "#dc2626" }}>{t(E, "already laid", "깔림")}</span>{" + "}{t(E, "what I got", "받은 것")}
           </span>
           <span style={{ flex: 1 }}>{t(E, "total blue → groups", "총 파랑 → 묶음")}</span>
         </div>
-        <div style={{ display: "grid", gap: 2 }}>
+        <div style={{ overflowX: "auto" }}>
           {rs.map((o, i) => {
             const worst = o.v === min;
             return (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, padding: "2px 7px", borderRadius: 6,
-                background: worst ? "#fff" : "transparent",
-                border: `1px solid ${worst ? (ok ? "#15803d" : "#dc2626") : "transparent"}`,
-                fontSize: 10.5, fontWeight: 700, color: "#475569", wordBreak: "keep-all" }}>
-                <span style={{ minWidth: 150 }}><T4Piles r={o.r} b={o.b} sz={13} /></span>
-                <span style={{ flex: 1, fontFamily: "'JetBrains Mono',monospace" }}>
-                  {t(E, `blue ${T4.LAID}+${o.b}=${o.tot} → ${o.g} grp`, `파랑 ${T4.LAID}+${o.b}=${o.tot} → 묶음 ${o.g}`)}
-                </span>
-                <span style={{ fontWeight: 800, color: worst ? (ok ? "#15803d" : "#dc2626") : "#94a3b8", flexShrink: 0 }}>
-                  {t(E, `red ${o.v}`, `빨강 ${o.v}`)}
-                </span>
-                <span style={{ width: 58, textAlign: "right", flexShrink: 0, color: ok ? "#15803d" : "#dc2626" }}>
-                  {worst ? t(E, "← worst", "← 제일 나쁨") : ""}
-                </span>
+              <div key={i}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "2px 7px", borderRadius: 6,
+                  background: worst ? "#fff" : "transparent",
+                  border: `1px solid ${worst ? (ok ? "#15803d" : "#dc2626") : "transparent"}`,
+                  fontSize: 10.5, fontWeight: 700, color: "#475569", minWidth: 430, ...NW }}>
+                  <span style={{ minWidth: 148, flexShrink: 0 }}><T4Piles r={o.r} b={o.b} sz={13} /></span>
+                  <span style={{ flex: 1, fontFamily: "'JetBrains Mono',monospace", ...NW }}>
+                    {t(E, `blue ${T4.LAID}+${o.b}=${o.tot} → ${o.g} grp`, `파랑 ${T4.LAID}+${o.b}=${o.tot} → 묶음 ${o.g}`)}
+                  </span>
+                  <span style={{ fontWeight: 800, color: worst ? (ok ? "#15803d" : "#dc2626") : "#94a3b8", flexShrink: 0 }}>
+                    {t(E, `red ${o.v}`, `빨강 ${o.v}`)}
+                  </span>
+                  <span style={{ width: 58, textAlign: "right", flexShrink: 0, color: ok ? "#15803d" : "#dc2626" }}>
+                    {worst ? t(E, "← worst", "← 제일 나쁨") : ""}
+                  </span>
+                </div>
+                {notes[i]}
               </div>
             );
           })}
@@ -1010,48 +1031,54 @@ export function LastOneWhySlide({ E }) {
       <div style={{ fontSize: 14, fontWeight: 800, color: "#7c3aed", textAlign: "center", marginBottom: 2 }}>
         📦 {t(E, "I need 4 more red — how many chips?", "빨강 4개가 더 필요해요 — 칩을 몇 개 받아야 할까요?")}
       </div>
-      <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 12 }}>
+      <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 10 }}>
         {t(E, "I pick the count. The trickster picks the colors.", "개수는 내가, 색은 심술쟁이가 정해요.")}
       </div>
 
       <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "8px 11px",
-        marginBottom: 10, fontSize: 12, color: "#92400e", lineHeight: 1.65 }}>
+        marginBottom: 10, fontSize: 12, color: "#92400e", lineHeight: 1.7 }}>
         {t(E,
-          <>"Just take 4 red chips = 4 chips!" — that would be best. But <b>the trickster picks the colors</b>, so it hands red as little as it can.</>,
-          <>"빨강 4개만 받으면 칩 4개로 끝이잖아!" — 그게 최고죠. 근데 <b>색은 심술쟁이가 정해요</b>. 빨강을 최대한 안 줍니다.</>)}
+          <>"Just take 4 red chips = 4 chips!" — that would be best. But <b>the trickster picks the colors</b>.</>,
+          <>"빨강 4개만 받으면 칩 4개로 끝이잖아!" — 그게 최고죠. 근데 <b>색은 심술쟁이가 정해요</b>.</>)}
+        <div style={{ marginTop: 5, paddingTop: 5, borderTop: "1px dashed #fbbf24", fontSize: 11, color: "#a16207" }}>
+          {t(E,
+            <><span style={{ color: "#dc2626", fontWeight: 800 }}>red dashed pair</span> at the start of every row = the 2 blues thrown away back in Tool ② (1 short of a group of 3).</>,
+            <>모든 줄 맨 앞의 <span style={{ color: "#dc2626", fontWeight: 800 }}>빨간 점선 파랑 2개</span>는 도구 ②에서 버려진 것이에요 (묶음 3개에 1개 모자란 상태).</>)}
+        </div>
       </div>
 
-      <div style={{ fontSize: 11.5, color: "#475569", marginBottom: 8 }}>
-        <b style={{ color: "#dc2626" }}>{t(E, "From ② :", "앞의 도구 ② 에서 :")}</b>{" "}
-        {t(E, "2 wasted blues are already sitting there — 1 short of a group of 3. They are the red-dashed pair at the start of every row below.",
-             "버려진 파랑 2개가 이미 깔려 있어요 — 묶음 3개에 1개 모자란 상태. 아래 모든 줄 맨 앞의 빨간 점선이 그 2개예요.")}
-      </div>
+      <AllColorings x={4} notes={{
+        3: (
+          <RowNote tone="warn">
+            {t(E,
+              <><b>Here it is:</b> with 4 chips there is a colouring that leaves me with only <b>3 red</b>. So <b>4 chips is not enough.</b></>,
+              <><b>바로 이 줄이에요:</b> 칩 4개로는 빨강이 <b>3개밖에 안 되는</b> 색칠이 있어요. 그래서 <b>칩 4개로는 안 돼요.</b></>)}
+          </RowNote>
+        ),
+        4: (
+          <RowNote tone="info">
+            {t(E,
+              <><b>"Wouldn't all-blue be meanest?"</b> No — 4 blue makes <b>2 whole groups</b> → red 4. Too many blues <b>finish groups</b> and help me. So the trickster stops at <b>3 blue</b>.</>,
+              <><b>"파랑만 주는 게 제일 못된 거 아니야?"</b> 아니에요 — 파랑 4개면 <b>묶음이 2개 완성</b>돼서 빨강 4개. 파랑이 많으면 <b>묶음이 채워져</b> 나를 도와줘요. 그래서 심술쟁이는 <b>파랑 3개</b>에서 멈춰요.</>)}
+          </RowNote>
+        ),
+      }} />
 
-      <AllColorings x={4} />
-
-      <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 8, padding: "8px 11px",
-        marginBottom: 10, fontSize: 11.5, color: "#1e40af", lineHeight: 1.7 }}>
-        {t(E,
-          <><b>"Wouldn't all-blue be meanest?"</b> Look at the bottom row: <b>4 blue → 2+4 = 6 → 2 whole groups → red 4</b>. Too many blues <b>complete groups</b> and help me! So the trickster stops at <b>3 blue</b> (leftover 2, thrown away) and gives 1 red.</>,
-          <><b>"파랑만 주는 게 제일 못된 거 아니야?"</b> 맨 아래 줄을 보세요: <b>파랑 4개 → 2+4 = 6 → 묶음 2개 완성 → 빨강 4</b>. 파랑을 많이 주면 <b>묶음이 완성돼</b> 오히려 나를 도와줘요! 그래서 심술쟁이는 <b>파랑 3개</b>만 주고 (자투리 2개 버려짐) 빨강 1개를 줘요.</>)}
-      </div>
-
-      <AllColorings x={5} />
-
-      <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8, padding: "9px 11px",
-        fontSize: 12.5, fontWeight: 700, color: "#15803d", lineHeight: 1.7 }}>
-        {t(E,
-          <>With <b>4 chips</b> there is a colouring that leaves me with only <b>3 red</b> (the red row above) — so 4 chips is not enough. With <b>5 chips</b> every colouring gives me <b>4 or more</b>.<br />
-            <b style={{ fontSize: 13.5 }}>→ So the answer here is 5 chips. Next: turn that into a formula.</b></>,
-          <><b>칩 4개</b>로는 빨강이 <b>3개밖에 안 되는 색칠</b>이 있어요 (위 빨간 줄). 그래서 칩 4개로는 안 돼요.<br /><b>칩 5개</b>는 어떤 색칠이든 빨강이 <b>4개 이상</b>이에요.<br />
-            <b style={{ fontSize: 13.5 }}>→ 그래서 답은 칩 5개. 다음 페이지에서 이걸 식으로 바꿔요.</b></>)}
-      </div>
+      <AllColorings x={5} notes={{
+        5: (
+          <RowNote tone="good">
+            {t(E,
+              <>Even the worst rows give me <b>red 4</b>. With <b>5 chips</b> every colouring reaches 4.<br />
+                <b style={{ fontSize: 12.5 }}>→ So the answer is 5 chips. Next: where the −1 and +1 in the formula come from.</b></>,
+              <>제일 나쁜 줄도 <b>빨강 4개</b>예요. <b>칩 5개</b>는 어떤 색칠이든 4개가 돼요.<br />
+                <b style={{ fontSize: 12.5 }}>→ 그래서 답은 칩 5개. 다음 페이지에선 식의 −1 과 +1 이 어디서 나오는지 봐요.</b></>)}
+          </RowNote>
+        ),
+      }} />
     </div>
   );
 }
 
-/* ═══ 도구 ④-2 (유도) — 그 결과를 식으로. −1 을 뺐을 때와 대비해서 차이를 보임 ═══
-   선생님 2026-08-26: "−1을 하지 않는 것과의 차이를 모르겠는데" → 6 vs 5 를 나란히. */
 /* ═══════════════════════════════════════════════════════════════
    WhyMinusPlusSim — 왜 −1 이고 왜 +1 인가 (선생님 요청: 시뮬로).
    말은 짧게, 계산은 그림으로. 선생님 문장을 그대로 씀(2026-08-27):
