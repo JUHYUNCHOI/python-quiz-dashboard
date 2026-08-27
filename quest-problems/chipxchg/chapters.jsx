@@ -75,7 +75,7 @@ function ChipXchgSample({ E }) {
       </div>
       {/* 출력 뜻 */}
       <div style={{ marginTop: 10, background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "9px 12px", fontSize: 12, color: C.text, lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
-        {t(E, "Output = fewest extra chips ", "출력 = 필요한 최소 추가 칩 ")}<b>x</b>{t(E, " that reaches the goal no matter how the trickster colors them.", " — 심술쟁이가 어떻게 색칠해도 목표 도달.")}
+        {t(E, "Output = fewest extra chips ", "출력 = 필요한 최소 추가 칩 ")}<b>x</b>{t(E, " that reaches the goal no matter how the trickster hands them over.", " — 심술쟁이가 어떻게 줘도 목표 도달.")}
       </div>
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
         {t(E, "📌 Up to 10⁴ tests · answer can reach 10¹⁸ → use 64-bit.", "📌 테스트는 최대 10⁴ 개이고 답이 10¹⁸ 까지 커져요. 그래서 64비트 정수가 필요해요.")}
@@ -136,7 +136,7 @@ export function makeChipXchgCh1(E) {
       content: (<ChipCountSim E={E} />),
     },
 
-    // [전] 도구: 심술쟁이가 색칠 → 파랑 자투리 버림 = 최악 (칩 시각, 슬라이드 없음).
+    // [전] 도구: 심술쟁이가 파랑으로 줌 → 자투리 버림 = 최악 (칩 시각, 슬라이드 없음).
     {
       type: "reveal",
       label: t(E, "Tool: cA < cB (swap loses) → he gives blue", "도구: cA < cB (바꾸면 손해) → 파랑을 준다"),
@@ -160,8 +160,8 @@ export function makeChipXchgCh1(E) {
     {
       type: "reveal",
       label: t(E, "Tool: how many chips force 4 red?", "도구: 빨강 4개를 받으려면 칩 몇 개?"),
-      narr: t(E, "Last piece — how many chips force the goal even with the meanest coloring?",
-                 "마지막 조각이에요. 심술쟁이가 아무리 못되게 색을 골라도 목표에 닿으려면 칩이 몇 개 필요할까요?"),
+      narr: t(E, "How many chips reach the goal no matter how it hands them over?",
+                 "심술쟁이가 어떻게 줘도 목표에 닿으려면 칩이 몇 개 필요할까요?"),
       content: (<LastOneWhySlide E={E} />),
     },
 
