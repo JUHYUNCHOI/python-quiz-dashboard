@@ -154,12 +154,12 @@ export function makeChipXchgCh1(E) {
       content: (<TricksterRedSim E={E} />),
     },
 
-    // [전] 도구 ④: 마지막 묶음은 통째로 안 산다 = 코드 경우 ② 의 근거.
+    // [전] 도구 ④: 마지막 빨강은 묶음(손해) 말고 낱개로 = 코드 경우 ② 의 근거.
     //      원래 '계획' 슬랩 ④ 안에 있었는데 계획 페이지가 너무 길어져서 형제 도구들 옆으로 옮김
     //      (선생님 2026-08-26: "이걸 다음 페이지에 나두는건? 이 페이지가 넘 긴데").
     {
       type: "reveal",
-      label: t(E, "Tool: last reds — singles beat a group", "도구: 마지막 빨강은 묶음보다 낱개가 싸다"),
+      label: t(E, "Tool: last reds — one-by-one is better", "도구: 마지막 빨강은 낱개로 받는 게 더 좋다"),
       narr: t(E, "Last piece — when groups divide it exactly, why the code buys one group fewer.",
                  "마지막 조각 — 묶음으로 딱 떨어질 때, 코드가 왜 묶음 하나를 덜 사는지."),
       content: (<LastOneWhySlide E={E} />),

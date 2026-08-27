@@ -927,7 +927,7 @@ export function StrategySlide({ E }) {
   );
 }
 
-/* ═══ 도구 ④ — 마지막 묶음은 통째로 안 산다 (경우 ② 의 근거) ═══
+/* ═══ 도구 ④ — 마지막 빨강은 묶음(손해) 말고 낱개로 (경우 ② 의 근거) ═══
    선생님 2026-08-26: −1/+1 트릭은 "뭔말인지는 알겠지만 이해가 안가" → if/elif/else 로 확정.
    이 페이지는 elif (묶음으로 딱 떨어질 때) 가 왜 묶음 하나를 빼는지:
    낱개 빨강 = 칩 1개 < 묶음 (칩 cB개에 빨강 cA개) → 마지막 묶음 대신 낱개 cA개.
@@ -951,7 +951,7 @@ export function LastOneWhySlide({ E }) {
         📦 {t(E, "Group = 3 chips for 2 red · single = 1 chip for 1 red", "묶음 = 칩 3개에 빨강 2개 · 낱개 = 칩 1개에 빨강 1개")}
       </div>
       <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 12 }}>
-        {t(E, "so for the last reds, singles are cheaper — that is case ②", "그래서 마지막 빨강은 낱개가 싸요 — 코드의 경우 ②")}
+        {t(E, "group = loss · one-by-one = better — that is case ②", "묶음으로 받으면 손해, 낱개로 받는 게 더 좋아요 — 코드의 경우 ②")}
       </div>
 
       {/* 상황 */}
@@ -973,10 +973,10 @@ export function LastOneWhySlide({ E }) {
       {/* 핵심 */}
       <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8, padding: "9px 11px",
         fontSize: 12.5, fontWeight: 700, color: "#15803d", lineHeight: 1.7 }}>
-        {t(E, <>A single red costs <b>1 chip</b>; a group costs <b>3 chips</b> for 2 red. So for the <b>last</b> 2 red, singles are cheaper.<br />
-               <b style={{ fontSize: 13.5 }}>→ Don't buy the last group. Take cA singles instead.</b></>,
-             <>낱개 빨강은 <b>칩 1개</b>, 묶음은 <b>칩 3개</b>에 빨강 2개예요. 그러니 <b>마지막</b> 빨강 2개는 낱개가 더 싸요.<br />
-               <b style={{ fontSize: 13.5 }}>→ 마지막 묶음은 사지 말고, 낱개 cA개로.</b></>)}
+        {t(E, <>A group takes <b>3 chips</b> for 2 red — a loss. One-by-one is <b>1 chip</b> per red.<br />
+               <b style={{ fontSize: 13.5 }}>→ Take the last reds one-by-one, not as a group.</b></>,
+             <>묶음은 <b>칩 3개</b> 내고 빨강 2개 — <b>손해</b>예요. 낱개는 <b>칩 1개</b>에 빨강 1개.<br />
+               <b style={{ fontSize: 13.5 }}>→ 마지막 빨강 2개는 낱개로 받는 게 더 좋아요.</b></>)}
       </div>
 
       {/* 코드 대응 */}
@@ -1027,7 +1027,7 @@ export function PlanSlide({ E }) {
             <div>① {t(E, <><b>cA ≥ cB</b> (swap pays) → red, 1 each · <code>to_fill = missing</code></>,
                         <><b>cA ≥ cB</b> (환전 이득) → 빨강 1개씩 · <code>to_fill = missing</code></>)}</div>
             <div>② {t(E, <>groups divide it exactly → <b>skip the last group</b>, take cA singles <span style={{ color: "#7c3aed" }}>(why? → previous page)</span></>,
-                        <>묶음으로 딱 떨어짐 → <b>마지막 묶음은 안 삼</b>, 낱개 cA개로 <span style={{ color: "#7c3aed" }}>(왜? → 앞 페이지)</span></>)}</div>
+                        <>묶음으로 딱 떨어짐 → <b>마지막 묶음 대신</b> 낱개 cA개로 <span style={{ color: "#7c3aed" }}>(왜? → 앞 페이지)</span></>)}</div>
             <div>③ {t(E, <>otherwise → whole groups + the rest as singles</>,
                         <>아니면 → 묶음들 + 남는 건 낱개로</>)}</div>
           </div>
