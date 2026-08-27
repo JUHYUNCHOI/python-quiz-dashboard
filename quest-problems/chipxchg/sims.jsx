@@ -933,66 +933,83 @@ export function StrategySlide({ E }) {
    낱개 빨강 = 칩 1개 < 묶음 (칩 cB개에 빨강 cA개) → 마지막 묶음 대신 낱개 cA개.
    예: 빨강 4개 필요 → 묶음 2개 통째 = 칩 6 vs 묶음1+낱개2 = 칩 5 ✓ */
 export function LastOneWhySlide({ E }) {
-  const cA = 2, cB = 3;
-  const Row = ({ chips, label, cost, color, bg, win }) => (
+  const Row = ({ chips, formula, result, ok }) => (
     <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 10px", borderRadius: 8,
-      background: bg, border: `${win ? 2 : 1.5}px solid ${color}`, fontSize: 11.5, fontWeight: 700, wordBreak: "keep-all" }}>
+      background: ok ? "#f0fdf4" : "#fef2f2", border: `${ok ? 2 : 1.5}px solid ${ok ? "#15803d" : "#fca5a5"}`,
+      fontSize: 11.5, fontWeight: 700, wordBreak: "keep-all" }}>
       <span style={{ display: "inline-flex", gap: 3, flexShrink: 0 }}>{chips}</span>
-      <span style={{ color: "#334155", flex: 1 }}>{label}</span>
-      <span style={{ color, fontWeight: 800, flexShrink: 0, fontFamily: "'JetBrains Mono',monospace" }}>{cost}</span>
+      <span style={{ color: "#334155", flex: 1 }}>{formula}</span>
+      <span style={{ color: ok ? "#15803d" : "#dc2626", fontWeight: 800, flexShrink: 0 }}>{result}</span>
     </div>
   );
-  const blue = (n) => Array.from({ length: n }).map((_, i) => <Chip key={"b" + i} color="blue" size={19} />);
-  const red  = (n) => Array.from({ length: n }).map((_, i) => <Chip key={"r" + i} color="red" size={19} />);
+  const blue = (n, sz=19) => Array.from({ length: n }).map((_, i) => <Chip key={"b"+i} color="blue" size={sz} />);
+  const red  = (n, sz=19) => Array.from({ length: n }).map((_, i) => <Chip key={"r"+i} color="red" size={sz} />);
 
   return (
-    <div style={{ padding: 16, maxWidth: 520, margin: "0 auto", fontSize: 12.5, color: "#334155", lineHeight: 1.6, wordBreak: "keep-all" }}>
+    <div style={{ padding: 16, maxWidth: 540, margin: "0 auto", fontSize: 12.5, color: "#334155", lineHeight: 1.65, wordBreak: "keep-all" }}>
       <div style={{ fontSize: 14, fontWeight: 800, color: "#7c3aed", textAlign: "center", marginBottom: 2 }}>
-        📦 {t(E, "Group = 3 chips for 2 red · single = 1 chip for 1 red", "묶음 = 칩 3개에 빨강 2개 · 낱개 = 칩 1개에 빨강 1개")}
+        📦 {t(E, "I need 4 more red — how many chips?", "빨강 4개가 더 필요해요 — 칩을 몇 개 받아야 할까?")}
       </div>
       <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 12 }}>
-        {t(E, "group = loss · one-by-one = better — that is case ②", "묶음으로 받으면 손해, 낱개로 받는 게 더 좋아요 — 코드의 경우 ②")}
+        {t(E, "I pick the count. The trickster picks the colors.", "개수는 내가, 색은 심술쟁이가 정해요.")}
       </div>
 
-      {/* 상황 */}
-      <div style={{ marginBottom: 9 }}>
-        {t(E, <>Say I need <b>4 more red</b>, and the swap is <b>3 blue → 2 red</b>. Groups divide it exactly: <b>2 groups = 4 red</b>. Two ways to get those 4:</>,
-             <>빨강 <b>4개</b>가 더 필요하고, 환전은 <b>파랑 3개 → 빨강 2개</b> 예요. 묶음으로 딱 떨어지죠 — <b>묶음 2개 = 빨강 4개</b>. 그 4개를 받는 방법이 두 가지예요:</>)}
+      {/* 함정 짚기 — '빨강 4개 받으면 되잖아' */}
+      <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "8px 11px",
+        marginBottom: 10, fontSize: 12, color: "#92400e", lineHeight: 1.65 }}>
+        {t(E,
+          <>"Just take 4 red chips = 4 chips!" — that would be best. But <b>the trickster picks the colors</b>, and red helps me most, so it hands red as little as it can.</>,
+          <>"빨강 4개만 받으면 칩 4개로 끝이잖아!" — 그게 최고죠. 근데 <b>색은 심술쟁이가 정해요</b>. 빨강은 나한테 제일 좋으니까 심술쟁이는 빨강을 최대한 안 줘요.</>)}
       </div>
 
-      {/* 두 방법 비교 */}
+      {/* 전제: ② 에서 자투리 2개 */}
+      <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+        <span style={{ color: "#dc2626", fontWeight: 800 }}>{t(E, "From ② :", "②에서 :")}</span>
+        <span>{t(E, "2 wasted blues are already sitting there", "버려진 파랑 2개가 이미 깔려 있어요")}</span>
+        <span style={{ display: "inline-flex", gap: 3, padding: "2px 5px", borderRadius: 999, border: "1.5px dashed #dc2626", background: "#fef2f2" }}>
+          {blue(2, 16)}
+        </span>
+        <span style={{ fontSize: 11, color: "#94a3b8" }}>{t(E, "(1 short of a group)", "(묶음에 1개 모자람)")}</span>
+      </div>
+
+      {/* 칩 개수별로 심술쟁이의 최악 — 여기가 답 */}
+      <div style={{ fontWeight: 800, color: "#7c3aed", marginBottom: 5 }}>
+        {t(E, "So — for each count, the trickster's meanest coloring:", "그래서 — 개수마다 심술쟁이의 제일 못된 색칠은:")}
+      </div>
       <div style={{ display: "grid", gap: 5, marginBottom: 10 }}>
-        <Row color="#94a3b8" bg="#f8fafc" chips={blue(6)}
-          label={t(E, "2 whole groups → 4 red", "묶음 2개 통째로 → 빨강 4개")}
-          cost={t(E, "6 chips", "칩 6개")} />
-        <Row color="#15803d" bg="#f0fdf4" win chips={<>{blue(3)}{red(2)}</>}
-          label={t(E, "1 group (2 red) + 2 singles (2 red) → 4 red", "묶음 1개 (빨강 2) + 낱개 2개 (빨강 2) → 빨강 4개")}
-          cost={t(E, "5 chips ✓", "칩 5개 ✓")} />
+        <Row ok={false}
+          chips={<>{red(1)}{blue(3)}</>}
+          formula={t(E, "4 chips: red 1 + (blue 3 + the 2 waiting → group +2)", "칩 4개: 빨강 1 + (파랑 3, 깔린 2개와 묶여 +2)")}
+          result={t(E, "red 3 ✗", "빨강 3 ✗")} />
+        <Row ok={true}
+          chips={<>{red(2)}{blue(3)}</>}
+          formula={t(E, "5 chips: even the meanest gives red 2 + group 2", "칩 5개: 아무리 못되게 줘도 빨강 2 + 묶음 2")}
+          result={t(E, "red 4 ✓", "빨강 4 ✓")} />
       </div>
 
-      {/* 핵심 */}
+      {/* 결론 */}
       <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8, padding: "9px 11px",
-        fontSize: 12.5, fontWeight: 700, color: "#15803d", lineHeight: 1.7 }}>
-        {t(E, <>A group takes <b>3 chips</b> for 2 red — a loss. One-by-one is <b>1 chip</b> per red.<br />
-               <b style={{ fontSize: 13.5 }}>→ Take the last reds one-by-one, not as a group.</b></>,
-             <>묶음은 <b>칩 3개</b> 내고 빨강 2개 — <b>손해</b>예요. 낱개는 <b>칩 1개</b>에 빨강 1개.<br />
-               <b style={{ fontSize: 13.5 }}>→ 마지막 빨강 2개는 낱개로 받는 게 더 좋아요.</b></>)}
+        fontSize: 12.5, fontWeight: 700, color: "#15803d", lineHeight: 1.7, marginBottom: 8 }}>
+        {t(E,
+          <>4 chips — the trickster still holds me at 3. <b>From 5 chips it can't:</b> whatever it colors, I reach 4.</>,
+          <>칩 4개까진 심술쟁이가 빨강 3개로 막아요. <b>5개부터는 못 막아요</b> — 어떻게 색칠해도 4개가 돼요.</>)}
       </div>
 
-      {/* 코드 대응 */}
-      <div style={{ marginTop: 8, padding: "8px 10px", borderRadius: 8, background: "#f5f3ff",
+      {/* 코드 대응 — ✓줄 모양이 곧 공식 */}
+      <div style={{ padding: "8px 10px", borderRadius: 8, background: "#f5f3ff",
         border: "1px dashed #c4b5fd", fontSize: 11.5, color: "#5b21b6", lineHeight: 1.65 }}>
-        {t(E, <>That's exactly case ② in the code:<br />
-               <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>to_fill = (missing / cA − 1) * cB + cA</code><br />
-               <span style={{ color: "#7c3aed" }}>one group fewer</span> … <span style={{ color: "#7c3aed" }}>plus cA singles</span></>,
-             <>코드의 경우 ② 가 딱 이거예요:<br />
-               <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>to_fill = (missing // cA − 1) * cB + cA</code><br />
-               <span style={{ color: "#7c3aed" }}>묶음 하나 덜</span> … <span style={{ color: "#7c3aed" }}>대신 낱개 cA개</span></>)}
+        {t(E,
+          <>Look at the ✓ row: <b>1 group</b> (not 2!) <b>+ 2 reds</b>. That shape is case ② in the code:<br />
+            <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>to_fill = (missing // cA − 1) * cB + cA</code><br />
+            <span style={{ color: "#7c3aed" }}>groups, one fewer</span> … <span style={{ color: "#7c3aed" }}>plus cA reds</span></>,
+          <>✓ 줄 모양을 보세요: <b>묶음 1개</b> (2개 아님!) <b>+ 빨강 2개</b>. 이 모양이 코드의 경우 ②예요:<br />
+            <code style={{ fontFamily: "'JetBrains Mono',monospace" }}>to_fill = (missing // cA − 1) * cB + cA</code><br />
+            <span style={{ color: "#7c3aed" }}>묶음 하나 덜</span> … <span style={{ color: "#7c3aed" }}>대신 빨강 cA개</span></>)}
       </div>
 
       <div style={{ marginTop: 8, fontSize: 11, color: "#94a3b8" }}>
-        {t(E, "(Doesn't divide exactly? Then the leftover reds already come as singles — that's case ③.)",
-             "(딱 안 떨어지면? 남는 빨강이 이미 낱개로 와요 — 그게 경우 ③.)")}
+        {t(E, "(Doesn't divide exactly? The leftover reds show up the same way — that's case ③.)",
+             "(딱 안 떨어지면? 남는 빨강이 같은 방식으로 나와요 — 그게 경우 ③.)")}
       </div>
     </div>
   );

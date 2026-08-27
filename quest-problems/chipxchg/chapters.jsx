@@ -160,8 +160,8 @@ export function makeChipXchgCh1(E) {
     {
       type: "reveal",
       label: t(E, "Tool: last reds — one-by-one is better", "도구: 마지막 빨강은 낱개로 받는 게 더 좋다"),
-      narr: t(E, "Last piece — when groups divide it exactly, why the code buys one group fewer.",
-                 "마지막 조각 — 묶음으로 딱 떨어질 때, 코드가 왜 묶음 하나를 덜 사는지."),
+      narr: t(E, "Last piece — how many chips force the goal even with the meanest coloring?",
+                 "마지막 조각 — 심술쟁이가 아무리 못되게 색칠해도 채워지려면 몇 개?"),
       content: (<LastOneWhySlide E={E} />),
     },
 
