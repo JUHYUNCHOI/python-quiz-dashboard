@@ -930,23 +930,29 @@ export function WorstCaseWhySim({ E }) {
   const lastOfX = cur && cur.i === cur.x;
 
   const say =
-    s.k === "now" ? t(E, <>I start with <b style={{color:RED,...NW}}>2 red</b> and <b style={{color:BLU,...NW}}>3 blue</b>. Swapping the 3 blue gives me 2 more red, so <b style={{color:RED,...NW}}>4 red</b> — the goal is <b style={NW}>5</b>, so I'm <b>one short</b>.</>,
-                        <><b style={{color:RED,...NW}}>A 2개</b>, <b style={{color:BLU,...NW}}>B 3개</b>로 시작해요. B 3개를 바꾸면 A가 2개 늘어서 <b style={{color:RED,...NW}}>4개</b>. 목표가 <b style={NW}>5개</b>니까 <b>하나가 모자라요.</b></>)
-  : s.k === "rule" ? t(E, <>With <b style={NW}>2 chips</b> I reach the goal <b>if I'm lucky</b>. But the question asks for a count that works <b>whatever comes</b> — so we always look at the <b>worst combination</b>.</>,
-                          <>칩 <b style={NW}>2개</b>로도 <b>운이 좋으면</b> 목표에 닿아요. 하지만 문제가 묻는 건 <b>무엇이 와도 되는 개수</b>예요 — 그래서 늘 <b>제일 나쁜 조합</b>을 봅니다.</>)
+    s.k === "now" ? t(E,
+        <>I start with <b style={{color:RED,...NW}}>2 A</b> and <b style={{color:BLU,...NW}}>3 B</b>.<br />Swapping the 3 B gives 2 more A → <b style={{color:RED,...NW}}>4 A</b>.<br />The goal is <b style={NW}>5</b>, so I'm <b>one short</b>.</>,
+        <><b style={{color:RED,...NW}}>A 2개</b>, <b style={{color:BLU,...NW}}>B 3개</b>로 시작해요.<br />B 3개를 바꾸면 A가 2개 늘어서 <b style={{color:RED,...NW}}>4개</b>.<br />목표가 <b style={NW}>5개</b>니까 <b>하나가 모자라요.</b></>)
+  : s.k === "rule" ? t(E,
+        <><b>A 2개</b> like that would be lovely — but <b>I don't get to pick</b>.<br />A count only works once <b>the worst combination</b> reaches the goal.<br />That's why we always look at the worst one.</>,
+        <><b>A 2개</b>처럼 좋은 게 오면 좋죠 — 근데 <b>내가 고르는 게 아니에요.</b><br />그래서 <b>제일 나쁜 조합</b>까지 목표에 닿아야 그 개수가 되는 거예요.<br />그래서 늘 제일 나쁜 경우를 봅니다.</>)
   : (() => {
       const head = firstOfX
-        ? t(E, <>Now take <b style={NW}>{cur.x} chip{cur.x > 1 ? "s" : ""}</b>. I can't know the colours, so let's try them all. </>,
-              <>이번엔 칩을 <b style={NW}>{cur.x}개</b> 받아 볼게요. 무슨 색이 올지 모르니 다 따져 봐요. </>)
+        ? t(E, <>Now <b style={NW}>{cur.x} chip{cur.x > 1 ? "s" : ""}</b> — I can't know the colours, so let's try them all.<br /></>,
+              <>이번엔 칩 <b style={NW}>{cur.x}개</b> — 무슨 색이 올지 모르니 다 따져 봐요.<br /></>)
         : "";
+      const isWorst = cur.v === worstOf(cur.x);
       const body = cur.v >= GOAL
-        ? t(E, <>{comboEn(cur.r, cur.b)} → <b style={{color:"#15803d",...NW}}>red {cur.v}</b>, goal reached ✓</>,
-              <>{comboKo(cur.r, cur.b)} <b style={{color:"#15803d",...NW}}>A {cur.v}개</b>, 목표 달성이에요 ✓</>)
-        : t(E, <>{comboEn(cur.r, cur.b)} → <b style={{color:RED,...NW}}>red {cur.v}</b>, still short of {GOAL} ✗ <b>— {cur.x} chip{cur.x > 1 ? "s aren't" : " isn't"} enough.</b></>,
-              <>{comboKo(cur.r, cur.b)} <b style={{color:RED,...NW}}>A {cur.v}개</b>, 목표 {GOAL}개에 아직 모자라요 ✗ <b>— 칩 {cur.x}개로는 안 되겠네요.</b></>);
+        ? (isWorst
+            ? t(E, <>{comboEn(cur.r, cur.b)} → <b style={{color:"#15803d",...NW}}>A {cur.v}</b> ✓<br /><b>Even this — the worst one — reaches the goal.</b></>,
+                   <>{comboKo(cur.r, cur.b)} <b style={{color:"#15803d",...NW}}>A {cur.v}개</b> ✓<br /><b>제일 나쁜 이 경우까지 목표에 닿았어요.</b></>)
+            : t(E, <>{comboEn(cur.r, cur.b)} → <b style={{color:"#15803d",...NW}}>A {cur.v}</b> ✓<br /><span style={{ color: "#94a3b8" }}>Lucky — but I can't choose this.</span></>,
+                   <>{comboKo(cur.r, cur.b)} <b style={{color:"#15803d",...NW}}>A {cur.v}개</b> ✓<br /><span style={{ color: "#94a3b8" }}>운이 좋은 경우 — 내가 고를 순 없어요.</span></>))
+        : t(E, <><b>The worst one:</b> {comboEn(cur.r, cur.b)} → <b style={{color:RED,...NW}}>only A {cur.v}</b> ✗<br /><b>This one isn't solved → {cur.x} chip{cur.x > 1 ? "s aren't" : " isn't"} enough.</b></>,
+               <><b>제일 나쁜 경우:</b> {comboKo(cur.r, cur.b)} <b style={{color:RED,...NW}}>A {cur.v}개뿐</b> ✗<br /><b>이게 해결이 안 돼요 → 칩 {cur.x}개로는 안 되겠네요.</b></>);
       const tail = lastOfX && worstOf(cur.x) >= GOAL
-        ? t(E, <> <b style={{color:"#15803d"}}>Every combination reached the goal — so {cur.x} chips is enough.</b></>,
-              <> <b style={{color:"#15803d"}}>어떤 조합이 와도 목표에 닿았어요 — 칩 {cur.x}개면 확실해요.</b></>)
+        ? t(E, <><br /><b style={{color:"#15803d"}}>→ The worst case is solved. {cur.x} chips it is.</b></>,
+              <><br /><b style={{color:"#15803d"}}>→ 제일 나쁜 경우가 해결됐어요. 답은 칩 {cur.x}개.</b></>)
         : "";
       return <>{head}{body}{tail}</>;
     })();
@@ -1038,6 +1044,10 @@ export function WorstCaseWhySim({ E }) {
                 </span>
                 <span style={{ fontWeight: 800, flexShrink: 0, color: good ? "#15803d" : "#dc2626" }}>
                   {t(E, `red ${o.v}`, `A ${o.v}개`)} {good ? "✓" : "✗"}
+                </span>
+                <span style={{ width: 78, textAlign: "right", flexShrink: 0, fontSize: 10, fontWeight: 800,
+                  color: o.v === worstOf(x) ? (good ? "#15803d" : "#dc2626") : "transparent" }}>
+                  {o.v === worstOf(x) ? t(E, "← worst", "← 제일 나쁨") : ""}
                 </span>
               </div>
               {cur2 && <Detail o={o} />}
