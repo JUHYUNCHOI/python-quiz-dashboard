@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, AllBlueWorstSim, AllRedWorstSim, LastOneWhySlide, WorstCaseWhySim } from "./sims";
+import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, AllBlueWorstSim, AllRedWorstSim, LastOneWhySlide, WhyNotGoalSim, WorstCaseWhySim } from "./sims";
 
 const A = "#2563eb";
 
@@ -174,6 +174,16 @@ export function makeChipXchgCh1(E) {
       narr: t(E, "Instead of 'when does it work', we ask 'when does it still fail' — and add one.",
                  "'언제 되나' 말고 '언제까지 안 되나' 를 세고, 거기서 하나 더해요."),
       content: (<LastOneWhySlide E={E} />),
+    },
+
+    // 학생이 여기서 꼭 하는 질문: "그럼 목표를 그대로 계산하면 되잖아요?"
+    // 말로 막지 않고 반례로 답한다 (선생님 2026-08-28: "이에 대한 설명이 들어갔으면 좋겠네").
+    {
+      type: "reveal",
+      label: t(E, "Why not count the goal itself?", "목표를 그대로 계산하면?"),
+      narr: t(E, "The natural shortcut is wrong half the time — here is a case where it is.",
+                 "당연해 보이는 지름길인데, 절반은 틀려요. 틀리는 경우를 직접 봐요."),
+      content: (<WhyNotGoalSim E={E} />),
     },
 
 

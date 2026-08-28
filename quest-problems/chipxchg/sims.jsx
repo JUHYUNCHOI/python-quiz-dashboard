@@ -1391,6 +1391,184 @@ export function LastOneWhySlide({ E }) {
   );
 }
 
+/* ═══ ⑤-b 왜 목표를 그대로 계산하면 안 되나 ═══
+   선생님 2026-08-28: "-1한 것에서 뭘 구한다는건 필요한 칩의 갯수를 구하는건데
+   그건 정확하지 않은건가?" → "이에 대한 설명이 들어갔으면 좋겠네".
+   말이 아니라 반례로 답한다: 목표를 바꿔가며 재면 직접 계산은 12개 중 6개에서 1 크게 나옴.
+   표의 네 줄은 완전탐색으로 확인한 값 (아래 주석의 검증 코드와 일치). */
+export function WhyNotGoalSim({ E }) {
+  const CA = 2, CB = 3;
+  const steps = [{ k: "ask" }, { k: "small" }, { k: "direct" }, { k: "real" },
+                 { k: "safe" }, { k: "why" }, { k: "table" }];
+  const ts = useTraceStep(steps); const s = steps[ts.safe];
+
+  /* 완전탐색으로 확인한 값 — 목표 | 진짜 답 | 목표 그대로 | 목표−1 후 +1 */
+  const rows = [
+    { goal: 2, real: 4, direct: 5, ours: 4 },
+    { goal: 3, real: 6, direct: 6, ours: 6 },
+    { goal: 4, real: 7, direct: 8, ours: 7 },
+    { goal: 5, real: 9, direct: 9, ours: 9 },
+  ];
+
+  const say =
+    s.k === "ask" ? t(E,
+        <>Wait — why not just count the chips<br />that <b>make A 5</b>, the goal itself?</>,
+        <>그런데 목표 <b style={{color:RED,...NW}}>A 5개</b>를<br />그대로 계산하면 안 될까요?<br />A 5개 만드는 칩 수를 바로 세는 거예요.</>)
+  : s.k === "small" ? t(E,
+        <>Let's test it on a <b>smaller goal</b>.<br />Goal becomes <b style={{color:RED,...NW}}>A 2</b>. The swap stays the same.</>,
+        <><b>작은 목표</b>로 시험해 볼게요.<br />목표를 <b style={{color:RED,...NW}}>A 2개</b>로 바꿉니다.<br />교환은 그대로 <b style={NW}>B 3개 → A 2개</b>예요.</>)
+  : s.k === "direct" ? t(E,
+        <>Counting the goal directly:<br /><b style={{color:BLU,...NW}}>2 B</b> that never gather, plus<br /><b style={{color:BLU,...NW}}>3 B</b> to make <b style={{color:RED,...NW}}>A 2</b>. That's <b style={NW}>5 chips</b>.</>,
+        <>목표를 그대로 세면 이렇게 돼요.<br />묶이지 못하고 버려지는 <b style={{color:BLU,...NW}}>B 2개</b>,<br />거기에 <b style={{color:RED,...NW}}>A 2개</b>를 만들 <b style={{color:BLU,...NW}}>B 3개</b>.<br />합쳐서 <b style={NW}>칩 5개</b>.</>)
+  : s.k === "real" ? t(E,
+        <>But <b style={NW}>4 chips</b> already do it.<br /><b style={{color:BLU,...NW}}>B 4</b> → one group of 3, one left over.<br />That gives <b style={{color:RED,...NW}}>A 2</b>.</>,
+        <>그런데 <b style={NW}>칩 4개</b>면 이미 됩니다.<br /><b style={{color:BLU,...NW}}>B 4개</b> → 3개로 묶음 하나, 남는 건 1개.<br /><b style={{color:RED,...NW}}>A 2개</b>가 나와요.</>)
+  : s.k === "safe" ? t(E,
+        <>And if some come as <b style={{color:RED,...NW}}>A</b>, A only grows.<br />So <b style={NW}>4 chips</b> is already <b>certain</b> — not 5.</>,
+        <>그리고 <b style={{color:RED,...NW}}>A</b> 가 섞여 오면 A 는 더 늘기만 해요.<br />그래서 <b style={NW}>칩 4개</b>면 이미 <b>확실</b>해요. 5개가 아니라요.</>)
+  : s.k === "why" ? t(E,
+        <>The direct count assumed <b>two worsts at once</b>:<br />"2 B are wasted" <b>and</b> "a group is filled".<br />With 4 chips only <b style={NW}>1</b> is wasted.</>,
+        <>직접 계산은 <b>최악을 두 번 겹쳐</b> 셌어요.<br />"B 2개가 버려진다" 와 "묶음을 꽉 채운다" 를<br />같이 일어나는 것처럼 본 거예요.<br />칩 4개일 땐 버려지는 게 <b style={NW}>1개</b>뿐이에요.</>)
+  : t(E,
+        <>Changing the goal, the direct count is<br /><b>right sometimes, wrong sometimes</b>.<br />So we can't use it.</>,
+        <>목표를 바꿔가며 재 보면<br />직접 계산은 <b>맞을 때도 있고 틀릴 때도</b> 있어요.<br />그래서 쓸 수가 없어요.</>);
+
+  /* 칩 한 줄 + 결과 */
+  const Row = ({ b, r = 0, tone, note }) => {
+    const g = Math.floor(b / CB), v = r + g * CA;
+    const col = tone === "good" ? "#15803d" : "#dc2626";
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", padding: "7px 11px",
+        borderRadius: 9, marginBottom: 6, border: `2px solid ${col}`,
+        background: tone === "good" ? "#f0fdf4" : "#fef2f2" }}>
+        <span style={{ minWidth: 56, fontSize: 11.5, fontWeight: 800, color: "#334155", flexShrink: 0 }}>
+          {t(E, `${b + r} chips`, `칩 ${b + r}개`)}
+        </span>
+        <span style={{ display: "inline-flex", gap: 3, flexWrap: "wrap", flexShrink: 0 }}>
+          {Array.from({ length: b }).map((_, i) => <Chip key={"b" + i} color="blue" size={17} />)}
+          {Array.from({ length: r }).map((_, i) => <Chip key={"r" + i} color="red" size={17} />)}
+        </span>
+        <span style={{ flex: 1, minWidth: 88, fontSize: 10.5, color: "#94a3b8",
+          fontFamily: "'JetBrains Mono',monospace", ...NW }}>
+          {t(E, `B ${b} → ${g} grp`, `B ${b}개 → 묶음 ${g}개`)}
+        </span>
+        <span style={{ fontSize: 12.5, fontWeight: 800, color: col, flexShrink: 0 }}>
+          {t(E, `A ${v}`, `A ${v}개`)}
+        </span>
+        {note && <span style={{ fontSize: 10.5, fontWeight: 800, color: col, flexShrink: 0 }}>{note}</span>}
+      </div>
+    );
+  };
+
+  return (
+    <div style={{ padding: 16, paddingBottom: 120 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Why not just count the goal itself?", "목표를 그대로 계산하면 안 될까요?")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
+      <Say tone={s.k === "ask" ? "stuck" : s.k === "why" || s.k === "table" ? "aha" : "go"}>{say}</Say>
+
+      {/* 시험용 목표 배지 — 작은 목표로 바꾼 뒤부터 계속 */}
+      {s.k !== "ask" && s.k !== "table" && (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 7, marginBottom: 11,
+          fontSize: 12, fontWeight: 800, color: "#15803d", wordBreak: "keep-all" }}>
+          <span style={{ padding: "3px 10px", borderRadius: 999, background: "#f0fdf4", border: "1.5px solid #86efac" }}>
+            🎯 {t(E, "test goal  A 2", "시험 목표 A 2개")}
+          </span>
+          <span style={{ display: "inline-flex", gap: 3 }}>
+            <Chip color="red" size={15} /><Chip color="red" size={15} />
+          </span>
+        </div>
+      )}
+
+      <div style={{ maxWidth: 480, margin: "0 auto" }}>
+        {s.k === "direct" && (
+          <div style={{ padding: "11px 13px", borderRadius: 10, background: "#fef2f2", border: "2px solid #fca5a5",
+            textAlign: "center", fontSize: 12.5, fontWeight: 800, color: "#7f1d1d",
+            wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.9 }}>
+            {t(E, <>2 (wasted) + 3 (to make A 2) = <b style={{ fontSize: 15 }}>5 chips</b></>,
+                  <>2 (버려짐) + 3 (A 2개 만들기) = <b style={{ fontSize: 15 }}>칩 5개</b></>)}
+          </div>
+        )}
+        {s.k === "real" && <Row b={4} tone="good" note={t(E, "← already ✓", "← 벌써 됨 ✓")} />}
+        {s.k === "safe" && (
+          <>
+            <Row b={4} tone="good" note="✓" />
+            <Row b={3} r={1} tone="good" note="✓" />
+            <Row b={2} r={2} tone="good" note="✓" />
+            <div style={{ marginTop: 7, textAlign: "center", fontSize: 12.5, fontWeight: 800, color: "#15803d",
+              wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E, "answer for goal A 2 = 4 chips, not 5", "목표 A 2개의 답 = 칩 4개. 5개가 아니에요.")}
+            </div>
+          </>
+        )}
+        {s.k === "why" && (
+          <div style={{ display: "grid", gap: 8 }}>
+            <div style={{ padding: "10px 12px", borderRadius: 10, background: "#fef2f2", border: "2px solid #fca5a5",
+              fontSize: 12, fontWeight: 700, color: "#7f1d1d", lineHeight: 1.8,
+              wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E, <><b>Direct count assumed</b><br />B B <span style={{ opacity: .55 }}>(wasted)</span> + B B B <span style={{ opacity: .55 }}>(full group)</span> = 5</>,
+                    <><b>직접 계산이 가정한 것</b><br />B B <span style={{ opacity: .55 }}>(버려짐)</span> + B B B <span style={{ opacity: .55 }}>(꽉 찬 묶음)</span> = 5</>)}
+            </div>
+            <div style={{ padding: "10px 12px", borderRadius: 10, background: "#f0fdf4", border: "2px solid #86efac",
+              fontSize: 12, fontWeight: 700, color: "#14532d", lineHeight: 1.8,
+              wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E, <><b>What 4 chips really look like</b><br />B B B <span style={{ opacity: .55 }}>(group)</span> + B <span style={{ opacity: .55 }}>(only 1 wasted)</span> = 4</>,
+                    <><b>칩 4개의 실제 모습</b><br />B B B <span style={{ opacity: .55 }}>(묶음)</span> + B <span style={{ opacity: .55 }}>(버려지는 건 1개뿐)</span> = 4</>)}
+            </div>
+          </div>
+        )}
+        {s.k === "table" && (
+          <>
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ borderCollapse: "collapse", margin: "0 auto", fontSize: 12 }}>
+                <thead>
+                  <tr style={{ background: "#f8fafc" }}>
+                    {[t(E, "goal", "목표"), t(E, "true answer", "진짜 답"),
+                      t(E, "goal directly", "목표 그대로"), t(E, "ours (−1, +1)", "우리 식 (−1, +1)")].map((h, i) => (
+                      <th key={i} style={{ padding: "7px 11px", border: "1px solid #e2e8f0", fontSize: 11,
+                        fontWeight: 800, color: "#475569", whiteSpace: "nowrap" }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((r) => {
+                    const dOk = r.direct === r.real;
+                    return (
+                      <tr key={r.goal}>
+                        <td style={{ padding: "7px 11px", border: "1px solid #e2e8f0", textAlign: "center",
+                          fontWeight: 800, color: RED, ...NW }}>{t(E, `A ${r.goal}`, `A ${r.goal}개`)}</td>
+                        <td style={{ padding: "7px 11px", border: "1px solid #e2e8f0", textAlign: "center",
+                          fontWeight: 800, color: "#334155" }}>{r.real}</td>
+                        <td style={{ padding: "7px 11px", border: "1px solid #e2e8f0", textAlign: "center",
+                          fontWeight: 800, color: dOk ? "#15803d" : "#dc2626",
+                          background: dOk ? "#f0fdf4" : "#fef2f2" }}>{r.direct} {dOk ? "✓" : "✗"}</td>
+                        <td style={{ padding: "7px 11px", border: "1px solid #e2e8f0", textAlign: "center",
+                          fontWeight: 800, color: "#15803d", background: "#f0fdf4" }}>{r.ours} ✓</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div style={{ marginTop: 11, padding: "10px 13px", borderRadius: 10, background: "#eff6ff",
+              border: "1.5px solid #93c5fd", fontSize: 12.5, fontWeight: 700, color: "#1e40af",
+              lineHeight: 1.85, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
+              {t(E, <>"The last failing count" is something we <b>actually built</b>.<br />So it never double-counts the worst.<br /><b>answer = last failing count + 1</b></>,
+                    <>"안 되는 마지막" 은 우리가 <b>직접 만들어 본</b> 거예요.<br />그래서 최악을 겹쳐 세는 일이 없어요.<br /><b>답 = 안 되는 마지막 + 1</b></>)}
+            </div>
+          </>
+        )}
+      </div>
+      </StepFade>
+
+      <div style={{ marginTop: 22 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}
+
 /* ═══ ⑥ 계획 — 코드 짜는 순서 (코드 전에 말로) ═══ */
 export function PlanSlide({ E }) {
   return (
