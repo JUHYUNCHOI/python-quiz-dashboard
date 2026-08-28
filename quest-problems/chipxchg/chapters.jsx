@@ -129,14 +129,14 @@ export function makeChipXchgCh1(E) {
       content: (<WorstCaseWhySim E={E} />),
     },
 
-    // [승] 첫 아이디어와 그 한계 — 학생이 실제로 떠올릴 방법을 먼저 끝까지 해 본다.
-    // 답 9 를 세어서 찾은 다음, fA 가 10^18 이라 그 방법이 무너지는 걸 본다.
-    // (선생님 2026-08-28: "언제 되나도 셀수 있는건데 그렇게 하면 엄청 오래걸리는것 설명")
+    // [승] 앞 페이지에서 세서 답을 찾았다. 그 방법이 어디까지 되는지 본다.
+    // 세는 걸 여기서 또 하면 중복이라, 목표를 키우며 한계만 (선생님 2026-08-28:
+    // "언제 되나도 셀수 있는건데 그렇게 하면 엄청 오래걸리는것 설명").
     {
       type: "reveal",
-      label: t(E, "Just count up?", "하나씩 세어보면?"),
-      narr: t(E, "The obvious way works — and then the limits break it.",
-                 "누구나 떠올리는 방법이에요. 답도 나와요. 그런데 제약이 이 방법을 무너뜨려요."),
+      label: t(E, "How far does counting go?", "세는 방법의 한계"),
+      narr: t(E, "Counting gave us the answer. Now watch it break as the goal grows.",
+                 "방금 세서 답을 찾았어요. 목표를 키우면 이 방법이 어떻게 되는지 봐요."),
       content: (<CountUpSim E={E} />),
     },
 
