@@ -382,7 +382,7 @@ export function getChipXchgFormulaWalk(E, lang = "py") {
     { hi: [6, last - 2], bubble: t(E, "③ How many chips can it stay there? Swapping pays (cA ≥ cB) → A only, 1 chip each. Swapping loses → B groups (cB chips buy cA A), and the rest as single A chips.",
                                       "③ 거기서 칩 몇 개까지 버틸까요? 환전이 이득(cA ≥ cB)이면 A만, 1개당 1칩. 손해면 B 묶음(칩 cB개로 A cA개)에 남는 건 A칩으로.") },
     { hi: [last, last], bubble: t(E, "One more chip after that → the goal is reached whatever comes. That is the +1. This is code ②.",
-                                     "거기서 칩 하나만 더 받으면 무슨 색이 오든 목표에 닿아요. 그게 +1 이에요. 이게 코드 ②예요.") },
+                                     "거기서 칩 하나만 더 받으면 A 가 오든 B 가 오든 목표에 닿아요. 그게 +1 이에요. 이게 코드 ②예요.") },
   ] };
 }
 
