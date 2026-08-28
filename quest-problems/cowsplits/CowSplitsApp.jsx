@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
+import { StepFade } from "@/components/quest/StepFade";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
 import { CowSplitsProgressiveCode, downloadCowSplitsPDF, getCowSplitsSections } from "./components";
@@ -150,7 +151,7 @@ export default function CowSplitsApp(props = {}) {
           marginBottom: 10, boxShadow: "0 2px 10px rgba(0,0,0,.04)", overflow: "hidden",
           minHeight: 460,
         }}>
-          {renderContent()}
+          <StepFade k={`${tab}-${cur}-${lang}`}>{renderContent()}</StepFade>
         </div>
         <div style={{ height: 110 }} />
       </div>
