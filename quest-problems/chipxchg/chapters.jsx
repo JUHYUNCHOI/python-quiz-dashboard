@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, AllBlueWorstSim, AllRedWorstSim, LastOneWhySlide, WhyMinusPlusSim, WorstCaseWhySim } from "./sims";
+import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, AllBlueWorstSim, AllRedWorstSim, LastOneWhySlide, WorstCaseWhySim } from "./sims";
 
 const A = "#2563eb";
 
@@ -170,23 +170,12 @@ export function makeChipXchgCh1(E) {
     //      (선생님 2026-08-26: "이걸 다음 페이지에 나두는건? 이 페이지가 넘 긴데").
     {
       type: "reveal",
-      label: t(E, "Tool: how many chips force 4 red?", "도구: A 4개를 받으려면 칩 몇 개?"),
-      narr: t(E, "How many chips reach the goal no matter which combination comes?",
-                 "어떤 조합이 와도 목표에 닿으려면 칩이 몇 개 필요할까요?"),
+      label: t(E, "The answer: last failing count + 1", "답 구하기: 안 되는 마지막 + 1"),
+      narr: t(E, "Instead of 'when does it work', we ask 'when does it still fail' — and add one.",
+                 "'언제 되나' 말고 '언제까지 안 되나' 를 세고, 거기서 하나 더해요."),
       content: (<LastOneWhySlide E={E} />),
     },
 
-    // [전] 도구 ④-2: 위 관찰을 칩 개수마다 다 해보면 사다리가 나오고, 거기서 식이 그냥 읽힌다.
-    //      한 페이지에 관찰 + 식 유도를 같이 두니 너무 길고, 유도가 '먼저 틀리게 세고 −1 로 고치는'
-    //      모양이라 설명이 안 됐음 (선생님 2026-08-27: "결론적으로 −1을 안하면 6이 된다는건 설명이 아니지").
-    //      → 식을 missing + eaten*(cB−cA) 로 바꿔 보정을 없애고, 사다리로 관찰→식 순서를 만듦.
-    {
-      type: "reveal",
-      label: t(E, "Tool: why −1 and why +1", "도구: 왜 −1 이고 왜 +1 인가"),
-      narr: t(E, "The formula has a −1 and a +1. Here is where each of them comes from.",
-                 "식에 −1 과 +1 이 있어요. 그게 각각 어디서 나온 건지 한 단계씩 봐요."),
-      content: (<WhyMinusPlusSim E={E} />),
-    },
 
     // [결] 계획 — 공식 단계 (개념 슬라이드, 코드는 다음 챕터에서)
 
