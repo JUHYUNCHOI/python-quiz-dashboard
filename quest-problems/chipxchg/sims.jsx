@@ -1234,8 +1234,8 @@ export function LastOneWhySlide({ E }) {
         <>I start with <b>nothing</b> — A 0, B 0. The goal is <b style={{color:RED,...NW}}>A 5</b>.<br />I have to receive chips, but <b>I can't choose how many are A.</b></>,
         <>가진 게 <b>하나도 없어요.</b> A 0개, B 0개.<br />목표는 <b style={{color:RED,...NW}}>A 5개</b>예요.<br />칩을 받아야 하는데, <b>몇 개가 A 로 올지는 내가 못 골라요.</b></>)
   : s.k === "fail" ? t(E,
-        <>So instead of asking "when does it work",<br />ask <b>"when does it still fail?"</b><br />It fails when A ends at <b style={{color:RED,...NW}}>4 or fewer</b>. <b>4 = 5 − 1</b>.</>,
-        <>그래서 "언제 되나" 를 묻는 대신<br /><b>"언제까지 안 되나"</b> 를 물어요.<br />안 되는 건 A 가 <b style={{color:RED,...NW}}>4개 이하</b>일 때. <b>4 = 5 − 1</b> 이에요.</>)
+        <>Counting up is out, so we look at the <b>failing side</b>.<br />There we can <b>build the worst case ourselves.</b><br />It fails when A ends at <b style={{color:RED,...NW}}>4 or fewer</b>. <b>4 = 5 − 1</b>.</>,
+        <>세는 건 안 되니까 <b>안 되는 쪽</b>을 봐요.<br />안 되는 쪽은 제일 나쁜 경우를 <b>직접 만들 수</b> 있거든요.<br />안 되는 건 A 가 <b style={{color:RED,...NW}}>4개 이하</b>일 때. <b>4 = 5 − 1</b> 이에요.</>)
   : s.k === "waste" ? t(E,
         <>B only turns into A when <b style={NW}>3</b> of them gather.<br />So <b style={{color:BLU,...NW}}>2 B</b> can sit there giving me <b>nothing</b>.<br />That's <b style={NW}>2 chips</b> with <b style={{color:RED,...NW}}>A 0</b>.</>,
         <>B 는 <b style={NW}>3개</b>가 모여야 A 가 돼요.<br />그래서 <b style={{color:BLU,...NW}}>B 2개</b>는 받아도 <b>아무것도 안 돼요.</b><br />칩 <b style={NW}>2개</b>를 받고 <b style={{color:RED,...NW}}>A 는 0개</b>.</>)
@@ -1378,6 +1378,134 @@ export function LastOneWhySlide({ E }) {
             </div>
             <div style={{ fontSize: 11, color: "#94a3b8", textAlign: "center" }}>
               {t(E, "— from the official USACO analysis (Benjamin Qi)", "— USACO 공식 풀이 (Benjamin Qi) 의 유도")}
+            </div>
+          </div>
+        )}
+      </div>
+      </StepFade>
+
+      <div style={{ marginTop: 22 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}
+
+/* ═══ ④-b 하나씩 세어보기 — 되는 방법이지만 느리다 ═══
+   선생님 2026-08-28: "언제까지 안되나를 셀수 있다는거는 언제 되나도 셀수 있는건데
+   그렇게 하면 엄청 오래걸리는것 설명".
+   전엔 '언제 되나 말고 언제까지 안 되나를 물어요' 라고 선언만 하고 넘어갔음.
+   먼저 학생이 떠올릴 방법(칩 1개부터 넣어보기)을 실제로 끝까지 해서 답 9를 찾고,
+   그 다음 fA 가 10^18 이라 그 방법이 무너지는 걸 보여준다 (기·승·전·결의 '한계').
+   최악값은 하드코딩하지 않고 그 자리에서 완전탐색 — 표와 어긋날 수 없음. */
+export function CountUpSim({ E }) {
+  const CA = 2, CB = 3, GOAL = 5, MAXX = 9;
+  /* 칩 x 개일 때 제일 나쁜 조합 (A 가 제일 적게 나오는 나눔) */
+  const worst = (x) => {
+    let best = null;
+    for (let r = 0; r <= x; r++) {
+      const v = r + Math.floor((x - r) / CB) * CA;
+      if (!best || v < best.v) best = { v, r, b: x - r };
+    }
+    return best;
+  };
+  const steps = [{ k: "idea" }, ...Array.from({ length: MAXX }, (_, i) => ({ k: "x", x: i + 1 })), { k: "limit" }];
+  const ts = useTraceStep(steps); const s = steps[ts.safe];
+  const w = s.k === "x" ? worst(s.x) : null;
+
+  const say =
+    s.k === "idea" ? t(E,
+        <>We can just <b>try chip counts one by one.</b><br />For each count, build its <b>worst split</b><br />and see if it still reaches <b style={{color:RED,...NW}}>A 5</b>.</>,
+        <>칩 수를 <b>1개부터 하나씩 넣어 보면</b> 돼요.<br />칩 수마다 <b>제일 나쁜 조합</b>을 만들어서<br /><b style={{color:RED,...NW}}>A 5개</b>가 되는지 보는 거예요.</>)
+  : s.k === "x" ? (w.v >= GOAL ? t(E,
+        <><b style={NW}>{s.x} chips</b> — even the worst split gives <b style={{color:RED,...NW}}>A {w.v}</b>.<br /><b style={{color:"#15803d"}}>It works. The answer is {s.x}.</b></>,
+        <><b style={NW}>칩 {s.x}개</b> — 제일 나쁜 조합도 <b style={{color:RED,...NW}}>A {w.v}개</b>.<br /><b style={{color:"#15803d"}}>됐어요. 답은 칩 {s.x}개예요.</b></>)
+      : t(E,
+        <><b style={NW}>{s.x} chips</b> — the worst split leaves <b style={{color:RED,...NW}}>A {w.v}</b>.<br />Not there yet.</>,
+        <><b style={NW}>칩 {s.x}개</b> — 제일 나쁜 조합은 <b style={{color:RED,...NW}}>A {w.v}개</b>.<br />아직 안 돼요.</>))
+  : t(E,
+        <>The method is <b>right</b>. But <b style={{color:RED,...NW}}>f<sub>A</sub></b> goes up to <b style={NW}>10<sup>18</sup></b>.<br />Then we'd count not 9 times but that many.<br /><b>No computer finishes that.</b></>,
+        <>이 방법은 <b>맞아요.</b> 그런데 목표 <b style={{color:RED,...NW}}>f<sub>A</sub></b> 는<br /><b style={NW}>10<sup>18</sup></b> 까지 갑니다.<br />그러면 9번이 아니라 그만큼 세야 해요.<br /><b>어떤 컴퓨터도 못 끝냅니다.</b></>);
+
+  /* 지금까지 확인한 칩 수들이 쌓이는 표 */
+  const shown = s.k === "x" ? s.x : s.k === "limit" ? MAXX : 0;
+
+  return (
+    <div style={{ padding: 16, paddingBottom: 120 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Just try every chip count?", "그냥 하나씩 세어보면 안 될까요?")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
+      <Say tone={s.k === "limit" ? "stuck" : s.k === "x" && w.v >= GOAL ? "aha" : "go"}>{say}</Say>
+
+      {s.k !== "limit" && (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 7, marginBottom: 11,
+          fontSize: 12, fontWeight: 800, color: "#15803d", wordBreak: "keep-all" }}>
+          <span style={{ padding: "3px 10px", borderRadius: 999, background: "#f0fdf4", border: "1.5px solid #86efac" }}>
+            🎯 {t(E, "goal  A 5", "목표 A 5개")}
+          </span>
+          <span style={{ display: "inline-flex", gap: 3 }}>
+            {Array.from({ length: GOAL }).map((_, i) => <Chip key={i} color="red" size={15} />)}
+          </span>
+        </div>
+      )}
+
+      <div style={{ maxWidth: 480, margin: "0 auto" }}>
+        {shown > 0 && (
+          <div style={{ display: "grid", gap: 4 }}>
+            {Array.from({ length: shown }, (_, i) => i + 1).map((x) => {
+              const q = worst(x), ok = q.v >= GOAL, last = x === shown;
+              const col = ok ? "#15803d" : "#dc2626";
+              return (
+                <div key={x} style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
+                  padding: "6px 10px", borderRadius: 9,
+                  border: `${last ? 2 : 1}px solid ${last ? col : "#e2e8f0"}`,
+                  background: last ? (ok ? "#f0fdf4" : "#fef2f2") : "#fff",
+                  opacity: last ? 1 : 0.62 }}>
+                  <span style={{ minWidth: 52, fontSize: 11.5, fontWeight: 800, color: "#334155", flexShrink: 0 }}>
+                    {t(E, `${x} chips`, `칩 ${x}개`)}
+                  </span>
+                  <span style={{ display: "inline-flex", gap: 3, flexWrap: "wrap", flexShrink: 0 }}>
+                    {Array.from({ length: q.b }).map((_, i) => <Chip key={"b" + i} color="blue" size={15} />)}
+                    {Array.from({ length: q.r }).map((_, i) => <Chip key={"r" + i} color="red" size={15} />)}
+                  </span>
+                  <span style={{ flex: 1 }} />
+                  <span style={{ fontSize: 12, fontWeight: 800, color: col, flexShrink: 0, ...NW }}>
+                    {t(E, `A ${q.v}`, `A ${q.v}개`)}
+                  </span>
+                  <span style={{ fontSize: 11, fontWeight: 800, color: col, flexShrink: 0 }}>{ok ? "✓" : "✗"}</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        {s.k === "idea" && (
+          <div style={{ padding: "11px 13px", borderRadius: 10, background: "#f0f9ff", border: "1.5px solid #7dd3fc",
+            textAlign: "center", fontSize: 12.5, fontWeight: 700, color: "#075985",
+            wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.85 }}>
+            {t(E, <>1 chip? 2 chips? 3 chips? …<br />Stop at the first one that always works.</>,
+                  <>칩 1개? 2개? 3개? …<br />처음으로 항상 되는 칩 수에서 멈추면 돼요.</>)}
+          </div>
+        )}
+        {s.k === "limit" && (
+          <div style={{ marginTop: 11, display: "grid", gap: 8 }}>
+            <div style={{ padding: "10px 13px", borderRadius: 10, background: "#f0fdf4", border: "1.5px solid #86efac",
+              fontSize: 12.5, fontWeight: 700, color: "#14532d", lineHeight: 1.85,
+              wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
+              {t(E, <>goal <b>A 5</b> → we counted <b>9 times</b> ✓</>,
+                    <>목표 <b>A 5개</b> → <b>9번</b> 세서 찾았어요 ✓</>)}
+            </div>
+            <div style={{ padding: "10px 13px", borderRadius: 10, background: "#fef2f2", border: "2px solid #fca5a5",
+              fontSize: 12.5, fontWeight: 700, color: "#7f1d1d", lineHeight: 1.85,
+              wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
+              {t(E, <>goal <b>A 10<sup>18</sup></b> → about <b>10<sup>18</sup> times</b> ✗<br />That is a billion billion.</>,
+                    <>목표 <b>A 10<sup>18</sup>개</b> → 약 <b>10<sup>18</sup>번</b> ✗<br />100경 번이에요.</>)}
+            </div>
+            <div style={{ padding: "10px 13px", borderRadius: 10, background: "#eff6ff", border: "1.5px solid #93c5fd",
+              fontSize: 12.5, fontWeight: 800, color: "#1e40af", lineHeight: 1.85,
+              wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
+              {t(E, <>So we need to get the same 9<br /><b>without counting up to it.</b></>,
+                    <>그래서 이 9를 <b>세지 않고</b><br />바로 구하는 방법이 필요해요.</>)}
             </div>
           </div>
         )}

@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getChipXchgWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, AllBlueWorstSim, AllRedWorstSim, LastOneWhySlide, WhyNotGoalSim, WorstCaseWhySim } from "./sims";
+import { ChipCountSim, GameBoardSim, CheckSim, StrategySlide, PlanSlide, AllBlueWorstSim, AllRedWorstSim, CountUpSim, LastOneWhySlide, WhyNotGoalSim, WorstCaseWhySim } from "./sims";
 
 const A = "#2563eb";
 
@@ -127,6 +127,17 @@ export function makeChipXchgCh1(E) {
       narr: t(E, "The chips arrive without me knowing their colours — so luck can't be part of the answer.",
                  "칩은 무슨 색인지 모른 채로 와요 — 그러니 운에 기댈 수는 없어요."),
       content: (<WorstCaseWhySim E={E} />),
+    },
+
+    // [승] 첫 아이디어와 그 한계 — 학생이 실제로 떠올릴 방법을 먼저 끝까지 해 본다.
+    // 답 9 를 세어서 찾은 다음, fA 가 10^18 이라 그 방법이 무너지는 걸 본다.
+    // (선생님 2026-08-28: "언제 되나도 셀수 있는건데 그렇게 하면 엄청 오래걸리는것 설명")
+    {
+      type: "reveal",
+      label: t(E, "Just count up?", "하나씩 세어보면?"),
+      narr: t(E, "The obvious way works — and then the limits break it.",
+                 "누구나 떠올리는 방법이에요. 답도 나와요. 그런데 제약이 이 방법을 무너뜨려요."),
+      content: (<CountUpSim E={E} />),
     },
 
     // [전] 전략 — 공식 큰 그림 (지금 걸로 되나? 안 되면 최악의 경우에 몇 개?)
