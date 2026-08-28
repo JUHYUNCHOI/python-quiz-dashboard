@@ -1154,17 +1154,17 @@ export function StrategySlide({ E }) {
             marginBottom: 10, fontSize: 12.5, color: "#92400e", lineHeight: 1.8, wordBreak: "keep-all" }}>
             {t(E,
               <>The worst combination keeps me <b>one short</b> of the goal. It can do that up to some number of chips — and <b>one chip past that, it can't.</b></>,
-              <>칩이 적으면 운 나쁜 조합이 왔을 때 <b>하나 모자랄 수</b> 있어요.<br />칩을 하나씩 늘리다 보면 어느 순간부터는<br /><b>어떤 조합이 와도</b> 목표에 닿아요.</>)}
+              <>목표가 <b>A 4개</b>라고 해볼게요.<br />4개를 <b>다 만들 필요는 없어요.</b><br /><b>3개</b>까지만 만들면, 마지막 1개는<br />무슨 칩이 오든 <b>저절로 채워지거든요.</b></>)}
           </div>
           <div style={{ textAlign: "center", padding: "12px 10px", borderRadius: 10, background: "#f5f3ff",
             border: "2px solid #c4b5fd", fontSize: 13.5, fontWeight: 800, color: "#5b21b6",
             wordBreak: "keep-all", lineHeight: 1.8 }}>
-            {t(E, <>answer = <span style={{ color: "#b45309" }}>the last chip that can still fall short</span> <span style={{ color: "#15803d" }}>+ 1</span></>,
-                  <>답 = <span style={{ color: "#b45309" }}>아직 모자랄 수 있는 마지막 칩 개수</span> <span style={{ color: "#15803d" }}>+ 1</span></>)}
+            {t(E, <>answer = <span style={{ color: "#b45309" }}>chips to build 3 A</span> <span style={{ color: "#15803d" }}>+ 1</span></>,
+                  <>답 = <span style={{ color: "#b45309" }}>A 3개를 만드는 칩 수</span> <span style={{ color: "#15803d" }}>+ 1</span></>)}
           </div>
           <div style={{ marginTop: 9, fontSize: 11.5, color: "#64748b", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
-            {t(E, <>"one short of the goal" is the <b style={{ color: "#b45309" }}>− 1</b> in the formula; "one more chip" is the <b style={{ color: "#15803d" }}>+ 1</b>. The next pages count each piece.</>,
-                  <>"하나 모자라다" 가 식의 <b style={{ color: "#b45309" }}>− 1</b>,<br />"거기서 하나 더" 가 <b style={{ color: "#15803d" }}>+ 1</b> 이에요.<br />다음 페이지들에서 하나씩 세어 봐요.</>)}
+            {t(E, <>The <b>3</b> (one below the goal) is the <b style={{ color: "#b45309" }}>− 1</b>;<br />the last chip is the <b style={{ color: "#15803d" }}>+ 1</b>.<br /><b>Why not count 4?</b> Then the last A would need<br />a whole group (3 chips) → <b>6 chips</b>, when 5 is enough.</>,
+                  <>목표 4개보다 하나 적은 <b>3</b> 이 식의 <b style={{ color: "#b45309" }}>− 1</b>,<br />마지막 한 칩이 <b style={{ color: "#15803d" }}>+ 1</b> 이에요.<br /><b>4개로 세면 안 되나요?</b> 그럼 마지막 1개도<br />묶음(칩 3개)으로 사야 한다고 세서 <b>칩 6개</b>가 나와요 — 5개면 되는데요.</>)}
           </div>
         </div>
       )}
