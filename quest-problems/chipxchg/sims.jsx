@@ -1508,16 +1508,16 @@ export function WhyMinusPlusSim({ E }) {
             </div>
           </div>
           <div style={{ padding: "9px 12px", borderRadius: 9, background: "#fffbeb", border: "1.5px solid #fbbf24", color: "#92400e" }}>
-            {t(E, <><b>y</b> = the largest <b>n<sub>A</sub> + n<sub>B</sub></b> among all pairs that still fall short. The answer is <b>y + 1</b> — that is the +1.</>,
-                  <><b>y</b> = 아직 모자란 짝들 중 <b>n<sub>A</sub> + n<sub>B</sub></b> 가 제일 큰 값. 답은 <b>y + 1</b> — 이게 그 +1 이에요.</>)}
+            {t(E, <><b>y</b> = the largest <b>n<sub>A</sub> + n<sub>B</sub></b> among all pairs that still fall short. Such a pair always exists — <b>(0, 0)</b> is one, since we already know red_now &lt; f<sub>A</sub>. The answer is <b>y + 1</b> — that is the +1.</>,
+                  <><b>y</b> = 아직 모자란 짝들 중 <b>n<sub>A</sub> + n<sub>B</sub></b> 가 제일 큰 값. 그런 짝은 반드시 있어요 — <b>(0, 0)</b> 이 그 하나거든요 (여기까지 왔다는 건 red_now &lt; f<sub>A</sub> 라는 뜻이니까). 답은 <b>y + 1</b> — 이게 그 +1 이에요.</>)}
           </div>
           <div style={{ padding: "9px 12px", borderRadius: 9, background: "#eff6ff", border: "1px solid #93c5fd", color: "#1e40af" }}>
             {t(E, <>At that largest pair the leftover must be maxed: <b>B + n<sub>B</sub> ≡ c<sub>B</sub> − 1 (mod c<sub>B</sub>)</b> — otherwise one more B chip would give a bigger sum that still falls short. So <b>n<sub>B,0</sub> = c<sub>B</sub> − 1 − (B mod c<sub>B</sub>)</b> = our <code>wasted_blue</code>.</>,
                   <>그 최대 짝에서는 자투리가 꽉 차 있어야 해요: <b>B + n<sub>B</sub> ≡ c<sub>B</sub> − 1 (mod c<sub>B</sub>)</b> — 안 그러면 B 를 하나 더 받아도 여전히 모자라서 합이 더 커지거든요. 그래서 <b>n<sub>B,0</sub> = c<sub>B</sub> − 1 − (B mod c<sub>B</sub>)</b>, 우리 코드의 <code>wasted_blue</code> 예요.</>)}
           </div>
           <div style={{ padding: "9px 12px", borderRadius: 9, background: "#f0fdf4", border: "1px solid #86efac", color: "#166534" }}>
-            {t(E, <>And <b>n<sub>A,0</sub> = f<sub>A</sub> − 1 − init</b> = our <code>short_red</code> — the <b>− 1</b>. With <b>n<sub>B</sub> = n<sub>B,0</sub> + i·c<sub>B</sub></b> we get <b>n<sub>A</sub> = n<sub>A,0</sub> − c<sub>A</sub>·i</b>, so the sum is largest at <b>i = 0</b> when c<sub>A</sub> ≥ c<sub>B</sub>, else at <b>i = ⌊n<sub>A,0</sub> / c<sub>A</sub>⌋</b> — exactly our two branches.</>,
-                  <>그리고 <b>n<sub>A,0</sub> = f<sub>A</sub> − 1 − init</b>, 우리 코드의 <code>short_red</code> 예요 — 이게 <b>− 1</b>. <b>n<sub>B</sub> = n<sub>B,0</sub> + i·c<sub>B</sub></b> 로 두면 <b>n<sub>A</sub> = n<sub>A,0</sub> − c<sub>A</sub>·i</b> 가 되고, 합이 최대가 되는 건 c<sub>A</sub> ≥ c<sub>B</sub> 일 때 <b>i = 0</b>, 아니면 <b>i = ⌊n<sub>A,0</sub> / c<sub>A</sub>⌋</b> — 우리 코드의 두 갈래 그대로예요.</>)}
+            {t(E, <>And <b>n<sub>A,0</sub> = f<sub>A</sub> − 1 − red_now</b> = our <code>short_red</code> — the <b>− 1</b>. With <b>n<sub>B</sub> = n<sub>B,0</sub> + i·c<sub>B</sub></b> we get <b>n<sub>A</sub> = n<sub>A,0</sub> − c<sub>A</sub>·i</b>, so the sum is largest at <b>i = 0</b> when c<sub>A</sub> ≥ c<sub>B</sub>, else at <b>i = ⌊n<sub>A,0</sub> / c<sub>A</sub>⌋</b> — exactly our two branches.</>,
+                  <>그리고 <b>n<sub>A,0</sub> = f<sub>A</sub> − 1 − red_now</b>, 우리 코드의 <code>short_red</code> 예요 — 이게 <b>− 1</b>. <b>n<sub>B</sub> = n<sub>B,0</sub> + i·c<sub>B</sub></b> 로 두면 <b>n<sub>A</sub> = n<sub>A,0</sub> − c<sub>A</sub>·i</b> 가 되고, 합이 최대가 되는 건 c<sub>A</sub> ≥ c<sub>B</sub> 일 때 <b>i = 0</b>, 아니면 <b>i = ⌊n<sub>A,0</sub> / c<sub>A</sub>⌋</b> — 우리 코드의 두 갈래 그대로예요.</>)}
           </div>
           <div style={{ fontSize: 11, color: "#94a3b8", textAlign: "center" }}>
             {t(E, "— from the official USACO analysis (Benjamin Qi)", "— USACO 공식 풀이 (Benjamin Qi) 의 유도")}
