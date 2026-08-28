@@ -40,18 +40,18 @@ function ChipXchgSample({ E }) {
   const RED = "#dc2626", RBG = "#fef2f2", BLU = "#2563eb", BBG = "#eff6ff",
         CY = "#0891b2", CBG = "#ecfeff", GR = "#15803d", GBG = "#f0fdf4";
   const test1 = [
-    { v: "2", label: "A", ko: t(E, "start red", "시작 A"), color: RED, bg: RBG },
-    { v: "3", label: "B", ko: t(E, "start blue", "시작 B"), color: BLU, bg: BBG },
-    { v: "1", label: "c_A", ko: t(E, "swap→red", "환전: 받는 A"), color: CY, bg: CBG },
-    { v: "1", label: "c_B", ko: t(E, "swap: blue in", "환전: 내는 B"), color: CY, bg: CBG },
-    { v: "4", label: "f_A", ko: t(E, "goal red", "목표 A"), color: GR, bg: GBG },
+    { v: "2", label: "A", ko: t(E, "start A", "시작 A"), color: RED, bg: RBG },
+    { v: "3", label: "B", ko: t(E, "start B", "시작 B"), color: BLU, bg: BBG },
+    { v: "1", label: "c_A", ko: t(E, "swap: get A", "환전: 받는 A"), color: CY, bg: CBG },
+    { v: "1", label: "c_B", ko: t(E, "swap: give B", "환전: 내는 B"), color: CY, bg: CBG },
+    { v: "4", label: "f_A", ko: t(E, "goal A", "목표 A"), color: GR, bg: GBG },
   ];
   const test2 = [
-    { v: "0", label: "A", ko: t(E, "start red", "시작 A"), color: RED, bg: RBG },
-    { v: "0", label: "B", ko: t(E, "start blue", "시작 B"), color: BLU, bg: BBG },
-    { v: "2", label: "c_A", ko: t(E, "swap→red", "환전: 받는 A"), color: CY, bg: CBG },
-    { v: "3", label: "c_B", ko: t(E, "swap: blue in", "환전: 내는 B"), color: CY, bg: CBG },
-    { v: "5", label: "f_A", ko: t(E, "goal red", "목표 A"), color: GR, bg: GBG },
+    { v: "0", label: "A", ko: t(E, "start A", "시작 A"), color: RED, bg: RBG },
+    { v: "0", label: "B", ko: t(E, "start B", "시작 B"), color: BLU, bg: BBG },
+    { v: "2", label: "c_A", ko: t(E, "swap: get A", "환전: 받는 A"), color: CY, bg: CBG },
+    { v: "3", label: "c_B", ko: t(E, "swap: give B", "환전: 내는 B"), color: CY, bg: CBG },
+    { v: "5", label: "f_A", ko: t(E, "goal A", "목표 A"), color: GR, bg: GBG },
   ];
   return (
     <div style={{ padding: 16 }}>
@@ -67,10 +67,10 @@ function ChipXchgSample({ E }) {
       {/* 각 테스트: 숫자마다 뜻이 바로 아래 */}
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <ChipXchgTestCard E={E} n={1} toks={test1} out="0"
-          reason={t(E, <>1 blue → 1 red, and I already have 2+3=5 <b style={{color:"#15803d"}}>≥ goal 4</b> → <b style={{color:"#15803d"}}>0 extra</b>.</>,
+          reason={t(E, <>1 B → 1 A, and I already have 2+3=5 <b style={{color:"#15803d"}}>≥ goal 4</b> → <b style={{color:"#15803d"}}>0 extra</b>.</>,
                        <>B 1개가 A 1개, 이미 2+3=5 <b style={{color:"#15803d"}}>≥ 목표 4</b> → <b style={{color:"#15803d"}}>추가 0개</b>.</>)} />
         <ChipXchgTestCard E={E} n={2} toks={test2} out="9"
-          reason={t(E, <>Start empty; the worst case wastes blue → need <b style={{color:"#15803d"}}>9 extra</b> <span style={{color:"#94a3b8"}}>(we'll see why!)</span></>,
+          reason={t(E, <>Start empty; the worst case wastes B → need <b style={{color:"#15803d"}}>9 extra</b> <span style={{color:"#94a3b8"}}>(we'll see why!)</span></>,
                        <>빈손 시작인데 최악의 경우 B를 낭비 → <b style={{color:"#15803d"}}>추가 9개</b> 필요 <span style={{color:"#94a3b8"}}>(왜인지 곧!)</span></>)} />
       </div>
       {/* 출력 뜻 */}
@@ -124,8 +124,8 @@ export function makeChipXchgCh1(E) {
     {
       type: "reveal",
       label: t(E, "Why the worst case?", "왜 제일 나쁜 경우?"),
-      narr: t(E, "The chips arrive without me knowing their colours — so luck can't be part of the answer.",
-                 "칩은 무슨 색인지 모른 채로 와요 — 그러니 운에 기댈 수는 없어요."),
+      narr: t(E, "Each chip arrives without me knowing its letter — so luck can't be part of the answer.",
+                 "칩은 A 인지 B 인지 모른 채로 와요.\n그러니 운에 기댈 수는 없어요."),
       content: (<WorstCaseWhySim E={E} />),
     },
 
@@ -152,8 +152,8 @@ export function makeChipXchgCh1(E) {
     // [전] 도구: 환전 세기 = init (지금 가진 걸로 만드는 A)
     {
       type: "reveal",
-      label: t(E, "Tool: red I can make now (red_now)", "도구: 지금 만드는 A (red_now)"),
-      narr: t(E, "How many red can I make right now? Group my blue by cB; leftovers waste. That's red_now.",
+      label: t(E, "Tool: A I can make now (red_now)", "도구: 지금 만드는 A (red_now)"),
+      narr: t(E, "How many A can I make right now? Group my B by cB; leftovers waste. That's red_now.",
                  "지금 가진 걸로 A를 몇 개 만들 수 있을까요? 그 결과가 red_now 예요."),
       content: (<ChipCountSim E={E} />),
     },
@@ -161,8 +161,8 @@ export function makeChipXchgCh1(E) {
     // [전] 도구: 최악의 경우 B로 줌 → 자투리 버림 = 최악 (칩 시각, 슬라이드 없음).
     {
       type: "reveal",
-      label: t(E, "Tool: cA < cB (swap loses) → he gives blue", "도구: cA < cB (바꾸면 손해) → B를 준다"),
-      narr: t(E, "Swap rate here: 3 blue → 2 red. Blue gives me less — so the worst case hands blue. Watch with real chips.",
+      label: t(E, "Tool: cA < cB (swap loses) → he gives B", "도구: cA < cB (바꾸면 손해) → B를 준다"),
+      narr: t(E, "Swap rate here: 3 B → 2 A. B gives me less — so the worst case hands B. Watch with real chips.",
                  "환전이 B 3개 → A 2개라 B를 받으면 손해예요. 그래서 제일 나쁜 건 B가 오는 경우죠."),
       content: (<AllBlueWorstSim E={E} />),
     },
@@ -170,8 +170,8 @@ export function makeChipXchgCh1(E) {
     // [전] 도구: 환전이 이득(cA≥cB)이면 최악의 경우엔 'A'을 줌 (B 아님). 공식의 다른 가지.
     {
       type: "reveal",
-      label: t(E, "Tool: cA ≥ cB (swap gains) → he gives red", "도구: cA ≥ cB (바꾸면 이득) → A를 준다"),
-      narr: t(E, "Opposite rate: 2 blue → 3 red. Now blue gives me MORE — so the worst case hands red instead.",
+      label: t(E, "Tool: cA ≥ cB (swap gains) → he gives A", "도구: cA ≥ cB (바꾸면 이득) → A를 준다"),
+      narr: t(E, "Opposite rate: 2 B → 3 A. Now B gives me MORE — so the worst case hands A instead.",
                  "이번엔 반대로 B 2개 → A 3개예요. B를 받는 게 오히려 이득이라서, 최악의 경우엔 A로 줍니다."),
       content: (<AllRedWorstSim E={E} />),
     },
