@@ -7,6 +7,7 @@
 
 import React from "react";
 import { t } from "@/components/quest/theme";
+import { StepFade } from "@/components/quest/StepFade";
 import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceStepper";
 
 const A = "#2563eb";
@@ -66,6 +67,7 @@ export function ChipCountSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "How many red chips do I end with?", "A 칩은 몇 개가 될까요?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
       <Say tone={s.kind === "total" ? "aha" : "go"}>{say}</Say>
 
       {/* A */}
@@ -100,6 +102,7 @@ export function ChipCountSim({ E }) {
       {s.kind === "convert" && <Cap color={RED}>{t(E, "2 groups → +4 red · leftover stuck", "묶음 2개를 바꿔서 A가 4개 늘었어요. 자투리 1개는 못 바꿔요.")}</Cap>}
       {s.kind === "total" && <Cap color="#15803d">final A = 2 + (7 ÷ 3)×2 = 6</Cap>}
 
+      </StepFade>
       <div style={{ marginTop: 24 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
       </div>
@@ -143,6 +146,7 @@ export function AllBlueWorstSim({ E }) {
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
         {t(E, "extra chips = 8 · swap: 3 blue → 2 red", "추가 칩 = 8개 · 환전: B 3 → A 2")}
       </div>
+      <StepFade fast k={ts.safe}>
       <Say tone={s.k === "worst" ? "stuck" : "go"}>{say}</Say>
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, flexWrap: "wrap", minHeight: 48, marginTop: 8 }}>
@@ -174,6 +178,7 @@ export function AllBlueWorstSim({ E }) {
         </Cap>
       )}
 
+      </StepFade>
       <div style={{ marginTop: 24 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
       </div>
@@ -208,6 +213,7 @@ export function AllRedWorstSim({ E }) {
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
         {t(E, "this example · swap: 2 blue → 3 red (cA ≥ cB)", "이 예시 · 환전: B 2 → A 3 (cA ≥ cB)")}
       </div>
+      <StepFade fast k={ts.safe}>
       <Say tone={s.k === "concl" ? "aha" : "go"}>{say}</Say>
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, flexWrap: "wrap", minHeight: 48, marginTop: 8 }}>
@@ -232,6 +238,7 @@ export function AllRedWorstSim({ E }) {
         )}
       </div>
 
+      </StepFade>
       <div style={{ marginTop: 24 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
       </div>
@@ -766,6 +773,7 @@ export function GameBoardSim({ E }) {
       </div>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "One round of the game", "이 게임 한 판")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
       <Say tone={s.kind === "goal" || s.kind === "block" ? "stuck" : s.kind === "ask" ? "aha" : "go"}>{say}</Say>
 
       {/* 내 칩 — 항상 표시 */}
@@ -838,6 +846,7 @@ export function GameBoardSim({ E }) {
         )}
       </div>
 
+      </StepFade>
       <div style={{ marginTop: 24 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
       </div>
@@ -871,6 +880,7 @@ export function CheckSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Quick check — did I get it?", "잠깐 확인 — 제대로 이해했나요?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
       <Say tone={s.kind === "reveal" ? "aha" : "go"}>
         {s.kind === "ask"
           ? t(E, <>What number do we actually <b>print</b> for each test? Pick one, then flip.</>,
@@ -888,6 +898,7 @@ export function CheckSim({ E }) {
           );
         })}
       </div>
+      </StepFade>
       <div style={{ marginTop: 24 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
       </div>
@@ -1063,6 +1074,7 @@ export function WorstCaseWhySim({ E }) {
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Why do we count the worst case?", "왜 제일 나쁜 경우를 셀까요?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
       <Say tone={s.k === "rule" ? "aha" : s.k === "now" ? "go" : (cur && cur.v >= GOAL ? "go" : "stuck")}>{say}</Say>
 
       {/* 목표는 늘 보이게 (선생님: "몇 개를 만드는 게 목표인데?") */}
@@ -1099,6 +1111,7 @@ export function WorstCaseWhySim({ E }) {
         </div>
       )}
 
+      </StepFade>
       <div style={{ marginTop: 22 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
       </div>
@@ -1117,6 +1130,7 @@ export function StrategySlide({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "How will we solve it?", "어떻게 풀까요?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
       <Say tone={s.kind === "shape" ? "aha" : "go"}>
         {s.kind === "two"
           ? t(E, <>First check what I already have. Two cases.</>, <>먼저 지금 가진 걸 확인해요. 두 경우로 갈려요.</>)
@@ -1154,6 +1168,7 @@ export function StrategySlide({ E }) {
           </div>
         </div>
       )}
+      </StepFade>
       <div style={{ marginTop: 24 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
       </div>
@@ -1306,6 +1321,7 @@ export function LastOneWhySlide({ E }) {
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "I need 4 more red — how many chips?", "A 4개가 더 필요해요 — 칩을 몇 개 받아야 할까요?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
 
       {s.k === "intro" && (
         <>
@@ -1325,6 +1341,7 @@ export function LastOneWhySlide({ E }) {
       {showFour && <Table x={4} focus={focus4} topNote={s.k === "four" ? NOTE.four : null} />}
       {showFive && <Table x={5} focus={focus5} topNote={s.k === "five" ? NOTE.five : null} />}
 
+      </StepFade>
       <div style={{ marginTop: 20 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
       </div>
@@ -1443,6 +1460,7 @@ export function WhyMinusPlusSim({ E }) {
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Why minus 1, and why plus 1?", "왜 −1 이고, 왜 +1 일까요?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
       <Say tone={s.k === "plus" || s.k === "sym" ? "aha" : s.k === "why3" || s.k === "give5" ? "go" : "stuck"}>{say}</Say>
 
       {s.k !== "sym" && s.k !== "whenSame" && s.k !== "math" && <Gauge />}
@@ -1535,6 +1553,7 @@ export function WhyMinusPlusSim({ E }) {
         </div>
       )}
 
+      </StepFade>
       <div style={{ marginTop: 24 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
       </div>

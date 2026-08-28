@@ -16,20 +16,24 @@ function injectOnce() {
   const el = document.createElement("style");
   el.setAttribute("data-quest-stepfade", "");
   el.textContent =
-    /* 시작 opacity 를 0 이 아니라 .35 로: 애니메이션이 멈춘 상태(배경 탭 등)에서도
-       내용을 읽을 수 있어야 함. 0 이면 화면이 비어 버림. */
-    "@keyframes questStepIn{from{opacity:.35;transform:translateY(8px)}to{opacity:1;transform:none}}" +
-    /* fill-mode 를 쓰지 않는다: 애니메이션이 안 돌아도(배경 탭·구형 브라우저)
-       기본 상태가 opacity 1 이라 내용이 반드시 보임. */
-    ".qStepIn{animation:questStepIn 200ms cubic-bezier(.22,.61,.36,1)}" +
-    "@media (prefers-reduced-motion:reduce){.qStepIn{animation:none}}";
+    /* 움직임이 신호다 — 아래에서 위로 미끄러져 들어오는 게 눈에 보여야 함.
+       opacity 는 .55 에서 시작: 애니메이션이 멈춰도(배경 탭) 절대 안 보이는 일은 없음.
+       fill-mode 도 안 씀 — 애니메이션이 아예 안 돌면 기본 상태(완전 불투명)로 보임. */
+    "@keyframes questStepIn{" +
+    "from{opacity:.55;transform:translateY(16px)}" +
+    "60%{opacity:1}" +
+    "to{opacity:1;transform:none}}" +
+    ".qStepIn{animation:questStepIn 300ms cubic-bezier(.16,.84,.44,1)}" +
+    /* 시뮬 안(▶)은 더 짧게 — 같은 화면 안에서 바뀌니까 */
+    ".qStepInFast{animation:questStepIn 200ms cubic-bezier(.16,.84,.44,1)}" +
+    "@media (prefers-reduced-motion:reduce){.qStepIn,.qStepInFast{animation:none}}";
   document.head.appendChild(el);
 }
 
-export function StepFade({ k, children }) {
+export function StepFade({ k, fast = false, children }) {
   injectOnce();
   return (
-    <div key={k} className="qStepIn">
+    <div key={k} className={fast ? "qStepInFast" : "qStepIn"}>
       {children}
     </div>
   );

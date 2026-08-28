@@ -7,6 +7,7 @@
 //   · 흐름: 이해 → 뭘 지울 수 있나 → 한 방(운 좋으면) → 막힘 → 핵심 발견 → 실행
 
 import { t } from "@/components/quest/theme";
+import { StepFade } from "@/components/quest/StepFade";
 import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceStepper";
 
 const A = "#059669";
@@ -146,6 +147,7 @@ export function EraseRuleSim({ E }) {
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "What can I wipe in one move?", "한 번에 뭘 지울 수 있지?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
       <Say tone={s.kind === "poof1" ? "stuck" : (s.kind === "poofC" || s.kind === "poofOW") ? "aha" : "go"}>{say}</Say>
 
       <div style={{ fontSize: 12, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 10, fontFamily: "'JetBrains Mono',monospace" }}>
@@ -177,6 +179,7 @@ export function EraseRuleSim({ E }) {
           : s.kind === "poof1" ? t(E, "empty in 1 move ✓", "1번에 빈 문자열 ✓")
           : ""}
       </div>
+      </StepFade>
 
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
@@ -234,6 +237,7 @@ export function InsightSim({ E }) {
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Why is 2 always enough?", "왜 항상 2번이면 될까?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
       <Say tone={s.kind === "overlap" || s.kind === "case2" || s.kind === "case3" ? "aha" : s.kind === "odd" ? "stuck" : "go"}>{say}</Say>
 
       {/* pair 스텝 — 앞 블록 ↔ 뒤 블록 짝 시각화 */}
@@ -332,6 +336,7 @@ export function InsightSim({ E }) {
                                           "N=1 → 3N=3 홀수 → 짝수 길이 연산으로 못 비움 → −1")}</Caption>
         </>
       )}
+      </StepFade>
 
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
@@ -383,6 +388,7 @@ export function CowSplitsTraceSim({ E }) {
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Watch the ans table fill in", "ans 표가 채워지는 걸 봐요")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
       <Say tone={s.kind === "done" ? "aha" : s.kind === "check" ? "stuck" : "go"}>{say}</Say>
 
       <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 6 }}>
@@ -418,6 +424,7 @@ export function CowSplitsTraceSim({ E }) {
           <span style={{ color: "#8b5cf6" }}>b = OWC</span>
         </div>
       )}
+      </StepFade>
 
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
