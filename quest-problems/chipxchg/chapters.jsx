@@ -143,7 +143,7 @@ export function makeChipXchgCh1(E) {
       type: "reveal",
       label: t(E, "Tool: red I can make now (red_now)", "도구: 지금 만드는 A (red_now)"),
       narr: t(E, "How many red can I make right now? Group my blue by cB; leftovers waste. That's red_now.",
-                 "지금 가진 걸로 A를 몇 개까지 만들 수 있을까요? 내 B를 cB 개씩 묶어서 바꾸고, 남는 자투리는 버려요. 그 결과가 red_now 예요."),
+                 "지금 가진 걸로 A를 몇 개 만들 수 있을까요? 그 결과가 red_now 예요."),
       content: (<ChipCountSim E={E} />),
     },
 
@@ -152,7 +152,7 @@ export function makeChipXchgCh1(E) {
       type: "reveal",
       label: t(E, "Tool: cA < cB (swap loses) → he gives blue", "도구: cA < cB (바꾸면 손해) → B를 준다"),
       narr: t(E, "Swap rate here: 3 blue → 2 red. Blue gives me less — so the worst case hands blue. Watch with real chips.",
-                 "이 예시의 환전 비율은 B 3개 → A 2개예요. B를 받으면 A보다 손해라서, 최악의 경우엔 B로 줍니다. 진짜 칩으로 한 단계씩 봐요."),
+                 "환전이 B 3개 → A 2개라 B를 받으면 손해예요. 그래서 제일 나쁜 건 B가 오는 경우죠."),
       content: (<AllBlueWorstSim E={E} />),
     },
 

@@ -51,7 +51,7 @@ function CowSplitsPlan({ E }) {
       <div style={{ ...box, background: "#f8fafc", fontSize: 13, lineHeight: 1.75, color: "#334155" , wordBreak: "keep-all", textWrap: "balance" }}>
         ⚙️ {t(E,
           <>So: build the labels list {codeTag("ans")} (start all 1). Loop front-half blocks, grab {codeTag("a")} and {codeTag("b")}, patch op 2 where needed. Finally {codeTag("M")} = max({codeTag("ans")}).</>,
-          <>그래서: 라벨 리스트 {codeTag("ans")} 를 만들고 (처음엔 다 1). 앞 절반 블록을 순회하며 {codeTag("a")}·{codeTag("b")} 꺼내 필요한 자리에 op 2 표시. 마지막에 {codeTag("M")} = max({codeTag("ans")}).</>)}
+          <>그래서: 라벨 리스트 {codeTag("ans")} 를 만들어요 (처음엔 다 1).<br />앞 절반 블록을 돌며 {codeTag("a")}·{codeTag("b")} 를 꺼내<br />필요한 자리에 op 2 를 표시해요.<br />마지막에 {codeTag("M")} = 라벨의 최댓값.</>)}
       </div>
     </div>
   );
@@ -88,7 +88,7 @@ function CowSplitsInput({ E }) {
       <div style={{ fontSize: 11, color: "#94a3b8", lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance" }}>
         {t(E,
           <><b>k</b> is just a scoring mode (0 = exact min, 1 = min+1 also OK). Our solution always gives the true minimum, so <b>k doesn't matter to us</b>.</>,
-          <><b>k</b> 는 채점 모드일 뿐이에요 (0 = 정확한 최소, 1 = 최소+1 까지 OK). 우리 풀이는 늘 진짜 최소를 내니 <b>k 는 신경 안 써도 돼요</b>.</>)}
+          <><b>k</b> 는 채점 모드일 뿐이에요 (0 = 정확한 최소, 1 = 최소+1 까지 OK).<br />우리 풀이는 늘 진짜 최소를 내니 <b>k 는 신경 안 써도 돼요</b>.</>)}
       </div>
     </div>
   );
@@ -169,7 +169,7 @@ function CowSplitsOutput({ E }) {
         <div style={{ fontSize: 12, color: "#334155", textAlign: "center", lineHeight: 1.65, wordBreak: "keep-all", textWrap: "balance" }}>
           {t(E,
             <>The 4 <b style={{ color: OP1_COL }}>O W O W</b> letters were move <b style={{ color: OP1_COL }}>1</b>, the 2 <b style={{ color: OP2_COL }}>C … C</b> were move <b style={{ color: OP2_COL }}>2</b> → output <code>2</code>, then <code>2 1 1 1 1 2</code>.</>,
-            <>가운데 <b style={{ color: OP1_COL }}>O W O W</b> 4글자는 <b style={{ color: OP1_COL }}>1번</b> 지우기, 양끝 <b style={{ color: OP2_COL }}>C … C</b> 2글자는 <b style={{ color: OP2_COL }}>2번</b> 지우기 → 출력 <code>2</code>, 그리고 <code>2 1 1 1 1 2</code>.</>)}
+            <>가운데 <b style={{ color: OP1_COL }}>O W O W</b> 4글자는 <b style={{ color: OP1_COL }}>1번</b> 지우기,<br />양끝 <b style={{ color: OP2_COL }}>C … C</b> 2글자는 <b style={{ color: OP2_COL }}>2번</b> 지우기.<br />→ 출력 <code>2</code>, 그리고 <code>2 1 1 1 1 2</code>.</>)}
         </div>
       </div>
     </div>
@@ -189,7 +189,7 @@ export function makeCowSplitsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie has a string S made of COW-like pieces. Empty it in as few moves as possible — each move erases a group of letters that reads as 'the same block twice' (e.g. COWCOW, CC).",
-        "Bessie 앞에 COW 조각들로 만든 문자열 S. 최소 몇 번 만에 다 지울 수 있을까요? 한 번에 지우는 건 '똑같은 게 두 번' 인 글자 묶음이에요 (예: COWCOW, CC)."),
+        "COW 조각들로 만든 S 를 최소 몇 번에 다 지울까요? 한 번에 지우는 건 '똑같은 게 두 번' 꼴이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -344,7 +344,7 @@ export function makeCowSplitsCh2(E, lang = "py") {
       label: t(E, "Run", "실행"),
       narr: t(E,
         "Before reading the code — watch its ans table fill in on COWOWC, so the code reads easy after.",
-        "코드를 읽기 전에 — ans 표가 COWOWC 에서 채워지는 걸 먼저 눈으로 봐요. 그럼 코드가 쉽게 읽혀요."),
+        "코드 전에 — ans 표가 채워지는 걸 먼저 눈으로 봐요. 그럼 코드가 쉽게 읽혀요."),
       content: (<CowSplitsTraceSim E={E} />),
     },
     // Code — mooin3 스타일 CodeWalk. ◀▶ 로 구현 조각씩 말풍선 이동

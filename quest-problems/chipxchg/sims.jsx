@@ -1153,18 +1153,18 @@ export function StrategySlide({ E }) {
           <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 12px",
             marginBottom: 10, fontSize: 12.5, color: "#92400e", lineHeight: 1.8, wordBreak: "keep-all" }}>
             {t(E,
-              <>The worst combination keeps me <b>one short</b> of the goal. It can do that up to some number of chips — and <b>one chip past that, it can't.</b></>,
-              <>목표가 <b>A 4개</b>라고 해볼게요.<br />4개를 <b>다 만들 필요는 없어요.</b><br /><b>3개</b>까지만 만들면, 마지막 1개는<br />무슨 칩이 오든 <b>저절로 채워지거든요.</b></>)}
+              <>Say the goal is <b>A 5</b>.<br />I don't have to build all 5 —<br />build <b>4</b>, and the last one<br />arrives by itself, whichever chip comes.</>,
+              <>목표가 <b>A 5개</b>라고 해볼게요.<br />5개를 <b>다 만들 필요는 없어요.</b><br /><b>4개</b>까지만 만들면, 마지막 1개는<br />무슨 칩이 오든 <b>저절로 채워지거든요.</b></>)}
           </div>
           <div style={{ textAlign: "center", padding: "12px 10px", borderRadius: 10, background: "#f5f3ff",
             border: "2px solid #c4b5fd", fontSize: 13.5, fontWeight: 800, color: "#5b21b6",
             wordBreak: "keep-all", lineHeight: 1.8 }}>
-            {t(E, <>answer = <span style={{ color: "#b45309" }}>chips to build 3 A</span> <span style={{ color: "#15803d" }}>+ 1</span></>,
-                  <>답 = <span style={{ color: "#b45309" }}>A 3개를 만드는 칩 수</span> <span style={{ color: "#15803d" }}>+ 1</span></>)}
+            {t(E, <>answer = <span style={{ color: "#b45309" }}>chips to build 4 A</span> <span style={{ color: "#15803d" }}>+ 1</span></>,
+                  <>답 = <span style={{ color: "#b45309" }}>A 4개를 만드는 칩 수</span> <span style={{ color: "#15803d" }}>+ 1</span></>)}
           </div>
           <div style={{ marginTop: 9, fontSize: 11.5, color: "#64748b", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
-            {t(E, <>The <b>3</b> (one below the goal) is the <b style={{ color: "#b45309" }}>− 1</b>;<br />the last chip is the <b style={{ color: "#15803d" }}>+ 1</b>.<br />The tool pages count each piece.</>,
-                  <>목표 4개보다 하나 적은 <b>3</b> 이 식의 <b style={{ color: "#b45309" }}>− 1</b>,<br />마지막 한 칩이 <b style={{ color: "#15803d" }}>+ 1</b> 이에요.<br />왜 그런지는 도구 페이지에서 하나씩 세어 봐요.</>)}
+            {t(E, <>The <b>4</b> (one below the goal) is the <b style={{ color: "#b45309" }}>− 1</b>;<br />the last chip is the <b style={{ color: "#15803d" }}>+ 1</b>.<br />The tool pages count each piece.</>,
+                  <>목표 5개보다 하나 적은 <b>4</b> 가 식의 <b style={{ color: "#b45309" }}>− 1</b>,<br />마지막 한 칩이 <b style={{ color: "#15803d" }}>+ 1</b> 이에요.<br />왜 그런지는 도구 페이지에서 하나씩 세어 봐요.</>)}
           </div>
         </div>
       )}
@@ -1221,8 +1221,11 @@ export function LastOneWhySlide({ E }) {
   const WASTE = CB - 1;                        // 2 — 절대 묶이지 않는 B
   const SC = Math.floor(NEED / CA) * CB + (NEED % CA);   // 6
   const LAST = WASTE + SC;                     // 8 — 안 되는 마지막 칩
+  /* 한 화면 = 새 정보 하나 (선생님 2026-08-27: "한 화면에서 너무 많은걸 보여주고 있어
+     말풍선 올려도 되니까 더 단계적으로"). next → nextA/nextB, sym → sym1/sym2 로 쪼갬. */
   const steps = [{ k: "now" }, { k: "fail" }, { k: "waste" }, { k: "build" },
-                 { k: "total" }, { k: "next" }, { k: "sym" }, { k: "math" }];
+                 { k: "total" }, { k: "nextA" }, { k: "nextB" },
+                 { k: "sym1" }, { k: "sym2" }, { k: "math" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
   const res = (b, r) => A0 + r + Math.floor((B0 + b) / CB) * CA;
 
@@ -1242,12 +1245,18 @@ export function LastOneWhySlide({ E }) {
   : s.k === "total" ? t(E,
         <><b style={NW}>2 + 6 = 8 chips</b>, and A is still <b style={{color:RED,...NW}}>4</b>.<br />So <b style={NW}>8</b> is the <b>last count that can still fail</b>.</>,
         <>합쳐서 <b style={NW}>칩 8개</b>, 그런데 A 는 아직 <b style={{color:RED,...NW}}>4개</b>.<br />그래서 <b style={NW}>8</b> 이 <b>안 될 수 있는 마지막 칩 수</b>예요.</>)
-  : s.k === "next" ? t(E,
-        <>The <b style={NW}>9th</b> chip — whichever it is:<br /><b style={{color:RED,...NW}}>A</b> comes → A 5 ✓ &nbsp; <b style={{color:BLU,...NW}}>B</b> comes → A 6 ✓<br /><b style={{color:"#15803d"}}>Answer = 8 + 1 = 9.</b></>,
-        <><b style={NW}>9번째</b> 칩 — 무엇이 와도:<br /><b style={{color:RED,...NW}}>A</b> 가 오면 → A 5개 ✓ &nbsp; <b style={{color:BLU,...NW}}>B</b> 가 오면 → A 6개 ✓<br /><b style={{color:"#15803d"}}>답 = 8 + 1 = 9.</b></>)
-  : s.k === "sym" ? t(E,
-        <>The same five numbers, written with letters.</>,
-        <>방금 그 다섯 숫자를 글자로 쓴 것뿐이에요.</>)
+  : s.k === "nextA" ? t(E,
+        <>Now the <b style={NW}>9th</b> chip.<br />If it comes as <b style={{color:RED,...NW}}>A</b> → A 5 ✓</>,
+        <>이제 <b style={NW}>9번째</b> 칩.<br /><b style={{color:RED,...NW}}>A</b> 로 오면 → A 5개 ✓</>)
+  : s.k === "nextB" ? t(E,
+        <>And if it comes as <b style={{color:BLU,...NW}}>B</b> → a group completes → A 6 ✓<br /><b style={{color:"#15803d"}}>Either way it works. Answer = 8 + 1 = 9.</b></>,
+        <><b style={{color:BLU,...NW}}>B</b> 로 와도 → 묶음이 완성돼서 → A 6개 ✓<br /><b style={{color:"#15803d"}}>어느 쪽이든 돼요. 답 = 8 + 1 = 9.</b></>)
+  : s.k === "sym1" ? t(E,
+        <>Now the letters — first, the three things we counted.</>,
+        <>이제 글자로 — 먼저 방금 센 세 가지예요.</>)
+  : s.k === "sym2" ? t(E,
+        <>And the last two lines put them together.</>,
+        <>마지막 두 줄이 그걸 합쳐요.</>)
   : t(E, <>Appendix — the official analysis writes the same thing with inequalities.</>,
          <>부록 — 공식 풀이는 같은 얘기를 부등식으로 씁니다. 답은 똑같아요.</>);
 
@@ -1283,10 +1292,10 @@ export function LastOneWhySlide({ E }) {
         title={t(E, "How many chips guarantee A 5?", "칩 몇 개면 A 5개가 확실할까요?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
-      <Say tone={s.k === "next" || s.k === "sym" || s.k === "math" ? "aha" : s.k === "fail" || s.k === "total" ? "stuck" : "go"}>{say}</Say>
+      <Say tone={s.k === "nextB" || s.k === "sym2" || s.k === "math" ? "aha" : s.k === "fail" || s.k === "total" ? "stuck" : "go"}>{say}</Say>
 
       {/* 목표 — 늘 보이게 */}
-      {s.k !== "sym" && s.k !== "math" && (
+      {!s.k.startsWith("sym") && s.k !== "math" && (
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 7, marginBottom: 11,
           fontSize: 12, fontWeight: 800, color: "#15803d", wordBreak: "keep-all" }}>
           <span style={{ padding: "3px 10px", borderRadius: 999, background: "#f0fdf4", border: "1.5px solid #86efac" }}>
@@ -1308,10 +1317,7 @@ export function LastOneWhySlide({ E }) {
         )}
         {s.k === "waste" && <Line label={t(E, "2 chips", "칩 2개")} b={WASTE} r={0} tone="bad" note={t(E, "← nothing", "← 아무것도 안 됨")} />}
         {s.k === "build" && (
-          <>
-            <Line label={t(E, "2 chips", "칩 2개")} b={WASTE} r={0} />
-            <Line label={t(E, "2 + 6 chips", "칩 2+6개")} b={WASTE + SC} r={0} tone="bad" note={t(E, "← now A 4", "← 이제 A 4개")} />
-          </>
+          <Line label={t(E, "2 + 6 chips", "칩 2+6개")} b={WASTE + SC} r={0} tone="bad" note={t(E, "← now A 4", "← 이제 A 4개")} />
         )}
         {s.k === "total" && (
           <>
@@ -1321,16 +1327,18 @@ export function LastOneWhySlide({ E }) {
             </div>
           </>
         )}
-        {s.k === "next" && (
+        {s.k === "nextA" && (
+          <Line label={t(E, "8 + A", "8 + A")} b={LAST} r={1} tone="good" note="✓" />
+        )}
+        {s.k === "nextB" && (
           <>
-            <Line label={t(E, "+ A", "+ A")} b={LAST} r={1} tone="good" note="✓" />
-            <Line label={t(E, "+ B", "+ B")} b={LAST + 1} r={0} tone="good" note="✓" />
+            <Line label={t(E, "8 + B", "8 + B")} b={LAST + 1} r={0} tone="good" note="✓" />
             <div style={{ marginTop: 6, textAlign: "center", fontSize: 13.5, fontWeight: 800, color: "#15803d" }}>
               {t(E, "answer = 8 + 1 = 9 chips", "답 = 8 + 1 = 칩 9개")}
             </div>
           </>
         )}
-        {s.k === "sym" && (
+        {s.k.startsWith("sym") && (
           <div style={{ padding: "12px 14px", borderRadius: 10, background: "#f5f3ff", border: "1.5px solid #c4b5fd",
             display: "grid", gap: 9, fontSize: 12, color: "#475569", lineHeight: 1.75, wordBreak: "keep-all", textWrap: "balance" }}>
             <div><code style={{ color: "#5b21b6", fontWeight: 800 }}>red_now = 0</code><br />
@@ -1339,10 +1347,15 @@ export function LastOneWhySlide({ E }) {
               <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "B that can never gather into a swap", "절대 묶이지 못하는 B")}</span></div>
             <div><code style={{ color: "#5b21b6", fontWeight: 800 }}>short_red = fA − 1 − red_now = 4</code><br />
               <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "still failing means A ≤ 4 — the −1", "안 된다 = A 4개 이하 — 여기가 −1")}</span></div>
-            <div><code style={{ color: "#5b21b6", fontWeight: 800 }}>short_chips = 4//2×3 + 4%2 = 6</code><br />
-              <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "most chips it can take to reach A 4", "A 4개까지 가는 데 최대로 쓰는 칩")}</span></div>
-            <div><code style={{ color: "#5b21b6", fontWeight: 800 }}>answer = 2 + 6 + 1 = 9</code><br />
-              <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "one past the last failing count — the +1", "안 되는 마지막(8) 다음 — 여기가 +1")}</span></div>
+            {s.k === "sym2" && (
+              <>
+                <div style={{ borderTop: "1px dashed #c4b5fd", paddingTop: 8 }}>
+                  <code style={{ color: "#5b21b6", fontWeight: 800 }}>short_chips = 4//2×3 + 4%2 = 6</code><br />
+                  <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "most chips it can take to reach A 4", "A 4개까지 가는 데 최대로 쓰는 칩")}</span></div>
+                <div><code style={{ color: "#5b21b6", fontWeight: 800 }}>answer = 2 + 6 + 1 = 9</code><br />
+                  <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "one past the last failing count — the +1", "안 되는 마지막(8) 다음 — 여기가 +1")}</span></div>
+              </>
+            )}
           </div>
         )}
         {s.k === "math" && (
