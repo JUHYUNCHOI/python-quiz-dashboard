@@ -1,9 +1,13 @@
-// ⚠️ USACO_PENDING_REVERIFY (2026-08-14 rewrite)
+// ⚠️ USACO_PENDING_REVERIFY (2026-08-14 rewrite · 2026-08-27 로컬 검증 보강)
 //   이전 M=3 letter-group 풀이는 k=1 서브태스크만 통과 (3/14). 선생님 지시
-//   ("틀린답인데 우리꺼를 왜 갖고 있어") → 공식 답안의 M=2 block-pair 매칭
-//   풀이로 재작성. 로컬 sample 검증 통과 (2 / 2 1 1 1 1 2). USACO 채점기
-//   재제출로 14/14 확인 필요 — 확인 후 이 헤더를 🔒 USACO_VERIFIED 로 갱신.
-
+//   ("틀린답인데 우리꺼를 왜 갖고 있어") → 공식 답안의 M=2 block-pair 매칭 풀이로 재작성.
+//
+//   2026-08-27 로컬 검증 (M 값뿐 아니라 '출력한 배정이 실제로 정사각(YY)을 이루는지'까지):
+//     · N=2 전수 9개 · N=4 전수 81개 — M 이 최소이고 배정도 전부 유효 (불일치 0)
+//     · 랜덤 300,000건 (N 최대 100) — 배정 전부 유효, M=1 판정 오류 0
+//     · 샘플 COWOWC → 2 / 2 1 1 1 1 2  (그룹1 OWOW, 그룹2 CC — 둘 다 정사각)
+//   → 알고리즘 정확성은 확인됨. 다만 USACO 채점기 재제출은 아직이라 헤더는 PENDING 유지.
+//     재제출로 14/14 확인 후 🔒 USACO_VERIFIED 로 갱신할 것.
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";

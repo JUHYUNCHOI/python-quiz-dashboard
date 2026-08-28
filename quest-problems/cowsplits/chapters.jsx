@@ -224,13 +224,13 @@ export function makeCowSplitsCh1(E) {
                   {t(E, "S has length ", "S 는 길이 ")}
                   <b style={{ color: "#059669" }}>3N</b>
                   {t(E, " — N pieces glued together. Each piece is ", ", ")}
-                  <b>{t(E, "a cyclic shift of ", "'COW' 를 굴려 만든 조각 (")}<code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>COW</code></b>
-                  {t(E, " — that is ", ", ")}
+                  <b>{t(E, "a cyclic shift of ", "")}<code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>COW</code></b>
+                   {t(E, " — that is ", " 를 굴려 만든 조각, 즉 ")}
                   <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>COW</code>
                   {", "}<code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>OWC</code>
                   {t(E, ", or ", ", ")}
                   <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>WCO</code>
-                  {t(E, ".", ") N 개를 이은 것.")}
+                  {t(E, ".", " 중 하나 — 를 N 개 이은 것.")}
                 </div>
               </div>
 
@@ -301,8 +301,8 @@ export function makeCowSplitsCh1(E) {
     // [전] 통찰 — 놀랍게도 항상 2번! (블록 쌍 + 겹치는 2 글자)
     {
       type: "reveal",
-      narr: t(E, "Surprise: the answer is always 2 when possible. Why? Pair the blocks and share the overlap.",
-                 "놀라운 사실 — 될 때는 답이 항상 2번이에요. 왜? 블록끼리 짝지어 겹치는 부분을 나눠요."),
+      narr: t(E, "Is there an S that really needs 3 or 4? Let's pair front and back blocks and check them one by one.",
+                 "3번, 4번이 필요한 S 가 정말 있을까요? 앞뒤 블록을 짝지어서 하나씩 따져 봐요."),
       content: (<InsightSim E={E} />),
     },
     // [전] 분류 — 답은 −1 / 1 / 2 셋 중 하나

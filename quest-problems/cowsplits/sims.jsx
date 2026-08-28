@@ -95,21 +95,27 @@ function Caption({ color, children }) {
    같은 덩어리 두 번(Y+Y) + 떨어진 것도 골라도 됨.
    ═══════════════════════════════════════════════════════════════ */
 export function EraseRuleSim({ E }) {
-  const S = "COWOWC".split("");   // C O W O W C
   const steps = [
     { kind: "intro" },
     { kind: "pickC" },    // 떨어진 C 두 개 (C·C)
     { kind: "poofC" },    // C 사라짐 → OWOW
     { kind: "pickOW" },   // 남은 OW + OW
     { kind: "poofOW" },   // 다 사라짐 → 빈 문자열 (2번에 싹)
+    { kind: "one" },      // S 가 COWCOW 였다면 — 그 자체가 '똑같은 게 두 번'
+    { kind: "poof1" },    // 1번에 싹 → "그럼 3번이 필요한 S 는?" 이 다음 페이지로
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
+  /* 뒤 두 단계는 다른 S 로 — M=1 인 경우를 학생이 한 번은 봐야 함 */
+  const isOneCase = s.kind === "one" || s.kind === "poof1";
+  const SSTR = isOneCase ? "COWCOW" : "COWOWC";
+  const S = SSTR.split("");
 
   const goneC   = s.kind === "poofC" || s.kind === "pickOW" || s.kind === "poofOW";
-  const goneAll = s.kind === "poofOW";
+  const goneAll = s.kind === "poofOW" || s.kind === "poof1";
   const isGone  = (i) => goneAll || (goneC && (i === 0 || i === 5));
-  const pick    = s.kind === "pickC" ? [0, 5] : s.kind === "pickOW" ? [1, 2, 3, 4] : [];
+  const pick    = s.kind === "pickC" ? [0, 5] : s.kind === "pickOW" ? [1, 2, 3, 4]
+                : s.kind === "one" ? [0, 1, 2, 3, 4, 5] : [];
   const pickCol = s.kind === "pickC" ? OPCOL[2] : OPCOL[1];   // C=주황, OW=빨강 (뒤 출력 라벨과 같은 색)
 
   const say =
@@ -125,19 +131,25 @@ export function EraseRuleSim({ E }) {
     : s.kind === "pickOW" ? t(E,
         <>Now the leftover <b>OWOW</b> = <b>OW·OW</b> = "OW twice" ✓ — one more move clears it.</>,
         <>이제 남은 <b>OWOW</b> = <b>OW·OW</b> = "OW 두 번" ✓ — 한 번 더로 지워요.</>)
+    : s.kind === "poofOW" ? t(E,
+        <>Empty! <b>2 moves</b> cleared the whole thing.</>,
+        <>싹 비었어요! <b>2번</b>에 다 지웠죠.</>)
+    : s.kind === "one" ? t(E,
+        <>But what if S were <b>COWCOW</b>? Front half <b>COW</b> = back half <b>COW</b> — the whole string is already <b>the same block twice</b>.</>,
+        <>그런데 S 가 <b>COWCOW</b> 였다면요? 앞 절반 <b>COW</b> = 뒤 절반 <b>COW</b> — 문자열 전체가 이미 <b>똑같은 게 두 번</b>이에요.</>)
     : t(E,
-        <>Empty! <b>2 moves</b> cleared the whole thing. But… is it <b>always 2</b>? Could some S need 3, 4, or more? 🤔</>,
-        <>싹 비었어요! <b>2번</b>에 다 지웠죠. 근데… <b>항상 2번</b>일까요? 어떤 S는 3번, 4번 들 수도 있지 않을까요? 🤔</>);
+        <><b>1 move</b> and it's gone! So the answer can be <b>1 or 2</b>… but is there an S that needs <b>3 or more</b>? 🤔</>,
+        <><b>1번</b>에 끝! 그럼 답은 <b>1번 아니면 2번</b>인데… <b>3번 이상</b>이 필요한 S 는 없을까요? 🤔</>);
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "What can I wipe in one move?", "한 번에 뭘 지울 수 있지?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <Say tone={s.kind === "poofOW" ? "stuck" : s.kind === "poofC" ? "aha" : "go"}>{say}</Say>
+      <Say tone={s.kind === "poof1" ? "stuck" : (s.kind === "poofC" || s.kind === "poofOW") ? "aha" : "go"}>{say}</Say>
 
       <div style={{ fontSize: 12, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 10, fontFamily: "'JetBrains Mono',monospace" }}>
-        S = COWOWC
+        S = {SSTR}
       </div>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, flexWrap: "wrap", minHeight: 56 }}>
         {S.map((ch, i) => {
@@ -161,6 +173,8 @@ export function EraseRuleSim({ E }) {
           : s.kind === "pickOW" ? "OW · OW  ✓"
           : s.kind === "poofC" ? t(E, "left over → OWOW", "남은 글자 → OWOW")
           : s.kind === "poofOW" ? t(E, "empty in 2 moves ✓", "2번에 빈 문자열 ✓")
+          : s.kind === "one" ? t(E, "COW · COW ✓ — one move", "COW · COW ✓ — 한 번이면 돼요")
+          : s.kind === "poof1" ? t(E, "empty in 1 move ✓", "1번에 빈 문자열 ✓")
           : ""}
       </div>
 
@@ -197,8 +211,8 @@ export function InsightSim({ E }) {
 
   const say =
     s.kind === "pair" ? t(E,
-      <><b>Surprise:</b> whenever it's possible, the answer is <b>always exactly 2</b> — never 3 or more! Why? Idea: <b>pair each front block with its back partner</b> (block <b>i</b> ↔ block <b>i + N/2</b>). Here N=2, so <b>COW</b> ↔ <b>OWC</b>.</>,
-      <><b>놀랍게도</b> — 될 때는 답이 <b>언제나 딱 2번</b>이에요. 3번 이상은 절대 안 들어요! 왜일까요? 아이디어: <b>앞쪽 블록 i 를 뒤쪽 파트너 (i + N/2) 와 짝지어요</b>. 여기 N=2 니 <b>COW</b> ↔ <b>OWC</b>.</>)
+      <>Let's look for an <b>S that needs 3 or more</b>. One idea: <b>pair each front block with its back partner</b> (block <b>i</b> ↔ block <b>i + N/2</b>) and see what each pair can do. Here N=2, so <b>COW</b> ↔ <b>OWC</b>. There are only <b>3 kinds of block</b>, so let's check every pair.</>,
+      <><b>3번 이상이 필요한 S</b> 가 있는지 찾아봐요. 이런 방법이 있어요: <b>앞쪽 블록 i 를 뒤쪽 파트너 (i + N/2) 와 짝지어</b> 짝마다 뭘 할 수 있는지 보는 거예요. 여기 N=2 니 <b>COW</b> ↔ <b>OWC</b>. 블록 종류는 <b>3가지뿐</b>이니 짝을 전부 확인할 수 있어요.</>)
     : s.kind === "overlap" ? t(E,
       <><b>Case 1 / 3.</b> <b>COW × OWC</b> — the middle "<b>OW</b>" appears in both. Leftover: <b>C</b> on front + <b>C</b> on back (same letter).</>,
       <><b>1 / 3 케이스.</b> <b>COW × OWC</b> — 가운데 "<b>OW</b>" 가 양쪽에 다 있어요. 남는 건: 앞 <b>C</b> + 뒤 <b>C</b> (같은 글자).</>)
