@@ -13,7 +13,7 @@ const OP2_BG  = "#fffbeb";
 /* Plan — photoshoot25 스타일. 시뮬에서 알아낸 것 → 코드 변수 이름 (ans, a, b, M) 미리 소개.
    Ch2 첫 페이지: CodeWalk 진입 준비. */
 function CowSplitsPlan({ E }) {
-  const box = { background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, padding: "12px 14px", wordBreak: "keep-all" };
+  const box = { background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, padding: "12px 14px", wordBreak: "keep-all", textWrap: "balance" };
   const Insight = ({ icon, head, body, color }) => (
     <div style={{ display: "flex", gap: 11, alignItems: "flex-start", ...box, borderLeft: `4px solid ${color}` }}>
       <span style={{ fontSize: 20, lineHeight: 1.2 }}>{icon}</span>
@@ -48,7 +48,7 @@ function CowSplitsPlan({ E }) {
             <>앞 블록 <b>a</b> ↔ 뒤 파트너 <b>b</b> 마다: 겹치는 2 글자는 op 1, 양쪽에 남는 1 글자씩은 op 2.</>)} />
       </div>
 
-      <div style={{ ...box, background: "#f8fafc", fontSize: 13, lineHeight: 1.75, color: "#334155" }}>
+      <div style={{ ...box, background: "#f8fafc", fontSize: 13, lineHeight: 1.75, color: "#334155" , wordBreak: "keep-all", textWrap: "balance" }}>
         ⚙️ {t(E,
           <>So: build the labels list {codeTag("ans")} (start all 1). Loop front-half blocks, grab {codeTag("a")} and {codeTag("b")}, patch op 2 where needed. Finally {codeTag("M")} = max({codeTag("ans")}).</>,
           <>그래서: 라벨 리스트 {codeTag("ans")} 를 만들고 (처음엔 다 1). 앞 절반 블록을 순회하며 {codeTag("a")}·{codeTag("b")} 꺼내 필요한 자리에 op 2 표시. 마지막에 {codeTag("M")} = max({codeTag("ans")}).</>)}
@@ -62,7 +62,7 @@ function CowSplitsPlan({ E }) {
 /* [승] 입력 형식만 — 짧게. 출력(글자별 op 배열)은 M=2 를 안 뒤에 CowSplitsOutput 에서. */
 function CowSplitsInput({ E }) {
   return (
-    <div style={{ padding: 16, wordBreak: "keep-all" }}>
+    <div style={{ padding: 16, wordBreak: "keep-all", textWrap: "balance" }}>
       <div style={{ marginBottom: 12 }}>
         <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
         <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.8 }}>
@@ -80,12 +80,12 @@ function CowSplitsInput({ E }) {
         <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
           <div>1 ≤ T ≤ 10⁴</div>
           <div>1 ≤ N (Σ N ≤ 10⁵)</div>
-          <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "S consists of characters C, O, W only", "S 는 C, O, W 로만 이루어짐")}</div>
+          <div style={{ color: C.dim, fontSize: 11, marginTop: 2 , wordBreak: "keep-all", textWrap: "balance" }}>{t(E, "S consists of characters C, O, W only", "S 는 C, O, W 로만 이루어짐")}</div>
         </div>
       </div>
 
       {/* k 는 곁길 — 각주로 축소 */}
-      <div style={{ fontSize: 11, color: "#94a3b8", lineHeight: 1.6, wordBreak: "keep-all" }}>
+      <div style={{ fontSize: 11, color: "#94a3b8", lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance" }}>
         {t(E,
           <><b>k</b> is just a scoring mode (0 = exact min, 1 = min+1 also OK). Our solution always gives the true minimum, so <b>k doesn't matter to us</b>.</>,
           <><b>k</b> 는 채점 모드일 뿐이에요 (0 = 정확한 최소, 1 = 최소+1 까지 OK). 우리 풀이는 늘 진짜 최소를 내니 <b>k 는 신경 안 써도 돼요</b>.</>)}
@@ -99,7 +99,7 @@ function CowSplitsClassify({ E }) {
   const Row3 = ({ icon, color, bg, cond, ans, ex }) => (
     <div style={{ display: "flex", gap: 10, alignItems: "center", background: bg, border: `1.5px solid ${color}`, borderRadius: 12, padding: "11px 14px" }}>
       <span style={{ fontSize: 20, flexShrink: 0 }}>{icon}</span>
-      <div style={{ flex: 1, fontSize: 13, color: "#334155", lineHeight: 1.5, wordBreak: "keep-all" }}>
+      <div style={{ flex: 1, fontSize: 13, color: "#334155", lineHeight: 1.5, wordBreak: "keep-all", textWrap: "balance" }}>
         {cond}{ex && <span style={{ color: "#94a3b8", marginLeft: 6, fontFamily: "'JetBrains Mono',monospace" }}>{ex}</span>}
       </div>
       <div style={{ flexShrink: 0, minWidth: 40, textAlign: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 20, color }}>{ans}</div>
@@ -107,10 +107,10 @@ function CowSplitsClassify({ E }) {
   );
   return (
     <div style={{ padding: 16, maxWidth: 480, margin: "0 auto" }}>
-      <div style={{ fontSize: 13.5, fontWeight: 800, color: "#0f172a", textAlign: "center", marginBottom: 4, wordBreak: "keep-all" }}>
+      <div style={{ fontSize: 13.5, fontWeight: 800, color: "#0f172a", textAlign: "center", marginBottom: 4, wordBreak: "keep-all", textWrap: "balance" }}>
         {t(E, "So the answer is always one of just three", "그래서 답은 언제나 이 셋 중 하나")}
       </div>
-      <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 12, wordBreak: "keep-all" }}>
+      <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 12, wordBreak: "keep-all", textWrap: "balance" }}>
         {t(E, "never 3 or more — that's the whole problem", "3 이상은 절대 없어요 — 이게 문제의 전부")}
       </div>
       <div style={{ display: "grid", gap: 8 }}>
@@ -128,10 +128,10 @@ function CowSplitsClassify({ E }) {
 /* [결] 출력 형식 — 이제 M=2 와 두 op 를 아니까 '글자별 op 번호' 배열이 이해됨. */
 function CowSplitsOutput({ E }) {
   return (
-    <div style={{ padding: 16, wordBreak: "keep-all" }}>
+    <div style={{ padding: 16, wordBreak: "keep-all", textWrap: "balance" }}>
       <div style={{ marginBottom: 12 }}>
         <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
-        <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.75 }}>
+        <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.75 , wordBreak: "keep-all", textWrap: "balance" }}>
           <div style={{ fontWeight: 700, color: "#065f46", marginBottom: 4 }}>{t(E, "For each test — 2 lines:", "각 테스트마다 — 2 줄:")}</div>
           <div style={{ display: "flex", gap: 8, marginBottom: 3 }}>
             <span style={{ color: "#059669", fontWeight: 700 }}>•</span>
@@ -166,7 +166,7 @@ function CowSplitsOutput({ E }) {
             );
           })}
         </div>
-        <div style={{ fontSize: 12, color: "#334155", textAlign: "center", lineHeight: 1.65, wordBreak: "keep-all" }}>
+        <div style={{ fontSize: 12, color: "#334155", textAlign: "center", lineHeight: 1.65, wordBreak: "keep-all", textWrap: "balance" }}>
           {t(E,
             <>The 4 <b style={{ color: OP1_COL }}>O W O W</b> letters were move <b style={{ color: OP1_COL }}>1</b>, the 2 <b style={{ color: OP2_COL }}>C … C</b> were move <b style={{ color: OP2_COL }}>2</b> → output <code>2</code>, then <code>2 1 1 1 1 2</code>.</>,
             <>가운데 <b style={{ color: OP1_COL }}>O W O W</b> 4글자는 <b style={{ color: OP1_COL }}>1번</b> 지우기, 양끝 <b style={{ color: OP2_COL }}>C … C</b> 2글자는 <b style={{ color: OP2_COL }}>2번</b> 지우기 → 출력 <code>2</code>, 그리고 <code>2 1 1 1 1 2</code>.</>)}

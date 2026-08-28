@@ -37,9 +37,9 @@ function Say({ children, tone = "go" }) {
           : tone === "aha"   ? { bg: "#eff6ff", bd: "#60a5fa", fg: "#1e40af" }
           : { bg: "#ecfdf5", bd: "#6ee7b7", fg: "#065f46" };
   return (
-    <div style={{ maxWidth: 540, margin: "6px auto 16px", padding: "12px 16px", borderRadius: 12,
+    <div style={{ maxWidth: 470, margin: "6px auto 14px", padding: "11px 16px", borderRadius: 12,
       background: c.bg, border: `1.5px solid ${c.bd}`, color: c.fg,
-      fontSize: 13.5, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
+      fontSize: 13.5, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.75 }}>
       {children}
     </div>
   );
@@ -121,10 +121,10 @@ export function EraseRuleSim({ E }) {
   const say =
     s.kind === "intro" ? t(E,
         <>One move can wipe <b>several letters at once</b> — as long as the picked letters read as <b>the same block twice</b> (like C·C or OW·OW). They don't even need to be next to each other!</>,
-        <>한 번의 지우기로 <b>여러 글자를 한꺼번에</b> 없앨 수 있어요 — 고른 글자가 <b>똑같은 게 두 번</b>이기만 하면요 (C·C 나 OW·OW 처럼). 딱 붙어있지 않아도 돼요!</>)
+        <>한 번에 <b>여러 글자</b>를 없앨 수 있어요.<br />고른 글자가 <b>똑같은 게 두 번</b>이면 돼요 — C·C, OW·OW 처럼.<br />떨어져 있어도 괜찮아요!</>)
     : s.kind === "pickC" ? t(E,
         <>Pick the two far-apart <b>C</b>'s → <b>C·C</b> = "C twice" ✓ &nbsp;<span style={{ color: "#94a3b8" }}>(C·O·W — all different — would NOT count ✗)</span></>,
-        <>떨어진 <b>C</b> 두 개를 골라요 → <b>C·C</b> = "C 두 번" ✓ &nbsp;<span style={{ color: "#94a3b8" }}>(C·O·W 처럼 다 다르면 안 돼요 ✗)</span></>)
+        <>떨어진 <b>C</b> 두 개를 골라요 → <b>C·C</b> = "C 두 번" ✓<br /><span style={{ color: "#94a3b8" }}>(C·O·W 처럼 다 다르면 안 돼요 ✗)</span></>)
     : s.kind === "poofC" ? t(E,
         <>Both C's vanish <b>in that one move</b> — together! What's left is <b>OWOW</b>.</>,
         <>그 <b>한 번</b>에 C 두 개가 <b>같이</b> 사라져요! 남은 건 <b>OWOW</b>.</>)
@@ -136,7 +136,7 @@ export function EraseRuleSim({ E }) {
         <>싹 비었어요! <b>2번</b>에 다 지웠죠.</>)
     : s.kind === "one" ? t(E,
         <>But what if S were <b>COWCOW</b>? Front half <b>COW</b> = back half <b>COW</b> — the whole string is already <b>the same block twice</b>.</>,
-        <>그런데 S 가 <b>COWCOW</b> 였다면요? 앞 절반 <b>COW</b> = 뒤 절반 <b>COW</b> — 문자열 전체가 이미 <b>똑같은 게 두 번</b>이에요.</>)
+        <>그런데 S 가 <b>COWCOW</b> 였다면요?<br />앞 절반 <b>COW</b> = 뒤 절반 <b>COW</b> — 전체가 이미 <b>똑같은 게 두 번</b>이에요.</>)
     : t(E,
         <><b>1 move</b> and it's gone! So the answer can be <b>1 or 2</b>… but is there an S that needs <b>3 or more</b>? 🤔</>,
         <><b>1번</b>에 끝! 그럼 답은 <b>1번 아니면 2번</b>인데… <b>3번 이상</b>이 필요한 S 는 없을까요? 🤔</>);
@@ -212,22 +212,22 @@ export function InsightSim({ E }) {
   const say =
     s.kind === "pair" ? t(E,
       <>Let's look for an <b>S that needs 3 or more</b>. One idea: <b>pair each front block with its back partner</b> (block <b>i</b> ↔ block <b>i + N/2</b>) and see what each pair can do. Here N=2, so <b>COW</b> ↔ <b>OWC</b>. There are only <b>3 kinds of block</b>, so let's check every pair.</>,
-      <><b>3번 이상이 필요한 S</b> 가 있는지 찾아봐요. 이런 방법이 있어요: <b>앞쪽 블록 i 를 뒤쪽 파트너 (i + N/2) 와 짝지어</b> 짝마다 뭘 할 수 있는지 보는 거예요. 여기 N=2 니 <b>COW</b> ↔ <b>OWC</b>. 블록 종류는 <b>3가지뿐</b>이니 짝을 전부 확인할 수 있어요.</>)
+      <><b>3번 이상이 필요한 S</b> 가 있을까요?<br />앞쪽 블록 i 를 뒤쪽 파트너 <b>(i + N/2)</b> 와 짝지어 봐요.<br />여기 N=2 니 <b>COW ↔ OWC</b>. 블록은 3가지뿐이라 짝을 다 볼 수 있어요.</>)
     : s.kind === "overlap" ? t(E,
       <><b>Case 1 / 3.</b> <b>COW × OWC</b> — the middle "<b>OW</b>" appears in both. Leftover: <b>C</b> on front + <b>C</b> on back (same letter).</>,
-      <><b>1 / 3 케이스.</b> <b>COW × OWC</b> — 가운데 "<b>OW</b>" 가 양쪽에 다 있어요. 남는 건: 앞 <b>C</b> + 뒤 <b>C</b> (같은 글자).</>)
+      <><b>1 / 3.</b> <b>COW × OWC</b> — 가운데 <b>OW</b> 가 양쪽에 다 있어요.<br />남는 건 앞 <b>C</b> + 뒤 <b>C</b> — 같은 글자예요.</>)
     : s.kind === "case2" ? t(E,
       <><b>Case 2 / 3.</b> <b>COW × WCO</b> — this time "<b>CO</b>" overlaps (front's start = back's end). Leftover: <b>W</b> · <b>W</b> — same letter again!</>,
-      <><b>2 / 3 케이스.</b> <b>COW × WCO</b> — 이번엔 "<b>CO</b>" 가 겹쳐요 (앞의 시작 = 뒤의 끝). 남는 건: <b>W</b> · <b>W</b> — 이번에도 같은 글자!</>)
+      <><b>2 / 3.</b> <b>COW × WCO</b> — 이번엔 <b>CO</b> 가 겹쳐요 (앞의 시작 = 뒤의 끝).<br />남는 건 <b>W · W</b> — 이번에도 같은 글자!</>)
     : s.kind === "case3" ? t(E,
       <><b>Case 3 / 3.</b> <b>OWC × WCO</b> — "<b>WC</b>" overlaps. Leftover: <b>O</b> · <b>O</b>. So all 3 possible pairs have 2-letter overlap + same-letter leftover → <b>M = 2 always works</b>.</>,
-      <><b>3 / 3 케이스.</b> <b>OWC × WCO</b> — "<b>WC</b>" 가 겹치고 남는 건 <b>O</b> · <b>O</b>. 서로 다른 3 쌍 다 확인 → 2 글자 겹침 + 같은 문자 남음이 항상 성립 → <b>M = 2 는 언제나 성공</b>.</>)
+      <><b>3 / 3.</b> <b>OWC × WCO</b> — <b>WC</b> 가 겹치고 남는 건 <b>O · O</b>.<br />세 쌍 다 같은 모양이에요 — <b>2글자 겹침 + 같은 글자 남음</b>.</>)
     : s.kind === "split" ? t(E,
       <>Split it: the <b>overlapping 2 letters</b> (OW) go to <b>op 1</b> — front OW matches back OW. The <b>leftover 1 letter each side</b> (C and C) go to <b>op 2</b> — same letter! Both ops read as Y+Y → <b>M = 2</b>.</>,
-      <>나눠요: <b>겹치는 2 글자</b> (OW) 는 <b>op 1</b> — 앞의 OW 와 뒤의 OW 가 일치. <b>양쪽에 남는 1 글자</b> (C 와 C) 는 <b>op 2</b> — 같은 글자! 두 op 다 Y+Y 형태 → <b>M = 2</b>.</>)
+      <>나눠요. 겹치는 <b>2글자 (OW)</b> 는 <b>1번</b>으로 — 앞 OW = 뒤 OW ✓<br />남는 <b>1글자씩 (C·C)</b> 은 <b>2번</b>으로 — 같은 글자 ✓<br />둘 다 "똑같은 게 두 번" → <b>M = 2</b>.</>)
     : t(E,
       <>And if <b>N is odd</b>? Total length 3N is odd → each op removes an even count → <b>impossible → −1</b>.</>,
-      <>만약 <b>N 이 홀수</b>면? 총 길이 3N 이 홀수 → 각 연산은 짝수 개 지우기 → <b>불가능 → −1</b>.</>);
+      <>N 이 <b>홀수</b>면? 총 길이 3N 도 홀수예요.<br />한 번에 <b>짝수 개</b>씩만 지우니 절대 못 비워요 → <b>−1</b>.</>)
 
   return (
     <div style={{ padding: 16 }}>
@@ -284,10 +284,10 @@ export function InsightSim({ E }) {
             overlapStr="WC" loLetter="O"
             aLabelEn="front: a[1:] = WC" aLabelKo="앞: a[1:] = WC"
             bLabelEn="back: b[:2] = WC" bLabelKo="뒤: b[:2] = WC" />
-          <div style={{ maxWidth: 500, margin: "14px auto 0", padding: "10px 14px", background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, fontSize: 12.5, color: "#065f46", lineHeight: 1.65, textAlign: "center", wordBreak: "keep-all" }}>
+          <div style={{ maxWidth: 500, margin: "14px auto 0", padding: "10px 14px", background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, fontSize: 12.5, color: "#065f46", lineHeight: 1.65, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
             🎉 {t(E,
               <>All <b>3 possible different-pairs</b> checked. Every one: 2-letter overlap + same-letter leftover. <b>M = 2 works no matter what.</b></>,
-              <>서로 다른 쌍은 <b>이 3 가지가 전부</b>. 3 가지 다 확인 — 2 글자 겹침 + 같은 문자 남음. <b>M = 2 는 무조건 성공.</b></>)}
+              <>서로 다른 쌍은 <b>이 3가지가 전부</b>예요.<br />셋 다 <b>2글자 겹침 + 같은 글자 남음</b> — 그러니 <b>M = 2 는 언제나 돼요.</b></>)}
           </div>
         </>
       )}
@@ -316,7 +316,7 @@ export function InsightSim({ E }) {
               <div style={{ fontSize: 10, fontWeight: 800, color: "#94a3b8" }}>{t(E, "back block", "뒤 블록")}</div>
             </div>
           </div>
-          <div style={{ marginTop: 6, fontSize: 12, textAlign: "center", color: "#065f46", lineHeight: 1.7, wordBreak: "keep-all" }}>
+          <div style={{ marginTop: 6, fontSize: 12, textAlign: "center", color: "#065f46", lineHeight: 1.7, wordBreak: "keep-all", textWrap: "balance" }}>
             <div><b style={{ color: OPCOL[1] }}>op 1</b> {t(E, "picks OW + OW = ", "= OW + OW = ")}<code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>OWOW</code> = OW+OW ✓</div>
             <div><b style={{ color: OPCOL[2] }}>op 2</b> {t(E, "picks C + C = ", "= C + C = ")}<code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>CC</code> = C+C ✓</div>
             <div style={{ marginTop: 4, fontWeight: 800, color: "#059669" }}>M = 2 🎉</div>
