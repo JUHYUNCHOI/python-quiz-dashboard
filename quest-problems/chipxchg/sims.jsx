@@ -1163,8 +1163,8 @@ export function StrategySlide({ E }) {
                   <>답 = <span style={{ color: "#b45309" }}>A 3개를 만드는 칩 수</span> <span style={{ color: "#15803d" }}>+ 1</span></>)}
           </div>
           <div style={{ marginTop: 9, fontSize: 11.5, color: "#64748b", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
-            {t(E, <>The <b>3</b> (one below the goal) is the <b style={{ color: "#b45309" }}>− 1</b>;<br />the last chip is the <b style={{ color: "#15803d" }}>+ 1</b>.<br /><b>Why not count 4?</b> Then the last A would need<br />a whole group (3 chips) → <b>6 chips</b>, when 5 is enough.</>,
-                  <>목표 4개보다 하나 적은 <b>3</b> 이 식의 <b style={{ color: "#b45309" }}>− 1</b>,<br />마지막 한 칩이 <b style={{ color: "#15803d" }}>+ 1</b> 이에요.<br /><b>4개로 세면 안 되나요?</b> 그럼 마지막 1개도<br />묶음(칩 3개)으로 사야 한다고 세서 <b>칩 6개</b>가 나와요 — 5개면 되는데요.</>)}
+            {t(E, <>The <b>3</b> (one below the goal) is the <b style={{ color: "#b45309" }}>− 1</b>;<br />the last chip is the <b style={{ color: "#15803d" }}>+ 1</b>.<br />The tool pages count each piece.</>,
+                  <>목표 4개보다 하나 적은 <b>3</b> 이 식의 <b style={{ color: "#b45309" }}>− 1</b>,<br />마지막 한 칩이 <b style={{ color: "#15803d" }}>+ 1</b> 이에요.<br />왜 그런지는 도구 페이지에서 하나씩 세어 봐요.</>)}
           </div>
         </div>
       )}
