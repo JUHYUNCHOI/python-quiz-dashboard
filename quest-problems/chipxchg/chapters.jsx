@@ -40,18 +40,18 @@ function ChipXchgSample({ E }) {
   const RED = "#dc2626", RBG = "#fef2f2", BLU = "#2563eb", BBG = "#eff6ff",
         CY = "#0891b2", CBG = "#ecfeff", GR = "#15803d", GBG = "#f0fdf4";
   const test1 = [
-    { v: "2", label: "A", ko: t(E, "start red", "시작 빨강"), color: RED, bg: RBG },
-    { v: "3", label: "B", ko: t(E, "start blue", "시작 파랑"), color: BLU, bg: BBG },
-    { v: "1", label: "c_A", ko: t(E, "swap→red", "환전: 받는 빨강"), color: CY, bg: CBG },
-    { v: "1", label: "c_B", ko: t(E, "swap: blue in", "환전: 내는 파랑"), color: CY, bg: CBG },
-    { v: "4", label: "f_A", ko: t(E, "goal red", "목표 빨강"), color: GR, bg: GBG },
+    { v: "2", label: "A", ko: t(E, "start red", "시작 A"), color: RED, bg: RBG },
+    { v: "3", label: "B", ko: t(E, "start blue", "시작 B"), color: BLU, bg: BBG },
+    { v: "1", label: "c_A", ko: t(E, "swap→red", "환전: 받는 A"), color: CY, bg: CBG },
+    { v: "1", label: "c_B", ko: t(E, "swap: blue in", "환전: 내는 B"), color: CY, bg: CBG },
+    { v: "4", label: "f_A", ko: t(E, "goal red", "목표 A"), color: GR, bg: GBG },
   ];
   const test2 = [
-    { v: "0", label: "A", ko: t(E, "start red", "시작 빨강"), color: RED, bg: RBG },
-    { v: "0", label: "B", ko: t(E, "start blue", "시작 파랑"), color: BLU, bg: BBG },
-    { v: "2", label: "c_A", ko: t(E, "swap→red", "환전: 받는 빨강"), color: CY, bg: CBG },
-    { v: "3", label: "c_B", ko: t(E, "swap: blue in", "환전: 내는 파랑"), color: CY, bg: CBG },
-    { v: "5", label: "f_A", ko: t(E, "goal red", "목표 빨강"), color: GR, bg: GBG },
+    { v: "0", label: "A", ko: t(E, "start red", "시작 A"), color: RED, bg: RBG },
+    { v: "0", label: "B", ko: t(E, "start blue", "시작 B"), color: BLU, bg: BBG },
+    { v: "2", label: "c_A", ko: t(E, "swap→red", "환전: 받는 A"), color: CY, bg: CBG },
+    { v: "3", label: "c_B", ko: t(E, "swap: blue in", "환전: 내는 B"), color: CY, bg: CBG },
+    { v: "5", label: "f_A", ko: t(E, "goal red", "목표 A"), color: GR, bg: GBG },
   ];
   return (
     <div style={{ padding: 16 }}>
@@ -68,10 +68,10 @@ function ChipXchgSample({ E }) {
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <ChipXchgTestCard E={E} n={1} toks={test1} out="0"
           reason={t(E, <>1 blue → 1 red, and I already have 2+3=5 <b style={{color:"#15803d"}}>≥ goal 4</b> → <b style={{color:"#15803d"}}>0 extra</b>.</>,
-                       <>파랑 1개가 빨강 1개, 이미 2+3=5 <b style={{color:"#15803d"}}>≥ 목표 4</b> → <b style={{color:"#15803d"}}>추가 0개</b>.</>)} />
+                       <>B 1개가 A 1개, 이미 2+3=5 <b style={{color:"#15803d"}}>≥ 목표 4</b> → <b style={{color:"#15803d"}}>추가 0개</b>.</>)} />
         <ChipXchgTestCard E={E} n={2} toks={test2} out="9"
           reason={t(E, <>Start empty; the worst case wastes blue → need <b style={{color:"#15803d"}}>9 extra</b> <span style={{color:"#94a3b8"}}>(we'll see why!)</span></>,
-                       <>빈손 시작인데 최악의 경우 파랑을 낭비 → <b style={{color:"#15803d"}}>추가 9개</b> 필요 <span style={{color:"#94a3b8"}}>(왜인지 곧!)</span></>)} />
+                       <>빈손 시작인데 최악의 경우 B를 낭비 → <b style={{color:"#15803d"}}>추가 9개</b> 필요 <span style={{color:"#94a3b8"}}>(왜인지 곧!)</span></>)} />
       </div>
       {/* 출력 뜻 */}
       <div style={{ marginTop: 10, background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "9px 12px", fontSize: 12, color: C.text, lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
@@ -120,7 +120,7 @@ export function makeChipXchgCh1(E) {
 
     // [승] ②-2 왜 '제일 나쁜 조합' 을 세나 — 랜덤이라 운에 맡길 수 없다는 걸 먼저 못박음.
     //      (선생님 2026-08-27: "랜덤으로 받기 때문에 최악인 경우를 해결해야한다는걸 시뮬로")
-    //      1페이지 예제 그대로(빨강2·파랑3·목표5) 라서 답이 3 — 조합을 전부 펼쳐도 짧음.
+    //      1페이지 예제 그대로(A2·B3·목표5) 라서 답이 3 — 조합을 전부 펼쳐도 짧음.
     {
       type: "reveal",
       label: t(E, "Why the worst case?", "왜 제일 나쁜 경우?"),
@@ -138,39 +138,39 @@ export function makeChipXchgCh1(E) {
       content: (<StrategySlide E={E} />),
     },
 
-    // [전] 도구: 환전 세기 = init (지금 가진 걸로 만드는 빨강)
+    // [전] 도구: 환전 세기 = init (지금 가진 걸로 만드는 A)
     {
       type: "reveal",
-      label: t(E, "Tool: red I can make now (red_now)", "도구: 지금 만드는 빨강 (red_now)"),
+      label: t(E, "Tool: red I can make now (red_now)", "도구: 지금 만드는 A (red_now)"),
       narr: t(E, "How many red can I make right now? Group my blue by cB; leftovers waste. That's red_now.",
-                 "지금 가진 걸로 빨강을 몇 개까지 만들 수 있을까요? 내 파랑을 cB 개씩 묶어서 바꾸고, 남는 자투리는 버려요. 그 결과가 red_now 예요."),
+                 "지금 가진 걸로 A를 몇 개까지 만들 수 있을까요? 내 B를 cB 개씩 묶어서 바꾸고, 남는 자투리는 버려요. 그 결과가 red_now 예요."),
       content: (<ChipCountSim E={E} />),
     },
 
-    // [전] 도구: 최악의 경우 파랑으로 줌 → 자투리 버림 = 최악 (칩 시각, 슬라이드 없음).
+    // [전] 도구: 최악의 경우 B로 줌 → 자투리 버림 = 최악 (칩 시각, 슬라이드 없음).
     {
       type: "reveal",
-      label: t(E, "Tool: cA < cB (swap loses) → he gives blue", "도구: cA < cB (바꾸면 손해) → 파랑을 준다"),
+      label: t(E, "Tool: cA < cB (swap loses) → he gives blue", "도구: cA < cB (바꾸면 손해) → B를 준다"),
       narr: t(E, "Swap rate here: 3 blue → 2 red. Blue gives me less — so the worst case hands blue. Watch with real chips.",
-                 "이 예시의 환전 비율은 파랑 3개 → 빨강 2개예요. 파랑을 받으면 빨강보다 손해라서, 최악의 경우엔 파랑으로 줍니다. 진짜 칩으로 한 단계씩 봐요."),
+                 "이 예시의 환전 비율은 B 3개 → A 2개예요. B를 받으면 A보다 손해라서, 최악의 경우엔 B로 줍니다. 진짜 칩으로 한 단계씩 봐요."),
       content: (<AllBlueWorstSim E={E} />),
     },
 
-    // [전] 도구: 환전이 이득(cA≥cB)이면 최악의 경우엔 '빨강'을 줌 (파랑 아님). 공식의 다른 가지.
+    // [전] 도구: 환전이 이득(cA≥cB)이면 최악의 경우엔 'A'을 줌 (B 아님). 공식의 다른 가지.
     {
       type: "reveal",
-      label: t(E, "Tool: cA ≥ cB (swap gains) → he gives red", "도구: cA ≥ cB (바꾸면 이득) → 빨강을 준다"),
+      label: t(E, "Tool: cA ≥ cB (swap gains) → he gives red", "도구: cA ≥ cB (바꾸면 이득) → A를 준다"),
       narr: t(E, "Opposite rate: 2 blue → 3 red. Now blue gives me MORE — so the worst case hands red instead.",
-                 "이번엔 반대로 파랑 2개 → 빨강 3개예요. 파랑을 받는 게 오히려 이득이라서, 최악의 경우엔 빨강으로 줍니다."),
+                 "이번엔 반대로 B 2개 → A 3개예요. B를 받는 게 오히려 이득이라서, 최악의 경우엔 A로 줍니다."),
       content: (<AllRedWorstSim E={E} />),
     },
 
-    // [전] 도구 ④: 마지막 빨강은 묶음(손해) 말고 낱개로 = 코드 경우 ② 의 근거.
+    // [전] 도구 ④: 마지막 A는 묶음(손해) 말고 낱개로 = 코드 경우 ② 의 근거.
     //      원래 '계획' 슬랩 ④ 안에 있었는데 계획 페이지가 너무 길어져서 형제 도구들 옆으로 옮김
     //      (선생님 2026-08-26: "이걸 다음 페이지에 나두는건? 이 페이지가 넘 긴데").
     {
       type: "reveal",
-      label: t(E, "Tool: how many chips force 4 red?", "도구: 빨강 4개를 받으려면 칩 몇 개?"),
+      label: t(E, "Tool: how many chips force 4 red?", "도구: A 4개를 받으려면 칩 몇 개?"),
       narr: t(E, "How many chips reach the goal no matter which combination comes?",
                  "어떤 조합이 와도 목표에 닿으려면 칩이 몇 개 필요할까요?"),
       content: (<LastOneWhySlide E={E} />),

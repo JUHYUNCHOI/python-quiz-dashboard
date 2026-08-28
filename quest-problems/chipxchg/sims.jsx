@@ -1,9 +1,9 @@
 // Chip Exchange (Dec 2025 Bronze #1) 용 시뮬 — 🔒 USACO_VERIFIED components.jsx 는
 // 건드리지 않고 여기에만 (mooin3 / photoshoot25 와 같은 방식).
 //
-// 원칙: 학생 목소리(해요체), 관찰→추론, 시뮬로 개념. 색: 빨강=A칩, 파랑=B칩.
+// 원칙: 학생 목소리(해요체), 관찰→추론, 시뮬로 개념. 색: A=A칩, B=B칩.
 //   ① ChipCountSim — 최종 A = A + (B // cB) × cA (묶음/자투리 시각)
-//   ② AdversarySim — 파랑이 몰려 와서 자투리 낭비 → 최악 분배
+//   ② AdversarySim — B가 몰려 와서 자투리 낭비 → 최악 분배
 
 import React from "react";
 import { t } from "@/components/quest/theme";
@@ -14,13 +14,16 @@ const RED = "#ef4444", REDBG = "#fef2f2";
 const BLU = "#3b82f6", BLUBG = "#eff6ff";
 const NW = { whiteSpace: "nowrap" }; // 수식·숫자단위 한 덩어리로 (읽기 좋은 줄바꿈)
 
-function Chip({ color, size = 26, faded = false, label = null }) {
+/* 칩에는 늘 문제 원문의 이름(A / B)을 새김. 색은 구분용 보조. */
+function Chip({ color, size = 26, faded = false, label = undefined }) {
   const c = color === "red" ? RED : BLU;
+  const text = label === undefined ? (color === "red" ? "A" : "B") : label;
   return (
     <div style={{ position: "relative", width: size, height: size, borderRadius: 999, background: color === "red" ? REDBG : BLUBG,
       border: `2.5px solid ${c}`, opacity: faded ? 0.3 : 1, transition: "all .15s", flexShrink: 0,
-      display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color: c }}>
-      {label}
+      display: "flex", alignItems: "center", justifyContent: "center",
+      fontSize: Math.max(8, Math.round(size * 0.46)), fontWeight: 800, color: c }}>
+      {text}
     </div>
   );
 }
@@ -39,7 +42,7 @@ function Cap({ color, children }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   ChipCountSim — 최종 A 칩 세기. 예: A=2, B=7, 환전 3파랑→1빨강.
+   ChipCountSim — 최종 A 칩 세기. 예: A=2, B=7, 환전 3B→1A.
    B 를 cB 씩 묶어 → 묶음마다 A cA 개, 자투리는 버림.
    ═══════════════════════════════════════════════════════════════ */
 export function ChipCountSim({ E }) {
@@ -51,31 +54,31 @@ export function ChipCountSim({ E }) {
 
   const say =
     s.kind === "have" ? t(E, <>I'm holding <b style={{color:RED,...NW}}>2 red (A)</b> and <b style={{color:BLU,...NW}}>7 blue (B)</b>. Exchange: <b style={NW}>3 blue → 2 red</b>. How many red can I end with?</>,
-                           <>지금 <b style={{color:RED,...NW}}>빨강(A) 2개</b>, <b style={{color:BLU,...NW}}>파랑(B) 7개</b>. 환전: <b style={NW}>파랑 3개 → 빨강 2개</b>. 빨강을 최대 몇 개까지?</>)
+                           <>지금 <b style={{color:RED,...NW}}>A 2개</b>, <b style={{color:BLU,...NW}}>B 7개</b>. 환전: <b style={NW}>B 3개 → A 2개</b>. A를 최대 몇 개까지?</>)
     : s.kind === "group" ? t(E, <>Group the blue in <b>3</b>s: <b style={NW}>7 = 3 + 3 + 1</b> → <b style={NW}>2 full groups</b>, and <b style={NW}>1 leftover</b>.</>,
-                              <>파랑을 <b style={NW}>3개씩</b> 묶어요: <b style={NW}>7 = 3 + 3 + 1</b> → <b style={NW}>완성 묶음 2개</b>, <b style={NW}>자투리 1개</b>.</>)
+                              <>B를 <b style={NW}>3개씩</b> 묶어요: <b style={NW}>7 = 3 + 3 + 1</b> → <b style={NW}>완성 묶음 2개</b>, <b style={NW}>자투리 1개</b>.</>)
     : s.kind === "convert" ? t(E, <>Each full group → <b style={NW}>2 red</b>. So <b style={NW}>+4 red</b>. The <b style={NW}>leftover can't convert</b> — it's stuck.</>,
-                                <>완성 묶음마다 → <b style={NW}>빨강 2개</b>. 그래서 <b style={NW}>+4 빨강</b>. <b style={NW}>자투리는 못 바꿔요</b> — 그냥 남아요.</>)
+                                <>완성 묶음마다 → <b style={NW}>A 2개</b>. 그래서 <b style={NW}>+4 A</b>. <b style={NW}>자투리는 못 바꿔요</b> — 그냥 남아요.</>)
     : t(E, <>Final red = <b style={NW}>2 + 4 = 6</b>. Rule: <b style={NW}>final A = A + (B ÷ cB) × cA</b> (÷ = drop leftovers).</>,
-           <>최종 빨강 <b style={NW}>= 2 + 4 = 6</b>. 공식: <b style={NW}>최종 A = A + (B÷cB)×cA</b> <span style={NW}>(자투리 버림)</span>.</>);
+           <>최종 A <b style={NW}>= 2 + 4 = 6</b>. 공식: <b style={NW}>최종 A = A + (B÷cB)×cA</b> <span style={NW}>(자투리 버림)</span>.</>);
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "How many red chips do I end with?", "빨강 칩은 몇 개가 될까요?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "How many red chips do I end with?", "A 칩은 몇 개가 될까요?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Say tone={s.kind === "total" ? "aha" : "go"}>{say}</Say>
 
-      {/* 빨강(A) */}
+      {/* A */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
-        <span style={{ fontSize: 11, fontWeight: 800, color: RED, width: 60, textAlign: "right" }}>{t(E, "red (A)", "빨강 A")}</span>
+        <span style={{ fontSize: 11, fontWeight: 800, color: RED, width: 60, textAlign: "right" }}>{t(E, "red (A)", "A")}</span>
         {Array.from({ length: Anow }).map((_, i) => <Chip key={i} color="red" />)}
         {s.kind === "convert" || s.kind === "total"
           ? Array.from({ length: gain }).map((_, i) => <Chip key={"g" + i} color="red" label="+" />)
           : null}
       </div>
-      {/* 파랑(B) — group 스텝부터 묶음 표시 */}
+      {/* B — group 스텝부터 묶음 표시 */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, flexWrap: "wrap", rowGap: 10 }}>
-        <span style={{ fontSize: 11, fontWeight: 800, color: BLU, width: 60, textAlign: "right" }}>{t(E, "blue (B)", "파랑 B")}</span>
+        <span style={{ fontSize: 11, fontWeight: 800, color: BLU, width: 60, textAlign: "right" }}>{t(E, "blue (B)", "B")}</span>
         {s.kind === "have" ? (
           Array.from({ length: Bnow }).map((_, i) => <Chip key={i} color="blue" />)
         ) : (
@@ -93,8 +96,8 @@ export function ChipCountSim({ E }) {
           </>
         )}
       </div>
-      {s.kind === "group" && <Cap color={BLU}>{t(E, "2 groups + 1 leftover", "파랑 7개 = 묶음 2개 + 자투리 1개")}</Cap>}
-      {s.kind === "convert" && <Cap color={RED}>{t(E, "2 groups → +4 red · leftover stuck", "묶음 2개를 바꿔서 빨강이 4개 늘었어요. 자투리 1개는 못 바꿔요.")}</Cap>}
+      {s.kind === "group" && <Cap color={BLU}>{t(E, "2 groups + 1 leftover", "B 7개 = 묶음 2개 + 자투리 1개")}</Cap>}
+      {s.kind === "convert" && <Cap color={RED}>{t(E, "2 groups → +4 red · leftover stuck", "묶음 2개를 바꿔서 A가 4개 늘었어요. 자투리 1개는 못 바꿔요.")}</Cap>}
       {s.kind === "total" && <Cap color="#15803d">final A = 2 + (7 ÷ 3)×2 = 6</Cap>}
 
       <div style={{ marginTop: 24 }}>
@@ -106,12 +109,12 @@ export function ChipCountSim({ E }) {
 
 /* ═══════════════════════════════════════════════════════════════
    AdversarySim — 한 x(=8)에서 최악의 경우 나눌 수 있는 모든 분배를
-   파랑 b=0,1,…,8 차례로 다 따져 최악(최소 최종빨강)을 찾음.
-   최종 빨강 = a + (b // cB)×cA, a = 8-b. 최악의 경우엔 이 값이 최소인 걸 고름.
+   B b=0,1,…,8 차례로 다 따져 최악(최소 최종A)을 찾음.
+   최종 A = a + (b // cB)×cA, a = 8-b. 최악의 경우엔 이 값이 최소인 걸 고름.
    ═══════════════════════════════════════════════════════════════ */
 /* ═══════════════════════════════════════════════════════════════
-   AllBlueWorstSim — 추가 칩이 전부 파랑으로 오는 경우 → 자투리 버림 = 최악.
-   슬라이드/분배 없음. 색 미정 → 다 파랑 → 묶기 → 자투리 낭비 → 최악.
+   AllBlueWorstSim — 추가 칩이 전부 B로 오는 경우 → 자투리 버림 = 최악.
+   슬라이드/분배 없음. 색 미정 → 다 B → 묶기 → 자투리 낭비 → 최악.
    ═══════════════════════════════════════════════════════════════ */
 export function AllBlueWorstSim({ E }) {
   const cB = 3, cA = 2, X = 8;
@@ -125,20 +128,20 @@ export function AllBlueWorstSim({ E }) {
     s.k === "give"    ? t(E, <>Short of the goal, so I get <b>extra chips</b> — but the <b style={{color:"#dc2626"}}>I can't know each colour in advance</b> (red or blue).</>,
                            <>목표에 부족해서 <b>추가 칩</b>을 받아요 — 근데 <b style={{color:"#dc2626"}}>무슨 색이 올지는 알 수 없어요</b>.</>)
     : s.k === "allblue" ? t(E, <>The worst combination is <b style={{color:BLU}}>all blue</b> — blue needs 3 to convert, so it helps me the least.</>,
-                           <>제일 나쁜 건 <b style={{color:BLU}}>전부 파랑</b>이 오는 경우예요 — 파랑은 3개가 모여야 빨강이 되니까요.</>)
+                           <>제일 나쁜 건 <b style={{color:BLU}}>전부 B</b>이 오는 경우예요 — B는 3개가 모여야 A가 되니까요.</>)
     : s.k === "group" ? t(E, <>Group the blue by 3 and swap: <span style={NW}><b>8 = 2 groups</b></span> → <b style={{color:RED}}>+4 red</b>. And what's left?</>,
-                           <>파랑을 <b>3개씩</b> 묶어 환전: <span style={NW}><b>8 = 2묶음</b></span> → <b style={{color:RED}}>빨강 4개</b>. 남은 건?</>)
+                           <>B를 <b>3개씩</b> 묶어 환전: <span style={NW}><b>8 = 2묶음</b></span> → <b style={{color:RED}}>A 4개</b>. 남은 건?</>)
     : s.k === "waste" ? t(E, <>The leftover <b style={{color:BLU}}>2 blue</b> can't make a group of 3 → <b style={{color:"#dc2626"}}>wasted</b>. We call that leftover 자투리.</>,
-                           <>남은 <b style={{color:BLU}}>파랑 2개</b>는 3개가 안 돼서 못 묶어요 → <b style={{color:"#dc2626"}}>그냥 버려져요</b>. 이 남는 게 자투리예요.</>)
+                           <>남은 <b style={{color:BLU}}>B 2개</b>는 3개가 안 돼서 못 묶어요 → <b style={{color:"#dc2626"}}>그냥 버려져요</b>. 이 남는 게 자투리예요.</>)
     : t(E, <><b>8 chips, but only 4 red!</b> Blue piles up and <b>wastes the leftover</b> — that's the worst that can happen.</>,
-           <><b>8개나 받았는데 빨강은 4개뿐이에요!</b> 파랑이 몰려 오면 <b>자투리가 버려져서</b> 이렇게 돼요.</>);
+           <><b>8개나 받았는데 A는 4개뿐이에요!</b> B가 몰려 오면 <b>자투리가 버려져서</b> 이렇게 돼요.</>);
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "3 blue in → 2 red out: swapping LOSES (cA < cB)", "파랑 3개 내면 → 빨강 2개: 바꾸면 손해 (cA < cB)")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "3 blue in → 2 red out: swapping LOSES (cA < cB)", "B 3개 내면 → A 2개: 바꾸면 손해 (cA < cB)")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
-        {t(E, "extra chips = 8 · swap: 3 blue → 2 red", "추가 칩 = 8개 · 환전: 파랑 3 → 빨강 2")}
+        {t(E, "extra chips = 8 · swap: 3 blue → 2 red", "추가 칩 = 8개 · 환전: B 3 → A 2")}
       </div>
       <Say tone={s.k === "worst" ? "stuck" : "go"}>{say}</Say>
 
@@ -166,8 +169,8 @@ export function AllBlueWorstSim({ E }) {
       {showGroups && (
         <Cap color={wasted ? "#dc2626" : RED}>
           {wasted
-            ? t(E, "2 groups → 4 red · 2 wasted → only 4 red", "묶음 2개로 빨강 4개. 자투리 파랑 2개는 버려져서 빨강은 4개뿐이에요.")
-            : t(E, "2 groups → 4 red · 2 blue left over", "묶음 2개로 빨강 4개. 파랑 2개가 남아요.")}
+            ? t(E, "2 groups → 4 red · 2 wasted → only 4 red", "묶음 2개로 A 4개. 자투리 B 2개는 버려져서 A는 4개뿐이에요.")
+            : t(E, "2 groups → 4 red · 2 blue left over", "묶음 2개로 A 4개. B 2개가 남아요.")}
         </Cap>
       )}
 
@@ -179,8 +182,8 @@ export function AllBlueWorstSim({ E }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   AllRedWorstSim — 환전이 이득(cA ≥ cB)일 땐 최악의 경우 '빨강'을 줌 (파랑 아님).
-   파랑을 주면 오히려 이득이라, 빨강 1개씩 줘서 덜 도와줌. (공식의 cA≥cB 가지)
+   AllRedWorstSim — 환전이 이득(cA ≥ cB)일 땐 최악의 경우 'A'을 줌 (B 아님).
+   B를 주면 오히려 이득이라, A 1개씩 줘서 덜 도와줌. (공식의 cA≥cB 가지)
    ═══════════════════════════════════════════════════════════════ */
 export function AllRedWorstSim({ E }) {
   const steps = [{ k: "rule" }, { k: "bluegood" }, { k: "givered" }, { k: "concl" }];
@@ -188,22 +191,22 @@ export function AllRedWorstSim({ E }) {
 
   const say =
     s.k === "rule"    ? t(E, <>A different swap this time — <span style={NW}><b style={{color:BLU}}>2 blue</b> → <b style={{color:RED}}>3 red</b></span>. Here converting <b>gains</b> red!</>,
-                           <>이번엔 환전이 달라요 — <span style={NW}><b style={{color:BLU}}>파랑 2개</b> → <b style={{color:RED}}>빨강 3개</b></span>. 환전하면 오히려 <b>이득</b>이에요!</>)
+                           <>이번엔 환전이 달라요 — <span style={NW}><b style={{color:BLU}}>B 2개</b> → <b style={{color:RED}}>A 3개</b></span>. 환전하면 오히려 <b>이득</b>이에요!</>)
     : s.k === "bluegood" ? t(E, <>If they all came as <b style={{color:BLU}}>blue</b>, I'd <b>gain</b> (2 → 3 red). No way it does that.</>,
-                           <>최악의 경우 <b style={{color:BLU}}>파랑</b>을 주면 나한텐 <b>이득</b> (2 → 3). 이럴 땐 파랑이 오는 게 오히려 나한테 이득이에요.</>)
+                           <>최악의 경우 <b style={{color:BLU}}>B</b>을 주면 나한텐 <b>이득</b> (2 → 3). 이럴 땐 B가 오는 게 오히려 나한테 이득이에요.</>)
     : s.k === "givered" ? t(E, <>So it gives <b style={{color:RED}}>red, 1 at a time</b> — one red chip is just one red, the <b>least help</b>.</>,
-                           <>그래서 제일 나쁜 건 <b style={{color:RED}}>빨강이 하나씩</b> 오는 경우예요 — 빨강 1개는 딱 1개로 끝이라 <b>제일 안 늘거든요</b>.</>)
+                           <>그래서 제일 나쁜 건 <b style={{color:RED}}>A가 하나씩</b> 오는 경우예요 — A 1개는 딱 1개로 끝이라 <b>제일 안 늘거든요</b>.</>)
     : t(E, <>So when swapping <b>pays</b> (cA ≥ cB) → the extra chips are <b style={{color:RED}}>all red</b>, no waste. <span style={{color:"#94a3b8"}}>(when it loses → all blue + waste, the step before)</span></>,
-           <>환전이 <b>이득</b>(cA ≥ cB)이면 → 추가 칩은 <b style={{color:RED}}>다 빨강</b>, 낭비 없음. <span style={{color:"#94a3b8"}}>(손해면 반대 = 파랑 낭비, 앞 스텝)</span></>);
+           <>환전이 <b>이득</b>(cA ≥ cB)이면 → 추가 칩은 <b style={{color:RED}}>다 A</b>, 낭비 없음. <span style={{color:"#94a3b8"}}>(손해면 반대 = B 낭비, 앞 스텝)</span></>);
 
   const showRed = s.k === "givered" || s.k === "concl";
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "2 blue in → 3 red out: swapping GAINS (cA ≥ cB)", "파랑 2개 내면 → 빨강 3개: 바꾸면 이득 (cA ≥ cB)")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+        title={t(E, "2 blue in → 3 red out: swapping GAINS (cA ≥ cB)", "B 2개 내면 → A 3개: 바꾸면 이득 (cA ≥ cB)")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all" }}>
-        {t(E, "this example · swap: 2 blue → 3 red (cA ≥ cB)", "이 예시 · 환전: 파랑 2 → 빨강 3 (cA ≥ cB)")}
+        {t(E, "this example · swap: 2 blue → 3 red (cA ≥ cB)", "이 예시 · 환전: B 2 → A 3 (cA ≥ cB)")}
       </div>
       <Say tone={s.k === "concl" ? "aha" : "go"}>{say}</Say>
 
@@ -224,7 +227,7 @@ export function AllRedWorstSim({ E }) {
             <span style={{ fontSize: 24 }}>😈</span>
             <span style={{ fontSize: 15, fontWeight: 800, color: "#94a3b8" }}>→</span>
             {Array.from({ length: 4 }).map((_, i) => <Chip key={i} color="red" size={22} />)}
-            <span style={{ fontSize: 11.5, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "all red, 1 each", "전부 빨강으로 줘요 — 칩 1개당 빨강 1개")}</span>
+            <span style={{ fontSize: 11.5, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "all red, 1 each", "전부 A로 줘요 — 칩 1개당 A 1개")}</span>
           </>
         )}
       </div>
@@ -257,26 +260,26 @@ export function AdversarySim({ E }) {
   const say =
     s.kind === "intro"
       ? t(E, <>How might the extra chips split? Say <b style={NW}>8 chips</b>. Slide <b>b</b> (blue) up — the more blue, the worse for me.</>,
-             <>추가 칩이 어떻게 섞여 올까요? 예로 <b style={NW}>8개</b>. 아래 <b>b</b>(파랑)를 늘려봐요 — 파랑에 몰수록 나한텐 나빠져요.</>)
+             <>추가 칩이 어떻게 섞여 올까요? 예로 <b style={NW}>8개</b>. 아래 <b>b</b>(B)를 늘려봐요 — B에 몰수록 나한텐 나빠져요.</>)
       : isLast
       ? t(E, <><b style={NW}>b=8 (all blue):</b> <span style={NW}>2 groups → +4 red</span>, but <span style={NW}><b style={{color:"#dc2626"}}>2 blue wasted</b></span> → <b style={{color:"#dc2626",...NW}}>final 4</b> (the lowest). <b>The worst is blue piling up and the leftover going to waste.</b></>,
-             <><b style={NW}>b=8 (다 파랑):</b> <span style={NW}>묶음 2 → +빨강 4</span>, 근데 <span style={NW}><b style={{color:"#dc2626"}}>파랑 2개 버림</b></span> → <b style={{color:"#dc2626",...NW}}>최종 4</b> (최저). <b>제일 나쁜 건 파랑이 몰려 오는 경우 자투리를 버려요.</b></>)
+             <><b style={NW}>b=8 (다 B):</b> <span style={NW}>묶음 2 → +A 4</span>, 근데 <span style={NW}><b style={{color:"#dc2626"}}>B 2개 버림</b></span> → <b style={{color:"#dc2626",...NW}}>최종 4</b> (최저). <b>제일 나쁜 건 B가 몰려 오는 경우 자투리를 버려요.</b></>)
       : t(E,
           <><b style={NW}>b={cur.b} ({cur.b} blue):</b> <span style={NW}>swap → <b style={{color:cur.g?"#15803d":"#94a3b8"}}>+{cur.g*cA} red</b>{cur.w?` (${cur.w} wasted)`:""}</span>, <span style={NW}>{cur.a} red kept</span> → <b>final {cur.val}</b></>,
-          <><b style={NW}>b={cur.b} (파랑 {cur.b}개):</b> <span style={NW}>환전 → <b style={{color:cur.g?"#15803d":"#94a3b8"}}>+빨강 {cur.g*cA}</b>{cur.w?` (자투리 ${cur.w} 버림)`:""}</span>, <span style={NW}>빨강 {cur.a}개는 그대로</span> → <b>최종 {cur.val}</b></>);
+          <><b style={NW}>b={cur.b} (B {cur.b}개):</b> <span style={NW}>환전 → <b style={{color:cur.g?"#15803d":"#94a3b8"}}>+A {cur.g*cA}</b>{cur.w?` (자투리 ${cur.w} 버림)`:""}</span>, <span style={NW}>A {cur.a}개는 그대로</span> → <b>최종 {cur.val}</b></>);
 
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Try every split — find the worst", "모든 분배 다 따지기 — 최악 찾기")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
-        {t(E, "start A=0, B=0 · 3 blue → 2 red · goal 5 · extra x=8", "시작 A=0, B=0 · 파랑 3 → 빨강 2 · 목표 5 · 추가 x=8")}
+        {t(E, "start A=0, B=0 · 3 blue → 2 red · goal 5 · extra x=8", "시작 A=0, B=0 · B 3 → A 2 · 목표 5 · 추가 x=8")}
       </div>
       <Say tone={isLast ? "stuck" : isNewMin ? "stuck" : "go"}>{say}</Say>
 
       {cur && (
         <div style={{ maxWidth: 480, margin: "0 auto" }}>
-          {/* 현재 분배 그림: a 빨강 + b 파랑(3묶음, 자투리 낭비) */}
+          {/* 현재 분배 그림: a A + b B(3묶음, 자투리 낭비) */}
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, flexWrap: "wrap", minHeight: 40, marginBottom: 10 }}>
             {Array.from({ length: cur.a }).map((_, i) => <Chip key={"a" + i} color="red" size={18} />)}
             {cur.a > 0 && cur.b > 0 && <span style={{ color: "#94a3b8", fontWeight: 800 }}>+</span>}
@@ -354,10 +357,10 @@ export function FormulaDeriveSim({ E }) {
              <>앞에서 만든 그 표예요. <span style={NW}>x 가 10¹⁸ 면</span> <span style={NW}>b 다 못 봐</span> → <span style={NW}>규칙을 찾아요.</span></>)
       : s.kind === "obs"
       ? t(E, <><b>Observe:</b> the value dips hardest where a split <b>wastes 2 blue</b> (leftover cB−1 = 2). Those b = <span style={NW}><b>2, 5, 8</b></span> — the candidates for worst.</>,
-             <><b>관찰:</b> <b>파랑 2개를 버릴 때</b>(자투리 cB−1 = 2) 값이 훅 낮아져요. 그런 b = <span style={NW}><b>2, 5, 8</b></span> — 최악 후보들.</>)
+             <><b>관찰:</b> <b>B 2개를 버릴 때</b>(자투리 cB−1 = 2) 값이 훅 낮아져요. 그런 b = <span style={NW}><b>2, 5, 8</b></span> — 최악 후보들.</>)
       : s.kind === "infer"
       ? t(E, <><b>Biggest of them = worst.</b> Blue loses <span style={NW}>(3 blue → 2 red)</span>, so bigger b → fewer red: <span style={NW}>b=2 → 6</span>, <span style={NW}>b=5 → 5</span>, <span style={NW}>b=8 → 4</span>. → worst <b>b = 8</b>. <span style={{color:"#2563eb"}}>Next: build the formula for it.</span></>,
-             <><b>이 중 가장 큰 게 최악.</b> 파랑은 손해라 <span style={NW}>(파랑 3 → 빨강 2)</span> b 클수록 빨강이 줄어요: <span style={NW}>b=2 → 6</span>, <span style={NW}>b=5 → 5</span>, <span style={NW}>b=8 → 4</span>. → 최악 <b>b = 8</b>. <span style={{color:"#2563eb"}}>다음: 이 b 의 공식을 만들어요.</span></>)
+             <><b>이 중 가장 큰 게 최악.</b> B는 손해라 <span style={NW}>(B 3 → A 2)</span> b 클수록 A가 줄어요: <span style={NW}>b=2 → 6</span>, <span style={NW}>b=5 → 5</span>, <span style={NW}>b=8 → 4</span>. → 최악 <b>b = 8</b>. <span style={{color:"#2563eb"}}>다음: 이 b 의 공식을 만들어요.</span></>)
       : t(E, <><b>As a formula:</b> get that worst <b>b = 8</b> directly — no brute loop. Steps <b>①②③</b> below are the calc.</>,
              <><b>공식으로:</b> 그 최악 <b>b = 8</b> 을 브루트 없이 바로 계산해요. 아래 <b>①②③</b> 이 그 계산이에요.</>);
 
@@ -366,8 +369,8 @@ export function FormulaDeriveSim({ E }) {
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Find the worst b from the table", "표에서 최악 b 찾기")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all", lineHeight: 1.5 }}>
-        {t(E, "start red 0 · blue 0 · swap: 3 blue → 2 red · goal 5 · extra x=8", "시작 빨강 0 · 파랑 0 · 환전: 파랑 3 → 빨강 2 · 목표 5 · 추가 x=8")}
-        <br/>{t(E, "b = blue chips given · value = my final red (smaller = worse)", "b = 파랑에 준 칩 · 값 = 그때 내 최종 빨강 (작을수록 최악)")}
+        {t(E, "start red 0 · blue 0 · swap: 3 blue → 2 red · goal 5 · extra x=8", "시작 A 0 · B 0 · 환전: B 3 → A 2 · 목표 5 · 추가 x=8")}
+        <br/>{t(E, "b = blue chips given · value = my final red (smaller = worse)", "b = B에 준 칩 · 값 = 그때 내 최종 A (작을수록 최악)")}
       </div>
       <Say tone={s.kind === "infer" ? "aha" : "stuck"}>{say}</Say>
 
@@ -393,7 +396,7 @@ export function FormulaDeriveSim({ E }) {
         </div>
       )}
 
-      {/* b=0..8 결과 표 — obs: 자투리최대 파랑 / infer·formula: 최악 빨강 */}
+      {/* b=0..8 결과 표 — obs: 자투리최대 B / infer·formula: 최악 A */}
       <div style={{ maxWidth: 480, margin: "0 auto", display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap" }}>
         {rows.map((r) => {
           const isMaxLeft = r.w === cB - 1;
@@ -421,17 +424,17 @@ export function FormulaDeriveSim({ E }) {
       {s.kind === "formula" && (
         <div style={{ maxWidth: 480, margin: "14px auto 0", background: "#eff6ff", border: "1.5px solid #2563eb", borderRadius: 10, padding: "12px 16px", fontSize: 12.5, color: "#1e3a8a", lineHeight: 1.7, wordBreak: "keep-all", textAlign: "left" }}>
           <div style={{ marginBottom: 5 }}>{t(E, <><b>①</b> waste 2 = total blue leaves <b>remainder 2</b> (÷3). Start blue 0 → first such <b style={{color:"#2563eb"}}>b = 2</b>.</>,
-                                              <><b>①</b> 파랑 2개 버리기 = 총 파랑을 <b>3으로 나눠 2 남기기</b>. 시작 파랑 0 → 처음 그런 <b style={{color:"#2563eb"}}>b = 2</b>.</>)}</div>
+                                              <><b>①</b> B 2개 버리기 = 총 B를 <b>3으로 나눠 2 남기기</b>. 시작 B 0 → 처음 그런 <b style={{color:"#2563eb"}}>b = 2</b>.</>)}</div>
           <div style={{ marginBottom: 5 }}>{t(E, <><b>②</b> add <b>+3</b> each time — same remainder: <span style={NW}><b>2 → 5 → 8</b></span>.</>,
                                               <><b>②</b> <b>+3</b>씩 더하기 — 나머지 그대로: <span style={NW}><b>2 → 5 → 8</b></span>.</>)}</div>
           <div>{t(E, <><b>③</b> largest ≤ <span style={NW}>x = 8</span> → worst <b style={{color:"#dc2626"}}>b = 8</b>, final red <b style={{color:"#dc2626"}}>4</b>.</>,
-                     <><b>③</b> <span style={NW}>x = 8</span> 이하 가장 큰 것 → 최악 <b style={{color:"#dc2626"}}>b = 8</b>, 최종 빨강 <b style={{color:"#dc2626"}}>4</b>.</>)}</div>
+                     <><b>③</b> <span style={NW}>x = 8</span> 이하 가장 큰 것 → 최악 <b style={{color:"#dc2626"}}>b = 8</b>, 최종 A <b style={{color:"#dc2626"}}>4</b>.</>)}</div>
           <div style={{ marginTop: 9, paddingTop: 9, borderTop: "1px dashed #93c5fd", fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, fontWeight: 800, color: "#1e40af", wordBreak: "break-word" }}>
             r1 = (cB−1 − B%cB)%cB = (2−0)%3 = 2
           </div>
           <div style={{ marginTop: 3, fontSize: 11, color: "#475569", wordBreak: "keep-all" }}>
             {t(E, <>= “how many more blue to reach remainder 2?” (start blue 0 → 2). Then +cB up to x. No loop — <b>O(1)</b>.</>,
-                  <>= “나머지 2 되려면 파랑 몇 개 더?” <span style={NW}>(시작 파랑 0 → 2)</span>. 그다음 x 까지 +cB. 반복 없이 — <b>O(1)</b>.</>)}
+                  <>= “나머지 2 되려면 B 몇 개 더?” <span style={NW}>(시작 B 0 → 2)</span>. 그다음 x 까지 +cB. 반복 없이 — <b>O(1)</b>.</>)}
           </div>
         </div>
       )}
@@ -456,7 +459,7 @@ export function FormulaBuildSim({ E }) {
   ];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
 
-  // 트레이 상태: whyB 만 시작 파랑 4개 예시, 나머지는 샘플(시작 0)
+  // 트레이 상태: whyB 만 시작 B 4개 예시, 나머지는 샘플(시작 0)
   const B = s.kind === "whyB" ? 4 : 0;
   const added = { anchor: 0, formula: 2, whyB: 0, wrap: 2, largest: X, codemap: 0 }[s.kind];
   const total = B + added;
@@ -469,13 +472,13 @@ export function FormulaBuildSim({ E }) {
   const say =
     s.kind === "anchor"
       ? t(E, <>Beat the <b>worst case</b> and the rest follows. Worst = <b style={{color:"#dc2626"}}>most blue leftover</b> (blue that can't fill a group of 3) — <span style={NW}>at most <b>cB−1 = 2</b></span>. Let's get the <b>b</b> that makes it.</>,
-             <>최악만 막으면 나머지는 저절로 풀려요. 최악 = <b style={{color:"#dc2626"}}>파랑 자투리</b>(3개로 못 묶어 버리는 나머지)<b>가 가장 많을 때</b> — <span style={NW}>최대 <b>cB−1 = 2</b>개</span>. 그걸 만드는 <b>b</b>를 공식으로 구해요.</>)
+             <>최악만 막으면 나머지는 저절로 풀려요. 최악 = <b style={{color:"#dc2626"}}>B 자투리</b>(3개로 못 묶어 버리는 나머지)<b>가 가장 많을 때</b> — <span style={NW}>최대 <b>cB−1 = 2</b>개</span>. 그걸 만드는 <b>b</b>를 공식으로 구해요.</>)
     : s.kind === "formula"
       ? t(E, <>Leftover = <span style={NW}>(total blue) mod cB</span>. To make it <b>2</b>: start blue is 0, so <span style={NW}>now-leftover <b>0</b></span> → give <span style={NW}><b>2 − 0 = 2</b></span>. That b is <b style={{color:"#2563eb"}}>r1</b>.</>,
-             <>자투리 = <span style={NW}>(총 파랑) ÷ cB 나머지</span>. 이걸 <b>목표 2</b>로? 시작 파랑 0이라 <span style={NW}>지금 자투리 <b>0</b></span> → <span style={NW}><b>2 − 0 = 2</b>개</span> 주면 돼요. 이 b가 <b style={{color:"#2563eb"}}>r1</b>.</>)
+             <>자투리 = <span style={NW}>(총 B) ÷ cB 나머지</span>. 이걸 <b>목표 2</b>로? 시작 B 0이라 <span style={NW}>지금 자투리 <b>0</b></span> → <span style={NW}><b>2 − 0 = 2</b>개</span> 주면 돼요. 이 b가 <b style={{color:"#2563eb"}}>r1</b>.</>)
     : s.kind === "whyB"
       ? t(E, <><b>What if start blue isn't 0?</b> Say <b>4</b>: <span style={NW}>4 = 3 + 1</span> → <span style={NW}>now-leftover <b>1</b></span>. To goal 2, only <span style={NW}><b>2 − 1 = 1</b></span>! <span style={NW}>→ that's the <b>− B%cB</b></span>.</>,
-             <><b>시작 파랑이 0이 아니면?</b> 예로 <b>4개</b>: <span style={NW}>4 = 3 + 1</span> → <span style={NW}>지금 자투리 <b>1</b></span>. 목표 2까지 <span style={NW}><b>2 − 1 = 1</b></span>개만! <span style={NW}>→ 이게 <b>− B%cB</b></span> 예요.</>)
+             <><b>시작 B가 0이 아니면?</b> 예로 <b>4개</b>: <span style={NW}>4 = 3 + 1</span> → <span style={NW}>지금 자투리 <b>1</b></span>. 목표 2까지 <span style={NW}><b>2 − 1 = 1</b></span>개만! <span style={NW}>→ 이게 <b>− B%cB</b></span> 예요.</>)
     : s.kind === "wrap"
       ? t(E, <>Code wraps the subtraction in <span style={NW}><b>(… % cB + cB) % cB</b></span> — a <b>safety net</b>: keep it a valid <span style={NW}>0…cB−1</span> remainder <span style={NW}>(C++ can give a negative mod)</span>. The meaning is still <b>'goal − now'</b>.</>,
              <>코드는 이 뺄셈을 <span style={NW}><b>(… % cB + cB) % cB</b></span> 로 감싸요 — <b>안전장치</b>예요. 나머지를 항상 <span style={NW}>0~cB−1</span> 로, <span style={NW}>C++는 음수 나머지</span>가 나올 수 있어서요. 뜻은 그대로 <b>'목표 − 지금'</b>.</>)
@@ -490,7 +493,7 @@ export function FormulaBuildSim({ E }) {
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Build the max-leftover formula", "자투리 최대 b 공식 만들기")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all", lineHeight: 1.5 }}>
-        {t(E, "leftover = total blue mod cB(3) · max = cB−1 = 2", "자투리 = 총 파랑을 cB(3)로 나눈 나머지 · 최대 = cB−1 = 2")}
+        {t(E, "leftover = total blue mod cB(3) · max = cB−1 = 2", "자투리 = 총 B를 cB(3)로 나눈 나머지 · 최대 = cB−1 = 2")}
       </div>
       <Say tone={hit ? "aha" : s.kind === "anchor" || s.kind === "wrap" ? "stuck" : "go"}>{say}</Say>
 
@@ -498,7 +501,7 @@ export function FormulaBuildSim({ E }) {
         <>
           {s.kind === "whyB" && (
             <div style={{ textAlign: "center", fontSize: 11, fontWeight: 800, color: "#b45309", marginBottom: 4, wordBreak: "keep-all" }}>
-              {t(E, "side example — start blue = 4", "다른 예 — 시작 파랑 = 4")}
+              {t(E, "side example — start blue = 4", "다른 예 — 시작 B = 4")}
             </div>
           )}
           <div style={{ maxWidth: 470, margin: "0 auto", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", justifyContent: "center", minHeight: 60 }}>
@@ -561,7 +564,7 @@ export function FormulaBuildSim({ E }) {
           <div>maxWasteB = ((cB−1 − B%cB)%cB + cB)%cB<span style={{ color: "#64748b" }}>{t(E, "  // goal − now (+safe)", "  // 목표 − 지금 (+안전)")}</span></div>
           <div>maxWasteB + ((x−maxWasteB)/cB)*cB<span style={{ color: "#64748b" }}>{t(E, "  // largest ≤ x", "  // x 이하 최대")}</span></div>
           <div style={{ marginTop: 8, fontFamily: "inherit", fontSize: 11.5, fontWeight: 700, color: "#93c5fd", wordBreak: "keep-all" }}>
-            {t(E, "Our sample: start blue 0 → r1 = 2 → b = 8.", "우리 샘플: 시작 파랑 0 → r1 = 2 → b = 8.")}
+            {t(E, "Our sample: start blue 0 → r1 = 2 → b = 8.", "우리 샘플: 시작 B 0 → r1 = 2 → b = 8.")}
           </div>
         </div>
       )}
@@ -592,7 +595,7 @@ export function CandidateSim({ E }) {
   const say =
     s.kind === "brute"
       ? t(E, <>The brute tried <b>every b (0–8)</b>. The <b>worst</b> <span style={NW}>(my fewest red)</span> is <b style={{color:"#dc2626"}}>4</b>, at <span style={NW}>b=8</span> <span style={NW}>(all blue, tail wasted)</span>.</>,
-             <>브루트는 <b>b 를 0~8 전부</b> 쟀어요. <b>최악</b> <span style={NW}>(내 빨강 최소)</span>은 <b style={{color:"#dc2626"}}>4</b>, <span style={NW}>b=8 에서</span> <span style={NW}>(다 파랑, 자투리 버림)</span>.</>)
+             <>브루트는 <b>b 를 0~8 전부</b> 쟀어요. <b>최악</b> <span style={NW}>(내 A 최소)</span>은 <b style={{color:"#dc2626"}}>4</b>, <span style={NW}>b=8 에서</span> <span style={NW}>(다 B, 자투리 버림)</span>.</>)
       : t(E, <>If <span style={NW}>x is huge</span> we can't try every b. So the code checks only <b>a few likely spots</b> and gets the same <b style={{color:"#dc2626"}}>4</b> — no loop, <b>O(1)</b>.</>,
              <><span style={NW}>x 가 크면</span> b 를 전부는 못 재요. 그래서 코드는 <b>최악 될 만한 몇 군데</b>만 재서 똑같이 <b style={{color:"#dc2626"}}>4</b> 를 구해요 — 반복 없이 <b>O(1)</b>.</>);
 
@@ -601,7 +604,7 @@ export function CandidateSim({ E }) {
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Brute → a few smart spots", "브루트 → 몇 군데만")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6, wordBreak: "keep-all", lineHeight: 1.5 }}>
-        {t(E, "x=8 · each cell = my final red for that split · the worst is the smallest", "x=8 · 칸 = 그 분배일 때 내 최종 빨강 · 최악의 경우엔 최소를 노림")}
+        {t(E, "x=8 · each cell = my final red for that split · the worst is the smallest", "x=8 · 칸 = 그 분배일 때 내 최종 A · 최악의 경우엔 최소를 노림")}
       </div>
       <Say tone={s.kind === "fast" ? "aha" : "stuck"}>{say}</Say>
 
@@ -731,28 +734,28 @@ export function SearchSim({ E }) {
 
 /* ═══════════════════════════════════════════════════════════════
    GameBoardSim — "이 게임 한 판" 을 구체 그림으로 한 장면씩.
-   예: 시작 빨강 2, 파랑 3 · 교환 파랑3→빨강2 · 목표 빨강 5.
+   예: 시작 A 2, B 3 · 교환 B3→A2 · 목표 A 5.
    setup → exchange → goal(모자람) → 반전(최악의 경우) → 우리 질문
    ═══════════════════════════════════════════════════════════════ */
 export function GameBoardSim({ E }) {
   const steps = [{ kind: "setup" }, { kind: "swap" }, { kind: "goal" }, { kind: "want" }, { kind: "block" }, { kind: "ask" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
-  // 파랑을 교환에 다 써버린 이후 상태 (빨강 =4, 파랑 흐림)
+  // B를 교환에 다 써버린 이후 상태 (A =4, B 흐림)
   const spent = s.kind === "goal" || s.kind === "want" || s.kind === "block" || s.kind === "ask";
 
   const say =
     s.kind === "setup" ? t(E, <>Bessie starts with <b style={{color:RED}}>2 red chips</b> and <b style={{color:BLU}}>3 blue chips</b>. That's her whole pile.</>,
-                            <>베시는 <b style={{color:RED}}>빨강 칩 2개</b>, <b style={{color:BLU}}>파랑 칩 3개</b>로 시작해요. 이게 가진 전부예요.</>)
+                            <>베시는 <b style={{color:RED}}>A 칩 2개</b>, <b style={{color:BLU}}>B 칩 3개</b>로 시작해요. 이게 가진 전부예요.</>)
     : s.kind === "swap" ? t(E, <>There's an exchange booth: <b>hand in 3 blue → get 2 red</b>. One direction only (blue → red), as often as you like.</>,
-                             <>교환소가 있어요: <b>파랑 3개를 내면 → 빨강 2개</b>. 한 방향만 (파랑 → 빨강), 몇 번이든.</>)
+                             <>교환소가 있어요: <b>B 3개를 내면 → A 2개</b>. 한 방향만 (B → A), 몇 번이든.</>)
     : s.kind === "goal" ? t(E, <>Goal: reach <b style={{color:"#15803d"}}>5 red chips</b>. Best I can do now: 2 red + (swap 3 blue) 2 red = <b>4 red</b>. <b style={{color:"#dc2626"}}>1 short ✗</b>.</>,
-                             <>목표: <b style={{color:"#15803d"}}>빨강{" "}5개</b> 모으기. 지금 최선: 빨강{" "}2 + (파랑{" "}3 교환) 빨강{" "}2 = <b>빨강{" "}4개</b>. <b style={{color:"#dc2626"}}>1개{" "}모자라 ✗</b>.</>)
+                             <>목표: <b style={{color:"#15803d"}}>A{" "}5개</b> 모으기. 지금 최선: A{" "}2 + (B{" "}3 교환) A{" "}2 = <b>A{" "}4개</b>. <b style={{color:"#dc2626"}}>1개{" "}모자라 ✗</b>.</>)
     : s.kind === "want" ? t(E, <>Just <b style={{color:"#16a34a"}}>1 more red</b> and I hit 5! So I grab <b>1 extra chip</b>. If only I could take it as red…</>,
-                             <>빨강 <b style={{color:"#16a34a"}}>1개만 더</b> 있으면 5예요! 그래서 <b>칩{" "}1개</b>를 더 받아요. 그{" "}1개를 빨강으로 받을 수만 있다면…</>)
+                             <>A <b style={{color:"#16a34a"}}>1개만 더</b> 있으면 5예요! 그래서 <b>칩{" "}1개</b>를 더 받아요. 그{" "}1개를 A로 받을 수만 있다면…</>)
     : s.kind === "block" ? t(E, <>But <b>I can't choose the color</b> — the <b style={{color:"#dc2626"}}>worst case</b> makes it <b style={{color:BLU}}>blue</b>. <b>1 blue can't be exchanged</b> (needs 3) → still <b>4 red</b>, still short <b style={{color:"#dc2626"}}>✗</b>.</>,
-                              <>근데 <b>색은 내가 못 골라요</b> — 하필 <b style={{color:BLU}}>파랑</b>이 올 수도 있어요. <b>파랑{" "}1개는 못{" "}바꿔요</b> (3개 필요) → 여전히 <b>빨강{" "}4</b>, 아직 부족 <b style={{color:"#dc2626"}}>✗</b>.</>)
+                              <>근데 <b>색은 내가 못 골라요</b> — 하필 <b style={{color:BLU}}>B</b>이 올 수도 있어요. <b>B{" "}1개는 못{" "}바꿔요</b> (3개 필요) → 여전히 <b>A{" "}4</b>, 아직 부족 <b style={{color:"#dc2626"}}>✗</b>.</>)
     : t(E, <><b>Our question:</b> 1 chip wasn't enough. How many must I grab so that <b>no matter how he colors them</b>, I still reach 5 red? <b>That fewest count is the answer.</b></>,
-           <><b>우리 질문:</b> 1개론 안 됐어요. <b>어떤 조합이 와도</b> 빨강{" "}5를 채우려면 몇{" "}개를 받아야 할까요? <b>그 최소{" "}개수가 답이에요.</b></>);
+           <><b>우리 질문:</b> 1개론 안 됐어요. <b>어떤 조합이 와도</b> A{" "}5를 채우려면 몇{" "}개를 받아야 할까요? <b>그 최소{" "}개수가 답이에요.</b></>);
 
   return (
     <div style={{ padding: 16 }}>
@@ -767,14 +770,14 @@ export function GameBoardSim({ E }) {
 
       {/* 내 칩 — 항상 표시 */}
       <div style={{ maxWidth: 460, margin: "0 auto" }}>
-        {/* 빨강 줄 — goal 부터 교환으로 얻은 +2 를 붙여 =4 를 계속 보여줌 */}
+        {/* A 줄 — goal 부터 교환으로 얻은 +2 를 붙여 =4 를 계속 보여줌 */}
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
-          <span style={{ fontSize: 11, fontWeight: 800, color: RED, width: 56, textAlign: "right" }}>{t(E, "red", "빨강")}</span>
+          <span style={{ fontSize: 11, fontWeight: 800, color: RED, width: 56, textAlign: "right" }}>{t(E, "red", "A")}</span>
           {Array.from({ length: 2 }).map((_, i) => <Chip key={i} color="red" />)}
           {spent && <><span style={{ color: "#94a3b8", fontWeight: 800 }}>+</span>
             {Array.from({ length: 2 }).map((_, i) => <Chip key={"e" + i} color="red" label="+" />)}
             <span style={{ fontSize: 13, fontWeight: 800, color: "#dc2626", marginLeft: 4, fontFamily: "'JetBrains Mono',monospace" }}>= 4</span></>}
-          {/* want: 원하는 빨강 1개(희망) */}
+          {/* want: 원하는 A 1개(희망) */}
           {s.kind === "want" && <>
             <span style={{ color: "#16a34a", fontWeight: 800 }}>+</span>
             <div style={{ width: 26, height: 26, borderRadius: 999, background: "#f0fdf4", border: "2px dashed #16a34a",
@@ -782,9 +785,9 @@ export function GameBoardSim({ E }) {
             <span style={{ fontSize: 13, fontWeight: 800, color: "#16a34a", marginLeft: 4, fontFamily: "'JetBrains Mono',monospace" }}>= 5?</span>
           </>}
         </div>
-        {/* 파랑 줄 — swap 에서 교환, 이후엔 흐리게(소모됨) 유지 */}
+        {/* B 줄 — swap 에서 교환, 이후엔 흐리게(소모됨) 유지 */}
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
-          <span style={{ fontSize: 11, fontWeight: 800, color: BLU, width: 56, textAlign: "right" }}>{t(E, "blue", "파랑")}</span>
+          <span style={{ fontSize: 11, fontWeight: 800, color: BLU, width: 56, textAlign: "right" }}>{t(E, "blue", "B")}</span>
           {s.kind === "setup" ? (
             Array.from({ length: 3 }).map((_, i) => <Chip key={i} color="blue" />)
           ) : (
@@ -794,27 +797,27 @@ export function GameBoardSim({ E }) {
           )}
           {s.kind === "swap" && <><span style={{ color: "#94a3b8", fontWeight: 800 }}>→</span>
             {Array.from({ length: 2 }).map((_, i) => <Chip key={"r" + i} color="red" />)}
-            <span style={{ fontSize: 11, fontWeight: 800, color: "#94a3b8", marginLeft: 2, wordBreak: "keep-all" }}>{t(E, "(2 more red)", "(빨강 2개 더)")}</span></>}
+            <span style={{ fontSize: 11, fontWeight: 800, color: "#94a3b8", marginLeft: 2, wordBreak: "keep-all" }}>{t(E, "(2 more red)", "(A 2개 더)")}</span></>}
           {spent && <span style={{ fontSize: 11, fontWeight: 800, color: "#94a3b8", marginLeft: 2, wordBreak: "keep-all" }}>{t(E, "(spent)", "(다 씀)")}</span>}
         </div>
 
         {/* 교환소 규칙 배지 — setup 에선 숨김(아직 교환·목표 얘기 전) */}
         {s.kind !== "setup" && (
           <div style={{ textAlign: "center", fontSize: 11.5, fontWeight: 800, color: "#64748b", fontFamily: "'JetBrains Mono',monospace", marginTop: 6, wordBreak: "keep-all" }}>
-            🔄 {t(E, "3 blue → 2 red", "파랑 3 → 빨강 2")} · 🎯 {t(E, "goal 5 red", "목표 빨강 5")}
+            🔄 {t(E, "3 blue → 2 red", "B 3 → A 2")} · 🎯 {t(E, "goal 5 red", "목표 A 5")}
           </div>
         )}
 
-        {/* block — 최악의 경우 그 1개를 파랑으로! 못 바꿈 → 여전히 부족 */}
+        {/* block — 최악의 경우 그 1개를 B로! 못 바꿈 → 여전히 부족 */}
         {s.kind === "block" && (
           <div style={{ marginTop: 16, paddingTop: 12, borderTop: "1px dashed #e2e8f0", display: "flex", justifyContent: "center", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <div style={{ fontSize: 26 }}>😈</div>
             <span style={{ fontSize: 15, fontWeight: 800, color: "#94a3b8" }}>→</span>
             <div style={{ display: "flex", gap: 4, padding: 4, borderRadius: 10, border: "2px dashed #dc2626", background: "#fef2f2", alignItems: "center" }}>
               <Chip color="blue" size={22} />
-              <span style={{ fontSize: 10.5, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "1 blue — can't swap (needs 3)", "파랑이 1개뿐이라 못 바꿔요 (3개 있어야 해요)")}</span>
+              <span style={{ fontSize: 10.5, fontWeight: 800, color: "#dc2626", wordBreak: "keep-all" }}>{t(E, "1 blue — can't swap (needs 3)", "B가 1개뿐이라 못 바꿔요 (3개 있어야 해요)")}</span>
             </div>
-            <span style={{ fontSize: 12.5, fontWeight: 800, color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "red still 4 ✗", "빨강은 4개 그대로 — 목표 5에 못 미쳐요 ✗")}</span>
+            <span style={{ fontSize: 12.5, fontWeight: 800, color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>{t(E, "red still 4 ✗", "A는 4개 그대로 — 목표 5에 못 미쳐요 ✗")}</span>
           </div>
         )}
 
@@ -860,9 +863,9 @@ export function CheckSim({ E }) {
   const steps = [{ kind: "ask" }, { kind: "reveal" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
   const opts = [
-    t(E, "A. the final number of red chips", "A. 최종 빨강 칩 개수"),
+    t(E, "A. the final number of red chips", "A. 최종 A 칩 개수"),
     t(E, "B. the fewest extra chips that guarantee the goal", "B. 목표를 보장하는 가장 적은 추가 칩 개수"),
-    t(E, "C. how many times we swap blue for red", "C. 파랑을 빨강으로 몇 번 바꾸는지"),
+    t(E, "C. how many times we swap blue for red", "C. B를 A로 몇 번 바꾸는지"),
   ];
   return (
     <div style={{ padding: 16 }}>
@@ -873,7 +876,7 @@ export function CheckSim({ E }) {
           ? t(E, <>What number do we actually <b>print</b> for each test? Pick one, then flip.</>,
                  <>각 테스트에서 우리가 실제로 <b>출력</b>하는 숫자는 뭘까요? 하나 고르고 넘겨봐요.</>)
           : t(E, <>It's <b>B</b> — the fewest extra chips so that <b>whichever combination comes</b>, we still reach the goal. (Not the final red count!)</>,
-                 <>정답은 <b>B</b> — <b>어떤 조합이 와도</b> 목표를 채우는 가장 적은 추가 칩 개수예요. (최종 빨강 개수가 아니에요!)</>)}
+                 <>정답은 <b>B</b> — <b>어떤 조합이 와도</b> 목표를 채우는 가장 적은 추가 칩 개수예요. (최종 A 개수가 아니에요!)</>)}
       </Say>
       <div style={{ maxWidth: 440, margin: "0 auto", display: "flex", flexDirection: "column", gap: 8 }}>
         {opts.map((o, i) => {
@@ -896,7 +899,7 @@ export function CheckSim({ E }) {
 
 /* ═══════════════════════════════════════════════════════════════
    WorstCaseWhySim — "왜 최악의 경우를 세나?" (선생님 2026-08-27 요청)
-   1페이지의 그 예제 그대로: 빨강 2 · 파랑 3 · 파랑3→빨강2 · 목표 5.
+   1페이지의 그 예제 그대로: A 2 · B 3 · B3→A2 · 목표 5.
    칩을 1→2→3개 받아 가며 올 수 있는 조합을 전부 펼침. 답 3.
    숫자 전부 완전탐색 확인함 (칩1 최악4 ✗ · 칩2 최악4 ✗ · 칩3 최악5 ✓).
    ═══════════════════════════════════════════════════════════════ */
@@ -910,11 +913,11 @@ export function WorstCaseWhySim({ E }) {
   const rows = (x) => Array.from({ length: x + 1 }).map((_, i) => mk(x, i));
   const worstOf = (x) => Math.min(...rows(x).map((o) => o.v));
 
-  /* 조합을 한국어답게 부르기: "파랑 2개만 오면", "빨강 1개와 파랑 2개가 오면" */
+  /* 조합을 한국어답게 부르기: "B 2개만 오면", "A 1개와 B 2개가 오면" */
   const comboKo = (r, b) =>
-    r === 0 ? `파랑 ${b}개만 오면`
-    : b === 0 ? `빨강 ${r}개만 오면`
-    : `빨강 ${r}개와 파랑 ${b}개가 오면`;
+    r === 0 ? `B ${b}개만 오면`
+    : b === 0 ? `A ${r}개만 오면`
+    : `A ${r}개와 B ${b}개가 오면`;
   const comboEn = (r, b) =>
     r === 0 ? `if all ${b} come blue` : b === 0 ? `if all ${r} come red` : `if ${r} red and ${b} blue come`;
 
@@ -928,7 +931,7 @@ export function WorstCaseWhySim({ E }) {
 
   const say =
     s.k === "now" ? t(E, <>I start with <b style={{color:RED,...NW}}>2 red</b> and <b style={{color:BLU,...NW}}>3 blue</b>. Swapping the 3 blue gives me 2 more red, so <b style={{color:RED,...NW}}>4 red</b> — the goal is <b style={NW}>5</b>, so I'm <b>one short</b>.</>,
-                        <><b style={{color:RED,...NW}}>빨강 2개</b>, <b style={{color:BLU,...NW}}>파랑 3개</b>로 시작해요. 파랑 3개를 바꾸면 빨강이 2개 늘어서 <b style={{color:RED,...NW}}>4개</b>. 목표가 <b style={NW}>5개</b>니까 <b>하나가 모자라요.</b></>)
+                        <><b style={{color:RED,...NW}}>A 2개</b>, <b style={{color:BLU,...NW}}>B 3개</b>로 시작해요. B 3개를 바꾸면 A가 2개 늘어서 <b style={{color:RED,...NW}}>4개</b>. 목표가 <b style={NW}>5개</b>니까 <b>하나가 모자라요.</b></>)
   : s.k === "rule" ? t(E, <>With <b style={NW}>2 chips</b> I reach the goal <b>if I'm lucky</b>. But the question asks for a count that works <b>whatever comes</b> — so we always look at the <b>worst combination</b>.</>,
                           <>칩 <b style={NW}>2개</b>로도 <b>운이 좋으면</b> 목표에 닿아요. 하지만 문제가 묻는 건 <b>무엇이 와도 되는 개수</b>예요 — 그래서 늘 <b>제일 나쁜 조합</b>을 봅니다.</>)
   : (() => {
@@ -938,9 +941,9 @@ export function WorstCaseWhySim({ E }) {
         : "";
       const body = cur.v >= GOAL
         ? t(E, <>{comboEn(cur.r, cur.b)} → <b style={{color:"#15803d",...NW}}>red {cur.v}</b>, goal reached ✓</>,
-              <>{comboKo(cur.r, cur.b)} <b style={{color:"#15803d",...NW}}>빨강 {cur.v}개</b>, 목표 달성이에요 ✓</>)
+              <>{comboKo(cur.r, cur.b)} <b style={{color:"#15803d",...NW}}>A {cur.v}개</b>, 목표 달성이에요 ✓</>)
         : t(E, <>{comboEn(cur.r, cur.b)} → <b style={{color:RED,...NW}}>red {cur.v}</b>, still short of {GOAL} ✗ <b>— {cur.x} chip{cur.x > 1 ? "s aren't" : " isn't"} enough.</b></>,
-              <>{comboKo(cur.r, cur.b)} <b style={{color:RED,...NW}}>빨강 {cur.v}개</b>, 목표 {GOAL}개에 아직 모자라요 ✗ <b>— 칩 {cur.x}개로는 안 되겠네요.</b></>);
+              <>{comboKo(cur.r, cur.b)} <b style={{color:RED,...NW}}>A {cur.v}개</b>, 목표 {GOAL}개에 아직 모자라요 ✗ <b>— 칩 {cur.x}개로는 안 되겠네요.</b></>);
       const tail = lastOfX && worstOf(cur.x) >= GOAL
         ? t(E, <> <b style={{color:"#15803d"}}>Every combination reached the goal — so {cur.x} chips is enough.</b></>,
               <> <b style={{color:"#15803d"}}>어떤 조합이 와도 목표에 닿았어요 — 칩 {cur.x}개면 확실해요.</b></>)
@@ -967,7 +970,7 @@ export function WorstCaseWhySim({ E }) {
           </span>
           {o.r + o.b === 0 && <span style={{ fontSize: 11, color: "#94a3b8" }}>—</span>}
         </Line>
-        <Line label={t(E, "my blue", "내 파랑")}>
+        <Line label={t(E, "my blue", "내 B")}>
           {Array.from({ length: o.g }).map((_, k) => (
             <span key={"g" + k} style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 5px",
               borderRadius: 7, border: `1.5px dashed ${BLU}`, background: "#f8fbff" }}>
@@ -984,7 +987,7 @@ export function WorstCaseWhySim({ E }) {
           )}
         </Line>
         <div style={{ borderTop: "1px dashed #e2e8f0", marginTop: 3, paddingTop: 4 }}>
-          <Line label={t(E, "my red", "내 빨강")}>
+          <Line label={t(E, "my red", "내 A")}>
             <span style={{ display: "inline-flex", gap: 3 }}>
               {Array.from({ length: A0 }).map((_, k) => <Chip key={"s" + k} color="red" size={18} />)}
               {Array.from({ length: o.r }).map((_, k) => <Chip key={"gr" + k} color="red" size={18} />)}
@@ -1011,7 +1014,7 @@ export function WorstCaseWhySim({ E }) {
           </span>
           {done && (
             <span style={{ fontSize: 12.5, fontWeight: 800, color: ok ? "#15803d" : "#dc2626" }}>
-              {t(E, `worst = red ${w}`, `제일 나쁜 경우 = 빨강 ${w}`)} {ok ? "✓" : "✗"}
+              {t(E, `worst = red ${w}`, `제일 나쁜 경우 = A ${w}`)} {ok ? "✓" : "✗"}
             </span>
           )}
         </div>
@@ -1031,10 +1034,10 @@ export function WorstCaseWhySim({ E }) {
                   {Array.from({ length: o.b }).map((_, k) => <Chip key={"b" + k} color="blue" size={14} />)}
                 </span>
                 <span style={{ flex: 1, fontFamily: "'JetBrains Mono',monospace", ...NW }}>
-                  {t(E, `blue ${B0}+${o.b}=${o.tot} → ${o.g} group${o.g === 1 ? "" : "s"}`, `파랑 ${B0}+${o.b}=${o.tot}개 → 묶음 ${o.g}개`)}
+                  {t(E, `blue ${B0}+${o.b}=${o.tot} → ${o.g} group${o.g === 1 ? "" : "s"}`, `B ${B0}+${o.b}=${o.tot}개 → 묶음 ${o.g}개`)}
                 </span>
                 <span style={{ fontWeight: 800, flexShrink: 0, color: good ? "#15803d" : "#dc2626" }}>
-                  {t(E, `red ${o.v}`, `빨강 ${o.v}개`)} {good ? "✓" : "✗"}
+                  {t(E, `red ${o.v}`, `A ${o.v}개`)} {good ? "✓" : "✗"}
                 </span>
               </div>
               {cur2 && <Detail o={o} />}
@@ -1056,7 +1059,7 @@ export function WorstCaseWhySim({ E }) {
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 7, marginBottom: 10,
         fontSize: 12, fontWeight: 800, color: "#15803d", wordBreak: "keep-all" }}>
         <span style={{ padding: "3px 10px", borderRadius: 999, background: "#f0fdf4", border: "1.5px solid #86efac" }}>
-          🎯 {t(E, "goal", "목표")} {t(E, `${GOAL} red`, `빨강 ${GOAL}개`)}
+          🎯 {t(E, "goal", "목표")} {t(E, `${GOAL} red`, `A ${GOAL}개`)}
         </span>
         <span style={{ display: "inline-flex", gap: 3 }}>
           {Array.from({ length: GOAL }).map((_, i) => <Chip key={i} color="red" size={15} />)}
@@ -1073,7 +1076,7 @@ export function WorstCaseWhySim({ E }) {
           <span style={{ display: "inline-flex", gap: 4 }}>
             {Array.from({ length: 4 }).map((_, i) => <Chip key={"f" + i} color="red" size={24} />)}
           </span>
-          <span style={{ color: "#dc2626" }}>{t(E, "red 4 — one short of 5 ✗", "빨강 4개 — 목표 5개에 하나 모자람 ✗")}</span>
+          <span style={{ color: "#dc2626" }}>{t(E, "red 4 — one short of 5 ✗", "A 4개 — 목표 5개에 하나 모자람 ✗")}</span>
         </div>
       )}
       {cur && <Table x={cur.x} upto={cur.i} />}
@@ -1114,7 +1117,7 @@ export function StrategySlide({ E }) {
         <div style={{ maxWidth: 470, margin: "0 auto" }}>
           <Slab n="①" color="#15803d" bg="#f0fdf4" title={t(E, "red_now ≥ goal", "red_now ≥ 목표")}>
             {t(E, <>My own blue, swapped, already reaches the goal → <b>the answer is 0.</b></>,
-                  <>내 파랑을 환전한 것만으로 이미 목표에 닿아요 → <b>답은 0이에요.</b></>)}
+                  <>내 B를 환전한 것만으로 이미 목표에 닿아요 → <b>답은 0이에요.</b></>)}
           </Slab>
           <Slab n="②" color="#2563eb" bg="#eff6ff" title={t(E, "red_now < goal", "red_now < 목표")}>
             {t(E, <>Short of the goal → I need extra chips. <b>How many?</b> That is the rest of this chapter.</>,
@@ -1148,12 +1151,12 @@ export function StrategySlide({ E }) {
   );
 }
 
-/* ═══ 도구 ④ — 마지막 빨강은 묶음(손해) 말고 낱개로 (경우 ② 의 근거) ═══
+/* ═══ 도구 ④ — 마지막 A는 묶음(손해) 말고 낱개로 (경우 ② 의 근거) ═══
    선생님 2026-08-26: −1/+1 트릭은 "뭔말인지는 알겠지만 이해가 안가" → if/elif/else 로 확정.
    이 페이지는 elif (묶음으로 딱 떨어질 때) 가 왜 묶음 하나를 빼는지:
-   낱개 빨강 = 칩 1개 < 묶음 (칩 cB개에 빨강 cA개) → 마지막 묶음 대신 낱개 cA개.
-   예: 빨강 4개 필요 → 묶음 2개 통째 = 칩 6 vs 묶음1+낱개2 = 칩 5 ✓ */
-/* ═══ 도구 ④ 공용 — 깔린 파랑 2개 상태에서, 최악의 경우 칩 x개를 빨강/파랑으로 나눠 주는 경우 ═══ */
+   낱개 A = 칩 1개 < 묶음 (칩 cB개에 A cA개) → 마지막 묶음 대신 낱개 cA개.
+   예: A 4개 필요 → 묶음 2개 통째 = 칩 6 vs 묶음1+낱개2 = 칩 5 ✓ */
+/* ═══ 도구 ④ 공용 — 깔린 B 2개 상태에서, 최악의 경우 칩 x개를 A/B로 나눠 주는 경우 ═══ */
 const T4 = { LAID: 2, CA: 2, CB: 3, GOAL: 4, MISSING: 4 };
 const t4Blue = (n, sz=15) => Array.from({ length: n }).map((_, i) => <Chip key={"b"+i} color="blue" size={sz} />);
 const t4Red  = (n, sz=15) => Array.from({ length: n }).map((_, i) => <Chip key={"r"+i} color="red" size={sz} />);
@@ -1177,7 +1180,7 @@ function T4Piles({ r, b, sz=15 }) {
   );
 }
 
-/* ═══ 도구 ④-1 (관찰) — 칩 몇 개부터 어떤 조합이 와도 빨강 4개가 되나?
+/* ═══ 도구 ④-1 (관찰) — 칩 몇 개부터 어떤 조합이 와도 A 4개가 되나?
    선생님 2026-08-27:
      "읽어야 할 순간에 말풍선이 떠야지"  → 한 번에 하나씩 (단계 시뮬)
      "설명을 봐야할 곳에 말풍선 아니잖아" → 말풍선을 그 줄 바로 밑에 (CodeWalk 와 동일)
@@ -1216,22 +1219,22 @@ export function LastOneWhySlide({ E }) {
   const NOTE = {
     intro: <Bubble tone="plain" tail={false}>{t(E,
       <>"Just take <b style={{color:RED,...NW}}>4 red chips</b> = 4 chips!" — that would be best. But <b>I choose how many chips; I can't choose how many of them are red.</b></>,
-      <>"빨강 4개만 받으면 칩 4개로 끝이잖아!" — 그게 최고죠. 근데 <b>칩 개수는 내가 정해요. 그런데 그중 몇 개가 빨강일지는 미리 알 수 없어요.</b></>)}</Bubble>,
+      <>"A 4개만 받으면 칩 4개로 끝이잖아!" — 그게 최고죠. 근데 <b>칩 개수는 내가 정해요. 그런데 그중 몇 개가 A일지는 미리 알 수 없어요.</b></>)}</Bubble>,
     four: <Bubble tone="plain" tail={false}>{t(E,
       <>Try <b style={NW}>4 chips</b>. It can make <b style={{color:RED,...NW}}>4, 3, 2, 1 or 0</b> of them red — <b style={NW}>5 ways</b>. Here they all are.</>,
-      <>먼저 칩 <b style={NW}>4개</b>. 그중 <b style={{color:RED,...NW}}>빨강</b>이 몇 개일지에 따라 <b style={NW}>5가지</b>가 있어요 (빨강 4·3·2·1·0개). 전부 세어 봤어요.</>)}</Bubble>,
+      <>먼저 칩 <b style={NW}>4개</b>. 그중 <b style={{color:RED,...NW}}>A</b>이 몇 개일지에 따라 <b style={NW}>5가지</b>가 있어요 (A 4·3·2·1·0개). 전부 세어 봤어요.</>)}</Bubble>,
     fourWorst: <Bubble tone="warn">{t(E,
       <>If I get <b style={{color:RED,...NW}}>1 red</b> and <b style={{color:BLU,...NW}}>3 blue</b>, I end with only <b style={{color:RED,...NW}}>3 red</b>. <b>So 4 chips is not enough.</b></>,
-      <><b style={{color:RED,...NW}}>빨강 1개</b>와 <b style={{color:BLU,...NW}}>파랑 3개</b>를 받으면 빨강이 <b style={{color:RED,...NW}}>3개밖에</b> 안 돼요. <b>그래서 칩 4개로는 안 돼요.</b></>)}</Bubble>,
+      <><b style={{color:RED,...NW}}>A 1개</b>와 <b style={{color:BLU,...NW}}>B 3개</b>를 받으면 A가 <b style={{color:RED,...NW}}>3개밖에</b> 안 돼요. <b>그래서 칩 4개로는 안 돼요.</b></>)}</Bubble>,
     fourBlue: <Bubble tone="info">{t(E,
       <>"Wouldn't <b>all blue</b> be meanest?" No — <b style={{color:BLU,...NW}}>4 blue</b> makes <b style={NW}>2 groups</b> → <b style={{color:RED,...NW}}>red 4</b>. Too much blue <b>finishes groups</b> and helps me. So it gives at most <b style={NW}>3 blue</b>.</>,
-      <>"<b>파랑만</b> 주는 게 제일 못된 거 아니야?" 아니에요 — <b style={{color:BLU,...NW}}>파랑 4개</b>를 받으면 <b style={NW}>묶음이 2개</b> 돼서 <b style={{color:RED,...NW}}>빨강 4개</b>가 돼요. 파랑이 많으면 <b>묶음이 채워져</b> 나한테 오히려 이득이에요. 그래서 제일 나쁜 건 <b style={NW}>파랑 3개</b>까지만 줘요.</>)}</Bubble>,
+      <>"<b>B만</b> 주는 게 제일 못된 거 아니야?" 아니에요 — <b style={{color:BLU,...NW}}>B 4개</b>를 받으면 <b style={NW}>묶음이 2개</b> 돼서 <b style={{color:RED,...NW}}>A 4개</b>가 돼요. B가 많으면 <b>묶음이 채워져</b> 나한테 오히려 이득이에요. 그래서 제일 나쁜 건 <b style={NW}>B 3개</b>까지만 줘요.</>)}</Bubble>,
     five: <Bubble tone="plain" tail={false}>{t(E,
       <>Now <b style={NW}>5 chips</b> — <b style={{color:RED,...NW}}>5, 4, 3, 2, 1 or 0</b> red, so <b style={NW}>6 ways</b>.</>,
-      <>이번엔 칩 <b style={NW}>5개</b> — <b style={{color:RED,...NW}}>빨강</b>이 5·4·3·2·1·0개일 수 있으니 <b style={NW}>6가지</b>예요.</>)}</Bubble>,
+      <>이번엔 칩 <b style={NW}>5개</b> — <b style={{color:RED,...NW}}>A</b>이 5·4·3·2·1·0개일 수 있으니 <b style={NW}>6가지</b>예요.</>)}</Bubble>,
     fiveWorst: <Bubble tone="good">{t(E,
       <>The two worst cases — <b style={{color:RED,...NW}}>2 red + </b><b style={{color:BLU,...NW}}>3 blue</b>, and <b style={{color:BLU,...NW}}>5 blue</b> — still give me <b style={{color:RED,...NW}}>4 red</b>.<br /><b style={{color:"#15803d", fontSize:13}}>→ So the answer is 5 chips.</b></>,
-      <>제일 나쁜 두 경우 — <b style={{color:RED,...NW}}>빨강 2</b> + <b style={{color:BLU,...NW}}>파랑 3</b>, 그리고 <b style={{color:BLU,...NW}}>파랑 5</b> — 도 <b style={{color:RED,...NW}}>빨강 4개</b>예요.<br /><b style={{color:"#15803d", fontSize:13}}>→ 그래서 답은 칩 5개.</b></>)}</Bubble>,
+      <>제일 나쁜 두 경우 — <b style={{color:RED,...NW}}>A 2</b> + <b style={{color:BLU,...NW}}>B 3</b>, 그리고 <b style={{color:BLU,...NW}}>B 5</b> — 도 <b style={{color:RED,...NW}}>A 4개</b>예요.<br /><b style={{color:"#15803d", fontSize:13}}>→ 그래서 답은 칩 5개.</b></>)}</Bubble>,
   };
 
   const Table = ({ x, focus, topNote }) => {
@@ -1245,7 +1248,7 @@ export function LastOneWhySlide({ E }) {
             {t(E, `${x} chips — all ${rs.length} possible combinations`, `칩 ${x}개 — 받을 수 있는 조합 ${rs.length}가지`)}
           </span>
           <span style={{ fontSize: 12.5, fontWeight: 800, color: ok ? "#15803d" : "#dc2626" }}>
-            {t(E, `worst = red ${min}`, `최악 = 빨강 ${min}`)} {ok ? "✓" : "✗"}
+            {t(E, `worst = red ${min}`, `최악 = A ${min}`)} {ok ? "✓" : "✗"}
           </span>
         </div>
         {topNote}
@@ -1255,7 +1258,7 @@ export function LastOneWhySlide({ E }) {
             <span style={{ minWidth: 140, flexShrink: 0 }}>
               <span style={{ color: "#dc2626" }}>{t(E, "already laid", "깔림")}</span>{" + "}{t(E, "what I got", "받은 것")}
             </span>
-            <span style={{ flex: 1 }}>{t(E, "total blue → groups", "총 파랑 → 묶음")}</span>
+            <span style={{ flex: 1 }}>{t(E, "total blue → groups", "총 B → 묶음")}</span>
           </div>
           {rs.map((o, i) => {
             const worst = o.v === min;
@@ -1270,10 +1273,10 @@ export function LastOneWhySlide({ E }) {
                   fontSize: 10.5, fontWeight: 700, color: "#475569" }}>
                   <span style={{ minWidth: 140, flexShrink: 0 }}><T4Piles r={o.r} b={o.b} sz={12} /></span>
                   <span style={{ flex: 1, fontFamily: "'JetBrains Mono',monospace", ...NW }}>
-                    {t(E, `blue ${T4.LAID}+${o.b}=${o.tot} → ${o.g} grp`, `파랑 ${T4.LAID}+${o.b}=${o.tot} → 묶음 ${o.g}`)}
+                    {t(E, `blue ${T4.LAID}+${o.b}=${o.tot} → ${o.g} grp`, `B ${T4.LAID}+${o.b}=${o.tot} → 묶음 ${o.g}`)}
                   </span>
                   <span style={{ fontWeight: 800, color: worst ? (ok ? "#15803d" : "#dc2626") : "#94a3b8", flexShrink: 0 }}>
-                    {t(E, `red ${o.v}`, `빨강 ${o.v}`)}
+                    {t(E, `red ${o.v}`, `A ${o.v}`)}
                   </span>
                   <span style={{ width: 58, textAlign: "right", flexShrink: 0, color: ok ? "#15803d" : "#dc2626" }}>
                     {worst ? t(E, "← worst", "← 제일 나쁨") : ""}
@@ -1291,7 +1294,7 @@ export function LastOneWhySlide({ E }) {
   return (
     <div style={{ padding: 16, paddingBottom: 140 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "I need 4 more red — how many chips?", "빨강 4개가 더 필요해요 — 칩을 몇 개 받아야 할까요?")}
+        title={t(E, "I need 4 more red — how many chips?", "A 4개가 더 필요해요 — 칩을 몇 개 받아야 할까요?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
 
       {s.k === "intro" && (
@@ -1304,7 +1307,7 @@ export function LastOneWhySlide({ E }) {
               {Array.from({ length: T4.LAID }).map((_, i) => <Chip key={i} color="blue" size={17} />)}
             </span>
             <span>{t(E, "= the 2 blues thrown away in Tool ② — at the start of every row below",
-                        "= 도구 ②에서 버려진 파랑 2개 — 아래 모든 줄 맨 앞에 있어요")}</span>
+                        "= 도구 ②에서 버려진 B 2개 — 아래 모든 줄 맨 앞에 있어요")}</span>
           </div>
         </>
       )}
@@ -1322,14 +1325,14 @@ export function LastOneWhySlide({ E }) {
 /* ═══════════════════════════════════════════════════════════════
    WhyMinusPlusSim — 왜 −1 이고 왜 +1 인가 (선생님 요청: 시뮬로).
    말은 짧게, 계산은 그림으로. 선생님 문장을 그대로 씀(2026-08-27):
-   "칩 4개로는 빨강이 3개밖에 안 되는 경우가 있다" — '막는다' 같은 흐린 말 금지.
+   "칩 4개로는 A가 3개밖에 안 되는 경우가 있다" — '막는다' 같은 흐린 말 금지.
    전부 완전탐색 대조함:
-     파랑3+빨강1 → 빨강 3 (칩 4개 최악)  ·  파랑4 → 묶음 2개 → 빨강 4 (최악의 경우 손해)
-     칩 5개는 어떻게 와도 빨강 4 이상
+     B3+A1 → A 3 (칩 4개 최악)  ·  B4 → 묶음 2개 → A 4 (최악의 경우 손해)
+     칩 5개는 어떻게 와도 A 4 이상
    ═══════════════════════════════════════════════════════════════ */
 export function WhyMinusPlusSim({ E }) {
   const GOAL = 4, LINE = GOAL - 1, LAID = 2, CB = 3, CA = 2;
-  const steps = [{ k: "line" }, { k: "give4" }, { k: "count4" }, { k: "why3" }, { k: "give5" }, { k: "plus" }, { k: "noMinus" }, { k: "whenSame" }, { k: "sym" }];
+  const steps = [{ k: "line" }, { k: "give4" }, { k: "count4" }, { k: "why3" }, { k: "give5" }, { k: "plus" }, { k: "noMinus" }, { k: "whenSame" }, { k: "sym" }, { k: "math" }];
   const ts = useTraceStep(steps); const s = steps[ts.safe];
   const HAND = { give4: [3, 1], count4: [3, 1], why3: [4, 0], give5: [3, 2], noMinus: [6, 0] }[s.k] || null;
   const myRed = s.k === "count4" ? 3 : s.k === "why3" ? 4 : s.k === "give5" || s.k === "plus" || s.k === "noMinus" ? 4 : 0;
@@ -1337,24 +1340,26 @@ export function WhyMinusPlusSim({ E }) {
 
   const say =
     s.k === "line"   ? t(E, <>I want <b style={{color:RED,...NW}}>4 red</b>. The worst combination stops me at <b style={NW}>3</b> — one short of 4.<br /><b style={NW}>3 = 4 − 1</b> is the <b>most it can give</b>.</>,
-                            <>나는 <b style={{color:RED,...NW}}>빨강 4개</b>가 필요해요. 그러니까 <b style={NW}>3개</b>까지만 와서는 아직 목표에 못 닿아요 — 4개가 되어야 끝나거든요.<br /><b style={NW}>3 = 4 − 1</b>, 최악의 경우 <b>줘도 되는 최대</b>예요.</>)
+                            <>나는 <b style={{color:RED,...NW}}>A 4개</b>가 필요해요. 그러니까 <b style={NW}>3개</b>까지만 와서는 아직 목표에 못 닿아요 — 4개가 되어야 끝나거든요.<br /><b style={NW}>3 = 4 − 1</b>, 최악의 경우 <b>줘도 되는 최대</b>예요.</>)
   : s.k === "give4"  ? t(E, <>I get <b style={{color:BLU,...NW}}>3 blue</b> and <b style={{color:RED,...NW}}>1 red</b> — <b style={NW}>4 chips</b> in all.</>,
-                            <><b style={NW}>칩 4개</b>를 받았는데 <b style={{color:BLU,...NW}}>파랑 3개</b>, <b style={{color:RED,...NW}}>빨강 1개</b>로 왔어요. 모두 <b style={NW}>칩 4개</b>를 줬어요.</>)
+                            <><b style={NW}>칩 4개</b>를 받았는데 <b style={{color:BLU,...NW}}>B 3개</b>, <b style={{color:RED,...NW}}>A 1개</b>로 왔어요. 모두 <b style={NW}>칩 4개</b>를 줬어요.</>)
   : s.k === "count4" ? t(E, <>Count it: <b style={{color:RED,...NW}}>red 3</b>. <b>So 4 chips can leave me with only 3 red.</b></>,
-                            <>세어 보면 <b style={{color:RED,...NW}}>빨강 3개</b>. <b>칩 4개로는 빨강이 3개밖에 안 되는 경우가 있는 거예요.</b></>)
+                            <>세어 보면 <b style={{color:RED,...NW}}>A 3개</b>. <b>칩 4개로는 A가 3개밖에 안 되는 경우가 있는 거예요.</b></>)
   : s.k === "why3"   ? t(E, <>Why not give <b style={NW}>4 blue</b>? Then it swaps <b style={NW}>twice</b> → <b style={{color:RED,...NW}}>red 4</b>, and I win. So 3 blue is as far as it goes.</>,
-                            <>파랑이 <b style={NW}>4개</b> 오면 어떨까요? 두 번 바꿔져서 <b style={{color:RED,...NW}}>빨강 4개</b> — 목표에 닿아버려요. 그래서 이건 <b>제일 나쁜 경우가 아니에요</b>.</>)
+                            <>B가 <b style={NW}>4개</b> 오면 어떨까요? 두 번 바꿔져서 <b style={{color:RED,...NW}}>A 4개</b> — 목표에 닿아버려요. 그래서 이건 <b>제일 나쁜 경우가 아니에요</b>.</>)
   : s.k === "give5"  ? t(E, <>Now <b style={NW}>5 chips</b>. However it hands them over, I get <b style={{color:RED,...NW}}>4 red</b> — we checked all 6 ways last page.</>,
-                            <>이번엔 <b style={NW}>칩 5개</b>를 받아요. 이제는 어떻게 섞여 와도 <b style={{color:RED,...NW}}>빨강이 4개</b>예요 — 앞 페이지에서 6가지를 전부 확인했죠.</>)
+                            <>이번엔 <b style={NW}>칩 5개</b>를 받아요. 이제는 어떻게 섞여 와도 <b style={{color:RED,...NW}}>A가 4개</b>예요 — 앞 페이지에서 6가지를 전부 확인했죠.</>)
   : s.k === "plus"   ? t(E, <><b style={NW}>4 chips</b> can leave me at 3. <b style={NW}>5 chips</b> never can.<br /><b style={{color:"#15803d",...NW}}>So: 4 + 1 = 5.</b></>,
-                            <>칩 <b style={NW}>4개</b>로는 빨강 3개인 경우가 있어요. 칩 <b style={NW}>5개</b>는 그런 경우가 없어요.<br /><b style={{color:"#15803d",...NW}}>그래서 답은 4 + 1 = 5.</b></>)
+                            <>칩 <b style={NW}>4개</b>로는 A 3개인 경우가 있어요. 칩 <b style={NW}>5개</b>는 그런 경우가 없어요.<br /><b style={{color:"#15803d",...NW}}>그래서 답은 4 + 1 = 5.</b></>)
   : s.k === "noMinus" ? t(E, <>What if we skip the <b style={NW}>−1</b>? Then we'd count "make all <b style={{color:RED,...NW}}>4 red</b> the expensive way" = <b style={NW}>2 swaps = 6 chips</b>. But <b style={NW}>5 chips</b> already worked. <b>6 is not the fewest → wrong.</b></>,
-                              <><b style={NW}>−1</b> 을 빼먹으면? "<b style={{color:RED,...NW}}>빨강 4개</b>가 다 채워질 때까지"고 세게 돼요 = <b style={NW}>바꾸기 2번 = 칩 6개</b>. 그런데 <b style={NW}>칩 5개</b>면 이미 됐잖아요. <b>6은 최소가 아니라 오답이에요.</b></>)
+                              <><b style={NW}>−1</b> 을 빼먹으면? "<b style={{color:RED,...NW}}>A 4개</b>가 다 채워질 때까지"고 세게 돼요 = <b style={NW}>바꾸기 2번 = 칩 6개</b>. 그런데 <b style={NW}>칩 5개</b>면 이미 됐잖아요. <b>6은 최소가 아니라 오답이에요.</b></>)
   : s.k === "whenSame" ? t(E, <>But if I needed <b style={{color:RED,...NW}}>3 red</b>, both give <b style={NW}>4 chips</b> — the same! The last red arrives as <b style={{color:RED,...NW}}>one red chip</b>, so removing it and adding 1 back costs the same.<br /><b>It only splits when the red I need is a multiple of 2.</b></>,
-                              <>그런데 <b style={{color:RED,...NW}}>빨강 3개</b>가 필요했다면 둘 다 <b style={NW}>칩 4개</b> — 똑같아요! 마지막 빨강이 <b style={{color:RED,...NW}}>빨강칩 하나</b>로 오니까, 하나 빼고 다시 하나 더하는 게 같은 칩 수거든요.<br /><b>필요한 빨강이 2의 배수일 때만 갈려요.</b></>)
-  : t(E, <>The same two numbers, written with letters.</>, <>방금 그 두 숫자를 글자로 쓴 것뿐이에요.</>);
+                              <>그런데 <b style={{color:RED,...NW}}>A 3개</b>가 필요했다면 둘 다 <b style={NW}>칩 4개</b> — 똑같아요! 마지막 A가 <b style={{color:RED,...NW}}>A칩 하나</b>로 오니까, 하나 빼고 다시 하나 더하는 게 같은 칩 수거든요.<br /><b>필요한 A가 2의 배수일 때만 갈려요.</b></>)
+  : s.k === "sym" ? t(E, <>The same two numbers, written with letters.</>, <>방금 그 두 숫자를 글자로 쓴 것뿐이에요.</>)
+  : t(E, <>Appendix — the official analysis writes the same thing with inequalities.</>,
+         <>부록 — 공식 풀이는 같은 얘기를 부등식으로 씁니다. 답은 똑같아요.</>);
 
-  /* 빨강 게이지 — 3 = 목표보다 하나 모자란 빨강, 4 = 내 목표 */
+  /* A 게이지 — 3 = 목표보다 하나 모자란 A, 4 = 내 목표 */
   const Gauge = () => (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
       {[1, 2, 3, 4].map((n) => {
@@ -1374,7 +1379,7 @@ export function WhyMinusPlusSim({ E }) {
     </div>
   );
 
-  /* 받은 칩 → 내 빨강. 장부 없이 두 줄로. (선생님: "그냥 보여주면 되는걸") */
+  /* 받은 칩 → 내 A. 장부 없이 두 줄로. (선생님: "그냥 보여주면 되는걸") */
   const Convert = ({ b, r }) => {
     const tot = LAID + b, g = Math.floor(tot / CB), left = tot % CB, red = g * CA + r;
     const Row = ({ label, children }) => (
@@ -1386,7 +1391,7 @@ export function WhyMinusPlusSim({ E }) {
     return (
       <div style={{ maxWidth: 470, margin: "0 auto 8px", padding: "8px 12px", borderRadius: 10,
         border: "1px solid #e2e8f0", background: "#fff" }}>
-        {/* 1. 받은 것 (깔린 파랑 2개 포함) */}
+        {/* 1. 받은 것 (깔린 B 2개 포함) */}
         <Row label={t(E, "I got", "받은 칩")}>
           <span style={{ display: "inline-flex", gap: 3, padding: "2px 4px", borderRadius: 7,
             border: "1.5px dashed #dc2626", background: "#fff5f5" }}>
@@ -1398,9 +1403,9 @@ export function WhyMinusPlusSim({ E }) {
             {Array.from({ length: r }).map((_, i) => <Chip key={"r" + i} color="red" size={20} />)}
           </span>
         </Row>
-        {/* 2. 결과 — 묶음은 박스로, 남은 파랑은 흐리게, 빨강칩은 그대로 */}
+        {/* 2. 결과 — 묶음은 박스로, 남은 B는 흐리게, A칩은 그대로 */}
         {showResult && (
-          <Row label={t(E, "my red", "내 빨강")}>
+          <Row label={t(E, "my red", "내 A")}>
             {Array.from({ length: g }).map((_, i) => (
               <span key={"g" + i} style={{ display: "inline-flex", alignItems: "center", gap: 4,
                 padding: "2px 5px", borderRadius: 8, border: `1.5px dashed ${BLU}`, background: "#f8fbff" }}>
@@ -1416,7 +1421,7 @@ export function WhyMinusPlusSim({ E }) {
               </span>
             )}
             <span style={{ fontSize: 13, fontWeight: 800, color: red >= GOAL ? "#15803d" : "#b45309", marginLeft: 2 }}>
-              = {t(E, `${red} red`, `빨강 ${red}개`)}
+              = {t(E, `${red} red`, `A ${red}개`)}
             </span>
           </Row>
         )}
@@ -1430,19 +1435,19 @@ export function WhyMinusPlusSim({ E }) {
         title={t(E, "Why minus 1, and why plus 1?", "왜 −1 이고, 왜 +1 일까요?")} subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Say tone={s.k === "plus" || s.k === "sym" ? "aha" : s.k === "why3" || s.k === "give5" ? "go" : "stuck"}>{say}</Say>
 
-      {s.k !== "sym" && s.k !== "whenSame" && <Gauge />}
+      {s.k !== "sym" && s.k !== "whenSame" && s.k !== "math" && <Gauge />}
       {HAND && <Convert b={HAND[0]} r={HAND[1]} />}
 
-      {s.k === "line"   && <Cap color="#b45309">{t(E, "one short of the goal = 4 − 1 = 3", "하나 모자란 빨강 = 4 − 1 = 3")}</Cap>}
-      {s.k === "count4" && <Cap color="#b45309">{t(E, "4 chips can leave me at red 3", "칩 4개 → 빨강이 3개인 경우가 있어요")}</Cap>}
-      {s.k === "why3"   && <Cap color="#dc2626">{t(E, "4 blue → red 4 · not the worst", "파랑 4개 → 빨강 4개 · 제일 나쁜 경우가 아님")}</Cap>}
-      {s.k === "give5"  && <Cap color="#15803d">{t(E, "5 chips → red 4 every time", "칩 5개 → 어떻게 와도 빨강 4개")}</Cap>}
+      {s.k === "line"   && <Cap color="#b45309">{t(E, "one short of the goal = 4 − 1 = 3", "하나 모자란 A = 4 − 1 = 3")}</Cap>}
+      {s.k === "count4" && <Cap color="#b45309">{t(E, "4 chips can leave me at red 3", "칩 4개 → A가 3개인 경우가 있어요")}</Cap>}
+      {s.k === "why3"   && <Cap color="#dc2626">{t(E, "4 blue → red 4 · not the worst", "B 4개 → A 4개 · 제일 나쁜 경우가 아님")}</Cap>}
+      {s.k === "give5"  && <Cap color="#15803d">{t(E, "5 chips → red 4 every time", "칩 5개 → 어떻게 와도 A 4개")}</Cap>}
       {s.k === "plus"   && <Cap color="#15803d">{t(E, "answer = 4 + 1 = 5 chips", "답 = 4 + 1 = 칩 5개")}</Cap>}
       {s.k === "noMinus" && <Cap color="#dc2626">{t(E, "no −1 → 6 chips · but 5 already works", "−1 안 하면 칩 6개 · 그런데 5개면 이미 돼요")}</Cap>}
       {s.k === "whenSame" && (
         <div style={{ maxWidth: 420, margin: "0 auto", border: "1.5px solid #cbd5e1", borderRadius: 10, background: "#fff", padding: "9px 11px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0 8px", fontSize: 11.5, textAlign: "center" }}>
-            <div style={{ fontWeight: 800, color: "#64748b", paddingBottom: 4 }}>{t(E, "red I need", "필요한 빨강")}</div>
+            <div style={{ fontWeight: 800, color: "#64748b", paddingBottom: 4 }}>{t(E, "red I need", "필요한 A")}</div>
             <div style={{ fontWeight: 800, color: "#15803d", paddingBottom: 4 }}>{t(E, "with −1", "−1 함")}</div>
             <div style={{ fontWeight: 800, color: "#dc2626", paddingBottom: 4 }}>{t(E, "without −1", "−1 안 함")}</div>
             {[[1,1,1],[2,2,3],[3,4,4],[4,5,6],[5,7,7],[6,8,9]].map(([m,w,wo]) => {
@@ -1473,20 +1478,49 @@ export function WhyMinusPlusSim({ E }) {
           <div>
             <code style={{ color: "#5b21b6", fontWeight: 800, fontSize: 12.5 }}>short_red = fA − 1 − red_now</code>
             <span style={{ color: "#94a3b8" }}> = 4 − 1 = 3</span><br />
-            <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "one short of the goal — the −1", "목표보다 하나 모자란 빨강 — 여기가 −1")}</span>
+            <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "one short of the goal — the −1", "목표보다 하나 모자란 A — 여기가 −1")}</span>
           </div>
           <div>
             <code style={{ color: "#5b21b6", fontWeight: 800, fontSize: 12.5 }}>short_chips = 3 // 2 × 3 + 3 % 2</code>
             <span style={{ color: "#94a3b8" }}> = 3 + 1 = 4</span><br />
             <span style={{ fontSize: 11.5, color: "#64748b" }}>
               {t(E, <>chips to make those 3 red: <b>3//2 = 1</b> swap (blue 3) + <b>3%2 = 1</b> red chip</>,
-                   <>빨강 3개를 만드는 데 드는 칩: 바꾸기 <b>3//2 = 1</b>번(파랑 3개) + 빨강칩 <b>3%2 = 1</b>개</>)}
+                   <>A 3개를 만드는 데 드는 칩: 바꾸기 <b>3//2 = 1</b>번(B 3개) + A칩 <b>3%2 = 1</b>개</>)}
             </span>
           </div>
           <div>
             <code style={{ color: "#5b21b6", fontWeight: 800, fontSize: 12.5 }}>answer = wasted_blue + short_chips + 1</code>
             <span style={{ color: "#94a3b8" }}> = 4 + 1 = 5</span><br />
             <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "one more chip than that — the +1", "거기서 칩 하나 더 — 여기가 +1")}</span>
+          </div>
+        </div>
+      )}
+
+      {s.k === "math" && (
+        <div style={{ maxWidth: 500, margin: "0 auto", display: "grid", gap: 9,
+          fontSize: 12, color: "#334155", lineHeight: 1.8, wordBreak: "keep-all" }}>
+          <div style={{ padding: "9px 12px", borderRadius: 9, background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+            {t(E, <>Say I receive <b>n<sub>A</sub></b> chips of type A and <b>n<sub>B</sub></b> of type B. I <b>still fall short</b> exactly when</>,
+                  <>A 칩을 <b>n<sub>A</sub></b>개, B 칩을 <b>n<sub>B</sub></b>개 받았다고 해요. <b>아직 모자란</b> 경우는 정확히 이때예요:</>)}
+            <div style={{ textAlign: "center", padding: "8px 0 2px", fontFamily: "'JetBrains Mono',monospace",
+              fontSize: 12.5, fontWeight: 800, color: "#5b21b6" }}>
+              ⌊(B + n<sub>B</sub>) / c<sub>B</sub>⌋ · c<sub>A</sub> + (A + n<sub>A</sub>) &lt; f<sub>A</sub>
+            </div>
+          </div>
+          <div style={{ padding: "9px 12px", borderRadius: 9, background: "#fffbeb", border: "1.5px solid #fbbf24", color: "#92400e" }}>
+            {t(E, <><b>y</b> = the largest <b>n<sub>A</sub> + n<sub>B</sub></b> among all pairs that still fall short. The answer is <b>y + 1</b> — that is the +1.</>,
+                  <><b>y</b> = 아직 모자란 짝들 중 <b>n<sub>A</sub> + n<sub>B</sub></b> 가 제일 큰 값. 답은 <b>y + 1</b> — 이게 그 +1 이에요.</>)}
+          </div>
+          <div style={{ padding: "9px 12px", borderRadius: 9, background: "#eff6ff", border: "1px solid #93c5fd", color: "#1e40af" }}>
+            {t(E, <>At that largest pair the leftover must be maxed: <b>B + n<sub>B</sub> ≡ c<sub>B</sub> − 1 (mod c<sub>B</sub>)</b> — otherwise one more B chip would give a bigger sum that still falls short. So <b>n<sub>B,0</sub> = c<sub>B</sub> − 1 − (B mod c<sub>B</sub>)</b> = our <code>wasted_blue</code>.</>,
+                  <>그 최대 짝에서는 자투리가 꽉 차 있어야 해요: <b>B + n<sub>B</sub> ≡ c<sub>B</sub> − 1 (mod c<sub>B</sub>)</b> — 안 그러면 B 를 하나 더 받아도 여전히 모자라서 합이 더 커지거든요. 그래서 <b>n<sub>B,0</sub> = c<sub>B</sub> − 1 − (B mod c<sub>B</sub>)</b>, 우리 코드의 <code>wasted_blue</code> 예요.</>)}
+          </div>
+          <div style={{ padding: "9px 12px", borderRadius: 9, background: "#f0fdf4", border: "1px solid #86efac", color: "#166534" }}>
+            {t(E, <>And <b>n<sub>A,0</sub> = f<sub>A</sub> − 1 − init</b> = our <code>short_red</code> — the <b>− 1</b>. With <b>n<sub>B</sub> = n<sub>B,0</sub> + i·c<sub>B</sub></b> we get <b>n<sub>A</sub> = n<sub>A,0</sub> − c<sub>A</sub>·i</b>, so the sum is largest at <b>i = 0</b> when c<sub>A</sub> ≥ c<sub>B</sub>, else at <b>i = ⌊n<sub>A,0</sub> / c<sub>A</sub>⌋</b> — exactly our two branches.</>,
+                  <>그리고 <b>n<sub>A,0</sub> = f<sub>A</sub> − 1 − init</b>, 우리 코드의 <code>short_red</code> 예요 — 이게 <b>− 1</b>. <b>n<sub>B</sub> = n<sub>B,0</sub> + i·c<sub>B</sub></b> 로 두면 <b>n<sub>A</sub> = n<sub>A,0</sub> − c<sub>A</sub>·i</b> 가 되고, 합이 최대가 되는 건 c<sub>A</sub> ≥ c<sub>B</sub> 일 때 <b>i = 0</b>, 아니면 <b>i = ⌊n<sub>A,0</sub> / c<sub>A</sub>⌋</b> — 우리 코드의 두 갈래 그대로예요.</>)}
+          </div>
+          <div style={{ fontSize: 11, color: "#94a3b8", textAlign: "center" }}>
+            {t(E, "— from the official USACO analysis (Benjamin Qi)", "— USACO 공식 풀이 (Benjamin Qi) 의 유도")}
           </div>
         </div>
       )}
@@ -1511,13 +1545,13 @@ export function PlanSlide({ E }) {
       <div style={{ maxWidth: 480, margin: "0 auto" }}>
         <Slab n="1" color="#15803d" bg="#f0fdf4" title={<code>red_now = A + B//cB*cA</code>}>
           {t(E, <>red I can make now. If <b>red_now ≥ fA</b> → answer <b>0</b>.</>,
-               <>지금 만드는 빨강. <b>red_now ≥ fA</b> 면 답 <b>0</b>.</>)}
+               <>지금 만드는 A. <b>red_now ≥ fA</b> 면 답 <b>0</b>.</>)}
         </Slab>
         <Slab n="2" color="#dc2626" bg="#fef2f2" title={<code>wasted_blue = cB−1 − B%cB</code>}>
           {t(E, <>blue that can't form a group is wasted first (leftover cB−1).</>,
-               <>묶음이 안 되는 파랑이 먼저 버려져요 (자투리 cB−1).</>)}
+               <>묶음이 안 되는 B가 먼저 버려져요 (자투리 cB−1).</>)}
         </Slab>
-        <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "one short of the goal", "목표보다 하나 모자란 빨강")}>
+        <Slab n="3" color="#2563eb" bg="#eff6ff" title={t(E, "one short of the goal", "목표보다 하나 모자란 A")}>
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#334155", wordBreak: "break-word" }}>
             short_red = fA − 1 − red_now <span style={{ color: "#94a3b8" }}>{t(E, "  // the −1", "  // 여기가 −1")}</span>
           </div>
@@ -1525,9 +1559,9 @@ export function PlanSlide({ E }) {
         <Slab n="4" color="#7c3aed" bg="#f5f3ff" title={t(E, "how many chips can still fall short? — two cases", "거기서 버틸 수 있는 칩은? — 경우 둘")}>
           <div style={{ display: "grid", gap: 3, fontSize: 11.5, lineHeight: 1.55 }}>
             <div>① {t(E, <><b>cA ≥ cB</b> (swap pays) → red only · <code>short_chips = short_red</code></>,
-                        <><b>cA ≥ cB</b> (환전 이득) → 빨강만 와요 · <code>short_chips = short_red</code></>)}</div>
+                        <><b>cA ≥ cB</b> (환전 이득) → A만 와요 · <code>short_chips = short_red</code></>)}</div>
             <div>② {t(E, <><b>cA &lt; cB</b> (swap loses) → blue groups · <code>short_chips = short_red//cA*cB + short_red%cA</code> <span style={{ color: "#7c3aed" }}>(why? → previous page)</span></>,
-                        <><b>cA &lt; cB</b> (환전 손해) → 파랑 묶음으로 · <code>short_chips = short_red//cA*cB + short_red%cA</code> <span style={{ color: "#7c3aed" }}>(왜? → 앞 페이지)</span></>)}</div>
+                        <><b>cA &lt; cB</b> (환전 손해) → B 묶음으로 · <code>short_chips = short_red//cA*cB + short_red%cA</code> <span style={{ color: "#7c3aed" }}>(왜? → 앞 페이지)</span></>)}</div>
             <div style={{ paddingLeft: 12, fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#5b21b6" }}>
               short_red = fA − 1 − red_now · 답 = wasted_blue + short_chips + 1
             </div>
