@@ -278,7 +278,7 @@ export function getChipXchgWalk(E, lang = "py") {
       "        short_chips = short_red / cA * cB + short_red % cA;",
       "    }",
       "",
-      "    return wasted_blue + short_chips + 1;  // " + c("the last chip that can still fall short, plus one", "아직 목표에 못 닿을 수 있는 마지막 칩 + 1"),
+      "    return wasted_blue + short_chips + 1;  // " + c("the last chip that can still fall short, plus one", "안 될 수 있는 마지막 칩 + 1"),
       "}",
       "",
       "int main() {",
@@ -326,7 +326,7 @@ export function getChipXchgWalk(E, lang = "py") {
     "    else:                             # " + c("swapping loses -> build them with B groups", "환전이 손해 → B 묶음으로 만들어요"),
     "        short_chips = short_red // cA * cB + short_red % cA",
     "",
-    "    return wasted_blue + short_chips + 1       # " + c("the last chip that can still fall short, plus one", "아직 목표에 못 닿을 수 있는 마지막 칩 + 1"),
+    "    return wasted_blue + short_chips + 1       # " + c("the last chip that can still fall short, plus one", "안 될 수 있는 마지막 칩 + 1"),
     "",
     "main()",
   ];
