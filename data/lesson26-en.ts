@@ -262,9 +262,9 @@ counts = Counter(text)
           type: "tryit",
           title: "🖥️ Count Frequencies!",
           task: "Count character frequencies using both methods!",
-          initialCode: "from collections import Counter\n\ntext = \"hello\"\n\n# Method 1: Manual dictionary\ncounts1 = {}\nfor char in text:\n    counts1[char] = counts1.get(char, 0) + 1\nprint(\"Dictionary:\", counts1)\n\n# Method 2: Counter\ncounts2 = Counter(text)\nprint(\"Counter:\", dict(counts2))\n\n# Most frequent character\nprint(\"Most frequent:\", counts2.most_common(1))",
+          initialCode: "from collections import Counter\n\ntext = \"hello\"\n\n# Method 1: Manual dictionary\ncounts1 = {}\nfor char in text:\n    counts1[char] = counts1.get(char, 0) + 1\nprint(\"Dictionary:\", counts1)\n\n# Method 2: hand the string straight to the tool that counts for you\ncounts2 = ___(text)\nprint(\"Counter:\", dict(counts2))\n\n# Just the single most frequent one\nprint(\"Most frequent:\", counts2.___(1))",
           expectedOutput: "Dictionary: {'h': 1, 'e': 1, 'l': 2, 'o': 1}\nCounter: {'h': 1, 'e': 1, 'l': 2, 'o': 1}\nMost frequent: [('l', 2)]",
-          hint: "Counter is a subclass of dict!",
+          hint: "Feed the string straight into the tool imported at the top. For rankings, use the method named 'most common'.",
           hint2: "Use most_common() to get rankings"
         },
         {

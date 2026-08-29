@@ -139,9 +139,9 @@ text.splitlines()        # ['a', 'b']       ← clean
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "Split a string into a list!",
-          initialCode: "text = \"Alice Bob Charlie\"\nnames = text.split()\nprint(names)",
+          initialCode: "text = \"Alice Bob Charlie\"\n\n# Cut it apart at the spaces to make a list\nnames = text.___()\nprint(names)",
           expectedOutput: "['Alice', 'Bob', 'Charlie']",
-          hint: "split() splits by spaces!",
+          hint: "There's a string method that cuts text apart at the spaces and gives back a list.",
           hint2: "text.split()"
         },
         {
@@ -149,9 +149,9 @@ text.splitlines()        # ['a', 'b']       ← clean
           type: "tryit",
           title: "🖥️ Split by Comma!",
           task: "Split the comma-separated fruits!",
-          initialCode: "text = \"apple,banana,strawberry\"\nfruits = text.split(\",\")\nprint(fruits)",
+          initialCode: "text = \"apple,banana,strawberry\"\n\n# This time cut at the commas, not at spaces\nfruits = text.split(___)\nprint(fruits)",
           expectedOutput: "['apple', 'banana', 'strawberry']",
-          hint: "Use split(\",\") to split by comma!",
+          hint: "You can tell it what to cut at by passing that character as a string.",
           hint2: "text.split(\",\")"
         }
       ]
@@ -185,9 +185,9 @@ print(nums)  # [10, 20, 30] (integers!)
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "Convert string numbers into a list of integers!",
-          initialCode: "text = \"10 20 30 40 50\"\nnums = list(map(int, text.split()))\nprint(nums)\nprint(f\"Total: {sum(nums)}\")",
+          initialCode: "text = \"10 20 30 40 50\"\n\n# Turn every piece into a whole number, then collect them into a list\nnums = ___(map(___, text.split()))\nprint(nums)\nprint(f\"Total: {sum(nums)}\")",
           expectedOutput: "[10, 20, 30, 40, 50]\nTotal: 150",
-          hint: "Wrapping with list() turns it into a list!",
+          hint: "A map result isn't a list on its own — wrap it so it becomes one. Inside, put the name of the function that turns text into a whole number.",
           hint2: "list(map(int, text.split()))"
         },
         {
@@ -271,9 +271,9 @@ Format: **\`'separator'.join(list)\`** — separator in front, list as the argum
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "Join the list with - as the separator!",
-          initialCode: "words = ['2024', '01', '15']\ndate = '-'.join(words)\nprint(date)",
+          initialCode: "words = ['2024', '01', '15']\n\n# Slip a - between the pieces to make one string\ndate = ___.join(words)\nprint(date)",
           expectedOutput: "2024-01-15",
-          hint: "Use the format separator.join(list)!",
+          hint: "The separator goes in front, and the list to glue together goes in the parentheses.",
           hint2: "'-'.join(words)"
         },
         {
@@ -281,9 +281,9 @@ Format: **\`'separator'.join(list)\`** — separator in front, list as the argum
           type: "tryit",
           title: "🖥️ Combine and Print!",
           task: "Join the letters to form a word!",
-          initialCode: "letters = ['P', 'y', 't', 'h', 'o', 'n']\nword = ''.join(letters)\nprint(word)",
+          initialCode: "letters = ['P', 'y', 't', 'h', 'o', 'n']\n\n# This time stick them together with nothing in between\nword = ___.join(letters)\nprint(word)",
           expectedOutput: "Python",
-          hint: "''.join() combines with no separator!",
+          hint: "If you don't want anything in between, leave the separator empty.",
           hint2: "Join with an empty string ''"
         },
         {

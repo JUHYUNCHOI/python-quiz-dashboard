@@ -554,7 +554,7 @@ print(text.count("an"))
           task: "한 글자 말고 '바나나' 같은 단어도 count 로 세지요. 'banana' 가 몇 번 나오는지 세서 출력해봐.",
           initialCode: "text = \"banana smoothie with banana chips and banana bread\"\n# print 한 줄로 'banana' 횟수 출력!\n",
           expectedOutput: "3",
-          hint: "글자 대신 단어를 넣어요: text.count(\"banana\")",
+          hint: "한 글자 대신 단어를 통째로 넣어도 똑같이 세줘요.",
           hint2: "print(text.count(\"banana\"))"
         },
         {

@@ -201,7 +201,7 @@ for i in range(1, 6):
           task: "1~10 까지 돌면서:\n- 8 을 만나면 → break (멈춤)\n- 홀수면 → continue (건너뛰기)\n- 짝수면 → print\n\n결과는 2, 4, 6 (8 만나기 전까지의 짝수)!",
           initialCode: "num = 0\nwhile num < 10:\n    num = num + 1\n    # 8 이면 break\n    # 홀수면 continue\n    # 짝수면 print\n",
           expectedOutput: "2\n4\n6",
-          hint: "if num == 8: break / if num % 2 == 1: continue / print(num) 순서로!",
+          hint: "먼저 8 인지 확인해서 멈추고,\n그다음 홀수면 이번 회차를 건너뛰고,\n남은 짝수만 출력해요.",
           hint2: "num = 0\nwhile num < 10:\n    num = num + 1\n    if num == 8:\n        break\n    if num % 2 == 1:\n        continue\n    print(num)"
         },
         {

@@ -554,7 +554,7 @@ Hint: \`b-a-n-a-n-a\` — trace through and find where \"an\" appears.`,
           task: "count() works with full words too — count 'banana' in the sentence.",
           initialCode: "text = \"banana smoothie with banana chips and banana bread\"\n# Print how many times 'banana' appears\n",
           expectedOutput: "3",
-          hint: "Pass the full word: text.count(\"banana\")",
+          hint: "The same counting method takes a whole word, not just a single character.",
           hint2: "print(text.count(\"banana\"))"
         },
         {

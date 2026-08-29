@@ -98,9 +98,9 @@ print((1))       # 1 — not a tuple!
           type: "tryit",
           title: "🖥️ Coordinate Tuple — Build & Read x, y",
           task: "Create a coordinate as a tuple and access it by index!",
-          initialCode: "point = (100, 200)\nprint(point)\nprint(f\"x: {point[0]}, y: {point[1]}\")",
+          initialCode: "# Bundle 100 and 200 together (parens and a comma!)\npoint = ___\n\nprint(point)\nprint(f\"x: {point[0]}, y: {point[1]}\")",
           expectedOutput: "(100, 200)\nx: 100, y: 200",
-          hint: "Indexing works the same as lists!",
+          hint: "List the values inside parentheses, separated by a comma. Reading back works the same as lists — by index!",
           hint2: "point[0], point[1]"
         },
         {
@@ -225,9 +225,9 @@ Variables on the left = elements on the right. Mismatch → error.`
           type: "tryit",
           title: "🖥️ Try Unpacking — RGB into r, g, b",
           task: "Unpack the RGB tuple into r, g, b!",
-          initialCode: "rgb = (255, 128, 0)\nr, g, b = rgb\nprint(f\"R: {r}, G: {g}, B: {b}\")",
+          initialCode: "rgb = (255, 128, 0)\n\n# Open the bundle and hand each value to its own variable at once\n___ = rgb\n\nprint(f\"R: {r}, G: {g}, B: {b}\")",
           expectedOutput: "R: 255, G: 128, B: 0",
-          hint: "The number of variables must match the number of elements",
+          hint: "List the variables on the left, separated by commas. The number of variables must match the number of elements.",
           hint2: "r, g, b = rgb does it all at once!"
         },
         {
@@ -253,9 +253,9 @@ print(b)  # 10
           type: "tryit",
           title: "🖥️ Swap — x ↔ y in one line",
           task: "Swap x and y in a single line!",
-          initialCode: "x = 100\ny = 200\nprint(f\"Before swap: x={x}, y={y}\")\nx, y = y, x\nprint(f\"After swap: x={x}, y={y}\")",
+          initialCode: "x = 100\ny = 200\nprint(f\"Before swap: x={x}, y={y}\")\n\n# Trade the two values in one line, with no temporary variable\n___\n\nprint(f\"After swap: x={x}, y={y}\")",
           expectedOutput: "Before swap: x=100, y=200\nAfter swap: x=200, y=100",
-          hint: "Swap without a temporary variable!",
+          hint: "On the right, pair the two values in reverse order with a comma; the left side unpacks them.",
           hint2: "x, y = y, x in one line!"
         },
         {
@@ -295,7 +295,7 @@ print(last)    # 5
           task: "From 5 scores, separate the top + middle + bottom. Print 'top: ___, mid: ___, bot: ___'!",
           initialCode: "scores = (98, 85, 76, 90, 62)\n\n# Unpack as top, *mid, bot\n\n\n# Print 'top: 98, mid: [85, 76, 90], bot: 62'\n",
           expectedOutput: "top: 98, mid: [85, 76, 90], bot: 62",
-          hint: "top, *mid, bot = scores in one line!",
+          hint: "Catch the first and the last in plain variables, and gather everything in the middle into one starred variable.",
           hint2: "top, *mid, bot = scores\nprint(f\"top: {top}, mid: {mid}, bot: {bot}\")"
         },
         {
@@ -496,10 +496,10 @@ for name, age in zip(names, ages):
           type: "tryit",
           title: "🖥️ enumerate Unpacking — number menu from 1",
           task: "Number a menu list starting from 1. (use enumerate's start argument)",
-          initialCode: "menu = [\"Latte\", \"Americano\", \"Cappuccino\"]\n\nfor i, name in enumerate(menu, start=1):\n    print(f\"{i}. {name}\")",
+          initialCode: "menu = [\"Latte\", \"Americano\", \"Cappuccino\"]\n\n# We want the numbering to begin at 1, not 0\nfor i, name in enumerate(menu, ___):\n    print(f\"{i}. {name}\")",
           expectedOutput: "1. Latte\n2. Americano\n3. Cappuccino",
-          hint: "Run as-is — enumerate(menu, start=1) makes index begin at 1.",
-          hint2: "Just run → 1. Latte / 2. Americano / 3. Cappuccino"
+          hint: "enumerate takes one more argument that tells it which number to count from.",
+          hint2: "enumerate(menu, start=1) — that makes the index begin at 1."
         },
         {
           id: "mission1",

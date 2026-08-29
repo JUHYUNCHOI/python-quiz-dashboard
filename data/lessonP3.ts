@@ -74,7 +74,7 @@ a _ _ _ _   (남은 기회: 5)
           type: "tryit",
           title: "1️⃣ 단어 하나 골라보기!",
           task: "words 리스트에서 첫 단어를 꺼내 출력해봐!",
-          initialCode: "words = ['apple', 'banana', 'cherry', 'orange', 'grape']\nsecret = words[0]  # 'apple' 고정\n\nprint(f'선택된 단어: {secret}')\nprint(f'글자 수: {len(secret)}')",
+          initialCode: "words = ['apple', 'banana', 'cherry', 'orange', 'grape']\nsecret = ___  # 리스트에서 맨 앞 단어를 꺼내요\n\nprint(f'선택된 단어: {secret}')\nprint(f'글자 수: {len(secret)}')",
           expectedOutput: "선택된 단어: apple\n글자 수: 5",
           hint: "리스트의 인덱스로 단어 선택!",
           hint2: "secret = words[0]"
@@ -84,9 +84,9 @@ a _ _ _ _   (남은 기회: 5)
           type: "tryit",
           title: "2️⃣ 단어를 밑줄로 가리기!",
           task: "for로 글자마다 밑줄로 바꿔서 표시해봐!",
-          initialCode: "secret = 'apple'\nguessed = []  # 맞춘 글자들\n\n# 표시할 문자열 만들기\ndisplay = ''\nfor letter in secret:\n    if letter in guessed:\n        display += letter + ' '\n    else:\n        display += '_ '\n\nprint(display)",
+          initialCode: "secret = 'apple'\nguessed = []  # 맞춘 글자들\n\n# 표시할 문자열 만들기\ndisplay = ''\nfor letter in secret:\n    if letter ___ guessed:      # 이미 맞춘 글자면\n        display += letter + ' '\n    else:\n        display += ___          # 아직이면 밑줄 + 공백\n\nprint(display)",
           expectedOutput: "_ _ _ _ _ ",
-          hint: "for문으로 각 글자를 확인!",
+          hint: "글자가 맞춘 목록 안에 들어있는지 물어보는 키워드가 있어요. 아직이면 밑줄 하나에 공백을 붙여요.",
           hint2: "if letter in guessed: display += letter"
         },
         {
@@ -94,9 +94,9 @@ a _ _ _ _   (남은 기회: 5)
           type: "tryit",
           title: "3️⃣ 글자가 단어 안에 있나?",
           task: "in으로 글자 검사 + guessed에 append!",
-          initialCode: "secret = 'apple'\nguessed = ['a']  # 이미 a를 맞춤\n\n# input() 대신 직접 글자를 넣어요\nguess = 'p'\n\nif guess in secret:\n    print('🎉 맞았어요!')\n    guessed.append(guess)\nelse:\n    print('❌ 틀렸어요!')\n\nprint(f'맞춘 글자: {guessed}')",
+          initialCode: "secret = 'apple'\nguessed = ['a']  # 이미 a를 맞춤\n\n# input() 대신 직접 글자를 넣어요\nguess = 'p'\n\nif guess ___ secret:            # 단어 안에 있으면\n    print('🎉 맞았어요!')\n    guessed.___(guess)          # 맞춘 글자 목록 끝에 덧붙여요\nelse:\n    print('❌ 틀렸어요!')\n\nprint(f'맞춘 글자: {guessed}')",
           expectedOutput: "🎉 맞았어요!\n맞춘 글자: ['a', 'p']",
-          hint: "in으로 글자가 있는지 확인!",
+          hint: "글자가 단어 안에 들어있는지 묻는 키워드를 써요. 맞았으면 리스트 끝에 덧붙이고요.",
           hint2: "if guess in secret:"
         },
         {
@@ -104,7 +104,7 @@ a _ _ _ _   (남은 기회: 5)
           type: "tryit",
           title: "4️⃣ 모든 글자를 다 맞췄나?",
           task: "for로 모든 글자가 guessed에 있는지 검사!",
-          initialCode: "secret = 'apple'\nguessed = ['a', 'p', 'l', 'e']\n\n# 모든 글자를 맞췄는지 확인\nall_found = True\nfor letter in secret:\n    if letter not in guessed:\n        all_found = False\n        break\n\nif all_found:\n    print('🎉 승리!')\nelse:\n    print('계속 도전!')",
+          initialCode: "secret = 'apple'\nguessed = ['a', 'p', 'l', 'e']\n\n# 모든 글자를 맞췄는지 확인\nall_found = True\nfor letter in secret:\n    if letter ___ guessed:   # 아직 안 맞춘 글자가 하나라도 있으면\n        all_found = ___      # 완성이 아니에요\n        break\n\nif all_found:\n    print('🎉 승리!')\nelse:\n    print('계속 도전!')",
           expectedOutput: "🎉 승리!",
           hint: "모든 글자가 guessed에 있는지 확인!",
           hint2: "if letter not in guessed: all_found = False"

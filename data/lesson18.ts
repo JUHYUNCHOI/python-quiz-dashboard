@@ -139,9 +139,9 @@ text.splitlines()        # ['a', 'b']       ← 깔끔
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "문자열을 쪼개서 리스트로 만드세요!",
-          initialCode: "text = \"철수 영희 민수\"\nnames = text.split()\nprint(names)",
+          initialCode: "text = \"철수 영희 민수\"\n\n# 공백을 기준으로 잘라서 리스트로 만들어요\nnames = text.___()\nprint(names)",
           expectedOutput: "['철수', '영희', '민수']",
-          hint: "split()은 공백으로 쪼개요!",
+          hint: "문자열을 공백 기준으로 잘라 리스트로 만들어 주는 메서드가 있어요.",
           hint2: "text.split()"
         },
         {
@@ -149,9 +149,9 @@ text.splitlines()        # ['a', 'b']       ← 깔끔
           type: "tryit",
           title: "🖥️ 쉼표로 쪼개기!",
           task: "쉼표로 구분된 과일을 쪼개세요!",
-          initialCode: "text = \"사과,바나나,딸기\"\nfruits = text.split(\",\")\nprint(fruits)",
+          initialCode: "text = \"사과,바나나,딸기\"\n\n# 이번엔 공백이 아니라 쉼표를 기준으로 잘라요\nfruits = text.split(___)\nprint(fruits)",
           expectedOutput: "['사과', '바나나', '딸기']",
-          hint: "split(\",\")로 쉼표 기준!",
+          hint: "무엇을 기준으로 자를지 괄호 안에 문자열로 알려줄 수 있어요.",
           hint2: "text.split(\",\")"
         }
       ]
@@ -185,9 +185,9 @@ print(nums)  # [10, 20, 30] (정수!)
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "문자열 숫자를 정수 리스트로 변환하세요!",
-          initialCode: "text = \"10 20 30 40 50\"\nnums = list(map(int, text.split()))\nprint(nums)\nprint(f\"합계: {sum(nums)}\")",
+          initialCode: "text = \"10 20 30 40 50\"\n\n# 쪼갠 조각들을 하나하나 정수로 바꾼 뒤 리스트로 담아요\nnums = ___(map(___, text.split()))\nprint(nums)\nprint(f\"합계: {sum(nums)}\")",
           expectedOutput: "[10, 20, 30, 40, 50]\n합계: 150",
-          hint: "list()로 감싸면 리스트가 돼요!",
+          hint: "map 결과는 그냥 두면 리스트가 아니에요. 리스트로 감싸 주세요. 안쪽에는 문자열을 정수로 바꾸는 함수 이름을 넣어요.",
           hint2: "list(map(int, text.split()))"
         },
         {
@@ -271,9 +271,9 @@ print(result)  # "사과,바나나,딸기"
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "리스트를 - 로 연결하세요!",
-          initialCode: "words = ['2024', '01', '15']\ndate = '-'.join(words)\nprint(date)",
+          initialCode: "words = ['2024', '01', '15']\n\n# 조각 사이사이에 - 를 끼워서 한 문자열로\ndate = ___.join(words)\nprint(date)",
           expectedOutput: "2024-01-15",
-          hint: "구분자.join(리스트) 형태예요!",
+          hint: "사이에 끼울 구분자가 앞에, 이어붙일 리스트가 괄호 안에 와요.",
           hint2: "'-'.join(words)"
         },
         {
@@ -281,9 +281,9 @@ print(result)  # "사과,바나나,딸기"
           type: "tryit",
           title: "🖥️ 붙여서 출력!",
           task: "글자들을 붙여서 단어로 만드세요!",
-          initialCode: "letters = ['P', 'y', 't', 'h', 'o', 'n']\nword = ''.join(letters)\nprint(word)",
+          initialCode: "letters = ['P', 'y', 't', 'h', 'o', 'n']\n\n# 이번엔 사이에 아무것도 끼우지 않고 딱 붙여요\nword = ___.join(letters)\nprint(word)",
           expectedOutput: "Python",
-          hint: "''.join()은 구분자 없이 붙여요!",
+          hint: "사이에 아무것도 넣고 싶지 않다면, 구분자 자리를 비워 두면 돼요.",
           hint2: "빈 문자열 ''로 join"
         },
         {

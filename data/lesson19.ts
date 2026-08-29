@@ -98,9 +98,9 @@ print((1))       # 1 — 튜플 아님!
           type: "tryit",
           title: "🖥️ 좌표 튜플 — point 만들고 x, y 꺼내기",
           task: "좌표를 튜플로 만들고 인덱스로 꺼내보세요!",
-          initialCode: "point = (100, 200)\nprint(point)\nprint(f\"x: {point[0]}, y: {point[1]}\")",
+          initialCode: "# 100 과 200 을 한 묶음으로 (괄호와 쉼표!)\npoint = ___\n\nprint(point)\nprint(f\"x: {point[0]}, y: {point[1]}\")",
           expectedOutput: "(100, 200)\nx: 100, y: 200",
-          hint: "인덱스로 접근은 리스트와 같아요!",
+          hint: "괄호 안에 값들을 쉼표로 나열하면 묶음이 돼요. 꺼낼 때는 리스트처럼 인덱스로!",
           hint2: "point[0], point[1]"
         },
         {
@@ -218,9 +218,9 @@ print(y)  # 20
           type: "tryit",
           title: "🖥️ 언패킹 해보기 — RGB 풀어 받기",
           task: "RGB 튜플을 r, g, b 세 변수에 언패킹하세요!",
-          initialCode: "rgb = (255, 128, 0)\nr, g, b = rgb\nprint(f\"R: {r}, G: {g}, B: {b}\")",
+          initialCode: "rgb = (255, 128, 0)\n\n# 묶음을 풀어서 세 변수에 한 번에 나눠 담아요\n___ = rgb\n\nprint(f\"R: {r}, G: {g}, B: {b}\")",
           expectedOutput: "R: 255, G: 128, B: 0",
-          hint: "변수 개수와 요소 개수가 같아야 해요",
+          hint: "왼쪽에 변수를 쉼표로 나열해요. 변수 개수와 요소 개수가 같아야 해요.",
           hint2: "r, g, b = rgb로 한 번에!"
         },
         {
@@ -246,9 +246,9 @@ print(b)  # 10
           type: "tryit",
           title: "🖥️ 값 바꿔치기 — x ↔ y",
           task: "x와 y의 값을 한 줄로 바꿔치세요!",
-          initialCode: "x = 100\ny = 200\nprint(f\"교환 전: x={x}, y={y}\")\nx, y = y, x\nprint(f\"교환 후: x={x}, y={y}\")",
+          initialCode: "x = 100\ny = 200\nprint(f\"교환 전: x={x}, y={y}\")\n\n# 임시 변수 없이, 한 줄로 두 값을 맞바꿔요\n___\n\nprint(f\"교환 후: x={x}, y={y}\")",
           expectedOutput: "교환 전: x=100, y=200\n교환 후: x=200, y=100",
-          hint: "임시 변수 없이 교환!",
+          hint: "오른쪽에 두 값을 반대 순서로 쉼표로 묶고, 왼쪽에서 풀어 담아요.",
           hint2: "x, y = y, x 한 줄로!"
         },
         {
@@ -288,7 +288,7 @@ print(last)    # 5
           task: "점수 5 개에서 1 등 점수 + 가운데 + 꼴등 점수 분리하기. 'top: ___, mid: ___, bot: ___' 형식 출력!",
           initialCode: "scores = (98, 85, 76, 90, 62)\n\n# top, *mid, bot 형태로 언패킹\n\n\n# 'top: 98, mid: [85, 76, 90], bot: 62' 형식 출력\n",
           expectedOutput: "top: 98, mid: [85, 76, 90], bot: 62",
-          hint: "top, *mid, bot = scores 한 줄!",
+          hint: "맨 앞 하나, 맨 뒤 하나는 변수로 받고, 가운데 여러 개는 별표 붙인 변수로 한 번에 모아요.",
           hint2: "top, *mid, bot = scores\nprint(f\"top: {top}, mid: {mid}, bot: {bot}\")"
         },
         {
@@ -489,10 +489,10 @@ for name, age in zip(names, ages):
           type: "tryit",
           title: "🖥️ enumerate 언패킹 — 메뉴에 1 번부터 번호",
           task: "메뉴 리스트의 각 항목에 1 부터 번호를 붙여 출력하세요. (enumerate 의 start 인자 활용)",
-          initialCode: "menu = [\"라떼\", \"아메리카노\", \"카푸치노\"]\n\nfor i, name in enumerate(menu, start=1):\n    print(f\"{i}. {name}\")",
+          initialCode: "menu = [\"라떼\", \"아메리카노\", \"카푸치노\"]\n\n# 번호를 0 이 아니라 1 부터 매기고 싶어요\nfor i, name in enumerate(menu, ___):\n    print(f\"{i}. {name}\")",
           expectedOutput: "1. 라떼\n2. 아메리카노\n3. 카푸치노",
-          hint: "그대로 실행하세요 — enumerate(menu, start=1) 이면 인덱스가 1 부터 시작.",
-          hint2: "코드 그대로 → 1. 라떼 / 2. 아메리카노 / 3. 카푸치노"
+          hint: "enumerate 에 번호를 몇 부터 셀지 알려주는 인자를 하나 더 줄 수 있어요.",
+          hint2: "enumerate(menu, start=1) — 이러면 인덱스가 1 부터 시작해요."
         },
         {
           id: "mission1",

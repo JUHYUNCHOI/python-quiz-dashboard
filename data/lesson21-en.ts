@@ -117,9 +117,9 @@ empty2 = set()     # ✅ actual empty set
           type: "tryit",
           title: "🖥️ Dedupe — count unique with set",
           task: "Convert a list with duplicates to a set and count the unique elements!",
-          initialCode: "numbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\nunique = set(numbers)\nprint(f\"Count after removing duplicates: {len(unique)}\")",
+          initialCode: "numbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\n\n# Convert it into the structure where duplicates vanish on their own\nunique = ___(numbers)\nprint(f\"Count after removing duplicates: {len(unique)}\")",
           expectedOutput: "Count after removing duplicates: 4",
-          hint: "Use set() to convert a list to a set!",
+          hint: "Switch to the structure that never holds the same value twice — what is left is the unique count.",
           hint2: "Use len() to check the count"
         },
         {
@@ -180,9 +180,9 @@ print(fruits)  # {'apple', 'strawberry'}
           type: "tryit",
           title: "🖥️ Add — slot in 'orange'",
           task: "Add 'orange' to the set and check the count!",
-          initialCode: "fruits = {\"apple\", \"banana\"}\nfruits.add(\"orange\")\nprint(f\"Number of fruits: {len(fruits)}\")",
+          initialCode: "fruits = {\"apple\", \"banana\"}\n\n# Slot 'orange' into the set\nfruits.___(\"orange\")\nprint(f\"Number of fruits: {len(fruits)}\")",
           expectedOutput: "Number of fruits: 3",
-          hint: "Use add() to add!",
+          hint: "There is a short method for dropping one element into a set.",
           hint2: "fruits.add(\"orange\")"
         },
         {
@@ -207,9 +207,9 @@ print("grape" in fruits)   # False
           type: "tryit",
           title: "🖥️ Membership — 'banana' in fruits",
           task: "Check whether 'banana' is in the set with in!",
-          initialCode: "fruits = {\"apple\", \"banana\", \"strawberry\"}\nprint(\"banana\" in fruits)",
+          initialCode: "fruits = {\"apple\", \"banana\", \"strawberry\"}\n\n# Ask whether it sits inside\nprint(\"banana\" ___ fruits)",
           expectedOutput: "True",
-          hint: "Use the in operator!",
+          hint: "One operator asks whether something sits inside — that is all you need.",
           hint2: "\"banana\" in fruits"
         },
         {
@@ -330,9 +330,9 @@ print(A - B)  # {1, 2}
           type: "tryit",
           title: "🖥️ Intersection (&) — count common items",
           task: "Use & to count how many elements two sets share!",
-          initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\ncommon = A & B\nprint(f\"Number of common elements: {len(common)}\")",
+          initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\n\n# Keep only what both of them hold\ncommon = A ___ B\nprint(f\"Number of common elements: {len(common)}\")",
           expectedOutput: "Number of common elements: 2",
-          hint: "Use the & operator for intersection!",
+          hint: "One symbol keeps only the part where the two groups overlap.",
           hint2: "Use len() for the count"
         },
         {
@@ -340,9 +340,9 @@ print(A - B)  # {1, 2}
           type: "tryit",
           title: "🖥️ Difference (-) — elements only in A",
           task: "Use - to count elements in A but not in B!",
-          initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\nonly_A = A - B\nprint(f\"Elements only in A: {len(only_A)}\")",
+          initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\n\n# Take away from A whatever B also holds\nonly_A = A ___ B\nprint(f\"Elements only in A: {len(only_A)}\")",
           expectedOutput: "Elements only in A: 3",
-          hint: "Use the - operator for difference!",
+          hint: "One symbol takes B's share away from A.",
           hint2: "A - B"
         },
         {
@@ -350,8 +350,8 @@ print(A - B)  # {1, 2}
           type: "mission",
           title: "🎯 Compare two fruit stores — fill in &, -, |",
           task: "Fill in 3 blanks to compare fruit stores!",
-          initialCode: "fruits_a = {'apple', 'banana', 'grape', 'strawberry'}\nfruits_b = {'banana', 'strawberry', 'mango', 'kiwi'}\n\n# Fruits sold by both stores (intersection)\nboth = fruits_a ___ fruits_b\nprint(f'Both: {both}')\n\n# Fruits sold only by store A (difference)\nonly_a = fruits_a ___ fruits_b\nprint(f'Only A: {only_a}')\n\n# All fruits (union)\nall_fruits = fruits_a ___ fruits_b\nprint(f'Total: {len(all_fruits)} kinds')",
-          expectedOutput: "Both: {'banana', 'strawberry'}\nOnly A: {'apple', 'grape'}\nTotal: 6 kinds",
+          initialCode: "fruits_a = {'apple', 'banana', 'grape', 'strawberry'}\nfruits_b = {'banana', 'strawberry', 'mango', 'kiwi'}\n\n# Fruits sold by both stores (intersection)\nboth = fruits_a ___ fruits_b\nprint(f'Both: {sorted(both)}')\n\n# Fruits sold only by store A (difference)\nonly_a = fruits_a ___ fruits_b\nprint(f'Only A: {sorted(only_a)}')\n\n# All fruits (union)\nall_fruits = fruits_a ___ fruits_b\nprint(f'Total: {len(all_fruits)} kinds')",
+          expectedOutput: "Both: ['banana', 'strawberry']\nOnly A: ['apple', 'grape']\nTotal: 6 kinds",
           hint: "Intersection &, Difference -, Union |",
           hint2: "& / - / |"
         },

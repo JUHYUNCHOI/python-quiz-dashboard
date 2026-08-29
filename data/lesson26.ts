@@ -262,9 +262,9 @@ counts = Counter(text)
           type: "tryit",
           title: "🖥️ 빈도수 세기!",
           task: "두 가지 방법으로 빈도수를 세보세요!",
-          initialCode: "from collections import Counter\n\ntext = \"hello\"\n\n# 방법 1: 직접 딕셔너리\ncounts1 = {}\nfor char in text:\n    counts1[char] = counts1.get(char, 0) + 1\nprint(\"딕셔너리:\", counts1)\n\n# 방법 2: Counter\ncounts2 = Counter(text)\nprint(\"Counter:\", dict(counts2))\n\n# 가장 많은 문자\nprint(\"가장 많은 문자:\", counts2.most_common(1))",
+          initialCode: "from collections import Counter\n\ntext = \"hello\"\n\n# 방법 1: 직접 딕셔너리\ncounts1 = {}\nfor char in text:\n    counts1[char] = counts1.get(char, 0) + 1\nprint(\"딕셔너리:\", counts1)\n\n# 방법 2: 세는 일을 대신 해주는 도구에 문자열을 그대로 넣기\ncounts2 = ___(text)\nprint(\"Counter:\", dict(counts2))\n\n# 가장 많이 나온 것 1 개만\nprint(\"가장 많은 문자:\", counts2.___(1))",
           expectedOutput: "딕셔너리: {'h': 1, 'e': 1, 'l': 2, 'o': 1}\nCounter: {'h': 1, 'e': 1, 'l': 2, 'o': 1}\n가장 많은 문자: [('l', 2)]",
-          hint: "Counter는 딕셔너리의 서브클래스!",
+          hint: "맨 위에서 가져온 도구에 문자열을 그대로 넣으면 세어 줘요. 순위는 '가장 흔한 것' 이라는 이름의 메서드로.",
           hint2: "most_common()으로 순위 확인 가능"
         },
         {

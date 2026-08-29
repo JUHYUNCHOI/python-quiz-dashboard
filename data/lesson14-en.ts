@@ -201,7 +201,7 @@ for i in range(1, 6):
           task: "Loop from 1 to 10:\n- 8 → break\n- odd → continue (skip)\n- even → print\n\nResult: 2, 4, 6 (the evens before 8)!",
           initialCode: "num = 0\nwhile num < 10:\n    num = num + 1\n    # if 8 → break\n    # if odd → continue\n    # if even → print\n",
           expectedOutput: "2\n4\n6",
-          hint: "if num == 8: break / if num % 2 == 1: continue / print(num) in that order!",
+          hint: "Check for 8 first and stop there, then skip the round when the number is odd, and print whatever is left.",
           hint2: "num = 0\nwhile num < 10:\n    num = num + 1\n    if num == 8:\n        break\n    if num % 2 == 1:\n        continue\n    print(num)"
         },
         {

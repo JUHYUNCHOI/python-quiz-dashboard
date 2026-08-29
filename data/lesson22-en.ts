@@ -77,9 +77,9 @@ print(fruits[1:1])    # [] — same position, empty
           type: "tryit",
           title: "🖥️ Slice — grab indices 1, 2, 3 only",
           task: "From nums, slice out just 1, 2, 3 and print them!",
-          initialCode: "nums = [0, 1, 2, 3, 4, 5]\nprint(nums[1:4])",
+          initialCode: "nums = [0, 1, 2, 3, 4, 5]\n\n# Cut from slot 1 through slot 3 only\nprint(nums[___:___])",
           expectedOutput: "[1, 2, 3]",
-          hint: "[1:4] means indices 1, 2, 3 — the 4 is NOT included.",
+          hint: "Start is included, end is excluded. To keep up to 3, the end slot needs one more than that.",
           hint2: "End index is excluded! / nums[1:4]"
         },
         {
@@ -153,9 +153,9 @@ print(nums[:])    # [0, 1, 2, 3, 4]
           type: "tryit",
           title: "🖥️ First 3 only — slice off the head",
           task: "Get just the first 3 elements of the list!",
-          initialCode: "nums = [10, 20, 30, 40, 50]\nprint(nums[:3])",
+          initialCode: "nums = [10, 20, 30, 40, 50]\n\n# Leave the start empty to begin at the front — just say how many\nprint(nums[:___])",
           expectedOutput: "[10, 20, 30]",
-          hint: "Omit start → from the beginning. [:3] = indices 0, 1, 2.",
+          hint: "An empty start means from the beginning. The end number is simply 'how many'.",
           hint2: "nums[:3]"
         },
         {
@@ -177,9 +177,9 @@ print(nums[:-1])    # [0, 1, 2, 3] (exclude last)
           type: "tryit",
           title: "🖥️ Last 2 — grab the tail",
           task: "Get just the last 2 elements of fruits!",
-          initialCode: "fruits = [\"apple\", \"banana\", \"strawberry\", \"grape\", \"watermelon\"]\nprint(fruits[-2:])",
+          initialCode: "fruits = [\"apple\", \"banana\", \"strawberry\", \"grape\", \"watermelon\"]\n\n# Cut from the 2nd-to-last slot all the way to the end\nprint(fruits[___:])",
           expectedOutput: "['grape', 'watermelon']",
-          hint: "Negative index = 'Nth from the end'. [-2:] = from 2nd-to-last to the end.",
+          hint: "Counting from the back uses a minus sign. If the last one is -1, what is the one before it?",
           hint2: "fruits[-2:]"
         },
         {
@@ -281,9 +281,9 @@ print(nums[::-1])   # [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
           type: "tryit",
           title: "🖥️ Reverse a list — the [::-1] trick",
           task: "Print the list in reverse order!",
-          initialCode: "nums = [1, 2, 3, 4, 5]\nprint(nums[::-1])",
+          initialCode: "nums = [1, 2, 3, 4, 5]\n\n# Flip the third slot (the step) so it reads back to front\nprint(nums[::___])",
           expectedOutput: "[5, 4, 3, 2, 1]",
-          hint: "Negative step = back to front! [::-1].",
+          hint: "The third slot is the step. To move one at a time from back to front, what sign do you need?",
           hint2: "nums[::-1]"
         },
         {
@@ -305,9 +305,9 @@ print(text[::-1])   # "dlroW olleH"
           type: "tryit",
           title: "🖥️ Palindrome check — same forwards & backwards?",
           task: "Reverse a string and check if it reads the same forwards and backwards (a palindrome)!",
-          initialCode: "word = \"level\"\nreversed_word = word[::-1]\nprint(f\"Original: {word}\")\nprint(f\"Reversed: {reversed_word}\")\nprint(f\"Palindrome? {word == reversed_word}\")",
+          initialCode: "word = \"level\"\n\n# Flip the whole string around\nreversed_word = word[___]\n\nprint(f\"Original: {word}\")\nprint(f\"Reversed: {reversed_word}\")\nprint(f\"Palindrome? {word == reversed_word}\")",
           expectedOutput: "Original: level\nReversed: level\nPalindrome? True",
-          hint: "Strings also reverse with [::-1]. Original == reversed → palindrome.",
+          hint: "The same trick that reversed a list works on a string too. Same as the original → palindrome!",
           hint2: "word == word[::-1]"
         },
         {

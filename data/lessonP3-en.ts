@@ -74,7 +74,7 @@ Letter: e
           type: "tryit",
           title: "1️⃣ Pick One Word!",
           task: "Grab the first word from the words list and print it!",
-          initialCode: "words = ['apple', 'banana', 'cherry', 'orange', 'grape']\nsecret = words[0]  # Fix to 'apple'\n\nprint(f'Selected word: {secret}')\nprint(f'Letter count: {len(secret)}')",
+          initialCode: "words = ['apple', 'banana', 'cherry', 'orange', 'grape']\nsecret = ___  # take the very first word out of the list\n\nprint(f'Selected word: {secret}')\nprint(f'Letter count: {len(secret)}')",
           expectedOutput: "Selected word: apple\nLetter count: 5",
           hint: "Select a word using the list index!",
           hint2: "secret = words[0]"
@@ -84,9 +84,9 @@ Letter: e
           type: "tryit",
           title: "2️⃣ Hide the Word with Underscores!",
           task: "Use a for loop to swap each letter for an underscore!",
-          initialCode: "secret = 'apple'\nguessed = []  # Correctly guessed letters\n\n# Build the display string\ndisplay = ''\nfor letter in secret:\n    if letter in guessed:\n        display += letter + ' '\n    else:\n        display += '_ '\n\nprint(display)",
+          initialCode: "secret = 'apple'\nguessed = []  # Correctly guessed letters\n\n# Build the display string\ndisplay = ''\nfor letter in secret:\n    if letter ___ guessed:      # already guessed this letter?\n        display += letter + ' '\n    else:\n        display += ___          # not yet — an underscore plus a space\n\nprint(display)",
           expectedOutput: "_ _ _ _ _ ",
-          hint: "Use a for loop to check each letter!",
+          hint: "There's a keyword that asks whether a letter sits inside a list. If it isn't there yet, add one underscore followed by a space.",
           hint2: "if letter in guessed: display += letter"
         },
         {
@@ -94,9 +94,9 @@ Letter: e
           type: "tryit",
           title: "3️⃣ Is the Letter in the Word?",
           task: "Use 'in' to check + append to guessed!",
-          initialCode: "secret = 'apple'\nguessed = ['a']  # Already guessed 'a'\n\n# Instead of input(), assign the letter directly\nguess = 'p'\n\nif guess in secret:\n    print('🎉 Correct!')\n    guessed.append(guess)\nelse:\n    print('❌ Wrong!')\n\nprint(f'Guessed letters: {guessed}')",
+          initialCode: "secret = 'apple'\nguessed = ['a']  # Already guessed 'a'\n\n# Instead of input(), assign the letter directly\nguess = 'p'\n\nif guess ___ secret:            # is it inside the word?\n    print('🎉 Correct!')\n    guessed.___(guess)          # tack it onto the end of the list\nelse:\n    print('❌ Wrong!')\n\nprint(f'Guessed letters: {guessed}')",
           expectedOutput: "🎉 Correct!\nGuessed letters: ['a', 'p']",
-          hint: "Use 'in' to check if the letter exists!",
+          hint: "Use the keyword that asks whether the letter sits inside the word. If it does, tack it onto the end of the list.",
           hint2: "if guess in secret:"
         },
         {
@@ -104,7 +104,7 @@ Letter: e
           type: "tryit",
           title: "4️⃣ Did You Get Every Letter?",
           task: "Use a for loop to check every letter is in guessed!",
-          initialCode: "secret = 'apple'\nguessed = ['a', 'p', 'l', 'e']\n\n# Check if all letters are guessed\nall_found = True\nfor letter in secret:\n    if letter not in guessed:\n        all_found = False\n        break\n\nif all_found:\n    print('🎉 You win!')\nelse:\n    print('Keep trying!')",
+          initialCode: "secret = 'apple'\nguessed = ['a', 'p', 'l', 'e']\n\n# Check if all letters are guessed\nall_found = True\nfor letter in secret:\n    if letter ___ guessed:   # even one letter still missing?\n        all_found = ___      # then it isn't complete\n        break\n\nif all_found:\n    print('🎉 You win!')\nelse:\n    print('Keep trying!')",
           expectedOutput: "🎉 You win!",
           hint: "Check if every letter is in guessed!",
           hint2: "if letter not in guessed: all_found = False"

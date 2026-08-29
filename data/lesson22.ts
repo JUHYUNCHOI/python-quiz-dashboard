@@ -77,9 +77,9 @@ print(fruits[1:1])    # [] — 같은 위치, 빈 리스트
           type: "tryit",
           title: "🖥️ 자르기 — 인덱스 1, 2, 3 만 가져오기",
           task: "nums 에서 1, 2, 3 만 잘라서 출력해보세요!",
-          initialCode: "nums = [0, 1, 2, 3, 4, 5]\nprint(nums[1:4])",
+          initialCode: "nums = [0, 1, 2, 3, 4, 5]\n\n# 1 번 자리부터 3 번 자리까지만 잘라요\nprint(nums[___:___])",
           expectedOutput: "[1, 2, 3]",
-          hint: "[1:4] 는 인덱스 1, 2, 3 (끝 4 는 포함 X)!",
+          hint: "시작은 포함, 끝은 제외예요. 3 번까지 가지려면 끝 자리에는 그보다 하나 큰 수를 써요.",
           hint2: "끝 숫자는 포함 안 됨! / nums[1:4]"
         },
         {
@@ -153,9 +153,9 @@ print(nums[:])    # [0, 1, 2, 3, 4]
           type: "tryit",
           title: "🖥️ 처음 3 개만 잘라내기",
           task: "리스트에서 처음 3 개 요소만 가져와 출력하세요!",
-          initialCode: "nums = [10, 20, 30, 40, 50]\nprint(nums[:3])",
+          initialCode: "nums = [10, 20, 30, 40, 50]\n\n# 시작을 생략하면 맨 앞부터 — 몇 개까지 가져올지만 적어요\nprint(nums[:___])",
           expectedOutput: "[10, 20, 30]",
-          hint: "시작을 생략하면 처음부터! [:3] → 0, 1, 2.",
+          hint: "시작을 비우면 처음부터예요. 끝 자리 숫자가 곧 '몇 개' 가 돼요.",
           hint2: "nums[:3]"
         },
         {
@@ -177,9 +177,9 @@ print(nums[:-1])    # [0, 1, 2, 3] (마지막 제외)
           type: "tryit",
           title: "🖥️ 마지막 2 개만 — 꼬리 두 개 가져오기",
           task: "fruits 의 마지막 2 개 요소만 출력하세요!",
-          initialCode: "fruits = [\"사과\", \"바나나\", \"딸기\", \"포도\", \"수박\"]\nprint(fruits[-2:])",
+          initialCode: "fruits = [\"사과\", \"바나나\", \"딸기\", \"포도\", \"수박\"]\n\n# 뒤에서 두 번째 자리부터 끝까지 잘라요\nprint(fruits[___:])",
           expectedOutput: "['포도', '수박']",
-          hint: "음수 인덱스는 '뒤에서 N 번째'. [-2:] = 뒤에서 두 번째부터 끝까지.",
+          hint: "뒤에서 셀 때는 마이너스를 붙여요. 마지막이 -1 이면 그 앞 자리는 뭘까요?",
           hint2: "fruits[-2:]"
         },
         {
@@ -281,9 +281,9 @@ print(nums[::-1])   # [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
           type: "tryit",
           title: "🖥️ 리스트 뒤집기 — [::-1] 마법",
           task: "리스트를 뒤집어 (역순으로) 출력하세요!",
-          initialCode: "nums = [1, 2, 3, 4, 5]\nprint(nums[::-1])",
+          initialCode: "nums = [1, 2, 3, 4, 5]\n\n# 세 번째 칸(스텝)을 거꾸로 줘서 뒤에서 앞으로 읽어요\nprint(nums[::___])",
           expectedOutput: "[5, 4, 3, 2, 1]",
-          hint: "스텝이 -1 이면 뒤에서 앞으로! [::-1].",
+          hint: "세 번째 칸이 스텝이에요. 한 칸씩 뒤에서 앞으로 가려면 어떤 부호가 필요할까요?",
           hint2: "nums[::-1]"
         },
         {
@@ -305,9 +305,9 @@ print(text[::-1])   # "dlroW olleH"
           type: "tryit",
           title: "🖥️ 회문 (palindrome) 검사 — level 거꾸로도 level?",
           task: "문자열을 뒤집어서 거꾸로 읽어도 똑같은지 (회문인지) 확인하세요!",
-          initialCode: "word = \"level\"\nreversed_word = word[::-1]\nprint(f\"원본: {word}\")\nprint(f\"뒤집기: {reversed_word}\")\nprint(f\"회문? {word == reversed_word}\")",
+          initialCode: "word = \"level\"\n\n# 문자열을 통째로 뒤집어요\nreversed_word = word[___]\n\nprint(f\"원본: {word}\")\nprint(f\"뒤집기: {reversed_word}\")\nprint(f\"회문? {word == reversed_word}\")",
           expectedOutput: "원본: level\n뒤집기: level\n회문? True",
-          hint: "문자열도 [::-1] 로 뒤집기. 원본 == 뒤집은 거 = 회문.",
+          hint: "리스트를 뒤집던 그 방법이 문자열에도 그대로 통해요. 원본과 뒤집은 게 같으면 회문!",
           hint2: "word == word[::-1]"
         },
         {

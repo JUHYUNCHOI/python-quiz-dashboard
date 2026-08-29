@@ -57,10 +57,10 @@ If a list is "lining up in order", a dict is "**labeling and organizing**".`
           type: "tryit",
           title: "🖥️ After the Sim — Build a Student Dict",
           task: "Build a student info dict, then print the name and score!",
-          initialCode: "student = {\n    \"name\": \"Mia\",\n    \"score\": 88\n}\n\nprint(student[\"name\"])\nprint(student[\"score\"])",
+          initialCode: "student = {\n    \"name\": \"Mia\",\n    \"score\": 88\n}\n\n# Put the tag inside the brackets to pull the value out\nprint(student[___])\nprint(student[___])",
           expectedOutput: "Mia\n88",
-          hint: "student[\"name\"] / student[\"score\"] pulls each value out!",
-          hint2: "Run the code as-is → 'Mia' / 88."
+          hint: "Copy the tag that sits next to each value into the brackets.",
+          hint2: "print(student[\"name\"]) / print(student[\"score\"])"
         },
         {
           id: "creation-ways",
@@ -106,9 +106,9 @@ Keys must be unchangeable. Values can be anything — list, set, even another di
           type: "tryit",
           title: "🖥️ Look Up Values — name / score",
           task: "Pull the name and score from the dictionary!",
-          initialCode: "student = {\n    \"name\": \"Bob\",\n    \"score\": 95,\n    \"class\": \"A\"\n}\n\nprint(student[\"name\"])\nprint(student[\"score\"])",
+          initialCode: "student = {\n    \"name\": \"Bob\",\n    \"score\": 95,\n    \"class\": \"A\"\n}\n\n# Pick two of the three tags and pull their values\nprint(student[___])\nprint(student[___])",
           expectedOutput: "Bob\n95",
-          hint: "Use dict[key] to find a value!",
+          hint: "The shape is dict[tag] — pick which tags you need from above.",
           hint2: "student[\"name\"]"
         },
         {
@@ -155,9 +155,9 @@ print(person)
           type: "tryit",
           title: "🖥️ Add a Value — slot in 'hobby'",
           task: "Add a new tag 'hobby' to the dictionary!",
-          initialCode: "person = {\"name\": \"Alice\", \"age\": 15}\nperson[\"hobby\"] = \"gaming\"\nprint(person)",
+          initialCode: "person = {\"name\": \"Alice\", \"age\": 15}\n\n# Attach a brand-new tag 'hobby' holding \"gaming\" (one line)\n___\nprint(person)",
           expectedOutput: "{'name': 'Alice', 'age': 15, 'hobby': 'gaming'}",
-          hint: "Assigning to a new key adds it!",
+          hint: "Putting a value on a new tag looks exactly like changing an existing one.",
           hint2: "person[\"hobby\"] = \"gaming\""
         },
         {
@@ -184,9 +184,9 @@ print(name)   # Alice
           type: "tryit",
           title: "🖥️ Remove a Value — drop 'age'",
           task: "Remove the 'age' tag from the dictionary!",
-          initialCode: "person = {\"name\": \"Alice\", \"age\": 15, \"school\": \"Middle School\"}\ndel person[\"age\"]\nprint(person)",
+          initialCode: "person = {\"name\": \"Alice\", \"age\": 15, \"school\": \"Middle School\"}\n\n# Take out the 'age' tag together with its value\n___ person[\"age\"]\nprint(person)",
           expectedOutput: "{'name': 'Alice', 'school': 'Middle School'}",
-          hint: "Use the format del dict[key] to delete!",
+          hint: "One keyword goes in front to wipe out the whole tag.",
           hint2: "del person[\"age\"]"
         },
         {
@@ -313,9 +313,9 @@ print(person.get("job", "none"))    # "none" — default value
           type: "tryit",
           title: "🖥️ Iterate a Dict — items for subject/score",
           task: "Use items() to print all (subject, score) pairs!",
-          initialCode: "scores = {\"Korean\": 90, \"English\": 85, \"Math\": 95}\n\nfor subject, score in scores.items():\n    print(f\"{subject}: {score} pts\")",
+          initialCode: "scores = {\"Korean\": 90, \"English\": 85, \"Math\": 95}\n\n# The method that hands back (subject, score) as a pair\nfor subject, score in scores.___():\n    print(f\"{subject}: {score} pts\")",
           expectedOutput: "Korean: 90 pts\nEnglish: 85 pts\nMath: 95 pts",
-          hint: "Use items() to iterate over key-value pairs!",
+          hint: "One method gives back the tag and the value together, one pair at a time.",
           hint2: "for key, value in dict.items():"
         },
         {
@@ -323,10 +323,10 @@ print(person.get("job", "none"))    # "none" — default value
           type: "tryit",
           title: "🖥️ keys / values / get — Menu Analysis",
           task: "Use keys/values/get together on a menu dict!",
-          initialCode: "menu = {'Chicken': 18000, 'Pizza': 20000, 'Burger': 7000, 'Tteokbokki': 4000}\n\n# Menu names only (keys)\nprint('=== Menu List ===')\nfor name in menu.keys():\n    print(f'  {name}')\n\n# Prices only (values)\nprices = list(menu.values())\nprint(f'\\nAverage price: {sum(prices)//len(prices)} won')\n\n# Safe lookup (get)\nprint(f'\\nChicken: {menu.get(\"Chicken\")} won')\nprint(f'Sushi: {menu.get(\"Sushi\", \"not on menu\")}')",
+          initialCode: "menu = {'Chicken': 18000, 'Pizza': 20000, 'Burger': 7000, 'Tteokbokki': 4000}\n\n# Gather the menu names only\nprint('=== Menu List ===')\nfor name in menu.___():\n    print(f'  {name}')\n\n# Gather the prices only\nprices = list(menu.___())\nprint(f'\\nAverage price: {sum(prices)//len(prices)} won')\n\n# Asking for a missing item raises no error\nprint(f'\\nChicken: {menu.get(\"Chicken\")} won')\nprint(f'Sushi: {menu.get(\"Sushi\", \"not on menu\")}')",
           expectedOutput: "=== Menu List ===\n  Chicken\n  Pizza\n  Burger\n  Tteokbokki\n\nAverage price: 12250 won\n\nChicken: 18000 won\nSushi: not on menu",
-          hint: "keys() for keys, values() for values, get() returns no error even if missing!",
-          hint2: "Just run the code as-is!"
+          hint: "One method collects only the tags, another collects only the values — the names say it.",
+          hint2: "menu.keys() / menu.values()"
         },
         {
           id: "pre-mission-method",
@@ -351,7 +351,7 @@ print(person.get("job", "none"))    # "none" — default value
           type: "mission",
           title: "🎯 Grade Analysis — fill keys/values/get",
           task: "Fill in the 3 blanks to complete the grade analysis!",
-          initialCode: "grades = {'Alice': 85, 'Bob': 92, 'Charlie': 78, 'Diana': 96}\n\n# Print all student names\nfor name in grades.___():\n    print(f'Student: {name}')\n\n# Calculate average from all scores\nscores = list(grades.___())\navg = sum(scores) // len(scores)\nprint(f'\\nAverage: {avg} pts')\n\n# Safely look up a missing student\nresult = grades.___(\"Eve\", \"not found\")\nprint(f'Eve: {result}')",
+          initialCode: "grades = {'Alice': 85, 'Bob': 92, 'Charlie': 78, 'Diana': 96}\n\n# Print all student names\nfor name in grades.___():\n    print(f'Student: {name}')\n\n# Calculate average from all scores\nscores = list(grades.___())\navg = sum(scores) // len(scores)\nprint(f'\\nAverage: {avg} pts')\n\n# Safely look up a missing student\nresult = grades.___(\"Eve\", \"not found\")\nprint(f'\\nEve: {result}')",
           expectedOutput: "Student: Alice\nStudent: Bob\nStudent: Charlie\nStudent: Diana\n\nAverage: 87 pts\n\nEve: not found",
           hint: "keys() for names, values() for scores, get() for safe access!",
           hint2: "keys / values / get"

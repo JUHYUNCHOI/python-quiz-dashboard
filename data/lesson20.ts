@@ -57,10 +57,10 @@ print(person["나이"])  # 15
           type: "tryit",
           title: "🖥️ 시뮬 본 후 — 학생 사전 만들기",
           task: "학생 정보 딕셔너리를 직접 만들고, 이름과 점수를 꺼내 출력하세요!",
-          initialCode: "student = {\n    \"이름\": \"민지\",\n    \"점수\": 88\n}\n\nprint(student[\"이름\"])\nprint(student[\"점수\"])",
+          initialCode: "student = {\n    \"이름\": \"민지\",\n    \"점수\": 88\n}\n\n# 대괄호 안에 이름표를 넣어 값을 꺼내요\nprint(student[___])\nprint(student[___])",
           expectedOutput: "민지\n88",
-          hint: "student[\"이름\"] / student[\"점수\"] 로 값을 꺼내요!",
-          hint2: "위 코드 그대로 실행 → '민지' / 88 출력."
+          hint: "값 옆에 붙어 있는 이름표를 대괄호 안에 그대로 적어요.",
+          hint2: "print(student[\"이름\"]) / print(student[\"점수\"])"
         },
         {
           id: "creation-ways",
@@ -106,9 +106,9 @@ d = dict.fromkeys(["A", "B", "C"], 0)
           type: "tryit",
           title: "🖥️ 사전에서 값 찾기 — 이름/점수",
           task: "딕셔너리에서 이름과 점수를 꺼내 출력하세요!",
-          initialCode: "student = {\n    \"이름\": \"영희\",\n    \"점수\": 95,\n    \"반\": \"A\"\n}\n\nprint(student[\"이름\"])\nprint(student[\"점수\"])",
+          initialCode: "student = {\n    \"이름\": \"영희\",\n    \"점수\": 95,\n    \"반\": \"A\"\n}\n\n# 세 이름표 중 두 개를 골라 값을 꺼내요\nprint(student[___])\nprint(student[___])",
           expectedOutput: "영희\n95",
-          hint: "딕셔너리[키]로 값을 찾아요!",
+          hint: "딕셔너리[이름표] 모양이에요. 어떤 이름표가 필요한지 위에서 골라요.",
           hint2: "student[\"이름\"]"
         },
         {
@@ -155,9 +155,9 @@ print(person)
           type: "tryit",
           title: "🖥️ 값 추가하기 — 취미 끼워넣기",
           task: "딕셔너리에 새 이름표 '취미' 를 추가하세요!",
-          initialCode: "person = {\"이름\": \"철수\", \"나이\": 15}\nperson[\"취미\"] = \"게임\"\nprint(person)",
+          initialCode: "person = {\"이름\": \"철수\", \"나이\": 15}\n\n# 없던 이름표 '취미' 에 \"게임\" 을 넣어요 (한 줄)\n___\nprint(person)",
           expectedOutput: "{'이름': '철수', '나이': 15, '취미': '게임'}",
-          hint: "새 키를 넣으면 추가돼요!",
+          hint: "새 이름표에 값을 넣는 모양은 있는 값을 바꿀 때와 똑같아요.",
           hint2: "person[\"취미\"] = \"게임\""
         },
         {
@@ -184,9 +184,9 @@ print(name)   # 철수
           type: "tryit",
           title: "🖥️ 값 지우기 — '나이' 빼기",
           task: "딕셔너리에서 '나이' 이름표를 지우세요!",
-          initialCode: "person = {\"이름\": \"철수\", \"나이\": 15, \"학교\": \"중학교\"}\ndel person[\"나이\"]\nprint(person)",
+          initialCode: "person = {\"이름\": \"철수\", \"나이\": 15, \"학교\": \"중학교\"}\n\n# '나이' 이름표와 그 값을 통째로 빼요\n___ person[\"나이\"]\nprint(person)",
           expectedOutput: "{'이름': '철수', '학교': '중학교'}",
-          hint: "del 딕셔너리[키] 형태로 삭제!",
+          hint: "이름표를 통째로 없애는 키워드 한 단어가 앞에 붙어요.",
           hint2: "del person[\"나이\"]"
         },
         {
@@ -313,9 +313,9 @@ print(person.get("직업", "없음")) # "없음" — 기본값
           type: "tryit",
           title: "🖥️ 딕셔너리 순회 — items 로 과목/점수",
           task: "items() 로 모든 (과목, 점수) 쌍을 출력하세요!",
-          initialCode: "scores = {\"국어\": 90, \"영어\": 85, \"수학\": 95}\n\nfor subject, score in scores.items():\n    print(f\"{subject}: {score}점\")",
+          initialCode: "scores = {\"국어\": 90, \"영어\": 85, \"수학\": 95}\n\n# (과목, 점수) 를 짝으로 묶어 꺼내주는 메서드\nfor subject, score in scores.___():\n    print(f\"{subject}: {score}점\")",
           expectedOutput: "국어: 90점\n영어: 85점\n수학: 95점",
-          hint: "items()로 키-값 쌍을 순회!",
+          hint: "이름표와 값을 한 쌍씩 묶어 돌려주는 메서드예요.",
           hint2: "for key, value in dict.items():"
         },
         {
@@ -323,10 +323,10 @@ print(person.get("직업", "없음")) # "없음" — 기본값
           type: "tryit",
           title: "🖥️ keys / values / get — 메뉴 분석",
           task: "메뉴 딕셔너리에서 keys/values/get 을 함께 써보세요!",
-          initialCode: "menu = {'치킨': 18000, '피자': 20000, '햄버거': 7000, '떡볶이': 4000}\n\n# 메뉴 이름만 (keys)\nprint('=== 메뉴 목록 ===')\nfor name in menu.keys():\n    print(f'  {name}')\n\n# 가격만 (values)\nprices = list(menu.values())\nprint(f'\\n평균 가격: {sum(prices)//len(prices)}원')\n\n# 안전하게 찾기 (get)\nprint(f'\\n치킨: {menu.get(\"치킨\")}원')\nprint(f'초밥: {menu.get(\"초밥\", \"없는 메뉴\")}')",
+          initialCode: "menu = {'치킨': 18000, '피자': 20000, '햄버거': 7000, '떡볶이': 4000}\n\n# 메뉴 이름만 모아요\nprint('=== 메뉴 목록 ===')\nfor name in menu.___():\n    print(f'  {name}')\n\n# 가격만 모아요\nprices = list(menu.___())\nprint(f'\\n평균 가격: {sum(prices)//len(prices)}원')\n\n# 없는 메뉴를 물어봐도 에러 안 나요\nprint(f'\\n치킨: {menu.get(\"치킨\")}원')\nprint(f'초밥: {menu.get(\"초밥\", \"없는 메뉴\")}')",
           expectedOutput: "=== 메뉴 목록 ===\n  치킨\n  피자\n  햄버거\n  떡볶이\n\n평균 가격: 12250원\n\n치킨: 18000원\n초밥: 없는 메뉴",
-          hint: "keys()는 키들, values()는 값들, get()은 없어도 에러 안 나요!",
-          hint2: "코드를 그대로 실행하세요!"
+          hint: "이름표만 모아주는 메서드, 값만 모아주는 메서드 — 이름이 딱 그 뜻이에요.",
+          hint2: "menu.keys() / menu.values()"
         },
         {
           id: "pre-mission-method",
@@ -351,7 +351,7 @@ print(person.get("직업", "없음")) # "없음" — 기본값
           type: "mission",
           title: "🎯 성적 분석 — keys/values/get 메서드 채우기",
           task: "빈칸 3개를 채워서 성적 분석을 완성하세요!",
-          initialCode: "grades = {'철수': 85, '영희': 92, '민수': 78, '지연': 96}\n\n# 모든 학생 이름 출력\nfor name in grades.___():\n    print(f'학생: {name}')\n\n# 모든 점수로 평균 계산\nscores = list(grades.___())\navg = sum(scores) // len(scores)\nprint(f'\\n평균: {avg}점')\n\n# 없는 학생 안전하게 찾기\nresult = grades.___(\"동수\", \"없는 학생\")\nprint(f'동수: {result}')",
+          initialCode: "grades = {'철수': 85, '영희': 92, '민수': 78, '지연': 96}\n\n# 모든 학생 이름 출력\nfor name in grades.___():\n    print(f'학생: {name}')\n\n# 모든 점수로 평균 계산\nscores = list(grades.___())\navg = sum(scores) // len(scores)\nprint(f'\\n평균: {avg}점')\n\n# 없는 학생 안전하게 찾기\nresult = grades.___(\"동수\", \"없는 학생\")\nprint(f'\\n동수: {result}')",
           expectedOutput: "학생: 철수\n학생: 영희\n학생: 민수\n학생: 지연\n\n평균: 87점\n\n동수: 없는 학생",
           hint: "keys()로 이름, values()로 점수, get()으로 안전 접근!",
           hint2: "keys / values / get"

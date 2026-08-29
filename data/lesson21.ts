@@ -117,9 +117,9 @@ empty2 = set()     # ✅ 진짜 빈 집합
           type: "tryit",
           title: "🖥️ 중복 제거 — set 으로 고유 개수 세기",
           task: "중복 있는 리스트를 set 으로 변환하고 고유 개수를 세보세요!",
-          initialCode: "numbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\nunique = set(numbers)\nprint(f\"중복 제거 후 개수: {len(unique)}개\")",
+          initialCode: "numbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\n\n# 중복이 저절로 사라지는 자료구조로 바꿔요\nunique = ___(numbers)\nprint(f\"중복 제거 후 개수: {len(unique)}개\")",
           expectedOutput: "중복 제거 후 개수: 4개",
-          hint: "set()으로 리스트를 집합으로!",
+          hint: "같은 값을 두 번 담지 않는 자료구조로 바꾸면, 남은 개수가 곧 고유 개수예요.",
           hint2: "len()으로 개수 확인"
         },
         {
@@ -180,9 +180,9 @@ print(fruits)  # {'사과', '딸기'}
           type: "tryit",
           title: "🖥️ 넣기 — '오렌지' add",
           task: "집합에 '오렌지' 를 추가하고 개수를 확인하세요!",
-          initialCode: "fruits = {\"사과\", \"바나나\"}\nfruits.add(\"오렌지\")\nprint(f\"과일 개수: {len(fruits)}개\")",
+          initialCode: "fruits = {\"사과\", \"바나나\"}\n\n# 집합에 '오렌지' 를 하나 넣어요\nfruits.___(\"오렌지\")\nprint(f\"과일 개수: {len(fruits)}개\")",
           expectedOutput: "과일 개수: 3개",
-          hint: "add()로 추가!",
+          hint: "집합에 원소 하나를 넣는 짧은 메서드가 있어요.",
           hint2: "fruits.add(\"오렌지\")"
         },
         {
@@ -207,9 +207,9 @@ print("포도" in fruits)   # False
           type: "tryit",
           title: "🖥️ 포함 확인 — '바나나' in fruits",
           task: "'바나나' 가 집합에 있는지 in 으로 확인하세요!",
-          initialCode: "fruits = {\"사과\", \"바나나\", \"딸기\"}\nprint(\"바나나\" in fruits)",
+          initialCode: "fruits = {\"사과\", \"바나나\", \"딸기\"}\n\n# 이 안에 있는지 물어봐요\nprint(\"바나나\" ___ fruits)",
           expectedOutput: "True",
-          hint: "in 연산자 사용!",
+          hint: "안에 들어 있는지 묻는 연산자 한 개면 끝나요.",
           hint2: "\"바나나\" in fruits"
         },
         {
@@ -330,9 +330,9 @@ print(A - B)  # {1, 2}
           type: "tryit",
           title: "🖥️ 교집합 (&) — 공통 요소 개수",
           task: "두 집합의 공통 요소 개수를 & 로 구하세요!",
-          initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\ncommon = A & B\nprint(f\"공통 요소 개수: {len(common)}개\")",
+          initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\n\n# 둘 다 가지고 있는 것만 남겨요\ncommon = A ___ B\nprint(f\"공통 요소 개수: {len(common)}개\")",
           expectedOutput: "공통 요소 개수: 2개",
-          hint: "& 연산자로 교집합!",
+          hint: "두 모임이 겹치는 부분만 남기는 기호예요.",
           hint2: "len()으로 개수"
         },
         {
@@ -340,9 +340,9 @@ print(A - B)  # {1, 2}
           type: "tryit",
           title: "🖥️ 차집합 (-) — A 에만 있는 요소 개수",
           task: "A 에만 있고 B 엔 없는 요소 개수를 - 로 구하세요!",
-          initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\nonly_A = A - B\nprint(f\"A에만 있는 요소 개수: {len(only_A)}개\")",
+          initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\n\n# A 에서 B 에도 있는 것을 덜어내요\nonly_A = A ___ B\nprint(f\"A에만 있는 요소 개수: {len(only_A)}개\")",
           expectedOutput: "A에만 있는 요소 개수: 3개",
-          hint: "- 연산자로 차집합!",
+          hint: "A 에서 B 쪽을 덜어내는 기호 하나예요.",
           hint2: "A - B"
         },
         {
@@ -350,8 +350,8 @@ print(A - B)  # {1, 2}
           type: "mission",
           title: "🎯 두 가게 과일 비교 — &, -, | 채우기",
           task: "빈칸 3 개를 채워 두 가게 과일 비교를 완성하세요!",
-          initialCode: "fruits_a = {'사과', '바나나', '포도', '딸기'}\nfruits_b = {'바나나', '딸기', '망고', '키위'}\n\n# 두 가게 모두 파는 과일 (교집합)\nboth = fruits_a ___ fruits_b\nprint(f'둘 다: {both}')\n\n# A가게만 파는 과일 (차집합)\nonly_a = fruits_a ___ fruits_b\nprint(f'A만: {only_a}')\n\n# 전체 과일 (합집합)\nall_fruits = fruits_a ___ fruits_b\nprint(f'전체: {len(all_fruits)}종류')",
-          expectedOutput: "둘 다: {'바나나', '딸기'}\nA만: {'사과', '포도'}\n전체: 6종류",
+          initialCode: "fruits_a = {'사과', '바나나', '포도', '딸기'}\nfruits_b = {'바나나', '딸기', '망고', '키위'}\n\n# 두 가게 모두 파는 과일 (교집합)\nboth = fruits_a ___ fruits_b\nprint(f'둘 다: {sorted(both)}')\n\n# A가게만 파는 과일 (차집합)\nonly_a = fruits_a ___ fruits_b\nprint(f'A만: {sorted(only_a)}')\n\n# 전체 과일 (합집합)\nall_fruits = fruits_a ___ fruits_b\nprint(f'전체: {len(all_fruits)}종류')",
+          expectedOutput: "둘 다: ['딸기', '바나나']\nA만: ['사과', '포도']\n전체: 6종류",
           hint: "교집합 &, 차집합 -, 합집합 |",
           hint2: "& / - / |"
         },
