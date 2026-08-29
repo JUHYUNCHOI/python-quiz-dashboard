@@ -1,6 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getBuyMilkSections, getBuyMilkWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
+import { NormalizeSim, GreedySim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeBuyMilkCh1 (5 steps)
@@ -28,7 +29,7 @@ export function makeBuyMilkCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
-                "For each query x, output the minimum cost to buy at least x buckets of milk.",
+                "For each query x,\noutput the minimum cost to buy at least x buckets of milk.",
                 "각 쿼리 x 에 대해 최소 x 통의 우유를 사는 최소 비용을 출력.")}
             </div>
           </div>
@@ -103,8 +104,8 @@ export function makeBuyMilkCh1(E) {
             </pre>
           </div>
           <div style={{ background: "#fff7ed", border: "1px dashed #fdba74", borderRadius: 10, padding: 12, fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
-            {t(E, "Notice for x=6: three of the 2-bucket deal cost 3 × 15 = 45. Six of the 1-bucket deal would cost 60. The bigger deal is cheaper per bucket here.",
-                 "x=6 에서 주목: 2 통짜리 3 번 = 3 × 15 = 45. 1 통짜리 6 번 = 60. 큰 거래가 통당 더 싸요.")}
+            {t(E, "Notice for x=6: three of the 2-bucket deal cost 3 × 15 = 45.\nSix of the 1-bucket deal would cost 60.\nThe bigger deal is cheaper per bucket.",
+                 "x=6 을 봐요. 2통짜리 3번이면 3 × 15 = 45 예요.\n1통짜리 6번은 60 이에요.\n큰 거래가 통당 더 싸요.")}
           </div>
 
           {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
@@ -175,6 +176,25 @@ export function makeBuyMilkCh1(E) {
       explain: t(E,
         "Exactly. The minimum cost answer might over-shoot x. So at each deal, we also try 'buy one extra of this size and stop'.",
         "맞아. 최소 비용 답이 x 를 초과할 수도 있어. 그래서 각 거래에서 '한 번 더 사고 끝내기' 도 같이 시도해."),
+    },
+
+    // [전] 정규화 — 핵심 ①. 전엔 코드 말풍선 안에만 있어서 학생이 코드에서 처음 만났음
+    //   (선생님 2026-08-29 검토). c[i] = min(a[i], 2·c[i-1]) 를 페이지에서 먼저 발견하게.
+    {
+      type: "reveal",
+      narr: t(E,
+        "Before any code: a big deal can be a bad deal. Let's find the cheapest price for each block first.",
+        "코드 전에 — 큰 딜이 오히려 손해일 수 있어요. 블록마다 가장 싼 값을 먼저 구해요."),
+      content: (<NormalizeSim E={E} />),
+    },
+
+    // [전] 그리디 — 핵심 ②. 큰 블록부터 올림/내림 두 갈래만 비교하면 끝
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now bigger blocks are never worse. So walk from the biggest block down, comparing just two choices.",
+        "이제 큰 블록이 손해가 아니에요. 그러니 큰 블록부터 훑으며 두 갈래만 비교해요."),
+      content: (<GreedySim E={E} />),
     },
   ];
 }

@@ -105,18 +105,18 @@ export function getBuyMilkWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _BM_VARS, beats: [
       { hi: [9, 12],  bubble: t(E, "Read N, Q and the deal prices a (deal i buys 2^i buckets).", "N, Q 와 딜 가격 배열 a 읽기 (딜 i 는 2^i 버킷).") },
-      { hi: [14, 19], bubble: t(E, "Normalize: c[i] = cheapest cost for a 2^i-block (buy deal i, or two smaller blocks). Then a bigger block is always cheaper per bucket → use big blocks first, no recursion.", "정규화: c[i] = 2^i 버킷 블록의 최저가 (딜 사거나 작은 블록 2개). 이러면 큰 블록이 버킷당 항상 싸요 → 큰 블록부터, 재귀 불필요.") },
+      { hi: [14, 19], bubble: t(E, "Normalize the deals.\nc[i] = cheapest way to get a 2^i block:\nbuy deal i, or buy two smaller blocks.\nThen a bigger block is never worse per bucket,\nso we go big-to-small with no recursion.", "딜을 정규화해요.\nc[i] 는 2^i 통 블록을 얻는 가장 싼 값이에요.\n딜 i 를 사거나, 작은 블록 두 개를 사요.\n그러면 큰 블록이 통당 손해가 아니에요.\n그래서 큰 것부터 훑으면 되고 재귀가 필요 없어요.") },
       { hi: [21, 23], bubble: t(E, "Each query: need x buckets. Start ans, cost, rem.", "쿼리마다: x 버킷 필요. ans, cost, rem 초기화.") },
-      { hi: [24, 32], bubble: t(E, "Big block → small: (A) round UP with this block and stop, or (B) take the floor and cover the rest with smaller blocks.", "큰 블록부터: (A) 이 블록으로 올림해서 끝, 또는 (B) 내림하고 나머지는 작은 블록으로.") },
+      { hi: [24, 32], bubble: t(E, "Go from the big block down to the small one.\n(A) Round up with this block and stop, or\n(B) take the floor and cover the rest with smaller blocks.", "큰 블록부터: (A) 이 블록으로 올림해서 끝, 또는 (B) 내림하고 나머지는 작은 블록으로.") },
       { hi: [34, 35], bubble: t(E, "Also the exact-cover case; print the cheapest answer.", "딱 맞춘 경우도 후보; 최저 답 출력.") },
     ] };
   }
   return { code: FULL_PY, vars: _BM_VARS, beats: [
     { hi: [0, 1],   bubble: t(E, "Fast input.", "빠른 입력.") },
     { hi: [3, 4],   bubble: t(E, "Read N, Q and the deal prices a (deal i buys 2^i buckets).", "N, Q 와 딜 가격 배열 a 읽기 (딜 i 는 2^i 버킷).") },
-    { hi: [6, 13],  bubble: t(E, "Normalize: c[i] = cheapest cost for a 2^i-block (buy deal i, or two smaller blocks). Then a bigger block is always cheaper per bucket → use big blocks first, no recursion.", "정규화: c[i] = 2^i 버킷 블록의 최저가 (딜 사거나 작은 블록 2개). 이러면 큰 블록이 버킷당 항상 싸요 → 큰 블록부터, 재귀 불필요.") },
+    { hi: [6, 13],  bubble: t(E, "Normalize the deals.\nc[i] = cheapest way to get a 2^i block:\nbuy deal i, or buy two smaller blocks.\nThen a bigger block is never worse per bucket,\nso we go big-to-small with no recursion.", "딜을 정규화해요.\nc[i] 는 2^i 통 블록을 얻는 가장 싼 값이에요.\n딜 i 를 사거나, 작은 블록 두 개를 사요.\n그러면 큰 블록이 통당 손해가 아니에요.\n그래서 큰 것부터 훑으면 되고 재귀가 필요 없어요.") },
     { hi: [15, 20], bubble: t(E, "Each query: need x buckets. Start ans, cost, rem.", "쿼리마다: x 버킷 필요. ans, cost, rem 초기화.") },
-    { hi: [22, 30], bubble: t(E, "Big block → small: (A) round UP with this block and stop, or (B) take the floor and cover the rest with smaller blocks.", "큰 블록부터: (A) 이 블록으로 올림해서 끝, 또는 (B) 내림하고 나머지는 작은 블록으로.") },
+    { hi: [22, 30], bubble: t(E, "Go from the big block down to the small one.\n(A) Round up with this block and stop, or\n(B) take the floor and cover the rest with smaller blocks.", "큰 블록부터: (A) 이 블록으로 올림해서 끝, 또는 (B) 내림하고 나머지는 작은 블록으로.") },
     { hi: [31, 32], bubble: t(E, "Also the exact-cover case; save the cheapest answer.", "딱 맞춘 경우도 후보; 최저 답 저장.") },
     { hi: [34, 34], bubble: t(E, "Print all answers at once.", "답을 한 번에 출력.") },
   ] };
