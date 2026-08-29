@@ -253,7 +253,7 @@ s.discard(99)   # ✅ 조용히 무시
           type: "tryit",
           title: "🖥️ update — 신입생 한꺼번에 합치기",
           task: "기존 학생 모임에 신입생 리스트를 update 로 한꺼번에 합치세요!",
-          initialCode: "current = {\"철수\", \"영희\", \"민수\"}\nnew_students = [\"수지\", \"준호\", \"영희\"]   # 영희는 이미 있음\n\n# update 로 한꺼번에\ncurrent.___(new_students)\nprint(f\"전체 인원: {len(current)}명\")",
+          initialCode: "current = {\"철수\", \"영희\", \"민수\"}\nnew_students = [\"수지\", \"준호\", \"영희\"]   # 영희는 이미 있음\n\n# 새 학생들을 한꺼번에 합쳐요\ncurrent.___(new_students)\nprint(f\"전체 인원: {len(current)}명\")",
           expectedOutput: "전체 인원: 5명",
           hint: "current.update(new_students) — 영희는 자동 중복 제거.",
           hint2: "current.update(new_students)"
@@ -288,9 +288,9 @@ print(grades)  # {'A', 'B', 'C'} — 등장한 등급들
           type: "tryit",
           title: "🖥️ set comprehension — 3 글자 이상 단어 집합",
           task: "단어 리스트에서 **3 글자 이상** 만 set 컴프리헨션으로 모으세요!",
-          initialCode: "words = [\"사과\", \"바나나\", \"키위\", \"파인애플\", \"감\", \"오렌지\"]\n\n# set comprehension 으로 길이 3 이상\nlong_words = ___\n\nprint(sorted(long_words))  # 정렬해서 출력 (재현 가능)",
+          initialCode: "words = [\"사과\", \"바나나\", \"키위\", \"파인애플\", \"감\", \"오렌지\"]\n\n# 글자 수가 3 이상인 단어만 골라요\n# 모양: { 담을 것  for w in words  if 조건 }\nlong_words = {___ for w in words if ___}\n\nprint(sorted(long_words))  # 정렬해서 출력 (재현 가능)",
           expectedOutput: "['바나나', '오렌지', '파인애플']",
-          hint: "{w for w in words if len(w) >= 3}",
+          hint: "첫 빈칸엔 담고 싶은 것 (단어 그대로), 둘째 빈칸엔 글자 수 조건.",
           hint2: "long_words = {w for w in words if len(w) >= 3}"
         }
       ]
@@ -487,7 +487,7 @@ else:
           type: "mission",
           title: "🏆 미션 3 — 입력 단어 고유/중복 개수",
           task: "공백으로 구분된 단어들을 입력받아 **고유 단어 수** 와 **중복 단어 수** 를 출력하세요!",
-          initialCode: "words = input().split()\n\n# 1) 고유 단어 수 = set 의 길이\n# 2) 중복 단어 수 = 전체 - 고유\n\nunique = ___\nduplicates = ___\n\nprint(f\"전체: {len(words)}개\")\nprint(f\"고유: {unique}개\")\nprint(f\"중복: {duplicates}개\")",
+          initialCode: "words = input().split()\n\n# 1) 겹치는 걸 없앤 뒤 몇 개인지\n# 2) 중복 단어 수 = 전체 - 고유\n\nunique = ___\nduplicates = ___\n\nprint(f\"전체: {len(words)}개\")\nprint(f\"고유: {unique}개\")\nprint(f\"중복: {duplicates}개\")",
           expectedOutput: "전체: 8개\n고유: 5개\n중복: 3개",
           stdin: "사과 배 사과 감 배 키위 포도 감",
           hint: "len(set(words)) 가 고유 수. 중복 = 전체 - 고유.",

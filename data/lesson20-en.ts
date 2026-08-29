@@ -268,7 +268,7 @@ person.update(age=15, school="middle")
           type: "tryit",
           title: "🖥️ update — Merge Two Dicts",
           task: "Merge extra info into a student dict using update — combine into one!",
-          initialCode: "student = {\"name\": \"Bob\", \"age\": 14}\nextra = {\"school\": \"middle\", \"grade\": 2, \"age\": 15}   # age overrides\n\n# Merge with update\nstudent.___(extra)\nprint(student)",
+          initialCode: "student = {\"name\": \"Bob\", \"age\": 14}\nextra = {\"school\": \"middle\", \"grade\": 2, \"age\": 15}   # age overrides\n\n# Merge everything in extra into student at once\nstudent.___(extra)\nprint(student)",
           expectedOutput: "{'name': 'Bob', 'age': 15, 'school': 'middle', 'grade': 2}",
           hint: "student.update(extra) — same key overwrites.",
           hint2: "student.update(extra)"

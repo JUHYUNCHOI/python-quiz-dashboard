@@ -37,9 +37,9 @@ for fruit in fruits:        # for (각각) 변수 in (리스트) :
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "리스트의 모든 요소를 출력하세요!",
-          initialCode: "numbers = [10, 20, 30, 40, 50]\n\nfor num in numbers:\n    print(num)",
+          initialCode: "numbers = [10, 20, 30, 40, 50]\n\n# numbers 의 값을 하나씩 꺼내 num 에 담아요\nfor ___ in ___:\n    print(num)",
           expectedOutput: "10\n20\n30\n40\n50",
-          hint: "numbers의 각 요소가 num에 들어가요!",
+          hint: "첫 빈칸은 값을 담을 이름, 둘째 빈칸은 꺼내올 리스트.",
           hint2: "for num in numbers:"
         },
         {
@@ -80,10 +80,10 @@ total = sum(prices)  # 6000
           type: "tryit",
           title: "🖥️ 합계 구하기!",
           task: "점수의 합계를 구하세요!",
-          initialCode: "scores = [85, 90, 78, 92, 88]\ntotal = 0\n\nfor score in scores:\n    total = total + score\n\nprint(\"합계:\", total)",
+          initialCode: "scores = [85, 90, 78, 92, 88]\ntotal = 0\n\n# 지금까지의 합에 이번 점수를 더해서 다시 total 에 넣어요\nfor score in scores:\n    total = ___\n\nprint(\"합계:\", total)",
           expectedOutput: "합계: 433",
-          hint: "total = total + score",
-          hint2: "또는 total += score"
+          hint: "지금까지의 합 + 이번 점수. 그 결과를 다시 total 에 넣어요.",
+          hint2: "total = total + score  (짧게 쓰면 total += score)"
         }
       ]
     },
@@ -127,10 +127,10 @@ for i, fruit in enumerate(fruits):    # i = 번호, fruit = 값 (둘 다 자동!
           type: "tryit",
           title: "🖥️ 순위 출력!",
           task: "순위와 이름을 함께 출력하세요!",
-          initialCode: "winners = [\"철수\", \"영희\", \"민수\"]\n\nfor i, name in enumerate(winners):\n    print(f\"{i+1}등: {name}\")",
+          initialCode: "winners = [\"철수\", \"영희\", \"민수\"]\n\n# 번호와 이름을 같이 꺼내요. 번호는 0 부터 나와요\nfor i, name in ___(winners):\n    print(f\"{___}등: {name}\")",
           expectedOutput: "1등: 철수\n2등: 영희\n3등: 민수",
-          hint: "i+1로 1부터 시작하게!",
-          hint2: "enumerate()는 0부터 시작해요"
+          hint: "번호와 값을 같이 꺼내주는 함수 / 번호가 0 부터라 1등으로 보이게 하려면?",
+          hint2: "enumerate(winners) 그리고 {i+1}"
         },
         {
           id: "range-explain",
@@ -172,9 +172,9 @@ print(numbers)  # [2, 4, 6]
           type: "tryit",
           title: "🖥️ 값 수정하기!",
           task: "모든 점수에 10점씩 더하세요!",
-          initialCode: "scores = [70, 80, 90]\n\nfor i in range(len(scores)):\n    scores[i] = scores[i] + 10\n\nprint(scores)",
+          initialCode: "scores = [70, 80, 90]\n\n# 값을 바꾸려면 자리 번호(i)로 접근해야 해요\nfor i in range(len(scores)):\n    scores[i] = ___\n\nprint(scores)",
           expectedOutput: "[80, 90, 100]",
-          hint: "인덱스로 접근해서 10을 더해요!",
+          hint: "i 번째 자리의 지금 점수에 10 을 더한 값을 다시 그 자리에 넣어요.",
           hint2: "scores[i] = scores[i] + 10"
         },
         {
@@ -233,9 +233,9 @@ for num in numbers:        # ① 하나씩 꺼내서
           type: "tryit",
           title: "🖥️ 80점 이상만!",
           task: "80점 이상인 점수만 출력하세요!",
-          initialCode: "scores = [65, 80, 72, 95, 88, 55, 90]\n\nfor score in scores:\n    if score >= 80:\n        print(score)",
+          initialCode: "scores = [65, 80, 72, 95, 88, 55, 90]\n\n# 하나씩 꺼내보고, 조건에 맞을 때만 출력해요\nfor score in scores:\n    if ___:\n        print(score)",
           expectedOutput: "80\n95\n88\n90",
-          hint: "for 안에 if를 넣어요!",
+          hint: "80 점도 포함이에요 — '크다' 가 아니라 '크거나 같다'.",
           hint2: "if score >= 80:"
         },
         {

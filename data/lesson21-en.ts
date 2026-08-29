@@ -253,7 +253,7 @@ s.discard(99)   # ✅ silently skips
           type: "tryit",
           title: "🖥️ update — Merge a list of new students",
           task: "Merge a list of new students into the existing set with update!",
-          initialCode: "current = {\"Alice\", \"Bob\", \"Charlie\"}\nnew_students = [\"Dora\", \"Eve\", \"Bob\"]   # Bob already there\n\n# Merge with update\ncurrent.___(new_students)\nprint(f\"total: {len(current)}\")",
+          initialCode: "current = {\"Alice\", \"Bob\", \"Charlie\"}\nnew_students = [\"Dora\", \"Eve\", \"Bob\"]   # Bob already there\n\n# Merge the new students in at once\ncurrent.___(new_students)\nprint(f\"total: {len(current)}\")",
           expectedOutput: "total: 5",
           hint: "current.update(new_students) — Bob auto-deduped.",
           hint2: "current.update(new_students)"
@@ -288,9 +288,9 @@ print(grades)  # {'A', 'B', 'C'} — grades that appeared
           type: "tryit",
           title: "🖥️ set comprehension — words of length 3+",
           task: "From a word list, build a set of **3+ character** words with a set comp!",
-          initialCode: "words = [\"cat\", \"banana\", \"on\", \"pineapple\", \"a\", \"orange\"]\n\n# Set comp filtering by len >= 3\nlong_words = ___\n\nprint(sorted(long_words))  # sorted for reproducibility",
+          initialCode: "words = [\"ox\", \"banana\", \"on\", \"pineapple\", \"a\", \"orange\"]\n\n# Keep only the words with 3 or more letters\n# shape: { what to store  for w in words  if condition }\nlong_words = {___ for w in words if ___}\n\nprint(sorted(long_words))  # sorted for reproducibility",
           expectedOutput: "['banana', 'orange', 'pineapple']",
-          hint: "{w for w in words if len(w) >= 3}",
+          hint: "First blank: what to store (the word itself). Second blank: the length test.",
           hint2: "long_words = {w for w in words if len(w) >= 3}"
         }
       ]
@@ -487,7 +487,7 @@ else:
           type: "mission",
           title: "🏆 Mission 3 — Duplicate count from input",
           task: "Read space-separated words and print the **unique count** and **duplicate count**.",
-          initialCode: "words = input().split()\n\n# 1) unique count = len(set(words))\n# 2) duplicates = total - unique\n\nunique = ___\nduplicates = ___\n\nprint(f\"total: {len(words)}\")\nprint(f\"unique: {unique}\")\nprint(f\"duplicates: {duplicates}\")",
+          initialCode: "words = input().split()\n\n# 1) how many are left once duplicates are gone\n# 2) duplicates = total - unique\n\nunique = ___\nduplicates = ___\n\nprint(f\"total: {len(words)}\")\nprint(f\"unique: {unique}\")\nprint(f\"duplicates: {duplicates}\")",
           expectedOutput: "total: 8\nunique: 5\nduplicates: 3",
           stdin: "apple pear apple kiwi pear banana apple kiwi",
           hint: "len(set(words)) is unique count. duplicates = total - unique.",

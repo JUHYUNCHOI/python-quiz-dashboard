@@ -380,9 +380,13 @@ export function BlankCodeRunner({
         const value = filledValues[currentBlankId] || ''
         // 박스 너비: 학생이 입력한 만큼만 자람 (빈칸일 땐 작게).
         // 정답 길이로 잡으면 (1) 답 길이 유출 (2) hint2 가 전체 힌트일 때 박스가 과하게 넓어짐 → 둘 다 방지.
-        // 입력 길이에 따라 넉넉히 늘어나게 — +2 는 좌우 패딩(px-1)과 커서 자리.
-        // (선생님 수업 중 'class_a+class_b' 가 잘려 보이던 버그 수정)
         const boxWidth = Math.max(value.length + 2, 5)
+        // 실제 픽셀 너비. box-sizing:border-box 라 테두리(border-2 = 좌우 4px)와
+        // 패딩(px-2 = 좌우 16px)이 width 안에서 글자 자리를 깎아먹는다.
+        // 이걸 안 더해주면 입력한 글자가 양옆으로 잘려 보임 (수업 중 발견, 2026-08-29).
+        const BLANK_CHROME_PX = 16 /* px-2 */ + 4 /* border-2 */
+        const blankTextPx = Math.max(value.length, 4) * charW + 10 /* 커서 + 반올림 여유 */
+        const blankPx = blankTextPx + BLANK_CHROME_PX
 
         if (choices.length > 0) {
           // 보기 선택 모드: 클릭 가능한 디스플레이 박스
@@ -461,7 +465,7 @@ export function BlankCodeRunner({
               }}
               placeholder="___"
               className={cn(
-                "code-editor-textarea inline-block font-mono text-center rounded-md border-2 mx-0.5 px-1 py-0 transition-all",
+                "code-editor-textarea inline-block font-mono text-center rounded-md border-2 mx-1 px-2 py-0 transition-all",
                 "text-[13px] md:text-[15px] leading-[1.8] bg-gray-800 outline-none",
                 focusedBlank === currentBlankId
                   ? "border-amber-400 text-amber-300 ring-1 ring-amber-400/50"
@@ -469,7 +473,7 @@ export function BlankCodeRunner({
                     ? "border-purple-400 text-purple-300"
                     : "border-gray-500 text-gray-400"
               )}
-              style={{ width: `${boxWidth * charW}px`, minWidth: `${boxWidth * charW}px` }}
+              style={{ width: `${blankPx}px`, minWidth: `${blankPx}px` }}
               spellCheck={false}
               autoComplete="off"
             />

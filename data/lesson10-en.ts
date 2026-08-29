@@ -316,7 +316,7 @@ int("hello")   # ❌ error — "I can't turn letters into a number!"
           type: "tryit",
           title: "🏆 Mission 1 — Greeting card (.strip() first use)",
           task: "Read a name, clean it with `.strip()`, then greet. (input: `  Walnut  `)",
-          initialCode: "name = input(\"Name: \").___()    # blank = strip\nprint(f\"Hello, {name}!\")",
+          initialCode: "name = input(\"Name: \").___()    # the method that trims whitespace\nprint(f\"Hello, {name}!\")",
           expectedOutput: "Hello, Walnut!",
           stdin: "  Walnut  ",
           hint: "Add .strip() after input() to remove surrounding spaces.",

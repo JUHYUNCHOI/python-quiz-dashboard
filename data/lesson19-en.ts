@@ -108,7 +108,7 @@ print((1))       # 1 — not a tuple!
           type: "tryit",
           title: "🖥️ Different Ways — per-char / single / no parens",
           task: "Make a tuple *3 different ways*! (per-character / single-element / no parens)",
-          initialCode: "# 1) \"hello\" → per-character tuple\nt1 = ___(\"hello\")\nprint(t1)\n\n# 2) Single-element tuple (don't forget the comma!)\nsingle = (42,)\nprint(single, type(single).__name__)\n\n# 3) Just commas, no parens\nt2 = 10, 20, 30\nprint(t2)",
+          initialCode: "# 1) \"hello\" → a bundle with one element per character\nt1 = ___(\"hello\")\nprint(t1)\n\n# 2) Single-element tuple (don't forget the comma!)\nsingle = (42,)\nprint(single, type(single).__name__)\n\n# 3) Just commas, no parens\nt2 = 10, 20, 30\nprint(t2)",
           expectedOutput: "('h', 'e', 'l', 'l', 'o')\n(42,) tuple\n(10, 20, 30)",
           hint: "There's a conversion function that turns a string into a *per-character* bundle.",
           hint2: "t1 = tuple(\"hello\") — tuple() splits each character into an element."

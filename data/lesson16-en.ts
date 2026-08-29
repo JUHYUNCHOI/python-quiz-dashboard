@@ -387,7 +387,7 @@ print(original)     # [3, 1, 4] — unchanged!
           type: "tryit",
           title: "🖥️ Try It — sort and sorted",
           task: "Print original and descending-sorted scores in two lines.",
-          initialCode: "scores = [85, 92, 78, 95, 67, 88]\n\n# 1) sorted() makes a new sorted list\ntop_scores = ___(scores, reverse=True)\n\nprint(f\"original: {scores}\")\nprint(f\"descending: {top_scores}\")",
+          initialCode: "scores = [85, 92, 78, 95, 67, 88]\n\n# 1) leave the original alone, build a new list in order\ntop_scores = ___(scores, reverse=True)\n\nprint(f\"original: {scores}\")\nprint(f\"descending: {top_scores}\")",
           expectedOutput: "original: [85, 92, 78, 95, 67, 88]\ndescending: [95, 92, 88, 85, 78, 67]",
           hint: "sorted(scores, reverse=True) — original untouched.",
           hint2: "top_scores = sorted(scores, reverse=True)"
@@ -453,10 +453,10 @@ even = [n for n in nums if n % 2 == 0]
           type: "tryit",
           title: "🖥️ Try It — Comprehension",
           task: "From 1-10, take only evens and square them!",
-          initialCode: "# Evens in 1-10, squared\n# (10 included, range(1, 11))\nresult = ___\n\nprint(result)",
+          initialCode: "nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n\n# Keep only the evens in nums, and store their squares\n# shape: [ what to store  for n in nums  if condition ]\nresult = [___ for n in nums if ___]\n\nprint(result)",
           expectedOutput: "[4, 16, 36, 64, 100]",
-          hint: "[n * n for n in range(1, 11) if n % 2 == 0]",
-          hint2: "result = [n * n for n in range(1, 11) if n % 2 == 0]"
+          hint: "First blank: what to store (n squared). Second blank: the test for even.",
+          hint2: "result = [n * n for n in nums if n % 2 == 0]"
         }
       ]
     },
@@ -480,7 +480,7 @@ even = [n for n in nums if n % 2 == 0]
           type: "mission",
           title: "🏆 Mission 2 — Score statistics in one shot",
           task: "From a score list, print **max/min/average/top 3 sorted descending** all at once.",
-          initialCode: "scores = [85, 92, 78, 95, 67, 88, 73, 90, 81, 76]\n\nprint(f\"count: {len(scores)}\")\nprint(f\"max: {___(scores)}\")\nprint(f\"min: {___(scores)}\")\nprint(f\"avg: {___(scores) / len(scores):.1f}\")\n\n# Top 3 (sort desc, take first 3)\ntop3 = sorted(scores, reverse=True)[:___]\nprint(f\"top 3: {top3}\")",
+          initialCode: "scores = [85, 92, 78, 95, 67, 88, 73, 90, 81, 76]\n\nprint(f\"count: {len(scores)}\")\nprint(f\"max: {___(scores)}\")\nprint(f\"min: {___(scores)}\")\nprint(f\"avg: {___(scores) / len(scores):.1f}\")\n\n# Top 3 — sort descending, then take the first few\ntop3 = sorted(scores, reverse=True)[:___]\nprint(f\"top 3: {top3}\")",
           expectedOutput: "count: 10\nmax: 95\nmin: 67\navg: 82.5\ntop 3: [95, 92, 90]",
           hint: "max, min, sum builtins. [:3] for first 3.",
           hint2: "max(scores), min(scores), sum(scores), [:3]"

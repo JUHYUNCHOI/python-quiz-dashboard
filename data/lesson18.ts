@@ -381,7 +381,7 @@ print("\\n".join(items))
           type: "mission",
           title: "🏆 미션 2 — CSV 한 줄 파싱 + 합계",
           task: "쉼표로 구분된 점수 한 줄을 받아 정수로 변환 후 **합계와 평균** 둘 다 출력하세요!",
-          initialCode: "line = \"75,90,82,88,95\"\n\n# 1) line.split(\",\") 로 ['75', '90', ...] 만들기\n# 2) 각 원소를 int 로 변환 (map 또는 컴프리헨션)\n# 3) 결과를 list 로 감싸기\nnums = ___\n\ntotal = sum(nums)\navg = total / len(nums)\nprint(f\"합계: {total}\")\nprint(f\"평균: {avg}\")",
+          initialCode: "line = \"75,90,82,88,95\"\n\n# 1) 쉼표를 기준으로 쪼개서 ['75', '90', ...] 만들기\n# 2) 각 원소를 int 로 변환 (map 또는 컴프리헨션)\n# 3) 결과를 list 로 감싸기\nnums = ___\n\ntotal = sum(nums)\navg = total / len(nums)\nprint(f\"합계: {total}\")\nprint(f\"평균: {avg}\")",
           expectedOutput: "합계: 430\n평균: 86.0",
           hint: "쪼개기 → 각 조각을 숫자로 → 리스트로 감싸기.",
           hint2: "nums = list(map(int, line.split(\",\")))"
@@ -391,7 +391,7 @@ print("\\n".join(items))
           type: "mission",
           title: "🏆 미션 3 — 입력 받은 단어들로 인사 만들기",
           task: "한 줄에 공백 구분으로 이름 여러 개 입력받아 '안녕 A, B, C!' 형태로 출력하세요. (마지막엔 ! 표)",
-          initialCode: "# 1) input() 으로 한 줄 받기\n# 2) .split() 으로 공백 기준 리스트 만들기\nnames = input().___()\n\n# 3) ', ' 로 합쳐서 f-string 안에 넣기\ngreeting = f\"안녕 {___}!\"\nprint(greeting)",
+          initialCode: "# 1) input() 으로 한 줄 받기\n# 2) 공백을 기준으로 쪼개 리스트 만들기\nnames = input().___()\n\n# 3) ', ' 로 합쳐서 f-string 안에 넣기\ngreeting = f\"안녕 {___}!\"\nprint(greeting)",
           expectedOutput: "안녕 철수, 영희, 민수!",
           stdin: "철수 영희 민수",
           hint: "입력을 쪼개 리스트로, 그 다음 구분자로 다시 합치기.",

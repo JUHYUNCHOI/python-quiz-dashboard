@@ -387,7 +387,7 @@ print(original)     # [3, 1, 4] — 그대로!
           type: "tryit",
           title: "🖥️ 직접 해보기 — sort 와 sorted",
           task: "점수 리스트를 정렬해 두 줄로 출력하세요. 첫 줄은 원본 그대로, 둘째 줄은 정렬된 결과.",
-          initialCode: "scores = [85, 92, 78, 95, 67, 88]\n\n# 1) sorted() 로 새 정렬 리스트\ntop_scores = ___(scores, reverse=True)\n\nprint(f\"원본: {scores}\")\nprint(f\"내림차순: {top_scores}\")",
+          initialCode: "scores = [85, 92, 78, 95, 67, 88]\n\n# 1) 원본은 그대로 두고, 정렬된 새 리스트를 만들어요\ntop_scores = ___(scores, reverse=True)\n\nprint(f\"원본: {scores}\")\nprint(f\"내림차순: {top_scores}\")",
           expectedOutput: "원본: [85, 92, 78, 95, 67, 88]\n내림차순: [95, 92, 88, 85, 78, 67]",
           hint: "sorted(scores, reverse=True) — 원본 안 건드림.",
           hint2: "top_scores = sorted(scores, reverse=True)"
@@ -453,10 +453,10 @@ even = [n for n in nums if n % 2 == 0]
           type: "tryit",
           title: "🖥️ 직접 해보기 — 컴프리헨션",
           task: "1~10 중 짝수만 골라 제곱해서 출력하세요!",
-          initialCode: "# 1~10 의 짝수만 골라 그 제곱을 리스트로\n# (10 은 포함, range(1, 11))\nresult = ___\n\nprint(result)",
+          initialCode: "nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n\n# nums 에서 짝수만 골라, 그 제곱을 담아요\n# 모양: [ 담을 것  for n in nums  if 조건 ]\nresult = [___ for n in nums if ___]\n\nprint(result)",
           expectedOutput: "[4, 16, 36, 64, 100]",
-          hint: "[n * n for n in range(1, 11) if n % 2 == 0]",
-          hint2: "result = [n * n for n in range(1, 11) if n % 2 == 0]"
+          hint: "첫 빈칸엔 담고 싶은 것 (n 의 제곱), 둘째 빈칸엔 짝수인지 확인하는 조건.",
+          hint2: "result = [n * n for n in nums if n % 2 == 0]"
         }
       ]
     },
@@ -480,7 +480,7 @@ even = [n for n in nums if n % 2 == 0]
           type: "mission",
           title: "🏆 미션 2 — 점수 통계 한방에",
           task: "점수 리스트에서 **최고/최저/평균/정렬된 상위 3 개** 를 한꺼번에 출력하세요.",
-          initialCode: "scores = [85, 92, 78, 95, 67, 88, 73, 90, 81, 76]\n\nprint(f\"개수: {len(scores)}\")\nprint(f\"최고: {___(scores)}\")\nprint(f\"최저: {___(scores)}\")\nprint(f\"평균: {___(scores) / len(scores):.1f}\")\n\n# 상위 3 개 (정렬 내림차순 후 [:3])\ntop3 = sorted(scores, reverse=True)[:___]\nprint(f\"상위 3: {top3}\")",
+          initialCode: "scores = [85, 92, 78, 95, 67, 88, 73, 90, 81, 76]\n\nprint(f\"개수: {len(scores)}\")\nprint(f\"최고: {___(scores)}\")\nprint(f\"최저: {___(scores)}\")\nprint(f\"평균: {___(scores) / len(scores):.1f}\")\n\n# 상위 3 개 — 내림차순 정렬한 뒤 앞에서 몇 개만\ntop3 = sorted(scores, reverse=True)[:___]\nprint(f\"상위 3: {top3}\")",
           expectedOutput: "개수: 10\n최고: 95\n최저: 67\n평균: 82.5\n상위 3: [95, 92, 90]",
           hint: "max, min, sum 내장 함수. [:3] 으로 처음 3 개.",
           hint2: "max(scores), min(scores), sum(scores), [:3]"

@@ -381,7 +381,7 @@ strawberry
           type: "mission",
           title: "🏆 Mission 2 — CSV one-liner: total + average",
           task: "Read a comma-separated score line, convert to ints, then print BOTH total and average!",
-          initialCode: "line = \"75,90,82,88,95\"\n\n# 1) line.split(\",\") makes ['75', '90', ...]\n# 2) convert each element to int (map or comprehension)\n# 3) wrap the result in list\nnums = ___\n\ntotal = sum(nums)\navg = total / len(nums)\nprint(f\"Total: {total}\")\nprint(f\"Average: {avg}\")",
+          initialCode: "line = \"75,90,82,88,95\"\n\n# 1) cut it at each comma → ['75', '90', ...]\n# 2) convert each element to int (map or comprehension)\n# 3) wrap the result in list\nnums = ___\n\ntotal = sum(nums)\navg = total / len(nums)\nprint(f\"Total: {total}\")\nprint(f\"Average: {avg}\")",
           expectedOutput: "Total: 430\nAverage: 86.0",
           hint: "Split → convert each piece to number → wrap in list.",
           hint2: "nums = list(map(int, line.split(\",\")))"
@@ -391,7 +391,7 @@ strawberry
           type: "mission",
           title: "🏆 Mission 3 — Build greeting from input",
           task: "Read multiple names (space-separated) on one line and print 'Hi A, B, C!' format. (! at end)",
-          initialCode: "# 1) read one line with input()\n# 2) use .split() to make a list, splitting on whitespace\nnames = input().___()\n\n# 3) join with ', ' inside the f-string\ngreeting = f\"Hi {___}!\"\nprint(greeting)",
+          initialCode: "# 1) read one line with input()\n# 2) cut it at each space to make a list\nnames = input().___()\n\n# 3) join with ', ' inside the f-string\ngreeting = f\"Hi {___}!\"\nprint(greeting)",
           expectedOutput: "Hi Alice, Bob, Charlie!",
           stdin: "Alice Bob Charlie",
           hint: "Split input into a list, then join with a separator.",

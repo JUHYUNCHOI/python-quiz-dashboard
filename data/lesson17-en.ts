@@ -37,9 +37,9 @@ Pattern: **for var in list:** — each box's value flows into \`fruit\` in turn.
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "Print every element of the list!",
-          initialCode: "numbers = [10, 20, 30, 40, 50]\n\nfor num in numbers:\n    print(num)",
+          initialCode: "numbers = [10, 20, 30, 40, 50]\n\n# Take the values out of numbers one at a time into num\nfor ___ in ___:\n    print(num)",
           expectedOutput: "10\n20\n30\n40\n50",
-          hint: "Each element of numbers goes into num!",
+          hint: "First blank: the name that holds each value. Second blank: the list to take from.",
           hint2: "for num in numbers:"
         },
         {
@@ -80,10 +80,10 @@ total = sum(prices)  # 6000
           type: "tryit",
           title: "🖥️ Calculate the Sum!",
           task: "Find the sum of the scores!",
-          initialCode: "scores = [85, 90, 78, 92, 88]\ntotal = 0\n\nfor score in scores:\n    total = total + score\n\nprint(\"Total:\", total)",
+          initialCode: "scores = [85, 90, 78, 92, 88]\ntotal = 0\n\n# Add this score to the running total, then store it back in total\nfor score in scores:\n    total = ___\n\nprint(\"Total:\", total)",
           expectedOutput: "Total: 433",
-          hint: "total = total + score",
-          hint2: "Or total += score"
+          hint: "The total so far + this score. Put the result back into total.",
+          hint2: "total = total + score  (shorter: total += score)"
         }
       ]
     },
@@ -127,10 +127,10 @@ Each round, \`enumerate(list)\` hands you **(index, value)** as one pair. That's
           type: "tryit",
           title: "🖥️ Print Rankings!",
           task: "Print the ranking and name together!",
-          initialCode: "winners = [\"Alice\", \"Bob\", \"Charlie\"]\n\nfor i, name in enumerate(winners):\n    print(f\"#{i+1}: {name}\")",
+          initialCode: "winners = [\"Alice\", \"Bob\", \"Charlie\"]\n\n# Take the number and the name together. The number starts at 0\nfor i, name in ___(winners):\n    print(f\"#{___}: {name}\")",
           expectedOutput: "#1: Alice\n#2: Bob\n#3: Charlie",
-          hint: "Use i+1 to start from 1!",
-          hint2: "enumerate() starts from 0"
+          hint: "The function that hands you the number and the value together / the number starts at 0, so what shows #1?",
+          hint2: "enumerate(winners) and {i+1}"
         },
         {
           id: "range-explain",
@@ -172,7 +172,7 @@ print(numbers)  # [2, 4, 6]
           type: "tryit",
           title: "🖥️ Modify Values!",
           task: "Add 10 points to every score!",
-          initialCode: "scores = [70, 80, 90]\n\nfor i in range(len(scores)):\n    scores[i] = scores[i] + 10\n\nprint(scores)",
+          initialCode: "scores = [70, 80, 90]\n\n# To change a value you have to reach it by its position (i)\nfor i in range(len(scores)):\n    scores[i] = ___\n\nprint(scores)",
           expectedOutput: "[80, 90, 100]",
           hint: "Access by index and add 10!",
           hint2: "scores[i] = scores[i] + 10"
@@ -233,7 +233,7 @@ for num in numbers:        # ① pull out one at a time
           type: "tryit",
           title: "🖥️ Only 80 and Above!",
           task: "Print only scores that are 80 or above!",
-          initialCode: "scores = [65, 80, 72, 95, 88, 55, 90]\n\nfor score in scores:\n    if score >= 80:\n        print(score)",
+          initialCode: "scores = [65, 80, 72, 95, 88, 55, 90]\n\n# Take them one at a time, print only when the test passes\nfor score in scores:\n    if ___:\n        print(score)",
           expectedOutput: "80\n95\n88\n90",
           hint: "Put an if inside the for loop!",
           hint2: "if score >= 80:"

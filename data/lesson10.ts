@@ -316,7 +316,7 @@ int("hello")   # ❌ 에러 — "글자는 숫자로 못 바꾸겠어!"
           type: "tryit",
           title: "🏆 미션 1 — 인사 카드 (.strip() 첫 적용)",
           task: "이름 받기 — `.strip()` 으로 공백 정리 후 인사. (입력: `  호두  `)",
-          initialCode: "name = input(\"이름: \").___()    # 빈칸에 strip\nprint(f\"안녕, {name}!\")",
+          initialCode: "name = input(\"이름: \").___()    # 앞뒤 공백을 없애는 메서드\nprint(f\"안녕, {name}!\")",
           expectedOutput: "안녕, 호두!",
           stdin: "  호두  ",
           hint: "input() 뒤에 .strip() 붙이면 앞뒤 공백이 사라져요.",

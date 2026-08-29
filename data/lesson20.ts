@@ -268,7 +268,7 @@ person.update(나이=15, 학교="중학교")
           type: "tryit",
           title: "🖥️ update — 두 딕셔너리 합치기",
           task: "기존 학생 정보에 추가 정보를 update 로 합쳐 하나로 만드세요!",
-          initialCode: "student = {\"이름\": \"영희\", \"나이\": 14}\nextra = {\"학교\": \"중학교\", \"학년\": 2, \"나이\": 15}   # 나이는 새 값으로\n\n# update 로 합치기\nstudent.___(extra)\nprint(student)",
+          initialCode: "student = {\"이름\": \"영희\", \"나이\": 14}\nextra = {\"학교\": \"중학교\", \"학년\": 2, \"나이\": 15}   # 나이는 새 값으로\n\n# extra 의 내용을 student 에 한꺼번에 합쳐요\nstudent.___(extra)\nprint(student)",
           expectedOutput: "{'이름': '영희', '나이': 15, '학교': '중학교', '학년': 2}",
           hint: "student.update(extra) — 같은 키는 덮어씀.",
           hint2: "student.update(extra)"

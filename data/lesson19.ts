@@ -108,7 +108,7 @@ print((1))       # 1 — 튜플 아님!
           type: "tryit",
           title: "🖥️ 다양한 만들기 — 글자별 / 단일 / 괄호 없이",
           task: "튜플을 *3가지 방법* 으로 만들어보세요! (글자별 / 단일 / 괄호 없이)",
-          initialCode: "# 1) \"hello\" 를 글자별 튜플로\nt1 = ___(\"hello\")\nprint(t1)\n\n# 2) 단일 요소 튜플 (쉼표 잊지 말기!)\nsingle = (42,)\nprint(single, type(single).__name__)\n\n# 3) 괄호 없이 쉼표만\nt2 = 10, 20, 30\nprint(t2)",
+          initialCode: "# 1) \"hello\" 를 글자 하나하나가 요소인 묶음으로\nt1 = ___(\"hello\")\nprint(t1)\n\n# 2) 단일 요소 튜플 (쉼표 잊지 말기!)\nsingle = (42,)\nprint(single, type(single).__name__)\n\n# 3) 괄호 없이 쉼표만\nt2 = 10, 20, 30\nprint(t2)",
           expectedOutput: "('h', 'e', 'l', 'l', 'o')\n(42,) tuple\n(10, 20, 30)",
           hint: "문자열을 *글자 단위* 묶음으로 만들어주는 변환 함수가 있어요.",
           hint2: "t1 = tuple(\"hello\") — tuple() 이 각 글자를 요소로 나눠요."
