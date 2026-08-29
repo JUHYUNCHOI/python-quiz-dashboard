@@ -189,7 +189,7 @@ export const lesson39: LessonData = {
           hint: "Save: 'w' mode / Load: try + 'r' mode / Error: FileNotFoundError"
         },
         alternateAnswers: [],
-        expect: "저장!"
+        expect: "저장!\n용사"
       }
     },
     {

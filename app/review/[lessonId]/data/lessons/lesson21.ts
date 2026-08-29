@@ -19,9 +19,9 @@ export const lesson21: LessonData = {
       type: "explain",
       content: {
         lines: [],
-        code: "fruits = {'사과', '바나나', '포도'}\nprint(fruits)\nprint(type(fruits))",
-        result: "{'사과', '바나나', '포도'}\n<class 'set'>",
-        note: "딕셔너리도 {}를 쓰지만, 키:값이 없으면 집합이에요!"
+        code: "fruits = {'사과', '바나나', '포도'}\nprint(sorted(fruits))\nprint(type(fruits))",
+        result: "['바나나', '사과', '포도']\n<class 'set'>",
+        note: "딕셔너리도 {}를 쓰지만, 키:값이 없으면 집합이에요! 집합은 순서가 없어서 그냥 print 하면 나올 때마다 순서가 달라요 — 여기선 sorted() 로 줄 세웠어요."
       }
     },
     {
@@ -58,7 +58,7 @@ export const lesson21: LessonData = {
       type: "explain",
       content: {
         lines: [],
-        code: "names = ['민수', '영희', '민수', '철수', '영희']\nunique = set(names)\nprint(unique)\nprint(f'중복 제거: {len(names)}개 -> {len(unique)}개')",
+        code: "names = ['민수', '영희', '민수', '철수', '영희']\nunique = set(names)\nprint(sorted(unique))\nprint(f'중복 제거: {len(names)}개 -> {len(unique)}개')",
         predict: {
           question: "unique의 길이는?",
           options: ["5", "4", "3", "2"],
@@ -72,7 +72,7 @@ export const lesson21: LessonData = {
             feedback: "민수, 영희, 철수 = 3 unique names! Duplicates are removed!"
           }
         },
-        result: "{'민수', '영희', '철수'}\n중복 제거: 5개 -> 3개"
+        result: "['민수', '영희', '철수']\n중복 제거: 5개 -> 3개"
       }
     },
     {
@@ -208,9 +208,9 @@ export const lesson21: LessonData = {
       type: "explain",
       content: {
         lines: [],
-        code: "colors = {'빨강', '파랑'}\ncolors.add('초록')\nprint(colors)\n\ncolors.remove('빨강')\nprint(colors)",
-        result: "{'빨강', '파랑', '초록'}\n{'파랑', '초록'}",
-        note: "add()로 추가, remove()로 삭제! (discard()는 없어도 에러 안 남)"
+        code: "colors = {'빨강', '파랑'}\ncolors.add('초록')\nprint(sorted(colors))\n\ncolors.remove('빨강')\nprint(sorted(colors))",
+        result: "['빨강', '초록', '파랑']\n['초록', '파랑']",
+        note: "add()로 추가, remove()로 삭제! 집합은 순서가 없어서 그냥 print 하면 나올 때마다 순서가 달라요. 그래서 sorted() 로 줄 세워 봤어요."
       }
     },
     {
@@ -238,18 +238,18 @@ export const lesson21: LessonData = {
       type: "explain",
       content: {
         lines: ["실전! 출석부에서 결석자 찾기!"],
-        code: "all_students = {'민수', '영희', '철수', '지민', '유진'}\npresent = {'민수', '철수', '유진'}\n\nabsent = all_students - present\nprint(f'결석: {absent}')",
-        result: "결석: {'영희', '지민'}",
-        note: "차집합으로 결석자를 쉽게 찾을 수 있어요!"
+        code: "all_students = {'민수', '영희', '철수', '지민', '유진'}\npresent = {'민수', '철수', '유진'}\n\nabsent = all_students - present\nprint(f'결석: {sorted(absent)}')",
+        result: "결석: ['영희', '지민']",
+        note: "차집합으로 결석자를 쉽게 찾을 수 있어요! 결과도 집합이라 순서가 없어서 sorted() 로 줄 세워 봤어요."
       }
     },
     {
       type: "explain",
       content: {
         lines: ["실전! 리스트에서 중복 제거 후 다시 리스트로!"],
-        code: "scores = [90, 85, 90, 95, 85, 100]\nunique_scores = list(set(scores))\nprint(unique_scores)\nprint(f'종류: {len(unique_scores)}개')",
+        code: "scores = [90, 85, 90, 95, 85, 100]\nunique_scores = sorted(set(scores))\nprint(unique_scores)\nprint(f'종류: {len(unique_scores)}개')",
         result: "[85, 90, 95, 100]\n종류: 4개",
-        note: "set()으로 중복 제거 -> list()로 다시 리스트!"
+        note: "set()으로 중복 제거! 집합은 순서가 없어서 list() 로만 바꾸면 순서가 뒤죽박죽이에요. 정렬해서 받고 싶으면 sorted()."
       }
     },
     {
@@ -273,10 +273,10 @@ export const lesson21: LessonData = {
         task: "집합에 '딸기'를 add()로 추가하고 출력하세요",
         guide: "set.add(값)!",
         hint: "fruits.add('딸기')",
-        template: "fruits = {'사과', '바나나'}\nfruits.___(___)\nprint(fruits)",
+        template: "fruits = {'사과', '바나나'}\nfruits.___(___)\nprint(sorted(fruits))",
         blanksAnswer: ["add", "'딸기'"],
-        answer: "fruits = {'사과', '바나나'}\nfruits.add('딸기')\nprint(fruits)",
-        expect: "{'사과', '바나나', '딸기'}",
+        answer: "fruits = {'사과', '바나나'}\nfruits.add('딸기')\nprint(sorted(fruits))",
+        expect: "['딸기', '바나나', '사과']",
         en: {
           task: "Add 'strawberry' to the set with add() and print",
           guide: "Use set.add(value)!",

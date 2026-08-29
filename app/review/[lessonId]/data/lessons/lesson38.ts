@@ -241,16 +241,16 @@ export const lesson38: LessonData = {
         message: "🔄 잠깐! 읽기 복습!",
         task: "___ 자리를 채워서 파일을 읽으세요!",
         hint: "읽기 모드: 'r' / 전체 읽기: read()",
-        template: "with open('memo.txt', '___') as f:\n    내용 = f.___()\n    print(내용)",
+        template: "with open('memo.txt', 'w') as f:\n    f.write('오늘 할 일: 코딩')\n\nwith open('memo.txt', '___') as f:\n    내용 = f.___()\n    print(내용)",
         blanksAnswer: ["r", "read"],
-        answer: "with open('memo.txt', 'r') as f:\n    내용 = f.read()\n    print(내용)",
+        answer: "with open('memo.txt', 'w') as f:\n    f.write('오늘 할 일: 코딩')\n\nwith open('memo.txt', 'r') as f:\n    내용 = f.read()\n    print(내용)",
         en: {
           message: "🔄 Quick review! File reading!",
           task: "Fill in the blanks to read a file!",
           hint: "Read mode: 'r' / Read all: read()"
         },
         alternateAnswers: [],
-        expect: ""
+        expect: "오늘 할 일: 코딩"
       }
     },
     
@@ -279,8 +279,8 @@ export const lesson38: LessonData = {
       content: {
         lines: ["⚠️ 파일 없으면 에러!"],
         code: "# 없는 파일 읽으려면?\ntry:\n    with open('save.txt', 'r') as f:\n        데이터 = f.read()\n        print(f'불러오기: {데이터}')\nexcept FileNotFoundError:\n    print('저장 파일이 없어요!')",
-        result: "FileNotFoundError = 파일 없음!",
-        note: "try-except로 에러 처리!"
+        result: "저장 파일이 없어요!",
+        note: "없는 파일을 읽으면 FileNotFoundError! try-except 로 잡아요."
       }
     },
     

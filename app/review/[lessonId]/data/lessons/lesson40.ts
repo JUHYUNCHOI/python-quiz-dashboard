@@ -64,10 +64,10 @@ export const lesson40: LessonData = {
       type: "practice",
       content: {
         level: 1, task: "___ 자리를 채우세요!", guide: "파일 열기 기본 구조", hint: "with ... as 구문!",
-        template: "___ open('data.txt', 'r') ___ f:\n    text = f.read()\n    print(text)",
+        template: "___ open('test.txt', 'r') ___ f:\n    text = f.read()\n    print(text)",
         blanksAnswer: ["with", "as"],
-        answer: "with open('data.txt', 'r') as f:\n    text = f.read()\n    print(text)",
-        alternateAnswers: [], expect: "",
+        answer: "with open('test.txt', 'r') as f:\n    text = f.read()\n    print(text)",
+        alternateAnswers: [], expect: "Hello World",
         en: {
           task: "Fill in the blanks!",
           guide: "Basic file opening structure",
@@ -247,7 +247,7 @@ export const lesson40: LessonData = {
         template: "with open('memo.txt', '___') as f:\n    f.___('새 메모\\n')\nprint('저장!')\n\n___:\n    with open('memo.txt', 'r') as f:\n        print(f.read())\nexcept ___:\n    print('메모 없음!')",
         blanksAnswer: ["a", "write", "try", "FileNotFoundError"],
         answer: "with open('memo.txt', 'a') as f:\n    f.write('새 메모\\n')\nprint('저장!')\n\ntry:\n    with open('memo.txt', 'r') as f:\n        print(f.read())\nexcept FileNotFoundError:\n    print('메모 없음!')",
-        alternateAnswers: [], expect: "저장!",
+        alternateAnswers: [], expect: "저장!\n새 메모",
         en: {
           task: "Fill in the blanks to create a notepad app!",
           guide: "'a' + write + try + FileNotFoundError",

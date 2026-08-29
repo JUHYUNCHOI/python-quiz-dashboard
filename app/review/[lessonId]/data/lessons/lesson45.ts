@@ -467,7 +467,7 @@ print(today.month)`,
         alternateAnswers: [
           "from random import randint, seed\nseed(5)\nfor i in range(3):\n    print(randint(1, 10))"
         ],
-        expect: "10\n2\n9"
+        expect: "10\n5\n6"
       }
     },
 
