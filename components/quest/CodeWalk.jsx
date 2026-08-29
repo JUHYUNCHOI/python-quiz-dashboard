@@ -126,7 +126,8 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
                     background: done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bColor}`,
                     borderRadius: 12, padding: "9px 13px", fontSize: 13,
                     color: done ? "#065f46" : "#92400e", lineHeight: 1.5,
-                    fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line",
+                    /* 한글 줄바꿈 4종 세트 — balance 가 없으면 마지막 줄만 짧게 남아 어정쩡하게 갈림 */
+                    fontWeight: 600, wordBreak: "keep-all", whiteSpace: "pre-line", textWrap: "balance",
                     fontFamily: "system-ui, -apple-system, 'Apple SD Gothic Neo', sans-serif", // 코드폰트 아닌 읽기폰트
                     boxShadow: "0 6px 16px rgba(0,0,0,.30)",
                   }}>💬 {beat.bubble}</div>

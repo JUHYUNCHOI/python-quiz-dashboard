@@ -206,7 +206,7 @@ export function getChipXchgBruteWalk(E, lang = "py") {
       "}",
     ];
     return { code, vars: _CX_VARS, beats: [
-      { hi: [0, 2], bubble: t(E, "Headers. C++ defines functions above main, but read in call order: main → solve → worstRed.", "헤더. C++ 은 함수를 main 위에 두지만, 읽는 순서는 호출 순서: main → solve → worstRed.") },
+      { hi: [0, 2], bubble: t(E, "Headers. C++ defines functions above main, but read in call order: main → solve → worstRed.", "헤더예요.\nC++ 은 함수를 main 위에 두지만 읽는 순서는 호출 순서예요.\nmain → solve → worstRed.") },
       { hi: [24, 25], bubble: t(E, "main — read T tests.", "main — 테스트 T개 읽기.") },
       { hi: [26, 30], bubble: t(E, "Each test: read the 5 numbers → call solve → print.", "각 테스트: 숫자 5개 읽어 → solve 호출 → 출력.") },
       { hi: [15, 21], bubble: t(E, "solve (what main calls): raise x by 1 until the goal is reached.", "solve (main 이 부르는 것): 목표 닿을 때까지 x 를 하나씩 ↑.") },
@@ -246,8 +246,8 @@ export function getChipXchgBruteWalk(E, lang = "py") {
     { hi: [0, 1], bubble: t(E, "Fast input. Read it input-first: main → solve → worst_red.", "빠른 입력. 입력부터: main → solve → worst_red 순.") },
     { hi: [3, 7], bubble: t(E, "main — each test: read the 5 numbers → call solve → print.", "main — 각 테스트: 숫자 5개 읽어 → solve 호출 → 출력.") },
     { hi: [9, 14], bubble: t(E, "solve (what main calls): raise x by 1 until the goal is reached.", "solve (main 이 부르는 것): 목표 닿을 때까지 x 를 하나씩 ↑.") },
-    { hi: [15, 18], bubble: t(E, "worst_red (what solve calls): b = B given, so x−b = A kept. Try every b (0…x).", "worst_red (solve 가 부르는 것): b = B에 준 수, 그럼 x−b = A로 받은 수. b 를 0~x 전부 시도.") },
-    { hi: [19, 19], bubble: t(E, "final A = start A + A kept (x−b) + B swapped ((B+b)//cB × cA). ← same as Tool ①a.", "최종 A = 시작A + A받은(x−b) + B환전((B+b)//cB × cA). ← 도구 ①a 환전세기 그대로.") },
+    { hi: [15, 18], bubble: t(E, "worst_red (what solve calls): b = B given, so x−b = A kept. Try every b (0…x).", "worst_red 는 solve 가 부르는 함수예요.\nb 는 B 로 준 수, 그러면 x−b 가 A 로 받은 수예요.\nb 를 0 부터 x 까지 전부 시도해요.") },
+    { hi: [19, 19], bubble: t(E, "final A = start A + A kept (x−b) + B swapped ((B+b)//cB × cA). ← same as Tool ①a.", "최종 A = 시작 A + 받은 A (x−b) + B 환전분 ((B+b)//cB × cA).\n앞에서 본 환전 세기 그대로예요.") },
     { hi: [20, 22], bubble: t(E, "Keep the smallest A — that is the worst combination. ← b AND x reach 10¹⁸, so this brute is FAR too slow.", "제일 작은 A가 최악의 경우. ← b 도 x 도 10¹⁸까지라 이 브루트는 너무 느려요.") },
   ] };
 }
@@ -296,10 +296,10 @@ export function getChipXchgWalk(E, lang = "py") {
       { hi: [24, 28], bubble: t(E, "Each test: read the 5 numbers → call solve → print.", "각 테스트: 숫자 5개 읽어 → solve 호출 → 출력.") },
       { hi: [5, 7], bubble: t(E, "red_now = A I can make right now by swapping my own B. If that already reaches fA → 0 extra.", "red_now = 지금 내 B를 환전해서 만드는 A. 목표 이상이면 추가 0.") },
       { hi: [9, 9], bubble: t(E, "Step 1 — the worst case throws B away first (Tool ②). It tops the leftover up to cB−1, and those chips give me 0 A.", "1단계 — 먼저 B를 버려요 (도구 ②). 자투리를 cB−1 까지 채우면 그 칩들은 나한테 A 0.") },
-      { hi: [10, 10], bubble: t(E, "Step 2 — I only need to build up to one below the goal: short_red = fA − 1 − red_now. ← this is the −1.", "2단계 — 목표보다 하나 적은 A 까지만 만들면 돼요: short_red = fA − 1 − red_now. ← 이게 −1 이에요.") },
-      { hi: [12, 14], bubble: t(E, "For how many chips can it stay there? If swapping pays (cA ≥ cB), B would help me, so the worst case hands me A only — 1 chip per A.", "거기서 칩 몇 개까지 버틸까요? 환전이 이득(cA ≥ cB)이면 B는 나를 도와주니 A만 줘요 — A 1개당 칩 1개.") },
+      { hi: [10, 10], bubble: t(E, "Step 2 — I only need to build up to one below the goal: short_red = fA − 1 − red_now. ← this is the −1.", "2단계예요. 목표보다 하나 적은 A 까지만 만들면 돼요.\nshort_red = fA − 1 − red_now\n← 이게 −1 이에요.") },
+      { hi: [12, 14], bubble: t(E, "For how many chips can it stay there? If swapping pays (cA ≥ cB), B would help me, so the worst case hands me A only — 1 chip per A.", "거기서 칩 몇 개까지 버틸까요?\n환전이 이득이면 (cA ≥ cB) B 는 나를 도와줘요.\n그래서 A 만 와요. A 1개당 칩 1개예요.") },
       { hi: [15, 17], bubble: t(E, "If swapping loses, the worst case uses B groups: cB chips buy only cA of A (Tool ④), and whatever A is left over comes as single A chips.", "환전이 손해면 B 묶음을 써요: 칩 cB개로 A cA개만 (도구 ④). 남는 A는 A칩으로.") },
-      { hi: [19, 19], bubble: t(E, "answer = wasted B + the last chip count that can still leave A short + 1. ← this is the +1. Check (0 0 2 3 5): 2 + 6 + 1 = 9.", "답 = 버린 B + 아직 목표에 못 닿을 수 있는 마지막 칩 + 1. ← 이게 +1 이에요. (0 0 2 3 5) 확인: 2 + 6 + 1 = 9.") },
+      { hi: [19, 19], bubble: t(E, "answer = wasted B + the last chip count that can still leave A short + 1. ← this is the +1. Check (0 0 2 3 5): 2 + 6 + 1 = 9.", "답 = 버린 B + 아직 목표에 못 닿을 수 있는 마지막 칩 + 1.\n← 이게 +1 이에요.\n(0 0 2 3 5) 로 확인하면 2 + 6 + 1 = 9.") },
     ] };
   }
   const code = [
@@ -335,10 +335,10 @@ export function getChipXchgWalk(E, lang = "py") {
     { hi: [3, 7], bubble: t(E, "main — each test: read the 5 numbers → call solve → print.", "main — 각 테스트: 숫자 5개 읽어 → solve 호출 → 출력.") },
     { hi: [10, 13], bubble: t(E, "red_now = A I can make right now by swapping my own B. If that already reaches fA → 0 extra.", "red_now = 지금 내 B를 환전해서 만드는 A. 목표 이상이면 추가 0.") },
     { hi: [15, 15], bubble: t(E, "Step 1 — the worst case throws B away first (Tool ②). It tops the leftover up to cB−1, and those chips give me 0 A.", "1단계 — 먼저 B를 버려요 (도구 ②). 자투리를 cB−1 까지 채우면 그 칩들은 나한테 A 0.") },
-    { hi: [16, 16], bubble: t(E, "Step 2 — I only need to build up to one below the goal: short_red = fA − 1 − red_now. ← this is the −1.", "2단계 — 목표보다 하나 적은 A 까지만 만들면 돼요: short_red = fA − 1 − red_now. ← 이게 −1 이에요.") },
-    { hi: [18, 19], bubble: t(E, "For how many chips can it stay there? If swapping pays (cA ≥ cB), B would help me, so the worst case hands me A only — 1 chip per A.", "거기서 칩 몇 개까지 버틸까요? 환전이 이득(cA ≥ cB)이면 B는 나를 도와주니 A만 줘요 — A 1개당 칩 1개.") },
+    { hi: [16, 16], bubble: t(E, "Step 2 — I only need to build up to one below the goal: short_red = fA − 1 − red_now. ← this is the −1.", "2단계예요. 목표보다 하나 적은 A 까지만 만들면 돼요.\nshort_red = fA − 1 − red_now\n← 이게 −1 이에요.") },
+    { hi: [18, 19], bubble: t(E, "For how many chips can it stay there? If swapping pays (cA ≥ cB), B would help me, so the worst case hands me A only — 1 chip per A.", "거기서 칩 몇 개까지 버틸까요?\n환전이 이득이면 (cA ≥ cB) B 는 나를 도와줘요.\n그래서 A 만 와요. A 1개당 칩 1개예요.") },
     { hi: [20, 21], bubble: t(E, "If swapping loses, the worst case uses B groups: cB chips buy only cA of A (Tool ④), and whatever A is left over comes as single A chips.", "환전이 손해면 B 묶음을 써요: 칩 cB개로 A cA개만 (도구 ④). 남는 A는 A칩으로.") },
-    { hi: [23, 23], bubble: t(E, "answer = wasted B + the last chip count that can still leave A short + 1. ← this is the +1. Check (0 0 2 3 5): 2 + 6 + 1 = 9.", "답 = 버린 B + 아직 목표에 못 닿을 수 있는 마지막 칩 + 1. ← 이게 +1 이에요. (0 0 2 3 5) 확인: 2 + 6 + 1 = 9.") },
+    { hi: [23, 23], bubble: t(E, "answer = wasted B + the last chip count that can still leave A short + 1. ← this is the +1. Check (0 0 2 3 5): 2 + 6 + 1 = 9.", "답 = 버린 B + 아직 목표에 못 닿을 수 있는 마지막 칩 + 1.\n← 이게 +1 이에요.\n(0 0 2 3 5) 로 확인하면 2 + 6 + 1 = 9.") },
   ] };
 }
 

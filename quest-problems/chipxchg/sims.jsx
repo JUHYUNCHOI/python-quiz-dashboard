@@ -1353,7 +1353,7 @@ export function LastOneWhySlide({ E }) {
               <>
                 <div style={{ borderTop: "1px dashed #c4b5fd", paddingTop: 8 }}>
                   <code style={{ color: "#5b21b6", fontWeight: 800 }}>short_chips = 4//2×3 + 4%2 = 6</code><br />
-                  <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "the most chips that can still leave A at 4", "A 를 4개에 머물게 하는 가장 많은 칩")}</span></div>
+                  <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "the most chips that can still leave A at 4", "A 가 4개에서 멈추는 가장 많은 칩")}</span></div>
                 <div><code style={{ color: "#5b21b6", fontWeight: 800 }}>answer = 2 + 6 + 1 = 9</code><br />
                   <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "one past the last failing count — the +1", "안 되는 마지막(8) 다음 — 여기가 +1")}</span></div>
               </>
@@ -1415,7 +1415,7 @@ export function CountUpSim({ E }) {
   const say =
     s.k === "recap" ? t(E,
         <>That worked. We tried <b style={NW}>1, 2, 3 chips</b><br />and stopped where the worst reached the goal.<br /><b>The answer was 3.</b></>,
-        <>방금 그 방법으로 답이 나왔어요.<br />칩 <b style={NW}>1개, 2개, 3개</b>를 차례로 따져서<br />제일 나쁜 경우가 목표에 닿는 데서 멈췄어요.<br /><b>답은 3이었어요.</b></>)
+        <>방금 그 방법으로 답이 나왔어요.<br />칩 <b style={NW}>1개, 2개, 3개</b>를 차례로 따져서<br />제일 나쁜 경우가 목표에 닿자마자 멈췄어요.<br /><b>답은 3이었어요.</b></>)
   : s.k === "g50" ? t(E,
         <>Now make the goal <b style={{color:RED,...NW}}>A 50</b>.<br />The same way needs <b style={NW}>70</b> counts.</>,
         <>이제 목표를 <b style={{color:RED,...NW}}>A 50개</b>로 키워 볼게요.<br />같은 방법이면 <b style={NW}>70번</b>을 세야 해요.</>)
@@ -1650,7 +1650,7 @@ export function WhyNotGoalSim({ E }) {
               border: "1.5px solid #93c5fd", fontSize: 12.5, fontWeight: 700, color: "#1e40af",
               lineHeight: 1.85, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
               {t(E, <>"The last failing count" is something we <b>actually built</b>.<br />So it never double-counts the worst.<br /><b>answer = last failing count + 1</b></>,
-                    <>"안 되는 마지막" 은 우리가 <b>직접 만들어 본</b> 거예요.<br />그래서 최악을 겹쳐 세는 일이 없어요.<br /><b>답 = 안 되는 마지막 + 1</b></>)}
+                    <>"안 되는 마지막" 은 우리가 <b>직접 만들어 본</b> 거예요.<br />그래서 최악을 두 번 세는 일이 없어요.<br /><b>답 = 안 되는 마지막 + 1</b></>)}
             </div>
           </>
         )}
@@ -1695,7 +1695,8 @@ export function PlanSlide({ E }) {
             <div>② {t(E, <><b>cA &lt; cB</b> (swap loses) → B groups · <code>short_chips = short_red//cA*cB + short_red%cA</code> <span style={{ color: "#7c3aed" }}>(why? → previous page)</span></>,
                         <><b>cA &lt; cB</b> (환전 손해) → B 묶음으로<br /><code>short_chips = short_red//cA*cB + short_red%cA</code> <span style={{ color: "#7c3aed" }}>(왜? → 앞 페이지)</span></>)}</div>
             <div style={{ paddingLeft: 12, fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: "#5b21b6" }}>
-              short_red = fA − 1 − red_now · 답 = wasted_blue + short_chips + 1
+              short_red = fA − 1 − red_now<br />
+              {t(E, "answer", "답")} = wasted_blue + short_chips + 1
             </div>
           </div>
           <div style={{ marginTop: 5, paddingTop: 5, borderTop: "1px dashed #c4b5fd", fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#334155" }}>
