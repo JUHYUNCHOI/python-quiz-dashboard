@@ -9,6 +9,7 @@ import { NormalizeSim, GreedySim } from "./sims";
 export function makeBuyMilkCh1(E) {
   return [
     // 1-1: Title + Mission reveal
+    // 1-1: Title + Mission reveal
     {
       type: "reveal",
       narr: t(E,
@@ -71,6 +72,7 @@ export function makeBuyMilkCh1(E) {
         </div>),
     },
 
+
     // 1-2: Sample reveal
     {
       type: "reveal",
@@ -121,6 +123,8 @@ export function makeBuyMilkCh1(E) {
         </div>),
     },
 
+    // [승] 먼저 물어봐요 — 큰 딜이 통당 더 쌀 수 있다는 걸 학생이 눈치채게
+
     // 1-3: Quiz — per-bucket price
     {
       type: "quiz",
@@ -139,23 +143,21 @@ export function makeBuyMilkCh1(E) {
       correct: 0,
       explain: t(E,
         "Right. Deal 2 sells 2 buckets for 15, so 7.5 per bucket — cheaper than Deal 1's 10 per bucket. Greedy 'always use the smallest deal' would be wrong.",
-        "맞아. 거래 2 는 2 통에 15, 즉 통당 7.5 — 거래 1 의 통당 10 보다 싸. '항상 작은 거래만 써' 라는 그리디는 틀려."),
+        "맞아요. 거래 2 는 2통에 15 니까 통당 7.5 예요.\n거래 1 의 통당 10 보다 싸요.\n그래서 '항상 작은 거래만 쓰면 된다' 는 생각은 틀려요."),
     },
 
-    // 1-4: Input — sample tracing
+
+    // [전] 정규화 — 핵심 ①. 전엔 코드 말풍선 안에만 있어서 학생이 코드에서 처음 만났음
+    //   (선생님 2026-08-29 검토). c[i] = min(a[i], 2·c[i-1]) 를 페이지에서 먼저 발견하게.
     {
-      type: "input",
+      type: "reveal",
       narr: t(E,
-        "Sample 2: a = [10, 25, 30, 70] — deals give 1, 2, 4, 8 buckets. For x=5, what is the minimum cost?",
-        "예제 2: a = [10, 25, 30, 70] — 거래는 1, 2, 4, 8 통. x=5 일 때 최소 비용은?"),
-      question: t(E,
-        "a=[10,25,30,70], deal sizes 1,2,4,8. Min cost for x=5?",
-        "a=[10,25,30,70], 거래 크기 1,2,4,8. x=5 의 최소 비용?"),
-      hint: t(E,
-        "One copy of the 4-bucket deal plus one copy of the 1-bucket deal — try the math.",
-        "4 통짜리 1 번 + 1 통짜리 1 번 — 합쳐 보자."),
-      answer: 40,
+        "Before any code: a big deal can be a bad deal. Let's find the cheapest price for each block first.",
+        "코드 전에 — 큰 딜이 오히려 손해일 수 있어요. 블록마다 가장 싼 값을 먼저 구해요."),
+      content: (<NormalizeSim E={E} />),
     },
+
+    // [전] 또 물어봐요 — 필요한 양보다 더 사도 쌀 수 있다 (그리디의 '올림' 갈래)
 
     // 1-5: Quiz — over-buy idea
     {
@@ -175,18 +177,9 @@ export function makeBuyMilkCh1(E) {
       correct: 0,
       explain: t(E,
         "Exactly. The minimum cost answer might over-shoot x. So at each deal, we also try 'buy one extra of this size and stop'.",
-        "맞아. 최소 비용 답이 x 를 초과할 수도 있어. 그래서 각 거래에서 '한 번 더 사고 끝내기' 도 같이 시도해."),
+        "맞아요. 최소 비용이 x 통을 넘겨 사는 경우일 수도 있어요.\n그래서 블록마다 '올림해서 사고 끝내기' 도 같이 따져봐요."),
     },
 
-    // [전] 정규화 — 핵심 ①. 전엔 코드 말풍선 안에만 있어서 학생이 코드에서 처음 만났음
-    //   (선생님 2026-08-29 검토). c[i] = min(a[i], 2·c[i-1]) 를 페이지에서 먼저 발견하게.
-    {
-      type: "reveal",
-      narr: t(E,
-        "Before any code: a big deal can be a bad deal. Let's find the cheapest price for each block first.",
-        "코드 전에 — 큰 딜이 오히려 손해일 수 있어요. 블록마다 가장 싼 값을 먼저 구해요."),
-      content: (<NormalizeSim E={E} />),
-    },
 
     // [전] 그리디 — 핵심 ②. 큰 블록부터 올림/내림 두 갈래만 비교하면 끝
     {
@@ -195,6 +188,23 @@ export function makeBuyMilkCh1(E) {
         "Now bigger blocks are never worse. So walk from the biggest block down, comparing just two choices.",
         "이제 큰 블록이 손해가 아니에요. 그러니 큰 블록부터 훑으며 두 갈래만 비교해요."),
       content: (<GreedySim E={E} />),
+    },
+
+    // [결] 배운 걸로 직접 확인 — 시뮬과 다른 x 로 (x=9 → 70)
+
+    // 1-4: Input — sample tracing
+    {
+      type: "input",
+      narr: t(E,
+        "Same deals as the sims: a = [10, 25, 30, 70]. This time x = 9 — do it yourself.",
+        "시뮬과 같은 딜이에요. a = [10, 25, 30, 70].\n이번엔 x = 9 예요. 직접 해봐요."),
+      question: t(E,
+        "a=[10,25,30,70], deal sizes 1,2,4,8. Min cost for x=9?",
+        "a=[10,25,30,70], 거래 크기 1,2,4,8. x=9 의 최소 비용?"),
+      hint: t(E,
+        "Use the block prices you found: 10, 20, 30, 60.\nStart from the biggest block and compare the two choices.",
+        "아까 구한 블록 값을 써요. 10, 20, 30, 60 이에요.\n제일 큰 블록부터 두 갈래를 비교해 봐요."),
+      answer: 70,
     },
   ];
 }
