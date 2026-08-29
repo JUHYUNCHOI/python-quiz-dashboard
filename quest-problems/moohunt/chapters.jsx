@@ -1,6 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getMooHuntSections, getMooHuntWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
+import { ScoreBoardSim, BruteLimitSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooHuntCh1 (5 steps: reveal / reveal / reveal / quiz / input)
@@ -12,7 +13,7 @@ export function makeMooHuntCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie has a line of N cells, each holding 'M' or 'O'. She does K taps — each tap picks 3 cells. She scores 1 if those 3 cells spell 'MOO' in order. Find the highest score reachable, and how many boards reach it.",
-        "베시는 N 칸짜리 한 줄을 가지고 있어. 각 칸은 'M' 또는 'O'. K 번의 탭을 하는데 매번 3 칸을 골라. 그 3 칸이 순서대로 'MOO' 면 1 점. 도달 가능한 최고 점수와, 그 점수에 도달하는 보드 개수를 구해."),
+        "베시는 N 칸짜리 한 줄을 가지고 있어요. 각 칸은 'M' 아니면 'O' 예요.\nK 번 탭을 하는데 매번 세 칸을 골라요.\n그 세 칸이 순서대로 'MOO' 면 1 점이에요.\n받을 수 있는 최고 점수와, 그 점수가 되는 보드 개수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -28,16 +29,9 @@ export function makeMooHuntCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
-                "Find the highest score any board can reach, and how many boards reach it.",
-                "어떤 보드가 받을 수 있는 최고 점수와, 그 점수에 도달하는 보드의 개수를 구해.")}
+                "Find the highest score any board can reach.\nThen count how many boards reach it.",
+                "어떤 보드가 받을 수 있는 최고 점수를 구해요.\n그리고 그 점수가 되는 보드가 몇 개인지도 구해요.")}
             </div>
-          </div>
-
-          {/* ⚠️ Performance note */}
-          <div style={{ background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: 10, padding: "10px 14px", marginBottom: 10, fontSize: 12, color: "#92400e", lineHeight: 1.5, wordBreak: "keep-all" }}>
-            ⚠️ {t(E,
-              "The Python solution is correct on samples but may TLE at max constraints (N = 20) under USACO's 2-second Python limit. The C++ version handles full constraints comfortably.",
-              "Python 풀이는 샘플에선 통과하지만 최대 제약 (N = 20) 에서 USACO 의 2초 Python 제한에 걸려 부분 점수만 받을 수 있어요. C++ 풀이는 풀 제약에서도 여유롭게 통과해요.")}
           </div>
 
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -58,8 +52,8 @@ export function makeMooHuntCh1(E) {
                 <div>
                   {t(E, "Bessie does ", "베시는 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "K moves", "K 번의 무브")}</b>
-                  {t(E, " (1 ≤ K ≤ 200,000). Each move taps three distinct cells (x, y, z) — order matters.",
-                        " (1 ≤ K ≤ 200,000) 를 해. 매 무브는 서로 다른 세 칸 (x, y, z) 를 순서대로 탭 — 순서 중요!")}
+                  {t(E, " (1 ≤ K ≤ 200,000).\nEach move taps three distinct cells (x, y, z) in order.\nThe order matters.",
+                        " (1 ≤ K ≤ 200,000) 를 해요.\n무브마다 서로 다른 세 칸 (x, y, z) 를 순서대로 탭해요.\n순서가 중요해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -77,7 +71,7 @@ export function makeMooHuntCh1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "Output: max score across all boards, then # of boards that reach it.",
+                  {t(E, "Output the best score across all boards,\nthen how many boards reach it.",
                         "출력: 모든 보드 중 최고 점수, 그리고 그 점수에 도달하는 보드 개수.")}
                 </div>
               </div>
@@ -125,46 +119,8 @@ export function makeMooHuntCh1(E) {
       type: "reveal",
       narr: t(E,
         "Why does board MOOOM score 4? Let's walk each move on it. M = 'M', O = 'O'. A move (x,y,z) scores when cell x is M and cells y,z are O.",
-        "보드 MOOOM 이 왜 4 점일까? 무브 하나하나 따라가 보자. 무브 (x,y,z) 는 칸 x 가 M, 칸 y, z 가 O 일 때 득점."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
-            🚶 {t(E, "Walking moves on board ", "보드 ")}<span style={{ fontFamily: "monospace", color: "#dc2626" }}>MOOOM</span>
-          </div>
-          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 8, padding: 10, marginBottom: 10, fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: "#7f1d1d" }}>
-            <div>{t(E, "Cell:  1  2  3  4  5", "칸:    1  2  3  4  5")}</div>
-            <div>{t(E, "Char:  M  O  O  O  M", "문자:  M  O  O  O  M")}</div>
-          </div>
-          <table style={{ width: "100%", fontSize: 12, fontFamily: "'JetBrains Mono',monospace", borderCollapse: "collapse" }}>
-            <thead>
-              <tr style={{ background: "#fef2f2", color: "#7f1d1d" }}>
-                <th style={{ padding: "6px 8px", textAlign: "left" }}>{t(E, "Move", "무브")}</th>
-                <th style={{ padding: "6px 8px", textAlign: "left" }}>{t(E, "Check", "검사")}</th>
-                <th style={{ padding: "6px 8px", textAlign: "center" }}>{t(E, "Score?", "득점?")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                ["(1,2,3)", "M·O·O", "✅ +1"],
-                ["(1,2,3)", "M·O·O", "✅ +1"],
-                ["(1,3,5)", "M·O·M", "❌"],
-                ["(2,3,4)", "O·O·O", "❌"],
-                ["(5,3,2)", "M·O·O", "✅ +1"],
-                ["(5,2,3)", "M·O·O", "✅ +1"],
-              ].map(([m, c, s], i) => (
-                <tr key={i} style={{ borderTop: "1px solid #fee2e2" }}>
-                  <td style={{ padding: "6px 8px", color: "#dc2626" }}>{m}</td>
-                  <td style={{ padding: "6px 8px", color: C.text }}>{c}</td>
-                  <td style={{ padding: "6px 8px", textAlign: "center" }}>{s}</td>
-                </tr>
-              ))}
-              <tr style={{ borderTop: "2px solid #dc2626", background: "#fef2f2" }}>
-                <td colSpan={2} style={{ padding: "8px", fontWeight: 700, color: "#7f1d1d" }}>{t(E, "Total", "합계")}</td>
-                <td style={{ padding: "8px", textAlign: "center", fontWeight: 700, color: "#dc2626" }}>4</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>),
+        "보드 MOOOM 이 왜 4 점일까요?\n무브를 하나씩 따라가 봐요.\n무브 (x,y,z) 는 칸 x 가 M 이고 칸 y, z 가 O 일 때 득점해요."),
+      content: (<ScoreBoardSim E={E} />),
     },
     // 1-4: Quiz - bitmask insight
     {
@@ -182,14 +138,14 @@ export function makeMooHuntCh1(E) {
       correct: 0,
       explain: t(E,
         "Right! 2^20 ≈ 1M. Each cell is M or O — a binary choice, perfect for a bitmask, so one number defines a whole board. Enumerating them is fine — but scoring each board still costs work (next).",
-        "맞아! 2^20 ≈ 100 만. 각 칸이 M/O 이진 선택이라 비트마스크로 한 보드를 숫자 하나로 딱 표현해. 보드를 다 훑는 건 되는데 — 보드마다 점수 매기는 비용이 남았어 (다음)."),
+        "맞아요. 2^20 ≈ 100 만이에요.\n각 칸이 M 아니면 O 라 비트마스크로 보드 하나를 숫자 하나로 표현할 수 있어요.\n보드를 다 훑는 건 괜찮아요.\n그런데 보드마다 점수를 매기는 비용이 남았어요."),
     },
     // 1-5: NumInput - count distinct triples to dedup
     {
       type: "input",
       narr: t(E,
-        "K can be up to 200,000, but the same triple (x,y,z) can repeat. How many distinct ordered triples are possible when N = 20?",
-        "K 는 최대 20 만이지만 같은 (x,y,z) 가 반복될 수 있어. N = 20 일 때 서로 다른 순서 있는 삼중쌍은 몇 개?"),
+        "K can be up to 200,000, but the same triple (x,y,z) can repeat.\nHow many distinct ordered triples are possible when N = 20?",
+        "K 는 최대 20 만이지만 같은 (x,y,z) 가 반복될 수 있어요.\nN = 20 일 때 서로 다른 삼중쌍은 몇 개일까요?"),
       question: t(E,
         "When N = 20, count distinct ordered triples (x, y, z) with x, y, z all different. Answer = ?",
         "N = 20 일 때 x, y, z 가 모두 다른 순서 있는 (x, y, z) 의 개수 = ?"),
@@ -204,28 +160,7 @@ export function makeMooHuntCh1(E) {
       narr: t(E,
         "So: build all 1M boards, score each against every distinct triple. Does that finish in time?",
         "그럼: 100만 보드를 다 만들어 각각을 모든 삼중쌍으로 채점. 시간 안에 끝날까?"),
-      content: (
-        <div style={{ padding: 20, wordBreak: "keep-all" }}>
-          <div style={{ maxWidth: 470, margin: "0 auto", background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 12, padding: "14px 16px" }}>
-            <div style={{ fontWeight: 800, color: "#b91c1c", marginBottom: 8, fontSize: 13 }}>
-              🐌 {t(E, "Every board × every triple", "보드마다 × 삼중쌍마다")}
-            </div>
-            <div style={{ fontSize: 12, color: "#334155", lineHeight: 1.9, fontFamily: "'JetBrains Mono',monospace" }}>
-              <div>{t(E, "boards", "보드")} = 2²⁰ ≈ <b>1,000,000</b></div>
-              <div>{t(E, "distinct triples", "삼중쌍")} ≈ <b>6,840</b></div>
-              <div style={{ color: "#b91c1c", fontWeight: 800, marginTop: 4 }}>→ 1,000,000 × 6,840 ≈ <b>7×10⁹</b></div>
-            </div>
-            <div style={{ fontSize: 11.5, color: "#7f1d1d", marginTop: 8, lineHeight: 1.6 }}>
-              {t(E, "A computer does about 10⁸~10⁹ simple steps per second — 7×10⁹ is over the limit, so this brute force times out on the biggest cases (partial credit).",
-                    "컴퓨터는 1 초에 대략 10⁸~10⁹ 번 계산해요 — 7×10⁹ 는 제한을 넘어서, 이 완전탐색은 큰 케이스에서 시간초과 (부분 점수).")}
-            </div>
-          </div>
-          <div style={{ maxWidth: 470, margin: "12px auto 0", fontSize: 12.5, color: "#5b21b6", textAlign: "center", fontWeight: 700, wordBreak: "keep-all", textWrap: "balance" }}>
-            {t(E, "→ The idea is right, and the code next is exactly this brute. Full marks would need a smarter count (beyond this quest).",
-                  "→ 아이디어는 맞고, 다음 코드가 바로 이 완전탐색이에요. 만점은 더 똑똑한 세기가 필요해요 (이 quest 범위 밖).")}
-          </div>
-        </div>
-      ),
+      content: (<BruteLimitSim E={E} />),
     },
   ];
 }
@@ -242,9 +177,20 @@ export function makeMooHuntCh2(E, lang = "py") {
       label: t(E, "Code", "코드"),
       narr: t(E,
         "Read the solution top to bottom — each bubble sits on the lines it explains: group moves, try every board with a bitmask, print best & count.",
-        "코드를 위에서 아래로 읽어보자 — 말풍선이 설명하는 코드 줄에 바로 붙어 있어: 무브 묶기, 비트마스크로 모든 보드 시도, 최고 점수와 보드 개수 출력."),
+        "코드를 위에서 아래로 읽어봐요.\n말풍선이 설명하는 코드 줄에 바로 붙어 있어요.\n무브 묶기 → 비트마스크로 모든 보드 시도 → 최고 점수와 보드 개수 출력."),
       content: (
-        <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />
+        <div>
+          {/* ⚠️ 이 코드의 한계 — 1페이지(문제 소개)에 있던 걸 코드 보는 자리로 옮김.
+              선생님 2026-08-29 검토: 문제를 읽기도 전에 우리 코드 얘기가 나올 자리가 아님. */}
+          <div style={{ margin: "12px 14px 0", background: "#fffbeb", border: "1.5px solid #d97706",
+            borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#92400e",
+            lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
+            {"\u26A0\uFE0F "}{t(E,
+              "This is the brute force from the last page.\nIt is correct, and it is fast enough on the samples.\nAt N = 20 the C++ version still passes.\nPython runs out of time there and gets partial credit.",
+              "앞 페이지에서 본 완전탐색 그대로예요.\n답은 맞고 샘플에서는 충분히 빨라요.\nN = 20 에서도 C++ 은 통과해요.\n파이썬은 시간이 모자라 부분 점수를 받아요.")}
+          </div>
+          <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />
+        </div>
       ),
     },
   ];

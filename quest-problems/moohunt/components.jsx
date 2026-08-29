@@ -103,18 +103,18 @@ export function getMooHuntWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _MH_VARS, beats: [
       { hi: [6, 8],   bubble: t(E, "Read N (spots) and K (moves).", "N (자리 수) 와 K (무브 수) 읽기.") },
-      { hi: [10, 23], bubble: t(E, "Group identical moves: count each (x,y,z) triple so duplicates aren't re-scored. Build the triples list.", "같은 무브 묶기: (x,y,z) 삼중항을 개수로 세서 중복 재계산 방지. triples 목록 만들기.") },
+      { hi: [10, 23], bubble: t(E, "Group identical moves.\nCount each (x,y,z) triple so duplicates are not scored again.\nThen build the triples list.", "같은 무브끼리 묶어요.\n(x,y,z) 삼중쌍을 개수로 세면 중복을 다시 계산하지 않아요.\n그다음 triples 목록을 만들어요.") },
       { hi: [25, 27], bubble: t(E, "Start best & ways, then try EVERY board (2^N of them).", "best, ways 초기화 후, 모든 보드(2^N 개)를 시도.") },
-      { hi: [28, 37], bubble: t(E, "Bitmask brute: for each board (bit 1 = M, 0 = O), a triple scores if x is M and y, z are O — add its count.", "비트마스크 브루트: 보드마다(비트 1=M, 0=O), 삼중항의 x=M 이고 y,z=O 면 그 개수만큼 점수.") },
+      { hi: [28, 37], bubble: t(E, "Bitmask brute force.\nFor each board, bit 1 means M and bit 0 means O.\nA triple scores when x is M and y, z are O.\nAdd how many times that triple appeared.", "비트마스크 완전탐색이에요.\n보드마다 비트 1 은 M, 0 은 O 예요.\n삼중쌍의 x 가 M 이고 y, z 가 O 면 득점해요.\n그 삼중쌍이 나온 횟수만큼 더해요.") },
       { hi: [38, 43], bubble: t(E, "Track the best score and how many boards reach it.", "최고 점수 갱신 + 그 점수에 이르는 보드 수 세기.") },
       { hi: [45, 45], bubble: t(E, "Print the best score and the count.", "최고 점수와 보드 수 출력.") },
     ] };
   }
   return { code: FULL_PY, vars: _MH_VARS, beats: [
     { hi: [2, 2],   bubble: t(E, "Read N (spots) and K (moves).", "N (자리 수) 와 K (무브 수) 읽기.") },
-    { hi: [4, 9],   bubble: t(E, "Group identical moves: count each (x,y,z) triple so duplicates aren't re-scored.", "같은 무브 묶기: (x,y,z) 삼중항을 개수(Counter)로 세서 중복 재계산 방지.") },
+    { hi: [4, 9],   bubble: t(E, "Group identical moves.\nCount each (x,y,z) triple so duplicates are not scored again.", "같은 무브끼리 묶어요.\n(x,y,z) 삼중쌍을 Counter 로 세면 중복을 다시 계산하지 않아요.") },
     { hi: [11, 14], bubble: t(E, "Start best & ways, then try EVERY board (2^N of them).", "best, ways 초기화 후, 모든 보드(2^N 개)를 시도.") },
-    { hi: [15, 19], bubble: t(E, "Bitmask brute: for each board (bit 1 = M, 0 = O), a triple scores if x is M and y, z are O — add its count.", "비트마스크 브루트: 보드마다(비트 1=M, 0=O), 삼중항의 x=M 이고 y,z=O 면 그 개수만큼 점수.") },
+    { hi: [15, 19], bubble: t(E, "Bitmask brute force.\nFor each board, bit 1 means M and bit 0 means O.\nA triple scores when x is M and y, z are O.\nAdd how many times that triple appeared.", "비트마스크 완전탐색이에요.\n보드마다 비트 1 은 M, 0 은 O 예요.\n삼중쌍의 x 가 M 이고 y, z 가 O 면 득점해요.\n그 삼중쌍이 나온 횟수만큼 더해요.") },
     { hi: [20, 24], bubble: t(E, "Track the best score and how many boards reach it.", "최고 점수 갱신 + 그 점수에 이르는 보드 수 세기.") },
     { hi: [26, 26], bubble: t(E, "Print the best score and the count.", "최고 점수와 보드 수 출력.") },
   ] };
