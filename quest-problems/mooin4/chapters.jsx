@@ -1,6 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getMooin4Sections, getMooin4Walk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
+import { TypeTraceSim, BackwardSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooin4Ch1 (5 steps)
@@ -28,7 +29,7 @@ export function makeMooin4Ch1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#9a3412", lineHeight: 1.5 }}>
               {t(E,
-                "Print YES (always possible), and if k=1 print one keystroke string that produces S.",
+                "Print YES — it is always possible.\nIf k=1, also print one keystroke string that produces S.",
                 "YES 를 출력하고 (항상 가능), k=1 이면 S 를 만드는 키 입력 한 가지를 출력.")}
             </div>
           </div>
@@ -60,8 +61,8 @@ export function makeMooin4Ch1(E) {
                 <div>
                   {t(E, "Given target ", "목표 ")}
                   <b style={{ color: "#15803d" }}>S</b>
-                  {t(E, ", print YES (always possible) and one valid keystroke string when k=1.",
-                        " 가 주어지면 YES 를 출력하고, k=1 일 땐 S 를 만드는 키 입력도 출력.")}
+                  {t(E, <> is given, print YES — it is always possible.<br />When k=1, also print one keystroke string that makes it.</>,
+                        <> 가 주어지면 YES 를 출력해요.<br />k=1 일 땐 S 를 만드는 키 입력도 출력해요.</>)}
                 </div>
               </div>
             </div>
@@ -101,10 +102,11 @@ MOOMO`}
               </pre>
             </div>
           </div>
-          <div style={{ marginTop: 10, padding: 10, background: "#fff7ed", borderRadius: 8, border: "1px solid #fdba74", fontSize: 12, color: "#9a3412", lineHeight: 1.6 }}>
+          {/* 절 단위로 나눈 \n 이 살아나도록 pre-line + 한글 줄바꿈 세트 */}
+          <div style={{ marginTop: 10, padding: 10, background: "#fff7ed", borderRadius: 8, border: "1px solid #fdba74", fontSize: 12, color: "#9a3412", lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              "First line: T (test cases) and k. Each test: N then string S of length N. Output YES per test; if k=1 also a keystroke string of length N.",
-              "첫 줄: T (케이스 수) 와 k. 각 케이스: N 그리고 길이 N 인 문자열 S. 케이스마다 YES 출력, k=1 이면 길이 N 인 키 입력 문자열도.")}
+              "First line: T (test cases) and k.\nEach test: N, then a string S of length N.\nPrint YES for every test.\nWhen k=1, also print a keystroke string of length N.",
+              "첫 줄에 T (케이스 수) 와 k 가 와요.\n각 케이스는 N 과 길이 N 인 문자열 S 예요.\n케이스마다 YES 를 출력해요.\nk=1 이면 길이 N 인 키 입력 문자열도 출력해요.")}
           </div>
 
           {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
@@ -124,35 +126,9 @@ MOOMO`}
     {
       type: "reveal",
       narr: t(E,
-        "Walk through typing MOOMO step by step and watch the screen change. Each O flips everything BEFORE it appends.",
-        "MOOMO 를 한 글자씩 쳐보면서 화면이 어떻게 바뀌는지 따라가봐요. O 를 칠 때마다 먼저 다 뒤집히고 그 다음 O 가 붙어요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: "#9a3412", marginBottom: 8 }}>
-            🎬 {t(E, "Type MOOMO step by step", "MOOMO 를 한 글자씩 입력")}
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 12, fontFamily: "'JetBrains Mono',monospace" }}>
-            {[
-              { k: "M", before: "(empty)", flip: "—", after: "M" },
-              { k: "O", before: "M", flip: "O", after: "OO" },
-              { k: "O", before: "OO", flip: "MM", after: "MMO" },
-              { k: "M", before: "MMO", flip: "—", after: "MMOM" },
-              { k: "O", before: "MMOM", flip: "OOMO", after: "OOMOO" },
-            ].map((row, i) => (
-              <div key={i} style={{ display: "grid", gridTemplateColumns: "auto 1fr 1fr 1fr", gap: 8, alignItems: "center", padding: "6px 8px", background: i % 2 ? "#fff7ed" : "#fff", borderRadius: 6, border: "1px solid #fed7aa" }}>
-                <div style={{ fontWeight: 700, color: "#f97316", fontSize: 14 }}>{row.k}</div>
-                <div style={{ color: C.dim }}><span style={{ color: C.dim, fontSize: 10 }}>{t(E, "before", "이전")}: </span>{row.before}</div>
-                <div style={{ color: row.flip === "—" ? C.dim : "#9a3412" }}><span style={{ color: C.dim, fontSize: 10 }}>{t(E, "flip→", "뒤집기→")}: </span><b>{row.flip}</b></div>
-                <div style={{ color: "#15803d", fontWeight: 700 }}><span style={{ color: C.dim, fontSize: 10, fontWeight: 400 }}>{t(E, "screen", "화면")}: </span>{row.after}</div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 10, padding: 10, background: "#ecfdf5", border: "1px solid #86efac", borderRadius: 8, fontSize: 12, color: "#166534", lineHeight: 1.6 }}>
-            {t(E,
-              "Final screen = OOMOO. So typing MOOMO produces OOMOO. The second-to-last key you typed (M) gets flipped once by that final O, so it shows up as O in S.",
-              "최종 화면 = OOMOO. MOOMO 를 치면 OOMOO 가 나와요. 마지막에서 두 번째로 친 M 은 마지막 O 한 번에 의해 뒤집혀서 S 에서는 O 로 보여요.")}
-          </div>
-        </div>),
+        "Walk through typing MOOMO one key at a time and watch the screen change.",
+        "MOOMO 를 한 글자씩 쳐보면서 화면이 어떻게 바뀌는지 따라가요."),
+      content: (<TypeTraceSim E={E} />),
     },
 
     // 1-4: Quiz — last typed key
@@ -172,7 +148,7 @@ MOOMO`}
       correct: 0,
       explain: t(E,
         "Right! Nothing flips after the last keystroke, so it lands at position N-1 unchanged. That gives us a foothold — work backwards from there.",
-        "맞아! 마지막 키 입력 뒤에는 뒤집힘이 없으니 그대로 N-1 자리에 놓여요. 여기서부터 거꾸로 풀어가면 돼."),
+        "맞아요. 마지막 키 입력 뒤에는 뒤집힘이 없으니 그대로 N-1 자리에 놓여요.\n여기서부터 거꾸로 풀어가면 돼요."),
     },
 
     // 1-5: Input — count parity
@@ -186,9 +162,19 @@ MOOMO`}
         "'MMO' 안에 O 는 몇 개?"),
       hint: t(E,
         "Just count the letter O in the string MMO.",
-        "문자열 MMO 안의 O 글자 개수만 세면 돼."),
+        "문자열 MMO 안의 O 글자 개수만 세면 돼요."),
       answer: 1,
     },
+    // 1-6: 거꾸로 복원 시뮬 — 전엔 이 알고리즘을 글로만 설명했음 (2026-08-18 감사에서
+    //   "뒤→앞 재구성 스텝 + 트레이스 시뮬" 로 지적된 자리). 실제로 돌려서 보여준 뒤 아래에서 정리.
+    {
+      type: "reveal",
+      narr: t(E,
+        "The last key we can read straight off S. Now let's actually walk backwards and recover every key.",
+        "마지막 키는 S 에서 바로 읽을 수 있어요. 이제 실제로 거꾸로 훑으며 나머지 키도 찾아봐요."),
+      content: (<BackwardSim E={E} />),
+    },
+
     // 1-6: 통찰 — 뒤→앞 재구성 + O 홀짝 (코드 전에 평이하게). review 2026-08-18.
     {
       type: "reveal",
@@ -204,10 +190,10 @@ MOOMO`}
             {[
               t(E, <><b>Start at the end.</b> Nothing flips after the last keystroke, so the last key = <b>S[N-1]</b>. That's our foothold.</>,
                    <><b>맨 끝부터.</b> 마지막 키 뒤엔 뒤집힘이 없어요 → 마지막 키 = <b>S[N-1]</b>. 이게 발판이에요.</>),
-              t(E, <>Each key shows up flipped once for <b>every O typed after it</b>. But O flips M↔O, and flipping twice undoes itself — so only <b>whether that count is even or odd (parity)</b> matters.</>,
+              t(E, <>Each key shows up flipped once for <b>every O typed after it</b>.<br />But O swaps M↔O, and flipping twice undoes itself.<br />So only <b>whether that count is even or odd</b> matters.</>,
                    <>각 키는 <b>그 뒤에 친 O 개수</b>만큼 뒤집혀 화면에 나와요. 근데 O는 M↔O로 뒤집고, 두 번 뒤집으면 원래대로 → <b>그 개수의 홀짝(parity)만</b> 중요해요.</>),
-              t(E, <>So sweep <b>right → left</b> holding the running O-parity (<b>flips</b>). Un-flip each S[i] by that parity to recover the real key; if that key is O, flip the parity. One backward pass — that's the code.</>,
-                   <>그래서 <b>뒤에서 앞으로</b> 훑어요. 지금까지 본 O의 홀짝(<b>flips</b>)을 들고, S[i]를 그 홀짝만큼 되돌리면 진짜 친 키. 그 키가 O면 flips를 뒤집어요. 거꾸로 한 번 훑기 — 그게 코드예요.</>),
+              t(E, <>So sweep <b>right → left</b>, holding the running O-parity (<b>flips</b>).<br />Un-flip each S[i] by that parity to recover the real key.<br />If that key is O, flip the parity.<br />One backward pass — that is the code.</>,
+                   <>그래서 <b>뒤에서 앞으로</b> 훑어요.<br />지금까지 본 O 의 홀짝(<b>flips</b>)을 들고 가요.<br />S[i] 를 그 홀짝만큼 되돌리면 진짜 친 키예요.<br />그 키가 O 면 flips 를 뒤집어요.<br />거꾸로 한 번 훑기 — 그게 코드예요.</>),
             ].map((body, i) => (
               <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "#faf5ff", border: "1.5px solid #c4b5fd", borderRadius: 12, padding: "11px 14px" }}>
                 <span style={{ flexShrink: 0, width: 22, height: 22, borderRadius: 999, background: "#7c3aed", color: "#fff", fontSize: 12, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</span>

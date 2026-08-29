@@ -79,16 +79,16 @@ export function getMooin4Walk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _M4_VARS, beats: [
       { hi: [4, 9],   bubble: t(E, "Read T and k, then each test's N and the screen string S.", "T 와 k 읽고, 테스트마다 N 과 화면 문자열 S.") },
-      { hi: [10, 12], bubble: t(E, "Walk RIGHT→LEFT. flips = parity of the O's typed at later positions.", "오른쪽→왼쪽으로 훑어요. flips = 뒤 자리에서 친 O 의 홀짝.") },
-      { hi: [13, 22], bubble: t(E, "Each char: if flips is odd, M and O are swapped. Record what was really typed; if it's 'O', flips++.", "각 글자: flips 가 홀수면 M↔O 뒤집힘. 실제 친 글자를 기록, 'O' 면 flips++.") },
+      { hi: [10, 12], bubble: t(E, "Walk RIGHT→LEFT.\nflips = are the O's typed after this spot odd or even?", "오른쪽에서 왼쪽으로 훑어요.\nflips 는 이 자리보다 뒤에서 친 O 의 홀짝이에요.") },
+      { hi: [13, 22], bubble: t(E, "For each character: if flips is odd, M and O are swapped.\nRecord what was really typed.\nIf that key is O, flip the parity.", "글자마다 봐요. flips 가 홀수면 M 과 O 가 뒤바뀐 거예요.\n실제로 친 글자를 기록해요.\n그 키가 O 면 홀짝을 뒤집어요.") },
       { hi: [23, 26], bubble: t(E, "Always YES. If k==1, also print the actual typed string.", "항상 YES. k==1 이면 실제 친 문자열도 출력.") },
     ] };
   }
   return { code: FULL_PY, vars: _M4_VARS, beats: [
     { hi: [0, 1],   bubble: t(E, "Fast input.", "빠른 입력.") },
     { hi: [3, 7],   bubble: t(E, "Read T and k, then each test's N and the screen string S.", "T 와 k 읽고, 테스트마다 N 과 화면 문자열 S.") },
-    { hi: [8, 10],  bubble: t(E, "Walk RIGHT→LEFT. flips = parity of the O's typed at later positions.", "오른쪽→왼쪽으로 훑어요. flips = 뒤 자리에서 친 O 의 홀짝.") },
-    { hi: [11, 17], bubble: t(E, "Each char: if flips is odd, M and O are swapped. Record what was really typed; if it's 'O', flips++.", "각 글자: flips 가 홀수면 M↔O 뒤집힘. 실제 친 글자를 기록, 'O' 면 flips++.") },
+    { hi: [8, 10],  bubble: t(E, "Walk RIGHT→LEFT.\nflips = are the O's typed after this spot odd or even?", "오른쪽에서 왼쪽으로 훑어요.\nflips 는 이 자리보다 뒤에서 친 O 의 홀짝이에요.") },
+    { hi: [11, 17], bubble: t(E, "For each character: if flips is odd, M and O are swapped.\nRecord what was really typed.\nIf that key is O, flip the parity.", "글자마다 봐요. flips 가 홀수면 M 과 O 가 뒤바뀐 거예요.\n실제로 친 글자를 기록해요.\n그 키가 O 면 홀짝을 뒤집어요.") },
     { hi: [18, 20], bubble: t(E, "Always YES. If k==1, also output the actual typed string.", "항상 YES. k==1 이면 실제 친 문자열도 출력.") },
     { hi: [21, 21], bubble: t(E, "Print all results at once.", "결과를 한 번에 출력.") },
   ] };
