@@ -69,9 +69,9 @@ nums = list(range(1, 6))     # [1, 2, 3, 4, 5]
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "과일 리스트를 만들고 출력하세요!",
-          initialCode: "fruits = [\"사과\", \"바나나\", \"딸기\"]\nprint(fruits)",
+          initialCode: "# 대괄호 [ ] 안에 값을 쉼표로 나열하면 리스트가 돼요\nfruits = [___, ___, ___]\nprint(fruits)",
           expectedOutput: "['사과', '바나나', '딸기']",
-          hint: "대괄호 안에 값들을 넣어요!",
+          hint: "따옴표로 감싼 과일 이름 세 개를 차례대로 넣어요.",
           hint2: "[\"사과\", \"바나나\", \"딸기\"]"
         },
         {
@@ -103,7 +103,7 @@ print(fruits[2])  # 딸기 (세 번째)
           type: "tryit",
           title: "🖥️ 인덱스로 접근!",
           task: "두 번째 과일을 출력하세요!",
-          initialCode: "fruits = [\"사과\", \"바나나\", \"딸기\"]\nprint(fruits[1])",
+          initialCode: "fruits = [\"사과\", \"바나나\", \"딸기\"]\n\n# 자리 번호는 0 부터 세요\nprint(fruits[___])",
           expectedOutput: "바나나",
           hint: "두 번째는 인덱스 1!",
           hint2: "fruits[1]"
@@ -153,7 +153,7 @@ print(fruits)  # ['사과', '포도', '딸기']
           type: "tryit",
           title: "🖥️ 값 수정하기!",
           task: "첫 번째 값을 '오렌지'로 바꾸세요!",
-          initialCode: "fruits = [\"사과\", \"바나나\", \"딸기\"]\nfruits[0] = \"오렌지\"\nprint(fruits)",
+          initialCode: "fruits = [\"사과\", \"바나나\", \"딸기\"]\n\n# 그 자리에 새 값을 넣어요\nfruits[___] = ___\nprint(fruits)",
           expectedOutput: "['오렌지', '바나나', '딸기']",
           hint: "인덱스 0은 첫 번째!",
           hint2: "fruits[0] = \"오렌지\""
@@ -193,9 +193,9 @@ fruits.pop(0)  # 0 번 박스를 꺼냄
           type: "tryit",
           title: "🖥️ 요소 추가하기!",
           task: "'포도'를 추가하세요!",
-          initialCode: "fruits = [\"사과\", \"바나나\"]\nfruits.append(\"포도\")\nprint(fruits)",
+          initialCode: "fruits = [\"사과\", \"바나나\"]\n\n# 리스트 끝에 하나 덧붙여요\nfruits.___(\"포도\")\nprint(fruits)",
           expectedOutput: "['사과', '바나나', '포도']",
-          hint: "append()로 추가!",
+          hint: "리스트 끝에 하나를 덧붙이는 메서드예요.",
           hint2: "fruits.append(\"포도\")"
         },
         {
@@ -321,9 +321,9 @@ print(fruits.index("바나나"))  # 1
           type: "tryit",
           title: "🖥️ 길이 구하기!",
           task: "리스트 길이를 출력하세요!",
-          initialCode: "numbers = [10, 20, 30, 40, 50]\nprint(f\"개수: {len(numbers)}개\")",
+          initialCode: "numbers = [10, 20, 30, 40, 50]\n\n# 몇 개 들어있는지 알려주는 함수\nprint(f\"개수: {___(numbers)}개\")",
           expectedOutput: "개수: 5개",
-          hint: "len()으로 길이!",
+          hint: "리스트에 몇 개 들어있는지 세어주는 함수가 있어요.",
           hint2: "len(numbers)"
         },
         {

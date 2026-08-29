@@ -69,9 +69,9 @@ nums = list(range(1, 6))     # [1, 2, 3, 4, 5]
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "Create a fruit list and print it!",
-          initialCode: "fruits = [\"apple\", \"banana\", \"strawberry\"]\nprint(fruits)",
+          initialCode: "# Square brackets [ ] with values separated by commas make a list\nfruits = [___, ___, ___]\nprint(fruits)",
           expectedOutput: "['apple', 'banana', 'strawberry']",
-          hint: "Put the values inside square brackets!",
+          hint: "Three fruit names, each in quotes, in order.",
           hint2: "[\"apple\", \"banana\", \"strawberry\"]"
         },
         {
@@ -103,7 +103,7 @@ print(fruits[2])  # strawberry (third)
           type: "tryit",
           title: "🖥️ Access by Index!",
           task: "Print the second fruit!",
-          initialCode: "fruits = [\"apple\", \"banana\", \"strawberry\"]\nprint(fruits[1])",
+          initialCode: "fruits = [\"apple\", \"banana\", \"strawberry\"]\n\n# Positions are counted from 0\nprint(fruits[___])",
           expectedOutput: "banana",
           hint: "The second item is index 1!",
           hint2: "fruits[1]"
@@ -153,7 +153,7 @@ print(fruits)  # ['apple', 'grape', 'strawberry']
           type: "tryit",
           title: "🖥️ Change a Value!",
           task: "Change the first value to 'orange'!",
-          initialCode: "fruits = [\"apple\", \"banana\", \"strawberry\"]\nfruits[0] = \"orange\"\nprint(fruits)",
+          initialCode: "fruits = [\"apple\", \"banana\", \"strawberry\"]\n\n# Put a new value into that position\nfruits[___] = ___\nprint(fruits)",
           expectedOutput: "['orange', 'banana', 'strawberry']",
           hint: "Index 0 is the first item!",
           hint2: "fruits[0] = \"orange\""
@@ -193,9 +193,9 @@ fruits.pop(0)  # removes box 0
           type: "tryit",
           title: "🖥️ Add an Element!",
           task: "Add 'grape' to the list!",
-          initialCode: "fruits = [\"apple\", \"banana\"]\nfruits.append(\"grape\")\nprint(fruits)",
+          initialCode: "fruits = [\"apple\", \"banana\"]\n\n# Stick one more onto the end of the list\nfruits.___(\"grape\")\nprint(fruits)",
           expectedOutput: "['apple', 'banana', 'grape']",
-          hint: "Use append() to add!",
+          hint: "The method that sticks one more item onto the end.",
           hint2: "fruits.append(\"grape\")"
         },
         {
@@ -321,9 +321,9 @@ print(fruits.index("banana"))  # 1
           type: "tryit",
           title: "🖥️ Get the Length!",
           task: "Print the length of the list!",
-          initialCode: "numbers = [10, 20, 30, 40, 50]\nprint(f\"Count: {len(numbers)} items\")",
+          initialCode: "numbers = [10, 20, 30, 40, 50]\n\n# The function that tells you how many are inside\nprint(f\"Count: {___(numbers)} items\")",
           expectedOutput: "Count: 5 items",
-          hint: "Use len() for the length!",
+          hint: "There is a function that counts how many items a list holds.",
           hint2: "len(numbers)"
         },
         {
