@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getCowSplitsWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { EraseRuleSim, InsightSim, CowSplitsTraceSim } from "./sims";
+import { EraseRuleSim, OddImpossibleSim, InsightSim, CowSplitsTraceSim } from "./sims";
 
 const A = "#059669";
 // op 색은 시뮬(sims.jsx OPCOL)과 통일: op1 = 빨강(겹치는 OW), op2 = 주황(남는 C)
@@ -28,7 +28,7 @@ function CowSplitsPlan({ E }) {
   return (
     <div style={{ padding: 16, maxWidth: 620, margin: "0 auto" }}>
       <div style={{ fontSize: 14, fontWeight: 800, color: "#0f172a", marginBottom: 4 }}>
-        🧩 {t(E, "What the sims told us", "시뮬에서 알아낸 것")}
+        🧩 {t(E, "What we found out", "우리가 알아낸 것")}
       </div>
       <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
         <Insight icon="🚫" color="#dc2626"
@@ -111,7 +111,7 @@ function CowSplitsClassify({ E }) {
         {t(E, "So the answer is always one of just three", "그래서 답은 언제나 이 셋 중 하나")}
       </div>
       <div style={{ fontSize: 11.5, color: "#64748b", textAlign: "center", marginBottom: 12, wordBreak: "keep-all", textWrap: "balance" }}>
-        {t(E, "never 3 or more — that's the whole problem", "3 이상은 절대 없어요 — 이게 문제의 전부")}
+        {t(E, "we just saw why 3 or more never happens", "3 번 이상이 왜 안 나오는지 방금 봤어요")}
       </div>
       <div style={{ display: "grid", gap: 8 }}>
         <Row3 icon="🚫" color="#dc2626" bg="#fef2f2"
@@ -119,7 +119,7 @@ function CowSplitsClassify({ E }) {
         <Row3 icon="🎯" color="#059669" bg="#ecfdf5"
           cond={t(E, <><b>S is already a square</b> (front half = back half)</>, <><b>S 자체가 제곱</b> (앞 절반 = 뒤 절반)</>)} ans="1" ex="COWCOW" />
         <Row3 icon="🔀" color="#8b5cf6" bg="#f5f3ff"
-          cond={t(E, <><b>otherwise</b> → block-pair trick</>, <><b>그 외</b> → 블록쌍 트릭</>)} ans="2" ex="COWOWC" />
+          cond={t(E, <><b>otherwise</b> → pair front and back blocks</>, <><b>그 외</b> → 앞뒤 블록을 짝지어서</>)} ans="2" ex="COWOWC" />
       </div>
     </div>
   );
@@ -298,6 +298,14 @@ export function makeCowSplitsCh1(E) {
                  "먼저 — 한 번의 지우기가 어떻게 생겼는지, COWOWC 를 직접 비워보며 세어봐요."),
       content: (<EraseRuleSim E={E} />),
     },
+    // [승] 불가능한 경우 — 전엔 통찰 시뮬 마지막 단계에 얹혀 있었음. 다른 질문이라 분리
+    // (선생님 2026-08-29 검토). 요약 페이지 순서(−1 → 1 → 2)와도 맞음.
+    {
+      type: "reveal",
+      narr: t(E, "Before counting moves — is there an S we can never empty at all?",
+                 "몇 번인지 세기 전에 — 아예 못 비우는 S 도 있을까요?"),
+      content: (<OddImpossibleSim E={E} />),
+    },
     // [전] 통찰 — 놀랍게도 항상 2번! (블록 쌍 + 겹치는 2 글자)
     {
       type: "reveal",
@@ -308,8 +316,8 @@ export function makeCowSplitsCh1(E) {
     // [전] 분류 — 답은 −1 / 1 / 2 셋 중 하나
     {
       type: "reveal",
-      narr: t(E, "Zoom out: the answer is always one of three — -1, 1, or 2. That's the whole problem.",
-                 "한 발 물러서 정리해요: 답은 늘 셋 중 하나 — -1, 1, 2. 그게 이 문제의 전부예요."),
+      narr: t(E, "Zoom out: every S lands in one of three cases — -1, 1, or 2.",
+                 "한 발 물러서 정리해요. 어떤 S 든 −1, 1, 2 셋 중 하나예요."),
       content: (<CowSplitsClassify E={E} />),
     },
     // [결] 출력 형식 — 이제 M=2 와 두 op 를 아니까 '글자별 op 번호' 배열이 이해됨
@@ -335,7 +343,7 @@ export function makeCowSplitsCh2(E, lang = "py") {
       label: t(E, "Plan", "계획"),
       narr: t(E,
         "Before the code — here's what the sims told us, and the exact plan (with the variable names you'll see).",
-        "코드 전에 — 시뮬이 알려준 것과, 정확한 계획 (곧 볼 변수 이름과 함께)."),
+        "코드 전에 — 앞에서 알아낸 것과 정확한 계획 (곧 볼 변수 이름과 함께)."),
       content: (<CowSplitsPlan E={E} />),
     },
     // Run — 코드 앞에 ans 표가 채워지는 걸 눈으로 (photoshoot25 Run 단계처럼)

@@ -194,13 +194,18 @@ export function EraseRuleSim({ E }) {
    (그리고 N 홀수면 3N 홀수 → 짝수 지우기로 못 비움 → -1)
    ═══════════════════════════════════════════════════════════════ */
 export function InsightSim({ E }) {
+  /* 선생님 2026-08-29 검토: "짝지어 봐요" 가 이유 없이 주어졌고(핵심인데),
+     N=2 세 쌍만 보고 "언제나 M=2" 로 일반화하고 있었음.
+     → 앞에 why(짝을 그렇게 짓는 이유), 뒤에 many(쌍이 여러 개여도 되는 이유) 추가.
+     −1(홀수)은 다른 질문이라 이 시뮬에서 빼고 앞 페이지로 분리. */
   const steps = [
+    { kind: "why" },         // 1번이 Y+Y 로 읽히려면 앞·뒤에서 고른 게 같아야 한다
     { kind: "pair" },
     { kind: "overlap" },     // Case 1/3: COW × OWC — 겹침 OW, 남음 C·C
     { kind: "case2" },       // Case 2/3: COW × WCO — 겹침 CO, 남음 W·W
     { kind: "case3" },       // Case 3/3: OWC × WCO — 겹침 WC, 남음 O·O + 요약
     { kind: "split" },
-    { kind: "odd" },
+    { kind: "many" },        // N=4 로 쌍 2개 — 앞 절반 COOW = 뒤 절반 COOW (검증됨)
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
@@ -213,9 +218,12 @@ export function InsightSim({ E }) {
   //  op 1 은 a[1], a[2], b[0], b[1] = O, W, O, W.
 
   const say =
-    s.kind === "pair" ? t(E,
-      <>Let's look for an <b>S that needs 3 or more</b>. One idea: <b>pair each front block with its back partner</b> (block <b>i</b> ↔ block <b>i + N/2</b>) and see what each pair can do. Here N=2, so <b>COW</b> ↔ <b>OWC</b>. There are only <b>3 kinds of block</b>, so let's check every pair.</>,
-      <><b>3번 이상이 필요한 S</b> 가 있을까요?<br />앞쪽 블록 i 를 뒤쪽 파트너 <b>(i + N/2)</b> 와 짝지어 봐요.<br />여기 N=2 니 <b>COW ↔ OWC</b>. 블록은 3가지뿐이라 짝을 다 볼 수 있어요.</>)
+    s.kind === "why" ? t(E,
+      <>Before pairing anything, remember what one move needs.<br />The letters we pick must read as <b>Y + Y</b>.<br />So what we take from the <b>front half</b> must match<br />what we take from the <b>back half</b>, letter for letter.</>,
+      <>짝을 짓기 전에, 한 번의 지우기가 뭘 요구하는지 봐요.<br />고른 글자가 <b>Y + Y</b> 로 읽혀야 해요.<br />그러니 <b>앞 절반</b>에서 고른 것과<br /><b>뒤 절반</b>에서 고른 것이 똑같아야 해요.</>)
+    : s.kind === "pair" ? t(E,
+      <>That is why we line the halves up <b>position by position</b>:<br />front block <b>i</b> with back block <b>i + N/2</b>.<br />Here N=2, so <b>COW ↔ OWC</b>.<br />There are only <b>3 kinds of block</b>, so we can check every pair.</>,
+      <>그래서 앞 절반과 뒤 절반을 <b>같은 자리끼리</b> 맞춰요.<br />앞 블록 <b>i</b> 와 뒤 블록 <b>i + N/2</b> 예요.<br />여기 N=2 니 <b>COW ↔ OWC</b>.<br />블록은 3가지뿐이라 짝을 다 볼 수 있어요.</>)
     : s.kind === "overlap" ? t(E,
       <><b>Case 1 / 3.</b> <b>COW × OWC</b> — the middle "<b>OW</b>" appears in both. Leftover: <b>C</b> on front + <b>C</b> on back (same letter).</>,
       <><b>1 / 3.</b> <b>COW × OWC</b> — 가운데 <b>OW</b> 가 양쪽에 다 있어요.<br />남는 건 앞 <b>C</b> + 뒤 <b>C</b> — 같은 글자예요.</>)
@@ -223,14 +231,14 @@ export function InsightSim({ E }) {
       <><b>Case 2 / 3.</b> <b>COW × WCO</b> — this time "<b>CO</b>" overlaps (front's start = back's end). Leftover: <b>W</b> · <b>W</b> — same letter again!</>,
       <><b>2 / 3.</b> <b>COW × WCO</b> — 이번엔 <b>CO</b> 가 겹쳐요 (앞의 시작 = 뒤의 끝).<br />남는 건 <b>W · W</b> — 이번에도 같은 글자!</>)
     : s.kind === "case3" ? t(E,
-      <><b>Case 3 / 3.</b> <b>OWC × WCO</b> — "<b>WC</b>" overlaps. Leftover: <b>O</b> · <b>O</b>. So all 3 possible pairs have 2-letter overlap + same-letter leftover → <b>M = 2 always works</b>.</>,
+      <><b>Case 3 / 3.</b> <b>OWC × WCO</b> — "<b>WC</b>" overlaps. Leftover: <b>O</b> · <b>O</b>.<br />All three pairs look the same — <b>2-letter overlap + same-letter leftover</b>.</>,
       <><b>3 / 3.</b> <b>OWC × WCO</b> — <b>WC</b> 가 겹치고 남는 건 <b>O · O</b>.<br />세 쌍 다 같은 모양이에요 — <b>2글자 겹침 + 같은 글자 남음</b>.</>)
-    : s.kind === "split" ? t(E,
-      <>Split it: the <b>overlapping 2 letters</b> (OW) go to <b>op 1</b> — front OW matches back OW. The <b>leftover 1 letter each side</b> (C and C) go to <b>op 2</b> — same letter! Both ops read as Y+Y → <b>M = 2</b>.</>,
-      <>나눠요. 겹치는 <b>2글자 (OW)</b> 는 <b>1번</b>으로 — 앞 OW = 뒤 OW ✓<br />남는 <b>1글자씩 (C·C)</b> 은 <b>2번</b>으로 — 같은 글자 ✓<br />둘 다 "똑같은 게 두 번" → <b>M = 2</b>.</>)
+    : s.kind === "many" ? t(E,
+      <>One pair is done. What if there are <b>many</b>?<br />Here N=4, so two pairs. Each pair splits the same way.<br />Op 1 collects <b>COOW</b> from the front half<br />and <b>COOW</b> from the back half — the same, so it reads Y+Y.<br />Op 2 does too. Still <b>M = 2</b>.</>,
+      <>한 쌍은 됐어요. 쌍이 <b>여러 개</b>면 어떨까요?<br />여기 N=4 라 쌍이 두 개예요. 쌍마다 똑같이 나눠요.<br />1번이 앞 절반에서 <b>COOW</b> 를 고르고<br />뒤 절반에서도 <b>COOW</b> 를 골라요. 같으니까 Y+Y 예요.<br />2번도 마찬가지예요. 그래서 <b>M = 2</b>.</>)
     : t(E,
-      <>And if <b>N is odd</b>? Total length 3N is odd → each op removes an even count → <b>impossible → −1</b>.</>,
-      <>N 이 <b>홀수</b>면? 총 길이 3N 도 홀수예요.<br />한 번에 <b>짝수 개</b>씩만 지우니 절대 못 비워요 → <b>−1</b>.</>)
+      <>Split it: the <b>overlapping 2 letters</b> (OW) go to <b>op 1</b> — front OW matches back OW.<br />The <b>leftover 1 letter each side</b> (C and C) go to <b>op 2</b> — same letter!<br />Both ops read as Y+Y → <b>M = 2</b>.</>,
+      <>나눠요. 겹치는 <b>2글자 (OW)</b> 는 <b>1번</b>으로 — 앞 OW = 뒤 OW ✓<br />남는 <b>1글자씩 (C·C)</b> 은 <b>2번</b>으로 — 같은 글자 ✓<br />둘 다 "똑같은 게 두 번" → <b>M = 2</b>.</>)
 
   return (
     <div style={{ padding: 16 }}>
@@ -290,8 +298,8 @@ export function InsightSim({ E }) {
             bLabelEn="back: b[:2] = WC" bLabelKo="뒤: b[:2] = WC" />
           <div style={{ maxWidth: 500, margin: "14px auto 0", padding: "10px 14px", background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, fontSize: 12.5, color: "#065f46", lineHeight: 1.65, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
             🎉 {t(E,
-              <>All <b>3 possible different-pairs</b> checked. Every one: 2-letter overlap + same-letter leftover. <b>M = 2 works no matter what.</b></>,
-              <>서로 다른 쌍은 <b>이 3가지가 전부</b>예요.<br />셋 다 <b>2글자 겹침 + 같은 글자 남음</b> — 그러니 <b>M = 2 는 언제나 돼요.</b></>)}
+              <>All <b>3 different pairs</b> checked. Every one: 2-letter overlap + same-letter leftover.<br />So <b>one pair</b> always splits into 2 moves.</>,
+              <>서로 다른 쌍은 <b>이 3가지가 전부</b>예요.<br />셋 다 <b>2글자 겹침 + 같은 글자 남음</b>이에요.<br />그러니 <b>한 쌍</b>은 늘 2번으로 나눠져요.</>)}
           </div>
         </>
       )}
@@ -328,13 +336,117 @@ export function InsightSim({ E }) {
         </>
       )}
 
-      {/* odd 스텝 — 홀수면 불가능 */}
-      {s.kind === "odd" && (
+      {/* why 스텝 — 한 번의 지우기가 요구하는 것: 앞 절반 = 뒤 절반 */}
+      {s.kind === "why" && (
         <>
-          <Row>{"COW".split("").map((ch, i) => <Tile key={i} ch={ch} size={42} bg="#fff" bd="#dc2626" />)}</Row>
-          <Caption color="#dc2626">{t(E, "N=1 → 3N=3 odd → can't empty with even-length ops → −1",
-                                          "N=1 → 3N=3 홀수 → 짝수 길이 연산으로 못 비움 → −1")}</Caption>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginBottom: 8 }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+              <div style={{ display: "flex", gap: 4 }}>
+                {"COW".split("").map((ch, i) => <Tile key={i} ch={ch} size={40} bd="#059669" bg="#ecfdf5" />)}
+              </div>
+              <div style={{ fontSize: 10, fontWeight: 800, color: "#059669" }}>{t(E, "front half", "앞 절반")}</div>
+            </div>
+            <div style={{ fontSize: 20, fontWeight: 800, color: "#8b5cf6" }}>=</div>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+              <div style={{ display: "flex", gap: 4 }}>
+                {"OWC".split("").map((ch, i) => <Tile key={i} ch={ch} size={40} bd="#8b5cf6" bg="#f5f3ff" />)}
+              </div>
+              <div style={{ fontSize: 10, fontWeight: 800, color: "#8b5cf6" }}>{t(E, "back half", "뒤 절반")}</div>
+            </div>
+          </div>
+          <div style={{ maxWidth: 480, margin: "10px auto 0", padding: "10px 14px", background: "#f5f3ff",
+            border: "1.5px solid #c4b5fd", borderRadius: 10, fontSize: 12.5, color: "#5b21b6",
+            lineHeight: 1.75, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E, <>One move picks letters that read <b>Y + Y</b>.<br />So the picks must be <b>the same on both halves</b>.</>,
+                  <>한 번의 지우기는 <b>Y + Y</b> 로 읽히는 글자를 고르는 거예요.<br />그러니 <b>양쪽 절반에서 고른 게 같아야</b> 해요.</>)}
+          </div>
         </>
+      )}
+
+      {/* many 스텝 — N=4 로 쌍 2개. 라벨은 실제 알고리즘 결과 (완전탐색으로 검증) */}
+      {s.kind === "many" && (
+        <>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, marginBottom: 8, flexWrap: "wrap" }}>
+            {"COWOWCWCOCOW".split("").flatMap((ch, i) => {
+              const op = [1,1,2,1,1,2,2,1,1,2,1,1][i];
+              const tile = <Tile key={"t" + i} ch={ch} size={32} bd={OPCOL[op]} bg={OPBG[op]} fg="#1f2937" badge={op} />;
+              return i === 5
+                ? [tile, <div key="div" style={{ width: 2, height: 34, background: "#cbd5e1", margin: "0 4px" }} />]
+                : [tile];
+            })}
+          </div>
+          <div style={{ fontSize: 10.5, fontWeight: 800, color: "#94a3b8", textAlign: "center", marginBottom: 8 }}>
+            {t(E, "N = 4 · front half | back half", "N = 4 · 앞 절반 | 뒤 절반")}
+          </div>
+          <div style={{ maxWidth: 500, margin: "0 auto", padding: "10px 14px", background: "#ecfdf5",
+            border: "1.5px solid #6ee7b7", borderRadius: 10, fontSize: 12, color: "#065f46",
+            lineHeight: 1.8, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+            <div><b style={{ color: OPCOL[1] }}>{t(E, "op 1", "1번")}</b>{" "}
+              <code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>COOW</code>
+              {" + "}<code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>COOW</code> ✓</div>
+            <div><b style={{ color: OPCOL[2] }}>{t(E, "op 2", "2번")}</b>{" "}
+              <code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>WC</code>
+              {" + "}<code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>WC</code> ✓</div>
+            <div style={{ marginTop: 4, fontWeight: 800, color: "#059669" }}>
+              {t(E, "2 pairs, still M = 2 🎉", "쌍이 둘이어도 M = 2 🎉")}
+            </div>
+          </div>
+        </>
+      )}
+      </StepFade>
+
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   OddImpossibleSim — [분리] 아예 못 비우는 S.
+   전엔 "왜 항상 2번이면 될까" 시뮬 마지막 단계에 얹혀 있었는데
+   (선생님 2026-08-29 검토: "다른 질문인데 같은 페이지에 있음") 자기 페이지로 뺐다.
+   요약 페이지의 순서(−1 → 1 → 2)와도 맞는다.
+   ═══════════════════════════════════════════════════════════════ */
+export function OddImpossibleSim({ E }) {
+  const steps = [{ kind: "count" }, { kind: "even" }, { kind: "concl" }];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+
+  const say =
+    s.kind === "count" ? t(E,
+      <>Before asking how few moves, ask if it is possible at all.<br />Take <b>N = 1</b>. Then S is one block, <b>3 letters</b>.</>,
+      <>몇 번이면 되는지 묻기 전에, 아예 되는지부터 봐요.<br /><b>N = 1</b> 이면 S 는 블록 하나, <b>글자 3개</b>예요.</>)
+    : s.kind === "even" ? t(E,
+      <>One move removes <b>Y + Y</b> — the same thing twice.<br />So it always removes an <b>even</b> number of letters.</>,
+      <>한 번의 지우기는 <b>Y + Y</b> 를 없애요. 같은 걸 두 번이죠.<br />그래서 지우는 글자 수는 늘 <b>짝수</b>예요.</>)
+    : t(E,
+      <>Even numbers can never add up to <b>3</b>.<br />So when <b>N is odd</b>, 3N is odd and S can never be emptied → <b>−1</b>.</>,
+      <>짝수를 아무리 더해도 <b>3</b> 이 될 수 없어요.<br />그래서 <b>N 이 홀수</b>면 3N 도 홀수라 절대 못 비워요 → <b>−1</b>.</>);
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Is it ever impossible?", "아예 못 비우는 S 는?")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
+      <Say tone={s.kind === "concl" ? "stuck" : "go"}>{say}</Say>
+
+      <Row>{"COW".split("").map((ch, i) =>
+        <Tile key={i} ch={ch} size={42} bg="#fff" bd={s.kind === "concl" ? "#dc2626" : "#94a3b8"} />)}</Row>
+
+      {s.kind === "count" && (
+        <Caption color="#64748b">{t(E, "N = 1 → 3N = 3 letters", "N = 1 → 3N = 글자 3개")}</Caption>
+      )}
+      {s.kind === "even" && (
+        <div style={{ maxWidth: 460, margin: "12px auto 0", padding: "10px 14px", background: "#f5f3ff",
+          border: "1.5px solid #c4b5fd", borderRadius: 10, fontSize: 12.5, color: "#5b21b6",
+          lineHeight: 1.8, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+          {t(E, <>Y + Y is <b>2 × (length of Y)</b> → always even.<br />2, 4, 6, 8, …</>,
+                <>Y + Y 는 <b>Y 길이의 2배</b>라 늘 짝수예요.<br />2, 4, 6, 8, …</>)}
+        </div>
+      )}
+      {s.kind === "concl" && (
+        <Caption color="#dc2626">{t(E, "3 is odd → can never be emptied → −1",
+                                        "3 은 홀수 → 절대 못 비움 → −1")}</Caption>
       )}
       </StepFade>
 
