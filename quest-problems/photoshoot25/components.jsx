@@ -1,6 +1,12 @@
-// 🔒 USACO_VERIFIED (2026-05-13)
+// 🔒 USACO_VERIFIED (2026-05-13 · 2026-08-29 배열 크기 +2 → +1)
 //   Python: 12/18 (TLE 13-18, Python too slow)
 //   C++:    18/18 PASS
+//   2026-08-29: 선생님 "이거 +2 안하고 할수 없을까?" → beauty/S 를 N+2 → N+1, W+2 → W+1.
+//     +1 은 필요하고 +2 의 둘째 칸은 아무도 안 씀 (r,c 가 1…N 이라 beauty[N] 까지만 접근).
+//     C++  : 랜덤 3,000건 결과 일치 · N=1~8 × K=1~N 전수를 ASan/UBSan 으로 경계 오류 0
+//     Python: N=1~7 × K 전수 × 6회 = 168건 결과 일치, 에러 0
+//     → 선생님이 USACO 재제출로 C++ 통과 확인 (2026-08-29).
+//     같이 고침: "+2 는 자리만 넉넉히 — 신경 안 써도 돼요" 말풍선을 실제 이유로 교체.
 //   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 
@@ -18,13 +24,13 @@ export const FULL_PY = [
   "Q = int(input())",
   "",
   "# beauty[r][c] = current beauty of cow at (r,c). 1-indexed.",
-  "beauty = [[0] * (N + 2) for _ in range(N + 2)]",
+  "beauty = [[0] * (N + 1) for _ in range(N + 1)]",
   "",
   "# W = number of valid top-left positions per dimension",
   "W = N - K + 1",
   "",
   "# S[i][j] = sum of K x K window with top-left (i,j)",
-  "S = [[0] * (W + 2) for _ in range(W + 2)]",
+  "S = [[0] * (W + 1) for _ in range(W + 1)]",
   "",
   "cur_max = 0",
   "out = []",
@@ -65,10 +71,10 @@ export const FULL_CPP = [
   "    cin >> Q;",
   "",
   "    // 1-indexed beauty grid",
-  "    vector<vector<int>> beauty(N + 2, vector<int>(N + 2, 0));",
+  "    vector<vector<int>> beauty(N + 1, vector<int>(N + 1, 0));",
   "",
   "    int W = N - K + 1; // valid top-left range per dim",
-  "    vector<vector<int>> S(W + 2, vector<int>(W + 2, 0));",
+  "    vector<vector<int>> S(W + 1, vector<int>(W + 1, 0));",
   "",
   "    int cur_max = 0;",
   "",
@@ -115,9 +121,9 @@ const VIEW_PY = [
   "N, K = map(int, input().split())",
   "Q = int(input())",
   "",
-  "beauty = [[0] * (N + 2) for _ in range(N + 2)]",
+  "beauty = [[0] * (N + 1) for _ in range(N + 1)]",
   "W = N - K + 1",
-  "S = [[0] * (W + 2) for _ in range(W + 2)]",
+  "S = [[0] * (W + 1) for _ in range(W + 1)]",
   "",
   "cur_max = 0",
   "out = []",
@@ -155,10 +161,10 @@ const VIEW_CPP = [
   "    int Q;",
   "    cin >> Q;",
   "",
-  "    vector<vector<int>> beauty(N + 2, vector<int>(N + 2, 0));",
+  "    vector<vector<int>> beauty(N + 1, vector<int>(N + 1, 0));",
   "",
   "    int W = N - K + 1;",
-  "    vector<vector<int>> S(W + 2, vector<int>(W + 2, 0));",
+  "    vector<vector<int>> S(W + 1, vector<int>(W + 1, 0));",
   "",
   "    int cur_max = 0;",
   "",
@@ -192,7 +198,7 @@ export function getPhotoshoot25Walk(E, lang = "py") {
     return { code: VIEW_CPP, vars: _PS_VARS, beats: [
       { hi: [0, 3],   bubble: t(E, "Include the tools we need.", "필요한 도구 include.") },
       { hi: [5, 9],   bubble: t(E, "Start main → read N, K, and the number of updates Q.", "main 시작 → N, K, 업데이트 수 Q 읽기.") },
-      { hi: [11, 11], bubble: t(E, "beauty = each cell's value (all 0 at first). (+2 is just spare room — don't worry about it.)", "beauty = 각 칸의 값 (처음엔 다 0). (+2 는 자리만 넉넉히 — 신경 안 써도 돼요.)") },
+      { hi: [11, 11], bubble: t(E, "beauty = each cell's value (all 0 at first). r and c arrive as 1…N, so we need beauty[N] — that is why the size is N+1. Slot 0 stays unused so r is the row number as-is.", "beauty = 각 칸의 값 (처음엔 다 0). r, c 가 1부터 N 까지 오니까 beauty[N] 까지 필요해요. 그래서 크기가 N+1 이에요. 0번 자리는 안 써요 — r 을 그대로 줄 번호로 쓰려고요.") },
       { hi: [13, 13], bubble: t(E, "W = how many photos fit in a row (N−K+1).", "W = 한 줄에 들어가는 사진 수 (N−K+1).") },
       { hi: [14, 14], bubble: t(E, "S = each photo's score. THE key idea — keep it, don't re-add every time.", "S = 각 사진의 점수. 핵심 — 저장해두고 매번 다시 안 더함.") },
       { hi: [16, 16], bubble: t(E, "cur_max = best score so far.", "cur_max = 지금까지 최고 점수.") },
@@ -206,7 +212,7 @@ export function getPhotoshoot25Walk(E, lang = "py") {
   return { code: VIEW_PY, vars: _PS_VARS, beats: [
     { hi: [0, 1],   bubble: t(E, "Fast input.", "빠른 입력.") },
     { hi: [3, 4],   bubble: t(E, "Read N, K, and the number of updates Q.", "N, K, 업데이트 수 Q 읽기.") },
-    { hi: [6, 6],   bubble: t(E, "beauty = each cell's value (all 0 at first). (+2 is just spare room — don't worry about it.)", "beauty = 각 칸의 값 (처음엔 다 0). (+2 는 자리만 넉넉히 — 신경 안 써도 돼요.)") },
+    { hi: [6, 6],   bubble: t(E, "beauty = each cell's value (all 0 at first). r and c arrive as 1…N, so we need beauty[N] — that is why the size is N+1. Slot 0 stays unused so r is the row number as-is.", "beauty = 각 칸의 값 (처음엔 다 0). r, c 가 1부터 N 까지 오니까 beauty[N] 까지 필요해요. 그래서 크기가 N+1 이에요. 0번 자리는 안 써요 — r 을 그대로 줄 번호로 쓰려고요.") },
     { hi: [7, 7],   bubble: t(E, "W = how many photos fit in a row (N−K+1).", "W = 한 줄에 들어가는 사진 수 (N−K+1).") },
     { hi: [8, 8],   bubble: t(E, "S = each photo's score. THE key idea — keep it, don't re-add every time.", "S = 각 사진의 점수. 핵심 — 저장해두고 매번 다시 안 더함.") },
     { hi: [10, 11], bubble: t(E, "cur_max = best score so far. out = collect answers.", "cur_max = 지금까지 최고 점수. out = 답 모음.") },
