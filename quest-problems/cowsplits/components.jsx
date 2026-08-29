@@ -1,4 +1,5 @@
-// ⚠️ USACO_PENDING_REVERIFY (2026-08-14 rewrite · 2026-08-27 로컬 검증 보강)
+// 🔒 USACO_VERIFIED (2026-08-14 rewrite · 2026-08-29 C++ 제출 통과)
+//   C++: 선생님이 USACO 채점기에 제출해 통과 확인 (2026-08-29).
 //   이전 M=3 letter-group 풀이는 k=1 서브태스크만 통과 (3/14). 선생님 지시
 //   ("틀린답인데 우리꺼를 왜 갖고 있어") → 공식 답안의 M=2 block-pair 매칭 풀이로 재작성.
 //
@@ -6,8 +7,11 @@
 //     · N=2 전수 9개 · N=4 전수 81개 — M 이 최소이고 배정도 전부 유효 (불일치 0)
 //     · 랜덤 300,000건 (N 최대 100) — 배정 전부 유효, M=1 판정 오류 0
 //     · 샘플 COWOWC → 2 / 2 1 1 1 1 2  (그룹1 OWOW, 그룹2 CC — 둘 다 정사각)
-//   → 알고리즘 정확성은 확인됨. 다만 USACO 채점기 재제출은 아직이라 헤더는 PENDING 유지.
-//     재제출로 14/14 확인 후 🔒 USACO_VERIFIED 로 갱신할 것.
+//   Python 은 아직 채점기 제출 전 (같은 알고리즘이고 위 로컬 검증은 통과).
+//
+//   코드 수정 시 USACO 재제출 필요.
+//   2026-08-29: 말풍선 문구만 손봄 (줄바꿈 · "시뮬" 제거). 실행 코드는 안 건드림 —
+//     표시 문구를 마스킹한 뒤 원본과 전체 비교해 동일 확인.
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";
 import { CodeBlock } from "@/components/quest/shared";

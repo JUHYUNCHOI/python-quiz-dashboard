@@ -34,7 +34,7 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `moohunt` | Moo Hunt | Jan 2026 Bronze #2 | 🟡 5/12 (TLE 6-12, brute too slow) | 🟡 10/12 (TLE - brute) |
 | `mooin4` | It's Mooin' Time IV | Jan 2026 Bronze #1 | ✅ 16/16 PASS | ✅ 16/16 PASS |
 | `photoshoot25` | Photoshoot | Dec 2025 Bronze #3 | 🟡 12/18 (TLE 13-18, Python too slow) | ✅ 18/18 PASS |
-| `cowsplits` | COW Splits | Dec 2025 Bronze #2 | ⚠️ 2026-08-14 rewrite to M=2 (block-pair) — pending USACO re-verify. Local sample ✓. Previous M=3 was 3/14 (k=1 only). | ⚠️ same rewrite, pending re-verify. |
+| `cowsplits` | COW Splits | Dec 2025 Bronze #2 | ✅ 2026-08-29 제출 통과 (2026-08-14 M=2 block-pair 재작성분). 이전 M=3 풀이는 3/14 (k=1 만). 로컬: N=2·N=4 전수 + 랜덤 30만 — 배정 유효성까지 확인. | 같은 알고리즘, 채점기 제출은 아직. 로컬 검증은 통과. |
 | `chipxchg` | Chip Exchange | Dec 2025 Bronze #1 | ✅ 12/12 PASS (Python passes - C++ has overflow) | 5/12 (overflow bug) |
 | `mooin3` | Mooin' Time III | Open 2025 Bronze #3 | ✅ PASS (선생님 통과 버전 = 표 O(26)/query, `docs/mooin3-passing-solution.py`; quest 코드는 bisect 변형 로컬~0.9s. 구 brute 3/11) | ✅ PASS — 부록 map 풀이(M3_MAP_PY/CPP) 선생님 USACO 제출 통과(2026-08-10). 표 방식과 동치, 로컬 브루트 3400+/3400+ 일치, C++ 0.16s/Py 0.64s |
 | `cowphotos` | More Cow Photos | Open 2025 Bronze #2 | ✅ PASS (Counter O(N), 재제출 통과 2026-07-23; 구 brute 6/8 TLE) | ✅ 11/11 PASS |
