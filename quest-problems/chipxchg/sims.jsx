@@ -199,7 +199,7 @@ export function AllRedWorstSim({ E }) {
                            <>이번엔 환전이 달라요.<br /><span style={NW}><b style={{color:BLU}}>B 2개</b>가 <b style={{color:RED}}>A 3개</b></span>가 되니까<br />바꾸면 오히려 <b>이득</b>이에요!</>)
     : s.k === "bluegood" ? t(E, <>If they all came as <b style={{color:BLU}}>B</b>, I'd <b>gain</b> (2 → 3 A). No way it does that.</>,
                            <>최악의 경우 <b style={{color:BLU}}>B</b>을 주면 나한텐 <b>이득</b> (2 → 3). 이럴 땐 B가 오는 게 오히려 나한테 이득이에요.</>)
-    : s.k === "givered" ? t(E, <>So it gives <b style={{color:RED}}>A, 1 at a time</b> — one A chip is just one A, the <b>least help</b>.</>,
+    : s.k === "givered" ? t(E, <>So the worst case hands me <b style={{color:RED}}>A, one at a time</b>.<br />One A chip is just one A, which helps me the <b>least</b>.</>,
                            <>그래서 제일 나쁜 건 <b style={{color:RED}}>A가 하나씩</b> 오는 경우예요.<br />A 1개는 딱 1개로 끝이라 <b>제일 안 늘거든요</b>.</>)
     : t(E, <>So when swapping <b>pays</b> (cA ≥ cB) → the extra chips are <b style={{color:RED}}>all A</b>, no waste. <span style={{color:"#94a3b8"}}>(when it loses → all B + waste, the step before)</span></>,
            <>환전이 <b>이득</b>(cA ≥ cB)이면 → 추가 칩은 <b style={{color:RED}}>다 A</b>, 낭비 없음. <span style={{color:"#94a3b8"}}>(손해면 반대 = B 낭비, 앞 스텝)</span></>);
@@ -755,13 +755,13 @@ export function GameBoardSim({ E }) {
                             <>베시는 <b style={{color:RED}}>A 칩 2개</b>, <b style={{color:BLU}}>B 칩 3개</b>로 시작해요. 이게 가진 전부예요.</>)
     : s.kind === "swap" ? t(E, <>There's an exchange booth: <b>hand in 3 B → get 2 A</b>. One direction only (B → A), as often as you like.</>,
                              <>교환소가 있어요.<br /><b>B 3개를 내면 A 2개</b>를 줘요.<br />B → A 한 방향만 되고, 몇 번이든 할 수 있어요.</>)
-    : s.kind === "goal" ? t(E, <>Goal: reach <b style={{color:"#15803d"}}>5 A chips</b>. Best I can do now: 2 A + (swap 3 B) 2 A = <b>4 A</b>. <b style={{color:"#dc2626"}}>1 short ✗</b>.</>,
+    : s.kind === "goal" ? t(E, <>Goal: reach <b style={{color:"#15803d"}}>5 A chips</b>.<br />Right now I have 2 A, and swapping my 3 B gives 2 more → <b>4 A</b>.<br /><b style={{color:"#dc2626"}}>1 short ✗</b>.</>,
                              <>목표는 <b style={{color:"#15803d"}}>A 5개</b> 모으기.<br />지금 A가 2개 있고, B 3개를 바꾸면 A가 2개 더 늘어요.<br />그래도 <b>A 4개</b>라서 <b style={{color:"#dc2626"}}>1개가 모자라요 ✗</b></>)
     : s.kind === "want" ? t(E, <>Just <b style={{color:"#16a34a"}}>1 more A</b> and I hit 5! So I grab <b>1 extra chip</b>. If only I could take it as A…</>,
                              <>A가 <b style={{color:"#16a34a"}}>1개만 더</b> 있으면 5개예요!<br />그래서 <b>칩 1개</b>를 더 받아요.<br />그 1개를 A로 받을 수만 있다면…</>)
     : s.kind === "block" ? t(E, <>But <b>I can't choose the letter</b> — the <b style={{color:"#dc2626"}}>worst case</b> makes it <b style={{color:BLU}}>B</b>. <b>1 B can't be exchanged</b> (needs 3) → still <b>4 A</b>, still short <b style={{color:"#dc2626"}}>✗</b>.</>,
                               <>근데 <b>A 인지 B 인지 내가 못 골라요.</b><br />하필 <b style={{color:BLU}}>B</b>가 올 수도 있죠.<br /><b>B 1개는 못 바꿔요</b> (3개가 있어야 해요).<br />여전히 <b>A 4개</b>, 아직 부족 <b style={{color:"#dc2626"}}>✗</b></>)
-    : t(E, <><b>Our question:</b> 1 chip wasn't enough. How many must I grab so that <b>no matter which letters come</b>, I still reach 5 A? <b>That fewest count is the answer.</b></>,
+    : t(E, <><b>Our question:</b> 1 chip wasn't enough. How many must I grab so that <b>no matter which letters come</b>, I still reach 5 A? <b>That smallest number is the answer.</b></>,
            <><b>우리 질문:</b> 칩 1개론 안 됐어요.<br /><b>어떤 조합이 와도</b> A 5개를 채우려면 몇 개를 받아야 할까요?<br /><b>그 가장 적은 개수가 답이에요.</b></>);
 
   return (
@@ -930,7 +930,9 @@ export function WorstCaseWhySim({ E }) {
     : b === 0 ? `A ${r}개만 오면`
     : `A ${r}개와 B ${b}개가 오면`;
   const comboEn = (r, b) =>
-    r === 0 ? `if all ${b} come B` : b === 0 ? `if all ${r} come A` : `if ${r} A and ${b} B come`;
+    r === 0 ? (b === 1 ? `if the one chip comes as B` : `if all ${b} come as B`)
+    : b === 0 ? (r === 1 ? `if the one chip comes as A` : `if all ${r} come as A`)
+    : `if ${r} A and ${b} B come`;
 
   const steps = [{ k: "now" }];
   [1, 2, 3].forEach((x) => rows(x).forEach((_, i) => steps.push({ k: "row", x, i })));
@@ -945,7 +947,7 @@ export function WorstCaseWhySim({ E }) {
         <>I start with <b style={{color:RED,...NW}}>2 A</b> and <b style={{color:BLU,...NW}}>3 B</b>.<br />Swapping the 3 B gives 2 more A → <b style={{color:RED,...NW}}>4 A</b>.<br />The goal is <b style={NW}>5</b>, so I'm <b>one short</b>.</>,
         <><b style={{color:RED,...NW}}>A 2개</b>, <b style={{color:BLU,...NW}}>B 3개</b>로 시작해요.<br />B 3개를 바꾸면 A가 2개 늘어서 <b style={{color:RED,...NW}}>4개</b>.<br />목표가 <b style={NW}>5개</b>니까 <b>하나가 모자라요.</b></>)
   : s.k === "rule" ? t(E,
-        <><b>A 2개</b> like that would be lovely — but <b>I don't get to pick</b>.<br />A count works only once <b>the worst</b> reaches the goal.<br />That's why we always look at the worst one.</>,
+        <>Getting <b>2 A</b> like that would be lovely, but <b>I don't get to pick</b>.<br />A chip count only counts as enough when even <b>the worst combination</b> reaches the goal.<br />That's why we always look at the worst one.</>,
         <><b>A 2개</b>처럼 좋은 게 오면 좋죠.<br />근데 <b>내가 고르는 게 아니에요.</b><br />그래서 <b>제일 나쁜 조합</b>에도 A 가 5개가 되어야 그 개수가 되는 거예요.<br />그래서 늘 제일 나쁜 경우를 봅니다.</>)
   : (() => {
       const head = firstOfX
@@ -960,7 +962,7 @@ export function WorstCaseWhySim({ E }) {
             : t(E, <>{comboEn(cur.r, cur.b)} → <b style={{color:"#15803d",...NW}}>A {cur.v}</b> ✓<br /><span style={{ color: "#94a3b8" }}>Lucky — but I can't choose this.</span></>,
                    <>{comboKo(cur.r, cur.b)} <b style={{color:"#15803d",...NW}}>A {cur.v}개</b> ✓<br /><span style={{ color: "#94a3b8" }}>운이 좋은 경우예요. 내가 고를 순 없죠.</span></>))
         : t(E, <><b>The worst one:</b> {comboEn(cur.r, cur.b)} → <b style={{color:RED,...NW}}>only A {cur.v}</b> ✗<br /><b>This one isn't solved → {cur.x} chip{cur.x > 1 ? "s aren't" : " isn't"} enough.</b></>,
-               <><b>제일 나쁜 경우:</b> {comboKo(cur.r, cur.b)} <b style={{color:RED,...NW}}>A {cur.v}개뿐</b> ✗<br /><b>이게 해결이 안 돼요 → 칩 {cur.x}개로는 안 되겠네요.</b></>);
+               <><b>제일 나쁜 경우:</b> {comboKo(cur.r, cur.b)} <b style={{color:RED,...NW}}>A {cur.v}개뿐</b> ✗<br /><b>이 경우가 목표에 못 닿아요 → 칩 {cur.x}개로는 안 되겠네요.</b></>);
       const tail = lastOfX && worstOf(cur.x) >= GOAL
         ? t(E, <><br /><b style={{color:"#15803d"}}>→ The worst case is solved. {cur.x} chips it is.</b></>,
               <><br /><b style={{color:"#15803d"}}>→ 제일 나쁜 경우가 해결됐어요. 답은 칩 {cur.x}개.</b></>)
@@ -1145,7 +1147,7 @@ export function StrategySlide({ E }) {
           </Slab>
           <Slab n="②" color="#2563eb" bg="#eff6ff" title={t(E, "red_now < goal", "red_now < 목표")}>
             {t(E, <>Short of the goal → I need extra chips. <b>How many?</b> That is the rest of this chapter.</>,
-                  <>목표에 모자라요 → 칩을 더 받아야 해요. <b>몇 개?</b> 이게 이 챕터의 나머지예요.</>)}
+                  <>목표에 모자라요 → 칩을 더 받아야 해요. <b>몇 개?</b> 이걸 지금부터 알아봐요.</>)}
           </Slab>
         </div>
       ) : (
@@ -1159,7 +1161,7 @@ export function StrategySlide({ E }) {
           <div style={{ textAlign: "center", padding: "12px 10px", borderRadius: 10, background: "#f5f3ff",
             border: "2px solid #c4b5fd", fontSize: 13.5, fontWeight: 800, color: "#5b21b6",
             wordBreak: "keep-all", lineHeight: 1.8 }}>
-            {t(E, <>answer = <span style={{ color: "#b45309" }}>last count that can still fall short</span> <span style={{ color: "#15803d" }}>+ 1</span></>,
+            {t(E, <>answer = <span style={{ color: "#b45309" }}>last chip count that can still leave A short</span> <span style={{ color: "#15803d" }}>+ 1</span></>,
                   <>답 = <span style={{ color: "#b45309" }}>안 될 수 있는 마지막 칩 수</span> <span style={{ color: "#15803d" }}>+ 1</span></>)}
           </div>
           <div style={{ marginTop: 9, fontSize: 11.5, color: "#64748b", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
@@ -1252,7 +1254,7 @@ export function LastOneWhySlide({ E }) {
         <>And if it comes as <b style={{color:BLU,...NW}}>B</b> → a group completes → A 6 ✓<br /><b style={{color:"#15803d"}}>Either way it works. Answer = 8 + 1 = 9.</b></>,
         <><b style={{color:BLU,...NW}}>B</b> 로 와도 → 묶음이 완성돼서 → A 6개 ✓<br /><b style={{color:"#15803d"}}>어느 쪽이든 돼요. 답 = 8 + 1 = 9.</b></>)
   : s.k === "sym1" ? t(E,
-        <>Now the letters — first, the three things we counted.</>,
+        <>Now let's write it in symbols.<br />First, the three things we just counted.</>,
         <>이제 글자로 써 볼게요.<br />먼저 방금 센 세 가지예요.</>)
   : s.k === "sym2" ? t(E,
         <>And the last two lines put them together.</>,
@@ -1344,14 +1346,14 @@ export function LastOneWhySlide({ E }) {
             <div><code style={{ color: "#5b21b6", fontWeight: 800 }}>red_now = 0</code><br />
               <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "A I can make right now", "지금 가진 걸로 만드는 A")}</span></div>
             <div><code style={{ color: "#5b21b6", fontWeight: 800 }}>wasted_blue = cB − 1 − B%cB = 2</code><br />
-              <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "B that can never gather into a swap", "절대 묶이지 못하는 B")}</span></div>
+              <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "B that can never fill a group of cB", "절대 묶이지 못하는 B")}</span></div>
             <div><code style={{ color: "#5b21b6", fontWeight: 800 }}>short_red = fA − 1 − red_now = 4</code><br />
               <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "still failing means A ≤ 4 — the −1", "안 된다 = A 4개 이하 — 여기가 −1")}</span></div>
             {s.k === "sym2" && (
               <>
                 <div style={{ borderTop: "1px dashed #c4b5fd", paddingTop: 8 }}>
                   <code style={{ color: "#5b21b6", fontWeight: 800 }}>short_chips = 4//2×3 + 4%2 = 6</code><br />
-                  <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "most chips it can take to reach A 4", "A 4개까지 가는 데 최대로 쓰는 칩")}</span></div>
+                  <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "the most chips that can still leave A at 4", "A 를 4개에 머물게 하는 가장 많은 칩")}</span></div>
                 <div><code style={{ color: "#5b21b6", fontWeight: 800 }}>answer = 2 + 6 + 1 = 9</code><br />
                   <span style={{ fontSize: 11.5, color: "#64748b" }}>{t(E, "one past the last failing count — the +1", "안 되는 마지막(8) 다음 — 여기가 +1")}</span></div>
               </>
@@ -1370,11 +1372,11 @@ export function LastOneWhySlide({ E }) {
             </div>
             <div style={{ padding: "9px 12px", borderRadius: 9, background: "#fffbeb", border: "1.5px solid #fbbf24", color: "#92400e" }}>
               {t(E, <><b>y</b> = the largest <b>n<sub>A</sub> + n<sub>B</sub></b> among those — our <b>8</b>.<br />The answer is <b>y + 1</b>.</>,
-                    <><b>y</b> = 그런 짝들 중 <b>n<sub>A</sub> + n<sub>B</sub></b> 가 제일 큰 값 — 우리의 <b>8</b>.<br />답은 <b>y + 1</b>.</>)}
+                    <>그런 (n<sub>A</sub>, n<sub>B</sub>) 중에서<br /><b>n<sub>A</sub> + n<sub>B</sub></b> 가 제일 큰 값을 <b>y</b> 라고 해요. 우리 예에선 <b>8</b>.<br />답은 <b>y + 1</b> 이에요.</>)}
             </div>
             <div style={{ padding: "9px 12px", borderRadius: 9, background: "#eff6ff", border: "1px solid #93c5fd", color: "#1e40af" }}>
               {t(E, <>At that largest pair the leftover is maxed:<br /><b>B + n<sub>B</sub> ≡ c<sub>B</sub> − 1 (mod c<sub>B</sub>)</b> → <code>wasted_blue</code>.<br />And <b>n<sub>A,0</sub> = f<sub>A</sub> − 1 − red_now</b> → <code>short_red</code>.</>,
-                    <>그 최대 짝에서는 자투리가 꽉 차 있어요:<br /><b>B + n<sub>B</sub> ≡ c<sub>B</sub> − 1 (mod c<sub>B</sub>)</b> → <code>wasted_blue</code>.<br />그리고 <b>n<sub>A,0</sub> = f<sub>A</sub> − 1 − red_now</b> → <code>short_red</code>.</>)}
+                    <>y 가 되는 그 경우에는 자투리가 꽉 차 있어요.<br /><b>B + n<sub>B</sub> ≡ c<sub>B</sub> − 1 (mod c<sub>B</sub>)</b> → <code>wasted_blue</code>.<br />그리고 <b>n<sub>A,0</sub> = f<sub>A</sub> − 1 − red_now</b> → <code>short_red</code>.</>)}
             </div>
             <div style={{ fontSize: 11, color: "#94a3b8", textAlign: "center" }}>
               {t(E, "— from the official USACO analysis (Benjamin Qi)", "— USACO 공식 풀이 (Benjamin Qi) 의 유도")}
@@ -1520,7 +1522,7 @@ export function WhyNotGoalSim({ E }) {
         <>And if some come as <b style={{color:RED,...NW}}>A</b>, A only grows.<br />So <b style={NW}>4 chips</b> is already <b>certain</b> — not 5.</>,
         <>그리고 <b style={{color:RED,...NW}}>A</b> 가 섞여 오면 A 는 더 늘기만 해요.<br />그래서 <b style={NW}>칩 4개</b>면 이미 <b>확실</b>해요. 5개가 아니라요.</>)
   : s.k === "why" ? t(E,
-        <>The direct count assumed <b>two worsts at once</b>:<br />"2 B are wasted" <b>and</b> "a group is filled".<br />With 4 chips only <b style={NW}>1</b> is wasted.</>,
+        <>The direct count assumed <b>the worst twice over</b>.<br />It took "2 B are wasted" <b>and</b> "a group is filled"<br />as if both happened together.<br />With 4 chips only <b style={NW}>1</b> is wasted.</>,
         <>직접 계산은 <b>최악을 두 번 겹쳐</b> 셌어요.<br />"B 2개가 버려진다" 와 "묶음을 꽉 채운다" 를<br />같이 일어나는 것처럼 본 거예요.<br />칩 4개일 땐 버려지는 게 <b style={NW}>1개</b>뿐이에요.</>)
   : t(E,
         <>Changing the goal, the direct count is<br /><b>right sometimes, wrong sometimes</b>.<br />So we can't use it.</>,
@@ -1686,7 +1688,7 @@ export function PlanSlide({ E }) {
             short_red = fA − 1 − red_now <span style={{ color: "#94a3b8" }}>{t(E, "  // the −1", "  // 여기가 −1")}</span>
           </div>
         </Slab>
-        <Slab n="4" color="#7c3aed" bg="#f5f3ff" title={t(E, "how many chips can still fall short? — two cases", "거기서 버틸 수 있는 칩은? — 경우 둘")}>
+        <Slab n="4" color="#7c3aed" bg="#f5f3ff" title={t(E, "how many chips can still leave A short? — two cases", "거기서 버틸 수 있는 칩은? — 경우 둘")}>
           <div style={{ display: "grid", gap: 3, fontSize: 11.5, lineHeight: 1.55 }}>
             <div>① {t(E, <><b>cA ≥ cB</b> (swap pays) → A only · <code>short_chips = short_red</code></>,
                         <><b>cA ≥ cB</b> (환전 이득) → A만 와요 · <code>short_chips = short_red</code></>)}</div>
