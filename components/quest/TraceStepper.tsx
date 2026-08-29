@@ -20,10 +20,23 @@
  * configurable so each quest can keep its visual identity.
  */
 
-import { useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { t } from "./theme";
 
 const DEFAULT_ACCENT = "#059669";
+
+/**
+ * 인쇄(PDF) 전용 — 시뮬을 '모든 단계' 로 한 번씩 펼쳐 그리기 위한 통로.
+ *
+ * 평소엔 null 이라 아무 영향이 없다. PDF 를 만들 때만 각 단계 번호를 밖에서
+ * 넣어 주고, 시뮬은 자기 총 단계 수를 report 로 알려 준다 (밖에선 알 길이 없으므로).
+ * 화면 동작은 그대로 useState 를 쓴다.
+ */
+export interface ForcedStep {
+  idx: number;
+  report?: (total: number) => void;
+}
+export const ForcedStepContext = createContext<ForcedStep | null>(null);
 
 export interface UseTraceStep<T> {
   idx: number;
@@ -52,6 +65,16 @@ export function useTraceStep<T = unknown>(arg: number | readonly T[]): UseTraceS
   const total = typeof arg === "number" ? arg : arg.length;
   const trace = typeof arg === "number" ? null : arg;
   const [idx, setIdx] = useState(0);
+  const forced = useContext(ForcedStepContext);
+  if (forced) {
+    forced.report?.(total);
+    const fs = Math.max(0, Math.min(forced.idx, Math.max(0, total - 1)));
+    const noop = () => {};
+    return { idx: fs, safe: fs, setIdx: noop, total,
+      step: trace ? trace[fs] : undefined,
+      isLast: fs === total - 1, isFirst: fs === 0,
+      next: noop, prev: noop, restart: noop };
+  }
   const safe = Math.max(0, Math.min(idx, Math.max(0, total - 1)));
   return {
     idx,

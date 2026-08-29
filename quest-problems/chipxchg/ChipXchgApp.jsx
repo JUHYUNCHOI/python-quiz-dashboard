@@ -3,7 +3,8 @@ import { C, t } from "@/components/quest/theme";
 import { StepFade } from "@/components/quest/StepFade";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
 import { QuestProgressBar, QuestBottomNav } from "@/components/quest/QuestNavBar";
-import { ChipXchgProgressiveCode, downloadChipXchgPDF, getChipXchgSections } from "./components";
+import { ChipXchgProgressiveCode } from "./components";
+import { downloadChipXchgStudyPDF } from "./pdf";
 import { makeChipXchgCh1, makeChipXchgCh2 } from "./chapters";
 import { useCodeLang } from "@/components/quest/use-code-lang";
 
@@ -120,7 +121,7 @@ export default function ChipXchgApp(props = {}) {
 
   const codeControlsSlot = showCodeControls ? (
     <div style={{ display: "flex", gap: 0, alignItems: "stretch" }}>
-      <button onClick={() => downloadChipXchgPDF(E, getChipXchgSections(E), codeLang)} style={{
+      <button onClick={() => downloadChipXchgStudyPDF(E, codeLang)} style={{
         background: A, color: "#fff", border: `1.5px solid ${A}`,
         borderRadius: "8px",
         padding: "5px 10px", cursor: "pointer", fontSize: 12, fontWeight: 800,
