@@ -234,6 +234,13 @@ function normalizeCpp(s: string) {
   return normalize(s).replace(/std::/g, "")
 }
 
+// 파이썬은 '문자열' 과 "문자열" 이 완전히 같다.
+// 따옴표 종류만 다르다고 오답 처리하면 안 됨 (수업 중 발견, 2026-08-29).
+// C++ 은 '문자' 와 "문자열" 이 다른 타입이라 이 규칙을 적용하면 안 된다.
+function normalizePyQuotes(s: string) {
+  return normalize(s).replace(/"/g, "'")
+}
+
 // 텍스트 안의 **bold** 만 처리 (마크다운 라이브러리 없이 가볍게)
 function renderBold(text: string): React.ReactNode {
   return (text || "").split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
@@ -254,6 +261,7 @@ function isAnswerCorrect(
   const compare = (a: string) => {
     if (normalize(a) === n) return true
     if (lang === "cpp" && normalizeCpp(a) === normalizeCpp(input)) return true
+    if (lang !== "cpp" && normalizePyQuotes(a) === normalizePyQuotes(input)) return true
     return false
   }
 

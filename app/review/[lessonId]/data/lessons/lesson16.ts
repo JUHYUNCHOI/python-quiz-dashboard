@@ -79,17 +79,17 @@ export const lesson16: LessonData = {
       type: "practice",
       content: {
         level: 1,
-        task: "좋아하는 색깔 3개를 리스트로 만들기",
+        task: "빨강, 파랑, 초록 세 가지 색을 순서대로 리스트에 담기",
         guide: "대괄호와 따옴표를 사용해요!",
-        hint: "문자열 요소는 따옴표로 감싸야 해! 세 칸에 각각 색깔 이름을 넣어봐",
+        hint: "문자열 요소는 따옴표로 감싸야 해! 세 칸에 빨강, 파랑, 초록 을 차례대로 넣어봐",
         template: "colors = [___, ___, ___]\nprint(colors)",
         blanksAnswer: ["\"빨강\"", "\"파랑\"", "\"초록\""],
         answer: "colors = [\"빨강\", \"파랑\", \"초록\"]\nprint(colors)",
         expect: "['빨강', '파랑', '초록']",
         en: {
-          task: "Create a list of 3 favorite colors",
+          task: "Put 빨강, 파랑, 초록 into a list, in that order",
           guide: "Use square brackets and quotes!",
-          hint: "String elements need quotes! Put a color name in each blank"
+          hint: "String elements need quotes! Type 빨강, 파랑, 초록 into the three blanks, in order"
         }
       }
     },
