@@ -87,8 +87,8 @@ function CowSplitsInput({ E }) {
       {/* k 는 곁길 — 각주로 축소 */}
       <div style={{ fontSize: 11, color: "#94a3b8", lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance" }}>
         {t(E,
-          <><b>k</b> is just a scoring mode (0 = exact min, 1 = min+1 also OK). Our solution always gives the true minimum, so <b>k doesn't matter to us</b>.</>,
-          <><b>k</b> 는 채점 모드일 뿐이에요 (0 = 정확한 최소, 1 = 최소+1 까지 OK).<br />우리 풀이는 늘 진짜 최소를 내니 <b>k 는 신경 안 써도 돼요</b>.</>)}
+          <><b>k</b> is a scoring mode: 0 = the exact minimum, 1 = minimum or one more.<br /><b>k = 1 is the looser of the two</b>, so anything that clears k = 0 clears k = 1 as well. Our solution always gives the true minimum, so it passes both and <b>never has to look at k</b>.</>,
+          <><b>k</b> 는 채점 모드예요: 0 = 정확한 최소, 1 = 최소 또는 최소+1.<br /><b>k=1 이 k=0 보다 느슨해요.</b> 그래서 k=0 을 통과하면 k=1 도 저절로 통과해요.<br />우리 풀이는 늘 진짜 최소를 내니 둘 다 통과 — <b>k 를 볼 일이 없어요</b>.</>)}
       </div>
     </div>
   );
@@ -171,6 +171,46 @@ function CowSplitsOutput({ E }) {
             <>The 4 <b style={{ color: OP1_COL }}>O W O W</b> letters were move <b style={{ color: OP1_COL }}>1</b>, the 2 <b style={{ color: OP2_COL }}>C … C</b> were move <b style={{ color: OP2_COL }}>2</b> → output <code>2</code>, then <code>2 1 1 1 1 2</code>.</>,
             <>가운데 <b style={{ color: OP1_COL }}>O W O W</b> 4글자는 <b style={{ color: OP1_COL }}>1번</b> 지우기,<br />양끝 <b style={{ color: OP2_COL }}>C … C</b> 2글자는 <b style={{ color: OP2_COL }}>2번</b> 지우기.<br />→ 출력 <code>2</code>, 그리고 <code>2 1 1 1 1 2</code>.</>)}
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* [결] 원문 샘플의 3 — quest 의 '원래 문제' 버튼으로 USACO 원문을 열면
+   샘플 출력에 3 이 보이는데 우리 답은 2 라서 학생이 반드시 헷갈린다.
+   (선생님 2026-08-30: 이 혼동을 직접 겪으심 — quest 에 한 줄도 없었음) */
+function CowSplitsSampleThree({ E }) {
+  const Line = ({ tag, m, tone }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 9,
+      background: tone === "ours" ? "#ecfdf5" : "#f8fafc",
+      border: `1.5px solid ${tone === "ours" ? "#6ee7b7" : C.border}` }}>
+      <div style={{ flex: 1, fontSize: 12.5, color: "#334155", wordBreak: "keep-all" }}>{tag}</div>
+      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 18,
+        color: tone === "ours" ? "#059669" : "#64748b" }}>{m}</div>
+    </div>
+  );
+  return (
+    <div style={{ padding: 16, wordBreak: "keep-all", textWrap: "balance" }}>
+      <div style={{ background: "#fffbeb", border: "2px solid #fbbf24", borderRadius: 12, padding: "12px 15px", marginBottom: 12 }}>
+        <div style={{ fontSize: 12.5, fontWeight: 800, color: "#92400e", marginBottom: 5 }}>
+          ⚠️ {t(E, "You will see a 3 in the official sample", "원문 샘플에는 3 이 보여요")}
+        </div>
+        <div style={{ fontSize: 12.5, color: "#78350f", lineHeight: 1.8 }}>
+          {t(E,
+            <>Open the original problem and the sample output for <code>COWCOWOWCOWCOWCOWC</code> says <b>3</b>. Ours says <b>2</b>. Is ours wrong?</>,
+            <>원문을 열어보면 <code>COWCOWOWCOWCOWCOWC</code> 의 샘플 출력이 <b>3</b> 이에요.<br />우리는 <b>2</b> 라고 하고요. 우리가 틀린 걸까요?</>)}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 12 }}>
+        <Line tag={t(E, "the official sample (k = 1)", "원문 샘플 (k = 1)")} m="3" />
+        <Line tag={t(E, "our solution", "우리 풀이")} m="2" tone="ours" />
+      </div>
+
+      <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 12, padding: "12px 15px", fontSize: 12.5, color: "#065f46", lineHeight: 1.85 }}>
+        {t(E,
+          <><b>Both are accepted.</b> The statement says "provide <i>a way</i> to do so" — a checker verifies your answer instead of matching it to the sample.<br />That sample runs with <b>k = 1</b>, which allows one extra move, so the author showed a 3 on purpose. The statement even spells it out: <i>"the optimal number of operations is two."</i><br />The very next sample gives the same string with <b>k = 0</b>, and there the answer is <b>2</b>.</>,
+          <><b>둘 다 정답이에요.</b> 문제가 "한 가지 방법을 제시하라" 고만 해서, 샘플과 맞춰보는 게 아니라 검사 프로그램이 유효한지만 봐요.<br />그 샘플은 <b>k = 1</b> 이라 한 번 더 써도 되거든요. 그래서 출제자가 일부러 3 짜리를 보여준 거예요.<br />문제에 대놓고 적혀 있어요 — <i>"이 테스트의 최적은 2번"</i>.<br />바로 다음 샘플은 같은 문자열을 <b>k = 0</b> 으로 주는데, 거기선 답이 <b>2</b> 예요.</>)}
       </div>
     </div>
   );
@@ -326,6 +366,13 @@ export function makeCowSplitsCh1(E) {
       narr: t(E, "Now the output makes sense: print M, then which move erased each letter — our COWOWC gives 2 1 1 1 1 2.",
                  "이제 출력이 이해돼요: M 과 글자별 '몇 번째 지우기'를 출력 — COWOWC 는 2 1 1 1 1 2."),
       content: (<CowSplitsOutput E={E} />),
+    },
+    // [결] 원문 샘플이 3 인 이유 — 안 짚어주면 학생이 '우리가 틀렸나?' 로 끝난다
+    {
+      type: "reveal",
+      narr: t(E, "One last thing: the official sample prints 3 for a string we answer 2 for. Here's why both are right.",
+                 "마지막 하나 — 우리가 2 라고 한 문자열을 원문 샘플은 3 이라고 해요. 둘 다 맞는 이유예요."),
+      content: (<CowSplitsSampleThree E={E} />),
     },
   ];
 }

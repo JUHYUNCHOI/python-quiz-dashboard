@@ -206,6 +206,7 @@ export function InsightSim({ E }) {
     { kind: "case3" },       // Case 3/3: OWC × WCO — 겹침 WC, 남음 O·O + 요약
     { kind: "split" },
     { kind: "many" },        // N=4 로 쌍 2개 — 앞 절반 COOW = 뒤 절반 COOW (검증됨)
+    { kind: "uneven" },      // N=6 · 같은 쌍이 섞임 → 조각 길이가 2,2,3 으로 달라짐
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
@@ -236,6 +237,9 @@ export function InsightSim({ E }) {
     : s.kind === "many" ? t(E,
       <>One pair is done. What if there are <b>many</b>?<br />Here N=4, so two pairs. Each pair splits the same way.<br />Op 1 collects <b>COOW</b> from the front half<br />and <b>COOW</b> from the back half — the same, so it reads Y+Y.<br />Op 2 does too. Still <b>M = 2</b>.</>,
       <>한 쌍은 됐어요. 쌍이 <b>여러 개</b>면 어떨까요?<br />여기 N=4 라 쌍이 두 개예요. 쌍마다 똑같이 나눠요.<br />1번이 앞 절반에서 <b>COOW</b> 를 고르고<br />뒤 절반에서도 <b>COOW</b> 를 골라요. 같으니까 Y+Y 예요.<br />2번도 마찬가지예요. 그래서 <b>M = 2</b>.</>)
+    : s.kind === "uneven" ? t(E,
+      <>Last worry. Above, <b>every</b> pair differed, so each block gave exactly 2 letters to op 1.<br />What if some pair <b>matches</b>? That pair gives <b>3</b> letters, the others give <b>2</b> —<br />so op 1 collects pieces of <b>different lengths</b>. Does it still read Y + Y?</>,
+      <>마지막 걱정 하나. 위에선 <b>모든</b> 쌍이 달라서 블록마다 딱 2글자씩 냈어요.<br />그런데 <b>같은</b> 쌍이 섞이면요? 그 쌍은 <b>3글자</b>, 나머지는 <b>2글자</b>를 내요 —<br />1번이 모으는 조각의 <b>길이가 제각각</b>이 되는데, 그래도 Y + Y 가 될까요?</>)
     : t(E,
       <>Split it: the <b>overlapping 2 letters</b> (OW) go to <b>op 1</b> — front OW matches back OW.<br />The <b>leftover 1 letter each side</b> (C and C) go to <b>op 2</b> — same letter!<br />Both ops read as Y+Y → <b>M = 2</b>.</>,
       <>나눠요. 겹치는 <b>2글자 (OW)</b> 는 <b>1번</b>으로 — 앞 OW = 뒤 OW ✓<br />남는 <b>1글자씩 (C·C)</b> 은 <b>2번</b>으로 — 같은 글자 ✓<br />둘 다 "똑같은 게 두 번" → <b>M = 2</b>.</>)
@@ -393,6 +397,61 @@ export function InsightSim({ E }) {
           </div>
         </>
       )}
+
+      {/* uneven 스텝 — N=6, 세 번째 쌍이 '같은' 쌍이라 조각 길이가 2·2·3 으로 달라짐.
+          선생님 2026-08-30: "OW 도 1이고 OWC 도 1인데 어떻게 같이 사라지지?" 가 여기서 막힌 지점.
+          라벨 [2,1,1,2,1,1,1,1,1,1,1,2,1,1,2,1,1,1] 은 실제 풀이 출력 (브루트포스 검증됨). */}
+      {s.kind === "uneven" && (() => {
+        const SS = "COWCOWOWCOWCOWCOWC";
+        const LB = [2,1,1,2,1,1,1,1,1,1,1,2,1,1,2,1,1,1];
+        const piece = (from, to) => SS.slice(from, to).split("")
+          .filter((_, j) => LB[from + j] === 1).join("");
+        const fragsFront = [piece(0,3), piece(3,6), piece(6,9)];
+        const fragsBack  = [piece(9,12), piece(12,15), piece(15,18)];
+        const Frag = ({ list, color }) => (
+          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color }}>
+            {list.map((f, j) => <span key={j}>{j > 0 && <span style={{ color: "#cbd5e1" }}> · </span>}{f}</span>)}
+          </span>
+        );
+        return (
+          <>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 3, marginBottom: 8, flexWrap: "wrap" }}>
+              {SS.split("").flatMap((ch, i) => {
+                const op = LB[i];
+                const tile = <Tile key={"u" + i} ch={ch} size={27} bd={OPCOL[op]} bg={OPBG[op]} fg="#1f2937" />;
+                return i === 8
+                  ? [tile, <div key="ud" style={{ width: 2, height: 30, background: "#cbd5e1", margin: "0 5px" }} />]
+                  : [tile];
+              })}
+            </div>
+            <div style={{ fontSize: 10.5, fontWeight: 800, color: "#94a3b8", textAlign: "center", marginBottom: 10 }}>
+              {t(E, "N = 6 · front half | back half  (3rd pair matches, so nothing was pulled from it)",
+                    "N = 6 · 앞 절반 | 뒤 절반  (셋째 쌍은 같아서 아무것도 안 뺐어요)")}
+            </div>
+            <div style={{ maxWidth: 520, margin: "0 auto", padding: "11px 14px", background: "#fef2f2",
+              border: `1.5px solid ${OPCOL[1]}`, borderRadius: 10, fontSize: 12, color: "#7f1d1d",
+              lineHeight: 1.9, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+              <div style={{ fontWeight: 800, marginBottom: 3 }}>{t(E, "op 1 — pieces of different lengths", "1번 — 길이가 제각각인 조각들")}</div>
+              <div>{t(E, "front", "앞")}: <Frag list={fragsFront} color={OPCOL[1]} /> <span style={{ color: "#94a3b8" }}>(2·2·3)</span></div>
+              <div>{t(E, "back", "뒤")}: <Frag list={fragsBack} color={OPCOL[1]} /> <span style={{ color: "#94a3b8" }}>(2·2·3)</span></div>
+              <div style={{ marginTop: 6, paddingTop: 6, borderTop: `1px dashed ${OPCOL[1]}` }}>
+                {t(E, "glued together", "이어붙이면")}{" "}
+                <code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>{fragsFront.join("")}</code>
+                {" + "}
+                <code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>{fragsBack.join("")}</code>
+                {" ✓"}
+              </div>
+            </div>
+            <div style={{ maxWidth: 520, margin: "10px auto 0", padding: "10px 14px", background: "#eff6ff",
+              border: "1.5px solid #60a5fa", borderRadius: 10, fontSize: 12.5, color: "#1e40af",
+              lineHeight: 1.8, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E,
+                <>The lengths never mattered. A label marks a <b>letter</b>, not a block —<br />all that has to match is the <b>whole front pick</b> vs the <b>whole back pick</b>.</>,
+                <>길이는 애초에 상관없었어요. 번호는 <b>블록</b>이 아니라 <b>글자</b>에 붙는 거예요 —<br />맞아야 하는 건 <b>앞에서 고른 것 전체</b>와 <b>뒤에서 고른 것 전체</b>뿐이에요.</>)}
+            </div>
+          </>
+        );
+      })()}
       </StepFade>
 
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
