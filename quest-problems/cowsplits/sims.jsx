@@ -223,8 +223,8 @@ export function InsightSim({ E }) {
       <>Before pairing anything, remember what one move needs.<br />The letters we pick must read as <b>Y + Y</b>.<br />So what we take from the <b>front half</b> must match<br />what we take from the <b>back half</b>, letter for letter.</>,
       <>짝을 짓기 전에, 한 번의 지우기가 뭘 요구하는지 봐요.<br />고른 글자가 <b>Y + Y</b> 로 읽혀야 해요.<br />그러니 <b>앞 절반</b>에서 고른 것과<br /><b>뒤 절반</b>에서 고른 것이 똑같아야 해요.</>)
     : s.kind === "pair" ? t(E,
-      <>That is why we line the halves up <b>position by position</b>:<br />front block <b>i</b> with back block <b>i + N/2</b>.<br />Here N=2, so <b>COW ↔ OWC</b>.<br />There are only <b>3 kinds of block</b>, so we can check every pair.</>,
-      <>그래서 앞 절반과 뒤 절반을 <b>같은 자리끼리</b> 맞춰요.<br />앞 블록 <b>i</b> 와 뒤 블록 <b>i + N/2</b> 예요.<br />여기 N=2 니 <b>COW ↔ OWC</b>.<br />블록은 3가지뿐이라 짝을 다 볼 수 있어요.</>)
+      <>That is why we line the halves up <b>position by position</b>:<br />front block <b>i</b> with back block <b>i + N/2</b>.<br />Here N=2, so <b>COW ↔ OWC</b>.<br />🔑 Remember the key fact — a block is <b>only ever COW, OWC, or WCO</b>.<br />Just <b>3 kinds</b>, so we can check <b>every possible pair</b> by hand.</>,
+      <>그래서 앞 절반과 뒤 절반을 <b>같은 자리끼리</b> 맞춰요.<br />앞 블록 <b>i</b> 와 뒤 블록 <b>i + N/2</b> 예요.<br />여기 N=2 니 <b>COW ↔ OWC</b>.<br />🔑 열쇠를 떠올려요 — 블록은 <b>COW, OWC, WCO 뿐</b>이에요.<br /><b>딱 3가지</b>라서 <b>가능한 짝을 전부</b> 손으로 확인할 수 있어요.</>)
     : s.kind === "overlap" ? t(E,
       <><b>Case 1 / 3.</b> <b>COW × OWC</b> — the middle "<b>OW</b>" appears in both. Leftover: <b>C</b> on front + <b>C</b> on back (same letter).</>,
       <><b>1 / 3.</b> <b>COW × OWC</b> — 가운데 <b>OW</b> 가 양쪽에 다 있어요.<br />남는 건 앞 <b>C</b> + 뒤 <b>C</b> — 같은 글자예요.</>)
@@ -302,8 +302,8 @@ export function InsightSim({ E }) {
             bLabelEn="back: b[:2] = WC" bLabelKo="뒤: b[:2] = WC" />
           <div style={{ maxWidth: 500, margin: "14px auto 0", padding: "10px 14px", background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, fontSize: 12.5, color: "#065f46", lineHeight: 1.65, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
             🎉 {t(E,
-              <>All <b>3 different pairs</b> checked. Every one: 2-letter overlap + same-letter leftover.<br />So <b>one pair</b> always splits into 2 moves.</>,
-              <>서로 다른 쌍은 <b>이 3가지가 전부</b>예요.<br />셋 다 <b>2글자 겹침 + 같은 글자 남음</b>이에요.<br />그러니 <b>한 쌍</b>은 늘 2번으로 나눠져요.</>)}
+              <>All <b>3 different pairs</b> checked. Every one: 2-letter overlap + same-letter leftover.<br />So <b>one pair</b> always splits into 2 moves.<br /><span style={{ fontSize: 11.5 }}>🔑 Both halves of that come straight from the key fact: rolling COW keeps 2 letters in place, and each block holds one C, one O, one W — so the leftover has to match.</span></>,
+              <>서로 다른 쌍은 <b>이 3가지가 전부</b>예요.<br />셋 다 <b>2글자 겹침 + 같은 글자 남음</b>이에요.<br />그러니 <b>한 쌍</b>은 늘 2번으로 나눠져요.<br /><span style={{ fontSize: 11.5 }}>🔑 둘 다 열쇠에서 바로 나와요 — 굴린 거라 2글자가 제자리에 남고,<br />블록마다 C·O·W 가 하나씩이라 남는 글자도 같을 수밖에 없어요.</span></>)}
           </div>
         </>
       )}

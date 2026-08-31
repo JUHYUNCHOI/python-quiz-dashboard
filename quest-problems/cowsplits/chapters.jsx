@@ -257,20 +257,39 @@ export function makeCowSplitsCh1(E) {
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
-              {/* (1) S 가 뭔지 */}
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E, "S has length ", "S 는 길이 ")}
-                  <b style={{ color: "#059669" }}>3N</b>
-                  {t(E, " — N pieces glued together. Each piece is ", ", ")}
-                  <b>{t(E, "a cyclic shift of ", "")}<code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>COW</code></b>
-                   {t(E, " — that is ", " 를 굴려 만든 조각, 즉 ")}
-                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>COW</code>
-                  {", "}<code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>OWC</code>
-                  {t(E, ", or ", ", ")}
-                  <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>WCO</code>
-                  {t(E, ".", " 중 하나 — 를 N 개 이은 것.")}
+              {/* (1) S 가 뭔지 — 이 문제 풀이 전체가 이 한 줄 위에 서 있다.
+                  선생님 2026-08-30: "처음 내가 COW/OWC/WCO 이걸 놓쳤더라고. 이게 중요한거였어"
+                  → 다른 불릿과 같은 모양이면 배경설정처럼 읽혀서 넘어간다. 카드로 끌어올림. */}
+              <div style={{ background: "#fffbeb", border: "2px solid #fbbf24", borderRadius: 12,
+                padding: "12px 14px", margin: "2px 0 4px" }}>
+                <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", letterSpacing: 0.4, marginBottom: 8 }}>
+                  🔑 {t(E, "THE ONE FACT EVERYTHING RESTS ON", "이 문제의 열쇠")}
+                </div>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 14, marginBottom: 9, flexWrap: "wrap" }}>
+                  {["COW", "OWC", "WCO"].map((b, bi) => (
+                    <span key={b} style={{ display: "inline-flex", gap: 2, padding: 5, borderRadius: 9,
+                        background: "#fff", border: "1.5px dashed #f59e0b" }}>
+                        {b.split("").map((ch, i) => (
+                          <span key={i} style={{ width: 26, height: 30, display: "flex", alignItems: "center",
+                            justifyContent: "center", borderRadius: 6, background: "#fffbeb",
+                            border: "1.5px solid #f59e0b", fontFamily: "'JetBrains Mono',monospace",
+                            fontWeight: 800, fontSize: 15, color: "#92400e" }}>{ch}</span>
+                        ))}
+                    </span>
+                  ))}
+                </div>
+                <div style={{ fontSize: 12.5, color: "#78350f", lineHeight: 1.75, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+                  {t(E,
+                    <>Every piece of <b>S</b> is one of these three — <b>COW rolled around</b>, nothing else.<br />
+                      <b>S</b> is <b>N</b> of them glued together, so its length is <b>3N</b>.</>,
+                    <><b>S</b> 의 조각은 <b>이 셋뿐</b>이에요 — <b>COW 를 한 칸씩 굴린 것</b>, 그 외엔 없어요.<br />
+                      <b>S</b> 는 이 조각을 <b>N 개</b> 이은 것이라 길이가 <b>3N</b> 이에요.</>)}
+                </div>
+                <div style={{ marginTop: 9, paddingTop: 8, borderTop: "1px dashed #fbbf24",
+                  fontSize: 11.5, color: "#92400e", lineHeight: 1.7, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+                  {t(E,
+                    <>Hold on to this. It is the reason two moves are always enough — and if pieces could be any 3 letters, this problem would be a completely different one.</>,
+                    <>이걸 꼭 붙잡고 가세요. 나중에 <b>왜 2번이면 되는지</b>가 전부 여기서 나와요.<br />조각이 아무 3글자나 될 수 있었다면 완전히 다른 문제가 돼요.</>)}
                 </div>
               </div>
 
