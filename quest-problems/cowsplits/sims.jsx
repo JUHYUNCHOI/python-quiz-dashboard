@@ -203,6 +203,7 @@ export function InsightSim({ E }) {
      −1(홀수)은 다른 질문이라 이 시뮬에서 빼고 앞 페이지로 분리. */
   const steps = [
     { kind: "why" },         // 1번이 Y+Y 로 읽히려면 앞·뒤에서 고른 게 같아야 한다
+    { kind: "halves" },      // 그래서 반으로 잘라 대봤더니 — 안 맞네? (이야기의 전환점)
     { kind: "pair" },
     { kind: "overlap" },     // Case 1/3: COW × OWC — 겹침 OW, 남음 C·C
     { kind: "case2" },       // Case 2/3: COW × WCO — 겹침 CO, 남음 W·W
@@ -223,11 +224,14 @@ export function InsightSim({ E }) {
 
   const say =
     s.kind === "why" ? t(E,
-      <>Before pairing anything, remember what one move needs.<br />The letters we pick must read as <b>Y + Y</b>.<br />So what we take from the <b>front half</b> must match<br />what we take from the <b>back half</b>, letter for letter.</>,
-      <>짝을 짓기 전에, 한 번의 지우기가 뭘 요구하는지 봐요.<br />고른 글자가 <b>Y + Y</b> 로 읽혀야 해요.<br />그러니 <b>앞 절반</b>에서 고른 것과<br /><b>뒤 절반</b>에서 고른 것이 똑같아야 해요.</>)
+      <>One move only works if the letters we pick read as <b>Y + Y</b> — the same thing twice.<br />So whatever we take from the <b>front half</b> has to match what we take from the <b>back half</b>.<br />Then let's just cut S down the middle and compare.</>,
+      <>한 번에 지우려면 고른 글자가 <b>Y + Y</b>, 같은 게 두 번으로 읽혀야 해요.<br />그러니 <b>앞 절반</b>에서 고른 것과 <b>뒤 절반</b>에서 고른 것이 같아야겠죠.<br />그럼 S 를 반으로 잘라서 대보면 되겠네요.</>)
+    : s.kind === "halves" ? t(E,
+      <>Cut it: front <b>COW</b>, back <b>OWC</b>. They don't match.<br />So we can't wipe the whole thing in one go.<br />But that's not a dead end — <b>they're close.</b><br />Let's find out exactly where they disagree.</>,
+      <>잘라봐요: 앞은 <b>COW</b>, 뒤는 <b>OWC</b>. 안 맞네요.<br />통째로 한 번에는 못 지운다는 뜻이에요.<br />그렇다고 막힌 건 아니에요 — <b>거의 비슷하잖아요.</b><br />어디가 어긋났는지만 정확히 찾아봐요.</>)
     : s.kind === "pair" ? t(E,
-      <>That is why we line the halves up <b>position by position</b>:<br />front block <b>i</b> with back block <b>i + N/2</b>.<br />Here N=2, so <b>COW ↔ OWC</b>.<br />🔑 Remember the key fact — a block is <b>only ever COW, OWC, or WCO</b>.<br />Just <b>3 kinds</b>, so we can check <b>every possible pair</b> by hand.</>,
-      <>그래서 앞 절반과 뒤 절반을 <b>같은 자리끼리</b> 맞춰요.<br />앞 블록 <b>i</b> 와 뒤 블록 <b>i + N/2</b> 예요.<br />여기 N=2 니 <b>COW ↔ OWC</b>.<br />🔑 열쇠를 떠올려요 — 블록은 <b>COW, OWC, WCO 뿐</b>이에요.<br /><b>딱 3가지</b>라서 <b>가능한 짝을 전부</b> 손으로 확인할 수 있어요.</>)
+      <>To find that out, compare them <b>block by block</b> — front block <b>i</b> against back block <b>i + N/2</b>.<br />Here N=2, so there's just one pair: <b>COW ↔ OWC</b>.<br />🔑 And a block is only ever <b>COW, OWC, or WCO</b> — so there aren't many pairs to worry about. We can check them all.</>,
+      <>어디가 어긋났는지 보려면 <b>같은 자리끼리</b> 대봐야죠 — 앞 블록 <b>i</b> 와 뒤 블록 <b>i + N/2</b>.<br />여기선 N=2 라 짝이 하나예요: <b>COW ↔ OWC</b>.<br />🔑 그리고 블록은 <b>COW, OWC, WCO</b> 뿐이라 나올 수 있는 짝이 얼마 없어요. 전부 확인해 볼 수 있어요.</>)
     : s.kind === "overlap" ? t(E,
       <><b>Case 1 / 3.</b> <b>COW × OWC</b> — the middle "<b>OW</b>" appears in both. Leftover: <b>C</b> on front + <b>C</b> on back (same letter).</>,
       <><b>1 / 3.</b> <b>COW × OWC</b> — 가운데 <b>OW</b> 가 양쪽에 다 있어요.<br />남는 건 앞 <b>C</b> + 뒤 <b>C</b> — 같은 글자예요.</>)
@@ -343,17 +347,45 @@ export function InsightSim({ E }) {
         </>
       )}
 
-      {/* why 스텝 — 한 번의 지우기가 요구하는 것: 앞 절반 = 뒤 절반 */}
+      {/* why 스텝 — 요구사항만. 아직 실제 S 를 대보기 전이라 '고른 것' 은 빈 상자.
+          (예전엔 여기서 COW = OWC 를 '=' 로 보여줬는데, 사실 둘은 다름 → 이야기가 끊겼음.
+           선생님 2026-08-30 "설명이 더 자연스럽게 안될까") */}
       {s.kind === "why" && (
+        <div style={{ maxWidth: 480, margin: "4px auto 0" }}>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, marginBottom: 10 }}>
+            {[t(E, "picked from the front half", "앞 절반에서 고른 것"),
+              t(E, "picked from the back half", "뒤 절반에서 고른 것")].map((lab, k) => (
+              <span key={k} style={{ display: "inline-flex", alignItems: "center", gap: 12 }}>
+                {k === 1 && <span style={{ fontSize: 20, fontWeight: 800, color: "#059669" }}>=</span>}
+                <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
+                  <span style={{ width: 108, height: 42, borderRadius: 9, background: "#f8fafc",
+                    border: "2px dashed #94a3b8", display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 20, fontWeight: 800, color: "#94a3b8" }}>?</span>
+                  <span style={{ fontSize: 10, fontWeight: 800, color: "#64748b", textAlign: "center", wordBreak: "keep-all" }}>{lab}</span>
+                </span>
+              </span>
+            ))}
+          </div>
+          <div style={{ padding: "10px 14px", background: "#f5f3ff",
+            border: "1.5px solid #c4b5fd", borderRadius: 10, fontSize: 12.5, color: "#5b21b6",
+            lineHeight: 1.75, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E, <>Whatever fills those two boxes has to be <b>identical</b>.<br />That's the only way the picks read as <b>Y + Y</b>.</>,
+                  <>이 두 상자에 들어갈 게 <b>서로 같아야</b> 해요.<br />그래야 고른 글자가 <b>Y + Y</b> 로 읽혀요.</>)}
+          </div>
+        </div>
+      )}
+
+      {/* halves 스텝 — 실제로 반을 잘라 대보니 안 맞음. 여기가 이야기의 전환점. */}
+      {s.kind === "halves" && (
         <>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginBottom: 8 }}>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, marginBottom: 8 }}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
               <div style={{ display: "flex", gap: 4 }}>
                 {"COW".split("").map((ch, i) => <Tile key={i} ch={ch} size={40} bd="#059669" bg="#ecfdf5" />)}
               </div>
               <div style={{ fontSize: 10, fontWeight: 800, color: "#059669" }}>{t(E, "front half", "앞 절반")}</div>
             </div>
-            <div style={{ fontSize: 20, fontWeight: 800, color: "#8b5cf6" }}>=</div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: "#dc2626" }}>≠</div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
               <div style={{ display: "flex", gap: 4 }}>
                 {"OWC".split("").map((ch, i) => <Tile key={i} ch={ch} size={40} bd="#8b5cf6" bg="#f5f3ff" />)}
@@ -361,11 +393,13 @@ export function InsightSim({ E }) {
               <div style={{ fontSize: 10, fontWeight: 800, color: "#8b5cf6" }}>{t(E, "back half", "뒤 절반")}</div>
             </div>
           </div>
-          <div style={{ maxWidth: 480, margin: "10px auto 0", padding: "10px 14px", background: "#f5f3ff",
-            border: "1.5px solid #c4b5fd", borderRadius: 10, fontSize: 12.5, color: "#5b21b6",
-            lineHeight: 1.75, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
-            {t(E, <>One move picks letters that read <b>Y + Y</b>.<br />So the picks must be <b>the same on both halves</b>.</>,
-                  <>한 번의 지우기는 <b>Y + Y</b> 로 읽히는 글자를 고르는 거예요.<br />그러니 <b>양쪽 절반에서 고른 게 같아야</b> 해요.</>)}
+          <Caption color="#dc2626">{t(E, "S = COWOWC → can't wipe it all in one move",
+                                          "S = COWOWC → 통째로 한 번에는 못 지워요")}</Caption>
+          <div style={{ maxWidth: 480, margin: "12px auto 0", padding: "10px 14px", background: "#eff6ff",
+            border: "1.5px solid #60a5fa", borderRadius: 10, fontSize: 12.5, color: "#1e40af",
+            lineHeight: 1.8, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E, <>But look how close they are — <b>OW</b> shows up in both.<br />Only <b>one letter each</b> is out of place.</>,
+                  <>그런데 얼마나 비슷한지 보세요 — <b>OW</b> 가 양쪽에 다 있어요.<br />어긋난 건 <b>한 글자씩</b>뿐이에요.</>)}
           </div>
         </>
       )}
