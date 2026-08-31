@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getPhotoshoot25Sections, getPhotoshoot25Walk } from "./components";
-import { PhotoWindowSim, PhotoUpdateSim, PhotoTraceSim } from "./sims";
+import { PhotoWindowSim, PhotoUpdateSim, PhotoMonotoneSim, PhotoTraceSim } from "./sims";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
 /* ═══════════════════════════════════════════════════════════════
@@ -168,6 +168,16 @@ export function makePhotoshoot25Ch1(E) {
         "Now the key: when ONE cow gets prettier, which photos change?  Only the ones containing her — and their top-left corners form a rectangle.",
         "이제 핵심: 소 한 마리가 예뻐지면 어떤 사진이 바뀔까?  그 소가 들어간 사진만 — 그리고 그 사진들의 왼쪽위가 직사각형을 이뤄요."),
       content: (<PhotoUpdateSim E={E} />),
+    },
+    /* [전] 마지막 미묘한 고리 — 왜 '바뀐 사진만' cur_max 와 견줘도 되나.
+       선생님 2026-08-30: Ch2 계획 카드 불릿 한 줄로만 있어서 '왜' 가 없었음.
+       다른 질문이라 별도 페이지 (cowsplits 의 −1 분리와 같은 이유). */
+    {
+      type: "reveal",
+      narr: t(E,
+        "One more link: we only compare the changed photos against cur_max. Why is that safe?",
+        "마지막 고리 하나: 바뀐 사진만 cur_max 와 견줘요. 그래도 괜찮은 이유는?"),
+      content: (<PhotoMonotoneSim E={E} />),
     },
   ];
 }

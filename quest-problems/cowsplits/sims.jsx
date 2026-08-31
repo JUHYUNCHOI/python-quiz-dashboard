@@ -210,6 +210,7 @@ export function InsightSim({ E }) {
     { kind: "case3" },       // Case 3/3: OWC × WCO — 겹침 WC, 남음 O·O + 요약
     { kind: "split" },
     { kind: "many" },        // N=4 로 쌍 2개 — 앞 절반 COOW = 뒤 절반 COOW (검증됨)
+    { kind: "whypair" },     // 왜 하필 i ↔ i+N/2 냐 — 뒤집어 짝지으면 순서가 어긋남
     { kind: "uneven" },      // N=6 · 같은 쌍이 섞임 → 조각 길이가 2,2,3 으로 달라짐
   ];
   const ts = useTraceStep(steps);
@@ -244,6 +245,9 @@ export function InsightSim({ E }) {
     : s.kind === "many" ? t(E,
       <>One pair is done. What if there are <b>many</b>?<br />Here N=4, so two pairs. Each pair splits the same way.<br />Op 1 collects <b>COOW</b> from the front half<br />and <b>COOW</b> from the back half — the same, so it reads Y+Y.<br />Op 2 does too. Still <b>M = 2</b>.</>,
       <>한 쌍은 됐어요. 쌍이 <b>여러 개</b>면 어떨까요?<br />여기 N=4 라 쌍이 두 개예요. 쌍마다 똑같이 나눠요.<br />1번이 앞 절반에서 <b>COOW</b> 를 고르고<br />뒤 절반에서도 <b>COOW</b> 를 골라요. 같으니까 Y+Y 예요.<br />2번도 마찬가지예요. 그래서 <b>M = 2</b>.</>)
+    : s.kind === "whypair" ? t(E,
+      <>Wait — why pair block <b>0 with 2</b>? Why not <b>0 with 3</b>?<br />Op 1 collects letters <b>in block order</b>, so the halves come out as<br />(block 0's) + (block 1's) &nbsp;vs&nbsp; (block 2's) + (block 3's).<br />Let's try both pairings and compare.</>,
+      <>잠깐 — 왜 하필 블록 <b>0 과 2</b> 를 짝지을까요? <b>0 과 3</b> 은 안 되나요?<br />1번은 글자를 <b>블록 순서대로</b> 모으니까, 두 절반은 이렇게 나와요:<br />(블록0이 낸 것) + (블록1이 낸 것) &nbsp;vs&nbsp; (블록2가 낸 것) + (블록3이 낸 것).<br />두 짝짓기를 다 해보고 견줘 봐요.</>)
     : s.kind === "uneven" ? t(E,
       <>Last worry. Above, <b>every</b> pair differed, so each block gave exactly 2 letters to op 1.<br />What if some pair <b>matches</b>? That pair gives <b>3</b> letters, the others give <b>2</b> —<br />so op 1 collects pieces of <b>different lengths</b>. Does it still read Y + Y?</>,
       <>마지막 걱정 하나. 위에선 <b>모든</b> 쌍이 달라서 블록마다 딱 2글자씩 냈어요.<br />그런데 <b>같은</b> 쌍이 섞이면요? 그 쌍은 <b>3글자</b>, 나머지는 <b>2글자</b>를 내요 —<br />1번이 모으는 조각의 <b>길이가 제각각</b>이 되는데, 그래도 Y + Y 가 될까요?</>)
@@ -434,6 +438,66 @@ export function InsightSim({ E }) {
           </div>
         </>
       )}
+
+      {/* whypair 스텝 — 왜 하필 i ↔ i+N/2 인가.
+          선생님 2026-08-30 "왜 i와 i + n//2인가? 이것만 비교해도 충분한거야?"
+          핵심: 1번은 글자를 블록 순서대로 모으므로, 앞의 k번째 블록과 뒤의 k번째 블록이
+          짝이어야 두 절반이 순서까지 겹친다. 뒤집어 짝지으면 A+B vs B+A 가 되어 어긋남.
+          숫자는 완전탐색으로 확인 (N=2,4,6 전수 780건: i+N/2 실패 0 / 뒤집기 실패 660). */}
+      {s.kind === "whypair" && (() => {
+        const BL = ["COW", "COW", "COW", "OWC"];          // S = COWCOWCOWOWC
+        const give = (a, b) => a === b ? [a, b]
+          : a.slice(0, 2) === b.slice(1) ? [a.slice(0, 2), b.slice(1)]
+          : [a.slice(1), b.slice(0, 2)];
+        const run = (pairs) => {
+          const part = {};
+          pairs.forEach(([x, y]) => { const [gx, gy] = give(BL[x], BL[y]); part[x] = gx; part[y] = gy; });
+          return { part, front: part[0] + part[1], back: part[2] + part[3] };
+        };
+        const A1 = run([[0, 2], [1, 3]]);
+        const A2 = run([[0, 3], [1, 2]]);
+        const Case = ({ title, res, good }) => (
+          <div style={{ flex: 1, minWidth: 232, background: good ? "#ecfdf5" : "#fef2f2",
+            border: `1.5px solid ${good ? "#6ee7b7" : "#fca5a5"}`, borderRadius: 11, padding: "10px 12px" }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: good ? "#065f46" : "#b91c1c", marginBottom: 7, textAlign: "center" }}>{title}</div>
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
+                fontSize: 11.5, color: "#334155", padding: "1px 0" }}>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>
+                  <span style={{ color: i < 2 ? "#059669" : "#8b5cf6", fontWeight: 800 }}>{i < 2 ? "앞" : "뒤"}</span> 블록{i} ({BL[i]})
+                </span>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: OPCOL[1] }}>{res.part[i]}</span>
+              </div>
+            ))}
+            <div style={{ marginTop: 7, paddingTop: 7, borderTop: `1px dashed ${good ? "#6ee7b7" : "#fca5a5"}`,
+              fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.75, textAlign: "center" }}>
+              <div>앞 = <b>{res.front}</b></div>
+              <div>뒤 = <b>{res.back}</b></div>
+              <div style={{ marginTop: 3, fontWeight: 800, color: good ? "#059669" : "#dc2626" }}>
+                {res.front === res.back ? t(E, "same ✓", "같음 ✓") : t(E, "different ✗", "다름 ✗")}
+              </div>
+            </div>
+          </div>
+        );
+        return (
+          <>
+            <div style={{ fontSize: 11, fontWeight: 800, color: "#94a3b8", textAlign: "center", marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>
+              S = COW COW │ COW OWC   (N = 4)
+            </div>
+            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", maxWidth: 520, margin: "0 auto" }}>
+              <Case title={t(E, "0↔2, 1↔3   (i ↔ i + N/2)", "0↔2, 1↔3   (i ↔ i + N/2)")} res={A1} good />
+              <Case title={t(E, "0↔3, 1↔2   (reversed)", "0↔3, 1↔2   (뒤집어서)")} res={A2} good={false} />
+            </div>
+            <div style={{ maxWidth: 520, margin: "12px auto 0", padding: "10px 14px", background: "#eff6ff",
+              border: "1.5px solid #60a5fa", borderRadius: 10, fontSize: 12.5, color: "#1e40af",
+              lineHeight: 1.8, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E,
+                <>Look at the right one: the <b>same two pieces</b> come out — <b>OW</b> and <b>COW</b> — but in <b>swapped order</b>.<br />Pairing block 0 with the <b>last</b> block makes the halves mirror each other.<br />Pair the <b>1st with the 1st, 2nd with the 2nd</b>, and the order lines up. That's <b>i ↔ i + N/2</b>.</>,
+                <>오른쪽을 보세요. 나온 조각은 <b>똑같아요</b> — <b>OW</b> 와 <b>COW</b>. 그런데 <b>순서가 바뀌었어요</b>.<br />블록 0 을 <b>마지막</b> 블록과 짝지으면 앞뒤가 거울처럼 뒤집혀요.<br /><b>첫째는 첫째끼리, 둘째는 둘째끼리</b> 짝지어야 순서가 맞아요. 그게 <b>i ↔ i + N/2</b> 예요.</>)}
+            </div>
+          </>
+        );
+      })()}
 
       {/* uneven 스텝 — N=6, 세 번째 쌍이 '같은' 쌍이라 조각 길이가 2·2·3 으로 달라짐.
           선생님 2026-08-30: "OW 도 1이고 OWC 도 1인데 어떻게 같이 사라지지?" 가 여기서 막힌 지점.

@@ -159,7 +159,6 @@ export function PhotoWindowSim({ E }) {
    ═══════════════════════════════════════════════════════════════ */
 export function PhotoUpdateSim({ E }) {
   const N = 8, K = 3;
-  const r = 4, c = 4;
   const FRAME = K * CELL + (K - 1) * GAP;
 
   const steps = [
@@ -168,10 +167,16 @@ export function PhotoUpdateSim({ E }) {
     { kind: "two" },     // 겹치는 두 사진이 소를 공유 → '한 장이 아니다'
     { kind: "miss" },    // 소 밖 → 안 바뀜 ✗
     { kind: "count" },   // 사진 9장 콘택트시트 (소가 9칸 중 어디에)
+    { kind: "edge" },    // 가장자리 소 — K*K 장이 아니다. 코드의 max/min 이 여기서 나옴
     { kind: "done" },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
+
+  /* 소 위치 — edge 스텝만 모서리로 옮겨서 "K×K 장" 이 안 되는 걸 보게 함
+     (선생님 2026-08-30: 코드의 max/min 이 왜 있는지 알 근거가 없었음) */
+  const isEdge = s.kind === "edge";
+  const r = isEdge ? 1 : 4, c = isEdge ? 1 : 4;
 
   const GREEN = "#16a34a", BLUE = "#2563eb", RED = "#dc2626";
   const tintOf = (col) => col === GREEN ? "#dcfce7" : col === BLUE ? "#dbeafe" : "#fee2e2";
@@ -181,6 +186,7 @@ export function PhotoUpdateSim({ E }) {
   : s.kind === "two"  ? [{ ti: 2, tj: 2, col: GREEN, label: t(E, "photo 1", "사진 1") },
                          { ti: 4, tj: 4, col: BLUE,  label: t(E, "photo 2", "사진 2") }]
   : s.kind === "miss" ? [{ ti: 5, tj: 5, col: RED,   label: t(E, "photo ✗", "사진 ✗") }]
+  : s.kind === "edge" ? [{ ti: 1, tj: 1, col: GREEN, label: t(E, "the only one", "이거 하나뿐") }]
   : [];
   const isCount = s.kind === "count" || s.kind === "done";
 
@@ -205,6 +211,9 @@ export function PhotoUpdateSim({ E }) {
     : s.kind === "miss" ? t(E,
         <>This 3×3 <b>misses the cow</b> → this photo stays the same ✗</>,
         <>이 3×3 은 <b>소를 못 담아요</b> → 이 사진은 그대로 ✗</>)
+    : s.kind === "edge" ? t(E,
+        <>Careful — that was a cow in the <b>middle</b>. Move it to a <b>corner</b>: some of those 9 photos would stick out past the field, so they don't exist. Only <b>1</b> photo actually holds it.</>,
+        <>조심 — 방금은 <b>한가운데</b> 소였어요. <b>모서리</b>로 옮기면요? 9장 중 몇 장은 들판 밖으로 삐져나가서 <b>있을 수가 없어요</b>. 실제로 담는 사진은 <b>1장</b>뿐이에요.</>)
     : s.kind === "count" ? t(E,
         <>Here are all the photos holding the cow: the cow can be in <b>any of a photo's 9 cells</b> → <b>9 photos</b>. Not all {(N - K + 1) * (N - K + 1)}!</>,
         <>소를 담는 사진을 다 모으면: 소가 <b>사진 속 9칸 중 어디</b>에 있어도 소가 담긴 사진 → <b>9장</b>. 전체 {(N - K + 1) * (N - K + 1)}장이 아니에요!</>)
@@ -292,6 +301,44 @@ export function PhotoUpdateSim({ E }) {
                 })}
               </div>
             ))}
+
+            {/* edge 스텝 — 위치마다 장수가 다르다는 표. 코드의 max/min 이 여기서 나옴. */}
+            {isEdge && (() => {
+              const W = N - K + 1;
+              const cnt = (rr, cc) =>
+                Math.max(0, Math.min(rr, W) - Math.max(1, rr - K + 1) + 1) *
+                Math.max(0, Math.min(cc, W) - Math.max(1, cc - K + 1) + 1);
+              const rows = [[4, 4], [2, 4], [1, 4], [1, 1]];
+              return (
+                <div style={{ marginTop: 14, padding: "11px 13px", background: "#fff7ed",
+                  border: "1.5px solid #fdba74", borderRadius: 11 }}>
+                  <div style={{ fontSize: 11.5, fontWeight: 800, color: "#9a3412", marginBottom: 7, textAlign: "center" }}>
+                    {t(E, "the count depends on where the cow is", "소가 어디 있냐에 따라 장수가 달라져요")}
+                  </div>
+                  {rows.map(([rr, cc]) => (
+                    <div key={`${rr}-${cc}`} style={{ display: "flex", justifyContent: "space-between",
+                      fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: "#7c2d12", padding: "1px 4px" }}>
+                      <span>{t(E, "cow", "소")} ({rr},{cc})</span>
+                      <span style={{ fontWeight: 800 }}>{cnt(rr, cc)}{t(E, " photos", "장")}</span>
+                    </div>
+                  ))}
+                  <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fdba74",
+                    fontSize: 11.5, color: "#7c2d12", lineHeight: 1.75, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
+                    {t(E,
+                      <>So we can't just say "K×K photos". We clamp the range to the field:<br />
+                        <code style={{ fontFamily: "'JetBrains Mono',monospace", background: "#fff", padding: "1px 5px", borderRadius: 4 }}>max(1, r−K+1)</code>
+                        {" … "}
+                        <code style={{ fontFamily: "'JetBrains Mono',monospace", background: "#fff", padding: "1px 5px", borderRadius: 4 }}>min(r, W)</code>
+                        <br />That's exactly the <b>max</b> and <b>min</b> you'll see in the code.</>,
+                      <>그래서 "K×K 장" 이라고 못 박을 수 없어요. 범위를 들판 안으로 잘라야 해요:<br />
+                        <code style={{ fontFamily: "'JetBrains Mono',monospace", background: "#fff", padding: "1px 5px", borderRadius: 4 }}>max(1, r−K+1)</code>
+                        {" … "}
+                        <code style={{ fontFamily: "'JetBrains Mono',monospace", background: "#fff", padding: "1px 5px", borderRadius: 4 }}>min(r, W)</code>
+                        <br />코드에 나오는 그 <b>max</b> 와 <b>min</b> 이 바로 이것이에요.</>)}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         </div>
       ) : (
@@ -311,6 +358,90 @@ export function PhotoUpdateSim({ E }) {
         </div>
       )}
 
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PhotoMonotoneSim — [왜 '바뀐 사진만' 비교해도 되나]
+   선생님 2026-08-30: quest 에서 이게 Ch2 계획 카드의 불릿 한 줄뿐이었음.
+   "값은 커지기만 → 최고는 줄지 않는다" 는 이 풀이에서 제일 미묘한 단계인데
+   결론만 있고 왜가 없었다. 학생 머릿속 질문: "다른 사진이 최고였으면 어떡하지?"
+   ═══════════════════════════════════════════════════════════════ */
+export function PhotoMonotoneSim({ E }) {
+  /* 사진 4장의 점수가 업데이트마다 어떻게 변하는지. 바뀌는 건 늘 일부. */
+  const FRAMES = [
+    { scores: [3, 7, 5, 2], changed: [],     note: "start" },
+    { scores: [3, 9, 5, 2], changed: [1],    note: "u1" },
+    { scores: [8, 9, 5, 2], changed: [0],    note: "u2" },
+    { scores: [8, 9, 5, 6], changed: [3],    note: "u3" },
+  ];
+  const steps = [{ kind: "intro" }, { kind: "u1" }, { kind: "u2" }, { kind: "u3" }, { kind: "why" }];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+  const fi = s.kind === "intro" ? 0 : s.kind === "why" ? 3 : ["u1", "u2", "u3"].indexOf(s.kind) + 1;
+  const f = FRAMES[fi];
+  const best = Math.max(...f.scores);
+  const prevBest = fi === 0 ? null : Math.max(...FRAMES[fi - 1].scores);
+
+  const say =
+    s.kind === "intro" ? t(E,
+      <>Four photos, with their scores. The best right now is <b>{best}</b>.<br />Watch what happens to the best as updates come in.</>,
+      <>사진 4장과 그 점수예요. 지금 최고는 <b>{best}</b>.<br />업데이트가 들어올 때 최고가 어떻게 되는지 봐요.</>)
+    : s.kind === "why" ? t(E,
+      <>Every score only ever <b>went up</b> — never down. Beauty only increases, so a photo's sum can't shrink.<br />So the new best is either the <b>old best</b>, or one of the <b>photos that just changed</b>.<br />Nothing else can sneak into first place. That's why we only compare the changed ones.</>,
+      <>점수는 전부 <b>올라가기만</b> 했어요 — 내려간 적이 없죠. 아름다움이 커지기만 하니 사진 합도 줄 수가 없어요.<br />그러니 새 최고는 <b>예전 최고</b>이거나, <b>방금 바뀐 사진</b> 중 하나예요.<br />다른 사진이 갑자기 1등이 될 수는 없어요. 그래서 바뀐 것만 견줘도 되는 거예요.</>)
+    : t(E,
+      <>Photo <b>{f.changed[0] + 1}</b> went up. Best: <b>{prevBest}</b> → <b>{best}</b>.<br />The untouched photos didn't move at all.</>,
+      <><b>{f.changed[0] + 1}번</b> 사진이 올라갔어요. 최고: <b>{prevBest}</b> → <b>{best}</b>.<br />손대지 않은 사진들은 꿈쩍도 안 했죠.</>);
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Why compare only the photos that changed?", "왜 '바뀐 사진'만 견줘도 될까?")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <div style={{ maxWidth: 430, margin: "0 auto 16px", padding: "10px 14px", borderRadius: 12,
+        background: "#fff7ed", border: "1.5px solid #fdba74", color: "#9a3412", fontSize: 12.5,
+        fontWeight: 700, textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.7 }}>{say}</div>
+
+      <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 12 }}>
+        {f.scores.map((v, i) => {
+          const isBest = v === best;
+          const justChanged = f.changed.includes(i);
+          return (
+            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+              <div style={{ width: 58, height: 58, borderRadius: 11, display: "flex", alignItems: "center",
+                justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 21,
+                background: justChanged ? "#fed7aa" : isBest ? "#dcfce7" : "#fff",
+                border: `2.5px solid ${justChanged ? "#ea580c" : isBest ? "#16a34a" : "#e2e8f0"}`,
+                color: "#1f2937", transition: "all .15s" }}>{v}</div>
+              <div style={{ fontSize: 10, fontWeight: 800, color: justChanged ? "#ea580c" : isBest ? "#16a34a" : "#94a3b8" }}>
+                {justChanged ? t(E, "changed", "바뀜") : isBest ? t(E, "best", "최고") : `${i + 1}`}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, color: "#16a34a",
+        fontFamily: "'JetBrains Mono',monospace" }}>
+        cur_max = {best}
+        {prevBest != null && prevBest !== best && (
+          <span style={{ color: "#94a3b8", fontWeight: 600, marginLeft: 8, fontSize: 12 }}>({prevBest} → {best})</span>
+        )}
+      </div>
+
+      {s.kind === "why" && (
+        <div style={{ maxWidth: 460, margin: "14px auto 0", padding: "10px 14px", background: "#ecfdf5",
+          border: "1.5px solid #6ee7b7", borderRadius: 10, fontSize: 12.5, color: "#065f46",
+          lineHeight: 1.8, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+          {t(E, <>If beauty could <b>drop</b>, this would break — the old best might fall and some untouched photo would take over, so we'd have to re-check everything.</>,
+                <>만약 아름다움이 <b>줄 수도</b> 있었다면 이 방법은 깨져요 — 옛 최고가 내려앉고 손 안 댄 사진이 1등이 될 수 있으니, 매번 전부 다시 봐야 하거든요.</>)}
+        </div>
+      )}
+
+      <div style={{ height: 16 }} />
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
   );
