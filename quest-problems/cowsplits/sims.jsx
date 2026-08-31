@@ -181,6 +181,9 @@ export function EraseRuleSim({ E }) {
       </div>
       </StepFade>
 
+      {/* 시뮬 내용과 ◀▶ 버튼 사이 숨 — 없으면 마지막 카드에 버튼이 붙어 보임
+          (선생님 2026-08-30 "뭔가 겹쳐"). checkups·buymilk 도 같은 방식. */}
+      <div style={{ height: 16 }} />
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
   );
@@ -454,6 +457,9 @@ export function InsightSim({ E }) {
       })()}
       </StepFade>
 
+      {/* 시뮬 내용과 ◀▶ 버튼 사이 숨 — 없으면 마지막 카드에 버튼이 붙어 보임
+          (선생님 2026-08-30 "뭔가 겹쳐"). checkups·buymilk 도 같은 방식. */}
+      <div style={{ height: 16 }} />
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
   );
@@ -509,6 +515,9 @@ export function OddImpossibleSim({ E }) {
       )}
       </StepFade>
 
+      {/* 시뮬 내용과 ◀▶ 버튼 사이 숨 — 없으면 마지막 카드에 버튼이 붙어 보임
+          (선생님 2026-08-30 "뭔가 겹쳐"). checkups·buymilk 도 같은 방식. */}
+      <div style={{ height: 16 }} />
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
   );
@@ -597,6 +606,9 @@ export function CowSplitsTraceSim({ E }) {
       )}
       </StepFade>
 
+      {/* 시뮬 내용과 ◀▶ 버튼 사이 숨 — 없으면 마지막 카드에 버튼이 붙어 보임
+          (선생님 2026-08-30 "뭔가 겹쳐"). checkups·buymilk 도 같은 방식. */}
+      <div style={{ height: 16 }} />
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
     </div>
   );
