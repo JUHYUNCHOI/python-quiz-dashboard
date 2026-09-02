@@ -151,7 +151,11 @@ export default function CowSplitsApp(props = {}) {
           marginBottom: 10, boxShadow: "0 2px 10px rgba(0,0,0,.04)", overflow: "hidden",
           minHeight: 460,
         }}>
-          <StepFade k={`${tab}-${cur}-${lang}`}>{renderContent()}</StepFade>
+          {/* key 에 lang 을 넣으면 언어를 바꿀 때 subtree 가 통째로 remount 되어
+              시뮬의 현재 단계가 1 로 초기화된다 (선생님 2026-09-02:
+              "한글 미러할때 시뮬레이터 다음 할때는 같이 이동 안되던데?").
+              언어 전환은 '새 정보'가 아니라 같은 화면의 번역이라 페이드도 필요 없다. */}
+          <StepFade k={`${tab}-${cur}`}>{renderContent()}</StepFade>
         </div>
         <div style={{ height: 110 }} />
       </div>

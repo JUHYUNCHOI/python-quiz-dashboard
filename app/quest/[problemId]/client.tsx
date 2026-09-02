@@ -420,8 +420,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           md 이상에서만 split. 모바일은 너무 좁아서 토글 버튼 자체를 숨김.
           splitView 일 때 가운데 draggable divider 로 비율 조절 가능. */}
       <div ref={splitContainerRef} className="flex-1 flex min-h-0">
-        {/* key=lang forces remount so useState initializer re-runs with new lang */}
-        <main
+                <main
           className={splitView ? "min-w-0 overflow-auto" : "flex-1 min-w-0"}
           style={splitView ? { flex: `0 0 calc(${splitRatio * 100}% - 4px)` } : undefined}
         >
@@ -431,8 +430,12 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           <ReleaseStageBanner questId={problemId} isEn={lang === "en"} />
           {LazyComp ? (
             <Suspense fallback={<ProblemLoadingSpinner />}>
-              {/* lang 을 prop 으로 직접 넘김 — window._questLang race 방지 */}
-              <LazyComp key={lang} lang={lang} />
+              {/* lang 을 prop 으로 직접 넘김 — window._questLang race 방지.
+                  ⚠️ key={lang} 를 주면 안 됨: 언어를 바꿀 때 quest 앱이 통째로 remount 되어
+                     시뮬의 현재 단계가 1 로 돌아가고 퀴즈 답도 날아간다 (선생님 2026-09-02
+                     "한글 미러할때 시뮬레이터 다음 할때는 같이 이동 안되던데?").
+                     180개 App 모두 useEffect([propLang]) 로 언어 전환을 스스로 처리한다. */}
+              <LazyComp lang={lang} />
             </Suspense>
           ) : (
             <div className="flex flex-col items-center justify-center gap-4 py-24 px-6 text-center">
