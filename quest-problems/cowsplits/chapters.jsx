@@ -210,7 +210,7 @@ function CowSplitsSampleThree({ E }) {
       <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 12, padding: "12px 15px", fontSize: 12.5, color: "#065f46", lineHeight: 1.85 }}>
         {t(E,
           <><b>Both are accepted.</b> The statement says "provide <i>a way</i> to do so" — a checker verifies your answer instead of matching it to the sample.<br />That sample runs with <b>k = 1</b>, which allows one extra move, so the author showed a 3 on purpose. The statement even spells it out: <i>"the optimal number of operations is two."</i><br />The very next sample gives the same string with <b>k = 0</b>, and there the answer is <b>2</b>.</>,
-          <><b>둘 다 정답이에요.</b> 문제가 "한 가지 방법을 제시하라" 고만 해서, 샘플과 맞춰보는 게 아니라 검사 프로그램이 유효한지만 봐요.<br />그 샘플은 <b>k = 1</b> 이라 한 번 더 써도 되거든요. 그래서 출제자가 일부러 3 짜리를 보여준 거예요.<br />문제에 대놓고 적혀 있어요 — <i>"이 테스트의 최적은 2번"</i>.<br />바로 다음 샘플은 같은 문자열을 <b>k = 0</b> 으로 주는데, 거기선 답이 <b>2</b> 예요.</>)}
+          <><b>둘 다 정답이에요.</b> 문제가 "한 가지 방법을 제시하라" 고만 해서, 샘플과 맞춰보는 게 아니라 검사 프로그램이 유효한지만 봐요.<br />그 샘플은 <b>k = 1</b> 이라 한 번 더 써도 되거든요. 그래서 출제자가 일부러 3 짜리를 보여준 거예요.<br />문제에 대놓고 적혀 있어요 — <i>"이 테스트의 최적은 두 번"</i>.<br />바로 다음 샘플은 같은 문자열을 <b>k = 0</b> 으로 주는데, 거기선 답이 <b>2</b> 예요.</>)}
       </div>
     </div>
   );
@@ -289,7 +289,7 @@ export function makeCowSplitsCh1(E) {
                   fontSize: 11.5, color: "#92400e", lineHeight: 1.7, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
                   {t(E,
                     <>Hold on to this. It is the reason two moves are always enough — and if pieces could be any 3 letters, this problem would be a completely different one.</>,
-                    <>이걸 꼭 붙잡고 가세요. 나중에 <b>왜 2번이면 되는지</b>가 전부 여기서 나와요.<br />조각이 아무 3글자나 될 수 있었다면 완전히 다른 문제가 돼요.</>)}
+                    <>이걸 꼭 붙잡고 가세요. 나중에 <b>왜 두 번이면 되는지</b>가 전부 여기서 나와요.<br />조각이 아무 3글자나 될 수 있었다면 완전히 다른 문제가 돼요.</>)}
                 </div>
               </div>
 
@@ -369,7 +369,7 @@ export function makeCowSplitsCh1(E) {
     {
       type: "reveal",
       narr: t(E, "Is there an S that really needs 3 or 4? Let's pair front and back blocks and check them one by one.",
-                 "3번, 4번이 필요한 S 가 정말 있을까요? 앞뒤 블록을 짝지어서 하나씩 따져 봐요."),
+                 "세 번, 네 번이 필요한 S 가 정말 있을까요? 앞뒤 블록을 짝지어서 하나씩 따져 봐요."),
       content: (<InsightSim E={E} />),
     },
     // [전] 분류 — 답은 −1 / 1 / 2 셋 중 하나

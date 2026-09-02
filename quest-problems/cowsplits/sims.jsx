@@ -165,13 +165,13 @@ export function EraseRuleSim({ E }) {
         <>이제 남은 <b>OWOW</b> = <b>OW·OW</b> — 앞뒤가 똑같죠 ✓ 한 번 더 지우면 끝.</>)
     : s.kind === "poofOW" ? t(E,
         <>Empty! <b>2 moves</b> cleared the whole thing.</>,
-        <>싹 비었어요! <b>2번</b>에 다 지웠죠.</>)
+        <>싹 비었어요! <b>두 번</b>에 다 지웠죠.</>)
     : s.kind === "one" ? t(E,
         <>But what if S were <b>COWCOW</b>? Front half <b>COW</b> = back half <b>COW</b> — the whole string is already <b>the same block twice</b>.</>,
         <>그런데 S 가 <b>COWCOW</b> 였다면요?<br />앞 절반 <b>COW</b> = 뒤 절반 <b>COW</b> — 전체가 이미 <b>앞뒤가 똑같아요</b>.</>)
     : t(E,
         <><b>1 move</b> and it's gone! So the answer can be <b>1 or 2</b>… but is there an S that needs <b>3 or more</b>? 🤔</>,
-        <><b>1번</b>에 끝! 그럼 답은 <b>1번 아니면 2번</b>인데… <b>3번 이상</b>이 필요한 S 는 없을까요? 🤔</>);
+        <><b>한 번</b>에 끝! 그럼 답은 <b>한 번 아니면 두 번</b>인데… <b>세 번 이상</b>이 필요한 S 는 없을까요? 🤔</>);
 
   return (
     <div style={{ padding: 16 }}>
@@ -205,9 +205,9 @@ export function EraseRuleSim({ E }) {
         {s.kind === "pickC" ? "C · C  ✓"
           : s.kind === "pickOW" ? "OW · OW  ✓"
           : s.kind === "poofC" ? t(E, "left over → OWOW", "남은 글자 → OWOW")
-          : s.kind === "poofOW" ? t(E, "empty in 2 moves ✓", "2번에 빈 문자열 ✓")
+          : s.kind === "poofOW" ? t(E, "empty in 2 moves ✓", "두 번에 빈 문자열 ✓")
           : s.kind === "one" ? t(E, "COW · COW ✓ — one move", "COW · COW ✓ — 한 번이면 돼요")
-          : s.kind === "poof1" ? t(E, "empty in 1 move ✓", "1번에 빈 문자열 ✓")
+          : s.kind === "poof1" ? t(E, "empty in 1 move ✓", "한 번에 빈 문자열 ✓")
           : ""}
       </div>
       </StepFade>
@@ -289,7 +289,7 @@ export function InsightSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Why can 2 moves always clear it?", "왜 항상 2번이면 다 지울 수 있을까?")}
+        title={t(E, "Why can 2 moves always clear it?", "왜 항상 두 번이면 다 지울 수 있을까?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
       {/* '셋뿐' 을 쓰는 화면에서는 그 사실을 위에 계속 띄워둔다 */}
@@ -473,7 +473,7 @@ export function InsightSim({ E }) {
               <code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>WC</code>
               {" + "}<code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>WC</code> ✓</div>
             <div style={{ marginTop: 4, fontWeight: 800, color: "#059669" }}>
-              {t(E, "2 pairs, still M = 2 🎉", "쌍이 둘이어도 M = 2 🎉")}
+              {t(E, "2 pairs, still M = 2 🎉", "쌍이 둘이어도 두 번이면 끝 🎉")}
             </div>
           </div>
         </>
