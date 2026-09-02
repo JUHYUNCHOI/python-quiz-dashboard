@@ -289,7 +289,7 @@ export function InsightSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Why is 2 always enough?", "왜 항상 2번이면 될까?")}
+        title={t(E, "Why can 2 moves always clear it?", "왜 항상 2번이면 다 지울 수 있을까?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
       {/* '셋뿐' 을 쓰는 화면에서는 그 사실을 위에 계속 띄워둔다 */}
