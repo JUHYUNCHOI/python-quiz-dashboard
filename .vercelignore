@@ -1,0 +1,42 @@
+# Vercel CLI 업로드 제외 목록.
+#
+# 왜 생겼나 (2026-09-02): npm run build:check 가 만드는 .next-check 가 업로드에 섞여
+#   "files should NOT have more than 15000 items, received 19099" 로 배포가 실패했다.
+#   .gitignore 에 넣어둬도 CLI 업로드에는 적용되지 않는다.
+#
+# ⚠️ 이 파일이 존재하면 Vercel 은 .gitignore 대신 이것만 본다.
+#    → .gitignore 의 항목을 여기에도 그대로 유지할 것. 새로 무시할 게 생기면 양쪽 다.
+
+node_modules
+.next
+.next-check
+out
+build
+
+# 로그
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# 환경 / 로컬 설정
+.env*
+!.env.example
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# 테스트 산출물
+test-results
+playwright-report
+blob-report
+playwright/.cache
+
+# 모바일 래퍼 (Capacitor) — 웹 배포엔 불필요
+ios
+android
+
+# 로컬 스크립트 산출물 / 도구
+scripts/output
+.superpowers
+.claude/worktrees
