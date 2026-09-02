@@ -455,7 +455,11 @@ export function PhotoMonotoneSim({ E }) {
    ═══════════════════════════════════════════════════════════════ */
 export function PhotoTraceSim({ E }) {
   const N = 5, K = 3, W = N - K + 1; // 3
-  const queries = [{ r: 2, c: 2, v: 5 }, { r: 4, c: 4, v: 3 }];
+  /* 3번째 쿼리는 (2,2) 를 5 → 9 로 다시 올린다.
+     앞 두 개는 0 에서 시작하는 칸이라 delta 가 v 와 같아서 "그냥 v 를 더하면 되잖아?" 로 보인다.
+     (선생님 2026-09-02: "delta가 이해가 안돼. 그냥 5에 3을 더하면 되는거 아닌가")
+     이미 값이 있는 칸을 한 번 겪어야 delta 가 왜 필요한지 보인다. */
+  const queries = [{ r: 2, c: 2, v: 5 }, { r: 4, c: 4, v: 3 }, { r: 2, c: 2, v: 9 }];
 
   // 한 쿼리를 5단계로: ①읽기 ②delta계산+저장 ③S 꺼내 +delta 저장 ④cur_max 비교+저장 ⑤꺼내 출력
   const steps = [{ kind: "intro", wr: [], rd: [] }];
@@ -479,6 +483,8 @@ export function PhotoTraceSim({ E }) {
       // ② delta 저장 + beauty[r][c] = v
       beauty[qq.r][qq.c] = qq.v;
       steps.push(snap({ kind: "delta", ...base, wr: ["delta", "beauty"], rd: ["v"], hasDelta: true, hasMax: false }));
+      // ②-b 어느 사진들을 고칠지 — 범위를 실제 숫자로 계산 (선생님 2026-09-02 요청)
+      steps.push(snap({ kind: "range", ...base, wr: [], rd: [], hasDelta: true, hasMax: false }));
       // ③ S 꺼내 +delta 저장
       for (let i = iLo; i <= iHi; i++) for (let j = jLo; j <= jHi; j++) S[i][j] += delta;
       steps.push(snap({ kind: "storeS", ...base, wr: ["S"], rd: ["S", "delta"], hasDelta: true, hasMax: false }));
@@ -497,7 +503,7 @@ export function PhotoTraceSim({ E }) {
   const q = s.q;
   const curMax = s.curMax ?? 0;
   const inQuery = s.kind !== "intro" && s.kind !== "done";
-  const sActive = s.kind === "storeS" || s.kind === "max";
+  const sActive = s.kind === "storeS" || s.kind === "max" || s.kind === "range";
   const beautyHot = s.kind === "read" || s.kind === "delta";
   const inRect = (i, j) => sActive && i >= s.iLo && i <= s.iHi && j >= s.jLo && j <= s.jHi;
   const wr = (n) => (s.wr || []).includes(n);
@@ -517,8 +523,21 @@ export function PhotoTraceSim({ E }) {
         <><b>①</b> Read the query into <b>r, c, v</b>. And read the old value out of beauty[{q.r}][{q.c}] = <b>{s.old}</b>.</>,
         <><b>①</b> 쿼리를 읽어 <b>r·c·v</b> 에 저장. 그리고 beauty[{q.r}][{q.c}] 에서 옛 값 <b>{s.old}</b> 을 꺼내요.</>)
     : s.kind === "delta" ? t(E,
-        <><b>②</b> Store into <b>delta</b> = v − old = {q.v} − {s.old} = <b>{s.delta}</b>. And store {q.v} into beauty[{q.r}][{q.c}].</>,
-        <><b>②</b> <b>delta</b> 에 저장: v − 옛값 = {q.v} − {s.old} = <b>{s.delta}</b>. beauty[{q.r}][{q.c}] 엔 새 값 {q.v} 저장.</>)
+        <><b>②</b> <b>delta</b> = v − old = {q.v} − {s.old} = <b>{s.delta}</b> — how much it <i>grew</i>.
+          {s.old > 0
+            ? <><br />The photo sums already include the old <b>{s.old}</b>. Adding <b>{q.v}</b> would count it twice — add only the <b>{s.delta}</b> it grew by.</>
+            : <><br />(This cell was 0, so delta happens to equal v. Watch a cell that already has a value.)</>}</>,
+        <><b>②</b> <b>delta</b> = v − 옛값 = {q.v} − {s.old} = <b>{s.delta}</b> — <i>얼마나 늘었나</i>.
+          {s.old > 0
+            ? <><br />사진 점수엔 옛값 <b>{s.old}</b> 이 이미 들어 있어요. <b>{q.v}</b> 를 더하면 두 번 세는 셈이라, <b>늘어난 {s.delta}</b> 만 더해야 해요.</>
+            : <><br />(이 칸은 0 이라 delta 가 v 와 같아요. 이미 값이 있는 칸에서 다시 봐요.)</>}</>)
+    : s.kind === "range" ? t(E,
+        <><b>②-b</b> Which photos hold this cow? Clamp the range to the field:<br />
+          i: max(1, {q.r}−{K}+1) … min({q.r}, {W}) = <b>{s.iLo} … {s.iHi}</b> &nbsp;·&nbsp;
+          j: max(1, {q.c}−{K}+1) … min({q.c}, {W}) = <b>{s.jLo} … {s.jHi}</b></>,
+        <><b>②-b</b> 어느 사진을 고쳐야 할까요? 범위를 들판 안으로 잘라요:<br />
+          i: max(1, {q.r}−{K}+1) … min({q.r}, {W}) = <b>{s.iLo} … {s.iHi}</b> &nbsp;·&nbsp;
+          j: max(1, {q.c}−{K}+1) … min({q.c}, {W}) = <b>{s.jLo} … {s.jHi}</b></>)
     : s.kind === "storeS" ? t(E,
         <><b>③</b> For the cow's photos: read <b>S</b> out, add <b>{s.delta}</b>, store it back into <b>S</b> (green cells).</>,
         <><b>③</b> 소를 품는 사진들: <b>S</b> 에서 값을 꺼내 <b>+{s.delta}</b> 해서 다시 <b>S</b> 에 저장 (초록 칸).</>)
