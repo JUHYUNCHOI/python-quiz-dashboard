@@ -35,6 +35,13 @@ if (missingRecommended.length > 0) {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // 확인용 빌드는 다른 폴더에 — dev 서버가 쓰는 .next 를 갈아엎지 않게.
+  //   next dev 와 next build 는 기본적으로 같은 .next 를 쓴다. dev 서버를 켜둔 채
+  //   npm run build 를 돌리면 서버가 쓰던 파일이 통째로 바뀌어 dev 가 죽는다.
+  //   (2026-08-31: "왜 자꾸 꺼지는거지?" — 배포 전 빌드 때마다 이게 원인이었음)
+  //   → 확인용은 `npm run build:check` (NEXT_DIST_DIR=.next-check).
+  //   Vercel 은 이 변수를 안 주므로 그대로 .next 를 쓴다.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   images: {
     unoptimized: true,
   },

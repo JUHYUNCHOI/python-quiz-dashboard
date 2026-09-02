@@ -38,3 +38,10 @@ next-env.d.ts
 /android/
 scripts/output/
 .superpowers/
+
+# 확인용 빌드 산출물 (npm run build:check) — dev 서버의 .next 와 분리
+#   next dev 와 next build 는 기본적으로 같은 .next 를 쓴다. dev 서버를 켜둔 채
+#   빌드를 돌리면 서버가 읽던 파일이 갈아엎혀 dev 가 죽는다 (2026-08-31).
+#   ⚠️ build:check 를 돌리면 Next 가 tsconfig.json 의 include 에 .next-check 경로를
+#      자동으로 추가한다. 커밋하지 말 것 — `git checkout -- tsconfig.json` 으로 되돌린다.
+.next-check
