@@ -225,14 +225,14 @@ export function InsightSim({ E }) {
 
   const say =
     s.kind === "why" ? t(E,
-      <>One move only works if the letters we pick read as <b>Y + Y</b> — the same thing twice.<br />So whatever we take from the <b>front half</b> has to match what we take from the <b>back half</b>.<br />Then let's just cut S down the middle and compare.</>,
-      <>한 번에 지우려면 고른 글자가 <b>Y + Y</b>, 같은 게 두 번으로 읽혀야 해요.<br />그러니 <b>앞 절반</b>에서 고른 것과 <b>뒤 절반</b>에서 고른 것이 같아야겠죠.<br />그럼 S 를 반으로 잘라서 대보면 되겠네요.</>)
+      <>One move works only if the picked letters read as <b>Y + Y</b>.<br />So let's cut S down the middle and compare the halves.</>,
+      <>한 번에 지우려면 고른 글자가 <b>Y + Y</b> 로 읽혀야 해요.<br />그럼 S 를 반으로 잘라서 대보면 되겠네요.</>)
     : s.kind === "halves" ? t(E,
-      <>Cut it: front <b>COW</b>, back <b>OWC</b>. They don't match.<br />So we can't wipe the whole thing in one go.<br />But that's not a dead end — <b>they're close.</b><br />Let's find out exactly where they disagree.</>,
-      <>잘라봐요: 앞은 <b>COW</b>, 뒤는 <b>OWC</b>. 안 맞네요.<br />통째로 한 번에는 못 지운다는 뜻이에요.<br />그렇다고 막힌 건 아니에요 — <b>거의 비슷하잖아요.</b><br />어디가 어긋났는지만 정확히 찾아봐요.</>)
+      <>Cut it: front <b>COW</b>, back <b>OWC</b> — they don't match.<br />Not a dead end though. Where exactly do they disagree?</>,
+      <>잘라봐요: 앞은 <b>COW</b>, 뒤는 <b>OWC</b> — 안 맞네요.<br />막힌 건 아니에요. 어디가 어긋난 걸까요?</>)
     : s.kind === "pair" ? t(E,
-      <>To find that out, compare them <b>block by block</b> — front block <b>i</b> against back block <b>i + N/2</b>.<br />Here N=2, so there's just one pair: <b>COW ↔ OWC</b>.<br />🔑 And a block is only ever <b>COW, OWC, or WCO</b> — so there aren't many pairs to worry about. We can check them all.</>,
-      <>어디가 어긋났는지 보려면 <b>같은 자리끼리</b> 대봐야죠 — 앞 블록 <b>i</b> 와 뒤 블록 <b>i + N/2</b>.<br />여기선 N=2 라 짝이 하나예요: <b>COW ↔ OWC</b>.<br />🔑 그리고 블록은 <b>COW, OWC, WCO</b> 뿐이라 나올 수 있는 짝이 얼마 없어요. 전부 확인해 볼 수 있어요.</>)
+      <><b>Same position against same position</b> — front block <b>i</b> vs back block <b>i + N/2</b>.<br />🔑 Blocks are only <b>COW, OWC, WCO</b>, so we can check every possible pair.</>,
+      <><b>같은 자리끼리</b> 대봐요 — 앞 블록 <b>i</b> 와 뒤 블록 <b>i + N/2</b>.<br />🔑 블록은 <b>COW, OWC, WCO</b> 뿐이라 가능한 짝을 전부 볼 수 있어요.</>)
     : s.kind === "overlap" ? t(E,
       <><b>Case 1 / 3.</b> <b>COW × OWC</b> — the middle "<b>OW</b>" appears in both. Leftover: <b>C</b> on front + <b>C</b> on back (same letter).</>,
       <><b>1 / 3.</b> <b>COW × OWC</b> — 가운데 <b>OW</b> 가 양쪽에 다 있어요.<br />남는 건 앞 <b>C</b> + 뒤 <b>C</b> — 같은 글자예요.</>)
@@ -240,17 +240,17 @@ export function InsightSim({ E }) {
       <><b>Case 2 / 3.</b> <b>COW × WCO</b> — this time "<b>CO</b>" overlaps (front's start = back's end). Leftover: <b>W</b> · <b>W</b> — same letter again!</>,
       <><b>2 / 3.</b> <b>COW × WCO</b> — 이번엔 <b>CO</b> 가 겹쳐요 (앞의 시작 = 뒤의 끝).<br />남는 건 <b>W · W</b> — 이번에도 같은 글자!</>)
     : s.kind === "case3" ? t(E,
-      <><b>Case 3 / 3.</b> <b>OWC × WCO</b> — "<b>WC</b>" overlaps. Leftover: <b>O</b> · <b>O</b>.<br />All three pairs look the same — <b>2-letter overlap + same-letter leftover</b>.</>,
-      <><b>3 / 3.</b> <b>OWC × WCO</b> — <b>WC</b> 가 겹치고 남는 건 <b>O · O</b>.<br />세 쌍 다 같은 모양이에요 — <b>2글자 겹침 + 같은 글자 남음</b>.</>)
+      <><b>Case 3 / 3.</b> The last pair: <b>OWC × WCO</b>.</>,
+      <><b>3 / 3.</b> 마지막 쌍이에요: <b>OWC × WCO</b>.</>)
     : s.kind === "many" ? t(E,
-      <>One pair is done. What if there are <b>many</b>?<br />Here N=4, so two pairs. Each pair splits the same way.<br />Op 1 collects <b>COOW</b> from the front half<br />and <b>COOW</b> from the back half — the same, so it reads Y+Y.<br />Op 2 does too. Still <b>M = 2</b>.</>,
-      <>한 쌍은 됐어요. 쌍이 <b>여러 개</b>면 어떨까요?<br />여기 N=4 라 쌍이 두 개예요. 쌍마다 똑같이 나눠요.<br />1번이 앞 절반에서 <b>COOW</b> 를 고르고<br />뒤 절반에서도 <b>COOW</b> 를 골라요. 같으니까 Y+Y 예요.<br />2번도 마찬가지예요. 그래서 <b>M = 2</b>.</>)
+      <>One pair is done. What if there are <b>many</b>?<br />N=4 here, so two pairs — split each one the same way.</>,
+      <>한 쌍은 됐어요. 쌍이 <b>여러 개</b>면요?<br />여기 N=4 라 쌍이 둘 — 쌍마다 똑같이 나누면 돼요.</>)
     : s.kind === "whypair" ? t(E,
-      <>Wait — why pair block <b>0 with 2</b>? Why not <b>0 with 3</b>?<br />Op 1 collects letters <b>in block order</b>, so the halves come out as<br />(block 0's) + (block 1's) &nbsp;vs&nbsp; (block 2's) + (block 3's).<br />Let's try both pairings and compare.</>,
-      <>잠깐 — 왜 하필 블록 <b>0 과 2</b> 를 짝지을까요? <b>0 과 3</b> 은 안 되나요?<br />1번은 글자를 <b>블록 순서대로</b> 모으니까, 두 절반은 이렇게 나와요:<br />(블록0이 낸 것) + (블록1이 낸 것) &nbsp;vs&nbsp; (블록2가 낸 것) + (블록3이 낸 것).<br />두 짝짓기를 다 해보고 견줘 봐요.</>)
+      <>Wait — why pair <b>0 with 2</b>? Why not <b>0 with 3</b>?<br />Let's try both and see.</>,
+      <>잠깐 — 왜 하필 <b>0 과 2</b> 를 짝지을까요? <b>0 과 3</b> 은 안 되나요?<br />둘 다 해보고 견줘 봐요.</>)
     : s.kind === "uneven" ? t(E,
-      <>Last worry. Above, <b>every</b> pair differed, so each block gave exactly 2 letters to op 1.<br />What if some pair <b>matches</b>? That pair gives <b>3</b> letters, the others give <b>2</b> —<br />so op 1 collects pieces of <b>different lengths</b>. Does it still read Y + Y?</>,
-      <>마지막 걱정 하나. 위에선 <b>모든</b> 쌍이 달라서 블록마다 딱 2글자씩 냈어요.<br />그런데 <b>같은</b> 쌍이 섞이면요? 그 쌍은 <b>3글자</b>, 나머지는 <b>2글자</b>를 내요 —<br />1번이 모으는 조각의 <b>길이가 제각각</b>이 되는데, 그래도 Y + Y 가 될까요?</>)
+      <>Last worry — what if some pair <b>matches</b>?<br />Then op 1 collects pieces of <b>different lengths</b>. Still Y + Y?</>,
+      <>마지막 걱정 — <b>같은</b> 쌍이 섞이면요?<br />1번이 모으는 조각의 <b>길이가 제각각</b>이 되는데, 그래도 Y + Y 가 될까요?</>)
     : t(E,
       <>Split it: the <b>overlapping 2 letters</b> (OW) go to <b>op 1</b> — front OW matches back OW.<br />The <b>leftover 1 letter each side</b> (C and C) go to <b>op 2</b> — same letter!<br />Both ops read as Y+Y → <b>M = 2</b>.</>,
       <>나눠요. 겹치는 <b>2글자 (OW)</b> 는 <b>1번</b>으로 — 앞 OW = 뒤 OW ✓<br />남는 <b>1글자씩 (C·C)</b> 은 <b>2번</b>으로 — 같은 글자 ✓<br />둘 다 "똑같은 게 두 번" → <b>M = 2</b>.</>)
@@ -313,8 +313,8 @@ export function InsightSim({ E }) {
             bLabelEn="back: b[:2] = WC" bLabelKo="뒤: b[:2] = WC" />
           <div style={{ maxWidth: 500, margin: "14px auto 0", padding: "10px 14px", background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, fontSize: 12.5, color: "#065f46", lineHeight: 1.65, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
             🎉 {t(E,
-              <>All <b>3 different pairs</b> checked. Every one: 2-letter overlap + same-letter leftover.<br />So <b>one pair</b> always splits into 2 moves.<br /><span style={{ fontSize: 11.5 }}>🔑 Both halves of that come straight from the key fact: rolling COW keeps 2 letters in place, and each block holds one C, one O, one W — so the leftover has to match.</span></>,
-              <>서로 다른 쌍은 <b>이 3가지가 전부</b>예요.<br />셋 다 <b>2글자 겹침 + 같은 글자 남음</b>이에요.<br />그러니 <b>한 쌍</b>은 늘 2번으로 나눠져요.<br /><span style={{ fontSize: 11.5 }}>🔑 둘 다 열쇠에서 바로 나와요 — 굴린 거라 2글자가 제자리에 남고,<br />블록마다 C·O·W 가 하나씩이라 남는 글자도 같을 수밖에 없어요.</span></>)}
+              <>Different pairs: <b>these 3 are all of them</b>. Every one — 2 letters overlap, same letter left over.<br /><span style={{ fontSize: 11.5 }}>🔑 Because it's a rotation: 2 letters stay put, and each block has one C, one O, one W.</span></>,
+              <>서로 다른 쌍은 <b>이 3가지가 전부</b>. 셋 다 <b>2글자 겹침 + 같은 글자 남음</b>.<br /><span style={{ fontSize: 11.5 }}>🔑 굴린 거라 2글자가 제자리에 남고, 블록마다 C·O·W 가 하나씩이라 남는 글자도 같아요.</span></>)}
           </div>
         </>
       )}
