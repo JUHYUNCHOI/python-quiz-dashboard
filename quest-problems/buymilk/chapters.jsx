@@ -187,24 +187,35 @@ export function makeBuyMilkCh1(E) {
       narr: t(E,
         "Now bigger blocks are never worse. So walk from the biggest block down, comparing just two choices.",
         "이제 큰 블록이 손해가 아니에요. 그러니 큰 블록부터 훑으며 두 갈래만 비교해요."),
-      content: (<GreedySim E={E} />),
+      content: (<GreedySim key="greedy5" E={E} x={5} />),
     },
 
-    // [결] 배운 걸로 직접 확인 — 시뮬과 다른 x 로 (x=9 → 70)
+    // [전] 한 번 더 — 이번엔 '올림해서 사고 끝내기' 가 실제로 이기는 x.
+    //   바로 앞 퀴즈에서 '더 사는 게 쌀 수도 있다' 고 배웠는데 x=5 에선 그 갈래가
+    //   이기지 않아서 학생이 확인할 데가 없었음 (선생님 2026-09-03 검토).
+    {
+      type: "reveal",
+      narr: t(E,
+        "Same deals, x = 7 this time. Watch the 'round up and stop' branch actually win.",
+        "같은 딜로 이번엔 x = 7 이에요.\n'올림해서 사고 끝내기' 갈래가 실제로 이기는 걸 봐요."),
+      content: (<GreedySim key="greedy7" E={E} x={7} />),
+    },
+
+    // [결] 배운 걸로 직접 확인 — 시뮬과 다른 x 로 (x=9 → 50)
 
     // 1-4: Input — sample tracing
     {
       type: "input",
       narr: t(E,
-        "Same deals as the sims: a = [10, 25, 30, 70]. This time x = 9 — do it yourself.",
-        "시뮬과 같은 딜이에요. a = [10, 25, 30, 70].\n이번엔 x = 9 예요. 직접 해봐요."),
+        "Same deals as the sims: a = [10, 15, 20, 45]. This time x = 9 — do it yourself.",
+        "시뮬과 같은 딜이에요. a = [10, 15, 20, 45].\n이번엔 x = 9 예요. 직접 해봐요."),
       question: t(E,
-        "a=[10,25,30,70], deal sizes 1,2,4,8. Min cost for x=9?",
-        "a=[10,25,30,70], 거래 크기 1,2,4,8. x=9 의 최소 비용?"),
+        "a=[10,15,20,45], deal sizes 1,2,4,8. Min cost for x=9?",
+        "a=[10,15,20,45], 거래 크기 1,2,4,8. x=9 의 최소 비용?"),
       hint: t(E,
-        "Use the block prices you found: 10, 20, 30, 60.\nStart from the biggest block and compare the two choices.",
-        "아까 구한 블록 값을 써요. 10, 20, 30, 60 이에요.\n제일 큰 블록부터 두 갈래를 비교해 봐요."),
-      answer: 70,
+        "Use the block prices you found: 10, 15, 20, 40.\nStart from the biggest block and compare the two choices.",
+        "아까 구한 블록 값을 써요. 10, 15, 20, 40 이에요.\n제일 큰 블록부터 두 갈래를 비교해 봐요."),
+      answer: 50,
     },
   ];
 }
@@ -213,8 +224,81 @@ export function makeBuyMilkCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: makeBuyMilkCh2 (1 progressive step)
    ═══════════════════════════════════════════════════════════════ */
+/* 코드로 넘어가기 전 다리 — 두 시뮬에서 본 것을 코드 변수 이름으로 옮겨 적는 카드.
+   왜 생겼나 (선생님 2026-09-03 검토): Ch2 가 시뮬 → 코드로 곧장 점프해서
+   c / rem / cost / ans 라는 이름을 학생이 코드에서 처음 만났음.
+   photoshoot25 의 Plan 카드와 같은 자리·같은 모양. */
+function BuyMilkPlan({ E }) {
+  const box = { background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, padding: "12px 14px", wordBreak: "keep-all" };
+  const Insight = ({ icon, head, body, color }) => (
+    <div style={{ display: "flex", gap: 11, alignItems: "flex-start", ...box, borderLeft: `4px solid ${color}` }}>
+      <span style={{ fontSize: 20, lineHeight: 1.2 }}>{icon}</span>
+      <div style={{ fontSize: 13.5, lineHeight: 1.65, color: "#334155", textWrap: "balance" }}>
+        <b style={{ color: "#0f172a" }}>{head}</b><br />{body}
+      </div>
+    </div>
+  );
+  const codeTag = (s) => (
+    <code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: "#b45309", background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 5, padding: "0 5px" }}>{s}</code>
+  );
+  const Line = ({ n, children }) => (
+    <div style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 7 }}>
+      <span style={{ flexShrink: 0, width: 20, height: 20, borderRadius: 999, background: "#d97706", color: "#fff", fontSize: 11.5, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{n}</span>
+      <div style={{ fontSize: 13, lineHeight: 1.7, color: "#334155", wordBreak: "keep-all", textWrap: "balance" }}>{children}</div>
+    </div>
+  );
+  return (
+    <div style={{ padding: 16, maxWidth: 620, margin: "0 auto" }}>
+      <div style={{ fontSize: 14, fontWeight: 800, color: "#0f172a", marginBottom: 4 }}>
+        🧩 {t(E, "What the two sims told us", "두 시뮬에서 알아낸 것")}
+      </div>
+      <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
+        <Insight icon="💰" color="#d97706"
+          head={t(E, "A big deal can be a bad deal.", "큰 딜이 오히려 손해일 수 있다.")}
+          body={t(E, <>So each block gets its own real price {codeTag("c[i]")} — the deal, or two half-blocks, whichever is cheaper.</>,
+                     <>그래서 블록마다 진짜 값 {codeTag("c[i]")} 를 따로 구해요.<br />딜 값과 반쪽 블록 두 개 값 중 싼 쪽이에요.</>)} />
+        <Insight icon="🧱" color="#0891b2"
+          head={t(E, "At each block there are only two choices.", "블록마다 고를 건 두 가지뿐이다.")}
+          body={t(E, <>Round up and stop, or take the floor and carry {codeTag("rem")} down to smaller blocks.</>,
+                     <>올림해서 사고 끝내거나,<br />내림만큼만 사고 남은 {codeTag("rem")} 을 작은 블록으로 넘겨요.</>)} />
+        <Insight icon="📉" color="#059669"
+          head={t(E, "One pass, big to small — no searching.", "큰 것부터 한 번만 훑으면 끝 — 탐색이 없다.")}
+          body={t(E, <>Every block gives one candidate; {codeTag("ans")} just keeps the smallest.</>,
+                     <>블록마다 후보가 하나씩 나와요.<br />{codeTag("ans")} 는 그중 제일 작은 값만 들고 있으면 돼요.</>)} />
+      </div>
+
+      <div style={{ ...box, background: "#f8fafc", marginBottom: 10 }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: "#0f172a", marginBottom: 9 }}>
+          ⚙️ {t(E, "So the code does this, in order", "그래서 코드는 이 순서로 해요")}
+        </div>
+        <Line n={1}>{t(E, <>Read the deal prices {codeTag("a")}.</>, <>딜 가격 {codeTag("a")} 를 읽어요.</>)}</Line>
+        <Line n={2}>{t(E, <>Build {codeTag("c")}: {codeTag("c[i] = min(a[i], 2*c[i-1])")} — the first sim.</>,
+                         <>{codeTag("c")} 를 만들어요. {codeTag("c[i] = min(a[i], 2*c[i-1])")} — 첫 시뮬이 한 일이에요.</>)}</Line>
+        <Line n={3}>{t(E, <>Per query: {codeTag("rem = x")}, {codeTag("cost = 0")}, {codeTag("ans = ∞")}.</>,
+                         <>쿼리마다 {codeTag("rem = x")}, {codeTag("cost = 0")}, {codeTag("ans = 무한대")} 로 시작해요.</>)}</Line>
+        <Line n={4}>{t(E, <>Big block → small block: the round-up candidate goes into {codeTag("ans")}, then buy the floor and update {codeTag("cost")} and {codeTag("rem")}.</>,
+                         <>큰 블록부터 작은 블록까지 훑어요.<br />올림 후보를 {codeTag("ans")} 에 넣고,<br />내림만큼 사서 {codeTag("cost")} 와 {codeTag("rem")} 을 갱신해요.</>)}</Line>
+        <Line n={5}>{t(E, <>Print {codeTag("ans")}.</>, <>{codeTag("ans")} 를 출력해요.</>)}</Line>
+      </div>
+
+      <div style={{ ...box, background: "#fffbeb", borderColor: "#fcd34d", fontSize: 12.5, lineHeight: 1.7, color: "#92400e", wordBreak: "keep-all", textWrap: "balance" }}>
+        {t(E, <>The table in the second sim was exactly this: one row per block, the “round up → cost” column is the {codeTag("ans")} candidate, the “take / carry” column is {codeTag("cost")} and {codeTag("rem")}.</>,
+             <>두 번째 시뮬의 표가 바로 이거예요.<br />한 줄이 블록 하나고, ‘올림하면 값’ 칸이 {codeTag("ans")} 후보,<br />‘내림 / 넘김’ 칸이 {codeTag("cost")} 와 {codeTag("rem")} 이에요.</>)}
+      </div>
+    </div>
+  );
+}
+
 export function makeBuyMilkCh2(E, lang = "py") {
   return [
+    {
+      type: "reveal",
+      label: t(E, "Plan", "계획"),
+      narr: t(E,
+        "Before the code: the same two ideas, written with the names the code uses.",
+        "코드 전에 — 방금 본 두 생각을 코드가 쓰는 이름으로 다시 적어봐요."),
+      content: (<BuyMilkPlan E={E} />),
+    },
     /* 코드 위 '왜 이렇게?' 노트 벽 → 코드 줄에 붙는 CodeWalk 말풍선 (선생님 2026-07-27). */
     (() => {
       const w = getBuyMilkWalk(E, lang);

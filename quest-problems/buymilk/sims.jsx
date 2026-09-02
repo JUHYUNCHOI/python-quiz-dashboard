@@ -11,7 +11,7 @@
    ① NormalizeSim — 딜 값을 블록 최저가로 바꾸면 "큰 블록이 통당 항상 싸다" 가 됨
    ② GreedySim    — 그래서 큰 블록부터 훑으며 올림/내림만 비교하면 됨
 
-   예제: a = [10, 25, 30, 70] (블록 1·2·4·8통), x = 5 → 답 40.
+   예제: a = [10, 15, 20, 45] (블록 1·2·4·8통) → c = [10, 15, 20, 40]. x = 5 → 30, x = 7 → 40.
    모든 값은 그 자리에서 계산 (하드코딩 아님). 실제 풀이와 브루트포스 대조 완료. */
 
 import { t } from "@/components/quest/theme";
@@ -19,7 +19,10 @@ import { StepFade } from "@/components/quest/StepFade";
 import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceStepper";
 
 const A = "#0891b2";
-const DEALS = [10, 25, 30, 70];          // 딜 가격 a[i]
+const DEALS = [10, 15, 20, 45];          // 딜 가격 a[i]
+// ⚠️ 이 값을 바꾸면 chapters.jsx 의 input 스텝(x=9 → 50)과 힌트의 블록 값도 같이 고칠 것.
+//    고른 이유: 정규화에서 '교체'(8통 45→40)와 '유지'(2·4통) 가 모두 나오고,
+//    x=7 에서 '올림해서 사고 끝내기' 가 실제로 이긴다(40 < 45) — 바로 앞 퀴즈에서 배운 것.
 const N = DEALS.length;
 
 /* c[i] = min(a[i], 2·c[i-1]) — 블록 2^i 통의 최저가 */
@@ -124,8 +127,8 @@ export function NormalizeSim({ E }) {
 }
 
 /* ═══ ② 그리디 — 큰 블록부터 올림/내림 두 갈래만 ═══ */
-export function GreedySim({ E }) {
-  const X = 5;
+export function GreedySim({ E, x = 5 }) {
+  const X = x;
   /* 실제 풀이 그대로 돌려서 단계 기록 */
   const trace = [];
   let best = Infinity, cost = 0, rem = X;
@@ -146,8 +149,9 @@ export function GreedySim({ E }) {
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
   const cur = s.k === "row" ? trace[s.n] : null;
-  const bestSoFar = s.k === "row"
-    ? Math.min(...trace.slice(0, s.n + 1).map((r) => r.cand))
+  // 'why' 단계에선 아직 아무 줄도 안 봤으니 답을 보여주면 안 됨 (미리 새던 것 수정)
+  const bestSoFar = s.k === "why" ? Infinity
+    : s.k === "row" ? Math.min(...trace.slice(0, s.n + 1).map((r) => r.cand))
     : best;
 
   const say =
@@ -157,6 +161,9 @@ export function GreedySim({ E }) {
     : s.k === "row" ? t(E,
       <>Block <b>{cur.size}</b>: <b>{cur.rem}</b> buckets still needed.<br />Round <b>up</b> → buy {cur.need} and stop → <b>{cur.cand}</b>.<br />Or take <b>{cur.take}</b> and carry <b>{cur.rem - cur.take * cur.size}</b> to smaller blocks.</>,
       <><b>{cur.size}통</b> 블록이에요. 아직 <b>{cur.rem}통</b> 필요해요.<br /><b>올림</b>하면 {cur.need}개 사고 끝 → <b>{cur.cand}</b>.<br />아니면 <b>{cur.take}개</b>만 쓰고 <b>{cur.rem - cur.take * cur.size}통</b>을 작은 블록으로 넘겨요.</>)
+    : best < exact ? t(E,
+      <>The cheapest is <b>{best}</b> — and it <b>over-buys</b>.<br />Buying exactly {X} costs <b>{exact}</b>. Rounding up wins.<br />One pass from big to small — no searching.</>,
+      <>제일 싼 게 <b>{best}</b> 인데, <b>{X}통을 넘겨 사는</b> 쪽이에요.<br />딱 {X}통만 사면 <b>{exact}</b>. 올림이 이겼어요.<br />큰 것부터 한 번만 훑었어요. 탐색이 없어요.</>)
     : t(E,
       <>Every block checked, and the cheapest is <b>{best}</b>.<br />That is <b>one pass</b> from big to small — no searching.</>,
       <>블록을 다 봤고 제일 싼 게 <b>{best}</b> 예요.<br />큰 것부터 <b>한 번만</b> 훑었어요. 탐색이 없어요.</>);
