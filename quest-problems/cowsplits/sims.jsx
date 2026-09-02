@@ -87,6 +87,37 @@ function PairOverlapVisual({ E, aBlock, bBlock, aOvIdx, bOvIdx, aLoIdx, bLoIdx, 
     </>
   );
 }
+/* 블록은 COW·OWC·WCO 셋뿐 — 이 사실을 '쓰는' 화면마다 위에 띠로 깔아둔다.
+   선생님 2026-09-02: "세가지밖에 없어서 가능한건데 … 강조를 해야지."
+   글로 또 적는 대신 그림으로 상시 노출 (글자 수도 안 늘어남). */
+const ALL_BLOCKS = ["COW", "OWC", "WCO"];
+function BlockLegend({ E, active = [] }) {
+  return (
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 9,
+      flexWrap: "wrap", margin: "0 0 12px" }}>
+      <span style={{ fontSize: 10.5, fontWeight: 800, color: "#92400e", whiteSpace: "nowrap" }}>
+        🔑 {t(E, "blocks: only these 3", "블록은 이 셋뿐")}
+      </span>
+      {ALL_BLOCKS.map((b) => {
+        const on = active.includes(b);
+        return (
+          <span key={b} style={{ display: "inline-flex", gap: 1.5, padding: 3, borderRadius: 7,
+            background: on ? "#fffbeb" : "transparent",
+            border: `1.5px ${on ? "solid" : "dashed"} ${on ? "#f59e0b" : "#e2e8f0"}`,
+            opacity: active.length === 0 || on ? 1 : 0.38, transition: "all .15s" }}>
+            {b.split("").map((ch, i) => (
+              <span key={i} style={{ width: 17, height: 20, display: "flex", alignItems: "center",
+                justifyContent: "center", borderRadius: 4, fontFamily: "'JetBrains Mono',monospace",
+                fontWeight: 800, fontSize: 11, color: on ? "#92400e" : "#94a3b8",
+                background: on ? "#fff" : "#f8fafc" }}>{ch}</span>
+            ))}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
 function Caption({ color, children }) {
   return <div style={{ textAlign: "center", marginTop: 13, fontSize: 13.5, fontWeight: 800, color, fontFamily: "'JetBrains Mono',monospace" }}>{children}</div>;
 }
@@ -122,22 +153,22 @@ export function EraseRuleSim({ E }) {
   const say =
     s.kind === "intro" ? t(E,
         <>One move can wipe <b>several letters at once</b> — as long as the picked letters read as <b>the same block twice</b> (like C·C or OW·OW). They don't even need to be next to each other!</>,
-        <>한 번에 <b>여러 글자</b>를 없앨 수 있어요.<br />고른 글자가 <b>똑같은 게 두 번</b>이면 돼요 — C·C, OW·OW 처럼.<br />떨어져 있어도 괜찮아요!</>)
+        <>한 번에 <b>여러 글자</b>를 없앨 수 있어요.<br />고른 글자가 <b>앞뒤가 똑같은 덩어리</b>면 돼요 — C·C, OW·OW 처럼.<br />떨어져 있어도 괜찮아요!</>)
     : s.kind === "pickC" ? t(E,
         <>Pick the two far-apart <b>C</b>'s → <b>C·C</b> = "C twice" ✓ &nbsp;<span style={{ color: "#94a3b8" }}>(C·O·W — all different — would NOT count ✗)</span></>,
-        <>떨어진 <b>C</b> 두 개를 골라요 → <b>C·C</b> = "C 두 번" ✓<br /><span style={{ color: "#94a3b8" }}>(C·O·W 처럼 다 다르면 안 돼요 ✗)</span></>)
+        <>떨어진 <b>C</b> 두 개를 골라요 → <b>C·C</b> = C 뒤에 또 C ✓<br /><span style={{ color: "#94a3b8" }}>(C·O·W 처럼 다 다르면 안 돼요 ✗)</span></>)
     : s.kind === "poofC" ? t(E,
         <>Both C's vanish <b>in that one move</b> — together! What's left is <b>OWOW</b>.</>,
         <>그 <b>한 번</b>에 C 두 개가 <b>같이</b> 사라져요! 남은 건 <b>OWOW</b>.</>)
     : s.kind === "pickOW" ? t(E,
         <>Now the leftover <b>OWOW</b> = <b>OW·OW</b> = "OW twice" ✓ — one more move clears it.</>,
-        <>이제 남은 <b>OWOW</b> = <b>OW·OW</b> = "OW 두 번" ✓ — 한 번 더로 지워요.</>)
+        <>이제 남은 <b>OWOW</b> = <b>OW·OW</b> — 앞뒤가 똑같죠 ✓ 한 번 더 지우면 끝.</>)
     : s.kind === "poofOW" ? t(E,
         <>Empty! <b>2 moves</b> cleared the whole thing.</>,
         <>싹 비었어요! <b>2번</b>에 다 지웠죠.</>)
     : s.kind === "one" ? t(E,
         <>But what if S were <b>COWCOW</b>? Front half <b>COW</b> = back half <b>COW</b> — the whole string is already <b>the same block twice</b>.</>,
-        <>그런데 S 가 <b>COWCOW</b> 였다면요?<br />앞 절반 <b>COW</b> = 뒤 절반 <b>COW</b> — 전체가 이미 <b>똑같은 게 두 번</b>이에요.</>)
+        <>그런데 S 가 <b>COWCOW</b> 였다면요?<br />앞 절반 <b>COW</b> = 뒤 절반 <b>COW</b> — 전체가 이미 <b>앞뒤가 똑같아요</b>.</>)
     : t(E,
         <><b>1 move</b> and it's gone! So the answer can be <b>1 or 2</b>… but is there an S that needs <b>3 or more</b>? 🤔</>,
         <><b>1번</b>에 끝! 그럼 답은 <b>1번 아니면 2번</b>인데… <b>3번 이상</b>이 필요한 S 는 없을까요? 🤔</>);
@@ -231,8 +262,8 @@ export function InsightSim({ E }) {
       <>Cut it: front <b>COW</b>, back <b>OWC</b> — they don't match.<br />Not a dead end though. Where exactly do they disagree?</>,
       <>잘라봐요: 앞은 <b>COW</b>, 뒤는 <b>OWC</b> — 안 맞네요.<br />막힌 건 아니에요. 어디가 어긋난 걸까요?</>)
     : s.kind === "pair" ? t(E,
-      <><b>Same position against same position</b> — front block <b>i</b> vs back block <b>i + N/2</b>.<br />🔑 Blocks are only <b>COW, OWC, WCO</b>, so we can check every possible pair.</>,
-      <><b>같은 자리끼리</b> 대봐요 — 앞 블록 <b>i</b> 와 뒤 블록 <b>i + N/2</b>.<br />🔑 블록은 <b>COW, OWC, WCO</b> 뿐이라 가능한 짝을 전부 볼 수 있어요.</>)
+      <><b>Same position against same position</b> — front block <b>i</b> vs back block <b>i + N/2</b>.<br />Only 3 kinds of block, so we can check <b>every possible pair</b>.</>,
+      <><b>같은 자리끼리</b> 대봐요 — 앞 블록 <b>i</b> 와 뒤 블록 <b>i + N/2</b>.<br />블록이 셋뿐이라 <b>가능한 짝을 전부</b> 볼 수 있어요.</>)
     : s.kind === "overlap" ? t(E,
       <><b>Case 1 / 3.</b> <b>COW × OWC</b> — the middle "<b>OW</b>" appears in both. Leftover: <b>C</b> on front + <b>C</b> on back (same letter).</>,
       <><b>1 / 3.</b> <b>COW × OWC</b> — 가운데 <b>OW</b> 가 양쪽에 다 있어요.<br />남는 건 앞 <b>C</b> + 뒤 <b>C</b> — 같은 글자예요.</>)
@@ -252,8 +283,8 @@ export function InsightSim({ E }) {
       <>Last worry — what if some pair <b>matches</b>?<br />Then op 1 collects pieces of <b>different lengths</b>. Still Y + Y?</>,
       <>마지막 걱정 — <b>같은</b> 쌍이 섞이면요?<br />1번이 모으는 조각의 <b>길이가 제각각</b>이 되는데, 그래도 Y + Y 가 될까요?</>)
     : t(E,
-      <>Split it: the <b>overlapping 2 letters</b> (OW) go to <b>op 1</b> — front OW matches back OW.<br />The <b>leftover 1 letter each side</b> (C and C) go to <b>op 2</b> — same letter!<br />Both ops read as Y+Y → <b>M = 2</b>.</>,
-      <>나눠요. 겹치는 <b>2글자 (OW)</b> 는 <b>1번</b>으로 — 앞 OW = 뒤 OW ✓<br />남는 <b>1글자씩 (C·C)</b> 은 <b>2번</b>으로 — 같은 글자 ✓<br />둘 다 "똑같은 게 두 번" → <b>M = 2</b>.</>)
+      <>So split it: the <b>overlapping 2 letters</b> go to op 1, the <b>leftover letter</b> from each side goes to op 2.</>,
+      <>그럼 나눠요 — 겹치는 <b>2글자</b>는 1번으로, 양쪽에 <b>남는 1글자</b>는 2번으로.</>)
 
   return (
     <div style={{ padding: 16 }}>
@@ -261,6 +292,15 @@ export function InsightSim({ E }) {
         title={t(E, "Why is 2 always enough?", "왜 항상 2번이면 될까?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
+      {/* '셋뿐' 을 쓰는 화면에서는 그 사실을 위에 계속 띄워둔다 */}
+      {["pair", "overlap", "case2", "case3", "whypair"].includes(s.kind) && (
+        <BlockLegend E={E} active={
+          s.kind === "overlap" ? ["COW", "OWC"]
+          : s.kind === "case2" ? ["COW", "WCO"]
+          : s.kind === "case3" ? ["OWC", "WCO"]
+          : s.kind === "pair"  ? ["COW", "OWC"]
+          : []} />
+      )}
       <Say tone={s.kind === "overlap" || s.kind === "case2" || s.kind === "case3" ? "aha" : s.kind === "odd" ? "stuck" : "go"}>{say}</Say>
 
       {/* pair 스텝 — 앞 블록 ↔ 뒤 블록 짝 시각화 */}
@@ -313,8 +353,8 @@ export function InsightSim({ E }) {
             bLabelEn="back: b[:2] = WC" bLabelKo="뒤: b[:2] = WC" />
           <div style={{ maxWidth: 500, margin: "14px auto 0", padding: "10px 14px", background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, fontSize: 12.5, color: "#065f46", lineHeight: 1.65, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
             🎉 {t(E,
-              <>Different pairs: <b>these 3 are all of them</b>. Every one — 2 letters overlap, same letter left over.<br /><span style={{ fontSize: 11.5 }}>🔑 Because it's a rotation: 2 letters stay put, and each block has one C, one O, one W.</span></>,
-              <>서로 다른 쌍은 <b>이 3가지가 전부</b>. 셋 다 <b>2글자 겹침 + 같은 글자 남음</b>.<br /><span style={{ fontSize: 11.5 }}>🔑 굴린 거라 2글자가 제자리에 남고, 블록마다 C·O·W 가 하나씩이라 남는 글자도 같아요.</span></>)}
+              <>Three kinds of block → <b>3 possible pairs</b>, and we just checked them all.<br /><span style={{ fontSize: 11.5 }}>Every one: 2 letters overlap, and the same letter is left over.</span></>,
+              <>블록이 셋 → 나올 수 있는 쌍도 <b>이 3개가 전부</b>. 방금 다 봤어요.<br /><span style={{ fontSize: 11.5 }}>셋 다 2글자가 겹치고, 남는 글자도 같았죠.</span></>)}
           </div>
         </>
       )}
@@ -444,57 +484,83 @@ export function InsightSim({ E }) {
           핵심: 1번은 글자를 블록 순서대로 모으므로, 앞의 k번째 블록과 뒤의 k번째 블록이
           짝이어야 두 절반이 순서까지 겹친다. 뒤집어 짝지으면 A+B vs B+A 가 되어 어긋남.
           숫자는 완전탐색으로 확인 (N=2,4,6 전수 780건: i+N/2 실패 0 / 뒤집기 실패 660). */}
+      {/* whypair — 글이 아니라 그림으로. 짝은 색으로 묶고, 결과는 타일로 늘어놔
+          '조각은 같은데 순서가 뒤집혔다' 를 눈으로 보게 함.
+          선생님 2026-09-02: "제발 글로만 막 설명하지마" */}
       {s.kind === "whypair" && (() => {
         const BL = ["COW", "COW", "COW", "OWC"];          // S = COWCOWCOWOWC
+        const PA = "#0891b2", PB = "#8b5cf6";              // 짝 A / 짝 B 색
         const give = (a, b) => a === b ? [a, b]
           : a.slice(0, 2) === b.slice(1) ? [a.slice(0, 2), b.slice(1)]
           : [a.slice(1), b.slice(0, 2)];
         const run = (pairs) => {
-          const part = {};
-          pairs.forEach(([x, y]) => { const [gx, gy] = give(BL[x], BL[y]); part[x] = gx; part[y] = gy; });
-          return { part, front: part[0] + part[1], back: part[2] + part[3] };
+          const part = {}, col = {};
+          pairs.forEach(([x, y], k) => {
+            const [gx, gy] = give(BL[x], BL[y]);
+            part[x] = gx; part[y] = gy;
+            col[x] = col[y] = k === 0 ? PA : PB;
+          });
+          return { part, col, front: part[0] + part[1], back: part[2] + part[3] };
         };
-        const A1 = run([[0, 2], [1, 3]]);
-        const A2 = run([[0, 3], [1, 2]]);
-        const Case = ({ title, res, good }) => (
-          <div style={{ flex: 1, minWidth: 232, background: good ? "#ecfdf5" : "#fef2f2",
-            border: `1.5px solid ${good ? "#6ee7b7" : "#fca5a5"}`, borderRadius: 11, padding: "10px 12px" }}>
-            <div style={{ fontSize: 11.5, fontWeight: 800, color: good ? "#065f46" : "#b91c1c", marginBottom: 7, textAlign: "center" }}>{title}</div>
-            {[0, 1, 2, 3].map((i) => (
-              <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
-                fontSize: 11.5, color: "#334155", padding: "1px 0" }}>
-                <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>
-                  <span style={{ color: i < 2 ? "#059669" : "#8b5cf6", fontWeight: 800 }}>{i < 2 ? "앞" : "뒤"}</span> 블록{i} ({BL[i]})
+        const CASES = [
+          { pairs: [[0, 2], [1, 3]], title: "0↔2, 1↔3" },
+          { pairs: [[0, 3], [1, 2]], title: "0↔3, 1↔2" },
+        ].map((c) => ({ ...c, ...run(c.pairs) }));
+
+        const Mini = ({ ch, col, dim }) => (
+          <span style={{ width: 19, height: 23, display: "flex", alignItems: "center", justifyContent: "center",
+            borderRadius: 4, fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 12,
+            background: dim ? "#f8fafc" : "#fff", border: `1.5px solid ${col}`, color: dim ? "#cbd5e1" : "#334155" }}>{ch}</span>
+        );
+
+        const Card = ({ c, good }) => (
+          <div style={{ flex: 1, minWidth: 240, background: good ? "#f0fdf4" : "#fef2f2",
+            border: `1.5px solid ${good ? "#86efac" : "#fca5a5"}`, borderRadius: 11, padding: "11px 12px" }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, textAlign: "center", marginBottom: 9,
+              color: good ? "#15803d" : "#b91c1c", fontFamily: "'JetBrains Mono',monospace" }}>{c.title}</div>
+
+            {/* 블록 4개 — 짝끼리 같은 색 */}
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 3, marginBottom: 9 }}>
+              {[0, 1, 2, 3].map((i) => (
+                <span key={i} style={{ display: "inline-flex", alignItems: "center" }}>
+                  {i === 2 && <span style={{ width: 2, height: 26, background: "#cbd5e1", margin: "0 5px" }} />}
+                  <span style={{ display: "inline-flex", gap: 1.5, padding: 2.5, borderRadius: 6,
+                    border: `2px solid ${c.col[i]}`, background: "#fff" }}>
+                    {BL[i].split("").map((ch, j) => (
+                      <span key={j} style={{ width: 15, height: 18, display: "flex", alignItems: "center",
+                        justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800,
+                        fontSize: 10.5, color: c.part[i].includes(ch) ? "#334155" : "#cbd5e1" }}>{ch}</span>
+                    ))}
+                  </span>
                 </span>
-                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: OPCOL[1] }}>{res.part[i]}</span>
+              ))}
+            </div>
+
+            {/* 결과 — 앞/뒤를 타일로 늘어놓고 자리별로 대조 */}
+            {[["앞", "front", c.front], ["뒤", "back", c.back]].map(([ko, en, str]) => (
+              <div key={en} style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 5, marginBottom: 4 }}>
+                <span style={{ width: 22, fontSize: 10, fontWeight: 800, color: "#64748b", textAlign: "right" }}>{t(E, en, ko)}</span>
+                <span style={{ display: "inline-flex", gap: 2 }}>
+                  {str.split("").map((ch, j) => (
+                    <Mini key={j} ch={ch} col={c.front[j] === c.back[j] ? "#94a3b8" : "#dc2626"} />
+                  ))}
+                </span>
               </div>
             ))}
-            <div style={{ marginTop: 7, paddingTop: 7, borderTop: `1px dashed ${good ? "#6ee7b7" : "#fca5a5"}`,
-              fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.75, textAlign: "center" }}>
-              <div>앞 = <b>{res.front}</b></div>
-              <div>뒤 = <b>{res.back}</b></div>
-              <div style={{ marginTop: 3, fontWeight: 800, color: good ? "#059669" : "#dc2626" }}>
-                {res.front === res.back ? t(E, "same ✓", "같음 ✓") : t(E, "different ✗", "다름 ✗")}
-              </div>
-            </div>
+            <div style={{ textAlign: "center", marginTop: 6, fontSize: 13, fontWeight: 800,
+              color: good ? "#16a34a" : "#dc2626" }}>{good ? "✓" : "✗"}</div>
           </div>
         );
+
         return (
           <>
-            <div style={{ fontSize: 11, fontWeight: 800, color: "#94a3b8", textAlign: "center", marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>
-              S = COW COW │ COW OWC   (N = 4)
+            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", maxWidth: 540, margin: "0 auto" }}>
+              <Card c={CASES[0]} good />
+              <Card c={CASES[1]} good={false} />
             </div>
-            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", maxWidth: 520, margin: "0 auto" }}>
-              <Case title={t(E, "0↔2, 1↔3   (i ↔ i + N/2)", "0↔2, 1↔3   (i ↔ i + N/2)")} res={A1} good />
-              <Case title={t(E, "0↔3, 1↔2   (reversed)", "0↔3, 1↔2   (뒤집어서)")} res={A2} good={false} />
-            </div>
-            <div style={{ maxWidth: 520, margin: "12px auto 0", padding: "10px 14px", background: "#eff6ff",
-              border: "1.5px solid #60a5fa", borderRadius: 10, fontSize: 12.5, color: "#1e40af",
-              lineHeight: 1.8, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
-              {t(E,
-                <>Look at the right one: the <b>same two pieces</b> come out — <b>OW</b> and <b>COW</b> — but in <b>swapped order</b>.<br />Pairing block 0 with the <b>last</b> block makes the halves mirror each other.<br />Pair the <b>1st with the 1st, 2nd with the 2nd</b>, and the order lines up. That's <b>i ↔ i + N/2</b>.</>,
-                <>오른쪽을 보세요. 나온 조각은 <b>똑같아요</b> — <b>OW</b> 와 <b>COW</b>. 그런데 <b>순서가 바뀌었어요</b>.<br />블록 0 을 <b>마지막</b> 블록과 짝지으면 앞뒤가 거울처럼 뒤집혀요.<br /><b>첫째는 첫째끼리, 둘째는 둘째끼리</b> 짝지어야 순서가 맞아요. 그게 <b>i ↔ i + N/2</b> 예요.</>)}
-            </div>
+            <Caption color="#dc2626">
+              {t(E, "same pieces, flipped order", "조각은 같은데 순서가 뒤집힘")}
+            </Caption>
           </>
         );
       })()}
