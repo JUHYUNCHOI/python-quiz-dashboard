@@ -26,7 +26,7 @@ function Bubble({ cx, rowW, bg, bd, fg, children, width = 320 }) {
       <div style={{
         padding: "8px 12px", borderRadius: 10, background: bg,
         border: `1.5px solid ${bd}`, color: fg, fontSize: 12, fontWeight: 700,
-        textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6,
+        textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.6,
       }}>{children}</div>
       <div style={{
         position: "absolute", top: "100%", left: tail, transform: "translateX(-50%)",
@@ -99,7 +99,7 @@ export function PhotoWindowSim({ E }) {
           {s.kind === "intro" && (
             <Bubble cx={ROW_W / 2} rowW={ROW_W} bg="#f5f3ff" bd="#c4b5fd" fg="#5b21b6">
               {t(E, <>A photo is any <b>{K}×{K}</b> square. Its score = sum inside. Slide it everywhere.</>,
-                    <>사진은 아무 <b>{K}×{K}</b> 정사각형. 점수 = 안에 든 값의 합. 다 밀어봐요.</>)}
+                    <>사진은 아무 데서나 잘라낸 <b>{K}×{K}</b> 정사각형이에요.<br />점수는 그 안에 든 값을 다 더한 것이고요.<br />한 칸씩 밀면서 봐요.</>)}
             </Bubble>
           )}
           {s.kind === "win" && (
@@ -117,7 +117,7 @@ export function PhotoWindowSim({ E }) {
           {s.kind === "final" && (
             <Bubble cx={ROW_W / 2} rowW={ROW_W} bg="#ecfdf5" bd="#86efac" fg="#15803d">
               {t(E, <>Checked all <b>{W}×{W} = {W * W}</b> photos. Best = <b>{s.best}</b>.</>,
-                    <>창 <b>{W}×{W} = {W * W}</b> 개를 다 봤어요. 최고 = <b>{s.best}</b>.</>)}
+                    <>사진 <b>{W}×{W} = {W * W}</b>장을 다 봤어요.<br />최고 점수는 <b>{s.best}</b> 이에요.</>)}
             </Bubble>
           )}
         </div>
@@ -237,16 +237,16 @@ export function PhotoUpdateSim({ E }) {
   const bubble =
     s.kind === "intro" ? t(E,
         <>Cow <b>({z(r)},{z(c)})</b> got prettier. Only the <b>3×3 photos that contain it</b> change. How many is that?</>,
-        <>소 <b>({z(r)},{z(c)})</b> 가 예뻐졌어요. <b>이 소가 담긴 3×3 사진</b>만 점수가 바뀝니다. 몇 장일까요?</>)
+        <>소 <b>({z(r)},{z(c)})</b> 가 예뻐졌어요.<br />점수가 바뀌는 건 <b>이 소가 담긴 3×3 사진</b>뿐이에요.<br />몇 장일까요?</>)
     : s.kind === "one" ? t(E,
         <>A photo is any <b>3×3 cut-out</b>. This one holds the cow → its score changes ✓</>,
-        <>사진 = 아무 칸에서나 잘라낸 <b>3×3 조각</b>. 이 사진 안에 소가 있죠 → 이 사진 점수가 바뀝니다 ✓</>)
+        <>사진은 아무 데서나 잘라낸 <b>3×3 조각</b>이에요.<br />이 안에 소가 있죠.<br />→ 이 사진은 점수가 바뀌어요 ✓</>)
     : s.kind === "two" ? t(E,
         <>Photos <b>overlap</b>. The cow sits in <b>both</b> photo 1 and photo 2 (they overlap right on the cow!) → so more than one photo changes.</>,
-        <>사진은 서로 <b>겹쳐요</b>. 소 하나가 <b>사진 1·사진 2 둘 다</b>에 들어있죠 (겹치는 칸이 바로 소!) → 그래서 바뀌는 사진이 한 장이 아니에요.</>)
+        <>사진은 서로 <b>겹쳐요</b>.<br />소 한 마리가 <b>사진 1·사진 2 둘 다</b>에 들어 있죠.<br />겹치는 칸이 바로 그 소예요.<br />→ 그래서 바뀌는 사진이 한 장이 아니에요.</>)
     : s.kind === "miss" ? t(E,
         <>This 3×3 <b>misses the cow</b> → this photo stays the same ✗</>,
-        <>이 3×3 은 <b>소를 못 담아요</b> → 이 사진은 그대로 ✗</>)
+        <>이 3×3 은 <b>소를 못 담아요</b>.<br />→ 이 사진은 점수가 그대로예요 ✗</>)
     : s.kind === "c1" ? t(E,
         <>A photo starting at row <b>{z(r - K + 1)}</b> covers rows <b>{z(r - K + 1)}·{z(r - K + 2)}·{z(r)}</b>.<br />
           The cow's row <b>{z(r)}</b> is inside — so it holds the cow.<br />
@@ -284,13 +284,13 @@ export function PhotoUpdateSim({ E }) {
           → <b>min(r, W−1)</b></>)
     : s.kind === "edge" ? t(E,
         <>Careful — that was a cow in the <b>middle</b>. Move it to a <b>corner</b>: some of those 9 photos would stick out past the field, so they don't exist. Only <b>1</b> photo actually holds it.</>,
-        <>조심 — 방금은 <b>한가운데</b> 소였어요. <b>모서리</b>로 옮기면요? 9장 중 몇 장은 들판 밖으로 삐져나가서 <b>있을 수가 없어요</b>. 실제로 담는 사진은 <b>1장</b>뿐이에요.</>)
+        <>방금은 <b>한가운데</b> 소였어요.<br /><b>모서리</b>로 옮기면 어떻게 될까요?<br />9장 중 몇 장은 들판 밖으로 나가서 아예 없어요.<br />실제로 소를 담는 건 <b>1장</b>뿐이에요.</>)
     : s.kind === "count" ? t(E,
         <>Here are all the photos holding the cow: the cow can be in <b>any of a photo's 9 cells</b> → <b>9 photos</b>. Not all {(N - K + 1) * (N - K + 1)}!</>,
-        <>소를 담는 사진을 다 모으면: 소가 <b>사진 속 9칸 중 어디</b>에 있어도 소가 담긴 사진 → <b>9장</b>. 전체 {(N - K + 1) * (N - K + 1)}장이 아니에요!</>)
+        <>소를 담는 사진을 다 모아봤어요.<br />소가 <b>사진 속 9칸 중 어디</b>에 있든 담긴 거니까<br />→ <b>9장</b>이에요. 전체 {(N - K + 1) * (N - K + 1)}장이 아니고요!</>)
     : t(E,
         <>So one prettier cow → fix just these <b>9 photos</b>, not all {(N - K + 1) * (N - K + 1)}. That's why it's fast.</>,
-        <>그래서 소 하나 예뻐지면 → 이 <b>9장만</b> 고치면 끝 (전체 {(N - K + 1) * (N - K + 1)}장 X). 그래서 빠름.</>);
+        <>그래서 소 하나가 예뻐지면<br />이 <b>9장만</b> 고치면 끝이에요.<br />전체 {(N - K + 1) * (N - K + 1)}장을 다시 안 봐도 되니까 빨라요.</>);
 
   const tailX = frames.length === 1
     ? (frames[0].tj - 1) * PITCH + FRAME / 2
@@ -457,7 +457,7 @@ export function PhotoUpdateSim({ E }) {
               const head = { fontSize: 11.5, fontWeight: 800, color: "#9a3412", marginBottom: 7, textAlign: "center" };
               /* 글자 색을 역할별로 나눈다 (선생님 2026-09-03: "글자 색을 제발 다르게 하자")
                  회색=말로 하는 설명 · 남색=식 · 주황=이번에 새로 나온 결론 · 초록=숫자 대입 */
-              const why  = { fontSize: 11, color: "#78716c", lineHeight: 1.6, wordBreak: "keep-all", marginBottom: 3 };
+              const why  = { fontSize: 11, color: "#78716c", lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", marginBottom: 3 };
               const mono = { fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#1e3a8a",
                 background: "#fff", border: "1px solid #e2e8f0", borderRadius: 5,
                 padding: "2px 6px", lineHeight: 1.6, display: "inline-block" };
@@ -494,7 +494,7 @@ export function PhotoUpdateSim({ E }) {
       ) : (
         <div style={{ maxWidth: 540, margin: "8px auto 0" }}>
           {/* 말풍선 */}
-          <div style={{ maxWidth: 430, margin: "0 auto 16px", padding: "10px 14px", borderRadius: 12, background: "#fff7ed", border: "1.5px solid #fdba74", color: "#9a3412", fontSize: 12.5, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6, boxShadow: "0 5px 16px rgba(0,0,0,.14)" }}>{bubble}</div>
+          <div style={{ maxWidth: 430, margin: "0 auto 16px", padding: "10px 14px", borderRadius: 12, background: "#fff7ed", border: "1.5px solid #fdba74", color: "#9a3412", fontSize: 12.5, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.7, boxShadow: "0 5px 16px rgba(0,0,0,.14)" }}>{bubble}</div>
           {/* 사진 9장 — 소가 9칸 중 어디에 */}
           <div style={{ display: "grid", gridTemplateColumns: `repeat(3, ${MW}px)`, gap: SHEET_GAP, justifyContent: "center" }}>
             {Array.from({ length: 9 }).map((_, idx) => (
@@ -601,7 +601,7 @@ export function PhotoMonotoneSim({ E }) {
           border: "1.5px solid #6ee7b7", borderRadius: 10, fontSize: 12.5, color: "#065f46",
           lineHeight: 1.8, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
           {t(E, <>If beauty could <b>drop</b>, this would break — the old best might fall and some untouched photo would take over, so we'd have to re-check everything.</>,
-                <>만약 아름다움이 <b>줄 수도</b> 있었다면 이 방법은 깨져요 — 옛 최고가 내려앉고 손 안 댄 사진이 1등이 될 수 있으니, 매번 전부 다시 봐야 하거든요.</>)}
+                <>만약 아름다움이 <b>줄 수도</b> 있었다면 이 방법은 깨져요.<br />옛 최고가 내려앉고, 손도 안 댄 사진이 1등이 될 수 있거든요.<br />그러면 매번 전부 다시 봐야 해요.</>)}
         </div>
       )}
 
@@ -684,38 +684,38 @@ export function PhotoTraceSim({ E }) {
   const caption =
     s.kind === "intro" ? t(E,
         <>See <b>which variable stores what</b>, and how it's read back — one step at a time. Left = <b>beauty</b>, right = <b>S</b>. All 0.</>,
-        <>값을 <b>어느 변수에 저장하고</b> 어떻게 꺼내 쓰는지 한 단계씩 봐요. 왼쪽 = <b>beauty</b>, 오른쪽 = <b>S</b>. 처음 다 0.</>)
+        <>값을 <b>어느 변수에 저장하고</b> 어떻게 꺼내 쓰는지<br />한 단계씩 봐요.<br />왼쪽이 <b>beauty</b>, 오른쪽이 <b>S</b> 예요. 처음엔 다 0 이고요.</>)
     : s.kind === "read" ? t(E,
         <><b>①</b> Read the query into <b>r, c, v</b> — the input says {q.r} {q.c}, and <b>r--, c--</b> makes them <b>{s.r0}, {s.c0}</b> (arrays count from 0). Then read the old value out of beauty[{s.r0}][{s.c0}] = <b>{s.old}</b>.</>,
-        <><b>①</b> 쿼리를 읽어 <b>r·c·v</b> 에 저장해요. 입력은 {q.r} {q.c} 인데 <b>r--, c--</b> 로 <b>{s.r0}, {s.c0}</b> 이 돼요 (배열은 0 부터니까요). 그리고 beauty[{s.r0}][{s.c0}] 에서 옛 값 <b>{s.old}</b> 을 꺼내요.</>)
+        <><b>①</b> 쿼리를 읽어 <b>r·c·v</b> 에 저장해요.<br />입력은 {q.r} {q.c} 인데 배열은 0 부터라서,<br /><b>r--, c--</b> 로 <b>{s.r0}, {s.c0}</b> 이 돼요.<br />그리고 beauty[{s.r0}][{s.c0}] 에서 옛 값 <b>{s.old}</b> 을 꺼내요.</>)
     : s.kind === "delta" ? t(E,
         <><b>②</b> <b>delta</b> = v − old = {q.v} − {s.old} = <b>{s.delta}</b> — how much it <i>grew</i>.
           {s.old > 0
             ? <><br />The photo sums already include the old <b>{s.old}</b>. Adding <b>{q.v}</b> would count it twice — add only the <b>{s.delta}</b> it grew by.</>
             : <><br />(This cell was 0, so delta happens to equal v. Watch a cell that already has a value.)</>}</>,
-        <><b>②</b> <b>delta</b> = v − 옛값 = {q.v} − {s.old} = <b>{s.delta}</b> — <i>얼마나 늘었나</i>.
+        <><b>②</b> <b>delta</b> 는 얼마나 늘었는지예요.<br />v − 옛값 = {q.v} − {s.old} = <b>{s.delta}</b>
           {s.old > 0
-            ? <><br />사진 점수엔 옛값 <b>{s.old}</b> 이 이미 들어 있어요. <b>{q.v}</b> 를 더하면 두 번 세는 셈이라, <b>늘어난 {s.delta}</b> 만 더해야 해요.</>
-            : <><br />(이 칸은 0 이라 delta 가 v 와 같아요. 이미 값이 있는 칸에서 다시 봐요.)</>}</>)
+            ? <><br />사진 점수엔 옛값 <b>{s.old}</b> 이 이미 들어 있어요.<br />여기에 <b>{q.v}</b> 를 더하면 두 번 세는 셈이에요.<br />그래서 <b>늘어난 {s.delta}</b> 만 더해요.</>
+            : <><br />(이 칸은 0 이라 delta 가 v 와 같아 보여요.<br />이미 값이 있는 칸에서 다시 볼게요.)</>}</>)
     : s.kind === "range" ? t(E,
         <><b>②-b</b> Which photos hold this cow? Clamp the range to the field:<br />
           i: max(0, {s.r0}−{K}+1) … min({s.r0}, {W - 1}) = <b>{s.iLo} … {s.iHi}</b> &nbsp;·&nbsp;
           j: max(0, {s.c0}−{K}+1) … min({s.c0}, {W - 1}) = <b>{s.jLo} … {s.jHi}</b></>,
-        <><b>②-b</b> 어느 사진을 고쳐야 할까요? 범위를 들판 안으로 잘라요:<br />
+        <><b>②-b</b> 어느 사진을 고쳐야 할까요?<br />범위를 들판 안으로 잘라요.<br />
           i: max(0, {s.r0}−{K}+1) … min({s.r0}, {W - 1}) = <b>{s.iLo} … {s.iHi}</b> &nbsp;·&nbsp;
           j: max(0, {s.c0}−{K}+1) … min({s.c0}, {W - 1}) = <b>{s.jLo} … {s.jHi}</b></>)
     : s.kind === "storeS" ? t(E,
         <><b>③</b> For the cow's photos: read <b>S</b> out, add <b>{s.delta}</b>, store it back into <b>S</b> (green cells).</>,
-        <><b>③</b> 소를 품는 사진들: <b>S</b> 에서 값을 꺼내 <b>+{s.delta}</b> 해서 다시 <b>S</b> 에 저장 (초록 칸).</>)
+        <><b>③</b> 소를 품는 사진들이에요.<br /><b>S</b> 에서 값을 꺼내 <b>{s.delta}</b> 를 더하고<br />다시 <b>S</b> 에 넣어요 (초록 칸).</>)
     : s.kind === "max" ? t(E,
         <><b>④</b> Compare those to <b>cur_max</b>; if bigger, store it into cur_max → <b>{curMax}</b>.</>,
-        <><b>④</b> 그 사진 점수를 <b>cur_max</b> 와 비교 → 더 크면 cur_max 에 저장 → <b>{curMax}</b>.</>)
+        <><b>④</b> 그 사진 점수를 <b>cur_max</b> 와 비교해요.<br />더 크면 cur_max 에 넣어요 → <b>{curMax}</b></>)
     : s.kind === "out" ? t(E,
         <><b>⑤</b> Read <b>cur_max</b> back out and print it → <b>{curMax}</b>.</>,
-        <><b>⑤</b> <b>cur_max</b> 를 꺼내서 출력 → <b>{curMax}</b>.</>)
+        <><b>⑤</b> <b>cur_max</b> 를 꺼내서 출력해요 → <b>{curMax}</b></>)
     : t(E,
         <>Store into variables, read them back — that's how each query is handled, touching only the cow's photos.</>,
-        <>값을 변수에 저장하고 다시 꺼내 쓰며 각 쿼리를 처리해요. 딱 소를 품는 사진만!</>);
+        <>값을 변수에 저장하고 다시 꺼내 쓰면서<br />쿼리를 하나씩 처리해요.<br />손대는 건 소를 품는 사진뿐이고요.</>);
 
   // 변수 상자 (저장=초록 ← / 꺼냄=파랑 →)
   const VarBox = ({ name, val, show }) => {
@@ -745,7 +745,7 @@ export function PhotoTraceSim({ E }) {
       {/* 설명 */}
       <div style={{ maxWidth: 540, margin: "4px auto 16px", padding: "12px 16px", borderRadius: 11,
         background: "#fff7ed", border: "1.5px solid #fdba74", color: "#9a3412",
-        fontSize: 13, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.75 }}>
+        fontSize: 13, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.75 }}>
         {caption}
       </div>
 

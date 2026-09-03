@@ -13,7 +13,7 @@ export function makePhotoshoot25Ch1(E) {
       type: "reveal",
       narr: t(E,
         "An N x N field of cows, all starting with beauty 0. Farmer John takes K x K square photos. After each beauty update, output the best possible photo.",
-        "N x N 들판에 소들 (처음 모두 아름다움 0). 농부는 K x K 정사각형 사진을 찍어요. 매번 한 마리 아름다움이 늘어날 때, 가장 멋진 사진의 점수를 출력."),
+        "N × N 들판에 소들이 있어요. 처음엔 아름다움이 모두 0 이에요.\n농부는 K × K 정사각형으로 사진을 찍어요.\n소 한 마리의 아름다움이 늘어날 때마다, 가장 멋진 사진의 점수를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -166,7 +166,7 @@ export function makePhotoshoot25Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Now the key: when ONE cow gets prettier, which photos change?  Only the ones containing her — and their top-left corners form a rectangle.",
-        "이제 핵심: 소 한 마리가 예뻐지면 어떤 사진이 바뀔까?  그 소가 들어간 사진만 — 그리고 그 사진들의 왼쪽위가 직사각형을 이뤄요."),
+        "이제 핵심이에요. 소 한 마리가 예뻐지면 어떤 사진이 바뀔까요?\n그 소가 들어간 사진만 바뀌어요.\n그리고 그 사진들의 왼쪽위가 직사각형을 이뤄요."),
       content: (<PhotoUpdateSim E={E} />),
     },
     /* [전] 마지막 미묘한 고리 — 왜 '바뀐 사진만' cur_max 와 견줘도 되나.
@@ -265,7 +265,7 @@ export function makePhotoshoot25Ch2(E, lang = "py") {
         label: t(E, "Code", "코드"),
         narr: t(E,
           "Now the code — you just saw these variables move. S keeps each photo's score; each update touches only the cow's rectangle.",
-          "이제 코드예요 — 방금 이 변수들이 움직이는 걸 봤죠. S 는 각 사진 점수, 업데이트는 소의 사각형만 건드려요."),
+          "이제 코드예요. 방금 이 변수들이 움직이는 걸 봤죠.\nS 는 각 사진의 점수고, 업데이트는 소가 든 사각형만 건드려요."),
         content: (
           <div>
             {lang === "py" && (
