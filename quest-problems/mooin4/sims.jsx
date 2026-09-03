@@ -136,36 +136,53 @@ export function BackwardSim({ E }) {
   const N = S.length;
   /* 뒤에서 앞으로: flips = 뒤쪽에 있는 O 개수의 홀짝 */
   const trace = [];
-  let flips = 0;
+  let flips = 0, oAfter = 0;   // oAfter = 이 자리보다 뒤에서 친 O 의 개수
   for (let i = N - 1; i >= 0; i--) {
     const key = flipCh(S[i], flips);
-    trace.push({ i, seen: S[i], flips, key, becameO: key === "O" });
-    if (key === "O") flips ^= 1;
+    trace.push({ i, seen: S[i], flips, oAfter, key, becameO: key === "O" });
+    if (key === "O") { flips ^= 1; oAfter += 1; }
   }
-  const steps = [{ k: "why" }, ...trace.map((_, n) => ({ k: "step", n })), { k: "check" }];
+  /* 한 자리를 여러 판으로 쪼갠다 — 한 화면에 한 줄만 남기려고
+     (선생님 2026-09-03: "시뮬스텝을 올려서라도 더 짧게 써줘") */
+  const steps = [{ k: "why" }, { k: "why2" }];
+  trace.forEach((x, n) => {
+    steps.push({ k: "look", n });                    // 이 자리 뒤쪽 O 의 홀짝
+    steps.push({ k: "take", n });                    // 그래서 친 키는?
+    if (x.becameO) steps.push({ k: "flip", n });     // O 를 쳤으니 앞쪽이 뒤집힘
+  });
+  steps.push({ k: "check" });
+
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
-  const done = s.k === "step" ? s.n + 1 : s.k === "check" ? N : 0;
+  // 'take' 부터 그 자리의 키가 채워진다
+  const filled = s.n == null ? 0 : s.k === "look" ? s.n : s.n + 1;
+  const done = s.k === "check" ? N : filled;
   const keys = Array(N).fill(null);
   trace.slice(0, done).forEach((x) => { keys[x.i] = x.key; });
-  const cur = s.k === "step" ? trace[s.n] : null;
+  const cur = s.n == null ? null : trace[s.n];
+  const even = cur && cur.flips === 0;
 
   const say =
     s.k === "why" ? t(E,
-      <>Now the other direction — we see <b>S</b> and want the keys.<br />A letter is only ever flipped by an <b>O typed after it</b>.<br />And after the <b>last</b> key, nothing more is typed.<br />→ So the last letter of S <b>is</b> the last key.</>,
-      <>이번엔 반대 방향이에요 — <b>S</b> 를 보고 친 키를 알아내요.<br />글자를 뒤집는 건 <b>그 뒤에 치는 O</b> 뿐이에요.<br />그런데 <b>마지막</b> 키 뒤에는 친 키가 없죠.<br />→ 그래서 S 의 마지막 글자가 곧 마지막에 친 키예요.</>)
-    : s.k === "step" ? (
-      cur.flips === 0
-        ? t(E,
-            <><b>{cur.i}</b>번 자리 — O 가 뒤에 <b>짝수</b> 개.<br />보이는 그대로가 친 키 → <b>{cur.key}</b>{cur.becameO ? <><br />O 를 쳤으니 앞쪽은 이제 뒤집혀 보여요.</> : null}</>,
-            <><b>{cur.i}</b>번 자리 — 뒤쪽 O 가 <b>짝수</b> 개.<br />보이는 그대로가 친 키 → <b>{cur.key}</b>{cur.becameO ? <><br />O 를 쳤으니 앞쪽은 이제 뒤집혀 보여요.</> : null}</>)
-        : t(E,
-            <><b>{cur.i}</b>번 자리 — O 가 뒤에 <b>홀수</b> 개.<br />화면의 <b>{cur.seen}</b> 를 되돌리면 친 키는 <b>{cur.key}</b>{cur.becameO ? <><br />이것도 O 라 홀짝이 다시 바뀌어요.</> : null}</>,
-            /* M 은 받침이 있어 "을", O 는 "를" — 글자가 바뀌니 조사도 같이 */
-            <><b>{cur.i}</b>번 자리 — 뒤쪽 O 가 <b>홀수</b> 개.<br />화면의 <b>{cur.seen}</b>{cur.seen === "M" ? " 을" : " 를"} 되돌리면 친 키는 <b>{cur.key}</b>{cur.becameO ? <><br />이것도 O 라 홀짝이 다시 바뀌어요.</> : null}</>))
+      <>Now the other direction —<br />we see <b>S</b> and want the keys.</>,
+      <>이번엔 반대 방향이에요.<br /><b>S</b> 를 보고 친 키를 알아내요.</>)
+    : s.k === "why2" ? t(E,
+      <>A letter only flips when an <b>O</b> is typed <b>after</b> it.<br />Nothing comes after the last key.<br />→ The last letter of S <b>is</b> the last key.</>,
+      <>글자는 <b>그 뒤에 O 를 칠 때만</b> 뒤집혀요.<br />마지막 키 뒤에는 친 키가 없죠.<br />→ S 의 마지막 글자가 곧 마지막에 친 키예요.</>)
+    : s.k === "look" ? t(E,
+      <>Position <b>{cur.i}</b> — O's typed after it: <b>{cur.oAfter}</b> → <b>{even ? "even" : "odd"}</b></>,
+      <><b>{cur.i}</b>번 자리 — 뒤쪽에서 친 O 가 <b>{cur.oAfter}개</b> → <b>{even ? "짝수" : "홀수"}</b></>)
+    : s.k === "take" ? (even
+      ? t(E, <>Even → what we see is the key → <b>{cur.key}</b></>,
+             <>짝수니까 보이는 그대로 → 친 키는 <b>{cur.key}</b></>)
+      : t(E, <>Odd → un-flip <b>{cur.seen}</b> → <b>{cur.key}</b></>,
+             <>홀수니까 <b>{cur.seen}</b>{cur.seen === "M" ? " 을" : " 를"} 되돌려서 → 친 키는 <b>{cur.key}</b></>))
+    : s.k === "flip" ? t(E,
+      <>That key was <b>O</b> → everything before it now shows flipped ↺</>,
+      <>이 키가 <b>O</b> 예요 → 앞쪽 글자들은 이제 뒤집혀 보여요 ↺</>)
     : t(E,
-      <>All keys recovered: <b>{keys.join("")}</b>.<br />We only ever needed <b>one pass from the back</b>,<br />counting whether the O's so far are odd or even.</>,
-      <>친 키를 다 찾았어요. <b>{keys.join("")}</b> 예요.<br /><b>뒤에서 앞으로 한 번</b> 훑기만 하면 돼요.<br />지금까지 본 O 가 홀수인지 짝수인지만 세면서요.</>);
+      <>All keys recovered: <b>{keys.join("")}</b><br />One pass from the back, counting O's odd/even.</>,
+      <>친 키를 다 찾았어요. <b>{keys.join("")}</b><br />뒤에서 앞으로 한 번, O 홀짝만 세면 끝이에요.</>);
 
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
@@ -173,13 +190,25 @@ export function BackwardSim({ E }) {
         title={t(E, "Read S backwards to recover the keys", "S 를 거꾸로 읽어 친 키 찾기")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
-      <Say tone={s.k === "check" ? "aha" : s.k === "why" ? "stuck" : "go"}>{say}</Say>
+      <Say tone={s.k === "check" ? "aha" : (s.k === "why" || s.k === "why2") ? "stuck" : "go"}>{say}</Say>
 
       <div style={{ maxWidth: 440, margin: "0 auto", display: "grid", gap: 12 }}>
         <div>
           <Label>{t(E, "S — what we see on screen", "S — 화면에 보이는 것")}</Label>
-          <Word s={S} size={30} ringAt={cur ? cur.i : s.k === "why" ? N - 1 : null} />
+          <Word s={S} size={30} ringAt={cur ? cur.i : s.k === "why2" ? N - 1 : null} />
         </div>
+        {cur && (
+          <div style={{ display: "flex", justifyContent: "center", gap: 7, alignItems: "center",
+            fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800 }}>
+            <span style={{ color: "#94a3b8" }}>{t(E, "O's typed after here", "뒤쪽에서 친 O")}</span>
+            <span style={{ padding: "2px 9px", borderRadius: 7,
+              background: even ? "#f0fdf4" : "#fef2f2",
+              border: `1.5px solid ${even ? "#86efac" : "#fca5a5"}`,
+              color: even ? "#15803d" : "#b91c1c" }}>
+              {cur.oAfter}{t(E, "", "개")} · {even ? t(E, "even", "짝수") : t(E, "odd", "홀수")}
+            </span>
+          </div>
+        )}
         <div>
           <Label color="#7c3aed">{t(E, "keys we recovered", "찾아낸 친 키")}</Label>
           <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
