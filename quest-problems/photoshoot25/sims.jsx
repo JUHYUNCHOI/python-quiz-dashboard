@@ -168,7 +168,12 @@ export function PhotoUpdateSim({ E }) {
     { kind: "miss" },    // 소 밖 → 안 바뀜 ✗
     { kind: "count" },   // 사진 9장 콘택트시트 (소가 9칸 중 어디에)
     { kind: "edge" },    // 가장자리 소 — K*K 장이 아니다
-    { kind: "clamp" },   // 그 max/min 식이 어디서 나왔는지 숫자로 유도
+    // 여기부터 네 판이 max/min 식을 격자 위에서 세운다.
+    // (선생님 2026-09-03: "각 단계별로 시뮬 보여주면서 말풍선 설명 안되나?")
+    { kind: "c1" },      // 사진 한 장이 덮는 행 → i ≤ r ≤ i+K−1
+    { kind: "c2" },      // 담는 사진의 '제일 위'·'제일 아래' → r−K+1 ≤ i ≤ r
+    { kind: "c3" },      // 소가 (1,1) — 후보 −1·0 은 들판 밖 → max(1, …)
+    { kind: "c4" },      // 소가 (8,8) — 후보 7·8 은 들판 밖 → min(r, W)
     { kind: "done" },
   ];
   const ts = useTraceStep(steps);
@@ -176,9 +181,14 @@ export function PhotoUpdateSim({ E }) {
 
   /* 소 위치 — edge·clamp 스텝만 모서리로 옮겨서 "K×K 장" 이 안 되는 걸 보게 함
      (선생님 2026-08-30: 코드의 max/min 이 왜 있는지 알 근거가 없었음) */
-  const isClamp = s.kind === "clamp";
+  const isClamp = ["c1", "c2", "c3", "c4"].includes(s.kind);
   const isEdge = s.kind === "edge" || isClamp;
-  const r = isEdge ? 1 : 4, c = isEdge ? 1 : 4;
+  // 판마다 소를 옮긴다: 가운데(4,4) → 왼쪽위 모서리(1,1) → 오른쪽아래 모서리(8,8)
+  const [r, c] =
+      s.kind === "edge" || s.kind === "c3" ? [1, 1]
+    : s.kind === "c4"                      ? [8, 8]
+    : s.kind === "c1" || s.kind === "c2"   ? [4, 4]
+    : [4, 4];
 
   const GREEN = "#16a34a", BLUE = "#2563eb", RED = "#dc2626";
   const tintOf = (col) => col === GREEN ? "#dcfce7" : col === BLUE ? "#dbeafe" : "#fee2e2";
@@ -188,7 +198,14 @@ export function PhotoUpdateSim({ E }) {
   : s.kind === "two"  ? [{ ti: 2, tj: 2, col: GREEN, label: t(E, "photo 1", "사진 1") },
                          { ti: 4, tj: 4, col: BLUE,  label: t(E, "photo 2", "사진 2") }]
   : s.kind === "miss" ? [{ ti: 5, tj: 5, col: RED,   label: t(E, "photo ✗", "사진 ✗") }]
-  : isEdge          ? [{ ti: 1, tj: 1, col: GREEN, label: t(E, "the only one", "이거 하나뿐") }]
+  : s.kind === "c1"   ? [{ ti: r - K + 1, tj: c - K + 1, col: GREEN, label: `i = ${r - K + 1}` }]
+  : s.kind === "c2"   ? [{ ti: r - K + 1, tj: c - K + 1, col: GREEN, label: t(E, `highest  i = ${r - K + 1}`, `제일 위  i = ${r - K + 1}`) },
+                         { ti: r,         tj: c,         col: BLUE,  label: t(E, `lowest  i = ${r}`, `제일 아래  i = ${r}`) }]
+  : s.kind === "edge" ? [{ ti: 1, tj: 1, col: GREEN, label: t(E, "the only one", "이거 하나뿐") }]
+  : isClamp           ? [{ ti: Math.min(Math.max(1, r - K + 1), N - K + 1),
+                           tj: Math.min(Math.max(1, c - K + 1), N - K + 1),
+                           col: GREEN,
+                           label: `i = ${Math.min(Math.max(1, r - K + 1), N - K + 1)}` }]
   : [];
   const isCount = s.kind === "count" || s.kind === "done";
 
@@ -215,9 +232,18 @@ export function PhotoUpdateSim({ E }) {
     : s.kind === "miss" ? t(E,
         <>This 3×3 <b>misses the cow</b> → this photo stays the same ✗</>,
         <>이 3×3 은 <b>소를 못 담아요</b> → 이 사진은 그대로 ✗</>)
-    : isClamp ? t(E,
-        <>So where does that <b>max</b> / <b>min</b> come from? Let's build it from scratch — right column.</>,
-        <>그럼 그 <b>max</b> · <b>min</b> 은 어디서 나온 걸까요? 오른쪽에서 처음부터 세워봐요.</>)
+    : s.kind === "c1" ? t(E,
+        <>So where do <b>max</b> / <b>min</b> come from? A photo with top-left row <b>{r - K + 1}</b> covers rows <b>{r - K + 1} … {r - K + 3}</b> — the cow's row <b>{r}</b> is inside, so it holds the cow.<br />Rule: <b>i ≤ r ≤ i+{K}−1</b></>,
+        <>그럼 <b>max</b> · <b>min</b> 은 어디서 나올까요? 왼쪽위가 <b>{r - K + 1}</b>행인 사진은 <b>{r - K + 1} … {r - K + 3}</b>행을 덮어요 — 소의 행(<b>{r}</b>)이 그 안에 있으니 이 사진은 소를 담아요.<br />규칙: <b>i ≤ r ≤ i+{K}−1</b></>)
+    : s.kind === "c2" ? t(E,
+        <>Slide it: the <b>highest</b> photo that still holds the cow starts at <b>{r}−{K}+1 = {r - K + 1}</b>, the <b>lowest</b> starts at <b>{r}</b>. Everything between works too.<br />So <b>r−{K}+1 ≤ i ≤ r</b> — that's where r−{K}+1 comes from.</>,
+        <>밀어보면 — 소를 담는 <b>제일 위</b> 사진은 <b>{r}−{K}+1 = {r - K + 1}</b>에서 시작하고, <b>제일 아래</b>는 <b>{r}</b>에서 시작해요. 그 사이도 전부 담아요.<br />그래서 <b>r−{K}+1 ≤ i ≤ r</b> — r−{K}+1 은 여기서 나온 거예요.</>)
+    : s.kind === "c3" ? t(E,
+        <>Now move the cow to the corner <b>(1,1)</b>. The rule gives i = <b>−1, 0, 1</b> … but rows −1 and 0 don't exist.<br />So we push the bottom up to 1 → <b>max(1, r−{K}+1)</b></>,
+        <>이제 소를 모서리 <b>(1,1)</b> 로 옮겨요. 규칙대로면 i 는 <b>−1, 0, 1</b> … 그런데 −1행·0행은 없어요.<br />그래서 아래쪽을 1 로 올려 잘라요 → <b>max(1, r−{K}+1)</b></>)
+    : s.kind === "c4" ? t(E,
+        <>The other corner <b>(8,8)</b>: the rule gives i = <b>6, 7, 8</b>, but a 3×3 starting at row 7 or 8 runs off the field. The last one that fits starts at <b>W = {N - K + 1}</b>.<br />So we pull the top down → <b>min(r, W)</b></>,
+        <>반대쪽 모서리 <b>(8,8)</b> 도 봐요. 규칙대로면 i 는 <b>6, 7, 8</b> 인데, 7행·8행에서 시작하는 3×3 은 들판을 넘어가요. 들어가는 마지막은 <b>W = {N - K + 1}</b> 에서 시작해요.<br />그래서 위쪽을 내려 잘라요 → <b>min(r, W)</b></>)
     : s.kind === "edge" ? t(E,
         <>Careful — that was a cow in the <b>middle</b>. Move it to a <b>corner</b>: some of those 9 photos would stick out past the field, so they don't exist. Only <b>1</b> photo actually holds it.</>,
         <>조심 — 방금은 <b>한가운데</b> 소였어요. <b>모서리</b>로 옮기면요? 9장 중 몇 장은 들판 밖으로 삐져나가서 <b>있을 수가 없어요</b>. 실제로 담는 사진은 <b>1장</b>뿐이에요.</>)
@@ -323,6 +349,52 @@ export function PhotoUpdateSim({ E }) {
               </div>
             ))}
 
+            {/* c3·c4 — '규칙대로면 i 후보' 를 칩으로 늘어놓고 들판 밖을 지운다.
+                들판 밖 액자를 격자 위로 삐져나가게 그리면 말풍선과 부딪혀서 이렇게 함. */}
+            {(s.kind === "c3" || s.kind === "c4") && (() => {
+              const W2 = N - K + 1;
+              const cand = [r - K + 1, r - K + 2, r];
+              const chip = (ok) => ({
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
+                padding: "3px 9px", borderRadius: 7, border: `1.5px solid ${ok ? "#86efac" : "#fca5a5"}`,
+                background: ok ? "#f0fdf4" : "#fef2f2", color: ok ? "#15803d" : "#b91c1c",
+                textDecoration: ok ? "none" : "line-through",
+              });
+              return (
+                <div style={{ marginTop: 14, marginLeft: GUT, wordBreak: "keep-all" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
+                    <span style={{ fontSize: 11, fontWeight: 800, color: "#78716c" }}>
+                      {t(E, "i by the rule", "규칙대로면 i 는")}
+                    </span>
+                    {cand.map((v) => {
+                      const ok = v >= 1 && v <= W2;
+                      return <span key={v} style={chip(ok)}>{v < 0 ? `−${-v}` : v}</span>;
+                    })}
+                    <span style={{ fontSize: 11, color: "#b91c1c", fontWeight: 700 }}>
+                      {t(E, "✗ = outside the field", "✗ = 들판 밖")}
+                    </span>
+                  </div>
+                  <div style={{ marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 12,
+                    fontWeight: 800, color: "#c2410c", background: "#fff7ed",
+                    border: "1.5px solid #fdba74", borderRadius: 7, padding: "5px 9px", display: "inline-block" }}>
+                    {s.kind === "c3"
+                      ? <>max(1, {r}−{K}+1) = max(1, {r - K + 1 < 0 ? `−${K - 1 - r}` : r - K + 1}) = {Math.max(1, r - K + 1)}</>
+                      : <>min({r}, {W2}) = {Math.min(r, W2)}</>}
+                  </div>
+                  {s.kind === "c4" && (
+                    <div style={{ marginTop: 8, fontSize: 11.5, color: "#78716c" }}>
+                      {t(E, "Both cuts together:", "두 자르기를 합치면")}{" "}
+                      <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
+                        color: "#c2410c", background: "#fff7ed", border: "1.5px solid #fdba74",
+                        borderRadius: 7, padding: "3px 8px", display: "inline-block", marginTop: 4 }}>
+                        max(1, r−{K}+1) … min(r, {W2})
+                      </span>
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+
           </div>
 
           {/* edge 스텝 — 위치마다 장수가 다르다는 표. 코드의 max/min 이 여기서 나옴.
@@ -347,49 +419,10 @@ export function PhotoUpdateSim({ E }) {
               const num  = { ...mono, color: "#15803d" };
               const hr = { margin: "7px 0", borderTop: "1px dashed #fdba74" };
 
-              /* clamp 스텝 — 식을 통보하지 않고 한 줄씩 세운다.
-                 (선생님 2026-09-03: "max, min 계산이 어떻게 나왔는지 보여줄순 없나? r-k+1?") */
-              if (isClamp) {
-                const lo = Math.max(1, r - K + 1), hi = Math.min(r, W);
-                return (
-                  <div style={box}>
-                    <div style={head}>{t(E, "where max / min come from", "max · min 이 나온 자리")}</div>
-
-                    {/* "인덱스는 0부터 아니냐" 는 학생이 반드시 묻는다 (선생님 2026-09-03 도 물음).
-                        이 문제는 입력 r, c 가 1 부터 오고 코드도 배열을 N+1 로 잡아 1 부터 쓴다. */}
-                    <div style={{ ...why, background: "#fff", border: "1px dashed #cbd5e1",
-                      borderRadius: 6, padding: "5px 7px", marginBottom: 7 }}>
-                      {t(E, <>Note: here we count from <b style={{ color: "#1e3a8a" }}>1</b>, not 0 — the input gives (r, c) starting at 1, so the code makes the array one bigger and leaves slot 0 empty. That's the <b style={{ color: "#c2410c" }}>1</b> inside max( ).</>,
-                            <>참고: 여기선 0 이 아니라 <b style={{ color: "#1e3a8a" }}>1</b> 부터 세요.<br />입력이 (r, c) 를 1 부터 주거든요.<br />그래서 배열을 한 칸 크게 잡고 0번 자리는 비워둬요.<br />max( ) 안의 그 <b style={{ color: "#c2410c" }}>1</b> 이 이거예요.</>)}
-                    </div>
-
-                    <div style={why}>{t(E, <>A photo whose top-left row is <b style={{ color: "#1e3a8a" }}>i</b> covers rows</>,
-                                          <>왼쪽위가 <b style={{ color: "#1e3a8a" }}>i</b> 행인 사진은 이 행들을 덮어요</>)}</div>
-                    <div><span style={mono}>i … i+{K}−1</span></div>
-                    <div style={hr} />
-
-                    <div style={why}>{t(E, <>To hold the cow's row <b style={{ color: "#ea580c" }}>r</b>:</>,
-                                          <>소의 행 <b style={{ color: "#ea580c" }}>r</b> 을 담으려면</>)}</div>
-                    <div><span style={mono}>i ≤ r ≤ i+{K}−1</span></div>
-                    <div style={{ ...why, marginTop: 5 }}>{t(E, "leave i alone on the inside:", "부등식에서 i 만 남기면")}</div>
-                    <div><span style={key}>r−{K}+1 ≤ i ≤ r</span></div>
-                    <div style={hr} />
-
-                    <div style={why}>{t(E, <>But photos outside the field don't exist — i must stay in <b style={{ color: "#1e3a8a" }}>1 … {W}</b>:</>,
-                                          <>그런데 들판 밖 사진은 없어요 — i 는 <b style={{ color: "#1e3a8a" }}>1 … {W}</b> 안이어야 해요</>)}</div>
-                    <div><span style={key}>max(1, r−{K}+1) … min(r, {W})</span></div>
-                    <div style={hr} />
-
-                    <div style={why}>{t(E, <>Our cow is at <b style={{ color: "#ea580c" }}>({r},{c})</b>:</>,
-                                          <>지금 소는 <b style={{ color: "#ea580c" }}>({r},{c})</b> 이니</>)}</div>
-                    <div style={{ marginBottom: 3 }}><span style={num}>max(1, {r}−{K}+1) = max(1, {r - K + 1}) = {lo}</span></div>
-                    <div><span style={num}>min({r}, {W}) = {hi}</span></div>
-                    <div style={{ marginTop: 5 }}>
-                      <span style={key}>i: {lo} … {hi} · j: {lo} … {hi} → {(hi - lo + 1) ** 2}{t(E, " photo", "장")}</span>
-                    </div>
-                  </div>
-                );
-              }
+              /* edge 스텝의 표만 여기(격자 옆 패널)에 둔다.
+                 clamp 는 패널 대신 격자 + 말풍선으로 보여준다
+                 (선생님 2026-09-03: "각 단계별로 시뮬 보여주면서 말풍선 설명 안되나?"). */
+              if (isClamp) return null;
 
               return (
                 <div style={box}>
