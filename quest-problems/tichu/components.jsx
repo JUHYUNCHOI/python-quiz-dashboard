@@ -91,8 +91,8 @@ export function getTichuWalk(E, lang = "py") {
         "win = biggest window found so far. i = left end of the sliding window.",
         "win = 지금까지 찾은 최대 창 크기. i = 슬라이딩 창의 왼쪽 끝.") },
       { hi: [16, 19], bubble: t(E,
-        "Slide j right. The inner gap of window [i..j] is (value-diff) − (count-diff) = c[j]−c[i] − (j−i). If it exceeds K, we can't fill it → shrink from the left. Keep the biggest window size.",
-        "j 를 오른쪽으로. 창 [i..j] 의 내부 빈칸 = (값차) − (개수차) = c[j]−c[i] − (j−i). K 를 넘으면 못 메꿔요 → 왼쪽 i 를 좁혀요. 최대 창 크기를 계속 갱신.") },
+        "Slide j to the right.\nThe inner gap of window [i..j] is (value diff) − (count diff),\nthat is c[j]−c[i] − (j−i).\nIf it exceeds K we cannot fill it, so shrink from the left.\nKeep the biggest window size.",
+        "j 를 오른쪽으로 밀어요.\n창 [i..j] 의 내부 빈칸은 (값차) − (개수차) 예요.\n즉 c[j]−c[i] − (j−i) 예요.\nK 를 넘으면 못 메꾸니 왼쪽 i 를 좁혀요.\n제일 큰 창 크기를 계속 갱신해요.") },
       { hi: [20, 20], bubble: t(E,
         "Answer = window + K (fill inner gaps, spend leftover wildcards on the ends), capped at N.",
         "답 = 창 + K (내부 빈칸 메꾸고, 남는 와일드는 양끝에). 최대 N.") },
@@ -100,17 +100,17 @@ export function getTichuWalk(E, lang = "py") {
   }
   return { code: FULL_PY, vars: _TICHU_VARS, beats: [
     { hi: [0, 1], bubble: t(E,
-      "Read N and K on the first line. On the second line, read the numbered cards — set(...) drops duplicates, sorted(...) orders them.",
-      "첫 줄에서 N 과 K 를 읽어요. 둘째 줄의 수 카드는 set(...) 으로 중복을 없애고 sorted(...) 로 정렬해요 (중복은 run에 소용없어요).") },
+      "Read N and K on the first line.\nOn the second line, read the numbered cards.\nUse set(...) to drop duplicates and sorted(...) to sort.\nDuplicates never help a run.",
+      "첫 줄에서 N 과 K 를 읽어요.\n둘째 줄의 수 카드를 읽어요.\nset(...) 으로 중복을 없애고 sorted(...) 로 정렬해요.\n중복은 run 을 늘리는 데 도움이 안 되거든요.") },
     { hi: [2, 4], bubble: t(E,
-      "m = how many distinct values. win = biggest window so far, i = left end of the window.",
+      "m = how many distinct values there are.\nwin = the biggest window so far.\ni = the left end of the window.",
       "m = 서로 다른 값 개수. win = 지금까지 최대 창, i = 창의 왼쪽 끝.") },
     { hi: [5, 8], bubble: t(E,
-      "Slide j right. The inner gap of window [i..j] is c[j]−c[i] − (j−i). If it's more than k wildcards can fill, shrink from the left (i += 1). Track the biggest window size j−i+1.",
-      "j 를 오른쪽으로. 창 [i..j] 의 내부 빈칸 = c[j]−c[i] − (j−i). 와일드 k개로 못 메꿀 만큼 크면 왼쪽을 좁혀요 (i += 1). 최대 창 크기 j−i+1 을 기록.") },
+      "Slide j to the right.\nThe inner gap of window [i..j] is c[j]−c[i] − (j−i).\nIf k wildcards cannot fill it, shrink from the left (i += 1).\nTrack the biggest window size j−i+1.",
+      "j 를 오른쪽으로 밀어요.\n창 [i..j] 의 내부 빈칸은 c[j]−c[i] − (j−i) 예요.\n와일드 k개로 못 메꿀 만큼 크면 왼쪽을 좁혀요.\n제일 큰 창 크기를 기록해요.") },
     { hi: [9, 9], bubble: t(E,
-      "Answer = window + k (fill the inner gaps, then spend leftover wildcards extending the ends), but never more than n cards.",
-      "답 = 창 + k (내부 빈칸을 메꾸고, 남는 와일드로 양끝 확장). 단, 카드 수 n 을 넘을 순 없어요.") },
+      "Answer = window + k.\nFill the inner gaps, then spend leftover wildcards on the ends.\nIt can never exceed the card count n.",
+      "답 = 창 + k 예요.\n내부 빈칸을 메꾸고 남는 와일드로 양끝을 늘려요.\n단, 카드 수 n 을 넘을 순 없어요.") },
   ] };
 }
 

@@ -151,3 +151,140 @@ export function TichuSim({ E }) {
     </div>
   );
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   GapFormulaSim — 코드의 `c[j] - c[i] - (j - i) > k` 를 눈으로.
+   선생님 2026-09-03: "c[j] - c[i] - (j - i) > k: 이걸 가시적으로 보여줘야지"
+   전엔 "내부 빈칸 = 값차 − 개수차" 라고 말로만 있었음. 왜 그 식이 빈칸 개수인지 안 보였음.
+
+   보이는 것: 창의 왼쪽~오른쪽이 몇 칸인지 세고, 가진 카드가 몇 장인지 세고,
+   빼면 빈칸이 나온다. 그 다음 (칸수 − 카드수) 를 정리하면 +1 이 서로 지워져
+   코드의 식이 그대로 나온다 — 사후 보정이 아니라 세어서 얻은 식.
+   세 창(2~5, 2~8, 2~11)의 값은 전부 실제로 세어서 확인 (빈칸 0 / 1 / 3).
+   ═══════════════════════════════════════════════════════════════ */
+export function GapFormulaSim({ E }) {
+  const C = [2, 3, 4, 5, 7, 8, 11, 15];   // 정렬·중복제거한 손패
+  const K = 2;
+  const WINDOWS = [[0, 5], [0, 6]];       // 보여줄 창: 빈칸 1 (OK), 빈칸 3 (초과)
+
+  const steps = [
+    { k: "win", w: 0 },      // 창 잡기
+    { k: "span", w: 0 },     // 몇 칸인가
+    { k: "have", w: 0 },     // 몇 장 가졌나
+    { k: "gap", w: 0 },      // 빼면 빈칸
+    { k: "algebra" },        // +1 이 지워져 코드의 식이 됨
+    { k: "win", w: 1 },      // 창을 넓히면
+    { k: "gap", w: 1 },      // 빈칸 3 > K → 못 씀
+  ];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+  const [i, j] = WINDOWS[s.w ?? 0];
+  const lo = C[i], hi = C[j];
+  const span = hi - lo + 1;            // 왼쪽부터 오른쪽까지 칸 수
+  const have = j - i + 1;              // 그 안에 가진 카드 수
+  const gap = span - have;             // 빈칸
+  const inSet = new Set(C);
+  const cells = [];
+  for (let v = lo; v <= hi; v++) cells.push({ v, has: inSet.has(v) });
+  const showSpan = s.k !== "win";
+  const showHave = s.k === "have" || s.k === "gap";
+  const showGap = s.k === "gap";
+
+  const say =
+    s.k === "win" ? (s.w === 0
+      ? t(E, <>Take the window from <b>{lo}</b> to <b>{hi}</b>.<br />How many wildcards would it need?</>,
+            <>창을 <b>{lo}</b> 부터 <b>{hi}</b> 까지 잡아봐요.<br />와일드가 몇 장 필요할까요?</>)
+      : t(E, <>Now widen the window to <b>{hi}</b>.<br />Does it still work with <b>{K}</b> wildcards?</>,
+            <>이번엔 창을 <b>{hi}</b> 까지 넓혀봐요.<br />와일드 <b>{K}장</b>으로 아직 될까요?</>))
+    : s.k === "span" ? t(E,
+        <>From <b>{lo}</b> to <b>{hi}</b> there are <b>{span}</b> slots.<br />That is <b>{hi} − {lo} + 1</b>.</>,
+        <><b>{lo}</b> 부터 <b>{hi}</b> 까지는 <b>{span}칸</b>이에요.<br /><b>{hi} − {lo} + 1</b> 이죠.</>)
+    : s.k === "have" ? t(E,
+        <>Of those slots I already hold <b>{have}</b> cards.<br />That is <b>j − i + 1</b>.</>,
+        <>그 칸들 중에 내가 가진 카드는 <b>{have}장</b>이에요.<br /><b>j − i + 1</b> 이죠.</>)
+    : s.k === "gap" ? (gap <= K
+        ? t(E, <>Slots minus cards = <b>{span} − {have} = {gap}</b> empty.<br />I have <b>{K}</b> wildcards, so <b style={{ color: "#15803d" }}>this window works</b>.</>,
+              <>칸 수에서 카드 수를 빼면 빈칸이에요.<br /><b>{span} − {have} = {gap}</b> 칸이 비었어요.<br />와일드가 <b>{K}장</b>이니 <b style={{ color: "#15803d" }}>이 창은 돼요</b>.</>)
+        : t(E, <>Now <b>{span} − {have} = {gap}</b> slots are empty.<br /><b style={{ color: RED }}>{gap} &gt; {K}</b>, so the wildcards run out —<br />the code shrinks the window from the left.</>,
+              <>이번엔 <b>{span} − {have} = {gap}</b> 칸이 비었어요.<br /><b style={{ color: RED }}>{gap} &gt; {K}</b> 라 와일드가 모자라요.<br />그래서 코드는 왼쪽 i 를 좁혀요.</>))
+    : t(E,
+        <>Write it out: <b>(hi − lo + 1) − (j − i + 1)</b>.<br />The two <b>+1</b> cancel, leaving <b>hi − lo − (j − i)</b>.<br />That is exactly the line in the code.</>,
+        <>식으로 써 봐요. <b>(칸 수) − (카드 수)</b> 예요.<br /><b>(hi − lo + 1) − (j − i + 1)</b> 인데<br /><b>+1</b> 두 개가 서로 지워져요.<br />남는 게 <b>hi − lo − (j − i)</b> — 코드의 그 줄이에요.</>);
+
+  return (
+    <div style={{ padding: 16, paddingBottom: 110 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Why that line counts the gaps", "그 식이 왜 빈칸 개수일까요")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Say tone={s.k === "algebra" ? "aha" : s.k === "gap" && gap > K ? "stuck" : "go"}>{say}</Say>
+
+      {s.k !== "algebra" && (
+        <>
+          <div style={{ display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap", marginBottom: 8 }}>
+            {cells.map(({ v, has }) => (
+              <div key={v} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+                <div style={{ width: 34, height: 40, borderRadius: 7,
+                  border: `2px ${has ? "solid" : "dashed"} ${has ? RED : (showGap ? WILD : "#cbd5e1")}`,
+                  background: has ? REDBG : (showGap ? WILDBG : "#fff"),
+                  color: has ? RED : (showGap ? WILD : "#cbd5e1"),
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 15 }}>
+                  {has ? v : (showGap ? "★" : "")}
+                </div>
+                <div style={{ fontSize: 9.5, fontWeight: 800, color: "#cbd5e1" }}>{v}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ maxWidth: 430, margin: "10px auto 0", display: "grid", gap: 5, fontSize: 12.5 }}>
+            {showSpan && (
+              <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 13px",
+                borderRadius: 9, border: "1.5px solid #e2e8f0", background: "#fff", wordBreak: "keep-all" }}>
+                <span style={{ color: "#475569", fontWeight: 700 }}>{t(E, `slots ${lo} … ${hi}`, `${lo} … ${hi} 칸 수`)}</span>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: "#334155" }}>
+                  {hi} − {lo} + 1 = {span}
+                </span>
+              </div>
+            )}
+            {showHave && (
+              <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 13px",
+                borderRadius: 9, border: `1.5px solid ${RED}`, background: REDBG, wordBreak: "keep-all" }}>
+                <span style={{ color: "#7f1d1d", fontWeight: 700 }}>{t(E, "cards I hold", "가진 카드")}</span>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: RED }}>
+                  {j} − {i} + 1 = {have}
+                </span>
+              </div>
+            )}
+            {showGap && (
+              <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 13px",
+                borderRadius: 9, border: `2px solid ${gap <= K ? "#86efac" : RED}`,
+                background: gap <= K ? "#f0fdf4" : REDBG, wordBreak: "keep-all" }}>
+                <span style={{ fontWeight: 800, color: gap <= K ? "#15803d" : RED }}>
+                  {t(E, "empty slots", "빈칸")} ★
+                </span>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800,
+                  color: gap <= K ? "#15803d" : RED }}>
+                  {span} − {have} = {gap}  {gap <= K ? `≤ ${K} ✓` : `> ${K} ✗`}
+                </span>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+
+      {s.k === "algebra" && (
+        <div style={{ maxWidth: 460, margin: "0 auto", padding: "14px 16px", borderRadius: 12,
+          background: "#f5f3ff", border: "1.5px solid #c4b5fd", color: "#5b21b6",
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 13.5, lineHeight: 2.1, textAlign: "center" }}>
+          <div>({t(E, "slots", "칸 수")}) − ({t(E, "cards", "카드 수")})</div>
+          <div>= (c[j] − c[i] + 1) − (j − i + 1)</div>
+          <div style={{ color: "#94a3b8", fontSize: 12 }}>{t(E, "the two +1 cancel", "+1 두 개가 서로 지워져요")}</div>
+          <div style={{ fontWeight: 800, fontSize: 15, color: "#7c3aed" }}>= c[j] − c[i] − (j − i)</div>
+        </div>
+      )}
+
+      <div style={{ marginTop: 20 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}

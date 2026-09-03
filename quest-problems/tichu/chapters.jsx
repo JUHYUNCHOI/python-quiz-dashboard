@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getTichuWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { TichuSim } from "./sims";
+import { TichuSim, GapFormulaSim } from "./sims";
 
 const A = "#dc2626";
 
@@ -71,7 +71,7 @@ function TichuSample({ E }) {
       </div>
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all" }}>
-        {t(E, "📌 Constraints: N ≤ 10⁵ · each card value Cᵢ ≤ 10⁹ · cards can be rearranged freely.",
+        {t(E, "📌 Constraints: N ≤ 10⁵ · each card value Cᵢ ≤ 10⁹\n· cards can be rearranged freely.",
              "📌 제약: N ≤ 10⁵ · 각 카드 값 Cᵢ ≤ 10⁹ · 카드는 자유롭게 재배열.")}
       </div>
     </div>
@@ -139,8 +139,8 @@ export function makeTichuCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
-                "Build the longest possible run of consecutive integers, using wildcards to fill any value.",
-                "와일드로 빈 값을 채워 가장 긴 연속 정수 run 을 만들기.")}
+                "Build the longest run of consecutive integers you can,\nusing wildcards to fill any value.",
+                "와일드로 빈 값을 채워 가장 긴 연속 정수 run 을 만들어요.")}
             </div>
           </div>
 
@@ -181,6 +181,36 @@ export function makeTichuCh1(E) {
               </div>
             </div>
           </div>
+
+          {/* 아주 작은 구체 예 — 선생님 2026-09-03: "이것만 봐서는 무슨 문제인지 알수가 없는데?"
+              도입이 전부 기호(N, K, a+1…)뿐이라 카드 한 줌으로 한 번에 보이게. */}
+          <div style={{ background: "#fff", border: "1.5px solid #fca5a5", borderRadius: 12,
+            padding: "12px 14px", wordBreak: "keep-all", textWrap: "balance" }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", marginBottom: 9, textAlign: "center" }}>
+              {t(E, "A tiny example", "아주 작은 예")}
+            </div>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, marginBottom: 8, flexWrap: "wrap" }}>
+              {["2", "3", "5"].map((v) => (
+                <span key={v} style={{ width: 34, height: 44, borderRadius: 7, border: "2px solid #dc2626",
+                  background: "#fef2f2", color: "#dc2626", display: "inline-flex", alignItems: "center",
+                  justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 17 }}>{v}</span>
+              ))}
+              <span style={{ width: 34, height: 44, borderRadius: 7, border: "2px dashed #8b5cf6",
+                background: "#f5f3ff", color: "#8b5cf6", display: "inline-flex", alignItems: "center",
+                justifyContent: "center", fontWeight: 800, fontSize: 17 }}>★</span>
+              <span style={{ fontSize: 11, color: "#94a3b8", marginLeft: 4 }}>
+                {t(E, "★ = wildcard", "★ = 와일드")}
+              </span>
+            </div>
+            <div style={{ fontSize: 12.5, color: "#334155", lineHeight: 1.85, textAlign: "center" }}>
+              {t(E, <>Use <b style={{ color: "#8b5cf6" }}>★</b> as a <b>4</b>, and the cards line up:<br />
+                    <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>2 3 4 5</b> — four in a row.<br />
+                    So the answer here is <b style={{ color: "#15803d" }}>4</b>.</>,
+                    <><b style={{ color: "#8b5cf6" }}>★</b> 을 <b>4</b> 로 쓰면 카드가 죽 이어져요.<br />
+                    <b style={{ fontFamily: "'JetBrains Mono',monospace", color: "#15803d" }}>2 3 4 5</b> — 네 장이 연속이에요.<br />
+                    그래서 이 경우 답은 <b style={{ color: "#15803d" }}>4</b> 예요.</>)}
+            </div>
+          </div>
         </div>),
     },
 
@@ -202,6 +232,18 @@ export function makeTichuCh1(E) {
         "Watch the run grow: dedupe the hand, pick a window, fill the missing value with a wildcard, then extend an end.",
         "run 이 자라는 걸 봐요: 중복 제거 → 창 잡기 → 빠진 값을 와일드로 메꾸기 → 끝을 확장."),
       content: (<TichuSim E={E} />),
+    },
+
+    // [전] 코드의 `c[j] - c[i] - (j - i) > k` 를 눈으로 — 전엔 말로만 있었음
+    //   (선생님 2026-09-03: "이걸 가시적으로 보여줘야지"). 칸 수 − 카드 수 = 빈칸,
+    //   정리하면 +1 이 지워져 코드의 식이 그대로 나온다.
+    {
+      type: "reveal",
+      label: t(E, "Why that formula?", "그 식은 왜?"),
+      narr: t(E,
+        "The code checks c[j] − c[i] − (j − i) > k. Let's count slots and cards and see where that comes from.",
+        "코드는 c[j] − c[i] − (j − i) > k 를 봐요.\n칸 수와 카드 수를 세어서 이 식이 어디서 나왔는지 봐요."),
+      content: (<GapFormulaSim E={E} />),
     },
 
     // [결] 정리
