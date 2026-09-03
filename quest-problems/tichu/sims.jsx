@@ -200,16 +200,16 @@ export function GapFormulaSim({ E }) {
         <>From <b>{lo}</b> to <b>{hi}</b> there are <b>{span}</b> slots.<br />That is <b>{hi} − {lo} + 1</b>.</>,
         <><b>{lo}</b> 부터 <b>{hi}</b> 까지는 <b>{span}칸</b>이에요.<br /><b>{hi} − {lo} + 1</b> 이죠.</>)
     : s.k === "have" ? t(E,
-        <>Of those slots I already hold <b>{have}</b> cards.<br />That is <b>j − i + 1</b>.</>,
-        <>그 칸들 중에 내가 가진 카드는 <b>{have}장</b>이에요.<br /><b>j − i + 1</b> 이죠.</>)
+        <>Of those slots I already hold <b>{have}</b> cards.<br />That is <b>right − left + 1</b>.</>,
+        <>그 칸들 중에 내가 가진 카드는 <b>{have}장</b>이에요.<br /><b>right − left + 1</b> 이죠.</>)
     : s.k === "gap" ? (gap <= K
         ? t(E, <>Slots minus cards = <b>{span} − {have} = {gap}</b> empty.<br />I have <b>{K}</b> wildcards, so <b style={{ color: "#15803d" }}>this window works</b>.</>,
               <>칸 수에서 카드 수를 빼면 빈칸이에요.<br /><b>{span} − {have} = {gap}</b> 칸이 비었어요.<br />와일드가 <b>{K}장</b>이니 <b style={{ color: "#15803d" }}>이 창은 돼요</b>.</>)
-        : t(E, <>Now <b>{span} − {have} = {gap}</b> slots are empty.<br /><b style={{ color: RED }}>{gap} &gt; {K}</b>, so the wildcards run out —<br />the code shrinks the window from the left.</>,
-              <>이번엔 <b>{span} − {have} = {gap}</b> 칸이 비었어요.<br /><b style={{ color: RED }}>{gap} &gt; {K}</b> 라 와일드가 모자라요.<br />그래서 코드는 왼쪽 i 를 좁혀요.</>))
+        : t(E, <>Now <b>{span} − {have} = {gap}</b> slots are empty.<br /><b style={{ color: RED }}>{gap} &gt; {K}</b>, so the wildcards run out —<br />the code moves <b>left</b> forward.</>,
+              <>이번엔 <b>{span} − {have} = {gap}</b> 칸이 비었어요.<br /><b style={{ color: RED }}>{gap} &gt; {K}</b> 라 와일드가 모자라요.<br />그래서 코드는 <b>left</b> 를 오른쪽으로 옮겨요.</>))
     : t(E,
-        <>Write it out: <b>(hi − lo + 1) − (j − i + 1)</b>.<br />The two <b>+1</b> cancel, leaving <b>hi − lo − (j − i)</b>.<br />That is exactly the line in the code.</>,
-        <>식으로 써 봐요. <b>(칸 수) − (카드 수)</b> 예요.<br /><b>(hi − lo + 1) − (j − i + 1)</b> 인데<br /><b>+1</b> 두 개가 서로 지워져요.<br />남는 게 <b>hi − lo − (j − i)</b> — 코드의 그 줄이에요.</>);
+        <>Write it out: <b>(slots) − (cards)</b>.<br />That is <b>(c[right] − c[left] + 1) − (right − left + 1)</b>.<br />The two <b>+1</b> cancel, leaving <b>c[right] − c[left] − (right − left)</b>.<br />That is exactly the line in the code.</>,
+        <>식으로 써 봐요. <b>(칸 수) − (카드 수)</b> 예요.<br /><b>(c[right] − c[left] + 1) − (right − left + 1)</b> 인데<br /><b>+1</b> 두 개가 서로 지워져요.<br />남는 게 <b>c[right] − c[left] − (right − left)</b> — 코드의 그 줄이에요.</>);
 
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
@@ -250,7 +250,7 @@ export function GapFormulaSim({ E }) {
                 borderRadius: 9, border: `1.5px solid ${RED}`, background: REDBG, wordBreak: "keep-all" }}>
                 <span style={{ color: "#7f1d1d", fontWeight: 700 }}>{t(E, "cards I hold", "가진 카드")}</span>
                 <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: RED }}>
-                  {j} − {i} + 1 = {have}
+                  {t(E, "right", "right")} {j} − {t(E, "left", "left")} {i} + 1 = {have}
                 </span>
               </div>
             )}
@@ -276,9 +276,9 @@ export function GapFormulaSim({ E }) {
           background: "#f5f3ff", border: "1.5px solid #c4b5fd", color: "#5b21b6",
           fontFamily: "'JetBrains Mono',monospace", fontSize: 13.5, lineHeight: 2.1, textAlign: "center" }}>
           <div>({t(E, "slots", "칸 수")}) − ({t(E, "cards", "카드 수")})</div>
-          <div>= (c[j] − c[i] + 1) − (j − i + 1)</div>
+          <div>= (c[right] − c[left] + 1) − (right − left + 1)</div>
           <div style={{ color: "#94a3b8", fontSize: 12 }}>{t(E, "the two +1 cancel", "+1 두 개가 서로 지워져요")}</div>
-          <div style={{ fontWeight: 800, fontSize: 15, color: "#7c3aed" }}>= c[j] − c[i] − (j − i)</div>
+          <div style={{ fontWeight: 800, fontSize: 15, color: "#7c3aed" }}>= c[right] − c[left] − (right − left)</div>
         </div>
       )}
 
