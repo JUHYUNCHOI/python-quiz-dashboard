@@ -175,6 +175,7 @@ export function GapFormulaSim({ E }) {
     { k: "algebra" },        // +1 이 지워져 코드의 식이 됨
     { k: "win", w: 1 },      // 창을 넓히면
     { k: "gap", w: 1 },      // 빈칸 3 > K → 못 씀
+    { k: "prefix", w: 0 },   // 덤: right − left + 1 이 사실 누적 개수(prefix count)
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
@@ -207,6 +208,9 @@ export function GapFormulaSim({ E }) {
               <>칸 수에서 카드 수를 빼면 빈칸이에요.<br /><b>{span} − {have} = {gap}</b> 칸이 비었어요.<br />와일드가 <b>{K}장</b>이니 <b style={{ color: "#15803d" }}>이 창은 돼요</b>.</>)
         : t(E, <>Now <b>{span} − {have} = {gap}</b> slots are empty.<br /><b style={{ color: RED }}>{gap} &gt; {K}</b>, so the wildcards run out —<br />the code moves <b>left</b> forward.</>,
               <>이번엔 <b>{span} − {have} = {gap}</b> 칸이 비었어요.<br /><b style={{ color: RED }}>{gap} &gt; {K}</b> 라 와일드가 모자라요.<br />그래서 코드는 <b>left</b> 를 오른쪽으로 옮겨요.</>))
+    : s.k === "prefix" ? t(E,
+        <>One more thing, for later.<br /><b>right − left + 1</b> is a <b>running count</b>:<br />cards up to c[right], minus cards below c[left].<br />That idea has a name — a <b>prefix count</b>.</>,
+        <>나중을 위해 하나만 더 봐요.<br /><b>right − left + 1</b> 은 사실 <b>세어 둔 개수의 차</b>예요.<br />c[right] 까지의 카드 수에서 c[left] 앞의 카드 수를 뺀 거죠.<br />이 생각에는 이름이 있어요. <b>누적 개수(prefix)</b> 예요.</>)
     : t(E,
         <>Write it out: <b>(slots) − (cards)</b>.<br />That is <b>(c[right] − c[left] + 1) − (right − left + 1)</b>.<br />The two <b>+1</b> cancel, leaving <b>c[right] − c[left] − (right − left)</b>.<br />That is exactly the line in the code.</>,
         <>식으로 써 봐요. <b>(칸 수) − (카드 수)</b> 예요.<br /><b>(c[right] − c[left] + 1) − (right − left + 1)</b> 인데<br /><b>+1</b> 두 개가 서로 지워져요.<br />남는 게 <b>c[right] − c[left] − (right − left)</b> — 코드의 그 줄이에요.</>);
@@ -218,7 +222,7 @@ export function GapFormulaSim({ E }) {
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Say tone={s.k === "algebra" ? "aha" : s.k === "gap" && gap > K ? "stuck" : "go"}>{say}</Say>
 
-      {s.k !== "algebra" && (
+      {s.k !== "algebra" && s.k !== "prefix" && (
         <>
           <div style={{ display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap", marginBottom: 8 }}>
             {cells.map(({ v, has }) => (
@@ -269,6 +273,42 @@ export function GapFormulaSim({ E }) {
             )}
           </div>
         </>
+      )}
+
+      {s.k === "prefix" && (
+        <div style={{ maxWidth: 470, margin: "0 auto" }}>
+          {/* 정렬·중복제거 뒤에는 인덱스가 곧 '그 값 이하인 카드 수' — 값 배열이 10⁹ 이라
+              누적 배열을 못 깔지만, 압축 좌표에선 인덱스가 그 역할을 한다. */}
+          <div style={{ display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap", marginBottom: 10 }}>
+            {C.map((v, idx) => (
+              <div key={v} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+                <div style={{ width: 34, height: 38, borderRadius: 7,
+                  border: `2px solid ${idx >= i && idx <= j ? RED : "#cbd5e1"}`,
+                  background: idx >= i && idx <= j ? REDBG : "#fff",
+                  color: idx >= i && idx <= j ? RED : "#cbd5e1",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 14 }}>{v}</div>
+                <div style={{ fontSize: 9.5, fontWeight: 800, color: "#94a3b8" }}>{idx}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ padding: "12px 15px", borderRadius: 11, background: "#ecfeff",
+            border: "1.5px solid #67e8f9", color: "#155e75", fontSize: 12.5,
+            lineHeight: 2, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E,
+              <>cards up to <b>{C[j]}</b> → <b>{j + 1}</b> &nbsp;(index {j} + 1)<br />
+                cards below <b>{C[i]}</b> → <b>{i}</b> &nbsp;(index {i})<br />
+                <b>{j + 1} − {i} = {j - i + 1}</b> — the same number as before.</>,
+              <><b>{C[j]}</b> 이하인 내 카드 → <b>{j + 1}장</b> &nbsp;(index {j} + 1)<br />
+                <b>{C[i]}</b> 앞의 내 카드 → <b>{i}장</b> &nbsp;(index {i})<br />
+                <b>{j + 1} − {i} = {j - i + 1}</b> — 아까 그 수예요.</>)}
+          </div>
+          <div style={{ marginTop: 9, fontSize: 11.5, color: "#94a3b8", textAlign: "center",
+            lineHeight: 1.8, wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E, <>Sorting and deduping made the index itself the running count.<br />So we never build a separate table.<br />Card values reach 10<sup>9</sup>, and a count array over values would not fit.</>,
+                  <>정렬하고 중복을 없앴더니 인덱스가 곧 그 개수가 됐어요.<br />그래서 표를 따로 안 만들어도 돼요.<br />카드 값이 10<sup>9</sup> 까지라 값마다 세는 표는 못 만들거든요.</>)}
+          </div>
+        </div>
       )}
 
       {s.k === "algebra" && (
