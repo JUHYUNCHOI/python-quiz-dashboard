@@ -152,8 +152,8 @@ export function BackwardSim({ E }) {
 
   const say =
     s.k === "why" ? t(E,
-      <>Now the other direction.<br />We are <b>given S</b> and want the keys.<br />Nothing flips after the <b>last</b> key,<br />so that one key is safe to read straight off S.</>,
-      <>이번엔 반대 방향이에요.<br /><b>S 를 받고</b> 친 키를 알아내야 해요.<br /><b>마지막</b> 키 뒤에는 뒤집힘이 없어요.<br />그래서 그 키만은 S 에서 바로 읽어도 돼요.</>)
+      <>Now the other direction — we see <b>S</b> and want the keys.<br />A letter is only ever flipped by an <b>O typed after it</b>.<br />And after the <b>last</b> key, nothing more is typed.<br />→ So the last letter of S <b>is</b> the last key.</>,
+      <>이번엔 반대 방향이에요 — <b>S</b> 를 보고 친 키를 알아내요.<br />글자를 뒤집는 건 <b>그 뒤에 치는 O</b> 뿐이에요.<br />그런데 <b>마지막</b> 키 뒤에는 친 키가 없죠.<br />→ 그래서 S 의 마지막 글자가 곧 마지막에 친 키예요.</>)
     : s.k === "step" ? (
       cur.flips === 0
         ? t(E,
@@ -178,7 +178,7 @@ export function BackwardSim({ E }) {
       <div style={{ maxWidth: 440, margin: "0 auto", display: "grid", gap: 12 }}>
         <div>
           <Label>{t(E, "S — what we see on screen", "S — 화면에 보이는 것")}</Label>
-          <Word s={S} size={30} ringAt={cur ? cur.i : null} />
+          <Word s={S} size={30} ringAt={cur ? cur.i : s.k === "why" ? N - 1 : null} />
         </div>
         <div>
           <Label color="#7c3aed">{t(E, "keys we recovered", "찾아낸 친 키")}</Label>

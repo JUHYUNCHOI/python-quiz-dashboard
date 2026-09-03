@@ -131,27 +131,7 @@ MOOMO`}
       content: (<TypeTraceSim E={E} />),
     },
 
-    // 1-4: Quiz — last typed key
-    {
-      type: "quiz",
-      narr: t(E,
-        "After the LAST keystroke, no more flips happen. So the last typed key equals which character?",
-        "맨 마지막 키 입력 뒤에는 더 이상 뒤집힘이 없어요. 그러면 마지막에 친 키는 무엇과 같을까?"),
-      question: t(E,
-        "If S has length N, what must the LAST typed key be?",
-        "S 의 길이가 N 일 때, 마지막에 친 키는 무엇이어야 할까?"),
-      options: [
-        t(E, "S[N-1] (the last character of S itself)", "S[N-1] (S 의 마지막 글자 그 자체)"),
-        t(E, "Always M", "항상 M"),
-        t(E, "Always O", "항상 O"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Right! Nothing flips after the last keystroke, so it lands at position N-1 unchanged. That gives us a foothold — work backwards from there.",
-        "맞아요. 마지막 키 입력 뒤에는 뒤집힘이 없으니 그대로 N-1 자리에 놓여요.\n여기서부터 거꾸로 풀어가면 돼요."),
-    },
-
-    // 1-5: Input — count parity
+    // 1-4: Input — count parity
     {
       type: "input",
       narr: t(E,
@@ -165,13 +145,13 @@ MOOMO`}
         "문자열 MMO 안의 O 글자 개수만 세면 돼요."),
       answer: 1,
     },
-    // 1-6: 거꾸로 복원 시뮬 — 전엔 이 알고리즘을 글로만 설명했음 (2026-08-18 감사에서
+    // 1-5: 거꾸로 복원 시뮬 — 전엔 이 알고리즘을 글로만 설명했음 (2026-08-18 감사에서
     //   "뒤→앞 재구성 스텝 + 트레이스 시뮬" 로 지적된 자리). 실제로 돌려서 보여준 뒤 아래에서 정리.
     {
       type: "reveal",
       narr: t(E,
-        "The last key we can read straight off S. Now let's actually walk backwards and recover every key.",
-        "마지막 키는 S 에서 바로 읽을 수 있어요. 이제 실제로 거꾸로 훑으며 나머지 키도 찾아봐요."),
+        "Nothing flips after the LAST keystroke, so it lands unchanged — the last key is just S[N-1]. Now let's walk backwards and recover every key.",
+        "마지막 키 뒤에는 더 이상 뒤집힘이 없어요.\n그래서 그 키는 그대로 놓여요 — 마지막 키는 곧 S[N-1] 이에요.\n여기서부터 거꾸로 훑으며 나머지 키도 찾아봐요."),
       content: (<BackwardSim E={E} />),
     },
 
