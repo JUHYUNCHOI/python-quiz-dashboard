@@ -187,6 +187,46 @@ MOOMO`}
         </div>
       ),
     },
+
+    /* 1-7: "그럼 왜 굳이 YES 를 물어보지?" — 미션 박스엔 '항상 가능' 이라고만 적혀 있고
+       왜 항상 가능한지가 어디에도 없었다 (선생님 2026-09-03 이 직접 물음). */
+    {
+      type: "reveal",
+      narr: t(E,
+        "The problem asks \"can she type it?\" — and the answer is always YES. Why?",
+        "문제는 \"칠 수 있냐\" 고 물어요. 그런데 답은 늘 YES 예요. 왜 그럴까요?"),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, color: "#15803d", marginBottom: 12, textWrap: "balance" }}>
+            ✅ {t(E, "Why the answer is always YES", "왜 답이 항상 YES 일까?")}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 480, margin: "0 auto" }}>
+            {[
+              t(E, <><b>Length matches by itself.</b><br />M and O each append exactly one letter.<br />So N keystrokes always give an N-letter screen.</>,
+                   <><b>길이는 저절로 맞아요.</b><br />M 도 O 도 한 글자씩만 붙여요.<br />그래서 키를 N 번 치면 화면도 딱 N 글자예요.</>),
+              t(E, <><b>Each key is forced.</b><br />Going backwards, the O-parity behind position i is already fixed.<br />Un-flip S[i] by it and you get <b>one</b> candidate — no choice to make.</>,
+                   <><b>각 자리의 키는 강제돼요.</b><br />거꾸로 가면 i 번 자리 뒤쪽의 O 홀짝은 이미 정해져 있어요.<br />S[i] 를 그만큼 되돌리면 후보가 <b>하나</b>뿐이에요. 고를 게 없어요.</>),
+              t(E, <><b>That one candidate is always typeable.</b><br />The keyboard has both M and O.<br />So we can never get stuck → the answer is YES, every time.</>,
+                   <><b>그 하나는 언제나 칠 수 있는 키예요.</b><br />키보드에 M 과 O 가 둘 다 있으니까요.<br />그래서 막힐 데가 없어요 → 답은 늘 YES 예요.</>),
+            ].map((body, i) => (
+              <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 12, padding: "11px 14px" }}>
+                <span style={{ flexShrink: 0, width: 22, height: 22, borderRadius: 999, background: "#16a34a", color: "#fff", fontSize: 12, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</span>
+                <div style={{ fontSize: 13, lineHeight: 1.65, color: "#334155", textWrap: "balance" }}>{body}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, maxWidth: 480, margin: "12px auto 0", background: "#fffbeb", border: "1px dashed #fbbf24",
+            borderRadius: 10, padding: "10px 13px", fontSize: 12.5, lineHeight: 1.7, color: "#92400e", textWrap: "balance" }}>
+            {t(E, <><b>So why does the problem ask at all?</b><br />Because <i>realizing</i> it is always YES is the work.<br />And k splits it: with k=0 you only answer the question, with k=1 you must also build the keystrokes.</>,
+                   <><b>그럼 왜 굳이 물어볼까요?</b><br />항상 YES 라는 걸 <i>알아내는 것</i> 자체가 이 문제가 시키는 일이에요.<br />그리고 k 가 둘로 나눠요 — k=0 이면 답만, k=1 이면 키 입력까지 만들어야 해요.</>)}
+          </div>
+          <div style={{ marginTop: 10, textAlign: "center", fontSize: 12, fontWeight: 700, color: "#7c3aed", textWrap: "balance", wordBreak: "keep-all" }}>
+            {t(E, "Bonus: since nothing is ever a choice, the keystroke string is the ONLY one that works.",
+                   "덤: 고를 게 하나도 없었으니, 답이 되는 키 입력은 그거 하나뿐이에요.")}
+          </div>
+        </div>
+      ),
+    },
   ];
 }
 
@@ -208,5 +248,56 @@ export function makeMooin4Ch2(E, lang = "py") {
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
       };
     })(),
+
+    /* 짜다가 실제로 걸리는 세 군데. 선생님이 직접 겪은 것들이라 그대로 남긴다
+       (선생님 2026-09-03: "내가 했던 실수나 그런것들에 대한 설명도 들어가 있었으면 좋겠어"). */
+    {
+      type: "reveal",
+      label: t(E, "Traps", "실수"),
+      narr: t(E,
+        "Three places people actually get this wrong. Each one still compiles and still looks right.",
+        "짜다 보면 실제로 걸리는 곳 세 군데예요. 셋 다 컴파일도 되고 그럴듯해 보여요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, color: "#b91c1c", marginBottom: 12, textWrap: "balance" }}>
+            ⚠️ {t(E, "Three traps", "여기서 자주 틀려요")}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 520, margin: "0 auto" }}>
+            {[
+              {
+                bad: "if (S[i] == 'O') count++;",
+                good: "if (key[i] == 'O') count++;",
+                why: t(E, <>Count the <b>keys we recovered</b>, not the letters on screen.<br />A screen O can come from an M that got flipped.</>,
+                         <><b>화면 글자</b>가 아니라 <b>방금 알아낸 친 키</b>를 세야 해요.<br />화면의 O 는 M 이 뒤집혀 보이는 걸 수도 있거든요.</>),
+              },
+              {
+                bad: t(E, "if (key == S) YES else NO", "if (key == S) YES 아니면 NO"),
+                good: 'cout << "YES"',
+                why: t(E, <>The answer is <b>always YES</b> — there is nothing to test.<br />Whether the keys match S has nothing to do with it.</>,
+                         <>답은 <b>항상 YES</b> 예요. 판정할 게 없어요.<br />친 키가 S 와 같은지는 아무 상관이 없고요.</>),
+              },
+              {
+                bad: t(E, "a leftover debug print", "디버깅용으로 넣어둔 출력"),
+                good: t(E, "delete it before submitting", "제출 전에 지우기"),
+                why: t(E, <>One stray blank line per test and the judge marks it wrong,<br />even though the algorithm is perfect.</>,
+                         <>케이스마다 빈 줄이 하나씩 더 나가면 그걸로 오답이에요.<br />알고리즘이 완벽해도요.</>),
+              },
+            ].map((x, i) => (
+              <div key={i} style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 12, padding: "11px 14px" }}>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 7 }}>
+                  <span style={{ flexShrink: 0, width: 20, height: 20, borderRadius: 999, background: "#dc2626", color: "#fff", fontSize: 11.5, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</span>
+                  <code style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, fontWeight: 800, color: "#b91c1c",
+                    background: "#fff", border: "1px solid #fca5a5", borderRadius: 6, padding: "2px 7px", textDecoration: "line-through" }}>{x.bad}</code>
+                  <span style={{ color: "#94a3b8", fontWeight: 800 }}>→</span>
+                  <code style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, fontWeight: 800, color: "#15803d",
+                    background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 6, padding: "2px 7px" }}>{x.good}</code>
+                </div>
+                <div style={{ fontSize: 12.5, lineHeight: 1.7, color: "#7f1d1d", textWrap: "balance" }}>{x.why}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ),
+    },
   ];
 }
