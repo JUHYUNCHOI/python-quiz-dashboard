@@ -264,7 +264,8 @@ export function PhotoUpdateSim({ E }) {
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
 
       {!isCount ? (
-        <div style={{ display: "flex", justifyContent: "center", marginTop: 6 }}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start",
+          gap: 12, flexWrap: "wrap", marginTop: 6 }}>
           <div style={{ width: ROW_W, position: "relative", paddingTop: PAD_TOP }}>
             {/* 말풍선 */}
             <div style={{ position: "absolute", top: PAD_TOP - 8, left: bLeft, width: BW, transform: "translateY(-100%)", zIndex: 7 }}>
@@ -302,15 +303,19 @@ export function PhotoUpdateSim({ E }) {
               </div>
             ))}
 
-            {/* edge 스텝 — 위치마다 장수가 다르다는 표. 코드의 max/min 이 여기서 나옴. */}
-            {isEdge && (() => {
+          </div>
+
+          {/* edge 스텝 — 위치마다 장수가 다르다는 표. 코드의 max/min 이 여기서 나옴.
+              격자 '아래' 가 아니라 '옆' 에 둔다 — 아래에 두면 한 화면에 안 들어감
+              (선생님 2026-09-03: "한 화면에 다 안보여"). */}
+          {isEdge && (() => {
               const W = N - K + 1;
               const cnt = (rr, cc) =>
                 Math.max(0, Math.min(rr, W) - Math.max(1, rr - K + 1) + 1) *
                 Math.max(0, Math.min(cc, W) - Math.max(1, cc - K + 1) + 1);
               const rows = [[4, 4], [2, 4], [1, 4], [1, 1]];
               return (
-                <div style={{ marginTop: 14, padding: "11px 13px", background: "#fff7ed",
+                <div style={{ width: 236, marginTop: PAD_TOP, padding: "10px 11px", background: "#fff7ed",
                   border: "1.5px solid #fdba74", borderRadius: 11 }}>
                   <div style={{ fontSize: 11.5, fontWeight: 800, color: "#9a3412", marginBottom: 7, textAlign: "center" }}>
                     {t(E, "the count depends on where the cow is", "소가 어디 있냐에 따라 장수가 달라져요")}
@@ -339,7 +344,6 @@ export function PhotoUpdateSim({ E }) {
                 </div>
               );
             })()}
-          </div>
         </div>
       ) : (
         <div style={{ maxWidth: 540, margin: "8px auto 0" }}>
@@ -370,31 +374,36 @@ export function PhotoUpdateSim({ E }) {
    결론만 있고 왜가 없었다. 학생 머릿속 질문: "다른 사진이 최고였으면 어떡하지?"
    ═══════════════════════════════════════════════════════════════ */
 export function PhotoMonotoneSim({ E }) {
-  /* 사진 4장의 점수가 업데이트마다 어떻게 변하는지. 바뀌는 건 늘 일부. */
+  /* 사진 4장의 점수가 업데이트마다 어떻게 변하는지. 바뀌는 건 늘 한 장.
+     ⚠️ 바뀐 칸은 '옛값 → 새값' 을 칸 안에 같이 보여줘야 한다.
+        새값만 보여주면 말풍선의 "최고 7 → 9" 의 7 이 화면 어디에도 없어서
+        학생이 뭘 보고 있는지 모른다 (선생님 2026-09-03: "이거 뭐하는건지 모르겠어"). */
   const FRAMES = [
-    { scores: [3, 7, 5, 2], changed: [],     note: "start" },
-    { scores: [3, 9, 5, 2], changed: [1],    note: "u1" },
-    { scores: [8, 9, 5, 2], changed: [0],    note: "u2" },
-    { scores: [8, 9, 5, 6], changed: [3],    note: "u3" },
+    { scores: [3, 7, 5, 2], changed: -1 },
+    { scores: [3, 9, 5, 2], changed: 1 },
+    { scores: [8, 9, 5, 2], changed: 0 },
+    { scores: [8, 9, 5, 6], changed: 3 },
   ];
-  const steps = [{ kind: "intro" }, { kind: "u1" }, { kind: "u2" }, { kind: "u3" }, { kind: "why" }];
+  const steps = [{ kind: "ask" }, { kind: "u1" }, { kind: "u2" }, { kind: "u3" }, { kind: "why" }];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
-  const fi = s.kind === "intro" ? 0 : s.kind === "why" ? 3 : ["u1", "u2", "u3"].indexOf(s.kind) + 1;
+  const fi = s.kind === "ask" ? 0 : s.kind === "why" ? 3 : ["u1", "u2", "u3"].indexOf(s.kind) + 1;
   const f = FRAMES[fi];
   const best = Math.max(...f.scores);
   const prevBest = fi === 0 ? null : Math.max(...FRAMES[fi - 1].scores);
+  const ci = f.changed;                                   // 이번에 바뀐 사진 (없으면 −1)
+  const oldOf = (i) => (fi > 0 && i === ci ? FRAMES[fi - 1].scores[i] : null);
 
   const say =
-    s.kind === "intro" ? t(E,
-      <>Four photos, with their scores. The best right now is <b>{best}</b>.<br />Watch what happens to the best as updates come in.</>,
-      <>사진 4장과 그 점수예요. 지금 최고는 <b>{best}</b>.<br />업데이트가 들어올 때 최고가 어떻게 되는지 봐요.</>)
+    s.kind === "ask" ? t(E,
+      <>Four photos and their scores. After every update we must report the <b>best</b> one.<br />Re-adding every photo each time is safe but slow.<br /><b>Do we really have to look at all of them?</b></>,
+      <>사진 4장과 그 점수예요. 업데이트가 올 때마다 <b>최고</b>를 알려줘야 해요.<br />매번 전부 다시 더하면 확실하지만 느려요.<br /><b>정말 전부 다시 봐야 할까요?</b></>)
     : s.kind === "why" ? t(E,
-      <>Every score only ever <b>went up</b> — never down. Beauty only increases, so a photo's sum can't shrink.<br />So the new best is either the <b>old best</b>, or one of the <b>photos that just changed</b>.<br />Nothing else can sneak into first place. That's why we only compare the changed ones.</>,
-      <>점수는 전부 <b>올라가기만</b> 했어요 — 내려간 적이 없죠. 아름다움이 커지기만 하니 사진 합도 줄 수가 없어요.<br />그러니 새 최고는 <b>예전 최고</b>이거나, <b>방금 바뀐 사진</b> 중 하나예요.<br />다른 사진이 갑자기 1등이 될 수는 없어요. 그래서 바뀐 것만 견줘도 되는 거예요.</>)
+      <>Three updates, and every score only ever went <b>up</b> — never down.<br />So the new best is the <b>old best</b>, or the <b>photo that just changed</b>.<br />A photo that sat still can never take first place.</>,
+      <>세 번 다 봤어요. 점수는 <b>올라가기만</b> 했어요 — 내려간 적이 없죠.<br />그러니 새 최고는 <b>예전 최고</b> 아니면 <b>방금 바뀐 사진</b>, 둘 중 하나예요.<br />가만히 있던 사진이 1등이 될 수는 없어요.</>)
     : t(E,
-      <>Photo <b>{f.changed[0] + 1}</b> went up. Best: <b>{prevBest}</b> → <b>{best}</b>.<br />The untouched photos didn't move at all.</>,
-      <><b>{f.changed[0] + 1}번</b> 사진이 올라갔어요. 최고: <b>{prevBest}</b> → <b>{best}</b>.<br />손대지 않은 사진들은 꿈쩍도 안 했죠.</>);
+      <>Only photo <b>{ci + 1}</b> moved: <b>{oldOf(ci)} → {f.scores[ci]}</b>. The other three sat still.<br />Best: <b>{prevBest}</b> → <b>{best}</b>.</>,
+      <><b>{ci + 1}번</b> 사진만 움직였어요 — <b>{oldOf(ci)} → {f.scores[ci]}</b>.<br />나머지 셋은 가만히 있어요. 최고: <b>{prevBest}</b> → <b>{best}</b>.</>);
 
   return (
     <div style={{ padding: 16 }}>
@@ -408,16 +417,25 @@ export function PhotoMonotoneSim({ E }) {
       <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 12 }}>
         {f.scores.map((v, i) => {
           const isBest = v === best;
-          const justChanged = f.changed.includes(i);
+          const justChanged = i === ci;
+          const old = oldOf(i);
           return (
             <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-              <div style={{ width: 58, height: 58, borderRadius: 11, display: "flex", alignItems: "center",
-                justifyContent: "center", fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 21,
+              <div style={{ width: justChanged ? 92 : 58, height: 58, borderRadius: 11, display: "flex",
+                alignItems: "center", justifyContent: "center", gap: 5,
+                fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 21,
                 background: justChanged ? "#fed7aa" : isBest ? "#dcfce7" : "#fff",
                 border: `2.5px solid ${justChanged ? "#ea580c" : isBest ? "#16a34a" : "#e2e8f0"}`,
-                color: "#1f2937", transition: "all .15s" }}>{v}</div>
+                color: "#1f2937", transition: "all .15s" }}>
+                {/* 바뀐 사진은 옛값 → 새값 을 같이 — 그래야 '올라가기만 한다' 가 눈에 보인다 */}
+                {justChanged && <span style={{ fontSize: 15, color: "#c2410c", opacity: .65 }}>{old}</span>}
+                {justChanged && <span style={{ fontSize: 13, color: "#c2410c" }}>→</span>}
+                <span>{v}</span>
+              </div>
               <div style={{ fontSize: 10, fontWeight: 800, color: justChanged ? "#ea580c" : isBest ? "#16a34a" : "#94a3b8" }}>
-                {justChanged ? t(E, "changed", "바뀜") : isBest ? t(E, "best", "최고") : `${i + 1}`}
+                {justChanged ? t(E, `changed +${v - old}`, `바뀜 +${v - old}`)
+                  : isBest ? t(E, "best", "최고")
+                  : (s.kind === "ask" ? `${i + 1}` : t(E, "unchanged", "가만히"))}
               </div>
             </div>
           );

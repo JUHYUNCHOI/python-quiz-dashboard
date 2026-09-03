@@ -45,7 +45,7 @@ export const SOLUTION_CODE = [
   "    else:",
   "        return half + half[-2::-1]",
   "",
-  "K, N = map(int, input().split())",
+  "N, K = map(int, input().split())",
   "print(nth_palindrome(N, K))",
 ];
 
@@ -133,8 +133,8 @@ export function makeMcc19PalCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. Input is one line: k then N. Output is the digit string (keep the leading zeros).",
-        "입력 형식과 공식 예제를 봐요. 입력은 한 줄에 k 그리고 N. 출력은 숫자 문자열 (앞자리 0 그대로)."),
+        "Read the input format and the official example. Input is one line: n then k. Output is the digit string (keep the leading zeros).",
+        "입력 형식과 공식 예제를 봐요. 입력은 한 줄에 n 그리고 k. 출력은 숫자 문자열 (앞자리 0 그대로)."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -142,9 +142,9 @@ export function makeMcc19PalCh1(E) {
               📥 {t(E, "Input", "입력")}
             </div>
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              <div>• {t(E, "One line: ", "한 줄: ")}<b>k</b> <b>N</b></div>
+              <div>• {t(E, "One line: ", "한 줄: ")}<b>n</b> <b>k</b></div>
+              <div>• <b>n</b> — {t(E, "which entry to print (1-indexed)", "몇 번째 항목인지 (1-indexed)")}</div>
               <div>• <b>k</b> — {t(E, "the digits are 0…k−1", "쓸 수 있는 숫자는 0…k−1")}</div>
-              <div>• <b>N</b> — {t(E, "which entry to print (1-indexed)", "몇 번째 항목인지 (1-indexed)")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: 2 ≤ k ≤ 10. Output: the palindrome digit string.", "제약: 2 ≤ k ≤ 10. 출력: 회문 숫자 문자열.")}
@@ -154,7 +154,7 @@ export function makeMcc19PalCh1(E) {
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", ...KA }}>
             <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 120 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
-              <div>3 7</div>
+              <div>7 3</div>
             </div>
             <div style={{ background: "#0f172a", color: "#c4b5fd", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.7, minWidth: 90 }}>
               <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>

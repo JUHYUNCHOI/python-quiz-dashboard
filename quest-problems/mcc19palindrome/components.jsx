@@ -224,7 +224,7 @@ const FULL_PY = [
   "    else:",
   "        return half + half[-2::-1]",
   "",
-  "K, N = map(int, input().split())",
+  "N, K = map(int, input().split())",
   "print(nth_palindrome(N, K))",
 ];
 
@@ -241,8 +241,8 @@ const FULL_CPP = [
   "}",
   "",
   "int main() {",
-  "    long long K, N;",
-  "    cin >> K >> N;",
+  "    long long N, K;",
+  "    cin >> N >> K;",
   "",
   "    // count of length-l palindromes = K^ceil(l/2)",
   "    // walk lengths, adding counts, until we reach N",
