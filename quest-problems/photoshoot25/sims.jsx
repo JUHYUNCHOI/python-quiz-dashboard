@@ -193,7 +193,7 @@ export function PhotoUpdateSim({ E }) {
   const isCount = s.kind === "count" || s.kind === "done";
 
   const ROW_W = gridW(N);
-  const GUT = 22, HDR = 16;      // 행 번호(왼쪽) · 열 번호(위) 자리
+  const GUT = 28, HDR = 20;      // 행 번호(왼쪽) · 열 번호(위) 자리 (격자와 붙지 않게 넉넉히)
   const AXIS = { fontFamily: "'JetBrains Mono',monospace", fontSize: 10.5, fontWeight: 800, lineHeight: 1 };
   const PAD_TOP = 96;
 
@@ -284,12 +284,12 @@ export function PhotoUpdateSim({ E }) {
             {/* 액자 오버레이 — 격자가 GUT(행 번호) · HDR(열 번호) 만큼 밀려 있다 */}
             {frames.map((f, k) => (
               <div key={k} style={{ position: "absolute", zIndex: 4 + k, pointerEvents: "none",
-                top: PAD_TOP + HDR + (f.ti - 1) * PITCH - 2, left: GUT + (f.tj - 1) * PITCH - 2,
+                top: PAD_TOP + HDR + 5 + (f.ti - 1) * PITCH - 2, left: GUT + (f.tj - 1) * PITCH - 2,
                 width: FRAME + 4, height: FRAME + 4,
                 border: `3px solid ${f.col}`, borderRadius: 9, boxShadow: `0 0 0 3px ${f.col}22` }}>
                 {/* 액자가 1행에 붙어 있으면 이름표를 위에 달 자리가 없다 (열 번호·말풍선과 겹침)
                     → 그럴 때만 액자 아래로 내린다. */}
-                <div style={{ position: "absolute", ...(f.ti === 1 ? { bottom: -11 } : { top: -11 }),
+                <div style={{ position: "absolute", ...(f.ti === 1 ? { top: "100%", marginTop: 5 } : { top: -11 }),
                   left: 6, fontSize: 10, fontWeight: 800,
                   color: "#fff", background: f.col, borderRadius: 999, padding: "1px 7px", whiteSpace: "nowrap" }}>
                   {f.label}
@@ -298,7 +298,7 @@ export function PhotoUpdateSim({ E }) {
             ))}
 
             {/* 열 번호 — 소의 열은 진하게 (선생님 2026-09-03: "grid에 index를 써놔야지") */}
-            <div style={{ display: "flex", gap: GAP, height: HDR, marginLeft: GUT, alignItems: "flex-end" }}>
+            <div style={{ display: "flex", gap: GAP, height: HDR, marginLeft: GUT, marginBottom: 5, alignItems: "flex-end" }}>
               {Array.from({ length: N }).map((_, ci) => (
                 <div key={ci} style={{ width: CELL, textAlign: "center", ...AXIS,
                   color: ci + 1 === c ? "#ea580c" : "#94a3b8" }}>{ci + 1}</div>
@@ -307,7 +307,7 @@ export function PhotoUpdateSim({ E }) {
 
             {Array.from({ length: N }).map((_, ri) => (
               <div key={ri} style={{ display: "flex", gap: GAP, marginBottom: GAP, alignItems: "center" }}>
-                <div style={{ width: GUT, textAlign: "right", paddingRight: 6, ...AXIS,
+                <div style={{ width: GUT, textAlign: "right", paddingRight: 10, ...AXIS,
                   color: ri + 1 === r ? "#ea580c" : "#94a3b8" }}>{ri + 1}</div>
                 {Array.from({ length: N }).map((_, ci) => {
                   const R = ri + 1, Cc = ci + 1;
@@ -334,7 +334,7 @@ export function PhotoUpdateSim({ E }) {
                 Math.max(0, Math.min(rr, W) - Math.max(1, rr - K + 1) + 1) *
                 Math.max(0, Math.min(cc, W) - Math.max(1, cc - K + 1) + 1);
               const rows = [[4, 4], [2, 4], [1, 4], [1, 1]];
-              const box = { width: 220, marginTop: PAD_TOP, padding: "10px 11px",
+              const box = { width: 216, marginTop: PAD_TOP, padding: "10px 11px",
                 background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 11 };
               const head = { fontSize: 11.5, fontWeight: 800, color: "#9a3412", marginBottom: 7, textAlign: "center" };
               /* 글자 색을 역할별로 나눈다 (선생님 2026-09-03: "글자 색을 제발 다르게 하자")
@@ -354,6 +354,14 @@ export function PhotoUpdateSim({ E }) {
                 return (
                   <div style={box}>
                     <div style={head}>{t(E, "where max / min come from", "max · min 이 나온 자리")}</div>
+
+                    {/* "인덱스는 0부터 아니냐" 는 학생이 반드시 묻는다 (선생님 2026-09-03 도 물음).
+                        이 문제는 입력 r, c 가 1 부터 오고 코드도 배열을 N+1 로 잡아 1 부터 쓴다. */}
+                    <div style={{ ...why, background: "#fff", border: "1px dashed #cbd5e1",
+                      borderRadius: 6, padding: "5px 7px", marginBottom: 7 }}>
+                      {t(E, <>Note: here we count from <b style={{ color: "#1e3a8a" }}>1</b>, not 0 — the input gives (r, c) starting at 1, so the code makes the array one bigger and leaves slot 0 empty. That's the <b style={{ color: "#c2410c" }}>1</b> inside max( ).</>,
+                            <>참고: 여기선 0 이 아니라 <b style={{ color: "#1e3a8a" }}>1</b> 부터 세요.<br />입력이 (r, c) 를 1 부터 주거든요.<br />그래서 배열을 한 칸 크게 잡고 0번 자리는 비워둬요.<br />max( ) 안의 그 <b style={{ color: "#c2410c" }}>1</b> 이 이거예요.</>)}
+                    </div>
 
                     <div style={why}>{t(E, <>A photo whose top-left row is <b style={{ color: "#1e3a8a" }}>i</b> covers rows</>,
                                           <>왼쪽위가 <b style={{ color: "#1e3a8a" }}>i</b> 행인 사진은 이 행들을 덮어요</>)}</div>
