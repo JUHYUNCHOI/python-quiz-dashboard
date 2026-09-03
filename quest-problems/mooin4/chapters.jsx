@@ -150,8 +150,8 @@ MOOMO`}
     {
       type: "reveal",
       narr: t(E,
-        "Nothing flips after the LAST keystroke, so it lands unchanged — the last key is just S[N-1]. Now let's walk backwards and recover every key.",
-        "마지막 키 뒤에는 더 이상 뒤집힘이 없어요.\n그래서 그 키는 그대로 놓여요 — 마지막 키는 곧 S[N-1] 이에요.\n여기서부터 거꾸로 훑으며 나머지 키도 찾아봐요."),
+        "Now walk backwards through S and recover every key.",
+        "이제 S 를 거꾸로 훑으며 친 키를 하나씩 찾아봐요."),
       content: (<BackwardSim E={E} />),
     },
 

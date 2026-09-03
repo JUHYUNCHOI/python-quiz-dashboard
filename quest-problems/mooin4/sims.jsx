@@ -157,12 +157,12 @@ export function BackwardSim({ E }) {
     : s.k === "step" ? (
       cur.flips === 0
         ? t(E,
-            <>Position <b>{cur.i}</b>: no O typed after it yet,<br />so what we see <b>is</b> what was typed → <b>{cur.key}</b>.{cur.becameO ? <><br />It is an O, so from now on later letters are flipped.</> : null}</>,
-            <><b>{cur.i}</b>번 자리예요. 뒤쪽에 O 가 아직 짝수 개라<br />보이는 글자가 <b>그대로</b> 친 키예요 → <b>{cur.key}</b>.{cur.becameO ? <><br />이게 O 니까 앞쪽 글자들은 이제 뒤집혀 보여요.</> : null}</>)
+            <><b>{cur.i}</b>번 자리 — O 가 뒤에 <b>짝수</b> 개.<br />보이는 그대로가 친 키 → <b>{cur.key}</b>{cur.becameO ? <><br />O 를 쳤으니 앞쪽은 이제 뒤집혀 보여요.</> : null}</>,
+            <><b>{cur.i}</b>번 자리 — 뒤쪽 O 가 <b>짝수</b> 개.<br />보이는 그대로가 친 키 → <b>{cur.key}</b>{cur.becameO ? <><br />O 를 쳤으니 앞쪽은 이제 뒤집혀 보여요.</> : null}</>)
         : t(E,
-            <>Position <b>{cur.i}</b>: an odd number of O's come after it,<br />so the screen shows it flipped.<br />Un-flip <b>{cur.seen}</b> → the real key is <b>{cur.key}</b>.{cur.becameO ? <><br />That is an O too, so the parity flips back.</> : null}</>,
+            <><b>{cur.i}</b>번 자리 — O 가 뒤에 <b>홀수</b> 개.<br />화면의 <b>{cur.seen}</b> 를 되돌리면 친 키는 <b>{cur.key}</b>{cur.becameO ? <><br />이것도 O 라 홀짝이 다시 바뀌어요.</> : null}</>,
             /* M 은 받침이 있어 "을", O 는 "를" — 글자가 바뀌니 조사도 같이 */
-            <><b>{cur.i}</b>번 자리예요. 뒤쪽 O 가 홀수 개라<br />화면엔 뒤집혀 보여요.<br /><b>{cur.seen}</b>{cur.seen === "M" ? " 을" : " 를"} 되돌리면 진짜 친 키는 <b>{cur.key}</b>.{cur.becameO ? <><br />이것도 O 라 홀짝이 다시 바뀌어요.</> : null}</>))
+            <><b>{cur.i}</b>번 자리 — 뒤쪽 O 가 <b>홀수</b> 개.<br />화면의 <b>{cur.seen}</b>{cur.seen === "M" ? " 을" : " 를"} 되돌리면 친 키는 <b>{cur.key}</b>{cur.becameO ? <><br />이것도 O 라 홀짝이 다시 바뀌어요.</> : null}</>))
     : t(E,
       <>All keys recovered: <b>{keys.join("")}</b>.<br />We only ever needed <b>one pass from the back</b>,<br />counting whether the O's so far are odd or even.</>,
       <>친 키를 다 찾았어요. <b>{keys.join("")}</b> 예요.<br /><b>뒤에서 앞으로 한 번</b> 훑기만 하면 돼요.<br />지금까지 본 O 가 홀수인지 짝수인지만 세면서요.</>);
@@ -190,14 +190,6 @@ export function BackwardSim({ E }) {
                   fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>?</div>)}
           </div>
         </div>
-        {cur && (
-          <div style={{ padding: "9px 13px", borderRadius: 10, background: "#f5f3ff",
-            border: "1.5px solid #c4b5fd", fontSize: 12.5, color: "#5b21b6", lineHeight: 1.8,
-            textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
-            {t(E, <>O's typed after this spot: <b>{cur.flips === 0 ? "even" : "odd"}</b><br />screen shows <b>{cur.seen}</b> → real key <b>{cur.key}</b></>,
-                  <>이 자리보다 뒤에 있는 O 의 개수: <b>{cur.flips === 0 ? "짝수" : "홀수"}</b><br />화면엔 <b>{cur.seen}</b>, 실제로 친 키는 <b>{cur.key}</b></>)}
-          </div>
-        )}
       </div>
       </StepFade>
       <div style={{ marginTop: 20 }}>
