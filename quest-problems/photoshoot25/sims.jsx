@@ -154,7 +154,7 @@ export function PhotoWindowSim({ E }) {
    PhotoUpdateSim — 이 문제의 진짜 핵심.
    한 칸이 커지면 *그 칸을 품은 창* 만 점수가 바뀐다.
    그리고 그 창들의 '왼쪽위 좌표' 가 마침 직사각형을 이룬다:
-       max(1, r−K+1) ≤ i ≤ min(r, W)   (열도 같은 식)
+       max(0, r−K+1) ≤ i ≤ min(r, W−1)   (열도 같은 식)
    → 매번 전부 더할 필요 없이 그 직사각형만 += delta.
    ═══════════════════════════════════════════════════════════════ */
 export function PhotoUpdateSim({ E }) {
@@ -172,8 +172,8 @@ export function PhotoUpdateSim({ E }) {
     // (선생님 2026-09-03: "각 단계별로 시뮬 보여주면서 말풍선 설명 안되나?")
     { kind: "c1" },      // 사진 한 장이 덮는 행 → i ≤ r ≤ i+K−1
     { kind: "c2" },      // 담는 사진의 '제일 위'·'제일 아래' → r−K+1 ≤ i ≤ r
-    { kind: "c3" },      // 소가 (1,1) — 후보 −1·0 은 들판 밖 → max(1, …)
-    { kind: "c4" },      // 소가 (8,8) — 후보 7·8 은 들판 밖 → min(r, W)
+    { kind: "c3" },      // 소가 (0,0) — 후보 −2·−1 은 들판 밖 → max(0, …)
+    { kind: "c4" },      // 소가 (7,7) — 후보 6·7 은 들판 밖 → min(r, W−1)
     { kind: "done" },
   ];
   const ts = useTraceStep(steps);
@@ -181,6 +181,11 @@ export function PhotoUpdateSim({ E }) {
 
   /* 소 위치 — edge·clamp 스텝만 모서리로 옮겨서 "K×K 장" 이 안 되는 걸 보게 함
      (선생님 2026-08-30: 코드의 max/min 이 왜 있는지 알 근거가 없었음) */
+  /* ⚠️ 내부 좌표(r, c, ti, tj)는 1-based 로 둔다 — 액자 위치 계산이 전부 여기 걸려 있음.
+     화면에 나가는 숫자만 z() 로 0-based 로 옮긴다.
+     (선생님 2026-09-03: "인덱스 0으로 계산해서 r--, c--로" → 코드가 0-based 가 됐으니
+      시뮬 번호도 코드와 같아야 함) */
+  const z = (x) => x - 1;
   const isClamp = ["c1", "c2", "c3", "c4"].includes(s.kind);
   const isEdge = s.kind === "edge" || isClamp;
   // 판마다 소를 옮긴다: 가운데(4,4) → 왼쪽위 모서리(1,1) → 오른쪽아래 모서리(8,8)
@@ -198,21 +203,31 @@ export function PhotoUpdateSim({ E }) {
   : s.kind === "two"  ? [{ ti: 2, tj: 2, col: GREEN, label: t(E, "photo 1", "사진 1") },
                          { ti: 4, tj: 4, col: BLUE,  label: t(E, "photo 2", "사진 2") }]
   : s.kind === "miss" ? [{ ti: 5, tj: 5, col: RED,   label: t(E, "photo ✗", "사진 ✗") }]
-  : s.kind === "c1"   ? [{ ti: r - K + 1, tj: c - K + 1, col: GREEN, label: `i = ${r - K + 1}` }]
-  : s.kind === "c2"   ? [{ ti: r - K + 1, tj: c - K + 1, col: GREEN, label: t(E, `highest  i = ${r - K + 1}`, `제일 위  i = ${r - K + 1}`) },
-                         { ti: r,         tj: c,         col: BLUE,  label: t(E, `lowest  i = ${r}`, `제일 아래  i = ${r}`) }]
+  : s.kind === "c1"   ? [{ ti: r - K + 1, tj: c - K + 1, col: GREEN, label: `i = ${z(r - K + 1)}` }]
+  : s.kind === "c2"   ? [{ ti: r - K + 1, tj: c - K + 1, col: GREEN, label: t(E, `highest  i = ${z(r - K + 1)}`, `제일 위  i = ${z(r - K + 1)}`) },
+                         { ti: r,         tj: c,         col: BLUE,  label: t(E, `lowest  i = ${z(r)}`, `제일 아래  i = ${z(r)}`) }]
   : s.kind === "edge" ? [{ ti: 1, tj: 1, col: GREEN, label: t(E, "the only one", "이거 하나뿐") }]
-  : isClamp           ? [{ ti: Math.min(Math.max(1, r - K + 1), N - K + 1),
-                           tj: Math.min(Math.max(1, c - K + 1), N - K + 1),
-                           col: GREEN,
-                           label: `i = ${Math.min(Math.max(1, r - K + 1), N - K + 1)}` }]
+  /* c3·c4 — 잘라낸 뒤의 액자(초록)와, 규칙대로면 나오지만 들판 밖으로 삐져나가는 액자(빨강 점선).
+     삐져나가는 걸 실제로 그려야 왜 자르는지가 바로 보인다
+     (선생님 2026-09-03: "그냥 저 3*3이 바운더리에 넘어가게끔 그리면 왜 min을 구하는지 알수 있지 않을까?") */
+  : isClamp           ? (() => {
+      const W1 = N - K + 1;
+      const okI = Math.min(Math.max(1, r - K + 1), W1);
+      const badI = s.kind === "c3" ? r - K + 1 : r;      // 자르기 전의 끝값
+      return [
+        { ti: okI, tj: okI, col: GREEN, label: t(E, `fits — i = ${z(okI)}`, `들어감 — i = ${z(okI)}`) },
+        { ti: badI, tj: badI, col: RED, dashed: true,
+          label: t(E, `sticks out — i = ${z(badI)} ✗`, `삐져나감 — i = ${z(badI)} ✗`) },
+      ];
+    })()
   : [];
   const isCount = s.kind === "count" || s.kind === "done";
 
   const ROW_W = gridW(N);
-  const GUT = 28, HDR = 20;      // 행 번호(왼쪽) · 열 번호(위) 자리 (격자와 붙지 않게 넉넉히)
+  const GUT = 28, HDR = 20, LEG = 18;   // 행 번호(왼쪽) · 열 번호(위) · 액자 범례(맨 위) 자리
   const AXIS = { fontFamily: "'JetBrains Mono',monospace", fontSize: 10.5, fontWeight: 800, lineHeight: 1 };
-  const PAD_TOP = 96;
+  // c3 은 액자가 격자 위로 삐져나가서 말풍선과 부딪힌다 → 그 단계만 더 띄움
+  const PAD_TOP = s.kind === "c3" ? 196 : isClamp ? 126 : 96;
 
   const cellFrame = (R, Cc) => {
     for (const f of frames) if (R >= f.ti && R < f.ti + K && Cc >= f.tj && Cc < f.tj + K) return f;
@@ -221,8 +236,8 @@ export function PhotoUpdateSim({ E }) {
 
   const bubble =
     s.kind === "intro" ? t(E,
-        <>Cow <b>({r},{c})</b> got prettier. Only the <b>3×3 photos that contain it</b> change. How many is that?</>,
-        <>소 <b>({r},{c})</b> 가 예뻐졌어요. <b>이 소가 담긴 3×3 사진</b>만 점수가 바뀝니다. 몇 장일까요?</>)
+        <>Cow <b>({z(r)},{z(c)})</b> got prettier. Only the <b>3×3 photos that contain it</b> change. How many is that?</>,
+        <>소 <b>({z(r)},{z(c)})</b> 가 예뻐졌어요. <b>이 소가 담긴 3×3 사진</b>만 점수가 바뀝니다. 몇 장일까요?</>)
     : s.kind === "one" ? t(E,
         <>A photo is any <b>3×3 cut-out</b>. This one holds the cow → its score changes ✓</>,
         <>사진 = 아무 칸에서나 잘라낸 <b>3×3 조각</b>. 이 사진 안에 소가 있죠 → 이 사진 점수가 바뀝니다 ✓</>)
@@ -233,17 +248,40 @@ export function PhotoUpdateSim({ E }) {
         <>This 3×3 <b>misses the cow</b> → this photo stays the same ✗</>,
         <>이 3×3 은 <b>소를 못 담아요</b> → 이 사진은 그대로 ✗</>)
     : s.kind === "c1" ? t(E,
-        <>So where do <b>max</b> / <b>min</b> come from? A photo with top-left row <b>{r - K + 1}</b> covers rows <b>{r - K + 1} … {r - K + 3}</b> — the cow's row <b>{r}</b> is inside, so it holds the cow.<br />Rule: <b>i ≤ r ≤ i+{K}−1</b></>,
-        <>그럼 <b>max</b> · <b>min</b> 은 어디서 나올까요? 왼쪽위가 <b>{r - K + 1}</b>행인 사진은 <b>{r - K + 1} … {r - K + 3}</b>행을 덮어요 — 소의 행(<b>{r}</b>)이 그 안에 있으니 이 사진은 소를 담아요.<br />규칙: <b>i ≤ r ≤ i+{K}−1</b></>)
+        <>A photo starting at row <b>{z(r - K + 1)}</b> covers rows <b>{z(r - K + 1)}·{z(r - K + 2)}·{z(r)}</b>.<br />
+          The cow's row <b>{z(r)}</b> is inside — so it holds the cow.<br />
+          → <b>i ≤ r ≤ i+{K}−1</b></>,
+        <><b>{z(r - K + 1)}</b>행에서 시작하는 사진은<br />
+          <b>{z(r - K + 1)}·{z(r - K + 2)}·{z(r)}</b>행을 덮어요.<br />
+          소의 행 <b>{z(r)}</b> 이 그 안에 있죠.<br />
+          → <b>i ≤ r ≤ i+{K}−1</b></>)
     : s.kind === "c2" ? t(E,
-        <>Slide it: the <b>highest</b> photo that still holds the cow starts at <b>{r}−{K}+1 = {r - K + 1}</b>, the <b>lowest</b> starts at <b>{r}</b>. Everything between works too.<br />So <b>r−{K}+1 ≤ i ≤ r</b> — that's where r−{K}+1 comes from.</>,
-        <>밀어보면 — 소를 담는 <b>제일 위</b> 사진은 <b>{r}−{K}+1 = {r - K + 1}</b>에서 시작하고, <b>제일 아래</b>는 <b>{r}</b>에서 시작해요. 그 사이도 전부 담아요.<br />그래서 <b>r−{K}+1 ≤ i ≤ r</b> — r−{K}+1 은 여기서 나온 거예요.</>)
+        <>Slide the frame up and down.<br />
+          The highest starts at <b>{z(r - K + 1)}</b>, the lowest at <b>{z(r)}</b>.<br />
+          And <b>{z(r - K + 1)} = {z(r)}−{K}+1</b>.<br />
+          → <b>r−{K}+1 ≤ i ≤ r</b> (same thing, rewritten for i)</>,
+        <>액자를 위아래로 밀어봐요.<br />
+          제일 위는 <b>{z(r - K + 1)}</b>, 제일 아래는 <b>{z(r)}</b> 에서 시작해요.<br />
+          그리고 <b>{z(r - K + 1)} = {z(r)}−{K}+1</b> 이에요.<br />
+          → <b>r−{K}+1 ≤ i ≤ r</b> (같은 식을 i 기준으로)</>)
     : s.kind === "c3" ? t(E,
-        <>Now move the cow to the corner <b>(1,1)</b>. The rule gives i = <b>−1, 0, 1</b> … but rows −1 and 0 don't exist.<br />So we push the bottom up to 1 → <b>max(1, r−{K}+1)</b></>,
-        <>이제 소를 모서리 <b>(1,1)</b> 로 옮겨요. 규칙대로면 i 는 <b>−1, 0, 1</b> … 그런데 −1행·0행은 없어요.<br />그래서 아래쪽을 1 로 올려 잘라요 → <b>max(1, r−{K}+1)</b></>)
+        <>Now the cow sits at <b>(0,0)</b>.<br />
+          By the rule i would be <b>{z(r - K + 1)}</b>,<br />
+          but that frame hangs off the <b>top</b>.<br />
+          → <b>max(0, r−{K}+1)</b></>,
+        <>이번엔 소가 <b>(0,0)</b> 에 있어요.<br />
+          규칙대로면 i 는 <b>{z(r - K + 1)}</b> 인데,<br />
+          그 액자는 <b>위로</b> 삐져나가요.<br />
+          → <b>max(0, r−{K}+1)</b></>)
     : s.kind === "c4" ? t(E,
-        <>The other corner <b>(8,8)</b>: the rule gives i = <b>6, 7, 8</b>, but a 3×3 starting at row 7 or 8 runs off the field. The last one that fits starts at <b>W = {N - K + 1}</b>.<br />So we pull the top down → <b>min(r, W)</b></>,
-        <>반대쪽 모서리 <b>(8,8)</b> 도 봐요. 규칙대로면 i 는 <b>6, 7, 8</b> 인데, 7행·8행에서 시작하는 3×3 은 들판을 넘어가요. 들어가는 마지막은 <b>W = {N - K + 1}</b> 에서 시작해요.<br />그래서 위쪽을 내려 잘라요 → <b>min(r, W)</b></>)
+        <>And at <b>({z(r)},{z(c)})</b>?<br />
+          By the rule i would be <b>{z(r)}</b>,<br />
+          but that frame hangs off the <b>bottom</b>.<br />
+          → <b>min(r, W−1)</b></>,
+        <>이번엔 <b>({z(r)},{z(c)})</b> 이에요.<br />
+          규칙대로면 i 는 <b>{z(r)}</b> 인데,<br />
+          그 액자는 <b>아래로</b> 삐져나가요.<br />
+          → <b>min(r, W−1)</b></>)
     : s.kind === "edge" ? t(E,
         <>Careful — that was a cow in the <b>middle</b>. Move it to a <b>corner</b>: some of those 9 photos would stick out past the field, so they don't exist. Only <b>1</b> photo actually holds it.</>,
         <>조심 — 방금은 <b>한가운데</b> 소였어요. <b>모서리</b>로 옮기면요? 9장 중 몇 장은 들판 밖으로 삐져나가서 <b>있을 수가 없어요</b>. 실제로 담는 사진은 <b>1장</b>뿐이에요.</>)
@@ -302,7 +340,7 @@ export function PhotoUpdateSim({ E }) {
           <div style={{ width: ROW_W + GUT, position: "relative", paddingTop: PAD_TOP }}>
             {/* 말풍선 — 액자 이름표(액자 위 −11px)와 겹치지 않게 HDR 만큼 더 띄운다 */}
             <div style={{ position: "absolute", top: PAD_TOP - 10, left: bLeft, width: BW, transform: "translateY(-100%)", zIndex: 7 }}>
-              <div style={{ padding: "9px 13px", borderRadius: 11, background: "#fff7ed", border: "1.5px solid #fdba74", color: "#9a3412", fontSize: 12.5, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.55, boxShadow: "0 5px 16px rgba(0,0,0,.14)" }}>{bubble}</div>
+              <div style={{ padding: "9px 13px", borderRadius: 11, background: "#fff7ed", border: "1.5px solid #fdba74", color: "#9a3412", fontSize: 12.5, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.7, boxShadow: "0 5px 16px rgba(0,0,0,.14)" }}>{bubble}</div>
               <div style={{ position: "absolute", top: "100%", left: bTail, transform: "translateX(-50%)", width: 0, height: 0, borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: "9px solid #fdba74" }} />
               <div style={{ position: "absolute", top: "100%", left: bTail, transform: "translateX(-50%)", marginTop: -1.7, width: 0, height: 0, borderLeft: "7px solid transparent", borderRight: "7px solid transparent", borderTop: "8px solid #fff7ed" }} />
             </div>
@@ -310,31 +348,39 @@ export function PhotoUpdateSim({ E }) {
             {/* 액자 오버레이 — 격자가 GUT(행 번호) · HDR(열 번호) 만큼 밀려 있다 */}
             {frames.map((f, k) => (
               <div key={k} style={{ position: "absolute", zIndex: 4 + k, pointerEvents: "none",
-                top: PAD_TOP + HDR + 5 + (f.ti - 1) * PITCH - 2, left: GUT + (f.tj - 1) * PITCH - 2,
+                top: PAD_TOP + LEG + HDR + 5 + (f.ti - 1) * PITCH - 2, left: GUT + (f.tj - 1) * PITCH - 2,
                 width: FRAME + 4, height: FRAME + 4,
-                border: `3px solid ${f.col}`, borderRadius: 9, boxShadow: `0 0 0 3px ${f.col}22` }}>
-                {/* 액자가 1행에 붙어 있으면 이름표를 위에 달 자리가 없다 (열 번호·말풍선과 겹침)
-                    → 그럴 때만 액자 아래로 내린다. */}
-                <div style={{ position: "absolute", ...(f.ti === 1 ? { top: "100%", marginTop: 5 } : { top: -11 }),
-                  left: 6, fontSize: 10, fontWeight: 800,
-                  color: "#fff", background: f.col, borderRadius: 999, padding: "1px 7px", whiteSpace: "nowrap" }}>
-                  {f.label}
-                </div>
+                border: `3px ${f.dashed ? "dashed" : "solid"} ${f.col}`, borderRadius: 9,
+                boxShadow: f.dashed ? "none" : `0 0 0 3px ${f.col}22` }}>
               </div>
             ))}
+
+            {/* 액자 이름표는 격자 위에 절대배치하면 칸·번호·말풍선과 계속 겹친다
+                (선생님 2026-09-03: "자꾸 겹쳐지는게 너무 많아") → 격자 밖 범례 한 줄로. */}
+            <div style={{ height: LEG, marginLeft: GUT, display: "flex", gap: 8, alignItems: "center",
+              position: "relative", zIndex: 8, background: "#fff" }}>
+              {frames.map((f, k) => (
+                <span key={k} style={{ display: "inline-flex", alignItems: "center", gap: 5,
+                  fontSize: 10.5, fontWeight: 800, color: f.col, whiteSpace: "nowrap" }}>
+                  <span style={{ width: 11, height: 11, borderRadius: 3,
+                    background: tintOf(f.col), border: `2px solid ${f.col}` }} />
+                  {f.label}
+                </span>
+              ))}
+            </div>
 
             {/* 열 번호 — 소의 열은 진하게 (선생님 2026-09-03: "grid에 index를 써놔야지") */}
             <div style={{ display: "flex", gap: GAP, height: HDR, marginLeft: GUT, marginBottom: 5, alignItems: "flex-end" }}>
               {Array.from({ length: N }).map((_, ci) => (
                 <div key={ci} style={{ width: CELL, textAlign: "center", ...AXIS,
-                  color: ci + 1 === c ? "#ea580c" : "#94a3b8" }}>{ci + 1}</div>
+                  color: ci + 1 === c ? "#ea580c" : "#94a3b8" }}>{ci}</div>
               ))}
             </div>
 
             {Array.from({ length: N }).map((_, ri) => (
               <div key={ri} style={{ display: "flex", gap: GAP, marginBottom: GAP, alignItems: "center" }}>
                 <div style={{ width: GUT, textAlign: "right", paddingRight: 10, ...AXIS,
-                  color: ri + 1 === r ? "#ea580c" : "#94a3b8" }}>{ri + 1}</div>
+                  color: ri + 1 === r ? "#ea580c" : "#94a3b8" }}>{ri}</div>
                 {Array.from({ length: N }).map((_, ci) => {
                   const R = ri + 1, Cc = ci + 1;
                   const cow = R === r && Cc === c;
@@ -352,8 +398,8 @@ export function PhotoUpdateSim({ E }) {
             {/* c3·c4 — '규칙대로면 i 후보' 를 칩으로 늘어놓고 들판 밖을 지운다.
                 들판 밖 액자를 격자 위로 삐져나가게 그리면 말풍선과 부딪혀서 이렇게 함. */}
             {(s.kind === "c3" || s.kind === "c4") && (() => {
-              const W2 = N - K + 1;
-              const cand = [r - K + 1, r - K + 2, r];
+              const W2 = N - K + 1;               // 사진 개수. 유효한 i 는 0 … W2−1
+              const cand = [z(r - K + 1), z(r - K + 2), z(r)];
               const chip = (ok) => ({
                 fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
                 padding: "3px 9px", borderRadius: 7, border: `1.5px solid ${ok ? "#86efac" : "#fca5a5"}`,
@@ -367,8 +413,8 @@ export function PhotoUpdateSim({ E }) {
                       {t(E, "i by the rule", "규칙대로면 i 는")}
                     </span>
                     {cand.map((v) => {
-                      const ok = v >= 1 && v <= W2;
-                      return <span key={v} style={chip(ok)}>{v < 0 ? `−${-v}` : v}</span>;
+                      const ok = v >= 0 && v <= W2 - 1;
+                      return <span key={v} style={chip(ok)}>{v}</span>;
                     })}
                     <span style={{ fontSize: 11, color: "#b91c1c", fontWeight: 700 }}>
                       {t(E, "✗ = outside the field", "✗ = 들판 밖")}
@@ -378,8 +424,8 @@ export function PhotoUpdateSim({ E }) {
                     fontWeight: 800, color: "#c2410c", background: "#fff7ed",
                     border: "1.5px solid #fdba74", borderRadius: 7, padding: "5px 9px", display: "inline-block" }}>
                     {s.kind === "c3"
-                      ? <>max(1, {r}−{K}+1) = max(1, {r - K + 1 < 0 ? `−${K - 1 - r}` : r - K + 1}) = {Math.max(1, r - K + 1)}</>
-                      : <>min({r}, {W2}) = {Math.min(r, W2)}</>}
+                      ? <>max(0, {z(r)}-{K}+1) = max(0, {z(r - K + 1)}) = {Math.max(0, z(r - K + 1))}</>
+                      : <>min({z(r)}, {W2 - 1}) = {Math.min(z(r), W2 - 1)}</>}
                   </div>
                   {s.kind === "c4" && (
                     <div style={{ marginTop: 8, fontSize: 11.5, color: "#78716c" }}>
@@ -387,7 +433,7 @@ export function PhotoUpdateSim({ E }) {
                       <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
                         color: "#c2410c", background: "#fff7ed", border: "1.5px solid #fdba74",
                         borderRadius: 7, padding: "3px 8px", display: "inline-block", marginTop: 4 }}>
-                        max(1, r−{K}+1) … min(r, {W2})
+                        max(0, r−{K}+1) … min(r, {W2 - 1})
                       </span>
                     </div>
                   )}
@@ -432,7 +478,7 @@ export function PhotoUpdateSim({ E }) {
                   {rows.map(([rr, cc]) => (
                     <div key={`${rr}-${cc}`} style={{ display: "flex", justifyContent: "space-between",
                       fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: "#7c2d12", padding: "1px 4px" }}>
-                      <span>{t(E, "cow", "소")} ({rr},{cc})</span>
+                      <span>{t(E, "cow", "소")} ({z(rr)},{z(cc)})</span>
                       <span style={{ fontWeight: 800 }}>{cnt(rr, cc)}{t(E, " photos", "장")}</span>
                     </div>
                   ))}
@@ -582,8 +628,8 @@ export function PhotoTraceSim({ E }) {
   // 한 쿼리를 5단계로: ①읽기 ②delta계산+저장 ③S 꺼내 +delta 저장 ④cur_max 비교+저장 ⑤꺼내 출력
   const steps = [{ kind: "intro", wr: [], rd: [] }];
   {
-    const beauty = Array.from({ length: N + 1 }, () => Array(N + 1).fill(0));
-    const S = Array.from({ length: W + 1 }, () => Array(W + 1).fill(0));
+    const beauty = Array.from({ length: N }, () => Array(N).fill(0));
+    const S = Array.from({ length: W }, () => Array(W).fill(0));
     let curMax = 0; const out = [];
     const snap = (extra) => ({
       beauty: beauty.map((row) => row.slice()),
@@ -591,15 +637,17 @@ export function PhotoTraceSim({ E }) {
       curMax, out: out.slice(), ...extra,
     });
     queries.forEach((qq, qi) => {
-      const old = beauty[qq.r][qq.c];
+      // 입력은 1 부터 오고 배열은 0 부터 — 코드의 r--, c-- 와 같게 여기서 빼둔다
+      const r0 = qq.r - 1, c0 = qq.c - 1;
+      const old = beauty[r0][c0];
       const delta = qq.v - old;
-      const iLo = Math.max(1, qq.r - K + 1), iHi = Math.min(qq.r, W);
-      const jLo = Math.max(1, qq.c - K + 1), jHi = Math.min(qq.c, W);
-      const base = { qi, q: qq, old, delta, iLo, iHi, jLo, jHi };
+      const iLo = Math.max(0, r0 - K + 1), iHi = Math.min(r0, W - 1);
+      const jLo = Math.max(0, c0 - K + 1), jHi = Math.min(c0, W - 1);
+      const base = { qi, q: qq, r0, c0, old, delta, iLo, iHi, jLo, jHi };
       // ① 읽기: r,c,v 저장 + beauty[r][c] 꺼내기
       steps.push(snap({ kind: "read", ...base, wr: ["r", "c", "v"], rd: ["beauty"], hasDelta: false, hasMax: false }));
       // ② delta 저장 + beauty[r][c] = v
-      beauty[qq.r][qq.c] = qq.v;
+      beauty[r0][c0] = qq.v;
       steps.push(snap({ kind: "delta", ...base, wr: ["delta", "beauty"], rd: ["v"], hasDelta: true, hasMax: false }));
       // ②-b 어느 사진들을 고칠지 — 범위를 실제 숫자로 계산 (선생님 2026-09-02 요청)
       steps.push(snap({ kind: "range", ...base, wr: [], rd: [], hasDelta: true, hasMax: false }));
@@ -638,8 +686,8 @@ export function PhotoTraceSim({ E }) {
         <>See <b>which variable stores what</b>, and how it's read back — one step at a time. Left = <b>beauty</b>, right = <b>S</b>. All 0.</>,
         <>값을 <b>어느 변수에 저장하고</b> 어떻게 꺼내 쓰는지 한 단계씩 봐요. 왼쪽 = <b>beauty</b>, 오른쪽 = <b>S</b>. 처음 다 0.</>)
     : s.kind === "read" ? t(E,
-        <><b>①</b> Read the query into <b>r, c, v</b>. And read the old value out of beauty[{q.r}][{q.c}] = <b>{s.old}</b>.</>,
-        <><b>①</b> 쿼리를 읽어 <b>r·c·v</b> 에 저장. 그리고 beauty[{q.r}][{q.c}] 에서 옛 값 <b>{s.old}</b> 을 꺼내요.</>)
+        <><b>①</b> Read the query into <b>r, c, v</b> — the input says {q.r} {q.c}, and <b>r--, c--</b> makes them <b>{s.r0}, {s.c0}</b> (arrays count from 0). Then read the old value out of beauty[{s.r0}][{s.c0}] = <b>{s.old}</b>.</>,
+        <><b>①</b> 쿼리를 읽어 <b>r·c·v</b> 에 저장해요. 입력은 {q.r} {q.c} 인데 <b>r--, c--</b> 로 <b>{s.r0}, {s.c0}</b> 이 돼요 (배열은 0 부터니까요). 그리고 beauty[{s.r0}][{s.c0}] 에서 옛 값 <b>{s.old}</b> 을 꺼내요.</>)
     : s.kind === "delta" ? t(E,
         <><b>②</b> <b>delta</b> = v − old = {q.v} − {s.old} = <b>{s.delta}</b> — how much it <i>grew</i>.
           {s.old > 0
@@ -651,11 +699,11 @@ export function PhotoTraceSim({ E }) {
             : <><br />(이 칸은 0 이라 delta 가 v 와 같아요. 이미 값이 있는 칸에서 다시 봐요.)</>}</>)
     : s.kind === "range" ? t(E,
         <><b>②-b</b> Which photos hold this cow? Clamp the range to the field:<br />
-          i: max(1, {q.r}−{K}+1) … min({q.r}, {W}) = <b>{s.iLo} … {s.iHi}</b> &nbsp;·&nbsp;
-          j: max(1, {q.c}−{K}+1) … min({q.c}, {W}) = <b>{s.jLo} … {s.jHi}</b></>,
+          i: max(0, {s.r0}−{K}+1) … min({s.r0}, {W - 1}) = <b>{s.iLo} … {s.iHi}</b> &nbsp;·&nbsp;
+          j: max(0, {s.c0}−{K}+1) … min({s.c0}, {W - 1}) = <b>{s.jLo} … {s.jHi}</b></>,
         <><b>②-b</b> 어느 사진을 고쳐야 할까요? 범위를 들판 안으로 잘라요:<br />
-          i: max(1, {q.r}−{K}+1) … min({q.r}, {W}) = <b>{s.iLo} … {s.iHi}</b> &nbsp;·&nbsp;
-          j: max(1, {q.c}−{K}+1) … min({q.c}, {W}) = <b>{s.jLo} … {s.jHi}</b></>)
+          i: max(0, {s.r0}−{K}+1) … min({s.r0}, {W - 1}) = <b>{s.iLo} … {s.iHi}</b> &nbsp;·&nbsp;
+          j: max(0, {s.c0}−{K}+1) … min({s.c0}, {W - 1}) = <b>{s.jLo} … {s.jHi}</b></>)
     : s.kind === "storeS" ? t(E,
         <><b>③</b> For the cow's photos: read <b>S</b> out, add <b>{s.delta}</b>, store it back into <b>S</b> (green cells).</>,
         <><b>③</b> 소를 품는 사진들: <b>S</b> 에서 값을 꺼내 <b>+{s.delta}</b> 해서 다시 <b>S</b> 에 저장 (초록 칸).</>)
@@ -703,8 +751,8 @@ export function PhotoTraceSim({ E }) {
 
       {/* 변수 상자 */}
       <div style={{ display: "flex", gap: 9, justifyContent: "center", flexWrap: "wrap", marginBottom: 18 }}>
-        <VarBox name="r" val={q ? q.r : "·"} show={inQuery} />
-        <VarBox name="c" val={q ? q.c : "·"} show={inQuery} />
+        <VarBox name="r" val={q ? s.r0 : "·"} show={inQuery} />
+        <VarBox name="c" val={q ? s.c0 : "·"} show={inQuery} />
         <VarBox name="v" val={q ? q.v : "·"} show={inQuery} />
         <VarBox name="delta" val={s.delta} show={s.hasDelta} />
         <VarBox name="cur_max" val={curMax} show={true} />
@@ -726,9 +774,9 @@ export function PhotoTraceSim({ E }) {
           {Array.from({ length: N }).map((_, ri) => (
             <div key={ri} style={{ display: "flex", gap: gp, marginBottom: gp }}>
               {Array.from({ length: N }).map((_, ci) => {
-                const R = ri + 1, Cc = ci + 1;
+                const R = ri, Cc = ci;
                 const val = (s.beauty && s.beauty[R][Cc]) || 0;
-                const hot = beautyHot && q && R === q.r && Cc === q.c;
+                const hot = beautyHot && q && R === s.r0 && Cc === s.c0;
                 const hotW = hot && s.kind === "delta";   // 저장(초록) vs 꺼냄(파랑)
                 return (
                   <div key={ci} style={{ width: FC, height: FC, display: "flex", alignItems: "center",
@@ -765,7 +813,7 @@ export function PhotoTraceSim({ E }) {
           {Array.from({ length: W }).map((_, ii) => (
             <div key={ii} style={{ display: "flex", gap: sgp, marginBottom: sgp }}>
               {Array.from({ length: W }).map((_, jj) => {
-                const I = ii + 1, J = jj + 1;
+                const I = ii, J = jj;
                 const val = (s.S && s.S[I][J]) || 0;
                 const rect = inRect(I, J);
                 const writing = s.kind === "storeS" && rect;   // 저장(초록)
