@@ -44,8 +44,8 @@ export function makeMcc22AliensCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Each alien has a real type — T (truth-teller) or F (liar) — given by the string a. There is also a list of claims b. We may hand out the claims to the aliens in ANY order.\nDecide whether SOME order makes every claim consistent — print YES or NO.",
-        "각 외계인은 진짜 타입이 있어요 — T (진실) 또는 F (거짓말쟁이) — 문자열 a 로 주어져요. 그리고 주장 목록 b 도 있어요. 주장은 외계인들에게 어떤 순서로든 나눠줄 수 있어요.\n어떤 순서든 하나라도 모든 주장을 맞게 만들 수 있는지 판단해서 YES 또는 NO 를 출력해요."),
+        "Each alien has a real type — T (truth-teller) or F (liar) — given by the string a. At the meeting, alien i said \"Alien p_i is of type b_i\". The list p — who pointed at whom — is lost.\nDecide whether SOME p makes every sentence consistent — print YES or NO.",
+        "각 외계인은 진짜 타입이 있어요 — T (진실) 또는 F (거짓말쟁이) — 문자열 a 로 주어져요. 회의에서 i 번 외계인은 \"p_i 번은 b_i 타입이야\" 라고 말했어요. 그런데 누가 누구를 지목했는지(p) 를 잃어버렸어요.\n모든 말이 앞뒤가 맞는 p 가 하나라도 있는지 판단해서 YES 또는 NO 를 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -61,8 +61,8 @@ export function makeMcc22AliensCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
-                "Decide if SOME way of handing out the claims makes them all consistent. Print YES or NO.",
-                "주장을 나눠주는 어떤 방법이든 하나라도 모두 일관되게 만들 수 있는지 판단해요. YES 또는 NO 를 출력.")}
+                "Decide if SOME way of choosing who pointed at whom makes every sentence consistent. Print YES or NO.",
+                "누가 누구를 지목했는지를 어떻게든 정해서 모든 말을 앞뒤 맞게 만들 수 있는지 판단해요. YES 또는 NO 를 출력.")}
             </div>
           </div>
 
@@ -84,18 +84,33 @@ export function makeMcc22AliensCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "String ", "문자열 ")}
+                  {t(E, "Alien ", "")}
+                  <b style={{ color: "#2563eb" }}>i</b>
+                  {t(E, " said: \"Alien ", " 번 외계인이 말했어요 — \"")}
+                  <b style={{ color: "#dc2626" }}>p<sub>i</sub></b>
+                  {t(E, " is of type ", " 번은 ")}
+                  <b style={{ color: "#7c3aed" }}>b<sub>i</sub></b>
+                  {t(E, "\". So b is fixed to the speaker; ", " 타입이야\". 즉 ")}
                   <b style={{ color: "#7c3aed" }}>b</b>
-                  {t(E, " is the list of claims. We may assign the claims to the aliens in ", " 는 주장 목록. 주장은 외계인들에게 ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "any order (a permutation)", "어떤 순서로든 (순열)")}</b>
-                  {t(E, ".", " 나눠줄 수 있어요.")}
+                  {t(E, "", " 는 말한 사람에게 붙어 있어요. ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "p — who pointed at whom — is what we lost", "잃어버린 건 p, 누가 누구를 지목했는지")}</b>
+                  {t(E, ".", "예요.")}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#dc2626" }}>p</b>
+                  {t(E, " is a permutation of 1…n — each alien is pointed at exactly once. ",
+                       " 는 1…n 의 순열이에요 — 모든 외계인이 정확히 한 번씩 지목돼요. ")}
+                  {t(E, "p", "p")}<sub>i</sub>{t(E, " = i is allowed (talking about yourself).", " = i 도 돼요 (자기 얘기).")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #93c5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "YES if some assignment makes every claim consistent, else NO", "어떤 배정이든 하나라도 모든 주장을 일관되게 만들면 YES, 아니면 NO")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "YES if some p makes every sentence consistent, else NO", "모든 말이 앞뒤 맞는 p 가 하나라도 있으면 YES, 아니면 NO")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>
@@ -108,8 +123,8 @@ export function makeMcc22AliensCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. There are T test cases. Each gives n, then the type string a, then the claim string b. The output is one YES/NO per test.",
-        "입력 형식과 공식 예제를 봐요. 테스트가 T 개 있어요. 각 테스트는 n, 타입 문자열 a, 주장 문자열 b 를 줘요. 출력은 테스트마다 YES/NO 한 줄."),
+        "Read the input format and the official example. There are T test cases. Each gives n, then the type string a, then the string b of what each alien said. The output is one YES/NO per test.",
+        "입력 형식과 공식 예제를 봐요. 테스트가 T 개 있어요. 각 테스트는 n, 타입 문자열 a, 각자가 말한 내용 b 를 줘요. 출력은 테스트마다 YES/NO 한 줄."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -120,7 +135,7 @@ export function makeMcc22AliensCh1(E) {
               <div>• <b>T</b> — {t(E, "number of test cases", "테스트 개수")}</div>
               <div>• <b>n</b> — {t(E, "number of aliens in this test", "이 테스트의 외계인 수")}</div>
               <div>• <b>a</b> — {t(E, "real types, a string of T/F (length n)", "진짜 타입, T/F 로 된 문자열 (길이 n)")}</div>
-              <div>• <b>b</b> — {t(E, "the claims, a string of T/F (length n)", "주장 목록, T/F 로 된 문자열 (길이 n)")}</div>
+              <div>• <b>b</b> — {t(E, "what each alien said: b[i] is the type alien i claimed about their target (length n)", "각자가 말한 내용: b[i] 는 i 번이 지목한 상대에게 붙인 타입 (길이 n)")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: 1 ≤ T ≤ 20, 1 ≤ n ≤ 10000, sum of n ≤ 65000. Output YES/NO (uppercase) per test.", "제약: 1 ≤ T ≤ 20, 1 ≤ n ≤ 10000, n 의 합 ≤ 65000. 테스트마다 YES/NO (대문자) 출력.")}
@@ -150,8 +165,8 @@ export function makeMcc22AliensCh1(E) {
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
             {t(E,
-              "In the third test, a=TT (two truth-tellers) but b=TF: no matter how you hand out the claims, the counts can't line up — NO.",
-              "세 번째 테스트는 a=TT (진실 둘) 인데 b=TF: 주장을 어떻게 나눠줘도 개수가 맞지 않아 — NO.")}
+              "In the third test, a=TT (two truth-tellers) but b=TF: no matter who points at whom, the counts can't line up — NO.",
+              "세 번째 테스트는 a=TT (진실 둘) 인데 b=TF: 누가 누구를 지목하든 개수가 맞지 않아 — NO.")}
           </div>
         </div>),
     },
@@ -198,14 +213,14 @@ export function makeMcc22AliensCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way tries every order of handing out the claims: n! permutations — hopeless even for small n. The fast way notices it's just counting: decode each claim to a demanded type, then check that demand for T equals supply of T.",
-        "느린 방법은 주장을 나눠주는 모든 순서를 시도해요: n! 개의 순열 — 작은 n 에서도 가망 없음. 빠른 방법은 그냥 개수 세기임을 알아채요: 각 주장을 요구 타입으로 해독한 뒤, T 수요가 T 공급과 같은지 확인."),
+        "The slow way tries every p — who points at whom: n! permutations, hopeless even for small n. The fast way notices it's just counting: decode each sentence into the type its target must have, then check that demand for T equals supply of T.",
+        "느린 방법은 지목표 p 를 전부 시도해요: n! 개의 순열 — 작은 n 에서도 가망 없음. 빠른 방법은 그냥 개수 세기임을 알아채요: 각 말을 '지목당한 쪽이 가져야 할 타입' 으로 해독한 뒤, T 수요가 T 공급과 같은지 확인."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
-                🐢 {t(E, "Slow: try every order of the claims", "느림: 주장의 모든 순서를 시도")}
+                🐢 {t(E, "Slow: try every p (who points at whom)", "느림: 지목표 p 를 전부 시도")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "n! permutations. For n = 10000 that's astronomically huge. Times out instantly.", "n! 개의 순열. n = 10000 이면 천문학적. 즉시 시간 초과.")}

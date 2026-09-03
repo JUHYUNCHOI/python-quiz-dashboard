@@ -70,8 +70,8 @@ export function getMcc22AliensSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Never search the n! orderings. Decode each claim into the single type it demands: a truth-teller (a[i]=='T') repeats the claim b[i] as-is; a liar flips it.",
-            "n! 개의 순서를 뒤지지 않아요. 각 주장을 요구하는 타입 하나로 해독: 진실쟁이 (a[i]=='T') 는 주장 b[i] 를 그대로, 거짓말쟁이는 뒤집어요."),
+        t(E, "Never search the n! permutations. Decode each sentence into the single type its target must have: a truth-teller (a[i]=='T') means b[i] as-is; a liar means the opposite.",
+            "n! 개의 지목표를 뒤지지 않아요. 각 말을 '지목당한 쪽이 가져야 할 타입' 하나로 해독: 진실쟁이 (a[i]=='T') 는 b[i] 그대로, 거짓말쟁이는 뒤집어요."),
         t(E, "A valid permutation exists exactly when supply equals demand: the count of demanded T's (need_T) must equal the count of real T's (have_T). One O(n) pass over the strings, no permutations.",
             "유효한 순열은 공급 = 수요일 때만 존재: 요구된 T 의 수 (need_T) 가 진짜 T 의 수 (have_T) 와 같아야 해요. 문자열을 O(n) 으로 한 번 훑을 뿐, 순열은 없음."),
       ],
@@ -144,7 +144,7 @@ export function AliensCountSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 14 }}>
           {t(E,
             "Real types a are fixed. Tap a claim to flip it. A truth-teller (T) demands the claim as-is; a liar (F) demands the opposite. When demand for T equals supply of T, some order works → YES.",
-            "진짜 타입 a 는 고정. 주장을 눌러 뒤집어요. 진실쟁이 (T) 는 주장 그대로, 거짓말쟁이 (F) 는 반대를 요구해요. T 의 수요가 T 의 공급과 같으면 어떤 순서가 통해요 → YES.")}
+            "진짜 타입 a 는 고정. 말을 눌러 뒤집어요. 진실쟁이 (T) 는 말 그대로, 거짓말쟁이 (F) 는 반대를 지목 대상에게 요구해요. T 의 수요가 T 의 공급과 같으면 지목표를 짤 수 있어요 → YES.")}
         </div>
 
         {/* index header */}

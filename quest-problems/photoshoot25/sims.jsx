@@ -193,8 +193,9 @@ export function PhotoUpdateSim({ E }) {
   const isCount = s.kind === "count" || s.kind === "done";
 
   const ROW_W = gridW(N);
-  // 모서리 소(edge·clamp) 일 때는 액자 이름표가 1행 위에 붙어 말풍선 꼬리와 겹친다 → 더 띄움
-  const PAD_TOP = isEdge ? 122 : 96;
+  const GUT = 22, HDR = 16;      // 행 번호(왼쪽) · 열 번호(위) 자리
+  const AXIS = { fontFamily: "'JetBrains Mono',monospace", fontSize: 10.5, fontWeight: 800, lineHeight: 1 };
+  const PAD_TOP = 96;
 
   const cellFrame = (R, Cc) => {
     for (const f of frames) if (R >= f.ti && R < f.ti + K && Cc >= f.tj && Cc < f.tj + K) return f;
@@ -271,30 +272,43 @@ export function PhotoUpdateSim({ E }) {
 
       {!isCount ? (
         <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start",
-          gap: 12, flexWrap: "wrap", marginTop: 6 }}>
-          <div style={{ width: ROW_W, position: "relative", paddingTop: PAD_TOP }}>
-            {/* 말풍선 */}
-            <div style={{ position: "absolute", top: PAD_TOP - 8, left: bLeft, width: BW, transform: "translateY(-100%)", zIndex: 7 }}>
+          gap: 10, flexWrap: "wrap", marginTop: 6 }}>
+          <div style={{ width: ROW_W + GUT, position: "relative", paddingTop: PAD_TOP }}>
+            {/* 말풍선 — 액자 이름표(액자 위 −11px)와 겹치지 않게 HDR 만큼 더 띄운다 */}
+            <div style={{ position: "absolute", top: PAD_TOP - 10, left: bLeft, width: BW, transform: "translateY(-100%)", zIndex: 7 }}>
               <div style={{ padding: "9px 13px", borderRadius: 11, background: "#fff7ed", border: "1.5px solid #fdba74", color: "#9a3412", fontSize: 12.5, fontWeight: 700, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.55, boxShadow: "0 5px 16px rgba(0,0,0,.14)" }}>{bubble}</div>
               <div style={{ position: "absolute", top: "100%", left: bTail, transform: "translateX(-50%)", width: 0, height: 0, borderLeft: "8px solid transparent", borderRight: "8px solid transparent", borderTop: "9px solid #fdba74" }} />
               <div style={{ position: "absolute", top: "100%", left: bTail, transform: "translateX(-50%)", marginTop: -1.7, width: 0, height: 0, borderLeft: "7px solid transparent", borderRight: "7px solid transparent", borderTop: "8px solid #fff7ed" }} />
             </div>
 
-            {/* 액자 오버레이 */}
+            {/* 액자 오버레이 — 격자가 GUT(행 번호) · HDR(열 번호) 만큼 밀려 있다 */}
             {frames.map((f, k) => (
               <div key={k} style={{ position: "absolute", zIndex: 4 + k, pointerEvents: "none",
-                top: PAD_TOP + (f.ti - 1) * PITCH - 2, left: (f.tj - 1) * PITCH - 2,
+                top: PAD_TOP + HDR + (f.ti - 1) * PITCH - 2, left: GUT + (f.tj - 1) * PITCH - 2,
                 width: FRAME + 4, height: FRAME + 4,
                 border: `3px solid ${f.col}`, borderRadius: 9, boxShadow: `0 0 0 3px ${f.col}22` }}>
-                <div style={{ position: "absolute", top: -11, left: 6, fontSize: 10, fontWeight: 800,
+                {/* 액자가 1행에 붙어 있으면 이름표를 위에 달 자리가 없다 (열 번호·말풍선과 겹침)
+                    → 그럴 때만 액자 아래로 내린다. */}
+                <div style={{ position: "absolute", ...(f.ti === 1 ? { bottom: -11 } : { top: -11 }),
+                  left: 6, fontSize: 10, fontWeight: 800,
                   color: "#fff", background: f.col, borderRadius: 999, padding: "1px 7px", whiteSpace: "nowrap" }}>
                   {f.label}
                 </div>
               </div>
             ))}
 
+            {/* 열 번호 — 소의 열은 진하게 (선생님 2026-09-03: "grid에 index를 써놔야지") */}
+            <div style={{ display: "flex", gap: GAP, height: HDR, marginLeft: GUT, alignItems: "flex-end" }}>
+              {Array.from({ length: N }).map((_, ci) => (
+                <div key={ci} style={{ width: CELL, textAlign: "center", ...AXIS,
+                  color: ci + 1 === c ? "#ea580c" : "#94a3b8" }}>{ci + 1}</div>
+              ))}
+            </div>
+
             {Array.from({ length: N }).map((_, ri) => (
-              <div key={ri} style={{ display: "flex", gap: GAP, marginBottom: GAP }}>
+              <div key={ri} style={{ display: "flex", gap: GAP, marginBottom: GAP, alignItems: "center" }}>
+                <div style={{ width: GUT, textAlign: "right", paddingRight: 6, ...AXIS,
+                  color: ri + 1 === r ? "#ea580c" : "#94a3b8" }}>{ri + 1}</div>
                 {Array.from({ length: N }).map((_, ci) => {
                   const R = ri + 1, Cc = ci + 1;
                   const cow = R === r && Cc === c;
@@ -320,11 +334,17 @@ export function PhotoUpdateSim({ E }) {
                 Math.max(0, Math.min(rr, W) - Math.max(1, rr - K + 1) + 1) *
                 Math.max(0, Math.min(cc, W) - Math.max(1, cc - K + 1) + 1);
               const rows = [[4, 4], [2, 4], [1, 4], [1, 1]];
-              const box = { width: 236, marginTop: PAD_TOP, padding: "10px 11px",
+              const box = { width: 220, marginTop: PAD_TOP, padding: "10px 11px",
                 background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 11 };
               const head = { fontSize: 11.5, fontWeight: 800, color: "#9a3412", marginBottom: 7, textAlign: "center" };
-              const mono = { fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#7c2d12", lineHeight: 1.7 };
-              const why = { fontSize: 11, color: "#9a3412", lineHeight: 1.65, wordBreak: "keep-all", marginBottom: 3 };
+              /* 글자 색을 역할별로 나눈다 (선생님 2026-09-03: "글자 색을 제발 다르게 하자")
+                 회색=말로 하는 설명 · 남색=식 · 주황=이번에 새로 나온 결론 · 초록=숫자 대입 */
+              const why  = { fontSize: 11, color: "#78716c", lineHeight: 1.6, wordBreak: "keep-all", marginBottom: 3 };
+              const mono = { fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: "#1e3a8a",
+                background: "#fff", border: "1px solid #e2e8f0", borderRadius: 5,
+                padding: "2px 6px", lineHeight: 1.6, display: "inline-block" };
+              const key  = { ...mono, color: "#c2410c", fontWeight: 800, background: "#fff7ed", borderColor: "#fdba74" };
+              const num  = { ...mono, color: "#15803d" };
               const hr = { margin: "7px 0", borderTop: "1px dashed #fdba74" };
 
               /* clamp 스텝 — 식을 통보하지 않고 한 줄씩 세운다.
@@ -335,27 +355,29 @@ export function PhotoUpdateSim({ E }) {
                   <div style={box}>
                     <div style={head}>{t(E, "where max / min come from", "max · min 이 나온 자리")}</div>
 
-                    <div style={why}>{t(E, <>A photo whose top-left row is <b>i</b> covers rows</>,
-                                          <>왼쪽위가 <b>i</b> 행인 사진은 이 행들을 덮어요</>)}</div>
-                    <div style={mono}>i … i+{K}−1</div>
+                    <div style={why}>{t(E, <>A photo whose top-left row is <b style={{ color: "#1e3a8a" }}>i</b> covers rows</>,
+                                          <>왼쪽위가 <b style={{ color: "#1e3a8a" }}>i</b> 행인 사진은 이 행들을 덮어요</>)}</div>
+                    <div><span style={mono}>i … i+{K}−1</span></div>
                     <div style={hr} />
 
-                    <div style={why}>{t(E, <>To hold the cow's row <b>r</b>:</>, <>소의 행 <b>r</b> 을 담으려면</>)}</div>
-                    <div style={mono}>i ≤ r ≤ i+{K}−1</div>
-                    <div style={why}>{t(E, "leave i alone on the inside:", "부등식에서 i 만 남기면")}</div>
-                    <div style={{ ...mono, fontWeight: 800 }}>r−{K}+1 ≤ i ≤ r</div>
+                    <div style={why}>{t(E, <>To hold the cow's row <b style={{ color: "#ea580c" }}>r</b>:</>,
+                                          <>소의 행 <b style={{ color: "#ea580c" }}>r</b> 을 담으려면</>)}</div>
+                    <div><span style={mono}>i ≤ r ≤ i+{K}−1</span></div>
+                    <div style={{ ...why, marginTop: 5 }}>{t(E, "leave i alone on the inside:", "부등식에서 i 만 남기면")}</div>
+                    <div><span style={key}>r−{K}+1 ≤ i ≤ r</span></div>
                     <div style={hr} />
 
-                    <div style={why}>{t(E, <>But photos outside the field don't exist — i must stay in <b>1 … {W}</b>:</>,
-                                          <>그런데 들판 밖 사진은 없어요 — i 는 <b>1 … {W}</b> 안이어야 해요</>)}</div>
-                    <div style={{ ...mono, fontWeight: 800 }}>max(1, r−{K}+1) … min(r, {W})</div>
+                    <div style={why}>{t(E, <>But photos outside the field don't exist — i must stay in <b style={{ color: "#1e3a8a" }}>1 … {W}</b>:</>,
+                                          <>그런데 들판 밖 사진은 없어요 — i 는 <b style={{ color: "#1e3a8a" }}>1 … {W}</b> 안이어야 해요</>)}</div>
+                    <div><span style={key}>max(1, r−{K}+1) … min(r, {W})</span></div>
                     <div style={hr} />
 
-                    <div style={why}>{t(E, <>Our cow is at <b>({r},{c})</b>:</>, <>지금 소는 <b>({r},{c})</b> 이니</>)}</div>
-                    <div style={mono}>max(1, {r}−{K}+1) = max(1, {r - K + 1}) = <b>{lo}</b></div>
-                    <div style={mono}>min({r}, {W}) = <b>{hi}</b></div>
-                    <div style={{ ...mono, fontWeight: 800, marginTop: 4 }}>
-                      i: {lo} … {hi} &nbsp;·&nbsp; j: {lo} … {hi} → {(hi - lo + 1) ** 2}{t(E, " photo", "장")}
+                    <div style={why}>{t(E, <>Our cow is at <b style={{ color: "#ea580c" }}>({r},{c})</b>:</>,
+                                          <>지금 소는 <b style={{ color: "#ea580c" }}>({r},{c})</b> 이니</>)}</div>
+                    <div style={{ marginBottom: 3 }}><span style={num}>max(1, {r}−{K}+1) = max(1, {r - K + 1}) = {lo}</span></div>
+                    <div><span style={num}>min({r}, {W}) = {hi}</span></div>
+                    <div style={{ marginTop: 5 }}>
+                      <span style={key}>i: {lo} … {hi} · j: {lo} … {hi} → {(hi - lo + 1) ** 2}{t(E, " photo", "장")}</span>
                     </div>
                   </div>
                 );
