@@ -42,6 +42,14 @@ Required structure for each topic:
 - `data/algo/topics.ts` — find topic metadata (lessonId, title)
 - `public/algo/topics/<topicId>.js` — source content to convert
 
+## 용어 (학생용 글을 쓸 때 반드시)
+
+- **원문에 없는 말을 지어내지 마라.** 의인화·동작 비유(`베시가 탭한다`)는 틀린 그림을 심는다.
+- **용어는 처음 쓰기 전에 정의한다.** 미션·제목·요약에 미정의 용어를 넣지 마라.
+- **음차어**(`무브`·`쿼리`)에는 뜻 한 줄을 붙이거나, 그 말을 버려라.
+- 판정: "이 비유를 지우면 더 쉬워지나?" → 쉬워지면 지운다.
+근거: `memory/feedback_no_invented_terms.md` (선생님 2026-09-04)
+
 ## Constraints
 
 1. **Bronze-level focus** — don't try to cover everything; pick essentials

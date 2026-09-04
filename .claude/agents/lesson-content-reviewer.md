@@ -21,6 +21,10 @@ You review lesson files against the established quality standard.
 5. **첫 언어 학생용 Python** — 능동 비율 55%+, mission per chapter
 6. **일상 동사 우선** — 공식 용어는 부록 박스
 
+- **지어낸 용어 · 정의 없는 말** — 원문에 없는 비유(`베시가 탭한다`)를 만들어 붙였거나,
+  정의하기 전에 쓴 용어(특히 미션·제목)가 있으면 지적한다. 음차어는 뜻 한 줄 필수.
+  근거: `memory/feedback_no_invented_terms.md`
+
 ## Don't touch
 
 - 🔒 **NEVER WRITE these files** (use Edit only, per CLAUDE.md):

@@ -28,6 +28,10 @@ You audit USACO quest tutorial files in `quest-problems/<id>/` for content integ
 - Algorithm complexity (O(N²), O(N log N))
 - Verified USACO submission data from USACO_VERIFICATION.md
 
+- **지어낸 용어 · 정의 없는 말** — 원문에 없는 비유(`베시가 탭한다`)를 만들어 붙였거나,
+  정의하기 전에 쓴 용어(특히 미션·제목)가 있으면 지적한다. 음차어는 뜻 한 줄 필수.
+  근거: `memory/feedback_no_invented_terms.md`
+
 ## Rules
 
 1. **NEVER MODIFY** `SOLUTION_CODE`, `*_PY`, `*_CPP` variables in USACO_VERIFIED files
