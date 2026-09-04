@@ -1,7 +1,8 @@
 import { C, t } from "@/components/quest/theme";
 import { getMooHuntSections, getMooHuntWalk } from "./components";
+import { getMooHuntFastWalk } from "./fast";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ScoreBoardSim, BitBoardSim, BruteLimitSim } from "./sims";
+import { ScoreBoardSim, BitBoardSim, BruteLimitSim, FasterIdeaSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooHuntCh1 (5 steps: reveal / reveal / reveal / quiz / input)
@@ -19,7 +20,7 @@ export function makeMooHuntCh1(E) {
           <div style={{ textAlign: "center", marginBottom: 8 }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>{"🐄"}</div>
             <div style={{ fontSize: 16, fontWeight: 600, color: "#dc2626" }}>Moo Hunt</div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2026 Bronze #2</div>
+            <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2026 Bronze #2</div>
           </div>
 
           {/* 🎯 Mission box */}
@@ -228,6 +229,7 @@ export function makeMooHuntCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMooHuntCh2(E, lang = "py") {
   const w = getMooHuntWalk(E, lang);
+  const fw = getMooHuntFastWalk(E, lang);
   return [
     {
       type: "reveal",
@@ -243,10 +245,41 @@ export function makeMooHuntCh2(E, lang = "py") {
             borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#92400e",
             lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
             {"\u26A0\uFE0F "}{t(E,
-              "This is the brute force from the last page.\nIt is correct, and it is fast enough on the samples.\nAt N = 20 the C++ version still passes.\nPython runs out of time there and gets partial credit.",
-              "앞 페이지에서 본 완전탐색 그대로예요.\n답은 맞고 샘플에서는 충분히 빨라요.\nN = 20 에서도 C++ 은 통과해요.\n파이썬은 시간이 모자라 부분 점수를 받아요.")}
+              "This is the brute force from the last page.\nIt is correct, and fast enough on the samples.\nAt N = 20 it is too slow — Python only gets partial credit.\nWe fix that on the next two pages.",
+              "앞 페이지에서 본 완전탐색 그대로예요.\n답은 맞고 샘플에서는 충분히 빨라요.\nN = 20 에서는 느려요 — 파이썬은 부분 점수를 받아요.\n다음 두 페이지에서 이걸 고쳐요.")}
           </div>
           <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />
+        </div>
+      ),
+    },
+    /* ── 결-c: 더 빠른 방법 ──────────────────────────────────────────
+       pedagogy-reviewer 2026-09-04: "한계까지만 있고 더 빠른 방법이 없다.
+       학생 입장에서 배운 게 '실패한 시도' 인지 '정답' 인지 구분이 안 된다."
+       usaco.org 공식 답안(cpid 1564)을 가져와 관찰 → 발견 → 코드 순으로. */
+    {
+      type: "reveal",
+      label: t(E, "Fewer checks", "덜 보기"),
+      narr: t(E,
+        "So — how do we make it faster? Let's look.",
+        "그럼 어떻게 하면 더 빨라질까요? 같이 봐요."),
+      content: (<FasterIdeaSim E={E} />),
+    },
+    {
+      type: "reveal",
+      label: t(E, "Faster code", "더 빠른 코드"),
+      narr: t(E,
+        "The official solution — same answer, far less work.",
+        "공식 풀이예요. 답은 같고 일은 훨씬 적어요."),
+      content: (
+        <div>
+          <div style={{ margin: "12px 14px 0", background: "#ecfdf5", border: "1.5px solid #34d399",
+            borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#065f46",
+            lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
+            {"\u2705 "}{t(E,
+              "This is the official solution from usaco.org.\nThe idea is the one you just saw: only 'one M cell + two O cells' can score.\nThe answer is identical to the brute force — it just looks at far fewer moves.",
+              "usaco.org 공식 풀이예요.\n방금 본 그 생각이에요 — 득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐이라는 것.\n답은 완전탐색과 똑같아요. 보는 무브 수만 확 줄어요.")}
+          </div>
+          <CodeWalk E={E} lang={lang} code={fw.code} vars={fw.vars} beats={fw.beats} accent="#059669" />
         </div>
       ),
     },

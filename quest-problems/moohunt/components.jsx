@@ -6,6 +6,11 @@
 //     동작이 안 바뀌므로 USACO 재제출 불필요.
 //   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
+//
+//   2026-09-04: 라벨이 'Jan 2026' 으로 잘못 적혀 있던 걸 'Feb 2026' 으로 고침
+//     (cpid=1564 = season26 contest 2 Bronze #2. Jan 2026 Bronze #2 는 COW Splits 다.)
+//   2026-09-04: 더 빠른 공식 풀이를 ./fast.jsx 에 **따로** 추가했다.
+//     이 파일의 FULL_PY / FULL_CPP 는 한 글자도 안 건드렸다 → 재제출 불필요.
 
 import { C, t } from "@/components/quest/theme";
 import { ProgressiveCodeStepper } from "@/components/quest/ProgressiveCodeStepper";

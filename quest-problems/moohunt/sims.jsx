@@ -1,6 +1,6 @@
 "use client";
 
-/* Moo Hunt (Jan 2026 Bronze #2) 용 시뮬 — 🔒 USACO_VERIFIED components.jsx 는
+/* Moo Hunt (Feb 2026 Bronze #2) 용 시뮬 — 🔒 USACO_VERIFIED components.jsx 는
    건드리지 않고 여기에만.
 
    전엔 시뮬이 없어서 채점 과정이 한 화면에 표로 통째로 있었다
@@ -287,6 +287,118 @@ export function BitBoardSim({ E }) {
       <div style={{ marginTop: 18 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
       </div>
+    </div>
+  );
+}
+
+/* ③ FasterIdeaSim — 왜 더 빨라지는가 (2026-09-04 추가).
+   pedagogy-reviewer 지적: "한계(결-b)까지만 있고 더 빠른 방법(결-c)이 없다."
+   usaco.org 공식 답안(Feb 2026 Bronze #2, cpid 1564)의 핵심을 단계로 쪼갠 것.
+   숫자는 전부 그 자리에서 계산 — 글과 어긋날 수 없다. */
+export function FasterIdeaSim({ E }) {
+  const steps = [{ k: "board" }, { k: "waste" }, { k: "order" }, { k: "only" }, { k: "gain" }];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+
+  // 작은 보드 하나를 놓고 본다 — M O O O M (1번·5번이 M)
+  const BOARD = "MOOOM";
+  const N = BOARD.length;
+  const mPos = [...BOARD].map((c, i) => (c === "M" ? i : -1)).filter((i) => i >= 0);
+  const oPos = [...BOARD].map((c, i) => (c === "O" ? i : -1)).filter((i) => i >= 0);
+
+  const allMoves = N * (N - 1) * (N - 2);                       // 60
+  const pairs = (oPos.length * (oPos.length - 1)) / 2;          // C(3,2) = 3
+  const canScore = mPos.length * pairs;                         // 2 × 3 = 6
+
+  // N = 20 일 때 — 보드마다 평균 몇 개나 보나
+  const BIG_ALL = 20 * 19 * 18;                                 // 6,840
+  let acc = 0;
+  for (let m = 0; m <= 20; m++) {
+    const o = 20 - m;
+    let c = 1;                                                  // C(20, m)
+    for (let i = 0; i < m; i++) c = (c * (20 - i)) / (i + 1);
+    acc += c * m * ((o * (o - 1)) / 2);
+  }
+  const BIG_AVG = Math.round(acc / Math.pow(2, 20));            // 428
+  const gain = Math.round(BIG_ALL / BIG_AVG);
+
+  const say =
+    s.k === "board" ? t(E,
+      <>Suppose the board is already decided — <b>M O O O M</b>.<br />Now score it.</>,
+      <>보드가 이미 정해졌다고 해봐요 — <b>M O O O M</b>.<br />이제 이 보드를 채점해요.</>)
+    : s.k === "waste" ? t(E,
+      <>The brute force checks <b>all {allMoves}</b> moves.<br />But cell 1 is M — any move asking cell 1 to be O <b>cannot score</b>.<br />Most checks are wasted.</>,
+      <>완전탐색은 무브 <b>{allMoves}개를 전부</b> 봐요.<br />그런데 1번 칸은 M 이에요. 1번이 O 여야 하는 무브는 <b>애초에 득점 못 해요</b>.<br />대부분이 헛수고예요.</>)
+    : s.k === "order" ? t(E,
+      <>First — y and z just both need to be O.<br />So <b>(1,2,3) and (1,3,2) are the same</b> for scoring.<br />Count them together.</>,
+      <>먼저 — y 와 z 는 <b>둘 다 O 이기만</b> 하면 돼요.<br />그러니 <b>(1,2,3) 과 (1,3,2) 는 채점에선 같은 것</b>이에요.<br />묶어서 세면 돼요.</>)
+    : s.k === "only" ? t(E,
+      <>So don't look at every move. Look only at what <b>can</b> score:<br />one <b>M</b> cell + two <b>O</b> cells.<br />Here that is {mPos.length} × {pairs} = <b>{canScore}</b>, not {allMoves}.</>,
+      <>그러니 무브를 다 보지 말고, <b>득점할 수 있는 것만</b> 봐요.<br /><b>M</b> 자리 하나 + <b>O</b> 자리 둘.<br />여기선 {mPos.length} × {pairs} = <b>{canScore}개</b>예요. {allMoves}개가 아니라요.</>)
+    : t(E,
+      <>At N = 20 the same trick cuts <b>{BIG_ALL.toLocaleString("en-US")}</b> down to about <b>{BIG_AVG}</b> per board.<br />Roughly <b>{gain}× less work</b> — and the answer is identical.</>,
+      <>N = 20 에서도 똑같아요. 보드마다 <b>{BIG_ALL.toLocaleString("en-US")}개</b> 보던 걸 평균 <b>{BIG_AVG}개</b>만 봐요.<br />일이 <b>약 {gain}배</b> 줄어요. 답은 똑같고요.</>);
+
+  const cellStyle = (c, dim) => ({
+    width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+    fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 15,
+    background: dim ? "#f8fafc" : c === "M" ? MBG : OBG,
+    border: `2px solid ${dim ? "#e2e8f0" : c === "M" ? MCOL : OCOL}`,
+    color: dim ? "#cbd5e1" : c === "M" ? MCOL : OCOL,
+  });
+
+  return (
+    <div style={{ padding: 16, paddingBottom: 110 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Can we check fewer moves?", "무브를 더 적게 볼 수 없을까?")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
+      <Say tone={s.k === "waste" ? "stuck" : s.k === "gain" ? "aha" : "go"}>{say}</Say>
+
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 14 }}>
+        {[...BOARD].map((c, i) => (
+          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+            <div style={cellStyle(c, false)}>{c}</div>
+            <span style={{ fontSize: 10, fontWeight: 800, color: "#f59e0b" }}>{i + 1}</span>
+          </div>
+        ))}
+      </div>
+
+      {(s.k === "only" || s.k === "gain") && (
+        <div style={{ maxWidth: 420, margin: "0 auto", display: "grid", gap: 6 }}>
+          <Row E={E} ko="M 자리 (여기서 x 를 고름)" en="M cells (pick x here)"
+               v={mPos.map((i) => i + 1).join(", ")} />
+          <Row E={E} ko="O 자리 (여기서 y, z 를 고름)" en="O cells (pick y, z here)"
+               v={oPos.map((i) => i + 1).join(", ")} />
+          <Row E={E} ko="봐야 할 조합" en="combinations to check" v={`${canScore}`} good />
+          <Row E={E} ko="완전탐색이 보던 것" en="brute force looked at" v={`${allMoves}`} bad />
+        </div>
+      )}
+      {s.k === "gain" && (
+        <div style={{ maxWidth: 420, margin: "10px auto 0", padding: "10px 14px", borderRadius: 10,
+          background: "#ecfdf5", border: "1.5px solid #34d399", fontSize: 12.5, color: "#065f46",
+          lineHeight: 1.85, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+          {t(E, <>N = 20 : <b>{BIG_ALL.toLocaleString("en-US")}</b> → about <b>{BIG_AVG}</b> per board</>,
+                <>N = 20 : 보드마다 <b>{BIG_ALL.toLocaleString("en-US")}</b> → 약 <b>{BIG_AVG}</b></>)}
+        </div>
+      )}
+      </StepFade>
+      <div style={{ marginTop: 18 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}
+
+function Row({ E, ko, en, v, good, bad }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 13px", borderRadius: 9,
+      border: `1.5px solid ${bad ? "#fca5a5" : good ? "#6ee7b7" : "#e2e8f0"}`,
+      background: bad ? "#fef2f2" : good ? "#ecfdf5" : "#fff", fontSize: 12.5,
+      wordBreak: "keep-all", textWrap: "balance" }}>
+      <span style={{ flex: 1, color: "#475569", fontWeight: 700 }}>{t(E, en, ko)}</span>
+      <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800,
+        color: bad ? "#dc2626" : good ? "#059669" : "#334155", whiteSpace: "nowrap" }}>{v}</span>
     </div>
   );
 }
