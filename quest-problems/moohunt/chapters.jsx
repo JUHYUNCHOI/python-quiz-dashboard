@@ -39,45 +39,73 @@ export function makeMooHuntCh1(E) {
               📖 {t(E, "Problem", "문제")}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6, wordBreak: "keep-all" }}>
+              {/* 말로만 하면 기호(N·K·x·y·z)뿐이라 그림이 안 그려진다
+                  (선생님 2026-09-04: "문제 설명 저거로만으로는 이해가 안가는데").
+                  칸 5개짜리 아주 작은 예를 카드 안에서 바로 보여준다. */}
+              <div style={{ marginBottom: 12, paddingBottom: 10, borderBottom: "1px dashed #fca5a5" }}>
+                <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", marginBottom: 8, wordBreak: "keep-all" }}>
+                  {t(E, "For example — 5 cells, and just one move (1, 2, 3):",
+                       "예를 들어 — 칸이 5개, 무브는 (1, 2, 3) 하나뿐이라고 해봐요.")}
+                </div>
+                {[
+                  { board: "MOOOM", pts: 1, note: t(E, "cells 1·2·3 read M O O → scores", "1·2·3번 칸이 M O O → 1점") },
+                  { board: "OOOOM", pts: 0, note: t(E, "cells 1·2·3 read O O O → no", "1·2·3번 칸이 O O O → 0점") },
+                ].map((r, k) => (
+                  <div key={k} style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 7 }}>
+                    <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 700, width: 74, flexShrink: 0, textAlign: "right" }}>
+                      {k === 0 ? t(E, "fill it this way", "이렇게 채우면") : t(E, "or this way", "이렇게 채우면")}
+                    </span>
+                    <span style={{ display: "flex", gap: 3 }}>
+                      {r.board.split("").map((c, i) => (
+                        <span key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                          <span style={{ width: 26, height: 26, borderRadius: 6, display: "flex",
+                            alignItems: "center", justifyContent: "center",
+                            fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 13,
+                            background: i < 3 ? (c === "M" ? "#fef2f2" : "#eff6ff") : "#f8fafc",
+                            border: `${i < 3 ? 2 : 1}px solid ${i < 3 ? (c === "M" ? "#dc2626" : "#2563eb") : "#e2e8f0"}`,
+                            color: i < 3 ? (c === "M" ? "#dc2626" : "#2563eb") : "#cbd5e1" }}>{c}</span>
+                          <span style={{ fontSize: 9, fontWeight: 800, color: i < 3 ? "#f59e0b" : "#e2e8f0" }}>{i + 1}</span>
+                        </span>
+                      ))}
+                    </span>
+                    <span style={{ fontSize: 11.5, fontWeight: 800, color: r.pts ? "#15803d" : "#b91c1c", wordBreak: "keep-all" }}>
+                      {r.note}
+                    </span>
+                  </div>
+                ))}
+                <div style={{ marginTop: 8, fontSize: 12.5, fontWeight: 800, color: "#7f1d1d", wordBreak: "keep-all", textWrap: "balance" }}>
+                  {t(E, "So the question is: how should we fill the board to score the most?",
+                       "그래서 문제는 이거예요 — 보드를 어떻게 채워야 점수가 제일 높을까?")}
+                </div>
+              </div>
+
+              {/* 규칙은 그림 아래에 짧게. 뜻은 위 그림이 이미 날랐다. */}
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "The board is ", "보드는 ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "a row of N cells (3 ≤ N ≤ 20)", "N 칸 (3 ≤ N ≤ 20) 짜리 한 줄")}</b>
-                  {t(E, ", each 'M' or 'O'.", " 이고, 칸마다 'M' 아니면 'O' 예요.")}
-                  <br />
-                  <b style={{ color: "#dc2626" }}>{t(E, "It is NOT given to us — we get to fill it in however we want.",
-                                                       "이건 입력으로 주어지지 않아요 — 우리가 마음대로 채우는 거예요.")}</b>
+                  <b style={{ color: "#dc2626" }}>{t(E, "Board", "보드")}</b>
+                  {t(E, " — N cells (3 ≤ N ≤ 20), each 'M' or 'O'. ", " — N 칸 (3 ≤ N ≤ 20), 칸마다 'M' 아니면 'O'. ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "we fill it in", "우리가 채워요")}</b>
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  <b style={{ color: "#0891b2" }}>{t(E, "K moves", "무브 K 개")}</b>
-                  {t(E, " (1 ≤ K ≤ 200,000) ", " (1 ≤ K ≤ 200,000) ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "are given in the input", "는 입력으로 주어져요")}</b>
-                  {t(E, " and never change.", " — 이건 우리가 못 바꿔요.")}
-                  <br />
-                  {t(E, "Each move names three cells (x, y, z). Moves don't change the board — they just get checked.",
-                        "무브 하나는 세 칸 (x, y, z) 를 가리켜요.\n무브가 보드를 바꾸지는 않아요. 그냥 그 세 칸을 확인만 해요.")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "Moves", "무브")}</b>
+                  {t(E, " — K of them (1 ≤ K ≤ 200,000), each naming three cells (x, y, z). ",
+                       " — K 개 (1 ≤ K ≤ 200,000), 각각 세 칸 (x, y, z) 를 가리켜요. ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "given in the input — we can't change them", "입력으로 주어져요 — 못 바꿔요")}</b>
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "For each move, if cell ", "무브 하나를 볼 때, 칸 ")}
-                  <b style={{ color: "#dc2626" }}>x</b>
-                  {t(E, " = 'M', cell ", " = 'M', 칸 ")}
-                  <b style={{ color: "#dc2626" }}>y</b>
-                  {t(E, " = 'O', cell ", " = 'O', 칸 ")}
-                  <b style={{ color: "#dc2626" }}>z</b>
-                  {t(E, " = 'O' — that spells 'MOO' — ", " = 'O' 이면 — 세 칸이 'MOO' 가 되면 — ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "that move scores 1 point.", "그 무브가 1점이에요.")}</b>
-                  <br />
-                  {t(E, "The board's score = how many of the K moves score.",
-                        "보드의 점수 = K 개 무브 중 점수가 나는 무브의 개수예요.")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "Score", "점수")}</b>
+                  {t(E, " — a move scores 1 if its three cells read 'MOO'. The board's score is the total.",
+                       " — 무브가 가리키는 세 칸이 'MOO' 면 그 무브가 1점. 다 더한 게 보드 점수.")}
                 </div>
               </div>
+
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>

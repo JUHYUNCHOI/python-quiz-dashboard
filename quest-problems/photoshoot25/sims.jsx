@@ -248,10 +248,10 @@ export function PhotoUpdateSim({ E }) {
         <>This 3×3 <b>misses the cow</b> → this photo stays the same ✗</>,
         <>이 3×3 은 <b>소를 못 담아요</b>.<br />→ 이 사진은 점수가 그대로예요 ✗</>)
     : s.kind === "c1" ? t(E,
-        <>A photo starting at row <b>{z(r - K + 1)}</b> covers rows <b>{z(r - K + 1)}·{z(r - K + 2)}·{z(r)}</b>.<br />
+        <>Call the row a photo <b>starts at</b> its <b>i</b>.<br />The photo with <b>i = {z(r - K + 1)}</b> covers rows <b>{z(r - K + 1)}·{z(r - K + 2)}·{z(r)}</b>.<br />
           The cow's row <b>{z(r)}</b> is inside — so it holds the cow.<br />
           → <b>i ≤ r ≤ i+{K}−1</b></>,
-        <><b>{z(r - K + 1)}</b>행에서 시작하는 사진은<br />
+        <>사진이 <b>시작하는 행</b>을 <b>i</b> 라고 부를게요.<br /><b>i = {z(r - K + 1)}</b> 인 사진은<br />
           <b>{z(r - K + 1)}·{z(r - K + 2)}·{z(r)}</b>행을 덮어요.<br />
           소의 행 <b>{z(r)}</b> 이 그 안에 있죠.<br />
           → <b>i ≤ r ≤ i+{K}−1</b></>)

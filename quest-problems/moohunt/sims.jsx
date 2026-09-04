@@ -153,7 +153,7 @@ export function BruteLimitSim({ E }) {
       <>보드 하나를 채점하려면 삼중쌍을 다 봐야 해요.<br />그러니 일의 양은 <b>100만 × 6,840 ≈ 7×10⁹</b> 이에요.</>)
     : t(E,
       <>A computer does roughly <b>10⁸ ~ 10⁹</b> simple steps per second.<br /><b>7×10⁹ does not fit in the time limit.</b><br />The idea is right; it is just too slow at N = 20.</>,
-      <>컴퓨터는 1초에 대략 <b>10⁸ ~ 10⁹</b> 번 계산해요.<br /><b>7×10⁹ 는 제한 시간 안에 안 들어와요.</b><br />생각은 맞아요. N = 20 에서 너무 느릴 뿐이에요.</>);
+      <>컴퓨터는 1초에 대략 <b>10⁸ ~ 10⁹</b> 번 계산해요.<br /><b>7×10⁹</b> 은 아슬아슬해요 — 빠듯한 숫자예요.<br />그래서 같은 무브를 묶어 줄이고 <b>C++</b> 로 짜면 통과해요.<br />파이썬은 시간이 모자라 부분 점수예요.</>);
 
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
@@ -179,7 +179,7 @@ export function BruteLimitSim({ E }) {
             border: "1.5px solid #fbbf24", fontSize: 12.5, color: "#92400e", lineHeight: 1.85,
             textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E, <>1 second ≈ <b>10⁸ ~ 10⁹</b> steps<br />we need <b>7×10⁹</b> → too slow</>,
-                  <>1초에 <b>10⁸ ~ 10⁹</b> 번<br />우리는 <b>7×10⁹</b> 번 필요 → 너무 느려요</>)}
+                  <>1초에 <b>10⁸ ~ 10⁹</b> 번<br />우리는 <b>7×10⁹</b> 번 → 아슬아슬</>)}
           </div>
         )}
       </div>
@@ -200,7 +200,12 @@ export function BitBoardSim({ E }) {
   const N = 3;
   const bits = (b) => Array.from({ length: N }, (_, i) => (b >> i) & 1);
   const chars = (b) => bits(b).map((v) => (v ? "M" : "O"));
-  const bin = (b) => b.toString(2).padStart(N, "0");
+  /* ⚠️ 보통 2진수는 '큰 자리부터' 쓰지만 (b=1 → "001"),
+     보드는 0번 칸이 왼쪽이다 (코드가 (b >> i) & 1 로 i번 칸 = i번 비트를 쓰니까).
+     그대로 나란히 놓으면 b=1 이 "001" 인데 보드는 "MOO" 라 눈에 어긋나 보인다.
+     실제로 8줄 중 4줄이 어긋났다 (student-algorithm 2026-09-04 가 잡음).
+     → 여기서는 비트도 **0번 칸부터** 적어서 보드와 방향을 맞춘다. */
+  const bin = (b) => bits(b).join("");
 
   const steps = [{ k: "why" }, ...Array.from({ length: 1 << N }, (_, b) => ({ k: "row", b })),
                  { k: "extract" }, { k: "all" }];
@@ -212,7 +217,7 @@ export function BitBoardSim({ E }) {
   const say =
     s.k === "why" ? t(E,
       <>Each cell is <b>M</b> or <b>O</b> — two choices.<br />So write M as <b>1</b> and O as <b>0</b>.<br />Then a whole board is just <b>one number</b>.</>,
-      <>칸마다 <b>M</b> 아니면 <b>O</b> — 둘 중 하나예요.<br />그럼 M 을 <b>1</b>, O 를 <b>0</b> 으로 쓰면요?<br />보드 하나가 <b>숫자 하나</b>가 돼요.</>)
+      <>칸마다 <b>M</b> 아니면 <b>O</b> — 둘 중 하나예요.<br />그럼 M 을 <b>1</b>, O 를 <b>0</b> 으로 쓰면요?<br />보드 하나가 <b>숫자 하나</b>가 돼요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .8 }}>(비트는 <b>0번 칸부터</b> 적을게요. 보드와 순서를 맞추려고요.)</span></>)
     : s.k === "row" ? t(E,
       <>Number <b>{s.b}</b> in binary is <b>{bin(s.b)}</b> → board <b>{chars(s.b).join("")}</b></>,
       <>숫자 <b>{s.b}</b> 를 2진수로 쓰면 <b>{bin(s.b)}</b> → 보드 <b>{chars(s.b).join("")}</b></>)
@@ -243,7 +248,7 @@ export function BitBoardSim({ E }) {
         <div style={{ display: "grid", gridTemplateColumns: "42px 60px 1fr", gap: 8,
           fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 8px" }}>
           <span>{t(E, "number", "숫자")}</span>
-          <span>{t(E, "binary", "2진수")}</span>
+          <span>{t(E, "bits (cell 0 first)", "비트 (0번 칸부터)")}</span>
           <span>{t(E, "board", "보드")}</span>
         </div>
         {rows.map((b) => {
