@@ -13,6 +13,8 @@
 | 레슨 새로 쓰기 · 품질 감사 | `.claude/docs/lesson-quality.md` |
 | 화면 만들기 · 데이터 위치 찾기 | `.claude/docs/learning-modes.md` |
 | DB · 진도 저장 | `.claude/docs/supabase.md` |
+| **지금 어디까지 왔나 · 다음 뭘 하나** | **`project-lead` 에이전트를 부른다** (근거는 아래 두 파일) |
+| 남은 일 목록 | `~/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/next_work_2026-09-04.md` |
 | 우선순위 정하기 | `.claude/docs/roadmap.md` |
 
 > ⚠️ **로드맵을 안 열어도 이것만은 알아라 (2026-09-04 코드로 확인):**
