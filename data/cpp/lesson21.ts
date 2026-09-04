@@ -508,7 +508,7 @@ int main() {
             cout << grid[i][j];
             if (j < 2) cout << " ";
         }
-        cout << "\n";
+        cout << "\\n";
     }
     return 0;
 }`,
@@ -546,7 +546,7 @@ int main() {
     for (int i = 0; i < 2; i++) {
         int sum = 0;
         for (int j = 0; j < 3; j++) sum += grid[i][j];
-        cout << sum << "\n";
+        cout << sum << "\\n";
     }
     return 0;
 }`,

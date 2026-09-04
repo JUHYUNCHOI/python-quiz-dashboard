@@ -17,8 +17,20 @@
 한 레슨의 스텝들은 **같은 임시 폴더에서 순서대로** 실행한다.
 학생 실행기(public/pyodide.worker.js)가 Pyodide 인스턴스를 재사용해서
 가상 파일시스템이 세션 내내 유지되기 때문 — 그 동작을 그대로 흉내낸 것.
+
+⚠️ check_learn() 의 사각지대 주의 (2026-09-04 에 발견해서 고침):
+  레슨 27~52 중 23개는 파일이 통짜(`data/lessonNN.ts`)가 아니라
+  `data/lessons/lessonNN/ch1.ts, ch2.ts, ...` 로 챕터별 서브폴더에 쪼개져 있다.
+  최상위 `data/lessonNN.ts` 는 (있다면) `export { lessonNNData } from './lessons/lessonNN'`
+  한 줄짜리 재수출 스텁일 뿐이고, 아예 최상위 파일이 없는 레슨도 있다
+  (`data/index.ts` 가 `./lessons/lessonNN` 을 바로 import 하는 경우 — 27~31, 41~52 등).
+  **이 서브폴더를 훑는 코드를 빼먹으면 검사 대상 목록에서 그 레슨 전체가 조용히 사라진다**
+  (에러 없이 그냥 0건 검사됨). 나중에 또 레슨 파일 구조가 바뀌면
+  (예: 서브폴더를 더 쪼갠다거나, 확장자/디렉터리명이 바뀐다거나) 같은 사각지대가
+  재발할 수 있다 — `_learn_files()` 가 실제로 몇 개 파일을 찾았는지 항상 눈으로 확인할 것.
 """
 
+import glob
 import json
 import os
 import re
@@ -110,8 +122,30 @@ def last_error_line(stderr):
 
 
 # initialCode 안에 "여기에 써봐" 류 안내 주석이 있으면 학생이 채우는 자리 → 실행 대조 대상 아님
+# "바꿔" 추가 (2026-09-04): "3과 5를 10과 7로 바꿔보세요!" 처럼 값을 고쳐야 하는 스캐폴드가
+# 이 리스트에 없어서 "출력 불일치" 오탐으로 잡혔음 (lesson32 ch4-3).
+# ⚠️ task 필드까지 이 정규식으로 걸러내면 안 된다 — "실행해보세요/확인해보세요" 류 정상적인
+# 지시문에도 흔히 붙는 말이라 130개 넘는 정상 스텝이 통째로 검사 대상에서 빠진다(실측 확인함).
+# 반드시 initialCode(코드) 본문에만 적용할 것.
 PLACEHOLDER = re.compile(
-    r"여기에|여기다|TODO|write your|your code|작성하|채워|넣어|\bhere\b|put an|한 줄 써", re.I)
+    r"여기에|여기다|TODO|write your|your code|작성하|채워|넣어|\bhere\b|put an|한 줄 써|바꿔", re.I)
+
+# 함수 본문이 "설명 주석만 적어놓고 실제 코드 없이" 끝나는 미완성 스캐폴드.
+# 예: "# 합계와 평균을 한 번에 return하세요!" 라고만 적혀 있고 실제 return 문은 없음
+#     (lesson33 ch3-7, lesson34 ch4-4). 들여쓰기된 주석 한 줄이 블록의 마지막 줄이고
+# (빈 줄 뒤에 들여쓰기 없는 다음 문장이 오거나 코드가 거기서 끝나면) 미완성으로 본다.
+TRAILING_COMMENT_BODY = re.compile(r"\n( +)#[^\n]*\n\n+(?=[^ \t\n]|\Z)")
+
+# 함수 본문이 주석 몇 줄 + 맨 `pass` 뿐인 미완성 스캐폴드 (lesson38 ch6-3 등)
+FUNC_STUB = re.compile(r"def \w+\([^)]*\):\n(?:[ \t]*#[^\n]*\n)*[ \t]*pass\b")
+
+
+def is_placeholder_code(code):
+    return bool(
+        PLACEHOLDER.search(code)
+        or TRAILING_COMMENT_BODY.search(code)
+        or FUNC_STUB.search(code)
+    )
 
 
 def check_review():
@@ -164,18 +198,35 @@ def check_review():
     return checked, problems
 
 
+def _learn_files():
+    """수업 레슨 파일 목록. 두 갈래를 다 훑어야 한다:
+      1) data/lessonNN.ts — 옛 구조(챕터가 파일 하나에 다 있음), 또는
+         data/lessons/lessonNN/ 로 옮긴 뒤 남은 재수출 스텁(내용 없음 → 자연히 0건).
+      2) data/lessons/lessonNN/chM.ts — 레슨 27~52 중 23개가 챕터별로 쪼개진 실제 파일
+         (2026-09 기준 84개 파일). 최상위엔 스텁조차 없는 레슨도 있어서
+         (`data/index.ts` 가 './lessons/lessonNN' 을 바로 import) 여길 안 훑으면
+         그 레슨 전체가 검사 대상에서 조용히 빠진다.
+    """
+    top = sorted(glob.glob(os.path.join(LEARN_DIR, "lesson*.ts")))
+    split = sorted(glob.glob(os.path.join(LEARN_DIR, "lessons", "lesson*", "ch*.ts")))
+    return top + split
+
+
 def check_learn():
     """수업 레슨 — 빈칸이 없는 tryit/mission/coding 의 initialCode 를 실행."""
     problems = []
     checked = 0
-    files = sorted(
-        n for n in os.listdir(LEARN_DIR)
-        if n.startswith("lesson") and n.endswith(".ts")
-    )
-    for name in files:
-        path = os.path.join(LEARN_DIR, name)
+    for path in _learn_files():
+        name = os.path.relpath(path, LEARN_DIR)
         src = open(path, encoding="utf-8").read()
-        ids = [(m.start(), m.group(1)) for m in re.finditer(r'\n          id: "([^"]+)"', src)]
+        # id 뒤에 곧바로 type 이 오는 자리만 스텝 경계로 본다 (챕터 객체 자체의
+        # id: "ch1" 같은 건 뒤에 title 이 오지 type 이 안 오므로 자동으로 걸러짐).
+        # 옛 구조(10칸 들여쓰기)와 새 서브폴더 구조(6칸 들여쓰기) 둘 다 맞아야 해서
+        # 들여쓰기 칸수를 고정하지 않고 \s+ 로 둔다.
+        ids = [
+            (m.start(), m.group(1))
+            for m in re.finditer(r'\n\s+id: "([^"]+)",?\n\s+type: "\w+"', src)
+        ]
         with tempfile.TemporaryDirectory() as workdir:
             for k, (pos, sid) in enumerate(ids):
                 end = ids[k + 1][0] if k + 1 < len(ids) else len(src)
@@ -185,7 +236,7 @@ def check_learn():
                 code, want = field(blk, "initialCode"), field(blk, "expectedOutput")
                 if code is None or want is None or "___" in code:
                     continue
-                if PLACEHOLDER.search(code):        # 학생이 채우는 자리가 있는 스텝
+                if is_placeholder_code(code):        # 학생이 채우는/고치는 자리가 있는 스텝
                     continue
                 body = [l for l in code.split("\n") if l.strip() and not l.strip().startswith("#")]
                 if not body or "print" not in code:  # 처음부터 쓰기

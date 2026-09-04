@@ -49,7 +49,7 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = i + 1; j < n; j++)
             if (a[i] + a[j] == t) count++;
-    cout << count << "\n";
+    cout << count << "\\n";
     return 0;
 }`,
       solutionExplanation: "i < j인 모든 쌍을 이중 반복문으로 확인합니다. a[i] + a[j] == t이면 카운트를 늘립니다. 시간복잡도는 O(N²)입니다.",
@@ -105,7 +105,7 @@ int main() {
     int n;
     cin >> n;
     for (int i = 2; i <= n; i++)
-        if (isPrime(i)) cout << i << "\n";
+        if (isPrime(i)) cout << i << "\\n";
     return 0;
 }`,
       solutionExplanation: "2부터 N까지 각 수에 대해 소수 판별 함수를 호출합니다. isPrime()은 2부터 n-1까지 나누어 떨어지는 수가 없으면 true를 반환합니다.",
@@ -168,7 +168,7 @@ int main() {
             best = i;
         }
     }
-    cout << best << "\n";
+    cout << best << "\\n";
     return 0;
 }`,
       solutionExplanation: "1부터 N까지 각 수의 약수 개수를 구하고, 최대인 수를 추적합니다. 동률이면 갱신하지 않으므로(>) 자연스럽게 가장 작은 수가 선택됩니다.",
@@ -229,7 +229,7 @@ int main() {
             if (sum > maxSum) maxSum = sum;
         }
     }
-    cout << maxSum << "\n";
+    cout << maxSum << "\\n";
     return 0;
 }`,
       solutionExplanation: "모든 시작점 i에 대해 j를 늘려가며 구간 합을 누적합니다. 각 구간의 합 중 최댓값을 추적합니다. 전부 음수인 경우도 처리하기 위해 INT_MIN으로 초기화합니다.",
@@ -286,7 +286,7 @@ int main() {
     int n;
     cin >> n;
     for (int i = 1; i <= n; i++)
-        if (isPerfect(i)) cout << i << "\n";
+        if (isPerfect(i)) cout << i << "\\n";
     return 0;
 }`,
       solutionExplanation: "각 수 n에 대해 1부터 n-1까지 약수의 합을 구합니다. 합이 n과 같으면 완전수로 출력합니다. 완전수가 없으면 아무것도 출력하지 않습니다.",
@@ -348,7 +348,7 @@ int main() {
     int count = 0;
     for (int i = a; i <= b; i++)
         if (isPalin(i)) count++;
-    cout << count << "\n";
+    cout << count << "\\n";
     return 0;
 }`,
       solutionExplanation: "각 수를 to_string()으로 문자열로 변환한 뒤, reverse()로 뒤집어 원본과 비교합니다. 같으면 팰린드롬입니다.",
@@ -405,7 +405,7 @@ int main() {
         for (int j = i + 1; j < n; j++)
             for (int k = j + 1; k < n; k++)
                 if (a[i] + a[j] + a[k] == t) count++;
-    cout << count << "\n";
+    cout << count << "\\n";
     return 0;
 }`,
       solutionExplanation: "i < j < k를 만족하는 모든 삼중 쌍을 삼중 반복문으로 탐색합니다. 합이 T이면 카운트를 늘립니다. N ≤ 200이므로 O(N³) = 8,000,000으로 충분합니다.",
@@ -462,11 +462,11 @@ int main() {
         for (int i = 0; i < n; i++)
             if (mask & (1 << i)) sum += a[i];
         if (sum == s) {
-            cout << "YES\n";
+            cout << "YES\\n";
             return 0;
         }
     }
-    cout << "NO\n";
+    cout << "NO\\n";
     return 0;
 }`,
       solutionExplanation: "0부터 2^N-1까지의 각 정수를 비트마스크로 사용합니다. i번째 비트가 1이면 a[i]를 포함합니다. 어떤 마스크에서 합이 S가 되면 YES를 출력합니다.",
@@ -530,7 +530,7 @@ int main() {
             double dist = sqrt(dx * dx + dy * dy);
             if (dist < minDist) minDist = dist;
         }
-    cout << fixed << setprecision(2) << minDist << "\n";
+    cout << fixed << setprecision(2) << minDist << "\\n";
     return 0;
 }`,
       solutionExplanation: "모든 점 쌍 (i, j)에 대해 유클리드 거리를 계산하고 최솟값을 유지합니다. sqrt()로 실제 거리를 구한 뒤 fixed + setprecision(2)로 출력합니다.",
@@ -593,7 +593,7 @@ int main() {
         }
         if (totalW <= W && totalV > maxVal) maxVal = totalV;
     }
-    cout << maxVal << "\n";
+    cout << maxVal << "\\n";
     return 0;
 }`,
       solutionExplanation: "비트마스크로 2^N가지 부분집합을 모두 탐색합니다. 총 무게가 W 이하인 경우에 한해 총 가치를 계산하고 최댓값을 갱신합니다.",
@@ -653,7 +653,7 @@ int main() {
     int count = 0;
     for (int i = 1; i <= n; i++)
         if (digitSum(i) == s) count++;
-    cout << count << "\n";
+    cout << count << "\\n";
     return 0;
 }`,
       solutionExplanation: "각 수의 자릿수 합을 구하는 함수를 만들고 1부터 N까지 적용합니다. 10으로 나눈 나머지를 더하는 방식으로 자릿수 합을 구합니다.",
@@ -716,7 +716,7 @@ int main() {
             if (mask & (1 << i)) sum += a[i];
         sums.insert(sum);
     }
-    cout << sums.size() << "\n";
+    cout << sums.size() << "\\n";
     return 0;
 }`,
       solutionExplanation: "비트마스크로 N장의 카드 중 K장을 선택하는 모든 경우를 열거합니다. 각 경우의 합을 set에 삽입해 중복을 제거하고, set의 크기를 출력합니다.",
@@ -779,7 +779,7 @@ int main() {
                 dp[i] = min(dp[i], dp[i - coins[j]] + 1);
         }
     }
-    cout << (dp[m] == INT_MAX ? -1 : dp[m]) << "\n";
+    cout << (dp[m] == INT_MAX ? -1 : dp[m]) << "\\n";
     return 0;
 }`,
       solutionExplanation: "dp[i]를 금액 i를 만드는 최소 동전 수로 정의합니다. dp[0] = 0에서 출발하여 각 동전을 써서 도달 가능한 금액을 갱신합니다. dp[m]이 INT_MAX이면 -1을 출력합니다.",
@@ -845,7 +845,7 @@ int main() {
         int diff = abs(total - 2 * sum);
         if (diff < minDiff) minDiff = diff;
     }
-    cout << minDiff << "\n";
+    cout << minDiff << "\\n";
     return 0;
 }`,
       solutionExplanation: "비트마스크로 정확히 N/2명을 선택하는 모든 경우를 탐색합니다. 선택된 팀의 합을 sum이라 하면, 차이는 |total - 2*sum|입니다. 이 값의 최솟값을 출력합니다.",
@@ -899,7 +899,7 @@ void solve(int start, int depth) {
             if (i > 0) cout << " ";
             cout << chosen[i];
         }
-        cout << "\n";
+        cout << "\\n";
         return;
     }
     for (int i = start; i <= n; i++) {
@@ -972,7 +972,7 @@ int main() {
         }
         if (dp[i] > ans) ans = dp[i];
     }
-    cout << ans << "\n";
+    cout << ans << "\\n";
     return 0;
 }`,
       solutionExplanation: "dp[i]를 a[i]에서 끝나는 LIS 길이로 정의합니다. 각 i에 대해 i 이전 인덱스 j 중 a[j] < a[i]이면 dp[i]를 dp[j]+1로 갱신합니다. 모든 dp[i]의 최댓값이 답입니다.",
@@ -1025,7 +1025,7 @@ int main() {
     string s;
     cin >> s;
     sort(s.begin(), s.end(), greater<char>());
-    cout << s << "\n";
+    cout << s << "\\n";
     return 0;
 }`,
       solutionExplanation: "문자열의 각 문자(자리 숫자)를 내림차순으로 정렬합니다. 문자 비교에서 '9' > '8' > ... > '0'이므로 greater<char>()로 내림차순 정렬하면 가장 큰 수를 얻을 수 있습니다.",
@@ -1085,7 +1085,7 @@ int main() {
             if (sum == k) count++;
         }
     }
-    cout << count << "\n";
+    cout << count << "\\n";
     return 0;
 }`,
       solutionExplanation: "모든 시작 인덱스 i에 대해 j를 늘려가며 구간 합을 누적합니다. 합이 k이면 카운트를 늘립니다. N ≤ 10000이므로 O(N²) = 10^8이 다소 느릴 수 있지만, 단순 누적이라 빠르게 동작합니다.",
@@ -1153,7 +1153,7 @@ int main() {
         cost += dist[cities.back()][0];
         if (cost < minCost) minCost = cost;
     } while (next_permutation(cities.begin(), cities.end()));
-    cout << minCost << "\n";
+    cout << minCost << "\\n";
     return 0;
 }`,
       solutionExplanation: "도시 1부터 N-1까지의 모든 순열을 next_permutation()으로 탐색합니다. 각 순열에 대해 0에서 출발해 순열 순서대로 방문하고 0으로 돌아오는 총 비용을 계산하여 최솟값을 추적합니다.",
@@ -1238,7 +1238,7 @@ int main() {
             minPaint = min(minPaint, min(cnt1, cnt2));
         }
     }
-    cout << minPaint << "\n";
+    cout << minPaint << "\\n";
     return 0;
 }`,
       solutionExplanation: "가능한 모든 8x8 시작 위치 (si, sj)에 대해 두 가지 체스판 패턴을 시도합니다. (r+c)가 짝수인 칸이 W(또는 B)여야 하는 패턴으로, 불일치 칸 수를 세어 최솟값을 출력합니다.",

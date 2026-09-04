@@ -256,10 +256,10 @@ int main() {
     int x, y;
     cout << "첫 번째 숫자: ";
     cin >> x;
-    cout << x << "\n";
+    cout << x << "\\n";
     cout << "두 번째 숫자: ";
     cin >> y;
-    cout << y << "\n";
+    cout << y << "\\n";
 
     cout << x << " + " << y << " = " << add(x, y) << endl;
 
@@ -276,10 +276,10 @@ int main() {
     int x, y;
     cout << "첫 번째 숫자: ";
     cin >> x;
-    cout << x << "\n";
+    cout << x << "\\n";
     cout << "두 번째 숫자: ";
     cin >> y;
-    cout << y << "\n";
+    cout << y << "\\n";
 
     cout << x << " + " << y << " = " << add(x, y) << endl;
 

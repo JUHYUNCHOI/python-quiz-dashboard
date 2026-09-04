@@ -1,6 +1,9 @@
 // 🔒 USACO_VERIFIED (2026-05-13)
 //   Python: 5/12 (TLE 6-12, brute too slow)
 //   C++:    10/12 (TLE - brute)
+//   2026-09-03: 코드 안 영어 주석을 한국어로 (선생님 "주석은 수정해도 돼").
+//     ⚠️ 주석만 바꿨고 실행 코드는 한 글자도 안 건드림 → 샘플 "4 2" 동일 확인.
+//     동작이 안 바뀌므로 USACO 재제출 불필요.
 //   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 
@@ -15,7 +18,7 @@ const FULL_PY = [
   "",
   "N, K = map(int, input().split())",
   "",
-  "# Group identical moves so we don't recount duplicates.",
+  "# 같은 무브끼리 묶어요. 중복을 여러 번 세지 않으려고요.",
   "cnt = Counter()",
   "for _ in range(K):",
   "    x, y, z = map(int, input().split())",
@@ -25,7 +28,7 @@ const FULL_PY = [
   "best = -1",
   "ways = 0",
   "",
-  "# Try every possible board: bit = 1 means M, bit = 0 means O.",
+  "# 가능한 보드를 전부 해봐요. 비트가 1 이면 M, 0 이면 O 예요.",
   "for b in range(1 << N):",
   "    score = 0",
   "    for (x, y, z), c in triples:",
@@ -51,7 +54,7 @@ const FULL_CPP = [
   "    int N, K;",
   "    cin >> N >> K;",
   "",
-  "    // Group identical moves into a count map.",
+  "    // 같은 무브끼리 묶어서 개수를 세요.",
   "    map<tuple<int,int,int>, int> cnt;",
   "    for (int i = 0; i < K; i++) {",
   "        int x, y, z;",

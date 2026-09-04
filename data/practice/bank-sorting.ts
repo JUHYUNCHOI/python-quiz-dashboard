@@ -180,7 +180,7 @@ int main() {
         cin >> x;
         s.insert(x);
     }
-    for (int v : s) cout << v << "\n";
+    for (int v : s) cout << v << "\\n";
     return 0;
 }`,
       solutionExplanation:
@@ -375,7 +375,7 @@ int main() {
     double avg = 0;
     for (int s : scores) avg += s;
     avg /= n;
-    cout << hi << "\n" << lo << "\n"
+    cout << hi << "\\n" << lo << "\\n"
          << fixed << setprecision(2) << avg << endl;
     return 0;
 }`,
@@ -450,7 +450,7 @@ int main() {
         if (a.second != b.second) return a.second > b.second;
         return a.first < b.first;
     });
-    for (auto& s : students) cout << s.first << "\n";
+    for (auto& s : students) cout << s.first << "\\n";
     return 0;
 }`,
       solutionExplanation:
@@ -528,7 +528,7 @@ int main() {
         if (a.first != b.first) return a.first > b.first;
         return a.second < b.second;
     });
-    for (int i = 0; i < k; i++) cout << v[i].second << "\n";
+    for (int i = 0; i < k; i++) cout << v[i].second << "\\n";
     return 0;
 }`,
       solutionExplanation:
@@ -599,7 +599,7 @@ int main() {
         else
             merged.push_back(seg);
     }
-    for (auto& seg : merged) cout << seg.first << " " << seg.second << "\n";
+    for (auto& seg : merged) cout << seg.first << " " << seg.second << "\\n";
     return 0;
 }`,
       solutionExplanation:
@@ -749,7 +749,7 @@ int main() {
         if (a.duration != b.duration) return a.duration > b.duration;
         return a.num < b.num;
     });
-    for (auto& car : cars) cout << car.num << " " << car.fee << "\n";
+    for (auto& car : cars) cout << car.num << " " << car.fee << "\\n";
     return 0;
 }`,
       solutionExplanation:
@@ -958,7 +958,7 @@ int main() {
     for (auto& p : freq)
         if (p.second == maxFreq) mode = p.first;  // map is ordered: last = largest
     sort(arr.begin(), arr.end());
-    cout << mode << "\n" << arr[n / 2] << endl;
+    cout << mode << "\\n" << arr[n / 2] << endl;
     return 0;
 }`,
       solutionExplanation:
@@ -1050,7 +1050,7 @@ int main() {
             if (i > 0) cout << " ";
             cout << g[i];
         }
-        cout << "\n";
+        cout << "\\n";
     }
     return 0;
 }`,
@@ -1443,7 +1443,7 @@ int main() {
         if (points[a] != points[b]) return points[a] > points[b];
         return a < b;
     });
-    for (auto& t : teams) cout << t << " " << points[t] << "\n";
+    for (auto& t : teams) cout << t << " " << points[t] << "\\n";
     return 0;
 }`,
       solutionExplanation:

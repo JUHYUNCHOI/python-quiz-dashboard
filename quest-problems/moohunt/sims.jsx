@@ -190,3 +190,98 @@ export function BruteLimitSim({ E }) {
     </div>
   );
 }
+
+/* ═══ ③ 숫자 하나 = 보드 하나 (비트마스크 다리) ═══
+   student-algorithm 이 실제로 풀어보고 막힌 자리 (2026-09-03):
+     "정수 하나(b=5)가 어떻게 이진수로 쪼개져서 각 칸의 M/O 가 되는지를 숫자로 본 적이 없다.
+      1-4 에서 '비트마스크' 단어만 한 번 나오고, 코드에 오니 >> 랑 & 가 뭔지부터 막혔다."
+   그래서 작은 N=3 으로 숫자 → 칸 을 눈으로 보여준 뒤 >> 와 & 를 그 위에서 설명한다. */
+export function BitBoardSim({ E }) {
+  const N = 3;
+  const bits = (b) => Array.from({ length: N }, (_, i) => (b >> i) & 1);
+  const chars = (b) => bits(b).map((v) => (v ? "M" : "O"));
+  const bin = (b) => b.toString(2).padStart(N, "0");
+
+  const steps = [{ k: "why" }, ...Array.from({ length: 1 << N }, (_, b) => ({ k: "row", b })),
+                 { k: "extract" }, { k: "all" }];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+  const shown = s.k === "row" ? s.b : s.k === "why" ? -1 : (1 << N) - 1;
+  const EX_B = 5, EX_I = 1;   // b=5 의 1번 칸을 꺼내는 예
+
+  const say =
+    s.k === "why" ? t(E,
+      <>Each cell is <b>M</b> or <b>O</b> — two choices.<br />So write M as <b>1</b> and O as <b>0</b>.<br />Then a whole board is just <b>one number</b>.</>,
+      <>칸마다 <b>M</b> 아니면 <b>O</b> — 둘 중 하나예요.<br />그럼 M 을 <b>1</b>, O 를 <b>0</b> 으로 쓰면요?<br />보드 하나가 <b>숫자 하나</b>가 돼요.</>)
+    : s.k === "row" ? t(E,
+      <>Number <b>{s.b}</b> in binary is <b>{bin(s.b)}</b> → board <b>{chars(s.b).join("")}</b></>,
+      <>숫자 <b>{s.b}</b> 를 2진수로 쓰면 <b>{bin(s.b)}</b> → 보드 <b>{chars(s.b).join("")}</b></>)
+    : s.k === "extract" ? t(E,
+      <>So how do we read just cell <b>{EX_I}</b> out of <b>b = {EX_B}</b>?<br />
+        Push it right {EX_I} step{EX_I > 1 ? "s" : ""}: <b>{EX_B} &gt;&gt; {EX_I}</b> = {EX_B >> EX_I} (binary {(EX_B >> EX_I).toString(2)})<br />
+        then keep only the last digit: <b>&amp; 1</b> → <b>{(EX_B >> EX_I) & 1}</b> = {((EX_B >> EX_I) & 1) ? "M" : "O"}</>,
+      <>그럼 <b>b = {EX_B}</b> 에서 <b>{EX_I}</b>번 칸만 어떻게 꺼낼까요?<br />
+        오른쪽으로 {EX_I}칸 밀어요 — <b>{EX_B} &gt;&gt; {EX_I}</b> = {EX_B >> EX_I} (2진수 {(EX_B >> EX_I).toString(2)})<br />
+        그리고 맨 끝자리만 남겨요 — <b>&amp; 1</b> → <b>{(EX_B >> EX_I) & 1}</b> 이니까 {((EX_B >> EX_I) & 1) ? "M" : "O"}</>)
+    : t(E,
+      <>N = {N} 이면 보드는 <b>{1 << N}</b>개. 숫자 <b>0 … {(1 << N) - 1}</b> 이 전부예요.<br />
+        그래서 <b>for b in range(1 &lt;&lt; N)</b> 한 줄이<br /><b>"모든 보드를 다 해본다"</b> 가 돼요.</>,
+      <>N = {N} 이면 보드는 <b>{1 << N}</b>개. 숫자 <b>0 … {(1 << N) - 1}</b> 이 전부예요.<br />
+        그래서 <b>for b in range(1 &lt;&lt; N)</b> 한 줄이<br /><b>"모든 보드를 다 해본다"</b> 가 돼요.</>);
+
+  const rows = Array.from({ length: 1 << N }, (_, b) => b).filter((b) => b <= shown);
+
+  return (
+    <div style={{ padding: 16, paddingBottom: 90 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "One number = one board", "숫자 하나 = 보드 하나")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
+      <Say tone={s.k === "all" ? "aha" : s.k === "why" ? "stuck" : "go"}>{say}</Say>
+
+      <div style={{ maxWidth: 330, margin: "0 auto", display: "grid", gap: 5 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "42px 60px 1fr", gap: 8,
+          fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 8px" }}>
+          <span>{t(E, "number", "숫자")}</span>
+          <span>{t(E, "binary", "2진수")}</span>
+          <span>{t(E, "board", "보드")}</span>
+        </div>
+        {rows.map((b) => {
+          const cur = s.k === "row" && b === s.b;
+          const ex = s.k === "extract" && b === EX_B;
+          return (
+            <div key={b} style={{ display: "grid", gridTemplateColumns: "42px 60px 1fr", gap: 8,
+              alignItems: "center", padding: "5px 8px", borderRadius: 9,
+              border: `${cur || ex ? 2 : 1}px solid ${cur ? A : ex ? "#f59e0b" : "#e2e8f0"}`,
+              background: cur ? "#f5f3ff" : ex ? "#fffbeb" : "#fff" }}>
+              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 14, color: "#334155" }}>{b}</span>
+              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 13, color: "#7c3aed" }}>{bin(b)}</span>
+              <span style={{ display: "flex", gap: 3 }}>
+                {chars(b).map((c, i) => (
+                  <span key={i} style={{ width: 24, height: 24, borderRadius: 6,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 13,
+                    background: c === "M" ? MBG : OBG,
+                    border: `${ex && i === EX_I ? 2.5 : 1.5}px solid ${ex && i === EX_I ? "#f59e0b" : (c === "M" ? MCOL : OCOL)}`,
+                    color: c === "M" ? MCOL : OCOL }}>{c}</span>
+                ))}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {s.k === "extract" && (
+        <div style={{ maxWidth: 330, margin: "12px auto 0", padding: "8px 11px", borderRadius: 9,
+          background: "#fffbeb", border: "1.5px solid #fbbf24", textAlign: "center",
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: "#92400e" }}>
+          (b &gt;&gt; i) &amp; 1 &nbsp;→&nbsp; ({EX_B} &gt;&gt; {EX_I}) &amp; 1 = {(EX_B >> EX_I) & 1}
+        </div>
+      )}
+      </StepFade>
+      <div style={{ marginTop: 18 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}

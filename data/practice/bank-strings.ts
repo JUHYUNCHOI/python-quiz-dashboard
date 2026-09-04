@@ -359,7 +359,7 @@ int main() {
     for (char c : s) cnt[c - 'a']++;
     for (int i = 0; i < 26; i++) {
         if (cnt[i] > 0) {
-            cout << (char)('a' + i) << ": " << cnt[i] << "\n";
+            cout << (char)('a' + i) << ": " << cnt[i] << "\\n";
         }
     }
     return 0;
@@ -559,7 +559,7 @@ int main() {
             if (prefix.empty()) break;
         }
     }
-    cout << prefix << "\n";
+    cout << prefix << "\\n";
     return 0;
 }`,
       solutionExplanation:
@@ -777,7 +777,7 @@ int main() {
             best = p.first;
         }
     }
-    cout << best << "\n" << n << "\n" << freq.size() << "\n";
+    cout << best << "\\n" << n << "\\n" << freq.size() << "\\n";
     return 0;
 }`,
       solutionExplanation:
@@ -846,7 +846,7 @@ int main() {
         if (i > 0) cout << " ";
         cout << words[i];
     }
-    cout << "\n";
+    cout << "\\n";
     return 0;
 }`,
       solutionExplanation:
@@ -925,7 +925,7 @@ int main() {
         path = rest.substr(slash + 1);
     }
 
-    cout << protocol << "\n" << host << "\n" << path << "\n";
+    cout << protocol << "\\n" << host << "\\n" << path << "\\n";
     return 0;
 }`,
       solutionExplanation:

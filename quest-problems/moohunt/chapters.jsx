@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getMooHuntSections, getMooHuntWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ScoreBoardSim, BruteLimitSim } from "./sims";
+import { ScoreBoardSim, BitBoardSim, BruteLimitSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooHuntCh1 (5 steps: reveal / reveal / reveal / quiz / input)
@@ -29,8 +29,8 @@ export function makeMooHuntCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
-                "Find the highest score any board can reach.\nThen count how many boards reach it.",
-                "어떤 보드가 받을 수 있는 최고 점수를 구해요.\n그리고 그 점수가 되는 보드가 몇 개인지도 구해요.")}
+                "The moves are fixed. YOU choose the board.\nPick the best board — what score does it get,\nand how many boards tie for it?",
+                "무브는 정해져 있어요. 보드는 내가 골라요.\n제일 좋은 보드를 골랐을 때 몇 점인지,\n그리고 그 점수가 나오는 보드가 몇 개인지 구해요.")}
             </div>
           </div>
 
@@ -42,30 +42,40 @@ export function makeMooHuntCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "A row of ", "한 줄에 ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "N cells (3 ≤ N ≤ 20)", "N 칸 (3 ≤ N ≤ 20)")}</b>
-                  {t(E, " — each one is 'M' or 'O'.", " — 각각 'M' 또는 'O'.")}
+                  {t(E, "The board is ", "보드는 ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "a row of N cells (3 ≤ N ≤ 20)", "N 칸 (3 ≤ N ≤ 20) 짜리 한 줄")}</b>
+                  {t(E, ", each 'M' or 'O'.", " 이고, 칸마다 'M' 아니면 'O' 예요.")}
+                  <br />
+                  <b style={{ color: "#dc2626" }}>{t(E, "It is NOT given to us — we get to fill it in however we want.",
+                                                       "이건 입력으로 주어지지 않아요 — 우리가 마음대로 채우는 거예요.")}</b>
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Bessie does ", "베시는 ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "K moves", "K 번의 무브")}</b>
-                  {t(E, " (1 ≤ K ≤ 200,000).\nEach move taps three distinct cells (x, y, z) in order.\nThe order matters.",
-                        " (1 ≤ K ≤ 200,000) 를 해요.\n무브마다 서로 다른 세 칸 (x, y, z) 를 순서대로 탭해요.\n순서가 중요해요.")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "K moves", "무브 K 개")}</b>
+                  {t(E, " (1 ≤ K ≤ 200,000) ", " (1 ≤ K ≤ 200,000) ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "are given in the input", "는 입력으로 주어져요")}</b>
+                  {t(E, " and never change.", " — 이건 우리가 못 바꿔요.")}
+                  <br />
+                  {t(E, "Each move names three cells (x, y, z). Moves don't change the board — they just get checked.",
+                        "무브 하나는 세 칸 (x, y, z) 를 가리켜요.\n무브가 보드를 바꾸지는 않아요. 그냥 그 세 칸을 확인만 해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "She scores when cell ", "득점 조건: 칸 ")}
+                  {t(E, "For each move, if cell ", "무브 하나를 볼 때, 칸 ")}
                   <b style={{ color: "#dc2626" }}>x</b>
                   {t(E, " = 'M', cell ", " = 'M', 칸 ")}
                   <b style={{ color: "#dc2626" }}>y</b>
                   {t(E, " = 'O', cell ", " = 'O', 칸 ")}
                   <b style={{ color: "#dc2626" }}>z</b>
-                  {t(E, " = 'O' — spelling 'MOO'.", " = 'O' — 'MOO' 가 되도록.")}
+                  {t(E, " = 'O' — that spells 'MOO' — ", " = 'O' 이면 — 세 칸이 'MOO' 가 되면 — ")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "that move scores 1 point.", "그 무브가 1점이에요.")}</b>
+                  <br />
+                  {t(E, "The board's score = how many of the K moves score.",
+                        "보드의 점수 = K 개 무브 중 점수가 나는 무브의 개수예요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
@@ -140,12 +150,23 @@ export function makeMooHuntCh1(E) {
         "Right! 2^20 ≈ 1M. Each cell is M or O — a binary choice, perfect for a bitmask, so one number defines a whole board. Enumerating them is fine — but scoring each board still costs work (next).",
         "맞아요. 2^20 ≈ 100 만이에요.\n각 칸이 M 아니면 O 라 비트마스크로 보드 하나를 숫자 하나로 표현할 수 있어요.\n보드를 다 훑는 건 괜찮아요.\n그런데 보드마다 점수를 매기는 비용이 남았어요."),
     },
+    /* 1-4b: 숫자 하나 = 보드 하나. student-algorithm 이 직접 풀어보고 막힌 자리 (2026-09-03):
+       "1-4 에서 '비트마스크' 단어만 한 번 나오고, 코드에 오니 >> 랑 & 가 뭔지부터 막혔다."
+       작은 N=3 으로 숫자 → 2진수 → 칸 을 눈으로 보여준 뒤 >> 와 & 를 그 위에서 설명한다. */
+    {
+      type: "reveal",
+      label: t(E, "One number = one board", "숫자 = 보드"),
+      narr: t(E, "But how does one number become a whole board?",
+                 "그런데 숫자 하나가 어떻게 보드가 되죠?"),
+      content: (<BitBoardSim E={E} />),
+    },
+
     // 1-5: NumInput - count distinct triples to dedup
     {
       type: "input",
       narr: t(E,
-        "And how many different moves are there?",
-        "무브는 서로 다른 게 몇 가지나 될까요?"),
+        "K can be 200,000 — but the same (x,y,z) repeats. Same triple, same check. So how many are really different?",
+        "K 는 20만까지 가는데 같은 (x,y,z) 가 여러 번 나와요.\n같은 삼중쌍이면 검사도 똑같으니 한 번만 세면 돼요.\n그럼 진짜 서로 다른 건 몇 개일까요?"),
       question: t(E,
         "When N = 20, count distinct ordered triples (x, y, z) with x, y, z all different. Answer = ?",
         "N = 20 일 때 x, y, z 가 모두 다른 순서 있는 (x, y, z) 의 개수 = ?"),

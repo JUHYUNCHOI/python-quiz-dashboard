@@ -317,7 +317,7 @@ int main() {
         cout << "3. 도망" << endl;
         cout << "선택: ";
         cin >> choice;
-        cout << choice << "\n";
+        cout << choice << "\\n";
 
         // 여기에 if/else로 choice에 따른 출력을 작성하세요
 

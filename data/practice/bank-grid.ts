@@ -118,7 +118,7 @@ int main() {
             cin >> x;
             if (x > maxVal) maxVal = x;
         }
-        cout << maxVal << "\n";
+        cout << maxVal << "\\n";
     }
     return 0;
 }`,
@@ -471,7 +471,7 @@ int main() {
             if (j > 0) cout << " ";
             cout << rotated[i][j];
         }
-        cout << "\n";
+        cout << "\\n";
     }
     return 0;
 }`,
@@ -551,7 +551,7 @@ int main() {
                 cout << cnt;
             }
         }
-        cout << "\n";
+        cout << "\\n";
     }
     return 0;
 }`,
@@ -703,7 +703,7 @@ int main() {
             if (j > 0) cout << " ";
             cout << grid[i][j];
         }
-        cout << "\n";
+        cout << "\\n";
     }
     return 0;
 }`,
@@ -778,7 +778,7 @@ int main() {
         int r1, c1, r2, c2;
         cin >> r1 >> c1 >> r2 >> c2;
         long long ans = prefix[r2][c2] - prefix[r1-1][c2] - prefix[r2][c1-1] + prefix[r1-1][c1-1];
-        cout << ans << "\n";
+        cout << ans << "\\n";
     }
     return 0;
 }`,
@@ -937,7 +937,7 @@ int main() {
             sum += grid[i][j];
             if (grid[i][j] > maxVal) maxVal = grid[i][j];
         }
-        cout << sum << " " << maxVal << "\n";
+        cout << sum << " " << maxVal << "\\n";
     }
     return 0;
 }`,
@@ -1098,7 +1098,7 @@ int main() {
             if (j > 0) cout << " ";
             cout << row[j];
         }
-        cout << "\n";
+        cout << "\\n";
     }
     return 0;
 }`,
@@ -1541,7 +1541,7 @@ int main() {
         }
     }
 
-    cout << dpMax[n-1][m-1] << "\n" << dpMin[n-1][m-1] << endl;
+    cout << dpMax[n-1][m-1] << "\\n" << dpMin[n-1][m-1] << endl;
     return 0;
 }`,
       solutionExplanation:
