@@ -282,7 +282,7 @@ print(math.sqrt(64))`,
 random.seed(42)
 print(random.randint(1, 10))
 print(random.choice(['가위', '바위', '보']))`,
-        result: "2\n바위",
+        result: "2\n가위",
         note: "seed(42)로 결과 고정! randint=정수 범위, choice=리스트에서 하나!",
         en: {
           note: "seed(42) fixes the result! randint=integer in a range, choice=one item from a list!"
@@ -358,7 +358,7 @@ random.seed(7)
 cards = [1, 2, 3, 4, 5]
 random.shuffle(cards)
 print(cards)`,
-        result: "[2, 5, 4, 1, 3]",
+        result: "[5, 1, 4, 2, 3]",
         note: "shuffle은 리스트를 직접 섞어요 (return 없음)!",
         en: {
           note: "shuffle mixes the list in place (no return value)!"

@@ -64,9 +64,9 @@ export const lesson40: LessonData = {
       type: "practice",
       content: {
         level: 1, task: "___ 자리를 채우세요!", guide: "파일 열기 기본 구조", hint: "with ... as 구문!",
-        template: "___ open('test.txt', 'r') ___ f:\n    text = f.read()\n    print(text)",
+        template: "open('test.txt', 'w').write('Hello World')   # 읽을 파일을 먼저 만들어 둠\n\n___ open('test.txt', 'r') ___ f:\n    text = f.read()\n    print(text)",
         blanksAnswer: ["with", "as"],
-        answer: "with open('test.txt', 'r') as f:\n    text = f.read()\n    print(text)",
+        answer: "open('test.txt', 'w').write('Hello World')   # 읽을 파일을 먼저 만들어 둠\n\nwith open('test.txt', 'r') as f:\n    text = f.read()\n    print(text)",
         alternateAnswers: [], expect: "Hello World",
         en: {
           task: "Fill in the blanks!",

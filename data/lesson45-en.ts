@@ -345,7 +345,7 @@ print(f'Days since school started: {school_days.days}')
 # Comparison
 if today > birthday:
     print('Birthday has passed!')`,
-          expectedOutput: `Birthday: 2010/5/20\nDays since birth: 5139\nDays since school started: 103\nBirthday has passed!`,
+          expectedOutput: `Birthday: 2010/5/20\nDays since birth: 5140\nDays since school started: 103\nBirthday has passed!`,
           hint: "Subtracting dates gives you the difference in days!",
           hint2: "Use .days to get the number of days!"
         },
@@ -383,7 +383,7 @@ foods = ['chicken', 'pizza', 'burger', 'tacos', 'sushi']
 for i in range(3):
     pick = random.choice(foods)
     print(f'\\nToday\\'s menu {i+1}: {pick}')`,
-          expectedOutput: `=== 5 Dice Rolls ===\nRoll 1: 1\nRoll 2: 1\nRoll 3: 6\nRoll 4: 6\nRoll 5: 6\n\nToday's menu 1: chicken\nToday's menu 2: chicken\nToday's menu 3: sushi`,
+          expectedOutput: `=== 5 Dice Rolls ===\nRoll 1: 6\nRoll 2: 1\nRoll 3: 1\nRoll 4: 6\nRoll 5: 3\n\nToday's menu 1: chicken\n\nToday's menu 2: chicken\n\nToday's menu 3: burger`,
           hint: "Setting seed(42) always gives the same sequence of random values!",
           hint2: "Just run the code as is!"
         },

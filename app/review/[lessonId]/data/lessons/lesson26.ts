@@ -174,7 +174,7 @@ attendance.add("영희")
 attendance.add("철수")  # 중복! 무시됨
 
 print(f"출석 인원: {len(attendance)}명")
-print(f"출석부: {attendance}")`,
+print(f"출석부: {sorted(attendance)}")  # set은 순서가 없어서 sorted로 정렬해서 봐요`,
         predict: {
           question: "철수를 2번 add하면 몇 명?",
           options: ["3명", "2명", "1명", "에러"],
@@ -188,7 +188,7 @@ print(f"출석부: {attendance}")`,
             feedback: "set automatically removes duplicates! 철수 is stored only once."
           }
         },
-        result: "출석 인원: 2명\n출석부: {'철수', '영희'}"
+        result: "출석 인원: 2명\n출석부: ['영희', '철수']"
       }
     },
     {

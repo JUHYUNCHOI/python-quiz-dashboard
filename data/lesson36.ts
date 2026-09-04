@@ -385,7 +385,7 @@ by_score = sorted(students, key=lambda s: s['score'], reverse=True)
 print(f'\\n성적순:')
 for s in by_score:
     print(f'  {s["name"]}: {s["score"]}점')`,
-          expectedOutput: `double(5) = 10\nadd(3, 7) = 10\n\n이름순: ['바나나', '사과', '체리', '포도']\n길이순: ['사과', '포도', '바나나', '체리']\n\n성적순:\n  영희: 92점\n  철수: 85점\n  민수: 78점`,
+          expectedOutput: `double(5) = 10\nadd(3, 7) = 10\n\n이름순: ['바나나', '사과', '체리', '포도']\n길이순: ['사과', '체리', '포도', '바나나']\n\n성적순:\n  영희: 92점\n  철수: 85점\n  민수: 78점`,
           hint: "lambda는 한 줄 함수, sorted의 key로 정렬 기준!",
           hint2: "코드를 그대로 실행하세요!"
         },

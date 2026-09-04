@@ -105,15 +105,45 @@ def field(blk, name):
     return None
 
 
-def run(code, cwd, stdin=""):
+def run(code, cwd, stdin="", hashseed=None):
+    env = None
+    if hashseed is not None:
+        env = dict(os.environ, PYTHONHASHSEED=str(hashseed))
     try:
         r = subprocess.run(
             [sys.executable, "-c", code], input=stdin, cwd=cwd,
-            capture_output=True, text=True, timeout=TIMEOUT,
+            capture_output=True, text=True, timeout=TIMEOUT, env=env,
         )
         return r.stdout, r.stderr
     except subprocess.TimeoutExpired:
         return None, "TIMEOUT"
+
+
+def is_unstable(code, cwd, stdin=""):
+    """집합·딕셔너리를 그냥 print 해서 실행할 때마다 순서가 달라지는 코드인가.
+
+    2026-09-04: 검사기 자신이 이걸 못 잡아서 lesson21·26 이 돌릴 때마다
+    나타났다 사라졌다 했다. PYTHONHASHSEED 를 고정하면 조용해지지만 그건 **버그를 숨기는 것**이다
+    — 학생 브라우저(Pyodide)는 또 다른 순서로 보여주니까. 그래서 고정하는 대신
+    서로 다른 seed 두 개로 돌려서 **결과가 갈리는지**를 본다. 갈리면 그게 확정된 버그다.
+
+    실패한 스텝에서만 부른다 (전체를 두 번 돌리면 느려진다).
+
+    ⚠️ seed 두 개로는 모자란다 — {'철수','영희'} 는 seed 1·2·3 에서 같은 순서가 나오고
+    7·11 에서만 뒤집힌다. 실제로 seed 1·2 만 보다가 lesson26 을 놓쳤다.
+    원소가 적을수록 우연히 같아지기 쉬우니 여러 개를 본다.
+    """
+    seeds = [1, 2, 3, 7, 11, 23]
+    first = None
+    for sd in seeds:
+        out, _ = run(code, cwd, stdin, hashseed=sd)
+        if out is None:
+            return False
+        if first is None:
+            first = out
+        elif out != first:
+            return True
+    return False
 
 
 def last_error_line(stderr):
@@ -127,8 +157,12 @@ def last_error_line(stderr):
 # ⚠️ task 필드까지 이 정규식으로 걸러내면 안 된다 — "실행해보세요/확인해보세요" 류 정상적인
 # 지시문에도 흔히 붙는 말이라 130개 넘는 정상 스텝이 통째로 검사 대상에서 빠진다(실측 확인함).
 # 반드시 initialCode(코드) 본문에만 적용할 것.
+# 영어 판정어 추가 (2026-09-04): 한국어 원본은 "바꿔" 로 걸러졌는데 같은 스텝의 -en 파일은
+# "change 3 and 5 to 10 and 7!" 이라 안 걸려서, mission 스텝의 미완성 코드를 실행하고
+# "17 이 나와야 하는데 8 이 나왔다" 고 오탐했다. 한국어 판정어마다 영어 짝을 붙인다.
 PLACEHOLDER = re.compile(
-    r"여기에|여기다|TODO|write your|your code|작성하|채워|넣어|\bhere\b|put an|한 줄 써|바꿔", re.I)
+    r"여기에|여기다|TODO|write your|your code|작성하|채워|넣어|\bhere\b|put an|한 줄 써|바꿔"
+    r"|fill in|\breplace\b|change [^\n]{0,40}\bto\b|\bmodify\b", re.I)
 
 # 함수 본문이 "설명 주석만 적어놓고 실제 코드 없이" 끝나는 미완성 스캐폴드.
 # 예: "# 합계와 평균을 한 번에 return하세요!" 라고만 적혀 있고 실제 return 문은 없음
@@ -194,7 +228,8 @@ def check_review():
                         continue
                     problems.append((name, ty, label, "ERROR", combined, want))
                 elif got != want.rstrip("\n"):
-                    problems.append((name, ty, label, "MISMATCH", got, want.rstrip("\n")))
+                    kind = "UNSTABLE" if is_unstable(code, workdir) else "MISMATCH"
+                    problems.append((name, ty, label, kind, got, want.rstrip("\n")))
     return checked, problems
 
 
@@ -259,7 +294,8 @@ def check_learn():
                 elif out.strip() == "" and want.strip() != "":
                     continue        # 출력 자체가 없음 = 학생이 처음부터 쓰는 스텝
                 elif out.rstrip("\n") != want.rstrip("\n"):
-                    problems.append((name, "tryit", sid, "MISMATCH", out.rstrip("\n"), want.rstrip("\n")))
+                    kind = "UNSTABLE" if is_unstable(code, workdir, stdin) else "MISMATCH"
+                    problems.append((name, "tryit", sid, kind, out.rstrip("\n"), want.rstrip("\n")))
     return checked, problems
 
 
@@ -269,6 +305,9 @@ def report(title, checked, problems):
         print(f"\n  ● {name} [{ty}] 「{label}」 {kind}")
         print(f"      나온 것  : {got!r}")
         print(f"      적힌 것  : {want!r}")
+        if kind == "UNSTABLE":
+            print("      ⚠️ 이 코드는 돌릴 때마다 결과가 달라진다 (집합·딕셔너리를 그냥 print).")
+            print("         학생 화면과도 늘 어긋난다 → sorted() 로 감싸라. 숫자만 고치면 안 된다.")
 
 
 def main():

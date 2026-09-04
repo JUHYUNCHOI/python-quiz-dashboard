@@ -133,7 +133,7 @@ export function BruteLimitSim({ E }) {
 
   const rows = [
     { key: "boards", ko: "보드 개수 (2²⁰)", en: "boards (2²⁰)", v: fmt(BOARDS) },
-    { key: "triples", ko: "서로 다른 삼중쌍 (20×19×18)", en: "distinct triples (20×19×18)", v: fmt(TRIPLES) },
+    { key: "triples", ko: "서로 다른 무브 (20×19×18)", en: "distinct moves (20×19×18)", v: fmt(TRIPLES) },
     { key: "mult", ko: "곱하면 검사 횟수", en: "multiply → checks", v: "≈ 7×10⁹", bad: true },
   ];
   const upto = { idea: 0, boards: 1, triples: 2, mult: 3, limit: 3 }[s.k];
@@ -147,10 +147,10 @@ export function BruteLimitSim({ E }) {
       <>칸마다 M 아니면 O 이고 N 은 20까지 가요.<br />그래서 보드는 <b>2²⁰ ≈ 100만</b> 개예요.</>)
     : s.k === "triples" ? t(E,
       <>K can be 200,000, but the same triple repeats.<br />Distinct ordered triples are only <b>20×19×18 = 6,840</b>.</>,
-      <>K 는 20만까지지만 같은 삼중쌍이 반복돼요.<br />서로 다른 삼중쌍은 <b>20×19×18 = 6,840</b> 개뿐이에요.</>)
+      <>K 는 20만까지지만 같은 무브가 여러 번 나와요.<br />서로 다른 무브는 <b>20×19×18 = 6,840</b> 개뿐이에요.</>)
     : s.k === "mult" ? t(E,
       <>Scoring one board means checking every triple.<br />So the work is <b>1,000,000 × 6,840 ≈ 7×10⁹</b>.</>,
-      <>보드 하나를 채점하려면 삼중쌍을 다 봐야 해요.<br />그러니 일의 양은 <b>100만 × 6,840 ≈ 7×10⁹</b> 이에요.</>)
+      <>보드 하나를 채점하려면 무브를 다 봐야 해요.<br />그러니 일의 양은 <b>100만 × 6,840 ≈ 7×10⁹</b> 이에요.</>)
     : t(E,
       <>A computer does roughly <b>10⁸ ~ 10⁹</b> simple steps per second.<br /><b>7×10⁹ does not fit in the time limit.</b><br />The idea is right; it is just too slow at N = 20.</>,
       <>컴퓨터는 1초에 대략 <b>10⁸ ~ 10⁹</b> 번 계산해요.<br /><b>7×10⁹</b> 은 아슬아슬해요 — 빠듯한 숫자예요.<br />그래서 같은 무브를 묶어 줄이고 <b>C++</b> 로 짜면 통과해요.<br />파이썬은 시간이 모자라 부분 점수예요.</>);

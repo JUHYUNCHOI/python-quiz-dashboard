@@ -13,8 +13,8 @@ export const lesson39: LessonData = {
       type: "explain",
       content: {
         lines: [],
-        code: `def save_game():\n    with open('save.txt', 'w') as file:\n        file.write(character['name'] + '\\n')\n        file.write(str(character['HP']) + '\\n')\n        file.write(str(character['attack']) + '\\n')\n    print('saved!')`,
-        result: "숫자는 str()로 변환해서 저장!",
+        code: `character = {'name': '용사', 'HP': 100, 'attack': 20}\n\ndef save_game():\n    with open('save.txt', 'w') as file:\n        file.write(character['name'] + '\\n')\n        file.write(str(character['HP']) + '\\n')\n        file.write(str(character['attack']) + '\\n')\n    print('saved!')\n\nsave_game()`,
+        result: "saved!",
         note: "'w' 모드 + \\n으로 줄바꿈!"
       }
     },
@@ -68,8 +68,8 @@ export const lesson39: LessonData = {
       type: "explain",
       content: {
         lines: [],
-        code: `def load_game():\n    try:\n        with open('save.txt', 'r') as file:\n            lines = file.readlines()\n            character['name'] = lines[0].strip()\n            character['HP'] = int(lines[1].strip())\n        print(f'Welcome back, {character["name"]}!')\n    except FileNotFoundError:\n        print('No save file found!')`,
-        result: "try-except로 파일 없음 처리!",
+        code: `character = {}\n\ndef load_game():\n    try:\n        with open('save.txt', 'r') as file:\n            lines = file.readlines()\n            character['name'] = lines[0].strip()\n            character['HP'] = int(lines[1].strip())\n        print(f'Welcome back, {character["name"]}!')\n    except FileNotFoundError:\n        print('No save file found!')\n\nload_game()`,
+        result: "Welcome back, 용사!",
         note: "strip()은 줄바꿈(\\n) 제거!"
       }
     },
@@ -101,9 +101,9 @@ export const lesson39: LessonData = {
         task: "___ 자리를 채워서 안전한 불러오기를 만드세요!",
         guide: "파일이 없을 때 에러 처리하려면?",
         hint: "try로 감싸고, 파일 없음 에러: FileNotFoundError",
-        template: "def 불러오기():\n    ___:\n        with open('save.txt', 'r') as f:\n            이름 = f.readline().strip()\n        print(f'{이름}님 환영!')\n    except ___:\n        print('세이브 없음!')\n\n불러오기()",
+        template: "def 불러오기():\n    ___:\n        with open('save2.txt', 'r') as f:   # 아직 한 번도 만든 적 없는 파일\n            이름 = f.readline().strip()\n        print(f'{이름}님 환영!')\n    except ___:\n        print('세이브 없음!')\n\n불러오기()",
         blanksAnswer: ["try", "FileNotFoundError"],
-        answer: "def 불러오기():\n    try:\n        with open('save.txt', 'r') as f:\n            이름 = f.readline().strip()\n        print(f'{이름}님 환영!')\n    except FileNotFoundError:\n        print('세이브 없음!')\n\n불러오기()",
+        answer: "def 불러오기():\n    try:\n        with open('save2.txt', 'r') as f:   # 아직 한 번도 만든 적 없는 파일\n            이름 = f.readline().strip()\n        print(f'{이름}님 환영!')\n    except FileNotFoundError:\n        print('세이브 없음!')\n\n불러오기()",
         en: {
           task: "Fill in the blanks to create a safe load function!",
           guide: "How do you handle errors when the file doesn't exist?",
@@ -437,16 +437,16 @@ print(name)`,
         task: "___ 자리를 채워서 파일에서 이름과 HP를 읽어 딕셔너리로 반환하는 함수를 완성하세요!",
         guide: "'r' 모드 + readlines() + strip() + int()!",
         hint: "줄1 = 이름, 줄2 = HP(int 변환 필요)",
-        template: "def 불러오기():\n    try:\n        with open('save.txt', '___') as f:\n            줄들 = f.readlines()\n            return {'이름': 줄들[0].strip(), 'HP': ___(줄들[1].strip())}\n    except FileNotFoundError:\n        return {'이름': '신규', 'HP': 100}\n\nresult = 불러오기()\nprint(result['이름'])",
+        template: "open('save.txt', 'w').write('용사\\n100\\n')   # 불러올 세이브를 먼저 만들어 둠\n\ndef 불러오기():\n    try:\n        with open('save.txt', '___') as f:\n            줄들 = f.readlines()\n            return {'이름': 줄들[0].strip(), 'HP': ___(줄들[1].strip())}\n    except FileNotFoundError:\n        return {'이름': '신규', 'HP': 100}\n\nresult = 불러오기()\nprint(result['이름'])",
         blanksAnswer: ["r", "int"],
-        answer: "def 불러오기():\n    try:\n        with open('save.txt', 'r') as f:\n            줄들 = f.readlines()\n            return {'이름': 줄들[0].strip(), 'HP': int(줄들[1].strip())}\n    except FileNotFoundError:\n        return {'이름': '신규', 'HP': 100}\n\nresult = 불러오기()\nprint(result['이름'])",
+        answer: "open('save.txt', 'w').write('용사\\n100\\n')   # 불러올 세이브를 먼저 만들어 둠\n\ndef 불러오기():\n    try:\n        with open('save.txt', 'r') as f:\n            줄들 = f.readlines()\n            return {'이름': 줄들[0].strip(), 'HP': int(줄들[1].strip())}\n    except FileNotFoundError:\n        return {'이름': '신규', 'HP': 100}\n\nresult = 불러오기()\nprint(result['이름'])",
         en: {
           task: "Fill in the blanks to complete a function that reads name and HP from file into a dictionary!",
           guide: "'r' mode + readlines() + strip() + int()!",
           hint: "Line 1 = name, Line 2 = HP (needs int conversion)"
         },
         alternateAnswers: [],
-        expect: "신규"
+        expect: "용사"
       }
     },
     {

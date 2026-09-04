@@ -96,7 +96,7 @@ const FULL_CPP = [
 
 // CodeWalk — 코드 위 노트 벽 대신 코드 줄에 붙는 말풍선 (선생님 규칙). 검증본 코드 그대로.
 const _MH_VARS = [
-  { v: "N", ko: "자리 수", en: "spots" },
+  { v: "N", ko: "칸 수", en: "cells" },
   { v: "triples", ko: "무브(개수)", en: "moves (count)" },
   { v: "b", ko: "보드(비트마스크)", en: "board (bitmask)" },
   { v: "best", ko: "최고 점수", en: "best score" },
@@ -105,19 +105,19 @@ const _MH_VARS = [
 export function getMooHuntWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _MH_VARS, beats: [
-      { hi: [6, 8],   bubble: t(E, "Read N (spots) and K (moves).", "N (자리 수) 와 K (무브 수) 읽기.") },
-      { hi: [10, 23], bubble: t(E, "Group identical moves.\nCount each (x,y,z) triple so duplicates are not scored again.\nThen build the triples list.", "같은 무브끼리 묶어요.\n(x,y,z) 삼중쌍을 개수로 세면 중복을 다시 계산하지 않아요.\n그다음 triples 목록을 만들어요.") },
+      { hi: [6, 8],   bubble: t(E, "Read N (cells) and K (moves).", "N (칸 수) 와 K (무브 수) 읽기.") },
+      { hi: [10, 23], bubble: t(E, "Group identical moves.\nCounter tallies how many times each (x,y,z) showed up, so duplicates are not scored again.\nThen build the list.", "같은 무브끼리 묶어요.\nCounter 는 각 (x,y,z) 가 몇 번 나왔는지 세 주는 도구예요.\n그러면 같은 무브를 두 번 채점하지 않아요.") },
       { hi: [25, 27], bubble: t(E, "Start best & ways, then try EVERY board (2^N of them).", "best, ways 초기화 후, 모든 보드(2^N 개)를 시도.") },
-      { hi: [28, 37], bubble: t(E, "Bitmask brute force.\nFor each board, bit 1 means M and bit 0 means O.\nA triple scores when x is M and y, z are O.\nAdd how many times that triple appeared.", "비트마스크 완전탐색이에요.\n보드마다 비트 1 은 M, 0 은 O 예요.\n삼중쌍의 x 가 M 이고 y, z 가 O 면 득점해요.\n그 삼중쌍이 나온 횟수만큼 더해요.") },
+      { hi: [28, 37], bubble: t(E, "Bitmask brute force.\nFor each board, bit 1 means M and bit 0 means O.\nA move scores when x is M and y, z are O.\nAdd how many times that move appeared.", "비트마스크 완전탐색이에요.\n보드마다 비트 1 은 M, 0 은 O 예요.\n무브의 x 가 M 이고 y, z 가 O 면 득점해요.\n그 무브가 나온 횟수만큼 더해요.") },
       { hi: [38, 43], bubble: t(E, "Track the best score and how many boards reach it.", "최고 점수 갱신 + 그 점수에 이르는 보드 수 세기.") },
       { hi: [45, 45], bubble: t(E, "Print the best score and the count.", "최고 점수와 보드 수 출력.") },
     ] };
   }
   return { code: FULL_PY, vars: _MH_VARS, beats: [
-    { hi: [2, 2],   bubble: t(E, "Read N (spots) and K (moves).", "N (자리 수) 와 K (무브 수) 읽기.") },
-    { hi: [4, 9],   bubble: t(E, "Group identical moves.\nCount each (x,y,z) triple so duplicates are not scored again.", "같은 무브끼리 묶어요.\n(x,y,z) 삼중쌍을 Counter 로 세면 중복을 다시 계산하지 않아요.") },
+    { hi: [2, 2],   bubble: t(E, "Read N (cells) and K (moves).", "N (칸 수) 와 K (무브 수) 읽기.") },
+    { hi: [4, 9],   bubble: t(E, "Group identical moves.\nCounter tallies how many times each (x,y,z) showed up, so duplicates are not scored again.", "같은 무브끼리 묶어요.\nCounter 는 각 (x,y,z) 가 몇 번 나왔는지 세 주는 도구예요.") },
     { hi: [11, 14], bubble: t(E, "Start best & ways, then try EVERY board (2^N of them).", "best, ways 초기화 후, 모든 보드(2^N 개)를 시도.") },
-    { hi: [15, 19], bubble: t(E, "Bitmask brute force.\nFor each board, bit 1 means M and bit 0 means O.\nA triple scores when x is M and y, z are O.\nAdd how many times that triple appeared.", "비트마스크 완전탐색이에요.\n보드마다 비트 1 은 M, 0 은 O 예요.\n삼중쌍의 x 가 M 이고 y, z 가 O 면 득점해요.\n그 삼중쌍이 나온 횟수만큼 더해요.") },
+    { hi: [15, 19], bubble: t(E, "Bitmask brute force.\nFor each board, bit 1 means M and bit 0 means O.\nA move scores when x is M and y, z are O.\nAdd how many times that move appeared.", "비트마스크 완전탐색이에요.\n보드마다 비트 1 은 M, 0 은 O 예요.\n무브의 x 가 M 이고 y, z 가 O 면 득점해요.\n그 무브가 나온 횟수만큼 더해요.") },
     { hi: [20, 24], bubble: t(E, "Track the best score and how many boards reach it.", "최고 점수 갱신 + 그 점수에 이르는 보드 수 세기.") },
     { hi: [26, 26], bubble: t(E, "Print the best score and the count.", "최고 점수와 보드 수 출력.") },
   ] };

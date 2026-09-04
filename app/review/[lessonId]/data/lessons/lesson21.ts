@@ -291,9 +291,9 @@ export const lesson21: LessonData = {
         task: "두 반의 학생 집합에서 공통 학생(교집합)을 찾으세요",
         guide: "& 연산자로 교집합!",
         hint: "class_a & class_b",
-        template: "class_a = {'민수', '영희', '철수'}\nclass_b = {'영희', '지민', '철수'}\nboth = class_a ___ class_b\nprint(f'공통 학생: {both}')",
+        template: "class_a = {'민수', '영희', '철수'}\nclass_b = {'영희', '지민', '철수'}\nboth = class_a ___ class_b\nprint(f'공통 학생: {sorted(both)}')",
         answer: "&",
-        expect: "공통 학생: {'영희', '철수'}",
+        expect: "공통 학생: ['영희', '철수']",
         en: {
           task: "Find students that appear in both class sets (intersection)",
           guide: "Use the & operator for intersection!",

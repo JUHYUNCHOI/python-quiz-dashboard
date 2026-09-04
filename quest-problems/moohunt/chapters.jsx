@@ -27,7 +27,8 @@ export function makeMooHuntCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
               🎯 {t(E, "Mission", "미션")}
             </div>
-            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
+            <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.7,
+              whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E,
                 "Fill each cell with M or O.\nFill it so \"MOO\" shows up as many times as possible —\nhow many is that, and how many fillings tie for it?",
                 "칸마다 M 아니면 O 를 채워요.\n\"MOO\" 가 제일 많이 나오게 채우면 몇 개이고,\n그렇게 채우는 방법이 몇 가지인지 구해요.")}
@@ -177,13 +178,13 @@ export function makeMooHuntCh1(E) {
         "How many distinct boards exist when N ≤ 20?",
         "N ≤ 20 일 때 서로 다른 보드는 몇 개?"),
       options: [
-        t(E, "About 1,000,000 (2^N) — representable with a bitmask", "약 100만 (2^N) — 비트마스크로 표현"),
+        t(E, "About 1,000,000 (2^N)", "약 100만 (2^N)"),
         t(E, "About N! — way too many to enumerate", "약 N! — 너무 많아 열거 불가"),
       ],
       correct: 0,
       explain: t(E,
-        "Right! 2^20 ≈ 1M. Each cell is M or O — a binary choice, perfect for a bitmask, so one number defines a whole board. Enumerating them is fine — but scoring each board still costs work (next).",
-        "맞아요. 2^20 ≈ 100 만이에요.\n각 칸이 M 아니면 O 라 비트마스크로 보드 하나를 숫자 하나로 표현할 수 있어요.\n보드를 다 훑는 건 괜찮아요.\n그런데 보드마다 점수를 매기는 비용이 남았어요."),
+        "Right — 2^20 ≈ 1M. Each cell is just M or O, so a whole board can be written as a single number.\nHow? Next screen.",
+        "맞아요. 2^20 ≈ 100 만이에요.\n각 칸이 M 아니면 O 둘 중 하나뿐이라, 보드 하나를 숫자 하나로 적을 수 있어요.\n어떻게요? 다음 화면에서 봐요."),
     },
     /* 1-4b: 숫자 하나 = 보드 하나. student-algorithm 이 직접 풀어보고 막힌 자리 (2026-09-03):
        "1-4 에서 '비트마스크' 단어만 한 번 나오고, 코드에 오니 >> 랑 & 가 뭔지부터 막혔다."
@@ -200,17 +201,17 @@ export function makeMooHuntCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "K can be 200,000 — but the same (x,y,z) repeats. Same triple, same check. So how many are really different?",
-        "K 는 20만까지 가는데 같은 (x,y,z) 가 여러 번 나와요.\n같은 삼중쌍이면 검사도 똑같으니 한 번만 세면 돼요.\n그럼 진짜 서로 다른 건 몇 개일까요?"),
+        "How many different moves (x, y, z) can there even be?",
+        "서로 다른 무브 (x, y, z) 는 몇 개나 있을 수 있을까요?"),
       question: t(E,
         "When N = 20, count distinct ordered triples (x, y, z) with x, y, z all different. Answer = ?",
-        "N = 20 일 때 x, y, z 가 모두 다른 순서 있는 (x, y, z) 의 개수 = ?"),
+        "N = 20 일 때, 세 칸이 모두 다른 무브 (x, y, z) 는 몇 개? = ?"),
       hint: t(E,
         "Pick x first, then y, then z — each from a shrinking pool.",
         "x 를 먼저 고르고, 그 다음 y, 그 다음 z 를 골라요. 고를 수 있는 게 하나씩 줄어들어요."),
       answer: 6840,
     },
-    // 1-6: 브루트 한계 — 1M 보드 × 6840 삼중쌍 = 7×10⁹ 벽 (배너와 일관). review 2026-08-18.
+    // 1-6: 브루트 한계 — 1M 보드 × 6840 무브 = 7×10⁹ 벽 (배너와 일관). review 2026-08-18.
     {
       type: "reveal",
       narr: t(E,
