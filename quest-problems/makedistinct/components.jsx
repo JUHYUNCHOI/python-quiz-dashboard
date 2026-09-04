@@ -106,7 +106,7 @@ export function getMakeDistinctWalk(E, lang = "py") {
       { hi: [7, 13],  bubble: t(E, "Read T, then each test's n, k, and the array. m = |k|.", "T 읽고, 테스트마다 n, k, 배열. m = |k|.") },
       { hi: [15, 20], bubble: t(E, "Key insight: adding K never changes a value's remainder mod |K| → group values by that remainder. Groups are independent!", "핵심: K 를 더해도 |K| 로 나눈 나머지는 안 변함 → 나머지별로 묶어요. 그룹끼리 독립!") },
       { hi: [22, 31], bubble: t(E, "For each group: sort (K>0 ascending, K<0 descending). The first value stays put.", "그룹마다 정렬 (K>0 오름차순, K<0 내림차순). 첫 값은 그대로.") },
-      { hi: [32, 41], bubble: t(E, "Greedy: if the next value is already past cur, keep it; else push it to cur+K and add the operations.", "그리디: 다음 값이 이미 앞서면 두고, 아니면 cur+K 로 밀고 연산 수를 더해요.") },
+      { hi: [32, 41], bubble: t(E, "Greedy: if the next value is already past cur, keep it; else push it to cur+K and add the operations.", "다음 값이 이미 앞서 있으면 그대로 두고,\n아니면 cur+K 로 밀면서 연산 수를 더해요.") },
       { hi: [42, 42], bubble: t(E, "Print this test's answer.", "이 테스트의 답 출력.") },
     ] };
   }
@@ -115,7 +115,7 @@ export function getMakeDistinctWalk(E, lang = "py") {
     { hi: [3, 6],   bubble: t(E, "solve() handles ONE test: read n, k, the array. m = |k|.", "solve() 는 한 테스트: n, k, 배열 읽기. m = |k|.") },
     { hi: [8, 11],  bubble: t(E, "Key insight: adding K never changes a value's remainder mod |K| → group values by that remainder. Groups are independent!", "핵심: K 를 더해도 |K| 로 나눈 나머지는 안 변함 → 나머지별로 묶어요. 그룹끼리 독립!") },
     { hi: [13, 17], bubble: t(E, "For each group: sort (K>0 ascending, K<0 descending). The first value stays put.", "그룹마다 정렬 (K>0 오름차순, K<0 내림차순). 첫 값은 그대로.") },
-    { hi: [18, 24], bubble: t(E, "Greedy: if the next value is already past cur, keep it; else push it to cur+K and add the operations.", "그리디: 다음 값이 이미 앞서면 두고, 아니면 cur+K 로 밀고 연산 수를 더해요.") },
+    { hi: [18, 24], bubble: t(E, "Greedy: if the next value is already past cur, keep it; else push it to cur+K and add the operations.", "다음 값이 이미 앞서 있으면 그대로 두고,\n아니면 cur+K 로 밀면서 연산 수를 더해요.") },
     { hi: [25, 25], bubble: t(E, "Print this test's answer.", "이 테스트의 답 출력.") },
     { hi: [27, 29], bubble: t(E, "Run solve() for all T tests.", "T 개 테스트를 solve() 로 반복.") },
   ] };
@@ -131,7 +131,7 @@ export function getMakeDistinctSections(E) {
         t(E, "Adding K never changes residue mod |K|, so groups are independent.",
             "K 를 더해도 |K| 로 나눈 나머지는 변하지 않아 — 그래서 잔여류끼리는 서로 독립."),
         t(E, "Within a group, sort then greedy: each element either stays or jumps to the next free slot.",
-            "한 그룹 안에서는 정렬 후 그리디 — 그대로 두거나 다음 빈 칸으로 한 번에 밀어요."),
+            "한 무리 안에서는 정렬한 뒤 앞에서부터 — 그대로 두거나 다음 빈 칸으로 밀어요."),
         t(E, "K > 0 sort ascending; K < 0 sort descending — same logic, mirrored direction.",
             "K > 0 이면 오름차순, K < 0 이면 내림차순 — 같은 논리, 방향만 반대."),
       ],

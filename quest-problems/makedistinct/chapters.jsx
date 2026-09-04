@@ -11,8 +11,8 @@ export function makeMakeDistinctCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You have N numbers. In one move you pick any element and add K to it (K can be negative). Find the minimum number of moves so that all N elements are distinct.",
-        "수 N 개가 있어요. 한 번에 아무 원소나 골라 K 를 더할 수 있어요 (K 는 음수도 가능). 모든 원소가 서로 달라지게 하는 최소 횟수를 구해요."),
+        "Numbers, and one move: add K. Make them all different.",
+        "수들에 K 를 더해서 전부 다르게 만드는 문제예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -26,7 +26,7 @@ export function makeMakeDistinctCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 700, color: "#1e3a8a", letterSpacing: 0.5, marginBottom: 4 }}>
               🎯 {t(E, "Mission", "미션")}
             </div>
-            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
+            <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 , wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E,
                 "Print the minimum number of `+= K` operations to make every element distinct.",
                 "모든 원소가 서로 달라지게 만드는 `+= K` 연산의 최소 횟수를 출력.")}
@@ -37,7 +37,7 @@ export function makeMakeDistinctCh1(E) {
             <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a8a", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 , wordBreak: "keep-all", textWrap: "balance" }}>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#2563eb", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
@@ -99,10 +99,10 @@ export function makeMakeDistinctCh1(E) {
             </div>
           </div>
 
-          <div style={{ background: "#fff", border: "1px dashed #93c5fd", borderRadius: 8, padding: "8px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.6 }}>
+          <div style={{ background: "#fff", border: "1px dashed #93c5fd", borderRadius: 8, padding: "8px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.6 , wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              "Array [4, 1, 4, 1]. K = 1. The two 4s and the two 1s collide. Push one 1 → 2 (1 op) and push one 4 → 5 (1 op). Now [4, 2, 5, 1] is distinct. Total = 2.",
-              "배열 [4, 1, 4, 1]. K = 1. 4 두 개, 1 두 개가 겹쳐요. 1 하나를 → 2 로 (1 회), 4 하나를 → 5 로 (1 회) 밀면 [4, 2, 5, 1] 로 모두 달라요. 합 = 2.")}
+              <>Array [4, 1, 4, 1], K = 1.<br />The two 4s and the two 1s collide.<br />Push one 1 → 2, push one 4 → 5 → [4, 2, 5, 1], all distinct.<br />Total = 1 + 1 = 2.</>,
+              <>배열 [4, 1, 4, 1]. K = 1.<br />4 두 개, 1 두 개가 겹쳐요.<br />1 하나를 → 2 로, 4 하나를 → 5 로 밀면 [4, 2, 5, 1] — 모두 달라요.<br />합 = 1 + 1 = 2 회.</>)}
           </div>
 
           <div style={{ marginTop: 8, fontSize: 11, color: C.dim }}>
@@ -127,15 +127,15 @@ export function makeMakeDistinctCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Watch [4, 1, 4, 1] with K=1. Adding 1 never changes oddness — so all four numbers are 'in the same family' and have to share consecutive slots starting from the smallest.",
-        "[4, 1, 4, 1] 에 K=1 을 적용해 봐요. 1 을 더해도 짝/홀이 안 바뀌어요 — 그래서 네 수가 같은 '가족' 이고, 가장 작은 수부터 한 칸씩 채워야 해요."),
+        "Watch [4, 1, 4, 1] with K = 1, smallest first.",
+        "[4, 1, 4, 1] 에 K = 1. 작은 수부터 따라가 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#1e3a8a", marginBottom: 8 }}>
             🔬 {t(E, "Walk through it", "직접 따라가요")}
           </div>
 
-          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 8, padding: "10px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
+          <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 8, padding: "10px 12px", fontSize: 12.5, color: C.text, lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
             <div><b>{t(E, "Step 1.", "1.")}</b> {t(E, "Sort the group: ", "그룹 정렬: ")}<code style={{ color: "#2563eb" }}>[1, 1, 4, 4]</code></div>
             <div><b>{t(E, "Step 2.", "2.")}</b> {t(E, "First slot stays: ", "첫 칸은 그대로: ")} <code>m₀ = 1</code> {t(E, " (0 ops)", " (0 회)")}</div>
             <div><b>{t(E, "Step 3.", "3.")}</b> {t(E, "Next is 1, not > 1, so push to ", "다음이 1, > 1 이 아니니 밀어요 → ")}<code>m₁ = 2</code> ({t(E, "1 op", "1 회")})</div>
@@ -146,10 +146,10 @@ export function makeMakeDistinctCh1(E) {
             </div>
           </div>
 
-          <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #93c5fd", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
+          <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #93c5fd", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: C.dim, lineHeight: 1.6 , wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
-              "💡 Each value either stays or gets bumped to (previous + K). Sorting first makes the greedy obviously optimal.",
-              "💡 각 값은 그대로 두거나 (이전값 + K) 로 한 번에 밀어요. 정렬을 먼저 하면 그리디가 자연스럽게 최적이에요.")}
+              <>💡 Each value either stays, or moves up to (previous + K).<br />Sorting first makes this the best possible.</>,
+              <>💡 각 값은 그대로 두거나 이전값 + K 로 밀려요.<br />정렬을 먼저 하면 이 방법이 항상 최적이에요.</>)}
           </div>
         </div>
       ),
@@ -159,29 +159,29 @@ export function makeMakeDistinctCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Same trick: a = [4, 1, 4, 1], K = 1. After sorting → [1, 1, 4, 4]. How many ops to make them distinct?",
-        "같은 방식: a = [4, 1, 4, 1], K = 1. 정렬 → [1, 1, 4, 4]. 모두 다르게 하려면 몇 회?"),
+        "Now K = 2. Which numbers can ever collide?",
+        "이번엔 K = 2 예요. 어떤 수끼리 부딪힐 수 있을까요?"),
       question: t(E,
-        "a = [4, 1, 4, 1], K = 1. Minimum ops?",
-        "a = [4, 1, 4, 1], K = 1. 최소 횟수는?"),
+        "a = [5, 3, 5, 4], K = 2. Minimum ops?",
+        "a = [5, 3, 5, 4], K = 2. 최소 횟수는?"),
       options: [
+        t(E, "0", "0"),
         t(E, "1", "1"),
         t(E, "2", "2"),
         t(E, "3", "3"),
-        t(E, "4", "4"),
       ],
       correct: 1,
       explain: t(E,
-        "Correct! Push one 1 → 2, push one 4 → 5. Total = 2.",
-        "정답! 1 하나를 → 2 로, 4 하나를 → 5 로 밀면 합 = 2."),
+        "Right — 1.\nAdding 2 keeps odd numbers odd and even numbers even.\nSo 4 can never collide with 5, 3, 5 — it is on its own.\nOnly [3, 5, 5] matters: push one 5 up to 7. That is 1 op.",
+        "정답 — 1 회예요.\n2 를 더하면 홀수는 계속 홀수, 짝수는 계속 짝수예요.\n그래서 4 는 5, 3, 5 와 절대 안 부딪혀요. 혼자예요.\n볼 건 [3, 5, 5] 뿐이에요 — 5 하나를 7 로 밀면 끝. 1 회."),
     },
 
     // 1-5: Input — direction-only hint
     {
       type: "input",
       narr: t(E,
-        "Try K negative. a = [1, 1, 2], K = -1. After grouping (all share residue 0 mod 1), sort descending → [2, 1, 1]. How many ops?",
-        "K 가 음수일 때. a = [1, 1, 2], K = -1. 잔여류로 묶고 (모두 1 로 나눈 나머지 0) 내림차순 정렬 → [2, 1, 1]. 몇 회?"),
+        "Now K is negative. Work it out yourself.",
+        "이번엔 K 가 음수예요. 직접 풀어봐요."),
       question: t(E,
         "a = [1, 1, 2], K = -1. Minimum ops?",
         "a = [1, 1, 2], K = -1. 최소 횟수는?"),
@@ -207,7 +207,7 @@ export function makeMakeDistinctCh2(E, lang = "py") {
         label: t(E, "Code", "코드"),
         narr: t(E,
           "Group by residue, sort, greedy-push.  Each part lights up with a bubble — read them in order.",
-          "나머지로 묶고, 정렬, 그리디로 밀기.  각 부분이 밝아지며 말풍선이 떠요, 순서대로 봐요."),
+          "나머지로 묶고, 정렬하고, 앞에서부터 하나씩 밀어요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />),
       };
     })(),

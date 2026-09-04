@@ -12,7 +12,7 @@ export function makeStrangeFnCh1(E) {
       type: "reveal",
       narr: t(E,
         "A weird function f. If x has a digit other than 0/1, replace each digit with its parity (odd→1, even→0). Otherwise, do x-1. Count how many f's reach 0.",
-        "이상한 함수 f. x 에 0/1 이 아닌 자릿수가 있으면 각 자리를 홀짝으로 바꿔(홀→1, 짝→0). 아니면 x-1. f 를 몇 번 써야 0 이 되는지 세요."),
+        "이상한 함수 f 를 몇 번 써야 x 가 0 이 되는지 세는 문제예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -26,7 +26,7 @@ export function makeStrangeFnCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", letterSpacing: 0.5, marginBottom: 4 }}>
               🎯 {t(E, "Mission", "미션")}
             </div>
-            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+            <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 , wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E,
                 "Output how many applications of f are needed to reach 0, mod 10⁹+7.",
                 "f 를 몇 번 적용해야 0 이 되는지 10⁹+7 로 나눈 나머지를 출력.")}
@@ -37,7 +37,7 @@ export function makeStrangeFnCh1(E) {
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 10 }}>
               📖 {t(E, "Problem", "문제")}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: C.text, lineHeight: 1.6 , wordBreak: "keep-all", textWrap: "balance" }}>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
@@ -109,7 +109,7 @@ export function makeStrangeFnCh1(E) {
             <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", marginBottom: 6 }}>
               {t(E, "Trace x = 24680", "추적 x = 24680")}
             </div>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono', monospace" }}>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono', monospace" , wordBreak: "keep-all", textWrap: "balance" }}>
               <div>24680 → {t(E, "has even/odd digits ≠ 0,1", "0/1 이 아닌 자릿수 있음")}</div>
               <div>{t(E, "each digit by parity:", "자리별 홀짝:")} 2→0, 4→0, 6→0, 8→0, 0→0</div>
               <div>= 00000 = 0 ✅ <b style={{ color: "#15803d" }}>1 op</b></div>
@@ -120,7 +120,7 @@ export function makeStrangeFnCh1(E) {
             <div style={{ fontSize: 12, fontWeight: 700, color: "#5b21b6", marginBottom: 6 }}>
               {t(E, "Trace x = 210", "추적 x = 210")}
             </div>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono', monospace" }}>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono', monospace" , wordBreak: "keep-all", textWrap: "balance" }}>
               <div>210 → 2→0, 1→1, 0→0 → 010 = 10  <span style={{ color: "#94a3b8" }}>{t(E, "(op 1)", "(1 회)")}</span></div>
               <div>10  → {t(E, "only 0/1, so 10 − 1 =", "0/1 만, 10 − 1 =")} 9  <span style={{ color: "#94a3b8" }}>{t(E, "(op 2)", "(2 회)")}</span></div>
               <div>9   → 9→1 → 1  <span style={{ color: "#94a3b8" }}>{t(E, "(op 3)", "(3 회)")}</span></div>
@@ -154,7 +154,7 @@ export function makeStrangeFnCh1(E) {
           </div>
 
           <div style={{ background: "#fff", border: "1px solid #c4b5fd", borderRadius: 10, padding: 12, marginBottom: 10 }}>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7 }}>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7 , wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E,
                 "When x has only 0s and 1s, treat its decimal-string as a binary number n. f does x−1 each time, but 'subtract 1 in decimal-of-0/1' equals 'subtract 1 in binary' until the number breaks the 0/1 rule again.",
                 "x 가 0/1 만 가지면 그 문자열을 이진수 n 으로 봐요. f 는 x−1 을 하지만 '10진수 0/1 에서 1 빼기' 와 '이진수에서 1 빼기' 가 같다가 0/1 규칙이 깨지는 순간 다시 자리별 변환이 들어가요.")}
@@ -190,7 +190,7 @@ export function makeStrangeFnCh1(E) {
             <div style={{ fontSize: 12, fontWeight: 700, color: "#15803d", marginBottom: 4 }}>
               {t(E, "✅ Closed form", "✅ 닫힌 식")}
             </div>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono', monospace" }}>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, fontFamily: "'JetBrains Mono', monospace" , wordBreak: "keep-all", textWrap: "balance" }}>
               <div>g(2k)   = 3k</div>
               <div>g(2k+1) = 3k + 1</div>
               <div style={{ marginTop: 4, color: "#15803d" }}>{t(E, "= floor(3·n / 2)", "= floor(3·n / 2)")}</div>
@@ -203,20 +203,20 @@ export function makeStrangeFnCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "x = 10 has only 0/1 digits, so view it as binary. n = 2. Use the formula.",
-        "x = 10 은 0/1 만 → 이진수로 보면 n = 2. 공식 써 보기."),
+        "x = 1000 has only 0/1 digits. Read it as binary and use the formula.",
+        "x = 1000 도 0/1 만 있어요. 이진수로 읽고 공식을 써 봐요."),
       question: t(E,
-        "How many ops to take x = 10 down to 0?",
-        "x = 10 을 0 으로 만드는 데 몇 번?"),
+        "How many ops to take x = 1000 down to 0?",
+        "x = 1000 을 0 으로 만드는 데 몇 번?"),
       options: [
-        t(E, "2", "2"),
-        t(E, "3", "3"),
-        t(E, "4", "4"),
+        t(E, "8", "8"),
+        t(E, "12", "12"),
+        t(E, "16", "16"),
       ],
       correct: 1,
       explain: t(E,
-        "10 in binary = 2. n = 2 = 2k with k = 1, so g = 3k = 3. (Trace: 10 → 9 → 1 → 0.)",
-        "이진수로 10 = 2. n = 2 = 2k, k = 1 → g = 3k = 3. (추적: 10 → 9 → 1 → 0.)"),
+        "1000 read as binary is 8. n = 8 is even, so g = 3 × (8 ÷ 2) = 12.",
+        "1000 을 이진수로 읽으면 8 이에요.\nn = 8 은 짝수라서 g = 3 × (8 ÷ 2) = 12 회."),
     },
 
     // 1-5: Input - x = 11
@@ -250,7 +250,7 @@ export function makeStrangeFnCh2(E, lang = "py") {
         label: t(E, "Code", "코드"),
         narr: t(E,
           "Binarize if needed, then a closed form for floor(3n/2) mod p.  Each part lights up with a bubble.",
-          "필요하면 이진화, 그 다음 floor(3n/2) mod p 를 닫힌 식으로.  각 부분이 밝아지며 말풍선이 떠요."),
+          "필요하면 자릿수를 한 번 바꾸고, 그 다음 공식을 써요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />),
       };
     })(),

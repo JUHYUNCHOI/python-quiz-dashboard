@@ -90,9 +90,9 @@ const FULL_CPP = [
 // CodeWalk — 코드 위 '왜 이렇게?' 노트 벽 대신 코드 줄에 붙는 말풍선 (선생님 규칙).
 const _SF_VARS = [
   { v: "s", ko: "입력 숫자(문자열)", en: "the number (string)" },
-  { v: "n", ko: "이진수 값 mod", en: "binary value mod" },
+  { v: "n", ko: "이진수로 읽은 값 (mod 10⁹+7)", en: "value read as binary (mod 10⁹+7)" },
   { v: "ops", ko: "이진화 비용", en: "binarize cost" },
-  { v: "g", ko: "floor(3n/2) mod", en: "floor(3n/2) mod" },
+  { v: "g", ko: "floor(3n/2) 의 값 (mod 10⁹+7)", en: "floor(3n/2) (mod 10⁹+7)" },
 ];
 export function getStrangeFnWalk(E, lang = "py") {
   if (lang === "cpp") {
