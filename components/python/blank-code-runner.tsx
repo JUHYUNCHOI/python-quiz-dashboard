@@ -68,6 +68,15 @@ function parseBlanks(code: string) {
 }
 
 // hint2에서 정답 배열 추출 ("choices / computer" → ["choices", "computer"])
+//
+// ⚠️ hint2 는 두 가지로 쓰인다:
+//   ① 빈칸별 정답을 " / " 로 나열한 것        → 자동채움에 쓸 수 있음
+//   ② 그냥 완성된 코드/문장 한 덩어리          → 자동채움에 쓰면 안 됨
+// ② 를 쪼개면 원소가 1개뿐이라, 예전엔 그걸 0번 빈칸에 통째로 박아넣고
+// 나머지 빈칸은 ___ 로 남긴 채 "정답" 으로 표시했다. 실제로 이런 스텝이 132개 있었다.
+//   템플릿 "for ___ in ___:" + hint2 "for num in numbers:"
+//     → "for for num in numbers: in ___:"  ✅정답  ← 이렇게 나갔음
+// 그래서 아래 loadSaved() 에서 **빈칸 개수와 정확히 같을 때만** 자동채움한다.
 function parseAnswers(hint2: string): string[] {
   return hint2.split(' / ').map(s => s.trim())
 }
@@ -130,8 +139,11 @@ export function BlankCodeRunner({
         }
       } catch { /* ignore */ }
     }
-    // 저장된 코드 없음 + 완료한 스텝 → 정답으로 채움
-    if (isStepDone && answers.length > 0) {
+    // 저장된 코드 없음 + 완료한 스텝 → 정답으로 채움.
+    // 단 hint2 가 빈칸마다 하나씩 나열된 형태일 때만 (개수가 정확히 맞을 때만).
+    // 안 맞으면 채우지 않고 빈칸으로 둔다 — 깨진 코드를 "정답" 으로 보여주느니
+    // 학생이 다시 풀게 하는 편이 낫다.
+    if (isStepDone && answers.length > 0 && answers.length === blanks.length) {
       return {
         values: Object.fromEntries(answers.map((ans, i) => [i, ans])) as Record<number, string>,
         correct: true as boolean | null
