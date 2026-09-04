@@ -29,8 +29,8 @@ export function makeMooHuntCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.5 }}>
               {t(E,
-                "The moves are fixed. YOU choose the board.\nPick the best board — what score does it get,\nand how many boards tie for it?",
-                "무브는 정해져 있어요. 보드는 내가 골라요.\n제일 좋은 보드를 골랐을 때 몇 점인지,\n그리고 그 점수가 나오는 보드가 몇 개인지 구해요.")}
+                "Fill each cell with M or O.\nFill it so \"MOO\" shows up as many times as possible —\nhow many is that, and how many fillings tie for it?",
+                "칸마다 M 아니면 O 를 채워요.\n\"MOO\" 가 제일 많이 나오게 채우면 몇 개이고,\n그렇게 채우는 방법이 몇 가지인지 구해요.")}
             </div>
           </div>
 
@@ -44,12 +44,18 @@ export function makeMooHuntCh1(E) {
                   칸 5개짜리 아주 작은 예를 카드 안에서 바로 보여준다. */}
               <div style={{ marginBottom: 12, paddingBottom: 10, borderBottom: "1px dashed #fca5a5" }}>
                 <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", marginBottom: 8, wordBreak: "keep-all" }}>
-                  {t(E, "For example — 5 cells, and just one move (1, 2, 3):",
-                       "예를 들어 — 칸이 5개, 무브는 (1, 2, 3) 하나뿐이라고 해봐요.")}
+                  {t(E, "For example — 5 cells, and one thing to check: (1, 2, 3).",
+                       "예를 들어 — 칸이 5개, 확인할 건 (1, 2, 3) 하나예요.")}
+                  <div style={{ fontWeight: 600, color: "#7f1d1d", marginTop: 5, fontSize: 11.5, lineHeight: 1.7 }}>
+                    {t(E, <>That means: read cell 1, cell 2, cell 3 <b>in that order</b>.<br />
+                           If those three letters are <b>"MOO"</b> → 1 point. A trio like this is one <b>move</b>.</>,
+                         <>1번 · 2번 · 3번 칸의 글자를 <b>이 순서대로</b> 읽어 봐요.<br />
+                           그 세 글자가 <b>"MOO"</b> 면 1점. 이런 칸 번호 세 개를 <b>무브</b> 라고 해요.</>)}
+                  </div>
                 </div>
                 {[
-                  { board: "MOOOM", pts: 1, note: t(E, "cells 1·2·3 read M O O → scores", "1·2·3번 칸이 M O O → 1점") },
-                  { board: "OOOOM", pts: 0, note: t(E, "cells 1·2·3 read O O O → no", "1·2·3번 칸이 O O O → 0점") },
+                  { board: "MOOOM", pts: 1, note: t(E, "reading 1→2→3 gives \"MOO\" → 1 point", "1→2→3 을 읽으면 \"MOO\" → 1점") },
+                  { board: "OOOOM", pts: 0, note: t(E, "reading 1→2→3 gives \"OOO\" → 0", "1→2→3 을 읽으면 \"OOO\" → 0점") },
                 ].map((r, k) => (
                   <div key={k} style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 7 }}>
                     <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 700, width: 74, flexShrink: 0, textAlign: "right" }}>
@@ -92,8 +98,9 @@ export function makeMooHuntCh1(E) {
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#0891b2" }}>{t(E, "Moves", "무브")}</b>
-                  {t(E, " — K of them (1 ≤ K ≤ 200,000), each naming three cells (x, y, z). ",
-                       " — K 개 (1 ≤ K ≤ 200,000), 각각 세 칸 (x, y, z) 를 가리켜요. ")}
+                  {t(E, " — K trios of cell numbers (x, y, z), read ", " — 칸 번호 세 개 (x, y, z) 한 묶음. K 개. ")}
+                  <b style={{ color: "#0891b2" }}>{t(E, "in that order", "순서대로 읽어요")}</b>
+                  {t(E, ". K is up to 200,000. ", ". K 는 최대 200,000. ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "given in the input — we can't change them", "입력으로 주어져요 — 못 바꿔요")}</b>
                 </div>
               </div>
@@ -102,7 +109,7 @@ export function makeMooHuntCh1(E) {
                 <div>
                   <b style={{ color: "#dc2626" }}>{t(E, "Score", "점수")}</b>
                   {t(E, " — a move scores 1 if its three cells read 'MOO'. The board's score is the total.",
-                       " — 무브가 가리키는 세 칸이 'MOO' 면 그 무브가 1점. 다 더한 게 보드 점수.")}
+                       " — 무브의 세 칸을 읽어서 'MOO' 면 1점. 다 더한 게 그 보드의 점수.")}
                 </div>
               </div>
 
