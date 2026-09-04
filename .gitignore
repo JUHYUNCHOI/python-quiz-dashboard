@@ -45,3 +45,17 @@ scripts/output/
 #   ⚠️ build:check 를 돌리면 Next 가 tsconfig.json 의 include 에 .next-check 경로를
 #      자동으로 추가한다. 커밋하지 말 것 — `git checkout -- tsconfig.json` 으로 되돌린다.
 .next-check
+
+# 레슨의 '파일 쓰기' 연습 코드를 리포 루트에서 돌리면 생기는 찌꺼기.
+# 검사 스크립트는 임시 폴더에서 돌지만, 손으로 돌릴 때 여기 떨어진다.
+/a.txt
+/log.txt
+/memo.txt
+/names.txt
+/ranking.txt
+/save.txt
+/score.txt
+/scores.txt
+/test.txt
+/sol.py
+/sol.cpp
