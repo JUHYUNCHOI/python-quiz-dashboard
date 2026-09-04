@@ -43,7 +43,12 @@ model: sonnet
   `quiz-history`, `blank-runner-*`. 바꾸면 학생 진도가 사라진다.
 - **절대배치 라벨** — 격자 위에 띄운 이름표·말풍선은 값이 바뀌면(모서리 케이스) 겹친다.
   격자 밖 범례로 빼는 게 안전하다.
-- **한글 텍스트** — `wordBreak: "keep-all"` + `textWrap: "balance"` 없으면 단어가 중간에서 갈린다.
+- **한글 텍스트 4종 세트** — 하나라도 빠지면 ux-reviewer 가 나중에 반드시 걸어낸다.
+  ① `wordBreak: "keep-all"` (없으면 "하나씩" → "하"/"나씩")
+  ② `textWrap: "balance"` (없으면 마지막 줄만 짧게 남는다)
+  ③ **한 줄 60자 이하**
+  ④ **절 단위로 `<br />` 직접 삽입** — 브라우저에 맡기지 마라
+  말풍선 기준값: `maxWidth: 470`, `lineHeight: 1.75`.
 
 ## 일할 때
 

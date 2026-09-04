@@ -29,17 +29,38 @@
 
 한 메시지에 여러 Agent tool 호출 = 동시 실행. 적극 활용.
 
-`.claude/agents/` 에 4 개 커스텀 에이전트 정의됨:
-- **quest-auditor** — quest 정직성 감사 (5-10 동시 권장)
-- **algo-chapter-builder** — vanilla JS algo 토픽 → React 챕터식 (1 토픽당 1 에이전트, 2-3 병렬)
-- **lesson-content-reviewer** — 레슨 콘텐츠 품질 감사 (5+ 동시)
-- **ui-pattern-applier** — 확립된 UX 패턴을 여러 파일에 적용 (N 병렬)
+`.claude/agents/` 에 **14 개** 커스텀 에이전트가 있다 (`ls .claude/agents/` 로 항상 실물 확인).
+
+**검토하는 사람**
+- **ux-reviewer** — 화면이 아이들에게 전달되나 (겹침·정보량·용어·한글 줄바꿈). 5+ 동시
+- **pedagogy-reviewer** — 스캐폴딩·순서·빠진 다리. 5+ 동시
+- **quest-auditor** — quest 정직성 (가짜 수치·과장). 5-10 동시
+- **lesson-content-reviewer** — 레슨 능동비율·주제 충실도. 5+ 동시
+- **python-qa** / **cpp-qa** — 코드가 진짜 도는지 실행해서 확인. 5+ 동시
+- **project-lead** — 전체 현황·우선순위·모순 찾기
+
+**만드는 사람**
+- **frontend-engineer** — 화면·컴포넌트·상태·빌드
+- **backend-engineer** — Supabase·API·배포 파이프라인
+- **algo-chapter-builder** — algo 토픽 → React 챕터식 (1 토픽당 1 명, 2-3 병렬)
+- **ui-pattern-applier** — 확립된 패턴을 여러 파일에 적용 (N 병렬)
+
+**학생 (검토자가 아니라 학생으로 행동)**
+- **student-python** / **student-cpp** / **student-algorithm** — 초6 이 직접 따라가며 막히는 곳을 잰다
+  ⚠️ 이 셋에게는 품질 기준 문서를 읽히지 마라. 규칙을 알면 학생이 아니게 된다.
+
+**역할이 겹칠 때:** 능동비율·주제 충실도만 = `lesson-content-reviewer`,
+서사 흐름·빠진 다리까지 = `pedagogy-reviewer`.
 
 **자동 병렬화 트리거:**
 - "47 quest 다 검토" → quest-auditor × 8-10 병렬
 - "다른 algo 토픽도 챕터식으로" → algo-chapter-builder × 2-3 병렬
 - "Python 레슨 다 감사" → lesson-content-reviewer × 5 병렬
 - "이 패턴 다른 페이지에도 적용" → ui-pattern-applier × N 병렬
+- "화면들 UX 다 검토" → ux-reviewer × N 병렬
+- "이 레슨들 순서가 이상해" → pedagogy-reviewer × N 병렬
+- "코드가 진짜 도는지 확인" → python-qa / cpp-qa × N 병렬
+- "학생 입장에서 봐줘" → student-* (해당 과목)
 - 일반: 5+ 동등한 파일 작업 = 병렬 검토
 
 **병렬 안 해도 되는 것 (혼자 처리):**
@@ -54,7 +75,10 @@
 - Next.js 16 (App Router, Turbopack)
 - TypeScript, Tailwind CSS
 - Supabase (인증, DB)
-- `output: export` (정적 빌드) — 동적 라우트 불가, query params 사용
+- **정적 export 아님** (2026-04-05 `8c794fbf` 에서 `output: export` 제거).
+  지금은 일반 Next.js 서버 배포 — `middleware.ts` 와 `app/api/**` 서버 라우트가 돈다.
+  동적 라우트(`[problemId]` · `[lessonId]` · `[id]`)를 정상적으로 쓴다.
+  ⚠️ 옛 문서가 "query params 로 우회하라" 고 하던 제약은 **더 이상 없다.**
 
 ## 🔮 향후 구조 변경 — 메모리 참고
 
@@ -78,31 +102,44 @@
 - **첫 언어 학생용 Python**: 능동 비율 55%+, 매 챕터마다 mission 1개 이상
 - **일상 동사 우선**, 공식 용어는 부록 박스
 
-**Python 레슨 감사 — 재측정 (2026-09-03).**
+**Python 레슨 감사 — 재측정 (2026-09-04). 앞의 표는 잣대가 섞여 있어서 폐기했다.**
 
-⚠️ 2026-04-29 에 "v3 우선순위 완료" 라고 적어뒀는데, 그 뒤 커밋(`144b96ed` "11살 친화 sweep")이
-다시 손대면서 **일부가 되돌아갔다.** 문서를 믿고 건너뛰면 안 된다 — 아래는 52개 전수 실측값이다.
+⚠️ 2026-09-03 표는 **레슨마다 다른 방법으로 세어져 있었다.** 레슨 32 는 `interactive` 를
+능동으로 세고 `quiz` 는 안 세서 56.8% 로 적혔는데, 기준대로 세면 **32.4%** 다.
+그래서 가장 손봐야 할 레슨 다섯이 "유지 ✅" 로 남아 넘어갔다.
+`interactive` 를 많이 쓴 레슨만 부풀려지는 편향이었다.
 
-| 레슨 | 2026-04-29 기록 | 2026-09-03 실측 | |
+**이제 도구가 저장소 안에 있다.** 문서를 믿지 말고 이걸 돌려라:
+
+```bash
+python3 scripts/check-active-ratio.py        # 52개 전체
+python3 scripts/check-active-ratio.py 32 5   # 특정 레슨만
+```
+
+잣대: 능동 = `tryit` `practice` `mission` `quiz` `predict` `fillblank`.
+**`interactive` 는 능동이 아니다** — "시각화는 보조, 연습 대체 ❌" 가 기준 원칙이다.
+(이전 도구는 `/tmp/audit2.py` 였고 재부팅에 사라져서 아무도 다시 잴 수 없었다.)
+
+**50% 미만 15개 · 45% 미만 8개** (2026-09-04 실측, 낮은 순):
+
+| 레슨 | 실측 | 옛 표 | 무엇이 문제인가 |
 |---|---|---|---|
-| 41 클래스 | 52→55% ✅ | **55.2%** | 유지 |
-| 32 함수 | 57% ✅ | **56.8%** | 유지. 단 **ch1(첫 도입 챕터)은 능동 스텝이 객관식 1개뿐** — `def` 를 한 번도 안 쳐보고 넘어감 |
-| 37 try-except | 58% ✅ | **57.1%** | 유지 |
-| 38 파일 | 70% ✅ | **67.7%** | 유지 |
-| 23 스택 | "50%+ 달성" ✅ | **47.1%** | ❌ **재하락** |
-| 24 큐 | " | **52.6%** | 경계 |
-| 25 덱 | " | **50.0%** | ❌ 경계까지 하락 |
-| 26 자료구조 비교 | " | **67.9%** | 유지 |
-| 11 조건문 | 44→50% ✅ | **54.2%** | 유지 |
-| 39 Part6 | 50→52% ✅ | **52.4%** | 유지 |
+| 15 자료구조 개요 | **20.0%** (1/5) | — | 스텝이 5개뿐. 사실상 빈 레슨 |
+| 37 try-except | **28.6%** | 57.1% 유지 ✅ | `interactive` 14개로 부풀려져 있었다 |
+| 39 Part6 | **28.6%** | 52.4% 유지 ✅ | 프로젝트인데 `mission` 이 1개 |
+| 32 함수 | **32.4%** | 56.8% 유지 ✅ | **ch1 에서 `def` 를 한 번도 안 쳐본다.** 전 학생이 지나가는 자리 |
+| 38 파일 | **35.5%** | 67.7% 유지 ✅ | 편차가 제일 컸다 (−32%p) |
+| 41 클래스 | **37.9%** | 55.2% 유지 ✅ | |
+| 33 매개변수 | **38.9%** | — | |
+| 40 Part6 문제 | **41.7%** | — | `quiz` 10 · `interactive` 11, 직접 짜는 게 없다 |
+| 5 문자열 · 13 for · 49 RPG | **45.0%** | 45% | 옛 표가 맞았다 |
+| 1 print · 23 스택 | **47.1%** | 47.1% | 옛 표가 맞았다 |
+| 27 · 22 · 2 · 16 · 25 · 28~30 | 47~50% | | |
 
-**2026-04-29 감사에 없던 새 문제:**
-- 레슨 5 (문자열 연산) **45%** — "곱하기" 챕터에 `in`·`==`·사전순 비교까지 들어가 챕터가 13~14스텝
-- 레슨 1 (print) **47.1%**, 34스텝 — ch3 하나가 13스텝
-- 레슨 13 (for) 45% · 22 (슬라이싱) 48% · 16 (리스트) 50%
+우선순위: **32 ch1** (전 학생이 지나감) → **37 · 39 · 38** (편차가 컸던 곳) → **15** (스텝 5개).
 
-우선순위: **32 ch1** (전 학생이 지나가는 자리) → **5** (챕터 분리) → **23·25**.
-다음 재측정 때도 문서가 아니라 **코드로 다시 재라.**
+옛 표에서 "❌ 재하락" 으로 적힌 23·25 는 실은 정확히 재어진 값이었고,
+"유지 ✅" 로 안심시킨 쪽이 실제로는 최하위였다. **문서가 아니라 스크립트를 믿어라.**
 
 ---
 
@@ -211,8 +248,14 @@ npm run check-outputs   # 화면에 적힌 출력 ↔ 실제 실행 결과 대�
 `check-outputs` 는 `data/lesson*.ts` + `data/lessons/lessonNN/ch*.ts`(챕터별로 쪼개진
 레슨 27~52 서브폴더 포함) 와 `app/review/.../lesson*.ts` 의 정답 코드를
 전부 실제로 python3 로 돌려서, `expect` / `result` / `expectedOutput` 과 글자 단위로
-비교한다 (약 830개 실행: 복습 647 + 수업 180. 2026-09-04 기준 — 레슨 파일 구조가
-또 바뀌면 이 숫자도 달라진다). 눈으로는 못 잡는 것들을 잡는다:
+비교한다 (**827개 실행**: 복습 647 + 수업 180. 2026-09-04 실측 — 레슨 파일 구조가
+또 바뀌면 이 숫자도 달라진다).
+
+⚠️ **지금 clean 하지 않다.** 2026-09-04 기준 **12개가 고정 실패** 중이다
+(lesson36 · 39 · 40 · 45 와 en 파일들 — 파일 I/O, random seed, 정렬 출력).
+게다가 검사기 자신이 `PYTHONHASHSEED` 를 안 고정해서 lesson21 · 26 두 개는
+돌릴 때마다 나타났다 사라진다 — **검사기가 잡으라는 버그를 검사기가 갖고 있다.**
+"실행했더니 통과" 라고 보고하기 전에 이 12개를 뺀 건지 확인해라. 눈으로는 못 잡는 것들을 잡는다:
 
 - **집합·딕셔너리를 그냥 `print` 하면 순서가 매번 달라진다** (문자열 해시 랜덤화).
   한 번 돌려본 순서를 정답으로 박아두면 학생 화면과 늘 어긋난다 → `sorted()` 로 감쌀 것.
@@ -282,8 +325,8 @@ DELETE FROM lesson_progress WHERE variant IS NULL;
 **✅ 현재 상태 (2026-06-21 갱신 — 동작 완료):**
 - `client-page.tsx`는 복습 데이터(`./data/lessons`의 `lessonsData`)에 올바르게 연결됨
 - `ReviewStepRenderer` 컴포넌트 작성 완료, 복습 스텝 렌더링 중
-- **Python 코드 채점은 진짜 파이썬(Pyodide)** 사용 — `utils/pyodideRun.ts`의 `runPythonReal`. 과거 가짜 정규식 러너가 `if/for` 를 못 돌려 맞는 조건문 코드를 오답 처리하던 버그 수정함. C++ 채점은 Piston.
-- 코드 에디터 신택스 하이라이트: `utils/highlightPy.ts`(Python) + `highlightCppCode`(C++)
+- **Python 코드 채점은 진짜 파이썬(Pyodide)** 사용 — `app/review/[lessonId]/utils/pyodideRun.ts` 의 `runPythonReal`. 과거 가짜 정규식 러너가 `if/for` 를 못 돌려 맞는 조건문 코드를 오답 처리하던 버그 수정함. C++ 채점은 Piston.
+- 코드 에디터 신택스 하이라이트: `app/review/[lessonId]/utils/highlightPy.ts`(Python) + `highlightCppCode`(C++)
 - DB 연동(`saveStepAnswer`, `markQuizComplete`)은 그대로 유지
 
 **복습 레슨 파일 작성 규칙:**
@@ -676,9 +719,17 @@ backtracking, tree, trie, unionfind, shortestpath, bitmanipulation 등
 - 공유 컴포넌트: `Narration`, `Quiz`, `NumInput`, `CodeBlock`, `CodeReveal`
 
 ## 배포
+
+> 🚫 **배포·main 머지는 선생님이 명시적으로 지시할 때만 한다.** 기본은 dev 커밋까지다.
+> 2026-05-14 · 05-15 두 번 지시받은 규칙인데 지금까지 memory 에만 있어서,
+> CLAUDE.md 만 읽는 에이전트는 몰랐다. 근거: `memory/feedback_deployment.md`,
+> `memory/feedback_no_more_deploy.md`
+> ⚠️ 라이브는 Vercel 프로젝트 `coderin` 인데 이 디렉터리 `.vercel` 링크는 다른 곳을 가리킨다.
+> 그냥 배포하면 라이브가 안 바뀐다. 정확한 명령은 `memory/infra_vercel_coderin_deploy.md`.
+
 - Vercel (정적 빌드)
 - `npm run build` = `next build`
-- 동적 라우트 대신 query params 사용 (/parent?t=TOKEN)
+- `/parent?t=TOKEN` 처럼 query params 를 쓰는 곳이 있지만, 정적 export 제약 때문이 아니라 그냥 그 화면의 설계다
 
 ## ⚠️ 핵심 제약사항 — 기존 학생 데이터 보호
 
@@ -687,7 +738,12 @@ backtracking, tree, trie, unionfind, shortestpath, bitmanipulation 등
 ### 절대 하면 안 되는 것
 - `lesson_id` 값 변경 — Supabase `lesson_progress` 테이블에 저장된 키값이므로 바꾸면 기존 진도가 사라짐
 - `question.id` 변경 — `question-mastery` localStorage/DB에 저장된 키값
-- localStorage 키 이름 변경 (`completedLessons`, `completedQuizzes`, `question-mastery`, `quiz-history` 등)
+- localStorage 키 이름 변경 — 아래는 **실제로 학생 진도가 들어 있는** 키다 (2026-09-04 grep 실측):
+  `completedLessons` `completedQuizzes` `question-mastery` `quiz-history` `quiz-scores`
+  `wrong-question-bank-v1` `practice-solved` `quest-solved` `ladder-done` `ladder-starred`
+  `kl-prep-done` `daily-challenges-all-done` `blank-runner-*`
+  `gamification-total-xp` `gamification-daily-streak` `gamification-sessions-today`
+  (전체 34개가 쓰이는 중. 새 키를 지우거나 이름 바꾸기 전에 반드시 grep 먼저)
 - Supabase 테이블 컬럼 삭제/이름 변경 (마이그레이션 없이)
 - 커리큘럼 레슨 순서 변경 — 잠금 해제 로직이 순서 기반이므로 기존 학생의 unlock 상태가 달라짐
 
@@ -707,6 +763,7 @@ backtracking, tree, trie, unionfind, shortestpath, bitmanipulation 등
 `cpp-1 cpp-2 cpp-3 cpp-4 cpp-5 cpp-6 cpp-7 cpp-8 cpp-p1`
 `cpp-9 cpp-10 cpp-11 cpp-12 cpp-13 cpp-14 cpp-p2`
 `cpp-15 cpp-16 cpp-17 cpp-18 cpp-19 cpp-20 cpp-p3`
+`cpp-21 cpp-22 cpp-23 cpp-24 cpp-25 cpp-26`
 
 **Pseudocode/IGCSE** (문자열형 ID):
 `pseudo-1 pseudo-2 pseudo-3 pseudo-4 pseudo-5 pseudo-6 pseudo-7 pseudo-8 pseudo-28 pseudo-p1`
@@ -716,5 +773,6 @@ backtracking, tree, trie, unionfind, shortestpath, bitmanipulation 등
 `pseudo-24 pseudo-25 pseudo-26 pseudo-27`
 `igcse-sql1 igcse-sql2 igcse-logic1`
 
-> 새 레슨 추가 시: Python은 53부터, C++은 cpp-23부터, Pseudocode는 pseudo-29부터 사용
+> 새 레슨 추가 시: Python은 53부터, **C++은 cpp-27부터**, Pseudocode는 pseudo-29부터 사용
+> (cpp-23~26 은 이미 커리큘럼에 등록돼 학생이 쓰는 중 — 2026-09-04 확인)
 > (cpp-21 = 2차원 배열, cpp-22 = 클래스 — 이미 사용 중. 커리큘럼 순서는 ID 순서와 다를 수 있음: cpp-9 → cpp-21 → cpp-10 순으로 표시)

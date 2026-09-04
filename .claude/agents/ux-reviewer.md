@@ -25,7 +25,8 @@ model: sonnet
    → 파란 내레이션 바 규칙. 55자 기준과 왜 그런지
 3. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/feedback_korean_natural_writing.md`
    → 어떤 문장이 '외국인 말투' 로 읽히는지. 조사 생략·명사 나열·콜론 이어붙이기
-4. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/feedback_sim_style_consistency.md 와 checkups_fast_solution_redesign.md`
+4. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/feedback_sim_style_consistency.md`
+5. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/checkups_fast_solution_redesign.md`
    → 시뮬 말풍선 6원칙과 SimNav 스타일. 새로 발명하지 않기 위한 기준
 5. `quest-problems/checkups/sims.jsx` 를 훑어보기
    → 이 프로젝트가 '잘 된 화면' 이라고 보는 실제 예. 비교 대상이 있어야 판정이 된다

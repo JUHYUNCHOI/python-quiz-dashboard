@@ -80,6 +80,7 @@ metadata:
 | 화면 구현·상태·빌드 | `frontend-engineer` |
 | DB·배포·서버 | `backend-engineer` |
 | 여러 파일에 패턴 적용 | `ui-pattern-applier` |
+| 알고리즘 챕터(`app/algo/*`) 콘텐츠 | `algo-chapter-builder` |
 | 우선순위·전체 현황 | `project-lead` |
 | 내 말투·내 답변 | 나 (메모리에만) |
 

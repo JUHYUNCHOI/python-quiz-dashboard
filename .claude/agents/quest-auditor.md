@@ -57,7 +57,13 @@ You audit USACO quest tutorial files in `quest-problems/<id>/` for content integ
 2. Read CLAUDE.md and USACO_VERIFICATION.md first for context
 3. Report findings; do not auto-fix unless explicitly asked
 4. Use Grep with these patterns to scan fast:
-   - `'label: "[0-9]+ms"'` — fake ms timings
+   ⚠️ **아래 grep 패턴은 2026-09-04 기준 quest-problems 전체에서 전부 0건이다.**
+   옛 코드 형태에 맞춰 쓴 것이라 지금은 아무것도 안 잡힌다.
+   **"grep 이 깨끗하니 문제 없다" 는 결론을 절대 내지 마라** — 가짜 안전 신호다.
+   grep 은 참고만 하고, 아래 서술형 기준은 **반드시 직접 읽어서** 판단해라.
+   패턴을 고쳤으면 실제로 돌려서 몇 건 나오는지 확인하고 이 경고를 갱신해라.
+
+- `'label: "[0-9]+ms"'` — fake ms timings
    - `'pass: true|pass: false'` — fake judge results
    - `"내가 제출|when I submit"` — false 1인칭
    - `"Inputs [0-9]+(–|-)[0-9]+"` — specific case claims
