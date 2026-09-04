@@ -103,7 +103,7 @@ export function ReflectionGrid({ E }) {
         const cnt = counts.get(`${hi[0]},${hi[1]}`) ?? 0;
         return (
           <div style={{ background: "#ecfeff", border: `1.5px solid ${A}`, borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#155e75", marginBottom: 10, lineHeight: 1.55 }}>
-            <b>{t(E, "Group", "그룹")} (rg={hi[0]}, cg={hi[1]}):</b>{" "}
+            <b>{t(E, "Group", "묶음")} (rg={hi[0]}, cg={hi[1]}):</b>{" "}
             {t(E, `${cnt} painted of 4 → flip ${Math.min(cnt, 4 - cnt)}.`, `4 중 ${cnt} 칠함 → ${Math.min(cnt, 4 - cnt)} 뒤집기.`)}
           </div>
         );
@@ -449,11 +449,11 @@ export function getReflectionSections(E) {
       py: RFL_S2_PY, cpp: RFL_S2_CPP,
       why: [
         t(E, "Cell (r, c) shares a group with (r, N+1−c), (N+1−r, c), (N+1−r, N+1−c) — 4 cells total.",
-            "칸 (r, c) 는 (r, N+1−c), (N+1−r, c), (N+1−r, N+1−c) 와 같은 그룹 — 총 4 칸."),
+            "칸 (r, c) 는 (r, N+1−c), (N+1−r, c), (N+1−r, N+1−c) 와 같은 묶음이에요. 모두 4 칸."),
         t(E, "Use rg = min(r, N+1−r), cg = min(c, N+1−c) as the canonical key. Now every cell maps to a (rg, cg) in [1, N/2] × [1, N/2].",
-            "rg = min(r, N+1−r), cg = min(c, N+1−c) 를 그룹 키로. 모든 칸이 [1, N/2] × [1, N/2] 안의 (rg, cg) 에 매핑."),
+            "rg = min(r, N+1−r), cg = min(c, N+1−c) 를 묶음 이름으로 써요. 그러면 모든 칸이 [1, N/2] × [1, N/2] 안의 (rg, cg) 로 모여요."),
         t(E, "Count painted cells per group with one O(N²) pass.",
-            "한 번의 O(N²) 패스로 그룹마다 칠한 칸 카운트."),
+            "격자를 한 번 훑으면서 묶음마다 칠한 칸을 세요."),
       ],
     },
     {
@@ -464,7 +464,7 @@ export function getReflectionSections(E) {
         t(E, "For a group of 4 cells with c painted: flip the c minority OR the (4 − c) minority. Min ops = min(c, 4 − c).",
             "4 칸 중 c 칠함: 소수 쪽인 c 또는 (4 − c) 를 뒤집음. 최소 = min(c, 4 − c)."),
         t(E, "Total over all groups = answer BEFORE any update.",
-            "모든 그룹 합 = update 전 답."),
+            "모든 묶음을 더하면 뒤집기 전 답이에요."),
       ],
     },
     {
@@ -479,7 +479,7 @@ export function getReflectionSections(E) {
       ],
     },
     {
-      label: t(E, "5️⃣ Insight — only ONE group changes per update", "5️⃣ 인사이트 — update 1 번에 그룹 1 개만 바뀜"),
+      label: t(E, "5️⃣ Insight — only ONE group changes per update", "5️⃣ 핵심 관찰 — 한 번 뒤집으면 묶음 하나만 바뀌어요"),
       color: "#0891b2",
       py: [
         "# 뒤집기 1 번 = 칸 1 개 토글 → 그 칸이 속한 묶음 하나의 count 만 바뀜.",
@@ -494,15 +494,15 @@ export function getReflectionSections(E) {
       ],
       cpp: [
         "// 같은 인사이트:",
-        "//   update 1 번 → 그룹 1 개의 count 만 ±1.",
-        "//   total 갱신 = 그 그룹의 새/옛 cost 차이만큼 더해주기.",
+        "//   한 번 뒤집으면 묶음 하나의 count 만 ±1.",
+        "//   total 은 그 묶음의 새 값 − 옛 값 만큼만 더해주면 된다.",
         "//   O(1) per update.",
       ],
       why: [
         t(E, "An update toggles exactly ONE cell, so the count of exactly ONE group changes by ±1.",
-            "update 는 정확히 한 칸을 토글 → 정확히 한 그룹의 count 가 ±1."),
+            "한 번 뒤집으면 칸 하나만 바뀌니, 묶음 하나의 count 만 ±1 이에요."),
         t(E, "All other groups' contributions to total stay the same.",
-            "나머지 그룹들의 total 기여는 그대로."),
+            "나머지 묶음들이 더하는 값은 그대로예요."),
         t(E, "So we can update `total` in O(1): subtract the old group cost, add the new one.",
             "그래서 total 을 O(1) 로 갱신: 옛 비용 빼고 새 비용 더하기."),
       ],
@@ -513,9 +513,9 @@ export function getReflectionSections(E) {
       py: RFL_FAST_PY, cpp: RFL_FAST_CPP,
       why: [
         t(E, "Build group_count once in O(N²). Initial total is one pass over groups.",
-            "group_count 한 번 O(N²) 으로 만들기. 초기 total 은 그룹 한 번 훑기."),
+            "group_count 를 격자 한 번 훑어 만들어요. 처음 total 도 묶음을 한 번 훑으면 나와요."),
         t(E, "Each update: look up the group, adjust its count and total in O(1).",
-            "각 update: 그룹 찾고, count 와 total 을 O(1) 로 조정."),
+            "뒤집을 때마다 묶음을 찾아 count 와 total 만 고쳐요."),
         t(E, "Total: O(N²) build + O(U) updates ≤ 4·10⁶ + 10⁵ = ~4·10⁶ ops. Trivially fast.",
             "총: O(N²) 빌드 + O(U) update ≤ 4·10⁶ + 10⁵ ≈ 4·10⁶. 매우 빠름."),
       ],

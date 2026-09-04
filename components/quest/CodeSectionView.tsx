@@ -121,10 +121,13 @@ export function CodeSectionView({
                     style={{
                       fontSize: 12.5,
                       color: "#1f2937",
-                      lineHeight: 1.65,
+                      lineHeight: 1.75,
                       marginBottom: 4,
                       display: "flex",
                       gap: 6,
+                      // 2026-09-04: 한글이 단어 중간에서 갈리고 마지막 줄만 짧게 남던 것
+                      wordBreak: "keep-all",
+                      textWrap: "balance",
                     }}
                   >
                     <span style={{ color: s.color, fontWeight: 800, flexShrink: 0 }}>•</span>

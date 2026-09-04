@@ -97,7 +97,7 @@ export function ReflectionRuleSim({ E }) {
 
       {/* 말풍선 (꼬리는 그리드 컨테이너로 이동 — 정확한 열 정렬을 위해) */}
       <div style={{ maxWidth: 460, margin: "0 auto 6px", transform: `translateY(${bubbleShiftY}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)", position: "relative", zIndex: 5 }}>
-        <div style={{ background: st.done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bubbleColor}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.done ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word" }}>💬 {st.bubble}</div>
+        <div style={{ background: st.done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bubbleColor}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.done ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word", whiteSpace: "pre-line", textWrap: "balance" }}>💬 {st.bubble}</div>
       </div>
 
       {/* 꼬리 + 그리드 — 같은 컨테이너(width: W)라서 열 위치 정확 */}
@@ -178,7 +178,7 @@ export function ReflectionGroupSim({ E }) {
 
       {/* 말풍선 (꼬리는 그리드 컨테이너로) */}
       <div style={{ maxWidth: 460, margin: "0 auto 6px", transform: `translateY(${bubbleShiftY}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)", position: "relative", zIndex: 5 }}>
-        <div style={{ background: st.final ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bubbleColor}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.final ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word" }}>💬 {st.bubble}</div>
+        <div style={{ background: st.final ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bubbleColor}`, borderRadius: 12, padding: "11px 14px", fontSize: 13, color: st.final ? "#065f46" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word", whiteSpace: "pre-line", textWrap: "balance" }}>💬 {st.bubble}</div>
       </div>
 
       {/* 꼬리 + 4×4 그리드 — 같은 컨테이너(width: W)라서 열 정렬 정확 */}
@@ -343,7 +343,7 @@ export function ReflectionUpdateSim({ E }) {
 
       {/* 말풍선 (꼬리는 그리드 컨테이너로) — toggle 행에 따라 Y 이동 */}
       <div style={{ maxWidth: 470, margin: "0 auto 6px", transform: `translateY(${focusRow == null ? 0 : (focusRow <= 1 ? 0 : (focusRow === 2 ? 28 : 56))}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)", position: "relative", zIndex: 5 }}>
-        <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 12, padding: "11px 14px", fontSize: 12.5, color: "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word" }}>💬 {st.bubble}</div>
+        <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 12, padding: "11px 14px", fontSize: 12.5, color: "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word", whiteSpace: "pre-line", textWrap: "balance" }}>💬 {st.bubble}</div>
       </div>
 
       {/* 꼬리 + 그리드 — 같은 컨테이너(width: W) */}
@@ -443,8 +443,8 @@ function _buildBruteSteps(E) {
   steps.push({
     phase: "done", grid: after, flipCell: null, cumul, scanned: 16,
     bubble: t(E,
-      `Answer = ${cumul}. But we re-scanned ALL 16 cells for just ONE flip. U = 200,000 × N² = 4,000,000 → 8×10¹¹ ops → time-limit exceeded.`,
-      `답 = ${cumul}. 근데 뒤집기 1 번에 16 칸을 다 훑었어요. U = 200,000 × N² = 4,000,000 → 8×10¹¹ 연산 → 시간 초과.`),
+      `Answer = ${cumul}. But we re-scanned ALL 16 cells for just ONE flip. At the real limits U = 10⁵ and N² = 4,000,000 that is 4×10¹¹ operations — far too slow.`,
+      `답 = ${cumul}. 근데 뒤집기 1 번에 16 칸을 다 훑었어요.\n실제 제약인 U = 10⁵, N² = 4,000,000 이면 4×10¹¹ 번이에요 — 너무 느려요.`),
   });
   return steps;
 }
@@ -471,7 +471,7 @@ export function ReflectionBruteSim({ E }) {
 
       {/* 말풍선 — 스캔 묶음 행에 따라 Y */}
       <div style={{ maxWidth: 470, margin: "0 auto 6px", transform: `translateY(${bubbleShiftY}px)`, transition: "transform .42s cubic-bezier(.4,0,.2,1)", position: "relative", zIndex: 5 }}>
-        <div style={{ background: isDone ? "#fef2f2" : "#fffbeb", border: `1.5px solid ${bubbleColor}`, borderRadius: 12, padding: "11px 14px", fontSize: 12.5, color: isDone ? "#7f1d1d" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word" }}>💬 {st.bubble}</div>
+        <div style={{ background: isDone ? "#fef2f2" : "#fffbeb", border: `1.5px solid ${bubbleColor}`, borderRadius: 12, padding: "11px 14px", fontSize: 12.5, color: isDone ? "#7f1d1d" : "#92400e", lineHeight: 1.6, minHeight: 44, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 600, wordBreak: "keep-all", overflowWrap: "break-word", whiteSpace: "pre-line", textWrap: "balance" }}>💬 {st.bubble}</div>
       </div>
 
       {/* 그리드 */}

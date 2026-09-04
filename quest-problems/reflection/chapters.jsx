@@ -24,10 +24,10 @@ export function makeReflectionCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 700, color: "#155e75", letterSpacing: 0.5, marginBottom: 4 }}>
               🎯 {t(E, "Mission", "미션")}
             </div>
-            <div style={{ fontSize: 13, color: "#155e75", lineHeight: 1.55, wordBreak: "keep-all" }}>
+            <div style={{ fontSize: 13, color: "#155e75", lineHeight: 1.75, wordBreak: "keep-all", textWrap: "balance", whiteSpace: "pre-line" }}>
               {t(E,
                 "Make the picture mirror-symmetric with the FEWEST cell changes. Bessie flips one cell at a time — answer again after each.",
-                "그림을 거울 대칭으로 만드는 데 칸을 최소 몇 번 바꿔야 할까요? Bessie 가 한 칸씩 바꿀 때마다 다시 답해요.")}
+                "그림을 거울 대칭으로 만들려면 칸을 최소 몇 번 바꿔야 할까요?\nBessie 가 한 칸씩 바꿀 때마다, 그때마다 다시 답해요.")}
             </div>
           </div>
 
@@ -167,7 +167,7 @@ export function makeReflectionCh2(E, lang = "py") {
       narr: i === 0
         ? t(E,
             "Each group's flips = min(painted, 4 − painted).",
-            "그룹마다 뒤집기 = min(칠한 수, 4 − 칠한 수).")
+            "묶음마다 뒤집는 횟수 = min(칠한 수, 4 − 칠한 수).")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
