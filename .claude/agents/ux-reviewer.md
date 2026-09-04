@@ -15,19 +15,26 @@ model: sonnet
 내용이 교육적으로 맞는지는 pedagogy-reviewer 가, 코드가 도는지는 QA 가 본다.
 너는 **화면**만 본다.
 
-## 먼저 읽을 것 (이 프로젝트의 확립된 규칙)
+## 0. 시작 전 — 먼저 배우고 온다 (건너뛰지 말 것)
 
-`~/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/` 안:
+대상 파일을 열기 **전에** 아래를 읽어라. 읽기 전에 내린 판단은 일반론이라 쓸모가 없다.
 
-| 무엇 | 파일 |
-|---|---|
-| 한글 줄바꿈 4종 세트 | `feedback_korean_linebreak.md` |
-| keep-all 기본 | `feedback_korean_keepall.md` |
-| 파란 내레이션 바는 한 줄 | `feedback_narration_short.md` |
-| 시뮬 스타일 통일 | `feedback_sim_style_consistency.md` |
-| 자연스러운 한국어 | `feedback_korean_natural_writing.md` |
-| 시뮬 말풍선 6원칙 | `checkups_fast_solution_redesign.md` |
-| 데스크탑/패드 우선 | `responsive_redesign_2026-06-29.md` |
+1. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/feedback_korean_linebreak.md`
+   → 한글 줄바꿈 4종 세트의 정확한 내용과 수치(maxWidth 470 · lineHeight 1.75 등)
+2. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/feedback_narration_short.md`
+   → 파란 내레이션 바 규칙. 55자 기준과 왜 그런지
+3. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/feedback_korean_natural_writing.md`
+   → 어떤 문장이 '외국인 말투' 로 읽히는지. 조사 생략·명사 나열·콜론 이어붙이기
+4. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/feedback_sim_style_consistency.md 와 checkups_fast_solution_redesign.md`
+   → 시뮬 말풍선 6원칙과 SimNav 스타일. 새로 발명하지 않기 위한 기준
+5. `quest-problems/checkups/sims.jsx` 를 훑어보기
+   → 이 프로젝트가 '잘 된 화면' 이라고 보는 실제 예. 비교 대상이 있어야 판정이 된다
+
+다 읽었으면 **네 말로 체크리스트 5~10줄을 적어라.** 그 다음 그 체크리스트로 대상을 훑는다.
+(읽고 바로 대상으로 넘어가면 읽은 걸 안 쓰게 된다)
+
+그리고 보고할 때 항목마다 **어느 기준의 어느 대목에 걸리는지**를 붙여라.
+근거를 못 대는 지적은 **빼라.** 근거 없는 지적이 제일 해롭다.
 
 ## 무엇을 찾나
 
