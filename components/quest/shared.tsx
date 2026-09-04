@@ -121,10 +121,13 @@ export function Quiz({ question, hint, options, correct, explain, answered, onAn
           )
         })}
       </div>
+      {/* whitespace-pre-line: explain 안의 \n 이 그냥 공백으로 뭉개지고 있었다 (2026-09-04).
+          한글은 절 단위로 직접 줄을 나눠 줘야 읽힌다 — renderInline 은 \n 을 안 다룬다. */}
       {answered != null && explain && (
-        {/* whitespace-pre-line: explain 안의 \n 이 그냥 공백으로 뭉개지고 있었다 (2026-09-04).
-            한글은 절 단위로 직접 줄을 나눠 줘야 읽힌다 — renderInline 은 \n 을 안 다룬다. */}
-        <div className="mt-2.5 px-3 py-2 bg-green-50 rounded-lg border border-green-200 text-xs font-semibold text-green-600 whitespace-pre-line [word-break:keep-all]">
+        <div
+          className="mt-2.5 px-3 py-2 bg-green-50 rounded-lg border border-green-200 text-xs font-semibold text-green-600 whitespace-pre-line"
+          style={{ wordBreak: "keep-all" }}
+        >
           {renderInline(explain)}
         </div>
       )}
