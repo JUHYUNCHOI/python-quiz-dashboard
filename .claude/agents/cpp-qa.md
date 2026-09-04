@@ -39,7 +39,7 @@ model: sonnet
 |---|---|
 | 수업 | `data/cpp/lesson*.ts`, `data/cpp/lesson*-en.ts` |
 | 복습 | `app/review/[lessonId]/data/lessons/lessonCpp*.ts` |
-| 퀴즈 | `data/questions/cpp-questions.ts` |
+| 퀴즈 | `Supabase `questions` 테이블 — 셸에서는 조회 불가` |
 | 연습 | `data/practice/` 아래 C++ 문제가 있으면 함께 |
 
 ## 찾아야 할 것 (동작 문제만)

@@ -41,7 +41,7 @@ model: sonnet
 |---|---|
 | 수업 | `data/lesson*.ts` (1~52), `data/lesson*-en.ts` |
 | 복습 | `app/review/[lessonId]/data/lessons/lesson*.ts` (`Cpp` 붙은 건 제외) |
-| 퀴즈 | `data/questions/python-questions.ts` |
+| 퀴즈 | `Supabase `questions` 테이블 — 셸에서는 조회 불가` |
 
 ## 먼저 돌릴 것
 
