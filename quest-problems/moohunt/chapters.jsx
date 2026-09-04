@@ -12,8 +12,8 @@ export function makeMooHuntCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Bessie has a line of N cells, each holding 'M' or 'O'. She does K taps — each tap picks 3 cells. She scores 1 if those 3 cells spell 'MOO' in order. Find the highest score reachable, and how many boards reach it.",
-        "베시는 N 칸짜리 한 줄을 가지고 있어요. 각 칸은 'M' 아니면 'O' 예요.\nK 번 탭을 하는데 매번 세 칸을 골라요.\n그 세 칸이 순서대로 'MOO' 면 1 점이에요.\n받을 수 있는 최고 점수와, 그 점수가 되는 보드 개수를 구해요."),
+        "M / O 한 줄에서 최고 점수와, 그 점수가 되는 보드 개수를 구해요.",
+        "M / O 한 줄에서 최고 점수와, 그 점수가 되는 보드 개수를 구해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -83,8 +83,8 @@ export function makeMooHuntCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Look at sample 1: N=5 cells, K=6 moves. Two boards (MOOOM and MOOMM) both score 4 — the answer is '4 2'.",
-        "샘플 1 을 봐: N=5 칸, K=6 무브. 보드 MOOOM 과 MOOMM 둘 다 4 점 — 답은 '4 2'."),
+        "Sample 1 — two boards tie at 4, so the answer is '4 2'.",
+        "샘플 1 이에요. 두 보드가 똑같이 4 점이라 답은 '4 2' 예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#7f1d1d", marginBottom: 10 }}>
@@ -118,16 +118,16 @@ export function makeMooHuntCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Why does board MOOOM score 4? Let's walk each move on it. M = 'M', O = 'O'. A move (x,y,z) scores when cell x is M and cells y,z are O.",
-        "보드 MOOOM 이 왜 4 점일까요?\n무브를 하나씩 따라가 봐요.\n무브 (x,y,z) 는 칸 x 가 M 이고 칸 y, z 가 O 일 때 득점해요."),
+        "Why is MOOOM worth 4? Walk the moves one by one.",
+        "MOOOM 이 왜 4 점일까요? 무브를 하나씩 따라가 봐요."),
       content: (<ScoreBoardSim E={E} />),
     },
     // 1-4: Quiz - bitmask insight
     {
       type: "quiz",
       narr: t(E,
-        "Each cell is one of two values (M or O). With N ≤ 20 cells, how many possible boards are there in total?",
-        "각 칸은 두 값 중 하나 (M 또는 O). N ≤ 20 칸일 때 가능한 보드는 총 몇 개?"),
+        "How many different boards are there at all?",
+        "보드는 애초에 몇 가지나 있을까요?"),
       question: t(E,
         "How many distinct boards exist when N ≤ 20?",
         "N ≤ 20 일 때 서로 다른 보드는 몇 개?"),
@@ -144,22 +144,22 @@ export function makeMooHuntCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "K can be up to 200,000, but the same triple (x,y,z) can repeat.\nHow many distinct ordered triples are possible when N = 20?",
-        "K 는 최대 20 만이지만 같은 (x,y,z) 가 반복될 수 있어요.\nN = 20 일 때 서로 다른 삼중쌍은 몇 개일까요?"),
+        "And how many different moves are there?",
+        "무브는 서로 다른 게 몇 가지나 될까요?"),
       question: t(E,
         "When N = 20, count distinct ordered triples (x, y, z) with x, y, z all different. Answer = ?",
         "N = 20 일 때 x, y, z 가 모두 다른 순서 있는 (x, y, z) 의 개수 = ?"),
       hint: t(E,
         "Pick x first, then y, then z — each from a shrinking pool.",
-        "x 를 먼저, 그 다음 y, 그 다음 z 를 골라봐 — 풀이 줄어들지."),
+        "x 를 먼저 고르고, 그 다음 y, 그 다음 z 를 골라요. 고를 수 있는 게 하나씩 줄어들어요."),
       answer: 6840,
     },
     // 1-6: 브루트 한계 — 1M 보드 × 6840 삼중쌍 = 7×10⁹ 벽 (배너와 일관). review 2026-08-18.
     {
       type: "reveal",
       narr: t(E,
-        "So: build all 1M boards, score each against every distinct triple. Does that finish in time?",
-        "그럼: 100만 보드를 다 만들어 각각을 모든 삼중쌍으로 채점. 시간 안에 끝날까?"),
+        "So — try all of them. Does that finish in time?",
+        "그럼 다 해보면 되겠네요. 시간 안에 끝날까요?"),
       content: (<BruteLimitSim E={E} />),
     },
   ];
@@ -176,8 +176,8 @@ export function makeMooHuntCh2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Code", "코드"),
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains: group moves, try every board with a bitmask, print best & count.",
-        "코드를 위에서 아래로 읽어봐요.\n말풍선이 설명하는 코드 줄에 바로 붙어 있어요.\n무브 묶기 → 비트마스크로 모든 보드 시도 → 최고 점수와 보드 개수 출력."),
+        "Now the code — each bubble sits on the lines it explains.",
+        "이제 코드예요. 말풍선이 설명하는 줄에 붙어 있어요."),
       content: (
         <div>
           {/* ⚠️ 이 코드의 한계 — 1페이지(문제 소개)에 있던 걸 코드 보는 자리로 옮김.
