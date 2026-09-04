@@ -53,6 +53,13 @@ model: sonnet
   `npx esbuild <file>.jsx --loader:.jsx=jsx --format=esm --outfile=/dev/null` 로 파스 확인.
 - 끝나면 `npm run build:check` 로 타입·빌드 통과 확인.
 
+## 시뮬을 만들거나 고칠 때
+
+`@/components/quest` 의 `SimNav` 단계 이동(◀▶) + 말풍선 방식으로 통일한다.
+**자동재생·채팅형 데이터 위젯 금지.** 만들기 전에 기존 `sims.jsx` 를 먼저 열어 모양을 맞춰라.
+선생님: "자동은 뭐지? 우리 시뮬 스타일이랑 넘 달라."
+근거: `memory/feedback_sim_style_consistency.md`
+
 ## 용어 (학생용 글을 쓸 때 반드시)
 
 - **원문에 없는 말을 지어내지 마라.** 의인화·동작 비유(`베시가 탭한다`)는 틀린 그림을 심는다.

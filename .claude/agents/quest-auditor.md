@@ -32,6 +32,25 @@ You audit USACO quest tutorial files in `quest-problems/<id>/` for content integ
   정의하기 전에 쓴 용어(특히 미션·제목)가 있으면 지적한다. 음차어는 뜻 한 줄 필수.
   근거: `memory/feedback_no_invented_terms.md`
 
+## 이 프로젝트에서 확립된 quest 규칙 (같이 검사할 것)
+
+선생님이 반복해서 지적한 것들이다. 근거 파일은 `memory/` 아래에 있다.
+
+- **결론 통보 금지** — 풀이 도입은 "그럼 어떻게 해결하면 될까? 생각해보자" 로 연다.
+  "이렇게 하면 됩니다" 로 시작하면 지적. `feedback_solution_framing.md`
+- **'왜' 가 빠진 결정** — 아이들 머릿속 1번 질문은 "왜?". 결정하는 그 슬라이드에 이유가 있어야 한다.
+  재사용 직관: "확실한 것(강한 제약)부터 → 애매한 선택지가 줄어든다".
+  `feedback_explain_why_certain_first.md`
+- **사후 보정 식** — "먼저 틀리게 세고 −1 로 고치는" 모양이면 어떤 문장으로도 설명이 안 된다.
+  말을 다듬으라 하지 말고 **보정 없는 동치 식으로 바꾸라**고 지적하라.
+  `feedback_no_post_hoc_correction.md`
+- **코드 설명은 CodeWalk 방식** — 말풍선이 **코드 줄에 붙어** 있어야 한다.
+  코드 위에 문단으로 써 놓은 설명은 안 읽힌다. `feedback_quest_code_codewalk.md`
+- **재귀 코드 표준** — ✋베이스 조기 return · 잡일만 도우미 · 직접 순회(암산 ❌) ·
+  주석 한 줄, 설명은 말풍선. `feedback_teaching_recursion_code.md`
+- **풀이 코드는 usaco.org 공식 답안 기준** — 직접 최적화한 코드를 "통과" 라고 표기하면 지적.
+  `feedback_usaco_official_solutions.md`
+
 ## Rules
 
 1. **NEVER MODIFY** `SOLUTION_CODE`, `*_PY`, `*_CPP` variables in USACO_VERIFIED files

@@ -45,6 +45,28 @@ You apply an established UX/visual pattern from a reference file to target files
 4. Preserve target-specific content (chapter titles, code samples, etc.)
 5. Use Edit (not Write) for existing files
 
+## 한글 텍스트 4종 세트 (한 문장이라도 쓰면 전부 적용)
+
+근거: `memory/feedback_korean_linebreak.md`, `feedback_korean_keepall.md`
+
+1. `wordBreak: "keep-all"` — 없으면 단어가 중간에서 갈린다 ("하나씩" → "하" / "나씩")
+2. `textWrap: "balance"` — 없으면 마지막 줄만 짧게 남는다
+3. **한 줄 60자 이하**
+4. **절 단위로 `<br />` 직접 삽입** — 브라우저에 맡기지 마라
+
+말풍선 기준값: `maxWidth: 470`, `lineHeight: 1.75`.
+선생님: "항상 줄바꿈에 대한건 매번 작성할때 기억하도록."
+
+## 화면 규칙
+
+- **파란 내레이션 바(`narr`) 는 한 문장, 55자 이하.** 설명은 아래 카드·시뮬이 한다.
+  길면 바로 아래 말풍선이 같은 말을 또 해서 "한번에 설명이 너무 많아" 가 된다.
+  `memory/feedback_narration_short.md`
+- **시뮬은 `@/components/quest` 의 SimNav 단계(◀▶) + 말풍선 방식으로.**
+  자동재생·채팅형 위젯 금지. 만들기 전에 기존 `sims.jsx` 를 열어 맞춰라.
+  `memory/feedback_sim_style_consistency.md`
+- **톤은 해요체.** 반말·1인칭 금지.
+
 ## 용어 (학생용 글을 쓸 때 반드시)
 
 - **원문에 없는 말을 지어내지 마라.** 의인화·동작 비유(`베시가 탭한다`)는 틀린 그림을 심는다.

@@ -42,6 +42,18 @@ Required structure for each topic:
 - `data/algo/topics.ts` — find topic metadata (lessonId, title)
 - `public/algo/topics/<topicId>.js` — source content to convert
 
+## 새 개념 첫 도입 (제일 자주 틀리는 곳)
+
+첫 챕터를 **추상적 정당화**("왜 이게 필요한가", 목록 관리)로 열면 안 된다.
+순서는 이것 하나다:
+
+**아는 문제(예: for 로 합 구하기) → 새 생각법으로 다시 풀기 → 숫자로 끝까지 →
+이름은 맨 나중 → "왜 배워요?" 는 제일 끝에 정직하게.**
+
+선생님(2026-07-17) 이 같은 지적을 두 번 하셨다:
+"처음 배우는 학생 입장에서는 설명이 어려워, 스케폴딩이 되지 않아."
+근거: `memory/feedback_first_concept_scaffolding.md`
+
 ## 용어 (학생용 글을 쓸 때 반드시)
 
 - **원문에 없는 말을 지어내지 마라.** 의인화·동작 비유(`베시가 탭한다`)는 틀린 그림을 심는다.
