@@ -146,8 +146,8 @@ function OrbitGridStepSim({ rows, cols, orbit, stepData, caption, E }) {
         </div>
       )}
       {/* Grid + floating explanation bubble anchored to the active cell */}
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 8, marginTop: 2 }}>
-        <div style={{ position: "relative", width: containerW, height: containerH }}>
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 8, marginTop: 2, width: "100%", overflowX: "auto" }}>
+        <div style={{ position: "relative", width: containerW, height: containerH, flexShrink: 0 }}>
           {/* grid */}
           <div style={{ position: "absolute", left: SIDE, top: VPAD, width: gridW, height: gridH }}>
             {/* connecting arrows along the orbit */}
@@ -782,7 +782,7 @@ export function makeAstralCh1(E) {
       type: "reveal",
       narr: t(E,
         "First, watch ONE star move between two photos. Bessie the cow took a night-sky photo, waited, then took another. Stars either disappear OR slide right/down by a fixed amount. Try the toggles — see what the COMPOSITE looks like.",
-        "먼저 그림으로 봐요. 별 한 개가 두 사진 사이에서 어떻게 움직이는지. Bessie 라는 소가 밤하늘을 두 번 찍었어요. 별은 사라지거나, 정해진 만큼 오른쪽·아래로 슬쩍 이동. 아래 토글 눌러보면서 합성이 어떻게 만들어지는지 봐요."),
+        "별 하나가 두 사진 사이에서 어떻게 움직이는지 봐요. 👇"),
       content: (
         <div>
           <div style={{ padding: "12px 16px 0", textAlign: "center" }}>
@@ -856,7 +856,7 @@ export function makeAstralCh1(E) {
       type: "reveal",
       narr: t(E,
         "Now the rules are clear — let's warm up with the EASIEST case: stars don't move. Count the stars one cell at a time. 👇",
-        "규칙을 알았으니 제일 쉬운 경우부터 — 별이 아예 안 움직이면? 아래에서 별을 한 칸씩 세어 봐요 👇"),
+        "제일 쉬운 경우부터 — 별이 아예 안 움직이면? 👇"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#4f46e5", textAlign: "center", marginBottom: 10 }}>
@@ -890,7 +890,7 @@ GGG`}
       type: "reveal",
       narr: t(E,
         "Easy case done. Now stars MOVE — and a corner G gets tricky. Step through it below. 👇",
-        "쉬운 경우는 끝. 이번엔 별이 움직여요 — 모서리 G 가 까다로워져요. 아래에서 한 칸씩 따라가 봐요 👇"),
+        "이번엔 별이 움직여요. 모서리가 까다로워져요. 👇"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 12 }}>

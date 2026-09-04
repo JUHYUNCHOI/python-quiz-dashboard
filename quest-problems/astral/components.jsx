@@ -405,8 +405,8 @@ export function AstralChainDiscovery({ E }) {
           <div style={{ display: "flex", justifyContent: "center" }}>{makeGrid(comp)}</div>
           <div style={{ fontSize: 10, color: C.dim, marginTop: 4 }}>
             {moves && inside
-              ? t(E, "2 G cells linked", "G 두 칸이 연결")
-              : t(E, "1 G cell", "G 1 칸")}
+              ? t(E, "2 grey cells linked", "회색 칸 두 개가 이어짐")
+              : t(E, "1 grey cell", "회색 칸 하나")}
           </div>
         </div>
       </div>
@@ -1175,7 +1175,7 @@ export function AstralAlgoTrace({ E }) {
 
 
 /* ════════════════════════════════════════════════════════════════════
-   Progressive code: 5 sections.
+   Progressive code: 8 sections. (2026-09-04: 헤더가 5 라고 적혀 있었는데 실제로는 8 개다)
    ════════════════════════════════════════════════════════════════════ */
 
 const AST_S1_PY = [
@@ -2125,7 +2125,7 @@ export function downloadAstralPDF(E, sections, lang = "py") {
 <div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO January 2025 Bronze · ${t(E, "Self-contained walkthrough", "혼자서도 볼 수 있는 풀이")}</div>
-<h2>${t(E, "Code (5 sections)", "코드 (5 섹션)")}</h2>
+<h2>${t(E, "Code (8 sections)", "코드 (8 섹션)")}</h2>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>

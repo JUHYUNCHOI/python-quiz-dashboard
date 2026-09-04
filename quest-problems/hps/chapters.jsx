@@ -159,7 +159,9 @@ export function makeHpsCh1(E) {
               <span style={{ color: "#7c3aed" }}>■</span>
               <span style={{ color: "#ea580c" }}>▲</span>
             </div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>Hoof Paper Scissors Minus One</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: "#059669" }}>
+              {t(E, "Hoof Paper Scissors Minus One", "가위바위보 마이너스 원")}
+            </div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2025 Bronze #1</div>
           </div>
 
@@ -217,7 +219,7 @@ export function makeHpsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Real USACO sample: 3 card types, 3 Elsie hands. The matchup chart is a TRIANGULAR matrix using W/L/D characters.",
-        "실제 USACO 샘플: 3 종 카드, 3 개 Elsie 패. 승패 차트는 W/L/D 글자로 된 삼각 행렬."),
+        "실제 USACO 샘플로 입력·출력 형식을 볼게요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", textAlign: "center", marginBottom: 10 }}>
@@ -354,7 +356,7 @@ LWD
       type: "reveal",
       narr: t(E,
         "Now use that beats map — watch the sample's 3 Elsie hands turn into the output 0, 0, 5, one at a time.",
-        "이제 그 이김 지도를 써서 — 샘플의 Elsie 3 패가 출력 0, 0, 5 로 어떻게 나오는지 하나씩 봐요."),
+        "이김 지도로 출력 0, 0, 5 가 어떻게 나오는지 봐요."),
       content: (<HpsSampleIOSim E={E} />),
     },
 
@@ -364,7 +366,7 @@ LWD
       type: "reveal",
       narr: t(E,
         "Problem's clear.  Simplest idea first — for each Elsie hand, just TRY every Bessie hand and count the wins.  That's brute force.  Let's code it.",
-        "문제는 다 이해했어요. 가장 단순한 방법부터 — 각 Elsie 패마다 Bessie 의 모든 패를 하나씩 시험해서 이기는 걸 세기. 이게 브루트포스. 코드로 짜보자."),
+        "그럼 어떻게 풀면 될까요? 제일 쉬운 방법부터 짜볼게요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff7ed", border: "1.5px solid #fb923c", borderRadius: 12, padding: "16px 18px", maxWidth: 480, margin: "0 auto", wordBreak: "keep-all" }}>
@@ -411,7 +413,7 @@ export function makeHpsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Brute is done — submit it.  The judge runs 12 test inputs against it.",
-        "brute 코드 다 됐어. 제출! 채점기가 12 개 테스트 입력을 돌릴 거예요."),
+        "brute 코드를 다 짰어요. 이제 제출해볼게요."),
       // (2026-07-14 검토: 이 스텝이 낡은 안내문 하나만 있는 '빈 화면'이었음 → 제출 순간 도식으로 채움.
       //  구체적 테스트 번호/시간은 확인된 바 없어 지어내지 않음 — 작은 입력 ✓ / 큰 입력 ⏰ 만.)
       content: (
@@ -467,7 +469,7 @@ export function makeHpsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "…and the bigger inputs time out.  Where is brute spending all its work?  Look at the nested loop.",
-        "…근데 큰 입력에서 시간 초과가 떠. brute 가 어디서 일을 그렇게 많이 하지? 안쪽 두 겹 for 를 같이 보자."),
+        "큰 입력에서 시간이 초과됐어요. 어디서 일이 많아졌을까요?"),
       content: (() => {
         const codeLines = [
           "for _ in range(M):              # M queries (Elsie's hands)",
@@ -554,7 +556,7 @@ export function makeHpsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "10¹⁰ ops in 2 seconds is impossible.  Need to do less work per query.  Same question, drawn as a picture, makes a shortcut visible.",
-        "10¹⁰ 연산을 2 초 안에 끝내는 건 불가능해. 한 쿼리당 일을 줄여야 해. 같은 문제를 그림으로 그리면 빠른 길이 보여요."),
+        "한 번에 하는 일을 줄여야 해요. 그림으로 그려 볼게요."),
       content: (<HpsFormulaGridSim E={E} />),
     },
     // Insight + smart code (sections 7-8)
@@ -574,7 +576,7 @@ export function makeHpsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Submit again — all 12 tests pass, even Python.  Let's see why so we can recognise the pattern next time.",
-        "다시 제출 — 12 개 테스트 모두 통과, Python 도! 왜 통과했는지 한번 짚어보고, 다음에 비슷한 문제 만나면 패턴 알아채게 하자."),
+        "다시 제출하니 12 개 모두 통과했어요. 왜 통과했는지 봐요."),
       content: <NSpeedSim E={E} />,
     },
     // ── Bonus track: bitmask trick. Optional / deep-dive — make this
@@ -586,7 +588,7 @@ export function makeHpsCh2(E, lang = "py") {
       label: t(E, "🎁 Bonus — bits", "🎁 보너스 — 비트"),
       narr: t(E,
         "Quest's main path ends here.  From here on is optional — a deeper bits trick for students who want more.  Skipping is totally fine.",
-        "여기까지가 메인 풀이. 여기부터는 선택 — 더 깊이 가고 싶은 학생만. 안 따라가도 전혀 문제 없어요."),
+        "여기까지가 메인 풀이예요. 아래는 선택이라 안 봐도 괜찮아요."),
       content: (
         <div style={{ padding: 16 }}>
           {/* Big "you finished the main quest" milestone */}
@@ -747,7 +749,7 @@ export function makeHpsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Step 3: apply bits to this problem. One column per Elsie card; bit i means 'card i beats this column'.",
-        "3 단계: 비트를 이 문제에 적용. 컬럼마다 비트마스크 — i 번째 비트 = '카드 i 가 이 컬럼 카드 이김'."),
+        "3 단계: 비트를 이 문제에 적용해 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
