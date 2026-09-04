@@ -31,7 +31,7 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `strangefn` | Strange Function | Feb 2026 Bronze #2 | ✅ 12/12 PASS | ✅ 12/12 PASS |
 | `makedistinct` | Make All Distinct | Feb 2026 Bronze #1 | ✅ 13/13 PASS | ✅ 13/13 PASS |
 | `buymilk` | Purchasing Milk | Jan 2026 Bronze #3 | ⏳ 재제출 대기 — 2026-07-17 재설계로 TLE 해결 (구 재귀는 5/14). 정규화 c[i]=min(a[i],2c[i-1]) + O(N) 그리디. 로컬: 전수 4142 + 랜덤 9400 구 재귀와 일치, 브루트포스 400건 일치, 공식 샘플 일치. | ⏳ 재제출 대기 — 같은 재설계 (구 브루트는 8/9+ TLE). PY==CPP 교차 확인. |
-| `moohunt` | Moo Hunt | Feb 2026 Bronze #2 | 🟡 5/12 (TLE 6-12, brute too slow) | 🟡 10/12 (TLE - brute) |
+| `moohunt` | Moo Hunt | Jan 2026 Bronze #2 | 🟡 5/12 (TLE 6-12, brute too slow) | 🟡 10/12 (TLE - brute) |
 | `mooin4` | It's Mooin' Time IV | Jan 2026 Bronze #1 | ✅ 16/16 PASS | ✅ 16/16 PASS |
 | `photoshoot25` | Photoshoot | Dec 2025 Bronze #3 | 🟡 12/18 (TLE 13-18, Python too slow) | ✅ 18/18 PASS |
 | `cowsplits` | COW Splits | Dec 2025 Bronze #2 | ✅ 2026-08-29 제출 통과 (2026-08-14 M=2 block-pair 재작성분). 이전 M=3 풀이는 3/14 (k=1 만). 로컬: N=2·N=4 전수 + 랜덤 30만 — 배정 유효성까지 확인. | 같은 알고리즘, 채점기 제출은 아직. 로컬 검증은 통과. |

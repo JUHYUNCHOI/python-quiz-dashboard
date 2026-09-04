@@ -2,7 +2,7 @@
 
 /* Moo Hunt — 더 빠른 풀이 (usaco.org 공식 답안).
    출처: https://usaco.org/current/data/sol_prob2_bronze_season26contest2.html
-         (Feb 2026 Bronze #2, cpid 1564)
+         (Jan 2026 Bronze #2 = season26 second contest, cpid 1564)
 
    🔒 components.jsx 의 FULL_PY / FULL_CPP (USACO 채점기로 검증된 완전탐색) 는
    한 글자도 건드리지 않는다. 여기는 별도 파일이다.

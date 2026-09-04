@@ -63,7 +63,7 @@ const SECTIONS: Section[] = [
       { id: "strangefn", emoji: "🔢", title: "Strange Function", sub: "Feb 2026 Bronze #2" },
       { id: "swaptowin", emoji: "🔀", title: "Swap to Win", sub: "Feb 2026 Bronze #3" },
       { id: "mooin4", emoji: "🐄", title: "It's Mooin' Time IV", sub: "Jan 2026 Bronze #1" },
-      { id: "moohunt", emoji: "🏹", title: "Moo Hunt", sub: "Feb 2026 Bronze #2" },
+      { id: "moohunt", emoji: "🏹", title: "Moo Hunt", sub: "Jan 2026 Bronze #2" },
       { id: "buymilk", emoji: "🥛", title: "Purchasing Milk", sub: "Jan 2026 Bronze #3" },
       { id: "chipxchg", emoji: "🪙", title: "Chip Exchange", sub: "Dec 2025 Bronze #1" },
       { id: "cowsplits", emoji: "✂️", title: "COW Splits", sub: "Dec 2025 Bronze #2" },

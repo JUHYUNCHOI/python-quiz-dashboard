@@ -36,7 +36,7 @@ export const ALL_PROBLEMS: ProblemMeta[] = [
   {id:"strangefn",emoji:"🔢",title:"Strange Function",sub:"Feb 2026 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1588"},
   {id:"swaptowin",emoji:"🔀",title:"Swap to Win",sub:"Feb 2026 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1589"},
   {id:"mooin4",emoji:"🐄",title:"It's Mooin' Time IV",sub:"Jan 2026 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1563"},
-  {id:"moohunt",emoji:"🏹",title:"Moo Hunt",sub:"Feb 2026 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1564"},
+  {id:"moohunt",emoji:"🏹",title:"Moo Hunt",sub:"Jan 2026 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1564"},
   {id:"buymilk",emoji:"🥛",title:"Purchasing Milk",sub:"Jan 2026 Bronze #3",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1565"},
   {id:"chipxchg",emoji:"🪙",title:"Chip Exchange",sub:"Dec 2025 Bronze #1",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1539"},
   {id:"cowsplits",emoji:"✂️",title:"COW Splits",sub:"Dec 2025 Bronze #2",section:"USACO",url:"https://usaco.org/index.php?page=viewproblem2&cpid=1540"},

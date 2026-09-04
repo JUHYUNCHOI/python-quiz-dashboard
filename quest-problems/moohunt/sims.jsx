@@ -1,6 +1,6 @@
 "use client";
 
-/* Moo Hunt (Feb 2026 Bronze #2) 용 시뮬 — 🔒 USACO_VERIFIED components.jsx 는
+/* Moo Hunt (Jan 2026 Bronze #2) 용 시뮬 — 🔒 USACO_VERIFIED components.jsx 는
    건드리지 않고 여기에만.
 
    전엔 시뮬이 없어서 채점 과정이 한 화면에 표로 통째로 있었다
@@ -293,7 +293,7 @@ export function BitBoardSim({ E }) {
 
 /* ③ FasterIdeaSim — 왜 더 빨라지는가 (2026-09-04 추가).
    pedagogy-reviewer 지적: "한계(결-b)까지만 있고 더 빠른 방법(결-c)이 없다."
-   usaco.org 공식 답안(Feb 2026 Bronze #2, cpid 1564)의 핵심을 단계로 쪼갠 것.
+   usaco.org 공식 답안(Jan 2026 Bronze #2, cpid 1564)의 핵심을 단계로 쪼갠 것.
    숫자는 전부 그 자리에서 계산 — 글과 어긋날 수 없다. */
 export function FasterIdeaSim({ E }) {
   const steps = [{ k: "board" }, { k: "waste" }, { k: "order" }, { k: "only" }, { k: "gain" }];

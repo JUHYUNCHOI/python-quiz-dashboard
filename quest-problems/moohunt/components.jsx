@@ -7,8 +7,10 @@
 //   코드 수정 시 USACO 재제출 필요 — /tmp/usaco_results.json 참고
 //   상세: REPO_ROOT/USACO_VERIFICATION.md
 //
-//   2026-09-04: 라벨이 'Jan 2026' 으로 잘못 적혀 있던 걸 'Feb 2026' 으로 고침
-//     (cpid=1564 = season26 contest 2 Bronze #2. Jan 2026 Bronze #2 는 COW Splits 다.)
+//   ⚠️ 2026-09-04: 내가 라벨을 'Feb 2026' 으로 잘못 바꿨다가 되돌렸다. 'Jan 2026' 이 맞다.
+//     usaco.org 는 이 대회를 'season26 second contest' 라고만 부르는데,
+//     USACO 는 **12월이 1차**다 → 2차 = 1월. contest 1(Chip Exchange·COW Splits·Photoshoot)이
+//     우리 저장소에서 Dec 2025 인 것으로 교차 확인됨. cpid 1563·1565 도 Jan 2026 으로 적혀 있다.
 //   2026-09-04: 더 빠른 공식 풀이를 ./fast.jsx 에 **따로** 추가했다.
 //     이 파일의 FULL_PY / FULL_CPP 는 한 글자도 안 건드렸다 → 재제출 불필요.
 
