@@ -108,6 +108,20 @@ print("안녕".upper())
 한글, 숫자, 기호 같은 건 그대로. 영문 글자만 바뀌어요.`
         },
         {
+          /* 2026-09-05 선생님: "읽기를 눈에 보이는 시뮬로, 읽는 게 아니라
+             보는 걸로 만들 수 있잖아."
+             레슨6(문자열 메서드)은 시뮬이 **0개**였는데,
+             `components/animations/py-string-method-visualizer.tsx` 가
+             upper·lower·strip·replace·find·count 를 전부 다루면서
+             **어느 레슨에도 안 붙어 있었다.** 만들어 놓고 안 쓰던 것이다. */
+          id: "method-sim-1",
+          type: "interactive",
+          title: "🔤 눈으로 보기 — 메서드가 하는 일",
+          description: "글자를 직접 바꿔가며 눌러봐요. 원래 글은 그대로 남아요.",
+          component: "pyStringMethodVisualizer",
+          componentProps: { initialText: "Hello World" }
+        },
+        {
           id: "predict-upper-result",
           type: "predict",
           title: "💭 결과 예측 — upper()",
@@ -245,6 +259,15 @@ print(text.strip())
 {output}
 안녕 친구
 {/output}`
+        },
+        {
+          // 같은 시뮬, 이번엔 앞뒤에 공백이 붙은 글로 — strip 탭을 눌러보게.
+          id: "method-sim-2",
+          type: "interactive",
+          title: "✂️ 눈으로 보기 — 공백이 잘리는 순간",
+          description: "위 시뮬에서 ✂️ strip 탭을 눌러봐요. 앞뒤 공백만 사라져요.",
+          component: "pyStringMethodVisualizer",
+          componentProps: { initialText: "  Hello World  " }
         },
         {
           id: "predict-strip-middle",
