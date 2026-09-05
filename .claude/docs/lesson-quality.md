@@ -13,6 +13,9 @@
 핵심 원칙:
 - **한 레슨 = 한 주제 = 한 주제만** (다음 레슨 개념 미리 노출 ❌)
 - **능동 스텝 비율 50%+** (tryit/practice/mission/quiz/predict)
+  ⚠️ **빈칸(`___`) 없는 `tryit` 은 능동이 아니다.** `requireCorrect={type==="mission"}`
+  (`components/learn/tryit-step.tsx:90`) 라 실행 버튼만 눌러도 통과된다.
+  빈칸이 있어야 채점기(`BlankCodeRunner`)로 간다 (같은 파일 21행).
 - **interactive 직후 tryit 필수** — 시각화는 보조, 연습 대체 ❌
 - **난이도 사다리**: 따라치기 → 빈칸 → 처음부터 (특히 함수/클래스 같은 추상 개념)
 - **첫 언어 학생용 Python**: 능동 비율 55%+, 매 챕터마다 mission 1개 이상
@@ -32,11 +35,19 @@ python3 scripts/check-active-ratio.py        # 52개 전체
 python3 scripts/check-active-ratio.py 32 5   # 특정 레슨만
 ```
 
-잣대: 능동 = `tryit` `practice` `mission` `quiz` `predict` `fillblank`.
-**`interactive` 는 능동이 아니다** — "시각화는 보조, 연습 대체 ❌" 가 기준 원칙이다.
-(이전 도구는 `/tmp/audit2.py` 였고 재부팅에 사라져서 아무도 다시 잴 수 없었다.)
+잣대: 능동 = `mission` `quiz` `predict` `fillblank` `practice` + **빈칸 있는** `tryit`.
+- **빈칸 없는 `tryit` 은 수동이다** (2026-09-05 수정). 실행만 해도 통과되니까.
+- `interactive` 는 컴포넌트별로 갈린다. `typeAlong`·`fillInBlank`·`pyAndOrNotMatcher`·
+  `gameCrashDemo` 만 능동 — **정답 개념이 있는 것**만이다. `syntax-builder`·
+  `code-trace`·시뮬 계열은 클릭해도 미리 정해진 것만 보여주므로 수동.
+- 레슨 15 는 **지도 레슨**이라 예외 (2026-08-23 에 선생님이 미션·퀴즈를 일부러 걷어냄).
 
-**50% 미만 15개 · 45% 미만 8개** (2026-09-04 실측, 낮은 순):
+> ⚠️ 2026-09-05 에 잣대를 고쳤더니 50% 미만이 **7개 → 21개**가 됐다.
+> 콘텐츠는 한 줄도 안 바뀌었다. **잣대가 틀리면 나쁜 레슨이 조용히 통과한다.**
+> 숫자가 좋은데 수업이 안 되면, 레슨보다 잣대를 먼저 의심해라.
+
+**50% 미만 21개 · 45% 미만 13개** (2026-09-05 실측 — 아래 표는 옛 잣대라 낡았다.
+정확한 값은 `python3 scripts/check-active-ratio.py` 를 그때그때 돌려라):
 
 | 레슨 | 실측 | 옛 표 | 무엇이 문제인가 |
 |---|---|---|---|
