@@ -710,5 +710,23 @@ export function renderContent(content: string) {
     i++
   }
 
-  return elements
+  /* 2026-09-05: 한글 줄바꿈 4종 세트를 여기 한 곳에서 건다.
+     ux-reviewer 실측 — 이 파일에 keep-all / textWrap 이 **0건**이었다.
+     즉 explain 438개 전체가 단어 중간에서 끊길 수 있는 상태였다
+     ("하나씩" → "하" / "나씩"). memory/feedback_korean_linebreak.md
+
+     두 속성 다 **상속**되므로 컨테이너 한 겹이면 모든 자식에 적용된다.
+     호출처가 8곳(explain·quiz·predict·fillblank·practice·animation·teach…)
+     이라 각각 고치지 않고 여기서 한 번에 덮는다.
+
+     ⚠️ 코드블록은 제외해야 한다 — `balance` 가 들여쓰기를 망친다.
+        `[&_pre]` / `[&_code]` 로 되돌린다. */
+  return (
+    <div
+      className="[&_pre]:[word-break:normal] [&_pre]:[text-wrap:nowrap] [&_code]:[word-break:normal]"
+      style={{ wordBreak: "keep-all", textWrap: "balance" }}
+    >
+      {elements}
+    </div>
+  )
 }
