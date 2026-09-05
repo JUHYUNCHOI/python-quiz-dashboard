@@ -151,6 +151,15 @@ The rest of \`<class '...'>\` is just packaging Python adds automatically.
 - Debugging an error — "wait, maybe the type is wrong?"`
         },
         {
+          /* 2026-09-05: 한글판과 짝. 한쪽만 고치면 언어를 영어로 둔 학생은
+             다른 레슨을 보게 된다 (python-qa 지적). */
+          id: "type-sim",
+          type: "interactive",
+          title: "🔍 See it — what type is this?",
+          description: "Type any value and Python tells you which type it sees.",
+          component: "pyTypeCards"
+        },
+        {
           id: "try1",
           type: "tryit",
           title: "🖥️ What's the type of 100?",

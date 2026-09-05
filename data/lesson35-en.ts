@@ -318,6 +318,16 @@ Notice the \`int\` handed to \`map\` has *no parentheses* (\`int()\` ❌). You'r
 @key: \`map(function, list)\` = apply the function to **every** item! Don't forget \`list()\` wrap.`
         },
         {
+          /* 2026-09-05: 한글판에는 있는데 영어판엔 **한 번도 없던** 시뮬이다
+             (python-qa 가 git log -p 로 확인). 한글판과 같은 자리 — 설명 뒤에 둔다.
+             학생: 시뮬이 설명보다 먼저 나오면 "뭔지 모르겠는 예쁜 그림" 이 된다. */
+          id: "ch4-0",
+          type: "interactive",
+          title: "🏭 See it — the map() factory",
+          description: "Watch what you just read. Text goes in, numbers come out.",
+          component: "mapFactory"
+        },
+        {
           id: "ch4-2",
           type: "tryit",
           title: "map() Basics",

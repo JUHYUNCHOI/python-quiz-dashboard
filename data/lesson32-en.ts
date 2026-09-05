@@ -92,6 +92,21 @@ The \`name\` slot here is exactly the **"hole"** we were looking for back in ch1
           component: "functionBuilder"
         },
         {
+          /* 2026-09-05: 한글판과 짝. 한쪽만 고치면 영어로 배우는 학생이
+             다른 레슨을 보게 된다 (python-qa 지적). */
+          id: "ch1-5b",
+          type: "interactive",
+          title: "Fill the blanks: make a function",
+          description: "Finish the greet function. What goes in the blanks?",
+          component: "fillInBlank",
+          codeTemplate: "___1___ greet(___2___):\n    print(f\"Happy birthday, {name}!\")",
+          blanks: [
+            { id: "1", answer: "def", hint: "The keyword for making a box" },
+            { id: "2", answer: "name", hint: "The part that changes — the coin slot!" }
+          ],
+          choices: ["def", "name", "print", "return", "greet", "function"]
+        },
+        {
           id: "ch1-6",
           type: "quiz",
           title: "Concept check!",
@@ -245,6 +260,22 @@ ___1___`,
           ],
           choices: ["def", "print", "fun()", "return", "fun", "()"],
           expectedOutput: "Python is fun!"
+        },
+        {
+          /* 2026-09-05: 한글판과 짝. 한쪽만 고치면 영어로 배우는 학생이
+             다른 레슨을 보게 된다 (python-qa 지적). */
+          id: "ch2-7b",
+          type: "mission",
+          title: "🎯 From scratch",
+          description: "No blanks this time. Write it all yourself!",
+          task: "Make a welcome function that prints \"Welcome!\", then call it twice.",
+          initialCode: `# Write it from scratch here!
+
+
+`,
+          expectedOutput: "Welcome!\nWelcome!",
+          hint: "Make it with def welcome(): and put print(\"Welcome!\") inside.",
+          hint2: `def welcome():\n    print("Welcome!")\n\nwelcome()\nwelcome()`
         },
         {
           id: "ch2-8",

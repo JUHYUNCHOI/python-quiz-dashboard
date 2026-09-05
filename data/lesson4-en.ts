@@ -263,6 +263,16 @@ print((22 + 5) % 24)
 > 🎯 One-liner: **% 2 = parity, % N = multiple-of-N (0 = yes), or wraps around every N.**`
         },
         {
+          /* 2026-09-05: 한글판과 짝. 한쪽만 고치면 언어를 영어로 둔 학생은
+             다른 레슨을 보게 된다 (python-qa 지적). */
+          id: "modulo-sim",
+          type: "interactive",
+          title: "🕐 See it — where the remainder lands",
+          description: "Step it round one at a time. Past 12 it comes back to 1.",
+          component: "pyModuloClock",
+          componentProps: { defaultMode: "clock" }
+        },
+        {
           id: "predict-clock-wrap",
           type: "predict",
           title: "💭 Predict — Clock wraparound",
@@ -466,6 +476,16 @@ False
 - \`>\` (greater than): "**strictly larger**" — equal is NOT OK
 
 They look similar but flip the answer when the two values are equal.`
+        },
+        {
+          /* 2026-09-05: 한글판과 짝. 한쪽만 고치면 언어를 영어로 둔 학생은
+             다른 레슨을 보게 된다 (python-qa 지적). */
+          id: "compare-sim",
+          type: "interactive",
+          title: "⚖️ See it — when both sides are equal",
+          description: "Put 10 on both sides, then switch between > and >=.",
+          component: "pyCompareSeesaw",
+          componentProps: { initialOp: ">=", initialLeft: 10, initialRight: 10 }
         },
         {
           id: "predict-gte-vs-gt",

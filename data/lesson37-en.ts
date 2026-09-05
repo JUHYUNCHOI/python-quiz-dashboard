@@ -61,6 +61,15 @@ except:
 @Key point: Wrap it in **try-except** and the program won't stop even when errors happen!`
         },
         {
+          /* 2026-09-05: 한글판과 짝. 한쪽만 고치면 영어로 배우는 학생이
+             다른 레슨을 보게 된다 (python-qa 지적). */
+          id: "ch1-2b",
+          type: "interactive",
+          title: "🎪 See it — the moment the net catches",
+          description: "Step through it. You see where it would stop without a net.",
+          component: "safetyNetAnimation"
+        },
+        {
           id: "ch1-3",
           type: "quiz",
           title: "Quiz!",

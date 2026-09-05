@@ -108,6 +108,16 @@ HÉLLO
 Only letters change. Digits, symbols, spaces — all stay the same.`
         },
         {
+          /* 2026-09-05: 한글판과 짝. 한쪽만 고치면 언어를 영어로 둔 학생은
+             다른 레슨을 보게 된다 (python-qa 지적). */
+          id: "method-sim-1",
+          type: "interactive",
+          title: "🔤 See it — what a method does",
+          description: "Change the text and watch. The original stays the same.",
+          component: "pyStringMethodVisualizer",
+          componentProps: { initialText: "Hello World", tabs: ["upper", "lower"] }
+        },
+        {
           id: "predict-upper-result",
           type: "predict",
           title: "💭 Predict — upper()",
@@ -245,6 +255,16 @@ print(text.strip())
 {output}
 Hello friend
 {/output}`
+        },
+        {
+          /* 2026-09-05: 한글판과 짝. 한쪽만 고치면 언어를 영어로 둔 학생은
+             다른 레슨을 보게 된다 (python-qa 지적). */
+          id: "method-sim-2",
+          type: "interactive",
+          title: "✂️ See it — the moment spaces get cut",
+          description: "Watch the outer spaces disappear. replace is here too.",
+          component: "pyStringMethodVisualizer",
+          componentProps: { initialText: "  Hello World  ", tabs: ["strip", "lstrip", "rstrip", "replace"] }
         },
         {
           id: "predict-strip-middle",
@@ -510,6 +530,16 @@ Both return numbers, but they mean very different things!
 print("Hello".find("h"))   # -1  (no lowercase h here)
 print("Hello".find("H"))   # 0
 \`\`\``
+        },
+        {
+          /* 2026-09-05: 한글판과 짝. 한쪽만 고치면 언어를 영어로 둔 학생은
+             다른 레슨을 보게 된다 (python-qa 지적). */
+          id: "method-sim-3",
+          type: "interactive",
+          title: "🔍 See it — where, and how many",
+          description: "Change what you search for. Position and count both show.",
+          component: "pyStringMethodVisualizer",
+          componentProps: { initialText: "banana", tabs: ["find", "count"] }
         },
         {
           id: "predict-count-banana",

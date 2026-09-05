@@ -485,7 +485,7 @@ False
           title: "⚖️ 눈으로 보기 — 두 값이 같을 때",
           description: "양쪽에 10 을 놓고 > 와 >= 를 번갈아 눌러봐요. 결과가 갈려요.",
           component: "pyCompareSeesaw",
-          componentProps: { defaultOp: ">=", initialLeft: 10, initialRight: 10 }
+          componentProps: { initialOp: ">=", initialLeft: 10, initialRight: 10 }
         },
         {
           id: "predict-gte-vs-gt",
