@@ -626,10 +626,18 @@ export function BlankCodeRunner({
         </div>
       )}
 
-      {/* 빈칸 미완료 힌트 */}
+      {/* 빈칸 미완료 안내 — 2026-09-05
+          예전 문구는 "위 빈칸을 채우면 실행 버튼이 활성화돼요!" 였는데,
+          아이 눈에는 **정답을 넣으라는 말**로 읽혔다. 실제로 allFilled 는 정답이
+          아니라 "비어있지 않음" 만 본다(263행). 즉 찍어도 실행되는데 그 말이
+          화면 어디에도 없었다. ux-reviewer·frontend-engineer·pedagogy-reviewer 가
+          독립적으로 같은 지적을 했다 — "기능적 막다른 길은 아니지만 체감상 막다른 길". */}
       {!allFilled && choices.length === 0 && (
-        <p className="text-center text-xs text-amber-500 font-medium animate-pulse">
-          {t("👆 위 빈칸을 채우면 실행 버튼이 활성화돼요!", "👆 Fill in the blanks to enable the run button!")}
+        <p
+          className="text-center text-xs text-amber-500 font-medium"
+          style={{ wordBreak: "keep-all", textWrap: "balance" }}
+        >
+          {t("👆 잘 모르면 아무 값이나 넣고 실행해봐요!", "👆 Not sure? Type a guess and run it!")}
         </p>
       )}
 
@@ -650,7 +658,7 @@ export function BlankCodeRunner({
           ) : (
             <Play className="w-3.5 h-3.5 md:w-4 md:h-4" />
           )}
-          {isLoading ? t("실행중...", "Running...") : allFilled ? t("▶ 실행하기!", "▶ Run!") : t("빈칸을 채워주세요", "Fill in the blanks")}
+          {isLoading ? t("실행중...", "Running...") : allFilled ? t("▶ 실행하기!", "▶ Run!") : t("먼저 채워봐요", "Fill them in first")}
         </button>
 
         <button
@@ -787,16 +795,23 @@ export function BlankCodeRunner({
             </div>
           )}
 
-          {/* 건너뛰기 — 2번 이상 시도 후 노출 (포기 안 하게 좀 더 권유) */}
-          {attempts >= 2 && (
-            <button
-              onClick={() => { onSuccess?.() }}
-              className="w-full py-2.5 rounded-xl text-sm font-medium text-gray-500 bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-all"
-            >
-              {t("→ 너무 어려워요, 다음으로 (정답은 위 힌트 확인)", "→ Skip and move on (see hint above)")}
-            </button>
-          )}
         </div>
+      )}
+
+      {/* 건너뛰기 — 2번 이상 시도 후. 2026-09-05 힌트 블록 **밖으로** 뺐다.
+          예전엔 위 `{!isCorrect && (hint || hint2) && (` 안에 있어서,
+          **힌트가 하나도 없는 빈칸 스텝 42개에서는 건너뛰기도 같이 사라졌다.**
+          거기서 막힌 학생은 힌트도 건너뛰기도 없었다 — 진짜 막다른 길이었고
+          이번 잠금과 무관하게 원래부터 있던 것이다.
+          라벨의 "정답은 위 힌트 확인" 도 뺐다. 힌트가 없는 스텝에서는 거짓말이 된다. */}
+      {!isCorrect && attempts >= 2 && (
+        <button
+          onClick={() => { onSuccess?.() }}
+          className="w-full py-2.5 rounded-xl text-sm font-medium text-gray-500 bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-all"
+          style={{ wordBreak: "keep-all", textWrap: "balance" }}
+        >
+          {t("→ 너무 어려워요, 다음으로 넘어갈래요", "→ Too hard, let me move on")}
+        </button>
       )}
 
       {/* 비로그인 학생 로그인 유도 (정답 맞췄을 때 한 번만 표시) */}
