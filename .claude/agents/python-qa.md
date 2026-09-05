@@ -63,6 +63,18 @@ npm run check-review    # 빈칸 개수 ↔ answer 필드 구조 버그
    - `random` 을 seed 없이 쓰거나, seed 는 있는데 적힌 값이 실제와 다름
    - `date.today()` 처럼 오늘 날짜에 의존
 4. **채점기가 정답을 오답 처리** — 학생이 맞게 써도 틀렸다고 나오는 경우.
+
+5. **채점기가 아무거나 정답 처리** ← 2026-09-04 에 이 방향을 아무도 안 봐서 놓쳤다.
+   4번의 반대다. **학생이 아무것도 안 해도 통과되는 스텝**을 찾아라.
+   - `type: "tryit"` 은 `requireCorrect={false}` 로 넘어간다
+     (`components/learn/tryit-step.tsx:90`) → **실행 버튼만 눌러도 완료**된다.
+     `expectedOutput` 이 `initialCode` 만 돌려도 나오는 값이면 그 스텝은 아무 검증도 안 한다.
+   - `type: "quiz"` 는 틀려도 `completedSteps` 에 들어간다
+     (`app/learn/[lessonId]/client-page.tsx`) — 이건 의도된 설계다.
+   - 확인법: 스텝의 `initialCode` 를 **그대로** 돌려서 `expectedOutput` 과 같은지 봐라.
+     같으면 학생이 손대지 않아도 통과한다는 뜻이다.
+   내가 넣은 레슨32 `ch1-5b` 가 이 함정에 걸렸고, project-lead 가 배포 검토에서 잡았다.
+   **채점이 진짜로 채점하는지는 네 담당이다.**
    채점 로직: `app/review/[lessonId]/ReviewStepRenderer.tsx` 의 `isAnswerCorrect` / `normalize`.
    빈칸이 1개면 `answer` 는 **빈칸에 들어갈 조각**이어야 하고, 2개 이상이면 `blanksAnswer` 를 쓴다.
    (CLAUDE.md 의 "practice/interleaving answer 필드" 절 참고)
