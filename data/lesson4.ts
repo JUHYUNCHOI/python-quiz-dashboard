@@ -263,6 +263,15 @@ print((22 + 5) % 24)
 > 🎯 한 줄: **% 2 는 짝/홀 신호, % N 은 N 의 배수 신호 (결과 0 = 배수), 또는 N 단위 순환.**`
         },
         {
+          // 2026-09-05: 안 쓰이던 시뮬. 짝홀·일의자리·배수·시계순환 4가지를 탭으로 다 담는다.
+          id: "modulo-sim",
+          type: "interactive",
+          title: "🕐 눈으로 보기 — 나머지가 도는 자리",
+          description: "한 칸씩 돌려봐요. 12를 넘으면 다시 1로 돌아와요.",
+          component: "pyModuloClock",
+          componentProps: { defaultMode: "clock" }
+        },
+        {
           id: "predict-clock-wrap",
           type: "predict",
           title: "💭 결과 예측 — 시계 순환",
@@ -466,6 +475,17 @@ False
 - \`>\` (초과): "**더 큰**" — 같은 것 X
 
 비슷하지만 같은 값일 때 결과가 달라져요.`
+        },
+        {
+          /* 2026-09-05: 안 쓰이던 시뮬. 만든 사람이 주석에 ">= 와 > 가 같은 값일 때
+             갈리는 걸 보여주려고" 라고 적어놨는데, 바로 다음 퀴즈가 정확히 그걸 묻는다.
+             관찰(직접 눌러봄) → 추론(퀴즈) 순서가 맞아떨어진다. */
+          id: "compare-sim",
+          type: "interactive",
+          title: "⚖️ 눈으로 보기 — 두 값이 같을 때",
+          description: "양쪽에 10 을 놓고 > 와 >= 를 번갈아 눌러봐요. 결과가 갈려요.",
+          component: "pyCompareSeesaw",
+          componentProps: { defaultOp: ">=", initialLeft: 10, initialRight: 10 }
         },
         {
           id: "predict-gte-vs-gt",

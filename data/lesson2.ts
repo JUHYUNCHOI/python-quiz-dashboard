@@ -151,6 +151,15 @@ print(type(True))     # <class 'bool'>  ← 불리언(bool) 종류
 - 에러가 났을 때 "혹시 타입이 잘못됐나?" 점검할 때`
         },
         {
+          /* 2026-09-05: 만들어 놓고 어느 레슨에도 안 붙어 있던 시뮬.
+             바로 위 type-explain 이 가르치는 걸 직접 쳐서 확인하게 한다. */
+          id: "type-sim",
+          type: "interactive",
+          title: "🔍 눈으로 보기 — 이건 무슨 타입?",
+          description: "아무 값이나 넣어보면 파이썬이 어느 타입으로 보는지 알려줘요.",
+          component: "pyTypeCards"
+        },
+        {
           id: "try1",
           type: "tryit",
           title: "🖥️ 100 의 타입은?",

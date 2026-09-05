@@ -56,6 +56,13 @@ KNOWN_PASSIVE = {
     "typeConversionVisualizer", "inputVisualizer", "stackVisualizer", "mapFactory",
     "defaultValueVisualizer", "multipleReturnVisualizer", "keywordArgVisualizer",
     "tryExceptFlow", "multiExceptFlow", "errorTypesCards",
+    # 2026-09-05 에 레슨에 붙인 시뮬 5개. 전부 **수동**이다 —
+    # 보여주기만 하고 "맞았다/틀렸다" 가 없다. 시뮬을 늘려도 능동 비율은 안 오른다.
+    # pedagogy-reviewer: "'보는 수업' 이 인지를 만드는 게 아니라
+    #                     '손을 대야만 다음이 보이는 수업' 이 인지를 만든다."
+    # → 시뮬 뒤에는 반드시 빈칸 tryit 이나 predict 를 붙여라.
+    "pyTypeCards", "pyModuloClock", "pyCompareSeesaw",
+    "pySplitJoinVisualizer", "pyStringMethodVisualizer",
     "memoryVsFile", "fileModeSimulator", "readMethodDemo", "classBoonguh",
 }
 
