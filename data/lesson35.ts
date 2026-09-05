@@ -44,11 +44,11 @@ export const lesson35Data: LessonData = {
           type: "tryit",
           title: "len() - 길이",
           task: "len()으로 다양한 길이를 확인해보세요",
-          initialCode: `print(len([1, 2, 3]))       # 리스트 길이
+          initialCode: `print(___([1, 2, 3]))       # 리스트 길이
 print(len('Hello'))         # 문자열 길이
 print(len({'a': 1, 'b': 2}))  # 딕셔너리 키 개수`,
           expectedOutput: "3\n5\n2",
-          hint: "리스트 3개, 문자 5개, 키 2개"
+          hint: "길이·개수를 세는 함수. 아래 두 줄에 이미 쓰여 있어요."
         },
         {
           id: "ch1-3",
@@ -59,9 +59,9 @@ print(len({'a': 1, 'b': 2}))  # 딕셔너리 키 개수`,
 print(sum([10, 20, 30]))      # 기본
 
 # 시작값 지정
-print(sum([1, 2, 3], 10))     # 10부터 시작해서 더함`,
+print(___([1, 2, 3], ___))     # 10부터 시작해서 더함`,
           expectedOutput: "15\n60\n16",
-          hint: "세 번째는 10 + 1 + 2 + 3 = 16"
+          hint: "합을 구하는 함수, 그리고 어디서부터 시작할지. 답이 16이 되게."
         },
         {
           id: "ch1-4",
@@ -136,10 +136,10 @@ max([10, 4, 8])     # 10   ← 리스트도 OK
 print(min([3, 7, 1, 9]))    # 리스트에서 최소
 
 # 여러 인자로도 가능
-print(max(3, 7, 1, 9))      # 여러 값 중 최대
-print(min(3, 7, 1, 9))      # 여러 값 중 최소`,
+print(___(3, 7, 1, 9))      # 여러 값 중 최대
+print(___(3, 7, 1, 9))      # 여러 값 중 최소`,
           expectedOutput: "9\n1\n9\n1",
-          hint: "9가 가장 크고, 1이 가장 작아요"
+          hint: "위 두 줄과 같은 함수예요. 리스트 대신 값을 그냥 나열해도 돼요."
         },
         {
           id: "ch2-2",
@@ -196,9 +196,9 @@ print(f'평균: {평균}')`,
           initialCode: `숫자 = [3, 1, 4, 1, 5, 9]
 
 print(sorted(숫자))                    # 오름차순
-print(sorted(숫자, reverse=True))     # 내림차순`,
+print(sorted(숫자, ___=True))     # 내림차순`,
           expectedOutput: "[1, 1, 3, 4, 5, 9]\n[9, 5, 4, 3, 1, 1]",
-          hint: "reverse=True는 내림차순"
+          hint: "거꾸로 라는 뜻의 영어 단어예요. 오름차순을 뒤집어요."
         },
         {
           id: "ch3-2",
@@ -255,9 +255,9 @@ print(sorted(단어, key=len))
           initialCode: `학생 = [('철수', 85), ('영희', 92), ('민수', 78)]
 
 # 점수(두 번째 요소) 기준 정렬
-print(sorted(학생, key=lambda x: x[1]))`,
+print(sorted(학생, key=lambda x: x[___]))`,
           expectedOutput: "[('민수', 78), ('철수', 85), ('영희', 92)]",
-          hint: "x[1]은 점수! 78, 85, 92 순서로 정렬"
+          hint: "철수와 85 중 점수는 몇 번째? 번호는 0부터 세요."
         },
         {
           id: "ch3-5",
@@ -330,10 +330,10 @@ print(숫자들)  # [1, 2, 3]
           title: "map() 기본",
           task: "문자열을 정수로 변환해보세요",
           initialCode: `문자들 = ['1', '2', '3']
-숫자들 = list(map(int, 문자들))
+숫자들 = list(map(___, 문자들))
 print(숫자들)`,
           expectedOutput: "[1, 2, 3]",
-          hint: "map(int, ...)는 모든 요소를 int로 변환"
+          hint: "글자를 정수로 바꾸는 기계 이름 — 괄호는 안 붙여요!"
         },
         {
           id: "ch4-3",
@@ -382,6 +382,26 @@ a, b, c = map(int, input().split())
 @핵심: \`map(int, input().split())\` — 한 줄에 여러 숫자 입력받는 마법의 한 줄!`
         },
         {
+          /* 2026-09-05 선생님 수업 관찰: "split, map 을 봤더니 충분히 연습도 안되고
+             수업내용으로 문제를 풀기가 어려워."
+             원인 — ch4-4 가 map(int, input().split()) 을 "시험에 거의 매번 나온다"
+             고 가르쳐 놓고, 학생이 그걸 **한 번도 안 쳐봤다.** 바로 아래 ch4-5 는
+             input() 없이 이미 있는 리스트만 다룬다. 시험에 나오는 건 입력 쪽인데.
+             → 빈칸(여기) → 처음부터(ch4-5b) 두 칸을 넣는다. */
+          id: "ch4-4b",
+          type: "tryit",
+          title: "빈칸 채우기: 한 줄 입력 받기",
+          task: "위에서 배운 세 도구를 이어 붙여요. 입력은 아래 stdin 이에요.",
+          initialCode: `# 입력으로 "10 20 30" 이 들어와요
+a, b, c = map(___, input().___())
+
+print(a + b + c)`,
+          expectedOutput: "60",
+          stdin: "10 20 30",
+          hint: "첫 빈칸 = 글자를 정수로 바꾸는 기계. 둘째 빈칸 = 공백으로 쪼개기.",
+          hint2: "a, b, c = map(int, input().split())"
+        },
+        {
           id: "ch4-5",
           type: "mission",
           title: "문자열을 숫자로 변환 후 합계",
@@ -396,6 +416,23 @@ print(___(숫자들))`,
           expectedOutput: "100",
           hint: "변환 함수 = 모든 원소에 적용. 합계 함수 = 모두 더하기.",
           hint2: "list(map(int, 문자열_숫자)), 그리고 sum(숫자들)"
+        },
+        {
+          /* 2026-09-05: 사다리의 마지막 칸. ch4-4b 가 빈칸이었으니 여기는 빈칸 없이.
+             a, b, c 로는 못 받는 상황(개수를 모름)을 일부러 줘서
+             list(map(...)) 를 스스로 고르게 한다. */
+          id: "ch4-5b",
+          type: "mission",
+          title: "🎯 처음부터: 한 줄 입력의 합",
+          task: "한 줄에 공백으로 들어온 숫자를 모두 더해 출력하세요. 몇 개가 올지는 몰라요!",
+          initialCode: `# 여기에 처음부터 직접 써보세요!
+
+
+`,
+          expectedOutput: "150",
+          stdin: "10 20 30 40 50",
+          hint: "개수를 모르니 a, b, c 로는 못 받아요. 리스트로 받으면 돼요.",
+          hint2: `숫자들 = list(map(int, input().split()))\nprint(sum(숫자들))`
         }
       ]
     },
@@ -430,15 +467,15 @@ print(___(숫자들))`,
           type: "tryit",
           title: "abs(), round()",
           task: "절대값과 반올림을 해보세요",
-          initialCode: `# abs() - 절대값
-print(abs(-5))
+          initialCode: `# 부호를 떼는 함수
+print(___(-5))
 print(abs(5))
 
-# round() - 반올림
+# 가장 가까운 값으로 만드는 함수
 print(round(3.7))
-print(round(3.14159, 2))  # 소수점 2자리`,
+print(___(3.14159, 2))  # 소수점 2자리`,
           expectedOutput: "5\n5\n4\n3.14",
-          hint: "abs()는 절대값, round()는 반올림"
+          hint: "바로 아래·위 줄에 답이 이미 쓰여 있어요. 같은 이름을 넣으면 돼요."
         },
         {
           id: "ch5-2",
@@ -448,10 +485,10 @@ print(round(3.14159, 2))  # 소수점 2자리`,
           initialCode: `숫자 = [1, -2, 3, -4, 5]
 
 # 양수만 필터
-양수 = list(filter(lambda x: x > 0, 숫자))
+양수 = list(___(lambda x: x > 0, 숫자))
 print(양수)`,
           expectedOutput: "[1, 3, 5]",
-          hint: "x > 0인 것만 남아요"
+          hint: "조건을 통과한 것만 골라내는 함수 — map 이 '전부 바꾸기' 였다면 이건 '골라내기'"
         },
         {
           id: "ch5-3",
@@ -479,10 +516,10 @@ print(sum(결과))
           task: "인덱스와 값을 함께 출력해보세요",
           initialCode: `과일 = ['사과', '바나나', '체리']
 
-for i, f in enumerate(과일):
+for i, f in ___(과일):
     print(f'{i}: {f}')`,
           expectedOutput: "0: 사과\n1: 바나나\n2: 체리",
-          hint: "enumerate()는 인덱스와 값을 함께 줘요"
+          hint: "값과 함께 번호(인덱스)를 같이 주는 함수"
         },
         {
           id: "ch5-5",
@@ -492,10 +529,28 @@ for i, f in enumerate(과일):
           initialCode: `이름 = ['철수', '영희']
 점수 = [85, 92]
 
-결과 = list(zip(이름, 점수))
+결과 = list(___(이름, 점수))
 print(결과)`,
           expectedOutput: "[('철수', 85), ('영희', 92)]",
-          hint: "zip()은 여러 리스트를 튜플로 묶어요"
+          hint: "두 목록을 지퍼처럼 짝지어 묶는 함수"
+        },
+        {
+          /* 2026-09-05: ch5 는 tryit 4개가 전부 빈칸이 없어 **실행 버튼만 눌러도**
+             넘어갔고, mission 이 하나도 없었다. 그래서 zip 은 파이썬 52개 레슨
+             전체에서 학생이 한 번도 직접 안 쳐본 함수였다 (python-qa 확인).
+             → 챕터 마지막 칸으로 빈칸 없는 미션을 넣는다. */
+          id: "ch5-6",
+          type: "mission",
+          title: "🎯 처음부터: 이름표 붙이기",
+          task: "이름과 점수를 짝지어 '철수: 85' 처럼 한 줄씩 출력하세요.",
+          initialCode: `이름 = ['철수', '영희', '민수']
+점수 = [85, 92, 78]
+
+# 여기에 직접 써보세요!
+`,
+          expectedOutput: "철수: 85\n영희: 92\n민수: 78",
+          hint: "두 목록을 묶는 함수를 for 문에 바로 넣을 수 있어요. for n, s in ...",
+          hint2: `for n, s in zip(이름, 점수):\n    print(f"{n}: {s}")`
         }
       ]
     }
