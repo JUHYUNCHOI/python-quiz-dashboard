@@ -108,46 +108,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
   )
 }
 
-function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
-  question: string; options: string[]; answerIdx: number; hint: string; onCorrect: () => void
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-  const handleSelect = (i: number) => {
-    setSelected(i)
-    if (i === answerIdx) setTimeout(onCorrect, 600)
-  }
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button key={i} onClick={() => handleSelect(i)} disabled={isCorrect}
-            className={cn("text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700")}>
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && <p className="mt-3 text-sm font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && (
-        <div className="mt-3">
-          <button onClick={() => setShowHint(!showHint)} className="text-xs font-bold text-amber-700 underline decoration-dotted">
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── Chapter 1: 왜 위상 정렬? ─────────────────────────────────────
 function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
@@ -283,9 +243,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
 // ── Chapter 2: in-degree 기반 (Kahn's) ───────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 인터랙티브 7 노드 DAG
   // 노드: 1..7
@@ -606,39 +565,10 @@ vector<int> topoSort(int n, vector<pair<int,int>>& edges) {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "Kahn's 알고리즘에서 *시작* 시 큐에 들어가는 노드는?",
-              "At the *start* of Kahn's algorithm, which nodes go into the queue?",
-            )}
-            options={[
-              t("out-degree = 0 인 노드", "Nodes with out-degree = 0"),
-              t("in-degree = 0 인 노드 (선행 없음)", "Nodes with in-degree = 0 (no prerequisites)"),
-              t("아무 노드나 하나", "Any single node"),
-              t("그래프에서 가장 작은 번호 노드", "The smallest-numbered node"),
-            ]}
-            answerIdx={1}
-            hint={t(
-              "선행 조건이 0 개인 = 바로 시작 가능한 노드. in-degree 0 = 나를 향한 화살표가 없음.",
-              "0 prerequisites = can start immediately. in-degree 0 means no incoming arrows.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -646,9 +576,8 @@ vector<int> topoSort(int n, vector<pair<int,int>>& edges) {
 // ── Chapter 3: DFS 기반 ─────────────────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬: 작은 DAG (5 노드) DFS post-order
   // 1→2, 1→3, 2→4, 3→4, 4→5
@@ -876,39 +805,10 @@ vector<int> topoDfs(int n, vector<pair<int,int>>& edges) {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "DFS 기반 위상 정렬에서, 노드를 결과 리스트에 추가하는 *시점* 은?",
-              "In DFS-based topo sort, *when* do we add a node to the result list?",
-            )}
-            options={[
-              t("DFS 함수 진입 직후 (visited 표시할 때)", "Right when DFS is called (when marking visited)"),
-              t("DFS 함수가 끝날 때 (모든 자식 처리 후)", "When DFS returns (after all children processed)"),
-              t("DFS 함수 진입할 때 + 끝날 때 둘 다", "Both on enter and exit"),
-              t("아무 때나 상관없음", "Any time"),
-            ]}
-            answerIdx={1}
-            hint={t(
-              "DFS 가 끝났다 = 이 노드의 *모든 후행* 이 결과에 이미 들어감. 그래서 이 노드는 *그 뒤* 에 추가되고, 마지막에 뒤집으면 *앞* 으로 옴.",
-              "DFS returning = all descendants already added. So this node goes *after* them, and reversing puts it *before*.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -916,9 +816,8 @@ vector<int> topoDfs(int n, vector<pair<int,int>>& edges) {
 // ── Chapter 4: 사이클 검출 ──────────────────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   const [method, setMethod] = useState<"kahn" | "dfs">("kahn")
 
   return (
@@ -1134,39 +1033,10 @@ vector<int> topoOrCycle(int n, vector<pair<int,int>>& edges) {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "Kahn's 알고리즘이 끝났는데 결과 리스트 길이가 N (전체 노드 수) 보다 작다. 무엇을 의미할까?",
-              "Kahn's finishes but result length < N (total nodes). What does it mean?",
-            )}
-            options={[
-              t("그래프에 사이클이 있다", "The graph has a cycle"),
-              t("그래프가 연결되어 있지 않다", "The graph is disconnected"),
-              t("알고리즘에 버그가 있다", "There's a bug in the algorithm"),
-              t("결과 리스트가 너무 짧게 잘렸다", "The result list was truncated"),
-            ]}
-            answerIdx={0}
-            hint={t(
-              "사이클 안의 노드들은 서로 선행이라 in-degree 가 끝까지 0 이 안 돼요 → 큐에 못 들어감 → 결과에 안 들어감.",
-              "Nodes in a cycle keep blocking each other — in-degree never hits 0 → never enter queue → never in result.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }

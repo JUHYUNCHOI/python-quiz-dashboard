@@ -110,46 +110,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
   )
 }
 
-function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
-  question: string; options: string[]; answerIdx: number; hint: string; onCorrect: () => void
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-  const handleSelect = (i: number) => {
-    setSelected(i)
-    if (i === answerIdx) setTimeout(onCorrect, 600)
-  }
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button key={i} onClick={() => handleSelect(i)} disabled={isCorrect}
-            className={cn("text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700")}>
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && <p className="mt-3 text-sm font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && (
-        <div className="mt-3">
-          <button onClick={() => setShowHint(!showHint)} className="text-xs font-bold text-amber-700 underline decoration-dotted">
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── Chapter 1: 복습 + 알고리즘 관점 ───────────────────────────────
 function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
@@ -245,9 +205,8 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
 // ── Chapter 2: 회문 — 두 포인터 ──────────────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   const word = "racecar"
   // L/R 두 포인터 step: 0(시작) → 1(L=0,R=6) → 2(L=1,R=5) → 3(L=2,R=4) → 4(L=R=3, 회문!)
   const [twoP, setTwoP] = useState(0)
@@ -485,35 +444,10 @@ string longestPalindrome(const string& s) {
         )}
 
         {/* Slide 3 — Quiz */}
-        {step === 3 && (
-          <MiniQuiz
-            // ⚠️ 예전엔 "놓치는 케이스는?" 이라 묻고 정답이 *해결책*(각 인덱스에서 두 번
-            //    시도)을 가리켰다. 질문대로면 짝수 길이가 정답이다. (2026-07-29 수정)
-            question={t("가운데 한 글자에서만 좌우로 넓히면 — 어떤 회문을 놓칠까요?", "If you only expand from a single centre letter, which palindromes do you miss?")}
-            options={[
-              t("홀수 길이 회문 (예: aba)", "Odd-length palindromes (e.g. aba)"),
-              t("짝수 길이 회문 (예: abba)", "Even-length palindromes (e.g. abba)"),
-              t("한 글자 회문 (예: a)", "Single-letter palindromes (e.g. a)"),
-              t("아무것도 놓치지 않는다", "Nothing is missed"),
-            ]}
-            answerIdx={1}
-            hint={t('"abba" 는 가운데가 글자 하나가 아니라 b|b 사이의 *틈* 이에요. 그래서 각 자리에서 (i, i) 와 (i, i+1) 두 번 넓혀야 둘 다 잡아요.', '"abba" has its centre in the *gap* between the two b\'s, not on a letter. So at each spot you expand twice: (i, i) and (i, i+1).')}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < 3 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -521,9 +455,8 @@ string longestPalindrome(const string& s) {
 // ── Chapter 3: 글자 슬라이딩 윈도우 ─────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   const word = "abcba"
   const K = 2
   // window step. 각 step: [L, R] (inclusive)
@@ -729,33 +662,10 @@ int longestWithKDistinct(const string& s, int K) {
         )}
 
         {/* Slide 3 — Quiz */}
-        {step === 3 && (
-          <MiniQuiz
-            question={t("글자 distinct ≤ K 윈도우 알고리즘에서 left 를 언제 옮기나?", "When do we move left in the distinct ≤ K window?")}
-            options={[
-              t("한 번에 1 칸", "Always exactly 1 step"),
-              t("distinct > K 일 때 distinct ≤ K 가 될 때까지", "While distinct > K, until distinct ≤ K"),
-              t("윈도우 크기 = K 일 때", "When window size = K"),
-              t("절대 안 옮김", "Never"),
-            ]}
-            answerIdx={1}
-            hint={t("조건 어기면 줄여요 — distinct 가 K 를 넘는 순간 L 을 한 칸씩 옮기며 다시 ≤ K 가 될 때까지.", "Break the rule → shrink. While distinct > K, move L one step at a time until distinct ≤ K again.")}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < 3 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -763,9 +673,8 @@ int longestWithKDistinct(const string& s, int K) {
 // ── Chapter 4: ASCII 카운팅 패턴 ─────────────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   const s1 = "listen"
   const s2 = "silent"
   const [revealed, setRevealed] = useState(false)
@@ -965,36 +874,10 @@ bool isAnagram(const string& a, const string& b) {
         )}
 
         {/* Slide 3 — Quiz */}
-        {step === 3 && (
-          <MiniQuiz
-            question={t("anagram 검사 가장 빠른 방법은? (lowercase a-z 만)", "Fastest anagram check? (lowercase a-z only)")}
-            options={[
-              // ⚠️ 예전 정답은 "count[26] 배열 *둘* 비교" 였는데, 바로 앞 슬라이드에서
-              //    "두 배열 만들 필요 없다, 하나만 +/-" 를 가르친다 → 서로 모순이었다.
-              //    map<char,int> 같은 C++ 문법도 언어중립 퀴즈에서 뺐다. (2026-07-29)
-              t("둘 다 정렬해서 비교하기", "Sort both, then compare"),
-              t("26 칸에 세면서 한쪽은 +1, 다른 쪽은 −1 → 전부 0 이면 참", "Count into 26 slots: +1 for one, −1 for the other → all zeros means yes"),
-              t("서로 다른 글자 집합만 비교하기 (개수는 무시)", "Compare just the sets of letters (ignore counts)"),
-              t("두 문자열의 길이만 비교하기", "Compare only the two lengths"),
-            ]}
-            answerIdx={1}
-            hint={t("글자가 26 개뿐이니 한 번만 훑으면 돼요. 집합만 비교하면 'aab' 와 'abb' 를 같다고 해서 틀려요.", "Only 26 letters, so one pass is enough. Comparing sets alone wrongly says 'aab' equals 'abb'.")}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < 3 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }

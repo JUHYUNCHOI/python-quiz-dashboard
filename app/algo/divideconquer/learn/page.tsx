@@ -110,46 +110,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
   )
 }
 
-function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
-  question: string; options: string[]; answerIdx: number; hint: string; onCorrect: () => void
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-  const handleSelect = (i: number) => {
-    setSelected(i)
-    if (i === answerIdx) setTimeout(onCorrect, 600)
-  }
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button key={i} onClick={() => handleSelect(i)} disabled={isCorrect}
-            className={cn("text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700")}>
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && <p className="mt-3 text-sm font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && (
-        <div className="mt-3">
-          <button onClick={() => setShowHint(!showHint)} className="text-xs font-bold text-amber-700 underline decoration-dotted">
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── Chapter 1: 왜 분할 정복? ─────────────────────────────────────
 function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
@@ -278,9 +238,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
 // ── Chapter 2: 머지 소트 ─────────────────────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 5
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 4
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: [5,2,8,1,9,3] split → merge
   // ⚠️ 분할 모양은 이 페이지 코드의 `mid = len(arr) // 2` 를 그대로 따라야 한다.
@@ -571,39 +530,10 @@ int main() {
           </div>
         )}
 
-        {step === 4 && (
-          <MiniQuiz
-            question={t(
-              "머지 소트의 시간복잡도가 *항상* O(N log N) 인 이유는?",
-              "Why is merge sort's time *always* O(N log N)?",
-            )}
-            options={[
-              t("입력이 거의 정렬되어 있어서", "Because input is nearly sorted"),
-              t("log N 단계 × 각 단계 N 작업 — 입력 모양과 무관", "log N levels × N work per level — independent of input"),
-              t("merge 가 O(log N) 이라서", "Because merge is O(log N)"),
-              t("내장 sort 함수가 내부에서 도와줘서", "Because the built-in sort helps internally"),
-            ]}
-            answerIdx={1}
-            hint={t(
-              "배열이 어떻든 똑같이 반으로 쪼개고 (log N 단계) 매 단계마다 모든 원소를 한 번씩 봄 (N). 정렬 상태가 영향 X.",
-              "Whatever the array looks like, we halve (log N levels) and touch every element once per level (N). Order doesn't matter.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -611,9 +541,8 @@ int main() {
 // ── Chapter 3: 퀵 소트 + 분할 ────────────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: 퀵 소트 partition — [5,2,8,1,9,3], 피벗=3 (마지막)
   // phases:
@@ -840,39 +769,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "이미 정렬된 [1,2,3,4,5] 에 마지막 원소를 피벗으로 퀵 소트하면 시간복잡도는?",
-              "On already-sorted [1,2,3,4,5] with last-element pivot, quick sort runs in?",
-            )}
-            options={[
-              "O(log N)",
-              "O(N log N)",
-              "O(N²)",
-              "O(N)",
-            ]}
-            answerIdx={2}
-            hint={t(
-              "피벗(5) 보다 작은 게 4 개, 큰 게 0 개 → 한쪽이 비어 분할 실패. 다음 호출도 같은 일 반복 → N 단계 × N 작업 = O(N²).",
-              "Pivot 5 has 4 less, 0 greater — one side empty. Same happens next call → N levels × N work = O(N²).",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -880,9 +780,8 @@ int main() {
 // ── Chapter 4: 분할 정복 응용 ───────────────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
@@ -1027,39 +926,10 @@ else:
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "빠른 거듭제곱 코드에서 짝수 분기를 `return power(b, n/2) * power(b, n/2)` 로 짜면 어떻게 될까?",
-              "In fast power, if the even branch writes `return power(b, n/2) * power(b, n/2)`, what happens?",
-            )}
-            options={[
-              t("결과는 같고 더 빠름", "Same result, faster"),
-              t("결과는 같지만 다시 O(N)", "Same result but back to O(N)"),
-              t("결과가 두 배가 됨", "Result doubles"),
-              t("컴파일 에러", "Compile error"),
-            ]}
-            answerIdx={1}
-            hint={t(
-              "같은 인자로 power(b, n/2) 를 두 번 호출 — 재귀 트리가 가지 두 개로 펼쳐짐 → 호출 수가 O(N) 으로 복귀. 'half = ...' 변수가 본질.",
-              "Calling power(b, n/2) twice — the tree branches twofold → calls grow to O(N). The 'half = ...' variable is essential.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }

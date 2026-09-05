@@ -108,46 +108,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
   )
 }
 
-function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
-  question: string; options: string[]; answerIdx: number; hint: string; onCorrect: () => void
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-  const handleSelect = (i: number) => {
-    setSelected(i)
-    if (i === answerIdx) setTimeout(onCorrect, 600)
-  }
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button key={i} onClick={() => handleSelect(i)} disabled={isCorrect}
-            className={cn("text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700")}>
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && <p className="mt-3 text-sm font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && (
-        <div className="mt-3">
-          <button onClick={() => setShowHint(!showHint)} className="text-xs font-bold text-amber-700 underline decoration-dotted">
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── Chapter 1: 왜 트라이? ────────────────────────────────────────
 function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
@@ -286,9 +246,8 @@ trie:   "apple" in dict?     ✓
 // ── Chapter 2: 구조 — children + is_end ──────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // Insert simulation: cat → car → card
   // phase 0: empty. 1: cat done. 2: car done. 3: card done.
@@ -464,39 +423,10 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "단어 'apple' 과 'app' 을 빈 트라이에 삽입했다. is_end = true 인 노드는 몇 개?",
-              "After inserting 'apple' and 'app' into an empty trie, how many nodes have is_end = true?",
-            )}
-            options={[
-              t("1 개 (마지막 단어인 apple 의 e 만)", "1 (only e, the last inserted word)"),
-              t("2 개 (app 의 p 와 apple 의 e)", "2 (p of 'app' and e of 'apple')"),
-              t("5 개 (apple 의 모든 글자)", "5 (every letter of apple)"),
-              t("0 개 — root 만 is_end 가 됨", "0 — only root is_end"),
-            ]}
-            answerIdx={1}
-            hint={t(
-              "각 단어가 끝나는 곳에 is_end. 'app' 끝나는 두 번째 p, 'apple' 끝나는 e — 둘 다 is_end = true.",
-              "is_end is set wherever a word ends. The second p (end of 'app') and the e (end of 'apple') — both is_end.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -504,9 +434,8 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
 // ── Chapter 3: insert + search ───────────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // search simulation: searching "car" in trie {cat, car, card}
   // phase 0: at root. 1: at c. 2: at c→a. 3: at c→a→r. check is_end.
@@ -732,39 +661,10 @@ bool search(Trie* root, const string& word) {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "트라이에 'apple' 만 들어있다. search('app') 의 결과는?",
-              "Trie contains only 'apple'. What does search('app') return?",
-            )}
-            options={[
-              t("true — 'app' 로 가는 길은 존재함", "true — there's a path for 'app'"),
-              t("false — 끝 노드의 is_end 가 false 라서", "false — the end node's is_end is false"),
-              t("true — apple 의 prefix 이므로", "true — it's a prefix of apple"),
-              t("에러 — 'app' 이 트라이에 없음", "error — 'app' isn't in the trie"),
-            ]}
-            answerIdx={1}
-            hint={t(
-              "search 는 끝 노드의 is_end == true 여야 true. 'app' 의 두 번째 p 까지 도달은 가능하지만, 그 노드는 apple 의 일부일 뿐 is_end 가 아님.",
-              "search needs is_end == true at the end node. We can reach the second p of 'app', but that node is just on the way to apple — its is_end is false.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -772,9 +672,8 @@ bool search(Trie* root, const string& word) {
 // ── Chapter 4: Prefix 검색 (autocomplete) ────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // Autocomplete simulation: prefix "ca" in {cat, car, card, dog}
   // phase 0: nothing. 1: walked to c. 2: at a. 3: DFS subtree → cat, car, card
@@ -1021,39 +920,10 @@ vector<string> autocomplete(Trie* root, const string& prefix) {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "트라이에 단어 100,000 개가 들어있고, prefix 'abc' 로 시작하는 단어가 5 개다. autocomplete('abc') 의 시간복잡도는?",
-              "Trie has 100,000 words; 5 start with prefix 'abc'. Time complexity of autocomplete('abc')?",
-            )}
-            options={[
-              "O(100,000)",
-              t("O(|prefix| + 결과 크기) ≈ O(3 + 작은 수)", "O(|prefix| + result-size) ≈ O(3 + small)"),
-              "O(100,000 × 3)",
-              "O(log 100,000)",
-            ]}
-            answerIdx={1}
-            hint={t(
-              "트라이는 prefix 만큼 내려간 뒤 매치되는 서브트리만 탐색. 100,000 전체와 무관 — '실제 매치 수' 만큼만 일함.",
-              "Trie walks down |prefix| and then DFS only the matching subtree. Independent of 100,000 — only the actual matches matter.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }

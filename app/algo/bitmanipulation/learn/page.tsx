@@ -110,46 +110,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
   )
 }
 
-function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
-  question: string; options: string[]; answerIdx: number; hint: string; onCorrect: () => void
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-  const handleSelect = (i: number) => {
-    setSelected(i)
-    if (i === answerIdx) setTimeout(onCorrect, 600)
-  }
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button key={i} onClick={() => handleSelect(i)} disabled={isCorrect}
-            className={cn("text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700")}>
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && <p className="mt-3 text-sm font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && (
-        <div className="mt-3">
-          <button onClick={() => setShowHint(!showHint)} className="text-xs font-bold text-amber-700 underline decoration-dotted">
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── 비트 표시 헬퍼 ───────────────────────────────────────────────
 function BitRow({ value, bits = 8, label, highlight }: { value: number; bits?: number; label?: string; highlight?: number[] }) {
   const arr: number[] = []
@@ -306,9 +266,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
 // ── Chapter 2: 기본 연산 (AND/OR/XOR/SHIFT) ──────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 인터랙티브 — 두 8-bit 수 입력 후 AND/OR/XOR/NOT/SHIFT 결과
   const [a, setA] = useState(12)   // 0b00001100
@@ -453,39 +412,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "a = 0b1100 (= 12), b = 0b1010 (= 10) 일 때 a ^ b 는?",
-              "If a = 0b1100 (= 12) and b = 0b1010 (= 10), what is a ^ b?",
-            )}
-            options={[
-              "0b1000 (= 8)",
-              "0b1110 (= 14)",
-              "0b0110 (= 6)",
-              "0b0000 (= 0)",
-            ]}
-            answerIdx={2}
-            hint={t(
-              "XOR = '엇갈린 비트' 만 1. 1100 과 1010 을 비교: 자리별로 (1,1)→0, (1,0)→1, (0,1)→1, (0,0)→0 → 0110 = 6.",
-              "XOR = 1 where bits differ. Compare 1100 vs 1010 bit by bit: (1,1)→0, (1,0)→1, (0,1)→1, (0,0)→0 → 0110 = 6.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -493,9 +423,8 @@ int main() {
 // ── Chapter 3: XOR 트릭 ──────────────────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 인터랙티브 — 짝 없는 원소 찾기 시뮬레이션
   const arr = [4, 1, 2, 1, 2]
@@ -679,34 +608,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "배열 [5, 3, 5, 7, 3, 7, 9] 의 모든 원소를 XOR 누적하면 결과는?",
-              "If you XOR-accumulate all elements of [5, 3, 5, 7, 3, 7, 9], what's the result?",
-            )}
-            options={["0", "5", "9", "39"]}
-            answerIdx={2}
-            hint={t(
-              "5, 3, 7 은 각각 두 번씩 → 모두 상쇄. 9 만 한 번이라 살아남음 → 9.",
-              "5, 3, 7 each appear twice and cancel. Only 9 appears once → 9.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -714,9 +619,8 @@ int main() {
 // ── Chapter 4: bitmask 활용 ──────────────────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 인터랙티브 — N=3 부분집합 mask 0..7
   const items = ["A", "B", "C"]
@@ -922,34 +826,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "N = 5 일 때 전체 부분집합 (공집합 포함) 의 개수는?",
-              "How many subsets (including empty) when N = 5?",
-            )}
-            options={["5", "10", "25", "32"]}
-            answerIdx={3}
-            hint={t(
-              "각 원소마다 '쓴다 / 안 쓴다' 두 갈래 → 2 × 2 × 2 × 2 × 2 = 2^5 = 32.",
-              "Each element is in/out → 2 × 2 × 2 × 2 × 2 = 2^5 = 32.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }

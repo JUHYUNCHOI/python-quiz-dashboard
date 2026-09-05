@@ -109,46 +109,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
   )
 }
 
-function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
-  question: string; options: string[]; answerIdx: number; hint: string; onCorrect: () => void
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-  const handleSelect = (i: number) => {
-    setSelected(i)
-    if (i === answerIdx) setTimeout(onCorrect, 600)
-  }
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button key={i} onClick={() => handleSelect(i)} disabled={isCorrect}
-            className={cn("text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700")}>
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && <p className="mt-3 text-sm font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && (
-        <div className="mt-3">
-          <button onClick={() => setShowHint(!showHint)} className="text-xs font-bold text-amber-700 underline decoration-dotted">
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── Chapter 1: 왜 유니온 파인드? ─────────────────────────────────
 function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
@@ -280,9 +240,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
 // ── Chapter 2: parent 배열 + find ─────────────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: 노드 5개, 연산 시퀀스 union(1,2), union(3,4), find(1), find(3), union(2,3)
   // 각 스텝마다 parent 배열 상태 표시
@@ -524,39 +483,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "최악의 경우: 노드 1000 개가 1→2→3→...→1000 일자 체인이에요. parent[i] = i+1, parent[1000] = 1000. find(1) 호출 비용은?",
-              "Worst case: 1000 nodes in a chain 1→2→3→...→1000. parent[i] = i+1, parent[1000] = 1000. Cost of find(1)?",
-            )}
-            options={[
-              "O(1)",
-              "O(log N)",
-              "O(N)",
-              "O(N²)",
-            ]}
-            answerIdx={2}
-            hint={t(
-              "while 루프가 1 → 2 → 3 → ... → 1000 까지 1000 번 돌아요. 트리가 *체인* 모양이면 find 가 O(N)! 그래서 다음 챕터에서 path compression 으로 평탄화해요.",
-              "The while loop walks 1 → 2 → 3 → ... → 1000, that's 1000 hops. A *chain*-shaped tree means find is O(N)! Next chapter: path compression flattens it.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -564,9 +494,8 @@ int main() {
 // ── Chapter 3: Path Compression ──────────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: 1→2→3→4 체인. find(1) 호출 → 모두 parent=4 로 평탄화
   // phase: 0 = 초기, 1 = find(1) 시작, 2 = 1 → 2 따라감, 3 = 2 → 3 따라감, 4 = 3 → 4 (루트!), 5 = 평탄화 완료
@@ -784,39 +713,10 @@ print(parent)    # [_, 4, 4, 4, 4]`)}
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "1 → 2 → 3 → 4 로 길게 이어진 상태에서 find(1) 을 부르고 나면, 그 다음 find(1) 은 왜 더 빠를까요?",
-              "In a long chain 1 → 2 → 3 → 4, after calling find(1) once, why is the next find(1) faster?",
-            )}
-            options={[
-              t("첫 find 가 1 을 루트에 *직접* 매달아서 한 칸만 보면 됨", "The first find re-pointed 1 *straight* to the root, so it's one hop"),
-              t("컴퓨터가 앞의 답을 기억(캐시)해 둬서", "The computer remembers (caches) the earlier answer"),
-              t("parent 배열이 작은 수부터 정렬돼서", "The parent array got sorted smallest-first"),
-              t("반복문보다 재귀가 원래 빨라서", "Recursion is simply faster than a loop"),
-            ]}
-            answerIdx={0}
-            hint={t(
-              "위 코드에서 parent[x] = find(parent[x]) 가 하는 일을 봐요. 돌아오는 길에 *지나온 노드마다* parent 를 루트로 바꿔 써요. 그래서 1, 2, 3 이 전부 4 를 직접 가리키게 되고 (parent = [_, 4, 4, 4, 4]), 다음엔 한 칸이면 끝.",
-              "Look at what parent[x] = find(parent[x]) does. On the way back it rewrites parent for *every node it passed*. So 1, 2, 3 all point straight at 4 (parent = [_, 4, 4, 4, 4]) and the next lookup is one hop.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -824,9 +724,8 @@ print(parent)    # [_, 4, 4, 4, 4]`)}
 // ── Chapter 4: Union by Rank / Size ──────────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: 트리 A (루트 1, 크기 5) + 트리 B (루트 2, 크기 2) → 작은 쪽을 큰 쪽 밑에
   // phase 0 = 두 그룹 따로, 1 = 비교 (rank), 2 = 작은쪽이 큰쪽으로 합쳐짐
@@ -1061,39 +960,10 @@ void unite(int a, int b) {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "Path compression + union by rank 둘 다 적용했을 때, find / union 한 번이 평균적으로 얼마나 걸릴까요?",
-              "With BOTH path compression and union by rank, how long does one find / union take on average?",
-            )}
-            options={[
-              "O(N)",
-              "O(log N)",
-              "O(α(N)) ≈ O(1)",
-              "O(N log N)",
-            ]}
-            answerIdx={2}
-            hint={t(
-              "두 기법을 같이 쓰면 α(N) 이 나와요. 어쩌다 한 번은 좀 오래 걸릴 수 있지만 *여러 번 부르면 평균* 이 이만큼 — 이걸 «amortized(분할 상환)» 라고 불러요. α(N) 은 현실의 어떤 N 에서도 4 를 안 넘어서 사실상 상수예요.",
-              "Together they give α(N). One call can occasionally be slow, but *averaged over many calls* it's this — that's what «amortized» means. α(N) never exceeds 4 for any realistic N, so it's effectively constant.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }

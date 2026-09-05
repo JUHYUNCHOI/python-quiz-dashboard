@@ -110,46 +110,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
   )
 }
 
-function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
-  question: string; options: string[]; answerIdx: number; hint: string; onCorrect: () => void
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-  const handleSelect = (i: number) => {
-    setSelected(i)
-    if (i === answerIdx) setTimeout(onCorrect, 600)
-  }
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button key={i} onClick={() => handleSelect(i)} disabled={isCorrect}
-            className={cn("text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700")}>
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && <p className="mt-3 text-sm font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && (
-        <div className="mt-3">
-          <button onClick={() => setShowHint(!showHint)} className="text-xs font-bold text-amber-700 underline decoration-dotted">
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── Chapter 1: 재귀가 왜 필요해? — 마트료시카 '눈으로' 열기 + 2 줄 규칙 + 예고 ────
 // (선생님 2026-07-13: 텍스트 비유만 있고 그림이 없었음 → 인형이 실제로 하나씩
 //  열리는 스텝 시뮬. 말풍선 하나 + 그 순간의 그림 하나. quest 시뮬과 같은 문법.)
@@ -434,9 +394,8 @@ print(sum_to(5))   # 15`)}
 // ── Chapter 2: 베이스 + 재귀 호출 (단순 재귀) ────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: factorial(5) 호출 스택 한 칸씩
   // phase: 0 = 시작 전, 1..5 = push (f(5)..f(1)), 6..10 = pop (반환)
@@ -614,39 +573,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "위 factorial 코드에서 베이스 케이스 (if n <= 1: return 1) 를 빼면 어떻게 될까?",
-              "If we remove the base case (if n <= 1: return 1) from factorial, what happens?",
-            )}
-            options={[
-              t("답이 0 으로 나옴", "Returns 0"),
-              t("답이 1 로 나옴", "Returns 1"),
-              t("무한 재귀 → 스택 오버플로우", "Infinite recursion → stack overflow"),
-              t("컴파일 에러", "Compile error"),
-            ]}
-            answerIdx={2}
-            hint={t(
-              "멈출 조건이 없으면 f(1) 이 f(0) 부르고, f(0) 이 f(-1) 부르고... 끝없이 자기 자신을 부르다 스택이 터져요.",
-              "Without a stop condition, f(1) calls f(0), f(0) calls f(-1)... endless self-calls until stack explodes.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -654,9 +584,8 @@ int main() {
 // ── Chapter 3: 분할 정복 (거듭제곱 O(log N)) ─────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: pow(2, 10) 분할 정복 호출 — 한 칸씩 n 을 반으로
   // n: 10 → 5 → 2 → 1 → 0
@@ -825,34 +754,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "위 power 함수로 pow(2, 16) 을 계산할 때 — n 을 반으로 줄이는 횟수는?",
-              "With the power function above, how many times does n get halved for pow(2, 16)?",
-            )}
-            options={["16", "8", "5", "1"]}
-            answerIdx={2}
-            hint={t(
-              "n 이 매번 //2 로 줄어요: 16 → 8 → 4 → 2 → 1 → 0. 화살표가 5 개 = 5 번 반으로! (호출 자체는 베이스까지 6 번)",
-              "n halves each call: 16 → 8 → 4 → 2 → 1 → 0. Five arrows = halved 5 times! (that's 6 calls counting the base.)",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -860,9 +765,8 @@ int main() {
 // ── Chapter 4: 재귀 트리 + 메모이제이션 ──────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   const [memoOn, setMemoOn] = useState(false)
 
   // 시뮬레이션: fib(5) 호출 트리 — 중복 강조
@@ -1058,39 +962,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "메모이제이션을 적용한 fib(n) 의 시간복잡도는?",
-              "Time complexity of memoized fib(n)?",
-            )}
-            options={[
-              "O(2^N)",
-              "O(N²)",
-              "O(N)",
-              "O(log N)",
-            ]}
-            answerIdx={2}
-            hint={t(
-              "각 fib(k) 는 *처음 한 번만* 진짜 계산하고, 그 이후엔 캐시에서 꺼냄. 0..N 까지 N+1 개 값 → O(N).",
-              "Each fib(k) is computed ONCE for real, then cached. N+1 distinct values from 0..N → O(N).",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }

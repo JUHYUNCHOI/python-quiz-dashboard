@@ -109,46 +109,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
   )
 }
 
-function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
-  question: string; options: string[]; answerIdx: number; hint: string; onCorrect: () => void
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-  const handleSelect = (i: number) => {
-    setSelected(i)
-    if (i === answerIdx) setTimeout(onCorrect, 600)
-  }
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button key={i} onClick={() => handleSelect(i)} disabled={isCorrect}
-            className={cn("text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700")}>
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && <p className="mt-3 text-sm font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && (
-        <div className="mt-3">
-          <button onClick={() => setShowHint(!showHint)} className="text-xs font-bold text-amber-700 underline decoration-dotted">
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── Chapter 1: 복습 + 알고리즘 관점 ────────────────────────────────
 function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
@@ -277,9 +237,8 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
 // ── Chapter 2: Two Sum — 짝 찾기 (Complement Hash) ───────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // Two Sum 시각화 — arr=[2,7,11,15], target=9
   const TWO_SUM_ARR = [2, 7, 11, 15]
@@ -489,33 +448,10 @@ pair<int,int> two_sum(vector<int>& arr, int target) {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t("two sum hash 패턴의 핵심 아이디어는?", "What's the core idea of the Two Sum hash pattern?")}
-            options={[
-              t("정렬 후 두 포인터", "Sort then two pointers"),
-              t("각 원소의 complement = target − x 를 hash 로 확인", "Check each element's complement = target − x via hash"),
-              t("모든 쌍 다 비교", "Compare every pair"),
-              t("DP 사용", "Use DP"),
-            ]}
-            answerIdx={1}
-            hint={t("x 더하기 뭐 = target ? 그 \"뭐\" 가 이미 봤었나 한 번에 확인.", "x plus what = target ? Check if that \"what\" was already seen in O(1).")}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < 3 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -523,9 +459,8 @@ pair<int,int> two_sum(vector<int>& arr, int target) {
 // ── Chapter 3: 부분 합 = K (Prefix Sum + Hash) ───────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // arr=[1,2,1,2,1], K=3. prefix=[0,1,3,4,6,7]
   const SUB_ARR = [1, 2, 1, 2, 1]
@@ -733,33 +668,10 @@ long long subarray_sum(vector<int>& arr, int K) {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t("부분 배열 합 = K 알고리즘에서 cnt[0] = 1 로 초기화하는 이유는?", "Why initialize cnt[0] = 1 in the subarray-sum-equals-K algorithm?")}
-            options={[
-              t("원소 1 개짜리 배열 처리", "To handle single-element arrays"),
-              t("배열 처음부터 시작하는 부분 배열의 prefix sum 0 도 카운트", "To count subarrays starting from index 0 (whose prior prefix is 0)"),
-              t("오버플로우 방지", "To prevent overflow"),
-              t("디버그용", "For debugging"),
-            ]}
-            answerIdx={1}
-            hint={t("prefix[0] = 0 인 경우 — 배열 시작 전부터 ~ i 까지 합이 K 면, prefix[i] − 0 = K. 즉 prefix[i] = K. 이걸 잡으려면 0 이 cnt 에 1 개 있어야 해요.", "When prefix[0] = 0 — if sum from start to i equals K, then prefix[i] − 0 = K. To catch that, 0 must already be in cnt with count 1.")}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < 3 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -767,9 +679,8 @@ long long subarray_sum(vector<int>& arr, int K) {
 // ── Chapter 4: 슬라이딩 윈도우 + Set (중복 없는 부분 문자열) ─────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시각화: "abcabcbb" 에서 중복 없는 가장 긴 부분 문자열
   const WIN_STR = "abcabcbb"
@@ -994,33 +905,10 @@ int longest_unique(const string& s) {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t("중복 없는 가장 긴 부분 문자열 알고리즘에서 dup 발견 시 무엇을 하나?", "On finding a dup in the longest-unique-substring algorithm, what do you do?")}
-            options={[
-              t("window 다 초기화", "Clear the entire window"),
-              t("left 포인터 한 칸 증가 + set 에서 left 문자 제거 (dup 사라질 때까지 반복)", "Increment left by 1 + remove s[left] from set (repeat until dup gone)"),
-              t("right 다시 시작", "Restart right from 0"),
-              t("set 비우기", "Empty the set"),
-            ]}
-            answerIdx={1}
-            hint={t("left 를 dup 다음 위치까지 옮길 때까지 한 칸씩. 한꺼번에 점프하면 중간 정보 잃음.", "Move left one step at a time until past the dup. Don't jump — you'd lose intermediate state.")}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < 3 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }

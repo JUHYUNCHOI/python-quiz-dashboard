@@ -110,46 +110,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
   )
 }
 
-function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
-  question: string; options: string[]; answerIdx: number; hint: string; onCorrect: () => void
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-  const handleSelect = (i: number) => {
-    setSelected(i)
-    if (i === answerIdx) setTimeout(onCorrect, 600)
-  }
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button key={i} onClick={() => handleSelect(i)} disabled={isCorrect}
-            className={cn("text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700")}>
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && <p className="mt-3 text-sm font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && (
-        <div className="mt-3">
-          <button onClick={() => setShowHint(!showHint)} className="text-xs font-bold text-amber-700 underline decoration-dotted">
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── Chapter 1: 왜 우선순위 큐? ───────────────────────────────────
 function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
@@ -299,9 +259,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
 // ── Chapter 2: heap 사용법 ───────────────────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 5
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 4
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: heap push/pop — heap = min-heap
   // ops 시퀀스: push 5, push 3, push 8, push 1, push 7, pop, pop, pop
@@ -583,58 +542,10 @@ int main() {
           </div>
         )}
 
-        {step === 4 && (codeLang === "py" ? (
-          <MiniQuiz
-            question={t(
-              "Python heapq 에 [5, 3, 8, 1, 7] 을 차례로 push 한 뒤 heappop 을 두 번 호출하면? (반환된 값 순서)",
-              "Push 5, 3, 8, 1, 7 into Python heapq, then heappop twice. What's returned?",
-            )}
-            options={[
-              t("5, 3 (넣은 순서)", "5, 3 (insertion order)"),
-              "1, 3",
-              "1, 7",
-              "3, 5",
-            ]}
-            answerIdx={1}
-            hint={t(
-              "heapq 는 min-heap. 넣은 순서 무관 — 매번 *최솟값* 이 나옴. 최솟값 = 1, 다음 최솟값 = 3.",
-              "heapq is a min-heap. Order of insertion doesn't matter — each pop returns the *smallest*. Min = 1, next = 3.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        ) : (
-          <MiniQuiz
-            question={t(
-              "C++ priority_queue<int> 에 5, 3, 8, 1, 7 을 push 한 뒤 top() / pop() 을 두 번 하면? (반환된 값 순서)",
-              "Push 5, 3, 8, 1, 7 into C++ priority_queue<int>, then top()+pop() twice. What's returned?",
-            )}
-            options={[
-              t("5, 3 (넣은 순서)", "5, 3 (insertion order)"),
-              "1, 3",
-              "8, 7",
-              "3, 5",
-            ]}
-            answerIdx={2}
-            hint={t(
-              "priority_queue<int> 는 기본 max-heap. 매번 *최댓값* 반환. 최댓값 = 8, 다음 = 7.",
-              "Default priority_queue<int> is a max-heap. Each pop returns the *largest*. Max = 8, next = 7.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        ))}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -642,9 +553,8 @@ int main() {
 // ── Chapter 3: K-largest / K-smallest ────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬: K=3, stream = [4, 1, 7, 3, 8, 2, 9, 5, 6]. min-heap 크기 K 유지 → 마지막에 heap = 큰 3개.
   const stream = [4, 1, 7, 3, 8, 2, 9, 5, 6]
@@ -854,39 +764,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "1억 개 숫자에서 *가장 작은 100 개* 를 찾을 때, 어떤 heap 을 어떤 크기로 쓸까?",
-              "From 100M numbers, find the *smallest 100*. Which heap, what size?",
-            )}
-            options={[
-              t("max-heap, 크기 100", "max-heap, size 100"),
-              t("min-heap, 크기 100", "min-heap, size 100"),
-              t("max-heap, 크기 1억", "max-heap, size 100M"),
-              t("정렬 필요", "must sort"),
-            ]}
-            answerIdx={0}
-            hint={t(
-              "K-largest = min-heap. 거꾸로 K-smallest = max-heap, 크기 K. 새 값 v < heap[0] (현재 최대) 이면 교체.",
-              "K-largest = min-heap. So K-smallest = max-heap of size K. If new v < heap[0] (current max), swap.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -894,9 +775,8 @@ int main() {
 // ── Chapter 4: Dijkstra preview ──────────────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 작은 그래프 시뮬: 노드 0..4, edges (간선) + 가중치.
   // 0 -- 4 --> 1
@@ -1114,39 +994,10 @@ vector<long long> dijkstra(vector<vector<pair<int,int>>>& g, int start, int n) {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "Dijkstra 에서 heap 없이 매번 *가장 가까운 노드* 를 선형 탐색하면 시간복잡도는?",
-              "Without a heap, Dijkstra scans linearly for the closest node. Total time?",
-            )}
-            options={[
-              "O(N log N)",
-              "O(N²)",
-              "O(N + E)",
-              "O(E log N)",
-            ]}
-            answerIdx={1}
-            hint={t(
-              "N 개 노드 × 매번 N 개 후보 선형 탐색 = O(N²). heap 으로 바꾸면 O((N+E) log N). 큰 그래프에선 매우 큰 차이.",
-              "N nodes × scan N candidates each = O(N²). With heap: O((N+E) log N). Huge difference on big graphs.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }

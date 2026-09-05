@@ -110,46 +110,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
   )
 }
 
-function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
-  question: string; options: string[]; answerIdx: number; hint: string; onCorrect: () => void
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-  const handleSelect = (i: number) => {
-    setSelected(i)
-    if (i === answerIdx) setTimeout(onCorrect, 600)
-  }
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button key={i} onClick={() => handleSelect(i)} disabled={isCorrect}
-            className={cn("text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700")}>
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && <p className="mt-3 text-sm font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && (
-        <div className="mt-3">
-          <button onClick={() => setShowHint(!showHint)} className="text-xs font-bold text-amber-700 underline decoration-dotted">
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── Chapter 1: 왜 그래프? ─────────────────────────────────────────
 function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
@@ -292,9 +252,8 @@ node 4's neighbors: [2]`)}
 // ── Chapter 2: 인접 리스트 표현 ───────────────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 5 노드 그래프 — 1-2, 1-3, 2-4, 3-4, 4-5
   // 시각 좌표 (SVG)
@@ -531,39 +490,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "N = 10^5 노드, E = 10^5 간선 그래프. 인접 *행렬* 로 표현하면 메모리 칸 수는?",
-              "N = 10^5 nodes, E = 10^5 edges. Memory cells if you use adjacency *matrix*?",
-            )}
-            options={[
-              "O(N + E) ≈ 2×10^5",
-              "O(N × E) ≈ 10^10",
-              "O(N²) ≈ 10^10",
-              "O(E²) ≈ 10^10",
-            ]}
-            answerIdx={2}
-            hint={t(
-              "행렬은 N×N 표 — 간선 수와 무관하게 N² 칸. 10^5 × 10^5 = 10^10. 메모리 한참 초과. 그래서 리스트.",
-              "Matrix is N×N regardless of edge count — N² cells. 10^5 × 10^5 = 10^10. Way over memory limit. Hence list.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -571,9 +501,8 @@ int main() {
 // ── Chapter 3: BFS — 큐로 최단 거리 ──────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 5
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 4
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 6 노드 그래프 — BFS 시뮬레이션
   // 1-2, 1-3, 2-4, 3-4, 3-5, 4-6, 5-6
@@ -879,39 +808,10 @@ vector<int> bfs(int start, int n, vector<vector<int>>& adj) {
           </div>
         )}
 
-        {step === 4 && (
-          <MiniQuiz
-            question={t(
-              "BFS 가 가중치 없는 그래프에서 최단 거리를 *보장* 하는 이유는?",
-              "Why does BFS *guarantee* shortest path on unweighted graphs?",
-            )}
-            options={[
-              t("큐가 LIFO 라 가장 깊은 노드부터 꺼내서", "Queue is LIFO so deepest node first"),
-              t("큐가 FIFO 라 같은 거리 노드들을 함께 처리해서 (한 층씩 퍼짐)", "Queue is FIFO — equal-distance nodes processed together (layer by layer)"),
-              t("재귀로 모든 경로를 시도해서", "Recursion tries all paths"),
-              t("visited 배열을 정렬해서", "visited array gets sorted"),
-            ]}
-            answerIdx={1}
-            hint={t(
-              "큐는 먼저 넣은 게 먼저 나옴 (FIFO). 거리 0 → 거리 1 → 거리 2... 순서로 처리됨. 그래서 어떤 노드를 *처음* 방문할 때의 dist 가 최단.",
-              "Queue is FIFO — first in, first out. Distance 0 → 1 → 2... in order. So when a node is *first* visited, that dist is shortest.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -919,9 +819,8 @@ vector<int> bfs(int start, int n, vector<vector<int>>& adj) {
 // ── Chapter 4: DFS — 재귀로 깊이 ──────────────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 같은 6 노드 그래프 — DFS 재귀 시뮬레이션
   const nodes = [
@@ -1169,39 +1068,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "노드 V 개, 간선 E 개 그래프에서 BFS 와 DFS 의 시간/공간 복잡도는?",
-              "On a graph with V nodes, E edges — time/space of BFS and DFS?",
-            )}
-            options={[
-              t("BFS O(V), DFS O(V²)", "BFS O(V), DFS O(V²)"),
-              t("BFS O(V+E), DFS O(V+E) — 둘 다 동일", "BFS O(V+E), DFS O(V+E) — both same"),
-              t("BFS O(V·E), DFS O(V·E)", "BFS O(V·E), DFS O(V·E)"),
-              t("BFS O(log V), DFS O(V)", "BFS O(log V), DFS O(V)"),
-            ]}
-            answerIdx={1}
-            hint={t(
-              "둘 다 모든 노드 1 번 + 모든 간선 1 번 (양방향이라 2 번이지만 상수) 처리 → O(V+E). 공간도 visited + 스택/큐 = O(V).",
-              "Both visit each node once and each edge once (twice for undirected, constant) → O(V+E). Space: visited + stack/queue = O(V).",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }

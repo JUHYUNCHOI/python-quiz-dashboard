@@ -111,46 +111,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
   )
 }
 
-function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
-  question: string; options: string[]; answerIdx: number; hint: string; onCorrect: () => void
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-  const handleSelect = (i: number) => {
-    setSelected(i)
-    if (i === answerIdx) setTimeout(onCorrect, 600)
-  }
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button key={i} onClick={() => handleSelect(i)} disabled={isCorrect}
-            className={cn("text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700")}>
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && <p className="mt-3 text-sm font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && (
-        <div className="mt-3">
-          <button onClick={() => setShowHint(!showHint)} className="text-xs font-bold text-amber-700 underline decoration-dotted">
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── Chapter 1: 왜 DP? — 비유 + 메모이제이션 ↔ tabulation 다리 ────
 function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
@@ -414,9 +374,8 @@ N=5 → 8 ways`)}
 // ── Chapter 2: 1D DP (계단 / 피보나치) ───────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 5
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   const [fillPassed, setFillPassed] = useState(false)
   void fillPassed
 
@@ -707,76 +666,12 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <div className="space-y-3">
-            <div className="bg-emerald-50 rounded-2xl p-3 border-2 border-emerald-200">
-              <p className="text-sm font-black text-emerald-900">✏️ {t("직접 점화식 세우기", "Build the recurrence yourself")}</p>
-              <p className="text-xs text-gray-700 mt-1">
-                {t(
-                  "계단 문제로 돌아가요. \"i 번째 계단 도착 직전엔 (i-1) 또는 (i-2) 에 있었다.\" 그렇다면 dp[i] 는?",
-                  "Back to the stairs. \"Right before stair i, I was on (i-1) or (i-2).\" So dp[i] = ?",
-                )}
-              </p>
-            </div>
-            <div className="bg-gray-900 rounded-lg p-3">
-              <pre className="text-xs text-emerald-200 font-mono leading-relaxed text-center">
-{t(`dp[i] = ________   ← 빈칸 채우기`, `dp[i] = ________   ← fill in the blank`)}
-              </pre>
-            </div>
-            <MiniQuiz
-              question={t(
-                "계단 오르기에서 dp[i] 의 점화식은? (한 번에 1 칸 또는 2 칸)",
-                "What is dp[i] for climbing stairs? (1 or 2 steps at a time)",
-              )}
-              options={[
-                "dp[i] = dp[i-1] + dp[i-2]",
-                "dp[i] = dp[i-1] * dp[i-2]",
-                "dp[i] = dp[i-1] + 1",
-                "dp[i] = max(dp[i-1], dp[i-2])",
-              ]}
-              answerIdx={0}
-              hint={t(
-                "(i-1) 에서 오는 방법 수 + (i-2) 에서 오는 방법 수 를 *더하면* i 까지 가는 전체 방법 수. 곱이나 max 가 아니라 합.",
-                "Ways from (i-1) + ways from (i-2) *added together* = total ways to reach i. It's a sum, not a product or a max.",
-              )}
-              onCorrect={() => setFillPassed(true)}
-            />
-          </div>
-        )}
+        
 
-        {step === 4 && (
-          <MiniQuiz
-            question={t(
-              "메모이제이션 (top-down) 과 tabulation (bottom-up), 같은 1D DP 문제의 시간복잡도는?",
-              "For the same 1D DP problem, what about time complexity of memoization (top-down) vs tabulation (bottom-up)?",
-            )}
-            options={[
-              t("메모이제이션이 더 빠르다", "Memoization is faster"),
-              t("tabulation 이 더 빠르다", "Tabulation is faster"),
-              t("똑같다 — 둘 다 O(N)", "Same — both O(N)"),
-              t("문제마다 다르다", "Depends on the problem"),
-            ]}
-            answerIdx={2}
-            hint={t(
-              "둘 다 같은 N+1 개의 dp 값을 *한 번씩만* 계산해요. 차이는 어떤 순서로 채우냐 (재귀 호출 순 vs for 루프 순) 와 약간의 메모리 (재귀는 호출 스택 추가).",
-              "Both compute the same N+1 dp values *exactly once*. Difference is the order (recursive call order vs for-loop order) and a bit of memory (recursion adds stack).",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -784,9 +679,8 @@ int main() {
 // ── Chapter 3: 2D DP (0/1 Knapsack) ──────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: knapsack — 작은 예
   // 물건: w=[2,3,4,5], v=[3,4,5,6], 배낭 용량 W=5
@@ -1039,39 +933,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "0/1 knapsack 의 시간복잡도는? (물건 N 개, 용량 W)",
-              "Time complexity of 0/1 knapsack? (N items, capacity W)",
-            )}
-            options={[
-              "O(N)",
-              "O(W)",
-              "O(N + W)",
-              "O(N × W)",
-            ]}
-            answerIdx={3}
-            hint={t(
-              "표 크기가 (N+1) × (W+1). 각 칸은 O(1) 에 계산. 전체 O(N×W).",
-              "Table is (N+1) × (W+1). Each cell is O(1). Total O(N×W).",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -1079,9 +944,8 @@ int main() {
 // ── Chapter 4: DP 4 단계 (점화식 도출법) ─────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
@@ -1263,39 +1127,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "위 LIS 코드에서 바깥 for 를 거꾸로 (i = N-1 → 0) 돌리면 어떻게 될까요?",
-              "In the LIS code above, what if the outer for went backwards (i = N-1 → 0)?",
-            )}
-            options={[
-              t("dp[j] (j<i) 가 아직 안 채워져 있어서 답이 작게 나와요", "dp[j] (j<i) isn't filled yet, so the answer comes out too small"),
-              t("결과는 똑같아요 — 순서는 상관없어요", "Same result — order doesn't matter"),
-              t("무한 루프에 빠져요", "It falls into an infinite loop"),
-              t("메모리가 부족해서 터져요", "It runs out of memory"),
-            ]}
-            answerIdx={0}
-            hint={t(
-              "4️⃣ 순서 단계를 떠올려요. dp[i] 는 자기보다 *앞* 에 있는 dp[j] 를 봐요. 그런데 i 를 뒤에서부터 돌면 dp[j] 는 아직 처음 값 1 인 상태예요 → 1 + 1 = 2 밖에 안 나와요. 필요한 값이 *이미 채워져 있어야* 한다는 게 4 단계의 뜻.",
-              "Recall step 4️⃣. dp[i] looks at dp[j] *before* it. Going backwards, those dp[j] are still the initial 1 → you only ever get 1 + 1 = 2. Step 4 means the values you need must *already be filled*.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }

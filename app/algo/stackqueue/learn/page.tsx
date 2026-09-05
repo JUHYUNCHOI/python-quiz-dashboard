@@ -111,46 +111,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang 
   )
 }
 
-function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
-  question: string; options: string[]; answerIdx: number; hint: string; onCorrect: () => void
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-  const handleSelect = (i: number) => {
-    setSelected(i)
-    if (i === answerIdx) setTimeout(onCorrect, 600)
-  }
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button key={i} onClick={() => handleSelect(i)} disabled={isCorrect}
-            className={cn("text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700")}>
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && <p className="mt-3 text-sm font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && (
-        <div className="mt-3">
-          <button onClick={() => setShowHint(!showHint)} className="text-xs font-bold text-amber-700 underline decoration-dotted">
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── Chapter 1: 복습 + 알고리즘 관점 ───────────────────────────────
 function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
@@ -261,9 +221,8 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
 // ── Chapter 2: Monotonic Stack — 다음 큰 수 ───────────────────────
 function Chapter2({ onComplete, codeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // Monotonic stack visualization — [2, 5, 3, 1, 4]
   const arr = [2, 5, 3, 1, 4]
@@ -492,39 +451,10 @@ vector<int> nextGreater(vector<int>& arr) {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "스택에 남아 있는 값들은 늘 어떤 모양일까요? (항상 지켜지는 규칙)",
-              "What's always true about the values left in the stack?",
-            )}
-            options={[
-              // ⚠️ 예전엔 정답이 "강(엄)감소" 였는데 pop 조건이 `arr[top] < arr[i]` (등호 없음)
-              //    이라 같은 값은 안 빠진다 → 실제로는 '작아지거나 같음'. 게다가 오답이던
-              //    "항상 정렬됨" 도 (내림차순으로) 사실이라 정답이 둘이었다. (2026-07-29 수정)
-              t("항상 오름차순 — top 으로 갈수록 커진다", "Always ascending — bigger toward the top"),
-              t("아래 → 위로 갈수록 값이 작아진다 (같을 수는 있음)", "Values get smaller from bottom to top (equal is possible)"),
-              t("스택은 항상 비어 있음", "The stack is always empty"),
-              t("스택에는 한 원소만 들어 있음", "The stack holds only one element"),
-            ]}
-            answerIdx={1}
-            hint={t("왜 pop 하는지 생각해 봐요 — 현재가 더 크면 이전 작은 것들이 답을 찾았어요. 그래서 스택에 남아 있는 건 항상 '내려가는' 순서.", "Think about *why* we pop — when current is bigger, the smaller ones below have their answer. So what remains is always 'going down'.")}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < 3 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -532,9 +462,8 @@ vector<int> nextGreater(vector<int>& arr) {
 // ── Chapter 3: BFS 의 도구 — 큐 ───────────────────────────────────
 function Chapter3({ onComplete, codeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // BFS 3x3 grid viz — start (0,0) target (2,2)
   // dist[r][c] = step distance from start, -1 if unvisited
@@ -816,36 +745,10 @@ vector<vector<int>> bfs(vector<vector<int>>& grid, int sr, int sc) {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "BFS 가 항상 최단 거리 (스텝 수) 를 보장하는 이유는?",
-              "Why does BFS always give shortest distance (in steps)?",
-            )}
-            options={[
-              t("큐는 FIFO 라서 — 같은 거리에 있는 노드들이 함께 처리되고, 더 먼 거리 노드는 그 뒤에야 처리됨 (level by level)", "Queue is FIFO — same-distance nodes process together, farther ones strictly after (level by level)"),
-              t("큐가 항상 정렬돼서", "Because the queue is always sorted"),
-              t("DFS 보다 메모리를 적게 써서", "Because it uses less memory than DFS"),
-              t("코드가 짧아서", "Because the code is short"),
-            ]}
-            answerIdx={0}
-            hint={t("level 단위 탐색 — 큐 안에는 거리 d 와 d+1 인 노드만 섞여 있고, d 가 항상 앞쪽에 있어요.", "Level-by-level — the queue holds only distance d and d+1, with d always at the front.")}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < 3 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -853,9 +756,8 @@ vector<vector<int>> bfs(vector<vector<int>>& grid, int sr, int sc) {
 // ── Chapter 4: 시뮬레이션 + 괄호 매칭 ─────────────────────────────
 function Chapter4({ onComplete, codeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // Bracket matching visualization — "([{}])"
   const input = "([{}])"
@@ -1070,36 +972,10 @@ bool isValid(string s) {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "괄호 문자열 '(]' 가 유효하지 않은 이유는?",
-              "Why is the bracket string '(]' invalid?",
-            )}
-            options={[
-              t("스택이 비어 있어서", "Because the stack is empty"),
-              t("닫는 괄호 ']' 가 스택 top '(' 와 짝이 안 맞아서", "Because closing ']' doesn't match top '(' on the stack"),
-              t("길이가 짝수라서", "Because the length is even"),
-              t("처음 문자가 '(' 라서", "Because it starts with '('"),
-            ]}
-            answerIdx={1}
-            hint={t("')' 를 만나면 top 이 '(' 인지 확인. ']' 를 만나면 top 이 '[' 인지 확인. 짝이 안 맞으면 그 자리에서 false.", "On ')', check top is '('. On ']', check top is '['. Mismatch → false immediately.")}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < 3 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }

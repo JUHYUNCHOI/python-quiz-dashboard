@@ -110,46 +110,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
   )
 }
 
-function MiniQuiz({ question, options, answerIdx, hint, onCorrect }: {
-  question: string; options: string[]; answerIdx: number; hint: string; onCorrect: () => void
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-  const handleSelect = (i: number) => {
-    setSelected(i)
-    if (i === answerIdx) setTimeout(onCorrect, 600)
-  }
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button key={i} onClick={() => handleSelect(i)} disabled={isCorrect}
-            className={cn("text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700")}>
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && <p className="mt-3 text-sm font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && (
-        <div className="mt-3">
-          <button onClick={() => setShowHint(!showHint)} className="text-xs font-bold text-amber-700 underline decoration-dotted">
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── Chapter 1: 왜 그리디? ─────────────────────────────────────────
 function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
@@ -290,9 +250,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
 // ── Chapter 2: 활동 선택 (Interval Scheduling) ───────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: 활동 선택 — 끝나는 시간 정렬 후 1-pass
   // 원본 (시작, 끝) 회의 11 개
@@ -533,39 +492,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "활동 선택에서 *왜 끝나는 시간* 기준으로 정렬할까?",
-              "In interval scheduling, why sort by *end time*?",
-            )}
-            options={[
-              t("시작 시간 빠른 것부터 — 일찍 시작하니까", "Earliest start — start early"),
-              t("끝나는 시간 빠른 것부터 — 남은 시간을 최대한 길게", "Earliest end — maximize remaining time"),
-              t("길이가 짧은 것부터 — 빨리 끝나니까", "Shortest length — finishes fast"),
-              t("무작위 — 어떻게든 N 개 중 절반은 잡힘", "Random — half get picked anyway"),
-            ]}
-            answerIdx={1}
-            hint={t(
-              "끝나는 시간 빠를수록 → 다음 회의를 위한 *여유 시간*이 더 많이 남아요. 짧은 회의나 일찍 시작하는 회의는 늦게 끝날 수도 있어 위험.",
-              "Earlier end → more *room* left for the next meeting. Short or early-start meetings might still end late.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -573,9 +503,8 @@ int main() {
 // ── Chapter 3: 동전 거스름 (큰 단위부터) ─────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: 730 원 거스름 — [500, 100, 50, 10]
   const coins = [500, 100, 50, 10]
@@ -773,39 +702,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "동전 [1, 3, 4] 로 6 원을 만들 때, 그리디(큰 거부터)와 최적의 차이는? 한국 동전은 왜 그리디로 충분할까?",
-              "Coins [1, 3, 4] making 6 — greedy vs optimal? And why does greedy suffice for Korean coins?",
-            )}
-            options={[
-              t("그리디=2, 최적=2, 한국 동전은 우연", "Greedy=2, optimal=2, Korean coins are lucky"),
-              t("그리디=3 (4+1+1), 최적=2 (3+3). 한국 동전은 단위가 서로 배수 관계라 그리디 안전.", "Greedy=3 (4+1+1), optimal=2 (3+3). Korean coins' denominations are multiples — greedy safe."),
-              t("그리디=2, 최적=3, 그리디가 더 좋다", "Greedy=2, optimal=3, greedy is better"),
-              t("그리디 항상 최적이라 차이 없음", "Greedy is always optimal — no difference"),
-            ]}
-            answerIdx={1}
-            hint={t(
-              "그리디로 6: 4 + 1 + 1 → 3 개. 최적: 3 + 3 → 2 개. 한국은 500=5×100, 100=2×50, 50=5×10 — 서로 배수라 큰 단위가 항상 이득.",
-              "Greedy on 6: 4+1+1 = 3. Optimal: 3+3 = 2. Korean coins: 500=5×100, 100=2×50, 50=5×10 — multiples, so biggest-first always wins.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -813,9 +713,8 @@ int main() {
 // ── Chapter 4: 정렬 + 누적 패턴 (대기 시간 최소화) ───────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // 시뮬레이션: 줄서기 — 짧은 일 먼저 vs 긴 일 먼저
   // P[i] = i 번째 사람의 일 처리 시간
@@ -1005,39 +904,10 @@ int main() {
           </div>
         )}
 
-        {step === 3 && (
-          <MiniQuiz
-            question={t(
-              "N 사람의 대기 시간 합을 최소화하려면 어떻게 정렬?",
-              "To minimize total wait of N people in a queue, sort by?",
-            )}
-            options={[
-              t("긴 일 먼저 — 무거운 일 먼저 끝내야", "Longest first — get heavy jobs done"),
-              t("짧은 일 먼저 — 뒷사람이 덜 기다림", "Shortest first — those behind wait less"),
-              t("도착 순 (FIFO) — 공정함", "Arrival order (FIFO) — fair"),
-              t("무작위 — 어차피 평균 같음", "Random — average is the same"),
-            ]}
-            answerIdx={1}
-            hint={t(
-              "내가 짧은 일이면 뒷사람 모두 *나만큼만* 기다림. 내가 긴 일이면 뒷사람 모두 *오래* 기다림. 짧은 일 먼저 = 모두 대기 적게.",
-              "If I'm short, everyone after me waits only *my time*. If I'm long, everyone waits *long*. Shortest first = minimal waits.",
-            )}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {step < totalSteps - 1 ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === step ? "w-8 bg-orange-500" : i < step ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} />}
     </div>
   )
 }

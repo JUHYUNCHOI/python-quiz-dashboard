@@ -105,43 +105,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang 
   )
 }
 
-// ── 미니 퀴즈 ─────────────────────────────────────────────────────
-function MiniQuiz({ question, options, answerIdx, hint }: {
-  question: string; options: string[]; answerIdx: number; hint: string
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button key={i} onClick={() => setSelected(i)} disabled={isCorrect}
-            className={cn("text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700")}>
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && <p className="mt-3 text-sm font-bold text-green-700">✅ {t("정답!", "Correct!")}</p>}
-      {isWrong && (
-        <div className="mt-3">
-          <button onClick={() => setShowHint(!showHint)} className="text-xs font-bold text-amber-700 underline decoration-dotted">
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── 공용: 배열 + 창 시각화 ─────────────────────────────────────────
 function ArrayWithWindow({ l, r }: { l: number; r: number }) {
   const hasWin = l >= 1
@@ -322,18 +285,7 @@ function Chapter2({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
           </div>
         )}
 
-        {step === 2 && (
-          <MiniQuiz
-            question={t("창이 [4, 1, 5]에서 [1, 5, 2]로 한 칸 밀리면, 합은? (직전 합 10)", "Window slides from [4, 1, 5] to [1, 5, 2] — the sum? (was 10)")}
-            options={[
-              t("1 + 5 + 2 를 처음부터 다시 더한다", "Re-add 1 + 5 + 2 from scratch"),
-              t("10 + 2(들어옴) − 4(나감) = 8", "10 + 2 (in) − 4 (out) = 8"),
-              t("10 + 4 − 2 = 12", "10 + 4 − 2 = 12"),
-            ]}
-            answerIdx={1}
-            hint={t("들어온 칸은 오른쪽 끝(2), 나간 칸은 왼쪽 끝(4).", "The entering cell is the new right end (2); the leaving cell is the old left end (4).")}
-          />
-        )}
+        
 
         {step === 3 && (
           <div>
@@ -461,18 +413,7 @@ function Chapter3({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
           </div>
         )}
 
-        {step === 2 && (
-          <MiniQuiz
-            question={t("창을 늘리다 합이 K를 넘으면, 다음에 할 일은?", "The window grows and the sum exceeds K — what do we do?")}
-            options={[
-              t("처음(자리 1)으로 돌아가 다시 시작한다", "Go back to spot 1 and restart"),
-              t("왼쪽 끝을 하나씩 빼며 합이 K 이하가 될 때까지 줄인다", "Drop the left end until the sum is ≤ K"),
-              t("오른쪽을 더 늘려 평균을 낮춘다", "Grow the right more to lower the average"),
-            ]}
-            answerIdx={1}
-            hint={t("애벌레! 머리(오른쪽)도 꼬리(왼쪽)도 전진만 해요 — 그래서 빨라요.", "Inchworm! Head (right) and tail (left) only move forward — that's why it's fast.")}
-          />
-        )}
+        
 
         {step === 3 && (
           <div>
@@ -538,7 +479,7 @@ cout << best << endl;         // 3  (spots 2~4: 1+4+1)`)}
 // ── 챕터 4: 정리 + 사촌 기법(누적합) 구별 ───────────────────────────
 function Chapter4({ onComplete, alreadyDone }: { onComplete: () => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 3
+  const totalSteps = 2
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
@@ -596,27 +537,7 @@ function Chapter4({ onComplete, alreadyDone }: { onComplete: () => void; already
           </div>
         )}
 
-        {step === 2 && (
-          <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl p-5 border-2 border-emerald-300">
-            <p className="text-4xl text-center mb-2">🎉</p>
-            <h3 className="text-lg font-black text-emerald-900 mb-3 text-center">
-              {t("슬라이딩 윈도우 두 기법 완료!", "Both window techniques done!")}
-            </h3>
-            <MiniQuiz
-              question={t("\"조건을 만족하는 가장 긴 연속 구간\" — 어떤 기법?", "\"Longest contiguous stretch meeting a rule\" — which technique?")}
-              options={[
-                t("미는 창 (고정 크기)", "Slide (fixed size)"),
-                t("늘였다 줄였다 (두 포인터)", "Grow & shrink (two pointers)"),
-                t("누적합 (미리 적어두고 빼기)", "Prefix sums (write once, subtract)"),
-              ]}
-              answerIdx={1}
-              hint={t("크기를 모르는 '가장 긴/짧은' 구간 = 늘였다 줄였다.", "Unknown-size longest/shortest range = grow & shrink.")}
-            />
-            <Link href="/algo" className="block px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm text-center border border-gray-200 mt-2">
-              🗺️ {t("다음 알고리즘 토픽 보기", "Next algorithm topic")} <ArrowRight className="inline w-4 h-4" />
-            </Link>
-          </div>
-        )}
+        
       </div>
       <SlideNav step={step} total={totalSteps} setStep={setStep} onFinish={onComplete} finishLabel={t("완료! 🎉", "Finish! 🎉")} />
     </div>

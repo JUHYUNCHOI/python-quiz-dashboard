@@ -108,77 +108,6 @@ function CodeBlock({ py, cpp, lang }: { py: string; cpp: string; lang: CodeLang;
   )
 }
 
-// ── 미니 퀴즈 ─────────────────────────────────────────────────────
-function MiniQuiz({
-  question,
-  options,
-  answerIdx,
-  hint,
-  onCorrect,
-}: {
-  question: string
-  options: string[]
-  answerIdx: number
-  hint: string
-  onCorrect: () => void
-}) {
-  const { t } = useLanguage()
-  const [selected, setSelected] = useState<number | null>(null)
-  const [showHint, setShowHint] = useState(false)
-
-  const handleSelect = (i: number) => {
-    setSelected(i)
-    if (i === answerIdx) {
-      setTimeout(onCorrect, 600)
-    }
-  }
-
-  const isCorrect = selected === answerIdx
-  const isWrong = selected !== null && selected !== answerIdx
-
-  return (
-    <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 my-4">
-      <p className="text-xs font-black text-amber-900 mb-2 uppercase tracking-wide">📝 {t("미니 퀴즈", "Mini Quiz")}</p>
-      <p className="text-sm font-bold text-gray-900 mb-3">{question}</p>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt, i) => (
-          <button
-            key={i}
-            onClick={() => handleSelect(i)}
-            disabled={isCorrect}
-            className={cn(
-              "text-left px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all",
-              selected === i && i === answerIdx && "bg-green-100 border-green-500 text-green-800",
-              selected === i && i !== answerIdx && "bg-red-100 border-red-400 text-red-800",
-              selected !== i && "bg-white border-gray-200 hover:border-amber-400 text-gray-700",
-            )}
-          >
-            {String.fromCharCode(65 + i)}. {opt}
-          </button>
-        ))}
-      </div>
-      {isCorrect && (
-        <p className="mt-3 text-sm font-bold text-green-700 flex items-center gap-1.5">
-          ✅ {t("정답!", "Correct!")}
-        </p>
-      )}
-      {isWrong && (
-        <div className="mt-3">
-          <button
-            onClick={() => setShowHint(!showHint)}
-            className="text-xs font-bold text-amber-700 underline decoration-dotted"
-          >
-            💡 {showHint ? t("힌트 닫기", "Hide hint") : t("힌트 보기", "Show hint")}
-          </button>
-          {showHint && (
-            <p className="mt-1.5 text-xs text-amber-800 bg-amber-100 rounded-lg p-2">{hint}</p>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── 챕터 1: 비유 (저금통) ───────────────────────────────────────────
 function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
@@ -280,7 +209,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
 // ── 챕터 2: 누적합 만들기 — 슬라이드식 ─────────────────────────
 function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
+  const totalSteps = 3
   const { step: slideStep, setStep: setSlideStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const arr = [3, 1, 4, 1, 5]
   const [vizStep, setVizStep] = useState(0)  // 시각화 내부 단계 (0~5)
@@ -288,8 +217,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
     const p = [0]
     for (let i = 0; i < arr.length; i++) p.push(p[i] + arr[i])
     return p
-  }, [])
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  }, [])   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
@@ -416,28 +344,10 @@ for (int i = 0; i < arr.size(); i++)
           </div>
         )}
 
-        {slideStep === 3 && (
-          <MiniQuiz
-            question={t("arr = [2, 4, 6] 일 때 prefix[3] 은 뭐예요?", "If arr = [2, 4, 6], what is prefix[3]?")}
-            options={["10", "12", "6", "8"]}
-            answerIdx={1}
-            hint={t("prefix[3] = 0 + 2 + 4 + 6 = ?", "prefix[3] = 0 + 2 + 4 + 6 = ?")}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {slideStep < 3 ? (
-        <SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === slideStep ? "w-8 bg-orange-500" : i < slideStep ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -445,13 +355,12 @@ for (int i = 0; i < arr.size(); i++)
 // ── 챕터 3: 구간 합 ─────────────────────────────────────────────────
 function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
+  const totalSteps = 3
   const { step: slideStep, setStep: setSlideStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
   const arr = [3, 1, 4, 1, 5]
   const prefix = [0, 3, 4, 8, 9, 14]
   const [L, setL] = useState(2)
-  const [R, setR] = useState(4)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const [R, setR] = useState(4)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   const directSum = arr.slice(L - 1, R).reduce((s, v) => s + v, 0)
   const prefixDiff = prefix[R] - prefix[L - 1]
 
@@ -596,28 +505,10 @@ cout << rangeSum(prefix, 2, 4) << endl;  // -> 6`)}
           </div>
         )}
 
-        {slideStep === 3 && (
-          <MiniQuiz
-            question={t("arr = [5, 2, 8, 1, 6], prefix = [0, 5, 7, 15, 16, 22]. arr[2]~arr[4] 합은?", "arr = [5, 2, 8, 1, 6], prefix = [0, 5, 7, 15, 16, 22]. Sum of arr[2]~arr[4]?")}
-            options={["11", "15", "17", "23"]}
-            answerIdx={0}
-            hint={t("prefix[R] − prefix[L−1] = prefix[4] − prefix[1] = 16 − 5", "prefix[R] − prefix[L−1] = prefix[4] − prefix[1] = 16 − 5")}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {slideStep < 3 ? (
-        <SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === slideStep ? "w-8 bg-orange-500" : i < slideStep ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />}
     </div>
   )
 }
@@ -625,9 +516,8 @@ cout << rangeSum(prefix, 2, 4) << endl;  // -> 6`)}
 // ── 챕터 4: 첫 문제 풀기 ────────────────────────────────────────────
 function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComplete: () => void; codeLang: CodeLang; setCodeLang: (l: CodeLang) => void; alreadyDone?: boolean }) {
   const { t } = useLanguage()
-  const totalSteps = 4
-  const { step: slideStep, setStep: setSlideStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)
-  const [quizPassed, setQuizPassed] = useState(!!alreadyDone)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
+  const totalSteps = 3
+  const { step: slideStep, setStep: setSlideStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
   return (
     <div ref={rootRef} className="space-y-4 min-h-[300px] flex flex-col scroll-mt-4">
       <div className="flex-1">
@@ -765,28 +655,10 @@ int main() {
           </div>
         )}
 
-        {slideStep === 3 && (
-          <MiniQuiz
-            question={t("N = 100,000, M = 100,000 일 때 나이브 방법은 약 몇 번 연산?", "If N = M = 100,000, naive needs ~how many ops?")}
-            options={["100,000", "200,000", "10,000,000,000 (시간초과)", "1,000,000"]}
-            answerIdx={2}
-            hint={t("각 질문이 평균 N 번 더하기 → N × M = 10⁵ × 10⁵ = 10¹⁰", "Each query ~N adds → N × M = 10⁵ × 10⁵ = 10¹⁰")}
-            onCorrect={() => setQuizPassed(true)}
-          />
-        )}
+        
       </div>
 
-      {slideStep < 3 ? (
-        <SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />
-      ) : quizPassed ? (
-        <SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className={cn("h-2 rounded-full transition-all", i === slideStep ? "w-8 bg-orange-500" : i < slideStep ? "w-2 bg-orange-300" : "w-2 bg-gray-300")} />
-          ))}
-        </div>
-      )}
+      {<SlideNav step={slideStep} total={totalSteps} setStep={setSlideStep} onFinish={onComplete} />}
     </div>
   )
 }
