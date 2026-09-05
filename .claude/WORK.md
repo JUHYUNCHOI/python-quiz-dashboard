@@ -56,12 +56,26 @@ python3 scripts/check-frozen.py     # 건드리면 안 되는 파일을 건드�
 | `moohunt` USACO 제출 | `quest-problems/moohunt/fast.jsx` 의 공식 풀이. 로컬 검증만 됨 |
 | MCQ SQL 이 DB 에 적용됐는지 | `SELECT COUNT(*) FROM questions WHERE id BETWEEN 10766 AND 10828;` → 63 이면 적용됨 |
 
-## 결정이 필요한 것
+## 결정 — 내가 정한 것 (다르게 원하시면 말씀해주세요)
 
-| 무엇 | 왜 막혔나 |
+2026-09-04: 선생님께 되물은 9건 중 진짜 선생님 몫은 2건뿐이었다.
+나머지는 아래처럼 정하고 진행한다. 전부 커밋이 나뉘어 있어 되돌릴 수 있다.
+
+| 무엇 | 정한 것 | 이유 |
+|---|---|---|
+| `hps` 를 동결인 줄 모르고 텍스트 수정한 것 | **되돌리지 않는다** | +12/−10줄, 커스텀 시뮬 전부 무사. 반말→해요체·55자·미정의 제목 수정이라 되돌리면 오히려 나빠진다 |
+| `CodeSectionView` → `CodeWalk` 이관 | **동결 아닌 것부터 한 개씩** (`reflection` 먼저) | 동결(`hps`·`checkups`·`mooin3`) 은 구조 변경이라 선생님 확인 필요 — 그 부분만 남긴다 |
+| 레슨 32 ch1 tryit 의 약한 채점 | **그대로 둔다** | 호출이 ch2 라 검증할 방법이 없다. 안 하는 학생은 손해지만 다른 스텝도 같다 |
+| `/algo` 8개 토픽 빈자리 | **pedagogy-reviewer 가 설계** | 내가 아니라 담당이 정할 일 |
+| 능동 비율 잣대 | **`/decide` 1라운드 진행 중** | 담당 셋의 답을 받아 결정 |
+
+## 선생님만 하실 수 있는 것 (진짜로 둘뿐)
+
+| 무엇 | 왜 |
 |---|---|
-| `hps` 를 오늘 텍스트만 고쳤음 (동결 quest 인 줄 모르고). 되돌릴지 둘지 | 자산 손실은 없음 (+12/−10줄, 위젯 무사). 규칙상 판단 필요 |
-| `CodeSectionView` → `CodeWalk` 이관 | 표준 위반이지만 `hps`·`checkups`·`mooin3` 가 동결. **구조 변경이라 선생님 몫** |
+| USACO 재제출 2건 (`photoshoot25` · `moohunt/fast.jsx`) | 채점기 계정이 필요 |
+| MCQ SQL 확인 `SELECT COUNT(*) FROM questions WHERE id BETWEEN 10766 AND 10828;` | Supabase 권한이 필요 |
+| (그 밖) 동결 quest 를 **구조 변경**해야 할 때 | 규칙이 "명시적 요청 전엔 읽기 전용" |
 
 ## 완료 (2026-09-04)
 
