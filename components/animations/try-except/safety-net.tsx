@@ -2,17 +2,30 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 
 export function SafetyNetAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const isEn = lang === "en"
-  const [phase, setPhase] = useState<'ready' | 'falling' | 'caught' | 'safe'>('ready')
-  
-  const play = () => {
-    setPhase('falling')
-    setTimeout(() => setPhase('caught'), 1200)
-    setTimeout(() => setPhase('safe'), 2200)
-    setTimeout(() => setPhase('ready'), 4000)
-  }
+  /* 2026-09-05: 자동재생(setTimeout 체인)을 걷어내고 ◀▶ 수동으로.
+     학생: "1초마다 휙휙 넘어가면 이해하기도 전에 다음 게 나와."
+     본보기 = components/animations/py-split-join-visualizer.tsx */
+  const PHASES = ['ready', 'falling', 'caught', 'safe'] as const
+  const [i, setI] = useState(0)
+  const phase = PHASES[i]
+
+  const BEATS = isEn
+    ? [
+        "The acrobat is up on the try block. Nothing has gone wrong yet.",
+        "Something breaks. Without a net, the program stops right here.",
+        "except catches it. The error does not reach the ground.",
+        "The program keeps going. That is what try-except buys you.",
+      ]
+    : [
+        "곡예사가 try 블록 위에 있어요. 아직 아무 일도 없어요.",
+        "에러가 났어요. 그물이 없으면 프로그램은 여기서 멈춰요.",
+        "except 가 받아냈어요. 에러가 바닥까지 안 내려가요.",
+        "프로그램이 계속 돌아요. try-except 가 해주는 일이에요.",
+      ]
 
   return (
     <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 shadow-lg">
@@ -67,9 +80,41 @@ export function SafetyNetAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
         </div>
       </div>
       
-      <button onClick={play} disabled={phase !== 'ready'} className="w-full mt-4 px-5 py-4 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-xl font-black text-lg transition-colors">
-        {phase === 'ready' ? (isEn ? '▶️ Start animation!' : '▶️ 애니메이션 시작!') : phase === 'falling' ? (isEn ? '😱 Falling...' : '😱 떨어지는 중...') : phase === 'caught' ? (isEn ? '🛡️ Caught!' : '🛡️ 잡았다!') : (isEn ? '🎉 Safe!' : '🎉 안전!')}
-      </button>
+      {/* 말풍선 — 한 단계 한 문장 */}
+      <div
+        className="mt-4 min-h-[52px] rounded-xl border-2 border-purple-200 bg-white px-4 py-3 text-[15px] leading-relaxed text-gray-800"
+        style={{ wordBreak: 'keep-all', textWrap: 'balance' }}
+      >
+        {BEATS[i]}
+      </div>
+
+      {/* ◀ ▶ — 자동재생 없음 */}
+      <div className="flex items-center justify-center gap-3 mt-4">
+        <button
+          onClick={() => setI((v) => Math.max(0, v - 1))}
+          disabled={i === 0}
+          className="rounded-lg bg-white p-2 text-purple-700 shadow border border-gray-200 disabled:opacity-30"
+          aria-label={isEn ? 'Previous step' : '이전 단계'}
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <span className="font-mono text-sm text-gray-600">{i + 1} / {PHASES.length}</span>
+        <button
+          onClick={() => setI((v) => Math.min(PHASES.length - 1, v + 1))}
+          disabled={i === PHASES.length - 1}
+          className="rounded-lg bg-white p-2 text-purple-700 shadow border border-gray-200 disabled:opacity-30"
+          aria-label={isEn ? 'Next step' : '다음 단계'}
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+        <button
+          onClick={() => setI(0)}
+          className="ml-2 rounded-lg bg-white p-2 text-gray-500 shadow border border-gray-200"
+          aria-label={isEn ? 'Back to start' : '처음으로'}
+        >
+          <RotateCcw className="h-4 w-4" />
+        </button>
+      </div>
     </div>
   )
 }

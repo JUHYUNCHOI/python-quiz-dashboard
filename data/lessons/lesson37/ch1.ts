@@ -55,6 +55,18 @@ except:
 @핵심: **try-except**로 감싸면 에러가 나도 프로그램이 안 멈춰!`
     },
     {
+      /* 2026-09-05: 바로 위 ch1-2 가 "곡예사가 떨어져도 그물이 있으면 안 다쳐" 라는
+         비유를 **글로만** 하고 있었다. 그 그림을 그리는 컴포넌트가
+         components/animations/try-except/safety-net.tsx 에 이미 있었는데
+         **어느 레슨에도 안 붙어 있었다.**
+         자동재생이라 붙이기 전에 ◀▶ 수동으로 먼저 고쳤다. */
+      id: "ch1-2b",
+      type: "interactive",
+      title: "🎪 눈으로 보기 — 그물이 받아내는 순간",
+      description: "한 단계씩 넘겨봐요. 그물이 없으면 어디서 멈추는지 보여요.",
+      component: "safetyNetAnimation"
+    },
+    {
       id: "ch1-3",
       type: "quiz",
       title: "퀴즈!",

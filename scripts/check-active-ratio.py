@@ -63,6 +63,7 @@ KNOWN_PASSIVE = {
     # → 시뮬 뒤에는 반드시 빈칸 tryit 이나 predict 를 붙여라.
     "pyTypeCards", "pyModuloClock", "pyCompareSeesaw",
     "pySplitJoinVisualizer", "pyStringMethodVisualizer",
+    "safetyNetAnimation",
     "memoryVsFile", "fileModeSimulator", "readMethodDemo", "classBoonguh",
 }
 
