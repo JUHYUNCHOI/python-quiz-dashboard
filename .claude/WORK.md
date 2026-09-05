@@ -29,7 +29,14 @@ python3 scripts/check-frozen.py     # 건드리면 안 되는 파일을 건드�
 | 무엇 | 담당 | 끝났다고 보는 기준 | 상태 |
 |---|---|---|---|
 | 레슨 32 ch1 — `def` 를 처음 쳐보는 `tryit` 추가 | 메인 세션 | ch1 에 능동 스텝 존재 | **완료** (32.4→34.2%) |
-| 레슨 32 나머지 챕터 (34.2% → 50%+) | lesson-content-reviewer → frontend-engineer | `check-active-ratio.py 32` 가 50%+ | 대기 |
+| 레슨 32 능동 비율 | — | — | **완료** — 잣대 수정 후 61.5% |
+| **레슨 15 — 스텝이 5개뿐 (20.0%)**. 새 잣대로 유일한 45% 미만 | lesson-content-reviewer | 챕터·스텝이 다른 레슨 수준으로 | 대기 |
+| 미분류 컴포넌트 13개 (`gameCrashDemo` 등) — 지금은 수동으로 셈 | lesson-content-reviewer | `ACTIVE_COMPONENTS` 나 `KNOWN_PASSIVE` 로 분류 | 대기 |
+| `function-structure.tsx` 의 `onClick` 이 **0개** — parameterStructure·returnStructure 가 정지 그림 | pedagogy-reviewer(설계) → frontend-engineer | `onClick` > 0 이고 전개에 실제로 관여 | 대기 |
+| 레슨32 `ch1-4`·`ch1-5` 가 거의 같은 내용 연속 | lesson-content-reviewer | 두 스텝 설명이 안 겹침 | 대기 |
+| 레슨32 `ch4-5`(print vs return, 학생이 "제일 헷갈린다") 뒤에 그 헷갈림을 시험하는 연습 없음 | lesson-content-reviewer | `x = 인사(); print(x)` → None 류 문제가 ch4 에 존재 | 대기 |
+| 레슨32 `ch5-3~5-6` 이 add·subtract·divide·multiply 같은 패턴 4연속 | lesson-content-reviewer | 최소 1개는 패턴이 다르거나 난이도가 오름 | 대기 |
+| ⚠️ **배치 문제는 % 로 안 잡힌다** — 관람 스텝 여러 개 뒤 능동 1개 (레슨32 ch1 형) | pedagogy-reviewer | 챕터별 시각화-능동 교대 점검 방법 | 대기 |
 | ⚠️ ch1 tryit 은 **채점이 약함** — def 를 안 쳐도 통과된다. 만들기만 하면 출력이 없어서(호출은 ch2) 검증할 방법이 없다. 설계상 한계 | 선생님 판단 | — | 보류 |
 | 레슨 37 (28.6%) · 39 (28.6%) | 〃 | 같은 스크립트로 50%+ | 대기 |
 | `/algo` 8개 토픽이 읽기 전용 — 퀴즈 67개를 지운 자리 | pedagogy-reviewer(설계) → frontend-engineer(구현) | 토픽마다 `onClick` 있는 능동 스텝 1개 이상 | 대기 |

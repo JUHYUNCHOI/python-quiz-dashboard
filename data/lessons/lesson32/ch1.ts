@@ -77,21 +77,24 @@ def 축하(이름):
       component: "functionBuilder"
     },
     {
-      // 2026-09-04: ch1 을 다 지나도록 def 를 한 번도 안 쳐보고 넘어갔다 (능동 32.4%).
-      // ⚠️ ch1-4 가 "호출은 ch2 에서 배운다" 고 명시했으므로 여기서 호출은 시키지 않는다.
-      // 만들기만 하고 아무것도 안 나오는 걸 직접 보는 것 — 그게 ch1-4 가 말한 그 내용이다.
+      /* 2026-09-04 /decide 3라운드 결과로 다시 씀.
+         처음엔 type:"tryit" 로 넣었는데, tryit 은 requireCorrect={false} 라
+         (components/learn/tryit-step.tsx:90) **실행 버튼만 눌러도 완료**됐다.
+         "def 를 안 쳐도 통과" 가 아니라 "아무것도 안 해도 통과" 였다.
+         학생 에이전트도 "따라치기·빈칸 없이 바로 처음부터로 점프" 라고 지적했다.
+         → fillInBlank 로 바꿔서 (a) 빈칸을 안 채우면 문법이 깨져 진짜로 채점되고
+           (b) 사다리의 빠진 첫 칸(빈칸)이 생긴다. 호출은 여전히 안 시키므로 ch1-4 제약도 지킨다. */
       id: "ch1-5b",
-      type: "tryit",
-      title: "처음으로 함수 만들어보기",
-      description: "위에서 본 축하 함수를 직접 쳐봐요. 만들기만 하면 축하 메시지가 나올까요?",
-      task: "축하 함수를 만들고 실행해보세요. 축하 메시지가 나올까요?",
-      initialCode: `# 여기에 축하 함수를 만들어 보세요!
-
-
-print("함수를 만들었어요!")`,
-      expectedOutput: "함수를 만들었어요!",
-      hint: "def 축하(이름): 으로 시작하고, 다음 줄은 네 칸 들여쓰기 해서 print 를 써요.",
-      hint2: `def 축하(이름):\n    print(f"생일 축하해! 행복한 하루 보내, {이름}!")\n\n\nprint("함수를 만들었어요!")`
+      type: "interactive",
+      title: "빈칸 채우기: 함수 만들기",
+      description: "축하 함수를 완성해봐요. 빈칸에 뭐가 들어갈까요?",
+      component: "fillInBlank",
+      codeTemplate: "___1___ 축하(___2___):\n    print(f\"생일 축하해! 행복한 하루 보내, {이름}!\")",
+      blanks: [
+        { id: "1", answer: "def", hint: "상자를 만들 때 쓰는 키워드" },
+        { id: "2", answer: "이름", hint: "달라지는 부분 — 자판기의 동전 투입구!" }
+      ],
+      choices: ["def", "이름", "print", "return", "축하", "함수"]
     },
     {
       id: "ch1-6",
