@@ -161,8 +161,15 @@ export function NumInput({ question, hint, answer, E, onSolve }: NumInputProps) 
   return (
     <div className="p-4">
       <div className="text-sm font-bold mb-2.5 text-gray-800">{question}</div>
+      {/* whitespace-pre-line: hint 안의 \n 이 공백으로 뭉개지고 있었다 (2026-09-04).
+          같은 파일 Quiz 의 explain 은 오늘 고쳤는데 여기만 빠져 있었다. */}
       {hint && (
-        <div className="text-xs font-semibold mb-2 text-amber-600">💡 {hint}</div>
+        <div
+          className="text-xs font-semibold mb-2 text-amber-600 whitespace-pre-line"
+          style={{ wordBreak: "keep-all" }}
+        >
+          💡 {hint}
+        </div>
       )}
       <div className="flex gap-1.5 items-center">
         <input

@@ -339,7 +339,11 @@ export function MexesMaxSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: A, marginBottom: 8, wordBreak: "keep-all" }}>
-        🎯 {t(E, "Min ops for a target mex = max(fill, remove)", "목표 mex 최소 연산 = max(채우기, 제거)")}
+        {/* 2026-09-04: 제목이 첫 스텝부터 정답 공식을 띄워서 아래 관찰 순서를 무력화했다.
+            마지막 스텝에 닿기 전엔 질문만 보여준다. */}
+        🎯 {rv.ops
+              ? t(E, "Min ops for a target mex = max(fill, remove)", "목표 mex 최소 연산 = max(채우기, 제거)")
+              : t(E, "What do we need to do to reach a target mex?", "목표 mex 를 만들려면 뭘 해야 할까요?")}
       </div>
 
       {/* 목표 mex 버튼 */}

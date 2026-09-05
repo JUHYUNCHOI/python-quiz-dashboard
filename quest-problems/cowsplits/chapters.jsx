@@ -288,8 +288,8 @@ export function makeCowSplitsCh1(E) {
                 <div style={{ marginTop: 9, paddingTop: 8, borderTop: "1px dashed #fbbf24",
                   fontSize: 11.5, color: "#92400e", lineHeight: 1.7, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
                   {t(E,
-                    <>Hold on to this. It is the reason two moves are always enough — and if pieces could be any 3 letters, this problem would be a completely different one.</>,
-                    <>이걸 꼭 붙잡고 가세요. 나중에 <b>왜 두 번이면 되는지</b>가 전부 여기서 나와요.<br />조각이 아무 3글자나 될 수 있었다면 완전히 다른 문제가 돼요.</>)}
+                    <>Hold on to this. It is the key to working out how many moves you need — and if pieces could be any 3 letters, this problem would be a completely different one.</>,
+                    <>이걸 꼭 붙잡고 가세요. 나중에 <b>지우기 횟수가 왜 딱 정해지는지</b>를 알아볼 때 이게 열쇠예요.<br />조각이 아무 3글자나 될 수 있었다면 완전히 다른 문제가 돼요.</>)}
                 </div>
               </div>
 

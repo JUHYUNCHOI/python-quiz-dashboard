@@ -14,7 +14,7 @@ export function makeBuyMilkCh1(E) {
       type: "reveal",
       narr: t(E,
         "Farmer John has N deals. Deal i sells 2^(i-1) buckets of milk for a_i moonies, prices strictly increasing. For each query x, find the minimum cost to buy at least x buckets.",
-        "농부 존이 N 개의 거래를 제안해요. 거래 i 는 2^(i-1) 통의 우유를 a_i 무니에 팔고, 가격은 엄격히 증가해요. 각 쿼리 x 에 대해 최소 x 통을 사는 최소 비용을 찾아요."),
+        "농부 존이 N 개의 거래를 제안해요. 거래 i 는 2^(i-1) 통의 우유를 a_i 무니에 팔고, 가격은 엄격히 증가해요. 주어지는 x 마다 최소 x 통을 사는 최소 비용을 찾아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -31,7 +31,7 @@ export function makeBuyMilkCh1(E) {
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
                 "For each query x,\noutput the minimum cost to buy at least x buckets of milk.",
-                "각 쿼리 x 에 대해 최소 x 통의 우유를 사는 최소 비용을 출력.")}
+                "주어지는 x 마다 최소 x 통의 우유를 사는 최소 비용을 출력.")}
             </div>
           </div>
 
@@ -62,7 +62,7 @@ export function makeBuyMilkCh1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "For each of the Q queries x, print the minimum cost to get ", "각 쿼리 x 에 대해 ")}
+                  {t(E, "For each of the Q queries x, print the minimum cost to get ", "주어지는 x 마다 ")}
                   <b style={{ color: "#15803d" }}>{t(E, "at least x buckets", "최소 x 통")}</b>
                   {t(E, ".", " 을 사는 최소 비용을 출력해요.")}
                 </div>
@@ -78,7 +78,7 @@ export function makeBuyMilkCh1(E) {
       type: "reveal",
       narr: t(E,
         "Sample 1: N=2, prices [10, 15]. So 1 bucket = 10, 2 buckets = 15. Query x=6: 3 copies of the 2-bucket deal = 45. Query x=7: same 3 copies of 2-bucket + 1 copy of 1-bucket = 55.",
-        "예제 1: N=2, 가격 [10, 15]. 1 통 = 10, 2 통 = 15. 쿼리 x=6: 2 통짜리 3 번 = 45. 쿼리 x=7: 2 통짜리 3 번 + 1 통짜리 1 번 = 55."),
+        "예제 1: N=2, 가격 [10, 15]. 1 통 = 10, 2 통 = 15. x=6: 2 통짜리 3 번 = 45. x=7: 2 통짜리 3 번 + 1 통짜리 1 번 = 55."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -275,7 +275,7 @@ function BuyMilkPlan({ E }) {
         <Line n={2}>{t(E, <>Build {codeTag("c")}: {codeTag("c[i] = min(a[i], 2*c[i-1])")} — the first sim.</>,
                          <>{codeTag("c")} 를 만들어요. {codeTag("c[i] = min(a[i], 2*c[i-1])")} — 첫 시뮬이 한 일이에요.</>)}</Line>
         <Line n={3}>{t(E, <>Per query: {codeTag("rem = x")}, {codeTag("cost = 0")}, {codeTag("ans = ∞")}.</>,
-                         <>쿼리마다 {codeTag("rem = x")}, {codeTag("cost = 0")}, {codeTag("ans = 무한대")} 로 시작해요.</>)}</Line>
+                         <>x 마다 {codeTag("rem = x")}, {codeTag("cost = 0")}, {codeTag("ans = 무한대")} 로 시작해요.</>)}</Line>
         <Line n={4}>{t(E, <>Big block → small block: the round-up candidate goes into {codeTag("ans")}, then buy the floor and update {codeTag("cost")} and {codeTag("rem")}.</>,
                          <>큰 블록부터 작은 블록까지 훑어요.<br />올림 후보를 {codeTag("ans")} 에 넣고,<br />내림만큼 사서 {codeTag("cost")} 와 {codeTag("rem")} 을 갱신해요.</>)}</Line>
         <Line n={5}>{t(E, <>Print {codeTag("ans")}.</>, <>{codeTag("ans")} 를 출력해요.</>)}</Line>
@@ -307,7 +307,7 @@ export function makeBuyMilkCh2(E, lang = "py") {
         label: t(E, "Code", "코드"),
         narr: t(E,
           "No recursion! Normalize the block prices, then sweep big→small per query.  Each part lights up with a bubble.",
-          "재귀 없이! 블록 가격을 정규화하고, 쿼리마다 큰 블록→작은 블록으로 훑어요.  각 부분이 밝아지며 말풍선이 떠요."),
+          "재귀 없이! 블록 가격을 정규화하고, x 마다 큰 블록→작은 블록으로 훑어요.  각 부분이 밝아지며 말풍선이 떠요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
       };
     })(),

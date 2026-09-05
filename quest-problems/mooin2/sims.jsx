@@ -273,7 +273,7 @@ export function MooinCountTrace({ E }) {
   else if (step.kind === "pair")
     note = t(E,
       `Here's a matching pair: ${step.y} and ${step.y}. These two are the moo's "same number twice at the end". Now let's see which numbers can come before this pair.`,
-      `같은 숫자 짝을 찾았어요 → ${step.y}과 ${step.y}. 이 두 개가 moo의 '뒤에 오는 같은 숫자 두 개'예요. 이제 이 짝 앞에 어떤 숫자들이 올 수 있는지 볼게요.`);
+      `같은 숫자 짝을 찾았어요 → ${step.y} 값 두 개. 이게 moo 의 '뒤에 오는 같은 숫자 두 개'예요. 이제 이 짝 앞에 어떤 숫자가 올 수 있는지 볼게요.`);
   else if (step.kind === "scan") {
     if (!step.scan)
       note = t(E, "There's nothing to the left of the pair, so no number can come before it — that's 0.",
@@ -281,8 +281,8 @@ export function MooinCountTrace({ E }) {
     else {
       const sc = step.scan;
       const head = sc.isNew
-        ? t(E, `Looking left of the pair, one cell at a time: ${sc.v} is a new number here, so add one kind.`, `짝 왼쪽을 한 칸씩 봐요. ${sc.v}는 여기서 처음 보는 숫자라, 종류를 하나 더해요.`)
-        : t(E, `${sc.v} we already counted, so we leave it as is.`, `${sc.v}는 아까 이미 센 숫자라 그대로 둬요.`);
+        ? t(E, `Looking left of the pair, one cell at a time: ${sc.v} is a new number here, so add one kind.`, `짝 왼쪽을 한 칸씩 봐요. ${sc.v} 값은 여기서 처음 보는 숫자라, 종류를 하나 더해요.`)
+        : t(E, `${sc.v} we already counted, so we leave it as is.`, `${sc.v} 값은 아까 이미 센 숫자라 그대로 둬요.`);
       const tail = step.scanDone
         ? t(E, ` Done — ${step.d0} different numbers came before the pair.`, ` 짝 왼쪽을 다 봤어요 — 앞에 서로 다른 숫자가 ${step.d0}종류 있었네요.`)
         : t(E, ` (${sc.distinct} kinds so far)`, ` (지금까지 ${sc.distinct}종류)`);
@@ -296,7 +296,7 @@ export function MooinCountTrace({ E }) {
   else if (step.kind === "add")
     note = t(E,
       `So ${step.y} can make ${step.contrib} moos. Add that to the answer so far → ${step.ans}.`,
-      `그래서 ${step.y}로 만들 수 있는 moo는 ${step.contrib}개. 지금까지 답에 더하면 ${step.ans}이에요.`);
+      `그래서 ${step.y} 값으로 만들 수 있는 moo 는 ${step.contrib}개. 지금까지 답에 더하면 ${step.ans}개예요.`);
   else if (step.kind === "none")
     note = t(E, "There's nothing to add up. The answer is 0.", "더할 게 없어요. 답은 0이에요.");
   else

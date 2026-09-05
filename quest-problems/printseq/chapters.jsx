@@ -1,7 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { getPrintseqSections, getPrintseqWalk, getPrintseqStkWalk, PrintseqExplorer } from "./components";
 import { PrintseqIntroSim, PrintseqShapesSim, PrintseqMixSim, PrintseqTodoPlanSim, PrintseqPlanSim, PrintseqBlockSim } from "./sims";
-import { CodeSectionView } from "@/components/quest/CodeSectionView";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 
 export function makePrintseqCh1(E) {
@@ -16,7 +15,7 @@ export function makePrintseqCh1(E) {
       type: "reveal",
       narr: t(E,
         "Bessie's printer has only 2 commands — and a strict budget K. What exactly is K counting? Let's see.",
-        "Bessie 의 프린터엔 명령이 2 개뿐 — 그리고 깐깐한 예산 K 가 있어요. K 가 정확히 '뭘' 세는 걸까요?"),
+        "프린터 명령은 2 개뿐이에요. 예산 K 는 정확히 뭘 셀까요?"),
       content: (
         <div>
           <div style={{ textAlign: "center", padding: "10px 16px 0" }}>
@@ -34,7 +33,7 @@ export function makePrintseqCh1(E) {
       type: "reveal",
       narr: t(E,
         "Now the real input file. Each line has a label bubble — read top to bottom and you'll see where N, K, and the target live.",
-        "이제 진짜 입력 파일이에요. 줄마다 말풍선 라벨을 달아뒀으니 위에서 아래로 읽으면 N, K, 목표가 어디 있는지 보여요."),
+        "이제 진짜 입력 파일이에요. N, K, 목표가 어디 있는지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#16a34a", textAlign: "center", marginBottom: 10 }}>
@@ -158,7 +157,7 @@ export function makePrintseqCh1(E) {
       type: "reveal",
       narr: t(E,
         "\"Are the three tricks REALLY all there is? What about a messy one?\" — great question. Let's solve 1 1 1 1 1 2 1 2 together, step by step.",
-        "\"세 요령이 진짜 전부야? 막 섞인 건?\" — 좋은 질문이에요. 1 1 1 1 1 2 1 2 를 같이, 한 단계씩 풀어봐요."),
+        "세 요령이 정말 전부일까요? 섞인 수열을 같이 풀어봐요."),
       content: (<PrintseqMixSim E={E} />),
     },
 
@@ -168,7 +167,7 @@ export function makePrintseqCh1(E) {
       type: "reveal",
       narr: t(E,
         "Playground time — pick a sequence and a budget K, and see YES or NO instantly. Try to find one that's NO with K=2 but YES with K=3!",
-        "놀이터 시간 — 수열과 예산 K 를 골라보면 YES/NO 가 바로 떠요. K=2 로는 NO 인데 K=3 이면 YES 가 되는 수열을 찾아보세요!"),
+        "놀이터예요. 수열과 K 를 직접 골라 YES·NO 를 확인해보세요."),
       content: (<PrintseqExplorer E={E} />),
     },
 
@@ -199,7 +198,7 @@ export function makePrintseqCh1(E) {
       type: "input",
       narr: t(E,
         "Last one — imagine the program in your head first, then answer. (Hint: we solved this exact sequence in the shapes sim!)",
-        "마지막! 머릿속으로 프로그램을 먼저 그려보고 답하세요. (힌트: 아까 모양 시뮬에서 똑같은 수열을 풀었어요!)"),
+        "마지막 문제예요. 프로그램을 머릿속으로 먼저 그려보세요."),
       question: t(E,
         "Can [1, 1, 2, 2] be produced with K=2?  (1 = YES, 0 = NO)",
         "[1, 1, 2, 2] 를 K=2 로 만들 수 있을까? (1 = YES, 0 = NO)"),
@@ -235,7 +234,7 @@ export function makePrintseqCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Zoom in on trick ② — let's SEE it: try block sizes on 1 2 1 2 1 2 and find the repeat.",
-        "요령 ② 를 확대해서 — 눈으로 봐요: 1 2 1 2 1 2 에 블록 크기를 바꿔가며 반복을 찾아요."),
+        "요령 ② 를 확대해서, 블록 크기를 바꾸며 반복을 찾아봐요."),
       content: (<PrintseqBlockSim E={E} />),
     },
 
@@ -289,7 +288,7 @@ export function makePrintseqCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "🎁 Bonus — we just solved it by driving a TO-DO list ourselves. There's a much shorter way to run the SAME three tricks: recursion. Remember the friend relay?",
-        "🎁 심화 — 방금은 '할 일 목록' 을 우리가 직접 굴려서 풀었죠. 똑같은 세 요령을 훨씬 짧게 쓰는 방법이 있어요: 재귀. '친구한테 시키기' 기억나요?"),
+        "🎁 심화예요. 똑같은 세 요령을 재귀로 훨씬 짧게 쓸 수 있어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ maxWidth: 500, margin: "0 auto" }}>
@@ -349,7 +348,7 @@ export function makePrintseqCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Watch the recursive plan on [1 1 2 2] with budget 2. Same three tricks — but this time a piece ASKS a smaller piece the same question (can() calls can()).",
-        "재귀 계획을 [1 1 2 2] 예산 2 로 봐요. 똑같은 세 요령 — 대신 이번엔 조각이 더 작은 조각에게 같은 질문을 물어봐요 (can() 이 can() 을 부름)."),
+        "재귀 계획을 [1 1 2 2] 예산 2 로 함께 살펴봐요."),
       content: (<PrintseqPlanSim E={E} />),
     },
 
@@ -361,7 +360,7 @@ export function makePrintseqCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "🎁 The recursive version — instead of us driving a TO-DO list, each piece directly CALLS smaller pieces (↺ can calls can). Same answer, same three tricks.",
-        "🎁 재귀 버전 — 할 일 목록을 우리가 굴리는 대신, 조각이 더 작은 조각을 직접 '불러요' (↺ can 이 can 을 부름). 답도 요령도 똑같아요."),
+        "🎁 재귀 버전이에요. 조각이 더 작은 조각을 직접 불러요."),
       content: (<CodeWalk E={E} lang={lang} {...getPrintseqWalk(E, lang)} accent="#0d9488"
         badge={{ color: "#0d9488",
           ko: "🎁 번외 · 재귀 버전 — 주 풀이는 앞의 '할 일 목록' 방식이에요",

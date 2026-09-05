@@ -138,8 +138,8 @@ function buildAuditTrace(a) {
         ? `Spot ${i} is ${v} again! Add one to "times seen" for ${v}, making it ${c}. Now ${v} has shown up 2+ times, so a ${v}, ${v} pair is possible.`
         : `Spot ${i} holds ${v}. It's the first time we see ${v}, so write 1 in the "times seen" note for ${v}.`,
       note_ko: c >= 2
-        ? `${i}번 칸도 ${v} 네요! ${v}의 '몇 번 나왔나'에 1 을 더해서 ${c}로 만들어요. 이제 ${v}가 2번 넘게 나왔으니, ${v}, ${v} 짝을 만들 수 있어요.`
-        : `${i}번 칸엔 ${v}가 있어요. ${v}를 처음 봤으니, ${v}의 '몇 번 나왔나'에 1 이라고 적어요.`,
+        ? `${i}번 칸도 ${v} 값이네요! ${v} 값의 '몇 번 나왔나'에 1 을 더해요 → ${c}. 이제 ${v} 값이 2번 넘게 나왔으니 짝을 만들 수 있어요.`
+        : `${i}번 칸엔 ${v} 값이 있어요. 처음 보는 값이니 '몇 번 나왔나'에 1 이라고 적어요.`,
     }));
 
     // 2) 짝 시작 자리 (second_last) — 반복일 때만, last_seen 갱신 '전' 의 값 사용
@@ -148,7 +148,7 @@ function buildAuditTrace(a) {
       trace.push(snap({
         i, v, focus: { table: "second_last", col: v },
         note_en: `We saw ${v} a moment ago, back at spot ${prevLast}. Save that spot as "where ${v}'s pair begins". Later we'll count how many different numbers came before it.`,
-        note_ko: `${v}는 방금 전 ${prevLast}번 칸에서 봤었죠. 그 자리를 '${v}의 짝이 시작되는 곳'으로 적어둬요. 이따 그 앞에 서로 다른 숫자가 몇 종류 있었는지 셀 거예요.`,
+        note_ko: `${v} 값은 방금 전 ${prevLast}번 칸에서 봤었죠. 그 자리를 '짝이 시작되는 곳'으로 적어둬요. 이따 그 앞에 서로 다른 숫자가 몇 종류였는지 셀 거예요.`,
       }));
     }
 
@@ -157,7 +157,7 @@ function buildAuditTrace(a) {
     trace.push(snap({
       i, v, focus: { table: "last_seen", col: v },
       note_en: `Now change "${v}'s last spot" to here (${i}). If ${v} appears again later, this is the value we'll use.`,
-      note_ko: `그리고 '${v}를 마지막으로 본 곳'을 지금 칸(${i})으로 바꿔 적어요. 나중에 ${v}가 또 나오면 이 값을 쓸 거예요.`,
+      note_ko: `그리고 '${v} 값을 마지막으로 본 곳'을 지금 칸(${i})으로 바꿔 적어요. 나중에 ${v} 값이 또 나오면 이걸 쓸 거예요.`,
     }));
 
     // 4) 앞 종류 수 (D)
@@ -170,8 +170,8 @@ function buildAuditTrace(a) {
         ? `${v} is a number we hadn't seen before, so the count of "different numbers so far" goes up by one, to ${D[i + 1]}.`
         : `We've already seen ${v} before, so the count of "different numbers so far" stays the same: ${D[i + 1]}.`,
       note_ko: wasNew
-        ? `${v}는 지금까지 안 나온 새 숫자예요. 그래서 '여기까지 나온 숫자 종류 수'가 하나 늘어서 ${D[i + 1]}가 돼요.`
-        : `${v}는 아까 이미 본 숫자라, '여기까지 나온 숫자 종류 수'는 그대로 ${D[i + 1]}예요.`,
+        ? `${v} 값은 지금까지 안 나온 새 숫자예요. 그래서 '여기까지 나온 숫자 종류 수'가 하나 늘어 ${D[i + 1]} 이 돼요.`
+        : `${v} 값은 아까 이미 본 숫자라, '여기까지 나온 숫자 종류 수'는 그대로 ${D[i + 1]} 이에요.`,
     }));
   }
 
@@ -204,13 +204,13 @@ function buildAuditTrace(a) {
     trace.push(snap({
       i: N - 1, v: y, phase: "use", ans, focus: { table: "count", col: y }, arrPair: pair, ledger: done.slice(),
       note_en: `Now ${y}. In "times seen", ${y} shows ${count[y]} — that's 2 or more, so a ${y}, ${y} pair exists. (The orange cells are those two ${y}s in the array.) Let's count its moos.`,
-      note_ko: `이제 ${y} 차례예요. '몇 번 나왔나'를 보면 ${y}는 ${count[y]} — 2 이상이죠. 그래서 ${y}, ${y} 짝이 있어요. (배열 주황 칸이 그 두 ${y}예요.) 이 짝의 moo를 세어 볼게요.`,
+      note_ko: `이제 ${y} 값 차례예요. '몇 번 나왔나'를 보면 ${y} 값은 ${count[y]} — 2 이상이죠. 그래서 짝이 있어요. (배열 주황 칸 두 개예요.) 이 짝의 moo 를 세어 볼게요.`,
     }));
     // (b) 짝 시작 자리 (앞쪽 y) 확인
     trace.push(snap({
       i: N - 1, v: y, phase: "use", ans, focus: { table: "second_last", col: y }, arrPair: pair, ledger: done.slice(),
       note_en: `The front ${y} of the pair is at spot ${p}. The "pair-start" note says ${p} too. A moo's front number (x) has to come from BEFORE this spot.`,
-      note_ko: `짝의 앞쪽 ${y}는 ${p}번 칸에 있어요. '짝 시작 자리' 메모에도 ${p}라고 적혀 있죠. moo의 앞 숫자(x)는 이 자리보다 '앞'에서 와야 해요.`,
+      note_ko: `짝의 앞쪽 ${y} 값은 ${p}번 칸에 있어요. '짝 시작 자리' 메모에도 같은 번호가 적혀 있죠. moo 의 앞 숫자(x)는 이 자리보다 앞에서 와야 해요.`,
     }));
     // (c) D 읽기 — 그 앞 종류 수
     trace.push(snap({
@@ -232,7 +232,7 @@ function buildAuditTrace(a) {
     trace.push(snap({
       i: N - 1, v: y, phase: "use", ans, focus: { table: "second_last", col: y }, arrPair: pair, ledger: done.slice(), ledgerNew: y,
       note_en: `So ${y} makes ${contrib} moos. Write it on the right and add to the total → ${ans}.`,
-      note_ko: `그래서 ${y}로 만드는 moo는 ${contrib}개. 오른쪽에 적고, 답에 더하면 ${ans}이에요.`,
+      note_ko: `그래서 ${y} 값으로 만드는 moo 는 ${contrib}개. 오른쪽에 적고, 답에 더하면 ${ans}개예요.`,
     }));
   }
   trace.push(snap({

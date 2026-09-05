@@ -13,7 +13,7 @@ export function makeMooin2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Farmer John recorded his cows. He wants to know how many different 'moo' sounds happened during the day — let's help him count! 🐄",
-        "농부 존이 소들을 녹음했어요. 하루 동안 서로 다른 'moo' 소리가 몇 번 났는지 알고 싶대요 — 세는 걸 도와줘요! 🐄"),
+        "농부 존이 녹음한 소 울음에서 서로 다른 moo 를 세어봐요! 🐄"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 40, marginBottom: 6 }}>🐄</div>
@@ -42,7 +42,7 @@ export function makeMooin2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "A 'moo' is 3 numbers: (x, y, y). The last two are the SAME, and the first is DIFFERENT — like a cow: one sound, then the same sound twice!",
-        "'moo' 는 숫자 3개: (x, y, y). 뒤 둘은 같고, 첫째는 달라요 — 소처럼 한 소리, 그다음 같은 소리 두 번!"),
+        "moo 는 숫자 3개, (x, y, y) — 뒤 둘은 같고 첫째만 달라요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff", border: "1.5px solid #fdba74", borderRadius: 10, padding: "12px 14px", fontSize: 14, color: C.text, lineHeight: 1.7, marginBottom: 12 }}>
@@ -88,7 +88,7 @@ export function makeMooin2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "A moo 'occurs' in the array if we can find the 3 numbers in ORDER — left to right — even with gaps in between.",
-        "moo 가 배열에서 '발생'한다는 건, 그 숫자 3개를 왼→오 순서로 찾을 수 있다는 뜻 — 사이를 건너뛰어도 돼요."),
+        "배열에서 moo 가 '발생'한다는 건, 순서대로 골라낼 수 있다는 뜻이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#eef6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "12px 14px", fontSize: 13.5, color: "#1e3a8a", lineHeight: 1.7, marginBottom: 12 }}>
@@ -137,7 +137,7 @@ export function makeMooin2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "Two moos count as the SAME if their (x, y) pair is the same — we count DISTINCT (x, y) pairs. Here's the official sample.",
-        "두 moo 의 (x, y) 쌍이 같으면 같은 걸로 쳐요. 서로 다른 (x, y) 쌍을 세는 거예요. 공식 샘플을 볼까요."),
+        "moo 는 (x, y) 쌍이 같으면 같은 걸로 쳐요. 공식 샘플을 볼게요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, marginBottom: 12 }}>
@@ -173,10 +173,10 @@ export function makeMooin2Ch1(E) {
       type: "input",
       narr: t(E,
         "Your turn! Walk through a = [1, 2, 2] by hand. Which value can be the (y, y) pair, and who can be x before it?",
-        "직접! a = [1, 2, 2] 를 손으로 따라가요. 어떤 값이 (y, y) 짝이 되고, 그 앞에 x 로 올 수 있는 값은?"),
+        "직접! a = [1, 2, 2] 를 손으로 따라가며 moo 를 찾아봐요."),
       question: t(E, "How many distinct moos occur in [1, 2, 2]?", "[1, 2, 2] 의 서로 다른 moo 개수?"),
-      hint: t(E, "Only 2 appears twice → y = 2. Before the (2,2) pair, the value 1 sits → x = 1. So (1, 2, 2).",
-                 "2 만 두 번 나옴 → y = 2. (2,2) 짝 앞에 값 1 → x = 1. 그래서 (1, 2, 2)."),
+      hint: t(E, "Find which value appears twice first, then look at what sits before it.",
+                 "어떤 값이 두 번 나오는지부터 찾고, 그 앞에 뭐가 있는지 봐요."),
       answer: 1,
     },
   ];
@@ -286,7 +286,7 @@ export function makeMooin2Ch2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Piece 2: a moo is 3 positions i < j < k. So loop all three — every i, every j after it, every k after that.",
-        "2조각: moo 는 위치 3개 i < j < k. 그러니 셋 다 돌려요 — 모든 i, 그 뒤 모든 j, 또 그 뒤 모든 k."),
+        "moo 는 자리 3개 i < j < k. 이 세 자리를 모두 돌려요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0891b2", marginBottom: 8 }}>
@@ -307,7 +307,7 @@ export function makeMooin2Ch2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Piece 3: inside, keep only real moos — a[j] = a[k] (the y-pair) and a[i] ≠ a[j] (a real x). Then print how many distinct ones we found.",
-        "3조각: 안에서 진짜 moo 만 남겨요 — a[j] = a[k] (y 짝) 이고 a[i] ≠ a[j] (진짜 x). 그다음 서로 다른 개수를 출력."),
+        "안에서 진짜 moo 만 골라 세고, 그 개수를 출력해요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0891b2", marginBottom: 8 }}>
@@ -327,7 +327,7 @@ export function makeMooin2Ch2(E, lang = "py") {
       type: "bruteRunner",
       narr: t(E,
         "Let's RUN it. N = 40 finishes instantly — then jump to N = 2000 🐌 and watch it actually crawl. Hit Stop whenever you've felt enough!",
-        "직접 돌려봐요. N = 40 은 순식간 — 그다음 N = 2000 🐌 로 올리면 진짜로 기어가는 걸 봐요. 충분히 느꼈으면 Stop 눌러요!"),
+        "직접 돌려봐요. N 을 키우면 진짜로 느려지는 게 보여요."),
     },
     /* 2-4 (limit/bridge) REMOVED 2026-06-18 — narr·박스가 같은 말이었고, 체감은 BruteRunner(2-3)가,
        동기는 빠른풀이 첫 페이지가 담당 → 불필요 (선생님). 첫시도는 BruteRunner 로 끝남. */
@@ -350,7 +350,7 @@ export function makeMooin2Ch3(E) {
       type: "reveal",
       narr: t(E,
         "Brute force timed out when N got big — so we need a smarter way.",
-        "브루트포스는 N 이 커지면 타임오버였죠 — 그러니 다른 방법을 생각해봐야 해요."),
+        "브루트포스는 N 이 커지면 시간 초과였죠 — 그러니 다른 방법을 생각해봐야 해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 12, padding: "14px 16px", fontSize: 14, color: "#9a3412", lineHeight: 1.7, maxWidth: 480, margin: "0 auto", wordBreak: "keep-all" }}>
@@ -398,7 +398,7 @@ export function makeMooin2Ch3(E) {
       type: "reveal",
       narr: t(E,
         "We've got the method. Now — how do we turn it into code? The computer has to remember a bit of info in variables.",
-        "방법은 알았어요. 그럼 이걸 코드로 어떻게 만들까요? 컴퓨터는 필요한 정보를 변수(메모지)에 담아둬야 해요."),
+        "방법은 알았어요. 이제 코드에 담을 정보를 정해봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13.5, color: C.text, lineHeight: 1.7, marginBottom: 4, textAlign: "center", wordBreak: "keep-all" }}>
