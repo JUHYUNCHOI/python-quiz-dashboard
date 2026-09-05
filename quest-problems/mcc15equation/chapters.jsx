@@ -194,7 +194,7 @@ export const SOLUTION_CODE = [
   "def check(x, op, y, z):      # x op y == z 인가?",
   "    if op == \"+\": return x + y == z",
   "    if op == \"-\": return x - y == z",
-  "    if op == \"*\": return x * y == z",
+  "    if op == \"\": return x  y == z",
   "    return x == y * z        # x / y == z  ⟺  x == y * z",
   "",
   "for op in \"+-*/\":",

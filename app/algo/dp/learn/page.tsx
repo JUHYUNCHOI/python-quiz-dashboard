@@ -130,8 +130,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               <p className="text-xs text-amber-700 font-bold mb-1">📌 {t("어려운 토픽이에요 — 천천히 가요", "This is a hard topic — we'll go slowly")}</p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "DP 는 재귀 다음으로 학생들이 멈춰서는 곳. 그런데 *재귀를 다른 각도에서* 보는 것뿐이에요.",
-                  "DP is where students stall after recursion. But really it's just *recursion seen from a different angle*.",
+                  "DP 는 재귀 다음으로 학생들이 멈춰서는 곳. 그런데 재귀를 다른 각도에서 보는 것뿐이에요.",
+                  "DP is where students stall after recursion. But really it's just recursion seen from a different angle.",
                 )}
               </p>
             </div>
@@ -193,8 +193,8 @@ N=5 → 8 ways`)}
             </div>
             <p className="text-xs text-gray-700 leading-relaxed mb-2">
               {t(
-                "문제: ways(5) 를 부르면 ways(3) 을 *두 번*, ways(2) 를 *세 번* 다시 계산해요. 트리를 펼쳐 보면:",
-                "Problem: calling ways(5) recomputes ways(3) *twice*, ways(2) *three times*. Unfold the call tree:",
+                "문제: ways(5) 를 부르면 ways(3) 을 두 번, ways(2) 를 세 번 다시 계산해요. 트리를 펼쳐 보면:",
+                "Problem: calling ways(5) recomputes ways(3) twice, ways(2) three times. Unfold the call tree:",
               )}
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-red-200 mb-3 overflow-x-auto">
@@ -228,8 +228,8 @@ N=5 → 8 ways`)}
               </p>
               <p className="text-xs text-red-800 leading-relaxed text-center mt-2">
                 {t(
-                  "→ 한 번 푼 답을 *저장* 하면 각 ways(k) 는 딱 한 번만. 이게 DP 의 출발점.",
-                  "→ *Save* each answer once and every ways(k) runs just once. That's the seed of DP.",
+                  "→ 한 번 푼 답을 저장 하면 각 ways(k) 는 딱 한 번만. 이게 DP 의 출발점.",
+                  "→ Save each answer once and every ways(k) runs just once. That's the seed of DP.",
                 )}
               </p>
             </div>
@@ -243,7 +243,7 @@ N=5 → 8 ways`)}
               {t("같은 것, 두 방향에서", "Same thing, two directions")}
             </h3>
             <p className="text-xs text-gray-700 text-center mb-4">
-              {t("이게 DP 의 정체. 두 방식은 *완전히 같은 계산*.", "This is what DP really is. Both styles compute the *exact same thing*.")}
+              {t("이게 DP 의 정체. 두 방식은 완전히 같은 계산.", "This is what DP really is. Both styles compute the exact same thing.")}
             </p>
             <div className="space-y-3 mb-3">
               <div className="bg-white rounded-lg p-3 border-2 border-purple-200">
@@ -252,8 +252,8 @@ N=5 → 8 ways`)}
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "위에서부터 시작 (ways(N)) → 필요한 작은 문제를 *물어봐서* 풀어요. 푼 건 dict 에 저장.",
-                    "Start at the top (ways(N)) → *ask* for smaller subproblems on demand. Cache results in a dict.",
+                    "위에서부터 시작 (ways(N)) → 필요한 작은 문제를 물어봐서 풀어요. 푼 건 dict 에 저장.",
+                    "Start at the top (ways(N)) → ask for smaller subproblems on demand. Cache results in a dict.",
                   )}
                 </p>
               </div>
@@ -404,8 +404,8 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-cyan-700">{t("질문", "Question")}:</b>{" "}
               {t(
-                "N 번째 계단에 도착했을 때, *직전에* 어디 있었을까?",
-                "When I'm on stair N, where was I *just before*?",
+                "N 번째 계단에 도착했을 때, 직전에 어디 있었을까?",
+                "When I'm on stair N, where was I just before?",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-cyan-200 mb-3">
@@ -432,8 +432,8 @@ dp[1] = 1   ← base`)}
             </div>
             <p className="text-xs text-cyan-700 text-center leading-relaxed">
               {t(
-                "이게 점화식. *마지막 동작* 만 생각하면 거의 항상 보여요.",
-                "That's the recurrence. Thinking about *the last move* almost always reveals it.",
+                "이게 점화식. 마지막 동작 만 생각하면 거의 항상 보여요.",
+                "That's the recurrence. Thinking about the last move almost always reveals it.",
               )}
             </p>
           </div>
@@ -488,8 +488,8 @@ dp[1] = 1   ← base`)}
               <p className="text-[11px] text-emerald-800 leading-relaxed">
                 💛 <b>{t("핵심", "Key")}:</b>{" "}
                 {t(
-                  "각 칸은 *한 번만* 계산. 메모이제이션 (재귀+캐시) 과 호출 횟수가 똑같아요.",
-                  "Each cell computed *exactly once*. Same call count as memoized recursion.",
+                  "각 칸은 한 번만 계산. 메모이제이션 (재귀+캐시) 과 호출 횟수가 똑같아요.",
+                  "Each cell computed exactly once. Same call count as memoized recursion.",
                 )}
               </p>
             </div>
@@ -579,8 +579,8 @@ int main() {
               <p className="text-sm font-black text-purple-900">🔄 {t("같은 계산, 반대 방향 — 메모이제이션 (top-down)", "Same calc, opposite direction — memoization (top-down)")}</p>
               <p className="text-xs text-gray-700 mt-1">
                 {t(
-                  "Ch1 의 느린 재귀에 *캐시 한 줄* 만 더하면 돼요. 표를 안 채우고, 재귀가 물어볼 때만 채워요.",
-                  "Just add *one cache* to Ch1's slow recursion. No table loop — fill on demand as the recursion asks.",
+                  "Ch1 의 느린 재귀에 캐시 한 줄 만 더하면 돼요. 표를 안 채우고, 재귀가 물어볼 때만 채워요.",
+                  "Just add one cache to Ch1's slow recursion. No table loop — fill on demand as the recursion asks.",
                 )}
               </p>
             </div>
@@ -658,8 +658,8 @@ int main() {
               <p className="text-xs text-amber-900 leading-relaxed text-center">
                 💡 <b>{t("두 코드는 같은 dp 값을 같은 횟수로 계산", "Both compute the same dp values, the same number of times")}</b>.{" "}
                 {t(
-                  "위(top-down)는 ways(N) 부터 *내려가며* 필요할 때 채우고, 아래(bottom-up)는 ways(0) 부터 *올라가며* 미리 채워요. 방향만 다름.",
-                  "Top-down starts at ways(N) and fills *downward* on demand; bottom-up starts at ways(0) and fills *upward* ahead of time. Only the direction differs.",
+                  "위(top-down)는 ways(N) 부터 내려가며 필요할 때 채우고, 아래(bottom-up)는 ways(0) 부터 올라가며 미리 채워요. 방향만 다름.",
+                  "Top-down starts at ways(N) and fills downward on demand; bottom-up starts at ways(0) and fills upward ahead of time. Only the direction differs.",
                 )}
               </p>
             </div>
@@ -735,8 +735,8 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </ul>
               <p className="text-xs text-gray-700 mt-2 leading-relaxed">
                 {t(
-                  "둘 중 *큰 쪽* 선택. → ",
-                  "Pick the *larger*. → ",
+                  "둘 중 큰 쪽 선택. → ",
+                  "Pick the larger. → ",
                 )}<code className="bg-white px-1 rounded text-[11px]">dp[i][w] = max(dp[i-1][w], dp[i-1][w-wi] + vi)</code>
               </p>
             </div>
@@ -969,8 +969,8 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "dp[i] (또는 dp[i][j]) 가 *무엇* 을 의미하는지 한 줄로 써요. 예: \"dp[i] = i 번째 계단까지 가는 방법 수\".",
-                    "What does dp[i] (or dp[i][j]) *mean* — in one line. E.g. \"dp[i] = ways to reach stair i\".",
+                    "dp[i] (또는 dp[i][j]) 가 무엇 을 의미하는지 한 줄로 써요. 예: \"dp[i] = i 번째 계단까지 가는 방법 수\".",
+                    "What does dp[i] (or dp[i][j]) mean — in one line. E.g. \"dp[i] = ways to reach stair i\".",
                   )}
                 </p>
               </div>
@@ -980,8 +980,8 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "*마지막 동작* 만 보면 — dp[i] 를 더 작은 dp[?] 들로 표현. 예: dp[i] = dp[i-1] + dp[i-2].",
-                    "Look at the *last move* — express dp[i] in terms of smaller dp[?]. E.g. dp[i] = dp[i-1] + dp[i-2].",
+                    "마지막 동작 만 보면 — dp[i] 를 더 작은 dp[?] 들로 표현. 예: dp[i] = dp[i-1] + dp[i-2].",
+                    "Look at the last move — express dp[i] in terms of smaller dp[?]. E.g. dp[i] = dp[i-1] + dp[i-2].",
                   )}
                 </p>
               </div>
@@ -1002,8 +1002,8 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "dp[i] 계산할 때 필요한 dp[?] 들이 *이미 채워져 있어야* 해요. 보통 작은 i 부터 큰 i 로.",
-                    "When computing dp[i], the dp[?] it needs must *already be filled*. Usually small i → large i.",
+                    "dp[i] 계산할 때 필요한 dp[?] 들이 이미 채워져 있어야 해요. 보통 작은 i 부터 큰 i 로.",
+                    "When computing dp[i], the dp[?] it needs must already be filled. Usually small i → large i.",
                   )}
                 </p>
               </div>
@@ -1023,8 +1023,8 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 "수열에서 ",
                 "From an array, ",
               )}<b>{t("순서를 유지하면서", "keeping order")}</b>{t(
-                " 고른 *증가하는* 부분 수열 중 가장 긴 것 길이? 예: [3,1,4,1,5,9,2,6] → 4 ([1,4,5,9] 또는 [1,4,5,6]).",
-                " pick an *increasing* subsequence — what's the longest length? Ex: [3,1,4,1,5,9,2,6] → 4 ([1,4,5,9] or [1,4,5,6]).",
+                " 고른 증가하는 부분 수열 중 가장 긴 것 길이? 예: [3,1,4,1,5,9,2,6] → 4 ([1,4,5,9] 또는 [1,4,5,6]).",
+                " pick an increasing subsequence — what's the longest length? Ex: [3,1,4,1,5,9,2,6] → 4 ([1,4,5,9] or [1,4,5,6]).",
               )}
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-blue-200 mb-3 space-y-1.5">
@@ -1178,7 +1178,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <ol className="space-y-2 text-sm text-gray-800">
               <li><b>1.</b> {t("DP = ", "DP = ")}<b>{t("재귀 결과를 저장해 재사용", "save recursion's results, reuse")}</b>. {t("Top-down (메모) ↔ Bottom-up (table) — 같은 것.", "Top-down (memo) ↔ Bottom-up (table) — same thing.")}</li>
               <li><b>2.</b> {t("새 문제 → ", "New problem → ")}<b>{t("4 단계 체크리스트", "4-step checklist")}</b>: {t("상태 / 점화식 / 베이스 / 순서.", "state / recurrence / base / order.")}</li>
-              <li><b>3.</b> {t("점화식 도출 = *마지막 동작* 만 보기. \"i 칸 도착 직전엔 어디 있었나?\"", "Recurrence = look at *last move*. \"Where was I right before reaching i?\"")}</li>
+              <li><b>3.</b> {t("점화식 도출 = 마지막 동작 만 보기. \"i 칸 도착 직전엔 어디 있었나?\"", "Recurrence = look at last move. \"Where was I right before reaching i?\"")}</li>
               <li><b>4.</b> {t("1D DP (계단/피보) → 2D DP (배낭) 순으로 익혀요. 1D 만 능숙해도 USACO Bronze 충분.", "Learn 1D (stairs/fib) → 2D (knapsack). 1D fluency alone is enough for USACO Bronze.")}</li>
               <li><b>5.</b> {t("적용 조건: ", "Applicable when: ")}<b>{t("최적 부분 구조 + 중복 부분 문제", "optimal substructure + overlapping subproblems")}</b>. {t("둘 다 있어야.", "Both needed.")}</li>
             </ol>

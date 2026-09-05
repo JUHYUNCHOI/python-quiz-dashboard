@@ -126,15 +126,15 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-orange-700">{t("비유", "Analogy")}:</b>{" "}
               {t(
-                "고등학교 수업표 짤 때 — 수학 1 안 들으면 수학 2 못 듣고, 영어 1 안 들으면 영어 2 못 듣잖아요? '뭘 먼저 들어야 하는지' 정해진 *순서* 가 있어요.",
-                "Like a class schedule — can't take Math 2 without Math 1, can't take English 2 without English 1. There's a *prerequisite order*.",
+                "고등학교 수업표 짤 때 — 수학 1 안 들으면 수학 2 못 듣고, 영어 1 안 들으면 영어 2 못 듣잖아요? '뭘 먼저 들어야 하는지' 정해진 순서 가 있어요.",
+                "Like a class schedule — can't take Math 2 without Math 1, can't take English 2 without English 1. There's a prerequisite order.",
               )}
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-amber-200 mb-3">
               <p className="text-xs font-bold text-amber-800 mb-1">💡 {t("위상 정렬 = ", "Topological sort = ")}</p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "선행 조건이 모두 끝난 작업부터 차례대로 줄 세우기. 같은 결과가 여러 개일 수 있어요 — 어떤 순서든 *선행이 먼저* 면 OK.",
+                  "선행 조건이 모두 끝난 작업부터 차례대로 줄 세우기. 같은 결과가 여러 개일 수 있어요 — 어떤 순서든 선행이 먼저 면 OK.",
                   "Line up tasks so each task comes after all its prerequisites. There can be multiple valid orders — any with prerequisites first is OK.",
                 )}
               </p>
@@ -203,8 +203,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "선행이 0 개인 노드부터 큐에 넣고 하나씩 꺼냄. *반복문 + 큐* — 가장 직관적. (챕터 2)",
-                    "Push nodes with 0 in-degree to a queue, pop one by one. *Loop + queue* — most intuitive. (Ch 2)",
+                    "선행이 0 개인 노드부터 큐에 넣고 하나씩 꺼냄. 반복문 + 큐 — 가장 직관적. (챕터 2)",
+                    "Push nodes with 0 in-degree to a queue, pop one by one. Loop + queue — most intuitive. (Ch 2)",
                   )}
                 </p>
               </div>
@@ -214,8 +214,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "재귀로 끝까지 들어갔다가 *끝나는 순서* 의 역으로 줄세움. (챕터 3)",
-                    "Recurse to leaves, then *reverse* the finish order. (Ch 3)",
+                    "재귀로 끝까지 들어갔다가 끝나는 순서 의 역으로 줄세움. (챕터 3)",
+                    "Recurse to leaves, then reverse the finish order. (Ch 3)",
                   )}
                 </p>
               </div>
@@ -558,8 +558,8 @@ vector<int> topoSort(int n, vector<pair<int,int>>& edges) {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "포인트: 큐는 BFS 처럼 보이지만 *방문 체크* 가 필요 없어요 — in-degree 가 그 역할을 함.",
-                "Note: looks like BFS but no *visited[]* needed — in-degree replaces it.",
+                "포인트: 큐는 BFS 처럼 보이지만 방문 체크 가 필요 없어요 — in-degree 가 그 역할을 함.",
+                "Note: looks like BFS but no visited[] needed — in-degree replaces it.",
               )}
             </p>
           </div>
@@ -601,16 +601,16 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-emerald-700">{t("핵심 통찰", "Key insight")}:</b>{" "}
               {t(
-                "DFS 로 끝까지 들어갔다 돌아오는 순간 = '이 노드의 모든 후행이 다 끝남'. *그래서* 가장 늦게 끝나는 노드가 *가장 먼저* 와야 함 (선행).",
-                "When DFS returns from a node = 'all its descendants are done'. *That's why* the latest-finishing node must come *first* (it's the prerequisite).",
+                "DFS 로 끝까지 들어갔다 돌아오는 순간 = '이 노드의 모든 후행이 다 끝남'. 그래서 가장 늦게 끝나는 노드가 가장 먼저 와야 함 (선행).",
+                "When DFS returns from a node = 'all its descendants are done'. That's why the latest-finishing node must come first (it's the prerequisite).",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-emerald-200 mb-3">
               <p className="text-xs font-bold text-emerald-800 mb-2">💡 {t("절차", "Procedure")}</p>
               <ol className="text-xs text-gray-700 leading-relaxed list-decimal pl-4 space-y-1">
                 <li>{t("모든 노드에 대해 DFS 한 번씩 (visited 로 중복 방지).", "Run DFS once per node (visited[] avoids repeats).")}</li>
-                <li>{t("DFS 함수의 *마지막* 에서 결과 리스트에 push.", "At the *end* of each DFS call, push to a list.")}</li>
-                <li>{t("끝나면 리스트 *뒤집기* — 그게 위상 순서.", "After all done, *reverse* the list — that's the topo order.")}</li>
+                <li>{t("DFS 함수의 마지막 에서 결과 리스트에 push.", "At the end of each DFS call, push to a list.")}</li>
+                <li>{t("끝나면 리스트 뒤집기 — 그게 위상 순서.", "After all done, reverse the list — that's the topo order.")}</li>
               </ol>
             </div>
             <p className="text-sm font-bold text-emerald-700 text-center">
@@ -683,7 +683,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
               <p className="text-sm font-black text-blue-900">📝 {t("코드 — DFS 기반 위상 정렬", "Code — DFS-based topological sort")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {t("재귀 + visited. 함수 *끝*에서 append → 끝나면 reverse.", "Recursion + visited[]. Append at the *end* → reverse at finish.")}
+                {t("재귀 + visited. 함수 끝에서 append → 끝나면 reverse.", "Recursion + visited[]. Append at the end → reverse at finish.")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
@@ -798,8 +798,8 @@ vector<int> topoDfs(int n, vector<pair<int,int>>& edges) {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "함정: append 위치가 *함수 끝* 이어야 함. 함수 시작에서 하면 일반 DFS 순서가 되어 위상 정렬 아님.",
-                "Pitfall: append must be at the *end* of the function. Appending at the start gives plain DFS order, not topo.",
+                "함정: append 위치가 함수 끝 이어야 함. 함수 시작에서 하면 일반 DFS 순서가 되어 위상 정렬 아님.",
+                "Pitfall: append must be at the end of the function. Appending at the start gives plain DFS order, not topo.",
               )}
             </p>
           </div>
@@ -831,8 +831,8 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "A → B → A 같은 사이클이 있으면 '먼저 들어야 할 게 끝없이 빙빙' — 답이 없어요. 다행히 두 방법 다 *부산물* 로 알려줘요.",
-                "If there's a cycle A → B → A, prerequisites go in circles — no answer. Luckily both methods *tell you* as a bonus.",
+                "A → B → A 같은 사이클이 있으면 '먼저 들어야 할 게 끝없이 빙빙' — 답이 없어요. 다행히 두 방법 다 부산물 로 알려줘요.",
+                "If there's a cycle A → B → A, prerequisites go in circles — no answer. Luckily both methods tell you as a bonus.",
               )}
             </p>
             <div className="space-y-2">
@@ -849,8 +849,8 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 <p className="text-sm font-bold text-rose-800 mb-1">🌳 {t("DFS 방식", "DFS method")}</p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "재귀 중인 (=현재 스택에 있는) 노드를 *또* 만나면 사이클. 'in-stack' 표시가 필요.",
-                    "If you encounter an *in-stack* node again during recursion → cycle. Need an 'in-stack' flag.",
+                    "재귀 중인 (=현재 스택에 있는) 노드를 또 만나면 사이클. 'in-stack' 표시가 필요.",
+                    "If you encounter an in-stack node again during recursion → cycle. Need an 'in-stack' flag.",
                   )}
                 </p>
               </div>
@@ -911,7 +911,7 @@ result length = 0 < N (3) → cycle detected!`)}
             )}
 
             <p className="text-[11px] text-gray-500 text-center mt-3 italic">
-              {t("둘 다 사이클을 찾지만 *어떻게* 찾는지가 다르다.", "Both detect the cycle, but *how* differs.")}
+              {t("둘 다 사이클을 찾지만 어떻게 찾는지가 다르다.", "Both detect the cycle, but how differs.")}
             </p>
           </div>
         )}
@@ -1077,8 +1077,8 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <h3 className="text-base font-black text-amber-900 mb-3">📌 {t("핵심 정리", "Key Takeaways")}</h3>
             <ol className="space-y-2 text-sm text-gray-800">
               <li><b>1.</b> {t("위상 정렬은 ", "Topo sort needs a ")}<b>{t("DAG 에서만 가능", "DAG (no cycles)")}</b> {t("— 사이클 있으면 답 없음", "— cycle → impossible")}</li>
-              <li><b>2.</b> <b>Kahn's</b> {t("(반복문 + 큐) = in-degree 0 부터. 다중 유효 순서를 *명시적* 으로 다루기 좋음", "(loop + queue) = start from in-degree 0. Good when handling multiple valid orders explicitly")}</li>
-              <li><b>3.</b> <b>DFS</b> {t("post-order 의 *역순*. 코드 짧고, 재귀 익숙하면 빠름", "*reverse* post-order. Short code, fast if you're recursion-comfy")}</li>
+              <li><b>2.</b> <b>Kahn's</b> {t("(반복문 + 큐) = in-degree 0 부터. 다중 유효 순서를 명시적 으로 다루기 좋음", "(loop + queue) = start from in-degree 0. Good when handling multiple valid orders explicitly")}</li>
+              <li><b>3.</b> <b>DFS</b> {t("post-order 의 역순. 코드 짧고, 재귀 익숙하면 빠름", "reverse post-order. Short code, fast if you're recursion-comfy")}</li>
               <li><b>4.</b> {t("사이클 검출: Kahn's = ", "Cycle detection: Kahn's = ")}<b>{t("결과 길이 < N", "result.size() < N")}</b>, DFS = <b>in-stack</b> {t("재발견", "re-encounter")}</li>
               <li><b>5.</b> {t("자주 같이 나오는 패턴: ", "Often combined with: ")}<b>{t("위상 + DP", "topo + DP")}</b> ({t("긴 작업 시간, 최장 경로 등", "longest task time, longest path")})</li>
             </ol>

@@ -127,15 +127,15 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-sky-700">{t("비유", "Analogy")}:</b>{" "}
               {t(
-                "A 와 B 가 친구. B 와 C 가 친구. 그럼 A, B, C 는 *같은 그룹*. D 와 E 는 따로. F 는 혼자.",
-                "A and B are friends. B and C are friends. So A, B, C are *one group*. D, E another. F alone.",
+                "A 와 B 가 친구. B 와 C 가 친구. 그럼 A, B, C 는 같은 그룹. D 와 E 는 따로. F 는 혼자.",
+                "A and B are friends. B and C are friends. So A, B, C are one group. D, E another. F alone.",
               )}
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-sky-200 mb-3">
               <p className="text-xs font-bold text-sky-800 mb-2">💡 {t("두 가지를 빠르게 하고 싶어요", "We want two things fast")}</p>
               <ul className="text-xs text-gray-800 space-y-1.5 leading-relaxed">
                 <li><b className="text-sky-700">① union(a, b)</b> — {t("a 와 b 를 한 그룹으로 합치기", "merge a and b into one group")}</li>
-                <li><b className="text-sky-700">② find(a)</b> — {t("a 가 속한 그룹의 *대표* 알아내기", "find the *representative* of a's group")}</li>
+                <li><b className="text-sky-700">② find(a)</b> — {t("a 가 속한 그룹의 대표 알아내기", "find the representative of a's group")}</li>
               </ul>
               <p className="text-[11px] text-gray-600 mt-2 leading-relaxed">
                 {t(
@@ -145,7 +145,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               </p>
             </div>
             <p className="text-sm font-bold text-sky-700 text-center">
-              {t("이 두 가지를 *거의 O(1)* 로 — 그게 유니온 파인드 (DSU).", "Both in *almost O(1)* — that's Union Find (DSU).")}
+              {t("이 두 가지를 거의 O(1) 로 — 그게 유니온 파인드 (DSU).", "Both in almost O(1) — that's Union Find (DSU).")}
             </p>
           </div>
         )}
@@ -158,8 +158,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "그래프 BFS/DFS 로도 '같은 그룹?' 알 수 있어요. 그런데 *간선이 계속 추가되는* 상황이면 매번 BFS 돌리기엔 너무 느려요.",
-                "BFS/DFS can answer 'same group?' too. But if edges *keep being added*, re-running BFS each time is too slow.",
+                "그래프 BFS/DFS 로도 '같은 그룹?' 알 수 있어요. 그런데 간선이 계속 추가되는 상황이면 매번 BFS 돌리기엔 너무 느려요.",
+                "BFS/DFS can answer 'same group?' too. But if edges keep being added, re-running BFS each time is too slow.",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-indigo-200 mb-3">
@@ -173,13 +173,13 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               </pre>
               <p className="text-[11px] text-gray-700 mt-2 leading-relaxed">
                 {t(
-                  "α(N) 은 *역 애커만 함수* — N 이 10⁸⁰ 이어도 4 이하. 그냥 상수라고 봐도 돼요.",
-                  "α(N) is the *inverse Ackermann* — even N = 10⁸⁰ keeps it ≤ 4. Treat it as constant.",
+                  "α(N) 은 역 애커만 함수 — N 이 10⁸⁰ 이어도 4 이하. 그냥 상수라고 봐도 돼요.",
+                  "α(N) is the inverse Ackermann — even N = 10⁸⁰ keeps it ≤ 4. Treat it as constant.",
                 )}
               </p>
             </div>
             <p className="text-sm font-bold text-indigo-700 text-center">
-              {t("간선이 *추가* 만 되는 (삭제 X) 상황 — DSU 의 본진.", "When edges only get *added* (no removal) — DSU's home turf.")}
+              {t("간선이 추가 만 되는 (삭제 X) 상황 — DSU 의 본진.", "When edges only get added (no removal) — DSU's home turf.")}
             </p>
           </div>
         )}
@@ -197,8 +197,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "간선을 가중치 순으로 보면서, *사이클 안 만드는* 간선만 추가. find 로 사이클 검출.",
-                    "Scan edges by weight; only add ones that *don't form a cycle*. find detects cycles.",
+                    "간선을 가중치 순으로 보면서, 사이클 안 만드는 간선만 추가. find 로 사이클 검출.",
+                    "Scan edges by weight; only add ones that don't form a cycle. find detects cycles.",
                   )}
                 </p>
               </div>
@@ -219,8 +219,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "USACO Bronze 단골 — '같은 집단 몇 개?' 답은 *자기 자신이 부모인 노드 수*.",
-                    "USACO Bronze regular — 'how many groups?' Answer: *nodes that are their own parent*.",
+                    "USACO Bronze 단골 — '같은 집단 몇 개?' 답은 자기 자신이 부모인 노드 수.",
+                    "USACO Bronze regular — 'how many groups?' Answer: nodes that are their own parent.",
                   )}
                 </p>
               </div>
@@ -265,13 +265,13 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
           <div className="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-2xl p-6 border-2 border-cyan-200 min-h-[280px]">
             <p className="text-5xl text-center mb-3">🌲</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("아이디어: 각 노드는 *부모만* 기억한다", "Idea: each node remembers *only its parent*")}
+              {t("아이디어: 각 노드는 부모만 기억한다", "Idea: each node remembers only its parent")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
                 "그룹을 트리로 표현해요. 노드는 자기 부모 하나만 기억. 같은 그룹? → ",
                 "Represent each group as a tree. Each node knows only its parent. Same group? → ",
-              )}<b className="text-cyan-700">{t("부모 따라 올라가서 *루트가 같으면* 같은 그룹.", "follow parent up, *same root = same group*.")}</b>
+              )}<b className="text-cyan-700">{t("부모 따라 올라가서 루트가 같으면 같은 그룹.", "follow parent up, same root = same group.")}</b>
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-cyan-200 mb-3">
               <p className="text-xs font-bold text-cyan-800 mb-2">📌 {t("parent 배열", "parent array")}</p>
@@ -349,11 +349,11 @@ after union(1,2): parent = [_, 1, 1, 3, 4, 5]
             </div>
 
             <div className="mt-3 bg-indigo-50 rounded-xl p-3 border-2 border-indigo-200">
-              <p className="text-xs font-black text-indigo-900 mb-2">🪜 {t("find 의 진짜 동작: 루트까지 *한 칸씩 올라가기*", "What find really does: *climb up one step at a time*")}</p>
+              <p className="text-xs font-black text-indigo-900 mb-2">🪜 {t("find 의 진짜 동작: 루트까지 한 칸씩 올라가기", "What find really does: climb up one step at a time")}</p>
               <p className="text-[11px] text-gray-700 leading-relaxed mb-2">
                 {t(
-                  "위 시뮬은 이미 *루트인* 노드만 조회해서 한 방에 끝나 보여요. 하지만 일반적으로 find(x) 는 한 칸에 안 끝나요. x 의 부모로, 그 부모의 부모로... parent[x] == x 인 *루트* 를 만날 때까지 계속 올라가요.",
-                  "The sim above only queries nodes that are *already roots*, so it looks one-step. But in general find(x) isn't one step. Go to x's parent, then that parent's parent... and keep climbing until you hit a *root* where parent[x] == x.",
+                  "위 시뮬은 이미 루트인 노드만 조회해서 한 방에 끝나 보여요. 하지만 일반적으로 find(x) 는 한 칸에 안 끝나요. x 의 부모로, 그 부모의 부모로... parent[x] == x 인 루트 를 만날 때까지 계속 올라가요.",
+                  "The sim above only queries nodes that are already roots, so it looks one-step. But in general find(x) isn't one step. Go to x's parent, then that parent's parent... and keep climbing until you hit a root where parent[x] == x.",
                 )}
               </p>
               <div className="bg-white/70 rounded-lg p-2 border border-indigo-200">
@@ -364,8 +364,8 @@ after union(1,2): parent = [_, 1, 1, 3, 4, 5]
               </div>
               <p className="text-[11px] text-indigo-700 leading-relaxed mt-2 font-bold">
                 {t(
-                  "체인이 길면 이 '올라가기' 가 O(N) 까지 느려져요 — 그래서 다음 챕터에서 *경로 압축* 으로 트리를 납작하게 눌러요.",
-                  "If the chain is long, this climb degrades to O(N) — that's why the next chapter flattens the tree with *path compression*.",
+                  "체인이 길면 이 '올라가기' 가 O(N) 까지 느려져요 — 그래서 다음 챕터에서 경로 압축 으로 트리를 납작하게 눌러요.",
+                  "If the chain is long, this climb degrades to O(N) — that's why the next chapter flattens the tree with path compression.",
                 )}
               </p>
             </div>
@@ -525,12 +525,12 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
           <div className="bg-gradient-to-br from-rose-50 to-orange-50 rounded-2xl p-6 border-2 border-orange-200 min-h-[280px]">
             <p className="text-5xl text-center mb-3">🗜️</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("아이디어: find 할 때 *모두 루트에 직접* 매달기", "Idea: on find, attach *everyone directly to the root*")}
+              {t("아이디어: find 할 때 모두 루트에 직접 매달기", "Idea: on find, attach everyone directly to the root")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "find 하면서 루트까지 어차피 다 거쳐가요. 그 김에 *거쳐온 모든 노드의 parent 를 루트로* 바꿔요. 다음번 find 는 한 방.",
-                "While finding the root, we pass every node on the way. *Reset their parent to root in passing*. Next find = one hop.",
+                "find 하면서 루트까지 어차피 다 거쳐가요. 그 김에 거쳐온 모든 노드의 parent 를 루트로 바꿔요. 다음번 find 는 한 방.",
+                "While finding the root, we pass every node on the way. Reset their parent to root in passing. Next find = one hop.",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-orange-200 mb-3">
@@ -552,8 +552,8 @@ After:  1 → 4                find(1) = 1 hop ✨
               </pre>
               <p className="text-[11px] text-gray-700 mt-2 leading-relaxed">
                 {t(
-                  "모두가 루트에 *직접* 매달려요. 트리가 깊이 1 로 평탄해짐.",
-                  "Everyone hangs *directly* off the root. Tree flattens to depth 1.",
+                  "모두가 루트에 직접 매달려요. 트리가 깊이 1 로 평탄해짐.",
+                  "Everyone hangs directly off the root. Tree flattens to depth 1.",
                 )}
               </p>
             </div>
@@ -648,7 +648,7 @@ After:  1 → 4                find(1) = 1 hop ✨
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
               <p className="text-sm font-black text-blue-900">📝 {t("코드 — Path Compression (한 줄!)", "Code — Path Compression (one line!)")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {t("재귀로 쓰면 깔끔. 부모를 *재귀로 찾은 루트* 로 덮어쓰기.", "Cleaner recursively. Overwrite parent with the *recursively-found root*.")}
+                {t("재귀로 쓰면 깔끔. 부모를 재귀로 찾은 루트 로 덮어쓰기.", "Cleaner recursively. Overwrite parent with the recursively-found root.")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
@@ -697,16 +697,16 @@ print(parent)    # [_, 4, 4, 4, 4]`)}
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "비교: while 버전 (Ch 2) 은 그냥 루트 *찾기만* 함. 이 재귀 버전은 *경로의 모든 노드* 를 루트에 직접 매달아요.",
-                "Compare: the while version (Ch 2) only *finds* the root. This recursive version *re-points every node on the path* to the root.",
+                "비교: while 버전 (Ch 2) 은 그냥 루트 찾기만 함. 이 재귀 버전은 경로의 모든 노드 를 루트에 직접 매달아요.",
+                "Compare: the while version (Ch 2) only finds the root. This recursive version re-points every node on the path to the root.",
               )}
             </p>
             <div className="mt-3 bg-gray-50 rounded-lg p-2 border border-gray-200">
               <p className="text-[11px] text-gray-700 leading-relaxed" style={{ wordBreak: "keep-all" }}>
                 📌 <b>{t("그럼 얼마나 빨라졌나요?", "So how much faster is it?")}</b>{" "}
                 {t(
-                  "평탄화를 해도 *한 번* 은 길을 걸어 올라가야 해요. 그래서 path compression 만 쓰면 평균 O(log N) 정도. 거의 상수 시간은 다음 챕터의 union by rank 까지 *같이* 써야 나와요.",
-                  "Even with flattening you must still walk up the path *once*. So path compression alone averages about O(log N). Near-constant time needs union by rank from the next chapter *as well*.",
+                  "평탄화를 해도 한 번 은 길을 걸어 올라가야 해요. 그래서 path compression 만 쓰면 평균 O(log N) 정도. 거의 상수 시간은 다음 챕터의 union by rank 까지 같이 써야 나와요.",
+                  "Even with flattening you must still walk up the path once. So path compression alone averages about O(log N). Near-constant time needs union by rank from the next chapter as well.",
                 )}
               </p>
             </div>
@@ -742,16 +742,16 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "Ch 2 의 union 은 *항상 b 의 루트를 a 의 루트 밑에* 매달았어요. 매번 같은 방향으로 합치다 보면 — *체인* 트리가 생겨요. find 가 다시 O(N)!",
-                "Ch 2's union *always parented b's root under a's root*. Always one direction → *chain* tree. find back to O(N)!",
+                "Ch 2 의 union 은 항상 b 의 루트를 a 의 루트 밑에 매달았어요. 매번 같은 방향으로 합치다 보면 — 체인 트리가 생겨요. find 가 다시 O(N)!",
+                "Ch 2's union always parented b's root under a's root. Always one direction → chain tree. find back to O(N)!",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-violet-200 mb-3">
               <p className="text-xs font-bold text-violet-800 mb-2">💡 {t("해결: 작은 트리를 큰 트리 밑에", "Fix: small tree under big tree")}</p>
               <p className="text-xs text-gray-700 leading-relaxed mb-2">
                 {t(
-                  "두 그룹 합칠 때 — *깊이가 더 깊은* 쪽을 부모로 (union by rank). 또는 *크기가 더 큰* 쪽을 부모로 (union by size). 어느 쪽이든 트리 깊이가 천천히 증가.",
-                  "When merging — *deeper* tree becomes parent (union by rank). Or *bigger* tree becomes parent (union by size). Either way, tree depth grows slowly.",
+                  "두 그룹 합칠 때 — 깊이가 더 깊은 쪽을 부모로 (union by rank). 또는 크기가 더 큰 쪽을 부모로 (union by size). 어느 쪽이든 트리 깊이가 천천히 증가.",
+                  "When merging — deeper tree becomes parent (union by rank). Or bigger tree becomes parent (union by size). Either way, tree depth grows slowly.",
                 )}
               </p>
               <pre className="text-[11px] text-gray-800 font-mono leading-relaxed">
@@ -803,7 +803,7 @@ size[i] = node count of the tree when i is root
                   <p className="text-sm text-amber-800 font-bold mb-3">{t("비교: rank[1]=2 vs rank[2]=1", "Compare: rank[1]=2 vs rank[2]=1")}</p>
                   <p className="text-3xl mb-2">⚖️</p>
                   <p className="text-sm text-gray-800">
-                    {t("1 의 트리가 더 *깊어요* (rank 2 > 1). → 2 를 1 밑에!", "1's tree is *deeper* (rank 2 > 1). → 2 goes under 1!")}
+                    {t("1 의 트리가 더 깊어요 (rank 2 > 1). → 2 를 1 밑에!", "1's tree is deeper (rank 2 > 1). → 2 goes under 1!")}
                   </p>
                 </div>
               )}
@@ -859,8 +859,8 @@ size[i] = node count of the tree when i is root
               <p className="text-[11px] text-violet-800 leading-relaxed">
                 💭 <b>{t("왜 깊이가 log N?", "Why depth is log N?")}</b>{" "}
                 {t(
-                  "rank 를 1 늘리려면 *같은 rank 두 트리* 가 만나야 해요 → 노드 수가 매번 2 배 필요. 그러니 rank r 트리엔 노드가 최소 2ʳ 개. 거꾸로, 노드 N 개로 만들 수 있는 깊이는 최대 log₂N.",
-                  "To raise rank by 1, *two trees of equal rank* must meet → node count must double each time. So a rank-r tree has at least 2ʳ nodes. Conversely, N nodes give depth at most log₂N.",
+                  "rank 를 1 늘리려면 같은 rank 두 트리 가 만나야 해요 → 노드 수가 매번 2 배 필요. 그러니 rank r 트리엔 노드가 최소 2ʳ 개. 거꾸로, 노드 N 개로 만들 수 있는 깊이는 최대 log₂N.",
+                  "To raise rank by 1, two trees of equal rank must meet → node count must double each time. So a rank-r tree has at least 2ʳ nodes. Conversely, N nodes give depth at most log₂N.",
                 )}
               </p>
             </div>
@@ -1005,7 +1005,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <ol className="space-y-2 text-sm text-gray-800">
               <li><b>1.</b> {t("DSU = ", "DSU = ")}<b>parent[]</b> {t("배열 하나로 그룹 표현 (각자 부모만 기억)", "represents groups (each node knows only parent)")}</li>
               <li><b>2.</b> <b>find(x)</b> = {t("루트까지 부모 따라 올라가기", "climb parent links to root")}. {t("같은 그룹? → 루트 같음?", "Same group? → same root?")}</li>
-              <li><b>3.</b> <b>{t("Path compression", "Path compression")}</b> = {t("find 하면서 *경로의 모든 노드* 를 루트에 직접 매달기 (재귀 한 줄)", "while finding, *re-point every visited node* to root (one recursive line)")}</li>
+              <li><b>3.</b> <b>{t("Path compression", "Path compression")}</b> = {t("find 하면서 경로의 모든 노드 를 루트에 직접 매달기 (재귀 한 줄)", "while finding, re-point every visited node to root (one recursive line)")}</li>
               <li><b>4.</b> <b>{t("Union by rank/size", "Union by rank/size")}</b> = {t("작은 트리를 큰 트리 밑에. 깊이가 천천히 늘어남", "small tree under big tree. Depth grows slowly")}</li>
               <li><b>5.</b> {t("둘 다 적용 → ", "Both together → ")}<b>O(α(N)) ≈ O(1)</b> {t("amortized — 사실상 상수", "amortized — effectively constant")}</li>
               <li><b>6.</b> {t("그룹 개수 = ", "Group count = ")}<code className="bg-white px-1 rounded text-xs">{t("자기 자신이 부모인 노드 수", "nodes where parent[i] == i")}</code></li>

@@ -477,7 +477,7 @@ export function makePatternSteps(E) {
     { type: "reveal",
       narr: t(E,
         "Each digit count d has its own contiguous block of disagreeing numbers — from the SMALLEST (s_d) to the LARGEST (e_d). Look at the digit boxes — see the pattern?",
-        "각 자릿수 d 마다 답이 다른 수의 *연속 구간* 이 있어요 — 가장 작은 수 (s_d) 부터 가장 큰 수 (e_d) 까지. 아래 숫자 박스를 봐요. 패턴 보이나요?"),
+        "각 자릿수 d 마다 답이 다른 수의 연속 구간 이 있어요 — 가장 작은 수 (s_d) 부터 가장 큰 수 (e_d) 까지. 아래 숫자 박스를 봐요. 패턴 보이나요?"),
       content: (() => {
         // Digit-box helper — Optimize 탭과 같은 색감
         const SBox = ({ ch, kind }) => {
@@ -673,7 +673,7 @@ const BF_ELSIE_CARRY = (E) => [
   "cur += 10**pos",
   "",
   E ? "# Zero out everything from that position down" : "# 그 자리 이하는 0 으로 (잘라내기)",
-  "cur = (cur // 10**pos) * 10**pos",
+  "cur = (cur // 10*pos)  10**pos",
   "",
   E ? "# Example: cur=58, pos=1"        : "# 예: cur=58, pos=1",
   "# 58 → +10 → 68 → //10*10 → 60",
@@ -770,7 +770,7 @@ const BF_ELSIE = (E) => [
   "            cur += 10**pos",
   "",
   E ? "        # zero out everything from that position down" : "        # 그 자리 이하 0으로",
-  "        cur = (cur // 10**pos) * 10**pos",
+  "        cur = (cur // 10*pos)  10**pos",
   "",
   "    return cur",
 ];
@@ -817,7 +817,7 @@ const BF_FULL = (E) => [
   "        d = (cur // 10**(pos-1)) % 10",
   "        if d >= 5:",
   "            cur += 10**pos",
-  "        cur = (cur // 10**pos) * 10**pos",
+  "        cur = (cur // 10*pos)  10**pos",
   "    return cur",
   "",
   "T = int(input())",
@@ -911,7 +911,7 @@ const BF_DP = (E) => [
   "        d = (cur // 10**(pos-1)) % 10",
   "        if d >= 5:",
   "            cur += 10**pos",
-  "        cur = (cur // 10**pos) * 10**pos",
+  "        cur = (cur // 10*pos)  10**pos",
   "    return cur",
   "",
   E ? "# Prefix sum — compute only as much as we need, then cache." : "# 누적합 — 필요한 만큼만 계산해서 저장.",
@@ -1298,7 +1298,7 @@ export function makeBruteSteps(E, lang = "py") {
     { type: "reveal",
       narr: t(E,
         "Wait — why does each of the T queries redo the work for 2 ~ N from scratch? If two queries cover overlapping ranges, we're doing the same arithmetic twice.\nSo: build the answer array ONCE, then every query just reads from it. That's the prefix sum idea.",
-        "잠깐 — T 번 쿼리마다 2 ~ N 까지 또 계산? 두 쿼리가 같은 구간을 공유하면 똑같은 일을 반복하는 거잖아요.\n그래서: 답을 *한 번만* 배열에 채워두고, 매 쿼리는 거기서 lookup. 이게 누적합 (prefix sum) 아이디어."),
+        "잠깐 — T 번 쿼리마다 2 ~ N 까지 또 계산? 두 쿼리가 같은 구간을 공유하면 똑같은 일을 반복하는 거잖아요.\n그래서: 답을 한 번만 배열에 채워두고, 매 쿼리는 거기서 lookup. 이게 누적합 (prefix sum) 아이디어."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 10, padding: 10, marginBottom: 14, textAlign: "center" }}>
@@ -1639,7 +1639,7 @@ export function makeOptSteps(E) {
     { type: "scale",
       narr: t(E,
         "Drag the N slider all the way to 10⁹ (the right edge). Watch the brute bar shoot past the time limit while the formula stays a tiny dot. THIS is why we still need the formula, even with brute + cache already in place.",
-        "N 슬라이더를 오른쪽 끝 (10⁹) 까지 끌어봐요. 브루트 막대는 시간 제한 *꽉 차고*, 공식은 작은 점 그대로. 브루트랑 캐시 있어도 *공식이 필요한 이유* — 이게 보이는 페이지예요."),
+        "N 슬라이더를 오른쪽 끝 (10⁹) 까지 끌어봐요. 브루트 막대는 시간 제한 꽉 차고, 공식은 작은 점 그대로. 브루트랑 캐시 있어도 공식이 필요한 이유 — 이게 보이는 페이지예요."),
     },
 
     { type: "reveal",

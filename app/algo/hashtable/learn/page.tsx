@@ -132,14 +132,14 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
             </p>
             <p className="text-sm text-gray-700 leading-relaxed mb-3">
               {t(
-                "그러면 이 토픽에서는 뭘 새로 배울까요? — 해시를 *문법* 이 아니라 *알고리즘 패턴* 으로 보는 거예요.",
-                "So what's new here? — viewing hash *as an algorithmic pattern*, not just syntax.",
+                "그러면 이 토픽에서는 뭘 새로 배울까요? — 해시를 문법 이 아니라 알고리즘 패턴 으로 보는 거예요.",
+                "So what's new here? — viewing hash as an algorithmic pattern, not just syntax.",
               )}
             </p>
             <p className="text-sm text-gray-700 leading-relaxed">
               {t(
-                "\"여기 dict 쓰면 O(N) → O(1) 되겠다\" 같은 *판단* 을 배우는 챕터예요. 사용법 복습은 가볍게, 활용에 집중해요.",
-                "\"Hmm, using a dict here cuts O(N) → O(1)\" — that kind of *judgment* is what we're after. Light review, focus on application.",
+                "\"여기 dict 쓰면 O(N) → O(1) 되겠다\" 같은 판단 을 배우는 챕터예요. 사용법 복습은 가볍게, 활용에 집중해요.",
+                "\"Hmm, using a dict here cuts O(N) → O(1)\" — that kind of judgment is what we're after. Light review, focus on application.",
               )}
             </p>
             <p className="text-sm font-bold text-orange-700 text-center mt-4">
@@ -200,7 +200,7 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
               {t("이 토픽에서 다룰 3 가지 패턴", "3 patterns we'll learn in this topic")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
-              {t("문법은 알지만 — *언제 꺼낼지* 가 진짜 실력. 이런 상황들이에요:", "You know the syntax — *when to reach for it* is the real skill. Situations like:")}
+              {t("문법은 알지만 — 언제 꺼낼지 가 진짜 실력. 이런 상황들이에요:", "You know the syntax — when to reach for it is the real skill. Situations like:")}
             </p>
             <div className="space-y-2 text-sm text-gray-800 mb-4">
               <div className="bg-white rounded-lg border border-blue-200 p-2.5">
@@ -274,8 +274,8 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "문제: 배열에서 a + b = target 인 쌍을 찾기. 들어본 적 있죠? — 해시의 *고전 응용* 이에요.",
-                "Problem: find a pair where a + b = target. Heard of it? — the *classic* hash application.",
+                "문제: 배열에서 a + b = target 인 쌍을 찾기. 들어본 적 있죠? — 해시의 고전 응용 이에요.",
+                "Problem: find a pair where a + b = target. Heard of it? — the classic hash application.",
               )}
             </p>
             <div className="bg-white rounded-lg p-3 border-2 border-rose-200 mb-3">
@@ -443,7 +443,7 @@ pair<int,int> two_sum(vector<int>& arr, int target) {
 // i=1: x=7, need=2, hit! -> (0,1)`)}
             />
             <p className="text-xs text-gray-600 text-center">
-              {t("주의: x 를 \"먼저 저장하고\" 검색하면 자기 자신과 매칭될 수 있음. 항상 검색 → 저장 순서.", "Watch: if you store x *before* checking, you might match yourself. Always check first, then store.")}
+              {t("주의: x 를 \"먼저 저장하고\" 검색하면 자기 자신과 매칭될 수 있음. 항상 검색 → 저장 순서.", "Watch: if you store x before checking, you might match yourself. Always check first, then store.")}
             </p>
           </div>
         )}
@@ -503,7 +503,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "문제: 연속된 부분 배열 중 합이 K 인 것의 *개수*. 예) [1,2,1,2,1], K=3 → 4 개.",
+                "문제: 연속된 부분 배열 중 합이 K 인 것의 개수. 예) [1,2,1,2,1], K=3 → 4 개.",
                 "Problem: count contiguous subarrays whose sum equals K. e.g. [1,2,1,2,1], K=3 → 4.",
               )}
             </p>
@@ -822,7 +822,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
               <p className="text-sm font-black text-blue-900">📝 {t("Two pointer + set — 패턴 외워두기", "Two pointer + set — memorize")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {t("dup 발견 시: window 다 비우는 게 *아니라* left 를 한 칸씩 옮기며 set 에서 제거.", "On dup: don't clear the window — move left one step at a time, removing from set.")}
+                {t("dup 발견 시: window 다 비우는 게 아니라 left 를 한 칸씩 옮기며 set 에서 제거.", "On dup: don't clear the window — move left one step at a time, removing from set.")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}

@@ -128,7 +128,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-orange-700">{t("비유 1 — 토너먼트", "Analogy 1 — tournament")}:</b>{" "}
               {t(
-                "32 명 중 1 등 뽑기. 한 명씩 비교 = 31 번 게임. 토너먼트는 16+8+4+2+1 = 31 번 — 같은 횟수지만 *동시에* 진행 가능.",
+                "32 명 중 1 등 뽑기. 한 명씩 비교 = 31 번 게임. 토너먼트는 16+8+4+2+1 = 31 번 — 같은 횟수지만 동시에 진행 가능.",
                 "Pick #1 of 32 players. Pairwise compare = 31 games. Tournament: 16+8+4+2+1 = 31 — same total but rounds can run in parallel.",
               )}
             </p>
@@ -141,7 +141,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-amber-200">
               <p className="text-sm font-bold text-amber-800 text-center">
-                💡 {t("분할 정복 = 재귀의 한 종류. ", "D&C = a kind of recursion. ")}<b>{t("같은 모양 작은 문제로 *나누고* → 풀고 → *합친다*", "split into same-shape smaller problems → solve → combine")}</b>
+                💡 {t("분할 정복 = 재귀의 한 종류. ", "D&C = a kind of recursion. ")}<b>{t("같은 모양 작은 문제로 나누고 → 풀고 → 합친다", "split into same-shape smaller problems → solve → combine")}</b>
               </p>
             </div>
           </div>
@@ -171,8 +171,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "각 작은 문제를 *같은 방법* 으로 푼다. 너무 작으면 (베이스) — 직접 답.",
-                    "Solve each subproblem the *same way*. If small enough (base) — answer directly.",
+                    "각 작은 문제를 같은 방법 으로 푼다. 너무 작으면 (베이스) — 직접 답.",
+                    "Solve each subproblem the same way. If small enough (base) — answer directly.",
                   )}
                 </p>
               </div>
@@ -182,8 +182,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "작은 문제 답들을 모아 원래 문제 답 만들기. 이 단계가 *얼마나 비싸냐* 가 전체 시간복잡도 결정.",
-                    "Stitch sub-answers into the full answer. The *cost of this step* drives total complexity.",
+                    "작은 문제 답들을 모아 원래 문제 답 만들기. 이 단계가 얼마나 비싸냐 가 전체 시간복잡도 결정.",
+                    "Stitch sub-answers into the full answer. The cost of this step drives total complexity.",
                   )}
                 </p>
               </div>
@@ -313,8 +313,8 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </div>
             <p className="text-sm font-bold text-cyan-700 text-center">
               {t(
-                "시간: O(N log N) — 어떤 입력이든 *항상*. 이게 핵심 장점.",
-                "Time: O(N log N) — *guaranteed*, any input. That's the key advantage.",
+                "시간: O(N log N) — 어떤 입력이든 항상. 이게 핵심 장점.",
+                "Time: O(N log N) — guaranteed, any input. That's the key advantage.",
               )}
             </p>
           </div>
@@ -572,8 +572,8 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-amber-700">{t("아이디어", "Idea")}:</b>{" "}
               {t(
-                "한 원소 (*피벗*) 골라요. 나머지를 *피벗보다 작은 것 / 큰 것* 두 그룹으로 가름. → 각 그룹 재귀 정렬. 합칠 필요 없어요 — 자리만 잡으면 끝.",
-                "Pick one element (the *pivot*). Split the rest into *less / greater*. Recursively sort each. No combine needed — placement is the work.",
+                "한 원소 (피벗) 골라요. 나머지를 피벗보다 작은 것 / 큰 것 두 그룹으로 가름. → 각 그룹 재귀 정렬. 합칠 필요 없어요 — 자리만 잡으면 끝.",
+                "Pick one element (the pivot). Split the rest into less / greater. Recursively sort each. No combine needed — placement is the work.",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-amber-200 mb-3">
@@ -762,8 +762,8 @@ int main() {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "평균 O(N log N), 최악 O(N²) — 이미 정렬된 입력에 마지막 피벗이면 한쪽이 매번 비어 폭망. 실전은 *랜덤 피벗* 으로 회피.",
-                "Avg O(N log N), worst O(N²) — already-sorted + last-pivot is the worst case. Real impls pick a *random pivot* to dodge it.",
+                "평균 O(N log N), 최악 O(N²) — 이미 정렬된 입력에 마지막 피벗이면 한쪽이 매번 비어 폭망. 실전은 랜덤 피벗 으로 회피.",
+                "Avg O(N log N), worst O(N²) — already-sorted + last-pivot is the worst case. Real impls pick a random pivot to dodge it.",
               )}
             </p>
           </div>
@@ -864,10 +864,10 @@ print(power(2, 30))   # 1073741824 (~30 multiplications — instant)`)}
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-rose-200 mb-3">
-              <p className="text-xs font-bold text-rose-800 mb-2">💡 {t("머지 소트에 *살짝* 얹기", "Piggyback on merge sort")}</p>
+              <p className="text-xs font-bold text-rose-800 mb-2">💡 {t("머지 소트에 살짝 얹기", "Piggyback on merge sort")}</p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "머지 단계에서 — 오른쪽 원소를 결과에 넣을 때 왼쪽에 남아있는 원소들 = 모두 그것보다 큰 *역순쌍*. 그 개수를 더하면 끝.",
+                  "머지 단계에서 — 오른쪽 원소를 결과에 넣을 때 왼쪽에 남아있는 원소들 = 모두 그것보다 큰 역순쌍. 그 개수를 더하면 끝.",
                   "During merge — when taking from right, every remaining left element forms an inversion. Just add the count.",
                 )}
               </p>
@@ -909,9 +909,9 @@ else:
             <div className="bg-white/70 rounded-lg p-3 border border-cyan-200 mb-3">
               <p className="text-xs font-bold text-cyan-800 mb-2">💡 {t("3 가지 경우", "3 cases")}</p>
               <ul className="text-xs text-gray-800 space-y-1">
-                <li>1. {t("최대 부분합이 *왼쪽 절반* 에만 있음 → 재귀로 풂", "Max is in *left half* — recurse left")}</li>
-                <li>2. {t("최대 부분합이 *오른쪽 절반* 에만 있음 → 재귀로 풂", "Max is in *right half* — recurse right")}</li>
-                <li>3. {t("최대 부분합이 *가운데를 가로질러* 있음 → 직접 계산 (O(N))", "Max *crosses the middle* — compute in O(N)")}</li>
+                <li>1. {t("최대 부분합이 왼쪽 절반 에만 있음 → 재귀로 풂", "Max is in left half — recurse left")}</li>
+                <li>2. {t("최대 부분합이 오른쪽 절반 에만 있음 → 재귀로 풂", "Max is in right half — recurse right")}</li>
+                <li>3. {t("최대 부분합이 가운데를 가로질러 있음 → 직접 계산 (O(N))", "Max crosses the middle — compute in O(N)")}</li>
               </ul>
               <p className="text-xs text-cyan-700 mt-2 leading-relaxed">
                 {t("세 후보 중 최대값 반환. T(N) = 2T(N/2) + N → O(N log N).", "Return the max of three candidates. T(N) = 2T(N/2) + N → O(N log N).")}
@@ -919,8 +919,8 @@ else:
             </div>
             <p className="text-xs text-cyan-700 text-center leading-relaxed">
               {t(
-                "여기서 핵심은 *합치는 단계* (case 3) 가 흥미로움 — 가운데서 양쪽으로 펼쳐가며 최대 누적. 분할 정복의 'combine' 단계가 어떻게 비자명할 수 있는지 보여줌.",
-                "The key is the *combine step* (case 3) — fan out from the middle accumulating max. Shows how the combine can be non-trivial.",
+                "여기서 핵심은 합치는 단계 (case 3) 가 흥미로움 — 가운데서 양쪽으로 펼쳐가며 최대 누적. 분할 정복의 'combine' 단계가 어떻게 비자명할 수 있는지 보여줌.",
+                "The key is the combine step (case 3) — fan out from the middle accumulating max. Shows how the combine can be non-trivial.",
               )}
             </p>
           </div>

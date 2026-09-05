@@ -129,8 +129,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               <p className="text-xs text-rose-700 font-bold mb-1">📌 {t("재귀 위에서 굴러가요", "Built on recursion")}</p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "재귀를 먼저 봤죠? 백트래킹은 재귀의 *응용*. 결정 트리를 따라 내려갔다가, 아니면 되돌아 와요.",
-                  "We saw recursion. Backtracking is recursion *applied* — walk a decision tree, undo when it doesn't work.",
+                  "재귀를 먼저 봤죠? 백트래킹은 재귀의 응용. 결정 트리를 따라 내려갔다가, 아니면 되돌아 와요.",
+                  "We saw recursion. Backtracking is recursion applied — walk a decision tree, undo when it doesn't work.",
                 )}
               </p>
             </div>
@@ -162,7 +162,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "현재 자리에 *시도* 할 값을 하나 놓는다. 예: '이 칸에 퀸 놓음', '이 자리에 숫자 3'.",
+                    "현재 자리에 시도 할 값을 하나 놓는다. 예: '이 칸에 퀸 놓음', '이 자리에 숫자 3'.",
                     "Place a candidate at the current spot. e.g. 'queen here', 'put 3 in this slot'.",
                   )}
                 </p>
@@ -173,7 +173,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "그 선택이 잘 됐다고 *가정* 하고 다음 자리로 재귀. 끝까지 갈 수 있으면 성공!",
+                    "그 선택이 잘 됐다고 가정 하고 다음 자리로 재귀. 끝까지 갈 수 있으면 성공!",
                     "Assume the choice is good and recurse to the next slot. Reach the end → success!",
                   )}
                 </p>
@@ -184,8 +184,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "안 됐으면 *지금 놓은 것* 을 다시 빼고, 다른 값 시도. 이게 '백트래킹' 이름의 유래.",
-                    "If it failed, *remove* what we placed and try another value. This is what 'backtrack' means.",
+                    "안 됐으면 지금 놓은 것 을 다시 빼고, 다른 값 시도. 이게 '백트래킹' 이름의 유래.",
+                    "If it failed, remove what we placed and try another value. This is what 'backtrack' means.",
                   )}
                 </p>
               </div>
@@ -222,7 +222,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "Brute force: 모든 2^N 경우 다 봄. 백트래킹: 가다가 *불가능* 한 게 보이면 그 가지 통째로 컷.",
+                "Brute force: 모든 2^N 경우 다 봄. 백트래킹: 가다가 불가능 한 게 보이면 그 가지 통째로 컷.",
                 "Brute force: try every 2^N case. Backtracking: spot impossibility early → kill that whole branch.",
               )}
             </p>
@@ -236,8 +236,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               </p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "백트래킹 + 가지치기: 1 행에 퀸 놓고 2 행 시도. *같은 열* 인 후보는 곧장 컷. *대각선* 위반도 컷. 실제 호출 ~2000 번.",
-                  "Backtracking + pruning: place queen row 1, try row 2. Skip *same column*. Skip *diagonal* conflicts. Actual calls ~2000.",
+                  "백트래킹 + 가지치기: 1 행에 퀸 놓고 2 행 시도. 같은 열 인 후보는 곧장 컷. 대각선 위반도 컷. 실제 호출 ~2000 번.",
+                  "Backtracking + pruning: place queen row 1, try row 2. Skip same column. Skip diagonal conflicts. Actual calls ~2000.",
                 )}
               </p>
             </div>
@@ -292,7 +292,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               <p className="text-xs font-bold text-purple-800 mb-2">💡 {t("핵심 관찰", "Key observation")}</p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "각 행에 *정확히 하나씩* 퀸. 그러니 'i 번째 행에 어느 열?' 만 결정하면 됨. 결정 트리 깊이 = N.",
+                  "각 행에 정확히 하나씩 퀸. 그러니 'i 번째 행에 어느 열?' 만 결정하면 됨. 결정 트리 깊이 = N.",
                   "Each row gets exactly one queen. So 'which column in row i?' is the only decision. Tree depth = N.",
                 )}
               </p>
@@ -357,11 +357,11 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <div className="mt-3 bg-purple-50 rounded-xl p-3 border-2 border-purple-200">
-              <p className="text-xs font-black text-purple-900 mb-2">🔙 {t("진짜 핵심: 막히면 *되돌리기 (undo)*", "The real heart: *undo* when stuck")}</p>
+              <p className="text-xs font-black text-purple-900 mb-2">🔙 {t("진짜 핵심: 막히면 되돌리기 (undo)", "The real heart: undo when stuck")}</p>
               <p className="text-[11px] text-gray-700 leading-relaxed mb-2">
                 {t(
-                  "위 보드는 *성공 경로* 만 보여줘서 쉬워 보여요. 하지만 진짜 백트래킹은 — 퀸을 놓다 충돌하면 *방금 놓은 걸 치우고(undo)* 같은 행의 다음 칸을 시도해요. 그 칸도 막히면 또 치우고... 다 막히면 *이전 행* 으로 돌아가 거기 퀸도 치워요.",
-                  "The board above shows only the *success path*, so it looks easy. But real backtracking — when a queen conflicts, you *remove the one just placed (undo)* and try the next column in the same row. Blocked again? Remove and retry... All blocked? Go *back a row* and remove that queen too.",
+                  "위 보드는 성공 경로 만 보여줘서 쉬워 보여요. 하지만 진짜 백트래킹은 — 퀸을 놓다 충돌하면 방금 놓은 걸 치우고(undo) 같은 행의 다음 칸을 시도해요. 그 칸도 막히면 또 치우고... 다 막히면 이전 행 으로 돌아가 거기 퀸도 치워요.",
+                  "The board above shows only the success path, so it looks easy. But real backtracking — when a queen conflicts, you remove the one just placed (undo) and try the next column in the same row. Blocked again? Remove and retry... All blocked? Go back a row and remove that queen too.",
                 )}
               </p>
               <div className="bg-white/70 rounded-lg p-2 border border-purple-200">
@@ -557,7 +557,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               <p className="text-xs font-bold text-cyan-800 mb-2">💡 {t("백트래킹 풀이", "Backtracking approach")}</p>
               <p className="text-xs text-gray-700 leading-relaxed mb-2">
                 {t(
-                  "한 자리씩 채워가요. 각 자리에 1..N 시도하되 *이미 쓴 숫자* 는 건너뜀.",
+                  "한 자리씩 채워가요. 각 자리에 1..N 시도하되 이미 쓴 숫자 는 건너뜀.",
                   "Fill positions one by one. Try 1..N for each, skipping already-used values.",
                 )}
               </p>
@@ -739,8 +739,8 @@ int main() {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "Python: result.append(cur[:]) — *복사* 안 하면 cur 가 계속 변해서 다 같아짐. 주의!",
-                "Python: result.append(cur[:]) — must *copy*, otherwise cur keeps mutating and all entries become identical!",
+                "Python: result.append(cur[:]) — 복사 안 하면 cur 가 계속 변해서 다 같아짐. 주의!",
+                "Python: result.append(cur[:]) — must copy, otherwise cur keeps mutating and all entries become identical!",
               )}
             </p>
           </div>
@@ -815,16 +815,16 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-emerald-700">{t("문제", "Problem")}:</b>{" "}
               {t(
-                "N 개 양수 원소 중 *몇 개를 골라* 합이 정확히 K 가 되는 부분집합이 있는지? 예: [3, 12, 7], K=10 → {3, 7} → YES.",
-                "Given N positive ints, can we pick *some* with sum exactly K? Example: [3, 12, 7], K=10 → {3, 7} works → YES.",
+                "N 개 양수 원소 중 몇 개를 골라 합이 정확히 K 가 되는 부분집합이 있는지? 예: [3, 12, 7], K=10 → {3, 7} → YES.",
+                "Given N positive ints, can we pick some with sum exactly K? Example: [3, 12, 7], K=10 → {3, 7} works → YES.",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-emerald-200 mb-3">
               <p className="text-xs font-bold text-emerald-800 mb-2">💡 {t("백트래킹: take / skip", "Backtracking: take / skip")}</p>
               <p className="text-xs text-gray-700 leading-relaxed mb-2">
                 {t(
-                  "각 원소마다 *두 갈래* — 쓴다 / 안 쓴다. N 개면 2^N 가지. N=20 이면 ~100 만 — 빡세지만 가능.",
-                  "Each element: *two branches* — take / skip. N elements = 2^N. N=20 → ~1M — tight but doable.",
+                  "각 원소마다 두 갈래 — 쓴다 / 안 쓴다. N 개면 2^N 가지. N=20 이면 ~100 만 — 빡세지만 가능.",
+                  "Each element: two branches — take / skip. N elements = 2^N. N=20 → ~1M — tight but doable.",
                 )}
               </p>
               <p className="text-xs text-gray-700 leading-relaxed">
@@ -1025,8 +1025,8 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed text-center mb-3">
               {t(
-                "N-Queens, 순열, 부분집합 — 다 같은 골격이라는 거 느꼈죠? choose / explore / un-choose. 이게 *수십 가지 문제* 의 공통 답안이에요. 🎉",
-                "N-Queens, permutations, subset sum — all the same skeleton. choose / explore / un-choose. This is the common answer to *dozens of problems*. 🎉",
+                "N-Queens, 순열, 부분집합 — 다 같은 골격이라는 거 느꼈죠? choose / explore / un-choose. 이게 수십 가지 문제 의 공통 답안이에요. 🎉",
+                "N-Queens, permutations, subset sum — all the same skeleton. choose / explore / un-choose. This is the common answer to dozens of problems. 🎉",
               )}
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-amber-200">
@@ -1051,7 +1051,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               <li><b>5.</b> {t("Python: list 복사할 때 ", "Python: copy lists with ")}<code className="bg-white px-1 rounded text-xs">cur[:]</code> {t("— 안 그러면 모두 같은 객체!", "— otherwise all entries share one object!")}</li>
             </ol>
             <p className="text-xs text-amber-700 mt-3 text-center italic">
-              {t("백트래킹은 DP, 그래프 탐색, 트리 순회의 *기초*예요!", "Backtracking is the foundation for DP, graph search, tree traversal!")}
+              {t("백트래킹은 DP, 그래프 탐색, 트리 순회의 기초예요!", "Backtracking is the foundation for DP, graph search, tree traversal!")}
             </p>
             <div className="mt-3 pt-3 border-t border-amber-200 space-y-2">
               <p className="text-[11px] text-purple-700 leading-relaxed">

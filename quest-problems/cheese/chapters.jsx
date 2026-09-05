@@ -499,7 +499,7 @@ export function makeCheeseCh3(E) {
       type: "reveal",
       narr: t(E,
         "Last carve: remove (1,1,0). This block's 3 counters were all at 1 already — now they all hit N=2 at the same time!",
-        "마지막 제거: (1,1,0). 이 블록의 카운터 3 개가 모두 이미 1 이었어요 — 이번에 *동시에* N=2 도달!"),
+        "마지막 제거: (1,1,0). 이 블록의 카운터 3 개가 모두 이미 1 이었어요 — 이번에 동시에 N=2 도달!"),
       content: (
         <div style={{ padding: 16 }}>
           {/* Block */}

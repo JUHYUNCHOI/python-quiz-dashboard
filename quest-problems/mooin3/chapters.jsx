@@ -346,7 +346,7 @@ export function makeMooin3Ch2(E, lang = "py") {
       preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
       narr: t(E,
         "The fix-j version solves it correctly — but how big can N get?  Let's count operations.",
-        "j 고정 버전은 문제를 *정확히* 풀어요 — 근데 N 이 얼마나 커질 수 있지? 연산량을 세어 봐요."),
+        "j 고정 버전은 문제를 정확히 풀어요 — 근데 N 이 얼마나 커질 수 있지? 연산량을 세어 봐요."),
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
 
@@ -368,7 +368,7 @@ export function makeMooin3Ch2(E, lang = "py") {
       label: t(E, "Building the table", "표 만들기"),
       narr: t(E,
         "Grouping by letter alone is still O(26·N) per query — we still scan.  The speed comes from building three small tables ONCE, before any query.  Here is how they fill up.",
-        "글자로 묶어도 쿼리마다 훑으면 아직 O(26·N) 이에요.  속도는 쿼리 전에 표 3 개를 *한 번만* 만들어 두는 데서 나와요.  그 표가 어떻게 채워지는지 봐요."),
+        "글자로 묶어도 쿼리마다 훑으면 아직 O(26·N) 이에요.  속도는 쿼리 전에 표 3 개를 한 번만 만들어 두는 데서 나와요.  그 표가 어떻게 채워지는지 봐요."),
       content: (<Mooin3TableSim E={E} lang={lang} />),
     },
 

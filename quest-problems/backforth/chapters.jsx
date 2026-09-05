@@ -90,21 +90,21 @@ export function makeBackForthCh1(E) {
     {
       type: "tree",
       narr: t(E,
-        "Before coding — *play* with the state tree.  Change the buckets, pick day-1, watch how every day-2 choice fans out.  The set at the bottom collects the distinct Barn 1 totals.",
-        "코딩 전에 — 상태 트리를 직접 *놀려* 봐. 양동이 값 바꾸고, 1 일차 선택을 골라 — 2 일차 분기들이 어떻게 펼쳐지는지 관찰. 아래 set 이 헛간 1 의 서로 다른 총량을 모아."),
+        "Before coding — play with the state tree.  Change the buckets, pick day-1, watch how every day-2 choice fans out.  The set at the bottom collects the distinct Barn 1 totals.",
+        "코딩 전에 — 상태 트리를 직접 놀려 봐. 양동이 값 바꾸고, 1 일차 선택을 골라 — 2 일차 분기들이 어떻게 펼쳐지는지 관찰. 아래 set 이 헛간 1 의 서로 다른 총량을 모아."),
     },
     // 1-4: Input
     {
       type: "input",
       narr: t(E,
         "Now you say it — all 10 buckets identical, 4-day swap.  How many DIFFERENT final amounts can barn 1 have?",
-        "직접 — 양동이 10 개 동일, 4 일 왕복. 헛간 1 의 *서로 다른* 최종 양은 몇 가지?"),
+        "직접 — 양동이 10 개 동일, 4 일 왕복. 헛간 1 의 서로 다른 최종 양은 몇 가지?"),
       question: t(E,
         "All identical buckets. Distinct outcomes for barn 1?",
         "모든 양동이 동일. 헛간 1의 고유 결과 수?"),
       hint: t(E,
         "Each transfer moves the same amount.  Does the total in barn 1 ever change?",
-        "이동량이 매번 같음. 헛간 1 의 총량이 *바뀔 수* 있어?"),
+        "이동량이 매번 같음. 헛간 1 의 총량이 바뀔 수 있어?"),
       answer: 1,
     },
   ];

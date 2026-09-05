@@ -163,8 +163,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "한 부모가 자식을 *몇 명이든* 가질 수 있어요. 폴더 구조, 파일시스템, 조직도, 가족 트리.",
-                    "A parent can have *any number* of children. File systems, org charts, family trees.",
+                    "한 부모가 자식을 몇 명이든 가질 수 있어요. 폴더 구조, 파일시스템, 조직도, 가족 트리.",
+                    "A parent can have any number of children. File systems, org charts, family trees.",
                   )}
                 </p>
               </div>
@@ -174,8 +174,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "각 노드는 *왼쪽 / 오른쪽* 자식만 가질 수 있어요. 최대 2 명. 표현/순회가 단순해 알고리즘에서 가장 많이 쓰는 형태.",
-                    "Each node has only *left / right* child — at most 2. Simplest to represent/traverse, used most often.",
+                    "각 노드는 왼쪽 / 오른쪽 자식만 가질 수 있어요. 최대 2 명. 표현/순회가 단순해 알고리즘에서 가장 많이 쓰는 형태.",
+                    "Each node has only left / right child — at most 2. Simplest to represent/traverse, used most often.",
                   )}
                 </p>
               </div>
@@ -612,8 +612,8 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "같은 트리, 다른 순서로 방문. '나' 를 *언제* 처리하느냐가 다 다른 거예요.",
-                "Same tree, different visit orders. The difference is *when* you process 'me'.",
+                "같은 트리, 다른 순서로 방문. '나' 를 언제 처리하느냐가 다 다른 거예요.",
+                "Same tree, different visit orders. The difference is when you process 'me'.",
               )}
             </p>
             <div className="space-y-2 mb-3">
@@ -921,8 +921,8 @@ internal node → 1 + (sum of children's sizes)`)}
               <p className="text-xs text-amber-800 leading-relaxed">
                 ⚡ <b>{t("핵심", "Key")}:</b>{" "}
                 {t(
-                  "Postorder! 자식 다 끝낸 *후* 내가 처리. 재귀가 자연스럽게 처리해줘요 — 호출이 자식부터 반환되니까.",
-                  "Postorder! Process me *after* my children. Recursion does this naturally — calls return from leaves up.",
+                  "Postorder! 자식 다 끝낸 후 내가 처리. 재귀가 자연스럽게 처리해줘요 — 호출이 자식부터 반환되니까.",
+                  "Postorder! Process me after my children. Recursion does this naturally — calls return from leaves up.",
                 )}
               </p>
             </div>

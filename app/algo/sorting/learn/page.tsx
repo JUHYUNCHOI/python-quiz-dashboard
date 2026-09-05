@@ -771,7 +771,7 @@ function Chapter5({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
             </ol>
             <div className="mt-3 bg-white rounded-xl p-3 border-2 border-orange-200">
               <p className="text-sm font-black text-orange-800 mb-1">
-                🧰 {t("진짜 쓸모: '정렬 후' 가 핵심", "Real payoff: what you do *after* sorting")}
+                🧰 {t("진짜 쓸모: '정렬 후' 가 핵심", "Real payoff: what you do after sorting")}
               </p>
               <p className="text-xs text-gray-700 leading-relaxed mb-2">
                 {t(

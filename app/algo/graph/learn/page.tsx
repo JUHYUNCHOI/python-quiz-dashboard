@@ -162,8 +162,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "종이에 그릴 땐 점 + 선이지만, 컴퓨터엔 어떻게 알려줄까? *각 노드마다 '내 이웃들 명단'* 을 들고 있게 해요.",
-                "On paper it's dots & lines, but how do we tell the computer? *Each node holds a list of 'my neighbors'*.",
+                "종이에 그릴 땐 점 + 선이지만, 컴퓨터엔 어떻게 알려줄까? 각 노드마다 '내 이웃들 명단' 을 들고 있게 해요.",
+                "On paper it's dots & lines, but how do we tell the computer? Each node holds a list of 'my neighbors'.",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-blue-200 mb-3">
@@ -186,8 +186,8 @@ node 4's neighbors: [2]`)}
             </div>
             <p className="text-xs text-blue-700 text-center leading-relaxed">
               {t(
-                "다음 챕터에서 코드로 만들고, 그 다음 BFS/DFS 로 *탐색* 해요.",
-                "Next chapter we build it in code, then BFS/DFS to *traverse*.",
+                "다음 챕터에서 코드로 만들고, 그 다음 BFS/DFS 로 탐색 해요.",
+                "Next chapter we build it in code, then BFS/DFS to traverse.",
               )}
             </p>
           </div>
@@ -566,16 +566,16 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-sky-700">{t("BFS = Breadth-First Search", "BFS = Breadth-First Search")}</b>.{" "}
               {t(
-                "큐 — 줄 서기처럼 *먼저 넣은 게 먼저 나오는* 통 (FIFO) — 로 같은 거리에 있는 점들을 함께 처리해요. 가까운 곳부터 한 겹씩.",
-                "A queue — like a line, *first in, first out* (FIFO) — handles all the equally-distant dots together. Nearest first, one layer at a time.",
+                "큐 — 줄 서기처럼 먼저 넣은 게 먼저 나오는 통 (FIFO) — 로 같은 거리에 있는 점들을 함께 처리해요. 가까운 곳부터 한 겹씩.",
+                "A queue — like a line, first in, first out (FIFO) — handles all the equally-distant dots together. Nearest first, one layer at a time.",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-sky-200 mb-3">
               <p className="text-xs font-bold text-sky-800 mb-2">💡 {t("핵심 약속", "Key promise")}</p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "선이 전부 똑같은 한 걸음짜리면 (= 가중치 없는 그래프) *최소 걸음 수* 를 보장해요. 1 에서 6 까지 몇 걸음인지 BFS 가 자동으로 알려줘요.",
-                  "On unweighted graphs, BFS guarantees *shortest distance*. From 1 to 6, BFS finds the shortest path automatically.",
+                  "선이 전부 똑같은 한 걸음짜리면 (= 가중치 없는 그래프) 최소 걸음 수 를 보장해요. 1 에서 6 까지 몇 걸음인지 BFS 가 자동으로 알려줘요.",
+                  "On unweighted graphs, BFS guarantees shortest distance. From 1 to 6, BFS finds the shortest path automatically.",
                 )}
               </p>
             </div>
@@ -801,8 +801,8 @@ vector<int> bfs(int start, int n, vector<vector<int>>& adj) {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "체크: ① 큐에 push 하는 *순간* visited=true (꺼낼 때 X). 왜? — pop 할 때 표시하면 같은 노드가 여러 이웃을 통해 큐에 *여러 번* 들어갈 수 있어요. push 할 때 막으면 노드마다 딱 한 번만 큐에 들어가요. ② 선이 전부 똑같은 한 걸음일 때만 최단 보장 (= 가중치 없는 그래프). ③ 모든 점 한 번 + 모든 선 한 번 = 시간 O(V + E).",
-                "Check: ① mark visited *when pushing* (not on pop). Why? — marking on pop lets the same node get pushed *multiple times* via different neighbors. Marking on push means each node enters the queue exactly once. ② shortest only on unweighted graphs.",
+                "체크: ① 큐에 push 하는 순간 visited=true (꺼낼 때 X). 왜? — pop 할 때 표시하면 같은 노드가 여러 이웃을 통해 큐에 여러 번 들어갈 수 있어요. push 할 때 막으면 노드마다 딱 한 번만 큐에 들어가요. ② 선이 전부 똑같은 한 걸음일 때만 최단 보장 (= 가중치 없는 그래프). ③ 모든 점 한 번 + 모든 선 한 번 = 시간 O(V + E).",
+                "Check: ① mark visited when pushing (not on pop). Why? — marking on pop lets the same node get pushed multiple times via different neighbors. Marking on push means each node enters the queue exactly once. ② shortest only on unweighted graphs.",
               )}
             </p>
           </div>
@@ -882,15 +882,15 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-emerald-700">{t("DFS = Depth-First Search", "DFS = Depth-First Search")}</b>.{" "}
               {t(
-                "재귀 — 함수가 자기 자신을 다시 부르는 것 — 로 한 길을 *끝까지* 파고든 뒤, 막히면 되돌아와서 다른 길로 가요.",
-                "Recursion — a function calling itself — goes *all the way down* one path, then backs up and tries another.",
+                "재귀 — 함수가 자기 자신을 다시 부르는 것 — 로 한 길을 끝까지 파고든 뒤, 막히면 되돌아와서 다른 길로 가요.",
+                "Recursion — a function calling itself — goes all the way down one path, then backs up and tries another.",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-emerald-200 mb-3">
               <p className="text-xs font-bold text-emerald-800 mb-2">💡 {t("BFS 와의 차이", "Difference from BFS")}</p>
               <ul className="text-xs text-gray-700 leading-relaxed space-y-1">
-                <li>• <b>BFS</b> — {t("큐, 한 층씩, *최단 거리* 강함", "queue, layer by layer, *shortest path* strong")}</li>
-                <li>• <b>DFS</b> — {t("한 길 끝까지 파고들기. *서로 이어진 덩어리 세기(연결 요소)·빙 도는 길 찾기(사이클)* 에 강함", "go all the way down one path. Strong for *counting connected blobs (components), finding loops (cycles)*")}</li>
+                <li>• <b>BFS</b> — {t("큐, 한 층씩, 최단 거리 강함", "queue, layer by layer, shortest path strong")}</li>
+                <li>• <b>DFS</b> — {t("한 길 끝까지 파고들기. 서로 이어진 덩어리 세기(연결 요소)·빙 도는 길 찾기(사이클) 에 강함", "go all the way down one path. Strong for *counting connected blobs (components), finding loops (cycles)*")}</li>
               </ul>
             </div>
           </div>
@@ -1041,8 +1041,8 @@ int main() {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "응용: 모든 점을 훑으며 아직 안 가본 점에서 dfs 시작 → 몇 번 시작했나 = *서로 이어진 덩어리 개수(연결 요소)*. visited 안 쓰면 빙 도는 길에서 무한 루프!",
-                "Apply: for each node, if unvisited do dfs(i) → *count connected components*. Without visited, cycles → infinite loop!",
+                "응용: 모든 점을 훑으며 아직 안 가본 점에서 dfs 시작 → 몇 번 시작했나 = 서로 이어진 덩어리 개수(연결 요소). visited 안 쓰면 빙 도는 길에서 무한 루프!",
+                "Apply: for each node, if unvisited do dfs(i) → count connected components. Without visited, cycles → infinite loop!",
               )}
             </p>
             {/* Python 재귀 한도 경고 — 코드 바로 옆으로 이동 (예전엔 DFS 코드도 보기 전 첫 슬라이드에 있었음) */}
@@ -1092,15 +1092,15 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed text-center mb-3">
               {t(
-                "축하해요! USACO Silver 의 *절반은* 그래프예요 — 큰 무기 하나 손에 넣은 셈. 🎉",
+                "축하해요! USACO Silver 의 절반은 그래프예요 — 큰 무기 하나 손에 넣은 셈. 🎉",
                 "Nice work! Half of USACO Silver is graphs — you just unlocked a major weapon. 🎉",
               )}
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-amber-200">
               <p className="text-sm text-gray-800 font-bold text-center">
                 {t(
-                  "BFS = 큐 = 최단. DFS = 재귀 = 깊이. 이 두 가지가 *수많은 문제* 의 베이스가 돼요.",
-                  "BFS = queue = shortest. DFS = recursion = depth. These two are the *base* of countless problems.",
+                  "BFS = 큐 = 최단. DFS = 재귀 = 깊이. 이 두 가지가 수많은 문제 의 베이스가 돼요.",
+                  "BFS = queue = shortest. DFS = recursion = depth. These two are the base of countless problems.",
                 )}
               </p>
             </div>

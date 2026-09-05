@@ -137,8 +137,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 "왜? — 매 순간 ",
                 "Why? — at each step, ",
               )}<b className="text-orange-700">{t("가장 큰 동전부터 최대한 많이 쓰면", "use the biggest coin as much as possible")}</b>{t(
-                " — 자연스럽게 *최소 개수* 나와요. 이게 그리디.",
-                " — naturally yields the *fewest* coins. That's greedy.",
+                " — 자연스럽게 최소 개수 나와요. 이게 그리디.",
+                " — naturally yields the fewest coins. That's greedy.",
               )}
             </p>
             <div className="bg-emerald-50 rounded-lg p-3 border border-emerald-200">
@@ -158,7 +158,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "잔돈을 거슬러주는 게 *항상* 큰 동전부터로 답이 되는 건 한국 화폐 단위가 잘 짜여 있어서예요. 다른 케이스에선 깨질 수도.",
+                "잔돈을 거슬러주는 게 항상 큰 동전부터로 답이 되는 건 한국 화폐 단위가 잘 짜여 있어서예요. 다른 케이스에선 깨질 수도.",
                 "Greedy giving change works for Korean coins because the denominations line up nicely. Other setups can break it.",
               )}
             </p>
@@ -166,8 +166,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               <p className="text-xs font-bold text-rose-800 mb-1">💥 {t("깨지는 예", "Counter-example")}</p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "동전 [1, 3, 4] 로 6 원 만들기. 그리디(큰 거부터): 4 + 1 + 1 = 3 개. 최적: 3 + 3 = 2 개. 그리디 *실패*.",
-                  "Coins [1, 3, 4], make 6. Greedy: 4+1+1 = 3 coins. Optimal: 3+3 = 2 coins. Greedy *fails*.",
+                  "동전 [1, 3, 4] 로 6 원 만들기. 그리디(큰 거부터): 4 + 1 + 1 = 3 개. 최적: 3 + 3 = 2 개. 그리디 실패.",
+                  "Coins [1, 3, 4], make 6. Greedy: 4+1+1 = 3 coins. Optimal: 3+3 = 2 coins. Greedy fails.",
                 )}
               </p>
             </div>
@@ -183,8 +183,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <div className="bg-amber-50 rounded-lg p-3 border border-amber-200">
               <p className="text-xs text-amber-800 leading-relaxed">
                 💛 {t(
-                  "이 토픽에선 그리디가 *잘 통하는* 표준 문제 3 가지를 봐요. 그 위에서 패턴을 익혀요.",
-                  "In this topic we cover 3 classic problems where greedy *works*. Build intuition from those.",
+                  "이 토픽에선 그리디가 잘 통하는 표준 문제 3 가지를 봐요. 그 위에서 패턴을 익혀요.",
+                  "In this topic we cover 3 classic problems where greedy works. Build intuition from those.",
                 )}
               </p>
             </div>
@@ -207,8 +207,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "N 개 회의 중 최대한 많이 잡기. *끝나는 시간* 빠른 것부터 그리디. (챕터 2)",
-                    "Pick max non-overlapping meetings. Sort by *earliest end*, then greedy. (Ch 2)",
+                    "N 개 회의 중 최대한 많이 잡기. 끝나는 시간 빠른 것부터 그리디. (챕터 2)",
+                    "Pick max non-overlapping meetings. Sort by earliest end, then greedy. (Ch 2)",
                   )}
                 </p>
               </div>
@@ -306,14 +306,14 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
             </div>
             <p className="text-sm font-bold text-cyan-700 text-center">
-              {t("끝나는 시간 빠른 회의를 먼저 끝내야 — *남은 시간이 길어져요*.", "Finishing early leaves *more room* for the rest.")}
+              {t("끝나는 시간 빠른 회의를 먼저 끝내야 — 남은 시간이 길어져요.", "Finishing early leaves more room for the rest.")}
             </p>
             <div className="bg-violet-50 rounded-lg p-3 border border-violet-200 mt-3">
               <p className="text-xs font-bold text-violet-800 mb-1">🔄 {t("왜 최적일까? — 바꿔치기 직관 (교환논증)", "Why optimal? — swap intuition (exchange argument)")}</p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "최적 답이 우리 그리디와 다른 회의를 첫 번째로 골랐다고 해봐요. 그 첫 회의를 '끝나는 시간이 가장 빠른 회의' 로 *바꿔치기* 해도 — 더 일찍 끝나니까 뒤 회의들이 들어갈 자리는 *오히려 더 넓어져요*. 즉 손해가 전혀 없어요. 그러니 끝나는 시간 가장 빠른 걸 첫 선택으로 두는 게 항상 안전 → 우리 그리디도 최적.",
-                  "Suppose the optimal answer picks some other meeting first. Swap that first pick for the earliest-ending one — it finishes sooner, so the room left for later meetings only *grows*. No loss at all. So choosing the earliest end first is always safe → our greedy is optimal too.",
+                  "최적 답이 우리 그리디와 다른 회의를 첫 번째로 골랐다고 해봐요. 그 첫 회의를 '끝나는 시간이 가장 빠른 회의' 로 바꿔치기 해도 — 더 일찍 끝나니까 뒤 회의들이 들어갈 자리는 오히려 더 넓어져요. 즉 손해가 전혀 없어요. 그러니 끝나는 시간 가장 빠른 걸 첫 선택으로 두는 게 항상 안전 → 우리 그리디도 최적.",
+                  "Suppose the optimal answer picks some other meeting first. Swap that first pick for the earliest-ending one — it finishes sooner, so the room left for later meetings only grows. No loss at all. So choosing the earliest end first is always safe → our greedy is optimal too.",
                 )}
               </p>
             </div>
@@ -538,8 +538,8 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-amber-700">{t("문제", "Problem")}:</b>{" "}
               {t(
-                "한국 동전 [500, 100, 50, 10] 으로 N 원을 거슬러줄 때 *최소 개수* 는?",
-                "Korean coins [500, 100, 50, 10] — make N₩ with the *fewest* coins?",
+                "한국 동전 [500, 100, 50, 10] 으로 N 원을 거슬러줄 때 최소 개수 는?",
+                "Korean coins [500, 100, 50, 10] — make N₩ with the fewest coins?",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-amber-200 mb-3">
@@ -695,8 +695,8 @@ int main() {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "주의: 동전 단위에 따라 그리디가 *깨질 수 있어요*. 다음 퀴즈에서 확인!",
-                "Warning: greedy can *break* depending on denominations. See next quiz!",
+                "주의: 동전 단위에 따라 그리디가 깨질 수 있어요. 다음 퀴즈에서 확인!",
+                "Warning: greedy can break depending on denominations. See next quiz!",
               )}
             </p>
           </div>
@@ -756,8 +756,8 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               <p className="text-xs font-bold text-sky-800 mb-1">💡 {t("예시 — 대기 시간 최소화", "Example — minimize total wait")}</p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "N 사람이 줄서서 ATM 사용 대기 중. 각자 처리 시간 다름. 모두의 대기 시간 *합* 을 최소화하려면 어떤 순서로 줄세울까?",
-                  "N people queueing for ATM, each with their own processing time. To minimize *total* wait, in what order should they go?",
+                  "N 사람이 줄서서 ATM 사용 대기 중. 각자 처리 시간 다름. 모두의 대기 시간 합 을 최소화하려면 어떤 순서로 줄세울까?",
+                  "N people queueing for ATM, each with their own processing time. To minimize total wait, in what order should they go?",
                 )}
               </p>
             </div>
@@ -771,7 +771,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
           <div className="bg-white rounded-2xl border-2 border-amber-300 p-4">
             <p className="text-base font-black text-amber-900 mb-2 text-center">🎮 {t("두 정렬 순서 비교", "Compare two orderings")}</p>
             <p className="text-xs text-gray-600 text-center mb-3">
-              {t("일 = [3, 1, 4, 3, 2]. 각 사람의 *대기 시간* 합을 최소화.", "Tasks = [3, 1, 4, 3, 2]. Minimize sum of each person's *wait*.")}
+              {t("일 = [3, 1, 4, 3, 2]. 각 사람의 대기 시간 합을 최소화.", "Tasks = [3, 1, 4, 3, 2]. Minimize sum of each person's wait.")}
             </p>
             <div className="flex items-center justify-center gap-2 mb-3">
               <button onClick={() => setOrder("asc")}
@@ -813,16 +813,16 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </p>
               <p className="text-[11px] text-gray-600 mt-1">
                 {order === "asc"
-                  ? t("짧은 일 먼저 → 짧은 일이 일찍 끝나 *모두* 빨리 시작.", "Short tasks first → short ones finish early, *everyone* starts sooner.")
-                  : t("긴 일 먼저 → 뒷사람이 *길게* 기다림. 비효율.", "Long tasks first → later people wait *longer*. Wasteful.")}
+                  ? t("짧은 일 먼저 → 짧은 일이 일찍 끝나 모두 빨리 시작.", "Short tasks first → short ones finish early, everyone starts sooner.")
+                  : t("긴 일 먼저 → 뒷사람이 길게 기다림. 비효율.", "Long tasks first → later people wait longer. Wasteful.")}
               </p>
             </div>
             <div className="bg-violet-50 rounded-lg p-3 border border-violet-200 mt-3">
               <p className="text-xs font-bold text-violet-800 mb-1">🔄 {t("왜 짧은 일 먼저가 최적? — 인접 바꿔치기 (교환논증)", "Why shortest first is optimal — adjacent swap (exchange argument)")}</p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "줄에서 *바로 옆에 붙어 있는* 두 사람 A, B 만 떼서 봐요 (A 가 앞). 둘을 서로 바꿔도 — 그 둘보다 뒤에 있는 사람들의 대기 시간은 *전혀 안 변해요* (둘의 시간 합은 그대로니까). 변하는 건 딱 B 의 대기뿐. A 가 더 길면, 긴 A 가 앞에 있어서 B 가 그만큼 더 기다리고 있던 것 → A·B 를 바꿔 *짧은 걸 앞으로* 보내면 B 가 덜 기다림 = 전체 합이 줄어요. 즉 '긴 게 짧은 것 앞에' 있으면 언제든 바꿔서 이득. 더 못 바꿀 때 = 완전히 짧은 순. 그래서 짧은 일 먼저가 최적.",
-                  "Take just two *adjacent* people A, B (A in front). Swapping them leaves everyone behind them *completely unchanged* (their combined time is the same). Only B's wait changes. If A is the longer one, B was waiting that extra amount for A — swap so the *shorter goes first* and B waits less = total drops. So whenever a longer one sits ahead of a shorter one, swapping helps. When no such pair is left = fully sorted shortest-first. Hence shortest first is optimal.",
+                  "줄에서 바로 옆에 붙어 있는 두 사람 A, B 만 떼서 봐요 (A 가 앞). 둘을 서로 바꿔도 — 그 둘보다 뒤에 있는 사람들의 대기 시간은 전혀 안 변해요 (둘의 시간 합은 그대로니까). 변하는 건 딱 B 의 대기뿐. A 가 더 길면, 긴 A 가 앞에 있어서 B 가 그만큼 더 기다리고 있던 것 → A·B 를 바꿔 짧은 걸 앞으로 보내면 B 가 덜 기다림 = 전체 합이 줄어요. 즉 '긴 게 짧은 것 앞에' 있으면 언제든 바꿔서 이득. 더 못 바꿀 때 = 완전히 짧은 순. 그래서 짧은 일 먼저가 최적.",
+                  "Take just two adjacent people A, B (A in front). Swapping them leaves everyone behind them completely unchanged (their combined time is the same). Only B's wait changes. If A is the longer one, B was waiting that extra amount for A — swap so the shorter goes first and B waits less = total drops. So whenever a longer one sits ahead of a shorter one, swapping helps. When no such pair is left = fully sorted shortest-first. Hence shortest first is optimal.",
                 )}
               </p>
             </div>
@@ -928,15 +928,15 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed text-center mb-3">
               {t(
-                "잘 했어요 👏 활동 선택 · 동전 거스름 · 정렬+누적 — 그리디의 *기본 3 종 세트*. 이제 USACO Bronze 에서 '아 이거 그리디 같은데?' 가 슬슬 보일 거예요.",
-                "Nice work 👏 Interval scheduling · coin change · sort+accumulate — the *3 classic greedy shapes*. You'll now spot 'ah, greedy?' in Bronze problems.",
+                "잘 했어요 👏 활동 선택 · 동전 거스름 · 정렬+누적 — 그리디의 기본 3 종 세트. 이제 USACO Bronze 에서 '아 이거 그리디 같은데?' 가 슬슬 보일 거예요.",
+                "Nice work 👏 Interval scheduling · coin change · sort+accumulate — the 3 classic greedy shapes. You'll now spot 'ah, greedy?' in Bronze problems.",
               )}
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-amber-200">
               <p className="text-sm text-gray-800 font-bold text-center">
                 {t(
-                  "그리디는 *직관*이 핵심. 다음 챕터에서 핵심 정리 + 다음 단계 안내.",
-                  "Greedy is about *intuition*. Next slide: key takeaways + what's next.",
+                  "그리디는 직관이 핵심. 다음 챕터에서 핵심 정리 + 다음 단계 안내.",
+                  "Greedy is about intuition. Next slide: key takeaways + what's next.",
                 )}
               </p>
             </div>
@@ -955,7 +955,7 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               <li><b>6.</b> ⚠️ {t("증명 어려움 — ", "Hard to prove — ")}<b>{t("반례 하나면 깨짐", "one counter-example breaks it")}</b>. {t("의심 가면 작은 케이스 직접 손으로!", "Suspicious? Try small cases by hand!")}</li>
             </ol>
             <p className="text-xs text-amber-700 mt-3 text-center italic">
-              {t("그리디 = 정렬 + 1-pass. 그 위에 *왜 이 정렬?* 만 답하면 됨.", "Greedy = sort + 1-pass. Just answer *why this sort?*")}
+              {t("그리디 = 정렬 + 1-pass. 그 위에 왜 이 정렬? 만 답하면 됨.", "Greedy = sort + 1-pass. Just answer why this sort?")}
             </p>
             <div className="mt-3 pt-3 border-t border-amber-200 space-y-2">
               <p className="text-[11px] text-purple-700 leading-relaxed">

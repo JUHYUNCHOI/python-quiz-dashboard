@@ -77,7 +77,7 @@ export function makeStampCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Try it yourself! Pick a rotation and position, then stamp. The legality rule: every '*' of the stamp must land on a '*' of the target.",
+        "Try it yourself! Pick a rotation and position, then stamp. The legality rule: every '' of the stamp must land on a '' of the target.",
         "\uc9c1\uc811 \ud574\ubd10! \ud68c\uc804\uacfc \uc704\uce58\ub97c \uace0\ub978 \ub4a4 \ub3c4\uc7a5\uc744 \ucc0d\uc5b4. \uaddc\uce59\uc740: \ub3c4\uc7a5\uc758 '*' \uc740 \ubc18\ub4dc\uc2dc \ubaa9\ud45c\uc758 '*' \uc704\uc5d0 \ub5a8\uc5b4\uc838\uc57c \ud574."),
       content: <StampSimulator E={E} />,
     },

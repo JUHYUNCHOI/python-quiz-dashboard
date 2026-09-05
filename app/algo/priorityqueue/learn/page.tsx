@@ -127,8 +127,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "응급실엔 보통 줄 (FIFO) 이 없죠. *심정지 환자가 먼저*. 도착 순서가 아니라 ",
-                "ER doesn't run on FIFO. *Cardiac arrest goes first*. Not by arrival — but by ",
+                "응급실엔 보통 줄 (FIFO) 이 없죠. 심정지 환자가 먼저. 도착 순서가 아니라 ",
+                "ER doesn't run on FIFO. Cardiac arrest goes first. Not by arrival — but by ",
               )}<b className="text-rose-700">{t("긴급도 순서", "priority")}</b>{t(
                 " 로 처리해요.",
                 ".",
@@ -138,8 +138,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               <p className="text-xs font-bold text-rose-800 mb-1">💡 {t("우선순위 큐 = 그걸 코드로", "Priority queue = that, in code")}</p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "넣은 순서 상관없이, *가장 작은 (또는 큰) 값* 을 빠르게 꺼내는 자료구조. 일반 큐와 달라요.",
-                  "Regardless of insertion order, quickly pop the *smallest (or largest)* item. Unlike a normal queue.",
+                  "넣은 순서 상관없이, 가장 작은 (또는 큰) 값 을 빠르게 꺼내는 자료구조. 일반 큐와 달라요.",
+                  "Regardless of insertion order, quickly pop the smallest (or largest) item. Unlike a normal queue.",
                 )}
               </p>
             </div>
@@ -193,8 +193,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </div>
             <p className="text-xs text-blue-700 text-center leading-relaxed">
               {t(
-                "N=100만, 꺼내기 100만 번 — 매번 sort: 20조 연산. heap: 2천만 연산. *100만 배 차이*.",
-                "N=1M, 1M pops — sort: 10 trillion ops. heap: 20 million. *500,000× faster*.",
+                "N=100만, 꺼내기 100만 번 — 매번 sort: 20조 연산. heap: 2천만 연산. 100만 배 차이.",
+                "N=1M, 1M pops — sort: 10 trillion ops. heap: 20 million. 500,000× faster.",
               )}
             </p>
           </div>
@@ -319,8 +319,8 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "O(log N). 어떤 순서로 넣었든 *항상 가장 우선순위 높은 거*.",
-                    "O(log N). Whatever order you pushed — *always the top-priority item*.",
+                    "O(log N). 어떤 순서로 넣었든 항상 가장 우선순위 높은 거.",
+                    "O(log N). Whatever order you pushed — always the top-priority item.",
                   )}
                 </p>
               </div>
@@ -393,10 +393,10 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </h3>
             <p className="text-xs text-gray-700 leading-relaxed mb-3 text-center">
               {t(
-                "heap 은 정렬된 리스트가 아니에요. *완전 이진 트리* — 규칙 딱 하나: ",
-                "A heap isn't a sorted list. It's a *complete binary tree* — with one rule: ",
+                "heap 은 정렬된 리스트가 아니에요. 완전 이진 트리 — 규칙 딱 하나: ",
+                "A heap isn't a sorted list. It's a complete binary tree — with one rule: ",
               )}<b className="text-indigo-700">{t("부모 ≤ 자식", "parent ≤ children")}</b>
-              {t(" (min-heap). 그래서 루트가 *항상 최솟값*.", " (min-heap). So the root is *always the min*.")}
+              {t(" (min-heap). 그래서 루트가 항상 최솟값.", " (min-heap). So the root is always the min.")}
             </p>
 
             <div className="bg-white/80 rounded-lg p-3 border border-indigo-200 mb-3">
@@ -421,8 +421,8 @@ every parent ≤ its children ✓`)}</pre>
                 <p className="text-sm font-black text-emerald-800 mb-1">⬆ push — {t("sift-up (위로 헤엄)", "sift-up (swim up)")}</p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "맨 끝에 넣고 → 부모보다 작으면 부모와 한 칸 교환 → 계속. *트리 높이만큼* 만 오르면 끝.",
-                    "Drop it at the end → if smaller than parent, swap up one level → repeat. Climbs at most the *tree height*.",
+                    "맨 끝에 넣고 → 부모보다 작으면 부모와 한 칸 교환 → 계속. 트리 높이만큼 만 오르면 끝.",
+                    "Drop it at the end → if smaller than parent, swap up one level → repeat. Climbs at most the tree height.",
                   )}
                 </p>
               </div>
@@ -430,8 +430,8 @@ every parent ≤ its children ✓`)}</pre>
                 <p className="text-sm font-black text-rose-800 mb-1">⬇ pop — {t("sift-down (아래로 가라앉기)", "sift-down (sink down)")}</p>
                 <p className="text-xs text-gray-700 leading-relaxed">
                   {t(
-                    "루트를 꺼낸 뒤 → 맨 끝 값을 루트로 올리고 → 자식 중 *작은 쪽* 과 교환하며 내려감. 역시 트리 높이만큼.",
-                    "Take the root → move the last value to the root → swap down with the *smaller child*. Again, at most the tree height.",
+                    "루트를 꺼낸 뒤 → 맨 끝 값을 루트로 올리고 → 자식 중 작은 쪽 과 교환하며 내려감. 역시 트리 높이만큼.",
+                    "Take the root → move the last value to the root → swap down with the smaller child. Again, at most the tree height.",
                   )}
                 </p>
               </div>
@@ -440,8 +440,8 @@ every parent ≤ its children ✓`)}</pre>
             <div className="bg-indigo-100 rounded-lg p-3 border-2 border-indigo-300">
               <p className="text-sm font-bold text-indigo-900 text-center leading-relaxed">
                 {t(
-                  "노드 N 개 트리의 높이 = log₂N. push/pop 은 *한 경로* 만 타고 오르내림 → ",
-                  "A tree of N nodes has height log₂N. push/pop ride just *one path* up or down → ",
+                  "노드 N 개 트리의 높이 = log₂N. push/pop 은 한 경로 만 타고 오르내림 → ",
+                  "A tree of N nodes has height log₂N. push/pop ride just one path up or down → ",
                 )}<b>O(log N)</b>{t(". 성능표의 log N 이 바로 이거예요.", ". That's the log N in the table.")}
               </p>
             </div>
@@ -535,8 +535,8 @@ int main() {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "체크포인트: ① heap 비어 있는지 ② push 한 다음 ③ pop 한 번이 *최우선*. 매 호출 O(log N).",
-                "Checklist: ① is heap empty? ② push then ③ each pop returns *top priority*. O(log N) per call.",
+                "체크포인트: ① heap 비어 있는지 ② push 한 다음 ③ pop 한 번이 최우선. 매 호출 O(log N).",
+                "Checklist: ① is heap empty? ② push then ③ each pop returns top priority. O(log N) per call.",
               )}
             </p>
           </div>
@@ -591,16 +591,16 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-orange-700">{t("문제", "Problem")}:</b>{" "}
               {t(
-                "스트림 (실시간) 으로 들어오는 숫자들 중 *가장 큰 K 개* 만 유지하고 싶다. K=10, N=100만.",
-                "From a stream of numbers, keep only the *top K largest*. K=10, N=1M.",
+                "스트림 (실시간) 으로 들어오는 숫자들 중 가장 큰 K 개 만 유지하고 싶다. K=10, N=100만.",
+                "From a stream of numbers, keep only the top K largest. K=10, N=1M.",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-orange-200 mb-3">
               <p className="text-xs font-bold text-orange-800 mb-2">💡 {t("min-heap 으로 — 의외", "Use a min-heap — surprising!")}</p>
               <p className="text-xs text-gray-700 leading-relaxed mb-2">
                 {t(
-                  "K=3 큰 거 → *min-heap* 크기 K 유지. 새 값 v 가 들어오면:",
-                  "Top-3 → keep a *min-heap* of size K. For a new value v:",
+                  "K=3 큰 거 → min-heap 크기 K 유지. 새 값 v 가 들어오면:",
+                  "Top-3 → keep a min-heap of size K. For a new value v:",
                 )}
               </p>
               <ul className="text-xs text-gray-700 leading-relaxed space-y-1 ml-4">
@@ -610,8 +610,8 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </ul>
               <p className="text-xs text-gray-700 mt-2 leading-relaxed">
                 {t(
-                  "결과: heap 에는 항상 *지금까지 본 큰 K 개*. heap[0] = 그 중 최소 (= K번째 큰 값).",
-                  "Result: heap always holds *top K seen so far*. heap[0] = min of those (= K-th largest).",
+                  "결과: heap 에는 항상 지금까지 본 큰 K 개. heap[0] = 그 중 최소 (= K번째 큰 값).",
+                  "Result: heap always holds top K seen so far. heap[0] = min of those (= K-th largest).",
                 )}
               </p>
             </div>
@@ -757,8 +757,8 @@ int main() {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "핵심: 'K largest 면 min-heap' — 헷갈리지만 그래야 *가장 작은 후보* 가 위에 있어서 빠르게 비교/교체.",
-                "Key: 'K largest → min-heap' — feels backwards, but min-on-top lets us compare/swap the *weakest candidate* fast.",
+                "핵심: 'K largest 면 min-heap' — 헷갈리지만 그래야 가장 작은 후보 가 위에 있어서 빠르게 비교/교체.",
+                "Key: 'K largest → min-heap' — feels backwards, but min-on-top lets us compare/swap the weakest candidate fast.",
               )}
             </p>
           </div>
@@ -813,25 +813,25 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
           <div className="bg-gradient-to-br from-green-50 to-teal-50 rounded-2xl p-6 border-2 border-teal-200 min-h-[280px]">
             <p className="text-5xl text-center mb-3">🌐</p>
             <h3 className="text-lg font-black text-gray-900 mb-3 text-center">
-              {t("Dijkstra — heap 이 *꼭* 필요한 이유", "Dijkstra — why heap is *essential*")}
+              {t("Dijkstra — heap 이 꼭 필요한 이유", "Dijkstra — why heap is essential")}
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "그래프에서 A → 모든 노드 최단거리 — *지하철 노선도* 같은 거. 각 간선에 시간(가중치) 이 있어요.",
+                "그래프에서 A → 모든 노드 최단거리 — 지하철 노선도 같은 거. 각 간선에 시간(가중치) 이 있어요.",
                 "Shortest path A → all nodes — like subway routes. Each edge has a time (weight).",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-teal-200 mb-3">
               <p className="text-xs font-bold text-teal-800 mb-2">💡 {t("Dijkstra 의 핵심 아이디어", "Dijkstra's key idea")}</p>
               <ul className="text-xs text-gray-700 leading-relaxed space-y-1.5">
-                <li>① {t("\"지금까지 본 것 중 *제일 가까운* 노드부터 확정한다\"", "\"Settle the *closest* unsettled node first\"")}</li>
+                <li>① {t("\"지금까지 본 것 중 제일 가까운 노드부터 확정한다\"", "\"Settle the closest unsettled node first\"")}</li>
                 <li>② {t("그 노드에서 갈 수 있는 이웃들의 거리 갱신", "From it, relax neighbors' distances")}</li>
                 <li>③ {t("반복", "Repeat")}</li>
               </ul>
               <p className="text-xs text-gray-700 mt-2 leading-relaxed">
                 {t(
-                  "①번이 핵심 — 매번 *제일 가까운* 거를 찾아야 해요. 어디서 봤죠?",
-                  "Step ① is the trick — find the *closest* node each time. Seen that before?",
+                  "①번이 핵심 — 매번 제일 가까운 거를 찾아야 해요. 어디서 봤죠?",
+                  "Step ① is the trick — find the closest node each time. Seen that before?",
                 )}
               </p>
             </div>
@@ -902,8 +902,8 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               <p className="text-sm font-black text-blue-900">📝 {t("코드 — Dijkstra (스켈레톤)", "Code — Dijkstra (skeleton)")}</p>
               <p className="text-xs text-gray-700 mt-1">
                 {t(
-                  "지금은 *어떻게 짜는지* 가 아니라 *heap 이 어디서 쓰이는지* 만 봐요. 다음 토픽 (최단경로) 에서 깊게.",
-                  "Don't worry about writing it now — just *spot where heap is used*. Deep dive in the next topic.",
+                  "지금은 어떻게 짜는지 가 아니라 heap 이 어디서 쓰이는지 만 봐요. 다음 토픽 (최단경로) 에서 깊게.",
+                  "Don't worry about writing it now — just spot where heap is used. Deep dive in the next topic.",
                 )}
               </p>
             </div>
@@ -987,8 +987,8 @@ vector<long long> dijkstra(vector<vector<pair<int,int>>>& g, int start, int n) {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "지금 외울 거 — heap 이 (거리, 노드) 쌍을 들고 있고, 매번 *가장 작은 거리* pop. 그게 본질.",
-                "Take-away — heap holds (distance, node) pairs; each pop returns the *smallest distance*. That's the essence.",
+                "지금 외울 거 — heap 이 (거리, 노드) 쌍을 들고 있고, 매번 가장 작은 거리 pop. 그게 본질.",
+                "Take-away — heap holds (distance, node) pairs; each pop returns the smallest distance. That's the essence.",
               )}
             </p>
           </div>
@@ -1018,15 +1018,15 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed text-center mb-3">
               {t(
-                "잘 했어요. heap 은 보기엔 단순한 도구지만 — Silver/Gold 단계에서 *엄청* 많이 쓰여요. 🎉",
-                "Nice work. Heap looks simple but it's used *everywhere* at Silver/Gold level. 🎉",
+                "잘 했어요. heap 은 보기엔 단순한 도구지만 — Silver/Gold 단계에서 엄청 많이 쓰여요. 🎉",
+                "Nice work. Heap looks simple but it's used everywhere at Silver/Gold level. 🎉",
               )}
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-amber-200">
               <p className="text-sm text-gray-800 font-bold text-center">
                 {t(
-                  "다음 단계 — Dijkstra (최단경로). 거기서 heap 이 *진짜로* 어떻게 쓰이는지 봐요.",
-                  "Next up — Dijkstra (shortest path). See heap *really* in action.",
+                  "다음 단계 — Dijkstra (최단경로). 거기서 heap 이 진짜로 어떻게 쓰이는지 봐요.",
+                  "Next up — Dijkstra (shortest path). See heap really in action.",
                 )}
               </p>
             </div>

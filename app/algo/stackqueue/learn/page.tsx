@@ -138,8 +138,8 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
             </p>
             <p className="text-sm text-gray-700 leading-relaxed mb-3">
               {t(
-                "여기 알고리즘 토픽에서는 — 자료구조 자체를 처음 배우는 게 아니라, *알고리즘에서 도구로 쓰일 때* 의 관점을 봐요. 어떤 문제 신호에서 스택을 꺼내고, 어떤 신호에서 큐를 꺼낼지.",
-                "Here in the algorithm topic — we're not learning the data structure from scratch. We're looking at it *as a tool for algorithms*: which problem signals call for stack, which for queue.",
+                "여기 알고리즘 토픽에서는 — 자료구조 자체를 처음 배우는 게 아니라, 알고리즘에서 도구로 쓰일 때 의 관점을 봐요. 어떤 문제 신호에서 스택을 꺼내고, 어떤 신호에서 큐를 꺼낼지.",
+                "Here in the algorithm topic — we're not learning the data structure from scratch. We're looking at it as a tool for algorithms: which problem signals call for stack, which for queue.",
               )}
             </p>
             <p className="text-sm font-bold text-orange-700 text-center mt-4">
@@ -192,7 +192,7 @@ function Chapter1({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
             <p className="text-base font-black text-purple-900 mb-3 text-center">🎯 {t("이 토픽에서 다룰 것", "What this topic covers")}</p>
             <p className="text-xs text-gray-700 mb-3 leading-relaxed">
               {t(
-                "자료구조는 안 까먹었으니까 — 알고리즘 관점만 새로 봐요. 스택/큐가 *어떤 문제* 에서 결정적인 도구가 되는지.",
+                "자료구조는 안 까먹었으니까 — 알고리즘 관점만 새로 봐요. 스택/큐가 어떤 문제 에서 결정적인 도구가 되는지.",
                 "You haven't forgotten the data structure — so we'll just look at the algorithm angle: what problems make stack/queue the decisive tool.",
               )}
             </p>
@@ -259,7 +259,7 @@ function Chapter2({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
               <p className="text-xs font-bold text-emerald-800 mb-1">💡 {t("Monotonic Stack 패턴", "Monotonic stack pattern")}</p>
               <p className="text-[11px] text-gray-700 leading-relaxed">
                 {t(
-                  "스택에 '아직 답을 못 찾은 인덱스' 를 쌓아둬요. 새 원소가 들어올 때, 그게 스택 top 보다 크면 — top 의 답이 *바로 이 새 원소* 라는 뜻. 그래서 pop 하면서 답 기록. 각 인덱스가 최대 1번 push, 1번 pop → O(N).",
+                  "스택에 '아직 답을 못 찾은 인덱스' 를 쌓아둬요. 새 원소가 들어올 때, 그게 스택 top 보다 크면 — top 의 답이 바로 이 새 원소 라는 뜻. 그래서 pop 하면서 답 기록. 각 인덱스가 최대 1번 push, 1번 pop → O(N).",
                   "Stack holds 'indices waiting for an answer'. When a new element arrives, if it's bigger than stack top — that's the answer for top. Pop and record. Each index pushed/popped at most once → O(N).",
                 )}
               </p>
@@ -352,7 +352,7 @@ function Chapter2({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
                   "스택에 '인덱스' 를 넣는 게 포인트. 값만 넣으면 답 배열의 어디에 기록할지 모르거든요.",
-                  "Push *indices* (not values) — otherwise you don't know where to write the answer.",
+                  "Push indices (not values) — otherwise you don't know where to write the answer.",
                 )}
               </p>
             </div>
@@ -534,8 +534,8 @@ function Chapter3({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "BFS (너비 우선 탐색) 는 '시작점에서 몇 스텝?' 같은 *최단 거리* 문제의 기본기. 한 칸씩 동심원처럼 퍼져나가요.",
-                "BFS (breadth-first search) is the bread-and-butter of *shortest-step* problems. It expands in concentric rings, one step at a time.",
+                "BFS (너비 우선 탐색) 는 '시작점에서 몇 스텝?' 같은 최단 거리 문제의 기본기. 한 칸씩 동심원처럼 퍼져나가요.",
+                "BFS (breadth-first search) is the bread-and-butter of shortest-step problems. It expands in concentric rings, one step at a time.",
               )}
             </p>
             <div className="bg-white rounded-lg p-3 border border-blue-200 mb-3">
@@ -548,7 +548,7 @@ function Chapter3({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
               </p>
               <p className="text-[11px] text-gray-600 italic">
                 {t(
-                  "스택 (DFS) 쓰면 어디로 *깊이* 빠질지 몰라서 최단 보장 안 됨.",
+                  "스택 (DFS) 쓰면 어디로 깊이 빠질지 몰라서 최단 보장 안 됨.",
                   "Stack (DFS) dives deep wherever — no shortest-path guarantee.",
                 )}
               </p>
@@ -738,8 +738,8 @@ vector<vector<int>> bfs(vector<vector<int>>& grid, int sr, int sc) {
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "💡 핵심: popleft / q.front () + q.pop () 로 *앞에서* 꺼내고, *뒤에* push. 거리 갱신은 push 직전에 (재방문 방지).",
-                "💡 Key: pull from *front*, push to *back*. Set dist *before* pushing — prevents re-queueing.",
+                "💡 핵심: popleft / q.front () + q.pop () 로 앞에서 꺼내고, 뒤에 push. 거리 갱신은 push 직전에 (재방문 방지).",
+                "💡 Key: pull from front, push to back. Set dist before pushing — prevents re-queueing.",
               )}
             </p>
           </div>
@@ -794,8 +794,8 @@ function Chapter4({ onComplete, codeLang, alreadyDone }: { onComplete: () => voi
               <p className="text-xs font-bold text-purple-800 mb-1.5">{t("왜 스택?", "Why stack?")}</p>
               <p className="text-[11px] text-gray-700 leading-relaxed">
                 {t(
-                  "닫는 괄호는 *가장 최근에 열린* 여는 괄호와 짝이 돼야 해요. '가장 최근' = 스택의 top. 그래서 LIFO 가 정확히 맞아 들어요.",
-                  "A closing bracket pairs with the *most recently opened* one. 'Most recent' = top of stack. LIFO fits exactly.",
+                  "닫는 괄호는 가장 최근에 열린 여는 괄호와 짝이 돼야 해요. '가장 최근' = 스택의 top. 그래서 LIFO 가 정확히 맞아 들어요.",
+                  "A closing bracket pairs with the most recently opened one. 'Most recent' = top of stack. LIFO fits exactly.",
                 )}
               </p>
             </div>

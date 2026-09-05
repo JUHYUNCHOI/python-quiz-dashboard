@@ -143,8 +143,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-sky-700">{t("질문", "Question")}:</b>{" "}
               {t(
-                "출발 정점 → 도착 정점, 가중치 합이 **최소** 인 경로는?",
-                "Start vertex → end vertex — path whose weight **sum is minimum**?",
+                "출발 정점 → 도착 정점, 가중치 합이 최소인 경로는?",
+                "Start vertex → end vertex — path whose weight sum is minimum?",
               )}
             </p>
             <div className="bg-emerald-50 rounded-lg p-3 border border-emerald-200">
@@ -163,8 +163,8 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "BFS 는 '간선 한 칸 = 거리 1' 일 때만 최단 경로를 보장해요. 가중치가 다양하면 BFS 가 *틀린 답* 을 줘요.",
-                "BFS guarantees shortest only for unit-weight edges. With varied weights, BFS gives *wrong answers*.",
+                "BFS 는 '간선 한 칸 = 거리 1' 일 때만 최단 경로를 보장해요. 가중치가 다양하면 BFS 가 틀린 답 을 줘요.",
+                "BFS guarantees shortest only for unit-weight edges. With varied weights, BFS gives wrong answers.",
               )}
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-rose-200 mb-3">
@@ -203,12 +203,12 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </div>
               </div>
               <p className="text-[11px] text-gray-700 leading-relaxed mt-2 text-center">
-                {t("BFS 는 간선 *개수* 만 세서 A→C 를 골라요 — 가중치 10 을 못 봐요!",
-                   "BFS counts only the *number* of edges, so it picks A→C — blind to the weight 10!")}
+                {t("BFS 는 간선 개수 만 세서 A→C 를 골라요 — 가중치 10 을 못 봐요!",
+                   "BFS counts only the number of edges, so it picks A→C — blind to the weight 10!")}
               </p>
             </div>
             <p className="text-sm font-bold text-rose-700 text-center">
-              {t("그래서 — 가중치를 *합산* 하는 알고리즘이 필요해요.", "So — we need algorithms that *sum weights*.")}
+              {t("그래서 — 가중치를 합산 하는 알고리즘이 필요해요.", "So — we need algorithms that sum weights.")}
             </p>
           </div>
         )}
@@ -220,7 +220,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
               {t("4 알고리즘 — 한 줄 요약", "4 algorithms — one-liners")}
             </h3>
             <p className="text-xs text-gray-600 text-center mb-4">
-              {t("다음 챕터부터 하나씩. 여기서는 '언제 뭐 쓰는지' 만.", "We'll go deep one by one. Here: *when* to use each.")}
+              {t("다음 챕터부터 하나씩. 여기서는 '언제 뭐 쓰는지' 만.", "We'll go deep one by one. Here: when to use each.")}
             </p>
             <div className="space-y-2">
               <div className="bg-white rounded-lg p-2.5 border-2 border-cyan-200">
@@ -252,7 +252,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                   🌐 {t("Floyd-Warshall — 모든 쌍 최단", "Floyd-Warshall — all pairs")}
                 </p>
                 <p className="text-[11px] text-gray-700 leading-relaxed">
-                  {t("O(V³). 작은 그래프 (V ≤ 400) 만. 코드는 *3 줄*.", "O(V³). Tiny graphs (V ≤ 400). Code is *3 lines*.")}
+                  {t("O(V³). 작은 그래프 (V ≤ 400) 만. 코드는 3 줄.", "O(V³). Tiny graphs (V ≤ 400). Code is 3 lines.")}
                 </p>
               </div>
             </div>
@@ -309,8 +309,8 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               <p className="text-sm text-gray-800 leading-relaxed">
                 <b className="text-amber-700">{t("규칙", "Rule")}:</b>{" "}
                 {t(
-                  "지금까지 본 정점들 중 *가장 가까운* 미확정 정점을 골라 — 확정. 그 정점에서 이웃들을 *갱신*. 반복.",
-                  "Among unfinalized vertices, pick the *closest one* — finalize it. Relax its neighbors. Repeat.",
+                  "지금까지 본 정점들 중 가장 가까운 미확정 정점을 골라 — 확정. 그 정점에서 이웃들을 갱신. 반복.",
+                  "Among unfinalized vertices, pick the closest one — finalize it. Relax its neighbors. Repeat.",
                 )}
               </p>
             </div>
@@ -480,7 +480,7 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
               <p className="text-sm font-black text-blue-900">📝 {t("코드 — 다익스트라 (인접 리스트 + 우선순위 큐)", "Code — Dijkstra (adj list + PQ)")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {t("PQ 에서 꺼낼 때 'd != dist[u]' 검사 — *낡은 항목* 스킵.", "On pop, check d != dist[u] — skip *stale* entries.")}
+                {t("PQ 에서 꺼낼 때 'd != dist[u]' 검사 — 낡은 항목 스킵.", "On pop, check d != dist[u] — skip stale entries.")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
@@ -595,7 +595,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
   const { step, setStep, rootRef } = useSlideChapter(alreadyDone ? totalSteps - 1 : 0)   // 이미 끝낸 챕터를 다시 열면 잠기지 않도록
 
   // BF round-by-round on 4 nodes (V=4): 1→2 (4), 1→3 (5), 2→3 (-2), 3→4 (1)
-  // 이 시뮬은 "한 라운드는 *이전 라운드* 값으로 모든 간선을 검사" 하는 모델로 보여준다
+  // 이 시뮬은 "한 라운드는 이전 라운드 값으로 모든 간선을 검사" 하는 모델로 보여준다
   // (간선 순서에 안 휘둘려서 라운드 개념이 또렷함).  V-1 = 3 갱신 라운드 + 1 검사 라운드.
   //   R1 [0,4,5,∞] → R2 [0,4,2,6] → R3 [0,4,2,3] → R4(검사) 변화 없음
   const bfSteps: Array<{ dist: (number | null)[]; msg: string; msgEn: string }> = [
@@ -644,8 +644,8 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               <p className="text-xs text-rose-800 leading-relaxed">
                 🔍 <b>{t("보너스 — 음수 사이클 검출", "Bonus — negative cycle detection")}</b>{" "}
                 {t(
-                  "V 번째 라운드에 또 갱신되는 게 있으면 *음수 사이클 존재*. 무한 절감 가능 — '최단 거리' 자체가 정의 안 됨.",
-                  "If a Vth round still relaxes anything → *negative cycle*. Infinite improvement — no defined 'shortest'.",
+                  "V 번째 라운드에 또 갱신되는 게 있으면 음수 사이클 존재. 무한 절감 가능 — '최단 거리' 자체가 정의 안 됨.",
+                  "If a Vth round still relaxes anything → negative cycle. Infinite improvement — no defined 'shortest'.",
                 )}
               </p>
             </div>
@@ -734,7 +734,7 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               </button>
             </div>
             <p className="text-[11px] text-gray-500 mt-2 text-center">
-              {t("주목: dist[3] 가 5 → 2 로 *줄어듦*. 음수 간선 덕분.", "Note: dist[3] *drops* 5 → 2 thanks to the negative edge.")}
+              {t("주목: dist[3] 가 5 → 2 로 줄어듦. 음수 간선 덕분.", "Note: dist[3] drops 5 → 2 thanks to the negative edge.")}
             </p>
           </div>
         )}
@@ -819,7 +819,7 @@ vector<long long> bellmanFord(int n, int src,
             />
             <p className="text-xs text-gray-600 text-center leading-relaxed">
               {t(
-                "함정: dist[u] == INF 일 때 + w 를 *해선 안 됨* (오버플로우). 모든 relax 전에 INF 검사!",
+                "함정: dist[u] == INF 일 때 + w 를 해선 안 됨 (오버플로우). 모든 relax 전에 INF 검사!",
                 "Pitfall: NEVER add w to dist[u] when dist[u] is INF (overflow). Guard every relax.",
               )}
             </p>
@@ -903,15 +903,15 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               {t(
-                "'정점 A 에서 정점 B 로' 한 쌍이 아니라 — *모든 쌍* 최단 거리가 필요할 때? 다익스트라를 V 번? 가능하지만, V 가 작으면 더 간단한 길이 있어요.",
-                "Need shortest path between *every pair*? You could run Dijkstra V times. But for small V there's a simpler way.",
+                "'정점 A 에서 정점 B 로' 한 쌍이 아니라 — 모든 쌍 최단 거리가 필요할 때? 다익스트라를 V 번? 가능하지만, V 가 작으면 더 간단한 길이 있어요.",
+                "Need shortest path between every pair? You could run Dijkstra V times. But for small V there's a simpler way.",
               )}
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-teal-200 mb-3">
               <p className="text-xs font-bold text-teal-800 mb-2">💡 {t("핵심 통찰", "Key insight")}</p>
               <p className="text-xs text-gray-700 leading-relaxed mb-2">
                 {t(
-                  "k 라는 정점을 *경유지로 허용* 했을 때, i 에서 j 로의 최단 거리는?",
+                  "k 라는 정점을 경유지로 허용 했을 때, i 에서 j 로의 최단 거리는?",
                   "If we allow vertex k as an intermediate, what's the shortest i→j?",
                 )}
               </p>
@@ -935,8 +935,8 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               <p className="text-xs text-amber-800 leading-relaxed">
                 ⚠️ <b>{t("시간: O(V³)", "Time: O(V³)")}</b>{" "}
                 {t(
-                  "V=100 → 10⁶ 안전. V=400 → 6.4 × 10⁷ 한계. V=1000 부터는 너무 느림. *작은 그래프 전용*.",
-                  "V=100 → 10⁶ fast. V=400 → 6.4 × 10⁷ marginal. V≥1000 too slow. *Small graphs only*.",
+                  "V=100 → 10⁶ 안전. V=400 → 6.4 × 10⁷ 한계. V=1000 부터는 너무 느림. 작은 그래프 전용.",
+                  "V=100 → 10⁶ fast. V=400 → 6.4 × 10⁷ marginal. V≥1000 too slow. Small graphs only.",
                 )}
               </p>
             </div>
@@ -1011,7 +1011,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
               <p className="text-sm font-black text-blue-900">📝 {t("코드 — 진짜 3 줄", "Code — really just 3 lines")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {t("루프 순서 *반드시* k → i → j. 바꾸면 틀림.", "Loop order MUST be k → i → j. Swap = wrong.")}
+                {t("루프 순서 반드시 k → i → j. 바꾸면 틀림.", "Loop order MUST be k → i → j. Swap = wrong.")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}

@@ -79,7 +79,7 @@ export function makeHoofballCh1(E) {
       type: "quiz",
       narr: t(E,
         "3 cows at positions [1, 5, 10].  Trace each cow's pass — who ends up never receiving one?",
-        "3 마리 소 위치 [1, 5, 10]. 각 소의 패스 추적 — 결국 *받지 못하는* 소는?"),
+        "3 마리 소 위치 [1, 5, 10]. 각 소의 패스 추적 — 결국 받지 못하는 소는?"),
       question: t(E,
         "Positions [1,5,10]. How many balls needed?",
         "위치 [1,5,10]. 필요한 공 수는?"),

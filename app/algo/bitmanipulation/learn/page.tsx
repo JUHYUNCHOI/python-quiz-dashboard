@@ -201,7 +201,7 @@ function Chapter1({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </p>
                 <p className="text-xs text-gray-700">
                   {t(
-                    "CPU 가 32 비트를 *동시에* 처리 — O(1).",
+                    "CPU 가 32 비트를 동시에 처리 — O(1).",
                     "CPU processes 32 bits in parallel — O(1).",
                   )}
                 </p>

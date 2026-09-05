@@ -434,8 +434,8 @@ function Chapter2({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-cyan-700">{t("문제", "Problem")}:</b>{" "}
               {t(
-                "5! = 5 × 4 × 3 × 2 × 1 = 120. for 로도 짤 수 있지만, 재귀로 보면 *구조가 보여요*.",
-                "5! = 5 × 4 × 3 × 2 × 1 = 120. You can use a for loop, but recursion shows the *structure*.",
+                "5! = 5 × 4 × 3 × 2 × 1 = 120. for 로도 짤 수 있지만, 재귀로 보면 구조가 보여요.",
+                "5! = 5 × 4 × 3 × 2 × 1 = 120. You can use a for loop, but recursion shows the structure.",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-cyan-200 mb-3">
@@ -508,8 +508,8 @@ f(1) = 1          ← base case!`)}
               <p className="text-[11px] text-rose-800 leading-relaxed">
                 ⚠️ <b>{t("베이스 케이스 없으면?", "No base case?")}</b>{" "}
                 {t(
-                  "f(1) 도 f(0) 부르고, f(0) 도 f(-1) 부르고... 끝없이 부름. *Stack overflow* (스택 터짐).",
-                  "f(1) calls f(0), f(0) calls f(-1)... forever. *Stack overflow* (stack explodes).",
+                  "f(1) 도 f(0) 부르고, f(0) 도 f(-1) 부르고... 끝없이 부름. Stack overflow (스택 터짐).",
+                  "f(1) calls f(0), f(0) calls f(-1)... forever. Stack overflow (stack explodes).",
                 )}
               </p>
             </div>
@@ -812,14 +812,14 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
               <p className="text-xs font-bold text-emerald-800 mb-2">⚠️ {t("함정 — 호출 트리 그려보면", "Trap — draw the call tree")}</p>
               <p className="text-xs text-gray-700 leading-relaxed mb-2">
                 {t(
-                  "fib(5) 부르면 fib(4) + fib(3). fib(4) 부르면 fib(3) + fib(2). 그런데 fib(3) 가 이미 또 나왔어요. *같은 걸 두 번 계산*.",
-                  "fib(5) calls fib(4) + fib(3). fib(4) calls fib(3) + fib(2). But we ALREADY needed fib(3). *Same thing computed twice*.",
+                  "fib(5) 부르면 fib(4) + fib(3). fib(4) 부르면 fib(3) + fib(2). 그런데 fib(3) 가 이미 또 나왔어요. 같은 걸 두 번 계산.",
+                  "fib(5) calls fib(4) + fib(3). fib(4) calls fib(3) + fib(2). But we ALREADY needed fib(3). Same thing computed twice.",
                 )}
               </p>
               <p className="text-xs text-gray-700 leading-relaxed">
                 {t(
-                  "트리가 *지수적으로* 폭발해요. fib(40) 부르면 약 ",
-                  "Tree explodes *exponentially*. fib(40) makes about ",
+                  "트리가 지수적으로 폭발해요. fib(40) 부르면 약 ",
+                  "Tree explodes exponentially. fib(40) makes about ",
                 )}<b className="text-rose-700">10 {t("억 번", "billion")}</b>{t(
                   " 호출 — 1 초 넘어요.",
                   " calls — over 1 second.",
@@ -898,7 +898,7 @@ function Chapter4({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             <div className="bg-blue-50 rounded-2xl p-3 border-2 border-blue-200">
               <p className="text-sm font-black text-blue-900">📝 {t("코드 — 메모이제이션 추가", "Code — add memoization")}</p>
               <p className="text-xs text-gray-700 mt-1">
-                {t("딱 *한 줄* 추가로 지수 → 선형. dict (또는 unordered_map) 에 결과 저장.", "*One line* added — exponential → linear. Store results in dict (or unordered_map).")}
+                {t("딱 한 줄 추가로 지수 → 선형. dict (또는 unordered_map) 에 결과 저장.", "One line added — exponential → linear. Store results in dict (or unordered_map).")}
               </p>
             </div>
             <CodeBlock lang={codeLang} setLang={setCodeLang}
@@ -986,14 +986,14 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             </h3>
             <p className="text-sm text-gray-800 leading-relaxed text-center mb-3">
               {t(
-                "정말 잘 했어요. 재귀는 학생들이 가장 많이 *나가떨어지는* 토픽 — 끝까지 온 것만으로도 큰 성취예요. 🎉",
+                "정말 잘 했어요. 재귀는 학생들이 가장 많이 나가떨어지는 토픽 — 끝까지 온 것만으로도 큰 성취예요. 🎉",
                 "Really nice work. Recursion is where most students give up — finishing it is a real win. 🎉",
               )}
             </p>
             <div className="bg-white/80 rounded-lg p-3 border border-amber-200">
               <p className="text-sm text-gray-800 font-bold text-center">
                 {t(
-                  "이제 알고리즘의 *진짜 도구* 가 손에 잡혔어요. 분할 정복, DP, 백트래킹 — 모두 재귀 위에서 굴러가요.",
+                  "이제 알고리즘의 진짜 도구 가 손에 잡혔어요. 분할 정복, DP, 백트래킹 — 모두 재귀 위에서 굴러가요.",
                   "Now you've got real algorithm tools. Divide & conquer, DP, backtracking — all run on recursion.",
                 )}
               </p>
@@ -1006,10 +1006,10 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
             <h3 className="text-base font-black text-amber-900 mb-3">📌 {t("핵심 정리", "Key Takeaways")}</h3>
             <ol className="space-y-2 text-sm text-gray-800">
               <li><b>1.</b> {t("재귀 = ", "Recursion = ")}<b>{t("베이스 케이스 + 재귀 호출", "base case + recursive call")}</b> {t("두 줄이면 끝", "two lines")}</li>
-              <li><b>2.</b> {t("문제를 *반으로* 쪼개면 O(N) → ", "Split problem *in half* → O(N) → ")}<b>O(log N)</b> {t("(분할 정복)", "(divide & conquer)")}</li>
+              <li><b>2.</b> {t("문제를 반으로 쪼개면 O(N) → ", "Split problem in half → O(N) → ")}<b>O(log N)</b> {t("(분할 정복)", "(divide & conquer)")}</li>
               <li><b>3.</b> {t("같은 문제 반복? ", "Same subproblem again? ")}<b>{t("메모이제이션", "memoize")}</b> {t("한 줄로 살림", "saves it in one line")}</li>
               <li><b>4.</b> {t("재귀 깊이 너무 깊으면? ", "Too deep? ")}<b>{t("스택 오버플로우", "stack overflow")}</b> {t("— Python ", "— Python ")}<code className="bg-white px-1 rounded text-xs">sys.setrecursionlimit</code></li>
-              <li><b>5.</b> {t("디버깅: 트리를 *손으로* 그려봐요. 종이 위에서 첫 3 단계 따라가면 보여요.", "Debug: *draw the tree by hand*. First 3 levels on paper makes it click.")}</li>
+              <li><b>5.</b> {t("디버깅: 트리를 손으로 그려봐요. 종이 위에서 첫 3 단계 따라가면 보여요.", "Debug: draw the tree by hand. First 3 levels on paper makes it click.")}</li>
             </ol>
             <p className="text-xs text-amber-700 mt-3 text-center italic">
               {t("재귀가 손에 잡히면 — DP, 백트래킹, 트리, 그래프 다 열려요!", "Once recursion clicks, DP/backtracking/trees/graphs all open up!")}

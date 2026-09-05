@@ -314,7 +314,7 @@ return -1                                ← not found`)}
               </pre>
             </div>
             <p className="text-sm font-bold text-cyan-700 text-center">
-              {t("핵심: 매 비교 후 — 범위가 *반으로* 줄어요.", "Key: after each compare — range *halves*.")}
+              {t("핵심: 매 비교 후 — 범위가 반으로 줄어요.", "Key: after each compare — range halves.")}
             </p>
           </div>
         )}
@@ -552,14 +552,14 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
                 "arr = [1, 3, 3, 3, 5, 7]. Find the ",
               )}<b>{t("첫 위치", "first position")}</b>{t(
                 " 는? 기본 이분탐색은 어느 3 든 멈춰버려요. 운에 맡김.",
-                " of 3. Basic binary search stops at *any* 3 — luck-based.",
+                " of 3. Basic binary search stops at any 3 — luck-based.",
               )}
             </p>
             <p className="text-sm text-gray-800 leading-relaxed mb-3">
               <b className="text-rose-700">{t("문제 2", "Problem 2")}:</b>{" "}
               {t(
-                "arr 가 정렬돼 있는데 6 을 *삽입* 하려면 어디? 5 와 7 사이 — idx 5.",
-                "arr is sorted. To *insert* 6 keeping it sorted — where? Between 5 and 7 → idx 5.",
+                "arr 가 정렬돼 있는데 6 을 삽입 하려면 어디? 5 와 7 사이 — idx 5.",
+                "arr is sorted. To insert 6 keeping it sorted — where? Between 5 and 7 → idx 5.",
               )}
             </p>
             <div className="bg-white/70 rounded-lg p-3 border border-rose-200">
@@ -644,8 +644,8 @@ function Chapter3({ onComplete, codeLang, setCodeLang, alreadyDone }: { onComple
             </div>
             <p className="text-[11px] text-gray-600 mt-3 text-center leading-relaxed">
               {t(
-                "포인트: arr[mid] ≥ 3 이어도 *멈추지 않고* high 만 줄여요. low = high 가 되면 그 자리가 답.",
-                "Trick: even when arr[mid] ≥ 3 we *don't stop* — just shrink high. When low = high, that's the answer.",
+                "포인트: arr[mid] ≥ 3 이어도 멈추지 않고 high 만 줄여요. low = high 가 되면 그 자리가 답.",
+                "Trick: even when arr[mid] ≥ 3 we don't stop — just shrink high. When low = high, that's the answer.",
               )}
             </p>
           </div>
@@ -1096,8 +1096,8 @@ function Chapter5({ onComplete, alreadyDone }: { onComplete: () => void; codeLan
                 </p>
                 <p className="text-xs text-gray-700 leading-relaxed mb-2">
                   {t(
-                    "그리디 / DP / 그래프 — 이분탐색과 자주 *섞여요*.",
-                    "Greedy / DP / Graph — often *combine* with binary search.",
+                    "그리디 / DP / 그래프 — 이분탐색과 자주 섞여요.",
+                    "Greedy / DP / Graph — often combine with binary search.",
                   )}
                 </p>
                 <Link href="/algo" className="text-xs font-bold text-purple-700 underline hover:text-purple-900">
