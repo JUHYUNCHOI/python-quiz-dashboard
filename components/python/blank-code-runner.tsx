@@ -748,8 +748,24 @@ export function BlankCodeRunner({
             </div>
           )}
 
-          {/* Lv2 정답 힌트 — 1차 힌트 본 후 요청 가능 (또는 3회 실패 시 자동) */}
-          {hint2 && showHint && !showAnswerHint && (
+          {/* Lv2 정답 힌트 — hint2 는 **정답 전문**이다. 그래서 한 번은 시도해야 열린다.
+              2026-09-05 선생님 수업 관찰: "학생이 수업내용에서 뭘 말해주는지 잘 모르고
+              연습문제 풀고 결국 뒤로 가서 배끼던데?"
+              그 경로가 여기였다 — 예전엔 `showHint` 만 걸려 있어서, 한 글자도 안 쳐보고
+              힌트1 → 힌트2 **두 번 클릭이면 정답 전문**이 나왔다.
+              `attempts` 는 실패한 실행에서만 오르므로(291·299·312·331행),
+              `attempts >= 1` = "한 번 돌려봤는데 틀렸다". 맞힌 학생은 여기 올 일이 없다.
+              ⚠️ 안전망을 없앤 게 아니다. 순서를 되돌린 것뿐이다 — 시도가 먼저다. */}
+          {hint2 && showHint && !showAnswerHint && attempts < 1 && (
+            <div className="w-full rounded-lg border-2 border-dashed border-gray-300 px-3 py-2.5 text-xs md:text-sm font-bold text-gray-400 flex items-center gap-2">
+              <Lightbulb className="w-4 h-4" />
+              <span>🔑 {t("정답에 더 가까운 힌트 (2/2)", "Closer to answer (2/2)")}</span>
+              <span className="ml-auto text-[10px] font-medium" style={{ wordBreak: "keep-all" }}>
+                {t("한 번 채워서 실행해보면 열려요", "Fill it in and run once to unlock")}
+              </span>
+            </div>
+          )}
+          {hint2 && showHint && !showAnswerHint && attempts >= 1 && (
             <button
               onClick={() => setShowAnswerHint(true)}
               className="w-full text-left px-3 py-2.5 rounded-lg border-2 border-dashed border-orange-300 text-orange-600 text-xs md:text-sm font-bold hover:bg-orange-50 transition-colors flex items-center gap-2"
