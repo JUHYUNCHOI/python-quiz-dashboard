@@ -69,6 +69,16 @@ print(fruits)  # ['사과', '바나나', '딸기']
 명시적 구분자는 **연속돼도 그대로** — 빈 문자열이 끼어들 수 있어요. 데이터에 따라 의식해야.`
         },
         {
+          /* 2026-09-05 선생님: "시뮬이 필요하면 시뮬을 보던가 해야하지 않을까?"
+             이 레슨은 420줄인데 시뮬이 하나도 없었다. 글자 덩어리가 조각으로
+             갈라지는 그림을 한 번도 안 보고 코드부터 쳤다. ◀▶ 로 직접 넘긴다. */
+          id: "split-sim",
+          type: "interactive",
+          title: "✂️ 눈으로 보기 — 쪼개지는 순간",
+          description: "글자 한 덩어리가 어떻게 조각으로 갈라지는지 한 단계씩 봐요.",
+          component: "pySplitJoinVisualizer"
+        },
+        {
           id: "split-maxsplit",
           type: "explain",
           title: "🎯 split(구분자, 횟수) — 일부만 쪼개기",
@@ -265,6 +275,15 @@ print(result)  # "사과,바나나,딸기"
 \`\`\`
 
 형식: **\`'구분자'.join(리스트)\`** — 구분자가 앞에, 리스트가 인자!`
+        },
+        {
+          /* 2026-09-05: 같은 시뮬의 join 탭. split 과 정반대라는 걸
+             같은 그림에서 거꾸로 보여주는 게 말로 설명하는 것보다 빠르다. */
+          id: "join-sim",
+          type: "interactive",
+          title: "🔗 눈으로 보기 — 다시 붙는 순간",
+          description: "위 시뮬에서 🔗 join 탭을 눌러보세요. split 과 정반대예요.",
+          component: "pySplitJoinVisualizer"
         },
         {
           id: "try4",

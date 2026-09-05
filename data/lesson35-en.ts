@@ -44,11 +44,11 @@ Let's master the **5 most useful** ones:
           type: "tryit",
           title: "len() - Length",
           task: "Check various lengths with len()",
-          initialCode: `print(len([1, 2, 3]))       # List length
+          initialCode: `print(___([1, 2, 3]))       # List length
 print(len('Hello'))         # String length
 print(len({'a': 1, 'b': 2}))  # Dictionary key count`,
           expectedOutput: "3\n5\n2",
-          hint: "3 items, 5 characters, 2 keys"
+          hint: "The function that counts length. The two lines below already show it."
         },
         {
           id: "ch1-3",
@@ -59,9 +59,9 @@ print(len({'a': 1, 'b': 2}))  # Dictionary key count`,
 print(sum([10, 20, 30]))      # Basic
 
 # Starting value
-print(sum([1, 2, 3], 10))     # Start from 10`,
+print(___([1, 2, 3], ___))     # Start from 10`,
           expectedOutput: "15\n60\n16",
-          hint: "Third one: 10 + 1 + 2 + 3 = 16"
+          hint: "The adding function, and where to start from. Make the answer 16."
         },
         {
           id: "ch1-4",
@@ -136,10 +136,10 @@ max([10, 4, 8])     # 10   ← a list works too
 print(min([3, 7, 1, 9]))    # Min from list
 
 # Can also use multiple arguments
-print(max(3, 7, 1, 9))      # Max of values
-print(min(3, 7, 1, 9))      # Min of values`,
+print(___(3, 7, 1, 9))      # Max of values
+print(___(3, 7, 1, 9))      # Min of values`,
           expectedOutput: "9\n1\n9\n1",
-          hint: "9 is largest, 1 is smallest"
+          hint: "Same functions as the two lines above — values work as well as a list."
         },
         {
           id: "ch2-2",
@@ -196,9 +196,9 @@ print(f'Average: {average}')`,
           initialCode: `numbers = [3, 1, 4, 1, 5, 9]
 
 print(sorted(numbers))                    # Ascending
-print(sorted(numbers, reverse=True))     # Descending`,
+print(sorted(numbers, ___=True))     # Descending`,
           expectedOutput: "[1, 1, 3, 4, 5, 9]\n[9, 5, 4, 3, 1, 1]",
-          hint: "reverse=True for descending"
+          hint: "The English word for backwards. It flips the ascending order."
         },
         {
           id: "ch3-2",
@@ -255,9 +255,9 @@ Line them up by the tag numbers 3, 5, 6 → \`pie\`, \`apple\`, \`banana\`. The 
           initialCode: `students = [('Tom', 85), ('Jane', 92), ('Mike', 78)]
 
 # Sort by score (second element)
-print(sorted(students, key=lambda x: x[1]))`,
+print(sorted(students, key=lambda x: x[___]))`,
           expectedOutput: "[('Mike', 78), ('Tom', 85), ('Jane', 92)]",
-          hint: "x[1] is score! 78, 85, 92 order"
+          hint: "In the pair Tom and 85, which position is the score? Count from 0."
         },
         {
           id: "ch3-5",
@@ -323,10 +323,10 @@ Notice the \`int\` handed to \`map\` has *no parentheses* (\`int()\` ❌). You'r
           title: "map() Basics",
           task: "Convert strings to integers",
           initialCode: `strings = ['1', '2', '3']
-numbers = list(map(int, strings))
+numbers = list(map(___, strings))
 print(numbers)`,
           expectedOutput: "[1, 2, 3]",
-          hint: "map(int, ...) converts each to int"
+          hint: "The machine that turns text into a whole number — no parentheses!"
         },
         {
           id: "ch4-3",
@@ -375,6 +375,22 @@ Now you can unpack them into \`a, b, c\`, or wrap in \`list()\` to grab them all
 @key: \`map(int, input().split())\` — the magic one-liner for multiple-number input!`
         },
         {
+          /* 2026-09-05: 한글판 data/lesson35.ts 와 짝. 이유는 그쪽 주석 참고.
+             영어로 두고 배우는 학생에게 안 고쳐진 레슨이 나가면 안 된다. */
+          id: "ch4-4b",
+          type: "tryit",
+          title: "Fill the blanks: read one line",
+          task: "Chain the three tools from above. The input is the stdin below.",
+          initialCode: `# The input is "10 20 30"
+a, b, c = map(___, input().___())
+
+print(a + b + c)`,
+          expectedOutput: "60",
+          stdin: "10 20 30",
+          hint: "First blank = the text-to-integer machine. Second = split on spaces.",
+          hint2: "a, b, c = map(int, input().split())"
+        },
+        {
           id: "ch4-5",
           type: "mission",
           title: "Convert and Sum",
@@ -389,6 +405,20 @@ print(___(numbers))`,
           expectedOutput: "100",
           hint: "Transformer = applies a function to every item. Totaler = adds them up.",
           hint2: "list(map(int, string_nums)), then sum(numbers)"
+        },
+        {
+          id: "ch4-5b",
+          type: "mission",
+          title: "🎯 From scratch: total of one input line",
+          task: "Add up every number on one space-separated line. You do not know how many there will be!",
+          initialCode: `# Write it from scratch here!
+
+
+`,
+          expectedOutput: "150",
+          stdin: "10 20 30 40 50",
+          hint: "You cannot use a, b, c when the count is unknown. Take it as a list.",
+          hint2: `numbers = list(map(int, input().split()))\nprint(sum(numbers))`
         }
       ]
     },
@@ -424,14 +454,14 @@ Run each one below and it'll click fast. 👇
           title: "abs(), round()",
           task: "Try absolute value and rounding",
           initialCode: `# abs() - Absolute value
-print(abs(-5))
+print(___(-5))
 print(abs(5))
 
 # round() - Rounding
 print(round(3.7))
-print(round(3.14159, 2))  # 2 decimal places`,
+print(___(3.14159, 2))  # 2 decimal places`,
           expectedOutput: "5\n5\n4\n3.14",
-          hint: "abs() for absolute value, round() for rounding"
+          hint: "The answers are already written on the neighbouring lines."
         },
         {
           id: "ch5-2",
@@ -441,10 +471,10 @@ print(round(3.14159, 2))  # 2 decimal places`,
           initialCode: `numbers = [1, -2, 3, -4, 5]
 
 # Keep only positive numbers
-positives = list(filter(lambda x: x > 0, numbers))
+positives = list(___(lambda x: x > 0, numbers))
 print(positives)`,
           expectedOutput: "[1, 3, 5]",
-          hint: "Only x > 0 ones remain"
+          hint: "The one that keeps only what passes a test — map changes all, this picks some."
         },
         {
           id: "ch5-3",
@@ -472,10 +502,10 @@ print(sum(result))
           task: "Print index with value",
           initialCode: `fruits = ['apple', 'banana', 'cherry']
 
-for i, f in enumerate(fruits):
+for i, f in ___(fruits):
     print(f'{i}: {f}')`,
           expectedOutput: "0: apple\n1: banana\n2: cherry",
-          hint: "enumerate() gives both index and value"
+          hint: "The function that hands you the number along with the value."
         },
         {
           id: "ch5-5",
@@ -485,10 +515,24 @@ for i, f in enumerate(fruits):
           initialCode: `names = ['Tom', 'Jane']
 scores = [85, 92]
 
-result = list(zip(names, scores))
+result = list(___(names, scores))
 print(result)`,
           expectedOutput: "[('Tom', 85), ('Jane', 92)]",
-          hint: "zip() combines lists into tuples"
+          hint: "The one that pairs two lists up like a zipper."
+        },
+        {
+          id: "ch5-6",
+          type: "mission",
+          title: "🎯 From scratch: label the scores",
+          task: "Pair names with scores and print one line each, like Tom: 85",
+          initialCode: `names = ['Tom', 'Jane', 'Max']
+scores = [85, 92, 78]
+
+# Write it yourself here!
+`,
+          expectedOutput: "Tom: 85\nJane: 92\nMax: 78",
+          hint: "The zipper function can go straight into a for loop. for n, s in ...",
+          hint2: `for n, s in zip(names, scores):\n    print(f"{n}: {s}")`
         }
       ]
     }

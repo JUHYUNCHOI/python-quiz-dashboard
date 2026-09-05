@@ -311,6 +311,16 @@ const registry: Record<string, ComponentEntry> = {
     }),
   },
 
+  // split() · join() 시뮬레이터 (레슨 18) — 2026-09-05 추가
+  pySplitJoinVisualizer: {
+    load: () => import("@/components/animations/py-split-join-visualizer"),
+    exportName: "PySplitJoinVisualizer",
+    props: (step: any, lang: string) => ({
+      lang,
+      ...(step?.componentProps || {}),
+    }),
+  },
+
   // Python 문자열 메서드 시뮬레이터 (upper/lower/strip/replace/find/count 탭)
   pyStringMethodVisualizer: {
     load: () => import("@/components/animations/py-string-method-visualizer"),

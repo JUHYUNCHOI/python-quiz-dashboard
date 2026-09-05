@@ -69,6 +69,15 @@ Bare \`split()\` (no argument) splits by **any whitespace** (spaces, tabs, newli
 Explicit delimiters keep **consecutive separators** as-is — empty strings can appear. Be aware depending on data source.`
         },
         {
+          /* 2026-09-05: 한글판 data/lesson18.ts 와 짝. 영어로 두면 안 고쳐진
+             레슨이 나가므로 같이 넣는다. 시뮬 컴포넌트는 lang prop 을 받는다. */
+          id: "split-sim",
+          type: "interactive",
+          title: "✂️ See it happen — the moment it splits",
+          description: "Watch one blob of text break into pieces, one step at a time.",
+          component: "pySplitJoinVisualizer"
+        },
+        {
           id: "split-maxsplit",
           type: "explain",
           title: "🎯 split(sep, count) — Split a few times only",
@@ -265,6 +274,13 @@ print(result)  # "apple,banana,strawberry"
 \`\`\`
 
 Format: **\`'separator'.join(list)\`** — separator in front, list as the argument!`
+        },
+        {
+          id: "join-sim",
+          type: "interactive",
+          title: "🔗 See it happen — the moment it joins back",
+          description: "Hit the 🔗 join tab in the sim above. It is split in reverse.",
+          component: "pySplitJoinVisualizer"
         },
         {
           id: "try4",
