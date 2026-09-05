@@ -1,49 +1,43 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Play, RotateCcw, Factory, Package } from "lucide-react"
+import { ChevronLeft, ChevronRight, RotateCcw, Factory } from "lucide-react"
 
 // ============================================
 // MapFactory - map() 공장 시각화
 // ============================================
 export function MapFactoryVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const isEn = lang === "en"
+  /* 2026-09-05: 자동재생을 걷어내고 ◀▶ 수동으로 바꿨다.
+     학생: "1초마다 휙휙 넘어가면 이해하기도 전에 다음 게 나와. 멈출 수가 없어."
+     선생님도 전에 "자동은 뭐지? 우리 시뮬 스타일이랑 넘 달라" 라고 하셨다
+     (memory/feedback_sim_style_consistency.md).
+     본보기 = components/animations/py-split-join-visualizer.tsx */
   const [step, setStep] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [processedItems, setProcessedItems] = useState<number[]>([])
-  
+
   const inputItems = ["'1'", "'2'", "'3'", "'4'"]
   const outputItems = ["1", "2", "3", "4"]
-  
-  const totalSteps = inputItems.length + 1 // 4개 처리 + 완료
-  
-  useEffect(() => {
-    if (!isPlaying) return
-    
-    if (step < totalSteps) {
-      const timer = setTimeout(() => {
-        if (step < inputItems.length) {
-          setProcessedItems(prev => [...prev, step])
-        }
-        setStep(step + 1)
-      }, 1000)
-      return () => clearTimeout(timer)
-    } else {
-      setIsPlaying(false)
-    }
-  }, [isPlaying, step, totalSteps])
-  
-  const reset = () => {
-    setStep(0)
-    setProcessedItems([])
-    setIsPlaying(false)
-  }
-  
-  const start = () => {
-    reset()
-    setTimeout(() => setIsPlaying(true), 100)
-  }
+
+  // 0 = 시작 전, 1~4 = 하나씩 처리됨
+  const totalSteps = inputItems.length
+  const processedItems = Array.from({ length: step }, (_, i) => i)
+
+  const BEATS = isEn
+    ? [
+        "Four pieces of text are lined up. Still text, not numbers.",
+        "The first '1' passes through int. Out comes the number 1.",
+        "'2' goes through the same way. We did not tell it to.",
+        "'3' too. The machine does the same job to whatever comes in.",
+        "All four are numbers now. That is what map did.",
+      ]
+    : [
+        "글자 네 개가 벨트에 줄 서 있어요. 아직 글자예요.",
+        "첫 번째 '1' 이 int 기계를 지나요. 숫자 1 이 되어 나와요.",
+        "'2' 도 똑같이 지나가요. 우리가 하나씩 시킨 게 아니에요.",
+        "'3' 도요. 들어온 것마다 기계가 같은 일을 해요.",
+        "네 개가 다 숫자가 됐어요. 이게 map 이 한 일이에요.",
+      ]
   
   return (
     <div className="bg-purple-50 rounded-2xl p-6 border-2 border-purple-200">
@@ -86,8 +80,8 @@ export function MapFactoryVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
             className="w-32 h-32 bg-purple-600 rounded-2xl flex flex-col items-center justify-center shadow-xl"
           >
             <Factory className="w-10 h-10 text-white mb-1" />
-            <span className="text-white font-bold text-lg">int()</span>
-            <span className="text-purple-200 text-xs">{isEn ? "Converting..." : "변환 중..."}</span>
+            <span className="text-white font-bold text-lg">int</span>
+            <span className="text-purple-200 text-xs">{isEn ? "the machine" : "기계"}</span>
           </motion.div>
           
           {/* 처리 중인 아이템 */}
@@ -152,33 +146,43 @@ export function MapFactoryVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
         </motion.div>
       )}
       
-      {/* 컨트롤 버튼 */}
-      <div className="flex justify-center gap-4 mt-6">
-        <button
-          onClick={start}
-          disabled={isPlaying}
-          className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-400 text-white font-bold rounded-xl transition-colors"
-        >
-          <Play className="w-5 h-5" />
-          {step === 0 ? (isEn ? "Start!" : "시작!") : (isEn ? "Watch again" : "다시 보기")}
-        </button>
-        <button
-          onClick={reset}
-          className="flex items-center gap-2 px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl transition-colors"
-        >
-          <RotateCcw className="w-5 h-5" />
-          {isEn ? "Reset" : "리셋"}
-        </button>
+      {/* 말풍선 — 한 단계 한 문장. 아래 정적 설명 블록은 걷어냈다:
+          시뮬이 보여주는 걸 글로 또 말하면 "설명 두 번" 이 된다 (ux-reviewer). */}
+      <div
+        className="mt-4 min-h-[52px] rounded-xl border-2 border-purple-200 bg-white px-4 py-3 text-[15px] leading-relaxed text-gray-800"
+        style={{ wordBreak: "keep-all", textWrap: "balance" }}
+      >
+        {BEATS[step]}
       </div>
-      
-      {/* 설명 */}
-      <div className="mt-4 bg-purple-100 rounded-xl p-4">
-        <p className="text-purple-800 text-sm">
-          <strong>{isEn ? "💡 How map() works:" : "💡 map() 작동 원리:"}</strong><br />
-          {isEn ? "1. Takes each element from the list one by one" : "1. 리스트의 각 요소를 하나씩 꺼냄"}<br />
-          {isEn ? "2. Converts it with int()" : "2. int() 함수로 변환"}<br />
-          {isEn ? "3. Stores in a new list!" : "3. 새 리스트에 저장!"}
-        </p>
+
+      {/* ◀ ▶ — 자동재생 없음 */}
+      <div className="flex items-center justify-center gap-3 mt-4">
+        <button
+          onClick={() => setStep((v) => Math.max(0, v - 1))}
+          disabled={step === 0}
+          className="rounded-lg bg-white p-2 text-purple-700 shadow disabled:opacity-30"
+          aria-label={isEn ? "Previous step" : "이전 단계"}
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <span className="font-mono text-sm text-gray-600">
+          {step + 1} / {totalSteps + 1}
+        </span>
+        <button
+          onClick={() => setStep((v) => Math.min(totalSteps, v + 1))}
+          disabled={step === totalSteps}
+          className="rounded-lg bg-white p-2 text-purple-700 shadow disabled:opacity-30"
+          aria-label={isEn ? "Next step" : "다음 단계"}
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+        <button
+          onClick={() => setStep(0)}
+          className="ml-2 rounded-lg bg-white p-2 text-gray-500 shadow"
+          aria-label={isEn ? "Back to start" : "처음으로"}
+        >
+          <RotateCcw className="h-4 w-4" />
+        </button>
       </div>
     </div>
   )
