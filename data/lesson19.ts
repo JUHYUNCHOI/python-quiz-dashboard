@@ -442,7 +442,7 @@ print(board[(0, 0)])  # "X"
           task: "두 점 사이의 맨해튼 거리 (|x1-x2| + |y1-y2|) 를 계산하세요!",
           initialCode: "p1 = (1, 2)\np2 = (4, 6)\n\n# 언패킹 후 거리 계산\nx1, y1 = p1\nx2, y2 = p2\n\ndist = ___\nprint(f\"거리: {dist}\")",
           expectedOutput: "거리: 7",
-          hint: "abs(x1 - x2) + abs(y1 - y2)",
+          hint: "세로줄 |a-b| 는 부호를 뗀 차이예요. 부호 떼는 함수를 두 번 쓰고 더해요.",
           hint2: "dist = abs(x1 - x2) + abs(y1 - y2)"
         },
         {

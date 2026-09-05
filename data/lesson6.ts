@@ -404,7 +404,7 @@ Hello
           task: "'사과'를 '포도'로 바꾸세요!",
           initialCode: "text = \"사과가 맛있다\"\nprint(text.replace(___, ___))",
           expectedOutput: "포도가 맛있다",
-          hint: ".replace(\"사과\", \"포도\")",
+          hint: "글자를 바꿔주는 메서드가 있어요. 괄호에 바꿀 글자, 새 글자 순서로 넣어요.",
           hint2: "text.replace(\"사과\", \"포도\")"
         },
         {

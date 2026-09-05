@@ -232,7 +232,7 @@ print(nums)              # [20]
           task: "맨 앞에 '오렌지' 끼워넣고, 마지막 요소를 꺼내서 출력하세요!",
           initialCode: "fruits = [\"사과\", \"바나나\", \"딸기\"]\n\n# 맨 앞에 '오렌지' 끼워넣기\nfruits.___(0, \"오렌지\")\n\n# 마지막 꺼내기 (반환값 받기)\nlast = fruits.___()\n\nprint(f\"리스트: {fruits}\")\nprint(f\"꺼낸 값: {last}\")",
           expectedOutput: "리스트: ['오렌지', '사과', '바나나']\n꺼낸 값: 딸기",
-          hint: "fruits.insert(0, \"오렌지\") / last = fruits.pop()",
+          hint: "끼워넣는 메서드는 몇 번째에 넣을지를 먼저 받아요. 꺼내는 메서드는 마지막 것을 빼서 돌려줘요.",
           hint2: "fruits.insert(0, \"오렌지\")\nlast = fruits.pop()"
         },
         {

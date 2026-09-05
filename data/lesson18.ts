@@ -235,7 +235,7 @@ words = input().split()
           initialCode: "nums = list(map(int, input().split()))\n\n# 평균을 구해서 'avg: ___' 형식으로 출력 (소수점 포함 OK)\navg = ___\nprint(f\"avg: {avg}\")",
           expectedOutput: "avg: 6.0",
           stdin: "3 5 7 8 9 4",
-          hint: "sum(nums) / len(nums)",
+          hint: "평균 = 다 더한 값 ÷ 개수예요. 둘 다 내장함수가 하나씩 있어요.",
           hint2: "avg = sum(nums) / len(nums)"
         },
         {
