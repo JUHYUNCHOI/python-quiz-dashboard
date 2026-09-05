@@ -13,7 +13,8 @@
 | 레슨 새로 쓰기 · 품질 감사 | `.claude/docs/lesson-quality.md` |
 | 화면 만들기 · 데이터 위치 찾기 | `.claude/docs/learning-modes.md` |
 | DB · 진도 저장 | `.claude/docs/supabase.md` |
-| **지금 어디까지 왔나 · 다음 뭘 하나** | **`project-lead` 에이전트를 부른다** (근거는 아래 두 파일) |
+| **지금 어디까지 왔나 · 다음 뭘 하나** | **`.claude/WORK.md`** — 살아있는 작업 목록. 주인은 `project-lead` |
+| 되돌리기 어려운 결정 (배포·삭제·구조 변경) | **`/decide` 스킬** — 한 사람이 판정하지 않는다 |
 | 남은 일 목록 | `~/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/next_work_2026-09-04.md` |
 | 우선순위 정하기 | `.claude/docs/roadmap.md` |
 
