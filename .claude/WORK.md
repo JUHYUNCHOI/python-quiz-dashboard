@@ -28,7 +28,9 @@ python3 scripts/check-frozen.py     # 건드리면 안 되는 파일을 건드�
 
 | 무엇 | 담당 | 끝났다고 보는 기준 | 상태 |
 |---|---|---|---|
-| 레슨 32 ch1 — 함수 첫 도입인데 `def` 를 한 번도 안 쳐봄 (32.4%) | lesson-content-reviewer → frontend-engineer | `python3 scripts/check-active-ratio.py 32` 가 50%+ | 대기 |
+| 레슨 32 ch1 — `def` 를 처음 쳐보는 `tryit` 추가 | 메인 세션 | ch1 에 능동 스텝 존재 | **완료** (32.4→34.2%) |
+| 레슨 32 나머지 챕터 (34.2% → 50%+) | lesson-content-reviewer → frontend-engineer | `check-active-ratio.py 32` 가 50%+ | 대기 |
+| ⚠️ ch1 tryit 은 **채점이 약함** — def 를 안 쳐도 통과된다. 만들기만 하면 출력이 없어서(호출은 ch2) 검증할 방법이 없다. 설계상 한계 | 선생님 판단 | — | 보류 |
 | 레슨 37 (28.6%) · 39 (28.6%) | 〃 | 같은 스크립트로 50%+ | 대기 |
 | `/algo` 8개 토픽이 읽기 전용 — 퀴즈 67개를 지운 자리 | pedagogy-reviewer(설계) → frontend-engineer(구현) | 토픽마다 `onClick` 있는 능동 스텝 1개 이상 | 대기 |
 | `chipxchg` 의 `CheckSim` 이 가짜 퀴즈 — "골라보세요" 인데 `onClick` 0개 | frontend-engineer | 옵션에 `onClick` 존재, 오답 시 되묻기 동작 | 대기 |
