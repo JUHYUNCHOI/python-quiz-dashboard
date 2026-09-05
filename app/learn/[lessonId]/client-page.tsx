@@ -1445,7 +1445,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               **무조건 true** 다 — "틀리거나 안 풀어도 크레딧 주고 진행" 이 확정된
               제품 결정이기 때문이다(위 160행 주석). 그래서 이 문구는 3개월 동안
               단 한 번도 화면에 뜬 적이 없다. ux-reviewer 가 죽은 코드로 찾아냈다.
-              두면 다음 사람이 또 "왜 안 뜨지" 하고 버그로 착각한다. */
+              두면 다음 사람이 또 "왜 안 뜨지" 하고 버그로 착각한다. */}
           <div className="flex gap-3 md:gap-4 justify-between max-w-2xl mx-auto">
             <button onClick={goPrev} disabled={currentStep === 0 && currentChapter === 0}
               title={t("이전 (⌘← / Ctrl←)", "Prev (⌘← / Ctrl←)")}
