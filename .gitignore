@@ -59,3 +59,4 @@ scripts/output/
 /test.txt
 /sol.py
 /sol.cpp
+scripts/__pycache__/
