@@ -31,7 +31,8 @@
 파일을 옮기거나 지웠으면 이 표를 같이 고쳐라. 기계로 확인하려면:
 
 ```bash
-python3 scripts/check-docs.py
+python3 scripts/check-docs.py       # 목차가 가리키는 파일이 실제로 있나
+python3 scripts/check-frozen.py     # 건드리면 안 되는 파일을 건드렸나 (커밋 전)
 ```
 
 ## 🧠 선생님 피드백은 반드시 남긴다 (제일 자주 놓치는 것)
