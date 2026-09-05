@@ -90,3 +90,51 @@ python3 scripts/check-frozen.py     # 건드리면 안 되는 파일을 건드�
 - quest 3차 검토 반영 (mooin2 조사 버그 · printseq · buymilk · cowsplits · mexes 스포일러)
 - `check-outputs` 14개 실패 → 0 · quest 177개 C++ 컴파일 검증
 - CLAUDE.md 778 → 218줄 + `.claude/docs/` · 피드백 기억 3층 구조
+
+---
+
+## 2026-09-05 `/decide` 3라운드 — 빈칸 없는 `tryit` 88개를 어떻게 할 것인가
+
+참여: lesson-content-reviewer · pedagogy-reviewer · python-qa · student-python → project-lead 종합
+
+### 갈렸다가 합의된 것
+- **짧은(≤25줄) 데모는 `explain` 으로 내리지 않는다.** pedagogy-reviewer 가 2라운드에서
+  철회했다 — `render-content.tsx:452-472` 를 읽고 나서, explain 의 코드블록엔
+  **실행기가 없다**는 걸 확인했기 때문. 학생이 "짧은 건 다 읽었고 좋았다" 고 한
+  유일한 능동 지점이 사라진다.
+- **"뒤 미션이 커버한다" 논리는 폐기.** lesson-content-reviewer 가 2라운드에서 철회 —
+  자기 근거가 "학생이 스스로 찾아낸다" 가 아니라 "hint2 가 답을 알려준다" 였다고 인정.
+- **`hint2: "코드를 그대로 실행하세요!"` 42개** = 작성자 스스로 "연습 아님" 선언.
+  둘이 독립적으로 같은 신호를 찾았고, 그 42개가 전부 빈칸 없는 tryit 이다.
+
+### 아직 갈려 있는 것 (숨기지 않는다)
+- 26줄 이상 데모의 처방. lesson-content-reviewer = **분할**, pedagogy-reviewer = **explain 재분류**.
+  project-lead 판단: hint2 를 고치기 전엔 이 논쟁의 실익이 작으니 **뒤로 미룬다.**
+
+### 잣대의 한계 (셋 다 동의)
+비율은 레슨 평균이라 **챕터 단위 공백을 가린다.**
+채점 스텝이 0개인 챕터 12개 (메인 세션 전수 측정):
+`lesson33/ch1` `lesson33/ch7` `lesson37/ch1` `lesson38/ch1` `lesson39/ch1` `lesson40/ch4`
+`lesson41/ch1` `lesson42/ch2` `lesson46/ch1` `lesson47/ch1` `lesson49/ch1` `lesson52/ch3`
+그중 **퀴즈조차 없는 것 둘**: `lesson33/ch7` · `lesson42/ch2`
+(pedagogy-reviewer 는 42~52 만 봐서 5개를 찾았다. 전수로 재니 12개다.)
+
+### 실행 순서
+
+| | 무엇 | 상태 | 끝났다고 보는 기준 |
+|---|---|---|---|
+| 1 | **hint2 잠금** — 시도 1회 후 열리게 | ✅ `6e976b8c` | 시도 0회에 정답 전문이 안 보이고, 1회 실패 후 열린다 (브라우저 확인 완료) |
+| 2 | **진짜 버그 9개** — `lesson6.ts`×4 `lesson14.ts`×3 `lesson19.ts` `lesson1.ts` | ⬜ | 제목이 "✋손으로 처음부터" 인데 실행하면 빈 출력. `mission` 승격 후 실행 검증 |
+| 3 | **채점 0개 챕터 12개** | ⬜ | 각 챕터에 채점되는 스텝 1개 이상. `lesson42/ch2` `lesson33/ch7` 부터 |
+| 4 | 나머지 ~79개 재분류 | ⬜ | 1~3 이후. 26줄+ 처방은 두 리뷰어 재조율 필요 |
+| 5 | **안 가르치고 쓰는 문법** — 한 줄 if, 리스트 컴프리헨션, "함수를 값으로 저장했다 호출" | ⬜ | 88개를 다 고쳐도 이 구멍은 안 메워진다. 별도 항목 |
+
+### ⚠️ 2번이 왜 1순위가 아니었나
+개수(레슨50:7개…)로 우선순위를 매긴 내 방식이 틀렸다. lesson51 은 6개인데 진짜 공백이
+**0개**고, lesson42 는 6개인데 4개 + 챕터 통짜 공백이다. **개수는 잣대가 아니다.**
+
+### 확인 못 한 것
+- `attempts >= 1` 이 실제로 베끼는 비율을 얼마나 줄이는지 — 코드 논리로만 판단했다
+- 42개(자기선언) 와 pedagogy 의 56개(42~52 범위) 의 정확한 diff
+- `lesson1.ts try-empty-print` 는 `mission` 으로 바꿔도 안 잡힌다 —
+  `python-runner.tsx` 의 `normalize` 가 개행을 스페이스로 뭉갠다 (pedagogy 발견, 미수정)
