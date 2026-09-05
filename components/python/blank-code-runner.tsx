@@ -35,6 +35,13 @@ interface BlankCodeRunnerProps {
   hint?: string
   hint2?: string
   onSuccess?: () => void
+  /* 건너뛰기 — 2026-09-05. 예전엔 이 버튼도 onSuccess() 를 불렀는데,
+     그러면 client-page 의 handleSuccess 가 correctlySolvedRef 에 넣고
+     removeResolveLater 까지 불러서(client-page.tsx:498-499)
+     **못 푼 문제가 "나중에 다시 풀기" 목록에서 지워졌다.**
+     학생도 "스킵했다는 표시가 남아서 나중에 다시 풀 수 있으면 좋겠다" 고 했다.
+     이제 완료 처리만 하는 handleUnlock 으로 간다. */
+  onSkip?: () => void
   minHeight?: string
   storageKey?: string
   /** 이미 완료한 스텝 여부 — 저장된 코드 없으면 정답으로 자동 채움 */
@@ -111,6 +118,7 @@ export function BlankCodeRunner({
   hint = "",
   hint2 = "",
   onSuccess,
+  onSkip,
   minHeight = "100px",
   storageKey,
   isStepDone = false,
@@ -806,7 +814,7 @@ export function BlankCodeRunner({
           라벨의 "정답은 위 힌트 확인" 도 뺐다. 힌트가 없는 스텝에서는 거짓말이 된다. */}
       {!isCorrect && attempts >= 2 && (
         <button
-          onClick={() => { onSuccess?.() }}
+          onClick={() => { (onSkip ?? onSuccess)?.() }}
           className="w-full py-2.5 rounded-xl text-sm font-medium text-gray-500 bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-all"
           style={{ wordBreak: "keep-all", textWrap: "balance" }}
         >

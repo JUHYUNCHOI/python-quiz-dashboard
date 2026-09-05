@@ -14,10 +14,13 @@ interface TryItStepProps {
   hintLevel: number
   onHintLevelChange: (level: number) => void
   onSuccess: () => void
+  /* 건너뛰기용 — 완료 처리만 하고 "맞혔다" 로는 안 친다.
+     그래야 "나중에 다시 풀기" 목록에 남는다 (client-page.tsx:643 recordResolveLaterIfNeeded). */
+  onUnlock?: () => void
   lessonId?: string
 }
 
-export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onSuccess, lessonId }: TryItStepProps) {
+export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onSuccess, onUnlock, lessonId }: TryItStepProps) {
   const hasBlanks = !!(step.initialCode && step.initialCode.includes('___'))
   const { t } = useLanguage()
 
@@ -70,6 +73,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
             hint2={step.hint2}
             choices={step.choices}
             onSuccess={onSuccess}
+            onSkip={onUnlock}
             minHeight={step.type === "mission" ? "140px" : "100px"}
             isStepDone={isCompleted}
           />

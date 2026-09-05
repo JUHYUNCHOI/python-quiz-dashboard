@@ -17,6 +17,8 @@ import { motion, AnimatePresence } from "framer-motion"
 // ============================================================
 
 interface PythonStringMethodVisualizerProps {
+  /** 보여줄 탭. 안 주면 전부. 그 챕터에서 배운 것만 주는 게 맞다. */
+  tabs?: string[]
   lang?: "ko" | "en"
   initialText?: string
 }
@@ -160,9 +162,16 @@ function StringRow({
 export function PythonStringMethodVisualizer({
   lang = "ko",
   initialText = "  Hello World  ",
+  tabs,
 }: PythonStringMethodVisualizerProps) {
   const isEn = lang === "en"
-  const [tab, setTab] = useState<MethodTab>("upper")
+  /* 2026-09-05: 보여줄 탭을 고를 수 있게 했다.
+     학생 에이전트 지적 — 레슨6 ch1(upper/lower 배우자마자)에 붙였더니
+     "화면엔 strip·replace·find·count 탭까지 다 보여. 나는 그 시점엔 안 배웠어.
+      '이게 뭐지, 나 이거 배운 적 없는데' 싶어서 안 눌러볼 것 같아."
+     안 배운 게 눈앞에 있으면 시뮬을 안 연다. 챕터마다 배운 것만 보여준다. */
+  const shownTabs = tabs?.length ? TABS.filter((t) => tabs.includes(t)) : TABS
+  const [tab, setTab] = useState<MethodTab>(shownTabs[0] ?? "upper")
   const [text, setText] = useState(initialText)
   const [oldStr, setOldStr] = useState("l")
   const [newStr, setNewStr] = useState("L")
@@ -431,7 +440,7 @@ export function PythonStringMethodVisualizer({
       <div className="rounded-2xl border-2 border-slate-200 bg-white p-4 space-y-4">
         {/* 탭 */}
         <div className="flex flex-wrap gap-1.5">
-          {TABS.map((t) => {
+          {shownTabs.map((t) => {
             const meta = TAB_META[t]
             const active = t === tab
             return (

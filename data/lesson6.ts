@@ -119,7 +119,7 @@ print("안녕".upper())
           title: "🔤 눈으로 보기 — 메서드가 하는 일",
           description: "글자를 직접 바꿔가며 눌러봐요. 원래 글은 그대로 남아요.",
           component: "pyStringMethodVisualizer",
-          componentProps: { initialText: "Hello World" }
+          componentProps: { initialText: "Hello World", tabs: ["upper", "lower"] }
         },
         {
           id: "predict-upper-result",
@@ -265,9 +265,9 @@ print(text.strip())
           id: "method-sim-2",
           type: "interactive",
           title: "✂️ 눈으로 보기 — 공백이 잘리는 순간",
-          description: "위 시뮬에서 ✂️ strip 탭을 눌러봐요. 앞뒤 공백만 사라져요.",
+          description: "앞뒤 공백이 잘리는 걸 눈으로 봐요. replace 탭도 여기 있어요.",
           component: "pyStringMethodVisualizer",
-          componentProps: { initialText: "  Hello World  " }
+          componentProps: { initialText: "  Hello World  ", tabs: ["strip", "lstrip", "rstrip", "replace"] }
         },
         {
           id: "predict-strip-middle",
@@ -533,6 +533,15 @@ print(text.count("z"))   # 0
 print("Hello".find("h"))   # -1  (소문자 h 는 없음)
 print("Hello".find("H"))   # 0
 \`\`\``
+        },
+        {
+          // 같은 시뮬 세 번째. 이번엔 find·count 탭만 — 여기까지 왔으면 둘 다 배웠다.
+          id: "method-sim-3",
+          type: "interactive",
+          title: "🔍 눈으로 보기 — 어디에, 몇 번",
+          description: "찾을 글자를 바꿔가며 눌러봐요. 자리 번호와 개수가 같이 보여요.",
+          component: "pyStringMethodVisualizer",
+          componentProps: { initialText: "banana", tabs: ["find", "count"] }
         },
         {
           id: "predict-count-banana",

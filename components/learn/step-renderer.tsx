@@ -55,6 +55,7 @@ export function StepRenderer({
           hintLevel={hintLevel}
           onHintLevelChange={onHintLevelChange}
           onSuccess={onSuccess}
+          onUnlock={onUnlock}
           lessonId={lessonId}
         />
       )
@@ -113,6 +114,7 @@ export function StepRenderer({
           hintLevel={hintLevel}
           onHintLevelChange={onHintLevelChange}
           onSuccess={onSuccess}
+          onUnlock={onUnlock}
           lessonId={lessonId}
         />
       )
