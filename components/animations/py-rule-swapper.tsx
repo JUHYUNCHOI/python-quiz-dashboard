@@ -13,6 +13,10 @@
    ⚠️ 자동재생 없음. ◀ ▶ 로 학생이 직접 넘긴다.
    ⚠️ 탭을 바꿔도 단계를 되감지 않는다 — 마지막 단계에서 카드만
       갈아 끼워 보는 것이 이 시뮬의 핵심 장면이기 때문이다.
+   ⚠️ 화면 글자는 반드시 lang 을 타야 한다. 2026-09-06 python-qa 가
+      첫 판에서 이걸 잡았다 — lang 을 받기만 하고 안 써서, 영어 트랙
+      학생(data/lesson34-en.ts ch3-2b)이 이 스텝만 한국어를 보고 있었다.
+      같은 결함이 pySplitJoinVisualizer·mapFactory 에도 남아 있다.
    ============================================================ */
 
 import { useState } from "react"
@@ -23,36 +27,77 @@ const KO = { wordBreak: "keep-all" as const, textWrap: "balance" as const }
 
 const NUMS = [1, 2, 3]
 
+type Lang = "ko" | "en"
 type RuleId = "double" | "square"
 
-const RULES: Record<RuleId, { label: string; code: string; fn: (n: number) => number }> = {
-  double: { label: "두 배로", code: "lambda n: n * 2", fn: (n) => n * 2 },
-  square: { label: "제곱으로", code: "lambda n: n ** 2", fn: (n) => n ** 2 },
+/* 함수 이름은 레슨 파일과 글자까지 맞춘다 —
+   ko: 전부/숫자들/규칙, en: apply_all/numbers/rule */
+const T = {
+  ko: {
+    pick: "건네줄 규칙 카드",
+    slot: "규칙 구멍",
+    empty: "비어 있어요",
+    fn: "전부",
+    param: "숫자들",
+    rule: "규칙",
+    result: "결과",
+    call: "규칙",
+    prev: "이전 단계",
+    next: "다음 단계",
+    reset: "처음으로",
+    labels: { double: "두 배로", square: "제곱으로" },
+    /* 한 단계에 한 문장만. 길어지면 학생이 안 읽는다. */
+    beats: [
+      "함수 `전부` 는 재료를 **둘** 받아요 — 숫자들, 그리고 **규칙**.",
+      "규칙 구멍에 **함수 카드**를 끼웠어요. 숫자가 아니라 함수예요.",
+      "숫자 하나가 규칙 카드를 **통과**하면 결과가 하나 나와요.",
+      "나머지도 똑같이 통과시키면 끝! 이게 함수가 돌려주는 답이에요.",
+      "이제 **규칙 카드만 갈아 끼워** 보세요. `전부` 는 한 글자도 안 고쳤어요.",
+    ],
+  },
+  en: {
+    pick: "Rule card to hand over",
+    slot: "rule slot",
+    empty: "empty",
+    fn: "apply_all",
+    param: "numbers",
+    rule: "rule",
+    result: "result",
+    call: "rule",
+    prev: "previous step",
+    next: "next step",
+    reset: "back to start",
+    labels: { double: "Double it", square: "Square it" },
+    beats: [
+      "`apply_all` takes **two** ingredients — the numbers, and a **rule**.",
+      "We slid a **function card** into the rule slot. Not a number — a function.",
+      "One number **passes through** the rule card and comes out changed.",
+      "Send the rest through the same way. That's what the function returns.",
+      "Now **swap only the rule card**. `apply_all` didn't change one character.",
+    ],
+  },
+} as const
+
+const RULES: Record<RuleId, { code: string; fn: (n: number) => number }> = {
+  double: { code: "lambda n: n * 2", fn: (n) => n * 2 },
+  square: { code: "lambda n: n ** 2", fn: (n) => n ** 2 },
 }
 
-/* 한 단계에 한 문장만. 길어지면 학생이 안 읽는다. */
-const BEATS = [
-  "함수 `전부` 는 재료를 **둘** 받아요 — 숫자들, 그리고 **규칙**.",
-  "규칙 구멍에 **함수 카드**를 끼웠어요. 숫자가 아니라 함수예요.",
-  "숫자 하나가 규칙 카드를 **통과**하면 결과가 하나 나와요.",
-  "나머지도 똑같이 통과시키면 끝! 이게 함수가 돌려주는 답이에요.",
-  "이제 **규칙 카드만 갈아 끼워** 보세요. `전부` 는 한 글자도 안 고쳤어요.",
-]
-
-export function PyRuleSwapper({ lang = "ko" }: { lang?: "ko" | "en" }) {
+export function PyRuleSwapper({ lang = "ko" }: { lang?: Lang }) {
   const [rule, setRule] = useState<RuleId>("double")
   const [step, setStep] = useState(0)
-  const last = BEATS.length - 1
+  const t = T[lang] ?? T.ko
+  const last = t.beats.length - 1
 
   const r = RULES[rule]
-  const slotted = step >= 1                    // 규칙 카드가 구멍에 꽂혔나
-  const done = step >= 3 ? NUMS.length : step >= 2 ? 1 : 0   // 통과한 숫자 개수
+  const slotted = step >= 1                                   // 규칙 카드가 구멍에 꽂혔나
+  const done = step >= 3 ? NUMS.length : step >= 2 ? 1 : 0    // 통과한 숫자 개수
 
   return (
     <div className="rounded-2xl border-2 border-indigo-200 bg-indigo-50 p-5">
       {/* 규칙 카드 고르기 */}
       <div className="mb-1 text-center text-xs font-bold text-indigo-700" style={KO}>
-        건네줄 규칙 카드
+        {t.pick}
       </div>
       <div className="mb-4 flex justify-center gap-2">
         {(Object.keys(RULES) as RuleId[]).map((k) => (
@@ -65,7 +110,7 @@ export function PyRuleSwapper({ lang = "ko" }: { lang?: "ko" | "en" }) {
                 : "bg-white text-indigo-700 hover:bg-indigo-100"
             }`}
           >
-            🎁 {RULES[k].label}
+            🎁 {t.labels[k]}
           </button>
         ))}
       </div>
@@ -73,7 +118,7 @@ export function PyRuleSwapper({ lang = "ko" }: { lang?: "ko" | "en" }) {
       {/* 지금 부르는 코드 */}
       <div className="mb-4 flex justify-center">
         <code className="rounded-lg bg-gray-800 px-3 py-1.5 text-left text-sm text-yellow-300">
-          전부([1, 2, 3], {slotted ? r.code : "___"})
+          {t.fn}([1, 2, 3], {slotted ? r.code : "___"})
         </code>
       </div>
 
@@ -81,22 +126,24 @@ export function PyRuleSwapper({ lang = "ko" }: { lang?: "ko" | "en" }) {
       <div className="mb-4 rounded-xl border-2 border-gray-200 bg-white p-5">
         {/* 함수 상자 — 몸통은 절대 안 바뀐다는 걸 보여준다 */}
         <div className="mb-4 rounded-lg bg-gray-50 p-3 font-mono text-[13px] leading-relaxed text-gray-700">
-          <div>def 전부(숫자들, <span className="font-bold text-indigo-600">규칙</span>):</div>
-          <div className="pl-4">결과 = []</div>
-          <div className="pl-4">for n in 숫자들:</div>
+          <div>
+            def {t.fn}({t.param}, <span className="font-bold text-indigo-600">{t.rule}</span>):
+          </div>
+          <div className="pl-4">{t.result} = []</div>
+          <div className="pl-4">for n in {t.param}:</div>
           <div className="pl-8">
-            결과.append(
+            {t.result}.append(
             <span className={slotted ? "rounded bg-yellow-200 font-bold text-yellow-900" : ""}>
-              규칙(n)
+              {t.rule}(n)
             </span>
             )
           </div>
-          <div className="pl-4">return 결과</div>
+          <div className="pl-4">return {t.result}</div>
         </div>
 
         {/* 규칙 구멍 */}
         <div className="mb-4 flex flex-col items-center justify-center gap-2 sm:flex-row">
-          <span className="whitespace-nowrap text-sm font-bold text-gray-500">규칙 구멍</span>
+          <span className="whitespace-nowrap text-sm font-bold text-gray-500">{t.slot}</span>
           <div className="min-w-[190px] rounded-xl border-2 border-dashed border-indigo-300 p-2 text-center">
             <AnimatePresence mode="wait">
               {slotted ? (
@@ -111,7 +158,7 @@ export function PyRuleSwapper({ lang = "ko" }: { lang?: "ko" | "en" }) {
                 </motion.code>
               ) : (
                 <motion.span key="empty" className="block py-1.5 text-sm text-gray-400">
-                  비어 있어요
+                  {t.empty}
                 </motion.span>
               )}
             </AnimatePresence>
@@ -127,8 +174,10 @@ export function PyRuleSwapper({ lang = "ko" }: { lang?: "ko" | "en" }) {
                 <span className="w-10 rounded-lg bg-gray-100 py-1 text-center font-mono text-base font-bold text-gray-800">
                   {n}
                 </span>
-                <span className={`text-sm ${passed ? "text-indigo-500" : "text-gray-300"}`}>
-                  ─ 규칙 ▶
+                <span
+                  className={`whitespace-nowrap text-sm ${passed ? "text-indigo-500" : "text-gray-300"}`}
+                >
+                  ─ {t.call} ▶
                 </span>
                 <motion.span
                   animate={{ opacity: passed ? 1 : 0.25, scale: passed ? 1 : 0.9 }}
@@ -145,10 +194,10 @@ export function PyRuleSwapper({ lang = "ko" }: { lang?: "ko" | "en" }) {
 
         <div className="mt-4 text-center">
           <span className="font-mono text-sm text-gray-600">
-            결과 ={" "}
+            {t.result} ={" "}
             <span className="font-bold text-indigo-700">
               [{NUMS.slice(0, done).map((n) => r.fn(n)).join(", ")}
-              {done < NUMS.length ? (done ? ", …" : "") : ""}]
+              {done && done < NUMS.length ? ", …" : ""}]
             </span>
           </span>
         </div>
@@ -159,15 +208,15 @@ export function PyRuleSwapper({ lang = "ko" }: { lang?: "ko" | "en" }) {
         className="mb-4 min-h-[52px] rounded-xl border-2 border-indigo-200 bg-white px-4 py-3 text-[15px] leading-relaxed text-gray-800"
         style={KO}
       >
-        {BEATS[step].split(/(\*\*[^*]+\*\*|`[^`]+`)/).map((t, i) =>
-          t.startsWith("**") ? (
-            <strong key={i} className="text-indigo-700">{t.slice(2, -2)}</strong>
-          ) : t.startsWith("`") ? (
+        {t.beats[step].split(/(\*\*[^*]+\*\*|`[^`]+`)/).map((x, i) =>
+          x.startsWith("**") ? (
+            <strong key={i} className="text-indigo-700">{x.slice(2, -2)}</strong>
+          ) : x.startsWith("`") ? (
             <code key={i} className="rounded bg-gray-100 px-1 font-mono text-[14px] text-gray-800">
-              {t.slice(1, -1)}
+              {x.slice(1, -1)}
             </code>
           ) : (
-            <span key={i}>{t}</span>
+            <span key={i}>{x}</span>
           )
         )}
       </div>
@@ -178,25 +227,25 @@ export function PyRuleSwapper({ lang = "ko" }: { lang?: "ko" | "en" }) {
           onClick={() => setStep((s) => Math.max(0, s - 1))}
           disabled={step === 0}
           className="rounded-lg bg-white p-2 text-indigo-700 shadow disabled:opacity-30"
-          aria-label="이전 단계"
+          aria-label={t.prev}
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
         <span className="font-mono text-sm text-gray-600">
-          {step + 1} / {BEATS.length}
+          {step + 1} / {t.beats.length}
         </span>
         <button
           onClick={() => setStep((s) => Math.min(last, s + 1))}
           disabled={step === last}
           className="rounded-lg bg-white p-2 text-indigo-700 shadow disabled:opacity-30"
-          aria-label="다음 단계"
+          aria-label={t.next}
         >
           <ChevronRight className="h-5 w-5" />
         </button>
         <button
           onClick={() => setStep(0)}
           className="ml-2 rounded-lg bg-white p-2 text-gray-500 shadow"
-          aria-label="처음으로"
+          aria-label={t.reset}
         >
           <RotateCcw className="h-4 w-4" />
         </button>
