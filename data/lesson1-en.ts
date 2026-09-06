@@ -401,7 +401,7 @@ Third line
         },
         {
           id: "try-empty-print",
-          type: "tryit",
+          type: "mission",
           title: "🖥️ Make a blank line yourself",
           task: "Print 'Hi', then a blank line, then 'Bye'.",
           initialCode: "print('Hi')\n# Put an empty print() here for the blank line\nprint('Bye')",

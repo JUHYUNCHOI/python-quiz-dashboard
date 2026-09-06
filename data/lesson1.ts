@@ -401,7 +401,7 @@ print('세 번째 줄')
         },
         {
           id: "try-empty-print",
-          type: "tryit",
+          type: "mission",
           title: "🖥️ 빈 줄 직접 만들어보기",
           task: "'안녕'을 출력한 뒤 빈 줄을 하나 두고, '반가워'를 출력해봐!",
           initialCode: "print('안녕')\n# 여기에 빈 줄용 print() 한 줄 써봐\nprint('반가워')",

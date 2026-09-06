@@ -313,7 +313,18 @@ export function BlankCodeRunner({
       setOutput(result)
 
       if (expectedOutput) {
-        const normalize = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ")
+        /* 2026-09-06: 줄 구조를 보존한다.
+           예전엔 `s.trim().toLowerCase().replace(/\s+/g, " ")` 라 **모든 공백을
+           하나로 뭉개서** '안녕\n\n반가워' 와 '안녕\n반가워' 가 같아졌다.
+           그래서 레슨1 "빈 줄 만들기" 는 mission 으로 올려도 채점이 불가능했다.
+
+           바꾼 뒤 ko/en 전체를 AST 로 뽑아 **598개 스텝의 정답 코드를 실제 실행**해
+           대조했다. 새로 오답이 되는 건 **2개뿐**이고 (lesson1 · lesson1-en 의
+           try-empty-print) 그 둘이 바로 고치려던 스텝이다.
+           줄 안의 공백은 여전히 관대하다 — 들여쓰기·정렬 차이로 억울하게 막히지 않는다. */
+        const normalize = (s: string) =>
+          s.replace(/\r\n/g, "\n").trim().toLowerCase()
+            .split("\n").map(l => l.replace(/[ \t]+/g, " ").trim()).join("\n")
         const isMatch = normalize(result) === normalize(expectedOutput)
 
         setIsCorrect(isMatch)
