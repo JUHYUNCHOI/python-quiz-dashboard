@@ -92,7 +92,7 @@ while 문이 하는 일 (계속 반복):
         },
         {
           id: "try1-scratch",
-          type: "tryit",
+          type: "mission",
           title: "✋ 손으로 처음부터 — 10 부터 1 까지 거꾸로",
           task: "10, 9, 8, ... 2, 1 을 한 줄씩 출력! 빈 곳에 직접 코드 적어봐 ✍️",
           initialCode: "# 1) 변수 num 을 10 으로 만들기\n# 2) num 이 1 이상이면 계속 반복 (while num >= 1:)\n# 3) 반복 안에서 num 출력 + num 을 1 줄이기\n# 막히면 아래 '힌트' 눌러봐!\n\n",
@@ -196,7 +196,7 @@ for i in range(1, 6):
         },
         {
           id: "try-break-continue",
-          type: "tryit",
+          type: "mission",
           title: "✋ 손으로 처음부터 — break + continue 합치기",
           task: "1~10 까지 돌면서:\n- 8 을 만나면 → break (멈춤)\n- 홀수면 → continue (건너뛰기)\n- 짝수면 → print\n\n결과는 2, 4, 6 (8 만나기 전까지의 짝수)!",
           initialCode: "num = 0\nwhile num < 10:\n    num = num + 1\n    # 8 이면 break\n    # 홀수면 continue\n    # 짝수면 print\n",
@@ -271,7 +271,7 @@ while money > 0:     # 돈 떨어질 때까지
         },
         {
           id: "try-while-scratch",
-          type: "tryit",
+          type: "mission",
           title: "✋ 손으로 처음부터 — 2 배씩 키워서 1000 처음 넘는 값 찾기",
           task: "1 부터 2 배씩 키워서 1000 넘는 순간 멈추고 출력! 빈 곳에 직접 ✍️",
           initialCode: "# 1) 변수 num 을 1 로 만들기\n# 2) num 이 1000 보다 작은 동안 (while num < 1000:)\n# 3) 반복 안에서 num 을 2 배로 (num = num * 2)\n# 4) 반복 끝난 후 num 출력\n\n",

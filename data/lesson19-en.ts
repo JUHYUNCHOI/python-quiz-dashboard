@@ -290,7 +290,7 @@ print(last)    # 5
         },
         {
           id: "try-star",
-          type: "tryit",
+          type: "mission",
           title: "🖥️ Star Unpacking — top/mid/bot split",
           task: "From 5 scores, separate the top + middle + bottom. Print 'top: ___, mid: ___, bot: ___'!",
           initialCode: "scores = (98, 85, 76, 90, 62)\n\n# Unpack as top, *mid, bot\n\n\n# Print 'top: 98, mid: [85, 76, 90], bot: 62'\n",

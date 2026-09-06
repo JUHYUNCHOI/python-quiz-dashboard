@@ -432,7 +432,7 @@ Hello
         },
         {
           id: "try-replace-scratch",
-          type: "tryit",
+          type: "mission",
           title: "✋ 손으로 직접 — replace 처음부터",
           task: "'안녕'을 '반가워'로 바꿔서 출력해봐. print 한 줄을 직접 써보자!",
           initialCode: "text = \"안녕 친구! 안녕 모두!\"\n# 여기에 print 한 줄을 직접 써봐\n",
@@ -442,7 +442,7 @@ Hello
         },
         {
           id: "try-replace-chain",
-          type: "tryit",
+          type: "mission",
           title: "✋ 두 개 한꺼번에 바꾸기",
           task: "replace 를 두 번 연결해서 '고양이'→'강아지', '소'→'토끼'로 바꿔봐.",
           initialCode: "text = \"고양이와 소\"\n# replace 를 .replace(...).replace(...) 처럼 이어붙일 수 있어\n",
@@ -571,7 +571,7 @@ print(text.count("an"))
         },
         {
           id: "try-count-scratch",
-          type: "tryit",
+          type: "mission",
           title: "✋ 손으로 직접 — count 처음부터",
           task: "문장에서 '는' 글자가 몇 번 나오는지 세서 출력해봐. print 한 줄을 직접 써보자!",
           initialCode: "text = \"나는 코딩을 배우는 중이고 나는 멋지다\"\n# 여기에 print 한 줄을 직접 써봐\n",
@@ -581,7 +581,7 @@ print(text.count("an"))
         },
         {
           id: "try-count-word",
-          type: "tryit",
+          type: "mission",
           title: "✋ 단어도 셀 수 있어",
           task: "한 글자 말고 '바나나' 같은 단어도 count 로 세지요. 'banana' 가 몇 번 나오는지 세서 출력해봐.",
           initialCode: "text = \"banana smoothie with banana chips and banana bread\"\n# print 한 줄로 'banana' 횟수 출력!\n",

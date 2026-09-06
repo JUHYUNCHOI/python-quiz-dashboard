@@ -283,7 +283,7 @@ print(last)    # 5
         },
         {
           id: "try-star",
-          type: "tryit",
+          type: "mission",
           title: "🖥️ 별표 언패킹 — top/mid/bot 분리",
           task: "점수 5 개에서 1 등 점수 + 가운데 + 꼴등 점수 분리하기. 'top: ___, mid: ___, bot: ___' 형식 출력!",
           initialCode: "scores = (98, 85, 76, 90, 62)\n\n# top, *mid, bot 형태로 언패킹\n\n\n# 'top: 98, mid: [85, 76, 90], bot: 62' 형식 출력\n",

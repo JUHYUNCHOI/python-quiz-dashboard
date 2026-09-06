@@ -92,7 +92,7 @@ Press **▶ Run** or **▷ Step**.`,
         },
         {
           id: "try1-scratch",
-          type: "tryit",
+          type: "mission",
           title: "✋ Type it from scratch — count down 10 to 1",
           task: "Print 10, 9, 8, ... 2, 1, one per line. Type it yourself ✍️",
           initialCode: "# 1) Make a variable num set to 10\n# 2) While num is at least 1 (while num >= 1:)\n# 3) Inside the loop, print num and subtract 1\n# Stuck? Tap 'hint' below!\n\n",
@@ -196,7 +196,7 @@ for i in range(1, 6):
         },
         {
           id: "try-break-continue",
-          type: "tryit",
+          type: "mission",
           title: "✋ Type from scratch — break + continue combo",
           task: "Loop from 1 to 10:\n- 8 → break\n- odd → continue (skip)\n- even → print\n\nResult: 2, 4, 6 (the evens before 8)!",
           initialCode: "num = 0\nwhile num < 10:\n    num = num + 1\n    # if 8 → break\n    # if odd → continue\n    # if even → print\n",
@@ -271,7 +271,7 @@ while money > 0:     # while money lasts
         },
         {
           id: "try-while-scratch",
-          type: "tryit",
+          type: "mission",
           title: "✋ Type from scratch — double until 1000 or more",
           task: "Start at 1, double it. Print the value the moment it hits 1000+ ✍️",
           initialCode: "# 1) Make a variable num set to 1\n# 2) While num is less than 1000 (while num < 1000:)\n# 3) Inside, double num (num = num * 2)\n# 4) After the loop, print num\n\n",
