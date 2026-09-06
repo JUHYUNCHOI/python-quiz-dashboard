@@ -36,6 +36,11 @@ interface PythonRunnerProps {
   hint?: string
   onSuccess?: () => void
   onError?: () => void
+  /* 실패한 실행이 있을 때마다 부모에게 알린다 — 2026-09-06.
+     빈칸 없는 스텝은 tryit-step.tsx 가 힌트 UI 를 **밖에서** 그리는데,
+     거기엔 시도 조건이 없어서 두 클릭이면 정답 전문이 나왔다.
+     BlankCodeRunner 에 건 `attempts >= 1` 게이트가 이쪽엔 안 걸려 있었다. */
+  onAttempt?: () => void
   readOnly?: boolean
   showExpectedOutput?: boolean
   minHeight?: string
@@ -58,6 +63,7 @@ export function PythonRunner({
   hint = "",
   onSuccess,
   onError,
+  onAttempt,
   readOnly = false,
   showExpectedOutput = false,
   minHeight = "220px",
@@ -225,7 +231,7 @@ export function PythonRunner({
       if (res.timedOut) {
         setError("__CR_TIMEOUT__")  // 렌더의 translatePythonError 가 친근 안내로 변환
         setIsCorrect(false)
-        setAttempts(prev => prev + 1)
+        setAttempts(prev => prev + 1); onAttempt?.()
         onError?.()
         if (attempts >= 1 && hint) setShowHint(true)
         return
@@ -235,7 +241,7 @@ export function PythonRunner({
         // 원본 에러 메시지 그대로 — 친근 변환은 렌더의 translatePythonError() 담당.
         setError(res.error || "에러!")
         setIsCorrect(false)
-        setAttempts(prev => prev + 1)
+        setAttempts(prev => prev + 1); onAttempt?.()
         onError?.()
         if (attempts >= 1 && hint) setShowHint(true)
         return
@@ -249,7 +255,7 @@ export function PythonRunner({
         const isMatch = normalize(result) === normalize(expectedOutput)
 
         setIsCorrect(isMatch)
-        setAttempts(prev => prev + 1)
+        setAttempts(prev => prev + 1); onAttempt?.()
 
         if (isMatch) {
           // 정답: 항상 onSuccess
@@ -276,7 +282,7 @@ export function PythonRunner({
       // 안전망 — runPython 은 보통 throw 하지 않지만(결과로 에러 반환), 예기치 못한 경우 대비.
       setError(err?.message || "에러!")
       setIsCorrect(false)
-      setAttempts(prev => prev + 1)
+      setAttempts(prev => prev + 1); onAttempt?.()
       onError?.()
       if (attempts >= 1 && hint) setShowHint(true)
     } finally {

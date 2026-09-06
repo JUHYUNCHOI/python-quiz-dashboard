@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Code, Trophy, Lightbulb, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { PythonRunner } from "@/components/python/python-runner"
@@ -21,6 +22,13 @@ interface TryItStepProps {
 }
 
 export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onSuccess, onUnlock, lessonId }: TryItStepProps) {
+  /* 2026-09-06: 빈칸 없는 스텝의 힌트 게이트.
+     어제 `attempts >= 1` 을 BlankCodeRunner 에만 걸었는데, 빈칸이 없으면
+     PythonRunner 로 가고 힌트 UI 는 **여기서** 따로 그린다 — 거기엔 조건이 없어서
+     한 글자도 안 쓰고 두 번 클릭이면 hint2(= 정답 전문)가 나왔다.
+     pedagogy-reviewer 가 mission 승격 검토 중에 찾았다.
+     "처음부터 쓰기" 를 mission 으로 올려도 답이 두 클릭 거리면 의미가 없다. */
+  const [attempts, setAttempts] = useState(0)
   const hasBlanks = !!(step.initialCode && step.initialCode.includes('___'))
   const { t } = useLanguage()
 
@@ -46,9 +54,16 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
                 <p className="text-sm text-amber-800"><Lightbulb className="w-4 h-4 inline mr-1 text-amber-600" /> {t("힌트 1: ", "Hint 1: ")}{renderInlineMarkdown(step.hint, "h1-")}</p>
                 {hintLevel === 1 && step.hint2 && (
-                  <button onClick={() => onHintLevelChange(2)} className="text-xs text-amber-600 hover:text-amber-700 mt-2 flex items-center gap-1">
-                    <Eye className="w-3 h-3" /> {t("정답에 가까운 힌트 보기", "Show answer hint")}
-                  </button>
+                  attempts >= 1 ? (
+                    <button onClick={() => onHintLevelChange(2)} className="text-xs text-amber-600 hover:text-amber-700 mt-2 flex items-center gap-1">
+                      <Eye className="w-3 h-3" /> {t("정답에 가까운 힌트 보기", "Show answer hint")}
+                    </button>
+                  ) : (
+                    <p className="text-xs text-amber-500 mt-2 flex items-center gap-1" style={{ wordBreak: "keep-all", textWrap: "balance" }}>
+                      <Eye className="w-3 h-3" />
+                      {t("한 번 써서 실행해보면 다음 힌트가 열려요", "Write something and run once to unlock the next hint")}
+                    </p>
+                  )
                 )}
               </div>
             )}
@@ -87,6 +102,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
             task={step.task}
             hint={step.hint}
             onSuccess={onSuccess}
+            onAttempt={() => setAttempts((a: number) => a + 1)}
             showExpectedOutput={step.type === "mission"}
             minHeight={step.type === "mission" ? "140px" : "100px"}
             requireCodeChange={false}

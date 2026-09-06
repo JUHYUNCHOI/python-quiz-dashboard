@@ -95,9 +95,9 @@ Press **▶ Run** or **▷ Step**.`,
           type: "mission",
           title: "✋ Type it from scratch — count down 10 to 1",
           task: "Print 10, 9, 8, ... 2, 1, one per line. Type it yourself ✍️",
-          initialCode: "# 1) Make a variable num set to 10\n# 2) While num is at least 1 (while num >= 1:)\n# 3) Inside the loop, print num and subtract 1\n# Stuck? Tap 'hint' below!\n\n",
+          initialCode: "# 1) Make a variable num set to 10\n# 2) Keep looping while num is at least 1\n# 3) Inside the loop, print num and subtract 1\n# Stuck? Tap 'hint' below!\n\n",
           expectedOutput: "10\n9\n8\n7\n6\n5\n4\n3\n2\n1",
-          hint: "Start with num = 10. Inside \`while num >= 1:\` print then \`num = num - 1\`.",
+          hint: "Start at 10 and go down by one each round, stopping below 1.",
           hint2: "num = 10\nwhile num >= 1:\n    print(num)\n    num = num - 1"
         },
         {
@@ -274,9 +274,9 @@ while money > 0:     # while money lasts
           type: "mission",
           title: "✋ Type from scratch — double until 1000 or more",
           task: "Start at 1, double it. Print the value the moment it hits 1000+ ✍️",
-          initialCode: "# 1) Make a variable num set to 1\n# 2) While num is less than 1000 (while num < 1000:)\n# 3) Inside, double num (num = num * 2)\n# 4) After the loop, print num\n\n",
+          initialCode: "# 1) Make a variable num set to 1\n# 2) Keep looping while num is under 1000\n# 3) Inside the loop, double num\n# 4) After the loop, print num\n\n",
           expectedOutput: "1024",
-          hint: "while num < 1000: num = num * 2. After the loop, print(num).",
+          hint: "Start at 1 and double it until it passes 1000, then stop.",
           hint2: "num = 1\nwhile num < 1000:\n    num = num * 2\nprint(num)"
         }
       ]

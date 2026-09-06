@@ -576,7 +576,7 @@ print(text.count("an"))
           task: "문장에서 '는' 글자가 몇 번 나오는지 세서 출력해봐. print 한 줄을 직접 써보자!",
           initialCode: "text = \"나는 코딩을 배우는 중이고 나는 멋지다\"\n# 여기에 print 한 줄을 직접 써봐\n",
           expectedOutput: "3",
-          hint: "print( text.count(\"는\") ) 모양으로 써요",
+          hint: "몇 번 나오는지 세어주는 메서드가 있어요. print 로 감싸서 출력해요.",
           hint2: "print(text.count(\"는\"))"
         },
         {

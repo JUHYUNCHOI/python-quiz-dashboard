@@ -95,9 +95,9 @@ while 문이 하는 일 (계속 반복):
           type: "mission",
           title: "✋ 손으로 처음부터 — 10 부터 1 까지 거꾸로",
           task: "10, 9, 8, ... 2, 1 을 한 줄씩 출력! 빈 곳에 직접 코드 적어봐 ✍️",
-          initialCode: "# 1) 변수 num 을 10 으로 만들기\n# 2) num 이 1 이상이면 계속 반복 (while num >= 1:)\n# 3) 반복 안에서 num 출력 + num 을 1 줄이기\n# 막히면 아래 '힌트' 눌러봐!\n\n",
+          initialCode: "# 1) 변수 num 을 10 으로 만들기\n# 2) num 이 1 이상인 동안 계속 반복하기\n# 3) 반복 안에서 num 출력 + num 을 1 줄이기\n# 막히면 아래 '힌트' 눌러봐!\n\n",
           expectedOutput: "10\n9\n8\n7\n6\n5\n4\n3\n2\n1",
-          hint: "num = 10 으로 시작. \`while num >= 1:\` 안에서 print 후 \`num = num - 1\`.",
+          hint: "num 을 10 에서 시작해 1 씩 줄여가며, 1 보다 작아지면 멈추게 해요.",
           hint2: "num = 10\nwhile num >= 1:\n    print(num)\n    num = num - 1"
         },
         {
@@ -274,9 +274,9 @@ while money > 0:     # 돈 떨어질 때까지
           type: "mission",
           title: "✋ 손으로 처음부터 — 2 배씩 키워서 1000 처음 넘는 값 찾기",
           task: "1 부터 2 배씩 키워서 1000 넘는 순간 멈추고 출력! 빈 곳에 직접 ✍️",
-          initialCode: "# 1) 변수 num 을 1 로 만들기\n# 2) num 이 1000 보다 작은 동안 (while num < 1000:)\n# 3) 반복 안에서 num 을 2 배로 (num = num * 2)\n# 4) 반복 끝난 후 num 출력\n\n",
+          initialCode: "# 1) 변수 num 을 1 로 만들기\n# 2) num 이 1000 보다 작은 동안 계속 반복하기\n# 3) 반복 안에서 num 을 두 배로 키우기\n# 4) 반복이 끝난 뒤 num 출력\n\n",
           expectedOutput: "1024",
-          hint: "while num < 1000: 안에서 num = num * 2. 루프 끝난 후 print(num).",
+          hint: "1 에서 시작해 두 배씩 키우다가, 1000 을 넘는 순간 반복을 끝내요.",
           hint2: "num = 1\nwhile num < 1000:\n    num = num * 2\nprint(num)"
         }
       ]

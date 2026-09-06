@@ -572,9 +572,9 @@ Hint: \`b-a-n-a-n-a\` — trace through and find where \"an\" appears.`,
           type: "mission",
           title: "✋ Type it yourself — count from scratch",
           task: "Count how many times 'is' appears in the sentence. Write the whole print line yourself!",
-          initialCode: "text = \"This is fun and this is hard but this is mine\"\n# Write a print line here yourself\n",
+          initialCode: "text = \"it is fun and it is hard but it is mine\"\n# Write a print line here yourself\n",
           expectedOutput: "3",
-          hint: "Write print( text.count(\"is\") )",
+          hint: "There is a method that counts how many times something appears.",
           hint2: "print(text.count(\"is\"))"
         },
         {
