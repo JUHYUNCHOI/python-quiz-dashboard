@@ -30,7 +30,11 @@ ACTIVE_TYPES = {"tryit", "practice", "mission", "quiz", "predict", "fillblank"}
 
 # type 이 interactive/explain 이어도 이 컴포넌트면 능동 — 학생이 입력·선택해야 진행된다
 ACTIVE_COMPONENTS = {
-    "typeAlong",            # textarea 에 글자 단위로 직접 친다
+    "typeAlong",            # 목표 코드와 **완전히 일치**해야 통과한다
+                            # (`components/animations/type-along-practice.tsx:196`
+                            #  `if (isFullMatch)` 일 때만 onComplete). 즉 채점된다 —
+                            #  2026-09-06 에 확인. 그 전엔 "채점 0개 챕터" 를 셀 때
+                            #  typeAlong 을 빠뜨려서 레슨33/ch1 을 잘못 걸었다.
     "fillInBlank",          # 빈칸을 채워야 하고 전부 정답이어야 통과
     "pyAndOrNotMatcher",    # 3지선다 10문항 + 점수 — 진짜 퀴즈
     "gameCrashDemo",        # 입력 선택에 따라 크래시/득점이 실제로 갈린다
