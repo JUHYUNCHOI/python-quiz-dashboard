@@ -263,6 +263,30 @@ for job in ['warrior', 'mage', 'archer']:
           expectedOutput: `=== Monster (ATK 15) single attack comparison ===\nWarrior: 3 damage -> HP 117/120\nMage: 10 damage -> HP 70/80\nArcher: 7 damage -> HP 93/100\n\n=== Damage each job deals to monster (DEF 5) ===\nWarrior: ATK 15 - DEF 5 = 10 damage\nMage: ATK 25 - DEF 5 = 20 damage\nArcher: ATK 20 - DEF 5 = 15 damage`,
           hint: "Higher defense means less damage taken!",
           hint2: "Run the code as-is!"
+        },
+        {
+          /* 2026-09-06: 한글판과 짝. 챕터 마지막이라 퀴즈조차 없었다. */
+          id: "ch1-5m",
+          type: "mission",
+          title: "🎯 Mission: damage math round-up!",
+          task: "Fill the three blanks to work out damage by class.",
+          initialCode: `stats = {'Warrior': 15, 'Mage': 25, 'Archer': 20}
+enemy_def = 8
+
+for job in stats:
+    dmg = stats[___] - enemy_def
+    if dmg < 1:
+        dmg = 1
+    print(f'{job}: {dmg} damage')
+
+total = sum(stats.___())
+print(f'Total ATK: {total}')
+
+best = max(stats, key=lambda j: stats[j])
+print(f'Top attack: {___}')`,
+          expectedOutput: "Warrior: 7 damage\nMage: 17 damage\nArcher: 12 damage\nTotal ATK: 60\nTop attack: Mage",
+          hint: "The key you pull a value out with, the method that collects only values, and the variable found above.",
+          hint2: "job / values / best"
         }
       ]
     },

@@ -209,6 +209,41 @@ print(f'남은 골드: {hero.gold}')`,
       hint2: "코드를 그대로 실행하세요!"
     },
     {
+      /* 2026-09-06: 빈칸 없는 tryit 79개 재분류. 이 스텝은 "길거나 짧은데
+         **뒤에 채점 스텝이 하나도 없는**" 자리였다 — 데모를 보고 퀴즈로 바로 간다.
+         긴 데모에 빈칸을 흩뿌리지 않고 **뒤에 짧은 미션 하나**를 붙인다.
+         학생: "50~90줄이면 한 줄 한 줄 안 읽고 결과만 훑고 넘어갔음." */
+      id: "ch1-3m",
+      type: "mission",
+      title: "🎯 미션: 보상 → 구매 흐름!",
+      task: "빈칸 세 개를 채워 보상을 받고 상점에서 사는 흐름을 완성하세요!",
+      initialCode: `class Hero:
+    def __init__(self, gold):
+        self.gold = gold
+        self.inventory = []
+
+def buy_potion(hero, price):
+    if hero.gold ___ price:
+        print('골드 부족!')
+        return
+    hero.gold -= price
+    hero.inventory.___('물약')
+    print(f'물약 구매! (잔액: {hero.gold})')
+
+hero = Hero(0)
+hero.gold += 80  # 몬스터 처치 보상
+print(f'보상 획득! 골드: {hero.gold}')
+
+buy_potion(hero, 30)
+buy_potion(hero, ___)
+
+print(f'인벤토리: {hero.inventory}')
+print(f'남은 골드: {hero.gold}')`,
+      expectedOutput: "보상 획득! 골드: 80\n물약 구매! (잔액: 50)\n골드 부족!\n인벤토리: ['물약']\n남은 골드: 50",
+      hint: "골드가 모자란지 견주는 기호, 인벤토리에 넣는 리스트 메서드, 그리고 일부러 모자라게 만들 가격이에요.",
+      hint2: "< / append / 60"
+    },
+    {
       id: "ch1-4",
       type: "quiz",
       title: "❓ 퀴즈!",

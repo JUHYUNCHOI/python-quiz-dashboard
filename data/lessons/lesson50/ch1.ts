@@ -257,6 +257,31 @@ for job in ['warrior', 'mage', 'archer']:
       expectedOutput: `=== 몬스터(ATK 15) 공격 1회 비교 ===\n용사: 3 데미지 -> HP 117/120\n마법사: 10 데미지 -> HP 70/80\n궁수: 7 데미지 -> HP 93/100\n\n=== 각 직업이 몬스터(DEF 5)에게 주는 데미지 ===\n용사: ATK 15 - DEF 5 = 10 데미지\n마법사: ATK 25 - DEF 5 = 20 데미지\n궁수: ATK 20 - DEF 5 = 15 데미지`,
       hint: "방어력이 높으면 받는 데미지가 줄어요!",
       hint2: "코드를 그대로 실행하세요!"
+    },
+    {
+      /* 2026-09-06: 이 챕터의 **마지막 스텝**이라 퀴즈조차 없이 끝났다.
+         딕셔너리 조회 + 반복 계산은 코드린 어디에서도 연습된 적이 없다. */
+      id: "ch1-5m",
+      type: "mission",
+      title: "🎯 미션: 데미지 계산 정리!",
+      task: "빈칸 세 개를 채워 직업별 데미지를 계산해보세요!",
+      initialCode: `stats = {'전사': 15, '마법사': 25, '궁수': 20}
+enemy_def = 8
+
+for job in stats:
+    dmg = stats[___] - enemy_def
+    if dmg < 1:
+        dmg = 1
+    print(f'{job}: {dmg} 데미지')
+
+total = sum(stats.___())
+print(f'ATK 합계: {total}')
+
+best = max(stats, key=lambda j: stats[j])
+print(f'공격력 1위: {___}')`,
+      expectedOutput: "전사: 7 데미지\n마법사: 17 데미지\n궁수: 12 데미지\nATK 합계: 60\n공격력 1위: 마법사",
+      hint: "딕셔너리에서 값을 꺼낼 때 쓰는 열쇠, 값만 모으는 메서드, 그리고 위에서 찾아둔 변수예요.",
+      hint2: "job / values / best"
     }
   ]
 }

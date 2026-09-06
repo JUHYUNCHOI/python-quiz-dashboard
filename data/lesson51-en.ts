@@ -215,6 +215,38 @@ print(f'Remaining gold: {hero.gold}')`,
           hint2: "Just run the code as is!"
         },
         {
+          /* 2026-09-06: 한글판과 짝. */
+          id: "ch1-3m",
+          type: "mission",
+          title: "🎯 Mission: reward → purchase!",
+          task: "Fill the three blanks to finish the reward-then-buy flow.",
+          initialCode: `class Hero:
+    def __init__(self, gold):
+        self.gold = gold
+        self.inventory = []
+
+def buy_potion(hero, price):
+    if hero.gold ___ price:
+        print('Not enough gold!')
+        return
+    hero.gold -= price
+    hero.inventory.___('Potion')
+    print(f'Bought a potion! (left: {hero.gold})')
+
+hero = Hero(0)
+hero.gold += 80  # reward for beating a monster
+print(f'Reward! Gold: {hero.gold}')
+
+buy_potion(hero, 30)
+buy_potion(hero, ___)
+
+print(f'Inventory: {hero.inventory}')
+print(f'Gold left: {hero.gold}')`,
+          expectedOutput: "Reward! Gold: 80\nBought a potion! (left: 50)\nNot enough gold!\nInventory: ['Potion']\nGold left: 50",
+          hint: "A sign that compares whether gold falls short, the list method that puts it in, and a price that is too high.",
+          hint2: "< / append / 60"
+        },
+        {
           id: "ch1-4",
           type: "quiz",
           title: "❓ Quiz!",
@@ -422,6 +454,36 @@ load_game(3)`,
           expectedOutput: `=== Save Slots ===\n  Slot 1: (empty)\n  Slot 2: (empty)\n  Slot 3: (empty)\n\n[Slot 1] Save complete!\n[Slot 2] Save complete!\n\n=== Save Slots ===\n  Slot 1: Warrior Lv.3\n  Slot 2: Mage Lv.5\n  Slot 3: (empty)\n\n[Slot 2] Load complete!\n  Name: Mage, Gold: 500\n\n[Slot 3] Empty!`,
           hint: "Manage slots with a dictionary, serialize with JSON!",
           hint2: "Just run the code as is!"
+        },
+        {
+          /* 2026-09-06: 한글판과 짝. */
+          id: "ch2-3m",
+          type: "mission",
+          title: "🎯 Mission: save slots!",
+          task: "Fill the three blanks to finish saving and loading slots.",
+          initialCode: `import json
+
+slots = {}
+
+def save(slot, data):
+    slots[slot] = json.___(data, ensure_ascii=False)
+    print(f'Slot {slot} saved!')
+
+def load(slot):
+    if slot ___ slots:
+        print(f'Slot {slot} is empty!')
+        return None
+    return json.___(slots[slot])
+
+save(1, {'name': 'Hero', 'level': 2})
+
+data = load(1)
+print(f'Loaded: {data}')
+
+load(2)`,
+          expectedOutput: "Slot 1 saved!\nLoaded: {'name': 'Hero', 'level': 2}\nSlot 2 is empty!",
+          hint: "The function that turns a dictionary into text, the condition for a missing slot, and the one that turns text back.",
+          hint2: "dumps / not in / loads"
         },
         {
           id: "ch2-4",
@@ -746,6 +808,37 @@ for job in ['warrior', 'mage', 'archer']:
           expectedOutput: `=== Class Battle Comparison (vs Goblin HP:50 ATK:15 DEF:5) ===\nWarrior: Won in 5 turns! (Remaining HP: 108/120)\nMage: Won in 3 turns! (Remaining HP: 60/80)\nArcher: Won in 4 turns! (Remaining HP: 79/100)`,
           hint: "Mage wins faster but has less HP remaining!",
           hint2: "Just run the code as is!"
+        },
+        {
+          /* 2026-09-06: 한글판과 짝. */
+          id: "ch3-3m",
+          type: "mission",
+          title: "🎯 Mission: battle sim by class!",
+          task: "Fill the three blanks to see how many turns each class survives.",
+          initialCode: `class Fighter:
+    def __init__(self, job):
+        self.job = job
+        if job == 'tank':
+            self.hp = 100
+        elif job == '___':
+            self.hp = 60
+        self.alive = True
+
+    def take_damage(self, dmg):
+        self.hp -= dmg
+        if self.hp ___ 0:
+            self.alive = False
+
+for job in ['tank', 'glass']:
+    hero = Fighter(job)
+    turns = 0
+    while hero.alive:
+        hero.take_damage(15)
+        turns += ___
+    print(f'{job}: down in {turns} turns (HP {hero.hp})')`,
+          expectedOutput: "tank: down in 7 turns (HP -5)\nglass: down in 4 turns (HP 0)",
+          hint: "The second class name in the for loop, the test for running out of HP, and what to add per turn.",
+          hint2: "glass / <= / 1"
         },
         {
           id: "ch3-4",

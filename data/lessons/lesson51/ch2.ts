@@ -194,6 +194,39 @@ load_game(3)`,
       hint2: "코드를 그대로 실행하세요!"
     },
     {
+      /* 2026-09-06: 빈칸 없는 tryit 79개 재분류. 이 스텝은 "길거나 짧은데
+         **뒤에 채점 스텝이 하나도 없는**" 자리였다 — 데모를 보고 퀴즈로 바로 간다.
+         긴 데모에 빈칸을 흩뿌리지 않고 **뒤에 짧은 미션 하나**를 붙인다.
+         학생: "50~90줄이면 한 줄 한 줄 안 읽고 결과만 훑고 넘어갔음." */
+      id: "ch2-3m",
+      type: "mission",
+      title: "🎯 미션: 세이브 슬롯 관리!",
+      task: "빈칸 세 개를 채워 슬롯 저장·불러오기를 완성하세요!",
+      initialCode: `import json
+
+slots = {}
+
+def save(slot, data):
+    slots[slot] = json.___(data, ensure_ascii=False)
+    print(f'슬롯 {slot} 저장!')
+
+def load(slot):
+    if slot ___ slots:
+        print(f'슬롯 {slot} 비어있음!')
+        return None
+    return json.___(slots[slot])
+
+save(1, {'name': '용사', 'level': 2})
+
+data = load(1)
+print(f'불러오기: {data}')
+
+load(2)`,
+      expectedOutput: "슬롯 1 저장!\n불러오기: {'name': '용사', 'level': 2}\n슬롯 2 비어있음!",
+      hint: "딕셔너리를 글자로 바꾸는 함수, 슬롯이 없을 때의 조건, 글자를 딕셔너리로 되돌리는 함수예요.",
+      hint2: "dumps / not in / loads"
+    },
+    {
       id: "ch2-4",
       type: "quiz",
       title: "❓ 퀴즈!",

@@ -309,6 +309,40 @@ for job in ['warrior', 'mage', 'archer']:
       hint2: "코드를 그대로 실행하세요!"
     },
     {
+      /* 2026-09-06: 빈칸 없는 tryit 79개 재분류. 이 스텝은 "길거나 짧은데
+         **뒤에 채점 스텝이 하나도 없는**" 자리였다 — 데모를 보고 퀴즈로 바로 간다.
+         긴 데모에 빈칸을 흩뿌리지 않고 **뒤에 짧은 미션 하나**를 붙인다.
+         학생: "50~90줄이면 한 줄 한 줄 안 읽고 결과만 훑고 넘어갔음." */
+      id: "ch3-3m",
+      type: "mission",
+      title: "🎯 미션: 직업별 전투 시뮬!",
+      task: "빈칸 세 개를 채워 직업별로 몇 턴을 버티는지 재보세요!",
+      initialCode: `class Fighter:
+    def __init__(self, job):
+        self.job = job
+        if job == 'tank':
+            self.hp = 100
+        elif job == '___':
+            self.hp = 60
+        self.alive = True
+
+    def take_damage(self, dmg):
+        self.hp -= dmg
+        if self.hp ___ 0:
+            self.alive = False
+
+for job in ['tank', 'glass']:
+    hero = Fighter(job)
+    turns = 0
+    while hero.alive:
+        hero.take_damage(15)
+        turns += ___
+    print(f'{job}: {turns}턴 만에 쓰러짐 (HP {hero.hp})')`,
+      expectedOutput: "tank: 7턴 만에 쓰러짐 (HP -5)\nglass: 4턴 만에 쓰러짐 (HP 0)",
+      hint: "위 for 문에 쓰인 두 번째 직업 이름, HP 가 다 됐는지 판단하는 조건, 턴을 셀 때 더할 값이에요.",
+      hint2: "glass / <= / 1"
+    },
+    {
       id: "ch3-4",
       type: "quiz",
       title: "❓ 퀴즈!",

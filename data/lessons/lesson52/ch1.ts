@@ -244,6 +244,48 @@ hero.status()`,
       hint2: "코드를 그대로 실행하세요!"
     },
     {
+      /* 2026-09-06: 빈칸 없는 tryit 79개 재분류. 이 스텝은 "길거나 짧은데
+         **뒤에 채점 스텝이 하나도 없는**" 자리였다 — 데모를 보고 퀴즈로 바로 간다.
+         긴 데모에 빈칸을 흩뿌리지 않고 **뒤에 짧은 미션 하나**를 붙인다.
+         학생: "50~90줄이면 한 줄 한 줄 안 읽고 결과만 훑고 넘어갔음." */
+      id: "ch1-5m",
+      type: "mission",
+      title: "🎯 미션: 무기 장착 계산!",
+      task: "빈칸 세 개를 채워 무기 장착 시스템을 완성하세요!",
+      initialCode: `class Weapon:
+    def __init__(self, name, bonus):
+        self.name = name
+        self.bonus = bonus
+
+class Hero:
+    def __init__(self, base_atk):
+        self.base_atk = base_atk
+        self.weapon = None
+
+    def equip(self, weapon):
+        self.weapon = weapon
+        print(f'{weapon.name} 장착!')
+
+    def get_atk(self):
+        bonus = self.weapon.___ if self.weapon else 0
+        return self.___ + bonus
+
+sword = Weapon('단검', 4)
+axe = Weapon('도끼', 9)
+
+hero = Hero(10)
+print(f'장착 전 ATK: {hero.get_atk()}')
+
+hero.equip(sword)
+print(f'ATK: {hero.get_atk()}')
+
+hero.___(axe)
+print(f'ATK: {hero.get_atk()}')`,
+      expectedOutput: "장착 전 ATK: 10\n단검 장착!\nATK: 14\n도끼 장착!\nATK: 19",
+      hint: "무기가 더해주는 값의 이름, 캐릭터의 기본 공격력 이름, 그리고 무기를 다는 메서드예요.",
+      hint2: "bonus / base_atk / equip"
+    },
+    {
       id: "ch1-6",
       type: "quiz",
       title: "❓ 퀴즈!",

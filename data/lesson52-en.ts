@@ -250,6 +250,45 @@ hero.status()`,
           hint2: "Just run the code as is!"
         },
         {
+          /* 2026-09-06: 한글판과 짝. */
+          id: "ch1-5m",
+          type: "mission",
+          title: "🎯 Mission: weapon attack math!",
+          task: "Fill the three blanks to finish the weapon system.",
+          initialCode: `class Weapon:
+    def __init__(self, name, bonus):
+        self.name = name
+        self.bonus = bonus
+
+class Hero:
+    def __init__(self, base_atk):
+        self.base_atk = base_atk
+        self.weapon = None
+
+    def equip(self, weapon):
+        self.weapon = weapon
+        print(f'{weapon.name} equipped!')
+
+    def get_atk(self):
+        bonus = self.weapon.___ if self.weapon else 0
+        return self.___ + bonus
+
+sword = Weapon('Dagger', 4)
+axe = Weapon('Axe', 9)
+
+hero = Hero(10)
+print(f'ATK before: {hero.get_atk()}')
+
+hero.equip(sword)
+print(f'ATK: {hero.get_atk()}')
+
+hero.___(axe)
+print(f'ATK: {hero.get_atk()}')`,
+          expectedOutput: "ATK before: 10\nDagger equipped!\nATK: 14\nAxe equipped!\nATK: 19",
+          hint: "The value a weapon adds, the base attack of the character, and the method that puts a weapon on.",
+          hint2: "bonus / base_atk / equip"
+        },
+        {
           id: "ch1-6",
           type: "quiz",
           title: "❓ Quiz!",
