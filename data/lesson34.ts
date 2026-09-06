@@ -305,11 +305,12 @@ print(정렬)
           task: "데이터를 두 번째 요소 기준으로 내림차순 정렬하세요",
           initialCode: `데이터 = [('a', 3), ('b', 1), ('c', 2)]
 
-# 두 번째 요소(x[1]) 기준, 내림차순
-정렬 = sorted(데이터, key=lambda x: x[1], reverse=True)
+# 두 번째 요소를 기준으로, 큰 것부터
+정렬 = sorted(데이터, key=lambda x: x[___], reverse=___)
 print(정렬)`,
           expectedOutput: "[('a', 3), ('c', 2), ('b', 1)]",
-          hint: "reverse=True를 추가하면 내림차순이에요"
+          hint: "튜플에서 숫자는 몇 번째인가요? 번호는 0 부터 세요. 큰 것부터 세우려면 거꾸로가 참이어야 해요.",
+          hint2: "1 / True"
         },
         {
           id: "ch3-5",

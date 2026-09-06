@@ -442,39 +442,6 @@ print(f'\\nTeam members: {TeamMember.___}')`,
       emoji: "\ud83c\udfae",
       steps: [
         {
-          /* 2026-09-06: 한글판과 짝. */
-          id: "ch4-0a",
-          type: "explain",
-          title: "🩹 An if that fits on one line",
-          content: `The if we know takes several lines.
-
-\`\`\`python
-if alive:
-    mark = 'O'
-else:
-    mark = 'X'
-\`\`\`
-
-When you are only **choosing between two values**, you can fold it into one line.
-
-\`\`\`python
-mark = 'O' if alive else 'X'
-\`\`\`
-
-The reading order feels odd at first. **Start from the if in the middle** —
-"if alive then 'O', otherwise 'X'".
-
-| Position | What it is |
-|---|---|
-| front \`'O'\` | the value when the condition is **true** |
-| middle \`if alive\` | the condition |
-| back \`else 'X'\` | the value when it is **false** |
-
-> 💡 Use it only to **pick a value**. If you need to run several lines, use a normal if.
-
-@Key: \`value1 if condition else value2\` — one condition, **one of two values**!`
-        },
-        {
           id: "ch4-0",
           type: "tryit",
           title: "Mini Battle System!",

@@ -332,6 +332,39 @@ if "z" not in "hello":
       emoji: "🏆",
       steps: [
         {
+          /* 2026-09-06: 한글판과 짝. */
+          id: "oneline-if",
+          type: "explain",
+          title: "🩹 An if that fits on one line",
+          content: `Often a condition only has to **pick one value**.
+
+\`\`\`python
+if score >= 60:
+    result = "Pass"
+else:
+    result = "Fail"
+\`\`\`
+
+Four lines, and all it does is "pick one of two". You can fold it into one line.
+
+\`\`\`python
+result = "Pass" if score >= 60 else "Fail"
+\`\`\`
+
+The reading order feels odd at first. **Start from the if in the middle** —
+"if score is 60 or more then Pass, otherwise Fail".
+
+| Position | What it is |
+|---|---|
+| front \`"Pass"\` | the value when the condition is **true** |
+| middle \`if score >= 60\` | the condition |
+| back \`else "Fail"\` | the value when it is **false** |
+
+> 💡 Use it only to **pick a value**. If you need to run several lines, use a normal if.
+
+@Key: \`value1 if condition else value2\` — one condition, **one of two values**!`
+        },
+        {
           id: "mission1",
           type: "mission",
           title: "🏆 Final Mission — Login System",

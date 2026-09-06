@@ -362,6 +362,8 @@ def check_hints():
     checked, problems = 0, []
     for path in sorted(glob.glob(os.path.join(LEARN_DIR, "**", "*.ts"), recursive=True)):
         name = os.path.relpath(path, LEARN_DIR)
+        if "backup" in name:        # 라이브 콘텐츠가 아니다
+            continue
         src = open(path, encoding="utf-8").read()
         ids = [(m.start(), m.group(1))
                for m in re.finditer(r'\n\s+id: "([^"]+)",?\n\s+type: "\w+"', src)]
@@ -376,6 +378,25 @@ def check_hints():
                     continue
                 raw = field(blk, "initialCode") or field(blk, "codeTemplate") or ""
                 hint2 = field(blk, "hint2")
+
+                # ① 고칠 게 없는 미션 — initialCode 를 **그대로** 돌렸더니
+                #    이미 expectedOutput 과 같다. 학생은 실행만 누르면 통과한다.
+                #    2026-09-06: pedagogy·lesson-content 가 독립적으로 짚었다
+                #    (`data/lesson34.ts` `ch3-4`). `mission` 이라 능동 비율에도
+                #    "완전한 연습" 으로 잡혀서 숫자로는 안 보였다.
+                base0 = field(blk, "initialCode")
+                if (field(blk, "type") in ("mission", "coding")
+                        and base0 and "___" not in base0
+                        and not is_placeholder_code(base0)):
+                    o0, e0 = run(base0, workdir, field(blk, "stdin") or "")
+                    if (o0 is not None and not (e0 and "Traceback" in e0)
+                            and o0.strip()
+                            and normalize_app(o0.rstrip("\n")) == normalize_app(want)):
+                        checked += 1
+                        problems.append((name, "hint2", sid,
+                                         "고칠 게 없는 미션 (실행만 해도 통과)",
+                                         o0.rstrip("\n"), want))
+                        continue
 
                 cands = solved_candidates(blk)
                 if not cands:

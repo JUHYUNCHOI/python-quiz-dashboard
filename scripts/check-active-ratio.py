@@ -131,7 +131,14 @@ def measure(n):
     act = sum(1 for t, c, b in steps if is_active(t, c, b))
     unknown = {c for t, c, b in steps if c and c not in ACTIVE_COMPONENTS and c not in KNOWN_PASSIVE}
     naked = sum(1 for t, c, b in steps if t == "tryit" and not b)
-    return act, len(steps), steps, unknown, naked
+    # 2026-09-06: `mission` 도 빈칸이 없으면 실행만 해도 통과할 수 있다.
+    # pedagogy-reviewer 와 lesson-content-reviewer 가 **독립적으로** 같은 걸 짚었다 —
+    # `data/lesson34.ts` `ch3-4` 는 mission 인데 initialCode 가 이미 정답 전문이라
+    # 아무것도 안 고쳐도 통과한다. 그런데 이 잣대는 mission 을 **무조건 능동**으로 셌다.
+    # (빈칸 없는 mission 이라도 "처음부터 쓰기" 면 정상이다 — 그건 실행하면 빈 출력이라
+    #  check-lesson-outputs.py 의 hint2 검사가 본다. 여기서는 개수만 알려준다.)
+    naked_mission = sum(1 for t, c, b in steps if t == "mission" and not b)
+    return act, len(steps), steps, unknown, naked, naked_mission
 
 
 def main():
@@ -141,8 +148,8 @@ def main():
     for n in nums:
         r = measure(n)
         if r:
-            act, total, steps, unk, naked = r
-            rows.append((100.0 * act / total, n, act, total, steps, naked))
+            act, total, steps, unk, naked, nm = r
+            rows.append((100.0 * act / total, n, act, total, steps, naked, nm))
             unknown_all |= unk
     if not rows:
         print("측정할 레슨을 못 찾음"); return 1
@@ -150,7 +157,7 @@ def main():
     rows.sort()
     print(f"{'레슨':>4} {'능동%':>7} {'능동/전체':>10}  구성")
     print("-" * 78)
-    for pct, n, act, total, steps, naked in rows:
+    for pct, n, act, total, steps, naked, nm in rows:
         mark = "🗺️ " if n in MAP_LESSONS else ("❌" if pct < 45 else ("⚠️ " if pct < 50 else "  "))
         cnt = {}
         for t, c, b in steps:
@@ -163,12 +170,19 @@ def main():
     bad = [r for r in rows if r[0] < 50 and r[1] not in MAP_LESSONS]
     print("-" * 78)
     print(f"측정 {len(rows)}개 · 50% 미만 {len(bad)}개 · 45% 미만 {sum(1 for r in rows if r[0] < 45 and r[1] not in MAP_LESSONS)}개")
-    nk = [(n, naked) for _, n, _, _, _, naked in rows if naked]
+    nk = [(n, naked) for _, n, _, _, _, naked, _ in rows if naked]
     if nk:
         print(f"\n⚠️  빈칸 없는 `tryit` 이 있는 레슨 {len(nk)}개 — **실행 버튼만 눌러도 통과**한다:")
         print("      " + "  ".join(f"레슨{n}:{c}개" for n, c in sorted(nk, key=lambda x: -x[1])))
         print("    고치는 법: initialCode 에 ___ 를 넣어 빈칸으로 만들거나, mission 으로 올려라.")
         print("    (읽히는 게 목적인 시범 코드라면 그냥 explain 이 맞다 — tryit 로 위장하지 마라.)")
+    nmiss = [(n, nm) for _, n, _, _, _, _, nm in rows if nm]
+    if nmiss:
+        print(f"\n⚠️  빈칸 없는 `mission` 이 있는 레슨 {len(nmiss)}개 — 확인이 필요하다:")
+        print("      " + "  ".join(f"레슨{n}:{c}개" for n, c in sorted(nmiss, key=lambda x: -x[1])))
+        print("    ✅ 정상: initialCode 가 주석뿐인 \"손으로 처음부터\" 미션")
+        print("    ❌ 문제: initialCode 가 **이미 정답**이라 실행만 해도 통과하는 것")
+        print("       → `npm run check-outputs` 의 hint2 검사가 후자를 잡는다")
     if unknown_all:
         print(f"\n⚠️  미분류 컴포넌트 {len(unknown_all)}개 — 지금은 **수동으로** 세고 있다. 분류가 필요하다:")
         for c in sorted(unknown_all):

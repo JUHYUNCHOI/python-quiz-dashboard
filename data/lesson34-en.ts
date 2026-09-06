@@ -305,11 +305,12 @@ print(result)
           task: "Sort data by second element in descending order",
           initialCode: `data = [('a', 3), ('b', 1), ('c', 2)]
 
-# Sort by x[1], descending
-result = sorted(data, key=lambda x: x[1], reverse=True)
+# Sort by the second element, biggest first
+result = sorted(data, key=lambda x: x[___], reverse=___)
 print(result)`,
           expectedOutput: "[('a', 3), ('c', 2), ('b', 1)]",
-          hint: "reverse=True makes it descending"
+          hint: "Which position is the number in the tuple? Count from 0. And going backwards has to be true.",
+          hint2: "1 / True"
         },
         {
           id: "ch3-5",
