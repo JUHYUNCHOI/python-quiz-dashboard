@@ -61,6 +61,24 @@ print(f'Wind: {info["wind"]}m/s')`,
           hint2: "Access with weather_db['Seoul']['temp']!"
         },
         {
+          /* 2026-09-06: 한글판과 짝. */
+          id: "ch1-1a",
+          type: "tryit",
+          title: "✋ Fill the blanks — two sets of brackets",
+          task: "Pull out Jeju's humidity. There is a dictionary inside the dictionary!",
+          initialCode: `weather_db = {
+    'Seoul': {'temp': 22, 'humidity': 55, 'condition': 'Clear', 'wind': 3.2},
+    'Busan': {'temp': 25, 'humidity': 70, 'condition': 'Cloudy', 'wind': 5.1},
+    'Jeju': {'temp': 27, 'humidity': 80, 'condition': 'Rain', 'wind': 7.8},
+}
+
+# First pick the city, then pick the item inside it
+print(f"Jeju humidity: {weather_db[___][___]}%")`,
+          expectedOutput: "Jeju humidity: 80%",
+          hint: "The first bracket picks a city, and inside it there is another dictionary.",
+          hint2: "'Jeju' / 'humidity'"
+        },
+        {
           id: "ch1-2",
           type: "quiz",
           title: "Quiz!",
