@@ -105,10 +105,11 @@ def func():
     x = 10   # Local (new variable!)
     print(f'Inside: {x}')
 
-func()
-print(f'Outside: {x}')`,
+___          # call the function
+print(f'Outside: {___}')   # what is x out here?`,
           expectedOutput: "Inside: 10\nOutside: 5",
-          hint: "x = 10 inside is a new local variable"
+          hint: "First blank calls the function; second is the name of the variable outside",
+          hint2: "func() / x"
         },
         {
           id: "ch1-6",
@@ -195,16 +196,17 @@ print(is_odd(7))    # True
           type: "tryit",
           title: "Creating Lambda Functions",
           task: "Run lambda functions",
-          initialCode: `# Square function
-square = lambda x: x ** 2
+          initialCode: `# Square function — multiply x by itself
+square = lambda x: ___
 print(square(5))
 
-# Check if odd
-is_odd = lambda x: x % 2 == 1
+# Check if odd — remainder of 1 after dividing by 2
+is_odd = lambda x: ___
 print(is_odd(7))
 print(is_odd(4))`,
           expectedOutput: "25\nTrue\nFalse",
-          hint: "5² = 25, 7 is odd(True), 4 is even(False)"
+          hint: "5² = 25, 7 is odd(True), 4 is even(False)",
+          hint2: "x ** 2 / x % 2 == 1"
         },
         {
           id: "ch2-4",
@@ -241,96 +243,6 @@ print(triple(10))`,
     },
     // ============================================
     // Chapter 3: sorted() with Lambda
-    // ============================================
-    {
-      id: "ch3",
-      title: "sorted() with Lambda",
-      emoji: "📊",
-      steps: [
-        {
-          id: "ch3-1",
-          type: "explain",
-          title: "💭 How do I sort students by score?",
-          content: `💭 Students = \`[('Tom', 85), ('Jane', 92), ('Mike', 78)]\`. Plain \`sorted()\` sorts by name. How do I sort by **score**?
-
-\`\`\`python
-students = [('Tom', 85), ('Jane', 92), ('Mike', 78)]
-
-# Sort by score (the second value)
-sorted_list = sorted(students, key=lambda x: x[1])
-print(sorted_list)
-# [('Mike', 78), ('Tom', 85), ('Jane', 92)]
-\`\`\`
-
-**\`key=lambda x: x[1]\`** = "compare by each tuple's second value (score)!"
-
-@key: \`sorted(... key=lambda)\` lets you sort by **any rule**! Common exam combo.`
-        },
-        {
-          id: "ch3-2",
-          type: "tryit",
-          title: "Sort by Score",
-          task: "Sort students by their scores",
-          initialCode: `students = [('Tom', 85), ('Jane', 92), ('Mike', 78)]
-
-# Sort by score (x[1])
-sorted_list = sorted(students, key=lambda x: x[1])
-print(sorted_list)`,
-          expectedOutput: "[('Mike', 78), ('Tom', 85), ('Jane', 92)]",
-          hint: "x[1] is each tuple's second element (score)"
-        },
-        {
-          id: "ch3-3",
-          type: "quiz",
-          title: "sorted with Lambda",
-          content: `What is the output?
-\`\`\`python
-data = [(3, 'a'), (1, 'c'), (2, 'b')]
-result = sorted(data, key=lambda x: x[0])
-print(result)
-\`\`\``,
-          options: [
-            "[(3, 'a'), (1, 'c'), (2, 'b')]",
-            "[(1, 'c'), (2, 'b'), (3, 'a')]",
-            "[('a', 3), ('b', 2), ('c', 1)]",
-            "Error occurs"
-          ],
-          answer: 1,
-          explanation: "Sorted by x[0] (first number)! 1, 2, 3 order."
-        },
-        {
-          id: "ch3-4",
-          type: "mission",
-          title: "Sort Descending",
-          task: "Sort data by second element in descending order",
-          initialCode: `data = [('a', 3), ('b', 1), ('c', 2)]
-
-# Sort by the second element, biggest first
-result = sorted(data, key=lambda x: x[___], reverse=___)
-print(result)`,
-          expectedOutput: "[('a', 3), ('c', 2), ('b', 1)]",
-          hint: "Which position is the number in the tuple? Count from 0. And going backwards has to be true.",
-          hint2: "1 / True"
-        },
-        {
-          id: "ch3-5",
-          type: "mission",
-          title: "🏆 Sort by String Length",
-          task: "Sort words by their length",
-          initialCode: `words = ['apple', 'hi', 'banana', 'cat']
-
-# Sort by length (len(x))
-result = # Write code here
-
-print(result)`,
-          expectedOutput: "['hi', 'cat', 'apple', 'banana']",
-          hint: "key=lambda x: len(x) sorts by length",
-          hint2: "sorted(words, key=lambda x: len(x))"
-        }
-      ]
-    },
-    // ============================================
-    // Chapter 4: Functions Calling Functions
     // ============================================
     {
       id: "ch4",
@@ -374,14 +286,15 @@ def multiply(a, b):
     return a * b
 
 def calculate(a, b):
-    total = add(a, b)
-    product = multiply(a, b)
+    total = ___(a, b)
+    product = ___(a, b)
     return total, product
 
 total, product = calculate(3, 5)
 print(f'Sum: {total}, Product: {product}')`,
           expectedOutput: "Sum: 8, Product: 15",
-          hint: "3+5=8, 3×5=15"
+          hint: "Of the two functions above, which one gives a sum and which gives a product?",
+          hint2: "add / multiply"
         },
         {
           id: "ch4-3",

@@ -243,7 +243,9 @@ print(sorted(words, key=len))
 
 Line them up by the tag numbers 3, 5, 6 → \`pie\`, \`apple\`, \`banana\`. The alphabet is ignored — only **length** matters.
 
-> 💡 Pass just the function *name* to \`key\` — \`key=len\` (\`key=len()\` ❌, no parentheses!). You only tell it *which ruler to measure with*; \`sorted()\` does the actual measuring. In the next step you'll use \`key=lambda x: x[1]\` to build your own rule, like *"compare by the tuple's second value."*
+> 💡 Pass just the function *name* to \`key\` — \`key=len\` (\`key=len()\` ❌, no parentheses!). You only tell it *which ruler to measure with*; \`sorted()\` does the actual measuring.
+
+Besides **ready-made functions** like \`len\`, you can build **your own rule** too. Let's try it in the next step.
 
 @key: \`key=function\` lets you pick the **sort criteria**! \`key=len\` = by length.`
         },
