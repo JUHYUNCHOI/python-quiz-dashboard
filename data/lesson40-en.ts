@@ -339,6 +339,22 @@ finally:
           explanation: "try-except + with open = the core of Part 6!"
         },
         {
+          /* 2026-09-06: 한글판과 짝. 한쪽만 고치면 영어로 배우는 학생이
+             다른 레슨을 보게 된다. */
+          id: "ch4-1b",
+          type: "interactive",
+          title: "Fill the blanks: Part 6 wrap-up",
+          description: "Put try-except and with open together.",
+          component: "fillInBlank",
+          codeTemplate: "___1___:\n    with open('save.txt', '___2___') as f:\n        score = int(f.read())\nexcept FileNotFoundError:\n    score = 0\n\nprint(score)",
+          blanks: [
+            { id: "1", answer: "try", hint: "The keyword that wraps code which might fail." },
+            { id: "2", answer: "r", hint: "The mode for reading a file only." }
+          ],
+          choices: ["try", "except", "r", "w", "a"],
+          expectedOutput: "0"
+        },
+        {
           id: "ch4-2",
           type: "explain",
           title: "What's coming next?",

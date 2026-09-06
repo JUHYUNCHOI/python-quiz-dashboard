@@ -48,6 +48,23 @@ finally:
       explanation: "try-except + with open = Part 6의 핵심!"
     },
     {
+      /* 2026-09-06: Part 6 전체를 정리하는 챕터인데 채점되는 스텝이 0개였다
+         (퀴즈 하나뿐). 형제 정리 챕터(lesson37/ch7 · lesson38/ch7)는
+         같은 자리에 fillInBlank 최종 정리를 둔다. 같은 모양으로 맞췄다. */
+      id: "ch4-1b",
+      type: "interactive",
+      title: "빈칸 채우기: Part 6 최종 정리",
+      description: "try-except 와 with open 을 합쳐서 완성해요.",
+      component: "fillInBlank",
+      codeTemplate: "___1___:\n    with open('save.txt', '___2___') as f:\n        점수 = int(f.read())\nexcept FileNotFoundError:\n    점수 = 0\n\nprint(점수)",
+      blanks: [
+        { id: "1", answer: "try", hint: "에러가 날 수도 있는 코드를 감싸는 키워드예요." },
+        { id: "2", answer: "r", hint: "파일을 읽기만 할 때 쓰는 모드예요." }
+      ],
+      choices: ["try", "except", "r", "w", "a"],
+      expectedOutput: "0"
+    },
+    {
       id: "ch4-2",
       type: "explain",
       title: "💭 다음엔 뭘 배울까?",

@@ -702,6 +702,38 @@ func(name='Tom', age=15)   # order doesn't matter!
 \`\`\`
 
 @key: **Defaults = convenience**, **multiple return = comma**, **keyword args = name tags** — master these three and you've mastered functions!`
+        },
+        {
+          /* 2026-09-06: 한글판과 짝. 한쪽만 고치면 영어로 배우는 학생이
+             다른 레슨을 보게 된다. */
+          id: "ch7-2",
+          type: "interactive",
+          title: "Fill the blanks: all three at once",
+          description: "Combine a default, multiple return values and a keyword argument.",
+          component: "fillInBlank",
+          codeTemplate: "def introduce(name, age___1___):\n    return name, age\n\nname, age = introduce(___2___='Minsu')\nprint(name, age)",
+          blanks: [
+            { id: "1", answer: "=15", hint: "A default goes right after the parameter. Which sign?" },
+            { id: "2", answer: "name", hint: "Pick the parameter you want to name-tag." }
+          ],
+          choices: ["=15", ":15", "name", "age"],
+          expectedOutput: "Minsu 15"
+        },
+        {
+          id: "ch7-3",
+          type: "quiz",
+          title: "Last quiz!",
+          content: `What are x and y here?
+
+\`\`\`python
+def calc(a, b=5):
+    return a + b, a - b
+
+x, y = calc(10)
+\`\`\``,
+          options: ["15, 5", "10, 5", "15, -5", "Error"],
+          answer: 0,
+          explanation: "b was not given, so the default 5 is used. a+b=15 and a-b=5 come back as a tuple, so x and y take one each."
         }
       ]
     }
