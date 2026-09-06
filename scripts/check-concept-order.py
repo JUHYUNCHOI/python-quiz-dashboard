@@ -29,10 +29,30 @@ CONCEPTS = [
     ("리스트 컴프리헨션",
      re.compile(r"\[[^\[\]\n]*\bfor\b[^\[\]\n]*\bin\b[^\[\]\n]*\]"),
      re.compile(r"컴프리헨션|comprehension|한 줄로 리스트")),
+    # 2026-09-06 2차: 학생 에이전트가 레슨1~14 를 처음부터 따라가며 두 개를 더 찾았다.
+    # 검사기가 못 잡던 것들이다 — 3종만 넣어두고 "다 잡았다" 고 여긴 게 내 실수였다.
+    ("리스트 리터럴 `[1, 2, 3]`",
+     re.compile(r"=\s*\[\s*(?:\d|['\"])[^\]\n]*\]"),
+     re.compile(r"리스트(?:란|는|를)|리스트 만들|\[\] 로 만들|list(?:s are| is)|make a list")),
+    # ⚠️ 빈칸(`___`)이 들어간 스텝은 "쓰는 곳" 으로 안 잡힌다 — 코드에 그 이름이
+    #    없기 때문이다. 그래서 hint2 도 코드 취급해 같이 본다(load_steps 참고).
+    ("`.reverse()` 메서드",
+     re.compile(r"\.reverse\s*\(|(?<![\w=])\breverse\b(?!\s*=)"),
+     # 개념 **이름을 정확히** 대야 "가르쳤다" 로 본다.
+     # 처음엔 "뒤집기" 도 넣었다가 레슨4 가 다른 뜻으로 그 말을 써서 오탐이 났다.
+     re.compile(r"reverse\(\)|reverses the list")),
     ("함수를 값으로 저장했다 호출",
      re.compile(r"self\.\w*(?:fn|func|callback)\w*\s*\(|\bself\.\w+_fn\b"),
      re.compile(r"함수를 (?:값|변수)(?:으로|로)|함수 자체를 (?:담|저장|넘)|함수를 담아|store a function|function as a value")),
 ]
+
+
+# "지금은 몰라도 된다" 고 **예고한** 자리는 실패로 보지 않는다.
+# 안내는 가르침이 아니지만, 학생이 "이거 안 배웠는데?" 하고 멈추는 건 막는다.
+# 2026-09-06: 학생이 레슨14 미션에서 리스트를 처음 보고 멈췄다 —
+#   "다음 레슨에서 배워요" 한 줄이 없어서였다.
+HEADS_UP = re.compile(r"다음 레슨에서 배|나중에 배|아직 안 배운|"
+                      r"coming up next lesson|you will learn .* later")
 
 
 def lesson_no(path):
@@ -60,12 +80,19 @@ def load_steps():
         # 레슨16 의 "✨ 리스트 컴프리헨션 — 한 줄로 만드는 마법" 을 놓쳤다.
         # 제목에만 개념 이름이 있고 본문은 코드블록뿐인 스텝이 있다.
         # (```python 블록 안은 '가르친 것' 이 아니라 '쓴 것' 이라 아래서 뺀다)
-        prose = "\n".join(m.group(1) for m in re.finditer(r"content:\s*`([^`]*)`", s))
+        # ⚠️ `[^`]*` 로 잡으면 **첫 백틱에서 잘린다** — 레슨 본문은 TS 템플릿 안이라
+        #    코드블록이 `\\`\\`\\`` (이스케이프된 백틱)로 들어있다. 2026-09-06 에
+        #    이것 때문에 레슨16 에 넣은 reverse() 설명을 검사기가 못 봤다.
+        prose = "\n".join(m.group(1) for m in re.finditer(r"content:\s*`((?:[^`\\]|\\.)*)`", s))
         prose += "\n" + "\n".join(m.group(1) for m in re.finditer(
             r'(?:title|description):\s*"((?:[^"\\]|\\.)*)"', s))
-        prose_no_code = re.sub(r"```[\s\S]*?```", "", prose)
-        code += "\n" + "\n".join(re.findall(r"```python\n([\s\S]*?)```", prose))
-        out.append((n, p, code, prose_no_code))
+        # task 는 "예고" 를 담는 자리다 — 아래에서 따로 본다
+        task = "\n".join(m.group(1) for m in re.finditer(
+            r'task:\s*"((?:[^"\\\\]|\\\\.)*)"', s)).replace("\\\\n", "\n")
+        prose_unesc = prose.replace("\\`", "`")
+        prose_no_code = re.sub(r"```[\s\S]*?```", "", prose_unesc)
+        code += "\n" + "\n".join(re.findall(r"```python\n([\s\S]*?)```", prose_unesc))
+        out.append((n, p, code, prose_no_code, task))
     return out
 
 
@@ -73,19 +100,24 @@ def main():
     steps = load_steps()
     bad = 0
     for name, use_re, teach_re in CONCEPTS:
-        taught = sorted({n for n, p, c, prose in steps if teach_re.search(prose)})
-        used = sorted({n for n, p, c, prose in steps if use_re.search(c)})
+        taught = sorted({n for n, p, c, prose, tk in steps if teach_re.search(prose)})
+        used = sorted({n for n, p, c, prose, tk in steps if use_re.search(c)})
+        announced = {n for n, p, c, prose, tk in steps if use_re.search(c) and HEADS_UP.search(tk)}
         first_teach = taught[0] if taught else None
-        early = [n for n in used if first_teach is None or n < first_teach]
+        early = [n for n in used if (first_teach is None or n < first_teach) and n not in announced]
+        heads = sorted(announced & {n for n in used if first_teach is None or n < first_teach})
         ok = not early
         mark = "✅" if ok else "❌"
         print(f"\n{mark} {name}")
         print(f"    처음 가르치는 곳 : {'레슨 ' + str(first_teach) if first_teach else '없음 (어디에서도 안 가르친다)'}")
         print(f"    쓰는 곳          : {', '.join('레슨'+str(n) for n in used) if used else '없음'}")
+        if heads:
+            print(f"    📣 예고만 하고 쓰는 곳 : {', '.join('레슨'+str(n) for n in heads)}"
+                  f"  (\"다음 레슨에서 배워요\" 안내가 있어 실패로 안 본다)")
         if not ok:
             bad += 1
             print(f"    ⚠️  안 배운 채로 만나는 레슨: {', '.join('레슨'+str(n) for n in early)}")
-            for n, p, c, prose in steps:
+            for n, p, c, prose, tk in steps:
                 if n not in early:
                     continue
                 m = use_re.search(c)

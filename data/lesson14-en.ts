@@ -311,7 +311,7 @@ We'll use a **predefined list of guesses** (since \`input()\` is tricky in our s
           id: "mission1",
           type: "mission",
           title: "🏆 Final Mission — Up & Down guessing game",
-          task: "Secret is **7**. Your friend tries 3 → 5 → 9 → 7.\n\nFor each guess:\n- guess < secret → \"→ Go higher!\"\n- guess > secret → \"→ Go lower!\"\n- guess == secret → \"→ Correct! Got it in N attempts!\" then **break**!\n\nFill 3 blanks:",
+          task: "Secret is **7**. Your friend tries 3 → 5 → 9 → 7.\n\n💡 See \\`[3, 5, 9, 7]\\` in the code? That is a **list**, coming up next lesson.\nFor now just read it as \"numbers kept in order\" — \\`for\\` takes them one at a time.\n\nFor each guess:\n- guess < secret → \"→ Go higher!\"\n- guess > secret → \"→ Go lower!\"\n- guess == secret → \"→ Correct! Got it in N attempts!\" then **break**!\n\nFill 3 blanks:",
           initialCode: "secret = 7\nguesses = [3, 5, 9, 7]\n\nattempts = 0\n\nfor guess in guesses:\n    attempts = attempts + 1\n    print(f\"Attempt {attempts}: {guess}\")\n    \n    if ___:\n        print(\"→ Go higher!\")\n    elif ___:\n        print(\"→ Go lower!\")\n    else:\n        print(f\"→ Correct! Got it in {attempts} attempts!\")\n        ___",
           expectedOutput: "Attempt 1: 3\n→ Go higher!\nAttempt 2: 5\n→ Go higher!\nAttempt 3: 9\n→ Go lower!\nAttempt 4: 7\n→ Correct! Got it in 4 attempts!",
           hint: "Compare guess vs secret. End the loop once correct!",

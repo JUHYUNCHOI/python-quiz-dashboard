@@ -392,8 +392,8 @@ print("\\n".join(items))
           task: "단어 순서를 뒤집어서 출력하세요!",
           initialCode: "text = \"Hello World Python\"\nwords = text.___()\nwords.___()\nresult = ' '.___(words)\nprint(result)",
           expectedOutput: "Python World Hello",
-          hint: "쪼개고 → 뒤집고 → 다시 합치는 3 단계!",
-          hint2: "words.reverse()로 순서 뒤집기!"
+          hint: "쪼개고 → 뒤집고 → 다시 합치는 3 단계! 뒤집기는 레슨16 에서 배운 메서드예요.",
+          hint2: "split / reverse / join"
         },
         {
           id: "mission2",

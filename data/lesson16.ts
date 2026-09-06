@@ -380,6 +380,25 @@ print(new_list)     # [1, 3, 4]
 print(original)     # [3, 1, 4] — 그대로!
 \`\`\`
 
+### 🔄 줄 세우지 말고 **뒤집기** 만 — reverse()
+
+\`sort()\` 는 **작은 것부터 줄을 세워요.** 지금 순서를 그대로
+**거꾸로만** 뒤집고 싶을 땐 \`reverse()\` 를 써요.
+
+\`\`\`python
+words = ['Hello', 'World', 'Python']
+words.reverse()
+print(words)     # ['Python', 'World', 'Hello']
+\`\`\`
+
+\`sort(reverse=True)\` 와 헷갈리기 쉬워요. 이름은 비슷한데 하는 일이 달라요.
+
+| | 하는 일 |
+|---|---|
+| \`sort()\` | 작은 것부터 **줄 세우기** |
+| \`sort(reverse=True)\` | 큰 것부터 **줄 세우기** |
+| \`reverse()\` | 줄 세우지 않고 **지금 순서만 거꾸로** |
+
 > 🎯 **sort = 자체 변경, sorted = 새 리스트.** 가장 큰 차이.`
         },
         {
