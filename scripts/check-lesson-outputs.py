@@ -299,6 +299,132 @@ def check_learn():
     return checked, problems
 
 
+# ──────────────────────────────────────────────────────────────
+# hint2 검사 — "학생이 정답을 써도 오답 처리" 를 잡는다
+#
+# 왜 있나 (2026-09-06): check_learn() 은 `initialCode` 만 돌린다. 그래서
+#   ① "처음부터 쓰기"(본문이 주석뿐) 스텝은 위 279행에서 **아예 건너뛰고**
+#   ② `hint2`(= 정답 코드) 는 어디서도 실행해보지 않는다
+# 그날 lesson6-en `try-count-scratch` 가 딱 이 사각지대에 있었다 —
+#   "This is fun and this is hard...".count("is") 는 6인데 적힌 값은 3.
+#   ("This"·"this" 안의 is 까지 센다)
+# tryit 일 땐 requireCorrect=false 라 아무도 안 걸렸는데, mission 으로 올리자마자
+# **학생이 hint2 의 정답을 그대로 써도 막히는** 상태가 됐다.
+# python-qa 가 손으로 찾았다. 다음엔 기계가 잡는다.
+# ──────────────────────────────────────────────────────────────
+
+def normalize_app(s):
+    """앱의 채점 정규화와 같은 규칙 (python-runner.tsx / blank-code-runner.tsx).
+    줄 구조는 보존하고 줄 안의 공백만 뭉친다."""
+    s = s.replace("\r\n", "\n").strip().lower()
+    return "\n".join(re.sub(r"[ \t]+", " ", l).strip() for l in s.split("\n"))
+
+
+def solved_candidates(blk):
+    """학생이 '정답' 을 냈을 때 나올 수 있는 코드 후보들.
+
+    `hint2` 관례가 하나가 아니다:
+      · 프로그램 전체를 적은 것
+      · **추가할 줄만** 적은 것 (설정 코드는 initialCode 에 이미 있다)
+    그래서 둘 다 만들어 보고 **어느 쪽으로도 안 맞을 때만** 문제로 본다.
+
+    ⚠️ **빈칸 있는 스텝은 일부러 안 본다.** 거기선 hint2 가 빈칸 조각(`max_hp`)
+       이기도 하고 줄 전체(`if hp == 0:`)이기도 해서 기계가 못 고른다.
+       억지로 채우면 헛 경보가 수백 개 난다 (2026-09-06 에 304개 나왔다).
+
+    보는 것은 **빈칸 없는 "손으로 처음부터" 스텝**뿐이다. 하필 `check_learn()`
+    이 건너뛰는 바로 그 구간이라 사각지대였다 —
+    lesson6-en `try-count-scratch`("정답인데 오답") 가 여기 있었다."""
+    code = field(blk, "initialCode")
+    hint2 = field(blk, "hint2")
+    if code is None or not hint2 or "___" in code:
+        return []
+    # ⚠️ check_learn 의 skip 조건을 **문자로 흉내 내면 안 된다.**
+    #    2026-09-06 에 그렇게 했다가 lesson6-en `try-count-scratch` 를 놓쳤다 —
+    #    주석에 "Write a print line here" 라고 써 있어서 `"print" in code` 가 참이 됐고,
+    #    "check_learn 이 본다" 고 착각했다. 정작 check_learn 은 **출력이 비면 건너뛴다.**
+    #    둘 다 안 보는 틈이 생겼다.
+    #    → 조건을 흉내 내지 말고, **실제로 돌려서** 판단한다. 호출부에서 처리.
+    body_lines = [l for l in code.split("\n") if l.strip() and not l.strip().startswith("#")]
+    # hint2 가 **들여쓰기로 시작**하면 "이 자리에 끼워 넣어라" 는 조각이다
+    # (예: 클래스 안에 들어갈 메서드 본문). 뒤에 붙이면 문법이 깨지므로,
+    # 어디에 넣어야 하는지 기계가 알 수 없다 → 검사하지 않는다.
+    # 헛 경보가 하나라도 남으면 검사기를 아무도 안 본다.
+    if hint2.split("\n")[0][:1] in (" ", "\t"):
+        return []
+    out = [hint2]
+    if body_lines:                 # initialCode 에 설정 코드가 있으면 붙여서도 본다
+        out.append(code.rstrip() + "\n" + hint2)
+    return out
+
+
+def check_hints():
+    checked, problems = 0, []
+    for path in sorted(glob.glob(os.path.join(LEARN_DIR, "**", "*.ts"), recursive=True)):
+        name = os.path.relpath(path, LEARN_DIR)
+        src = open(path, encoding="utf-8").read()
+        ids = [(m.start(), m.group(1))
+               for m in re.finditer(r'\n\s+id: "([^"]+)",?\n\s+type: "\w+"', src)]
+        with tempfile.TemporaryDirectory() as workdir:
+            for k, (pos, sid) in enumerate(ids):
+                end = ids[k + 1][0] if k + 1 < len(ids) else len(src)
+                blk = src[pos:end]
+                if field(blk, "type") not in ("tryit", "mission", "coding"):
+                    continue
+                want = field(blk, "expectedOutput")
+                if want is None:
+                    continue
+                raw = field(blk, "initialCode") or field(blk, "codeTemplate") or ""
+                hint2 = field(blk, "hint2")
+
+                cands = solved_candidates(blk)
+                if not cands:
+                    continue
+                # initialCode 를 그대로 돌려 **출력이 나오면** check_learn 이 이미 검증한다.
+                # 비어 있으면(= 학생이 처음부터 쓰는 자리) 여기서 hint2 를 본다.
+                base = field(blk, "initialCode")
+                b_out, b_err = run(base, workdir, "")
+                if b_out is not None and b_out.strip() and not (b_err and "Traceback" in b_err):
+                    continue
+                stdin = field(blk, "stdin") or ""
+                if any("input(" in c for c in cands) and not stdin:
+                    m = re.search(r"\(입력:\s*([^)]*)\)|\(input:\s*([^)]*)\)", field(blk, "task") or "")
+                    if not m:
+                        continue
+                    stdin = (m.group(1) or m.group(2)).strip()
+                if stdin and not stdin.endswith("\n"):
+                    stdin += "\n"
+
+                checked += 1
+                # 후보 중 **정상 실행된 것**만 본다.
+                # 전부 에러면 우리가 코드를 잘못 재구성한 것이다 — hint2 가
+                # "이 자리에 끼워 넣어라" 는 조각(함수 안 return, 클래스 안 메서드 등)
+                # 이면 붙여서 돌릴 방법이 없다. 그건 **콘텐츠 문제가 아니므로 조용히 넘긴다.**
+                # 헛 경보가 남으면 검사기를 아무도 안 본다.
+                mismatch = None
+                for c in cands:
+                    run_code = c
+                    if "input(" in c:
+                        # 앱은 input() 프롬프트를 stdout 에 안 찍는다
+                        # (`public/pyodide.worker.js:61-67` 에서 builtins.input 을 래핑)
+                        run_code = ("import builtins as _b\n_o = _b.input\n"
+                                    "_b.input = lambda *a, **k: _o()\n") + c
+                    out, err = run(run_code, workdir, stdin)
+                    if out is None or err:
+                        continue                      # 재구성 실패 — 판단하지 않는다
+                    if not out.strip() and want.strip():
+                        continue                      # 출력이 아예 없음 = 조각만 돌린 것.
+                                                      # check_learn 도 같은 규칙을 쓴다(위쪽 295행).
+                    if normalize_app(out.rstrip("\n")) == normalize_app(want):
+                        mismatch = None
+                        break                          # 맞는 길이 있으면 통과
+                    mismatch = out.rstrip("\n")
+                if mismatch is not None:
+                    kind = "UNSTABLE" if is_unstable(cands[-1], workdir, stdin) else "정답인데 오답 처리"
+                    problems.append((name, "hint2", sid, kind, mismatch, want))
+    return checked, problems
+
+
 def report(title, checked, problems):
     print(f"\n{title} — {checked}개 실행, 문제 {len(problems)}개")
     for name, ty, label, kind, got, want in problems:
@@ -313,9 +439,11 @@ def report(title, checked, problems):
 def main():
     rc, rp = check_review()
     lc, lp = check_learn()
+    hc, hp = check_hints()
     report("📘 복습 문제 (app/review)", rc, rp)
     report("📗 수업 레슨 (data)", lc, lp)
-    total = len(rp) + len(lp)
+    report("🔑 정답(hint2) 검사 — 학생이 맞게 써도 막히나", hc, hp)
+    total = len(rp) + len(lp) + len(hp)
     if total == 0:
         print("\n✅ 적힌 출력과 실제 실행 결과가 전부 일치합니다.")
         return 0
