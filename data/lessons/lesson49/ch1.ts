@@ -159,6 +159,31 @@ hero.status()`,
       hint2: "코드를 그대로 실행하세요!"
     },
     {
+      /* 2026-09-06: 이 챕터는 스텝 11개인데 채점되는 게 0개였다. tryit 3개의
+         hint2 가 전부 "코드를 그대로 실행하세요!" — 작성자가 연습이 아니라고
+         스스로 써놓은 것이다. 이 레슨은 챕터가 2개뿐이고 ch2 는 게임 메뉴 흐름을
+         다뤄서, **레슨49 안 어디에서도 클래스 설계가 채점되지 않았다.** */
+      id: "ch1-5a",
+      type: "tryit",
+      title: "✋ 빈칸 채우기 — 속성 이름으로 꺼내기",
+      task: "status 메서드가 HP 와 MP 를 출력하도록 빈칸을 채워보세요!",
+      initialCode: `class Character:
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+        self.hp = 100
+        self.mp = 30          # 마법력 추가!
+
+    def status(self):
+        print(f'{self.name}: HP {self.___}, MP {self.___}')
+
+hero = Character('철수', '마법사')
+hero.status()`,
+      expectedOutput: "철수: HP 100, MP 30",
+      hint: "self.속성이름 으로 꺼내요. 위에서 뭐라고 이름 붙였는지 보세요.",
+      hint2: "hp / mp"
+    },
+    {
       id: "ch1-6",
       type: "explain",
       title: "💭 몬스터는 어떤 속성이 필요할까?",
@@ -246,6 +271,28 @@ potion.show()`,
       expectedOutput: `[마법사] 영희: HP 100/100, ATK 15, DEF 10\n[몬스터] 슬라임: HP 30, ATK 8, DEF 2\n[회복] 물약: +30, 50골드`,
       hint: "3개 클래스로 게임의 모든 요소를 표현!",
       hint2: "코드를 그대로 실행하세요!"
+    },
+    {
+      // 사다리 마지막 칸 — 빈칸 없이 처음부터. 바로 위에서 Character 를 봤다.
+      id: "ch1-8a",
+      type: "mission",
+      title: "🏆 미션 — Monster 클래스를 처음부터",
+      task: "Monster 클래스를 만들어보세요. 속성은 name, hp, atk 세 개예요.",
+      initialCode: `# 1) Monster 클래스 만들기 (name, hp, atk 세 속성)
+# 2) goblin = Monster('고블린', 40, 12)
+# 3) 'HP: 40, ATK: 12' 모양으로 출력
+
+`,
+      expectedOutput: "HP: 40, ATK: 12",
+      hint: "class Monster: 안에 __init__(self, name, hp, atk) 를 만들고 self.속성 = 값 으로 담아요.",
+      hint2: `class Monster:
+    def __init__(self, name, hp, atk):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+
+goblin = Monster('고블린', 40, 12)
+print(f'HP: {goblin.hp}, ATK: {goblin.atk}')`
     },
     {
       id: "ch1-9",

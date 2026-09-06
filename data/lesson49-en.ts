@@ -165,6 +165,28 @@ hero.status()`,
           hint2: "Run the code as-is!"
         },
         {
+          /* 2026-09-06: 한글판과 짝. */
+          id: "ch1-5a",
+          type: "tryit",
+          title: "✋ Fill the blanks — reach for it by name",
+          task: "Make status print HP and MP.",
+          initialCode: `class Character:
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+        self.hp = 100
+        self.mp = 30          # magic points!
+
+    def status(self):
+        print(f'{self.name}: HP {self.___}, MP {self.___}')
+
+hero = Character('Alex', 'Mage')
+hero.status()`,
+          expectedOutput: "Alex: HP 100, MP 30",
+          hint: "Reach for them with self.name-of-attribute. Look at what they were called above.",
+          hint2: "hp / mp"
+        },
+        {
           id: "ch1-6",
           type: "explain",
           title: "What attributes does a monster need?",
@@ -252,6 +274,28 @@ potion.show()`,
           expectedOutput: `[Mage] Bob: HP 100/100, ATK 15, DEF 10\n[Monster] Slime: HP 30, ATK 8, DEF 2\n[Heal] Potion: +30, 50 gold`,
           hint: "3 classes represent every element of the game!",
           hint2: "Run the code as-is!"
+        },
+        {
+          /* 2026-09-06: 한글판과 짝. */
+          id: "ch1-8a",
+          type: "mission",
+          title: "🏆 Mission — a Monster class from scratch",
+          task: "Write a Monster class. It has three attributes: name, hp, atk.",
+          initialCode: `# 1) Write the Monster class (name, hp, atk)
+# 2) goblin = Monster('Goblin', 40, 12)
+# 3) Print it as 'HP: 40, ATK: 12'
+
+`,
+          expectedOutput: "HP: 40, ATK: 12",
+          hint: "Inside class Monster: write __init__(self, name, hp, atk) and store each with self.x = x.",
+          hint2: `class Monster:
+    def __init__(self, name, hp, atk):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+
+goblin = Monster('Goblin', 40, 12)
+print(f'HP: {goblin.hp}, ATK: {goblin.atk}')`
         },
         {
           id: "ch1-9",

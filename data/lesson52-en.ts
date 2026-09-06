@@ -622,6 +622,33 @@ show_achievements()`,
           hint2: "Just run the code as is!"
         },
         {
+          /* 2026-09-06: 한글판과 짝. */
+          id: "ch3-1a",
+          type: "mission",
+          title: "🎯 Mission: finish the achievement system!",
+          task: "Fill the three blanks to finish it.",
+          initialCode: `class Achievement:
+    def __init__(self, name, condition_fn):
+        self.name = name
+        self.condition_fn = condition_fn
+        self.___ = False
+
+    def check(self, data):
+        if self.condition_fn(data):
+            self.___ = True
+            print(f'* Achievement unlocked: {self.name}!')
+
+ach = Achievement('Reached level 3', lambda d: d['level'] >= 3)
+
+player = {'level': 1}
+ach.check(player)
+player['level'] = 3
+ach.___(player)`,
+          expectedOutput: "* Achievement unlocked: Reached level 3!",
+          hint: "You need one attribute to remember it was unlocked. The last line calls the method above.",
+          hint2: "unlocked / unlocked / check"
+        },
+        {
           id: "ch3-2",
           type: "tryit",
           title: "💻 ⑦ Monster Drops!",
@@ -686,6 +713,32 @@ for i in range(5):
           expectedOutput: `=== Defeated 5 Slimes! ===\n  #1: Slime Core [ATK +2] dropped!\n  #2: Sticky Jelly [Heal +10] dropped!\n  #3: (No drop)\n  #4: Slime Core [ATK +2] dropped!\n  #5: Sticky Jelly [Heal +10] dropped!\n  #5: Slime Core [ATK +2] dropped!\n\n=== Defeated 5 Goblins! ===\n  #1: Potion [Heal +30] dropped!\n  #1: Goblin Crown [DEF +8] dropped!\n  #2: Potion [Heal +30] dropped!\n  #3: Potion [Heal +30] dropped!\n  #4: Potion [Heal +30] dropped!\n  #5: Potion [Heal +30] dropped!\n  #5: Rusty Sword [ATK +5] dropped!`,
           hint: "random.random() < chance for drop check!",
           hint2: "Just run the code as is!"
+        },
+        {
+          /* 2026-09-06: 한글판과 짝. */
+          id: "ch3-2a",
+          type: "mission",
+          title: "🎯 Mission: finish the drop chance!",
+          task: "Fill the three blanks to finish the item drop.",
+          initialCode: `class Item:
+    def __init__(self, name, chance):
+        self.name = name
+        self.___ = chance
+
+    def try_drop(self, roll):
+        return roll < self.___   # a roll under the chance means it drops!
+
+sword = Item('Legendary Sword', 0.3)
+
+rolls = [0.1, 0.5, 0.2]
+for roll in rolls:
+    if sword.___(roll):
+        print(f'{sword.name} dropped! (roll={roll})')
+    else:
+        print(f'No drop (roll={roll})')`,
+          expectedOutput: "Legendary Sword dropped! (roll=0.1)\nNo drop (roll=0.5)\nLegendary Sword dropped! (roll=0.2)",
+          hint: "Use the same attribute name for the chance, and the method name you wrote above.",
+          hint2: "chance / chance / try_drop"
         },
         {
           id: "ch3-3",

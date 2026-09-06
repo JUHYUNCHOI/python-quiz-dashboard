@@ -86,6 +86,36 @@ show_achievements()`,
       hint2: "코드를 그대로 실행하세요!"
     },
     {
+      /* 2026-09-06: 형제 챕터 ch1·ch2 는 "tryit(전체 데모) → mission(빈칸, 축소판)"
+         쌍이 각각 두 번씩 있는데, **ch3 만 mission 이 하나도 없었다.**
+         난이도는 올라가는데 스캐폴딩은 사라지는 거꾸로 된 구조였다.
+         새 모양을 발명한 게 아니라 같은 레슨 안에서 빠뜨린 패턴을 채운다. */
+      id: "ch3-1a",
+      type: "mission",
+      title: "🎯 미션: 업적 시스템 완성!",
+      task: "빈칸 세 개를 채워 업적 시스템을 완성하세요!",
+      initialCode: `class Achievement:
+    def __init__(self, name, condition_fn):
+        self.name = name
+        self.condition_fn = condition_fn
+        self.___ = False
+
+    def check(self, data):
+        if self.condition_fn(data):
+            self.___ = True
+            print(f'★ 업적 해금: {self.name}!')
+
+ach = Achievement('레벨업 달성', lambda d: d['level'] >= 3)
+
+player = {'level': 1}
+ach.check(player)
+player['level'] = 3
+ach.___(player)`,
+      expectedOutput: "★ 업적 해금: 레벨업 달성!",
+      hint: "해금됐는지 기억할 속성이 하나 필요해요. 마지막 줄은 위에 만든 메서드를 부르는 자리예요.",
+      hint2: "unlocked / unlocked / check"
+    },
+    {
       id: "ch3-2",
       type: "tryit",
       title: "💻 ⑦ 몬스터 드롭!",
@@ -150,6 +180,34 @@ for i in range(5):
       expectedOutput: `=== 슬라임 5마리 처치! ===\n  1번째: 슬라임 코어 [공격 +2] 드롭!\n  2번째: 끈적한 젤리 [회복 +10] 드롭!\n  3번째: (드롭 없음)\n  4번째: 슬라임 코어 [공격 +2] 드롭!\n  5번째: 끈적한 젤리 [회복 +10] 드롭!\n  5번째: 슬라임 코어 [공격 +2] 드롭!\n\n=== 고블린 5마리 처치! ===\n  1번째: 물약 [회복 +30] 드롭!\n  1번째: 고블린 왕관 [방어 +8] 드롭!\n  2번째: 물약 [회복 +30] 드롭!\n  3번째: 물약 [회복 +30] 드롭!\n  4번째: 물약 [회복 +30] 드롭!\n  5번째: 물약 [회복 +30] 드롭!\n  5번째: 녹슨 검 [공격 +5] 드롭!`,
       hint: "random.random() < 확률 로 드롭 판정!",
       hint2: "코드를 그대로 실행하세요!"
+    },
+    {
+      /* 2026-09-06: 원본 ch3-2 데모는 random.seed 로 확률을 보여준다.
+         미션에서는 굳이 난수를 쓰지 않는다 — 채점이 흔들리면 안 되고,
+         배울 것은 `roll < chance` 비교 자체이지 난수 생성이 아니기 때문이다. */
+      id: "ch3-2a",
+      type: "mission",
+      title: "🎯 미션: 드롭 확률 완성!",
+      task: "빈칸 세 개를 채워 아이템 드롭을 완성하세요!",
+      initialCode: `class Item:
+    def __init__(self, name, chance):
+        self.name = name
+        self.___ = chance
+
+    def try_drop(self, roll):
+        return roll < self.___   # roll 이 확률보다 작으면 드롭 성공!
+
+sword = Item('전설의 검', 0.3)
+
+rolls = [0.1, 0.5, 0.2]
+for roll in rolls:
+    if sword.___(roll):
+        print(f'{sword.name} 드롭! (roll={roll})')
+    else:
+        print(f'드롭 없음 (roll={roll})')`,
+      expectedOutput: "전설의 검 드롭! (roll=0.1)\n드롭 없음 (roll=0.5)\n전설의 검 드롭! (roll=0.2)",
+      hint: "확률을 담아둘 속성 이름과, 위에서 만든 메서드 이름을 그대로 쓰면 돼요.",
+      hint2: "chance / chance / try_drop"
     },
     {
       id: "ch3-3",

@@ -193,6 +193,31 @@ hero.attack(slime)`,
           hint2: "Inside the attack method, s is Hero and target is Slime!"
         },
         {
+          /* 2026-09-06: 한글판과 짝. 한쪽만 고치면 영어로 배우는 학생이 다른 레슨을 본다. */
+          id: "ch2-1a",
+          type: "tryit",
+          title: "✋ Fill the blanks — who attacks whom?",
+          task: "This time make the goblin attack the hero!",
+          initialCode: `class Character:
+    def __init__(s, char_name, hp, atk):
+        s.char_name = char_name
+        s.hp = hp
+        s.atk = atk
+
+    def attack(s, target):
+        target.hp = target.hp - s.atk
+        print(f'{target.char_name} HP left: {target.hp}')
+
+hero = Character('Hero', 100, 30)
+goblin = Character('Goblin', 50, 8)
+
+# The goblin attacks the hero!
+___.attack(___)`,
+          expectedOutput: "Hero HP left: 92",
+          hint: "In attack(s, target), s is the one attacking and target is the one hit.",
+          hint2: "goblin / hero"
+        },
+        {
           id: "ch2-2",
           type: "tryit",
           title: "Build a healing system!",
@@ -230,6 +255,68 @@ hero.heal(50)`,
       title: "Instance Variables vs Class Variables",
       emoji: "\ud83d\udd00",
       steps: [
+        {
+          /* 2026-09-06: 한글판과 짝. */
+          id: "ch2-2a",
+          type: "quiz",
+          title: "Quiz!",
+          content: "A character at HP 90/100 calls heal(30). What is the HP after?",
+          options: ["120", "100", "90", "30"],
+          answer: 1,
+          explanation: "90+30=120, but it cannot pass max_hp (100), so it stops at 100."
+        },
+        {
+          id: "ch2-2b",
+          type: "tryit",
+          title: "✋ Fill the blank — do not pass max_hp!",
+          task: "Fill the blank so healing never goes past the maximum HP.",
+          initialCode: `class Character:
+    def __init__(s, char_name, hp, max_hp):
+        s.char_name = char_name
+        s.hp = hp
+        s.max_hp = max_hp
+
+    def heal(s, amount):
+        s.hp = s.hp + amount
+        if s.hp > s.max_hp:
+            s.hp = s.___
+        print(f'{s.char_name} HP: {s.hp}/{s.max_hp}')
+
+hero = Character('Hero', 70, 100)
+hero.heal(20)
+hero.heal(50)`,
+          expectedOutput: "Hero HP: 90/100\nHero HP: 100/100",
+          hint: "Healing must not go above the maximum. So what should it be set to?",
+          hint2: "max_hp"
+        },
+        {
+          id: "ch2-3",
+          type: "mission",
+          title: "🏆 Mission — write a use_potion method",
+          task: "Write use_potion from scratch! It heals 30 HP but never passes the maximum.",
+          initialCode: `class Character:
+    def __init__(s, char_name, hp, max_hp):
+        s.char_name = char_name
+        s.hp = hp
+        s.max_hp = max_hp
+
+    # Write use_potion here!
+    # 1) add 30 to HP
+    # 2) if it passes the maximum, set it to the maximum
+    # 3) print '{name} used a potion! HP: {now}/{max}'
+
+
+hero = Character('Hero', 50, 100)
+hero.use_potion()
+hero.use_potion()`,
+          expectedOutput: "Hero used a potion! HP: 80/100\nHero used a potion! HP: 100/100",
+          hint: "Same shape as heal above — add, clamp, print.",
+          hint2: `    def use_potion(s):
+        s.hp = s.hp + 30
+        if s.hp > s.max_hp:
+            s.hp = s.max_hp
+        print(f'{s.char_name} used a potion! HP: {s.hp}/{s.max_hp}')`
+        },
         {
           id: "ch3-0",
           type: "explain",
