@@ -437,7 +437,7 @@ Hello
           task: "'안녕'을 '반가워'로 바꿔서 출력해봐. print 한 줄을 직접 써보자!",
           initialCode: "text = \"안녕 친구! 안녕 모두!\"\n# 여기에 print 한 줄을 직접 써봐\n",
           expectedOutput: "반가워 친구! 반가워 모두!",
-          hint: "print( ... ) 안에 text.replace(\"안녕\", \"반가워\") 모양으로 넣으면 돼요",
+          hint: "글자를 바꿔주는 메서드를 print 안에 넣어요. 바꿀 글자, 새 글자 순서예요.",
           hint2: "print(text.replace(\"안녕\", \"반가워\"))"
         },
         {
@@ -447,7 +447,7 @@ Hello
           task: "replace 를 두 번 연결해서 '고양이'→'강아지', '소'→'토끼'로 바꿔봐.",
           initialCode: "text = \"고양이와 소\"\n# replace 를 .replace(...).replace(...) 처럼 이어붙일 수 있어\n",
           expectedOutput: "강아지와 토끼",
-          hint: "한 줄에 replace 를 두 번 연결: text.replace(...).replace(...)",
+          hint: "바꾸고 나온 결과에 또 바꾸기를 붙일 수 있어요. 점으로 이어요.",
           hint2: "print(text.replace(\"고양이\", \"강아지\").replace(\"소\", \"토끼\"))"
         }
       ]

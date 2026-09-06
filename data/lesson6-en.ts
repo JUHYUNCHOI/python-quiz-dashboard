@@ -434,7 +434,7 @@ Hello
           task: "Replace 'Hi' with 'Hello' and print the result. Write the whole print line yourself!",
           initialCode: "text = \"Hi friend! Hi everyone!\"\n# Write the print line here yourself\n",
           expectedOutput: "Hello friend! Hello everyone!",
-          hint: "Inside print( ... ), use text.replace(\"Hi\", \"Hello\")",
+          hint: "Put the replacing method inside print. Old text first, then new text.",
           hint2: "print(text.replace(\"Hi\", \"Hello\"))"
         },
         {
@@ -444,7 +444,7 @@ Hello
           task: "Chain two replace() calls — turn 'cat'→'dog' and 'cow'→'rabbit'.",
           initialCode: "text = \"cat and cow\"\n# You can chain replace like .replace(...).replace(...)\n",
           expectedOutput: "dog and rabbit",
-          hint: "Chain replace twice: text.replace(...).replace(...)",
+          hint: "You can replace again on the result. Join them with a dot.",
           hint2: "print(text.replace(\"cat\", \"dog\").replace(\"cow\", \"rabbit\"))"
         }
       ]
