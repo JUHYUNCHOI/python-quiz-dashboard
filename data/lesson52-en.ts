@@ -594,6 +594,49 @@ m.heal()`,
 @Key point: **lambda for condition checks** (achievements) + **random for probability** (drops) = advanced features complete!`
         },
         {
+          /* 2026-09-06: 한글판과 짝. */
+          id: "ch3-0a",
+          type: "explain",
+          title: "📦 Holding a function to call later",
+          content: `The achievement system below has **one new thing** in it. Let's look first.
+
+So far we called a function **right after making it**.
+
+\`\`\`python
+def double(x):
+    return x * 2
+
+print(double(5))   # 10
+\`\`\`
+
+But a function can also be **kept in a variable, like a value**. No parentheses here.
+
+\`\`\`python
+op = double       # no parentheses! we keep the function itself
+print(op(5))      # 10  <- add parentheses later to call it
+\`\`\`
+
+Once kept, it can also be **passed to another function**.
+
+\`\`\`python
+def apply(fn, value):
+    return fn(value)      # the passed-in one gets called here
+
+print(apply(double, 7))            # 14
+print(apply(lambda x: x + 100, 7))  # 107
+\`\`\`
+
+| How you write it | What it means |
+|---|---|
+| \`double\` (no parens) | the function **itself** — to keep or pass |
+| \`double(5)\` (parens) | **run it now** and take the result |
+
+> 💡 \`map(int, chars)\` in lesson 35 was the same thing — \`int\` was passed
+> without parentheses and map called it for you.
+
+@Key: keep it **without parentheses**, call it **with parentheses** later!`
+        },
+        {
           id: "ch3-1",
           type: "tryit",
           title: "💻 ⑥ Achievement System!",
