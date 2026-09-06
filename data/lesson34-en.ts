@@ -245,6 +245,124 @@ print(triple(10))`,
     // Chapter 3: sorted() with Lambda
     // ============================================
     {
+      /* 2026-09-06: old ch3 (sorted + key=lambda) duplicated lesson 35, so it was cut.
+         That left lambda taught in ch2 with nowhere to actually use it inside
+         lesson 34. This chapter fills that slot. Built-ins like sorted/map/filter
+         are deliberately avoided (those belong to lesson 35) — here the lambda is
+         handed to a function the student wrote. Step ids carry a "b" so students
+         who already completed the old ch3-1~5 don't see this new content as done. */
+      id: "ch3",
+      title: "Passing a Function as an Ingredient",
+      emoji: "🎁",
+      steps: [
+        {
+          id: "ch3-1b",
+          type: "explain",
+          title: "💭 Two functions differ by exactly one line",
+          content: `💭 Look at these two functions. Almost identical — can you spot the difference?
+
+\`\`\`python
+def double_all(numbers):
+    result = []
+    for n in numbers:
+        result.append(n * 2)
+    return result
+
+def square_all(numbers):
+    result = []
+    for n in numbers:
+        result.append(n ** 2)
+    return result
+\`\`\`
+
+Only **one line** differs — \`n * 2\` vs \`n ** 2\`. The other four lines match character for character.
+
+That's the same signal from ch1: **you wrote the same code twice.** Time to put it in a box.
+
+But this time it's different. Until now the thing in the hole (the parameter) was a **number or some text**, like \`greet("Tom")\`. Here what changes isn't the ingredient — it's **what the function does**.
+
+> 💭 Can "what it does" go in a hole too? Let's see it in the next step.
+
+@key: If two functions differ only in *what they do*, take **that job** as an ingredient!`
+        },
+        {
+          id: "ch3-2b",
+          type: "interactive",
+          title: "Swap the Rule Card",
+          description: "What changes when you swap the rule card?",
+          component: "pyRuleSwapper"
+        },
+        {
+          id: "ch3-3b",
+          type: "interactive",
+          title: "Type Along: Handing Over a Rule",
+          description: "Type the code you just saw!",
+          component: "typeAlong",
+          targetCode: `def apply_all(numbers, rule):
+    result = []
+    for n in numbers:
+        result.append(rule(n))
+    return result
+
+print(apply_all([1, 2, 3], lambda n: n * 2))`,
+          expectedOutput: "[2, 4, 6]"
+        },
+        {
+          id: "ch3-4b",
+          type: "tryit",
+          title: "Fill In: The Rule Slot",
+          task: "Fill the spot that calls the rule and the spot that hands one over",
+          initialCode: `def apply_all(numbers, rule):
+    result = []
+    for n in numbers:
+        result.append(___)      # call the rule with n
+    return result
+
+# Hand over a rule that triples
+print(apply_all([1, 2, 3], ___))`,
+          expectedOutput: "[3, 6, 9]",
+          hint: "First blank calls the rule; the second is a single line starting with lambda",
+          hint2: "rule(n) / lambda n: n * 3"
+        },
+        {
+          id: "ch3-5b",
+          type: "mission",
+          title: "🎯 Build It From Scratch",
+          description: "No blanks — write the whole thing yourself!",
+          task: "Write a calculate function that takes a rule and applies it to two numbers, then hand it an adding rule and a multiplying rule.",
+          initialCode: `# Write it from scratch here!
+# rule that adds 3 and 5       -> 8
+# rule that multiplies 3 and 5 -> 15
+
+
+`,
+          expectedOutput: "8\n15",
+          hint: "Make a function taking three ingredients — two numbers and a rule — then call the rule inside.",
+          hint2: `def calculate(a, b, rule):\n    return rule(a, b)\n\nprint(calculate(3, 5, lambda x, y: x + y))\nprint(calculate(3, 5, lambda x, y: x * y))`
+        },
+        {
+          id: "ch3-6b",
+          type: "quiz",
+          title: "Quick Check",
+          content: `What is the output?
+\`\`\`python
+def apply(value, rule):
+    return rule(value)
+
+print(apply(4, lambda x: x + 10))
+\`\`\``,
+          options: [
+            "4",
+            "10",
+            "14",
+            "Error occurs"
+          ],
+          answer: 2,
+          explanation: "The rule slot got lambda x: x + 10, so rule(4) is 4 + 10 = 14. A function that takes a function as an ingredient has a fancy name — 'higher-order function' — but you don't need the name. The sorted(..., key=...) you'll meet next lesson works the same way: you hand sorted a rule for which ruler to measure with."
+        }
+      ]
+    },
+    {
       id: "ch4",
       title: "Functions Calling Functions",
       emoji: "🔗",

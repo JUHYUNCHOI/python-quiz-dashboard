@@ -311,6 +311,16 @@ const registry: Record<string, ComponentEntry> = {
     }),
   },
 
+  // "규칙을 재료로 건네주기" 시뮬레이터 (레슨 34 ch3) — 2026-09-06 추가
+  pyRuleSwapper: {
+    load: () => import("@/components/animations/py-rule-swapper"),
+    exportName: "PyRuleSwapper",
+    props: (step: any, lang: string) => ({
+      lang,
+      ...(step?.componentProps || {}),
+    }),
+  },
+
   // split() · join() 시뮬레이터 (레슨 18) — 2026-09-05 추가
   pySplitJoinVisualizer: {
     load: () => import("@/components/animations/py-split-join-visualizer"),
