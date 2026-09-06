@@ -369,6 +369,29 @@ for key in ['slime', 'goblin', 'dragon']:
           hint2: "Run the code as-is!"
         },
         {
+          /* 2026-09-06: 한글판과 짝. */
+          id: "ch2-1m",
+          type: "mission",
+          title: "🎯 Mission: the monster factory!",
+          task: "Fill the three blanks so a name alone gives you a monster.",
+          initialCode: `monster_data = {
+    'Slime': {'hp': 30, 'atk': 8},
+    'Goblin': {'hp': 50, 'atk': 12},
+    'Dragon': {'hp': 200, 'atk': 40},
+}
+
+def create_monster(name):
+    d = monster_data[___]
+    return {'name': name, 'hp': d['hp'], 'atk': d[___]}
+
+for name in ['Slime', 'Dragon']:
+    m = ___(name)
+    print(f"{m['name']}: HP {m['hp']}, ATK {m['atk']}")`,
+          expectedOutput: "Slime: HP 30, ATK 8\nDragon: HP 200, ATK 40",
+          hint: "Look the data up with the name you were given, then pull the attack key out of it. The last one is the function above.",
+          hint2: "name / 'atk' / create_monster"
+        },
+        {
           id: "ch2-2",
           type: "explain",
           title: "How does a battle play out?",

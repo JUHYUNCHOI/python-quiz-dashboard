@@ -58,7 +58,7 @@ slime.status()`,
       id: "ch4-1",
       type: "mission",
       title: "🏦 미션: 은행 계좌 클래스!",
-      task: "BankAccount 클래스의 빈칸(___) 3개를 채워서 입금, 출금, 잔액 조회 기능을 완성하세요!",
+      task: "방금 전투에서 쓴 '속성 바꾸기 + 조건 확인' 을 이번엔 은행 계좌에 써봐요. 빈칸 3개를 채워 입금·출금·잔액 조회를 완성하세요!",
       initialCode: `class BankAccount:
     def __init__(s, owner, balance):
         s.owner = owner

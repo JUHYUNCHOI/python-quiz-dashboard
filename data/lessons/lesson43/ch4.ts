@@ -116,6 +116,44 @@ hero.status()`,
       hint2: "exp >= 100이면 레벨업! 레벨업 시 max_hp+20, atk+5, def+2!"
     },
     {
+      /* 2026-09-06: pedagogy 가 28개(긴 데모)를 훑고 찾은 **진짜 빠진 다리**.
+         바로 위 데모가 가르치는 것을 이 레슨 어디에서도 채점하지 않았다.
+         (내가 AST 로 확인: 채점 스텝 0개)
+         패턴은 오늘 e747b645 에서 확립한 것 그대로 — 데모 직후 3빈칸 소형 미션. */
+      id: "ch4-0m",
+      type: "mission",
+      title: "🎯 미션: 레벨업 공식!",
+      task: "빈칸 세 개를 채워 경험치와 레벨업을 완성하세요!",
+      initialCode: `class Hero:
+    def __init__(s, name):
+        s.name = name
+        s.level = 1
+        s.exp = 0
+        s.max_hp = 100
+        s.atk = 20
+
+    def gain_exp(s, amount):
+        s.exp = s.exp + amount
+        print(f'+{amount} EXP (총 {s.exp})')
+        if s.exp ___ 100:
+            s.___()
+
+    def level_up(s):
+        s.level = s.level + 1
+        s.exp = s.exp ___ 100
+        s.max_hp = s.max_hp + 20
+        s.atk = s.atk + 5
+        print(f'★ LEVEL UP! Lv.{s.level} (HP {s.max_hp} ATK {s.atk})')
+
+hero = Hero('용사')
+hero.gain_exp(40)
+hero.gain_exp(70)
+print(f'남은 EXP: {hero.exp}')`,
+      expectedOutput: "+40 EXP (총 40)\n+70 EXP (총 110)\n★ LEVEL UP! Lv.2 (HP 120 ATK 25)\n남은 EXP: 10",
+      hint: "레벨업 조건은 100 이상이에요. 올린 뒤에는 쓴 만큼 경험치를 덜어내야 다음 레벨을 셀 수 있어요.",
+      hint2: ">= / level_up / -"
+    },
+    {
       id: "ch4-1",
       type: "mission",
       title: "🎯 미션: 스킬 시스템 추가!",

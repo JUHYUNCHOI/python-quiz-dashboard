@@ -494,7 +494,7 @@ slime.status()`,
           id: "ch4-1",
           type: "mission",
           title: "Mission: Bank Account Class!",
-          task: "Fill in the 3 blanks (___) in the BankAccount class to complete deposit, withdraw, and balance check features!",
+          task: "The same 'change an attribute, check a condition' you just used in battle — now on a bank account. Fill the 3 blanks to finish deposit, withdraw and balance.",
           initialCode: `class BankAccount:
     def __init__(s, owner, balance):
         s.owner = owner

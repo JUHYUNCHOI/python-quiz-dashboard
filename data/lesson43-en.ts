@@ -530,6 +530,41 @@ hero.status()`,
           hint2: "If exp >= 100, level up! On level up: max_hp+20, atk+5, def+2!"
         },
         {
+          /* 2026-09-06: 한글판과 짝. */
+          id: "ch4-0m",
+          type: "mission",
+          title: "🎯 Mission: the level-up formula!",
+          task: "Fill the three blanks to finish experience and levelling up.",
+          initialCode: `class Hero:
+    def __init__(s, name):
+        s.name = name
+        s.level = 1
+        s.exp = 0
+        s.max_hp = 100
+        s.atk = 20
+
+    def gain_exp(s, amount):
+        s.exp = s.exp + amount
+        print(f'+{amount} EXP (total {s.exp})')
+        if s.exp ___ 100:
+            s.___()
+
+    def level_up(s):
+        s.level = s.level + 1
+        s.exp = s.exp ___ 100
+        s.max_hp = s.max_hp + 20
+        s.atk = s.atk + 5
+        print(f'* LEVEL UP! Lv.{s.level} (HP {s.max_hp} ATK {s.atk})')
+
+hero = Hero('Hero')
+hero.gain_exp(40)
+hero.gain_exp(70)
+print(f'EXP left: {hero.exp}')`,
+          expectedOutput: "+40 EXP (total 40)\n+70 EXP (total 110)\n* LEVEL UP! Lv.2 (HP 120 ATK 25)\nEXP left: 10",
+          hint: "Levelling needs 100 or more. After levelling you spend that much, so the leftover carries to the next level.",
+          hint2: ">= / level_up / -"
+        },
+        {
           id: "ch4-1",
           type: "mission",
           title: "Mission: Add a Skill System!",

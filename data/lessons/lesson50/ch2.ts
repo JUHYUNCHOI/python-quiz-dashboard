@@ -79,6 +79,32 @@ for key in ['slime', 'goblin', 'dragon']:
       hint2: "코드를 그대로 실행하세요!"
     },
     {
+      /* 2026-09-06: pedagogy 가 28개(긴 데모)를 훑고 찾은 **진짜 빠진 다리**.
+         바로 위 데모가 가르치는 것을 이 레슨 어디에서도 채점하지 않았다.
+         (내가 AST 로 확인: 채점 스텝 0개)
+         패턴은 오늘 e747b645 에서 확립한 것 그대로 — 데모 직후 3빈칸 소형 미션. */
+      id: "ch2-1m",
+      type: "mission",
+      title: "🎯 미션: 몬스터 공장!",
+      task: "빈칸 세 개를 채워 이름만 주면 몬스터가 나오게 만드세요!",
+      initialCode: `monster_data = {
+    '슬라임': {'hp': 30, 'atk': 8},
+    '고블린': {'hp': 50, 'atk': 12},
+    '드래곤': {'hp': 200, 'atk': 40},
+}
+
+def create_monster(name):
+    d = monster_data[___]
+    return {'name': name, 'hp': d['hp'], 'atk': d[___]}
+
+for name in ['슬라임', '드래곤']:
+    m = ___(name)
+    print(f"{m['name']}: HP {m['hp']}, ATK {m['atk']}")`,
+      expectedOutput: "슬라임: HP 30, ATK 8\n드래곤: HP 200, ATK 40",
+      hint: "받은 이름으로 자료를 꺼내고, 그 안에서 공격력 열쇠를 꺼내요. 마지막은 위에서 만든 함수예요.",
+      hint2: "name / 'atk' / create_monster"
+    },
+    {
       id: "ch2-2",
       type: "explain",
       title: "💭 전투는 어떤 순서로 진행될까?",
