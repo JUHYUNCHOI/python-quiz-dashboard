@@ -361,3 +361,30 @@ s.replace(/\r\n/g,"\n").trim().toLowerCase()
 | 3 | "다 해보자" 선언을 4쪽 앞으로 → 7쪽 "왜 세는지" 가 풀린다 | 셋 다 |
 | 4 | 비트 시뮬을 코드 직전으로. **줄이지 말고 옮기고, 연산자 정의 한 줄을 더한다** | 셋 다 (처방은 학생 쪽) |
 | 5 | 맨 위 배너 "이 문제 핵심: 비트 연산 → /algo/bitmanipulation(Gold+)" 재검토 | 기획자 실측 |
+
+---
+
+## 2026-09-07 마감 — 내일 아침 여기부터
+
+**배포 완료.** 42커밋 push, 라이브에서 눌러 확인함 (`coderin.vercel.app/quest` Lv 칩 정상).
+그 뒤 커밋 1개(`count-quests` 검사기)는 **안 밀었다** — 화면에 안 보이는 도구라
+다음 내용 커밋과 묶어서 한 번에. (memory/feedback_deploy_frequency.md)
+
+### 내일 수업 (MCC)
+- 난이도 목록: https://claude.ai/code/artifact/6b3d1bde-aef9-4abc-a6da-3817c5627b85
+- `/quest` 에서 난이도 칩 = 보기 모드. 전체 → 연도별 / Lv 선택 → 그 레벨만 평평하게
+
+### 남은 일 — **숫자는 `python3 scripts/count-quests.py` 로 확인하고 시작해라**
+| | 무엇 | 지금 값 | 비고 |
+|---|---|---|---|
+| 1 | 입출력 형식 카드 | USACO 79 · MCO 5 (MCC 0) | 패턴 반복 → 병렬. **단 목록을 검사기로 뽑을 것** |
+| 2 | CodeWalk 전환 | 옛 방식만 142 (MCC 37) | quest 마다 말풍선을 새로 써야 함. 긴 것부터 하나씩 |
+| 3 | "포인트" 패턴 문서화 | 미완 | rectangles 에 넣은 "왜 느린가 = 무엇이 낭비인가" 를 quest_problem_standard 에 |
+| 4 | USACO 난이도가 추정치 | 113개 | 문제 번호로 유추(Bronze #1→2). 감사값(MCC 48)과 신뢰도가 다른데 화면은 같은 뱃지 |
+| 5 | 선생님만 가능 | — | USACO 재제출(moohunt·photoshoot25·cowsplits·buymilk) · `/quest` 노란 박스 문구 |
+
+### 오늘 남긴 교훈 셋 (메모리 + 에이전트 정의에 배포됨)
+- `feedback_intent_check_is_everyones_job` — 기승전결 대조는 담당자 상시 검사. QA 는 2층으로
+- `feedback_reviewers_see_pages_teacher_sees_story` — 검토자는 '쪽' 을 보고 선생님은 '이야기' 를 본다.
+  검토 **전에** `see-flow.mjs` 로 전체를 먼저 읽어라. 주인 = project-lead
+- **숫자를 네 번 틀렸다** → `scripts/count-quests.py`. 손으로 세지 마라
