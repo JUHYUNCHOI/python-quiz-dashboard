@@ -21,6 +21,10 @@
  *
  * 무엇을 찍어주나:
  *   1) 스텝 번호 · 탭 · 그 쪽의 파란 내레이션 한 줄 (= 그 쪽이 하는 말)
+ *      + **시뮬 안의 첫 말풍선** — 이야기는 시뮬 안에서도 진행된다.
+ *        (첫 판은 내레이션만 긁었다. 그런데 정작 그날 잡힌 결함은 시뮬 1단계 안에
+ *         숨어 있어서 이 도구로는 못 잡았을 것이다. project-lead 가 자기 손으로
+ *         돌려보고 그렇게 보고했다 — "이 도구는 오늘 문제를 못 잡았을 겁니다.")
  *   2) 시뮬이 있으면 그 안의 서브 단계가 몇 개인지 (분량이 튀는 자리를 찾으려고)
  *   3) 코드가 처음 나오는 자리
  *
@@ -66,7 +70,17 @@ try {
       const lines = document.body.innerText.split('\n').map((x) => x.trim()).filter(Boolean)
       const k = lines.findIndex((x) => /^\d+ \/ \d+$/.test(x))
       // 시뮬 안의 (n / m) 은 서브 단계 수
-      const sub = lines.find((x) => /^\(\d+ \/ \d+\)$/.test(x))
+      const si = lines.findIndex((x) => /^\(\d+ \/ \d+\)$/.test(x))
+      const sub = si >= 0 ? lines[si] : undefined
+      // ⚠️ 시뮬 **안의 첫 말풍선**도 가져온다.
+      //    2026-09-07: 이 도구의 첫 판이 페이지 내레이션만 긁었다. 그런데 그날 잡힌 결함
+      //    ("다 해보자" 선언이 맨 뒤에 있던 것)은 내레이션이 아니라 **시뮬 1단계 안**에
+      //    숨어 있었다. 그래서 이 도구로는 못 잡았을 것이다 — project-lead 가 자기 손으로
+      //    돌려보고 그렇게 보고했다. 이야기는 시뮬 안에서도 진행된다. 같이 읽어야 한다.
+      const NAV = /^(⏮|◀|다음 ▶|Next ▶|Prev|처음부터|이전|Restart)/
+      const subFirst = si >= 0
+        ? lines.slice(si + 1, si + 4).filter((x) => !NAV.test(x)).slice(0, 2).join(' ')
+        : ''
       // 코드창이 있나 — 등폭 글꼴 줄이 여러 개 쌓여 있으면 코드다.
       // (CodeWalk 은 줄마다 따로 그린다. 한 덩어리 텍스트가 아니라 줄 수를 센다.)
       const monoLines = [...document.querySelectorAll('span,div,pre')].filter((e) => {
@@ -76,7 +90,7 @@ try {
         return /JetBrains|monospace|Menlo|Consolas/i.test(f) && txt.length > 8
       }).length
       const hasCode = monoLines >= 6
-      return { pos: lines[k] || '?', narr: (lines[k + 2] || lines[k + 1] || '').trim(), sub, hasCode }
+      return { pos: lines[k] || '?', narr: (lines[k + 2] || lines[k + 1] || '').trim(), sub, subFirst, hasCode }
     })
     const subTxt = r.sub ? ` [시뮬 ${r.sub.replace(/[()]/g, '').split(' / ')[1]}단계]` : ''
     if (r.hasCode && firstCode === null) firstCode = i + 1
@@ -84,6 +98,8 @@ try {
     console.log(
       `   ${String(i + 1).padStart(2)}   ${r.pos.padEnd(7)}  ${r.narr.slice(0, 52)}${r.code ? ' 〈코드〉' : ''}${subTxt}`
     )
+    // 시뮬 첫 말풍선 — 이야기는 시뮬 안에서도 진행된다. 선언·결론이 여기 숨는다.
+    if (r.subFirst) console.log(`              └ 시뮬 1단계: ${r.subFirst.slice(0, 64)}`)
 
     let moved = false
     try {
