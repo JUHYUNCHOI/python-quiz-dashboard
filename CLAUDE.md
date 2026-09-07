@@ -44,6 +44,15 @@ python3 scripts/check-concept-order.py  # 안 가르친 문법을 쓰고 있나
 python3 scripts/check-quest-lang.py     # quest 영어 자리에 한국어가 들어갔나
 ```
 
+**이야기 전체를 봐야 할 때 — 검토를 *시작하기 전에* 이걸 먼저** (2026-09-07 추가):
+```bash
+node scripts/see-flow.mjs http://localhost:3000/quest/moohunt   # 13쪽을 13줄로
+```
+스텝 순서 · 그 쪽이 하는 말 · 시뮬 분량 · 첫 코드가 나오는 쪽을 한 화면에 편다.
+그날 여러 명이 검토했는데도 "기승전결이 없다" 를 아무도 못 봤다 — **한 쪽씩 열면
+어느 쪽도 안 이상하기 때문이다. 이상한 건 쪽과 쪽 사이다.**
+주인은 `project-lead`. 근거: `memory/feedback_reviewers_see_pages_teacher_sees_story.md`
+
 **화면을 눈으로 봐야 할 때** (검토자·QA·학생 에이전트도 이걸 쓴다):
 ```bash
 node scripts/see-screen.mjs http://localhost:3000/quest/moohunt          # 데스크탑

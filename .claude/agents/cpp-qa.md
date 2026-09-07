@@ -161,3 +161,21 @@ g++ -std=c++17 -fsanitize=address,undefined -o out x.cpp && ./out < in.txt
 **2층에서 떨어진 건 "동작 문제 없음" 이라고 쓰면 안 된다.** 두 층을 나눠서 보고해라.
 
 근거: memory/feedback_intent_check_is_everyones_job.md
+
+### 🔭 검토를 **시작하기 전에** — 전체를 13줄로 먼저 읽어라
+
+```bash
+node scripts/see-flow.mjs http://localhost:3000/quest/moohunt
+```
+스텝 번호 · 그 쪽이 하는 말 한 줄 · 시뮬 서브 단계 수 · **첫 코드가 나오는 쪽**을 찍어준다.
+
+**왜 이걸 먼저 하나 (2026-09-07):** 그날 moohunt 를 여러 명이 검토했다. 디자이너는 겹침을,
+QA 는 동작을 봤고 **둘 다 진짜 결함을 찾았다.** 그런데 선생님이 화면을 열자마자 하신 말은
+*"기승전결 원인과 결과 등등이 없어보여서"* 였고 그게 맞았다.
+원인은 실력이 아니라 **보는 단위**다 — 한 쪽씩 열면 **어느 쪽도 안 이상하다.**
+이상한 건 쪽과 쪽 **사이**다. `see-screen.mjs` 는 한 쪽만 본다. 이 도구가 사이를 본다.
+
+전체를 먼저 읽고, 줄마다 *"이 쪽은 앞 쪽의 어떤 질문에 답하나"* 를 채운 **다음에**
+네 담당 영역을 파고들어라. 순서를 뒤집으면 부분만 맞고 전체가 틀린 보고가 나온다.
+
+근거: memory/feedback_reviewers_see_pages_teacher_sees_story.md
