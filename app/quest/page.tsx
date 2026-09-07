@@ -455,6 +455,90 @@ export default function QuestPage() {
   const NUM_COLORS = ["bg-amber-100 text-amber-800", "bg-sky-100 text-sky-800", "bg-purple-100 text-purple-800",
     "bg-green-100 text-green-800", "bg-rose-100 text-rose-800", "bg-emerald-100 text-emerald-800", "bg-purple-100 text-purple-800"]
 
+  // 문제 한 줄 렌더링 — 대회별 카드 그리드와 난이도 평면 리스트가 이 함수를 같이 쓴다(행 JSX 중복 방지).
+  // contestLabel 이 있으면(=난이도 필터로 카드 구조를 없앤 상태) 대회 배지를 붙여서 출처를 잃지 않게 한다.
+  //
+  // ⚠️ 난이도(diff) 출처는 문제마다 다르다 (lib/quest-difficulty.ts):
+  //   - MCC = 사람이 감사해서 매긴 값(lib/mcc-difficulty.ts)
+  //   - USACO/MCO = 문제 번호로 유추한 추정치(#1→2, #2→3 ...). 감사값이 아니다.
+  //   지금은 화면에서 둘을 구분하지 않고 똑같이 "Lv N" 으로 보여준다. 손대지 말 것 — 어떻게
+  //   드러낼지는 따로 정한다 (선생님 지시, 2026-09-07).
+  const renderProblemRow = (problem: Problem, idx: number, contestLabel?: string) => {
+    const isSolved = solvedSet.has(problem.id)
+    const diff = questDifficulty(problem.id, problem.sub)
+    const stage = getReleaseStage(problem.id)
+    const ready = isReady(problem.id)
+    const numMatch = problem.sub.match(/#(\d+)$/) || problem.sub.match(/P(\d+)$/)
+    const numLabel = numMatch ? (problem.sub.includes("#") ? `#${numMatch[1]}` : `P${numMatch[1]}`) : `${idx + 1}`
+    return (
+      <Link
+        key={problem.id}
+        href={`/quest/${problem.id}`}
+        className={[
+          "flex items-center gap-2 px-2.5 py-1.5 text-xs transition-colors group",
+          isSolved
+            ? "bg-green-50 hover:bg-green-100"
+            : "hover:bg-amber-50/70",
+        ].join(" ")}
+      >
+        <span className="font-black text-[11px] w-7 text-gray-500 flex-shrink-0">
+          {numLabel}
+        </span>
+        <span className="text-sm flex-shrink-0">{problem.emoji}</span>
+        <span className={`flex-1 truncate font-semibold ${
+          isSolved ? "text-green-700" : "text-gray-800 group-hover:text-amber-700"
+        }`}>
+          {problem.title}
+        </span>
+        {contestLabel && (
+          <span className="text-[9px] font-bold px-1.5 py-px rounded bg-slate-100 text-slate-600 border border-slate-300 flex-shrink-0">
+            {contestLabel}
+          </span>
+        )}
+        {diff && (
+          <span
+            title={`난이도 ${diff}/5`}
+            className="text-[9px] font-black px-1.5 py-px rounded-full flex-shrink-0 text-white"
+            style={{ background: DIFF_COLOR[diff] }}
+          >
+            Lv{diff}
+          </span>
+        )}
+        {stage === "internal" && (
+          <span className="text-[9px] font-black uppercase px-1 py-px rounded bg-rose-100 text-rose-700 border border-rose-300 flex-shrink-0">
+            internal
+          </span>
+        )}
+        {stage === "beta" && (
+          <span className="text-[9px] font-black uppercase px-1 py-px rounded bg-fuchsia-100 text-fuchsia-700 border border-fuchsia-300 flex-shrink-0">
+            beta
+          </span>
+        )}
+        {ready && (
+          <span className="text-[9px] font-black px-1 py-px rounded bg-purple-100 text-purple-700 border border-purple-300 flex-shrink-0" title={t("준비된 quest — 필요한 개념 다 배웠어요", "Ready — prereqs satisfied")}>
+            🎯
+          </span>
+        )}
+        {HARD_QUESTS.has(problem.id) && (
+          <span className="text-amber-400/80 text-[11px] leading-none flex-shrink-0 cursor-default" title={t("어려운 편 (선생님 메모)", "harder one (teacher note)")}>
+            ◆
+          </span>
+        )}
+        <button
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSolved(problem.id) }}
+          title={isSolved ? t("했음 — 누르면 해제", "Done — tap to undo") : t("했으면 체크", "Tap to mark done")}
+          aria-label={isSolved ? "완료 해제" : "완료 체크"}
+          className={[
+            "shrink-0 w-5 h-5 rounded-full border flex items-center justify-center text-[11px] font-black transition-colors",
+            isSolved
+              ? "bg-green-500 border-green-500 text-white"
+              : "border-gray-300 text-transparent hover:border-green-400 hover:text-green-400",
+          ].join(" ")}
+        >✓</button>
+      </Link>
+    )
+  }
+
   // ── Main page ────────────────────────────────
   return (
     <div className="min-h-screen bg-gray-50">
@@ -578,6 +662,7 @@ export default function QuestPage() {
             const sectionTotal = section.problems.length
             const isExpanded = expandedSections.has(section.label)
             const groups = groupByContest(section.problems)
+            const hasDiff = DIFF_SECTIONS.has(section.label)   // 난이도 뱃지·필터 붙는 섹션(USACO/MCC/MCO)
 
             return (
               <div key={section.label} id={`sec-${section.label}`} className="border border-gray-200 rounded-xl shadow-sm bg-white overflow-hidden scroll-mt-4">
@@ -630,7 +715,19 @@ export default function QuestPage() {
                         })}
                       </div>
                     )}
-                    {(section.label === "USACO"
+                    {hasDiff && mccDiff !== null ? (
+                      // 난이도를 골랐을 때: 연도/시즌 카드 구조 없이 한 줄씩 쭉 (선생님 요청, 2026-09-07)
+                      // 정렬은 section.problems 원래 순서 그대로(최신이 위) — 새로 만들지 않음.
+                      <div className="flex flex-col divide-y divide-gray-200 bg-white">
+                        {section.problems
+                          .filter(p => questDifficulty(p.id, p.sub) === mccDiff)
+                          .map((problem, idx) => renderProblemRow(
+                            problem,
+                            idx,
+                            problem.sub.replace(/\s*#\d+$/, "").replace(/\s*P\d+$/, "").trim()
+                          ))}
+                      </div>
+                    ) : (section.label === "USACO"
                       ? groupBySeason(groups)
                       : [{ season: "", contests: groups }]
                     ).map(({ season, contests }) => {
@@ -688,76 +785,7 @@ export default function QuestPage() {
                                   </div>
                                   {/* Problems list inside the card */}
                                   <div className="flex flex-col">
-                                    {rows.map((problem, idx) => {
-                                      const isSolved = solvedSet.has(problem.id)
-                                      const diff = questDifficulty(problem.id, problem.sub)
-                                      const stage = getReleaseStage(problem.id)
-                                      const ready = isReady(problem.id)
-                                      const numMatch = problem.sub.match(/#(\d+)$/) || problem.sub.match(/P(\d+)$/)
-                                      const numLabel = numMatch ? (problem.sub.includes("#") ? `#${numMatch[1]}` : `P${numMatch[1]}`) : `${idx + 1}`
-                                      return (
-                                        <Link
-                                          key={problem.id}
-                                          href={`/quest/${problem.id}`}
-                                          className={[
-                                            "flex items-center gap-2 px-2.5 py-1.5 text-xs transition-colors group",
-                                            isSolved
-                                              ? "bg-green-50 hover:bg-green-100"
-                                              : "hover:bg-amber-50/70",
-                                          ].join(" ")}
-                                        >
-                                          <span className="font-black text-[11px] w-7 text-gray-500 flex-shrink-0">
-                                            {numLabel}
-                                          </span>
-                                          <span className="text-sm flex-shrink-0">{problem.emoji}</span>
-                                          <span className={`flex-1 truncate font-semibold ${
-                                            isSolved ? "text-green-700" : "text-gray-800 group-hover:text-amber-700"
-                                          }`}>
-                                            {problem.title}
-                                          </span>
-                                          {diff && (
-                                            <span
-                                              title={`난이도 ${diff}/5`}
-                                              className="text-[9px] font-black px-1.5 py-px rounded-full flex-shrink-0 text-white"
-                                              style={{ background: DIFF_COLOR[diff] }}
-                                            >
-                                              Lv{diff}
-                                            </span>
-                                          )}
-                                          {stage === "internal" && (
-                                            <span className="text-[9px] font-black uppercase px-1 py-px rounded bg-rose-100 text-rose-700 border border-rose-300 flex-shrink-0">
-                                              internal
-                                            </span>
-                                          )}
-                                          {stage === "beta" && (
-                                            <span className="text-[9px] font-black uppercase px-1 py-px rounded bg-fuchsia-100 text-fuchsia-700 border border-fuchsia-300 flex-shrink-0">
-                                              beta
-                                            </span>
-                                          )}
-                                          {ready && (
-                                            <span className="text-[9px] font-black px-1 py-px rounded bg-purple-100 text-purple-700 border border-purple-300 flex-shrink-0" title={t("준비된 quest — 필요한 개념 다 배웠어요", "Ready — prereqs satisfied")}>
-                                              🎯
-                                            </span>
-                                          )}
-                                          {HARD_QUESTS.has(problem.id) && (
-                                            <span className="text-amber-400/80 text-[11px] leading-none flex-shrink-0 cursor-default" title={t("어려운 편 (선생님 메모)", "harder one (teacher note)")}>
-                                              ◆
-                                            </span>
-                                          )}
-                                          <button
-                                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSolved(problem.id) }}
-                                            title={isSolved ? t("했음 — 누르면 해제", "Done — tap to undo") : t("했으면 체크", "Tap to mark done")}
-                                            aria-label={isSolved ? "완료 해제" : "완료 체크"}
-                                            className={[
-                                              "shrink-0 w-5 h-5 rounded-full border flex items-center justify-center text-[11px] font-black transition-colors",
-                                              isSolved
-                                                ? "bg-green-500 border-green-500 text-white"
-                                                : "border-gray-300 text-transparent hover:border-green-400 hover:text-green-400",
-                                            ].join(" ")}
-                                          >✓</button>
-                                        </Link>
-                                      )
-                                    })}
+                                    {rows.map((problem, idx) => renderProblemRow(problem, idx))}
                                   </div>
                                 </div>
                               )
