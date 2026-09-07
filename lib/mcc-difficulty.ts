@@ -12,11 +12,20 @@ export const MCC_DIFFICULTY: Record<string, Difficulty> = {
   // 2 — 기본 (시뮬/경우나눔/집합·딕셔너리)
   collatz: 2, cornercover: 2, fences: 2,
   mcc15equation: 2, mcc15bahasaf: 2,
+  // 2026-09-07 재점검 — 내려온 것:
+  //   gifts 3 → 2. 풀이가 `sorted(zip(t, range(n)))` 로 앞 m 명. **동점 처리 있는 정렬 한 줄**이다.
+  //   같은 3 에 있던 Bakery(교환 논증 그리디)·City Tour(격자 BFS)와 난이도가 다르다.
+  gifts: 2,
   mcc19rect2: 2, mcc21carrots: 2,
-  mcc22aliens: 2, mcc22grammar: 2,
+  mcc22grammar: 2,
 
   // 3 — 표준 기법 (그리디/정렬활용/스택·투포인터/BFS 기본)
-  fans: 3, gifts: 3, mcc15choco: 3,
+  fans: 3, mcc15choco: 3,
+  // 2026-09-07 재점검 — 올라간 것:
+  //   mcc22aliens 2 → 3. 코드는 17줄로 짧지만, "누가 누구를 지목했나" 를 **개수 문제로 바꾸는**
+  //   환원(need_T vs have_T)이 필요하다. 같은 2 의 Collatz·Carrots·Corner Cover 는 규칙을
+  //   그대로 옮기면 되는 문제들이다. 발상 한 단계가 더 있다.
+  mcc22aliens: 3,
   mcc19bakery: 3, mcc19ditcoin: 3, mcc19elim: 3, mcc20citytour: 3, mcc20cipher: 3,
   mcc20missing: 3, mcc21dvd: 3, mcc19candy: 3,
   mcc21marbles: 3, mcc21menu: 3,
