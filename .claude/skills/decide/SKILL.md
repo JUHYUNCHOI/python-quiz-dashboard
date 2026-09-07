@@ -70,7 +70,7 @@ project lead랑 상의해서 다시 생각해줘."*
 | 결정 | 물어볼 사람 |
 |---|---|
 | 배포·머지 | project-lead + python-qa · cpp-qa(실행 검증) + 바뀐 영역 담당 |
-| 학생 화면 구조 변경 | ux-reviewer + pedagogy-reviewer + student-*(해당 과목) |
+| 학생 화면 구조 변경 | **student-*(해당 과목) 을 먼저** → ux-reviewer + pedagogy-reviewer. 학생이 안 겪어본 화면을 전문가 판단만으로 바꾸지 마라 (2026-09-07) |
 | 콘텐츠 삭제 | 그 영역 담당 + quest-auditor(🔒 동결 목록 대조) |
 | 레슨 내용 | lesson-content-reviewer + pedagogy-reviewer + student-*(해당 과목) |
 | 일괄 작업 | 담당 + quest-auditor(동결 목록) — **반드시 대조 후 시작** |
