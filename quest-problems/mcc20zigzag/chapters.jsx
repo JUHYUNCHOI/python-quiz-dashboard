@@ -294,6 +294,27 @@ export function makeMcc20ZigzagCh1(E) {
             </div>
           </div>
 
+          {/* 입력 형식이 없으면 샘플의 숫자가 무슨 뜻인지 알 수가 없다.
+              근거: memory/feedback_problem_statement_readable.md */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
+            <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+                {t(E,
+                  <>Line 1: string s (lowercase)<br/>Line 2: integer K</>,
+                  <>첫 줄: 문자열 s (소문자)<br/>둘째 줄: 정수 K</>)}
+              </div>
+            </div>
+            <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+                {t(E,
+                  <>Count of length-K zig-zag<br/>subsequences, mod 1000</>,
+                  <>길이 K 지그재그 부분수열<br/>개수를 1000으로 나눈 나머지</>)}
+              </div>
+            </div>
+          </div>
+
           {/* Constraints + official sample */}
           <div style={{ background: "#faf5ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10, wordBreak: "keep-all" }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 8 }}>

@@ -70,6 +70,27 @@ export function makeMcc19RectCh1(E) {
               </div>
             </div>
           </div>
+
+          {/* 입력 형식이 없으면 샘플의 숫자가 무슨 뜻인지 알 수가 없다.
+              근거: memory/feedback_problem_statement_readable.md */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12 }}>
+            <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+                {t(E,
+                  <>Line 1: N<br />Line 2: N sorted integers a[1..N]</>,
+                  <>첫 줄: N<br />둘째 줄: 정렬된 정수 N개 a[1..N]</>)}
+              </div>
+            </div>
+            <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+                {t(E,
+                  <>Minimum difference between<br />consecutive elements</>,
+                  <>인접한 두 원소 차이의<br />최솟값</>)}
+              </div>
+            </div>
+          </div>
         </div>),
     },
     // 1-2: Quiz

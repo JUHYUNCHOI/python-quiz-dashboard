@@ -343,6 +343,19 @@ export function makeExplodingArrowCh1(E) {
             </div>
           </div>
 
+          {/* 📤 Output — 입력 박스는 있었지만 출력 형식만 박스 없이 미션·narr 문장 속에 묻혀 있었다.
+              근거: memory/feedback_problem_statement_readable.md
+              print(solve(N, M, K, a)) — components.jsx FULL_PY 마지막 줄 */}
+          <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 12, padding: 14, marginBottom: 12 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e", marginBottom: 8 }}>
+              📤 {t(E, "Output", "출력")}
+            </div>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.75 }}>
+              {t(E, <>One line: <b>the minimum power X</b> that clears every target within K arrows.</>,
+                   <>한 줄: 화살 K개로 모든 표적을 없앨 수 있는 <b>최소 힘 X</b>.</>)}
+            </div>
+          </div>
+
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10 }}>
             <div>
               <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "SAMPLE INPUT", "샘플 입력")}</div>
