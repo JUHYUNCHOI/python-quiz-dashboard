@@ -109,9 +109,18 @@ const registry: Record<string, ComponentEntry> = {
   },
 
   // Lesson 32: map()
+  // ⚠️ props 로 lang 을 안 넘기면 컴포넌트가 아무리 번역돼 있어도 영어가 안 켜진다.
+  //    interactive-renderer.tsx:79 이 `entry?.props ? entry.props(...) : {}` 라서,
+  //    props 가 없는 항목은 lang 이 기본값 "ko" 에 머문다.
+  //    map-factory 는 isEn 분기가 이미 다 들어 있었는데 이 한 줄이 없어서
+  //    레슨35-en 학생이 한국어를 봤다 (2026-09-06 python-qa 발견).
   mapFactory: {
     load: () => import("@/components/animations/map-factory"),
     exportName: "MapFactoryVisualizer",
+    props: (step: any, lang: string) => ({
+      lang,
+      ...(step?.componentProps || {}),
+    }),
   },
 
   // Lesson 34: try-except

@@ -24,24 +24,60 @@ type Mode = "split" | "join"
 const PIECES = ["10", "20", "30"]
 const SRC = "10 20 30"
 
-/* 말풍선 — 한 단계에 한 문장만. 길어지면 학생이 안 읽는다. */
-const SPLIT_BEATS = [
-  "입력으로 받은 건 통째로 **글자 한 덩어리**예요. 계산을 못 해요.",
-  "**공백**이 있는 자리를 찾아요. 여기가 가위질할 곳이에요.",
-  "그 자리에서 **싹둑** — 세 조각으로 갈라졌어요.",
-  "조각들을 **리스트**에 담으면 끝! 이제 하나씩 꺼내 쓸 수 있어요.",
-]
-const JOIN_BEATS = [
-  "이번엔 반대예요. 조각 세 개가 리스트에 들어 있어요.",
-  "조각 **사이사이**에 이어붙일 글자를 끼워요. 여기선 `-` 예요.",
-  "쭉 밀어서 **한 덩어리**로 붙여요.",
-  "다시 글자 한 덩어리가 됐어요. 출력할 때 이 모양이 필요해요.",
-]
+/* 말풍선 — 한 단계에 한 문장만. 길어지면 학생이 안 읽는다.
+   ⚠️ 화면 글자는 반드시 lang 을 타야 한다. 2026-09-06 까지 이 시뮬은
+      lang 을 받기만 하고 한 번도 안 써서, 레슨18-en 학생이 영어 제목을
+      누르고 들어와 한국어 말풍선을 봤다. */
+const T = {
+  ko: {
+    splitTab: "✂️ split — 쪼개기",
+    joinTab: "🔗 join — 이어붙이기",
+    listNote: "리스트 — 조각을 따로따로 꺼내 쓸 수 있어요",
+    strNote: "문자열 — 통째로 글자 한 덩어리",
+    prev: "이전 단계",
+    next: "다음 단계",
+    reset: "처음으로",
+    split: [
+      "입력으로 받은 건 통째로 **글자 한 덩어리**예요. 계산을 못 해요.",
+      "**공백**이 있는 자리를 찾아요. 여기가 가위질할 곳이에요.",
+      "그 자리에서 **싹둑** — 세 조각으로 갈라졌어요.",
+      "조각들을 **리스트**에 담으면 끝! 이제 하나씩 꺼내 쓸 수 있어요.",
+    ],
+    join: [
+      "이번엔 반대예요. 조각 세 개가 리스트에 들어 있어요.",
+      "조각 **사이사이**에 이어붙일 글자를 끼워요. 여기선 `-` 예요.",
+      "쭉 밀어서 **한 덩어리**로 붙여요.",
+      "다시 글자 한 덩어리가 됐어요. 출력할 때 이 모양이 필요해요.",
+    ],
+  },
+  en: {
+    splitTab: "✂️ split — cut it up",
+    joinTab: "🔗 join — glue it back",
+    listNote: "a list — you can pull out each piece on its own",
+    strNote: "a string — one solid block of characters",
+    prev: "previous step",
+    next: "next step",
+    reset: "back to start",
+    split: [
+      "What came in is **one solid block** of characters. You can't do math on it.",
+      "Find where the **spaces** are. That's where the scissors go.",
+      "Cut right there — **snip** — and it falls into three pieces.",
+      "Drop the pieces into a **list** and you're done. Now you can use them one by one.",
+    ],
+    join: [
+      "Now the other way around. Three pieces are sitting in a list.",
+      "Slip the glue character **between** the pieces. Here it's `-`.",
+      "Push them together into **one block**.",
+      "It's a single block of characters again. That's the shape you need to print.",
+    ],
+  },
+} as const
 
 export function PySplitJoinVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const [mode, setMode] = useState<Mode>("split")
   const [step, setStep] = useState(0)
-  const beats = mode === "split" ? SPLIT_BEATS : JOIN_BEATS
+  const t = T[lang] ?? T.ko
+  const beats = mode === "split" ? t.split : t.join
   const last = beats.length - 1
 
   const go = (m: Mode) => { setMode(m); setStep(0) }
@@ -75,7 +111,7 @@ export function PySplitJoinVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                 : "bg-white text-indigo-700 hover:bg-indigo-100"
             }`}
           >
-            {m === "split" ? "✂️ split — 쪼개기" : "🔗 join — 이어붙이기"}
+            {m === "split" ? t.splitTab : t.joinTab}
           </button>
         ))}
       </div>
@@ -168,7 +204,7 @@ export function PySplitJoinVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
           </AnimatePresence>
 
           <div className="text-xs text-gray-500" style={KO}>
-            {listed ? "리스트 — 조각을 따로따로 꺼내 쓸 수 있어요" : "문자열 — 통째로 글자 한 덩어리"}
+            {listed ? t.listNote : t.strNote}
           </div>
         </div>
       </div>
@@ -189,7 +225,7 @@ export function PySplitJoinVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
           onClick={() => setStep((s) => Math.max(0, s - 1))}
           disabled={step === 0}
           className="rounded-lg bg-white p-2 text-indigo-700 shadow disabled:opacity-30"
-          aria-label="이전 단계"
+          aria-label={t.prev}
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
@@ -200,14 +236,14 @@ export function PySplitJoinVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
           onClick={() => setStep((s) => Math.min(last, s + 1))}
           disabled={step === last}
           className="rounded-lg bg-white p-2 text-indigo-700 shadow disabled:opacity-30"
-          aria-label="다음 단계"
+          aria-label={t.next}
         >
           <ChevronRight className="h-5 w-5" />
         </button>
         <button
           onClick={() => setStep(0)}
           className="ml-2 rounded-lg bg-white p-2 text-gray-500 shadow"
-          aria-label="처음으로"
+          aria-label={t.reset}
         >
           <RotateCcw className="h-4 w-4" />
         </button>
