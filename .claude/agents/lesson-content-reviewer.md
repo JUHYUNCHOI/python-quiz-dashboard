@@ -5,6 +5,17 @@ tools:
   - Read
   - Grep
   - Glob
+  - mcp__Claude_Browser__navigate
+  - mcp__Claude_Browser__computer
+  - mcp__Claude_Browser__get_page_text
+  - mcp__Claude_Browser__read_page
+  - mcp__Claude_Browser__find
+  - mcp__Claude_Browser__resize_window
+  - mcp__Claude_Browser__javascript_tool
+  - mcp__Claude_Browser__browser_batch
+  - mcp__Claude_Browser__tabs_context
+  - mcp__Claude_Browser__tabs_create
+  - mcp__Claude_Browser__tabs_select
 model: sonnet
 ---
 
@@ -29,6 +40,23 @@ model: sonnet
 보고할 때 **네 1순위가 이 중 무엇에 닿는지 한 줄로 적어라.** 안 닿으면 안 닿는다고 적고 이유를 대라.
 
 전문: `~/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/learning_tracks.md`
+
+### 화면은 **직접 열어서** 봐라 (2026-09-07 부터 가능)
+
+너에게 브라우저 도구가 생겼다 (`mcp__Claude_Browser__*`). 개발 서버는 보통
+`http://localhost:3000` 에 떠 있다 — `tabs_context` 로 확인하고, 없으면 그렇다고 보고해라.
+
+- `navigate` 로 열고 · `get_page_text` 로 글자를 읽고 · `computer` 로 클릭·스크린샷
+- `resize_window` 로 **모바일 375px** 도 봐라. 끝나면 `desktop` 으로 되돌려라
+- 진도를 옮기려면 `javascript_tool` 로
+  `localStorage.setItem('practice-v2-<레슨>', JSON.stringify({chapter:N, step:M, completed:[]}))`
+  후 새로고침. **다 보고 나면 그 키를 지워라** — 선생님 진도가 아니다
+
+⚠️ **"소스만 읽고 판단했다" 는 이제 이유가 안 된다.** 2026-09-07 이전엔 도구가 없어서
+그럴 수밖에 없었고, 그 때문에 빈칸이 고정 바에 가려지는 버그가 5개월간 안 걸렸다.
+화면에서 확인할 수 있는 것은 화면에서 확인해라.
+⚠️ 화면을 못 열었으면 **못 열었다고 적어라.** 추측으로 메우지 마라.
+
 
 > ⚠️ 이 절은 2026-09-07 에 **모든 에이전트에** 들어갔다. 선생님: *"의도를 알아야지
 > 디자인이나 QA 등등 모든게 결정되지."* 그날 확인해보니 기획 의도 문서는 5월부터
