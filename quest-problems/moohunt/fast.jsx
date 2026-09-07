@@ -32,7 +32,12 @@ export const FAST_PY = [
   "",
   "# isAt[x][a][b] = 'x 가 M, a 와 b 가 O' 일 때 득점하는 무브의 개수 (a < b)",
   "# y 와 z 는 둘 다 O 이기만 하면 되니 순서는 상관없어요 → 작은 쪽·큰 쪽으로 묶어요",
-  "isAt = [[[0] * N for _ in range(N)] for _ in range(N)]",
+  "isAt = []",
+  "for x in range(N):",
+  "    plane = []",
+  "    for a in range(N):",
+  "        plane.append([0] * N)",
+  "    isAt.append(plane)",
   "for _ in range(K):",
   "    x, y, z = map(int, input().split())",
   "    x -= 1",
@@ -122,11 +127,11 @@ export function getMooHuntFastWalk(E, lang = "py") {
   }
   return { code: FAST_PY, vars: _FAST_VARS, beats: [
     { hi: [0, 0],   bubble: t(E, "Read N (cells) and K (moves).", "N (칸 수) 와 K (무브 수) 읽기.") },
-    { hi: [2, 10],  bubble: t(E, "Store the moves in a table instead of a list.\nisAt[x][a][b] = how many moves need x to be M and a, b to be O.\nSince y and z both just need to be O, min/max puts (1,2,3) and (1,3,2) in the same slot.",
-                                 "무브를 목록이 아니라 표에 담아요.\nisAt[x][a][b] = 'x 가 M, a 와 b 가 O' 여야 득점하는 무브 개수.\ny 와 z 는 둘 다 O 이기만 하면 되니, min/max 로 (1,2,3) 과 (1,3,2) 를 같은 칸에 넣어요.") },
-    { hi: [14, 16], bubble: t(E, "For each board, split the cells: which are M, which are O.", "보드마다 칸을 갈라요 — 어디가 M 이고 어디가 O 인지.") },
-    { hi: [18, 23], bubble: t(E, "Here is the whole point.\nOnly 'one M cell + two O cells' can ever score, so look at nothing else.\nAt N = 20 that is about 428 combinations instead of 6,840.",
+    { hi: [2, 15],  bubble: t(E, "Store the moves in a table instead of a list.\nisAt[x][a][b] = how many moves need x to be M and a, b to be O.\nSince y and z both just need to be O, min/max puts (1,2,3) and (1,3,2) in the same slot.",
+                                 "무브를 목록이 아니라 표에 담아요.\n먼저 빈 표를 만들어요 — 칸 x 마다 판을 하나, 그 판 안에 a 마다 줄을 하나, 그 줄은 N칸.\nisAt[x][a][b] = 'x 가 M, a 와 b 가 O' 여야 득점하는 무브 개수예요.\ny 와 z 는 둘 다 O 이기만 하면 되니, min/max 로 (1,2,3) 과 (1,3,2) 를 같은 칸에 넣어요.") },
+    { hi: [19, 21], bubble: t(E, "For each board, split the cells: which are M, which are O.", "보드마다 칸을 갈라요 — 어디가 M 이고 어디가 O 인지.") },
+    { hi: [23, 28], bubble: t(E, "Here is the whole point.\nOnly 'one M cell + two O cells' can ever score, so look at nothing else.\nAt N = 20 that is about 428 combinations instead of 6,840.",
                                  "여기가 핵심이에요.\n득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐이니 다른 건 안 봐요.\nN = 20 에서 6,840 개 대신 평균 428 개만 봐요.") },
-    { hi: [25, 31], bubble: t(E, "Best score, and how many boards reach it.", "최고 점수와, 그 점수에 이르는 보드 개수.") },
+    { hi: [30, 36], bubble: t(E, "Best score, and how many boards reach it.", "최고 점수와, 그 점수에 이르는 보드 개수.") },
   ] };
 }
