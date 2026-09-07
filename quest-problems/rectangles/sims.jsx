@@ -6,6 +6,7 @@
 //   · RectanglesSim — 빨강 사각형 3개를 x축에 그리고, 파랑(연속 구간)으로
 //     나눠 면적을 비교해 → 최소 8 을 학생이 눈으로 발견.
 
+import React from "react";
 import { t } from "@/components/quest/theme";
 import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceStepper";
 
@@ -283,6 +284,173 @@ export function WhyCostSim({ E }) {
           : s.kind === "area" ? t(E, "3 × 2 = 6", "3 × 2 = 6")
           : t(E, "reds 5 · we pay 6 → 1 wasted", "빨강 5 · 내는 값 6 → 1 만큼 손해")}
       </Caption>
+
+      <div style={{ height: 14 }} />
+      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DPTableFillSim — dp 표를 한 칸씩 손으로 채워 보인다.
+
+   왜 만들었나 (2026-09-07):
+     학생 둘이 각각 같은 말을 했다.
+       "DP로 넘어가는 순간부터는 확실히 못 따라갔다. dp[k][i] 표를 손으로 직접
+        채워보고서야 이해했지, 화면만 보고는 '그렇다니까 그런가보다' 에 가까웠다."
+       "moohunt엔 숫자→비트→보드를 한 칸씩 채워주는 시뮬이 있었는데, rectangles는
+        dp표를 그렇게 한 칸씩 채워주는 시뮬 없이 바로 완성된 코드로 넘어감."
+     막힌 자리도 정확히 짚었다 — "코드 4/5, dp[kk][i] 가 처음 등장하는 자리".
+     브루트포스까지는 ①②③ 같은 작은 그림으로 봤는데, DP 는 갑자기 kk·i·j 기호뿐이었다.
+
+   설계 원칙:
+     · 새 숫자를 만들지 않는다. Ch1 에서 학생이 이미 손으로 구한 값(1·6·10·8)을 그대로 쓴다.
+     · 이름(dp)은 표를 다 채운 뒤에 붙인다 — feedback_first_concept_scaffolding.md
+     · ◀▶ 수동. 자동재생 없음 — feedback_sim_style_consistency.md
+     · 숫자는 전부 아래 REDS 에서 그 자리에서 계산한다. 표와 어긋날 수 없다.
+   ═══════════════════════════════════════════════════════════════ */
+export function DPTableFillSim({ E }) {
+  const N = REDS.length;                       // 3
+  const INF = Infinity;
+  // 표를 실제로 계산 — 화면 숫자는 전부 여기서 나온다
+  const dp = Array.from({ length: N + 1 }, () => Array(N + 1).fill(INF));
+  dp[0][0] = 0;
+  for (let kk = 1; kk <= N; kk++)
+    for (let i = 1; i <= N; i++) {
+      let sw = 0, mh = 0;
+      for (let j = i; j >= 1; j--) {
+        sw += REDS[j - 1].w; mh = Math.max(mh, REDS[j - 1].h);
+        if (dp[kk - 1][j - 1] < INF) dp[kk][i] = Math.min(dp[kk][i], dp[kk - 1][j - 1] + sw * mh);
+      }
+    }
+
+  // 채우는 순서 — 한 칸씩. cell = 지금 채우는 칸, try = 그 칸을 정할 때 따져본 후보
+  const steps = [
+    { k: "intro" },
+    { k: "cell", kk: 1, i: 1 }, { k: "cell", kk: 1, i: 2 }, { k: "cell", kk: 1, i: 3 },
+    { k: "try", kk: 2, i: 2, j: 2 }, { k: "try", kk: 2, i: 2, j: 1 }, { k: "cell", kk: 2, i: 2 },
+    { k: "try", kk: 2, i: 3, j: 3 }, { k: "try", kk: 2, i: 3, j: 2 }, { k: "cell", kk: 2, i: 3 },
+    { k: "answer" },
+  ];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+
+  // 지금까지 확정된 칸
+  const filled = new Set(["0,0"]);
+  for (let z = 1; z <= ts.safe; z++) {
+    const st = steps[z];
+    if (st.k === "cell") filled.add(`${st.kk},${st.i}`);
+  }
+
+  const cost = (j, i) => {                     // j..i 를 파랑 하나로 덮는 값
+    let sw = 0, mh = 0;
+    for (let z = j; z <= i; z++) { sw += REDS[z - 1].w; mh = Math.max(mh, REDS[z - 1].h); }
+    return { sw, mh, area: sw * mh };
+  };
+
+  const say = (() => {
+    if (s.k === "intro") return t(E,
+      <>We make a table. Rows = how many blues, columns = how many reds from the left.<br />
+        (0 blues, 0 reds) is <b>0</b> — nothing there yet.</>,
+      <>표를 하나 만들어요. 세로는 <b>파랑 개수</b>, 가로는 <b>앞에서부터 빨강 개수</b>.<br />
+        (파랑 0개, 앞 0개) 칸은 <b>0</b> 이에요 — 아직 아무것도 없으니까.</>);
+    if (s.k === "cell" && s.kk === 1) {
+      const c = cost(1, s.i);
+      const names = REDS.slice(0, s.i).map((r) => r.label).join("");
+      return t(E,
+        <>One blue has to cover <b>{names}</b> all at once.<br />
+          ({REDS.slice(0, s.i).map((r) => r.w).join(" + ")}) × {c.mh} = <b>{c.area}</b></>,
+        <>파랑 <b>1개</b>로 <b>{names}</b> 를 통째로 덮어요.<br />
+          ({REDS.slice(0, s.i).map((r) => r.w).join(" + ")}) × {c.mh} = <b>{c.area}</b></>);
+    }
+    if (s.k === "try") {
+      const c = cost(s.j, s.i);
+      const front = dp[s.kk - 1][s.j - 1];
+      const names = REDS.slice(s.j - 1, s.i).map((r) => r.label).join("");
+      const frontNames = REDS.slice(0, s.j - 1).map((r) => r.label).join("") || "—";
+      if (front === INF) return t(E,
+        <>What if the last blue takes <b>{names}</b>?<br />
+          Then the front (<b>{frontNames}</b>) has nothing left to cover — skip.</>,
+        <>마지막 파랑이 <b>{names}</b> 를 맡으면요?<br />
+          그럼 앞부분(<b>{frontNames}</b>)에 덮을 게 없어요 — 넘어가요.</>);
+      const total = front + c.area;
+      const better = total === dp[s.kk][s.i];
+      return t(E,
+        <>What if the last blue takes <b>{names}</b>? That costs {c.sw} × {c.mh} = <b>{c.area}</b>.<br />
+          The front (<b>{frontNames}</b>) we already wrote down: <b>{front}</b>.<br />
+          {c.area} + {front} = <b>{total}</b>{better ? "" : <> — bigger, throw it away.</>}</>,
+        <>마지막 파랑이 <b>{names}</b> 를 맡으면요? 그 값은 {c.sw} × {c.mh} = <b>{c.area}</b>.<br />
+          앞부분(<b>{frontNames}</b>)은 아까 적어둔 <b>{front}</b> 을 꺼내 써요.<br />
+          {c.area} + {front} = <b>{total}</b>{better ? "" : <> — 더 크니까 버려요.</>}</>);
+    }
+    if (s.k === "cell") return t(E,
+      <>So (<b>{s.kk} blues</b>, <b>first {s.i}</b>) = <b>{dp[s.kk][s.i]}</b>.</>,
+      <>그래서 (파랑 <b>{s.kk}개</b>, 앞 <b>{s.i}개</b>) 칸은 <b>{dp[s.kk][s.i]}</b> 이에요.</>);
+    return t(E,
+      <>The answer is in the <b>last column</b> — pick the smallest: {dp[1][N]} or {dp[2][N]} → <b>{Math.min(dp[1][N], dp[2][N])}</b>.<br />
+        Same number we found by hand earlier.<br />
+        This table is what the code calls <b>dp[kk][i]</b>.</>,
+      <>답은 <b>맨 오른쪽 칸</b>들 중에서 골라요 — {dp[1][N]} 과 {dp[2][N]} 중 <b>{Math.min(dp[1][N], dp[2][N])}</b>.<br />
+        아까 손으로 구한 그 숫자예요.<br />
+        이 표를 코드에서 <b>dp[kk][i]</b> 라고 불러요.</>);
+  })();
+
+  const cellBg = (kk, i) => {
+    if (s.k !== "intro" && s.kk === kk && s.i === i) return "#fff7ed";
+    if (s.k === "try" && kk === s.kk - 1 && i === s.j - 1) return "#ecfdf5";   // 꺼내 쓰는 앞부분
+    return filled.has(`${kk},${i}`) ? "#fff" : "#f8fafc";
+  };
+  const cellBd = (kk, i) => {
+    if (s.k !== "intro" && s.kk === kk && s.i === i) return A;
+    if (s.k === "try" && kk === s.kk - 1 && i === s.j - 1) return "#059669";
+    return "#e2e8f0";
+  };
+
+  return (
+    <div style={{ padding: 16 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Filling the table by hand", "표를 한 칸씩 채워보기")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Say tone={s.k === "answer" ? "aha" : s.k === "try" ? "go" : "go"}>{say}</Say>
+
+      <div style={{ maxWidth: 360, margin: "14px auto 0" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "76px repeat(4, 1fr)", gap: 5 }}>
+          <span />
+          {[0, 1, 2, 3].map((i) => (
+            <span key={i} style={{ textAlign: "center", fontSize: 10.5, fontWeight: 800, color: "#94a3b8" }}>
+              {t(E, `first ${i}`, `앞 ${i}개`)}
+            </span>
+          ))}
+          {[0, 1, 2].map((kk) => (
+            <React.Fragment key={`row${kk}`}>
+              <span style={{ fontSize: 10.5, fontWeight: 800, color: "#94a3b8",
+                display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 4 }}>
+                {t(E, `${kk} blue`, `파랑 ${kk}개`)}
+              </span>
+              {[0, 1, 2, 3].map((i) => {
+                const v = dp[kk][i];
+                const show = filled.has(`${kk},${i}`) && v < INF;
+                return (
+                  <span key={`${kk}-${i}`} style={{
+                    height: 38, display: "flex", alignItems: "center", justifyContent: "center",
+                    borderRadius: 8, background: cellBg(kk, i), border: `2px solid ${cellBd(kk, i)}`,
+                    fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 14,
+                    color: show ? "#1f2937" : "#cbd5e1" }}>
+                    {show ? v : "·"}
+                  </span>
+                );
+              })}
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+
+      {s.k === "try" && (
+        <Caption color="#059669">
+          {t(E, "green = the front part we look up, never recompute",
+               "초록 = 꺼내 쓰는 앞부분. 다시 계산 안 해요")}
+        </Caption>
+      )}
 
       <div style={{ height: 14 }} />
       <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />

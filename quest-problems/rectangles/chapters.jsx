@@ -2,7 +2,7 @@ import { C, t } from "@/components/quest/theme";
 import { getRectanglesWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 import { CodeBlock } from "@/components/quest/shared";
-import { RectanglesSim, WhyContiguousSim, WhyCostSim } from "./sims";
+import { RectanglesSim, WhyContiguousSim, WhyCostSim, DPTableFillSim } from "./sims";
 
 const A = "#f97316";
 
@@ -100,7 +100,7 @@ function RectanglesRecap({ E }) {
         <Row q={t(E, "One blue covers a contiguous group", "파랑 하나 = 연속 구간 하나")}
              res={t(E, "(Σw) × (max h)", "(폭합) × (최고높이)")} col="#2563eb" bg="#eff6ff" />
         <Row q={t(E, "Split ≤ K groups, minimize total area", "≤ K개 구간으로 나눠 총면적 최소")}
-             res="dp[k][i]" col="#f97316" bg="#fff7ed" />
+             res={t(E, "fill a table, take the min", "표를 채워서 최소값 고르기")} col="#f97316" bg="#fff7ed" />
         <Row q={t(E, "K huge? cap it — N groups is enough", "K가 커도? N개 넘으면 캡")}
              res="K = min(K, N)" col="#059669" bg="#ecfdf5" />
       </div>
@@ -123,8 +123,8 @@ export function makeRectanglesCh1(E) {
       type: "reveal",
       label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
-        "N red rectangles sit side by side on the x-axis. Cover them with at most K blue rectangles — each red inside exactly one blue — so the total blue area is smallest.",
-        "x축에 나란히 붙은 빨강 사각형 N개를 파랑 사각형 최대 K개로 덮어요 — 각 빨강은 정확히 한 파랑 안 — 파랑 총면적이 가장 작게."),
+        "Cover N reds with at most K blues — smallest total area.",
+        "빨강 N개를 파랑 최대 K개로 덮어요. 총면적이 가장 작게."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -392,6 +392,15 @@ export function makeRectanglesCh2(E, lang = "py") {
       ),
     },
     {
+      // 2026-09-07: 학생 둘이 "dp 표를 손으로 채워보고서야 이해했다" 고 했다.
+      // 이름(dp)을 붙이기 **전에** 같은 숫자로 표를 직접 채워 보인다.
+      type: "reveal",
+      label: t(E, "Fill it by hand", "손으로 채워보기"),
+      narr: t(E, "Before naming anything — let's fill the table ourselves.",
+                 "이름을 붙이기 전에, 표를 직접 채워봐요."),
+      content: (<DPTableFillSim E={E} />),
+    },
+    {
       type: "reveal",
       label: t(E, "The table", "적어둘 표"),
       narr: t(E, "That is the whole trick. Here is what we write down.",
@@ -434,8 +443,8 @@ export function makeRectanglesCh2(E, lang = "py") {
       type: "reveal",
       label: t(E, "Code", "코드"),
       narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains: read input, cap K, fill the partition DP (group cost = Σw × max-h), then take the minimum.",
-        "코드를 위에서 아래로 읽어봐요 — 말풍선이 설명하는 줄에 붙어 있어요: 입력 읽기 → K 캡 → 구간 분할 DP 채우기(구간 비용 = 폭합×최고높이) → 최소 고르기."),
+        "The code. Each bubble sits on the line it explains.",
+        "코드예요. 말풍선이 설명하는 줄에 붙어 있어요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#f97316" />
       ),
