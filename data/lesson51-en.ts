@@ -64,12 +64,12 @@ shop_items = {
 
 def show_shop():
     print('=== Shop ===')
-    for key, item in shop_items.items():
+    for key, item in shop_items.___():
         types = {'heal': 'Heal', 'atk': 'ATK'}
         print(f'  {item.name}: {types[item.item_type]} +{item.value} ({item.price}G)')
 
 def buy_item(hero, item_key):
-    if item_key not in shop_items:
+    if item_key ___ shop_items:
         print('  Item not found!')
         return
     item = shop_items[item_key]
@@ -79,7 +79,7 @@ def buy_item(hero, item_key):
     hero.gold -= item.price
     # Create a new item object!
     new_item = Item(item.name, item.item_type, item.value, item.price)
-    hero.add_item(new_item)
+    hero.___(new_item)
     print(f'  Bought {item.name}! (-{item.price}G, Balance: {hero.gold})')
 
 # Test!
@@ -100,8 +100,8 @@ print(f'Inventory: {len(hero.inventory)} items')
 for item in hero.inventory:
     print(f'  - {item.name}')`,
           expectedOutput: `Gold: 200\n=== Shop ===\n  Potion: Heal +30 (50G)\n  Big Potion: Heal +60 (100G)\n  Power Potion: ATK +5 (80G)\n\n--- Shopping! ---\n  Bought Potion! (-50G, Balance: 150)\n  Bought Potion! (-50G, Balance: 100)\n  Bought Power Potion! (-80G, Balance: 20)\n  Not enough gold! (Have: 20, Need: 100)\n\nBalance: 20G\nInventory: 3 items\n  - Potion\n  - Potion\n  - Power Potion`,
-          hint: "Check gold -> deduct -> add to inventory!",
-          hint2: "Just run the code as is!"
+          hint: "The method that pulls key and value out together, the condition asking whether the shop does **not** have it, and the method that puts the purchase into the inventory.",
+          hint2: "items / not in / add_item"
         },
         {
           id: "ch1-2",
@@ -195,7 +195,7 @@ while hero.alive and goblin.alive:
         print(f'  Goblin -> Hero ({dmg})')
 
 print(f'\\nGoblin defeated! +{goblin.gold_reward}G')
-hero.gold += goblin.gold_reward
+hero.gold ___ goblin.gold_reward
 
 # Shop!
 print(f'\\n=== Shop (Have: {hero.gold}G) ===')
@@ -206,13 +206,13 @@ hero.inventory.append('Potion')
 print(f'  Bought Potion! (Balance: {hero.gold})')
 
 # Use potion
-hero.hp = min(hero.hp + 30, hero.max_hp)
-hero.inventory.pop(0)
+hero.hp = ___(hero.hp + 30, hero.max_hp)
+hero.inventory.___(0)
 print(f'\\nUsed Potion! HP: {hero.hp}/{hero.max_hp}')
 print(f'Remaining gold: {hero.gold}')`,
           expectedOutput: `=== Battle! ===\n  Hero -> Goblin (17)\n  Goblin -> Hero (2)\n  Hero -> Goblin (17)\n  Goblin -> Hero (2)\n  Hero -> Goblin (17)\n\nGoblin defeated! +50G\n\n=== Shop (Have: 50G) ===\n  Potion: 30G\n  Bought Potion! (Balance: 20)\n\nUsed Potion! HP: 120/120\nRemaining gold: 20`,
-          hint: "Battle -> reward -> shop -> use item, a natural flow!",
-          hint2: "Just run the code as is!"
+          hint: "The operator that adds gold, the function that keeps HP from passing the maximum, and the method that takes the first item out of the inventory.",
+          hint2: "+= / min / pop"
         },
         {
           /* 2026-09-06: 한글판과 짝. */
@@ -362,19 +362,19 @@ print('=== Before Save ===')
 hero.status()
 
 # 2. Save!
-save_data = hero.to_dict()
+save_data = hero.___()
 json_str = json.dumps(save_data, ensure_ascii=False)
 print(f'\\n=== Save Data ===')
 print(json_str)
 
 # 3. Load!
 loaded_data = json.loads(json_str)
-loaded_hero = from_dict(loaded_data)
+loaded_hero = ___(loaded_data)
 print(f'\\n=== Load Complete! ===')
 loaded_hero.status()`,
           expectedOutput: `=== Before Save ===\n[Warrior] Alice Lv.3\n  HP: 85/130 | ATK: 24\n  Gold: 250 | Inventory: ['Potion', 'Potion', 'Power Potion']\n\n=== Save Data ===\n{"name": "Alice", "job": "warrior", "level": 3, "hp": 85, "max_hp": 130, "atk": 24, "defense": 16, "gold": 250, "exp": 0, "inventory": ["Potion", "Potion", "Power Potion"]}\n\n=== Load Complete! ===\n[Warrior] Alice Lv.3\n  HP: 85/130 | ATK: 24\n  Gold: 250 | Inventory: ['Potion', 'Potion', 'Power Potion']`,
-          hint: "Convert to dictionary with to_dict(), save/load with json.dumps/loads!",
-          hint2: "Just run the code as is!"
+          hint: "One method turns the character into a dictionary; one function turns a dictionary back into a character.",
+          hint2: "to_dict / from_dict"
         },
         {
           id: "ch2-2",
@@ -414,7 +414,7 @@ print(f'Items: {loaded["items"]}')`,
 save_slots = {}
 
 def save_game(slot, data):
-    save_slots[slot] = json.dumps(data, ensure_ascii=False)
+    save_slots[slot] = json.___(data, ensure_ascii=False)
     print(f'[Slot {slot}] Save complete!')
 
 def load_game(slot):
@@ -427,8 +427,8 @@ def load_game(slot):
 
 def show_slots():
     print('=== Save Slots ===')
-    for i in range(1, 4):
-        if i in save_slots:
+    for i in range(1, ___):
+        if i ___ save_slots:
             data = json.loads(save_slots[i])
             print(f'  Slot {i}: {data["name"]} Lv.{data["level"]}')
         else:
@@ -452,8 +452,8 @@ if data:
 print()
 load_game(3)`,
           expectedOutput: `=== Save Slots ===\n  Slot 1: (empty)\n  Slot 2: (empty)\n  Slot 3: (empty)\n\n[Slot 1] Save complete!\n[Slot 2] Save complete!\n\n=== Save Slots ===\n  Slot 1: Warrior Lv.3\n  Slot 2: Mage Lv.5\n  Slot 3: (empty)\n\n[Slot 2] Load complete!\n  Name: Mage, Gold: 500\n\n[Slot 3] Empty!`,
-          hint: "Manage slots with a dictionary, serialize with JSON!",
-          hint2: "Just run the code as is!"
+          hint: "The function that turns a dictionary into text, how far the slot numbers run from 1, and the operator asking whether that slot is filled.",
+          hint2: "dumps / 4 / in"
         },
         {
           /* 2026-09-06: 한글판과 짝. */
@@ -784,7 +784,7 @@ class Monster:
         actual = damage - s.defense
         if actual < 1: actual = 1
         s.hp -= actual
-        if s.hp <= 0:
+        if s.hp ___ 0:
             s.hp = 0
             s.alive = False
         return actual
@@ -792,7 +792,7 @@ class Monster:
 # Same monster, different classes!
 print('=== Class Battle Comparison (vs Goblin HP:50 ATK:15 DEF:5) ===')
 
-for job in ['warrior', 'mage', 'archer']:
+for job in ['warrior', 'mage', '___']:
     hero = Character('Test', job)
     goblin = Monster('Goblin', 50, 15, 5)
     jobs = {'warrior': 'Warrior', 'mage': 'Mage', 'archer': 'Archer'}
@@ -806,8 +806,8 @@ for job in ['warrior', 'mage', 'archer']:
 
     print(f'{jobs[job]}: Won in {turns} turns! (Remaining HP: {hero.hp}/{hero.max_hp})')`,
           expectedOutput: `=== Class Battle Comparison (vs Goblin HP:50 ATK:15 DEF:5) ===\nWarrior: Won in 5 turns! (Remaining HP: 108/120)\nMage: Won in 3 turns! (Remaining HP: 60/80)\nArcher: Won in 4 turns! (Remaining HP: 79/100)`,
-          hint: "Mage wins faster but has less HP remaining!",
-          hint2: "Just run the code as is!"
+          hint: "Exactly the condition you already saw in the Character class above. And the third job name in the for loop.",
+          hint2: "<= / archer"
         },
         {
           /* 2026-09-06: 한글판과 짝. */

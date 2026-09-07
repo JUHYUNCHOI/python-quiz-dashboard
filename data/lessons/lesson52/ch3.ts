@@ -81,7 +81,7 @@ print(실행(lambda x: x + 100, 7))  # 107
     def check(self, player_data):
         if self.unlocked:
             return
-        if self.condition_fn(player_data):
+        if self.___(player_data):
             self.unlocked = True
             print(f'  ★ 업적 해금: {self.name}!')
             print(f'    {self.description}')
@@ -130,8 +130,8 @@ check_all(player)
 print()
 show_achievements()`,
       expectedOutput: `=== 업적 ===\n  [  ] 첫 전투: 첫 전투에서 승리!\n  [  ] 슬레이어: 몬스터 5마리 처치!\n  [  ] 부자: 골드 200 달성!\n  [  ] 고수: 레벨 3 달성!\n\n--- 전투! ---\n  ★ 업적 해금: 첫 전투!\n    첫 전투에서 승리!\n\n--- 전투 4번 더! ---\n  ★ 업적 해금: 슬레이어!\n    몬스터 5마리 처치!\n  ★ 업적 해금: 부자!\n    골드 200 달성!\n\n--- 레벨 업! ---\n  ★ 업적 해금: 고수!\n    레벨 3 달성!\n\n=== 업적 ===\n  [★] 첫 전투: 첫 전투에서 승리!\n  [★] 슬레이어: 몬스터 5마리 처치!\n  [★] 부자: 골드 200 달성!\n  [★] 고수: 레벨 3 달성!`,
-      hint: "lambda로 조건 함수, condition_fn(data)로 체크!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "앞에서 배운 대로, 괄호 없이 담아둔 함수를 여기서 괄호를 붙여 불러야 해요.",
+      hint2: "condition_fn"
     },
     {
       /* 2026-09-06: 형제 챕터 ch1·ch2 는 "tryit(전체 데모) → mission(빈칸, 축소판)"

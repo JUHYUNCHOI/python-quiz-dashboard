@@ -41,7 +41,7 @@ export const lesson52EnData: LessonData = {
     def rest(s):
         # Recover 30% of max HP!
         heal_amount = int(s.max_hp * 0.3)
-        s.hp = min(s.hp + heal_amount, s.max_hp)
+        s.hp = ___(s.hp + heal_amount, s.max_hp)
         print(f'{s.name} rests! +{heal_amount} HP -> {s.hp}/{s.max_hp}')
 
     def take_damage(s, damage):
@@ -67,8 +67,8 @@ hero.rest()  # What if it exceeds max HP?
 
 print(f'\\nFinal: HP {hero.hp}/{hero.max_hp}')`,
           expectedOutput: `After battle: HP 95/120\n\nHero rests! +36 HP -> 120/120\nHero rests! +36 HP -> 120/120\nHero rests! +36 HP -> 120/120\n\nFinal: HP 120/120`,
-          hint: "Recover 30% of max_hp, limit with min!",
-          hint2: "Just run the code as is!"
+          hint: "The function that picks the smaller of the two so resting never pushes HP past the maximum.",
+          hint2: "min"
         },
         {
           id: "ch1-2",
@@ -118,7 +118,7 @@ class Character:
         # Critical hit check!
         is_crit = random.random() < s.crit_rate
         if is_crit:
-            damage = int(damage * s.crit_damage)
+            damage = int(damage * s.___)
 
         actual = damage - target.defense
         if actual < 1:
@@ -146,8 +146,8 @@ for i in range(5):
     hero.attack_target(goblin)
     print(f'    Goblin HP: {goblin.hp}')`,
           expectedOutput: `=== Critical Hit Test (5 attacks) ===\n  Hero -> Goblin (15 damage)\n    Goblin HP: 85\n  ★ Critical! Hero -> Goblin (25 damage!)\n    Goblin HP: 60\n  Hero -> Goblin (15 damage)\n    Goblin HP: 45\n  Hero -> Goblin (15 damage)\n    Goblin HP: 30\n  Hero -> Goblin (15 damage)\n    Goblin HP: 15`,
-          hint: "If random.random() < 0.2, it's a critical hit! 1.5x damage!",
-          hint2: "Just run the code as is!"
+          hint: "The attribute holding how many times the damage is multiplied on a critical hit.",
+          hint2: "crit_damage"
         },
         {
           id: "ch1-4",
@@ -217,7 +217,7 @@ class Character:
         return s.base_atk + bonus
 
     def get_def(s):
-        bonus = s.armor.def_bonus if s.armor else 0
+        bonus = s.armor.___ if s.armor else 0
         return s.base_def + bonus
 
     def status(s):
@@ -246,8 +246,8 @@ print('\\n--- Upgrade to Iron Sword! ---')
 hero.equip(iron_sword)
 hero.status()`,
           expectedOutput: `=== Before Equipment ===\nHero: ATK 15 (base 15), DEF 10 (base 10)\n  Weapon: None, Armor: None\n\n--- Wooden Sword + Leather Armor ---\n  Equipped Wooden Sword!\n  Equipped Leather Armor!\nHero: ATK 18 (base 15), DEF 15 (base 10)\n  Weapon: Wooden Sword, Armor: Leather Armor\n\n--- Upgrade to Iron Sword! ---\n  Unequipped Wooden Sword\n  Equipped Iron Sword!\nHero: ATK 23 (base 15), DEF 15 (base 10)\n  Weapon: Iron Sword, Armor: Leather Armor`,
-          hint: "base_atk + weapon.atk_bonus = actual attack power!",
-          hint2: "Just run the code as is!"
+          hint: "Just like get_atk pulled the weapon bonus — this time it is the armor side's bonus value.",
+          hint2: "def_bonus"
         },
         {
           /* 2026-09-06: 한글판과 짝. */
@@ -349,7 +349,7 @@ print(f'ATK: {hero.get_atk()}')`,
     def update(s, amount):
         if s.completed:
             return
-        s.progress += amount
+        s.progress += ___
         print(f'  [{s.name}] Progress: {s.progress}/{s.target}')
         if s.progress >= s.target:
             s.completed = True
@@ -385,8 +385,8 @@ print('\\n=== Quest Status ===')
 for q in quests.values():
     q.show()`,
           expectedOutput: `=== Quest List ===\n  [0/3] Slime Hunt: Defeat 3 slimes\n  [0/100] Gold Collector: Collect 100 gold\n\n--- Slime defeated! ---\n  [Slime Hunt] Progress: 1/3\n  [Slime Hunt] Progress: 2/3\n  [Slime Hunt] Progress: 3/3\n  ★ Quest complete! Reward: 50 gold, 30 EXP\n\n--- Gold earned! ---\n  [Gold Collector] Progress: 50/100\n  [Gold Collector] Progress: 80/100\n  [Gold Collector] Progress: 110/100\n  ★ Quest complete! Reward: 0 gold, 50 EXP\n\n=== Quest Status ===\n  [Done] Slime Hunt: Defeat 3 slimes\n  [Done] Gold Collector: Collect 100 gold`,
-          hint: "If progress is at or above target, it's complete!",
-          hint2: "Just run the code as is!"
+          hint: "This is where update adds what it received to the progress. Look at the parameter name in the parentheses.",
+          hint2: "amount"
         },
         {
           id: "ch2-2",
@@ -469,10 +469,10 @@ q.update(1)`,
             total = 0
             for i in range(skill['hits']):
                 dmg = int(s.atk * 0.6)
-                total += dmg
+                total += ___
             print(f'  ★ {skill["name"]}! {skill["hits"]} hits = {total} damage! (MP: {s.mp})')
         elif 'atk_buff' in skill:
-            s.atk += skill['atk_buff']
+            s.___ += skill['atk_buff']
             print(f'  ★ {skill["name"]}! ATK +{skill["atk_buff"]} -> {s.atk} (MP: {s.mp})')
         elif 'def_buff' in skill:
             s.defense += skill['def_buff']
@@ -504,8 +504,8 @@ archer.show_skills()
 archer.use_skill('rapid_shot')
 archer.use_skill('dodge')`,
           expectedOutput: `=== Warrior Skills ===\n[Warrior] Tom's skills (MP: 50/50)\n  - Power Strike (MP: 15)\n  - War Cry (MP: 10)\n  ★ Power Strike! 30 damage! (MP: 35)\n  ★ War Cry! ATK +5 -> 20 (MP: 25)\n\n=== Mage Skills ===\n[Mage] Lily's skills (MP: 50/50)\n  - Fireball (MP: 20)\n  - Heal (MP: 15)\n  ★ Fireball! 62 damage! (MP: 30)\n  ★ Heal! HP 80/80 (MP: 15)\n\n=== Archer Skills ===\n[Archer] Sam's skills (MP: 50/50)\n  - Rapid Shot (MP: 15)\n  - Dodge (MP: 10)\n  ★ Rapid Shot! 3 hits = 36 damage! (MP: 35)\n  ★ Dodge! DEF +8 -> 16 (MP: 25)`,
-          hint: "Manage skill data with dictionaries, consume MP!",
-          hint2: "Just run the code as is!"
+          hint: "A multi-hit adds each hit's damage into the running total. And which stat does the war cry raise for good?",
+          hint2: "dmg / atk"
         },
         {
           id: "ch2-4",
@@ -651,7 +651,7 @@ print(apply(lambda x: x + 100, 7))  # 107
     def check(s, player_data):
         if s.unlocked:
             return
-        if s.condition_fn(player_data):
+        if s.___(player_data):
             s.unlocked = True
             print(f'  ★ Achievement unlocked: {s.name}!')
             print(f'    {s.description}')
@@ -700,8 +700,8 @@ check_all(player)
 print()
 show_achievements()`,
           expectedOutput: `=== Achievements ===\n  [  ] First Battle: Win your first battle!\n  [  ] Slayer: Defeat 5 monsters!\n  [  ] Rich: Reach 200 gold!\n  [  ] Expert: Reach level 3!\n\n--- Battle! ---\n  ★ Achievement unlocked: First Battle!\n    Win your first battle!\n\n--- 4 more battles! ---\n  ★ Achievement unlocked: Slayer!\n    Defeat 5 monsters!\n  ★ Achievement unlocked: Rich!\n    Reach 200 gold!\n\n--- Level up! ---\n  ★ Achievement unlocked: Expert!\n    Reach level 3!\n\n=== Achievements ===\n  [★] First Battle: Win your first battle!\n  [★] Slayer: Defeat 5 monsters!\n  [★] Rich: Reach 200 gold!\n  [★] Expert: Reach level 3!`,
-          hint: "lambda for condition functions, condition_fn(data) to check!",
-          hint2: "Just run the code as is!"
+          hint: "Just like you learned — a function stored without parentheses gets called here by adding them.",
+          hint2: "condition_fn"
         },
         {
           /* 2026-09-06: 한글판과 짝. */

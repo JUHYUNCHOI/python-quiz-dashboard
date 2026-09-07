@@ -35,7 +35,7 @@ export const ch1: Chapter = {
     def rest(self):
         # 최대 HP의 30% 회복!
         heal_amount = int(self.max_hp * 0.3)
-        self.hp = min(self.hp + heal_amount, self.max_hp)
+        self.hp = ___(self.hp + heal_amount, self.max_hp)
         print(f'{self.name} 휴식! +{heal_amount} HP -> {self.hp}/{self.max_hp}')
 
     def take_damage(self, damage):
@@ -61,8 +61,8 @@ hero.rest()  # 최대HP 넘어가면?
 
 print(f'\\n최종: HP {hero.hp}/{hero.max_hp}')`,
       expectedOutput: `전투 후: HP 95/120\n\n용사 휴식! +36 HP -> 120/120\n용사 휴식! +36 HP -> 120/120\n용사 휴식! +36 HP -> 120/120\n\n최종: HP 120/120`,
-      hint: "max_hp의 30%를 회복, min으로 최대 제한!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "휴식으로 늘어난 HP 가 최대치를 넘지 않게 둘 중 작은 쪽을 골라주는 함수예요.",
+      hint2: "min"
     },
     {
       id: "ch1-2",
@@ -112,7 +112,7 @@ class Character:
         # 치명타 판정!
         is_crit = random.random() < self.crit_rate
         if is_crit:
-            damage = int(damage * self.crit_damage)
+            damage = int(damage * self.___)
 
         actual = damage - target.defense
         if actual < 1:
@@ -140,8 +140,8 @@ for i in range(5):
     hero.attack_target(goblin)
     print(f'    고블린 HP: {goblin.hp}')`,
       expectedOutput: `=== 치명타 테스트 (5번 공격) ===\n  용사 -> 고블린 (15 데미지)\n    고블린 HP: 85\n  ★ 크리티컬! 용사 -> 고블린 (25 데미지!)\n    고블린 HP: 60\n  용사 -> 고블린 (15 데미지)\n    고블린 HP: 45\n  용사 -> 고블린 (15 데미지)\n    고블린 HP: 30\n  용사 -> 고블린 (15 데미지)\n    고블린 HP: 15`,
-      hint: "random.random() < 0.2 면 치명타! 데미지 1.5배!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "치명타가 터졌을 때 데미지를 몇 배로 올릴지, 그 배율을 담아둔 속성 이름이에요.",
+      hint2: "crit_damage"
     },
     {
       id: "ch1-4",
@@ -211,7 +211,7 @@ class Character:
         return self.base_atk + bonus
 
     def get_def(self):
-        bonus = self.armor.def_bonus if self.armor else 0
+        bonus = self.armor.___ if self.armor else 0
         return self.base_def + bonus
 
     def status(self):
@@ -240,8 +240,8 @@ print('\\n--- 철검으로 업그레이드! ---')
 hero.equip(iron_sword)
 hero.status()`,
       expectedOutput: `=== 장비 전 ===\n용사: ATK 15 (기본 15), DEF 10 (기본 10)\n  무기: 없음, 방어구: 없음\n\n--- 나무검 + 가죽갑옷 ---\n  나무검 장착!\n  가죽갑옷 장착!\n용사: ATK 18 (기본 15), DEF 15 (기본 10)\n  무기: 나무검, 방어구: 가죽갑옷\n\n--- 철검으로 업그레이드! ---\n  나무검 해제\n  철검 장착!\n용사: ATK 23 (기본 15), DEF 15 (기본 10)\n  무기: 철검, 방어구: 가죽갑옷`,
-      hint: "base_atk + weapon.atk_bonus = 실제 공격력!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "get_atk 에서 무기 보너스를 꺼낸 것처럼, 이번엔 방어구 쪽 보너스 값 이름이에요.",
+      hint2: "def_bonus"
     },
     {
       /* 2026-09-06: 빈칸 없는 tryit 79개 재분류. 이 스텝은 "길거나 짧은데

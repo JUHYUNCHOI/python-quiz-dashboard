@@ -283,7 +283,7 @@ class Monster:
         actual = damage - self.defense
         if actual < 1: actual = 1
         self.hp -= actual
-        if self.hp <= 0:
+        if self.hp ___ 0:
             self.hp = 0
             self.alive = False
         return actual
@@ -291,7 +291,7 @@ class Monster:
 # 같은 몬스터, 다른 직업!
 print('=== 직업별 전투 비교 (vs 고블린 HP:50 ATK:15 DEF:5) ===')
 
-for job in ['warrior', 'mage', 'archer']:
+for job in ['warrior', 'mage', '___']:
     hero = Character('테스트', job)
     goblin = Monster('고블린', 50, 15, 5)
     jobs = {'warrior': '용사', 'mage': '마법사', 'archer': '궁수'}
@@ -305,8 +305,8 @@ for job in ['warrior', 'mage', 'archer']:
 
     print(f'{jobs[job]}: {turns}턴 만에 승리! (남은 HP: {hero.hp}/{hero.max_hp})')`,
       expectedOutput: `=== 직업별 전투 비교 (vs 고블린 HP:50 ATK:15 DEF:5) ===\n용사: 5턴 만에 승리! (남은 HP: 108/120)\n마법사: 3턴 만에 승리! (남은 HP: 60/80)\n궁수: 4턴 만에 승리! (남은 HP: 79/100)`,
-      hint: "마법사는 빨리 이기지만 HP가 적게 남아요!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "위 Character 클래스에서 이미 본 조건과 똑같아요. 그리고 for 문에 나오는 세 번째 직업 이름이에요.",
+      hint2: "<= / archer"
     },
     {
       /* 2026-09-06: 빈칸 없는 tryit 79개 재분류. 이 스텝은 "길거나 짧은데

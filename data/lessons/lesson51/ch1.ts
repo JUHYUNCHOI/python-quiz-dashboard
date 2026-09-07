@@ -58,12 +58,12 @@ shop_items = {
 
 def show_shop():
     print('=== 상점 ===')
-    for key, item in shop_items.items():
+    for key, item in shop_items.___():
         types = {'heal': '회복', 'atk': '공격력'}
         print(f'  {item.name}: {types[item.item_type]} +{item.value} ({item.price}골드)')
 
 def buy_item(hero, item_key):
-    if item_key not in shop_items:
+    if item_key ___ shop_items:
         print('  없는 상품!')
         return
     item = shop_items[item_key]
@@ -73,7 +73,7 @@ def buy_item(hero, item_key):
     hero.gold -= item.price
     # 새 아이템 객체 생성!
     new_item = Item(item.name, item.item_type, item.value, item.price)
-    hero.add_item(new_item)
+    hero.___(new_item)
     print(f'  {item.name} 구매! (-{item.price}골드, 잔액: {hero.gold})')
 
 # 테스트!
@@ -94,8 +94,8 @@ print(f'인벤토리: {len(hero.inventory)}개')
 for item in hero.inventory:
     print(f'  - {item.name}')`,
       expectedOutput: `보유 골드: 200\n=== 상점 ===\n  물약: 회복 +30 (50골드)\n  큰 물약: 회복 +60 (100골드)\n  힘의 물약: 공격력 +5 (80골드)\n\n--- 쇼핑! ---\n  물약 구매! (-50골드, 잔액: 150)\n  물약 구매! (-50골드, 잔액: 100)\n  힘의 물약 구매! (-80골드, 잔액: 20)\n  골드 부족! (보유: 20, 필요: 100)\n\n잔액: 20골드\n인벤토리: 3개\n  - 물약\n  - 물약\n  - 힘의 물약`,
-      hint: "골드 확인 → 차감 → 인벤토리에 추가!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "딕셔너리를 (키, 값)으로 함께 꺼내는 메서드, 가게에 그 물건이 **없는지** 묻는 조건, 산 물건을 인벤토리에 넣는 메서드예요.",
+      hint2: "items / not in / add_item"
     },
     {
       id: "ch1-2",
@@ -189,7 +189,7 @@ while hero.alive and goblin.alive:
         print(f'  고블린 -> 용사 ({dmg})')
 
 print(f'\\n고블린 처치! +{goblin.gold_reward}골드')
-hero.gold += goblin.gold_reward
+hero.gold ___ goblin.gold_reward
 
 # 상점!
 print(f'\\n=== 상점 (보유: {hero.gold}골드) ===')
@@ -200,13 +200,13 @@ hero.inventory.append('물약')
 print(f'  물약 구매! (잔액: {hero.gold})')
 
 # 물약 사용
-hero.hp = min(hero.hp + 30, hero.max_hp)
-hero.inventory.pop(0)
+hero.hp = ___(hero.hp + 30, hero.max_hp)
+hero.inventory.___(0)
 print(f'\\n물약 사용! HP: {hero.hp}/{hero.max_hp}')
 print(f'남은 골드: {hero.gold}')`,
       expectedOutput: `=== 전투! ===\n  용사 -> 고블린 (17)\n  고블린 -> 용사 (2)\n  용사 -> 고블린 (17)\n  고블린 -> 용사 (2)\n  용사 -> 고블린 (17)\n\n고블린 처치! +50골드\n\n=== 상점 (보유: 50골드) ===\n  물약: 30골드\n  물약 구매! (잔액: 20)\n\n물약 사용! HP: 120/120\n남은 골드: 20`,
-      hint: "전투 → 보상 → 상점 → 아이템 사용, 자연스러운 흐름!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "골드를 늘리는 연산자, 최대 HP 를 넘지 않게 골라주는 함수, 인벤토리 맨 앞 것을 빼는 메서드예요.",
+      hint2: "+= / min / pop"
     },
     {
       /* 2026-09-06: 빈칸 없는 tryit 79개 재분류. 이 스텝은 "길거나 짧은데

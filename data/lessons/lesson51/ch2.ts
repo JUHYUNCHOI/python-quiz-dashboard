@@ -100,19 +100,19 @@ print('=== 저장 전 ===')
 hero.status()
 
 # 2. 세이브!
-save_data = hero.to_dict()
+save_data = hero.___()
 json_str = json.dumps(save_data, ensure_ascii=False)
 print(f'\\n=== 세이브 데이터 ===')
 print(json_str)
 
 # 3. 로드!
 loaded_data = json.loads(json_str)
-loaded_hero = from_dict(loaded_data)
+loaded_hero = ___(loaded_data)
 print(f'\\n=== 로드 완료! ===')
 loaded_hero.status()`,
       expectedOutput: `=== 저장 전 ===\n[용사] 철수 Lv.3\n  HP: 85/130 | ATK: 24\n  골드: 250 | 인벤토리: ['물약', '물약', '힘의 물약']\n\n=== 세이브 데이터 ===\n{"name": "철수", "job": "warrior", "level": 3, "hp": 85, "max_hp": 130, "atk": 24, "defense": 16, "gold": 250, "exp": 0, "inventory": ["물약", "물약", "힘의 물약"]}\n\n=== 로드 완료! ===\n[용사] 철수 Lv.3\n  HP: 85/130 | ATK: 24\n  골드: 250 | 인벤토리: ['물약', '물약', '힘의 물약']`,
-      hint: "to_dict()로 딕셔너리 변환, json.dumps/loads로 저장/불러오기!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "캐릭터를 딕셔너리로 바꾸는 메서드 하나, 딕셔너리를 다시 캐릭터로 되돌리는 함수 하나예요.",
+      hint2: "to_dict / from_dict"
     },
     {
       id: "ch2-2",
@@ -152,7 +152,7 @@ print(f'아이템: {loaded["items"]}')`,
 save_slots = {}
 
 def save_game(slot, data):
-    save_slots[slot] = json.dumps(data, ensure_ascii=False)
+    save_slots[slot] = json.___(data, ensure_ascii=False)
     print(f'[슬롯 {slot}] 저장 완료!')
 
 def load_game(slot):
@@ -165,8 +165,8 @@ def load_game(slot):
 
 def show_slots():
     print('=== 세이브 슬롯 ===')
-    for i in range(1, 4):
-        if i in save_slots:
+    for i in range(1, ___):
+        if i ___ save_slots:
             data = json.loads(save_slots[i])
             print(f'  슬롯 {i}: {data["name"]} Lv.{data["level"]}')
         else:
@@ -190,8 +190,8 @@ if data:
 print()
 load_game(3)`,
       expectedOutput: `=== 세이브 슬롯 ===\n  슬롯 1: (비어있음)\n  슬롯 2: (비어있음)\n  슬롯 3: (비어있음)\n\n[슬롯 1] 저장 완료!\n[슬롯 2] 저장 완료!\n\n=== 세이브 슬롯 ===\n  슬롯 1: 용사 Lv.3\n  슬롯 2: 마법사 Lv.5\n  슬롯 3: (비어있음)\n\n[슬롯 2] 불러오기 완료!\n  이름: 마법사, 골드: 500\n\n[슬롯 3] 비어있음!`,
-      hint: "딕셔너리로 슬롯 관리, JSON으로 직렬화!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "딕셔너리를 글자로 바꾸는 함수, 슬롯 번호가 1부터 몇까지 도는지, 그리고 그 슬롯이 채워져 있는지 묻는 연산자예요.",
+      hint2: "dumps / 4 / in"
     },
     {
       /* 2026-09-06: 빈칸 없는 tryit 79개 재분류. 이 스텝은 "길거나 짧은데

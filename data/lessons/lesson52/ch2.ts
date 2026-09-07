@@ -36,7 +36,7 @@ export const ch2: Chapter = {
     def update(self, amount):
         if self.completed:
             return
-        self.progress += amount
+        self.progress += ___
         print(f'  [{self.name}] 진행: {self.progress}/{self.target}')
         if self.progress >= self.target:
             self.completed = True
@@ -72,8 +72,8 @@ print('\\n=== 퀘스트 현황 ===')
 for q in quests.values():
     q.show()`,
       expectedOutput: `=== 퀘스트 목록 ===\n  [0/3] 슬라임 사냥: 슬라임 3마리 처치\n  [0/100] 골드 모으기: 100골드 모으기\n\n--- 슬라임 처치! ---\n  [슬라임 사냥] 진행: 1/3\n  [슬라임 사냥] 진행: 2/3\n  [슬라임 사냥] 진행: 3/3\n  ★ 퀘스트 완료! 보상: 50골드, 30EXP\n\n--- 골드 획득! ---\n  [골드 모으기] 진행: 50/100\n  [골드 모으기] 진행: 80/100\n  [골드 모으기] 진행: 110/100\n  ★ 퀘스트 완료! 보상: 0골드, 50EXP\n\n=== 퀘스트 현황 ===\n  [완료] 슬라임 사냥: 슬라임 3마리 처치\n  [완료] 골드 모으기: 100골드 모으기`,
-      hint: "progress가 target 이상이면 완료!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "update 가 넘겨받은 값을 진행도에 더하는 자리예요. 괄호 안 매개변수 이름을 보세요.",
+      hint2: "amount"
     },
     {
       id: "ch2-2",
@@ -156,10 +156,10 @@ q.update(1)`,
             total = 0
             for i in range(skill['hits']):
                 dmg = int(self.atk * 0.6)
-                total += dmg
+                total += ___
             print(f'  ★ {skill["name"]}! {skill["hits"]}연타 = {total} 데미지! (MP: {self.mp})')
         elif 'atk_buff' in skill:
-            self.atk += skill['atk_buff']
+            self.___ += skill['atk_buff']
             print(f'  ★ {skill["name"]}! ATK +{skill["atk_buff"]} -> {self.atk} (MP: {self.mp})')
         elif 'def_buff' in skill:
             self.defense += skill['def_buff']
@@ -191,8 +191,8 @@ archer.show_skills()
 archer.use_skill('rapid_shot')
 archer.use_skill('dodge')`,
       expectedOutput: `=== 용사 스킬 ===\n[용사] 철수의 스킬 (MP: 50/50)\n  - 강타 (MP: 15)\n  - 함성 (MP: 10)\n  ★ 강타! 30 데미지! (MP: 35)\n  ★ 함성! ATK +5 -> 20 (MP: 25)\n\n=== 마법사 스킬 ===\n[마법사] 영희의 스킬 (MP: 50/50)\n  - 파이어볼 (MP: 20)\n  - 힐 (MP: 15)\n  ★ 파이어볼! 62 데미지! (MP: 30)\n  ★ 힐! HP 80/80 (MP: 15)\n\n=== 궁수 스킬 ===\n[궁수] 민수의 스킬 (MP: 50/50)\n  - 속사 (MP: 15)\n  - 회피 (MP: 10)\n  ★ 속사! 3연타 = 36 데미지! (MP: 35)\n  ★ 회피! DEF +8 -> 16 (MP: 25)`,
-      hint: "딕셔너리로 스킬 데이터 관리, MP 소모!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "연타는 매번 때린 데미지를 총합에 더해요. 함성은 어떤 능력치를 영구히 올려주죠?",
+      hint2: "dmg / atk"
     },
     {
       id: "ch2-4",
