@@ -30,20 +30,26 @@ python3 scripts/check-frozen.py     # 건드리면 안 되는 파일을 건드�
 |---|---|---|---|
 | 레슨 32 ch1 — `def` 를 처음 쳐보는 `tryit` 추가 | 메인 세션 | ch1 에 능동 스텝 존재 | **완료** (32.4→34.2%) |
 | 레슨 32 능동 비율 | — | — | **완료** — 잣대 수정 후 61.5% |
-| **레슨 15 — 스텝이 5개뿐 (20.0%)**. 새 잣대로 유일한 45% 미만 | lesson-content-reviewer | 챕터·스텝이 다른 레슨 수준으로 | 대기 |
+| 레슨 15 — 스텝이 5개뿐 (20.0%) | — | — | **해당 없음** — `check-active-ratio.py:77` 의 `MAP_LESSONS` 에 예외로 등록됐다. 2026-08-23 에 '학생이 아직 안 배운 걸 풀어야 해서' 일부러 미션을 걷어낸 다리 레슨이다 |
 | 미분류 컴포넌트 13개 (`gameCrashDemo` 등) — 지금은 수동으로 셈 | lesson-content-reviewer | `ACTIVE_COMPONENTS` 나 `KNOWN_PASSIVE` 로 분류 | 대기 |
 | `function-structure.tsx` 의 `onClick` 이 **0개** — parameterStructure·returnStructure 가 정지 그림 | pedagogy-reviewer(설계) → frontend-engineer | `onClick` > 0 이고 전개에 실제로 관여 | 대기 |
 | 레슨32 `ch1-4`·`ch1-5` 가 거의 같은 내용 연속 | lesson-content-reviewer | 두 스텝 설명이 안 겹침 | 대기 |
-| 레슨32 `ch4-5`(print vs return, 학생이 "제일 헷갈린다") 뒤에 그 헷갈림을 시험하는 연습 없음 | lesson-content-reviewer | `x = 인사(); print(x)` → None 류 문제가 ch4 에 존재 | 대기 |
+| 레슨32 `ch4-5`(print vs return, 학생이 "제일 헷갈린다") 뒤에 그 헷갈림을 시험하는 연습 없음 | lesson-content-reviewer | `x = 인사(); print(x)` → None 류 문제가 ch4 에 존재 | 대기 — pedagogy 가 2026-09-07 에 재확인 |
 | 레슨32 `ch5-3~5-6` 이 add·subtract·divide·multiply 같은 패턴 4연속 | lesson-content-reviewer | 최소 1개는 패턴이 다르거나 난이도가 오름 | 대기 |
-| ⚠️ **배치 문제는 % 로 안 잡힌다** — 관람 스텝 여러 개 뒤 능동 1개 (레슨32 ch1 형) | pedagogy-reviewer | 챕터별 시각화-능동 교대 점검 방법 | 대기 |
+| ⚠️ **배치 문제는 % 로 안 잡힌다** — 레슨32 `ch1` 은 지금도 관람 5연속 뒤 능동 1개다. 위 '완료' 는 채점 스텝을 하나 더한 것이지 **배치를 고친 게 아니다** | pedagogy-reviewer | 관람 뒤에 능동이 붙는지 챕터 단위로 | 대기 (2026-09-07 재확인) |
 | ⚠️ ch1 tryit 은 **채점이 약함** — def 를 안 쳐도 통과된다. 만들기만 하면 출력이 없어서(호출은 ch2) 검증할 방법이 없다. 설계상 한계 | 선생님 판단 | — | 보류 |
-| 레슨 37 (28.6%) · 39 (28.6%) | 〃 | 같은 스크립트로 50%+ | 대기 |
+| 레슨 37 · 39 | 〃 | 같은 스크립트로 50%+ | **완료** — 지금 37=58.3% · 39=52.4% (2026-09-07 실측). 32·33·38·40·41 도 전부 통과 |
+| **빈칸 없는 `tryit` 67곳**(ko·en) — 실행 버튼만 눌러도 통과하던 자리 | 메인 세션 | `check-active-ratio.py` 에 ❌ 0개 | **완료** (2026-09-07, 미배포) — 레슨 10·19·22·23·24·25·26·31·36·42·43·44·45·46·47·48·49·50·51·52 |
+| 🚨 **정답을 맞혀도 통과가 안 되던 빈칸 10곳** — 밑줄이 5개라 `return n * n__` 이 됐다 | 메인 세션 | 검사기가 잡는다 | **완료** (`1f5940fa`, 미배포) — 레슨32 넷·레슨52 하나, 각 ko/en |
 | 레슨34 ch3 가 레슨35 와 중복(`sorted`+`key=lambda`) | 선생님 결정 → 메인 세션 | 중복 제거 + 람다 쓸 자리 확보 | **완료** (배포 2026-09-06) |
 | 시뮬 2개가 영어 트랙에 한국어를 보여줌 — `pySplitJoinVisualizer`(레슨18-en) · `mapFactory`(레슨35-en) | 메인 세션 | `?lang=en` 으로 열어 한국어 0건 | **완료** (`caf6ae20`, 미배포) |
 | **같은 결함 54개** — 근본은 컴포넌트가 아니라 렌더러였다 (`interactive-renderer.tsx:79` 가 props 없는 항목엔 `lang` 을 안 넘김). `: { lang }` 한 줄로 전부 해결 | 메인 세션 | 영어 레슨을 열어 시뮬에 한국어 0건 | **완료** (`9536d851`) |
 | C++ 영어 레슨 18개는 **로그인이 필요해 화면 확인을 못 했다.** 소스로만 확인함 (한글이 전부 `isEn` 분기 안) | 선생님 | C++ 영어 레슨을 한 번 열어보기 | 선생님 |
 | `AnimationRenderer`(`interactive-renderer.tsx` 하단)도 props 를 하나도 안 넘긴다. 지금은 `animationType` 을 쓰는 레슨이 0개라 무해 | frontend-engineer | 쓰기 시작하면 같은 결함이 재발 | 보류 (쓰는 데가 없음) |
+| 🚨 **데모가 바로 다음 미션의 정답을 그대로 보여준다** — 레슨51 `ch1-1→ch1-2` · `ch3-1→ch3-2` · `ch3-3→ch3-3m`. 선생님이 말씀하신 "뒤로 가서 배낀다" 의 실물. (`ch2-3→ch2-3m` 은 2026-09-07 에 고침) | lesson-content-reviewer | 데모에 다음 미션 정답 토큰이 안 보임 | 대기 |
+| **옛 빈칸 77곳** — `hint2` 가 정답 목록이 아니라 완성 코드라(`fruits[___]` 에 hint2 `"fruits[1]"`), 이미 푼 스텝을 다시 열면 "정답" 이라며 깨진 코드를 보여준다 | lesson-content-reviewer | `check-lesson-outputs.py` 기준선이 0 이 됨 | 대기 — 기준선 77 로 잡아둠. **고칠 때마다 숫자를 같이 내려라** |
+| 레슨51 `ch3-1`(143줄) · 레슨52 `ch3-2` **분할** — 새 스텝과 새 expectedOutput 이 필요 | pedagogy-reviewer(설계) → 메인 세션 | 각 조각이 그 자체로 말이 되고 각자 출력이 나옴 | 대기 |
+| 레슨52 `ch2-3` 은 82줄 — 빈칸을 넣어도 길이 문제는 남는다. 클래스 62줄이 중복이라 분할도 막혔다 | 선생님 판단 | 내용을 줄일지 | 보류 |
 | 레슨35 ch3-3 처럼 **설명이 바로 다음 문제의 답을 적어놓은** 곳 — 레슨 5/13/22/23/25 에 ~18곳 (hint1 유출) | lesson-content-reviewer | 문제 바로 앞 문단에 정답 문자열 없음 | 대기 |
 | `/algo` 8개 토픽이 읽기 전용 — 퀴즈 67개를 지운 자리 | pedagogy-reviewer(설계) → frontend-engineer(구현) | 토픽마다 `onClick` 있는 능동 스텝 1개 이상 | 대기 |
 | `chipxchg` 의 `CheckSim` 이 가짜 퀴즈 — "골라보세요" 인데 `onClick` 0개 | frontend-engineer | 옵션에 `onClick` 존재, 오답 시 되묻기 동작 | 대기 |
@@ -51,6 +57,22 @@ python3 scripts/check-frozen.py     # 건드리면 안 되는 파일을 건드�
 | quest 9개에 되돌아온 별표 10곳 (되돌리며 같이 복구됨) | ux-reviewer | 코드 줄은 안 건드리고 narr 만 정리 | 대기 |
 
 ⚠️ 레슨 파일은 **Edit 만, Write 금지.** 과거 Write 로 덮어써서 선생님 작성분이 날아간 사고가 있다.
+
+## 2026-09-07 — 배포 저장소 10GB 100%
+
+Vercel 메일로 원인 확정: **빌드 분이 아니라 배포 저장소**였다.
+coderin production 207건 중 고유 커밋은 112개뿐 — **95건이 같은 커밋의 사본**이다.
+메인 세션이 CLI 로 중복 배포한 결과. 배포를 멈춰도 쌓인 건 안 줄어든다.
+
+| | 전 | 후 |
+|---|---|---|
+| 팀 전체 | 375건 | **57건** |
+| coderin (라이브) | 227 | 17 |
+| python-quiz-dashboard | 110 | 2 |
+
+재발 방지 셋: ①CLI 배포 중단(`git push` 가 곧 배포) ②`vercel.json` 경로 조건으로
+문서 전용 커밋은 빌드 스킵 ③커밋은 자주, **push 는 모아서**.
+자세한 것은 `memory/infra_vercel_coderin_deploy.md`.
 
 ## 결정 기록 (`/decide`)
 
