@@ -20,6 +20,11 @@
         득점할 수 있는 건 "M 하나 + O 둘" 조합뿐이니 그것만 본다
         (N=20 에서 보드당 6,840 → 평균 428) */
 
+/* ⚠️ beats 의 hi 는 **0부터 세는 배열 인덱스**다. 화면에 보이는 줄 번호는 +1 이다.
+   2026-09-07: 여기 다섯 개가 전부 1부터 세어 적혀 있어서 한 줄씩 밀려 있었다.
+   첫 말풍선이 "N 과 K 읽기" 인데 밝아진 줄은 그 아래 **빈 줄**이었고, N 과 K 를 읽는
+   진짜 줄은 자동 스크롤 위로 밀려 화면 밖이었다. 나머지 넷도 다 한 줄씩 밀렸다.
+   components.jsx 의 완전탐색 walk 은 처음부터 0부터 세어 적혀 있어 멀쩡했다. */
 import { t } from "@/components/quest/theme";
 
 export const FAST_PY = [
@@ -106,22 +111,22 @@ const _FAST_VARS = [
 export function getMooHuntFastWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FAST_CPP, vars: _FAST_VARS, beats: [
-      { hi: [7, 8],   bubble: t(E, "Read N (cells) and K (moves).", "N (칸 수) 와 K (무브 수) 읽기.") },
-      { hi: [10, 17], bubble: t(E, "Store the moves in a table instead of a list.\nisAt[x][a][b] = how many moves need x to be M and a, b to be O.\nSince y and z both just need to be O, min/max puts (1,2,3) and (1,3,2) in the same slot.",
+      { hi: [6, 7],   bubble: t(E, "Read N (cells) and K (moves).", "N (칸 수) 와 K (무브 수) 읽기.") },
+      { hi: [9, 16], bubble: t(E, "Store the moves in a table instead of a list.\nisAt[x][a][b] = how many moves need x to be M and a, b to be O.\nSince y and z both just need to be O, min/max puts (1,2,3) and (1,3,2) in the same slot.",
                                    "무브를 목록이 아니라 표에 담아요.\nisAt[x][a][b] = 'x 가 M, a 와 b 가 O' 여야 득점하는 무브 개수.\ny 와 z 는 둘 다 O 이기만 하면 되니, min/max 로 (1,2,3) 과 (1,3,2) 를 같은 칸에 넣어요.") },
-      { hi: [19, 25], bubble: t(E, "For each board, split the cells: which are M, which are O.", "보드마다 칸을 갈라요 — 어디가 M 이고 어디가 O 인지.") },
-      { hi: [26, 30], bubble: t(E, "Here is the whole point.\nOnly 'one M cell + two O cells' can ever score, so look at nothing else.\nAt N = 20 that is about 428 combinations instead of 6,840.",
+      { hi: [18, 24], bubble: t(E, "For each board, split the cells: which are M, which are O.", "보드마다 칸을 갈라요 — 어디가 M 이고 어디가 O 인지.") },
+      { hi: [25, 29], bubble: t(E, "Here is the whole point.\nOnly 'one M cell + two O cells' can ever score, so look at nothing else.\nAt N = 20 that is about 428 combinations instead of 6,840.",
                                    "여기가 핵심이에요.\n득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐이니 다른 건 안 봐요.\nN = 20 에서 6,840 개 대신 평균 428 개만 봐요.") },
-      { hi: [33, 35], bubble: t(E, "Best score, and how many boards reach it.", "최고 점수와, 그 점수에 이르는 보드 개수.") },
+      { hi: [32, 35], bubble: t(E, "Best score, and how many boards reach it.", "최고 점수와, 그 점수에 이르는 보드 개수.") },
     ] };
   }
   return { code: FAST_PY, vars: _FAST_VARS, beats: [
-    { hi: [1, 1],   bubble: t(E, "Read N (cells) and K (moves).", "N (칸 수) 와 K (무브 수) 읽기.") },
-    { hi: [3, 11],  bubble: t(E, "Store the moves in a table instead of a list.\nisAt[x][a][b] = how many moves need x to be M and a, b to be O.\nSince y and z both just need to be O, min/max puts (1,2,3) and (1,3,2) in the same slot.",
+    { hi: [0, 0],   bubble: t(E, "Read N (cells) and K (moves).", "N (칸 수) 와 K (무브 수) 읽기.") },
+    { hi: [2, 10],  bubble: t(E, "Store the moves in a table instead of a list.\nisAt[x][a][b] = how many moves need x to be M and a, b to be O.\nSince y and z both just need to be O, min/max puts (1,2,3) and (1,3,2) in the same slot.",
                                  "무브를 목록이 아니라 표에 담아요.\nisAt[x][a][b] = 'x 가 M, a 와 b 가 O' 여야 득점하는 무브 개수.\ny 와 z 는 둘 다 O 이기만 하면 되니, min/max 로 (1,2,3) 과 (1,3,2) 를 같은 칸에 넣어요.") },
-    { hi: [15, 17], bubble: t(E, "For each board, split the cells: which are M, which are O.", "보드마다 칸을 갈라요 — 어디가 M 이고 어디가 O 인지.") },
-    { hi: [19, 24], bubble: t(E, "Here is the whole point.\nOnly 'one M cell + two O cells' can ever score, so look at nothing else.\nAt N = 20 that is about 428 combinations instead of 6,840.",
+    { hi: [14, 16], bubble: t(E, "For each board, split the cells: which are M, which are O.", "보드마다 칸을 갈라요 — 어디가 M 이고 어디가 O 인지.") },
+    { hi: [18, 23], bubble: t(E, "Here is the whole point.\nOnly 'one M cell + two O cells' can ever score, so look at nothing else.\nAt N = 20 that is about 428 combinations instead of 6,840.",
                                  "여기가 핵심이에요.\n득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐이니 다른 건 안 봐요.\nN = 20 에서 6,840 개 대신 평균 428 개만 봐요.") },
-    { hi: [26, 30], bubble: t(E, "Best score, and how many boards reach it.", "최고 점수와, 그 점수에 이르는 보드 개수.") },
+    { hi: [25, 31], bubble: t(E, "Best score, and how many boards reach it.", "최고 점수와, 그 점수에 이르는 보드 개수.") },
   ] };
 }
