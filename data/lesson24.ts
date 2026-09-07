@@ -182,10 +182,10 @@ queue.popleft()     # dequeue - O(1) 빠름!
           type: "tryit",
           title: "🖥️ deque로 큐 만들기!",
           task: "deque를 사용해서 큐를 구현해보세요!",
-          initialCode: "from collections import deque\n\nqueue = deque()\n\n# enqueue\nqueue.append(\"1번 손님\")\nqueue.append(\"2번 손님\")\nqueue.append(\"3번 손님\")\nprint(\"대기열:\", list(queue))\n\n# dequeue\nprint(\"처리:\", queue.popleft())\nprint(\"처리:\", queue.popleft())\nprint(\"남은 대기열:\", list(queue))",
+          initialCode: "from collections import deque\n\nqueue = deque()\n\n# enqueue\nqueue.___(\"1번 손님\")\nqueue.append(\"2번 손님\")\nqueue.append(\"3번 손님\")\nprint(\"대기열:\", list(queue))\n\n# dequeue\nprint(\"처리:\", queue.___())\nprint(\"처리:\", queue.popleft())\nprint(\"남은 대기열:\", list(queue))",
           expectedOutput: "대기열: ['1번 손님', '2번 손님', '3번 손님']\n처리: 1번 손님\n처리: 2번 손님\n남은 대기열: ['3번 손님']",
           hint: "append()로 뒤에 추가, popleft()로 앞에서 제거!",
-          hint2: "FIFO: 1번이 먼저 나옴"
+          hint2: "append / popleft"
         },
         {
           id: "class-queue",

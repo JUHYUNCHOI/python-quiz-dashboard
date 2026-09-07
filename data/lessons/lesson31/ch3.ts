@@ -12,12 +12,12 @@ export const ch3: Chapter = {
       task: "피보나치 수열 10개를 출력하세요!",
       initialCode: `fib = [0, 1]
 for i in range(8):
-    fib.append(fib[-1] + fib[-2])
+    fib.append(___)
 print(f'피보나치: {fib}')
 print(f'10번째: {fib[9]}')`,
       expectedOutput: `피보나치: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]\n10번째: 34`,
       hint: "현재 = 이전 + 그 이전!",
-      hint2: "fib[-1] + fib[-2]로 다음 수를 구해요!"
+      hint2: "fib[-1] + fib[-2]"
     },
     {
       id: "ch3-1",
@@ -98,7 +98,7 @@ result = []
 for i in range(len(matrix1)):
     row = []
     for j in range(len(matrix1[0])):
-        row.append(matrix1[i][j] + matrix2[i][j])
+        row.append(___)
     result.append(row)
 
 print('행렬1:', matrix1)
@@ -106,7 +106,7 @@ print('행렬2:', matrix2)
 print('결과:', result)`,
       expectedOutput: `행렬1: [[1, 2, 3], [4, 5, 6]]\n행렬2: [[7, 8, 9], [10, 11, 12]]\n결과: [[8, 10, 12], [14, 16, 18]]`,
       hint: "같은 위치의 원소끼리 더해요!",
-      hint2: "matrix1[i][j] + matrix2[i][j]!"
+      hint2: "matrix1[i][j] + matrix2[i][j]"
     },
     {
       id: "ch3-6",
@@ -171,7 +171,7 @@ purchases = [
 totals = {}
 for p in purchases:
     item = p['item']
-    amount = p['price'] * p['qty']
+    amount = ___
     if item in totals:
         totals[item] += amount
     else:
@@ -184,8 +184,8 @@ for item, total in sorted(totals.items(), key=lambda x: x[1], reverse=True):
 grand_total = sum(totals.values())
 print(f'\\n총 합계: {grand_total:,}원')`,
       expectedOutput: `=== 아이템별 총 금액 ===\n  바나나: 10,000원\n  사과: 6,000원\n  체리: 3,000원\n\n총 합계: 19,000원`,
-      hint: "딕셔너리로 아이템별 합산!",
-      hint2: "price * qty로 금액 계산, 아이템별 누적!"
+      hint: "딕셔너리에서 값을 꺼낼 땐 대괄호 안에 키 이름을 써요. 그 줄의 금액은 무엇과 무엇을 곱한 걸까요?",
+      hint2: "p['price'] * p['qty']"
     }
   ]
 }

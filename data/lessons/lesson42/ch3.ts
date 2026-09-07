@@ -50,20 +50,20 @@ class Character:
     def __init__(s, char_name, hp):
         s.char_name = char_name
         s.hp = hp
-        Character.total_count = Character.total_count + 1
+        Character.total_count = Character.total_count ___ 1
         print(f'{char_name} 생성! (현재 총 {Character.total_count}명)')
 
 hero = Character('용사', 100)
 mage = Character('마법사', 80)
 archer = Character('궁수', 90)
 
-print(f'\\n게임 제목: {Character.game_title}')
+print(f'\\n게임 제목: {___.game_title}')
 print(f'캐릭터 수: {Character.total_count}명')
 print(f'{hero.char_name}의 HP: {hero.hp}')
 print(f'{mage.char_name}의 HP: {mage.hp}')`,
       expectedOutput: `용사 생성! (현재 총 1명)\n마법사 생성! (현재 총 2명)\n궁수 생성! (현재 총 3명)\n\n게임 제목: RPG 용사 게임\n캐릭터 수: 3명\n용사의 HP: 100\n마법사의 HP: 80`,
-      hint: "Character.total_count는 모든 객체가 공유하지만, s.hp는 각자 달라요!",
-      hint2: "클래스 변수는 Character.변수명으로, 인스턴스 변수는 s.변수명으로 접근!"
+      hint: "세는 값은 한 명 만들 때마다 1씩 늘어나요. 그리고 클래스가 다 같이 쓰는 값은 s 가 아니라 클래스 이름을 앞에 붙여요.",
+      hint2: "+ / Character"
     },
     {
       id: "ch3-1b",

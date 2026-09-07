@@ -118,10 +118,10 @@ print((1))       # 1 — 튜플 아님!
           type: "tryit",
           title: "🖥️ 리스트 vs 튜플 — 직접 비교",
           task: "리스트와 튜플의 차이를 직접 확인해보세요!",
-          initialCode: "# 리스트 - 수정 가능!\nfruits = ['사과', '바나나', '포도']\nfruits[0] = '딸기'\nfruits.append('망고')\nprint(f'리스트: {fruits}')\n\n# 튜플 - 수정 불가! (하지만 안전!)\ncolors = ('빨강', '파랑', '초록')\nprint(f'튜플: {colors}')\nprint(f'길이: {len(colors)}')\nprint(f'포함? {\"파랑\" in colors}')\n\n# 여러 타입도 OK!\nmixed = ('철수', 15, True, 3.14)\nfor item in mixed:\n    print(f'  {item} ({type(item).__name__})')",
+          initialCode: "# 리스트 - 수정 가능!\nfruits = ['사과', '바나나', '포도']\nfruits[0] = '딸기'\nfruits.append('망고')\nprint(f'리스트: {fruits}')\n\n# 튜플 - 수정 불가! (하지만 안전!)\ncolors = ('빨강', '파랑', '초록')\nprint(f'튜플: {colors}')\nprint(f'길이: {___(colors)}')\nprint(f'포함? {\"파랑\" ___ colors}')\n\n# 여러 타입도 OK!\nmixed = ('철수', 15, True, 3.14)\nfor item in mixed:\n    print(f'  {item} ({___(item).__name__})')",
           expectedOutput: "리스트: ['딸기', '바나나', '포도', '망고']\n튜플: ('빨강', '파랑', '초록')\n길이: 3\n포함? True\n  철수 (str)\n  15 (int)\n  True (bool)\n  3.14 (float)",
           hint: "튜플은 수정은 안 되지만 읽기, 반복, in 연산은 가능!",
-          hint2: "코드를 그대로 실행하세요!"
+          hint2: "len / in / type"
         },
         {
           id: "vs-list-deep",

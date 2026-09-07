@@ -410,7 +410,7 @@ for q in quests.values():
 
 q = Quest('Monster Hunt', 3)
 q.update(1)
-q._____(1)
+q.___(1)
 q.update(1)`,
           expectedOutput: `Monster Hunt: 1/3\nMonster Hunt: 2/3\nMonster Hunt complete!`,
           hint: "Completion state, compare to goal, call update!",

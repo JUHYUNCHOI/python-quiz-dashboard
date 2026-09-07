@@ -98,7 +98,7 @@ def add(a, b):
     return a + b
 
 def multiply(a, b):
-    return a * b
+    return ___
 
 # 호출!
 print(greet('철수'))
@@ -107,11 +107,11 @@ print(f'3 + 5 = {add(3, 5)}')
 print(f'4 x 6 = {multiply(4, 6)}')
 
 # 함수 조합!
-result = add(multiply(2, 3), multiply(4, 5))
+result = ___(multiply(2, 3), multiply(4, 5))
 print(f'2*3 + 4*5 = {result}')`,
           expectedOutput: `철수아 안녕!\n영희아 안녕!\n3 + 5 = 8\n4 x 6 = 24\n2*3 + 4*5 = 26`,
           hint: "함수를 정의하고 호출하는 기본 패턴!",
-          hint2: "코드를 그대로 실행하세요!"
+          hint2: "a * b / add"
         },
         {
           id: "ch1-5",
@@ -243,11 +243,11 @@ print(x)
 def add_bonus():
     bonus = 50  # 지역 변수 (함수 안에서만!)
     print(f'보너스: {bonus}')
-    # score는 읽기만 가능 (수정하려면 global 필요!)
+    # score는 읽기만 가능 (고치려면 선언이 하나 더 필요!)
     print(f'현재 점수: {score}')
 
 def reset_score():
-    global score  # 전역 변수 수정 선언!
+    ___ score  # 전역 변수 수정 선언!
     score = 0
     print(f'점수 리셋! -> {score}')
 
@@ -257,8 +257,8 @@ print(f'add_bonus 후: {score}')  # 변함없음!
 reset_score()
 print(f'reset 후: {score}')`,
           expectedOutput: `처음: 100\n보너스: 50\n현재 점수: 100\nadd_bonus 후: 100\n점수 리셋! -> 0\nreset 후: 0`,
-          hint: "global 없이는 전역변수를 수정할 수 없어요!",
-          hint2: "코드를 그대로 실행하세요!"
+          hint: "함수 안에서 밖의 변수를 **고치려면** 한 줄 선언이 먼저 필요해요. 읽기만 할 땐 필요 없었죠.",
+          hint2: "global"
         },
         {
           id: "ch2-2",
@@ -372,7 +372,7 @@ print(f'add(3, 7) = {add(3, 7)}')
 # sorted + key = 정렬 기준 지정!
 names = ['바나나', '사과', '체리', '포도']
 print(f'\\n이름순: {sorted(names)}')
-print(f'길이순: {sorted(names, key=lambda x: len(x))}')
+print(f'길이순: {sorted(names, key=___)}')
 
 # 딕셔너리 정렬!
 students = [
@@ -381,13 +381,13 @@ students = [
     {'name': '민수', 'score': 78},
 ]
 
-by_score = sorted(students, key=lambda s: s['score'], reverse=True)
+by_score = sorted(students, key=___, reverse=True)
 print(f'\\n성적순:')
 for s in by_score:
     print(f'  {s["name"]}: {s["score"]}점')`,
           expectedOutput: `double(5) = 10\nadd(3, 7) = 10\n\n이름순: ['바나나', '사과', '체리', '포도']\n길이순: ['사과', '체리', '포도', '바나나']\n\n성적순:\n  영희: 92점\n  철수: 85점\n  민수: 78점`,
           hint: "lambda는 한 줄 함수, sorted의 key로 정렬 기준!",
-          hint2: "코드를 그대로 실행하세요!"
+          hint2: "lambda x: len(x) / lambda s: s['score']"
         },
         {
           id: "ch3-2",
@@ -505,7 +505,7 @@ print(f'개수: {len(scores)}')
 print(f'평균: {sum(scores)/len(scores):.1f}')
 
 # map: 모든 요소에 함수 적용
-doubled = list(map(lambda x: x * 2, scores))
+doubled = list(___(lambda x: x * 2, scores))
 print(f'\\n2배: {doubled}')
 
 # filter: 조건에 맞는 요소만
@@ -514,11 +514,11 @@ print(f'90점 이상: {high}')
 
 # enumerate: 인덱스와 함께
 print(f'\\n등수:')
-for i, s in enumerate(sorted(scores, reverse=True)):
+for i, s in ___(sorted(scores, reverse=True)):
     print(f'  {i+1}등: {s}점')`,
           expectedOutput: `합계: 600\n최고: 95\n최저: 72\n개수: 7\n평균: 85.7\n\n2배: [170, 184, 156, 190, 176, 144, 180]\n90점 이상: [92, 95, 90]\n\n등수:\n  1등: 95점\n  2등: 92점\n  3등: 90점\n  4등: 88점\n  5등: 85점\n  6등: 78점\n  7등: 72점`,
-          hint: "sum, max, min, len, map, filter, enumerate!",
-          hint2: "코드를 그대로 실행하세요!"
+          hint: "하나는 리스트 전체에 함수를 씌우는 것, 하나는 돌면서 번호를 같이 꺼내주는 것이에요. 바로 위 filter 가 첫 빈칸의 모양을 보여줘요.",
+          hint2: "map / enumerate"
         },
         {
           id: "ch4-1",

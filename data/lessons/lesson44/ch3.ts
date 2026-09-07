@@ -14,10 +14,10 @@ export const ch3: Chapter = {
     def __init__(s):
         s.books = {}
     def add_book(s, title, author):
-        s.books[title] = author
+        s.books[___] = author
         print(f'추가: {title} ({author})')
     def find_book(s, title):
-        if title in s.books:
+        if title ___ s.books:
             print(f'O {title} - {s.books[title]}')
         else:
             print(f'X {title} 없음')
@@ -31,8 +31,8 @@ lib.find_book('해리포터')
 lib.find_book('반지의제왕')
 print(f'총 {lib.count()}권')`,
       expectedOutput: "추가: 해리포터 (J.K.롤링)\n추가: 어린왕자 (생텍쥐페리)\nO 해리포터 - J.K.롤링\nX 반지의제왕 없음\n총 2권",
-      hint: "딕셔너리에 title: author로 저장하고, in으로 검색!",
-      hint2: "s.books[title] = author / title in s.books / len(s.books)"
+      hint: "대괄호 안에는 찾을 때 쓸 이름이 들어가요. 그리고 그 이름이 딕셔너리에 있는지 묻는 연산자가 따로 있죠.",
+      hint2: "title / in"
     },
     {
       id: "ch3-1",
@@ -63,7 +63,7 @@ class Mage:
         s.hp = 80
         s.atk = 45
     def attack(s, target):
-        target.hp -= s.atk
+        target.hp ___ s.atk
         print(f'{s.name} -> {target.name} ({s.atk} 데미지)')
 
 warrior = Warrior()
@@ -74,7 +74,7 @@ print(f'{warrior.name} HP: {warrior.hp}')
 print(f'{mage.name} HP: {mage.hp}')`,
       expectedOutput: "전사 -> 마법사 (30 데미지)\n마법사 -> 전사 (45 데미지)\n전사 HP: 75\n마법사 HP: 50",
       hint: "target.hp에서 s.atk만큼 빼면 돼요!",
-      hint2: "target.hp -= s.atk 로 상대 HP를 깎아요"
+      hint2: "-="
     },
     {
       id: "ch3-3",

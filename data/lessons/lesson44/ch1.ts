@@ -69,7 +69,7 @@ export const ch1: Chapter = {
         print(f'이름: {s.name}, 학년: {s.grade}학년')
 
     def is_senior(s):
-        if s.grade >= 3:
+        if s.grade ___ 3:
             return True
         return False
 
@@ -80,11 +80,11 @@ s2 = Student('영희', 3)
 s1.introduce()
 s2.introduce()
 
-print(f'\\n{s1.name} 고학년? {s1.is_senior()}')
+print(f'\\n{s1.name} 고학년? {s1.___()}')
 print(f'{s2.name} 고학년? {s2.is_senior()}')`,
       expectedOutput: `이름: 철수, 학년: 2학년\n이름: 영희, 학년: 3학년\n\n철수 고학년? False\n영희 고학년? True`,
       hint: "__init__으로 속성 설정, 메서드로 행동 정의!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint2: ">= / is_senior"
     },
     {
       id: "ch1-5",

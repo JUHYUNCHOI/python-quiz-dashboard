@@ -98,7 +98,7 @@ def add(a, b):
     return a + b
 
 def multiply(a, b):
-    return a * b
+    return ___
 
 # Call them!
 print(greet('Tom'))
@@ -107,11 +107,11 @@ print(f'3 + 5 = {add(3, 5)}')
 print(f'4 x 6 = {multiply(4, 6)}')
 
 # Combine functions!
-result = add(multiply(2, 3), multiply(4, 5))
+result = ___(multiply(2, 3), multiply(4, 5))
 print(f'2*3 + 4*5 = {result}')`,
           expectedOutput: `Hi Tom!\nHi Jane!\n3 + 5 = 8\n4 x 6 = 24\n2*3 + 4*5 = 26`,
-          hint: "Basic pattern: define a function, then call it!",
-          hint2: "Just run the code as is!"
+          hint: "multiply returns a product. And when two functions are combined, which one wraps the other?",
+          hint2: "a * b / add"
         },
         {
           id: "ch1-5",
@@ -243,11 +243,11 @@ print(x)
 def add_bonus():
     bonus = 50  # local variable (only inside the function!)
     print(f'Bonus: {bonus}')
-    # score is read-only here (need 'global' to change it!)
+    # score is read-only here (changing it needs one more declaration!)
     print(f'Current score: {score}')
 
 def reset_score():
-    global score  # declare we want to change the global!
+    ___ score  # declare we want to change the global!
     score = 0
     print(f'Score reset! -> {score}')
 
@@ -257,8 +257,8 @@ print(f'After add_bonus: {score}')  # unchanged!
 reset_score()
 print(f'After reset: {score}')`,
           expectedOutput: `Start: 100\nBonus: 50\nCurrent score: 100\nAfter add_bonus: 100\nScore reset! -> 0\nAfter reset: 0`,
-          hint: "Without 'global', you can't change a global variable!",
-          hint2: "Just run the code as is!"
+          hint: "To **change** an outside variable from inside a function you need one declaration first. Reading it needed none.",
+          hint2: "global"
         },
         {
           id: "ch2-2",
@@ -372,7 +372,7 @@ print(f'add(3, 7) = {add(3, 7)}')
 # sorted + key = pick the sort key!
 fruits = ['banana', 'apple', 'cherry', 'grape']
 print(f'\\nby name: {sorted(fruits)}')
-print(f'by length: {sorted(fruits, key=lambda x: len(x))}')
+print(f'by length: {sorted(fruits, key=___)}')
 
 # Sort dictionaries!
 students = [
@@ -381,13 +381,13 @@ students = [
     {'name': 'Mike', 'score': 78},
 ]
 
-by_score = sorted(students, key=lambda s: s['score'], reverse=True)
+by_score = sorted(students, key=___, reverse=True)
 print(f'\\nby score:')
 for s in by_score:
     print(f'  {s["name"]}: {s["score"]}')`,
           expectedOutput: `double(5) = 10\nadd(3, 7) = 10\n\nby name: ['apple', 'banana', 'cherry', 'grape']\nby length: ['apple', 'grape', 'banana', 'cherry']\n\nby score:\n  Jane: 92\n  Tom: 85\n  Mike: 78`,
           hint: "lambda = one-line function, key in sorted = how to sort!",
-          hint2: "Just run the code as is!"
+          hint2: "lambda x: len(x) / lambda s: s['score']"
         },
         {
           id: "ch3-2",
@@ -505,7 +505,7 @@ print(f'count: {len(scores)}')
 print(f'avg: {sum(scores)/len(scores):.1f}')
 
 # map: apply a function to every item
-doubled = list(map(lambda x: x * 2, scores))
+doubled = list(___(lambda x: x * 2, scores))
 print(f'\\ndoubled: {doubled}')
 
 # filter: keep items that match a condition
@@ -514,11 +514,11 @@ print(f'>=90: {high}')
 
 # enumerate: get index + item
 print(f'\\nranking:')
-for i, s in enumerate(sorted(scores, reverse=True)):
+for i, s in ___(sorted(scores, reverse=True)):
     print(f'  #{i+1}: {s}')`,
           expectedOutput: `sum: 600\nmax: 95\nmin: 72\ncount: 7\navg: 85.7\n\ndoubled: [170, 184, 156, 190, 176, 144, 180]\n>=90: [92, 95, 90]\n\nranking:\n  #1: 95\n  #2: 92\n  #3: 90\n  #4: 88\n  #5: 85\n  #6: 78\n  #7: 72`,
-          hint: "sum, max, min, len, map, filter, enumerate!",
-          hint2: "Just run the code as is!"
+          hint: "One applies a function across the whole list; one walks it while handing you the index. The filter line above shows the first one's shape.",
+          hint2: "map / enumerate"
         },
         {
           id: "ch4-1",

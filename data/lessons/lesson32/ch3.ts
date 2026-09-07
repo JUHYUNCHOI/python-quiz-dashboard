@@ -103,13 +103,13 @@ def 소개(이름, 나이):
       title: "음식 주문 함수",
       task: "order 함수가 '피자 주문이요!'처럼 출력하도록 빈칸을 채우세요",
       initialCode: `def order(food):
-    print(f"_____ 주문이요!")  # 주문한 음식 이름을 넣으세요
+    print(f"___ 주문이요!")  # 주문한 음식 이름을 넣으세요
 
 order("피자")
 order("치킨")`,
       expectedOutput: "피자 주문이요!\n치킨 주문이요!",
-      hint: "_____를 {food}로 바꿔요!",
-      hint2: "f-string 안에 중괄호로 변수를 감싸요!"
+      hint: "매개변수로 받은 이름을 f-string 안에 넣어야 해요. 중괄호를 잊지 마세요.",
+      hint2: "{food}"
     },
     {
       id: "ch3-8",

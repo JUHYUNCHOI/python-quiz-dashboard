@@ -135,10 +135,10 @@ export const lesson26Data: LessonData = {
           type: "tryit",
           title: "🖥️ 검색 성능 원리!",
           task: "리스트 vs 집합 검색 원리를 이해하세요!",
-          initialCode: "# 리스트: 처음부터 하나씩 확인 (O(n))\nmy_list = [10, 20, 30, 40, 50]\ntarget = 40\n\n# 리스트 검색 과정\nprint(\"리스트 검색:\")\nfor i, val in enumerate(my_list):\n    print(f\"  {i}번째: {val} 확인\", end=\"\")\n    if val == target:\n        print(\" → 찾았다!\")\n        break\n    print()\n\n# 집합: 해시로 바로 접근 (O(1))\nmy_set = {10, 20, 30, 40, 50}\nprint(f\"\\n집합 검색:\")\nprint(f\"  {target} in 집합? {target in my_set} (바로 찾음!)\")",
+          initialCode: "# 리스트: 처음부터 하나씩 확인 (O(n))\nmy_list = [10, 20, 30, 40, 50]\ntarget = 40\n\n# 리스트 검색 과정\nprint(\"리스트 검색:\")\nfor i, val in enumerate(my_list):\n    print(f\"  {i}번째: {val} 확인\", end=\"\")\n    if val ___ target:\n        print(\" → 찾았다!\")\n        break\n    print()\n\n# 집합: 해시로 바로 접근 (O(1))\nmy_set = ___\nprint(f\"\\n집합 검색:\")\nprint(f\"  {target} in 집합? {target in my_set} (바로 찾음!)\")",
           expectedOutput: "리스트 검색:\n  0번째: 10 확인\n  1번째: 20 확인\n  2번째: 30 확인\n  3번째: 40 확인 → 찾았다!\n\n집합 검색:\n  40 in 집합? True (바로 찾음!)",
           hint: "리스트는 순차 탐색, 집합은 해시 탐색!",
-          hint2: "데이터가 많을수록 차이가 커짐"
+          hint2: "== / {10, 20, 30, 40, 50}"
         },
         {
           id: "problem-solving",

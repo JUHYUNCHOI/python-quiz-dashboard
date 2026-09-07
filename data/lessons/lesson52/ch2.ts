@@ -97,7 +97,7 @@ for q in quests.values():
 
 q = Quest('몬스터 처치', 3)
 q.update(1)
-q._____(1)
+q.___(1)
 q.update(1)`,
       expectedOutput: `몬스터 처치: 1/3\n몬스터 처치: 2/3\n몬스터 처치 완료!`,
       hint: "완료 상태, 목표치 비교, update 호출!",

@@ -71,11 +71,11 @@ export const ch1: Chapter = {
       type: "tryit",
       title: "문제 6: 구구단",
       task: "7단을 출력하는 코드를 실행하세요!",
-      initialCode: `for i in range(1, 10):
+      initialCode: `for i in range(1, ___):
     print(f'7 x {i} = {7 * i}')`,
       expectedOutput: `7 x 1 = 7\n7 x 2 = 14\n7 x 3 = 21\n7 x 4 = 28\n7 x 5 = 35\n7 x 6 = 42\n7 x 7 = 49\n7 x 8 = 56\n7 x 9 = 63`,
-      hint: "range(1, 10)은 1~9!",
-      hint2: "7 * i로 곱셈 결과를 구해요!"
+      hint: "range(1, N) 은 1부터 N-1 까지예요. 9단까지 다 나오려면 N 은 얼마일까요?",
+      hint2: "10"
     },
     {
       id: "ch1-7",

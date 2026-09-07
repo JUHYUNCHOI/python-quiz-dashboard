@@ -182,7 +182,7 @@ def attack(s, target):  # target = the attack target!
     def attack(s, target):
         print(f'{s.char_name} attacks {target.char_name}!')
         print(f'{s.atk} damage!')
-        target.hp = target.hp - s.atk
+        target.hp = target.hp - ___
         print(f'{target.char_name} remaining HP: {target.hp}')
 
 hero = Character('Hero', 100, 25)
@@ -190,7 +190,7 @@ slime = Character('Slime', 30, 5)
 hero.attack(slime)`,
           expectedOutput: `Hero attacks Slime!\n25 damage!\nSlime remaining HP: 5`,
           hint: "In hero.attack(slime), s=hero and target=slime!",
-          hint2: "Inside the attack method, s is Hero and target is Slime!"
+          hint2: "s.atk"
         },
         {
           /* 2026-09-06: 한글판과 짝. 한쪽만 고치면 영어로 배우는 학생이 다른 레슨을 본다. */
@@ -226,11 +226,11 @@ ___.attack(___)`,
     def __init__(s, char_name, hp, atk):
         s.char_name = char_name
         s.hp = hp
-        s.max_hp = hp
+        s.max_hp = ___
         s.atk = atk
 
     def heal(s, amount):
-        s.hp = s.hp + amount
+        s.hp = s.hp ___ amount
         if s.hp > s.max_hp:
             s.hp = s.max_hp
         print(f'{s.char_name} healed! (+{amount}) HP: {s.hp}/{s.max_hp}')
@@ -245,8 +245,8 @@ hero.status()
 hero.heal(30)
 hero.heal(50)`,
           expectedOutput: `Hero: HP 100/100, ATK 25\nHero: HP 60/100, ATK 25\nHero healed! (+30) HP: 90/100\nHero healed! (+50) HP: 100/100`,
-          hint: "max_hp is the maximum health! Healing can't exceed it!",
-          hint2: "heal(50) gives 90+50=140, but it caps at max_hp which is 100!"
+          hint: "At creation the maximum health equals the starting health. And which operation is healing?",
+          hint2: "hp / +"
         }
       ]
     },
@@ -362,20 +362,20 @@ class Character:
     def __init__(s, char_name, hp):
         s.char_name = char_name
         s.hp = hp
-        Character.total_count = Character.total_count + 1
+        Character.total_count = Character.total_count ___ 1
         print(f'{char_name} created! (Total: {Character.total_count})')
 
 hero = Character('Hero', 100)
 mage = Character('Mage', 80)
 archer = Character('Archer', 90)
 
-print(f'\\nGame title: {Character.game_title}')
+print(f'\\nGame title: {___.game_title}')
 print(f'Character count: {Character.total_count}')
 print(f'{hero.char_name} HP: {hero.hp}')
 print(f'{mage.char_name} HP: {mage.hp}')`,
           expectedOutput: `Hero created! (Total: 1)\nMage created! (Total: 2)\nArcher created! (Total: 3)\n\nGame title: RPG Hero Game\nCharacter count: 3\nHero HP: 100\nMage HP: 80`,
-          hint: "Character.total_count is shared by all objects, but s.hp is different for each!",
-          hint2: "Class variables use Character.varname, instance variables use s.varname!"
+          hint: "The counter goes up by one each time someone is made. And a value the whole class shares is prefixed with the class name, not s.",
+          hint2: "+ / Character"
         },
         {
           id: "ch3-1b",

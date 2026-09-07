@@ -63,13 +63,13 @@ print(reversed_nums)`,
       title: "문제 16: 중복 제거",
       task: "리스트에서 중복을 제거하고 정렬하세요!",
       initialCode: `nums = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5]
-unique = sorted(set(nums))
+unique = ___(___(nums))
 print(f'원본: {nums}')
 print(f'중복 제거: {unique}')
 print(f'원본 {len(nums)}개 → {len(unique)}개')`,
       expectedOutput: `원본: [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5]\n중복 제거: [1, 2, 3, 4, 5, 6, 9]\n원본 11개 → 7개`,
-      hint: "set()으로 중복 제거, sorted()로 정렬!",
-      hint2: "sorted(set(리스트))가 핵심!"
+      hint: "먼저 중복이 사라지는 자료구조로 바꾸고, 그 다음 순서대로 줄 세워요.",
+      hint2: "sorted / set"
     },
     {
       id: "ch2-6",

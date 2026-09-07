@@ -75,7 +75,7 @@ export const lesson44EnData: LessonData = {
         print(f'Name: {s.name}, Grade: {s.grade}')
 
     def is_senior(s):
-        if s.grade >= 3:
+        if s.grade ___ 3:
             return True
         return False
 
@@ -86,11 +86,11 @@ s2 = Student('Bob', 3)
 s1.introduce()
 s2.introduce()
 
-print(f'\\n{s1.name} senior? {s1.is_senior()}')
+print(f'\\n{s1.name} senior? {s1.___()}')
 print(f'{s2.name} senior? {s2.is_senior()}')`,
           expectedOutput: `Name: Alice, Grade: 2\nName: Bob, Grade: 3\n\nAlice senior? False\nBob senior? True`,
           hint: "__init__ sets attributes, methods define behavior!",
-          hint2: "Just run the code as-is!"
+          hint2: ">= / is_senior"
         },
         {
           id: "ch1-5",
@@ -259,12 +259,12 @@ print(f"{student.name}'s average: {student.average():.1f}")`,
     def __init__(s):
         s.items = {'Cola': 1200, 'Sprite': 1000, 'Juice': 1500}
     def show_menu(s):
-        for name, price in s.items.items():
+        for name, price in s.items.___():
             print(f'{name}: \${price}')
     def buy(s, item, money):
         if item not in s.items:
             print('Item not found!')
-        elif money < s.items[item]:
+        elif money ___ s.items[item]:
             print(f'Not enough! Need \${s.items[item] - money} more')
         else:
             change = money - s.items[item]
@@ -275,8 +275,8 @@ vm.show_menu()
 vm.buy('Cola', 2000)
 vm.buy('Juice', 1000)`,
           expectedOutput: "Cola: $1200\nSprite: $1000\nJuice: $1500\nCola purchased! Change: $800\nNot enough! Need $500 more",
-          hint: "Use .items() on the dictionary to get name and price",
-          hint2: "Conditionals branch for: item exists, not enough money, purchase success"
+          hint: "One method pulls the name and the price out **together**. And which way does the sign point when the money is less than the price?",
+          hint2: "items / <"
         }
       ]
     },
@@ -294,10 +294,10 @@ vm.buy('Juice', 1000)`,
     def __init__(s):
         s.books = {}
     def add_book(s, title, author):
-        s.books[title] = author
+        s.books[___] = author
         print(f'Added: {title} ({author})')
     def find_book(s, title):
-        if title in s.books:
+        if title ___ s.books:
             print(f'O {title} - {s.books[title]}')
         else:
             print(f'X {title} not found')
@@ -311,8 +311,8 @@ lib.find_book('Harry Potter')
 lib.find_book('Lord of the Rings')
 print(f'Total {lib.count()} books')`,
           expectedOutput: "Added: Harry Potter (J.K. Rowling)\nAdded: Little Prince (Saint-Exupery)\nO Harry Potter - J.K. Rowling\nX Lord of the Rings not found\nTotal 2 books",
-          hint: "Store as title: author in the dictionary, search with in!",
-          hint2: "s.books[title] = author / title in s.books / len(s.books)"
+          hint: "The brackets hold the name you will look it up by. And there is an operator that asks whether that name is in the dictionary.",
+          hint2: "title / in"
         },
         {
           id: "ch3-1",
@@ -343,7 +343,7 @@ class Mage:
         s.hp = 80
         s.atk = 45
     def attack(s, target):
-        target.hp -= s.atk
+        target.hp ___ s.atk
         print(f'{s.name} -> {target.name} ({s.atk} dmg)')
 
 warrior = Warrior()
@@ -354,7 +354,7 @@ print(f'{warrior.name} HP: {warrior.hp}')
 print(f'{mage.name} HP: {mage.hp}')`,
           expectedOutput: "Warrior -> Mage (30 dmg)\nMage -> Warrior (45 dmg)\nWarrior HP: 75\nMage HP: 50",
           hint: "Subtract s.atk from target.hp!",
-          hint2: "target.hp -= s.atk reduces the opponent's HP"
+          hint2: "-="
         },
         {
           id: "ch3-3",

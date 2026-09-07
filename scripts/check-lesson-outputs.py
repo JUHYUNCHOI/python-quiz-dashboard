@@ -468,6 +468,15 @@ def report(title, checked, problems):
 #   ② hint2 의 정답을 채워 넣어도 expectedOutput 이 안 나온다
 #      → 학생이 정답을 맞혀도 오답 처리된다
 # 그래서 정답을 실제로 채워 넣고 **돌려서** 대조한다.
+# 빈칸 표시는 밑줄 **정확히 3개**여야 한다. 4개 이상이면 파서
+# (`components/python/blank-code-runner.tsx:63` 의 /___/g) 가 앞 3개만 빈칸으로
+# 잡고 나머지 밑줄이 코드에 그대로 남는다 → 학생이 정답을 채워도
+#   `return n * n__`  ·  `q.update__(1)`
+# 이 되어 실행이 깨진다. **정답을 맞혀도 통과가 안 되는** 버그다.
+# 2026-09-07 에 10곳(레슨32 네 곳·레슨52 한 곳, 각 ko/en)이 이 상태였다.
+BAD_BLANK = re.compile(r"_{4,}")
+
+
 NO_PROMPT_SHIM = (
     "import builtins as _b\n"
     "_o = _b.input\n"
@@ -495,6 +504,11 @@ def check_blanks():
                 code, want, hint2 = (field(blk, "initialCode"), field(blk, "expectedOutput"),
                                      field(blk, "hint2"))
                 if code is None or want is None or "___" not in code or not hint2:
+                    continue
+                if BAD_BLANK.search(code):
+                    checked += 1
+                    problems.append((name, "blank", sid, "밑줄4개+",
+                                     "밑줄이 4개 이상 — 파서가 앞 3개만 잡아 찌꺼기가 남는다", "___ 로 고칠 것"))
                     continue
                 nb = code.count("___")
                 answers = [a.strip() for a in hint2.split(" / ")]
@@ -548,7 +562,10 @@ def main():
     # 그때 "정답" 이라며 깨진 코드를 보여준다. 81곳을 한 번에 고치는 건 별건이라
     # 기준선으로 잡아두고 **늘어나면** 빨간불이 되게 한다.
     # ⚠️ 고칠 때마다 이 숫자를 같이 내려라. 안 내리면 기준선이 방패가 된다.
-    KNOWN_BLANK_ISSUES = 81
+    # ⚠️ 이 숫자는 **고칠 때마다 같이 내려야 한다.** 안 내리면 그 차이만큼이
+    #    방패가 되어 새 버그가 숨는다 — 2026-09-07 에 4곳을 고치고 81 을 그대로 뒀더니
+    #    일부러 넣은 새 버그가 안 잡혔다.
+    KNOWN_BLANK_ISSUES = 77
     legacy = min(len(bp), KNOWN_BLANK_ISSUES)
     report("📘 복습 문제 (app/review)", rc, rp)
     report("📗 수업 레슨 (data)", lc, lp)

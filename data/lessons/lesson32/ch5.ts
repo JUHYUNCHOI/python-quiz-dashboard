@@ -71,13 +71,13 @@ print(subtract(10, 5))  # 5
       title: "빼기 함수 만들기",
       task: "subtract 함수가 두 수의 차이를 돌려주도록 빈칸을 채우세요!",
       initialCode: `def subtract(a, b):
-    return _____  # 두 수의 차를 돌려주세요
+    return ___  # 두 수의 차를 돌려주세요
 
 print(subtract(10, 3))  # 7이 나와야 해요
 print(subtract(20, 8))  # 12가 나와야 해요`,
       expectedOutput: "7\n12",
       hint: "두 수를 빼는 식을 입력해요!",
-      hint2: "빼기 연산자는 - 예요!"
+      hint2: "a - b"
     },
     {
       id: "ch5-5",
@@ -103,13 +103,13 @@ def add(a, b):
     return a + b
 
 def multiply(a, b):
-    return _____  # 두 수의 곱을 돌려주세요
+    return ___  # 두 수의 곱을 돌려주세요
 
 print("3 + 5 =", add(3, 5))
 print("3 * 5 =", multiply(3, 5))`,
       expectedOutput: "3 + 5 = 8\n3 * 5 = 15",
       hint: "두 수를 곱하는 식을 입력해요!",
-      hint2: "곱하기 연산자는 * 예요!"
+      hint2: "a * b"
     },
     {
       id: "ch5-7",

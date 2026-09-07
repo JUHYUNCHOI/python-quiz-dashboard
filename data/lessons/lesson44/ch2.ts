@@ -99,12 +99,12 @@ print(f'{student.name}의 평균: {student.average():.1f}')`,
     def __init__(s):
         s.items = {'콜라': 1200, '사이다': 1000, '주스': 1500}
     def show_menu(s):
-        for name, price in s.items.items():
+        for name, price in s.items.___():
             print(f'{name}: {price}원')
     def buy(s, item, money):
         if item not in s.items:
             print('없는 상품!')
-        elif money < s.items[item]:
+        elif money ___ s.items[item]:
             print(f'돈 부족! {s.items[item] - money}원 더 필요')
         else:
             change = money - s.items[item]
@@ -115,8 +115,8 @@ vm.show_menu()
 vm.buy('콜라', 2000)
 vm.buy('주스', 1000)`,
       expectedOutput: "콜라: 1200원\n사이다: 1000원\n주스: 1500원\n콜라 구매! 거스름돈: 800원\n돈 부족! 500원 더 필요",
-      hint: "딕셔너리의 .items()로 이름과 가격을 가져와요",
-      hint2: "조건문으로 상품 존재, 금액 부족, 구매 성공을 분기해요"
+      hint: "딕셔너리에서 이름과 가격을 **한꺼번에** 꺼내는 메서드가 있어요. 그리고 돈이 가격보다 적을 때 쓸 부등호는 어느 쪽일까요?",
+      hint2: "items / <"
     }
   ]
 }

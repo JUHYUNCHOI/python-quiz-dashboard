@@ -35,7 +35,7 @@ def attack(s, target):  # target = 공격 대상!
     def attack(s, target):
         print(f'{s.char_name}이(가) {target.char_name}을(를) 공격!')
         print(f'{s.atk} 데미지!')
-        target.hp = target.hp - s.atk
+        target.hp = target.hp - ___
         print(f'{target.char_name}의 남은 HP: {target.hp}')
 
 hero = Character('용사', 100, 25)
@@ -43,7 +43,7 @@ slime = Character('슬라임', 30, 5)
 hero.attack(slime)`,
       expectedOutput: `용사이(가) 슬라임을(를) 공격!\n25 데미지!\n슬라임의 남은 HP: 5`,
       hint: "hero.attack(slime)에서 s=hero, target=slime이 돼요!",
-      hint2: "attack 메서드 안에서 s는 용사, target은 슬라임!"
+      hint2: "s.atk"
     },
     {
       /* 2026-09-06: 이 챕터는 explain 1 + 채점 안 되는 tryit 2 뿐이고 퀴즈조차 없었다.
@@ -84,11 +84,11 @@ ___.attack(___)`,
     def __init__(s, char_name, hp, atk):
         s.char_name = char_name
         s.hp = hp
-        s.max_hp = hp
+        s.max_hp = ___
         s.atk = atk
 
     def heal(s, amount):
-        s.hp = s.hp + amount
+        s.hp = s.hp ___ amount
         if s.hp > s.max_hp:
             s.hp = s.max_hp
         print(f'{s.char_name} 회복! (+{amount}) HP: {s.hp}/{s.max_hp}')
@@ -103,8 +103,8 @@ hero.status()
 hero.heal(30)
 hero.heal(50)`,
       expectedOutput: `용사: HP 100/100, ATK 25\n용사: HP 60/100, ATK 25\n용사 회복! (+30) HP: 90/100\n용사 회복! (+50) HP: 100/100`,
-      hint: "max_hp는 최대 체력! 회복해도 이걸 넘을 수 없어요!",
-      hint2: "heal(50)을 해도 90+50=140이 아니라 max_hp인 100이 돼요!"
+      hint: "처음 만들 때 최대 체력은 시작 체력과 같아요. 그리고 회복은 어느 쪽 연산일까요?",
+      hint2: "hp / +"
     },
     {
       id: "ch2-2a",

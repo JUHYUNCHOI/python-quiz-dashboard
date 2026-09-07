@@ -401,13 +401,13 @@ introduce("Jane", 14)
           title: "Food order function",
           task: "Make order print '<food> please!' for each order",
           initialCode: `def order(food):
-    print(f"_____ please!")  # put the ordered food name in here
+    print(f"___ please!")  # put the ordered food name in here
 
 order("pizza")
 order("chicken")`,
           expectedOutput: "pizza please!\nchicken please!",
-          hint: "Replace _____ with {food}!",
-          hint2: "Wrap the variable in curly braces inside the f-string!"
+          hint: "The name the function received has to go inside the f-string. Don't forget the braces.",
+          hint2: "{food}"
         },
         {
           id: "ch3-8",
@@ -541,13 +541,13 @@ print(x * 2)  # 16 — you can use it in calculations!
           title: "Make a square function",
           task: "Fill in the blank so square returns the square of a number (square of 3 = 3 * 3 = 9)",
           initialCode: `def square(n):
-    return _____  # return n multiplied by itself
+    return ___  # return n multiplied by itself
 
 print(square(3))   # should print 9
 print(square(5))   # should print 25`,
           expectedOutput: "9\n25",
           hint: "Squaring means multiplying a number by itself!",
-          hint2: "To multiply n by itself: n * n"
+          hint2: "n * n"
         },
         {
           id: "ch4-8",
@@ -641,13 +641,13 @@ Since each function \`return\`s its result, you can hand that value straight to 
           title: "Make a subtract function",
           task: "Fill in the blank so subtract returns the difference!",
           initialCode: `def subtract(a, b):
-    return _____  # return the difference of the two numbers
+    return ___  # return the difference of the two numbers
 
 print(subtract(10, 3))  # should print 7
 print(subtract(20, 8))  # should print 12`,
           expectedOutput: "7\n12",
           hint: "Write the expression that subtracts two numbers!",
-          hint2: "The minus operator is -"
+          hint2: "a - b"
         },
         {
           id: "ch5-5",
@@ -673,13 +673,13 @@ def add(a, b):
     return a + b
 
 def multiply(a, b):
-    return _____  # return the product of the two numbers
+    return ___  # return the product of the two numbers
 
 print("3 + 5 =", add(3, 5))
 print("3 * 5 =", multiply(3, 5))`,
           expectedOutput: "3 + 5 = 8\n3 * 5 = 15",
           hint: "Write the expression that multiplies two numbers!",
-          hint2: "The multiply operator is *"
+          hint2: "a * b"
         },
         {
           id: "ch5-7",

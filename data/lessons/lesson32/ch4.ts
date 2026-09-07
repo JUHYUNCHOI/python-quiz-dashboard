@@ -112,13 +112,13 @@ print(x * 2)  # 16 - 계산에도 사용 가능!
       title: "제곱 함수 만들기",
       task: "square 함수가 숫자의 제곱을 돌려주도록 빈칸을 채우세요 (3의 제곱 = 3 * 3 = 9)",
       initialCode: `def square(n):
-    return _____  # n 을 두 번 곱한 값을 돌려주세요
+    return ___  # n 을 두 번 곱한 값을 돌려주세요
 
 print(square(3))   # 9가 나와야 해요
 print(square(5))   # 25가 나와야 해요`,
       expectedOutput: "9\n25",
       hint: "제곱은 같은 수를 두 번 곱하는 거예요!",
-      hint2: "n을 두 번 곱하려면 n * n"
+      hint2: "n * n"
     },
     {
       id: "ch4-8",

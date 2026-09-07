@@ -287,10 +287,10 @@ int(float("3.14"))   # ✅ 3 — 소수점이 그냥 잘림!
           type: "tryit",
           title: "🖥️ 직접 — int(float('3.78')) 결과 예측",
           task: "출력을 예측한 다음 실행해서 확인. 3 일까 4 일까?",
-          initialCode: "x = \"3.78\"\nprint(int(float(x)))",
+          initialCode: "x = \"3.78\"\nprint(___(float(x)))",
           expectedOutput: "3",
-          hint: "int 는 그냥 소수점을 떼버려요 — 반올림 아님!",
-          hint2: "3"
+          hint: "반올림하는 round 말고, 소수점을 그냥 잘라내는 쪽이에요.",
+          hint2: "int"
         },
         {
           id: "float-trap-letters",
