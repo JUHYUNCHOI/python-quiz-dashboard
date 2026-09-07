@@ -132,8 +132,8 @@ class Character:
       task: "Character 클래스를 만들고 캐릭터 정보를 출력해보세요!",
       initialCode: `class Character:
     def __init__(self, name, job):
-        self.name = name
-        self.job = job
+        self.name = ___
+        self.job = ___
         self.hp = 100
         self.max_hp = 100
         self.atk = 15
@@ -155,8 +155,8 @@ class Character:
 hero = Character('철수', '용사')
 hero.status()`,
       expectedOutput: `=== 철수 ===\n직업: 용사\nHP: 100/100\nATK: 15 | DEF: 10\nLv.1 | EXP: 0\n골드: 0`,
-      hint: "클래스로 캐릭터의 모든 정보를 관리해요!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "__init__(self, name, job) 으로 받은 값을 self 에 그대로 넣어요. 괄호 안 이름을 그대로 쓰면 돼요.",
+      hint2: "name / job"
     },
     {
       /* 2026-09-06: 이 챕터는 스텝 11개인데 채점되는 게 0개였다. tryit 3개의

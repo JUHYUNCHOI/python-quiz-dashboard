@@ -147,10 +147,10 @@ print(stack[-1])  # 2 (just looking, not removed)
           type: "tryit",
           title: "🖥️ Basic Stack Operations!",
           task: "Push 1, 2, 3 onto the stack and pop them one by one!",
-          initialCode: "stack = []\n\n# push\nstack.append(1)\nstack.append(2)\nstack.append(3)\nprint(\"After push:\", stack)\n\n# pop 3 times\nprint(\"pop:\", stack.pop())\nprint(\"pop:\", stack.pop())\nprint(\"pop:\", stack.pop())\nprint(\"Final:\", stack)",
+          initialCode: "stack = []\n\n# push\nstack.___(1)\nstack.append(2)\nstack.append(3)\nprint(\"After push:\", stack)\n\n# pop 3 times\nprint(\"pop:\", stack.___())\nprint(\"pop:\", stack.pop())\nprint(\"pop:\", stack.pop())\nprint(\"Final:\", stack)",
           expectedOutput: "After push: [1, 2, 3]\npop: 3\npop: 2\npop: 1\nFinal: []",
-          hint: "pop() removes and returns the last element!",
-          hint2: "LIFO: Items come out in order 3 → 2 → 1"
+          hint: "The two stack operations you just met — what did you call putting in, and taking out?",
+          hint2: "append / pop"
         },
         {
           id: "class-stack",

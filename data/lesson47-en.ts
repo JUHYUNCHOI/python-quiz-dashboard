@@ -54,11 +54,11 @@ info = weather_db[city]
 print(f'\\n=== {city} Weather ===')
 print(f'Temp: {info["temp"]}°')
 print(f'Humidity: {info["humidity"]}%')
-print(f'Condition: {info["condition"]}')
-print(f'Wind: {info["wind"]}m/s')`,
+print(f'Condition: {info[___]}')
+print(f'Wind: {info[___]}m/s')`,
           expectedOutput: `=== Available Cities ===\n  Seoul\n  Busan\n  Jeju\n  Incheon\n  Daejeon\n\n=== Seoul Weather ===\nTemp: 22°\nHumidity: 55%\nCondition: Sunny\nWind: 3.2m/s`,
-          hint: "Use a dictionary inside a dictionary to structure the data!",
-          hint2: "Access with weather_db['Seoul']['temp']!"
+          hint: "The two lines above (Temp, Humidity) are your model. Pull these out the same way — quotes included. Check weather_db for the names.",
+          hint2: `"condition" / "wind"`
         },
         {
           /* 2026-09-06: 한글판과 짝. */

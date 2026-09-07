@@ -51,15 +51,15 @@ total_atk = sum(c['atk'] for c in characters)
 avg_atk = total_atk / len(characters)
 
 print(f'평균 공격력: {avg_atk:.1f}')
-print(f'올림: {math.ceil(avg_atk)}')
+print(f'올림: {math.___(avg_atk)}')
 print(f'캐릭터 수: {len(characters)}명')
 
 # JSON으로 저장 형식
-save_data = json.dumps(characters, ensure_ascii=False)
+save_data = json.___(characters, ensure_ascii=False)
 print(f'\\n저장 데이터: {save_data}')`,
       expectedOutput: `평균 공격력: 30.0\n올림: 30\n캐릭터 수: 3명\n\n저장 데이터: [{"name": "용사", "hp": 100, "atk": 25}, {"name": "마법사", "hp": 80, "atk": 35}, {"name": "궁수", "hp": 90, "atk": 30}]`,
-      hint: "math는 계산, json은 데이터 변환에 사용",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "평균을 위로 올리는 math 함수 하나, 딕셔너리를 문자열로 내보내는 json 함수 하나예요.",
+      hint2: "ceil / dumps"
     },
     {
       id: "ch3-1b",

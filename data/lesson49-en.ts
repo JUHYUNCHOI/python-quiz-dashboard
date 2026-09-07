@@ -138,8 +138,8 @@ class Character:
           task: "Create a Character class and print the character info!",
           initialCode: `class Character:
     def __init__(s, name, job):
-        s.name = name
-        s.job = job
+        s.name = ___
+        s.job = ___
         s.hp = 100
         s.max_hp = 100
         s.atk = 15
@@ -161,8 +161,8 @@ class Character:
 hero = Character('Alice', 'Warrior')
 hero.status()`,
           expectedOutput: `=== Alice ===\nJob: Warrior\nHP: 100/100\nATK: 15 | DEF: 10\nLv.1 | EXP: 0\nGold: 0`,
-          hint: "A class manages all of a character's information!",
-          hint2: "Run the code as-is!"
+          hint: "Store what __init__(s, name, job) received onto s. Use the same names from the parentheses.",
+          hint2: "name / job"
         },
         {
           /* 2026-09-06: 한글판과 짝. */
@@ -411,9 +411,9 @@ print('=== Text RPG ===')
 turn = 1
 while True:
     action = next_action()
-    if action == 'quit':
+    if action == ___:
         print('\\nGame over!')
-        break
+        ___
 
     print(f'\\n[Turn {turn}] Action: {action}')
 
@@ -428,8 +428,8 @@ while True:
 
     turn += 1`,
           expectedOutput: `=== Text RPG ===\n\n[Turn 1] Action: battle\n  -> Battle start!\n\n[Turn 2] Action: battle\n  -> Battle start!\n\n[Turn 3] Action: shop\n  -> Entering shop!\n\n[Turn 4] Action: inventory\n  -> Checking inventory!\n\n[Turn 5] Action: save\n  -> Game saved!\n\nGame over!`,
-          hint: "while + next_action() creates the game loop!",
-          hint2: "Run the code as-is!"
+          hint: "The last value in the actions list is the stop signal. What command breaks out of a loop?",
+          hint2: "'quit' / break"
         },
         {
           id: "ch2-3",
@@ -450,9 +450,9 @@ while True:
             s.hp, s.max_hp = 120, 120
             s.atk = 15
             s.defense = 12
-        elif job == 'mage':
+        elif job == ___:
             s.hp, s.max_hp = 80, 80
-            s.atk = 25
+            s.atk = ___
             s.defense = 5
         elif job == 'archer':
             s.hp, s.max_hp = 100, 100
@@ -482,8 +482,8 @@ for job in ['warrior', 'mage', 'archer']:
     c.status()
     print()`,
           expectedOutput: `=== Job Selection ===\nChoice: warrior\n\n[Warrior] Player\n  HP: 120/120\n  ATK: 15 | DEF: 12\n\n=== All Jobs Comparison ===\n[Warrior] Test\n  HP: 120/120\n  ATK: 15 | DEF: 12\n\n[Mage] Test\n  HP: 80/80\n  ATK: 25 | DEF: 5\n\n[Archer] Test\n  HP: 100/100\n  ATK: 20 | DEF: 8\n`,
-          hint: "Use if/elif to set different stats per job!",
-          hint2: "Run the code as-is!"
+          hint: "The \"All Jobs\" output below prints every job name and its ATK. Work backwards from there.",
+          hint2: "'mage' / 25"
         },
         {
           id: "ch2-4",

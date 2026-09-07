@@ -48,11 +48,11 @@ info = weather_db[city]
 print(f'\\n=== {city} 날씨 ===')
 print(f'기온: {info["temp"]}도')
 print(f'습도: {info["humidity"]}%')
-print(f'상태: {info["condition"]}')
-print(f'풍속: {info["wind"]}m/s')`,
+print(f'상태: {info[___]}')
+print(f'풍속: {info[___]}m/s')`,
       expectedOutput: `=== 조회 가능한 도시 ===\n  서울\n  부산\n  제주\n  인천\n  대전\n\n=== 서울 날씨 ===\n기온: 22도\n습도: 55%\n상태: 맑음\n풍속: 3.2m/s`,
-      hint: "딕셔너리 안의 딕셔너리로 데이터를 구성해요!",
-      hint2: "weather_db['서울']['temp']처럼 접근해요!"
+      hint: "위 두 줄(기온·습도)이 본보기예요. 같은 모양으로 꺼내면 돼요 — 따옴표까지요. weather_db 정의에 어떤 이름이 있었는지 보세요.",
+      hint2: `"condition" / "wind"`
     },
     {
       /* 2026-09-06: 학생 에이전트가 ch1 을 **건너뛰고 ch2 를 풀어보는 실험**에서

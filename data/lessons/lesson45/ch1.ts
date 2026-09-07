@@ -65,16 +65,16 @@ import math
 print(f'sqrt(25) = {math.sqrt(25)}')
 
 # 방법 2: 특정 기능만
-from math import pi, ceil
+___ math import pi, ceil
 print(f'pi = {pi:.4f}')
 print(f'ceil(3.2) = {ceil(3.2)}')
 
 # 방법 3: 별명
-import math as m
+import math ___ m
 print(f'floor(3.9) = {m.floor(3.9)}')`,
       expectedOutput: `sqrt(25) = 5.0\npi = 3.1416\nceil(3.2) = 4\nfloor(3.9) = 3`,
-      hint: "import math은 math.함수(), from math import는 바로 함수()!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "세 방법을 가르는 건 키워드 하나씩이에요. 필요한 것만 골라 올 때, 이름을 바꿔 부를 때 각각 뭐라고 썼죠?",
+      hint2: "from / as"
     },
     {
       id: "ch1-3",
@@ -82,7 +82,7 @@ print(f'floor(3.9) = {m.floor(3.9)}')`,
       title: "💻 from import로 깔끔하게!",
       task: "from import로 필요한 함수만 가져와서 사용해보세요!",
       initialCode: `# 필요한 것만 가져오기!
-from math import sqrt, pi, ceil, floor
+from math import sqrt, ___, ceil, ___
 
 # 모듈명 없이 바로 사용!
 print(f'sqrt(64) = {sqrt(64)}')
@@ -95,8 +95,8 @@ import math as m
 print(f'\\nm.pow(3, 4) = {m.pow(3, 4)}')
 print(f'm.factorial(6) = {m.factorial(6)}')`,
       expectedOutput: `sqrt(64) = 8.0\npi = 3.1416\nceil(7.3) = 8\nfloor(7.9) = 7\n\nm.pow(3, 4) = 81.0\nm.factorial(6) = 720`,
-      hint: "from import하면 모듈명 없이 바로 함수 이름만!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "아래에서 모듈명 없이 바로 쓰는 이름들을 보세요. 가져오지 않은 게 있으면 에러가 나요.",
+      hint2: "pi / floor"
     },
     {
       id: "ch1-4",

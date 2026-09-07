@@ -146,10 +146,10 @@ d.popleft()      # Remove from front
           type: "tryit",
           title: "\ud83d\udda5\ufe0f Basic Deque Operations!",
           task: "Try all 4 deque operations!",
-          initialCode: "from collections import deque\n\nd = deque([2, 3, 4])\nprint(\"Initial:\", list(d))\n\n# Add to back\nd.append(5)\nprint(\"append(5):\", list(d))\n\n# Add to front\nd.appendleft(1)\nprint(\"appendleft(1):\", list(d))\n\n# Remove from back\nd.pop()\nprint(\"pop():\", list(d))\n\n# Remove from front\nd.popleft()\nprint(\"popleft():\", list(d))",
+          initialCode: "from collections import deque\n\nd = deque([2, 3, 4])\nprint(\"Initial:\", list(d))\n\n# Add to back\nd.append(5)\nprint(\"append(5):\", list(d))\n\n# Add to front\nd.___(1)\nprint(\"appendleft(1):\", list(d))\n\n# Remove from back\nd.pop()\nprint(\"pop():\", list(d))\n\n# Remove from front\nd.___()\nprint(\"popleft():\", list(d))",
           expectedOutput: "Initial: [2, 3, 4]\nappend(5): [2, 3, 4, 5]\nappendleft(1): [1, 2, 3, 4, 5]\npop(): [1, 2, 3, 4]\npopleft(): [2, 3, 4]",
-          hint: "append/pop work on the back, appendleft/popleft work on the front!",
-          hint2: "All operations run in O(1) time"
+          hint: "The back ones (append, pop) are already above. What gets tacked onto those names for the front?",
+          hint2: "appendleft / popleft"
         },
         {
           id: "more-operations",
@@ -190,10 +190,10 @@ print(d)  # [3, 4, 5] Only the most recent 3!
           type: "tryit",
           title: "\ud83d\udda5\ufe0f Rotate and maxlen!",
           task: "Test deque rotation and maximum length!",
-          initialCode: "from collections import deque\n\n# Rotation test\nd = deque([1, 2, 3, 4, 5])\nprint(\"Original:\", list(d))\nd.rotate(2)\nprint(\"rotate(2):\", list(d))\nd.rotate(-2)\nprint(\"rotate(-2):\", list(d))\n\n# maxlen test - keep only the most recent 3\nrecent = deque(maxlen=3)\nfor i in range(1, 6):\n    recent.append(i)\n    print(f\"Add {i}: {list(recent)}\")",
+          initialCode: "from collections import deque\n\n# Rotation test\nd = deque([1, 2, 3, 4, 5])\nprint(\"Original:\", list(d))\nd.rotate(___)\nprint(\"rotate(2):\", list(d))\nd.rotate(-2)\nprint(\"rotate(-2):\", list(d))\n\n# maxlen test - keep only the most recent few\nrecent = deque(maxlen=___)\nfor i in range(1, 6):\n    recent.append(i)\n    print(f\"Add {i}: {list(recent)}\")",
           expectedOutput: "Original: [1, 2, 3, 4, 5]\nrotate(2): [4, 5, 1, 2, 3]\nrotate(-2): [1, 2, 3, 4, 5]\nAdd 1: [1]\nAdd 2: [1, 2]\nAdd 3: [1, 2, 3]\nAdd 4: [2, 3, 4]\nAdd 5: [3, 4, 5]",
           hint: "rotate(positive) goes right, rotate(negative) goes left!",
-          hint2: "With maxlen=3, the oldest items are automatically removed"
+          hint2: "2 / 3"
         }
       ]
     },

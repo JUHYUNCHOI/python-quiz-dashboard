@@ -56,11 +56,11 @@ class Character:
         if item.item_type == 'heal':
             self.hp = min(self.hp + item.value, self.max_hp)
             print(f'{self.name}: {item.name} 사용! HP {self.hp}/{self.max_hp}')
-        elif item.item_type == 'atk':
+        elif item.item_type == ___:
             self.atk += item.value
             print(f'{self.name}: {item.name} 사용! ATK {self.atk}')
         elif item.item_type == 'def':
-            self.defense += item.value
+            self.___ += item.value
             print(f'{self.name}: {item.name} 사용! DEF {self.defense}')
 
 # 아이템 생성
@@ -87,8 +87,8 @@ hero.use_item(shield)
 print(f'\\n=== 최종 스탯 ===')
 print(f'HP: {hero.hp}/{hero.max_hp} | ATK: {hero.atk} | DEF: {hero.defense}')`,
       expectedOutput: `=== 아이템 목록 ===\n  물약 [회복 +30] (50골드)\n  힘의 물약 [공격력 +5] (80골드)\n  방어 물약 [방어력 +3] (60골드)\n\n=== 아이템 사용 전 ===\nHP: 60/100 | ATK: 15 | DEF: 10\n\n=== 아이템 사용! ===\n철수: 물약 사용! HP 90/100\n철수: 힘의 물약 사용! ATK 20\n철수: 방어 물약 사용! DEF 13\n\n=== 최종 스탯 ===\nHP: 90/100 | ATK: 20 | DEF: 13`,
-      hint: "item_type으로 if/elif 분기해서 효과 적용!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "위 heal 분기가 본보기예요. 아이템 종류 이름은 Item 을 만들 때 넣은 값과 같아야 하고, 마지막 분기는 어떤 스탯을 올리죠?",
+      hint2: "'atk' / defense"
     },
     {
       id: "ch3-2",

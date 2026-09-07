@@ -244,19 +244,19 @@ monster_atk = 15
 print('=== 몬스터(ATK 15) 공격 1회 비교 ===')
 for job in ['warrior', 'mage', 'archer']:
     hero = Character('테스트', job)
-    dmg = hero.take_damage(monster_atk)
+    dmg = hero.take_damage(___)
     jobs = {'warrior': '용사', 'mage': '마법사', 'archer': '궁수'}
     print(f'{jobs[job]}: {dmg} 데미지 -> HP {hero.hp}/{hero.max_hp}')
 
 print('\\n=== 각 직업이 몬스터(DEF 5)에게 주는 데미지 ===')
 for job in ['warrior', 'mage', 'archer']:
     hero = Character('테스트', job)
-    dmg = hero.atk - 5  # 몬스터 방어력 5
+    dmg = hero.atk - ___  # 몬스터 방어력 5
     jobs = {'warrior': '용사', 'mage': '마법사', 'archer': '궁수'}
     print(f'{jobs[job]}: ATK {hero.atk} - DEF 5 = {dmg} 데미지')`,
       expectedOutput: `=== 몬스터(ATK 15) 공격 1회 비교 ===\n용사: 3 데미지 -> HP 117/120\n마법사: 10 데미지 -> HP 70/80\n궁수: 7 데미지 -> HP 93/100\n\n=== 각 직업이 몬스터(DEF 5)에게 주는 데미지 ===\n용사: ATK 15 - DEF 5 = 10 데미지\n마법사: ATK 25 - DEF 5 = 20 데미지\n궁수: ATK 20 - DEF 5 = 15 데미지`,
-      hint: "방어력이 높으면 받는 데미지가 줄어요!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "위에 이미 정해둔 몬스터 공격력 변수가 있어요. 아래는 몬스터 방어력 — 주석과 출력 라벨이 말해줘요.",
+      hint2: "monster_atk / 5"
     },
     {
       /* 2026-09-06: 이 챕터의 **마지막 스텝**이라 퀴즈조차 없이 끝났다.

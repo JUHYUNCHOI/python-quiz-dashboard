@@ -146,10 +146,10 @@ d.popleft()      # 앞에서 삭제
           type: "tryit",
           title: "🖥️ 덱 기본 연산!",
           task: "덱의 4가지 연산을 모두 사용해보세요!",
-          initialCode: "from collections import deque\n\nd = deque([2, 3, 4])\nprint(\"초기:\", list(d))\n\n# 뒤에 추가\nd.append(5)\nprint(\"append(5):\", list(d))\n\n# 앞에 추가\nd.appendleft(1)\nprint(\"appendleft(1):\", list(d))\n\n# 뒤에서 삭제\nd.pop()\nprint(\"pop():\", list(d))\n\n# 앞에서 삭제\nd.popleft()\nprint(\"popleft():\", list(d))",
+          initialCode: "from collections import deque\n\nd = deque([2, 3, 4])\nprint(\"초기:\", list(d))\n\n# 뒤에 추가\nd.append(5)\nprint(\"append(5):\", list(d))\n\n# 앞에 추가\nd.___(1)\nprint(\"appendleft(1):\", list(d))\n\n# 뒤에서 삭제\nd.pop()\nprint(\"pop():\", list(d))\n\n# 앞에서 삭제\nd.___()\nprint(\"popleft():\", list(d))",
           expectedOutput: "초기: [2, 3, 4]\nappend(5): [2, 3, 4, 5]\nappendleft(1): [1, 2, 3, 4, 5]\npop(): [1, 2, 3, 4]\npopleft(): [2, 3, 4]",
-          hint: "append/pop은 뒤, appendleft/popleft는 앞!",
-          hint2: "모든 연산이 O(1)로 빠름"
+          hint: "뒤쪽 담당(append, pop)은 이미 위에 있어요. 앞쪽 담당은 그 이름 뒤에 뭐가 붙을까요?",
+          hint2: "appendleft / popleft"
         },
         {
           id: "more-operations",
@@ -190,10 +190,10 @@ print(d)  # [3, 4, 5] 최근 3개만!
           type: "tryit",
           title: "🖥️ 회전과 maxlen!",
           task: "덱의 회전과 최대 길이를 테스트하세요!",
-          initialCode: "from collections import deque\n\n# 회전 테스트\nd = deque([1, 2, 3, 4, 5])\nprint(\"원본:\", list(d))\nd.rotate(2)\nprint(\"rotate(2):\", list(d))\nd.rotate(-2)\nprint(\"rotate(-2):\", list(d))\n\n# maxlen 테스트 - 최근 3개만 유지\nrecent = deque(maxlen=3)\nfor i in range(1, 6):\n    recent.append(i)\n    print(f\"추가 {i}: {list(recent)}\")",
+          initialCode: "from collections import deque\n\n# 회전 테스트\nd = deque([1, 2, 3, 4, 5])\nprint(\"원본:\", list(d))\nd.rotate(___)\nprint(\"rotate(2):\", list(d))\nd.rotate(-2)\nprint(\"rotate(-2):\", list(d))\n\n# maxlen 테스트 - 최근 몇 개만 유지\nrecent = deque(maxlen=___)\nfor i in range(1, 6):\n    recent.append(i)\n    print(f\"추가 {i}: {list(recent)}\")",
           expectedOutput: "원본: [1, 2, 3, 4, 5]\nrotate(2): [4, 5, 1, 2, 3]\nrotate(-2): [1, 2, 3, 4, 5]\n추가 1: [1]\n추가 2: [1, 2]\n추가 3: [1, 2, 3]\n추가 4: [2, 3, 4]\n추가 5: [3, 4, 5]",
           hint: "rotate(양수)는 오른쪽, rotate(음수)는 왼쪽!",
-          hint2: "maxlen=3이면 오래된 것이 자동 삭제"
+          hint2: "2 / 3"
         }
       ]
     },

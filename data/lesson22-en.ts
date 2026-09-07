@@ -378,10 +378,10 @@ Partial slices too — separate from the source.
           type: "tryit",
           title: "🖥️ = vs [:] — see the difference yourself",
           task: "Confirm with your own eyes: \`=\` vs \`[:]\` behave differently.",
-          initialCode: "original = [1, 2, 3]\nsame = original          # same list\ncopy = original[:]       # new list\n\noriginal.append(99)\n\n# Just run!\nprint(f\"original: {original}\")\nprint(f\"same:     {same}\")\nprint(f\"copy:     {copy}\")",
+          initialCode: "original = [1, 2, 3]\nsame = ___          # same list\ncopy = ___       # new list\n\noriginal.append(99)\n\n# Just run!\nprint(f\"original: {original}\")\nprint(f\"same:     {same}\")\nprint(f\"copy:     {copy}\")",
           expectedOutput: "original: [1, 2, 3, 99]\nsame:     [1, 2, 3, 99]\ncopy:     [1, 2, 3]",
-          hint: "Just run the code and read the output!",
-          hint2: "= aliases, [:] copies."
+          hint: "One points at the **same** list, one makes a **new** one. Which makes the copy?",
+          hint2: "original / original[:]"
         }
       ]
     },

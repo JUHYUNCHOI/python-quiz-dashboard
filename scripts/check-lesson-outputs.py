@@ -457,14 +457,108 @@ def report(title, checked, problems):
             print("         학생 화면과도 늘 어긋난다 → sorted() 로 감싸라. 숫자만 고치면 안 된다.")
 
 
+# ─────────────────────────────────────────────────────────────
+# 왜 있나 (2026-09-07): 빈칸(`___`) 있는 스텝은 check_learn() 도 check_hints() 도
+# 일부러 건너뛴다. 그런데 2026-09-07 에 레슨 22·23·25·45·46·47·49·50 에
+# 빈칸 스텝을 25개 새로 만들었다 — 그 25개를 지켜주는 기계가 하나도 없었다.
+#
+# 빈칸 스텝이 깨지는 방식은 둘이고, 둘 다 눈으로는 안 보인다:
+#   ① 빈칸 개수 ≠ hint2 항목 개수 → 자동채움이 조용히 꺼진다
+#      (`components/python/blank-code-runner.tsx:80` `parseAnswers`)
+#   ② hint2 의 정답을 채워 넣어도 expectedOutput 이 안 나온다
+#      → 학생이 정답을 맞혀도 오답 처리된다
+# 그래서 정답을 실제로 채워 넣고 **돌려서** 대조한다.
+NO_PROMPT_SHIM = (
+    "import builtins as _b\n"
+    "_o = _b.input\n"
+    "_b.input = lambda *a: _o()\n"
+)
+
+
+def check_blanks():
+    """빈칸 스텝 — hint2 정답을 채워 실제 실행하고 expectedOutput 과 대조."""
+    problems = []
+    checked = 0
+    for path in _learn_files():
+        name = os.path.relpath(path, LEARN_DIR)
+        src = open(path, encoding="utf-8").read()
+        ids = [
+            (m.start(), m.group(1))
+            for m in re.finditer(r'\n\s+id: "([^"]+)",?\n\s+type: "\w+"', src)
+        ]
+        with tempfile.TemporaryDirectory() as workdir:
+            for k, (pos, sid) in enumerate(ids):
+                end = ids[k + 1][0] if k + 1 < len(ids) else len(src)
+                blk = src[pos:end]
+                if field(blk, "type") not in ("tryit", "mission", "coding"):
+                    continue
+                code, want, hint2 = (field(blk, "initialCode"), field(blk, "expectedOutput"),
+                                     field(blk, "hint2"))
+                if code is None or want is None or "___" not in code or not hint2:
+                    continue
+                nb = code.count("___")
+                answers = [a.strip() for a in hint2.split(" / ")]
+                # hint2 가 정답 목록이 아니라 완성 코드/설명 한 덩어리인 경우가 있다.
+                # 그건 자동채움을 안 쓰는 정상 케이스라 여기서 볼 대상이 아니다.
+                if len(answers) != nb:
+                    continue
+                filled = code
+                for a in answers:
+                    filled = filled.replace("___", a, 1)
+                # hint2 가 정답 목록이 아니라 설명문인 경우가 많다
+                # (예: 레슨22 try1 의 "끝 숫자는 포함 안 됨! / nums[1:4]" — 항목 수가
+                #  우연히 빈칸 수와 같다). 채워 넣었더니 파이썬 문법조차 안 되면
+                # 그건 정답 목록이 아니니 이 검사의 대상이 아니다.
+                # ⚠️ 이 걸러내기를 빼면 옛 스텝 100여 개가 한꺼번에 빨간불이 되고,
+                #    그러면 아무도 이 검사기를 안 보게 된다.
+                try:
+                    compile(filled, "<check>", "exec")
+                except SyntaxError:
+                    continue
+                stdin = ""
+                if "input(" in filled:
+                    m = re.search(r"\(입력:\s*([^)]*)\)|\(input:\s*([^)]*)\)", field(blk, "task") or "")
+                    if not m:
+                        continue
+                    stdin = (m.group(1) or m.group(2)).strip() + "\n"
+                # 학생 실행기는 input() 의 프롬프트를 화면에 안 찍는다
+                # (`public/pyodide.worker.js:61-67` 가 builtins.input 을 감싼다).
+                # 그대로 CPython 으로 돌리면 프롬프트가 stdout 에 섞여 헛 경보가 난다.
+                out, err = run(NO_PROMPT_SHIM + filled if "input(" in filled else filled,
+                               workdir, stdin)
+                checked += 1
+                if out is None:
+                    problems.append((name, "blank", sid, "TIMEOUT", "", want))
+                elif err and "Traceback" in err:
+                    problems.append((name, "blank", sid, "ERROR", last_error_line(err), want))
+                elif out.rstrip("\n") != want.rstrip("\n"):
+                    kind = "UNSTABLE" if is_unstable(filled, workdir, stdin) else "MISMATCH"
+                    problems.append((name, "blank", sid, kind, out.rstrip("\n"), want.rstrip("\n")))
+    return checked, problems
+
+
 def main():
     rc, rp = check_review()
     lc, lp = check_learn()
     hc, hp = check_hints()
+    bc, bp = check_blanks()
+    # 옛 스텝 81곳은 hint2 가 정답 목록이 아니라 완성 코드 조각이다
+    # (예: `fruits[___]` 에 hint2 "fruits[1]" → 채우면 `fruits[fruits[1]]`).
+    # 이미 푼 스텝을 다시 열 때만 자동채움되므로 학생을 막지는 않지만,
+    # 그때 "정답" 이라며 깨진 코드를 보여준다. 81곳을 한 번에 고치는 건 별건이라
+    # 기준선으로 잡아두고 **늘어나면** 빨간불이 되게 한다.
+    # ⚠️ 고칠 때마다 이 숫자를 같이 내려라. 안 내리면 기준선이 방패가 된다.
+    KNOWN_BLANK_ISSUES = 81
+    legacy = min(len(bp), KNOWN_BLANK_ISSUES)
     report("📘 복습 문제 (app/review)", rc, rp)
     report("📗 수업 레슨 (data)", lc, lp)
     report("🔑 정답(hint2) 검사 — 학생이 맞게 써도 막히나", hc, hp)
-    total = len(rp) + len(lp) + len(hp)
+    if len(bp) > KNOWN_BLANK_ISSUES:
+        report("🕳️  빈칸 검사 — 정답을 채우면 적힌 출력이 나오나", bc, bp)
+    else:
+        print(f"\n🕳️  빈칸 검사 — 정답을 채우면 적힌 출력이 나오나 — {bc}개 실행, "
+              f"알려진 옛 결함 {len(bp)}개 (기준선 {KNOWN_BLANK_ISSUES}, 새 breakage 0)")
+    total = len(rp) + len(lp) + len(hp) + max(0, len(bp) - legacy)
     if total == 0:
         print("\n✅ 적힌 출력과 실제 실행 결과가 전부 일치합니다.")
         return 0

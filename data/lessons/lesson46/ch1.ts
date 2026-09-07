@@ -98,9 +98,9 @@ pip install --upgrade 패키지이름
       title: "💻 내장 vs 외부 구분하기!",
       task: "내장 모듈은 바로 import 가능! 실행해보세요!",
       initialCode: `# 내장 모듈 = 설치 없이 바로 사용!
-import math
-import json
-import string
+import ___
+import ___
+import ___
 
 print('=== 내장 모듈 테스트 ===')
 print(f'math.sqrt(49) = {math.sqrt(49)}')
@@ -114,8 +114,8 @@ print('pip install requests  → 웹 요청')
 print('pip install pandas    → 데이터 분석')
 print('pip install pygame    → 게임 개발')`,
       expectedOutput: `=== 내장 모듈 테스트 ===\nmath.sqrt(49) = 7.0\njson.dumps({"a": 1}) = {"a": 1}\nstring.digits = 0123456789\n\n=== 외부 패키지 (설치 필요) ===\npip install requests  → 웹 요청\npip install pandas    → 데이터 분석\npip install pygame    → 게임 개발`,
-      hint: "내장 모듈은 import만 하면 바로 사용 가능!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "아래에서 점(.) 앞에 어떤 이름들을 쓰고 있나요? 나오는 순서대로 가져오면 돼요.",
+      hint2: "math / json / string"
     },
     {
       id: "ch1-5",

@@ -46,16 +46,16 @@ radii = [1, 3, 5, 10]
 
 print('=== 원의 넓이 ===')
 for r in radii:
-    area = math.pi * r ** 2
+    area = math.pi * r ** ___
     print(f'반지름 {r}: 넓이 = {area:.2f}')
 
 print(f'\\n=== 구의 부피 ===')
 r = 5
-volume = (4/3) * math.pi * r ** 3
+volume = (___) * math.pi * r ** ___
 print(f'반지름 {r}: 부피 = {volume:.2f}')`,
       expectedOutput: `=== 원의 넓이 ===\n반지름 1: 넓이 = 3.14\n반지름 3: 넓이 = 28.27\n반지름 5: 넓이 = 78.54\n반지름 10: 넓이 = 314.16\n\n=== 구의 부피 ===\n반지름 5: 부피 = 523.60`,
-      hint: "원의 넓이 = π × r², 구의 부피 = (4/3) × π × r³",
-      hint2: "math.pi * r ** 2로 원의 넓이를 계산해요!"
+      hint: "넓이는 반지름을 몇 번 곱하죠? 부피는 몇 번 곱하고, 앞에 어떤 분수가 붙었죠?",
+      hint2: "2 / 4/3 / 3"
     },
     {
       id: "ch2-2",

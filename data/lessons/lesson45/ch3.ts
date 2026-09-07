@@ -102,18 +102,18 @@ today = datetime.date(2024, 6, 15)
 print(f'생일: {birthday.year}년 {birthday.month}월 {birthday.day}일')
 
 # 날짜 차이 계산
-age_days = today - birthday
+age_days = ___ - birthday
 school_days = today - school_start
 
-print(f'태어난 지 {age_days.days}일')
-print(f'개학한 지 {school_days.days}일')
+print(f'태어난 지 {age_days.___}일')
+print(f'개학한 지 {school_days.___}일')
 
 # 비교
 if today > birthday:
     print('생일이 지났어요!')`,
       expectedOutput: `생일: 2010년 5월 20일\n태어난 지 5140일\n개학한 지 103일\n생일이 지났어요!`,
-      hint: "날짜끼리 빼면 차이(일수)가 나와요!",
-      hint2: ".days로 일수를 가져와요!"
+      hint: "최근 날짜에서 예전 날짜를 빼야 양수가 나와요. 뺀 결과에서 일수만 꺼내는 이름도 떠올려보세요.",
+      hint2: "today / days / days"
     },
     {
       id: "ch3-5",
@@ -137,21 +137,21 @@ if today > birthday:
       initialCode: `import random
 
 # seed 고정하면 매번 같은 결과!
-random.seed(42)
+random.___(42)
 print('=== 주사위 5번 ===')
 for i in range(5):
     roll = random.randint(1, 6)
     print(f'{i+1}번째: {roll}')
 
 # 리스트에서 랜덤 선택
-random.seed(42)
+random.___(42)
 foods = ['치킨', '피자', '햄버거', '떡볶이', '김밥']
 for i in range(3):
     pick = random.choice(foods)
     print(f'\\n오늘의 메뉴 {i+1}: {pick}')`,
       expectedOutput: `=== 주사위 5번 ===\n1번째: 6\n2번째: 1\n3번째: 1\n4번째: 6\n5번째: 3\n\n오늘의 메뉴 1: 치킨\n\n오늘의 메뉴 2: 치킨\n\n오늘의 메뉴 3: 햄버거`,
-      hint: "seed(42)를 설정하면 항상 같은 순서의 랜덤값이 나와요!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "매번 같은 랜덤값이 나오게 하려면, randint 나 choice 를 부르기 전에 뭘 먼저 불러야 했죠?",
+      hint2: "seed / seed"
     },
     {
       id: "ch3-7",

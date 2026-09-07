@@ -103,9 +103,9 @@ pip install --upgrade package_name
           title: "💻 Distinguish built-in vs external!",
           task: "Built-in modules can be imported right away! Run it!",
           initialCode: `# Built-in modules = use without installing!
-import math
-import json
-import string
+import ___
+import ___
+import ___
 
 print('=== Built-in Module Test ===')
 print(f'math.sqrt(49) = {math.sqrt(49)}')
@@ -119,8 +119,8 @@ print('pip install requests  → web requests')
 print('pip install pandas    → data analysis')
 print('pip install pygame    → game development')`,
           expectedOutput: `=== Built-in Module Test ===\nmath.sqrt(49) = 7.0\njson.dumps({"a": 1}) = {"a": 1}\nstring.digits = 0123456789\n\n=== External Packages (install required) ===\npip install requests  → web requests\npip install pandas    → data analysis\npip install pygame    → game development`,
-          hint: "Built-in modules can be used just by importing!",
-          hint2: "Just run the code as is!"
+          hint: "Which names appear before the dot (.) below? Import them in that order.",
+          hint2: "math / json / string"
         },
         {
           id: "ch1-5",
@@ -179,17 +179,17 @@ data = {
     'items': ['Sword', 'Shield', 'Potion']
 }
 
-json_str = json.dumps(data, ensure_ascii=False, indent=2)
+json_str = json.___(data, ensure_ascii=False, indent=2)
 print('=== JSON Conversion ===')
 print(json_str)
 
 # JSON string to dictionary
-parsed = json.loads(json_str)
+parsed = json.___(json_str)
 print(f'\\nName: {parsed["name"]}')
 print(f'Items: {parsed["items"]}')`,
           expectedOutput: `=== JSON Conversion ===\n{\n  "name": "Hero",\n  "hp": 100,\n  "items": [\n    "Sword",\n    "Shield",\n    "Potion"\n  ]\n}\n\nName: Hero\nItems: ['Sword', 'Shield', 'Potion']`,
-          hint: "dumps = dictionary to string, loads = string to dictionary",
-          hint2: "Just run the code as is!"
+          hint: "One writes a dictionary out as text, the other reads text back in. The two names are opposites.",
+          hint2: "dumps / loads"
         },
         {
           id: "ch2-2",
@@ -198,13 +198,13 @@ print(f'Items: {parsed["items"]}')`,
           task: "Check the constants in the string module!",
           initialCode: `import string
 
-print('Lowercase:', string.ascii_lowercase)
-print('Uppercase:', string.ascii_uppercase)
-print('Digits:', string.digits)
+print('Lowercase:', string.___)
+print('Uppercase:', string.___)
+print('Digits:', string.___)
 print('Punctuation:', string.punctuation[:10])`,
           expectedOutput: `Lowercase: abcdefghijklmnopqrstuvwxyz\nUppercase: ABCDEFGHIJKLMNOPQRSTUVWXYZ\nDigits: 0123456789\nPunctuation: !"#$%&'()*`,
-          hint: "The string module has constants for each character type",
-          hint2: "Just run the code as is!"
+          hint: "What is each character group called? The punctuation line at the bottom shows the shape.",
+          hint2: "ascii_lowercase / ascii_uppercase / digits"
         },
         {
           id: "ch2-3",
@@ -310,15 +310,15 @@ total_atk = sum(c['atk'] for c in characters)
 avg_atk = total_atk / len(characters)
 
 print(f'Average ATK: {avg_atk:.1f}')
-print(f'Rounded up: {math.ceil(avg_atk)}')
+print(f'Rounded up: {math.___(avg_atk)}')
 print(f'Character count: {len(characters)}')
 
 # JSON save format
-save_data = json.dumps(characters, ensure_ascii=False)
+save_data = json.___(characters, ensure_ascii=False)
 print(f'\\nSave data: {save_data}')`,
           expectedOutput: `Average ATK: 30.0\nRounded up: 30\nCharacter count: 3\n\nSave data: [{"name": "Hero", "hp": 100, "atk": 25}, {"name": "Mage", "hp": 80, "atk": 35}, {"name": "Archer", "hp": 90, "atk": 30}]`,
-          hint: "math is for calculations, json is for data conversion",
-          hint2: "Just run the code as is!"
+          hint: "One math function rounds the average up; one json function writes a dictionary out as text.",
+          hint2: "ceil / dumps"
         },
         {
           id: "ch3-1b",

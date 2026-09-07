@@ -250,19 +250,19 @@ monster_atk = 15
 print('=== Monster (ATK 15) single attack comparison ===')
 for job in ['warrior', 'mage', 'archer']:
     hero = Character('Test', job)
-    dmg = hero.take_damage(monster_atk)
+    dmg = hero.take_damage(___)
     jobs = {'warrior': 'Warrior', 'mage': 'Mage', 'archer': 'Archer'}
     print(f'{jobs[job]}: {dmg} damage -> HP {hero.hp}/{hero.max_hp}')
 
 print('\\n=== Damage each job deals to monster (DEF 5) ===')
 for job in ['warrior', 'mage', 'archer']:
     hero = Character('Test', job)
-    dmg = hero.atk - 5  # Monster defense 5
+    dmg = hero.atk - ___  # Monster defense 5
     jobs = {'warrior': 'Warrior', 'mage': 'Mage', 'archer': 'Archer'}
     print(f'{jobs[job]}: ATK {hero.atk} - DEF 5 = {dmg} damage')`,
           expectedOutput: `=== Monster (ATK 15) single attack comparison ===\nWarrior: 3 damage -> HP 117/120\nMage: 10 damage -> HP 70/80\nArcher: 7 damage -> HP 93/100\n\n=== Damage each job deals to monster (DEF 5) ===\nWarrior: ATK 15 - DEF 5 = 10 damage\nMage: ATK 25 - DEF 5 = 20 damage\nArcher: ATK 20 - DEF 5 = 15 damage`,
-          hint: "Higher defense means less damage taken!",
-          hint2: "Run the code as-is!"
+          hint: "The monster attack value is already stored in a variable above. Below, the comment and the label tell you the monster defense.",
+          hint2: "monster_atk / 5"
         },
         {
           /* 2026-09-06: 한글판과 짝. 챕터 마지막이라 퀴즈조차 없었다. */
@@ -656,11 +656,11 @@ class Character:
         if item.item_type == 'heal':
             s.hp = min(s.hp + item.value, s.max_hp)
             print(f'{s.name}: Used {item.name}! HP {s.hp}/{s.max_hp}')
-        elif item.item_type == 'atk':
+        elif item.item_type == ___:
             s.atk += item.value
             print(f'{s.name}: Used {item.name}! ATK {s.atk}')
         elif item.item_type == 'def':
-            s.defense += item.value
+            s.___ += item.value
             print(f'{s.name}: Used {item.name}! DEF {s.defense}')
 
 # Create items
@@ -687,8 +687,8 @@ hero.use_item(shield)
 print(f'\\n=== Final Stats ===')
 print(f'HP: {hero.hp}/{hero.max_hp} | ATK: {hero.atk} | DEF: {hero.defense}')`,
           expectedOutput: `=== Item List ===\n  Potion [Heal +30] (50 gold)\n  Power Potion [Attack +5] (80 gold)\n  Shield Potion [Defense +3] (60 gold)\n\n=== Before Using Items ===\nHP: 60/100 | ATK: 15 | DEF: 10\n\n=== Using Items! ===\nAlice: Used Potion! HP 90/100\nAlice: Used Power Potion! ATK 20\nAlice: Used Shield Potion! DEF 13\n\n=== Final Stats ===\nHP: 90/100 | ATK: 20 | DEF: 13`,
-          hint: "Use if/elif on item_type to apply different effects!",
-          hint2: "Run the code as-is!"
+          hint: "The heal branch above is your model. The type name must match what the Item was built with — and which stat does the last branch raise?",
+          hint2: "'atk' / defense"
         },
         {
           id: "ch3-2",

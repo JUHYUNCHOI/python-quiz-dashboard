@@ -378,10 +378,10 @@ print(nums)        # [1, 2, 3, 4, 5] — 원본 안 바뀜
           type: "tryit",
           title: "🖥️ = 와 [:] 차이 — 직접 비교해보기",
           task: "두 변수의 차이를 직접 확인. \`=\` 와 \`[:]\` 의 결과가 어떻게 다른지.",
-          initialCode: "original = [1, 2, 3]\nsame = original          # 같은 리스트\ncopy = original[:]       # 새 리스트\n\noriginal.append(99)\n\n# 결과 출력 — 코드 그대로 실행!\nprint(f\"original: {original}\")\nprint(f\"same:     {same}\")\nprint(f\"copy:     {copy}\")",
+          initialCode: "original = [1, 2, 3]\nsame = ___          # 같은 리스트\ncopy = ___       # 새 리스트\n\noriginal.append(99)\n\n# 결과 출력 — 코드 그대로 실행!\nprint(f\"original: {original}\")\nprint(f\"same:     {same}\")\nprint(f\"copy:     {copy}\")",
           expectedOutput: "original: [1, 2, 3, 99]\nsame:     [1, 2, 3, 99]\ncopy:     [1, 2, 3]",
-          hint: "코드를 그대로 실행해서 차이를 눈으로 확인!",
-          hint2: "= 는 같은 리스트 가리킴, [:] 는 새 복사본."
+          hint: "하나는 원본과 **같은** 리스트를 가리키고, 하나는 **새** 리스트예요. 어느 쪽이 복사본을 만들죠?",
+          hint2: "original / original[:]"
         }
       ]
     },

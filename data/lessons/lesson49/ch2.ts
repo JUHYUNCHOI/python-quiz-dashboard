@@ -89,9 +89,9 @@ print('=== 텍스트 RPG ===')
 turn = 1
 while True:
     action = next_action()
-    if action == 'quit':
+    if action == ___:
         print('\\n게임 종료!')
-        break
+        ___
 
     print(f'\\n[{turn}턴] 행동: {action}')
 
@@ -106,8 +106,8 @@ while True:
 
     turn += 1`,
       expectedOutput: `=== 텍스트 RPG ===\n\n[1턴] 행동: battle\n  -> 전투 시작!\n\n[2턴] 행동: battle\n  -> 전투 시작!\n\n[3턴] 행동: shop\n  -> 상점 입장!\n\n[4턴] 행동: inventory\n  -> 인벤토리 확인!\n\n[5턴] 행동: save\n  -> 게임 저장!\n\n게임 종료!`,
-      hint: "while + next_action()으로 게임 루프를 만들어요!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "actions 리스트의 마지막 값이 루프를 멈추는 신호예요. 멈출 때 쓰는 명령어는 뭐였죠?",
+      hint2: "'quit' / break"
     },
     {
       id: "ch2-3",
@@ -128,9 +128,9 @@ while True:
             self.hp, self.max_hp = 120, 120
             self.atk = 15
             self.defense = 12
-        elif job == 'mage':
+        elif job == ___:
             self.hp, self.max_hp = 80, 80
-            self.atk = 25
+            self.atk = ___
             self.defense = 5
         elif job == 'archer':
             self.hp, self.max_hp = 100, 100
@@ -160,8 +160,8 @@ for job in ['warrior', 'mage', 'archer']:
     c.status()
     print()`,
       expectedOutput: `=== 직업 선택 ===\n선택: warrior\n\n[용사] 플레이어\n  HP: 120/120\n  ATK: 15 | DEF: 12\n\n=== 모든 직업 비교 ===\n[용사] 테스트\n  HP: 120/120\n  ATK: 15 | DEF: 12\n\n[마법사] 테스트\n  HP: 80/80\n  ATK: 25 | DEF: 5\n\n[궁수] 테스트\n  HP: 100/100\n  ATK: 20 | DEF: 8\n`,
-      hint: "if/elif로 직업마다 다른 스탯을 설정!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "아래 \"모든 직업 비교\" 출력에 세 직업 이름과 각자의 ATK 가 다 찍혀요. 거기서 거꾸로 찾아보세요.",
+      hint2: "'mage' / 25"
     },
     {
       id: "ch2-4",

@@ -144,10 +144,10 @@ print(stack[-1])  # 2 (보기만, 제거 안 됨)
           type: "tryit",
           title: "🖥️ 스택 기본 연산!",
           task: "스택에 1, 2, 3을 넣고 하나씩 빼보세요!",
-          initialCode: "stack = []\n\n# push\nstack.append(1)\nstack.append(2)\nstack.append(3)\nprint(\"push 후:\", stack)\n\n# pop 3번\nprint(\"pop:\", stack.pop())\nprint(\"pop:\", stack.pop())\nprint(\"pop:\", stack.pop())\nprint(\"최종:\", stack)",
+          initialCode: "stack = []\n\n# push\nstack.___(1)\nstack.append(2)\nstack.append(3)\nprint(\"push 후:\", stack)\n\n# pop 3번\nprint(\"pop:\", stack.___())\nprint(\"pop:\", stack.pop())\nprint(\"pop:\", stack.pop())\nprint(\"최종:\", stack)",
           expectedOutput: "push 후: [1, 2, 3]\npop: 3\npop: 2\npop: 1\n최종: []",
-          hint: "pop()은 마지막 요소를 제거하고 반환!",
-          hint2: "LIFO: 3 → 2 → 1 순서로 나옴"
+          hint: "방금 배운 스택 연산 두 개예요 — 넣는 동작과 빼는 동작, 각각 뭐라고 불렀죠?",
+          hint2: "append / pop"
         },
         {
           id: "class-stack",

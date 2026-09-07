@@ -71,16 +71,16 @@ import math
 print(f'sqrt(25) = {math.sqrt(25)}')
 
 # Method 2: Specific features only
-from math import pi, ceil
+___ math import pi, ceil
 print(f'pi = {pi:.4f}')
 print(f'ceil(3.2) = {ceil(3.2)}')
 
 # Method 3: Alias
-import math as m
+import math ___ m
 print(f'floor(3.9) = {m.floor(3.9)}')`,
           expectedOutput: `sqrt(25) = 5.0\npi = 3.1416\nceil(3.2) = 4\nfloor(3.9) = 3`,
-          hint: "import math uses math.function(), from math import uses function() directly!",
-          hint2: "Just run the code as is!"
+          hint: "One keyword sets each method apart. Which one pulls in just the pieces you need, and which one renames it?",
+          hint2: "from / as"
         },
         {
           id: "ch1-3",
@@ -88,7 +88,7 @@ print(f'floor(3.9) = {m.floor(3.9)}')`,
           title: "💻 Clean code with from import!",
           task: "Use from import to bring in only the functions you need!",
           initialCode: `# Import only what you need!
-from math import sqrt, pi, ceil, floor
+from math import sqrt, ___, ceil, ___
 
 # Use directly without module name!
 print(f'sqrt(64) = {sqrt(64)}')
@@ -101,8 +101,8 @@ import math as m
 print(f'\\nm.pow(3, 4) = {m.pow(3, 4)}')
 print(f'm.factorial(6) = {m.factorial(6)}')`,
           expectedOutput: `sqrt(64) = 8.0\npi = 3.1416\nceil(7.3) = 8\nfloor(7.9) = 7\n\nm.pow(3, 4) = 81.0\nm.factorial(6) = 720`,
-          hint: "With from import, you can use just the function name without the module name!",
-          hint2: "Just run the code as is!"
+          hint: "Look at the names used below without a module prefix. Leave one out of the import and it errors.",
+          hint2: "pi / floor"
         },
         {
           id: "ch1-4",
@@ -187,16 +187,16 @@ radii = [1, 3, 5, 10]
 
 print('=== Circle Area ===')
 for r in radii:
-    area = math.pi * r ** 2
+    area = math.pi * r ** ___
     print(f'Radius {r}: Area = {area:.2f}')
 
 print(f'\\n=== Sphere Volume ===')
 r = 5
-volume = (4/3) * math.pi * r ** 3
+volume = (___) * math.pi * r ** ___
 print(f'Radius {r}: Volume = {volume:.2f}')`,
           expectedOutput: `=== Circle Area ===\nRadius 1: Area = 3.14\nRadius 3: Area = 28.27\nRadius 5: Area = 78.54\nRadius 10: Area = 314.16\n\n=== Sphere Volume ===\nRadius 5: Volume = 523.60`,
-          hint: "Circle area = pi * r^2, Sphere volume = (4/3) * pi * r^3",
-          hint2: "math.pi * r ** 2 calculates the circle area!"
+          hint: "How many times does area multiply the radius? And volume — how many times, and what fraction goes in front?",
+          hint2: "2 / 4/3 / 3"
         },
         {
           id: "ch2-2",
@@ -336,18 +336,18 @@ today = datetime.date(2024, 6, 15)
 print(f'Birthday: {birthday.year}/{birthday.month}/{birthday.day}')
 
 # Calculate date differences
-age_days = today - birthday
+age_days = ___ - birthday
 school_days = today - school_start
 
-print(f'Days since birth: {age_days.days}')
-print(f'Days since school started: {school_days.days}')
+print(f'Days since birth: {age_days.___}')
+print(f'Days since school started: {school_days.___}')
 
 # Comparison
 if today > birthday:
     print('Birthday has passed!')`,
           expectedOutput: `Birthday: 2010/5/20\nDays since birth: 5140\nDays since school started: 103\nBirthday has passed!`,
-          hint: "Subtracting dates gives you the difference in days!",
-          hint2: "Use .days to get the number of days!"
+          hint: "Subtract the older date from the newer one to get a positive result. Then pull just the day count out of it.",
+          hint2: "today / days / days"
         },
         {
           id: "ch3-5",
@@ -371,21 +371,21 @@ if today > birthday:
           initialCode: `import random
 
 # With seed fixed, same results every time!
-random.seed(42)
+random.___(42)
 print('=== 5 Dice Rolls ===')
 for i in range(5):
     roll = random.randint(1, 6)
     print(f'Roll {i+1}: {roll}')
 
 # Random pick from list
-random.seed(42)
+random.___(42)
 foods = ['chicken', 'pizza', 'burger', 'tacos', 'sushi']
 for i in range(3):
     pick = random.choice(foods)
     print(f'\\nToday\\'s menu {i+1}: {pick}')`,
           expectedOutput: `=== 5 Dice Rolls ===\nRoll 1: 6\nRoll 2: 1\nRoll 3: 1\nRoll 4: 6\nRoll 5: 3\n\nToday's menu 1: chicken\n\nToday's menu 2: chicken\n\nToday's menu 3: burger`,
-          hint: "Setting seed(42) always gives the same sequence of random values!",
-          hint2: "Just run the code as is!"
+          hint: "To get the same random values every time, what do you call before randint or choice?",
+          hint2: "seed / seed"
         },
         {
           id: "ch3-7",

@@ -41,17 +41,17 @@ data = {
     'items': ['검', '방패', '포션']
 }
 
-json_str = json.dumps(data, ensure_ascii=False, indent=2)
+json_str = json.___(data, ensure_ascii=False, indent=2)
 print('=== JSON 변환 ===')
 print(json_str)
 
 # JSON 문자열을 딕셔너리로
-parsed = json.loads(json_str)
+parsed = json.___(json_str)
 print(f'\\n이름: {parsed["name"]}')
 print(f'아이템: {parsed["items"]}')`,
       expectedOutput: `=== JSON 변환 ===\n{\n  "name": "용사",\n  "hp": 100,\n  "items": [\n    "검",\n    "방패",\n    "포션"\n  ]\n}\n\n이름: 용사\n아이템: ['검', '방패', '포션']`,
-      hint: "dumps = 딕셔너리를 문자열로, loads = 문자열을 딕셔너리로",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "딕셔너리를 문자열로 내보내는 쪽과, 문자열을 다시 읽어 들이는 쪽이에요. 두 이름이 서로 반대 뜻이에요.",
+      hint2: "dumps / loads"
     },
     {
       id: "ch2-2",
@@ -60,13 +60,13 @@ print(f'아이템: {parsed["items"]}')`,
       task: "string 모듈의 상수들을 확인하세요!",
       initialCode: `import string
 
-print('소문자:', string.ascii_lowercase)
-print('대문자:', string.ascii_uppercase)
-print('숫자:', string.digits)
+print('소문자:', string.___)
+print('대문자:', string.___)
+print('숫자:', string.___)
 print('특수문자:', string.punctuation[:10])`,
       expectedOutput: `소문자: abcdefghijklmnopqrstuvwxyz\n대문자: ABCDEFGHIJKLMNOPQRSTUVWXYZ\n숫자: 0123456789\n특수문자: !"#$%&'()*`,
-      hint: "string 모듈에는 문자 종류별 상수가 있어요",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "소문자·대문자·숫자를 각각 뭐라고 부르는 이름이었죠? 맨 아래 punctuation 이 모양의 본보기예요.",
+      hint2: "ascii_lowercase / ascii_uppercase / digits"
     },
     {
       id: "ch2-3",
