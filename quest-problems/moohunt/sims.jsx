@@ -198,7 +198,9 @@ export function BruteLimitSim({ E }) {
      "보드 2^N 개" 와 "무브 6,840 개" 는 바로 앞 퀴즈(1-4)와 입력(1-5)에서
      학생이 직접 답한 수다. 여기서 또 한 단계씩 유도하면 같은 말을 세 번 하게 된다.
      이제 두 수를 한 번에 놓고 곱하기만 한다. */
-  const steps = [{ k: "idea" }, { k: "mult" }, { k: "limit" }];
+  /* 2026-09-07: "다 해보자" 선언은 앞 페이지(1-3b)로 옮겼다. 여기 남기면 같은 말을 두 번 한다.
+     이 시뮬은 이제 **재보는 일**만 한다: 곱하기 → 제한과 비교. */
+  const steps = [{ k: "mult" }, { k: "limit" }];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
 
@@ -212,14 +214,11 @@ export function BruteLimitSim({ E }) {
     { key: "triples", ko: "서로 다른 무브 (20×19×18)", en: "distinct moves (20×19×18)", v: fmt(TRIPLES) },
     { key: "mult", ko: "곱하면 검사 횟수", en: "multiply → checks", v: "≈ 7×10⁹", bad: true },
   ];
-  const upto = { idea: 0, mult: 3, limit: 3 }[s.k];
+  const upto = { mult: 3, limit: 3 }[s.k];
   const sayRef = useKeepInView(ts.safe);
 
   const say =
-    s.k === "idea" ? t(E,
-      <>The plan is simple.<br />Make <b>every</b> board, score each one, keep the best.<br />Will it finish in time?</>,
-      <>방법은 간단해요.<br /><b>모든</b> 보드를 만들어 하나씩 채점하고 제일 높은 걸 고르는 거예요.<br />시간 안에 끝날까요?</>)
-    : s.k === "mult" ? t(E,
+    s.k === "mult" ? t(E,
       <>You counted both numbers already.<br />Scoring one board means checking every move —<br />so the work is <b>1,000,000 × 6,840 ≈ 7×10⁹</b>.</>,
       <>두 수는 방금 직접 셌어요.<br />보드 하나를 채점하려면 무브를 다 봐야 하니까 —<br />일의 양은 <b>100만 × 6,840 ≈ 7×10⁹</b> 이에요.</>)
     : t(E,
@@ -233,7 +232,7 @@ export function BruteLimitSim({ E }) {
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
       <div ref={sayRef}>
-        <Say tone={s.k === "limit" ? "stuck" : s.k === "idea" ? "go" : "aha"}>{say}</Say>
+        <Say tone={s.k === "limit" ? "stuck" : "aha"}>{say}</Say>
       </div>
 
       <div style={{ maxWidth: 420, margin: "0 auto", display: "grid", gap: 6 }}>
@@ -273,10 +272,11 @@ export function BitBoardSim({ E }) {
   const bin = (b) => bits(b).join("");
 
   const steps = [{ k: "why" }, ...Array.from({ length: 1 << N }, (_, b) => ({ k: "row", b })),
-                 { k: "extract" }, { k: "all" }];
+                 { k: "extract" }, { k: "shift" }, { k: "all" }];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
   const shown = s.k === "row" ? s.b : s.k === "why" ? -1 : (1 << N) - 1;
+  const bubbleTone = s.k === "all" ? "aha" : s.k === "why" ? "stuck" : "go";
   const EX_B = 5, EX_I = 1;   // b=5 의 1번 칸을 꺼내는 예
 
   const say =
@@ -297,6 +297,15 @@ export function BitBoardSim({ E }) {
         <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{chars(EX_B).join("")} → {chars(EX_B).slice(EX_I).join("")}</span> · 이게 <b>{EX_B} &gt;&gt; {EX_I}</b> 예요.<br />
         <b>②</b> 이제 <b>맨 앞 한 칸</b>만 보면 돼요 — 이게 <b>&amp; 1</b> 이에요.<br />
         답: <b>{((EX_B >> EX_I) & 1) ? "M" : "O"}</b> — 위 표의 {EX_I}번 칸과 같죠?</>)
+    : s.k === "shift" ? t(E,
+      <>One more sign: <b>&lt;&lt;</b>. It is <b>&gt;&gt;</b> the other way.<br />
+        <b>&gt;&gt;</b> drops cells from the front; <b>&lt;&lt;</b> <b>adds empty cells at the front</b>.<br />
+        <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>1 = M &nbsp;→&nbsp; 1 &lt;&lt; {N} = OOO<b>M</b> = {1 << N}</span><br />
+        Each added cell doubles it, so <b>1 &lt;&lt; {N} = 2<sup>{N}</sup> = {1 << N}</b>.</>,
+      <>기호 하나만 더요. <b>&lt;&lt;</b> 는 <b>&gt;&gt;</b> 를 뒤집은 거예요.<br />
+        <b>&gt;&gt;</b> 는 앞 칸을 버리고, <b>&lt;&lt;</b> 는 <b>앞에 빈 칸을 붙여요.</b><br />
+        <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>1 = M &nbsp;→&nbsp; 1 &lt;&lt; {N} = OOO<b>M</b> = {1 << N}</span><br />
+        칸이 하나 붙을 때마다 두 배가 되니까 <b>1 &lt;&lt; {N} = 2<sup>{N}</sup> = {1 << N}</b> 이에요.</>)
     : t(E,
       <>With N = {N} there are <b>{1 << N}</b> boards — the numbers <b>0 … {(1 << N) - 1}</b>, all of them.<br />
         So the single line <b>for b in range(1 &lt;&lt; N)</b><br />means <b>"try every board"</b>.</>,
@@ -307,6 +316,7 @@ export function BitBoardSim({ E }) {
   /* 말풍선이 붙을 줄. "5를 2진수로 쓰면…" 은 5번 줄 위에 있어야 읽힌다.
      why/all 단계는 특정 줄 얘기가 아니라 표 위에 둔다. */
   const bubbleAt = s.k === "row" ? s.b : s.k === "extract" ? EX_B : null;
+  // shift 단계는 특정 줄 얘기가 아니라 표 위에 둔다 (bubbleAt === null 경로)
   const sayRef = useKeepInView(ts.safe);
 
   return (
@@ -317,7 +327,7 @@ export function BitBoardSim({ E }) {
       <StepFade fast k={ts.safe}>
       {bubbleAt === null && (
         <div ref={sayRef}>
-          <Say tone={s.k === "all" ? "aha" : s.k === "why" ? "stuck" : "go"}>{say}</Say>
+          <Say tone={bubbleTone}>{say}</Say>
         </div>
       )}
 

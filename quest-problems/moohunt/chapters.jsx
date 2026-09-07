@@ -219,12 +219,54 @@ export function makeMooHuntCh1(E) {
         "MOOOM 이 왜 4 점일까요? 무브를 하나씩 따라가 봐요."),
       content: (<ScoreBoardSim E={E} />),
     },
+    /* 1-3b: **"그럼 어떻게 풀까?" 를 여기서 먼저 말한다** (2026-09-07)
+       선생님: "다 해보자 다음에 이렇게 하면 문제가 있으니까 어떻게 하자고
+       이게 왜 좋은지가 순서 아닌가?"
+       전에는 이 선언이 문제 탭 **마지막**(BruteLimitSim 첫 단계)에 있었다. 그래서 그 앞의
+       "보드가 몇 개?"(1-4) 와 "무브가 몇 개?"(1-5) 가 **아무도 안 물어본 질문**이 됐다.
+       학생이 직접 그렇게 말했다: "이걸 왜 지금 세는지 이 쪽에서는 아직 모름."
+       계획을 먼저 세우면, 그 뒤의 세는 일이 전부 "그 계획이 되는지 재보는 것" 이 된다.
+       프레이밍은 memory/feedback_solution_framing.md — 결론 통보가 아니라 질문으로 연다. */
+    {
+      type: "reveal",
+      label: t(E, "The plan", "세워보기"),
+      narr: t(E, "So — how would we solve this? Let's think.",
+                 "그럼 이걸 어떻게 풀면 될까요? 생각해봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ maxWidth: 470, margin: "0 auto", background: "#f5f3ff",
+            border: "1.5px solid #c4b5fd", borderRadius: 12, padding: "14px 18px",
+            fontSize: 13.5, color: "#5b21b6", lineHeight: 1.85, fontWeight: 700,
+            textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E,
+              <>The board is ours to fill. So the simplest idea —<br />
+                <b>make every possible board</b>, score each one,<br />and keep the best.</>,
+              <>보드는 우리가 채우는 거예요. 그러니 제일 쉬운 생각은 —<br />
+                <b>가능한 보드를 전부 만들어</b> 하나씩 채점하고,<br />제일 높은 걸 고르는 거예요.</>)}
+          </div>
+          <div style={{ maxWidth: 470, margin: "12px auto 0", background: "#fffbeb",
+            border: "1.5px solid #fbbf24", borderRadius: 12, padding: "12px 18px",
+            fontSize: 13, color: "#92400e", lineHeight: 1.85, fontWeight: 700,
+            textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E,
+              <>Will that finish in time?<br />
+                To know, we need two numbers:<br />
+                <b>how many boards</b>, and <b>how many moves</b>.<br />
+                Let's count them.</>,
+              <>그런데 그게 시간 안에 끝날까요?<br />
+                알려면 두 가지를 세야 해요 —<br />
+                <b>보드가 몇 개</b>인지, <b>무브가 몇 개</b>인지.<br />
+                하나씩 세어봐요.</>)}
+          </div>
+        </div>
+      ),
+    },
     // 1-4: Quiz - bitmask insight
     {
       type: "quiz",
       narr: t(E,
-        "How many different boards are there at all?",
-        "보드는 애초에 몇 가지나 있을까요?"),
+        "First number: how many boards are there to make?",
+        "첫째 — 만들 보드는 몇 개일까요?"),
       question: t(E,
         "How many distinct boards exist when N ≤ 20?",
         "N ≤ 20 일 때 서로 다른 보드는 몇 개?"),
@@ -234,20 +276,9 @@ export function makeMooHuntCh1(E) {
       ],
       correct: 0,
       explain: t(E,
-        "Right — 2^20 ≈ 1M. Each cell is just M or O, so a whole board can be written as a single number.\nHow? Next screen.",
-        "맞아요. 2^20 ≈ 100 만이에요.\n각 칸이 M 아니면 O 둘 중 하나뿐이라, 보드 하나를 숫자 하나로 적을 수 있어요.\n어떻게요? 다음 화면에서 봐요."),
+        "Right — 2^20 ≈ 1M. Each cell is M or O, so the count doubles with every extra cell.",
+        "맞아요. 2^20 ≈ 100 만이에요.\n칸마다 M 아니면 O 둘 중 하나라, 칸이 하나 늘 때마다 보드 수가 두 배가 돼요."),
     },
-    /* 1-4b: 숫자 하나 = 보드 하나. student-algorithm 이 직접 풀어보고 막힌 자리 (2026-09-03):
-       "1-4 에서 '비트마스크' 단어만 한 번 나오고, 코드에 오니 >> 랑 & 가 뭔지부터 막혔다."
-       작은 N=3 으로 숫자 → 2진수 → 칸 을 눈으로 보여준 뒤 >> 와 & 를 그 위에서 설명한다. */
-    {
-      type: "reveal",
-      label: t(E, "One number = one board", "숫자 = 보드"),
-      narr: t(E, "But how does one number become a whole board?",
-                 "그런데 숫자 하나가 어떻게 보드가 되죠?"),
-      content: (<BitBoardSim E={E} />),
-    },
-
     // 1-5a: 작은 수로 먼저 세어보기 (2026-09-07 추가)
     //   학생: "힌트를 읽고 나서야 겨우 이해했다. 힌트 없이 혼자였으면 못 풀었을 것 같다.
     //          '순서가 있는 조합' 이라는 개념 자체가 처음이라서."
@@ -285,8 +316,8 @@ export function makeMooHuntCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "How many different moves (x, y, z) can there even be?",
-        "서로 다른 무브 (x, y, z) 는 몇 개나 있을 수 있을까요?"),
+        "Second number: scoring one board means checking every move. How many?",
+        "둘째 — 보드 하나를 채점하려면 무브를 다 봐야 해요. 몇 개죠?"),
       question: t(E,
         "When N = 20, count distinct ordered triples (x, y, z) with x, y, z all different. Answer = ?",
         "N = 20 일 때, 세 칸이 모두 다른 무브 (x, y, z) 는 몇 개? = ?"),
@@ -299,8 +330,8 @@ export function makeMooHuntCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "So — try all of them. How much work is that?",
-        "그럼 다 해보면 되겠네요. 일이 얼마나 될까요?"),
+        "Two numbers in hand. Now — is the plan fast enough?",
+        "두 수를 다 셌어요. 그럼 그 계획, 시간 안에 될까요?"),
       content: (<BruteLimitSim E={E} />),
     },
   ];
@@ -314,6 +345,21 @@ export function makeMooHuntCh2(E, lang = "py") {
   const w = getMooHuntWalk(E, lang);
   const fw = getMooHuntFastWalk(E, lang);
   return [
+    /* 코드를 읽기 **직전**에 비트 표현을 본다 (2026-09-07 자리 이동).
+       전에는 문제 탭 한복판(보드 세기 ↔ 무브 세기 사이)에 있었다. 셋이 따로 보고 다 같은 말을 했다.
+         · 기획자: ">> 가 실제로 필요한 건 코드 한 줄뿐인데 네 쪽 앞에서 배우고 방치된다"
+         · 수업: "코드를 읽을 때만 필요한 도구가 문제 이해 단계 한가운데 끼어 있다"
+         · 학생: "이걸 왜 지금 배우는지 모르겠다"
+       선생님: "막상 잘 안쓰는 비트연산자 얘기하다가 갑자기…"
+       ⚠️ **분량은 줄이지 않았다.** 학생은 "길다" 가 아니라 **"모자라다"** 고 했다 —
+       "이 그림에서는 이렇게 되더라 정도로만 알았다". 그래서 옮기고, 오히려 << 설명을 더했다. */
+    {
+      type: "reveal",
+      label: t(E, "Number = board", "숫자 = 보드"),
+      narr: t(E, "Before the code — how does one number become a board?",
+                 "코드를 보기 전에요. 숫자 하나가 어떻게 보드가 되죠?"),
+      content: (<BitBoardSim E={E} />),
+    },
     {
       type: "reveal",
       label: t(E, "Code", "코드"),
