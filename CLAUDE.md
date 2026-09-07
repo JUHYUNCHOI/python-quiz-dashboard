@@ -43,6 +43,15 @@ python3 scripts/check-frozen.py         # 건드리면 안 되는 파일을 건�
 python3 scripts/check-concept-order.py  # 안 가르친 문법을 쓰고 있나
 ```
 
+**화면을 눈으로 봐야 할 때** (검토자·QA·학생 에이전트도 이걸 쓴다):
+```bash
+node scripts/see-screen.mjs http://localhost:3000/quest/moohunt          # 데스크탑
+node scripts/see-screen.mjs http://localhost:3000/learn/45 --progress 45:1:1 --mobile
+```
+화면 글자 · **고정 요소에 가려진 버튼/입력칸** · 55자 넘는 문장을 찍어준다.
+2026-09-07 에 만들었다 — 그전엔 검토자에게 화면을 볼 수단이 없어서
+빈칸이 고정 바에 가려지는 버그가 5개월간 안 걸렸다.
+
 ## 🧠 선생님 피드백은 반드시 남긴다 (제일 자주 놓치는 것)
 
 **고치고 끝내지 마라. 고치는 건 이번 한 번이고, 기억은 다음 백 번이다.**
