@@ -70,13 +70,42 @@ function Cell({ c, i, hl = null }) {
    `scrollIntoView` 로 푼다 — 단계가 바뀌면 말풍선+그 줄을 화면 안으로 데려온다.
    ⚠️ 박스 안 스크롤은 쓰지 않는다 (quest_problem_standard.md:561 안티패턴). */
 function Say({ children, tone = "go", inRow = false }) {
+  /* inRow — 표의 '지금 설명하는 줄' 바로 위에 끼워 넣는 말풍선.
+
+     2026-09-07 선생님: "너무 말풍선같지 않고 색도 같은 보라색인것 같은 생각이 드는데"
+     맞다. 네모난 연보라 상자였는데 바로 아래 밝아진 줄도 연보라라, 말이 아니라
+     **표의 한 줄**처럼 보였다.
+     그래서 CodeWalk 이 쓰는 모양을 그대로 가져온다 (이미 선생님이 보신 모양이다):
+       · 노란 바탕 — 아래 줄(보라)과 색이 갈린다
+       · 💬 + 왼쪽 정렬 — 누가 말하는 것처럼
+       · 아래를 가리키는 꼬리 — 어느 줄 얘기인지 손가락질한다
+       · 그림자 — 표 위에 떠 있는 것으로 읽힌다
+     결론이 난 단계(aha)만 초록. CodeWalk 과 같은 두 가지 상태다. */
+  if (inRow) {
+    const done = tone === "aha";
+    const bd = done ? "#6ee7b7" : "#fbbf24";
+    return (
+      <div style={{ margin: "6px 2px 8px" }}>
+        <div style={{
+          background: done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${bd}`,
+          borderRadius: 12, padding: "9px 13px", fontSize: 13,
+          color: done ? "#065f46" : "#92400e", lineHeight: 1.6, fontWeight: 600,
+          wordBreak: "keep-all", textWrap: "balance",
+          boxShadow: "0 6px 16px rgba(0,0,0,.16)",
+        }}>💬 {children}</div>
+        {/* 아래 줄을 가리키는 꼬리 */}
+        <div style={{ width: 0, height: 0, marginLeft: 26,
+          borderLeft: "8px solid transparent", borderRight: "8px solid transparent",
+          borderTop: `9px solid ${bd}` }} />
+      </div>
+    );
+  }
   const c = tone === "stuck" ? { bg: "#fffbeb", bd: "#fbbf24", fg: "#92400e" }
           : tone === "aha"   ? { bg: "#eff6ff", bd: "#60a5fa", fg: "#1e40af" }
           : { bg: "#f5f3ff", bd: "#c4b5fd", fg: "#5b21b6" };
   return (
     <div style={{
-      maxWidth: 470, margin: inRow ? "4px auto 6px" : "6px auto 14px",
-      padding: "11px 16px", borderRadius: 12,
+      maxWidth: 470, margin: "6px auto 14px", padding: "11px 16px", borderRadius: 12,
       background: c.bg, border: `1.5px solid ${c.bd}`, color: c.fg, fontSize: 13.5, fontWeight: 700,
       textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.75,
       boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>{children}</div>
