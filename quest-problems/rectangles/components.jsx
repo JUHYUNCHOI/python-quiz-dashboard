@@ -104,6 +104,75 @@ export function getRectanglesSections(E) {
     },
   ];
 }
+/* ═══════════════════════════════════════════════════════════════
+   getRectanglesSlowWalk — 느린 코드(완전탐색)도 CodeWalk 로.
+
+   왜 (2026-09-07): 이 quest 안에서 코드 보여주는 방식이 두 가지였다.
+   최종 DP 코드는 CodeWalk(말풍선이 줄에 붙음)인데 느린 코드만 25줄 통째 dump 였다.
+   선생님 지시(2026-07-14): "앞으로 코드는 모두 이런식으로 할거야." 이유는
+   "위에 있는 설명은 안 읽힌다" — memory/feedback_quest_code_codewalk.md
+   ux-reviewer: "아이는 최종 코드는 한 줄씩 따라가다가, 브루트 코드에서는 갑자기
+   25줄을 스크롤하며 스스로 읽어야 해서 '여긴 왜 설명이 없지' 하고 속도가 뚝 떨어진다."
+   ═══════════════════════════════════════════════════════════════ */
+const SLOW_PY = [
+  "n, k = map(int, input().split())",
+  "h = [0] * n",
+  "w = [0] * n",
+  "for i in range(n):",
+  "    h[i], w[i] = map(int, input().split())",
+  "",
+  "best = float('inf')",
+  "for mask in range(1 << (n - 1)):",
+  "    groups = 1",
+  "    total = 0",
+  "    sw, mh = w[0], h[0]",
+  "    for i in range(1, n):",
+  "        if mask >> (i - 1) & 1:",
+  "            total += sw * mh",
+  "            groups += 1",
+  "            sw, mh = w[i], h[i]",
+  "        else:",
+  "            sw += w[i]",
+  "            mh = max(mh, h[i])",
+  "    total += sw * mh",
+  "    if groups <= k:",
+  "        best = min(best, total)",
+  "",
+  "print(best)",
+];
+
+const _SLOW_VARS = [
+  { v: "mask", ko: "자를 자리 조합 하나 (비트 = 틈 하나)", en: "one cut pattern (bit = one gap)" },
+  { v: "sw · mh", ko: "지금 모으는 덩어리의 폭합 · 최고높이", en: "current group: Σwidth · max-height" },
+  { v: "groups", ko: "지금까지 만든 덩어리 수 (파랑 개수)", en: "groups made so far (# of blues)" },
+  { v: "best", ko: "지금까지 본 것 중 제일 작은 총면적", en: "smallest total seen so far" },
+];
+
+export function getRectanglesSlowWalk(E) {
+  return {
+    code: SLOW_PY, vars: _SLOW_VARS, beats: [
+      { hi: [0, 4], bubble: t(E,
+        "Read n reds and k, then each red's height and width.",
+        "빨강 n개와 k를 읽고, 빨강마다 높이와 폭을 읽어요.") },
+      { hi: [7, 7], bubble: t(E,
+        "Between n reds there are n−1 gaps. Each gap: cut or not. One number's bits = one choice for every gap — so this loop tries every way of cutting.",
+        "빨강 n개 사이엔 틈이 n−1 군데예요. 틈마다 자를지 말지 두 가지. 숫자 하나의 비트가 틈마다의 선택이라, 이 반복문이 자르는 모든 방법을 다 해봐요.") },
+      { hi: [10, 10], bubble: t(E,
+        "Start the first group with red 1: its width and its height.",
+        "첫 덩어리를 빨강 1번으로 시작해요. 그 폭과 높이로요.") },
+      { hi: [12, 15], bubble: t(E,
+        "Cut here? Then the group we were collecting is finished — pay (Σwidth × max-height) for it, count one more blue, and start a new group at red i.",
+        "여기서 자른다면? 모으던 덩어리가 끝난 거예요 — (폭합 × 최고높이) 만큼 값을 내고, 파랑을 하나 더 세고, 빨강 i 부터 새 덩어리를 시작해요.") },
+      { hi: [16, 18], bubble: t(E,
+        "No cut? Then red i joins the current group — widths add up, height takes the max.",
+        "안 자른다면? 빨강 i 가 지금 덩어리에 붙어요 — 폭은 더하고, 높이는 큰 쪽을 써요.") },
+      { hi: [19, 23], bubble: t(E,
+        "Pay for the last group too. If we used at most k blues, this cutting is allowed — keep it if it is the smallest so far.",
+        "마지막 덩어리도 값을 내요. 파랑을 k개 이하로 썼으면 그 자르기는 규칙에 맞아요 — 지금까지 중 제일 작으면 답으로 둬요.") },
+    ],
+  };
+}
+
 
 /* ═══════════════════════════════════════════════════════════════
    getRectanglesWalk — CodeWalk 용 {code, vars, beats} (Ch2 가 import).

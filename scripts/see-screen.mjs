@@ -12,6 +12,12 @@
  *
  * 쓰는 법 (반드시 프로젝트 루트에서 — 그래야 playwright 를 찾는다):
  *   node scripts/see-screen.mjs <url> [--mobile] [--progress 레슨:챕터:스텝] [--shot 파일명] [--sim]
+ *                                     [--lang ko|en] [--click "글자" [--click "글자" ...]]
+ *
+ * ⚠️ quest 는 한 주소 안에서 탭·페이지를 눌러 넘긴다. 첫 화면만 보고 "확인했다" 하지 마라.
+ *    보고 싶은 자리까지 `--click` 으로 눌러서 가라. 예 — 느린 코드 페이지:
+ *      node scripts/see-screen.mjs http://localhost:3000/quest/rectangles \
+ *        --click "⚡ 코드" --click "다음 →" --click "다음 →" --sim
  *
  * ⚠️ `--sim` 을 안 쓰면 **첫 화면만** 본다. 시뮬은 눌러야 내용이 바뀐다.
  *    2026-09-07 선생님: "시뮬도 안보고 어떻게 확인을 한거라는거지? 그건 거짓된 결과잖아."
@@ -53,6 +59,23 @@ if (args.includes('--progress')) {
   await p.reload({ waitUntil: 'domcontentloaded' })
 }
 await p.waitForTimeout(4500)
+
+// --lang ko|en: 화면 언어를 정해서 연다 (모바일은 언어 버튼이 메뉴 안이라 못 누른다)
+if (args.includes('--lang')) {
+  const L = args[args.indexOf('--lang') + 1]
+  await p.evaluate(l => localStorage.setItem('language', l), L)
+  await p.reload({ waitUntil: 'domcontentloaded' }); await p.waitForTimeout(3000)
+}
+
+// --click: 보고 싶은 자리까지 눌러서 간다 (탭·다음 버튼 등). 순서대로 실행.
+// 못 누르면 넘어간다 — 30초씩 멈춰서 죽어버리면 에이전트가 아무것도 못 본다.
+const clicks = args.reduce((acc, a, i) => (a === '--click' ? [...acc, args[i + 1]] : acc), [])
+for (const label of clicks) {
+  try {
+    await p.click(`text=${label}`, { timeout: 2500 })
+    await p.waitForTimeout(700)
+  } catch { console.log(`   ⚠️ --click "${label}" — 못 눌렀다 (안 보이거나 없음). 건너뜀`) }
+}
 
 const r = await p.evaluate(() => {
   const bars = [...document.querySelectorAll('*')].filter(e => {

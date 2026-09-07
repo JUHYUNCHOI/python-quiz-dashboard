@@ -1,7 +1,6 @@
 import { C, t } from "@/components/quest/theme";
-import { getRectanglesWalk } from "./components";
+import { getRectanglesWalk, getRectanglesSlowWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { CodeBlock } from "@/components/quest/shared";
 import { RectanglesSim, WhyContiguousSim, WhyCostSim, DPTableFillSim } from "./sims";
 
 const A = "#f97316";
@@ -286,6 +285,7 @@ export function makeRectanglesCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeRectanglesCh2(E, lang = "py") {
   const w = getRectanglesWalk(E, lang);
+  const SLOW = getRectanglesSlowWalk(E);
   return [
     /* [결 앞] 쉬운 첫 코드 → 한계 → 빠른 코드. 전엔 이 흐름이 통째로 없고
        바로 3중 루프 DP 가 나왔다 (선생님 2026-09-03: "하나도 이해 안되게끔"). */
@@ -328,33 +328,7 @@ export function makeRectanglesCh2(E, lang = "py") {
                  "그 말을 그대로 옮긴 코드예요 — 틈마다 비트 하나, 0 이면 안 자르고 1 이면 자르기."),
       content: (
         <div style={{ padding: 16 }}>
-          <CodeBlock lines={[
-        "n, k = map(int, input().split())",
-        "h = [0] * n",
-        "w = [0] * n",
-        "for i in range(n):",
-        "    h[i], w[i] = map(int, input().split())",
-        "",
-        "best = float('inf')",
-        "# 자를 자리 n-1 군데를, 자를지 말지 전부 해보기",
-        "for mask in range(1 << (n - 1)):",
-        "    groups = 1",
-        "    total = 0",
-        "    sw, mh = w[0], h[0]",
-        "    for i in range(1, n):",
-        "        if mask >> (i - 1) & 1:        # 여기서 자른다",
-        "            total += sw * mh           # 지금까지 모은 덩어리를 값으로",
-        "            groups += 1",
-        "            sw, mh = w[i], h[i]        # 새 덩어리 시작",
-        "        else:                          # 안 자르고 이어 붙인다",
-        "            sw += w[i]",
-        "            mh = max(mh, h[i])",
-        "    total += sw * mh                   # 마지막 덩어리",
-        "    if groups <= k:",
-        "        best = min(best, total)",
-        "",
-        "print(best)",
-      ]} lang="py" />
+          <CodeWalk E={E} code={SLOW.code} vars={SLOW.vars} beats={SLOW.beats} accent={A} />
         </div>
       ),
     },
