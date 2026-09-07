@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getRectanglesWalk, getRectanglesSlowWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { RectanglesSim, WhyContiguousSim, WhyCostSim, DPTableFillSim } from "./sims";
+import { RectanglesSim, WhyContiguousSim, WhyCostSim, WhyTableSim, DPTableFillSim } from "./sims";
 
 const A = "#f97316";
 
@@ -364,6 +364,19 @@ export function makeRectanglesCh2(E, lang = "py") {
           </div>
         </div>
       ),
+    },
+    /* 결-b 와 결-c 사이를 잇는다 (2026-09-07). 선생님:
+       "전부다 브루트포스하다보면 시간이 오래걸린다고 하는데 그럼 그거 때문에
+        어떻게 하면 될까 먼저 포인트를 알았으면 하는데"
+       그전 흐름: "가짓수가 폭발한다(한계)" → 바로 "표를 채워봐요".
+       표가 느림과 무슨 상관인지 아무도 말해주지 않았다. 그 사이를 채운다.
+       포인트는 정답이 아니라 **원인**이다 — 같은 앞부분을 몇 번이고 다시 센다. */
+    {
+      type: "reveal",
+      label: t(E, "The point", "포인트"),
+      narr: t(E, "Before the fix — why is it slow, really?",
+                 "고치기 전에요. 왜 느린 걸까요? 진짜 이유요."),
+      content: (<WhyTableSim E={E} />),
     },
     {
       // 2026-09-07: 학생 둘이 "dp 표를 손으로 채워보고서야 이해했다" 고 했다.

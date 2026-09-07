@@ -457,3 +457,99 @@ export function DPTableFillSim({ E }) {
     </div>
   );
 }
+
+/* ═══ ⑤ WhyTableSim — 느린 이유를 짚고, 그래서 표를 쓴다 ═══════════════
+   왜 있나 (2026-09-07): 선생님
+     "전부다 브루트포스하다보면 시간이 오래걸린다고 하는데 그럼 그거 때문에
+      어떻게 하면 될까 먼저 포인트를 알았으면 하는데"
+
+   그때 이 quest 의 흐름은 이랬다:
+     11쪽 "답은 맞아요. 그런데 가짓수가…"  →  12쪽 "이름 붙이기 전에, 표를 채워봐요."
+   **사이가 비어 있었다.** 느리다는 말 다음에 곧바로 표가 나오는데,
+   표가 느림과 무슨 상관인지는 아무도 말해주지 않았다.
+   moohunt 에는 이 자리가 있었다(FasterIdeaSim — "대부분이 헛수고예요").
+   여기만 없었다.
+
+   포인트는 **정답이 아니라 원인**이다: 완전탐색은 **같은 앞부분을 몇 번이고 다시 계산한다.**
+   원인을 알면 "그럼 한 번 구한 건 적어두면 되겠네" 가 학생 머리에서 나온다.
+   숫자는 전부 이 자리에서 계산한다 — 글과 어긋날 수 없다. */
+export function WhyTableSim({ E }) {
+  const steps = [{ k: "two" }, { k: "again" }, { k: "write" }];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+
+  // 자르는 방법 두 가지. 둘 다 "① 를 혼자 덮는다" 로 시작한다.
+  const cutA = [[0], [1, 2]];        // ① | ②③
+  const cutB = [[0], [1], [2]];      // ① | ② | ③
+  const cost = (g) => groupCost(g).area;   // groupCost 는 {sw, mh, area} 를 준다
+  const first = cost([0]);           // ① 혼자 = 1×1 = 1
+
+  const say =
+    s.k === "two" ? t(E,
+      <>Two different cuttings. Look at how each one <b>starts</b>.<br />Both begin the same way: <b>① alone</b>.</>,
+      <>자르는 방법 두 가지예요. 각각 <b>앞부분</b>을 봐요.<br />둘 다 똑같이 시작해요 — <b>① 혼자</b>.</>)
+    : s.k === "again" ? t(E,
+      <>Brute force tries them one at a time, from scratch.<br />So it works out <b>① alone = {first}</b> <b>twice</b> — once for each.<br />With more reds, the same beginnings come back again and again.</>,
+      <>완전탐색은 하나씩 처음부터 다시 해봐요.<br />그래서 <b>① 혼자 = {first}</b> 을 <b>두 번</b> 따로 계산해요.<br />빨강이 많아지면 같은 앞부분이 몇 번이고 또 나와요.</>)
+    : t(E,
+      <>That is the waste — not the cutting, the <b>re-counting</b>.<br />So: once we work out an answer, <b>write it down</b>.<br />Next time the same beginning shows up, read it off instead.</>,
+      <>낭비는 자르는 게 아니라 <b>다시 세는 것</b>이었어요.<br />그러니 한 번 구한 답은 <b>적어둬요.</b><br />다음에 같은 앞부분이 나오면 계산하지 말고 적어둔 걸 꺼내 써요.</>);
+
+  const Cut = ({ groups, dim, mark }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "center",
+      padding: "8px 10px", borderRadius: 10,
+      border: `${mark ? 2 : 1}px solid ${mark ? A : "#e2e8f0"}`,
+      background: mark ? "#fff7ed" : "#fff" }}>
+      {groups.map((g, gi) => (
+        <span key={gi} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          {gi > 0 && <span style={{ color: "#cbd5e1", fontWeight: 800 }}>|</span>}
+          <span style={{
+            display: "inline-flex", gap: 3, padding: "3px 7px", borderRadius: 8,
+            background: gi === 0 && mark ? "#fed7aa" : BLUBG,
+            outline: gi === 0 && mark ? `2px solid ${A}` : "none",
+            opacity: dim && gi > 0 ? 0.35 : 1,
+          }}>
+            {g.map((i) => (
+              <span key={i} style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800,
+                fontSize: 13, color: REDBD }}>{REDS[i].label}</span>
+            ))}
+          </span>
+          <span style={{ fontSize: 11.5, fontWeight: 800, color: "#64748b" }}>{cost(g)}</span>
+        </span>
+      ))}
+    </div>
+  );
+
+  return (
+    <div style={{ padding: 16, paddingBottom: 100 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Why is it slow — really?", "왜 느린 걸까요? 진짜 이유")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Say tone={s.k === "again" ? "stuck" : s.k === "write" ? "aha" : "go"}>{say}</Say>
+
+      <div style={{ maxWidth: 420, margin: "0 auto", display: "grid", gap: 8 }}>
+        <Cut groups={cutA} dim={s.k !== "two"} mark={s.k !== "two"} />
+        <Cut groups={cutB} dim={s.k !== "two"} mark={s.k !== "two"} />
+      </div>
+
+      {s.k !== "two" && (
+        <div style={{ maxWidth: 420, margin: "12px auto 0", padding: "10px 14px", borderRadius: 10,
+          background: s.k === "write" ? "#ecfdf5" : "#fef2f2",
+          border: `1.5px solid ${s.k === "write" ? "#6ee7b7" : "#fca5a5"}`,
+          fontSize: 12.5, fontWeight: 800, textAlign: "center",
+          color: s.k === "write" ? "#065f46" : "#991b1b",
+          wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.8 }}>
+          {s.k === "again"
+            ? t(E, <>“① alone = {first}” — worked out <b>twice</b></>,
+                  <>“① 혼자 = {first}” 를 <b>두 번</b> 계산했어요</>)
+            : t(E, <>Work it out <b>once</b>, write it down, reuse it</>,
+                  <><b>한 번</b> 구하고, 적어두고, 꺼내 쓰기</>)}
+        </div>
+      )}
+
+      <div style={{ marginTop: 18 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}
