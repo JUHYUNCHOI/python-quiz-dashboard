@@ -41,9 +41,15 @@ function Say({ children, tone = "go" }) {
           : tone === "aha"   ? { bg: "#eff6ff", bd: "#60a5fa", fg: "#1e40af" }
           : { bg: "#f5f3ff", bd: "#c4b5fd", fg: "#5b21b6" };
   return (
-    <div style={{ maxWidth: 470, margin: "6px auto 14px", padding: "11px 16px", borderRadius: 12,
+    /* 2026-09-07 선생님: "길어지면서 위 설명이 위로 올라가서 안보여."
+       표가 길어지면 말풍선이 화면 밖으로 나가서, 학생이 지금 무슨 단계인지 모른 채
+       표만 본다. sticky 로 붙여둔다 — 페이지의 상단 고정 바(약 100px) 아래에.
+       ⚠️ 박스 안 스크롤은 쓰지 않는다 (quest_problem_standard.md:561 안티패턴). */
+    <div style={{ position: "sticky", top: 104, zIndex: 5,
+      maxWidth: 470, margin: "6px auto 14px", padding: "11px 16px", borderRadius: 12,
       background: c.bg, border: `1.5px solid ${c.bd}`, color: c.fg, fontSize: 13.5, fontWeight: 700,
-      textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.75 }}>{children}</div>
+      textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.75,
+      backdropFilter: "blur(6px)", boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>{children}</div>
   );
 }
 

@@ -11,7 +11,12 @@
  *   그 길을 매번 각자 짜지 말고 여기 하나로 둔다.
  *
  * 쓰는 법 (반드시 프로젝트 루트에서 — 그래야 playwright 를 찾는다):
- *   node scripts/see-screen.mjs <url> [--mobile] [--progress 레슨:챕터:스텝] [--shot 파일명]
+ *   node scripts/see-screen.mjs <url> [--mobile] [--progress 레슨:챕터:스텝] [--shot 파일명] [--sim]
+ *
+ * ⚠️ `--sim` 을 안 쓰면 **첫 화면만** 본다. 시뮬은 눌러야 내용이 바뀐다.
+ *    2026-09-07 선생님: "시뮬도 안보고 어떻게 확인을 한거라는거지? 그건 거짓된 결과잖아."
+ *    그날 검토자·학생 둘 다 "시뮬 확인했다" 고 했지만, 표가 길어지면서 설명 말풍선이
+ *    화면 밖으로 밀려나는 걸 아무도 못 봤다. 첫 화면만 봤기 때문이다.
  *
  * 예:
  *   node scripts/see-screen.mjs http://localhost:3000/quest/moohunt
@@ -79,6 +84,33 @@ console.log(`\n── 고정 요소에 가려진 것: ${r.covered.length}개`)
 r.covered.slice(0, 10).forEach(c => console.log(`   🚨 ${c.what}  ← ${c.by}`))
 console.log(`\n── 55자 넘는 문장: ${r.longText.length}개 (feedback_narration_short.md 기준)`)
 r.longText.forEach(t => console.log(`   ${t.length}자: ${t.slice(0, 70)}…`))
+
+// --sim: 시뮬을 끝까지 눌러가며 **매 단계** 설명 말풍선이 화면에 남아 있는지 본다
+if (args.includes('--sim')) {
+  console.log('\n── 시뮬을 끝까지 눌러본다 (매 단계 설명이 화면에 보이나)')
+  for (let k = 0; k < 20; k++) {
+    const r = await p.evaluate(() => {
+      // 말풍선 = 이 단계의 설명. 화면(뷰포트) 안에 실제로 보이나?
+      const cands = [...document.querySelectorAll('div')].filter(e => {
+        const st = getComputedStyle(e)
+        return e.offsetHeight > 30 && e.offsetHeight < 260 && parseFloat(st.borderTopWidth) >= 1
+          && /rgb\(2[0-9]{2}|rgb\(24[0-9]|rgb\(25[0-5]/.test(st.backgroundColor)
+          && (e.textContent || '').trim().length > 25 && e.children.length < 12
+      })
+      const say = cands[0]
+      if (!say) return { none: true }
+      const q = say.getBoundingClientRect()
+      return { visible: q.bottom > 0 && q.top < innerHeight, top: Math.round(q.top),
+               text: (say.textContent || '').trim().slice(0, 46) }
+    })
+    const btn = await p.$('text=/다음 ▶|Next ▶/')
+    const done = !btn || await btn.isDisabled().catch(() => true)
+    if (r.none) { console.log(`   ${k + 1}단계: 말풍선을 못 찾음`) }
+    else console.log(`   ${k + 1}단계: ${r.visible ? '✅ 보임' : '🚨 화면 밖'} (top=${r.top})  ${r.text}…`)
+    if (done) break
+    await btn.click(); await p.waitForTimeout(300)
+  }
+}
 
 if (shot) { await p.screenshot({ path: shot, fullPage: false }); console.log(`\n스크린샷: ${shot}`) }
 if (progKey) await p.evaluate(k => localStorage.removeItem(k), progKey)   // 진도 원복
