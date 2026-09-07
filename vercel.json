@@ -4,5 +4,6 @@
       "main": true,
       "dev": false
     }
-  }
+  },
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':!.claude' ':!*.md' ':!scripts/*.py'"
 }
