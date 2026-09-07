@@ -248,6 +248,39 @@ export function makeMooHuntCh1(E) {
       content: (<BitBoardSim E={E} />),
     },
 
+    // 1-5a: 작은 수로 먼저 세어보기 (2026-09-07 추가)
+    //   학생: "힌트를 읽고 나서야 겨우 이해했다. 힌트 없이 혼자였으면 못 풀었을 것 같다.
+    //          '순서가 있는 조합' 이라는 개념 자체가 처음이라서."
+    //          "아주 작은 숫자(3개 중 2개 = 3×2)로 먼저 손으로 세워보게 했으면
+    //           20×19×18 이 왜 저렇게 되는지 더 잘 알았을 것 같다."
+    //   → 결론(20×19×18)을 묻기 전에, 손으로 다 세어지는 크기를 먼저 보여준다.
+    //   검산: 칸 3개에서 서로 다른 두 칸을 순서 있게 = 6가지 = 3×2
+    {
+      type: "reveal",
+      narr: t(E,
+        "First, a tiny one you can count on your fingers.",
+        "먼저 손으로 다 셀 수 있는 작은 걸로 해봐요."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 10, padding: 14 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 8, wordBreak: "keep-all" }}>
+              {t(E, "Cells 1, 2, 3 — pick two different ones, in order. How many ways?",
+                   "칸이 1·2·3 세 개예요. 서로 다른 두 칸을 순서대로 고르면 몇 가지일까요?")}
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 10 }}>
+              {[["1","2"],["1","3"],["2","1"],["2","3"],["3","1"],["3","2"]].map(([a,bb],k)=>(
+                <span key={k} style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700,
+                  background: "#fff", border: "1.5px solid #93c5fd", color: "#1d4ed8",
+                  borderRadius: 8, padding: "4px 10px" }}>({a}, {bb})</span>
+              ))}
+            </div>
+            <div style={{ fontSize: 12.5, color: "#1e3a8a", lineHeight: 1.8, wordBreak: "keep-all" }}>
+              {t(E, <>Six. Because the first cell has <b>3</b> choices, and the second has only <b>2</b> left —<br /><b>3 × 2 = 6</b>. Order matters: (1, 2) and (2, 1) are different.</>,
+                   <>여섯 가지예요. 첫 칸은 <b>3</b>가지 중에 고르고, 둘째 칸은 <b>2</b>가지만 남으니까 —<br /><b>3 × 2 = 6</b>. 순서가 중요해요. (1, 2) 와 (2, 1) 은 다른 거예요.</>)}
+            </div>
+          </div>
+        </div>),
+    },
     // 1-5: NumInput - count distinct triples to dedup
     {
       type: "input",
@@ -258,8 +291,8 @@ export function makeMooHuntCh1(E) {
         "When N = 20, count distinct ordered triples (x, y, z) with x, y, z all different. Answer = ?",
         "N = 20 일 때, 세 칸이 모두 다른 무브 (x, y, z) 는 몇 개? = ?"),
       hint: t(E,
-        "Pick x first, then y, then z — each from a shrinking pool.",
-        "x 를 먼저 고르고, 그 다음 y, 그 다음 z 를 골라요. 고를 수 있는 게 하나씩 줄어들어요."),
+        "Same as the 3 × 2 you just counted — but three cells this time, out of 20.",
+        "방금 센 3 × 2 와 똑같아요. 이번엔 칸이 20개고, 고르는 게 세 개예요."),
       answer: 6840,
     },
     // 1-6: 브루트 한계 — 1M 보드 × 6840 무브 = 7×10⁹ 벽 (배너와 일관). review 2026-08-18.
