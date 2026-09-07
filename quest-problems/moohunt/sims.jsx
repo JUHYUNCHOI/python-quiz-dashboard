@@ -8,8 +8,10 @@
 
    ① ScoreBoardSim — 보드 MOOOM 을 무브마다 채점 (샘플 1 그대로, 답 4점)
    ② BruteLimitSim — 왜 완전탐색이 큰 케이스에서 시간초과인지 단계로
+   ⑤ BruteRunSim  — 그 완전탐색을 **진짜로 돌려서** 느림을 체감 (숫자는 전부 실측)
    값은 전부 그 자리에서 계산 — 표와 어긋날 수 없다. */
 
+import { useState, useRef } from "react";
 import { t } from "@/components/quest/theme";
 import { StepFade } from "@/components/quest/StepFade";
 import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceStepper";
@@ -36,7 +38,11 @@ function Cell({ c, i, hl = null }) {
     </div>
   );
 }
-function Say({ children, tone = "go" }) {
+/* stick=false 로 쓰는 자리가 있다 — 아래에 **누르는 것**이 오는 시뮬(BruteRunSim).
+   sticky 말풍선은 스크롤하면 아래로 미끄러져 버튼을 덮는다. 실제로 덮었다
+   (2026-09-07 실측: N 고르는 버튼 4개가 전부 가려졌다). 표만 있는 시뮬은 sticky, 
+   버튼이 있는 시뮬은 그냥 흐름에 둔다. */
+function Say({ children, tone = "go", stick = true }) {
   const c = tone === "stuck" ? { bg: "#fffbeb", bd: "#fbbf24", fg: "#92400e" }
           : tone === "aha"   ? { bg: "#eff6ff", bd: "#60a5fa", fg: "#1e40af" }
           : { bg: "#f5f3ff", bd: "#c4b5fd", fg: "#5b21b6" };
@@ -45,7 +51,7 @@ function Say({ children, tone = "go" }) {
        표가 길어지면 말풍선이 화면 밖으로 나가서, 학생이 지금 무슨 단계인지 모른 채
        표만 본다. sticky 로 붙여둔다 — 페이지의 상단 고정 바(약 100px) 아래에.
        ⚠️ 박스 안 스크롤은 쓰지 않는다 (quest_problem_standard.md:561 안티패턴). */
-    <div style={{ position: "sticky", top: 104, zIndex: 5,
+    <div style={{ ...(stick ? { position: "sticky", top: 104, zIndex: 5 } : null),
       maxWidth: 470, margin: "6px auto 14px", padding: "11px 16px", borderRadius: 12,
       background: c.bg, border: `1.5px solid ${c.bd}`, color: c.fg, fontSize: 13.5, fontWeight: 700,
       textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.75,
@@ -128,7 +134,11 @@ export function ScoreBoardSim({ E }) {
 
 /* ═══ ② 완전탐색의 한계 — 왜 큰 케이스에서 시간이 모자라나 ═══ */
 export function BruteLimitSim({ E }) {
-  const steps = [{ k: "idea" }, { k: "boards" }, { k: "triples" }, { k: "mult" }, { k: "limit" }];
+  /* 2026-09-07: 5단계 → 3단계.
+     "보드 2^N 개" 와 "무브 6,840 개" 는 바로 앞 퀴즈(1-4)와 입력(1-5)에서
+     학생이 직접 답한 수다. 여기서 또 한 단계씩 유도하면 같은 말을 세 번 하게 된다.
+     이제 두 수를 한 번에 놓고 곱하기만 한다. */
+  const steps = [{ k: "idea" }, { k: "mult" }, { k: "limit" }];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
 
@@ -142,24 +152,18 @@ export function BruteLimitSim({ E }) {
     { key: "triples", ko: "서로 다른 무브 (20×19×18)", en: "distinct moves (20×19×18)", v: fmt(TRIPLES) },
     { key: "mult", ko: "곱하면 검사 횟수", en: "multiply → checks", v: "≈ 7×10⁹", bad: true },
   ];
-  const upto = { idea: 0, boards: 1, triples: 2, mult: 3, limit: 3 }[s.k];
+  const upto = { idea: 0, mult: 3, limit: 3 }[s.k];
 
   const say =
     s.k === "idea" ? t(E,
       <>The plan is simple.<br />Make <b>every</b> board, score each one, keep the best.<br />Will it finish in time?</>,
       <>방법은 간단해요.<br /><b>모든</b> 보드를 만들어 하나씩 채점하고 제일 높은 걸 고르는 거예요.<br />시간 안에 끝날까요?</>)
-    : s.k === "boards" ? t(E,
-      <>Each cell is M or O, and N can be 20.<br />So there are <b>2²⁰ ≈ 1 million</b> boards.</>,
-      <>칸마다 M 아니면 O 이고 N 은 20까지 가요.<br />그래서 보드는 <b>2²⁰ ≈ 100만</b> 개예요.</>)
-    : s.k === "triples" ? t(E,
-      <>K can be 200,000, but the same triple repeats.<br />Distinct ordered triples are only <b>20×19×18 = 6,840</b>.</>,
-      <>K 는 20만까지지만 같은 무브가 여러 번 나와요.<br />서로 다른 무브는 <b>20×19×18 = 6,840</b> 개뿐이에요.</>)
     : s.k === "mult" ? t(E,
-      <>Scoring one board means checking every triple.<br />So the work is <b>1,000,000 × 6,840 ≈ 7×10⁹</b>.</>,
-      <>보드 하나를 채점하려면 무브를 다 봐야 해요.<br />그러니 일의 양은 <b>100만 × 6,840 ≈ 7×10⁹</b> 이에요.</>)
+      <>You counted both numbers already.<br />Scoring one board means checking every move —<br />so the work is <b>1,000,000 × 6,840 ≈ 7×10⁹</b>.</>,
+      <>두 수는 방금 직접 셌어요.<br />보드 하나를 채점하려면 무브를 다 봐야 하니까 —<br />일의 양은 <b>100만 × 6,840 ≈ 7×10⁹</b> 이에요.</>)
     : t(E,
-      <>A computer does roughly <b>10⁸ ~ 10⁹</b> simple steps per second.<br /><b>7×10⁹ does not fit in the time limit.</b><br />The idea is right; it is just too slow at N = 20.</>,
-      <>컴퓨터는 1초에 대략 <b>10⁸ ~ 10⁹</b> 번 계산해요.<br /><b>7×10⁹</b> 은 아슬아슬해요 — 빠듯한 숫자예요.<br />그래서 같은 무브를 묶어 줄이고 <b>C++</b> 로 짜면 통과해요.<br />파이썬은 시간이 모자라 부분 점수예요.</>);
+      <>A computer does about <b>10⁸ ~ 10⁹</b> steps a second.<br /><b>7×10⁹</b> is more than that.<br />Is it really too slow? Let's run it and see.</>,
+      <>컴퓨터는 1초에 <b>10⁸ ~ 10⁹</b> 번쯤 계산해요.<br /><b>7×10⁹</b> 은 그보다 많아요.<br />정말 느린지, 직접 돌려서 봐요.</>);
 
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
@@ -184,8 +188,8 @@ export function BruteLimitSim({ E }) {
           <div style={{ marginTop: 6, padding: "10px 14px", borderRadius: 10, background: "#fffbeb",
             border: "1.5px solid #fbbf24", fontSize: 12.5, color: "#92400e", lineHeight: 1.85,
             textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
-            {t(E, <>1 second ≈ <b>10⁸ ~ 10⁹</b> steps<br />we need <b>7×10⁹</b> → too slow</>,
-                  <>1초에 <b>10⁸ ~ 10⁹</b> 번<br />우리는 <b>7×10⁹</b> 번 → 아슬아슬</>)}
+            {t(E, <>1 second ≈ <b>10⁸ ~ 10⁹</b> steps<br />we need <b>7×10⁹</b> steps</>,
+                  <>1초에 <b>10⁸ ~ 10⁹</b> 번<br />우리는 <b>7×10⁹</b> 번</>)}
           </div>
         )}
       </div>
@@ -409,6 +413,175 @@ function Row({ E, ko, en, v, good, bad }) {
       <span style={{ flex: 1, color: "#475569", fontWeight: 700 }}>{t(E, en, ko)}</span>
       <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800,
         color: bad ? "#dc2626" : good ? "#059669" : "#334155", whiteSpace: "nowrap" }}>{v}</span>
+    </div>
+  );
+}
+
+/* ═══ ⑤ BruteRunSim — 완전탐색을 진짜로 돌려본다 ═══════════════════
+   왜 (2026-09-07): 한계를 숫자표로만 보여주고 있었다. 학생이 "7×10⁹" 을 읽어도
+   그게 얼마나 오래인지는 안 와닿는다. quest_problem_standard.md:205 "체감하는 느림":
+   async + live 진행 + Stop, 그리고 "실제 N 에서 얼마나 걸릴지" 추정.
+
+   ⚠️ 여기 나오는 숫자는 전부 **이 브라우저에서 방금 잰 것**이다. 추정치도 잰 속도로
+   나눈 값이고 화면에 "이 속도라면" 이라고 적는다. 지어낸 수치가 없어야 한다.
+
+   돌리는 건 진짜 완전탐색이다 — 보드 2^N 개를 하나씩 만들어, 서로 다른 무브
+   N(N-1)(N-2) 개를 전부 검사한다. 무브를 이미 중복 제거한 **가장 좋은** 완전탐색인데도
+   N=20 에서 안 끝난다는 게 이 화면의 요점이다.
+   무브 (x,y,z) 판정: x 칸이 M, y·z 칸이 O →  (b & need) === want.  */
+const RUN_NS = [8, 12, 16, 20];
+const RUN_MS = 4000;          // N=20 은 안 끝난다. 4초까지만 돌리고 멈춘다.
+
+function buildMoves(n) {
+  const need = [], want = [];
+  for (let x = 0; x < n; x++) for (let y = 0; y < n; y++) for (let z = 0; z < n; z++) {
+    if (x === y || y === z || x === z) continue;
+    need.push((1 << x) | (1 << y) | (1 << z));
+    want.push(1 << x);
+  }
+  return { need: Int32Array.from(need), want: Int32Array.from(want) };
+}
+
+export function BruteRunSim({ E }) {
+  const [n, setN] = useState(12);
+  const [state, setState] = useState("idle");     // idle | running | done | stopped | timeout
+  const [done, setDone] = useState(0);            // 채점 끝낸 보드 수
+  const [best, setBest] = useState(0);
+  const [ms, setMs] = useState(0);
+  const stopRef = useRef(false);
+
+  const totalBoards = 2 ** n;
+  const moveCount = n * (n - 1) * (n - 2);
+  const totalChecks = totalBoards * moveCount;
+  const fmt = (v) => v.toLocaleString("en-US");
+
+  const reset = () => { stopRef.current = true; setState("idle"); setDone(0); setBest(0); setMs(0); };
+  const pick = (v) => { reset(); setN(v); };
+
+  const run = () => {
+    stopRef.current = false;
+    setState("running"); setDone(0); setBest(0); setMs(0);
+    const { need, want } = buildMoves(n);
+    const M = need.length;
+    const t0 = performance.now();
+    let b = 0, hi = 0;
+
+    const chunk = () => {
+      if (stopRef.current) return;
+      const slice0 = performance.now();
+      // 30ms 씩만 돌고 화면에 제어를 돌려준다 — 안 그러면 브라우저가 얼어붙는다.
+      while (b < totalBoards && performance.now() - slice0 < 30) {
+        let sc = 0;
+        for (let j = 0; j < M; j++) if ((b & need[j]) === want[j]) sc++;
+        if (sc > hi) hi = sc;
+        b++;
+      }
+      const el = performance.now() - t0;
+      setDone(b); setBest(hi); setMs(el);
+      if (b >= totalBoards) { setState("done"); return; }
+      if (el > RUN_MS) { setState("timeout"); return; }
+      setTimeout(chunk, 0);
+    };
+    setTimeout(chunk, 0);
+  };
+
+  const stop = () => { stopRef.current = true; setState("stopped"); };
+
+  const pct = totalBoards ? (done / totalBoards) * 100 : 0;
+  const rate = ms > 0 ? (done * moveCount) / (ms / 1000) : 0;      // 초당 검사 횟수 (실측)
+  const eta = rate > 0 ? totalChecks / rate : 0;                    // 초
+  const etaText = eta < 60 ? t(E, `about ${eta.toFixed(1)} s`, `약 ${eta.toFixed(1)}초`)
+    : eta < 3600 ? t(E, `about ${(eta / 60).toFixed(1)} min`, `약 ${(eta / 60).toFixed(1)}분`)
+    : t(E, `about ${(eta / 3600).toFixed(1)} h`, `약 ${(eta / 3600).toFixed(1)}시간`);
+
+  const say =
+    state === "idle" ? t(E,
+      <>Pick an N and press <b>Run</b>.<br />It really builds every board and scores it, right here.</>,
+      <>N 을 고르고 <b>돌리기</b> 를 눌러요.<br />여기서 진짜로 보드를 다 만들어 채점해요.</>)
+    : state === "running" ? t(E,
+      <>Running… <b>{pct.toFixed(pct < 1 ? 3 : 1)}%</b> of the boards done.</>,
+      <>돌리는 중… 보드의 <b>{pct.toFixed(pct < 1 ? 3 : 1)}%</b> 를 봤어요.</>)
+    : state === "done" ? t(E,
+      <>Finished in <b>{(ms / 1000).toFixed(2)} s</b>. Best score <b>{best}</b>.<br />{ms < 2000 ? <>Inside the 2-second limit. Now try a bigger N.</> : <>Already past the 2-second limit.</>}</>,
+      <>{(ms / 1000).toFixed(2)}초 만에 끝났어요. 최고 점수는 <b>{best}</b> 점이에요.<br />{ms < 2000 ? <>제한 시간 2초 안이에요. 이제 N 을 더 키워봐요.</> : <>벌써 제한 시간 2초를 넘었어요.</>}</>)
+    : state === "timeout" ? t(E,
+      <>Four seconds gone, and only <b>{pct.toFixed(3)}%</b> is done.<br />At this speed the whole thing takes <b>{etaText}</b>.<br />The contest gives us <b>2 seconds</b>.</>,
+      <>4초가 지났는데 겨우 <b>{pct.toFixed(3)}%</b> 했어요.<br />이 속도면 끝까지 <b>{etaText}</b> 걸려요.<br />대회가 주는 시간은 <b>2초</b>예요.</>)
+    : t(E,
+      <>Stopped at <b>{pct.toFixed(pct < 1 ? 3 : 1)}%</b>.<br />At this speed the whole thing takes <b>{etaText}</b>.</>,
+      <>{pct.toFixed(pct < 1 ? 3 : 1)}% 에서 멈췄어요.<br />이 속도면 끝까지 <b>{etaText}</b> 걸려요.</>);
+
+  const btn = (on) => ({
+    padding: "7px 15px", borderRadius: 9, fontSize: 12.5, fontWeight: 800, cursor: "pointer",
+    border: `1.5px solid ${on ? A : "#e2e8f0"}`, background: on ? A : "#fff",
+    color: on ? "#fff" : "#475569", fontFamily: "inherit",
+  });
+
+  return (
+    <div style={{ padding: 16, paddingBottom: 110 }}>
+      <StepHeader accent={A} idx={0} total={1} isEn={E}
+        title={t(E, "Run the brute force yourself", "완전탐색을 직접 돌려봐요")}
+        subtitle={t(E, "every board, every move — for real", "보드도 무브도 전부 진짜로")} />
+
+      <Say stick={false} tone={state === "timeout" ? "stuck" : state === "done" ? "aha" : "go"}>{say}</Say>
+
+      <div style={{ maxWidth: 460, margin: "0 auto" }}>
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginBottom: 10 }}>
+          {RUN_NS.map((v) => (
+            <button key={v} onClick={() => pick(v)} style={btn(v === n)}>N = {v}</button>
+          ))}
+        </div>
+
+        <div style={{ display: "grid", gap: 6, marginBottom: 10 }}>
+          {[
+            { l: t(E, "boards to make (2^N)", "만들 보드 (2^N)"), v: fmt(totalBoards) },
+            { l: t(E, "distinct moves", "서로 다른 무브"), v: fmt(moveCount) },
+            { l: t(E, "checks in total", "검사 횟수"), v: fmt(totalChecks), bad: totalChecks > 1e9 },
+          ].map((r, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 13px",
+              borderRadius: 9, border: `1.5px solid ${r.bad ? "#fca5a5" : "#e2e8f0"}`,
+              background: r.bad ? "#fef2f2" : "#fff", fontSize: 12.5,
+              wordBreak: "keep-all", textWrap: "balance" }}>
+              <span style={{ flex: 1, color: "#475569", fontWeight: 700 }}>{r.l}</span>
+              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800,
+                color: r.bad ? "#dc2626" : "#334155", whiteSpace: "nowrap" }}>{r.v}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* 진행 막대 — 얼마나 갔는지 눈으로 */}
+        <div style={{ height: 14, borderRadius: 999, background: "#f1f5f9",
+          border: "1.5px solid #e2e8f0", overflow: "hidden", marginBottom: 6 }}>
+          <div style={{ height: "100%", width: `${Math.max(pct, state === "idle" ? 0 : 0.4)}%`,
+            background: state === "timeout" ? "#dc2626" : A, transition: "width .12s linear" }} />
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11.5,
+          fontFamily: "'JetBrains Mono',monospace", color: "#64748b", marginBottom: 12 }}>
+          <span>{fmt(done)} / {fmt(totalBoards)}</span>
+          <span>{(ms / 1000).toFixed(2)}s{state !== "idle" && <> · {t(E, "best", "최고")} {best}</>}</span>
+        </div>
+
+        <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+          <button onClick={run} disabled={state === "running"}
+            style={{ ...btn(state !== "running"), opacity: state === "running" ? 0.45 : 1 }}>
+            ▶ {t(E, "Run", "돌리기")}
+          </button>
+          <button onClick={stop} disabled={state !== "running"}
+            style={{ ...btn(false), opacity: state !== "running" ? 0.45 : 1 }}>
+            ■ {t(E, "Stop", "멈추기")}
+          </button>
+          <button onClick={reset} style={btn(false)}>↺ {t(E, "Reset", "처음부터")}</button>
+        </div>
+
+        {(state === "timeout" || state === "stopped") && (
+          <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 10, background: "#fffbeb",
+            border: "1.5px solid #fbbf24", fontSize: 12.5, color: "#92400e", lineHeight: 1.85,
+            textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
+            {t(E, <>Measured right now, in your browser — with JavaScript.<br />The Python code on the last page is much slower still.<br />Try N = 12 again to feel the difference.</>,
+                  <>지금 이 브라우저에서 잰 거예요. 자바스크립트 속도예요.<br />앞 페이지의 파이썬 코드는 이것보다 훨씬 더 느려요.<br />N = 12 를 다시 눌러보면 차이가 느껴져요.</>)}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

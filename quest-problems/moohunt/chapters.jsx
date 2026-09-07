@@ -2,7 +2,7 @@ import { C, t } from "@/components/quest/theme";
 import { getMooHuntSections, getMooHuntWalk } from "./components";
 import { getMooHuntFastWalk } from "./fast";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ScoreBoardSim, BitBoardSim, BruteLimitSim, FasterIdeaSim } from "./sims";
+import { ScoreBoardSim, BitBoardSim, BruteLimitSim, BruteRunSim, FasterIdeaSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooHuntCh1 (5 steps: reveal / reveal / reveal / quiz / input)
@@ -299,8 +299,8 @@ export function makeMooHuntCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "So — try all of them. Does that finish in time?",
-        "그럼 다 해보면 되겠네요. 시간 안에 끝날까요?"),
+        "So — try all of them. How much work is that?",
+        "그럼 다 해보면 되겠네요. 일이 얼마나 될까요?"),
       content: (<BruteLimitSim E={E} />),
     },
   ];
@@ -328,12 +328,25 @@ export function makeMooHuntCh2(E, lang = "py") {
             borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#92400e",
             lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
             {"\u26A0\uFE0F "}{t(E,
-              "This is the brute force from the last page.\nIt is correct, and fast enough on the samples.\nAt N = 20 it is too slow — Python only gets partial credit.\nWe fix that on the next two pages.",
-              "앞 페이지에서 본 완전탐색 그대로예요.\n답은 맞고 샘플에서는 충분히 빨라요.\nN = 20 에서는 느려요 — 파이썬은 부분 점수를 받아요.\n다음 두 페이지에서 이걸 고쳐요.")}
+              "This is the plan from the last page, written as code.\nRead it first — you get to run it on the next page.",
+              "앞 페이지에서 세운 방법을 그대로 코드로 옮긴 거예요.\n먼저 읽어봐요. 다음 페이지에서 직접 돌려봐요.")}
           </div>
           <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />
         </div>
       ),
+    },
+    /* ── 결-b: 한계를 **체감** ─────────────────────────────────────
+       quest_problem_standard.md:205 "체감하는 느림 (brute 류는 진짜 느려야)".
+       전엔 한계가 숫자표뿐이었다 — "7×10⁹" 을 읽어도 얼마나 오래인지는 안 온다.
+       그리고 "느리다" 를 코드 보기 전에 두 번, 코드 배너에서 또 한 번 말하고 있었다.
+       이제 순서가 이렇다: 계산으로 예측(ch1) → 코드 → **직접 돌려서 확인** → 개선. */
+    {
+      type: "reveal",
+      label: t(E, "Run it", "돌려보기"),
+      narr: t(E,
+        "Now run that code — with your own hand, right here.",
+        "이제 그 코드를 직접 돌려봐요. 여기서 바로요."),
+      content: (<BruteRunSim E={E} />),
     },
     /* ── 결-c: 더 빠른 방법 ──────────────────────────────────────────
        pedagogy-reviewer 2026-09-04: "한계까지만 있고 더 빠른 방법이 없다.

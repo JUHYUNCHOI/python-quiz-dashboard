@@ -77,34 +77,56 @@ for (const label of clicks) {
   } catch { console.log(`   ⚠️ --click "${label}" — 못 눌렀다 (안 보이거나 없음). 건너뜀`) }
 }
 
-const r = await p.evaluate(() => {
+const scan = () => p.evaluate(() => {
   const bars = [...document.querySelectorAll('*')].filter(e => {
     const c = getComputedStyle(e)
     return (c.position === 'fixed' || c.position === 'sticky') && e.offsetHeight > 24 && e.offsetWidth > 150
   })
-  const targets = [...document.querySelectorAll('input, button, a, textarea')].filter(e => e.offsetParent)
+  // 푸터 링크는 뺀다 — 하단 고정 바가 푸터를 덮는 건 설계고, 매번 신고되면
+  // 진짜 신고가 그 밑에 묻힌다.
+  const targets = [...document.querySelectorAll('input, button, a, textarea')]
+    .filter(e => e.offsetParent && !e.closest('footer'))
   const covered = []
   targets.forEach(t => {
     const q = t.getBoundingClientRect()
     if (!q.height || q.bottom < 0 || q.top > innerHeight) return
-    bars.forEach(f => {
-      if (f.contains(t)) return
-      const g = f.getBoundingClientRect()
-      if (q.bottom > g.top && q.top < g.bottom && q.right > g.left && q.left < g.right)
-        covered.push({ what: (t.tagName + ' ' + (t.textContent || t.placeholder || '').trim()).slice(0, 40),
-                       by: (f.className || '').toString().slice(0, 40) })
-    })
+    // ⚠️ 겹치는 네모끼리 비교만 하면 헛 경보가 난다 (2026-09-07 실측: 조상 래퍼가
+    //    sticky 라는 이유로 멀쩡히 눌리는 버튼 3개를 "가려졌다" 고 신고했다).
+    //    헛 경보가 남으면 아무도 이 검사기를 안 본다. 그래서 **실제로 클릭이 막히는지**
+    //    한가운데 점에서 elementFromPoint 로 확인한 것만 신고한다.
+    const cx = Math.round(Math.min(Math.max(q.left + q.width / 2, 1), innerWidth - 1))
+    const cy = Math.round(Math.min(Math.max(q.top + q.height / 2, 1), innerHeight - 1))
+    const top = document.elementFromPoint(cx, cy)
+    if (!top || top === t || t.contains(top)) return
+    const blocker = bars.find(f => !f.contains(t) && (f === top || f.contains(top)))
+    if (!blocker) return
+    covered.push({ what: (t.tagName + ' ' + (t.textContent || t.placeholder || '').trim()).slice(0, 40),
+                   by: (blocker.className || '').toString().slice(0, 40) || '(인라인 스타일 요소)' })
   })
   const longText = [...document.querySelectorAll('p, div')]
     .filter(e => e.children.length === 0 && (e.textContent || '').trim().length > 55)
     .map(e => (e.textContent || '').trim()).slice(0, 8)
-  return { text: document.body.innerText.slice(0, 3000), covered, longText }
+  return { text: document.body.innerText.slice(0, 3000), covered, longText, y: Math.round(scrollY) }
 })
+
+// ⚠️ sticky 는 **스크롤해야** 덮는다. 맨 위에서 한 번만 보면 못 잡는다
+//    (2026-09-07: 말풍선이 버튼 4개를 덮고 있었는데 첫 화면 검사는 0개라고 했다).
+//    그래서 페이지를 내려가며 여러 번 잰다.
+const r = await scan()
+const seen = new Set(r.covered.map(c => c.what))
+const H = await p.evaluate(() => document.body.scrollHeight)
+for (let y = Math.round(vp.height * 0.3); y < H; y += Math.round(vp.height * 0.3)) {
+  await p.evaluate((v) => window.scrollTo(0, v), y)
+  await p.waitForTimeout(180)
+  const more = await scan()
+  more.covered.forEach(c => { if (!seen.has(c.what)) { seen.add(c.what); r.covered.push({ ...c, y: more.y }) } })
+}
+await p.evaluate(() => window.scrollTo(0, 0)); await p.waitForTimeout(150)
 
 console.log(`\n=== ${mobile ? '모바일 375×812' : '데스크탑 1280×900'} · ${url} ===\n`)
 console.log(r.text)
 console.log(`\n── 고정 요소에 가려진 것: ${r.covered.length}개`)
-r.covered.slice(0, 10).forEach(c => console.log(`   🚨 ${c.what}  ← ${c.by}`))
+r.covered.slice(0, 10).forEach(c => console.log(`   🚨 ${c.what}  ← ${c.by}${c.y ? ` (스크롤 ${c.y}px 에서)` : ''}`))
 console.log(`\n── 55자 넘는 문장: ${r.longText.length}개 (feedback_narration_short.md 기준)`)
 r.longText.forEach(t => console.log(`   ${t.length}자: ${t.slice(0, 70)}…`))
 
