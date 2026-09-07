@@ -54,15 +54,15 @@ class Character:
     def say_hello(s):
         print(f'안녕! 나는 {s.char_name}이야!')
 
-    def show_status(s):
+    def show_status(___):
         print(f'{s.char_name}: HP {s.hp}')
 
 hero = Character('용사', 100)
 hero.say_hello()
-hero.show_status()`,
+hero.___()`,
       expectedOutput: `안녕! 나는 용사이야!\n용사: HP 100`,
-      hint: "메서드는 객체.메서드이름() 으로 호출해요!",
-      hint2: "hero.say_hello()처럼 점(.)을 찍고 메서드 이름을 쓰세요!"
+      hint: "바로 위 say_hello 가 본보기예요 — 괄호 안 첫 자리에 뭐가 들어갔고, 부를 때 점 뒤에 뭘 썼는지 보세요.",
+      hint2: "s / show_status"
     },
     {
       id: "ch1-1b",
@@ -77,7 +77,7 @@ hero.show_status()`,
     def say_hello(s):
         print(f'안녕! 나는 {s.char_name}이야!')
 
-    def introduce(s, age, job):
+    def introduce(s, ___, ___):
         print(f'이름: {s.char_name}')
         print(f'나이: {age}살')
         print(f'직업: {job}')
@@ -94,8 +94,8 @@ print()
 mage = Character('마법사', 80)
 mage.introduce(20, '마법사')`,
       expectedOutput: `안녕! 나는 용사이야!\n\n이름: 용사\n나이: 18살\n직업: 전사\nHP: 100\n\n이름: 마법사\n나이: 20살\n직업: 마법사\nHP: 80`,
-      hint: "메서드도 일반 함수처럼 매개변수를 추가할 수 있어요!",
-      hint2: "s 다음에 원하는 매개변수를 쉼표로 추가하세요!"
+      hint: "아래 print 줄들이 어떤 이름을 쓰고 있는지 보세요. 이름이 다르면 그 줄이 깨져요.",
+      hint2: "age / job"
     },
     {
       id: "ch1-1c",

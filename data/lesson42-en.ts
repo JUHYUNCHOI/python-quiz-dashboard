@@ -60,15 +60,15 @@ Note: The first parameter of a method is always **s (self)** = "myself"!
     def say_hello(s):
         print(f'Hi! I am {s.char_name}!')
 
-    def show_status(s):
+    def show_status(___):
         print(f'{s.char_name}: HP {s.hp}')
 
 hero = Character('Hero', 100)
 hero.say_hello()
-hero.show_status()`,
+hero.___()`,
           expectedOutput: `Hi! I am Hero!\nHero: HP 100`,
-          hint: "Methods are called with object.method_name()!",
-          hint2: "Use a dot (.) after hero, then the method name, like hero.say_hello()!"
+          hint: "say_hello just above is your model — what goes first inside the parentheses, and what follows the dot when you call it?",
+          hint2: "s / show_status"
         },
         {
           id: "ch1-1b",
@@ -83,7 +83,7 @@ hero.show_status()`,
     def say_hello(s):
         print(f'Hi! I am {s.char_name}!')
 
-    def introduce(s, age, job):
+    def introduce(s, ___, ___):
         print(f'Name: {s.char_name}')
         print(f'Age: {age}')
         print(f'Job: {job}')
@@ -100,8 +100,8 @@ print()
 mage = Character('Mage', 80)
 mage.introduce(20, 'Wizard')`,
           expectedOutput: `Hi! I am Hero!\n\nName: Hero\nAge: 18\nJob: Warrior\nHP: 100\n\nName: Mage\nAge: 20\nJob: Wizard\nHP: 80`,
-          hint: "Methods can take extra parameters just like regular functions!",
-          hint2: "Add the parameters you want after s, separated by commas!"
+          hint: "Look at which names the print lines below use. A different name breaks those lines.",
+          hint2: "age / job"
         },
         {
           id: "ch1-1c",
@@ -663,6 +663,61 @@ print(f"{w.name} HP:{w.hp} Weapon:{w.weapon}")
             { id: 2, answer: "magic", options: ["magic", "mp", "spell", "power"] }
           ],
           explanation: "class Mage(Character) to inherit! super().__init__() to call parent constructor! s.magic = magic for the extra attribute!"
+        },
+        {
+          /* 2026-09-07: ko 와 짝. student-python 이 ch5 를 따라가고 "상속 코드를
+             직접 처음부터 쳐본 적이 한 번도 없다" 고 했다. ch5-fb1 은 보기 중
+             클릭이라 타이핑이 아니다. → 빈칸(ch5-try1) → 처음부터(ch5-mission). */
+          id: "ch5-try1",
+          type: "tryit",
+          title: "💻 Inherit It, Then Make It Yours",
+          task: "Make Archer inherit from Character, and call the parent's __init__.",
+          initialCode: `class Character:
+    def __init__(s, name, hp):
+        s.name = name
+        s.hp = hp
+
+    def hello(s):
+        print(f'{s.name} appears!')
+
+# Archer inherits from Character
+class Archer(___):
+    def __init__(s, name, hp, arrows):
+        ___.__init__(name, hp)   # call the parent's __init__
+        s.arrows = arrows
+
+    # Replace the parent's hello with our own
+    def hello(s):
+        print(f'{s.name} appears! {s.arrows} arrows')
+
+a = Archer('Archer', 90, 20)
+a.hello()`,
+          expectedOutput: "Archer appears! 20 arrows",
+          hint: "The parentheses hold the name of the class you inherit from. Calling the parent has its own keyword.",
+          hint2: "Character / super()"
+        },
+        {
+          id: "ch5-mission",
+          type: "mission",
+          title: "🎯 Build It From Scratch",
+          description: "No blanks — write the whole thing yourself!",
+          task: "Write a Healer that inherits from Character. It takes three ingredients — name, hp, heal — and passes name and hp up with super(). Change hello so it prints \"Healer appears! Heal 30\".",
+          initialCode: `class Character:
+    def __init__(s, name, hp):
+        s.name = name
+        s.hp = hp
+
+    def hello(s):
+        print(f'{s.name} appears!')
+
+# Write Healer from scratch here
+
+
+h = Healer('Healer', 70, 30)
+h.hello()`,
+          expectedOutput: "Healer appears! Heal 30",
+          hint: "Start with class Name(Parent):. __init__ takes three ingredients but hands only two to the parent.",
+          hint2: `class Character:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\n    def hello(s):\n        print(f'{s.name} appears!')\n\nclass Healer(Character):\n    def __init__(s, name, hp, heal):\n        super().__init__(name, hp)\n        s.heal = heal\n\n    def hello(s):\n        print(f'{s.name} appears! Heal {s.heal}')\n\nh = Healer('Healer', 70, 30)\nh.hello()`
         },
         {
           id: "ch5-quiz1",

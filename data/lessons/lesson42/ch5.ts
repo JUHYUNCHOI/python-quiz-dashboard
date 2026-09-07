@@ -139,6 +139,66 @@ print(f"{w.name} HP:{w.hp} 무기:{w.weapon}")
       explanation: "class Mage(Character)로 상속! super().__init__()으로 부모 생성자 호출! s.magic = magic으로 추가 속성!"
     },
     {
+      /* 2026-09-07: 학생(student-python)이 ch5 를 따라가고 이렇게 말했다 —
+         "상속·오버라이딩·다형성·super() 가 한 챕터에 몰렸는데 내가 직접
+          타이핑하는 문제가 하나도 없었다. 정답은 다 맞혔는데 바로 위 explain 에
+          코드가 거의 그대로 있어서, 이해했다기보다 방금 본 걸 그대로 고른 느낌."
+         실제로 ch5 는 explain3·predict2·quiz2·fillblank1 뿐이었다 —
+         ch1~ch4 는 매 챕터에 mission 이 있었는데 마지막 챕터에서만 사라졌다.
+         ch5-fb1 은 보기 중 클릭이라 손으로 치는 게 아니다.
+         → 타이핑하는 칸 둘을 넣는다: 빈칸(ch5-try1) → 처음부터(ch5-mission). */
+      id: "ch5-try1",
+      type: "tryit",
+      title: "💻 물려받아서 내 것으로 바꾸기",
+      task: "Archer 가 Character 를 물려받게 하고, 부모의 __init__ 을 불러주세요.",
+      initialCode: `class Character:
+    def __init__(s, name, hp):
+        s.name = name
+        s.hp = hp
+
+    def hello(s):
+        print(f'{s.name} 등장!')
+
+# Archer 는 Character 를 물려받아요
+class Archer(___):
+    def __init__(s, name, hp, arrows):
+        ___.__init__(name, hp)   # 부모의 __init__ 부르기
+        s.arrows = arrows
+
+    # 부모의 hello 를 내 것으로 바꿔요
+    def hello(s):
+        print(f'{s.name} 등장! 화살 {s.arrows}개')
+
+a = Archer('궁수', 90, 20)
+a.hello()`,
+      expectedOutput: "궁수 등장! 화살 20개",
+      hint: "괄호 안에는 물려줄 쪽 이름이 들어가요. 부모를 부를 때 쓰는 말은 따로 있었죠.",
+      hint2: "Character / super()"
+    },
+    {
+      id: "ch5-mission",
+      type: "mission",
+      title: "🎯 처음부터 만들어보기",
+      description: "빈칸 없이, 처음부터 직접 써봐요!",
+      task: "Character 를 물려받는 Healer 를 만드세요. 재료는 이름·HP·힐량 셋이고, 이름과 HP 는 super() 로 부모에게 넘겨요. hello 는 \"치유사 등장! 힐 30\" 이 나오게 바꾸세요.",
+      initialCode: `class Character:
+    def __init__(s, name, hp):
+        s.name = name
+        s.hp = hp
+
+    def hello(s):
+        print(f'{s.name} 등장!')
+
+# 여기에 Healer 를 처음부터 써보세요
+
+
+h = Healer('치유사', 70, 30)
+h.hello()`,
+      expectedOutput: "치유사 등장! 힐 30",
+      hint: "class 이름(부모): 로 시작해요. __init__ 은 재료를 셋 받고, 그중 둘만 부모에게 넘겨요.",
+      hint2: `class Character:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\n    def hello(s):\n        print(f'{s.name} 등장!')\n\nclass Healer(Character):\n    def __init__(s, name, hp, heal):\n        super().__init__(name, hp)\n        s.heal = heal\n\n    def hello(s):\n        print(f'{s.name} 등장! 힐 {s.heal}')\n\nh = Healer('치유사', 70, 30)\nh.hello()`
+    },
+    {
       id: "ch5-quiz1",
       type: "quiz",
       title: "상속 이해하기!",
