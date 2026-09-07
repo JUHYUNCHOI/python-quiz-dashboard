@@ -60,3 +60,9 @@ scripts/output/
 /sol.py
 /sol.cpp
 scripts/__pycache__/
+
+# 에이전트가 저장소 루트에 만드는 임시 파일 — 2026-09-07 에 6개가 실수로 커밋됐다.
+# Playwright 는 프로젝트 루트에서 실행해야 모듈을 찾아서, 검토자들이 여기에 스크립트를 만든다.
+scratch_*
+_*.mjs
+*-check.mjs
