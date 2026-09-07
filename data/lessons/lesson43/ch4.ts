@@ -100,20 +100,20 @@ for monster in monsters:
 
     print(f'\\n=== {monster.name} 등장! ===')
 
-    while hero.alive and monster.alive:
+    ___ hero.alive and monster.alive:
         hero.attack(monster)
         if monster.alive:
             monster.attack(hero)
 
     if hero.alive:
-        hero.gain_exp(monster.exp_reward)
+        hero.gain_exp(monster.___)
         hero.status()
 
 print('\\n=== 최종 결과 ===')
 hero.status()`,
       expectedOutput: `  Lv.1 용사: HP 100/100 ATK 20 DEF 5 EXP 0/100\n\n=== 슬라임 등장! ===\n  용사 -> 슬라임 (18 데미지)\n  슬라임 -> 용사 (5 데미지)\n  용사 -> 슬라임 (18 데미지)\n  슬라임 쓰러짐!\n  +40 EXP (총 40)\n  Lv.1 용사: HP 95/100 ATK 20 DEF 5 EXP 40/100\n\n=== 고블린 등장! ===\n  용사 -> 고블린 (16 데미지)\n  고블린 -> 용사 (10 데미지)\n  용사 -> 고블린 (16 데미지)\n  고블린 -> 용사 (10 데미지)\n  용사 -> 고블린 (16 데미지)\n  고블린 -> 용사 (10 데미지)\n  용사 -> 고블린 (16 데미지)\n  고블린 쓰러짐!\n  +60 EXP (총 100)\n  ★ LEVEL UP! Lv.2!\n  HP 120 ATK 25 DEF 7\n  Lv.2 용사: HP 120/120 ATK 25 DEF 7 EXP 0/100\n\n=== 오크 등장! ===\n  용사 -> 오크 (19 데미지)\n  오크 -> 용사 (13 데미지)\n  용사 -> 오크 (19 데미지)\n  오크 -> 용사 (13 데미지)\n  용사 -> 오크 (19 데미지)\n  오크 -> 용사 (13 데미지)\n  용사 -> 오크 (19 데미지)\n  오크 쓰러짐!\n  +80 EXP (총 80)\n  Lv.2 용사: HP 81/120 ATK 25 DEF 7 EXP 80/100\n\n=== 최종 결과 ===\n  Lv.2 용사: HP 81/120 ATK 25 DEF 7 EXP 80/100`,
-      hint: "레벨업하면 능력치가 올라가고 HP가 완전 회복돼요!",
-      hint2: "exp >= 100이면 레벨업! 레벨업 시 max_hp+20, atk+5, def+2!"
+      hint: "이 싸움은 정해진 횟수가 아니라 누가 쓰러질 때까지 계속돼요. 경험치도 정해진 숫자가 아니라 몬스터가 가진 값을 그대로 가져와요.",
+      hint2: "while / exp_reward"
     },
     {
       /* 2026-09-06: pedagogy 가 28개(긴 데모)를 훑고 찾은 **진짜 빠진 다리**.

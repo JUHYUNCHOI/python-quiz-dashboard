@@ -26,7 +26,7 @@ export const ch2: Chapter = {
         s.hp = s.hp - actual
         if s.hp <= 0:
             s.hp = 0
-            s.alive = False
+            s.alive = ___
         return actual
 
     def attack(s, target):
@@ -64,8 +64,8 @@ print('\\n=== 결과 ===')
 hero.status()
 slime.status()`,
       expectedOutput: `=== 캐릭터 생성 ===\n[O] 용사: HP 100/100\n[O] 슬라임: HP 40/40\n\n=== 전투! ===\n용사 -> 슬라임 (22 데미지)\n슬라임 -> 용사 (4 데미지)\n용사 -> 슬라임 (22 데미지)\n슬라임 쓰러짐!\n\n=== 결과 ===\n[O] 용사: HP 96/100\n[X] 슬라임: HP 0/40`,
-      hint: "take_damage에서 방어력만큼 데미지를 줄여요!",
-      hint2: "actual = damage - defense, 최소 1 데미지는 들어가요!"
+      hint: "체력이 0 이하가 되면 살아있다는 표시를 바꿔줘야, 다음 턴에서 쓰러진 걸 알 수 있어요.",
+      hint2: "False"
     },
     {
       id: "ch2-0b",

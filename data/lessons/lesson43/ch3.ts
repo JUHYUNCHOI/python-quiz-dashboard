@@ -88,7 +88,7 @@ goblin.status()
 turn = 1
 for action in actions:
     if not hero.alive or not goblin.alive:
-        break
+        ___
 
     print(f'\\n--- {turn}턴 ---')
 
@@ -100,7 +100,7 @@ for action in actions:
     if goblin.alive:
         goblin.attack(hero)
 
-    turn = turn + 1
+    turn = turn + ___
 
 print('\\n=== 전투 종료! ===')
 hero.status()
@@ -110,8 +110,8 @@ if hero.alive:
 else:
     print('패배...')`,
       expectedOutput: `=== RPG 전투 시작! ===\n  [O] 용사: HP 100/100\n  [O] 고블린: HP 60/60\n\n--- 1턴 ---\n  용사 -> 고블린 (20 데미지)\n  고블린 -> 용사 (10 데미지)\n\n--- 2턴 ---\n  용사 -> 고블린 (20 데미지)\n  고블린 -> 용사 (10 데미지)\n\n--- 3턴 ---\n  용사 회복! HP: 100/100\n  고블린 -> 용사 (10 데미지)\n\n--- 4턴 ---\n  용사 -> 고블린 (20 데미지)\n  고블린 쓰러짐!\n\n=== 전투 종료! ===\n  [O] 용사: HP 90/100\n  [X] 고블린: HP 0/60\n승리!`,
-      hint: "actions 리스트로 input() 없이 행동을 정해요!",
-      hint2: "for action in actions로 한 턴씩 진행해요!"
+      hint: "누군가 쓰러지면 더 돌 필요가 없어요. 턴 번호도 매번 하나씩 올려줘야겠죠?",
+      hint2: "break / 1"
     },
     {
       id: "ch3-1",

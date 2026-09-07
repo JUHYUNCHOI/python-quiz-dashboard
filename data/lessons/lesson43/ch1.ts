@@ -41,8 +41,8 @@ battle(hero, monster)  # 자동 전투!
 
     def status(s):
         bar_len = 10
-        filled = int(s.hp / s.max_hp * bar_len)
-        bar = '#' * filled + '-' * (bar_len - filled)
+        filled = int(s.hp / s.___ * bar_len)
+        bar = '#' * filled + '-' * (bar_len - ___)
         state = 'O' if s.alive else 'X'
         print(f'[{state}] {s.name}: [{bar}] HP {s.hp}/{s.max_hp} ATK {s.atk}')
 
@@ -52,7 +52,7 @@ hero.status()
 mage.status()`,
       expectedOutput: `[O] 용사: [##########] HP 100/100 ATK 20\n[O] 마법사: [##########] HP 80/80 ATK 30`,
       hint: "HP 바는 현재 체력 비율로 만들어요!",
-      hint2: "filled = int(s.hp / s.max_hp * bar_len)으로 비율 계산!"
+      hint2: "max_hp / filled"
     },
     {
       id: "ch1-2",

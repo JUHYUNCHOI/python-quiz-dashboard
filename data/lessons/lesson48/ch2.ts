@@ -16,13 +16,13 @@ numbers = [3.2, 7.8, 4.5, 9.1, 2.7]
 
 print('=== 올림/내림 ===')
 for n in numbers:
-    print(f'{n} -> 올림: {math.ceil(n)}, 내림: {math.floor(n)}')
+    print(f'{n} -> 올림: {math.___(n)}, 내림: {math.___(n)}')
 
 print(f'\\n합계: {sum(numbers)}')
 print(f'평균: {sum(numbers)/len(numbers):.1f}')`,
       expectedOutput: `=== 올림/내림 ===\n3.2 -> 올림: 4, 내림: 3\n7.8 -> 올림: 8, 내림: 7\n4.5 -> 올림: 5, 내림: 4\n9.1 -> 올림: 10, 내림: 9\n2.7 -> 올림: 3, 내림: 2\n\n합계: 27.3\n평균: 5.5`,
-      hint: "ceil은 올림, floor는 내림!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "숫자를 위로 올리는 함수와 아래로 내리는 함수, 이름이 뭐였죠? 둘 다 math 모듈에 있어요.",
+      hint2: "ceil / floor"
     },
     {
       id: "ch2-1",

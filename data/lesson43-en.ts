@@ -47,8 +47,8 @@ battle(hero, monster)  # Auto battle!
 
     def status(s):
         bar_len = 10
-        filled = int(s.hp / s.max_hp * bar_len)
-        bar = '#' * filled + '-' * (bar_len - filled)
+        filled = int(s.hp / s.___ * bar_len)
+        bar = '#' * filled + '-' * (bar_len - ___)
         state = 'O' if s.alive else 'X'
         print(f'[{state}] {s.name}: [{bar}] HP {s.hp}/{s.max_hp} ATK {s.atk}')
 
@@ -58,7 +58,7 @@ hero.status()
 mage.status()`,
           expectedOutput: `[O] Hero: [##########] HP 100/100 ATK 20\n[O] Mage: [##########] HP 80/80 ATK 30`,
           hint: "The HP bar is built based on the current health ratio!",
-          hint2: "filled = int(s.hp / s.max_hp * bar_len) calculates the ratio!"
+          hint2: "max_hp / filled"
         },
         {
           id: "ch1-2",
@@ -112,7 +112,7 @@ hero.status()`,
         s.hp = s.hp - actual
         if s.hp <= 0:
             s.hp = 0
-            s.alive = False
+            s.alive = ___
         return actual
 
     def attack(s, target):
@@ -150,8 +150,8 @@ print('\\n=== Result ===')
 hero.status()
 slime.status()`,
           expectedOutput: `=== Characters Created ===\n[O] Hero: HP 100/100\n[O] Slime: HP 40/40\n\n=== Battle! ===\nHero -> Slime (22 dmg)\nSlime -> Hero (4 dmg)\nHero -> Slime (22 dmg)\nSlime defeated!\n\n=== Result ===\n[O] Hero: HP 96/100\n[X] Slime: HP 0/40`,
-          hint: "Defense reduces damage in take_damage!",
-          hint2: "actual = damage - defense, minimum 1 damage always gets through!"
+          hint: "When HP drops to 0 or below, flip the alive flag so the next turn knows this one is down.",
+          hint2: "False"
         },
         {
           id: "ch2-0b",
@@ -300,7 +300,7 @@ goblin.status()
 turn = 1
 for action in actions:
     if not hero.alive or not goblin.alive:
-        break
+        ___
 
     print(f'\\n--- Turn {turn} ---')
 
@@ -312,7 +312,7 @@ for action in actions:
     if goblin.alive:
         goblin.attack(hero)
 
-    turn = turn + 1
+    turn = turn + ___
 
 print('\\n=== Battle Over! ===')
 hero.status()
@@ -322,8 +322,8 @@ if hero.alive:
 else:
     print('Defeat...')`,
           expectedOutput: `=== RPG Battle Start! ===\n  [O] Hero: HP 100/100\n  [O] Goblin: HP 60/60\n\n--- Turn 1 ---\n  Hero -> Goblin (20 dmg)\n  Goblin -> Hero (10 dmg)\n\n--- Turn 2 ---\n  Hero -> Goblin (20 dmg)\n  Goblin -> Hero (10 dmg)\n\n--- Turn 3 ---\n  Hero healed! HP: 100/100\n  Goblin -> Hero (10 dmg)\n\n--- Turn 4 ---\n  Hero -> Goblin (20 dmg)\n  Goblin defeated!\n\n=== Battle Over! ===\n  [O] Hero: HP 90/100\n  [X] Goblin: HP 0/60\nVictory!`,
-          hint: "The actions list defines moves without needing input()!",
-          hint2: "for action in actions processes one turn at a time!"
+          hint: "Once someone falls there is no need to keep looping. And the turn number goes up by one each time.",
+          hint2: "break / 1"
         },
         {
           id: "ch3-1",
@@ -514,20 +514,20 @@ for monster in monsters:
 
     print(f'\\n=== {monster.name} appears! ===')
 
-    while hero.alive and monster.alive:
+    ___ hero.alive and monster.alive:
         hero.attack(monster)
         if monster.alive:
             monster.attack(hero)
 
     if hero.alive:
-        hero.gain_exp(monster.exp_reward)
+        hero.gain_exp(monster.___)
         hero.status()
 
 print('\\n=== Final Result ===')
 hero.status()`,
           expectedOutput: `  Lv.1 Hero: HP 100/100 ATK 20 DEF 5 EXP 0/100\n\n=== Slime appears! ===\n  Hero -> Slime (18 dmg)\n  Slime -> Hero (5 dmg)\n  Hero -> Slime (18 dmg)\n  Slime defeated!\n  +40 EXP (total 40)\n  Lv.1 Hero: HP 95/100 ATK 20 DEF 5 EXP 40/100\n\n=== Goblin appears! ===\n  Hero -> Goblin (16 dmg)\n  Goblin -> Hero (10 dmg)\n  Hero -> Goblin (16 dmg)\n  Goblin -> Hero (10 dmg)\n  Hero -> Goblin (16 dmg)\n  Goblin -> Hero (10 dmg)\n  Hero -> Goblin (16 dmg)\n  Goblin defeated!\n  +60 EXP (total 100)\n  ★ LEVEL UP! Lv.2!\n  HP 120 ATK 25 DEF 7\n  Lv.2 Hero: HP 120/120 ATK 25 DEF 7 EXP 0/100\n\n=== Orc appears! ===\n  Hero -> Orc (19 dmg)\n  Orc -> Hero (13 dmg)\n  Hero -> Orc (19 dmg)\n  Orc -> Hero (13 dmg)\n  Hero -> Orc (19 dmg)\n  Orc -> Hero (13 dmg)\n  Hero -> Orc (19 dmg)\n  Orc defeated!\n  +80 EXP (total 80)\n  Lv.2 Hero: HP 81/120 ATK 25 DEF 7 EXP 80/100\n\n=== Final Result ===\n  Lv.2 Hero: HP 81/120 ATK 25 DEF 7 EXP 80/100`,
-          hint: "When you level up, stats increase and HP fully recovers!",
-          hint2: "If exp >= 100, level up! On level up: max_hp+20, atk+5, def+2!"
+          hint: "This fight has no fixed round count — it runs until someone falls. And the EXP is not a fixed number either; take it straight off the monster.",
+          hint2: "while / exp_reward"
         },
         {
           /* 2026-09-06: 한글판과 짝. */

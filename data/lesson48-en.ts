@@ -173,11 +173,11 @@ print('=== Ceil/Floor ===')
 for n in numbers:
     print(f'{n} -> Ceil: {math.ceil(n)}, Floor: {math.floor(n)}')
 
-print(f'\\nTotal: {sum(numbers)}')
-print(f'Average: {sum(numbers)/len(numbers):.1f}')`,
+print(f'\\nTotal: {___(numbers)}')
+print(f'Average: {sum(numbers)/___(numbers):.1f}')`,
           expectedOutput: `=== Ceil/Floor ===\n3.2 -> Ceil: 4, Floor: 3\n7.8 -> Ceil: 8, Floor: 7\n4.5 -> Ceil: 5, Floor: 4\n9.1 -> Ceil: 10, Floor: 9\n2.7 -> Ceil: 3, Floor: 2\n\nTotal: 27.3\nAverage: 5.5`,
-          hint: "ceil rounds up, floor rounds down!",
-          hint2: "Just run the code as is!"
+          hint: "Total adds every number together. Average divides that total by how many numbers there are.",
+          hint2: "sum / len"
         },
         {
           id: "ch2-1",
@@ -268,11 +268,11 @@ def check_password(pw):
     has_digit = False
 
     for ch in pw:
-        if ch in string.ascii_lowercase:
+        if ch in string.___:
             has_lower = True
-        if ch in string.ascii_uppercase:
+        if ch in string.___:
             has_upper = True
-        if ch in string.digits:
+        if ch in string.___:
             has_digit = True
 
     results = []
@@ -293,8 +293,8 @@ for pw in passwords:
     for r in check_password(pw):
         print(f'  {r}')`,
           expectedOutput: `--- abc ---\n  X Length under 8\n  O Lowercase\n  X Uppercase\n  X Digit\n--- Hello123! ---\n  O Length 8 or more\n  O Lowercase\n  O Uppercase\n  O Digit\n--- PASSWORD ---\n  O Length 8 or more\n  X Lowercase\n  O Uppercase\n  X Digit`,
-          hint: "Check with string.ascii_lowercase, ascii_uppercase, digits!",
-          hint2: "Use the 'in' operator to check which category each character belongs to!"
+          hint: "Use the in operator to see which group each character falls into. The string module already has those lists ready.",
+          hint2: "ascii_lowercase / ascii_uppercase / digits"
         },
         {
           id: "ch3-1",

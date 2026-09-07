@@ -18,11 +18,11 @@ def check_password(pw):
     has_digit = False
 
     for ch in pw:
-        if ch in string.ascii_lowercase:
+        if ch in string.___:
             has_lower = True
-        if ch in string.ascii_uppercase:
+        if ch in string.___:
             has_upper = True
-        if ch in string.digits:
+        if ch in string.___:
             has_digit = True
 
     results = []
@@ -43,8 +43,8 @@ for pw in passwords:
     for r in check_password(pw):
         print(f'  {r}')`,
       expectedOutput: `--- abc ---\n  X 길이 8자 미만\n  O 소문자\n  X 대문자\n  X 숫자\n--- Hello123! ---\n  O 길이 8자 이상\n  O 소문자\n  O 대문자\n  O 숫자\n--- PASSWORD ---\n  O 길이 8자 이상\n  X 소문자\n  O 대문자\n  X 숫자`,
-      hint: "string.ascii_lowercase, ascii_uppercase, digits로 검사!",
-      hint2: "in 연산자로 각 문자가 어느 카테고리인지 확인해요!"
+      hint: "in 연산자로 각 글자가 어느 무리에 드는지 봐요. string 모듈에 그 목록이 이미 준비돼 있어요.",
+      hint2: "ascii_lowercase / ascii_uppercase / digits"
     },
     {
       id: "ch3-1",

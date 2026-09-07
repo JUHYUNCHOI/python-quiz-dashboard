@@ -67,15 +67,15 @@ export const ch1: Chapter = {
 numbers = [3.2, 5.7, 8.5, 1.1]
 
 for n in numbers:
-    print(f'{n} → 올림:{math.ceil(n)} 내림:{math.floor(n)} 반올림:{round(n)}')
+    print(f'{n} → 올림:{math.___(n)} 내림:{math.___(n)} 반올림:{___(n)}')
 
 # 절대값과 제곱근
 print(f'\\nabs(-15) = {abs(-15)}')
 print(f'sqrt(144) = {math.sqrt(144)}')
 print(f'pi = {math.pi:.4f}')`,
       expectedOutput: `3.2 → 올림:4 내림:3 반올림:3\n5.7 → 올림:6 내림:5 반올림:6\n8.5 → 올림:9 내림:8 반올림:8\n1.1 → 올림:2 내림:1 반올림:1\n\nabs(-15) = 15\nsqrt(144) = 12.0\npi = 3.1416`,
-      hint: "ceil=올림, floor=내림, round=반올림!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "올림·내림은 math 모듈 함수예요. 반올림은 math 없이 파이썬 기본 함수로 써요.",
+      hint2: "ceil / floor / round"
     },
     {
       id: "ch1-5",
