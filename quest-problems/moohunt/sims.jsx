@@ -222,12 +222,16 @@ export function BitBoardSim({ E }) {
       <>Number <b>{s.b}</b> in binary is <b>{bin(s.b)}</b> → board <b>{chars(s.b).join("")}</b></>,
       <>숫자 <b>{s.b}</b> 를 2진수로 쓰면 <b>{bin(s.b)}</b> → 보드 <b>{chars(s.b).join("")}</b></>)
     : s.k === "extract" ? t(E,
-      <>So how do we read just cell <b>{EX_I}</b> out of <b>b = {EX_B}</b>?<br />
-        Push it right {EX_I} step{EX_I > 1 ? "s" : ""}: <b>{EX_B} &gt;&gt; {EX_I}</b> = {EX_B >> EX_I} (binary {(EX_B >> EX_I).toString(2)})<br />
-        then keep only the last digit: <b>&amp; 1</b> → <b>{(EX_B >> EX_I) & 1}</b> = {((EX_B >> EX_I) & 1) ? "M" : "O"}</>,
-      <>그럼 <b>b = {EX_B}</b> 에서 <b>{EX_I}</b>번 칸만 어떻게 꺼낼까요?<br />
-        오른쪽으로 {EX_I}칸 밀어요 — <b>{EX_B} &gt;&gt; {EX_I}</b> = {EX_B >> EX_I} (2진수 {(EX_B >> EX_I).toString(2)})<br />
-        그리고 맨 끝자리만 남겨요 — <b>&amp; 1</b> → <b>{(EX_B >> EX_I) & 1}</b> 이니까 {((EX_B >> EX_I) & 1) ? "M" : "O"}</>)
+      <>So how do we read just cell <b>{EX_I}</b> out of <b>b = {EX_B}</b> (= <b>{chars(EX_B).join("")}</b>)?<br />
+        <b>①</b> <b>Drop</b> the first {EX_I} cell{EX_I > 1 ? "s" : ""} — now cell {EX_I} sits at the front.<br />
+        <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{chars(EX_B).join("")} → {chars(EX_B).slice(EX_I).join("")}</span> · that is <b>{EX_B} &gt;&gt; {EX_I}</b>.<br />
+        <b>②</b> Now just look at the <b>front cell</b> — that is <b>&amp; 1</b>.<br />
+        Answer: <b>{((EX_B >> EX_I) & 1) ? "M" : "O"}</b> — same as cell {EX_I} in the table above.</>,
+      <>그럼 <b>b = {EX_B}</b>(= <b>{chars(EX_B).join("")}</b>) 에서 <b>{EX_I}</b>번 칸만 어떻게 꺼낼까요?<br />
+        <b>①</b> 앞의 {EX_I}칸을 <b>버려요</b> — 그러면 {EX_I}번 칸이 맨 앞으로 와요.<br />
+        <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{chars(EX_B).join("")} → {chars(EX_B).slice(EX_I).join("")}</span> · 이게 <b>{EX_B} &gt;&gt; {EX_I}</b> 예요.<br />
+        <b>②</b> 이제 <b>맨 앞 한 칸</b>만 보면 돼요 — 이게 <b>&amp; 1</b> 이에요.<br />
+        답: <b>{((EX_B >> EX_I) & 1) ? "M" : "O"}</b> — 위 표의 {EX_I}번 칸과 같죠?</>)
     : t(E,
       <>With N = {N} there are <b>{1 << N}</b> boards — the numbers <b>0 … {(1 << N) - 1}</b>, all of them.<br />
         So the single line <b>for b in range(1 &lt;&lt; N)</b><br />means <b>"try every board"</b>.</>,
