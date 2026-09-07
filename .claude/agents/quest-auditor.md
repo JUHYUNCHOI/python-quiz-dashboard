@@ -181,3 +181,19 @@ QA 는 동작을 봤고 **둘 다 진짜 결함을 찾았다.** 그런데 선생
 네 담당 영역을 파고들어라. 순서를 뒤집으면 부분만 맞고 전체가 틀린 보고가 나온다.
 
 근거: memory/feedback_reviewers_see_pages_teacher_sees_story.md
+
+### 🔢 quest 개수는 **손으로 세지 마라**
+
+```bash
+python3 scripts/count-quests.py              # 섹션별 표
+python3 scripts/count-quests.py --list io    # 그 항목에 걸린 quest 이름까지
+python3 scripts/count-quests.py --json       # 기계 출력
+```
+
+**2026-09-07 에 하루 동안 quest 개수를 네 번 틀리게 셌다** — 나도, 다른 에이전트도.
+그중 한 번은 좁은 grep 때문에 "카드 없음 9개" 로 세서 **에이전트 셋을 헛돌렸다**
+(진짜 없는 건 2개였다). 매번 "직접 세라" 고 시켰는데도 그랬다. **지시로는 안 고쳐진다.**
+
+보고에 숫자를 쓸 거면 **이 스크립트를 돌려서 그 출력을 인용해라.**
+직접 grep 해서 센 숫자는 쓰지 마라. 스크립트가 세는 패턴도 같이 찍어주니
+숫자가 이상하면 패턴을 의심해라 — 위 사고가 정확히 그 경우였다.

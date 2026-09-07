@@ -43,6 +43,7 @@ python3 scripts/check-frozen.py         # 건드리면 안 되는 파일을 건�
 python3 scripts/check-concept-order.py  # 안 가르친 문법을 쓰고 있나
 python3 scripts/check-quest-lang.py     # quest 영어 자리에 한국어가 들어갔나
 python3 scripts/check-quest-algo-level.py  # Bronze 문제를 '심화' 토픽으로 보내나
+python3 scripts/count-quests.py         # ⭐ quest 개수는 **손으로 세지 마라** (--list 로 이름까지)
 ```
 
 **이야기 전체를 봐야 할 때 — 검토를 *시작하기 전에* 이걸 먼저** (2026-09-07 추가):
