@@ -498,6 +498,11 @@ export function BlankCodeRunner({
               className={cn(
                 "code-editor-textarea inline-block font-mono text-center rounded-md border-2 mx-1 px-2 py-0 transition-all",
                 "text-[13px] md:text-[15px] leading-[1.8] bg-gray-800 outline-none",
+                // 2026-09-07: 빈칸이 위아래 고정 요소에 가려지던 것 (Playwright 실측).
+                // 모바일은 스크롤 0 에서 첫 빈칸이 하단 바 밑에 깔려 **빈칸이 있는 줄도 몰랐다.**
+                // 위 = 진도바(sticky top-0) + 출력 미리보기(sticky top-[110px]),
+                // 아래 = 이전/다음 고정 바. 포커스로 스크롤될 때 그 사이에 오게 한다.
+                "scroll-mt-[300px] md:scroll-mt-[380px] scroll-mb-[100px]",
                 focusedBlank === currentBlankId
                   ? "border-amber-400 text-amber-300 ring-1 ring-amber-400/50"
                   : value
@@ -553,7 +558,9 @@ export function BlankCodeRunner({
       {expectedOutput && (
         <div className="sticky top-[110px] md:top-[120px] z-10 bg-amber-50/95 backdrop-blur rounded-lg md:rounded-xl p-2.5 md:p-3 border border-amber-200">
           <p className="text-amber-700 font-bold text-xs md:text-sm mb-1">{t("📋 이렇게 출력되도록 빈칸을 채우세요:", "📋 Fill in the blanks to get this output:")}</p>
-          <pre className="font-mono text-xs md:text-sm text-amber-900 whitespace-pre-wrap bg-amber-100/50 rounded-md p-2 select-all cursor-text">{expectedOutput}</pre>
+          {/* 2026-09-07: 출력이 길면 이 카드가 화면 위쪽을 248px 까지 먹어서
+              아래 코드의 빈칸을 가렸다. 높이를 묶고 안쪽만 스크롤한다. */}
+          <pre className="font-mono text-xs md:text-sm text-amber-900 whitespace-pre-wrap bg-amber-100/50 rounded-md p-2 select-all cursor-text max-h-[18vh] md:max-h-[22vh] overflow-y-auto">{expectedOutput}</pre>
           {/[^\x00-\x7F]/.test(expectedOutput) && (
             <p className="text-amber-600 text-xs mt-1.5">
               {t("💡 위 텍스트를 드래그해서 복사하세요!", "💡 Drag to copy the text above!")}
