@@ -68,7 +68,11 @@ _*.mjs
 *-check.mjs
 
 # 에이전트·검증용 임시 스크립트 (루트에서 돌려야 playwright 를 찾는다)
-# 2026-09-07: 검토 에이전트들이 scratchpad_*.mjs 15개를 루트에 남겼다.
+# 2026-09-07: 검토 에이전트들이 scratchpad_*.mjs
+scroll-check-tmp.mjs
+*-check-tmp.mjs 15개를 루트에 남겼다.
 scratchpad_*.mjs
+scroll-check-tmp.mjs
+*-check-tmp.mjs
 .chk-tmp.mjs
 .qa-tmp.mjs
