@@ -11,7 +11,7 @@
    ⑤ BruteRunSim  — 그 완전탐색을 **진짜로 돌려서** 느림을 체감 (숫자는 전부 실측)
    값은 전부 그 자리에서 계산 — 표와 어긋날 수 없다. */
 
-import { useState, useRef } from "react";
+import { Fragment, useEffect, useState, useRef } from "react";
 import { t } from "@/components/quest/theme";
 import { StepFade } from "@/components/quest/StepFade";
 import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceStepper";
@@ -19,6 +19,22 @@ import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceSteppe
 const A = "#8b5cf6";
 const MCOL = "#dc2626", MBG = "#fef2f2";
 const OCOL = "#2563eb", OBG = "#eff6ff";
+
+/* 단계가 바뀌면 말풍선(과 그 아래 설명되는 줄)을 화면 안으로 데려온다.
+   sticky 를 버린 대신 이것이 "설명이 화면 밖으로 나가는" 문제를 맡는다.
+   block:"center" 라야 말풍선 **아래** 줄까지 같이 보인다 ("nearest" 는 말풍선만 걸친다). */
+function useKeepInView(dep) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const q = el.getBoundingClientRect();
+    // 이미 편하게 보이면 건드리지 않는다 — 멀쩡한 화면을 흔들지 않으려고.
+    if (q.top > 60 && q.bottom < window.innerHeight - 180) return;
+    el.scrollIntoView({ block: "center", behavior: "smooth" });
+  }, [dep]);
+  return ref;
+}
 
 /* 샘플 1 — N=5, K=6. 보드 MOOOM 은 4점 (완전탐색으로 확인) */
 const BOARD = "MOOOM";
@@ -38,24 +54,32 @@ function Cell({ c, i, hl = null }) {
     </div>
   );
 }
-/* stick=false 로 쓰는 자리가 있다 — 아래에 **누르는 것**이 오는 시뮬(BruteRunSim).
-   sticky 말풍선은 스크롤하면 아래로 미끄러져 버튼을 덮는다. 실제로 덮었다
-   (2026-09-07 실측: N 고르는 버튼 4개가 전부 가려졌다). 표만 있는 시뮬은 sticky, 
-   버튼이 있는 시뮬은 그냥 흐름에 둔다. */
-function Say({ children, tone = "go", stick = true }) {
+/* 말풍선.
+
+   2026-09-07 선생님 (스크린샷과 함께):
+     "막상 말풍선이 설명을 봐야할곳에 뜨지도 않고 보여야 하는 글자를 가리고 있어."
+   그전에는 `position: sticky, top: 104` 였다. 표가 길어지면 설명이 화면 밖으로
+   나가는 걸 막으려고 붙인 건데, 대신 두 가지가 망가졌다.
+     ① 스크롤하면 말풍선이 아래로 미끄러져 **표 머리글(숫자·비트·보드)을 덮었다.**
+     ② 설명하는 줄은 표 맨 아래(5번)인데 말풍선은 화면 맨 위에 떠 있었다.
+        읽을 곳과 볼 곳이 따로 놀았다.
+
+   그래서 sticky 를 버리고, **설명하는 줄 바로 위**에 끼워 넣는다.
+   CodeWalk 이 이미 그렇게 한다 (선생님 2026-08-10: 말풍선을 위에 고정하지 말고
+   진짜 설명되는 코드 줄 위에 띄우기). 화면 밖으로 나가는 문제는 sticky 가 아니라
+   `scrollIntoView` 로 푼다 — 단계가 바뀌면 말풍선+그 줄을 화면 안으로 데려온다.
+   ⚠️ 박스 안 스크롤은 쓰지 않는다 (quest_problem_standard.md:561 안티패턴). */
+function Say({ children, tone = "go", inRow = false }) {
   const c = tone === "stuck" ? { bg: "#fffbeb", bd: "#fbbf24", fg: "#92400e" }
           : tone === "aha"   ? { bg: "#eff6ff", bd: "#60a5fa", fg: "#1e40af" }
           : { bg: "#f5f3ff", bd: "#c4b5fd", fg: "#5b21b6" };
   return (
-    /* 2026-09-07 선생님: "길어지면서 위 설명이 위로 올라가서 안보여."
-       표가 길어지면 말풍선이 화면 밖으로 나가서, 학생이 지금 무슨 단계인지 모른 채
-       표만 본다. sticky 로 붙여둔다 — 페이지의 상단 고정 바(약 100px) 아래에.
-       ⚠️ 박스 안 스크롤은 쓰지 않는다 (quest_problem_standard.md:561 안티패턴). */
-    <div style={{ ...(stick ? { position: "sticky", top: 104, zIndex: 5 } : null),
-      maxWidth: 470, margin: "6px auto 14px", padding: "11px 16px", borderRadius: 12,
+    <div style={{
+      maxWidth: 470, margin: inRow ? "4px auto 6px" : "6px auto 14px",
+      padding: "11px 16px", borderRadius: 12,
       background: c.bg, border: `1.5px solid ${c.bd}`, color: c.fg, fontSize: 13.5, fontWeight: 700,
       textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.75,
-      backdropFilter: "blur(6px)", boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>{children}</div>
+      boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>{children}</div>
   );
 }
 
@@ -72,6 +96,7 @@ export function ScoreBoardSim({ E }) {
   const m = done ? null : MOVES[cur];
   const ok = m ? hit(m) : false;
 
+  const sayRef = useKeepInView(ts.safe);
   const hlOf = (idx) => {
     if (!m) return null;
     if (idx === m[0] - 1) return "x";
@@ -94,7 +119,8 @@ export function ScoreBoardSim({ E }) {
         title={t(E, `Score the board ${BOARD}, move by move`, `보드 ${BOARD} 을 무브마다 채점해요`)}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
-      <Say tone={done ? "aha" : ok ? "go" : "stuck"}>{say}</Say>
+      {/* 무브를 다 본 마지막 단계는 특정 줄 얘기가 아니라 표 위에 둔다. */}
+      {done && <div ref={sayRef}><Say tone="aha">{say}</Say></div>}
 
       <div style={{ display: "flex", gap: 7, justifyContent: "center", marginBottom: 14 }}>
         {BOARD.split("").map((c, i) => <Cell key={i} c={c} i={i} hl={hlOf(i)} />)}
@@ -105,7 +131,11 @@ export function ScoreBoardSim({ E }) {
           const seen = i <= cur;
           const good = hit(mv);
           return (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "5px 11px",
+            <Fragment key={i}>
+            {!done && i === cur && (
+              <div ref={sayRef}><Say inRow tone={ok ? "go" : "stuck"}>{say}</Say></div>
+            )}
+            <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "5px 11px",
               borderRadius: 8, fontSize: 12, fontFamily: "'JetBrains Mono',monospace",
               border: `${i === cur ? 2 : 1}px solid ${i === cur ? A : "#e2e8f0"}`,
               background: !seen ? "#fff" : good ? "#f0fdf4" : "#fef2f2",
@@ -118,6 +148,7 @@ export function ScoreBoardSim({ E }) {
                 {seen ? (good ? "+1" : "—") : ""}
               </span>
             </div>
+            </Fragment>
           );
         })}
       </div>
@@ -153,6 +184,7 @@ export function BruteLimitSim({ E }) {
     { key: "mult", ko: "곱하면 검사 횟수", en: "multiply → checks", v: "≈ 7×10⁹", bad: true },
   ];
   const upto = { idea: 0, mult: 3, limit: 3 }[s.k];
+  const sayRef = useKeepInView(ts.safe);
 
   const say =
     s.k === "idea" ? t(E,
@@ -171,7 +203,9 @@ export function BruteLimitSim({ E }) {
         title={t(E, "Will brute force finish in time?", "완전탐색, 시간 안에 끝날까요?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
-      <Say tone={s.k === "limit" ? "stuck" : s.k === "idea" ? "go" : "aha"}>{say}</Say>
+      <div ref={sayRef}>
+        <Say tone={s.k === "limit" ? "stuck" : s.k === "idea" ? "go" : "aha"}>{say}</Say>
+      </div>
 
       <div style={{ maxWidth: 420, margin: "0 auto", display: "grid", gap: 6 }}>
         {rows.slice(0, upto).map((r) => (
@@ -184,14 +218,6 @@ export function BruteLimitSim({ E }) {
               color: r.bad ? "#dc2626" : "#334155", whiteSpace: "nowrap" }}>{r.v}</span>
           </div>
         ))}
-        {s.k === "limit" && (
-          <div style={{ marginTop: 6, padding: "10px 14px", borderRadius: 10, background: "#fffbeb",
-            border: "1.5px solid #fbbf24", fontSize: 12.5, color: "#92400e", lineHeight: 1.85,
-            textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
-            {t(E, <>1 second ≈ <b>10⁸ ~ 10⁹</b> steps<br />we need <b>7×10⁹</b> steps</>,
-                  <>1초에 <b>10⁸ ~ 10⁹</b> 번<br />우리는 <b>7×10⁹</b> 번</>)}
-          </div>
-        )}
       </div>
       </StepFade>
       <div style={{ marginTop: 18 }}>
@@ -249,6 +275,10 @@ export function BitBoardSim({ E }) {
         그래서 <b>for b in range(1 &lt;&lt; N)</b> 한 줄이<br /><b>"모든 보드를 다 해본다"</b> 가 돼요.</>);
 
   const rows = Array.from({ length: 1 << N }, (_, b) => b).filter((b) => b <= shown);
+  /* 말풍선이 붙을 줄. "5를 2진수로 쓰면…" 은 5번 줄 위에 있어야 읽힌다.
+     why/all 단계는 특정 줄 얘기가 아니라 표 위에 둔다. */
+  const bubbleAt = s.k === "row" ? s.b : s.k === "extract" ? EX_B : null;
+  const sayRef = useKeepInView(ts.safe);
 
   return (
     <div style={{ padding: 16, paddingBottom: 90 }}>
@@ -256,7 +286,11 @@ export function BitBoardSim({ E }) {
         title={t(E, "One number = one board", "숫자 하나 = 보드 하나")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
-      <Say tone={s.k === "all" ? "aha" : s.k === "why" ? "stuck" : "go"}>{say}</Say>
+      {bubbleAt === null && (
+        <div ref={sayRef}>
+          <Say tone={s.k === "all" ? "aha" : s.k === "why" ? "stuck" : "go"}>{say}</Say>
+        </div>
+      )}
 
       <div style={{ maxWidth: 330, margin: "0 auto", display: "grid", gap: 5 }}>
         <div style={{ display: "grid", gridTemplateColumns: "42px 60px 1fr", gap: 8,
@@ -269,7 +303,20 @@ export function BitBoardSim({ E }) {
           const cur = s.k === "row" && b === s.b;
           const ex = s.k === "extract" && b === EX_B;
           return (
-            <div key={b} style={{ display: "grid", gridTemplateColumns: "42px 60px 1fr", gap: 8,
+            <Fragment key={b}>
+            {bubbleAt === b && (
+              <div ref={sayRef}>
+                <Say inRow tone={ex ? "aha" : "go"}>{say}</Say>
+                {ex && (
+                  <div style={{ maxWidth: 330, margin: "0 auto 8px", padding: "7px 11px", borderRadius: 9,
+                    background: "#fffbeb", border: "1.5px solid #fbbf24", textAlign: "center",
+                    fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: "#92400e" }}>
+                    (b &gt;&gt; i) &amp; 1 &nbsp;→&nbsp; ({EX_B} &gt;&gt; {EX_I}) &amp; 1 = {(EX_B >> EX_I) & 1}
+                  </div>
+                )}
+              </div>
+            )}
+            <div style={{ display: "grid", gridTemplateColumns: "42px 60px 1fr", gap: 8,
               alignItems: "center", padding: "5px 8px", borderRadius: 9,
               border: `${cur || ex ? 2 : 1}px solid ${cur ? A : ex ? "#f59e0b" : "#e2e8f0"}`,
               background: cur ? "#f5f3ff" : ex ? "#fffbeb" : "#fff" }}>
@@ -286,17 +333,11 @@ export function BitBoardSim({ E }) {
                 ))}
               </span>
             </div>
+            </Fragment>
           );
         })}
       </div>
 
-      {s.k === "extract" && (
-        <div style={{ maxWidth: 330, margin: "12px auto 0", padding: "8px 11px", borderRadius: 9,
-          background: "#fffbeb", border: "1.5px solid #fbbf24", textAlign: "center",
-          fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: "#92400e" }}>
-          (b &gt;&gt; i) &amp; 1 &nbsp;→&nbsp; ({EX_B} &gt;&gt; {EX_I}) &amp; 1 = {(EX_B >> EX_I) & 1}
-        </div>
-      )}
       </StepFade>
       <div style={{ marginTop: 18 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
@@ -511,8 +552,10 @@ export function BruteRunSim({ E }) {
       <>Stopped at <b>{pct.toFixed(pct < 1 ? 3 : 1)}%</b>.<br />At this speed the whole thing takes <b>{etaText}</b>.</>,
       <>{pct.toFixed(pct < 1 ? 3 : 1)}% 에서 멈췄어요.<br />이 속도면 끝까지 <b>{etaText}</b> 걸려요.</>);
 
+  // 좁은 화면에서 N 네 개가 한 줄에 들어가게 — 줄이 넘어가면 그만큼 아래가 밀려서
+  // 돌리기 버튼이 하단 고정 바 뒤로 내려간다 (모바일 375px 실측).
   const btn = (on) => ({
-    padding: "7px 15px", borderRadius: 9, fontSize: 12.5, fontWeight: 800, cursor: "pointer",
+    padding: "7px 11px", borderRadius: 9, fontSize: 12.5, fontWeight: 800, cursor: "pointer",
     border: `1.5px solid ${on ? A : "#e2e8f0"}`, background: on ? A : "#fff",
     color: on ? "#fff" : "#475569", fontFamily: "inherit",
   });
@@ -523,7 +566,7 @@ export function BruteRunSim({ E }) {
         title={t(E, "Run the brute force yourself", "완전탐색을 직접 돌려봐요")}
         subtitle={t(E, "every board, every move — for real", "보드도 무브도 전부 진짜로")} />
 
-      <Say stick={false} tone={state === "timeout" ? "stuck" : state === "done" ? "aha" : "go"}>{say}</Say>
+      <Say tone={state === "timeout" ? "stuck" : state === "done" ? "aha" : "go"}>{say}</Say>
 
       <div style={{ maxWidth: 460, margin: "0 auto" }}>
         <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginBottom: 10 }}>
@@ -532,6 +575,17 @@ export function BruteRunSim({ E }) {
           ))}
         </div>
 
+        <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 12 }}>
+          <button onClick={run} disabled={state === "running"}
+            style={{ ...btn(state !== "running"), opacity: state === "running" ? 0.45 : 1 }}>
+            ▶ {t(E, "Run", "돌리기")}
+          </button>
+          <button onClick={stop} disabled={state !== "running"}
+            style={{ ...btn(false), opacity: state !== "running" ? 0.45 : 1 }}>
+            ■ {t(E, "Stop", "멈추기")}
+          </button>
+          <button onClick={reset} style={btn(false)}>↺ {t(E, "Reset", "처음부터")}</button>
+        </div>
         <div style={{ display: "grid", gap: 6, marginBottom: 10 }}>
           {[
             { l: t(E, "boards to make (2^N)", "만들 보드 (2^N)"), v: fmt(totalBoards) },
@@ -561,17 +615,6 @@ export function BruteRunSim({ E }) {
           <span>{(ms / 1000).toFixed(2)}s{state !== "idle" && <> · {t(E, "best", "최고")} {best}</>}</span>
         </div>
 
-        <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
-          <button onClick={run} disabled={state === "running"}
-            style={{ ...btn(state !== "running"), opacity: state === "running" ? 0.45 : 1 }}>
-            ▶ {t(E, "Run", "돌리기")}
-          </button>
-          <button onClick={stop} disabled={state !== "running"}
-            style={{ ...btn(false), opacity: state !== "running" ? 0.45 : 1 }}>
-            ■ {t(E, "Stop", "멈추기")}
-          </button>
-          <button onClick={reset} style={btn(false)}>↺ {t(E, "Reset", "처음부터")}</button>
-        </div>
 
         {(state === "timeout" || state === "stopped") && (
           <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 10, background: "#fffbeb",

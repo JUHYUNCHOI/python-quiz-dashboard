@@ -116,8 +116,19 @@ const r = await scan()
 const seen = new Set(r.covered.map(c => c.what))
 const H = await p.evaluate(() => document.body.scrollHeight)
 for (let y = Math.round(vp.height * 0.3); y < H; y += Math.round(vp.height * 0.3)) {
-  await p.evaluate((v) => window.scrollTo(0, v), y)
-  await p.waitForTimeout(180)
+  // ⚠️ 부드러운 스크롤(smooth) 도중에 재면 또 헛 경보가 난다 — 2026-09-07 실측:
+  //    멀쩡한 버튼 4개가 애니메이션 중간 프레임에서 "가려졌다" 로 잡혔다.
+  //    즉시 스크롤하고, 스크롤 위치가 멈출 때까지 기다린 뒤에 잰다.
+  await p.evaluate((v) => window.scrollTo({ top: v, behavior: "instant" }), y)
+  await p.evaluate(() => new Promise((res) => {
+    let last = -1, same = 0
+    const tick = () => {
+      if (window.scrollY === last) { if (++same >= 3) return res() } else { same = 0; last = window.scrollY }
+      requestAnimationFrame(tick)
+    }
+    tick()
+  }))
+  await p.waitForTimeout(120)
   const more = await scan()
   more.covered.forEach(c => { if (!seen.has(c.what)) { seen.add(c.what); r.covered.push({ ...c, y: more.y }) } })
 }
