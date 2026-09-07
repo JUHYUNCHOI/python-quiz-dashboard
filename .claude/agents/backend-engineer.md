@@ -26,7 +26,10 @@ model: sonnet
      **null ≠ ""** 이라 같은 레슨이 두 행이 된다. upsert 할 땐 항상 `variant: ""` 명시.
 3. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/infra_vercel_coderin_deploy.md`
    → 라이브는 Vercel 프로젝트 `coderin` 인데 이 디렉터리 `.vercel` 링크는 **엉뚱한 곳**을 가리킨다.
-     그냥 배포하면 라이브가 안 바뀐다. 함정 3개와 정확한 명령이 여기 있다.
+     함정 3개와 정확한 명령이 여기 있다.
+     ⚠️ **2026-09-07 정정: `npx vercel deploy` 를 기본으로 쓰지 마라.** `git push origin main`
+     만으로 이미 배포된다. CLI 로 또 쏴서 커밋마다 두 번씩 배포됐고 limit 에 걸렸다.
+     CLI 는 git 배포가 **실제로 실패한 걸 확인한 뒤에만** 쓴다.
 4. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/infra_piston_server.md`
    → C++ 실행에 쓰는 자체 호스팅 Piston 서버(DigitalOcean). "API 죽었다" 신고가 오면 여기부터.
 5. `/Users/juhyunchoi/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/infra_pyodide_web_worker.md`
