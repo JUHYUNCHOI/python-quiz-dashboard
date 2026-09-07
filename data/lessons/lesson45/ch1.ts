@@ -116,7 +116,7 @@ print(f'floor(2.9) = {floor(2.9)}')
 import math ___ m
 print(f'pi = {m.___:.2f}')`,
       expectedOutput: `sqrt(100) = 10.0\nceil(2.1) = 3\nfloor(2.9) = 2\npi = 3.14`,
-      hint: "from으로 함수만, as로 별명, pi는 math의 상수!",
+      hint: "필요한 것만 골라 오는 키워드, 이름을 바꿔 부르는 키워드, 그리고 3.14 로 찍히는 상수 이름이에요.",
       hint2: "from / as / pi"
     },
     {

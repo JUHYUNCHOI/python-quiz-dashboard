@@ -195,7 +195,7 @@ print(f'Items: {parsed["items"]}')`,
           id: "ch2-2",
           type: "tryit",
           title: "💻 Using the string module!",
-          task: "Check the constants in the string module!",
+          task: "Put each string-module constant in the right place. Names to use (shuffled): digits · ascii_uppercase · ascii_lowercase",
           initialCode: `import string
 
 print('Lowercase:', string.___)
@@ -219,9 +219,9 @@ def check_password(pw):
     has_digit = False
 
     for ch in pw:
-        if ch in string.ascii___:
+        if ch in string.___:
             has_lower = True
-        elif ch in string.ascii___:
+        elif ch in string.___:
             has_upper = True
         elif ch in string.___:
             has_digit = True
@@ -240,8 +240,8 @@ check_password('Hello123')
 print()
 check_password('hello')`,
           expectedOutput: `Password: Hello123\n  Lowercase: ✅\n  Uppercase: ✅\n  Digit: ✅\n  → Strong password!\n\nPassword: hello\n  Lowercase: ✅\n  Uppercase: ❌\n  Digit: ❌\n  → Weak password!`,
-          hint: "Use the lowercase, uppercase, and digit constants from the string module!",
-          hint2: "lowercase / uppercase / digits"
+          hint: "The same three names you used in the previous step.",
+          hint2: "ascii_lowercase / ascii_uppercase / digits"
         },
         {
           id: "ch2-4",
@@ -391,7 +391,7 @@ print(f'Level: {loaded["level"]}')
 print(f'Items: {", ".join(loaded["items"])}')
 print(f'Gold: {loaded["gold"]}G')`,
           expectedOutput: `=== Game Save ===\n{\n  "player": "Hero",\n  "level": 5,\n  "hp": 150,\n  "items": [\n    "Flame Sword",\n    "Steel Shield",\n    "Healing Potion"\n  ],\n  "gold": 2500\n}\n\n=== Game Load ===\nPlayer: Hero\nLevel: 5\nItems: Flame Sword, Steel Shield, Healing Potion\nGold: 2500G`,
-          hint: "Use dumps (save) and loads (load) from the json module!",
+          hint: "Which module, the function that writes a dictionary out as text, and the function that reads text back into a dictionary.",
           hint2: "json / dumps / loads"
         },
         {

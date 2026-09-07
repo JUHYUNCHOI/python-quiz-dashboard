@@ -638,7 +638,7 @@ idx = 0
 def next_action():
     global idx
     if idx < len(actions):
-        a = actions[idx]
+        a = actions[___]
         idx += 1
         return a
     return 'quit'
@@ -657,7 +657,7 @@ while True:
     action = next_action()
     if action == 'quit':
         print('\\nGame Over!')
-        break
+        ___
 
     if action == 'battle':
         monster = create_monster()
@@ -685,7 +685,7 @@ while True:
         print('\\n--- Status ---')
         hero.status()
 
-    elif action == 'shop':
+    elif action == '___':
         print(f'\\n--- Shop (Have: {hero.gold}G) ---')
         print('  Potion: 30G')
 
@@ -706,8 +706,8 @@ hero.status()
 if save_data:
     print(f'\\nSave: {save_data}')`,
           expectedOutput: `=== Warrior is born! ===\n  [Warrior] Player Lv.1\n  HP: 120/120 | ATK: 15 | DEF: 12\n  EXP: 0/100 | Gold: 0\n\n--- Goblin appeared! (HP:30) ---\n  Player -> Goblin (10)\n  Goblin -> Player (3)\n  Player -> Goblin (10)\n  Goblin -> Player (3)\n  Player -> Goblin (10)\n  Victory! +60EXP, +40G\n\n--- Slime appeared! (HP:40) ---\n  Player -> Slime (13)\n  Slime -> Player (1)\n  Player -> Slime (13)\n  Slime -> Player (1)\n  Player healed! HP: 120/120\n  Slime -> Player (1)\n  Player -> Slime (13)\n  Slime -> Player (1)\n  Player -> Slime (13)\n  Victory! +30EXP, +20G\n\n--- Status ---\n  [Warrior] Player Lv.1\n  HP: 118/120 | ATK: 15 | DEF: 12\n  EXP: 90/100 | Gold: 60\n\n--- Shop (Have: 60G) ---\n  Potion: 30G\n  Bought Potion! (Balance: 30)\n\n--- Save Complete! ---\n\nGame Over!\n\n=== Final Results ===\n  [Warrior] Player Lv.1\n  HP: 118/120 | ATK: 15 | DEF: 12\n  EXP: 90/100 | Gold: 30\n\nSave: {"name": "Player", "job": "warrior", "level": 1, "hp": 118, "max_hp": 120, "atk": 15, "defense": 12, "exp": 90, "gold": 30}`,
-          hint: "The actions list is the game scenario! Repeat with while!",
-          hint2: "Just run the code as is!"
+          hint: "The variable counting which action comes next, the command that leaves the loop, and the action name for entering the shop.",
+          hint2: "idx / break / shop"
         },
         {
           id: "ch3-2",

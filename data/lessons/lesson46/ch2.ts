@@ -57,7 +57,7 @@ print(f'아이템: {parsed["items"]}')`,
       id: "ch2-2",
       type: "tryit",
       title: "💻 string 모듈 활용!",
-      task: "string 모듈의 상수들을 확인하세요!",
+      task: "string 모듈의 상수 이름을 알맞은 자리에 넣어보세요. 쓸 이름 (순서는 섞여 있어요): digits · ascii_uppercase · ascii_lowercase",
       initialCode: `import string
 
 print('소문자:', string.___)
@@ -81,9 +81,9 @@ def check_password(pw):
     has_digit = False
 
     for ch in pw:
-        if ch in string.ascii___:
+        if ch in string.___:
             has_lower = True
-        elif ch in string.ascii___:
+        elif ch in string.___:
             has_upper = True
         elif ch in string.___:
             has_digit = True
@@ -102,8 +102,8 @@ check_password('Hello123')
 print()
 check_password('hello')`,
       expectedOutput: `비밀번호: Hello123\n  소문자: ✅\n  대문자: ✅\n  숫자: ✅\n  → 강한 비밀번호!\n\n비밀번호: hello\n  소문자: ✅\n  대문자: ❌\n  숫자: ❌\n  → 약한 비밀번호!`,
-      hint: "string 모듈의 소문자, 대문자, 숫자 상수를 사용해요!",
-      hint2: "lowercase / uppercase / digits"
+      hint: "바로 앞 문제에서 쓴 이름 셋을 그대로 다시 써요.",
+      hint2: "ascii_lowercase / ascii_uppercase / digits"
     },
     {
       id: "ch2-4",

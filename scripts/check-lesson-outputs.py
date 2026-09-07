@@ -477,6 +477,7 @@ def report(title, checked, problems):
 BAD_BLANK = re.compile(r"_{4,}")
 
 
+
 NO_PROMPT_SHIM = (
     "import builtins as _b\n"
     "_o = _b.input\n"
@@ -565,7 +566,7 @@ def main():
     # ⚠️ 이 숫자는 **고칠 때마다 같이 내려야 한다.** 안 내리면 그 차이만큼이
     #    방패가 되어 새 버그가 숨는다 — 2026-09-07 에 4곳을 고치고 81 을 그대로 뒀더니
     #    일부러 넣은 새 버그가 안 잡혔다.
-    KNOWN_BLANK_ISSUES = 77
+    KNOWN_BLANK_ISSUES = 75
     legacy = min(len(bp), KNOWN_BLANK_ISSUES)
     report("📘 복습 문제 (app/review)", rc, rp)
     report("📗 수업 레슨 (data)", lc, lp)

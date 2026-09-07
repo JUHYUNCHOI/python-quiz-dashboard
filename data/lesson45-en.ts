@@ -122,7 +122,7 @@ print(f'floor(2.9) = {floor(2.9)}')
 import math ___ m
 print(f'pi = {m.___:.2f}')`,
           expectedOutput: `sqrt(100) = 10.0\nceil(2.1) = 3\nfloor(2.9) = 2\npi = 3.14`,
-          hint: "from to get functions, as for alias, pi is a math constant!",
+          hint: "The keyword that pulls in only what you need, the keyword that renames it, and the constant that prints as 3.14.",
           hint2: "from / as / pi"
         },
         {
@@ -192,11 +192,11 @@ for r in radii:
 
 print(f'\\n=== Sphere Volume ===')
 r = 5
-volume = (___) * math.pi * r ** ___
+volume = (4/3) * math.pi * r ** ___
 print(f'Radius {r}: Volume = {volume:.2f}')`,
           expectedOutput: `=== Circle Area ===\nRadius 1: Area = 3.14\nRadius 3: Area = 28.27\nRadius 5: Area = 78.54\nRadius 10: Area = 314.16\n\n=== Sphere Volume ===\nRadius 5: Volume = 523.60`,
-          hint: "How many times does area multiply the radius? And volume — how many times, and what fraction goes in front?",
-          hint2: "2 / 4/3 / 3"
+          hint: "How many times does area multiply the radius? And volume? (The 4/3 in front is just part of the sphere formula.)",
+          hint2: "2 / 3"
         },
         {
           id: "ch2-2",
@@ -215,7 +215,7 @@ print(f'Average: {avg:.1f}')
 print(f'Rounded up: {math.___(avg)}')
 print(f'Rounded down: {math.___(avg)}')`,
           expectedOutput: `Total: 668\nAverage: 83.5\nRounded up: 84\nRounded down: 83`,
-          hint: "Round up is ceil, round down is floor!",
+          hint: "First, which module they came from. Then the function that rounds up and the one that rounds down.",
           hint2: "math / ceil / floor"
         },
         {

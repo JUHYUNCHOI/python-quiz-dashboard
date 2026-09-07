@@ -137,7 +137,7 @@ idx = 0
 def next_action():
     global idx
     if idx < len(actions):
-        a = actions[idx]
+        a = actions[___]
         idx += 1
         return a
     return 'quit'
@@ -156,7 +156,7 @@ while True:
     action = next_action()
     if action == 'quit':
         print('\\n게임 종료!')
-        break
+        ___
 
     if action == 'battle':
         monster = create_monster()
@@ -184,7 +184,7 @@ while True:
         print('\\n--- 상태 ---')
         hero.status()
 
-    elif action == 'shop':
+    elif action == '___':
         print(f'\\n--- 상점 (보유: {hero.gold}골드) ---')
         print('  물약: 30골드')
 
@@ -205,8 +205,8 @@ hero.status()
 if save_data:
     print(f'\\n세이브: {save_data}')`,
       expectedOutput: `=== 용사 탄생! ===\n  [용사] 플레이어 Lv.1\n  HP: 120/120 | ATK: 15 | DEF: 12\n  EXP: 0/100 | 골드: 0\n\n--- 고블린 등장! (HP:30) ---\n  플레이어 -> 고블린 (10)\n  고블린 -> 플레이어 (3)\n  플레이어 -> 고블린 (10)\n  고블린 -> 플레이어 (3)\n  플레이어 -> 고블린 (10)\n  승리! +60EXP, +40골드\n\n--- 슬라임 등장! (HP:40) ---\n  플레이어 -> 슬라임 (13)\n  슬라임 -> 플레이어 (1)\n  플레이어 -> 슬라임 (13)\n  슬라임 -> 플레이어 (1)\n  플레이어 회복! HP: 120/120\n  슬라임 -> 플레이어 (1)\n  플레이어 -> 슬라임 (13)\n  슬라임 -> 플레이어 (1)\n  플레이어 -> 슬라임 (13)\n  승리! +30EXP, +20골드\n\n--- 상태 ---\n  [용사] 플레이어 Lv.1\n  HP: 118/120 | ATK: 15 | DEF: 12\n  EXP: 90/100 | 골드: 60\n\n--- 상점 (보유: 60골드) ---\n  물약: 30골드\n  물약 구매! (잔액: 30)\n\n--- 세이브 완료! ---\n\n게임 종료!\n\n=== 최종 결과 ===\n  [용사] 플레이어 Lv.1\n  HP: 118/120 | ATK: 15 | DEF: 12\n  EXP: 90/100 | 골드: 30\n\n세이브: {"name": "플레이어", "job": "warrior", "level": 1, "hp": 118, "max_hp": 120, "atk": 15, "defense": 12, "exp": 90, "gold": 30}`,
-      hint: "actions 리스트가 게임 시나리오! while로 반복!",
-      hint2: "코드를 그대로 실행하세요!"
+      hint: "actions 에서 지금 몇 번째를 꺼낼지 세는 변수, 루프를 빠져나가는 명령어, 그리고 상점에 들어가는 행동 이름이에요.",
+      hint2: "idx / break / shop"
     },
     {
       id: "ch3-2",

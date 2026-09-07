@@ -132,7 +132,7 @@ print(f'레벨: {loaded["level"]}')
 print(f'아이템: {", ".join(loaded["items"])}')
 print(f'골드: {loaded["gold"]}G')`,
       expectedOutput: `=== 게임 저장 ===\n{\n  "player": "용사",\n  "level": 5,\n  "hp": 150,\n  "items": [\n    "불꽃검",\n    "강철방패",\n    "회복포션"\n  ],\n  "gold": 2500\n}\n\n=== 게임 로드 ===\n플레이어: 용사\n레벨: 5\n아이템: 불꽃검, 강철방패, 회복포션\n골드: 2500G`,
-      hint: "json 모듈의 dumps(저장)와 loads(불러오기)를 사용해요!",
+      hint: "어느 모듈인지, 딕셔너리를 글자로 내보내는 함수, 글자를 다시 딕셔너리로 읽어 들이는 함수예요.",
       hint2: "json / dumps / loads"
     },
     {
