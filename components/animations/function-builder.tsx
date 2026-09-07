@@ -233,7 +233,7 @@ export function FunctionBuilder({ onComplete, lang = "ko" }: FunctionBuilderProp
             step.parts.includes('string') 
               ? "opacity-100 bg-lime-500/30 text-lime-300 font-bold" 
               : "opacity-0"
-          )}>f"안녕, {'{name}'}!"</span>
+          )}>{isEn ? <>f"Hello, {'{name}'}!"</> : <>f"안녕, {'{name}'}!"</>}</span>
           <span className={cn(
             "px-1 py-1 transition-all duration-500",
             step.parts.includes('paren4') ? "opacity-100 text-amber-300" : "opacity-0"
