@@ -30,9 +30,13 @@ export function makeMooHuntCh1(E) {
             </div>
             <div style={{ fontSize: 13, color: "#7f1d1d", lineHeight: 1.7,
               whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
+              {/* 2026-09-07 선생님: "난 이거 첫페이지랑 두번째 페이지 읽을떄까지
+                  뭘하라는건지 모르겠는데". 원인 — 미션이 아직 정의되지 않은 말
+                  ("MOO 가 나온다")에 기대고 있었다. 미션만 읽으면 "MOO 를 여러 번
+                  쓰면 되나?" 로 읽힌다. 채점 규칙을 미션 안에서 먼저 말한다. */}
               {t(E,
-                "Fill each cell with M or O.\nFill it so \"MOO\" shows up as many times as possible —\nhow many is that, and how many fillings tie for it?",
-                "칸마다 M 아니면 O 를 채워요.\n\"MOO\" 가 제일 많이 나오게 채우면 몇 개이고,\n그렇게 채우는 방법이 몇 가지인지 구해요.")}
+                "You fill each cell with M or O.\nA list of cell-number trios is given — if a trio reads \"MOO\", that's 1 point.\nFill the board for the highest total: what is it, and how many fillings reach it?",
+                "칸마다 M 아니면 O 를 우리가 적어요.\n확인할 칸 번호 세 개짜리 묶음들이 주어지는데, 그 세 칸이 'MOO' 로 읽히면 1점이에요.\n점수가 제일 높게 적으면 몇 점이고, 그렇게 적는 방법이 몇 가지인지 구해요.")}
             </div>
           </div>
 
@@ -46,18 +50,25 @@ export function makeMooHuntCh1(E) {
                   칸 5개짜리 아주 작은 예를 카드 안에서 바로 보여준다. */}
               <div style={{ marginBottom: 12, paddingBottom: 10, borderBottom: "1px dashed #fca5a5" }}>
                 <div style={{ fontSize: 12, fontWeight: 800, color: "#7f1d1d", marginBottom: 8, wordBreak: "keep-all" }}>
-                  {t(E, "For example — 5 cells, and one thing to check: (1, 2, 3).",
-                       "예를 들어 — 칸이 5개, 확인할 건 (1, 2, 3) 하나예요.")}
+                  {t(E, "For example — 5 cells, and two things to check: (1, 2, 3) and (1, 4, 5).",
+                       "예를 들어 — 칸이 5개, 확인할 건 (1, 2, 3) 과 (1, 4, 5) 두 개예요.")}
                   <div style={{ fontWeight: 600, color: "#7f1d1d", marginTop: 5, fontSize: 11.5, lineHeight: 1.7 }}>
                     {t(E, <>That means: read cell 1, cell 2, cell 3 <b>in that order</b>.<br />
-                           If those three letters are <b>"MOO"</b> → 1 point. A trio like this is one <b>move</b>.</>,
+                           If those three letters are <b>"MOO"</b> → 1 point. A trio like this is one <b>move</b>.<br />
+                           Same for (1, 4, 5). Add them up — that's the board's score.</>,
                          <>1번 · 2번 · 3번 칸의 글자를 <b>이 순서대로</b> 읽어 봐요.<br />
-                           그 세 글자가 <b>"MOO"</b> 면 1점. 이런 칸 번호 세 개를 <b>무브</b> 라고 해요.</>)}
+                           그 세 글자가 <b>"MOO"</b> 면 1점. 이런 칸 번호 세 개를 <b>무브</b> 라고 해요.<br />
+                           (1, 4, 5) 도 똑같이 읽어요. 둘을 더한 게 그 보드의 점수예요.</>)}
                   </div>
                 </div>
                 {[
-                  { board: "MOOOM", pts: 1, note: t(E, "reading 1→2→3 gives \"MOO\" → 1 point", "1→2→3 을 읽으면 \"MOO\" → 1점") },
-                  { board: "OOOOM", pts: 0, note: t(E, "reading 1→2→3 gives \"OOO\" → 0", "1→2→3 을 읽으면 \"OOO\" → 0점") },
+                  /* 2026-09-07: 전엔 무브가 하나뿐이라 최고 점수가 늘 1점이었고,
+                     그래서 미션의 "제일 많이" 가 무슨 말인지 안 보였다.
+                     같은 5칸인데 채우기에 따라 1점·2점으로 갈리는 두 보드로 바꾼다.
+                     (검산: MOOOM → (1,2,3)="MOO" 1점, (1,4,5)="MOM" 0점 → 1점
+                             MOOOO → 둘 다 "MOO" → 2점) */
+                  { board: "MOOOM", pts: 1, note: t(E, "(1,2,3) → \"MOO\" ✓ · (1,4,5) → \"MOM\" ✗  →  1 point", "(1,2,3) → \"MOO\" ✓ · (1,4,5) → \"MOM\" ✗  →  1점") },
+                  { board: "MOOOO", pts: 2, note: t(E, "(1,2,3) → \"MOO\" ✓ · (1,4,5) → \"MOO\" ✓  →  2 points", "(1,2,3) → \"MOO\" ✓ · (1,4,5) → \"MOO\" ✓  →  2점") },
                 ].map((r, k) => (
                   <div key={k} style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 7 }}>
                     <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 700, width: 74, flexShrink: 0, textAlign: "right" }}>
@@ -69,10 +80,11 @@ export function makeMooHuntCh1(E) {
                           <span style={{ width: 26, height: 26, borderRadius: 6, display: "flex",
                             alignItems: "center", justifyContent: "center",
                             fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 13,
-                            background: i < 3 ? (c === "M" ? "#fef2f2" : "#eff6ff") : "#f8fafc",
-                            border: `${i < 3 ? 2 : 1}px solid ${i < 3 ? (c === "M" ? "#dc2626" : "#2563eb") : "#e2e8f0"}`,
-                            color: i < 3 ? (c === "M" ? "#dc2626" : "#2563eb") : "#cbd5e1" }}>{c}</span>
-                          <span style={{ fontSize: 9, fontWeight: 800, color: i < 3 ? "#f59e0b" : "#e2e8f0" }}>{i + 1}</span>
+                            /* 무브가 (1,2,3)·(1,4,5) 라 5칸이 전부 쓰인다 — 회색 처리하던 4·5번도 살린다 */
+                            background: c === "M" ? "#fef2f2" : "#eff6ff",
+                            border: `2px solid ${c === "M" ? "#dc2626" : "#2563eb"}`,
+                            color: c === "M" ? "#dc2626" : "#2563eb" }}>{c}</span>
+                          <span style={{ fontSize: 9, fontWeight: 800, color: "#f59e0b" }}>{i + 1}</span>
                         </span>
                       ))}
                     </span>
@@ -82,8 +94,8 @@ export function makeMooHuntCh1(E) {
                   </div>
                 ))}
                 <div style={{ marginTop: 8, fontSize: 12.5, fontWeight: 800, color: "#7f1d1d", wordBreak: "keep-all", textWrap: "balance" }}>
-                  {t(E, "So the question is: how should we fill the board to score the most?",
-                       "그래서 문제는 이거예요 — 보드를 어떻게 채워야 점수가 제일 높을까?")}
+                  {t(E, "Same 5 cells — but 1 point or 2, depending on how we fill it.\nSo: how should we fill it to score the most?",
+                       "같은 5칸인데 어떻게 채우냐에 따라 1점도 되고 2점도 돼요.\n그래서 문제는 이거예요 — 어떻게 채워야 점수가 제일 높을까?")}
                 </div>
               </div>
 
@@ -153,10 +165,48 @@ export function makeMooHuntCh1(E) {
               <div>4 2</div>
             </div>
           </div>
+          {/* 2026-09-07: 입력 형식 설명이 없어서 `5 6` 이 뭔지 알 수가 없었다.
+              다른 quest 에는 있는 3박스 카드(mcc19rect2 템플릿)가 여기만 빠져 있었다. */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12 }}>
+            <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+                {t(E, <>First line: <b>N K</b> — cells, then how many moves.<br />Next <b>K</b> lines: one move each — <b>x y z</b>.</>,
+                     <>첫 줄: <b>N K</b> — 칸 수, 그리고 무브 개수.<br />다음 <b>K</b> 줄: 무브 하나씩 — <b>x y z</b>.</>)}
+              </div>
+            </div>
+            <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+              <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.7, wordBreak: "keep-all" }}>
+                {t(E, <>One line: <b>best score</b>, then <b>how many boards</b> reach it.</>,
+                     <>한 줄: <b>최고 점수</b>, 그리고 그 점수가 되는 <b>보드 개수</b>.</>)}
+              </div>
+            </div>
+          </div>
+
+          {/* 전엔 "두 보드가 4점" 이라고 결론만 줬다. 왜 4점인지 무브 6개를 하나씩 보여준다. */}
           <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: 12, fontSize: 12, color: "#7f1d1d", lineHeight: 1.6, wordBreak: "keep-all" }}>
-            {t(E, "Two boards reach the max score of 4:", "최고 점수 4 에 도달하는 보드는 두 가지:")}
-            <div style={{ marginTop: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#dc2626" }}>
-              MOOOM &nbsp; · &nbsp; MOOMM
+            {t(E, <>Why is <b>MOOOM</b> worth 4? Read each move on that board:</>,
+                 <><b>MOOOM</b> 이 왜 4점일까요? 무브를 하나씩 읽어 봐요:</>)}
+            <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+              {[["1 2 3","MOO",true],["1 2 3","MOO",true],["1 3 5","MOM",false],
+                ["2 3 4","OOO",false],["5 3 2","MOO",true],["5 2 3","MOO",true]].map(([mv,rd,ok],k)=>(
+                <div key={k} style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                  <span style={{ color: "#0891b2", fontWeight: 700, width: 46 }}>{mv}</span>
+                  <span style={{ color: C.dim }}>→</span>
+                  <span style={{ fontWeight: 800, color: ok ? "#15803d" : "#94a3b8" }}>{rd}</span>
+                  <span style={{ fontWeight: 800, color: ok ? "#15803d" : "#b91c1c" }}>{ok ? "✓ 1" : "✗ 0"}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fca5a5", fontWeight: 800 }}>
+              {t(E, "4 moves read MOO → 4 points.", "네 개가 MOO 로 읽혀요 → 4점.")}
+            </div>
+            <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
+              {t(E, "One other board also reaches 4 — so the answer is \"4 2\":", "4점이 되는 보드가 하나 더 있어요 — 그래서 답이 \"4 2\" 예요:")}
+              <div style={{ marginTop: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#dc2626" }}>
+                MOOOM &nbsp; · &nbsp; MOOMM
+              </div>
             </div>
           </div>
         </div>),
