@@ -217,6 +217,7 @@ export function BlankCodeRunner({
   const [nestedWarning, setNestedWarning] = useState<Record<number, string>>(
     () => detectInitialWarnings(savedValues)
   )
+  const [outputExpanded, setOutputExpanded] = useState(false)   // 긴 출력 접기/펴기 (2026-09-07)
   const [focusedBlank, setFocusedBlank] = useState<number>(0)
   const [output, setOutput] = useState("")
   const [error, setError] = useState("")
@@ -587,20 +588,45 @@ export function BlankCodeRunner({
         </div>
       )}
 
-      {/* 기대 출력 미리보기 — 빈칸에 뭘 넣어야 하는지 유추 가능. sticky 로 항상 보임. */}
-      {expectedOutput && (
+      {/* 기대 출력 미리보기 — 빈칸에 뭘 넣어야 하는지 유추 가능. sticky 로 항상 보임.
+          2026-09-07: 학생이 화면을 직접 써보고 두 가지를 말했다 —
+            "화면을 열자마자 코드가 한 줄도 안 보이거나 딱 첫 줄만 보이고, 빈칸은 화면 밖에 있었어.
+             스크롤해야 빈칸이 나온다는 걸 처음엔 몰랐어."
+            "스크롤하면서 이 박스가 코드 중간에 둥둥 떠서 코드 두 줄 정도를 가렸어."
+          그 전에 내가 `max-h + overflow-y-auto` 로 막아봤는데 그건
+          `memory/quest_problem_standard.md:561` 이 금지한 안티패턴이었다 —
+          "컨텐츠 일부 숨겨짐, 페이지 안 또 스크롤 → UX 혼란".
+          실제로 레슨43 에서 24줄 출력이 496px 인데 198px 만 보이고 스크롤바 단서도 없었다.
+          → 스크롤 대신 **접는다.** 긴 출력은 기본 접힘(앞 4줄) + "전체 보기".
+            접혀 있으면 첫 화면에 코드가 보이고, 스티키로 남아도 코드를 가릴 만큼 크지 않다. */}
+      {expectedOutput && (() => {
+        const lines = expectedOutput.split("\n")
+        // 8줄까지는 그냥 다 보여준다 — 그 정도는 카드가 100px 안쪽이라 코드를 안 가린다.
+        // 6줄짜리에도 "전체 보기" 가 붙으면 버튼만 시끄럽다 (2026-09-07 실측 후 조정).
+        const LONG = lines.length > 8
+        const shown = !LONG || outputExpanded ? expectedOutput : lines.slice(0, 6).join("\n")
+        return (
         <div className="sticky top-[110px] md:top-[120px] z-10 bg-amber-50/95 backdrop-blur rounded-lg md:rounded-xl p-2.5 md:p-3 border border-amber-200">
           <p className="text-amber-700 font-bold text-xs md:text-sm mb-1">{t("📋 이렇게 출력되도록 빈칸을 채우세요:", "📋 Fill in the blanks to get this output:")}</p>
-          {/* 2026-09-07: 출력이 길면 이 카드가 화면 위쪽을 248px 까지 먹어서
-              아래 코드의 빈칸을 가렸다. 높이를 묶고 안쪽만 스크롤한다. */}
-          <pre className="font-mono text-xs md:text-sm text-amber-900 whitespace-pre-wrap bg-amber-100/50 rounded-md p-2 select-all cursor-text max-h-[18vh] md:max-h-[22vh] overflow-y-auto">{expectedOutput}</pre>
+          <pre className="font-mono text-xs md:text-sm text-amber-900 whitespace-pre-wrap bg-amber-100/50 rounded-md p-2 select-all cursor-text">{shown}</pre>
+          {LONG && (
+            <button
+              type="button"
+              onClick={() => setOutputExpanded(v => !v)}
+              className="mt-1 text-xs font-bold text-amber-700 hover:text-amber-900 underline"
+            >
+              {outputExpanded
+                ? t("▲ 접기", "▲ Collapse")
+                : t(`▾ 전체 보기 (${lines.length}줄)`, `▾ Show all (${lines.length} lines)`)}
+            </button>
+          )}
           {/[^\x00-\x7F]/.test(expectedOutput) && (
             <p className="text-amber-600 text-xs mt-1.5">
               {t("💡 위 텍스트를 드래그해서 복사하세요!", "💡 Drag to copy the text above!")}
             </p>
           )}
         </div>
-      )}
+      )})()}
 
       {/* 코드 에디터 (빈칸 포함) */}
       <div className={cn(
