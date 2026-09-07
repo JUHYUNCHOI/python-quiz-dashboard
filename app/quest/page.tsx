@@ -267,7 +267,12 @@ export default function QuestPage() {
   const [algoTopicsDone, setAlgoTopicsDone] = useState(0)
   const [solvedSet, setSolvedSet] = useState<Set<string>>(new Set())
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(["USACO", "MCC", "MCO"]))
-  const [mccDiff, setMccDiff] = useState<number | null>(null)   // MCC 난이도 필터 (null=전체)
+  /* 난이도 필터 — **섹션마다 따로** 기억한다 (2026-09-07).
+     전엔 변수 하나(mccDiff)를 USACO·MCC·MCO 가 같이 썼다. 칩 줄은 섹션 안에 따로 그려져서
+     "이 섹션 안에서만 거른다" 로 보이는데 실제로는 셋 다 걸러졌다.
+     ux-reviewer 실측: USACO 에서 Lv2 를 누르면 **MCO 가 통째로 빈 화면**이 됐다 —
+     MCO 엔 Lv2 문제가 하나도 없는데, 왜 비었는지 설명이 없다. */
+  const [diffBySection, setDiffBySection] = useState<Record<string, number | null>>({})
   const [betaOptIn, setBetaOptIn] = useReleasePref()
 
   // Phase 5: Filter helper. A quest is visible if:
@@ -464,6 +469,11 @@ export default function QuestPage() {
   //   지금은 화면에서 둘을 구분하지 않고 똑같이 "Lv N" 으로 보여준다. 손대지 말 것 — 어떻게
   //   드러낼지는 따로 정한다 (선생님 지시, 2026-09-07).
   const renderProblemRow = (problem: Problem, idx: number, contestLabel?: string) => {
+    /* contestLabel 이 있으면 = 난이도로 걸러 카드 구조를 없앤 평평한 목록이다.
+       그 상태에서는 대회 안 순번(#1·#2)을 숨긴다 — 서로 다른 대회 수십 개가 한 줄씩 나오는데
+       앞에 #1 이 스무 번 반복돼서, 순위인지 중복인지로 읽힌다 (ux-reviewer 실측 2026-09-07).
+       어느 대회인지는 오른쪽 대회 배지가 이미 알려준다. */
+    const flat = !!contestLabel
     const isSolved = solvedSet.has(problem.id)
     const diff = questDifficulty(problem.id, problem.sub)
     const stage = getReleaseStage(problem.id)
@@ -481,9 +491,11 @@ export default function QuestPage() {
             : "hover:bg-amber-50/70",
         ].join(" ")}
       >
-        <span className="font-black text-[11px] w-7 text-gray-500 flex-shrink-0">
-          {numLabel}
-        </span>
+        {!flat && (
+          <span className="font-black text-[11px] w-7 text-gray-500 flex-shrink-0">
+            {numLabel}
+          </span>
+        )}
         <span className="text-sm flex-shrink-0">{problem.emoji}</span>
         <span className={`flex-1 truncate font-semibold ${
           isSolved ? "text-green-700" : "text-gray-800 group-hover:text-amber-700"
@@ -519,7 +531,11 @@ export default function QuestPage() {
             🎯
           </span>
         )}
-        {HARD_QUESTS.has(problem.id) && (
+        {/* ◆ 는 **선생님 메모**다 (위 HARD_QUESTS 주석: "선생님 참고용").
+            그런데 학생에게도 그대로 보이고 있었다. 2026-09-07 학생이 직접 짚었다 —
+            "이게 뭘 뜻하는지 화면에서 안 알려줬다." 뜻 모를 기호는 없는 것만 못하다.
+            → 선생님 화면에서만 보인다. */}
+        {isTeacher && HARD_QUESTS.has(problem.id) && (
           <span className="text-amber-400/80 text-[11px] leading-none flex-shrink-0 cursor-default" title={t("어려운 편 (선생님 메모)", "harder one (teacher note)")}>
             ◆
           </span>
@@ -691,7 +707,7 @@ export default function QuestPage() {
                       <div className="flex items-center gap-1.5 flex-wrap px-3 py-2 border-b-2 border-gray-200 bg-white">
                         <span className="text-[11px] font-bold text-gray-500 mr-1">🎚️ 난이도</span>
                         {([null, 1, 2, 3, 4, 5] as (number | null)[]).map(lv => {
-                          const on = mccDiff === lv
+                          const on = (diffBySection[section.label] ?? null) === lv
                           const label = lv === null ? "전체" : `Lv${lv}`
                           const color = lv === null ? "#334155" : DIFF_COLOR[lv as 1 | 2 | 3 | 4 | 5]
                           const pool = lv === null
@@ -703,7 +719,7 @@ export default function QuestPage() {
                           return (
                             <button
                               key={String(lv)}
-                              onClick={() => setMccDiff(lv)}
+                              onClick={() => setDiffBySection(prev => ({ ...prev, [section.label]: lv }))}
                               className="text-[11px] font-black px-2 py-0.5 rounded-full border-2 transition-colors"
                               style={on
                                 ? { background: color, color: "#fff", borderColor: color }
@@ -715,12 +731,20 @@ export default function QuestPage() {
                         })}
                       </div>
                     )}
-                    {hasDiff && mccDiff !== null ? (
+                    {hasDiff && (diffBySection[section.label] ?? null) !== null && (
+                      /* 칩 줄은 섹션 맨 위에만 있고 고정이 아니라, 50개짜리 목록을 스크롤하면
+                         "내가 지금 뭘 보고 있지" 를 알 방법이 없어진다. 한 줄로 말해준다. */
+                      <div className="px-3 py-1.5 bg-amber-50 border-b-2 border-amber-200 text-[11.5px] font-bold text-amber-900" style={{ wordBreak: "keep-all" }}>
+                        {t(`지금 Lv${diffBySection[section.label]} 문제만 보고 있어요. 전체를 보려면 위 "전체" 를 눌러요.`,
+                           `Showing Lv${diffBySection[section.label]} only — tap "All" above for everything.`)}
+                      </div>
+                    )}
+                    {hasDiff && (diffBySection[section.label] ?? null) !== null ? (
                       // 난이도를 골랐을 때: 연도/시즌 카드 구조 없이 한 줄씩 쭉 (선생님 요청, 2026-09-07)
                       // 정렬은 section.problems 원래 순서 그대로(최신이 위) — 새로 만들지 않음.
                       <div className="flex flex-col divide-y divide-gray-200 bg-white">
                         {section.problems
-                          .filter(p => questDifficulty(p.id, p.sub) === mccDiff)
+                          .filter(p => questDifficulty(p.id, p.sub) === diffBySection[section.label])
                           .map((problem, idx) => renderProblemRow(
                             problem,
                             idx,
@@ -754,8 +778,8 @@ export default function QuestPage() {
                               const sorted = hasDiff
                                 ? [...items].sort((a, b) => (questDifficulty(a.id, a.sub) ?? 9) - (questDifficulty(b.id, b.sub) ?? 9))
                                 : items
-                              const rows = (hasDiff && mccDiff !== null)
-                                ? sorted.filter(p => questDifficulty(p.id, p.sub) === mccDiff)
+                              const rows = (hasDiff && (diffBySection[section.label] ?? null) !== null)
+                                ? sorted.filter(p => questDifficulty(p.id, p.sub) === diffBySection[section.label])
                                 : sorted
                               if (rows.length === 0) return null   // 필터에 안 걸리는 대회 카드는 숨김
                               const groupSolved = rows.filter(p => solvedSet.has(p.id)).length
