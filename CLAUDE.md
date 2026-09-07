@@ -17,6 +17,7 @@
 | 되돌리기 어려운 결정 (배포·삭제·구조 변경) | **`/decide` 스킬** — 한 사람이 판정하지 않는다 |
 | 남은 일 목록 | `~/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/next_work_2026-09-04.md` |
 | 우선순위 정하기 | `.claude/docs/roadmap.md` |
+| **왜 이걸 만드나 · 무엇을 향해 가나** | **`~/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/learning_tracks.md`** — 3트랙·5단계 기획 의도. 선생님(2026-05-27) *"기획의도를 기억하게 해줘."* **큰 결정 전에 여기부터** |
 
 > ⚠️ **로드맵을 안 열어도 이것만은 알아라 (2026-09-04 코드로 확인):**
 > 코딩 뱅크(`/coding-bank`) · Algorithm Lab(`/algo`, 토픽 23개) · CodeQuest(`/quest`, 문제 180개) ·
@@ -26,6 +27,12 @@
 | 선생님이 전에 하신 말 찾기 | `~/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/MEMORY.md` |
 
 역할별로 아는 것은 `.claude/agents/<이름>.md` 안에 있다. 그 에이전트를 부르면 같이 읽힌다.
+
+> 📌 **2026-09-07 에 이 줄이 생긴 이유:** 기획 의도 문서는 5월부터 있었고
+> `project-lead` 에게만 읽으라고 적혀 있었다. 그런데 목차에 없어서 **메인 세션이
+> 한 번도 안 열었다.** 그날 에이전트를 20번 넘게 돌리는 동안 아무도 "이 일이
+> 우리 목표의 어디에 닿나" 를 묻지 않았다. 선생님: *"우리의 목표를 잊어버리지 말고
+> 중심을 잡을 필요가 있어."* — 주인이 없어서가 아니라 **질문이 없어서** 잊혔다.
 
 ⚠️ **목차가 낡으면 본문이 틀린 것보다 나쁘다** — 없는 걸 열게 되니까.
 파일을 옮기거나 지웠으면 이 표를 같이 고쳐라. 기계로 확인하려면:

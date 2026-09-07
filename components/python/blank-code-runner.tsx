@@ -88,6 +88,36 @@ function parseAnswers(hint2: string): string[] {
   return hint2.split(' / ').map(s => s.trim())
 }
 
+// 포커스된 빈칸이 위아래 고정 요소에 가리면 직접 옮긴다.
+//
+// 왜 브라우저에 못 맡기나 (2026-09-07 python-qa 가 측정해서 알려줌):
+//   `focus()` 의 기본 스크롤은 요소가 **기하학적으로 뷰포트 안에 있으면 안 움직인다.**
+//   fixed 오버레이에 시각적으로 덮여 있어도 브라우저는 "보인다" 고 판단한다.
+//   그래서 CSS `scroll-margin` 은 "완전히 화면 밖" 인 경우만 고치고,
+//   "일부 겹침" 은 못 고친다 — 레슨48 ch3-5 모바일 마지막 빈칸이 그 경우였다.
+// 그래서 실제로 겹치는지 재서, 겹칠 때만 그만큼 스크롤한다.
+function scrollBlankIntoSafeArea(el: HTMLElement | null) {
+  if (!el || typeof window === "undefined") return
+  requestAnimationFrame(() => {
+    const r = el.getBoundingClientRect()
+    if (!r.height) return
+    let top = 0, bottom = window.innerHeight
+    document.querySelectorAll<HTMLElement>("*").forEach(node => {
+      const cs = getComputedStyle(node)
+      if (cs.position !== "fixed" && cs.position !== "sticky") return
+      if (node.contains(el)) return                 // 조상은 제외 (코드 카드 자체)
+      const g = node.getBoundingClientRect()
+      if (g.height < 24 || g.width < 150) return
+      if (g.top <= 0) top = Math.max(top, g.bottom)                       // 위에 붙은 것
+      else if (g.bottom >= window.innerHeight) bottom = Math.min(bottom, g.top)  // 아래에 붙은 것
+      else if (g.top < window.innerHeight / 2) top = Math.max(top, g.bottom)     // 위쪽 스티키
+    })
+    const pad = 12
+    if (r.top < top + pad) window.scrollBy({ top: r.top - top - pad, behavior: "smooth" })
+    else if (r.bottom > bottom - pad) window.scrollBy({ top: r.bottom - bottom + pad, behavior: "smooth" })
+  })
+}
+
 // 빈칸 값을 코드에 합성 (컴포넌트 외부에서도 사용 가능)
 function buildAssembledCode(initialCode: string, filledValues: Record<number, string>): string {
   const lines = initialCode.split('\n')
@@ -472,7 +502,10 @@ export function BlankCodeRunner({
                 }
                 setNestedWarning(prev => ({ ...prev, [currentBlankId]: warning }))
               }}
-              onFocus={() => setFocusedBlank(currentBlankId)}
+              onFocus={(e) => {
+                setFocusedBlank(currentBlankId)
+                scrollBlankIntoSafeArea(e.currentTarget)
+              }}
               onKeyDown={(e) => {
                 // IME composition 중에는 skip — 한글 조합 완료 Enter 가 다음 빈칸 이동/실행 트리거 안 하게
                 if ((e.nativeEvent as KeyboardEvent)?.isComposing || e.keyCode === 229) return
