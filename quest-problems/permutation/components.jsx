@@ -380,7 +380,7 @@ export function PermSim({ E }) {
               </span>
             </div>
             <div style={{ marginTop: 4, fontWeight: 600, color: step.ok ? "#16a34a" : "#dc2626" }}>
-              → {step.ok ? `${t(E, "pick", "선택")}: ${step.picked}` : t(E, "둘 다 안 됨 — start 실패!", "둘 다 안 됨 — start 실패!")}
+              → {step.ok ? `${t(E, "pick", "선택")}: ${step.picked}` : t(E, "Neither works — this start fails!", "둘 다 안 됨 — start 실패!")}
             </div>
           </div>
         </div>

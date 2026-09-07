@@ -229,8 +229,8 @@ export function BitBoardSim({ E }) {
         오른쪽으로 {EX_I}칸 밀어요 — <b>{EX_B} &gt;&gt; {EX_I}</b> = {EX_B >> EX_I} (2진수 {(EX_B >> EX_I).toString(2)})<br />
         그리고 맨 끝자리만 남겨요 — <b>&amp; 1</b> → <b>{(EX_B >> EX_I) & 1}</b> 이니까 {((EX_B >> EX_I) & 1) ? "M" : "O"}</>)
     : t(E,
-      <>N = {N} 이면 보드는 <b>{1 << N}</b>개. 숫자 <b>0 … {(1 << N) - 1}</b> 이 전부예요.<br />
-        그래서 <b>for b in range(1 &lt;&lt; N)</b> 한 줄이<br /><b>"모든 보드를 다 해본다"</b> 가 돼요.</>,
+      <>With N = {N} there are <b>{1 << N}</b> boards — the numbers <b>0 … {(1 << N) - 1}</b>, all of them.<br />
+        So the single line <b>for b in range(1 &lt;&lt; N)</b><br />means <b>"try every board"</b>.</>,
       <>N = {N} 이면 보드는 <b>{1 << N}</b>개. 숫자 <b>0 … {(1 << N) - 1}</b> 이 전부예요.<br />
         그래서 <b>for b in range(1 &lt;&lt; N)</b> 한 줄이<br /><b>"모든 보드를 다 해본다"</b> 가 돼요.</>);
 

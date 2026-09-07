@@ -41,6 +41,7 @@
 python3 scripts/check-docs.py           # 목차가 가리키는 파일이 실제로 있나
 python3 scripts/check-frozen.py         # 건드리면 안 되는 파일을 건드렸나 (커밋 전)
 python3 scripts/check-concept-order.py  # 안 가르친 문법을 쓰고 있나
+python3 scripts/check-quest-lang.py     # quest 영어 자리에 한국어가 들어갔나
 ```
 
 **화면을 눈으로 봐야 할 때** (검토자·QA·학생 에이전트도 이걸 쓴다):
