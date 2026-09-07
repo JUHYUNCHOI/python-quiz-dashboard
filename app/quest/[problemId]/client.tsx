@@ -340,7 +340,16 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
             title={t("이 문제에 쓰는 알고리즘 배우러 가기", "Go learn the algorithm this problem uses")}
           >
             <span>{big ? "📘" : "🧠"}</span>
-            <span>{t("이 문제 핵심", "Core idea")}: <b>{lang === "en" ? qa.en : qa.ko}</b> — {t("막히면 배우기", "stuck? learn it")} →</span>
+            <span>
+              {t("이 문제 핵심", "Core idea")}: <b>{lang === "en" ? qa.en : qa.ko}</b> — {t("막히면 배우기", "stuck? learn it")} →
+              {/* 이 문제 등급보다 위 단계 토픽이면, 눌러보기 **전에** 무엇만 필요한지 알려준다.
+                  안 그러면 Bronze 학생이 클릭하고 "심화 (Gold~Platinum)" 라벨을 보고 물러선다. */}
+              {qa.note && (
+                <span className="ml-1.5 font-normal opacity-80">
+                  ({lang === "en" ? qa.note.en : qa.note.ko})
+                </span>
+              )}
+            </span>
           </Link>
         )
       })()}

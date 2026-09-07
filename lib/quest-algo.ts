@@ -50,7 +50,14 @@ export const QUEST_ALGO: Record<string, string> = {
   mcc21menu: "greedy", mcc22cardshark: "sorting", mcc22grammar: "graph", mcc22lamp: "prefixsum",
   mcc22maze: "graph", mco15honey: "greedy", mco15secret: "string", mco15trains: "shortestpath",
   milkfactory: "graph", milkorder: "topologicalsort",
-  moo: "string", moohunt: "bitmanipulation", mooin2: "prefixsum",
+  moo: "string",
+  // moohunt: 제거 (2026-09-07) — 비트 연산은 **핵심 아이디어가 아니라 표현 수단**이다.
+  //   공식 풀이의 진짜 통찰은 "득점 가능한 건 M 자리 하나 + O 자리 둘 조합뿐" 이라는 세기(관찰)이고,
+  //   (b >> i) & 1 은 보드를 숫자로 적기 위한 도구일 뿐이다. 20개 표준 토픽에 맞는 게 없다.
+  //   게다가 /algo/bitmanipulation 은 category: '심화 (Gold~Platinum)' 인데 moohunt 는 Bronze #2 다.
+  //   learning_tracks.md 4번("트랙에 안 맞는 걸 보여주지 않는다") 정면 위반이었다.
+  //   ⚠️ 대신 quest 안에서 가르친다 — BitBoardSim(숫자=보드, >> 와 & 와 <<)을 코드 직전에 둔다.
+  mooin2: "prefixsum",
   // mooin3: 제거 — 검증된 통과 풀이는 이분탐색을 안 씀(2026-07-27 표+그리디로 교체).
   //   실제 기법 = 글자별 lookup 표 precompute + 포물선 꼭짓점. 20개 표준 토픽에 딱 맞는 게 없음 → 애드혹.
   //   greedy(가운데 고정+양끝) 만으론 O(N²) TLE 라 greedy 태그도 오해 유발 → 링크 안 띄우는 게 정확.
@@ -73,8 +80,26 @@ export const TOPIC_EN: Record<string, string> = {
 };
 
 // quest 핵심 알고리즘 학습 정보 (없으면 null = 완전탐색 등, 링크 안 띄움)
-export function questAlgo(id: string): { topic: string; ko: string; en: string; href: string } | null {
+/* 이 문제 등급보다 **위 등급** 토픽으로 보내는 곳 — 링크는 남기되 배너가 미리 알려준다.
+   2026-09-07 실측: Bronze quest 4건이 '심화 (Gold~Platinum)' 토픽으로 갔다.
+   그중 moohunt 는 애초에 매핑이 틀려서 지웠고, 남은 셋은 **그 알고리즘이 진짜 핵심**이라
+   링크를 지우면 학생이 배울 곳을 잃는다. 대신 "이 토픽은 위 단계인데, 이 문제엔 앞부분만
+   쓴다" 를 눌러보기 **전에** 말해준다 — 클릭하고 나서 "심화" 라벨을 보고 놀라지 않게.
+   근거: learning_tracks.md 4번 "트랙에 안 맞는 걸 보여주지 않는다". */
+export const ALGO_LEVEL_NOTE: Record<string, { ko: string; en: string }> = {
+  familytree:     { ko: "이 문제엔 트리의 '부모 따라 올라가기' 만 써요", en: "only 'walk up to the parent' is needed here" },
+  interview:      { ko: "이 문제엔 '제일 작은 것 꺼내기' 만 써요", en: "only 'take the smallest' is needed here" },
+  milkorder:      { ko: "이 문제엔 '순서 정하기' 앞부분만 써요", en: "only the first part of ordering is needed here" },
+};
+
+export function questAlgo(id: string): {
+  topic: string; ko: string; en: string; href: string;
+  note?: { ko: string; en: string };
+} | null {
   const topic = QUEST_ALGO[id];
   if (!topic) return null;
-  return { topic, ko: TOPIC_KO[topic] || topic, en: TOPIC_EN[topic] || topic, href: `/algo/${topic}/learn` };
+  return {
+    topic, ko: TOPIC_KO[topic] || topic, en: TOPIC_EN[topic] || topic,
+    href: `/algo/${topic}/learn`, note: ALGO_LEVEL_NOTE[id],
+  };
 }
