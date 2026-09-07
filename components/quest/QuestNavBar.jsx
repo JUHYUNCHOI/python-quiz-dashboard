@@ -308,7 +308,11 @@ export function QuestBottomNav({
   // 그 값을 쓰고, 없으면 legacy behavior (첫 스텝 = disabled).
   const prevDisabled = canPrev !== undefined ? !canPrev : cur === 0;
   return (
-    <div style={{
+    // quest-navbar: 데스크탑에서 왼쪽 사이드바(w-60) 위를 덮지 않게 globals.css 가 left 를 민다.
+    // 2026-09-07 학생 관찰: "데스크탑에서 상단바에 로그인 버튼이 다른 요소에 가려서 안 보이기도 했다."
+    // 실측하니 이 바(z-100)가 사이드바(z-50) 아래쪽을 덮어 **로그인이 클릭조차 안 됐다**
+    // (elementFromPoint 가 이 바를 돌려줬다).
+    <div className="quest-navbar" style={{
       position: "fixed", bottom: 0, left: 0, right: 0,
       background: C.bg,
       padding: "8px 16px calc(14px + env(safe-area-inset-bottom))",

@@ -784,3 +784,10 @@ code, pre, .font-mono, [class*="font-mono"] {
   outline-offset: 2px;
   border-radius: 4px;
 }
+
+/* quest 하단 고정 네비 — 데스크탑에서 왼쪽 사이드바(w-60 = 15rem) 위를 덮지 않게.
+   2026-09-07: 이 바가 사이드바 아래쪽 로그인 버튼을 덮어 클릭이 안 됐다.
+   인라인 style 로는 미디어 쿼리를 못 써서 여기 둔다. */
+@media (min-width: 768px) {
+  .quest-navbar { left: 15rem !important; }
+}
