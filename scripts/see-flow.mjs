@@ -122,6 +122,20 @@ try {
     console.log('      분량이 큰 쪽은 "이게 이 문제의 본질인가, 코드를 읽는 도구인가" 를 물어라.')
     console.log('      도구면 자리는 **그것을 쓰는 코드 직전**이다. 문제 이해 한복판이 아니다.')
   }
+  /* 누르는 횟수 — 분량 피로는 글자 수가 아니라 **클릭 수**로 온다 (ux-reviewer 2026-09-08 실측:
+     rectangles 는 쪽 넘김 14 + 시뮬 서브 30 = 44회. "각 쪽은 안 긴데 계속 누르게 한다"). */
+  const subClicks = rows.reduce((a, r) => {
+    const m = /시뮬 (\d+)단계/.exec(r.subTxt)
+    return a + (m ? +m[1] - 1 : 0)
+  }, 0)
+  const clicks = rows.length - 1 + subClicks
+  console.log(`\n   눌러야 하는 횟수: ${clicks}회 (쪽 넘김 ${rows.length - 1} + 시뮬 안 ${subClicks})`)
+  if (clicks > 40) {
+    console.log('   ⚠️ 40회가 넘는다. 열두 살이 끝까지 올 분량인지 의심해라.')
+    console.log('      단, 줄이기 전에 **그 시뮬이 학생이 이해한 자리인지** 먼저 확인해라 —')
+    console.log('      2026-09-08 에 "길다" 는 이유로 압축하려던 시뮬이 학생이 유일하게')
+    console.log('      이해한 자리였다. 길이는 증거지 판결이 아니다.')
+  }
   console.log(`\n   첫 코드가 나오는 쪽: ${firstCode ?? '없음'} / 전체 ${rows.length}쪽`)
   if (errs.length) console.log(`\n   🚨 페이지 에러 ${errs.length}건: ${errs[0].slice(0, 80)}`)
 } finally {
