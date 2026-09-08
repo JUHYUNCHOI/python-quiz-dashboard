@@ -328,8 +328,19 @@ export function DPTableFillSim({ E }) {
   const steps = [
     { k: "intro" },
     { k: "cell", kk: 1, i: 1 }, { k: "cell", kk: 1, i: 2 }, { k: "cell", kk: 1, i: 3 },
-    { k: "try", kk: 2, i: 2, j: 2 }, { k: "try", kk: 2, i: 2, j: 1 }, { k: "cell", kk: 2, i: 2 },
-    { k: "try", kk: 2, i: 3, j: 3 }, { k: "try", kk: 2, i: 3, j: 2 }, { k: "cell", kk: 2, i: 3 },
+    /* 2026-09-07 — 한 번에 하던 "후보 구간을 보고 + 앞부분을 꺼내 더하기" 를 **두 스텝으로 쪼갰다.**
+       선생님이 그림을 같이 보여주자고 하셨는데, 모바일은 SimNav 아래 여백이 21px 뿐이라
+       그림을 얹으면 버튼이 하단 고정 바 밑으로 내려간다(ux-reviewer 좌표 실측).
+       선생님이 전에 주신 처방이 이거다 — **"시뮬 스텝을 늘려서라도 더 짧게."**
+         try    = 이 후보 구간이 얼마인가 (그림을 본다)
+         tryadd = 앞부분은 표에서 꺼내 쓴다 (표를 본다)
+       그러면 한 스텝에 한 가지만 보면 돼서 모바일에도 들어가고, 말풍선도 두 줄로 짧아진다. */
+    { k: "try", kk: 2, i: 2, j: 2 }, { k: "tryadd", kk: 2, i: 2, j: 2 },
+    { k: "try", kk: 2, i: 2, j: 1 }, { k: "tryadd", kk: 2, i: 2, j: 1 },
+    { k: "cell", kk: 2, i: 2 },
+    { k: "try", kk: 2, i: 3, j: 3 }, { k: "tryadd", kk: 2, i: 3, j: 3 },
+    { k: "try", kk: 2, i: 3, j: 2 }, { k: "tryadd", kk: 2, i: 3, j: 2 },
+    { k: "cell", kk: 2, i: 3 },
     { k: "answer" },
   ];
   const ts = useTraceStep(steps);
@@ -363,24 +374,25 @@ export function DPTableFillSim({ E }) {
         <>파랑 <b>1개</b>로 <b>{names}</b> 를 통째로 덮어요.<br />
           ({REDS.slice(0, s.i).map((r) => r.w).join(" + ")}) × {c.mh} = <b>{c.area}</b></>);
     }
-    if (s.k === "try") {
+    if (s.k === "try" || s.k === "tryadd") {
       const c = cost(s.j, s.i);
       const front = dp[s.kk - 1][s.j - 1];
       const names = REDS.slice(s.j - 1, s.i).map((r) => r.label).join("");
       const frontNames = REDS.slice(0, s.j - 1).map((r) => r.label).join("") || "—";
-      if (front === INF) return t(E,
+      if (s.k === "try") return t(E,
         <>What if the last blue takes <b>{names}</b>?<br />
-          Then the front (<b>{frontNames}</b>) has nothing left to cover — skip.</>,
+          That one costs {c.sw} × {c.mh} = <b>{c.area}</b>.</>,
         <>마지막 파랑이 <b>{names}</b> 를 맡으면요?<br />
-          그럼 앞부분(<b>{frontNames}</b>)에 덮을 게 없어요 — 넘어가요.</>);
+          그 파랑은 {c.sw} × {c.mh} = <b>{c.area}</b> 예요.</>);
+      if (front === INF) return t(E,
+        <>Then the front (<b>{frontNames}</b>) has nothing left to cover — skip this one.</>,
+        <>그럼 앞부분(<b>{frontNames}</b>)에 덮을 게 없어요 — 이건 넘어가요.</>);
       const total = front + c.area;
       const better = total === dp[s.kk][s.i];
       return t(E,
-        <>What if the last blue takes <b>{names}</b>? That costs {c.sw} × {c.mh} = <b>{c.area}</b>.<br />
-          The front (<b>{frontNames}</b>) we already wrote down: <b>{front}</b>.<br />
+        <>The front (<b>{frontNames}</b>) is already in the table: <b>{front}</b>.<br />
           {c.area} + {front} = <b>{total}</b>{better ? "" : <> — bigger, throw it away.</>}</>,
-        <>마지막 파랑이 <b>{names}</b> 를 맡으면요? 그 값은 {c.sw} × {c.mh} = <b>{c.area}</b>.<br />
-          앞부분(<b>{frontNames}</b>)은 아까 적어둔 <b>{front}</b> 을 꺼내 써요.<br />
+        <>앞부분(<b>{frontNames}</b>)은 표에 적어둔 <b>{front}</b> 을 꺼내 써요.<br />
           {c.area} + {front} = <b>{total}</b>{better ? "" : <> — 더 크니까 버려요.</>}</>);
     }
     if (s.k === "cell") return t(E,
@@ -397,12 +409,12 @@ export function DPTableFillSim({ E }) {
 
   const cellBg = (kk, i) => {
     if (s.k !== "intro" && s.kk === kk && s.i === i) return "#fff7ed";
-    if (s.k === "try" && kk === s.kk - 1 && i === s.j - 1) return "#ecfdf5";   // 꺼내 쓰는 앞부분
+    if (s.k === "tryadd" && kk === s.kk - 1 && i === s.j - 1) return "#ecfdf5";   // 꺼내 쓰는 앞부분
     return filled.has(`${kk},${i}`) ? "#fff" : "#f8fafc";
   };
   const cellBd = (kk, i) => {
     if (s.k !== "intro" && s.kk === kk && s.i === i) return A;
-    if (s.k === "try" && kk === s.kk - 1 && i === s.j - 1) return "#059669";
+    if (s.k === "tryadd" && kk === s.kk - 1 && i === s.j - 1) return "#059669";
     return "#e2e8f0";
   };
 
@@ -422,17 +434,23 @@ export function DPTableFillSim({ E }) {
           try 단계에만 붙인다 — 후보 구간(j..i)이 매번 바뀌는 자리다.
           cell·intro·answer 단계는 그림이 안 바뀌거나 앞 시뮬과 겹쳐서 반복이 된다 (pedagogy 판정).
 
-          ⚠️ 데스크탑에서만 보인다. ux-reviewer 좌표 실측: 모바일 375×812 에서는 SimNav 아래
-          여백이 **21px** 뿐이라(하단 고정 바 744, 카드 끝 739) 90px 짜리 그림을 얹으면
-          스크롤이 새로 생기고 SimNav 가 고정 바 밑으로 내려간다. 오늘만 세 번 겪은 자리다.
-          모바일까지 주려면 스텝을 쪼개야 하는데, 그건 따로 판단한다. */}
+          처음엔 데스크탑에만 넣었다 — 모바일은 SimNav 아래 여백이 21px 뿐이라
+          그림을 더 얹으면 버튼이 하단 고정 바 밑으로 내려갔다.
+          선생님: "모바일도 스텝 쪼개서 그림 넣어줘." → 스텝을 둘로 쪼갰고(try / tryadd),
+          이제 한 스텝에 한 가지만 있어서 **모바일에서도 그림이 나온다.** */}
       {s.k === "try" && (
-        <div className="hidden md:block" style={{ marginTop: 12 }}>
+        <div style={{ marginTop: 12 }}>
           <RectStage groups={[Array.from({ length: s.i - s.j + 1 }, (_, z) => s.j - 1 + z)]} />
         </div>
       )}
 
-      <div style={{ maxWidth: 360, margin: "14px auto 0" }}>
+      {/* try 단계(그림을 보는 단계)에서는 **모바일에서만** 표를 접는다.
+          그 단계 말풍선은 표를 가리키지 않는다("마지막 파랑이 ②를 맡으면? 2×2=4") —
+          앞부분을 표에서 꺼내는 얘기는 다음 tryadd 단계의 일이다.
+          접지 않으면 모바일 375 에서 카드가 길어져 SimNav 가 하단 고정 바 밑으로 내려간다
+          (실측: 접기 전 nav 770 · 바 744 → 눌리지 않았다). 데스크탑은 자리가 있어 같이 본다. */}
+      <div className={s.k === "try" ? "hidden md:block" : ""}
+           style={{ maxWidth: 360, margin: "14px auto 0" }}>
         <div style={{ display: "grid", gridTemplateColumns: "76px repeat(4, 1fr)", gap: 5 }}>
           <span />
           {[0, 1, 2, 3].map((i) => (
@@ -464,7 +482,7 @@ export function DPTableFillSim({ E }) {
         </div>
       </div>
 
-      {s.k === "try" && (
+      {s.k === "tryadd" && (
         <Caption color="#059669">
           {t(E, "green = the front part we look up, never recompute",
                "초록 = 꺼내 쓰는 앞부분. 다시 계산 안 해요")}
