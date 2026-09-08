@@ -67,8 +67,9 @@ export function Mcc19DitcoinDeepAuditSim({ E }) {
   });
 
   const isOptimal = finalProfit === optProfit;
-  const reset = () => setSells(preset.prices.map(() => false));
-  const showAnswer = () => setSells(optSells);
+  const [revealed, setRevealed] = useState(false);
+  const reset = () => { setSells(preset.prices.map(() => false)); setRevealed(false); };
+  const showAnswer = () => { setSells(optSells); setRevealed(true); };
 
   const cellW = 56;
 
@@ -89,7 +90,7 @@ export function Mcc19DitcoinDeepAuditSim({ E }) {
 
       <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10 }}>
         {t(E, "Tap a day to toggle SELL. Coins accumulate +1 per day; on a SELL-day, profit += coins × price and coins reset to 0.",
-              "날을 탭해서 매도(SELL) 여부를 토글해. 코인은 매일 +1, 매도일에는 수익 += 코인 × 가격, 코인 0 으로 초기화.")}
+              "날짜를 눌러 파는 날을 켰다 껐다 해봐요. 코인은 매일 1 개씩 늘고, 파는 날엔 (코인 수 × 그날 가격) 만큼 벌고 코인은 0 이 돼요.")}
       </div>
 
       {/* timeline grid */}
@@ -217,10 +218,16 @@ export function Mcc19DitcoinDeepAuditSim({ E }) {
         </button>
       </div>
 
-      <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.5 }}>
-        {t(E, "Hint: sell on day i exactly when prices[i] equals the maximum of prices[i..N-1] (no better day ahead).",
-              "힌트: prices[i] 가 prices[i..N-1] 중 최댓값일 때(앞으로 더 나은 날이 없을 때) 매도해.")}
-      </div>
+      {/* 2026-09-08: 이 규칙이 **버튼 뒤가 아니라 항상** 떠 있었다.
+          통째로 알려주니 시뮬에서 발견할 게 없다.
+          학생: "규칙 자체는 화면이 준 것이다. 내가 스스로 찾은 게 아니다."
+          '최적 보기' 를 누른 뒤에만 보이게 했다. */}
+      {revealed && (
+        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, textAlign: "center", lineHeight: 1.6, wordBreak: "keep-all" }}>
+          {t(E, "The rule: sell on day i exactly when prices[i] is the biggest price from day i to the end — no better day is coming.",
+                "규칙은 이거예요 — i 일의 가격이 i 일부터 마지막 날까지 중에서 가장 클 때 그날 팔아요. 앞으로 더 좋은 날이 없다는 뜻이니까요.")}
+        </div>
+      )}
     </div>
   );
 }
@@ -290,9 +297,13 @@ export function getMcc19DitcoinSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
-        t(E, "Both versions do the same thing: build suffix_max once, then walk the days once — O(D).",
-            "두 버전 모두 하는 일은 같아요. suffix_max 를 한 번 만들고, 날짜를 한 번 훑어요 — O(D)."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 있어요."),
+        /* 2026-09-08: "두 버전 모두" 라고 했는데 이 quest 는 Python 전용이다
+           (Mcc19DitcoinApp.jsx:23 `codeLang = "py"`). 학생이 걸렸다: "다른 버전은 안 보였다."
+           그리고 suffix_max 가 코드 쪽에서 처음 영어 이름으로만 나와서, 4쪽 힌트의
+           풀어쓴 말과 연결이 안 됐다. 두 가지를 같이 고친다. */
+        t(E, "suffix_max is a table of \"the best price from today to the end\". Build it once, then walk the days once — O(D).",
+            "suffix_max 는 \"오늘부터 마지막 날까지 중 가장 비싼 가격\" 을 미리 적어둔 표예요. 한 번 만들어 두고 날짜를 한 번만 훑어요 — O(D)."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
@@ -300,7 +311,7 @@ export function getMcc19DitcoinSections(E) {
       ],
       cppOnly: [
         t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
+            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어요."),
         t(E, "Indices fit in int, but the profit does NOT: D ≤ 10^5 days × p ≤ 10^9 reaches 10^14, so it needs long long.",
             "인덱스는 int 로 되지만 수익은 안 돼요. D ≤ 10^5 일 × p ≤ 10^9 이면 10^14 까지 가서 long long 이 필요해요."),
       ],

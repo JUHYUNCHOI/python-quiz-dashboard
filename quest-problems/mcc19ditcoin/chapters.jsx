@@ -130,10 +130,9 @@ export function makeMcc19DitcoinCh1(E) {
                 <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>{`15`}</div>
               </div>
             </div>
-            <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
-              {t(E, "Why 15? Save all 3 coins for day 3 (price 5) → 3 × 5. Next pages figure out the general rule.",
-                    "왜 15? 3 개 코인을 3 일까지 모아뒀다 5 에 판매 → 3 × 5. 다음 페이지에서 일반 규칙 발견.")}
-            </div>
+            {/* 2026-09-08: 여기 있던 "왜 15?" 설명을 뺐다.
+                학생: "내가 스스로 궁리해볼 틈도 없이 답부터 봤다."
+                형식 쪽은 형식만 보여주고, 예제를 파헤치는 건 다음 쪽 몫이다. */}
           </div>
           {/* CONSTRAINTS */}
           <div>
@@ -146,11 +145,40 @@ export function makeMcc19DitcoinCh1(E) {
           </div>
         </div>),
     },
+    /* 원문 공식 예제. 화면에 아예 없었다 (P1 과 같은 누락).
+       [3,2,6,8,10,1,7,9] → 77 은 **파는 날이 두 번**인 대표 예제다 —
+       "제일 비싼 날 하루에 다 팔면 끝" 이라는 첫 생각이 여기서 깨진다.
+       검산: 1~5번째 코인을 10 에 팔아 50, 나머지 3개를 마지막 날 9 에 팔아 27. 합 77. */
+    {
+      type: "reveal",
+      narr: t(E, "A bigger example — and one day is not enough.",
+                 "조금 더 큰 예제 — 하루로는 안 돼요."),
+      content: (
+        <div style={{ padding: 16, wordBreak: "keep-all" }}>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 12 }}>
+            <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, flex: 1, minWidth: 190 }}>
+              <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "example input", "예제 입력")}</div>
+              <div>8</div>
+              <div>3 2 6 8 10 1 7 9</div>
+            </div>
+            <div style={{ background: "#0f172a", color: "#86efac", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, minWidth: 90 }}>
+              <div style={{ color: "#8b949e", fontSize: 11, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
+              <div style={{ fontWeight: 800 }}>77</div>
+            </div>
+          </div>
+          <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.75, whiteSpace: "pre-line", textWrap: "balance" }}>
+            {t(E,
+              "The most expensive day is day 5 (price 10). Sell the 5 coins you have by then: 5 × 10 = 50.\nBut 3 more days come after that, and 3 more coins.\nWhere do those go? Think before you turn the page.",
+              "제일 비싼 날은 5 일째(가격 10)예요. 그때까지 모은 코인 5 개를 팔면 5 × 10 = 50.\n그런데 그 뒤로 날이 3 일 더 남고, 코인도 3 개 더 생겨요.\n그건 어떻게 할까요? 넘기기 전에 먼저 생각해봐요.")}
+          </div>
+        </div>),
+    },
+
     // 1-3: Quiz
     {
       type: "quiz",
       narr: t(E,
-        "Prices = [3, 1, 5]. You earn 1 coin/day. When should you sell?", "가격 = [3, 1, 5]. 하루에 코인 1개씩 벌어. 언제 팔아야 해요?"),
+        "Prices = [3, 1, 5]. You earn 1 coin/day. When should you sell?", "가격 = [3, 1, 5]. 하루에 코인을 1 개씩 벌어요. 언제 팔아야 할까요?"),
       question: t(E,
         "Prices [3, 1, 5]. Best strategy?",
         "가격 [3, 1, 5]. 최적 전략은?"),
@@ -168,8 +196,8 @@ export function makeMcc19DitcoinCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Try it yourself. Toggle SELL days and watch coins accumulate, profit update live. Can you match the OPTIMAL profit? When should you sell?",
-        "직접 해봐. 매도(SELL) 날을 토글해서 코인 누적과 수익이 실시간으로 갱신되는걸 봐. 최적 수익에 일치시킬 수 있어? 언제 팔아야 할까?"),
+        "Try it yourself. Toggle the sell days and watch the coins and profit change. Can you match the optimal profit?",
+        "직접 해봐요. 파는 날을 켰다 껐다 하면 코인과 수익이 바로 바뀌어요. 최적 수익과 같게 만들 수 있나요?"),
       content: <Mcc19DitcoinDeepAuditSim E={E} />,
     },
     // 1-4: Input
@@ -197,9 +225,13 @@ export function makeMcc19DitcoinCh2(E, lang = "py") {
     // 2-1: Code
     {
       type: "progressive",
+      /* 2026-09-08: 여기 narr 이 "i 일에 미래 최고 가격은 suffix_max[i]…" 로
+         **결론부터** 시작했다. 앞 쪽에서 학생이 규칙을 찾았으니, 여기선 코드로 옮기는
+         이야기만 한다. 그리고 suffix_max 라는 이름이 여기서 처음 나오므로 뜻을 붙인다
+         (학생: "코드 쪽에서 갑자기 영어 변수 이름으로만 부르니 스스로 연결해야 했다"). */
       narr: t(E,
-        "On day i, the BEST future price is suffix_max[i]. Sell all accumulated coins on day i if today's price equals suffix_max[i] (no better day ahead). Compute suffix_max once, then greedy. Sections build it one piece at a time.",
-        "i 일에 미래 최고 가격은 suffix_max[i]. 오늘 가격이 suffix_max[i] 와 같으면 (앞으로 더 좋은 날 없음) 보유 코인 전부 매도. suffix_max 한 번 계산 후 그리디. 아래 섹션이 한 단락씩 쌓아요."),
+        "suffix_max[i] = the best price from day i to the end. Let us build it.",
+        "suffix_max[i] 는 i 일부터 마지막 날까지 중 가장 비싼 가격이에요. 그걸 만들어 봐요."),
       sections: getMcc19DitcoinSections(E),
     },
   ];
