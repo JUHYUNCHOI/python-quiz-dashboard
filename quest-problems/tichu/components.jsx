@@ -27,7 +27,8 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    long long N, K; cin >> N >> K;",
+  "    long long N, K;",
+  "    cin >> N >> K;",
   "    int cnt = N - K;",
   "    vector<long long> c(cnt);",
   "    for (auto& x : c) cin >> x;",
@@ -84,16 +85,16 @@ const _TICHU_VARS = [
 export function getTichuWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _TICHU_VARS, beats: [
-      { hi: [5, 12], bubble: t(E,
+      { hi: [5, 13], bubble: t(E,
         "Read N and K, read the N-K numbered cards, then sort and dedupe them — duplicates never help a run.",
         "N 과 K 를 읽고, 수 카드 N-K개를 읽어요. 그다음 정렬 + 중복 제거 — 중복은 run에 소용없어요.") },
-      { hi: [14, 15], bubble: t(E,
+      { hi: [15, 16], bubble: t(E,
         "win = the biggest window found so far.\nleft = the left end of the sliding window.",
         "win = 지금까지 찾은 최대 창 크기예요.\nleft 는 창의 왼쪽 끝이에요.") },
-      { hi: [16, 19], bubble: t(E,
+      { hi: [17, 20], bubble: t(E,
         "Slide right to the right.\nThe inner gap of window [left..right] is (value diff) − (count diff),\nthat is c[right]−c[left] − (right−left).\nIf it exceeds K we cannot fill it, so move left forward.\nKeep the biggest window size.",
         "right 를 오른쪽으로 밀어요.\n창 [left..right] 의 내부 빈칸은 (값차) − (개수차) 예요.\n즉 c[right]−c[left] − (right−left) 예요.\nK 를 넘으면 못 메꾸니 left 를 오른쪽으로 옮겨요.\n제일 큰 창 크기를 계속 갱신해요.") },
-      { hi: [20, 20], bubble: t(E,
+      { hi: [21, 21], bubble: t(E,
         "Answer = window + K (fill inner gaps, spend leftover wildcards on the ends), capped at N.",
         "답 = 창 + K (내부 빈칸 메꾸고, 남는 와일드는 양끝에). 최대 N.") },
     ] };
