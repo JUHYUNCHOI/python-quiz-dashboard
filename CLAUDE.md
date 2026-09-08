@@ -280,7 +280,11 @@ node scripts/see-screen.mjs http://localhost:3000/learn/45 --progress 45:1:1 --m
 
 ## 배포
 
-> 🚫 **배포·main 머지는 선생님이 명시적으로 지시할 때만 한다.** 기본은 dev 커밋까지다.
+> 🚫 **배포·main 머지는 선생님이 명시적으로 지시할 때만 한다.** 기본은 **커밋까지**다.
+> **`git push origin main` 이 곧 배포다** — 커밋만 하고 "밀까요?" 라고 물어라.
+> **"배포해도 돼?" 는 판정을 물으신 것이지 승낙이 아니다.** (2026-09-08 세 번째 지시)
+> main 아닌 브랜치는 `vercel.json` 이 막는다 — 단 `VERCEL_GIT_COMMIT_REF` 가 비면
+> **빌드하는 쪽**으로 넘어지게 짰다 (2026-06-21 에 반대로 짰다가 사이트가 며칠 얼었다).
 > 2026-05-14 · 05-15 두 번 지시받은 규칙인데 지금까지 memory 에만 있어서,
 > CLAUDE.md 만 읽는 에이전트는 몰랐다. 근거: `memory/feedback_deployment.md`,
 > `memory/feedback_no_more_deploy.md`
