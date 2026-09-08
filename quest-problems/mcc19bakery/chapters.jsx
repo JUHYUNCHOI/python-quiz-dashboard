@@ -82,10 +82,15 @@ function BakeryGreedySim({ E }) {
         <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 8 }}>
           🥖 {t(E, "Greedy on the official sample", "공식 예제로 그리디 따라가기")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7, marginBottom: 8, textWrap: "balance" }}>
-          {t(E,
-            "Sort the prices small→big. Each round: pay the two most-expensive, let the next one be FREE, then pay the cheapest that's left.",
-            "가격을 작은→큰 순으로 정렬해요.\n한 라운드마다 제일 비싼 두 개를 지불하고, 그다음 하나를 무료로 받고,\n남은 것 중 제일 싼 것을 지불해요.")}
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7, marginBottom: 8, textWrap: "balance", whiteSpace: "pre-line" }}>
+          {/* 2026-09-08 수업 담당: 이 안내문이 (B) 방법 자체를 먼저 서술해버려서
+              질문이 "어느 게 싼가" 로만 좁아졌다. 누르기 전에는 정렬해뒀다는 것만 말한다.
+              방법은 한 라운드를 눌러본 뒤에 글로 정리해준다. */}
+          {step === 0
+            ? t(E, "The prices are sorted, small→big. Two ways of grouping are on the table — which one wins?",
+                   "가격을 작은→큰 순으로 정렬해뒀어요.\n묶는 방법이 두 가지 놓여 있어요. 어느 쪽이 이길까요?")
+            : t(E, "Each round: pay the two most-expensive, let the next one be FREE, then pay the cheapest that's left.",
+                   "한 라운드마다 제일 비싼 두 개를 지불하고, 그다음 하나를 무료로 받고,\n남은 것 중 제일 싼 것을 지불해요.")}
         </div>
         {/* 2026-09-08 화면 담당: 미션은 "2번째로 싼 빵이 무료" 라고 하고
             여기선 "3번째로 비싼 것" 이라고 한다. 4개 묶음에선 같은 자리인데
@@ -94,7 +99,7 @@ function BakeryGreedySim({ E }) {
         <div style={{
           fontSize: 11.5, color: "#92400e", lineHeight: 1.65, marginBottom: 12,
           background: "#fff", border: "1px dashed #fcd34d", borderRadius: 8,
-          padding: "7px 10px", textWrap: "balance", ...KA,
+          padding: "7px 10px", textWrap: "balance", whiteSpace: "pre-line", ...KA,
         }}>
           {t(E,
             "In a batch of 4, the 3rd-most-expensive IS the 2nd-cheapest — the same slot, counted from the other end.",
@@ -167,10 +172,10 @@ function BakeryGreedySim({ E }) {
             <div style={{ fontSize: 12, fontWeight: 800, color: "#1d4ed8", marginBottom: 6 }}>
               🤔 {t(E, "Guess first: which way is cheaper?", "먼저 추측해봐요 — 어느 쪽이 더 쌀까요?")}
             </div>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, textWrap: "balance" }}>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, textWrap: "balance", whiteSpace: "pre-line" }}>
               {t(E,
-                "(A) Chop the big→small list into blocks: [10,9,8,7] and [6,3,2,1].\n(B) Put the cheap ones together with expensive ones, as the steps above do.\nPress through and see which total comes out smaller.",
-                "(A) 큰→작은 순으로 그냥 잘라 묶기: [10,9,8,7] 과 [6,3,2,1].\n(B) 싼 것을 비싼 것들과 함께 묶기 — 위 단계가 하는 방법.\n눌러서 어느 쪽 총액이 더 작게 나오는지 봐요.")}
+                "(A) Chop the big→small list into blocks: [10,9,8,7] and [6,3,2,1].\n(B) Put the cheap ones together with the expensive ones.\nPress through and see which total comes out smaller.",
+                "(A) 큰→작은 순으로 그냥 잘라 묶기: [10,9,8,7] 과 [6,3,2,1].\n(B) 싼 것을 비싼 것들과 함께 묶기.\n눌러서 어느 쪽 총액이 더 작게 나오는지 봐요.")}
             </div>
           </div>
         )}
@@ -186,7 +191,7 @@ function BakeryGreedySim({ E }) {
                 "(A) blocks [10,9,8,7] and [6,3,2,1] free 8 and 2 → saves 10 → pay 36.",
                 "(A) [10,9,8,7] 과 [6,3,2,1] 로 자르면 8 과 2 가 무료 → 10 절약 → 36 지불.")}
             </div>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginTop: 6 }}>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginTop: 6, whiteSpace: "pre-line" }}>
               {t(E,
                 "(B) pairs the cheap 1 and 2 with expensive items, so it frees 8 and 3 → saves 11 → pay 35.\nA cheap bread is worth little as the free one — better to let it be one you pay for.",
                 "(B) 는 싼 1 과 2 를 비싼 것들과 짝지어 8 과 3 을 무료로 만들어요 → 11 절약 → 35 지불.\n싼 빵을 공짜로 받으면 얼마 못 아껴요. 공짜 자리는 비싼 빵에 주는 게 이득이에요.")}
