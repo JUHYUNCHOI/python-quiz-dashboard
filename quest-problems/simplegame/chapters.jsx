@@ -73,6 +73,172 @@ function Known({ E, n }) {
   );
 }
 
+/* ─────────────────────────────────────────────────────────────
+   BuildSim — 코드를 **읽기 전에 직접 만들어 본다.**
+
+   선생님(2026-09-08): "학생이 코드 말고 앞의 내용만으로 코드를 만들수 있어야해."
+   그전까지 이 quest 의 코드 쪽은 다 지어진 코드를 **읽기만** 했다.
+   읽어서 아는 것과 만들 수 있는 것은 다르다.
+
+   조각은 앞 쪽에서 전부 나온 것들이다 — 합을 맨 앞에 담기(4쪽·5쪽),
+   큰 것부터 줄 세우기(4쪽), 앞에서부터 +a/−b(6쪽).
+   ⚠️ 정답을 보여주는 버튼은 두지 않는다 — 두 번 눌러 베끼는 길이 생긴다
+   (memory/feedback_students_copy_the_answer.md).
+   ───────────────────────────────────────────────────────────── */
+const BUILD = [
+  { key: "read",  py: "n = int(input())" },
+  { key: "store", py: "items.append((a + b, a, b))" },
+  { key: "sort",  py: "items.sort(reverse=True)" },
+  { key: "walk",  py: "res += a  /  res -= b" },
+  { key: "print", py: "print(res)" },
+];
+const BUILD_SHUFFLED = [2, 4, 0, 3, 1];   // 화면에 늘어놓는 순서 (정답 순서가 아니다)
+
+/* ─────────────────────────────────────────────────────────────
+   Says / Target — 이 설명이 **무엇에 대한 설명인지** 눈에 보이게.
+
+   선생님(2026-09-08): "저 설명이 도대체 어디에 관한 설명이냐는거야.
+   말풍선이 아니어도 돼. 어디에 대한 설명인지 알았으면해."
+
+   말풍선을 새 것 옆에 두는 것만으로는 부족했다. 짝을 **표시**해야 한다:
+   말풍선 아래에 꼬리를 달고, 지금 이야기하는 것에 같은 색 테두리를 두른다.
+   (CodeWalk 이 밝아진 코드 줄 위에 꼬리 달린 말풍선을 두는 것과 같은 방식이다.)
+   ───────────────────────────────────────────────────────────── */
+const TONE = { on: "#fbbf24", done: "#6ee7b7" };
+
+function Says({ E, children, done = false, at = null }) {
+  const c = done ? TONE.done : TONE.on;
+  return (
+    <div style={{ position: "relative", marginBottom: 14 }}>
+      <div style={{
+        background: done ? "#ecfdf5" : "#fffbeb", border: `1.5px solid ${c}`,
+        borderRadius: 10, padding: "10px 13px",
+        fontSize: 12.5, lineHeight: 1.75, color: C.text,
+        whiteSpace: "pre-line", textWrap: "balance", ...KA,
+      }}>
+        {at && (
+          <div style={{ fontSize: 11, fontWeight: 800, color: "#92400e", marginBottom: 5 }}>
+            ↓ {at}
+          </div>
+        )}
+        💬 {children}
+      </div>
+      {/* 꼬리 — 바로 아래 것을 가리킨다 */}
+      <div style={{
+        position: "absolute", left: 26, bottom: -7, width: 12, height: 12,
+        background: done ? "#ecfdf5" : "#fffbeb",
+        borderRight: `1.5px solid ${c}`, borderBottom: `1.5px solid ${c}`,
+        transform: "rotate(45deg)",
+      }} />
+    </div>
+  );
+}
+
+/* 지금 이야기하는 것 — 말풍선과 같은 색 테두리를 둘러 짝을 보이게 한다 */
+function Target({ on, done = false, children }) {
+  if (!on) return children;
+  return (
+    <div style={{
+      outline: `2px solid ${done ? TONE.done : TONE.on}`, outlineOffset: 3,
+      borderRadius: 12,
+    }}>{children}</div>
+  );
+}
+
+function BuildSim({ E }) {
+  const [placed, setPlaced] = useState([]);
+  const [wrong, setWrong] = useState(null);
+  const label = (k) => ({
+    read:  t(E, "read how many pairs", "쌍이 몇 개인지 읽기"),
+    store: t(E, "store each pair with its sum in front", "쌍을 담되 합을 맨 앞에"),
+    sort:  t(E, "line them up, biggest sum first", "합이 큰 것부터 줄 세우기"),
+    walk:  t(E, "walk the row: Evirir adds a, Rhae subtracts b", "줄을 훑으며 Evirir 는 a 더하고 Rhae 는 b 빼기"),
+    print: t(E, "print the total", "다 더한 값을 출력하기"),
+  }[k]);
+
+  const pick = (i) => {
+    if (placed.includes(i)) return;
+    if (i === placed.length) { setPlaced([...placed, i]); setWrong(null); }
+    else { setWrong(i); setTimeout(() => setWrong(null), 1200); }
+  };
+  const done = placed.length === BUILD.length;
+
+  return (
+    <div style={{ padding: 16, ...KA }}>
+      <Known E={E} n={2} />
+      <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#7f1d1d", marginBottom: 4 }}>
+          🧩 {t(E, "Build it yourself first", "코드를 직접 만들어봐요")}
+        </div>
+        <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 12, textWrap: "balance" }}>
+          {t(E,
+            "Every piece below already appeared in the pages before. Click them in the order the program should run.",
+            "아래 조각은 앞 쪽에서 다 나온 것들이에요.\n프로그램이 돌아갈 순서대로 눌러봐요.")}
+        </div>
+
+        {/* 내가 놓은 것 */}
+        <div style={{
+          background: "#0f172a", borderRadius: 8, padding: "10px 12px", marginBottom: 12,
+          minHeight: 96, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.9,
+        }}>
+          {placed.length === 0 && (
+            <span style={{ color: "#64748b", fontFamily: "inherit" }}>
+              {t(E, "(empty — pick the first piece)", "(비어 있어요 — 첫 조각을 골라봐요)")}
+            </span>
+          )}
+          {placed.map((i, k) => (
+            <div key={i} style={{ color: "#f8fafc" }}>
+              <span style={{ color: "#475569" }}>{k + 1}. </span>{BUILD[i].py}
+            </div>
+          ))}
+        </div>
+
+        {/* 고를 조각들 */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 10 }}>
+          {BUILD_SHUFFLED.map((i) => {
+            const used = placed.includes(i);
+            const bad = wrong === i;
+            return (
+              <button key={i} onClick={() => pick(i)} disabled={used} style={{
+                textAlign: "left", padding: "8px 11px", borderRadius: 9, cursor: used ? "default" : "pointer",
+                border: `1.5px solid ${bad ? A : used ? "#cbd5e1" : "#fca5a5"}`,
+                background: bad ? "#fee2e2" : used ? "#f1f5f9" : "#fff",
+                opacity: used ? 0.5 : 1, ...KA,
+              }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: "#7f1d1d" }}>{label(BUILD[i].key)}</div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, color: C.dim, marginTop: 2 }}>
+                  {BUILD[i].py}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {wrong !== null && (
+          <div style={{ fontSize: 12, color: A, fontWeight: 700, marginBottom: 8 }}>
+            {t(E, "Not yet — what has to happen before this?", "아직이에요 — 이것보다 먼저 해야 할 게 있어요.")}
+          </div>
+        )}
+        {done && (
+          <div style={{
+            background: "#065f46", color: "#fff", borderRadius: 10, padding: "11px 14px",
+            fontSize: 12.5, fontWeight: 700, textAlign: "center", lineHeight: 1.6,
+          }}>
+            {t(E, "That is the whole program. The next page writes it out in Python.",
+                 "이게 프로그램 전부예요.\n다음 쪽에서 이걸 파이썬으로 써 봐요.")}
+          </div>
+        )}
+        {!done && placed.length > 0 && (
+          <button onClick={() => { setPlaced([]); setWrong(null); }} style={{
+            padding: "5px 12px", borderRadius: 8, border: `1.5px solid ${A}`,
+            background: "#fff", color: "#7f1d1d", fontSize: 12, fontWeight: 700, cursor: "pointer",
+          }}>↺ {t(E, "start over", "처음부터")}</button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function LineUpSim({ E }) {
   const { safe, setIdx, total } = useTraceStep(LINEUP.length);
   const st = LINEUP[safe];
@@ -105,15 +271,12 @@ function LineUpSim({ E }) {
           📶 {t(E, "Four pairs — put them in order", "쌍 네 개 — 줄 세우기")}
         </div>
 
-        <div style={{
-          background: done ? "#ecfdf5" : "#fffbeb",
-          border: `1.5px solid ${done ? "#6ee7b7" : "#fbbf24"}`,
-          borderRadius: 10, padding: "10px 13px", marginBottom: 12,
-          fontSize: 12.5, lineHeight: 1.75, color: C.text,
-          whiteSpace: "pre-line", textWrap: "balance", ...KA,
-        }}>
-          💬 {BUBBLE[safe]}
-        </div>
+        <Says E={E} done={done} at={
+          done ? t(E, "the finished row", "다 선 줄 얘기예요")
+               : st.cmp ? t(E, "these two", "이 둘 얘기예요")
+                        : t(E, "this row", "이 줄 얘기예요")}>
+          {BUBBLE[safe]}
+        </Says>
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
           {shown.map((p, i) => {
@@ -137,13 +300,15 @@ function LineUpSim({ E }) {
         </div>
 
         {/* 이 줄대로 가져갔을 때의 값 — 바꿀 때마다 올라가는 게 보여야 한다 */}
-        <div style={{
-          background: "#0f172a", color: "#f8fafc", borderRadius: 8, padding: "8px 12px",
-          fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, marginBottom: 10, ...KA,
-        }}>
-          <span style={{ color: "#8b949e" }}>{t(E, "this row gives  X − Y = ", "이 줄대로면  X − Y = ")}</span>
-          <b style={{ color: "#fbbf24", fontSize: 14 }}>{now}</b>
-        </div>
+        <Target on={safe > 0 && !done}>
+          <div style={{
+            background: "#0f172a", color: "#f8fafc", borderRadius: 8, padding: "8px 12px",
+            fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, marginBottom: 10, ...KA,
+          }}>
+            <span style={{ color: "#8b949e" }}>{t(E, "this row gives  X − Y = ", "이 줄대로면  X − Y = ")}</span>
+            <b style={{ color: "#fbbf24", fontSize: 14 }}>{now}</b>
+          </div>
+        </Target>
 
         {st.cmp && (
           <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 12,
@@ -363,21 +528,26 @@ function SwapSim({ E }) {
             붙인다. 이미 나온 것은 그대로 있는다.
             (CodeWalk 이 말풍선을 밝아진 코드 줄에 붙이는 것과 같은 생각이다.) */}
         {(() => {
+          const AT = [null,
+            t(E, "this order", "이 순서 얘기예요"),
+            t(E, "this order", "이 순서 얘기예요"),
+            t(E, "these numbers", "이 숫자들 얘기예요"),
+            t(E, "these numbers", "이 숫자들 얘기예요")];
           const bubble = (
-            <div key="bubble" style={{
-              background: safe === 4 ? "#ecfdf5" : "#fffbeb",
-              border: `1.5px solid ${safe === 4 ? "#6ee7b7" : "#fbbf24"}`,
-              borderRadius: 10, padding: "10px 13px", marginBottom: 10,
-              fontSize: 12.5, lineHeight: 1.75, color: C.text,
-              whiteSpace: "pre-line", textWrap: "balance", ...KA,
-            }}>
-              💬 {BUBBLE[safe]}
+            <Says key="bubble" E={E} done={safe === 4} at={AT[safe]}>{BUBBLE[safe]}</Says>
+          );
+          const rowA = (
+            <div key="rowA" style={{ marginBottom: 8 }}>
+              <Target on={safe === 1}>{orderRow(0, true)}</Target>
             </div>
           );
-          const rowA = <div key="rowA" style={{ marginBottom: 8 }}>{orderRow(0, true)}</div>;
-          const rowB = <div key="rowB" style={{ marginBottom: 10 }}>{orderRow(1, true)}</div>;
+          const rowB = (
+            <div key="rowB" style={{ marginBottom: 10 }}>
+              <Target on={safe === 2}>{orderRow(1, true)}</Target>
+            </div>
+          );
           const box = (
-            <div key="box" style={{
+            <Target key="box" on={safe >= 3} done={safe === 4}><div style={{
               background: "#0f172a", color: "#f8fafc", borderRadius: 8, padding: "10px 12px",
               fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.7,
               marginBottom: 12, ...KA,
@@ -397,7 +567,7 @@ function SwapSim({ E }) {
                     <b style={{ color: "#fbbf24" }}>  (+a) − (−b) = a + b</b></div>
                 </div>
               )}
-            </div>
+            </div></Target>
           );
           if (safe === 0) return [bubble];
           if (safe === 1) return [bubble, rowA];
@@ -810,7 +980,16 @@ export function makeSimpleGameCh2(E, lang = "py") {
           </div>
         </div>),
     },
-    // 2-2: 코드 — CodeWalk (설명 말풍선이 코드 줄에 붙는다)
+    // 2-2: 읽기 전에 **직접 만들어 본다**
+    {
+      type: "reveal",
+      narr: t(E,
+        "Before reading the code — put the pieces in order yourself.",
+        "코드를 읽기 전에, 조각을 직접 순서대로 놓아봐요."),
+      content: <BuildSim E={E} />,
+    },
+
+    // 2-3: 코드 — CodeWalk (설명 말풍선이 코드 줄에 붙는다)
     /* 전에는 섹션 하나짜리 ProgressiveCode 라서, 코드 **위에** 산문 570자가 얹혀 있었다.
        memory/feedback_quest_code_codewalk.md 가 바로 이 모양을 이름 대고 금지한다.
        (선생님 2026-07-14: "코드 위 설명은 안 읽힘. 앞으로 코드는 모두 이런식으로.") */
