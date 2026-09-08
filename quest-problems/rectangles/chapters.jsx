@@ -242,16 +242,11 @@ export function makeRectanglesCh1(E) {
       content: (<WhyCostSim E={E} />),
     },
 
-    /* [전] ③ 그래서 나눠보면 줄어든다 — 기존 시뮬 */
-    {
-      type: "reveal",
-      label: t(E, "Split into groups", "나눠보기"),
-      narr: t(E, "So try cutting the row in different places and compare the totals.",
-                 "그럼 줄을 여기저기서 잘라보고 총합을 비교해봐요."),
-      content: (<RectanglesSim E={E} />),
-    },
+    /* 배운 규칙(폭 합 × 최고 높이)을 **바로** 직접 써보는 자리.
 
-    /* [전] ④ 능동 — 직접 계산해 보기. 전엔 퀴즈·입력 스텝이 하나도 없었다. */
+       2026-09-08 에 순서를 바꿨다. 전에는 비교표(아래 '나눠보기')가 먼저 나왔는데,
+       그 표 안에 [②③] = 8 이 이미 적혀 있었다. 답을 보여준 다음에 "직접 해봐요" 라고
+       물은 것이다. 배운 직후에 묻고, 표는 그다음에 본다. */
     {
       type: "input",
       label: t(E, "Your turn", "직접"),
@@ -262,6 +257,15 @@ export function makeRectanglesCh1(E) {
       hint: t(E, "Width = 2 + 2. Height = the taller of 2 and 1.",
                  "폭 = 2 + 2. 높이 = 2 와 1 중 큰 쪽."),
       answer: 8,
+    },
+
+    /* [전] ③ 그래서 나눠보면 줄어든다 — 기존 시뮬 */
+    {
+      type: "reveal",
+      label: t(E, "Split into groups", "나눠보기"),
+      narr: t(E, "So try cutting the row in different places and compare the totals.",
+                 "그럼 줄을 여기저기서 잘라보고 총합을 비교해봐요."),
+      content: (<RectanglesSim E={E} />),
     },
 
     /* [전] ⑤ K = min(K, N) 이유 — 전엔 "N개 넘으면 캡" 한 줄이 전부였다. */
