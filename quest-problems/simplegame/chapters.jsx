@@ -423,36 +423,26 @@ function navBtn(disabled) {
    SOLUTION CODE  (sort by a+b desc, alternate +a / -b)
    ================================================================ */
 export const SOLUTION_CODE = [
-  "import sys",
+  "n = int(input())",
   "",
-  "def main():",
-  "    data = sys.stdin.read().split()",
-  "    idx = 0",
-  "    n = int(data[idx])",
-  "    idx += 1",
+  "items = []",
+  "for _ in range(n):",
+  "    a, b = map(int, input().split())",
+  "    # keep the sum in front, so a plain sort lines them up by the sum",
+  "    items.append((a + b, a, b))",
   "",
-  "    items = []",
-  "    for _ in range(n):",
-  "        a = int(data[idx])",
-  "        b = int(data[idx + 1])",
-  "        idx += 2",
-  "        # keep the sum in front, so a plain sort lines them up by the sum",
-  "        items.append((a + b, a, b))",
+  "items.sort(reverse=True)   # biggest sum first",
   "",
-  "    items.sort(reverse=True)   # biggest sum first",
+  "res = 0",
+  "turn = 0",
+  "for sum_ab, a, b in items:",
+  "    if turn % 2 == 0:",
+  "        res += a",
+  "    else:",
+  "        res -= b",
+  "    turn += 1",
   "",
-  "    res = 0",
-  "    turn = 0",
-  "    for sum_ab, a, b in items:",
-  "        if turn % 2 == 0:",
-  "            res += a",
-  "        else:",
-  "            res -= b",
-  "        turn += 1",
-  "",
-  "    print(res)",
-  "",
-  "main()",
+  "print(res)",
 ];
 
 /* ═══════════════════════════════════════════════════════════════
@@ -785,8 +775,8 @@ export function makeSimpleGameCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 8, textWrap: "balance", ...KA }}>
                 {t(E,
-                  "First pick: n choices. Next: n−1. Then n−2 … so the number of orders is n × (n−1) × … × 1.",
-                  "첫 차례에 고를 수 있는 게 n 가지, 다음엔 n−1 가지,\n그다음은 n−2 가지 … 그래서 순서는 n × (n−1) × … × 1 가지예요.")}
+                  "First pick: n choices. Next: n−1. Then n−2 …",
+                  "첫 차례엔 n 가지, 다음엔 n−1 가지, 그다음은 n−2 가지 …")}
               </div>
               {/* 학생(2026-09-08): "2^n 이 왜 2의 n제곱인지는 설명이 없었다."
                   세는 방법을 그대로 적으면 곱셈이 눈에 보인다. 숫자는 계산해서 넣었다. */}
@@ -800,8 +790,8 @@ export function makeSimpleGameCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 11.5, color: "#b91c1c", marginTop: 8, lineHeight: 1.65, textWrap: "balance", ...KA }}>
                 {t(E,
-                  "Even at 100 million tries per second, n = 20 alone takes about 770 years. And n goes up to 10,000.",
-                  "1초에 1억 번씩 세도 n = 20 하나에 약 770년이 걸려요.\n그런데 n 은 10,000 까지 와요.")}
+                  "100 million tries a second → n = 20 alone takes 770 years.",
+                  "1초에 1억 번씩 세도 n = 20 하나에 770년.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
@@ -810,8 +800,8 @@ export function makeSimpleGameCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, textWrap: "balance", ...KA }}>
                 {t(E,
-                  "We already found the rule: the bigger a+b goes first. Line the pairs up that way once, then just walk down it — +a, −b, +a, −b.",
-                  "규칙은 앞에서 찾았어요 — a+b 가 큰 쌍이 먼저.\n그렇게 한 번만 줄을 세우고, 위에서부터 훑으며\n+a, −b, +a, −b 를 더하면 끝이에요.")}
+                  "Line them up once, then walk down: +a, −b, +a, −b.",
+                  "한 번만 줄을 세우고, 위에서부터 훑으며 더해요.")}
               </div>
             </div>
           </div>

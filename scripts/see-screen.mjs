@@ -118,10 +118,27 @@ const scan = () => p.evaluate(() => {
     }
     return false
   }
+  /* 스크롤되는 상자 **밖으로 밀려난** 것은 뺀다 — 화면엔 안 보이는데 좌표만 남아 있다.
+     2026-09-08: 학생이 CodeWalk 코드창에서 "겹침 여러 개" 신고를 받고 스크린샷을 열어봤더니
+     눈에는 멀쩡했다. 코드창은 고정 높이에 overflow 라서, 스크롤로 가려진 줄이
+     좌표상으로만 말풍선과 겹친 것이었다. **오늘 네 번째 헛경보다.**
+     잘린 것을 겹쳤다고 신고하면 진짜 겹침이 그 속에 묻힌다. */
+  const clipped = (e) => {
+    const q = e.getBoundingClientRect()
+    for (let n = e.parentElement; n && n !== document.body; n = n.parentElement) {
+      const st = getComputedStyle(n)
+      if (!/auto|scroll|hidden/.test(st.overflowY + st.overflowX)) continue
+      const c = n.getBoundingClientRect()
+      // 부모 상자 안에 절반도 안 들어와 있으면 잘린 것으로 본다
+      const vis = Math.max(0, Math.min(q.bottom, c.bottom) - Math.max(q.top, c.top))
+      if (q.height > 0 && vis / q.height < 0.5) return true
+    }
+    return false
+  }
   const boxes = [...document.querySelectorAll('body *')].filter((e) => {
     if (e.children.length) return false                 // 말단만 (부모-자식 겹침은 정상)
     if (!(e.textContent || '').trim()) return false
-    if (inFixed(e)) return false
+    if (inFixed(e) || clipped(e)) return false
     const st = getComputedStyle(e)
     if (st.visibility === 'hidden' || st.display === 'none' || +st.opacity === 0) return false
     const q = e.getBoundingClientRect()
@@ -132,7 +149,7 @@ const scan = () => p.evaluate(() => {
      글자↔글자만 보면 영영 못 잡는다. */
   const shapes = [...document.querySelectorAll('body *')].filter((e) => {
     if ((e.textContent || '').trim()) return false      // 글자 있는 건 위에서 봤다
-    if (inFixed(e)) return false
+    if (inFixed(e) || clipped(e)) return false
     const st = getComputedStyle(e)
     const drawn = parseFloat(st.borderTopWidth) >= 1 || parseFloat(st.borderLeftWidth) >= 1 ||
                   (st.backgroundColor && st.backgroundColor !== 'rgba(0, 0, 0, 0)')
