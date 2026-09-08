@@ -44,7 +44,13 @@ export const QUEST_ALGO: Record<string, string> = {
   lc303: "prefixsum", lc560: "prefixsum", lc974: "prefixsum", livestock: "graph",
   magicorbs: "sorting", makedistinct: "sorting", mcc15bahasaf: "string", mcc15choco: "stackqueue",
   mcc19bakery: "greedy", mcc19ditcoin: "greedy", mcc19rect: "sorting",
-  mcc19rect2: "bitmanipulation", mcc20cipher: "hashtable", mcc20citytour: "graph", mcc20kitty: "dp",
+  // 2026-09-08 제거: mcc19rect2 → bitmanipulation.
+  //   문제는 "축에 평행한 직사각형의 꼭짓점 3개로 4번째를 찾기" 다.
+  //   원문 풀이(ioimalaysia.org/competition/mcc/2019-editorial, 직접 확인):
+  //   "세 점의 x 좌표 중 둘은 같다. 다른 하나가 답의 x 다. y 도 마찬가지."
+  //   비트 연산은 한 번도 안 쓴다. 그런데 배너가 학생을
+  //   '심화 (Gold~Platinum)' 라벨이 붙은 /algo/bitmanipulation 으로 보내고 있었다.
+  //   난이도 표에서 이 문제는 2(기본)다. moohunt 때와 같은 사고다. mcc20cipher: "hashtable", mcc20citytour: "graph", mcc20kitty: "dp",
   mcc20knight: "graph", mcc20zigzag: "dp", mcc21marbles: "prefixsum",
   // mcc20missing: 제거 — 핵심은 "가장 큰 크기(N/N-1)가 극단에 온다"는 anchor 경우나눔(ad-hoc). set 은 부수적. 표준 토픽 없음.
   mcc21menu: "greedy", mcc22cardshark: "sorting", mcc22grammar: "graph", mcc22lamp: "prefixsum",

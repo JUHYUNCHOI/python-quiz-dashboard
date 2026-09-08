@@ -61,23 +61,39 @@ def main():
         if m:
             cats[f[:-3]] = m.group(1)
 
+    # MCC 는 sub 에 Bronze/Silver 가 없어서 지금까지 **48개가 통째로 검사 밖**이었다.
+    # 대신 난이도 표(lib/mcc-difficulty.ts, 1~5)가 있다. 1~2 는 초급으로 본다.
+    # 2026-09-08: mcc19rect2(난이도 2, 직사각형 네 번째 꼭짓점 찾기)가
+    #   /algo/bitmanipulation — '심화 (Gold~Platinum)' 로 학생을 보내고 있었다.
+    #   원문 풀이는 비트 연산을 쓰지 않는다. "세 점 중 x 가 다른 하나가 답" 이 전부다.
+    mcc = {}
+    try:
+        md = read("lib/mcc-difficulty.ts")
+        body = md[md.index("MCC_DIFFICULTY"):]
+        body = "\n".join(l for l in body.splitlines() if not l.strip().startswith("//"))
+        mcc = {k: int(v) for k, v in re.findall(r"(\w+):\s*([1-5])\b", body)}
+    except Exception:
+        pass
+
     bad = []
     for quest, topic in sorted(mapping.items()):
         sub = subs.get(quest, "")
         ql = next((r for k, r in QRANK if k in sub.lower()), None)
+        if ql is None and mcc.get(quest, 9) <= 2:
+            ql = 1                        # MCC 난이도 1~2 = 초급으로 본다
         tr = RANK.get(cats.get(topic, ""), None)
         if ql is None or tr is None:
-            continue                      # 대회 등급이 없는 문제(MCC 등)는 판정 불가 — 건너뜀
+            continue                      # 등급도 난이도도 없으면 판정 불가 — 건너뜀
         # ⚠️ 기준을 좁게 잡는다. 처음엔 "한 단계라도 위면 신고" 로 짰다가 **18건**이 떴다 —
         #    Bronze 문제가 greedy·dp 로 분류되는 건 지극히 정상이다(USACO Bronze 가 원래 그렇다).
         #    헛 경보가 18줄 남으면 아무도 이 검사기를 안 본다.
-        #    진짜 문제는 **Bronze 학생에게 '심화(Gold~Platinum)' 라벨이 붙은 페이지를 내미는 것**이다.
+        #    진짜 문제는 **초급 학생에게 '심화(Gold~Platinum)' 라벨이 붙은 페이지를 내미는 것**이다.
         #    그 한 가지만 신고한다.
         if ql == 1 and tr == 4 and quest not in noted:
             bad.append((quest, sub, topic, cats[topic]))
 
     if bad:
-        print(f"🚨 Bronze 문제인데 '심화(Gold~Platinum)' 토픽으로 보내는 quest {len(bad)}건 "
+        print(f"🚨 초급 문제인데 '심화(Gold~Platinum)' 토픽으로 보내는 quest {len(bad)}건 "
               f"(ALGO_LEVEL_NOTE 미등록):\n")
         for q, sub, t, c in bad:
             print(f"   {q:<14} {sub:<24} → /algo/{t}  [{c}]")
