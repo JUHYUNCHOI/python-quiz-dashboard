@@ -82,10 +82,23 @@ function BakeryGreedySim({ E }) {
         <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 8 }}>
           🥖 {t(E, "Greedy on the official sample", "공식 예제로 그리디 따라가기")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7, marginBottom: 8, textWrap: "balance" }}>
           {t(E,
-            "Sort the prices small→big. Each round: pay the two most-expensive, let the next one be FREE, then pay the cheapest that's left. Step through it.",
-            "가격을 작은→큰 순으로 정렬해요. 한 라운드마다: 제일 비싼 두 개를 지불하고, 그다음 하나를 무료로 받고, 남은 것 중 제일 싼 것을 지불해요. 한 단계씩 눌러봐요.")}
+            "Sort the prices small→big. Each round: pay the two most-expensive, let the next one be FREE, then pay the cheapest that's left.",
+            "가격을 작은→큰 순으로 정렬해요.\n한 라운드마다 제일 비싼 두 개를 지불하고, 그다음 하나를 무료로 받고,\n남은 것 중 제일 싼 것을 지불해요.")}
+        </div>
+        {/* 2026-09-08 화면 담당: 미션은 "2번째로 싼 빵이 무료" 라고 하고
+            여기선 "3번째로 비싼 것" 이라고 한다. 4개 묶음에선 같은 자리인데
+            (메인이 2000개 묶음으로 검산 — 전부 일치) 화면이 그 말을 한 번도 안 했다.
+            학생 눈엔 "2번째로 싼 거라며, 왜 3번째로 비싼 거지?" 가 된다. */}
+        <div style={{
+          fontSize: 11.5, color: "#92400e", lineHeight: 1.65, marginBottom: 12,
+          background: "#fff", border: "1px dashed #fcd34d", borderRadius: 8,
+          padding: "7px 10px", textWrap: "balance", ...KA,
+        }}>
+          {t(E,
+            "In a batch of 4, the 3rd-most-expensive IS the 2nd-cheapest — the same slot, counted from the other end.",
+            "4 개 묶음에서 '3 번째로 비싼 것' 은 '2 번째로 싼 것' 과 같은 자리예요.\n반대쪽에서 셌을 뿐이에요.")}
         </div>
 
         {/* sorted strip */}
@@ -143,7 +156,26 @@ function BakeryGreedySim({ E }) {
           {done && <span> {"  "}✅ {t(E, "final total = ", "최종 총액 = ")}<b style={{ color: "#fbbf24" }}>{paid}</b></span>}
         </div>
 
-        {/* contrast card — only after finishing */}
+        {/* 2026-09-08: 이 대조 카드는 **시뮬을 끝까지 눌러야만** 나왔다.
+            즉 답(35)이 확정된 뒤에 반례를 보여주는 사후 정당화였다.
+            학생: "딱 한 가지 다른 방법과만 비교한 거라 '진짜 제일 싸다' 는 증명은 아니었다.
+            조금은 '그렇다니까' 였다."
+            그래서 **묻는 자리를 앞으로** 옮긴다 — 누르기 전에 먼저 추측하게 한다.
+            (새 증명 장치를 만들지 않는다. 위치만 바꾼다.) */}
+        {!done && (
+          <div style={{ marginTop: 12, background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "10px 12px", ...KA }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#1d4ed8", marginBottom: 6 }}>
+              🤔 {t(E, "Guess first: which way is cheaper?", "먼저 추측해봐요 — 어느 쪽이 더 쌀까요?")}
+            </div>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, textWrap: "balance" }}>
+              {t(E,
+                "(A) Chop the big→small list into blocks: [10,9,8,7] and [6,3,2,1].\n(B) Put the cheap ones together with expensive ones, as the steps above do.\nPress through and see which total comes out smaller.",
+                "(A) 큰→작은 순으로 그냥 잘라 묶기: [10,9,8,7] 과 [6,3,2,1].\n(B) 싼 것을 비싼 것들과 함께 묶기 — 위 단계가 하는 방법.\n눌러서 어느 쪽 총액이 더 작게 나오는지 봐요.")}
+            </div>
+          </div>
+        )}
+
+        {/* 끝까지 누른 뒤 — 숫자로 답 맞추기 */}
         {done && (
           <div style={{ marginTop: 12, background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 12px", ...KA }}>
             <div style={{ fontSize: 12, fontWeight: 800, color: "#b91c1c", marginBottom: 6 }}>
@@ -151,13 +183,13 @@ function BakeryGreedySim({ E }) {
             </div>
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
               {t(E,
-                "Chopping the big→small list into blocks [10,9,8,7] and [6,3,2,1] frees 8 and 2 → saves 10 → pay 36.",
-                "큰→작은 순으로 [10,9,8,7] 과 [6,3,2,1] 로 잘라 묶으면 8 과 2 가 무료 → 10 절약 → 36 지불.")}
+                "(A) blocks [10,9,8,7] and [6,3,2,1] free 8 and 2 → saves 10 → pay 36.",
+                "(A) [10,9,8,7] 과 [6,3,2,1] 로 자르면 8 과 2 가 무료 → 10 절약 → 36 지불.")}
             </div>
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginTop: 6 }}>
               {t(E,
-                "The greedy above pairs the cheap 1 and 2 with expensive items instead, so it can free 8 and 3 → saves 11 → pay 35. Cheap items are 'spent' as the pay-slot, never wasted as the free one.",
-                "위 그리디는 싼 1 과 2 를 비싼 것들과 짝지어, 8 과 3 을 무료로 만들어요 → 11 절약 → 35 지불. 싼 것은 '지불 자리'로 쓰고, 무료 자리로 낭비하지 않아요.")}
+                "(B) pairs the cheap 1 and 2 with expensive items, so it frees 8 and 3 → saves 11 → pay 35.\nA cheap bread is worth little as the free one — better to let it be one you pay for.",
+                "(B) 는 싼 1 과 2 를 비싼 것들과 짝지어 8 과 3 을 무료로 만들어요 → 11 절약 → 35 지불.\n싼 빵을 공짜로 받으면 얼마 못 아껴요. 공짜 자리는 비싼 빵에 주는 게 이득이에요.")}
             </div>
           </div>
         )}
@@ -200,8 +232,8 @@ export function makeMcc19BakeryCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You buy all N breads (N is a multiple of 4). You split them into batches of 4 however you like, and in each batch the 2nd-cheapest bread is FREE.\nPrint the minimum total cost.",
-        "빵 N 개를 모두 사요 (N 은 4 의 배수). 원하는 대로 4 개씩 묶어 계산하는데, 각 묶음에서 2 번째로 싼 빵이 무료예요.\n최소 총 비용을 출력해요."),
+        "Buy all N breads. In each batch of 4, the 2nd-cheapest is free.",
+        "빵을 4 개씩 묶어 사면 그중 2 번째로 싼 것이 공짜예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -263,8 +295,8 @@ export function makeMcc19BakeryCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. N breads, then their N prices on one line.",
-        "입력 형식과 공식 예제를 봐요. 빵 개수 N, 그다음 줄에 N 개의 가격."),
+        "The input format and the official example.",
+        "입력 형식과 공식 예제를 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -303,8 +335,8 @@ export function makeMcc19BakeryCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Step through the greedy on the sample. Watch the total settle on 35, and see why chopping into blocks is worse.",
-        "예제로 그리디를 한 단계씩 따라가요. 총액이 35 로 맞춰지는 걸 보고, 왜 그냥 4 개씩 자르면 손해인지 확인해요."),
+        "Now try the other way and see which one wins.",
+        "이제 다른 방법과 견줘봐요. 어느 쪽이 더 쌀까요?"),
       content: <BakeryGreedySim E={E} />,
     },
 
@@ -312,8 +344,8 @@ export function makeMcc19BakeryCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In one batch of 4, only the 2nd-cheapest is free — so you want the free slot to fall on an item that is NOT already one of the cheapest overall.",
-        "한 묶음 4 개 중에서 무료는 2 번째로 싼 것뿐이에요 — 그래서 무료 자리가 전체에서 이미 제일 싼 축이 아닌 빵에 떨어지길 원해요."),
+        "One question before the code.",
+        "코드 전에 하나만 확인해요."),
       question: t(E,
         "In a single batch of 4 breads, which one is free?",
         "빵 4 개짜리 한 묶음에서 무료가 되는 것은?"),
@@ -339,8 +371,8 @@ export function makeMcc19BakeryCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Trying every way to split into batches of 4 explodes fast — far too many combinations. Instead, sort once and greedily pick each round: the two most-expensive are paid, the next is freed, and the cheapest leftover is spent as a pay-slot.",
-        "4 개씩 묶는 모든 방법을 다 시도하면 경우의 수가 폭발해요 — 너무 많아요. 대신 한 번 정렬하고 라운드마다 그리디로 골라요: 제일 비싼 두 개는 지불, 그다음은 무료, 남은 것 중 제일 싼 것을 지불 자리로 써요."),
+        "Slow way vs fast way — why they differ.",
+        "느린 방법과 빠른 방법, 무엇이 다른지 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
