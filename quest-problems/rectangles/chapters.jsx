@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getRectanglesWalk, getRectanglesSlowWalk } from "./components";
+import { getRectanglesWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 import { RectanglesSim, WhyContiguousSim, WhyCostSim, WhyTableSim, DPTableFillSim, RectStage } from "./sims";
 
@@ -330,7 +330,6 @@ export function makeRectanglesCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeRectanglesCh2(E, lang = "py") {
   const w = getRectanglesWalk(E, lang);
-  const SLOW = getRectanglesSlowWalk(E);
   return [
     /* [결 앞] 쉬운 첫 코드 → 한계 → 빠른 코드. 전엔 이 흐름이 통째로 없고
        바로 3중 루프 DP 가 나왔다 (선생님 2026-09-03: "하나도 이해 안되게끔"). */
@@ -344,44 +343,66 @@ export function makeRectanglesCh2(E, lang = "py") {
           <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, color: "#9a3412", marginBottom: 12, textWrap: "balance" }}>
             🐢 {t(E, "Just try every way to cut", "그냥 자르는 방법을 전부 해보기")}
           </div>
-          <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 12,
-            padding: "12px 15px", fontSize: 13, lineHeight: 1.8, color: "#334155", textWrap: "balance" }}>
-            {t(E, <>Cutting the row is the whole problem.<br />
-                   With <b>n</b> reds there are <b>n−1</b> gaps between them,<br />
-                   and at each gap we either <b>cut</b> or <b>don't</b>.<br />
-                   So: try all of those, add up each one, keep the smallest.</>,
-                 <>줄을 자르는 게 문제의 전부였죠.<br />
-                   빨강이 <b>n</b>개면 사이의 틈은 <b>n−1</b>개고,<br />
-                   틈마다 <b>자른다 / 안 자른다</b> 둘 중 하나예요.<br />
-                   그럼 그걸 전부 해보고, 각각 더해서, 제일 작은 걸 고르면 돼요.</>)}
+          {/* 2026-09-08 선생님(네 번째 같은 지적): "이해 안돼. 읽기 싫어"
+              전엔 글 네 줄 + `① | ② ③ → 1 + 8 = 9` 같은 기호 칩 네 개였다.
+              기호 칩은 학생이 머릿속에서 그림으로 되돌려야 읽힌다 — 그 되돌리기를 우리가 해준다.
+              **네 가지 자르는 방법을 그대로 네 개의 그림으로** 보여주고, 문장은 한 줄만 남긴다. */}
+          <div style={{ fontSize: 13, lineHeight: 1.8, color: "#334155", textAlign: "center",
+            wordBreak: "keep-all", textWrap: "balance", marginBottom: 12 }}>
+            {t(E, <>Cutting the row is the whole problem — so just <b>try every way to cut</b>.<br />
+                   With 3 reds there are only these four.</>,
+                 <>줄을 자르는 게 문제의 전부였죠 — 그러니 <b>자르는 방법을 전부 해보면</b> 돼요.<br />
+                   빨강이 3개면 방법은 이 넷뿐이에요.</>)}
           </div>
-          <div style={{ marginTop: 12, display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap",
-            fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800 }}>
-            {[["① | ② ③", "1 + 8 = 9"], ["① ② | ③", "6 + 2 = 8"], ["① | ② | ③", "1 + 4 + 2 = 7 ✗ K=2"], ["① ② ③", "10"]].map(([a, b], i) => (
-              <span key={i} style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 8, padding: "5px 9px", color: "#475569" }}>
-                {a} <span style={{ color: "#94a3b8" }}>→</span> {b}
-              </span>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))",
+            gap: 10, maxWidth: 520, margin: "0 auto" }}>
+            {[
+              { g: [[0], [1, 2]],       sum: "1 + 8 = 9",     ok: true },
+              { g: [[0, 1], [2]],       sum: "6 + 2 = 8",     ok: true, best: true },
+              { g: [[0], [1], [2]],     sum: "1 + 4 + 2 = 7", ok: false },
+              { g: [[0, 1, 2]],         sum: "10",            ok: true },
+            ].map((c, i) => (
+              <div key={i} style={{
+                background: c.best ? "#ecfdf5" : c.ok ? "#fff" : "#fef2f2",
+                border: `${c.best ? 2 : 1.5}px solid ${c.best ? "#059669" : c.ok ? "#e2e8f0" : "#fca5a5"}`,
+                borderRadius: 12, padding: "8px 6px 10px" }}>
+                <RectStage scale={0.52} groups={c.g} bad={!c.ok} />
+                <div style={{ textAlign: "center", marginTop: 4, fontSize: 12.5, fontWeight: 800,
+                  fontFamily: "'JetBrains Mono',monospace",
+                  color: c.best ? "#065f46" : c.ok ? "#475569" : "#991b1b" }}>
+                  {c.sum}{c.best ? " ✓" : ""}
+                </div>
+                {!c.ok && (
+                  <div style={{ textAlign: "center", marginTop: 2, fontSize: 11, fontWeight: 700,
+                    color: "#991b1b", wordBreak: "keep-all" }}>
+                    {t(E, "3 blues — but K = 2", "파랑 3개 — K = 2 인데")}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
+          <div style={{ textAlign: "center", marginTop: 12, fontSize: 13, fontWeight: 800,
+            color: "#065f46", wordBreak: "keep-all" }}>
+            {t(E, "Smallest among the allowed ones → 8", "규칙에 맞는 것 중 제일 작은 것 → 8")}
+          </div>
         </div>
       ),
     },
-    {
-      type: "reveal",
-      label: t(E, "Slow code", "느린 코드"),
-      narr: t(E, "Here it is, straight from that sentence — one bit per gap, 0 = don't cut, 1 = cut.",
-                 "그 말을 그대로 옮긴 코드예요 — 틈마다 비트 하나, 0 이면 안 자르고 1 이면 자르기."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <CodeWalk E={E} code={SLOW.code} vars={SLOW.vars} beats={SLOW.beats} accent={A} />
-        </div>
-      ),
-    },
+    /* 2026-09-08 — "느린 코드" 쪽을 **뺐다.** 선생님:
+       "굳이 없어도 될것 같아. 그냥 많이 걸리니 어떻게 하자로 하면 될것 같아"
+
+       그 쪽은 완전탐색 24줄을 CodeWalk 로 보여주고 곧바로 버리는 코드였다. 값이 없었다:
+       · 학생은 그 아이디어를 **코드 없이도 이미 알았다** ("완전탐색까지는 내 생각과 같았다")
+       · 그러면서 **바로 그 코드에서 완전히 막혔다**(난이도 5) — 비트 연산자를 안 배웠다
+       · 최종 DP 코드와 공유하는 것도 없다. 읽고 버리는 24줄이었다
+       이제 흐름이 이렇게 된다: 방법을 다 그려본다 → 근데 200개면 2^199 → 그럼 어떻게 고칠까.
+       ⚠️ quest_problem_standard 의 "첫 코드 → 한계" 와는 어긋난다. 다만 여기선 첫 코드가
+          이해를 돕기는커녕 막는 자리였다. 표준은 이야기를 위한 것이지 그 반대가 아니다. */
     {
       type: "reveal",
       label: t(E, "Too slow", "한계"),
-      narr: t(E, "It is correct. But look at how fast the number of cuts grows.",
-                 "답은 맞아요. 그런데 자르는 방법의 가짓수가 얼마나 빨리 커지는지 봐요."),
+      narr: t(E, "That works. But look at how fast the number of ways grows.",
+                 "그렇게 하면 답은 나와요. 그런데 방법의 가짓수가 얼마나 빨리 커지는지 봐요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all", maxWidth: 520, margin: "0 auto" }}>
           <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, color: "#b91c1c", marginBottom: 12 }}>
@@ -401,10 +422,10 @@ export function makeRectanglesCh2(E, lang = "py") {
           <div style={{ marginTop: 12, background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10,
             padding: "11px 14px", fontSize: 13, lineHeight: 1.8, color: "#1e3a8a", textWrap: "balance" }}>
             {t(E, <><b>So how do we fix it?</b><br />
-                   Look at what the slow code repeats: for every cut pattern it re-adds the same front part over and over.<br />
+                   Look at what we keep repeating: for every way of cutting we re-add the same front part over and over.<br />
                    If we <b>remember the best answer for each front part</b>, we never redo it.</>,
                  <><b>그럼 어떻게 고칠까요?</b><br />
-                   느린 코드가 뭘 반복하는지 봐요 — 자르는 방법마다 <b>앞부분을 계속 다시 더해요</b>.<br />
+                   우리가 뭘 반복하고 있는지 봐요 — 자르는 방법마다 <b>앞부분을 계속 다시 더해요</b>.<br />
                    앞부분의 <b>최선을 한 번 구해서 적어두면</b>, 다시 안 해도 돼요.</>)}
           </div>
         </div>
