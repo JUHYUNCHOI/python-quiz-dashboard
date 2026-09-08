@@ -139,7 +139,7 @@ function PairPickSim({ E }) {
 const TWO = [{ a: 5, b: 1 }, { a: 2, b: 6 }];
 
 function SwapSim({ E }) {
-  const { safe, setIdx, total } = useTraceStep(4);
+  const { safe, setIdx, total } = useTraceStep(5);
 
   const orderRow = (firstIdx, on) => {
     const f = TWO[firstIdx], r = TWO[1 - firstIdx];
@@ -174,8 +174,13 @@ function SwapSim({ E }) {
         "(5, 1) 을 가져가면 5 를 얻지만\n(2, 6) 을 Rhae 에게 넘겨줘요.\nX−Y 는 −1 이 돼요."),
     t(E, "Take (2, 6): he only gains 2 — but Rhae is left with (5, 1)\nand can only take away 1. X−Y is +1. Better!",
         "(2, 6) 을 가져가면 2 밖에 못 얻어요.\n대신 Rhae 에겐 (5, 1) 만 남아 1 밖에 못 빼가요.\nX−Y 는 +1. 이쪽이 나아요!"),
-    t(E, "The gap is 2. And 2 is exactly (2+6) − (5+1) = 8 − 6.\nSo compare pairs by a+b, and take the bigger sum first.",
-        "차이는 2 예요. 그런데 2 는\n(2+6) − (5+1) = 8 − 6 과 똑같아요.\n그래서 쌍은 a+b 로 견주고, 합이 큰 쪽을 먼저 가져가요."),
+    t(E, "The gap is 2. And 2 is exactly (2+6) − (5+1) = 8 − 6.\nThat is not a coincidence. Why a+b?",
+        "차이는 2 예요. 그런데 2 는\n(2+6) − (5+1) = 8 − 6 과 똑같아요.\n우연이 아니에요. 왜 하필 a+b 일까요?"),
+    /* 선생님(2026-09-08): "왜 합을 기준으로 정렬을 했지?"
+       숫자로 "차이 2 = 8−6" 까지만 보여주고 **왜 a+b 인지 한 줄이 없었다.**
+       숫자를 먼저 보고 나서 기호로 옮기는 순서 (feedback_first_concept_scaffolding). */
+    t(E, "A pair swings X−Y by a if I take it, and by −b if the opponent does.\nSo who gets it changes the answer by a+b. Take the widest swing first.",
+        "쌍 하나는 내가 가져가면 +a,\n상대가 가져가면 −b 예요.\n그러니 그 쌍이 누구 손에 가느냐로 a+b 만큼이 갈려요.\n갈리는 폭이 큰 쌍부터 가져가는 거예요."),
   ];
 
   return (
@@ -187,8 +192,8 @@ function SwapSim({ E }) {
 
         {/* 말풍선 */}
         <div style={{
-          background: safe === 3 ? "#ecfdf5" : "#fffbeb",
-          border: `1.5px solid ${safe === 3 ? "#6ee7b7" : "#fbbf24"}`,
+          background: safe === 4 ? "#ecfdf5" : "#fffbeb",
+          border: `1.5px solid ${safe === 4 ? "#6ee7b7" : "#fbbf24"}`,
           borderRadius: 10, padding: "10px 13px", marginBottom: 12,
           fontSize: 12.5, lineHeight: 1.75, color: C.text,
           whiteSpace: "pre-line", textWrap: "balance", ...KA,
@@ -209,6 +214,16 @@ function SwapSim({ E }) {
           }}>
             <div>1 − (−1) = <b style={{ color: "#fbbf24" }}>2</b></div>
             <div>(2+6) − (5+1) = <b style={{ color: "#fbbf24" }}>2</b></div>
+            {safe >= 4 && (
+              <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #334155" }}>
+                <div>{t(E, "I take it", "내가 가져가면")}
+                  <b style={{ color: "#86efac" }}>  + a</b></div>
+                <div>{t(E, "they take it", "상대가 가져가면")}
+                  <b style={{ color: "#fca5a5" }}>  − b</b></div>
+                <div style={{ marginTop: 4 }}>{t(E, "the swing", "갈리는 폭")}
+                  <b style={{ color: "#fbbf24" }}>  a + b</b></div>
+              </div>
+            )}
           </div>
         )}
 
