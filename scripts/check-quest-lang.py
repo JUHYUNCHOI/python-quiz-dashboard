@@ -51,6 +51,16 @@ for f in sorted(glob.glob("quest-problems/*/*.jsx")):
             bad.append((f, line, "두 자리가 글자까지 같다 (복붙)", en[:70]))
         elif HANGUL.search(en) and not ALPHA.search(en):
             bad.append((f, line, "영어 자리에 알파벳이 없다", en[:70]))
+        elif HANGUL.match(en.lstrip("\"'`")[:1] or "x"):
+            # 2026-09-08 에 추가. 위 두 규칙을 **둘 다 빠져나간** 사고가 있었다:
+            #   t(E, "앞에서처럼 a+b 가 큰 쌍부터 …", "앞에서처럼 …")
+            # 한국어 문장에 "a+b" 가 들어 있어서 ALPHA 검사를 통과했고,
+            # 한국어 쪽과 글자가 완전히 같지도 않아서 복붙 검사도 통과했다.
+            # 그래서 "영어 자리가 **한글로 시작**하면" 을 따로 본다.
+            # ⚠️ "en 에 한글이 섞였으면" 으로 넓히면 저장소 전체에서 41건이 뜨는데
+            #    거의 전부 JSX 안의 `<` `>` 때문에 인자 경계가 밀린 헛경보다.
+            #    헛경보 41줄이면 아무도 이 검사기를 안 본다. 좁게 잡는다 (지금 0건).
+            bad.append((f, line, "영어 자리가 한글로 시작한다", en[:70]))
 
 for f, ln, why, t in bad:
     print(f"🚨 {f}:{ln}  — {why}\n     {t}…")

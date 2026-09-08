@@ -83,6 +83,63 @@ export function getSimpleGameSections(E) {
   ];
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   getSimpleGameWalk — CodeWalk 용 {code, vars, beats}
+
+   말풍선을 설명하는 코드 줄에 붙인다 (memory/feedback_quest_code_codewalk.md).
+   전에는 코드 **위에** 산문 570자가 얹혀 있었고, 그 안에 "교환 논증" 이
+   설명 없이 들어 있었다. 2026-09-08 초6 학생이 그 자리에서 막혔고
+   "결국 못 알아들었다" 고 했다. 논증은 챕터1의 쌍 2개 시뮬로 옮기고,
+   여기서는 그 시뮬에서 본 숫자로만 짧게 되짚는다.
+
+   ⚠️ hi 는 **0부터 세는 줄 번호**다 (화면에 보이는 번호는 +1).
+   ═══════════════════════════════════════════════════════════════ */
+const _SG_VARS = [
+  { v: "pairs", ko: "쌍 (a, b) 들", en: "the pairs" },
+  { v: "res", ko: "지금까지의 X−Y", en: "X−Y so far" },
+  { v: "t", ko: "몇 번째 차례인지 (0부터)", en: "turn number (from 0)" },
+];
+
+export function getSimpleGameWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP, vars: _SG_VARS, beats: [
+        { hi: [5, 8], bubble: t(E,
+          "Read n, then read each pair a b into pairs. Use long long — a and b reach 1e9 and there are up to 1e4 pairs, so the total can pass a 32-bit int.",
+          "n 을 읽고, 쌍 a b 를 하나씩 pairs 에 담아요.\nlong long 을 써요 — a, b 가 10억까지고 쌍이 1만 개라\n합이 32비트 int 를 넘을 수 있어요.") },
+        { hi: [10, 13], bubble: t(E,
+          "Line them up: bigger a+b first. That is the rule we found with two pairs — taking the bigger-sum pair first gained exactly (2+6) − (5+1) = 2.",
+          "줄을 세워요. a+b 가 큰 쌍이 먼저예요.\n쌍 두 개로 찾은 규칙이에요 — 합이 큰 쪽을 먼저 가져가면\n딱 (2+6) − (5+1) = 2 만큼 이득이었어요.") },
+        { hi: [15, 18], bubble: t(E,
+          "Walk down the line. Turn 0, 2, 4 … is Evirir, so add +a. Turn 1, 3, 5 … is Rhae, so add −b.",
+          "줄을 위에서부터 훑어요.\n0, 2, 4 … 번째는 Evirir 차례라 +a,\n1, 3, 5 … 번째는 Rhae 차례라 −b 를 더해요.") },
+        { hi: [19, 21], bubble: t(E,
+          "That running total is the final X−Y — one line-up, one pass.",
+          "그 누적 합이 최종 X−Y 예요.\n줄 세우기 한 번 + 훑기 한 번이면 끝이에요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY, vars: _SG_VARS, beats: [
+      { hi: [0, 4], bubble: t(E,
+        "Read the whole input at once and split it into numbers. The first number is n, how many pairs there are.",
+        "입력을 한꺼번에 읽어 숫자로 쪼개요.\n맨 앞 숫자가 n — 쌍이 몇 개인지예요.") },
+      { hi: [5, 8], bubble: t(E,
+        "Then take the numbers two at a time — a and b — and put each pair into the pairs list.",
+        "그다음 숫자를 두 개씩 — a 와 b — 꺼내서\n쌍 하나씩 pairs 리스트에 담아요.") },
+      { hi: [10, 11], bubble: t(E,
+        "Line them up: bigger a+b first. That is the rule we found with two pairs — taking the bigger-sum pair first gained exactly (2+6) − (5+1) = 2. The minus sign in the key makes it descending.",
+        "줄을 세워요. a+b 가 큰 쌍이 먼저예요.\n쌍 두 개로 찾은 규칙이에요 — 합이 큰 쪽을 먼저 가져가면\n딱 (2+6) − (5+1) = 2 만큼 이득이었어요.\n앞의 빼기 기호가 '큰 것부터' 로 뒤집어 줘요.") },
+      { hi: [13, 16], bubble: t(E,
+        "Walk down the line. t is the turn number: 0, 2, 4 … is Evirir so we add +a; 1, 3, 5 … is Rhae so we add −b.",
+        "줄을 위에서부터 훑어요. t 가 몇 번째 차례인지예요.\n0, 2, 4 … 번째는 Evirir 차례라 +a,\n1, 3, 5 … 번째는 Rhae 차례라 −b 를 더해요.") },
+      { hi: [17, 18], bubble: t(E,
+        "That running total is the final X−Y — one line-up, one pass.",
+        "그 누적 합이 최종 X−Y 예요.\n줄 세우기 한 번 + 훑기 한 번이면 끝이에요.") },
+    ],
+  };
+}
+
 export function SimpleGameProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#dc2626" />;
 }
