@@ -39,6 +39,29 @@ FROZEN = {"hps", "cowphotos", "rounding", "cheese", "moo", "mooin3", "checkups"}
 IO_CARD = re.compile(
     r'📥|📤|"INPUT"|"OUTPUT"|입력 형식|출력 형식|"Input"|"Output"|Input Format|입력 / 출력'
 )
+# 커리큘럼에서 **안 가르치는 개념**을 quest 코드가 전제하고 있나 (2026-09-08 전수 조사에서 나옴).
+# 21개 quest 가 걸렸다. 손으로 세면 또 틀린다 — 여기 박아둔다.
+#   비트 연산  : cpp-20 에 "📌 참고용" 으로 **미뤄둔** 개념이다
+#   2차원 리스트: `[[X]*N for _ in range(N)]` — 2차원 리스트 자체를 안 가르친다
+#   조합론/펜윅/모듈러역원: 레슨·algo 토픽 어디에도 없다
+# ⚠️ 걸렸다고 다 결함은 아니다. **본질이면 가르치고, 수단이면 갈아치운다** —
+#    판별은 사람이 한다. 이 목록은 "확인해야 할 자리" 다.
+UNTAUGHT = {
+    # ⚠️ 처음 짠 패턴이 **78개**를 신고했는데 대부분 헛 경보였다 (2026-09-08).
+    #    `cout << -1 <<` 의 `1 <<` 가 "비트 연산" 으로 잡혔고,
+    #    파일 전체를 한 덩어리로 봐서 서로 다른 줄의 `for` 두 개가 "중첩" 으로 잡혔다.
+    #    → **줄 단위로** 보고, C++ 스트림(`cout <<`)은 뺀다.
+    #    오늘만 이 실수를 다섯 번째 한다. 패턴을 넓게 잡으면 반드시 확인하고 좁혀라.
+    "비트연산": re.compile(r"\(1 <<|1 << \w|>> *\w+ *\) *& *1|& *\(1 <<|>>= |<<= "),
+    "2차원리스트": re.compile(r"\[\s*\[[^\]]*\]\s*\* *\w|\[\[[^\]]*\] +for +\w+ +in "),
+    # 한 줄에 `for … in` 이 **두 번 이상** 나오는 대괄호 식 (3중·4중 dp 초기화가 여기 걸린다).
+    # 실제 예: `dp = [[[[0] * (K+1) for _ in range(3)] for _ in range(N)] for _ in range(N)]`
+    "중첩컴프리헨션": re.compile(r"\[.*\bfor +\w+ +in\b.*\bfor +\w+ +in\b.*\]"),
+    "조합론": re.compile(r"이항|파스칼|nCr|binomial|C\[\w+\]\[\w+\] *= *C\["),
+    "펜윅": re.compile(r"펜윅|[Ff]enwick|lowbit|\bBIT\b"),
+    "모듈러역원": re.compile(r"역원|[Ff]ermat|페르마|pow\([^,]+, *MOD *- *2|modinv"),
+}
+CPP_STREAM = re.compile(r'c(out|err) *<<|<< *(endl|std::)')
 CODEWALK = re.compile(r"<CodeWalk\b")
 PROGRESSIVE = re.compile(r"<\w*ProgressiveCode\b")
 
@@ -58,6 +81,18 @@ def quest_text(qid):
         if f.endswith((".jsx", ".tsx", ".js", ".ts")):
             out.append(read(os.path.join(d, f)))
     return "\n".join(out) if out else None
+
+
+def untaught_of(text):
+    """줄 단위로 본다. C++ 출력 스트림 줄은 건너뛴다 (`cout << -1 <<` 가 비트로 잡혔다)."""
+    hit = set()
+    for line in text.split("\n"):
+        if CPP_STREAM.search(line):
+            continue
+        for name, pat in UNTAUGHT.items():
+            if pat.search(line):
+                hit.add(name)
+    return sorted(hit)
 
 
 def collect():
@@ -85,6 +120,7 @@ def collect():
             #   감사값 = MCC 48개, 사람이 하나씩 보고 매긴 값
             #   추정치 = 그 외, 문제 번호로 유추 (Bronze #1→2, #2→3, #3→4)
             # 화면은 둘을 똑같은 Lv 뱃지로 보여준다. 세는 자리에서라도 갈라 둔다.
+            "untaught": untaught_of(t) if t else [],
             "difficulty": diff.get(qid),
             "diff_source": ("감사값" if qid in diff
                             else "추정치" if re.search(r"Bronze\s*#\s*\d|\bP\d\b", sub or "")
@@ -98,7 +134,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--json", action="store_true", help="에이전트용 기계 출력")
     ap.add_argument("--list", metavar="항목",
-                    help="이름까지 찍기: io | codewalk | nodiff | orphan")
+                    help="이름까지 찍기: io | codewalk | untaught | nodiff | orphan")
     args = ap.parse_args()
 
     quests, orphan, diff = collect()
@@ -113,6 +149,7 @@ def main():
             "입출력 카드 없음": len([q for q in rows if not q["io_card"]]),
             "CodeWalk 씀": len([q for q in rows if q["codewalk"]]),
             "옛 코드 표시만": len([q for q in rows if q["progressive"] and not q["codewalk"]]),
+            "안 배운 개념": len([q for q in rows if q["untaught"]]),
             "난이도 감사값": len([q for q in rows if q["diff_source"] == "감사값"]),
             "난이도 추정치": len([q for q in rows if q["diff_source"] == "추정치"]),
         }
@@ -131,6 +168,7 @@ def main():
     if args.list:
         key = {"io": lambda q: not q["io_card"],
                "codewalk": lambda q: q["progressive"] and not q["codewalk"],
+               "untaught": lambda q: bool(q["untaught"]),
                "nodiff": lambda q: q["diff_source"] is None}.get(args.list)
         if args.list == "orphan":
             print(f"카탈로그에 없는 폴더 {len(orphan)}개:")
@@ -142,6 +180,17 @@ def main():
             return 2
         hit = [q for q in live if key(q)]
         print(f"'{args.list}' 에 걸린 quest {len(hit)}개 (동결·폴더없음 제외):\n")
+        if args.list == "untaught":
+            from collections import Counter
+            cnt = Counter(k for q in hit for k in q["untaught"])
+            for k, v in cnt.most_common():
+                names = [q["id"] for q in hit if k in q["untaught"]]
+                print(f"  [{k}] {v}개")
+                for i in range(0, len(names), 5):
+                    print("    " + "  ".join(names[i:i + 5]))
+            print("\n  ⚠️ 걸렸다고 다 결함은 아니다. **본질이면 가르치고, 수단이면 갈아치운다.**")
+            print("     판별은 사람이 한다 — 이건 '확인해야 할 자리' 목록이다.")
+            return 0
         for sec in sections:
             xs = [q["id"] for q in hit if q["section"] == sec]
             if xs:
@@ -151,7 +200,7 @@ def main():
         return 0
 
     cols = ["전체", "셀 수 있음", "입출력 카드 없음", "CodeWalk 씀", "옛 코드 표시만",
-            "난이도 감사값", "난이도 추정치"]
+            "안 배운 개념", "난이도 감사값", "난이도 추정치"]
     w = max(len(c) for c in cols) + 2
     print("\n=== quest 개수 (기준: app/quest/[problemId]/data.ts 카탈로그) ===\n")
     print("  " + "섹션".ljust(11) + "".join(c.rjust(w) for c in cols))
@@ -179,7 +228,7 @@ def main():
     print("\n  세는 규칙 — 숫자만 인용하지 말고 이것도 같이 봐라:")
     print(f"    입출력 카드  {IO_CARD.pattern}")
     print("    ↑ 좁게 잡았다가 7개를 '없음' 으로 잘못 셌다(2026-09-07). 넓은 게 맞다.")
-    print("  이름까지: --list io | codewalk | nodiff | orphan\n")
+    print("  이름까지: --list io | codewalk | untaught | nodiff | orphan\n")
     return 0
 
 
