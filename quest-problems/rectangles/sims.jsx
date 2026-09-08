@@ -66,7 +66,7 @@ export function RectStage({ groups = null, bad = false, showWaste = false, scale
   const U = UNIT * scale;
   const stageW = TOTAL_W * U;
   const stageH = MAX_H * U;
-  const padTop = 26 * scale + 8, baseline = 26 * scale;
+  const padTop = Math.max(20, 26 * scale + 8), baseline = 26 * scale;
   const leftOfS = (idx) => REDS.slice(0, idx).reduce((a, r) => a + r.w, 0) * U;
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
@@ -110,8 +110,16 @@ export function RectStage({ groups = null, bad = false, showWaste = false, scale
               width: sw * U, height: mh * U, boxSizing: "border-box", zIndex: 4,
               background: bad ? "rgba(220,38,38,0.10)" : BLUBG,
               border: `2.5px ${bad ? "dashed" : "solid"} ${col}`, borderRadius: 5 }}>
-              <span style={{ position: "absolute", top: -19, left: "50%", transform: "translateX(-50%)",
-                fontSize: 11, fontWeight: 800, color: col, whiteSpace: "nowrap", fontFamily: "'JetBrains Mono',monospace" }}>
+              {/* 2026-09-08 선생님: "글자랑 도형등 겹치는 부분이 있던데" — 맞다.
+                  라벨 위치(top:-19)와 글자 크기(11px)가 **scale 을 안 따라갔다.**
+                  작게 그리면(scale 0.52) 라벨이 그대로 커서, 옆 그룹 라벨끼리 겹치고
+                  빨강 사각형 위로 올라탔다. 라벨도 같이 줄인다.
+                  ⚠️ 작을 땐 아예 안 그린다 — 겹칠 바엔 없는 게 낫다. 값은 아래 총합이 말해준다. */}
+              <span style={{ position: "absolute", top: -13 * Math.max(scale, .7) - 5,
+                left: "50%", transform: "translateX(-50%)",
+                display: scale < 0.6 && groups.length > 1 ? "none" : "block",
+                fontSize: Math.max(9, 11 * scale), fontWeight: 800, color: col,
+                whiteSpace: "nowrap", fontFamily: "'JetBrains Mono',monospace" }}>
                 {/* 2026-09-08: 라벨이 `높이×폭` 인데 말풍선·공식은 내내 **(폭합) × (최고높이)** 였다.
                     같은 6을 `2×3` 과 `(1+2)×2` 두 모양으로 보여주면 학생이 다른 계산으로 읽는다.
                     순서를 공식과 맞춘다. */}
@@ -414,10 +422,17 @@ export function DPTableFillSim({ E }) {
         <>그럼 앞부분(<b>{frontNames}</b>)에 덮을 게 없어요 — 이건 넘어가요.</>);
       const total = front + c.area;
       const better = total === dp[s.kk][s.i];
+      /* 2026-09-08 선생님: "여기 이해가 안가고" (6/15 화면)
+         이 단계 말풍선이 "앞부분(①)은 1 을 꺼내 써요. 4 + 1 = 5" 였다.
+         **4 가 어디서 왔는지 이 화면에 없다** — 바로 앞 단계에서 구한 값인데
+         그 단계엔 그림이 있었고 이 단계엔 없어서 맥락이 끊겼다.
+         어제 try/tryadd 로 쪼개면서 생긴 구멍이다. 두 항을 **둘 다 이름과 함께** 다시 말한다. */
       return t(E,
-        <>The front (<b>{frontNames}</b>) is already in the table: <b>{front}</b>.<br />
+        <>The last blue (<b>{names}</b>) costs <b>{c.area}</b> — we just worked that out.<br />
+          The front (<b>{frontNames}</b>) is already in the table: <b>{front}</b>.<br />
           {c.area} + {front} = <b>{total}</b>{better ? "" : <> — bigger, throw it away.</>}</>,
-        <>앞부분(<b>{frontNames}</b>)은 표에 적어둔 <b>{front}</b> 을 꺼내 써요.<br />
+        <>마지막 파랑(<b>{names}</b>)은 <b>{c.area}</b> — 방금 구한 값이에요.<br />
+          앞부분(<b>{frontNames}</b>)은 표에 적어둔 <b>{front}</b> 을 꺼내 써요.<br />
           {c.area} + {front} = <b>{total}</b>{better ? "" : <> — 더 크니까 버려요.</>}</>);
     }
     if (s.k === "cell") return t(E,

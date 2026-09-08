@@ -103,10 +103,72 @@ const scan = () => p.evaluate(() => {
     covered.push({ what: (t.tagName + ' ' + (t.textContent || t.placeholder || '').trim()).slice(0, 40),
                    by: (blocker.className || '').toString().slice(0, 40) || '(인라인 스타일 요소)' })
   })
+  /* 글자끼리 · 글자와 도형이 **겹치나** (2026-09-08 추가).
+     선생님: "디자이너와 qa가 잘 안하나봐. 글자랑 도형등 겹치는 부분이 있던데"
+     맞는 말이었다 — 이 검사기는 그때까지 **누르는 것이 막혔나**만 봤고
+     글자 겹침은 아예 안 봤다. 검토자들이 이 도구를 믿었으니 못 볼 수밖에 없었다.
+     실제 사례: RectStage 라벨(`4×2=8`)이 scale 을 안 따라가서 작게 그릴 때
+     옆 라벨과 겹치고 빨강 사각형 위로 올라탔다. */
+  // 고정/스티키 안에 든 것은 뺀다 — 바가 본문 위를 지나는 건 설계고, 그건 위 `covered` 가 본다.
+  // (안 빼면 헤더 버튼들이 내레이션과 100% 겹친다고 신고한다 — 2026-09-08 실측)
+  const inFixed = (e) => {
+    for (let n = e; n && n !== document.body; n = n.parentElement) {
+      const pos = getComputedStyle(n).position
+      if (pos === 'fixed' || pos === 'sticky') return true
+    }
+    return false
+  }
+  const boxes = [...document.querySelectorAll('body *')].filter((e) => {
+    if (e.children.length) return false                 // 말단만 (부모-자식 겹침은 정상)
+    if (!(e.textContent || '').trim()) return false
+    if (inFixed(e)) return false
+    const st = getComputedStyle(e)
+    if (st.visibility === 'hidden' || st.display === 'none' || +st.opacity === 0) return false
+    const q = e.getBoundingClientRect()
+    return q.width > 2 && q.height > 2 && q.bottom > 0 && q.top < innerHeight
+  })
+  /* 글자가 **도형** 위에 올라탄 것도 본다 — 도형은 글자가 없어서 위 목록엔 안 잡힌다.
+     선생님이 본 것이 정확히 이 경우였다: 라벨(`4×2=8`)이 파랑 네모(글자 없는 div) 위로 올라탔다.
+     글자↔글자만 보면 영영 못 잡는다. */
+  const shapes = [...document.querySelectorAll('body *')].filter((e) => {
+    if ((e.textContent || '').trim()) return false      // 글자 있는 건 위에서 봤다
+    if (inFixed(e)) return false
+    const st = getComputedStyle(e)
+    const drawn = parseFloat(st.borderTopWidth) >= 1 || parseFloat(st.borderLeftWidth) >= 1 ||
+                  (st.backgroundColor && st.backgroundColor !== 'rgba(0, 0, 0, 0)')
+    if (!drawn) return false
+    const q = e.getBoundingClientRect()
+    return q.width > 4 && q.height > 4 && q.width < 400 && q.bottom > 0 && q.top < innerHeight
+  })
+  const overlaps = []
+  // 글자 ↔ 도형
+  for (const A of boxes) for (const S of shapes) {
+    if (A.contains(S) || S.contains(A)) continue
+    const a = A.getBoundingClientRect(), c = S.getBoundingClientRect()
+    const w = Math.min(a.right, c.right) - Math.max(a.left, c.left)
+    const h = Math.min(a.bottom, c.bottom) - Math.max(a.top, c.top)
+    if (w <= 1 || h <= 1) continue
+    const ratio = (w * h) / (a.width * a.height)        // 글자가 얼마나 덮였나
+    if (ratio < 0.25) continue
+    overlaps.push({ a: (A.textContent || '').trim().slice(0, 16), b: '〈도형〉', r: +ratio.toFixed(2) })
+  }
+  for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
+    const A = boxes[i], B = boxes[j]
+    if (A.contains(B) || B.contains(A)) continue
+    const a = A.getBoundingClientRect(), c = B.getBoundingClientRect()
+    const w = Math.min(a.right, c.right) - Math.max(a.left, c.left)
+    const h = Math.min(a.bottom, c.bottom) - Math.max(a.top, c.top)
+    if (w <= 1 || h <= 1) continue
+    const ratio = (w * h) / Math.min(a.width * a.height, c.width * c.height)
+    if (ratio < 0.15) continue                          // 살짝 스치는 건 뺀다
+    overlaps.push({ a: (A.textContent || '').trim().slice(0, 16),
+                    b: (B.textContent || '').trim().slice(0, 16), r: +ratio.toFixed(2) })
+  }
+
   const longText = [...document.querySelectorAll('p, div')]
     .filter(e => e.children.length === 0 && (e.textContent || '').trim().length > 55)
     .map(e => (e.textContent || '').trim()).slice(0, 8)
-  return { text: document.body.innerText.slice(0, 3000), covered, longText, y: Math.round(scrollY) }
+  return { text: document.body.innerText.slice(0, 3000), covered, overlaps, longText, y: Math.round(scrollY) }
 })
 
 // ⚠️ sticky 는 **스크롤해야** 덮는다. 맨 위에서 한 번만 보면 못 잡는다
@@ -114,6 +176,7 @@ const scan = () => p.evaluate(() => {
 //    그래서 페이지를 내려가며 여러 번 잰다.
 const r = await scan()
 const seen = new Set(r.covered.map(c => c.what))
+const seenOv = new Set((r.overlaps || []).map(o => o.a + '|' + o.b))
 const H = await p.evaluate(() => document.body.scrollHeight)
 for (let y = Math.round(vp.height * 0.3); y < H; y += Math.round(vp.height * 0.3)) {
   // ⚠️ 부드러운 스크롤(smooth) 도중에 재면 또 헛 경보가 난다 — 2026-09-07 실측:
@@ -131,6 +194,7 @@ for (let y = Math.round(vp.height * 0.3); y < H; y += Math.round(vp.height * 0.3
   await p.waitForTimeout(120)
   const more = await scan()
   more.covered.forEach(c => { if (!seen.has(c.what)) { seen.add(c.what); r.covered.push({ ...c, y: more.y }) } })
+  ;(more.overlaps || []).forEach(o => { const k = o.a + '|' + o.b; if (!seenOv.has(k)) { seenOv.add(k); r.overlaps.push(o) } })
 }
 await p.evaluate(() => window.scrollTo(0, 0)); await p.waitForTimeout(150)
 
@@ -138,6 +202,9 @@ console.log(`\n=== ${mobile ? '모바일 375×812' : '데스크탑 1280×900'} �
 console.log(r.text)
 console.log(`\n── 고정 요소에 가려진 것: ${r.covered.length}개`)
 r.covered.slice(0, 10).forEach(c => console.log(`   🚨 ${c.what}  ← ${c.by}${c.y ? ` (스크롤 ${c.y}px 에서)` : ''}`))
+console.log(`\n── 글자·도형이 겹친 곳: ${r.overlaps.length}개`)
+r.overlaps.slice(0, 8).forEach(o => console.log(`   🚨 "${o.a}" ↔ "${o.b}"  (겹침 ${Math.round(o.r * 100)}%)`))
+
 console.log(`\n── 55자 넘는 문장: ${r.longText.length}개 (feedback_narration_short.md 기준)`)
 r.longText.forEach(t => console.log(`   ${t.length}자: ${t.slice(0, 70)}…`))
 
