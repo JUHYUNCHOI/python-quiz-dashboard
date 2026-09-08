@@ -179,9 +179,12 @@ export function makeMcc19PalCh1(E) {
               ))}
             </div>
             <div style={{ marginTop: 8, fontSize: 11.5, color: C.dim, lineHeight: 1.55 }}>
+              {/* 2026-09-08: 여기서 "왜 000 인지" 를 통째로 설명하고 있었다
+                  (한 자리 3개 · 두 자리 3개 · 그다음 길이 3…).
+                  P4 의 "왜 15?" 와 같은 자리다 — 형식 쪽은 형식만. 궁리는 다음 쪽 몫이다. */}
               {t(E,
-                "The 7th entry is \"000\" — three single digits, three two-digit doubles, then the length-3 strings start with \"000\" (leading zeros are fine).",
-                "7 번째는 \"000\" 이에요 — 한 자리 3 개, 두 자리 3 개, 그다음 길이 3 이 \"000\" 부터 시작해요 (앞자리 0 허용).")}
+                "So the 7th entry is \"000\". Leading zeros are fine.",
+                "그래서 7 번째는 \"000\" 이에요. 앞자리 0 도 그대로 써요.")}
             </div>
           </div>
         </div>),
@@ -190,18 +193,25 @@ export function makeMcc19PalCh1(E) {
     // 1-3: concept sim
     {
       type: "sim",
+      /* 2026-09-08: 이 narr 이 슬라이더를 만지기 **전에** 공식(k^⌈L/2⌉)과
+         거울 트릭을 문장으로 다 줬다. 시뮬이 "느껴보라" 는데 느낄 게 없었다.
+         공식은 시뮬 안 라이브 카드가 이미 보여준다 — 여기선 무엇을 해보라는 것만. */
       narr: t(E,
-        "Feel the order. Pick k and N, and watch the palindrome strings line up by length then alphabetically. Each length holds k^⌈L/2⌉ of them — the front half is chosen freely, then mirrored.",
-        "순서를 직접 느껴봐요. k 와 N 을 골라 회문 문자열이 길이 순, 사전 순으로 줄 서는 걸 봐요. 각 길이는 k^⌈L/2⌉ 개예요 — 앞 절반을 자유롭게 고르고 거울처럼 뒤집으면 돼요."),
+        "Pick k and N, and watch the strings line up.",
+        "k 와 N 을 골라 문자열이 줄 서는 걸 봐요."),
       content: null, // rendered by App via <Mcc19PalSim />
     },
 
     // 1-4: understanding quiz
     {
       type: "quiz",
+      /* 2026-09-08: 여기 narr 이 책 2 의 순서를 8번째까지 **나열**하고
+         "5 번째가 길이 3 의 첫 항목" 까지 못박았다. 질문이 바로 그 5번째 값을 묻는다.
+         narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
+         목록과 결론을 빼고, 세는 데 필요한 것만 남긴다. */
       narr: t(E,
-        "Book 2 order: \"0\", \"1\", \"00\", \"11\", \"000\", \"010\", \"101\", \"111\", …\nLength 1 gives 2 strings, length 2 gives 2 more — so the 5th starts the length-3 group.",
-        "책 2 의 순서: \"0\", \"1\", \"00\", \"11\", \"000\", \"010\", \"101\", \"111\", … 길이 1 이 2 개, 길이 2 가 2 개 — 그래서 5 번째가 길이 3 의 첫 항목이에요."),
+        "Book 2 (k = 2). Count them in order — how far does each length reach?",
+        "책 2 (k = 2). 순서대로 세어봐요. 길이마다 몇 개씩일까요?"),
       question: t(E,
         "Book 2 (k = 2): what is the 5th palindrome string?",
         "책 2 (k = 2): 5 번째 회문 문자열은?"),
