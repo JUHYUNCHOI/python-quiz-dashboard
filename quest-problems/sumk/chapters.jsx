@@ -125,9 +125,11 @@ export function makeSumKCh1(E) {
     {
       type: "reveal",
       label: t(E, "Problem (intro)", "문제 (도입)"),
+      /* 2026-09-08 — narr 이 86자였고, 바로 아래 🎯미션·📖불릿이 **같은 정의를 두 번 더** 말했다.
+         한 화면에서 같은 말을 세 번 하는 셈이다 (feedback_narration_short.md: 55자 이하 한 문장). */
       narr: t(E,
-        "Given an array A of N integers and a number K, look at EVERY non-empty subset. Each subset scores (its sum) raised to the K-th power. Add up all those scores (mod 998244353).",
-        "N 개 정수 배열 A 와 숫자 K 가 주어져요. 모든 비어있지 않은 부분집합을 봐요. 각 부분집합의 점수 = (원소 합)의 K 제곱. 그 점수들을 다 더해요 (mod 998244353)."),
+        "Sum^K — add up the score of every subset.",
+        "Sum^K — 모든 부분집합의 점수를 더해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>

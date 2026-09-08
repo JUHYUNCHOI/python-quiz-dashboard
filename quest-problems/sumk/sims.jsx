@@ -93,7 +93,10 @@ export function SumkSim({ E }) {
              <>7개 끝! 모든 (합)²을 더하면 → 답은 <b>{grand}</b>. (이게 바로 샘플: <b>3 2 / 1 2 3 → 100</b>.)</>);
 
   return (
-    <div style={{ padding: 16 }}>
+    /* paddingBottom — 모바일 375×812 에서 SimNav 3개가 하단 고정 바(quest-navbar)에 가려
+       **눌리지 않았다** (ux-reviewer 좌표 실측, 스크롤 0 지점). 오늘 같은 자리를 네 번째 겪는다.
+       바 높이(약 68px)보다 넉넉히 준다. */
+    <div style={{ padding: 16, paddingBottom: 110 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Add (sum)² over all 7 subsets", "7개 부분집합의 (합)² 다 더하기")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
@@ -120,19 +123,29 @@ export function SumkSim({ E }) {
       )}
 
       {/* 누적 장부 — 7개 부분집합을 세로로, 지나온 것은 색칠 */}
-      <div style={{ maxWidth: 380, margin: "16px auto 0", display: "grid", gap: 5 }}>
-        {rows.map((r, i) => {
+      <div style={{ maxWidth: 380, margin: "10px auto 0", display: "grid", gap: 3 }}>
+        {/* 아직 안 나온 줄은 **그리지도 않는다** (2026-09-08).
+            ① 미션이 "직접 세어봐요" 인데 안 지나온 값까지 자리를 차지하면 답을 미리 보여주는 셈이고,
+            ② 그 빈 줄들이 세로를 다 먹어서 모바일에서 SimNav 가 하단 고정 바 밑으로 내려갔다.
+            둘이 같은 원인이었다 — 한 번에 고친다. 한 줄만 앞서 보여줘서 "다음이 있다" 는 알린다. */}
+        {rows.slice(0, Math.min(rows.length, shownCount + 1)).map((r, i) => {
           const passed = i < shownCount;
           const active = s.kind === "sub" && i === s.i;
           return (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 12px", borderRadius: 8,
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "3px 12px", borderRadius: 8,
               background: active ? PUR : passed ? PURBG : "#f8fafc",
               border: `1.5px solid ${active ? PURDK : passed ? "#c4b5fd" : "#e2e8f0"}`,
               opacity: passed ? 1 : 0.4, transition: "all .15s" }}>
               <span style={{ flex: 1, fontSize: 12.5, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
                 color: active ? "#fff" : PURDK }}>{setStr(r.idxs)}</span>
+              {/* 2026-09-08 — 안 지나온 줄은 값을 가린다.
+                  미션이 "직접 세어봐요" 인데 7개 부분집합의 제곱값이 **처음부터 다 보였다.**
+                  그러면 학생은 계산하는 게 아니라 확인만 하게 된다.
+                  실제로 학생이 이 쪽을 난이도 1로 매기고 "아까 봤는데 또 나와요" 라고 했다. */}
               <span style={{ fontSize: 12, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace",
-                color: active ? "#ede9fe" : "#7c3aed" }}>{r.sum}² = {r.sq}</span>
+                color: active ? "#ede9fe" : passed ? "#7c3aed" : "#cbd5e1" }}>
+                {passed || active ? `${r.sum}² = ${r.sq}` : "? ² = ?"}
+              </span>
               <span style={{ fontSize: 12.5, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
                 color: active ? "#fff" : "#15803d", minWidth: 52, textAlign: "right" }}>
                 {passed ? `→ ${r.run}` : ""}
