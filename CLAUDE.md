@@ -44,6 +44,7 @@ python3 scripts/check-concept-order.py  # 안 가르친 문법을 쓰고 있나
 python3 scripts/check-quest-lang.py     # quest 영어 자리에 한국어가 들어갔나
 python3 scripts/check-quest-algo-level.py  # Bronze 문제를 '심화' 토픽으로 보내나
 python3 scripts/count-quests.py         # ⭐ quest 개수는 **손으로 세지 마라** (--list 로 이름까지)
+python3 scripts/check-quiz-spoiler.py   # 퀴즈 내레이션이 정답을 미리 말하나 (판정 아님 — 볼 자리 표시)
 python3 scripts/count-quests.py --list untaught  # 안 가르친 개념(비트·2차원리스트·조합론…)을 전제하는 quest
 ```
 
