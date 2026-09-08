@@ -54,7 +54,10 @@ export const SOLUTION_CODE = [
   "# Output",
   "print(len(results))",
   "for pz, mn, mx in results:",
-  "    inf = 'Infinity' if mx >= T else str(mx)",
+  "    if mx >= T:",
+  "        inf = 'Infinity'",
+  "    else:",
+  "        inf = str(mx)",
   "    print(pz, mn, inf)",
 ];
 

@@ -9,7 +9,10 @@ const FULL_PY = [
   "a = list(map(int, input().split()))",
   "for _ in range(k):",
   "    for i in range(n):",
-  "        a[i] = a[i] // 2 if a[i] % 2 == 0 else 3 * a[i] + 1",
+  "        if a[i] % 2 == 0:",
+  "            a[i] = a[i] // 2",
+  "        else:",
+  "            a[i] = 3 * a[i] + 1",
   "print(sum(a))",
 ];
 
@@ -27,7 +30,11 @@ const FULL_CPP = [
   "",
   "    for (long long t = 0; t < k; t++)   // k번 반복",
   "        for (auto& x : a)               // 각 원소를",
-  "            x = (x % 2 == 0) ? x / 2 : 3 * x + 1;",
+  "            if (x % 2 == 0) {",
+  "                x = x / 2;",
+  "            } else {",
+  "                x = 3 * x + 1;",
+  "            }",
   "",
   "    long long sum = 0;",
   "    for (auto x : a) sum += x;",
@@ -73,14 +80,14 @@ export function getCollatzWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _COLL_VARS, beats: [
       { hi: [0, 9],   bubble: t(E, "Read n and k, then read the n numbers into the list a (long long — 3·x+1 can grow).", "n과 k를 읽고, 숫자 n개를 리스트 a에 읽어와요 (3·x+1로 커질 수 있어 long long).") },
-      { hi: [11, 13], bubble: t(E, "Repeat the whole pass exactly k times. Each pass: for every number, if even ÷2, if odd ×3+1 — updated in place (auto& x is a reference).", "한 바퀴 전체를 정확히 k번 반복. 매 바퀴: 숫자마다 짝수면 ÷2, 홀수면 ×3+1 — 참조(auto& x)로 제자리 수정.") },
-      { hi: [15, 17], bubble: t(E, "After all k passes, add up the whole list and print the sum. That's the answer.", "k번을 다 돌린 뒤 리스트 전체를 더해 합을 출력. 그게 답이에요.") },
+      { hi: [11, 17], bubble: t(E, "Repeat the whole pass exactly k times. Each pass: for every number, if even ÷2, if odd ×3+1 — updated in place (auto& x is a reference).", "한 바퀴 전체를 정확히 k번 반복. 매 바퀴: 숫자마다 짝수면 ÷2, 홀수면 ×3+1 — 참조(auto& x)로 제자리 수정.") },
+      { hi: [19, 21], bubble: t(E, "After all k passes, add up the whole list and print the sum. That's the answer.", "k번을 다 돌린 뒤 리스트 전체를 더해 합을 출력. 그게 답이에요.") },
     ] };
   }
   return { code: FULL_PY, vars: _COLL_VARS, beats: [
     { hi: [0, 1], bubble: t(E, "Read n and k on the first line, then read the list a of n numbers.", "첫 줄에서 n과 k를 읽고, 다음 줄에서 숫자 n개 리스트 a를 읽어요.") },
-    { hi: [2, 4], bubble: t(E, "Repeat the whole pass exactly k times. Each pass: for every index i, if a[i] is even ÷2, if odd ×3+1 — replaced in place.", "한 바퀴 전체를 정확히 k번 반복. 매 바퀴: 각 i마다 a[i]가 짝수면 ÷2, 홀수면 ×3+1 — 제자리 교체.") },
-    { hi: [5, 5], bubble: t(E, "After all k passes, print(sum(a)) — the sum of the final list. Done.", "k번을 다 돌린 뒤 print(sum(a)) — 최종 리스트의 합. 끝이에요.") },
+    { hi: [2, 7], bubble: t(E, "Repeat the whole pass exactly k times. Each pass: for every index i, if a[i] is even ÷2, if odd ×3+1 — replaced in place.", "한 바퀴 전체를 정확히 k번 반복. 매 바퀴: 각 i마다 a[i]가 짝수면 ÷2, 홀수면 ×3+1 — 제자리 교체.") },
+    { hi: [8, 8], bubble: t(E, "After all k passes, print(sum(a)) — the sum of the final list. Done.", "k번을 다 돌린 뒤 print(sum(a)) — 최종 리스트의 합. 끝이에요.") },
   ] };
 }
 
