@@ -355,45 +355,55 @@ function SwapSim({ E }) {
           🔁 {t(E, "Two pairs — swap the order and see", "쌍 두 개 — 순서를 바꿔보기")}
         </div>
 
-        {/* 말풍선 */}
-        <div style={{
-          background: safe === 4 ? "#ecfdf5" : "#fffbeb",
-          border: `1.5px solid ${safe === 4 ? "#6ee7b7" : "#fbbf24"}`,
-          borderRadius: 10, padding: "10px 13px", marginBottom: 12,
-          fontSize: 12.5, lineHeight: 1.75, color: C.text,
-          whiteSpace: "pre-line", textWrap: "balance", ...KA,
-        }}>
-          💬 {BUBBLE[safe]}
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 12 }}>
-          {orderRow(0, safe >= 1)}
-          {orderRow(1, safe >= 2)}
-        </div>
-
-        {safe >= 3 && (
-          <div style={{
-            background: "#0f172a", color: "#f8fafc", borderRadius: 8, padding: "10px 12px",
-            fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.7,
-            marginBottom: 12, ...KA,
-          }}>
-            <div>1 − (−1) = <b style={{ color: "#fbbf24" }}>2</b></div>
-            <div>(2+6) − (5+1) = <b style={{ color: "#fbbf24" }}>2</b></div>
-            {safe >= 4 && (
-              <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #334155" }}>
-                <div>{t(E, "I take (2,6)", "(2,6) 을 내가 가져가면")}
-                  <b style={{ color: "#86efac" }}>  + 2</b></div>
-                <div>{t(E, "they take (2,6)", "상대가 가져가면")}
-                  <b style={{ color: "#fca5a5" }}>  − 6</b></div>
-                <div style={{ marginTop: 4 }}>{t(E, "apart by", "두 경우의 차이")}
-                  <b style={{ color: "#fbbf24" }}>  2 − (−6) = 8</b></div>
+        {/* ⚠️ 한 번에 **한 자리만** 바뀌게 둔다.
+            선생님(2026-09-08): "변하는 부분을 분산시키지 않는게 좋겠어.
+            갑자기 위아래 내용이 동시에 바뀌는데."
+            전에는 맨 위 말풍선과 맨 아래 검은 상자가 같은 걸음에 같이 바뀌어서
+            눈이 두 군데를 쫓아야 했다. 이제 말풍선을 **이번에 새로 나오는 것 바로 위**에
+            붙인다. 이미 나온 것은 그대로 있는다.
+            (CodeWalk 이 말풍선을 밝아진 코드 줄에 붙이는 것과 같은 생각이다.) */}
+        {(() => {
+          const bubble = (
+            <div key="bubble" style={{
+              background: safe === 4 ? "#ecfdf5" : "#fffbeb",
+              border: `1.5px solid ${safe === 4 ? "#6ee7b7" : "#fbbf24"}`,
+              borderRadius: 10, padding: "10px 13px", marginBottom: 10,
+              fontSize: 12.5, lineHeight: 1.75, color: C.text,
+              whiteSpace: "pre-line", textWrap: "balance", ...KA,
+            }}>
+              💬 {BUBBLE[safe]}
+            </div>
+          );
+          const rowA = <div key="rowA" style={{ marginBottom: 8 }}>{orderRow(0, true)}</div>;
+          const rowB = <div key="rowB" style={{ marginBottom: 10 }}>{orderRow(1, true)}</div>;
+          const box = (
+            <div key="box" style={{
+              background: "#0f172a", color: "#f8fafc", borderRadius: 8, padding: "10px 12px",
+              fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.7,
+              marginBottom: 12, ...KA,
+            }}>
+              <div>1 − (−1) = <b style={{ color: "#fbbf24" }}>2</b></div>
+              <div>(2+6) − (5+1) = <b style={{ color: "#fbbf24" }}>2</b></div>
+              {safe >= 4 && (
                 <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #334155" }}>
-                  {t(E, "any pair (a, b)", "어떤 쌍 (a, b) 든")}
-                  <b style={{ color: "#fbbf24" }}>  (+a) − (−b) = a + b</b></div>
-              </div>
-            )}
-          </div>
-        )}
+                  <div>{t(E, "I take (2,6)", "(2,6) 을 내가 가져가면")}
+                    <b style={{ color: "#86efac" }}>  + 2</b></div>
+                  <div>{t(E, "they take (2,6)", "상대가 가져가면")}
+                    <b style={{ color: "#fca5a5" }}>  − 6</b></div>
+                  <div style={{ marginTop: 4 }}>{t(E, "apart by", "두 경우의 차이")}
+                    <b style={{ color: "#fbbf24" }}>  2 − (−6) = 8</b></div>
+                  <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #334155" }}>
+                    {t(E, "any pair (a, b)", "어떤 쌍 (a, b) 든")}
+                    <b style={{ color: "#fbbf24" }}>  (+a) − (−b) = a + b</b></div>
+                </div>
+              )}
+            </div>
+          );
+          if (safe === 0) return [bubble];
+          if (safe === 1) return [bubble, rowA];
+          if (safe === 2) return [rowA, bubble, rowB];
+          return [rowA, rowB, bubble, box];
+        })()}
 
         <SimNav idx={safe} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
       </div>
@@ -642,7 +652,81 @@ export function makeSimpleGameCh1(E) {
       content: <LineUpSim E={E} />,
     },
 
-    // 1-5: 줄이 선 뒤에 차례대로 가져가 보기
+    /* 다음에 또 쓸 방법 — 이 문제의 답이 아니라 **방법**을 남긴다.
+
+       선생님(2026-09-08): "공식의 흐름이 보이지가 않아. 사실 이 문제가 중요한게 아니라
+       나중에 이런 비슷한 문제가 나왔을때 풀수 있어야 하는거잖아."
+       맞다. 앞 쪽들은 이 문제의 답(a+b)에 이르는 길만 보여줬고,
+       **그 길 자체에 이름을 붙여 두지 않았다.** 그러면 다음 문제에서 못 꺼내 쓴다. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "The same four steps work on other ordering problems.",
+        "이 네 걸음은 다른 순서 문제에도 그대로 써요."),
+      content: (
+        <div style={{ padding: 16, ...KA }}>
+          <Known E={E} n={2} />
+          <div style={{
+            background: "#fff", border: "2px solid #065f46", borderRadius: 12,
+            padding: 14, marginBottom: 10,
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 4 }}>
+              🧭 {t(E, "How we found it — and how to find it next time",
+                     "어떻게 찾았나 — 다음에도 이렇게 찾는다")}
+            </div>
+            <div style={{ fontSize: 11.5, color: C.dim, marginBottom: 12, lineHeight: 1.6 }}>
+              {t(E, "Whenever a problem asks “in what order?”, walk these four.",
+                   "“무슨 순서로 해야 하지?” 라는 문제를 만나면 이 넷을 밟아요.")}
+            </div>
+            {[
+              { g: t(E, "Put just TWO of them side by side and swap.",
+                        "딱 두 개만 놓고 순서를 바꿔본다."),
+                m: t(E, "(5,1) first → −1 · (2,6) first → +1",
+                        "(5,1) 먼저 → −1 · (2,6) 먼저 → +1") },
+              { g: t(E, "Write down how much the answer moved.",
+                        "답이 얼마나 달라졌는지 적는다."),
+                m: "1 − (−1) = 2" },
+              { g: t(E, "Read the gap — it tells you what to compare by.",
+                        "그 차이를 읽는다. 무엇으로 견줄지가 거기 적혀 있다."),
+                m: t(E, "2 = (2+6) − (5+1)  →  compare by a+b",
+                        "2 = (2+6) − (5+1)  →  견줄 것은 a+b") },
+              { g: t(E, "Swapping neighbours leaves the rest alone — so sort everything by it.",
+                        "이웃만 바꾸면 나머지는 그대로다 → 그 기준으로 전부 줄 세운다."),
+                m: t(E, "line them up by a+b, biggest first",
+                        "a+b 가 큰 순서로 줄 세우기") },
+            ].map((r, i) => (
+              <div key={i} style={{
+                display: "flex", gap: 10, alignItems: "flex-start",
+                padding: "9px 0", borderTop: i ? "1px dashed #d1d5db" : "none",
+              }}>
+                <span style={{
+                  flexShrink: 0, width: 22, height: 22, borderRadius: 999,
+                  background: "#065f46", color: "#fff", fontSize: 12, fontWeight: 800,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>{i + 1}</span>
+                <div>
+                  <div style={{ fontSize: 12.5, fontWeight: 700, color: C.text, lineHeight: 1.6 }}>
+                    {r.g}
+                  </div>
+                  <div style={{
+                    fontSize: 11.5, color: C.dim, marginTop: 3, lineHeight: 1.6,
+                    fontFamily: "'JetBrains Mono',monospace",
+                  }}>
+                    {t(E, "this problem: ", "이 문제에선 → ")}{r.m}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, textWrap: "balance" }}>
+            {t(E,
+              "The answer a+b belongs to this problem only. The four steps belong to you.",
+              "a+b 라는 답은 이 문제 것이에요.\n하지만 이 네 걸음은 다음 문제에서도 그대로 써요.")}
+          </div>
+        </div>),
+    },
+
+    // 1-6: 줄이 선 뒤에 차례대로 가져가 보기
     {
       type: "reveal",
       /* 전에는 narr 가 "쌍을 a+b 로 정렬한 뒤" 라고 **결론부터** 말했다.

@@ -210,7 +210,8 @@ r.longText.forEach(t => console.log(`   ${t.length}자: ${t.slice(0, 70)}…`))
 
 // --sim: 시뮬을 끝까지 눌러가며 **매 단계** 설명 말풍선이 화면에 남아 있는지 본다
 if (args.includes('--sim')) {
-  console.log('\n── 시뮬을 끝까지 눌러본다 (매 단계 설명이 화면에 보이나)')
+  console.log('\n── 시뮬을 끝까지 눌러본다 (설명이 보이나 · 바뀐 자리가 모여 있나)')
+  let prevSnap = null
   for (let k = 0; k < 20; k++) {
     const r = await p.evaluate(() => {
       // 말풍선 = 이 단계의 설명. 화면(뷰포트) 안에 실제로 보이나?
@@ -226,6 +227,51 @@ if (args.includes('--sim')) {
       return { visible: q.bottom > 0 && q.top < innerHeight, top: Math.round(q.top),
                text: (say.textContent || '').trim().slice(0, 46) }
     })
+    /* 이번 걸음에서 **무엇이 어디서** 바뀌었나.
+
+       선생님(2026-09-08): "변하는 부분을 분산시키지 않는게 좋겠어.
+       갑자기 위아래 내용이 동시에 바뀌는데."
+       내가 "학생 에이전트는 움직임을 못 느껴서 못 잡는다" 고 했더니 선생님:
+       "이건 방법이 없는건가? 새로운 정보가 다른 위치에 있으면 그런거 아닌가?"
+       맞다. **느낄 필요가 없다. 새 글자가 어디에 나타났는지만 보면 된다.**
+       한 걸음 전후의 글자를 자리째 비교해서, 바뀐 자리가 흩어져 있으면 알린다. */
+    const snap = await p.evaluate(() => {
+      const out = []
+      for (const e of document.querySelectorAll('div,span,b,p,li,td')) {
+        if (e.children.length) continue                    // 잎만 (글자를 직접 가진 것)
+        const txt = (e.textContent || '').trim()
+        if (!txt) continue
+        const q = e.getBoundingClientRect()
+        if (q.height < 4 || q.bottom < 0 || q.top > innerHeight) continue
+        out.push({ y: Math.round(q.top + q.height / 2), txt })
+      }
+      return out
+    })
+    if (prevSnap) {
+      const before = new Set(prevSnap.map(o => o.txt))
+      const after = new Set(snap.map(o => o.txt))
+      const changed = [...snap.filter(o => !before.has(o.txt)).map(o => o.y),
+                       ...prevSnap.filter(o => !after.has(o.txt)).map(o => o.y)]
+      if (changed.length) {
+        changed.sort((a, b) => a - b)
+        // 60px 안쪽이면 같은 자리로 본다
+        const cl = [[changed[0]]]
+        for (const y of changed.slice(1)) {
+          if (y - cl[cl.length - 1][cl[cl.length - 1].length - 1] <= 60) cl[cl.length - 1].push(y)
+          else cl.push([y])
+        }
+        const spots = cl.map(c => `${c[0]}~${c[c.length - 1]}px`)
+        const gap = cl.length > 1 ? cl[cl.length - 1][0] - cl[0][cl[0].length - 1] : 0
+        if (cl.length > 1 && gap > 200) {
+          console.log(`      ⚠️ 바뀐 자리가 ${cl.length}군데로 흩어짐 (${spots.join(' / ')}, ${gap}px 떨어짐)`)
+          console.log(`         → 새 정보를 한 자리에 모아라. 눈이 두 군데를 쫓는다.`)
+        } else {
+          console.log(`      바뀐 자리: ${spots.join(' / ')}`)
+        }
+      }
+    }
+    prevSnap = snap
+
     const btn = await p.$('text=/다음 ▶|Next ▶/')
     const done = !btn || await btn.isDisabled().catch(() => true)
     if (r.none) { console.log(`   ${k + 1}단계: 말풍선을 못 찾음`) }
