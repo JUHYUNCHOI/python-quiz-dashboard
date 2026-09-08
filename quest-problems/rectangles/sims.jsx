@@ -413,6 +413,25 @@ export function DPTableFillSim({ E }) {
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Say tone={s.k === "answer" ? "aha" : s.k === "try" ? "go" : "go"}>{say}</Say>
 
+      {/* 후보 구간을 **그림으로도** 보여준다 (2026-09-07 선생님: "이거 이미지랑 같이 보여주면 어떨까?").
+          이 시뮬을 만든 이유가 파일 위 주석에 적혀 있다 — "브루트포스까지는 ①②③ 그림으로 봤는데
+          DP 는 갑자기 기호뿐이었다". 그런데 그 해결책에도 그림을 안 넣어서 같은 간극이 남아 있었다.
+          말풍선이 "마지막 파랑이 ② 를 맡으면 2×2=4" 라고 하는데, 학생은 ② 의 모양을
+          **세 쪽 전 다른 탭에서 본 것**을 기억에서 꺼내야 했다.
+
+          try 단계에만 붙인다 — 후보 구간(j..i)이 매번 바뀌는 자리다.
+          cell·intro·answer 단계는 그림이 안 바뀌거나 앞 시뮬과 겹쳐서 반복이 된다 (pedagogy 판정).
+
+          ⚠️ 데스크탑에서만 보인다. ux-reviewer 좌표 실측: 모바일 375×812 에서는 SimNav 아래
+          여백이 **21px** 뿐이라(하단 고정 바 744, 카드 끝 739) 90px 짜리 그림을 얹으면
+          스크롤이 새로 생기고 SimNav 가 고정 바 밑으로 내려간다. 오늘만 세 번 겪은 자리다.
+          모바일까지 주려면 스텝을 쪼개야 하는데, 그건 따로 판단한다. */}
+      {s.k === "try" && (
+        <div className="hidden md:block" style={{ marginTop: 12 }}>
+          <RectStage groups={[Array.from({ length: s.i - s.j + 1 }, (_, z) => s.j - 1 + z)]} />
+        </div>
+      )}
+
       <div style={{ maxWidth: 360, margin: "14px auto 0" }}>
         <div style={{ display: "grid", gridTemplateColumns: "76px repeat(4, 1fr)", gap: 5 }}>
           <span />
