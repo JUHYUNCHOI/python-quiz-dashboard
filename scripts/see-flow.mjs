@@ -71,7 +71,14 @@ try {
       const k = lines.findIndex((x) => /^\d+ \/ \d+$/.test(x))
       // 시뮬 안의 (n / m) 은 서브 단계 수
       const si = lines.findIndex((x) => /^\(\d+ \/ \d+\)$/.test(x))
-      const sub = si >= 0 ? lines[si] : undefined
+      let sub = si >= 0 ? lines[si] : undefined
+      /* ⚠️ `(n / m)` 라벨이 없는 시뮬도 있다 — 2026-09-08 python-qa 가 잡았다.
+         simplegame 의 시뮬은 그 라벨 대신 "Evirir takes +a ▶" 같은 버튼 글씨를 쓴다.
+         그래서 이 도구가 "시뮬 0개" 라고 찍었고, 나는 그걸 그대로 선생님께 말했다 — 틀린 보고였다.
+         라벨이 없으면 **◀▶ 버튼이 있는지**로 시뮬 유무만이라도 알린다. */
+      const hasSimNav = [...document.querySelectorAll('button')]
+        .some((e) => /▶|◀|⏮/.test(e.textContent || ''))
+      if (!sub && hasSimNav) sub = '(? / ?)'
       // ⚠️ 시뮬 **안의 첫 말풍선**도 가져온다.
       //    2026-09-07: 이 도구의 첫 판이 페이지 내레이션만 긁었다. 그런데 그날 잡힌 결함
       //    ("다 해보자" 선언이 맨 뒤에 있던 것)은 내레이션이 아니라 **시뮬 1단계 안**에
@@ -92,7 +99,8 @@ try {
       const hasCode = monoLines >= 6
       return { pos: lines[k] || '?', narr: (lines[k + 2] || lines[k + 1] || '').trim(), sub, subFirst, hasCode }
     })
-    const subTxt = r.sub ? ` [시뮬 ${r.sub.replace(/[()]/g, '').split(' / ')[1]}단계]` : ''
+    const n = r.sub ? r.sub.replace(/[()]/g, '').split(' / ')[1] : null
+    const subTxt = !r.sub ? '' : (n === '?' ? ' [시뮬 있음 · 단계 수 못 셈]' : ` [시뮬 ${n}단계]`)
     if (r.hasCode && firstCode === null) firstCode = i + 1
     rows.push({ n: i + 1, pos: r.pos, narr: r.narr, subTxt, code: r.hasCode })
     console.log(
