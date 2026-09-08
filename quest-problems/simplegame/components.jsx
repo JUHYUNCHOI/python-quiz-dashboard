@@ -4,16 +4,22 @@ import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
 
-const FULL_PY = [
+/* 코드 주석도 화면 말과 같은 말로 (2026-09-08).
+   학생: "이 두 줄이 영어예요. 다른 건 다 한국어인데 이 주석만 영어라서
+   '이게 왜 여기 영어로 있지?' 싶었어요."
+   그래서 코드를 언어에 맞춰 만든다. 줄 수는 두 언어가 같아야 한다 — 말풍선 줄 번호를 쓰니까. */
+const fullPy = (E) => [
   "n = int(input())",
   "",
   "items = []",
   "for _ in range(n):",
   "    a, b = map(int, input().split())",
-  "    # keep the sum in front, so a plain sort lines them up by the sum",
+  E ? "    # keep the sum in front, so a plain sort lines them up by the sum"
+    : "    # 합을 맨 앞에 둬요 — 그러면 그냥 정렬해도 합 기준으로 줄이 서요",
   "    items.append((a + b, a, b))",
   "",
-  "items.sort(reverse=True)   # biggest sum first",
+  E ? "items.sort(reverse=True)   # biggest sum first"
+    : "items.sort(reverse=True)   # 합이 큰 것부터",
   "",
   "res = 0",
   "turn = 0",
@@ -68,7 +74,7 @@ export function getSimpleGameSections(E) {
     {
       label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: fullPy(E), cpp: FULL_CPP,
       why: [
         /* 2026-09-08: 화면 설명을 고친 뒤에도 이 PDF 문구만 옛말로 남아 있었다.
            ("교환 논증" 은 초6 학생이 못 알아들은 말이다.) 화면과 같은 말로 맞춘다. */
@@ -137,16 +143,16 @@ export function getSimpleGameWalk(E, lang = "py") {
     };
   }
   return {
-    code: FULL_PY, vars: _SG_VARS, beats: [
+    code: fullPy(E), vars: _SG_VARS, beats: [
       { hi: [0, 0], bubble: t(E,
         "First line: n — how many pairs there are.",
         "첫 줄에서 n 을 읽어요. 쌍이 몇 개인지예요.") },
       { hi: [2, 6], bubble: t(E,
-        "Read each pair and store it as (a+b, a, b) — the sum goes in FRONT. That is the number we line them up by, so we put it first.",
-        "쌍을 하나씩 읽어 (a+b, a, b) 로 담아요 — 합을 맨 앞에 둬요.\n우리가 줄 세울 기준이 합이니까, 그걸 앞에 놓는 거예요.") },
+        "Read one line, split it on spaces, turn the pieces into numbers a and b. Then store (a+b, a, b) — the sum goes in FRONT, because that is what we line them up by.",
+        "한 줄을 읽어 공백으로 쪼개고 숫자로 바꿔 a, b 에 담아요.\n그리고 (a+b, a, b) 로 넣어요 — 합을 맨 앞에 둬요.\n우리가 줄 세울 기준이 합이니까, 그걸 앞에 놓는 거예요.") },
       { hi: [8, 8], bubble: t(E,
-        "Now a plain sort does the job: it compares the first number, which is the sum. reverse=True makes it biggest-first — exactly the row we built by hand.",
-        "이제 그냥 정렬하면 돼요. 맨 앞 숫자, 그러니까 합끼리 견주거든요.\nreverse=True 는 큰 것부터라는 뜻이에요 —\n우리가 손으로 세운 그 줄과 똑같아요.") },
+        "Now a plain sort does the job. Comparing two tuples looks at the first number first — (8, 2, 6) vs (7, 4, 1) is decided by 8 and 7 alone. That first number is the sum we put there. reverse=True makes it biggest-first.",
+        "이제 그냥 정렬하면 돼요.\n묶음끼리 견줄 땐 맨 앞 숫자부터 봐요 —\n(8, 2, 6) 과 (7, 4, 1) 이면 8 과 7 만 보고 정해요.\n그 맨 앞이 우리가 넣어둔 합이에요.\nreverse=True 는 큰 것부터라는 뜻이고요.") },
       { hi: [10, 17], bubble: t(E,
         "Walk down the row. turn counts the turns: 0, 2, 4 … is Evirir so we add a; 1, 3, 5 … is Rhae so we subtract b.",
         "줄을 위에서부터 훑어요. turn 이 몇 번째 차례인지 세요.\n0, 2, 4 … 번째는 Evirir 차례라 a 를 더하고,\n1, 3, 5 … 번째는 Rhae 차례라 b 를 빼요.") },

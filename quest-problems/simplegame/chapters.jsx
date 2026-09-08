@@ -794,7 +794,57 @@ export function makeSimpleGameCh1(E) {
         </div>),
     },
 
-    // 1-3: 쌍 2개로 순서를 바꿔보며 규칙을 스스로 찾는 자리
+    /* "다 해보면 되지 않나?" 를 **규칙을 찾기 전에** 먼저 겪게 한다.
+
+       2026-09-08 학생: "'다 해보면 되지 않나' 를 제가 직접 시도해볼 기회 없이,
+       규칙을 다 배운 다음에야 '다 해보면 이렇게 느리다' 표를 보여줬어요.
+       순서를 반대로 하면 더 와닿았을 것 같아요."
+       memory/quest_problem_standard.md 의 기승전결(… → 한계 → 더 빠르게)도 같은 순서다. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Could we just try every order? Let us count them.",
+        "그냥 다 해보면 안 될까요? 몇 번인지 세어봐요."),
+      content: (
+        <div style={{ padding: 16, ...KA }}>
+            <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 6 }}>
+                🐢 {t(E, "Slow: try every order", "느림: 모든 순서를 다 해보기")}
+              </div>
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 8, textWrap: "balance", ...KA }}>
+                {t(E,
+                  "First pick: n choices. Next: n−1. Then n−2 …",
+                  "첫 차례엔 n 가지, 다음엔 n−1 가지, 그다음은 n−2 가지 …")}
+              </div>
+              {/* 학생(2026-09-08): "2^n 이 왜 2의 n제곱인지는 설명이 없었다."
+                  세는 방법을 그대로 적으면 곱셈이 눈에 보인다. 숫자는 계산해서 넣었다. */}
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9, color: C.text }}>
+                <div>n = 5 &nbsp;→ &nbsp;120{t(E, " orders", " 가지")}</div>
+                <div>n = 10 → &nbsp;3,628,800{t(E, " orders", " 가지")}</div>
+                <div>n = 15 → &nbsp;1{t(E, " trillion+", " 조가 넘어요")}</div>
+                <div style={{ color: "#b91c1c", fontWeight: 800 }}>
+                  n = 20 → &nbsp;2,432,902,008,176,640,000
+                </div>
+              </div>
+              <div style={{ fontSize: 11.5, color: "#b91c1c", marginTop: 8, lineHeight: 1.65, textWrap: "balance", ...KA }}>
+                {t(E,
+                  "100 million tries a second → n = 20 alone takes 770 years.",
+                  "1초에 1억 번씩 세도 n = 20 하나에 770년.")}
+              </div>
+            </div>
+          <div style={{
+            marginTop: 12, background: "#fffbeb", border: "1.5px solid #fbbf24",
+            borderRadius: 10, padding: "11px 14px", fontSize: 12.5,
+            color: C.text, lineHeight: 1.7, textWrap: "balance", ...KA,
+          }}>
+            {t(E,
+              "So trying everything is out. We need a rule that tells us the order straight away — let us go find one.",
+              "그러니 다 해보는 건 안 돼요.\n순서를 바로 알려주는 규칙이 있어야 해요.\n이제 그걸 찾으러 가요.")}
+          </div>
+        </div>),
+    },
+
+    // 1-4: 쌍 2개로 순서를 바꿔보며 규칙을 스스로 찾는 자리
     {
       type: "reveal",
       narr: t(E,
@@ -933,37 +983,12 @@ export function makeSimpleGameCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "How many tries is \u201ctry everything\u201d? Watch it grow.",
-        "다 해보면 몇 번일까요? 늘어나는 속도를 봐요."),
+        "The plan, in one line — before we write it.",
+        "짜기 전에, 계획을 한 줄로 다시 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <Known E={E} n={2} />
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
-              <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 6 }}>
-                🐢 {t(E, "Slow: try every order", "느림: 모든 순서를 다 해보기")}
-              </div>
-              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.7, marginBottom: 8, textWrap: "balance", ...KA }}>
-                {t(E,
-                  "First pick: n choices. Next: n−1. Then n−2 …",
-                  "첫 차례엔 n 가지, 다음엔 n−1 가지, 그다음은 n−2 가지 …")}
-              </div>
-              {/* 학생(2026-09-08): "2^n 이 왜 2의 n제곱인지는 설명이 없었다."
-                  세는 방법을 그대로 적으면 곱셈이 눈에 보인다. 숫자는 계산해서 넣었다. */}
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9, color: C.text }}>
-                <div>n = 5 &nbsp;→ &nbsp;120{t(E, " orders", " 가지")}</div>
-                <div>n = 10 → &nbsp;3,628,800{t(E, " orders", " 가지")}</div>
-                <div>n = 15 → &nbsp;1{t(E, " trillion+", " 조가 넘어요")}</div>
-                <div style={{ color: "#b91c1c", fontWeight: 800 }}>
-                  n = 20 → &nbsp;2,432,902,008,176,640,000
-                </div>
-              </div>
-              <div style={{ fontSize: 11.5, color: "#b91c1c", marginTop: 8, lineHeight: 1.65, textWrap: "balance", ...KA }}>
-                {t(E,
-                  "100 million tries a second → n = 20 alone takes 770 years.",
-                  "1초에 1억 번씩 세도 n = 20 하나에 770년.")}
-              </div>
-            </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
                 🚀 {t(E, "Fast: line them up once, then walk it once", "빠름: 한 번 줄 세우고, 한 번 훑기")}
