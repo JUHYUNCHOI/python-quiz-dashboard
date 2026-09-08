@@ -42,6 +42,37 @@ const LINEUP = [
   { order: [0, 1, 2, 3], cmp: null,   swap: false },   // 다 섰다
 ];
 
+/* ─────────────────────────────────────────────────────────────
+   Known — 앞 쪽에서 알아낸 것을 계속 띄워 둔다.
+
+   선생님(2026-09-08): "학생들은 전화면에 나왔던것들을 기억하나?
+   난 뭐가 있었는지 기억 못하는데 왔다갔다해야하나?"
+   기억에 기대면 안 된다. 화면에 남겨 둔다.
+   (CodeWalk 의 변수 범례·상시 배지와 같은 생각이다 — 새로 발명한 게 아니다.)
+   ───────────────────────────────────────────────────────────── */
+function Known({ E, n }) {
+  const FACTS = [
+    t(E, "One pair changes the answer by a+b — that is (+a) minus (−b).",
+        "쌍 하나가 누구 손에 가느냐로 답이 a+b 만큼 달라진다"),
+    t(E, "So line the pairs up by a+b, biggest first.",
+        "그래서 a+b 가 큰 순서로 줄을 세운다"),
+  ].slice(0, n);
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center",
+      marginBottom: 12, fontSize: 11.5, lineHeight: 1.5, ...KA }}>
+      <span style={{ fontWeight: 800, color: "#7f1d1d" }}>
+        📌 {t(E, "what we know so far", "지금까지 알아낸 것")}
+      </span>
+      {FACTS.map((x, i) => (
+        <span key={i} style={{
+          background: "#fff", border: "1px solid #fca5a5", borderRadius: 999,
+          padding: "3px 10px", color: C.text,
+        }}>{i + 1}. {x}</span>
+      ))}
+    </div>
+  );
+}
+
 function LineUpSim({ E }) {
   const { safe, setIdx, total } = useTraceStep(LINEUP.length);
   const st = LINEUP[safe];
@@ -68,6 +99,7 @@ function LineUpSim({ E }) {
 
   return (
     <div style={{ padding: 16 }}>
+      <Known E={E} n={1} />
       <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, ...KA }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#7f1d1d", marginBottom: 10 }}>
           📶 {t(E, "Four pairs — put them in order", "쌍 네 개 — 줄 세우기")}
@@ -199,6 +231,7 @@ function PairPickSim({ E }) {
 
   return (
     <div style={{ padding: 16 }}>
+      <Known E={E} n={2} />
       <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, ...KA }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#7f1d1d", marginBottom: 8 }}>
           🎮 {t(E, "Take them from the front", "앞에서부터 차례대로")}
@@ -309,8 +342,10 @@ function SwapSim({ E }) {
     /* 선생님(2026-09-08): "왜 합을 기준으로 정렬을 했지?"
        숫자로 "차이 2 = 8−6" 까지만 보여주고 **왜 a+b 인지 한 줄이 없었다.**
        숫자를 먼저 보고 나서 기호로 옮기는 순서 (feedback_first_concept_scaffolding). */
-    t(E, "A pair swings X−Y by a if I take it, and by −b if the opponent does.\nSo who gets it changes the answer by a+b. Take the widest swing first.",
-        "쌍 하나는 내가 가져가면 +a,\n상대가 가져가면 −b 예요.\n그러니 그 쌍이 누구 손에 가느냐로 a+b 만큼이 갈려요.\n갈리는 폭이 큰 쌍부터 가져가는 거예요."),
+    /* "갈리는 폭" 은 내가 지어낸 말이었다. 선생님(2026-09-08): "난 아직도 갈리는 폭이 이해가 안가."
+       지어낸 말을 버리고 **숫자로 직접 빼보게** 한다 (memory/feedback_no_invented_terms.md). */
+    t(E, "Take (2, 6) yourself and X−Y gets +2. Let the other one take it and X−Y gets −6.\nThe two outcomes are 2 − (−6) = 8 apart.\nAnd 8 is just 2+6.",
+        "(2, 6) 을 내가 가져가면 X−Y 에 +2,\n상대가 가져가면 −6 이에요.\n두 경우가 2 − (−6) = 8 만큼 떨어져 있어요.\n그 8 이 바로 2+6 이에요."),
   ];
 
   return (
@@ -346,12 +381,15 @@ function SwapSim({ E }) {
             <div>(2+6) − (5+1) = <b style={{ color: "#fbbf24" }}>2</b></div>
             {safe >= 4 && (
               <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #334155" }}>
-                <div>{t(E, "I take it", "내가 가져가면")}
-                  <b style={{ color: "#86efac" }}>  + a</b></div>
-                <div>{t(E, "they take it", "상대가 가져가면")}
-                  <b style={{ color: "#fca5a5" }}>  − b</b></div>
-                <div style={{ marginTop: 4 }}>{t(E, "the swing", "갈리는 폭")}
-                  <b style={{ color: "#fbbf24" }}>  a + b</b></div>
+                <div>{t(E, "I take (2,6)", "(2,6) 을 내가 가져가면")}
+                  <b style={{ color: "#86efac" }}>  + 2</b></div>
+                <div>{t(E, "they take (2,6)", "상대가 가져가면")}
+                  <b style={{ color: "#fca5a5" }}>  − 6</b></div>
+                <div style={{ marginTop: 4 }}>{t(E, "apart by", "두 경우의 차이")}
+                  <b style={{ color: "#fbbf24" }}>  2 − (−6) = 8</b></div>
+                <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #334155" }}>
+                  {t(E, "any pair (a, b)", "어떤 쌍 (a, b) 든")}
+                  <b style={{ color: "#fbbf24" }}>  (+a) − (−b) = a + b</b></div>
               </div>
             )}
           </div>
@@ -624,6 +662,11 @@ export function makeSimpleGameCh1(E) {
       question: t(E,
         "Pairs: (3, 1), (2, 6), (5, 2). Which pair does Evirir take on the first turn?",
         "쌍: (3, 1), (2, 6), (5, 2). Evirir 가 첫 차례에 가져가는 쌍은?"),
+      /* 퀴즈에는 content 가 없어서 '지금까지 알아낸 것' 띠를 못 붙인다.
+         힌트 자리에 같은 것을 적어 둔다 — 앞으로 되돌아가지 않아도 되게. */
+      hint: t(E,
+        "So far: one pair changes the answer by a+b, so line them up by a+b, biggest first.",
+        "지금까지 — 쌍 하나로 답이 a+b 만큼 달라지니까, a+b 가 큰 순서로 줄을 세운다."),
       options: [
         t(E, "(2, 6) — largest a+b = 8", "(2, 6) — a+b = 8 로 가장 큼"),
         t(E, "(5, 2) — largest a = 5", "(5, 2) — a = 5 로 가장 큼"),
@@ -650,6 +693,7 @@ export function makeSimpleGameCh2(E, lang = "py") {
         "다 해보면 몇 번일까요? 늘어나는 속도를 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
+          <Known E={E} n={2} />
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 6 }}>
@@ -703,7 +747,12 @@ export function makeSimpleGameCh2(E, lang = "py") {
         "말풍선이 설명하는 코드 줄에 붙어 있어요."),
       content: (() => {
         const w = getSimpleGameWalk(E, lang);
-        return <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent={A} />;
+        return (
+          <div>
+            <div style={{ padding: "16px 16px 0" }}><Known E={E} n={2} /></div>
+            <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent={A} />
+          </div>
+        );
       })(),
     },
   ];
