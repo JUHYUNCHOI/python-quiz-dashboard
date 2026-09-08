@@ -48,17 +48,22 @@ function LineUpSim({ E }) {
   const done = safe === LINEUP.length - 1;
   const shown = st.order.map((i) => DEMO[i]);
 
+  /* 지금 줄대로 가져갔을 때의 X−Y — 앞에서부터 +a, −b, +a, −b.
+     0 → 1 → 3 으로 올라간다. 전수 확인함(4! × 이웃교환 전부). */
+  const value = (row) => row.reduce((acc, p, i) => acc + (i % 2 === 0 ? p.a : -p.b), 0);
+  const now = value(shown);
+
   const BUBBLE = [
-    t(E, "Four pairs, in no particular order. We only know one rule: the pair with the bigger a+b should go first.",
-        "쌍 넷이 아무 순서 없이 놓여 있어요.\n우리가 아는 건 규칙 하나뿐이에요 —\na+b 가 큰 쌍이 먼저 가야 한다."),
-    t(E, "Compare the first two: 7 and 8. The bigger one should come first, so swap them.",
-        "앞의 둘을 견줘요. 7 과 8.\n큰 쪽이 앞에 와야 하니 자리를 바꿔요."),
-    t(E, "Next pair of neighbours: 7 and 3. The bigger one is already in front — leave it.",
-        "다음 이웃 둘. 7 과 3.\n큰 쪽이 이미 앞에 있어요 — 그대로 둬요."),
-    t(E, "Next: 3 and 5. Swap again.",
-        "그다음. 3 과 5.\n또 바꿔요."),
-    t(E, "Keep doing just that and the whole row ends up in a+b order by itself. That is all “sorting” means here.",
-        "이것만 되풀이하면 줄 전체가 저절로 a+b 순서로 서요.\n여기서 말하는 ‘정렬’ 이 바로 이거예요."),
+    t(E, "Four pairs, in no particular order. Taking them straight down this row gives X−Y = 0.",
+        "쌍 넷이 아무 순서 없이 놓여 있어요.\n이 줄 그대로 앞에서부터 가져가면 X−Y 는 0 이에요."),
+    t(E, "Look at just the first two: 7 and 8. Swapping only these two leaves everyone else’s turn untouched — so we only have to compare these two.",
+        "앞의 둘만 봐요. 7 과 8.\n이 둘만 자리를 바꾸면 나머지 쌍들의 차례는 하나도 안 바뀌어요.\n그래서 이 둘만 견주면 돼요."),
+    t(E, "Swapped. X−Y went 0 → 1, and 1 is exactly 8 − 7 — the gap between the two sums. Next neighbours: 7 and 3, already in the right order.",
+        "바꿨어요. X−Y 가 0 → 1 이 됐어요.\n그 1 은 딱 8 − 7, 두 합의 차이예요.\n다음 이웃 둘, 7 과 3 은 이미 제대로 놓였어요."),
+    t(E, "Last neighbours: 3 and 5. Swap, and X−Y goes 1 → 3 — again 5 − 3, the gap between the sums.",
+        "마지막 이웃 둘. 3 과 5.\n바꾸니 X−Y 가 1 → 3 이 됐어요.\n이번에도 5 − 3, 두 합의 차이만큼이에요."),
+    t(E, "Now no neighbouring pair is worth swapping any more — nothing can get better. And a row with nothing left to swap is exactly a row in a+b order.",
+        "이제 바꿔서 나아질 이웃이 하나도 없어요.\n더 좋아질 수 없다는 뜻이에요.\n그리고 바꿀 데가 없는 줄은, 곧 a+b 가 큰 순서로 선 줄이에요."),
   ];
 
   return (
@@ -78,7 +83,7 @@ function LineUpSim({ E }) {
           💬 {BUBBLE[safe]}
         </div>
 
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
           {shown.map((p, i) => {
             const on = st.cmp && (i === st.cmp[0] || i === st.cmp[1]);
             return (
@@ -99,33 +104,50 @@ function LineUpSim({ E }) {
           })}
         </div>
 
+        {/* 이 줄대로 가져갔을 때의 값 — 바꿀 때마다 올라가는 게 보여야 한다 */}
+        <div style={{
+          background: "#0f172a", color: "#f8fafc", borderRadius: 8, padding: "8px 12px",
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, marginBottom: 10, ...KA,
+        }}>
+          <span style={{ color: "#8b949e" }}>{t(E, "this row gives  X − Y = ", "이 줄대로면  X − Y = ")}</span>
+          <b style={{ color: "#fbbf24", fontSize: 14 }}>{now}</b>
+        </div>
+
         {st.cmp && (
           <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 12,
             color: st.swap ? A : "#065f46", ...KA }}>
-            {st.swap ? t(E, "→ swap", "→ 자리를 바꿔요") : t(E, "→ leave it", "→ 그대로 둬요")}
+            {st.swap ? t(E, "→ swap", "→ 자리를 바꿔요") : t(E, "→ already fine, leave it", "→ 이미 제대로 놓였어요")}
           </div>
         )}
 
         {done && (
-          <div style={{
-            background: "#065f46", color: "#fff", borderRadius: 10,
-            padding: "12px 14px", marginBottom: 12, textAlign: "center", ...KA,
-          }}>
-            <div style={{ fontSize: 11, fontWeight: 700, opacity: 0.85, letterSpacing: 0.5, marginBottom: 4 }}>
-              {t(E, "THE RULE", "우리가 쓸 규칙")}
+          <>
+            <div style={{
+              background: "#065f46", color: "#fff", borderRadius: 10,
+              padding: "12px 14px", marginBottom: 8, textAlign: "center", ...KA,
+            }}>
+              <div style={{ fontSize: 11, fontWeight: 700, opacity: 0.85, letterSpacing: 0.5, marginBottom: 4 }}>
+                {t(E, "SO THE RULE IS", "그래서 규칙은")}
+              </div>
+              <div style={{ fontSize: 15, fontWeight: 800, lineHeight: 1.5 }}>
+                {t(E, "Line the pairs up by a+b, biggest first.",
+                    "쌍을 a+b 가 큰 순서로 줄 세운다.")}
+              </div>
             </div>
-            <div style={{ fontSize: 15, fontWeight: 800, lineHeight: 1.5 }}>
-              {t(E, "Line the pairs up by a+b, biggest first.",
-                  "쌍을 a+b 가 큰 순서로 줄 세운다.")}
+            {/* 정직하게: 짝수 자리(Evirir 차례)에서는 X−Y 가 커지고,
+                홀수 자리(Rhae 차례)에서는 같은 크기만큼 작아진다 — 그게 Rhae 에게 이득이다.
+                어느 쪽이든 '자기 차례엔 합이 큰 쌍' 이라 규칙은 하나다. (전수 확인함) */}
+            <div style={{ fontSize: 11.5, color: C.dim, lineHeight: 1.65, textWrap: "balance", ...KA }}>
+              {t(E,
+                "On Rhae’s turn the same swap moves X−Y down by that gap instead — which is what she wants. Either way, whoever is to move wants the bigger a+b.",
+                "Rhae 차례 자리에서는 같은 교환이 X−Y 를 그만큼 내려요.\n그게 Rhae 가 원하는 거예요.\n어느 쪽이든, 둘 자리에 있는 사람은 a+b 가 큰 쌍을 원해요.")}
             </div>
-            <div style={{ fontSize: 11.5, marginTop: 6, opacity: 0.9, lineHeight: 1.6 }}>
-              {t(E, "Then just take them from the front, turn by turn.",
-                  "그다음엔 앞에서부터 차례대로 가져가기만 하면 돼요.")}
-            </div>
-          </div>
+          </>
         )}
 
-        <SimNav idx={safe} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
+        <div style={{ marginTop: 12 }}>
+          <SimNav idx={safe} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
+        </div>
       </div>
     </div>
   );
