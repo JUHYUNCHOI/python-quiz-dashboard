@@ -382,10 +382,45 @@ export function makeSimpleGameCh1(E) {
                 <div style={{ fontWeight: 800 }}>2</div>
               </div>
             </div>
+            {/* 설명 — 원문(mcc24simplegame.pdf)의 Sample Explanation 도 이렇게 한다:
+                가능한 경우를 다 적고 결과를 견준다. 선생님(2026-09-08):
+                "이거 설명이 나와있는게 좋지 않나? 문제에서도 설명이 나오던데"
+                ⚠️ 결과는 적되 **규칙은 아직 말하지 않는다** — 다음 쪽이 그걸 찾는 자리다.
+                세 값(2 / 0 / 0)은 미니맥스 완전탐색으로 확인했다. */}
+            <div style={{ marginTop: 12, fontSize: 12, color: C.text, lineHeight: 1.7, textWrap: "balance", ...KA }}>
+              {t(E,
+                "Evirir has three pairs to choose from. Each first pick leads somewhere different — with both playing their best:",
+                "Evirir 가 고를 수 있는 쌍이 셋이에요.\n무엇을 먼저 가져가느냐에 따라 결과가 달라져요.\n둘 다 최선을 다했을 때 이렇게 돼요.")}
+            </div>
+            <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+              {[
+                { pick: "(2, 5)", val: 2, best: true, line: "+2 −1 +1" },
+                { pick: "(4, 1)", val: 0, best: false, line: "+4 −5 +1" },
+                { pick: "(1, 1)", val: 0, best: false, line: "+1 −5 +4" },
+              ].map((r) => (
+                <div key={r.pick} style={{
+                  display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap",
+                  border: `1.5px solid ${r.best ? "#6ee7b7" : "#e2e8f0"}`,
+                  background: r.best ? "#ecfdf5" : "#f8fafc",
+                  borderRadius: 9, padding: "7px 11px", fontSize: 12, ...KA,
+                }}>
+                  <span style={{ color: C.dim }}>
+                    {t(E, `takes ${r.pick} first`, `${r.pick} 먼저`)}
+                  </span>
+                  <span style={{ fontFamily: "'JetBrains Mono',monospace", color: C.text }}>{r.line}</span>
+                  <span style={{ color: C.dim }}>⇒</span>
+                  <b style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13.5,
+                    color: r.best ? "#065f46" : C.dim }}>{r.val}</b>
+                  {r.best && <span style={{ fontSize: 11, fontWeight: 800, color: "#065f46" }}>
+                    {t(E, "best", "제일 큼")}
+                  </span>}
+                </div>
+              ))}
+            </div>
             <div style={{ marginTop: 10, fontSize: 12, color: C.text, lineHeight: 1.7, textWrap: "balance", ...KA }}>
               {t(E,
-                "Now Evirir has three pairs to choose from — and the answer changes depending on which he takes first. Which one should it be?",
-                "이번엔 Evirir 가 고를 수 있는 쌍이 셋이에요.\n무엇을 먼저 가져가느냐에 따라 답이 달라져요.\n어느 걸 가져가야 할까요?")}
+                "So the answer is 2. But why that pair first? Find out on the next page.",
+                "그래서 답이 2 예요.\n그런데 왜 하필 (2, 5) 였을까요? 다음 쪽에서 직접 찾아봐요.")}
             </div>
           </div>
         </div>),
