@@ -60,10 +60,14 @@ const groupCost = (g) => {
 };
 
 /* 축 위에 빨강들을 그리고, groups(연속 구간)가 있으면 파랑 오버레이를 얹는다. */
-function RectStage({ groups = null, bad = false, showWaste = false }) {
-  const stageW = TOTAL_W * UNIT;                 // 150
-  const stageH = MAX_H * UNIT;                   // 60
-  const padTop = 26, baseline = 26;
+/* scale — 표와 같이 놓을 땐 작게 (2026-09-08). 세로 공간이 모자라면 그림이 못 들어가는데,
+   선생님이 세 번 연속 "그림이 없어서 무슨 넓이인지 모르겠다" 고 하셨다. 작게라도 넣는 게 맞다. */
+export function RectStage({ groups = null, bad = false, showWaste = false, scale = 1 }) {
+  const U = UNIT * scale;
+  const stageW = TOTAL_W * U;
+  const stageH = MAX_H * U;
+  const padTop = 26 * scale + 8, baseline = 26 * scale;
+  const leftOfS = (idx) => REDS.slice(0, idx).reduce((a, r) => a + r.w, 0) * U;
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <div style={{ position: "relative", width: stageW + 6, height: stageH + padTop + baseline }}>
@@ -73,8 +77,8 @@ function RectStage({ groups = null, bad = false, showWaste = false }) {
         {/* 빨강 사각형들 */}
         {REDS.map((r, i) => (
           <div key={i} style={{ position: "absolute",
-            left: leftOf(i) + 3, bottom: baseline,
-            width: r.w * UNIT - 4, height: r.h * UNIT - 1,
+            left: leftOfS(i) + 3, bottom: baseline,
+            width: r.w * U - 4, height: r.h * U - 1,
             background: REDBG, border: `2px solid ${REDBD}`, borderRadius: 4,
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 12, fontWeight: 800, color: REDBD, fontFamily: "'JetBrains Mono',monospace" }}>
@@ -89,8 +93,8 @@ function RectStage({ groups = null, bad = false, showWaste = false }) {
             if (gap <= 0) return null;
             return (
               <div key={`w${i}`} style={{ position: "absolute",
-                left: leftOf(i) + 3, bottom: baseline + REDS[i].h * UNIT,
-                width: REDS[i].w * UNIT - 4, height: gap * UNIT - 1, zIndex: 3,
+                left: leftOfS(i) + 3, bottom: baseline + REDS[i].h * U,
+                width: REDS[i].w * U - 4, height: gap * U - 1, zIndex: 3,
                 background: "repeating-linear-gradient(45deg,#fca5a5 0 5px,transparent 5px 10px)",
                 border: "1.5px dashed #dc2626", borderRadius: 4 }} />
             );
@@ -102,13 +106,16 @@ function RectStage({ groups = null, bad = false, showWaste = false }) {
           const col = bad ? REDBD : BLU;
           return (
             <div key={gi} style={{ position: "absolute",
-              left: leftOf(g[0]) + 1, bottom: baseline,
-              width: sw * UNIT, height: mh * UNIT, boxSizing: "border-box", zIndex: 4,
+              left: leftOfS(g[0]) + 1, bottom: baseline,
+              width: sw * U, height: mh * U, boxSizing: "border-box", zIndex: 4,
               background: bad ? "rgba(220,38,38,0.10)" : BLUBG,
               border: `2.5px ${bad ? "dashed" : "solid"} ${col}`, borderRadius: 5 }}>
               <span style={{ position: "absolute", top: -19, left: "50%", transform: "translateX(-50%)",
                 fontSize: 11, fontWeight: 800, color: col, whiteSpace: "nowrap", fontFamily: "'JetBrains Mono',monospace" }}>
-                {bad ? "✗" : `${mh}×${sw}=${area}`}
+                {/* 2026-09-08: 라벨이 `높이×폭` 인데 말풍선·공식은 내내 **(폭합) × (최고높이)** 였다.
+                    같은 6을 `2×3` 과 `(1+2)×2` 두 모양으로 보여주면 학생이 다른 계산으로 읽는다.
+                    순서를 공식과 맞춘다. */}
+                {bad ? "✗" : `${sw}×${mh}=${area}`}
               </span>
             </div>
           );
@@ -353,6 +360,24 @@ export function DPTableFillSim({ E }) {
     if (st.k === "cell") filled.add(`${st.kk},${st.i}`);
   }
 
+  /* 그 칸(kk, i)의 값을 만든 **실제 나눔**을 되짚는다. 그림으로 보여주려면 숫자가 아니라
+     "어느 빨강들을 어떻게 묶었나" 가 필요하다. dp 를 거꾸로 따라간다. */
+  const bestSplit = (kk, i) => {
+    const out = [];
+    let cur = i;
+    for (let k = kk; k >= 1 && cur >= 1; k--) {
+      let bj = cur;
+      for (let j = cur; j >= 1; j--) {
+        let sw = 0, mh = 0;
+        for (let z = j; z <= cur; z++) { sw += REDS[z - 1].w; mh = Math.max(mh, REDS[z - 1].h); }
+        if (dp[k - 1][j - 1] < INF && dp[k - 1][j - 1] + sw * mh === dp[k][cur]) { bj = j; break; }
+      }
+      out.unshift(Array.from({ length: cur - bj + 1 }, (_, z) => bj - 1 + z));
+      cur = bj - 1;
+    }
+    return out;
+  };
+
   const cost = (j, i) => {                     // j..i 를 파랑 하나로 덮는 값
     let sw = 0, mh = 0;
     for (let z = j; z <= i; z++) { sw += REDS[z - 1].w; mh = Math.max(mh, REDS[z - 1].h); }
@@ -441,6 +466,23 @@ export function DPTableFillSim({ E }) {
       {s.k === "try" && (
         <div style={{ marginTop: 12 }}>
           <RectStage groups={[Array.from({ length: s.i - s.j + 1 }, (_, z) => s.j - 1 + z)]} />
+        </div>
+      )}
+
+      {/* cell 단계에도 그림 — 2026-09-08 선생님(세 번째 같은 지적):
+          "이거 할때 도대체 **어디의** 넓이를 구하는건지 모르겠어"
+          말풍선은 "파랑 1개로 ①② 를 통째로 덮어요. (1+2)×2 = 6" 이라고 하는데
+          화면엔 숫자 칸만 있었다. 어느 사각형을 덮는 얘기인지 볼 수가 없다.
+          try 단계엔 어제 넣었는데 cell 단계는 빠져 있었다.
+          ⚠️ 여긴 표도 같이 보여야 하는 자리라 **작게(scale 0.6)** 넣는다 —
+             모바일에서 SimNav 가 하단 고정 바 밑으로 내려가지 않게. */}
+      {s.k === "cell" && (
+        <div style={{ marginTop: 8 }}>
+          <RectStage scale={0.6} groups={
+            s.kk === 1
+              ? [Array.from({ length: s.i }, (_, z) => z)]          // 파랑 하나가 앞 i개를 통째로
+              : bestSplit(s.kk, s.i)                                 // 그 칸을 만든 최선의 나눔
+          } />
         </div>
       )}
 

@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getRectanglesWalk, getRectanglesSlowWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { RectanglesSim, WhyContiguousSim, WhyCostSim, WhyTableSim, DPTableFillSim } from "./sims";
+import { RectanglesSim, WhyContiguousSim, WhyCostSim, WhyTableSim, DPTableFillSim, RectStage } from "./sims";
 
 const A = "#f97316";
 
@@ -78,14 +78,6 @@ function RectanglesSample({ E }) {
 
 /* 정리 — 발견한 걸 한 판단으로 (cowsplits CowSplitsPlan 모양). */
 function RectanglesRecap({ E }) {
-  const Row = ({ q, res, col, bg }) => (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, background: bg, border: `1.5px solid ${col}`,
-      borderRadius: 10, padding: "11px 14px" }}>
-      <div style={{ flex: 1, fontSize: 13, fontWeight: 700, color: "#334155", wordBreak: "keep-all" }}>{q}</div>
-      <div style={{ fontSize: 16, color: col }}>→</div>
-      <div style={{ fontSize: 14, fontWeight: 800, color: col, fontFamily: "'JetBrains Mono',monospace", whiteSpace: "nowrap" }}>{res}</div>
-    </div>
-  );
   return (
     <div style={{ padding: 16 }}>
       <div style={{ fontSize: 14, fontWeight: 800, color: "#9a3412", textAlign: "center", marginBottom: 6 }}>
@@ -104,11 +96,18 @@ function RectanglesRecap({ E }) {
              손으로 되는데 왜 코드가 필요한지 아무도 말해주지 않았다.
           → 핵심을 한 문장으로 못박고, 코드가 필요한 이유를 여기서 말한다.
              "표" 얘기는 빼서 13쪽에서 스스로 발견하게 남긴다. */}
-      <div style={{ maxWidth: 480, margin: "0 auto", display: "grid", gap: 10 }}>
-        <Row q={t(E, "One blue covers a contiguous group", "파랑 하나 = 연속 구간 하나")}
-             res={t(E, "(Σw) × (max h)", "(폭합) × (최고높이)")} col="#2563eb" bg="#eff6ff" />
-        <Row q={t(E, "K huge? cap it — N groups is enough", "K가 커도? N개 넘으면 캡")}
-             res="K = min(K, N)" col="#059669" bg="#ecfdf5" />
+      {/* 2026-09-08 선생님: "이것도 이해 안됨" (기호표를 보시고)
+          전엔 "질문 → 기호" 행 세 줄이었다. 7쪽에서와 같은 병이다 —
+          이 quest 는 내내 그림으로 보여주다가 정리에서만 갑자기 기호로 돌아갔다.
+          정리는 **본 것을 다시 보여주는 자리**지 기호로 압축하는 자리가 아니다.
+          → 우리가 실제로 고른 답(①② | ③ = 6 + 2 = 8)을 그림으로 다시 보여준다.
+            (폭합)×(최고높이)는 그림 안 라벨이 이미 말해준다. */}
+      <div style={{ maxWidth: 480, margin: "0 auto" }}>
+        <div style={{ fontSize: 12.5, fontWeight: 700, color: "#9a3412", textAlign: "center",
+          marginBottom: 8, wordBreak: "keep-all" }}>
+          {t(E, "This was the answer — 2 blues, total 8.", "우리가 고른 답이 이거였어요 — 파랑 2개, 합쳐서 8.")}
+        </div>
+        <RectStage groups={[[0, 1], [2]]} />
       </div>
 
       {/* 핵심 한 문장 — 이 쪽 라벨이 "핵심 아이디어 한눈에" 인데 정작 핵심을 말한 적이 없었다. */}
@@ -276,22 +275,39 @@ export function makeRectanglesCh1(E) {
           <div style={{ textAlign: "center", fontSize: 14, fontWeight: 800, color: "#9a3412", marginBottom: 12, textWrap: "balance" }}>
             🤔 {t(E, "K up to 10^9 — but N is only 200", "K 는 10억까지, 그런데 N 은 200")}
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {[
-              t(E, <>Cutting the row of <b>N</b> reds into pieces gives <b>at most N</b> pieces —<br />one per red. You can't make more.</>,
-                   <>빨강 <b>N</b>개짜리 줄을 잘라봐야 조각은 <b>많아야 N개</b>예요.<br />하나씩 떼는 게 끝이라 더는 못 만들어요.</>),
-              t(E, <>So a K bigger than N buys you nothing.<br />Extra blues would have to cover <b>zero</b> reds — and every red already has one.</>,
-                   <>그래서 K 가 N 보다 커도 쓸 데가 없어요.<br />남는 파랑은 빨강을 <b>하나도</b> 안 덮게 되는데, 이미 다 덮여 있으니까요.</>),
-              t(E, <>Just clamp it first: <b>K = min(K, N)</b>.<br />Now K ≤ 200 and the table stays small.</>,
-                   <>그래서 먼저 잘라둬요 — <b>K = min(K, N)</b>.<br />이러면 K ≤ 200 이라 표가 작게 유지돼요.</>),
-            ].map((body, i) => (
-              <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "#fff7ed",
-                border: "1.5px solid #fdba74", borderRadius: 12, padding: "11px 14px" }}>
-                <span style={{ flexShrink: 0, width: 22, height: 22, borderRadius: 999, background: "#ea580c",
-                  color: "#fff", fontSize: 12, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</span>
-                <div style={{ fontSize: 13, lineHeight: 1.7, color: "#334155", textWrap: "balance" }}>{body}</div>
-              </div>
-            ))}
+          {/* 2026-09-08 선생님: "뭔가 오래걸린다는건지는 알겠는데 **밑에 글이 머리에 안들어와**"
+              전엔 여기가 문단 세 개였다. 이 quest 는 내내 그림으로 보여주다가
+              여기서만 갑자기 글로 설명했다. 그리고 학생도 같은 쪽을 짚었다 —
+              마지막 문단의 "표가 작게 유지돼요" 는 **표가 다섯 쪽 뒤에야 처음 나오는데** 쓴 말이다.
+              → 그림 하나로 보여주고, 문장은 한 줄만 남긴다. "표" 얘기는 뺀다. */}
+          <div style={{ maxWidth: 420, margin: "0 auto" }}>
+            <div style={{ fontSize: 12.5, fontWeight: 700, color: "#9a3412", textAlign: "center",
+              marginBottom: 8, wordBreak: "keep-all" }}>
+              {t(E, <>Reds are 3. Give yourself 5 blues — can you use them all?</>,
+                   <>빨강이 3개예요. 파랑을 5개 준다면, 다 쓸 수 있을까요?</>)}
+            </div>
+            <RectStage groups={[[0], [1], [2]]} />
+            <div style={{ marginTop: 10, display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
+              {["①", "②", "③", "—", "—"].map((lab, i) => (
+                <span key={i} style={{
+                  fontSize: 11.5, fontWeight: 800, padding: "4px 10px", borderRadius: 999,
+                  background: i < 3 ? "rgba(37,99,235,0.16)" : "#f1f5f9",
+                  border: `1.5px solid ${i < 3 ? "#2563eb" : "#cbd5e1"}`,
+                  color: i < 3 ? "#1d4ed8" : "#94a3b8",
+                }}>
+                  {t(E, `blue ${i + 1}`, `파랑 ${i + 1}`)} {lab}
+                </span>
+              ))}
+            </div>
+            <div style={{ marginTop: 12, background: "#fff7ed", border: "2px solid #f97316",
+              borderRadius: 12, padding: "12px 16px", textAlign: "center",
+              fontSize: 13.5, fontWeight: 800, color: "#9a3412", lineHeight: 1.8,
+              wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E, <>Blues 4 and 5 have <b>nothing left to cover</b>.<br />
+                    So K past N is wasted — <b>K = min(K, N)</b>.</>,
+                   <>파랑 4번·5번은 <b>덮을 게 없어요.</b><br />
+                    그러니 N 을 넘는 K 는 쓸 데가 없어요 — <b>K = min(K, N)</b>.</>)}
+            </div>
           </div>
         </div>
       ),
