@@ -120,6 +120,8 @@ export function getRectanglesSections(E) {
    25줄을 스크롤하며 스스로 읽어야 해서 '여긴 왜 설명이 없지' 하고 속도가 뚝 떨어진다."
    ═══════════════════════════════════════════════════════════════ */
 const SLOW_PY = [
+  "from itertools import product",
+  "",
   "n, k = map(int, input().split())",
   "h = [0] * n",
   "w = [0] * n",
@@ -127,12 +129,13 @@ const SLOW_PY = [
   "    h[i], w[i] = map(int, input().split())",
   "",
   "best = float('inf')",
-  "for mask in range(1 << (n - 1)):",
+  "# 틈마다 자르나(1) 안 자르나(0) — 그 조합을 전부 만들어요",
+  "for cuts in product([0, 1], repeat=n - 1):",
   "    groups = 1",
   "    total = 0",
   "    sw, mh = w[0], h[0]",
   "    for i in range(1, n):",
-  "        if mask >> (i - 1) & 1:",
+  "        if cuts[i - 1] == 1:",
   "            total += sw * mh",
   "            groups += 1",
   "            sw, mh = w[i], h[i]",
@@ -156,22 +159,29 @@ const _SLOW_VARS = [
 export function getRectanglesSlowWalk(E) {
   return {
     code: SLOW_PY, vars: _SLOW_VARS, beats: [
-      { hi: [0, 4], bubble: t(E,
+      { hi: [0, 6], bubble: t(E,
         "Read n reds and k, then each red's height and width.",
         "빨강 n개와 k를 읽고, 빨강마다 높이와 폭을 읽어요.") },
-      { hi: [7, 7], bubble: t(E,
-        "Between n reds there are n−1 gaps. Each gap: cut or not. One number's bits = one choice for every gap — so this loop tries every way of cutting.",
-        "빨강 n개 사이엔 틈이 n−1 군데예요. 틈마다 자를지 말지 두 가지. 숫자 하나의 비트가 틈마다의 선택이라, 이 반복문이 자르는 모든 방법을 다 해봐요.") },
-      { hi: [10, 10], bubble: t(E,
+      /* 2026-09-08 — 여기가 학생이 **완전히 막힌 자리**였다 (난이도 5).
+         전엔 `for mask in range(1 << (n-1))` 와 `mask >> (i-1) & 1` 이었다.
+         학생: "비트 연산자를 배운 적이 없다. 왜 그게 자른다/안 자른다를 알려주는지 설명이 없었다."
+         비트는 커리큘럼에서 뒤로 미룬 개념이고, **최종 DP 코드엔 쓰이지도 않는다** —
+         버려지는 완전탐색 한 곳에서만 쓰는 구현 선택이었다.
+         그래서 설명을 더하는 대신 **갈아치웠다.** product 는 "0/1 조합을 다 만든다" 가
+         이름에 드러나서, 한 줄 정의만 붙이면 배운 어휘로 읽힌다. 복잡도·이야기는 그대로. */
+      { hi: [9, 10], bubble: t(E,
+        "Between n reds there are n−1 gaps. Each gap: cut (1) or not (0).\nproduct makes every 0/1 combination of those gaps — so this loop tries every way of cutting.",
+        "빨강 n개 사이엔 틈이 n−1 군데예요. 틈마다 자르거나(1) 안 자르거나(0) 둘 중 하나죠.\nproduct 는 그 0/1 조합을 **전부** 만들어 줘요. 그래서 이 반복문이 자르는 모든 방법을 다 해봐요.") },
+      { hi: [13, 13], bubble: t(E,
         "Start the first group with red 1: its width and its height.",
         "첫 덩어리를 빨강 1번으로 시작해요. 그 폭과 높이로요.") },
-      { hi: [12, 15], bubble: t(E,
+      { hi: [15, 18], bubble: t(E,
         "Cut here? Then the group we were collecting is finished — pay (Σwidth × max-height) for it, count one more blue, and start a new group at red i.",
         "여기서 자른다면? 모으던 덩어리가 끝난 거예요 — (폭합 × 최고높이) 만큼 값을 내고, 파랑을 하나 더 세고, 빨강 i 부터 새 덩어리를 시작해요.") },
-      { hi: [16, 18], bubble: t(E,
+      { hi: [19, 21], bubble: t(E,
         "No cut? Then red i joins the current group — widths add up, height takes the max.",
         "안 자른다면? 빨강 i 가 지금 덩어리에 붙어요 — 폭은 더하고, 높이는 큰 쪽을 써요.") },
-      { hi: [19, 23], bubble: t(E,
+      { hi: [22, 26], bubble: t(E,
         "Pay for the last group too. If we used at most k blues, this cutting is allowed — keep it if it is the smallest so far.",
         "마지막 덩어리도 값을 내요. 파랑을 k개 이하로 썼으면 그 자르기는 규칙에 맞아요 — 지금까지 중 제일 작으면 답으로 둬요.") },
     ],
@@ -216,8 +226,8 @@ export function getRectanglesWalk(E, lang = "py") {
         "dp is a table: one row per kk, one box per i. We build it row by row — each row is a list of (n+1) boxes, all INF at first. dp[kk][i] = the smallest total area to cover the first i reds using kk blues. Start from dp[0][0] = 0 (nothing covered, no area).",
         "dp 는 표예요. kk 마다 한 줄, 그 줄 안에 i 마다 칸 하나. 줄을 하나씩 만들어 붙여요 — 한 줄은 (n+1)칸짜리 리스트이고 처음엔 전부 INF 예요.\ndp[kk][i] = 앞 i개 빨강을 파랑 kk개로 덮는 최소 총면적. dp[0][0] = 0(아무것도 안 덮음, 면적 0)에서 시작.") },
       { hi: [12, 20], bubble: t(E,
-        "Fill the table: let the last blue cover the group [j..i]. Widen it from i down to j, tracking sw (sum of widths) and mh (max height) — that group's blue = sw × mh. The rest is dp[kk-1][j-1]. Keep the minimum.",
-        "표를 채워요: 마지막 파랑이 구간 [j..i]를 덮는다고 봐요. i에서 j까지 넓히며 sw(폭 합)·mh(최고 높이)를 갱신 — 그 파랑 = sw × mh. 앞부분은 dp[kk-1][j-1]. 최소로 갱신.") },
+        "Fill the table: let the last blue cover the group [j..i]. j walks backwards from i — that way each step only adds one more red on the left, so sw and mh keep growing instead of being recomputed. That group's blue = sw × mh, the rest is dp[kk-1][j-1]. Keep the minimum.",
+        "표를 채워요: 마지막 파랑이 구간 [j..i]를 덮는다고 봐요.\nj 가 i 에서 **거꾸로** 내려가는 이유는, 한 칸씩 왼쪽으로 넓힐 때마다 빨강이 하나씩만 더 붙어서 sw(폭 합)·mh(최고 높이)를 **다시 계산하지 않고 이어서 키울 수 있기** 때문이에요.\n그 파랑 = sw × mh, 앞부분은 dp[kk-1][j-1]. 최소로 갱신.") },
       { hi: [21, 24], bubble: t(E,
         "Now pick the answer: walk kk = 1..k and keep the smallest dp[kk][n] — the best way using at most K blues.",
         "이제 답을 골라요. kk 를 1부터 k 까지 훑으며 dp[kk][n] 중 제일 작은 걸 남겨요 — 파랑을 최대 K개 써서 전체를 덮는 최선이에요.") },

@@ -95,16 +95,45 @@ function RectanglesRecap({ E }) {
         {t(E, "Each red inside exactly one blue → blues split the reds into contiguous groups.",
              "각 빨강이 정확히 한 파랑 안 → 파랑들이 빨강을 연속 구간으로 분할.")}
       </div>
+      {/* 2026-09-08 — 선생님: "난 아직도 핵심을 모르겠는데? 갑자기 왜 코드가 나오지?"
+          3자 검토로 원인 둘을 찾았다.
+          ① 여기 마지막 줄이 "표를 채워서 최소값 고르기" 를 예고하는데, 다음에 실제로 나오는 건
+             **완전탐색**이다. 예고와 실물이 어긋나서 "갑자기" 로 느껴졌다.
+             게다가 "표" 는 다섯 쪽 뒤에야 처음 설명되는 말이라 스포일러이기도 했다.
+          ② 1~8쪽 어디에도 **"손으로는 못 한다"** 가 없었다. 학생은 6쪽에서 손으로 답까지 구했다.
+             손으로 되는데 왜 코드가 필요한지 아무도 말해주지 않았다.
+          → 핵심을 한 문장으로 못박고, 코드가 필요한 이유를 여기서 말한다.
+             "표" 얘기는 빼서 13쪽에서 스스로 발견하게 남긴다. */}
       <div style={{ maxWidth: 480, margin: "0 auto", display: "grid", gap: 10 }}>
         <Row q={t(E, "One blue covers a contiguous group", "파랑 하나 = 연속 구간 하나")}
              res={t(E, "(Σw) × (max h)", "(폭합) × (최고높이)")} col="#2563eb" bg="#eff6ff" />
-        <Row q={t(E, "Split ≤ K groups, minimize total area", "≤ K개 구간으로 나눠 총면적 최소")}
-             res={t(E, "fill a table, take the min", "표를 채워서 최소값 고르기")} col="#f97316" bg="#fff7ed" />
         <Row q={t(E, "K huge? cap it — N groups is enough", "K가 커도? N개 넘으면 캡")}
              res="K = min(K, N)" col="#059669" bg="#ecfdf5" />
       </div>
-      <div style={{ textAlign: "center", marginTop: 14, fontSize: 12, color: C.dim, wordBreak: "keep-all" }}>
-        {t(E, "Now let's read the code that does exactly this →", "이제 이걸 그대로 하는 코드를 봐요 →")}
+
+      {/* 핵심 한 문장 — 이 쪽 라벨이 "핵심 아이디어 한눈에" 인데 정작 핵심을 말한 적이 없었다. */}
+      <div style={{ maxWidth: 480, margin: "14px auto 0", background: "#fff7ed",
+        border: "2px solid #f97316", borderRadius: 12, padding: "13px 16px", textAlign: "center",
+        fontSize: 13.5, fontWeight: 800, color: "#9a3412", lineHeight: 1.8,
+        wordBreak: "keep-all", textWrap: "balance" }}>
+        {t(E, <>So the whole problem is this:<br />
+              <b>cut the row into at most K pieces</b>, and make the total area smallest.</>,
+             <>그러니까 이 문제는 이거예요 —<br />
+              <b>줄을 최대 K조각으로 자르고</b>, 총면적을 가장 작게.</>)}
+      </div>
+
+      {/* 코드가 필요한 이유. 여기가 없어서 "갑자기 왜 코드가 나오지" 가 됐다. */}
+      <div style={{ maxWidth: 480, margin: "10px auto 0", background: "#f8fafc",
+        border: "1.5px solid #e2e8f0", borderRadius: 10, padding: "11px 15px", textAlign: "center",
+        fontSize: 12.5, color: "#475569", lineHeight: 1.85, wordBreak: "keep-all", textWrap: "balance" }}>
+        {t(E, <>Three reds you can cut by hand. But <b>N goes up to 200</b> —<br />
+              nobody cuts 200 by hand. From here the computer does it.</>,
+             <>빨강 3개는 손으로 잘라볼 수 있었죠. 그런데 <b>N 은 200까지</b> 가요 —<br />
+              200개를 손으로 다 해볼 사람은 없어요. 여기서부터는 컴퓨터가 해요.</>)}
+      </div>
+
+      <div style={{ textAlign: "center", marginTop: 12, fontSize: 12, color: C.dim, wordBreak: "keep-all" }}>
+        {t(E, "First, the most obvious way — try every cut →", "먼저 제일 뻔한 방법부터 — 전부 잘라보기 →")}
       </div>
     </div>
   );
