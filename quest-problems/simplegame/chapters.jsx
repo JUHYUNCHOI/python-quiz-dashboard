@@ -23,6 +23,114 @@ const DEMO = [
 // sorted by a+b desc: (6,2)=8, (2,5)=7, (4,1)=5, (1,2)=3
 const SORTED = [...DEMO].sort((p, q) => (q.a + q.b) - (p.a + p.b));
 
+/* ─────────────────────────────────────────────────────────────
+   LineUpSim — 한 번의 선택 규칙을 **전체 순서**로 잇는 다리.
+
+   선생님(2026-09-08): "그 합의 정렬로 해야한다는게 아직도 안보여. 강조해줘."
+   수업 담당도 같은 자리를 짚었다 — 3쪽은 "이 쌍 하나를 먼저 가져간다"(한 번의 결정)
+   까지만 가는데, 그다음 쪽은 갑자기 **이미 줄 세워진** 목록을 보여준다.
+   "정렬" 이라는 말이 근거 없이 결과 라벨로 먼저 나왔다.
+
+   여기서 이웃 둘씩 견줘 큰 쪽을 앞으로 보낸다. 그걸 반복하면 줄이 저절로
+   a+b 순서로 선다 — 그게 '정렬' 이다. 앞의 규칙을 그대로 되풀이할 뿐이다.
+   ───────────────────────────────────────────────────────────── */
+const LINEUP = [
+  { order: [1, 0, 3, 2], cmp: null,   swap: false },   // 섞인 채로 시작
+  { order: [1, 0, 3, 2], cmp: [0, 1], swap: true  },   // 7 vs 8 → 바꾼다
+  { order: [0, 1, 3, 2], cmp: [1, 2], swap: false },   // 7 vs 3 → 그대로
+  { order: [0, 1, 3, 2], cmp: [2, 3], swap: true  },   // 3 vs 5 → 바꾼다
+  { order: [0, 1, 2, 3], cmp: null,   swap: false },   // 다 섰다
+];
+
+function LineUpSim({ E }) {
+  const { safe, setIdx, total } = useTraceStep(LINEUP.length);
+  const st = LINEUP[safe];
+  const done = safe === LINEUP.length - 1;
+  const shown = st.order.map((i) => DEMO[i]);
+
+  const BUBBLE = [
+    t(E, "Four pairs, in no particular order. We only know one rule: the pair with the bigger a+b should go first.",
+        "쌍 넷이 아무 순서 없이 놓여 있어요.\n우리가 아는 건 규칙 하나뿐이에요 —\na+b 가 큰 쌍이 먼저 가야 한다."),
+    t(E, "Compare the first two: 7 and 8. The bigger one should come first, so swap them.",
+        "앞의 둘을 견줘요. 7 과 8.\n큰 쪽이 앞에 와야 하니 자리를 바꿔요."),
+    t(E, "Next pair of neighbours: 7 and 3. The bigger one is already in front — leave it.",
+        "다음 이웃 둘. 7 과 3.\n큰 쪽이 이미 앞에 있어요 — 그대로 둬요."),
+    t(E, "Next: 3 and 5. Swap again.",
+        "그다음. 3 과 5.\n또 바꿔요."),
+    t(E, "Keep doing just that and the whole row ends up in a+b order by itself. That is all “sorting” means here.",
+        "이것만 되풀이하면 줄 전체가 저절로 a+b 순서로 서요.\n여기서 말하는 ‘정렬’ 이 바로 이거예요."),
+  ];
+
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, ...KA }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#7f1d1d", marginBottom: 10 }}>
+          📶 {t(E, "Four pairs — put them in order", "쌍 네 개 — 줄 세우기")}
+        </div>
+
+        <div style={{
+          background: done ? "#ecfdf5" : "#fffbeb",
+          border: `1.5px solid ${done ? "#6ee7b7" : "#fbbf24"}`,
+          borderRadius: 10, padding: "10px 13px", marginBottom: 12,
+          fontSize: 12.5, lineHeight: 1.75, color: C.text,
+          whiteSpace: "pre-line", textWrap: "balance", ...KA,
+        }}>
+          💬 {BUBBLE[safe]}
+        </div>
+
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
+          {shown.map((p, i) => {
+            const on = st.cmp && (i === st.cmp[0] || i === st.cmp[1]);
+            return (
+              <div key={`${p.a}-${p.b}`} style={{
+                display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
+                borderRadius: 10, padding: "8px 10px", minWidth: 66,
+                border: `2px solid ${on ? A : done ? "#6ee7b7" : "#e2e8f0"}`,
+                background: on ? "#fff" : done ? "#ecfdf5" : "#f8fafc", ...KA,
+              }}>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 800, color: "#334155" }}>
+                  ({p.a}, {p.b})
+                </div>
+                <div style={{ fontSize: 10.5, color: C.dim }}>
+                  a+b = <b style={{ color: on ? A : "#7c3aed" }}>{p.a + p.b}</b>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {st.cmp && (
+          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 12,
+            color: st.swap ? A : "#065f46", ...KA }}>
+            {st.swap ? t(E, "→ swap", "→ 자리를 바꿔요") : t(E, "→ leave it", "→ 그대로 둬요")}
+          </div>
+        )}
+
+        {done && (
+          <div style={{
+            background: "#065f46", color: "#fff", borderRadius: 10,
+            padding: "12px 14px", marginBottom: 12, textAlign: "center", ...KA,
+          }}>
+            <div style={{ fontSize: 11, fontWeight: 700, opacity: 0.85, letterSpacing: 0.5, marginBottom: 4 }}>
+              {t(E, "THE RULE", "우리가 쓸 규칙")}
+            </div>
+            <div style={{ fontSize: 15, fontWeight: 800, lineHeight: 1.5 }}>
+              {t(E, "Line the pairs up by a+b, biggest first.",
+                  "쌍을 a+b 가 큰 순서로 줄 세운다.")}
+            </div>
+            <div style={{ fontSize: 11.5, marginTop: 6, opacity: 0.9, lineHeight: 1.6 }}>
+              {t(E, "Then just take them from the front, turn by turn.",
+                  "그다음엔 앞에서부터 차례대로 가져가기만 하면 돼요.")}
+            </div>
+          </div>
+        )}
+
+        <SimNav idx={safe} total={total} onIdx={setIdx} accent={A} showLabels isEn={E} />
+      </div>
+    </div>
+  );
+}
+
 function PairPickSim({ E }) {
   // turn = how many pairs have been taken (0..SORTED.length)
   const [turn, setTurn] = useState(0);
@@ -71,12 +179,12 @@ function PairPickSim({ E }) {
     <div style={{ padding: 16 }}>
       <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 12, padding: 14, ...KA }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#7f1d1d", marginBottom: 8 }}>
-          🎮 {t(E, "Four pairs — same rule?", "쌍 네 개 — 같은 규칙일까?")}
+          🎮 {t(E, "Take them from the front", "앞에서부터 차례대로")}
         </div>
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7, marginBottom: 12, textWrap: "balance" }}>
           {t(E,
-            "Lined up by a+b, biggest first — just like before. Step through and watch X−Y build up.",
-            "앞에서처럼 a+b 가 큰 쌍부터 줄을 세웠어요.\n한 칸씩 눌러 X−Y 가 어떻게 쌓이는지 봐요.")}
+            "The pairs are lined up by the rule we just found. Now just take them from the front, turn by turn.",
+            "방금 정한 규칙대로 줄을 세워뒀어요.\n이제 앞에서부터 차례대로 가져가기만 하면 돼요.\n한 칸씩 눌러 X−Y 가 쌓이는 걸 봐요.")}
         </div>
 
         {/* sorted pairs */}
@@ -464,15 +572,24 @@ export function makeSimpleGameCh1(E) {
       content: <SwapSim E={E} />,
     },
 
-    // 1-4: 넷으로 늘려서 같은 규칙이 통하는지 확인
+    // 1-4: 한 번의 선택 규칙 → 전체 순서(정렬) 로 잇는 다리
+    {
+      type: "reveal",
+      narr: t(E,
+        "Same rule, four pairs. Which one goes in front?",
+        "같은 규칙으로 넷을 놓아봐요. 누가 앞에 설까요?"),
+      content: <LineUpSim E={E} />,
+    },
+
+    // 1-5: 줄이 선 뒤에 차례대로 가져가 보기
     {
       type: "reveal",
       /* 전에는 narr 가 "쌍을 a+b 로 정렬한 뒤" 라고 **결론부터** 말했다.
          그러면 시뮬은 스스로 찾는 자리가 아니라 답을 받고 확인만 하는 자리가 된다.
          2026-09-08 수업·화면 담당이 같이 짚었다. 질문형으로 바꿨다. */
       narr: t(E,
-        "Does the same rule still work with four pairs?",
-        "쌍이 넷으로 늘어도 같은 규칙이 통할까요?"),
+        "The row is ready. Now take them from the front.",
+        "줄이 다 섰어요. 이제 앞에서부터 가져가 봐요."),
       content: <PairPickSim E={E} />,
     },
 
