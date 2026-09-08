@@ -42,10 +42,17 @@ for f in sorted(glob.glob("quest-problems/*/chapters.jsx")):
         i = int(cor.group(1))
         if i >= len(o): continue
         ans = norm(o[i])
-        if len(ans) < 2: continue
+        if not ans: continue
         # 정답 보기의 핵심 조각이 narr 안에 통째로 들어 있나
         core = max(re.split(r"[→=]", ans), key=len)
         if len(core) >= 2 and core in narr:
+            hits.append((f.split("/")[1], o[i][:44], n.group(1)[:60]))
+            continue
+        # 정답이 "3" 처럼 짧으면 위 규칙이 못 잡는다 (2026-09-08 mcc19elim 에서 놓쳤다:
+        # narr 이 두 경우를 다 계산하고 "최선 = 3" 까지 적어놨는데 정답 보기가 "3" 이었다).
+        # 짧은 답은 **결론 자리**("= 3", "최선 3", "정답 3", "답은 3")에 있을 때만 신고한다.
+        # 그냥 숫자가 스쳐 지나가는 건 문제 설정일 수 있어서다.
+        if len(ans) <= 3 and re.search(r"(?:=|최선|정답|답은)\s*" + re.escape(ans) + r"(?![0-9])", narr):
             hits.append((f.split("/")[1], o[i][:44], n.group(1)[:60]))
 
 print(f"퀴즈 내레이션이 정답 보기를 그대로 담은 곳: {len(hits)}건")

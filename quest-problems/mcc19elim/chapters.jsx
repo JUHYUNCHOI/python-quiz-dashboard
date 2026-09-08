@@ -75,8 +75,8 @@ function ElimWindowSim({ E }) {
         </div>
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
-            "Pick a stretch of the string. The zeros inside (up to K) get deleted, so the 1s squeeze together. The answer is how many 1s are left — NOT the window length.",
-            "문자열에서 한 구간을 골라요. 안의 0은 (K개까지) 지워지고, 1들이 서로 붙어요. 답은 남은 1의 개수예요 — 창의 길이가 아니에요.")}
+            "Pick a stretch of the string. The zeros inside (up to K) get deleted, so the 1s squeeze together. What is left?",
+            "문자열에서 한 구간을 골라요. 안의 0 은 (K 개까지) 지워지고, 1 들이 서로 붙어요.\n무엇이 남을까요?")}
         </div>
 
         {/* the string with the window */}
@@ -133,7 +133,9 @@ function ElimWindowSim({ E }) {
               {t(E, "Delete ", "0을 ")}<b style={{ color: "#fbbf24" }}>{zeros}</b>
               {t(E, " zero(s) → the ", " 개 지우면 → 창의 ")}<b style={{ color: "#93c5fd" }}>{ones}</b>
               {t(E, " ones become one run. ", " 개의 1이 한 덩어리로 이어져요. ")}
-              <b style={{ color: "#6ee7b7" }}>{t(E, "Answer counts the 1s, not the length.", "답은 창 길이가 아니라 1의 개수.")}</b>
+              {/* 2026-09-08: 여기에 "답은 창 길이가 아니라 1의 개수" 라는 **결론**이
+                  처음부터 박혀 있었다. 쪽 내레이션·안내문에도 같은 말이 있어 세 군데에서
+                  미리 나왔다. 학생이 창을 움직여 보고 스스로 알아챌 자리를 남긴다. */}
             </>
           ) : (
             <>
@@ -280,9 +282,14 @@ export function makeMcc19ElimCh1(E) {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+            {/* 2026-09-08: 여기 계산이 **틀려 있었다.**
+                "101111" 은 0 이 하나, 1 이 다섯이라 지워도 5 다 (6 이 아니다).
+                6 이 나오는 구간은 "1110111" 이다 — 원문 설명("두 111 사이의 0 하나")과도 이쪽이 맞다.
+                검산: s[8..14] = "1110111", 0 한 개, 1 여섯 개 → 6.
+                전수 확인: 이 문자열·K=1 의 정답은 6, 그 구간은 s[8..14] 뿐이다. */}
             {t(E,
-              "Delete the single 0 inside \"1111001110111\" that sits between the \"1111\" and \"11\" groups — the run \"101111\" holds one 0; delete it and six 1s line up: 6.",
-              "\"101111\" 구간에는 0 이 하나 있어요; 그 0 하나를 지우면 1 이 여섯 개 이어져요: 6.")}
+              "Look at the stretch \"1110111\" near the end. It holds one 0; delete it and six 1s line up: 6.",
+              "뒤쪽의 \"1110111\" 을 봐요. 그 안에 0 이 하나 있어요.\n그 0 을 지우면 1 이 여섯 개 이어져요: 6.")}
           </div>
         </div>),
     },
@@ -290,18 +297,24 @@ export function makeMcc19ElimCh1(E) {
     // 1-3: concept sim
     {
       type: "reveal",
+      /* 2026-09-08: 이 narr 이 "답은 남은 1 의 개수 — 창의 길이가 아니에요" 라고
+         **누르기 전에 결론부터** 말했다. 같은 문장이 시뮬 안내문·판정 박스에도 있어
+         세 군데에서 미리 나왔다. 여기선 무엇을 해보라는 것만 말한다. */
       narr: t(E,
-        "Feel the rule. Slide the window over the string, delete the zeros inside (up to K), and watch: the answer is the number of 1s left — not the window length.",
-        "규칙을 직접 느껴봐요. 창을 문자열 위로 움직이며 안의 0 을 (K개까지) 지우고 확인해요: 답은 남은 1 의 개수 — 창의 길이가 아니에요."),
+        "Slide the window and delete the zeros inside — what do you get?",
+        "창을 움직이며 안의 0 을 지워봐요. 무엇이 남을까요?"),
       content: <ElimWindowSim E={E} />,
     },
 
     // 1-4: understanding quiz  (FIXED: answer is 3, not 4 — the kept zero is deleted, not counted)
     {
       type: "quiz",
+      /* 2026-09-08: 여기 narr 에 **두 경우의 계산과 "최선 = 3" 이 그대로** 적혀 있었다.
+         narr 은 질문과 무관하게 항상 먼저 뜬다 — 읽기만 해도 답을 알고 클릭한다.
+         계산은 explain(정답을 고른 뒤 보이는 곳)으로 옮겼다. */
       narr: t(E,
-        "s = \"10110\", K = 1.\nDelete the 0 at index 1 → \"1110\": three 1s in a row.\nDelete the 0 at index 4 → \"1011\": at most two in a row.\nBest = 3. The deleted 0 does NOT count.",
-        "s = \"10110\", K = 1.\n인덱스 1 의 0 을 지우면 → \"1110\": 1 이 세 개 연속.\n인덱스 4 의 0 을 지우면 → \"1011\": 많아야 두 개 연속.\n최선 = 3. 지운 0 은 세지 않아요."),
+        "s = \"10110\", K = 1. Which 0 would you delete?",
+        "s = \"10110\", K = 1. 어느 0 을 지우면 좋을까요?"),
       question: t(E,
         "s = \"10110\", K = 1. Delete at most one 0. Longest run of consecutive 1s = ?",
         "s = \"10110\", K = 1. 0 을 최대 한 개 지워요. 가장 긴 연속 1 의 길이 = ?"),
@@ -312,8 +325,8 @@ export function makeMcc19ElimCh1(E) {
       ],
       correct: 1,
       explain: t(E,
-        "Delete the 0 between \"1\" and \"11\": \"1\"+\"11\" merge into \"111\" = 3. The window \"1011\" has length 4, but one character was a deleted 0 — the answer counts only the 1s.",
-        "\"1\" 과 \"11\" 사이의 0 을 지우면 \"1\"+\"11\" 이 \"111\" 로 합쳐져 3. 창 \"1011\" 은 길이가 4 지만 그중 하나는 지운 0 이었어요 — 답은 1 만 세요."),
+        "Delete the 0 at index 1 → \"1110\": three 1s in a row. Delete the 0 at index 4 → \"1011\": at most two. So 3 is the best. Note the window \"1011\" has length 4, but one of those characters was the deleted 0 — the deleted 0 does not count.",
+        "인덱스 1 의 0 을 지우면 \"1110\" — 1 이 세 개 연속.\n인덱스 4 의 0 을 지우면 \"1011\" — 많아야 두 개.\n그래서 3 이 최선이에요.\n창 \"1011\" 은 길이가 4 지만 그중 하나는 지운 0 이에요 — 지운 0 은 세지 않아요."),
     },
   ];
 }
