@@ -10,14 +10,16 @@ export const SOLUTION_CODE = [
   "R = int(input())",
   "shouts = input().split()",
   "",
-  "# the position we are solving for",
+  "# 마지막 라운드부터 거꾸로 되돌려요.",
+  "# 지금 자리가 pos 라면, 한 라운드 전에는",
+  "#   \"odd\" 를 외쳤으면  pos * 2      자리에 있었고",
+  "#   \"even\" 을 외쳤으면 pos * 2 - 1  자리에 있었어요",
   "pos = 1",
-  "",
-  "# each round decides one bit of (pos - 1):",
-  "#   an \"odd\" round in slot i adds 2**i",
-  "for i in range(R):",
+  "for i in range(R - 1, -1, -1):",
   "    if shouts[i] == \"odd\":",
-  "        pos += 2 ** i",
+  "        pos = pos * 2",
+  "    else:",
+  "        pos = pos * 2 - 1",
   "",
   "print(pos)",
 ];
@@ -131,9 +133,12 @@ export function makeMcc19CandyCh1(E) {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+            {/* 2026-09-08: 여기서 이미 푸는 방법(되돌리기·두배·−1)을 통째로 줬다.
+                학생: "아직 문제도 다 안 읽었는데 벌써 답 구하는 방법이 통째로 나왔다."
+                답만 남기고 방법은 시뮬(다음 쪽) 몫으로 넘긴다. */}
             {t(E,
-              "Rounds are even, even, odd. Undo them from last to first: start at 1, an \"odd\" round doubles to 2, an \"even\" round doubles-minus-1 to 3, then to 5. Bob starts at position 5.",
-              "라운드는 even, even, odd. 마지막부터 되돌려요: 1 에서 시작, \"odd\" 라운드로 두 배 → 2, \"even\" 라운드로 두 배−1 → 3, 다시 → 5. Bob 은 5 번 자리에서 시작해요.")}
+              "Rounds are even, even, odd — and Bob must start at position 5. How would you find that?",
+              "라운드는 even, even, odd 이고, Bob 은 5 번 자리에서 시작해야 해요.\n그걸 어떻게 찾을까요?")}
           </div>
         </div>),
     },
@@ -142,8 +147,8 @@ export function makeMcc19CandyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Feel it. Set each round's shout and watch the line thin out on a full row of people — then see which starting number is the last one left, and how it spells out in bits.",
-        "직접 느껴봐요. 라운드마다 외침을 정하고, 꽉 찬 줄에서 사람들이 줄어드는 걸 봐요 — 마지막까지 남는 시작 번호가 무엇인지, 그게 비트로 어떻게 나타나는지 확인해요."),
+        "Set each round's shout and watch the line thin out — who is the last one left?",
+        "라운드마다 외침을 정하고 줄이 줄어드는 걸 봐요. 마지막에 누가 남을까요?"),
       content: (
         <div style={{ padding: 4 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#dc2626", textAlign: "center", marginBottom: 6 }}>
@@ -156,9 +161,13 @@ export function makeMcc19CandyCh1(E) {
     // 1-4: understanding check
     {
       type: "quiz",
+      /* 2026-09-08: 여기 narr 에 **정답이 그대로** 적혀 있었다
+         ("자리 2 가 살아남아요"). narr 은 질문과 무관하게 항상 먼저 렌더된다 —
+         안 풀어도 읽고 클릭만 하면 됐다. 상황만 남기고 답은 뺀다.
+         같은 사고를 저장소 전체에서 찾는 검사기: scripts/check-quiz-spoiler.py */
       narr: t(E,
-        "One round, shout \"odd\". A full line is just [1, 2]. \"odd\" removes the odd position (position 1), so position 2 survives — its starting number is 2.",
-        "라운드 한 번, 외침 \"odd\". 꽉 찬 줄은 [1, 2] 예요. \"odd\" 는 홀수 자리(자리 1)를 없애서 자리 2 가 살아남아요 — 시작 번호는 2."),
+        "One round, shout \"odd\". A full line is just [1, 2].",
+        "라운드 한 번, 외침 \"odd\". 꽉 찬 줄은 [1, 2] 예요."),
       question: t(E,
         "R = 1 with shout \"odd\". What starting position must Bob take?",
         "R = 1, 외침 \"odd\". Bob 은 어느 시작 위치에 서야 하나요?"),
@@ -169,8 +178,8 @@ export function makeMcc19CandyCh1(E) {
       ],
       correct: 1,
       explain: t(E,
-        "\"odd\" eliminates the odd position, so position 2 survives. In bits: an \"odd\" round in slot 0 adds 2^0, so pos = 1 + 1 = 2.",
-        "\"odd\" 는 홀수 자리를 없애니 자리 2 가 살아남아요. 비트로 보면: 슬롯 0 의 \"odd\" 라운드가 2^0 을 더해서 pos = 1 + 1 = 2."),
+        "\"odd\" eliminates the odd position, so position 2 survives. Undoing it: the last survivor stands at 1, and one round earlier that was 1 × 2 = 2.",
+        "\"odd\" 는 홀수 자리를 없애니 자리 2 가 살아남아요. 거꾸로 보면: 마지막에 남은 사람은 자리 1 이고, 한 라운드 전엔 1 × 2 = 2 였어요."),
     },
   ];
 }
@@ -185,8 +194,8 @@ export function makeMcc19CandyCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way guesses a starting position, simulates every round, and checks if that person is the sole survivor — many guesses × R rounds of work. The fast way works backwards: Bob ends at position 1, so undo the rounds. Each round writes exactly one bit of the answer.",
-        "느린 방법은 시작 위치를 하나 찍고, 모든 라운드를 시뮬레이션해서 그 사람이 혼자 남는지 확인해요 — 많은 후보 × R 라운드 만큼 일해요. 빠른 방법은 거꾸로 봐요: Bob 은 자리 1 로 끝나니 라운드를 되돌려요. 라운드마다 답의 비트 하나가 딱 정해져요."),
+        "Slow way vs fast way.",
+        "느린 방법과 빠른 방법을 견줘봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -200,10 +209,10 @@ export function makeMcc19CandyCh2(E, lang = "py") {
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: one bit per round, no simulation", "빠름: 라운드마다 비트 하나, 시뮬 없음")}
+                🚀 {t(E, "Fast: undo the rounds, last one first", "빠름: 라운드를 마지막부터 되돌리기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Start pos at 1; for each \"odd\" round in slot i, add 2^i. Answer in O(R).", "pos 를 1 로 시작; 슬롯 i 의 \"odd\" 라운드마다 2^i 를 더해요. 답을 O(R) 에.")}
+                {t(E, "Start at pos = 1 and walk the rounds backwards: \"odd\" → ×2, \"even\" → ×2 − 1.", "pos = 1 에서 시작해 라운드를 거꾸로 훑어요: \"odd\" 면 ×2, \"even\" 이면 ×2 − 1.")}
               </div>
             </div>
           </div>
@@ -216,8 +225,8 @@ export function makeMcc19CandyCh2(E, lang = "py") {
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Each \"odd\" round adds its bit to the answer.",
-        "풀이 코드 — 부분별로 읽어봐요. \"odd\" 라운드마다 자기 비트를 답에 더해요."),
+        "Solution code — read part by part.",
+        "풀이 코드 — 부분별로 읽어봐요."),
       sections: getMcc19CandySections(E),
     },
   ];

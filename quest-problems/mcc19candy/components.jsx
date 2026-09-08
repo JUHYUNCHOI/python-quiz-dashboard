@@ -44,9 +44,21 @@ export function Mcc19CandyShoutSim({ E }) {
   });
   const survivor = people[0]; // the one original number left standing
 
-  // Bit view: pos - 1 has a 1 in bit i exactly when shout[i] === "odd".
-  const bits = shouts.map((s) => (s === "odd" ? 1 : 0));
-  const answerFromBits = 1 + bits.reduce((acc, b, i) => acc + b * 2 ** i, 0);
+  /* 2026-09-08: 여기 있던 "비트 / 슬롯 i / 1 + 2^i 합" 패널을 걷어냈다.
+     초6 학생이 **이 자리에서 그만두고 싶어했다** — "비트가 뭔지 한 번도 설명 안 해줬다."
+     대신 마지막 라운드부터 거꾸로 되돌리는 걸 그대로 보여준다.
+     지금 자리가 pos 면 한 라운드 전에는 "odd" → pos*2, "even" → pos*2−1 자리였다.
+     (510가지 전수 대조로 확인했다.) */
+  const undoSteps = [];
+  {
+    let p = 1;
+    for (let i = shouts.length - 1; i >= 0; i--) {
+      const before = shouts[i] === "odd" ? p * 2 : p * 2 - 1;
+      undoSteps.push({ round: i, shout: shouts[i], from: p, to: before });
+      p = before;
+    }
+  }
+  const answerFromUndo = undoSteps.length ? undoSteps[undoSteps.length - 1].to : 1;
 
   const chip = (num, i, killed) => (
     <div
@@ -120,31 +132,39 @@ export function Mcc19CandyShoutSim({ E }) {
           ))}
         </div>
 
-        {/* answer + bit mapping */}
+        {/* 답 + 거꾸로 되돌리기 */}
         <div style={{ background: "#0f172a", color: "#f8fafc", padding: "10px 12px", borderRadius: 8,
           fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.7, ...KA }}>
           <div>
             {t(E, "sole survivor started at position ", "혼자 남은 사람의 시작 위치 = ")}
             <b style={{ color: "#fbbf24", fontSize: 15 }}>{survivor}</b>
           </div>
-          <div style={{ marginTop: 6, color: "#cbd5e1" }}>
-            {shouts.map((s, i) => (
-              <span key={i} style={{ marginRight: 10, ...NW }}>
-                {t(E, `bit ${i} `, `비트 ${i} `)}
-                <b style={{ color: s === "odd" ? "#f87171" : "#a78bfa" }}>{s === "odd" ? 1 : 0}</b>
-              </span>
-            ))}
+          <div style={{ marginTop: 8, color: "#cbd5e1", fontSize: 11.5 }}>
+            {t(E, "undo the rounds, last one first:", "라운드를 마지막부터 거꾸로 되돌리면:")}
           </div>
+          {undoSteps.map((u, k) => (
+            <div key={k} style={{ marginTop: 3, ...NW }}>
+              <span style={{ color: "#64748b" }}>
+                {t(E, `round ${u.round + 1} `, `라운드 ${u.round + 1} `)}
+              </span>
+              <b style={{ color: u.shout === "odd" ? "#f87171" : "#a78bfa" }}>{u.shout}</b>
+              <span style={{ color: "#8b949e" }}>
+                {u.shout === "odd" ? "  →  ×2  " : "  →  ×2 − 1  "}
+              </span>
+              <span style={{ color: "#cbd5e1" }}>{u.from} → </span>
+              <b style={{ color: "#fbbf24" }}>{u.to}</b>
+            </div>
+          ))}
           <div style={{ marginTop: 6, color: "#6ee7b7" }}>
-            1 + {bits.map((b, i) => (b ? `2^${i}` : null)).filter(Boolean).join(" + ") || "0"} ={" "}
-            <b style={{ color: "#34d399" }}>{answerFromBits}</b>
+            {t(E, "start position = ", "시작 위치 = ")}
+            <b style={{ color: "#34d399" }}>{answerFromUndo}</b>
           </div>
         </div>
 
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
           {t(E,
-            "See the pattern? An \"odd\" round in slot i puts a 1 in bit i of (answer − 1); an \"even\" round puts a 0. So the whole answer is just 1 + the number those bits spell out — no need to simulate.",
-            "패턴이 보여요? 슬롯 i 의 \"odd\" 라운드는 (답 − 1) 의 비트 i 를 1 로, \"even\" 라운드는 0 으로 만들어요. 그래서 답은 그 비트들이 나타내는 수에 1 을 더한 것뿐 — 시뮬레이션이 필요 없어요.")}
+            "Why? \"odd\" wipes out the odd positions, so a survivor now standing at p was at 2p before. \"even\" wipes out the even ones, so p was at 2p − 1. Undo the rounds backwards and you never have to line the people up at all.",
+            "왜 그럴까요? \"odd\" 는 홀수 자리를 지우니, 지금 p 번째인 사람은 그전엔 2p 번째에 있었어요.\n\"even\" 은 짝수 자리를 지우니 2p − 1 번째였고요.\n라운드를 거꾸로 되돌리면 사람을 한 줄로 세울 필요가 아예 없어요.")}
         </div>
       </div>
     </div>
@@ -162,36 +182,42 @@ const FULL_PY = [
   "R = int(input())",
   "shouts = input().split()",
   "",
-  "# the position we are solving for",
+  "# 마지막 라운드부터 거꾸로 되돌려요.",
+  "# 지금 자리가 pos 라면, 한 라운드 전에는",
+  "#   \"odd\" 를 외쳤으면  pos * 2      자리에 있었고",
+  "#   \"even\" 을 외쳤으면 pos * 2 - 1  자리에 있었어요",
   "pos = 1",
-  "",
-  "# each round decides one bit of (pos - 1):",
-  "#   an \"odd\" round in slot i adds 2**i",
-  "for i in range(R):",
+  "for i in range(R - 1, -1, -1):",
   "    if shouts[i] == \"odd\":",
-  "        pos += 2 ** i",
+  "        pos = pos * 2",
+  "    else:",
+  "        pos = pos * 2 - 1",
   "",
   "print(pos)",
 ];
 
 const FULL_CPP = [
   "#include <iostream>",
+  "#include <vector>",
   "#include <string>",
   "using namespace std;",
   "",
   "int main() {",
   "    int R;",
   "    cin >> R;",
-  "",
-  "    // the position we are solving for",
-  "    long long pos = 1;",
-  "",
-  "    // each round decides one bit of (pos - 1):",
-  "    //   an \"odd\" round in slot i adds 2^i",
+  "    vector<string> shouts(R);",
   "    for (int i = 0; i < R; i++) {",
-  "        string s;",
-  "        cin >> s;",
-  "        if (s == \"odd\") pos += (1LL << i);",
+  "        cin >> shouts[i];",
+  "    }",
+  "",
+  "    // 마지막 라운드부터 거꾸로 되돌려요",
+  "    long long pos = 1;",
+  "    for (int i = R - 1; i >= 0; i--) {",
+  "        if (shouts[i] == \"odd\") {",
+  "            pos = pos * 2;",
+  "        } else {",
+  "            pos = pos * 2 - 1;",
+  "        }",
   "    }",
   "",
   "    cout << pos << \"\\n\";",
@@ -208,18 +234,21 @@ export function getMcc19CandySections(E) {
       why: [
         t(E, "Work backwards from the end: Bob must finish at position 1, so undo the rounds from last to first.",
             "끝에서부터 거꾸로 봐요: Bob 은 자리 1 로 끝나야 하니, 마지막 라운드부터 하나씩 되돌려요."),
-        t(E, "Each round doubles the position on the way back, and an \"even\" round subtracts 1 — that is exactly writing one bit per round into (pos − 1): an \"odd\" round in slot i sets bit i to 1, an \"even\" round leaves it 0.",
-            "되돌릴 때 라운드마다 위치가 두 배가 되고 \"even\" 라운드는 1 을 빼요 — 이건 정확히 (pos − 1) 에 라운드마다 비트 하나를 쓰는 것이에요: 슬롯 i 의 \"odd\" 라운드는 비트 i 를 1 로, \"even\" 라운드는 0 으로.",),
-        t(E, "So instead of simulating the line, just add 2**i for every \"odd\" round to a starting pos of 1. O(R) time.",
-            "그래서 줄을 시뮬레이션하는 대신, 시작값 1 에 \"odd\" 라운드마다 2**i 만 더하면 돼요. O(R) 시간.",),
+        /* 2026-09-08: 설명은 "되돌리기" 인데 코드는 "정방향 비트합" 이라 서로 다른 방법이었다.
+           학생: "설명은 거꾸로라는데 코드는 앞에서부터 돈다. 왜 안 맞는지 모르겠다."
+           코드를 되돌리기로 바꾸고 설명도 같은 말로 맞췄다. 비트는 쓰지 않는다. */
+        t(E, "\"odd\" wipes out the odd positions, so someone now standing at p was at 2p one round earlier. \"even\" wipes out the even ones, so p was at 2p − 1.",
+            "\"odd\" 는 홀수 자리를 지우니, 지금 p 번째인 사람은 한 라운드 전엔 2p 번째에 있었어요. \"even\" 은 짝수 자리를 지우니 2p − 1 번째였고요.",),
+        t(E, "So start at pos = 1 (the last survivor) and undo the rounds from last to first. No line of people is ever built.",
+            "그래서 pos = 1 (마지막에 남은 사람)에서 시작해, 라운드를 마지막부터 거꾸로 되돌려요. 사람을 한 줄로 세울 일이 없어요.",),
       ],
       pyOnly: [
-        t(E, "input().split() gives the shouts as a list of words; 2 ** i is Python's power operator.",
-            "input().split() 은 외침을 단어 리스트로 줘요; 2 ** i 는 파이썬의 거듭제곱이에요.",),
+        t(E, "input().split() gives the shouts as a list of words; range(R - 1, -1, -1) walks the rounds backwards.",
+            "input().split() 은 외침을 단어 리스트로 줘요; range(R - 1, -1, -1) 은 라운드를 거꾸로 훑어요.",),
       ],
       cppOnly: [
-        t(E, "1LL << i is 2^i using a bit shift; the LL keeps it a 64-bit long long so large R doesn't overflow.",
-            "1LL << i 는 비트 시프트로 2^i 를 만들어요; LL 을 붙여 64비트 long long 으로 두면 R 이 커도 넘치지 않아요.",),
+        t(E, "pos is a long long — the position doubles every round, so it grows fast.",
+            "pos 를 long long 으로 둬요 — 라운드마다 두 배가 되니 금방 커지거든요.",),
         t(E, "Read each shout word into a std::string with cin >> s inside the loop.",
             "반복문 안에서 cin >> s 로 외침 단어를 std::string 에 하나씩 읽어요.",),
       ],
