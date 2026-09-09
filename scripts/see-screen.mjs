@@ -276,7 +276,12 @@ if (args.includes('--sim')) {
         const st = getComputedStyle(e)
         return e.offsetHeight > 30 && e.offsetHeight < 260 && parseFloat(st.borderTopWidth) >= 1
           && /rgb\(2[0-9]{2}|rgb\(24[0-9]|rgb\(25[0-5]/.test(st.backgroundColor)
-          && (e.textContent || '').trim().length > 25 && e.children.length < 12
+          // 2026-09-09: 전에는 25자 초과만 말풍선으로 쳤다. 그래서 gifts 시뮬 9·10단계에서
+          // "말풍선을 못 찾음" 이라고 보고했는데, 실제로는 "손님 8 (티어 5) — 선물이 없어요"
+          // 가 멀쩡히 떠 있었다. 25자가 안 됐을 뿐이다.
+          // 짧은 말풍선이 오히려 좋은 말풍선인데 도구가 그걸 없는 것으로 셌다.
+          // 8자로 낮춘다 — 그 아래는 "1 / 8" 같은 카운터라 말풍선이 아니다.
+          && (e.textContent || '').trim().length > 8 && e.children.length < 12
       })
       const say = cands[0]
       if (!say) return { none: true }
