@@ -10,7 +10,7 @@
 // (풀이 코드 자체는 이날 랜덤 5,000건 + 언어 간 300건 대조로 정확성을 확인했다.)
 //
 // 원칙: 학생 목소리(해요체), 관찰→추론, 시뮬로 개념.
-//   · CollatzStepSim — 리스트 [1,2,3,4,5] 에 절차를 한 번(k=1) 적용.
+//   · CollatzStepSim — 리스트 [1,2,3,4,5] 에 한 바퀴(k=1) 적용.
 //     각 원소를 하나씩: 짝수면 ÷2, 홀수면 ×3+1 → 제자리에서 바뀜 → 마지막에 합.
 
 import { t } from "@/components/quest/theme";
@@ -55,7 +55,7 @@ function Row({ children }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   CollatzStepSim — [한 번 적용해보기] 리스트에 절차를 k=1번.
+   CollatzStepSim — [한 번 적용해보기] 리스트에 한 바퀴(k=1).
    [1,2,3,4,5] → 각 원소 짝/홀 판단해 제자리 변환 → [4,1,10,2,16] → 합 33.
    ═══════════════════════════════════════════════════════════════ */
 export function CollatzStepSim({ E }) {
@@ -85,7 +85,7 @@ export function CollatzStepSim({ E }) {
 
   const say =
     s.kind === "intro" ? t(E, <>Here's the list <b>[1, 2, 3, 4, 5]</b>. Let's run the procedure <b>once</b> (k = 1): each number, if even <b>÷2</b>, if odd <b>×3+1</b>.</>,
-                            <>리스트 <b>[1, 2, 3, 4, 5]</b> 가 있어요. 절차를 <b>한 번</b>(k = 1) 돌려봐요: 숫자마다 짝수면 <b>÷2</b>, 홀수면 <b>×3+1</b>.</>)
+                            <>리스트 <b>[1, 2, 3, 4, 5]</b> 가 있어요. <b>한 바퀴</b>(k = 1) 돌려봐요: 숫자마다 짝수면 <b>÷2</b>, 홀수면 <b>×3+1</b>.</>)
     : s.kind === "elem"
       ? (isEven
           ? t(E, <><b>{cur}</b> is <b>even</b> → {cur} ÷ 2 = <b>{after[s.i]}</b>.</>,
@@ -98,7 +98,7 @@ export function CollatzStepSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Run the procedure once (k = 1)", "절차를 한 번 돌려보기 (k = 1)")}
+        title={t(E, "Run the procedure once (k = 1)", "한 바퀴 돌려보기 (k = 1)")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Say tone={s.kind === "sum" ? "aha" : s.kind === "elem" ? (isEven ? "even" : "odd") : "go"}>{say}</Say>
 
