@@ -34,6 +34,10 @@ ALLOW = {
     # narr: "조약돌이 1번에 있고, 1번과 3번을 교환. 어디로 가?" / 정답 "3번"
     # → 3 은 **문제 설정**(어느 컵과 바꾸는지)이지 답을 말한 게 아니다. 2026-09-09 판정.
     ("shellgame", "3번"),
+    # 앞 쪽이 "횡단은 같은 소의 연속된 두 관찰에서 쪽이 바뀔 때 1번" 이라고 **정의**하고,
+    # 퀴즈가 "0번 쪽 → 1번 쪽이면 몇 번?" 을 묻는다. 정의 직후의 **이해 확인**이라
+    # 정의가 답을 담고 있는 건 당연하다 — 이건 스포일러가 아니다. 2026-09-09 판정.
+    ("crossroad1", "1번 횡단"),
 }
 
 hits = []
@@ -141,7 +145,10 @@ for f in sorted(glob.glob("quest-problems/*/chapters.jsx")):
         if (f.split("/")[1], ans) in ALLOW:
             continue
         core = max(re.split(r"[→=]", norm(ans)), key=len)
-        prev_text = norm(" ".join(re.findall(r'"((?:[^"\\]|\\.)*)"', parts[i - 1])))
+        # ⚠️ 앞 쪽에서 **본문만** 뽑는다. 처음엔 따옴표 안을 전부 긁었더니
+        # style 값("10px" + "14px" → "1014px")이 이어붙어 "24" 같은 짧은 정답과
+        # 우연히 겹쳤다 — mcc19rect2 가 고친 뒤에도 계속 울렸다.
+        prev_text = norm(" ".join(ko(parts[i - 1])))
         if len(core) >= 2 and core in prev_text:
             prev_hits.append((f.split("/")[1], ans[:44]))
 
