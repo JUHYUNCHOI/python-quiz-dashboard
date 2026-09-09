@@ -1,5 +1,13 @@
-// Collatz (MCC 2023 P1) 용 시뮬 — 🔒 USACO_VERIFIED components.jsx 는
-// 건드리지 않고 여기에만 (photoshoot25 / cowsplits / chipxchg 와 같은 방식).
+// Collatz (MCC 2023 P1) 용 시뮬 — components.jsx 는 건드리지 않고 여기에만
+// (photoshoot25 / cowsplits / chipxchg 와 같은 방식).
+//
+// 2026-09-09: 이 자리에 "🔒 USACO_VERIFIED components.jsx" 라고 적혀 있었는데
+// **거짓이었다.** components.jsx 에 그 헤더가 없고, USACO_VERIFICATION.md 에도
+// collatz 항목이 없고, check-frozen.py 도 이 quest 를 모른다.
+// 애초에 collatz 는 MCC 2023 P1 이라 USACO 채점기에 낼 수 있는 문제가 아니다.
+// 잘못된 잠금 표시는 두 방향으로 위험하다 — 진짜 버그를 "잠겨 있으니 못 고친다" 며
+// 넘기게 만들거나, 반대로 표시를 못 믿게 만든다. QA 가 찾아서 지웠다.
+// (풀이 코드 자체는 이날 랜덤 5,000건 + 언어 간 300건 대조로 정확성을 확인했다.)
 //
 // 원칙: 학생 목소리(해요체), 관찰→추론, 시뮬로 개념.
 //   · CollatzStepSim — 리스트 [1,2,3,4,5] 에 절차를 한 번(k=1) 적용.
