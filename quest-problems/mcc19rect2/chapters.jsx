@@ -134,7 +134,7 @@ export function makeMcc19Rect2Ch1(E) {
             </div>
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
               {t(E, "Why 2 3? — the sim below reveals it bit by bit.",
-                    "왜 2 3 일까? — 아래 시뮬이 비트 단위로 밝혀요.")}
+                    "왜 2 3 일까? — 아래 시뮬이 하나씩 짚어줘요.")}
             </div>
           </div>
           {/* CONSTRAINTS */}

@@ -104,4 +104,51 @@ print("  (모르고도 제일 긴 걸 고르면 맞는다. 보기 길이를 비�
 for q, a in long_ans:
     print(f"  ⚠️ {q:<16} {a}…")
 
-sys.exit(1 if (hits or long_ans) else 0)
+# ── 세 번째 검사: **바로 앞 쪽**이 정답을 미리 말한다 ────────────────
+# 2026-09-09 에 추가. 위 두 검사가 mcc15equation 을 0건으로 통과시켰는데,
+# 수업 담당이 눈으로 스포일러를 찾아냈다. 원인은 검사기가 **퀴즈 자기 narr 만**
+# 봤다는 것이다. 정답 "8가지" 는 퀴즈 앞 쪽(시뮬 쪽) narr 의
+#   "빈칸 2개를 채우는 방법은 8가지뿐이에요"
+# 에 있었다. 쪽을 넘기면 앞 쪽은 사라지지만, 학생은 **방금 읽고 왔다.**
+# 검사기가 한 쪽 안만 보면 쪽과 쪽 사이는 영영 안 걸린다
+# (memory/feedback_reviewers_see_pages_teacher_sees_story.md 와 같은 병이다).
+STEP_SPLIT = re.compile(r'\n\s*\{\s*\n?\s*type:\s*"')
+
+def steps(src):
+    """chapters.jsx 를 스텝 조각으로 자른다.
+    split 이 여는 따옴표를 먹으므로 도로 붙인다 — 안 붙이면 따옴표 짝이
+    한 칸씩 밀려서 본문이 통째로 빈 문자열로 나온다 (처음에 여기서 틀렸다)."""
+    parts = ['"' + x for x in STEP_SPLIT.split(src)]
+    parts[0] = parts[0][1:]
+    return parts
+
+prev_hits = []
+for f in sorted(glob.glob("quest-problems/*/chapters.jsx")):
+    s3 = io.open(f, encoding="utf-8").read()
+    parts = steps(s3)
+    for i, p in enumerate(parts):
+        if not p.startswith('"quiz"') or i == 0:
+            continue
+        o = re.search(r"options:\s*\[(.*?)\]", p, re.S)
+        c = re.search(r"correct:\s*(\d+)", p)
+        if not (o and c):
+            continue
+        opts = ko(o.group(1))
+        k = int(c.group(1))
+        if k >= len(opts):
+            continue
+        ans = opts[k].strip()
+        if (f.split("/")[1], ans) in ALLOW:
+            continue
+        core = max(re.split(r"[→=]", norm(ans)), key=len)
+        prev_text = norm(" ".join(re.findall(r'"((?:[^"\\]|\\.)*)"', parts[i - 1])))
+        if len(core) >= 2 and core in prev_text:
+            prev_hits.append((f.split("/")[1], ans[:44]))
+
+print(f"\n**앞 쪽**이 퀴즈 정답을 미리 말하는 곳: {len(prev_hits)}건")
+print("  (퀴즈 자기 narr 은 깨끗한데 바로 앞 쪽에서 답을 말해버린 자리다.)")
+for q, a in prev_hits:
+    print(f"  🚨 {q:<16} 정답: {a}…")
+
+
+sys.exit(1 if (hits or long_ans or prev_hits) else 0)
