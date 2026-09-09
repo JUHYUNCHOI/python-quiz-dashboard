@@ -192,8 +192,8 @@ export function makeFencesCh1(E) {
           <div style={{ marginBottom: 12 }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
-              {t(E, "A single integer — the minimum number of fences to build (= smallest grass '.' count over all columns).",
-                  "정수 하나 — 만들어야 할 최소 울타리 수 (= 모든 열 중 가장 작은 풀 '.' 개수).")}
+              {t(E, "A single integer — the minimum number of fences to build.",
+                  "정수 하나 — 만들어야 할 최소 울타리 수.")}
             </div>
           </div>
           {/* 제약 */}
