@@ -22,8 +22,8 @@ export function makeGiftsCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "You invited more guests than you have gifts. You hand them out by tier — closest friends (tier 1) first. If a tier runs out of gifts partway, whoever arrived earlier gets it. Who ends up with a gift?",
-        "손님보다 선물이 적어요. 친한 순서(티어)대로 나눠줘요 — 티어 1 이 제일 친한 친구. 어떤 티어에서 선물이 도중에 떨어지면, 먼저 온 사람이 가져가요. 누가 선물을 받게 될까요?"),
+        "More guests than gifts. Who goes home empty-handed?",
+        "손님보다 선물이 적어요. 누가 빈손으로 갈까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 10 }}>
@@ -91,8 +91,45 @@ export function makeGiftsCh1(E) {
               {t(E, " — the 6th number is 0, so guest 6 got nothing.",
                     " 이에요 — 6 번째가 0 이니 손님 6 이 못 받았어요.")}
             </div>
+            {/* 2026-09-09: 원문 제약(PDF p.3-4)이 화면 어디에도 없었다.
+                티어가 10억까지 간다는 걸 모르면 "티어 1부터 하나씩 세면 안 되나?" 라는
+                자연스러운 의문에 답이 없고, 정렬이 "그냥 외우는 것" 이 된다. */}
+            <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #ddd6fe", fontSize: 11.5, color: "#6d28d9", whiteSpace: "pre-line", lineHeight: 1.7 }}>
+              📌 {t(E, "Limits: 1 <= m < n <= 100,000 and each tier is between 1 and 1,000,000,000. Tiers go up to a billion, so you cannot walk tier 1, tier 2, tier 3 one at a time.",
+                       "제약: 1 ≤ m < n ≤ 100,000 이고 티어는 1 부터 1,000,000,000 사이예요.\n티어가 10억까지 가니까 티어 1, 2, 3 … 을 하나씩 훑을 수는 없어요.")}
+            </div>
           </div>
         </div>),
+    },
+
+    /* [확인] 2026-09-09 추가. 이 quest 는 능동 스텝이 0개였다.
+       그런데 퀴즈를 시뮬 뒤에 두면 이미 늦다 — 학생이 **2쪽 예제를 손으로 검산한 시점에**
+       정렬 규칙을 스스로 알아냈다고 보고했다("3·4쪽과 코드는 전부 확인이었다").
+       그래서 시뮬 **앞**, 형식 카드 바로 뒤에 둔다. 여기가 아직 모르는 마지막 자리다.
+       고른 지점은 이 문제의 유일한 갈림인 **같은 티어 동률**이다 —
+       공식 샘플에서 손님 5 와 8 이 둘 다 티어 5 인데 하나만 받는다.
+       숫자는 직접 검산했다: 티어 순 줄 = 2(1) 4(1) 7(2) 1(3) 3(4) 5(5) 8(5) 6(9),
+       선물 6개면 앞 여섯 명까지라 손님 5 는 받고 손님 8 은 못 받는다. */
+    {
+      type: "quiz",
+      narr: t(E,
+        "One thing to work out before we watch.",
+        "보기 전에 하나만 풀고 가요."),
+      question: t(E,
+        "Guest 5 and guest 8 are both tier 5. The sample output gives guest 5 a gift and guest 8 nothing. Why?",
+        "손님 5 와 손님 8 은 둘 다 티어 5 예요. 그런데 샘플 출력은 손님 5 에게만 선물을 줬어요. 왜 그럴까요?"),
+      hint: t(E,
+        "Both are tier 5, so the tier cannot be what separates them. What else do they differ in?",
+        "둘 다 티어 5 라 티어로는 못 가려요. 둘이 다른 게 또 뭐가 있죠?"),
+      options: [
+        t(E, "Guest 5 has the smaller guest number", "손님 5 의 번호가 더 앞서요"),
+        t(E, "Guest 5 asked for a cheaper gift", "손님 5 가 더 싼 선물을 골랐어요"),
+        t(E, "It was decided at random", "무작위로 정해졌어요"),
+      ],
+      correct: 0,
+      explain: t(E,
+        "Inside one tier, the earlier guest number wins. Line everyone up by tier and you get 2, 4, 7, 1, 3, 5, 8, 6. With 6 gifts, guest 5 sits just inside the first six and guest 8 just outside — that is the 0 in the 8th place.",
+        "같은 티어 안에서는 번호가 앞선 손님이 받아요.\n티어 순으로 줄을 세우면 2, 4, 7, 1, 3, 5, 8, 6 이 돼요.\n선물이 6개니까 손님 5 는 아슬아슬하게 들어오고 손님 8 은 밀려나요.\n그게 8번째 자리의 0 이에요."),
     },
 
     /* [전] 시뮬 — 줄 서는 장면과 선물이 떨어지는 순간 */

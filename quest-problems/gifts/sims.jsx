@@ -34,6 +34,15 @@ export function GiftQueueSim({ E }) {
   if (s.kind === "give") order.slice(0, Math.min(s.k + (s.got ? 1 : 0), m)).forEach(g => given.add(g));
   if (s.kind === "final") order.slice(0, m).forEach(g => given.add(g));
 
+  /* 2026-09-09: 아직 차례가 안 온 손님도 출력 칸에 0 이 찍혀 있었다.
+     학생: "손님6은 아직 ✗ 표시 안 됐는데 아래 출력 칸엔 이미 11111010 이 나와 있어서
+     '어? 아직 처리 안 했는데 왜 벌써 0이지?' 했다."
+     0 은 "못 받았다" 는 **결론**인데 아직 결론이 안 난 자리에 찍혀 있었던 것이다.
+     줄에서 아직 안 지나간 손님은 · 로 둔다. */
+  const decided = new Set();
+  if (s.kind === "give") order.slice(0, s.k + 1).forEach(g => decided.add(g));
+  if (s.kind === "final") order.forEach(g => decided.add(g));
+
   const lined = s.kind !== "raw";
   const row = lined ? order : [...Array(n).keys()];
 
@@ -124,8 +133,8 @@ export function GiftQueueSim({ E }) {
         {[...Array(n).keys()].map(i => (
           <span key={i} style={{
             margin: "0 4px", fontWeight: 800,
-            color: given.has(i) ? "#15803d" : "#94a3b8",
-          }}>{(s.kind === "final" || s.kind === "give") ? (given.has(i) ? 1 : 0) : "·"}</span>
+            color: !decided.has(i) ? "#cbd5e1" : given.has(i) ? "#15803d" : "#94a3b8",
+          }}>{decided.has(i) ? (given.has(i) ? 1 : 0) : "·"}</span>
         ))}
       </div>
 
