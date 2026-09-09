@@ -6,12 +6,14 @@ import { CodeBlock } from "@/components/quest/shared";
 const A = "#059669";
 
 /* ═══════════════════════════════════════════════════════════════
-   Deep-Audit Sim: Rectangle XOR Inspector
+   숨은 꼭짓점 찾기 — 좌표를 세어 보는 시뮬
+
+   2026-09-09: 전에는 XOR 비트 검사기였다. 그런데 **원문 풀이는 XOR 을 안 쓴다**:
+     "세 점의 x 좌표 중 둘은 같다. 다른 하나가 네 번째 점의 x 다. y 도 마찬가지."
+   비트는 어디서도 안 가르치고, mcc19candy 에서 초6 학생이 "비트" 때문에
+   그만두고 싶어했다. 세는 방식으로 바꿨다 — 곱셈도 필요 없다.
    - Bilingual (E flag), theme-matched (green A = #059669).
    - Student picks one of 3 preset 3-corner sets, sees the rectangle
-     drawn live, then runs XOR bit-by-bit on the x and y coordinates
-     to reveal the missing 4th corner. Reinforces the XOR-trick
-     invariant (each axis value appears twice -> XOR cancels).
    ═══════════════════════════════════════════════════════════════ */
 const RECT_PRESETS = [
   { id: "A", c1: [0, 0], c2: [2, 0], c3: [0, 3], hidden: [2, 3] },
@@ -19,12 +21,12 @@ const RECT_PRESETS = [
   { id: "C", c1: [2, 3], c2: [2, 7], c3: [6, 3], hidden: [6, 7] },
 ];
 
-function xorTrace(a, b, c) {
-  // Returns step list of XOR for 3 ints, bit-by-bit (4 bits is enough for presets up to 7).
-  const bits = 4;
-  const toBits = (n) => n.toString(2).padStart(bits, "0");
-  const r = a ^ b ^ c;
-  return { ba: toBits(a), bb: toBits(b), bc: toBits(c), br: toBits(r), val: r };
+/* 세 값 중 **혼자 나온 것**을 찾는다. 나머지 둘은 같은 값이다.
+   (직사각형이면 각 x 좌표가 네 꼭짓점 중 정확히 두 번 나오기 때문이다.) */
+function loneValue(a, b, c) {
+  const val = a === b ? c : (a === c ? b : a);
+  const pair = a === b ? a : (a === c ? a : b);   // 두 번 나온 값
+  return { a, b, c, val, pair };
 }
 
 export function Mcc19Rect2AuditSim({ E }) {
@@ -40,8 +42,8 @@ export function Mcc19Rect2AuditSim({ E }) {
   const W = 240, H = 200, padPx = 24;
   const sx = (x) => padPx + ((x - minX) / Math.max(1, maxX - minX)) * (W - 2 * padPx);
   const sy = (y) => H - padPx - ((y - minY) / Math.max(1, maxY - minY)) * (H - 2 * padPx);
-  const tx = xorTrace(p.c1[0], p.c2[0], p.c3[0]);
-  const ty = xorTrace(p.c1[1], p.c2[1], p.c3[1]);
+  const tx = loneValue(p.c1[0], p.c2[0], p.c3[0]);
+  const ty = loneValue(p.c1[1], p.c2[1], p.c3[1]);
 
   const cornerDot = (c, i, hidden) => (
     <g key={i}>
@@ -63,12 +65,12 @@ export function Mcc19Rect2AuditSim({ E }) {
         padding: 12, marginBottom: 10,
       }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", marginBottom: 8 }}>
-          🔬 {t(E, "Deep-Audit: XOR Bit Inspector", "정밀 감사: XOR 비트 검사기")}
+          🔎 {t(E, "Find the hidden corner", "숨은 꼭짓점 찾기")}
         </div>
         <div style={{ fontSize: 12, color: "#065f46", marginBottom: 8, lineHeight: 1.5 }}>
           {t(E,
-            "Pick a preset, watch the 3 known corners. The 4th is hidden until you XOR.",
-            "프리셋을 골라 알려진 3 꼭짓점을 봐요. 4 번째는 XOR 하기 전엔 숨겨져 있어요.")}
+            "Pick a rectangle and look at the three corners you know. Where must the fourth one be?",
+            "직사각형을 골라 알고 있는 세 꼭짓점을 봐요. 네 번째는 어디 있어야 할까요?")}
         </div>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           {RECT_PRESETS.map(r => (
@@ -94,7 +96,7 @@ export function Mcc19Rect2AuditSim({ E }) {
             }}>
             {reveal
               ? t(E, "🙈 Hide 4th", "🙈 4 번째 숨기기")
-              : t(E, "🔓 Run XOR → reveal", "🔓 XOR 실행 → 공개")}
+              : t(E, "🔓 show the answer", "🔓 답 보기")}
           </button>
         </div>
       </div>
@@ -123,33 +125,41 @@ export function Mcc19Rect2AuditSim({ E }) {
           padding: 12, fontFamily: '"JetBrains Mono", monospace', fontSize: 12, lineHeight: 1.55,
         }}>
           <div style={{ color: "#94a3b8", marginBottom: 6 }}>
-            {t(E, "// XOR audit on x-coords", "// x 좌표 XOR 감사")}
+            {t(E, "// the three x values", "// 알고 있는 x 좌표 셋")}
           </div>
-          <div>x1 = {p.c1[0]}  <span style={{ color: "#64748b" }}>= {tx.ba}</span></div>
-          <div>x2 = {p.c2[0]}  <span style={{ color: "#64748b" }}>= {tx.bb}</span></div>
-          <div>x3 = {p.c3[0]}  <span style={{ color: "#64748b" }}>= {tx.bc}</span></div>
+          {[p.c1[0], p.c2[0], p.c3[0]].map((v, i) => (
+            <div key={i}>
+              x{i + 1} = {v}
+              {reveal && (
+                <span style={{ color: v === tx.pair ? "#64748b" : "#fbbf24" }}>
+                  {v === tx.pair ? t(E, "   (twice)", "   (두 번 나옴)") : t(E, "   (once)", "   (한 번만)")}
+                </span>
+              )}
+            </div>
+          ))}
           <div style={{ borderTop: "1px dashed #334155", margin: "4px 0", paddingTop: 4 }}>
             x4 = {reveal
               ? <b style={{ color: "#fbbf24" }}>{tx.val}</b>
               : <span style={{ color: "#475569" }}>?</span>}
-            {"  "}<span style={{ color: "#64748b" }}>
-              = {reveal ? tx.br : "????"}
-            </span>
           </div>
           <div style={{ height: 8 }} />
           <div style={{ color: "#94a3b8", marginBottom: 6 }}>
-            {t(E, "// XOR audit on y-coords", "// y 좌표 XOR 감사")}
+            {t(E, "// the three y values", "// 알고 있는 y 좌표 셋")}
           </div>
-          <div>y1 = {p.c1[1]}  <span style={{ color: "#64748b" }}>= {ty.ba}</span></div>
-          <div>y2 = {p.c2[1]}  <span style={{ color: "#64748b" }}>= {ty.bb}</span></div>
-          <div>y3 = {p.c3[1]}  <span style={{ color: "#64748b" }}>= {ty.bc}</span></div>
+          {[p.c1[1], p.c2[1], p.c3[1]].map((v, i) => (
+            <div key={i}>
+              y{i + 1} = {v}
+              {reveal && (
+                <span style={{ color: v === ty.pair ? "#64748b" : "#fbbf24" }}>
+                  {v === ty.pair ? t(E, "   (twice)", "   (두 번 나옴)") : t(E, "   (once)", "   (한 번만)")}
+                </span>
+              )}
+            </div>
+          ))}
           <div style={{ borderTop: "1px dashed #334155", margin: "4px 0", paddingTop: 4 }}>
             y4 = {reveal
               ? <b style={{ color: "#fbbf24" }}>{ty.val}</b>
               : <span style={{ color: "#475569" }}>?</span>}
-            {"  "}<span style={{ color: "#64748b" }}>
-              = {reveal ? ty.br : "????"}
-            </span>
           </div>
         </div>
       </div>
@@ -157,27 +167,37 @@ export function Mcc19Rect2AuditSim({ E }) {
       <div style={{
         marginTop: 10, padding: "8px 12px", fontSize: 12,
         background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 8,
-        color: "#92400e", lineHeight: 1.55,
+        color: "#92400e", lineHeight: 1.7,
+        whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance",
       }}>
         💡 {t(E,
-          "Each x value appears twice across the 4 corners, so a^a = 0 cancels them and XORing the 3 known values leaves the missing one. Same trick on y.",
-          "각 x 값은 4 꼭짓점에서 정확히 2 번 등장 → a^a = 0 으로 상쇄, 알려진 3 개 XOR 결과가 빠진 1 개. y 도 같은 원리.")}
+          "In a rectangle the same x value shows up at two corners. Among your three, one x appears twice and one appears alone — the lonely one belongs to the missing corner. Same for y.",
+          "직사각형에서는 같은 x 값이 두 꼭짓점에 나와요.\n가진 셋 중 하나는 두 번, 하나는 한 번만 나와요.\n한 번만 나온 그 값이 빠진 꼭짓점의 x 예요. y 도 똑같아요.")}
       </div>
     </div>
   );
 }
 
 const FULL_PY = [
-  "# Given 3 corners of a rectangle, find the 4th",
   "x1, y1 = map(int, input().split())",
   "x2, y2 = map(int, input().split())",
   "x3, y3 = map(int, input().split())",
   "",
-  "# XOR trick: x4 = x1 ^ x2 ^ x3, y4 = y1 ^ y2 ^ y3",
-  "# Works because in a rectangle, each coordinate",
-  "# appears exactly twice among the 4 corners",
-  "x4 = x1 ^ x2 ^ x3",
-  "y4 = y1 ^ y2 ^ y3",
+  "# 세 x 좌표 중 둘은 같아요. 한 번만 나온 값이 네 번째 점의 x 예요.",
+  "if x1 == x2:",
+  "    x4 = x3",
+  "elif x1 == x3:",
+  "    x4 = x2",
+  "else:",
+  "    x4 = x1",
+  "",
+  "# y 도 똑같이 해요.",
+  "if y1 == y2:",
+  "    y4 = y3",
+  "elif y1 == y3:",
+  "    y4 = y2",
+  "else:",
+  "    y4 = y1",
   "",
   "print(x4, y4)",
 ];
@@ -187,22 +207,31 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    // Given 3 corners of a rectangle, find the 4th",
-  "    int x1, y1;",
+  "    long long x1, y1, x2, y2, x3, y3;",
   "    cin >> x1 >> y1;",
-  "    int x2, y2;",
   "    cin >> x2 >> y2;",
-  "    int x3, y3;",
   "    cin >> x3 >> y3;",
   "",
-  "    // XOR trick: x4 = x1 ^ x2 ^ x3, y4 = y1 ^ y2 ^ y3",
-  "    // Works because in a rectangle, each coordinate",
-  "    // appears exactly twice among the 4 corners",
-  "    int x4 = x1 ^ x2 ^ x3;",
-  "    int y4 = y1 ^ y2 ^ y3;",
+  "    // 세 x 좌표 중 둘은 같아요. 한 번만 나온 값이 답이에요.",
+  "    long long x4;",
+  "    if (x1 == x2) {",
+  "        x4 = x3;",
+  "    } else if (x1 == x3) {",
+  "        x4 = x2;",
+  "    } else {",
+  "        x4 = x1;",
+  "    }",
+  "",
+  "    long long y4;",
+  "    if (y1 == y2) {",
+  "        y4 = y3;",
+  "    } else if (y1 == y3) {",
+  "        y4 = y2;",
+  "    } else {",
+  "        y4 = y1;",
+  "    }",
   "",
   "    cout << x4 << \" \" << y4 << \"\\n\";",
-  "",
   "    return 0;",
   "}",
 ];

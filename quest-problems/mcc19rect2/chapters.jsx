@@ -5,16 +5,25 @@ import { getMcc19Rect2Sections, Mcc19Rect2AuditSim } from "./components";
    SOLUTION CODE
    ================================================================ */
 export const SOLUTION_CODE = [
-  "# Given 3 corners of a rectangle, find the 4th",
   "x1, y1 = map(int, input().split())",
   "x2, y2 = map(int, input().split())",
   "x3, y3 = map(int, input().split())",
   "",
-  "# XOR trick: x4 = x1 ^ x2 ^ x3, y4 = y1 ^ y2 ^ y3",
-  "# Works because in a rectangle, each coordinate",
-  "# appears exactly twice among the 4 corners",
-  "x4 = x1 ^ x2 ^ x3",
-  "y4 = y1 ^ y2 ^ y3",
+  "# 세 x 좌표 중 둘은 같아요. 한 번만 나온 값이 네 번째 점의 x 예요.",
+  "if x1 == x2:",
+  "    x4 = x3",
+  "elif x1 == x3:",
+  "    x4 = x2",
+  "else:",
+  "    x4 = x1",
+  "",
+  "# y 도 똑같이 해요.",
+  "if y1 == y2:",
+  "    y4 = y3",
+  "elif y1 == y3:",
+  "    y4 = y2",
+  "else:",
+  "    y4 = y1",
   "",
   "print(x4, y4)",
 ];
@@ -65,14 +74,9 @@ export function makeMcc19Rect2Ch1(E) {
                         " 가 주어져요 (변이 x, y 축에 평행).")}
                 </div>
               </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
-                <div>
-                  {t(E,
-                    "In a rectangle, each x-coordinate appears exactly twice among the 4 corners, and the same for y.",
-                    "직사각형에서 각 x 좌표는 4 꼭짓점 중 정확히 2 번, y 좌표도 마찬가지.")}
-                </div>
-              </div>
+              {/* 2026-09-09: 여기 불릿이 "각 x 좌표는 4 꼭짓점 중 정확히 2 번 나온다" 는
+                  **핵심 관찰**을 도입에서 통째로 말해버렸다. 그게 이 문제의 전부다.
+                  6쪽(코드)에서 같은 문장을 또 반복할 뿐, 학생이 스스로 눈치챌 자리가 없었다. */}
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #6ee7b7" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
@@ -148,7 +152,8 @@ export function makeMcc19Rect2Ch1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Corners: (0,0), (2,0), (0,3).\nThe rectangle has x-values {0,2} and y-values {0,3}.\nWhat's the 4th corner?", "꼭짓점: (0,0), (2,0), (0,3). 직사각형의 x값은 {0,2}, y값은 {0,3}. 4번째 꼭짓점은?"),
+        "Corners: (0,0), (2,0), (0,3). Where must the 4th one be?",
+        "꼭짓점: (0,0), (2,0), (0,3). 4 번째는 어디에 있어야 할까요?"),
       question: t(E,
         "3 corners: (0,0), (2,0), (0,3). 4th corner?",
         "3개 꼭짓점: (0,0), (2,0), (0,3). 4번째 꼭짓점은?"),
@@ -159,8 +164,8 @@ export function makeMcc19Rect2Ch1(E) {
       ],
       correct: 0,
       explain: t(E,
-        "Correct! x4 = 0 XOR 2 XOR 0 = 2, y4 = 0 XOR 0 XOR 3 = 3. The 4th corner is (2, 3).",
-        "맞아! x4 = 0 XOR 2 XOR 0 = 2, y4 = 0 XOR 0 XOR 3 = 3. 4번째 꼭짓점은 (2, 3)."),
+        "The x values are 0, 2, 0 — the 0 appears twice, so the lonely 2 is the missing x. The y values are 0, 0, 3 — so the missing y is 3. The 4th corner is (2, 3).",
+        "x 값은 0, 2, 0 이에요 — 0 이 두 번 나오니 한 번만 나온 2 가 빠진 x 예요.\ny 값은 0, 0, 3 이니 빠진 y 는 3 이고요.\n4 번째 꼭짓점은 (2, 3) 이에요."),
     },
     // 1-3: Input
     {
@@ -170,17 +175,20 @@ export function makeMcc19Rect2Ch1(E) {
       question: t(E,
         "4th corner x-coordinate = ?",
         "4번째 꼭짓점의 x좌표 = ?"),
+      /* 2026-09-09: 힌트에 "x4 = 0 XOR 2 XOR 0 = 2" 라고 **답이 그대로** 있었다.
+         NumInput 은 힌트를 버튼 뒤가 아니라 입력칸 밑에 **항상** 그린다
+         (components/quest/shared.tsx). 그러니 힌트에 답 자체를 넣으면 안 된다. */
       hint: t(E,
-        "x4 = 0 XOR 2 XOR 0 = 2.",
-        "x4 = 0 XOR 2 XOR 0 = 2."),
+        "Three x values are given. Which one shows up only once?",
+        "x 값이 셋 있어요. 그중 한 번만 나온 값은 무엇일까요?"),
       answer: 2,
     },
-    // 1-4: Deep-audit sim (XOR bit inspector)
+    // 1-4: 숨은 꼭짓점 찾기 시뮬
     {
       type: "reveal",
       narr: t(E,
-        "Deep-audit sim: pick a preset, see the 3 known corners, then run XOR bit-by-bit on x and y to reveal the missing 4th corner.",
-        "정밀 감사 시뮬: 프리셋을 골라 알려진 3 꼭짓점을 보고, x 와 y 각각 비트 단위 XOR 로 빠진 4 번째 꼭짓점을 공개해요."),
+        "Pick a rectangle, look at the three corners you know, and find the fourth.",
+        "직사각형을 골라 아는 세 꼭짓점을 보고, 네 번째를 찾아봐요."),
       content: <Mcc19Rect2AuditSim E={E} />,
     },
   ];
@@ -196,8 +204,8 @@ export function makeMcc19Rect2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Each x coord appears exactly twice in a rectangle's 4 corners; same for y. XOR of all 4 x's = 0, so XOR of the 3 given x's gives the missing one.",
-        "직사각형 4 꼭짓점에서 각 x 좌표는 정확히 2 번 등장; y 도 동일. 4 개 x 의 XOR = 0 이므로, 주어진 3 개 x 의 XOR 이 빠진 1 개."),
+        "Three x values, one shows up alone — that one is the answer. Same for y.",
+        "x 값 셋 중 한 번만 나온 것이 답이에요. y 도 똑같고요."),
       content: (
         <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
           {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}

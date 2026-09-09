@@ -465,3 +465,16 @@ LineUpSim(이웃끼리 견줘 바꾸기)을 4쪽에 넣고, 마지막에 진한 
 코드가 길면 반드시 스크롤하게 되는데 그 순간 언어 전환·PDF 저장 수단을 잃는다.
 ⚠️ 한 quest 에서 고치지 마라 — 공용이라 전체를 한 번에.
 재현: `node scripts/see-screen.mjs <quest코드쪽url> --lang ko --mobile`
+
+### 내부 검토 용어가 학생 화면에 새어 나왔다 (14개 quest, 미착수)
+"Deep Audit" 이라는 **우리 검토 용어**가 학생이 보는 글자에 그대로 있다.
+번역도 제각각이다 — 정밀 감사 / 정밀 점검 / 심층 감사 / 심층 점검 / **딥 오딧** / 꼼꼼 검증.
+"딥 오딧" 은 음차어인데 뜻풀이가 없다 (`feedback_no_invented_terms.md` 위반).
+
+2026-09-09 에 mcc19rect2·mcc19rect 두 개만 고쳤다 ("숨은 꼭짓점 찾기" / "이웃끼리 한 칸씩 훑어보기").
+남은 곳 (학생이 보는 글자 기준 15곳 · quest 14개):
+  acowdemia3 · blockgame · clockfence · favperm2 · feb23 · interview ·
+  mco15badminton(2) · mco15secret · moolang · photoshoot20 · productivity · 그 외
+세는 법:
+  t(E, …) 의 한국어 자리에서 위 표현을 찾는다. 컴포넌트 이름(DeepAuditSim)은 학생이 안 보니 제외.
+⚠️ 이름만 바꾸지 말고 **그 쪽이 학생에게 무엇을 시키는지**로 다시 지어라.

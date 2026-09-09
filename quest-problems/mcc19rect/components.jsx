@@ -100,7 +100,7 @@ export function ConsecutiveDiffScanSim({ E }) {
       borderRadius: 12, padding: 14,
     }}>
       <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", marginBottom: 10, letterSpacing: 0.3 }}>
-        🔬 {t(E, "Deep Audit — Consecutive Diff Scan", "정밀 점검 — 인접 차이 스캔")}
+        🔎 {t(E, "Walk the row, one neighbour at a time", "이웃끼리 한 칸씩 훑어보기")}
       </div>
 
       {/* Array cells */}
