@@ -9,7 +9,7 @@ export const SOLUTION_CODE = [
   "x2, y2 = map(int, input().split())",
   "x3, y3 = map(int, input().split())",
   "",
-  "# 세 x 좌표 중 둘은 같아요. 한 번만 나온 값이 네 번째 점의 x 예요.",
+  "# 세 x 좌표 중 둘은 같아요. 짝 없는 하나가 네 번째 점의 x 예요.",
   "if x1 == x2:",
   "    x4 = x3",
   "elif x1 == x3:",
@@ -165,7 +165,7 @@ export function makeMcc19Rect2Ch1(E) {
       correct: 0,
       explain: t(E,
         "The x values are 0, 2, 0 — the 0 appears twice, so the lonely 2 is the missing x. The y values are 0, 0, 3 — so the missing y is 3. The 4th corner is (2, 3).",
-        "x 값은 0, 2, 0 이에요 — 0 이 두 번 나오니 한 번만 나온 2 가 빠진 x 예요.\ny 값은 0, 0, 3 이니 빠진 y 는 3 이고요.\n4 번째 꼭짓점은 (2, 3) 이에요."),
+        "x 값은 0, 2, 0 이에요 — 0 이 두 번 나오니 짝이 없는 2 가 빠진 x 예요.\ny 값은 0, 0, 3 이니 빠진 y 는 3 이고요.\n4 번째 꼭짓점은 (2, 3) 이에요."),
     },
     // 1-3: Input
     {
@@ -179,8 +179,8 @@ export function makeMcc19Rect2Ch1(E) {
          NumInput 은 힌트를 버튼 뒤가 아니라 입력칸 밑에 **항상** 그린다
          (components/quest/shared.tsx). 그러니 힌트에 답 자체를 넣으면 안 된다. */
       hint: t(E,
-        "Three x values are given. Which one shows up only once?",
-        "x 값이 셋 있어요. 그중 한 번만 나온 값은 무엇일까요?"),
+        "Three x values are given. Which one has no partner?",
+        "x 값이 셋 있어요. 그중 짝 없는 값은 무엇일까요?"),
       answer: 2,
     },
     // 1-4: 숨은 꼭짓점 찾기 시뮬
@@ -204,8 +204,8 @@ export function makeMcc19Rect2Ch2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Three x values, one shows up alone — that one is the answer. Same for y.",
-        "x 값 셋 중 한 번만 나온 것이 답이에요. y 도 똑같고요."),
+        "Three x values: two of them pair up, and the one left without a partner is the answer. Same for y.",
+        "x 값 셋 중 짝 없는 하나가 답이에요. y 도 똑같고요."),
       content: (
         <div style={{ padding: 16, fontSize: 12, color: C.dim, fontWeight: 400, textAlign: "center" }}>
           {t(E, "↓ code section by section below.", "↓ 코드 섹션이 아래에 한 단락씩 나와요.")}

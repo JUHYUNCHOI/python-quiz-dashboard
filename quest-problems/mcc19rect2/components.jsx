@@ -132,7 +132,7 @@ export function Mcc19Rect2AuditSim({ E }) {
               x{i + 1} = {v}
               {reveal && (
                 <span style={{ color: v === tx.pair ? "#64748b" : "#fbbf24" }}>
-                  {v === tx.pair ? t(E, "   (twice)", "   (두 번 나옴)") : t(E, "   (once)", "   (한 번만)")}
+                  {v === tx.pair ? t(E, "   (twice)", "   (두 번 나옴)") : t(E, "   (alone)", "   (짝 없음)")}
                 </span>
               )}
             </div>
@@ -151,7 +151,7 @@ export function Mcc19Rect2AuditSim({ E }) {
               y{i + 1} = {v}
               {reveal && (
                 <span style={{ color: v === ty.pair ? "#64748b" : "#fbbf24" }}>
-                  {v === ty.pair ? t(E, "   (twice)", "   (두 번 나옴)") : t(E, "   (once)", "   (한 번만)")}
+                  {v === ty.pair ? t(E, "   (twice)", "   (두 번 나옴)") : t(E, "   (alone)", "   (짝 없음)")}
                 </span>
               )}
             </div>
@@ -171,8 +171,8 @@ export function Mcc19Rect2AuditSim({ E }) {
         whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance",
       }}>
         💡 {t(E,
-          "In a rectangle the same x value shows up at two corners. Among your three, one x appears twice and one appears alone — the lonely one belongs to the missing corner. Same for y.",
-          "직사각형에서는 같은 x 값이 두 꼭짓점에 나와요.\n가진 셋 중 하나는 두 번, 하나는 한 번만 나와요.\n한 번만 나온 그 값이 빠진 꼭짓점의 x 예요. y 도 똑같아요.")}
+          "In a rectangle the same x value shows up at two corners. Among your three, one x appears twice and one appears alone — the one left without a partner belongs to the missing corner. Same for y.",
+          "직사각형에서는 같은 x 값이 두 꼭짓점에 나와요.\n가진 셋 중 둘은 짝이 되고, 하나는 짝이 없어요.\n짝 없는 그 값이 빠진 꼭짓점의 x 예요. y 도 똑같아요.")}
       </div>
     </div>
   );
@@ -183,7 +183,7 @@ const FULL_PY = [
   "x2, y2 = map(int, input().split())",
   "x3, y3 = map(int, input().split())",
   "",
-  "# 세 x 좌표 중 둘은 같아요. 한 번만 나온 값이 네 번째 점의 x 예요.",
+  "# 세 x 좌표 중 둘은 같아요. 짝 없는 하나가 네 번째 점의 x 예요.",
   "if x1 == x2:",
   "    x4 = x3",
   "elif x1 == x3:",
@@ -212,7 +212,7 @@ const FULL_CPP = [
   "    cin >> x2 >> y2;",
   "    cin >> x3 >> y3;",
   "",
-  "    // 세 x 좌표 중 둘은 같아요. 한 번만 나온 값이 답이에요.",
+  "    // 세 x 좌표 중 둘은 같아요. 짝 없는 하나가 답이에요.",
   "    long long x4;",
   "    if (x1 == x2) {",
   "        x4 = x3;",

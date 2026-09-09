@@ -25,7 +25,10 @@ function pairing(v1, v2, v3) {
 }
 
 function RectCornerSim({ E }) {
-  const [pi, setPi] = useState(0);
+  /* 2026-09-09: 시뮬이 2쪽 예제(0,0)(0,3)(3,3)와 **같은 것**부터 보여줬다.
+     학생: "이거 방금 본 건데." 다른 예제부터 시작한다.
+     공식 예제는 프리셋에 그대로 있으니 눌러서 볼 수 있다. */
+  const [pi, setPi] = useState(1);
   const [stage, setStage] = useState(0); // 0 given · 1 x · 2 y · 3 answer
 
   const preset = PRESETS[pi];
@@ -299,7 +302,7 @@ export function makeMcc15RectCh1(E) {
       type: "reveal",
       narr: t(E,
         "Three lines come in, one point per line. One line goes out with the fourth point.",
-        "입력은 세 줄, 한 줄에 한 점씩 들어와요. 출력은 네 번째 점 한 줄이에요."),
+        "입력은 세 줄, 출력은 한 줄이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
@@ -336,10 +339,14 @@ export function makeMcc15RectCh1(E) {
               <div style={{ fontWeight: 800 }}>3 0</div>
             </div>
           </div>
-          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+          {/* 2026-09-09: 여기서 답(3 0)과 풀이 근거를 **다 말해버렸다.**
+              학생: "2쪽에서 답까지 설명해줘서 그 뒤로는 확인만 하면 됐다."
+              형제 quest mcc19rect2 는 같은 자리를 이미 다음 쪽으로 미뤄놨다.
+              형식 쪽은 형식만. 찾는 건 시뮬 몫이다. */}
+          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, ...KA }}>
             {t(E,
-              "The x's are 0, 0, 3 — the 0's pair up, so 3 is lonely. The y's are 0, 3, 3 — the 3's pair up, so 0 is lonely. Answer: 3 0.",
-              "x 는 0, 0, 3 — 0 끼리 짝이라 3 이 짝 없는 값. y 는 0, 3, 3 — 3 끼리 짝이라 0 이 짝 없는 값. 답: 3 0.")}
+              "Why 3 0? Find it yourself on the next page.",
+              "왜 3 0 일까요? 다음 쪽에서 직접 찾아봐요.")}
           </div>
         </div>),
     },
@@ -349,7 +356,7 @@ export function makeMcc15RectCh1(E) {
       type: "reveal",
       narr: t(E,
         "Try it yourself: find the lonely x, then the lonely y, then watch the fourth corner appear.",
-        "직접 해봐요: 짝 없는 x 를 찾고, 짝 없는 y 를 찾으면, 네 번째 꼭짓점이 나타나요."),
+        "직접 해봐요. 세 점의 x 끼리, y 끼리 견줘봐요."),
       content: <RectCornerSim E={E} />,
     },
 
