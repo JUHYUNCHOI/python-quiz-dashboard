@@ -22,7 +22,14 @@ const CELL = 34, GAP = 3;
     quest_problem_standard 의 "관찰 → 추론, 답 미리 X".) */
 export function CornerCoverSim({ E, reveal = true }) {
   const n = 4, m = 5;                     // 고정 격자 (숫자가 작아야 눈이 따라옴)
-  const [h, setH] = useState(4);          // 부분격자 세로
+  /* 2026-09-09: 기본값이 h=4(=n), w=2 였다. 그러면 화면을 **열자마자**
+     "지금 덮은 코너: 2 / 4 ✅" 가 떠 있었다 — h==n 이라 이미 성공 상태다.
+     바로 위 안내가 "코너 2개를 잡는 크기와 아무리 옮겨도 못 잡는 크기를 찾아보세요"
+     인데, 찾으라는 것의 절반이 이미 찾아져 있었다.
+     h=2, w=2 로 시작한다 — 격자 안에 들어가지만(fits) 어느 변도 꽉 채우지 못해
+     아무리 옮겨도 코너는 최대 1개다. 학생이 직접 슬라이더를 움직여야
+     "2개 잡히는 순간" 을 만난다. */
+  const [h, setH] = useState(2);          // 부분격자 세로
   const [w, setW] = useState(2);          // 부분격자 가로
   const [r, setR] = useState(1);          // 놓은 위치 (1-indexed)
   const [c, setC] = useState(1);
