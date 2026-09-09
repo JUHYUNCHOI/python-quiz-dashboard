@@ -380,7 +380,7 @@ export function makeFencesCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's make sure you got it!\nIn the grid we just saw, the grass counts were [3, 1, 2, 0].\nWhich column should we pick?", "제대로 이해했는지 확인! 방금 본 그리드에서 점 수가 [3, 1, 2, 0]이었어. 어떤 열을 골라야 해요?"),
+        "Let's make sure you got it!\nIn the grid we just saw, the grass counts were [3, 1, 2, 0].\nWhich column should we pick?", "제대로 이해했는지 확인해요! 방금 본 그리드에서 풀 수가 [3, 1, 2, 0] 이었어요.\n어떤 열을 골라야 할까요?"),
       question: t(E,
         "Dot counts: 1st=3, 2nd=1, 3rd=2, 4th=0. Pick which?",
         "풀 수: 1열=3, 2열=1, 3열=2, 4열=0. 어떤 열?"),
@@ -407,7 +407,7 @@ export function makeFencesCh2(E) {
     {
       type: "fenceColumnScanner",
       narr: t(E,
-        "Press ▶ Scan to watch!\nIt counts grass in each column, one by one.\nThen try it yourself!\n👀", "▶ 스캔을 눌러봐요! 각 열의 점을 하나씩 세는 걸 볼 수 있어요. 풀이 가장 적은 열이 가장 싸! 그다음 직접 해봐요! 👀"),
+        "Press ▶ Scan to watch!\nIt counts grass in each column, one by one.\nThen try it yourself!\n👀", "▶ 스캔을 눌러봐요! 각 열의 풀을 하나씩 세는 걸 볼 수 있어요.\n그다음 직접 해봐요! 👀"),
     },
     // 2-2: Observation quiz
     {
@@ -555,7 +555,7 @@ export function makeFencesCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We need to count dots per column.\nSo we make a list with M zeros — one slot for each column!", "열마다 풀을 세야 하니까, M개의 0이 들어간 리스트를 만들어야 해 — 열마다 자리 하나!"),
+        "We need to count dots per column.\nSo we make a list with M zeros — one slot for each column!", "열마다 풀을 세야 하니까, M개의 0이 들어간 리스트를 만들어요 — 열마다 자리 하나!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", marginBottom: 6 }}>
@@ -563,7 +563,7 @@ export function makeFencesCh3(E) {
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6, whiteSpace: "pre-line" }}>
             {t(E,
-              "5 columns → count = [0, 0, 0, 0, 0].\nEach slot will store how much grass that column has.", "5열이면 → count = [0, 0, 0, 0, 0].\n각 칸에 그 열의 점 수를 저장할 거예요.")}
+              "5 columns → count = [0, 0, 0, 0, 0].\nEach slot will store how much grass that column has.", "5열이면 → count = [0, 0, 0, 0, 0].\n각 칸에 그 열의 풀 수를 저장할 거예요.")}
           </div>
           <CodeSnippet
             lines={["N, M = map(int, input().split())", "count = [0] * M"]}

@@ -78,7 +78,7 @@ function OddEvenPileSim({ E }) {
         <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", marginBottom: 8 }}>
           🟠⚪ {t(E, "Split into ODD and EVEN piles", "홀수·짝수 더미로 나누기")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12, whiteSpace: "pre-line" }}>
           {touched
             ? t(E,
             "A sum of 3 numbers is ODD in only two recipes: three odds, or one odd + two evens. So forget picking triples — just count odds and evens.",
@@ -294,7 +294,7 @@ export function makeMcc21CarrotsCh1(E) {
               <div style={{ fontWeight: 800 }}>YES</div>
             </div>
           </div>
-          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA, whiteSpace: "pre-line" }}>
             {t(E,
               /* 2026-09-09: 여기에 세 샘플의 합을 직접 계산해 답의 근거까지 다 적어놨다.
                  형식 카드는 "각 줄이 무엇인지" 까지가 몫이고, "왜 그 답인지" 는
