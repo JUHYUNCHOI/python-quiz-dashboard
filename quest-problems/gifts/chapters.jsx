@@ -127,9 +127,15 @@ export function makeGiftsCh1(E) {
         t(E, "It was decided at random", "무작위로 정해졌어요"),
       ],
       correct: 0,
+      /* 2026-09-09(2차): 여기 explain 이 정렬 결과(2,4,7,1,3,5,8,6)와 당락 이유까지 다 계산해줬다.
+         그런데 **바로 다음 쪽 시뮬이 정확히 그 장면**을 15클릭에 걸쳐 보여준다
+         (sims.jsx 주석: "같은 티어(5)인 손님 5·8 에서 갈리는 순간이 이 문제의 전부").
+         능동 스텝 0개를 고치려고 넣은 퀴즈가 시뮬을 죽인 것이다 —
+         오늘 아홉 번 고친 바로 그 병(앞이 답을 말해서 뒤가 재확인이 됨)을 내가 새로 만들었다.
+         pedagogy 검토가 잡았다. 규칙 재확인 선에서 끊고 결과는 시뮬 몫으로 돌린다. */
       explain: t(E,
-        "Inside one tier, the earlier guest number wins. Line everyone up by tier and you get 2, 4, 7, 1, 3, 5, 8, 6. With 6 gifts, guest 5 sits just inside the first six and guest 8 just outside — that is the 0 in the 8th place.",
-        "같은 티어 안에서는 번호가 앞선 손님이 받아요.\n티어 순으로 줄을 세우면 2, 4, 7, 1, 3, 5, 8, 6 이 돼요.\n선물이 6개니까 손님 5 는 아슬아슬하게 들어오고 손님 8 은 밀려나요.\n그게 8번째 자리의 0 이에요."),
+        "Inside one tier, the earlier guest number wins. Watch the line form on the next page and see where guest 8 lands.",
+        "같은 티어 안에서는 번호가 앞선 손님이 받아요.\n다음 쪽에서 줄이 서는 걸 보면서 손님 8 이 어디에 놓이는지 봐요."),
     },
 
     /* [전] 시뮬 — 줄 서는 장면과 선물이 떨어지는 순간 */

@@ -347,9 +347,14 @@ export function makeExplodingArrowCh1(E) {
               <div><b>N M K</b> — {t(E, "targets, damage scale, arrows", "표적 수, 데미지 배율, 화살 수")}</div>
               <div><b>a[0] … a[N−1]</b> — {t(E, "each target's health", "각 표적의 체력")}</div>
             </div>
-            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fde68a" }}>
-              {t(E, "Limits: N ≤ 2·10^5; M, K, a[i] ≤ 10^9. Products reach 10^14 — very large numbers.",
-                  "제약: N ≤ 2·10^5; M, K, a[i] ≤ 10^9. 곱하면 10^14 까지 가요 — 아주 큰 수예요.")}
+            <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fde68a", whiteSpace: "pre-line", lineHeight: 1.65 }}>
+              {/* 2026-09-09: 여기에 "곱하면 10^14 까지 가요" 라고 썼는데 **근거 없는 숫자였다.**
+                  "64비트 사용" 이라는 C++ 얘기를 걷어내면서 크기 표현으로 바꾸다가 내가 지어냈고,
+                  quest-auditor 가 "무엇의 곱인지 밝히지 않은 검증 불가능한 정밀한 숫자" 라고 잡았다.
+                  실제로 계산하면 이 문제에서 제일 커지는 값은 `a[j] + j²` 이고,
+                  a[j] ≤ 10^9 · j ≤ 2·10^5 이면 10^9 + (2·10^5)² ≈ 410억이다. 그 숫자를 쓴다. */}
+              {t(E, "Limits: N <= 2*10^5; M, K, a[i] <= 10^9. Health plus distance squared can reach about 41 billion.",
+                  "제약: N ≤ 2·10^5; M, K, a[i] ≤ 10^9.\n체력 + 거리² 가 410억까지 커져요 — 아주 큰 수예요.")}
             </div>
           </div>
 
