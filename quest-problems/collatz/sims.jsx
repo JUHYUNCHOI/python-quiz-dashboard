@@ -84,7 +84,7 @@ export function CollatzStepSim({ E }) {
   const isEven = cur != null && cur % 2 === 0;
 
   const say =
-    s.kind === "intro" ? t(E, <>Here's the list <b>[1, 2, 3, 4, 5]</b>. Let's run the procedure <b>once</b> (k = 1): each number, if even <b>÷2</b>, if odd <b>×3+1</b>.</>,
+    s.kind === "intro" ? t(E, <>Here's the list <b>[1, 2, 3, 4, 5]</b>. Let's run <b>one pass</b> (k = 1): each number, if even <b>÷2</b>, if odd <b>×3+1</b>.</>,
                             <>리스트 <b>[1, 2, 3, 4, 5]</b> 가 있어요. <b>한 바퀴</b>(k = 1) 돌려봐요: 숫자마다 짝수면 <b>÷2</b>, 홀수면 <b>×3+1</b>.</>)
     : s.kind === "elem"
       ? (isEven
@@ -98,7 +98,7 @@ export function CollatzStepSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Run the procedure once (k = 1)", "한 바퀴 돌려보기 (k = 1)")}
+        title={t(E, "Run one pass (k = 1)", "한 바퀴 돌려보기 (k = 1)")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Say tone={s.kind === "sum" ? "aha" : s.kind === "elem" ? (isEven ? "even" : "odd") : "go"}>{say}</Say>
 

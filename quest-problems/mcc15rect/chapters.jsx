@@ -303,7 +303,7 @@ export function makeMcc15RectCh1(E) {
       type: "reveal",
       narr: t(E,
         "Three lines come in, one point per line. One line goes out with the fourth point.",
-        "입력은 세 줄, 출력은 한 줄이에요."),
+        "한 줄에 한 점씩 세 줄이 들어오고, 네 번째 점 한 줄이 나가요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 10, ...KA }}>
