@@ -348,8 +348,8 @@ export function makeExplodingArrowCh1(E) {
               <div><b>a[0] … a[N−1]</b> — {t(E, "each target's health", "각 표적의 체력")}</div>
             </div>
             <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fde68a" }}>
-              {t(E, "Limits: N ≤ 2·10^5; M, K, a[i] ≤ 10^9. Everything is big — use 64-bit integers.",
-                  "제약: N ≤ 2·10^5; M, K, a[i] ≤ 10^9. 값이 커요 — 64비트 정수 사용.")}
+              {t(E, "Limits: N ≤ 2·10^5; M, K, a[i] ≤ 10^9. Products reach 10^14 — very large numbers.",
+                  "제약: N ≤ 2·10^5; M, K, a[i] ≤ 10^9. 곱하면 10^14 까지 가요 — 아주 큰 수예요.")}
             </div>
           </div>
 

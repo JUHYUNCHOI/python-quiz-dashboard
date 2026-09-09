@@ -83,9 +83,15 @@ function CollatzRecap({ E }) {
         <Row q={t(E, "Do the whole pass ...", "이 한 바퀴를 ...")} res={t(E, "k times", "k번")} />
         <Row q={t(E, "Finally", "마지막에")} res={t(E, "sum", "합")} />
       </div>
-      <div style={{ maxWidth: 470, margin: "14px auto 0", background: "#fffbeb", border: "1px solid #fbbf24", borderRadius: 10, padding: "10px 13px", fontSize: 12, color: "#92400e", lineHeight: 1.7, wordBreak: "keep-all", textAlign: "center" }}>
-        {t(E, "n · k ≤ 10⁶, so a plain simulation is fast enough. (But 3×+1 can grow — use 64-bit / long long.)",
-             "n · k ≤ 10⁶ 라 그냥 시뮬로 충분히 빨라요. (단 3×+1 로 값이 커질 수 있으니 64비트 / long long 사용.)")}
+      <div style={{ maxWidth: 470, margin: "14px auto 0", background: "#fffbeb", border: "1px solid #fbbf24", borderRadius: 10, padding: "10px 13px", fontSize: 12, color: "#92400e", lineHeight: 1.7, wordBreak: "keep-all", whiteSpace: "pre-line", textAlign: "center" }}>
+        {/* 2026-09-09: 전에는 "값이 커질 수 있으니 64비트 / long long 사용" 이었다.
+            학생이 "왜 커지는지, 얼마나 커지는지 숫자가 없어서 그냥 넘어갔다" 고 했다.
+            게다가 MCC 는 codeLang="py" 고정이라 학생은 C++ 을 볼 수도 없다.
+            그래서 실제 최댓값을 계산해서 넣었다 — 시작값 1~10000 전부를 1000단계까지
+            돌려보면 9663 이 48번째에 27,114,424 로 최고점을 찍는다. 리스트 1000칸이
+            전부 9663 이면 그 순간 합은 271억이다. */}
+        {t(E, "n · k <= 10^6, so a plain simulation is fast enough. But the numbers get big: 9663 becomes 27,114,424 after 48 rounds, and 1000 of those add up to 27 billion.",
+             "n · k ≤ 10⁶ 라 그냥 시뮬로 충분히 빨라요.\n단 값이 꽤 커져요 — 9663 은 48번 만에 27,114,424 가 되고, 그런 수가 1000개면 합이 271억이에요.")}
       </div>
       <div style={{ textAlign: "center", marginTop: 14, fontSize: 12, color: C.dim, wordBreak: "keep-all" }}>
         {t(E, "Now let's read the code that does exactly this →", "이제 이걸 그대로 하는 코드를 봐요 →")}

@@ -197,14 +197,16 @@ export function getMcc21MarblesSections(E) {
             "D[i] = A[i] − B[i] 로 바꿔 생각해요: 상자 i 는 남거나(D>0) 모자라요(D<0). 구슬은 이웃 사이의 경계만 건너요."),
         t(E, "Whatever imbalance sits to the LEFT of a boundary must cross it. That amount is the running prefix of D, so the answer = sum of |prefix| at every boundary — one left-to-right O(N) pass.",
             "경계 왼쪽에 남은 불균형은 반드시 그 경계를 건너야 해요. 그 양이 D 의 누적(prefix) 이므로, 답 = 경계마다 |누적| 의 합 — 왼쪽부터 O(N) 한 번 훑기."),
-        t(E, "Use 64-bit (long long): sum(A) can reach 5·10¹¹, far beyond 32-bit range.",
-            "64비트(long long) 사용: sum(A) 가 5·10¹¹ 까지라 32비트 범위를 훌쩍 넘어요."),
       ],
       pyOnly: [
         t(E, "Python ints are unbounded, so abs(carry) never overflows — no special type needed.",
             "Python 정수는 크기 제한이 없어서 abs(carry) 가 넘칠 일이 없어요 — 특별한 타입 불필요."),
       ],
       cppOnly: [
+        /* 2026-09-09: why(항상 보임)에 있던 C++ 타입 얘기를 여기로 옮겼다.
+           MCC 는 codeLang="py" 고정이라 파이썬 학생이 볼 일이 없다. */
+        t(E, "Use 64-bit (long long): sum(A) can reach 5·10¹¹, far beyond 32-bit range.",
+            "64비트(long long) 사용: sum(A) 가 5·10¹¹ 까지라 32비트 범위를 훌쩍 넘어요."),
         t(E, "Declare A, B, carry, ops as long long — totals up to 5·10¹¹ overflow a 32-bit int.",
             "A, B, carry, ops 를 long long 으로 — 합이 5·10¹¹ 까지라 32비트 int 는 넘쳐요."),
         t(E, "Read A fully, then B fully (two separate loops) — they arrive on two lines.",

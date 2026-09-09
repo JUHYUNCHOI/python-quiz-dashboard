@@ -301,7 +301,7 @@ export function makeMcc22CardSharkCh1(E) {
               <div>• {t(E, "then n stack lines: ", "그다음 n 개의 스택 줄: ")}<b>m c1 c2 … c_m</b> {t(E, "(top → bottom)", "(위 → 아래)")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Limits: T ≤ 10, n ≤ 10^5, |c| ≤ 10^9, total cards ≤ 2·10^5. Use 64-bit sums.", "제약: T ≤ 10, n ≤ 10^5, |c| ≤ 10^9, 전체 카드 수 ≤ 2·10^5. 합계는 64비트.")}
+              {t(E, "Limits: T ≤ 10, n ≤ 10^5, |c| ≤ 10^9, total cards ≤ 2·10^5.", "제약: T ≤ 10, n ≤ 10^5, |c| ≤ 10^9, 전체 카드 수 ≤ 2·10^5.")}
             </div>
           </div>
 

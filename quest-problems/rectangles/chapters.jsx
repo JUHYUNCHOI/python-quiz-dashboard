@@ -69,8 +69,8 @@ function RectanglesSample({ E }) {
       </div>
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
-        {t(E, "📌 Constraints: N ≤ 200 · K ≤ 10⁹ · each h, w ≤ 1000. Area can be large → use 64-bit.",
-             "📌 제약: N ≤ 200 · K ≤ 10⁹ · 각 h, w ≤ 1000. 면적이 커질 수 있어 → 64비트 필요.")}
+        {t(E, "📌 Constraints: N ≤ 200 · K ≤ 10⁹ · each h, w ≤ 1000. Areas add up to something huge.",
+             "📌 제약: N ≤ 200 · K ≤ 10⁹ · 각 h, w ≤ 1000. 면적을 다 더하면 아주 커져요.")}
       </div>
     </div>
   );

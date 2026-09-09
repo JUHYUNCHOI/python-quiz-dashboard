@@ -51,8 +51,8 @@ function InnovationSample({ E }) {
       </div>
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all" }}>
-        {t(E, "📌 1 ≤ m ≤ n ≤ 20000 · each value ≤ 10⁹ → the sum can be large, use 64-bit.",
-             "📌 1 ≤ m ≤ n ≤ 20000 · 각 값 ≤ 10⁹ → 합이 커질 수 있어 64비트 필요.")}
+        {t(E, "📌 1 ≤ m ≤ n ≤ 20000 · each value ≤ 10⁹ → adding them all reaches 2·10¹³.",
+             "📌 1 ≤ m ≤ n ≤ 20000 · 각 값 ≤ 10⁹ → 다 더하면 2·10¹³ 까지 가요.")}
       </div>
     </div>
   );

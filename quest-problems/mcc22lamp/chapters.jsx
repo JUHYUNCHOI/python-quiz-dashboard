@@ -163,8 +163,8 @@ export function makeMcc22LampCh1(E) {
             </div>
             <div style={{ fontSize: 12, color: C.dim, marginTop: 8 }}>
               {t(E,
-                "Limits: T ≤ 2×10⁵, n ≤ 2×10⁵ (Σn ≤ 10⁵), k ≤ 10¹⁸, |p| ≤ 10¹², b ≤ 10¹². Use big integers / 64-bit.",
-                "제약: T ≤ 2×10⁵, n ≤ 2×10⁵ (Σn ≤ 10⁵), k ≤ 10¹⁸, |p| ≤ 10¹², b ≤ 10¹². 큰 정수 / 64비트 필요.")}
+                "Limits: T ≤ 2×10⁵, n ≤ 2×10⁵ (Σn ≤ 10⁵), k ≤ 10¹⁸, |p| ≤ 10¹², b ≤ 10¹².",
+                "제약: T ≤ 2×10⁵, n ≤ 2×10⁵ (Σn ≤ 10⁵), k ≤ 10¹⁸, |p| ≤ 10¹², b ≤ 10¹².")}
             </div>
           </div>
 

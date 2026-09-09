@@ -102,7 +102,7 @@ export function makeMcc21MarblesCh1(E) {
               <div>• <b>B</b> — {t(E, "N integers: the TARGET count of each box", "N 개 정수: 각 상자의 목표 개수")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Limits: 1 ≤ N ≤ 5·10⁴, sum(A) ≤ 5·10¹¹ (use 64-bit), sum(A) = sum(B).", "제약: 1 ≤ N ≤ 5·10⁴, sum(A) ≤ 5·10¹¹ (64비트 사용), sum(A) = sum(B).")}
+              {t(E, "Limits: 1 ≤ N ≤ 5·10⁴, sum(A) ≤ 5·10¹¹, sum(A) = sum(B).", "제약: 1 ≤ N ≤ 5·10⁴, sum(A) ≤ 5·10¹¹, sum(A) = sum(B).")}
             </div>
           </div>
 

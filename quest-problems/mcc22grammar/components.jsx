@@ -394,14 +394,14 @@ export function getMcc22GrammarSections(E) {
             "문법은 변하지 않으니 adj[x] = x 다음에 올 수 있는 단어 집합 을 코드에 그대로 적어둬요. 집합/맵 조회는 한 번에 끝나요 — 매번 간선 목록을 훑을 필요가 없어요."),
         t(E, "Two failure checks: ① every word must be a key of adj (one of the 5), and ② for each neighbor pair, words[i+1] must be in adj[words[i]]. Fail either one → NO.",
             "실패 검사 두 가지: ① 모든 단어가 adj 의 키 (5개 중 하나) 여야 하고, ② 이웃한 쌍마다 words[i+1] 이 adj[words[i]] 안에 있어야 해요. 하나라도 어기면 → NO."),
-        t(E, "The C++ version uses map<string,set<string>> for the same instant lookup; cin >> reads T, then n and n words per test.",
-            "C++ 버전은 같은 즉시 조회를 위해 map<string,set<string>> 를 써요; cin >> 로 T 를 읽고, 테스트마다 n 과 n 개 단어를 읽어요."),
       ],
       pyOnly: [
         t(E, "'w in adj' checks the keys (the 5 words); 'words[i+1] in adj[words[i]]' checks the arrow — both are O(1) set lookups.",
             "'w in adj' 는 키 (5개 단어) 를, 'words[i+1] in adj[words[i]]' 는 화살표를 확인해요 — 둘 다 O(1) 집합 조회예요."),
       ],
       cppOnly: [
+        t(E, "The C++ version uses map<string,set<string>> for the same instant lookup; cin >> reads T, then n and n words per test.",
+            "C++ 버전은 같은 즉시 조회를 위해 map<string,set<string>> 를 써요; cin >> 로 T 를 읽고, 테스트마다 n 과 n 개 단어를 읽어요."),
         t(E, "adj.find(w) == adj.end() means the word is not a key — an unknown word (check ①).",
             "adj.find(w) == adj.end() 는 그 단어가 키에 없다는 뜻 — 없는 단어예요 (검사 ①)."),
         t(E, "adj[words[i]].count(words[i+1]) == 0 means there is no arrow between the pair (check ②).",
