@@ -14,10 +14,18 @@ const KA = { wordBreak: "keep-all" };
    The student steps through the 8 candidates one by one and
    watches the left value vs the right value until ✅ appears.
    ───────────────────────────────────────────────────────────── */
+/* 2026-09-09: 전에는 [[13,2,15], [3,2,1], [2,3,6]] 이었다. 두 가지가 틀렸다.
+   ① [3,2,1] 은 **정답이 둘이다** — 3=2+1 과 3-2=1 둘 다 참.
+      화면(:307)이 "답은 유일하게 존재하도록 주어져요" 라고 약속해 놓고 그걸 깼다.
+      원문에서 3 2 1 은 입력 예제가 **아니라** "둘 다 올바른 등식이다" 를 보여주는
+      규칙 설명용 예시였는데(:271), 그걸 시뮬 입력으로 가져다 쓴 것이 사고의 뿌리다.
+   ② 기본 예제 [13,2,15] 는 **첫 후보에서 바로 맞아서** "8개를 다 봐야 한다" 가 안 느껴졌다.
+   그래서 기본값을 4번 실패 후 성공하는 [2,3,6] 으로 옮기고, [3,2,1] 은 정답이 유일한
+   [1,3,2](1 = 3 − 2) 로 갈았다. 셋 다 정답 유일함을 전수 계산으로 확인했다. */
 const EXAMPLES = [
-  [13, 2, 15],
-  [3, 2, 1],
   [2, 3, 6],
+  [13, 2, 15],
+  [1, 3, 2],
 ];
 const OPS = ["+", "-", "*", "/"];
 
@@ -27,6 +35,25 @@ const CANDS = [];
 for (const op of OPS) {
   CANDS.push({ eqFirst: false, op });   // a op b = c
   CANDS.push({ eqFirst: true, op });    // a = b op c
+}
+
+/* 개발 중에만 도는 안전장치 (2026-09-09).
+   화면(:307)이 "답은 유일하게 존재하도록 주어져요" 라고 약속한다. 그런데 시뮬은
+   검증카드를 `ok`(그 칸만 독립 계산)로, 아래 문장을 `firstHit === i`(처음 맞은 것)로
+   따로 판정한다. 정답이 둘인 예제를 넣으면 두 판정이 갈려서 한 화면에
+   "✅ 이게 답이에요" 와 "이 후보는 아니에요" 가 **동시에** 뜬다 — 실제로 그랬다.
+   이중 판정 자체는 교육적으로 정당해서 그대로 두고, 대신 예제를 새로 넣을 때
+   콘솔에서 바로 걸리게 한다. 프로덕션에서는 안 돈다. */
+if (process.env.NODE_ENV !== "production") {
+  for (const [a, b, c] of EXAMPLES) {
+    const n = CANDS.filter((d) =>
+      d.eqFirst ? isOk(b, d.op, c, a) : isOk(a, d.op, b, c)).length;
+    if (n !== 1) {
+      console.error(
+        `[mcc15equation] 예제 ${a} ${b} ${c} 의 정답이 ${n} 개다. ` +
+        `화면은 "답은 유일" 이라고 약속한다 — 정답이 딱 1개인 예제로 바꿔라.`);
+    }
+  }
 }
 
 function applyOp(x, op, y) {
@@ -167,10 +194,10 @@ function EqTrySim({ E }) {
                 "이 후보는 아니에요. ▶ 를 눌러 다음 후보를 확인해봐요.")}
         </div>
 
-        <div style={{ marginTop: 8, fontSize: 11.5, color: "#b45309", lineHeight: 1.55, ...KA }}>
+        <div style={{ marginTop: 8, fontSize: 11.5, color: "#b45309", lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
           {t(E,
-            "Watch the ÷ candidates: the left value can come out as a decimal like 6.5. Since ÷ here is real division, 13/2=6 would be wrong — 6.5 is not 6.",
-            "÷ 후보를 잘 봐요: 왼쪽 값이 6.5 처럼 소수로 나올 수 있어요. 여기서 ÷ 는 실수 나눗셈이라 13/2=6 은 틀린 식이에요 — 6.5 는 6 이 아니니까요.")}
+            "Watch the ÷ candidates. Take the example 13 2 15: the candidate 13÷2=15 gives 6.5 on the left. Since ÷ here is real division, writing 13÷2=6 would be wrong — 6.5 is not 6.",
+            "÷ 후보를 잘 봐요. 예제 13 2 15 로 보면, 후보 13÷2=15 의 왼쪽 값이 6.5 예요.\n여기서 ÷ 는 실수 나눗셈이라 13÷2=6 이라고 쓰면 틀려요 — 6.5 는 6 이 아니니까요.")}
         </div>
       </div>
     </div>
@@ -315,9 +342,6 @@ export function makeMcc15EqCh1(E) {
             </div>
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
               {t(E, "A string (without spaces) containing the valid equation.", "올바른 등식을 담은 공백 없는 문자열 하나.")}
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#92400e", marginTop: 4, overflowX: "auto" }}>
-                print(str(a) + op1 + str(b) + op2 + str(c))
-              </div>
             </div>
           </div>
 
@@ -339,16 +363,7 @@ export function makeMcc15EqCh1(E) {
         </div>),
     },
 
-    // 1-3: concept sim
-    {
-      type: "reveal",
-      narr: t(E,
-        "There are only 8 ways to fill the two gaps. Step through them and watch the two sides until they match.",
-        "빈칸 2개를 채우는 방법은 8가지뿐이에요. 하나씩 넘기면서 양쪽 값이 같아지는 순간을 봐요."),
-      content: <EqTrySim E={E} />,
-    },
-
-    // 1-4: understanding check
+    // 1-3: 먼저 세어본다 — 시뮬로 확인하기 **전에** 묻는다
     {
       type: "quiz",
       narr: t(E,
@@ -367,6 +382,16 @@ export function makeMcc15EqCh1(E) {
         "If '=' is in the first gap the shape is a=b op c; if it is in the second gap the shape is a op b=c. Each has 4 operators → 2 × 4 = 8.",
         "'=' 가 앞칸이면 a=b op c, 뒷칸이면 a op b=c. 각각 연산자 4개 → 2×4 = 8."),
     },
+
+    // 1-4: 시뮬로 확인 — 방금 세어본 8가지를 하나씩 넘겨본다
+    {
+      type: "reveal",
+      narr: t(E,
+        "Now check it. Step through the candidates and watch the two sides until they match.",
+        "이제 확인해봐요. 하나씩 넘기면서 양쪽 값이 같아지는 순간을 봐요."),
+      content: <EqTrySim E={E} />,
+    },
+
   ];
 }
 
