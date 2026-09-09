@@ -59,12 +59,32 @@ if (args.includes('--progress')) {
   await p.reload({ waitUntil: 'domcontentloaded' })
 }
 await p.waitForTimeout(4500)
+await settleTyping(p)
 
 // --lang ko|en: 화면 언어를 정해서 연다 (모바일은 언어 버튼이 메뉴 안이라 못 누른다)
 if (args.includes('--lang')) {
   const L = args[args.indexOf('--lang') + 1]
   await p.evaluate(l => localStorage.setItem('language', l), L)
   await p.reload({ waitUntil: 'domcontentloaded' }); await p.waitForTimeout(3000)
+}
+
+// 내레이션은 한 글자씩 타이핑된다 (components/quest/shared.tsx useTyping, 28ms/글자).
+// 129자짜리는 3.6초가 걸린다. 그런데 우리는 클릭 뒤 700ms(--click)·300ms(--sim) 만 기다렸다.
+// 그래서 **지금까지 이 도구가 읽은 내레이션은 잘린 문장이었다.**
+// 2026-09-09 에 학생이 cornercover 2쪽에서 "문장이 뚝 끊긴다" 고 보고해서 드러났다 —
+// 소스는 멀쩡했고, 잘린 건 화면이 아니라 **우리 도구의 눈**이었다.
+// 그 여파로 "55자 넘는 문장" 개수도 계속 적게 셌다.
+// 글자 수가 더 안 늘 때까지 기다린다. 최대 6초 — 그 안에 어떤 내레이션도 끝난다.
+async function settleTyping(page, maxMs = 6000) {
+  const t0 = Date.now()
+  let prev = -1
+  while (Date.now() - t0 < maxMs) {
+    const n = await page.evaluate(() =>
+      document.body.innerText ? document.body.innerText.length : 0).catch(() => -1)
+    if (n === prev && n > 0) return
+    prev = n
+    await page.waitForTimeout(180)
+  }
 }
 
 // --click: 보고 싶은 자리까지 눌러서 간다 (탭·다음 버튼 등). 순서대로 실행.
@@ -74,6 +94,7 @@ for (const label of clicks) {
   try {
     await p.click(`text=${label}`, { timeout: 2500 })
     await p.waitForTimeout(700)
+    await settleTyping(p)
   } catch { console.log(`   ⚠️ --click "${label}" — 못 눌렀다 (안 보이거나 없음). 건너뜀`) }
 }
 
@@ -313,7 +334,7 @@ if (args.includes('--sim')) {
     if (r.none) { console.log(`   ${k + 1}단계: 말풍선을 못 찾음`) }
     else console.log(`   ${k + 1}단계: ${r.visible ? '✅ 보임' : '🚨 화면 밖'} (top=${r.top})  ${r.text}…`)
     if (done) break
-    await btn.click(); await p.waitForTimeout(300)
+    await btn.click(); await p.waitForTimeout(300); await settleTyping(p)
   }
 }
 
