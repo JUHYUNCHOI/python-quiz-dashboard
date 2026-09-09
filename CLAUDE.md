@@ -46,6 +46,7 @@ python3 scripts/check-quest-algo-level.py  # Bronze 문제를 '심화' 토픽으
 python3 scripts/count-quests.py         # ⭐ quest 개수는 **손으로 세지 마라** (--list 로 이름까지)
 python3 scripts/check-quiz-spoiler.py   # 퀴즈 내레이션이 정답을 미리 말하나 (판정 아님 — 볼 자리 표시)
 python3 scripts/check-bilingual-drift.py   # t(E, 영어, 한국어) 중 **한쪽만 고친** 자리 (빌드도 못 잡는다)
+python3 scripts/check-io-card-spoiler.py   # 입출력 형식 카드가 답까지 말하나 (재현율 50%·정밀도 20% — 사람 대신 못 씀)
 python3 scripts/count-quests.py --list untaught  # 안 가르친 개념(비트·2차원리스트·조합론…)을 전제하는 quest
 ```
 
