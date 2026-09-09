@@ -383,8 +383,16 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
         {/* Same-contest dots: nested next to title, with label */}
         {contestSiblings.length > 1 && (
           <div className="flex items-center gap-1.5 flex-shrink-0 border-l border-gray-200 pl-2 ml-1">
-            <span className="text-[10px] font-semibold text-gray-400 hidden lg:inline">
-              {t("같은 대회", "Same contest")}
+            {/* 2026-09-09: 라벨이 `hidden lg:inline` 이라 1024px 미만에서 사라졌다.
+                그러면 동그란 숫자만 남는데, 그게 챕터 진행점과 똑같이 생겼다.
+                학생 **셋이 각각 독립으로** 이걸 챕터인 줄 알고 눌렀다가
+                다른 문제로 튕겼다(cornercover · mcc20cipher · mcc15choco).
+                "한 번은 화면이 처음으로 되돌아갔고 한 번은 아예 안 바뀌었다",
+                "실수로 4를 눌렀다가 완전히 다른 문제로 넘어가 버렸다".
+                라벨을 항상 보이게 한다 — 좁은 화면에서는 짧게. */}
+            <span className="text-[10px] font-semibold text-gray-400 whitespace-nowrap">
+              <span className="hidden sm:inline">{t("같은 대회", "Same contest")}</span>
+              <span className="sm:hidden">{t("대회", "Contest")}</span>
             </span>
             <div className="flex items-center gap-1">
               {contestSiblings.map((p) => {
