@@ -373,8 +373,12 @@ export function CodeBlock({ lines, lang = "py", dimUntil = 0 }: CodeBlockProps) 
       setTimeout(() => setCopied(false), 1500)
     }
   }
+  /* 2026-09-09: 모바일(375px)에서 "📋 Copy" 버튼(absolute top-right)이
+     코드 **첫 줄 끝을 실제로 덮고 있었다** — 화면 담당이 스크린샷으로 확인했다.
+     `.split())` 의 뒷부분이 버튼 밑에 숨었다. 공용 컴포넌트라 quest 전체에 걸린다.
+     좁은 화면에서는 버튼 높이만큼 위를 비워 첫 줄이 절대 안 가리게 한다. */
   return (
-    <div className="relative bg-gray-900 rounded-xl px-3 py-3 overflow-x-auto text-[13px] leading-relaxed font-mono" style={{ fontVariantLigatures: "none", fontFeatureSettings: '"liga" 0, "calt" 0' }}>
+    <div className="relative bg-gray-900 rounded-xl px-3 pb-3 pt-9 sm:pt-3 overflow-x-auto text-[13px] leading-relaxed font-mono" style={{ fontVariantLigatures: "none", fontFeatureSettings: '"liga" 0, "calt" 0' }}>
       <button
         onClick={handleCopy}
         className={`absolute top-2 right-2 px-2 py-1 rounded-md text-[11px] font-bold transition-colors ${
