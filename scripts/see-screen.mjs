@@ -334,7 +334,11 @@ if (args.includes('--sim')) {
     }
     prevSnap = snap
 
-    const btn = await p.$('text=/다음 ▶|Next ▶/')
+    /* 2026-09-09: '다음 ▶' / 'Next ▶' 만 찾았다. 그런데 시뮬마다 버튼 글자가 다르다 —
+       mcc15bahasaf 는 그냥 '▶' 라서 이 도구가 시뮬을 아예 못 걷고 "1단계" 만 찍었다.
+       검토자가 손으로 --click "▶" 를 눌러가며 확인해야 했다.
+       쪽 넘김 버튼은 '다음 →' 라 화살표 모양이 달라서 ▶ 만으로도 안 겹친다. */
+    const btn = await p.$('text=/다음 ▶|Next ▶|^▶$|▶\\s*$/')
     const done = !btn || await btn.isDisabled().catch(() => true)
     if (r.none) { console.log(`   ${k + 1}단계: 말풍선을 못 찾음`) }
     else console.log(`   ${k + 1}단계: ${r.visible ? '✅ 보임' : '🚨 화면 밖'} (top=${r.top})  ${r.text}…`)
