@@ -8,9 +8,16 @@ export type Difficulty = 1 | 2 | 3 | 4 | 5;
 export const MCC_DIFFICULTY: Record<string, Difficulty> = {
   // 1 — 쉬움 (단순 스캔/정렬/한 줄 관찰)
   mcc15rect: 1, mcc19rect: 1,
+  // 2026-09-09 재점검 — 내려온 것:
+  //   fences 2 → 1. 풀이가 이중 루프로 열별 개수를 세고 min() 이 전부다.
+  //   경우나눔도, 집합·딕셔너리도 없다 — mcc19rect(정렬 리스트에서 인접 최소차)와 구조가 같다.
+  //   초6 학생이 직접 풀어보고 체감 1 이라고 했고("너무 쉬웠다"), 문제를 읽자마자
+  //   정답 코드를 스스로 짰다. 이 값은 /quest 카탈로그의 뱃지·필터·정렬에만 쓰인다
+  //   (잠금 로직·진도 키와 무관 — app/quest/page.tsx 에서만 참조).
+  fences: 1,
 
   // 2 — 기본 (시뮬/경우나눔/집합·딕셔너리)
-  collatz: 2, cornercover: 2, fences: 2,
+  collatz: 2, cornercover: 2,
   mcc15equation: 2, mcc15bahasaf: 2,
   // 2026-09-07 재점검 — 내려온 것:
   //   gifts 3 → 2. 풀이가 `sorted(zip(t, range(n)))` 로 앞 m 명. **동점 처리 있는 정렬 한 줄**이다.

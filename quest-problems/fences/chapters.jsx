@@ -95,6 +95,10 @@ export function makeFencesCh1(E) {
           [".",".","#","."],
         ];
         const hiliteCol = 3;
+        /* 2026-09-09: 학생이 "분홍으로 칠했길래 이게 정답 열인가 했다" 고 걸렸다.
+           실제로 이 그리드의 열별 비용은 [3, 2, 1, 3] 이라 hiliteCol=3(C4)은 비용 3 —
+           제일 싼 열이 아니다(C3 이 1). 이 쪽은 비용 개념이 나오기 전, "열이 뭔지" 만
+           보여주는 자리다. 그리드는 안 건드리고 캡션 한 줄로 오해만 막는다. */
         return (
           <div style={{ padding: 16 }}>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
@@ -140,19 +144,24 @@ export function makeFencesCh1(E) {
                 textAlign: "center", marginTop: 6, fontSize: 12, fontWeight: 600, color: "#ec4899",
                 animation: "fadeIn .4s ease both", animationDelay: "1.6s",
               }}>
-                ↑ {t(E, "This is one column (vertical!)", "이게 열 하나야 (세로줄!)")}
+                ↑ {t(E, "This is one column (vertical!)", "이게 열 하나예요 (세로줄!)")}
               </div>
               <div style={{
                 fontSize: 12, color: "#059669", fontWeight: 700, textAlign: "center", marginTop: 8,
                 animation: "fadeIn .4s ease both", animationDelay: "2s",
               }}>
-                {t(E, "Make all 3 cells in this column → #", "이 열의 3칸을 전부 → # 으로!")}
+                {t(E, "Make all 3 cells in this column → #", "이 열의 3칸을 전부 → # 으로 바꿔요!")}
               </div>
               <div style={{ marginTop: 10, fontSize: 13, color: C.text, lineHeight: 1.8, textAlign: "center" }}>
                 <span style={{ background: "#bbf7d0", borderRadius: 4, padding: "2px 6px", fontWeight: 700, color: "#166534" }}>.</span>
                 {t(E, " = grass (need to convert) ", " = 풀 (변환 필요) ")}
                 <span style={{ background: "#374151", borderRadius: 4, padding: "2px 6px", fontWeight: 700, color: "#fff" }}>#</span>
                 {t(E, " = fence (already done!)", " = 울타리 (이미 완료!)")}
+              </div>
+              {/* 2026-09-09: 학생이 "분홍으로 칠했길래 이게 정답 열인가 했다" 고 걸렸다. */}
+              <div style={{ marginTop: 8, textAlign: "center", fontSize: 11, color: "#9333ea", wordBreak: "keep-all", lineHeight: 1.6 }}>
+                {t(E, "(The pink one is just an example column — which column is cheapest comes later.)",
+                      "(분홍색은 그냥 예시로 고른 열이에요 — 어느 열이 제일 싼지는 뒤에서 알아봐요.)")}
               </div>
             </div>
           </div>
@@ -211,9 +220,15 @@ export function makeFencesCh1(E) {
               </div>
             </div>
           </div>
-          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all" }}>
-            {t(E, "Grass ('.') per column: 4, 3, 3, 2, 4. The smallest is 2 → that column is cheapest to wall off.",
-                "열별 풀('.') 수: 4, 3, 3, 2, 4. 가장 작은 값이 2 → 그 열을 울타리로 막는 게 제일 싸요.")}
+          {/* 2026-09-09: 여기에 "가장 작은 값이 2 → 그 열이 제일 싸요" 까지 적혀 있었다.
+              원문(ioimalaysia MCC 2025 P1)에 있는 문장은 맞지만 **위치가 다르다** —
+              원문은 이걸 Sample 다음의 별도 Explanation 섹션에 둔다. 학생이 스스로
+              풀어본 뒤에 보는 자리다. 우리는 형식 카드 안에 넣어서 만져보기도 전에 답을 줬다.
+              이 한 줄이 뒤따르는 여섯 스텝을 전부 "발견" 이 아니라 "재확인" 으로 만들었다.
+              숫자는 남기고 결론만 질문으로 돌린다. */}
+          <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all", lineHeight: 1.7 }}>
+            {t(E, "Grass ('.') per column: 4, 3, 3, 2, 4. Which column is cheapest to wall off? Let's find it one step at a time.",
+                "열별 풀('.') 수: 4, 3, 3, 2, 4. 어느 열을 막는 게 제일 쌀까요? 아래에서 하나씩 확인해봐요.")}
           </div>
         </div>),
     },
@@ -304,7 +319,7 @@ export function makeFencesCh1(E) {
           <div style={{ padding: 16 }}>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
               <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", marginBottom: 8 }}>
-                {t(E, "3×4 grid — count dots per column!", "3×4 그리드 — 각 열의 점을 세봐요!")}
+                {t(E, "3×4 grid — count dots per column!", "3×4 그리드 — 각 열의 풀을 세봐요!")}
               </div>
               {/* Column labels */}
               <div style={{ display: "flex", justifyContent: "center", gap: 4, marginBottom: 2 }}>
@@ -350,17 +365,12 @@ export function makeFencesCh1(E) {
                 ))}
               </div>
               <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginTop: 4 }}>
-                {t(E, "↑ dots per column (= cost)", "↑ 열별 점 수 (= 비용)")}
+                {t(E, "↑ grass per column (= cost)", "↑ 열별 풀 수 (= 비용)")}
               </div>
               {/* Answer highlight */}
-              <div style={{
-                marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 700, color: "#059669",
-                animation: "fadeIn .4s ease both", animationDelay: ".5s",
-              }}>
-                {t(E,
-                  "4th column: 0 dots → cost 0 → cheapest! 🎯",
-                  "4열: 점 0개 → 비용 0 → 가장 싸! 🎯")}
-              </div>
+              {/* 2026-09-09: 여기에 "4열: 풀 0개 → 비용 0 → 가장 싸! 🎯" 가 있었다.
+                  **바로 다음 쪽 퀴즈가 같은 [3,1,2,0] 으로 "어떤 열을 골라야 해요?" 를 묻는다.**
+                  결론을 지우면 이 쪽은 관찰, 다음 쪽은 퀴즈가 되어 순서가 살아난다. */}
             </div>
           </div>
         );
@@ -370,19 +380,19 @@ export function makeFencesCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's make sure you got it!\nIn the grid we just saw, the dot counts were [3, 1, 2, 0].\nWhich column should we pick?", "제대로 이해했는지 확인! 방금 본 그리드에서 점 수가 [3, 1, 2, 0]이었어. 어떤 열을 골라야 해요?"),
+        "Let's make sure you got it!\nIn the grid we just saw, the grass counts were [3, 1, 2, 0].\nWhich column should we pick?", "제대로 이해했는지 확인! 방금 본 그리드에서 점 수가 [3, 1, 2, 0]이었어. 어떤 열을 골라야 해요?"),
       question: t(E,
         "Dot counts: 1st=3, 2nd=1, 3rd=2, 4th=0. Pick which?",
-        "점 수: 1열=3, 2열=1, 3열=2, 4열=0. 어떤 열?"),
+        "풀 수: 1열=3, 2열=1, 3열=2, 4열=0. 어떤 열?"),
       options: [
-        t(E, "2nd column (1 dot = cost 1)", "2열 (점 1개 = 비용 1)"),
-        t(E, "4th column (0 dots = cost 0!)", "4열 (점 0개 = 비용 0!)"),
-        t(E, "1st column (3 dots = cost 3)", "1열 (점 3개 = 비용 3)"),
+        t(E, "2nd column (1 dot = cost 1)", "2열 (풀 1개 = 비용 1)"),
+        t(E, "4th column (0 dots = cost 0!)", "4열 (풀 0개 = 비용 0!)"),
+        t(E, "1st column (3 dots = cost 3)", "1열 (풀 3개 = 비용 3)"),
       ],
       correct: 1,
       explain: t(E,
         "The 4th column has 0 dots — already all fences! Cost = 0, the minimum! 🎯",
-        "4열은 점이 0개 — 이미 전부 울타리! 비용 = 0, 최솟값! 🎯"),
+        "4열은 풀이 0개 — 이미 전부 울타리! 비용 = 0, 최솟값! 🎯"),
     },
   ];
 }
@@ -397,13 +407,13 @@ export function makeFencesCh2(E) {
     {
       type: "fenceColumnScanner",
       narr: t(E,
-        "Press ▶ Scan to watch!\nIt counts dots in each column, one by one.\nThe column with the fewest dots is the cheapest!\nThen try it yourself!\n👀", "▶ 스캔을 눌러봐요! 각 열의 점을 하나씩 세는 걸 볼 수 있어요. 점이 가장 적은 열이 가장 싸! 그다음 직접 해봐요! 👀"),
+        "Press ▶ Scan to watch!\nIt counts grass in each column, one by one.\nThen try it yourself!\n👀", "▶ 스캔을 눌러봐요! 각 열의 점을 하나씩 세는 걸 볼 수 있어요. 풀이 가장 적은 열이 가장 싸! 그다음 직접 해봐요! 👀"),
     },
     // 2-2: Observation quiz
     {
       type: "quiz",
       narr: t(E,
-        "Did you notice? The answer is simply the MINIMUM number of '.' across all columns!", "눈치챘어? 답은 그냥 모든 열 중 '.'의 최솟값이에요!"),
+        "Now put it in words: what exactly are we printing?", "이제 말로 옮겨봐요 — 우리가 출력하는 건 정확히 뭘까요?"),
       question: t(E,
         "What is the answer to this problem?",
         "이 문제의 답은 뭐예요?"),
@@ -421,20 +431,20 @@ export function makeFencesCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "By hand! 3×4 grid — dots (.) per column: 3, 1, 2, 0. What's the minimum cost?", "손으로! 3×4 그리드 — 열별 점(.) 수: 3, 1, 2, 0. 최소 비용은?"),
+        "By hand! 3x4 grid — grass (.) per column: 2, 4, 1, 3. What is the minimum cost?", "손으로! 3×4 그리드 — 열별 풀(.) 수: 2, 4, 1, 3. 최소 비용은?"),
       question: t(E,
-        "Dots per column: 3, 1, 2, 0\nMin cost = ?",
-        "열별 점(.) 수: 3, 1, 2, 0\n최소 비용 = ?"),
-      answer: 0,
+        "Grass per column: 2, 4, 1, 3\nMin cost = ?",
+        "열별 풀(.) 수: 2, 4, 1, 3\n최소 비용 = ?"),
+      answer: 1,
     },
     // 2-4: Hand calculation 2
     {
       type: "input",
       narr: t(E,
-        "Another one! 3×3 grid — dots (.) per column: 1, 1, 3. What's the minimum cost?", "하나 더! 3×3 그리드 — 열별 점(.) 수: 1, 1, 3. 최소 비용은?"),
+        "Another one! 3×3 grid — dots (.) per column: 1, 1, 3. What's the minimum cost?", "하나 더! 3×3 그리드 — 열별 풀(.) 수: 1, 1, 3. 최소 비용은?"),
       question: t(E,
         "Dots per column: 1, 1, 3\nMin cost = ?",
-        "열별 점(.) 수: 1, 1, 3\n최소 비용 = ?"),
+        "열별 풀(.) 수: 1, 1, 3\n최소 비용 = ?"),
       answer: 1,
     },
   ];
@@ -545,7 +555,7 @@ export function makeFencesCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "We need to count dots per column.\nSo we make a list with M zeros — one slot for each column!", "열마다 점을 세야 하니까, M개의 0이 들어간 리스트를 만들어야 해 — 열마다 자리 하나!"),
+        "We need to count dots per column.\nSo we make a list with M zeros — one slot for each column!", "열마다 풀을 세야 하니까, M개의 0이 들어간 리스트를 만들어야 해 — 열마다 자리 하나!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", marginBottom: 6 }}>
@@ -553,7 +563,7 @@ export function makeFencesCh3(E) {
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 4, lineHeight: 1.6, whiteSpace: "pre-line" }}>
             {t(E,
-              "5 columns → count = [0, 0, 0, 0, 0].\nEach slot will store how many dots that column has.", "5열이면 → count = [0, 0, 0, 0, 0].\n각 칸에 그 열의 점 수를 저장할 거예요.")}
+              "5 columns → count = [0, 0, 0, 0, 0].\nEach slot will store how much grass that column has.", "5열이면 → count = [0, 0, 0, 0, 0].\n각 칸에 그 열의 점 수를 저장할 거예요.")}
           </div>
           <CodeSnippet
             lines={["N, M = map(int, input().split())", "count = [0] * M"]}
@@ -583,15 +593,19 @@ export function makeFencesCh3(E) {
     // 3-4: Step 3 quiz — understanding the loop
     {
       type: "quiz",
+      /* 2026-09-09: 두 가지를 고쳤다.
+         ① 정답 보기만 23자로 유독 길고 설명형이라, 몰라도 "제일 긴 걸" 찍으면 맞았다
+            (나머지는 11자·7자). 세 보기 길이를 비슷하게 맞췄다.
+         ② 반말이 섞여 있었다 — "읽어", "크니까", "상관없어". 해요체로 고쳤다. */
       narr: t(E,
-        "As you just saw, the code reads row by row.\nQuick check — why is the outer loop over rows (N)?", "방금 봤듯이 코드는 행을 하나씩 읽어. 확인 — 바깥 반복이 행(N)인 이유가 뭘까?"),
+        "Quick check — why is the outer loop over rows (N)?", "확인해봐요 — 바깥 반복문이 행(N)인 이유는 뭘까요?"),
       question: t(E,
         "Why is the OUTER loop over rows (N)?",
         "바깥 반복문이 행(N)인 이유는?"),
       options: [
-        t(E, "Rows are always bigger than columns", "행이 항상 열보다 크니까"),
-        t(E, "Input comes one row at a time, so we read row by row", "입력이 한 줄(행)씩 오니까 행 단위로 읽어야 해"),
-        t(E, "It doesn't matter, either order works", "순서 상관없어"),
+        t(E, "Rows are always bigger than columns", "행이 항상 열보다 많아서요"),
+        t(E, "Input arrives one row per line", "입력이 한 줄에 한 행씩 와서요"),
+        t(E, "Either order works the same", "어느 쪽이든 똑같아서요"),
       ],
       correct: 1,
       explain: t(E,
@@ -602,7 +616,7 @@ export function makeFencesCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "After counting all dots per column, just print the minimum!\nPython's min() does this in one line.", "모든 열의 점을 다 세고 나면, 최솟값만 출력하면 끝! Python의 min()이 한 줄로 해줘요."),
+        "After counting all grass per column, just print the minimum!\nPython's min() does this in one line.", "모든 열의 풀을 다 세고 나면, 최솟값만 출력하면 끝! Python의 min()이 한 줄로 해줘요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#059669", marginBottom: 6 }}>
