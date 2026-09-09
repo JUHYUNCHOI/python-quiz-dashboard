@@ -225,7 +225,7 @@ export function getMcc19RectSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
             "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
       ],
@@ -235,7 +235,7 @@ export function getMcc19RectSections(E) {
       ],
       cppOnly: [
         t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어."),
+            "#include 는 배운 헤더들로 (iostream, vector, string) 나눠 적어요."),
         t(E, "Use int for sums and indices — only switch to a bigger type when sums exceed ~2×10^9.",
             "합계·인덱스는 int 로 충분 — 2×10^9 넘는 큰 합계만 더 큰 타입 고려."),
       ],
