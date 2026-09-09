@@ -63,6 +63,14 @@ for f in sorted(glob.glob("quest-problems/*/chapters.jsx")):
         # 그냥 숫자가 스쳐 지나가는 건 문제 설정일 수 있어서다.
         if len(ans) <= 3 and re.search(r"(?:=|최선|정답|답은)\s*" + re.escape(ans) + r"(?![0-9])", narr):
             hits.append((f.split("/")[1], o[i][:44], n.group(1)[:60]))
+            continue
+        # 정답 보기 안의 "= 숫자" 가 내레이션에도 그대로 있나.
+        # 2026-09-09 에 추가 — lifeguards 를 놓쳤다:
+        #   보기 "첫째 해고 (커버리지 = 5)" / narr "첫째를 **해고하면** 커버리지 = 3~8 = 5"
+        #   조사 하나 차이로 substring 매칭이 빗나갔다. 숫자는 조사가 안 붙는다.
+        eq = re.findall(r"=\s*(-?\d+)", o[i])
+        if eq and all(re.search(r"=\s*" + re.escape(v) + r"(?![0-9])", narr) for v in eq):
+            hits.append((f.split("/")[1], o[i][:44], n.group(1)[:60]))
 
 print(f"퀴즈 내레이션이 정답 보기를 그대로 담은 곳: {len(hits)}건")
 print("  (판정이 아니다 — 각 자리를 눈으로 보고 '설정' 인지 '답' 인지 사람이 정해라)\n")
