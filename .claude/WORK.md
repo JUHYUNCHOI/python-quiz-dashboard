@@ -719,3 +719,88 @@ quest-auditor 의 "가짜 수치·과장" 범주다.
 → 정할 것: quest 마다 (가) 제약을 넣어 브루트 연산량을 실제로 계산하고
 (나) 10⁸ 을 넘지 않으면 "느림" 서사를 걷어내거나 진짜 이유(코드가 짧고 명확해서)로 바꾼다.
 담당: quest-auditor + project-lead. **일괄 작업이므로 `/decide` 3라운드.**
+
+### mcc15bahasaf — 3인 검토 종합 판정 (2026-09-09)
+
+QA(실행검증 문제없음) · 수업(스토리 결함 3건) · 학생(1쪽에서 이미 정답 로직 완성, 체감 1~2) 종합.
+
+1. **퀴즈 narr (`chapters.jsx:309-311`) — 고친다. 원인은 narr 만이 아니라 시뮬 자체다.**
+   퀴즈가 묻는 음절 "ri" 는 `DEMO_SENTENCE`(`chapters.jsx:13` `"cu/a/ca ha/ri"`)의 **마지막 음절**이라,
+   바로 앞 시뮬(1-3, `SyllableEchoSim`)에서 스텝퍼를 끝까지 넘기면 `ri + fi = rifi` 가
+   **화면 숫자로 그대로** 계산돼 나온다(`chapters.jsx:106-114` echo 줄). narr 이 규칙을 다시 말해주는 것도
+   문제지만, 규칙이 아니라 **정답 그 자체**가 이미 한 번 나온 뒤라 narr 을 고쳐도 안 풀린다.
+   `Quiz` 의 `hint` prop 도 확인함(`components/quest/shared.tsx:94-99`) — `narr` 과 똑같이
+   **항상 보임**(버튼 뒤 아님). narr→hint 로 옮기는 건 해결이 아니다.
+   처방: 퀴즈가 묻는 음절을 데모에 없는 것(예: 공식 샘플의 `gat`·`san`·`ni`)으로 바꾸고,
+   narr 은 "이제 규칙을 직접 적용해볼 차례예요" 류 중립 문장으로. (2-fix 지만 근본은 하나 —
+   퀴즈 음절이 데모에 안 나오게만 해도 narr 문제는 같이 옅어진다.)
+
+2. **IO 카드(`chapters.jsx:262-266`)와 시뮬 데모 겹침 — 데모를 바꾼다, 문장은 안 지운다.**
+   IO 카드의 "cu→cufu, a→afa" 는 원문 Explanation 을 그대로 옮긴 문장(HackerRank
+   `mcc-bahasa-f` API 로 직접 확인: "The first syllable cu is translated ... to cufu.
+   The second syllable a is translated ... to afa.") — **지우면 안 된다**(cornercover·collatz·gifts
+   선례). `DEMO_SENTENCE`(코드 주석에 "데모용" 이라 명시, 원문 고정 문구 아님)는 이미
+   공식 샘플 `"cu/a/ca ha/ri i/ni san/gat pa/nas"` 의 **잘라낸 부분집합**이라, 겹치지 않는
+   다른 부분집합(예: `"i/ni san/gat"`)으로 바꿔도 **공식 샘플과의 연결은 끊기지 않는다** —
+   여전히 같은 문장의 일부이고 출력도 계산 가능(`ifinifi sanfangatfat`). 이 교체가 1번의
+   "퀴즈 음절이 데모에 없게" 도 동시에 해결한다(`ri` 도 제거되니까).
+
+3. **"첫 자음" vs "첫 글자" — 원문은 "첫 자음"(first consonant). 시뮬 쪽 용어를 통일한다.**
+   HackerRank 원문 직접 확인: "changing the **first consonant** in every syllable (sukukata) to 'f'".
+   Ch1 문제카드(`chapters.jsx:215`)·퀴즈 narr(`311`)은 이미 "첫 자음" — 원문과 일치.
+   시뮬(`chapters.jsx:98,102-105`)만 "첫 글자" — `learning_tracks.md` 5번째 원칙
+   ("같은 단계를 페이지마다 다른 말로 부르지 않는다") 위반. **"첫 글자"→"첫 자음" 으로 통일 권고.**
+   학생 질문("자음이 음절 맨 앞이 아닌 경우가 있을 수 있나") — 말레이어 음절 자체는 VC 형(모음+자음,
+   예: "om" in "ombak")도 실존하지만, 공식 샘플 10음절 전부 V·CV·CVC(자음이 있으면 항상 맨 앞)뿐이고
+   이 문제는 USACO_VERIFIED 아니라 실제 채점 제출 기록이 없다 — **VC형이 채점 데이터에 없다는 걸
+   증명할 방법이 없다.** 확인 못 함으로 남긴다. 단, 화면 문구는 "첫 글자"보다 "첫 자음"이 원문과
+   일치하고 더 정확하므로 용어 통일은 이 불확실성과 무관하게 진행할 값어치가 있다.
+
+4. **Ch2 계획 카드 결론 통보 — 안 고친다.** 수업 스스로 "경미" 라 했고, 확인해보니 이 문제엔
+   브루트/최적 갈림이 아예 없다(문자열 O(길이) 한 번 훑기뿐) — 고를 게 없는 자리에 "생각해보자" 를
+   강제로 넣는 게 오히려 표준-맞추기(형식만 맞추는) 위반.
+
+5. **재진술 6회 — 줄이지 않는다.** `quest_review_progress.md` 표준-맞추기 함정(rounding 2236→184줄)
+   기준으로 판단: 6곳 중 4곳(미션·IO카드·계획카드·코드주석)은 서로 다른 모드(정의→예제→적용계획→구현)라
+   `quest_problem_standard.md` 의 기·승·전·결 구조가 요구하는 정상 반복. 진짜 문제는 개수가 아니라
+   그중 2곳(퀴즈narr, 시뮬-IO겹침)이 **능동 스텝을 죽이는 자리**라는 것 — 1·2번만 고치면
+   나머지 4곳은 그대로 둬도 된다. 학생도 지루하다고 하지 않았다(체감 1~2, 버튼 10번).
+
+6. **"5,000자" — 확인 완료 (QA·수업 모두 "MathJax 라 못 뺐다"고 했지만 됨).**
+   HackerRank REST API(`rest/contests/mcc-2015/challenges/mcc-bahasa-f`)로 `body_html` 직접 받아
+   MathJax SVG 안의 glyph path 를 숫자로 판독 — 5 개 path(5, 쉼표, 0, 0, 0 모양)가 정확히
+   "5,000" 과 일치. 화면 표기(`chapters.jsx` IO 카드 "최대 5,000") 그대로 맞다.
+
+7. **난이도 2 — 유지.** `lib/mcc-difficulty.ts:21`. 학생이 1쪽에서 이미 로직을 다 세웠고 이후 전부
+   확인이었다는 보고와 부합(문자열 규칙 하나, 실제 어려움 없음).
+
+**갈린 지점**: 없음 — 세 보고가 서로 다른 층(코드정확성/스토리흐름/실제체감)을 봐서 겹치는 주장이
+없었고, 종합 과정에서 상충도 없었다. 다만 수업이 원인을 narr 로 짚은 것을 검증 중 **더 깊은
+원인(시뮬이 정답을 이미 계산해 보여줌)** 을 발견 — 수업 보고를 대체하는 게 아니라 좁혀서 보강.
+
+**코드 미반영** — 판정만, 반영은 다음 세션. 배포 대상 아님.
+
+### 알고리즘 배지가 실제 풀이와 안 맞는 자리 (2026-09-09)
+
+mcc22grammar 학생이 찾았다: 화면 맨 위에 **"그래프 (BFS/DFS)"** 배지가 문제 내내 떠 있는데
+풀이 코드엔 그래프 탐색이 없다. *"그냥 딕셔너리 조회 두 번이 전부였다. 왜 이 라벨이
+붙었는지 모르겠다."* 배지는 `lib/quest-algo.ts` 의 `QUEST_ALGO` 매핑에서 나오고,
+`/algo/<topic>/learn` 링크까지 건다 — **틀리면 학생을 엉뚱한 학습 페이지로 보낸다.**
+`check-quest-algo-level.py` 는 Bronze↔심화 어긋남만 보고 **라벨 vs 실제 기법은 안 본다.**
+
+**⚠️ 아래는 판정이 아니라 "볼 자리 표시" 다.** 기법 흔적을 정규식으로 훑은 것이고,
+**손으로 4개를 열어보니 그중 하나는 내 탐지기가 틀렸다.** 오늘 내 측정이 세 번 틀렸다.
+
+| quest | 지금 라벨 | 손으로 확인한 결과 |
+|---|---|---|
+| **mcc22maze** | graph (BFS/DFS) | 🚨 **확정 — 틀렸다.** `components.jsx:207~` 이 `class DSU` 로 **유니온-파인드**를 쓴다(find/union/rollback). BFS·DFS·queue 가 없다. `unionfind` 토픽이 이미 있다 |
+| **mcc22grammar** | graph (BFS/DFS) | 🚨 **확정 — 틀렸다.** dict+set 조회가 전부. 인접 리스트를 만들 뿐 탐색이 없다. `hashtable`(해시 맵·집합)이 맞아 보인다 |
+| mcc20zigzag | dp | ✅ **내 탐지기가 틀렸다.** `up[i][j]`/`dn[i][j]` 표를 채우는 정통 DP 다. 라벨 맞음 |
+| mcc20kitty | dp | ❓ 확인 필요. `seen` 딕셔너리로 **주기(cycle)를 찾는다** — DP 표가 아니다 |
+| subseqmedian | dp | ❓ 확인 필요. **Fenwick(BIT)** 을 쓴다 — DP 표가 아니다 |
+| mcc20citytour · mcc20knight | graph | ✅ 탐색 흔적 있음 |
+| explodingarrow | binarysearch | ✅ 흔적 있음 |
+
+→ 각 quest 차례가 왔을 때 그 quest 의 project-lead 판정에 포함시킨다.
+   라벨을 바꾸면 `/algo/<topic>/learn` 링크가 바뀌므로 **영향 범위를 먼저 확인할 것.**
+   ❓ 두 개는 **코드를 끝까지 읽고** 판정해라 — 앞 16줄만 보고 정하지 마라.
