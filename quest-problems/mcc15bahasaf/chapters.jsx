@@ -8,9 +8,15 @@ const MONO = "'JetBrains Mono',monospace";
 
 const VOWELS = "aeiou";
 
-/* Demo sentence for the concept sim — has BOTH a vowel-start syllable ("a")
-   and consonant-start syllables ("cu", "ca", "ha", "ri"). */
-const DEMO_SENTENCE = "cu/a/ca ha/ri";
+/* 시뮬 데모 문장. 모음으로 시작하는 음절("i")과 자음으로 시작하는 음절("ha","ri","ni")을
+   둘 다 갖고 있어야 한다 — 두 갈래를 한 번씩 보여줘야 하니까.
+
+   2026-09-09: 전에는 "cu/a/ca ha/ri" 였다. 그런데 바로 앞 형식 카드가 원문 Explanation 을
+   그대로 옮겨 "cu 는 cufu 가 되고 a 는 afa 가 된다" 고 말한다(:289 근처).
+   그러면 시뮬 5단계 중 **첫 두 단계는 답을 알고 누르는 것**이 된다.
+   원문 문장은 원문이니 지우지 않고, 데모를 공식 샘플의 겹치지 않는 부분으로 옮겼다.
+   "ha/ri i/ni" 도 공식 샘플(cu/a/ca ha/ri i/ni san/gat pa/nas)의 일부라 연결은 그대로다. */
+const DEMO_SENTENCE = "ha/ri i/ni";
 const DEMO_WORDS = DEMO_SENTENCE.split(" ").map((w) => w.split("/"));
 const DEMO_FLAT = [];
 DEMO_WORDS.forEach((w, wi) => w.forEach((syl, si) => DEMO_FLAT.push({ syl, wi, first: si === 0 })));
@@ -95,14 +101,16 @@ function SyllableEchoSim({ E }) {
           </div>
 
           <div style={{ display: "flex", gap: 8, alignItems: "baseline", marginBottom: 8 }}>
-            <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, minWidth: 52, flexShrink: 0 }}>{t(E, "first letter", "첫 글자")}</span>
+            <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, minWidth: 52, flexShrink: 0 }}>{/* 이 칸은 syl[0] 을 그대로 보여준다 — 모음일 수도 있으니 "첫 글자" 가 맞다.
+                  규칙 문장 쪽만 원문(first consonant)에 맞춰 "첫 자음" 으로 쓴다. */}
+            {t(E, "first letter", "첫 글자")}</span>
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, ...KA }}>
               <b style={{ fontFamily: MONO, color: "#7c3aed" }}>{cur.syl[0]}</b>
               {isVowelStart
                 ? t(E, " is a VOWEL → there is no consonant to swap, so put 'f' in front of the whole syllable.",
                      " 는 모음이에요 → 갈아낄 자음이 없으니, 음절 통째로 앞에 'f' 를 붙여요.")
-                : t(E, " is a CONSONANT → swap just that first letter for 'f'.",
-                     " 는 자음이에요 → 그 첫 글자만 'f' 로 갈아껴요.")}
+                : t(E, " is a CONSONANT → swap that first consonant for 'f'.",
+                     " 는 자음이에요 → 그 첫 자음을 'f' 로 갈아껴요.")}
             </div>
           </div>
 
@@ -306,17 +314,23 @@ export function makeMcc15BahasaCh1(E) {
     // 1-4: understanding check
     {
       type: "quiz",
+      /* 2026-09-09: 전에는 narr 이 "자음으로 시작하는 음절은 … 첫 자음만 f 로 갈아낀 소리예요"
+         라고 **정답 규칙을 통째로** 적어놓고 바로 아래에서 "ri" 를 물었다.
+         게다가 "ri" 는 시뮬 데모의 마지막 음절이라 시뮬을 끝까지 넘기면 rifi 가
+         화면에 계산돼 있었다. 이 quest 의 **유일한 능동 스텝**이 두 겹으로 죽어 있었다.
+         (hint 로 옮기는 건 해결이 아니다 — shared.tsx 의 Quiz 는 hint 도 항상 그린다.)
+         narr 은 중립으로, 음절은 데모에 없는 "san" 으로 바꿨다. 3글자라 조금 더 묻는다. */
       narr: t(E,
-        "A syllable that starts with a consonant keeps its own letters, and the echo is the same syllable with that first consonant swapped for 'f'.",
-        "자음으로 시작하는 음절은 자기 글자를 그대로 두고, 메아리는 그 첫 자음만 'f' 로 갈아낀 소리예요."),
+        "Your turn — one syllable you have not walked through yet.",
+        "이번엔 직접 해봐요 — 아직 안 따라가본 음절이에요."),
       question: t(E,
-        "What does the syllable \"ri\" become in Bahasa F?",
-        "음절 \"ri\" 를 Bahasa F 로 바꾸면?"),
-      options: ["rifri", "rifi", "firi", "rif"],
-      correct: 1,
+        "What does the syllable \"san\" become in Bahasa F?",
+        "음절 \"san\" 을 Bahasa F 로 바꾸면?"),
+      options: ["sanfan", "sanfsan", "fansan", "sanf"],
+      correct: 0,
       explain: t(E,
-        "\"ri\" starts with the consonant 'r', so the echo is \"fi\" — the first consonant swapped for 'f'. \"ri\" + \"fi\" = \"rifi\".",
-        "\"ri\" 는 자음 'r' 로 시작 → 첫 자음을 f 로 갈아낀 \"fi\" 가 메아리. \"ri\" + \"fi\" = \"rifi\"."),
+        "\"san\" starts with the consonant 's', so the echo is \"fan\" — the first consonant swapped for 'f'. \"san\" + \"fan\" = \"sanfan\".",
+        "\"san\" 은 자음 's' 로 시작 → 첫 자음을 f 로 갈아낀 \"fan\" 이 메아리.\n\"san\" + \"fan\" = \"sanfan\"."),
     },
   ];
 }
