@@ -87,6 +87,7 @@ const scan = () => p.evaluate(() => {
   const targets = [...document.querySelectorAll('input, button, a, textarea')]
     .filter(e => e.offsetParent && !e.closest('footer'))
   const covered = []
+  const onScreen = []   // 이번 스크롤 위치에서 화면 안에 있던 것들
   targets.forEach(t => {
     const q = t.getBoundingClientRect()
     if (!q.height || q.bottom < 0 || q.top > innerHeight) return
@@ -97,10 +98,12 @@ const scan = () => p.evaluate(() => {
     const cx = Math.round(Math.min(Math.max(q.left + q.width / 2, 1), innerWidth - 1))
     const cy = Math.round(Math.min(Math.max(q.top + q.height / 2, 1), innerHeight - 1))
     const top = document.elementFromPoint(cx, cy)
+    const name = (t.tagName + ' ' + (t.textContent || t.placeholder || '').trim()).slice(0, 40)
+    onScreen.push(name)                       // 이 위치에서 화면 안에 있었다
     if (!top || top === t || t.contains(top)) return
     const blocker = bars.find(f => !f.contains(t) && (f === top || f.contains(top)))
     if (!blocker) return
-    covered.push({ what: (t.tagName + ' ' + (t.textContent || t.placeholder || '').trim()).slice(0, 40),
+    covered.push({ what: name,
                    by: (blocker.className || '').toString().slice(0, 40) || '(인라인 스타일 요소)' })
   })
   /* 글자끼리 · 글자와 도형이 **겹치나** (2026-09-08 추가).
@@ -185,14 +188,26 @@ const scan = () => p.evaluate(() => {
   const longText = [...document.querySelectorAll('p, div')]
     .filter(e => e.children.length === 0 && (e.textContent || '').trim().length > 55)
     .map(e => (e.textContent || '').trim()).slice(0, 8)
-  return { text: document.body.innerText.slice(0, 3000), covered, overlaps, longText, y: Math.round(scrollY) }
+  return { text: document.body.innerText.slice(0, 3000), covered, onScreen, overlaps, longText, y: Math.round(scrollY) }
 })
 
 // ⚠️ sticky 는 **스크롤해야** 덮는다. 맨 위에서 한 번만 보면 못 잡는다
 //    (2026-09-07: 말풍선이 버튼 4개를 덮고 있었는데 첫 화면 검사는 0개라고 했다).
 //    그래서 페이지를 내려가며 여러 번 잰다.
+/* ⚠️ 2026-09-09: 여기가 오늘 다섯 번째 헛경보를 냈다.
+   위쪽 sticky 바 **밑을 지나가는 것**을 "가려졌다" 고 신고했는데,
+   그건 sticky 헤더가 있는 어느 페이지에서나 일어난다 — 조금 올리면 다시 보인다.
+   실측: 그 버튼은 스크롤 0 에서 멀쩡히 눌렸고, 이 쪽의 최대 스크롤은 149px 인데
+   도구는 "스크롤 270px 에서 가려짐" 이라고 했다.
+   그래서 기준을 바꾼다 — **어느 스크롤 위치에서도 한 번도 못 눌린 것만** 신고한다.
+   (진짜였던 사례: 아래 고정 바에 가린 입력칸은 끝까지 내려도 안 나온다.) */
 const r = await scan()
 const seen = new Set(r.covered.map(c => c.what))
+const everClickable = new Set()
+const addClickable = (sc) => sc.onScreen.forEach(n => {
+  if (!sc.covered.some(c => c.what === n)) everClickable.add(n)
+})
+addClickable(r)
 const seenOv = new Set((r.overlaps || []).map(o => o.a + '|' + o.b))
 const H = await p.evaluate(() => document.body.scrollHeight)
 for (let y = Math.round(vp.height * 0.3); y < H; y += Math.round(vp.height * 0.3)) {
@@ -210,10 +225,14 @@ for (let y = Math.round(vp.height * 0.3); y < H; y += Math.round(vp.height * 0.3
   }))
   await p.waitForTimeout(120)
   const more = await scan()
+  addClickable(more)
   more.covered.forEach(c => { if (!seen.has(c.what)) { seen.add(c.what); r.covered.push({ ...c, y: more.y }) } })
   ;(more.overlaps || []).forEach(o => { const k = o.a + '|' + o.b; if (!seenOv.has(k)) { seenOv.add(k); r.overlaps.push(o) } })
 }
 await p.evaluate(() => window.scrollTo(0, 0)); await p.waitForTimeout(150)
+
+// 한 번이라도 눌린 것은 뺀다 — 잠깐 바 밑을 지난 것뿐이다
+r.covered = r.covered.filter(c => !everClickable.has(c.what))
 
 console.log(`\n=== ${mobile ? '모바일 375×812' : '데스크탑 1280×900'} · ${url} ===\n`)
 console.log(r.text)
