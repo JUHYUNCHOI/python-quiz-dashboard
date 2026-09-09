@@ -4,42 +4,12 @@ import { getMcc22GrammarSections } from "./components";
 const NW = { whiteSpace: "nowrap" };
 const KA = { wordBreak: "keep-all" };
 
-/* ================================================================
-   SOLUTION CODE  (fixed grammar → two checks per sentence)
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "",
-  "# The grammar is FIXED — it is given in the problem, NOT read from input.",
-  "adj = {",
-  "    'WE':   {'DONT', 'KNOW'},",
-  "    'THEY': {'DONT', 'KNOW'},",
-  "    'DONT': {'KNOW'},",
-  "    'KNOW': {'WE', 'THEY', 'THAT'},",
-  "    'THAT': {'WE', 'THEY'},",
-  "}",
-  "",
-  "data = sys.stdin.read().split('\\n')",
-  "idx = 0",
-  "T = int(data[idx])",
-  "idx += 1",
-  "out = []",
-  "for _ in range(T):",
-  "    n = int(data[idx])",
-  "    idx += 1",
-  "    words = data[idx].split()",
-  "    idx += 1",
-  "    ok = all(w in adj for w in words)",
-  "    if ok:",
-  "        for i in range(len(words) - 1):",
-  "            if words[i + 1] not in adj[words[i]]:",
-  "                ok = False",
-  "                break",
-  "    out.append('YES' if ok else 'NO')",
-  "print('\\n'.join(out))",
-];
-
-
+/* 2026-09-09: 여기 있던 SOLUTION_CODE 를 지웠다.
+   export 만 되고 **어디서도 import 되지 않는** 사본이었다 —
+   실제 화면은 components.jsx 의 FULL_PY 를 쓴다.
+   무해한 중복이 아니다: 안 쓰이니 아무도 안 봐서, 선생님이 지시하신
+   "한 줄에 여러 문장 쓰지 마라" 일괄 작업이 이 사본만 건너뛰었고
+   옛 스타일이 그대로 남아 있었다. 같은 사본이 MCC 36개에 있다(WORK.md 참조). */
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (4 steps)
    ═══════════════════════════════════════════════════════════════ */
@@ -176,8 +146,14 @@ export function makeMcc22GrammarCh1(E) {
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
             {t(E,
-              "\"WE KNOW\": WE → KNOW exists → YES. \"WE THEY\": there is no arrow WE → THEY → NO. \"I KNEW THAT THEY KNOW\": I and KNEW aren't among the 5 words → NO.",
-              "\"WE KNOW\": WE → KNOW 화살표 있음 → YES. \"WE THEY\": WE → THEY 화살표 없음 → NO. \"I KNEW THAT THEY KNOW\": I 와 KNEW 는 5개 단어에 없음 → NO.")}
+              /* 2026-09-09: 여기에 세 샘플이 왜 YES/NO 인지 이유가 다 적혀 있었다.
+                 원문 PDF 는 이 Explanation 을 Sample Output 다음 **별도 섹션**에 둔다 —
+                 형식 → 샘플 → (나중에) 설명 순서다. 우리는 형식 카드 안에 밀어 넣어
+                 [승]과 [전]을 한 쪽에 합쳤고, 그래서 다음 쪽 시뮬과 그다음 퀴즈가
+                 둘 다 "이미 읽은 것 재확인" 이 됐다. 지운 게 아니라 시뮬로 옮긴다 —
+                 시뮬이 정확히 이 네 문장을 픽업 버튼으로 갖고 있다. */
+              "Why is each one YES or NO? Pick the sentences in the sim below and step through them.",
+              "왜 각각 YES 이고 NO 일까요? 아래 시뮬에서 문장을 하나씩 골라 짚어봐요.")}
           </div>
         </div>),
     },
@@ -194,8 +170,8 @@ export function makeMcc22GrammarCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Look at the arrows out of each word. \"WE THEY\": is there an arrow WE → THEY? WE only points to DONT and KNOW.",
-        "각 단어에서 나가는 화살표를 봐요. \"WE THEY\": WE → THEY 화살표가 있나요? WE 는 DONT 와 KNOW 로만 가리켜요."),
+        "Check it against the arrow list below.",
+        "아래 화살표 목록과 맞춰봐요."),
       question: t(E,
         "Grammar: WE → {DONT, KNOW}, THEY → {DONT, KNOW}, DONT → {KNOW}, KNOW → {WE, THEY, THAT}, THAT → {WE, THEY}. Is the sentence \"WE THEY\" correct?",
         "문법: WE → {DONT, KNOW}, THEY → {DONT, KNOW}, DONT → {KNOW}, KNOW → {WE, THEY, THAT}, THAT → {WE, THEY}. 문장 \"WE THEY\" 는 맞을까요?"),
@@ -221,22 +197,30 @@ export function makeMcc22GrammarCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The check itself is a single pass over each sentence — the only question is how fast one 'is this pair allowed?' lookup is. Scanning a list of all arrows every time is wasteful; storing each word's allowed successors as a set makes every lookup instant.",
-        "검사 자체는 각 문장을 한 번 훑는 것뿐이에요 — 관건은 '이 쌍이 허용되나?' 조회 한 번이 얼마나 빠른가예요. 매번 모든 화살표 목록을 훑는 건 낭비고, 각 단어의 허용 다음-단어를 집합으로 저장하면 조회가 한 번에 끝나요."),
+        /* 2026-09-09: 여기가 **가짜 병목**이었다.
+           "매번 모든 화살표를 훑는 건 낭비" 라고 🐢느림/🚀빠름 대비를 만들어놨는데,
+           제약을 넣고 계산해보면 Σn ≤ 100,000 이고 화살표가 10개라 최악이 100만 번이다 —
+           시간 제한 문턱(10^8)의 1/100 이다. **전혀 안 느리다.**
+           타임아웃 시뮬도 느려지는 장면도 없이 "낭비예요" 문장 하나뿐이었다.
+           없는 병목을 있는 것처럼 말하면 학생이 "이 문제엔 진짜 속도 문제가 있구나" 라고
+           **잘못 배운다.** 속도 서사를 걷어내고 진짜 이유로 바꾼다 —
+           표를 한 번 만들어두면 코드가 짧고, 읽는 사람이 규칙을 한눈에 본다. */
+        "Both checks are just lookups. The question is what shape to keep the grammar in so the code stays short and obvious.",
+        "두 검사 모두 '찾아보기' 예요. 문법을 어떤 모양으로 들고 있어야 코드가 짧고 한눈에 보일까요?"),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
-              <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
-                🐢 {t(E, "Slow: scan the whole arrow list for every pair", "느림: 쌍마다 화살표 목록 전체를 훑기")}
+            <div style={{ background: "#f8fafc", border: "1px solid #cbd5e1", borderRadius: 10, padding: "10px 14px" }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: "#475569", marginBottom: 4 }}>
+                📋 {t(E, "One way: scan the whole arrow list for every pair", "한 방법: 쌍마다 화살표 목록 전체를 훑기")}
               </div>
-              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "For each neighbor pair, walk through all 10 arrows to see if it's there. Works, but repeats the same scan again and again.", "이웃한 쌍마다 화살표 10개를 모두 훑어 있는지 확인. 되긴 하지만 같은 훑기를 계속 반복해요.")}
+              <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55, whiteSpace: "pre-line" }}>
+                {t(E, "For each neighbor pair, walk through all 10 arrows to see if it is there. This works fine here — 100,000 pairs times 10 arrows is only a million steps.", "이웃한 쌍마다 화살표 10개를 다 훑어 있는지 봐요.\n여기선 이것도 충분히 빨라요 — 쌍 10만 개 × 화살표 10개면 100만 걸음이거든요.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: adj[word] = set of allowed successors", "빠름: adj[단어] = 허용 다음-단어 집합")}
+                ✨ {t(E, "Nicer: adj[word] = set of allowed successors", "더 나은 방법: adj[단어] = 허용 다음-단어 집합")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "Build the table once. Then 'word in adj' (check ①) and 'next in adj[word]' (check ②) are each one instant lookup — a single pass over each sentence.", "표를 한 번 만들어 둬요. 그러면 'word in adj' (검사 ①) 와 'next in adj[word]' (검사 ②) 가 각각 한 번의 즉시 조회 — 문장마다 한 번만 훑어요.")}
@@ -244,7 +228,7 @@ export function makeMcc22GrammarCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
-            {t(E, "↓ the fast code, section by section.", "↓ 빠른 코드가 아래에 한 단락씩 나와요.")}
+            {t(E, "↓ the code, section by section.", "↓ 코드가 아래에 한 단락씩 나와요.")}
           </div>
         </div>),
     },
