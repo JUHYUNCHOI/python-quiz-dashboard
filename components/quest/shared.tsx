@@ -39,6 +39,11 @@ export function Narration({ text, variant = "accent" }: NarrationProps) {
 
   return (
     <div
+      /* 2026-09-09: 검사 도구가 파란 내레이션 바만 골라 셀 수 있게 표시를 단다.
+         전에는 see-screen.mjs 가 "55자 넘는 문장" 을 셀 때 narr 과 미션 박스·불릿을
+         구분 못 해서, 사람이 소스를 다시 열어 어느 게 진짜 narr 인지 골라야 했다.
+         quest 180개 전부가 이 컴포넌트를 쓰므로(로컬 재구현 0건 확인) 이 한 줄로 끝난다. */
+      data-narr="1"
       className={`rounded-xl border-2 px-2 sm:px-4 py-1.5 sm:py-2.5 text-[13px] sm:text-sm font-semibold leading-relaxed whitespace-pre-line break-keep mb-2 sm:mb-2.5 min-h-[36px] sm:min-h-[40px] font-sans ${variantClasses[variant]}`}
     >
       {shown}

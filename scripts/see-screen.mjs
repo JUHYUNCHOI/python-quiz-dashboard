@@ -206,10 +206,16 @@ const scan = () => p.evaluate(() => {
                     b: (B.textContent || '').trim().slice(0, 16), r: +ratio.toFixed(2) })
   }
 
+  /* 2026-09-09: 전에는 p·div 를 전부 훑어 55자 넘는 것을 다 찍었다. 그래서
+     파란 내레이션 바(55자 규칙이 걸리는 자리)와 미션 박스·정의 불릿(그런 규칙이 없는 자리)이
+     한 줄에 나란히 나왔고, 사람이 소스를 다시 열어 어느 게 진짜 narr 인지 골라야 했다.
+     `Narration` 컴포넌트에 data-narr="1" 을 달았으니 이제 갈라서 찍는다. */
+  const narrLong = [...document.querySelectorAll('[data-narr]')]
+    .map(e => (e.textContent || '').trim()).filter(t => t.length > 55)
   const longText = [...document.querySelectorAll('p, div')]
     .filter(e => e.children.length === 0 && (e.textContent || '').trim().length > 55)
     .map(e => (e.textContent || '').trim()).slice(0, 8)
-  return { text: document.body.innerText.slice(0, 3000), covered, onScreen, overlaps, longText, y: Math.round(scrollY) }
+  return { text: document.body.innerText.slice(0, 3000), covered, onScreen, overlaps, longText, narrLong, y: Math.round(scrollY) }
 })
 
 // ⚠️ sticky 는 **스크롤해야** 덮는다. 맨 위에서 한 번만 보면 못 잡는다
@@ -262,8 +268,10 @@ r.covered.slice(0, 10).forEach(c => console.log(`   🚨 ${c.what}  ← ${c.by}$
 console.log(`\n── 글자·도형이 겹친 곳: ${r.overlaps.length}개`)
 r.overlaps.slice(0, 8).forEach(o => console.log(`   🚨 "${o.a}" ↔ "${o.b}"  (겹침 ${Math.round(o.r * 100)}%)`))
 
-console.log(`\n── 55자 넘는 문장: ${r.longText.length}개 (feedback_narration_short.md 기준)`)
-r.longText.forEach(t => console.log(`   ${t.length}자: ${t.slice(0, 70)}…`))
+console.log(`\n── 파란 내레이션 바 55자 초과: ${r.narrLong.length}개  ← feedback_narration_short.md 가 말하는 자리`)
+r.narrLong.forEach(t => console.log(`   🚨 ${t.length}자: ${t.slice(0, 70)}…`))
+console.log(`── 그 밖에 55자 넘는 긴 글: ${r.longText.length - r.narrLong.length}개 (참고용 — 미션 박스·불릿엔 55자 규칙이 없다)`)
+r.longText.filter(t => !r.narrLong.includes(t)).forEach(t => console.log(`   · ${t.length}자: ${t.slice(0, 60)}…`))
 
 // --sim: 시뮬을 끝까지 눌러가며 **매 단계** 설명 말풍선이 화면에 남아 있는지 본다
 if (args.includes('--sim')) {
