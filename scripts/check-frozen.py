@@ -57,7 +57,14 @@ def main():
         p = os.path.join(ROOT, f)
         if os.path.exists(p) and f.endswith((".jsx", ".tsx", ".ts")):
             head = open(p, encoding="utf-8", errors="ignore").read(600)
-            if "USACO_VERIFIED" in head:
+            # 2026-09-09: 전에는 앞 600자에 "USACO_VERIFIED" 라는 **글자**가 있으면 걸었다.
+            # 그래서 collatz/sims.jsx 가 계속 울렸다 — 거짓 잠금 표시를 지우면서
+            # "여기 USACO_VERIFIED 라고 적혀 있었는데 거짓이었다" 는 설명을 주석에 남겼더니,
+            # 그 설명 글자를 헤더로 오인한 것이다. 그 파일을 건드린 커밋 두 개가 연달아 울렸다.
+            # 계속 울리는 헛경보를 두면 아무도 검사기를 안 본다
+            # (check-quiz-spoiler.py 의 shellgame 때와 같은 병).
+            # **진짜 헤더 모양**만 잡는다 — 줄 맨 앞의 `// 🔒 USACO_VERIFIED` 형태.
+            if re.search(r"^\s*//\s*🔒?\s*USACO_VERIFIED", head, re.M):
                 hits_verified.append(f)
 
     if not hits_frozen and not hits_verified:
