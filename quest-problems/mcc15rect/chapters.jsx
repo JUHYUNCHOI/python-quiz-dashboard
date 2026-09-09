@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
-import { getMcc15RectSections } from "./components";
+import { getMcc15RectSections, getMcc15RectWalk } from "./components";
+import { CodeWalk } from "@/components/quest/CodeWalk";
 
 const NW = { whiteSpace: "nowrap" };
 const KA = { wordBreak: "keep-all" };
@@ -423,12 +424,20 @@ export function makeMcc15RectCh2(E, lang = "py") {
           </div>
         </div>),
     },
-    // 2-2: progressive code
+    // 2-2: 코드 — CodeWalk (설명 말풍선이 코드 줄에 붙는다)
+    /* 전에는 코드 **위에** why 4줄 + pyOnly 3 + cppOnly 3 이 얹혀 있었다.
+       memory/feedback_quest_code_codewalk.md 가 이 모양을 이름 대고 금지한다
+       (선생님 2026-07-14: "코드 위 설명은 안 읽힘. 앞으로 코드는 모두 이런식으로.")
+       형제 quest mcc19rect2 를 본떠 바꾼다 (2026-09-09, 파일럿). */
     {
-      type: "progressive",
+      type: "reveal",
       narr: t(E,
-        "Solution code — read part by part.", "풀이 코드 — 부분별로 읽어봐요."),
-      sections: getMcc15RectSections(E),
+        "Each bubble sits on the line it explains.",
+        "말풍선이 설명하는 코드 줄에 붙어 있어요."),
+      content: (() => {
+        const w = getMcc15RectWalk(E, lang);
+        return <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent={A} />;
+      })(),
     },
   ];
 }

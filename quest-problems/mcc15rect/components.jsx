@@ -93,6 +93,59 @@ export function Mcc15RectProgressiveCode(props) {
   return <ProgressiveCodeStepper {...props} accentColor="#059669" />;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   getMcc15RectWalk — CodeWalk 용 {code, vars, beats}
+
+   말풍선을 설명하는 코드 줄에 붙인다 (memory/feedback_quest_code_codewalk.md,
+   선생님 2026-07-14 "코드 위 설명은 안 읽힘. 앞으로 코드는 모두 이런식으로.").
+   전에는 코드 **위에** why 4줄 + pyOnly 3 + cppOnly 3 이 얹혀 있었다.
+   형제 quest mcc19rect2 를 본떠 CodeWalk 로 바꾼다 (2026-09-09, 파일럿).
+
+   ⚠️ hi 는 **0부터 세는 줄 번호**다 (화면에 보이는 번호는 +1).
+   FULL_PY 는 21 줄(인덱스 0~20), FULL_CPP 는 19 줄(인덱스 0~18) — 기계로 대조함.
+   ═══════════════════════════════════════════════════════════════ */
+const _RECT_VARS = [
+  { v: "x4", ko: "짝 없는 x → 4번째 꼭짓점의 x", en: "the lonely x → 4th corner's x" },
+  { v: "y4", ko: "짝 없는 y → 4번째 꼭짓점의 y", en: "the lonely y → 4th corner's y" },
+];
+
+export function getMcc15RectWalk(E, lang = "py") {
+  if (lang === "cpp") {
+    return {
+      code: FULL_CPP, vars: _RECT_VARS, beats: [
+        { hi: [3, 5], bubble: t(E,
+          "Declare the three known corners and read them all with one cin statement.",
+          "알고 있는 꼭짓점 셋을 선언하고, cin 한 줄로 다 읽어요.") },
+        { hi: [7, 10], bubble: t(E,
+          "int is enough — coordinates stay within ±1,000. if / else if / else picks whichever x has no partner among the three.",
+          "좌표가 ±1,000 이라 int 로 충분해요.\nif / else if / else 가 셋 중 짝 없는 x 를 골라요.") },
+        { hi: [12, 14], bubble: t(E,
+          "Same idea for y.",
+          "y 도 똑같이 해요.") },
+        { hi: [16, 18], bubble: t(E,
+          "Print the space yourself with cout — C++ does not insert one automatically.",
+          "공백은 cout 에서 직접 넣어요 — C++ 는 자동으로 안 넣어줘요.") },
+      ],
+    };
+  }
+  return {
+    code: FULL_PY, vars: _RECT_VARS, beats: [
+      { hi: [0, 2], bubble: t(E,
+        "Read the three known corners: (x1,y1), (x2,y2), (x3,y3).",
+        "알고 있는 꼭짓점 셋을 읽어요.\n(x1,y1), (x2,y2), (x3,y3).") },
+      { hi: [4, 11], bubble: t(E,
+        "The sides are parallel to the axes, so each x value belongs to two corners. Among the three x's, two match and one has no partner — that lonely x becomes x4.",
+        "변이 축에 평행하니 x 값 하나는 꼭짓점 두 개가 나눠 써요.\nx 셋 중 둘은 같고 하나는 짝이 없어요 — 그 짝 없는 값이 x4예요.") },
+      { hi: [13, 18], bubble: t(E,
+        "Same idea for y — the y with no partner among the three becomes y4.",
+        "y 도 똑같아요.\n셋 중 짝 없는 y 가 y4가 돼요.") },
+      { hi: [20, 20], bubble: t(E,
+        "print(x4, y4) puts a space between the two numbers automatically — exactly the format we need.",
+        "print(x4, y4) 는 두 수 사이에 공백을 자동으로 넣어요.\n필요한 출력 형식 그대로예요.") },
+    ],
+  };
+}
+
 
 const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","list","max","min","sorted","sum","set","tuple","dict","abs"];
 const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","include","vector","max","min","sort","pair","map","set"];
