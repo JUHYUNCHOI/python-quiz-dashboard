@@ -345,6 +345,9 @@ export function makeMcc20ZigzagCh1(E) {
     // Interactive zig-zag simulator (additive, bilingual)
     {
       type: "reveal",
+      /* 2026-09-09: 이 narr 이 답을 미리 계산해서 말하고 있었다.
+         narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
+         상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
         "Tweak the string and slide K to feel zig-zag in your bones. Pick slots in order to test a candidate — green arrows mean each step flips direction; red means two same-direction steps in a row, so it isn't zig-zag.",
         "문자열을 바꾸고 K 를 옮겨가며 지그재그를 직접 느껴봐요. 슬롯을 골라 후보를 만들어보면, 매 칸 방향이 뒤집히면 초록 화살표 — 같은 방향이 두 번 나오면 빨강이라 지그재그가 아니에요."),
@@ -356,7 +359,7 @@ export function makeMcc20ZigzagCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "String 'abc', how many subsequences of length 2? C(3,2) = 3: ab, ac, bc.", "문자열 'abc', 길이 2 부분수열 몇 개? C(3,2) = 3: ab, ac, bc."),
+        "From the string 'abc', pick two letters keeping their order.", "문자열 'abc' 에서 글자 두 개를 순서대로 골라봐요."),
       question: t(E,
         "String 'abc'. How many subsequences of length 2?",
         "문자열 'abc'. 길이 2 부분수열 몇 개?"),

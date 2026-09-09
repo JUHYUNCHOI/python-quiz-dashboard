@@ -478,3 +478,16 @@ LineUpSim(이웃끼리 견줘 바꾸기)을 4쪽에 넣고, 마지막에 진한 
 세는 법:
   t(E, …) 의 한국어 자리에서 위 표현을 찾는다. 컴포넌트 이름(DeepAuditSim)은 학생이 안 보니 제외.
 ⚠️ 이름만 바꾸지 말고 **그 쪽이 학생에게 무엇을 시키는지**로 다시 지어라.
+
+### 정답 보기만 유독 긴 퀴즈 17건 (14개 quest, 미착수)
+2026-09-09, 스포일러 8건을 고치다 눈에 띄었다. **정답만 설명형으로 길고 나머지는 짧다** —
+모르고도 제일 긴 걸 고르면 맞는다. 스포일러와 같은 병이다(생각 없이 답을 안다).
+찾는 법: `python3 scripts/check-quiz-spoiler.py` 두 번째 절.
+
+  🔒 동결(선생님 허락 필요): cheese · moo
+  🔒 USACO 검증 파일: cowgym · interview · mixmilk · outofplace · shellgame · sleepclass · whereami
+     (⚠️ 잠금은 SOLUTION_CODE·*_PY·*_CPP 에만 걸린다. **퀴즈 보기 글자는 고쳐도 된다** —
+      다만 check-frozen.py 가 파일 단위로 경고하니 커밋 전에 무엇을 고쳤는지 밝혀라.)
+  자유: fences · lc3 · mcc20kitty · mcc20missing · mcc21glass
+고치는 법: 오답 보기를 정답과 **같은 길이·같은 결**로 다시 쓴다. 정답을 줄이지 마라 —
+줄이면 설명이 사라진다. 오답을 그럴듯하게 길게 쓰는 쪽이 맞다.

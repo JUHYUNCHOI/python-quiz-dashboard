@@ -255,6 +255,9 @@ export function makeWordProcCh1(E) {
     // 1-4: Line fitting example
     {
       type: "reveal",
+      /* 2026-09-09: 이 narr 이 답을 미리 계산해서 말하고 있었다.
+         narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
+         상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
         "Let's trace a bigger example!\nWords: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5.\nWe add words greedily until the next one doesn't fit.", "더 큰 예시를 추적해보자! 단어: [\"ab\", \"cd\", \"ef\", \"gh\"], K=5. 다음 단어가 안 들어갈 때까지 그리디하게 추가해요."),
       content: (
@@ -299,7 +302,7 @@ export function makeWordProcCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Words [\"ab\",\"cd\",\"ef\"], K=5.\nab(2)+cd(2)=4, fits.\n4+ef(2)=6>5, new line.\nSo 2 lines!", "단어 [\"ab\",\"cd\",\"ef\"], K=5. ab(2)+cd(2)=4, 들어감. 4+ef(2)=6>5, 새 줄. 그래서 2줄!"),
+        "Words [\"ab\",\"cd\",\"ef\"], K=5. Fill a line from the front.", "단어 [\"ab\",\"cd\",\"ef\"], K=5. 앞에서부터 한 줄에 담아봐요."),
       question: t(E,
         "Words [\"ab\",\"cd\",\"ef\"], K=5. How many lines?",
         "단어 [\"ab\",\"cd\",\"ef\"], K=5. 몇 줄?"),

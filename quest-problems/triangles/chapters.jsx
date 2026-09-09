@@ -45,6 +45,9 @@ export function makeTrianglesCh1(E) {
     // 1-1: Title reveal
     {
       type: "reveal",
+      /* 2026-09-09: 이 narr 이 답을 미리 계산해서 말하고 있었다.
+         narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
+         상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
         "FJ has N fence posts at integer (x, y) positions. He wants to choose three posts to form a RIGHT triangle whose two legs are parallel to the x and y axes.\nPrint TWICE the maximum area of such a triangle (to keep the answer integer).",
         "FJ 한테 정수 좌표 (x, y) 의 N 개 울타리 기둥이 있어요. 그중 세 기둥으로 직각 삼각형 — 두 변이 각각 x 축과 y 축에 평행한 — 을 만들어요.\n그 삼각형의 최대 넓이의 2 배 (소수 없이 정수로) 를 출력해요."),
@@ -105,7 +108,7 @@ export function makeTrianglesCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Points: (0,0), (1,0), (0,2).\nThe right angle is at (0,0).\nBase = 1, Height = 2.\nArea = 1.\nOutput = 2 * area = ?", "점: (0,0), (1,0), (0,2). 직각이 (0,0). 밑변 = 1, 높이 = 2. 넓이 = 1. 출력 = 2 * 넓이 = ?"),
+        "Points (0,0), (1,0), (0,2), with the right angle at (0,0). Measure the base and the height first.", "점: (0,0), (1,0), (0,2). 직각이 (0,0) 에 있어요. 밑변과 높이를 먼저 재봐요."),
       question: t(E,
         "Points (0,0),(1,0),(0,2). Right angle at origin. 2 * area = ?",
         "점 (0,0),(1,0),(0,2). 원점에서 직각. 2 * 넓이 = ?"),

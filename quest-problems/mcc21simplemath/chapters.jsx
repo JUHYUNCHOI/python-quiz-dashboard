@@ -170,6 +170,9 @@ export function makeMcc21SimpleMathCh1(E) {
     // 1-3: concept sim
     {
       type: "opsim",
+      /* 2026-09-09: 이 narr 이 답을 미리 계산해서 말하고 있었다.
+         narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
+         상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
         "Feel it on {1,2,3}. List all 7 subsets, watch the running total, then reveal the shortcut that reaches the same total without listing.",
         "{1,2,3} 로 직접 느껴봐요. 7 개 부분집합을 다 나열하고 누적 합을 보고, 나열 없이 같은 합에 닿는 지름길을 열어봐요."),
@@ -180,8 +183,8 @@ export function makeMcc21SimpleMathCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In {1,2,3}, fix the number 1. The other two (2 and 3) are each either in or out: 2×2 = 4 subsets contain 1.",
-        "{1,2,3} 에서 수 1 을 고정해요. 나머지 둘(2 와 3)은 각각 있거나 없거나: 2×2 = 4 개의 부분집합이 1 을 포함해요."),
+        "Fix the number 1 in {1,2,3}. Each of the other two (2 and 3) is either in or out.",
+        "{1,2,3} 에서 수 1 을 고정해요. 나머지 둘(2 와 3)은 각각 있거나 없거나예요."),
       question: t(E,
         "Among the 7 nonempty subsets of {1,2,3}, how many contain the number 1?",
         "{1,2,3} 의 7 개 부분집합 중, 수 1 을 포함하는 건 몇 개?"),

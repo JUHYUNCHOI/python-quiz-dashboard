@@ -456,6 +456,9 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     // 3-2 phase 2: find the cycle
     {
       type: "reveal",
+      /* 2026-09-09: 이 narr 이 답을 미리 계산해서 말하고 있었다.
+         narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
+         상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
         "Phase 2: remember every 5-window we've seen with a dict. The first time a window comes back, we've found where the cycle starts and how long it is.",
         "2단계: 지금까지 본 5칸 창을 dict에 기억해요. 어떤 창이 처음으로 다시 나오는 순간, 사이클이 어디서 시작하고 길이가 얼마인지 알아내요."),
@@ -480,8 +483,8 @@ export function makeMcc20KittyCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "There are only 243 possible windows, so a repeat is guaranteed within 243 steps — the search can never run away.",
-        "가능한 창이 243개뿐이라, 243단계 안에 반복이 보장돼요 — 탐색이 폭주할 일이 없어요."),
+        "A window is 5 remainders, and each remainder is one of 0, 1, 2.",
+        "창 하나는 나머지 5 개로 이뤄지고, 나머지는 0·1·2 셋 중 하나예요."),
       question: t(E,
         "At most how many windows must we check before one is guaranteed to repeat?",
         "하나가 반드시 반복되기 전까지, 최대 몇 개의 창을 확인해야 하나요?"),

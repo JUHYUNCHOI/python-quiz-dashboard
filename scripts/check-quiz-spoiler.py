@@ -28,6 +28,14 @@ def ko(m):
 def norm(s):
     return re.sub(r"[\s\(\)\[\]'\",.·—–\-!?]+", "", s)
 
+# 사람이 보고 "이건 설정이지 답이 아니다" 라고 판정한 자리. 이유를 꼭 적어라.
+# 계속 울리는 헛경보를 두면 아무도 이 검사기를 안 본다.
+ALLOW = {
+    # narr: "조약돌이 1번에 있고, 1번과 3번을 교환. 어디로 가?" / 정답 "3번"
+    # → 3 은 **문제 설정**(어느 컵과 바꾸는지)이지 답을 말한 게 아니다. 2026-09-09 판정.
+    ("shellgame", "3번"),
+}
+
 hits = []
 for f in sorted(glob.glob("quest-problems/*/chapters.jsx")):
     s = io.open(f, encoding="utf-8").read()
@@ -45,6 +53,7 @@ for f in sorted(glob.glob("quest-problems/*/chapters.jsx")):
         if not ans: continue
         # 정답 보기의 핵심 조각이 narr 안에 통째로 들어 있나
         core = max(re.split(r"[→=]", ans), key=len)
+        if (f.split("/")[1], o[i].strip()) in ALLOW: continue
         if len(core) >= 2 and core in narr:
             hits.append((f.split("/")[1], o[i][:44], n.group(1)[:60]))
             continue
@@ -60,4 +69,31 @@ print("  (판정이 아니다 — 각 자리를 눈으로 보고 '설정' 인지
 for q, a, nr in hits:
     print(f"  🚨 {q}\n     정답: {a}\n     narr: {nr}…")
 
-sys.exit(1 if hits else 0)
+# ── 두 번째 검사: 정답 보기만 유독 길다 ──────────────────────────────
+# 2026-09-09 에 추가. 스포일러 8건을 고치며 눈에 띄었다 —
+# 여러 퀴즈에서 **정답만 설명형으로 길고 나머지는 짧다.**
+# 그러면 모르고도 제일 긴 걸 고르면 맞는다. 스포일러와 같은 병이다:
+# 학생이 생각하지 않고도 답을 안다.
+long_ans = []
+for f in sorted(glob.glob("quest-problems/*/chapters.jsx")):
+    s2 = io.open(f, encoding="utf-8").read()
+    for blk in QUIZ.findall(s2):
+        o = re.search(r"options:\s*\[(.*?)\]", blk, re.S)
+        c = re.search(r"correct:\s*(\d+)", blk)
+        if not (o and c):
+            continue
+        opts = ko(o.group(1))
+        i = int(c.group(1))
+        if i >= len(opts) or len(opts) < 3:
+            continue
+        others = [len(x) for k, x in enumerate(opts) if k != i]
+        # 2배 넘게 길고, 그 자체도 짧지 않을 때만 (2026-09-09 기준 17건)
+        if others and len(opts[i]) > 2.0 * max(others) and len(opts[i]) >= 16:
+            long_ans.append((f.split("/")[1], opts[i][:52]))
+
+print(f"\n정답 보기만 다른 보기의 2배 넘게 긴 퀴즈: {len(long_ans)}건")
+print("  (모르고도 제일 긴 걸 고르면 맞는다. 보기 길이를 비슷하게 맞춰라.)")
+for q, a in long_ans:
+    print(f"  ⚠️ {q:<16} {a}…")
+
+sys.exit(1 if (hits or long_ans) else 0)

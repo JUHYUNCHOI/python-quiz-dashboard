@@ -9,6 +9,9 @@ export function makeDroughtCh1(E) {
     // 1-1: Title reveal
     {
       type: "reveal",
+      /* 2026-09-09: 이 narr 이 답을 미리 계산해서 말하고 있었다.
+         narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
+         상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
         "FJ has N cows in a row, each with some hunger level.\nIn one operation, you pick a pair of adjacent cows and reduce BOTH of their hunger levels by 1.\nYou want every cow to end at the SAME (non-negative) hunger level — find the minimum number of operations, or print -1 if impossible. There are T such test cases.",
         "FJ에게 한 줄로 선 N마리 소가 있고, 각 소는 배고픔 수치를 가져요.\n한 번의 연산으로 인접한 두 소를 골라 둘의 배고픔을 동시에 1씩 줄여요.\n모든 소를 같은 (음이 아닌) 배고픔 값으로 만드는 최소 연산 횟수를 출력해요. 불가능하면 -1. 이런 테스트 케이스가 T개 주어져요."),
@@ -86,7 +89,7 @@ export function makeDroughtCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Let's think about [2, 2].\nWe can feed pair (0,1) to decrease both.\nTarget 0 needs 2 feeds.", "[2, 2]를 생각해보자. 쌍(0,1)에 먹이를 줘서 둘 다 줄일 수 있어요. 목표 0이면 2번 먹이를 줘야 해요."),
+        "Take [2, 2]. Feeding the pair (0,1) lowers both at once.", "[2, 2] 를 생각해봐요. 쌍(0,1)에 먹이를 주면 둘이 같이 줄어요."),
       question: t(E,
         "[2, 2]: feeding pair (0,1) twice gives [0, 0]. How many operations?",
         "[2, 2]: 쌍(0,1)에 2번 먹이 주면 [0, 0]. 몇 번의 연산?"),

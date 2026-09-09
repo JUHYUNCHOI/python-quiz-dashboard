@@ -116,6 +116,9 @@ export function makeSwapityCh1(E) {
     // 1-2: Sim — animate one round + cycle detection on [1..5]
     {
       type: "reveal",
+      /* 2026-09-09: 이 narr 이 답을 미리 계산해서 말하고 있었다.
+         narr 은 질문과 무관하게 항상 먼저 뜬다 — 안 풀어도 읽기만 하면 답이 보였다.
+         상황만 남기고 계산은 뺐다. 찾은 도구: scripts/check-quiz-spoiler.py */
       narr: t(E,
         "Before the quiz, watch a round play out. Reverse 1–3, then reverse 3–5. Keep clicking until the array returns to [1,2,3,4,5] — that count is the cycle length.",
         "퀴즈 전에 한 라운드가 실행되는 걸 보자. 1–3 뒤집기, 그 다음 3–5 뒤집기. 배열이 [1,2,3,4,5] 로 돌아올 때까지 계속 눌러 봐 — 그 횟수가 순환 길이."),
@@ -125,7 +128,7 @@ export function makeSwapityCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "[1,2,3]: reverse pos 1-2 -> [2,1,3], then reverse pos 2-3 -> [2,3,1].\nThat's 1 round.\nAfter 3 rounds it returns to [1,2,3].\nWhat's the cycle length?", "[1,2,3]: 위치 1-2 뒤집기 -> [2,1,3], 위치 2-3 뒤집기 -> [2,3,1]. 1라운드. 3라운드 후 [1,2,3]으로 복귀. 순환 길이는?"),
+        "[1,2,3]: reverse 1-2 → [2,1,3], then reverse 2-3 → [2,3,1]. That is one round.", "[1,2,3]: 위치 1-2 뒤집기 → [2,1,3], 위치 2-3 뒤집기 → [2,3,1]. 여기까지가 1 라운드예요."),
       question: t(E,
         "[1,2,3] with reversals at (1-2) then (2-3). Cycle length?",
         "[1,2,3]에서 (1-2), (2-3) 뒤집기. 순환 길이?"),
