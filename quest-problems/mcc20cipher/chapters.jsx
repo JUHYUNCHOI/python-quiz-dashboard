@@ -20,6 +20,11 @@ for (let i = 0; i < DEMO_SRC.length; i++) DEMO_STEP[DEMO_SRC[i]] = DEMO_DST[i];
 function CipherHopSim({ E }) {
   const [start, setStart] = useState("a");
   const [k, setK] = useState(2);
+  /* 2026-09-09: 이 시뮬 마무리 문구(:104 근처)가 "26글자에 대해 한 번만 구해두면 끝" 이라고
+     **이 문제의 핵심 알고리즘을 문제 탭에서** 미리 말했다. 학생이 그것 때문에
+     "코드가 놀랍지 않았다" 고 했다. 같은 얘기가 코드 탭에서 두 번 더 나온다.
+     조작을 한 번이라도 하면 그때 드러나게 한다 (mcc21carrots 와 같은 수법). */
+  const [touched, setTouched] = useState(false);
 
   // path of letters visited: start, step(start), step(step(start)), ...
   const path = [start];
@@ -69,7 +74,7 @@ function CipherHopSim({ E }) {
           <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
             <span style={{ fontSize: 12, color: "#065f46", fontWeight: 600 }}>{t(E, "start:", "시작:")}</span>
             {DEMO_SRC.split("").map((ch) => (
-              <button key={ch} onClick={() => setStart(ch)} style={{
+              <button key={ch} onClick={() => { setTouched(true); setStart(ch); }} style={{
                 width: 26, height: 26, borderRadius: 6, fontFamily: "'JetBrains Mono',monospace",
                 fontSize: 13, fontWeight: 700, cursor: "pointer",
                 border: start === ch ? "2px solid #059669" : "1px solid #a7f3d0",
@@ -79,9 +84,9 @@ function CipherHopSim({ E }) {
           </div>
           <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
             <span style={{ fontSize: 12, color: "#065f46", fontWeight: 600 }}>K =</span>
-            <button onClick={() => setK(Math.max(0, k - 1))} style={kBtn}>−</button>
+            <button onClick={() => { setTouched(true); setK(Math.max(0, k - 1)); }} style={kBtn}>−</button>
             <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, fontWeight: 800, color: "#059669", minWidth: 18, textAlign: "center" }}>{k}</span>
-            <button onClick={() => setK(Math.min(7, k + 1))} style={kBtn}>+</button>
+            <button onClick={() => { setTouched(true); setK(Math.min(7, k + 1)); }} style={kBtn}>+</button>
           </div>
         </div>
 
@@ -101,10 +106,15 @@ function CipherHopSim({ E }) {
           <b style={{ color: "#34d399" }}>'{start}'</b> → <b style={{ color: "#6ee7b7" }}>'{landed}'</b>
         </div>
 
-        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
-          {t(E,
-            "So each letter has one final destination after K hops. Find that for all 26 letters once — then any message, however long, is a single lookup per character.",
-            "그러니 각 글자는 K번 뛴 뒤 도착지가 하나로 정해져요. 26글자에 대해 이걸 한 번만 구해두면, 아무리 긴 메시지라도 글자마다 한 번의 조회로 끝나요.")}
+        <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
+          {
+            touched
+              ? t(E,
+                  "So each letter has one final destination after K hops. Find that for all 26 letters once — then any message, however long, is a single lookup per letter.",
+                  "그러니 각 글자는 K번 뛴 뒤 도착지가 하나로 정해져요.\n26글자에 대해 이걸 한 번만 구해두면, 아무리 긴 메시지라도 글자마다 한 번의 조회로 끝나요.")
+              : t(E,
+                  "Try another letter, or change K. Does each letter always land somewhere fixed?",
+                  "다른 글자도 눌러보고 K 도 바꿔봐요.\n글자마다 도착지가 늘 하나로 정해질까요?")}
         </div>
       </div>
     </div>
@@ -118,29 +128,9 @@ const kBtn = {
 /* ================================================================
    SOLUTION CODE  (fast: precompute each letter's K-step landing)
    ================================================================ */
-export const SOLUTION_CODE = [
-  "S = input().strip()",
-  "K = int(input())",
-  "A = input().strip()",
-  "B = input().strip()",
-  "",
-  "# one application of the rule: A[i] turns into B[i]",
-  "step = {}",
-  "for i in range(26):",
-  "    step[A[i]] = B[i]",
-  "",
-  "# where does each letter land after K applications?",
-  "after = {}",
-  "for c in 'abcdefghijklmnopqrstuvwxyz':",
-  "    x = c",
-  "    for _ in range(K):",
-  "        x = step[x]",
-  "    after[c] = x",
-  "",
-  "# rewrite the message in one pass",
-  "print(''.join(after[c] for c in S))",
-];
-
+/* 2026-09-09: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도 import 되지
+   않는 사본이었다(화면은 components.jsx 의 FULL_PY 를 쓴다). MCC 36개에 같은 사본이 있고,
+   안 쓰이니 아무도 안 봐서 선생님의 "한 줄에 여러 문장 쓰지 마라" 작업이 그것들만 건너뛰었다. */
 export function makeMcc20CipherCh1(E) {
   return [
     // 1-1: Title + mission + problem
@@ -224,7 +214,7 @@ export function makeMcc20CipherCh1(E) {
               <div>• <b>A</b>, <b>B</b> — {t(E, "two permutations of a–z; A[i] → B[i]", "a–z 의 순열 두 개; A[i] → B[i]")}</div>
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
-              {t(E, "Limits: |S| ≤ 100000, 1 ≤ K ≤ 100000.", "제약: |S| ≤ 100000, 1 ≤ K ≤ 100000.")}
+              {t(E, "Limits: |S| (S 의 길이) ≤ 100000, 1 ≤ K ≤ 100000.", "제약: |S| ≤ 100000, 1 ≤ K ≤ 100000.")}
             </div>
           </div>
 
@@ -241,10 +231,14 @@ export function makeMcc20CipherCh1(E) {
               <div style={{ fontWeight: 800 }}>epal</div>
             </div>
           </div>
-          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
+          <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
             {t(E,
-              "Each letter of \"ctej\" follows its arrow twice: c→…→e, t→…→p, e→…→a, j→…→l, giving \"epal\".",
-              "\"ctej\" 의 각 글자가 화살표를 두 번 따라가요: c→…→e, t→…→p, e→…→a, j→…→l → \"epal\".")}
+              /* 2026-09-09: 여기에 "c→…→e, t→…→p, e→…→a, j→…→l → epal" 트레이스가 통째로 있었다.
+                 다음 쪽 시뮬이 바로 그 "글자 하나를 K번 따라가기" 를 손으로 해보는 자리인데
+                 형식 카드가 답을 먼저 다 줬다. 학생은 "계산이 복잡해서 흘려봤다" 고 했다 —
+                 읽을 이유가 없으면 안 읽는다. 답을 미루고 다음 쪽으로 넘긴다. */
+              "Each letter of \"ctej\" follows its arrow twice. Why does that give \"epal\"? The next page lets you follow one letter at a time.",
+              "\"ctej\" 의 각 글자가 화살표를 두 번 따라가요.\n왜 \"epal\" 이 될까요? 다음 쪽에서 글자 하나씩 따라가봐요.")}
           </div>
         </div>),
     },
@@ -262,8 +256,8 @@ export function makeMcc20CipherCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "If the rule is a→b, b→c, c→a, then applying it to 'a' three times gives: a→b→c→a. Back to 'a'.",
-        "규칙이 a→b, b→c, c→a 이면, 'a' 에 3번 적용: a→b→c→a. 다시 'a' 로 돌아와요."),
+        "Follow the arrow K times — that is the whole rule.",
+        "화살표를 K번 따라가면 돼요. 그게 규칙 전부예요."),
       question: t(E,
         "Rule: a→b, b→c, c→a. Apply it to 'a' TWICE. What letter?",
         "규칙: a→b, b→c, c→a. 'a' 에 2번 적용하면 어떤 글자?"),
