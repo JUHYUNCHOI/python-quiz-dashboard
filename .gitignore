@@ -68,11 +68,12 @@ _*.mjs
 *-check.mjs
 
 # 에이전트·검증용 임시 스크립트 (루트에서 돌려야 playwright 를 찾는다)
-# 2026-09-07: 검토 에이전트들이 scratchpad_*.mjs
-scroll-check-tmp.mjs
-*-check-tmp.mjs 15개를 루트에 남겼다.
+# 2026-09-07: 검토 에이전트들이 이런 파일 15개를 루트에 남겼다.
+# 2026-09-09: 주석이 두 줄로 잘려 "*-check-tmp.mjs 15개를 루트에 남겼다." 가
+#             패턴처럼 들어가 있었다. 고쳤다.
 scratchpad_*.mjs
 scroll-check-tmp.mjs
 *-check-tmp.mjs
 .chk-tmp.mjs
 .qa-tmp.mjs
+.claude/tmp-*/
