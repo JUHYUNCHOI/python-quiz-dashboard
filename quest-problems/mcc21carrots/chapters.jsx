@@ -21,6 +21,11 @@ const PRESETS = [
 
 function OddEvenPileSim({ E }) {
   const [vals, setVals] = useState([3, 5, 2]);
+  /* 2026-09-09: 시뮬을 열면 **클릭 전에** 알고리즘 전체가 문장으로 나와 있었다 —
+     맨 위 결론("홀 셋 또는 홀 하나+짝 둘"), 레시피 두 줄의 이름표, 맨 아래 요약
+     ("개수만 세면 된다"). 학생이 바구니를 한 번도 누르기 전에 답을 다 쥐고 시작했다.
+     바구니를 한 번이라도 만지면 그때 드러나게 한다. */
+  const [touched, setTouched] = useState(false);
 
   const oddIdx = vals.map((v, i) => (v % 2 === 1 ? i : -1)).filter((i) => i >= 0);
   const evenIdx = vals.map((v, i) => (v % 2 === 0 ? i : -1)).filter((i) => i >= 0);
@@ -32,7 +37,7 @@ function OddEvenPileSim({ E }) {
   const verdict = recipeA || recipeB;
 
   // click a basket → +1 carrot, flipping its parity so the piles move
-  const bump = (i) => setVals((prev) => prev.map((v, j) => (j === i ? v + 1 : v)));
+  const bump = (i) => { setTouched(true); setVals((prev) => prev.map((v, j) => (j === i ? v + 1 : v))); };
 
   const basketChip = (v, i, odd) => (
     <button
@@ -74,16 +79,20 @@ function OddEvenPileSim({ E }) {
           🟠⚪ {t(E, "Split into ODD and EVEN piles", "홀수·짝수 더미로 나누기")}
         </div>
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
-          {t(E,
+          {touched
+            ? t(E,
             "A sum of 3 numbers is ODD in only two recipes: three odds, or one odd + two evens. So forget picking triples — just count odds and evens.",
-            "세 수의 합이 홀수가 되는 방법은 딱 두 가지뿐이에요: 홀수 3개, 또는 홀수 1개 + 짝수 2개. 그러니 조합을 고르지 말고 홀수·짝수 개수만 세면 돼요.")}
+            "세 수의 합이 홀수가 되는 방법은 딱 두 가지뿐이에요: 홀수 3개, 또는 홀수 1개 + 짝수 2개. 그러니 조합을 고르지 말고 홀수·짝수 개수만 세면 돼요.")
+            : t(E,
+                "Click the baskets and watch the verdict flip. When does a sum of three become ODD?",
+                "바구니를 눌러보면서 판정이 언제 바뀌는지 봐요.\n세 수의 합은 어떨 때 홀수가 될까요?")}
         </div>
 
         {/* preset picker */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center", marginBottom: 12 }}>
           <span style={{ fontSize: 11.5, color: "#065f46", fontWeight: 700 }}>{t(E, "example:", "예제:")}</span>
           {PRESETS.map((p) => (
-            <button key={p.label} onClick={() => setVals([...p.vals])} style={{
+            <button key={p.label} onClick={() => { setTouched(true); setVals([...p.vals]); }} style={{
               ...NW, fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, fontWeight: 700,
               cursor: "pointer", padding: "3px 8px", borderRadius: 6,
               border: "1px solid #a7f3d0", background: "#fff", color: "#065f46",
@@ -115,8 +124,11 @@ function OddEvenPileSim({ E }) {
         </div>
 
         {/* the two winning recipes */}
-        {recipeRow("🟠🟠🟠", recipeA, t(E, "three odds  (odd+odd+odd = odd)", "홀수 3개  (홀+홀+홀 = 홀)"))}
-        {recipeRow("🟠⚪⚪", recipeB, t(E, "one odd + two evens  (odd+even+even = odd)", "홀수 1개 + 짝수 2개  (홀+짝+짝 = 홀)"))}
+        {/* 2026-09-09: 레시피 이름표가 클릭 전부터 떠 있어서, 학생이 바구니를 만지기 전에
+            "홀+홀+홀" "홀+짝+짝" 이라는 답을 읽고 시작했다. 조작 후에만 이름을 붙인다 —
+            줄 자체(칩과 켜짐/꺼짐)는 그대로 두어 무엇이 바뀌는지는 계속 보인다. */}
+        {recipeRow("🟠🟠🟠", recipeA, touched ? t(E, "three odds  (odd+odd+odd = odd)", "홀수 3개  (홀+홀+홀 = 홀)") : "")}
+        {recipeRow("🟠⚪⚪", recipeB, touched ? t(E, "one odd + two evens  (odd+even+even = odd)", "홀수 1개 + 짝수 2개  (홀+짝+짝 = 홀)") : "")}
 
         {/* verdict */}
         <div style={{
@@ -133,7 +145,7 @@ function OddEvenPileSim({ E }) {
         </div>
 
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
-          {t(E,
+          {touched && t(E,
             "Only the counts matter, never the exact baskets — so one scan to count odds and evens answers each test case.",
             "정확히 어떤 바구니인지는 중요하지 않고, 홀수·짝수 개수만 중요해요 — 그래서 한 번 훑어 개수만 세면 각 테스트를 답할 수 있어요.")}
         </div>
@@ -284,8 +296,12 @@ export function makeMcc21CarrotsCh1(E) {
           </div>
           <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.55, ...KA }}>
             {t(E,
-              "Test 1 has only [3, 5, 2] — the sole triple sums to 10, even → NO. Test 2: 4+6+3 = 13 is odd → YES. Test 3: 8+5+2 = 15 is odd → YES.",
-              "테스트 1 은 [3, 5, 2] 뿐 — 유일한 조합의 합이 10 으로 짝수 → NO. 테스트 2: 4+6+3 = 13 은 홀수 → YES. 테스트 3: 8+5+2 = 15 는 홀수 → YES.")}
+              /* 2026-09-09: 여기에 세 샘플의 합을 직접 계산해 답의 근거까지 다 적어놨다.
+                 형식 카드는 "각 줄이 무엇인지" 까지가 몫이고, "왜 그 답인지" 는
+                 바로 다음 쪽 시뮬이 같은 세 샘플을 프리셋으로 갖고 있어서 거기서 답한다.
+                 원문 설명을 지운 게 아니라 자리를 옮긴 것이다. */
+              "Same three tests wait in the sim on the next page — try them there and see which sums come out odd.",
+              "다음 쪽 시뮬에 이 세 테스트가 그대로 들어 있어요.\n거기서 직접 눌러보며 어느 합이 홀수가 되는지 봐요.")}
           </div>
         </div>),
     },
@@ -327,8 +343,8 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way tries every triple of baskets: about C(N,3) ≈ N³/6 checks — with N up to 100000 that is astronomically slow. The fast way uses parity: count odds and evens once, then check the two recipes.",
-        "느린 방법은 바구니 3 개 조합을 모두 시도해요: 약 C(N,3) ≈ N³/6 번 — N 이 최대 100000 이면 천문학적으로 느려요. 빠른 방법은 홀짝을 써요: 홀수·짝수를 한 번만 세고 두 레시피만 확인해요."),
+        "The slow way tries every triple of baskets: about N³/6 checks — with N up to 100000 that is astronomically slow. The fast way uses parity: count odds and evens once, then check the two recipes.",
+        "느린 방법은 바구니 3 개 조합을 모두 시도해요: 약 N³/6 번 — N 이 최대 100000 이면 천문학적으로 느려요. 빠른 방법은 홀짝을 써요: 홀수·짝수를 한 번만 세고 두 레시피만 확인해요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -337,7 +353,7 @@ export function makeMcc21CarrotsCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: try every triple of baskets", "느림: 바구니 3 개 조합을 모두 시도")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "C(N,3) ≈ N³/6 triples. With N = 100000 that is ~10^14 — times out badly.", "C(N,3) ≈ N³/6 개 조합. N = 100000 이면 약 10^14 — 시간 초과.")}
+                {t(E, "About N³/6 triples. With N = 100000 that is ~10^14 — times out badly.", "약 N³/6 개 조합. N = 100000 이면 약 10^14 — 시간 초과.")}
               </div>
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
