@@ -338,6 +338,7 @@ export function SumkSim({ E }) {
    1(일)·3(삼)·6(육)·7(칠)·8(팔)·0(영) → 을 / 2(이)·4(사)·5(오)·9(구) → 를.
    "2 을 넣어요" 로 나오던 것을 고쳤다. */
 const EUL = (n) => ("136780".includes(String(n % 10)) ? "을" : "를");   // 일·삼·육·칠·팔·영 = 받침 있음
+const EUN = (n) => ("136780".includes(String(n % 10)) ? "은" : "는");   // 같은 규칙의 은/는
 
 /* ═══════════════════════════════════════════════════════════════
    AreaSquare — 한 변이 (x + a) 인 정사각형을 네 조각으로 자른 그림.
@@ -360,11 +361,14 @@ const AC = {
 };
 function AreaSquare({ x, a, unit = 27, colored = false }) {
   const W = (x + a) * unit;
+  /* 2026-09-10 — 칸 안에 `1×1=1` 을 넣었더니 **27px 칸에 다섯 글자**라 넘쳤다.
+     칸에는 **넓이 숫자만** 쓴다. 가로·세로가 바깥에 적혀 있으니 곱셈은 눈으로 보인다.
+     합(1+3+3+9=16)은 말풍선이 이미 말한다. */
   const P = [
-    { l: 0,        t: 0,        w: x, h: x, tone: "s2",  lab: `${x}×${x}=${x * x}` },
-    { l: x * unit, t: 0,        w: a, h: x, tone: "s1",  lab: `${x}×${a}=${x * a}` },
-    { l: 0,        t: x * unit, w: x, h: a, tone: "s1",  lab: `${a}×${x}=${a * x}` },
-    { l: x * unit, t: x * unit, w: a, h: a, tone: "cnt", lab: `${a}×${a}=${a * a}` },
+    { l: 0,        t: 0,        w: x, h: x, tone: "s2",  lab: x * x },
+    { l: x * unit, t: 0,        w: a, h: x, tone: "s1",  lab: x * a },
+    { l: 0,        t: x * unit, w: x, h: a, tone: "s1",  lab: a * x },
+    { l: x * unit, t: x * unit, w: a, h: a, tone: "cnt", lab: a * a },
   ];
   return (
     <div style={{ display: "flex", justifyContent: "center", margin: "18px 0 6px" }}>
@@ -377,7 +381,7 @@ function AreaSquare({ x, a, unit = 27, colored = false }) {
               boxSizing: "border-box", background: c.bg, border: `2px solid ${c.bd}`,
               display: "flex", alignItems: "center", justifyContent: "center",
               fontFamily: "'JetBrains Mono',monospace", fontWeight: 800,
-              fontSize: Math.max(9, unit * 0.30), color: c.fg, transition: "all .2s" }}>
+              fontSize: Math.max(11, unit * 0.42), color: c.fg, transition: "all .2s" }}>
               {p.lab}
             </div>
           );
@@ -485,14 +489,23 @@ export function SumkBuildSim({ E }) {
     if (s.k === "double") return t(E,
       <>But the list <b>doubles</b> every time. 100,000 numbers → 2¹⁰⁰⁰⁰⁰ subsets. We can never hold it.</>,
       <>그런데 목록이 매번 <b>두 배</b>예요. 10만 개면 2¹⁰⁰⁰⁰⁰ 개 — 절대 못 들고 다녀요.</>);
+    /* 2026-09-10 선생님: **"1 3 3 9?"** / **"뭔말?"**
+       다리가 빠져 있었다. "합 1 이 4 가 된다" 다음에 **왜 갑자기 제곱을 하는지**가 없다.
+       답에 들어가는 게 (합)² 이라는 건 몇 쪽 전 이야기라 여기서 다시 말해줘야 한다.
+       그리고 16 이 장부의 14 와 무슨 상관인지도 — 그건 다음 걸음이 받는다. */
     if (s.k === "area") return t(E,
-      <>Put in <b>{AA}</b> and a sum of <b>{AX}</b> becomes <b>{AX + AA}</b>. Draw ({AX}+{AA})² as a square:<br />
-        {AX * AX} + {AX * AA} + {AA * AX} + {AA * AA} = <b>{(AX + AA) ** 2}</b></>,
-      <><b>{AA}</b>{EUL(AA)} 담으면 합 <b>{AX}</b> 는 <b>{AX + AA}</b> 가 돼요. ({AX}+{AA})² 를 정사각형으로 그려봐요 —<br />
-        {AX * AX} + {AX * AA} + {AA * AX} + {AA * AA} = <b>{(AX + AA) ** 2}</b></>);
+      <>The answer needs each sum <b>squared</b>. Put in <b>{AA}</b> and the sum <b>{AX}</b> becomes <b>{AX + AA}</b>, so we need <b>{AX + AA}² = {(AX + AA) ** 2}</b>.<br />
+        Draw that {(AX + AA) ** 2} as a square and cut it: {AX * AX} + {AX * AA} + {AA * AX} + {AA * AA}.</>,
+      <>답에 들어가는 건 <b>합의 제곱</b>이죠. <b>{AA}</b>{EUL(AA)} 담으면 합 <b>{AX}</b>{EUN(AX)} <b>{AX + AA}</b> 가 되니 <b>{AX + AA}² = {(AX + AA) ** 2}</b> 이 필요해요.<br />
+        그 {(AX + AA) ** 2} 을 정사각형으로 그려서 잘라봐요 — {AX * AX} + {AX * AA} + {AA * AX} + {AA * AA}.</>);
+    /* 2026-09-10 선생님: **"뭔말?"** — 전엔 "2 가 붙는 이유가 이거예요" 라고 했는데
+       **2 가 어디에 붙는다는 얘기를 한 적이 없다.** 아직 안 나온 것의 이유를 말한 셈이다.
+       이 걸음이 실제로 보여주는 것만 말한다: 세 종류이고, 그중 하나가 두 개다. */
     if (s.k === "color") return t(E,
-      <>Three kinds of piece. And the two <b>{AX}×{AA}</b> rectangles are <b>the same</b> — that is where the 2 comes from.</>,
-      <>조각이 세 종류예요. 그리고 <b>{AX}×{AA}</b> 직사각형이 <b>똑같이 두 개</b>죠 — 2 가 붙는 이유가 이거예요.</>);
+      <>Three kinds of piece: <b>green 1</b>, <b>blue 2</b>, <b>purple 1</b>.<br />
+        The two blue ones are <b>exactly the same</b> — so blue always counts <b>twice</b>.</>,
+      <>조각이 세 종류예요 — <b>초록 1개</b>, <b>파랑 2개</b>, <b>보라 1개</b>.<br />
+        파랑 둘이 <b>똑같아서</b>, 파랑은 늘 <b>두 배</b>로 세요.</>);
     if (s.k === "rows") return t(E,
       <>Every old sum splits the same way — so we need <b>all three</b> colours:<br />
         green {pre.s2} · blue 2×{AA}×{pre.s1} = {2 * AA * pre.s1} · purple {AA}²×{pre.cnt} = {AA * AA * pre.cnt}</>,
