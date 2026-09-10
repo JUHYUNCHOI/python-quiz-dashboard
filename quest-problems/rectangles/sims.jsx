@@ -404,9 +404,9 @@ export function DPTableFillSim({ E }) {
   const say = (() => {
     if (s.k === "intro") return t(E,
       <>We make a table. Rows = how many blues, columns = how many reds from the left.<br />
-        (0 blues, 0 reds) is <b>0</b> — nothing there yet.</>,
+        A row means <b>exactly that many blues</b> — the problem allows <b>at most</b> K, so at the end we pick the smallest across rows.</>,
       <>표를 하나 만들어요. 세로는 <b>파랑 개수</b>, 가로는 <b>앞에서부터 빨강 개수</b>.<br />
-        (파랑 0개, 앞 0개) 칸은 <b>0</b> 이에요 — 아직 아무것도 없으니까.</>);
+        한 줄은 <b>파랑을 딱 그만큼 쓴 경우</b>예요 — 문제는 <b>최대</b> K개니까 맨 끝에 줄들 중 제일 작은 걸 고르면 돼요.</>);
     if (s.k === "cell" && s.kk === 1) {
       const c = cost(1, s.i);
       const names = REDS.slice(0, s.i).map((r) => r.label).join("");
@@ -449,8 +449,8 @@ export function DPTableFillSim({ E }) {
          모바일 여유가 744px 뿐인데(하단 고정 바 68px) 그림 + 세 줄이면 ▶ 버튼이 가린다.
          이름(①②)은 그대로 두되 "방금 구한 값이에요" 같은 말은 그림이 대신한다. */
       return t(E,
-        <>Last blue (<b>{names}</b>) <b>{c.area}</b> + front (<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — bigger, throw it away.</>}</>,
-        <>마지막 파랑(<b>{names}</b>) <b>{c.area}</b> + 앞부분(<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — 더 크니까 버려요.</>}</>);
+        <>Last blue (<b>{names}</b>) <b>{c.area}</b> + front (<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — bigger; drop it.</>}</>,
+        <>마지막 파랑(<b>{names}</b>) <b>{c.area}</b> + 앞부분(<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — 더 커요, 버려요.</>}</>);
     }
     if (s.k === "cell") return t(E,
       <>So (<b>{s.kk} blues</b>, <b>first {s.i}</b>) = <b>{dp[s.kk][s.i]}</b>.</>,
