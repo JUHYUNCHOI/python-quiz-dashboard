@@ -300,6 +300,10 @@ export function SumkBuildSim({ E }) {
     { k: "expand" },
     { k: "rule2" },
     { k: "name" },
+    /* 2026-09-10 — 선생님이 물으신 "이게 왜 속도를 줄일 수 있는지" 가
+       이 시뮬 어디에도 **숫자로** 없었다. 마지막에 한 걸음 넣는다.
+       0.4초는 내가 이 quest 의 실제 코드로 N=10만·K=3 을 돌려 잰 값이다(2026-09-10). */
+    { k: "fast" },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
@@ -359,11 +363,16 @@ export function SumkBuildSim({ E }) {
         That is the answer we counted by hand on the page before.</>,
       <>맨 아랫줄을 봐요 — <b>{L.s2}</b>.<br />
         앞 쪽에서 손으로 세어 구한 그 답이에요.</>);
+    /* 2026-09-10 선생님: **"여기부터 또 이해가 안돼. 이게 왜 속도를 줄일수 있는지는 뒤에 있나?"**
+       내가 거꾸로 써놨다. "목록이 두 배가 된다" 는 **탈출구가 아니라 문제 그 자체**다
+       (그래서 2ᴺ 이 된다). 그런데 "여기서 빠져나가는 길이 있어요 — 딱 두 배로만 만들어요" 라고
+       써서, 문제를 해결책인 것처럼 말했다. 학생이 여기서 끊기는 게 당연하다.
+       → 두 배가 **왜 큰일인지** 먼저 말하고, 진짜 탈출구(아랫줄이 윗줄+a 라는 규칙)를 가리킨다. */
     if (s.k === "double") return t(E,
-      <>But we still listed every subset. Here is the way out:<br />
-        each new number only ever <b>doubles</b> the list — leave it out, or put it in.</>,
-      <>그런데 아직은 부분집합을 다 나열했어요. 여기서 빠져나가는 길이 있어요 —<br />
-        새 숫자 하나는 목록을 <b>딱 두 배</b>로만 만들어요. 안 담거나, 담거나 둘뿐이니까요.</>);
+      <>Each number <b>doubles</b> the list — 100,000 numbers means 2¹⁰⁰⁰⁰⁰ subsets. We can never hold that.<br />
+        But look: the bottom row is just the top row with <b>{arr[arr.length - 1]}</b> added. There is a rule.</>,
+      <>숫자 하나마다 목록이 <b>두 배</b>예요 — 10만 개면 2¹⁰⁰⁰⁰⁰ 개. 이건 절대 못 들고 다녀요.<br />
+        그런데 보세요, 아랫줄은 윗줄에 <b>{arr[arr.length - 1]}</b> 을 더한 것뿐이에요. <b>규칙이 있어요.</b></>);
     if (s.k === "rule1") return t(E,
       <>Back up to just before <b>{ex.a}</b> was put in — the box below is that moment.<br />
         <b>left out</b> side stays: <Term v={ex.old.s1} lab="sum" tone="s1" /><br />
@@ -395,11 +404,18 @@ export function SumkBuildSim({ E }) {
         <b>안 담은 쪽</b>: <Term v={ex.old.s2} lab="합²" tone="s2" /><br />
         <b>담은 쪽</b>: <Term v={ex.old.s2} lab="합²" tone="s2" /> + 2·<Term v={ex.a} lab="넣는 수" tone="a" />·<Term v={ex.old.s1} lab="합" tone="s1" /> + <Term v={ex.a} lab="넣는 수" tone="a" />²·<Term v={ex.old.cnt} lab="개수" /> = <b>{ex.now.s2 - ex.old.s2}</b><br />
         둘을 합쳐 <b>{ex.now.s2}</b> ✓</>);
-    return t(E,
+    if (s.k === "name") return t(E,
       <>We never listed a single subset — three numbers were enough.<br />
         Their names: <b>P[0]</b>, <b>P[1]</b>, <b>P[2]</b>. And splitting (x+a)² like that is the <b>binomial theorem</b>.</>,
       <>부분집합을 한 번도 안 나열했어요 — 숫자 세 개면 됐어요.<br />
         이 셋의 이름이 <b>P[0]</b>, <b>P[1]</b>, <b>P[2]</b> 예요. 그리고 (x+a)² 를 저렇게 가르는 걸 <b>이항정리</b>라고 해요.</>);
+    return t(E,
+      <><b>So why is this fast?</b> Throw the list away — only the three rows matter.<br />
+        One number = fix three rows. 100,000 numbers = <b>300,000</b> fixes, not 2¹⁰⁰⁰⁰⁰.<br />
+        Running it for real on 100,000 numbers takes about <b>0.4 seconds</b>.</>,
+      <><b>그래서 왜 빠른가요?</b> 목록은 버려요 — 세 줄만 있으면 되니까요.<br />
+        숫자 하나에 세 줄만 고치면 돼요. 10만 개면 <b>30만 번</b>, 2¹⁰⁰⁰⁰⁰ 이 아니라요.<br />
+        실제로 10만 개짜리를 돌려보면 <b>0.4초</b> 만에 끝나요.</>);
   })();
 
   const LedgerBox = () => {
@@ -502,8 +518,9 @@ export function SumkBuildSim({ E }) {
           고침: 한 줄을 **빼는 쪽 / 넣는 쪽 두 줄**로 가르고,
           넣는 쪽은 `1+2=3` 처럼 **어디서 나온 숫자인지 식으로** 보여준다.
           이건 이 시뮬이 내내 하는 이야기(빼거나 넣거나)와도 같은 모양이다. */}
-      {(s.k === "stage" || s.k === "same" || s.k === "double") && (
-        <div style={{ maxWidth: 420, margin: "12px auto 0" }}>
+      {(s.k === "stage" || s.k === "same" || s.k === "double" || s.k === "fast") && (
+        <div style={{ maxWidth: 420, margin: "12px auto 0",
+          opacity: s.k === "fast" ? 0.25 : 1, transition: "opacity .25s" }}>
           {stageIdx === 0 ? (
             <>
               <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6 }}>
