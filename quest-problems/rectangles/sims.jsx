@@ -425,10 +425,8 @@ export function DPTableFillSim({ E }) {
       const c = cost(s.j, s.i);
       const names = REDS.slice(s.j - 1, s.i).map((r) => r.label).join("");
       return t(E,
-        <>What if the last blue took <b>{names}</b> — all of them?<br />
-          Then the other blue has nothing left to cover. Not allowed — skip it.</>,
-        <>마지막 파랑이 <b>{names}</b> 를 <b>다</b> 맡으면요?<br />
-          그럼 남은 파랑 하나가 덮을 게 없어요. 그래서 이 후보는 안 돼요.</>);
+        <>If the last blue took <b>{names}</b> — all of them — the other blue has nothing to cover.</>,
+        <>마지막 파랑이 <b>{names}</b> 를 다 맡으면 남은 파랑이 덮을 게 없어요 — 안 돼요.</>);
     }
     if (s.k === "try" || s.k === "tryadd") {
       const c = cost(s.j, s.i);
@@ -454,8 +452,8 @@ export function DPTableFillSim({ E }) {
          모바일 여유가 744px 뿐인데(하단 고정 바 68px) 그림 + 세 줄이면 ▶ 버튼이 가린다.
          이름(①②)은 그대로 두되 "방금 구한 값이에요" 같은 말은 그림이 대신한다. */
       return t(E,
-        <>Last blue (<b>{names}</b>) <b>{c.area}</b> + front (<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — bigger; drop it.</>}</>,
-        <>마지막 파랑(<b>{names}</b>) <b>{c.area}</b> + 앞부분(<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — 더 커요, 버려요.</>}</>);
+        <>Last blue (<b>{names}</b>) <b>{c.area}</b> + front (<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — drop it</>}</>,
+        <>마지막 파랑(<b>{names}</b>) <b>{c.area}</b> + 앞부분(<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — 버려요</>}</>);
     }
     if (s.k === "cell") return t(E,
       <>So (<b>{s.kk} blues</b>, <b>first {s.i}</b>) = <b>{dp[s.kk][s.i]}</b>.</>,
@@ -500,11 +498,19 @@ export function DPTableFillSim({ E }) {
           그림을 더 얹으면 버튼이 하단 고정 바 밑으로 내려갔다.
           선생님: "모바일도 스텝 쪼개서 그림 넣어줘." → 스텝을 둘로 쪼갰고(try / tryadd),
           이제 한 스텝에 한 가지만 있어서 **모바일에서도 그림이 나온다.** */}
+      {/* 2026-09-10 선생님: "왜 시뮬레이션 이미지가 커졌다 작아졌다 하는거지?"
+          내가 만든 문제다. 모바일에서 ▶ 버튼이 하단 바에 가리길래 **단계마다 다른 크기**로
+          줄였다(1 · 0.48 · 0.6 네 가지). 버튼 위치만 재고 화면이 어떻게 보이는지는 안 봤다.
+          선생님: "rectagle에서 QA랑 디자이너가 제대로 본건가? 이걸 왜 아무도 못보는거지?"
+          — rectangles 는 아직 팀 검토 전인 19개 중 하나이고, 내 수정은 아무도 안 봤다.
+          **모든 단계에서 같은 크기(0.55)를 쓴다.** 그러면 걸음마다 그림 높이가 안 변한다.
+          0.55 를 고른 이유: 0.6 이상이면 라벨이 다시 그려지면서 윗여백 20px 이 붙어
+          12/14 에서 버튼이 가린다(실측). 0.6 미만에서 라벨이 숨겨진다. */}
       {(s.k === "try" || s.k === "tryskip") && (
         <div style={{ marginTop: 12 }}>
           {/* tryskip 은 말풍선이 두 줄이라 그림을 줄여야 모바일에서 ▶ 가 안 가린다
               (실측: 하단 고정 바 68px, 여유선 744px). */}
-          <RectStage scale={s.k === "tryskip" ? 0.48 : 1}
+          <RectStage scale={0.55}
             groups={[Array.from({ length: s.i - s.j + 1 }, (_, z) => s.j - 1 + z)]} />
         </div>
       )}
@@ -524,11 +530,11 @@ export function DPTableFillSim({ E }) {
           것인지 되짚어 그리므로 지어낸 그림이 아니다. 그러면 "4 + 1 = 5" 가 화면에서 보인다.
           높이는 try 단계와 같다(그림 하나) — 모바일 여백 문제도 그대로다. */}
       {s.k === "tryadd" && (
-        <div style={{ marginTop: 6 }}>
+        <div style={{ marginTop: 2 }}>
           {/* ⚠️ scale 0.8 — 그림 하나에 캡션까지 얹으니 모바일(375×812)에서 ▶ 버튼이
               화면 밖으로 밀렸다(bottom 859 > 812, 실측). 9/7 에 스텝을 쪼갠 이유가 바로 이거였다.
               그림을 줄이고 캡션을 한 줄로 눌러 다시 들어가게 했다. */}
-          <RectStage scale={0.48} groups={[
+          <RectStage scale={0.55} groups={[
             ...bestSplit(s.kk - 1, s.j - 1),
             Array.from({ length: s.i - s.j + 1 }, (_, z) => s.j - 1 + z),
           ]} />
@@ -547,7 +553,7 @@ export function DPTableFillSim({ E }) {
              모바일에서 SimNav 가 하단 고정 바 밑으로 내려가지 않게. */}
       {s.k === "cell" && (
         <div style={{ marginTop: 8 }}>
-          <RectStage scale={0.6} groups={
+          <RectStage scale={0.55} groups={
             s.kk === 1
               ? [Array.from({ length: s.i }, (_, z) => z)]          // 파랑 하나가 앞 i개를 통째로
               : bestSplit(s.kk, s.i)                                 // 그 칸을 만든 최선의 나눔
