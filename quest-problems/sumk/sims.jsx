@@ -86,13 +86,29 @@ function Term({ v, lab, tone = "cnt" }) {
    하나는 {1,2}, 하나는 {3} 이다. 화면만 봐서는 구별할 방법이 아예 없었다.
 
    위 원소 타일(사각형)과 안 헷갈리게 알약 모양은 유지한다. */
-function SumChip({ items, v, isNew = false, isEmpty = false }) {
-  const label = items.length ? items.join("+") : "없음";
+/* 2026-09-10 선생님: **"아까껏에 암것도 아니어서 0이었는데 2도 추가를 안하면 0이어야지"**
+
+   라벨이 `1+2` 처럼 **더하기 식**이었다. 그런데 `{2}` 하나짜리는 `2` 라고만 찍혀서,
+   그게 "없음에서 온 것" 이라는 게 안 보였다 — 첫 칩만 다른 규칙으로 읽히는 셈이다.
+   `없음` + 2 는 `0+2` 여야 말이 되는데 라벨은 그냥 `2` 였다.
+
+   → **담은 것을 집합으로 쓴다.** `{ }` `{1}` `{2}` `{1,2}`.
+     그러면 위칩 `{ }` 아래 `{2}` 가 오고, **아까 것에 2 를 넣은 것**이 눈에 보인다.
+     더하기 식이 아니니 계산으로 오해될 일도 없다. 새로 넣은 수만 색을 준다. */
+function SumChip({ items, v, isNew = false, isEmpty = false, added = null }) {
   return (
     <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
-      <span style={{ fontSize: 9.5, fontWeight: 800, whiteSpace: "nowrap",
+      <span style={{ fontSize: 10, fontWeight: 800, whiteSpace: "nowrap",
         fontFamily: "'JetBrains Mono',monospace",
-        color: isEmpty ? "#cbd5e1" : isNew ? PURDK : "#94a3b8" }}>{label}</span>
+        color: isEmpty ? "#cbd5e1" : "#94a3b8" }}>
+        {"{"}
+        {items.map((it, i) => (
+          <span key={i} style={{ color: added != null && it === added && i === items.length - 1 ? PURDK : "inherit" }}>
+            {i > 0 ? "," : ""}{it}
+          </span>
+        ))}
+        {"}"}
+      </span>
       <span style={{ minWidth: 26, textAlign: "center", padding: "3px 9px", borderRadius: 999,
         fontSize: 12.5, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
         background: isEmpty ? "#f8fafc" : isNew ? PUR : PURBG,
@@ -560,7 +576,7 @@ export function SumkBuildSim({ E }) {
                 </span>
                 <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
                   {stages[stageIdx - 1].subs.map((x, i) => (
-                    <SumChip key={i} items={[...x.items, st.a]} v={x.sum + st.a} isNew />
+                    <SumChip key={i} items={[...x.items, st.a]} v={x.sum + st.a} isNew added={st.a} />
                   ))}
                 </span>
               </div>
