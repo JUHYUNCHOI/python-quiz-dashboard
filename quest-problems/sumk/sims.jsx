@@ -7,7 +7,17 @@
 //   · Tile/Say/Row/Caption 은 cowsplits/sims.jsx 에서 그대로 가져옴
 
 import { t } from "@/components/quest/theme";
-import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceStepper";
+import { useTraceStep, SimShell, StepHeader } from "@/components/quest/TraceStepper";
+
+/* 2026-09-10 — 이 파일의 시뮬 둘은 `SimShell` 을 쓴다. 저장소에서 printseq 다음으로 두 번째다.
+   왜 바꿨나: ux 가 좌표로 재보니 **SumkSim 의 ▶ 가 4단계부터 9단계까지 전부**
+   모바일 하단 고정 바(top 744) 밑으로 내려가 있었다 — 최대 119px.
+   전엔 `paddingBottom: 110` 으로 막아뒀는데, 걸음이 진행되며 누적 표가 한 줄씩 자라
+   그 여유분을 도로 잡아먹었다. **고정 숫자로 막으면 내용이 자라는 순간 다시 터진다.**
+
+   `SimShell` (components/quest/TraceStepper.tsx:181) 은 이걸 위해 이미 만들어져 있었다 —
+   내용은 화면 높이에 맞춰 안에서 스크롤되고 ▶ 는 항상 밖에 남는다.
+   그런데 시뮬이 있는 quest 27개 중 **printseq 하나만** 쓰고 있었다. */
 
 const A = "#8b5cf6";
 const PUR = "#8b5cf6", PURBG = "#f5f3ff", PURDK = "#5b21b6";
@@ -93,10 +103,16 @@ export function SumkSim({ E }) {
              <>7개 끝! 모든 (합)²을 더하면 → 답은 <b>{grand}</b>. (이게 바로 샘플: <b>3 2 / 1 2 3 → 100</b>.)</>);
 
   return (
-    /* paddingBottom — 모바일 375×812 에서 SimNav 3개가 하단 고정 바(quest-navbar)에 가려
-       **눌리지 않았다** (ux-reviewer 좌표 실측, 스크롤 0 지점). 오늘 같은 자리를 네 번째 겪는다.
-       바 높이(약 68px)보다 넉넉히 준다. */
-    <div style={{ padding: 16, paddingBottom: 110 }}>
+    /* 여기 원래 `paddingBottom: 110` 이 있었다 — 모바일에서 ▶ 가 하단 고정 바에 가리길래
+       여백을 손으로 준 것이다. 그런데 아래 누적 표가 걸음마다 한 줄씩 자라서
+       그 여유분을 도로 먹었고, 4~9단계가 다시 가려졌다(2026-09-10 재발, 최대 119px).
+       고정 숫자로는 못 막는다 → SimShell 로 옮겼다. 파일 위 주석 참고. */
+    /* maxHeightCss — SimShell 기본값은 `calc(100dvh - 340px)` 인데 이 quest 는 그걸로 부족했다.
+       실측: 기본값으로도 5~9단계가 모바일 하단 바를 46px 넘겼다(전엔 119px 넘겼다).
+       이 쪽은 카드 위에 제목·파란 바가 더 있어서 340 이 모자란다. 400 으로 재서 맞췄다.
+       도구 = `node check-sim-nav.mjs sumk 2` / `sumk 4`. */
+    <SimShell idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels
+        maxHeightCss="calc(100dvh - 400px)">
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Add (sum)² over all 7 subsets", "7개 부분집합의 (합)² 다 더하기")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
@@ -171,7 +187,238 @@ export function SumkSim({ E }) {
         )}
       </div>
 
-      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
-    </div>
+    </SimShell>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SumkBuildSim — [빠진 다리] 나열하지 않고 답이 자라는 걸 보여준다.
+
+   왜 만들었나 (2026-09-10, 팀 넷이 같은 자리를 짚었다):
+     · pedagogy: "3쪽 시뮬은 **부분집합을 통째로 나열**하고, 4쪽은 **원소를 하나씩 넣는다** —
+       순회 방식 자체가 다른데 둘이 같은 100 을 낸다는 걸 잇는 문장이 없다."
+     · student(초6): **4쪽에서 그만뒀다.** "(옛합 + a)ᵗ 를 이항정리로 펼치면 을 읽는 순간
+       뭔 소린지 몰라서 눈으로만 흘려보고 넘겼다. 5쪽 코드는 읽는 척만 했다."
+       "4쪽부터는 그림이 하나도 없다."
+     · quest-auditor: 이항정리·이항계수·파스칼이 **정의 없이 이름만** 쓰인다.
+       `count-quests.py --list untaught` 에 sumk 가 [조합론] 으로 걸린다 —
+       레슨·algo 토픽 어디에도 없는 개념이다.
+
+   설계 (project-lead 판정: "이항정리 없이 먼저, 유도는 그 다음"):
+     · 이름을 마지막에 붙인다 — 내내 **개수 · 합의 합 · 합²의 합** 이라고 부르고,
+       맨 끝에서야 "이 셋을 P[0]·P[1]·P[2] 라고 불러요" 로 잇는다
+       (feedback_first_concept_scaffolding.md — 이름은 나중에).
+     · 이항정리도 이름을 먼저 대지 않는다. **(2+3)² 를 손으로 펼쳐** 보이고,
+       그게 갱신식의 세 항이 되는 걸 눈으로 확인한 뒤에 이름을 준다.
+     · 숫자는 전부 이 파일에서 그 자리에 계산한다. 브루트와 대조까지 여기서 한다 —
+       화면 숫자가 틀릴 수 없게.
+
+   검산 (2026-09-10, 브루트 대조 완료):
+     시작 [1,0,0] → 1 넣고 [2,1,1] → 2 넣고 [4,6,14] → 3 넣고 [8,24,100]
+     마지막 100 이 3쪽에서 손으로 구한 그 100 이다. 그게 이 시뮬의 전부다.
+   ═══════════════════════════════════════════════════════════════ */
+/* 숫자 뒤 조사 — 한국어는 **숫자를 읽은 소리**의 받침으로 정해진다.
+   1(일)·3(삼)·6(육)·7(칠)·8(팔)·0(영) → 을 / 2(이)·4(사)·5(오)·9(구) → 를.
+   "2 을 넣어요" 로 나오던 것을 고쳤다. */
+const EUL = (n) => ("1368 0".includes(String(n % 10)) ? "을" : "를");
+
+export function SumkBuildSim({ E }) {
+  const arr = [1, 2, 3];
+
+  /* 숫자를 하나씩 넣어가며 **모든 부분집합의 합**을 실제로 만든다.
+     장부 세 줄(개수 · 합의 합 · 합²의 합)은 그 합들에서 바로 나온다. */
+  const stages = [];
+  let sums = [0];                                   // 아무것도 안 넣었을 때 = 공집합 하나
+  stages.push({ a: null, sums: sums.slice() });
+  for (const a of arr) {
+    sums = [...sums, ...sums.map((x) => x + a)];     // 빼거나 / 넣거나 → 딱 두 배
+    stages.push({ a, sums: sums.slice() });
+  }
+  const ledger = (ss) => ({
+    cnt: ss.length,
+    s1: ss.reduce((p, x) => p + x, 0),
+    s2: ss.reduce((p, x) => p + x * x, 0),
+  });
+
+  if (process.env.NODE_ENV !== "production") {
+    const last = ledger(stages[stages.length - 1].sums);
+    if (last.s2 !== 100) console.error(`[sumk] 합²의 합이 ${last.s2} 다 — 3쪽 답 100 과 어긋난다`);
+  }
+
+  const steps = [
+    { k: "ask" },
+    { k: "stage", i: 0 }, { k: "stage", i: 1 }, { k: "stage", i: 2 }, { k: "stage", i: 3 },
+    { k: "same" },
+    { k: "double" },
+    { k: "rule1" },
+    { k: "expand" },
+    { k: "rule2" },
+    { k: "name" },
+  ];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+
+  /* 갱신식을 숫자로 말하는 세 걸음(rule1·expand·rule2)은 "**2 를 넣던 순간**" 이야기다.
+     그런데 장부가 마지막 상태(8·24·100)를 보여주고 있었다 —
+     말풍선은 "옛것 1 + (1 + 2×2) = 6" 이라는데 화면 장부엔 24 가 떠 있는 셈이다.
+     선생님이 rectangles 에서 세 번 하신 지적과 같은 병이다: "**어디의** 값인지 모르겠어."
+     그 걸음들에선 장부를 **1 까지만 넣은 상태**(옛것)로 되돌린다. 말풍선이 부르는 그 숫자다. */
+  const EX_STAGE = 1;                      // 1 만 넣은 상태 = 갱신식의 "옛것"
+  const stageIdx =
+    s.k === "stage" ? s.i
+    : s.k === "ask" ? 0
+    : (s.k === "rule1" || s.k === "expand" || s.k === "rule2") ? EX_STAGE
+    : stages.length - 1;
+  const st = stages[stageIdx];
+  const L = ledger(st.sums);
+  const prev = stageIdx > 0 ? ledger(stages[stageIdx - 1].sums) : null;
+
+  /* 갱신식을 **숫자로** 보여줄 때 쓰는 값 — 2 를 넣던 순간을 예로 든다.
+     (그 자리에서 계산하니 위 stages 와 어긋날 수 없다) */
+  const ex = { old: ledger(stages[EX_STAGE].sums), oldSums: stages[EX_STAGE].sums,
+               a: arr[EX_STAGE], now: ledger(stages[EX_STAGE + 1].sums) };
+
+  const say = (() => {
+    if (s.k === "ask") return t(E,
+      <>We listed all 7 subsets by hand. With N = 100,000 we can&apos;t.<br />
+        Could the answer <b>grow</b> as we drop the numbers in one at a time?</>,
+      <>아까는 부분집합 7개를 손으로 다 나열했죠. N 이 10만이면 못 해요.<br />
+        숫자를 <b>하나씩 넣으면서</b> 답이 자라게 할 수는 없을까요?</>);
+    if (s.k === "stage" && s.i === 0) return t(E,
+      <>Nothing in yet. There is exactly one subset — the <b>empty</b> one, sum <b>0</b>.<br />
+        We keep three numbers about it. That&apos;s all we carry.</>,
+      <>아직 아무것도 안 넣었어요. 부분집합은 <b>공집합</b> 하나, 합은 <b>0</b>.<br />
+        이것에 대해 <b>숫자 세 개</b>만 적어둬요. 우리가 들고 다닐 건 이게 전부예요.</>);
+    if (s.k === "stage") return t(E,
+      <>Drop in <b>{st.a}</b>. Every old subset either <b>skips</b> it or <b>takes</b> it —<br />
+        so the sums are the old ones, plus the old ones with <b>{st.a}</b> added.</>,
+      <><b>{st.a}</b>{EUL(st.a)} 넣어요. 옛 부분집합마다 이걸 <b>빼거나</b> <b>넣거나</b> —<br />
+        그래서 합은 옛 합들 그대로, 그리고 옛 합에 <b>{st.a}</b>{EUL(st.a)} 더한 것들이에요.</>);
+    if (s.k === "same") return t(E,
+      <>Look at the last line — <b>{L.s2}</b>.<br />
+        That is the answer we counted by hand on the page before.</>,
+      <>맨 아랫줄을 봐요 — <b>{L.s2}</b>.<br />
+        앞 쪽에서 손으로 세어 구한 그 답이에요.</>);
+    if (s.k === "double") return t(E,
+      <>But we still listed every subset. Here is the way out:<br />
+        dropping in <b>a</b> always just <b>doubles</b> the list — old ones, and old ones + a.</>,
+      <>그런데 아직은 부분집합을 다 나열했어요. 여기서 빠져나가는 길이 있어요 —<br />
+        <b>a</b> 를 넣으면 목록은 언제나 <b>딱 두 배</b>예요. 옛것들, 그리고 옛것들 + a.</>);
+    if (s.k === "rule1") return t(E,
+      <>So the <b>sum of sums</b> needs no list:<br />
+        old <b>{ex.old.s1}</b> + (old <b>{ex.old.s1}</b> + {ex.a}×<b>{ex.old.cnt}</b>) = <b>{ex.now.s1}</b> ✓</>,
+      <>그럼 <b>합의 합</b>은 목록 없이도 구해져요 —<br />
+        옛것 <b>{ex.old.s1}</b> + (옛것 <b>{ex.old.s1}</b> + {ex.a}×<b>{ex.old.cnt}</b>) = <b>{ex.now.s1}</b> ✓</>);
+    if (s.k === "expand") {
+      /* 2026-09-10 — 처음엔 (2+3)² 로 펼쳐 보였는데, 3 은 지금 넣는 숫자가 아니라
+         화면 어디에도 없는 값이었다. **화면에 떠 있는 숫자만 쓴다** —
+         옛 합 중 하나(x)와 지금 넣는 수(a)로 편다. 그래야 다음 걸음의 세 항과 눈으로 이어진다. */
+      const x = ex.oldSums[ex.oldSums.length - 1], a = ex.a;
+      return t(E,
+        <>What about the <b>sum of squares</b>? Take one old sum, <b>{x}</b>, and expand by hand:<br />
+          ( <b>{x}</b> + <b>{a}</b> )² = {x}² + 2·{x}·{a} + {a}² = {x * x} + {2 * x * a} + {a * a} = <b>{(x + a) ** 2}</b></>,
+        <><b>합²의 합</b>은요? 옛 합 하나(<b>{x}</b>)를 골라 손으로 펼쳐봐요 —<br />
+          ( <b>{x}</b> + <b>{a}</b> )² = {x}² + 2·{x}·{a} + {a}² = {x * x} + {2 * x * a} + {a * a} = <b>{(x + a) ** 2}</b></>);
+    }
+    if (s.k === "rule2") return t(E,
+      <>Every old sum breaks up the same way — and we already keep all three pieces:<br />
+        <b>{ex.old.s2}</b> + ( <b>{ex.old.s2}</b> + 2·{ex.a}·<b>{ex.old.s1}</b> + {ex.a}²·<b>{ex.old.cnt}</b> ) = <b>{ex.now.s2}</b> ✓</>,
+      <>옛 합 하나하나가 다 그렇게 갈라져요 — 그 세 조각을 우리는 이미 갖고 있어요.<br />
+        <b>{ex.old.s2}</b> + ( <b>{ex.old.s2}</b> + 2·{ex.a}·<b>{ex.old.s1}</b> + {ex.a}²·<b>{ex.old.cnt}</b> ) = <b>{ex.now.s2}</b> ✓</>);
+    return t(E,
+      <>We never listed a single subset — three numbers were enough.<br />
+        Their names: <b>P[0]</b>, <b>P[1]</b>, <b>P[2]</b>. And splitting (x+a)² like that is the <b>binomial theorem</b>.</>,
+      <>부분집합을 한 번도 안 나열했어요 — 숫자 세 개면 됐어요.<br />
+        이 셋의 이름이 <b>P[0]</b>, <b>P[1]</b>, <b>P[2]</b> 예요. 그리고 (x+a)² 를 저렇게 가르는 걸 <b>이항정리</b>라고 해요.</>);
+  })();
+
+  const LedgerBox = () => {
+    const rowsOut = [
+      { lab: t(E, "how many subsets", "부분집합 개수"), name: "P[0]", v: L.cnt, p: prev && prev.cnt },
+      { lab: t(E, "sums added up", "합을 다 더한 것"), name: "P[1]", v: L.s1, p: prev && prev.s1 },
+      { lab: t(E, "squares added up", "합²을 다 더한 것"), name: "P[2]", v: L.s2, p: prev && prev.s2 },
+    ];
+    return (
+      <div style={{ maxWidth: 360, margin: "12px auto 0", display: "grid", gap: 4 }}>
+        {rowsOut.map((r, i) => {
+          const changed = s.k === "stage" && stageIdx > 0 && r.p !== r.v;
+          const isAnswer = i === 2 && (s.k === "same" || s.k === "name");
+          const isOld = s.k === "rule1" || s.k === "expand" || s.k === "rule2";
+          return (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 12px", borderRadius: 9,
+              background: isAnswer ? "#ecfdf5" : changed ? PURBG : "#f8fafc",
+              border: `1.5px solid ${isAnswer ? "#6ee7b7" : changed ? PUR : "#e2e8f0"}` }}>
+              <span style={{ flex: 1, fontSize: 12, fontWeight: 700, color: "#475569", wordBreak: "keep-all" }}>
+                {isOld && <b style={{ color: PUR }}>{t(E, "old ", "옛것 ")}</b>}{r.lab}
+              </span>
+              {/* 이름은 맨 마지막 걸음에서만 붙인다 — 그전엔 우리말로만 부른다 */}
+              {s.k === "name" && (
+                <span style={{ fontSize: 11.5, fontWeight: 800, color: PUR, fontFamily: "'JetBrains Mono',monospace" }}>
+                  {r.name}
+                </span>
+              )}
+              <span style={{ minWidth: 46, textAlign: "right", fontSize: 15, fontWeight: 800,
+                fontFamily: "'JetBrains Mono',monospace", color: isAnswer ? "#15803d" : changed ? PURDK : "#1f2937" }}>
+                {r.v}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  return (
+    /* maxHeightCss — SimShell 기본값은 `calc(100dvh - 340px)` 인데 이 quest 는 그걸로 부족했다.
+       실측: 기본값으로도 5~9단계가 모바일 하단 바를 46px 넘겼다(전엔 119px 넘겼다).
+       이 쪽은 카드 위에 제목·파란 바가 더 있어서 340 이 모자란다. 400 으로 재서 맞췄다.
+       도구 = `node check-sim-nav.mjs sumk 2` / `sumk 4`. */
+    <SimShell idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels
+        maxHeightCss="calc(100dvh - 400px)">
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Grow the answer without listing", "나열하지 않고 답 키우기")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Say tone={s.k === "same" || s.k === "name" ? "aha" : s.k === "ask" || s.k === "double" ? "stuck" : "go"}>{say}</Say>
+
+      {/* 어느 숫자까지 넣었나 */}
+      {(s.k === "ask" || s.k === "stage") && (
+        <Row>
+          {arr.map((v, i) => {
+            const inYet = i < stageIdx;
+            const justNow = s.k === "stage" && i === stageIdx - 1;
+            return <Tile key={i} ch={v} size={44}
+              bg={justNow ? PUR : inYet ? PURBG : "#fff"} bd={inYet || justNow ? PUR : "#e2e8f0"}
+              fg={justNow ? "#fff" : inYet ? PURDK : "#cbd5e1"} faded={!inYet && !justNow} />;
+          })}
+        </Row>
+      )}
+
+      {/* 지금까지 만들어진 부분집합들의 **합** — 나열이 두 배로 늘어나는 게 눈에 보인다 */}
+      {(s.k === "stage" || s.k === "same" || s.k === "double") && (
+        <>
+          <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginTop: 12, marginBottom: 6 }}>
+            {t(E, "sums of every subset so far", "지금까지 부분집합들의 합")}
+          </div>
+          <Row>
+            {st.sums.map((v, i) => {
+              const isNew = s.k === "stage" && stageIdx > 0 && i >= st.sums.length / 2;
+              return (
+                <span key={i} style={{ padding: "3px 9px", borderRadius: 999, fontSize: 12, fontWeight: 800,
+                  fontFamily: "'JetBrains Mono',monospace",
+                  background: isNew ? PUR : PURBG, color: isNew ? "#fff" : PURDK,
+                  border: `1.5px solid ${isNew ? PURDK : "#c4b5fd"}` }}>{v}</span>
+              );
+            })}
+          </Row>
+          {s.k === "double" && (
+            <Caption color={PURDK}>
+              {t(E, "left half = old · right half = old + a", "왼쪽 절반 = 옛것 · 오른쪽 절반 = 옛것 + a")}
+            </Caption>
+          )}
+        </>
+      )}
+
+      <LedgerBox />
+    </SimShell>
   );
 }

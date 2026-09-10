@@ -91,8 +91,14 @@ for f in sorted(glob.glob("quest-problems/*/*.jsx")):
         if len(en) >= 55 and len(ko) < len(en) * 0.35:
             why.append(f"길이 EN {len(en)} vs KO {len(ko)}")
         # ② 숫자 불일치
+        # ⚠️ 한국어는 큰 수를 **자릿수 말**로 쓴다 — 영어 100,000 이 한국어로는 "10만" 이다.
+        #    그러면 숫자만 세었을 때 EN['100000'] vs KO['10'] 이 되어 늘 헛경보가 난다.
+        #    2026-09-10 sumk 에서 두 건 났고 **둘 다 뜻은 같았다**(10만 = 100,000 · 115경 = 1.15×10¹⁸).
+        #    숫자 바로 뒤에 만·억·조·경이 붙은 한국어는 이 신호를 건너뛴다.
+        #    (길이·문장 수 신호는 그대로 본다 — 숫자 하나 때문에 짝 전체를 놓치지는 않게.)
+        ko_uses_word_numerals = re.search(r"\d\s*[만억조경]", ko)
         ne, nk = numbers(en), numbers(ko)
-        if ne != nk:
+        if ne != nk and not ko_uses_word_numerals:
             only_en = [x for x in ne if x not in nk]
             only_ko = [x for x in nk if x not in ne]
             if only_en or only_ko:

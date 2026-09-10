@@ -4,8 +4,9 @@
  * "조금 스크롤하면 닿는다" 는 일반 버튼 기준이지 이 버튼 기준이 아니다 — 마찰이 스텝 수만큼 쌓인다.
  * see-screen.mjs 는 quest 시뮬 안쪽까지 못 들어간다(--click 이 탭 버튼을 못 누른다).
  *
- *   node check-sim-nav.mjs <quest-id> [챕터로 가는 "다음 →" 횟수] [--desktop]
- *   예: node check-sim-nav.mjs rectangles 11
+ *   node check-sim-nav.mjs <quest-id> [챕터로 가는 "다음 →" 횟수] [--code] [--desktop]
+ *   예: node check-sim-nav.mjs rectangles 11 --code
+ *       node check-sim-nav.mjs sumk 4
  *       node check-sim-nav.mjs rectangles 11 --desktop
  *
  * 데스크탑도 재는 이유: 2026-09-10 에 그림 크기를 화면 크기별로 갈랐다
@@ -32,7 +33,9 @@ const click = async (txt) => {
   await p.waitForTimeout(400);
 };
 await click("한국어");
-await click("⚡ 코드");
+/* 시뮬이 ⚡ 코드 탭 안에 있으면 `--code` 를 준다. 📋 문제 탭 안이면 안 준다.
+   (2026-09-10: 처음엔 무조건 코드 탭을 눌렀는데, sumk 는 시뮬이 문제 탭에 있어서 못 찾았다.) */
+if (process.argv.includes("--code")) await click("⚡ 코드");
 for (let i = 0; i < hops; i++) await click("다음 →");
 
 const barTop = await p.evaluate(() => {

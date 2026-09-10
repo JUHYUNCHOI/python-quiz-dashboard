@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getSumkWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { SumkSim } from "./sims";
+import { SumkSim, SumkBuildSim } from "./sims";
 
 const A = "#8b5cf6";
 
@@ -39,26 +39,12 @@ function SumKSample({ E }) {
         </div>
       </div>
 
-      {/* 출력 의미 시각화: 7개 부분집합의 점수 */}
-      <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #c4b5fd", borderRadius: 10, padding: "10px 12px" }}>
-        <div style={{ fontSize: 11.5, fontWeight: 700, color: "#5b21b6", marginBottom: 8, textAlign: "center", wordBreak: "keep-all" }}>
-          {t(E, "Every non-empty subset scores (its sum)² — add them all:", "각 부분집합의 점수 = (합)² — 다 더해요:")}
-        </div>
-        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 6, marginBottom: 8 }}>
-          {[["{1}", 1], ["{2}", 4], ["{3}", 9], ["{1,2}", 9], ["{1,3}", 16], ["{2,3}", 25], ["{1,2,3}", 36]].map(([lab, sc], i) => (
-            <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "3px 8px", borderRadius: 999,
-              background: "#f5f3ff", border: "1px solid #c4b5fd", fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5, fontWeight: 700 }}>
-              <span style={{ color: "#5b21b6" }}>{lab}</span>
-              <span style={{ color: "#94a3b8" }}>→</span>
-              <span style={{ color: "#7c3aed" }}>{sc}</span>
-            </span>
-          ))}
-        </div>
-        <div style={{ fontSize: 12, color: "#166534", textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6, fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>
-          1+4+9+9+16+25+36 = 100 ✓
-        </div>
-      </div>
-
+      {/* 2026-09-10 — 여기 원래 부분집합 7개의 점수 칩(`{1}→1 … {1,2,3}→36`)과
+          `1+4+9+9+16+25+36 = 100 ✓` 합산 박스가 있었다. **뺐다.**
+          바로 다음 쪽 시뮬이 같은 배열·같은 K로 **같은 7개를 같은 순서로** 하나씩 세게 한다.
+          답을 다 본 뒤에 "직접 세어봐요" 를 시키면 그건 발견이 아니라 확인이다
+          (pedagogy 2순위 · memory/feedback_students_copy_the_answer.md 와 같은 뿌리).
+          지우는 게 아니라 **옮긴 것**이다 — 설명은 다음 쪽이 그대로 갖고 있다. */}
       <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #c4b5fd", borderRadius: 10, padding: "8px 12px", fontSize: 11.5, color: C.text, lineHeight: 1.6, wordBreak: "keep-all" }}>
         <b style={{ color: "#5b21b6" }}>{t(E, "Another test", "다른 테스트")}</b> {t(E, ": ", ": ")}<code style={{ background: "#f5f3ff", padding: "1px 5px", borderRadius: 3 }}>2 1 / 3 3</code>
         {t(E, " → subsets {3},{3},{3,3}: 3+3+6 = ", " → 부분집합 {3},{3},{3,3}: 3+3+6 = ")}<b style={{ color: "#15803d" }}>12</b>
@@ -77,14 +63,31 @@ function SumKSample({ E }) {
   );
 }
 
-/* 왜 DP? — 정리 카드. */
-function SumKWhyDP({ E }) {
+/* 2026-09-10 — 여기 원래 `SumKWhyDP` 한 쪽이 있었다. **둘로 갈랐다.**
+
+   팀 넷이 같은 자리를 짚었다:
+     · pedagogy: "3쪽은 부분집합을 통째로 나열하고 4쪽은 원소를 하나씩 넣는다 —
+       순회 방식 자체가 다른데 둘이 같은 100 을 낸다는 걸 잇는 문장이 없다."
+     · student(초6): **여기서 그만뒀다.** "이항정리로 펼치면 을 읽는 순간 뭔 소린지 몰라서
+       눈으로만 흘려보고 넘겼다. 5쪽 코드는 읽는 척만 했다."
+     · quest-auditor: 이항정리·C(t,j)·파스칼이 정의 없이 이름만 쓰인다.
+
+   전엔 한 쪽에서 "2ᴺ 은 크다 → 트릭은 P[t] 다 → 이항정리로 갱신한다" 를 색 카드 세 장으로
+   **연달아 통보**했다. 학생이 할 일이 받아 적는 것밖에 없었다.
+
+   갈라서 사이에 시뮬(`SumkBuildSim`)을 넣는다:
+     [한계 + 질문]  →  숫자로 직접 굴려보기  →  [정리 + 이름 붙이기]
+   이름(P[t]·이항정리·C(t,j))은 **맨 뒤에서만** 나온다
+   (memory/feedback_first_concept_scaffolding.md — 이름은 나중에). */
+
+/* [한계] 2ᴺ 은 못 센다 — 그리고 **질문으로 닫는다.** */
+function SumKLimit({ E }) {
   return (
     <div style={{ padding: 16 }}>
-      <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", textAlign: "center", marginBottom: 6 }}>
-        🤔 {t(E, "7 subsets was easy — but N up to 10⁵?", "7개는 쉬웠죠 — 근데 N 이 10⁵ 이면?")}
+      <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", textAlign: "center", marginBottom: 6, wordBreak: "keep-all", textWrap: "balance" }}>
+        🤔 {t(E, "7 subsets was easy — but N up to 10⁵?", "7개는 쉬웠죠 — 근데 N 이 10만이면?")}
       </div>
-      <div style={{ maxWidth: 500, margin: "0 auto 14px", fontSize: 12.5, color: C.text, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
+      <div style={{ maxWidth: 500, margin: "0 auto 14px", fontSize: 12.5, color: C.text, textAlign: "center", wordBreak: "keep-all", textWrap: "balance", lineHeight: 1.7 }}>
         {/* 2026-09-10 quest-auditor: 여기 원래 "N=60 만 돼도 **온 우주 원자보다 많아요**" 라고 적혀 있었다.
             2⁶⁰ = 1,152,921,504,606,846,976 ≈ 1.15×10¹⁸ 이고 관측 가능한 우주의 원자는 약 10⁸⁰ 개다.
             **62자릿수 차이로 사실이 정반대다.** 겁주려고 쓴 비유가 틀린 셈이다.
@@ -95,23 +98,82 @@ function SumKWhyDP({ E }) {
              " 개예요. N = 60 이면 2⁶⁰ ≈ 115경 개 — 1초에 10억 개씩 세어도 36년이에요. 그런데 이 문제의 N 은 10만까지 가요.")}
       </div>
 
+      {/* 결론을 통보하지 않는다 — 질문으로 닫고, 다음 쪽에서 학생이 숫자로 직접 굴려본다
+          (memory/feedback_solution_framing.md — "그럼 어떻게 해결하면 될까? 생각해보자"). */}
+      <div style={{ maxWidth: 500, margin: "0 auto", background: "#f5f3ff", border: "2px solid #8b5cf6",
+        borderRadius: 12, padding: "14px 16px", textAlign: "center", fontSize: 13.5, fontWeight: 800,
+        color: "#5b21b6", lineHeight: 1.85, wordBreak: "keep-all", textWrap: "balance" }}>
+        {t(E, <>So — how else could we do it?<br />
+              Could the answer <b>grow</b> as we drop the numbers in one at a time,<br />
+              without ever listing a subset?</>,
+             <>그럼 어떻게 하면 될까요?<br />
+              숫자를 <b>하나씩 넣으면서</b> 답이 자라게 할 수는 없을까요?<br />
+              부분집합은 한 번도 나열하지 않고요.</>)}
+      </div>
+
+      <div style={{ textAlign: "center", marginTop: 14, fontSize: 12, color: C.dim, wordBreak: "keep-all" }}>
+        {t(E, "Let's try it with 1, 2, 3 →", "1, 2, 3 으로 직접 해봐요 →")}
+      </div>
+    </div>
+  );
+}
+
+/* [정리] 시뮬에서 본 것에 **이름을 붙이고** K 로 넓힌다. */
+function SumKRecap({ E }) {
+  return (
+    <div style={{ padding: 16 }}>
+      <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", textAlign: "center", marginBottom: 12, wordBreak: "keep-all", textWrap: "balance" }}>
+        📒 {t(E, "What we just did, with names on it", "방금 한 것에 이름 붙이기")}
+      </div>
+
       <div style={{ maxWidth: 500, margin: "0 auto", display: "grid", gap: 10 }}>
-        <div style={{ background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#5b21b6", lineHeight: 1.7, wordBreak: "keep-all" }}>
-          <b>💡 {t(E, "The trick", "핵심 아이디어")}</b><br />
-          {t(E, "Add the elements one at a time. Keep ", "원소를 하나씩 넣어요. 그리고 ")}
-          <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>P[t]</code>
-          {t(E, " = the sum of (subset sum)ᵗ over all subsets so far, for every t = 0..K.",
-               " = 지금까지 부분집합들의 (합)ᵗ 합 을 t = 0..K 마다 유지해요.")}
+        <div style={{ background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#5b21b6", lineHeight: 1.85, wordBreak: "keep-all", textWrap: "balance" }}>
+          <b>📝 {t(E, "The three numbers", "그 숫자 세 개")}</b><br />
+          {t(E, "We carried: how many subsets, the sums added up, the squares added up.",
+               "우리가 들고 다닌 것: 부분집합 개수, 합을 다 더한 것, 합²을 다 더한 것.")}<br />
+          {t(E, "Their names are ", "이 셋의 이름이 ")}
+          <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>P[0]</code>,{" "}
+          <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>P[1]</code>,{" "}
+          <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>P[2]</code>
+          {t(E, ". For a bigger K we keep P[0] … P[K].", " 예요. K 가 더 크면 P[0] 부터 P[K] 까지 들고 다녀요.")}
         </div>
-        <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#1e3a8a", lineHeight: 1.7, wordBreak: "keep-all" }}>
-          <b>➕ {t(E, "Adding element a", "새 원소 a 넣기")}</b><br />
-          {t(E, "A subset either skips a (old P[t] stays) or includes a → its sum becomes (old sum + a). Expand ",
-               "부분집합은 a 를 빼거나(옛 P[t] 그대로) 넣거나 → 합이 (옛합 + a) 가 돼요. ")}
-          <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>(old + a)ᵗ</code>
-          {t(E, " with the binomial theorem to update all P[t] at once.",
-               " 를 이항정리로 펼치면 모든 P[t] 를 한 번에 갱신할 수 있어요.")}
+
+        <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#1e3a8a", lineHeight: 1.85, wordBreak: "keep-all", textWrap: "balance" }}>
+          <b>✂️ {t(E, "Splitting (x + a)ᵗ", "(x + a)ᵗ 를 가르기")}</b><br />
+          {t(E, "We split (1+2)² into 1² + 2·1·2 + 2² — three pieces. (x+a)ᵗ splits into t+1 pieces the same way.",
+               "우리는 (1+2)² 를 1² + 2·1·2 + 2² 세 조각으로 갈랐죠. (x+a)ᵗ 도 똑같이 t+1 조각으로 갈라져요.")}<br />
+          {t(E, "The number in front of each piece is written ", "각 조각 앞에 붙는 수를 ")}
+          <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>C(t, j)</code>
+          {t(E, " — the numbers in Pascal's triangle (1 / 1 1 / 1 2 1 / 1 3 3 1 …). Splitting like this is called the binomial theorem.",
+               " 라고 써요 — 파스칼의 삼각형에 나오는 그 수예요 (1 / 1 1 / 1 2 1 / 1 3 3 1 …). 이렇게 가르는 걸 이항정리라고 해요.")}
         </div>
-        <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#065f46", lineHeight: 1.7, wordBreak: "keep-all", textAlign: "center" }}>
+
+        {/* 파스칼의 삼각형을 **글로만** 말하지 않는다 — 학생이 (2+3)² 에서 본 1·2·1 이 어디 있는지 보인다 */}
+        <div style={{ background: "#fff", border: "1.5px dashed #93c5fd", borderRadius: 10, padding: "10px 12px" }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: "#1e40af", textAlign: "center", marginBottom: 7, wordBreak: "keep-all" }}>
+            {t(E, "row t of Pascal's triangle = the numbers in front", "파스칼의 삼각형 t 번째 줄 = 앞에 붙는 수들")}
+          </div>
+          {[[1], [1, 1], [1, 2, 1], [1, 3, 3, 1]].map((row, t) => (
+            <div key={t} style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 5, marginTop: 3 }}>
+              <span style={{ width: 34, textAlign: "right", fontSize: 10.5, fontWeight: 800, color: "#94a3b8", fontFamily: "'JetBrains Mono',monospace" }}>
+                t={t}
+              </span>
+              {row.map((v, j) => (
+                <span key={j} style={{ minWidth: 24, textAlign: "center", padding: "2px 6px", borderRadius: 7,
+                  fontSize: 12, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+                  background: t === 2 ? "#dbeafe" : "#f8fafc", color: t === 2 ? "#1e40af" : "#64748b",
+                  border: `1px solid ${t === 2 ? "#93c5fd" : "#e2e8f0"}` }}>{v}</span>
+              ))}
+              {t === 2 && (
+                <span style={{ fontSize: 11, fontWeight: 700, color: "#1e40af", marginLeft: 4, wordBreak: "keep-all" }}>
+                  {t2Note(E)}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#065f46", lineHeight: 1.85, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
           🏁 {t(E, "The answer is ", "답은 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>P[K]</code>
           {t(E, ". (For K ≥ 1 the empty subset scores 0ᴷ = 0, so it drops out on its own.)",
                ". (K ≥ 1 이면 공집합은 0ᴷ = 0 이라 저절로 빠져요.)")}
@@ -123,6 +185,11 @@ function SumKWhyDP({ E }) {
       </div>
     </div>
   );
+}
+
+/* t=2 줄 옆 주석 — (2+3)² 에서 본 1·2·1 이 바로 이 줄이라는 것만 말한다. */
+function t2Note(E) {
+  return t(E, "← the 1, 2, 1 from (1+2)²", "← (1+2)² 에서 본 1, 2, 1");
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -218,18 +285,39 @@ export function makeSumKCh1(E) {
     {
       type: "reveal",
       label: t(E, "Try a small case", "작은 예로 직접"),
-      narr: t(E, "Let's actually count it for [1, 2, 3], K = 2: enumerate all 7 subsets and add each (sum)².",
-                 "[1, 2, 3], K = 2 로 직접 세어봐요: 7개 부분집합을 다 나열해 각 (합)² 을 더해요."),
+      /* 2026-09-10 ux 실측 56자 — 55자 규칙 위반. 뒷절은 시뮬 첫 말풍선이 그대로 다시 말한다. */
+      narr: t(E, "Let's count it by hand for [1, 2, 3], K = 2.",
+                 "[1, 2, 3], K = 2 로 직접 세어봐요."),
       content: (<SumkSim E={E} />),
     },
 
-    // [결] 왜 DP?
+    // [전-2] 한계 — 그리고 질문으로 닫는다
     {
       type: "reveal",
-      label: t(E, "Why DP?", "왜 DP?"),
-      narr: t(E, "Listing 2ᴺ subsets is impossible for big N. Here's the idea that avoids it entirely.",
-                 "N 이 크면 2ᴺ 개 나열은 불가능해요. 그걸 아예 피하는 아이디어예요."),
-      content: (<SumKWhyDP E={E} />),
+      label: t(E, "Too many", "너무 많아요"),
+      narr: t(E, "For big N, listing 2ᴺ subsets is impossible.",
+                 "N 이 크면 2ᴺ 개 나열은 불가능해요."),
+      content: (<SumKLimit E={E} />),
+    },
+
+    /* [전-3] **빠진 다리** — 2026-09-10 에 새로 넣은 쪽.
+       전엔 위 [한계] 다음이 곧바로 [정리] 였다. 학생(초6)이 정확히 그 자리에서 그만뒀다.
+       나열하는 방식(3쪽)과 원소를 하나씩 넣는 방식(정리) 사이를 **숫자로** 잇는다. */
+    {
+      type: "reveal",
+      label: t(E, "Grow it instead", "나열 말고 키우기"),
+      narr: t(E, "Drop the numbers in one at a time and watch the answer grow.",
+                 "숫자를 하나씩 넣으면서 답이 자라는 걸 봐요."),
+      content: (<SumkBuildSim E={E} />),
+    },
+
+    // [결] 정리 — 방금 본 것에 이름을 붙이고 K 로 넓힌다
+    {
+      type: "reveal",
+      label: t(E, "Name it", "이름 붙이기"),
+      narr: t(E, "Now the names: P[t], C(t,j), the binomial theorem.",
+                 "이제 이름을 붙여요 — P[t], C(t,j), 이항정리."),
+      content: (<SumKRecap E={E} />),
     },
   ];
 }
@@ -244,9 +332,9 @@ export function makeSumKCh2(E, lang = "py") {
     {
       type: "reveal",
       label: t(E, "Code", "코드"),
-      narr: t(E,
-        "Read the solution top to bottom — each bubble sits on the lines it explains: read input, build binomials, keep P[t], update per element with the binomial theorem, print P[K].",
-        "코드를 위에서 아래로 읽어봐요 — 말풍선이 설명하는 줄에 붙어 있어요: 입력 읽기 → 이항계수 → P[t] 유지 → 원소마다 이항정리로 갱신 → P[K] 출력."),
+      /* 2026-09-10 ux 실측 89자였다 — 55자 규칙의 최대 위반이고,
+         나열한 5단계를 바로 아래 CodeWalk 말풍선 5개가 **또 한 번씩** 설명한다. */
+      narr: t(E, "Read the code top to bottom.", "코드를 위에서 아래로 읽어봐요."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />
       ),
