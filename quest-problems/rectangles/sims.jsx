@@ -449,10 +449,8 @@ export function DPTableFillSim({ E }) {
          모바일 여유가 744px 뿐인데(하단 고정 바 68px) 그림 + 세 줄이면 ▶ 버튼이 가린다.
          이름(①②)은 그대로 두되 "방금 구한 값이에요" 같은 말은 그림이 대신한다. */
       return t(E,
-        <>Last blue (<b>{names}</b>) <b>{c.area}</b> + front (<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — bigger, throw it away.</>}<br />
-          The front comes straight from the table.</>,
-        <>마지막 파랑(<b>{names}</b>) <b>{c.area}</b> + 앞부분(<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — 더 크니까 버려요.</>}<br />
-          앞부분은 표에서 그대로 꺼내 써요.</>);
+        <>Last blue (<b>{names}</b>) <b>{c.area}</b> + front (<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — bigger, throw it away.</>}</>,
+        <>마지막 파랑(<b>{names}</b>) <b>{c.area}</b> + 앞부분(<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — 더 크니까 버려요.</>}</>);
     }
     if (s.k === "cell") return t(E,
       <>So (<b>{s.kk} blues</b>, <b>first {s.i}</b>) = <b>{dp[s.kk][s.i]}</b>.</>,
@@ -499,7 +497,10 @@ export function DPTableFillSim({ E }) {
           이제 한 스텝에 한 가지만 있어서 **모바일에서도 그림이 나온다.** */}
       {(s.k === "try" || s.k === "tryskip") && (
         <div style={{ marginTop: 12 }}>
-          <RectStage groups={[Array.from({ length: s.i - s.j + 1 }, (_, z) => s.j - 1 + z)]} />
+          {/* tryskip 은 말풍선이 두 줄이라 그림을 줄여야 모바일에서 ▶ 가 안 가린다
+              (실측: 하단 고정 바 68px, 여유선 744px). */}
+          <RectStage scale={s.k === "tryskip" ? 0.48 : 1}
+            groups={[Array.from({ length: s.i - s.j + 1 }, (_, z) => s.j - 1 + z)]} />
         </div>
       )}
 
@@ -518,11 +519,11 @@ export function DPTableFillSim({ E }) {
           것인지 되짚어 그리므로 지어낸 그림이 아니다. 그러면 "4 + 1 = 5" 가 화면에서 보인다.
           높이는 try 단계와 같다(그림 하나) — 모바일 여백 문제도 그대로다. */}
       {s.k === "tryadd" && (
-        <div style={{ marginTop: 12 }}>
+        <div style={{ marginTop: 6 }}>
           {/* ⚠️ scale 0.8 — 그림 하나에 캡션까지 얹으니 모바일(375×812)에서 ▶ 버튼이
               화면 밖으로 밀렸다(bottom 859 > 812, 실측). 9/7 에 스텝을 쪼갠 이유가 바로 이거였다.
               그림을 줄이고 캡션을 한 줄로 눌러 다시 들어가게 했다. */}
-          <RectStage scale={0.68} groups={[
+          <RectStage scale={0.48} groups={[
             ...bestSplit(s.kk - 1, s.j - 1),
             Array.from({ length: s.i - s.j + 1 }, (_, z) => s.j - 1 + z),
           ]} />
