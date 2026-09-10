@@ -322,11 +322,20 @@ export function SumkBuildSim({ E }) {
         Could the answer <b>grow</b> as we decide one number at a time?</>,
       <>아까는 부분집합 7개를 손으로 다 나열했죠. N 이 10만이면 못 해요.<br />
         숫자를 <b>하나씩 담을지 말지 정하면서</b> 답이 자라게 할 수는 없을까요?</>);
+    /* 2026-09-10 선생님: **"이것에 대해 숫자 세 개만 적어둬요. 우리가 들고 다닐 건
+       이게 전부예요. 이 말이 못알아듣겠어."**
+
+       두 군데가 잘못됐다.
+         · **"이것에 대해"** 가 무엇을 가리키는지 없다. 그리고 **"숫자 세 개"** 가
+           바로 아래 세 줄이라는 말을 안 한다 — 학생은 연결할 단서가 없다.
+         · **"들고 다닌다"** 는 내가 지어낸 비유다. 지우면 더 쉬워진다
+           (memory/feedback_no_invented_terms.md 의 판정 기준 그대로).
+       → 가리키는 것을 이름으로 부르고, 세 줄이 각각 무엇인지 그 자리에서 말한다. */
     if (s.k === "stage" && s.i === 0) return t(E,
-      <>Nothing chosen yet. There is exactly one subset — the <b>empty</b> one, sum <b>0</b>.<br />
-        We keep three numbers about it. That&apos;s all we carry.</>,
-      <>아직 아무것도 안 담았어요. <b>아무것도 안 담은 것</b>도 부분집합 하나예요. 합은 <b>0</b>.<br />
-        이것에 대해 <b>숫자 세 개</b>만 적어둬요. 우리가 들고 다닐 건 이게 전부예요.</>);
+      <>Nothing chosen yet — and <b>that empty pick counts as a subset too</b>. Its sum is <b>0</b>.<br />
+        The <b>three rows below</b> record it: how many · sum of the sums · sum of the squares.</>,
+      <>아직 아무것도 안 담았어요 — <b>그것도 부분집합 하나</b>예요. 합은 <b>0</b>.<br />
+        <b>아래 세 줄</b>에 그걸 적어요: 몇 개인지 · 합을 다 더하면 · 합을 제곱해서 다 더하면.</>);
     /* 2026-09-10 선생님: **"말이 이해가 안돼. 뭘 빼고 넣고"**
        전엔 "이걸 빼거나 넣거나" 였다. 한국어에서 **빼다 = 뺄셈**으로 읽힌다 —
        바로 옆에 `0+2` 같은 계산이 붙어 있으니 더 그렇다.
