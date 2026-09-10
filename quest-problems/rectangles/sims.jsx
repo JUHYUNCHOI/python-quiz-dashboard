@@ -351,7 +351,16 @@ export function DPTableFillSim({ E }) {
          tryadd = 앞부분은 표에서 꺼내 쓴다 (표를 본다)
        그러면 한 스텝에 한 가지만 보면 돼서 모바일에도 들어가고, 말풍선도 두 줄로 짧아진다. */
     { k: "try", kk: 2, i: 2, j: 2 }, { k: "tryadd", kk: 2, i: 2, j: 2 },
-    { k: "try", kk: 2, i: 2, j: 1 }, { k: "tryadd", kk: 2, i: 2, j: 1 },
+    /* 2026-09-10 선생님: "이게 뜬금없이 나온것같은. 이해가 안가" (7/15 화면)
+       j=1 후보(마지막 파랑이 ①② 를 다 맡는 경우)는 **애초에 성립하지 않는다** —
+       파랑이 2개인데 마지막 하나가 둘 다 덮으면 남은 하나가 덮을 게 없다(dp[1][0] = ∞).
+       그런데 try 단계가 "그 파랑은 3 × 2 = 6 예요" 라고 **값을 먼저 계산하게 해놓고**,
+       다음 tryadd 단계에서야 "덮을 게 없어요 — 넘어가요" 라고 버렸다.
+       학생은 쓸데없는 숫자를 하나 외웠다가 버리는 셈이고, 그게 뜬금없이 느껴진다.
+       두 단계를 **하나로 합친다** — 묻는 그 자리에서 왜 안 되는지 답한다.
+       이 후보를 아예 빼지는 않는다: "파랑을 다 쓰려면 앞에 남겨둘 게 있어야 한다" 는
+       제약 자체가 이 문제의 규칙이라 한 번은 보여줄 값어치가 있다. */
+    { k: "tryskip", kk: 2, i: 2, j: 1 },
     { k: "cell", kk: 2, i: 2 },
     { k: "try", kk: 2, i: 3, j: 3 }, { k: "tryadd", kk: 2, i: 3, j: 3 },
     { k: "try", kk: 2, i: 3, j: 2 }, { k: "tryadd", kk: 2, i: 3, j: 2 },
@@ -407,6 +416,15 @@ export function DPTableFillSim({ E }) {
         <>파랑 <b>1개</b>로 <b>{names}</b> 를 통째로 덮어요.<br />
           ({REDS.slice(0, s.i).map((r) => r.w).join(" + ")}) × {c.mh} = <b>{c.area}</b></>);
     }
+    if (s.k === "tryskip") {
+      const c = cost(s.j, s.i);
+      const names = REDS.slice(s.j - 1, s.i).map((r) => r.label).join("");
+      return t(E,
+        <>What if the last blue took <b>{names}</b> — all of them?<br />
+          Then the other blue has nothing left to cover. Not allowed — skip it.</>,
+        <>마지막 파랑이 <b>{names}</b> 를 <b>다</b> 맡으면요?<br />
+          그럼 남은 파랑 하나가 덮을 게 없어요. 그래서 이 후보는 안 돼요.</>);
+    }
     if (s.k === "try" || s.k === "tryadd") {
       const c = cost(s.j, s.i);
       const front = dp[s.kk - 1][s.j - 1];
@@ -427,13 +445,14 @@ export function DPTableFillSim({ E }) {
          **4 가 어디서 왔는지 이 화면에 없다** — 바로 앞 단계에서 구한 값인데
          그 단계엔 그림이 있었고 이 단계엔 없어서 맥락이 끊겼다.
          어제 try/tryadd 로 쪼개면서 생긴 구멍이다. 두 항을 **둘 다 이름과 함께** 다시 말한다. */
+      /* 2026-09-10: 세 줄이었다. 그림을 되돌리면서 두 줄로 줄였다 —
+         모바일 여유가 744px 뿐인데(하단 고정 바 68px) 그림 + 세 줄이면 ▶ 버튼이 가린다.
+         이름(①②)은 그대로 두되 "방금 구한 값이에요" 같은 말은 그림이 대신한다. */
       return t(E,
-        <>The last blue (<b>{names}</b>) costs <b>{c.area}</b> — we just worked that out.<br />
-          The front (<b>{frontNames}</b>) is already in the table: <b>{front}</b>.<br />
-          {c.area} + {front} = <b>{total}</b>{better ? "" : <> — bigger, throw it away.</>}</>,
-        <>마지막 파랑(<b>{names}</b>)은 <b>{c.area}</b> — 방금 구한 값이에요.<br />
-          앞부분(<b>{frontNames}</b>)은 표에 적어둔 <b>{front}</b> 을 꺼내 써요.<br />
-          {c.area} + {front} = <b>{total}</b>{better ? "" : <> — 더 크니까 버려요.</>}</>);
+        <>Last blue (<b>{names}</b>) <b>{c.area}</b> + front (<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — bigger, throw it away.</>}<br />
+          The front comes straight from the table.</>,
+        <>마지막 파랑(<b>{names}</b>) <b>{c.area}</b> + 앞부분(<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — 더 크니까 버려요.</>}<br />
+          앞부분은 표에서 그대로 꺼내 써요.</>);
     }
     if (s.k === "cell") return t(E,
       <>So (<b>{s.kk} blues</b>, <b>first {s.i}</b>) = <b>{dp[s.kk][s.i]}</b>.</>,
@@ -478,9 +497,38 @@ export function DPTableFillSim({ E }) {
           그림을 더 얹으면 버튼이 하단 고정 바 밑으로 내려갔다.
           선생님: "모바일도 스텝 쪼개서 그림 넣어줘." → 스텝을 둘로 쪼갰고(try / tryadd),
           이제 한 스텝에 한 가지만 있어서 **모바일에서도 그림이 나온다.** */}
-      {s.k === "try" && (
+      {(s.k === "try" || s.k === "tryskip") && (
         <div style={{ marginTop: 12 }}>
           <RectStage groups={[Array.from({ length: s.i - s.j + 1 }, (_, z) => s.j - 1 + z)]} />
+        </div>
+      )}
+
+      {/* 2026-09-10 선생님(같은 자리 **세 번째** 지적):
+          "여기에서 갑자기 이미지가 없어지니까 뭐가 뭔지 모르겠던데" (6/15 화면)
+
+          try 단계엔 그림이 있고 tryadd 단계엔 없었다. 그런데 tryadd 말풍선은
+          "마지막 파랑(②)은 4 … 앞부분(①)은 표에 적어둔 1" 이라고 **그림에 있던 이름**을 부른다.
+          그림이 사라진 자리에서 ①②를 부르니 학생은 볼 것이 없다.
+
+          9/7 에 모바일 여백(21px) 때문에 스텝을 try/tryadd 로 쪼갰고,
+          9/8 엔 말풍선 문구만 더 자세히 고쳤다. **둘 다 그림을 안 되돌려서 같은 지적이 또 나왔다.**
+          말로 다시 말해주는 걸로는 안 된다 — 볼 것이 있어야 한다.
+
+          여기선 **두 항을 다 그린다**. 앞부분은 bestSplit 으로 표 값이 실제로 어떻게 나뉜
+          것인지 되짚어 그리므로 지어낸 그림이 아니다. 그러면 "4 + 1 = 5" 가 화면에서 보인다.
+          높이는 try 단계와 같다(그림 하나) — 모바일 여백 문제도 그대로다. */}
+      {s.k === "tryadd" && (
+        <div style={{ marginTop: 12 }}>
+          {/* ⚠️ scale 0.8 — 그림 하나에 캡션까지 얹으니 모바일(375×812)에서 ▶ 버튼이
+              화면 밖으로 밀렸다(bottom 859 > 812, 실측). 9/7 에 스텝을 쪼갠 이유가 바로 이거였다.
+              그림을 줄이고 캡션을 한 줄로 눌러 다시 들어가게 했다. */}
+          <RectStage scale={0.68} groups={[
+            ...bestSplit(s.kk - 1, s.j - 1),
+            Array.from({ length: s.i - s.j + 1 }, (_, z) => s.j - 1 + z),
+          ]} />
+          {/* 캡션을 넣었다가 뺐다 — 모바일에서 ▶ 버튼이 21px 밖으로 밀렸다(실측 833/812).
+              말풍선이 이미 "마지막 파랑(②)" · "앞부분(①)" 이라고 부르고, 그림의 각 묶음에
+              넓이가 붙어 있어(1, 4) 캡션 없이도 어느 게 어느 것인지 읽힌다. */}
         </div>
       )}
 
