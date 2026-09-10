@@ -308,6 +308,16 @@ export function QuestBottomNav({
   // 그 값을 쓰고, 없으면 legacy behavior (첫 스텝 = disabled).
   const prevDisabled = canPrev !== undefined ? !canPrev : cur === 0;
   return (
+    <>
+    {/* 2026-09-10 선생님: "12/14 아직 가린다며, 그것도 고쳐줘"
+        이 바는 position:fixed 라 **문서 흐름에서 자리를 차지하지 않는다.**
+        그래서 쪽 내용이 길면 마지막 요소(대개 ◀▶ 버튼)가 바 밑에 깔린다.
+        지금까지는 quest 마다 그림을 줄이고 문장을 깎아 한 쪽씩 맞춰왔는데,
+        그건 그 쪽만 고치는 것이고 다음 쪽에서 또 터진다 — 실제로 오늘 네 번 그랬다.
+        바 높이만큼 **문서 끝에 빈 자리를 만든다.** 그러면 quest 180개가 같이 고쳐진다.
+        높이는 실측 68px + 여유. 힌트 줄이 뜨면 한 줄(약 20px) 더 높아진다. */}
+    <div aria-hidden="true"
+      style={{ height: `calc(${showAnswerHint ? 96 : 78}px + env(safe-area-inset-bottom))` }} />
     // quest-navbar: 데스크탑에서 왼쪽 사이드바(w-60) 위를 덮지 않게 globals.css 가 left 를 민다.
     // 2026-09-07 학생 관찰: "데스크탑에서 상단바에 로그인 버튼이 다른 요소에 가려서 안 보이기도 했다."
     // 실측하니 이 바(z-100)가 사이드바(z-50) 아래쪽을 덮어 **로그인이 클릭조차 안 됐다**
@@ -346,5 +356,6 @@ export function QuestBottomNav({
         </div>
       </div>
     </div>
+    </>
   );
 }

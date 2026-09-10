@@ -66,7 +66,12 @@ export function RectStage({ groups = null, bad = false, showWaste = false, scale
   const U = UNIT * scale;
   const stageW = TOTAL_W * U;
   const stageH = MAX_H * U;
-  const padTop = Math.max(20, 26 * scale + 8), baseline = 26 * scale;
+  /* 라벨(그룹 위의 "3×2=6")은 작게 그릴 때 숨긴다 — 아래 groups 렌더 참고.
+     그런데 그 라벨 자리를 비워두는 padTop 은 그대로여서 **아무것도 없는 여백**이 남았다.
+     2026-09-10: 그 20px 때문에 rectangles 12/14 에서 ▶ 버튼이 하단 바에 9px 깔렸다.
+     라벨을 안 그리는 경우엔 윗여백도 같이 줄인다. */
+  const labelsHidden = scale < 0.6 && groups && groups.length > 1;
+  const padTop = labelsHidden ? 6 : Math.max(20, 26 * scale + 8), baseline = 26 * scale;
   const leftOfS = (idx) => REDS.slice(0, idx).reduce((a, r) => a + r.w, 0) * U;
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
