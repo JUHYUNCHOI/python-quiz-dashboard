@@ -236,9 +236,8 @@ export function SumkSim({ E }) {
       {/* 현재 부분집합의 원소 in/out 타일 */}
       {s.kind === "sub" && (
         <>
-          <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 8, fontFamily: "'JetBrains Mono',monospace" }}>
-            A = [1, 2, 3]
-          </div>
+          {/* "A = [1, 2, 3]" 라벨을 뺐다 — 바로 아래 타일 세 개가 그대로 보여준다.
+              모바일에서 아래 누적 목록이 최대 47px 잘리던 자리라 한 줄이라도 아낀다. */}
           <Row>
             {arr.map((v, i) => {
               const inSet = cur.idxs.includes(i);
@@ -461,10 +460,6 @@ export function SumkBuildSim({ E }) {
     { k: "stage", i: 1 }, { k: "stage", i: 2 }, { k: "stage", i: 3 },
     { k: "same" },
     { k: "double" },
-    { k: "area" },
-    { k: "color" },
-    { k: "rows" },
-    { k: "fast" },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
@@ -485,12 +480,11 @@ export function SumkBuildSim({ E }) {
   const takeS2 = pre.s2 + 2 * AA * pre.s1 + AA * AA * pre.cnt;
   const L2FINAL = ledger(stages[stages.length - 1].subs).s2;   // 100 — 안 담은 쪽 + 담은 쪽
 
-  const AREA = ["area", "color", "rows"].includes(s.k);
-  const stageIdx = s.k === "stage" ? s.i : s.k === "ask" ? 0 : AREA ? PRE : stages.length - 1;
+  const stageIdx = s.k === "stage" ? s.i : s.k === "ask" ? 0  : stages.length - 1;
   const st = stages[stageIdx];
   const L = ledger(st.subs);
   const prev = stageIdx > 0 ? ledger(stages[stageIdx - 1].subs) : null;
-  const threeRows = ["rows", "fast"].includes(s.k);
+  const threeRows = false;      // 세 줄은 다음 쪽에서 **필요해질 때** 생긴다
 
   if (process.env.NODE_ENV !== "production") {
     if (ledger(stages[3].subs).s2 !== 100) console.error("[sumk] 합²의 합이 100 이 아니다");
@@ -515,50 +509,15 @@ export function SumkBuildSim({ E }) {
     /* 2026-09-10 선생님: **"잉? 왜 1,2,4,8?"** / **"무슨 목록 얘기하는지 모르겠어"**
        숫자만 있고 **무엇의 개수인지**가 없었다. 그리고 "목록" 이라는 말은
        1쪽이 정의한 "부분집합" 과 **같은 것을 다르게 부른 것**이었다. 한 이름으로 통일한다. */
-    if (s.k === "double") return t(E,
+    return t(E,
       <>How many subsets we had: <b>1 → 2 → 4 → 8</b>. Doubling, because each one splits in two.<br />
-        With 100,000 numbers that is 2¹⁰⁰⁰⁰⁰ subsets — nobody can write them all down.</>,
+        With 100,000 numbers that is 2¹⁰⁰⁰⁰⁰ — nobody can write them down. So how do we grow that one row? →</>,
       <>부분집합이 몇 개였는지 봐요 — <b>1 → 2 → 4 → 8</b>. 하나하나가 둘로 갈라지니까 두 배씩이에요.<br />
-        숫자가 10만 개면 2¹⁰⁰⁰⁰⁰ 개 — 그건 아무도 다 적을 수 없어요.</>);
+        10만 개면 2¹⁰⁰⁰⁰⁰ 개 — 아무도 다 적을 수 없어요. 그럼 저 한 줄은 어떻게 키우죠? →</>);
     /* 2026-09-10 선생님: **"1 3 3 9?"** / **"뭔말?"**
        다리가 빠져 있었다. "합 1 이 4 가 된다" 다음에 **왜 갑자기 제곱을 하는지**가 없다.
        답에 들어가는 게 (합)² 이라는 건 몇 쪽 전 이야기라 여기서 다시 말해줘야 한다.
        그리고 16 이 장부의 14 와 무슨 상관인지도 — 그건 다음 걸음이 받는다. */
-    /* 2026-09-10 — 검토 둘이 같이 잡았다.
-       기획: "'합 1' 의 **1 이 화면 어디에도 없다** — 이 걸음엔 칩이 안 그려진다."
-       디자인: "장부가 **100 → 14 로 역행**하는데 '3 담기 직전으로 되돌아간 것' 이라는
-                이름표가 없다. 이 프레임만 보면 계산이 틀린 것처럼 읽힌다."
-       → 되감았다고 **먼저 말하고**, 어느 부분집합의 합인지 칩을 옆에 살려둔다. */
-    if (s.k === "area") return t(E,
-      <>⏪ Back to just before <b>{AA}</b> went in — {pre.cnt} subsets, squares adding to {pre.s2}.<br />
-        Take the one below, sum <b>{AX}</b>. Putting {AA} in makes it <b>{AX + AA}</b>, and the answer needs it <b>squared</b>: {AX + AA}² = <b>{(AX + AA) ** 2}</b>.</>,
-      <>⏪ <b>{AA}</b>{EUL(AA)} 담기 <b>직전</b>으로 되돌아가요 — 부분집합 {pre.cnt}개, 합²의 합 {pre.s2}.<br />
-        아래 그 하나, 합이 <b>{AX}</b> 예요. {AA}{EUL(AA)} 담으면 <b>{AX + AA}</b> 가 되고, 답엔 그걸 <b>제곱</b>해서 넣어요 — {AX + AA}² = <b>{(AX + AA) ** 2}</b>.</>);
-    /* 2026-09-10 선생님: **"뭔말?"** — 전엔 "2 가 붙는 이유가 이거예요" 라고 했는데
-       **2 가 어디에 붙는다는 얘기를 한 적이 없다.** 아직 안 나온 것의 이유를 말한 셈이다.
-       이 걸음이 실제로 보여주는 것만 말한다: 세 종류이고, 그중 하나가 두 개다. */
-    /* 2026-09-10 — 색이 무엇을 뜻하는지 **이 프레임에 없었다.** 다음 걸음에서야 나왔다.
-       검토 둘 다 같은 말을 했다 — "색을 외워서 다음 장으로 넘어가야 한다." */
-    if (s.k === "color") return t(E,
-      <>Three kinds of piece, and each is one of our rows:<br />
-        <b style={{ color: AC.s2.fg }}>green = sum²</b> · <b style={{ color: AC.s1.fg }}>blue = sum</b> (two identical ones!) · <b style={{ color: AC.cnt.fg }}>purple = just count</b></>,
-      <>조각이 세 종류인데, 하나하나가 우리 줄이에요 —<br />
-        <b style={{ color: AC.s2.fg }}>초록 = 합²</b> · <b style={{ color: AC.s1.fg }}>파랑 = 합</b> (똑같은 게 <b>두 개</b>!) · <b style={{ color: AC.cnt.fg }}>보라 = 개수</b></>);
-    if (s.k === "rows") return t(E,
-    /* 2026-09-10 디자인: **"14 + 36 + 36 = 86 인데 답은 100."**
-       담은 쪽만 쪼개 놓고 **안 담은 쪽 14 를 다시 더한다는 말을 안 했다.**
-       화면에 없는 숫자로 설명을 닫고 있었다. 세 줄로 갈라 끝까지 잇는다. */
-      <>All {pre.cnt} sums split the same way. Add each colour over all of them:<br />
-        <b style={{ color: AC.s2.fg }}>{pre.s2}</b> + <b style={{ color: AC.s1.fg }}>2×{AA}×{pre.s1} = {2 * AA * pre.s1}</b> + <b style={{ color: AC.cnt.fg }}>{AA}²×{pre.cnt} = {AA * AA * pre.cnt}</b> = {pre.s2 + 2 * AA * pre.s1 + AA * AA * pre.cnt} — that is the <b>put-in</b> side.<br />
-        The <b>left-out</b> side is still {pre.s2}. So {pre.s2} + {pre.s2 + 2 * AA * pre.s1 + AA * AA * pre.cnt} = <b>{L2FINAL}</b> ✓</>,
-      <>합 {pre.cnt}개가 다 이렇게 갈라져요. 색깔별로 전부 더하면 —<br />
-        <b style={{ color: AC.s2.fg }}>{pre.s2}</b> + <b style={{ color: AC.s1.fg }}>2×{AA}×{pre.s1} = {2 * AA * pre.s1}</b> + <b style={{ color: AC.cnt.fg }}>{AA}²×{pre.cnt} = {AA * AA * pre.cnt}</b> = {pre.s2 + 2 * AA * pre.s1 + AA * AA * pre.cnt} — 이게 <b>담은 쪽</b>이에요.<br />
-        <b>안 담은 쪽</b>은 {pre.s2} 그대로니까, {pre.s2} + {pre.s2 + 2 * AA * pre.s1 + AA * AA * pre.cnt} = <b>{L2FINAL}</b> ✓</>);
-    return t(E,
-      <><b>So why is it fast?</b> We never write the subsets down — three rows are enough.<br />
-        100,000 numbers = 300,000 cells, about 600,000 multiplications. Not 2¹⁰⁰⁰⁰⁰. Really runs in <b>0.4 s</b> (K = 3).</>,
-      <><b>그래서 왜 빠른가요?</b> 부분집합을 적어두지 않아요 — 세 줄이면 되니까요.<br />
-        10만 개면 고칠 칸 30만, 곱셈 60만 번쯤. 2¹⁰⁰⁰⁰⁰ 이 아니라요. 실제로 <b>0.4초</b> (K = 3).</>);
   })();
 
   const LedgerBox = () => {
@@ -685,11 +644,131 @@ export function SumkBuildSim({ E }) {
         </div>
       )}
 
-      {AREA && (
+    </SimShell>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SumkAreaSim — [새 쪽] 왜 세 줄이면 되는지, 넓이 그림으로.
+
+   2026-09-10 재설계. 이 걸음들은 원래 앞 쪽 시뮬(`SumkBuildSim`) 안에 있었다.
+   선생님이 그 시뮬에서만 **열 번 넘게** 막히셨고, 검토가 원인을 이렇게 냈다:
+
+     디자인: "한 시뮬에서 배워야 하는 **'보는 법' 이 5개**다. 그리고 칩(이산)에서
+              넓이(연속)로 **그림이 통째로 갈아치워지는데** 잇는 근거가 말풍선뿐이다."
+     디자인(실측): 저장소 관례는 **시뮬당 2개** — rectangles 19걸음짜리도 2개,
+              gifts·printseq 는 1개. 어휘를 처음 세우는 쪽만 3~4개.
+     기획: "앞 쪽이 반드시 할 일은 '원소 하나가 들어올 때 답이 어떻게 커지는지' 다.
+              **왜 2ab 인지는 그 일의 증명이지 그 일 자체가 아니다.** 옮기지 말고 **쪼개라.**"
+
+   디자인은 "기존 공식 쪽에 넣으면 520~530px 라 넘친다" 고 했는데,
+   기획 안은 **새 쪽**이라 그 제약이 안 걸린다 — 두 판정이 서로를 푼다.
+
+   여기 보는 법은 **정사각형 하나**다(장부는 앞 쪽에서 이어진 것).
+   ═══════════════════════════════════════════════════════════════ */
+export function SumkAreaSim({ E }) {
+  const arr = [1, 2, 3];
+  const stages = [];
+  let subs = [{ items: [], sum: 0 }];
+  stages.push({ a: null, subs: subs.slice() });
+  for (const a of arr) {
+    subs = [...subs, ...subs.map((x) => ({ items: [...x.items, a], sum: x.sum + a }))];
+    stages.push({ a, subs: subs.slice() });
+  }
+  const ledger = (ss) => ({
+    cnt: ss.length,
+    s1: ss.reduce((p, x) => p + x.sum, 0),
+    s2: ss.reduce((p, x) => p + x.sum * x.sum, 0),
+  });
+  const PRE = 2;                       // 1·2 까지 담기로 정한 상태
+  const pre = ledger(stages[PRE].subs);
+  const AX = 1, AA = arr[PRE];         // x = 1 (부분집합 {1} 의 합), a = 3
+  const takeS2 = pre.s2 + 2 * AA * pre.s1 + AA * AA * pre.cnt;
+  const FINAL = ledger(stages[stages.length - 1].subs).s2;
+
+  if (process.env.NODE_ENV !== "production") {
+    if ((AX + AA) ** 2 !== AX * AX + 2 * AX * AA + AA * AA) console.error("[sumk] 넓이 조각 합이 안 맞는다");
+    if (pre.s2 + takeS2 !== FINAL) console.error(`[sumk] 갱신식이 ${pre.s2 + takeS2} 다 — ${FINAL} 이어야 한다`);
+    /* ⚠️ 정사각형 조각 값이 장부 값과 **겹치면 안 된다.**
+       2026-09-10 학생: "조각의 4, 6 이 장부의 개수 4 · 합 6 과 우연히 같아서
+       둘이 같은 걸 가리키는 줄 착각했다." x=1 이면 조각 [1,3,3,9] 로 안 겹친다. */
+    const pieces = [AX * AX, AX * AA, AA * AX, AA * AA];
+    const led = [pre.cnt, pre.s1, pre.s2];
+    const clash = pieces.filter((v) => led.includes(v));
+    if (clash.length) console.error(`[sumk] 조각 ${clash} 가 장부 값과 겹친다 — x 를 바꿔라`);
+  }
+
+  const steps = [{ k: "area" }, { k: "color" }, { k: "rows" }, { k: "fast" }];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+  const threeRows = ["rows", "fast"].includes(s.k);
+
+  const say = (() => {
+    /* 되감았다고 **먼저 말하고**, 어느 부분집합의 합인지 칩을 옆에 살려둔다.
+       기획: "'합 1' 의 1 이 화면 어디에도 없다" · 디자인: "100 → 14 역행에 이름표가 없다" */
+    if (s.k === "area") return t(E,
+      <>⏪ Back to just before <b>{AA}</b> went in — {pre.cnt} subsets, squares adding to {pre.s2}.<br />
+        Take the one below, sum <b>{AX}</b>. Putting {AA} in makes it <b>{AX + AA}</b>, and the answer needs it <b>squared</b>: {AX + AA}² = <b>{(AX + AA) ** 2}</b>.</>,
+      <>⏪ <b>{AA}</b>{EUL(AA)} 담기 <b>직전</b>으로 되돌아가요 — 부분집합 {pre.cnt}개, 합²의 합 {pre.s2}.<br />
+        아래 그 하나, 합이 <b>{AX}</b> 예요. {AA}{EUL(AA)} 담으면 <b>{AX + AA}</b> 가 되고, 답엔 그걸 <b>제곱</b>해서 넣어요 — {AX + AA}² = <b>{(AX + AA) ** 2}</b>.</>);
+    /* 색이 무엇을 뜻하는지 **이 프레임에서** 말한다. 전엔 다음 걸음에서야 나왔다. */
+    if (s.k === "color") return t(E,
+      <>Three kinds of piece, and each is one of our rows:<br />
+        <b style={{ color: AC.s2.fg }}>green = sum²</b> · <b style={{ color: AC.s1.fg }}>blue = sum</b> (two identical ones!) · <b style={{ color: AC.cnt.fg }}>purple = just count</b></>,
+      <>조각이 세 종류인데, 하나하나가 우리 줄이에요 —<br />
+        <b style={{ color: AC.s2.fg }}>초록 = 합²</b> · <b style={{ color: AC.s1.fg }}>파랑 = 합</b> (똑같은 게 <b>두 개</b>!) · <b style={{ color: AC.cnt.fg }}>보라 = 개수</b></>);
+    /* 디자인: "14 + 36 + 36 = 86 인데 답은 100." 담은 쪽만 쪼개 놓고
+       **안 담은 쪽 14 를 다시 더한다는 말을 안 했다.** 끝까지 잇는다. */
+    if (s.k === "rows") return t(E,
+      <>All {pre.cnt} sums split the same way. Add each colour over all of them:<br />
+        <b style={{ color: AC.s2.fg }}>{pre.s2}</b> + <b style={{ color: AC.s1.fg }}>2×{AA}×{pre.s1} = {2 * AA * pre.s1}</b> + <b style={{ color: AC.cnt.fg }}>{AA}²×{pre.cnt} = {AA * AA * pre.cnt}</b> = {takeS2} — the <b>put-in</b> side.<br />
+        The <b>left-out</b> side is still {pre.s2}. So {pre.s2} + {takeS2} = <b>{FINAL}</b> ✓</>,
+      <>합 {pre.cnt}개가 다 이렇게 갈라져요. 색깔별로 전부 더하면 —<br />
+        <b style={{ color: AC.s2.fg }}>{pre.s2}</b> + <b style={{ color: AC.s1.fg }}>2×{AA}×{pre.s1} = {2 * AA * pre.s1}</b> + <b style={{ color: AC.cnt.fg }}>{AA}²×{pre.cnt} = {AA * AA * pre.cnt}</b> = {takeS2} — 이게 <b>담은 쪽</b>.<br />
+        <b>안 담은 쪽</b>은 {pre.s2} 그대로니까, {pre.s2} + {takeS2} = <b>{FINAL}</b> ✓</>);
+    /* "30만 번" 은 과소평가였다(감사). 고칠 칸 30만 · 곱셈 60만.
+       "0.4초" 는 K=3 실측치다(직접 세 번 돌려 0.42~0.45초). K 를 밝힌다. */
+    return t(E,
+      <><b>So why is it fast?</b> We never write the subsets down — three rows are enough.<br />
+        100,000 numbers = 300,000 cells, about 600,000 multiplications. Not 2¹⁰⁰⁰⁰⁰. Really runs in <b>0.4 s</b> (K = 3).</>,
+      <><b>그래서 왜 빠른가요?</b> 부분집합을 적어두지 않아요 — 세 줄이면 되니까요.<br />
+        10만 개면 고칠 칸 30만, 곱셈 60만 번쯤. 2¹⁰⁰⁰⁰⁰ 이 아니라요. 실제로 <b>0.4초</b> (K = 3).</>);
+  })();
+
+  const rowsOut = [
+    { lab: t(E, "how many subsets", "부분집합 개수"), v: pre.cnt, tone: "cnt" },
+    { lab: t(E, "each sum, added up", "각 합을 더한 것"), v: pre.s1, tone: "s1" },
+    { lab: t(E, "each sum SQUARED, added up", "각 합을 제곱해서 더한 것"), v: pre.s2, tone: "s2" },
+  ];
+
+  return (
+    <SimShell idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels
+      maxHeightCss="calc(100dvh - 400px)">
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Why three rows are enough", "왜 세 줄이면 되나")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Say tone={s.k === "rows" || s.k === "fast" ? "aha" : "go"}>{say}</Say>
+
+      {/* 장부 — `rows` 부터 세 줄. 그전엔 우리가 원하는 한 줄만. */}
+      <div style={{ maxWidth: 340, margin: "10px auto 0", display: "grid", gap: 4 }}>
+        {(threeRows ? rowsOut : [rowsOut[2]]).map((r) => {
+          const c = AC[r.tone];
+          return (
+            <div key={r.lab} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 12px",
+              borderRadius: 9, background: threeRows ? c.bg : "#f8fafc",
+              border: `1.5px solid ${threeRows ? c.bd : "#e2e8f0"}` }}>
+              <span style={{ flex: 1, fontSize: 12, fontWeight: 700, wordBreak: "keep-all",
+                color: threeRows ? c.fg : "#475569" }}>{r.lab}</span>
+              <span style={{ minWidth: 44, textAlign: "right", fontSize: 15, fontWeight: 800,
+                fontFamily: "'JetBrains Mono',monospace", color: threeRows ? c.fg : "#1f2937" }}>{r.v}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      {s.k !== "fast" && (
         <>
-          {/* 기획: "'합 1' 의 1 이 화면 어디에도 없다" — 그 부분집합을 정사각형 옆에 살려둔다. */}
-          {/* 칩은 7·8걸음에만. 9걸음은 말풍선 3줄 + 장부 3줄이라 세로가 빠듯하다(실측 128px 잘림).
-              그때는 이미 "이 부분집합" 이 무엇인지 두 걸음에 걸쳐 보인 뒤다. */}
+          {/* 기획: "'합 1' 의 1 이 화면 어디에도 없다" — 그 부분집합을 그림 옆에 살려둔다. */}
           {s.k !== "rows" && (
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginTop: 12 }}>
               <MiniSet items={[AX]} arr={arr} />
@@ -698,7 +777,7 @@ export function SumkBuildSim({ E }) {
               </span>
             </div>
           )}
-          <AreaSquare x={AX} a={AA} colored={s.k !== "area"} unit={s.k === "rows" ? 20 : 27} />
+          <AreaSquare x={AX} a={AA} colored={s.k !== "area"} unit={s.k === "rows" ? 15 : 27} />
         </>
       )}
     </SimShell>

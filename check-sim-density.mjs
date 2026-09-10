@@ -10,10 +10,20 @@
  *   node check-sim-density.mjs <quest-id> [--desktop]
  *
  * ⚠️ **판정이 아니라 볼 자리 표시다.** 적정 줄 수는 내용마다 다르다.
- *    다만 ①한 걸음이 20줄을 넘거나 ②걸음 사이에 갑자기 배로 뛰면 거의 항상 볼 값어치가 있다.
+ *    다만 ①한 걸음이 35줄을 넘거나 ②걸음 사이에 갑자기 배로 뛰면 거의 항상 볼 값어치가 있다.
+ *
+ * 눈금 근거 (2026-09-10 ux 실측): 처음엔 20줄로 잡았는데 **정상 quest 가 전부 걸렸다.**
+ *   gifts(유일 시뮬) 26~32줄 · rectangles 19걸음짜리 27~33줄 — 둘 다 잘림 0.
+ *   반대로 sumk 는 **22줄인데 43px 잘렸다.** 즉 **줄 수는 잘림과 상관이 약하다** —
+ *   원인은 위젯 높이(표·그림)지 글줄이 아니다.
+ *   → 실제 상한은 `check-sim-nav.mjs` 의 **px 잘림**으로 본다.
+ *     이 도구의 줄 수는 "읽을 게 갑자기 많아지는 자리" 를 찾는 용도이고,
+ *     눈금은 실측 상단(33)보다 넉넉한 **35** 로 둔다.
  * ⚠️ 누적 장부처럼 **일부러 쌓이는** 시뮬은 늘어나는 게 정상이다. 숫자만 보고 판정하지 마라.
  */
 import { chromium } from "playwright";
+
+const LIMIT = 35;      // 위 "눈금 근거" 참고. 20 은 오탐이 너무 많았다.
 
 const quest = process.argv[2];
 if (!quest) { console.log("사용법: node check-sim-density.mjs <quest-id> [--desktop]"); process.exit(2); }
@@ -64,7 +74,7 @@ for (let g = 0; g < 25; g++) {
     for (let i = 1; i <= total; i++) {
       const n = await lines();
       row.push(`${i}:${n}`);
-      if (n > 20) warn.push(`${page + 1}쪽 ${i}걸음 — 한 걸음에 ${n}줄`);
+      if (n > LIMIT) warn.push(`${page + 1}쪽 ${i}걸음 — 한 걸음에 ${n}줄`);
       if (prev && n >= prev * 2 && n - prev >= 6) warn.push(`${page + 1}쪽 ${i}걸음 — ${prev} → ${n} 줄로 뛴다`);
       prev = n;
       if (i < total) {
@@ -80,5 +90,5 @@ for (let g = 0; g < 25; g++) {
 if (!sims) { console.log("⚠️ 시뮬을 못 찾았다 — '문제 없음' 이 아니라 **못 쟀다** 는 뜻이다."); await b.close(); process.exit(2); }
 console.log(`\n시뮬 ${sims}개.`);
 console.log(warn.length ? `⚠️ 볼 자리 ${warn.length}개:\n  ${warn.join("\n  ")}`
-                        : "✅ 20줄 넘는 걸음도, 갑자기 배로 뛰는 자리도 없다.");
+                        : `✅ ${LIMIT}줄 넘는 걸음도, 갑자기 배로 뛰는 자리도 없다.`);
 await b.close();

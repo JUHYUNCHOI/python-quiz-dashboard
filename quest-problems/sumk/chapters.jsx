@@ -2,7 +2,7 @@ import { C, t } from "@/components/quest/theme";
 import { getSumkWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 import { useTraceStep, SimShell } from "@/components/quest/TraceStepper";
-import { SumkSim, SumkBuildSim } from "./sims";
+import { SumkSim, SumkBuildSim, SumkAreaSim } from "./sims";
 
 const A = "#8b5cf6";
 
@@ -380,6 +380,18 @@ export function makeSumKCh1(E) {
       narr: t(E, "Decide one number at a time and watch the answer grow.",
                  "숫자를 하나씩 담을지 정하면서 답을 키워요."),
       content: (<SumkBuildSim E={E} />),
+    },
+
+    /* [전-4] **새 쪽** (2026-09-10 재설계).
+       원래 이 걸음들은 앞 쪽 시뮬 안에 있었다. 선생님이 그 시뮬 하나에서 **열 번 넘게** 막히셨고,
+       검토가 원인을 냈다 — "한 시뮬에서 배워야 할 **보는 법이 5개**", "칩(이산)에서 넓이(연속)로
+       **그림이 통째로 갈아치워지는데** 잇는 근거가 말풍선뿐". 저장소 관례는 **시뮬당 2개**다.
+       기획: "**왜 2ab 인지는 앞 쪽 일의 증명이지 그 일 자체가 아니다.** 옮기지 말고 **쪼개라.**" */
+    {
+      type: "reveal",
+      label: t(E, "Why three", "왜 세 줄"),
+      narr: t(E, "Why do three rows do the job?", "왜 세 줄이면 될까요?"),
+      content: (<SumkAreaSim E={E} />),
     },
 
     // [결] 정리 — 방금 본 것에 이름을 붙이고 K 로 넓힌다
