@@ -1,5 +1,10 @@
 /* 시뮬의 ▶ 버튼이 **스크롤 없이** 보이는지 걸음마다 잰다.
  *
+ ⚠️ 2026-09-10 이 도구가 **조용히 틀렸다.** ▶ 버튼만 쟀는데, `SimShell` 을 쓰면
+ *   그 버튼은 스크롤 영역 **밖**에 고정돼 **항상 보인다.** 그래서 "전부 닿는다" 고 보고하는 동안
+ *   정작 **내용이 안에서 잘리고** 있었다 — sumk 마지막 걸음에서 답(P[2]=100)이 화면 밖이었다.
+ *   ux 가 스크린샷을 눈으로 보다 찾았다. 그래서 **안쪽 잘림도 같이 잰다.**
+ *
  * 왜 (2026-09-10): 시뮬 ▶ 는 quest 하나에서 열몇 번을 눌러야 하는 버튼이다.
  * "조금 스크롤하면 닿는다" 는 일회성 버튼 기준이지 이 버튼 기준이 아니다 —
  * 마찰이 스텝 수만큼 쌓인다. sumk 은 9단계 중 6단계가 가려 있었다(최대 119px).
@@ -41,6 +46,16 @@ const navBottom = () => p.evaluate(() => {
   const el = [...document.querySelectorAll("button")].find((e) => /다음\s*▶|Next\s*▶/.test(e.textContent));
   return el ? Math.round(el.getBoundingClientRect().bottom) : null;
 });
+/* SimShell 안쪽에서 잘린 양. scrollHeight > clientHeight 면 그만큼이 화면 밖이다.
+   ▶ 가 보인다고 내용이 다 보이는 게 아니다 — 이걸 안 재서 오늘 틀린 보고를 냈다. */
+const clippedPx = () => p.evaluate(() => {
+  const boxes = [...document.querySelectorAll("div")].filter((d) => {
+    const st = getComputedStyle(d);
+    return st.overflowY === "auto" && d.scrollHeight > d.clientHeight + 2;
+  });
+  if (!boxes.length) return 0;
+  return Math.max(...boxes.map((d) => Math.round(d.scrollHeight - d.clientHeight)));
+});
 
 await click("🇰🇷 한국어KO");
 const barTop = await p.evaluate(() => {
@@ -62,9 +77,12 @@ for (let guard = 0; guard < 25; guard++) {
       await p.evaluate(() => window.scrollTo(0, 0));
       await p.waitForTimeout(150);
       const bt = await navBottom();
+      const cut = await clippedPx();
       const over = bt != null && bt > barTop;
-      if (over) bad.push(`${page + 1}쪽 ${i}단계 (${bt} > ${barTop}, ${bt - barTop}px 밖)`);
-      console.log(`     ${String(i).padStart(2)}/${total}  ▶ bottom=${bt ?? "없음"}${over ? "  ⚠️ 하단 바에 가림" : ""}`);
+      if (over) bad.push(`${page + 1}쪽 ${i}단계 — ▶ 가 하단 바에 가림 (${bt} > ${barTop})`);
+      if (cut > 0) bad.push(`${page + 1}쪽 ${i}단계 — 내용이 ${cut}px 잘림 (시뮬 안쪽 스크롤)`);
+      console.log(`     ${String(i).padStart(2)}/${total}  ▶ bottom=${bt ?? "없음"}`
+        + `${over ? "  ⚠️ 하단 바에 가림" : ""}${cut > 0 ? `  ⚠️ 내용 ${cut}px 잘림` : ""}`);
       if (i < total) {
         await p.evaluate(() => {
           const el = [...document.querySelectorAll("button")].find((e) => /다음\s*▶|Next\s*▶/.test(e.textContent));
@@ -83,7 +101,7 @@ for (let guard = 0; guard < 25; guard++) {
 }
 
 console.log(`\n시뮬 ${sims}개를 쟀다.`);
-console.log(bad.length ? `⚠️ 스크롤해야 닿는 걸음 ${bad.length}개:\n  ${bad.join("\n  ")}`
-                       : `✅ 전부 스크롤 없이 닿는다.`);
+console.log(bad.length ? `⚠️ 안 보이는 것이 있는 걸음 ${bad.length}개:\n  ${bad.join("\n  ")}`
+                       : `✅ 전부 스크롤 없이 다 보인다 (버튼도, 내용도).`);
 await b.close();
 process.exit(bad.length ? 1 : 0);

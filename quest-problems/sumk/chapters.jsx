@@ -34,8 +34,10 @@ function SumKSample({ E }) {
         <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 2 3</code> — {t(E, "the array A", "다음 줄 = 배열 A")}</div>
         <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #c4b5fd" }}>
           {t(E, "Output ", "출력 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>100</code>
-          {t(E, " = the sum of (subset sum)^K over every non-empty subset, mod 998244353.",
-               " = 모든 비어있지 않은 부분집합의 (합)^K 를 다 더한 값, mod 998244353.")}
+          {/* 2026-09-10 학생: "998244353 로 나눈 나머지 라고 잘 쓰다가 갑자기 mod 998244353 이 나온다.
+              mod 는 처음 보는 말이다." — 같은 화면에서 같은 뜻을 두 말로 쓰고 있었다. 한 말로 통일한다. */}
+          {t(E, " = the sum of (subset sum)^K over every non-empty subset, then the remainder after dividing by 998244353.",
+               " = 모든 비어있지 않은 부분집합의 (합)^K 를 다 더한 뒤, 998244353 으로 나눈 나머지.")}
         </div>
       </div>
 
@@ -46,8 +48,18 @@ function SumKSample({ E }) {
           (pedagogy 2순위 · memory/feedback_students_copy_the_answer.md 와 같은 뿌리).
           지우는 게 아니라 **옮긴 것**이다 — 설명은 다음 쪽이 그대로 갖고 있다. */}
       <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #c4b5fd", borderRadius: 10, padding: "8px 12px", fontSize: 11.5, color: C.text, lineHeight: 1.6, wordBreak: "keep-all" }}>
-        <b style={{ color: "#5b21b6" }}>{t(E, "Another test", "다른 테스트")}</b> {t(E, ": ", ": ")}<code style={{ background: "#f5f3ff", padding: "1px 5px", borderRadius: 3 }}>2 1 / 3 3</code>
-        {t(E, " → subsets {3},{3},{3,3}: 3+3+6 = ", " → 부분집합 {3},{3},{3,3}: 3+3+6 = ")}<b style={{ color: "#15803d" }}>12</b>
+        {/* 2026-09-10 학생: "`/` 로 두 줄 입력을 붙여 쓴 걸 처음 봐서 뭐가 N,K 고 뭐가 배열인지
+            한참 봐야 알았다." — 위 INPUT 카드는 두 줄로 보여주는데 여기만 한 줄로 뭉쳤다.
+            그리고 값이 같은 원소 둘을 `{3},{3}` 로 써서 "같은 걸 두 번 셌나" 로도 읽혔다.
+            줄을 나누고, 어느 3 인지 자리로 구분해 준다. */}
+        <b style={{ color: "#5b21b6" }}>{t(E, "Another test", "다른 테스트")}</b><br />
+        <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+          <code style={{ background: "#f5f3ff", padding: "1px 5px", borderRadius: 3 }}>2 1</code>
+          {t(E, "  ← N = 2, K = 1", "  ← N = 2, K = 1")}<br />
+          <code style={{ background: "#f5f3ff", padding: "1px 5px", borderRadius: 3 }}>3 3</code>
+          {t(E, "  ← the array: first 3, second 3", "  ← 배열: 첫 번째 3, 두 번째 3")}
+        </span><br />
+        {t(E, "Subsets: {first}, {second}, {both} → 3 + 3 + 6 = ", "부분집합: {첫 번째}, {두 번째}, {둘 다} → 3 + 3 + 6 = ")}<b style={{ color: "#15803d" }}>12</b>
       </div>
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
@@ -154,7 +166,9 @@ function SumKRecap({ E }) {
       <div style={{ maxWidth: 500, margin: "0 auto", display: "grid", gap: 10 }}>
         {/* ① 문제 자체를 공식으로 — 선생님이 쓰신 그 문장 */}
         <Box bg="#f5f3ff" bd="#c4b5fd" fg="#5b21b6">
-          <b>1. {t(E, "Two reds a and b", "빨강이 a, b 둘이면")}</b><br />
+          {/* 2026-09-10 auditor: "빨강" 은 rectangles 의 말이다. 이 문제엔 빨강이 없고
+              화면 어디에도 a, b 를 빨간색으로 보여준 적이 없다. 지우면 뜻이 그대로 통한다. */}
+          <b>1. {t(E, "Two numbers a and b", "숫자가 a, b 둘이면")}</b><br />
           {t(E, "The subsets are {a}, {b}, {a,b}. So the answer is",
                "부분집합은 {a}, {b}, {a,b} 셋. 그러니 답은")}<br />
           <span style={{ display: "block", textAlign: "center", fontSize: 15, margin: "4px 0" }}>
@@ -192,17 +206,29 @@ function SumKRecap({ E }) {
           </span>
         </Box>
 
-        {/* ④ 이제야 이름 */}
+        {/* ④~⑥ 이름은 **하나씩**. 2026-09-10 학생(초6)이 정확히 여기서 무너졌다:
+            "한 화면에 처음 보는 말이 세 개 동시에 쏟아졌다 — 이항정리, C(t, j), 파스칼의 삼각형.
+             C(t,j) 가 정확히 어떻게 계산되는 건지, 파스칼의 삼각형이랑 왜 같은 건지
+             문장으로 안 알려주고 그림만 나란히 보여준다. **여기서부터 뒤는 그냥 눈으로 훑었다.**"
+            → 상자 하나에 이름 하나. C(t,j) 는 **학생이 직접 구할 수 있는 정의**로 준다
+              ("삼각형 t 번째 줄의 j 번째 수"). 그림만 나란히 놓고 끝내지 않는다. */}
         <Box bg="#f8fafc" bd="#e2e8f0" fg="#334155">
-          <b>4. {t(E, "Names", "이름")}</b><br />
+          <b>4. {t(E, "Name the three rows", "세 줄에 이름 붙이기")}</b><br />
           {t(E, "Those three rows are ", "그 세 줄이 ")}
           <M>P[0]</M>, <M>P[1]</M>, <M>P[2]</M>
-          {t(E, ". For a bigger K we keep P[0] … P[K], and the answer is ", ". K 가 더 크면 P[0] 부터 P[K] 까지 들고 다니고, 답은 ")}
-          <M>P[K]</M>.<br />
-          {t(E, "Splitting (x+a)ᵗ into t+1 pieces like this is the ", "(x+a)ᵗ 를 이렇게 t+1 조각으로 가르는 걸 ")}
-          <b>{t(E, "binomial theorem", "이항정리")}</b>
-          {t(E, ", and the number in front of each piece is ", " 라고 하고, 각 조각 앞에 붙는 수를 ")}
-          <M>C(t, j)</M>.
+          {t(E, ". For a bigger K we keep P[0] … P[K].", " 예요. K 가 더 크면 P[0] 부터 P[K] 까지 들고 다녀요.")}
+        </Box>
+
+        <Box bg="#eff6ff" bd="#93c5fd" fg="#1e3a8a">
+          <b>5. {t(E, "Name the numbers in front", "앞에 붙는 수에 이름 붙이기")}</b><br />
+          {t(E, "When we split (1+2)², the numbers in front were ", "(1+2)² 를 펼쳤을 때 앞에 붙은 수가 ")}
+          <M>1, 2, 1</M>{t(E, " — that is row 2 of the triangle below.", " 이었죠 — 아래 삼각형의 2 번째 줄이 그거예요.")}<br />
+          {t(E, "We write them ", "이 수를 ")}<M>C(t, j)</M>
+          {t(E, ", read as: row t of the triangle, the j-th number (counting from 0).",
+               " 라고 써요. 읽는 법은 이래요 — 삼각형 t 번째 줄의, j 번째 수 (0 부터 셈).")}<br />
+          <span style={{ fontSize: 11.5, color: "#475569" }}>
+            {t(E, "So C(2,0) = 1 · C(2,1) = 2 · C(2,2) = 1.", "그러니까 C(2,0) = 1 · C(2,1) = 2 · C(2,2) = 1 이에요.")}
+          </span>
         </Box>
 
         {/* 파스칼 삼각형 — (1+2)² 에서 본 1·2·1 이 어디 있는지 보인다 */}
@@ -234,6 +260,19 @@ function SumKRecap({ E }) {
             </div>
           ))}
         </div>
+
+        <Box bg="#f5f3ff" bd="#c4b5fd" fg="#5b21b6">
+          <b>6. {t(E, "Name the splitting itself", "가르는 것 자체에 이름 붙이기")}</b><br />
+          {t(E, "Splitting (x+a)ᵗ into t+1 pieces the way we did is called the ", "(x+a)ᵗ 를 우리가 한 것처럼 t+1 조각으로 가르는 걸 ")}
+          <b>{t(E, "binomial theorem", "이항정리")}</b>{t(E, ".", " 라고 해요.")}
+        </Box>
+
+        <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "11px 14px",
+          fontSize: 13, color: "#065f46", lineHeight: 1.85, wordBreak: "keep-all", textWrap: "balance", textAlign: "center", fontWeight: 800 }}>
+          ✅ {t(E, "The answer is ", "답은 ")}<M>P[K]</M>
+          {t(E, ". (For K ≥ 1 the empty pick scores 0ᴷ = 0, so it drops out on its own.)",
+               ". (K ≥ 1 이면 아무것도 안 담은 것은 0ᴷ = 0 이라 저절로 빠져요.)")}
+        </div>
       </div>
 
       <div style={{ textAlign: "center", marginTop: 14, fontSize: 12, color: C.dim, wordBreak: "keep-all" }}>
@@ -243,9 +282,9 @@ function SumKRecap({ E }) {
   );
 }
 
-/* t=2 줄 옆 주석 — (2+3)² 에서 본 1·2·1 이 바로 이 줄이라는 것만 말한다. */
+/* t=2 줄 옆 주석 — (1+2)² 에서 본 1·2·1 이 바로 이 줄이라는 것만 말한다. */
 function t2Note(E) {
-  return t(E, "← the 1, 2, 1 from (x+a)²", "← (x+a)² 에서 본 1, 2, 1");
+  return t(E, "← the 1, 2, 1 from (1+2)²", "← (1+2)² 에서 본 1, 2, 1");
 }
 
 /* ═══════════════════════════════════════════════════════════════
