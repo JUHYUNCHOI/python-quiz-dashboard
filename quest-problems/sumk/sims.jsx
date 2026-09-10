@@ -774,13 +774,24 @@ export function SumkAreaSim({ E }) {
 
       {/* 계산을 **한 줄에 등호 하나**씩. 색은 위 정사각형 조각과 같다. */}
       {s.k === "rows" && (
-        <div style={{ maxWidth: 330, margin: "12px auto 0", display: "grid", gap: 4 }}>
+        <div style={{ maxWidth: 330, margin: "10px auto 0", display: "grid", gap: 3 }}>
+          {/* 2026-09-10 project-lead: **"이 페이지의 결론(14+86=100 ✓)이 모바일에서
+              39px 스크롤 밖에 있다. 스크롤 흔적이 없어서 학생은 '여기서 끝' 이라고 믿고 넘어간다."**
+              내가 WORK.md 에 "잘리는 건 지나간 값이고 답은 위에 있다" 고 적어뒀는데
+              **6쪽엔 그 말이 안 맞았다** — 잘리는 게 결론 그 자체였다.
+              → 결론을 **계산 줄 위로** 올린다. 답이 먼저, 근거가 아래. (3쪽에 쓴 것과 같은 원칙) */}
+          <div style={{ padding: "7px 12px", borderRadius: 9, background: "#ecfdf5",
+            border: "1.5px solid #6ee7b7", fontSize: 12.5, fontWeight: 800, color: "#065f46",
+            textAlign: "center", wordBreak: "keep-all" }}>
+            {t(E, `left-out ${pre.s2} + put-in ${takeS2} = `, `안 담은 쪽 ${pre.s2} + 담은 쪽 ${takeS2} = `)}
+            <b style={{ color: "#15803d", fontSize: 15 }}>{FINAL}</b> ✓
+          </div>
           {[
             { c: AC.s2, lab: t(E, "green, all added", "초록 다 더하면"), ex: `${pre.s2}`, v: pre.s2 },
             { c: AC.s1, lab: t(E, "blue (two of them)", "파랑 (두 개니까)"), ex: `2 × ${AA} × ${pre.s1}`, v: 2 * AA * pre.s1 },
             { c: AC.cnt, lab: t(E, "purple, all added", "보라 다 더하면"), ex: `${AA}² × ${pre.cnt}`, v: AA * AA * pre.cnt },
           ].map((r, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 12px",
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "3px 12px",
               borderRadius: 9, background: r.c.bg, border: `1.5px solid ${r.c.bd}` }}>
               <span style={{ flex: 1, fontSize: 11.5, fontWeight: 700, color: r.c.fg, wordBreak: "keep-all" }}>{r.lab}</span>
               <span style={{ fontSize: 11.5, fontWeight: 700, color: r.c.fg, fontFamily: "'JetBrains Mono',monospace" }}>{r.ex}</span>
@@ -788,13 +799,6 @@ export function SumkAreaSim({ E }) {
                 fontFamily: "'JetBrains Mono',monospace", color: r.c.fg }}>= {r.v}</span>
             </div>
           ))}
-          <div style={{ marginTop: 4, padding: "7px 12px", borderRadius: 9, background: "#f5f3ff",
-            border: `1.5px solid #c4b5fd`, fontSize: 12, fontWeight: 800, color: PURDK,
-            textAlign: "center", lineHeight: 1.8, wordBreak: "keep-all" }}>
-            {t(E, `put-in side = ${takeS2}`, `담은 쪽 = ${takeS2}`)}<br />
-            {t(E, `left-out side is still ${pre.s2} → ${pre.s2} + ${takeS2} = `, `안 담은 쪽은 ${pre.s2} 그대로 → ${pre.s2} + ${takeS2} = `)}
-            <b style={{ color: "#15803d", fontSize: 15 }}>{FINAL}</b> ✓
-          </div>
         </div>
       )}
 
