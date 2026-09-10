@@ -75,20 +75,26 @@ function Term({ v, lab, tone = "cnt" }) {
   );
 }
 
-/* 부분집합의 **합** 칩. 위쪽 원소 타일(사각형)과 헷갈리지 않게 **동그란 알약 모양**으로 만든다.
-   넣는 쪽은 `1+2` 처럼 어디서 나온 값인지 밑에 붙인다 —
-   선생님(2026-09-10): "위에서는 2를 얘기하다가 갑자기 왜 3?" 이 그 자리다. */
-function SumChip({ v, from = null, isNew = false }) {
+/* 부분집합 칩 — **무엇을 담았는지**(위)와 **그 합**(아래)을 같이 보여준다.
+
+   2026-09-10 선생님: **"어느 순간 뭐가 담아서 계산된건지 모르겠던데"**
+   전엔 합만 `0 1 2 3` 찍었다. 그러면 3 이 {1,2} 인지 {3} 인지 화면에 없다.
+   실제로 셋을 다 담고 나면 합이 `0 1 2 3 3 4 5 6` 이라 **3 이 두 개**인데
+   하나는 {1,2}, 하나는 {3} 이다. 화면만 봐서는 구별할 방법이 아예 없었다.
+
+   위 원소 타일(사각형)과 안 헷갈리게 알약 모양은 유지한다. */
+function SumChip({ items, v, isNew = false, isEmpty = false }) {
+  const label = items.length ? items.join("+") : "없음";
   return (
-    <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center" }}>
+    <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+      <span style={{ fontSize: 9.5, fontWeight: 800, whiteSpace: "nowrap",
+        fontFamily: "'JetBrains Mono',monospace",
+        color: isEmpty ? "#cbd5e1" : isNew ? PURDK : "#94a3b8" }}>{label}</span>
       <span style={{ minWidth: 26, textAlign: "center", padding: "3px 9px", borderRadius: 999,
         fontSize: 12.5, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
-        background: isNew ? PUR : PURBG, color: isNew ? "#fff" : PURDK,
-        border: `1.5px solid ${isNew ? PURDK : "#c4b5fd"}` }}>{v}</span>
-      {from && (
-        <span style={{ fontSize: 9, fontWeight: 700, color: "#94a3b8", marginTop: 1,
-          fontFamily: "'JetBrains Mono',monospace", whiteSpace: "nowrap" }}>{from}</span>
-      )}
+        background: isEmpty ? "#f8fafc" : isNew ? PUR : PURBG,
+        color: isEmpty ? "#94a3b8" : isNew ? "#fff" : PURDK,
+        border: `1.5px solid ${isEmpty ? "#e2e8f0" : isNew ? PURDK : "#c4b5fd"}` }}>{v}</span>
     </span>
   );
 }
@@ -265,21 +271,23 @@ export function SumkBuildSim({ E }) {
 
   /* 숫자를 하나씩 넣어가며 **모든 부분집합의 합**을 실제로 만든다.
      장부 세 줄(개수 · 합의 합 · 합²의 합)은 그 합들에서 바로 나온다. */
+  /* 부분집합마다 **담은 것 목록**과 **그 합**을 같이 들고 있는다.
+     합만 들고 있으면 화면에서 "뭘 담아서 나온 합인지" 를 보여줄 수가 없다. */
   const stages = [];
-  let sums = [0];                                   // 아무것도 안 넣었을 때 = 공집합 하나
-  stages.push({ a: null, sums: sums.slice() });
+  let subs = [{ items: [], sum: 0 }];               // 아무것도 안 담은 것 하나
+  stages.push({ a: null, subs: subs.slice() });
   for (const a of arr) {
-    sums = [...sums, ...sums.map((x) => x + a)];     // 빼거나 / 넣거나 → 딱 두 배
-    stages.push({ a, sums: sums.slice() });
+    subs = [...subs, ...subs.map((x) => ({ items: [...x.items, a], sum: x.sum + a }))];
+    stages.push({ a, subs: subs.slice() });          // 안 담거나 / 담거나 → 딱 두 배
   }
   const ledger = (ss) => ({
     cnt: ss.length,
-    s1: ss.reduce((p, x) => p + x, 0),
-    s2: ss.reduce((p, x) => p + x * x, 0),
+    s1: ss.reduce((p, x) => p + x.sum, 0),
+    s2: ss.reduce((p, x) => p + x.sum * x.sum, 0),
   });
 
   if (process.env.NODE_ENV !== "production") {
-    const last = ledger(stages[stages.length - 1].sums);
+    const last = ledger(stages[stages.length - 1].subs);
     if (last.s2 !== 100) console.error(`[sumk] 합²의 합이 ${last.s2} 다 — 3쪽 답 100 과 어긋난다`);
   }
 
@@ -308,13 +316,13 @@ export function SumkBuildSim({ E }) {
     : (s.k === "rule1" || s.k === "expand" || s.k === "rule2") ? EX_STAGE
     : stages.length - 1;
   const st = stages[stageIdx];
-  const L = ledger(st.sums);
-  const prev = stageIdx > 0 ? ledger(stages[stageIdx - 1].sums) : null;
+  const L = ledger(st.subs);
+  const prev = stageIdx > 0 ? ledger(stages[stageIdx - 1].subs) : null;
 
   /* 갱신식을 **숫자로** 보여줄 때 쓰는 값 — 2 를 넣던 순간을 예로 든다.
      (그 자리에서 계산하니 위 stages 와 어긋날 수 없다) */
-  const ex = { old: ledger(stages[EX_STAGE].sums), oldSums: stages[EX_STAGE].sums,
-               a: arr[EX_STAGE], now: ledger(stages[EX_STAGE + 1].sums) };
+  const ex = { old: ledger(stages[EX_STAGE].subs), oldSums: stages[EX_STAGE].subs.map((x) => x.sum),
+               a: arr[EX_STAGE], now: ledger(stages[EX_STAGE + 1].subs) };
 
   const say = (() => {
     if (s.k === "ask") return t(E,
@@ -332,10 +340,10 @@ export function SumkBuildSim({ E }) {
            (memory/feedback_no_invented_terms.md 의 판정 기준 그대로).
        → 가리키는 것을 이름으로 부르고, 세 줄이 각각 무엇인지 그 자리에서 말한다. */
     if (s.k === "stage" && s.i === 0) return t(E,
-      <>Nothing chosen yet — and <b>that empty pick counts as a subset too</b>. Its sum is <b>0</b>.<br />
-        The <b>three rows below</b> record it: how many · sum of the sums · sum of the squares.</>,
-      <>아직 아무것도 안 담았어요 — <b>그것도 부분집합 하나</b>예요. 합은 <b>0</b>.<br />
-        <b>아래 세 줄</b>에 그걸 적어요: 몇 개인지 · 합을 다 더하면 · 합을 제곱해서 다 더하면.</>);
+      <>Choosing in-or-out for each number builds the subsets one at a time.<br />
+        <b>Picking nothing</b> is one of them — its sum is <b>0</b>, so it adds <b>0</b> to the answer.</>,
+      <>숫자마다 <b>담을지 말지</b> 고르면 부분집합이 하나씩 만들어져요.<br />
+        <b>아무것도 안 고른 것</b>도 하나 생기죠 — 합이 <b>0</b> 이라 답에는 <b>0</b> 만 보태요.</>);
     /* 2026-09-10 선생님: **"말이 이해가 안돼. 뭘 빼고 넣고"**
        전엔 "이걸 빼거나 넣거나" 였다. 한국어에서 **빼다 = 뺄셈**으로 읽힌다 —
        바로 옆에 `0+2` 같은 계산이 붙어 있으니 더 그렇다.
@@ -400,8 +408,8 @@ export function SumkBuildSim({ E }) {
          각 합을 **제곱해서** 다 더한 것 = 1²+2²+3²+3²+4²+5²+6² = 100  ← 이게 답
          모든 합을 더한 뒤 제곱          = 24²                  = 576  ← 이건 아님
        이름을 고치고, **식 자체를 옆에 같이 보여준다.** 식이 있으면 오해할 수가 없다. */
-    const sq = st.sums.map((v) => `${v}²`).join("+");
-    const pl = st.sums.join("+");
+    const sq = st.subs.map((x) => `${x.sum}²`).join("+");
+    const pl = st.subs.map((x) => x.sum).join("+");
     const rowsOut = [
       { lab: t(E, "how many subsets", "부분집합 개수"), name: "P[0]", v: L.cnt, p: prev && prev.cnt,
         ex: null },
@@ -501,7 +509,7 @@ export function SumkBuildSim({ E }) {
               <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6 }}>
                 {t(E, "sums of every subset so far", "지금까지 부분집합들의 합")}
               </div>
-              <Row><SumChip v={0} /></Row>
+              <Row><SumChip items={[]} v={0} isEmpty /></Row>
             </>
           ) : (
             <>
@@ -510,7 +518,9 @@ export function SumkBuildSim({ E }) {
                   {t(E, `${st.a} left out`, `${st.a} 안 담음`)}
                 </span>
                 <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                  {stages[stageIdx - 1].sums.map((v, i) => <SumChip key={i} v={v} />)}
+                  {stages[stageIdx - 1].subs.map((x, i) => (
+                    <SumChip key={i} items={x.items} v={x.sum} isEmpty={x.items.length === 0} />
+                  ))}
                 </span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -518,8 +528,8 @@ export function SumkBuildSim({ E }) {
                   {t(E, `${st.a} put in`, `${st.a} 담음`)}
                 </span>
                 <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                  {stages[stageIdx - 1].sums.map((v, i) => (
-                    <SumChip key={i} v={v + st.a} from={`${v}+${st.a}`} isNew />
+                  {stages[stageIdx - 1].subs.map((x, i) => (
+                    <SumChip key={i} items={[...x.items, st.a]} v={x.sum + st.a} isNew />
                   ))}
                 </span>
               </div>
