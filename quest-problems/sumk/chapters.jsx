@@ -362,8 +362,10 @@ export function makeSumKCh1(E) {
     {
       type: "reveal",
       label: t(E, "Grow it instead", "나열 말고 키우기"),
-      narr: t(E, "Drop the numbers in one at a time and watch the answer grow.",
-                 "숫자를 하나씩 넣으면서 답이 자라는 걸 봐요."),
+      /* 2026-09-10 — 시뮬 안을 "담다" 로 통일하면서 파란 바도 같이 맞춘다.
+         선생님: "말이 이해가 안돼. 뭘 빼고 넣고" */
+      narr: t(E, "Decide one number at a time and watch the answer grow.",
+                 "숫자를 하나씩 담을지 정하면서 답을 키워요."),
       content: (<SumkBuildSim E={E} />),
     },
 

@@ -319,19 +319,24 @@ export function SumkBuildSim({ E }) {
   const say = (() => {
     if (s.k === "ask") return t(E,
       <>We listed all 7 subsets by hand. With N = 100,000 we can&apos;t.<br />
-        Could the answer <b>grow</b> as we drop the numbers in one at a time?</>,
+        Could the answer <b>grow</b> as we decide one number at a time?</>,
       <>아까는 부분집합 7개를 손으로 다 나열했죠. N 이 10만이면 못 해요.<br />
-        숫자를 <b>하나씩 넣으면서</b> 답이 자라게 할 수는 없을까요?</>);
+        숫자를 <b>하나씩 담을지 말지 정하면서</b> 답이 자라게 할 수는 없을까요?</>);
     if (s.k === "stage" && s.i === 0) return t(E,
-      <>Nothing in yet. There is exactly one subset — the <b>empty</b> one, sum <b>0</b>.<br />
+      <>Nothing chosen yet. There is exactly one subset — the <b>empty</b> one, sum <b>0</b>.<br />
         We keep three numbers about it. That&apos;s all we carry.</>,
-      <>아직 아무것도 안 넣었어요. 부분집합은 <b>공집합</b> 하나, 합은 <b>0</b>.<br />
+      <>아직 아무것도 안 담았어요. <b>아무것도 안 담은 것</b>도 부분집합 하나예요. 합은 <b>0</b>.<br />
         이것에 대해 <b>숫자 세 개</b>만 적어둬요. 우리가 들고 다닐 건 이게 전부예요.</>);
+    /* 2026-09-10 선생님: **"말이 이해가 안돼. 뭘 빼고 넣고"**
+       전엔 "이걸 빼거나 넣거나" 였다. 한국어에서 **빼다 = 뺄셈**으로 읽힌다 —
+       바로 옆에 `0+2` 같은 계산이 붙어 있으니 더 그렇다.
+       1쪽 문제 설명이 이미 쓰는 말로 통일한다: "부분집합은 원소를 **골라 담은** 것".
+       담다/안 담다는 뺄셈으로 오해될 수가 없고, 실제로 하는 일 그대로다. */
     if (s.k === "stage") return t(E,
-      <>Drop in <b>{st.a}</b>. Every old subset either <b>skips</b> it or <b>takes</b> it —<br />
-        so the sums are the old ones, plus the old ones with <b>{st.a}</b> added.</>,
-      <><b>{st.a}</b>{EUL(st.a)} 넣어요. 옛 부분집합마다 이걸 <b>빼거나</b> <b>넣거나</b> —<br />
-        그래서 합은 옛 합들 그대로, 그리고 옛 합에 <b>{st.a}</b>{EUL(st.a)} 더한 것들이에요.</>);
+      <>Now <b>{st.a}</b>: each subset either <b>leaves it out</b> or <b>puts it in</b>.<br />
+        Left out → the sum stays. Put in → the sum grows by <b>{st.a}</b>.</>,
+      <>이제 <b>{st.a}</b>{EUL(st.a)} <b>담을지 말지</b> 골라요.<br />
+        안 담으면 합은 그대로, 담으면 합이 <b>{st.a}</b> 만큼 커져요.</>);
     if (s.k === "same") return t(E,
       <>Look at the last line — <b>{L.s2}</b>.<br />
         That is the answer we counted by hand on the page before.</>,
@@ -339,18 +344,18 @@ export function SumkBuildSim({ E }) {
         앞 쪽에서 손으로 세어 구한 그 답이에요.</>);
     if (s.k === "double") return t(E,
       <>But we still listed every subset. Here is the way out:<br />
-        dropping in <b>a</b> always just <b>doubles</b> the list — old ones, and old ones + a.</>,
+        each new number only ever <b>doubles</b> the list — leave it out, or put it in.</>,
       <>그런데 아직은 부분집합을 다 나열했어요. 여기서 빠져나가는 길이 있어요 —<br />
-        <b>a</b> 를 넣으면 목록은 언제나 <b>딱 두 배</b>예요. 옛것들, 그리고 옛것들 + a.</>);
+        새 숫자 하나는 목록을 <b>딱 두 배</b>로만 만들어요. 안 담거나, 담거나 둘뿐이니까요.</>);
     if (s.k === "rule1") return t(E,
-      <>Back up to just before we dropped in <b>{ex.a}</b> — the box below is that moment.<br />
-        <b>skip</b> side stays: <Term v={ex.old.s1} lab="sum" tone="s1" /><br />
-        <b>take</b> side: every old sum gains {ex.a} →{" "}
+      <>Back up to just before <b>{ex.a}</b> was put in — the box below is that moment.<br />
+        <b>left out</b> side stays: <Term v={ex.old.s1} lab="sum" tone="s1" /><br />
+        <b>put in</b> side: every sum gains {ex.a} →{" "}
         <Term v={ex.old.s1} lab="sum" tone="s1" /> + <Term v={ex.a} lab="new" tone="a" />×<Term v={ex.old.cnt} lab="count" /> = <b>{ex.old.s1 + ex.a * ex.old.cnt}</b><br />
         together = <b>{ex.now.s1}</b> ✓ — no list needed</>,
-      <><b>{ex.a}</b> 를 넣기 <b>직전</b>으로 되돌아가 볼게요 — 아래 상자가 그 순간이에요.<br />
-        <b>빼는 쪽</b>은 그대로: <Term v={ex.old.s1} lab="합" tone="s1" /><br />
-        <b>넣는 쪽</b>은 옛 합마다 {ex.a} 씩 늘어요 →{" "}
+      <><b>{ex.a}</b> 를 담기 <b>직전</b>으로 되돌아가 볼게요 — 아래 상자가 그 순간이에요.<br />
+        <b>안 담은 쪽</b>은 그대로: <Term v={ex.old.s1} lab="합" tone="s1" /><br />
+        <b>담은 쪽</b>은 합마다 {ex.a} 씩 늘어요 →{" "}
         <Term v={ex.old.s1} lab="합" tone="s1" /> + <Term v={ex.a} lab="넣는 수" tone="a" />×<Term v={ex.old.cnt} lab="개수" /> = <b>{ex.old.s1 + ex.a * ex.old.cnt}</b><br />
         둘을 합쳐 <b>{ex.now.s1}</b> ✓ — 목록이 필요 없어요</>);
     if (s.k === "expand") {
@@ -361,17 +366,17 @@ export function SumkBuildSim({ E }) {
       return t(E,
         <>What about the <b>sum of squares</b>? Take one old sum, <b>{x}</b>, and expand by hand:<br />
           ( <b>{x}</b> + <b>{a}</b> )² = {x}² + 2·{x}·{a} + {a}² = {x * x} + {2 * x * a} + {a * a} = <b>{(x + a) ** 2}</b></>,
-        <><b>합²의 합</b>은요? 옛 합 하나(<b>{x}</b>)를 골라 손으로 펼쳐봐요 —<br />
+        <><b>합²의 합</b>은요? 직전 합 하나(<b>{x}</b>)를 골라 손으로 펼쳐봐요 —<br />
           ( <b>{x}</b> + <b>{a}</b> )² = {x}² + 2·{x}·{a} + {a}² = {x * x} + {2 * x * a} + {a * a} = <b>{(x + a) ** 2}</b></>);
     }
     if (s.k === "rule2") return t(E,
       <>Every old sum breaks up the same way — and each piece is a row we already keep:<br />
-        <b>skip</b>: <Term v={ex.old.s2} lab="sum²" tone="s2" /><br />
-        <b>take</b>: <Term v={ex.old.s2} lab="sum²" tone="s2" /> + 2·<Term v={ex.a} lab="new" tone="a" />·<Term v={ex.old.s1} lab="sum" tone="s1" /> + <Term v={ex.a} lab="new" tone="a" />²·<Term v={ex.old.cnt} lab="count" /> = <b>{ex.now.s2 - ex.old.s2}</b><br />
+        <b>left out</b>: <Term v={ex.old.s2} lab="sum²" tone="s2" /><br />
+        <b>put in</b>: <Term v={ex.old.s2} lab="sum²" tone="s2" /> + 2·<Term v={ex.a} lab="new" tone="a" />·<Term v={ex.old.s1} lab="sum" tone="s1" /> + <Term v={ex.a} lab="new" tone="a" />²·<Term v={ex.old.cnt} lab="count" /> = <b>{ex.now.s2 - ex.old.s2}</b><br />
         together = <b>{ex.now.s2}</b> ✓</>,
-      <>옛 합 하나하나가 다 그렇게 갈라져요 — 그 조각들이 전부 우리가 가진 줄이에요.<br />
-        <b>빼는 쪽</b>: <Term v={ex.old.s2} lab="합²" tone="s2" /><br />
-        <b>넣는 쪽</b>: <Term v={ex.old.s2} lab="합²" tone="s2" /> + 2·<Term v={ex.a} lab="넣는 수" tone="a" />·<Term v={ex.old.s1} lab="합" tone="s1" /> + <Term v={ex.a} lab="넣는 수" tone="a" />²·<Term v={ex.old.cnt} lab="개수" /> = <b>{ex.now.s2 - ex.old.s2}</b><br />
+      <>직전 합 하나하나가 다 그렇게 갈라져요 — 그 조각들이 전부 우리가 가진 줄이에요.<br />
+        <b>안 담은 쪽</b>: <Term v={ex.old.s2} lab="합²" tone="s2" /><br />
+        <b>담은 쪽</b>: <Term v={ex.old.s2} lab="합²" tone="s2" /> + 2·<Term v={ex.a} lab="넣는 수" tone="a" />·<Term v={ex.old.s1} lab="합" tone="s1" /> + <Term v={ex.a} lab="넣는 수" tone="a" />²·<Term v={ex.old.cnt} lab="개수" /> = <b>{ex.now.s2 - ex.old.s2}</b><br />
         둘을 합쳐 <b>{ex.now.s2}</b> ✓</>);
     return t(E,
       <>We never listed a single subset — three numbers were enough.<br />
@@ -407,7 +412,7 @@ export function SumkBuildSim({ E }) {
               background: isAnswer ? "#ecfdf5" : changed ? PURBG : "#f8fafc",
               border: `1.5px solid ${isAnswer ? "#6ee7b7" : changed ? PUR : "#e2e8f0"}` }}>
               <span style={{ flex: 1, fontSize: 12, fontWeight: 700, color: "#475569", wordBreak: "keep-all" }}>
-                {isOld && <b style={{ color: PUR }}>{t(E, "old ", "옛것 ")}</b>}{r.lab}
+                {isOld && <b style={{ color: PUR }}>{t(E, "old ", "직전 ")}</b>}{r.lab}
                 {/* 식을 옆에 같이 — "각 합을 제곱해서 더한 것" 이 무슨 뜻인지 글이 아니라 식이 말한다.
                     합이 여덟 개까지 늘어나므로 모바일에서 줄이 넘치지 않게 작게 쓴다. */}
                 {r.ex && (
@@ -418,7 +423,7 @@ export function SumkBuildSim({ E }) {
                 )}
                 {isOld && i === 0 && (
                   <span style={{ fontSize: 9.5, fontWeight: 700, color: PUR, marginLeft: 6, whiteSpace: "nowrap" }}>
-                    {t(E, `← just before ${ex.a} went in`, `← ${ex.a} 넣기 직전`)}
+                    {t(E, `← just before ${ex.a} went in`, `← ${ex.a} 담기 직전`)}
                   </span>
                 )}
               </span>
@@ -455,7 +460,7 @@ export function SumkBuildSim({ E }) {
       {(s.k === "ask" || s.k === "stage") && (
         <>
         <div style={{ fontSize: 10.5, fontWeight: 800, color: "#94a3b8", textAlign: "center", marginBottom: 5 }}>
-          {t(E, "the numbers we drop in", "넣을 숫자들")}
+          {t(E, "the numbers we choose from", "골라 담을 숫자들")}
         </div>
         <Row>
           {arr.map((v, i) => {
@@ -493,7 +498,7 @@ export function SumkBuildSim({ E }) {
             <>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
                 <span style={{ minWidth: 96, fontSize: 10.5, fontWeight: 800, color: "#64748b", textAlign: "right", wordBreak: "keep-all" }}>
-                  {t(E, `skip ${st.a}`, `${st.a} 빼는 쪽`)}
+                  {t(E, `${st.a} left out`, `${st.a} 안 담음`)}
                 </span>
                 <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
                   {stages[stageIdx - 1].sums.map((v, i) => <SumChip key={i} v={v} />)}
@@ -501,7 +506,7 @@ export function SumkBuildSim({ E }) {
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span style={{ minWidth: 96, fontSize: 10.5, fontWeight: 800, color: PURDK, textAlign: "right", wordBreak: "keep-all" }}>
-                  {t(E, `take ${st.a}`, `${st.a} 넣는 쪽`)}
+                  {t(E, `${st.a} put in`, `${st.a} 담음`)}
                 </span>
                 <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
                   {stages[stageIdx - 1].sums.map((v, i) => (
@@ -513,7 +518,7 @@ export function SumkBuildSim({ E }) {
           )}
           {s.k === "double" && (
             <Caption color={PURDK}>
-              {t(E, "one number in → the list doubles", "숫자 하나 넣으면 → 목록이 두 배")}
+              {t(E, "one number → the list doubles", "숫자 하나에 목록이 두 배")}
             </Caption>
           )}
         </div>
