@@ -150,8 +150,13 @@ function SumKRecap({ E }) {
 
         {/* 파스칼의 삼각형을 **글로만** 말하지 않는다 — 학생이 (2+3)² 에서 본 1·2·1 이 어디 있는지 보인다 */}
         <div style={{ background: "#fff", border: "1.5px dashed #93c5fd", borderRadius: 10, padding: "10px 12px" }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: "#1e40af", textAlign: "center", marginBottom: 7, wordBreak: "keep-all" }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: "#1e40af", textAlign: "center", marginBottom: 3, wordBreak: "keep-all" }}>
             {t(E, "row t of Pascal's triangle = the numbers in front", "파스칼의 삼각형 t 번째 줄 = 앞에 붙는 수들")}
+          </div>
+          {/* 2026-09-10 학생: "파스칼의 삼각형을 어떻게 다음 줄로 만드는지 — 숫자만 보여주고
+              위 두 개를 더하면 아래가 된다는 규칙은 안 알려준다(코드에 나오지만 설명 없이 지나감)." */}
+          <div style={{ fontSize: 10.5, color: "#64748b", textAlign: "center", marginBottom: 7, wordBreak: "keep-all" }}>
+            {t(E, "each number = the two just above it, added (1 + 2 = 3)", "한 칸 = 바로 위 두 칸을 더한 것 (1 + 2 = 3)")}
           </div>
           {[[1], [1, 1], [1, 2, 1], [1, 3, 3, 1]].map((row, t) => (
             <div key={t} style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 5, marginTop: 3 }}>

@@ -115,8 +115,10 @@ export function getSumKSections(E) {
       why: [
         t(E, "Add one element a. Each existing subset splits two ways: without a (old P[t] stays) or with a (its sum becomes old sum + a).",
             "원소 a 를 추가. 기존 각 부분집합은 'a 없이'(옛 P[t] 그대로) 와 'a 포함'(합이 옛합+a) 두 갈래."),
-        t(E, "Expand (old sum + a)^t with the binomial theorem: Σ_j C(t,j)·a^(t-j)·(old sum)^j → summed over subsets = Σ_j C(t,j)·a^(t-j)·P[j].",
-            "(옛합+a)^t 를 이항정리로 펼치면 Σ_j C(t,j)·a^(t-j)·(옛합)^j → 부분집합 전체로 합치면 Σ_j C(t,j)·a^(t-j)·P[j]."),
+        /* 2026-09-10 학생: "Σ (시그마) 기호가 여기서 처음 나오는데, 이게 반복해서 더하라는
+           뜻이라고 아무도 안 알려줬다. 짐작으로 넘어감." — 안 배운 기호다. 말로 푼다. */
+        t(E, "Expand (old sum + a)^t the way we split (1+2)² by hand. Run j from 0 to t and add up every piece C(t,j)·a^(t-j)·P[j].",
+            "(옛합+a)^t 를 아까 (1+2)² 펼치던 것처럼 갈라요. j 를 0부터 t 까지 바꿔가며 조각 C(t,j)·a^(t-j)·P[j] 를 다 더해요."),
         t(E, "So new P[t] = old P[t] + (contribution of subsets that include a). Take % MOD on every product.",
             "그래서 새 P[t] = 옛 P[t] + (a 포함 부분집합 기여). 매 곱마다 % MOD."),
       ],
@@ -177,7 +179,7 @@ export function getSumkWalk(E, lang = "py") {
       { hi: [0, 7],   bubble: t(E, "Read n numbers and the exponent K. Set MOD = 998244353 — the whole answer is taken modulo this.", "숫자 n개와 지수 K를 읽어요. MOD = 998244353 — 답 전체를 이 값으로 나눈 나머지로 다뤄요.") },
       { hi: [8, 14],  bubble: t(E, "Precompute the binomial coefficients C(t,j) with Pascal's triangle — we'll need them to expand (old sum + a)^t.", "이항계수 C(t,j)를 파스칼의 삼각형으로 미리 만들어요 — (옛합+a)^t 를 펼칠 때 써요.") },
       { hi: [15, 16], bubble: t(E, "P[t] = the sum of (subset sum)^t over all subsets so far. With zero elements only the empty subset exists → P[0] = 1.", "P[t] = 지금까지 부분집합들의 (합)^t 합. 원소 0개면 공집합뿐이라 P[0] = 1로 시작.") },
-      { hi: [17, 30], bubble: t(E, "Add element a. Subsets without a keep old P[t]; subsets with a give (old sum + a)^t = Σ C(t,j)·a^(t-j)·P[j] (binomial theorem). Add the two → new P[t].", "원소 a를 넣어요. a 없는 부분집합은 옛 P[t] 그대로, a 포함은 (옛합+a)^t = Σ C(t,j)·a^(t-j)·P[j] (이항정리). 둘을 더해 새 P[t].") },
+      { hi: [17, 30], bubble: t(E, "Add element a. The skip side keeps old P[t]; the take side is (old sum + a)^t — split it and add every piece C(t,j)·a^(t-j)·P[j] for j = 0..t. Add both sides → new P[t].", "원소 a를 넣어요. 빼는 쪽은 옛 P[t] 그대로, 넣는 쪽은 (옛합+a)^t — 갈라서 j = 0..t 조각 C(t,j)·a^(t-j)·P[j] 를 다 더해요. 두 쪽을 합치면 새 P[t].") },
       { hi: [31, 33], bubble: t(E, "After all N elements, P[K] is the answer. For K ≥ 1 the empty subset scores 0^K = 0, so it drops out on its own.", "N개를 다 넣으면 P[K]가 답. K ≥ 1이면 공집합(0^K=0)은 저절로 빠져요.") },
     ] };
   }
@@ -187,7 +189,7 @@ export function getSumkWalk(E, lang = "py") {
     { hi: [0, 2],   bubble: t(E, "Read n numbers and the exponent K. Set MOD = 998244353 — the whole answer is taken modulo this.", "숫자 n개와 지수 K를 읽어요. MOD = 998244353 — 답 전체를 이 값으로 나눈 나머지로 다뤄요.") },
     { hi: [3, 8],   bubble: t(E, "Precompute the binomial coefficients C(t,j) with Pascal's triangle — we'll need them to expand (old sum + a)^t.", "이항계수 C(t,j)를 파스칼의 삼각형으로 미리 만들어요 — (옛합+a)^t 를 펼칠 때 써요.") },
     { hi: [9, 11],  bubble: t(E, "P[t] = the sum of (subset sum)^t over all subsets so far. With zero elements only the empty subset exists → P[0] = 1.", "P[t] = 지금까지 부분집합들의 (합)^t 합. 원소 0개면 공집합뿐이라 P[0] = 1로 시작.") },
-    { hi: [12, 23], bubble: t(E, "Add element a. Subsets without a keep old P[t]; subsets with a give (old sum + a)^t = Σ C(t,j)·a^(t-j)·P[j] (binomial theorem). Add the two → new P[t].", "원소 a를 넣어요. a 없는 부분집합은 옛 P[t] 그대로, a 포함은 (옛합+a)^t = Σ C(t,j)·a^(t-j)·P[j] (이항정리). 둘을 더해 새 P[t].") },
+    { hi: [12, 23], bubble: t(E, "Add element a. The skip side keeps old P[t]; the take side is (old sum + a)^t — split it and add every piece C(t,j)·a^(t-j)·P[j] for j = 0..t. Add both sides → new P[t].", "원소 a를 넣어요. 빼는 쪽은 옛 P[t] 그대로, 넣는 쪽은 (옛합+a)^t — 갈라서 j = 0..t 조각 C(t,j)·a^(t-j)·P[j] 를 다 더해요. 두 쪽을 합치면 새 P[t].") },
     { hi: [24, 24], bubble: t(E, "After all N elements, P[K] is the answer. For K ≥ 1 the empty subset scores 0^K = 0, so it drops out on its own.", "N개를 다 넣으면 P[K]가 답. K ≥ 1이면 공집합(0^K=0)은 저절로 빠져요.") },
   ] };
 }

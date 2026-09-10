@@ -55,6 +55,26 @@ function Say({ children, tone = "go" }) {
   );
 }
 
+/* 식 안의 숫자 하나 — 밑에 **어느 장부 줄에서 온 것인지** 이름표를 붙인다.
+   2026-09-10 학생: "공식 속 숫자 하나하나가 저 상자 중 뭘 가져온 건지 라벨이 없어서
+   직접 대조해야 알 수 있다. 여기서 멈춰서 손으로 다시 계산해보고 나서야 넘어갔다."
+   특히 `1 + ( 1 + 2·2·1 + 2²·2 )` 에서 **2 가 세 가지 다른 뜻**으로 나온다 —
+   넣는 수 2, 옛 개수 2, 그냥 계수 2. 색과 이름표로 가른다. */
+function Term({ v, lab, tone = "cnt" }) {
+  const c = tone === "cnt" ? { fg: "#5b21b6", bg: "#f5f3ff", bd: "#c4b5fd" }
+          : tone === "s1"  ? { fg: "#1e40af", bg: "#eff6ff", bd: "#93c5fd" }
+          : tone === "s2"  ? { fg: "#065f46", bg: "#ecfdf5", bd: "#6ee7b7" }
+          : { fg: "#9a3412", bg: "#fff7ed", bd: "#fdba74" };   // a = 지금 넣는 수
+  return (
+    <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center",
+      margin: "0 2px", verticalAlign: "middle" }}>
+      <span style={{ padding: "1px 7px", borderRadius: 7, background: c.bg, border: `1.5px solid ${c.bd}`,
+        color: c.fg, fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 14 }}>{v}</span>
+      <span style={{ fontSize: 9, fontWeight: 800, color: c.fg, marginTop: 1, whiteSpace: "nowrap" }}>{lab}</span>
+    </span>
+  );
+}
+
 function Row({ children }) {
   return <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, flexWrap: "wrap" }}>{children}</div>;
 }
@@ -305,10 +325,16 @@ export function SumkBuildSim({ E }) {
       <>그런데 아직은 부분집합을 다 나열했어요. 여기서 빠져나가는 길이 있어요 —<br />
         <b>a</b> 를 넣으면 목록은 언제나 <b>딱 두 배</b>예요. 옛것들, 그리고 옛것들 + a.</>);
     if (s.k === "rule1") return t(E,
-      <>So the <b>sum of sums</b> needs no list:<br />
-        old <b>{ex.old.s1}</b> + (old <b>{ex.old.s1}</b> + {ex.a}×<b>{ex.old.cnt}</b>) = <b>{ex.now.s1}</b> ✓</>,
-      <>그럼 <b>합의 합</b>은 목록 없이도 구해져요 —<br />
-        옛것 <b>{ex.old.s1}</b> + (옛것 <b>{ex.old.s1}</b> + {ex.a}×<b>{ex.old.cnt}</b>) = <b>{ex.now.s1}</b> ✓</>);
+      <>Back up to just before we dropped in <b>{ex.a}</b> — the box below is that moment.<br />
+        <b>skip</b> side stays: <Term v={ex.old.s1} lab="sum" tone="s1" /><br />
+        <b>take</b> side: every old sum gains {ex.a} →{" "}
+        <Term v={ex.old.s1} lab="sum" tone="s1" /> + <Term v={ex.a} lab="new" tone="a" />×<Term v={ex.old.cnt} lab="count" /> = <b>{ex.old.s1 + ex.a * ex.old.cnt}</b><br />
+        together = <b>{ex.now.s1}</b> ✓ — no list needed</>,
+      <><b>{ex.a}</b> 를 넣기 <b>직전</b>으로 되돌아가 볼게요 — 아래 상자가 그 순간이에요.<br />
+        <b>빼는 쪽</b>은 그대로: <Term v={ex.old.s1} lab="합" tone="s1" /><br />
+        <b>넣는 쪽</b>은 옛 합마다 {ex.a} 씩 늘어요 →{" "}
+        <Term v={ex.old.s1} lab="합" tone="s1" /> + <Term v={ex.a} lab="넣는 수" tone="a" />×<Term v={ex.old.cnt} lab="개수" /> = <b>{ex.old.s1 + ex.a * ex.old.cnt}</b><br />
+        둘을 합쳐 <b>{ex.now.s1}</b> ✓ — 목록이 필요 없어요</>);
     if (s.k === "expand") {
       /* 2026-09-10 — 처음엔 (2+3)² 로 펼쳐 보였는데, 3 은 지금 넣는 숫자가 아니라
          화면 어디에도 없는 값이었다. **화면에 떠 있는 숫자만 쓴다** —
@@ -321,10 +347,14 @@ export function SumkBuildSim({ E }) {
           ( <b>{x}</b> + <b>{a}</b> )² = {x}² + 2·{x}·{a} + {a}² = {x * x} + {2 * x * a} + {a * a} = <b>{(x + a) ** 2}</b></>);
     }
     if (s.k === "rule2") return t(E,
-      <>Every old sum breaks up the same way — and we already keep all three pieces:<br />
-        <b>{ex.old.s2}</b> + ( <b>{ex.old.s2}</b> + 2·{ex.a}·<b>{ex.old.s1}</b> + {ex.a}²·<b>{ex.old.cnt}</b> ) = <b>{ex.now.s2}</b> ✓</>,
-      <>옛 합 하나하나가 다 그렇게 갈라져요 — 그 세 조각을 우리는 이미 갖고 있어요.<br />
-        <b>{ex.old.s2}</b> + ( <b>{ex.old.s2}</b> + 2·{ex.a}·<b>{ex.old.s1}</b> + {ex.a}²·<b>{ex.old.cnt}</b> ) = <b>{ex.now.s2}</b> ✓</>);
+      <>Every old sum breaks up the same way — and each piece is a row we already keep:<br />
+        <b>skip</b>: <Term v={ex.old.s2} lab="sum²" tone="s2" /><br />
+        <b>take</b>: <Term v={ex.old.s2} lab="sum²" tone="s2" /> + 2·<Term v={ex.a} lab="new" tone="a" />·<Term v={ex.old.s1} lab="sum" tone="s1" /> + <Term v={ex.a} lab="new" tone="a" />²·<Term v={ex.old.cnt} lab="count" /> = <b>{ex.now.s2 - ex.old.s2}</b><br />
+        together = <b>{ex.now.s2}</b> ✓</>,
+      <>옛 합 하나하나가 다 그렇게 갈라져요 — 그 조각들이 전부 우리가 가진 줄이에요.<br />
+        <b>빼는 쪽</b>: <Term v={ex.old.s2} lab="합²" tone="s2" /><br />
+        <b>넣는 쪽</b>: <Term v={ex.old.s2} lab="합²" tone="s2" /> + 2·<Term v={ex.a} lab="넣는 수" tone="a" />·<Term v={ex.old.s1} lab="합" tone="s1" /> + <Term v={ex.a} lab="넣는 수" tone="a" />²·<Term v={ex.old.cnt} lab="개수" /> = <b>{ex.now.s2 - ex.old.s2}</b><br />
+        둘을 합쳐 <b>{ex.now.s2}</b> ✓</>);
     return t(E,
       <>We never listed a single subset — three numbers were enough.<br />
         Their names: <b>P[0]</b>, <b>P[1]</b>, <b>P[2]</b>. And splitting (x+a)² like that is the <b>binomial theorem</b>.</>,
@@ -350,6 +380,11 @@ export function SumkBuildSim({ E }) {
               border: `1.5px solid ${isAnswer ? "#6ee7b7" : changed ? PUR : "#e2e8f0"}` }}>
               <span style={{ flex: 1, fontSize: 12, fontWeight: 700, color: "#475569", wordBreak: "keep-all" }}>
                 {isOld && <b style={{ color: PUR }}>{t(E, "old ", "옛것 ")}</b>}{r.lab}
+                {isOld && i === 0 && (
+                  <span style={{ fontSize: 9.5, fontWeight: 700, color: PUR, marginLeft: 6, whiteSpace: "nowrap" }}>
+                    {t(E, `← just before ${ex.a} went in`, `← ${ex.a} 넣기 직전`)}
+                  </span>
+                )}
               </span>
               {/* 이름은 맨 마지막 걸음에서만 붙인다 — 그전엔 우리말로만 부른다 */}
               {s.k === "name" && (
