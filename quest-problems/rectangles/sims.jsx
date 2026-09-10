@@ -455,9 +455,28 @@ export function DPTableFillSim({ E }) {
         <>Last blue (<b>{names}</b>) <b>{c.area}</b> + front (<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — drop it</>}</>,
         <>마지막 파랑(<b>{names}</b>) <b>{c.area}</b> + 앞부분(<b>{frontNames}</b>) <b>{front}</b> = <b>{total}</b>{better ? "" : <> — 버려요</>}</>);
     }
-    if (s.k === "cell") return t(E,
-      <>So (<b>{s.kk} blues</b>, <b>first {s.i}</b>) = <b>{dp[s.kk][s.i]}</b>.</>,
-      <>그래서 (파랑 <b>{s.kk}개</b>, 앞 <b>{s.i}개</b>) 칸은 <b>{dp[s.kk][s.i]}</b> 이에요.</>);
+    if (s.k === "cell") {
+      /* 2026-09-10 선생님: "우리는 결국 파랑이 빨강을 다 덮는걸 고민해야하는데
+         왜 파랑 두개로 1번, 2번을 덮는걸 생각해야하는거지? 그럼 빨강 3번은?"
+         **맞는 지적이다.** K=2 인 이 예제에서 (파랑2, 앞2) 칸은 아무도 안 읽는다 —
+         답은 맨 오른쪽 칸에서만 나오고, dp[3][*] 은 K=2 라 아예 없다.
+         그렇다고 이 칸을 건너뛸 수는 없다: components.jsx 의 FULL_PY 가 kk·i 를
+         조건 없이 전부 도는데 시뮬만 골라 채우면 코드와 어긋난다(pedagogy 판정).
+         그래서 **왜 지금은 안 쓰는지를 그 자리에서 말한다.** 원래 이 스텝과 다음 스텝
+         (③까지 덮는 칸) 사이에 연결어가 하나도 없었고, 그게 "뜬금없다" 의 원인이었다.
+         "파랑을 3개 쓸 수 있으면 쓰는 칸" 은 지어낸 정당화가 아니라 사실이다. */
+      const orphan = s.kk >= 2 && s.i < N;
+      const last = REDS[N - 1].label;
+      return t(E,
+        <>So (<b>{s.kk} blues</b>, <b>first {s.i}</b>) = <b>{dp[s.kk][s.i]}</b>.
+          {orphan && <><br />
+            We won&apos;t use this one — it&apos;s for when <b>3 blues</b> are allowed.<br />
+            Next we fill the cell that covers <b>all the way to {last}</b>.</>}</>,
+        <>그래서 (파랑 <b>{s.kk}개</b>, 앞 <b>{s.i}개</b>) 칸은 <b>{dp[s.kk][s.i]}</b> 이에요.
+          {orphan && <><br />
+            이 칸은 지금은 안 써요 — <b>파랑 3개</b>까지 쓸 수 있을 때 쓰는 칸이에요.<br />
+            이제 파랑 2개로 <b>{last}까지 전부</b> 덮는 칸을 채워요.</>}</>);
+    }
     return t(E,
       <>The answer is in the <b>last column</b> — pick the smallest: {dp[1][N]} or {dp[2][N]} → <b>{Math.min(dp[1][N], dp[2][N])}</b>.<br />
         Same number we found by hand earlier.<br />
