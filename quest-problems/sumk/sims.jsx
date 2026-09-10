@@ -75,6 +75,24 @@ function Term({ v, lab, tone = "cnt" }) {
   );
 }
 
+/* 부분집합의 **합** 칩. 위쪽 원소 타일(사각형)과 헷갈리지 않게 **동그란 알약 모양**으로 만든다.
+   넣는 쪽은 `1+2` 처럼 어디서 나온 값인지 밑에 붙인다 —
+   선생님(2026-09-10): "위에서는 2를 얘기하다가 갑자기 왜 3?" 이 그 자리다. */
+function SumChip({ v, from = null, isNew = false }) {
+  return (
+    <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center" }}>
+      <span style={{ minWidth: 26, textAlign: "center", padding: "3px 9px", borderRadius: 999,
+        fontSize: 12.5, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+        background: isNew ? PUR : PURBG, color: isNew ? "#fff" : PURDK,
+        border: `1.5px solid ${isNew ? PURDK : "#c4b5fd"}` }}>{v}</span>
+      {from && (
+        <span style={{ fontSize: 9, fontWeight: 700, color: "#94a3b8", marginTop: 1,
+          fontFamily: "'JetBrains Mono',monospace", whiteSpace: "nowrap" }}>{from}</span>
+      )}
+    </span>
+  );
+}
+
 function Row({ children }) {
   return <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, flexWrap: "wrap" }}>{children}</div>;
 }
@@ -435,6 +453,10 @@ export function SumkBuildSim({ E }) {
 
       {/* 어느 숫자까지 넣었나 */}
       {(s.k === "ask" || s.k === "stage") && (
+        <>
+        <div style={{ fontSize: 10.5, fontWeight: 800, color: "#94a3b8", textAlign: "center", marginBottom: 5 }}>
+          {t(E, "the numbers we drop in", "넣을 숫자들")}
+        </div>
         <Row>
           {arr.map((v, i) => {
             const inYet = i < stageIdx;
@@ -444,31 +466,57 @@ export function SumkBuildSim({ E }) {
               fg={justNow ? "#fff" : inYet ? PURDK : "#cbd5e1"} faded={!inYet && !justNow} />;
           })}
         </Row>
+        </>
       )}
 
-      {/* 지금까지 만들어진 부분집합들의 **합** — 나열이 두 배로 늘어나는 게 눈에 보인다 */}
+      {/* 지금까지 만들어진 부분집합들의 **합**.
+
+          2026-09-10 선생님: **"위에서는 2를 얘기하다가 갑자기 왜 3?"**
+          전엔 합들을 `0 1 2 3` 한 줄로 늘어놨다. 그런데 바로 위 타일도 `1 2 3` 이라
+          **같은 3 이 한 화면에 두 뜻으로** 있었다 — 타일 3 은 아직 안 넣은 숫자,
+          칩 3 은 {1,2} 의 합. 모양도 비슷해서 구별이 안 됐다.
+          학생 에이전트는 이걸 못 잡았다. 선생님이 화면을 보고 바로 잡으셨다.
+
+          고침: 한 줄을 **빼는 쪽 / 넣는 쪽 두 줄**로 가르고,
+          넣는 쪽은 `1+2=3` 처럼 **어디서 나온 숫자인지 식으로** 보여준다.
+          이건 이 시뮬이 내내 하는 이야기(빼거나 넣거나)와도 같은 모양이다. */}
       {(s.k === "stage" || s.k === "same" || s.k === "double") && (
-        <>
-          <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginTop: 12, marginBottom: 6 }}>
-            {t(E, "sums of every subset so far", "지금까지 부분집합들의 합")}
-          </div>
-          <Row>
-            {st.sums.map((v, i) => {
-              const isNew = s.k === "stage" && stageIdx > 0 && i >= st.sums.length / 2;
-              return (
-                <span key={i} style={{ padding: "3px 9px", borderRadius: 999, fontSize: 12, fontWeight: 800,
-                  fontFamily: "'JetBrains Mono',monospace",
-                  background: isNew ? PUR : PURBG, color: isNew ? "#fff" : PURDK,
-                  border: `1.5px solid ${isNew ? PURDK : "#c4b5fd"}` }}>{v}</span>
-              );
-            })}
-          </Row>
+        <div style={{ maxWidth: 420, margin: "12px auto 0" }}>
+          {stageIdx === 0 ? (
+            <>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6 }}>
+                {t(E, "sums of every subset so far", "지금까지 부분집합들의 합")}
+              </div>
+              <Row><SumChip v={0} /></Row>
+            </>
+          ) : (
+            <>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                <span style={{ minWidth: 96, fontSize: 10.5, fontWeight: 800, color: "#64748b", textAlign: "right", wordBreak: "keep-all" }}>
+                  {t(E, `skip ${st.a}`, `${st.a} 빼는 쪽`)}
+                </span>
+                <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                  {stages[stageIdx - 1].sums.map((v, i) => <SumChip key={i} v={v} />)}
+                </span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ minWidth: 96, fontSize: 10.5, fontWeight: 800, color: PURDK, textAlign: "right", wordBreak: "keep-all" }}>
+                  {t(E, `take ${st.a}`, `${st.a} 넣는 쪽`)}
+                </span>
+                <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                  {stages[stageIdx - 1].sums.map((v, i) => (
+                    <SumChip key={i} v={v + st.a} from={`${v}+${st.a}`} isNew />
+                  ))}
+                </span>
+              </div>
+            </>
+          )}
           {s.k === "double" && (
             <Caption color={PURDK}>
-              {t(E, "left half = old · right half = old + a", "왼쪽 절반 = 옛것 · 오른쪽 절반 = 옛것 + a")}
+              {t(E, "one number in → the list doubles", "숫자 하나 넣으면 → 목록이 두 배")}
             </Caption>
           )}
-        </>
+        </div>
       )}
 
       <LedgerBox />
