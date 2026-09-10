@@ -4,15 +4,21 @@
  * "조금 스크롤하면 닿는다" 는 일반 버튼 기준이지 이 버튼 기준이 아니다 — 마찰이 스텝 수만큼 쌓인다.
  * see-screen.mjs 는 quest 시뮬 안쪽까지 못 들어간다(--click 이 탭 버튼을 못 누른다).
  *
- *   node check-sim-nav.mjs <quest-id> [챕터로 가는 "다음 →" 횟수]
+ *   node check-sim-nav.mjs <quest-id> [챕터로 가는 "다음 →" 횟수] [--desktop]
  *   예: node check-sim-nav.mjs rectangles 11
+ *       node check-sim-nav.mjs rectangles 11 --desktop
+ *
+ * 데스크탑도 재는 이유: 2026-09-10 에 그림 크기를 화면 크기별로 갈랐다
+ * (모바일 0.55 / 데스크탑 0.95~1). 모바일만 재면 데스크탑에서 넘치는 걸 못 본다.
  */
 import { chromium } from "playwright";
 
 const quest = process.argv[2] || "rectangles";
 const hops = Number(process.argv[3] ?? 11);
+const desktop = process.argv.includes("--desktop");
+const vp = desktop ? { width: 1280, height: 900 } : { width: 375, height: 812 };
 const b = await chromium.launch();
-const p = await b.newPage({ viewport: { width: 375, height: 812 } });
+const p = await b.newPage({ viewport: vp });
 await p.goto(`http://localhost:3000/quest/${quest}`, { waitUntil: "networkidle" });
 
 /* ⚠️ locator(`div:has-text(...)`) 를 쓰면 **조상 div 가 다 잡힌다** — 그래서 엉뚱한 걸 누른다.
@@ -39,7 +45,7 @@ const total = await p.evaluate(() => {
 });
 if (!total) { console.log("시뮬을 못 찾았다. 다음 → 횟수를 바꿔봐라."); await b.close(); process.exit(1); }
 
-console.log(`=== ${quest} · 모바일 375×812 · 하단 고정 바 top = ${barTop}px ===`);
+console.log(`=== ${quest} · ${desktop ? "데스크탑 1280×900" : "모바일 375×812"} · 하단 고정 바 top = ${barTop}px ===`);
 const bad = [];
 for (let i = 1; i <= total; i++) {
   await p.evaluate(() => window.scrollTo(0, 0));

@@ -1,7 +1,7 @@
 import { C, t } from "@/components/quest/theme";
 import { getRectanglesWalk } from "./components";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { RectanglesSim, WhyContiguousSim, WhyCostSim, WhyTableSim, DPTableFillSim, RectStage } from "./sims";
+import { RectanglesSim, WhyContiguousSim, WhyCostSim, WhyTableSim, DPTableFillSim, RectStage, AutoRectStage } from "./sims";
 
 const A = "#f97316";
 
@@ -391,7 +391,7 @@ export function makeRectanglesCh2(E, lang = "py") {
                 background: c.best ? "#ecfdf5" : c.ok ? "#fff" : "#fef2f2",
                 border: `${c.best ? 2 : 1.5}px solid ${c.best ? "#059669" : c.ok ? "#e2e8f0" : "#fca5a5"}`,
                 borderRadius: 12, padding: "8px 6px 10px" }}>
-                <RectStage scale={0.52} groups={c.g} bad={!c.ok} />
+                <AutoRectStage small={0.52} big={0.72} groups={c.g} bad={!c.ok} />
                 <div style={{ textAlign: "center", marginTop: 4, fontSize: 12.5, fontWeight: 800,
                   fontFamily: "'JetBrains Mono',monospace",
                   color: c.best ? "#065f46" : c.ok ? "#475569" : "#991b1b" }}>

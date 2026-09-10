@@ -155,8 +155,45 @@ export function RectStage({ groups = null, bad = false, showWaste = false, scale
   );
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   AutoRectStage — 화면이 넓으면 그림을 키운다.
+
+   2026-09-10 선생님: "이미지가 다 작아졌는데? 디자이너 이게 맞나?"
+   그리고: "디자이너. 넌 전문가야. 큰 숲을 봐야지."
+
+   ux-reviewer 가 좌표로 재고 온 것:
+     · 데스크탑 1280×900 — 14단계 전부 `다음 ▶` 아래쪽이 최대 687px 다. **213px 이 남는다.**
+       그런데 그림은 카드 폭 845px 중 90~150px 만 쓰고 있었다.
+       **데스크탑에서 줄인 근거가 화면에 없다** — 모바일에 맞춘 값을 그대로 물려받은 것이다.
+     · 모바일 375×812 — 하단 고정 바 때문에 여유가 744px 뿐이라 작게 그릴 수밖에 없다.
+
+   그래서 **화면 크기마다 다른 값**을 쓴다. 선생님이 지적하신
+   "왜 커졌다 작아졌다 하냐" 는 **한 화면 안에서** 걸음마다 바뀌던 것이고
+   (그건 2026-09-10 에 한 값으로 통일해 고쳤다), 데스크탑과 모바일이 서로 다른 건 다른 얘기다.
+
+   ⚠️ 서버에서 그릴 땐 화면 크기를 모른다. 그래서 **작은 쪽으로 시작**하고 뜨자마자 맞춘다.
+      반대로 하면 모바일에서 큰 그림이 한 번 번쩍인다. */
+function useWide(px = 768) {
+  const [wide, setWide] = React.useState(false);
+  React.useEffect(() => {
+    const m = window.matchMedia(`(min-width:${px}px)`);
+    const on = () => setWide(m.matches);
+    on();
+    m.addEventListener("change", on);
+    return () => m.removeEventListener("change", on);
+  }, [px]);
+  return wide;
+}
+
+export function AutoRectStage({ small, big = 1, ...rest }) {
+  const wide = useWide();
+  return <RectStage {...rest} scale={wide ? big : small} />;
+}
+
 /* 한 분할(파티션)을 제목 + 그림 + 총면적으로 보여주기 */
-function Partition({ title, groups, total, best = false, scale = 1 }) {
+function Partition({ title, groups, total, best = false, small = 1, big = 1 }) {
+  const wide = useWide();
+  const scale = wide ? big : small;
   return (
     <div style={{ padding: "10px 12px 8px", borderRadius: 12,
       background: best ? "#ecfdf5" : "#f8fafc",
@@ -237,9 +274,9 @@ export function RectanglesSim({ E }) {
           셋이 다 보여야 "1등과 2등이 1 차이" 라는 말이 화면에서 확인된다. */}
       {s.kind === "compare" && (
         <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
-          <Partition title="A · [①] + [②③④]" groups={A_groups} total={aTotal} scale={0.62} best />
-          <Partition title="B · [①②] + [③④]" groups={B_groups} total={bTotal} scale={0.62} />
-          <Partition title="C · [①②③] + [④]" groups={C_groups} total={cTotal} scale={0.62} />
+          <Partition title="A · [①] + [②③④]" groups={A_groups} total={aTotal} small={0.62} big={0.95} best />
+          <Partition title="B · [①②] + [③④]" groups={B_groups} total={bTotal} small={0.62} big={0.95} />
+          <Partition title="C · [①②③] + [④]" groups={C_groups} total={cTotal} small={0.62} big={0.95} />
         </div>
       )}
 
@@ -589,7 +626,7 @@ export function DPTableFillSim({ E }) {
         <div style={{ marginTop: 12 }}>
           {/* tryskip 은 말풍선이 두 줄이라 그림을 줄여야 모바일에서 ▶ 가 안 가린다
               (실측: 하단 고정 바 68px, 여유선 744px). */}
-          <RectStage scale={0.55}
+          <AutoRectStage small={0.55}
             groups={[Array.from({ length: s.i - s.j + 1 }, (_, z) => s.j - 1 + z)]} />
         </div>
       )}
@@ -613,7 +650,7 @@ export function DPTableFillSim({ E }) {
           {/* ⚠️ scale 0.8 — 그림 하나에 캡션까지 얹으니 모바일(375×812)에서 ▶ 버튼이
               화면 밖으로 밀렸다(bottom 859 > 812, 실측). 9/7 에 스텝을 쪼갠 이유가 바로 이거였다.
               그림을 줄이고 캡션을 한 줄로 눌러 다시 들어가게 했다. */}
-          <RectStage scale={0.55} groups={[
+          <AutoRectStage small={0.55} groups={[
             ...bestSplit(s.kk - 1, s.j - 1),
             Array.from({ length: s.i - s.j + 1 }, (_, z) => s.j - 1 + z),
           ]} />
@@ -632,7 +669,7 @@ export function DPTableFillSim({ E }) {
              모바일에서 SimNav 가 하단 고정 바 밑으로 내려가지 않게. */}
       {s.k === "cell" && (
         <div style={{ marginTop: 8 }}>
-          <RectStage scale={0.55} groups={
+          <AutoRectStage small={0.55} groups={
             s.kk === 1
               ? [Array.from({ length: s.i }, (_, z) => z)]          // 파랑 하나가 앞 i개를 통째로
               : bestSplit(s.kk, s.i)                                 // 그 칸을 만든 최선의 나눔
