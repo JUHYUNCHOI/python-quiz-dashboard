@@ -483,6 +483,7 @@ export function SumkBuildSim({ E }) {
      그리고 똑같은 직사각형 두 개(3, 3)가 오히려 더 또렷하다. */
   const AX = 1, AA = arr[PRE];                     // x = 1, a = 3 → (1+3)² = 1+3+3+9 = 16
   const takeS2 = pre.s2 + 2 * AA * pre.s1 + AA * AA * pre.cnt;
+  const L2FINAL = ledger(stages[stages.length - 1].subs).s2;   // 100 — 안 담은 쪽 + 담은 쪽
 
   const AREA = ["area", "color", "rows"].includes(s.k);
   const stageIdx = s.k === "stage" ? s.i : s.k === "ask" ? 0 : AREA ? PRE : stages.length - 1;
@@ -499,8 +500,8 @@ export function SumkBuildSim({ E }) {
 
   const say = (() => {
     if (s.k === "ask") return t(E,
-      <>Instead of listing every subset, could we just <b>grow this one number</b>?</>,
-      <>부분집합을 다 나열하지 말고, <b>이 한 줄만 키울</b> 순 없을까요?</>);
+      <>Instead of listing every subset, could we just grow <b>the one row below</b>?</>,
+      <>부분집합을 다 나열하지 말고, <b>아래 저 한 줄만 키울</b> 순 없을까요?</>);
     if (s.k === "stage") return t(E,
       <><b>1)</b> every subset <b>splits in two</b> — one without <b>{st.a}</b>, one with it. {prev ? prev.cnt : 1} become {L.cnt}.<br />
         <b>2)</b> square every sum and add them up.</>,
@@ -523,24 +524,36 @@ export function SumkBuildSim({ E }) {
        다리가 빠져 있었다. "합 1 이 4 가 된다" 다음에 **왜 갑자기 제곱을 하는지**가 없다.
        답에 들어가는 게 (합)² 이라는 건 몇 쪽 전 이야기라 여기서 다시 말해줘야 한다.
        그리고 16 이 장부의 14 와 무슨 상관인지도 — 그건 다음 걸음이 받는다. */
+    /* 2026-09-10 — 검토 둘이 같이 잡았다.
+       기획: "'합 1' 의 **1 이 화면 어디에도 없다** — 이 걸음엔 칩이 안 그려진다."
+       디자인: "장부가 **100 → 14 로 역행**하는데 '3 담기 직전으로 되돌아간 것' 이라는
+                이름표가 없다. 이 프레임만 보면 계산이 틀린 것처럼 읽힌다."
+       → 되감았다고 **먼저 말하고**, 어느 부분집합의 합인지 칩을 옆에 살려둔다. */
     if (s.k === "area") return t(E,
-      <>The answer needs each sum <b>squared</b>. Put in <b>{AA}</b> and the sum <b>{AX}</b> becomes <b>{AX + AA}</b>, so we need <b>{AX + AA}² = {(AX + AA) ** 2}</b>.<br />
-        Draw that {(AX + AA) ** 2} as a square and cut it: {AX * AX} + {AX * AA} + {AA * AX} + {AA * AA}.</>,
-      <>답에 들어가는 건 <b>합의 제곱</b>이죠. <b>{AA}</b>{EUL(AA)} 담으면 합 <b>{AX}</b>{EUN(AX)} <b>{AX + AA}</b> 가 되니 <b>{AX + AA}² = {(AX + AA) ** 2}</b> 이 필요해요.<br />
-        그 {(AX + AA) ** 2} 을 정사각형으로 그려서 잘라봐요 — {AX * AX} + {AX * AA} + {AA * AX} + {AA * AA}.</>);
+      <>⏪ Back to just before <b>{AA}</b> went in — {pre.cnt} subsets, squares adding to {pre.s2}.<br />
+        Take the one below, sum <b>{AX}</b>. Putting {AA} in makes it <b>{AX + AA}</b>, and the answer needs it <b>squared</b>: {AX + AA}² = <b>{(AX + AA) ** 2}</b>.</>,
+      <>⏪ <b>{AA}</b>{EUL(AA)} 담기 <b>직전</b>으로 되돌아가요 — 부분집합 {pre.cnt}개, 합²의 합 {pre.s2}.<br />
+        아래 그 하나, 합이 <b>{AX}</b> 예요. {AA}{EUL(AA)} 담으면 <b>{AX + AA}</b> 가 되고, 답엔 그걸 <b>제곱</b>해서 넣어요 — {AX + AA}² = <b>{(AX + AA) ** 2}</b>.</>);
     /* 2026-09-10 선생님: **"뭔말?"** — 전엔 "2 가 붙는 이유가 이거예요" 라고 했는데
        **2 가 어디에 붙는다는 얘기를 한 적이 없다.** 아직 안 나온 것의 이유를 말한 셈이다.
        이 걸음이 실제로 보여주는 것만 말한다: 세 종류이고, 그중 하나가 두 개다. */
+    /* 2026-09-10 — 색이 무엇을 뜻하는지 **이 프레임에 없었다.** 다음 걸음에서야 나왔다.
+       검토 둘 다 같은 말을 했다 — "색을 외워서 다음 장으로 넘어가야 한다." */
     if (s.k === "color") return t(E,
-      <>Three kinds of piece: <b>green 1</b>, <b>blue 2</b>, <b>purple 1</b>.<br />
-        The two blue ones are <b>exactly the same</b> — so blue always counts <b>twice</b>.</>,
-      <>조각이 세 종류예요 — <b>초록 1개</b>, <b>파랑 2개</b>, <b>보라 1개</b>.<br />
-        파랑 둘이 <b>똑같아서</b>, 파랑은 늘 <b>두 배</b>로 세요.</>);
+      <>Three kinds of piece, and each is one of our rows:<br />
+        <b style={{ color: AC.s2.fg }}>green = sum²</b> · <b style={{ color: AC.s1.fg }}>blue = sum</b> (two identical ones!) · <b style={{ color: AC.cnt.fg }}>purple = just count</b></>,
+      <>조각이 세 종류인데, 하나하나가 우리 줄이에요 —<br />
+        <b style={{ color: AC.s2.fg }}>초록 = 합²</b> · <b style={{ color: AC.s1.fg }}>파랑 = 합</b> (똑같은 게 <b>두 개</b>!) · <b style={{ color: AC.cnt.fg }}>보라 = 개수</b></>);
     if (s.k === "rows") return t(E,
-      <>Every old sum splits the same way — so we need <b>all three</b> colours:<br />
-        green {pre.s2} · blue 2×{AA}×{pre.s1} = {2 * AA * pre.s1} · purple {AA}²×{pre.cnt} = {AA * AA * pre.cnt}</>,
-      <>합 하나하나가 다 이렇게 갈라져요 — 그래서 <b>세 색이 다</b> 필요해요.<br />
-        초록 {pre.s2} · 파랑 2×{AA}×{pre.s1} = {2 * AA * pre.s1} · 보라 {AA}²×{pre.cnt} = {AA * AA * pre.cnt}</>);
+    /* 2026-09-10 디자인: **"14 + 36 + 36 = 86 인데 답은 100."**
+       담은 쪽만 쪼개 놓고 **안 담은 쪽 14 를 다시 더한다는 말을 안 했다.**
+       화면에 없는 숫자로 설명을 닫고 있었다. 세 줄로 갈라 끝까지 잇는다. */
+      <>All {pre.cnt} sums split the same way. Add each colour over all of them:<br />
+        <b style={{ color: AC.s2.fg }}>{pre.s2}</b> + <b style={{ color: AC.s1.fg }}>2×{AA}×{pre.s1} = {2 * AA * pre.s1}</b> + <b style={{ color: AC.cnt.fg }}>{AA}²×{pre.cnt} = {AA * AA * pre.cnt}</b> = {pre.s2 + 2 * AA * pre.s1 + AA * AA * pre.cnt} — that is the <b>put-in</b> side.<br />
+        The <b>left-out</b> side is still {pre.s2}. So {pre.s2} + {pre.s2 + 2 * AA * pre.s1 + AA * AA * pre.cnt} = <b>{L2FINAL}</b> ✓</>,
+      <>합 {pre.cnt}개가 다 이렇게 갈라져요. 색깔별로 전부 더하면 —<br />
+        <b style={{ color: AC.s2.fg }}>{pre.s2}</b> + <b style={{ color: AC.s1.fg }}>2×{AA}×{pre.s1} = {2 * AA * pre.s1}</b> + <b style={{ color: AC.cnt.fg }}>{AA}²×{pre.cnt} = {AA * AA * pre.cnt}</b> = {pre.s2 + 2 * AA * pre.s1 + AA * AA * pre.cnt} — 이게 <b>담은 쪽</b>이에요.<br />
+        <b>안 담은 쪽</b>은 {pre.s2} 그대로니까, {pre.s2} + {pre.s2 + 2 * AA * pre.s1 + AA * AA * pre.cnt} = <b>{L2FINAL}</b> ✓</>);
     return t(E,
       <><b>So why is it fast?</b> We never write the subsets down — three rows are enough.<br />
         100,000 numbers = 300,000 cells, about 600,000 multiplications. Not 2¹⁰⁰⁰⁰⁰. Really runs in <b>0.4 s</b> (K = 3).</>,
@@ -626,7 +639,15 @@ export function SumkBuildSim({ E }) {
                 {i > 0 && (
                   <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center",
                     fontSize: 9.5, fontWeight: 800, color: PURDK, paddingBottom: 4 }}>
-                    <span>{g.a}{t(E, "", " 담기")}</span>
+                    {/* 2026-09-10 디자인: 화살표 라벨의 "1·2·3"(방금 담은 **원소**)이
+                        옆 칩의 "1·2·4·8"(부분집합 **개수**)과 같은 모양이라 뜻이 겹쳤다.
+                        원소는 칩 안 타일과 같은 **네모**로 그려 개수(둥근 상자)와 가른다. */}
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 2 }}>
+                      <span style={{ width: 13, height: 13, borderRadius: 3, display: "flex",
+                        alignItems: "center", justifyContent: "center", background: PUR, color: "#fff",
+                        fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 9 }}>{g.a}</span>
+                      <span>{t(E, "in", "담기")}</span>
+                    </span>
                     <span style={{ fontSize: 13 }}>→</span>
                   </span>
                 )}
@@ -664,7 +685,22 @@ export function SumkBuildSim({ E }) {
         </div>
       )}
 
-      {AREA && <AreaSquare x={AX} a={AA} colored={s.k !== "area"} />}
+      {AREA && (
+        <>
+          {/* 기획: "'합 1' 의 1 이 화면 어디에도 없다" — 그 부분집합을 정사각형 옆에 살려둔다. */}
+          {/* 칩은 7·8걸음에만. 9걸음은 말풍선 3줄 + 장부 3줄이라 세로가 빠듯하다(실측 128px 잘림).
+              그때는 이미 "이 부분집합" 이 무엇인지 두 걸음에 걸쳐 보인 뒤다. */}
+          {s.k !== "rows" && (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginTop: 12 }}>
+              <MiniSet items={[AX]} arr={arr} />
+              <span style={{ fontSize: 10.5, fontWeight: 700, color: "#64748b", wordBreak: "keep-all" }}>
+                {t(E, `this one, sum ${AX}`, `이 부분집합, 합 ${AX}`)}
+              </span>
+            </div>
+          )}
+          <AreaSquare x={AX} a={AA} colored={s.k !== "area"} unit={s.k === "rows" ? 20 : 27} />
+        </>
+      )}
     </SimShell>
   );
 }
