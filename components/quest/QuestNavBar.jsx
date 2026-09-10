@@ -318,10 +318,14 @@ export function QuestBottomNav({
         높이는 실측 68px + 여유. 힌트 줄이 뜨면 한 줄(약 20px) 더 높아진다. */}
     <div aria-hidden="true"
       style={{ height: `calc(${showAnswerHint ? 96 : 78}px + env(safe-area-inset-bottom))` }} />
-    // quest-navbar: 데스크탑에서 왼쪽 사이드바(w-60) 위를 덮지 않게 globals.css 가 left 를 민다.
-    // 2026-09-07 학생 관찰: "데스크탑에서 상단바에 로그인 버튼이 다른 요소에 가려서 안 보이기도 했다."
-    // 실측하니 이 바(z-100)가 사이드바(z-50) 아래쪽을 덮어 **로그인이 클릭조차 안 됐다**
-    // (elementFromPoint 가 이 바를 돌려줬다).
+    {/* quest-navbar: 데스크탑에서 왼쪽 사이드바(w-60) 위를 덮지 않게 globals.css 가 left 를 민다.
+        2026-09-07 학생 관찰: "데스크탑에서 상단바에 로그인 버튼이 다른 요소에 가려서 안 보이기도 했다."
+        실측하니 이 바(z-100)가 사이드바(z-50) 아래쪽을 덮어 **로그인이 클릭조차 안 됐다**
+        (elementFromPoint 가 이 바를 돌려줬다).
+        ⚠️ 2026-09-10: 이 네 줄이 원래 `//` 였다. 오늘 위에 스페이서 <div> 를 넣으면서
+        이 자리가 **JSX 자식 자리**가 됐고, `//` 주석은 JSX 안에서 주석이 아니라 **글자**라
+        학생 화면에 그대로 찍혔다 — quest 180개 전부. 빌드는 이걸 못 잡는다(정상 문자열이니까).
+        디자이너가 스크린샷에서 잡았다. JSX 자식 자리에 주석을 달 땐 중괄호로 감싸라. */}
     <div className="quest-navbar" style={{
       position: "fixed", bottom: 0, left: 0, right: 0,
       background: C.bg,
