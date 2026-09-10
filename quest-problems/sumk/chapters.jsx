@@ -195,13 +195,13 @@ function SumKRecap({ E }) {
         <>
           <Head>{t(E, "Names for the three rows", "세 줄의 이름")}</Head>
           <Body>
-            {t(E, "The three rows we carried are", "우리가 들고 다닌 세 줄이")}<br />
+            {t(E, "The three rows we kept writing down are", "우리가 계속 적어둔 세 줄이")}<br />
             <span style={{ display: "block", fontSize: 15, margin: "8px 0", color: "#5b21b6" }}>
               <M>P[0]</M> · <M>P[1]</M> · <M>P[2]</M>
             </span>
             {t(E, "how many · each sum added up · each sum squared, added up.",
                  "부분집합 개수 · 각 합을 더한 것 · 각 합을 제곱해서 더한 것.")}<br />
-            {t(E, "For a bigger K we carry P[0] … P[K].", "K 가 더 크면 P[0] 부터 P[K] 까지 들고 다녀요.")}
+            {t(E, "For a bigger K we write down P[0] … P[K].", "K 가 더 크면 P[0] 부터 P[K] 까지 적어둬요.")}
             <div style={{ marginTop: 12, background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10,
               padding: "10px 14px", fontSize: 13, fontWeight: 800, color: "#065f46", lineHeight: 1.85 }}>
               ✅ {t(E, "The answer is ", "답은 ")}<M>P[K]</M>
@@ -216,9 +216,13 @@ function SumKRecap({ E }) {
         <>
           <Head>{t(E, "Names for the numbers in front", "앞에 붙는 수의 이름")}</Head>
           <Body>
-            {t(E, "When we cut the square, the pieces came with ", "정사각형을 잘랐을 때 조각 앞에 붙은 수가 ")}
+            {/* 2026-09-10 학생 A: "'조각 앞에 붙은 수가 1, 2, 1 이었죠' 라는데
+                앞 쪽 사각형에서는 1,3,3,9 값만 봤지 **'앞에 붙은 수 1,2,1' 은 본 적 없다.**"
+                맞았다 — 그래서 앞 쪽 2걸음이 이제 "초록 1개 · 파랑 2개 · 보라 1개.
+                이 1, 2, 1 을 기억해요" 라고 **실제로 말한다.** 여기서는 그걸 되받는다. */}
+            {t(E, "Remember the pieces — 1 green, 2 blue, 1 purple. That ", "조각이 초록 1개 · 파랑 2개 · 보라 1개였죠. 그 ")}
             <M>1, 2, 1</M>
-            {t(E, " in front — row 2 of the triangle below.", " 였죠 — 아래 삼각형의 2 번째 줄이에요.")}<br />
+            {t(E, " is row 2 of the triangle below.", " 이 아래 삼각형의 2 번째 줄이에요.")}<br />
             {t(E, "We write them ", "이 수를 ")}<M>C(t, j)</M>
             {t(E, ": row t of the triangle, the j-th number (counting from 0). So C(2,0)=1, C(2,1)=2, C(2,2)=1.",
                  " 라고 써요 — 삼각형 t 번째 줄의, j 번째 수 (0 부터 셈). 그러니까 C(2,0)=1, C(2,1)=2, C(2,2)=1.")}

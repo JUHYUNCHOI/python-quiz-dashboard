@@ -712,27 +712,33 @@ export function SumkAreaSim({ E }) {
       <>⏪ <b>{AA}</b>{EUL(AA)} 담기 <b>직전</b>으로 되돌아가요 — 부분집합 {pre.cnt}개, 합²의 합 {pre.s2}.<br />
         아래 그 하나, 합이 <b>{AX}</b> 예요. {AA}{EUL(AA)} 담으면 <b>{AX + AA}</b> 가 되고, 답엔 그걸 <b>제곱</b>해서 넣어요 — {AX + AA}² = <b>{(AX + AA) ** 2}</b>.</>);
     /* 색이 무엇을 뜻하는지 **이 프레임에서** 말한다. 전엔 다음 걸음에서야 나왔다. */
+    /* 2026-09-10 학생 A: "**보라 칸 값이 9인데 '개수' 라 하니 헷갈림.**"
+       맞다. 보라 조각은 3×3=9 이고, "개수" 는 그걸 **다 더할 때** 쓰는 말이다 — 다음 걸음의 일이다.
+       그리고 7쪽이 "조각 앞에 붙은 수가 **1, 2, 1** 이었죠" 라고 하는데
+       **그 1·2·1 이 화면에 없었다**(학생 A). 여기서 실제로 보인다 — 조각 개수가 그것이다. */
     if (s.k === "color") return t(E,
-      <>Three kinds of piece, and each is one of our rows:<br />
-        <b style={{ color: AC.s2.fg }}>green = sum²</b> · <b style={{ color: AC.s1.fg }}>blue = sum</b> (two identical ones!) · <b style={{ color: AC.cnt.fg }}>purple = just count</b></>,
-      <>조각이 세 종류인데, 하나하나가 우리 줄이에요 —<br />
-        <b style={{ color: AC.s2.fg }}>초록 = 합²</b> · <b style={{ color: AC.s1.fg }}>파랑 = 합</b> (똑같은 게 <b>두 개</b>!) · <b style={{ color: AC.cnt.fg }}>보라 = 개수</b></>);
+      <>Three kinds of piece — <b style={{ color: AC.s2.fg }}>1 green</b>, <b style={{ color: AC.s1.fg }}>2 blue</b>, <b style={{ color: AC.cnt.fg }}>1 purple</b>. Remember that <b>1, 2, 1</b>.<br />
+        Green is <b>sum×sum</b>, blue is <b>sum×{AA}</b>, purple is <b>{AA}×{AA}</b>.</>,
+      <>조각이 세 종류예요 — <b style={{ color: AC.s2.fg }}>초록 1개</b>, <b style={{ color: AC.s1.fg }}>파랑 2개</b>, <b style={{ color: AC.cnt.fg }}>보라 1개</b>. 이 <b>1, 2, 1</b> 을 기억해요.<br />
+        초록은 <b>합×합</b>, 파랑은 <b>합×{AA}</b>, 보라는 <b>{AA}×{AA}</b> 예요.</>);
     /* 디자인: "14 + 36 + 36 = 86 인데 답은 100." 담은 쪽만 쪼개 놓고
        **안 담은 쪽 14 를 다시 더한다는 말을 안 했다.** 끝까지 잇는다. */
+    /* 2026-09-10 학생 B: "`14 + 2×3×6 = 36 + 3²×4 = 36 = 86` 이 문장에서 완전히 막혔다.
+       **등호가 세 번 이어져서 뭐가 뭐랑 같은 건지 모르겠다.**"
+       맞다. 각 항 안에 `= 36` 을 넣었더니 **한 줄에 등호가 네 개**가 됐다.
+       → 말풍선은 결론만. 계산은 아래 **색깔 줄 세 개**로 따로 놓는다(한 줄에 등호 하나). */
     if (s.k === "rows") return t(E,
-      <>All {pre.cnt} sums split the same way. Add each colour over all of them:<br />
-        <b style={{ color: AC.s2.fg }}>{pre.s2}</b> + <b style={{ color: AC.s1.fg }}>2×{AA}×{pre.s1} = {2 * AA * pre.s1}</b> + <b style={{ color: AC.cnt.fg }}>{AA}²×{pre.cnt} = {AA * AA * pre.cnt}</b> = {takeS2} — the <b>put-in</b> side.<br />
-        The <b>left-out</b> side is still {pre.s2}. So {pre.s2} + {takeS2} = <b>{FINAL}</b> ✓</>,
-      <>합 {pre.cnt}개가 다 이렇게 갈라져요. 색깔별로 전부 더하면 —<br />
-        <b style={{ color: AC.s2.fg }}>{pre.s2}</b> + <b style={{ color: AC.s1.fg }}>2×{AA}×{pre.s1} = {2 * AA * pre.s1}</b> + <b style={{ color: AC.cnt.fg }}>{AA}²×{pre.cnt} = {AA * AA * pre.cnt}</b> = {takeS2} — 이게 <b>담은 쪽</b>.<br />
-        <b>안 담은 쪽</b>은 {pre.s2} 그대로니까, {pre.s2} + {takeS2} = <b>{FINAL}</b> ✓</>);
-    /* "30만 번" 은 과소평가였다(감사). 고칠 칸 30만 · 곱셈 60만.
-       "0.4초" 는 K=3 실측치다(직접 세 번 돌려 0.42~0.45초). K 를 밝힌다. */
+      <>Every one of the {pre.cnt} sums splits like that. Add each colour over all {pre.cnt}:</>,
+      <>합 {pre.cnt}개가 하나하나 다 그렇게 갈라져요. 색깔별로 {pre.cnt}개를 다 더하면 —</>);
+    /* 2026-09-10 — 학생 A: "'0.4초 (K=3)' 가 갑자기 나왔다. **예제는 K=2 였는데 K=3 은 왜?**"
+       맞다. 예제와 다른 K 의 실측치를 붙여놨다. **K=2 실측치(0.29초)로 바꾼다.**
+       학생 B: "'**고칠 칸**' 이 뭔지 몰랐다." → "세 줄을 10만 번" 으로 푼다.
+       (둘 다 내가 직접 재봤다: N=10만, K=2 → 0.29초 · K=3 → 0.41초) */
     return t(E,
       <><b>So why is it fast?</b> We never write the subsets down — three rows are enough.<br />
-        100,000 numbers = 300,000 cells, about 600,000 multiplications. Not 2¹⁰⁰⁰⁰⁰. Really runs in <b>0.4 s</b> (K = 3).</>,
+        100,000 numbers means fixing three rows 100,000 times. Not 2¹⁰⁰⁰⁰⁰. It really finishes in about <b>0.3 seconds</b>.</>,
       <><b>그래서 왜 빠른가요?</b> 부분집합을 적어두지 않아요 — 세 줄이면 되니까요.<br />
-        10만 개면 고칠 칸 30만, 곱셈 60만 번쯤. 2¹⁰⁰⁰⁰⁰ 이 아니라요. 실제로 <b>0.4초</b> (K = 3).</>);
+        숫자가 10만 개면 <b>세 줄을 10만 번</b> 고치면 끝이에요. 2¹⁰⁰⁰⁰⁰ 이 아니라요. 실제로 <b>0.3초</b> 만에 끝나요.</>);
   })();
 
   const rowsOut = [
@@ -766,7 +772,35 @@ export function SumkAreaSim({ E }) {
         })}
       </div>
 
-      {s.k !== "fast" && (
+      {/* 계산을 **한 줄에 등호 하나**씩. 색은 위 정사각형 조각과 같다. */}
+      {s.k === "rows" && (
+        <div style={{ maxWidth: 330, margin: "12px auto 0", display: "grid", gap: 4 }}>
+          {[
+            { c: AC.s2, lab: t(E, "green, all added", "초록 다 더하면"), ex: `${pre.s2}`, v: pre.s2 },
+            { c: AC.s1, lab: t(E, "blue (two of them)", "파랑 (두 개니까)"), ex: `2 × ${AA} × ${pre.s1}`, v: 2 * AA * pre.s1 },
+            { c: AC.cnt, lab: t(E, "purple, all added", "보라 다 더하면"), ex: `${AA}² × ${pre.cnt}`, v: AA * AA * pre.cnt },
+          ].map((r, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 12px",
+              borderRadius: 9, background: r.c.bg, border: `1.5px solid ${r.c.bd}` }}>
+              <span style={{ flex: 1, fontSize: 11.5, fontWeight: 700, color: r.c.fg, wordBreak: "keep-all" }}>{r.lab}</span>
+              <span style={{ fontSize: 11.5, fontWeight: 700, color: r.c.fg, fontFamily: "'JetBrains Mono',monospace" }}>{r.ex}</span>
+              <span style={{ minWidth: 34, textAlign: "right", fontSize: 14, fontWeight: 800,
+                fontFamily: "'JetBrains Mono',monospace", color: r.c.fg }}>= {r.v}</span>
+            </div>
+          ))}
+          <div style={{ marginTop: 4, padding: "7px 12px", borderRadius: 9, background: "#f5f3ff",
+            border: `1.5px solid #c4b5fd`, fontSize: 12, fontWeight: 800, color: PURDK,
+            textAlign: "center", lineHeight: 1.8, wordBreak: "keep-all" }}>
+            {t(E, `put-in side = ${takeS2}`, `담은 쪽 = ${takeS2}`)}<br />
+            {t(E, `left-out side is still ${pre.s2} → ${pre.s2} + ${takeS2} = `, `안 담은 쪽은 ${pre.s2} 그대로 → ${pre.s2} + ${takeS2} = `)}
+            <b style={{ color: "#15803d", fontSize: 15 }}>{FINAL}</b> ✓
+          </div>
+        </div>
+      )}
+
+      {/* 3걸음(rows)은 계산 줄 세 개가 들어와서 정사각형까지 두면 123px 잘린다(실측).
+          색은 바로 앞 걸음에서 세웠고, 계산 줄이 같은 색을 쓰니 그림 없이도 이어진다. */}
+      {(s.k === "area" || s.k === "color") && (
         <>
           {/* 기획: "'합 1' 의 1 이 화면 어디에도 없다" — 그 부분집합을 그림 옆에 살려둔다. */}
           {s.k !== "rows" && (

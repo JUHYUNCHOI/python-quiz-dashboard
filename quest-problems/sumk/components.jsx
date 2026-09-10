@@ -72,7 +72,7 @@ export function getSumKSections(E) {
       ],
       pyOnly: [
         t(E, "A flat list of size K+1 is all the state we ever carry.",
-            "크기 K+1 리스트 하나가 우리가 들고 다니는 상태 전부."),
+            "크기 K+1 리스트 하나가 우리가 적어두는 것 전부."),
       ],
       cppOnly: [
         t(E, "One vector<long long> of size K+1 — tiny memory even for big N.",
