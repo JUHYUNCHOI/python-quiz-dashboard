@@ -363,10 +363,20 @@ export function SumkBuildSim({ E }) {
   })();
 
   const LedgerBox = () => {
+    /* 2026-09-10 선생님: **"결국 저건 모든 합의 제곱이라는건가?"**
+       내 라벨이 애매해서 그렇게 읽혔다. 아니다 —
+         각 합을 **제곱해서** 다 더한 것 = 1²+2²+3²+3²+4²+5²+6² = 100  ← 이게 답
+         모든 합을 더한 뒤 제곱          = 24²                  = 576  ← 이건 아님
+       이름을 고치고, **식 자체를 옆에 같이 보여준다.** 식이 있으면 오해할 수가 없다. */
+    const sq = st.sums.map((v) => `${v}²`).join("+");
+    const pl = st.sums.join("+");
     const rowsOut = [
-      { lab: t(E, "how many subsets", "부분집합 개수"), name: "P[0]", v: L.cnt, p: prev && prev.cnt },
-      { lab: t(E, "sums added up", "합을 다 더한 것"), name: "P[1]", v: L.s1, p: prev && prev.s1 },
-      { lab: t(E, "squares added up", "합²을 다 더한 것"), name: "P[2]", v: L.s2, p: prev && prev.s2 },
+      { lab: t(E, "how many subsets", "부분집합 개수"), name: "P[0]", v: L.cnt, p: prev && prev.cnt,
+        ex: null },
+      { lab: t(E, "each sum, added up", "각 합을 더한 것"), name: "P[1]", v: L.s1, p: prev && prev.s1,
+        ex: pl },
+      { lab: t(E, "each sum SQUARED, added up", "각 합을 제곱해서 더한 것"), name: "P[2]", v: L.s2, p: prev && prev.s2,
+        ex: sq },
     ];
     return (
       <div style={{ maxWidth: 360, margin: "12px auto 0", display: "grid", gap: 4 }}>
@@ -380,6 +390,14 @@ export function SumkBuildSim({ E }) {
               border: `1.5px solid ${isAnswer ? "#6ee7b7" : changed ? PUR : "#e2e8f0"}` }}>
               <span style={{ flex: 1, fontSize: 12, fontWeight: 700, color: "#475569", wordBreak: "keep-all" }}>
                 {isOld && <b style={{ color: PUR }}>{t(E, "old ", "옛것 ")}</b>}{r.lab}
+                {/* 식을 옆에 같이 — "각 합을 제곱해서 더한 것" 이 무슨 뜻인지 글이 아니라 식이 말한다.
+                    합이 여덟 개까지 늘어나므로 모바일에서 줄이 넘치지 않게 작게 쓴다. */}
+                {r.ex && (
+                  <span style={{ display: "block", fontSize: 9.5, fontWeight: 700, color: "#94a3b8",
+                    fontFamily: "'JetBrains Mono',monospace", marginTop: 1, wordBreak: "break-all" }}>
+                    {r.ex}
+                  </span>
+                )}
                 {isOld && i === 0 && (
                   <span style={{ fontSize: 9.5, fontWeight: 700, color: PUR, marginLeft: 6, whiteSpace: "nowrap" }}>
                     {t(E, `← just before ${ex.a} went in`, `← ${ex.a} 넣기 직전`)}

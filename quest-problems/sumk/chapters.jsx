@@ -118,37 +118,94 @@ function SumKLimit({ E }) {
   );
 }
 
-/* [정리] 시뮬에서 본 것에 **이름을 붙이고** K 로 넓힌다. */
+/* [정리] 시뮬에서 본 것을 **글자 공식**으로 다시 쓰고, 그 다음 이름을 붙인다.
+
+   2026-09-10 선생님: *"이거 결국 공식으로 보여주면 좋을것 같은데 애들 수학 잘하잖아.
+   결국 a^2+b^2+(a+b)^2인데 결국 저건 모든 합의 제곱이라는건가? 페이지 5,6 이해가 안가"*
+
+   두 가지를 말씀하신 것이다:
+     ① **공식으로 보여줘라.** 아이들은 전개를 할 줄 안다. 선생님이 직접 쓰신 문장이
+        `a² + b² + (a+b)²` 다 — 빨강이 둘일 때 이 문제의 답 그 자체다. 이걸 화면에 두면
+        말로 열 줄 설명하는 것보다 낫다.
+     ② **"모든 합의 제곱" 이 아니다.** 각 합을 **제곱해서** 다 더한 것이다.
+        1,2,3 이면 1²+2²+3²+3²+4²+5²+6² = 100 이고, 모든 합의 제곱은 24² = 576 이다.
+        선생님이 그렇게 읽으셨다는 건 내 라벨이 애매했다는 뜻이다 — 시뮬 장부 이름도 같이 고쳤다.
+
+   그래서 이 쪽을 **공식 먼저 · 이름 나중** 으로 다시 짰다.
+   a = 1, b = 2 를 쓴다 — 시뮬 3단계에서 학생이 이미 본 그 숫자이고,
+   답 14 도 시뮬 장부에 떠 있던 값이다. 새 숫자를 만들지 않는다. */
 function SumKRecap({ E }) {
+  const Box = ({ bg, bd, fg, children }) => (
+    <div style={{ background: bg, border: `1.5px solid ${bd}`, borderRadius: 10, padding: "11px 14px",
+      fontSize: 12.5, color: fg, lineHeight: 1.85, wordBreak: "keep-all", textWrap: "balance" }}>
+      {children}
+    </div>
+  );
+  const M = ({ children }) => (
+    <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>{children}</span>
+  );
+
   return (
     <div style={{ padding: 16 }}>
       <div style={{ fontSize: 14, fontWeight: 800, color: "#5b21b6", textAlign: "center", marginBottom: 12, wordBreak: "keep-all", textWrap: "balance" }}>
-        📒 {t(E, "What we just did, with names on it", "방금 한 것에 이름 붙이기")}
+        ✏️ {t(E, "The same thing, as a formula", "같은 것을 공식으로")}
       </div>
 
       <div style={{ maxWidth: 500, margin: "0 auto", display: "grid", gap: 10 }}>
-        <div style={{ background: "#f5f3ff", border: "1.5px solid #c4b5fd", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#5b21b6", lineHeight: 1.85, wordBreak: "keep-all", textWrap: "balance" }}>
-          <b>📝 {t(E, "The three numbers", "그 숫자 세 개")}</b><br />
-          {t(E, "We carried: how many subsets, the sums added up, the squares added up.",
-               "우리가 들고 다닌 것: 부분집합 개수, 합을 다 더한 것, 합²을 다 더한 것.")}<br />
-          {t(E, "Their names are ", "이 셋의 이름이 ")}
-          <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>P[0]</code>,{" "}
-          <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>P[1]</code>,{" "}
-          <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>P[2]</code>
-          {t(E, ". For a bigger K we keep P[0] … P[K].", " 예요. K 가 더 크면 P[0] 부터 P[K] 까지 들고 다녀요.")}
-        </div>
+        {/* ① 문제 자체를 공식으로 — 선생님이 쓰신 그 문장 */}
+        <Box bg="#f5f3ff" bd="#c4b5fd" fg="#5b21b6">
+          <b>1. {t(E, "Two reds a and b", "빨강이 a, b 둘이면")}</b><br />
+          {t(E, "The subsets are {a}, {b}, {a,b}. So the answer is",
+               "부분집합은 {a}, {b}, {a,b} 셋. 그러니 답은")}<br />
+          <span style={{ display: "block", textAlign: "center", fontSize: 15, margin: "4px 0" }}>
+            <M>a² + b² + (a+b)²</M>
+          </span>
+          {t(E, "Not (a + b + (a+b))² — each sum is squared first, then all added.",
+               "(a + b + (a+b))² 가 아니에요 — 각 합을 먼저 제곱하고, 그걸 다 더해요.")}
+        </Box>
 
-        <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#1e3a8a", lineHeight: 1.85, wordBreak: "keep-all", textWrap: "balance" }}>
-          <b>✂️ {t(E, "Splitting (x + a)ᵗ", "(x + a)ᵗ 를 가르기")}</b><br />
-          {t(E, "We split (1+2)² into 1² + 2·1·2 + 2² — three pieces. (x+a)ᵗ splits into t+1 pieces the same way.",
-               "우리는 (1+2)² 를 1² + 2·1·2 + 2² 세 조각으로 갈랐죠. (x+a)ᵗ 도 똑같이 t+1 조각으로 갈라져요.")}<br />
-          {t(E, "The number in front of each piece is written ", "각 조각 앞에 붙는 수를 ")}
-          <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>C(t, j)</code>
-          {t(E, " — the numbers in Pascal's triangle (1 / 1 1 / 1 2 1 / 1 3 3 1 …). Splitting like this is called the binomial theorem.",
-               " 라고 써요 — 파스칼의 삼각형에 나오는 그 수예요 (1 / 1 1 / 1 2 1 / 1 3 3 1 …). 이렇게 가르는 걸 이항정리라고 해요.")}
-        </div>
+        {/* ② 전개 — 아이들이 할 줄 아는 그것 */}
+        <Box bg="#eff6ff" bd="#93c5fd" fg="#1e3a8a">
+          <b>2. {t(E, "Expand it", "펼쳐보면")}</b><br />
+          <span style={{ display: "block", textAlign: "center", fontSize: 14, margin: "4px 0", lineHeight: 2 }}>
+            <M>(a+b)² = a² + 2ab + b²</M><br />
+            <M>a² + b² + (a+b)² = 2a² + 2b² + 2ab</M>
+          </span>
+          {t(E, "With a = 1, b = 2: 1 + 4 + 9 = 14 — the number the table showed after 2 went in.",
+               "a = 1, b = 2 를 넣으면 1 + 4 + 9 = 14 — 앞 쪽 표에서 2 를 넣은 뒤 나왔던 그 숫자예요.")}
+        </Box>
 
-        {/* 파스칼의 삼각형을 **글로만** 말하지 않는다 — 학생이 (2+3)² 에서 본 1·2·1 이 어디 있는지 보인다 */}
+        {/* ③ 우리가 한 것이 바로 그 전개다 */}
+        <Box bg="#fff7ed" bd="#fdba74" fg="#9a3412">
+          <b>3. {t(E, "That expansion IS what we did", "우리가 한 게 바로 그 전개예요")}</b><br />
+          {t(E, "Dropping in a new number a, every old sum x becomes (x + a). Square it:",
+               "새 숫자 a 를 넣으면 옛 합 x 는 (x + a) 가 돼요. 제곱하면 —")}<br />
+          <span style={{ display: "block", textAlign: "center", fontSize: 14, margin: "4px 0" }}>
+            <M>(x + a)² = x² + 2a·x + a²</M>
+          </span>
+          {t(E, "Add that over every old sum and the three pieces are exactly our three rows:",
+               "이걸 옛 합 전부에 대해 더하면, 세 조각이 정확히 우리 세 줄이에요 —")}<br />
+          <span style={{ fontSize: 12 }}>
+            <M>x²</M>{t(E, " → each sum squared · ", " → 각 합을 제곱해서 더한 것 · ")}
+            <M>2a·x</M>{t(E, " → each sum · ", " → 각 합을 더한 것 · ")}
+            <M>a²</M>{t(E, " → how many", " → 부분집합 개수")}
+          </span>
+        </Box>
+
+        {/* ④ 이제야 이름 */}
+        <Box bg="#f8fafc" bd="#e2e8f0" fg="#334155">
+          <b>4. {t(E, "Names", "이름")}</b><br />
+          {t(E, "Those three rows are ", "그 세 줄이 ")}
+          <M>P[0]</M>, <M>P[1]</M>, <M>P[2]</M>
+          {t(E, ". For a bigger K we keep P[0] … P[K], and the answer is ", ". K 가 더 크면 P[0] 부터 P[K] 까지 들고 다니고, 답은 ")}
+          <M>P[K]</M>.<br />
+          {t(E, "Splitting (x+a)ᵗ into t+1 pieces like this is the ", "(x+a)ᵗ 를 이렇게 t+1 조각으로 가르는 걸 ")}
+          <b>{t(E, "binomial theorem", "이항정리")}</b>
+          {t(E, ", and the number in front of each piece is ", " 라고 하고, 각 조각 앞에 붙는 수를 ")}
+          <M>C(t, j)</M>.
+        </Box>
+
+        {/* 파스칼 삼각형 — (1+2)² 에서 본 1·2·1 이 어디 있는지 보인다 */}
         <div style={{ background: "#fff", border: "1.5px dashed #93c5fd", borderRadius: 10, padding: "10px 12px" }}>
           <div style={{ fontSize: 11, fontWeight: 800, color: "#1e40af", textAlign: "center", marginBottom: 3, wordBreak: "keep-all" }}>
             {t(E, "row t of Pascal's triangle = the numbers in front", "파스칼의 삼각형 t 번째 줄 = 앞에 붙는 수들")}
@@ -158,30 +215,24 @@ function SumKRecap({ E }) {
           <div style={{ fontSize: 10.5, color: "#64748b", textAlign: "center", marginBottom: 7, wordBreak: "keep-all" }}>
             {t(E, "each number = the two just above it, added (1 + 2 = 3)", "한 칸 = 바로 위 두 칸을 더한 것 (1 + 2 = 3)")}
           </div>
-          {[[1], [1, 1], [1, 2, 1], [1, 3, 3, 1]].map((row, t) => (
-            <div key={t} style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 5, marginTop: 3 }}>
+          {[[1], [1, 1], [1, 2, 1], [1, 3, 3, 1]].map((row, tt) => (
+            <div key={tt} style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 5, marginTop: 3 }}>
               <span style={{ width: 34, textAlign: "right", fontSize: 10.5, fontWeight: 800, color: "#94a3b8", fontFamily: "'JetBrains Mono',monospace" }}>
-                t={t}
+                t={tt}
               </span>
               {row.map((v, j) => (
                 <span key={j} style={{ minWidth: 24, textAlign: "center", padding: "2px 6px", borderRadius: 7,
                   fontSize: 12, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
-                  background: t === 2 ? "#dbeafe" : "#f8fafc", color: t === 2 ? "#1e40af" : "#64748b",
-                  border: `1px solid ${t === 2 ? "#93c5fd" : "#e2e8f0"}` }}>{v}</span>
+                  background: tt === 2 ? "#dbeafe" : "#f8fafc", color: tt === 2 ? "#1e40af" : "#64748b",
+                  border: `1px solid ${tt === 2 ? "#93c5fd" : "#e2e8f0"}` }}>{v}</span>
               ))}
-              {t === 2 && (
+              {tt === 2 && (
                 <span style={{ fontSize: 11, fontWeight: 700, color: "#1e40af", marginLeft: 4, wordBreak: "keep-all" }}>
                   {t2Note(E)}
                 </span>
               )}
             </div>
           ))}
-        </div>
-
-        <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "11px 14px", fontSize: 12.5, color: "#065f46", lineHeight: 1.85, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
-          🏁 {t(E, "The answer is ", "답은 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 4 }}>P[K]</code>
-          {t(E, ". (For K ≥ 1 the empty subset scores 0ᴷ = 0, so it drops out on its own.)",
-               ". (K ≥ 1 이면 공집합은 0ᴷ = 0 이라 저절로 빠져요.)")}
         </div>
       </div>
 
@@ -194,7 +245,7 @@ function SumKRecap({ E }) {
 
 /* t=2 줄 옆 주석 — (2+3)² 에서 본 1·2·1 이 바로 이 줄이라는 것만 말한다. */
 function t2Note(E) {
-  return t(E, "← the 1, 2, 1 from (1+2)²", "← (1+2)² 에서 본 1, 2, 1");
+  return t(E, "← the 1, 2, 1 from (x+a)²", "← (x+a)² 에서 본 1, 2, 1");
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -319,9 +370,10 @@ export function makeSumKCh1(E) {
     // [결] 정리 — 방금 본 것에 이름을 붙이고 K 로 넓힌다
     {
       type: "reveal",
-      label: t(E, "Name it", "이름 붙이기"),
-      narr: t(E, "Now the names: P[t], C(t,j), the binomial theorem.",
-                 "이제 이름을 붙여요 — P[t], C(t,j), 이항정리."),
+      label: t(E, "As a formula", "공식으로"),
+      /* 2026-09-10 선생님: "이거 결국 공식으로 보여주면 좋을것 같은데 애들 수학 잘하잖아." */
+      narr: t(E, "The same thing written as a formula.",
+                 "방금 한 것을 공식으로 써봐요."),
       content: (<SumKRecap E={E} />),
     },
   ];
