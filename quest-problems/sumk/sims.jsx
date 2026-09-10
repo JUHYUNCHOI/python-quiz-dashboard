@@ -136,10 +136,35 @@ function MiniSet({ items, arr, added = null, isNew = false }) {
    → **한 줄로 합친다.** 목록은 하나고, 방금 생긴 절반만 진하다.
      "숫자 하나에 목록이 두 배" 도 이 한 줄에서 그대로 보인다 — 절반이 새것이니까. */
 function SubsetList({ subs, arr, added = null }) {
+  /* 2026-09-10 선생님: **"2 다음에 이러기 때문에 1,2세트가 생기고 뭔가 더 단계적으로,
+     갑자기 두개가 생기니까 뭔가 정보가 확 생기는 느낌"**
+
+     기획·디자인이 따로 냈는데 **같은 답**을 냈다 — **짝을 나란히 놓아라.**
+       기획: "새 항목을 목록 끝이 아니라 **부모 바로 옆**에. 렌더 순서만 바꾸면 된다.
+              걸음 수 0 증가. 컴포넌트는 이미 부모-자식 관계를 알고 있다."
+       디자인: "옛것 전부 → 새것 전부 로 늘어놓으니 **새것만 모인 줄**이 생긴다.
+              인터리브하면 4쌍 × 66px = 264px < 343px 로 **한 줄**에 들어가고,
+              줄바꿈이 나도 줄마다 짝이 섞여 있어 '완전히 새 줄' 이 안 생긴다."
+
+     전엔 `{},{1},{2},{1,2}` 다음에 `{3},{1,3},{2,3},{1,2,3}` 이 통째로 이어붙었다.
+     그래서 `{1,3}` 이 `{1}` 에서 나온 것이라는 걸 **인덱스 암산**으로 찾아야 했다.
+     이제 `{} → {3}` · `{1} → {1,3}` 처럼 **짝이 붙어 있다.** */
+  if (added == null) {
+    return (
+      <span style={{ display: "flex", gap: 7, flexWrap: "wrap", justifyContent: "center" }}>
+        {subs.map((x, i) => <MiniSet key={i} items={x.items} arr={arr} />)}
+      </span>
+    );
+  }
+  const half = subs.length / 2;
   return (
-    <span style={{ display: "flex", gap: 7, flexWrap: "wrap", justifyContent: "center" }}>
-      {subs.map((x, i) => (
-        <MiniSet key={i} items={x.items} arr={arr} isNew={added != null && x.items.includes(added)} added={added} />
+    <span style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center" }}>
+      {subs.slice(0, half).map((x, i) => (
+        <span key={i} style={{ display: "inline-flex", alignItems: "flex-start", gap: 4 }}>
+          <MiniSet items={x.items} arr={arr} />
+          <span style={{ fontSize: 12, fontWeight: 800, color: PURDK, lineHeight: "19px" }}>→</span>
+          <MiniSet items={subs[half + i].items} arr={arr} isNew added={added} />
+        </span>
       ))}
     </span>
   );
@@ -477,18 +502,23 @@ export function SumkBuildSim({ E }) {
       <>Instead of listing every subset, could we just <b>grow this one number</b>?</>,
       <>부분집합을 다 나열하지 말고, <b>이 한 줄만 키울</b> 순 없을까요?</>);
     if (s.k === "stage") return t(E,
-      <><b>1)</b> each subset either leaves <b>{st.a}</b> out or puts it in → the list doubles.<br />
+      <><b>1)</b> every subset <b>splits in two</b> — one without <b>{st.a}</b>, one with it. {prev ? prev.cnt : 1} become {L.cnt}.<br />
         <b>2)</b> square every sum and add them up.</>,
-      <><b>1)</b> 부분집합마다 <b>{st.a}</b>{EUL(st.a)} 안 담거나 담거나 → 목록이 두 배가 돼요.<br />
+      <><b>1)</b> 부분집합 하나하나가 <b>둘로 갈라져요</b> — <b>{st.a}</b>{EUL(st.a)} 안 담은 것과 담은 것. {prev ? prev.cnt : 1}개가 {L.cnt}개가 돼요.<br />
         <b>2)</b> 그 합들을 <b>하나씩 제곱해서 다 더해요.</b></>);
     if (s.k === "same") return t(E,
       <><b>{L.s2}</b> — the number we counted by hand two pages ago.<br />
         (There are {L.cnt} subsets here, not 7: the empty one adds 0² = 0.)</>,
       <><b>{L.s2}</b> — 앞 쪽에서 손으로 세어 구한 그 답이에요.<br />
         (여기 부분집합은 7개가 아니라 {L.cnt}개인데, 빈 것은 0² = 0 만 보태요.)</>);
+    /* 2026-09-10 선생님: **"잉? 왜 1,2,4,8?"** / **"무슨 목록 얘기하는지 모르겠어"**
+       숫자만 있고 **무엇의 개수인지**가 없었다. 그리고 "목록" 이라는 말은
+       1쪽이 정의한 "부분집합" 과 **같은 것을 다르게 부른 것**이었다. 한 이름으로 통일한다. */
     if (s.k === "double") return t(E,
-      <>But the list <b>doubles</b> every time. 100,000 numbers → 2¹⁰⁰⁰⁰⁰ subsets. We can never hold it.</>,
-      <>그런데 목록이 매번 <b>두 배</b>예요. 10만 개면 2¹⁰⁰⁰⁰⁰ 개 — 절대 못 들고 다녀요.</>);
+      <>How many subsets we had: <b>1 → 2 → 4 → 8</b>. Doubling, because each one splits in two.<br />
+        With 100,000 numbers that is 2¹⁰⁰⁰⁰⁰ subsets — nobody can write them all down.</>,
+      <>부분집합이 몇 개였는지 봐요 — <b>1 → 2 → 4 → 8</b>. 하나하나가 둘로 갈라지니까 두 배씩이에요.<br />
+        숫자가 10만 개면 2¹⁰⁰⁰⁰⁰ 개 — 그건 아무도 다 적을 수 없어요.</>);
     /* 2026-09-10 선생님: **"1 3 3 9?"** / **"뭔말?"**
        다리가 빠져 있었다. "합 1 이 4 가 된다" 다음에 **왜 갑자기 제곱을 하는지**가 없다.
        답에 들어가는 게 (합)² 이라는 건 몇 쪽 전 이야기라 여기서 다시 말해줘야 한다.
@@ -512,9 +542,9 @@ export function SumkBuildSim({ E }) {
       <>합 하나하나가 다 이렇게 갈라져요 — 그래서 <b>세 색이 다</b> 필요해요.<br />
         초록 {pre.s2} · 파랑 2×{AA}×{pre.s1} = {2 * AA * pre.s1} · 보라 {AA}²×{pre.cnt} = {AA * AA * pre.cnt}</>);
     return t(E,
-      <><b>So why is it fast?</b> Throw the list away — three rows are enough.<br />
+      <><b>So why is it fast?</b> We never write the subsets down — three rows are enough.<br />
         100,000 numbers = 300,000 cells, about 600,000 multiplications. Not 2¹⁰⁰⁰⁰⁰. Really runs in <b>0.4 s</b> (K = 3).</>,
-      <><b>그래서 왜 빠른가요?</b> 목록은 버려요 — 세 줄이면 되니까요.<br />
+      <><b>그래서 왜 빠른가요?</b> 부분집합을 적어두지 않아요 — 세 줄이면 되니까요.<br />
         10만 개면 고칠 칸 30만, 곱셈 60만 번쯤. 2¹⁰⁰⁰⁰⁰ 이 아니라요. 실제로 <b>0.4초</b> (K = 3).</>);
   })();
 
@@ -578,7 +608,48 @@ export function SumkBuildSim({ E }) {
       <LedgerBox />
 
       {/* 이번 걸음의 블록 **하나**. 칩이거나, 넓이 그림이거나, 아무것도 아니거나. */}
-      {(s.k === "stage" || s.k === "same" || s.k === "double") && (
+      {/* 2026-09-10 선생님: **"목록이 매번 두배?"**
+          이 걸음은 8개짜리 목록을 **정지 상태로** 보여주면서 "매번 두 배" 라고 말했다.
+          두 배가 되던 과정은 2~4걸음에 있었는데 **여기선 이미 사라진 뒤**다 —
+          화면이 앞 쪽 기억에 기대고 있었다(`memory/feedback_screen_must_not_rely_on_memory.md`).
+          → 칩 8개를 빼고 **개수가 자라온 자취**를 놓는다. 그게 증거다. */}
+      {s.k === "double" && (
+        <div style={{ maxWidth: 340, margin: "16px auto 0" }}>
+          {/* 2026-09-10 선생님: "잉? 왜 1,2,4,8?" — 숫자만 있고 무엇의 개수인지가 없었다. */}
+          <div style={{ fontSize: 10.5, fontWeight: 800, color: "#64748b", textAlign: "center",
+            marginBottom: 7, wordBreak: "keep-all" }}>
+            {t(E, "how many subsets", "부분집합 개수")}
+          </div>
+          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 6 }}>
+            {stages.map((g, i) => (
+              <span key={i} style={{ display: "inline-flex", alignItems: "flex-end", gap: 6 }}>
+                {i > 0 && (
+                  <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center",
+                    fontSize: 9.5, fontWeight: 800, color: PURDK, paddingBottom: 4 }}>
+                    <span>{g.a}{t(E, "", " 담기")}</span>
+                    <span style={{ fontSize: 13 }}>→</span>
+                  </span>
+                )}
+                <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+                  <span style={{ minWidth: 30, textAlign: "center", padding: "4px 8px", borderRadius: 8,
+                    fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+                    background: i === stages.length - 1 ? PUR : PURBG,
+                    color: i === stages.length - 1 ? "#fff" : PURDK,
+                    border: `1.5px solid ${i === stages.length - 1 ? PURDK : "#c4b5fd"}` }}>
+                    {ledger(g.subs).cnt}
+                  </span>
+                </span>
+              </span>
+            ))}
+          </div>
+          <Caption color={PURDK}>
+            {t(E, "every subset splits in two — so it doubles",
+                 "하나하나가 둘로 갈라지니까 두 배")}
+          </Caption>
+        </div>
+      )}
+
+      {(s.k === "stage" || s.k === "same") && (
         <div style={{ maxWidth: 380, margin: "14px auto 0" }}>
           <div style={{ fontSize: 10.5, fontWeight: 800, color: "#64748b", textAlign: "center",
             marginBottom: 7, wordBreak: "keep-all" }}>
@@ -590,11 +661,6 @@ export function SumkBuildSim({ E }) {
             )}
           </div>
           <SubsetList subs={st.subs} arr={arr} added={s.k === "stage" ? st.a : null} />
-          {s.k === "double" && (
-            <Caption color={PURDK}>
-              {t(E, "one number → the list doubles", "숫자 하나에 목록이 두 배")}
-            </Caption>
-          )}
         </div>
       )}
 
