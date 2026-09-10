@@ -1970,7 +1970,10 @@ export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
   hoofball:  { ...DEFAULT_META, type: "simulation",       difficulty: 3 },
   hps17:     { ...DEFAULT_META, type: "brute-force",      difficulty: 3 },
   race:      { ...DEFAULT_META, type: "algorithm-reveal", difficulty: 3 },
-  sumk:      { ...DEFAULT_META, type: "brute-force",      difficulty: 2 },
+  // 2026-09-10: type 이 "brute-force" 였는데 이 문제의 풀이는 DP + 이항정리다 — 브루트가 아니다.
+  // difficulty 도 2 였는데 학생 화면에 뜨는 값(lib/mcc-difficulty.ts:48)은 5 다. 초6 학생이
+  // 4쪽에서 그만뒀다("이건 초6이 풀 수 있는 문제가 아니었다"). 5 로 맞춘다.
+  sumk:      { ...DEFAULT_META, type: "algorithm-reveal", difficulty: 5 },
 };
 
 export function getQuestMeta(id: string): QuestConceptMeta {

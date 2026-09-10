@@ -65,8 +65,13 @@ function SumKSample({ E }) {
       </div>
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.6 }}>
-        {t(E, "📌 Constraints: N up to 10⁵ with small K, or N and K up to 200. Answer is taken mod 998244353.",
-             "📌 제약: N 은 최대 10⁵ (K 작음), 또는 N·K 최대 200. 답은 998244353 로 나눈 나머지.")}
+        {/* 2026-09-10 — 전엔 영어가 "N and K up to 200", 한국어가 "N·K 최대 200" 으로
+            **서로 다른 뜻**이었고 둘 다 원문과 안 맞았다(check-bilingual-drift 는 이런 걸 못 잡는다 —
+            글자가 아니라 뜻이 갈린 경우다). PDF 의 서브태스크 표를 눈으로 읽고 다시 썼다:
+              N=10 K=1 / 10,2 / 18,2 / 1000,2 / 100000,2 / 100000,3 / 200,200 / 777,150,  1 ≤ aᵢ ≤ 10⁹
+            즉 두 갈래다 — 큰 N·작은 K, 그리고 작은 N·큰 K. aᵢ 상한은 아예 빠져 있었다. */}
+        {t(E, "📌 Constraints — two families: N up to 100,000 with K ≤ 3, or N up to 777 with K up to 200. Each aᵢ ≤ 10⁹. The answer is taken mod 998244353.",
+             "📌 제약 — 두 갈래예요: N 이 최대 10만이면 K 는 3 이하, N 이 777 이하면 K 가 200까지. 각 원소 aᵢ 는 10억 이하. 답은 998244353 로 나눈 나머지.")}
       </div>
     </div>
   );
@@ -80,9 +85,14 @@ function SumKWhyDP({ E }) {
         🤔 {t(E, "7 subsets was easy — but N up to 10⁵?", "7개는 쉬웠죠 — 근데 N 이 10⁵ 이면?")}
       </div>
       <div style={{ maxWidth: 500, margin: "0 auto 14px", fontSize: 12.5, color: C.text, textAlign: "center", wordBreak: "keep-all", lineHeight: 1.7 }}>
+        {/* 2026-09-10 quest-auditor: 여기 원래 "N=60 만 돼도 **온 우주 원자보다 많아요**" 라고 적혀 있었다.
+            2⁶⁰ = 1,152,921,504,606,846,976 ≈ 1.15×10¹⁸ 이고 관측 가능한 우주의 원자는 약 10⁸⁰ 개다.
+            **62자릿수 차이로 사실이 정반대다.** 겁주려고 쓴 비유가 틀린 셈이다.
+            브루트가 불가능한 건 맞으니, 맞는 숫자로 같은 말을 한다 —
+            1초에 10억 개씩 세어도 36.5년 (2⁶⁰ / 10⁹ / 초 = 36.5년, 직접 계산). */}
         {t(E, "There are ", "부분집합은 ")}<b style={{ color: "#dc2626" }}>2ᴺ</b>
-        {t(E, " subsets — for N = 60 that's already more than all the atoms we could count. We can't list them one by one.",
-             " 개예요 — N = 60 만 돼도 온 우주 원자보다 많아요. 하나씩 나열은 불가능.")}
+        {t(E, " subsets. For N = 60 that is 2⁶⁰ ≈ 1,150,000,000,000,000,000 — counting a billion per second would take 36 years. And here N goes up to 100,000.",
+             " 개예요. N = 60 이면 2⁶⁰ ≈ 115경 개 — 1초에 10억 개씩 세어도 36년이에요. 그런데 이 문제의 N 은 10만까지 가요.")}
       </div>
 
       <div style={{ maxWidth: 500, margin: "0 auto", display: "grid", gap: 10 }}>
