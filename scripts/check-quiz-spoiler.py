@@ -38,6 +38,12 @@ ALLOW = {
     # 퀴즈가 "0번 쪽 → 1번 쪽이면 몇 번?" 을 묻는다. 정의 직후의 **이해 확인**이라
     # 정의가 답을 담고 있는 건 당연하다 — 이건 스포일러가 아니다. 2026-09-09 판정.
     ("crossroad1", "1번 횡단"),
+    # ── 네 번째 검사(explain 이 계산 결과를 나열)의 헛경보. 눈으로 보고 판정했다. 2026-09-09.
+    # 이 검사가 겨냥한 건 "**다음 쪽**이 보여줄 것을 explain 이 미리 계산해주는 것" 이다.
+    # 아래 둘은 그냥 **자기 퀴즈의 답을 설명**하느라 리스트를 적은 것이고,
+    # 다음 스텝은 각각 다른 연습(input)·다른 검증(reveal)이라 겹치지 않는다.
+    ("checkups", "5, 3, 2, 1, 4"),      # 뒤집기 결과를 보여주는 자기 해설. checkups 는 🔒 동결이기도 하다
+    ("mco15secret", "1,2,3,1,2,3"),     # a+a 를 펼쳐 보이는 자기 해설
 }
 
 hits = []
@@ -158,4 +164,38 @@ for q, a in prev_hits:
     print(f"  🚨 {q:<16} 정답: {a}…")
 
 
-sys.exit(1 if (hits or long_ans or prev_hits) else 0)
+# ── 네 번째 검사: 퀴즈 **해설(explain)이 다음 쪽이 보여줄 것을 미리 계산**한다 ──────
+# 2026-09-09 에 내가 직접 만든 결함이다. `gifts` 는 능동 스텝이 0개라 시뮬 **앞**에
+# 퀴즈를 넣어 고쳤는데, 그 퀴즈의 explain 이 이렇게 적혀 있었다:
+#   "티어 순으로 줄을 세우면 2, 4, 7, 1, 3, 5, 8, 6 이 돼요. 선물이 6개니까
+#    손님 5 는 아슬아슬하게 들어오고 손님 8 은 밀려나요."
+# 그런데 **바로 다음 쪽 시뮬이 정확히 그 장면**을 15클릭에 걸쳐 보여준다.
+# 퀴즈가 시뮬을 죽였다 — 그날 아홉 번 고친 바로 그 병을 내가 새로 심은 것이다.
+# pedagogy 검토가 잡았고, 검사기 세 규칙은 전부 놓쳤다(셋 다 narr 만 본다).
+#
+# ⚠️ 다음 쪽 내용과 글자로 대조할 수는 없다 — 시뮬은 컴포넌트라 비교할 텍스트가 없다.
+# 대신 **explain 이 계산 결과를 통째로 나열하는 모양**을 잡는다.
+# 쉼표로 이어진 숫자 넷 이상(`2, 4, 7, 1, 3, 5, 8, 6`)은 "학생이 직접 만들어봐야 할 것"을
+# 미리 다 적어준 신호다. 판정이 아니라 볼 자리 표시다.
+EXPLAIN_SEQ = re.compile(r"(?:-?\d+\s*,\s*){3,}-?\d+")
+
+seq_hits = []
+for f in sorted(glob.glob("quest-problems/*/chapters.jsx")):
+    s4 = io.open(f, encoding="utf-8").read()
+    for blk in QUIZ.findall(s4):
+        m = re.search(r'explain:\s*t\(E,\s*"(?:[^"\\]|\\.)*"\s*,\s*"((?:[^"\\]|\\.)*)"', blk)
+        if not m:
+            continue
+        ex = m.group(1)
+        hit = EXPLAIN_SEQ.search(ex)
+        if hit and (f.split("/")[1], hit.group(0)) not in ALLOW:
+            seq_hits.append((f.split("/")[1], hit.group(0), ex[:60]))
+
+print(f"\n퀴즈 **해설**이 계산 결과를 통째로 나열한 곳: {len(seq_hits)}건")
+print("  (다음 쪽 시뮬이 그걸 보여줄 자리면 시뮬이 죽는다 — 눈으로 확인해라)")
+for q, seq, ex in seq_hits:
+    print(f"  🚨 {q:<16} 나열: {seq}")
+    print(f"     explain: {ex}…")
+
+
+sys.exit(1 if (hits or long_ans or prev_hits or seq_hits) else 0)
