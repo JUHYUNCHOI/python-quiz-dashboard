@@ -43,14 +43,31 @@ function Caption({ color, children }) {
   return <div style={{ textAlign: "center", marginTop: 13, fontSize: 13.5, fontWeight: 800, color, fontFamily: "'JetBrains Mono',monospace", wordBreak: "keep-all" }}>{children}</div>;
 }
 
-/* ── 샘플의 빨강 3개: ①1×1, ②2×2, ③1×2 (높이 h × 폭 w) ── */
+/* ── 가르치는 예제의 빨강 4개: ①1×1, ②2×2, ③1×2, ④2×1 (높이 h × 폭 w) ──
+
+   2026-09-10 선생님이 **세 번** 물으셨다: "빨강이 4개인 경우를 보여주면 더 이해가 잘될것 같은데."
+
+   전엔 빨강 3개(공식 샘플)로 가르쳤다. 그런데 3개면 나눌 수 있는 방법이 3가지뿐이라
+   **손으로 10초면 다 센다** — 학생 에이전트가 실제로 그렇게 보고했다.
+   그러면 "그래서 표는 왜 만드나" 가 화면에서 안 선다.
+
+   ④ 를 **세로로 긴 것(2×1)** 으로 골랐다. 그 이유:
+     · 답 11, 2등 12 — **차이가 1이라 눈으로는 못 고른다** (3개일 땐 8 대 9 였다)
+     · 자르는 자리가 [①②][③] → [①][②③④] 로 **옮겨간다.**
+       하나 붙었다고 답이 통째로 달라지는 걸 학생이 직접 본다.
+     · 전체 폭이 5 → 6 칸으로만 늘어 모바일 그림이 안 넘친다
+   후보 9개(높이 1~3 × 폭 1~3)를 전부 돌려 고른 값이다. 최적 나눔은 유일하다.
+
+   ⚠️ 공식 샘플(`3 2 / 1 1 / 2 2 / 1 2 → 8`, MCC 2023 P5 원문)은 **지우지 않았다.**
+      입출력 형식 카드에 그대로 있다. 가르치는 예제만 4개로 올린 것이다.  ── */
 const REDS = [
   { h: 1, w: 1, label: "①" },   // ①
   { h: 2, w: 2, label: "②" },   // ②
   { h: 1, w: 2, label: "③" },   // ③
+  { h: 2, w: 1, label: "④" },   // ④
 ];
 const UNIT = 30;
-const TOTAL_W = REDS.reduce((a, r) => a + r.w, 0);   // 5
+const TOTAL_W = REDS.reduce((a, r) => a + r.w, 0);   // 6
 const MAX_H = Math.max(...REDS.map((r) => r.h));      // 2
 const leftOf = (idx) => REDS.slice(0, idx).reduce((a, r) => a + r.w, 0) * UNIT;
 const groupCost = (g) => {
@@ -139,13 +156,13 @@ export function RectStage({ groups = null, bad = false, showWaste = false, scale
 }
 
 /* 한 분할(파티션)을 제목 + 그림 + 총면적으로 보여주기 */
-function Partition({ title, groups, total, best = false }) {
+function Partition({ title, groups, total, best = false, scale = 1 }) {
   return (
     <div style={{ padding: "10px 12px 8px", borderRadius: 12,
       background: best ? "#ecfdf5" : "#f8fafc",
       border: `2px solid ${best ? "#34d399" : "#e2e8f0"}` }}>
       <div style={{ fontSize: 12, fontWeight: 800, color: best ? "#065f46" : "#475569", textAlign: "center", marginBottom: 8, wordBreak: "keep-all" }}>{title}</div>
-      <RectStage groups={groups} />
+      <RectStage groups={groups} scale={scale} />
       <div style={{ textAlign: "center", marginTop: 8, fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: best ? "#059669" : "#334155" }}>
         = {total}{best ? " ✓" : ""}
       </div>
@@ -154,32 +171,45 @@ function Partition({ title, groups, total, best = false }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   RectanglesSim — 빨강 3개 → 파랑(연속 구간)으로 나눠 면적 비교 → 최소 8.
-   reds → rule(파랑 하나의 비용) → compare(A vs B) → min(8).
+   RectanglesSim — 빨강 4개 → 파랑(연속 구간)으로 나눠 면적 비교 → 최소 11.
+   reds → rule(파랑 하나의 비용) → compare(A·B·C) → min(11).
+
+   2026-09-10: 빨강 3개였을 때는 후보가 A·B 둘뿐이라 학생이 눈으로 골랐다.
+   4개가 되면 자를 자리가 세 군데라 후보도 셋이고, **1등 11 과 2등 12 의 차이가 1** 이다.
+   숫자를 안 세면 못 고른다 — 그게 다음 쪽에서 표를 만드는 이유가 된다.
    ═══════════════════════════════════════════════════════════════ */
 export function RectanglesSim({ E }) {
   const steps = [{ kind: "reds" }, { kind: "rule" }, { kind: "compare" }, { kind: "min" }];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
 
-  const A_groups = [[0], [1, 2]];   // [①] + [②③]
-  const B_groups = [[0, 1], [2]];   // [①②] + [③]
-  const aTotal = A_groups.reduce((a, g) => a + groupCost(g).area, 0); // 9
-  const bTotal = B_groups.reduce((a, g) => a + groupCost(g).area, 0); // 8
+  /* 자를 자리가 세 군데 → 파랑 2개짜리 후보도 셋이다. 숫자는 전부 groupCost 가 낸다. */
+  const A_groups = [[0], [1, 2, 3]];      // [①] + [②③④]  = 1 + 10 = 11 ← 최소
+  const B_groups = [[0, 1], [2, 3]];      // [①②] + [③④]  = 6 + 6  = 12
+  const C_groups = [[0, 1, 2], [3]];      // [①②③] + [④]  = 10 + 2 = 12
+  const sum = (gs) => gs.reduce((a, g) => a + groupCost(g).area, 0);
+  const aTotal = sum(A_groups), bTotal = sum(B_groups), cTotal = sum(C_groups);
+  const allOne = groupCost([0, 1, 2, 3]).area;   // 파랑 하나로 다 덮기 = 12
+  const best = Math.min(aTotal, bTotal, cTotal);
+  const runnerUp = Math.min(bTotal, cTotal);
 
   const say =
     s.kind === "reds" ? t(E,
-        <>Three red rectangles sit side by side on the x-axis: <b style={{ color: REDBD }}>① 1×1</b>, <b style={{ color: REDBD }}>② 2×2</b>, <b style={{ color: REDBD }}>③ 1×2</b> (height × width).</>,
-        <>빨강 사각형 3개가 x축에 나란히 붙어 있어요: <b style={{ color: REDBD }}>① 1×1</b>, <b style={{ color: REDBD }}>② 2×2</b>, <b style={{ color: REDBD }}>③ 1×2</b> (높이 × 폭).</>)
+        <>Four red rectangles sit side by side on the x-axis: <b style={{ color: REDBD }}>① 1×1</b>, <b style={{ color: REDBD }}>② 2×2</b>, <b style={{ color: REDBD }}>③ 1×2</b>, <b style={{ color: REDBD }}>④ 2×1</b> (height × width).</>,
+        <>빨강 사각형 4개가 x축에 나란히 붙어 있어요:<br /><b style={{ color: REDBD }}>① 1×1</b>, <b style={{ color: REDBD }}>② 2×2</b>, <b style={{ color: REDBD }}>③ 1×2</b>, <b style={{ color: REDBD }}>④ 2×1</b> (높이 × 폭).</>)
     : s.kind === "rule" ? t(E,
-        <>One <b style={{ color: BLU }}>blue</b> covers a <b>contiguous group</b>. Its <b>width = sum of widths</b>, <b>height = max height</b>. One blue over all three → 2×5 = <b>10</b>. Can we do better by splitting?</>,
-        <>파랑 하나는 <b>연속 구간</b>을 덮어요. <b>폭 = 폭의 합</b>, <b>높이 = 최고 높이</b>. 셋을 파랑 하나로 덮으면 2×5 = <b>10</b>. 나누면 더 줄일 수 있을까요?</>)
+        <>One <b style={{ color: BLU }}>blue</b> covers a <b>contiguous group</b>. Its <b>width = sum of widths</b>, <b>height = max height</b>. One blue over all four → {MAX_H}×{TOTAL_W} = <b>{allOne}</b>. Can we do better by splitting?</>,
+        <>파랑 하나는 <b>연속 구간</b>을 덮어요. <b>폭 = 폭의 합</b>, <b>높이 = 최고 높이</b>.<br />넷을 파랑 하나로 덮으면 {MAX_H}×{TOTAL_W} = <b>{allOne}</b>. 나누면 더 줄일 수 있을까요?</>)
     : s.kind === "compare" ? t(E,
-        <>Split into (at most K=2) groups two ways. <b>A</b>: [①]+[②③] = 1+8 = <b>9</b>. <b>B</b>: [①②]+[③] = 6+2 = <b>8</b>.</>,
-        <>(파랑 최대 K=2개로) 두 가지로 나눠봐요. <b>A</b>: [①]+[②③] = 1+8 = <b>9</b>. <b>B</b>: [①②]+[③] = 6+2 = <b>8</b>.</>)
+        <>With <b>at most K=2</b> blues there are <b>three</b> places to cut.<br />
+          <b>A</b>: [①]+[②③④] = <b>{aTotal}</b> · <b>B</b>: [①②]+[③④] = <b>{bTotal}</b> · <b>C</b>: [①②③]+[④] = <b>{cTotal}</b></>,
+        <>(파랑 최대 K=2개니까) 자를 자리가 <b>세 군데</b>예요.<br />
+          <b>A</b>: [①]+[②③④] = <b>{aTotal}</b> · <b>B</b>: [①②]+[③④] = <b>{bTotal}</b> · <b>C</b>: [①②③]+[④] = <b>{cTotal}</b></>)
     : t(E,
-        <>The smallest total is <b>8</b> — group <b>[①②]</b> = 2×3 = 6 and <b>[③]</b> = 1×2 = 2. That's the answer!</>,
-        <>가장 작은 총면적은 <b>8</b> — <b>[①②]</b> = 2×3 = 6, <b>[③]</b> = 1×2 = 2. 이게 답이에요!</>);
+        <>The smallest is <b>{best}</b> — <b>[①]</b> = 1 and <b>[②③④]</b> = {MAX_H}×5 = 10.<br />
+          Only <b>{runnerUp - best}</b> less than the next one — you can&apos;t eyeball this.</>,
+        <>가장 작은 건 <b>{best}</b> — <b>[①]</b> = 1, <b>[②③④]</b> = {MAX_H}×5 = 10.<br />
+          2등이랑 <b>{runnerUp - best} 차이</b>예요 — 눈대중으로는 못 골라요.</>);
 
   return (
     <div style={{ padding: 16 }}>
@@ -191,28 +221,32 @@ export function RectanglesSim({ E }) {
       {s.kind === "reds" && (
         <>
           <RectStage groups={null} />
-          <Caption color={REDBD}>{t(E, "① 1×1  ·  ② 2×2  ·  ③ 1×2", "① 1×1  ·  ② 2×2  ·  ③ 1×2")}</Caption>
+          <Caption color={REDBD}>{t(E, "① 1×1  ·  ② 2×2  ·  ③ 1×2  ·  ④ 2×1", "① 1×1  ·  ② 2×2  ·  ③ 1×2  ·  ④ 2×1")}</Caption>
         </>
       )}
 
       {s.kind === "rule" && (
         <>
-          <RectStage groups={[[0, 1, 2]]} />
-          <Caption color={BLU}>{t(E, "one blue = height(max) × width(sum) = 2×5 = 10", "파랑 하나 = 최고높이 × 폭합 = 2×5 = 10")}</Caption>
+          <RectStage groups={[[0, 1, 2, 3]]} />
+          <Caption color={BLU}>{t(E, `one blue = height(max) × width(sum) = ${MAX_H}×${TOTAL_W} = ${allOne}`,
+                                     `파랑 하나 = 최고높이 × 폭합 = ${MAX_H}×${TOTAL_W} = ${allOne}`)}</Caption>
         </>
       )}
 
+      {/* 후보 셋을 나란히 — 모바일(375px)에서 두 개씩 접히게 scale 0.62 로 줄인다.
+          셋이 다 보여야 "1등과 2등이 1 차이" 라는 말이 화면에서 확인된다. */}
       {s.kind === "compare" && (
-        <div style={{ display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap" }}>
-          <Partition title={t(E, "A · [①] + [②③]", "A · [①] + [②③]")} groups={A_groups} total={aTotal} />
-          <Partition title={t(E, "B · [①②] + [③]", "B · [①②] + [③]")} groups={B_groups} total={bTotal} best />
+        <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
+          <Partition title="A · [①] + [②③④]" groups={A_groups} total={aTotal} scale={0.62} best />
+          <Partition title="B · [①②] + [③④]" groups={B_groups} total={bTotal} scale={0.62} />
+          <Partition title="C · [①②③] + [④]" groups={C_groups} total={cTotal} scale={0.62} />
         </div>
       )}
 
       {s.kind === "min" && (
         <>
-          <RectStage groups={B_groups} />
-          <Caption color="#059669">{t(E, "min total area = 8 ✓", "최소 총면적 = 8 ✓")}</Caption>
+          <RectStage groups={A_groups} />
+          <Caption color="#059669">{t(E, `min total area = ${best} ✓`, `최소 총면적 = ${best} ✓`)}</Caption>
         </>
       )}
 
@@ -253,11 +287,13 @@ export function WhyContiguousSim({ E }) {
       <Say tone={s.kind === "so" ? "aha" : s.kind === "rule" ? "stuck" : "go"}>{say}</Say>
 
       {s.kind === "want" && <RectStage groups={null} />}
+      {/* ①과 ③을 묶으려면 ②까지 딸려 들어간다 — 그 못난 파랑 하나만 그린다.
+          ④ 는 이 이야기에 안 나오니 안 덮인 채로 둔다 (빨강 3개 때 ③ 을 그랬던 것과 같다). */}
       {(s.kind === "draw" || s.kind === "rule") && <RectStage groups={[[0, 1, 2]]} bad />}
-      {s.kind === "so" && <RectStage groups={[[0, 1], [2]]} />}
+      {s.kind === "so" && <RectStage groups={[[0, 1], [2, 3]]} />}
 
       {s.kind === "so" && (
-        <Caption color="#059669">{t(E, "e.g. [①②] + [③]  ·  never [①③] + [②]", "예: [①②] + [③]  ·  [①③] + [②] 는 불가능")}</Caption>
+        <Caption color="#059669">{t(E, "e.g. [①②] + [③④]  ·  never [①③] + [②④]", "예: [①②] + [③④]  ·  [①③] + [②④] 는 불가능")}</Caption>
       )}
 
       <div style={{ height: 14 }} />
@@ -330,7 +366,8 @@ export function WhyCostSim({ E }) {
      · 숫자는 전부 아래 REDS 에서 그 자리에서 계산한다. 표와 어긋날 수 없다.
    ═══════════════════════════════════════════════════════════════ */
 export function DPTableFillSim({ E }) {
-  const N = REDS.length;                       // 3
+  const N = REDS.length;                       // 4
+  const K = 2;                                 // 이 예제에서 쓸 수 있는 파랑 최대 개수
   const INF = Infinity;
   // 표를 실제로 계산 — 화면 숫자는 전부 여기서 나온다
   const dp = Array.from({ length: N + 1 }, () => Array(N + 1).fill(INF));
@@ -345,33 +382,57 @@ export function DPTableFillSim({ E }) {
     }
 
   // 채우는 순서 — 한 칸씩. cell = 지금 채우는 칸, try = 그 칸을 정할 때 따져본 후보
+  /* 2026-09-10 — 빨강이 3개에서 4개가 되면서 스텝이 14 → 19 가 됐다.
+     22 까지 갈 수 있었는데 다섯을 덜어냈다. 어떻게 덜었나:
+
+       · **답이 나오는 칸(앞 4개)만** try + tryadd 두 스텝으로 쪼갠다.
+         try = 이 후보 구간이 얼마인가(그림을 본다) / tryadd = 앞부분을 표에서 꺼내 더한다(표를 본다).
+         2026-09-07 에 모바일 때문에 쪼갠 것이다 — 한 스텝에 한 가지만 보게.
+       · **중간 칸(앞 2개·앞 3개)은 tryadd 한 스텝**으로 간다.
+         tryadd 말풍선이 이미 두 항을 다 말하고("마지막 파랑(②) 4 + 앞부분(①) 1 = 5")
+         그림도 붙어 있어서, 거기서 try 를 따로 두면 같은 걸 두 번 보는 셈이다.
+         중간 칸은 답을 만들지 않으니 이 정도 압축이 맞다고 봤다.
+
+     ⚠️ K=2 라서 (파랑2, 앞2)·(파랑2, 앞3) 두 칸은 **아무도 안 읽는다.**
+        답은 맨 오른쪽 칸에서 나오고, 그 칸은 파랑 1개 줄만 읽는다.
+        건너뛰지는 않는다 — components.jsx 의 FULL_PY 가 kk·i 를 조건 없이 전부 돌기 때문에
+        시뮬만 골라 채우면 학생이 다음 쪽에서 볼 코드와 어긋난다(pedagogy 판정).
+        대신 그 칸에서 **아직 안 덮인 빨강이 있다**고 말해 다음 칸으로 넘긴다. */
   const steps = [
     { k: "intro" },
-    { k: "cell", kk: 1, i: 1 }, { k: "cell", kk: 1, i: 2 }, { k: "cell", kk: 1, i: 3 },
-    /* 2026-09-07 — 한 번에 하던 "후보 구간을 보고 + 앞부분을 꺼내 더하기" 를 **두 스텝으로 쪼갰다.**
-       선생님이 그림을 같이 보여주자고 하셨는데, 모바일은 SimNav 아래 여백이 21px 뿐이라
-       그림을 얹으면 버튼이 하단 고정 바 밑으로 내려간다(ux-reviewer 좌표 실측).
-       선생님이 전에 주신 처방이 이거다 — **"시뮬 스텝을 늘려서라도 더 짧게."**
-         try    = 이 후보 구간이 얼마인가 (그림을 본다)
-         tryadd = 앞부분은 표에서 꺼내 쓴다 (표를 본다)
-       그러면 한 스텝에 한 가지만 보면 돼서 모바일에도 들어가고, 말풍선도 두 줄로 짧아진다. */
-    { k: "try", kk: 2, i: 2, j: 2 }, { k: "tryadd", kk: 2, i: 2, j: 2 },
-    /* 2026-09-10 선생님: "이게 뜬금없이 나온것같은. 이해가 안가" (7/15 화면)
-       j=1 후보(마지막 파랑이 ①② 를 다 맡는 경우)는 **애초에 성립하지 않는다** —
+    ...Array.from({ length: N }, (_, z) => ({ k: "cell", kk: 1, i: z + 1 })),
+
+    // 앞 2개 — 후보 하나(j=2)와, 성립하지 않는 후보 하나(j=1)
+    { k: "tryadd", kk: 2, i: 2, j: 2 },
+    /* j=1 후보(마지막 파랑이 ①② 를 다 맡는 경우)는 애초에 성립하지 않는다 —
        파랑이 2개인데 마지막 하나가 둘 다 덮으면 남은 하나가 덮을 게 없다(dp[1][0] = ∞).
-       그런데 try 단계가 "그 파랑은 3 × 2 = 6 예요" 라고 **값을 먼저 계산하게 해놓고**,
-       다음 tryadd 단계에서야 "덮을 게 없어요 — 넘어가요" 라고 버렸다.
-       학생은 쓸데없는 숫자를 하나 외웠다가 버리는 셈이고, 그게 뜬금없이 느껴진다.
-       두 단계를 **하나로 합친다** — 묻는 그 자리에서 왜 안 되는지 답한다.
-       이 후보를 아예 빼지는 않는다: "파랑을 다 쓰려면 앞에 남겨둘 게 있어야 한다" 는
+       선생님(2026-09-10): "이게 뜬금없이 나온것같은. 이해가 안가"
+       전엔 try 단계가 "그 파랑은 3 × 2 = 6 예요" 라고 **값을 먼저 계산하게 해놓고**,
+       다음 단계에서야 "덮을 게 없어요 — 넘어가요" 라고 버렸다.
+       한 스텝으로 합쳐서 묻는 그 자리에서 왜 안 되는지 답한다.
+       아예 빼지는 않는다: "파랑을 다 쓰려면 앞에 남겨둘 게 있어야 한다" 는
        제약 자체가 이 문제의 규칙이라 한 번은 보여줄 값어치가 있다. */
     { k: "tryskip", kk: 2, i: 2, j: 1 },
     { k: "cell", kk: 2, i: 2 },
-    { k: "try", kk: 2, i: 3, j: 3 }, { k: "tryadd", kk: 2, i: 3, j: 3 },
-    { k: "try", kk: 2, i: 3, j: 2 }, { k: "tryadd", kk: 2, i: 3, j: 2 },
+
+    // 앞 3개 — 후보 둘 (j=1 은 위에서 한 번 봤으니 다시 안 본다)
+    { k: "tryadd", kk: 2, i: 3, j: 3 },
+    { k: "tryadd", kk: 2, i: 3, j: 2 },
     { k: "cell", kk: 2, i: 3 },
+
+    // 앞 4개 — **여기서 답이 나온다.** 후보 셋을 두 스텝씩 천천히.
+    { k: "try", kk: 2, i: 4, j: 4 }, { k: "tryadd", kk: 2, i: 4, j: 4 },
+    { k: "try", kk: 2, i: 4, j: 3 }, { k: "tryadd", kk: 2, i: 4, j: 3 },
+    { k: "try", kk: 2, i: 4, j: 2 }, { k: "tryadd", kk: 2, i: 4, j: 2 },
+    { k: "cell", kk: 2, i: 4 },
+
     { k: "answer" },
   ];
+  /* 표의 가로·세로. **손으로 [0,1,2,3] 이라고 박아두지 마라** — 빨강을 하나 늘렸을 때
+     표만 안 늘어나서 마지막 칸이 통째로 안 보이는 사고가 난다. N·K 에서 뽑는다. */
+  const COLS = Array.from({ length: N + 1 }, (_, z) => z);
+  const ROWS = Array.from({ length: K + 1 }, (_, z) => z);
+
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
 
@@ -458,24 +519,23 @@ export function DPTableFillSim({ E }) {
     if (s.k === "cell") {
       /* 2026-09-10 선생님: "우리는 결국 파랑이 빨강을 다 덮는걸 고민해야하는데
          왜 파랑 두개로 1번, 2번을 덮는걸 생각해야하는거지? 그럼 빨강 3번은?"
-         **맞는 지적이다.** K=2 인 이 예제에서 (파랑2, 앞2) 칸은 아무도 안 읽는다 —
-         답은 맨 오른쪽 칸에서만 나오고, dp[3][*] 은 K=2 라 아예 없다.
-         그렇다고 이 칸을 건너뛸 수는 없다: components.jsx 의 FULL_PY 가 kk·i 를
-         조건 없이 전부 도는데 시뮬만 골라 채우면 코드와 어긋난다(pedagogy 판정).
-         그래서 **왜 지금은 안 쓰는지를 그 자리에서 말한다.** 원래 이 스텝과 다음 스텝
-         (③까지 덮는 칸) 사이에 연결어가 하나도 없었고, 그게 "뜬금없다" 의 원인이었다.
-         "파랑을 3개 쓸 수 있으면 쓰는 칸" 은 지어낸 정당화가 아니라 사실이다. */
-      const orphan = s.kk >= 2 && s.i < N;
-      const last = REDS[N - 1].label;
+         **맞는 지적이다.** K=2 인 이 예제에서 맨 오른쪽이 아닌 파랑2 칸들은 아무도 안 읽는다.
+         그렇다고 건너뛸 수는 없다 — FULL_PY 가 kk·i 를 조건 없이 전부 돈다(pedagogy 판정).
+         원래 이 스텝과 다음 스텝 사이에 연결어가 **하나도** 없었고, 그게 "뜬금없다" 의 원인이었다.
+
+         ⚠️ 첫 시도는 "파랑 3개까지 쓸 수 있을 때 쓰는 칸이에요" 였다. **되돌렸다.**
+            학생 에이전트: *"이 문제는 K=2인데 왜 갑자기 3개 얘기가 나오는지 몰랐다.
+            도움이 안 되고 새 의문만 만들었다."* 사실이긴 해도 여기서 할 말이 아니다.
+            지금은 선생님이 물으신 그대로 — **아직 안 덮인 빨강이 누구인지** 를 말하고 넘긴다. */
+      const restNames = REDS.slice(s.i).map((r) => r.label).join("");
+      const unfinished = s.kk >= 2 && s.i < N;
       return t(E,
         <>So (<b>{s.kk} blues</b>, <b>first {s.i}</b>) = <b>{dp[s.kk][s.i]}</b>.
-          {orphan && <><br />
-            We won&apos;t use this one — it&apos;s for when <b>3 blues</b> are allowed.<br />
-            Next we fill the cell that covers <b>all the way to {last}</b>.</>}</>,
+          {unfinished && <><br />
+            But <b>{restNames}</b> {s.i === N - 1 ? "is" : "are"} still uncovered — on to the next cell.</>}</>,
         <>그래서 (파랑 <b>{s.kk}개</b>, 앞 <b>{s.i}개</b>) 칸은 <b>{dp[s.kk][s.i]}</b> 이에요.
-          {orphan && <><br />
-            이 칸은 지금은 안 써요 — <b>파랑 3개</b>까지 쓸 수 있을 때 쓰는 칸이에요.<br />
-            이제 파랑 2개로 <b>{last}까지 전부</b> 덮는 칸을 채워요.</>}</>);
+          {unfinished && <><br />
+            그런데 <b>{restNames}</b> 가 아직 안 덮였죠 — 다음 칸으로 가요.</>}</>);
     }
     return t(E,
       <>The answer is in the <b>last column</b> — pick the smallest: {dp[1][N]} or {dp[2][N]} → <b>{Math.min(dp[1][N], dp[2][N])}</b>.<br />
@@ -585,22 +645,25 @@ export function DPTableFillSim({ E }) {
           앞부분을 표에서 꺼내는 얘기는 다음 tryadd 단계의 일이다.
           접지 않으면 모바일 375 에서 카드가 길어져 SimNav 가 하단 고정 바 밑으로 내려간다
           (실측: 접기 전 nav 770 · 바 744 → 눌리지 않았다). 데스크탑은 자리가 있어 같이 본다. */}
+      {/* 2026-09-10: 위 여백을 14 → 8 로 줄였다. 빨강이 4개가 되면서 표가 한 칸 넓어졌고,
+          `— 버려요` 가 붙는 tryadd 스텝 셋(10·13·15)에서 ▶ 버튼이 하단 고정 바를 **1px** 넘겼다.
+          실측 도구는 `node check-sim-nav.mjs rectangles 11`. */}
       <div className={s.k === "try" ? "hidden md:block" : ""}
-           style={{ maxWidth: 360, margin: "14px auto 0" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "76px repeat(4, 1fr)", gap: 5 }}>
+           style={{ maxWidth: 360, margin: "8px auto 0" }}>
+        <div style={{ display: "grid", gridTemplateColumns: `76px repeat(${N + 1}, 1fr)`, gap: 5 }}>
           <span />
-          {[0, 1, 2, 3].map((i) => (
+          {COLS.map((i) => (
             <span key={i} style={{ textAlign: "center", fontSize: 10.5, fontWeight: 800, color: "#94a3b8" }}>
               {t(E, `first ${i}`, `앞 ${i}개`)}
             </span>
           ))}
-          {[0, 1, 2].map((kk) => (
+          {ROWS.map((kk) => (
             <React.Fragment key={`row${kk}`}>
               <span style={{ fontSize: 10.5, fontWeight: 800, color: "#94a3b8",
                 display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 4 }}>
                 {t(E, `${kk} blue`, `파랑 ${kk}개`)}
               </span>
-              {[0, 1, 2, 3].map((i) => {
+              {COLS.map((i) => {
                 const v = dp[kk][i];
                 const show = filled.has(`${kk},${i}`) && v < INF;
                 return (
@@ -651,9 +714,11 @@ export function WhyTableSim({ E }) {
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
 
-  // 자르는 방법 두 가지. 둘 다 "① 를 혼자 덮는다" 로 시작한다.
-  const cutA = [[0], [1, 2]];        // ① | ②③
-  const cutB = [[0], [1], [2]];      // ① | ② | ③
+  /* 자르는 방법 두 가지. 둘 다 "① 를 혼자 덮는다" 로 시작한다.
+     ⚠️ 빨강 전부를 덮어야 한다 — 빨강이 4개가 됐을 때 ④ 를 빠뜨리면
+        "각 빨강은 정확히 한 파랑 안" 이라는 문제의 규칙이 화면에서 깨진다. */
+  const cutA = [[0], [1, 2, 3]];        // ① | ②③④
+  const cutB = [[0], [1], [2, 3]];      // ① | ② | ③④
   const cost = (g) => groupCost(g).area;   // groupCost 는 {sw, mh, area} 를 준다
   const first = cost([0]);           // ① 혼자 = 1×1 = 1
 

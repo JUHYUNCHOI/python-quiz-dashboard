@@ -43,28 +43,40 @@ function RectanglesSample({ E }) {
         <div style={{ background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10, padding: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>{t(E, "INPUT", "입력")}</div>
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#7c2d12", whiteSpace: "pre" }}>
-{`3 2
+{`4 2
 1 1
 2 2
-1 2`}
+1 2
+2 1`}
           </div>
         </div>
         <div style={{ background: "#dcfce7", border: "1px solid #16a34a", borderRadius: 10, padding: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#15803d", marginBottom: 6 }}>{t(E, "OUTPUT", "출력")}</div>
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.6, color: "#166534", whiteSpace: "pre" }}>
-{`8`}
+{`11`}
           </div>
         </div>
       </div>
 
       <div style={{ background: "#fff7ed", border: "1px solid #fdba74", borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
         <div style={{ fontWeight: 700, color: "#9a3412", marginBottom: 6 }}>🔍 {t(E, "Line by line", "한 줄씩")}</div>
-        <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>3 2</code> — {t(E, "N = 3 red rects, K = 2 blue rects allowed", "N = 3 (빨강 사각형 수), K = 2 (파랑 최대 수)")}</div>
+        <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>4 2</code> — {t(E, "N = 4 red rects, K = 2 blue rects allowed", "N = 4 (빨강 사각형 수), K = 2 (파랑 최대 수)")}</div>
         <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 1</code> — {t(E, "rect 1: height 1, width 1", "사각형 1: 높이 1, 폭 1")}</div>
         <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>2 2</code> — {t(E, "rect 2: height 2, width 2", "사각형 2: 높이 2, 폭 2")}</div>
         <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>1 2</code> — {t(E, "rect 3: height 1, width 2", "사각형 3: 높이 1, 폭 2")}</div>
+        <div style={{ marginTop: 4 }}><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>2 1</code> — {t(E, "rect 4: height 2, width 1", "사각형 4: 높이 2, 폭 1")}</div>
         <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #fdba74" }}>
-          {t(E, "Output ", "출력 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>8</code>{t(E, " = smallest total blue area. Group [1,2] → 2×3 = 6, group [3] → 1×2 = 2, total 8.", " = 최소 파랑 총면적. 구간 [1,2] → 2×3 = 6, 구간 [3] → 1×2 = 2, 합 8.")}
+          {t(E, "Output ", "출력 ")}<code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>11</code>{t(E, " = smallest total blue area. Group [1] → 1×1 = 1, group [2,3,4] → 2×5 = 10, total 11.", " = 최소 파랑 총면적. 구간 [1] → 1×1 = 1, 구간 [2,3,4] → 2×5 = 10, 합 11.")}
+        </div>
+        {/* 2026-09-10 — 공식 샘플을 **지우지 않았다.** 여기 그대로 남긴다.
+            가르치는 예제만 빨강 4개로 올린 이유는 sims.jsx 의 REDS 주석에 적어뒀다:
+            3개면 자르는 방법이 3가지뿐이라 손으로 10초면 다 세어져서,
+            "그래서 표는 왜 만드나" 가 화면에서 안 섰다. */}
+        <div style={{ marginTop: 8, paddingTop: 7, borderTop: "1px dashed #fdba74", fontSize: 11.5, color: "#9a3412", lineHeight: 1.75 }}>
+          {t(E, <>The official contest sample is one rect shorter — <code>3 2 / 1 1 / 2 2 / 1 2</code> → <b>8</b>.<br />
+                 We added a fourth so there is more to think about.</>,
+               <>대회 원문 예제는 빨강이 하나 적어요 — <code>3 2 / 1 1 / 2 2 / 1 2</code> → <b>8</b>.<br />
+                 여기서는 하나 더 붙여 4개로 연습해요.</>)}
         </div>
       </div>
 
@@ -100,14 +112,14 @@ function RectanglesRecap({ E }) {
           전엔 "질문 → 기호" 행 세 줄이었다. 7쪽에서와 같은 병이다 —
           이 quest 는 내내 그림으로 보여주다가 정리에서만 갑자기 기호로 돌아갔다.
           정리는 **본 것을 다시 보여주는 자리**지 기호로 압축하는 자리가 아니다.
-          → 우리가 실제로 고른 답(①② | ③ = 6 + 2 = 8)을 그림으로 다시 보여준다.
+          → 우리가 실제로 고른 답(① | ②③④ = 1 + 10 = 11)을 그림으로 다시 보여준다.
             (폭합)×(최고높이)는 그림 안 라벨이 이미 말해준다. */}
       <div style={{ maxWidth: 480, margin: "0 auto" }}>
         <div style={{ fontSize: 12.5, fontWeight: 700, color: "#9a3412", textAlign: "center",
           marginBottom: 8, wordBreak: "keep-all" }}>
-          {t(E, "This was the answer — 2 blues, total 8.", "우리가 고른 답이 이거였어요 — 파랑 2개, 합쳐서 8.")}
+          {t(E, "This was the answer — 2 blues, total 11.", "우리가 고른 답이 이거였어요 — 파랑 2개, 합쳐서 11.")}
         </div>
-        <RectStage groups={[[0, 1], [2]]} />
+        <RectStage groups={[[0], [1, 2, 3]]} />
       </div>
 
       {/* 핵심 한 문장 — 이 쪽 라벨이 "핵심 아이디어 한눈에" 인데 정작 핵심을 말한 적이 없었다. */}
@@ -125,10 +137,10 @@ function RectanglesRecap({ E }) {
       <div style={{ maxWidth: 480, margin: "10px auto 0", background: "#f8fafc",
         border: "1.5px solid #e2e8f0", borderRadius: 10, padding: "11px 15px", textAlign: "center",
         fontSize: 12.5, color: "#475569", lineHeight: 1.85, wordBreak: "keep-all", textWrap: "balance" }}>
-        {t(E, <>Three reds you can cut by hand. But <b>N goes up to 200</b> —<br />
-              nobody cuts 200 by hand. From here the computer does it.</>,
-             <>빨강 3개는 손으로 잘라볼 수 있었죠. 그런데 <b>N 은 200까지</b> 가요 —<br />
-              200개를 손으로 다 해볼 사람은 없어요. 여기서부터는 컴퓨터가 해요.</>)}
+        {t(E, <>Four reds took eight tries — and the top two differed by <b>1</b>.<br />
+              <b>N goes up to 200.</b> From here the computer does it.</>,
+             <>빨강 4개도 여덟 번을 따져봤고, 1등과 2등은 <b>1 차이</b>였어요.<br />
+              그런데 <b>N 은 200까지</b> 가요. 여기서부터는 컴퓨터가 해요.</>)}
       </div>
 
       <div style={{ textAlign: "center", marginTop: 12, fontSize: 12, color: C.dim, wordBreak: "keep-all" }}>
@@ -287,17 +299,17 @@ export function makeRectanglesCh1(E) {
           <div style={{ maxWidth: 420, margin: "0 auto" }}>
             <div style={{ fontSize: 12.5, fontWeight: 700, color: "#9a3412", textAlign: "center",
               marginBottom: 8, wordBreak: "keep-all" }}>
-              {t(E, <>Reds are 3. Give yourself 5 blues — can you use them all?</>,
-                   <>빨강이 3개예요. 파랑을 5개 준다면, 다 쓸 수 있을까요?</>)}
+              {t(E, <>Reds are 4. Give yourself 6 blues — can you use them all?</>,
+                   <>빨강이 4개예요. 파랑을 6개 준다면, 다 쓸 수 있을까요?</>)}
             </div>
-            <RectStage groups={[[0], [1], [2]]} />
+            <RectStage groups={[[0], [1], [2], [3]]} />
             <div style={{ marginTop: 10, display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
-              {["①", "②", "③", "—", "—"].map((lab, i) => (
+              {["①", "②", "③", "④", "—", "—"].map((lab, i) => (
                 <span key={i} style={{
                   fontSize: 11.5, fontWeight: 800, padding: "4px 10px", borderRadius: 999,
-                  background: i < 3 ? "rgba(37,99,235,0.16)" : "#f1f5f9",
-                  border: `1.5px solid ${i < 3 ? "#2563eb" : "#cbd5e1"}`,
-                  color: i < 3 ? "#1d4ed8" : "#94a3b8",
+                  background: i < 4 ? "rgba(37,99,235,0.16)" : "#f1f5f9",
+                  border: `1.5px solid ${i < 4 ? "#2563eb" : "#cbd5e1"}`,
+                  color: i < 4 ? "#1d4ed8" : "#94a3b8",
                 }}>
                   {t(E, `blue ${i + 1}`, `파랑 ${i + 1}`)} {lab}
                 </span>
@@ -307,9 +319,9 @@ export function makeRectanglesCh1(E) {
               borderRadius: 12, padding: "12px 16px", textAlign: "center",
               fontSize: 13.5, fontWeight: 800, color: "#9a3412", lineHeight: 1.8,
               wordBreak: "keep-all", textWrap: "balance" }}>
-              {t(E, <>Blues 4 and 5 have <b>nothing left to cover</b>.<br />
+              {t(E, <>Blues 5 and 6 have <b>nothing left to cover</b>.<br />
                     So K past N is wasted — <b>K = min(K, N)</b>.</>,
-                   <>파랑 4번·5번은 <b>덮을 게 없어요.</b><br />
+                   <>파랑 5번·6번은 <b>덮을 게 없어요.</b><br />
                     그러니 N 을 넘는 K 는 쓸 데가 없어요 — <b>K = min(K, N)</b>.</>)}
             </div>
           </div>
@@ -350,21 +362,30 @@ export function makeRectanglesCh2(E, lang = "py") {
           {/* 2026-09-08 선생님(네 번째 같은 지적): "이해 안돼. 읽기 싫어"
               전엔 글 네 줄 + `① | ② ③ → 1 + 8 = 9` 같은 기호 칩 네 개였다.
               기호 칩은 학생이 머릿속에서 그림으로 되돌려야 읽힌다 — 그 되돌리기를 우리가 해준다.
-              **네 가지 자르는 방법을 그대로 네 개의 그림으로** 보여주고, 문장은 한 줄만 남긴다. */}
+              **자르는 방법을 그대로 그림으로** 보여주고, 문장은 한 줄만 남긴다.
+              2026-09-10 빨강이 4개가 되면서 방법이 4가지 → **8가지**가 됐다.
+              여덟 장이 많아 보이지만 그게 이 쪽이 하려는 말이다 — "손으로 다 해보면 이만큼".
+              그리고 규칙(K=2)을 어기는 쪽이 **더 싸다**는 것도 여기서 눈에 보인다. */}
           <div style={{ fontSize: 13, lineHeight: 1.8, color: "#334155", textAlign: "center",
             wordBreak: "keep-all", textWrap: "balance", marginBottom: 12 }}>
             {t(E, <>Cutting the row is the whole problem — so just <b>try every way to cut</b>.<br />
-                   With 3 reds there are only these four.</>,
+                   With 4 reds there are eight.</>,
                  <>줄을 자르는 게 문제의 전부였죠 — 그러니 <b>자르는 방법을 전부 해보면</b> 돼요.<br />
-                   빨강이 3개면 방법은 이 넷뿐이에요.</>)}
+                   빨강이 4개면 방법은 여덟 가지예요.</>)}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))",
             gap: 10, maxWidth: 520, margin: "0 auto" }}>
             {[
-              { g: [[0], [1, 2]],       sum: "1 + 8 = 9",     ok: true },
-              { g: [[0, 1], [2]],       sum: "6 + 2 = 8",     ok: true, best: true },
-              { g: [[0], [1], [2]],     sum: "1 + 4 + 2 = 7", ok: false },
-              { g: [[0, 1, 2]],         sum: "10",            ok: true },
+              /* 파랑 2개 이하 — 규칙에 맞는 넷 */
+              { g: [[0, 1, 2, 3]],            sum: "12",                blues: 1, ok: true },
+              { g: [[0], [1, 2, 3]],          sum: "1 + 10 = 11",       blues: 2, ok: true, best: true },
+              { g: [[0, 1], [2, 3]],          sum: "6 + 6 = 12",        blues: 2, ok: true },
+              { g: [[0, 1, 2], [3]],          sum: "10 + 2 = 12",       blues: 2, ok: true },
+              /* 파랑 3개 이상 — 더 싸지만 K = 2 를 넘는다 */
+              { g: [[0], [1], [2, 3]],        sum: "1 + 4 + 6 = 11",    blues: 3, ok: false },
+              { g: [[0], [1, 2], [3]],        sum: "1 + 8 + 2 = 11",    blues: 3, ok: false },
+              { g: [[0, 1], [2], [3]],        sum: "6 + 2 + 2 = 10",    blues: 3, ok: false },
+              { g: [[0], [1], [2], [3]],      sum: "1 + 4 + 2 + 2 = 9", blues: 4, ok: false },
             ].map((c, i) => (
               <div key={i} style={{
                 background: c.best ? "#ecfdf5" : c.ok ? "#fff" : "#fef2f2",
@@ -379,7 +400,7 @@ export function makeRectanglesCh2(E, lang = "py") {
                 {!c.ok && (
                   <div style={{ textAlign: "center", marginTop: 2, fontSize: 11, fontWeight: 700,
                     color: "#991b1b", wordBreak: "keep-all" }}>
-                    {t(E, "3 blues — but K = 2", "파랑 3개 — K = 2 인데")}
+                    {t(E, `${c.blues} blues — but K = 2`, `파랑 ${c.blues}개 — K = 2 인데`)}
                   </div>
                 )}
               </div>
@@ -387,7 +408,8 @@ export function makeRectanglesCh2(E, lang = "py") {
           </div>
           <div style={{ textAlign: "center", marginTop: 12, fontSize: 13, fontWeight: 800,
             color: "#065f46", wordBreak: "keep-all" }}>
-            {t(E, "Smallest among the allowed ones → 8", "규칙에 맞는 것 중 제일 작은 것 → 8")}
+            {t(E, "Smallest among the allowed ones → 11 (the next is 12)",
+                 "규칙에 맞는 것 중 제일 작은 것 → 11 (그다음이 12)")}
           </div>
         </div>
       ),
