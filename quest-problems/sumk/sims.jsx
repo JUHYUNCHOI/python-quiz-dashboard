@@ -81,7 +81,7 @@ function Say({ children, tone = "go" }) {
      · 배경 알약 → 좌우 패딩만큼 폭을 먹어 그 18px 를 잠식
      · outline → **폭 0.** 칩 43px 그대로, 줄바꿈 위험 없음
    그리고 그릇은 **각진 상자**, 합은 **완전한 원** — 모양을 갈라 "원 안의 원" 을 피한다. */
-function MiniSet({ items, arr, added = null }) {
+function MiniSet({ items, arr, added = null, isNew = false }) {
   /* 2026-09-10 선생님: **"그냥 실제로 담아져 있는것만 보여주면 어떨까? 투 머치 인포같아.
      색도 선명하지 않아서 결국 뭐가 있다는건지 모르겠고"**
      학생 B 도 같은 말을 했다 — "확대해서 보니 진한 칸=담김이 보였는데,
@@ -99,8 +99,9 @@ function MiniSet({ items, arr, added = null }) {
   return (
     <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
       <span style={{ width: W, height: 19, display: "inline-flex", gap: 2, borderRadius: 5,
-        alignItems: "center", justifyContent: "center", background: "#fff",
-        outline: "1.5px solid #c4b5fd", outlineOffset: 0 }}>
+        alignItems: "center", justifyContent: "center",
+        background: isNew ? "#f5f3ff" : "#fff",
+        outline: `${isNew ? 2 : 1.5}px solid ${isNew ? PURDK : "#ddd6fe"}`, outlineOffset: 0 }}>
         {on.length === 0 ? (
           <span style={{ fontSize: 9, fontWeight: 800, color: "#cbd5e1" }}>—</span>
         ) : on.map((v) => {
@@ -122,26 +123,25 @@ function MiniSet({ items, arr, added = null }) {
   );
 }
 
-function ChipRow({ label, sub, subs, arr, add = null, accent = false }) {
+/* 지금까지 만든 **부분집합 목록 하나.** 방금 생긴 것은 진하게.
+
+   2026-09-10 선생님: **"1 담음에서 왜 다음 화면에 2로 바뀌지 순간 헷갈렸음.
+   원래 {}, {1}, {2}, {1,2} 여야 하는거 아닌가? 뭘하려는거지?"**
+
+   맞다. 그 걸음의 목록은 `{}` `{1}` `{2}` `{1,2}` 네 개인데
+   나는 그걸 **"2 안 담음 / 2 담음" 두 줄로 쪼개** 보여주고 있었다.
+   두 줄은 **그 걸음에서만 쓰는 임시 장치**다 — 걸음이 넘어가면 라벨의 숫자가 바뀐다.
+   그래서 "지금 목록이 뭐냐" 를 화면에서 읽을 수가 없었다.
+
+   → **한 줄로 합친다.** 목록은 하나고, 방금 생긴 절반만 진하다.
+     "숫자 하나에 목록이 두 배" 도 이 한 줄에서 그대로 보인다 — 절반이 새것이니까. */
+function SubsetList({ subs, arr, added = null }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-      {/* 라벨 82px + 칩 4개(각 ~47px) + 간격 = 약 290px < 가용 343px.
-          ⚠️ 이 폭이 넘치면 칩이 줄바꿈되고 **위아래 짝이 어긋나** "아까 것 + 3" 이 안 보인다.
-             처음에 타일 16px 로 짰다가 그 사고가 났다. 실측으로 13px 로 내렸다. */}
-      <span style={{ minWidth: 82, fontSize: 10, fontWeight: 800, textAlign: "right",
-        wordBreak: "keep-all", lineHeight: 1.35, color: accent ? PURDK : "#64748b" }}>
-        {label}
-        <span style={{ display: "block", fontWeight: 700, fontSize: 9.5,
-          color: accent ? "#a78bfa" : "#94a3b8" }}>{sub}</span>
-      </span>
-      {/* 간격 7px — 그릇(outline 1.5px)이 양옆으로 1.5px 씩 나가므로 4px 로는 서로 닿는다.
-          여유 18px 중 9px(3칸 × 3px)를 쓴다. 남은 9px. */}
-      <span style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
-        {subs.map((x, i) => (
-          <MiniSet key={i} items={add == null ? x.items : [...x.items, add]} arr={arr} added={add} />
-        ))}
-      </span>
-    </div>
+    <span style={{ display: "flex", gap: 7, flexWrap: "wrap", justifyContent: "center" }}>
+      {subs.map((x, i) => (
+        <MiniSet key={i} items={x.items} arr={arr} isNew={added != null && x.items.includes(added)} added={added} />
+      ))}
+    </span>
   );
 }
 
@@ -473,8 +473,10 @@ export function SumkBuildSim({ E }) {
       <>Instead of listing every subset, could we just <b>grow this one number</b>?</>,
       <>부분집합을 다 나열하지 말고, <b>이 한 줄만 키울</b> 순 없을까요?</>);
     if (s.k === "stage") return t(E,
-      <>Each subset either <b>leaves {st.a} out</b> or <b>puts it in</b>. Putting it in adds <b>{st.a}</b> to the sum.</>,
-      <>부분집합마다 <b>{st.a}{EUL(st.a)} 안 담거나 담거나</b>. 담으면 합이 <b>{st.a}</b> 만큼 커져요.</>);
+      <><b>1)</b> each subset either leaves <b>{st.a}</b> out or puts it in → the list doubles.<br />
+        <b>2)</b> square every sum and add them up.</>,
+      <><b>1)</b> 부분집합마다 <b>{st.a}</b>{EUL(st.a)} 안 담거나 담거나 → 목록이 두 배가 돼요.<br />
+        <b>2)</b> 그 합들을 <b>하나씩 제곱해서 다 더해요.</b></>);
     if (s.k === "same") return t(E,
       <><b>{L.s2}</b> — the number we counted by hand two pages ago.<br />
         (There are {L.cnt} subsets here, not 7: the empty one adds 0² = 0.)</>,
@@ -504,10 +506,17 @@ export function SumkBuildSim({ E }) {
   })();
 
   const LedgerBox = () => {
+    /* 2026-09-10 선생님: **"무슨 순서로 계산을 하는건지"**
+       장부 숫자가 1 → 14 → 100 으로 바뀌는데 **어떻게 바뀌는지가 화면에 없었다.**
+       (전엔 식이 있었는데 "너무 많은 정보" 지적을 받고 내가 뺐다. 뺄 자리가 아니었다.)
+       → 숫자가 **바뀌는 걸음에서만** 식을 보인다. 칩의 합과 1:1 로 이어진다:
+         `0²+1²+2²+3² = 14` 의 0·1·2·3 이 바로 위 칩 네 개의 합이다. */
+    const sq = st.subs.map((x) => `${x.sum}²`).join("+");
+    const pl = st.subs.map((x) => x.sum).join("+");
     const all = [
-      { lab: t(E, "how many subsets", "부분집합 개수"), name: "P[0]", v: L.cnt, p: prev && prev.cnt, tone: "cnt" },
-      { lab: t(E, "each sum, added up", "각 합을 더한 것"), name: "P[1]", v: L.s1, p: prev && prev.s1, tone: "s1" },
-      { lab: t(E, "each sum SQUARED, added up", "각 합을 제곱해서 더한 것"), name: "P[2]", v: L.s2, p: prev && prev.s2, tone: "s2" },
+      { lab: t(E, "how many subsets", "부분집합 개수"), name: "P[0]", v: L.cnt, p: prev && prev.cnt, tone: "cnt", ex: null },
+      { lab: t(E, "each sum, added up", "각 합을 더한 것"), name: "P[1]", v: L.s1, p: prev && prev.s1, tone: "s1", ex: pl },
+      { lab: t(E, "each sum SQUARED, added up", "각 합을 제곱해서 더한 것"), name: "P[2]", v: L.s2, p: prev && prev.s2, tone: "s2", ex: sq },
     ];
     const rowsOut = threeRows ? all : [all[2]];
     return (
@@ -525,6 +534,12 @@ export function SumkBuildSim({ E }) {
               border: `1.5px solid ${painted ? c.bd : isAnswer ? "#6ee7b7" : changed ? PUR : "#e2e8f0"}` }}>
               <span style={{ flex: 1, fontSize: 12, fontWeight: 700, color: painted ? c.fg : "#475569", wordBreak: "keep-all" }}>
                 {r.lab}
+                {r.ex && s.k === "stage" && (
+                  <span style={{ display: "block", fontSize: 9.5, fontWeight: 700, color: "#94a3b8",
+                    fontFamily: "'JetBrains Mono',monospace", marginTop: 1, wordBreak: "break-all" }}>
+                    {r.ex}
+                  </span>
+                )}
               </span>
               {/* 2026-09-10 학생 A: "5쪽 마지막 걸음에 **P[0], P[1], P[2] 라는 이름이
                   아무 설명 없이 튀어나왔다**(6쪽에서야 뒤늦게 설명됨)." 맞다. 이름은 6쪽 몫이다. */}
@@ -552,13 +567,21 @@ export function SumkBuildSim({ E }) {
       {/* 이번 걸음의 블록 **하나**. 칩이거나, 넓이 그림이거나, 아무것도 아니거나. */}
       {(s.k === "stage" || s.k === "same" || s.k === "double") && (
         <div style={{ maxWidth: 380, margin: "14px auto 0" }}>
-          <ChipRow label={t(E, `${st.a} left out`, `${st.a} 안 담음`)}
-            sub={t(E, "= same as before", "= 아까 것 그대로")}
-            subs={stages[stageIdx - 1].subs} arr={arr} />
-          <div style={{ height: 6 }} />
-          <ChipRow label={t(E, `${st.a} put in`, `${st.a} 담음`)}
-            sub={t(E, `= before, plus ${st.a}`, `= 아까 것에 ${st.a} 추가`)}
-            subs={stages[stageIdx - 1].subs} arr={arr} add={st.a} accent />
+          <div style={{ fontSize: 10.5, fontWeight: 800, color: "#64748b", textAlign: "center",
+            marginBottom: 7, wordBreak: "keep-all" }}>
+            {t(E, `${L.cnt} subsets now`, `지금 부분집합 ${L.cnt}개`)}
+            {s.k === "stage" && (
+              <b style={{ color: PURDK }}>
+                {t(E, ` · bold = just made by putting ${st.a} in`, ` · 진한 것 = 방금 ${st.a}${EUL(st.a)} 담아 생긴 것`)}
+              </b>
+            )}
+          </div>
+          <SubsetList subs={st.subs} arr={arr} added={s.k === "stage" ? st.a : null} />
+          {s.k === "double" && (
+            <Caption color={PURDK}>
+              {t(E, "one number → the list doubles", "숫자 하나에 목록이 두 배")}
+            </Caption>
+          )}
         </div>
       )}
 
