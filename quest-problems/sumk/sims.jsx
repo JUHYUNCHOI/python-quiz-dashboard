@@ -82,20 +82,34 @@ function Say({ children, tone = "go" }) {
      · outline → **폭 0.** 칩 43px 그대로, 줄바꿈 위험 없음
    그리고 그릇은 **각진 상자**, 합은 **완전한 원** — 모양을 갈라 "원 안의 원" 을 피한다. */
 function MiniSet({ items, arr, added = null }) {
+  /* 2026-09-10 선생님: **"그냥 실제로 담아져 있는것만 보여주면 어떨까? 투 머치 인포같아.
+     색도 선명하지 않아서 결국 뭐가 있다는건지 모르겠고"**
+     학생 B 도 같은 말을 했다 — "확대해서 보니 진한 칸=담김이 보였는데,
+     **실제 화면 크기 그대로면 숫자가 작아서 진하고 흐린 게 구분 잘 안 될 것 같음.**"
+
+     전엔 1·2·3 세 자리를 늘 그리고 **안 담긴 것은 흐리게** 했다.
+     자리 고정은 위아래 짝을 맞추려던 것인데, 그 대가로 **화면에 늘 세 배가 떠 있었다.**
+     그리고 흐린 회색과 연보라 차이가 13px 에서는 거의 안 보인다.
+
+     → **담긴 것만 그린다.** 대신 **칸(상자)의 폭은 3자리로 고정**해서 짝은 그대로 맞춘다.
+       "적게 보이되 자리는 안 흔들린다" — 둘 다 가진다.
+       그리고 담긴 타일은 **진한 보라에 흰 글씨**로 확실하게 칠한다. */
+  const on = arr.filter((v) => items.includes(v));
+  const W = arr.length * 13 + (arr.length - 1) * 2;      // 3자리분 고정 폭
   return (
     <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
-      <span style={{ display: "inline-flex", gap: 2, borderRadius: 5, background: "#fff",
+      <span style={{ width: W, height: 19, display: "inline-flex", gap: 2, borderRadius: 5,
+        alignItems: "center", justifyContent: "center", background: "#fff",
         outline: "1.5px solid #c4b5fd", outlineOffset: 0 }}>
-        {arr.map((v) => {
-          const on = items.includes(v);
+        {on.length === 0 ? (
+          <span style={{ fontSize: 9, fontWeight: 800, color: "#cbd5e1" }}>—</span>
+        ) : on.map((v) => {
           const isNew = added != null && v === added;
           return (
             <span key={v} style={{ width: 13, height: 13, borderRadius: 3,
               display: "flex", alignItems: "center", justifyContent: "center",
               fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 9,
-              background: on ? (isNew ? "#c4b5fd" : PURBG) : "#fff",
-              border: `1.5px solid ${on ? (isNew ? PURDK : "#c4b5fd") : "#e2e8f0"}`,
-              color: on ? PURDK : "#e2e8f0" }}>{v}</span>
+              background: isNew ? PURDK : PUR, color: "#fff" }}>{v}</span>
           );
         })}
       </span>
@@ -432,7 +446,13 @@ export function SumkBuildSim({ E }) {
      검산: (2+3)² = 4 + 6 + 6 + 9 = 25 ✓ */
   const PRE = 2;                                   // 1·2 까지 정한 상태
   const pre = ledger(stages[PRE].subs);
-  const AX = 2, AA = arr[PRE];                     // x = 2, a = 3
+  /* 2026-09-10 학생 A: "7걸음 정사각형 그림의 **4, 6** 이 9걸음 장부의
+     **개수 4 · 합 6** 과 **우연히 똑같아서** 둘이 같은 걸 가리키는 줄 착각했다.
+     실제론 완전히 다른 것(하나는 예시 그림, 하나는 8개 전체 합계)이었다."
+     맞다. x=2 면 조각이 [4, 6, 6, 9] 인데 장부가 [4, 6, 14] 다 — 두 개가 겹친다.
+     x 를 1 로 바꾼다: 조각 [1, 3, 3, 9], 장부 [4, 6, 14] — **겹치는 값이 없다.**
+     그리고 똑같은 직사각형 두 개(3, 3)가 오히려 더 또렷하다. */
+  const AX = 1, AA = arr[PRE];                     // x = 1, a = 3 → (1+3)² = 1+3+3+9 = 16
   const takeS2 = pre.s2 + 2 * AA * pre.s1 + AA * AA * pre.cnt;
 
   const AREA = ["area", "color", "rows"].includes(s.k);
@@ -506,11 +526,8 @@ export function SumkBuildSim({ E }) {
               <span style={{ flex: 1, fontSize: 12, fontWeight: 700, color: painted ? c.fg : "#475569", wordBreak: "keep-all" }}>
                 {r.lab}
               </span>
-              {s.k === "fast" && (
-                <span style={{ fontSize: 11.5, fontWeight: 800, color: c.fg, fontFamily: "'JetBrains Mono',monospace" }}>
-                  {r.name}
-                </span>
-              )}
+              {/* 2026-09-10 학생 A: "5쪽 마지막 걸음에 **P[0], P[1], P[2] 라는 이름이
+                  아무 설명 없이 튀어나왔다**(6쪽에서야 뒤늦게 설명됨)." 맞다. 이름은 6쪽 몫이다. */}
               <span style={{ minWidth: 44, textAlign: "right", fontSize: 15, fontWeight: 800,
                 fontFamily: "'JetBrains Mono',monospace", color: painted ? c.fg : isAnswer ? "#15803d" : changed ? PURDK : "#1f2937" }}>
                 {r.v}
