@@ -530,9 +530,20 @@ export function SumkBuildSim({ E }) {
             </>
           ) : (
             <>
+              {/* 2026-09-10 선생님: **"2를 안담는다는건 2만 빼고 다 있다는건가?"**
+                  아니다 — 그 줄은 **2 가 안 들어간 부분집합들**이고 지금은 {} 와 {1} 둘이다.
+                  내 라벨("2 안 담음")이 **한 부분집합을 설명하는 말**처럼 읽혔다.
+                  두 줄이 "아까 목록 그대로 / 아까 목록에 2 를 넣은 것" 이라는 걸 라벨이 직접 말한다. */}
+              <div style={{ fontSize: 10.5, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 7, wordBreak: "keep-all" }}>
+                {t(E, `every subset so far — each one either leaves ${st.a} out or puts it in`,
+                     `지금까지 만든 부분집합 — 하나하나가 ${st.a}${EUL(st.a)} 안 담거나 담거나`)}
+              </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                <span style={{ minWidth: 96, fontSize: 10.5, fontWeight: 800, color: "#64748b", textAlign: "right", wordBreak: "keep-all" }}>
+                <span style={{ minWidth: 104, fontSize: 10.5, fontWeight: 800, color: "#64748b", textAlign: "right", wordBreak: "keep-all", lineHeight: 1.35 }}>
                   {t(E, `${st.a} left out`, `${st.a} 안 담음`)}
+                  <span style={{ display: "block", fontWeight: 700, color: "#94a3b8", fontSize: 9.5 }}>
+                    {t(E, "= same as before", "= 아까 것 그대로")}
+                  </span>
                 </span>
                 <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
                   {stages[stageIdx - 1].subs.map((x, i) => (
@@ -541,8 +552,11 @@ export function SumkBuildSim({ E }) {
                 </span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ minWidth: 96, fontSize: 10.5, fontWeight: 800, color: PURDK, textAlign: "right", wordBreak: "keep-all" }}>
+                <span style={{ minWidth: 104, fontSize: 10.5, fontWeight: 800, color: PURDK, textAlign: "right", wordBreak: "keep-all", lineHeight: 1.35 }}>
                   {t(E, `${st.a} put in`, `${st.a} 담음`)}
+                  <span style={{ display: "block", fontWeight: 700, color: "#a78bfa", fontSize: 9.5 }}>
+                    {t(E, `= before, plus ${st.a}`, `= 아까 것에 ${st.a} 추가`)}
+                  </span>
                 </span>
                 <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
                   {stages[stageIdx - 1].subs.map((x, i) => (
