@@ -8,7 +8,7 @@
 
 import React from "react";
 import { t } from "@/components/quest/theme";
-import { useTraceStep, SimNav, StepHeader } from "@/components/quest/TraceStepper";
+import { useTraceStep, SimNav, SimShell, StepHeader } from "@/components/quest/TraceStepper";
 
 const A = "#f97316";
 const RED = "#ef4444", REDBD = "#dc2626", REDBG = "#fee2e2";
@@ -249,7 +249,12 @@ export function RectanglesSim({ E }) {
           2등이랑 <b>{runnerUp - best} 차이</b>예요 — 눈대중으로는 못 골라요.</>);
 
   return (
-    <div style={{ padding: 16 }}>
+    /* 2026-09-10 — 후보 카드를 A·B 둘에서 A·B·C 셋으로 늘렸더니 모바일에서 카드가 두 줄로 접히고
+       `다음 ▶` 가 하단 고정 바를 **226px** 넘겼다(check-sim-nav.mjs 실측). 내가 만든 회귀다.
+       여백을 손으로 주는 대신 `SimShell` 로 옮긴다 — 내용이 길면 안에서 스크롤되고 ▶ 는 밖에 남는다.
+       저장소에서 세 번째 적용(printseq · sumk · 여기). */
+    <SimShell idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels
+      maxHeightCss="calc(100dvh - 400px)">
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Split reds into contiguous groups", "빨강을 연속 구간으로 나누기")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
@@ -287,8 +292,7 @@ export function RectanglesSim({ E }) {
         </>
       )}
 
-      <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
-    </div>
+    </SimShell>
   );
 }
 
