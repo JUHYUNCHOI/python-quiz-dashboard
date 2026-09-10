@@ -28,10 +28,15 @@ await p.goto(`http://localhost:3000/quest/${quest}`, { waitUntil: "networkidle" 
 
 /* ⚠️ locator(`div:has-text(...)`) 는 **조상 div 를 다 잡아서** 엉뚱한 걸 누른다.
    자식이 거의 없는 잎 요소 중 글자가 정확히 같은 것만 고른다. */
+/* ⚠️ 정확히 일치로만 찾으면 라벨이 조금만 달라져도 조용히 안 눌린다.
+   2026-09-10: 언어 버튼 글자가 "🇰🇷 한국어KO" 에서 "🇰🇷 한국어" 로 보이면서
+   클릭이 통째로 안 먹었고, 그러면 화면이 영어로 남아 "다음 →" 도 못 찾는다.
+   그런데 도구는 **"시뮬 0개를 쟀다 ✅"** 라고 답했다 — 또 조용히 틀린 것이다.
+   → 정확히 일치 → 안 되면 포함으로 한 번 더. 그리고 아래에서 언어를 실제로 확인한다. */
 const click = async (txt) => {
   const hit = await p.evaluate((t) => {
-    const el = [...document.querySelectorAll("button,a,div,span")]
-      .find((e) => e.children.length <= 2 && e.textContent.trim() === t);
+    const cand = [...document.querySelectorAll("button,a,div,span")].filter((e) => e.children.length <= 2);
+    const el = cand.find((e) => e.textContent.trim() === t) || cand.find((e) => e.textContent.trim().includes(t));
     if (el) { el.click(); return true; }
     return false;
   }, txt);
@@ -57,7 +62,13 @@ const clippedPx = () => p.evaluate(() => {
   return Math.max(...boxes.map((d) => Math.round(d.scrollHeight - d.clientHeight)));
 });
 
-await click("🇰🇷 한국어KO");
+await click("한국어");
+/* 언어가 실제로 바뀌었나 확인 — 안 바뀌면 "다음 →" 을 못 찾아 시뮬을 0개로 세게 된다. */
+if (!(await p.evaluate(() => /다음|이전/.test(document.body.innerText)))) {
+  console.log("⚠️ 한국어로 못 바꿨다. 라벨이 바뀌었는지 확인해라 — 이 상태로는 못 잰다.");
+  await b.close();
+  process.exit(2);
+}
 const barTop = await p.evaluate(() => {
   const bar = document.querySelector(".quest-navbar");
   return bar ? Math.round(bar.getBoundingClientRect().top) : window.innerHeight;
@@ -101,6 +112,11 @@ for (let guard = 0; guard < 25; guard++) {
 }
 
 console.log(`\n시뮬 ${sims}개를 쟀다.`);
+if (sims === 0) {
+  console.log("⚠️ 시뮬을 하나도 못 찾았다. 이건 '문제 없음' 이 아니라 **못 쟀다** 는 뜻이다.");
+  await b.close();
+  process.exit(2);
+}
 console.log(bad.length ? `⚠️ 안 보이는 것이 있는 걸음 ${bad.length}개:\n  ${bad.join("\n  ")}`
                        : `✅ 전부 스크롤 없이 다 보인다 (버튼도, 내용도).`);
 await b.close();

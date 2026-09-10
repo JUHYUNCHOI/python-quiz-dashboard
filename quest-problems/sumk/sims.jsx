@@ -55,66 +55,79 @@ function Say({ children, tone = "go" }) {
   );
 }
 
-/* 식 안의 숫자 하나 — 밑에 **어느 장부 줄에서 온 것인지** 이름표를 붙인다.
-   2026-09-10 학생: "공식 속 숫자 하나하나가 저 상자 중 뭘 가져온 건지 라벨이 없어서
-   직접 대조해야 알 수 있다. 여기서 멈춰서 손으로 다시 계산해보고 나서야 넘어갔다."
-   특히 `1 + ( 1 + 2·2·1 + 2²·2 )` 에서 **2 가 세 가지 다른 뜻**으로 나온다 —
-   넣는 수 2, 옛 개수 2, 그냥 계수 2. 색과 이름표로 가른다. */
-function Term({ v, lab, tone = "cnt" }) {
-  const c = tone === "cnt" ? { fg: "#5b21b6", bg: "#f5f3ff", bd: "#c4b5fd" }
-          : tone === "s1"  ? { fg: "#1e40af", bg: "#eff6ff", bd: "#93c5fd" }
-          : tone === "s2"  ? { fg: "#065f46", bg: "#ecfdf5", bd: "#6ee7b7" }
-          /* c = 전개하면 늘 나오는 계수 2. 2026-09-10 ux: a 가 하필 2 라
-             `2·1·2` 의 왼쪽 2(계수)와 오른쪽 2(담는 수)가 겹쳐 보였다. 색을 따로 준다. */
-          : tone === "c"   ? { fg: "#64748b", bg: "#f1f5f9", bd: "#cbd5e1" }
-          : { fg: "#9a3412", bg: "#fff7ed", bd: "#fdba74" };   // a = 지금 담는 수
+/* 부분집합 칩 한 줄. 칩 하나 = **작은 타일 3개**(자리 고정) + 그 아래 합.
+
+   2026-09-10 선생님: **"차라리 지금 뭐가 담아져 있는지 보여줘. 어떻게 보여줘야할지는 디자이너가"**
+
+   이 자리에서 선생님이 **네 번** 막히셨고 네 번 다 내가 "글자로 어떻게 쓸까" 만 고민했다:
+     ① 합만(`0 1 2 3`)  → "갑자기 왜 3?"
+     ② 더하기 식(`1+2`) → 두 뜻으로 읽히고, 원소 하나짜리는 `2` 라 첫 칩만 규칙이 달랐다
+     ③ 줄 라벨 "2 안 담음" → "2만 빼고 다 있다는건가?"
+     ④ 집합 기호(`{1,2}`) → "차라리 지금 뭐가 담아져 있는지 보여줘"
+   → 글자를 버린다. 디자이너 실측안: `Tile` 을 16px 로 줄여 **3자리 고정, 켜짐/꺼짐**.
+     담긴 것 진하게 · 안 담긴 것 흐리게. 폭 실측 321px < 가용 343px (모바일 한 줄).
+   ⚠️ 진한 보라(PUR)는 위쪽 "지금 고르는 차례" 에만 쓰던 색이었다. 여기선 연보라만 쓴다 —
+      같은 모양이 두 뜻이 되면 안 된다 (`memory/feedback_same_number_two_meanings.md`). */
+/* 2026-09-10 선생님: **"세트는 {}로 하던가 해야할것 같은데"** / **"알아보기가 어려워"**
+   타일 사이 2px, 칩 사이 4px 이라 12개가 한 줄로 늘어선 것처럼 보였다 —
+   **어디서 한 부분집합이 끝나는지 안 보였다.**
+
+   기획 판정: 이건 글자 `{ }` 로 돌아가자는 게 아니라 **그릇을 달라**는 말이다.
+   (이 quest 는 `{1,2}` 중괄호를 이미 여러 곳에서 정의 없이 쓴다. 서술문에 한 번씩이면 문맥이
+    뜻을 잡아주지만, 칩 4개 × 여러 걸음으로 밀집시키면 아까 걷어낸 문제가 그대로 재발한다.)
+
+   디자인 판정: **`outline`** 을 쓴다. `border` 와 달리 **레이아웃 폭을 0 먹는다.**
+     · 리터럴 `{`·`}` 글자 → 칩당 2글자 × 4칩 = 48~64px 필요. **여유가 18px 뿐이라 불가**
+     · 배경 알약 → 좌우 패딩만큼 폭을 먹어 그 18px 를 잠식
+     · outline → **폭 0.** 칩 43px 그대로, 줄바꿈 위험 없음
+   그리고 그릇은 **각진 상자**, 합은 **완전한 원** — 모양을 갈라 "원 안의 원" 을 피한다. */
+function MiniSet({ items, arr, added = null }) {
   return (
-    <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center",
-      margin: "0 2px", verticalAlign: "middle" }}>
-      <span style={{ padding: "1px 7px", borderRadius: 7, background: c.bg, border: `1.5px solid ${c.bd}`,
-        color: c.fg, fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 14 }}>{v}</span>
-      <span style={{ fontSize: 9, fontWeight: 800, color: c.fg, marginTop: 1, whiteSpace: "nowrap" }}>{lab}</span>
+    <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
+      <span style={{ display: "inline-flex", gap: 2, borderRadius: 5, background: "#fff",
+        outline: "1.5px solid #c4b5fd", outlineOffset: 0 }}>
+        {arr.map((v) => {
+          const on = items.includes(v);
+          const isNew = added != null && v === added;
+          return (
+            <span key={v} style={{ width: 13, height: 13, borderRadius: 3,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 9,
+              background: on ? (isNew ? "#c4b5fd" : PURBG) : "#fff",
+              border: `1.5px solid ${on ? (isNew ? PURDK : "#c4b5fd") : "#e2e8f0"}`,
+              color: on ? PURDK : "#e2e8f0" }}>{v}</span>
+          );
+        })}
+      </span>
+      <span style={{ minWidth: 20, textAlign: "center", padding: "1px 6px", borderRadius: 999,
+        fontSize: 11.5, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
+        background: PURBG, color: PURDK, border: "1.5px solid #c4b5fd" }}>
+        {items.reduce((p, v) => p + v, 0)}
+      </span>
     </span>
   );
 }
 
-/* 부분집합 칩 — **무엇을 담았는지**(위)와 **그 합**(아래)을 같이 보여준다.
-
-   2026-09-10 선생님: **"어느 순간 뭐가 담아서 계산된건지 모르겠던데"**
-   전엔 합만 `0 1 2 3` 찍었다. 그러면 3 이 {1,2} 인지 {3} 인지 화면에 없다.
-   실제로 셋을 다 담고 나면 합이 `0 1 2 3 3 4 5 6` 이라 **3 이 두 개**인데
-   하나는 {1,2}, 하나는 {3} 이다. 화면만 봐서는 구별할 방법이 아예 없었다.
-
-   위 원소 타일(사각형)과 안 헷갈리게 알약 모양은 유지한다. */
-/* 2026-09-10 선생님: **"아까껏에 암것도 아니어서 0이었는데 2도 추가를 안하면 0이어야지"**
-
-   라벨이 `1+2` 처럼 **더하기 식**이었다. 그런데 `{2}` 하나짜리는 `2` 라고만 찍혀서,
-   그게 "없음에서 온 것" 이라는 게 안 보였다 — 첫 칩만 다른 규칙으로 읽히는 셈이다.
-   `없음` + 2 는 `0+2` 여야 말이 되는데 라벨은 그냥 `2` 였다.
-
-   → **담은 것을 집합으로 쓴다.** `{ }` `{1}` `{2}` `{1,2}`.
-     그러면 위칩 `{ }` 아래 `{2}` 가 오고, **아까 것에 2 를 넣은 것**이 눈에 보인다.
-     더하기 식이 아니니 계산으로 오해될 일도 없다. 새로 넣은 수만 색을 준다. */
-function SumChip({ items, v, isNew = false, isEmpty = false, added = null }) {
+function ChipRow({ label, sub, subs, arr, add = null, accent = false }) {
   return (
-    <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
-      <span style={{ fontSize: 10, fontWeight: 800, whiteSpace: "nowrap",
-        fontFamily: "'JetBrains Mono',monospace",
-        color: isEmpty ? "#cbd5e1" : "#94a3b8" }}>
-        {"{"}
-        {items.map((it, i) => (
-          <span key={i} style={{ color: added != null && it === added && i === items.length - 1 ? PURDK : "inherit" }}>
-            {i > 0 ? "," : ""}{it}
-          </span>
-        ))}
-        {"}"}
+    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      {/* 라벨 82px + 칩 4개(각 ~47px) + 간격 = 약 290px < 가용 343px.
+          ⚠️ 이 폭이 넘치면 칩이 줄바꿈되고 **위아래 짝이 어긋나** "아까 것 + 3" 이 안 보인다.
+             처음에 타일 16px 로 짰다가 그 사고가 났다. 실측으로 13px 로 내렸다. */}
+      <span style={{ minWidth: 82, fontSize: 10, fontWeight: 800, textAlign: "right",
+        wordBreak: "keep-all", lineHeight: 1.35, color: accent ? PURDK : "#64748b" }}>
+        {label}
+        <span style={{ display: "block", fontWeight: 700, fontSize: 9.5,
+          color: accent ? "#a78bfa" : "#94a3b8" }}>{sub}</span>
       </span>
-      <span style={{ minWidth: 26, textAlign: "center", padding: "3px 9px", borderRadius: 999,
-        fontSize: 12.5, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
-        background: isEmpty ? "#f8fafc" : isNew ? PUR : PURBG,
-        color: isEmpty ? "#94a3b8" : isNew ? "#fff" : PURDK,
-        border: `1.5px solid ${isEmpty ? "#e2e8f0" : isNew ? PURDK : "#c4b5fd"}` }}>{v}</span>
-    </span>
+      {/* 간격 7px — 그릇(outline 1.5px)이 양옆으로 1.5px 씩 나가므로 4px 로는 서로 닿는다.
+          여유 18px 중 9px(3칸 × 3px)를 쓴다. 남은 9px. */}
+      <span style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
+        {subs.map((x, i) => (
+          <MiniSet key={i} items={add == null ? x.items : [...x.items, add]} arr={arr} added={add} />
+        ))}
+      </span>
+    </div>
   );
 }
 
@@ -240,8 +253,26 @@ export function SumkSim({ E }) {
               background: active ? PUR : passed ? PURBG : "#f8fafc",
               border: `1.5px solid ${active ? PURDK : passed ? "#c4b5fd" : "#e2e8f0"}`,
               opacity: passed ? 1 : 0.4, transition: "all .15s" }}>
-              <span style={{ flex: 1, fontSize: 11.5, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace",
-                color: active ? "#fff" : PURDK }}>{setStr(r.idxs)}</span>
+              {/* 2026-09-10 기획: 이 쪽은 **위에는 타일 문법, 아래 장부는 `{1,2}` 글자 표기**를
+                  쓰고 있었다 — 한 쪽 안에서 같은 것을 두 모양으로 부른 셈이다.
+                  5쪽 칩과 같은 문법으로 맞춘다. */}
+              <span style={{ flex: 1, display: "flex", alignItems: "center" }}>
+                <span style={{ display: "inline-flex", gap: 2, borderRadius: 5,
+                  background: active ? "rgba(255,255,255,.15)" : "#fff",
+                  outline: `1.5px solid ${active ? "rgba(255,255,255,.5)" : "#c4b5fd"}`, outlineOffset: 0 }}>
+                  {arr.map((v, z) => {
+                    const on = r.idxs.includes(z);
+                    return (
+                      <span key={z} style={{ width: 13, height: 13, borderRadius: 3,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 9,
+                        background: on ? (active ? "#fff" : PURBG) : "transparent",
+                        border: `1.5px solid ${on ? (active ? "#fff" : "#c4b5fd") : "transparent"}`,
+                        color: on ? (active ? PURDK : PURDK) : (active ? "rgba(255,255,255,.35)" : "#e2e8f0") }}>{v}</span>
+                    );
+                  })}
+                </span>
+              </span>
               {/* 2026-09-08 — 안 지나온 줄은 값을 가린다.
                   미션이 "직접 세어봐요" 인데 7개 부분집합의 제곱값이 **처음부터 다 보였다.**
                   그러면 학생은 계산하는 게 아니라 확인만 하게 된다.
@@ -294,18 +325,72 @@ export function SumkSim({ E }) {
    "2 을 넣어요" 로 나오던 것을 고쳤다. */
 const EUL = (n) => ("136780".includes(String(n % 10)) ? "을" : "를");   // 일·삼·육·칠·팔·영 = 받침 있음
 
+/* ═══════════════════════════════════════════════════════════════
+   AreaSquare — 한 변이 (x + a) 인 정사각형을 네 조각으로 자른 그림.
+
+   왜 (2026-09-10): 학생 A(초6) —
+     "**(a+b)² 전개 자체를 배운 적이 없다.** 초등학교 6학년이 (a+b)²=a²+2ab+b² 를
+      증명 없이 받아들이고 그 위에 이항계수·파스칼까지 쌓아 올리는 건 무리라고 느꼈다."
+   맞다. 곱셈공식은 중학교 과정이다. 그래서 **식으로 주지 않고 넓이로 보여준다** —
+   초6 이 아는 건 "넓이 = 가로 × 세로" 뿐이고, 이 그림엔 그것만 있으면 된다.
+
+   그리고 **똑같은 직사각형이 두 개**라서 계수가 2 다.
+   학생 둘이 못 알아본 "늘 2" 이름표가 이 그림에선 아예 필요 없다.
+
+   색은 장부 세 줄과 맞춘다 — 초록 = 합², 파랑 = 합, 보라 = 개수.
+   ═══════════════════════════════════════════════════════════════ */
+const AC = {
+  s2:  { bg: "#d1fae5", bd: "#059669", fg: "#065f46" },   // 합²
+  s1:  { bg: "#dbeafe", bd: "#2563eb", fg: "#1e40af" },   // 합
+  cnt: { bg: "#ede9fe", bd: "#7c3aed", fg: "#5b21b6" },   // 개수
+};
+function AreaSquare({ x, a, unit = 27, colored = false }) {
+  const W = (x + a) * unit;
+  const P = [
+    { l: 0,        t: 0,        w: x, h: x, tone: "s2",  lab: `${x}×${x}=${x * x}` },
+    { l: x * unit, t: 0,        w: a, h: x, tone: "s1",  lab: `${x}×${a}=${x * a}` },
+    { l: 0,        t: x * unit, w: x, h: a, tone: "s1",  lab: `${a}×${x}=${a * x}` },
+    { l: x * unit, t: x * unit, w: a, h: a, tone: "cnt", lab: `${a}×${a}=${a * a}` },
+  ];
+  return (
+    <div style={{ display: "flex", justifyContent: "center", margin: "18px 0 6px" }}>
+      <div style={{ position: "relative", width: W, height: W }}>
+        {P.map((p, i) => {
+          const c = colored ? AC[p.tone] : { bg: "#f8fafc", bd: "#94a3b8", fg: "#475569" };
+          return (
+            <div key={i} style={{ position: "absolute",
+              left: p.l, top: p.t, width: p.w * unit, height: p.h * unit,
+              boxSizing: "border-box", background: c.bg, border: `2px solid ${c.bd}`,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontFamily: "'JetBrains Mono',monospace", fontWeight: 800,
+              fontSize: Math.max(9, unit * 0.30), color: c.fg, transition: "all .2s" }}>
+              {p.lab}
+            </div>
+          );
+        })}
+        {/* 변 길이 — 한 변이 x + a 라는 걸 글이 아니라 자리로 보인다 */}
+        <span style={{ position: "absolute", left: 0, top: -17, width: x * unit,
+          textAlign: "center", fontSize: 11, fontWeight: 800, color: "#64748b" }}>{x}</span>
+        <span style={{ position: "absolute", left: x * unit, top: -17, width: a * unit,
+          textAlign: "center", fontSize: 11, fontWeight: 800, color: "#9a3412" }}>{a}</span>
+        <span style={{ position: "absolute", left: -14, top: 0, height: x * unit,
+          display: "flex", alignItems: "center", fontSize: 11, fontWeight: 800, color: "#64748b" }}>{x}</span>
+        <span style={{ position: "absolute", left: -14, top: x * unit, height: a * unit,
+          display: "flex", alignItems: "center", fontSize: 11, fontWeight: 800, color: "#9a3412" }}>{a}</span>
+      </div>
+    </div>
+  );
+}
+
 export function SumkBuildSim({ E }) {
   const arr = [1, 2, 3];
 
-  /* 부분집합마다 **담은 것 목록**과 **그 합**을 같이 들고 있는다.
-     합만 들고 있으면 화면에서 "뭘 담아서 나온 합인지" 를 보여줄 수가 없다
-     (2026-09-10 선생님: "어느 순간 뭐가 담아서 계산된건지 모르겠던데"). */
   const stages = [];
-  let subs = [{ items: [], sum: 0 }];               // 아무것도 안 담은 것 하나
+  let subs = [{ items: [], sum: 0 }];
   stages.push({ a: null, subs: subs.slice() });
   for (const a of arr) {
     subs = [...subs, ...subs.map((x) => ({ items: [...x.items, a], sum: x.sum + a }))];
-    stages.push({ a, subs: subs.slice() });          // 안 담거나 / 담거나 → 딱 두 배
+    stages.push({ a, subs: subs.slice() });
   }
   const ledger = (ss) => ({
     cnt: ss.length,
@@ -313,182 +398,121 @@ export function SumkBuildSim({ E }) {
     s2: ss.reduce((p, x) => p + x.sum * x.sum, 0),
   });
 
-  if (process.env.NODE_ENV !== "production") {
-    const last = ledger(stages[stages.length - 1].subs);
-    if (last.s2 !== 100) console.error(`[sumk] 합²의 합이 ${last.s2} 다 — 3쪽 답 100 과 어긋난다`);
-  }
+  /* ═══ 걸음 목록 (2026-09-10 재설계 · 코드보다 이 표를 먼저 썼다) ═══════════
+     선생님이 이 시뮬 하나에서 **열한 번** 막히셨고, 나는 그때마다 하나씩 고쳤다.
+     숲 담당 실측: 그날 커밋 12개 제목이 전부 "~이 없었다 → 넣는다" 이고
+     "뺐다" 는 하나뿐이었다. 한 화면 글 덩어리가 **23개**가 됐다.
+     이유가 도구에 있었다 — `narr` 은 55자 상한이 있어 못 커지는데
+     시뮬 본문엔 상한이 없어서 **"설명 하나 더 붙이기" 가 저항 없는 유일한 길**이었다.
 
-  /* ═══ 걸음 목록 ═══════════════════════════════════════════════
-     2026-09-10 재설계. 코드보다 이 목록을 먼저 짰다
-     (memory/feedback_sim_design_needs_a_pass.md — 그전엔 내가 혼자 정하고 아무도 안 봤다).
+     그래서 이번 규칙: **한 걸음 = 말풍선 1개 + 시각 블록 1개.**
+     장부(답 줄)만 상시. 둘이 필요하면 그건 두 걸음이라는 뜻이다.
+     pedagogy 가 이 규칙으로 내 초안의 8걸음을 잡아냈다("도형과 장부가 동시에 바뀐다")
+     → 8a(색만) / 8b(장부에 두 줄 등장) 로 쪼갰다.
 
-     pedagogy 1순위였던 **결론 통보 재발**을 고치는 게 이 재설계의 핵심이다:
-       전: 1걸음부터 장부 세 줄(개수·합·합²)을 다 띄웠다.
-           왜 하필 그 셋인지는 8걸음 뒤에 나왔다 — 학생은 이유 없이 일곱 걸음을 봤다.
-           선생님도 같은 걸 물으셨다: "왜 숫자가 세 개나?"
-       후: **우리가 원하는 한 줄(합²의 합)만** 들고 시작한다.
-           `expand` 에서 (1+2)² 를 펼치다 **"합²만으론 안 되네"** 를 만나고,
-           `grow` 에서 나머지 두 줄이 **필요해서** 생긴다.
-
-     그리고 `seven` 을 새로 넣었다 — 1·3쪽이 "비어있지 않은 부분집합 **7개**" 를 세 번 못박는데
-     이 시뮬은 **8** 을 띄운다. 선생님·pedagogy·student 셋이 같은 자리를 짚었다.
-     전엔 화면이 이 모순을 **언급조차 안 했다.**                            ═══ */
+     덜어낸 것: 집합 기호 · 더하기 식 · 장부 밑 식 · 머리말 ·
+                "골라 담을 숫자들" 타일 줄 · 알약 범벅 4걸음 · 앞부분 2걸음.
+     13걸음 → 10걸음.                                        ═══════════════ */
   const steps = [
     { k: "ask" },
-    ...Array.from({ length: arr.length + 1 }, (_, z) => ({ k: "stage", i: z })),
-    { k: "seven" },
+    { k: "stage", i: 1 }, { k: "stage", i: 2 }, { k: "stage", i: 3 },
+    { k: "same" },
     { k: "double" },
-    { k: "expand" },
-    { k: "grow" },
-    { k: "rule1" },
-    { k: "rule2" },
-    { k: "name" },
+    { k: "area" },
+    { k: "color" },
+    { k: "rows" },
     { k: "fast" },
   ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
 
-  const EX_STAGE = 1;                      // 1 만 담은 상태 = 갱신식의 "직전"
-  const BACK = ["expand", "grow", "rule1", "rule2"];   // 이 걸음들은 "직전" 을 보여준다
-  const stageIdx =
-    s.k === "stage" ? s.i
-    : s.k === "ask" ? 0
-    : BACK.includes(s.k) ? EX_STAGE
-    : stages.length - 1;
+  /* 넓이 그림에 쓸 값. pedagogy 판정: **되돌아가지 않는다.**
+     3 을 담기 직전 상태(1·2 만 정한 상태)를 그대로 쓴다 — 그게 3걸음이 끝난 자리다.
+     x = 그 상태의 합 하나(부분집합 {2} 의 합 = 2), a = 지금 담는 수 3.
+     검산: (2+3)² = 4 + 6 + 6 + 9 = 25 ✓ */
+  const PRE = 2;                                   // 1·2 까지 정한 상태
+  const pre = ledger(stages[PRE].subs);
+  const AX = 2, AA = arr[PRE];                     // x = 2, a = 3
+  const takeS2 = pre.s2 + 2 * AA * pre.s1 + AA * AA * pre.cnt;
+
+  const AREA = ["area", "color", "rows"].includes(s.k);
+  const stageIdx = s.k === "stage" ? s.i : s.k === "ask" ? 0 : AREA ? PRE : stages.length - 1;
   const st = stages[stageIdx];
   const L = ledger(st.subs);
   const prev = stageIdx > 0 ? ledger(stages[stageIdx - 1].subs) : null;
-  const ex = { old: ledger(stages[EX_STAGE].subs), oldSums: stages[EX_STAGE].subs.map((x) => x.sum),
-               a: arr[EX_STAGE], now: ledger(stages[EX_STAGE + 1].subs) };
-  const isBack = BACK.includes(s.k);
-  /* 장부는 **자란다.** `grow` 전까지는 우리가 원하는 한 줄만 보여준다. */
-  const threeRows = ["grow", "rule1", "rule2", "name", "fast"].includes(s.k);
+  const threeRows = ["rows", "fast"].includes(s.k);
+
+  if (process.env.NODE_ENV !== "production") {
+    if (ledger(stages[3].subs).s2 !== 100) console.error("[sumk] 합²의 합이 100 이 아니다");
+    if ((AX + AA) ** 2 !== AX * AX + 2 * AX * AA + AA * AA) console.error("[sumk] 넓이 조각 합이 안 맞는다");
+    if (pre.s2 + takeS2 !== 100) console.error(`[sumk] 갱신식이 ${pre.s2 + takeS2} 다 — 100 이어야 한다`);
+  }
 
   const say = (() => {
     if (s.k === "ask") return t(E,
-      <>We listed all 7 subsets by hand. With N = 100,000 we can&apos;t.<br />
-        Could the answer <b>grow</b> as we decide one number at a time?</>,
-      <>아까는 부분집합 7개를 손으로 다 나열했죠. N 이 10만이면 못 해요.<br />
-        숫자를 <b>하나씩 담을지 말지 정하면서</b> 답이 자라게 할 수는 없을까요?</>);
-    if (s.k === "stage" && s.i === 0) return t(E,
-      <>Choosing in-or-out for each number builds the subsets one at a time.<br />
-        <b>We only want one number</b>: each sum squared, all added up.</>,
-      <>숫자마다 <b>담을지 말지</b> 고르면 부분집합이 하나씩 만들어져요.<br />
-        <b>우리가 원하는 건 한 줄뿐</b>이에요 — 각 합을 제곱해서 다 더한 것.</>);
+      <>Instead of listing every subset, could we just <b>grow this one number</b>?</>,
+      <>부분집합을 다 나열하지 말고, <b>이 한 줄만 키울</b> 순 없을까요?</>);
     if (s.k === "stage") return t(E,
-      <>Now <b>{st.a}</b>: each subset either <b>leaves it out</b> or <b>puts it in</b>.<br />
-        Left out → the sum stays. Put in → the sum grows by <b>{st.a}</b>.</>,
-      <>이제 <b>{st.a}</b>{EUL(st.a)} <b>담을지 말지</b> 골라요.<br />
-        안 담으면 합은 그대로, 담으면 합이 <b>{st.a}</b> 만큼 커져요.</>);
-    /* 2026-09-10 — 1·3쪽은 "비어있지 않은 부분집합 7개" 라고 세 번 못박는데
-       여기 개수는 8 이다. 선생님·pedagogy·student 셋이 같은 자리를 짚었다.
-       전엔 이 모순을 화면이 **언급조차 안 했고**, 해소는 두 쪽 뒤 코드에서야 한 줄 나왔다. */
-    if (s.k === "seven") return t(E,
-      <>Wait — page 1 said <b>7</b> subsets, but this says <b>{L.cnt}</b>.<br />
-        The extra one is the empty pick. Its sum is 0, so it adds <b>0² = 0</b> —<br />
-        the total is still the same <b>{L.s2}</b> we counted by hand.</>,
-      <>어? 앞에서는 <b>7개</b>라고 했는데 여기는 <b>{L.cnt}개</b>네요.<br />
-        하나 더 있는 건 <b>아무것도 안 담은 것</b>이에요. 합이 0 이라 <b>0² = 0</b> 만 보태요 —<br />
-        그래서 합계는 손으로 세어 구한 <b>{L.s2}</b> 그대로예요.</>);
+      <>Each subset either <b>leaves {st.a} out</b> or <b>puts it in</b>. Putting it in adds <b>{st.a}</b> to the sum.</>,
+      <>부분집합마다 <b>{st.a}{EUL(st.a)} 안 담거나 담거나</b>. 담으면 합이 <b>{st.a}</b> 만큼 커져요.</>);
+    if (s.k === "same") return t(E,
+      <><b>{L.s2}</b> — the number we counted by hand two pages ago.<br />
+        (There are {L.cnt} subsets here, not 7: the empty one adds 0² = 0.)</>,
+      <><b>{L.s2}</b> — 앞 쪽에서 손으로 세어 구한 그 답이에요.<br />
+        (여기 부분집합은 7개가 아니라 {L.cnt}개인데, 빈 것은 0² = 0 만 보태요.)</>);
     if (s.k === "double") return t(E,
-      <>Each number <b>doubles</b> the list — 100,000 numbers means 2¹⁰⁰⁰⁰⁰ subsets. We can never hold that.<br />
-        But look: the bottom row is just the top row with <b>{arr[arr.length - 1]}</b> added. There is a rule.</>,
-      <>숫자 하나마다 목록이 <b>두 배</b>예요 — 10만 개면 2¹⁰⁰⁰⁰⁰ 개. 이건 절대 못 들고 다녀요.<br />
-        그런데 보세요, 아랫줄은 윗줄에 <b>{arr[arr.length - 1]}</b> 을 더한 것뿐이에요. <b>규칙이 있어요.</b></>);
-    if (s.k === "expand") {
-      /* 화면에 떠 있는 숫자만 쓴다 — 직전 합 하나(x)와 지금 담는 수(a).
-         ⚠️ 2026-09-10 ux: 이 줄만 `Term` 이름표가 빠져 있었다. 하필 a = 2 라
-         가운데 항 `2·1·2` 의 왼쪽 2(계수)와 오른쪽 2(담는 수)가 같은 숫자로 겹쳤다. */
-      const x = ex.oldSums[ex.oldSums.length - 1], a = ex.a;
-      return t(E,
-        <>Back to just before <b>{a}</b> went in. Take one sum, <b>{x}</b>, and square it:<br />
-          ( <Term v={x} lab="sum" tone="s1" /> + <Term v={a} lab="put in" tone="a" /> )² ={" "}
-          <Term v={x} lab="sum" tone="s1" />² + <Term v={2} lab="always 2" tone="c" />·<Term v={x} lab="sum" tone="s1" />·<Term v={a} lab="put in" tone="a" /> + <Term v={a} lab="put in" tone="a" />² = <b>{(x + a) ** 2}</b><br />
-          <b>The sum itself shows up.</b> Squares alone are not enough.</>,
-        <><b>{a}</b> 를 담기 <b>직전</b>으로 돌아가요. 합 하나(<b>{x}</b>)를 제곱해봐요 —<br />
-          ( <Term v={x} lab="합" tone="s1" /> + <Term v={a} lab="담는 수" tone="a" /> )² ={" "}
-          <Term v={x} lab="합" tone="s1" />² + <Term v={2} lab="늘 2" tone="c" />·<Term v={x} lab="합" tone="s1" />·<Term v={a} lab="담는 수" tone="a" /> + <Term v={a} lab="담는 수" tone="a" />² = <b>{(x + a) ** 2}</b><br />
-          <b>합이 튀어나왔어요.</b> 합²만 갖고는 안 되네요.</>);
-    }
-    if (s.k === "grow") return t(E,
-      <>To add up all the <b>2·sum·{ex.a}</b> parts we need the <b>sum</b> row.<br />
-        To add up all the <b>{ex.a}²</b> parts we need the <b>count</b> row.<br />
-        So two more rows appear — <b>that is why there are three</b>.</>,
-      <><b>2·합·{ex.a}</b> 를 다 더하려면 <b>합</b> 줄이 있어야 해요.<br />
-        <b>{ex.a}²</b> 를 다 더하려면 <b>개수</b> 줄이 있어야 하고요.<br />
-        그래서 두 줄이 더 생겨요 — <b>세 줄인 이유가 이거예요.</b></>);
-    if (s.k === "rule1") return t(E,
-      <><b>sum</b> row, with no list at all:<br />
-        left out stays <Term v={ex.old.s1} lab="sum" tone="s1" />, put in gives{" "}
-        <Term v={ex.old.s1} lab="sum" tone="s1" /> + <Term v={ex.a} lab="put in" tone="a" />×<Term v={ex.old.cnt} lab="count" /> = <b>{ex.old.s1 + ex.a * ex.old.cnt}</b><br />
-        together = <b>{ex.now.s1}</b> ✓</>,
-      <><b>합</b> 줄부터 — 목록 없이 구해져요.<br />
-        안 담은 쪽은 <Term v={ex.old.s1} lab="합" tone="s1" /> 그대로, 담은 쪽은{" "}
-        <Term v={ex.old.s1} lab="합" tone="s1" /> + <Term v={ex.a} lab="담는 수" tone="a" />×<Term v={ex.old.cnt} lab="개수" /> = <b>{ex.old.s1 + ex.a * ex.old.cnt}</b><br />
-        둘을 합쳐 <b>{ex.now.s1}</b> ✓</>);
-    if (s.k === "rule2") return t(E,
-      <><b>squares</b> row — every piece is a row we already have:<br />
-        <Term v={ex.old.s2} lab="sum²" tone="s2" /> + ( <Term v={ex.old.s2} lab="sum²" tone="s2" /> + <Term v={2} lab="always 2" tone="c" />·<Term v={ex.a} lab="put in" tone="a" />·<Term v={ex.old.s1} lab="sum" tone="s1" /> + <Term v={ex.a} lab="put in" tone="a" />²·<Term v={ex.old.cnt} lab="count" /> )<br />
-        = <b>{ex.now.s2}</b> ✓</>,
-      <><b>합²</b> 줄 — 조각이 전부 우리가 이미 가진 줄이에요.<br />
-        <Term v={ex.old.s2} lab="합²" tone="s2" /> + ( <Term v={ex.old.s2} lab="합²" tone="s2" /> + <Term v={2} lab="늘 2" tone="c" />·<Term v={ex.a} lab="담는 수" tone="a" />·<Term v={ex.old.s1} lab="합" tone="s1" /> + <Term v={ex.a} lab="담는 수" tone="a" />²·<Term v={ex.old.cnt} lab="개수" /> )<br />
-        = <b>{ex.now.s2}</b> ✓</>);
-    if (s.k === "name") return t(E,
-      <>We never listed a single subset — three numbers were enough.<br />
-        Their names: <b>P[0]</b>, <b>P[1]</b>, <b>P[2]</b>. The answer is <b>P[2]</b> = <b>{L.s2}</b>.</>,
-      <>부분집합을 한 번도 안 나열했어요 — 숫자 세 개면 됐어요.<br />
-        이 셋의 이름이 <b>P[0]</b>, <b>P[1]</b>, <b>P[2]</b> 예요. 답은 <b>P[2]</b> = <b>{L.s2}</b>.</>);
-    /* 2026-09-10 auditor: "30만 번" 은 과소평가였다. 세 줄을 O(1) 로 친 것인데
-       실제로는 (t, j) 쌍마다 곱셈이 든다 — K=2 면 6쌍 × 10만 = 60만.
-       그리고 "0.4초" 는 K=3 실측치인데 앞 문장은 K=2 얘기였다. K 를 밝힌다.
-       (K=2 는 0.29초, K=3 은 0.42~0.45초. 내가 이 quest 의 py 코드로 직접 쟀다.) */
+      <>But the list <b>doubles</b> every time. 100,000 numbers → 2¹⁰⁰⁰⁰⁰ subsets. We can never hold it.</>,
+      <>그런데 목록이 매번 <b>두 배</b>예요. 10만 개면 2¹⁰⁰⁰⁰⁰ 개 — 절대 못 들고 다녀요.</>);
+    if (s.k === "area") return t(E,
+      <>Put in <b>{AA}</b> and a sum of <b>{AX}</b> becomes <b>{AX + AA}</b>. Draw ({AX}+{AA})² as a square:<br />
+        {AX * AX} + {AX * AA} + {AA * AX} + {AA * AA} = <b>{(AX + AA) ** 2}</b></>,
+      <><b>{AA}</b>{EUL(AA)} 담으면 합 <b>{AX}</b> 는 <b>{AX + AA}</b> 가 돼요. ({AX}+{AA})² 를 정사각형으로 그려봐요 —<br />
+        {AX * AX} + {AX * AA} + {AA * AX} + {AA * AA} = <b>{(AX + AA) ** 2}</b></>);
+    if (s.k === "color") return t(E,
+      <>Three kinds of piece. And the two <b>{AX}×{AA}</b> rectangles are <b>the same</b> — that is where the 2 comes from.</>,
+      <>조각이 세 종류예요. 그리고 <b>{AX}×{AA}</b> 직사각형이 <b>똑같이 두 개</b>죠 — 2 가 붙는 이유가 이거예요.</>);
+    if (s.k === "rows") return t(E,
+      <>Every old sum splits the same way — so we need <b>all three</b> colours:<br />
+        green {pre.s2} · blue 2×{AA}×{pre.s1} = {2 * AA * pre.s1} · purple {AA}²×{pre.cnt} = {AA * AA * pre.cnt}</>,
+      <>합 하나하나가 다 이렇게 갈라져요 — 그래서 <b>세 색이 다</b> 필요해요.<br />
+        초록 {pre.s2} · 파랑 2×{AA}×{pre.s1} = {2 * AA * pre.s1} · 보라 {AA}²×{pre.cnt} = {AA * AA * pre.cnt}</>);
     return t(E,
-      <><b>So why is this fast?</b> Throw the list away — only the three rows matter.<br />
-        100,000 numbers = <b>300,000</b> cells to fix, about <b>600,000</b> multiplications.
-        Not 2¹⁰⁰⁰⁰⁰.<br />
-        Run for real on 100,000 numbers with K = 3: about <b>0.4 seconds</b>.</>,
-      <><b>그래서 왜 빠른가요?</b> 목록은 버려요 — 세 줄만 있으면 되니까요.<br />
-        10만 개면 고칠 칸이 <b>30만</b>, 곱셈이 <b>60만 번</b>쯤이에요. 2¹⁰⁰⁰⁰⁰ 이 아니라요.<br />
-        실제로 10만 개를 K = 3 으로 돌리면 <b>0.4초</b> 만에 끝나요.</>);
+      <><b>So why is it fast?</b> Throw the list away — three rows are enough.<br />
+        100,000 numbers = 300,000 cells, about 600,000 multiplications. Not 2¹⁰⁰⁰⁰⁰. Really runs in <b>0.4 s</b> (K = 3).</>,
+      <><b>그래서 왜 빠른가요?</b> 목록은 버려요 — 세 줄이면 되니까요.<br />
+        10만 개면 고칠 칸 30만, 곱셈 60만 번쯤. 2¹⁰⁰⁰⁰⁰ 이 아니라요. 실제로 <b>0.4초</b> (K = 3).</>);
   })();
 
   const LedgerBox = () => {
-    const sq = st.subs.map((x) => `${x.sum}²`).join("+");
-    const pl = st.subs.map((x) => x.sum).join("+");
     const all = [
-      { lab: t(E, "how many subsets", "부분집합 개수"), name: "P[0]", v: L.cnt, p: prev && prev.cnt, ex: null },
-      { lab: t(E, "each sum, added up", "각 합을 더한 것"), name: "P[1]", v: L.s1, p: prev && prev.s1, ex: pl },
-      { lab: t(E, "each sum SQUARED, added up", "각 합을 제곱해서 더한 것"), name: "P[2]", v: L.s2, p: prev && prev.s2, ex: sq },
+      { lab: t(E, "how many subsets", "부분집합 개수"), name: "P[0]", v: L.cnt, p: prev && prev.cnt, tone: "cnt" },
+      { lab: t(E, "each sum, added up", "각 합을 더한 것"), name: "P[1]", v: L.s1, p: prev && prev.s1, tone: "s1" },
+      { lab: t(E, "each sum SQUARED, added up", "각 합을 제곱해서 더한 것"), name: "P[2]", v: L.s2, p: prev && prev.s2, tone: "s2" },
     ];
-    /* 장부는 자란다 — `grow` 전까지는 우리가 원하는 한 줄만. */
     const rowsOut = threeRows ? all : [all[2]];
     return (
-      <div style={{ maxWidth: 360, margin: "12px auto 0", display: "grid", gap: 4 }}>
-        {rowsOut.map((r, i) => {
-          const changed = s.k === "stage" && stageIdx > 0 && r.p !== r.v;
-          const isAnswer = r.name === "P[2]" && ["seven", "name", "fast"].includes(s.k);
-          const justAppeared = s.k === "grow" && r.name !== "P[2]";
+      <div style={{ maxWidth: 340, margin: "10px auto 0", display: "grid", gap: 4 }}>
+        {rowsOut.map((r) => {
+          const changed = s.k === "stage" && r.p !== r.v;
+          const isAnswer = r.name === "P[2]" && ["same", "fast"].includes(s.k);
+          const c = AC[r.tone];
+          /* `rows` 걸음에서만 장부가 넓이 그림과 **색으로** 이어진다.
+             그 전에는 색을 안 쓴다 — 색이 미리 있으면 무슨 뜻인지 모른 채 보게 된다. */
+          const painted = threeRows;
           return (
-            <div key={r.name} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 12px", borderRadius: 9,
-              background: isAnswer ? "#ecfdf5" : justAppeared ? PURBG : changed ? PURBG : "#f8fafc",
-              border: `1.5px solid ${isAnswer ? "#6ee7b7" : justAppeared ? PUR : changed ? PUR : "#e2e8f0"}` }}>
-              <span style={{ flex: 1, fontSize: 12, fontWeight: 700, color: "#475569", wordBreak: "keep-all" }}>
-                {isBack && <b style={{ color: PUR }}>{t(E, "old ", "직전 ")}</b>}{r.lab}
-                {justAppeared && <b style={{ color: PUR }}>{t(E, "  ← new", "  ← 새로 생김")}</b>}
-                {r.ex && (
-                  <span style={{ display: "block", fontSize: 9.5, fontWeight: 700, color: "#94a3b8",
-                    fontFamily: "'JetBrains Mono',monospace", marginTop: 1, wordBreak: "break-all" }}>
-                    {r.ex}
-                  </span>
-                )}
+            <div key={r.name} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 12px", borderRadius: 9,
+              background: painted ? c.bg : isAnswer ? "#ecfdf5" : changed ? PURBG : "#f8fafc",
+              border: `1.5px solid ${painted ? c.bd : isAnswer ? "#6ee7b7" : changed ? PUR : "#e2e8f0"}` }}>
+              <span style={{ flex: 1, fontSize: 12, fontWeight: 700, color: painted ? c.fg : "#475569", wordBreak: "keep-all" }}>
+                {r.lab}
               </span>
-              {s.k === "name" || s.k === "fast" ? (
-                <span style={{ fontSize: 11.5, fontWeight: 800, color: PUR, fontFamily: "'JetBrains Mono',monospace" }}>
+              {s.k === "fast" && (
+                <span style={{ fontSize: 11.5, fontWeight: 800, color: c.fg, fontFamily: "'JetBrains Mono',monospace" }}>
                   {r.name}
                 </span>
-              ) : null}
-              <span style={{ minWidth: 46, textAlign: "right", fontSize: 15, fontWeight: 800,
-                fontFamily: "'JetBrains Mono',monospace", color: isAnswer ? "#15803d" : changed || justAppeared ? PURDK : "#1f2937" }}>
+              )}
+              <span style={{ minWidth: 44, textAlign: "right", fontSize: 15, fontWeight: 800,
+                fontFamily: "'JetBrains Mono',monospace", color: painted ? c.fg : isAnswer ? "#15803d" : changed ? PURDK : "#1f2937" }}>
                 {r.v}
               </span>
             </div>
@@ -499,96 +523,29 @@ export function SumkBuildSim({ E }) {
   };
 
   return (
-    /* maxHeightCss — SimShell 기본값 340px 로는 모자라 400 으로 재서 맞췄다.
-       ⚠️ 그래도 모바일에서는 안쪽이 잘린다. 그래서 **장부(답)를 칩 목록 위에** 둔다 —
-          잘릴 거면 지나간 목록이 잘려야지 답이 잘리면 안 된다.
-          도구: `node check-sim-nav.mjs sumk` (▶ 뿐 아니라 **안쪽 잘림도** 잰다). */
     <SimShell idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels
       maxHeightCss="calc(100dvh - 400px)">
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Grow the answer without listing", "나열하지 않고 답 키우기")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <Say tone={s.k === "seven" || s.k === "expand" ? "stuck" : s.k === "grow" || s.k === "name" || s.k === "fast" ? "aha" : "go"}>{say}</Say>
+      <Say tone={s.k === "double" ? "stuck" : ["same", "rows", "fast"].includes(s.k) ? "aha" : "go"}>{say}</Say>
 
       <LedgerBox />
 
-      {(s.k === "ask" || s.k === "stage") && (
-        <>
-          <div style={{ fontSize: 10.5, fontWeight: 800, color: "#94a3b8", textAlign: "center", margin: "12px 0 5px" }}>
-            {t(E, "the numbers we choose from", "골라 담을 숫자들")}
-          </div>
-          <Row>
-            {arr.map((v, i) => {
-              const inYet = i < stageIdx;
-              const justNow = s.k === "stage" && i === stageIdx - 1;
-              return <Tile key={i} ch={v} size={44}
-                bg={justNow ? PUR : inYet ? PURBG : "#fff"} bd={inYet || justNow ? PUR : "#e2e8f0"}
-                fg={justNow ? "#fff" : inYet ? PURDK : "#cbd5e1"} faded={!inYet && !justNow} />;
-            })}
-          </Row>
-        </>
-      )}
-
-      {/* 칩 — 담은 것(위) + 합(아래). 한 줄이 아니라 **안 담음 / 담음 두 줄**로 가른다.
-          선생님(2026-09-10): "위에서는 2를 얘기하다가 갑자기 왜 3?" — 3 이 {1,2} 라는 걸
-          화면이 말한 적이 없었다. 이제 칩 위에 `1+2` 가 적힌다. */}
-      {/* `fast` 에서는 칩을 **안 그린다.** 전엔 회색으로 되살렸는데,
-          8~12걸음에 없다가 13에서 다시 나타나는 게 이상했고 그것 때문에 57px 이 잘렸다.
-          "목록은 버려요" 는 말풍선과 **장부만 남은 화면**이 이미 말한다. */}
-      {(s.k === "stage" || s.k === "seven" || s.k === "double") && (
-        <div style={{ maxWidth: 420, margin: "12px auto 0" }}>
-          {stageIdx === 0 ? (
-            <>
-              <div style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 6 }}>
-                {t(E, "sums of every subset so far", "지금까지 부분집합들의 합")}
-              </div>
-              <Row><SumChip items={[]} v={0} isEmpty /></Row>
-            </>
-          ) : (
-            <>
-              {/* 2026-09-10 선생님: **"2를 안담는다는건 2만 빼고 다 있다는건가?"**
-                  아니다 — 그 줄은 **2 가 안 들어간 부분집합들**이고 지금은 {} 와 {1} 둘이다.
-                  내 라벨("2 안 담음")이 **한 부분집합을 설명하는 말**처럼 읽혔다.
-                  두 줄이 "아까 목록 그대로 / 아까 목록에 2 를 넣은 것" 이라는 걸 라벨이 직접 말한다. */}
-              <div style={{ fontSize: 10.5, fontWeight: 800, color: "#64748b", textAlign: "center", marginBottom: 7, wordBreak: "keep-all" }}>
-                {t(E, `every subset so far — each one either leaves ${st.a} out or puts it in`,
-                     `지금까지 만든 부분집합 — 하나하나가 ${st.a}${EUL(st.a)} 안 담거나 담거나`)}
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                <span style={{ minWidth: 104, fontSize: 10.5, fontWeight: 800, color: "#64748b", textAlign: "right", wordBreak: "keep-all", lineHeight: 1.35 }}>
-                  {t(E, `${st.a} left out`, `${st.a} 안 담음`)}
-                  <span style={{ display: "block", fontWeight: 700, color: "#94a3b8", fontSize: 9.5 }}>
-                    {t(E, "= same as before", "= 아까 것 그대로")}
-                  </span>
-                </span>
-                <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                  {stages[stageIdx - 1].subs.map((x, i) => (
-                    <SumChip key={i} items={x.items} v={x.sum} isEmpty={x.items.length === 0} />
-                  ))}
-                </span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ minWidth: 104, fontSize: 10.5, fontWeight: 800, color: PURDK, textAlign: "right", wordBreak: "keep-all", lineHeight: 1.35 }}>
-                  {t(E, `${st.a} put in`, `${st.a} 담음`)}
-                  <span style={{ display: "block", fontWeight: 700, color: "#a78bfa", fontSize: 9.5 }}>
-                    {t(E, `= before, plus ${st.a}`, `= 아까 것에 ${st.a} 추가`)}
-                  </span>
-                </span>
-                <span style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                  {stages[stageIdx - 1].subs.map((x, i) => (
-                    <SumChip key={i} items={[...x.items, st.a]} v={x.sum + st.a} isNew added={st.a} />
-                  ))}
-                </span>
-              </div>
-            </>
-          )}
-          {s.k === "double" && (
-            <Caption color={PURDK}>
-              {t(E, "one number → the list doubles", "숫자 하나에 목록이 두 배")}
-            </Caption>
-          )}
+      {/* 이번 걸음의 블록 **하나**. 칩이거나, 넓이 그림이거나, 아무것도 아니거나. */}
+      {(s.k === "stage" || s.k === "same" || s.k === "double") && (
+        <div style={{ maxWidth: 380, margin: "14px auto 0" }}>
+          <ChipRow label={t(E, `${st.a} left out`, `${st.a} 안 담음`)}
+            sub={t(E, "= same as before", "= 아까 것 그대로")}
+            subs={stages[stageIdx - 1].subs} arr={arr} />
+          <div style={{ height: 6 }} />
+          <ChipRow label={t(E, `${st.a} put in`, `${st.a} 담음`)}
+            sub={t(E, `= before, plus ${st.a}`, `= 아까 것에 ${st.a} 추가`)}
+            subs={stages[stageIdx - 1].subs} arr={arr} add={st.a} accent />
         </div>
       )}
+
+      {AREA && <AreaSquare x={AX} a={AA} colored={s.k !== "area"} />}
     </SimShell>
   );
 }
