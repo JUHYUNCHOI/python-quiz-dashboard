@@ -228,7 +228,7 @@ export function BruteLimitSim({ E }) {
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Trying every board \u2014 in time?", "보드를 전부 해보기 \u2014 시간 안에 될까요?")}
+        title={t(E, "Trying every board — in time?", "보드를 전부 해보기 — 시간 안에 될까요?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
       <div ref={sayRef}>
@@ -357,7 +357,7 @@ export function BitBoardSim({ E }) {
           fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 8px" }}>
           <span>{t(E, "number", "숫자")}</span>
           <span>{t(E, "bits = 0/1 (cell 0 first)", "비트 = 0 아니면 1 (0번 칸부터)")}</span>
-          <span>{t(E, "board (cells 0\u00b71\u00b72)", "보드 (0\u00b71\u00b72번 칸)")}</span>
+          <span>{t(E, "board (cells 0·1·2)", "보드 (0·1·2번 칸)")}</span>
         </div>
         {rows.map((b) => {
           const cur = s.k === "row" && b === s.b;
@@ -469,6 +469,11 @@ export function WholeRunSim({ E }) {
   seen.forEach((b) => { const sc = scoreOf(b).sc; if (sc > runBest) { runBest = sc; runWays = 1; } else if (sc === runBest) runWays++; });
 
   const cur = s.k === "board" ? scoreOf(s.b) : null;
+  /* 이 보드에서 실제로 꺼내 쓴 표 칸 — "표를 꺼내 더하면" 이 눈에 보이게 (2026-09-11).
+     선생님: "이거 볼때는 **앞의 내용이 없어져서** 뭘 얘기하는지 모르겠어"
+     2걸음에서 만든 표가 3걸음부터 사라져 있었다. feedback_screen_must_not_rely_on_memory. */
+  const used = (x, a, b2) =>
+    cur && cur.Ms.includes(x) && cur.Os.includes(a) && cur.Os.includes(b2);
   const say =
     s.k === "read" ? t(E,
       <><b>1.</b> Read the input — <b>{RAW.length} moves</b> on {N} cells.<br />This is the official sample. The answer should come out <b>{best} {ways}</b>.</>,
@@ -514,13 +519,39 @@ export function WholeRunSim({ E }) {
             </div>
           )}
 
-          {s.k === "table" && (
-            <div style={{ display: "grid", gap: 4 }}>
-              {filled.map(([x, a, b, v]) => (
-                <Row key={`${x}-${a}-${b}`}
-                  label={t(E, <>x = {x + 1} (M) · O pair {a + 1}·{b + 1}</>, <>x = {x + 1} (M 자리) · O 짝 {a + 1}·{b + 1}</>)}
-                  value={v} hot />
-              ))}
+          {(s.k === "table" || s.k === "board") && (
+            <div style={{ display: "grid", gap: 4, marginBottom: s.k === "board" ? 10 : 0 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: "#94a3b8", textAlign: "center",
+                marginBottom: 2, wordBreak: "keep-all" }}>
+                {s.k === "table"
+                  ? t(E, "the table we just built", "방금 만든 표")
+                  : t(E, "the same table — green rows are the ones this board reads",
+                       "아까 그 표 — 초록이 이 보드가 꺼내 쓰는 칸이에요")}
+              </div>
+              {filled.map(([x, a, b, v]) => {
+                const on = s.k === "table" || used(x, a, b);
+                return (
+                  <div key={`${x}-${a}-${b}`} style={{ display: "flex", justifyContent: "space-between",
+                    alignItems: "center", padding: "6px 11px", borderRadius: 8,
+                    opacity: on ? 1 : 0.4,
+                    background: on ? "#ecfdf5" : "#f8fafc",
+                    border: `1.5px solid ${on ? "#34d399" : "#e2e8f0"}` }}>
+                    <span style={{ fontSize: 11.5, fontWeight: 700, color: "#475569", wordBreak: "keep-all" }}>
+                      {t(E, <>x = {x + 1} (M) · O pair {a + 1}·{b + 1}</>,
+                           <>x = {x + 1} (M 자리) · O 짝 {a + 1}·{b + 1}</>)}
+                    </span>
+                    <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 13,
+                      color: on ? "#047857" : "#94a3b8" }}>{v}</span>
+                  </div>
+                );
+              })}
+              {s.k === "board" && (
+                <div style={{ fontSize: 11.5, fontWeight: 800, color: "#047857", textAlign: "center",
+                  marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>
+                  {filled.filter(([x, a, b]) => used(x, a, b)).map(([, , , v]) => v).join(" + ") || "0"}
+                  {" = "}{cur.sc}
+                </div>
+              )}
             </div>
           )}
 
@@ -691,8 +722,8 @@ export function IsAtTableSim({ E }) {
                 fontSize: 12, fontWeight: 700, color: "#5b21b6", lineHeight: 1.7, wordBreak: "keep-all" }}>
                 {s.k === "use" ? (
                   <>
-                    {t(E, <>O cells are <b>2, 3, 4, 5</b> \u2192 pairs:</>,
-                         <>O 자리는 <b>2, 3, 4, 5</b> 번 \u2192 짝은:</>)}
+                    {t(E, <>O cells are <b>2, 3, 4, 5</b> → pairs:</>,
+                         <>O 자리는 <b>2, 3, 4, 5</b> 번 → 짝은:</>)}
                     <br />
                     <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 12 }}>
                       {oPairs.map(([a2, b2]) => `(${a2 + 1},${b2 + 1})`).join("  ")}
