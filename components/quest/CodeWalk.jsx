@@ -148,7 +148,12 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
                   transition: "background .2s",
                 }}>
                 <span style={{ color: isHot ? "#a3b3c9" : "#5b6675", width: 24, textAlign: "right", marginRight: 12, flexShrink: 0, userSelect: "none", fontSize: 11.5 }}>{i + 1}</span>
-                <span style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", flex: 1, minWidth: 0 }}>
+                {/* ⚠️ 2026-09-11: break-word 가 **식별자 한가운데를 쪼갰다.**
+                    모바일 375px 에서 `int` 가 "in"+"t" 로, `it->first` 가 "it-"+">first" 로 갈렸다
+                    (ux 가 moohunt C++ 3번째 조각 스크린샷에서 잡음).
+                    바깥 상자에 이미 overflowX: auto 가 있다(99줄) — 코드는 **접지 말고 가로로 밀어야** 한다.
+                    한글 줄바꿈 규칙은 말풍선 얘기다. 코드 영역엔 적용되지 않는다. */}
+                <span style={{ whiteSpace: "pre", wordBreak: "normal", overflowWrap: "normal", flexShrink: 0 }}>
                   {highlight(line, lang)}
                 </span>
                 {mk && i === mk.from && (

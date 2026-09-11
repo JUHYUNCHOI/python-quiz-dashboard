@@ -401,7 +401,12 @@ export function CodeBlock({ lines, lang = "py", dimUntil = 0 }: CodeBlockProps) 
           <span className="text-gray-500 w-7 text-right mr-2.5 flex-shrink-0 select-none text-[11px] pt-px">
             {i + 1}
           </span>
-          <span style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", flex: 1, minWidth: 0 }}>{highlight(l, lang)}</span>
+          {/* ⚠️ 2026-09-11: break-word 가 **식별자 한가운데를 쪼갰다.** 모바일 375px 에서
+              `int` 가 "in"+"t" 로, `n-1-j)` 가 "n-1-"+"j)" 로 갈렸다 (ux 가 스크린샷으로 잡음).
+              바깥 상자에 이미 overflow-x-auto 가 있다 — 코드는 **접지 말고 가로로 밀어야** 한다.
+              한글 줄바꿈 규칙(keep-all)은 말풍선 얘기지 코드 영역 얘기가 아니다.
+              CodeWalk.jsx 도 같은 이유로 같이 고쳤다. */}
+          <span style={{ whiteSpace: "pre", wordBreak: "normal", overflowWrap: "normal", flexShrink: 0 }}>{highlight(l, lang)}</span>
         </div>
       ))}
     </div>

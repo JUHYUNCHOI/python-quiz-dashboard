@@ -418,9 +418,18 @@ export function makeMooHuntCh2(E, lang = "py") {
             borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#065f46",
             lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
             {"\u2705 "}{t(E,
-              "This is the code to submit — the official solution from usaco.org.\nThe idea is the one you just saw: only 'one M cell + two O cells' can score.\nSame answer as the slow code, but it looks at far fewer moves.",
-              "이게 제출할 코드예요 — usaco.org 공식 풀이.\n방금 본 그 생각이에요: 득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐.\n답은 느린 코드와 똑같고, 보는 무브 수만 확 줄어요.")}
+              "The official solution from usaco.org.\nThe idea is the one you just saw: only 'one M cell + two O cells' can score.\nSame answer as the slow code, but it looks at far fewer moves.",
+              "usaco.org 공식 풀이예요.\n방금 본 그 생각이에요: 득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐.\n답은 느린 코드와 똑같고, 보는 무브 수만 확 줄어요.")}
           </div>
+          {lang === "py" && (
+            <div style={{ margin: "10px 16px 0", padding: "9px 13px", borderRadius: 10, background: "#fffbeb",
+              border: "1.5px solid #fbbf24", color: "#92400e", fontSize: 12.5, fontWeight: 700,
+              lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
+              {t(E,
+                <>⚠️ At the biggest case (N = 20, K = 200,000) this takes about <b>69 seconds</b> in Python — the limit is 4. The algorithm is right, so it is great for understanding, but submit in <b>C++</b> for full marks (measured 1.96 s, limit 2).</>,
+                <>⚠️ 가장 큰 입력(N = 20, K = 20만)에서 Python 은 약 <b>69초</b> 걸려요 — 제한은 4초예요.<br />생각은 맞으니 이해용으로는 좋지만, 만점은 <b>C++</b> 로 내요 (실측 1.96초, 제한 2초).</>)}
+            </div>
+          )}
           <CodeWalk E={E} lang={lang} code={fw.code} vars={fw.vars} beats={fw.beats} accent="#059669" />
         </div>
       ),
