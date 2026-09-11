@@ -154,33 +154,10 @@ function OddEvenPileSim({ E }) {
   );
 }
 
-/* ================================================================
-   SOLUTION CODE  (fast: count odds & evens, check two recipes)
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "data = sys.stdin.buffer.read().split()",
-  "idx = 0",
-  "T = int(data[idx])",
-  "idx += 1",
-  "out = []",
-  "for _ in range(T):",
-  "    N = int(data[idx])",
-  "    idx += 1",
-  "    odd = even = 0",
-  "    for _ in range(N):",
-  "        if int(data[idx]) % 2 == 1:",
-  "            odd += 1",
-  "        else:",
-  "            even += 1",
-  "        idx += 1",
-  "    # odd sum of 3 = (3 odds) or (1 odd + 2 evens)",
-  "    if odd >= 3 or (odd >= 1 and even >= 2):",
-  "        out.append('YES')",
-  "    else:",
-  "        out.append('NO')",
-  "print('\\n'.join(out))",
-];
+/* 2026-09-11: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도 import 되지
+   않는 죽은 복제본이었다(저장소 67곳 중 실제로 쓰는 건 3곳뿐).
+   살아 있는 코드는 components.jsx 의 단계별 배열이다. 둘을 같이 두면 조용히 어긋난다 —
+   실제로 오늘 입출력 방식을 고칠 때 이쪽만 옛 모양으로 남아 검사기에 걸렸다. */
 
 export function makeMcc21CarrotsCh1(E) {
   return [

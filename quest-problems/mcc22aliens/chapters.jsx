@@ -3,41 +3,10 @@ import { getMcc22AliensSections, AliensCountSim } from "./components";
 
 const KA = { wordBreak: "keep-all" };
 
-/* ================================================================
-   SOLUTION CODE  (fast: decode each claim → count supply vs demand)
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "def main():",
-  "    data = sys.stdin.read().split()",
-  "    idx = 0",
-  "    T = int(data[idx])",
-  "    idx += 1",
-  "    out = []",
-  "    for _ in range(T):",
-  "        n = int(data[idx])",
-  "        idx += 1",
-  "        a = data[idx]",
-  "        idx += 1",
-  "        b = data[idx]",
-  "        idx += 1",
-  "        need_T = 0",
-  "        have_T = 0",
-  "        for i in range(n):",
-  "            if a[i] == 'T':",
-  "                have_T += 1",
-  "                req = b[i]",
-  "            else:",
-  "                if b[i] == 'T':",
-  "                    req = 'F'",
-  "                else:",
-  "                    req = 'T'",
-  "            if req == 'T':",
-  "                need_T += 1",
-  "        out.append('YES' if need_T == have_T else 'NO')",
-  "    print('\\n'.join(out))",
-  "main()",
-];
+/* 2026-09-11: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도 import 되지
+   않는 죽은 복제본이었다(저장소 67곳 중 실제로 쓰는 건 3곳뿐).
+   살아 있는 코드는 components.jsx 의 단계별 배열이다. 둘을 같이 두면 조용히 어긋난다 —
+   실제로 오늘 입출력 방식을 고칠 때 이쪽만 옛 모양으로 남아 검사기에 걸렸다. */
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem

@@ -23,9 +23,6 @@ int flip_cost(vector<string> &grid, int i, int j) {
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
     int N, U;
     cin >> N >> U;
 

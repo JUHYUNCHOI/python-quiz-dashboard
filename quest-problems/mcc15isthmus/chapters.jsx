@@ -231,51 +231,10 @@ const caseBtn = {
   fontSize: 11.5, fontWeight: 700, padding: "3px 10px", cursor: "pointer", wordBreak: "keep-all",
 };
 
-/* ================================================================
-   SOLUTION CODE  (O(N) run lengths in four directions)
-   ================================================================ */
-export const SOLUTION_CODE = [
-  "import sys",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0])",
-  "K = int(data[1])",
-  "H = list(map(int, data[2:2+N]))",
-  "",
-  "# 왼쪽으로 계속 내려가는 길이 / 계속 올라가는 길이",
-  "downL = [0] * N",
-  "upL   = [0] * N",
-  "for i in range(1, N):",
-  "    if H[i] > H[i-1]:",
-  "        downL[i] = downL[i-1] + 1",
-  "    else:",
-  "        downL[i] = 0",
-  "    if H[i] < H[i-1]:",
-  "        upL[i]   = upL[i-1]   + 1",
-  "    else:",
-  "        upL[i]   = 0",
-  "",
-  "# 오른쪽 방향은 뒤에서부터 똑같이",
-  "downR = [0] * N",
-  "upR   = [0] * N",
-  "for i in range(N-2, -1, -1):",
-  "    if H[i] > H[i+1]:",
-  "        downR[i] = downR[i+1] + 1",
-  "    else:",
-  "        downR[i] = 0",
-  "    if H[i] < H[i+1]:",
-  "        upR[i]   = upR[i+1]   + 1",
-  "    else:",
-  "        upR[i]   = 0",
-  "",
-  "count = 0",
-  "for i in range(N):",
-  "    if downL[i] >= K and downR[i] >= K:      # order-K 봉우리",
-  "        count += 1",
-  "    elif upL[i] >= K and upR[i] >= K:        # order-K 골짜기",
-  "        count += 1",
-  "",
-  "print(count)",
-];
+/* 2026-09-11: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도 import 되지
+   않는 죽은 복제본이었다(저장소 67곳 중 실제로 쓰는 건 3곳뿐).
+   살아 있는 코드는 components.jsx 의 단계별 배열이다. 둘을 같이 두면 조용히 어긋난다 —
+   실제로 오늘 입출력 방식을 고칠 때 이쪽만 옛 모양으로 남아 검사기에 걸렸다. */
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: Problem (4 steps)

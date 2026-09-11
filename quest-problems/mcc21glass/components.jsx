@@ -6,11 +6,11 @@ const A = "#2563eb";
 
 const FULL_PY = [
   "import sys, math",
+  "input = sys.stdin.readline",
   "",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0])",
-  "A = int(data[1])",
-  "R = list(map(int, data[2:2 + (N - 1)]))",
+  "N = int(input())",
+  "A = int(input())",
+  "R = list(map(int, input().split()))",
   "",
   "b = sorted(R, reverse=True)   # known radii, largest first",
   "m = N - 1",

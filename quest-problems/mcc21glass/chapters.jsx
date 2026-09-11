@@ -8,53 +8,10 @@ const BLACK = "#1f2937";
 const CLEAR = "#f1f5f9";
 
 // Reference solution (Python) — kept exported for consistency with other quests.
-export const SOLUTION_CODE = [
-  "import sys, math",
-  "",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0])",
-  "A = int(data[1])",
-  "R = list(map(int, data[2:2 + (N - 1)]))",
-  "",
-  "b = sorted(R, reverse=True)   # known radii, largest first",
-  "m = N - 1",
-  "",
-  "# prefix[i] = b1^2 - b2^2 + b3^2 - ...  (alternating)",
-  "prefix = [0] * (m + 1)",
-  "for i in range(1, m + 1):",
-  "    if i % 2 == 1:",
-  "        sign = 1",
-  "    else:",
-  "        sign = -1",
-  "    prefix[i] = prefix[i - 1] + sign * b[i - 1] ** 2",
-  "S = prefix[m]",
-  "",
-  "for p in range(1, N + 1):        # try each slot for the missing radius",
-  "    pre = prefix[p - 1]",
-  "    if p % 2 == 1:",
-  "        x2 = A + S - 2 * pre",
-  "    else:",
-  "        x2 = 2 * pre - A - S",
-  "    if x2 < 0:",
-  "        continue",
-  "    x = math.isqrt(x2)",
-  "    if x * x != x2 or x <= 0:",
-  "        continue",
-  "    if p - 1 >= 1:",
-  "        upper = b[p - 2]",
-  "    else:",
-  "        upper = None",
-  "    if p - 1 < m:",
-  "        lower = b[p - 1]",
-  "    else:",
-  "        lower = 0",
-  "    if upper is not None and x > upper:",
-  "        continue",
-  "    if x < lower:",
-  "        continue",
-  "    print(x)",
-  "    break",
-];
+/* 2026-09-11: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도 import 되지
+   않는 죽은 복제본이었다(저장소 67곳 중 실제로 쓰는 건 3곳뿐).
+   살아 있는 코드는 components.jsx 의 단계별 배열이다. 둘을 같이 두면 조용히 어긋난다 —
+   실제로 오늘 입출력 방식을 고칠 때 이쪽만 옛 모양으로 남아 검사기에 걸렸다. */
 
 /* ─────────────────────────────────────────────────────────────
    Concept sim 1 (Ch1): the stacked plates.

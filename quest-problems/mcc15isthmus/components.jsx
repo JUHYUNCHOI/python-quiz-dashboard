@@ -6,10 +6,11 @@ const A = "#2563eb";
 
 const FULL_PY = [
   "import sys",
-  "data = sys.stdin.read().split()",
-  "N = int(data[0])",
-  "K = int(data[1])",
-  "H = list(map(int, data[2:2+N]))",
+  "input = sys.stdin.readline",
+  "",
+  "N = int(input())",
+  "K = int(input())",
+  "H = list(map(int, input().split()))",
   "",
   "# 왼쪽으로 계속 내려가는 길이 / 계속 올라가는 길이",
   "downL = [0] * N",
@@ -113,8 +114,8 @@ export function getMcc15IsthmusSections(E) {
             "if 를 하나 더 쓰지 않고 elif 인 이유: 한 위치가 봉우리이면서 동시에 골짜기일 수는 없어요. 두 번 세면 안 돼요."),
       ],
       pyOnly: [
-        t(E, "N can be 1,000,000, so calling input() many times is slow. sys.stdin.read().split() grabs everything at once.",
-            "N 이 100만이라 input() 을 여러 번 부르면 느려요. sys.stdin.read() 로 한 번에 읽어요."),
+        t(E, "The whole input is just 3 lines: N, then K, then all N heights on one line.",
+            "입력은 딱 3 줄이에요. N, K, 그리고 높이 N 개가 한 줄에 다 들어 있어요."),
         t(E, "data[0] is N and data[1] is K because the input puts them on their own lines — split() flattens all three lines into one list of tokens.",
             "입력이 N, K, 배열을 각각 다른 줄에 주는데 split() 이 세 줄을 토큰 하나의 리스트로 펼치니 data[0] 이 N, data[1] 이 K 예요."),
       ],
