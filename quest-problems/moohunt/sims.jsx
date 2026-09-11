@@ -426,7 +426,11 @@ export function BitBoardSim({ E }) {
       그래서 한 번에 다 보여주지 않고 **x 를 하나 고정한 평면 한 장**만 그린다.
    걸음 목록은 pedagogy-reviewer 가 짜서 검토받은 것을 그대로 옮겼다. */
 export function IsAtTableSim({ E }) {
-  const steps = [{ k: "ask" }, { k: "plan" }, { k: "fill" }, { k: "order" }, { k: "use" }];
+  /* ⚠️ 2026-09-11 선생님: "저걸 보고 **그래서 어떻게 값을 구할수 있는건지도 모르겠어**"
+     처음엔 표를 채우는 데서 끝냈다. 채우는 법만 보여주고 **쓰는 법**을 안 보여준 것이다.
+     use·sum 두 걸음을 붙여 보드 하나를 실제로 채점해 점수를 내는 데까지 간다. */
+  const steps = [{ k: "ask" }, { k: "plan" }, { k: "fill" }, { k: "order" },
+                 { k: "use" }, { k: "sum" }];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
   const sayRef = useKeepInView(ts.safe);
@@ -436,7 +440,13 @@ export function IsAtTableSim({ E }) {
   const N = 5;
   const X = 0;                                   // 평면 한 장: x = 0 (1번 칸이 M 인 경우)
   const MOVES = [[0, 1, 2], [0, 3, 4], [0, 2, 1]];   // 세 번째는 (1,3,2) — 순서만 다른 무브
-  const upTo = s.k === "fill" ? 2 : s.k === "order" || s.k === "use" ? 3 : 0;
+  const upTo = s.k === "ask" || s.k === "plan" ? 0 : s.k === "fill" ? 2 : 3;
+  /* 채점 예시 보드 — 1번 칸만 M, 나머지는 O (표가 x=0 평면 한 장이라 딱 맞는다) */
+  const SCORE_BOARD = "MOOOO";
+  const oCells = [1, 2, 3, 4];                       // 0-based: 2·3·4·5번 칸이 O
+  const oPairs = [];
+  for (let i = 0; i < oCells.length; i++)
+    for (let j = i + 1; j < oCells.length; j++) oPairs.push([oCells[i], oCells[j]]);
 
   /* isAt[X][a][b] — a < b 로 모아 센다 */
   const grid = Array.from({ length: N }, () => Array(N).fill(0));
@@ -457,12 +467,16 @@ export function IsAtTableSim({ E }) {
     : s.k === "order" ? t(E,
       <>Now <b>(1, 3, 2)</b> arrives — same two O cells, swapped.<br />y and z only need to be O, so order does not matter.<br />Always store <b>smaller, larger</b> → it lands on (2, 3) again.</>,
       <>이번엔 <b>(1, 3, 2)</b> 가 왔어요 — O 자리 둘이 순서만 바뀐 거예요.<br />y·z 는 둘 다 O 이기만 하면 되니 순서는 상관없어요.<br />늘 <b>작은 쪽·큰 쪽</b>으로 넣으면 (2, 3) 칸에 또 쌓여요.</>)
+    : s.k === "use" ? t(E,
+      <>Now score a board — say <b>{SCORE_BOARD}</b>: cell 1 is M, the rest are O.<br />Which squares do we read? Every <b>pair of O cells</b>.</>,
+      <>이제 보드를 채점해요 — <b>{SCORE_BOARD}</b> 예요. 1번만 M, 나머지는 O.<br />어느 칸을 볼까요? <b>O 자리끼리 짝지은 칸</b>을 다 봐요.</>)
     : t(E,
-      <>Scoring a board: read the squares straight out of the sheet.<br />The 200,000 moves are <b>never scanned again</b>.</>,
-      <>보드를 채점할 땐 표에서 칸만 꺼내 쓰면 돼요.<br />무브 20만 개를 <b>다시 훑지 않아요</b>.</>);
+      <>Add those squares up — that is the board's score.<br />The 200,000 moves are <b>never scanned again</b>.</>,
+      <>그 칸들을 더하면 <b>이 보드의 점수</b>예요.<br />무브 20만 개를 <b>다시 훑지 않아요</b>.</>);
 
   const justFilled =
-    s.k === "fill" ? [[1, 2], [3, 4]] : s.k === "order" ? [[1, 2]] : s.k === "use" ? [[1, 2]] : [];
+    s.k === "fill" ? [[1, 2], [3, 4]] : s.k === "order" ? [[1, 2]]
+    : s.k === "use" || s.k === "sum" ? oPairs : [];
   const isNew = (a, b) => justFilled.some(([p, q]) => p === a && q === b);
 
   const cell = (a, b) => {
@@ -513,16 +527,31 @@ export function IsAtTableSim({ E }) {
               {t(E, "row = smaller O cell, column = larger O cell",
                    "세로 = 작은 쪽 O 칸, 가로 = 큰 쪽 O 칸")}
             </div>
-            {s.k === "use" && (
+            {(s.k === "use" || s.k === "sum") && (
               <div style={{ maxWidth: 320, margin: "12px auto 0", padding: "9px 12px", borderRadius: 9,
                 background: "#f5f3ff", border: `1.5px solid ${A}`, textAlign: "center",
                 fontSize: 12, fontWeight: 700, color: "#5b21b6", lineHeight: 1.7, wordBreak: "keep-all" }}>
-                {t(E, <>Code counts cells from <b>0</b>, so subtract 1 from each:</>,
-                     <>코드는 칸을 <b>0번부터</b> 세요. 그래서 하나씩 빼요:</>)}
-                <br />
-                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>
-                  1·2·3 {"→"} isAt[0][1][2] = {grid[1][2]}
-                </span>
+                {s.k === "use" ? (
+                  <>
+                    {t(E, <>O cells are <b>2, 3, 4, 5</b> \u2192 pairs:</>,
+                         <>O 자리는 <b>2, 3, 4, 5</b> 번 \u2192 짝은:</>)}
+                    <br />
+                    <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 12 }}>
+                      {oPairs.map(([a2, b2]) => `(${a2 + 1},${b2 + 1})`).join("  ")}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 12 }}>
+                      {oPairs.map(([a2, b2]) => grid[a2][b2]).join(" + ")}
+                      {" = "}
+                      <span style={{ fontSize: 15 }}>{oPairs.reduce((p, [a2, b2]) => p + grid[a2][b2], 0)}</span>
+                    </span>
+                    <br />
+                    {t(E, <><b>{SCORE_BOARD}</b> scores <b>{oPairs.reduce((p, [a2, b2]) => p + grid[a2][b2], 0)}</b>.</>,
+                         <><b>{SCORE_BOARD}</b> 의 점수는 <b>{oPairs.reduce((p, [a2, b2]) => p + grid[a2][b2], 0)}</b> 점이에요.</>)}
+                  </>
+                )}
               </div>
             )}
           </div>
