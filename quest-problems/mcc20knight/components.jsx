@@ -220,8 +220,6 @@ const FULL_CPP = [
   "vector<vector<int>> best(SIZE, vector<int>(SIZE, -1));",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
   "",
   "    // BFS once: minimum knight moves to every offset",
   "    best[0 - LO][0 - LO] = 0;",
@@ -277,8 +275,6 @@ export function getMcc20KnightSections(E) {
       cppOnly: [
         t(E, "dr[]/dc[] list the 8 L-moves; LO shifts coordinates so negatives index a plain vector.",
             "dr[]/dc[] 는 8 개 L-이동; LO 로 좌표를 밀어 음수도 보통 vector 로 인덱싱해요."),
-        t(E, "ios::sync_with_stdio(false) speeds up cin/cout for up to 400 queries.",
-            "ios::sync_with_stdio(false) 로 최대 400 질문의 cin/cout 을 빠르게 해요."),
       ],
     },
   ];

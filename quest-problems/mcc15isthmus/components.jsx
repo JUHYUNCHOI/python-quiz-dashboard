@@ -54,8 +54,6 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
   "    int N, K;",
   "    cin >> N >> K;",
   "    vector<int> H(N);",
@@ -120,8 +118,6 @@ export function getMcc15IsthmusSections(E) {
             "입력이 N, K, 배열을 각각 다른 줄에 주는데 split() 이 세 줄을 토큰 하나의 리스트로 펼치니 data[0] 이 N, data[1] 이 K 예요."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) speeds cin up — we have to read up to a million numbers.",
-            "ios::sync_with_stdio(false) 로 입력 속도를 올려요 — 100만 개를 읽어야 하니까요."),
         t(E, "cin >> skips whitespace and newlines alike, so reading N, then K, then the N heights just works with the three-line format.",
             "cin >> 는 공백과 줄바꿈을 똑같이 건너뛰어요. 그래서 N, K, 높이 N개를 차례로 읽으면 세 줄짜리 형식이 그대로 처리돼요."),
         t(E, "int is enough everywhere: heights are at most 1,000,000 and the count is at most N.",

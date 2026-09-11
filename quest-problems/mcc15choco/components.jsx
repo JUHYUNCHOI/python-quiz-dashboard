@@ -176,8 +176,6 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
   "    int N;",
   "    cin >> N;",
   "",
@@ -228,8 +226,6 @@ export function getMcc15ChocoSections(E) {
             "vector 를 스택처럼 써요: push_back / pop_back / back(). std::stack 을 써도 돼요."),
         t(E, "The total needs long long: 1,000,000 bars of length 1,000,000 would overflow int.",
             "총합은 long long 이어야 해요. 길이 1,000,000 짜리 바가 1,000,000 개면 int 로는 넘쳐요."),
-        t(E, "ios::sync_with_stdio(false) speeds up reading up to a million numbers.",
-            "숫자를 최대 100만 개 읽으니 ios::sync_with_stdio(false) 로 입력 속도를 올려요."),
       ],
     },
   ];

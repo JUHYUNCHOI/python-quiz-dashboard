@@ -32,8 +32,6 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
   "    int T;",
   "    cin >> T;",
   "    while (T--) {",
@@ -75,8 +73,6 @@ export function getMcc21CarrotsSections(E) {
             "x % 2 == 1 로 홀수를 확인해요. 답을 리스트에 모아 '\\n' 로 이어 붙여 한 번에 출력해요."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) with cin.tie(nullptr) speeds up cin — useful when N reaches 100000.",
-            "ios::sync_with_stdio(false) 와 cin.tie(nullptr) 로 cin 을 빠르게 해요 — N 이 100000 까지 갈 때 도움돼요."),
         t(E, "while (T--) loops over the test cases; the count fits in int, but long long is a safe habit.",
             "while (T--) 로 테스트를 반복해요. 개수는 int 로도 되지만 long long 이 안전한 습관이에요."),
       ],

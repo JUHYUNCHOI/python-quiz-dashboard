@@ -49,7 +49,8 @@ const FULL_PY = [
 ];
 
 const FULL_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <string>",
   "using namespace std;",
   "const long long MOD = 998244353;",
   "",

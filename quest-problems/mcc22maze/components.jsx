@@ -297,7 +297,10 @@ const S4_PY = [
 ];
 
 const S1_CPP = [
-  "#include <bits/stdc++.h>",
+  "#include <iostream>",
+  "#include <vector>",
+  "#include <string>",
+  "#include <utility>",
   "using namespace std;",
   "",
   "struct DSU {                       // union-find with rollback",
@@ -370,8 +373,6 @@ const S3_CPP = [
 
 const S4_CPP = [
   "int main(){",
-  "    ios::sync_with_stdio(false);",
-  "    cin.tie(nullptr);",
   "    int T;",
   "    cin >> T;",
   "    while (T--){",
@@ -437,8 +438,6 @@ export function getMcc22MazeSections(E) {
             "data[idx+i].decode() 로 stdin 의 바이트 줄을 보통 문자열로 바꿔요."),
       ],
       cppOnly: [
-        t(E, "ios::sync_with_stdio(false) speeds up cin for the large number of tests.",
-            "ios::sync_with_stdio(false) 로 많은 테스트에서 cin 을 빠르게 해요."),
       ],
     },
   ];
