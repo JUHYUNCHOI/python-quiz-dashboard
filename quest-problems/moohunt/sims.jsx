@@ -304,8 +304,8 @@ export function BitBoardSim({ E }) {
 
   const say =
     s.k === "row" && s.first ? t(E,
-      <>Each cell is <b>M</b> or <b>O</b> — two choices.<br />Write M as <b>1</b>, O as <b>0</b>.<br />Then a whole board is just <b>one number</b>.</>,
-      <>칸마다 <b>M</b> 아니면 <b>O</b> 둘 중 하나예요.<br />M 을 <b>1</b>, O 를 <b>0</b> 으로 쓰면<br />보드 하나가 <b>숫자 하나</b>가 돼요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .8 }}>(비트는 <b>0번 칸부터</b> 적을게요. 보드와 순서를 맞추려고요.)</span></>)
+      <>Let's shrink it to <b>3 cells</b> so we can see them all. (The real problem has up to 20.)<br />Each cell is <b>M</b> or <b>O</b> — two choices.<br />Write M as <b>1</b>, O as <b>0</b>.<br />Then a whole board is just <b>one number</b>.</>,
+      <>손으로 다 볼 수 있게 <b>칸 3개</b>로 작게 해볼게요. (진짜 문제는 최대 20칸이에요.)<br />칸마다 <b>M</b> 아니면 <b>O</b> 둘 중 하나예요.<br />M 을 <b>1</b>, O 를 <b>0</b> 으로 쓰면<br />보드 하나가 <b>숫자 하나</b>가 돼요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .8 }}>(비트는 <b>0번 칸부터</b> 적을게요. 보드와 순서를 맞추려고요.)</span></>)
     : s.k === "row" && s.b === 1 ? t(E,
       <><b>1</b> is <b>{bin(1)}</b> — only cell <b>0</b> turned into M.</>,
       <><b>1</b> 은 <b>{bin(1)}</b> — <b>0번 칸</b>만 M 이 됐어요.</>)
@@ -328,8 +328,8 @@ export function BitBoardSim({ E }) {
       <>One more sign: <b>&lt;&lt;</b>, the opposite of <b>&gt;&gt;</b>.<br />It <b>adds</b> empty cells at the front, doubling each time.<br /><b>1 &lt;&lt; {N} = 2<sup>{N}</sup> = {1 << N}</b></>,
       <>기호 하나만 더요. <b>&lt;&lt;</b> 는 <b>&gt;&gt;</b> 의 반대예요.<br />앞에 빈 칸을 <b>붙여요.</b> 한 칸 붙을 때마다 두 배예요.<br /><b>1 &lt;&lt; {N} = 2<sup>{N}</sup> = {1 << N}</b></>)
     : t(E,
-      <>And <b>{1 << N}</b> is exactly how many boards we have.<br />So <b>for b in range(1 &lt;&lt; N)</b> means<br /><b>"try every board"</b>.</>,
-      <>그 <b>{1 << N}</b>이 바로 보드 개수예요.<br />그래서 <b>for b in range(1 &lt;&lt; N)</b> 한 줄이<br /><b>"모든 보드를 다 해본다"</b> 가 돼요.</>);
+      <>Now two lines of the next page's code read out loud.<br /><b>for b in range(1 &lt;&lt; N)</b> → try all <b>{1 << N}</b> boards.<br /><b>(b &gt;&gt; i) &amp; 1</b> → <b>is cell i an M</b> on that board?<br />That is what the bits were for.</>,
+      <>이제 다음 쪽 코드의 두 줄이 읽혀요.<br /><b>for b in range(1 &lt;&lt; N)</b> → 보드 <b>{1 << N}</b>개를 다 해본다.<br /><b>(b &gt;&gt; i) &amp; 1</b> → 그 보드에서 <b>i번 칸이 M 인가?</b><br />비트는 이 두 줄을 쓰려고 배운 거예요.</>);
 
   const rows = Array.from({ length: 1 << N }, (_, b) => b).filter((b) => b <= shown);
   /* 말풍선이 붙을 줄 — 그 줄 바로 위에 끼운다 (한 걸음에 바뀌는 자리는 한 곳).

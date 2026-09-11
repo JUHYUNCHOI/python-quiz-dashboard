@@ -285,21 +285,6 @@ export function makeMooHuntCh2(E, lang = "py") {
   const w = getMooHuntWalk(E, lang);
   const fw = getMooHuntFastWalk(E, lang);
   return [
-    /* 코드를 읽기 **직전**에 비트 표현을 본다 (2026-09-07 자리 이동).
-       전에는 문제 탭 한복판(보드 세기 ↔ 무브 세기 사이)에 있었다. 셋이 따로 보고 다 같은 말을 했다.
-         · 기획자: ">> 가 실제로 필요한 건 코드 한 줄뿐인데 네 쪽 앞에서 배우고 방치된다"
-         · 수업: "코드를 읽을 때만 필요한 도구가 문제 이해 단계 한가운데 끼어 있다"
-         · 학생: "이걸 왜 지금 배우는지 모르겠다"
-       선생님: "막상 잘 안쓰는 비트연산자 얘기하다가 갑자기…"
-       ⚠️ **분량은 줄이지 않았다.** 학생은 "길다" 가 아니라 **"모자라다"** 고 했다 —
-       "이 그림에서는 이렇게 되더라 정도로만 알았다". 그래서 옮기고, 오히려 << 설명을 더했다. */
-    {
-      type: "reveal",
-      label: t(E, "Number = board", "숫자 = 보드"),
-      narr: t(E, "Before the code — how does one number become a board?",
-                 "코드를 보기 전에요. 숫자 하나가 어떻게 보드가 되죠?"),
-      content: (<BitBoardSim E={E} />),
-    },
     {
       type: "reveal",
       label: t(E, "Run it", "돌려보기"),
@@ -335,6 +320,21 @@ export function makeMooHuntCh2(E, lang = "py") {
         "Count the moves once into a table — then never scan them again.",
         "무브를 표에 한 번만 세어 넣으면, 다시 훑을 일이 없어요."),
       content: (<IsAtTableSim E={E} />),
+    },
+    /* 코드를 읽기 **직전**에 비트 표현을 본다 (2026-09-07 자리 이동).
+       전에는 문제 탭 한복판(보드 세기 ↔ 무브 세기 사이)에 있었다. 셋이 따로 보고 다 같은 말을 했다.
+         · 기획자: ">> 가 실제로 필요한 건 코드 한 줄뿐인데 네 쪽 앞에서 배우고 방치된다"
+         · 수업: "코드를 읽을 때만 필요한 도구가 문제 이해 단계 한가운데 끼어 있다"
+         · 학생: "이걸 왜 지금 배우는지 모르겠다"
+       선생님: "막상 잘 안쓰는 비트연산자 얘기하다가 갑자기…"
+       ⚠️ **분량은 줄이지 않았다.** 학생은 "길다" 가 아니라 **"모자라다"** 고 했다 —
+       "이 그림에서는 이렇게 되더라 정도로만 알았다". 그래서 옮기고, 오히려 << 설명을 더했다. */
+    {
+      type: "reveal",
+      label: t(E, "Number = board", "숫자 = 보드"),
+      narr: t(E, "Before the code — how does one number become a board?",
+                 "코드를 보기 전에요. 숫자 하나가 어떻게 보드가 되죠?"),
+      content: (<BitBoardSim E={E} />),
     },
     {
       type: "reveal",
