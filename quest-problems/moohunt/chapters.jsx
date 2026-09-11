@@ -2,7 +2,7 @@ import { C, t } from "@/components/quest/theme";
 import { getMooHuntSections, getMooHuntWalk } from "./components";
 import { getMooHuntFastWalk } from "./fast";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ScoreBoardSim, BitBoardSim, BruteLimitSim, BruteRunSim, FasterIdeaSim, IsAtTableSim } from "./sims";
+import { ScoreBoardSim, BitBoardSim, BruteLimitSim, BruteRunSim, FasterIdeaSim, IsAtTableSim, WholeRunSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooHuntCh1 (5 steps: reveal / reveal / reveal / quiz / input)
@@ -335,6 +335,22 @@ export function makeMooHuntCh2(E, lang = "py") {
       narr: t(E, "Before the code — how does one number become a board?",
                  "코드를 보기 전에요. 숫자 하나가 어떻게 보드가 되죠?"),
       content: (<BitBoardSim E={E} />),
+    },
+    /* ── 계획: 코드 도는 순서 그대로 답까지 (2026-09-11 신설) ──────
+       선생님: "아직 처음부터 차례대로 **코드가 동작하는 순서**정도로
+                **어떻게 구할건지 눈에 안보여**"
+       조각(한계·아이디어·isAt 표·비트)은 다 있었는데 그것들을 이어
+       **답이 나오는 장면**이 없었다.
+       memory/usaco_quest_learning_flow.md 의 "계획" 단계가 이 자리다 —
+       이해 → 이해확인 → 전략 → 브루트한계 → 재전략 → **계획** → 코드.
+       애들이 계획을 건너뛰고 코드로 점프하는 걸 막으려고 있는 단계다. */
+    {
+      type: "reveal",
+      label: t(E, "The plan", "짜는 순서"),
+      narr: t(E,
+        "Before the code — walk the whole thing once, in the order it runs.",
+        "코드 보기 전에 — 도는 순서 그대로 한 번 끝까지 따라가 봐요."),
+      content: (<WholeRunSim E={E} />),
     },
     {
       type: "reveal",
