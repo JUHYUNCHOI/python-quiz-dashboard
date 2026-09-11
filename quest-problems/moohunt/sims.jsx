@@ -1027,8 +1027,8 @@ export function BruteRunSim({ E }) {
           <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 10, background: "#fffbeb",
             border: "1.5px solid #fbbf24", fontSize: 12.5, color: "#92400e", lineHeight: 1.85,
             textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
-            {t(E, <>Measured right now, in your browser — with JavaScript.<br />The Python code on the last page is much slower still.<br />Try N = 12 again to feel the difference.</>,
-                  <>지금 이 브라우저에서 잰 거예요. 자바스크립트 속도예요.<br />앞 페이지의 파이썬 코드는 이것보다 훨씬 더 느려요.<br />N = 12 를 다시 눌러보면 차이가 느껴져요.</>)}
+            {t(E, <>Measured right now, in your browser — with JavaScript.<br />Written in Python it would be much slower still.<br />Try N = 12 again to feel the difference.</>,
+                  <>지금 이 브라우저에서 잰 거예요. 자바스크립트 속도예요.<br />파이썬으로 짜면 이것보다 훨씬 더 느려요.<br />N = 12 를 다시 눌러보면 차이가 느껴져요.</>)}
           </div>
         )}
       </div>

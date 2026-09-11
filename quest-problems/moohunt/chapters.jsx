@@ -364,8 +364,8 @@ export function makeMooHuntCh2(E, lang = "py") {
             borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#065f46",
             lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
             {"✅ "}{t(E,
-              "The official solution from usaco.org.\nThe idea is the one you just saw: only 'one M cell + two O cells' can score.\nSame answer as the slow code, but it looks at far fewer moves.",
-              "usaco.org 공식 풀이예요.\n방금 본 그 생각이에요: 득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐.\n답은 느린 코드와 똑같고, 보는 무브 수만 확 줄어요.")}
+              "The official solution from usaco.org.\nThe idea is the one you just saw: only 'one M cell + two O cells' can score.\nStill every board — just far fewer moves per board.",
+              "usaco.org 공식 풀이예요.\n방금 본 그 생각이에요: 득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐.\n보드를 다 해보는 건 똑같은데, 보드마다 보는 무브 수가 확 줄어요.")}
           </div>
           {lang === "py" && (
             <div style={{ margin: "10px 16px 0", padding: "9px 13px", borderRadius: 10, background: "#fffbeb",
