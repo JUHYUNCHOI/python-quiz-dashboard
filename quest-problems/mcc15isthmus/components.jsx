@@ -114,8 +114,8 @@ export function getMcc15IsthmusSections(E) {
       pyOnly: [
         t(E, "The whole input is just 3 lines: N, then K, then all N heights on one line.",
             "입력은 딱 3 줄이에요. N, K, 그리고 높이 N 개가 한 줄에 다 들어 있어요."),
-        t(E, "data[0] is N and data[1] is K because the input puts them on their own lines — split() flattens all three lines into one list of tokens.",
-            "입력이 N, K, 배열을 각각 다른 줄에 주는데 split() 이 세 줄을 토큰 하나의 리스트로 펼치니 data[0] 이 N, data[1] 이 K 예요."),
+        t(E, "So we read three times: int(input()) twice, then split() the last line into N numbers.",
+            "그래서 세 번 읽어요. int(input()) 두 번, 마지막 줄만 split() 으로 N 개를 나눠요."),
       ],
       cppOnly: [
         t(E, "cin >> skips whitespace and newlines alike, so reading N, then K, then the N heights just works with the three-line format.",

@@ -428,14 +428,14 @@ export function getMcc22MazeSections(E) {
       color: A,
       py: S4_PY, cpp: S4_CPP,
       why: [
-        t(E, "Up to 100000 tests, so read all input at once instead of calling input() over and over.",
-            "테스트가 최대 10만 개라, input() 을 반복하지 않고 입력을 한 번에 읽어요."),
+        t(E, "Each test is 1 + n lines: the size n, then n rows of the grid.",
+            "테스트 하나가 1 + n 줄이에요. 크기 n 한 줄, 그다음 격자 n 줄."),
         t(E, "For each test, solve_case returns 0, 1, or 2; collect them and print at the end.",
             "각 테스트마다 solve_case 가 0/1/2 를 돌려줘요; 모아 두었다가 마지막에 출력."),
       ],
       pyOnly: [
-        t(E, "data[idx+i].decode() turns each raw byte-row from stdin into a normal string.",
-            "data[idx+i].decode() 로 stdin 의 바이트 줄을 보통 문자열로 바꿔요."),
+        t(E, "input() gives the line with a trailing newline, so rstrip() trims it before we use the row.",
+            "input() 은 줄 끝의 줄바꿈까지 같이 줘요. rstrip() 으로 떼고 써요."),
       ],
       cppOnly: [
       ],

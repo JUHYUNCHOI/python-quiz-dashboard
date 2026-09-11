@@ -166,8 +166,8 @@ export function makeReflectionCh2(E, lang = "py") {
       type: "reveal",
       narr: i === 0
         ? t(E,
-            "Each group's flips = min(painted, 4 − painted).",
-            "묶음마다 뒤집는 횟수 = min(칠한 수, 4 − 칠한 수).")
+            "Flips per group = the smaller of (cells unlike me) and (the rest).",
+            "뒤집는 횟수 = 나와 다른 칸과 나머지 중 적은 쪽.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
