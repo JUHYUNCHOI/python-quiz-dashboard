@@ -228,112 +228,51 @@ export function makeMooHuntCh1(E) {
        계획을 먼저 세우면, 그 뒤의 세는 일이 전부 "그 계획이 되는지 재보는 것" 이 된다.
        프레이밍은 memory/feedback_solution_framing.md — 결론 통보가 아니라 질문으로 연다. */
     {
+      /* ── 결-b 한계: 한 화면 ────────────────────────────────────────
+         2026-09-11. 여기 있던 **다섯 쪽**(계획 선언 · 보드 수 퀴즈 · 3×2 워밍업 ·
+         무브 수 입력 · 곱하기 시뮬)을 한 쪽으로 줄였다.
+         선생님이 **세 번** 말씀하셨다:
+           "안된다는걸 앞 페이지에서 엄청 많이 설명하고 막상 어떻게 풀건지는 설명이 부족해"
+           "굳이 시간이 오래걸린다는걸 코드까지 보여주고"
+           "아직도 오래걸린다는 설명이 앞에 너무 많이 나오는데? **퀴즈도 필요없고.**"
+         memory/feedback_why_and_how_over_slowness.md 가 같은 말이다 —
+         "한계는 **한 화면이면 충분**하다. 제약 숫자 + 연산량 한 줄.
+          아낀 분량을 왜 이 방법이 되나·어떻게 짜나 에 써라."
+         아낀 분량은 isAt 다리(새 쪽)로 갔다 — 학생이 거기서 그만뒀다. */
       type: "reveal",
-      label: t(E, "The plan", "세워보기"),
-      narr: t(E, "So — how would we solve this? Let's think.",
-                 "그럼 이걸 어떻게 풀면 될까요? 생각해봐요."),
+      label: t(E, "Try them all?", "다 해보면?"),
+      narr: t(E,
+        "Make every board and score each one. Does that finish in time?",
+        "보드를 다 만들어 하나씩 채점해요. 시간 안에 끝날까요?"),
       content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ maxWidth: 470, margin: "0 auto", background: "#f5f3ff",
-            border: "1.5px solid #c4b5fd", borderRadius: 12, padding: "14px 18px",
-            fontSize: 13.5, color: "#5b21b6", lineHeight: 1.85, fontWeight: 700,
-            textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
-            {t(E,
-              <>The board is ours to fill. So the simplest idea —<br />
-                <b>make every possible board</b>, score each one,<br />and keep the best.</>,
-              <>보드는 우리가 채우는 거예요. 그러니 제일 쉬운 생각은 —<br />
-                <b>가능한 보드를 전부 만들어</b> 하나씩 채점하고,<br />제일 높은 걸 고르는 거예요.</>)}
+        <div style={{ padding: 20, wordBreak: "keep-all" }}>
+          <div style={{ maxWidth: 470, margin: "0 auto", background: "#fff7ed",
+            border: "1.5px solid #fb923c", borderRadius: 12, padding: "14px 16px",
+            fontSize: 13, color: "#7c2d12", lineHeight: 1.9, textWrap: "balance" }}>
+            <div style={{ fontWeight: 800, marginBottom: 8 }}>
+              {t(E, "Two numbers decide it", "두 수가 정해요")}
+            </div>
+            <div>
+              {t(E, <><b>Boards</b>: each cell is M or O \u2192 <b>2<sup>20</sup> \u2248 1,000,000</b></>,
+                   <><b>보드 수</b>: 칸마다 M 아니면 O \u2192 <b>2<sup>20</sup> \u2248 100만</b></>)}
+            </div>
+            <div>
+              {t(E, <><b>Moves per board</b>: (x, y, z) all different \u2192 <b>20\u00d719\u00d718 = 6,840</b></>,
+                   <><b>보드당 무브</b>: (x, y, z) 가 모두 다름 \u2192 <b>20\u00d719\u00d718 = 6,840</b></>)}
+            </div>
+            <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fdba74", fontWeight: 800 }}>
+              {t(E, <>100\u4e07 \u00d7 6,840 \u2248 <b>7\u00d710<sup>9</sup></b></>,
+                   <>100만 \u00d7 6,840 \u2248 <b>7\u00d710<sup>9</sup></b> 번</>)}
+            </div>
           </div>
-          <div style={{ maxWidth: 470, margin: "12px auto 0", background: "#fffbeb",
-            border: "1.5px solid #fbbf24", borderRadius: 12, padding: "12px 18px",
-            fontSize: 13, color: "#92400e", lineHeight: 1.85, fontWeight: 700,
-            textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
-            {t(E,
-              <>Will that finish in time?<br />
-                To know, we need two numbers:<br />
-                <b>how many boards</b>, and <b>how many moves</b>.<br />
-                Let's count them.</>,
-              <>그런데 그게 시간 안에 끝날까요?<br />
-                알려면 두 가지를 세야 해요 —<br />
-                <b>보드가 몇 개</b>인지, <b>무브가 몇 개</b>인지.<br />
-                하나씩 세어봐요.</>)}
+          <div style={{ maxWidth: 470, margin: "12px auto 0", background: "#fef2f2",
+            border: "1.5px solid #f87171", borderRadius: 12, padding: "12px 16px",
+            fontSize: 13, color: "#7f1d1d", lineHeight: 1.9, textWrap: "balance", textAlign: "center" }}>
+            {t(E, <>A computer does about <b>a billion simple steps</b> in one second \u2014 that is <b>10<sup>9</sup></b>.<br /><b>7\u00d710<sup>9</sup></b> is <b>seven times</b> more. Let's see it for real.</>,
+                 <>컴퓨터는 <b>간단한 계산 10억 번</b>에 1초쯤 걸려요 \u2014 그게 <b>10<sup>9</sup></b> 이에요.<br /><b>7\u00d710<sup>9</sup></b> 은 그보다 <b>일곱 배</b> 많아요. 직접 봐요.</>)}
           </div>
         </div>
       ),
-    },
-    // 1-4: Quiz - bitmask insight
-    {
-      type: "quiz",
-      narr: t(E,
-        "First number: how many boards are there to make?",
-        "첫째 — 만들 보드는 몇 개일까요?"),
-      question: t(E,
-        "How many distinct boards exist when N ≤ 20?",
-        "N ≤ 20 일 때 서로 다른 보드는 몇 개?"),
-      options: [
-        t(E, "About 1,000,000 (2^N)", "약 100만 (2^N)"),
-        t(E, "About N \u00d7 (N\u22121) \u00d7 \u2026 \u00d7 1 \u2014 way too many to enumerate",
-             "약 N \u00d7 (N\u22121) \u00d7 \u2026 \u00d7 1 \u2014 너무 많아 열거 불가"),
-      ],
-      correct: 0,
-      explain: t(E,
-        "Right — 2^20 ≈ 1M. Each cell is M or O, so the count doubles with every extra cell.",
-        "맞아요. 2^20 ≈ 100 만이에요.\n칸마다 M 아니면 O 둘 중 하나라, 칸이 하나 늘 때마다 보드 수가 두 배가 돼요."),
-    },
-    // 1-5a: 작은 수로 먼저 세어보기 (2026-09-07 추가)
-    //   학생: "힌트를 읽고 나서야 겨우 이해했다. 힌트 없이 혼자였으면 못 풀었을 것 같다.
-    //          '순서가 있는 조합' 이라는 개념 자체가 처음이라서."
-    //          "아주 작은 숫자(3개 중 2개 = 3×2)로 먼저 손으로 세워보게 했으면
-    //           20×19×18 이 왜 저렇게 되는지 더 잘 알았을 것 같다."
-    //   → 결론(20×19×18)을 묻기 전에, 손으로 다 세어지는 크기를 먼저 보여준다.
-    //   검산: 칸 3개에서 서로 다른 두 칸을 순서 있게 = 6가지 = 3×2
-    {
-      type: "reveal",
-      narr: t(E,
-        "First, a tiny one you can count on your fingers.",
-        "먼저 손으로 다 셀 수 있는 작은 걸로 해봐요."),
-      content: (
-        <div style={{ padding: 16 }}>
-          <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 10, padding: 14 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#1e3a8a", marginBottom: 8, wordBreak: "keep-all" }}>
-              {t(E, "Cells 1, 2, 3 — pick two different ones, in order. How many ways?",
-                   "칸이 1·2·3 세 개예요. 서로 다른 두 칸을 순서대로 고르면 몇 가지일까요?")}
-            </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 10 }}>
-              {[["1","2"],["1","3"],["2","1"],["2","3"],["3","1"],["3","2"]].map(([a,bb],k)=>(
-                <span key={k} style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700,
-                  background: "#fff", border: "1.5px solid #93c5fd", color: "#1d4ed8",
-                  borderRadius: 8, padding: "4px 10px" }}>({a}, {bb})</span>
-              ))}
-            </div>
-            <div style={{ fontSize: 12.5, color: "#1e3a8a", lineHeight: 1.8, wordBreak: "keep-all" }}>
-              {t(E, <>Six. Because the first cell has <b>3</b> choices, and the second has only <b>2</b> left —<br /><b>3 × 2 = 6</b>. Order matters: (1, 2) and (2, 1) are different.</>,
-                   <>여섯 가지예요. 첫 칸은 <b>3</b>가지 중에 고르고, 둘째 칸은 <b>2</b>가지만 남으니까 —<br /><b>3 × 2 = 6</b>. 순서가 중요해요. (1, 2) 와 (2, 1) 은 다른 거예요.</>)}
-            </div>
-          </div>
-        </div>),
-    },
-    // 1-5: NumInput - count distinct triples to dedup
-    {
-      type: "input",
-      narr: t(E,
-        "Second number: scoring one board means checking every move. How many?",
-        "둘째 — 보드 하나를 채점하려면 무브를 다 봐야 해요. 몇 개죠?"),
-      question: t(E,
-        "When N = 20, count distinct ordered triples (x, y, z) with x, y, z all different. Answer = ?",
-        "N = 20 일 때, 세 칸이 모두 다른 무브 (x, y, z) 는 몇 개? = ?"),
-      hint: t(E,
-        "Same as the 3 × 2 you just counted — but three cells this time, out of 20.",
-        "방금 센 3 × 2 와 똑같아요. 이번엔 칸이 20개고, 고르는 게 세 개예요."),
-      answer: 6840,
-    },
-    // 1-6: 브루트 한계 — 1M 보드 × 6840 무브 = 7×10⁹ 벽 (배너와 일관). review 2026-08-18.
-    {
-      type: "reveal",
-      narr: t(E,
-        "Two numbers in hand. Now — is the plan fast enough?",
-        "두 수를 다 셌어요. 그럼 그 계획, 시간 안에 될까요?"),
-      content: (<BruteLimitSim E={E} />),
     },
   ];
 }
@@ -363,40 +302,10 @@ export function makeMooHuntCh2(E, lang = "py") {
     },
     {
       type: "reveal",
-      label: t(E, "First code (slow)", "첫 코드 (느림)"),
-      narr: t(E,
-        "The slow plan, as code. This is not the final answer yet.",
-        "느린 방법을 코드로 옮겼어요. 아직 최종 답은 아니에요."),
-      content: (
-        <div>
-          {/* ⚠️ 이 코드의 한계 — 1페이지(문제 소개)에 있던 걸 코드 보는 자리로 옮김.
-              선생님 2026-08-29 검토: 문제를 읽기도 전에 우리 코드 얘기가 나올 자리가 아님. */}
-          <div style={{ margin: "12px 14px 0", background: "#fffbeb", border: "1.5px solid #d97706",
-            borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#92400e",
-            lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
-            {"\u26A0\uFE0F "}{t(E,
-              /* ⚠️ 2026-09-11: 여기에 "7×10⁹" 과 "시간이 모자라요" 를 넣었다가 뺐다.
-                 커밋 4c00bbbc(9/7)가 **정확히 그 문장을 지운 자리**다 —
-                 "느리다 를 세 번 말하던 걸 한 번으로". 8쪽이 이미 그 말을 한다.
-                 이름표·파란 바의 "첫 코드(느림)/최종 답" 은 새 정보라 남긴다. */
-              "This is the slow plan, written as code \u2014 not the one to submit yet.\nRead it, run it on the next page, and then we make it fast.",
-              "이건 방금 세운 느린 방법을 코드로 옮긴 거예요. 아직 제출할 코드는 아니에요.\n읽어보고, 다음 쪽에서 직접 돌려본 뒤에 빠르게 고쳐요.")}
-          </div>
-          <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />
-        </div>
-      ),
-    },
-    /* ── 결-b: 한계를 **체감** ─────────────────────────────────────
-       quest_problem_standard.md:205 "체감하는 느림 (brute 류는 진짜 느려야)".
-       전엔 한계가 숫자표뿐이었다 — "7×10⁹" 을 읽어도 얼마나 오래인지는 안 온다.
-       그리고 "느리다" 를 코드 보기 전에 두 번, 코드 배너에서 또 한 번 말하고 있었다.
-       이제 순서가 이렇다: 계산으로 예측(ch1) → 코드 → **직접 돌려서 확인** → 개선. */
-    {
-      type: "reveal",
       label: t(E, "Run it", "돌려보기"),
       narr: t(E,
-        "Now run that code — with your own hand, right here.",
-        "이제 그 코드를 직접 돌려봐요. 여기서 바로요."),
+        "Let's actually run it — with your own hand, right here.",
+        "정말 그런지 직접 돌려봐요. 여기서 바로요."),
       content: (<BruteRunSim E={E} />),
     },
     /* ── 결-c: 더 빠른 방법 ──────────────────────────────────────────
