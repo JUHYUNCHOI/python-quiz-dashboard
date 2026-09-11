@@ -10,6 +10,16 @@
  * 마찰이 스텝 수만큼 쌓인다. sumk 은 9단계 중 6단계가 가려 있었다(최대 119px).
  * see-screen.mjs 는 quest 시뮬 안쪽까지 못 들어간다(--click 이 탭 버튼을 못 누른다).
  *
+ ⚠️ 2026-09-11 **`SimShell` 로 옮기면 고쳐질 거라는 생각은 틀렸다.** 실측으로 확정:
+ *   chipxchg 1쪽을 SimShell 로 옮겨 걸음마다 재 봤더니 상자가 `max-height`(기본 472px)에
+ *   **한 번도 안 닿았다**(내용 최대 427px, 잘림 0px). 그런데도 ▶ 는 여전히 바 밑이었다.
+ *   ▶ 가 가리는 진짜 이유는 "내용이 무한히 자라서" 가 아니라
+ *   **시뮬 상자가 페이지 아래쪽(top=289px)에서 시작하기 때문**이다.
+ *   289 + 427 + 나비바 ≒ 780 > 744. `SimShell` 은 자람만 막지 시작 위치는 못 옮긴다.
+ *   → 상자가 cap 에 안 닿으면 `SimShell` 이관은 **아무것도 안 바꾼다.**
+ *   cap 을 줄이면 그제서야 닿는데, 그러면 내용이 잘린다(mooin4: 어떤 값을 줘도 최소 58px).
+ *   그래서 아래 `top=`/`cap` 을 같이 찍는다 — **이관이 도움이 되는지 미리 보이게.**
+ *
  *   node check-sim-nav.mjs <quest-id> [--desktop]
  *
  * 쪽을 **알아서 넘겨가며 그 quest 의 시뮬을 전부 찾아** 잰다. 횟수를 셀 필요 없다.
@@ -53,6 +63,14 @@ const navBottom = () => p.evaluate(() => {
 });
 /* SimShell 안쪽에서 잘린 양. scrollHeight > clientHeight 면 그만큼이 화면 밖이다.
    ▶ 가 보인다고 내용이 다 보이는 게 아니다 — 이걸 안 재서 오늘 틀린 보고를 냈다. */
+/* 시뮬 상자가 어디서 시작하고 cap 에 닿았나. 안 닿았으면 SimShell 이관은 헛수고다. */
+const shellBox = () => p.evaluate(() => {
+  const d = [...document.querySelectorAll("div")].find((x) => (x.style.maxHeight || "").includes("100dvh"));
+  if (!d) return null;
+  const r = d.getBoundingClientRect();
+  const cap = parseFloat(getComputedStyle(d).maxHeight) || 0;
+  return { top: Math.round(r.top), h: Math.round(r.height), cap: Math.round(cap) };
+});
 const clippedPx = () => p.evaluate(() => {
   const boxes = [...document.querySelectorAll("div")].filter((d) => {
     const st = getComputedStyle(d);
@@ -89,11 +107,15 @@ for (let guard = 0; guard < 25; guard++) {
       await p.waitForTimeout(150);
       const bt = await navBottom();
       const cut = await clippedPx();
+      const box = await shellBox();
       const over = bt != null && bt > barTop;
       if (over) bad.push(`${page + 1}쪽 ${i}단계 — ▶ 가 하단 바에 가림 (${bt} > ${barTop})`);
       if (cut > 0) bad.push(`${page + 1}쪽 ${i}단계 — 내용이 ${cut}px 잘림 (시뮬 안쪽 스크롤)`);
+      const boxNote = box
+        ? `  [상자 top=${box.top} 높이=${box.h} cap=${box.cap}${box.h < box.cap - 2 ? " · cap 안 닿음" : " · cap 에 닿음"}]`
+        : "";
       console.log(`     ${String(i).padStart(2)}/${total}  ▶ bottom=${bt ?? "없음"}`
-        + `${over ? "  ⚠️ 하단 바에 가림" : ""}${cut > 0 ? `  ⚠️ 내용 ${cut}px 잘림` : ""}`);
+        + `${over ? "  ⚠️ 하단 바에 가림" : ""}${cut > 0 ? `  ⚠️ 내용 ${cut}px 잘림` : ""}${boxNote}`);
       if (i < total) {
         await p.evaluate(() => {
           const el = [...document.querySelectorAll("button")].find((e) => /다음\s*▶|Next\s*▶/.test(e.textContent));
