@@ -362,10 +362,10 @@ export function makeMooHuntCh2(E, lang = "py") {
     },
     {
       type: "reveal",
-      label: t(E, "Code", "코드"),
+      label: t(E, "First code (slow)", "첫 코드 (느림)"),
       narr: t(E,
-        "Now the code — each bubble sits on the lines it explains.",
-        "이제 코드예요. 말풍선이 설명하는 줄에 붙어 있어요."),
+        "The slow plan, as code. This is not the final answer yet.",
+        "느린 방법을 코드로 옮겼어요. 아직 최종 답은 아니에요."),
       content: (
         <div>
           {/* ⚠️ 이 코드의 한계 — 1페이지(문제 소개)에 있던 걸 코드 보는 자리로 옮김.
@@ -374,8 +374,8 @@ export function makeMooHuntCh2(E, lang = "py") {
             borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#92400e",
             lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
             {"\u26A0\uFE0F "}{t(E,
-              "This is the plan from the last page, written as code.\nRead it first — you get to run it on the next page.",
-              "앞 페이지에서 세운 방법을 그대로 코드로 옮긴 거예요.\n먼저 읽어봐요. 다음 페이지에서 직접 돌려봐요.")}
+              "This is the plan we just counted — 7\u00d710\u2079 steps — written as code.\nIt gives the right answer but runs out of time on the big cases.\nRead it, run it on the next page, and then we make it fast.",
+              "방금 센 그 방법(7\u00d710\u2079 번)을 그대로 코드로 옮긴 거예요.\n답은 맞는데 큰 입력에서 시간이 모자라요.\n읽어보고, 다음 쪽에서 직접 돌려본 뒤에 빠르게 고쳐요.")}
           </div>
           <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />
         </div>
@@ -408,18 +408,18 @@ export function makeMooHuntCh2(E, lang = "py") {
     },
     {
       type: "reveal",
-      label: t(E, "Faster code", "더 빠른 코드"),
+      label: t(E, "Final answer", "최종 답"),
       narr: t(E,
-        "The official solution — same answer, far less work.",
-        "공식 풀이예요. 답은 같고 일은 훨씬 적어요."),
+        "The final answer — same result, far less work.",
+        "이게 최종 답이에요. 결과는 같고 일은 훨씬 적어요."),
       content: (
         <div>
           <div style={{ margin: "12px 14px 0", background: "#ecfdf5", border: "1.5px solid #34d399",
             borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#065f46",
             lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
             {"\u2705 "}{t(E,
-              "This is the official solution from usaco.org.\nThe idea is the one you just saw: only 'one M cell + two O cells' can score.\nThe answer is identical to the brute force — it just looks at far fewer moves.",
-              "usaco.org 공식 풀이예요.\n방금 본 그 생각이에요 — 득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐이라는 것.\n답은 완전탐색과 똑같아요. 보는 무브 수만 확 줄어요.")}
+              "This is the code to submit — the official solution from usaco.org.\nThe idea is the one you just saw: only 'one M cell + two O cells' can score.\nSame answer as the slow code, but it looks at far fewer moves.",
+              "이게 제출할 코드예요 — usaco.org 공식 풀이.\n방금 본 그 생각이에요: 득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐.\n답은 느린 코드와 똑같고, 보는 무브 수만 확 줄어요.")}
           </div>
           <CodeWalk E={E} lang={lang} code={fw.code} vars={fw.vars} beats={fw.beats} accent="#059669" />
         </div>
