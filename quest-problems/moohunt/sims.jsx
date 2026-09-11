@@ -271,52 +271,73 @@ export function BitBoardSim({ E }) {
      → 여기서는 비트도 **0번 칸부터** 적어서 보드와 방향을 맞춘다. */
   const bin = (b) => bits(b).join("");
 
-  const steps = [{ k: "why" }, ...Array.from({ length: 1 << N }, (_, b) => ({ k: "row", b })),
-                 { k: "extract" }, { k: "shift" }, { k: "all" }];
+  /* ═══ 걸음 목록 — 2026-09-11 재설계 (12 → 9) ═══
+     선생님: *"갑자기 b=5일때 공식 얘기가 나오지?"*
+     옛 구조는 0~7 을 한 줄씩 여덟 걸음 훑은 뒤, 10번째 걸음에서 표 한가운데 5로
+     **되돌아가** >> · &1 · 공식을 한꺼번에 줬다. 고친 것 셋:
+       ① 0·1·2 세 줄만 하나씩 보여주면 "칸마다 자기 비트" 규칙이 이미 보인다.
+          나머지 다섯 줄은 한 번에 채운다 (걸음마다 답할 새 질문이 없었다).
+       ② **turn** 걸음을 새로 넣어 "이제 거꾸로 본다" 를 말하고, 5를 고른 이유도 말한다.
+          (M 과 O 가 섞여 있어야 답이 맞았는지 눈으로 구별된다. 7=MMM 은 전부 M 이라
+           엉뚱한 칸을 집어도 우연히 맞는다.)
+       ③ >> 와 &1 을 두 걸음으로 쪼갠다. 옛 구조는 한 말풍선에 둘 다 있었다.
+     << 걸음은 남긴다 — 다음 쪽 코드 `for b in range(1 << N)` 에 실제로 쓰인다
+     (components.jsx). 다만 옛 구조는 shift·all 두 걸음이 `1<<N=8` 을 각각 말해
+     겹쳤다 → 정의(shift)와 코드 줄 뜻(all)으로 갈랐다. */
+  const EX_B = 5, EX_I = 1;   // b=5 의 1번 칸을 꺼내는 예 — 고른 이유는 turn 걸음에 있다
+  const steps = [
+    { k: "row", b: 0, first: true },
+    { k: "row", b: 1 },
+    { k: "row", b: 2 },
+    { k: "rest" },
+    { k: "turn" },
+    { k: "shr" },
+    { k: "and" },
+    { k: "shift" },
+    { k: "all" },
+  ];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
-  const shown = s.k === "row" ? s.b : s.k === "why" ? -1 : (1 << N) - 1;
-  const bubbleTone = s.k === "all" ? "aha" : s.k === "why" ? "stuck" : "go";
-  const EX_B = 5, EX_I = 1;   // b=5 의 1번 칸을 꺼내는 예
+  const shown = s.k === "row" ? s.b : (1 << N) - 1;
+  const EXC = chars(EX_B);                       // ["M","O","M"]
+  const CUT = EXC.slice(EX_I);                   // >> 뒤에 남는 것
 
   const say =
-    s.k === "why" ? t(E,
-      <>Each cell is <b>M</b> or <b>O</b> — two choices.<br />So write M as <b>1</b> and O as <b>0</b>.<br />Then a whole board is just <b>one number</b>.</>,
-      <>칸마다 <b>M</b> 아니면 <b>O</b> — 둘 중 하나예요.<br />그럼 M 을 <b>1</b>, O 를 <b>0</b> 으로 쓰면요?<br />보드 하나가 <b>숫자 하나</b>가 돼요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .8 }}>(비트는 <b>0번 칸부터</b> 적을게요. 보드와 순서를 맞추려고요.)</span></>)
+    s.k === "row" && s.first ? t(E,
+      <>Each cell is <b>M</b> or <b>O</b> — two choices.<br />Write M as <b>1</b>, O as <b>0</b>.<br />Then a whole board is just <b>one number</b>.</>,
+      <>칸마다 <b>M</b> 아니면 <b>O</b> 둘 중 하나예요.<br />M 을 <b>1</b>, O 를 <b>0</b> 으로 쓰면<br />보드 하나가 <b>숫자 하나</b>가 돼요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .8 }}>(비트는 <b>0번 칸부터</b> 적을게요. 보드와 순서를 맞추려고요.)</span></>)
+    : s.k === "row" && s.b === 1 ? t(E,
+      <><b>1</b> is <b>{bin(1)}</b> — only cell <b>0</b> turned into M.</>,
+      <><b>1</b> 은 <b>{bin(1)}</b> — <b>0번 칸</b>만 M 이 됐어요.</>)
     : s.k === "row" ? t(E,
-      <>Number <b>{s.b}</b> in binary is <b>{bin(s.b)}</b> → board <b>{chars(s.b).join("")}</b></>,
-      <>숫자 <b>{s.b}</b> 를 2진수로 쓰면 <b>{bin(s.b)}</b> → 보드 <b>{chars(s.b).join("")}</b></>)
-    : s.k === "extract" ? t(E,
-      <>So how do we read just cell <b>{EX_I}</b> out of <b>b = {EX_B}</b> (= <b>{chars(EX_B).join("")}</b>)?<br />
-        <b>①</b> <b>Drop</b> the first {EX_I} cell{EX_I > 1 ? "s" : ""} — now cell {EX_I} sits at the front.<br />
-        <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{chars(EX_B).join("")} → {chars(EX_B).slice(EX_I).join("")}</span> · that is <b>{EX_B} &gt;&gt; {EX_I}</b>.<br />
-        <b>②</b> Now just look at the <b>front cell</b> — that is <b>&amp; 1</b>.<br />
-        Answer: <b>{((EX_B >> EX_I) & 1) ? "M" : "O"}</b> — same as cell {EX_I} in the table above.</>,
-      <>그럼 <b>b = {EX_B}</b>(= <b>{chars(EX_B).join("")}</b>) 에서 <b>{EX_I}</b>번 칸만 어떻게 꺼낼까요?<br />
-        <b>①</b> 앞의 {EX_I}칸을 <b>버려요</b> — 그러면 {EX_I}번 칸이 맨 앞으로 와요.<br />
-        <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{chars(EX_B).join("")} → {chars(EX_B).slice(EX_I).join("")}</span> · 이게 <b>{EX_B} &gt;&gt; {EX_I}</b> 예요.<br />
-        <b>②</b> 이제 <b>맨 앞 한 칸</b>만 보면 돼요 — 이게 <b>&amp; 1</b> 이에요.<br />
-        답: <b>{((EX_B >> EX_I) & 1) ? "M" : "O"}</b> — 위 표의 {EX_I}번 칸과 같죠?</>)
+      <><b>2</b> is <b>{bin(2)}</b> — this time only cell <b>1</b>.<br />Each cell watches <b>its own spot</b>.</>,
+      <><b>2</b> 는 <b>{bin(2)}</b> — 이번엔 <b>1번 칸</b>만이에요.<br />칸마다 <b>자기 자리</b>만 봐요.</>)
+    : s.k === "rest" ? t(E,
+      <>Same rule for the rest — all <b>{1 << N}</b> boards.</>,
+      <>나머지도 같은 규칙이에요 — 보드 <b>{1 << N}</b>개가 전부 나왔어요.</>)
+    : s.k === "turn" ? t(E,
+      <>Now the other way round: given a number, which cell is M?<br />Let us try <b>{EX_B}</b> (= <b>{EXC.join("")}</b>) — it has both M and O,<br />so we can <b>see</b> whether our answer is right.</>,
+      <>이번엔 거꾸로예요. 숫자만 보고 어느 칸이 M 인지 알아내야 해요.<br /><b>{EX_B}</b>(= <b>{EXC.join("")}</b>) 로 해볼게요.<br />M 과 O 가 <b>섞여 있어서</b> 답이 맞았는지 눈으로 보여요.</>)
+    : s.k === "shr" ? t(E,
+      <>We want cell <b>{EX_I}</b>. First bring it to the front:<br /><b>drop</b> the {EX_I} cell{EX_I > 1 ? "s" : ""} in front of it.<br /><span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{EXC.join("")} → {CUT.join("")}</span> · that is <b>{EX_B} &gt;&gt; {EX_I} = {EX_B >> EX_I}</b>.</>,
+      <><b>{EX_I}번 칸</b>이 궁금해요. 먼저 맨 앞으로 데려와요.<br />앞에 있는 <b>{EX_I}칸을 버려요.</b><br /><span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{EXC.join("")} → {CUT.join("")}</span> · 이게 <b>{EX_B} &gt;&gt; {EX_I} = {EX_B >> EX_I}</b> 예요.</>)
+    : s.k === "and" ? t(E,
+      <>Now keep only the <b>front cell</b> — that is <b>&amp; 1</b>.<br /><b>{EX_B >> EX_I} &amp; 1 = {(EX_B >> EX_I) & 1}</b> → <b>{((EX_B >> EX_I) & 1) ? "M" : "O"}</b>.<br />Same as cell {EX_I} of {EXC.join("")}. ✔</>,
+      <>이제 <b>맨 앞 한 칸</b>만 남겨요 — 이게 <b>&amp; 1</b> 이에요.<br /><b>{EX_B >> EX_I} &amp; 1 = {(EX_B >> EX_I) & 1}</b> → <b>{((EX_B >> EX_I) & 1) ? "M" : "O"}</b><br />{EXC.join("")} 의 {EX_I}번 칸과 같죠? ✔</>)
     : s.k === "shift" ? t(E,
-      <>One more sign: <b>&lt;&lt;</b>. It is <b>&gt;&gt;</b> the other way.<br />
-        <b>&gt;&gt;</b> drops cells from the front; <b>&lt;&lt;</b> <b>adds empty cells at the front</b>.<br />
-        <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>1 = M &nbsp;→&nbsp; 1 &lt;&lt; {N} = OOO<b>M</b> = {1 << N}</span><br />
-        Each added cell doubles it, so <b>1 &lt;&lt; {N} = 2<sup>{N}</sup> = {1 << N}</b>.</>,
-      <>기호 하나만 더요. <b>&lt;&lt;</b> 는 <b>&gt;&gt;</b> 를 뒤집은 거예요.<br />
-        <b>&gt;&gt;</b> 는 앞 칸을 버리고, <b>&lt;&lt;</b> 는 <b>앞에 빈 칸을 붙여요.</b><br />
-        <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>1 = M &nbsp;→&nbsp; 1 &lt;&lt; {N} = OOO<b>M</b> = {1 << N}</span><br />
-        칸이 하나 붙을 때마다 두 배가 되니까 <b>1 &lt;&lt; {N} = 2<sup>{N}</sup> = {1 << N}</b> 이에요.</>)
+      <>One more sign: <b>&lt;&lt;</b>, the opposite of <b>&gt;&gt;</b>.<br />It <b>adds</b> empty cells at the front, doubling each time.<br /><b>1 &lt;&lt; {N} = 2<sup>{N}</sup> = {1 << N}</b></>,
+      <>기호 하나만 더요. <b>&lt;&lt;</b> 는 <b>&gt;&gt;</b> 의 반대예요.<br />앞에 빈 칸을 <b>붙여요.</b> 한 칸 붙을 때마다 두 배예요.<br /><b>1 &lt;&lt; {N} = 2<sup>{N}</sup> = {1 << N}</b></>)
     : t(E,
-      <>With N = {N} there are <b>{1 << N}</b> boards — the numbers <b>0 … {(1 << N) - 1}</b>, all of them.<br />
-        So the single line <b>for b in range(1 &lt;&lt; N)</b><br />means <b>"try every board"</b>.</>,
-      <>N = {N} 이면 보드는 <b>{1 << N}</b>개. 숫자 <b>0 … {(1 << N) - 1}</b> 이 전부예요.<br />
-        그래서 <b>for b in range(1 &lt;&lt; N)</b> 한 줄이<br /><b>"모든 보드를 다 해본다"</b> 가 돼요.</>);
+      <>And <b>{1 << N}</b> is exactly how many boards we have.<br />So <b>for b in range(1 &lt;&lt; N)</b> means<br /><b>"try every board"</b>.</>,
+      <>그 <b>{1 << N}</b>이 바로 보드 개수예요.<br />그래서 <b>for b in range(1 &lt;&lt; N)</b> 한 줄이<br /><b>"모든 보드를 다 해본다"</b> 가 돼요.</>);
 
   const rows = Array.from({ length: 1 << N }, (_, b) => b).filter((b) => b <= shown);
-  /* 말풍선이 붙을 줄. "5를 2진수로 쓰면…" 은 5번 줄 위에 있어야 읽힌다.
-     why/all 단계는 특정 줄 얘기가 아니라 표 위에 둔다. */
-  const bubbleAt = s.k === "row" ? s.b : s.k === "extract" ? EX_B : null;
-  // shift 단계는 특정 줄 얘기가 아니라 표 위에 둔다 (bubbleAt === null 경로)
+  /* 말풍선이 붙을 줄 — 그 줄 바로 위에 끼운다 (한 걸음에 바뀌는 자리는 한 곳).
+     turn·shr·and 는 5번 줄 얘기라 5번 줄 위. shift·all 은 특정 줄 얘기가 아니라 표 위. */
+  const inRowSteps = { row: true, turn: true, shr: true, and: true };
+  const bubbleAt = s.k === "row" ? s.b : inRowSteps[s.k] ? EX_B : null;
+  const onEx = s.k === "turn" || s.k === "shr" || s.k === "and";
+  const bubbleTone = s.k === "and" || s.k === "all" ? "aha" : s.k === "turn" ? "stuck" : "go";
   const sayRef = useKeepInView(ts.safe);
 
   return (
@@ -340,17 +361,19 @@ export function BitBoardSim({ E }) {
         </div>
         {rows.map((b) => {
           const cur = s.k === "row" && b === s.b;
-          const ex = s.k === "extract" && b === EX_B;
+          const ex = onEx && b === EX_B;
           return (
             <Fragment key={b}>
             {bubbleAt === b && (
               <div ref={sayRef}>
-                <Say inRow tone={ex ? "aha" : "go"}>{say}</Say>
-                {ex && (
+                <Say inRow tone={bubbleTone}>{say}</Say>
+                {(s.k === "shr" || s.k === "and") && (
                   <div style={{ maxWidth: 330, margin: "0 auto 8px", padding: "7px 11px", borderRadius: 9,
                     background: "#fffbeb", border: "1.5px solid #fbbf24", textAlign: "center",
                     fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: "#92400e" }}>
-                    (b &gt;&gt; i) &amp; 1 &nbsp;→&nbsp; ({EX_B} &gt;&gt; {EX_I}) &amp; 1 = {(EX_B >> EX_I) & 1}
+                    {s.k === "shr"
+                      ? <>{EX_B} &gt;&gt; {EX_I} = {EX_B >> EX_I}</>
+                      : <>(b &gt;&gt; i) &amp; 1 &nbsp;→&nbsp; ({EX_B} &gt;&gt; {EX_I}) &amp; 1 = {(EX_B >> EX_I) & 1}</>}
                   </div>
                 )}
               </div>
@@ -362,14 +385,22 @@ export function BitBoardSim({ E }) {
               <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 14, color: "#334155" }}>{b}</span>
               <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 13, color: "#7c3aed" }}>{bin(b)}</span>
               <span style={{ display: "flex", gap: 3 }}>
-                {chars(b).map((c, i) => (
-                  <span key={i} style={{ width: 24, height: 24, borderRadius: 6,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 13,
-                    background: c === "M" ? MBG : OBG,
-                    border: `${ex && i === EX_I ? 2.5 : 1.5}px solid ${ex && i === EX_I ? "#f59e0b" : (c === "M" ? MCOL : OCOL)}`,
-                    color: c === "M" ? MCOL : OCOL }}>{c}</span>
-                ))}
+                {chars(b).map((c, i) => {
+                  /* shr·and 걸음에서는 버린 앞 칸을 흐리게 — "무엇이 사라졌나" 가 보이게 */
+                  const dropped = (s.k === "shr" || s.k === "and") && ex && i < EX_I;
+                  const faded = s.k === "and" && ex && i > EX_I;
+                  const spot = ex && i === EX_I;
+                  return (
+                    <span key={i} style={{ width: 24, height: 24, borderRadius: 6,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 13,
+                      opacity: dropped ? 0.25 : faded ? 0.35 : 1,
+                      textDecoration: dropped ? "line-through" : "none",
+                      background: c === "M" ? MBG : OBG,
+                      border: `${spot ? 2.5 : 1.5}px solid ${spot ? "#f59e0b" : (c === "M" ? MCOL : OCOL)}`,
+                      color: c === "M" ? MCOL : OCOL }}>{c}</span>
+                  );
+                })}
               </span>
             </div>
             </Fragment>
