@@ -34,12 +34,17 @@ function collect(file, key) {
 
 const un = (s) => s;   // JSON.parse 가 이미 풀었다
 
-for (const [q, file, pyKey, cppKey] of [
+/* CLI 로 한 건만 뽑기:  node scripts/extract-usaco-code.mjs <quest> <파일> <PY키> <CPP키> */
+const argv = process.argv.slice(2);
+const TARGETS = argv.length === 4
+  ? [[argv[0], argv[1], argv[2], argv[3]]]
+  : [
   ["buymilk",      "quest-problems/buymilk/components.jsx",      "FULL_PY", "FULL_CPP"],
   ["photoshoot25", "quest-problems/photoshoot25/components.jsx", "FULL_PY", "FULL_CPP"],
   ["moohunt",      "quest-problems/moohunt/fast.jsx",            "FAST_PY", "FAST_CPP"],
   ["cowsplits",    "quest-problems/cowsplits/components.jsx",    "py",      "cpp"],
-]) {
+];
+for (const [q, file, pyKey, cppKey] of TARGETS) {
   for (const [lang, key, ext] of [["py", pyKey, "py"], ["cpp", cppKey, "cpp"]]) {
     const L = collect(file, key);
     if (!L.length) { console.log(`⚠️ ${q} ${lang}: 못 찾음 (${key} in ${file})`); continue; }

@@ -41,7 +41,7 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `hps` | HPS Minus One | Open 2025 Bronze #1 | ✅ 12/12 PASS | ✅ 12/12 PASS |
 | `printseq` | Printing Sequences | Feb 2025 Bronze #3 | ✅ 13/13 PASS | ✅ 13/13 PASS (after dev fix) |
 | `mexes` | Making Mexes | Feb 2025 Bronze #2 | ✅ 11/11 PASS | ✅ 11/11 PASS |
-| `reflection` | Reflection | Feb 2025 Bronze #1 | 🟡 3/16 (TLE 4-16, Python too slow) | ✅ 15/15 PASS |
+| `reflection` | Reflection | Feb 2025 Bronze #1 | ⏳ 재제출 대기 — 2026-09-11 선생님 지시로 풀이 모양 교체(묶음 개수표 제거 → 거울짝 3칸 직접 비교). 처음 훑기 N² → (N/2)². N=2000·U=10만 1.08s → **0.62s**. 구 버전은 3/16 TLE. 로컬: usaco.org 공식 만점 C++ 과 랜덤 500건 + 큰 입력 10만 줄 전부 일치. | ⏳ 재제출 대기 — 같은 교체 (구 버전은 15/15 PASS). 공식 답안과 일치 확인. |
 | `checkups` | Cow Checkups | Jan 2025 Bronze #3 | 🟡 6/13 (TLE 7-13, Python expected slow) | 6/13 (intended O(N^3)) |
 | `mooin2` | It's Mooin' Time II | Jan 2025 Bronze #2 | ✅ 11/11 PASS | ✅ 11/11 PASS |
 | `astral` | Astral Superposition | Jan 2025 Bronze #1 | ✅ 12/12 PASS | ✅ 12/12 PASS |
