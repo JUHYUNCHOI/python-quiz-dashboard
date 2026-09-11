@@ -317,13 +317,13 @@ export function BitBoardSim({ E }) {
       <>나머지도 같은 규칙이에요 — 보드 <b>{1 << N}</b>개가 전부 나왔어요.</>)
     : s.k === "turn" ? t(E,
       <>Now the other way round: given a number, which cell is M?<br />Let us try <b>{EX_B}</b> (= <b>{EXC.join("")}</b>) — it has both M and O,<br />so we can <b>see</b> whether our answer is right.</>,
-      <>이번엔 거꾸로예요. 숫자만 보고 어느 칸이 M 인지 알아내야 해요.<br /><b>{EX_B}</b>(= <b>{EXC.join("")}</b>) 로 해볼게요.<br />M 과 O 가 <b>섞여 있어서</b> 답이 맞았는지 눈으로 보여요.</>)
+      <>이번엔 거꾸로예요. 숫자만 보고 어느 칸이 M 인지 알아내야 해요.<br /><b>{EX_B}</b>(= <b>{EXC.join("")}</b>) 로 해볼게요.<br />M 과 O 가 <b>섞여 있어서</b> 답이 맞았는지 눈으로 보여요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .8 }}>(여기서 칸은 <b>0번부터</b> 세요. 문제의 <b>1 2 3</b> 은 1번부터라서 코드가 1 을 빼요.)</span></>)
     : s.k === "shr" ? t(E,
       <>We want cell <b>{EX_I}</b>. First bring it to the front:<br /><b>drop</b> the {EX_I} cell{EX_I > 1 ? "s" : ""} in front of it.<br /><span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{EXC.join("")} → {CUT.join("")}</span> · that is <b>{EX_B} &gt;&gt; {EX_I} = {EX_B >> EX_I}</b>.</>,
       <><b>{EX_I}번 칸</b>이 궁금해요. 먼저 맨 앞으로 데려와요.<br />앞에 있는 <b>{EX_I}칸을 버려요.</b><br /><span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{EXC.join("")} → {CUT.join("")}</span> · 이게 <b>{EX_B} &gt;&gt; {EX_I} = {EX_B >> EX_I}</b> 예요.</>)
     : s.k === "and" ? t(E,
-      <>Now keep only the <b>front cell</b> — that is <b>&amp; 1</b>.<br /><b>{EX_B >> EX_I} &amp; 1 = {(EX_B >> EX_I) & 1}</b> → <b>{((EX_B >> EX_I) & 1) ? "M" : "O"}</b>.<br />Same as cell {EX_I} of {EXC.join("")}. ✔</>,
-      <>이제 <b>맨 앞 한 칸</b>만 남겨요 — 이게 <b>&amp; 1</b> 이에요.<br /><b>{EX_B >> EX_I} &amp; 1 = {(EX_B >> EX_I) & 1}</b> → <b>{((EX_B >> EX_I) & 1) ? "M" : "O"}</b><br />{EXC.join("")} 의 {EX_I}번 칸과 같죠? ✔</>)
+      <>Now keep only the <b>front cell</b> — that is <b>&amp; 1</b>.<br />We get <b>{EX_B >> EX_I} &amp; 1 = {(EX_B >> EX_I) & 1}</b>, which means <b>{((EX_B >> EX_I) & 1) ? "M" : "O"}</b>.<br />In the table, cell {EX_I} of {EXC.join("")} is <b>{EXC[EX_I]}</b> too — we got it right ✔</>,
+      <>이제 <b>맨 앞 한 칸</b>만 남겨요 — 이게 <b>&amp; 1</b> 이에요.<br />계산하면 <b>{EX_B >> EX_I} &amp; 1 = {(EX_B >> EX_I) & 1}</b>, 곧 <b>{((EX_B >> EX_I) & 1) ? "M" : "O"}</b> 예요.<br />표에서 {EXC.join("")} 의 {EX_I}번 칸도 <b>{EXC[EX_I]}</b> 죠? 맞게 꺼냈어요 ✔</>)
     : s.k === "shift" ? t(E,
       <>One more sign: <b>&lt;&lt;</b>, the opposite of <b>&gt;&gt;</b>.<br />It <b>adds</b> empty cells at the front, doubling each time.<br /><b>1 &lt;&lt; {N} = 2<sup>{N}</sup> = {1 << N}</b></>,
       <>기호 하나만 더요. <b>&lt;&lt;</b> 는 <b>&gt;&gt;</b> 의 반대예요.<br />앞에 빈 칸을 <b>붙여요.</b> 한 칸 붙을 때마다 두 배예요.<br /><b>1 &lt;&lt; {N} = 2<sup>{N}</sup> = {1 << N}</b></>)
@@ -357,7 +357,7 @@ export function BitBoardSim({ E }) {
           fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 8px" }}>
           <span>{t(E, "number", "숫자")}</span>
           <span>{t(E, "bits (cell 0 first)", "비트 (0번 칸부터)")}</span>
-          <span>{t(E, "board", "보드")}</span>
+          <span>{t(E, "board (cells 0\u00b71\u00b72)", "보드 (0\u00b71\u00b72번 칸)")}</span>
         </div>
         {rows.map((b) => {
           const cur = s.k === "row" && b === s.b;
