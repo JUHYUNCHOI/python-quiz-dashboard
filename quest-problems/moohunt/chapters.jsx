@@ -381,8 +381,8 @@ export function makeMooHuntCh2(E, lang = "py") {
               border: "1.5px solid #fbbf24", color: "#92400e", fontSize: 12.5, fontWeight: 700,
               lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
               {t(E,
-                <>⚠️ At the biggest case (N = 20, K = 200,000) this takes about <b>69 seconds</b> in Python — the limit is 4. The algorithm is right, so it is great for understanding, but submit in <b>C++</b> for full marks (measured 1.96 s, limit 2).</>,
-                <>⚠️ 가장 큰 입력(N = 20, K = 20만)에서 Python 은 약 <b>69초</b> 걸려요 — 제한은 4초예요.<br />생각은 맞으니 이해용으로는 좋지만, 만점은 <b>C++</b> 로 내요 (실측 1.96초, 제한 2초).</>)}
+                <>⚠️ At the biggest case (N = 20, K = 200,000) this takes about <b>96 seconds</b> in Python — the limit is 4. The algorithm is right, so it is great for understanding, but submit in <b>C++</b> for full marks (measured 1.96 s, limit 2).</>,
+                <>⚠️ 가장 큰 입력(N = 20, K = 20만)에서 Python 은 약 <b>96초</b> 걸려요 — 제한은 4초예요.<br />생각은 맞으니 이해용으로는 좋지만, 만점은 <b>C++</b> 로 내요 (실측 1.96초, 제한 2초).</>)}
             </div>
           )}
           <CodeWalk E={E} lang={lang} code={fw.code} vars={fw.vars} beats={fw.beats} accent="#059669" />
