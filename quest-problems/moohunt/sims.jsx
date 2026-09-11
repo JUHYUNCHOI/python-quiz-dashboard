@@ -228,7 +228,7 @@ export function BruteLimitSim({ E }) {
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Will brute force finish in time?", "완전탐색, 시간 안에 끝날까요?")}
+        title={t(E, "Trying every board \u2014 in time?", "보드를 전부 해보기 \u2014 시간 안에 될까요?")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
       <div ref={sayRef}>
@@ -356,7 +356,7 @@ export function BitBoardSim({ E }) {
         <div style={{ display: "grid", gridTemplateColumns: "42px 60px 1fr", gap: 8,
           fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 8px" }}>
           <span>{t(E, "number", "숫자")}</span>
-          <span>{t(E, "bits (cell 0 first)", "비트 (0번 칸부터)")}</span>
+          <span>{t(E, "bits = 0/1 (cell 0 first)", "비트 = 0 아니면 1 (0번 칸부터)")}</span>
           <span>{t(E, "board (cells 0\u00b71\u00b72)", "보드 (0\u00b71\u00b72번 칸)")}</span>
         </div>
         {rows.map((b) => {
@@ -514,10 +514,15 @@ export function IsAtTableSim({ E }) {
                    "세로 = 작은 쪽 O 칸, 가로 = 큰 쪽 O 칸")}
             </div>
             {s.k === "use" && (
-              <div style={{ maxWidth: 300, margin: "12px auto 0", padding: "8px 12px", borderRadius: 9,
+              <div style={{ maxWidth: 320, margin: "12px auto 0", padding: "9px 12px", borderRadius: 9,
                 background: "#f5f3ff", border: `1.5px solid ${A}`, textAlign: "center",
-                fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: "#5b21b6" }}>
-                isAt[0][1][2] = {grid[1][2]}
+                fontSize: 12, fontWeight: 700, color: "#5b21b6", lineHeight: 1.7, wordBreak: "keep-all" }}>
+                {t(E, <>Code counts cells from <b>0</b>, so subtract 1 from each:</>,
+                     <>코드는 칸을 <b>0번부터</b> 세요. 그래서 하나씩 빼요:</>)}
+                <br />
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800 }}>
+                  1·2·3 {"→"} isAt[0][1][2] = {grid[1][2]}
+                </span>
               </div>
             )}
           </div>
@@ -569,14 +574,14 @@ export function FasterIdeaSim({ E }) {
       <>The brute force checks <b>all {allMoves}</b> moves.<br />But cell 1 is M — any move asking cell 1 to be O <b>cannot score</b>.<br />Most checks are wasted.</>,
       <>완전탐색은 무브 <b>{allMoves}개를 전부</b> 봐요.<br />그런데 1번 칸은 M 이에요. 1번이 O 여야 하는 무브는 <b>애초에 득점 못 해요</b>.<br />대부분이 헛수고예요.</>)
     : s.k === "order" ? t(E,
-      <>First — y and z just both need to be O.<br />So <b>(1,2,3) and (1,3,2) are the same</b> for scoring.<br />Count them together.</>,
-      <>먼저 — y 와 z 는 <b>둘 다 O 이기만</b> 하면 돼요.<br />그러니 <b>(1,2,3) 과 (1,3,2) 는 채점에선 같은 것</b>이에요.<br />묶어서 세면 돼요.</>)
+      <>A move is <b>(x, y, z)</b> — x must read M, y and z must read O.<br />So y and z <b>just both need to be O</b>: <b>(1,2,3) and (1,3,2) score the same</b>.<br />Count them together.</>,
+      <>무브는 <b>(x, y, z)</b> 예요 — x 자리가 M, y·z 자리가 O 여야 득점해요.<br />그러니 y 와 z 는 <b>둘 다 O 이기만</b> 하면 돼요.<br /><b>(1,2,3) 과 (1,3,2) 는 채점에선 같은 것</b>이에요. 묶어서 세요.</>)
     : s.k === "only" ? t(E,
       <>So don't look at every move. Look only at what <b>can</b> score:<br />one <b>M</b> cell + two <b>O</b> cells.<br />Here that is {mPos.length} × {pairs} = <b>{canScore}</b>, not {allMoves}.</>,
       <>그러니 무브를 다 보지 말고, <b>득점할 수 있는 것만</b> 봐요.<br /><b>M</b> 자리 하나 + <b>O</b> 자리 둘.<br />여기선 {mPos.length} × {pairs} = <b>{canScore}개</b>예요. {allMoves}개가 아니라요.</>)
     : t(E,
-      <>At N = 20 the same trick cuts <b>{BIG_ALL.toLocaleString("en-US")}</b> down to about <b>{BIG_AVG}</b> per board.<br />Roughly <b>{gain}× less work</b> — and the answer is identical.</>,
-      <>N = 20 에서도 똑같아요. 보드마다 <b>{BIG_ALL.toLocaleString("en-US")}개</b> 보던 걸 평균 <b>{BIG_AVG}개</b>만 봐요.<br />일이 <b>약 {gain}배</b> 줄어요. 답은 똑같고요.</>);
+      <>At N = 20 the same idea cuts <b>{BIG_ALL.toLocaleString("en-US")}</b> down to about <b>{BIG_AVG}</b> per board.<br />Roughly <b>{gain}× less work</b> — and the answer is identical.</>,
+      <>N = 20 에서도 같은 생각이에요. 보드마다 <b>{BIG_ALL.toLocaleString("en-US")}개</b> 보던 걸 평균 <b>{BIG_AVG}개</b>만 봐요.<br />일이 <b>약 {gain}배</b> 줄어요. 답은 똑같고요.</>);
 
   const cellStyle = (c, dim) => ({
     width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",

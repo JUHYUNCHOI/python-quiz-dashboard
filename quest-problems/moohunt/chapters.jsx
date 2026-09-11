@@ -272,7 +272,8 @@ export function makeMooHuntCh1(E) {
         "N ≤ 20 일 때 서로 다른 보드는 몇 개?"),
       options: [
         t(E, "About 1,000,000 (2^N)", "약 100만 (2^N)"),
-        t(E, "About N! — way too many to enumerate", "약 N! — 너무 많아 열거 불가"),
+        t(E, "About N \u00d7 (N\u22121) \u00d7 \u2026 \u00d7 1 \u2014 way too many to enumerate",
+             "약 N \u00d7 (N\u22121) \u00d7 \u2026 \u00d7 1 \u2014 너무 많아 열거 불가"),
       ],
       correct: 0,
       explain: t(E,
