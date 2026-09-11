@@ -383,7 +383,9 @@ export function CodeBlock({ lines, lang = "py", dimUntil = 0 }: CodeBlockProps) 
      `.split())` 의 뒷부분이 버튼 밑에 숨었다. 공용 컴포넌트라 quest 전체에 걸린다.
      좁은 화면에서는 버튼 높이만큼 위를 비워 첫 줄이 절대 안 가리게 한다. */
   return (
-    <div className="relative bg-gray-900 rounded-xl px-3 pb-3 pt-9 sm:pt-3 overflow-x-auto text-[13px] leading-relaxed font-mono" style={{ fontVariantLigatures: "none", fontFeatureSettings: '"liga" 0, "calt" 0' }}>
+    <div className="qcode-scroll relative bg-gray-900 rounded-xl px-3 pb-3 pt-9 sm:pt-3 overflow-x-auto text-[13px] leading-relaxed font-mono" style={{ fontVariantLigatures: "none", fontFeatureSettings: '"liga" 0, "calt" 0',
+      /* 오른쪽에 더 있다는 힌트 (2026-09-11) — pre 로 바꾼 뒤 긴 줄이 표시 없이 잘렸다 */
+      boxShadow: "inset -14px 0 14px -10px rgba(0,0,0,.55)" }}>
       <button
         onClick={handleCopy}
         className={`absolute top-2 right-2 px-2 py-1 rounded-md text-[11px] font-bold transition-colors ${

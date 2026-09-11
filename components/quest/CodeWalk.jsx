@@ -94,7 +94,7 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
       {/* 코드 — 고정 높이 창, 밝아진 줄로 자동 스크롤.
           배경/글자색은 다른 레슨(CodeBlock)과 동일한 gray-900. 흐림 없이 전부 또렷,
           강조는 '밝은 왼쪽 막대 + 살짝 밝은 배경'만 (선생님 2026-07-13: 어둡지 않게). */}
-      <div ref={boxRef} style={{
+      <div ref={boxRef} className="qcode-scroll" style={{
         background: "#111827", borderRadius: 12, padding: "12px 10px",
         overflowY: "auto", overflowX: "auto",
         // 기본은 적당한 높이, 그런데 학생·선생님이 아래 모서리를 끌어서 늘릴 수 있게.
@@ -109,7 +109,9 @@ export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars
         fontVariantLigatures: "none", fontFeatureSettings: '"liga" 0, "calt" 0',
         fontSize: 13.5, lineHeight: 1.85, maxWidth: 740, margin: "0 auto",
         position: "relative",
-        boxShadow: "inset 0 -10px 12px -10px rgba(0,0,0,.4)",   // 아래에 더 있다는 힌트
+        // 아래에 더 있다 / **오른쪽에 더 있다** 는 힌트. 오른쪽은 2026-09-11 추가 —
+        // pre 로 바꾼 뒤 긴 줄이 표시 없이 잘리고 있었다(ux 가 checkups 에서 잡음).
+        boxShadow: "inset 0 -10px 12px -10px rgba(0,0,0,.4), inset -14px 0 14px -10px rgba(0,0,0,.55)",
       }}>
         {code.map((line, i) => {
           const isHot = i >= lo && i <= hi;

@@ -791,3 +791,17 @@ code, pre, .font-mono, [class*="font-mono"] {
 @media (min-width: 768px) {
   .quest-navbar { left: 15rem !important; }
 }
+
+/* ── 코드 상자의 가로 스크롤 흔적 ─────────────────────────────────────────
+   왜 (2026-09-11): 코드가 식별자 한가운데서 쪼개지던 걸 고치려고
+   `white-space: pre` 로 바꿨더니(가로 스크롤), **잘린 줄에 아무 표시가 없었다.**
+   checkups 2/8쪽에서 `input().spli` 로 끊겨 `.split()` 이 통째로 안 보이는데
+   학생은 더 있는 줄도 모른다 — sumk 에서 이미 한 번 낸 사고다(ux 가 잡음).
+   되돌리면 식별자가 다시 쪼개지므로, **흔적을 붙인다**:
+   ① 가늘지만 **항상 보이는** 가로 스크롤 막대
+   ② 오른쪽 가장자리 그림자 (inset box-shadow 는 각 컴포넌트에서 준다)            */
+.qcode-scroll { scrollbar-width: thin; scrollbar-color: #64748b transparent; }
+.qcode-scroll::-webkit-scrollbar { height: 7px; width: 7px; }
+.qcode-scroll::-webkit-scrollbar-track { background: transparent; }
+.qcode-scroll::-webkit-scrollbar-thumb { background: #64748b; border-radius: 4px; }
+.qcode-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
