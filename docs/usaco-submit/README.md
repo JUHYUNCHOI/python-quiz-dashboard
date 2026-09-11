@@ -1,4 +1,4 @@
-# USACO 재제출 — 선생님이 제출하실 코드 5건
+# USACO 재제출 — 선생님이 제출하실 코드 4건 (moohunt 는 2026-09-11 통과)
 
 **왜 여기 있나:** 이 넷은 검증 뒤에 **알고리즘이나 코드가 바뀌었다.**
 `CLAUDE.md` 규칙상 🔒 `USACO_VERIFIED` 코드를 바꿨으면 채점기 재제출로 확인해야 한다.
@@ -14,7 +14,7 @@
 | 2 | **photoshoot25** | Dec 2025 Bronze #3 | — | 2026-08-29 배열 크기 · 2026-09-03 0-based 로 **인덱스 변경**. 헤더에 "선생님이 제출해 18/18 확인 후 갱신할 것" 이라고 이미 적혀 있음 | `photoshoot25.cpp` |
 | 3 | **cowsplits** | Dec 2025 Bronze #2 | — | C++ 은 2026-08-29 통과. **Python 은 한 번도 안 냈다** | `cowsplits.py` |
 | 5 | **reflection** | Feb 2025 Bronze #1 | — | 2026-09-11 **풀이 모양 교체** (선생님 지시). 구 Python 은 3/16 **TLE** | `reflection.cpp`, `reflection.py` |
-| 4 | **moohunt** | Jan 2026 Bronze #2 | **1564** | 2026-09-08 "한 줄에 한 문장" 정리로 코드 줄이 바뀜. 원래 브루트는 PY 5/12 · CPP 10/12 **TLE** → 지금은 **공식 답안** 코드 | `moohunt.cpp`, `moohunt.py` |
+| ~~4~~ | ~~**moohunt**~~ | Jan 2026 Bronze #2 | **1564** | ✅ **2026-09-11 제출 통과** — 비트 없는 판본(`moohunt-nobit.cpp`). 파이썬은 이 문제에서 만점 불가. | 끝 |
 
 > moohunt 공식 풀이 출처: https://usaco.org/current/data/sol_prob2_bronze_season26contest2.html
 
