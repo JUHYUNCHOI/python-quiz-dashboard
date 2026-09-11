@@ -182,28 +182,11 @@ export function CodeSectionView({
               </div>
             )}
           </div>
+          {/* ⚠️ 2026-09-11: 여기 있던 복사 버튼을 지웠다 — **CodeBlock 이 이미 자기 복사 버튼을
+              그린다.** 둘이 같은 자리에 98% 겹쳐 있었다(실측: 270,584 와 265,584).
+              ux 가 checkups·reflection 스크린샷에서 잡았다.
+              CodeSectionView 를 쓰는 quest 11개 전부에 걸려 있던 버그다. */}
           <div style={{ position: "relative", borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
-            <button
-              onClick={handleCopy}
-              style={{
-                position: "absolute",
-                top: 8,
-                right: 8,
-                zIndex: 2,
-                fontSize: 11,
-                fontWeight: 700,
-                padding: "4px 10px",
-                borderRadius: 6,
-                border: `1px solid ${copied ? "#16a34a" : "rgba(255,255,255,0.3)"}`,
-                background: copied ? "rgba(22,163,74,0.85)" : "rgba(255,255,255,0.1)",
-                color: copied ? "#fff" : "#cbd5e1",
-                cursor: "pointer",
-                backdropFilter: "blur(4px)",
-              }}
-              title={t(E, "Copy code", "코드 복사")}
-            >
-              {copied ? `✓ ${t(E, "copied", "복사됨")}` : `📋 ${t(E, "copy", "복사")}`}
-            </button>
             <CodeBlock lines={code} lang={lang} />
           </div>
         </div>
