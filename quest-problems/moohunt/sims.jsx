@@ -313,8 +313,8 @@ export function BitBoardSim({ E }) {
       <><b>2</b> is <b>{bin(2)}</b> — this time only cell <b>1</b>.<br />Each cell watches <b>its own spot</b>.</>,
       <><b>2</b> 는 <b>{bin(2)}</b> — 이번엔 <b>1번 칸</b>만이에요.<br />칸마다 <b>자기 자리</b>만 봐요.</>)
     : s.k === "rest" ? t(E,
-      <>Same rule for the rest — all <b>{1 << N}</b> boards.</>,
-      <>나머지도 같은 규칙이에요 — 보드 <b>{1 << N}</b>개가 전부 나왔어요.</>)
+      <>Same rule for the rest — all <b>{1 << N}</b> boards.<br /><b>None of them is "the answer" yet</b> — they are every board we could make.<br />We score all {1 << N} and keep the best.</>,
+      <>나머지도 같은 규칙이에요 — 보드 <b>{1 << N}</b>개가 전부 나왔어요.<br /><b>이 중에 정답이 따로 있는 게 아니에요</b> — 만들 수 있는 보드를 다 적은 거예요.<br />{1 << N}개를 전부 채점해서 <b>점수가 제일 높은 걸</b> 고를 거예요.</>)
     : s.k === "turn" ? t(E,
       <>So far we read <b>number → board</b>. The table goes that way.<br />Code needs the <b>opposite</b> — pull <b>one cell</b> out of the number.<br />Because scoring asks "is cell 3 an M?"<br />Try <b>{EX_B}</b> (= <b>{EXC.join("")}</b>) — it has both M and O, so we can <b>see</b> if we got it right.</>,
       <>지금까지는 <b>숫자 → 보드</b> 였어요. 표를 그렇게 읽었죠.<br />코드는 <b>반대로</b> 해야 해요 — <b>숫자에서 칸 하나만</b> 꺼내요.<br />왜냐면 채점할 때 "3번 칸이 M 인가?" 를 물어야 하거든요.<br /><b>{EX_B}</b>(= <b>{EXC.join("")}</b>) 로 해볼게요. M 과 O 가 <b>섞여 있어서</b> 답이 맞았는지 눈으로 보여요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .8 }}>(여기서 칸은 <b>0번부터</b> 세요. 문제의 <b>1 2 3</b> 은 1번부터라서 코드가 1 을 빼요.)</span></>)
@@ -343,7 +343,7 @@ export function BitBoardSim({ E }) {
   return (
     <div style={{ padding: 16, paddingBottom: 90 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "One number = one board", "숫자 하나 = 보드 하나")}
+        title={t(E, "Every board, as a number", "만들 수 있는 보드 전부 — 숫자로")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
       {bubbleAt === null && (
@@ -620,8 +620,8 @@ export function FasterIdeaSim({ E }) {
       <>A move is <b>(x, y, z)</b> — x must read M, y and z must read O.<br />So y and z <b>just both need to be O</b>: <b>(1,2,3) and (1,3,2) score the same</b>.<br />Count them together.</>,
       <>무브는 <b>(x, y, z)</b> 예요 — x 자리가 M, y·z 자리가 O 여야 득점해요.<br />그러니 y 와 z 는 <b>둘 다 O 이기만</b> 하면 돼요.<br /><b>(1,2,3) 과 (1,3,2) 는 채점에선 같은 것</b>이에요. 묶어서 세요.</>)
     : s.k === "only" ? t(E,
-      <>So don't look at every move. Look only at what <b>can</b> score:<br />one <b>M</b> cell + two <b>O</b> cells.<br />Here that is {mPos.length} × {pairs} = <b>{canScore}</b>, not {allMoves}.</>,
-      <>그러니 무브를 다 보지 말고, <b>득점할 수 있는 것만</b> 봐요.<br /><b>M</b> 자리 하나 + <b>O</b> 자리 둘.<br />여기선 {mPos.length} × {pairs} = <b>{canScore}개</b>예요. {allMoves}개가 아니라요.</>)
+      <>So don't look at every move. Look only at what <b>can</b> score:<br />a scoring <b>move</b> points at one <b>M</b> cell + two <b>O</b> cells.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(That is about moves, not boards — a board may hold any number of M's.)</span><br />Here that is {mPos.length} × {pairs} = <b>{canScore}</b>, not {allMoves}.</>,
+      <>그러니 무브를 다 보지 말고, <b>득점할 수 있는 것만</b> 봐요.<br />득점하는 <b>무브</b>는 <b>M</b> 자리 하나 + <b>O</b> 자리 둘을 가리켜요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(보드 얘기가 아니에요 — 보드엔 M 이 몇 개든 있어도 돼요.)</span><br />여기선 {mPos.length} × {pairs} = <b>{canScore}개</b>예요. {allMoves}개가 아니라요.</>)
     : t(E,
       <>With <b>N</b> cells the same idea works. At <b>N = 20</b> (20 cells) it cuts <b>{BIG_ALL.toLocaleString("en-US")}</b> down to about <b>{BIG_AVG}</b> per board.<br />Roughly <b>{gain}× less work</b> — and the answer is identical.</>,
       <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>(칸 20개)이면 보드마다 <b>{BIG_ALL.toLocaleString("en-US")}개</b> 보던 걸 평균 <b>{BIG_AVG}개</b>만 봐요.<br />일이 <b>약 {gain}배</b> 줄어요. 답은 똑같고요.</>);
