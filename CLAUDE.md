@@ -48,6 +48,9 @@ python3 scripts/check-quiz-spoiler.py   # 퀴즈 내레이션이 정답을 미�
 python3 scripts/check-bilingual-drift.py   # t(E, 영어, 한국어) 중 **한쪽만 고친** 자리 (빌드도 못 잡는다)
 python3 scripts/check-io-card-spoiler.py   # 입출력 형식 카드가 답까지 말하나 (재현율 50%·정밀도 20% — 사람 대신 못 씀)
 python3 scripts/count-quests.py --list untaught  # 안 가르친 개념(비트·2차원리스트·조합론…)을 전제하는 quest
+python3 scripts/check-quest-code-idiom.py  # 안 가르친 **손버릇**(stdin.buffer·bytearray·bits/stdc++.h)을 쓰는 quest
+                                           #   ⚠️ 위 --list untaught 와 **다른 층**이다. 그건 알고리즘 개념,
+                                           #   이건 같은 알고리즘인데 코드를 어떻게 짰나. 합치지 마라.
 ```
 
 **이야기 전체를 봐야 할 때 — 검토를 *시작하기 전에* 이걸 먼저** (2026-09-07 추가):

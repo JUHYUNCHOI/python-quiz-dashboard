@@ -1667,3 +1667,30 @@ mooin4 3쪽 5단계는 **어떤 값을 줘도 최소 58px 잘렸다**(−415px �
 - 상자 안 스크롤 **흔적(그림자)** 추가도 같은 이유로 별도.
 - `check-sim-nav.mjs` 가 이제 `[상자 top / 높이 / cap]` 을 같이 찍는다.
   **cap 안 닿음 = 이관해도 안 바뀜.** 다음 사람이 이 길을 다시 밟지 않게.
+
+## 2026-09-11 — quest 코드가 레슨과 어긋난 자리 (진행 중)
+
+선생님: *"다른 수업들은? 그거에 따라 가르치는 수업내용도 바뀔수 있으니 담당자가 관리를 해야할거야"*
+
+**주인 = `quest-auditor`** (상시 검사, 헌장에 적었다).
+본질/수단 판정 = `pedagogy-reviewer`. 레슨을 고쳐야 하면 여기에 항목으로 올라온다.
+검사: `python3 scripts/check-quest-code-idiom.py`
+
+### 끝난 것
+- 파이썬 5개 (mcc21carrots·mcc22aliens·mcc22maze·mcc21glass·mcc15isthmus) → `readline`
+  전후 출력 각 300건 대조, 불일치 0.
+- C++ 6개 (xorstring·mcc22maze·mcc15choco·mcc15isthmus·mcc20knight·mcc21carrots)
+  `bits/stdc++.h` → 헤더 하나씩 · `sync_with_stdio` 제거. cpp-qa 실측으로 안 느려짐 확인.
+- 그 기교를 설명하던 말풍선 5곳도 같이 제거.
+- reflection 풀이 교체 (묶음 개수표 제거) — **USACO 재제출 대상**.
+- 죽은 `SOLUTION_CODE` 5개 삭제 (2026-09-09 승인분 중 일부).
+
+### 남은 것 — 전부 🔒 잠긴 것이라 **선생님 지시가 있어야** 한다
+- 파이썬 `pos` 방식 22개: astral bacteria candycane cannonball exchange explodingarrow
+  feb23 feedcows fjfarms leaders majority mcc22lamp mexes milkexchange mooin2 moolang
+  mooloo palindrome productivity rotshift rounding stampgrid
+- 파이썬 `stdin.buffer` 3개: mcc22cardshark mooin3 subseqmedian
+- `setrecursionlimit` 1개: alchemy — **pedagogy 가 "N 제약을 못 찾아 판정 못 함"** 이라고 했다.
+  기본 1000 으로 되는지 확인이 먼저다.
+- C++ 4개: chipxchg mooin2 (bits) · exchange mooin3 (sync)
+- 죽은 `SOLUTION_CODE` 나머지 (저장소 67곳 선언 중 실제 사용 3곳)
