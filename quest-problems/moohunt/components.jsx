@@ -25,7 +25,7 @@ const FULL_PY = [
   "",
   "N, K = map(int, input().split())",
   "",
-  "# 같은 무브끼리 묶어요. 중복을 여러 번 세지 않으려고요.",
+  "# 같은 무브끼리 묶어요. 무브는 20만 개인데 서로 다른 건 많아야 8000개예요.",
   "cnt = Counter()",
   "for _ in range(K):",
   "    x, y, z = map(int, input().split())",
@@ -61,7 +61,7 @@ const FULL_CPP = [
   "    int N, K;",
   "    cin >> N >> K;",
   "",
-  "    // 같은 무브끼리 묶어서 개수를 세요.",
+  "    // 같은 무브끼리 묶어요. 무브는 20만 개인데 서로 다른 건 많아야 8000개.",
   "    map<tuple<int,int,int>, int> cnt;",
   "    for (int i = 0; i < K; i++) {",
   "        int x, y, z;",
@@ -113,7 +113,8 @@ export function getMooHuntWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _MH_VARS, beats: [
       { hi: [6, 8],   bubble: t(E, "Read N (cells) and K (moves).", "N (칸 수) 와 K (무브 수) 읽기.") },
-      { hi: [10, 23], bubble: t(E, "Group identical moves.\nCounter tallies how many times each (x,y,z) showed up, so duplicates are not scored again.\nThen build the list.", "같은 무브끼리 묶어요.\nCounter 는 각 (x,y,z) 가 몇 번 나왔는지 세 주는 도구예요.\n그러면 같은 무브를 두 번 채점하지 않아요.") },
+      { hi: [10, 16], bubble: t(E, "Read the moves, grouping equal ones as we go.\nmap keeps (x,y,z) as the key and counts how many times it appeared.\nWhy: K is up to 200,000, but distinct moves are at most 20\u00b3 = 8000.", "무브를 읽으면서 같은 것끼리 묶어요.\nmap 이 (x, y, z) 를 열쇠로 삼아 몇 번 나왔는지 세 줘요.\n왜냐면 무브는 20만 개인데 서로 다른 건 많아야 20\u00b3 = 8000개거든요.") },
+      { hi: [17, 23], bubble: t(E, "Flatten the map into a list.\nEach entry holds (x, y, z, how many times it appeared).\nThat count is what we will add to the score.", "묶은 걸 목록으로 펴요.\n칸마다 (x, y, z, 몇 번 나왔나) 를 담아요.\n그 횟수가 나중에 점수에 더해질 값이에요.") },
       { hi: [25, 27], bubble: t(E, "Start best & ways, then try EVERY board (2^N of them).", "best, ways 초기화 후, 모든 보드(2^N 개)를 시도.") },
       { hi: [28, 37], bubble: t(E, "Bitmask brute force.\nFor each board, bit 1 means M and bit 0 means O.\nA move scores when x is M and y, z are O.\nAdd how many times that move appeared.", "비트마스크 완전탐색이에요.\n보드마다 비트 1 은 M, 0 은 O 예요.\n무브의 x 가 M 이고 y, z 가 O 면 득점해요.\n그 무브가 나온 횟수만큼 더해요.") },
       { hi: [38, 43], bubble: t(E, "Track the best score and how many boards reach it.", "최고 점수 갱신 + 그 점수에 이르는 보드 수 세기.") },
@@ -122,7 +123,7 @@ export function getMooHuntWalk(E, lang = "py") {
   }
   return { code: FULL_PY, vars: _MH_VARS, beats: [
     { hi: [2, 2],   bubble: t(E, "Read N (cells) and K (moves).", "N (칸 수) 와 K (무브 수) 읽기.") },
-    { hi: [4, 9],   bubble: t(E, "Group identical moves.\nCounter tallies how many times each (x,y,z) showed up, so duplicates are not scored again.", "같은 무브끼리 묶어요.\nCounter 는 각 (x,y,z) 가 몇 번 나왔는지 세 주는 도구예요.") },
+    { hi: [4, 9],   bubble: t(E, "Read the moves, grouping equal ones as we go.\nCounter counts how many times each (x,y,z) appeared.\nWhy: K is up to 200,000, but distinct moves are at most 20\u00b3 = 8000.", "무브를 읽으면서 같은 것끼리 묶어요.\nCounter 가 각 (x, y, z) 가 몇 번 나왔는지 세 줘요.\n왜냐면 무브는 20만 개인데 서로 다른 건 많아야 20\u00b3 = 8000개거든요.") },
     { hi: [11, 14], bubble: t(E, "Start best & ways, then try EVERY board (2^N of them).", "best, ways 초기화 후, 모든 보드(2^N 개)를 시도.") },
     { hi: [15, 19], bubble: t(E, "Bitmask brute force.\nFor each board, bit 1 means M and bit 0 means O.\nA move scores when x is M and y, z are O.\nAdd how many times that move appeared.", "비트마스크 완전탐색이에요.\n보드마다 비트 1 은 M, 0 은 O 예요.\n무브의 x 가 M 이고 y, z 가 O 면 득점해요.\n그 무브가 나온 횟수만큼 더해요.") },
     { hi: [20, 24], bubble: t(E, "Track the best score and how many boards reach it.", "최고 점수 갱신 + 그 점수에 이르는 보드 수 세기.") },
