@@ -261,159 +261,73 @@ export function BruteLimitSim({ E }) {
   );
 }
 
-/* ═══ ③ 숫자 하나 = 보드 하나 (비트마스크 다리) ═══
-   student-algorithm 이 실제로 풀어보고 막힌 자리 (2026-09-03):
-     "정수 하나(b=5)가 어떻게 이진수로 쪼개져서 각 칸의 M/O 가 되는지를 숫자로 본 적이 없다.
-      1-4 에서 '비트마스크' 단어만 한 번 나오고, 코드에 오니 >> 랑 & 가 뭔지부터 막혔다."
-   그래서 작은 N=3 으로 숫자 → 칸 을 눈으로 보여준 뒤 >> 와 & 를 그 위에서 설명한다. */
-export function BitBoardSim({ E }) {
+/* ③-0 EveryBoardSim — 보드를 하나도 빠짐없이 만드는 법. 2026-09-11 재작성.
+   선생님: "왜 굳이 비트연산자로?" → 안 써도 된다. 그리고 **비트 없는 판본이 USACO 를 통과했다**
+   (2026-09-11 선생님 제출. 최대 입력 1.44초 / 제한 2초 — 비트 판본 1.52초보다 오히려 빨랐다.
+    시간을 먹는 건 안쪽 3중 반복이지 보드를 만드는 방식이 아니다).
+   ⚠️ 전에는 비트 시뮬이 **9걸음**이었다(>> · &1 · 1<<N). 그 기호들이 이제 코드에 하나도 없다.
+      도구에 핵심보다 많은 분량을 쓰고 있었다 — **4걸음**으로 줄이고,
+      코드에 실제로 있는 "리스트에 1 더하기" 만 보여준다. */
+export function EveryBoardSim({ E }) {
   const N = 3;
-  const bits = (b) => Array.from({ length: N }, (_, i) => (b >> i) & 1);
-  const chars = (b) => bits(b).map((v) => (v ? "M" : "O"));
-  /* ⚠️ 보통 2진수는 '큰 자리부터' 쓰지만 (b=1 → "001"),
-     보드는 0번 칸이 왼쪽이다 (코드가 (b >> i) & 1 로 i번 칸 = i번 비트를 쓰니까).
-     그대로 나란히 놓으면 b=1 이 "001" 인데 보드는 "MOO" 라 눈에 어긋나 보인다.
-     실제로 8줄 중 4줄이 어긋났다 (student-algorithm 2026-09-04 가 잡음).
-     → 여기서는 비트도 **0번 칸부터** 적어서 보드와 방향을 맞춘다. */
-  const bin = (b) => bits(b).join("");
-
-  /* ═══ 걸음 목록 — 2026-09-11 재설계 (12 → 9) ═══
-     선생님: *"갑자기 b=5일때 공식 얘기가 나오지?"*
-     옛 구조는 0~7 을 한 줄씩 여덟 걸음 훑은 뒤, 10번째 걸음에서 표 한가운데 5로
-     **되돌아가** >> · &1 · 공식을 한꺼번에 줬다. 고친 것 셋:
-       ① 0·1·2 세 줄만 하나씩 보여주면 "칸마다 자기 비트" 규칙이 이미 보인다.
-          나머지 다섯 줄은 한 번에 채운다 (걸음마다 답할 새 질문이 없었다).
-       ② **turn** 걸음을 새로 넣어 "이제 거꾸로 본다" 를 말하고, 5를 고른 이유도 말한다.
-          (M 과 O 가 섞여 있어야 답이 맞았는지 눈으로 구별된다. 7=MMM 은 전부 M 이라
-           엉뚱한 칸을 집어도 우연히 맞는다.)
-       ③ >> 와 &1 을 두 걸음으로 쪼갠다. 옛 구조는 한 말풍선에 둘 다 있었다.
-     << 걸음은 남긴다 — 다음 쪽 코드 `for b in range(1 << N)` 에 실제로 쓰인다
-     (components.jsx). 다만 옛 구조는 shift·all 두 걸음이 `1<<N=8` 을 각각 말해
-     겹쳤다 → 정의(shift)와 코드 줄 뜻(all)으로 갈랐다. */
-  const EX_B = 5, EX_I = 1;   // b=5 의 1번 칸을 꺼내는 예 — 고른 이유는 turn 걸음에 있다
-  const steps = [
-    { k: "row", b: 0, first: true },
-    { k: "row", b: 1 },
-    { k: "row", b: 2 },
-    { k: "rest" },
-    { k: "turn" },
-    { k: "shr" },
-    { k: "and" },
-    { k: "shift" },
-    { k: "all" },
-  ];
+  const steps = [{ k: "why" }, { k: "first" }, { k: "add" }, { k: "all" }];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
-  const shown = s.k === "row" ? s.b : (1 << N) - 1;
-  const EXC = chars(EX_B);                       // ["M","O","M"]
-  const CUT = EXC.slice(EX_I);                   // >> 뒤에 남는 것
+  const sayRef = useKeepInView(ts.safe);
+
+  /* 화면에 뿌릴 보드 — 리스트 [0/1] 그대로. 비트 연산은 여기 그리기용일 뿐 코드와 무관하다. */
+  const show = (b) => Array.from({ length: N }, (_, i) => ((b >> i) & 1 ? "M" : "O"));
+  const upTo = s.k === "why" ? -1 : s.k === "first" ? 0 : s.k === "add" ? 3 : (1 << N) - 1;
 
   const say =
-    s.k === "row" && s.first ? t(E,
-      <>Let's shrink it to <b>3 cells</b> so we can see them all. (The real problem has up to 20.)<br />Each cell is <b>M</b> or <b>O</b> — two choices.<br />Write M as <b>1</b>, O as <b>0</b>.<br />Then a whole board is just <b>one number</b>.</>,
-      <>손으로 다 볼 수 있게 <b>칸 3개</b>로 작게 해볼게요. (진짜 문제는 최대 20칸이에요.)<br />칸마다 <b>M</b> 아니면 <b>O</b> 둘 중 하나예요.<br />M 을 <b>1</b>, O 를 <b>0</b> 으로 쓰면<br />보드 하나가 <b>숫자 하나</b>가 돼요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .8 }}>(비트는 <b>0번 칸부터</b> 적을게요. 보드와 순서를 맞추려고요.)</span></>)
-    : s.k === "row" && s.b === 1 ? t(E,
-      <><b>1</b> is <b>{bin(1)}</b> — only cell <b>0</b> turned into M.</>,
-      <><b>1</b> 은 <b>{bin(1)}</b> — <b>0번 칸</b>만 M 이 됐어요.</>)
-    : s.k === "row" ? t(E,
-      <><b>2</b> is <b>{bin(2)}</b> — this time only cell <b>1</b>.<br />Each cell watches <b>its own spot</b>.</>,
-      <><b>2</b> 는 <b>{bin(2)}</b> — 이번엔 <b>1번 칸</b>만이에요.<br />칸마다 <b>자기 자리</b>만 봐요.</>)
-    : s.k === "rest" ? t(E,
-      <>Same rule for the rest — all <b>{1 << N}</b> boards.<br /><b>None of them is "the answer" yet</b> — they are every board we could make.<br />We score all {1 << N} and keep the best.</>,
-      <>나머지도 같은 규칙이에요 — 보드 <b>{1 << N}</b>개가 전부 나왔어요.<br /><b>이 중에 정답이 따로 있는 게 아니에요</b> — 만들 수 있는 보드를 다 적은 거예요.<br />{1 << N}개를 전부 채점해서 <b>점수가 제일 높은 걸</b> 고를 거예요.</>)
-    : s.k === "turn" ? t(E,
-      <>So far we read <b>number → board</b>. The table goes that way.<br />Code needs the <b>opposite</b> — pull <b>one cell</b> out of the number.<br />Because scoring asks "is cell 3 an M?"<br />Try <b>{EX_B}</b> (= <b>{EXC.join("")}</b>) — it has both M and O, so we can <b>see</b> if we got it right.</>,
-      <>지금까지는 <b>숫자 → 보드</b> 였어요. 표를 그렇게 읽었죠.<br />코드는 <b>반대로</b> 해야 해요 — <b>숫자에서 칸 하나만</b> 꺼내요.<br />왜냐면 채점할 때 "3번 칸이 M 인가?" 를 물어야 하거든요.<br /><b>{EX_B}</b>(= <b>{EXC.join("")}</b>) 로 해볼게요. M 과 O 가 <b>섞여 있어서</b> 답이 맞았는지 눈으로 보여요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .8 }}>(여기서 칸은 <b>0번부터</b> 세요. 문제의 <b>1 2 3</b> 은 1번부터라서 코드가 1 을 빼요.)</span></>)
-    : s.k === "shr" ? t(E,
-      <>We want cell <b>{EX_I}</b>. First bring it to the front:<br /><b>drop</b> the {EX_I} cell{EX_I > 1 ? "s" : ""} in front of it.<br /><span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{EXC.join("")} → {CUT.join("")}</span> · that is <b>{EX_B} &gt;&gt; {EX_I} = {EX_B >> EX_I}</b>.</>,
-      <><b>{EX_I}번 칸</b>이 궁금해요. 먼저 맨 앞으로 데려와요.<br />앞에 있는 <b>{EX_I}칸을 버려요.</b><br /><span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{EXC.join("")} → {CUT.join("")}</span> · 이게 <b>{EX_B} &gt;&gt; {EX_I} = {EX_B >> EX_I}</b> 예요.</>)
-    : s.k === "and" ? t(E,
-      <>Now keep only the <b>front cell</b> — that is <b>&amp; 1</b>.<br />We get <b>{EX_B >> EX_I} &amp; 1 = {(EX_B >> EX_I) & 1}</b>, which means <b>{((EX_B >> EX_I) & 1) ? "M" : "O"}</b>.<br />In the table, cell {EX_I} of {EXC.join("")} is <b>{EXC[EX_I]}</b> too — we got it right ✔</>,
-      <>이제 <b>맨 앞 한 칸</b>만 남겨요 — 이게 <b>&amp; 1</b> 이에요.<br />계산하면 <b>{EX_B >> EX_I} &amp; 1 = {(EX_B >> EX_I) & 1}</b>, 곧 <b>{((EX_B >> EX_I) & 1) ? "M" : "O"}</b> 예요.<br />표에서 {EXC.join("")} 의 {EX_I}번 칸도 <b>{EXC[EX_I]}</b> 죠? 맞게 꺼냈어요 ✔</>)
-    : s.k === "shift" ? t(E,
-      <>One more sign: <b>&lt;&lt;</b>, the opposite of <b>&gt;&gt;</b>.<br />It <b>adds</b> empty cells at the front, doubling each time.<br /><b>1 &lt;&lt; {N} = 2<sup>{N}</sup> = {1 << N}</b></>,
-      <>기호 하나만 더요. <b>&lt;&lt;</b> 는 <b>&gt;&gt;</b> 의 반대예요.<br />앞에 빈 칸을 <b>붙여요.</b> 한 칸 붙을 때마다 두 배예요.<br /><b>1 &lt;&lt; {N} = 2<sup>{N}</sup> = {1 << N}</b></>)
+    s.k === "why" ? t(E,
+      <>We must try <b>every</b> board — miss one and the answer can be wrong.<br />With {N} cells that is <b>{1 << N}</b> boards. How do we walk them all, in order?</>,
+      <>보드를 <b>하나도 빠짐없이</b> 해봐야 해요 — 하나만 빠져도 답이 틀릴 수 있어요.<br />칸이 {N}개면 <b>{1 << N}</b>개예요. 어떻게 하나씩, 빠짐없이 훑을까요?</>)
+    : s.k === "first" ? t(E,
+      <>Keep the board as a <b>list</b>: 1 means M, 0 means O.<br />Start from <b>all O</b> — that is the first board.</>,
+      <>보드를 <b>리스트</b>로 들고 다녀요 — 1 이면 M, 0 이면 O.<br /><b>전부 O</b> 에서 시작해요. 그게 첫 번째 보드예요.</>)
+    : s.k === "add" ? t(E,
+      <>Next board = <b>add 1</b>, the way you add 1 to a number.<br />From the front: every <b>M</b> turns back to <b>O</b>, until you meet an <b>O</b> — make that one <b>M</b>.</>,
+      <>다음 보드는 <b>1 을 더하는 것</b>과 같아요. 숫자에 1 더하듯이요.<br />앞에서부터 <b>M</b> 은 <b>O</b> 로 되돌리다가, <b>O</b> 를 만나면 그 자리를 <b>M</b> 으로 바꿔요.</>)
     : t(E,
-      <>Now two lines of the next page's code read out loud.<br /><b>for b in range(1 &lt;&lt; N)</b> → try all <b>{1 << N}</b> boards.<br /><b>(b &gt;&gt; i) &amp; 1</b> → <b>is cell i an M</b> on that board?<br />That is what the bits were for.</>,
-      <>이제 다음 쪽 코드의 두 줄이 읽혀요.<br /><b>for b in range(1 &lt;&lt; N)</b> → 보드 <b>{1 << N}</b>개를 다 해본다.<br /><b>(b &gt;&gt; i) &amp; 1</b> → 그 보드에서 <b>i번 칸이 M 인가?</b><br />비트는 이 두 줄을 쓰려고 배운 거예요.</>);
-
-  const rows = Array.from({ length: 1 << N }, (_, b) => b).filter((b) => b <= shown);
-  /* 말풍선이 붙을 줄 — 그 줄 바로 위에 끼운다 (한 걸음에 바뀌는 자리는 한 곳).
-     turn·shr·and 는 5번 줄 얘기라 5번 줄 위. shift·all 은 특정 줄 얘기가 아니라 표 위. */
-  const inRowSteps = { row: true, turn: true, shr: true, and: true };
-  const bubbleAt = s.k === "row" ? s.b : inRowSteps[s.k] ? EX_B : null;
-  const onEx = s.k === "turn" || s.k === "shr" || s.k === "and";
-  const bubbleTone = s.k === "and" || s.k === "all" ? "aha" : s.k === "turn" ? "stuck" : "go";
-  const sayRef = useKeepInView(ts.safe);
+      <>Keep adding 1 and you get <b>all {1 << N}</b> boards — none missed, none twice.<br />When every cell is M there is nothing left, so we stop.<br /><b>No bit operators needed.</b></>,
+      <>계속 1 을 더하면 <b>{1 << N}개 전부</b>가 나와요. 빠지지도, 겹치지도 않아요.<br />전부 M 이 되면 더 갈 데가 없으니 멈춰요.<br /><b>비트 연산자는 필요 없어요.</b></>);
 
   return (
     <div style={{ padding: 16, paddingBottom: 90 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Every board, as a number", "만들 수 있는 보드 전부 — 숫자로")}
+        title={t(E, "Every board, one at a time", "보드를 하나씩, 빠짐없이")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
-      {bubbleAt === null && (
-        <div ref={sayRef}>
-          <Say tone={bubbleTone}>{say}</Say>
-        </div>
-      )}
+        <div ref={sayRef}><Say tone={s.k === "why" ? "stuck" : s.k === "all" ? "aha" : "go"}>{say}</Say></div>
 
-      <div style={{ maxWidth: 330, margin: "0 auto", display: "grid", gap: 5 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "42px 60px 1fr", gap: 8,
-          fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 8px" }}>
-          <span>{t(E, "number", "숫자")}</span>
-          <span>{t(E, "bits = 0/1 (cell 0 first)", "비트 = 0 아니면 1 (0번 칸부터)")}</span>
-          <span>{t(E, "board (cells 0·1·2)", "보드 (0·1·2번 칸)")}</span>
-        </div>
-        {rows.map((b) => {
-          const cur = s.k === "row" && b === s.b;
-          const ex = onEx && b === EX_B;
-          return (
-            <Fragment key={b}>
-            {bubbleAt === b && (
-              <div ref={sayRef}>
-                <Say inRow tone={bubbleTone}>{say}</Say>
-                {(s.k === "shr" || s.k === "and") && (
-                  <div style={{ maxWidth: 330, margin: "0 auto 8px", padding: "7px 11px", borderRadius: 9,
-                    background: "#fffbeb", border: "1.5px solid #fbbf24", textAlign: "center",
-                    fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: "#92400e" }}>
-                    {s.k === "shr"
-                      ? <>{EX_B} &gt;&gt; {EX_I} = {EX_B >> EX_I}</>
-                      : <>(b &gt;&gt; i) &amp; 1 &nbsp;→&nbsp; ({EX_B} &gt;&gt; {EX_I}) &amp; 1 = {(EX_B >> EX_I) & 1}</>}
-                  </div>
-                )}
-              </div>
-            )}
-            <div style={{ display: "grid", gridTemplateColumns: "42px 60px 1fr", gap: 8,
-              alignItems: "center", padding: "5px 8px", borderRadius: 9,
-              border: `${cur || ex ? 2 : 1}px solid ${cur ? A : ex ? "#f59e0b" : "#e2e8f0"}`,
-              background: cur ? "#f5f3ff" : ex ? "#fffbeb" : "#fff" }}>
-              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 14, color: "#334155" }}>{b}</span>
-              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 13, color: "#7c3aed" }}>{bin(b)}</span>
-              <span style={{ display: "flex", gap: 3 }}>
-                {chars(b).map((c, i) => {
-                  /* shr·and 걸음에서는 버린 앞 칸을 흐리게 — "무엇이 사라졌나" 가 보이게 */
-                  const dropped = (s.k === "shr" || s.k === "and") && ex && i < EX_I;
-                  const faded = s.k === "and" && ex && i > EX_I;
-                  const spot = ex && i === EX_I;
-                  return (
-                    <span key={i} style={{ width: 24, height: 24, borderRadius: 6,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 13,
-                      opacity: dropped ? 0.25 : faded ? 0.35 : 1,
-                      textDecoration: dropped ? "line-through" : "none",
-                      background: c === "M" ? MBG : OBG,
-                      border: `${spot ? 2.5 : 1.5}px solid ${spot ? "#f59e0b" : (c === "M" ? MCOL : OCOL)}`,
-                      color: c === "M" ? MCOL : OCOL }}>{c}</span>
-                  );
-                })}
-              </span>
-            </div>
-            </Fragment>
-          );
-        })}
-      </div>
-
+        {upTo >= 0 && (
+          <div style={{ maxWidth: 310, margin: "0 auto", display: "grid", gap: 5 }}>
+            {Array.from({ length: upTo + 1 }, (_, b) => b).map((b) => {
+              const cur = b === upTo;
+              return (
+                <div key={b} style={{ display: "flex", alignItems: "center", gap: 9,
+                  padding: "6px 10px", borderRadius: 9,
+                  border: `${cur ? 2 : 1}px solid ${cur ? A : "#e2e8f0"}`,
+                  background: cur ? "#f5f3ff" : "#fff" }}>
+                  <span style={{ width: 16, fontSize: 11, fontWeight: 800, color: "#94a3b8" }}>{b + 1}</span>
+                  <span style={{ display: "flex", gap: 4 }}>
+                    {show(b).map((c, i) => (
+                      <span key={i} style={{ width: 26, height: 26, borderRadius: 6, display: "inline-flex",
+                        alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace",
+                        fontWeight: 800, fontSize: 13, background: c === "M" ? MBG : OBG,
+                        border: `1.5px solid ${c === "M" ? MCOL : OCOL}`, color: c === "M" ? MCOL : OCOL }}>{c}</span>
+                    ))}
+                  </span>
+                  <span style={{ marginLeft: "auto", fontFamily: "'JetBrains Mono',monospace",
+                    fontSize: 11.5, fontWeight: 700, color: cur ? "#6d28d9" : "#94a3b8" }}>
+                    [{show(b).map((c) => (c === "M" ? 1 : 0)).join(", ")}]
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </StepFade>
       <div style={{ marginTop: 18 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />

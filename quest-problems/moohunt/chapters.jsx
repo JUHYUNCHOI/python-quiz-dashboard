@@ -2,7 +2,7 @@ import { C, t } from "@/components/quest/theme";
 import { getMooHuntSections, getMooHuntWalk } from "./components";
 import { getMooHuntFastWalk } from "./fast";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ScoreBoardSim, BitBoardSim, BruteLimitSim, BruteRunSim, FasterIdeaSim, IsAtTableSim, WholeRunSim } from "./sims";
+import { ScoreBoardSim, EveryBoardSim, BruteRunSim, FasterIdeaSim, IsAtTableSim, WholeRunSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooHuntCh1 (5 steps: reveal / reveal / reveal / quiz / input)
@@ -340,10 +340,10 @@ export function makeMooHuntCh2(E, lang = "py") {
        "이 그림에서는 이렇게 되더라 정도로만 알았다". 그래서 옮기고, 오히려 << 설명을 더했다. */
     {
       type: "reveal",
-      label: t(E, "Number = board", "숫자 = 보드"),
-      narr: t(E, "Before the code — how does one number become a board?",
-                 "코드를 보기 전에요. 숫자 하나가 어떻게 보드가 되죠?"),
-      content: (<BitBoardSim E={E} />),
+      label: t(E, "Every board", "보드 전부"),
+      narr: t(E, "Before the code — how do we walk every board without missing one?",
+                 "코드를 보기 전에요. 보드를 어떻게 하나도 빠짐없이 만들죠?"),
+      content: (<EveryBoardSim E={E} />),
     },
     /* ── 계획: 코드 도는 순서 그대로 답까지 (2026-09-11 신설) ──────
        선생님: "아직 처음부터 차례대로 **코드가 동작하는 순서**정도로
