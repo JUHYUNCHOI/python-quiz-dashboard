@@ -56,6 +56,11 @@ CPP_RULES = [
     ("ios::sync_with_stdio — 그냥 cin/cout 을 쓴다",
      re.compile(r"sync_with_stdio"),
      "설명한 적 없는 속도 기교다. 빼도 USACO 제한 안에 든다(reflection 실측 0.98s → 1.29s, 제한 2s)"),
+    # ⚠️ 2026-09-11 quest-auditor 가 손으로 찾았다 — 검사기는 moohunt 를 "0건" 으로 넘겼는데
+    #    C++ 코드가 map<...>::iterator 로 순회하고 있었다. **또 조용히 틀린 것이다.**
+    ("::iterator — 레슨이 안 가르친다",
+     re.compile(r"::iterator\b"),
+     "for (auto& kv : m) 또는 구조적 바인딩 for (auto& [k, v] : m). auto 는 C++ 레슨 28개, range-for 는 23개가 가르친다"),
     ("scanf/printf — 그냥 cin/cout 을 쓴다",
      re.compile(r"\b(?:scanf|printf)\s*\("),
      "C 스타일 입출력은 레슨에서 안 가르친다"),
