@@ -36,8 +36,14 @@ function useKeepInView(dep) {
   return ref;
 }
 
-/* 샘플 1 — N=5, K=6. 보드 MOOOM 은 4점 (완전탐색으로 확인) */
-const BOARD = "MOOOM";
+/* 샘플 1 — N=5, K=6.
+   ⚠️ 2026-09-11: 보드를 MOOOM → **MOOMM** 으로 바꿨다 (ScoreBoardSim 이 쓴다).
+   2쪽 정적 표가 이미 MOOOM 을 무브 6개까지 다 펼쳐 4점을 보여주는데,
+   이 시뮬이 **똑같은 보드·똑같은 무브**를 한 걸음씩 다시 밟고 있었다 (pedagogy·ux 둘 다 지적).
+   2쪽은 "MOOMM 도 4점" 이라고 **말만 하고 안 보여준다** — 그게 답의 절반(보드 2개)인데.
+   → 시뮬이 그 두 번째 보드를 맡는다. 중복이 새 정보가 된다.
+   같은 무브 6개로 MOOMM 도 4점인 것을 파이썬으로 검산했다. */
+const BOARD = "MOOMM";
 const MOVES = [[1, 2, 3], [1, 2, 3], [1, 3, 5], [2, 3, 4], [5, 3, 2], [5, 2, 3]];
 
 function Cell({ c, i, hl = null }) {
@@ -612,13 +618,18 @@ export function IsAtTableSim({ E }) {
 
   /* 1쪽 문제 설명에 이미 쓴 칸 5개·무브 두 개를 그대로 재사용한다 (새 그림을 안 만든다).
      화면에 적는 칸 번호는 **1번부터** — 문제와 같게. 표 안 첨자는 코드와 같게 0부터. */
+  /* ⚠️ 2026-09-11: 처음엔 무브를 **지어내서** 썼는데, 1쪽 예제와 같은 보드 이름(MOOOO)이
+     다른 점수로 나왔다 (1쪽 2점 / 여기 3점). pedagogy 가 잡았다.
+     → **공식 샘플 1 을 그대로 쓴다.** 2쪽에서 학생이 이미 본 무브다.
+     샘플 안에 (5,3,2) 와 (5,2,3) 이 있다 — **순서만 다른 짝**이라 지어낼 필요가 없었다.
+     x = 5 평면을 쓰니 채점 보드는 OOOOM — 1쪽의 MOOOO 와 글자가 달라 안 헷갈린다. */
   const N = 5;
-  const X = 0;                                   // 평면 한 장: x = 0 (1번 칸이 M 인 경우)
-  const MOVES = [[0, 1, 2], [0, 3, 4], [0, 2, 1]];   // 세 번째는 (1,3,2) — 순서만 다른 무브
-  const upTo = s.k === "ask" || s.k === "plan" ? 0 : s.k === "fill" ? 2 : 3;
+  const X = 4;                                   // 평면 한 장: x = 5번 칸이 M 인 경우
+  const MOVES = [[4, 2, 1], [4, 1, 2]];          // (5,3,2) 와 (5,2,3) — 순서만 다른 짝
+  const upTo = s.k === "ask" || s.k === "plan" ? 0 : s.k === "fill" ? 1 : 2;
   /* 채점 예시 보드 — 1번 칸만 M, 나머지는 O (표가 x=0 평면 한 장이라 딱 맞는다) */
-  const SCORE_BOARD = "MOOOO";
-  const oCells = [1, 2, 3, 4];                       // 0-based: 2·3·4·5번 칸이 O
+  const SCORE_BOARD = "OOOOM";                       // 5번 칸만 M — 이 평면과 딱 맞는다
+  const oCells = [0, 1, 2, 3];                       // 0-based: 1·2·3·4번 칸이 O
   const oPairs = [];
   for (let i = 0; i < oCells.length; i++)
     for (let j = i + 1; j < oCells.length; j++) oPairs.push([oCells[i], oCells[j]]);
@@ -634,14 +645,14 @@ export function IsAtTableSim({ E }) {
       <>We know only <b>one M + two O</b> can score.<br />But must we scan all <b>200,000</b> moves for every board?</>,
       <>득점하는 건 <b>M 자리 하나 + O 자리 둘</b> 뿐인 건 알았어요.<br />그런데 보드마다 무브 <b>20만 개</b>를 매번 다 훑어야 할까요?</>)
     : s.k === "plan" ? t(E,
-      <>No — count the moves <b>once, up front</b>, into a table.<br />One square = <b>how many times that move appeared</b>.<br />A move is (x, y, z), so a square is picked by <b>which three cells</b>.</>,
-      <>아니에요. 무브를 <b>미리 한 번만</b> 세서 표에 넣어두면 돼요.<br />표의 <b>한 칸 = 그 무브가 몇 번 나왔나</b> 예요.<br />무브는 (x, y, z) 니까, 칸은 <b>세 칸 번호</b>로 정해져요.</>)
+      <>No — count the moves <b>once, up front</b>, into a table.<br />One square = <b>how many times that move appeared</b>.<br />One sheet per M cell; this one is for <b>x = cell 5</b>.</>,
+      <>아니에요. 무브를 <b>미리 한 번만</b> 세서 표에 넣어두면 돼요.<br />표의 <b>한 칸 = 그 무브가 몇 번 나왔나</b> 예요.<br />M 자리마다 표 한 장씩 — 이건 <b>x = 5번 칸</b> 표예요.</>)
     : s.k === "fill" ? t(E,
-      <>Move <b>(1, 2, 3)</b> → put <b>1</b> in the (2, 3) square.<br />Move <b>(1, 4, 5)</b> → put <b>1</b> in the (4, 5) square.</>,
-      <>무브 <b>(1, 2, 3)</b> → (2, 3) 칸에 <b>1</b> 을 더해요.<br />무브 <b>(1, 4, 5)</b> → (4, 5) 칸에 <b>1</b> 을 더해요.</>)
+      <>Move <b>(5, 3, 2)</b> arrives: x = 5 is the M, the O cells are 3 and 2.<br />Store them <b>smaller first</b> → the (2, 3) square gets <b>1</b>.</>,
+      <>무브 <b>(5, 3, 2)</b> 가 왔어요. x = 5 가 M 자리, O 자리는 3 과 2 예요.<br /><b>작은 쪽을 앞</b>으로 넣으면 → (2, 3) 칸이 <b>1</b> 이 돼요.</>)
     : s.k === "order" ? t(E,
-      <>Now <b>(1, 3, 2)</b> arrives — same two O cells, swapped.<br />y and z only need to be O, so order does not matter.<br />Always store <b>smaller, larger</b> → it lands on (2, 3) again.</>,
-      <>이번엔 <b>(1, 3, 2)</b> 가 왔어요 — O 자리 둘이 순서만 바뀐 거예요.<br />y·z 는 둘 다 O 이기만 하면 되니 순서는 상관없어요.<br />늘 <b>작은 쪽·큰 쪽</b>으로 넣으면 (2, 3) 칸에 또 쌓여요.</>)
+      <>Now <b>(5, 2, 3)</b> arrives — same two O cells, swapped.<br />y and z only need to be O, so order does not matter.<br />Smaller first again → it lands on (2, 3) once more: <b>2</b>.</>,
+      <>이번엔 <b>(5, 2, 3)</b> 가 왔어요 — O 자리 둘이 순서만 바뀐 거예요.<br />y·z 는 둘 다 O 이기만 하면 되니 순서는 상관없어요.<br />또 작은 쪽을 앞으로 넣으면 (2, 3) 칸에 <b>2</b> 가 돼요.</>)
     : s.k === "use" ? t(E,
       <>Now score a board — say <b>{SCORE_BOARD}</b>: cell 1 is M, the rest are O.<br />Which squares do we read? Every <b>pair of O cells</b>.</>,
       <>이제 보드를 채점해요 — <b>{SCORE_BOARD}</b> 예요. 1번만 M, 나머지는 O.<br />어느 칸을 볼까요? <b>O 자리끼리 짝지은 칸</b>을 다 봐요.</>)
@@ -681,7 +692,7 @@ export function IsAtTableSim({ E }) {
           <div style={{ maxWidth: 320, margin: "0 auto" }}>
             <div style={{ fontSize: 12, fontWeight: 800, color: "#7c3aed", textAlign: "center",
               marginBottom: 4, wordBreak: "keep-all" }}>
-              {t(E, "sheet for x = cell 1 (the M)", "x = 1번 칸 (M 자리) 의 표")}
+              {t(E, "sheet for x = cell 5 (the M)", "x = 5번 칸 (M 자리) 의 표")}
             </div>
             {/* ⚠️ 축 설명이 표 **아래** 작은 회색 글씨였다. 선생님: "가로세로가 뭘 얘기하는 표야?"
                 읽기 전에 보이게 위로 올리고, y·z 라는 이름을 같이 준다. */}
@@ -711,9 +722,9 @@ export function IsAtTableSim({ E }) {
                 background: "#f5f3ff", border: `1.5px solid ${A}`, fontSize: 12, fontWeight: 700,
                 color: "#5b21b6", lineHeight: 1.8, wordBreak: "keep-all", textAlign: "center" }}>
                 {t(E, <>So the square at row <b>2</b>, column <b>3</b> means:<br />
-                       "how many times did move <b>(1, 2, 3)</b> appear?"</>,
+                       "how many times did move <b>(5, 2, 3)</b> appear?"</>,
                      <>그러니까 세로 <b>2</b>, 가로 <b>3</b> 칸은 이런 뜻이에요:<br />
-                       "무브 <b>(1, 2, 3)</b> 이 몇 번 나왔나?"</>)}
+                       "무브 <b>(5, 2, 3)</b> 이 몇 번 나왔나?"</>)}
               </div>
             )}
             {(s.k === "use" || s.k === "sum") && (

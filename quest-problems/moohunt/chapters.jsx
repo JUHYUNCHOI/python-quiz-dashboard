@@ -259,6 +259,15 @@ export function makeMooHuntCh1(E) {
             <div>
               {t(E, <><b>Moves per board</b>: (x, y, z) all different → <b>20×19×18 = 6,840</b></>,
                    <><b>보드당 무브</b>: (x, y, z) 가 모두 다름 → <b>20×19×18 = 6,840</b></>)}
+              {/* ⚠️ ux·학생이 같이 짚었다: "K 는 20만이라며 왜 갑자기 6,840?"
+                  두 수는 다른 것이다 — K 는 **입력으로 들어온 개수**(같은 무브가 여러 번 올 수 있다),
+                  6,840 은 **서로 다른 조합의 최대 개수**다. 그 다리가 3쪽 뒤에야 나왔다. */}
+              <div style={{ fontSize: 11.5, fontWeight: 700, color: "#9a3412", opacity: .9, marginTop: 2 }}>
+                {t(E, <>(K = 200,000 is how many moves the input gives — the same move can come many times.
+                        6,840 is how many <b>different</b> ones there can be.)</>,
+                     <>(K = 20만은 <b>입력에 들어온 개수</b>예요 — 같은 무브가 여러 번 올 수 있어요.
+                        6,840 은 <b>서로 다른</b> 게 최대 몇 가지인가예요.)</>)}
+              </div>
             </div>
             <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fdba74", fontWeight: 800 }}>
               {t(E, <>100万 × 6,840 ≈ <b>7×10<sup>9</sup></b></>,
