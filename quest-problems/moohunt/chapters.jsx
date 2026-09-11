@@ -2,7 +2,7 @@ import { C, t } from "@/components/quest/theme";
 import { getMooHuntSections, getMooHuntWalk } from "./components";
 import { getMooHuntFastWalk } from "./fast";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ScoreBoardSim, BitBoardSim, BruteLimitSim, BruteRunSim, FasterIdeaSim } from "./sims";
+import { ScoreBoardSim, BitBoardSim, BruteLimitSim, BruteRunSim, FasterIdeaSim, IsAtTableSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooHuntCh1 (5 steps: reveal / reveal / reveal / quiz / input)
@@ -374,8 +374,12 @@ export function makeMooHuntCh2(E, lang = "py") {
             borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#92400e",
             lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
             {"\u26A0\uFE0F "}{t(E,
-              "This is the plan we just counted — 7\u00d710\u2079 steps — written as code.\nIt gives the right answer but runs out of time on the big cases.\nRead it, run it on the next page, and then we make it fast.",
-              "방금 센 그 방법(7\u00d710\u2079 번)을 그대로 코드로 옮긴 거예요.\n답은 맞는데 큰 입력에서 시간이 모자라요.\n읽어보고, 다음 쪽에서 직접 돌려본 뒤에 빠르게 고쳐요.")}
+              /* ⚠️ 2026-09-11: 여기에 "7×10⁹" 과 "시간이 모자라요" 를 넣었다가 뺐다.
+                 커밋 4c00bbbc(9/7)가 **정확히 그 문장을 지운 자리**다 —
+                 "느리다 를 세 번 말하던 걸 한 번으로". 8쪽이 이미 그 말을 한다.
+                 이름표·파란 바의 "첫 코드(느림)/최종 답" 은 새 정보라 남긴다. */
+              "This is the slow plan, written as code \u2014 not the one to submit yet.\nRead it, run it on the next page, and then we make it fast.",
+              "이건 방금 세운 느린 방법을 코드로 옮긴 거예요. 아직 제출할 코드는 아니에요.\n읽어보고, 다음 쪽에서 직접 돌려본 뒤에 빠르게 고쳐요.")}
           </div>
           <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#8b5cf6" />
         </div>
@@ -405,6 +409,22 @@ export function makeMooHuntCh2(E, lang = "py") {
         "So — how do we make it faster? Let's look.",
         "그럼 어떻게 하면 더 빨라질까요? 같이 봐요."),
       content: (<FasterIdeaSim E={E} />),
+    },
+    /* ── 결-c2: 아이디어와 코드 사이의 다리 (2026-09-11 신설) ────────
+       student-algorithm 이 **바로 다음 쪽에서 그만뒀다**:
+         "isAt[x][a][b] 나오자마자 '이건 나 혼자 못 짜겠다' 는 생각이 들었다.
+          앞의 시뮬에서는 'M칸 1개+O칸 2개만 세면 된다' 는 아이디어까지만 봤지,
+          그걸 **미리 표로 저장해두는 방법은 코드에서 처음 봤다**."
+       선생님(2026-09-11): "막상 어떻게 풀건지는 설명이 부족해."
+       project-lead 판정: 쪽수를 맞추려 다른 쪽을 지우지 않는다 —
+       quest_problem_standard.md 에 선생님이 "페이지수 상관없어" 라고 박아두셨다. */
+    {
+      type: "reveal",
+      label: t(E, "Count once", "한 번만 세기"),
+      narr: t(E,
+        "Count the moves once into a table — then never scan them again.",
+        "무브를 표에 한 번만 세어 넣으면, 다시 훑을 일이 없어요."),
+      content: (<IsAtTableSim E={E} />),
     },
     {
       type: "reveal",

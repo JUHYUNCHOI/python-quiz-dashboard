@@ -222,8 +222,8 @@ export function BruteLimitSim({ E }) {
       <>You counted both numbers already.<br />Scoring one board means checking every move —<br />so the work is <b>1,000,000 × 6,840 ≈ 7×10⁹</b>.</>,
       <>두 수는 방금 직접 셌어요.<br />보드 하나를 채점하려면 무브를 다 봐야 하니까 —<br />일의 양은 <b>100만 × 6,840 ≈ 7×10⁹</b> 이에요.</>)
     : t(E,
-      <>A computer does about <b>10⁸ ~ 10⁹</b> steps a second.<br /><b>7×10⁹</b> is more than that.<br />Is it really too slow? Let's run it and see.</>,
-      <>컴퓨터는 1초에 <b>10⁸ ~ 10⁹</b> 번쯤 계산해요.<br /><b>7×10⁹</b> 은 그보다 많아요.<br />정말 느린지, 직접 돌려서 봐요.</>);
+      <>A computer does about <b>a billion simple steps</b> in one second — that is <b>10⁹</b>.<br /><b>7×10⁹</b> is <b>seven times</b> more.<br />Is it really too slow? Let's run it and see.</>,
+      <>컴퓨터는 <b>간단한 계산 10억 번</b>에 1초쯤 걸려요 — 그게 <b>10⁹</b> 이에요.<br /><b>7×10⁹</b> 은 그보다 <b>일곱 배</b> 많아요.<br />정말 느린지, 직접 돌려서 봐요.</>);
 
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
@@ -408,6 +408,120 @@ export function BitBoardSim({ E }) {
         })}
       </div>
 
+      </StepFade>
+      <div style={{ marginTop: 18 }}>
+        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
+      </div>
+    </div>
+  );
+}
+
+/* ③-b IsAtTableSim — 12쪽(아이디어)과 13쪽(코드) 사이의 다리. 2026-09-11 신설.
+   왜: student-algorithm 이 13쪽에서 **그만뒀다** —
+     "isAt[x][a][b] 나오자마자 '이건 나 혼자 못 짜겠다' 는 생각이 들었다.
+      앞의 시뮬에서는 'M칸 1개+O칸 2개만 세면 된다' 는 아이디어까지만 봤지,
+      그걸 **미리 표로 저장해두는 방법은 코드에서 처음 봤다**."
+   처방도 학생이 냈다 — "코드 나오기 전에 isAt 표가 뭘 저장하는지 손으로 채워보는 작은 표".
+   ⚠️ 2차원 리스트를 가르치는 레슨이 0개다. 여기 isAt 는 **3차원**이다.
+      그래서 한 번에 다 보여주지 않고 **x 를 하나 고정한 평면 한 장**만 그린다.
+   걸음 목록은 pedagogy-reviewer 가 짜서 검토받은 것을 그대로 옮겼다. */
+export function IsAtTableSim({ E }) {
+  const steps = [{ k: "ask" }, { k: "plan" }, { k: "fill" }, { k: "order" }, { k: "use" }];
+  const ts = useTraceStep(steps);
+  const s = steps[ts.safe];
+  const sayRef = useKeepInView(ts.safe);
+
+  /* 1쪽 문제 설명에 이미 쓴 칸 5개·무브 두 개를 그대로 재사용한다 (새 그림을 안 만든다).
+     화면에 적는 칸 번호는 **1번부터** — 문제와 같게. 표 안 첨자는 코드와 같게 0부터. */
+  const N = 5;
+  const X = 0;                                   // 평면 한 장: x = 0 (1번 칸이 M 인 경우)
+  const MOVES = [[0, 1, 2], [0, 3, 4], [0, 2, 1]];   // 세 번째는 (1,3,2) — 순서만 다른 무브
+  const upTo = s.k === "fill" ? 2 : s.k === "order" || s.k === "use" ? 3 : 0;
+
+  /* isAt[X][a][b] — a < b 로 모아 센다 */
+  const grid = Array.from({ length: N }, () => Array(N).fill(0));
+  MOVES.slice(0, upTo).forEach(([x, y, z]) => {
+    if (x === X) grid[Math.min(y, z)][Math.max(y, z)] += 1;
+  });
+
+  const say =
+    s.k === "ask" ? t(E,
+      <>We know only <b>one M + two O</b> can score.<br />But must we scan all <b>200,000</b> moves for every board?</>,
+      <>득점하는 건 <b>M 자리 하나 + O 자리 둘</b> 뿐인 건 알았어요.<br />그런데 보드마다 무브 <b>20만 개</b>를 매번 다 훑어야 할까요?</>)
+    : s.k === "plan" ? t(E,
+      <>No — count the moves <b>once, up front</b>, into a table.<br />One sheet per M cell. This sheet is for <b>cell 1 = M</b>.</>,
+      <>아니에요. 무브를 <b>미리 한 번만</b> 세서 표에 넣어두면 돼요.<br />M 자리마다 표 한 장씩. 이건 <b>1번 칸이 M</b> 일 때 표예요.</>)
+    : s.k === "fill" ? t(E,
+      <>Move <b>(1, 2, 3)</b> → put <b>1</b> in the (2, 3) square.<br />Move <b>(1, 4, 5)</b> → put <b>1</b> in the (4, 5) square.</>,
+      <>무브 <b>(1, 2, 3)</b> → (2, 3) 칸에 <b>1</b> 을 더해요.<br />무브 <b>(1, 4, 5)</b> → (4, 5) 칸에 <b>1</b> 을 더해요.</>)
+    : s.k === "order" ? t(E,
+      <>Now <b>(1, 3, 2)</b> arrives — same two O cells, swapped.<br />y and z only need to be O, so order does not matter.<br />Always store <b>smaller, larger</b> → it lands on (2, 3) again.</>,
+      <>이번엔 <b>(1, 3, 2)</b> 가 왔어요 — O 자리 둘이 순서만 바뀐 거예요.<br />y·z 는 둘 다 O 이기만 하면 되니 순서는 상관없어요.<br />늘 <b>작은 쪽·큰 쪽</b>으로 넣으면 (2, 3) 칸에 또 쌓여요.</>)
+    : t(E,
+      <>Scoring a board: read the squares straight out of the sheet.<br />The 200,000 moves are <b>never scanned again</b>.</>,
+      <>보드를 채점할 땐 표에서 칸만 꺼내 쓰면 돼요.<br />무브 20만 개를 <b>다시 훑지 않아요</b>.</>);
+
+  const justFilled =
+    s.k === "fill" ? [[1, 2], [3, 4]] : s.k === "order" ? [[1, 2]] : s.k === "use" ? [[1, 2]] : [];
+  const isNew = (a, b) => justFilled.some(([p, q]) => p === a && q === b);
+
+  const cell = (a, b) => {
+    const v = grid[a][b];
+    const off = b <= a;                                  // a < b 만 쓴다 (아래쪽은 안 씀)
+    return (
+      <span key={`${a}-${b}`} style={{
+        width: 34, height: 30, borderRadius: 7, display: "inline-flex",
+        alignItems: "center", justifyContent: "center",
+        fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 13,
+        background: off ? "#f8fafc" : isNew(a, b) ? "#ede9fe" : v ? "#f5f3ff" : "#fff",
+        border: `${isNew(a, b) ? 2.5 : 1.5}px solid ${off ? "#f1f5f9" : isNew(a, b) ? A : v ? "#c4b5fd" : "#e2e8f0"}`,
+        color: off ? "#e2e8f0" : v ? "#5b21b6" : "#cbd5e1",
+      }}>{off ? "" : v}</span>
+    );
+  };
+
+  return (
+    <div style={{ padding: 16, paddingBottom: 90 }}>
+      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
+        title={t(E, "Count once, into a table", "한 번만 세서 표에 넣어두기")}
+        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <StepFade fast k={ts.safe}>
+        <div ref={sayRef}><Say tone={s.k === "ask" ? "stuck" : s.k === "use" ? "aha" : "go"}>{say}</Say></div>
+
+        {s.k !== "ask" && (
+          <div style={{ maxWidth: 320, margin: "0 auto" }}>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#7c3aed", textAlign: "center",
+              marginBottom: 7, wordBreak: "keep-all" }}>
+              {t(E, "sheet for: cell 1 is M", "1번 칸이 M 일 때의 표")}
+            </div>
+            {/* 열 제목 — O 자리 두 개를 (작은 쪽, 큰 쪽) 으로 읽는다 */}
+            <div style={{ display: "grid", gridTemplateColumns: "28px repeat(5, 34px)", gap: 4, justifyContent: "center" }}>
+              <span />
+              {Array.from({ length: N }, (_, b) => (
+                <span key={b} style={{ textAlign: "center", fontSize: 11, fontWeight: 800, color: "#94a3b8" }}>{b + 1}</span>
+              ))}
+              {Array.from({ length: N }, (_, a) => (
+                <Fragment key={a}>
+                  <span style={{ display: "flex", alignItems: "center", justifyContent: "flex-end",
+                    fontSize: 11, fontWeight: 800, color: "#94a3b8", paddingRight: 4 }}>{a + 1}</span>
+                  {Array.from({ length: N }, (_, b) => cell(a, b))}
+                </Fragment>
+              ))}
+            </div>
+            <div style={{ fontSize: 11, color: "#94a3b8", textAlign: "center", marginTop: 7,
+              wordBreak: "keep-all", textWrap: "balance" }}>
+              {t(E, "row = smaller O cell, column = larger O cell",
+                   "세로 = 작은 쪽 O 칸, 가로 = 큰 쪽 O 칸")}
+            </div>
+            {s.k === "use" && (
+              <div style={{ maxWidth: 300, margin: "12px auto 0", padding: "8px 12px", borderRadius: 9,
+                background: "#f5f3ff", border: `1.5px solid ${A}`, textAlign: "center",
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: "#5b21b6" }}>
+                isAt[0][1][2] = {grid[1][2]}
+              </div>
+            )}
+          </div>
+        )}
       </StepFade>
       <div style={{ marginTop: 18 }}>
         <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
