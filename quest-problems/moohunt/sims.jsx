@@ -316,8 +316,8 @@ export function BitBoardSim({ E }) {
       <>Same rule for the rest — all <b>{1 << N}</b> boards.</>,
       <>나머지도 같은 규칙이에요 — 보드 <b>{1 << N}</b>개가 전부 나왔어요.</>)
     : s.k === "turn" ? t(E,
-      <>Now the other way round: given a number, which cell is M?<br />Let us try <b>{EX_B}</b> (= <b>{EXC.join("")}</b>) — it has both M and O,<br />so we can <b>see</b> whether our answer is right.</>,
-      <>이번엔 거꾸로예요. 숫자만 보고 어느 칸이 M 인지 알아내야 해요.<br /><b>{EX_B}</b>(= <b>{EXC.join("")}</b>) 로 해볼게요.<br />M 과 O 가 <b>섞여 있어서</b> 답이 맞았는지 눈으로 보여요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .8 }}>(여기서 칸은 <b>0번부터</b> 세요. 문제의 <b>1 2 3</b> 은 1번부터라서 코드가 1 을 빼요.)</span></>)
+      <>So far we read <b>number → board</b>. The table goes that way.<br />Code needs the <b>opposite</b> — pull <b>one cell</b> out of the number.<br />Because scoring asks "is cell 3 an M?"<br />Try <b>{EX_B}</b> (= <b>{EXC.join("")}</b>) — it has both M and O, so we can <b>see</b> if we got it right.</>,
+      <>지금까지는 <b>숫자 → 보드</b> 였어요. 표를 그렇게 읽었죠.<br />코드는 <b>반대로</b> 해야 해요 — <b>숫자에서 칸 하나만</b> 꺼내요.<br />왜냐면 채점할 때 "3번 칸이 M 인가?" 를 물어야 하거든요.<br /><b>{EX_B}</b>(= <b>{EXC.join("")}</b>) 로 해볼게요. M 과 O 가 <b>섞여 있어서</b> 답이 맞았는지 눈으로 보여요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .8 }}>(여기서 칸은 <b>0번부터</b> 세요. 문제의 <b>1 2 3</b> 은 1번부터라서 코드가 1 을 빼요.)</span></>)
     : s.k === "shr" ? t(E,
       <>We want cell <b>{EX_I}</b>. First bring it to the front:<br /><b>drop</b> the {EX_I} cell{EX_I > 1 ? "s" : ""} in front of it.<br /><span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{EXC.join("")} → {CUT.join("")}</span> · that is <b>{EX_B} &gt;&gt; {EX_I} = {EX_B >> EX_I}</b>.</>,
       <><b>{EX_I}번 칸</b>이 궁금해요. 먼저 맨 앞으로 데려와요.<br />앞에 있는 <b>{EX_I}칸을 버려요.</b><br /><span style={{ fontFamily: "'JetBrains Mono',monospace" }}>{EXC.join("")} → {CUT.join("")}</span> · 이게 <b>{EX_B} &gt;&gt; {EX_I} = {EX_B >> EX_I}</b> 예요.</>)
@@ -459,8 +459,8 @@ export function IsAtTableSim({ E }) {
       <>We know only <b>one M + two O</b> can score.<br />But must we scan all <b>200,000</b> moves for every board?</>,
       <>득점하는 건 <b>M 자리 하나 + O 자리 둘</b> 뿐인 건 알았어요.<br />그런데 보드마다 무브 <b>20만 개</b>를 매번 다 훑어야 할까요?</>)
     : s.k === "plan" ? t(E,
-      <>No — count the moves <b>once, up front</b>, into a table.<br />One sheet per M cell. This sheet is for <b>cell 1 = M</b>.</>,
-      <>아니에요. 무브를 <b>미리 한 번만</b> 세서 표에 넣어두면 돼요.<br />M 자리마다 표 한 장씩. 이건 <b>1번 칸이 M</b> 일 때 표예요.</>)
+      <>No — count the moves <b>once, up front</b>, into a table.<br />One square = <b>how many times that move appeared</b>.<br />A move is (x, y, z), so a square is picked by <b>which three cells</b>.</>,
+      <>아니에요. 무브를 <b>미리 한 번만</b> 세서 표에 넣어두면 돼요.<br />표의 <b>한 칸 = 그 무브가 몇 번 나왔나</b> 예요.<br />무브는 (x, y, z) 니까, 칸은 <b>세 칸 번호</b>로 정해져요.</>)
     : s.k === "fill" ? t(E,
       <>Move <b>(1, 2, 3)</b> → put <b>1</b> in the (2, 3) square.<br />Move <b>(1, 4, 5)</b> → put <b>1</b> in the (4, 5) square.</>,
       <>무브 <b>(1, 2, 3)</b> → (2, 3) 칸에 <b>1</b> 을 더해요.<br />무브 <b>(1, 4, 5)</b> → (4, 5) 칸에 <b>1</b> 을 더해요.</>)
@@ -504,9 +504,17 @@ export function IsAtTableSim({ E }) {
 
         {s.k !== "ask" && (
           <div style={{ maxWidth: 320, margin: "0 auto" }}>
-            <div style={{ fontSize: 11.5, fontWeight: 800, color: "#7c3aed", textAlign: "center",
-              marginBottom: 7, wordBreak: "keep-all" }}>
-              {t(E, "sheet for: cell 1 is M", "1번 칸이 M 일 때의 표")}
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#7c3aed", textAlign: "center",
+              marginBottom: 4, wordBreak: "keep-all" }}>
+              {t(E, "sheet for x = cell 1 (the M)", "x = 1번 칸 (M 자리) 의 표")}
+            </div>
+            {/* ⚠️ 축 설명이 표 **아래** 작은 회색 글씨였다. 선생님: "가로세로가 뭘 얘기하는 표야?"
+                읽기 전에 보이게 위로 올리고, y·z 라는 이름을 같이 준다. */}
+            <div style={{ maxWidth: 300, margin: "0 auto 9px", padding: "7px 10px", borderRadius: 8,
+              background: "#faf5ff", border: "1px solid #ddd6fe", fontSize: 11.5, color: "#6d28d9",
+              lineHeight: 1.7, wordBreak: "keep-all", textAlign: "center" }}>
+              {t(E, <>rows ↓ = smaller <b>O</b> cell &nbsp;·&nbsp; columns → = larger <b>O</b> cell<br />(those are y and z)</>,
+                   <>세로 ↓ = 작은 쪽 <b>O</b> 칸 &nbsp;·&nbsp; 가로 → = 큰 쪽 <b>O</b> 칸<br />(그 둘이 y, z 예요)</>)}
             </div>
             {/* 열 제목 — O 자리 두 개를 (작은 쪽, 큰 쪽) 으로 읽는다 */}
             <div style={{ display: "grid", gridTemplateColumns: "28px repeat(5, 34px)", gap: 4, justifyContent: "center" }}>
@@ -522,11 +530,17 @@ export function IsAtTableSim({ E }) {
                 </Fragment>
               ))}
             </div>
-            <div style={{ fontSize: 11, color: "#94a3b8", textAlign: "center", marginTop: 7,
-              wordBreak: "keep-all", textWrap: "balance" }}>
-              {t(E, "row = smaller O cell, column = larger O cell",
-                   "세로 = 작은 쪽 O 칸, 가로 = 큰 쪽 O 칸")}
-            </div>
+
+            {s.k === "plan" && (
+              <div style={{ maxWidth: 300, margin: "10px auto 0", padding: "9px 12px", borderRadius: 9,
+                background: "#f5f3ff", border: `1.5px solid ${A}`, fontSize: 12, fontWeight: 700,
+                color: "#5b21b6", lineHeight: 1.8, wordBreak: "keep-all", textAlign: "center" }}>
+                {t(E, <>So the square at row <b>2</b>, column <b>3</b> means:<br />
+                       "how many times did move <b>(1, 2, 3)</b> appear?"</>,
+                     <>그러니까 세로 <b>2</b>, 가로 <b>3</b> 칸은 이런 뜻이에요:<br />
+                       "무브 <b>(1, 2, 3)</b> 이 몇 번 나왔나?"</>)}
+              </div>
+            )}
             {(s.k === "use" || s.k === "sum") && (
               <div style={{ maxWidth: 320, margin: "12px auto 0", padding: "9px 12px", borderRadius: 9,
                 background: "#f5f3ff", border: `1.5px solid ${A}`, textAlign: "center",
@@ -609,8 +623,8 @@ export function FasterIdeaSim({ E }) {
       <>So don't look at every move. Look only at what <b>can</b> score:<br />one <b>M</b> cell + two <b>O</b> cells.<br />Here that is {mPos.length} × {pairs} = <b>{canScore}</b>, not {allMoves}.</>,
       <>그러니 무브를 다 보지 말고, <b>득점할 수 있는 것만</b> 봐요.<br /><b>M</b> 자리 하나 + <b>O</b> 자리 둘.<br />여기선 {mPos.length} × {pairs} = <b>{canScore}개</b>예요. {allMoves}개가 아니라요.</>)
     : t(E,
-      <>At N = 20 the same idea cuts <b>{BIG_ALL.toLocaleString("en-US")}</b> down to about <b>{BIG_AVG}</b> per board.<br />Roughly <b>{gain}× less work</b> — and the answer is identical.</>,
-      <>N = 20 에서도 같은 생각이에요. 보드마다 <b>{BIG_ALL.toLocaleString("en-US")}개</b> 보던 걸 평균 <b>{BIG_AVG}개</b>만 봐요.<br />일이 <b>약 {gain}배</b> 줄어요. 답은 똑같고요.</>);
+      <>With <b>N</b> cells the same idea works. At <b>N = 20</b> (20 cells) it cuts <b>{BIG_ALL.toLocaleString("en-US")}</b> down to about <b>{BIG_AVG}</b> per board.<br />Roughly <b>{gain}× less work</b> — and the answer is identical.</>,
+      <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>(칸 20개)이면 보드마다 <b>{BIG_ALL.toLocaleString("en-US")}개</b> 보던 걸 평균 <b>{BIG_AVG}개</b>만 봐요.<br />일이 <b>약 {gain}배</b> 줄어요. 답은 똑같고요.</>);
 
   const cellStyle = (c, dim) => ({
     width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",

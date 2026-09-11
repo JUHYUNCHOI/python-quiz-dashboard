@@ -253,23 +253,23 @@ export function makeMooHuntCh1(E) {
               {t(E, "Two numbers decide it", "두 수가 정해요")}
             </div>
             <div>
-              {t(E, <><b>Boards</b>: each cell is M or O \u2192 <b>2<sup>20</sup> \u2248 1,000,000</b></>,
-                   <><b>보드 수</b>: 칸마다 M 아니면 O \u2192 <b>2<sup>20</sup> \u2248 100만</b></>)}
+              {t(E, <><b>Boards</b>: each of the <b>N = 20</b> cells is M or O → <b>2<sup>20</sup> ≈ 1,000,000</b></>,
+                   <><b>보드 수</b>: 칸 <b>N = 20</b>개가 저마다 M 아니면 O → <b>2<sup>20</sup> ≈ 100만</b></>)}
             </div>
             <div>
-              {t(E, <><b>Moves per board</b>: (x, y, z) all different \u2192 <b>20\u00d719\u00d718 = 6,840</b></>,
-                   <><b>보드당 무브</b>: (x, y, z) 가 모두 다름 \u2192 <b>20\u00d719\u00d718 = 6,840</b></>)}
+              {t(E, <><b>Moves per board</b>: (x, y, z) all different → <b>20×19×18 = 6,840</b></>,
+                   <><b>보드당 무브</b>: (x, y, z) 가 모두 다름 → <b>20×19×18 = 6,840</b></>)}
             </div>
             <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fdba74", fontWeight: 800 }}>
-              {t(E, <>100\u4e07 \u00d7 6,840 \u2248 <b>7\u00d710<sup>9</sup></b></>,
-                   <>100만 \u00d7 6,840 \u2248 <b>7\u00d710<sup>9</sup></b> 번</>)}
+              {t(E, <>100万 × 6,840 ≈ <b>7×10<sup>9</sup></b></>,
+                   <>100만 × 6,840 ≈ <b>7×10<sup>9</sup></b> 번</>)}
             </div>
           </div>
           <div style={{ maxWidth: 470, margin: "12px auto 0", background: "#fef2f2",
             border: "1.5px solid #f87171", borderRadius: 12, padding: "12px 16px",
             fontSize: 13, color: "#7f1d1d", lineHeight: 1.9, textWrap: "balance", textAlign: "center" }}>
-            {t(E, <>A computer does about <b>a billion simple steps</b> in one second \u2014 that is <b>10<sup>9</sup></b>.<br /><b>7\u00d710<sup>9</sup></b> is <b>seven times</b> more. Let's see it for real.</>,
-                 <>컴퓨터는 <b>간단한 계산 10억 번</b>에 1초쯤 걸려요 \u2014 그게 <b>10<sup>9</sup></b> 이에요.<br /><b>7\u00d710<sup>9</sup></b> 은 그보다 <b>일곱 배</b> 많아요. 직접 봐요.</>)}
+            {t(E, <>A computer does about <b>a billion simple steps</b> in one second — that is <b>10<sup>9</sup></b>.<br /><b>7×10<sup>9</sup></b> is <b>seven times</b> more. Let's see it for real.</>,
+                 <>컴퓨터는 <b>간단한 계산 10억 번</b>에 1초쯤 걸려요 — 그게 <b>10<sup>9</sup></b> 이에요.<br /><b>7×10<sup>9</sup></b> 은 그보다 <b>일곱 배</b> 많아요. 직접 봐요.</>)}
           </div>
         </div>
       ),
@@ -347,7 +347,7 @@ export function makeMooHuntCh2(E, lang = "py") {
           <div style={{ margin: "12px 14px 0", background: "#ecfdf5", border: "1.5px solid #34d399",
             borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#065f46",
             lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
-            {"\u2705 "}{t(E,
+            {"✅ "}{t(E,
               "The official solution from usaco.org.\nThe idea is the one you just saw: only 'one M cell + two O cells' can score.\nSame answer as the slow code, but it looks at far fewer moves.",
               "usaco.org 공식 풀이예요.\n방금 본 그 생각이에요: 득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐.\n답은 느린 코드와 똑같고, 보는 무브 수만 확 줄어요.")}
           </div>
