@@ -214,7 +214,7 @@ export function ProgressiveCodeStepper({
           )}
         </div>
         <div style={{ borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
-          <CodeBlock lines={code} lang={lang} />
+          <CodeBlock lines={code} lang={lang} isEn={!!E} />
         </div>
         </div>
         {s.aside && showAside && <div>{s.aside}</div>}

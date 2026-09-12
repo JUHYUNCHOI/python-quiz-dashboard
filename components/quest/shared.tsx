@@ -2,6 +2,7 @@
 
 import { Fragment, useState, useEffect } from "react"
 import type React from "react"
+import { localizeCode } from "@/components/quest/localizeCode"
 
 // ── Typing animation hook ─────────────────────────────────────────────────────
 
@@ -357,9 +358,14 @@ interface CodeBlockProps {
   /** Lines [0, dimUntil) render dimmed (already-built context); the rest are
    *  the newly-added lines, shown full-strength. Default 0 = nothing dimmed. */
   dimUntil?: number
+  isEn?: boolean
 }
 
-export function CodeBlock({ lines, lang = "py", dimUntil = 0 }: CodeBlockProps) {
+export function CodeBlock({ lines: rawLines, lang = "py", dimUntil = 0, isEn = false }: CodeBlockProps) {
+  /* 코드 안 한국어 주석을 영어 화면에서도 읽히게 한다 (2026-09-11).
+     ⚠️ isEn 을 안 넘기는 옛 호출부는 지금과 똑같이 원본을 그린다 — 깨지지 않는다.
+     원본 배열은 안 건드리고 **그리는 자리에서만** 바꾼다. 줄 수는 유지된다. */
+  const lines = localizeCode(rawLines, isEn);
   const [copied, setCopied] = useState(false)
   const handleCopy = async () => {
     try {

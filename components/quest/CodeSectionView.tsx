@@ -187,7 +187,7 @@ export function CodeSectionView({
               ux 가 checkups·reflection 스크린샷에서 잡았다.
               CodeSectionView 를 쓰는 quest 11개 전부에 걸려 있던 버그다. */}
           <div style={{ position: "relative", borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
-            <CodeBlock lines={code} lang={lang} />
+            <CodeBlock lines={code} lang={lang} isEn={!!E} />
           </div>
         </div>
         {s.aside && showAside && <div>{s.aside}</div>}

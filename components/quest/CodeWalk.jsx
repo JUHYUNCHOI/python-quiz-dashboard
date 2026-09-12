@@ -23,7 +23,13 @@ import { useTraceStep, SimNav } from "@/components/quest/TraceStepper";
 // badge(선택): { ko, en, color } — 코드워크 맨 위에 '항상' 붙는 띠.
 // (선생님 2026-07-18: 재귀 번외편을 주 풀이로 착각 — "아직도 recursion이 있는데?".
 //  내레이션은 스크롤하면 안 보여서, 워크 안에 상시 표시가 필요.)
-export function CodeWalk({ E, code, lang = "py", beats, accent = "#16a34a", vars = null, marks = null, badge = null }) {
+import { localizeCode } from "@/components/quest/localizeCode";
+
+export function CodeWalk({ E, code: rawCode, lang = "py", beats, accent = "#16a34a", vars = null, marks = null, badge = null }) {
+  /* 코드 안 한국어 주석을 영어 화면에서도 읽히게 한다 (2026-09-11).
+     ⚠️ 원본 배열은 절대 안 건드린다 — 🔒 USACO_VERIFIED 파일이 많다. **그리는 자리에서만** 바꾼다.
+     번역이 없으면 그 줄을 비운다. **줄 수는 유지**하므로 beats 의 hi 번호가 안 밀린다. */
+  const code = localizeCode(rawCode, !!E);
   const { idx, setIdx, total } = useTraceStep(beats.length);
   const beat = beats[Math.min(idx, beats.length - 1)];
   const [lo, hi] = beat.hi;
