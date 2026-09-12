@@ -280,7 +280,10 @@ export function makeMooHuntCh1(E) {
               </div>
             </div>
             <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fdba74", fontWeight: 800 }}>
-              {t(E, <>100万 × 6,840 ≈ <b>7×10<sup>9</sup></b></>,
+              {/* ⚠️ 2026-09-12: 영어 쪽에 **한자 "万"** 이 섞여 있었다. 영어 모드 학생이 잡았다 —
+                     "영어 화면인데 이게 뭔지 몰랐다". 한국어 "100만" 을 고칠 때 딸려 들어간 것으로 보인다.
+                     영어 숫자는 영어 표기로 쓴다. */}
+              {t(E, <>1,000,000 × 6,840 ≈ <b>7×10<sup>9</sup></b></>,
                    <>100만 × 6,840 ≈ <b>7×10<sup>9</sup></b> 번</>)}
             </div>
           </div>

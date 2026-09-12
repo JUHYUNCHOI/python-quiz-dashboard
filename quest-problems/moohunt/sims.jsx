@@ -402,8 +402,17 @@ export function WholeRunSim({ E }) {
       <><b>2.</b> Count the moves into the table — <b>once</b>.<br />Only {filled.length} squares end up non-zero.</>,
       <><b>2.</b> 무브를 표에 세어 넣어요 — <b>딱 한 번</b>.<br />0 이 아닌 칸은 {filled.length}개뿐이에요.</>)
     : s.k === "board" ? t(E,
-      <><b>3.</b> Board <b>b = {s.b}</b> is <b>{board(s.b)}</b>.<br />M cells {cur.Ms.map((i) => i + 1).join("·") || "none"} / O cells {cur.Os.map((i) => i + 1).join("·")}<br />Read the table for every (M, O-pair) → <b>{cur.sc}</b> points.</>,
-      <><b>3.</b> 보드 <b>b = {s.b}</b> 는 <b>{board(s.b)}</b> 예요.<br />M 자리 {cur.Ms.map((i) => i + 1).join("·") || "없음"} / O 자리 {cur.Os.map((i) => i + 1).join("·")}<br />(M 자리, O 짝) 마다 표를 꺼내 더하면 <b>{cur.sc}점</b>.</>)
+      /* ⚠️ 2026-09-12 학생: "b 가 뭔지 화면이 설명해주지 않았다. 0,1,2 다음 갑자기 17, 25 로 뛴다."
+         b 의 뜻은 **첫 걸음에 한 번만** 말하고, 건너뛴다는 것도 그 자리에서 말한다.
+         (WALK = [0, 1, 2, 최고점 보드 둘] — 1,048,576개를 다 밟을 수는 없다.) */
+      <><b>3.</b> Board <b>b = {s.b}</b> is <b>{board(s.b)}</b>.
+        {s.i === 0 && <><br /><span style={{ opacity: .85 }}>b is just <b>which board</b> — we make them in order, b = 0, 1, 2, …</span></>}
+        {s.i === 3 && <><br /><span style={{ opacity: .85 }}>Skipping ahead — these last two are the <b>best-scoring</b> boards.</span></>}
+        <br />M cells {cur.Ms.map((i) => i + 1).join("·") || "none"} / O cells {cur.Os.map((i) => i + 1).join("·")}<br />Read the table for every (M, O-pair) → <b>{cur.sc}</b> points.</>,
+      <><b>3.</b> 보드 <b>b = {s.b}</b> 는 <b>{board(s.b)}</b> 예요.
+        {s.i === 0 && <><br /><span style={{ opacity: .85 }}>b 는 <b>몇 번째 보드</b>인가예요 — 0, 1, 2 … 순서로 만들어요.</span></>}
+        {s.i === 3 && <><br /><span style={{ opacity: .85 }}>여기서부터는 건너뛰어요 — 이 둘이 <b>최고 점수</b>가 나온 보드예요.</span></>}
+        <br />M 자리 {cur.Ms.map((i) => i + 1).join("·") || "없음"} / O 자리 {cur.Os.map((i) => i + 1).join("·")}<br />(M 자리, O 짝) 마다 표를 꺼내 더하면 <b>{cur.sc}점</b>.</>)
     : t(E,
       <><b>4.</b> Do that for all <b>{1 << N}</b> boards and keep the best.<br />Answer: <b>{best} {ways}</b> — that is exactly what the code prints.</>,
       <><b>4.</b> 보드 <b>{1 << N}</b>개를 다 그렇게 하고 제일 좋은 걸 남겨요.<br />답: <b>{best} {ways}</b> — 코드가 출력하는 게 바로 이거예요.</>);
@@ -571,8 +580,15 @@ export function IsAtTableSim({ E }) {
       <>Now score a board — say <b>{SCORE_BOARD}</b>: cell 1 is M, the rest are O.<br />Which squares do we read? Every <b>pair of O cells</b>.</>,
       <>이제 보드를 채점해요 — <b>{SCORE_BOARD}</b> 예요. 1번만 M, 나머지는 O.<br />어느 칸을 볼까요? <b>O 자리끼리 짝지은 칸</b>을 다 봐요.</>)
     : t(E,
-      <>Add those squares up — that is the board's score.<br />The 200,000 moves are <b>never scanned again</b>.</>,
-      <>그 칸들을 더하면 <b>이 보드의 점수</b>예요.<br />무브 20만 개를 <b>다시 훑지 않아요</b>.</>);
+      /* ⚠️ 2026-09-12 학생이 **이 쪽에서 그만두고 싶었다**고 했다. 이유가 지루함만이 아니었다:
+         "표로 미리 세도, 결국 보드마다 표를 찾아보는 건 똑같잖아. 그럼 뭐가 다른 건지
+          이 쪽에서는 안 알려줬다." — 맞는 말이다. 전엔 "다시 훑지 않아요" 라고 **사실만**
+         말하고 **대신 몇 번을 보는지**는 안 적었다. 선생님이 내내 물으신 "왜 이게 되나" 가
+         바로 이 한 줄이다 (memory/feedback_why_and_how_over_slowness.md).
+         숫자 검산: N=20 에서 (M 자리, O 짝) 자리는 20 × C(19,2) = 3,420 가지.
+         한 자리가 실제로 쓰이려면 x=M · y=O · z=O 라 확률 1/8 → 보드당 평균 427.5 ≈ 428. */
+      <>Add those squares up — that is the board's score.<br />The 200,000 moves are <b>never scanned again</b>.<br /><b>200,000 → about 428 squares</b> per board.</>,
+      <>그 칸들을 더하면 <b>이 보드의 점수</b>예요.<br />무브 20만 개를 <b>다시 훑지 않아요</b>.<br />보드마다 <b>20만 번 → 평균 428칸</b>만 봐요.</>);
 
   const justFilled =
     s.k === "fill" ? [[1, 2], [3, 4]] : s.k === "order" ? [[1, 2]]
