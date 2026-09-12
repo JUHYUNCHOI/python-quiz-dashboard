@@ -716,8 +716,9 @@ export function FasterIdeaSim({ E }) {
   const pairs = (oPos.length * (oPos.length - 1)) / 2;          // C(3,2) = 3
   const canScore = mPos.length * pairs;                         // 2 × 3 = 6
 
-  // N = 20 일 때 — 보드마다 평균 몇 개나 보나
-  const BIG_ALL = 20 * 19 * 18;                                 // 6,840
+  // N = 20 일 때 — 보드마다 평균 몇 가지나 보나
+  // (6,840 = 20×19×18 은 2026-09-12 에 뺐다. 앞 쪽이 코드로 "무브 20만" 을 보여주는데
+  //  여기서 다른 기준을 들면 학생이 두 세계를 본다 — ux·학생이 걸렸던 그 두 숫자다.)
   let acc = 0;
   for (let m = 0; m <= 20; m++) {
     const o = 20 - m;
@@ -726,7 +727,6 @@ export function FasterIdeaSim({ E }) {
     acc += c * m * ((o * (o - 1)) / 2);
   }
   const BIG_AVG = Math.round(acc / Math.pow(2, 20));            // 428
-  const gain = Math.round(BIG_ALL / BIG_AVG);
 
   const say =
     s.k === "board" ? t(E,
@@ -742,8 +742,13 @@ export function FasterIdeaSim({ E }) {
       <>So don't look at every move. Look only at what <b>can</b> score:<br />a scoring <b>move</b> points at one <b>M</b> cell + two <b>O</b> cells.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(That is about moves, not boards — a board may hold any number of M's.)</span><br />Here that is <b>{mPos.length}</b> M cells × <b>{pairs}</b> O-pairs (pick 2 of the {oPos.length} O cells) = <b>{canScore}</b>, not {allMoves}.</>,
       <>그러니 무브를 다 보지 말고, <b>득점할 수 있는 것만</b> 봐요.<br />득점하는 <b>무브</b>는 <b>M</b> 자리 하나 + <b>O</b> 자리 둘을 가리켜요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(보드 얘기가 아니에요 — 보드엔 M 이 몇 개든 있어도 돼요.)</span><br />여기선 M 자리 <b>{mPos.length}개</b> × O 짝 <b>{pairs}가지</b>(O 칸 {oPos.length}개 중 2개 고르기) = <b>{canScore}개</b>예요. {allMoves}개가 아니라요.</>)
     : t(E,
-      <>With <b>N</b> cells the same idea works. At <b>N = 20</b> (20 cells) it cuts <b>{BIG_ALL.toLocaleString("en-US")}</b> down to about <b>{BIG_AVG}</b> per board.<br />Roughly <b>{gain}× less work</b> — and the answer is identical.</>,
-      <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>(칸 20개)이면 보드마다 <b>{BIG_ALL.toLocaleString("en-US")}개</b> 보던 걸 평균 <b>{BIG_AVG}개</b>만 봐요.<br />일이 <b>약 {gain}배</b> 줄어요. 답은 똑같고요.</>);
+      /* ⚠️ 2026-09-12: 기준을 6,840 에서 **20만**으로 바꿨다.
+         앞 쪽(첫 코드)이 방금 "보드마다 무브 20만 개를 훑는다" 를 코드로 보여준다.
+         그런데 여기서 갑자기 6,840 을 기준으로 삼으면 학생은 두 세계를 보게 된다 —
+         ux·학생이 예전에 "K 는 20만이라며 왜 갑자기 6,840?" 이라고 걸린 그 자리다.
+         6,840(서로 다른 무브의 최대 가짓수)은 이 이야기에 필요 없다. */
+      <>With <b>N</b> cells the same idea works. At <b>N = 20</b>, instead of walking all <b>200,000</b> moves per board we look at about <b>{BIG_AVG}</b> combinations.<br />The answer is identical.</>,
+      <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>이면 보드마다 무브 <b>20만 개</b>를 훑는 대신, 볼 조합은 평균 <b>{BIG_AVG}가지</b>예요.<br />답은 똑같고요.</>);
 
   const cellStyle = (c, dim) => ({
     width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
@@ -784,8 +789,10 @@ export function FasterIdeaSim({ E }) {
         <div style={{ maxWidth: 420, margin: "10px auto 0", padding: "10px 14px", borderRadius: 10,
           background: "#ecfdf5", border: "1.5px solid #34d399", fontSize: 12.5, color: "#065f46",
           lineHeight: 1.85, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
-          {t(E, <>N = 20 : <b>{BIG_ALL.toLocaleString("en-US")}</b> → about <b>{BIG_AVG}</b> per board</>,
-                <>N = 20 : 보드마다 <b>{BIG_ALL.toLocaleString("en-US")}</b> → 약 <b>{BIG_AVG}</b></>)}
+          {/* ⚠️ 말풍선만 고치고 이 카드를 안 고치면 한 화면에서 두 기준이 싸운다.
+                 (내가 자주 내는 실수라 적어둔다 — 같은 걸음의 말풍선·카드는 늘 같이 본다.) */}
+          {t(E, <>N = 20 : <b>200,000</b> moves → about <b>{BIG_AVG}</b> combinations per board</>,
+                <>N = 20 : 보드마다 무브 <b>20만</b> → 볼 조합 약 <b>{BIG_AVG}가지</b></>)}
         </div>
       )}
       </StepFade>

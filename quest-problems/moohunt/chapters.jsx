@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMooHuntSections, getMooHuntWalk } from "./components";
+import { getMooHuntSections } from "./components";
 import { getMooHuntFastWalk } from "./fast";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 import { ScoreBoardSim, EveryBoardSim, FasterIdeaSim, IsAtTableSim, WholeRunSim } from "./sims";
@@ -229,26 +229,35 @@ export function makeMooHuntCh1(E) {
         "MOOMM 도 4 점이에요 — 나머지 한 개요. 무브를 따라가 봐요."),
       content: (<ScoreBoardSim E={E} />),
     },
-    /* 1-3b: **"그럼 어떻게 풀까?" 를 여기서 먼저 말한다** (2026-09-07)
-       선생님: "다 해보자 다음에 이렇게 하면 문제가 있으니까 어떻게 하자고
-       이게 왜 좋은지가 순서 아닌가?"
-       전에는 이 선언이 문제 탭 **마지막**(BruteLimitSim 첫 단계)에 있었다. 그래서 그 앞의
-       "보드가 몇 개?"(1-4) 와 "무브가 몇 개?"(1-5) 가 **아무도 안 물어본 질문**이 됐다.
-       학생이 직접 그렇게 말했다: "이걸 왜 지금 세는지 이 쪽에서는 아직 모름."
-       계획을 먼저 세우면, 그 뒤의 세는 일이 전부 "그 계획이 되는지 재보는 것" 이 된다.
-       프레이밍은 memory/feedback_solution_framing.md — 결론 통보가 아니라 질문으로 연다. */
+    /* ── 결-b 한계: 한 화면 ────────────────────────────────────────
+       2026-09-11. 여기 있던 **다섯 쪽**(계획 선언 · 보드 수 퀴즈 · 3×2 워밍업 ·
+       무브 수 입력 · 곱하기 시뮬)을 한 쪽으로 줄였다. 선생님이 **세 번** 말씀하셨다:
+         "안된다는걸 앞 페이지에서 엄청 많이 설명하고 막상 어떻게 풀건지는 설명이 부족해"
+         "굳이 시간이 오래걸린다는걸 코드까지 보여주고"
+         "아직도 오래걸린다는 설명이 앞에 너무 많이 나오는데? **퀴즈도 필요없고.**"
+       memory/feedback_why_and_how_over_slowness.md — 한계는 한 화면이면 충분하다.
+
+       ── 2026-09-12: 여기에 **첫 코드(완전탐색 CodeWalk)를 넣었다가 도로 뺐다.** ──
+       전원 검토 3라운드 판정은 "넣는다" 였다(결-a 가 비어 있고, 선생님이 표준에
+       "쉬운 코드 단계별" 을 계속 요구하신다고 적어두셨다). 실제로 붙여서 화면을 봤더니
+       **그 브루트 코드가 비트마스크를 쓴다** — `for b in range(1 << N)` · `(b >> x) & 1`
+       (components.jsx:39,42). 변수 범례에 "b = 보드(비트마스크)" 가 그대로 뜬다.
+       ⚠️ 이 세션 내내 한 일이 **최종 코드에서 비트를 걷어낸 것**이었고(선생님 지시,
+          제출해서 통과까지 확인), 7쪽은 비트 없이 "리스트에 1 더하기" 로 보드를 만든다.
+          그 앞 4쪽에서 비트마스크를 첫 코드로 보여주면 정반대다.
+          `count-quests.py --list untaught` 도 moohunt 를 [비트연산] 으로 잡는다 —
+          지금까지는 그 코드가 화면에 안 떠서 무해했는데, 띄우는 순간 실물이 된다.
+       → **판정을 뒤집는다.** 3라운드는 코드를 열어보지 않고 낸 결론이었다.
+          결-a 를 채우려면 **비트 없는 브루트를 새로 써야** 하고, 그건 새 코드라
+          QA 와 pedagogy 설계 패스가 필요하다. .claude/WORK.md 항목으로 올린다.
+          🔒 components.jsx 의 FULL_PY/FULL_CPP 는 USACO_VERIFIED 라 고칠 수 없다.
+
+       ⚠️ 숫자는 고친 채로 둔다. 전에는 `100만 × 6,840 ≈ 7×10⁹` 이었는데
+          실제 완전탐색은 6,840 이 아니라 **입력 K개를 그대로 돈다**
+          (components.jsx:41 `for x, y, z in moves:`) → `100만 × 20만 ≈ 2×10¹¹`, 30배 차이.
+          6,840 과 그걸 해명하던 각주도 뺐다 — ux·학생이 "K 는 20만이라며 왜 갑자기
+          6,840?" 이라고 걸렸던 두 숫자다. 5쪽 시뮬의 기준도 20만으로 맞췄다. */
     {
-      /* ── 결-b 한계: 한 화면 ────────────────────────────────────────
-         2026-09-11. 여기 있던 **다섯 쪽**(계획 선언 · 보드 수 퀴즈 · 3×2 워밍업 ·
-         무브 수 입력 · 곱하기 시뮬)을 한 쪽으로 줄였다.
-         선생님이 **세 번** 말씀하셨다:
-           "안된다는걸 앞 페이지에서 엄청 많이 설명하고 막상 어떻게 풀건지는 설명이 부족해"
-           "굳이 시간이 오래걸린다는걸 코드까지 보여주고"
-           "아직도 오래걸린다는 설명이 앞에 너무 많이 나오는데? **퀴즈도 필요없고.**"
-         memory/feedback_why_and_how_over_slowness.md 가 같은 말이다 —
-         "한계는 **한 화면이면 충분**하다. 제약 숫자 + 연산량 한 줄.
-          아낀 분량을 왜 이 방법이 되나·어떻게 짜나 에 써라."
-         아낀 분량은 isAt 다리(새 쪽)로 갔다 — 학생이 거기서 그만뒀다. */
       type: "reveal",
       label: t(E, "Try them all?", "다 해보면?"),
       narr: t(E,
@@ -267,35 +276,19 @@ export function makeMooHuntCh1(E) {
                    <><b>보드 수</b>: 칸 <b>N = 20</b>개가 저마다 M 아니면 O → <b>2<sup>20</sup> ≈ 100만</b></>)}
             </div>
             <div>
-              {t(E, <><b>Moves per board</b>: (x, y, z) all different → <b>20×19×18 = 6,840</b></>,
-                   <><b>보드당 무브</b>: (x, y, z) 가 모두 다름 → <b>20×19×18 = 6,840</b></>)}
-              {/* ⚠️ ux·학생이 같이 짚었다: "K 는 20만이라며 왜 갑자기 6,840?"
-                  두 수는 다른 것이다 — K 는 **입력으로 들어온 개수**(같은 무브가 여러 번 올 수 있다),
-                  6,840 은 **서로 다른 조합의 최대 개수**다. 그 다리가 3쪽 뒤에야 나왔다. */}
-              <div style={{ fontSize: 11.5, fontWeight: 700, color: "#9a3412", opacity: .9, marginTop: 2 }}>
-                {t(E, <>(K = 200,000 is how many moves the input gives — the same move can come many times.
-                        6,840 is how many <b>different</b> ones there can be.)</>,
-                     <>(K = 20만은 <b>입력에 들어온 개수</b>예요 — 같은 무브가 여러 번 올 수 있어요.
-                        6,840 은 <b>서로 다른</b> 게 최대 몇 가지인가예요.)</>)}
-              </div>
+              {t(E, <><b>Moves per board</b>: we walk the whole input → <b>K ≤ 200,000</b></>,
+                   <><b>보드당 무브</b>: 입력을 통째로 훑어요 → <b>K ≤ 20만</b></>)}
             </div>
             <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fdba74", fontWeight: 800 }}>
-              {/* ⚠️ 2026-09-12: 영어 쪽에 **한자 "万"** 이 섞여 있었다. 영어 모드 학생이 잡았다 —
-                     "영어 화면인데 이게 뭔지 몰랐다". 한국어 "100만" 을 고칠 때 딸려 들어간 것으로 보인다.
-                     영어 숫자는 영어 표기로 쓴다. */}
-              {t(E, <>1,000,000 × 6,840 ≈ <b>7×10<sup>9</sup></b></>,
-                   <>100만 × 6,840 ≈ <b>7×10<sup>9</sup></b> 번</>)}
+              {t(E, <>1,000,000 × 200,000 ≈ <b>2×10<sup>11</sup></b></>,
+                   <>100만 × 20만 ≈ <b>2×10<sup>11</sup></b> 번</>)}
             </div>
           </div>
           <div style={{ maxWidth: 470, margin: "12px auto 0", background: "#fef2f2",
             border: "1.5px solid #f87171", borderRadius: 12, padding: "12px 16px",
             fontSize: 13, color: "#7f1d1d", lineHeight: 1.9, textWrap: "balance", textAlign: "center" }}>
-            {/* ⚠️ 끝맺음은 **다음 쪽을 부르는 말**이어야 한다. 전에는 "직접 봐요" 로 끝났는데
-                   그 다음 쪽(BruteRunSim)을 2026-09-12 에 지웠다 — 갈 곳 없는 약속이 된다.
-                   지금은 바로 다음 쪽의 "그럼 어떻게 하면 더 빨라질까요?" 로 이어진다.
-                   ⚠️ 영어도 같이 고쳐라 — 한쪽만 고치면 check-bilingual-drift 가 잡는다. */}
-            {t(E, <>A computer does about <b>a billion simple steps</b> in one second — that is <b>10<sup>9</sup></b>.<br /><b>7×10<sup>9</sup></b> is <b>seven times</b> more. So trying them all does not fit. We need another way.</>,
-                 <>컴퓨터는 <b>간단한 계산 10억 번</b>에 1초쯤 걸려요 — 그게 <b>10<sup>9</sup></b> 이에요.<br /><b>7×10<sup>9</sup></b> 은 그보다 <b>일곱 배</b> 많아요.<br />그래서 다 해보는 건 안 돼요. 다른 방법이 필요해요.</>)}
+            {t(E, <>A computer does about <b>a billion simple steps</b> in one second — that is <b>10<sup>9</sup></b>.<br />So trying them all does not fit. We need another way.</>,
+                 <>컴퓨터는 <b>간단한 계산 10억 번</b>에 1초쯤 걸려요 — 그게 <b>10<sup>9</sup></b> 이에요.<br />그래서 다 해보는 건 안 돼요. 다른 방법이 필요해요.</>)}
           </div>
         </div>
       ),
@@ -308,7 +301,10 @@ export function makeMooHuntCh1(E) {
    Chapter 2: makeMooHuntCh2 (5 steps — 전부 reveal)
    ═══════════════════════════════════════════════════════════════ */
 export function makeMooHuntCh2(E, lang = "py") {
-  const w = getMooHuntWalk(E, lang);
+  /* ⚠️ 2026-09-12: `const w = getMooHuntWalk(E, lang)` 를 지웠다 — 만들어만 놓고
+     어디서도 안 쓰는 죽은 변수였고, 검토자가 그걸 보고 "결-a 가 비었다" 를 세 번 지적했다.
+     완전탐색 코드는 지금 PDF(getMooHuntSections)에만 있다. 화면에 올리려면
+     **비트 없는 판본을 새로 써야** 한다 — .claude/WORK.md 항목. */
   const fw = getMooHuntFastWalk(E, lang);
   return [
     /* ── 2026-09-12: 여기 있던 "돌려보기"(BruteRunSim) 한 쪽을 **지웠다.**
