@@ -577,8 +577,11 @@ export function IsAtTableSim({ E }) {
       <>Now <b>(5, 2, 3)</b> arrives — same two O cells, swapped.<br />y and z only need to be O, so order does not matter.<br />Smaller first again → it lands on (2, 3) once more: <b>2</b>.</>,
       <>이번엔 <b>(5, 2, 3)</b> 가 왔어요 — O 자리 둘이 순서만 바뀐 거예요.<br />y·z 는 둘 다 O 이기만 하면 되니 순서는 상관없어요.<br />또 작은 쪽을 앞으로 넣으면 (2, 3) 칸에 <b>2</b> 가 돼요.</>)
     : s.k === "use" ? t(E,
-      <>Now score a board — say <b>{SCORE_BOARD}</b>: cell 1 is M, the rest are O.<br />Which squares do we read? Every <b>pair of O cells</b>.</>,
-      <>이제 보드를 채점해요 — <b>{SCORE_BOARD}</b> 예요. 1번만 M, 나머지는 O.<br />어느 칸을 볼까요? <b>O 자리끼리 짝지은 칸</b>을 다 봐요.</>)
+      /* ⚠️ 2026-09-12 학생: "말풍선은 cell 1 is M 이라는데 글자는 OOOOM 이라 두 번 다시 읽었다."
+         이 표는 x = 5번 칸 평면이고 채점 보드도 OOOOM — **M 은 5번 칸**이다. 말풍선만 틀렸다.
+         부르는 것을 눈으로 볼 수 있어야 한다 (feedback_screen_must_not_rely_on_memory). */
+      <>Now score a board — say <b>{SCORE_BOARD}</b>: cell <b>5</b> is M, the rest are O.<br />Which squares do we read? Every <b>pair of O cells</b>.</>,
+      <>이제 보드를 채점해요 — <b>{SCORE_BOARD}</b> 예요. <b>5번</b>만 M, 나머지는 O.<br />어느 칸을 볼까요? <b>O 자리끼리 짝지은 칸</b>을 다 봐요.</>)
     : t(E,
       /* ⚠️ 2026-09-12 학생이 **이 쪽에서 그만두고 싶었다**고 했다. 이유가 지루함만이 아니었다:
          "표로 미리 세도, 결국 보드마다 표를 찾아보는 건 똑같잖아. 그럼 뭐가 다른 건지
@@ -587,8 +590,8 @@ export function IsAtTableSim({ E }) {
          바로 이 한 줄이다 (memory/feedback_why_and_how_over_slowness.md).
          숫자 검산: N=20 에서 (M 자리, O 짝) 자리는 20 × C(19,2) = 3,420 가지.
          한 자리가 실제로 쓰이려면 x=M · y=O · z=O 라 확률 1/8 → 보드당 평균 427.5 ≈ 428. */
-      <>Add those squares up — that is the board's score.<br />The 200,000 moves are <b>never scanned again</b>.<br /><b>200,000 → about 428 squares</b> per board.</>,
-      <>그 칸들을 더하면 <b>이 보드의 점수</b>예요.<br />무브 20만 개를 <b>다시 훑지 않아요</b>.<br />보드마다 <b>20만 번 → 평균 428칸</b>만 봐요.</>);
+      <>Add those squares up — that is the board's score.<br />The 200,000 moves are counted <b>once, at the very start</b> —<br />not again for each of the <b>1,000,000</b> boards.</>,
+      <>그 칸들을 더하면 <b>이 보드의 점수</b>예요.<br />무브 20만 개는 <b>맨 처음 딱 한 번</b>만 세요 —<br />보드 <b>100만 개</b>마다 다시 훑지 않아요.</>);
 
   const justFilled =
     s.k === "fill" ? [[1, 2], [3, 4]] : s.k === "order" ? [[1, 2]]
@@ -736,8 +739,8 @@ export function FasterIdeaSim({ E }) {
       <>A move is <b>(x, y, z)</b> — x must read M, y and z must read O.<br />So y and z <b>just both need to be O</b>: <b>(1,2,3) and (1,3,2) score the same</b>.<br />Count them together.</>,
       <>무브는 <b>(x, y, z)</b> 예요 — x 자리가 M, y·z 자리가 O 여야 득점해요.<br />그러니 y 와 z 는 <b>둘 다 O 이기만</b> 하면 돼요.<br /><b>(1,2,3) 과 (1,3,2) 는 채점에선 같은 것</b>이에요. 묶어서 세요.</>)
     : s.k === "only" ? t(E,
-      <>So don't look at every move. Look only at what <b>can</b> score:<br />a scoring <b>move</b> points at one <b>M</b> cell + two <b>O</b> cells.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(That is about moves, not boards — a board may hold any number of M's.)</span><br />Here that is {mPos.length} × {pairs} = <b>{canScore}</b>, not {allMoves}.</>,
-      <>그러니 무브를 다 보지 말고, <b>득점할 수 있는 것만</b> 봐요.<br />득점하는 <b>무브</b>는 <b>M</b> 자리 하나 + <b>O</b> 자리 둘을 가리켜요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(보드 얘기가 아니에요 — 보드엔 M 이 몇 개든 있어도 돼요.)</span><br />여기선 {mPos.length} × {pairs} = <b>{canScore}개</b>예요. {allMoves}개가 아니라요.</>)
+      <>So don't look at every move. Look only at what <b>can</b> score:<br />a scoring <b>move</b> points at one <b>M</b> cell + two <b>O</b> cells.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(That is about moves, not boards — a board may hold any number of M's.)</span><br />Here that is <b>{mPos.length}</b> M cells × <b>{pairs}</b> O-pairs (pick 2 of the {oPos.length} O cells) = <b>{canScore}</b>, not {allMoves}.</>,
+      <>그러니 무브를 다 보지 말고, <b>득점할 수 있는 것만</b> 봐요.<br />득점하는 <b>무브</b>는 <b>M</b> 자리 하나 + <b>O</b> 자리 둘을 가리켜요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(보드 얘기가 아니에요 — 보드엔 M 이 몇 개든 있어도 돼요.)</span><br />여기선 M 자리 <b>{mPos.length}개</b> × O 짝 <b>{pairs}가지</b>(O 칸 {oPos.length}개 중 2개 고르기) = <b>{canScore}개</b>예요. {allMoves}개가 아니라요.</>)
     : t(E,
       <>With <b>N</b> cells the same idea works. At <b>N = 20</b> (20 cells) it cuts <b>{BIG_ALL.toLocaleString("en-US")}</b> down to about <b>{BIG_AVG}</b> per board.<br />Roughly <b>{gain}× less work</b> — and the answer is identical.</>,
       <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>(칸 20개)이면 보드마다 <b>{BIG_ALL.toLocaleString("en-US")}개</b> 보던 걸 평균 <b>{BIG_AVG}개</b>만 봐요.<br />일이 <b>약 {gain}배</b> 줄어요. 답은 똑같고요.</>);
