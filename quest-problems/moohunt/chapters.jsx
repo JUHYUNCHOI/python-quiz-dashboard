@@ -2,7 +2,7 @@ import { C, t } from "@/components/quest/theme";
 import { getMooHuntSections, getMooHuntWalk } from "./components";
 import { getMooHuntFastWalk } from "./fast";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ScoreBoardSim, EveryBoardSim, BruteRunSim, FasterIdeaSim, IsAtTableSim, WholeRunSim } from "./sims";
+import { ScoreBoardSim, EveryBoardSim, FasterIdeaSim, IsAtTableSim, WholeRunSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
    Chapter 1: makeMooHuntCh1 (5 steps: reveal / reveal / reveal / quiz / input)
@@ -277,8 +277,12 @@ export function makeMooHuntCh1(E) {
           <div style={{ maxWidth: 470, margin: "12px auto 0", background: "#fef2f2",
             border: "1.5px solid #f87171", borderRadius: 12, padding: "12px 16px",
             fontSize: 13, color: "#7f1d1d", lineHeight: 1.9, textWrap: "balance", textAlign: "center" }}>
-            {t(E, <>A computer does about <b>a billion simple steps</b> in one second — that is <b>10<sup>9</sup></b>.<br /><b>7×10<sup>9</sup></b> is <b>seven times</b> more. Let's see it for real.</>,
-                 <>컴퓨터는 <b>간단한 계산 10억 번</b>에 1초쯤 걸려요 — 그게 <b>10<sup>9</sup></b> 이에요.<br /><b>7×10<sup>9</sup></b> 은 그보다 <b>일곱 배</b> 많아요. 직접 봐요.</>)}
+            {/* ⚠️ 끝맺음은 **다음 쪽을 부르는 말**이어야 한다. 전에는 "직접 봐요" 로 끝났는데
+                   그 다음 쪽(BruteRunSim)을 2026-09-12 에 지웠다 — 갈 곳 없는 약속이 된다.
+                   지금은 바로 다음 쪽의 "그럼 어떻게 하면 더 빨라질까요?" 로 이어진다.
+                   ⚠️ 영어도 같이 고쳐라 — 한쪽만 고치면 check-bilingual-drift 가 잡는다. */}
+            {t(E, <>A computer does about <b>a billion simple steps</b> in one second — that is <b>10<sup>9</sup></b>.<br /><b>7×10<sup>9</sup></b> is <b>seven times</b> more. So trying them all does not fit. We need another way.</>,
+                 <>컴퓨터는 <b>간단한 계산 10억 번</b>에 1초쯤 걸려요 — 그게 <b>10<sup>9</sup></b> 이에요.<br /><b>7×10<sup>9</sup></b> 은 그보다 <b>일곱 배</b> 많아요.<br />그래서 다 해보는 건 안 돼요. 다른 방법이 필요해요.</>)}
           </div>
         </div>
       ),
@@ -294,14 +298,14 @@ export function makeMooHuntCh2(E, lang = "py") {
   const w = getMooHuntWalk(E, lang);
   const fw = getMooHuntFastWalk(E, lang);
   return [
-    {
-      type: "reveal",
-      label: t(E, "Run it", "돌려보기"),
-      narr: t(E,
-        "Let's actually run it — with your own hand, right here.",
-        "정말 그런지 직접 돌려봐요. 여기서 바로요."),
-      content: (<BruteRunSim E={E} />),
-    },
+    /* ── 2026-09-12: 여기 있던 "돌려보기"(BruteRunSim) 한 쪽을 **지웠다.**
+       선생님이 **네 번째로** 같은 말씀을 하셨다:
+         "아직도 시간이 오래 걸린다는 설명이 너무 많은것 같은데."
+       그 쪽은 학생에게 N 을 고르게 하고 **4초를 기다리게** 한 뒤,
+       바로 앞 쪽(1-3b)이 이미 숫자로 말한 것을 다시 말했다 — 같은 말을 두 번 하고
+       한 번은 기다리게 하는 구조였다.
+       memory/feedback_why_and_how_over_slowness.md: "한계는 **한 화면이면 충분**하다."
+       그 한 화면은 1-3b 로 남긴다. 여기서부터는 전부 **왜·어떻게** 다. */
     /* ── 결-c: 더 빠른 방법 ──────────────────────────────────────────
        pedagogy-reviewer 2026-09-04: "한계까지만 있고 더 빠른 방법이 없다.
        학생 입장에서 배운 게 '실패한 시도' 인지 '정답' 인지 구분이 안 된다."
