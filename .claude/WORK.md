@@ -1708,10 +1708,31 @@ Read 토글은 English 로 되어 있었는데 **코드 주석만 한국어**로
 **한 벌뿐**이다. 그래서 언어를 바꿔도 코드 안 주석은 안 바뀐다.
 말풍선(`beats`)·설명(`why`)은 이중 언어인데 **코드만 아니다.**
 
-**혼자 정할 일이 아닌 이유**: 셋 중 하나를 골라야 하고 다 비용이 크다.
-  (가) 코드 배열을 `(E) => [...]` 로 바꿔 주석을 이중 언어로 — 93개 파일, 🔒 USACO_VERIFIED 다수
-  (나) 코드에서 주석을 빼고 말풍선이 다 맡는다 — CodeWalk 표준과는 맞지만 PDF·복사에는 주석이 없어진다
-  (다) 영어 트랙에서는 주석만 걷어낸다 — 렌더 단계에서 필터, 파일은 안 건드림
-⚠️ 🔒 USACO_VERIFIED 파일이 많아 **선생님 지시 없이는 시작하지 않는다.**
+**셋 중 하나를 골라야 했다**:
+  (가) 코드 배열을 `(E) => [...]` 로 — 93개 파일, 🔒 USACO_VERIFIED 다수
+  (나) 코드에서 주석을 아예 뺀다 — PDF·복사에도 주석이 없어진다
+  (다) **그리는 자리에서만 바꾼다** — 파일은 안 건드림
 
-**검사기 없음** — `check-bilingual-drift.py` 는 `t(E,…)` 짝만 본다. 코드 배열은 짝이 아예 없어서 안 걸린다.
+### ✅ 2026-09-12 — (다) 로 갔다. 기계는 다 됐고, 표를 채우는 일이 남았다
+
+선생님 지시 *"코드 반영 배포 할거고, 주석 고쳐줘"*. **quest 파일은 한 줄도 안 건드렸다** —
+🔒 USACO_VERIFIED 도, "표준-맞추기 함정"(2026-05-06 rounding 2236→184줄) 도 안 건드린다.
+
+- `components/quest/localizeCode.ts` — 줄 단위 치환. **표에 없으면 줄을 비운다(지우지 않는다)** —
+  지우면 CodeWalk 의 `hi:[start,end]` 가 전부 밀린다. 꼬리 주석은 따옴표 상태를 훑어
+  문자열 안의 `#` / `//` 를 안 건드린다.
+- `components/quest/codeCommentsEn.ts` — 번역표. 지금 **102개**.
+- 그리는 자리 네 곳 다 연결: CodeWalk · CodeBlock(shared) · CodeSectionView · ProgressiveCodeStepper.
+- 커밋 `1349a9a7`.
+
+**실측**(`?lang=en` 으로 끝까지 걸어봤다 — `node check-code-en.mjs moohunt reflection`):
+  moohunt 10쪽 영어주석 8 · 한국어 0 · reflection 11쪽 영어주석 18 · 한국어 0
+
+**남은 것 — 번역 없는 주석 712개 · 854줄.** 그 줄들은 지금 **빈 줄로 나온다.**
+읽을 수 없는 한국어보다는 낫지만 **설명이 사라진 것**이므로 표를 채워야 끝이다.
+많은 순: `python3 scripts/list-untranslated-comments.py` (`--ts` 로 붙여 넣을 뼈대, `--quest <id>` 로 한 개)
+⚠️ 그 스크립트의 `comment_body()` 는 `localizeCode.one()` 과 **같은 규칙**이다 — 어긋나면 표에 넣어도 안 맞는다.
+**주인 = 메인 세션.** 다음 quest 를 손댈 때 그 quest 것부터 같이 채운다(quest 하나 = 보통 20~40줄).
+
+**검사기** — `check-bilingual-drift.py` 는 `t(E,…)` 짝만 봐서 코드 배열은 못 잡는다.
+이 층은 `check-code-en.mjs`(영어 화면을 실제로 걸으며 코드 안 한글을 센다) 가 본다.
