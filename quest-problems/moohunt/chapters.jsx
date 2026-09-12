@@ -5,7 +5,7 @@ import { CodeWalk } from "@/components/quest/CodeWalk";
 import { ScoreBoardSim, EveryBoardSim, FasterIdeaSim, IsAtTableSim, WholeRunSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: makeMooHuntCh1 (5 steps: reveal / reveal / reveal / quiz / input)
+   Chapter 1: makeMooHuntCh1 (4 steps — 전부 reveal)
    ═══════════════════════════════════════════════════════════════ */
 export function makeMooHuntCh1(E) {
   return [
@@ -65,9 +65,14 @@ export function makeMooHuntCh1(E) {
                   /* 2026-09-07: 전엔 무브가 하나뿐이라 최고 점수가 늘 1점이었고,
                      그래서 미션의 "제일 많이" 가 무슨 말인지 안 보였다.
                      같은 5칸인데 채우기에 따라 1점·2점으로 갈리는 두 보드로 바꾼다.
-                     (검산: MOOOM → (1,2,3)="MOO" 1점, (1,4,5)="MOM" 0점 → 1점
-                             MOOOO → 둘 다 "MOO" → 2점) */
-                  { board: "MOOOM", pts: 1, note: t(E, "(1,2,3) → \"MOO\" ✓ · (1,4,5) → \"MOM\" ✗  →  1 point", "(1,2,3) → \"MOO\" ✓ · (1,4,5) → \"MOM\" ✗  →  1점") },
+                     ⚠️ 2026-09-12: 여기 있던 **MOOOM** 을 MOMOO 로 바꿨다.
+                       MOOOM 은 2쪽 공식 샘플에서 **4점**인 보드다. 같은 글자 조합이 1쪽에서 1점,
+                       2쪽에서 4점으로 나와 학생이 자기가 잘못 읽었나 헷갈린다(ux 지적).
+                       1쪽은 지어낸 무브 두 개, 2쪽은 공식 무브 여섯 개라 둘 다 맞는 계산인데,
+                       **왜 다른지 화면에 없다.** 겹치는 이름을 안 쓰는 쪽이 설명 한 줄보다 싸다.
+                     (검산: MOMOO → (1,2,3)="MOM" ✗, (1,4,5)="MOO" ✓ → 1점
+                             MOOOO → 둘 다 "MOO" ✓ → 2점. 둘 다 공식 정답 보드가 아니다.) */
+                  { board: "MOMOO", pts: 1, note: t(E, "(1,2,3) → \"MOM\" ✗ · (1,4,5) → \"MOO\" ✓  →  1 point", "(1,2,3) → \"MOM\" ✗ · (1,4,5) → \"MOO\" ✓  →  1점") },
                   { board: "MOOOO", pts: 2, note: t(E, "(1,2,3) → \"MOO\" ✓ · (1,4,5) → \"MOO\" ✓  →  2 points", "(1,2,3) → \"MOO\" ✓ · (1,4,5) → \"MOO\" ✓  →  2점") },
                 ].map((r, k) => (
                   <div key={k} style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 7 }}>
@@ -211,12 +216,17 @@ export function makeMooHuntCh1(E) {
           </div>
         </div>),
     },
-    // 1-3: Walkthrough on MOOOM
+    // 1-3: Walkthrough on MOOMM
+    /* ⚠️ 2026-09-12: narr 가 **MOOOM** 이라고 불렀는데 시뮬(ScoreBoardSim)이 그리는 보드는
+       **MOOMM** 이다. 2026-09-11 에 중복을 없애려고 시뮬 보드만 바꾸고 narr 를 안 따라가게 뒀다.
+       학생은 파란 바를 먼저 읽고 "MOOOM 찾아야지" 하고 보는데 화면엔 MOOMM 이 있다.
+       memory/feedback_screen_must_not_rely_on_memory.md — 부르는 것을 눈으로 볼 수 있어야 한다.
+       2쪽이 "MOOMM 도 4점" 이라고 **말만 하고 안 보여준** 그 보드다. 그걸 narr 에도 적는다. */
     {
       type: "reveal",
       narr: t(E,
-        "Why is MOOOM worth 4? Walk the moves one by one.",
-        "MOOOM 이 왜 4 점일까요? 무브를 하나씩 따라가 봐요."),
+        "MOOMM scores 4 too — the other one. Walk its moves.",
+        "MOOMM 도 4 점이에요 — 나머지 한 개요. 무브를 따라가 봐요."),
       content: (<ScoreBoardSim E={E} />),
     },
     /* 1-3b: **"그럼 어떻게 풀까?" 를 여기서 먼저 말한다** (2026-09-07)
@@ -292,7 +302,7 @@ export function makeMooHuntCh1(E) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: makeMooHuntCh2 (1 step: progressive)
+   Chapter 2: makeMooHuntCh2 (5 steps — 전부 reveal)
    ═══════════════════════════════════════════════════════════════ */
 export function makeMooHuntCh2(E, lang = "py") {
   const w = getMooHuntWalk(E, lang);
@@ -384,9 +394,15 @@ export function makeMooHuntCh2(E, lang = "py") {
             <div style={{ margin: "10px 16px 0", padding: "9px 13px", borderRadius: 10, background: "#fffbeb",
               border: "1.5px solid #fbbf24", color: "#92400e", fontSize: 12.5, fontWeight: 700,
               lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
+              {/* ⚠️ 이 두 숫자는 **지금 실린 코드**(비트 없는 판본)를 잰 값이어야 한다.
+                     2026-09-12 감사에서 걸렸다 — "1.96초" 는 비트 쓰던 옛 판본 값이라
+                     지금 코드가 실제보다 아슬아슬해 보였다.
+                     오늘 실측(cpp-qa, N=20·K=20만): C++ 1.49초 · Python 104초.
+                     USACO_VERIFICATION.md 는 다른 기계에서 C++ 1.43~1.44초.
+                     기계마다 갈리니 화면에는 **약** 을 붙인 값으로 쓴다. */}
               {t(E,
-                <>⚠️ At the biggest case (N = 20, K = 200,000) this takes about <b>96 seconds</b> in Python — the limit is 4. The algorithm is right, so it is great for understanding, but submit in <b>C++</b> for full marks (measured 1.96 s, limit 2).</>,
-                <>⚠️ 가장 큰 입력(N = 20, K = 20만)에서 Python 은 약 <b>96초</b> 걸려요 — 제한은 4초예요.<br />생각은 맞으니 이해용으로는 좋지만, 만점은 <b>C++</b> 로 내요 (실측 1.96초, 제한 2초).</>)}
+                <>⚠️ At the biggest case (N = 20, K = 200,000) this takes about <b>100 seconds</b> in Python — the limit is 4. The algorithm is right, so it is great for understanding, but submit in <b>C++</b> for full marks (measured about 1.5 s, limit 2).</>,
+                <>⚠️ 가장 큰 입력(N = 20, K = 20만)에서 Python 은 약 <b>100초</b> 걸려요 — 제한은 4초예요.<br />생각은 맞으니 이해용으로는 좋지만, 만점은 <b>C++</b> 로 내요 (실측 약 1.5초, 제한 2초).</>)}
             </div>
           )}
           <CodeWalk E={E} lang={lang} code={fw.code} vars={fw.vars} beats={fw.beats} accent="#059669" />
