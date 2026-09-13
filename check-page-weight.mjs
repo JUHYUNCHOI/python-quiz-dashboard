@@ -32,13 +32,18 @@ for (let i = 1; i <= 20; i++) {
   });
   rows.push(m);
   console.log(`   ${String(i).padStart(2)} ${String(m.n).padStart(5)} ${String(m.sent).padStart(5)} ${String(m.cards).padStart(5)} ${String(m.scroll).padStart(7)}   ${m.head.slice(0, 34)}`);
+  /* ⚠️ 쪽이 넘어갔는지는 **글자 수로 판정하면 안 된다** — 길이가 우연히 같으면 거기서 멈춘다.
+     (처음에 그렇게 짰다가 9쪽 중 6쪽만 재고 끝났다.) 진도 표시("코드 3 / 5")로 본다. */
   const nx = p.locator('button:has-text("다음"), button:has-text("Next")').last();
-  if (!(await nx.count())) break;
-  const before = await p.evaluate(() => (document.querySelector("main")||document.body).innerText.length);
+  if (!(await nx.count()) || (await nx.isDisabled().catch(() => true))) break;
+  const where = () => p.evaluate(() => {
+    const m = (document.body.innerText || "").match(/(문제|코드|Problem|Code)\s*(\d+)\s*\/\s*(\d+)/);
+    return m ? m[0] : "?";
+  });
+  const w0 = await where();
   await nx.click().catch(() => {});
-  await p.waitForTimeout(500);
-  const after = await p.evaluate(() => (document.querySelector("main")||document.body).innerText.length);
-  if (before === after && i > 3) break;
+  await p.waitForTimeout(650);
+  if ((await where()) === w0) break;
 }
 const worst = rows.map((r, i) => ({ ...r, i: i + 1 })).sort((a, b2) => b2.n - a.n).slice(0, 3);
 console.log(`\n⚠️ 글자가 제일 많은 쪽: ` + worst.map((w) => `${w.i}쪽 ${w.n}자`).join(" · "));

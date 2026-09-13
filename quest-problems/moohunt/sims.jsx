@@ -730,8 +730,8 @@ export function FasterIdeaSim({ E }) {
       <>A move is <b>(x, y, z)</b> — x must read M, y and z must read O.<br />So y and z <b>just both need to be O</b>: <b>(1,2,3) and (1,3,2) score the same</b>.<br />Count them together.</>,
       <>무브는 <b>(x, y, z)</b> 예요 — x 자리가 M, y·z 자리가 O 여야 득점해요.<br />그러니 y 와 z 는 <b>둘 다 O 이기만</b> 하면 돼요.<br /><b>(1,2,3) 과 (1,3,2) 는 채점에선 같은 것</b>이에요. 묶어서 세요.</>)
     : s.k === "only" ? t(E,
-      <>So don't look at every move. Look only at what <b>can</b> score:<br />a scoring <b>move</b> points at one <b>M</b> cell + two <b>O</b> cells.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(That is about moves, not boards — a board may hold any number of M's.)</span><br />Here that is <b>{mPos.length}</b> M cells × <b>{pairs}</b> O-pairs = <b>{canScore}</b>, not {allMoves}.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(the O cells are {oPos.map((i) => i + 1).join(", ")}, so the pairs are {oPos.flatMap((a, i) => oPos.slice(i + 1).map((b2) => `(${a + 1},${b2 + 1})`)).join(" ")})</span></>,
-      <>그러니 무브를 다 보지 말고, <b>득점할 수 있는 것만</b> 봐요.<br />득점하는 <b>무브</b>는 <b>M</b> 자리 하나 + <b>O</b> 자리 둘을 가리켜요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(보드 얘기가 아니에요 — 보드엔 M 이 몇 개든 있어도 돼요.)</span><br />여기선 M 자리 <b>{mPos.length}개</b> × O 짝 <b>{pairs}가지</b> = <b>{canScore}개</b>예요. {allMoves}개가 아니라요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(O 칸이 {oPos.map((i) => i + 1).join("·")}번이니까 짝은 {oPos.flatMap((a, i) => oPos.slice(i + 1).map((b2) => `(${a + 1},${b2 + 1})`)).join(" ")} 이에요.)</span></>)
+      <>So don't look at every move. Look only at what <b>can</b> score:<br />a scoring <b>move</b> points at one <b>M</b> cell + two <b>O</b> cells.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(That is about moves, not boards — a board may hold any number of M's.)</span><br />Here that is <b>{mPos.length}</b> M cells × <b>{pairs}</b> O-pairs = <b>{canScore}</b>, not {allMoves}.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(pairs: {oPos.flatMap((a, i) => oPos.slice(i + 1).map((b2) => `(${a + 1},${b2 + 1})`)).join(" ")})</span></>,
+      <>그러니 무브를 다 보지 말고, <b>득점할 수 있는 것만</b> 봐요.<br />득점하는 <b>무브</b>는 <b>M</b> 자리 하나 + <b>O</b> 자리 둘을 가리켜요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(보드 얘기가 아니에요 — 보드엔 M 이 몇 개든 있어도 돼요.)</span><br />여기선 M 자리 <b>{mPos.length}개</b> × O 짝 <b>{pairs}가지</b> = <b>{canScore}개</b>예요. {allMoves}개가 아니라요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(짝은 {oPos.flatMap((a, i) => oPos.slice(i + 1).map((b2) => `(${a + 1},${b2 + 1})`)).join(" ")} 이에요.)</span></>)
     : t(E,
       /* ⚠️ 2026-09-12: 기준을 6,840 에서 **20만**으로 바꿨다.
          앞 쪽(첫 코드)이 방금 "보드마다 무브 20만 개를 훑는다" 를 코드로 보여준다.
@@ -748,8 +748,8 @@ export function FasterIdeaSim({ E }) {
          셀 수 없는 수를 화면에 두면 거기서 "그냥 믿고 가자" 모드로 바뀐다(학생 C·D 둘 다 그랬다).
          → 손으로 확인되는 예(10 × 45 = 450)만 남기고, 나머지는 "몇백 가지" 로 말한다.
          (참고: 실제 평균은 427.5, 최대는 546. 코드 주석에만 남긴다.) */
-      <>With <b>N</b> cells the same idea works. At <b>N = 20</b> we do the same count — <b>M cells × O-pairs</b>.<br />Say a board has 10 M's and 10 O's: that is <b>10 × 45 = 450</b>. Other boards differ, but it stays in the <b>hundreds</b>.<br />Instead of walking all <b>200,000</b> moves per board. The answer is identical.</>,
-      <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>이면 방금과 똑같이 <b>M 자리 수 × O 짝 수</b>를 세요.<br />M 이 10개, O 가 10개인 보드라면 <b>10 × 45 = 450가지</b>예요. 다른 보드도 <b>몇백 가지</b>예요.<br />보드마다 무브 20만 개를 훑는 대신에요. 답은 똑같고요.</>);
+      <>With <b>N</b> cells the same idea works. At <b>N = 20</b> we do the same count — <b>M cells × O-pairs</b>.<br />Say a board has 10 M's and 10 O's: that is <b>10 × 45 = 450</b>. Other boards differ, but it stays in the <b>hundreds</b>.<br />The answer is identical.</>,
+      <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>이면 방금과 똑같이 <b>M 자리 수 × O 짝 수</b>를 세요.<br />M 이 10개, O 가 10개인 보드라면 <b>10 × 45 = 450가지</b>예요. 다른 보드도 <b>몇백 가지</b>예요.<br />답은 똑같고요.</>);
 
   const cellStyle = (c, dim) => ({
     width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",

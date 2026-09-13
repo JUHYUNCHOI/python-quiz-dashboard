@@ -105,39 +105,28 @@ export function makeMooHuntCh1(E) {
                 </div>
               </div>
 
-              {/* 규칙은 그림 아래에 짧게. 뜻은 위 그림이 이미 날랐다. */}
+              {/* 규칙은 그림 아래에 **짧게**. 뜻은 위 그림이 이미 날랐다.
+                  ⚠️ 2026-09-13, 선생님 "아직도 한 화면에 너무 많은 정보가 많아" →
+                     불릿 셋 + 출력 한 줄을 **둘로 줄였다.** ux 가 짚은 겹침 세 개:
+                     · "Score — 세 칸이 MOO 면 1점" = 바로 위 예제 설명과 같은 말 (같은 쪽, 80줄 위)
+                     · "우리가 채워요" = 미션 첫 문장과 같은 말
+                     · "👉 출력: 최고 점수와 보드 개수" = **바로 다음 쪽** 출력 카드와 같은 말
+                     지워도 막히지 않는다 — 셋 다 다른 자리가 이미 말한다.
+                     ⚠️ 위의 미션·예제(두 보드 비교)는 손대지 않았다. 2026-09-07
+                        "뭘하라는건지 모르겠는데" 를 고친 핵심이다. */}
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#dc2626" }}>{t(E, "Board", "보드")}</b>
-                  {t(E, " — N cells (3 ≤ N ≤ 20), each 'M' or 'O'. ", " — N 칸 (3 ≤ N ≤ 20), 칸마다 'M' 아니면 'O'. ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "we fill it in", "우리가 채워요")}</b>
+                  {t(E, " — N cells (3 ≤ N ≤ 20), each 'M' or 'O'.", " — N 칸 (3 ≤ N ≤ 20), 칸마다 'M' 아니면 'O'.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   <b style={{ color: "#0891b2" }}>{t(E, "Moves", "무브")}</b>
-                  {t(E, " — K trios of cell numbers (x, y, z), read ", " — 칸 번호 세 개 (x, y, z) 한 묶음. K 개. ")}
-                  <b style={{ color: "#0891b2" }}>{t(E, "in that order", "순서대로 읽어요")}</b>
-                  {t(E, ". K is up to 200,000. ", ". K 는 최대 200,000. ")}
+                  {t(E, " — K trios (x, y, z), up to 200,000. ", " — 칸 번호 세 개 (x, y, z) 한 묶음, 최대 20만 개. ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "given in the input — we can't change them", "입력으로 주어져요 — 못 바꿔요")}</b>
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: 8 }}>
-                <span style={{ color: "#dc2626", fontWeight: 600, flexShrink: 0 }}>•</span>
-                <div>
-                  <b style={{ color: "#dc2626" }}>{t(E, "Score", "점수")}</b>
-                  {t(E, " — a move scores 1 if its three cells read 'MOO'. The board's score is the total.",
-                       " — 무브의 세 칸을 읽어서 'MOO' 면 1점. 다 더한 게 그 보드의 점수.")}
-                </div>
-              </div>
-
-              <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fca5a5" }}>
-                <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
-                <div>
-                  {t(E, "Output the best score across all boards,\nthen how many boards reach it.",
-                        "출력: 모든 보드 중 최고 점수, 그리고 그 점수에 도달하는 보드 개수.")}
                 </div>
               </div>
             </div>
