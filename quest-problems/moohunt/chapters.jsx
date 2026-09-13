@@ -3,10 +3,10 @@ import { getMooHuntSections } from "./components";
 import { getMooHuntFastWalk } from "./fast";
 import { getMooHuntBruteWalk } from "./brute";
 import { CodeWalk } from "@/components/quest/CodeWalk";
-import { ScoreBoardSim, EveryBoardSim, FasterIdeaSim, IsAtTableSim, WholeRunSim } from "./sims";
+import { EveryBoardSim, FasterIdeaSim, IsAtTableSim, WholeRunSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: makeMooHuntCh1 (4 steps — 도입 · 형식+예제 · 손 채점 · 보드 열거)
+   Chapter 1: makeMooHuntCh1 (3 steps — 도입 · 형식+예제 · 보드 열거)
    ═══════════════════════════════════════════════════════════════ */
 export function makeMooHuntCh1(E) {
   return [
@@ -206,19 +206,20 @@ export function makeMooHuntCh1(E) {
           </div>
         </div>),
     },
-    // 1-3: Walkthrough on MOOMM
-    /* ⚠️ 2026-09-12: narr 가 **MOOOM** 이라고 불렀는데 시뮬(ScoreBoardSim)이 그리는 보드는
-       **MOOMM** 이다. 2026-09-11 에 중복을 없애려고 시뮬 보드만 바꾸고 narr 를 안 따라가게 뒀다.
-       학생은 파란 바를 먼저 읽고 "MOOOM 찾아야지" 하고 보는데 화면엔 MOOMM 이 있다.
-       memory/feedback_screen_must_not_rely_on_memory.md — 부르는 것을 눈으로 볼 수 있어야 한다.
-       2쪽이 "MOOMM 도 4점" 이라고 **말만 하고 안 보여준** 그 보드다. 그걸 narr 에도 적는다. */
-    {
-      type: "reveal",
-      narr: t(E,
-        "MOOMM scores 4 too — the other one. Walk its moves.",
-        "MOOMM 도 4 점이에요 — 나머지 한 개요. 무브를 따라가 봐요."),
-      content: (<ScoreBoardSim E={E} />),
-    },
+    /* ── 2026-09-13: 여기 있던 3쪽(ScoreBoardSim, 7걸음)을 **지웠다.** ──────────
+       선생님: "아직도 한 화면에 너무 많은 정보가 많아. 학생들에게 글이 많거나
+                새 페이지에 너무 많은 정보가 있거나"
+       ux·pedagogy 가 **따로 보고 같은 판정**을 냈고, 학생 둘이 이미 그렇게 말했다:
+         학생1 "같은 결론(4점) 재확인 — 반복 느낌" · 학생B "2쪽이랑 거의 똑같은 걸 또 봄"
+       그 쪽이 한 일: 보드 MOOMM 을 무브 6개로 한 걸음씩 채점 → 4점.
+       그런데 **1쪽이 매커니즘을 가르치고 2쪽이 MOOOM 을 무브 6개로 전부 채점**한다.
+       3쪽은 보드만 바꿔 똑같이 한 번 더 돈 것이고, 새 정보는 "MOOMM 도 4점" 한 문장인데
+       **그 문장은 바로 위 2쪽 카드에 이미 있다**("4점이 되는 보드가 하나 더 있어요 — MOOOM · MOOMM").
+       ⚠️ "왜 최고점 보드가 정확히 둘인가" 는 **8쪽이 더 잘 답한다** — b=17·b=25 를
+          최종 방법(표 조회)으로 나란히 검산하고 ways 까지 붙인다. pedagogy 가 클릭해서 확인했다.
+       ⚠️ 다리도 안 끊긴다 — 다음 쪽 narr "보드를 어떻게 하나도 빠짐없이 만들죠?" 는
+          "보드가 여러 개다" 만 있으면 서는데, 그건 1쪽 미션과 2쪽 출력 형식이 이미 준다.
+          (3쪽 마지막 말풍선은 3쪽이 만든 필요를 3쪽이 메우는 순환이었다.) */
     /* ── 2026-09-13: `EveryBoardSim` 을 **최종 코드 직전(7쪽)에서 여기(4쪽)로 당겼다.**
        선생님 "비트 없는 첫 코드 만들어줘" → 첫 코드가 보드를 하나씩 만들어야 하는데,
        그 방법(리스트에 1 더하기)을 7쪽에서야 가르치고 있었다. 코드보다 뒤에 있으면 안 된다.

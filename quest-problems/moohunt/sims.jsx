@@ -117,86 +117,8 @@ function Say({ children, tone = "go", inRow = false }) {
       boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>{children}</div>
   );
 }
-
-/* ═══ ① 보드 하나를 무브마다 채점 ═══ */
-export function ScoreBoardSim({ E }) {
-  const steps = MOVES.map((_, i) => ({ i })).concat([{ i: MOVES.length }]);
-  const ts = useTraceStep(steps);
-  const cur = steps[ts.safe].i;
-  const done = cur >= MOVES.length;
-
-  const hit = (m) => BOARD[m[0] - 1] === "M" && BOARD[m[1] - 1] === "O" && BOARD[m[2] - 1] === "O";
-  const total = MOVES.slice(0, Math.min(cur + 1, MOVES.length)).filter(hit).length;
-  const finalScore = MOVES.filter(hit).length;
-  const m = done ? null : MOVES[cur];
-  const ok = m ? hit(m) : false;
-
-  const sayRef = useKeepInView(ts.safe);
-  const hlOf = (idx) => {
-    if (!m) return null;
-    if (idx === m[0] - 1) return "x";
-    if (idx === m[1] - 1 || idx === m[2] - 1) return "yz";
-    return null;
-  };
-
-  const say = done
-    ? t(E, <>Every move checked. Board <b>{BOARD}</b> scores <b>{finalScore}</b>.<br />That is one board. There are many more to try.</>,
-          <>무브를 다 봤어요. 보드 <b>{BOARD}</b> 은 <b>{finalScore}점</b>이에요.<br />이건 보드 하나예요. 아직 볼 보드가 많아요.</>)
-    : ok
-      ? t(E, <>Move <b>({m.join(", ")})</b>: cell {m[0]} is <b style={{ color: MCOL }}>M</b>, cells {m[1]} and {m[2]} are <b style={{ color: OCOL }}>O</b>.<br />That reads MOO → <b style={{ color: "#15803d" }}>+1 point</b>.</>,
-            <>무브 <b>({m.join(", ")})</b> 예요. {m[0]}번 칸이 <b style={{ color: MCOL }}>M</b>, {m[1]}번과 {m[2]}번이 <b style={{ color: OCOL }}>O</b> 예요.<br />MOO 가 되니까 <b style={{ color: "#15803d" }}>1점</b>이에요.</>)
-      : t(E, <>Move <b>({m.join(", ")})</b> reads <b>{[m[0], m[1], m[2]].map((p) => BOARD[p - 1]).join("·")}</b>.<br />That is not MOO → <b style={{ color: MCOL }}>no point</b>.</>,
-            <>무브 <b>({m.join(", ")})</b> 는 <b>{[m[0], m[1], m[2]].map((p) => BOARD[p - 1]).join("·")}</b> 로 읽혀요.<br />MOO 가 아니라서 <b style={{ color: MCOL }}>점수가 없어요</b>.</>);
-
-  return (
-    <div style={{ padding: 16, paddingBottom: 110 }}>
-      <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, `Score the board ${BOARD}, move by move`, `보드 ${BOARD} 을 무브마다 채점해요`)}
-        subtitle={`(${ts.safe + 1} / ${steps.length})`} />
-      <StepFade fast k={ts.safe}>
-      {/* 무브를 다 본 마지막 단계는 특정 줄 얘기가 아니라 표 위에 둔다. */}
-      {done && <div ref={sayRef}><Say tone="aha">{say}</Say></div>}
-
-      <div style={{ display: "flex", gap: 7, justifyContent: "center", marginBottom: 14 }}>
-        {BOARD.split("").map((c, i) => <Cell key={i} c={c} i={i} hl={hlOf(i)} />)}
-      </div>
-
-      <div style={{ maxWidth: 380, margin: "0 auto", display: "grid", gap: 4 }}>
-        {MOVES.map((mv, i) => {
-          const seen = i <= cur;
-          const good = hit(mv);
-          return (
-            <Fragment key={i}>
-            {!done && i === cur && (
-              <div ref={sayRef}><Say inRow tone={ok ? "go" : "stuck"}>{say}</Say></div>
-            )}
-            <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "5px 11px",
-              borderRadius: 8, fontSize: 12, fontFamily: "'JetBrains Mono',monospace",
-              border: `${i === cur ? 2 : 1}px solid ${i === cur ? A : "#e2e8f0"}`,
-              background: !seen ? "#fff" : good ? "#f0fdf4" : "#fef2f2",
-              opacity: seen ? 1 : 0.35 }}>
-              <span style={{ fontWeight: 800, color: "#334155", minWidth: 62 }}>({mv.join(",")})</span>
-              <span style={{ flex: 1, color: "#64748b" }}>
-                {seen ? mv.map((p) => BOARD[p - 1]).join("·") : "…"}
-              </span>
-              <span style={{ fontWeight: 800, color: good ? "#15803d" : "#dc2626" }}>
-                {seen ? (good ? "+1" : "—") : ""}
-              </span>
-            </div>
-            </Fragment>
-          );
-        })}
-      </div>
-      <div style={{ marginTop: 10, textAlign: "center", fontSize: 14, fontWeight: 800, color: "#5b21b6" }}>
-        {t(E, "score so far", "지금까지 점수")} {total}
-      </div>
-      </StepFade>
-      <div style={{ marginTop: 18 }}>
-        <SimNav idx={ts.idx} total={ts.total} onIdx={ts.setIdx} accent={A} isEn={E} showLabels />
-      </div>
-    </div>
-  );
-}
+/* ScoreBoardSim 은 2026-09-13 에 지웠다 — 3쪽을 없애면서 쓰는 데가 사라졌다.
+   지운 이유는 chapters.jsx 의 그 자리 주석에 적어뒀다. 되살리려면 그 커밋을 보면 된다. */
 
 /* ═══ ② 완전탐색의 한계 — 왜 큰 케이스에서 시간이 모자라나 ═══ */
 export function BruteLimitSim({ E }) {
@@ -599,8 +521,12 @@ export function IsAtTableSim({ E }) {
     : s.k === "plan" ? t(E,
       /* ⚠️ 2026-09-13 학생 E: "'sheet' 를 왜 시트라고 부르는지 설명 없이 쓴다."
          정의 안 한 말은 안 쓴다 (memory/feedback_no_invented_terms.md). 그냥 "표" 다. */
-      <>No — count the moves <b>once, up front</b>, into a table.<br />One square = <b>how many times that move appeared</b>.<br />One table per M cell; this one is for <b>x = cell 5</b>.</>,
-      <>아니에요. 무브를 <b>미리 한 번만</b> 세서 표에 넣어두면 돼요.<br />표의 <b>한 칸 = 그 무브가 몇 번 나왔나</b> 예요.<br />M 자리마다 표 하나씩 — 이건 <b>x = 5번 칸</b> 표예요.</>)
+      /* ⚠️ 2026-09-13 선생님이 이 화면을 보시고: "위아래 너무 많은 정보. 글도 길어."
+         말풍선 3줄 · 표 위 축 설명 박스 · 표 아래 뜻 박스 — **셋이 같은 것("칸이 무슨 뜻인가")을
+         세 번** 말하고 있었다. 하나만 남긴다: **표 아래 박스**(제일 구체적이다).
+         말풍선은 "왜 표를 쓰나" 만, 축은 표 머리에 글자로 붙인다. */
+      <>No — count the moves <b>once, up front</b>, into a table.<br />One table per M cell; this one is for <b>x = cell 5</b>.</>,
+      <>아니에요. 무브를 <b>미리 한 번만</b> 세서 표에 넣어두면 돼요.<br />M 자리마다 표 하나씩 — 이건 <b>x = 5번 칸</b> 표예요.</>)
     : s.k === "fill" ? t(E,
       <>Move <b>(5, 3, 2)</b> arrives: x = 5 is the M, the O cells are 3 and 2.<br />Store them <b>smaller first</b> → the (2, 3) square gets <b>1</b>.</>,
       <>무브 <b>(5, 3, 2)</b> 가 왔어요. x = 5 가 M 자리, O 자리는 3 과 2 예요.<br /><b>작은 쪽을 앞</b>으로 넣으면 → (2, 3) 칸이 <b>1</b> 이 돼요.</>)
@@ -642,24 +568,23 @@ export function IsAtTableSim({ E }) {
               marginBottom: 4, wordBreak: "keep-all" }}>
               {t(E, "table for x = cell 5 (the M)", "x = 5번 칸 (M 자리) 의 표")}
             </div>
-            {/* ⚠️ 축 설명이 표 **아래** 작은 회색 글씨였다. 선생님: "가로세로가 뭘 얘기하는 표야?"
-                읽기 전에 보이게 위로 올리고, y·z 라는 이름을 같이 준다. */}
-            <div style={{ maxWidth: 300, margin: "0 auto 9px", padding: "7px 10px", borderRadius: 8,
-              background: "#faf5ff", border: "1px solid #ddd6fe", fontSize: 11.5, color: "#6d28d9",
-              lineHeight: 1.7, wordBreak: "keep-all", textAlign: "center" }}>
-              {t(E, <>rows ↓ = smaller <b>O</b> cell &nbsp;·&nbsp; columns → = larger <b>O</b> cell<br />(those are y and z)</>,
-                   <>세로 ↓ = 작은 쪽 <b>O</b> 칸 &nbsp;·&nbsp; 가로 → = 큰 쪽 <b>O</b> 칸<br />(그 둘이 y, z 예요)</>)}
-            </div>
-            {/* 열 제목 — O 자리 두 개를 (작은 쪽, 큰 쪽) 으로 읽는다 */}
-            <div style={{ display: "grid", gridTemplateColumns: "28px repeat(5, 34px)", gap: 4, justifyContent: "center" }}>
-              <span />
+            {/* ⚠️ 축 설명 박스를 지우고 **표 머리에 글자로** 붙였다 (2026-09-13).
+                박스로 두면 표 위에 읽을 덩어리가 하나 더 생긴다 — 축 이름은 축에 붙는 게 맞다.
+                (원래 지적: 선생님 "가로세로가 뭘 얘기하는 표야?" — 이름은 그대로 준다.) */}
+            <div style={{ display: "grid", gridTemplateColumns: "58px repeat(5, 34px)", gap: 4, justifyContent: "center" }}>
+              <span style={{ fontSize: 9.5, fontWeight: 800, color: "#a78bfa", alignSelf: "end", lineHeight: 1.3, textAlign: "right", paddingRight: 4 }}>
+                {t(E, "larger O →", "큰 O →")}
+              </span>
               {Array.from({ length: N }, (_, b) => (
                 <span key={b} style={{ textAlign: "center", fontSize: 11, fontWeight: 800, color: "#94a3b8" }}>{b + 1}</span>
               ))}
               {Array.from({ length: N }, (_, a) => (
                 <Fragment key={a}>
                   <span style={{ display: "flex", alignItems: "center", justifyContent: "flex-end",
-                    fontSize: 11, fontWeight: 800, color: "#94a3b8", paddingRight: 4 }}>{a + 1}</span>
+                    fontSize: 11, fontWeight: 800, color: "#94a3b8", paddingRight: 4 }}>
+                    {a === 0 && <span style={{ fontSize: 9.5, color: "#a78bfa", marginRight: 4 }}>{t(E, "smaller O ↓", "작은 O ↓")}</span>}
+                    {a + 1}
+                  </span>
                   {Array.from({ length: N }, (_, b) => cell(a, b))}
                 </Fragment>
               ))}
