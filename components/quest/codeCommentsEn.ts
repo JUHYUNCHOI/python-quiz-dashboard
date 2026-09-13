@@ -235,4 +235,10 @@ export const CODE_COMMENT_EN: Record<string, string> = {
   // ── C++ 표를 3차원 → 2차원으로 바꾸며 (2026-09-13)
   "표 한 장 = M 자리 하나. 그 안은 O 짝 (작은 쪽, 큰 쪽) 을 번호 하나로 바꿔서 넣어요.":
     "one row per M cell; inside it, the O pair (smaller, larger) becomes a single number",
+
+  // ── C++ 2차원 표의 '번호 합치기' (2026-09-13)
+  "표 한 줄 = M 자리 하나. 그 안은 O 짝을 번호 하나로 합쳐서 넣어요.":
+    "one row per M cell; inside it, the O pair is squeezed into a single number",
+  "두 칸을 번호 하나로: 작은 쪽 * N + 큰 쪽.  (N = 5 면 작은 1·큰 2 → 1*5+2 = 7번 칸)":
+    "two cells into one number: smaller * N + larger.  (N = 5: smaller 1, larger 2 -> 1*5+2 = slot 7)",
 };

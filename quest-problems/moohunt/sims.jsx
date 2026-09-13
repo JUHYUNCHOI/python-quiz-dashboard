@@ -392,7 +392,7 @@ export function WholeRunSim({ E }) {
             : s.i === 1
               ? <><b>3.</b> Next board, next board, … <b>adding 1 each time</b>, just like before. Scores rise and fall; here at <b>{board(s.b)}</b> the <b>highest score so far</b> appears.<br /><span style={{ opacity: .8 }}>(We are skipping ahead on screen — the code does not skip.)</span></>
               : <><b>3.</b> Keep adding 1, and one more board ties that highest score — <b>{board(s.b)}</b>.</>}
-          <br />M cells <b>{mList}</b> · O cells <b>{oList}</b>.</>,
+          <br />Walk the cells from 1: M ones go in one list, O ones in the other.<br />M cells <b>{mList}</b> · O cells <b>{oList}</b>.</>,
         <>{s.i === 0
             ? <><b>3.</b> 보드는 <b>OOOOO</b> 부터 시작해요 — M 이 없으니 0점. 그 다음 보드가 <b>{board(s.b)}</b> 예요.</>
             /* ⚠️ 2026-09-13 선생님: "**뭘 기준으로 보드가 바껴?**"
@@ -402,7 +402,7 @@ export function WholeRunSim({ E }) {
             : s.i === 1
               ? <><b>3.</b> 다음 보드, 그 다음 보드 … <b>앞에서처럼 1 씩 더하면서</b> 가요. 점수가 오르내리다가 <b>{board(s.b)}</b> 에서 <b>지금까지 중 가장 높은 점수</b>가 나와요.<br /><span style={{ opacity: .8 }}>(화면에서만 건너뛰는 거예요 — 코드는 안 건너뛰어요.)</span></>
               : <><b>3.</b> 계속 1 씩 더해 가면, 그 최고 점수와 같은 보드가 하나 더 나와요 — <b>{board(s.b)}</b>.</>}
-          <br />M 자리 <b>{mList}</b> · O 자리 <b>{oList}</b>.</>);
+          <br />1번 칸부터 훑으면서 M 이면 M 목록에, O 면 O 목록에 담아요.<br />M 자리 <b>{mList}</b> · O 자리 <b>{oList}</b>.</>);
       if (s.p === "pick") return t(E,
         /* ⚠️ 구멍 ④: **왜 어떤 줄은 흐린지** 화면이 말하지 않았다.
            x 가 이 보드의 M 자리여야 하고, O 짝 둘 다 이 보드의 O 자리여야 한다. */
@@ -781,8 +781,8 @@ export function FasterIdeaSim({ E }) {
          셀 수 없는 수를 화면에 두면 거기서 "그냥 믿고 가자" 모드로 바뀐다(학생 C·D 둘 다 그랬다).
          → 손으로 확인되는 예(10 × 45 = 450)만 남기고, 나머지는 "몇백 가지" 로 말한다.
          (참고: 실제 평균은 427.5, 최대는 546. 코드 주석에만 남긴다.) */
-      <>With <b>N</b> cells the same idea works. At <b>N = 20</b> we do the same count — <b>M cells × O-pairs</b>.<br />Say a board has 10 M's and 10 O's: that is <b>10 × 45 = 450</b>. Other boards differ, but it stays in the <b>hundreds</b>.<br />The answer is identical.</>,
-      <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>이면 방금과 똑같이 <b>M 자리 수 × O 짝 수</b>를 세요.<br />M 이 10개, O 가 10개인 보드라면 <b>10 × 45 = 450가지</b>예요. 다른 보드도 <b>몇백 가지</b>예요.<br />답은 똑같고요.</>);
+      <>With <b>N</b> cells the same idea works. At <b>N = 20</b> we do the same count — <b>M cells × O-pairs</b>.<br />Say a board has 10 M's and 10 O's: the O pairs are <b>10 × 9 ÷ 2 = 45</b>, so <b>10 × 45 = 450</b>. Other boards differ, but it stays in the <b>hundreds</b>.<br />The answer is identical.</>,
+      <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>이면 방금과 똑같이 <b>M 자리 수 × O 짝 수</b>를 세요.<br />M 이 10개, O 가 10개인 보드라면 O 짝은 <b>10 × 9 ÷ 2 = 45가지</b>, 그래서 <b>10 × 45 = 450가지</b>예요. 다른 보드도 <b>몇백 가지</b>예요.<br />답은 똑같고요.</>);
 
   const cellStyle = (c, dim) => ({
     width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
