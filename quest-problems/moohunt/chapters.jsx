@@ -390,9 +390,16 @@ export function makeMooHuntCh2(E, lang = "py") {
                      오늘 실측(cpp-qa, N=20·K=20만): C++ 1.49초 · Python 104초.
                      USACO_VERIFICATION.md 는 다른 기계에서 C++ 1.43~1.44초.
                      기계마다 갈리니 화면에는 **약** 을 붙인 값으로 쓴다. */}
+              {/* ⚠️ 2026-09-13 학생 D 가 두 가지를 짚었다. 둘 다 화면에 없던 말이다:
+                     ① "제한이 한 줄은 4초, 다음 줄은 2초다. 왜 다른지 설명이 없다."
+                        → 대회가 언어마다 다르게 준다. 그걸 적는다.
+                     ② "5쪽에서 '10억 번에 1초' 라고 배웠는데, 여기 계산량이면 1초도 안 걸려야
+                        하는 거 아닌가? 왜 100초지?"  **정확한 지적이다.**
+                        그 어림값은 C++ 얘기고 파이썬은 훨씬 느리다 — 그게 C++ 로 내는 이유다.
+                        학생이 물어봐야 나오는 답이면 화면에 있어야 한다. */}
               {t(E,
-                <>⚠️ At the biggest case (N = 20, K = 200,000) this takes about <b>100 seconds</b> in Python — the limit is 4. The algorithm is right, so it is great for understanding, but submit in <b>C++</b> for full marks (measured about 1.5 s, limit 2).</>,
-                <>⚠️ 가장 큰 입력(N = 20, K = 20만)에서 Python 은 약 <b>100초</b> 걸려요 — 제한은 4초예요.<br />생각은 맞으니 이해용으로는 좋지만, 만점은 <b>C++</b> 로 내요 (실측 약 1.5초, 제한 2초).</>)}
+                <>⚠️ The contest gives <b>4 seconds for Python, 2 for C++</b>.<br />At the biggest case (N = 20, K = 200,000) this takes about <b>100 seconds</b> in Python. The algorithm is right, so it is great for understanding, but submit in <b>C++</b> for full marks (measured about 1.5 s).<br /><span style={{ fontWeight: 600 }}>Why not faster? "A billion steps a second" is a C++ figure — Python does the same work tens of times slower.</span></>,
+                <>⚠️ 대회는 언어마다 시간을 다르게 줘요 — <b>파이썬 4초, C++ 2초</b>.<br />가장 큰 입력(N = 20, K = 20만)에서 파이썬은 약 <b>100초</b> 걸려요. 생각은 맞으니 이해용으로는 좋지만, 만점은 <b>C++</b> 로 내요 (실측 약 1.5초).<br /><span style={{ fontWeight: 600 }}>왜 더 빠르지 않냐면 — 앞에서 본 "10억 번에 1초" 는 C++ 얘기예요. 파이썬은 같은 일을 수십 배 느리게 해요.</span></>)}
             </div>
           )}
           <CodeWalk E={E} lang={lang} code={fw.code} vars={fw.vars} beats={fw.beats} accent="#059669" />

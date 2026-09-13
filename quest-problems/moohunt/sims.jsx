@@ -744,17 +744,15 @@ export function FasterIdeaSim({ E }) {
   const pairs = (oPos.length * (oPos.length - 1)) / 2;          // C(3,2) = 3
   const canScore = mPos.length * pairs;                         // 2 × 3 = 6
 
-  // N = 20 일 때 — 보드마다 평균 몇 가지나 보나
-  // (6,840 = 20×19×18 은 2026-09-12 에 뺐다. 앞 쪽이 코드로 "무브 20만" 을 보여주는데
-  //  여기서 다른 기준을 들면 학생이 두 세계를 본다 — ux·학생이 걸렸던 그 두 숫자다.)
-  let acc = 0;
-  for (let m = 0; m <= 20; m++) {
-    const o = 20 - m;
-    let c = 1;                                                  // C(20, m)
-    for (let i = 0; i < m; i++) c = (c * (20 - i)) / (i + 1);
-    acc += c * m * ((o * (o - 1)) / 2);
-  }
-  const BIG_AVG = Math.round(acc / Math.pow(2, 20));            // 428
+  /* N = 20 에서 보드마다 볼 조합 수 — **화면에는 안 쓴다.**
+     2026-09-13: 학생 넷 중 셋이 이 수(428)에서 "짐작도 못 하고 그냥 믿었다" 고 했다.
+     학생이 직접 셀 수 없는 수라서다. 화면은 손으로 확인되는 10 × 45 = 450 만 쓰고
+     나머지는 "몇백 가지" 로 말한다. 근거는 여기 주석에만 남긴다:
+       한 보드에 M 이 m 개면 볼 조합은 m × C(20−m, 2).
+       모든 보드에 걸친 평균 = 20 × C(19,2) / 8 = 3,420 / 8 = 427.5
+       (자리 하나가 실제로 쓰이려면 x=M · y=O · z=O 라 확률 1/8)
+       최대는 m = 6 또는 7 일 때 546. 그래서 "몇백 가지" 가 맞는 말이다.
+     ⚠️ 화면에 다시 쓰고 싶으면, 학생이 **손으로 확인할 수 있는 형태**인지 먼저 물어라. */
 
   const say =
     s.k === "board" ? t(E,
@@ -764,8 +762,10 @@ export function FasterIdeaSim({ E }) {
       /* ⚠️ 2026-09-13 학생 B: "갑자기 60 이라는 숫자가 나와서 K 랑 무슨 관계인지 헷갈렸다.
          계산 과정이 화면에 없고 결과만 나와서 짐작해야 했다." → 곱셈을 적는다.
          (x, y, z 는 서로 다른 칸이라 5 × 4 × 3 이다.) */
-      <>Every possible move on {N} cells: <b>{N} × {N - 1} × {N - 2} = {allMoves}</b> — the brute force checks them all.<br />But cell 1 is M — any move asking cell 1 to be O <b>cannot score</b>.<br />Most checks are wasted.</>,
-      <>칸 {N}개로 만들 수 있는 무브는 <b>{N} × {N - 1} × {N - 2} = {allMoves}개</b> — 완전탐색은 이걸 전부 봐요.<br />그런데 1번 칸은 M 이에요. 1번이 O 여야 하는 무브는 <b>애초에 득점 못 해요</b>.<br />대부분이 헛수고예요.</>)
+      /* ⚠️ 2026-09-13 학생 D: "'완전탐색' 이 뭔지 앞에서 정해준 적이 없는데 갑자기 나온다."
+         맞다. 앞 쪽에서 본 그 코드를 가리키는 말이니, **그렇게 부른다.** */
+      <>Every possible move on {N} cells: <b>{N} × {N - 1} × {N - 2} = {allMoves}</b> — the code on the last page checks them all.<br />But cell 1 is M — any move asking cell 1 to be O <b>cannot score</b>.<br />Most checks are wasted.</>,
+      <>칸 {N}개로 만들 수 있는 무브는 <b>{N} × {N - 1} × {N - 2} = {allMoves}개</b> — 앞 쪽 코드는 이걸 전부 봐요.<br />그런데 1번 칸은 M 이에요. 1번이 O 여야 하는 무브는 <b>애초에 득점 못 해요</b>.<br />대부분이 헛수고예요.</>)
     : s.k === "order" ? t(E,
       <>A move is <b>(x, y, z)</b> — x must read M, y and z must read O.<br />So y and z <b>just both need to be O</b>: <b>(1,2,3) and (1,3,2) score the same</b>.<br />Count them together.</>,
       <>무브는 <b>(x, y, z)</b> 예요 — x 자리가 M, y·z 자리가 O 여야 득점해요.<br />그러니 y 와 z 는 <b>둘 다 O 이기만</b> 하면 돼요.<br /><b>(1,2,3) 과 (1,3,2) 는 채점에선 같은 것</b>이에요. 묶어서 세요.</>)
@@ -783,8 +783,13 @@ export function FasterIdeaSim({ E }) {
       /* ⚠️ 2026-09-13 학생 셋 중 둘이 428 에서 "짐작도 못 하고 그냥 믿었다" 고 했다.
          숫자를 손으로 확인할 수 있게 **예를 하나** 준다 — M 이 10개인 보드.
          검산: O 가 10개면 짝은 10×9/2 = 45, M 10개 × 45 = 450. 보드마다 달라 평균은 427.5 ≈ 428. */
-      <>With <b>N</b> cells the same idea works. At <b>N = 20</b> we do the same count — <b>M cells × O-pairs</b>.<br />Say a board has 10 M's and 10 O's: that is <b>10 × 45 = 450</b>. Every board is different, so on average it is about <b>{BIG_AVG}</b>.<br />Instead of walking all <b>200,000</b> moves per board. The answer is identical.</>,
-      <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>이면 방금과 똑같이 <b>M 자리 수 × O 짝 수</b>를 세요.<br />M 이 10개, O 가 10개인 보드라면 <b>10 × 45 = 450가지</b>예요. 보드마다 다르니 평균을 내면 <b>{BIG_AVG}가지</b>고요.<br />보드마다 무브 20만 개를 훑는 대신에요. 답은 똑같고요.</>);
+      /* ⚠️ 2026-09-13: **428 을 뺐다.** 학생 넷 중 셋이 "짐작도 못 하고 그냥 믿었다" 고 했다.
+         "평균" 이라고 적어도, 예를 하나 붙여도 안 통했다 — 학생이 **직접 셀 수 없는 수**라서다.
+         셀 수 없는 수를 화면에 두면 거기서 "그냥 믿고 가자" 모드로 바뀐다(학생 C·D 둘 다 그랬다).
+         → 손으로 확인되는 예(10 × 45 = 450)만 남기고, 나머지는 "몇백 가지" 로 말한다.
+         (참고: 실제 평균은 427.5, 최대는 546. 코드 주석에만 남긴다.) */
+      <>With <b>N</b> cells the same idea works. At <b>N = 20</b> we do the same count — <b>M cells × O-pairs</b>.<br />Say a board has 10 M's and 10 O's: that is <b>10 × 45 = 450</b>. Other boards differ, but it stays in the <b>hundreds</b>.<br />Instead of walking all <b>200,000</b> moves per board. The answer is identical.</>,
+      <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>이면 방금과 똑같이 <b>M 자리 수 × O 짝 수</b>를 세요.<br />M 이 10개, O 가 10개인 보드라면 <b>10 × 45 = 450가지</b>예요. 다른 보드도 <b>몇백 가지</b>예요.<br />보드마다 무브 20만 개를 훑는 대신에요. 답은 똑같고요.</>);
 
   const cellStyle = (c, dim) => ({
     width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
@@ -818,7 +823,7 @@ export function FasterIdeaSim({ E }) {
           <Row E={E} ko="O 자리 (여기서 y, z 를 고름)" en="O cells (pick y, z here)"
                v={oPos.map((i) => i + 1).join(", ")} />
           <Row E={E} ko="봐야 할 조합" en="combinations to check" v={`${canScore}`} good />
-          <Row E={E} ko="완전탐색이 보던 것" en="brute force looked at" v={`${allMoves}`} bad />
+          <Row E={E} ko="앞 쪽 코드가 보던 것" en="the last page's code looked at" v={`${allMoves}`} bad />
         </div>
       )}
       {s.k === "gain" && (
@@ -827,8 +832,8 @@ export function FasterIdeaSim({ E }) {
           lineHeight: 1.85, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
           {/* ⚠️ 말풍선만 고치고 이 카드를 안 고치면 한 화면에서 두 기준이 싸운다.
                  (내가 자주 내는 실수라 적어둔다 — 같은 걸음의 말풍선·카드는 늘 같이 본다.) */}
-          {t(E, <>N = 20 : <b>200,000</b> moves → about <b>{BIG_AVG}</b> combinations per board</>,
-                <>N = 20 : 보드마다 무브 <b>20만</b> → 볼 조합 약 <b>{BIG_AVG}가지</b></>)}
+          {t(E, <>N = 20 : <b>200,000</b> moves → a few <b>hundred</b> combinations per board</>,
+                <>N = 20 : 보드마다 무브 <b>20만</b> → 볼 조합은 <b>몇백 가지</b></>)}
         </div>
       )}
       </StepFade>
