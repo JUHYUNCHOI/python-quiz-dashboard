@@ -304,8 +304,11 @@ export function EveryBoardSim({ E }) {
       <>Next board = <b>add 1</b>, the way you add 1 to a number.<br />Either end can be the ones place — all that matters is that every board comes up <b>exactly once</b>. We picked <b>cell 1</b>, so we start at the front.<br />From the front: every <b>M</b> turns back to <b>O</b>, until you meet an <b>O</b> — make that one <b>M</b>.</>,
       <>다음 보드는 <b>1 을 더하는 것</b>과 같아요. 숫자에 1 더하듯이요.<br />어느 쪽을 일의 자리로 삼아도 괜찮아요 — <b>빠짐없이 한 번씩만</b> 나오면 되니까요. 우리는 <b>1번 칸</b>으로 정했고, 그래서 앞에서부터 해요.<br />앞에서부터 <b>M</b> 은 <b>O</b> 로 되돌리다가, <b>O</b> 를 만나면 그 자리를 <b>M</b> 으로 바꿔요.</>)
     : t(E,
-      <>Keep adding 1 and you get <b>all {1 << N}</b> boards — none missed, none twice.<br />When every cell is M there is nothing left, so we stop.<br /><b>No bit operators needed.</b></>,
-      <>계속 1 을 더하면 <b>{1 << N}개 전부</b>가 나와요. 빠지지도, 겹치지도 않아요.<br />전부 M 이 되면 더 갈 데가 없으니 멈춰요.<br /><b>비트 연산자는 필요 없어요.</b></>);
+      /* ⚠️ 2026-09-13 학생 B: "'비트 연산자' 가 뭔지 설명이 전혀 없다. 필요없다니까 그냥 넘어갔다."
+         맞다 — 그 줄은 **우리끼리 하는 말**이었지 학생에게 하는 말이 아니었다. 뺀다.
+         (memory/feedback_no_invented_terms.md — 정의 안 한 말은 쓰지 않는다.) */
+      <>Keep adding 1 and you get <b>all {1 << N}</b> boards — none missed, none twice.<br />When every cell is M there is nothing left, so we stop.</>,
+      <>계속 1 을 더하면 <b>{1 << N}개 전부</b>가 나와요. 빠지지도, 겹치지도 않아요.<br />전부 M 이 되면 더 갈 데가 없으니 멈춰요.</>);
 
   return (
     <div style={{ padding: 16, paddingBottom: 90 }}>
@@ -388,8 +391,13 @@ export function WholeRunSim({ E }) {
     else if (sc === best) { ways++; hits.push(b); }
   }
 
-  /* 화면에서 하나씩 짚어볼 보드 — 앞 셋과, 최고 점수가 나온 둘 */
-  const WALK = [0, 1, 2, hits[0], hits[1]];
+  /* 화면에서 하나씩 짚어볼 보드 — 첫 보드 하나와, 최고 점수가 나온 둘.
+     ⚠️ 2026-09-13: 전에는 [0, 1, 2, 최고점 둘] 이라 다섯이었다. **학생 둘이 이 쪽에서
+        그만두고 싶다**고 했다 — "6·7쪽에서 이미 본 걸 또 8단계로 되풀이한다",
+        "여기부터는 눈으로만 훑었다". 3라운드 판정도 "저점 보드를 줄여라" 였다.
+        0, 1, 2 를 순서대로 밟는 건 이제 **4쪽(EveryBoardSim)이 하는 일**이라 여기선 필요 없다.
+        첫 보드 하나만 남겨 "여기서 시작한다" 만 보이고, 나머지는 답이 나오는 보드다. */
+  const WALK = [0, hits[0], hits[1]];
   const steps = [{ k: "read" }, { k: "table" },
                  ...WALK.map((b, i) => ({ k: "board", b, i })),
                  { k: "done" }];
@@ -421,11 +429,11 @@ export function WholeRunSim({ E }) {
          (WALK = [0, 1, 2, 최고점 보드 둘] — 1,048,576개를 다 밟을 수는 없다.) */
       <><b>3.</b> Board <b>b = {s.b}</b> is <b>{board(s.b)}</b>.
         {s.i === 0 && <><br /><span style={{ opacity: .85 }}>b is just <b>which board</b> — we make them in order, b = 0, 1, 2, …</span></>}
-        {s.i === 3 && <><br /><span style={{ opacity: .85 }}>Skipping ahead — these last two are the <b>best-scoring</b> boards.</span></>}
+        {s.i === 1 && <><br /><span style={{ opacity: .85 }}>Jumping ahead — these two are the <b>best-scoring</b> boards.</span></>}
         <br />M cells {cur.Ms.map((i) => i + 1).join("·") || "none"} / O cells {cur.Os.map((i) => i + 1).join("·")}<br />Read the table for every (M, O-pair) → <b>{cur.sc}</b> points.</>,
       <><b>3.</b> 보드 <b>b = {s.b}</b> 는 <b>{board(s.b)}</b> 예요.
         {s.i === 0 && <><br /><span style={{ opacity: .85 }}>b 는 <b>몇 번째 보드</b>인가예요 — 0, 1, 2 … 순서로 만들어요.</span></>}
-        {s.i === 3 && <><br /><span style={{ opacity: .85 }}>여기서부터는 건너뛰어요 — 이 둘이 <b>최고 점수</b>가 나온 보드예요.</span></>}
+        {s.i === 1 && <><br /><span style={{ opacity: .85 }}>여기서부터는 건너뛰어요 — 이 둘이 <b>최고 점수</b>가 나온 보드예요.</span></>}
         <br />M 자리 {cur.Ms.map((i) => i + 1).join("·") || "없음"} / O 자리 {cur.Os.map((i) => i + 1).join("·")}<br />(M 자리, O 짝) 마다 표를 꺼내 더하면 <b>{cur.sc}점</b>.</>)
     : t(E,
       <><b>4.</b> Do that for all <b>{1 << N}</b> boards and keep the best.<br />Answer: <b>{best} {ways}</b> — that is exactly what the code prints.</>,
@@ -747,8 +755,11 @@ export function FasterIdeaSim({ E }) {
       <>Suppose the board is already decided — <b>M O O O M</b>.<br />Now score it.</>,
       <>보드가 이미 정해졌다고 해봐요 — <b>M O O O M</b>.<br />이제 이 보드를 채점해요.</>)
     : s.k === "waste" ? t(E,
-      <>The brute force checks <b>all {allMoves}</b> moves.<br />But cell 1 is M — any move asking cell 1 to be O <b>cannot score</b>.<br />Most checks are wasted.</>,
-      <>완전탐색은 무브 <b>{allMoves}개를 전부</b> 봐요.<br />그런데 1번 칸은 M 이에요. 1번이 O 여야 하는 무브는 <b>애초에 득점 못 해요</b>.<br />대부분이 헛수고예요.</>)
+      /* ⚠️ 2026-09-13 학생 B: "갑자기 60 이라는 숫자가 나와서 K 랑 무슨 관계인지 헷갈렸다.
+         계산 과정이 화면에 없고 결과만 나와서 짐작해야 했다." → 곱셈을 적는다.
+         (x, y, z 는 서로 다른 칸이라 5 × 4 × 3 이다.) */
+      <>Every possible move on {N} cells: <b>{N} × {N - 1} × {N - 2} = {allMoves}</b> — the brute force checks them all.<br />But cell 1 is M — any move asking cell 1 to be O <b>cannot score</b>.<br />Most checks are wasted.</>,
+      <>칸 {N}개로 만들 수 있는 무브는 <b>{N} × {N - 1} × {N - 2} = {allMoves}개</b> — 완전탐색은 이걸 전부 봐요.<br />그런데 1번 칸은 M 이에요. 1번이 O 여야 하는 무브는 <b>애초에 득점 못 해요</b>.<br />대부분이 헛수고예요.</>)
     : s.k === "order" ? t(E,
       <>A move is <b>(x, y, z)</b> — x must read M, y and z must read O.<br />So y and z <b>just both need to be O</b>: <b>(1,2,3) and (1,3,2) score the same</b>.<br />Count them together.</>,
       <>무브는 <b>(x, y, z)</b> 예요 — x 자리가 M, y·z 자리가 O 여야 득점해요.<br />그러니 y 와 z 는 <b>둘 다 O 이기만</b> 하면 돼요.<br /><b>(1,2,3) 과 (1,3,2) 는 채점에선 같은 것</b>이에요. 묶어서 세요.</>)
@@ -761,8 +772,10 @@ export function FasterIdeaSim({ E }) {
          그런데 여기서 갑자기 6,840 을 기준으로 삼으면 학생은 두 세계를 보게 된다 —
          ux·학생이 예전에 "K 는 20만이라며 왜 갑자기 6,840?" 이라고 걸린 그 자리다.
          6,840(서로 다른 무브의 최대 가짓수)은 이 이야기에 필요 없다. */
-      <>With <b>N</b> cells the same idea works. At <b>N = 20</b>, instead of walking all <b>200,000</b> moves per board we look at about <b>{BIG_AVG}</b> combinations.<br />The answer is identical.</>,
-      <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>이면 보드마다 무브 <b>20만 개</b>를 훑는 대신, 볼 조합은 평균 <b>{BIG_AVG}가지</b>예요.<br />답은 똑같고요.</>);
+      /* ⚠️ 2026-09-13 학생 B: "428 이 어디서 나왔는지 계산 과정이 없어서 짐작도 못 했다."
+         → 방금 한 것과 **같은 셈**이라고 적는다. 보드마다 M 개수가 달라 평균이라는 것도. */
+      <>With <b>N</b> cells the same idea works. At <b>N = 20</b> we do the same count — <b>M cells × O-pairs</b> — but each board has a different number of M's, so it comes to about <b>{BIG_AVG}</b> on average.<br />Instead of walking all <b>200,000</b> moves per board. The answer is identical.</>,
+      <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>이면 방금과 똑같이 <b>M 자리 수 × O 짝 수</b>를 세는데, 보드마다 M 개수가 달라서 평균 <b>{BIG_AVG}가지</b>가 돼요.<br />보드마다 무브 20만 개를 훑는 대신에요. 답은 똑같고요.</>);
 
   const cellStyle = (c, dim) => ({
     width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
