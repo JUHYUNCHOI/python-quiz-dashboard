@@ -429,10 +429,15 @@ export function WholeRunSim({ E }) {
          (WALK = [0, 1, 2, 최고점 보드 둘] — 1,048,576개를 다 밟을 수는 없다.) */
       <><b>3.</b> Board <b>b = {s.b}</b> is <b>{board(s.b)}</b>.
         {s.i === 0 && <><br /><span style={{ opacity: .85 }}>b is just <b>which board</b> — we make them in order, b = 0, 1, 2, …</span></>}
+        {s.i > 0 && <><br /><span style={{ opacity: .85 }}>{s.b} = {(() => { const t2 = []; let v = s.b, k = 1; while (v) { if (v & 1) t2.push(k); v >>= 1; k *= 2; } return t2.join(" + "); })()} → cells {board(s.b).split("").map((c, i2) => (c === "M" ? i2 + 1 : 0)).filter(Boolean).join(" · ")} are M (cell 1 is the ones place).</span></>}
         {s.i === 1 && <><br /><span style={{ opacity: .85 }}>Jumping ahead — these two are the <b>best-scoring</b> boards.</span></>}
         <br />M cells {cur.Ms.map((i) => i + 1).join("·") || "none"} / O cells {cur.Os.map((i) => i + 1).join("·")}<br />Read the table for every (M, O-pair) → <b>{cur.sc}</b> points.</>,
       <><b>3.</b> 보드 <b>b = {s.b}</b> 는 <b>{board(s.b)}</b> 예요.
         {s.i === 0 && <><br /><span style={{ opacity: .85 }}>b 는 <b>몇 번째 보드</b>인가예요 — 0, 1, 2 … 순서로 만들어요.</span></>}
+        {/* ⚠️ 2026-09-13 학생 F 가 **여기서 그만뒀다**: "b=0 은 OOOOO 였다가 갑자기 b=17 인데,
+               왜 17 이 MOOOM 인지 설명이 하나도 없다." 4쪽에서 정한 "1번 칸이 일의 자리" 로
+               손으로 확인되게 적는다 — 17 = 1 + 16 → 1번·5번 칸이 M. */}
+        {s.i > 0 && <><br /><span style={{ opacity: .85 }}>{s.b} = {(() => { const t2 = []; let v = s.b, k = 1; while (v) { if (v & 1) t2.push(k); v >>= 1; k *= 2; } return t2.join(" + "); })()} 이니까 {board(s.b).split("").map((c, i2) => (c === "M" ? i2 + 1 : 0)).filter(Boolean).join("번 · ")}번 칸이 M 이에요 (1번 칸이 일의 자리).</span></>}
         {s.i === 1 && <><br /><span style={{ opacity: .85 }}>여기서부터는 건너뛰어요 — 이 둘이 <b>최고 점수</b>가 나온 보드예요.</span></>}
         <br />M 자리 {cur.Ms.map((i) => i + 1).join("·") || "없음"} / O 자리 {cur.Os.map((i) => i + 1).join("·")}<br />(M 자리, O 짝) 마다 표를 꺼내 더하면 <b>{cur.sc}점</b>.</>)
     : t(E,
@@ -588,8 +593,9 @@ export function IsAtTableSim({ E }) {
 
   const say =
     s.k === "ask" ? t(E,
-      <>We know only <b>one M + two O</b> can score.<br />But must we scan all <b>200,000</b> moves for every board?</>,
-      <>득점하는 건 <b>M 자리 하나 + O 자리 둘</b> 뿐인 건 알았어요.<br />그런데 보드마다 무브 <b>20만 개</b>를 매번 다 훑어야 할까요?</>)
+      /* ⚠️ 2026-09-13 학생 F: "6쪽에서 방금 한 얘기를 그대로 다시 하는 느낌." → 앞말을 뺀다. */
+      <>Must we scan all <b>200,000</b> moves for every board?</>,
+      <>그런데 보드마다 무브 <b>20만 개</b>를 매번 다 훑어야 할까요?</>)
     : s.k === "plan" ? t(E,
       /* ⚠️ 2026-09-13 학생 E: "'sheet' 를 왜 시트라고 부르는지 설명 없이 쓴다."
          정의 안 한 말은 안 쓴다 (memory/feedback_no_invented_terms.md). 그냥 "표" 다. */
@@ -601,8 +607,8 @@ export function IsAtTableSim({ E }) {
     : t(E,
       /* 잘라낸 sum 걸음의 마무리를 여기로 옮겼다. 이 줄이 이 쪽이 버는 것이다 —
          2026-09-12 학생: "표로 미리 세도 보드마다 찾아보는 건 똑같잖아. 뭐가 다른데?" */
-      <>Now <b>(5, 2, 3)</b> arrives — same two O cells, swapped.<br />y and z only need to be O, so order does not matter.<br />Smaller first again → it lands on (2, 3) once more: <b>2</b>.<br />That is the whole table: the <b>200,000</b> moves are counted <b>once, at the very start</b> — not again for each of the <b>1,000,000</b> boards.</>,
-      <>이번엔 <b>(5, 2, 3)</b> 가 왔어요 — O 자리 둘이 순서만 바뀐 거예요.<br />y·z 는 둘 다 O 이기만 하면 되니 순서는 상관없어요.<br />또 작은 쪽을 앞으로 넣으면 (2, 3) 칸에 <b>2</b> 가 돼요.<br />표는 이게 다예요. 무브 <b>20만 개</b>는 <b>맨 처음 딱 한 번</b>만 세요 — 보드 <b>100만 개</b>마다 다시 훑지 않아요.</>);
+      <>Now <b>(5, 2, 3)</b> arrives — same two O cells, swapped.<br />y and z only need to be O, so order does not matter.<br />Smaller first again → it lands on (2, 3) once more: <b>2</b>.<br />Do that for every move and the table is done — the <b>200,000</b> moves are counted <b>once, at the very start</b>, not again for each of the <b>1,000,000</b> boards.</>,
+      <>이번엔 <b>(5, 2, 3)</b> 가 왔어요 — O 자리 둘이 순서만 바뀐 거예요.<br />y·z 는 둘 다 O 이기만 하면 되니 순서는 상관없어요.<br />또 작은 쪽을 앞으로 넣으면 (2, 3) 칸에 <b>2</b> 가 돼요.<br />무브를 이렇게 하나씩 다 넣으면 표가 채워져요. 무브 <b>20만 개</b>를 <b>맨 처음 딱 한 번</b>만 세는 거예요 — 보드 <b>100만 개</b>마다 다시 훑지 않아요.</>);
 
   const justFilled = s.k === "fill" ? [[1, 2], [3, 4]] : s.k === "order" ? [[1, 2]] : [];
   const isNew = (a, b) => justFilled.some(([p, q]) => p === a && q === b);
