@@ -42,6 +42,23 @@
           작은 N 에서 '몇 배 빠름' 은 통과를 뜻하지 않는다. 2^N 이 지수로 커지기 때문이다.
           그래서 파이썬 쪽에 정직 배너를 달았다 (chapters.jsx, photoshoot25 와 같은 모양).
 
+   ⚠️ 2026-09-13 C++ 표를 **3차원 → 2차원**으로 바꿨다. 선생님: "c++은 3차배열이네.
+      3차배열 안쓰고 map을 사용하면 안되는거야?" · "2차배열도 된다면서 왜 3차배열로 되어 있지?"
+      정직한 답: **공식 답안이 3차원이라 그대로 옮겼고, 재보지 않았다.** 파이썬은 9/11 에
+      "2·3차원 리스트를 가르치는 레슨이 0개" 라서 딕셔너리로 바꿨는데, C++ 은 "2초 제한에
+      얇다" 는 이유로 그대로 뒀다 — **그 '얇다' 를 잰 적이 없다.**
+      실측(N=20 · K=20만 · 제한 2초):
+        2차원 배열 1.45초 · 1차원 배열 1.43초 · 3차원 배열 1.51초
+        unordered_map 5.35초 ✗ · map 16.57초 ✗
+      map 은 왜 느린가 — 표를 찾는 횟수가 **4억 4천만 번**이라 한 번의 비용이 그대로 총 시간이 된다.
+        배열 3.2ns · unordered_map 11.9ns · map 37ns.
+        배열은 번호를 계산해 바로 가고(8000칸 = 31KB 라 CPU 캐시에 통째로 들어간다),
+        map 은 흩어진 노드를 12번쯤 따라간다.
+      2차원을 고른 이유: **cpp-21 에서 2차원 배열을 가르친다**(3차원은 0개). 속도도 같고,
+      시뮬이 이미 "M 자리마다 표 하나씩" 이라고 말해서 그림과도 맞는다.
+      ⚠️ 선생님이 제출해 통과시킨 판본은 **3차원**이다. 화면 코드가 그와 달라졌다 —
+         docs/usaco-submit/moohunt-nobit.cpp 는 제출 기록으로 그대로 둔다.
+
    핵심 두 가지:
      ① y 와 z 는 둘 다 O 이기만 하면 되니 순서가 상관없다 → min/max 로 묶는다
      ② 보드가 정해지면 M 자리와 O 자리가 갈린다.
@@ -125,16 +142,16 @@ export const FAST_CPP = [
   "    int N, K;",
   "    cin >> N >> K;",
   "",
-  "    // count[x][a][b] = 'x 가 M, a 와 b 가 O' 면 득점하는 무브가 몇 개인가 (a < b)",
+  "    // 표 한 장 = M 자리 하나. 그 안은 O 짝 (작은 쪽, 큰 쪽) 을 번호 하나로 바꿔서 넣어요.",
   "    // y 와 z 는 둘 다 O 이기만 하면 되니 순서는 상관없다 → 작은 쪽·큰 쪽으로 모은다",
-  "    vector<vector<vector<int>>> count(N, vector<vector<int>>(N, vector<int>(N, 0)));",
+  "    vector<vector<int>> count(N, vector<int>(N * N, 0));",
   "    for (int i = 0; i < K; i++) {",
   "        int x, y, z;",
   "        cin >> x >> y >> z;",
   "        x--;",
   "        y--;",
   "        z--;",
-  "        count[x][min(y, z)][max(y, z)] += 1;",
+  "        count[x][min(y, z) * N + max(y, z)] += 1;",
   "    }",
   "",
   "    // 보드는 리스트로 나타내요. 1 이면 M, 0 이면 O.",
@@ -159,7 +176,7 @@ export const FAST_CPP = [
   "        for (int a = 0; a < (int)Ms.size(); a++) {",
   "            for (int i = 0; i < (int)Os.size(); i++) {",
   "                for (int j = i + 1; j < (int)Os.size(); j++) {",
-  "                    score += count[Ms[a]][Os[i]][Os[j]];",
+  "                    score += count[Ms[a]][Os[i] * N + Os[j]];",
   "                }",
   "            }",
   "        }",
@@ -199,12 +216,12 @@ export function getMooHuntFastWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FAST_CPP, vars: _FAST_VARS, beats: [
       { hi: [0, 6],   bubble: t(E, "Headers we need, then read N (cells) and K (moves).", "필요한 헤더를 적고, N (칸 수) 와 K (무브 수) 를 읽어요.") },
-      { hi: [8, 18],  bubble: t(E, "This is the table you built a page ago.\ncount[x][a][b] = how many moves need x to be M and a, b to be O.\nSince y and z both just need to be O, min/max puts (1,2,3) and (1,3,2) in the same slot.",
-                                   "앞 쪽에서 만든 그 표예요.\n무브를 여기에 한 번만 세어 넣어요.\ncount[x][a][b] = x 가 M, a 와 b 가 O 여야 득점하는 무브 개수.\ny 와 z 는 둘 다 O 이기만 하면 되니, min/max 로 (1,2,3) 과 (1,3,2) 를 같은 칸에 넣어요.") },
+      { hi: [8, 18],  bubble: t(E, "This is the table you built a page ago.\nOne row per M cell; inside it, the O pair (smaller, larger) becomes one number.\nSince y and z both just need to be O, min/max puts (1,2,3) and (1,3,2) in the same slot.",
+                                   "앞 쪽에서 만든 그 표예요.\n무브를 여기에 한 번만 세어 넣어요.\n표 한 줄 = M 자리 하나. 그 안은 O 짝 (작은 쪽, 큰 쪽) 을 번호 하나로 바꿔 넣어요.\ny 와 z 는 둘 다 O 이기만 하면 되니, min/max 로 (1,2,3) 과 (1,3,2) 를 같은 칸에 넣어요.") },
       { hi: [20, 25], bubble: t(E, "The board is just a list: 1 means M, 0 means O. Start from all O.", "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O. 전부 O 에서 시작해요.") },
       { hi: [26, 35], bubble: t(E, "For this board, split the cells: which are M, which are O.", "이 보드에서 칸을 갈라요 — 어디가 M 이고 어디가 O 인지.") },
-      { hi: [36, 45], bubble: t(E, "Here is the whole point.\nOnly 'one M cell + two O cells' can ever score, so look at nothing else.\nj starts after i, so Os[i] < Os[j] always — it matches how we stored the keys.",
-                                   "여기가 핵심이에요.\n득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐이니 그것만 봐요.\nj 를 i 다음부터 세니까 Os[i] < Os[j] 가 늘 성립해요 — 표에 넣은 규칙과 맞아요.") },
+      { hi: [36, 45], bubble: t(E, "Here is the whole point.\nOnly 'one M cell + two O cells' can ever score, so look at nothing else.\nj starts after i, and Os was filled from cell 1 upward, so Os[i] is always the smaller cell — which matches the smaller-first rule we used for the keys.",
+                                   "여기가 핵심이에요.\n득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐이니 그것만 봐요.\nj 를 i 다음부터 고르는데, Os 는 1번 칸부터 차례로 담은 목록이라 Os[i] 가 늘 더 작은 자리예요 — 표에 넣을 때 정한 '작은 쪽 먼저' 규칙과 저절로 맞아요.") },
       { hi: [46, 52], bubble: t(E, "Best score, and how many boards reach it.", "최고 점수와, 그 점수에 이르는 보드 개수.") },
       { hi: [54, 64], bubble: t(E, "Move to the next board — cell 1 is the ones place, so add 1 there.\nFrom cell 1 on: turn every M back to O until you meet an O, then make that one an M.",
                                    "다음 보드로 넘어가요 — 1번 칸이 일의 자리, 거기에 1 을 더해요.\n앞에서부터 M 이면 O 로 되돌리다가, O 를 만나면 그 자리를 M 으로 바꿔요.") },
@@ -219,8 +236,8 @@ export function getMooHuntFastWalk(E, lang = "py") {
                                  "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O.\n전부 O 에서 시작해서 모든 보드를 훑을 거예요.\n점수는 0 보다 작을 수 없으니 best 를 0 에서 시작해도 돼요.") },
     { hi: [22, 30], bubble: t(E, "For this board, split the cells: which are M, which are O.",
                                  "이 보드에서 칸을 갈라요 — 어디가 M 이고 어디가 O 인지.") },
-    { hi: [31, 38], bubble: t(E, "Here is the whole point.\nOnly 'one M cell + two O cells' can ever score, so look at nothing else.\nj starts after i, so Os[i] < Os[j] always — that matches the smaller/larger rule we used for the keys.\nIf the key is not in the table, nobody asked about it: 0.",
-                                 "여기가 핵심이에요.\n득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐이니 그것만 봐요.\nj 를 i 다음부터 세니까 Os[i] < Os[j] 가 늘 성립해요 — 열쇠를 작은 쪽·큰 쪽으로 넣은 규칙과 맞아요.\n표에 없는 열쇠는 아무도 물어본 적이 없다는 뜻이라 0 이에요.") },
+    { hi: [31, 38], bubble: t(E, "Here is the whole point.\nOnly 'one M cell + two O cells' can ever score, so look at nothing else.\nj starts after i, and Os was filled from cell 1 upward, so Os[i] is always the smaller cell — which matches the smaller-first rule we used for the keys.\nIf the key is not in the table, nobody asked about it: 0.",
+                                 "여기가 핵심이에요.\n득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐이니 그것만 봐요.\nj 를 i 다음부터 고르는데, Os 는 1번 칸부터 차례로 담은 목록이라 Os[i] 가 늘 더 작은 자리예요 — 표에 넣을 때 정한 '작은 쪽 먼저' 규칙과 저절로 맞아요.\n표에 없는 열쇠는 아무도 물어본 적이 없다는 뜻이라 0 이에요.") },
     { hi: [40, 44], bubble: t(E, "Best score, and how many boards reach it.", "최고 점수와, 그 점수에 이르는 보드 개수.") },
     { hi: [46, 55], bubble: t(E, "Move to the next board — cell 1 is the ones place, so add 1 there.\nFrom cell 1 on: turn every M back to O until you meet an O, then make that one an M.\nWhen every cell was M there is nothing left — stop.",
                                  "다음 보드로 넘어가요 — 1번 칸이 일의 자리, 거기에 1 을 더해요.\n앞에서부터 M 이면 O 로 되돌리다가, O 를 만나면 그 자리를 M 으로 바꿔요.\n전부 M 이었다면 더 갈 데가 없으니 멈춰요.") },

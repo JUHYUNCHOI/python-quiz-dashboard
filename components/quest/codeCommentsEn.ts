@@ -231,4 +231,8 @@ export const CODE_COMMENT_EN: Record<string, string> = {
   // ── 주석이 코드와 모순이었다: i = 0 부터 도는데 "뒤에서부터" 라고 적혀 있었다 (2026-09-13)
   "1번 칸부터 M(1) 이면 O(0) 로 되돌리며 뒤로 가고,":
     "starting at cell 1: while it is M(1), turn it back to O(0) and move on,",
+
+  // ── C++ 표를 3차원 → 2차원으로 바꾸며 (2026-09-13)
+  "표 한 장 = M 자리 하나. 그 안은 O 짝 (작은 쪽, 큰 쪽) 을 번호 하나로 바꿔서 넣어요.":
+    "one row per M cell; inside it, the O pair (smaller, larger) becomes a single number",
 };

@@ -366,9 +366,10 @@ export function makeMooHuntCh2(E, lang = "py") {
           <div style={{ margin: "12px 14px 0", background: "#ecfdf5", border: "1.5px solid #34d399",
             borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#065f46",
             lineHeight: 1.7, whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>
-            {"✅ "}{t(E,
-              "The official solution from usaco.org.\nThe idea is the one you just saw: only 'one M cell + two O cells' can score.\nStill every board — just far fewer moves per board.",
-              "usaco.org 공식 풀이예요.\n방금 본 그 생각이에요: 득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐.\n보드를 다 해보는 건 똑같은데, 보드마다 보는 무브 수가 확 줄어요.")}
+            {/* ⚠️ 2026-09-13: 세 줄 중 뒤 두 줄을 지웠다. 바로 앞 쪽(전체 실행) 마지막 걸음이
+                   "맞아요, 보드는 여전히 전부 해봐요. 달라진 건 보드 하나를 채점하는 값이에요…"
+                   로 끝난다 — 쪽을 넘기자마자 같은 결론을 또 말하고 있었다. */}
+            {"✅ "}{t(E, "The official solution from usaco.org.", "usaco.org 공식 풀이예요.")}
           </div>
           {lang === "py" && (
             <div style={{ margin: "10px 16px 0", padding: "9px 13px", borderRadius: 10, background: "#fffbeb",

@@ -136,7 +136,12 @@ const _BRUTE_VARS = [
 ];
 
 export function getMooHuntBruteWalk(E, lang = "py") {
-  /* ⚠️ 걸음은 **6개**다. 처음엔 5개였는데, **학생 둘이 독립적으로 같은 걸음**을 짚었다:
+  /* ⚠️ 2026-09-13: 채점 걸음이 "**3쪽에서 MOOMM 을 손으로 센 것**" 을 가리키고 있었다.
+     그런데 그 3쪽을 오늘 지웠고, 지우기 전에도 **MOOMM 을 손으로 채점한 자리는 없었다** —
+     2쪽이 손으로 채점한 보드는 MOOOM 이다. 없는 자리를 두 겹으로 가리키고 있었던 셈이다.
+     → "2쪽에서 MOOOM 을 손으로 센 것과 같은 방식이에요."
+     ⚠️ **쪽을 지울 때는 그 쪽을 가리키던 말도 같이 찾아야 한다.** 오늘 그걸 안 했다.
+  ⚠️ 걸음은 **6개**다. 처음엔 5개였는데, **학생 둘이 독립적으로 같은 걸음**을 짚었다:
      "최고 점수 갱신 + 다음 보드로 넘어가기, 두 가지가 말풍선 하나에 들어 있다.
       처음 읽었을 때 '지금 뭘 설명하는 거지' 싶었다." → 둘로 갈랐다.
      ⚠️ 누르는 횟수가 하나 는다. 그래도 가른다 — 겹치는 지적이 진짜 문제다.
@@ -151,8 +156,8 @@ export function getMooHuntBruteWalk(E, lang = "py") {
                                    "입력을 읽어요 — N (칸 수), K (무브 수), 그리고 무브 K 개.\n입력은 칸을 1번부터 세고 코드는 0번부터 세니까 1 을 빼요.") },
       { hi: [17, 21], bubble: t(E, "The board is just a list: 1 means M, 0 means O. Start from all O.\nScores are never negative, so 0 is a safe starting best.",
                                    "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O. 전부 O 에서 시작해요.\n점수는 0 보다 작을 수 없으니 best 를 0 에서 시작해도 돼요.") },
-      { hi: [23, 30], bubble: t(E, "Score this board — the very thing you did by hand on MOOMM.\nA move scores when x reads M and y, z read O. Walk all K of them.",
-                                   "이 보드를 채점해요 — 3쪽에서 MOOMM 을 손으로 센 것과 똑같아요.\nx 자리가 M, y·z 자리가 O 면 1점. 무브 K 개를 다 훑어요.") },
+      { hi: [23, 30], bubble: t(E, "Score this board — the same way you did by hand on MOOOM on page 2.\nA move scores when x reads M and y, z read O. Walk all K of them.",
+                                   "이 보드를 채점해요 — 2쪽에서 MOOOM 을 손으로 센 것과 같은 방식이에요.\nx 자리가 M, y·z 자리가 O 면 1점. 무브 K 개를 다 훑어요.") },
       { hi: [32, 37], bubble: t(E, "Keep the best score, and how many boards reach it.",
                                    "최고 점수와, 그 점수에 이르는 보드 개수를 남겨요.") },
       { hi: [39, 49], bubble: t(E, "Then move to the next board — adding 1, the way you just saw.",
@@ -165,8 +170,8 @@ export function getMooHuntBruteWalk(E, lang = "py") {
                                  "입력을 읽어요 — N (칸 수), K (무브 수), 그리고 무브 K 개.\n입력은 칸을 1번부터 세고 코드는 0번부터 세니까 1 을 빼요.") },
     { hi: [11, 15], bubble: t(E, "The board is just a list: 1 means M, 0 means O. Start from all O.\nScores are never negative, so 0 is a safe starting best.",
                                  "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O. 전부 O 에서 시작해요.\n점수는 0 보다 작을 수 없으니 best 를 0 에서 시작해도 돼요.") },
-    { hi: [17, 22], bubble: t(E, "Score this board — the very thing you did by hand on MOOMM.\nA move scores when x reads M and y, z read O. Walk all K of them.",
-                                 "이 보드를 채점해요 — 3쪽에서 MOOMM 을 손으로 센 것과 똑같아요.\nx 자리가 M, y·z 자리가 O 면 1점. 무브 K 개를 다 훑어요.") },
+    { hi: [17, 22], bubble: t(E, "Score this board — the same way you did by hand on MOOOM on page 2.\nA move scores when x reads M and y, z read O. Walk all K of them.",
+                                 "이 보드를 채점해요 — 2쪽에서 MOOOM 을 손으로 센 것과 같은 방식이에요.\nx 자리가 M, y·z 자리가 O 면 1점. 무브 K 개를 다 훑어요.") },
     { hi: [24, 28], bubble: t(E, "Keep the best score, and how many boards reach it.",
                                  "최고 점수와, 그 점수에 이르는 보드 개수를 남겨요.") },
     { hi: [30, 37], bubble: t(E, "Then move to the next board — adding 1, the way you just saw.",
