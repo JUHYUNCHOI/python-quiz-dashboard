@@ -319,7 +319,17 @@ export function WholeRunSim({ E }) {
         "여기부터는 눈으로만 훑었다". 3라운드 판정도 "저점 보드를 줄여라" 였다.
         0, 1, 2 를 순서대로 밟는 건 이제 **4쪽(EveryBoardSim)이 하는 일**이라 여기선 필요 없다.
         첫 보드 하나만 남겨 "여기서 시작한다" 만 보이고, 나머지는 답이 나오는 보드다. */
-  const WALK = [0, hits[0], hits[1]];
+  /* ⚠️ 2026-09-13 선생님: "o가 여기에 있음 점수 올라가는거 아니야?
+       **왜 MOOOM이 첫 점수 올라가는곳인데?**"
+     맞는 지적이고 **내가 쓴 문장이 거짓말이었다.** 확인해 보니:
+       b=0 OOOOO 0점 · **b=1 MOOOO 3점** · b=2 OMOOO 1점 · b=9 MOOMO 3점 · b=17 MOOOM 4점
+     점수가 처음 오르는 건 **두 번째 보드(MOOOO, 3점)** 다. MOOOM 은 "처음 오르는 곳" 이 아니라
+     **최고점 4점이 처음 나오는 곳**이다.
+     → 밟는 보드를 [0(0점), 17, 25] 에서 **[1(3점), 17, 25]** 로 바꾼다.
+       0점짜리 보드는 배울 게 적고(보드가 전부 O 에서 시작한다는 건 앞 쪽이 이미 가르친다),
+       무엇보다 **"지금까지 최고 점수" 가 실제로 두 번 바뀌는 걸** 봐야 그 칸이 뭘 하는지 안다:
+         3점(갈아치움) → 4점(갈아치움) → 4점(개수만 +1). */
+  const WALK = [1, hits[0], hits[1]];
   /* ⚠️ 2026-09-13, 선생님이 이 화면을 보시고:
        "정보를 보여주는 방법이 별로야. **필요 없는 정보는 없는데 봐야할게 많아.**
         스텝바이스텝 맞아? 그 보드 점수? 지금까지 최고 점수? 그 점수인 보드수?
@@ -374,23 +384,20 @@ export function WholeRunSim({ E }) {
       const mList = cur.Ms.map((x) => x + 1).join("·");
       const oList = cur.Os.map((x) => x + 1).join("·");
       if (s.p === "none") return t(E,
-        <><b>3.</b> Start from the first board — <b>{board(s.b)}</b>, all O.<br />No M at all, and a move needs one, so this board scores <b>0</b>.</>,
-        <><b>3.</b> 첫 보드부터 봐요 — <b>{board(s.b)}</b>, 전부 O 예요.<br />M 이 하나도 없는데 득점하려면 M 이 있어야 하니 <b>0점</b>이에요.</>);
+        <><b>3.</b> This board is <b>{board(s.b)}</b> — no M at all, so it scores <b>0</b>.</>,
+        <><b>3.</b> 이 보드는 <b>{board(s.b)}</b> — M 이 하나도 없어서 <b>0점</b>이에요.</>);
       if (s.p === "split") return t(E,
-        /* ⚠️ 2026-09-13 선생님: **"17이 뭔데?"**
-           b = 17 은 **우리 코드에 없는 수**다. 비트를 걷어낸 뒤 최종 코드는 보드를 리스트로
-           들고 1 을 더해 나갈 뿐 `b` 라는 변수가 없다. 옛 비트마스크 시절의 잔재가 화면에만
-           남아 있었다. 학생 F 도 여기서 그만뒀고, 나는 "17 = 1 + 16" 이라는 **설명을 덧붙여**
-           고치려 했다 — 없는 수에 설명을 붙인 것이라 더 헷갈리게 만들었다.
-           → **b 를 화면에서 뺀다.** 몇 번째인지는 알 필요가 없다. 필요한 건 "순서대로 만들다
-             보면 이 보드가 나온다" 뿐이다. */
-        <>{s.i === 1
-            ? <><b>3.</b> Keep making boards in order, and this one comes up — <b>{board(s.b)}</b>. Here the score first goes up.</>
-            : <><b>3.</b> Later, one more board ties it — <b>{board(s.b)}</b>.</>}
+        <>{s.i === 0
+            ? <><b>3.</b> Boards start at <b>OOOOO</b> — no M, so 0 points. The next one is <b>{board(s.b)}</b>.</>
+            : s.i === 1
+              ? <><b>3.</b> Keep going. Scores rise and fall, and at <b>{board(s.b)}</b> the <b>highest score so far</b> appears.</>
+              : <><b>3.</b> Later, one more board ties that highest score — <b>{board(s.b)}</b>.</>}
           <br />M cells <b>{mList}</b> · O cells <b>{oList}</b>.</>,
-        <>{s.i === 1
-            ? <><b>3.</b> 보드를 순서대로 만들다 보면 이 보드가 나와요 — <b>{board(s.b)}</b>. 여기서 점수가 처음 올라요.</>
-            : <><b>3.</b> 더 가다 보면 점수가 같은 보드가 하나 더 나와요 — <b>{board(s.b)}</b>.</>}
+        <>{s.i === 0
+            ? <><b>3.</b> 보드는 <b>OOOOO</b> 부터 시작해요 — M 이 없으니 0점. 그 다음 보드가 <b>{board(s.b)}</b> 예요.</>
+            : s.i === 1
+              ? <><b>3.</b> 계속 가요. 보드마다 점수가 오르내리는데, <b>{board(s.b)}</b> 에서 <b>지금까지 중 가장 높은 점수</b>가 나와요.</>
+              : <><b>3.</b> 더 가다 보면 그 최고 점수와 같은 보드가 하나 더 나와요 — <b>{board(s.b)}</b>.</>}
           <br />M 자리 <b>{mList}</b> · O 자리 <b>{oList}</b>.</>);
       if (s.p === "pick") return t(E,
         /* ⚠️ 구멍 ④: **왜 어떤 줄은 흐린지** 화면이 말하지 않았다.
@@ -406,7 +413,7 @@ export function WholeRunSim({ E }) {
       prev.forEach((b2) => { const sc = scoreOf(b2).sc; if (sc > pb) { pb = sc; pw = 1; } else if (sc === pb) pw++; });
       return t(E,
         <><b>6.</b> Compare with the best so far.<br />{cur.sc > pb ? <>Higher — the best becomes <b>{cur.sc}</b>, and the count starts again at <b>1</b>.</> : <>Same — the count goes up by one.</>}</>,
-        <><b>6.</b> 지금까지 최고 점수와 견줘요.<br />{cur.sc > pb ? <>더 높으니 최고 점수가 <b>{cur.sc}</b> 가 되고, 보드 수는 <b>1</b> 부터 다시 세요.</> : <>같으니 보드 수만 <b>하나 늘어요</b>.</>}</>);
+        <><b>6.</b> 지금까지 최고 점수와 견줘요.<br />{cur.sc > pb ? <>더 높으니 최고 점수가 바뀌어요 — <b>{cur.sc}점</b>. 보드 수는 <b>1</b> 부터 다시 세요.</> : <>같으니 보드 수만 <b>하나 늘어요</b>.</>}</>);
     })()
     : t(E,
       /* ⚠️ 번호는 **코드가 도는 순서**다. 3~6 은 보드마다 되풀이되니 보드가 바뀌면 3 으로 돌아간다 —
