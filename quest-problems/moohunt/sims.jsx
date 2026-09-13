@@ -555,8 +555,14 @@ export function IsAtTableSim({ E }) {
   /* ⚠️ 2026-09-11 선생님: "저걸 보고 **그래서 어떻게 값을 구할수 있는건지도 모르겠어**"
      처음엔 표를 채우는 데서 끝냈다. 채우는 법만 보여주고 **쓰는 법**을 안 보여준 것이다.
      use·sum 두 걸음을 붙여 보드 하나를 실제로 채점해 점수를 내는 데까지 간다. */
-  const steps = [{ k: "ask" }, { k: "plan" }, { k: "fill" }, { k: "order" },
-                 { k: "use" }, { k: "sum" }];
+  /* ⚠️ 2026-09-13: 뒤 두 걸음(use·sum)을 **잘라냈다.** 6 → 4.
+     학생 셋(B·C·E)이 "7·8·9쪽이 표에서 꺼내 더하기를 세 번 되풀이한다" 고 했다.
+     화면을 대조해 보니 사실이었다 — 여기 use·sum 이 **장난감 보드(OOOOM)** 로 보여주는
+     그 동작을, 8쪽(WholeRunSim)이 **공식 샘플로 다시** 보여준다. 8쪽 쪽이 더 세다(진짜 답 4 2).
+     ⚠️ use·sum 은 2026-09-11 선생님 지적("채우는 법만 보여주고 **쓰는 법**을 안 보여줬다")으로
+        붙인 것이다. 지우는 게 아니라 **8쪽으로 넘긴다** — 8쪽이 그 뒤에 생겼고 더 잘 한다.
+     이 쪽이 버는 것("무브는 맨 처음 한 번만 센다")은 마지막 걸음 말풍선에 남긴다. */
+  const steps = [{ k: "ask" }, { k: "plan" }, { k: "fill" }, { k: "order" }];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
   const sayRef = useKeepInView(ts.safe);
@@ -572,12 +578,7 @@ export function IsAtTableSim({ E }) {
   const X = 4;                                   // 평면 한 장: x = 5번 칸이 M 인 경우
   const MOVES = [[4, 2, 1], [4, 1, 2]];          // (5,3,2) 와 (5,2,3) — 순서만 다른 짝
   const upTo = s.k === "ask" || s.k === "plan" ? 0 : s.k === "fill" ? 1 : 2;
-  /* 채점 예시 보드 — 1번 칸만 M, 나머지는 O (표가 x=0 평면 한 장이라 딱 맞는다) */
-  const SCORE_BOARD = "OOOOM";                       // 5번 칸만 M — 이 평면과 딱 맞는다
-  const oCells = [0, 1, 2, 3];                       // 0-based: 1·2·3·4번 칸이 O
-  const oPairs = [];
-  for (let i = 0; i < oCells.length; i++)
-    for (let j = i + 1; j < oCells.length; j++) oPairs.push([oCells[i], oCells[j]]);
+  /* 채점 예시(SCORE_BOARD·oCells·oPairs)는 2026-09-13 에 8쪽으로 넘기며 지웠다. */
 
   /* isAt[X][a][b] — a < b 로 모아 센다 */
   const grid = Array.from({ length: N }, () => Array(N).fill(0));
@@ -597,29 +598,13 @@ export function IsAtTableSim({ E }) {
     : s.k === "fill" ? t(E,
       <>Move <b>(5, 3, 2)</b> arrives: x = 5 is the M, the O cells are 3 and 2.<br />Store them <b>smaller first</b> → the (2, 3) square gets <b>1</b>.</>,
       <>무브 <b>(5, 3, 2)</b> 가 왔어요. x = 5 가 M 자리, O 자리는 3 과 2 예요.<br /><b>작은 쪽을 앞</b>으로 넣으면 → (2, 3) 칸이 <b>1</b> 이 돼요.</>)
-    : s.k === "order" ? t(E,
-      <>Now <b>(5, 2, 3)</b> arrives — same two O cells, swapped.<br />y and z only need to be O, so order does not matter.<br />Smaller first again → it lands on (2, 3) once more: <b>2</b>.</>,
-      <>이번엔 <b>(5, 2, 3)</b> 가 왔어요 — O 자리 둘이 순서만 바뀐 거예요.<br />y·z 는 둘 다 O 이기만 하면 되니 순서는 상관없어요.<br />또 작은 쪽을 앞으로 넣으면 (2, 3) 칸에 <b>2</b> 가 돼요.</>)
-    : s.k === "use" ? t(E,
-      /* ⚠️ 2026-09-12 학생: "말풍선은 cell 1 is M 이라는데 글자는 OOOOM 이라 두 번 다시 읽었다."
-         이 표는 x = 5번 칸 평면이고 채점 보드도 OOOOM — **M 은 5번 칸**이다. 말풍선만 틀렸다.
-         부르는 것을 눈으로 볼 수 있어야 한다 (feedback_screen_must_not_rely_on_memory). */
-      <>Now score a board — say <b>{SCORE_BOARD}</b>: cell <b>5</b> is M, the rest are O.<br />Which squares do we read? Every <b>pair of O cells</b>.</>,
-      <>이제 보드를 채점해요 — <b>{SCORE_BOARD}</b> 예요. <b>5번</b>만 M, 나머지는 O.<br />어느 칸을 볼까요? <b>O 자리끼리 짝지은 칸</b>을 다 봐요.</>)
     : t(E,
-      /* ⚠️ 2026-09-12 학생이 **이 쪽에서 그만두고 싶었다**고 했다. 이유가 지루함만이 아니었다:
-         "표로 미리 세도, 결국 보드마다 표를 찾아보는 건 똑같잖아. 그럼 뭐가 다른 건지
-          이 쪽에서는 안 알려줬다." — 맞는 말이다. 전엔 "다시 훑지 않아요" 라고 **사실만**
-         말하고 **대신 몇 번을 보는지**는 안 적었다. 선생님이 내내 물으신 "왜 이게 되나" 가
-         바로 이 한 줄이다 (memory/feedback_why_and_how_over_slowness.md).
-         숫자 검산: N=20 에서 (M 자리, O 짝) 자리는 20 × C(19,2) = 3,420 가지.
-         한 자리가 실제로 쓰이려면 x=M · y=O · z=O 라 확률 1/8 → 보드당 평균 427.5 ≈ 428. */
-      <>Add those squares up — that is the board's score.<br />The 200,000 moves are counted <b>once, at the very start</b> —<br />not again for each of the <b>1,000,000</b> boards.</>,
-      <>그 칸들을 더하면 <b>이 보드의 점수</b>예요.<br />무브 20만 개는 <b>맨 처음 딱 한 번</b>만 세요 —<br />보드 <b>100만 개</b>마다 다시 훑지 않아요.</>);
+      /* 잘라낸 sum 걸음의 마무리를 여기로 옮겼다. 이 줄이 이 쪽이 버는 것이다 —
+         2026-09-12 학생: "표로 미리 세도 보드마다 찾아보는 건 똑같잖아. 뭐가 다른데?" */
+      <>Now <b>(5, 2, 3)</b> arrives — same two O cells, swapped.<br />y and z only need to be O, so order does not matter.<br />Smaller first again → it lands on (2, 3) once more: <b>2</b>.<br />That is the whole table: the <b>200,000</b> moves are counted <b>once, at the very start</b> — not again for each of the <b>1,000,000</b> boards.</>,
+      <>이번엔 <b>(5, 2, 3)</b> 가 왔어요 — O 자리 둘이 순서만 바뀐 거예요.<br />y·z 는 둘 다 O 이기만 하면 되니 순서는 상관없어요.<br />또 작은 쪽을 앞으로 넣으면 (2, 3) 칸에 <b>2</b> 가 돼요.<br />표는 이게 다예요. 무브 <b>20만 개</b>는 <b>맨 처음 딱 한 번</b>만 세요 — 보드 <b>100만 개</b>마다 다시 훑지 않아요.</>);
 
-  const justFilled =
-    s.k === "fill" ? [[1, 2], [3, 4]] : s.k === "order" ? [[1, 2]]
-    : s.k === "use" || s.k === "sum" ? oPairs : [];
+  const justFilled = s.k === "fill" ? [[1, 2], [3, 4]] : s.k === "order" ? [[1, 2]] : [];
   const isNew = (a, b) => justFilled.some(([p, q]) => p === a && q === b);
 
   const cell = (a, b) => {
@@ -643,7 +628,7 @@ export function IsAtTableSim({ E }) {
         title={t(E, "Count once, into a table", "한 번만 세서 표에 넣어두기")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <StepFade fast k={ts.safe}>
-        <div ref={sayRef}><Say tone={s.k === "ask" ? "stuck" : s.k === "use" ? "aha" : "go"}>{say}</Say></div>
+        <div ref={sayRef}><Say tone={s.k === "ask" ? "stuck" : s.k === "order" ? "aha" : "go"}>{say}</Say></div>
 
         {s.k !== "ask" && (
           <div style={{ maxWidth: 320, margin: "0 auto" }}>
@@ -682,39 +667,6 @@ export function IsAtTableSim({ E }) {
                        "how many times did move <b>(5, 2, 3)</b> appear?"</>,
                      <>그러니까 세로 <b>2</b>, 가로 <b>3</b> 칸은 이런 뜻이에요:<br />
                        "무브 <b>(5, 2, 3)</b> 이 몇 번 나왔나?"</>)}
-              </div>
-            )}
-            {(s.k === "use" || s.k === "sum") && (
-              <div style={{ maxWidth: 320, margin: "12px auto 0", padding: "9px 12px", borderRadius: 9,
-                background: "#f5f3ff", border: `1.5px solid ${A}`, textAlign: "center",
-                fontSize: 12, fontWeight: 700, color: "#5b21b6", lineHeight: 1.7, wordBreak: "keep-all" }}>
-                {s.k === "use" ? (
-                  <>
-                    {/* ⚠️ 2026-09-13 학생이 잡았다: 여기 "2, 3, 4, 5" 가 **손으로 박혀 있었다.**
-                           보드가 OOOOM(5번만 M)이라 O 는 1·2·3·4번인데, 바로 아래 짝 목록은
-                           (1,2)(1,3)… 로 맞게 나와서 **문장과 목록이 서로 안 맞았다.**
-                           학생: "5번이 M이라며 왜 O자리에 5번이 또 들어가지? 하고 멈췄다."
-                           옛 보드(1번만 M)일 때 쓴 문장이 그대로 남은 것이다.
-                           → **oCells 에서 뽑는다.** 보드를 또 바꿔도 다시는 안 어긋난다. */}
-                    {t(E, <>O cells are <b>{oCells.map((c) => c + 1).join(", ")}</b> → pairs:</>,
-                         <>O 자리는 <b>{oCells.map((c) => c + 1).join(", ")}</b> 번 → 짝은:</>)}
-                    <br />
-                    <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 12 }}>
-                      {oPairs.map(([a2, b2]) => `(${a2 + 1},${b2 + 1})`).join("  ")}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 12 }}>
-                      {oPairs.map(([a2, b2]) => grid[a2][b2]).join(" + ")}
-                      {" = "}
-                      <span style={{ fontSize: 15 }}>{oPairs.reduce((p, [a2, b2]) => p + grid[a2][b2], 0)}</span>
-                    </span>
-                    <br />
-                    {t(E, <><b>{SCORE_BOARD}</b> scores <b>{oPairs.reduce((p, [a2, b2]) => p + grid[a2][b2], 0)}</b>.</>,
-                         <><b>{SCORE_BOARD}</b> 의 점수는 <b>{oPairs.reduce((p, [a2, b2]) => p + grid[a2][b2], 0)}</b> 점이에요.</>)}
-                  </>
-                )}
               </div>
             )}
           </div>
