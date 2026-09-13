@@ -199,8 +199,8 @@ export function getMooHuntFastWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FAST_CPP, vars: _FAST_VARS, beats: [
       { hi: [0, 6],   bubble: t(E, "Headers we need, then read N (cells) and K (moves).", "필요한 헤더를 적고, N (칸 수) 와 K (무브 수) 를 읽어요.") },
-      { hi: [8, 18],  bubble: t(E, "Count the moves once, into a table.\ncount[x][a][b] = how many moves need x to be M and a, b to be O.\nSince y and z both just need to be O, min/max puts (1,2,3) and (1,3,2) in the same slot.",
-                                   "무브를 표에 한 번만 세어 넣어요.\ncount[x][a][b] = x 가 M, a 와 b 가 O 여야 득점하는 무브 개수.\ny 와 z 는 둘 다 O 이기만 하면 되니, min/max 로 (1,2,3) 과 (1,3,2) 를 같은 칸에 넣어요.") },
+      { hi: [8, 18],  bubble: t(E, "This is the table you built a page ago.\ncount[x][a][b] = how many moves need x to be M and a, b to be O.\nSince y and z both just need to be O, min/max puts (1,2,3) and (1,3,2) in the same slot.",
+                                   "앞 쪽에서 만든 그 표예요.\n무브를 여기에 한 번만 세어 넣어요.\ncount[x][a][b] = x 가 M, a 와 b 가 O 여야 득점하는 무브 개수.\ny 와 z 는 둘 다 O 이기만 하면 되니, min/max 로 (1,2,3) 과 (1,3,2) 를 같은 칸에 넣어요.") },
       { hi: [20, 25], bubble: t(E, "The board is just a list: 1 means M, 0 means O. Start from all O.", "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O. 전부 O 에서 시작해요.") },
       { hi: [26, 35], bubble: t(E, "For this board, split the cells: which are M, which are O.", "이 보드에서 칸을 갈라요 — 어디가 M 이고 어디가 O 인지.") },
       { hi: [36, 45], bubble: t(E, "Here is the whole point.\nOnly 'one M cell + two O cells' can ever score, so look at nothing else.\nj starts after i, so Os[i] < Os[j] always — it matches how we stored the keys.",
@@ -213,8 +213,8 @@ export function getMooHuntFastWalk(E, lang = "py") {
   }
   return { code: FAST_PY, vars: _FAST_VARS, beats: [
     { hi: [0, 3],   bubble: t(E, "Read N (cells) and K (moves).", "N (칸 수) 와 K (무브 수) 읽기.") },
-    { hi: [5, 14],  bubble: t(E, "Count the moves once, into a dictionary.\nThe key is (M cell, smaller O cell, larger O cell).\nSince y and z both just need to be O, min/max puts (1,2,3) and (1,3,2) under the same key.",
-                                 "무브를 딕셔너리에 한 번만 세어 넣어요.\n열쇠는 (M 자리, O 자리 작은 쪽, O 자리 큰 쪽) 이에요.\ny 와 z 는 둘 다 O 이기만 하면 되니, min/max 로 (1,2,3) 과 (1,3,2) 를 같은 열쇠에 넣어요.") },
+    { hi: [5, 14],  bubble: t(E, "This is the table you built a page ago — in code it is called count.\nCount the moves into it once.\nThe key is (M cell, smaller O cell, larger O cell).\nSince y and z both just need to be O, min/max puts (1,2,3) and (1,3,2) under the same key.",
+                                 "앞 쪽에서 만든 그 표예요 — 코드에서는 count 라고 불러요.\n무브를 여기에 한 번만 세어 넣어요.\n열쇠는 (M 자리, O 자리 작은 쪽, O 자리 큰 쪽) 이에요.\ny 와 z 는 둘 다 O 이기만 하면 되니, min/max 로 (1,2,3) 과 (1,3,2) 를 같은 열쇠에 넣어요.") },
     { hi: [16, 21], bubble: t(E, "The board is just a list: 1 means M, 0 means O.\nStart from all O, and we will walk every board from here.\nScores are never negative, so 0 is a safe starting best.",
                                  "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O.\n전부 O 에서 시작해서 모든 보드를 훑을 거예요.\n점수는 0 보다 작을 수 없으니 best 를 0 에서 시작해도 돼요.") },
     { hi: [22, 30], bubble: t(E, "For this board, split the cells: which are M, which are O.",

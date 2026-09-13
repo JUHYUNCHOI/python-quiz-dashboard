@@ -688,8 +688,14 @@ export function IsAtTableSim({ E }) {
                 fontSize: 12, fontWeight: 700, color: "#5b21b6", lineHeight: 1.7, wordBreak: "keep-all" }}>
                 {s.k === "use" ? (
                   <>
-                    {t(E, <>O cells are <b>2, 3, 4, 5</b> → pairs:</>,
-                         <>O 자리는 <b>2, 3, 4, 5</b> 번 → 짝은:</>)}
+                    {/* ⚠️ 2026-09-13 학생이 잡았다: 여기 "2, 3, 4, 5" 가 **손으로 박혀 있었다.**
+                           보드가 OOOOM(5번만 M)이라 O 는 1·2·3·4번인데, 바로 아래 짝 목록은
+                           (1,2)(1,3)… 로 맞게 나와서 **문장과 목록이 서로 안 맞았다.**
+                           학생: "5번이 M이라며 왜 O자리에 5번이 또 들어가지? 하고 멈췄다."
+                           옛 보드(1번만 M)일 때 쓴 문장이 그대로 남은 것이다.
+                           → **oCells 에서 뽑는다.** 보드를 또 바꿔도 다시는 안 어긋난다. */}
+                    {t(E, <>O cells are <b>{oCells.map((c) => c + 1).join(", ")}</b> → pairs:</>,
+                         <>O 자리는 <b>{oCells.map((c) => c + 1).join(", ")}</b> 번 → 짝은:</>)}
                     <br />
                     <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 12 }}>
                       {oPairs.map(([a2, b2]) => `(${a2 + 1},${b2 + 1})`).join("  ")}
@@ -764,8 +770,8 @@ export function FasterIdeaSim({ E }) {
       <>A move is <b>(x, y, z)</b> — x must read M, y and z must read O.<br />So y and z <b>just both need to be O</b>: <b>(1,2,3) and (1,3,2) score the same</b>.<br />Count them together.</>,
       <>무브는 <b>(x, y, z)</b> 예요 — x 자리가 M, y·z 자리가 O 여야 득점해요.<br />그러니 y 와 z 는 <b>둘 다 O 이기만</b> 하면 돼요.<br /><b>(1,2,3) 과 (1,3,2) 는 채점에선 같은 것</b>이에요. 묶어서 세요.</>)
     : s.k === "only" ? t(E,
-      <>So don't look at every move. Look only at what <b>can</b> score:<br />a scoring <b>move</b> points at one <b>M</b> cell + two <b>O</b> cells.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(That is about moves, not boards — a board may hold any number of M's.)</span><br />Here that is <b>{mPos.length}</b> M cells × <b>{pairs}</b> O-pairs (pick 2 of the {oPos.length} O cells) = <b>{canScore}</b>, not {allMoves}.</>,
-      <>그러니 무브를 다 보지 말고, <b>득점할 수 있는 것만</b> 봐요.<br />득점하는 <b>무브</b>는 <b>M</b> 자리 하나 + <b>O</b> 자리 둘을 가리켜요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(보드 얘기가 아니에요 — 보드엔 M 이 몇 개든 있어도 돼요.)</span><br />여기선 M 자리 <b>{mPos.length}개</b> × O 짝 <b>{pairs}가지</b>(O 칸 {oPos.length}개 중 2개 고르기) = <b>{canScore}개</b>예요. {allMoves}개가 아니라요.</>)
+      <>So don't look at every move. Look only at what <b>can</b> score:<br />a scoring <b>move</b> points at one <b>M</b> cell + two <b>O</b> cells.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(That is about moves, not boards — a board may hold any number of M's.)</span><br />Here that is <b>{mPos.length}</b> M cells × <b>{pairs}</b> O-pairs = <b>{canScore}</b>, not {allMoves}.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(the O cells are {oPos.map((i) => i + 1).join(", ")}, so the pairs are {oPos.flatMap((a, i) => oPos.slice(i + 1).map((b2) => `(${a + 1},${b2 + 1})`)).join(" ")})</span></>,
+      <>그러니 무브를 다 보지 말고, <b>득점할 수 있는 것만</b> 봐요.<br />득점하는 <b>무브</b>는 <b>M</b> 자리 하나 + <b>O</b> 자리 둘을 가리켜요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(보드 얘기가 아니에요 — 보드엔 M 이 몇 개든 있어도 돼요.)</span><br />여기선 M 자리 <b>{mPos.length}개</b> × O 짝 <b>{pairs}가지</b> = <b>{canScore}개</b>예요. {allMoves}개가 아니라요.<br /><span style={{ fontSize: 11.5, fontWeight: 700, opacity: .85 }}>(O 칸이 {oPos.map((i) => i + 1).join("·")}번이니까 짝은 {oPos.flatMap((a, i) => oPos.slice(i + 1).map((b2) => `(${a + 1},${b2 + 1})`)).join(" ")} 이에요.)</span></>)
     : t(E,
       /* ⚠️ 2026-09-12: 기준을 6,840 에서 **20만**으로 바꿨다.
          앞 쪽(첫 코드)이 방금 "보드마다 무브 20만 개를 훑는다" 를 코드로 보여준다.
@@ -774,8 +780,11 @@ export function FasterIdeaSim({ E }) {
          6,840(서로 다른 무브의 최대 가짓수)은 이 이야기에 필요 없다. */
       /* ⚠️ 2026-09-13 학생 B: "428 이 어디서 나왔는지 계산 과정이 없어서 짐작도 못 했다."
          → 방금 한 것과 **같은 셈**이라고 적는다. 보드마다 M 개수가 달라 평균이라는 것도. */
-      <>With <b>N</b> cells the same idea works. At <b>N = 20</b> we do the same count — <b>M cells × O-pairs</b> — but each board has a different number of M's, so it comes to about <b>{BIG_AVG}</b> on average.<br />Instead of walking all <b>200,000</b> moves per board. The answer is identical.</>,
-      <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>이면 방금과 똑같이 <b>M 자리 수 × O 짝 수</b>를 세는데, 보드마다 M 개수가 달라서 평균 <b>{BIG_AVG}가지</b>가 돼요.<br />보드마다 무브 20만 개를 훑는 대신에요. 답은 똑같고요.</>);
+      /* ⚠️ 2026-09-13 학생 셋 중 둘이 428 에서 "짐작도 못 하고 그냥 믿었다" 고 했다.
+         숫자를 손으로 확인할 수 있게 **예를 하나** 준다 — M 이 10개인 보드.
+         검산: O 가 10개면 짝은 10×9/2 = 45, M 10개 × 45 = 450. 보드마다 달라 평균은 427.5 ≈ 428. */
+      <>With <b>N</b> cells the same idea works. At <b>N = 20</b> we do the same count — <b>M cells × O-pairs</b>.<br />Say a board has 10 M's and 10 O's: that is <b>10 × 45 = 450</b>. Every board is different, so on average it is about <b>{BIG_AVG}</b>.<br />Instead of walking all <b>200,000</b> moves per board. The answer is identical.</>,
+      <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>이면 방금과 똑같이 <b>M 자리 수 × O 짝 수</b>를 세요.<br />M 이 10개, O 가 10개인 보드라면 <b>10 × 45 = 450가지</b>예요. 보드마다 다르니 평균을 내면 <b>{BIG_AVG}가지</b>고요.<br />보드마다 무브 20만 개를 훑는 대신에요. 답은 똑같고요.</>);
 
   const cellStyle = (c, dim) => ({
     width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
