@@ -219,4 +219,8 @@ export const CODE_COMMENT_EN: Record<string, string> = {
     "keep the moves in a list. cells count from 0 in code, so subtract 1",
   "이 보드를 채점해요 — 무브를 하나씩 다 봐요.":
     "score this board — walk the moves one by one",
+
+  // ── "2진수" 라는 말이 설명 없이 나온다고 학생이 잡았다 (2026-09-13)
+  "다음 보드로 넘어가요 — 1번 칸이 일의 자리, 거기에 1 을 더해요.":
+    "move to the next board — cell 1 is the ones place, add 1 there",
 };

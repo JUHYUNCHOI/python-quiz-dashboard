@@ -59,7 +59,7 @@ const BRUTE_PY = [
   "    elif score == best:",
   "        ways += 1",
   "",
-  "    # 다음 보드로 넘어가요 — 2진수에 1 을 더하는 것과 같아요.",
+  "    # 다음 보드로 넘어가요 — 1번 칸이 일의 자리, 거기에 1 을 더해요.",
   "    i = 0",
   "    while i < N and board[i] == 1:",
   "        board[i] = 0",
@@ -111,7 +111,7 @@ const BRUTE_CPP = [
   "            ways = ways + 1;",
   "        }",
   "",
-  "        // 다음 보드로 넘어가요 — 2진수에 1 을 더하는 것과 같아요.",
+  "        // 다음 보드로 넘어가요 — 1번 칸이 일의 자리, 거기에 1 을 더해요.",
   "        int i = 0;",
   "        while (i < N && board[i] == 1) {",
   "            board[i] = 0;",
@@ -149,8 +149,8 @@ export function getMooHuntBruteWalk(E, lang = "py") {
                                    "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O. 전부 O 에서 시작해요.\n점수는 0 보다 작을 수 없으니 best 를 0 에서 시작해도 돼요.") },
       { hi: [23, 30], bubble: t(E, "Score this board — the very thing you did by hand on MOOMM.\nA move scores when x reads M and y, z read O. Walk all K of them.",
                                    "이 보드를 채점해요 — 3쪽에서 MOOMM 을 손으로 센 것과 똑같아요.\nx 자리가 M, y·z 자리가 O 면 1점. 무브 K 개를 다 훑어요.") },
-      { hi: [32, 49], bubble: t(E, "Keep the best score and how many boards reach it.\nThen move to the next board — the way you just saw, adding 1.\nWhen every cell was M there is nothing left — stop.",
-                                   "최고 점수와, 그 점수에 이르는 보드 개수를 남겨요.\n그리고 다음 보드로 — 방금 본 그 방법, 1 을 더하는 거예요.\n전부 M 이었다면 더 갈 데가 없으니 멈춰요.") },
+      { hi: [32, 49], bubble: t(E, "Keep the best score and how many boards reach it.\nThen move to the next board — adding 1, the way you just saw.",
+                                   "최고 점수와, 그 점수에 이르는 보드 개수를 남겨요.\n그리고 다음 보드로 — 방금 본 그 방법, 1 을 더하는 거예요.") },
       { hi: [51, 53], bubble: t(E, "Print both — that is the answer.", "둘을 출력해요 — 그게 답이에요.") },
     ] };
   }
@@ -161,8 +161,8 @@ export function getMooHuntBruteWalk(E, lang = "py") {
                                  "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O. 전부 O 에서 시작해요.\n점수는 0 보다 작을 수 없으니 best 를 0 에서 시작해도 돼요.") },
     { hi: [17, 22], bubble: t(E, "Score this board — the very thing you did by hand on MOOMM.\nA move scores when x reads M and y, z read O. Walk all K of them.",
                                  "이 보드를 채점해요 — 3쪽에서 MOOMM 을 손으로 센 것과 똑같아요.\nx 자리가 M, y·z 자리가 O 면 1점. 무브 K 개를 다 훑어요.") },
-    { hi: [24, 37], bubble: t(E, "Keep the best score and how many boards reach it.\nThen move to the next board — the way you just saw, adding 1.\nWhen every cell was M there is nothing left — stop.",
-                                 "최고 점수와, 그 점수에 이르는 보드 개수를 남겨요.\n그리고 다음 보드로 — 방금 본 그 방법, 1 을 더하는 거예요.\n전부 M 이었다면 더 갈 데가 없으니 멈춰요.") },
+    { hi: [24, 37], bubble: t(E, "Keep the best score and how many boards reach it.\nThen move to the next board — adding 1, the way you just saw.",
+                                 "최고 점수와, 그 점수에 이르는 보드 개수를 남겨요.\n그리고 다음 보드로 — 방금 본 그 방법, 1 을 더하는 거예요.") },
     { hi: [39, 39], bubble: t(E, "Print both — that is the answer.", "둘을 출력해요 — 그게 답이에요.") },
   ] };
 }

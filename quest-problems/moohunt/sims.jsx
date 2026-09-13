@@ -287,8 +287,12 @@ export function EveryBoardSim({ E }) {
       <>Keep the board as a <b>list</b>: 1 means M, 0 means O.<br />Start from <b>all O</b> — that is the first board.</>,
       <>보드를 <b>리스트</b>로 들고 다녀요 — 1 이면 M, 0 이면 O.<br /><b>전부 O</b> 에서 시작해요. 그게 첫 번째 보드예요.</>)
     : s.k === "add" ? t(E,
-      <>Next board = <b>add 1</b>, the way you add 1 to a number.<br />From the front: every <b>M</b> turns back to <b>O</b>, until you meet an <b>O</b> — make that one <b>M</b>.</>,
-      <>다음 보드는 <b>1 을 더하는 것</b>과 같아요. 숫자에 1 더하듯이요.<br />앞에서부터 <b>M</b> 은 <b>O</b> 로 되돌리다가, <b>O</b> 를 만나면 그 자리를 <b>M</b> 으로 바꿔요.</>)
+      /* ⚠️ 2026-09-13 학생이 **여기서 멈추고 싶었다**고 했다:
+         "보통 숫자에 1 을 더할 땐 오른쪽(일의 자리)부터 하는데 여기는 왼쪽(앞)부터라니 왜 반대지?"
+         → 이유를 한 줄로 적는다. 1번 칸을 **일의 자리로 쓰기로 정한 것**뿐이다.
+         화면은 학생이 짐작하게 두면 안 된다. */
+      <>Next board = <b>add 1</b>, the way you add 1 to a number.<br /><b>Cell 1 is the ones place here</b> — that is why we start at the front, not the back.<br />From the front: every <b>M</b> turns back to <b>O</b>, until you meet an <b>O</b> — make that one <b>M</b>.</>,
+      <>다음 보드는 <b>1 을 더하는 것</b>과 같아요. 숫자에 1 더하듯이요.<br />여기서는 <b>1번 칸이 일의 자리</b>예요 — 그래서 뒤가 아니라 앞에서부터 해요.<br />앞에서부터 <b>M</b> 은 <b>O</b> 로 되돌리다가, <b>O</b> 를 만나면 그 자리를 <b>M</b> 으로 바꿔요.</>)
     : t(E,
       <>Keep adding 1 and you get <b>all {1 << N}</b> boards — none missed, none twice.<br />When every cell is M there is nothing left, so we stop.<br /><b>No bit operators needed.</b></>,
       <>계속 1 을 더하면 <b>{1 << N}개 전부</b>가 나와요. 빠지지도, 겹치지도 않아요.<br />전부 M 이 되면 더 갈 데가 없으니 멈춰요.<br /><b>비트 연산자는 필요 없어요.</b></>);

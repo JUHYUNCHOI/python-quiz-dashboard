@@ -102,7 +102,7 @@ export const FAST_PY = [
   "    elif score == best:",
   "        ways += 1",
   "",
-  "    # 다음 보드로 넘어가요 — 2진수에 1 을 더하는 것과 같아요.",
+  "    # 다음 보드로 넘어가요 — 1번 칸이 일의 자리, 거기에 1 을 더해요.",
   "    # 뒤에서부터 M(1) 이면 O(0) 로 되돌리고 한 칸 앞으로,",
   "    # O(0) 를 만나면 그 자리를 M(1) 로 바꾸고 멈춰요.",
   "    i = 0",
@@ -207,7 +207,7 @@ export function getMooHuntFastWalk(E, lang = "py") {
                                    "여기가 핵심이에요.\n득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐이니 그것만 봐요.\nj 를 i 다음부터 세니까 Os[i] < Os[j] 가 늘 성립해요 — 표에 넣은 규칙과 맞아요.") },
       { hi: [46, 52], bubble: t(E, "Best score, and how many boards reach it.", "최고 점수와, 그 점수에 이르는 보드 개수.") },
       { hi: [54, 64], bubble: t(E, "Move to the next board — this is just adding 1 in binary.\nFrom the front: turn every M back to O until you meet an O, then make that one an M.",
-                                   "다음 보드로 넘어가요 — 2진수에 1 을 더하는 것과 같아요.\n앞에서부터 M 이면 O 로 되돌리다가, O 를 만나면 그 자리를 M 으로 바꿔요.") },
+                                   "다음 보드로 넘어가요 — 1번 칸이 일의 자리, 거기에 1 을 더해요.\n앞에서부터 M 이면 O 로 되돌리다가, O 를 만나면 그 자리를 M 으로 바꿔요.") },
       { hi: [66, 68], bubble: t(E, "Print both — that is the answer.", "둘을 출력해요 — 그게 답이에요.") },
     ] };
   }
@@ -223,7 +223,7 @@ export function getMooHuntFastWalk(E, lang = "py") {
                                  "여기가 핵심이에요.\n득점할 수 있는 건 'M 자리 하나 + O 자리 둘' 뿐이니 그것만 봐요.\nj 를 i 다음부터 세니까 Os[i] < Os[j] 가 늘 성립해요 — 열쇠를 작은 쪽·큰 쪽으로 넣은 규칙과 맞아요.\n표에 없는 열쇠는 아무도 물어본 적이 없다는 뜻이라 0 이에요.") },
     { hi: [40, 44], bubble: t(E, "Best score, and how many boards reach it.", "최고 점수와, 그 점수에 이르는 보드 개수.") },
     { hi: [46, 55], bubble: t(E, "Move to the next board — this is just adding 1 in binary.\nFrom the front: turn every M back to O until you meet an O, then make that one an M.\nWhen every cell was M there is nothing left — stop.",
-                                 "다음 보드로 넘어가요 — 2진수에 1 을 더하는 것과 같아요.\n앞에서부터 M 이면 O 로 되돌리다가, O 를 만나면 그 자리를 M 으로 바꿔요.\n전부 M 이었다면 더 갈 데가 없으니 멈춰요.") },
+                                 "다음 보드로 넘어가요 — 1번 칸이 일의 자리, 거기에 1 을 더해요.\n앞에서부터 M 이면 O 로 되돌리다가, O 를 만나면 그 자리를 M 으로 바꿔요.\n전부 M 이었다면 더 갈 데가 없으니 멈춰요.") },
     { hi: [57, 57], bubble: t(E, "Print both — that is the answer.", "둘을 출력해요 — 그게 답이에요.") },
   ] };
 }
