@@ -372,8 +372,24 @@ export function WholeRunSim({ E }) {
         <><b>3.</b> Board <b>b = {s.b}</b> is <b>{board(s.b)}</b> — no M at all.<br />A move needs one M, so this board scores <b>0</b>.</>,
         <><b>3.</b> 보드 <b>b = {s.b}</b> 은 <b>{board(s.b)}</b> — M 이 하나도 없어요.<br />득점하려면 M 이 하나 있어야 하니 <b>0점</b>이에요.</>);
       if (s.p === "split") return t(E,
-        <><b>3.</b> Board <b>b = {s.b}</b> is <b>{board(s.b)}</b>.<br />{s.b} = {parts} → cells {mList} are M.<br />So: M cells <b>{mList}</b> · O cells <b>{oList}</b>.</>,
-        <><b>3.</b> 보드 <b>b = {s.b}</b> 는 <b>{board(s.b)}</b> 예요.<br />{s.b} = {parts} 이니까 {mList}번 칸이 M.<br />그래서 M 자리 <b>{mList}</b> · O 자리 <b>{oList}</b>.</>);
+        /* ⚠️ 2026-09-13 선생님: 이 화면을 보시고 **"갑자기 뭔말?"**
+           원인 둘. ① 내가 걸음을 쪼개면서 **"왜 갑자기 17 이냐" 를 말하던 줄을 잃어버렸다.**
+              앞 걸음이 b = 0 이었는데 다음이 b = 17 이면 어디서 온 수인지 알 길이 없다.
+              (쪼개기 전에는 "여기서부터는 건너뛰어요" 라는 줄이 있었다 — 내가 지웠다.)
+           ② 같은 말을 두 번 했다 — "1·5번 칸이 M" 과 "M 자리 1·5" 는 같은 말이다.
+           → 건너뛰는 이유를 **먼저** 말하고, 겹치는 줄은 합친다. */
+        <>{s.i === 1
+            ? <><b>3.</b> Keep making boards 0, 1, 2 … and at <b>b = {s.b}</b> the score first goes up. Jump there.</>
+            : s.i > 1
+              ? <><b>3.</b> The next board that ties it is <b>b = {s.b}</b>.</>
+              : <><b>3.</b> Take a board — <b>b = {s.b}</b>.</>}
+          <br />{s.b} = {parts} → cells <b>{mList}</b> are M, so the board is <b>{board(s.b)}</b>. The rest ({oList}) are O.</>,
+        <>{s.i === 1
+            ? <><b>3.</b> 보드를 0, 1, 2 … 계속 만들다가 <b>b = {s.b}</b> 에서 점수가 처음 올라요. 거기로 건너뛸게요.</>
+            : s.i > 1
+              ? <><b>3.</b> 그 다음으로 점수가 같은 보드는 <b>b = {s.b}</b> 예요.</>
+              : <><b>3.</b> 보드를 하나 봐요 — <b>b = {s.b}</b>.</>}
+          <br />{s.b} = {parts} 이니까 <b>{mList}</b>번 칸이 M, 그래서 보드는 <b>{board(s.b)}</b>. 나머지 {oList}번은 O 예요.</>);
       if (s.p === "pick") return t(E,
         <><b>4.</b> Now read the table — one square for each <b>(M cell, O pair)</b>.</>,
         <><b>4.</b> 이제 표에서 꺼내요 — <b>(M 자리, O 짝)</b> 마다 한 칸씩.</>);
