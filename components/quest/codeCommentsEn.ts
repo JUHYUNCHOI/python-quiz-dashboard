@@ -227,4 +227,8 @@ export const CODE_COMMENT_EN: Record<string, string> = {
   // ── "들고 다녀요" 는 지어낸 비유라고 학생이 잡았다 (2026-09-13)
   "보드는 리스트로 나타내요. 1 이면 M, 0 이면 O.":
     "the board is a list. 1 means M, 0 means O",
+
+  // ── 주석이 코드와 모순이었다: i = 0 부터 도는데 "뒤에서부터" 라고 적혀 있었다 (2026-09-13)
+  "1번 칸부터 M(1) 이면 O(0) 로 되돌리며 뒤로 가고,":
+    "starting at cell 1: while it is M(1), turn it back to O(0) and move on,",
 };
