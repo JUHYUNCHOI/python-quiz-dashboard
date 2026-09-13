@@ -361,41 +361,46 @@ export function WholeRunSim({ E }) {
       <><b>1.</b> Read the input — <b>{RAW.length} moves</b> on {N} cells.<br />This is the official sample. The answer should come out <b>{best} {ways}</b>.</>,
       <><b>1.</b> 입력을 읽어요 — 칸 {N}개에 <b>무브 {RAW.length}개</b>.<br />공식 샘플이에요. 끝까지 가면 답이 <b>{best} {ways}</b> 가 나와야 해요.</>)
     : s.k === "table" ? t(E,
-      <><b>2.</b> Count the moves into the table — <b>once</b>.<br />Only {filled.length} squares end up non-zero.</>,
-      <><b>2.</b> 무브를 표에 세어 넣어요 — <b>딱 한 번</b>.<br />0 이 아닌 칸은 {filled.length}개뿐이에요.</>)
+      /* ⚠️ 2026-09-13 전면 재검토. 선생님 "2,3이 oo인 경우 2점을 줘서 그런건가?
+         뭔말인지 하나도 모르겠어" · "제대로 시뮬 보라고 햇는데"
+         12걸음을 다 열어보니 구멍이 다섯이었다. 여기서 셋을 메운다:
+           ① 오른쪽 숫자에 **이름이 없다** — 점수로도, 칸 번호로도 읽힌다.
+           ② **왜 2 인지 안 잇는다** — 바로 앞 걸음의 입력에 "1 2 3" 이 두 번 있어서인데
+              그 연결이 화면에 없다.
+           ③ **표에 없는 조합은 0** 이라는 말이 없다 — 줄이 넷뿐이라 나머지가 뭔지 모른다. */
+      <><b>2.</b> Sort the moves by kind and count each — <b>once</b>.<br /><b>1 2 3</b> came twice, so that row is <b>2</b>.<br />Any combination not listed is <b>0</b> — nobody asked for it.</>,
+      <><b>2.</b> 무브를 종류별로 모아 세요 — <b>딱 한 번</b>.<br /><b>1 2 3</b> 이 두 번 왔으니 그 줄이 <b>2</b> 예요.<br />여기 없는 조합은 <b>0</b> 이에요 — 아무도 안 물어봤다는 뜻이에요.</>)
     : s.k === "board" ? (() => {
-      /* b 를 자리값으로 풀어 쓴다 — "17 = 1 + 16" (2026-09-13 학생 F 가 여기서 그만뒀다). */
-      const parts = (() => { const t2 = []; let v = s.b, k = 1; while (v) { if (v & 1) t2.push(k); v >>= 1; k *= 2; } return t2.join(" + "); })();
       const mList = cur.Ms.map((x) => x + 1).join("·");
       const oList = cur.Os.map((x) => x + 1).join("·");
       if (s.p === "none") return t(E,
-        <><b>3.</b> Board <b>b = {s.b}</b> is <b>{board(s.b)}</b> — no M at all.<br />A move needs one M, so this board scores <b>0</b>.</>,
-        <><b>3.</b> 보드 <b>b = {s.b}</b> 은 <b>{board(s.b)}</b> — M 이 하나도 없어요.<br />득점하려면 M 이 하나 있어야 하니 <b>0점</b>이에요.</>);
+        <><b>3.</b> Start from the first board — <b>{board(s.b)}</b>, all O.<br />No M at all, and a move needs one, so this board scores <b>0</b>.</>,
+        <><b>3.</b> 첫 보드부터 봐요 — <b>{board(s.b)}</b>, 전부 O 예요.<br />M 이 하나도 없는데 득점하려면 M 이 있어야 하니 <b>0점</b>이에요.</>);
       if (s.p === "split") return t(E,
-        /* ⚠️ 2026-09-13 선생님: 이 화면을 보시고 **"갑자기 뭔말?"**
-           원인 둘. ① 내가 걸음을 쪼개면서 **"왜 갑자기 17 이냐" 를 말하던 줄을 잃어버렸다.**
-              앞 걸음이 b = 0 이었는데 다음이 b = 17 이면 어디서 온 수인지 알 길이 없다.
-              (쪼개기 전에는 "여기서부터는 건너뛰어요" 라는 줄이 있었다 — 내가 지웠다.)
-           ② 같은 말을 두 번 했다 — "1·5번 칸이 M" 과 "M 자리 1·5" 는 같은 말이다.
-           → 건너뛰는 이유를 **먼저** 말하고, 겹치는 줄은 합친다. */
+        /* ⚠️ 2026-09-13 선생님: **"17이 뭔데?"**
+           b = 17 은 **우리 코드에 없는 수**다. 비트를 걷어낸 뒤 최종 코드는 보드를 리스트로
+           들고 1 을 더해 나갈 뿐 `b` 라는 변수가 없다. 옛 비트마스크 시절의 잔재가 화면에만
+           남아 있었다. 학생 F 도 여기서 그만뒀고, 나는 "17 = 1 + 16" 이라는 **설명을 덧붙여**
+           고치려 했다 — 없는 수에 설명을 붙인 것이라 더 헷갈리게 만들었다.
+           → **b 를 화면에서 뺀다.** 몇 번째인지는 알 필요가 없다. 필요한 건 "순서대로 만들다
+             보면 이 보드가 나온다" 뿐이다. */
         <>{s.i === 1
-            ? <><b>3.</b> Keep making boards 0, 1, 2 … and at <b>b = {s.b}</b> the score first goes up. Jump there.</>
-            : s.i > 1
-              ? <><b>3.</b> The next board that ties it is <b>b = {s.b}</b>.</>
-              : <><b>3.</b> Take a board — <b>b = {s.b}</b>.</>}
-          <br />{s.b} = {parts} → cells <b>{mList}</b> are M, so the board is <b>{board(s.b)}</b>. The rest ({oList}) are O.</>,
+            ? <><b>3.</b> Keep making boards in order, and this one comes up — <b>{board(s.b)}</b>. Here the score first goes up.</>
+            : <><b>3.</b> Later, one more board ties it — <b>{board(s.b)}</b>.</>}
+          <br />M cells <b>{mList}</b> · O cells <b>{oList}</b>.</>,
         <>{s.i === 1
-            ? <><b>3.</b> 보드를 0, 1, 2 … 계속 만들다가 <b>b = {s.b}</b> 에서 점수가 처음 올라요. 거기로 건너뛸게요.</>
-            : s.i > 1
-              ? <><b>3.</b> 그 다음으로 점수가 같은 보드는 <b>b = {s.b}</b> 예요.</>
-              : <><b>3.</b> 보드를 하나 봐요 — <b>b = {s.b}</b>.</>}
-          <br />{s.b} = {parts} 이니까 <b>{mList}</b>번 칸이 M, 그래서 보드는 <b>{board(s.b)}</b>. 나머지 {oList}번은 O 예요.</>);
+            ? <><b>3.</b> 보드를 순서대로 만들다 보면 이 보드가 나와요 — <b>{board(s.b)}</b>. 여기서 점수가 처음 올라요.</>
+            : <><b>3.</b> 더 가다 보면 점수가 같은 보드가 하나 더 나와요 — <b>{board(s.b)}</b>.</>}
+          <br />M 자리 <b>{mList}</b> · O 자리 <b>{oList}</b>.</>);
       if (s.p === "pick") return t(E,
-        <><b>4.</b> Now read the table — one square for each <b>(M cell, O pair)</b>.</>,
-        <><b>4.</b> 이제 표에서 꺼내요 — <b>(M 자리, O 짝)</b> 마다 한 칸씩.</>);
+        /* ⚠️ 구멍 ④: **왜 어떤 줄은 흐린지** 화면이 말하지 않았다.
+           x 가 이 보드의 M 자리여야 하고, O 짝 둘 다 이 보드의 O 자리여야 한다. */
+        <><b>4.</b> Which rows can this board use?<br />x must be one of our M cells (<b>{mList}</b>), and both O cells must be ours (<b>{oList}</b>).<br />The grey rows fail one of those.</>,
+        <><b>4.</b> 이 보드가 쓸 수 있는 줄은 어느 것일까요?<br />x 가 우리 M 자리(<b>{mList}</b>)여야 하고, O 짝 둘도 우리 O 자리(<b>{oList}</b>)여야 해요.<br />흐린 줄은 둘 중 하나가 안 맞아요.</>);
       if (s.p === "score") return t(E,
-        <><b>5.</b> Add them up — this board scores <b>{cur.sc}</b>.</>,
-        <><b>5.</b> 더하면 — 이 보드는 <b>{cur.sc}점</b>이에요.</>);
+        /* ⚠️ 구멍 ⑤: **개수를 더한 게 왜 점수인지** 없었다. 무브 하나가 1점이라서다. */
+        <><b>5.</b> Each of those moves scores 1 point, so add the counts up.<br />This board scores <b>{cur.sc}</b>.</>,
+        <><b>5.</b> 그 무브들은 하나에 1점씩이니, 개수를 더하면 돼요.<br />이 보드는 <b>{cur.sc}점</b>이에요.</>);
       const prev = WALK.slice(0, s.i);
       let pb = 0, pw = 0;
       prev.forEach((b2) => { const sc = scoreOf(b2).sc; if (sc > pb) { pb = sc; pw = 1; } else if (sc === pb) pw++; });
@@ -459,9 +464,10 @@ export function WholeRunSim({ E }) {
               <div style={{ fontSize: 11, fontWeight: 800, color: "#94a3b8", textAlign: "center",
                 marginBottom: 2, wordBreak: "keep-all" }}>
                 {s.k === "table"
-                  ? t(E, "the table we just built", "방금 만든 표")
-                  : t(E, "the same table — green rows are the ones this board reads",
-                       "아까 그 표 — 초록이 이 보드가 꺼내 쓰는 칸이에요")}
+                  ? t(E, "the table — right side = how many such moves came in",
+                       "표 — 오른쪽 수 = 그런 무브가 몇 개 왔나")
+                  : t(E, "the same table — green rows are the ones this board can use",
+                       "아까 그 표 — 초록이 이 보드가 쓸 수 있는 줄이에요")}
               </div>
               {filled.map(([x, a, b, v]) => {
                 const on = s.k === "table" || used(x, a, b);
@@ -483,8 +489,14 @@ export function WholeRunSim({ E }) {
               {s.k === "board" && s.p === "score" && (
                 <div style={{ fontSize: 11.5, fontWeight: 800, color: "#047857", textAlign: "center",
                   marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>
+                  {/* ⚠️ 이 화면 안에서 2 가 여러 뜻으로 나온다(표의 무브 개수 · 여기 더하는 수 ·
+                         마지막 걸음의 "그 점수인 보드 수"). 무엇을 더하는지 이름을 붙인다.
+                         pedagogy 지적 (feedback_same_number_two_meanings.md). */}
                   {filled.filter(([x, a, b]) => used(x, a, b)).map(([, , , v]) => v).join(" + ") || "0"}
                   {" = "}{cur.sc}
+                  <div style={{ fontSize: 10.5, fontWeight: 700, color: "#94a3b8", marginTop: 2 }}>
+                    {t(E, "(moves, and each move is 1 point)", "(무브 개수예요 — 무브 하나가 1점)")}
+                  </div>
                 </div>
               )}
             </div>
