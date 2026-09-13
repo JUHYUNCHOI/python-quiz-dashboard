@@ -590,8 +590,10 @@ export function IsAtTableSim({ E }) {
       <>We know only <b>one M + two O</b> can score.<br />But must we scan all <b>200,000</b> moves for every board?</>,
       <>득점하는 건 <b>M 자리 하나 + O 자리 둘</b> 뿐인 건 알았어요.<br />그런데 보드마다 무브 <b>20만 개</b>를 매번 다 훑어야 할까요?</>)
     : s.k === "plan" ? t(E,
-      <>No — count the moves <b>once, up front</b>, into a table.<br />One square = <b>how many times that move appeared</b>.<br />One sheet per M cell; this one is for <b>x = cell 5</b>.</>,
-      <>아니에요. 무브를 <b>미리 한 번만</b> 세서 표에 넣어두면 돼요.<br />표의 <b>한 칸 = 그 무브가 몇 번 나왔나</b> 예요.<br />M 자리마다 표 한 장씩 — 이건 <b>x = 5번 칸</b> 표예요.</>)
+      /* ⚠️ 2026-09-13 학생 E: "'sheet' 를 왜 시트라고 부르는지 설명 없이 쓴다."
+         정의 안 한 말은 안 쓴다 (memory/feedback_no_invented_terms.md). 그냥 "표" 다. */
+      <>No — count the moves <b>once, up front</b>, into a table.<br />One square = <b>how many times that move appeared</b>.<br />One table per M cell; this one is for <b>x = cell 5</b>.</>,
+      <>아니에요. 무브를 <b>미리 한 번만</b> 세서 표에 넣어두면 돼요.<br />표의 <b>한 칸 = 그 무브가 몇 번 나왔나</b> 예요.<br />M 자리마다 표 하나씩 — 이건 <b>x = 5번 칸</b> 표예요.</>)
     : s.k === "fill" ? t(E,
       <>Move <b>(5, 3, 2)</b> arrives: x = 5 is the M, the O cells are 3 and 2.<br />Store them <b>smaller first</b> → the (2, 3) square gets <b>1</b>.</>,
       <>무브 <b>(5, 3, 2)</b> 가 왔어요. x = 5 가 M 자리, O 자리는 3 과 2 예요.<br /><b>작은 쪽을 앞</b>으로 넣으면 → (2, 3) 칸이 <b>1</b> 이 돼요.</>)
@@ -647,7 +649,7 @@ export function IsAtTableSim({ E }) {
           <div style={{ maxWidth: 320, margin: "0 auto" }}>
             <div style={{ fontSize: 12, fontWeight: 800, color: "#7c3aed", textAlign: "center",
               marginBottom: 4, wordBreak: "keep-all" }}>
-              {t(E, "sheet for x = cell 5 (the M)", "x = 5번 칸 (M 자리) 의 표")}
+              {t(E, "table for x = cell 5 (the M)", "x = 5번 칸 (M 자리) 의 표")}
             </div>
             {/* ⚠️ 축 설명이 표 **아래** 작은 회색 글씨였다. 선생님: "가로세로가 뭘 얘기하는 표야?"
                 읽기 전에 보이게 위로 올리고, y·z 라는 이름을 같이 준다. */}
