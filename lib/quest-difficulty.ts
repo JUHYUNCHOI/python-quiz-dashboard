@@ -18,9 +18,19 @@ export function questDifficulty(id: string, sub?: string): Difficulty | null {
   // 3) sub 라벨에서 유추
   if (sub) {
     if (/warm[-\s]?up/i.test(sub)) return 1;
-    // USACO 는 전부 Bronze → 문제번호로: #1 쉬움 … #3 어려움
-    const b = sub.match(/Bronze\s*#\s*(\d)/i);
-    if (b) return Math.min(4, Number(b[1]) + 1) as Difficulty;   // #1→2, #2→3, #3→4
+    /* USACO 는 전부 Bronze → **전부 3.**
+       ⚠️ 2026-09-13 이전에는 문제 번호로 유추했다 — `#1→2 · #2→3 · #3→4`.
+          선생님 "이 문제가 진짜 레벨3인가?" 로 열어보니 **그 규칙이 틀렸다.**
+          기획이 **사람이 매긴 42개와 대조**해 확인한 것:
+            · `#1 → 2` 예측인데 수기값 셋(rounding·astral·leaders)은 **전부 3~4**
+            · `#3 → 4` 예측인데 수기값 일곱 중 **여섯이 3** (moo 만 4)
+            · `#2 → 3` 만 그럭저럭 맞았다 (일곱 중 여섯)
+          **USACO 문제 번호는 그 대회 안 배치 순서일 뿐** 우리 학생 난이도와 상관이 거의 없고,
+          `#1`·`#3` 에서는 오히려 **역상관**이었다. 그래서 규칙을 버리고 **최빈값 3** 으로 고정한다 —
+          "덜 틀린" 쪽이다. 선생님 지시(2026-09-13).
+       ⚠️ 이건 **모르겠다는 뜻의 3** 이다. 실제로 재본 quest 는 `quest-meta.ts` 에
+          `difficulty` 를 **명시**해라 — 명시값이 이 유추보다 우선한다. */
+    if (/Bronze/i.test(sub)) return 3;
     // MCO(올림피아드) P1..P5 — Bronze 보다 어려움
     const p = sub.match(/\bP(\d)\b/);
     if (p) { const n = Number(p[1]); return (n <= 2 ? 3 : n === 3 ? 4 : 5) as Difficulty; }
