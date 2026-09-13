@@ -281,18 +281,28 @@ export function EveryBoardSim({ E }) {
 
   const say =
     s.k === "why" ? t(E,
-      <>We must try <b>every</b> board — miss one and the answer can be wrong.<br />With {N} cells that is <b>{1 << N}</b> boards. How do we walk them all, in order?</>,
-      <>보드를 <b>하나도 빠짐없이</b> 해봐야 해요 — 하나만 빠져도 답이 틀릴 수 있어요.<br />칸이 {N}개면 <b>{1 << N}</b>개예요. 어떻게 하나씩, 빠짐없이 훑을까요?</>)
+      /* ⚠️ 2026-09-13 학생: "3칸 → 8개 라고만 하고 2×2×2=8 을 안 보여줘서,
+         왜 20칸이면 2 를 20번 곱하는지 스스로 이어붙이지 못했다." 곱셈을 화면에 적는다. */
+      <>We must try <b>every</b> board — miss one and the answer can be wrong.<br />Each cell is M or O, so {N} cells give <b>{Array(N).fill(2).join(" × ")} = {1 << N}</b> boards.<br />How do we walk them all, in order?</>,
+      <>보드를 <b>하나도 빠짐없이</b> 해봐야 해요 — 하나만 빠져도 답이 틀릴 수 있어요.<br />칸마다 M 아니면 O 니까, {N}칸이면 <b>{Array(N).fill(2).join(" × ")} = {1 << N}</b>개예요.<br />어떻게 하나씩, 빠짐없이 훑을까요?</>)
     : s.k === "first" ? t(E,
-      <>Keep the board as a <b>list</b>: 1 means M, 0 means O.<br />Start from <b>all O</b> — that is the first board.</>,
-      <>보드를 <b>리스트</b>로 들고 다녀요 — 1 이면 M, 0 이면 O.<br /><b>전부 O</b> 에서 시작해요. 그게 첫 번째 보드예요.</>)
+      /* ⚠️ 2026-09-13 학생: "'들고 다녀요' 가 무슨 뜻인지 모르겠다. 지어낸 비유 같다."
+         비유를 지우면 더 쉬워지면 지운다 (memory/feedback_no_invented_terms.md). */
+      <>The board is just a <b>list</b>: 1 means M, 0 means O.<br />Start from <b>all O</b> — that is the first board.</>,
+      <>보드는 <b>리스트</b>로 나타내요 — 1 이면 M, 0 이면 O.<br /><b>전부 O</b> 에서 시작해요. 그게 첫 번째 보드예요.</>)
     : s.k === "add" ? t(E,
       /* ⚠️ 2026-09-13 학생이 **여기서 멈추고 싶었다**고 했다:
          "보통 숫자에 1 을 더할 땐 오른쪽(일의 자리)부터 하는데 여기는 왼쪽(앞)부터라니 왜 반대지?"
          → 이유를 한 줄로 적는다. 1번 칸을 **일의 자리로 쓰기로 정한 것**뿐이다.
          화면은 학생이 짐작하게 두면 안 된다. */
-      <>Next board = <b>add 1</b>, the way you add 1 to a number.<br /><b>Cell 1 is the ones place here</b> — that is why we start at the front, not the back.<br />From the front: every <b>M</b> turns back to <b>O</b>, until you meet an <b>O</b> — make that one <b>M</b>.</>,
-      <>다음 보드는 <b>1 을 더하는 것</b>과 같아요. 숫자에 1 더하듯이요.<br />여기서는 <b>1번 칸이 일의 자리</b>예요 — 그래서 뒤가 아니라 앞에서부터 해요.<br />앞에서부터 <b>M</b> 은 <b>O</b> 로 되돌리다가, <b>O</b> 를 만나면 그 자리를 <b>M</b> 으로 바꿔요.</>)
+      /* ⚠️ 2026-09-13, **두 번째 학생이 같은 자리에서 또 걸렸다.**
+         첫 학생: "왜 앞에서부터?" → 나는 "1번 칸이 일의 자리예요" 라고 적었다.
+         둘째 학생: "**왜 1번 칸이 일의 자리인지는 설명이 없다.** 내가 알던 규칙을
+                     뒤집어놓고 왜 뒤집었는지는 안 알려준 거다."
+         맞는 말이다. 진짜 답은 **어느 쪽이든 상관없다** 는 것이다 —
+         빠짐없이 한 번씩만 나오면 되니까. 그걸 적는다. 규칙을 정당화하려 들지 말고. */
+      <>Next board = <b>add 1</b>, the way you add 1 to a number.<br />Either end can be the ones place — all that matters is that every board comes up <b>exactly once</b>. We picked <b>cell 1</b>, so we start at the front.<br />From the front: every <b>M</b> turns back to <b>O</b>, until you meet an <b>O</b> — make that one <b>M</b>.</>,
+      <>다음 보드는 <b>1 을 더하는 것</b>과 같아요. 숫자에 1 더하듯이요.<br />어느 쪽을 일의 자리로 삼아도 괜찮아요 — <b>빠짐없이 한 번씩만</b> 나오면 되니까요. 우리는 <b>1번 칸</b>으로 정했고, 그래서 앞에서부터 해요.<br />앞에서부터 <b>M</b> 은 <b>O</b> 로 되돌리다가, <b>O</b> 를 만나면 그 자리를 <b>M</b> 으로 바꿔요.</>)
     : t(E,
       <>Keep adding 1 and you get <b>all {1 << N}</b> boards — none missed, none twice.<br />When every cell is M there is nothing left, so we stop.<br /><b>No bit operators needed.</b></>,
       <>계속 1 을 더하면 <b>{1 << N}개 전부</b>가 나와요. 빠지지도, 겹치지도 않아요.<br />전부 M 이 되면 더 갈 데가 없으니 멈춰요.<br /><b>비트 연산자는 필요 없어요.</b></>);

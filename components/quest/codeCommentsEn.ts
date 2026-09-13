@@ -223,4 +223,8 @@ export const CODE_COMMENT_EN: Record<string, string> = {
   // ── "2진수" 라는 말이 설명 없이 나온다고 학생이 잡았다 (2026-09-13)
   "다음 보드로 넘어가요 — 1번 칸이 일의 자리, 거기에 1 을 더해요.":
     "move to the next board — cell 1 is the ones place, add 1 there",
+
+  // ── "들고 다녀요" 는 지어낸 비유라고 학생이 잡았다 (2026-09-13)
+  "보드는 리스트로 나타내요. 1 이면 M, 0 이면 O.":
+    "the board is a list. 1 means M, 0 means O",
 };

@@ -40,7 +40,7 @@ const BRUTE_PY = [
   "    x, y, z = map(int, input().split())",
   "    moves.append((x - 1, y - 1, z - 1))",
   "",
-  "# 보드를 리스트로 들고 다녀요. 1 이면 M, 0 이면 O.",
+  "# 보드는 리스트로 나타내요. 1 이면 M, 0 이면 O.",
   "board = [0] * N",
   "",
   "best = 0",
@@ -89,7 +89,7 @@ const BRUTE_CPP = [
   "        mz[i] = mz[i] - 1;",
   "    }",
   "",
-  "    // 보드를 리스트로 들고 다녀요. 1 이면 M, 0 이면 O.",
+  "    // 보드는 리스트로 나타내요. 1 이면 M, 0 이면 O.",
   "    vector<int> board(N, 0);",
   "",
   "    int best = 0;",
@@ -136,7 +136,11 @@ const _BRUTE_VARS = [
 ];
 
 export function getMooHuntBruteWalk(E, lang = "py") {
-  /* ⚠️ 걸음은 **5개**다. pedagogy 판정(2026-09-13): "브루트는 15~20줄인데 최종 코드(68줄)와
+  /* ⚠️ 걸음은 **6개**다. 처음엔 5개였는데, **학생 둘이 독립적으로 같은 걸음**을 짚었다:
+     "최고 점수 갱신 + 다음 보드로 넘어가기, 두 가지가 말풍선 하나에 들어 있다.
+      처음 읽었을 때 '지금 뭘 설명하는 거지' 싶었다." → 둘로 갈랐다.
+     ⚠️ 누르는 횟수가 하나 는다. 그래도 가른다 — 겹치는 지적이 진짜 문제다.
+     (원래 메모) 걸음은 5개였다. pedagogy 판정(2026-09-13): "브루트는 15~20줄인데 최종 코드(68줄)와
      같은 7걸음을 쓰면 한 걸음당 두 줄꼴 — 너무 잘게 썬다." 입력 둘을 하나로, 갱신과
      다음 보드를 하나로 합쳤다.
      ⚠️ 채점 걸음은 **3쪽(MOOMM 손 채점)을 이름으로 부른다.** 화면은 앞 쪽 기억에 기대면
@@ -149,8 +153,10 @@ export function getMooHuntBruteWalk(E, lang = "py") {
                                    "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O. 전부 O 에서 시작해요.\n점수는 0 보다 작을 수 없으니 best 를 0 에서 시작해도 돼요.") },
       { hi: [23, 30], bubble: t(E, "Score this board — the very thing you did by hand on MOOMM.\nA move scores when x reads M and y, z read O. Walk all K of them.",
                                    "이 보드를 채점해요 — 3쪽에서 MOOMM 을 손으로 센 것과 똑같아요.\nx 자리가 M, y·z 자리가 O 면 1점. 무브 K 개를 다 훑어요.") },
-      { hi: [32, 49], bubble: t(E, "Keep the best score and how many boards reach it.\nThen move to the next board — adding 1, the way you just saw.",
-                                   "최고 점수와, 그 점수에 이르는 보드 개수를 남겨요.\n그리고 다음 보드로 — 방금 본 그 방법, 1 을 더하는 거예요.") },
+      { hi: [32, 37], bubble: t(E, "Keep the best score, and how many boards reach it.",
+                                   "최고 점수와, 그 점수에 이르는 보드 개수를 남겨요.") },
+      { hi: [39, 49], bubble: t(E, "Then move to the next board — adding 1, the way you just saw.",
+                                   "그리고 다음 보드로 — 앞 쪽에서 본 그 방법, 1 을 더하는 거예요.") },
       { hi: [51, 53], bubble: t(E, "Print both — that is the answer.", "둘을 출력해요 — 그게 답이에요.") },
     ] };
   }
@@ -161,8 +167,10 @@ export function getMooHuntBruteWalk(E, lang = "py") {
                                  "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O. 전부 O 에서 시작해요.\n점수는 0 보다 작을 수 없으니 best 를 0 에서 시작해도 돼요.") },
     { hi: [17, 22], bubble: t(E, "Score this board — the very thing you did by hand on MOOMM.\nA move scores when x reads M and y, z read O. Walk all K of them.",
                                  "이 보드를 채점해요 — 3쪽에서 MOOMM 을 손으로 센 것과 똑같아요.\nx 자리가 M, y·z 자리가 O 면 1점. 무브 K 개를 다 훑어요.") },
-    { hi: [24, 37], bubble: t(E, "Keep the best score and how many boards reach it.\nThen move to the next board — adding 1, the way you just saw.",
-                                 "최고 점수와, 그 점수에 이르는 보드 개수를 남겨요.\n그리고 다음 보드로 — 방금 본 그 방법, 1 을 더하는 거예요.") },
+    { hi: [24, 28], bubble: t(E, "Keep the best score, and how many boards reach it.",
+                                 "최고 점수와, 그 점수에 이르는 보드 개수를 남겨요.") },
+    { hi: [30, 37], bubble: t(E, "Then move to the next board — adding 1, the way you just saw.",
+                                 "그리고 다음 보드로 — 앞 쪽에서 본 그 방법, 1 을 더하는 거예요.") },
     { hi: [39, 39], bubble: t(E, "Print both — that is the answer.", "둘을 출력해요 — 그게 답이에요.") },
   ] };
 }
