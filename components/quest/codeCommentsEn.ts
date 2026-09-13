@@ -213,4 +213,10 @@ export const CODE_COMMENT_EN: Record<string, string> = {
     "paint)",
   "지우기)":
     "erase)",
+
+  // ── moohunt 첫 코드(비트 없는 브루트, 2026-09-13)
+  "무브를 목록에 담아요. 칸 번호는 0번부터 세니까 1씩 빼요.":
+    "keep the moves in a list. cells count from 0 in code, so subtract 1",
+  "이 보드를 채점해요 — 무브를 하나씩 다 봐요.":
+    "score this board — walk the moves one by one",
 };

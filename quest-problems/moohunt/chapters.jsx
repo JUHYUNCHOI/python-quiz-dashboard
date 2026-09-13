@@ -1,11 +1,12 @@
 import { C, t } from "@/components/quest/theme";
 import { getMooHuntSections } from "./components";
 import { getMooHuntFastWalk } from "./fast";
+import { getMooHuntBruteWalk } from "./brute";
 import { CodeWalk } from "@/components/quest/CodeWalk";
 import { ScoreBoardSim, EveryBoardSim, FasterIdeaSim, IsAtTableSim, WholeRunSim } from "./sims";
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 1: makeMooHuntCh1 (4 steps — 전부 reveal)
+   Chapter 1: makeMooHuntCh1 (4 steps — 도입 · 형식+예제 · 손 채점 · 보드 열거)
    ═══════════════════════════════════════════════════════════════ */
 export function makeMooHuntCh1(E) {
   return [
@@ -229,82 +230,41 @@ export function makeMooHuntCh1(E) {
         "MOOMM 도 4 점이에요 — 나머지 한 개요. 무브를 따라가 봐요."),
       content: (<ScoreBoardSim E={E} />),
     },
-    /* ── 결-b 한계: 한 화면 ────────────────────────────────────────
-       2026-09-11. 여기 있던 **다섯 쪽**(계획 선언 · 보드 수 퀴즈 · 3×2 워밍업 ·
-       무브 수 입력 · 곱하기 시뮬)을 한 쪽으로 줄였다. 선생님이 **세 번** 말씀하셨다:
-         "안된다는걸 앞 페이지에서 엄청 많이 설명하고 막상 어떻게 풀건지는 설명이 부족해"
-         "굳이 시간이 오래걸린다는걸 코드까지 보여주고"
-         "아직도 오래걸린다는 설명이 앞에 너무 많이 나오는데? **퀴즈도 필요없고.**"
-       memory/feedback_why_and_how_over_slowness.md — 한계는 한 화면이면 충분하다.
-
-       ── 2026-09-12: 여기에 **첫 코드(완전탐색 CodeWalk)를 넣었다가 도로 뺐다.** ──
-       전원 검토 3라운드 판정은 "넣는다" 였다(결-a 가 비어 있고, 선생님이 표준에
-       "쉬운 코드 단계별" 을 계속 요구하신다고 적어두셨다). 실제로 붙여서 화면을 봤더니
-       **그 브루트 코드가 비트마스크를 쓴다** — `for b in range(1 << N)` · `(b >> x) & 1`
-       (components.jsx:39,42). 변수 범례에 "b = 보드(비트마스크)" 가 그대로 뜬다.
-       ⚠️ 이 세션 내내 한 일이 **최종 코드에서 비트를 걷어낸 것**이었고(선생님 지시,
-          제출해서 통과까지 확인), 7쪽은 비트 없이 "리스트에 1 더하기" 로 보드를 만든다.
-          그 앞 4쪽에서 비트마스크를 첫 코드로 보여주면 정반대다.
-          `count-quests.py --list untaught` 도 moohunt 를 [비트연산] 으로 잡는다 —
-          지금까지는 그 코드가 화면에 안 떠서 무해했는데, 띄우는 순간 실물이 된다.
-       → **판정을 뒤집는다.** 3라운드는 코드를 열어보지 않고 낸 결론이었다.
-          결-a 를 채우려면 **비트 없는 브루트를 새로 써야** 하고, 그건 새 코드라
-          QA 와 pedagogy 설계 패스가 필요하다. .claude/WORK.md 항목으로 올린다.
-          🔒 components.jsx 의 FULL_PY/FULL_CPP 는 USACO_VERIFIED 라 고칠 수 없다.
-
-       ⚠️ 숫자는 고친 채로 둔다. 전에는 `100만 × 6,840 ≈ 7×10⁹` 이었는데
-          실제 완전탐색은 6,840 이 아니라 **입력 K개를 그대로 돈다**
-          (components.jsx:41 `for x, y, z in moves:`) → `100만 × 20만 ≈ 2×10¹¹`, 30배 차이.
-          6,840 과 그걸 해명하던 각주도 뺐다 — ux·학생이 "K 는 20만이라며 왜 갑자기
-          6,840?" 이라고 걸렸던 두 숫자다. 5쪽 시뮬의 기준도 20만으로 맞췄다. */
+    /* ── 2026-09-13: `EveryBoardSim` 을 **최종 코드 직전(7쪽)에서 여기(4쪽)로 당겼다.**
+       선생님 "비트 없는 첫 코드 만들어줘" → 첫 코드가 보드를 하나씩 만들어야 하는데,
+       그 방법(리스트에 1 더하기)을 7쪽에서야 가르치고 있었다. 코드보다 뒤에 있으면 안 된다.
+       pedagogy 확인(2026-09-13): 3쪽 마지막 말풍선이 이미 "보드 하나예요. 해볼 게 더 많아요"
+       로 끝나 이 쪽의 질문을 만들어 준다. 8쪽(WholeRunSim)은 b 를 "몇 번째 보드" 로만
+       다루므로 이 시뮬이 빠져도 안 끊긴다 — 실제로 열어서 확인했다.
+       열거는 **첫 코드와 최종 코드가 똑같이** 쓴다. 한 번 배워 두 번 쓴다. */
+    /* 코드를 읽기 **직전**에 비트 표현을 본다 (2026-09-07 자리 이동).
+       전에는 문제 탭 한복판(보드 세기 ↔ 무브 세기 사이)에 있었다. 셋이 따로 보고 다 같은 말을 했다.
+         · 기획자: ">> 가 실제로 필요한 건 코드 한 줄뿐인데 네 쪽 앞에서 배우고 방치된다"
+         · 수업: "코드를 읽을 때만 필요한 도구가 문제 이해 단계 한가운데 끼어 있다"
+         · 학생: "이걸 왜 지금 배우는지 모르겠다"
+       선생님: "막상 잘 안쓰는 비트연산자 얘기하다가 갑자기…"
+       ⚠️ **분량은 줄이지 않았다.** 학생은 "길다" 가 아니라 **"모자라다"** 고 했다 —
+       "이 그림에서는 이렇게 되더라 정도로만 알았다". 그래서 옮기고, 오히려 << 설명을 더했다. */
     {
       type: "reveal",
-      label: t(E, "Try them all?", "다 해보면?"),
-      narr: t(E,
-        "Make every board and score each one. Does that finish in time?",
-        "보드를 다 만들어 하나씩 채점해요. 시간 안에 끝날까요?"),
-      content: (
-        <div style={{ padding: 20, wordBreak: "keep-all" }}>
-          <div style={{ maxWidth: 470, margin: "0 auto", background: "#fff7ed",
-            border: "1.5px solid #fb923c", borderRadius: 12, padding: "14px 16px",
-            fontSize: 13, color: "#7c2d12", lineHeight: 1.9, textWrap: "balance" }}>
-            <div style={{ fontWeight: 800, marginBottom: 8 }}>
-              {t(E, "Two numbers decide it", "두 수가 정해요")}
-            </div>
-            <div>
-              {t(E, <><b>Boards</b>: each of the <b>N = 20</b> cells is M or O → <b>2<sup>20</sup> ≈ 1,000,000</b></>,
-                   <><b>보드 수</b>: 칸 <b>N = 20</b>개가 저마다 M 아니면 O → <b>2<sup>20</sup> ≈ 100만</b></>)}
-            </div>
-            <div>
-              {t(E, <><b>Moves per board</b>: we walk the whole input → <b>K ≤ 200,000</b></>,
-                   <><b>보드당 무브</b>: 입력을 통째로 훑어요 → <b>K ≤ 20만</b></>)}
-            </div>
-            <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fdba74", fontWeight: 800 }}>
-              {t(E, <>1,000,000 × 200,000 ≈ <b>2×10<sup>11</sup></b></>,
-                   <>100만 × 20만 ≈ <b>2×10<sup>11</sup></b> 번</>)}
-            </div>
-          </div>
-          <div style={{ maxWidth: 470, margin: "12px auto 0", background: "#fef2f2",
-            border: "1.5px solid #f87171", borderRadius: 12, padding: "12px 16px",
-            fontSize: 13, color: "#7f1d1d", lineHeight: 1.9, textWrap: "balance", textAlign: "center" }}>
-            {t(E, <>A computer does about <b>a billion simple steps</b> in one second — that is <b>10<sup>9</sup></b>.<br />So trying them all does not fit. We need another way.</>,
-                 <>컴퓨터는 <b>간단한 계산 10억 번</b>에 1초쯤 걸려요 — 그게 <b>10<sup>9</sup></b> 이에요.<br />그래서 다 해보는 건 안 돼요. 다른 방법이 필요해요.</>)}
-          </div>
-        </div>
-      ),
+      label: t(E, "Every board", "보드 전부"),
+      narr: t(E, "Before the code — how do we walk every board without missing one?",
+                 "코드를 보기 전에요. 보드를 어떻게 하나도 빠짐없이 만들죠?"),
+      content: (<EveryBoardSim E={E} />),
     },
   ];
 }
 
 
 /* ═══════════════════════════════════════════════════════════════
-   Chapter 2: makeMooHuntCh2 (5 steps — 전부 reveal)
+   Chapter 2: makeMooHuntCh2 (5 steps — 첫 코드+한계 · 아이디어 · 표 · 전체 실행 · 최종 코드)
    ═══════════════════════════════════════════════════════════════ */
 export function makeMooHuntCh2(E, lang = "py") {
   /* ⚠️ 2026-09-12: `const w = getMooHuntWalk(E, lang)` 를 지웠다 — 만들어만 놓고
      어디서도 안 쓰는 죽은 변수였고, 검토자가 그걸 보고 "결-a 가 비었다" 를 세 번 지적했다.
      완전탐색 코드는 지금 PDF(getMooHuntSections)에만 있다. 화면에 올리려면
      **비트 없는 판본을 새로 써야** 한다 — .claude/WORK.md 항목. */
+  const bw = getMooHuntBruteWalk(E, lang);   // 첫 코드 — 비트 없는 완전탐색
   const fw = getMooHuntFastWalk(E, lang);
   return [
     /* ── 2026-09-12: 여기 있던 "돌려보기"(BruteRunSim) 한 쪽을 **지웠다.**
@@ -315,6 +275,50 @@ export function makeMooHuntCh2(E, lang = "py") {
        한 번은 기다리게 하는 구조였다.
        memory/feedback_why_and_how_over_slowness.md: "한계는 **한 화면이면 충분**하다."
        그 한 화면은 1-3b 로 남긴다. 여기서부터는 전부 **왜·어떻게** 다. */
+    /* ── 결-a 첫 코드 + 결-b 한계, 한 쪽에 (2026-09-13) ─────────────
+       선생님: "비트 없는 첫 코드 만들어줘."
+       표준(memory/quest_problem_standard.md)은 예제 → **첫 코드** → 한계 → 더 빠르게 인데
+       여기엔 첫 코드가 없었다. 3쪽에서 손으로 채점하고 곧장 마지막 쪽 최종 코드로 뛰었다.
+       (`components.jsx` 의 완전탐색은 🔒 USACO_VERIFIED 이면서 **비트마스크**라 못 쓴다 —
+        비트 없는 판본을 brute.jsx 에 새로 썼다. 공식 샘플 + 무작위 400 케이스 대조 완료.)
+
+       ⚠️ 코드가 **먼저**, 한계 카드는 **아래**다. pedagogy 판정(2026-09-13):
+          마지막 쪽은 배너가 코드 위에 있는데 그건 "이제 읽을 코드가 느리니 미리 알아둬" 다.
+          여기는 반대다 — **"내가 방금 짠 코드가 왜 안 되는지"** 라서 코드를 먼저 읽어야 한다.
+          그 패턴을 그대로 베끼면 순서가 거꾸로 된다.
+
+       ⚠️ 한계 카드는 "느리다·초·타임아웃" 을 한 글자도 안 쓴다. 세는 것만 말한다.
+          선생님이 **네 번** 지적하신 자리다 (memory/feedback_why_and_how_over_slowness.md). */
+    {
+      type: "reveal",
+      label: t(E, "First code", "첫 코드"),
+      narr: t(E,
+        "Put what you did by hand into code.",
+        "손으로 한 걸 그대로 코드로 옮기면 이래요."),
+      content: (
+        <div>
+          <CodeWalk E={E} lang={lang} code={bw.code} vars={bw.vars} beats={bw.beats} accent="#dc2626" />
+          <div style={{ maxWidth: 470, margin: "16px auto 0", background: "#fff7ed",
+            border: "1.5px solid #fb923c", borderRadius: 12, padding: "14px 16px",
+            fontSize: 13, color: "#7c2d12", lineHeight: 1.9, textWrap: "balance",
+            wordBreak: "keep-all", textAlign: "center" }}>
+            <div style={{ fontWeight: 800, marginBottom: 6 }}>
+              {t(E, "So how many times does that run?", "그런데 이게 몇 번이나 도는 걸까요?")}
+            </div>
+            {t(E, <>Boards: each of the <b>N = 20</b> cells is M or O → <b>2<sup>20</sup> ≈ 1,000,000</b><br />
+                   Each board walks the whole input → <b>K ≤ 200,000</b><br />
+                   1,000,000 × 200,000 ≈ <b>2×10<sup>11</sup></b></>,
+                 <>보드 수: 칸 <b>N = 20</b>개가 저마다 M 아니면 O → <b>2<sup>20</sup> ≈ 100만</b><br />
+                   보드마다 입력을 통째로 훑어요 → <b>K ≤ 20만</b><br />
+                   100만 × 20만 ≈ <b>2×10<sup>11</sup></b> 번</>)}
+            <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fdba74", fontWeight: 800 }}>
+              {t(E, <>A computer does about <b>a billion</b> simple steps in one second.<br />So trying them all does not fit. We need another way.</>,
+                   <>컴퓨터는 간단한 계산 <b>10억 번</b>에 1초쯤 걸려요.<br />그래서 다 해보는 건 안 돼요. 다른 방법이 필요해요.</>)}
+            </div>
+          </div>
+        </div>
+      ),
+    },
     /* ── 결-c: 더 빠른 방법 ──────────────────────────────────────────
        pedagogy-reviewer 2026-09-04: "한계까지만 있고 더 빠른 방법이 없다.
        학생 입장에서 배운 게 '실패한 시도' 인지 '정답' 인지 구분이 안 된다."
@@ -343,21 +347,6 @@ export function makeMooHuntCh2(E, lang = "py") {
         "무브를 표에 한 번만 세어 넣으면, 다시 훑을 일이 없어요."),
       content: (<IsAtTableSim E={E} />),
     },
-    /* 코드를 읽기 **직전**에 비트 표현을 본다 (2026-09-07 자리 이동).
-       전에는 문제 탭 한복판(보드 세기 ↔ 무브 세기 사이)에 있었다. 셋이 따로 보고 다 같은 말을 했다.
-         · 기획자: ">> 가 실제로 필요한 건 코드 한 줄뿐인데 네 쪽 앞에서 배우고 방치된다"
-         · 수업: "코드를 읽을 때만 필요한 도구가 문제 이해 단계 한가운데 끼어 있다"
-         · 학생: "이걸 왜 지금 배우는지 모르겠다"
-       선생님: "막상 잘 안쓰는 비트연산자 얘기하다가 갑자기…"
-       ⚠️ **분량은 줄이지 않았다.** 학생은 "길다" 가 아니라 **"모자라다"** 고 했다 —
-       "이 그림에서는 이렇게 되더라 정도로만 알았다". 그래서 옮기고, 오히려 << 설명을 더했다. */
-    {
-      type: "reveal",
-      label: t(E, "Every board", "보드 전부"),
-      narr: t(E, "Before the code — how do we walk every board without missing one?",
-                 "코드를 보기 전에요. 보드를 어떻게 하나도 빠짐없이 만들죠?"),
-      content: (<EveryBoardSim E={E} />),
-    },
     /* ── 계획: 코드 도는 순서 그대로 답까지 (2026-09-11 신설) ──────
        선생님: "아직 처음부터 차례대로 **코드가 동작하는 순서**정도로
                 **어떻게 구할건지 눈에 안보여**"
@@ -369,9 +358,11 @@ export function makeMooHuntCh2(E, lang = "py") {
     {
       type: "reveal",
       label: t(E, "The plan", "짜는 순서"),
+      /* ⚠️ 2026-09-13: 그냥 "코드 보기 전에" 였는데, 이제 5쪽에 **첫 코드가 있다.**
+         어느 코드를 말하는지 학생이 모른다 → "최종 코드" 라고 이름을 댄다. */
       narr: t(E,
-        "Before the code — walk the whole thing once, in the order it runs.",
-        "코드 보기 전에 — 도는 순서 그대로 한 번 끝까지 따라가 봐요."),
+        "Before the final code — walk the whole thing once, in the order it runs.",
+        "최종 코드 보기 전에 — 도는 순서 그대로 한 번 끝까지 따라가 봐요."),
       content: (<WholeRunSim E={E} />),
     },
     {
