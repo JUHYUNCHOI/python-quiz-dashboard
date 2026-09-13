@@ -320,15 +320,33 @@ export function WholeRunSim({ E }) {
         0, 1, 2 를 순서대로 밟는 건 이제 **4쪽(EveryBoardSim)이 하는 일**이라 여기선 필요 없다.
         첫 보드 하나만 남겨 "여기서 시작한다" 만 보이고, 나머지는 답이 나오는 보드다. */
   const WALK = [0, hits[0], hits[1]];
+  /* ⚠️ 2026-09-13, 선생님이 이 화면을 보시고:
+       "정보를 보여주는 방법이 별로야. **필요 없는 정보는 없는데 봐야할게 많아.**
+        스텝바이스텝 맞아? 그 보드 점수? 지금까지 최고 점수? 그 점수인 보드수?
+        **어떻게 구해지는건지 더 단계별로 해야지**"
+     보드 하나를 **한 걸음**에 다 보여주고 있었다 — 보드·M/O 가르기·표에서 꺼내기·합·
+     이 보드 점수·최고 점수·보드 수가 한 화면에 동시에 떴다.
+     → 보드 하나를 **네 걸음**으로 쪼갠다. 걸음마다 **한 가지만** 새로 뜬다
+       (memory/feedback_one_thing_changes_at_a_time.md).
+         split — 이 보드는 무엇이고 M 자리·O 자리가 어디인가
+         pick  — 그 조합으로 표의 어느 칸을 꺼내나
+         score — 더하면 이 보드 점수
+         keep  — 최고 점수·보드 수를 고친다
+     M 이 하나도 없는 보드(b = 0)는 쪼갤 게 없어 한 걸음("none")으로 둔다. */
+  const PH = ["split", "pick", "score", "keep"];
   const steps = [{ k: "read" }, { k: "table" },
-                 ...WALK.map((b, i) => ({ k: "board", b, i })),
+                 ...WALK.flatMap((b, i) => (scoreOf(b).Ms.length === 0
+                   ? [{ k: "board", b, i, p: "none" }]
+                   : PH.map((ph) => ({ k: "board", b, i, p: ph })))),
                  { k: "done" }];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
   const sayRef = useKeepInView(ts.safe);
 
   /* 지금까지 본 보드만으로 계산한 장부 — "그 순간의 값" 을 보여준다 */
-  const seen = s.k === "board" ? WALK.slice(0, s.i + 1) : s.k === "done" ? WALK : [];
+  /* 장부(최고 점수·보드 수)는 **keep 걸음에서만** 바뀐다 — 그 전엔 이 보드가 아직 안 들어간다. */
+  const seen = s.k === "board" ? WALK.slice(0, s.i + (s.p === "keep" || s.p === "none" ? 1 : 0))
+             : s.k === "done" ? WALK : [];
   let runBest = 0, runWays = 0;
   seen.forEach((b) => { const sc = scoreOf(b).sc; if (sc > runBest) { runBest = sc; runWays = 1; } else if (sc === runBest) runWays++; });
 
@@ -345,26 +363,35 @@ export function WholeRunSim({ E }) {
     : s.k === "table" ? t(E,
       <><b>2.</b> Count the moves into the table — <b>once</b>.<br />Only {filled.length} squares end up non-zero.</>,
       <><b>2.</b> 무브를 표에 세어 넣어요 — <b>딱 한 번</b>.<br />0 이 아닌 칸은 {filled.length}개뿐이에요.</>)
-    : s.k === "board" ? t(E,
-      /* ⚠️ 2026-09-12 학생: "b 가 뭔지 화면이 설명해주지 않았다. 0,1,2 다음 갑자기 17, 25 로 뛴다."
-         b 의 뜻은 **첫 걸음에 한 번만** 말하고, 건너뛴다는 것도 그 자리에서 말한다.
-         (WALK = [0, 1, 2, 최고점 보드 둘] — 1,048,576개를 다 밟을 수는 없다.) */
-      <><b>3.</b> Board <b>b = {s.b}</b> is <b>{board(s.b)}</b>.
-        {s.i === 0 && <><br /><span style={{ opacity: .85 }}>b is just <b>which board</b> — we make them in order, b = 0, 1, 2, …</span></>}
-        {s.i > 0 && <><br /><span style={{ opacity: .85 }}>{s.b} = {(() => { const t2 = []; let v = s.b, k = 1; while (v) { if (v & 1) t2.push(k); v >>= 1; k *= 2; } return t2.join(" + "); })()} → cells {board(s.b).split("").map((c, i2) => (c === "M" ? i2 + 1 : 0)).filter(Boolean).join(" · ")} are M (cell 1 is the ones place).</span></>}
-        {s.i === 1 && <><br /><span style={{ opacity: .85 }}>Jumping ahead — these two are the <b>best-scoring</b> boards.</span></>}
-        <br />M cells {cur.Ms.map((i) => i + 1).join("·") || "none"} / O cells {cur.Os.map((i) => i + 1).join("·")}<br />Read the table for every (M, O-pair) → <b>{cur.sc}</b> points.</>,
-      <><b>3.</b> 보드 <b>b = {s.b}</b> 는 <b>{board(s.b)}</b> 예요.
-        {s.i === 0 && <><br /><span style={{ opacity: .85 }}>b 는 <b>몇 번째 보드</b>인가예요 — 0, 1, 2 … 순서로 만들어요.</span></>}
-        {/* ⚠️ 2026-09-13 학생 F 가 **여기서 그만뒀다**: "b=0 은 OOOOO 였다가 갑자기 b=17 인데,
-               왜 17 이 MOOOM 인지 설명이 하나도 없다." 4쪽에서 정한 "1번 칸이 일의 자리" 로
-               손으로 확인되게 적는다 — 17 = 1 + 16 → 1번·5번 칸이 M. */}
-        {s.i > 0 && <><br /><span style={{ opacity: .85 }}>{s.b} = {(() => { const t2 = []; let v = s.b, k = 1; while (v) { if (v & 1) t2.push(k); v >>= 1; k *= 2; } return t2.join(" + "); })()} 이니까 {board(s.b).split("").map((c, i2) => (c === "M" ? i2 + 1 : 0)).filter(Boolean).join("번 · ")}번 칸이 M 이에요 (1번 칸이 일의 자리).</span></>}
-        {s.i === 1 && <><br /><span style={{ opacity: .85 }}>여기서부터는 건너뛰어요 — 이 둘이 <b>최고 점수</b>가 나온 보드예요.</span></>}
-        <br />M 자리 {cur.Ms.map((i) => i + 1).join("·") || "없음"} / O 자리 {cur.Os.map((i) => i + 1).join("·")}<br />(M 자리, O 짝) 마다 표를 꺼내 더하면 <b>{cur.sc}점</b>.</>)
+    : s.k === "board" ? (() => {
+      /* b 를 자리값으로 풀어 쓴다 — "17 = 1 + 16" (2026-09-13 학생 F 가 여기서 그만뒀다). */
+      const parts = (() => { const t2 = []; let v = s.b, k = 1; while (v) { if (v & 1) t2.push(k); v >>= 1; k *= 2; } return t2.join(" + "); })();
+      const mList = cur.Ms.map((x) => x + 1).join("·");
+      const oList = cur.Os.map((x) => x + 1).join("·");
+      if (s.p === "none") return t(E,
+        <><b>3.</b> Board <b>b = {s.b}</b> is <b>{board(s.b)}</b> — no M at all.<br />A move needs one M, so this board scores <b>0</b>.</>,
+        <><b>3.</b> 보드 <b>b = {s.b}</b> 은 <b>{board(s.b)}</b> — M 이 하나도 없어요.<br />득점하려면 M 이 하나 있어야 하니 <b>0점</b>이에요.</>);
+      if (s.p === "split") return t(E,
+        <><b>3.</b> Board <b>b = {s.b}</b> is <b>{board(s.b)}</b>.<br />{s.b} = {parts} → cells {mList} are M.<br />So: M cells <b>{mList}</b> · O cells <b>{oList}</b>.</>,
+        <><b>3.</b> 보드 <b>b = {s.b}</b> 는 <b>{board(s.b)}</b> 예요.<br />{s.b} = {parts} 이니까 {mList}번 칸이 M.<br />그래서 M 자리 <b>{mList}</b> · O 자리 <b>{oList}</b>.</>);
+      if (s.p === "pick") return t(E,
+        <><b>4.</b> Now read the table — one square for each <b>(M cell, O pair)</b>.</>,
+        <><b>4.</b> 이제 표에서 꺼내요 — <b>(M 자리, O 짝)</b> 마다 한 칸씩.</>);
+      if (s.p === "score") return t(E,
+        <><b>5.</b> Add them up — this board scores <b>{cur.sc}</b>.</>,
+        <><b>5.</b> 더하면 — 이 보드는 <b>{cur.sc}점</b>이에요.</>);
+      const prev = WALK.slice(0, s.i);
+      let pb = 0, pw = 0;
+      prev.forEach((b2) => { const sc = scoreOf(b2).sc; if (sc > pb) { pb = sc; pw = 1; } else if (sc === pb) pw++; });
+      return t(E,
+        <><b>6.</b> Compare with the best so far.<br />{cur.sc > pb ? <>Higher — the best becomes <b>{cur.sc}</b>, and the count starts again at <b>1</b>.</> : <>Same — the count goes up by one.</>}</>,
+        <><b>6.</b> 지금까지 최고 점수와 견줘요.<br />{cur.sc > pb ? <>더 높으니 최고 점수가 <b>{cur.sc}</b> 가 되고, 보드 수는 <b>1</b> 부터 다시 세요.</> : <>같으니 보드 수만 <b>하나 늘어요</b>.</>}</>);
+    })()
     : t(E,
-      <><b>4.</b> Do that for all <b>{1 << N}</b> boards and keep the best.<br />Answer: <b>{best} {ways}</b> — that is exactly what the code prints.</>,
-      <><b>4.</b> 보드 <b>{1 << N}</b>개를 다 그렇게 하고 제일 좋은 걸 남겨요.<br />답: <b>{best} {ways}</b> — 코드가 출력하는 게 바로 이거예요.</>);
+      /* ⚠️ 번호는 **코드가 도는 순서**다. 3~6 은 보드마다 되풀이되니 보드가 바뀌면 3 으로 돌아간다 —
+         그게 반복문이라는 뜻이라 일부러 그렇게 둔다. 마지막은 그 뒤라 **7** 이다(전엔 4 였다). */
+      <><b>7.</b> Repeat <b>3 – 6</b> for all <b>{1 << N}</b> boards and keep the best.<br />Answer: <b>{best} {ways}</b> — that is exactly what the code prints.</>,
+      <><b>7.</b> 보드 <b>{1 << N}</b>개에 <b>3 ~ 6</b> 을 되풀이하고 제일 좋은 걸 남겨요.<br />답: <b>{best} {ways}</b> — 코드가 출력하는 게 바로 이거예요.</>);
 
   const Row = ({ label, value, hot }) => (
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
@@ -397,7 +424,21 @@ export function WholeRunSim({ E }) {
             </div>
           )}
 
-          {(s.k === "table" || s.k === "board") && (
+          {/* ⚠️ 2026-09-13: 보드 타일을 **표보다 위**로 올렸다. 아래에 두면 표가 나타날 때
+              타일이 아래로 밀려 "바뀐 자리" 가 둘이 된다 (feedback_one_thing_changes_at_a_time). */}
+          {s.k === "board" && (
+            <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 10 }}>
+              {board(s.b).split("").map((c, i) => (
+                <span key={i} style={{ width: 30, height: 30, borderRadius: 7, display: "inline-flex",
+                  alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace",
+                  fontWeight: 800, fontSize: 13, background: c === "M" ? MBG : OBG,
+                  border: `1.5px solid ${c === "M" ? MCOL : OCOL}`, color: c === "M" ? MCOL : OCOL }}>{c}</span>
+              ))}
+            </div>
+          )}
+
+          {/* 표는 **꺼내는 걸음부터** 보인다 — 보드를 가르는 걸음엔 아직 필요 없다. */}
+          {(s.k === "table" || (s.k === "board" && (s.p === "pick" || s.p === "score"))) && (
             <div style={{ display: "grid", gap: 4, marginBottom: s.k === "board" ? 10 : 0 }}>
               <div style={{ fontSize: 11, fontWeight: 800, color: "#94a3b8", textAlign: "center",
                 marginBottom: 2, wordBreak: "keep-all" }}>
@@ -423,7 +464,7 @@ export function WholeRunSim({ E }) {
                   </div>
                 );
               })}
-              {s.k === "board" && (
+              {s.k === "board" && s.p === "score" && (
                 <div style={{ fontSize: 11.5, fontWeight: 800, color: "#047857", textAlign: "center",
                   marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>
                   {filled.filter(([x, a, b]) => used(x, a, b)).map(([, , , v]) => v).join(" + ") || "0"}
@@ -433,21 +474,13 @@ export function WholeRunSim({ E }) {
             </div>
           )}
 
-          {s.k === "board" && (
-            <>
-              <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 10 }}>
-                {board(s.b).split("").map((c, i) => (
-                  <span key={i} style={{ width: 30, height: 30, borderRadius: 7, display: "inline-flex",
-                    alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono',monospace",
-                    fontWeight: 800, fontSize: 13, background: c === "M" ? MBG : OBG,
-                    border: `1.5px solid ${c === "M" ? MCOL : OCOL}`, color: c === "M" ? MCOL : OCOL }}>{c}</span>
-                ))}
-              </div>
-              <Row label={t(E, "this board's score", "이 보드 점수")} value={cur.sc} hot={cur.sc === best} />
-            </>
+
+          {s.k === "board" && (s.p === "score" || s.p === "keep" || s.p === "none") && (
+            <Row label={t(E, "this board's score", "이 보드 점수")} value={cur.sc} hot={cur.sc === best} />
           )}
 
-          {(s.k === "board" || s.k === "done") && (
+          {/* 장부는 **남기는 걸음**부터. 그 전에 띄우면 아직 안 정해진 값을 보여주게 된다. */}
+          {((s.k === "board" && (s.p === "keep" || s.p === "none")) || s.k === "done") && (
             <div style={{ marginTop: 10, paddingTop: 9, borderTop: "1px dashed #cbd5e1" }}>
               <Row label={t(E, "best so far", "지금까지 최고 점수")} value={runBest} hot={s.k === "done"} />
               <Row label={t(E, "boards at that score", "그 점수인 보드 수")} value={runWays} hot={s.k === "done"} />
@@ -489,7 +522,14 @@ export function IsAtTableSim({ E }) {
      ⚠️ use·sum 은 2026-09-11 선생님 지적("채우는 법만 보여주고 **쓰는 법**을 안 보여줬다")으로
         붙인 것이다. 지우는 게 아니라 **8쪽으로 넘긴다** — 8쪽이 그 뒤에 생겼고 더 잘 한다.
      이 쪽이 버는 것("무브는 맨 처음 한 번만 센다")은 마지막 걸음 말풍선에 남긴다. */
-  const steps = [{ k: "ask" }, { k: "plan" }, { k: "fill" }, { k: "order" }];
+  /* ⚠️ 2026-09-13: 걸음 "all" 을 더했다(4 → 5). 선생님 "시뮬이 우리꺼 설명하기에 부족하다".
+     ux 가 클릭해서 확인한 것: 이 시뮬은 **5×5 칸 중 딱 한 칸만 채운 채** "표가 다 됐다" 고 말하고,
+     다음 쪽에서 **완성된 표가 통째로** 나타난다. 학생 F 도 같은 말을 했다 —
+     "표가 다 됐다는 느낌이 안 든다. 나머지 칸이랑 x=1, x=2 표는 언제 채워요?"
+     → 마지막에 **나머지 무브를 마저 넣어 표가 완성되는 장면**을 넣는다. 그 완성본은
+       다음 쪽이 쓰는 것과 **같은 모양·같은 순서**로 그린다 — 모양이 같아야 "저번에 본 그거다" 가
+       기억이 아니라 눈으로 인식된다 (feedback_screen_must_not_rely_on_memory). */
+  const steps = [{ k: "ask" }, { k: "plan" }, { k: "fill" }, { k: "order" }, { k: "all" }];
   const ts = useTraceStep(steps);
   const s = steps[ts.safe];
   const sayRef = useKeepInView(ts.safe);
@@ -505,6 +545,9 @@ export function IsAtTableSim({ E }) {
   const X = 4;                                   // 평면 한 장: x = 5번 칸이 M 인 경우
   const MOVES = [[4, 2, 1], [4, 1, 2]];          // (5,3,2) 와 (5,2,3) — 순서만 다른 짝
   const upTo = s.k === "ask" || s.k === "plan" ? 0 : s.k === "fill" ? 1 : 2;
+  /* 공식 샘플 무브 6개를 다 넣었을 때의 표 — 다음 쪽(WholeRunSim)이 쓰는 값과 같다.
+     (1,2,3)·(1,2,3)·(1,3,5)·(2,3,4)·(5,3,2)·(5,2,3) → 0 이 아닌 칸은 넷뿐이다. */
+  const ALL_ROWS = [[1, 2, 3, 2], [1, 3, 5, 1], [2, 3, 4, 1], [5, 2, 3, 2]];
   /* 채점 예시(SCORE_BOARD·oCells·oPairs)는 2026-09-13 에 8쪽으로 넘기며 지웠다. */
 
   /* isAt[X][a][b] — a < b 로 모아 센다 */
@@ -530,11 +573,14 @@ export function IsAtTableSim({ E }) {
     : s.k === "fill" ? t(E,
       <>Move <b>(5, 3, 2)</b> arrives: x = 5 is the M, the O cells are 3 and 2.<br />Store them <b>smaller first</b> → the (2, 3) square gets <b>1</b>.</>,
       <>무브 <b>(5, 3, 2)</b> 가 왔어요. x = 5 가 M 자리, O 자리는 3 과 2 예요.<br /><b>작은 쪽을 앞</b>으로 넣으면 → (2, 3) 칸이 <b>1</b> 이 돼요.</>)
-    : t(E,
+    : s.k === "order" ? t(E,
       /* 잘라낸 sum 걸음의 마무리를 여기로 옮겼다. 이 줄이 이 쪽이 버는 것이다 —
          2026-09-12 학생: "표로 미리 세도 보드마다 찾아보는 건 똑같잖아. 뭐가 다른데?" */
-      <>Now <b>(5, 2, 3)</b> arrives — same two O cells, swapped.<br />y and z only need to be O, so order does not matter.<br />Smaller first again → it lands on (2, 3) once more: <b>2</b>.<br />Do that for every move and the table is done — the <b>200,000</b> moves are counted <b>once, at the very start</b>, not again for each of the <b>1,000,000</b> boards.</>,
-      <>이번엔 <b>(5, 2, 3)</b> 가 왔어요 — O 자리 둘이 순서만 바뀐 거예요.<br />y·z 는 둘 다 O 이기만 하면 되니 순서는 상관없어요.<br />또 작은 쪽을 앞으로 넣으면 (2, 3) 칸에 <b>2</b> 가 돼요.<br />무브를 이렇게 하나씩 다 넣으면 표가 채워져요. 무브 <b>20만 개</b>를 <b>맨 처음 딱 한 번</b>만 세는 거예요 — 보드 <b>100만 개</b>마다 다시 훑지 않아요.</>);
+      <>Now <b>(5, 2, 3)</b> arrives — same two O cells, swapped.<br />y and z only need to be O, so order does not matter.<br />Smaller first again → it lands on (2, 3) once more: <b>2</b>.</>,
+      <>이번엔 <b>(5, 2, 3)</b> 가 왔어요 — O 자리 둘이 순서만 바뀐 거예요.<br />y·z 는 둘 다 O 이기만 하면 되니 순서는 상관없어요.<br />또 작은 쪽을 앞으로 넣으면 (2, 3) 칸에 <b>2</b> 가 돼요.</>)
+    : t(E,
+      <>Now the other four moves, the same way — <b>the table is done</b>.<br />The <b>200,000</b> moves were counted <b>once</b>, not again for each of the <b>1,000,000</b> boards.</>,
+      <>나머지 무브 넷도 같은 식으로 넣으면 — <b>표가 완성돼요</b>.<br />무브 <b>20만 개</b>를 <b>딱 한 번</b> 센 거예요. 보드 <b>100만 개</b>마다 다시 훑지 않아요.</>);
 
   const justFilled = s.k === "fill" ? [[1, 2], [3, 4]] : s.k === "order" ? [[1, 2]] : [];
   const isNew = (a, b) => justFilled.some(([p, q]) => p === a && q === b);
@@ -562,7 +608,27 @@ export function IsAtTableSim({ E }) {
       <StepFade fast k={ts.safe}>
         <div ref={sayRef}><Say tone={s.k === "ask" ? "stuck" : s.k === "order" ? "aha" : "go"}>{say}</Say></div>
 
-        {s.k !== "ask" && (
+        {s.k === "all" && (
+          <div style={{ maxWidth: 330, margin: "0 auto", display: "grid", gap: 4 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: "#94a3b8", textAlign: "center",
+              marginBottom: 2, wordBreak: "keep-all" }}>
+              {t(E, "the finished table", "완성된 표")}
+            </div>
+            {ALL_ROWS.map(([x, a, b2, v]) => (
+              <div key={`${x}-${a}-${b2}`} style={{ display: "flex", justifyContent: "space-between",
+                alignItems: "center", padding: "6px 11px", borderRadius: 8,
+                background: "#ecfdf5", border: "1.5px solid #34d399" }}>
+                <span style={{ fontSize: 11.5, fontWeight: 700, color: "#475569", wordBreak: "keep-all" }}>
+                  {t(E, <>x = {x} (M) · O pair {a}·{b2}</>, <>x = {x} (M 자리) · O 짝 {a}·{b2}</>)}
+                </span>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 13,
+                  color: "#047857" }}>{v}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {s.k !== "ask" && s.k !== "all" && (
           <div style={{ maxWidth: 320, margin: "0 auto" }}>
             <div style={{ fontSize: 12, fontWeight: 800, color: "#7c3aed", textAlign: "center",
               marginBottom: 4, wordBreak: "keep-all" }}>
