@@ -335,7 +335,7 @@ export function makeMooHuntCh2(E, lang = "py") {
       narr: t(E,
         "Count the moves once into a table — then never scan them again.",
         "무브를 표에 한 번만 세어 넣으면, 다시 훑을 일이 없어요."),
-      content: (<IsAtTableSim E={E} />),
+      content: (<IsAtTableSim E={E} lang={lang} />),
     },
     /* ── 계획: 코드 도는 순서 그대로 답까지 (2026-09-11 신설) ──────
        선생님: "아직 처음부터 차례대로 **코드가 동작하는 순서**정도로

@@ -244,4 +244,7 @@ export const CODE_COMMENT_EN: Record<string, string> = {
 
   "두 칸을 번호 하나로: 작은 쪽 * N + 큰 쪽.  (N = 5 면 1·2 → 7번. 7/5 = 몫 1·나머지 2 로 되돌아온다)":
     "two cells into one number: smaller * N + larger.  (N = 5: 1 and 2 -> 7. 7/5 gives quotient 1, remainder 2 back)",
+
+  "두 칸을 번호 하나로: 작은 쪽 * N + 큰 쪽":
+    "two cells into one number: smaller * N + larger",
 };

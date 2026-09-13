@@ -163,6 +163,28 @@ export type ConceptId = keyof typeof CONCEPT_ONTOLOGY;
  * entry use DEFAULT_META.
  */
 export const QUEST_CONCEPT_META: Record<string, QuestConceptMeta> = {
+  /* moohunt — 난이도를 **사람이 매긴 값**으로 박는다 (2026-09-13).
+     선생님: "이 문제가 진짜 레벨3인가?" → 열어보니 **아무도 매긴 적이 없었다.**
+     명시 엔트리가 없어 `quest-difficulty.ts` 의 유추 규칙(`Bronze #2 → 3`)이 붙인 값이었다.
+
+     기획·감사가 따로 보고 같은 결론을 냈다 — **4 다.** 근거:
+       · **파이썬으로 만점이 원천적으로 불가능한 유일한 quest** 다
+         (97초 · 제한 4초. USACO_VERIFICATION.md 전체에서 "만점 불가" 문구는 여기 하나뿐).
+       · 아이디어를 **둘** 요구한다 — 지수 완전탐색 + 미리 세어두는 표.
+         레벨 3 으로 매겨진 것들(mooin2·bacteria·cannonball·stampgrid·leaders·race·hoofball)은
+         전부 아이디어 하나이고 파이썬으로 완전 통과한다.
+       · C++ 로도 제한의 70~75% 를 쓴다(1.45초 / 2초). 레벨 4 인 moo·rounding·astral 은
+         파이썬 100% 통과라 이런 여유 없는 구현이 아니다.
+     **5 가 아닌 이유**: 레벨 5(sumk 등)는 알고리즘 자체가 Gold 급이다. 여기서 어려운 건
+     **구현 밀도와 파이썬 불가능**이지 사고 자체가 아니다 — 핵심 생각은 "다 세보고 세어두기" 다. */
+  moohunt: {
+    type: "brute-force",
+    concepts_taught: ["precompute-table", "enumerate-all-states"],
+    concepts_required: ["loop", "vector-basics", "dictionary"],
+    difficulty: 4,
+    supported_languages: ["py", "cpp"],
+  },
+
   // ─── Deeply audited 4 (Phase 0/1 of content review) ──────────
   cowphotos: {
     type: "pattern-discovery",

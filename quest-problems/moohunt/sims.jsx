@@ -553,7 +553,14 @@ export function WholeRunSim({ E }) {
    ⚠️ 2차원 리스트를 가르치는 레슨이 0개다. 여기 isAt 는 **3차원**이다.
       그래서 한 번에 다 보여주지 않고 **x 를 하나 고정한 평면 한 장**만 그린다.
    걸음 목록은 pedagogy-reviewer 가 짜서 검토받은 것을 그대로 옮겼다. */
-export function IsAtTableSim({ E }) {
+export function IsAtTableSim({ E, lang = "py" }) {
+  /* ⚠️ 2026-09-13: `lang` 을 받는다. **C++ 일 때만** "칸을 번호 하나로" 이야기를 붙인다.
+     파이썬은 (x, 작은, 큰) 을 그대로 열쇠로 써서 그 변환이 아예 없다 — 파이썬 학생에겐
+     안 배운 개념이 낀 불필요한 다리다. 기획·ux 가 따로 보고 같은 자리를 짚었다:
+       선생님이 오늘 "N 이 왜 들어가지?" · "그냥 min 만 하면 되는거 아니었나?" 를 **두 번**,
+       학생도 "파이썬엔 없던 게 C++ 탭에서 처음 나왔다" 고 했다.
+     ⚠️ 이 자리는 이미 세 번 고쳤는데 **매번 글을 더 넣는 방향**이었고 254자 벽이 됐다.
+        이번엔 **글을 줄이고** 이미 있는 격자에 한 줄만 붙인다. */
   /* ⚠️ 2026-09-11 선생님: "저걸 보고 **그래서 어떻게 값을 구할수 있는건지도 모르겠어**"
      처음엔 표를 채우는 데서 끝냈다. 채우는 법만 보여주고 **쓰는 법**을 안 보여준 것이다.
      use·sum 두 걸음을 붙여 보드 하나를 실제로 채점해 점수를 내는 데까지 간다. */
@@ -697,6 +704,18 @@ export function IsAtTableSim({ E }) {
                 </Fragment>
               ))}
             </div>
+
+            {/* ⚠️ 화면은 칸을 **1번부터** 세는데(세로 2·가로 3) 코드는 **0번부터** 센다.
+                   그대로 "1×5+2" 라고만 쓰면 학생은 2×5+3 = 13 을 계산한다.
+                   그래서 **0번부터 센다는 말을 먼저** 하고 숫자를 보인다. */}
+            {lang === "cpp" && (s.k === "fill" || s.k === "order" || s.k === "all") && (
+              <div style={{ maxWidth: 300, margin: "10px auto 0", padding: "9px 12px", borderRadius: 9,
+                background: "#f5f3ff", border: `1.5px solid ${A}`, fontSize: 12, fontWeight: 700,
+                color: "#5b21b6", lineHeight: 1.8, wordBreak: "keep-all", textAlign: "center" }}>
+                {t(E, <>C++ arrays need <b>one</b> number, not two.<br />Counting cells from <b>0</b>: this is row 1, column 2 → <b>1 × {N} + 2 = 7</b>.</>,
+                     <>C++ 배열은 번호가 <b>하나</b>여야 칸을 찾아요.<br />칸을 <b>0번부터</b> 세면 이건 세로 1, 가로 2 → <b>1 × {N} + 2 = 7</b>번.</>)}
+              </div>
+            )}
 
             {s.k === "plan" && (
               <div style={{ maxWidth: 300, margin: "10px auto 0", padding: "9px 12px", borderRadius: 9,

@@ -144,7 +144,7 @@ export const FAST_CPP = [
   "    cin >> N >> K;",
   "",
   "    // 표 한 줄 = M 자리 하나. 그 안은 O 짝을 번호 하나로 합쳐서 넣어요.",
-  "    // 두 칸을 번호 하나로: 작은 쪽 * N + 큰 쪽.  (N = 5 면 1·2 → 7번. 7/5 = 몫 1·나머지 2 로 되돌아온다)",
+  "    // 두 칸을 번호 하나로: 작은 쪽 * N + 큰 쪽",
   "    // y 와 z 는 둘 다 O 이기만 하면 되니 순서는 상관없다 → 작은 쪽·큰 쪽으로 모은다",
   "    vector<vector<int>> count(N, vector<int>(N * N, 0));",
   "    for (int i = 0; i < K; i++) {",
@@ -218,8 +218,8 @@ export function getMooHuntFastWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FAST_CPP, vars: _FAST_VARS, beats: [
       { hi: [0, 6],   bubble: t(E, "Headers we need, then read N (cells) and K (moves).", "필요한 헤더를 적고, N (칸 수) 와 K (무브 수) 를 읽어요.") },
-      { hi: [8, 18],  bubble: t(E, "This is the table you built a page ago.\nOne row per M cell; inside it, the two O cells are **squeezed into one number** — smaller * N + larger.\nAn array can only be looked up by one number (Python uses the triple (x, smaller, larger) as the key directly).\nWith N = 5, 1 and 2 give 1*5+2 = 7. The larger cell is always below N, so dividing 7 by 5 **always** gives back quotient 1, remainder 2 — nothing collides.",
-                                   "앞 쪽에서 만든 그 표예요.\n무브를 여기에 한 번만 세어 넣어요.\n표 한 줄 = M 자리 하나. 그 안은 O 짝 **두 칸을 번호 하나로 합쳐서** 넣어요 — 작은 쪽 * N + 큰 쪽.\n배열은 번호 하나로만 찾을 수 있으니까요 (파이썬은 (x, 작은, 큰) 을 그대로 열쇠로 써요).\nN = 5 면 1·2 는 1*5+2 = 7번. 큰 쪽은 늘 N 보다 작으니, 7 을 5 로 나누면 몫 1·나머지 2 로 **늘 되돌아와요** — 그래서 안 겹쳐요.") },
+      { hi: [8, 18],  bubble: t(E, "This is the table you built a page ago.\nThe same table as a page ago — that cell was slot **7** in the array.\nTwo cells into one number: smaller * N + larger.",
+                                   "앞 쪽에서 만든 그 표예요.\n무브를 여기에 한 번만 세어 넣어요.\n앞 쪽 표 그대로예요 — 거기서 본 그 칸이 배열에선 **7번**이었죠.\n두 칸을 한 번호로: 작은 쪽 * N + 큰 쪽.") },
       { hi: [20, 25], bubble: t(E, "The board is just a list: 1 means M, 0 means O. Start from all O.", "보드는 그냥 리스트예요 — 1 이면 M, 0 이면 O. 전부 O 에서 시작해요.") },
       { hi: [26, 35], bubble: t(E, "For this board, split the cells: which are M, which are O.", "이 보드에서 칸을 갈라요 — 어디가 M 이고 어디가 O 인지.") },
       { hi: [36, 45], bubble: t(E, "Here is the whole point.\nOnly 'one M cell + two O cells' can ever score, so look at nothing else.\nOs was filled from cell 1 upward, so earlier entries are always smaller cells.\nj starts after i, so Os[i] is the smaller one — matching the smaller-first rule we used for the keys.",
