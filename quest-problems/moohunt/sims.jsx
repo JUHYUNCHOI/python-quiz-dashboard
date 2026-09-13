@@ -390,14 +390,18 @@ export function WholeRunSim({ E }) {
         <>{s.i === 0
             ? <><b>3.</b> Boards start at <b>OOOOO</b> — no M, so 0 points. The next one is <b>{board(s.b)}</b>.</>
             : s.i === 1
-              ? <><b>3.</b> Keep going. Scores rise and fall, and at <b>{board(s.b)}</b> the <b>highest score so far</b> appears.</>
-              : <><b>3.</b> Later, one more board ties that highest score — <b>{board(s.b)}</b>.</>}
+              ? <><b>3.</b> Next board, next board, … <b>adding 1 each time</b>, just like before. Scores rise and fall; here at <b>{board(s.b)}</b> the <b>highest score so far</b> appears.<br /><span style={{ opacity: .8 }}>(We are skipping ahead on screen — the code does not skip.)</span></>
+              : <><b>3.</b> Keep adding 1, and one more board ties that highest score — <b>{board(s.b)}</b>.</>}
           <br />M cells <b>{mList}</b> · O cells <b>{oList}</b>.</>,
         <>{s.i === 0
             ? <><b>3.</b> 보드는 <b>OOOOO</b> 부터 시작해요 — M 이 없으니 0점. 그 다음 보드가 <b>{board(s.b)}</b> 예요.</>
+            /* ⚠️ 2026-09-13 선생님: "**뭘 기준으로 보드가 바껴?**"
+               "계속 가요" 라고만 해서 보드가 아무렇게나 바뀌는 것처럼 보였다.
+               보드를 바꾸는 규칙은 4쪽에서 배운 **1 더하기** 다. 그 말을 여기서 다시 한다.
+               그리고 **화면에서만 건너뛴다**는 것도 밝힌다 — 코드는 하나도 안 건너뛴다. */
             : s.i === 1
-              ? <><b>3.</b> 계속 가요. 보드마다 점수가 오르내리는데, <b>{board(s.b)}</b> 에서 <b>지금까지 중 가장 높은 점수</b>가 나와요.</>
-              : <><b>3.</b> 더 가다 보면 그 최고 점수와 같은 보드가 하나 더 나와요 — <b>{board(s.b)}</b>.</>}
+              ? <><b>3.</b> 다음 보드, 그 다음 보드 … <b>앞에서처럼 1 씩 더하면서</b> 가요. 점수가 오르내리다가 <b>{board(s.b)}</b> 에서 <b>지금까지 중 가장 높은 점수</b>가 나와요.<br /><span style={{ opacity: .8 }}>(화면에서만 건너뛰는 거예요 — 코드는 안 건너뛰어요.)</span></>
+              : <><b>3.</b> 계속 1 씩 더해 가면, 그 최고 점수와 같은 보드가 하나 더 나와요 — <b>{board(s.b)}</b>.</>}
           <br />M 자리 <b>{mList}</b> · O 자리 <b>{oList}</b>.</>);
       if (s.p === "pick") return t(E,
         /* ⚠️ 구멍 ④: **왜 어떤 줄은 흐린지** 화면이 말하지 않았다.
@@ -418,8 +422,11 @@ export function WholeRunSim({ E }) {
     : t(E,
       /* ⚠️ 번호는 **코드가 도는 순서**다. 3~6 은 보드마다 되풀이되니 보드가 바뀌면 3 으로 돌아간다 —
          그게 반복문이라는 뜻이라 일부러 그렇게 둔다. 마지막은 그 뒤라 **7** 이다(전엔 4 였다). */
-      <><b>7.</b> Repeat <b>3 – 6</b> for all <b>{1 << N}</b> boards and keep the best.<br />Answer: <b>{best} {ways}</b> — that is exactly what the code prints.</>,
-      <><b>7.</b> 보드 <b>{1 << N}</b>개에 <b>3 ~ 6</b> 을 되풀이하고 제일 좋은 걸 남겨요.<br />답: <b>{best} {ways}</b> — 코드가 출력하는 게 바로 이거예요.</>);
+      /* ⚠️ 2026-09-13 선생님: "**결국 이것도 다 넣어보는거 아니야?**"
+         맞다 — 보드는 여전히 전부 해본다. 줄어든 건 **보드 개수가 아니라 보드 하나를 채점하는 값**이다.
+         그게 이 quest 의 핵심인데 마지막 걸음이 그 말을 안 하고 있었다. 정면으로 답한다. */
+      <><b>7.</b> Repeat <b>3 – 6</b> for all <b>{1 << N}</b> boards and keep the best.<br />Answer: <b>{best} {ways}</b> — exactly what the code prints.<br /><span style={{ opacity: .85 }}>Yes — we still try <b>every</b> board. What changed is the <b>cost of scoring one</b>: walking 200,000 moves became a few lookups in the table.</span></>,
+      <><b>7.</b> 보드 <b>{1 << N}</b>개에 <b>3 ~ 6</b> 을 되풀이하고 제일 좋은 걸 남겨요.<br />답: <b>{best} {ways}</b> — 코드가 출력하는 게 바로 이거예요.<br /><span style={{ opacity: .85 }}>맞아요, 보드는 <b>여전히 전부</b> 해봐요. 달라진 건 <b>보드 하나를 채점하는 값</b>이에요 — 무브 20만 개를 훑던 걸 표에서 몇 번 꺼내는 걸로 바꿨어요.</span></>);
 
   const Row = ({ label, value, hot }) => (
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
