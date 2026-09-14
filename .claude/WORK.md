@@ -1816,7 +1816,14 @@ moohunt 를 가른 건 **"만점 불가" 명시 + untaught 2개**의 교집합�
 애초에 그 정밀도로 검증된 적이 없어(제출·타이밍 실측 없음) 이 신호를 계산할 수조차 없다.
 **기계는 후보만 좁힌다. 판정은 사람이 하나씩 연다.**
 
-### 곁가지 — `alchemy` 는 매긴 건지 아닌지 구분이 안 된다
-`quest-meta.ts` 에 엔트리는 있는데 `difficulty` 필드가 없어 `DEFAULT_META` 의 **기본값 2** 를
-그대로 물려받는다. 화면엔 2 로 뜨지만 아무도 2 라고 판단한 적이 없을 수 있다.
-→ 엔트리가 있으면서 difficulty 가 빠진 quest 를 세는 검사가 있으면 좋겠다.
+### ✅ 곁가지 해결 — 검사기를 만들었다 (`scripts/check-quest-difficulty.py`)
+`alchemy` 처럼 **엔트리는 있는데 `difficulty` 필드가 없는** quest 는 `DEFAULT_META` 의
+**기본값 2** 를 그대로 물려받는다. 유추값(③)보다 나쁘다 — **매긴 값처럼 보이기** 때문이다.
+검사기가 난이도의 출처를 넷으로 가른다:
+  ① 감사맵 19개 · ② 명시 44개 · ③ 유추 94개 · **④ 기본값이 새어나옴 18개**
+`--list` 로 ④ 목록이 나온다. **다음에 손으로 열어볼 18개가 이것이다** (우선순위 높은 순 아님):
+  acowdemia1 acowdemia2 aircond1 alchemy billboard2 blocks cowntrace livestock madscientist
+  photoshoot2 reach reverseeng socialdist2 stuckinrut subseqmedian swapity tameherd teleport
+⚠️ 만들 때 한 번 틀렸다 — 정규식으로 엔트리 블록을 자르다 중첩 객체에 걸려 `bacteria` 를
+   "안 매김" 으로 셌다(25개로 나왔다). **중괄호 깊이로 세도록** 고쳐 18개가 됐다.
+   검산: bacteria 3 · moohunt 4 · astral 4 · cowphotos 2 를 제대로 잡는다.
