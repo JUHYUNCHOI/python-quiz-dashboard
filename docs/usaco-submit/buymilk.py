@@ -4,7 +4,7 @@ input = sys.stdin.readline
 N, Q = map(int, input().split())
 a = list(map(int, input().split()))
 
-# Normalize: c[i] = cheapest cost for a 2^i-bucket block.
+# Normalize: c[i] = cheapest cost for a block of 1 doubled i times.
 # Either buy deal i (a[i]), or two smaller blocks (2 * c[i-1]).
 # After this, a bigger block is always cheaper PER BUCKET,
 # so we can just use big blocks first — no recursion needed.

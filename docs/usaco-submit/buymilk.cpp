@@ -14,7 +14,7 @@ int main() {
         cin >> a[i];
     }
 
-    // Normalize: c[i] = cheapest cost for a 2^i-bucket block
+    // Normalize: c[i] = cheapest cost for a block of 1 doubled i times
     // (buy deal i, or two smaller blocks). Then a bigger block is
     // always cheaper PER BUCKET — use big blocks first, no recursion.
     vector<ll> c(N);
