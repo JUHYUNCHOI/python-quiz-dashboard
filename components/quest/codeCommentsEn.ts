@@ -1199,4 +1199,130 @@ export const CODE_COMMENT_EN: Record<string, string> = {
     "otherwise the bounding box is the whole billboard -> the whole area",
   "첫 줄: billboard 좌표, 둘째 줄: feed (tarp) 좌표":
     "first line: the billboard's corners; second line: the feed poster's corners",
+
+  // ── hoofball · moo · swapity · backforth · socialdist2 · bucketbrigade · crossroad2 · explodingarrow · fences (2026-09-15)
+  "1 단계: 아무도 안 주는 cow 마다 ball 1 개":
+    "step 1: one ball for each cow nobody passes to",
+  "1 단계: 안 받는 cow 마다 ball 1 개":
+    "step 1: one ball for each cow that never receives",
+  "2 단계: 서로만 패스하는 인접 쌍 (mutual cycle) 마다 ball 1 개 추가":
+    "step 2: one more ball for each neighbouring pair that only passes to each other",
+  "2 단계: 인접 mutual cycle 쌍마다 ball 1 개 추가":
+    "step 2: one more ball for each neighbouring pair that passes only to each other",
+  "각 cow 가 몇 번 받는지":
+    "how many times each cow receives",
+  "각 cow 마다 누구한테 패스하는지 (tie 시 왼쪽)":
+    "who each cow passes to (on a tie, the one on the left)",
+  "각 cow 마다 누구한테 패스하는지 (가까운 쪽, tie 시 왼쪽)":
+    "who each cow passes to (the nearer one; on a tie, the left)",
+  "받는 횟수":
+    "how many times it receives",
+  "매번 전체 문자열 재스캔 (N 칸)":
+    "rescanning the whole string every time (N cells)",
+  "원본 문자열에 이미 있는 moo 등록":
+    "register the moos already in the original string",
+  "🐌 매 위치 × 26 글자 시도 — TLE 원인!":
+    "slow: every position times 26 letters - this is what times out!",
+  "set 은 순서 없음 — sorted() 로 리스트 만듦":
+    "a set has no order, so sorted() turns it into a list",
+  "set 은 알파벳순 순회 — 정렬 불필요":
+    "this set walks in alphabetical order, so no sorting is needed",
+  "한 식이 모든 경우 처리":
+    "one formula handles every case",
+  "🔴 REMOVE: 영향받는 3 윈도우 카운트 빼기":
+    "REMOVE: take away the counts of the three windows this affects",
+  "🟢 RESTORE: 원래 윈도우 복원":
+    "RESTORE: put the original windows back",
+  "사이클 분해로 K 라운드 효율적 계산":
+    "break it into cycles to work out K rounds quickly",
+  "위치 cycle[j] 에 사이클에서 shift 만큼 뒤의 원래 소 (1-indexed)":
+    "spot cycle[j] gets the cow that sits shift places further along the cycle (counting from 1)",
+  "두번째 reverse: 위치 B1-1 ~ B2-1":
+    "second reverse: spots B1-1 to B2-1",
+  "사이클 추출":
+    "pull out the cycles",
+  "첫번째 reverse: 위치 A1-1 ~ A2-1 (0-indexed)":
+    "first reverse: spots A1-1 to A2-1 (counting from 0)",
+  "출력: 각 줄에 위치 i 의 소 번호":
+    "output: one line per spot i, the number of the cow standing there",
+  "한 라운드의 perm 구축 (2번의 reverse 적용)":
+    "build one round's rearrangement (applying the two reverses)",
+  "한 라운드의 perm 구축 (2번의 reverse)":
+    "build one round's rearrangement (the two reverses)",
+  "1일: b1 → b2 (b1 의 10개 중 1개 선택)":
+    "day 1: b1 -> b2 (pick one of b1's 10)",
+  "2일: b2 → b1 (b2 의 11개 중 1개 선택)":
+    "day 2: b2 -> b1 (pick one of b2's 11)",
+  "3일: b1 → b2 (b1 의 10개 중 1개 선택)":
+    "day 3: b1 -> b2 (pick one of b1's 10)",
+  "4일 동안 barn1 <-> barn2 옮기기, 최종 b1 총합 distinct":
+    "move buckets between barn 1 and barn 2 for four days, then count the different totals barn 1 can end with",
+  "4일 동안 barn1 <-> barn2 옮기기:":
+    "moving buckets between barn 1 and barn 2 for four days:",
+  "4일: b2 → b1 (b2 의 11개 중 1개 선택)":
+    "day 4: b2 -> b1 (pick one of b2's 11)",
+  "최종 b1 총합의 distinct 가짓수 출력":
+    "print how many different totals barn 1 can end with",
+  "모두 아픔 — 초기 감염 1마리로 전파 가능":
+    "everyone is sick - one starting case could have spread to all of them",
+  "max R: 가장 큰 R — 어떤 건강한 소도 아픈 소의 R 이내에 없어야 함":
+    "the largest R: no healthy cow may sit within R of a sick one",
+  "max R: 가장 큰 R 값 — 어떤 건강한 소도 아픈 소의 R 이내에 없어야 함":
+    "the largest possible R: no healthy cow may sit within R of a sick one",
+  "건강한 소가 나오면 클러스터 끊김":
+    "a healthy cow breaks the cluster",
+  "연속된 아픈 소 사이 거리 > R 이면 새 클러스터":
+    "if two sick cows in a row are more than R apart, that starts a new cluster",
+  "클러스터 세기":
+    "count the clusters",
+  "클러스터 세기: 정렬된 cows 순회":
+    "count the clusters: walk the sorted cows",
+  "rock 이 L 과 B 의 같은 행/열에 끼어 있으면 우회 → +2":
+    "if the rock sits between L and B on the same row or column, we go around it -> +2",
+  "같은 열":
+    "the same column",
+  "같은 행":
+    "the same row",
+  "같은 행: L, B, R 모두 같은 행이고 R 이 L 과 B 사이에 있음":
+    "same row: L, B and R are all on one row and R sits between L and B",
+  "최단 거리 = 맨해튼 - 1 (양 끝 제외)":
+    "shortest distance = the Manhattan distance minus 1 (the two ends do not count)",
+  "최단 거리 = 맨해튼 거리 - 1 (양 끝 제외)":
+    "shortest distance = the Manhattan distance minus 1 (the two ends do not count)",
+  "각 글자의 첫 번째와 두 번째 위치":
+    "where each letter appears the first and the second time",
+  "각 글자의 첫 번째와 두 번째 위치 찾기":
+    "find where each letter appears the first and the second time",
+  "끝점 번갈아: a1 < b1 < a2 < b2 또는 b1 < a1 < b2 < a2":
+    "the ends alternate: a1 < b1 < a2 < b2, or b1 < a1 < b2 < a2",
+  "두 chord (A, B) 가 교차할 조건: 끝점이 번갈아 (a1 < b1 < a2 < b2 또는 그 반대)":
+    "two chords A and B cross exactly when their ends alternate (a1 < b1 < a2 < b2, or the other way round)",
+  "입력은 한 줄: 글자 시퀀스":
+    "the input is one line: a sequence of letters",
+  "입력은 한 줄: 글자 시퀀스 (각 cow 가 2번씩 등장)":
+    "the input is one line: a sequence of letters (each cow shows up twice)",
+  "데미지가 닿는 최대 거리":
+    "how far the damage reaches",
+  "여기서 쏠 화살 수":
+    "how many arrows to shoot here",
+  "... feasible(X) 는 아래 ② 에서 ...":
+    "... feasible(X) is defined in part 2 below ...",
+  "M 은 j 를 혼자서 없앨 최소 X 예요 — 정답은 이 값들 중 최댓값을 넘지 않아요.":
+    "M is the smallest X that clears j on its own - the answer never goes above the largest of these",
+  "feasible(X) 는 아래 ② 에서 정의":
+    "feasible(X) is defined in part 2 below",
+  "정수 제곱근":
+    "integer square root",
+  "이면 된다":
+    "is enough",
+  ") 로 바꿔요.":
+    ") .",
+  ") 로 채워져 있어요. FJ 가 한 개의 열을 골라 그 열의 모든 칸을 울타리 (#) 로 바꾸려고 해요. 풀 → 울타리 한 칸당 비용 1.\n어떤 열을 골랐을 때 가장 적은 총 비용이 드는지 출력해요.":
+    ") . FJ picks one column and turns every cell of it into fence (#). Turning one grass cell into fence costs 1.\nPrint the smallest total cost he can get by choosing the best column.",
+  "). 열(세로줄!) 하나를 골라서 전부 울타리로 만들어야 해요!":
+    "). Pick one column (a vertical line!) and turn all of it into fence!",
+  "으로 바꿔요!":
+    "!",
+  "이어야 한다":
+    "must be",
 };

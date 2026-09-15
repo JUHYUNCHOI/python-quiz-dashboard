@@ -321,9 +321,13 @@ export function makeMooHuntCh2(E, lang = "py") {
     {
       type: "reveal",
       label: t(E, "Fewer checks", "덜 보기"),
+      /* ⚠️ 2026-09-15: narr 가 "더 빨라질까요?" 라고만 해서, 학생이 5·6쪽을 보는 동안
+         자기가 **보드를 줄이는 이야기**를 듣는지 **보드당 비용을 줄이는 이야기**를 듣는지
+         스스로 가려야 했다. 선생님이 "그냥 다 해보는거야?" 라고 물으신 게 그 지점이다.
+         → 무엇을 줄이는지 **먼저** 말한다. narr 는 원래 한 줄이라 글자 수는 안 늘어난다. */
       narr: t(E,
-        "So — how do we make it faster? Let's look.",
-        "그럼 어떻게 하면 더 빨라질까요? 같이 봐요."),
+        "What shrinks is not the number of boards — it is the cost of scoring one.",
+        "무엇을 줄일까요 — 보드 수가 아니라 보드 하나 채점하는 값이에요."),
       content: (<FasterIdeaSim E={E} />),
     },
     /* ── 결-c2: 아이디어와 코드 사이의 다리 (2026-09-11 신설) ────────
@@ -363,9 +367,15 @@ export function makeMooHuntCh2(E, lang = "py") {
     {
       type: "reveal",
       label: t(E, "Final answer", "최종 답"),
+      /* ⚠️ 2026-09-15: 전에는 "결과는 같고 일은 훨씬 적어요" 였다. **무엇이 그대로고 무엇이
+         줄었는지**를 안 말한다. 게다가 이 quest 의 핵심 문장은 7쪽 **15번째 걸음**에 딱 한 번
+         나온다 — 15클릭 깊이다. 앞서 나는 "앞 쪽이 이미 말했으니" 반복을 피해 두 줄을 지웠는데,
+         그 판단이 **학생이 마지막에 들고 나가는 문장에서 핵심을 빼버렸다.**
+         선생님: "뭘 어떻게 했다는건지 핵심을 모르겠어."
+         ⚠️ 반복을 줄이는 것과 **핵심을 한 번 더 못 박는 것**은 다르다. 헤드라인은 반복해도 된다. */
       narr: t(E,
-        "The final answer — same result, far less work.",
-        "이게 최종 답이에요. 결과는 같고 일은 훨씬 적어요."),
+        "Still all 1,000,000 boards — what shrank is the cost of scoring one.",
+        "보드는 여전히 100만 개 다 봐요 — 줄인 건 보드 하나 채점하는 값이에요."),
       content: (
         <div>
           <div style={{ margin: "12px 14px 0", background: "#ecfdf5", border: "1.5px solid #34d399",
