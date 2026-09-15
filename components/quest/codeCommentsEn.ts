@@ -1041,4 +1041,162 @@ export const CODE_COMMENT_EN: Record<string, string> = {
     "the first arrangement that meets every rule is the answer - done with a loop, no recursion",
   "처음으로 제약을 만족하는 배열이 곧 답 — 재귀 없이 반복문으로.":
     "the first arrangement that meets the rules is the answer - done with a loop, no recursion",
+
+  // ── milkorder · mooin2 · acowdemia3 · familytree · meastraffic · modernart · sleepyherd · billboard2 (2026-09-15)
+  "USACO 이전 contest 는 파일 입출력 사용":
+    "older USACO contests use file I/O",
+  "hierarchy 순서대로 placement":
+    "place them in hierarchy order",
+  "1) 고정 위치 + cow 1 at p 로 position 배열 만듦":
+    "1) build the position array from the fixed spots plus cow 1 at p",
+  "2) hierarchy 를 순서대로 placement: 고정이면 그 위치 사용, 아니면 next 이후 가능한 위치 찾기":
+    "2) place the hierarchy in order: use the fixed spot if there is one, otherwise find the next free spot",
+  "K 고정 위치: cow -> position":
+    "K fixed spots: cow -> position",
+  "cow 1 의 고정 위치가 있다면 그것과 일치해야 함":
+    "if cow 1 has a fixed spot, this has to match it",
+  "h 의 위치를 결정":
+    "settle where h goes",
+  "nxt 이후 비어있는 위치 찾기":
+    "find the first free spot at or after nxt",
+  "pos_to_cow[q] = q 위치에 있는 cow (없으면 0)":
+    "pos_to_cow[q] = the cow standing at spot q (0 if it is empty)",
+  "각 p (1..N) 에 대해 cow 1 이 거기 갈 수 있는지 검사":
+    "for each p in 1..N, check whether cow 1 can stand there",
+  "각 p 에 대해 cow 1 이 p 에 갈 수 있는지 검사":
+    "for each p, check whether cow 1 can stand at p",
+  "다음 후보 위치":
+    "the next spot to try",
+  "second_last: 각 값의 '끝에서 두 번째' 자리 j (오른쪽부터, count 가 2 되는 순간)":
+    "second_last: for each value, the second-from-the-end place j (counting from the right, the moment the count hits 2)",
+  "x 는 i 자리":
+    "x sits at place i",
+  "둘째 y 는 k 자리":
+    "the second y sits at place k",
+  "서로 다른 (x, y) moo 모음":
+    "the collection of different (x, y) moos",
+  "오른쪽부터 세다가 그 값의 count 가 2 되는 순간이 그 자리":
+    "counting from the right, that place is where the value's count reaches 2",
+  "첫 y 는 j 자리":
+    "the first y sits at place j",
+  "a[i] 자기 자신은 빼기":
+    "leave out a[i] itself",
+  "second_last: 각 값이 '끝에서 두 번째'로 나온 자리 j (그 뒤에 같은 y 가 또 있음)":
+    "second_last: for each value, the place j where it appears second from the end (another matching y comes after it)",
+  "second_last: 각 값이 '끝에서 두 번째'로 나온 자리 j (뒤에 같은 y 가 또 있음)":
+    "second_last: for each value, the place j where it appears second from the end (another matching y follows)",
+  "답 (클 수 있음 -> long long): (y,y) 짝마다 memo[j] 를 더함":
+    "the answer (it can get big, so use 64-bit): for each (y, y) pair, add memo[j]",
+  "답 = 각 (y,y) 짝마다, 그 j 앞에 올 수 있는 서로 다른 x 개수를 더함":
+    "the answer = for each (y, y) pair, add how many different x's could come before that j",
+  "3마리 이상이면 반대편 한 쌍 → 바로 친구":
+    "three or more means some pair sits opposite each other -> friends right away",
+  "3마리+ → 반대편 한 쌍":
+    "three or more -> a pair opposite each other",
+  "같은 쌍은 1번만":
+    "count each pair only once",
+  "같은 쌍이 두 번 나와도 set 이 1번만":
+    "even if the same pair comes up twice, the set keeps only one",
+  "소 0~1마리 → 우정 불가":
+    "zero or one cow -> no friendship possible",
+  "소 0~1마리면 우정 불가":
+    "with zero or one cow there is no friendship",
+  "소 2마리 쌍 (중복 제거)":
+    "pairs of exactly two cows (duplicates removed)",
+  "풀 칸에 소 3마리 이상 (반대편 쌍) → 바로 +1":
+    "three or more cows on a grass cell (a pair sits opposite) -> +1 right away",
+  "풀 칸에 소 3마리+ (반대편 쌍) → 바로 +1":
+    "three or more cows on a grass cell (an opposite pair) -> +1 right away",
+  "풀 칸에 소 정확히 2마리 → 그 소 쌍을 기록 (중복 제거)":
+    "exactly two cows on a grass cell -> record that pair (duplicates removed)",
+  "A 가 B 의 ancestor":
+    "A is an ancestor of B",
+  "A 가 B 의 aunt (혹은 great-aunt)":
+    "A is B's aunt (or great-aunt)",
+  "A 의 ancestor chain (자기 자신 포함)":
+    "A's chain of ancestors (A included)",
+  "A 의 ancestor chain 만들기 (자기 자신 포함)":
+    "build A's chain of ancestors (A included)",
+  "B 가 A 의 ancestor":
+    "B is an ancestor of A",
+  "B 의 ancestor chain":
+    "B's chain of ancestors",
+  "LCA 찾기: chain_A 에서 가장 가까운 (인덱스 낮은) 공통 조상":
+    "find the lowest common ancestor: the nearest shared one in chain_A (the smallest index)",
+  "LCA: chain_A 에서 가장 가까운 공통 조상":
+    "the lowest common ancestor: the nearest shared one in chain_A",
+  "같은 cow 가정 안 함":
+    "we do not assume they are the same cow",
+  "첫 줄: N + 두 cow 이름":
+    "first line: N and the two cow names",
+  "Backward sweep: 끝부터 처음까지":
+    "backward sweep: from the end to the start",
+  "Backward sweep: 끝부터 처음까지 흐름 범위 좁히기":
+    "backward sweep: narrow the flow range from the end to the start",
+  "Forward sweep: 처음부터 끝까지":
+    "forward sweep: from the start to the end",
+  "Forward sweep: 처음부터 끝까지 흐름 범위 좁히기":
+    "forward sweep: narrow the flow range from the start to the end",
+  "reverse: 거꾸로 가니 ramp 만큼 더하기":
+    "going backwards, so add the ramp instead",
+  "reverse: 거꾸로 가니 ramp 만큼 빼기":
+    "going backwards, so subtract the ramp instead",
+  "type = 'none' (센서), 'on' (진입로), 'off' (출구)":
+    "type is 'none' for a sensor, 'on' for an on-ramp, 'off' for an exit",
+  "각 segment: (type, lo, hi)":
+    "each segment is (type, lo, hi)",
+  "큰 범위로 시작 (아주 큰 수 = 무한대 대신)":
+    "start with a wide range (a very large number stands in for infinity)",
+  "canvas 에 안 보임":
+    "it does not show on the canvas",
+  "각 색깔의 bounding box":
+    "the bounding box of each colour",
+  "각 색깔의 bounding box 계산":
+    "work out the bounding box of each colour",
+  "각 줄은 공백 없이 N 자리 숫자":
+    "each line is N digits with no spaces",
+  "각 줄은 공백 없이 N 자리 숫자 (예: '2230')":
+    "each line is N digits with no spaces (e.g. '2230')",
+  "색깔 C 가 first 일 조건:":
+    "for colour C to have been painted first:",
+  "색깔 C 가 first: 어떤 C 셀도 다른 색깔 Y 의 bbox 안에 있으면 안 됨":
+    "colour C was first only if no C cell sits inside another colour Y's bounding box",
+  "어떤 C 셀도 다른 색깔 Y 의 bbox 안에 있으면 안 됨 (있으면 C 가 Y 보다 나중)":
+    "no C cell may sit inside another colour Y's bounding box (if one does, C came after Y)",
+  "이 C 셀이 다른 색깔의 bbox 에 있는지 확인":
+    "check whether this C cell sits inside another colour's bounding box",
+  "- 나머지: 2번":
+    "- otherwise: 2 moves",
+  "- 나머지: 2번 필요 (gap=1 한쪽 + gap>2 다른쪽 케이스 포함)":
+    "- otherwise: 2 moves (this covers one gap of 1 with the other bigger than 2)",
+  "- 한 쪽 gap=2: 가운데 빈 칸으로 옮기면 1번":
+    "- if one gap is 2: move into the empty middle cell, so 1 move",
+  "- 한 쪽 gap=2: 가운데 빈 칸으로 옮기면 1번에 해결":
+    "- if one gap is 2: moving into the empty middle cell settles it in 1 move",
+  "3마리 소 위치 입력 (한 줄에 공백으로 구분), 정렬":
+    "read the three cow positions (one line, space separated) and sort them",
+  "Maximum moves: 큰 gap 안에서 1칸씩 = max(gap1, gap2) - 1":
+    "most moves: stepping one cell at a time inside the larger gap = max(gap1, gap2) - 1",
+  "Maximum moves: 큰 gap 안에서 1칸씩 움직이는 횟수 = max(gap1, gap2) - 1":
+    "most moves: how many one-cell steps fit in the larger gap = max(gap1, gap2) - 1",
+  "a 와 b 사이 간격":
+    "the gap between a and b",
+  "b 와 c 사이 간격":
+    "the gap between b and c",
+  "billboard 너비":
+    "the width of the billboard",
+  "billboard 높이":
+    "the height of the billboard",
+  "cow feed 가 billboard 의 전 너비 + 위/아래 한쪽 edge 까지 닿음":
+    "the feed poster covers the billboard's full width and reaches the top or bottom edge",
+  "cow feed 가 billboard 의 전 너비를 덮고, 위/아래 한쪽 edge 까지 닿는 경우":
+    "the case where the feed poster covers the full width and reaches the top or bottom edge",
+  "cow feed 가 billboard 의 전 높이 + 좌/우 한쪽 edge 까지 닿음":
+    "the feed poster covers the billboard's full height and reaches the left or right edge",
+  "cow feed 가 billboard 의 전 높이를 덮고, 좌/우 한쪽 edge 까지 닿는 경우":
+    "the case where the feed poster covers the full height and reaches the left or right edge",
+  "그 외: bounding box 가 전체 billboard → 전체 면적":
+    "otherwise the bounding box is the whole billboard -> the whole area",
+  "첫 줄: billboard 좌표, 둘째 줄: feed (tarp) 좌표":
+    "first line: the billboard's corners; second line: the feed poster's corners",
 };
