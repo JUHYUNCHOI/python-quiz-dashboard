@@ -22,7 +22,7 @@ int main() {
     for (int q = 0; q < Q; q++) {
         ll x; cin >> x;
         ll ans = INF, cost = 0, rem = x;   // cost locked in, buckets left
-        for (int i = N - 1; i >= 0; i--) {
+        for (int i = min(N - 1, 30); i >= 0; i--) {   // 2^30 > x, so stop at 30
             ll size = 1LL << i;
             // option A: round UP with this block and stop (buy a little extra)
             ll need = (rem + size - 1) / size;   // ceil(rem / size)
