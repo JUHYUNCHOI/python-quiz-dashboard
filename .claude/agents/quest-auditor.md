@@ -245,13 +245,24 @@ MCC 2019 를 P1~P4 하나씩 보면서 **같은 사고가 네 번** 나왔다.
 
 ```bash
 python3 scripts/check-quest-code-idiom.py     # 안 가르친 손버릇 (이 문서 담당)
+python3 scripts/check-code-one-statement.py   # 한 줄에 문장 여러 개 (2026-09-15 추가)
 python3 scripts/count-quests.py --list untaught   # 안 가르친 알고리즘 개념 (참고)
 ```
 
-⚠️ **둘은 다른 층이다. 합치지 마라.**
+⚠️ **셋은 다른 층이다. 합치지 마라.**
 `--list untaught` = 비트연산·2차원리스트 같은 **풀이 방법**.
 `check-quest-code-idiom` = 같은 알고리즘인데 **코드를 어떻게 짰나**
 (`sys.stdin.buffer` · `bytearray` · ord 값 · `pos` 포인터 · `bits/stdc++.h` · `sync_with_stdio`).
+`check-code-one-statement` = 코드가 **눈에 들어오나** — `ll x; cin >> x;` 처럼
+한 줄에 문장이 둘, `for (...) c[i] = ...;` 처럼 본문이 헤더에 붙은 줄, 삼항 연산자.
+
+### ⭐ 2026-09-15 — 이게 **세 번째 층으로 올라온 이유**
+
+선생님이 buymilk 를 보시고: *"코드는 한줄에 여러개가 있고 보기 않좋아서 읽기 싫던데.
+**다 검토가 들어간건가?**"* — 그날 검토자가 다섯이었는데 **아무도 안 봤다.**
+2026-09-08 에 이미 같은 지적을 받았지만 **검사기가 없어서 매번 잊혔다.**
+실측 **778줄 · quest 144개, 그중 551줄이 🔒 안**이다.
+🔒 는 "안 고친다" 가 아니라 **"고치려면 판정 + 재검증이 필요하다"** 로 읽어라.
 
 ### 왜 생겼나 — 2026-09-11
 

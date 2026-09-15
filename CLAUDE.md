@@ -52,6 +52,9 @@ python3 scripts/check-quest-difficulty.py  # 난이도가 **누가 매긴 값인
                                            #   ⚠️ 유추값이 많은 건 문제가 아니다. 문제는 **안 매긴 값이
                                            #   매긴 값처럼 보이는** 것이다 (2026-09-13 선생님 "이 문제가 진짜 레벨3인가?")
 python3 scripts/check-quest-code-idiom.py  # 안 가르친 **손버릇**(stdin.buffer·bytearray·bits/stdc++.h)을 쓰는 quest
+python3 scripts/check-code-one-statement.py  # 한 줄에 문장이 여러 개인 코드 (선생님이 "읽기 싫다" 하신 것)
+                                           #   ⚠️ 2026-09-08·09-15 **두 번** 지적받았다. 두 번째가 나온 건
+                                           #   기억을 안 해서가 아니라 **검사 항목이 아니어서**다. 실측 778줄·quest 144개.
                                            #   ⚠️ 위 --list untaught 와 **다른 층**이다. 그건 알고리즘 개념,
                                            #   이건 같은 알고리즘인데 코드를 어떻게 짰나. 합치지 마라.
 ```
