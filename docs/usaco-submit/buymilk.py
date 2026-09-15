@@ -21,7 +21,7 @@ for _ in range(Q):
     rem = x           # buckets still to cover
     # biggest useful block down to the smallest (i = 0)
     for i in range(min(N - 1, 30), -1, -1):   # 30 doublings already pass x
-        size = 1 << i
+        size = 2 ** i
         # option A: round UP with this block and stop (buy a little extra)
         need = (rem + size - 1) // size        # ceil(rem / size)
         ans = min(ans, cost + need * c[i])

@@ -23,6 +23,13 @@ int main() {
         c[i] = min(a[i], 2 * c[i - 1]);
     }
 
+    // blockSize[i] = how many buckets block i holds: 1 doubled i times
+    vector<ll> blockSize(31);
+    blockSize[0] = 1;
+    for (int i = 1; i <= 30; i++) {
+        blockSize[i] = blockSize[i - 1] * 2;
+    }
+
     for (int q = 0; q < Q; q++) {
         ll x;
         cin >> x;
@@ -30,7 +37,7 @@ int main() {
         ll cost = 0;       // cost locked in so far
         ll rem = x;        // buckets still to cover
         for (int i = min(N - 1, 30); i >= 0; i--) {   // 30 doublings already pass x
-            ll size = 1LL << i;
+            ll size = blockSize[i];
             // option A: round UP with this block and stop (buy a little extra)
             ll need = (rem + size - 1) / size;   // ceil(rem / size)
             ans = min(ans, cost + need * c[i]);

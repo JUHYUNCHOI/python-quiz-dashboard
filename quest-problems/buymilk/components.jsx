@@ -23,6 +23,20 @@
 //        말풍선 5개가 다 제자리에 붙는 것을 화면에서 눈으로 확인했다.
 //     검증 5단계 재실행 전부 통과 (N=100,000 Q=10,000 실측 PY 0.18초 · CPP 0.16초).
 //     새 검사기: `scripts/check-code-one-statement.py`
+//   **2026-09-15 (3): 비트 시프트를 걷어냈다. 학생이 `1LL << i` 에서 "멈추고 싶었다" 고 했다.**
+//     `/decide` 3라운드 — 기획·감사·python-qa·cpp-qa 에게 서로 안 보이게 묻고 PM 이 종합.
+//     판정 근거: 화면은 이 문제를 **어디서도 `<<` 로 말하지 않는다** ("블록·두 배" 로만 말한다).
+//       코드에서만 다른 기호로 다시 쓴 것 → **본질이 아니라 수단.** 그래서 코드를 바꾼다.
+//       (부분집합 열거처럼 비트가 곧 아이디어인 quest 는 이 판정 밖이다 — aircond·feb23·
+//        mcc21simplemath. 거긴 대체 표현이 없어서 커리큘럼 문제고, 선생님 판정으로 올렸다.)
+//     PY : `size = 1 << i` → **`size = 2 ** i`** (`**` 는 파이썬 레슨 4 에서 가르친다)
+//     CPP: `ll size = 1LL << i;` → **`blockSize[i]` 표** (C++ 엔 `**` 가 없다). 46 → 53줄.
+//          이름을 `c` 와 안 겹치게 골랐다 — `c[i]` 는 값, `blockSize[i]` 는 통 수다.
+//     ⚠️ CPP 가 7줄 늘어 `hi` 를 다시 매겼고 말풍선도 하나 늘렸다(표를 설명해야 해서) —
+//        [25,30]=새 표 · [32,37] · [38,46] · [48,49]. 6개 다 제자리인 것을 화면에서 확인했다.
+//     검증: PY 21,780쿼리 불일치 0 (python-qa) · CPP 무작위 500 + 브루트포스 200 불일치 0,
+//        ASan/UBSan 클린 (cpp-qa) · 5단계 재실행 전부 통과 (상한 PY 0.19초 · CPP 0.15초).
+//     남은 `<<` 는 `cout <<` 뿐 — 학생이 이미 아는 뜻이다.
 //   코드 수정 시 USACO 재제출 필요 — 상세: REPO_ROOT/USACO_VERIFICATION.md
 
 import { C, t } from "@/components/quest/theme";
@@ -55,7 +69,7 @@ const FULL_PY = [
   "    rem = x           # buckets still to cover",
   "    # biggest useful block down to the smallest (i = 0)",
   "    for i in range(min(N - 1, 30), -1, -1):   # 30 doublings already pass x",
-  "        size = 1 << i",
+  "        size = 2 ** i",
   "        # option A: round UP with this block and stop (buy a little extra)",
   "        need = (rem + size - 1) // size        # ceil(rem / size)",
   "        ans = min(ans, cost + need * c[i])",
@@ -95,6 +109,13 @@ const FULL_CPP = [
   "        c[i] = min(a[i], 2 * c[i - 1]);",
   "    }",
   "",
+  "    // blockSize[i] = how many buckets block i holds: 1 doubled i times",
+  "    vector<ll> blockSize(31);",
+  "    blockSize[0] = 1;",
+  "    for (int i = 1; i <= 30; i++) {",
+  "        blockSize[i] = blockSize[i - 1] * 2;",
+  "    }",
+  "",
   "    for (int q = 0; q < Q; q++) {",
   "        ll x;",
   "        cin >> x;",
@@ -102,7 +123,7 @@ const FULL_CPP = [
   "        ll cost = 0;       // cost locked in so far",
   "        ll rem = x;        // buckets still to cover",
   "        for (int i = min(N - 1, 30); i >= 0; i--) {   // 30 doublings already pass x",
-  "            ll size = 1LL << i;",
+  "            ll size = blockSize[i];",
   "            // option A: round UP with this block and stop (buy a little extra)",
   "            ll need = (rem + size - 1) / size;   // ceil(rem / size)",
   "            ans = min(ans, cost + need * c[i]);",
@@ -130,9 +151,10 @@ export function getBuyMilkWalk(E, lang = "py") {
     return { code: FULL_CPP, vars: _BM_VARS, beats: [
       { hi: [9, 14],   bubble: t(E, "Read N, Q and the prices a.\nDeal 1 in the problem is a[0] in the code.\nSo a[i] buys 1 doubled i times: 1, 2, 4, 8, ...", "N, Q 와 가격 a 를 읽어요.\n문제의 1번 딜이 코드에서는 a[0] 이에요.\n그래서 a[i] 는 1 을 i 번 두 배 한 만큼이에요 — 1, 2, 4, 8, ...") },
       { hi: [16, 23], bubble: t(E, "Normalize the deals.\nc[i] = the cheapest way to get that block:\nbuy deal i, or buy two smaller blocks.\nThen a bigger block is never worse per bucket,\nso we go big-to-small with no recursion.", "딜을 정규화해요.\nc[i] 는 그 블록을 얻는 가장 싼 값이에요.\n딜 i 를 사거나, 작은 블록 두 개를 사요.\n그러면 큰 블록이 통당 손해가 아니에요.\n그래서 큰 것부터 훑으면 되고 재귀가 필요 없어요.") },
-      { hi: [25, 30], bubble: t(E, "Each query: need x buckets. Start ans, cost, rem.", "쿼리마다: x 버킷 필요. ans, cost, rem 초기화.") },
-      { hi: [31, 39], bubble: t(E, "x is at most 1,000,000,000.\nDoubling 30 times already passes it: 1,073,741,824.\nSo i never needs to go above 30.\n(A) Round up with this block and stop, or\n(B) take the floor and cover the rest with smaller blocks.", "x 는 많아야 10억이에요.\n2 를 30번 곱하면 벌써 넘어요 — 1,073,741,824.\n그래서 i 가 30보다 커질 일이 없어요.\n(A) 이 블록으로 올림해서 끝, 또는\n(B) 내림하고 나머지는 작은 블록으로.") },
-      { hi: [41, 42], bubble: t(E, "Also the exact-cover case; print the cheapest answer.", "딱 맞춘 경우도 후보; 최저 답 출력.") },
+      { hi: [25, 30], bubble: t(E, "Write down how many buckets each block holds.\nStart at 1 and keep doubling: 1, 2, 4, 8, ...\nC++ has no ** operator, so we build the list once.", "블록마다 몇 통인지 미리 적어둬요.\n1 에서 시작해서 계속 두 배예요 — 1, 2, 4, 8, ...\nC++ 에는 ** 가 없어서 한 번 만들어 두고 써요.") },
+      { hi: [32, 37], bubble: t(E, "Each query: need x buckets. Start ans, cost, rem.", "쿼리마다: x 버킷 필요. ans, cost, rem 초기화.") },
+      { hi: [38, 46], bubble: t(E, "x is at most 1,000,000,000.\nDoubling 30 times already passes it: 1,073,741,824.\nSo i never needs to go above 30.\n(A) Round up with this block and stop, or\n(B) take the floor and cover the rest with smaller blocks.", "x 는 많아야 10억이에요.\n2 를 30번 곱하면 벌써 넘어요 — 1,073,741,824.\n그래서 i 가 30보다 커질 일이 없어요.\n(A) 이 블록으로 올림해서 끝, 또는\n(B) 내림하고 나머지는 작은 블록으로.") },
+      { hi: [48, 49], bubble: t(E, "Also the exact-cover case; print the cheapest answer.", "딱 맞춘 경우도 후보; 최저 답 출력.") },
     ] };
   }
   return { code: FULL_PY, vars: _BM_VARS, beats: [
