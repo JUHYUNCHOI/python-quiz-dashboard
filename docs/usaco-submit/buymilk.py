@@ -20,7 +20,7 @@ for _ in range(Q):
     cost = 0          # cost locked in so far
     rem = x           # buckets still to cover
     # biggest useful block down to the smallest (i = 0)
-    for i in range(min(N - 1, 30), -1, -1):   # 2^30 > x, so stop at 30
+    for i in range(min(N - 1, 30), -1, -1):   # 30 doublings already pass x
         size = 1 << i
         # option A: round UP with this block and stop (buy a little extra)
         need = (rem + size - 1) // size        # ceil(rem / size)

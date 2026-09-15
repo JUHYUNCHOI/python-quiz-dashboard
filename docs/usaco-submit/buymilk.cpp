@@ -10,19 +10,26 @@ const ll INF = (ll)4e18;
 int main() {
     cin >> N >> Q;
     vector<ll> a(N);
-    for (int i = 0; i < N; i++) cin >> a[i];
+    for (int i = 0; i < N; i++) {
+        cin >> a[i];
+    }
 
     // Normalize: c[i] = cheapest cost for a 2^i-bucket block
     // (buy deal i, or two smaller blocks). Then a bigger block is
     // always cheaper PER BUCKET — use big blocks first, no recursion.
     vector<ll> c(N);
     c[0] = a[0];
-    for (int i = 1; i < N; i++) c[i] = min(a[i], 2 * c[i - 1]);
+    for (int i = 1; i < N; i++) {
+        c[i] = min(a[i], 2 * c[i - 1]);
+    }
 
     for (int q = 0; q < Q; q++) {
-        ll x; cin >> x;
-        ll ans = INF, cost = 0, rem = x;   // cost locked in, buckets left
-        for (int i = min(N - 1, 30); i >= 0; i--) {   // 2^30 > x, so stop at 30
+        ll x;
+        cin >> x;
+        ll ans = INF;      // best answer so far
+        ll cost = 0;       // cost locked in so far
+        ll rem = x;        // buckets still to cover
+        for (int i = min(N - 1, 30); i >= 0; i--) {   // 30 doublings already pass x
             ll size = 1LL << i;
             // option A: round UP with this block and stop (buy a little extra)
             ll need = (rem + size - 1) / size;   // ceil(rem / size)

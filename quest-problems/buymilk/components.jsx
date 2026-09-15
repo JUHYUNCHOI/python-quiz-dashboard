@@ -15,6 +15,14 @@
 //     검증 — 공식 샘플 일치 · 브루트포스 300케이스(1800쿼리) 불일치 0 · N=30~200 에서 PY==CPP ·
 //            **N=100,000 Q=10,000 실제 실행: PY 0.18초 · CPP 0.15초** · 옛 코드가 맞던 N≤63 구간 200케이스 답 동일.
 //     ⚠️ 여전히 **USACO 재제출 전**이다. `USACO_VERIFICATION.md` 의 ⏳ 표기를 그대로 둔다.
+//   **2026-09-15 (2): 한 줄에 문장 여러 개를 폈다. 선생님 "한줄에 여러개가 있고 읽기 싫던데" (두 번째 지적).**
+//     CPP 4줄 — `for (...) cin >> a[i];` · `for (...) c[i] = ...;` · `ll x; cin >> x;` ·
+//     `ll ans = INF, cost = 0, rem = x;` → 각각 폈다 (39줄 → 46줄). 동작은 그대로다.
+//     ⚠️ 줄이 늘어서 CodeWalk `hi` 를 전부 다시 매겼다 —
+//        [9,12]→[9,14] · [14,19]→[16,23] · [21,23]→[25,30] · [24,32]→[31,39] · [34,35]→[41,42].
+//        말풍선 5개가 다 제자리에 붙는 것을 화면에서 눈으로 확인했다.
+//     검증 5단계 재실행 전부 통과 (N=100,000 Q=10,000 실측 PY 0.18초 · CPP 0.16초).
+//     새 검사기: `scripts/check-code-one-statement.py`
 //   코드 수정 시 USACO 재제출 필요 — 상세: REPO_ROOT/USACO_VERIFICATION.md
 
 import { C, t } from "@/components/quest/theme";
@@ -46,7 +54,7 @@ const FULL_PY = [
   "    cost = 0          # cost locked in so far",
   "    rem = x           # buckets still to cover",
   "    # biggest useful block down to the smallest (i = 0)",
-  "    for i in range(min(N - 1, 30), -1, -1):   # 2^30 > x, so stop at 30",
+  "    for i in range(min(N - 1, 30), -1, -1):   # 30 doublings already pass x",
   "        size = 1 << i",
   "        # option A: round UP with this block and stop (buy a little extra)",
   "        need = (rem + size - 1) // size        # ceil(rem / size)",
@@ -74,19 +82,26 @@ const FULL_CPP = [
   "int main() {",
   "    cin >> N >> Q;",
   "    vector<ll> a(N);",
-  "    for (int i = 0; i < N; i++) cin >> a[i];",
+  "    for (int i = 0; i < N; i++) {",
+  "        cin >> a[i];",
+  "    }",
   "",
   "    // Normalize: c[i] = cheapest cost for a 2^i-bucket block",
   "    // (buy deal i, or two smaller blocks). Then a bigger block is",
   "    // always cheaper PER BUCKET — use big blocks first, no recursion.",
   "    vector<ll> c(N);",
   "    c[0] = a[0];",
-  "    for (int i = 1; i < N; i++) c[i] = min(a[i], 2 * c[i - 1]);",
+  "    for (int i = 1; i < N; i++) {",
+  "        c[i] = min(a[i], 2 * c[i - 1]);",
+  "    }",
   "",
   "    for (int q = 0; q < Q; q++) {",
-  "        ll x; cin >> x;",
-  "        ll ans = INF, cost = 0, rem = x;   // cost locked in, buckets left",
-  "        for (int i = min(N - 1, 30); i >= 0; i--) {   // 2^30 > x, so stop at 30",
+  "        ll x;",
+  "        cin >> x;",
+  "        ll ans = INF;      // best answer so far",
+  "        ll cost = 0;       // cost locked in so far",
+  "        ll rem = x;        // buckets still to cover",
+  "        for (int i = min(N - 1, 30); i >= 0; i--) {   // 30 doublings already pass x",
   "            ll size = 1LL << i;",
   "            // option A: round UP with this block and stop (buy a little extra)",
   "            ll need = (rem + size - 1) / size;   // ceil(rem / size)",
@@ -113,11 +128,11 @@ const _BM_VARS = [
 export function getBuyMilkWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _BM_VARS, beats: [
-      { hi: [9, 12],  bubble: t(E, "Read N, Q and the deal prices a (deal i buys 2^i buckets).", "N, Q 와 딜 가격 배열 a 읽기 (딜 i 는 2^i 버킷).") },
-      { hi: [14, 19], bubble: t(E, "Normalize the deals.\nc[i] = cheapest way to get a 2^i block:\nbuy deal i, or buy two smaller blocks.\nThen a bigger block is never worse per bucket,\nso we go big-to-small with no recursion.", "딜을 정규화해요.\nc[i] 는 2^i 통 블록을 얻는 가장 싼 값이에요.\n딜 i 를 사거나, 작은 블록 두 개를 사요.\n그러면 큰 블록이 통당 손해가 아니에요.\n그래서 큰 것부터 훑으면 되고 재귀가 필요 없어요.") },
-      { hi: [21, 23], bubble: t(E, "Each query: need x buckets. Start ans, cost, rem.", "쿼리마다: x 버킷 필요. ans, cost, rem 초기화.") },
-      { hi: [24, 32], bubble: t(E, "x is at most 10^9, and 2^30 is bigger than that,\nso block 30 is the biggest one worth looking at.\n(A) Round up with this block and stop, or\n(B) take the floor and cover the rest with smaller blocks.", "x 는 많아야 10억이고 2^30 은 그보다 커요.\n그래서 볼 만한 제일 큰 블록이 30번이에요.\n(A) 이 블록으로 올림해서 끝, 또는\n(B) 내림하고 나머지는 작은 블록으로.") },
-      { hi: [34, 35], bubble: t(E, "Also the exact-cover case; print the cheapest answer.", "딱 맞춘 경우도 후보; 최저 답 출력.") },
+      { hi: [9, 14],   bubble: t(E, "Read N, Q and the deal prices a (deal i buys 2^i buckets).", "N, Q 와 딜 가격 배열 a 읽기 (딜 i 는 2^i 버킷).") },
+      { hi: [16, 23], bubble: t(E, "Normalize the deals.\nc[i] = cheapest way to get a 2^i block:\nbuy deal i, or buy two smaller blocks.\nThen a bigger block is never worse per bucket,\nso we go big-to-small with no recursion.", "딜을 정규화해요.\nc[i] 는 2^i 통 블록을 얻는 가장 싼 값이에요.\n딜 i 를 사거나, 작은 블록 두 개를 사요.\n그러면 큰 블록이 통당 손해가 아니에요.\n그래서 큰 것부터 훑으면 되고 재귀가 필요 없어요.") },
+      { hi: [25, 30], bubble: t(E, "Each query: need x buckets. Start ans, cost, rem.", "쿼리마다: x 버킷 필요. ans, cost, rem 초기화.") },
+      { hi: [31, 39], bubble: t(E, "x is at most 1,000,000,000.\nDoubling 30 times already passes it: 1,073,741,824.\nSo i never needs to go above 30.\n(A) Round up with this block and stop, or\n(B) take the floor and cover the rest with smaller blocks.", "x 는 많아야 10억이에요.\n2 를 30번 곱하면 벌써 넘어요 — 1,073,741,824.\n그래서 i 가 30보다 커질 일이 없어요.\n(A) 이 블록으로 올림해서 끝, 또는\n(B) 내림하고 나머지는 작은 블록으로.") },
+      { hi: [41, 42], bubble: t(E, "Also the exact-cover case; print the cheapest answer.", "딱 맞춘 경우도 후보; 최저 답 출력.") },
     ] };
   }
   return { code: FULL_PY, vars: _BM_VARS, beats: [
@@ -125,7 +140,7 @@ export function getBuyMilkWalk(E, lang = "py") {
     { hi: [3, 4],   bubble: t(E, "Read N, Q and the deal prices a (deal i buys 2^i buckets).", "N, Q 와 딜 가격 배열 a 읽기 (딜 i 는 2^i 버킷).") },
     { hi: [6, 13],  bubble: t(E, "Normalize the deals.\nc[i] = cheapest way to get a 2^i block:\nbuy deal i, or buy two smaller blocks.\nThen a bigger block is never worse per bucket,\nso we go big-to-small with no recursion.", "딜을 정규화해요.\nc[i] 는 2^i 통 블록을 얻는 가장 싼 값이에요.\n딜 i 를 사거나, 작은 블록 두 개를 사요.\n그러면 큰 블록이 통당 손해가 아니에요.\n그래서 큰 것부터 훑으면 되고 재귀가 필요 없어요.") },
     { hi: [15, 20], bubble: t(E, "Each query: need x buckets. Start ans, cost, rem.", "쿼리마다: x 버킷 필요. ans, cost, rem 초기화.") },
-    { hi: [22, 30], bubble: t(E, "x is at most 10^9, and 2^30 is bigger than that,\nso block 30 is the biggest one worth looking at.\n(A) Round up with this block and stop, or\n(B) take the floor and cover the rest with smaller blocks.", "x 는 많아야 10억이고 2^30 은 그보다 커요.\n그래서 볼 만한 제일 큰 블록이 30번이에요.\n(A) 이 블록으로 올림해서 끝, 또는\n(B) 내림하고 나머지는 작은 블록으로.") },
+    { hi: [22, 30], bubble: t(E, "x is at most 1,000,000,000.\nDoubling 30 times already passes it: 1,073,741,824.\nSo i never needs to go above 30.\n(A) Round up with this block and stop, or\n(B) take the floor and cover the rest with smaller blocks.", "x 는 많아야 10억이에요.\n2 를 30번 곱하면 벌써 넘어요 — 1,073,741,824.\n그래서 i 가 30보다 커질 일이 없어요.\n(A) 이 블록으로 올림해서 끝, 또는\n(B) 내림하고 나머지는 작은 블록으로.") },
     { hi: [31, 32], bubble: t(E, "Also the exact-cover case; save the cheapest answer.", "딱 맞춘 경우도 후보; 최저 답 저장.") },
     { hi: [34, 34], bubble: t(E, "Print all answers at once.", "답을 한 번에 출력.") },
   ] };
