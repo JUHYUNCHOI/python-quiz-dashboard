@@ -1325,4 +1325,367 @@ export const CODE_COMMENT_EN: Record<string, string> = {
     "!",
   "이어야 한다":
     "must be",
+  /* ── 2026-09-15 배치 5 (남은 181개 전부) ───────────────────────── */
+  "c+d 오름차순":
+    "sorted by c+d ascending",
+  "include 는 배운 헤더들로 (iostream, vector) 나눠 적어.":
+    "include only the headers we learned (iostream, vector), one per line.",
+  "log[i] 제약":
+    "constraint from log[i]",
+  "radj[b] = b 로 들어오는 간선의 시작점들 (역방향 인접 리스트)":
+    "radj[b] = the starts of edges coming into b (reverse adjacency list)",
+  "x op y == z 인가?":
+    "is x op y == z ?",
+  "y 도 똑같이 해요.":
+    "do the same for y.",
+  "가장 큰 적을 먹어 최대 성장":
+    "eat the biggest enemy you can for the most growth",
+  "각 (pz, K) 시뮬레이션":
+    "simulate each (pz, K)",
+  "각 목초지마다 '다른 풀이어야 하는' 목초지 목록":
+    "for each pasture, the list of pastures that must get a different grass",
+  "각 점을 직각 꼭짓점으로: 같은 y 의 가장 먼 점 + 같은 x 의 가장 먼 점":
+    "take each point as the right angle: farthest point with the same y + farthest with the same x",
+  "각 행을 K 번 반복, 각 글자도 K 번 반복":
+    "repeat each row K times, and each letter K times too",
+  "같은 cow 가 이전 관찰과 다른 side 면 cross 횟수 증가":
+    "if the same cow is on a different side than last time, count one more crossing",
+  "그리디: 각 목초지에 가장 작은 색(1~4) 할당":
+    "greedy: give each pasture the smallest color (1-4) it can take",
+  "단어 길이 합이 K 이하 (공백은 안 세는 USACO 문제)":
+    "the word lengths must sum to K or less (this USACO problem does not count spaces)",
+  "더 먹을 적이 없음":
+    "no enemy left to eat",
+  "두 특성 a, b 가 'cross' 하면 invalid:":
+    "if two traits a and b 'cross', it is invalid:",
+  "마지막 1 ~ 오른쪽 끝":
+    "from the last 1 to the right end",
+  "마지막 라운드부터 거꾸로 되돌려요.":
+    "undo it backwards, starting from the last round.",
+  "빈 stall만 있는 경우: 0, D, 2D, ... 배치":
+    "if every stall is empty: place at 0, D, 2D, ...",
+  "세 x 좌표 중 둘은 같아요. 짝 없는 하나가 네 번째 점의 x 예요.":
+    "two of the three x values are equal. the unpaired one is the fourth point's x.",
+  "세 수의 합이 홀수 = (홀 3개) 또는 (홀 1개 + 짝 2개)":
+    "three numbers sum to an odd number when they are (3 odds) or (1 odd + 2 evens)",
+  "실제 감염된 소 set (1-indexed)":
+    "the set of cows that really got infected (1-indexed)",
+  "쌍 (i, j) 중 모든 세션에서 같은 순서가 유지되는 쌍 개수":
+    "count the pairs (i, j) that keep the same order in every session",
+  "역방향 한 step: temp[i] = result[shuffle[i]]":
+    "one step backwards: temp[i] = result[shuffle[i]]",
+  "오른쪽부터 정렬되어 있는 가장 긴 suffix 찾기":
+    "find the longest suffix that is already sorted, starting from the right",
+  "왼쪽 끝 ~ 첫 1":
+    "from the left end to the first 1",
+  "음절 + 메아리":
+    "the syllable plus its echo",
+  "이미 존재하는 1들 사이 최소 거리가 D 이상이어야 함":
+    "the 1s that are already there must be at least D apart",
+  "이벤트: (시각, delta). 시작 +b, 끝+1 -b":
+    "events: (time, delta). +b at the start, -b at end+1",
+  "자음이 없어요 → f 를 앞에 붙여요":
+    "no consonant -> put f in front",
+  "정렬된 순서와 비교해 어긋난 위치 개수":
+    "how many spots differ from the sorted order",
+  "주어진 3개 중 짝이 있는 두 개를 빼면, 짝 없는 하나가 답이에요.":
+    "drop the two that pair up, and the unpaired one is the answer.",
+  "줄마다 [-1, -1, …] 하나씩":
+    "one [-1, -1, ...] row per line",
+  "줄마다 [False, False, …] 하나씩":
+    "one [False, False, ...] row per line",
+  "줄마다 [INF, INF, …] 하나씩":
+    "one [INF, INF, ...] row per line",
+  "지금 자리가 pos 라면, 한 라운드 전에는":
+    "if you are at pos now, then one round earlier you were",
+  "첫 자음을 f 로 갈아끼워요":
+    "swap the first consonant for an f",
+  "축에 평행한 직사각형 → x 좌표는 왼쪽 변에 2번, 오른쪽 변에 2번 등장해요.":
+    "in an axis-parallel rectangle each x shows up twice on the left side and twice on the right.",
+  "현재 점유된 stall 위치들 (0-indexed)":
+    "the stalls that are taken right now (0-indexed)",
+  "홀수·짝수 바구니 개수":
+    "how many odd and even baskets there are",
+  "'factory' 후보는 모든 소가 도달할 수 있는 곳":
+    "a 'factory' candidate is a spot every cow can reach",
+  "(arrival, duration) — arrival 순으로 정렬해서 처리":
+    "(arrival, duration) - sort by arrival and handle them in that order",
+  "(거리, x, y) 최소 힙 — greater<> 로 가장 작은 거리부터 꺼냄":
+    "(distance, x, y) min-heap - greater<> pops the smallest distance first",
+  "(티어, 번호) 쌍으로 줄 세우기.":
+    "line them up by the pair (tier, number).",
+  "1..N 순열 검사: 정렬해서 1, 2, ..., N 이면 OK":
+    "check it is a permutation of 1..N: sort it and see if it is 1, 2, ..., N",
+  "1..N 순열 검사: 정렬해서 [1, 2, ..., N] 과 같으면 OK":
+    "check it is a permutation of 1..N: sort it and compare with [1, 2, ..., N]",
+  "10 = 2, partial = 5. answer = 2 × 4 (온전한 사이클) + 2 (남는 5항의 0) = 10.":
+    "10 = 2, partial = 5. answer = 2 x 4 (whole cycles) + 2 (the 0s in the leftover 5 terms) = 10.",
+  "1480 — Running Sum of 1d Array. nums 가 주어지면 output[i] = nums[0] + nums[1] + … + nums[i] 인 배열을 반환. 가장 간단한 누적합 문제 — 다음 세 문제의 기초예요.":
+    "1480 - Running Sum of 1d Array. Given nums, return the array output[i] = nums[0] + nums[1] + ... + nums[i]. The simplest prefix-sum problem - the base for the next three.",
+  "2인가? 이것만 비교해도 충분한거야?":
+    "is it 2? is comparing just this enough?",
+  "3 cows: Bessie, Elsie, Mildred, 시작 우유량 7":
+    "3 cows: Bessie, Elsie, Mildred, all starting at 7 milk",
+  "3 — Longest Substring Without Repeating Characters. 같은 글자가 두 번 안 나오는 가장 긴 연속 구간의 길이를 구하세요.":
+    "3 - Longest Substring Without Repeating Characters. Find the length of the longest run with no repeated letter.",
+  "303 — Range Sum Query - Immutable. sumRange(left, right) 쿼리에 답하는 NumArray 클래스 만들기. 배열은 안 변해요 — 근데 쿼리가 최대 10^4 번 호출될 수 있어요.":
+    "303 - Range Sum Query - Immutable. Build a NumArray class that answers sumRange(left, right). The array never changes - but the query can be called up to 10^4 times.",
+  "303 에서 열리는 마법이에요.":
+    "that is the magic 303 unlocks.",
+  "560 — Subarray Sum Equals K. 합이 정확히 k 인 연속 부분 배열의 개수를 세세요.":
+    "560 - Subarray Sum Equals K. Count the runs whose sum is exactly k.",
+  "560 과 구조 동일 — (prefix − k) 조회 대신 prefix % k 조회. 시간/공간 O(n).":
+    "same shape as 560 - look up prefix % k instead of (prefix - k). O(n) time and space.",
+  "560 과 핵심 차이: 고정 목표값이 아님 — k 의 배수면 모두 해당. 다른 인사이트가 필요해요.":
+    "the key difference from 560: there is no single target - any multiple of k counts. It needs a different insight.",
+  "8 lines: 3 행 + 3 열 + 2 대각선":
+    "8 lines: 3 rows + 3 columns + 2 diagonals",
+  "974 — Subarray Sums Divisible by K. 합이 k 로 나누어 떨어지는 부분 배열 개수. 이건 #560 의 변형: sum = k 대신 sum % k = 0 이에요.":
+    "974 - Subarray Sums Divisible by K. Count the subarrays whose sum divides by k. A twist on #560: sum % k = 0 instead of sum = k.",
+  "= 역방향으로 BFS 했을 때 모든 노드에 도달 가능한 곳":
+    "= a spot whose reverse BFS reaches every node",
+  "B 에 최소 비용 도착 — 끝":
+    "reached B at the lowest cost - done",
+  "DP: dp[c] = day i 에서 counter 가 c 일 때 min/max breakout":
+    "DP: dp[c] = the min/max breakouts when the counter is c on day i",
+  "DP: dp_min[c] = day i 에서 counter 가 c 일 때의 최소 breakout 횟수":
+    "DP: dp_min[c] = the fewest breakouts when the counter is c on day i",
+  "K = 1, 2, ... 차례로 시도":
+    "try K = 1, 2, ... in order",
+  "P[t] = 지금까지 부분집합들의 (합)^t 합 (공집합 포함)":
+    "P[t] = the sum of (subset sum)^t over the subsets so far (the empty set included)",
+  "a 를 넣은 부분집합의 기여":
+    "what the subsets that include a contribute",
+  "a+b 상위 m-1개":
+    "the top m-1 by a+b",
+  "a[0] 를 1..N 다 시도, a[i+1] = b[i] - a[i]":
+    "try every a[0] from 1..N, then a[i+1] = b[i] - a[i]",
+  "a[0] 를 1..N 다 시도, a[i+1] = b[i] - a[i] 로 사슬 만들기":
+    "try every a[0] from 1..N and build the chain with a[i+1] = b[i] - a[i]",
+  "arrival 기준 정렬 (parallel sort)":
+    "sort by arrival (parallel sort)",
+  "arrival 순으로 처리, gate 가 비어 있으면 기다림":
+    "handle them in arrival order; if the gate is busy, wait",
+  "cB × cA).\n앞에서 본 환전 세기 그대로예요.":
+    "cB x cA).\nthe same swap counting we saw earlier.",
+  "day 기준 정렬 (parallel sort via indices)":
+    "sort by day (parallel sort via indices)",
+  "day 기준 정렬 — parallel sort via triple list":
+    "sort by day - parallel sort via a list of triples",
+  "i 가 항상 앞 (= K) 이거나 항상 뒤 (= 0)":
+    "i is always in front (= K) or always behind (= 0)",
+  "include <algorithm> 필요.":
+    "you need include <algorithm>.",
+  "include 는 배운 헤더들로 (iostream, string) 나눠 적어.":
+    "include only the headers we learned (iostream, string), one per line.",
+  "include 는 배운 헤더들로 (iostream, string, map, algorithm) 나눠 적어.":
+    "include only the headers we learned (iostream, string, map, algorithm), one per line.",
+  "include 는 배운 헤더들로 (iostream, vector, set, algorithm) 나눠 적어.":
+    "include only the headers we learned (iostream, vector, set, algorithm), one per line.",
+  "include 는 배운 헤더들로 (iostream, vector, string, map) 나눠 적어.":
+    "include only the headers we learned (iostream, vector, string, map), one per line.",
+  "include 는 배운 헤더만 (iostream, string) — bits/stdc++.h 안 써.":
+    "include only the headers we learned (iostream, string) - no bits/stdc++.h.",
+  "include 는 이 코드에 필요한 헤더들로 (iostream, vector, queue, tuple) 나눠 적어.":
+    "include just the headers this code needs (iostream, vector, queue, tuple), one per line.",
+  "k = 옮겨야 할 소의 수":
+    "k = how many cows we have to move",
+  "k = 옮겨야 할 소의 수 (앞쪽 0..k-1)":
+    "k = how many cows we have to move (the front ones, 0..k-1)",
+  "k번 반복":
+    "repeat k times",
+  "n = 4 스택":
+    "n = 4 stacks",
+  "name K trait1 trait2 ... traitK (한 줄)":
+    "name K trait1 trait2 ... traitK (one line)",
+  "order-K 골짜기":
+    "an order-K valley",
+  "order-K 봉우리":
+    "an order-K peak",
+  "rank[s][c] = 세션 s 에서 소 c 가 몇 등인지 (0-based)":
+    "rank[s][c] = what place cow c took in session s (0-based)",
+  "rank[s][c] = 세션 s 에서 소 c 의 순위 (0-based)":
+    "rank[s][c] = cow c's place in session s (0-based)",
+  "s) 는 양수 올림나눗셈 파이썬 관용구예요; num // s 는 이미 −∞ 방향으로 내림해요.":
+    "s) is the Python idiom for rounding up when the numbers are positive; num // s already rounds down toward -infinity.",
+  "set 은 정렬됨":
+    "a set keeps them sorted",
+  "shuffle: i 번째 위치 → 어디로 가는지 (1-indexed → 0-indexed 변환)":
+    "shuffle: where position i goes (converted from 1-indexed to 0-indexed)",
+  "shuffle: 위치 i 에 있던 cow 가 shuffle[i] 위치로 감":
+    "shuffle: the cow at position i moves to position shuffle[i]",
+  "top 다시 찾기":
+    "find the top again",
+  "x op y == z 인가?  (나눗셈은 x / y == z  ⟺  x == y * z 로 확인)":
+    "is x op y == z ?  (for division check x == y * z instead of x / y == z)",
+  "x 이하 최대":
+    "the largest one that is at most x",
+  "{1, 2, 3} → (H, P, S) 6 가지 순열":
+    "{1, 2, 3} -> the 6 ways to map onto (H, P, S)",
+  "{1, 2, 3} 을 (Hoof, Paper, Scissors) 에 배정하는 6 가지 순열":
+    "the 6 ways to assign {1, 2, 3} to (Hoof, Paper, Scissors)",
+  "① 격자 안에 들어가나":
+    "(1) does it fit inside the grid",
+  "② 한 방향을 끝까지 꽉 채우나":
+    "(2) does it fill one direction all the way",
+  "각 gap 에 새 cow 몇 마리 넣을 수 있는지":
+    "how many new cows fit in each gap",
+  "각 lifeguard 의 (start, end)":
+    "each lifeguard's (start, end)",
+  "각 swap: (a, b, g) — a 와 b 컵 바꾸고 g 컵 추측":
+    "each swap: (a, b, g) - swap cups a and b, then guess cup g",
+  "각 관찰: (cow, side)":
+    "each sighting: (cow, side)",
+  "각 글자 (a-z) 마다 필요한 블록 수 계산":
+    "work out how many blocks each letter (a-z) needs",
+  "각 글자마다 max(front, back) 누적":
+    "add up max(front, back) for each letter",
+  "각 동물의 특성 set":
+    "each animal's set of traits",
+  "각 변화 (day, name, delta)":
+    "each change as (day, name, delta)",
+  "각 소의 (start, end, buckets) — sweep line 으로 동시에 필요한 최대 buckets":
+    "each cow's (start, end, buckets) - a sweep line gives the most buckets needed at once",
+  "각 소의 우유 총합 초기화":
+    "start every cow's milk total at zero",
+  "각 순열마다 cow1 이 이긴 게임 수 세기":
+    "for each permutation, count the games cow1 wins",
+  "각 원소를":
+    "take each element",
+  "각 위치 j 마다 spotted 와 plain 글자가 안 겹치는 위치 수":
+    "count the spots j where the spotted and plain letters never overlap",
+  "각 위치 j 마다 spotted 와 plain 의 글자가 한 번도 안 겹치는 위치 수":
+    "count the spots j where no spotted letter ever equals a plain letter",
+  "각 집단은 특성 set":
+    "each population is a set of traits",
+  "각 집단은 한 줄: K char1 char2 ... charK":
+    "each population is one line: K char1 char2 ... charK",
+  "각 후보 노드에 대해 역방향 BFS, 모든 노드 도달 가능하면 답":
+    "run a reverse BFS from each candidate; if it reaches every node, that is the answer",
+  "경계마다 넘겨야 하는 구슬 = D 의 누적(prefix). 답 = 그 |누적| 의 합.":
+    "the marbles that must cross each border are the running sum of D. the answer is the sum of those absolute values.",
+  "공통 글자 있나 확인":
+    "check whether they share a letter",
+  "그 합":
+    "their sum",
+  "눕혀서 놓는 것도 허용":
+    "you may lay it on its side too",
+  "두 글자 정렬한 \"AB\" 형태":
+    "the two letters sorted into an \"AB\" string",
+  "두 글자 정렬해서 tuple 로 (frozenset 대신)":
+    "the two letters sorted into a tuple (instead of a frozenset)",
+  "두 다리 길이 곱 = 2 * 삼각형 넓이 (문제가 2배 넓이를 요구)":
+    "the two legs multiplied = 2 * the area (the problem asks for twice the area)",
+  "두 다리(leg) 길이 곱 = 2 * 삼각형 넓이 (문제가 2배 넓이를 정수로 요구)":
+    "the two legs multiplied = 2 * the area (the problem wants twice the area as a whole number)",
+  "두 동물에 대해 공통 특성 수 + 1":
+    "for two animals, the number of shared traits + 1",
+  "두 동물에 대해 공통 특성 수 + 1 (한 개 차이 나는 질문)":
+    "for two animals, the shared traits + 1 (the question that tells them apart)",
+  "두 번째로 적은 우유량 찾기":
+    "find the second smallest milk amount",
+  "두 번째로 적은 우유량 찾기 — 가장 적은 것 + 그 다음":
+    "find the second smallest milk amount - the smallest, then the next one",
+  "두 사각형의 교집합 면적":
+    "the area where the two rectangles overlap",
+  "두 직사각형 좌표":
+    "the two rectangles' coordinates",
+  "두 직사각형을 모두 덮는 bounding box":
+    "the bounding box that covers both rectangles",
+  "마지막 라운드부터 거꾸로 되돌려요":
+    "undo it backwards, starting from the last round",
+  "만든 사슬이 1..N 의 순열이면 정답":
+    "if the chain you built is a permutation of 1..N, it is the answer",
+  "먹을 수 있는 적 (max-heap)":
+    "the enemies you can eat (max-heap)",
+  "먹을 수 있는 적 (max-heap: -값 저장)":
+    "the enemies you can eat (max-heap: store the negative values)",
+  "목표 − 지금 (+안전)":
+    "target - what you have now (plus the safety margin)",
+  "세 x 좌표 중 둘은 같아요. 짝 없는 하나가 답이에요.":
+    "two of the three x values are equal. the unpaired one is the answer.",
+  "소1 의 gesture (1/2/3)":
+    "cow 1's gesture (1/2/3)",
+  "소2 의 gesture":
+    "cow 2's gesture",
+  "시작 위치 1, 2, 3 다 시도해서 최대 점수":
+    "try starting at 1, 2 and 3 and take the best score",
+  "시작 위치 1, 2, 3 다 시도해서 최대 점수 찾기":
+    "try starting at 1, 2 and 3 and find the best score",
+  "알고 있는 x 좌표 셋":
+    "the x values we already know",
+  "알고 있는 y 좌표 셋":
+    "the y values we already know",
+  "앞에서 m 명만 선물을 받음":
+    "only the first m in line get a gift",
+  "앞쪽 a+b 상위 m-1개":
+    "the top m-1 by a+b from the front",
+  "어느 면이 보여도 spell 가능해야 하므로":
+    "it has to spell the word no matter which side shows",
+  "어떤 집단은 a 만, 어떤 집단은 b 만, 어떤 집단은 a 와 b 둘 다":
+    "some populations have only a, some only b, and some have both",
+  "어떤 집단은 a 만, 어떤 집단은 b 만, 어떤 집단은 a 와 b 둘 다 가짐":
+    "some populations have only a, some only b, and some have both a and b",
+  "여기가 −1":
+    "this is where the -1 comes from",
+  "오른쪽 방향은 뒤에서부터 똑같이":
+    "do the right side the same way, starting from the back",
+  "오른쪽 아래부터 왼쪽 위로 처리: 1 이면 (0,0)-(i,j) 직사각형 toggle":
+    "go from the bottom right to the top left: if it is 1, toggle the rectangle (0,0)-(i,j)",
+  "오른쪽 아래부터 왼쪽 위로: 1 이면 (0,0)-(i,j) 직사각형 toggle":
+    "from the bottom right to the top left: if it is 1, toggle the rectangle (0,0)-(i,j)",
+  "왼쪽으로 계속 내려가는 길이 / 계속 올라가는 길이":
+    "how far it keeps going down to the left / how far it keeps going up",
+  "원소 0개 = 공집합만":
+    "zero elements = only the empty set",
+  "음절 하나가 끝났어요":
+    "one syllable is finished",
+  "이미 더 좋은 값으로 처리된 칸":
+    "a cell we already settled with a better value",
+  "이웃이 이미 쓴 색 모으기":
+    "collect the colors the neighbors already used",
+  "이항계수 C[t][j]":
+    "the binomial coefficient C[t][j]",
+  "이항계수 C[t][j] 미리 계산 (파스칼의 삼각형)":
+    "work out the binomial coefficients C[t][j] first (Pascal's triangle)",
+  "인덱스 0 = 'a', 25 = 'z'":
+    "index 0 = 'a', 25 = 'z'",
+  "인터랙션 (t, a, b) 읽고 시간순 정렬":
+    "read the interactions (t, a, b) and sort them by time",
+  "전이: counter c → c+1 (no break) 또는 counter * → 0 (break, +1)":
+    "moves: counter c -> c+1 (no break), or counter * -> 0 (a break, +1)",
+  "정답":
+    "the answer",
+  "정사각형 한 변 = 가로/세로 범위 중 큰 값":
+    "the square's side = the larger of the width and the height",
+  "정점마다 빈 목록 하나씩":
+    "one empty list per vertex",
+  "중복 제거":
+    "drop the duplicates",
+  "지금 먹을 수 있는 적 넣기":
+    "put in the enemies you can eat right now",
+  "직접 가는 거리":
+    "the distance if you just walk there",
+  "출발 칸 인구도 비용에 포함":
+    "the starting cell's population counts toward the cost too",
+  "테스트 케이스 개수":
+    "how many test cases",
+  "텔레포터 사용 반대 방향: a→y, teleport to x, x→b":
+    "using the teleporter the other way: a->y, teleport to x, x->b",
+  "텔레포터 사용: a→x, teleport to y, y→b":
+    "using the teleporter: a->x, teleport to y, y->b",
+  "튜플은 앞에서부터 비교 → 티어가 먼저, 같으면 번호가 작은 사람이 먼저.":
+    "tuples compare from the front, so the tier decides first, and a tie goes to the smaller number.",
+  "파워 오름차순":
+    "sorted by power ascending",
+  "한 마리만 잘못 배치된 경우, 인접 swap 횟수 = diff - 1":
+    "when only one cow is out of place, the number of neighbor swaps is diff - 1",
+  "한 명 제외해보고 sweep line 으로 union coverage 계산, 최댓값":
+    "drop one lifeguard, sweep-line the covered time, and take the best",
+  "한 명 제외해보고 sweep line 으로 union coverage 계산, 최댓값 출력":
+    "drop one lifeguard, sweep-line the covered time, and print the best",
+  "합을 맨 앞에 둬요 — 그러면 그냥 정렬해도 합 기준으로 줄이 서요":
+    "put the sum first - then a plain sort lines them up by the sum",
+  "합이 큰 것부터":
+    "biggest sum first",
 };
