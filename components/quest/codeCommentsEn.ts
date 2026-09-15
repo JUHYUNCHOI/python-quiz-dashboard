@@ -751,4 +751,294 @@ export const CODE_COMMENT_EN: Record<string, string> = {
     "keep only the leading digit",
   "첫째 자리만 본다":
     "look only at the leading digit",
+
+  // ── checkups · cowphotos · cheese (2026-09-15)
+  "관찰: 뒤집기는 '가운데 기준 대칭'.":
+    "notice: flipping is symmetric about the middle",
+  "구간을 중심에서 넓히며 새로 들어온 두 끝만 갱신":
+    "widen the range out from the centre and only update the two new ends",
+  "구간을 중심에서 넓히며, 새로 들어온 두 끝만 갱신":
+    "widen the range out from the centre, updating only the two new ends",
+  "구간을 중심에서 양옆으로 넓히며, 새로 들어온 두 끝만 갱신":
+    "widen the range out from the centre on both sides, updating only the two new ends",
+  "아무것도 안 뒤집었을 때 맞는 자리 수 = 모든 구간의 출발점":
+    "how many places already match with nothing flipped - the starting point for every range",
+  "안 뒤집었을 때 맞는 수 = 출발점":
+    "how many match with nothing flipped - the starting point",
+  "안 뒤집었을 때 맞는 자리 수 = 출발점":
+    "how many places match with nothing flipped - the starting point",
+  "자리 i 에 올 소":
+    "the cow that ends up in place i",
+  "창 안 자리 l..r":
+    "places l..r inside the window",
+  "(다음 단계에서 안쪽 채움)":
+    "(the inside gets filled in at the next step)",
+  "2. 그래서 l: max(1,":
+    "2. so l starts at max(1,",
+  "[l, r] 바깥: 그대로 cow[i].":
+    "outside [l, r]: cow[i] stays as it is",
+  "[l, r] 안: 뒤집힌 후 i 자리에는 원래 (l + r - i) 자리 값.":
+    "inside [l, r]: after the flip, place i holds what used to be at place (l + r - i)",
+  "counts[checks] = (l, r) 쌍 중 검진 수가 정확히 checks 인 개수":
+    "counts[checks] = how many (l, r) pairs give exactly that many checkups",
+  "검진 ✓":
+    "a checkup, yes",
+  "검진 수를 '두 끝만' 고쳐 O(1) 로 이어 세고 answer 에 집계.":
+    "keep the checkup count going in O(1) by fixing only the two ends, and add it into answer",
+  "구간을 양쪽으로 똑같이 넓혀도 가운데 소는 자리 그대로,":
+    "widening the range equally on both sides leaves the middle cows where they are,",
+  "새로 들어온 두 끝만 서로 바뀐다.":
+    "only the two newly added ends swap",
+  "양쪽을 똑같이 넓혀도 가운데 소는 자리 그대로, 새 두 끝만 바뀜.":
+    "widening equally on both sides leaves the middle cows in place - only the two new ends change",
+  "외곽 (l, r) 쌍 — 서로 다른 연산 N(N+1)/2 개":
+    "the outer (l, r) pairs - N(N+1)/2 different operations",
+  "원하는 소면 검진 ✓":
+    "if it is the cow we wanted, that is a checkup",
+  "원하는 소와 같으면":
+    "if it matches the cow we wanted",
+  "작전: 가운데(중심)에서 구간을 한 칸씩 넓히며,":
+    "the plan: widen the range one cell at a time out from the centre,",
+  "작전: 중심에서 구간을 넓히며, 두 끝만 고쳐 O(1) 로 이어 세고 answer 집계.":
+    "the plan: widen the range from the centre, fix only the two ends to keep counting in O(1), and add it into answer",
+  "h 한 번만 훑기 → O(N)":
+    "walk h once -> O(N)",
+  "h 한 번만 훑음 → O(N)":
+    "h is walked only once -> O(N)",
+  "lookup 은 즉시":
+    "the lookup is instant",
+  "lookup 은 즉시 (O(1))":
+    "the lookup is instant (O(1))",
+  "peak 도 같이":
+    "the peak too",
+  "길이 = 2·rings + 1":
+    "length = 2 * rings + 1",
+  "길이 = 2·rings + 1 (좌+우 mirror = 2 마리, peak 1 마리)":
+    "length = 2 * rings + 1 (each ring is a left and a right cow, plus the one peak)",
+  "매번 h.count(v) 대신 — 빈도를 한 번만 세두면?":
+    "instead of calling h.count(v) every time - what if we count once, up front?",
+  "인덱스 = 키, 값 = 빈도":
+    "the index is the key, the value is how often it appears",
+  "입력 받으면서 빈도 누적":
+    "build up the counts while reading the input",
+  "키가 1..N 이라 — 그냥 freq[키] 인덱스로 빈도 저장하면 어떨까?":
+    "the keys run 1..N - so why not just store the count at freq[key]?",
+  "한 줄로 dict 빈도 — O(N)":
+    "counts in a dict, in one line - O(N)",
+  "(앞부분 생략 — h 로 입력 읽음)":
+    "(earlier part omitted - the input is read into h)",
+  "ring 이 되려면: v < M 이고 같은 값 2 마리 이상":
+    "to be a ring: v < M, and at least two cows share that value",
+  "ring 이 되려면: v < M 이고 같은 값이 2 마리 이상":
+    "to be a ring: v < M, and at least two cows have that same value",
+  "ring 이 되려면: 값이 peak 보다 작고 (v < M), 같은 값 2 마리 이상":
+    "to be a ring: the value is below the peak (v < M) and at least two cows share it",
+  "ring: v < M 이고 같은 값이 2 마리 이상 (즉시 조회)":
+    "a ring: v < M and at least two cows share the value (looked up instantly)",
+  "v 가 몇 번 나오는지 세고 ≥ 2 면 ring":
+    "count how often v appears - two or more makes it a ring",
+  "v 를 이미 셌으면 skip":
+    "skip v if we have already counted it",
+  "빈도 한 번에 — O(N)":
+    "count them all in one pass - O(N)",
+  "빈도를 한 번에 세기 — O(N)  (h.count 로 매번 훑으면 O(N²) → TLE)":
+    "count them all in one pass - O(N) (calling h.count every time would be O(N^2) and time out)",
+  "키가 1..N → 값 자체를 인덱스로 freq 세기 — O(N)":
+    "the keys run 1..N, so use the value itself as the index into freq - O(N)",
+  "키가 1..N → 값을 인덱스로 freq 세기 — O(N)":
+    "the keys run 1..N, so count into freq using the value as the index - O(N)",
+  "x-방향: (y,z) 쌍":
+    "along x: the pair (y, z)",
+  "y-방향: (x,z) 쌍":
+    "along y: the pair (x, z)",
+  "z-방향: (x,y) 고정, z 변함":
+    "along z: (x, y) stay fixed, z changes",
+  "z-방향: (x,y) 쌍":
+    "along z: the pair (x, y)",
+  "블록 빼기":
+    "take a block away",
+  "🐌 3 방향 × N² 줄 × N 칸 = O(N³) per query — TLE 원인!":
+    "slow: 3 directions x N^2 lines x N cells = O(N^3) per query - this is what times out!",
+  "0 으로 미리 채운 2D vector":
+    "a 2D vector filled with zeros up front",
+  "3D 큐브: cheese[x][y][z] = True 면 거기 블록 있음":
+    "a 3D cube: cheese[x][y][z] is True when a block sits there",
+  "3D 큐브: cheese[x][y][z] = true 면 거기 블록 있음":
+    "a 3D cube: cheese[x][y][z] is true when a block sits there",
+  "N×N 격자 — z/x/y 방향 줄별 카운터":
+    "an N by N grid - a counter for each line along z, x and y",
+  "x-방향, y-방향도 똑같이 (생략 — 같은 패턴 반복)":
+    "x and y work the same way (left out - it repeats the same pattern)",
+  "x-방향: (y,z) 고정, x 변함":
+    "along x: (y, z) stay fixed, x changes",
+  "x-방향: N² 직선":
+    "along x: N^2 straight lines",
+  "xy[(3,5)] → 이제 1!":
+    "xy[(3,5)] -> now 1!",
+  "xy[(3,5)] → 자동으로 0!":
+    "xy[(3,5)] -> 0 on its own!",
+  "xy[3][5] 는 이미 0":
+    "xy[3][5] is already 0",
+  "xy[3][5] 는 이제 1":
+    "xy[3][5] is now 1",
+  "y-방향: (x,z) 고정, y 변함":
+    "along y: (x, z) stay fixed, y changes",
+  "y-방향: N² 직선":
+    "along y: N^2 straight lines",
+  "z-방향: N² 직선":
+    "along z: N^2 straight lines",
+  "모든 N² 줄을 N 칸씩 확인 → O(N³) per query":
+    "checking all N^2 lines, N cells each -> O(N^3) per query",
+
+  // ── mcc22maze · hps · lostcow · race · mcc21simplemath · livestock (2026-09-15)
+  "). 인접한 통로 칸 사이를 오가요. 조작 한 번: 한 행이나 열을 골라 그 안의 벽을 전부 부숴요.\n좌상단에서 우하단에 닿을 수 있게 만드는 최소 조작 횟수를 구해요.":
+    "). You move between neighbouring open cells. One operation: pick a row or a column and knock down every wall in it.\nFind the fewest operations that let you get from the top-left to the bottom-right.",
+  "각 '열'도 똑같이 시험":
+    "try each column the same way",
+  "각 '행'을 하나씩 시험 삼아 부숴보기":
+    "try knocking down each row, one at a time",
+  "각 칸의 대표":
+    "the representative of each cell",
+  "그 행을 통로로":
+    "open that row up",
+  "묶음 크기":
+    "size of the group",
+  "원래 통로끼리 인접하면 같은 묶음으로":
+    "open cells that already touch go into the same group",
+  "원상복구":
+    "put it back the way it was",
+  "위·아래 통로와 연결":
+    "join up with the open cells above and below",
+  "유니온-파인드 (되돌리기 지원)":
+    "union-find (with undo)",
+  "이미 이어짐":
+    "already joined",
+  "칸 (r,c) 에 번호 붙이기":
+    "give the cell (r, c) a number",
+  "하나로는 안 되면 2":
+    "if one is not enough, then 2",
+  "합친 기록 (되돌리기용)":
+    "a record of what we joined, so we can undo it",
+  "N (카드 종류) 와 M (Elsie 패 개수) 읽기":
+    "read N (how many card types) and M (how many hands Elsie has)",
+  "W/L/D 차트로 표 채우기":
+    "fill the table in from the W/L/D chart",
+  "둘 중 하나가 Elsie 두 카드 다 이기나?":
+    "does either one beat both of Elsie's cards?",
+  "'누가 누구 이김' 표 — 처음엔 다 False":
+    "the 'who beats whom' table - everything starts False",
+  "'누가 누구 이김' 표 — 처음엔 다 false":
+    "the 'who beats whom' table - everything starts false",
+  "(Elsie 패 루프 안)":
+    "(inside the loop over Elsie's hands)",
+  "(Python 전용 트릭 — C++ 은 위 코드로 충분)":
+    "(a Python-only trick - in C++ the code above is enough)",
+  "Elsie 두 카드 다 이기는 카드 (dom) — 단일 for":
+    "cards that beat both of Elsie's (dom) - one loop",
+  "Elsie 두 카드 다 이기는 카드 (dom) 개수 — 단일 for, O(N)":
+    "how many cards beat both of Elsie's (dom) - one loop, O(N)",
+  "col[c] = 비트마스크: i 번째 비트 = 카드 i 가 카드 c 이김":
+    "col[c] marks, bit by bit, which cards beat card c - bit i means card i beats it",
+  "├─ 이 두 줄이 N² !":
+    "these two lines are the N^2 part!",
+  "답 = 전체 N² - dom 없는 (N-dom)²":
+    "answer = all N^2 minus the (N-dom)^2 pairs with no dominating card",
+  "두 컬럼 AND → 둘 다 이기는 카드 비트만 남음 → popcount":
+    "AND the two columns: only cards beating both survive, then count the bits",
+  "(시작 위치 x 로부터 2배씩 멀어지는 zig-zag)":
+    "(a zig-zag that doubles its distance from the starting spot x each time)",
+  "+1 오른쪽, -1 왼쪽":
+    "+1 is right, -1 is left",
+  "⚠️ target 은 항상 시작 x 기준":
+    "careful: target is always measured from the starting x",
+  "⚠️ target 은 항상 시작 x 에서 계산 (현재 pos 가 아니라!)":
+    "careful: target is always worked out from the starting x, not from where we are now!",
+  "누적 걸은 거리":
+    "how far we have walked in total",
+  "매 step k: target = x + direction * 2^(k-1)":
+    "at step k: target = x + direction * 2^(k-1)",
+  "매 step k: target = x + direction * 2^(k-1) (시작 위치 x 기준)":
+    "at step k: target = x + direction * 2^(k-1), measured from the starting x",
+  "시작 위치 x 기준":
+    "measured from the starting spot x",
+  "이번 leg 의 거리 — 매번 두 배":
+    "how far this leg goes - it doubles every time",
+  "지금 pos 에서 target 사이에 y 가 있으면 도달":
+    "if y lies between where we are and target, we reach it",
+  "지금 발 위치 (처음엔 x 에서 시작)":
+    "where we are standing now (we start at x)",
+  "한 leg 다 걷고 방향 반전, step 은 두 배":
+    "after one leg, turn around and double the step",
+  "- p <= X: 가속만 (끝 속도 = p, 그래도 X 이하면 OK)":
+    "- p <= X: speed up only (we finish at speed p, which is fine as long as it is at most X)",
+  "- p > X: 가속 + cruise + 감속 (끝 속도 = X)":
+    "- p > X: speed up, cruise, then slow down (we finish at speed X)",
+  "- 최고 속도 p 까지 가속 → 정속 cruise → X 까지 감속":
+    "- speed up to a top speed of p, cruise, then slow down to X",
+  "Case 1: 최고 속도 p <= X (가속만 + cruise)":
+    "case 1: top speed p <= X (speed up, then cruise)",
+  "Case 2: p > X (가속 + cruise + 감속)":
+    "case 2: p > X (speed up, cruise, slow down)",
+  "p = X 로 가속 후 cruise":
+    "speed up to p = X, then cruise",
+  "가장 작은 t 찾기: t(t+1)/2 >= K, t <= X":
+    "find the smallest t with t(t+1)/2 >= K and t <= X",
+  "각 peak 속도 p 마다 최소 time 계산":
+    "for each top speed p, work out the shortest time",
+  "거리 공식: base_dist(p, X) = p*p - X*(X-1)//2  (p > X 경우)":
+    "distance formula: base_dist(p, X) = p*p - X*(X-1)//2 (when p > X)",
+  "시간 공식: base_time = 2p - X  + cruise":
+    "time formula: base_time = 2p - X, plus the cruise",
+  "전략:":
+    "the plan:",
+  "최적 p 는 sqrt(K + X(X-1)/2) 근처 → 그 주변만 시도":
+    "the best p sits near sqrt(K + X(X-1)/2), so only try around there",
+  "최적은 p = X (속도 최대). 단, X(X+1)/2 >= K 면 더 작은 t 가능":
+    "the best is p = X (top speed) - though if X(X+1)/2 >= K, a smaller t will do",
+  "(1+A1)(1+A2)...(1+An) 를 펼치면":
+    "if you expand (1+A1)(1+A2)...(1+An)",
+  "→ 2^(N-1) 개의 부분집합에 그 수가 들어간다":
+    "-> that number appears in 2^(N-1) of the subsets",
+  "각 수 x 2^(N-1)":
+    "each number, times 2^(N-1)",
+  "각 수는 2^(N-1) 개의 부분집합에 등장한다":
+    "each number shows up in 2^(N-1) subsets",
+  "각 항이 부분집합 하나의 곱 (빈 집합 = 1 만 빼면 됨)":
+    "each term is the product of one subset (we only have to drop the empty set, which is 1)",
+  "모든 부분집합 곱의 합 = (1+A1)(1+A2)...(1+An) - 1":
+    "the sum over all subsets of their product = (1+A1)(1+A2)...(1+An) - 1",
+  "비트마다: 그 비트를 홀수 개 고른 부분집합만 기여":
+    "bit by bit: only subsets that pick an odd number of that bit contribute",
+  "빈 집합(=1) 만 빼기":
+    "subtract just the empty set, which is 1",
+  "수 하나를 고정하면 나머지 N-1 개는 자유":
+    "fix one number and the other N-1 are free",
+  "이 비트를 가진 원소가 k 개일 때,":
+    "when k of the numbers carry this bit,",
+  "입력은 main() 에서 읽음":
+    "the input is read in main()",
+  "홀수 개 고르기: 2^(k-1) 가지, 나머지 자유: 2^(N-k)":
+    "picking an odd number of them: 2^(k-1) ways; the rest are free: 2^(N-k)",
+  "알파벳 순으로 정렬해둔 소 이름 8개":
+    "the eight cow names, sorted alphabetically",
+  "'X must be milked beside Y' — 첫 단어와 마지막 단어":
+    "'X must be milked beside Y' - the first word and the last word",
+  "'X must be milked beside Y' → 첫 단어와 마지막 단어":
+    "'X must be milked beside Y' -> the first word and the last word",
+  "cows 가 알파벳 순이라 next_permutation 은 '사전순으로' 배열을 만들어줘요.":
+    "because cows is in alphabetical order, next_permutation hands us the arrangements in dictionary order",
+  "cows 가 알파벳 순이라 permutations 는 배열을 '사전순으로' 만들어줘요.":
+    "because cows is in alphabetical order, permutations hands us the arrangements in dictionary order",
+  "공백으로 자르기":
+    "split on spaces",
+  "제약: (a, b) 쌍들 — a 와 b 는 줄에서 인접해야 함":
+    "the rules: pairs (a, b) - a and b must stand next to each other in the line",
+  "제약: pairs_a[i] 와 pairs_b[i] 는 인접해야 함":
+    "the rules: pairs_a[i] and pairs_b[i] must stand next to each other",
+  "줄바꿈 흡수":
+    "swallow the newline",
+  "처음으로 모든 제약을 만족하는 배열이 곧 답 — 재귀 없이 반복문으로.":
+    "the first arrangement that meets every rule is the answer - done with a loop, no recursion",
+  "처음으로 제약을 만족하는 배열이 곧 답 — 재귀 없이 반복문으로.":
+    "the first arrangement that meets the rules is the answer - done with a loop, no recursion",
 };
