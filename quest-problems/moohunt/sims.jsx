@@ -776,8 +776,15 @@ export function FasterIdeaSim({ E }) {
          (x, y, z 는 서로 다른 칸이라 5 × 4 × 3 이다.) */
       /* ⚠️ 2026-09-13 학생 D: "'완전탐색' 이 뭔지 앞에서 정해준 적이 없는데 갑자기 나온다."
          맞다. 앞 쪽에서 본 그 코드를 가리키는 말이니, **그렇게 부른다.** */
-      <>Every possible move on {N} cells: <b>{N} × {N - 1} × {N - 2} = {allMoves}</b> — the code on the last page checks them all.<br />But cell 1 is M — any move asking cell 1 to be O <b>cannot score</b>.<br />Most checks are wasted.</>,
-      <>칸 {N}개로 만들 수 있는 무브는 <b>{N} × {N - 1} × {N - 2} = {allMoves}개</b> — 앞 쪽 코드는 이걸 전부 봐요.<br />그런데 1번 칸은 M 이에요. 1번이 O 여야 하는 무브는 <b>애초에 득점 못 해요</b>.<br />대부분이 헛수고예요.</>)
+      /* ⚠️ 2026-09-15 선생님 "뭔말인지 이해 안돼" — 뜯어보니 **내가 만든 거짓말**이었다.
+         "앞 쪽 코드는 이 60개를 전부 봐요" 라고 썼는데, 앞 쪽 코드는 `for x, y, z in moves:`
+         즉 **입력으로 들어온 K개**(샘플이면 6개)를 훑는다. 60 은 "이 보드로 **만들 수 있는**
+         무브 수"(5×4×3)라 **다른 것을 재는 자**다.
+         ux 가 짚었다 — 같은 거짓 라벨이 세 곳에 있었다(waste·only·gain).
+         → 60 은 **구조적 사실로만** 말한다. "앞 쪽 코드" 를 끌어들이지 않는다.
+            K 와의 비교는 마지막 걸음에서 K 끼리 한다. **구조는 구조끼리, K 는 K 끼리.** */
+      <>This board can form <b>{N} × {N - 1} × {N - 2} = {allMoves}</b> different moves.<br />But cell 1 is M — any move asking cell 1 to be O <b>cannot score</b>.<br />Most of them are wasted.</>,
+      <>이 보드로 만들 수 있는 무브는 <b>{N} × {N - 1} × {N - 2} = {allMoves}가지</b>예요.<br />그런데 1번 칸은 M 이에요. 1번이 O 여야 하는 무브는 <b>애초에 득점 못 해요</b>.<br />대부분이 헛수고예요.</>)
     : s.k === "order" ? t(E,
       <>A move is <b>(x, y, z)</b> — x must read M, y and z must read O.<br />So y and z <b>just both need to be O</b>: <b>(1,2,3) and (1,3,2) score the same</b>.<br />Count them together.</>,
       <>무브는 <b>(x, y, z)</b> 예요 — x 자리가 M, y·z 자리가 O 여야 득점해요.<br />그러니 y 와 z 는 <b>둘 다 O 이기만</b> 하면 돼요.<br /><b>(1,2,3) 과 (1,3,2) 는 채점에선 같은 것</b>이에요. 묶어서 세요.</>)
@@ -800,8 +807,10 @@ export function FasterIdeaSim({ E }) {
          셀 수 없는 수를 화면에 두면 거기서 "그냥 믿고 가자" 모드로 바뀐다(학생 C·D 둘 다 그랬다).
          → 손으로 확인되는 예(10 × 45 = 450)만 남기고, 나머지는 "몇백 가지" 로 말한다.
          (참고: 실제 평균은 427.5, 최대는 546. 코드 주석에만 남긴다.) */
-      <>With <b>N</b> cells the same idea works. At <b>N = 20</b> we do the same count — <b>M cells × O-pairs</b>.<br />Say a board has 10 M's and 10 O's: the O pairs are <b>10 × 9 ÷ 2 = 45</b>, so <b>10 × 45 = 450</b>. Other boards differ, but it stays in the <b>hundreds</b>.<br />The answer is identical.</>,
-      <>칸이 <b>N</b>개일 때도 같은 생각이에요. <b>N = 20</b>이면 방금과 똑같이 <b>M 자리 수 × O 짝 수</b>를 세요.<br />M 이 10개, O 가 10개인 보드라면 O 짝은 <b>10 × 9 ÷ 2 = 45가지</b>, 그래서 <b>10 × 45 = 450가지</b>예요. 다른 보드도 <b>몇백 가지</b>예요.<br />답은 똑같고요.</>);
+      /* 여기서 처음으로 **K 와 비교한다.** 앞 걸음들은 구조(60 → 6)만 말했다.
+         작은 보드에서는 이득이 안 보이므로(조합 6 · 무브 6) 이득 주장은 여기서 시작한다. */
+      <>Now the real size. At <b>N = 20</b> the last page's code walked <b>all K moves</b> for every board — up to <b>200,000</b>.<br />With this idea we only look at <b>M cells × O-pairs</b>: a few <b>hundred</b>.<br />The answer is identical.</>,
+      <>이제 진짜 크기예요. <b>N = 20</b>이면 앞 쪽 코드는 보드마다 <b>무브 K개를 전부</b> 훑었어요 — 최대 <b>20만 개</b>.<br />이 생각을 쓰면 <b>M 자리 수 × O 짝 수</b>만 봐요 — <b>몇백 가지</b>예요.<br />답은 똑같고요.</>);
 
   const cellStyle = (c, dim) => ({
     width: 34, height: 34, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
@@ -819,23 +828,32 @@ export function FasterIdeaSim({ E }) {
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "waste" ? "stuck" : s.k === "gain" ? "aha" : "go"}>{say}</Say>
 
-      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 14 }}>
-        {[...BOARD].map((c, i) => (
-          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-            <div style={cellStyle(c, false)}>{c}</div>
-            <span style={{ fontSize: 10, fontWeight: 800, color: "#f59e0b" }}>{i + 1}</span>
-          </div>
-        ))}
-      </div>
+      {/* 보드도 gain 걸음에선 안 그린다 — 거기는 N = 20 이야기라 이 5칸 보드가 오히려 방해다. */}
+      {s.k !== "gain" && (
+        <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 14 }}>
+          {[...BOARD].map((c, i) => (
+            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+              <div style={cellStyle(c, false)}>{c}</div>
+              <span style={{ fontSize: 10, fontWeight: 800, color: "#f59e0b" }}>{i + 1}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
-      {(s.k === "only" || s.k === "gain") && (
+      {/* ⚠️ 2026-09-15 ux: gain 걸음은 **N=5 보드 위에서 N=20 이야기**를 했다.
+             두 세계를 한 화면에 얹은 것이다. 게다가 이 보드에선 "봐야 할 조합 6" 과
+             "입력 무브 6" 이 같아 **이득이 아예 안 보인다** — 그래서 내가 비교 대상을
+             60 으로 바꿔치기했었다.
+             → gain 에서는 보드와 줄 넷을 **뺀다.** N=5 예제는 only 걸음까지만 쓰고,
+               이득 이야기는 N=20 카드 하나로 한다. 요소 6개 → 1개. */}
+      {s.k === "only" && (
         <div style={{ maxWidth: 420, margin: "0 auto", display: "grid", gap: 6 }}>
           <Row E={E} ko="M 자리 (여기서 x 를 고름)" en="M cells (pick x here)"
                v={mPos.map((i) => i + 1).join(", ")} />
           <Row E={E} ko="O 자리 (여기서 y, z 를 고름)" en="O cells (pick y, z here)"
                v={oPos.map((i) => i + 1).join(", ")} />
           <Row E={E} ko="봐야 할 조합" en="combinations to check" v={`${canScore}`} good />
-          <Row E={E} ko="앞 쪽 코드가 보던 것" en="the last page's code looked at" v={`${allMoves}`} bad />
+          <Row E={E} ko="만들 수 있는 무브 모양" en="possible move shapes" v={`${allMoves}`} bad />
         </div>
       )}
       {s.k === "gain" && (

@@ -302,8 +302,13 @@ export function makeMooHuntCh2(E, lang = "py") {
                    보드마다 입력을 통째로 훑어요 → <b>K ≤ 20만</b><br />
                    100만 × 20만 ≈ <b>2×10<sup>11</sup></b> 번</>)}
             <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #fdba74", fontWeight: 800 }}>
-              {t(E, <>A computer does about <b>a billion</b> simple steps in one second.<br />So trying them all does not fit. We need another way.</>,
-                   <>컴퓨터는 간단한 계산 <b>10억 번</b>에 1초쯤 걸려요.<br />그래서 다 해보는 건 안 돼요. 다른 방법이 필요해요.</>)}
+              {/* ⚠️ 2026-09-15: 곱셈만 보여주면 **보드 100만 개 자체가 문제**인지
+                   **보드마다 K 를 다시 훑는 게 문제**인지 학생이 못 가른다.
+                   공식 USACO 영상은 반대로 강조한다 — "N 이 아주 작다(≤20). **그래서 완전탐색을
+                   감당할 수 있겠다고 생각하기 시작해야 한다.**" 2^N 은 **해결책**이고 적은 K 하나다.
+                   병목에 이름을 준다 — 다음 쪽들이 전부 그 K 를 줄이는 이야기다. */}
+            {t(E, <>A computer does about <b>a billion</b> simple steps in one second.<br />A million boards is fine on its own. What hurts is walking <b>all K moves again for every board</b>.</>,
+                   <>컴퓨터는 간단한 계산 <b>10억 번</b>에 1초쯤 걸려요.<br />보드 100만 개는 그 자체로는 괜찮아요. 아픈 건 <b>보드마다 무브 K개를 다시 훑는</b> 거예요.</>)}
             </div>
           </div>
         </div>
