@@ -110,7 +110,7 @@ const FULL_CPP = [
   "    }",
   "",
   "    // blockSize[i] = how many buckets block i holds: 1 doubled i times",
-  "    vector<ll> blockSize(31);",
+  "    vector<ll> blockSize(31);   // blocks 0 through 30",
   "    blockSize[0] = 1;",
   "    for (int i = 1; i <= 30; i++) {",
   "        blockSize[i] = blockSize[i - 1] * 2;",
@@ -151,9 +151,9 @@ export function getBuyMilkWalk(E, lang = "py") {
     return { code: FULL_CPP, vars: _BM_VARS, beats: [
       { hi: [9, 14],   bubble: t(E, "Read N, Q and the prices a.\nDeal 1 in the problem is a[0] in the code.\nSo a[i] buys 1 doubled i times: 1, 2, 4, 8, ...", "N, Q 와 가격 a 를 읽어요.\n문제의 1번 딜이 코드에서는 a[0] 이에요.\n그래서 a[i] 는 1 을 i 번 두 배 한 만큼이에요 — 1, 2, 4, 8, ...") },
       { hi: [16, 23], bubble: t(E, "Normalize the deals.\nc[i] = the cheapest way to get that block:\nbuy deal i, or buy two smaller blocks.\nThen a bigger block is never worse per bucket,\nso we go big-to-small with no recursion.", "딜을 정규화해요.\nc[i] 는 그 블록을 얻는 가장 싼 값이에요.\n딜 i 를 사거나, 작은 블록 두 개를 사요.\n그러면 큰 블록이 통당 손해가 아니에요.\n그래서 큰 것부터 훑으면 되고 재귀가 필요 없어요.") },
-      { hi: [25, 30], bubble: t(E, "Write down how many buckets each block holds.\nStart at 1 and keep doubling: 1, 2, 4, 8, ...\nC++ has no ** operator, so we build the list once.", "블록마다 몇 통인지 미리 적어둬요.\n1 에서 시작해서 계속 두 배예요 — 1, 2, 4, 8, ...\nC++ 에는 ** 가 없어서 한 번 만들어 두고 써요.") },
+      { hi: [25, 30], bubble: t(E, "Write down how many buckets each block holds.\nStart at 1 and keep doubling: 1, 2, 4, 8, ...\nx is at most 1,000,000,000, and block 30 holds 1,073,741,824 — already past it.\nSo blocks 0 through 30 are enough, which is 31 slots.\nC++ has no ** operator, so we build the list once.", "블록마다 몇 통인지 미리 적어둬요.\n1 에서 시작해서 계속 두 배예요 — 1, 2, 4, 8, ...\nx 는 많아야 10억인데 30번 블록이 1,073,741,824 라 벌써 넘어요.\n그래서 0번부터 30번까지면 충분해요 — 칸이 31개예요.\nC++ 에는 ** 가 없어서 한 번 만들어 두고 써요.") },
       { hi: [32, 37], bubble: t(E, "Each query: need x buckets. Start ans, cost, rem.", "쿼리마다: x 버킷 필요. ans, cost, rem 초기화.") },
-      { hi: [38, 46], bubble: t(E, "x is at most 1,000,000,000.\nDoubling 30 times already passes it: 1,073,741,824.\nSo i never needs to go above 30.\n(A) Round up with this block and stop, or\n(B) take the floor and cover the rest with smaller blocks.", "x 는 많아야 10억이에요.\n2 를 30번 곱하면 벌써 넘어요 — 1,073,741,824.\n그래서 i 가 30보다 커질 일이 없어요.\n(A) 이 블록으로 올림해서 끝, 또는\n(B) 내림하고 나머지는 작은 블록으로.") },
+      { hi: [38, 46], bubble: t(E, "i never needs to go above 30 —\nthat is exactly why the table stopped there.\n(A) Round up with this block and stop, or\n(B) take the floor and cover the rest with smaller blocks.", "i 가 30보다 커질 일이 없어요 —\n표를 30번까지만 만든 게 그 이유예요.\n(A) 이 블록으로 올림해서 끝, 또는\n(B) 내림하고 나머지는 작은 블록으로.") },
       { hi: [48, 49], bubble: t(E, "Also the exact-cover case; print the cheapest answer.", "딱 맞춘 경우도 후보; 최저 답 출력.") },
     ] };
   }

@@ -24,7 +24,7 @@ int main() {
     }
 
     // blockSize[i] = how many buckets block i holds: 1 doubled i times
-    vector<ll> blockSize(31);
+    vector<ll> blockSize(31);   // blocks 0 through 30
     blockSize[0] = 1;
     for (int i = 1; i <= 30; i++) {
         blockSize[i] = blockSize[i - 1] * 2;
