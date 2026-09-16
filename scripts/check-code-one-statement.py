@@ -122,9 +122,24 @@ def findings_for(raw, lang):
         stmts = [s.strip() for s in split_top_level(code) if s.strip()]
         if len(stmts) >= 2:
             hits.append(("문장 두 개가 한 줄", " ; ".join(stmts[:3])))
-        m = re.match(r"^\s*(if|for|while|else)\b[^:]*:\s*(\S.*)$", code)
-        if m and not m.group(2).startswith("#"):
-            hits.append(("제어문 본문이 헤더와 같은 줄", body))
+        # ⚠️ 콜론을 단순히 `[^:]*:` 로 찾으면 **슬라이스**에 걸린다.
+        #    2026-09-16 A-3 담당자가 잡았다 — `if doubled[i:i+N] == b:` 를
+        #    "본문이 헤더에 붙었다" 로 오탐했다. `[i:i+N]` 의 콜론이 먼저 걸린 것이다.
+        #    제어문의 콜론은 **괄호 밖(깊이 0)에 있는 마지막 콜론**이다.
+        kw = re.match(r"^\s*(if|elif|for|while|else|with|try|except|finally)\b", code)
+        if kw:
+            depth, colon = 0, -1
+            for i, ch in enumerate(code):
+                if ch in "([{":
+                    depth += 1
+                elif ch in ")]}":
+                    depth -= 1
+                elif ch == ":" and depth == 0:
+                    colon = i
+            if colon >= 0:
+                rest = code[colon + 1:].strip()
+                if rest:
+                    hits.append(("제어문 본문이 헤더와 같은 줄", body))
 
     if re.search(r"\?[^?:]+:", code) and lang == "cpp" and "://" not in code:
         hits.append(("삼항 연산자", body))
