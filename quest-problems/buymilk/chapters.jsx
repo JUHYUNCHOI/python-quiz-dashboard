@@ -13,8 +13,8 @@ export function makeBuyMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Farmer John has N deals. Deal i sells 2^(i-1) buckets of milk for a_i moonies, prices strictly increasing. For each query x, find the minimum cost to buy at least x buckets.",
-        "농부 존이 N 개의 거래를 제안해요. 거래 i 는 2^(i-1) 통의 우유를 a_i 무니에 팔고, 가격은 엄격히 증가해요. 주어지는 x 마다 최소 x 통을 사는 최소 비용을 찾아요."),
+        "Farmer John sells milk in bundles. Buy x buckets as cheaply as you can.",
+        "농부 존이 우유를 묶음으로 팔아요. x 통을 제일 싸게 사요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -77,8 +77,8 @@ export function makeBuyMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Sample 1: N=2, prices [10, 15]. So 1 bucket = 10, 2 buckets = 15. Query x=6: 3 copies of the 2-bucket deal = 45. Query x=7: same 3 copies of 2-bucket + 1 copy of 1-bucket = 55.",
-        "예제 1: N=2, 가격 [10, 15]. 1 통 = 10, 2 통 = 15. x=6: 2 통짜리 3 번 = 45. x=7: 2 통짜리 3 번 + 1 통짜리 1 번 = 55."),
+        "Sample 1 has just two deals. Watch which one is cheaper per bucket.",
+        "예제 1 은 거래가 둘뿐이에요. 어느 쪽이 통당 싼지 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 10 }}>
@@ -129,8 +129,8 @@ export function makeBuyMilkCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Prices are strictly increasing, but bucket counts double. Which deal could have the lowest price per bucket?",
-        "가격은 엄격 증가하지만 통 수는 2 배씩 늘어요. 통당 단가가 가장 낮은 거래는 어떤 거래일 수 있을까?"),
+        "Prices go up, but bucket counts double. Which deal is cheapest per bucket?",
+        "가격은 오르는데 통 수는 두 배씩 늘어요. 통당 제일 싼 건 어디일까요?"),
       question: t(E,
         "If a = [10, 15], what is the price per bucket for each deal?",
         "a = [10, 15] 일 때 각 거래의 통당 단가는?"),
@@ -207,8 +207,8 @@ export function makeBuyMilkCh1(E) {
     {
       type: "input",
       narr: t(E,
-        "Same deals as the sims: a = [10, 15, 20, 45]. This time x = 9 — do it yourself.",
-        "시뮬과 같은 딜이에요. a = [10, 15, 20, 45].\n이번엔 x = 9 예요. 직접 해봐요."),
+        "Same deals, but x = 9 this time — do it yourself.",
+        "같은 딜로 x = 9 를 직접 해봐요."),
       question: t(E,
         "a=[10,15,20,45], deal sizes 1,2,4,8. Min cost for x=9?",
         "a=[10,15,20,45], 거래 크기 1,2,4,8. x=9 의 최소 비용?"),
@@ -238,13 +238,18 @@ function BuyMilkPlan({ E }) {
       </div>
     </div>
   );
+  // ⚠️ 2026-09-15 ux-reviewer 실측: 모바일 375px 에서 `c` 뱃지와 `c[i] = min(...)` 뱃지가
+  //    **완전히 같은 좌표**(top 836.42 / left 86.5)로 겹쳐 앞의 것이 안 보였다.
+  //    원인은 아래 Line 의 `textWrap: "balance"` 가 인라인 <code> 두 개와 부딪힌 것.
+  //    `inline-block` + `nowrap` 으로 뱃지를 한 덩어리로 만들어 balance 가 쪼개지 못하게 한다.
+  //    (balance 자체는 한글 줄바꿈 규칙이라 빼지 않는다 — memory/feedback_korean_linebreak.md)
   const codeTag = (s) => (
-    <code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: "#b45309", background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 5, padding: "0 5px" }}>{s}</code>
+    <code style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, color: "#b45309", background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 5, padding: "0 5px", display: "inline-block", whiteSpace: "nowrap", maxWidth: "100%", overflowX: "auto", verticalAlign: "middle" }}>{s}</code>
   );
   const Line = ({ n, children }) => (
     <div style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 7 }}>
       <span style={{ flexShrink: 0, width: 20, height: 20, borderRadius: 999, background: "#d97706", color: "#fff", fontSize: 11.5, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{n}</span>
-      <div style={{ fontSize: 13, lineHeight: 1.7, color: "#334155", wordBreak: "keep-all", textWrap: "balance" }}>{children}</div>
+      <div style={{ minWidth: 0, fontSize: 13, lineHeight: 1.7, color: "#334155", wordBreak: "keep-all", textWrap: "balance" }}>{children}</div>
     </div>
   );
   return (
@@ -276,15 +281,14 @@ function BuyMilkPlan({ E }) {
                          <>{codeTag("c")} 를 만들어요. {codeTag("c[i] = min(a[i], 2*c[i-1])")} — 첫 시뮬이 한 일이에요.</>)}</Line>
         <Line n={3}>{t(E, <>Per query: {codeTag("rem = x")}, {codeTag("cost = 0")}, {codeTag("ans = ∞")}.</>,
                          <>x 마다 {codeTag("rem = x")}, {codeTag("cost = 0")}, {codeTag("ans = 무한대")} 로 시작해요.</>)}</Line>
-        <Line n={4}>{t(E, <>Big block → small block: the round-up candidate goes into {codeTag("ans")}, then buy the floor and update {codeTag("cost")} and {codeTag("rem")}.</>,
-                         <>큰 블록부터 작은 블록까지 훑어요.<br />올림 후보를 {codeTag("ans")} 에 넣고,<br />내림만큼 사서 {codeTag("cost")} 와 {codeTag("rem")} 을 갱신해요.</>)}</Line>
+        <Line n={4}>{t(E, <>Big block → small block — this is the second sim&apos;s table.<br />“round up → cost” is the {codeTag("ans")} candidate;<br />“take / carry” updates {codeTag("cost")} and {codeTag("rem")}.</>,
+                         <>큰 블록부터 작은 블록까지 훑어요 — 두 번째 시뮬의 표예요.<br />‘올림하면 값’ 칸이 {codeTag("ans")} 후보고,<br />‘내림 / 넘김’ 칸이 {codeTag("cost")} 와 {codeTag("rem")} 이에요.</>)}</Line>
         <Line n={5}>{t(E, <>Print {codeTag("ans")}.</>, <>{codeTag("ans")} 를 출력해요.</>)}</Line>
       </div>
-
-      <div style={{ ...box, background: "#fffbeb", borderColor: "#fcd34d", fontSize: 12.5, lineHeight: 1.7, color: "#92400e", wordBreak: "keep-all", textWrap: "balance" }}>
-        {t(E, <>The table in the second sim was exactly this: one row per block, the “round up → cost” column is the {codeTag("ans")} candidate, the “take / carry” column is {codeTag("cost")} and {codeTag("rem")}.</>,
-             <>두 번째 시뮬의 표가 바로 이거예요.<br />한 줄이 블록 하나고, ‘올림하면 값’ 칸이 {codeTag("ans")} 후보,<br />‘내림 / 넘김’ 칸이 {codeTag("cost")} 와 {codeTag("rem")} 이에요.</>)}
-      </div>
+      {/* ⚠️ 2026-09-16: 여기 있던 노란 마무리 박스를 지웠다. 같은 아이디어를 인사이트 카드 →
+          번호 목록 → 마무리 박스로 **세 번** 말하고 있었고, 이 쪽이 10쪽 중 제일 무거웠다
+          (카드 7개·스크롤 381px, ux-reviewer 실측). 박스만 있던 내용 — 시뮬 표의 두 칸이
+          어떤 변수인지 — 은 위 4번 줄에 합쳤다. 지운 게 아니라 옮긴 것이다. */}
     </div>
   );
 }
@@ -306,8 +310,8 @@ export function makeBuyMilkCh2(E, lang = "py") {
         type: "reveal",
         label: t(E, "Code", "코드"),
         narr: t(E,
-          "No recursion! Normalize the block prices, then sweep big→small per query.  Each part lights up with a bubble.",
-          "재귀 없이! 블록 가격을 정규화하고, x 마다 큰 블록→작은 블록으로 훑어요.  각 부분이 밝아지며 말풍선이 떠요."),
+          "No recursion — one sweep from the biggest block down.",
+          "재귀 없이 큰 블록부터 한 번만 훑어요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
       };
     })(),

@@ -45,6 +45,21 @@ function Say({ children, tone = "go" }) {
 }
 const mono = { fontFamily: "'JetBrains Mono',monospace" };
 
+/* 📌 지금 쓰는 예제를 늘 띄워 둔다.
+   ⚠️ 2026-09-15 ux-reviewer: 예제 1 은 a = [10, 15] 라 x=7 → 55 인데, 여기서는
+   a = [10, 15, 20, 45] 로 **통째로 바뀌는데** 앞 두 값이 똑같아서 학생은 같은 예제로 본다.
+   그리고 여기선 같은 x=7 이 40 이다. "예제가 바뀌었다" 를 화면이 말해야 한다.
+   근거: memory/feedback_screen_must_not_rely_on_memory.md */
+function Carry({ E, children }) {
+  return (
+    <div style={{ maxWidth: 470, margin: "0 auto 10px", padding: "8px 12px", borderRadius: 9,
+      background: "#fffbeb", border: "1px solid #fcd34d", fontSize: 12, color: "#92400e",
+      lineHeight: 1.75, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
+      {children}
+    </div>
+  );
+}
+
 /* ═══ ① 정규화 — 딜 값을 '블록 최저가' 로 ═══ */
 export function NormalizeSim({ E }) {
   const steps = [{ k: "why" }, ...DEALS.map((_, i) => ({ k: "row", i })), { k: "unit" }];
@@ -77,6 +92,12 @@ export function NormalizeSim({ E }) {
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, "Turn deals into block prices", "딜 값을 블록 최저가로 바꿔요")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Carry E={E}>
+        {t(E, <>A new, bigger example — <b>4 deals</b> now: a = [10, 15, 20, 45].<br />
+                 (Sample 1 back on page 2 had only two: [10, 15].)</>,
+             <>더 큰 새 예제예요 — 이제 딜이 <b>4개</b>예요. a = [10, 15, 20, 45].<br />
+               (2쪽의 예제 1 은 두 개였어요. [10, 15])</>)}
+      </Carry>
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "unit" ? "aha" : s.k === "why" ? "go" : "go"}>{say}</Say>
 
@@ -173,6 +194,12 @@ export function GreedySim({ E, x = 5 }) {
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
         title={t(E, `Buy at least ${X} buckets, as cheap as possible`, `${X}통 이상을 제일 싸게 사요`)}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
+      <Carry E={E}>
+        {t(E, <>Same 4 deals a = [10, 15, 20, 45].<br />
+                 Block prices we just worked out: c = [{C.join(", ")}]</>,
+             <>같은 딜 4개예요. a = [10, 15, 20, 45]<br />
+               방금 구한 블록 최저가는 c = [{C.join(", ")}] 예요.</>)}
+      </Carry>
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "done" ? "aha" : "go"}>{say}</Say>
 
