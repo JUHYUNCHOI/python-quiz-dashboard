@@ -66,12 +66,41 @@ CPP_RULES = [
      "C 스타일 입출력은 레슨에서 안 가르친다"),
 ]
 
-# 레슨이 가르치는 것 — 설명 본문만 본다. 코드에만 나오면 '쓴 것'이지 '가르친 것'이 아니다.
-lesson_text = ""
-for f in glob.glob("data/lesson*.ts") + glob.glob("data/cpp/lesson*.ts"):
-    lesson_text += io.open(f, encoding="utf-8", errors="replace").read()
+# ── 시프트 `<<` — 언어마다 답이 다르다 (2026-09-15 추가)
+#    파이썬: 레슨 어디에도 없다. C++: cpp-20 "CP 실전 팁" 이 가르치는데
+#    **Part 3 의 끝에서 두 번째**다 (`lib/curriculum-data.ts` 의 cpp-part3, 바로 다음이 cpp-p3).
+#    그래서 "안 가르쳤다" 가 아니라 **"학생이 거기 닿기 전에 quest 를 만난다"** 가 문제다.
+#    quest 에는 잠금이 없다.
+SHIFT = re.compile(r"\b\d+L?L?\s*<<\s*\w|\(\s*1L?L?\s*<<")
+# ⚠️ `cout << 1 << "\n"` 같은 출력 체이닝이 위 정규식에 걸린다. 2026-09-15 에 이 오탐으로
+#    quest 를 13개로 잘못 셌다(진짜는 5개). 같은 줄에 스트림이 있으면 시프트가 아니다.
+STREAM = re.compile(r"\bcout\b|\bcin\b|\bfout\b|\bfin\b|\bendl\b|\bcerr\b")
 
-taught = {name: bool(teach.search(lesson_text)) for name, _, teach, _ in IDIOMS}
+
+def uses_shift(code):
+    """줄 단위로 본다 — 스트림 출력 줄은 빼고."""
+    for line in code.split("\n"):
+        if STREAM.search(line):
+            continue
+        if SHIFT.search(line):
+            return True
+    return False
+
+
+# 레슨이 가르치는 것 — 설명 본문만 본다. 코드에만 나오면 '쓴 것'이지 '가르친 것'이 아니다.
+# ⚠️ **파이썬과 C++ 을 반드시 갈라서 읽는다.** 2026-09-15 까지는 둘을 한 덩어리로 합쳐서
+#    판정했다. 지금 있는 IDIOMS 여섯 개는 우연히 결과가 같아서 **틀린 답은 안 나오고 있었지만**
+#    (직접 대조 확인), C++ 에서만 가르치는 것을 규칙에 넣는 순간 **파이썬 갭이 마스킹된다.**
+#    `<<` 가 정확히 그 경우라 이번에 갈랐다.
+py_lesson_text = "".join(
+    io.open(f, encoding="utf-8", errors="replace").read()
+    for f in glob.glob("data/lesson*.ts"))
+cpp_lesson_text = "".join(
+    io.open(f, encoding="utf-8", errors="replace").read()
+    for f in glob.glob("data/cpp/lesson*.ts"))
+
+# IDIOMS 는 전부 파이썬 손버릇이다 → 파이썬 레슨만 본다.
+taught = {name: bool(teach.search(py_lesson_text)) for name, _, teach, _ in IDIOMS}
 
 # ⚠️ 배열 **이름**으로 찾지 마라. 2026-09-11 에 그렇게 짰다가 chipxchg(`code`)와
 #    mooin2(`bruteReadCpp`)의 진짜 <bits/stdc++.h> 를 놓쳤다 — 검사기는 "2개" 라고 했고
@@ -120,6 +149,7 @@ def unesc(lines):
 
 
 hits, cpp_hits = {}, {}
+shift_py, shift_cpp = set(), set()
 for f in sorted(glob.glob("quest-problems/*/*.jsx")):
     quest = f.split("/")[1]
     src = io.open(f, encoding="utf-8", errors="replace").read()
@@ -129,10 +159,14 @@ for f in sorted(glob.glob("quest-problems/*/*.jsx")):
             for name, use, _ in CPP_RULES:
                 if use.search(code):
                     cpp_hits.setdefault(name, set()).add(quest)
+            if uses_shift(code):
+                shift_cpp.add(f"{quest}({f.split(chr(47))[-1][:-4]})")
         elif PY_SIGN.search(code):                     # 파이썬 배열
             for name, use, _, _ in IDIOMS:
                 if use.search(code) and not taught[name]:
                     hits.setdefault(name, set()).add(quest)
+            if uses_shift(code):
+                shift_py.add(f"{quest}({f.split(chr(47))[-1][:-4]})")
 
 total = len(set().union(*hits.values())) if hits else 0
 print(f"안 가르친 파이썬 기교를 쓰는 quest {total}개")
@@ -160,4 +194,26 @@ for name, _, why in CPP_RULES:
         print("     " + "  ".join(qs[i:i + 6]))
     print()
 
-sys.exit(1 if (hits or cpp_hits) else 0)
+# ── 시프트 `<<` — 언어별로 뜻이 다르다
+print("── 비트 시프트 `<<` 를 쓰는 quest")
+print("  (`cout <<` 는 뺐다 — 같은 줄에 스트림이 있으면 출력이지 시프트가 아니다)\n")
+py_taught = bool(re.search(r"1 <<|비트 시프트|시프트 연산", py_lesson_text))
+print(f"  ▸ 파이썬 — 레슨에서 {'가르침 ✅' if py_taught else '**안 가르친다**'} · quest {len(shift_py)}개")
+if shift_py and not py_taught:
+    print("     대신: `2 ** i` 를 쓸 수 있다 — `**` 는 **파이썬 레슨 4** 가 가르친다")
+    print("     " + "  ".join(sorted(shift_py)))
+print()
+cpp_taught = bool(re.search(r"1 <<", cpp_lesson_text))
+print(f"  ▸ C++ — cpp-20 'CP 실전 팁' 이 {'가르친다' if cpp_taught else '안 가르친다'} · quest {len(shift_cpp)}개")
+if shift_cpp:
+    print("     ⚠️ 가르치긴 하는데 **Part 3 의 끝에서 두 번째**다 (다음이 cpp-p3 USACO 모의전).")
+    print("        quest 에는 잠금이 없어서 학생은 그 전에 닿는다. '안 가르쳤다' 가 아니라 **순서** 문제다.")
+    print("     " + "  ".join(sorted(shift_cpp)))
+print()
+print("⚠️ 아는 모양만 찾는다. 0건이어도 눈으로 한 번 봐라.")
+print("⚠️ **이 검사기는 그 코드가 화면에 실제로 뜨는지 못 가른다.** 파일 이름을 같이 찍는 이유다.")
+print("   2026-09-15 확인된 예: `moohunt(components)` 는 **PDF 전용**이고 화면은 brute/fast 를 쓴다.")
+print("   `hps(components)` 의 비트는 **'🎁 보너스 · 안 봐도 돼요'** 구간이다. 둘 다 필수 경로가 아니다.")
+print("   파일을 열어 그 배열이 어디에 렌더되는지 보고 판정해라.")
+
+sys.exit(1 if (hits or cpp_hits or shift_py) else 0)
