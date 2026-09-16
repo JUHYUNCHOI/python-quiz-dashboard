@@ -248,3 +248,19 @@ python3 scripts/check-code-one-statement.py <quest>
    제자리에 붙는지 브라우저에서 한 걸음씩 확인해라. 코드 정답 검증도 다시 돌려라.
 
 근거: `memory/feedback_code_one_statement_per_line.md` (2026-09-08 · 09-15 두 번 지적)
+
+
+## ⚠️ 2026-09-16 — **이 기계의 `g++` 는 GNU 가 아니다**
+
+`g++ --version` → **`Apple clang version 15.0.0`**. macOS 에서 `g++` 는 **clang 의 별명**이다.
+이 문서가 위에서 `g++ -std=c++17 -Wall` 을 쓰라고 하는데, 그건 **USACO 채점기가 쓰는
+GNU GCC 가 아니다.** 지금까지 이 저장소의 C++ 검증은 전부 clang 으로 한 것이다.
+
+- **"컴파일되나 · 돌아가나" 를 볼 때는 괜찮다.** 두 컴파일러 다 표준 C++17 을 받는다.
+- **하지만 "채점기에서도 같을까" 를 말할 때는 안 된다.** 컴파일러가 다르면 최적화도,
+  미정의 동작(UB)의 결과도 다를 수 있다. 어제 buymilk 의 `1LL << i` 가 정확히 UB 였다.
+- 진짜 GNU 가 필요하면 **`g++-15`**(Homebrew) 를 써라. `scripts/prove-same-program.py` 는
+  자동으로 찾아 쓰고, 없으면 그렇다고 말한다.
+
+⚠️ **USACO 채점기의 정확한 GCC 버전·플래그는 이 저장소 어디에도 없다** (grep 0건).
+   "보통 -O2" 는 일반 지식이지 확인된 사실이 아니다. 속도를 말할 때 이걸 잊지 마라.
