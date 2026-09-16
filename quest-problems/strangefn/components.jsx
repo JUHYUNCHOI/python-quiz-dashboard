@@ -49,9 +49,11 @@ const FULL_CPP = [
   "const long long INV2 = 500000004LL;  // modular inverse of 2",
   "",
   "int main() {",
-  "    int T; cin >> T;",
+  "    int T;",
+  "    cin >> T;",
   "    for (int t = 0; t < T; t++) {",
-  "        string s; cin >> s;",
+  "        string s;",
+  "        cin >> s;",
   "",
   "        // Step 1: if any digit is not 0/1, binarize (1 op).",
   "        long long ops = 0;",
@@ -66,7 +68,11 @@ const FULL_CPP = [
   "        if (needBinarize) {",
   "            for (int i = 0; i < (int)s.size(); i++) {",
   "                int d = s[i] - '0';",
-  "                s[i] = (d % 2) ? '1' : '0';",
+  "                if (d % 2) {",
+  "                    s[i] = '1';",
+  "                } else {",
+  "                    s[i] = '0';",
+  "                }",
   "            }",
   "            ops = 1;",
   "        }",
@@ -97,11 +103,11 @@ const _SF_VARS = [
 export function getStrangeFnWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _SF_VARS, beats: [
-      { hi: [4, 10],  bubble: t(E, "Constants: MOD = 10⁹+7, INV2 = inverse of 2. Read T tests, each number x as a string (x can be astronomically large).", "상수: MOD = 10⁹+7, INV2 = 2 의 역원. T 테스트, 각 x 를 문자열 s 로 읽기 (x 가 엄청 커서).") },
-      { hi: [12, 28], bubble: t(E, "Step 1: if any digit isn't 0/1, binarize it (odd→1, even→0) — that costs 1 op.", "1단계: 0/1 이 아닌 자리가 있으면 이진화 (홀수→1, 짝수→0) — 1회 비용.") },
-      { hi: [30, 34], bubble: t(E, "Step 2: read s as a binary number n, taking mod at every digit (n is huge).", "2단계: s 를 2진수 n 으로 읽되 자릿수마다 mod (n 이 거대해서).") },
-      { hi: [36, 38], bubble: t(E, "Step 3: g = floor(3n/2) = (3n − last bit) × INV2 mod MOD.", "3단계: g = floor(3n/2) = (3n − 마지막 비트) × INV2 mod MOD.") },
-      { hi: [40, 40], bubble: t(E, "Answer = (ops + g) mod MOD.", "답 = (ops + g) mod MOD 출력.") },
+      { hi: [4, 12],  bubble: t(E, "Constants: MOD = 10⁹+7, INV2 = inverse of 2. Read T tests, each number x as a string (x can be astronomically large).", "상수: MOD = 10⁹+7, INV2 = 2 의 역원. T 테스트, 각 x 를 문자열 s 로 읽기 (x 가 엄청 커서).") },
+      { hi: [14, 33], bubble: t(E, "Step 1: if any digit isn't 0/1, binarize it (odd→1, even→0) — that costs 1 op.", "1단계: 0/1 이 아닌 자리가 있으면 이진화 (홀수→1, 짝수→0) — 1회 비용.") },
+      { hi: [36, 40], bubble: t(E, "Step 2: read s as a binary number n, taking mod at every digit (n is huge).", "2단계: s 를 2진수 n 으로 읽되 자릿수마다 mod (n 이 거대해서).") },
+      { hi: [42, 44], bubble: t(E, "Step 3: g = floor(3n/2) = (3n − last bit) × INV2 mod MOD.", "3단계: g = floor(3n/2) = (3n − 마지막 비트) × INV2 mod MOD.") },
+      { hi: [46, 46], bubble: t(E, "Answer = (ops + g) mod MOD.", "답 = (ops + g) mod MOD 출력.") },
     ] };
   }
   return { code: FULL_PY, vars: _SF_VARS, beats: [

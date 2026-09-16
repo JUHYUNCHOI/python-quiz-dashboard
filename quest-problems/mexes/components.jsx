@@ -358,18 +358,26 @@ const _MEX_WALK_PY = [
   "    print(max(missing[i], cnt[i]))",
 ];
 const _MEX_WALK_CPP = [
-  "int N; cin >> N;",
+  "int N;",
+  "cin >> N;",
   "vector<int> a(N);",
-  "for (int i = 0; i < N; i++) cin >> a[i];",
+  "for (int i = 0; i < N; i++) {",
+  "    cin >> a[i];",
+  "}",
   "",
   "vector<int> cnt(N + 2, 0);",
   "for (int x : a)",
-  "    if (0 <= x && x <= N) cnt[x]++;",
+  "    if (0 <= x && x <= N) {",
+  "        cnt[x]++;",
+  "    }",
   "",
   "vector<int> missing(N + 2, 0);",
   "for (int i = 1; i <= N + 1; i++) {",
-  "    if (cnt[i-1] == 0) missing[i] = missing[i-1] + 1;",
-  "    else missing[i] = missing[i-1];",
+  "    if (cnt[i-1] == 0) {",
+  "        missing[i] = missing[i-1] + 1;",
+  "    } else {",
+  "        missing[i] = missing[i-1];",
+  "    }",
   "}",
   "",
   "for (int i = 0; i <= N; i++)",
@@ -379,10 +387,10 @@ const _MEX_WALK_CPP = [
 export function getMexesWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: _MEX_WALK_CPP, vars: _MEX_VARS, beats: [
-      { hi: [0, 2], bubble: t(E, "Read N and the array a.", "N 과 배열 a 를 읽어요.") },
-      { hi: [4, 6], bubble: t(E, "cnt[v] = how many times v appears.", "cnt[v] = v 가 몇 번 나오나 세기.") },
-      { hi: [8, 13], bubble: t(E, "missing[i] = absent values in {0..i−1}. If i−1 is missing, +1; else keep.", "missing[i] = {0..i−1} 중 없는 값 수. i−1 이 없으면 +1, 있으면 그대로.") },
-      { hi: [15, 16], bubble: t(E, "Answer per mex i = the bigger of add (missing) and remove (cnt).", "mex i 답 = 추가(missing)와 제거(cnt) 중 큰 쪽.") },
+      { hi: [0, 5], bubble: t(E, "Read N and the array a.", "N 과 배열 a 를 읽어요.") },
+      { hi: [7, 11], bubble: t(E, "cnt[v] = how many times v appears.", "cnt[v] = v 가 몇 번 나오나 세기.") },
+      { hi: [13, 21], bubble: t(E, "missing[i] = absent values in {0..i−1}. If i−1 is missing, +1; else keep.", "missing[i] = {0..i−1} 중 없는 값 수. i−1 이 없으면 +1, 있으면 그대로.") },
+      { hi: [22, 23], bubble: t(E, "Answer per mex i = the bigger of add (missing) and remove (cnt).", "mex i 답 = 추가(missing)와 제거(cnt) 중 큰 쪽.") },
     ] };
   }
   return { code: _MEX_WALK_PY, vars: _MEX_VARS, beats: [

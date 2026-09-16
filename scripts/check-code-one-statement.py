@@ -25,8 +25,11 @@ ROOT = Path(__file__).resolve().parent.parent
 QUEST_DIR = ROOT / "quest-problems"
 
 # 코드 배열로 쓰이는 변수 이름 (뒤에 오는 [ ... ] 안이 코드 줄들이다)
+# ⚠️ 2026-09-16 담당자가 잡았다 — `export const` 를 못 보고 있었다.
+#    `swaptowin` 의 `FULL_CPP` 가 `export const` 라서 **같은 위반인데 안 걸렸다.**
+#    저장소 전체로 세니 그런 배열이 **70개**다. 그만큼 덜 보고 "0줄" 이라고 해온 것이다.
 CODE_VAR = re.compile(
-    r"^\s*(?:const|let|var)\s+([A-Za-z_$][\w$]*(?:PY|CPP|CODE|_py|_cpp))\s*=\s*\[\s*$"
+    r"^\s*(?:export\s+)?(?:const|let|var)\s+([A-Za-z_$][\w$]*(?:PY|CPP|CODE|_py|_cpp))\s*=\s*\[\s*$"
 )
 STR_LINE = re.compile(r'^\s*"((?:[^"\\]|\\.)*)"\s*,?\s*$')
 
