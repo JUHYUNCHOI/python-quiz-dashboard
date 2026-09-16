@@ -2111,3 +2111,33 @@ PM 판정: LOCK 규칙 원문이 *"변수명 정리, **스타일 통일** 등 �
 cheapest so far→ans' 겠거니 짐작했다."*
 → 어제 다른 학생도 같은 말을 했다(변수 배지에 `ans`·`cost`·`need`·`take` 가 없다).
    **두 번 나왔으니 진짜다.**
+
+## 🔴 2026-09-16 — **학생이 못 보는 C++ 코드를 40개 quest 가 들고 있다**
+
+오늘 줄 펴기를 돌리다가 담당자 **셋이 따로** 같은 걸 말했다. 세어 보니 **40개**다.
+
+이 quest 들은 `*App.jsx` 에서 **파이썬 전용**으로 못박혀 있다(`codeLang = "py"`).
+그런데 `components.jsx` 에는 **C++ 코드와 CodeWalk 말풍선이 그대로** 있다.
+즉 **학생에게 한 번도 안 보이는 코드를 유지보수하고 있다.**
+
+```
+collatz explodingarrow innovation magicorbs mcc15bahasaf mcc15choco mcc15equation
+mcc15isthmus mcc15rect mcc19bakery mcc19candy mcc19ditcoin mcc19elim mcc19palindrome
+mcc19rect mcc19rect2 mcc20cipher mcc20citytour mcc20kitty mcc20knight mcc20missing
+mcc20zigzag mcc21carrots mcc21dvd mcc21glass mcc21marbles mcc21menu mcc21simplemath
+mcc22aliens … (총 40개, 대부분 MCC)
+```
+
+### 왜 문제인가
+- **오늘 다섯 배치가 이 죽은 코드도 같이 고쳤다.** 줄을 펴고, `hi` 를 다시 매기고,
+  컴파일해서 답을 대조했다 — **아무도 볼 수 없는 코드에.**
+- 앞으로 어떤 일괄 작업을 해도 같은 비용이 계속 든다.
+- 반대로, **살릴 생각이면** 지금 상태가 더 위험하다 — 아무도 화면으로 검증 못 하는 코드가
+  "있는 것처럼" 파일에 있다. `mobilegame` 은 C++ 말풍선까지 있는데 화면이 안 열린다.
+
+### 판정 필요 (혼자 안 정한다 — 40개 quest 콘텐츠 삭제/유지 결정이다)
+① **지운다** — 파이썬 전용이면 C++ 을 빼서 유지보수 비용을 없앤다
+② **살린다** — 언어 버튼을 열어준다. 그러면 **C++ 코드 40개를 화면 기준으로 검증**해야 한다
+③ **그대로 둔다** — 대신 일괄 작업 때 **건너뛰도록 표시**해서 헛수고를 막는다
+`/decide` 대상. 참여자: quest-auditor(동결 목록 대조) · pedagogy(두 언어를 다 줘야 하나) ·
+project-lead(우선순위). **MCC 는 원래 파이썬 대회인지**부터 확인할 것.
