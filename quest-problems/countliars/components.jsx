@@ -36,8 +36,10 @@ const FULL_PY = [
   "for p in [c[1] for c in claims]:",
   "    liars = 0",
   "    for typ, val in claims:",
-  "        if typ == 'G' and p < val: liars += 1",
-  "        elif typ == 'L' and p > val: liars += 1",
+  "        if typ == 'G' and p < val:",
+  "            liars += 1",
+  "        elif typ == 'L' and p > val:",
+  "            liars += 1",
   "    ans = min(ans, liars)",
   "print(ans)",
 ];

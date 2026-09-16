@@ -116,7 +116,14 @@ def findings_for(raw, lang):
         if len(real) >= 2 and not hits:
             hits.append(("문장 두 개가 한 줄", " ; ".join(real[:3])))
         # ll a = 1, b = 2;  — 선언 여러 개
-        if code.count("=") >= 2 and re.search(r"=[^=;]+,[^;]*=", code) and "for" not in code:
+        # ⚠️ 2026-09-16 A-4 담당자가 오탐을 잡았다. `walkfence` 의
+        #    `if (px == qx && min(py,qy) <= y && y <= max(py,qy)) {` 를 "선언 여러 개" 로 봤다.
+        #    `==` · `<=` · `>=` · `!=` 의 `=` 가 대입으로 세어진 것이다.
+        #    → **비교 연산자를 먼저 지우고** 센다.
+        cmp_gone = re.sub(r"[=!<>+\-*/%&|^]=|=[=]", "@", code)
+        if (cmp_gone.count("=") >= 2
+                and re.search(r"=[^=;]+,[^;]*=", cmp_gone)
+                and "for" not in code):
             hits.append(("선언·대입 여러 개가 한 줄", body))
     else:
         stmts = [s.strip() for s in split_top_level(code) if s.strip()]

@@ -40,7 +40,10 @@ export const SOLUTION_CODE = [
   "    stop_time[victim] = meet_time",
   "",
   "for s in stop_time:",
-  "    print('Infinity' if s is None else s)",
+  "    if s is None:",
+  "        print('Infinity')",
+  "    else:",
+  "        print(s)",
 ];
 
 

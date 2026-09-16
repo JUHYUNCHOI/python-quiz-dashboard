@@ -67,13 +67,31 @@ def norm_asm(text):
     return "\n".join(l for l in out if l.strip())
 
 
+# ⚠️ 2026-09-16 A-4 담당자가 찾은 한계 — **파이썬 삼항은 이 방법으로 증명이 안 된다.**
+#    `x = 1 if c else 2` 를 `if c: x = 1 / else: x = 2` 로 펴면 **AST 가 반드시 다르다**
+#    (`IfExp` 노드 vs `If` 노드). 뜻은 같은데 구조가 다르다. 도구의 버그가 아니라 방법의 한계다.
+#    → 그 경우엔 **증명을 포기하고 실행 대조로 가라**고 말해준다. 조용히 ❌ 를 내면
+#      담당자가 "내가 뜻을 바꿨나" 하고 멀쩡한 수정을 되돌린다.
+TERNARY = re.compile(r"\S\s+if\s+.+\s+else\s+\S")
+
+
 def prove_py(a, b):
     try:
-        da = ast.dump(ast.parse(Path(a).read_text()), include_attributes=False)
-        db = ast.dump(ast.parse(Path(b).read_text()), include_attributes=False)
+        sa, sb = Path(a).read_text(), Path(b).read_text()
+        da = ast.dump(ast.parse(sa), include_attributes=False)
+        db = ast.dump(ast.parse(sb), include_attributes=False)
     except SyntaxError as e:
         return None, f"파싱 실패: {e}"
-    return da == db, "AST 비교 (줄 번호 제외)"
+    if da == db:
+        return True, "AST 비교 (줄 번호 제외)"
+    # 삼항을 폈나? 그러면 AST 가 다른 게 정상이다 — 증명 불가로 돌려준다
+    if TERNARY.search(sa) and not TERNARY.search(sb):
+        return None, ("**삼항 연산자를 폈다 — 이 방법으로는 증명할 수 없다.**\n"
+                      "     `x = 1 if c else 2` → `if c: ... else: ...` 는 AST 가 반드시 다르다\n"
+                      "     (`IfExp` 노드 vs `If` 노드). 뜻은 같은데 구조가 다르다.\n"
+                      "     → **실행 대조로 가라**: 옛 코드와 새 코드에 같은 입력을 100번 이상 넣어\n"
+                      "        출력이 전부 같은지 확인하고, 그 사실을 보고에 적어라.")
+    return False, "AST 비교 (줄 번호 제외)"
 
 
 def prove_cpp(a, b):
