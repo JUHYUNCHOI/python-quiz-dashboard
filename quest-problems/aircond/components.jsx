@@ -3,10 +3,28 @@
 //   C++ placeholder (summed cow costs) replaced with the correct 2^M subset (bitmask) search,
 //   matching the already-correct Python. Local: compiles + matches official sample (10) exactly.
 //   USACO re-submit PENDING.
-//   ⚠️ CURRICULUM NOTE: this Bronze problem's intended solution is bitmask enumeration over
-//   the M (≤10) air conditioners — bit ops are taught only as a CP tip (cpp-20), not core
-//   C++ curriculum. Kept because there is no non-bitmask Bronze solution and the Python
-//   already shipped this approach. Flag for design review if a no-bitmask version is desired.
+//   ⚠️ CURRICULUM NOTE (2026-06-15): "bit ops are only a CP tip (cpp-20), but there is no
+//   non-bitmask Bronze solution. Flag for design review if a no-bitmask version is desired."
+//
+// ✅ 2026-09-16 — design review 를 걸었고 **그 노트가 틀렸다는 게 밝혀졌다.**
+//   `/decide` 3라운드(기획·감사·학생 → PM 종합), 선생님 지시로 실행.
+//   · 감사가 `mask & (1<<j)` 를 `% 2` / `//= 2` 로 바꿔 **랜덤 80회 브루트 대조 전부 일치** —
+//     "대안이 없다" 는 **검증 없이 쓴 말**이었다. 석 달간 그 말이 판정을 막고 있었다.
+//   · 학생(초6)이 이 코드에서 **완전히 멈췄다**: *"`<<` 랑 `&` 기호 처음 봐요. `mask` 라는
+//     단어도 처음 봐요. 화면은 `1 << M` 이 왜 2^10 이랑 같은지 한 마디도 안 알려줘요."*
+//     그런데 **아이디어는 스스로 떠올렸다** — *"에어컨 각각을 켜거나 끄거나 두 가지니까
+//     다 해보면 되지 않나"*. 막힌 건 개념이 아니라 **그걸 코드로 쓰는 법**이었다.
+//   · 파이썬 레슨에 비트 시프트 **0건**, `itertools` 도 **0건** (전수 확인).
+//     반면 `**` 는 레슨 4, `//` 와 `%` 는 레슨 3 에서 가르친다.
+//
+//   고침: `mask` → `combo`, `1 << M` → `2 ** M`, `mask & (1 << j)` → `rest % 2` + `rest //= 2`.
+//         C++ 도 같은 모양(`combos *= 2` 로 미리 세고 `rest % 2` / `rest /= 2`).
+//         **알고리즘·시간복잡도 그대로, 문법만 바꿨다.**
+//   검증: **무작위 400케이스에서 옛 파이썬 = 새 파이썬, 옛 C++ = 새 C++ 불일치 0.**
+//         답이 있는 입력에서 새 파이썬 = 새 C++ 도 불일치 0.
+//   ⚠️ **USACO 재제출 필요** — 지금 11/11 은 **옛 코드** 기준이다.
+//   ⚠️ 공식 샘플 입력이 저장소에 없어서 그건 못 돌렸다. 화면에도 입출력 카드가 없다(별건).
+//   ⚠️ 원래부터 있던 것: 답이 없을 때 파이썬은 `inf`, C++ 은 `-1` 을 낸다 — 내가 만든 게 아니다.
 
 import { useState } from "react";
 import { C, t } from "@/components/quest/theme";
@@ -180,12 +198,17 @@ const FULL_PY = [
   "",
   "best = float('inf')",
   "",
-  "# Try all 2^M subsets of ACs",
-  "for mask in range(1 << M):",
+  "# Each AC is either on or off, so with M <= 10 there are",
+  "# at most 2 ** 10 = 1024 combinations. Number them 0, 1, 2, ...",
+  "# and read a number's digits in base 2: digit j says 'is AC j on?'",
+  "for combo in range(2 ** M):",
   "    total_cost = 0",
   "    cooling = [0] * 101  # cooling at each stall",
+  "    rest = combo",
   "    for j in range(M):",
-  "        if mask & (1 << j):",
+  "        on = rest % 2    # 1 means AC j is on",
+  "        rest //= 2       # move on to the next AC",
+  "        if on == 1:",
   "            s, e, p, cost = acs[j]",
   "            total_cost += cost",
   "            for pos in range(s, e + 1):",
@@ -197,7 +220,8 @@ const FULL_PY = [
   "            if cooling[pos] < c:",
   "                ok = False",
   "                break",
-  "        if not ok: break",
+  "        if not ok:",
+  "            break",
   "    if ok:",
   "        best = min(best, total_cost)",
   "",
@@ -210,27 +234,51 @@ const FULL_CPP = [
   "using namespace std;",
   "",
   "int main() {",
-  "    int N, M; cin >> N >> M;",
+  "    int N, M;",
+  "    cin >> N >> M;",
   "    vector<int> cs(N), ce(N), cc(N);          // cow: stall range + cooling needed",
-  "    for (int i = 0; i < N; i++) cin >> cs[i] >> ce[i] >> cc[i];",
+  "    for (int i = 0; i < N; i++) {",
+  "        cin >> cs[i] >> ce[i] >> cc[i];",
+  "    }",
   "    vector<int> as(M), ae(M), ap(M), acost(M);// AC: range, power, cost",
-  "    for (int j = 0; j < M; j++) cin >> as[j] >> ae[j] >> ap[j] >> acost[j];",
+  "    for (int j = 0; j < M; j++) {",
+  "        cin >> as[j] >> ae[j] >> ap[j] >> acost[j];",
+  "    }",
   "",
   "    long long best = -1;",
-  "    // Try every subset of the M air conditioners (M <= 10, so 2^M <= 1024)",
-  "    for (int mask = 0; mask < (1 << M); mask++) {",
+  "",
+  "    // Each AC is on or off, so with M <= 10 there are at most 1024 combinations.",
+  "    int combos = 1;",
+  "    for (int j = 0; j < M; j++) {",
+  "        combos *= 2;",
+  "    }",
+  "",
+  "    // Number the combinations 0, 1, 2, ... and read each number in base 2:",
+  "    // digit j says whether AC j is on.",
+  "    for (int combo = 0; combo < combos; combo++) {",
   "        long long total = 0;",
   "        vector<int> cool(101, 0);             // cooling at each stall 1..100",
-  "        for (int j = 0; j < M; j++)",
-  "            if (mask & (1 << j)) {            // AC j is turned on",
+  "        int rest = combo;",
+  "        for (int j = 0; j < M; j++) {",
+  "            int on = rest % 2;                // 1 means AC j is on",
+  "            rest /= 2;                        // move on to the next AC",
+  "            if (on == 1) {",
   "                total += acost[j];",
-  "                for (int pos = as[j]; pos <= ae[j]; pos++) cool[pos] += ap[j];",
+  "                for (int pos = as[j]; pos <= ae[j]; pos++) {",
+  "                    cool[pos] += ap[j];",
+  "                }",
   "            }",
+  "        }",
   "        bool ok = true;",
   "        for (int i = 0; i < N && ok; i++)",
   "            for (int pos = cs[i]; pos <= ce[i]; pos++)",
-  "                if (cool[pos] < cc[i]) { ok = false; break; }",
-  "        if (ok && (best == -1 || total < best)) best = total;",
+  "                if (cool[pos] < cc[i]) {",
+  "                    ok = false;",
+  "                    break;",
+  "                }",
+  "        if (ok && (best == -1 || total < best)) {",
+  "            best = total;",
+  "        }",
   "    }",
   "    cout << best << \"\\n\";",
   "    return 0;",

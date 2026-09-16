@@ -70,7 +70,7 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `stampgrid` | Stamp Grid | Feb 2023 Bronze #2 | ✅ 14/14 PASS | ✅ 14/14 PASS |
 | `hungrycow` | Hungry Cow | Feb 2023 Bronze #1 | ✅ 13/13 PASS | ✅ 13/13 PASS |
 | `mooops` | Moo Operations | Jan 2023 Bronze #3 | ✅ 11/11 PASS | ✅ 11/11 PASS |
-| `aircond` | Air Cownditioning II | Jan 2023 Bronze #2 | ✅ 11/11 PASS | ✅ 11/11 PASS (re-submitted 2026-06-16 C++17, cpid=1276) |
+| `aircond` | Air Cownditioning II | Jan 2023 Bronze #2 | ⏳ **재제출 대기** — 11/11 은 **옛 코드** 기준. 2026-09-16 에 학생이 못 읽는 비트 연산을 걷어냈다(`1<<M`→`2**M`, `mask&(1<<j)`→`% 2`·`//= 2`). 알고리즘 그대로, 문법만. 무작위 400케이스에서 **옛 코드와 답 불일치 0**. | ⏳ **재제출 대기** — 같은 이유. 옛 기록: ✅ 11/11 PASS (2026-06-16 C++17, cpid=1276). 새 판본도 400케이스 옛 코드와 일치. |
 | `leaders` | Leaders | Jan 2023 Bronze #1 | ✅ 17/17 PASS | ✅ 17/17 PASS |
 | `reverseeng` | Reverse Engineering | Dec 2022 Bronze #3 | 🟡 **문서가 낡았던 자리.** 이 ❌ 는 **2026-06-15 에 고쳐진 코드 이전**의 기록이다. 지금 코드는 돈다 — 2026-09-14 확인: `quest-meta.ts` 의 공식 샘플 **2/2 통과**(메인 세션이 직접 돌림). **다만 채점기에 재제출한 적이 없다** — 로컬 통과이지 PASS 가 아니다. | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1253) |
 | `feedcows` | Feeding the Cows | Dec 2022 Bronze #2 | ❌ 0/1 (RTE - wrong input parsing (missing T)) | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1252) |
