@@ -99,7 +99,11 @@ const SECTIONS: Section[] = [
       { id: "candycane", emoji: "🍬", title: "Candy Cane Feast", sub: "Dec 2023 Bronze #1" },
       { id: "cowntact", emoji: "🦠", title: "Cowntact Tracing 2", sub: "Dec 2023 Bronze #2" },
       { id: "fjfarms", emoji: "🌱", title: "FJ Actually Farms", sub: "Dec 2023 Bronze #3" },
-      { id: "feb23", emoji: "🔤", title: "FEB", sub: "Open 2023 Bronze #1" },
+      // 🚧 2026-09-16 숨김 — 화면이 학생에게 **틀린 걸 정답이라고** 가르치고 있었다.
+      //    파일 헤더(`components.jsx:1-3`)가 2026-05-13 부터 "Python 2/20 · C++ 2/20 (WA/TLE)"
+      //    라고 적어뒀는데, `chapters.jsx:216` 은 "|F| ≤ ~20 이라 브루트로 충분" 이라고 단언한다.
+      //    선생님 판정(2026-09-16): "숨긴 채로 두고 나중에 보자". 자세한 건 docs/BROKEN_QUESTS.md
+      { id: "feb23", emoji: "🔤", title: "FEB", sub: "Open 2023 Bronze #1", broken: true },
       { id: "moolang", emoji: "📝", title: "Moo Language", sub: "Open 2023 Bronze #2" },
       { id: "rotshift", emoji: "🔄", title: "Rotate and Shift", sub: "Open 2023 Bronze #3" },
       { id: "hungrycow", emoji: "🐄", title: "Hungry Cow", sub: "Feb 2023 Bronze #1" },
