@@ -106,11 +106,15 @@ export function makeBuyMilkCh1(E) {
             </pre>
           </div>
           <div style={{ background: "#fff7ed", border: "1px dashed #fdba74", borderRadius: 10, padding: 12, fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
-            {/* ⚠️ 2026-09-16 pedagogy: 여기 있던 "큰 거래가 통당 더 싸요" 가 **바로 다음 쪽
-                퀴즈의 정답**이었다. 관찰(45 vs 60)만 남기고 결론은 학생이 내게 둔다.
-                근거: memory/quest_problem_standard.md "관찰 → 추론 (답 미리 X)" */}
-            {t(E, "Notice for x=6: three of the 2-bucket deal cost 3 × 15 = 45.\nSix of the 1-bucket deal would cost 60.\nSame 6 buckets, different price — why?",
-                 "x=6 을 봐요. 2통짜리 3번이면 3 × 15 = 45 예요.\n1통짜리 6번은 60 이에요.\n똑같이 6통인데 값이 달라요 — 왜 그럴까요?")}
+            {/* ⚠️ 2026-09-16 — 두 번 고쳤다.
+                1차: 끝문장 "큰 거래가 통당 더 싸요" 를 지웠다. **그래도 안 됐다.**
+                학생: *"2쪽에서 3×15=45 vs 60 을 보여주는 순간 '큰 거래가 더 싸다'는 걸
+                계산으로 이미 봐버려서, 3쪽 퀴즈는 생각해서 고른 게 아니라 방금 본 걸 그대로 골랐다."*
+                → **결론 문장이 아니라 계산 자체가 스포일러였다.** 45 와 60 을 나란히 놓으면
+                   문장을 지워도 답이 보인다. 그래서 비교를 통째로 뺐다.
+                이 쪽이 할 일은 **입출력을 읽는 법**이고, 값 비교는 3쪽 퀴즈 몫이다. */}
+            {t(E, "The third output line is 45 — that is the answer for x=6.\nHow would you buy 6 buckets for exactly 45?",
+                 "출력 셋째 줄 45 가 x=6 의 답이에요.\n6통을 어떻게 사면 딱 45 가 될까요?")}
           </div>
 
           {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
