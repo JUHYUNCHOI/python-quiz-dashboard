@@ -178,9 +178,14 @@ def scan_file(path):
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("-")]
     show_all = "--all" in sys.argv
-    files = sorted(QUEST_DIR.glob("*/components.jsx"))
+    # ⚠️ 2026-09-16 감사 지적: 전에는 `*/components.jsx` 만 봤다.
+    #    그런데 코드 배열이 `chapters.jsx` 에도 **사본**으로 있는 quest 가 있다
+    #    (comfycows 가 그렇다 — 물리적으로 두 곳에 따로 있다).
+    #    한쪽만 고치면 **화면 두 곳이 서로 다른 코드를 보여준다.**
+    #    오늘 mcc20zigzag·mcc21simplemath 에서 실제로 겪었다.
+    files = sorted(QUEST_DIR.glob("*/*.jsx"))
     if args:
-        files = [f for f in files if f.parent.name in args]
+        files = [f for f in files if f.parent.name in args]   # 폴더 이름으로 고른다
         if not files:
             print(f"그런 quest 가 없다: {', '.join(args)}")
             return 1
@@ -195,13 +200,16 @@ def main():
         n = sum(len(v) for v in res.values())
         total_lines += n
         total_quests += 1
-        rows.append((n, f.parent.name, res))
+        label = f.parent.name if f.name == "components.jsx" else f"{f.parent.name}({f.stem})"
+        rows.append((n, label, res))
 
     rows.sort(reverse=True)
     print(f"한 줄에 문장이 여러 개 — {total_lines}줄 · quest {total_quests}개\n")
 
     for n, quest, res in rows:
-        locked = "🔒 " if "USACO_VERIFIED" in (QUEST_DIR / quest / "components.jsx").read_text(
+        qdir = quest.split("(")[0]
+        comp = QUEST_DIR / qdir / "components.jsx"
+        locked = "🔒 " if comp.exists() and "USACO_VERIFIED" in comp.read_text(
             encoding="utf-8", errors="replace")[:600] else "   "
         print(f"{locked}{quest:<22} {n}줄")
         if not show_all:
