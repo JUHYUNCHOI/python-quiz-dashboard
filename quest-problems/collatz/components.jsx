@@ -26,7 +26,9 @@ const FULL_CPP = [
   "    long long k;",
   "    cin >> n >> k;",
   "    vector<long long> a(n);",
-  "    for (auto& x : a) cin >> x;",
+  "    for (auto& x : a) {",
+  "        cin >> x;",
+  "    }",
   "",
   "    for (long long t = 0; t < k; t++)   // k번 반복",
   "        for (auto& x : a)               // 각 원소를",
@@ -37,7 +39,9 @@ const FULL_CPP = [
   "            }",
   "",
   "    long long sum = 0;",
-  "    for (auto x : a) sum += x;",
+  "    for (auto x : a) {",
+  "        sum += x;",
+  "    }",
   "    cout << sum << \"\\n\";",
   "}",
 ];
@@ -79,9 +83,9 @@ const _COLL_VARS = [
 export function getCollatzWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _COLL_VARS, beats: [
-      { hi: [0, 9],   bubble: t(E, "Read n and k, then read the n numbers into the list a (long long — 3·x+1 can grow).", "n과 k를 읽고, 숫자 n개를 리스트 a에 읽어와요 (3·x+1로 커질 수 있어 long long).") },
-      { hi: [11, 17], bubble: t(E, "Repeat the whole pass exactly k times. Each pass: for every number, if even ÷2, if odd ×3+1 — updated in place (auto& x is a reference).", "한 바퀴 전체를 정확히 k번 반복. 매 바퀴: 숫자마다 짝수면 ÷2, 홀수면 ×3+1 — 참조(auto& x)로 제자리 수정.") },
-      { hi: [19, 21], bubble: t(E, "After all k passes, add up the whole list and print the sum. That's the answer.", "k번을 다 돌린 뒤 리스트 전체를 더해 합을 출력. 그게 답이에요.") },
+      { hi: [0, 11],  bubble: t(E, "Read n and k, then read the n numbers into the list a (long long — 3·x+1 can grow).", "n과 k를 읽고, 숫자 n개를 리스트 a에 읽어와요 (3·x+1로 커질 수 있어 long long).") },
+      { hi: [13, 19], bubble: t(E, "Repeat the whole pass exactly k times. Each pass: for every number, if even ÷2, if odd ×3+1 — updated in place (auto& x is a reference).", "한 바퀴 전체를 정확히 k번 반복. 매 바퀴: 숫자마다 짝수면 ÷2, 홀수면 ×3+1 — 참조(auto& x)로 제자리 수정.") },
+      { hi: [21, 25], bubble: t(E, "After all k passes, add up the whole list and print the sum. That's the answer.", "k번을 다 돌린 뒤 리스트 전체를 더해 합을 출력. 그게 답이에요.") },
     ] };
   }
   return { code: FULL_PY, vars: _COLL_VARS, beats: [

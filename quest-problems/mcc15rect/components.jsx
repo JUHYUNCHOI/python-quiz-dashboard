@@ -37,13 +37,21 @@ const FULL_CPP = [
   "    cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;",
   "",
   "    int x4, y4;",
-  "    if (x1 == x2) x4 = x3;",
-  "    else if (x1 == x3) x4 = x2;",
-  "    else x4 = x1;",
+  "    if (x1 == x2) {",
+  "        x4 = x3;",
+  "    } else if (x1 == x3) {",
+  "        x4 = x2;",
+  "    } else {",
+  "        x4 = x1;",
+  "    }",
   "",
-  "    if (y1 == y2) y4 = y3;",
-  "    else if (y1 == y3) y4 = y2;",
-  "    else y4 = y1;",
+  "    if (y1 == y2) {",
+  "        y4 = y3;",
+  "    } else if (y1 == y3) {",
+  "        y4 = y2;",
+  "    } else {",
+  "        y4 = y1;",
+  "    }",
   "",
   "    cout << x4 << \" \" << y4 << \"\\n\";",
   "    return 0;",
@@ -102,7 +110,7 @@ export function Mcc15RectProgressiveCode(props) {
    형제 quest mcc19rect2 를 본떠 CodeWalk 로 바꾼다 (2026-09-09, 파일럿).
 
    ⚠️ hi 는 **0부터 세는 줄 번호**다 (화면에 보이는 번호는 +1).
-   FULL_PY 는 21 줄(인덱스 0~20), FULL_CPP 는 19 줄(인덱스 0~18) — 기계로 대조함.
+   FULL_PY 는 21 줄(인덱스 0~20), FULL_CPP 는 27 줄(인덱스 0~26) — 기계로 대조함.
    ═══════════════════════════════════════════════════════════════ */
 const _RECT_VARS = [
   { v: "x4", ko: "짝 없는 x → 4번째 꼭짓점의 x", en: "the lonely x → 4th corner's x" },
@@ -116,13 +124,13 @@ export function getMcc15RectWalk(E, lang = "py") {
         { hi: [3, 5], bubble: t(E,
           "Declare the three known corners and read them all with one cin statement.",
           "알고 있는 꼭짓점 셋을 선언하고, cin 한 줄로 다 읽어요.") },
-        { hi: [7, 10], bubble: t(E,
+        { hi: [7, 14], bubble: t(E,
           "int is enough — coordinates stay within ±1,000. if / else if / else picks whichever x has no partner among the three.",
           "좌표가 ±1,000 이라 int 로 충분해요.\nif / else if / else 가 셋 중 짝 없는 x 를 골라요.") },
-        { hi: [12, 14], bubble: t(E,
+        { hi: [16, 22], bubble: t(E,
           "Same idea for y.",
           "y 도 똑같이 해요.") },
-        { hi: [16, 18], bubble: t(E,
+        { hi: [24, 26], bubble: t(E,
           "Print the space yourself with cout — C++ does not insert one automatically.",
           "공백은 cout 에서 직접 넣어요 — C++ 는 자동으로 안 넣어줘요.") },
       ],

@@ -500,7 +500,8 @@ const VIZ_CODE = [
   "for i in range(N):",
   "    row = input()",
   "    for j in range(M):",
-  "        if row[j]=='.': count[j]+=1",
+  "        if row[j] == '.':",
+  "            count[j] += 1",
   "print(min(count))",
 ];
 
@@ -572,13 +573,14 @@ export function RowColumnFillViz({ E }) {
         {VIZ_CODE.map((line, idx) => {
           const isActive = cur.codeLine === idx ||
             (cur.type === "readRow" && idx === 1) ||
-            (cur.type === "checkCell" && (idx === 2 || idx === 3));
+            (cur.type === "checkCell" && (idx === 2 || idx === 3 || idx === 4));
 
           // More specific highlighting
           let highlighted = false;
           if (cur.type === "readRow" && idx === 1) highlighted = true;
           if (cur.type === "checkCell" && idx === 3) highlighted = true;
-          if (cur.type === "done" && idx === 4) highlighted = true;
+          if (cur.type === "checkCell" && idx === 4 && cur.isDot) highlighted = true;
+          if (cur.type === "done" && idx === 5) highlighted = true;
           // outer for when reading row
           if (cur.type === "readRow" && idx === 0) highlighted = true;
           // inner for when checking cell

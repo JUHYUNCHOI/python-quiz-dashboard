@@ -24,7 +24,10 @@ const FULL_PY = [
   "            if h == n or w == m:       # ② 한 방향을 끝까지 꽉 채우나",
   "                ok = True",
   "",
-  "    print(\"YES\" if ok else \"NO\")",
+  "    if ok:",
+  "        print(\"YES\")",
+  "    else:",
+  "        print(\"NO\")",
 ];
 
 /* C++ 코드는 2026-07-30 삭제 — MCC quest 는 App 에서 codeLang="py" 로 고정돼

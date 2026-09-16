@@ -54,14 +54,19 @@ const FULL_CPP = [
   "    sort(card.begin(), card.end());                // c+d 오름차순",
   "",
   "    priority_queue<long long, vector<long long>, greater<long long>> topAB; // a+b 상위 m-1개",
-  "    long long sumTop = 0, best = 0;",
+  "    long long sumTop = 0;",
+  "    long long best = 0;",
   "    for (int i = 0; i < n; i++) {",
-  "        long long cd = card[i].first, ab = card[i].second;",
+  "        long long cd = card[i].first;",
+  "        long long ab = card[i].second;",
   "        if ((int)topAB.size() >= m - 1)",
   "            best = max(best, sumTop + ab + cd);",
   "        topAB.push(ab);",
   "        sumTop += ab;",
-  "        if ((int)topAB.size() > m - 1) { sumTop -= topAB.top(); topAB.pop(); }",
+  "        if ((int)topAB.size() > m - 1) {",
+  "            sumTop -= topAB.top();",
+  "            topAB.pop();",
+  "        }",
   "    }",
   "    cout << best << \"\\n\";",
   "}",
@@ -149,8 +154,8 @@ export function getInnovationWalk(E, lang = "py") {
     return { code, vars: _INNO_VARS, beats: [
       { hi: [0, 13],  bubble: t(E, "Read each card and keep just two totals: (c+d, a+b). Sort by c+d ascending so any card can act as the 'last (largest c+d)' one.", "카드마다 두 합 (c+d, a+b) 만 저장. c+d 오름차순 정렬해서, 어떤 카드든 '마지막(c+d 최대)' 역할을 할 수 있게 해요.") },
       { hi: [14, 16], bubble: t(E, "Prepare a min-heap holding the top m−1 a+b values, their sum sumTop, and the running answer best.", "a+b 상위 m−1개를 담는 min-heap, 그 합 sumTop, 정답 best 를 준비해요.") },
-      { hi: [17, 20], bubble: t(E, "For each card, if m−1 candidates are already in front, use THIS card as the special last one: sumTop + this a+b + this c+d. Update best.", "각 카드마다, 앞에 후보 m−1개가 있으면 이 카드를 특별한 마지막 장으로: sumTop + 이 a+b + 이 c+d. best 갱신.") },
-      { hi: [21, 25], bubble: t(E, "Push this card's a+b into the pool; if the pool grows past m−1, drop the smallest so it always keeps the best m−1. Finally print best.", "이 카드의 a+b 를 풀에 넣고, m−1개를 넘으면 가장 작은 걸 버려 항상 상위 m−1개 유지. 마지막에 best 출력.") },
+      { hi: [17, 22], bubble: t(E, "For each card, if m−1 candidates are already in front, use THIS card as the special last one: sumTop + this a+b + this c+d. Update best.", "각 카드마다, 앞에 후보 m−1개가 있으면 이 카드를 특별한 마지막 장으로: sumTop + 이 a+b + 이 c+d. best 갱신.") },
+      { hi: [23, 30], bubble: t(E, "Push this card's a+b into the pool; if the pool grows past m−1, drop the smallest so it always keeps the best m−1. Finally print best.", "이 카드의 a+b 를 풀에 넣고, m−1개를 넘으면 가장 작은 걸 버려 항상 상위 m−1개 유지. 마지막에 best 출력.") },
     ] };
   }
   const code = [...s[0].py, ...s[1].py, ...s[2].py];
