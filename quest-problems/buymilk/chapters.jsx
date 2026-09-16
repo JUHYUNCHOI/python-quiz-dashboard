@@ -106,8 +106,11 @@ export function makeBuyMilkCh1(E) {
             </pre>
           </div>
           <div style={{ background: "#fff7ed", border: "1px dashed #fdba74", borderRadius: 10, padding: 12, fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
-            {t(E, "Notice for x=6: three of the 2-bucket deal cost 3 × 15 = 45.\nSix of the 1-bucket deal would cost 60.\nThe bigger deal is cheaper per bucket.",
-                 "x=6 을 봐요. 2통짜리 3번이면 3 × 15 = 45 예요.\n1통짜리 6번은 60 이에요.\n큰 거래가 통당 더 싸요.")}
+            {/* ⚠️ 2026-09-16 pedagogy: 여기 있던 "큰 거래가 통당 더 싸요" 가 **바로 다음 쪽
+                퀴즈의 정답**이었다. 관찰(45 vs 60)만 남기고 결론은 학생이 내게 둔다.
+                근거: memory/quest_problem_standard.md "관찰 → 추론 (답 미리 X)" */}
+            {t(E, "Notice for x=6: three of the 2-bucket deal cost 3 × 15 = 45.\nSix of the 1-bucket deal would cost 60.\nSame 6 buckets, different price — why?",
+                 "x=6 을 봐요. 2통짜리 3번이면 3 × 15 = 45 예요.\n1통짜리 6번은 60 이에요.\n똑같이 6통인데 값이 달라요 — 왜 그럴까요?")}
           </div>
 
           {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
