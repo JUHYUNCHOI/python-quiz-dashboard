@@ -1,5 +1,5 @@
 import { C, t } from "@/components/quest/theme";
-import { getMcc21SimpleMathSections } from "./components";
+import { getMcc21SimpleMathSections, getMcc21SimpleMathBruteSections } from "./components";
 
 const KA = { wordBreak: "keep-all" };
 
@@ -19,8 +19,9 @@ function SampleCard({ E, p, out, note }) {
       <div style={{ display: "flex", gap: 8, ...KA }}>
         <div style={{ background: "#0f172a", color: "#e2e8f0", borderRadius: "10px 0 0 10px", padding: "8px 10px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.6, flex: 1 }}>
           <div style={{ color: "#8b949e", fontSize: 10.5, marginBottom: 2 }}>{t(E, "input", "입력")}</div>
-          <div>3 {p}</div>
-          <div>1 2 3</div>
+          <div>N = 3</div>
+          <div>P = {p}</div>
+          <div>A = [1, 2, 3]</div>
         </div>
         <div style={{ background: "#0f172a", color: "#fb923c", borderRadius: "0 10px 10px 0", padding: "8px 10px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.6, minWidth: 64 }}>
           <div style={{ color: "#8b949e", fontSize: 10.5, marginBottom: 2 }}>{t(E, "output", "출력")}</div>
@@ -249,18 +250,30 @@ export function makeMcc21SimpleMathCh1(E) {
 
 export function makeMcc21SimpleMathCh2(E, lang = "py") {
   return [
+    /* 2-0: 첫 코드 (2026-09-17 신설)
+       왜 생겼나 — project-lead 판정: 기승전결의 **'첫 코드' 단계가 통째로 없었다.**
+       예제를 손으로 세다가 곧장 최종 공식으로 점프했다.
+       이 쪽이 있어야 다음 쪽의 "그런데 N 이 커지면" 이 **무엇에 대한 한계인지** 가 생긴다.
+       비트 연산은 안 쓴다 — 안 가르친 개념이다. 리스트를 늘려 가며 만든다. */
+    {
+      type: "progressive",
+      narr: t(E,
+        "First, write it the way you just counted by hand.",
+        "먼저 방금 손으로 센 그대로 짜 봐요."),
+      sections: getMcc21SimpleMathBruteSections(E),
+    },
     // 2-1: plan — brute limit → fast idea
     {
       type: "reveal",
       narr: t(E,
-        "The slow way lists every subset and combines each — impossible past ~N=25. The fast way never lists a subset: it counts how much each number (or each bit) contributes to the total.",
-        "부분집합을 다 적지 않고, 각 수가 총합에 몇 번 쓰이는지만 세요."),
+        "The code you just wrote stops working once N grows. Here is why, and what to do instead.",
+        "방금 그 코드는 N 이 조금만 커져도 못 써요. 왜 그런지 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#b91c1c", marginBottom: 4 }}>
-                🐢 {t(E, "Slow: enumerate every subset", "느린 방법: 부분집합을 하나하나 다 적기")}
+                🐢 {t(E, "The code you just wrote", "방금 짠 코드")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {/* 2026-09-17: "N 이 25 만 넘어도 손을 못 댄다" 에서 25 가 어디서 온 수인지 안 말했다. */}

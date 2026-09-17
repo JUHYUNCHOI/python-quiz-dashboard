@@ -201,6 +201,79 @@ const CPP_XOR = [
 const PY_OUT = ["print(ans)"];
 const CPP_OUT = ["cout << ans << \"\\n\";"];
 
+/* ================================================================
+   첫 코드 — 눈에 보이는 대로 짠 브루트 (2026-09-17 신설)
+
+   왜 생겼나: project-lead 판정 — 기승전결(도입→형식→예제→**첫 코드**→한계→
+   더 빠르게) 중 **'첫 코드' 단계가 통째로 없었다.** 예제를 손으로 세다가
+   바로 최종 공식으로 점프했다. `memory/quest_problem_standard.md` 최우선 항목이다.
+
+   비트 연산을 안 쓴다 — 부분집합을 **리스트를 늘려 가며** 만든다.
+   (비트마스크는 안 가르친 개념이다: count-quests.py --list untaught)
+   공식 예제로 확인 — P=1 → 24 · P=2 → 23 · P=3 → 12.
+   ================================================================ */
+const BRUTE_MAKE_PY = [
+  "# 부분집합을 전부 만들어 봐요",
+  "# 빈 것 하나로 시작해서, 수를 하나씩 넣은 사본을 계속 붙여요",
+  "subsets = [[]]",
+  "for x in a:",
+  "    for i in range(len(subsets)):",
+  "        subsets.append(subsets[i] + [x])",
+];
+const BRUTE_COMBINE_PY = [
+  "total = 0",
+  "for sub in subsets:",
+  "    if len(sub) == 0:        # 빈 부분집합은 세지 않아요",
+  "        continue",
+  "    value = sub[0]",
+  "    for x in sub[1:]:",
+  "        if P == 1:",
+  "            value = value + x",
+  "        elif P == 2:",
+  "            value = value * x",
+  "        else:",
+  "            value = value ^ x",
+  "    total = total + value",
+];
+const BRUTE_OUT_PY = [
+  "print(total % MOD)",
+];
+
+export function getMcc21SimpleMathBruteSections(E) {
+  return [
+    {
+      label: t(E, "\u{1F422} 1. Make every subset", "\u{1F422} 1. 부분집합을 전부 만들기"),
+      color: A,
+      py: BRUTE_MAKE_PY, cpp: BRUTE_MAKE_PY,
+      why: [
+        t(E,
+          "Start with one empty subset. For each number, copy every subset we already have and put that number in.\nThat is exactly what the 7 rows on the previous page were.",
+          "빈 부분집합 하나로 시작해요.\n수를 하나 볼 때마다, 지금 있는 부분집합을 전부 베껴서 그 수를 넣어요.\n앞 쪽에서 본 7 줄이 바로 이렇게 만들어진 거예요."),
+      ],
+    },
+    {
+      label: t(E, "\u{1F422} 2. Combine each subset", "\u{1F422} 2. 부분집합마다 합치기"),
+      color: A,
+      py: BRUTE_COMBINE_PY, cpp: BRUTE_COMBINE_PY,
+      why: [
+        t(E,
+          "Inside one subset, take the first number and fold the rest into it with the operator P picks.\nThen add that value to the total.",
+          "부분집합 안에서 첫 수를 잡고, 나머지를 P 가 고른 연산자로 하나씩 합쳐요.\n그렇게 나온 값을 총합에 더해요."),
+      ],
+    },
+    {
+      label: t(E, "\u{1F422} 3. Print", "\u{1F422} 3. 출력"),
+      color: A,
+      py: BRUTE_OUT_PY, cpp: BRUTE_OUT_PY,
+      why: [
+        t(E,
+          "This is correct, and on the sample it prints 24 / 23 / 12 just like the official output.\nThe next page asks the one question that matters: how far does it go?",
+          "이 코드는 맞아요. 예제에 넣으면 공식 답과 똑같이 24 / 23 / 12 가 나와요.\n다음 쪽에서 딱 하나를 물어볼게요 — 이 방법은 어디까지 갈까요?"),
+      ],
+    },
+  ];
+}
+
 export function getMcc21SimpleMathSections(E) {
   return [
     {

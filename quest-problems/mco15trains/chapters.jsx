@@ -192,6 +192,54 @@ export function makeTrainsCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeTrainsCh2(E, lang = "py") {
   return [
+    /* 2-0: 한계 (2026-09-17 신설)
+       왜 생겼나 — project-lead 판정: 기승전결에서 **'한계' 쪽이 통째로 없었다.**
+       문제를 이해한 다음 바로 코드로 넘어가서, 학생이 "왜 이렇게 짜지?" 를 물을 자리가 없었다.
+       ⚠️ 한 화면이면 충분하다 — 제약 숫자 + 길 수 한 줄
+          (memory/feedback_why_and_how_over_slowness.md, 선생님 2026-09-10
+           "오래 걸리는건 금방 알수 있어. 그래서 그 방법에 대해 왜. 어떻게가 가장 중요한것 같아").
+       숫자는 직접 센 것이다 — 오른쪽·아래로만 가는 길의 수 C(2n-2, n-1).
+       5×5=70 · 10×10=48,620 · 20×20=35,345,263,800. */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Could we just try every path? Let us count them first.",
+        "길을 전부 해보면 될까요? 몇 가지인지부터 세어 봐요."),
+      content: (
+        <div style={{ padding: 16, maxWidth: 620, margin: "0 auto", wordBreak: "keep-all" }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#b91c1c", marginBottom: 6 }}>
+              🐢 {t(E, "Try every path", "길을 전부 해보기")}
+            </div>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7, whiteSpace: "pre-line", textWrap: "balance" }}>
+              {t(E,
+                "Count only the paths that go right and down — never back up.",
+                "오른쪽과 아래로만 가는 길만 세 볼게요. 되돌아가는 길은 빼고요.")}
+            </div>
+            <div style={{ marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, color: "#9a3412", lineHeight: 1.9 }}>
+              <div>5 × 5 {t(E, "grid", "격자")} → 70</div>
+              <div>10 × 10 → 48,620</div>
+              <div>20 × 20 → 35,345,263,800</div>
+            </div>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7, marginTop: 8, whiteSpace: "pre-line", textWrap: "balance" }}>
+              {t(E,
+                "A 20 × 20 grid is small, and it already has over 35 billion paths.\nAnd that count leaves out every path that loops back.",
+                "20 × 20 은 작은 격자인데 벌써 353 억 가지가 넘어요.\n게다가 되돌아가는 길은 아직 세지도 않았어요.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "12px 14px" }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 6 }}>
+              🚀 {t(E, "So we do not look at paths at all", "그래서 길을 보지 않아요")}
+            </div>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7, whiteSpace: "pre-line", textWrap: "balance" }}>
+              {t(E,
+                "We look at cells instead. Each cell gets one number: the cheapest way to reach it.\nOnce a cell has that number it never changes, so every cell is settled once.\nThat is why the code on the next page starts from the cheapest cell and spreads outward.",
+                "대신 칸을 봐요. 칸마다 값을 하나씩 정해요 — 여기까지 오는 제일 싼 값이에요.\n한 번 정해진 칸은 다시 안 바뀌어요. 그래서 칸마다 한 번이면 끝이에요.\n다음 쪽 코드가 제일 싼 칸에서 시작해 바깥으로 넓혀 가는 이유가 이거예요.")}
+            </div>
+          </div>
+        </div>),
+    },
     // 2-1: Code
     {
       type: "progressive",
