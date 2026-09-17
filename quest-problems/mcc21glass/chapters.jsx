@@ -290,8 +290,8 @@ export function makeMcc21GlassCh1(E) {
             <div style={{ fontSize: 12, color: C.dim, marginTop: 8, whiteSpace: "pre-line", ...KA }}>
               {/* 2026-09-17: "32비트" 는 학생 말이 아니다. 답이 커서 큰 수를 담아야 한다는
                   뜻으로 바꿔 쓴다. 제약 숫자는 PDF 그대로다 (case 8 은 N = 10⁵, A ≤ 10¹⁰). */}
-              {t(E, "Limits: N ≤ 5·10⁴, A ≤ 10¹⁸, Rᵢ ≤ 10⁹ — squaring these gets huge, so Python's big integers matter.",
-                   "제약: N ≤ 5·10⁴, A ≤ 10¹⁸, Rᵢ ≤ 10⁹\n반지름을 제곱하면 아주 큰 수가 돼요. 파이썬 정수는 아무리 커져도 괜찮아요.")}
+              {t(E, "Limits: N ≤ 5·10⁴ (50,000), A ≤ 10¹⁸ (a huge number), Rᵢ ≤ 10⁹ (1,000,000,000) — squaring (multiplying a number by itself) makes these even bigger, so Python's big integers matter.",
+                   "제약: N ≤ 5·10⁴(5만), A ≤ 10¹⁸(아주 큰 수), Rᵢ ≤ 10⁹(10억)\n반지름을 제곱(자기 자신을 두 번 곱한 값)하면 훨씬 더 큰 수가 돼요. 파이썬 정수는 아무리 커져도 괜찮아요.")}
             </div>
             <div style={{ fontSize: 11.5, color: C.dim, marginTop: 6, lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
               {t(E,
@@ -407,7 +407,7 @@ export function makeMcc21GlassCh2(E) {
       /* 2026-09-17: 이 narr 이 106 자·세 문장이었다. 바로 아래 카드 세 장이
          같은 말을 더 자세히 한다 — 파란 바는 "지금 뭘 볼 차례" 만 말한다. */
       narr: t(E,
-        "x can be up to 10⁹, so instead of guessing it, fix the slot p first.",
+        "x can be huge, so instead of guessing it, fix the slot p first.",
         "x 를 다 넣어 볼 수 없으니 자리 p 를 먼저 정해 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
@@ -424,7 +424,7 @@ export function makeMcc21GlassCh2(E) {
             </div>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#1e3a8a", marginBottom: 4 }}>
-                2️⃣ {t(E, "Solve for x² in O(1)", "x² 를 O(1) 로 풀어요")}
+                2️⃣ {t(E, "Solve for x² in one step (O(1))", "x² 를 한 번에(O(1)) 풀어요")}
               </div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
                 {t(E, "p odd  → x² = A + S − 2·pre", "p 홀수  → x² = A + S − 2·pre")}<br/>
@@ -497,7 +497,7 @@ export function makeMcc21GlassCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way tries every possible x (up to 10⁹) and re-checks — far too slow. The fast way tests each of the N slots the missing radius could occupy, solving x² directly in O(1) each.",
+        "Trying every x is too slow — solve directly for x² at each slot instead.",
         "x 를 다 넣어 보면 너무 느려요. 자리마다 x² 를 바로 풀면 빨라요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
@@ -507,8 +507,8 @@ export function makeMcc21GlassCh3(E, lang = "py") {
                 🐢 {t(E, "Slow: try every radius x", "느린 방법: 반지름 x 를 하나씩 다 넣어 보기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "x can be up to 10⁹, each try re-sorts / re-sums → far past the time limit.",
-                     "x 는 10⁹ 까지 커요.\n한 번 넣을 때마다 다시 줄 세우고 다시 더하니까\n시간이 한참 모자라요.")}
+                {t(E, "x can be up to 1,000,000,000 (10⁹), and each try re-sorts / re-sums → far past the time limit.",
+                     "x 는 최대 10억(10⁹)까지 커요.\n한 번 넣을 때마다 다시 줄 세우고 다시 더하니까\n시간이 한참 모자라요.")}
               </div>
             </div>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>
@@ -516,8 +516,8 @@ export function makeMcc21GlassCh3(E, lang = "py") {
                 🚀 {t(E, "Fast: one closed-form per slot", "빠른 방법: 자리마다 식 하나로 바로 풀기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Sort once (N log N), build a prefix of the alternating sum, then O(1) per slot → O(N log N) total.",
-                     "한 번만 줄 세우고 (N log N) 번갈아 합의 앞부분을 만들어 둬요.\n그러면 자리마다 O(1) 이라 전체가 O(N log N) 이에요.")}
+                {t(E, "Sort once (N log N), build a prefix of the alternating sum, then solve each slot in one step (O(1)) → about N log N total (O(N log N)).",
+                     "한 번만 줄 세우고(N log N) 번갈아 합의 앞부분을 만들어 둬요.\n그러면 자리마다 한 번에(O(1)) 계산되어\n전체는 N log N 정도 걸려요(O(N log N)).")}
               </div>
             </div>
           </div>

@@ -160,8 +160,8 @@ export function getMcc21GlassSections(E) {
             "sorted(R, reverse=True) 는 큰 것부터 담긴 새 리스트를 줘요.\nR 자체는 그대로 남아요."),
       ],
       cppOnly: [
-        t(E, "sort(b.rbegin(), b.rend()) sorts descending. Read A as long long — it goes up to 10¹⁸.",
-            "sort(b.rbegin(), b.rend()) 는 큰 것부터 정렬해요.\nA 는 10¹⁸ 까지라서 long long 으로 읽어요."),
+        t(E, "sort(b.rbegin(), b.rend()) sorts descending. Read A as long long — it goes up to 10¹⁸ (a billion times a billion).",
+            "sort(b.rbegin(), b.rend()) 는 큰 것부터 정렬해요.\nA 는 10¹⁸(10억×10억)까지라서 long long 으로 읽어요."),
       ],
     },
     {
@@ -171,16 +171,16 @@ export function getMcc21GlassSections(E) {
       why: [
         t(E, "prefix[i] = b1² − b2² + b3² − … : the alternating sum of the first i known radii. Signs flip because the answer alternates by position.",
             "prefix[i] = b1² − b2² + b3² − … 예요.\n앞에서부터 i 개까지 번갈아 더하고 뺀 합이에요.\n자리마다 부호가 번갈아 바뀌니까 sign 도 +1, −1 을 오가요."),
-        t(E, "Computing it once means any prefix we need later is O(1) to look up. S = prefix[m] is the whole alternating sum of the known radii.",
+        t(E, "Computing it once means any prefix we need later is a quick O(1) lookup, not a recompute. S = prefix[m] is the whole alternating sum of the known radii.",
             "한 번만 만들어 두면 나중에 어느 앞부분이든 바로 꺼내 써요.\nS = prefix[m] 은 아는 반지름 전체의 번갈아 합이에요."),
       ],
       pyOnly: [
-        t(E, "Python ints are unbounded, so b[i]² (up to 10¹⁸) and their running sum never overflow — no big-integer setup needed.",
-            "파이썬 정수는 크기 제한이 없어요.\n그래서 10¹⁸ 까지 가는 b[i]² 도, 쌓아 온 합도 넘칠 걱정이 없어요."),
+        t(E, "Python ints are unbounded, so b[i]² (up to 10¹⁸ — a billion times a billion, since b[i] itself reaches 10⁹) and their running sum never overflow — no big-integer setup needed.",
+            "파이썬 정수는 크기 제한이 없어요.\n그래서 b[i] 가 최대 10⁹(10억)이라 b[i]² 은 10¹⁸(10억×10억)까지 가지만\n쌓아 온 합도 넘칠 걱정이 없어요."),
       ],
       cppOnly: [
-        t(E, "Sums reach ~5·10⁴ terms of 10¹⁸ each → far past long long. Use __int128 for prefix and S.",
-            "10¹⁸ 짜리 항이 5·10⁴ 개쯤 더해지니까 long long 으로는 모자라요.\nprefix 와 S 는 __int128 에 담아요."),
+        t(E, "Sums reach ~5·10⁴ (50,000) terms of 10¹⁸ each → far past long long. Use __int128 for prefix and S.",
+            "10¹⁸(10억×10억)짜리 항이 5·10⁴(5만) 개쯤 더해지니까 long long 으로는 모자라요.\nprefix 와 S 는 __int128 에 담아요."),
       ],
     },
     {
@@ -190,7 +190,7 @@ export function getMcc21GlassSections(E) {
       why: [
         t(E, "The missing radius lands in ONE slot p. Radii above p keep their signs; every radius below p shifts one place, so all their signs flip.",
             "깨진 반지름은 줄 세운 순서의 어느 한 자리 p 에 들어가요.\np 보다 큰 반지름은 자리가 그대로라 부호도 그대로예요.\np 보다 작은 반지름은 한 칸씩 밀려서 부호가 전부 뒤집혀요."),
-        t(E, "Once p is fixed, 'alternating sum = A' has only one unknown, so x² comes out in O(1): p odd → A+S−2·pre, p even → 2·pre−A−S.",
+        t(E, "Once p is fixed, 'alternating sum = A' has only one unknown, so x² comes out immediately (O(1)): p odd → A+S−2·pre, p even → 2·pre−A−S.",
             "p 를 정하면 '번갈아 합 = A' 에 모르는 값이 x² 하나뿐이에요.\n그래서 p 가 홀수면 x² = A+S−2·pre,\n짝수면 x² = 2·pre−A−S 로 바로 나와요."),
         t(E, "A negative x² can't come from a real radius, so that slot is dropped at once.",
             "x² 가 음수면 그런 반지름은 세상에 없어요.\n그 자리는 바로 버리고 다음 자리로 가요."),
