@@ -201,7 +201,7 @@ export function makeMcc22LampCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "A lamp's brightness at x is max(0, b − |p − x|). Work out each lamp's share first.",
+        "A lamp's brightness at x is max(0, b − |p − x|).",
         "램프 하나의 밝기는 max(0, b − |p − x|) 예요."),
       question: t(E,
         "Two lamps: (p=0, b=6) and (p=−3, b=2). What is the total brightness at x = −3?",

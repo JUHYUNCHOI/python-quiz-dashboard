@@ -380,9 +380,11 @@ export function makeMcc21GlassCh2(E) {
     // 2-3 the closed-form idea
     {
       type: "reveal",
+      /* 2026-09-17: 이 narr 이 106 자·세 문장이었다. 바로 아래 카드 세 장이
+         같은 말을 더 자세히 한다 — 파란 바는 "지금 뭘 볼 차례" 만 말한다. */
       narr: t(E,
-        "We can't guess x forever (it may be up to 10⁹). Instead: the missing radius slots into ONE position p in the sorted order. Fix p, and the equation 'alternating sum = A' has a single unknown x², which we solve directly.",
-        "x 는 10⁹ 까지 커서 다 넣어 볼 수 없어요.\n대신 깨진 반지름이 줄 서는 자리 p 를 먼저 정해 봐요.\np 를 정하면 '번갈아 합 = A' 에 모르는 값이 x² 하나뿐이라 바로 풀려요."),
+        "x can be up to 10⁹, so instead of guessing it, fix the slot p first.",
+        "x 를 다 넣어 볼 수 없으니 자리 p 를 먼저 정해 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -432,10 +434,12 @@ export function makeMcc21GlassCh2(E) {
       question: t(E,
         "A position gives x² = 49. What do we do?",
         "어떤 자리에서 x² = 49 가 나왔어요. 어떻게 할까요?"),
+      /* 2026-09-17: 정답 보기만 2 배 넘게 길었다 — 읽지 않고 길이로 찍을 수 있다.
+         셋 다 비슷한 길이로 맞췄다. 정답 자리(0)는 그대로. */
       options: [
-        t(E, "x = 7 (perfect square) — check it fits between neighbors, then accept", "x = 7 이니까 양옆 사이에 들어가는지 보고 받아들여요"),
-        t(E, "Reject: 49 is too big", "49 는 너무 크니까 버려요"),
-        t(E, "x = 49", "x = 49"),
+        t(E, "x = 7, then check it fits between its neighbours", "x = 7 로 두고 양옆 사이인지 확인해요"),
+        t(E, "Reject it: 49 is bigger than the other radii", "49 는 다른 반지름보다 크니까 버려요"),
+        t(E, "x = 49, the formula already gave the radius", "x = 49, 식이 이미 반지름을 준 거예요"),
       ],
       correct: 0,
       explain: t(E,
@@ -446,10 +450,15 @@ export function makeMcc21GlassCh2(E) {
     // 2-5 practice input (sample 2)
     {
       type: "input",
+      /* 2026-09-17: narr 이 "줄 세우면 6, 5, 3, 2" 라고 **답(5)을 그대로 적어** 두고
+         있었다. 상황만 남기고, 풀이는 눌러야 열리는 힌트로 옮겼다. */
       narr: t(E,
-        "Sample 2: known radii 2,3,6 with A = 16. Sorted with the answer they become 6,5,3,2 → 36−25+9−4 = 16. What is the broken radius?",
-        "아는 반지름은 2, 3, 6 이고 A 는 16 이에요.\n답을 넣고 줄 세우면 6, 5, 3, 2 가 되어 36−25+9−4 = 16 이에요.\n깨진 반지름은 얼마일까요?"),
+        "Official sample 2: the known radii are 2, 3, 6 and A = 16.",
+        "공식 예제 2 예요. 아는 반지름은 2, 3, 6 이고 A 는 16 이에요."),
       question: t(E, "Broken radius for R=[2,3,6], A=16 = ?", "R=[2,3,6] 이고 A=16 일 때 깨진 반지름은?"),
+      hint: t(E,
+        "Line all four up largest-first; the alternating sum of squares must be 16. Try putting x between 6 and 3.",
+        "네 개를 큰 것부터 줄 세우면 제곱을 번갈아 더하고 뺀 값이 16 이어야 해요.\nx 를 6 과 3 사이에 놓는 경우부터 따져 봐요."),
       answer: 5,
     },
   ];

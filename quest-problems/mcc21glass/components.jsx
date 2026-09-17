@@ -126,31 +126,108 @@ const FULL_CPP = [
   "}",
 ];
 
+/* 2026-09-17: 여기가 섹션 **한 개**에 파이썬 47 줄·C++ 71 줄을 통째로 펼치고 있었다.
+   이 묶음에서 수학이 제일 복잡한데 코드는 가장 안 쪼개져 있었다.
+   서로 다른 다섯 단계(읽기·정렬 / prefix 만들기 / 자리마다 x² 풀기 /
+   완전제곱 확인 / 양옆 확인·출력)로 나눈다.
+   ⚠️ 코드 **내용**은 한 글자도 안 바꾼다 — 어디서 자르는지만 정한다.
+   그래서 새 배열을 손으로 적지 않고 FULL_PY·FULL_CPP 를 slice 해서 쓴다.
+   (본: mcc21simplemath 5 섹션 · mcc21menu) */
+const PY_READ   = FULL_PY.slice(0, 10);
+const PY_PREFIX = FULL_PY.slice(10, 20);
+const PY_SLOT   = FULL_PY.slice(20, 29);
+const PY_SQRT   = FULL_PY.slice(29, 32);
+const PY_FIT    = FULL_PY.slice(32);
+
+const CPP_READ   = FULL_CPP.slice(0, 17);
+const CPP_PREFIX = FULL_CPP.slice(17, 29);
+const CPP_SLOT   = FULL_CPP.slice(29, 40);
+const CPP_SQRT   = FULL_CPP.slice(40, 50);
+const CPP_FIT    = FULL_CPP.slice(50);
+
 export function getMcc21GlassSections(E) {
   return [
     {
-      label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
+      label: t(E, "📥 1. Read input, sort largest-first", "📥 1. 입력 읽기 · 큰 것부터 줄 세우기"),
       color: A,
-      py: FULL_PY, cpp: FULL_CPP,
+      py: PY_READ, cpp: CPP_READ,
       why: [
-        t(E, "Sort the known radii largest-first, then build 'prefix': prefix[i] = b1² − b2² + b3² − … So the WHOLE alternating sum of squares is precomputed and any prefix is O(1).",
-            "아는 반지름을 큰 것부터 줄 세우고 prefix 를 만들어요.\nprefix[i] = b1² − b2² + b3² − … 이에요.\n이렇게 미리 더해 두면 어느 앞부분이든 O(1) 에 꺼내 쓸 수 있어요."),
-        t(E, "The missing radius must land in ONE slot p of the sorted order. Radii above p keep their signs; every radius below p shifts one place, so all their signs flip. That turns 'alternating sum = A' into a single equation for x².",
-            "깨진 반지름은 줄 세운 순서의 어느 한 자리 p 에 들어가요.\np 보다 큰 반지름은 자리가 그대로라 부호도 그대로예요.\np 보다 작은 반지름은 한 칸씩 밀려서 부호가 전부 뒤집혀요.\n그래서 모르는 값이 x² 하나만 남고, 식 하나로 풀 수 있어요."),
-        t(E, "Solve x² per slot in O(1): p odd → x² = A+S−2·pre, p even → x² = 2·pre−A−S. Accept x only if x² is a positive perfect square (isqrt check) AND x fits between its neighbors upper/lower. The first slot that passes is a valid answer.",
-            "자리마다 x² 를 O(1) 에 풀어요.\np 가 홀수면 x² = A+S−2·pre, 짝수면 x² = 2·pre−A−S 예요.\nx² 가 양수이면서 완전제곱이고 (isqrt 로 확인)\nx 가 양옆 upper·lower 사이에 들어올 때만 받아들여요.\n이 조건을 처음 통과한 자리의 x 가 답이에요."),
+        t(E, "The alternating sum only makes sense once the radii are in order, so sort the known ones largest-first right away.",
+            "번갈아 더하고 빼는 합은 반지름이 줄 서 있어야 뜻이 생겨요.\n그래서 아는 반지름부터 큰 것 → 작은 것 순으로 줄 세워요."),
+        t(E, "m = N − 1 is how many radii we actually know — one of the N is broken.",
+            "m = N − 1 은 우리가 아는 반지름의 개수예요.\nN 개 중 하나가 깨져서 하나가 비어 있으니까요."),
       ],
       pyOnly: [
-        t(E, "math.isqrt(x2) is exact integer square root — no float rounding. Check x*x == x2 to confirm x2 is a perfect square.",
-            "math.isqrt(x2) 는 정수 제곱근을 정확히 구해서\n소수점 반올림 때문에 틀릴 일이 없어요.\nx*x == x2 인지 보면 완전제곱인지 알 수 있어요."),
+        t(E, "sorted(R, reverse=True) gives a new list in descending order; R itself is left alone.",
+            "sorted(R, reverse=True) 는 큰 것부터 담긴 새 리스트를 줘요.\nR 자체는 그대로 남아요."),
+      ],
+      cppOnly: [
+        t(E, "sort(b.rbegin(), b.rend()) sorts descending. Read A as long long — it goes up to 10¹⁸.",
+            "sort(b.rbegin(), b.rend()) 는 큰 것부터 정렬해요.\nA 는 10¹⁸ 까지라서 long long 으로 읽어요."),
+      ],
+    },
+    {
+      label: t(E, "🧮 2. Precompute the alternating sums", "🧮 2. 번갈아 더한 합 미리 만들기"),
+      color: A,
+      py: PY_PREFIX, cpp: CPP_PREFIX,
+      why: [
+        t(E, "prefix[i] = b1² − b2² + b3² − … : the alternating sum of the first i known radii. Signs flip because the answer alternates by position.",
+            "prefix[i] = b1² − b2² + b3² − … 예요.\n앞에서부터 i 개까지 번갈아 더하고 뺀 합이에요.\n자리마다 부호가 번갈아 바뀌니까 sign 도 +1, −1 을 오가요."),
+        t(E, "Computing it once means any prefix we need later is O(1) to look up. S = prefix[m] is the whole alternating sum of the known radii.",
+            "한 번만 만들어 두면 나중에 어느 앞부분이든 바로 꺼내 써요.\nS = prefix[m] 은 아는 반지름 전체의 번갈아 합이에요."),
+      ],
+      pyOnly: [
         t(E, "Python ints are unbounded, so b[i]² (up to 10¹⁸) and their running sum never overflow — no big-integer setup needed.",
             "파이썬 정수는 크기 제한이 없어요.\n그래서 10¹⁸ 까지 가는 b[i]² 도, 쌓아 온 합도 넘칠 걱정이 없어요."),
       ],
       cppOnly: [
-        t(E, "Sums reach ~5·10⁴ terms of 10¹⁸ each → far past long long. Use __int128 for prefix, S, and x². Read A as long long (up to 10¹⁸).",
-            "10¹⁸ 짜리 항이 5·10⁴ 개쯤 더해지니까 long long 으로는 모자라요.\nprefix, S, x² 는 __int128 에 담고\nA 는 10¹⁸ 까지라서 long long 으로 읽으면 돼요."),
+        t(E, "Sums reach ~5·10⁴ terms of 10¹⁸ each → far past long long. Use __int128 for prefix and S.",
+            "10¹⁸ 짜리 항이 5·10⁴ 개쯤 더해지니까 long long 으로는 모자라요.\nprefix 와 S 는 __int128 에 담아요."),
+      ],
+    },
+    {
+      label: t(E, "🔍 3. Try each slot p, solve x²", "🔍 3. 자리 p 를 하나씩 놓아 보고 x² 풀기"),
+      color: A,
+      py: PY_SLOT, cpp: CPP_SLOT,
+      why: [
+        t(E, "The missing radius lands in ONE slot p. Radii above p keep their signs; every radius below p shifts one place, so all their signs flip.",
+            "깨진 반지름은 줄 세운 순서의 어느 한 자리 p 에 들어가요.\np 보다 큰 반지름은 자리가 그대로라 부호도 그대로예요.\np 보다 작은 반지름은 한 칸씩 밀려서 부호가 전부 뒤집혀요."),
+        t(E, "Once p is fixed, 'alternating sum = A' has only one unknown, so x² comes out in O(1): p odd → A+S−2·pre, p even → 2·pre−A−S.",
+            "p 를 정하면 '번갈아 합 = A' 에 모르는 값이 x² 하나뿐이에요.\n그래서 p 가 홀수면 x² = A+S−2·pre,\n짝수면 x² = 2·pre−A−S 로 바로 나와요."),
+        t(E, "A negative x² can't come from a real radius, so that slot is dropped at once.",
+            "x² 가 음수면 그런 반지름은 세상에 없어요.\n그 자리는 바로 버리고 다음 자리로 가요."),
+      ],
+    },
+    {
+      label: t(E, "✅ 4. Is x² a perfect square?", "✅ 4. x² 가 완전제곱인지 확인"),
+      color: A,
+      py: PY_SQRT, cpp: CPP_SQRT,
+      why: [
+        t(E, "A radius is a whole number, so x² has to be a perfect square. Take the integer square root and square it back — if it doesn't return to x², this slot is out.",
+            "반지름은 정수라서 x² 는 완전제곱이어야 해요.\n정수 제곱근을 구해 다시 제곱해 보고,\nx² 로 돌아오지 않으면 이 자리는 버려요."),
+        t(E, "x ≤ 0 is rejected too — a circle of radius 0 or less isn't a radius.",
+            "x 가 0 이하인 것도 버려요. 반지름이 0 이거나 음수일 수는 없으니까요."),
+      ],
+      pyOnly: [
+        t(E, "math.isqrt(x2) is exact integer square root — no float rounding. Check x*x == x2 to confirm x2 is a perfect square.",
+            "math.isqrt(x2) 는 정수 제곱근을 정확히 구해서\n소수점 반올림 때문에 틀릴 일이 없어요.\nx*x == x2 인지 보면 완전제곱인지 알 수 있어요."),
+      ],
+      cppOnly: [
         t(E, "There is no int128 sqrt, so seed with sqrtl then nudge x up/down until x*x == x2 exactly.",
             "__int128 에는 sqrt 가 없어요.\n그래서 sqrtl 로 대략 잡은 뒤\nx*x 가 x2 와 딱 같아질 때까지 x 를 한 칸씩 올리고 내려요."),
+      ],
+    },
+    {
+      label: t(E, "📏 5. Does x fit the slot? Print it", "📏 5. 양옆 사이에 들어가나 보고 출력"),
+      color: A,
+      py: PY_FIT, cpp: CPP_FIT,
+      why: [
+        t(E, "x was solved ASSUMING it sits at slot p, so it must really fit there: not bigger than the radius above it (upper), not smaller than the one below (lower).",
+            "x 는 '자리 p 에 있다' 고 치고 푼 값이에요.\n그러니 진짜로 그 자리에 들어가야 해요.\n위 반지름(upper)보다 크면 안 되고, 아래 반지름(lower)보다 작아도 안 돼요."),
+        t(E, "At the two ends there is no neighbour: slot 1 has nothing above it, and the last slot only needs x > 0, so lower is 0.",
+            "양 끝자리에는 이웃이 없어요.\n첫 자리는 위쪽이 비어 있고,\n마지막 자리는 0 보다 크기만 하면 되니 lower 를 0 으로 둬요."),
+        t(E, "The first slot that passes every check is a valid answer, so we print x and stop.",
+            "모든 확인을 처음 통과한 자리의 x 가 답이에요.\n그래서 출력하고 바로 멈춰요."),
       ],
     },
   ];

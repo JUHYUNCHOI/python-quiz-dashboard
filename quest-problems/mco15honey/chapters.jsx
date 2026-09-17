@@ -135,8 +135,8 @@ export function makeHoneyCh1(E) {
               </div>
             </div>
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
-              {t(E, "Why 38? — drag K in the sim below.",
-                    "왜 38 일까? — 아래 시뮬에서 K 를 움직여 봐요.")}
+              {t(E, "Why 38? — drag K in the sim on the next page.",
+                    "왜 38 일까? — 다음 쪽 시뮬에서 K 를 움직여 봐요.")}
             </div>
           </div>
           {/* CONSTRAINTS */}

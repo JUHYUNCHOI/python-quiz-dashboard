@@ -145,6 +145,21 @@ try {
     console.log('      이해한 자리였다. 길이는 증거지 판결이 아니다.')
   }
   console.log(`\n   첫 코드가 나오는 쪽: ${firstCode ?? '없음'} / 전체 ${rows.length}쪽`)
+
+  // ⚠️ **조용히 틀리지 마라.** quest 는 쪽이 하나일 수 없다(제일 짧은 것도 4쪽이다).
+  //    "전체 1쪽" 은 거의 언제나 **화면이 다 안 뜬 것**이다 — dev 서버가 붐비거나 첫 컴파일 중.
+  //    2026-09-17 MCC 전원 검토에서 담당자 **넷이 각각** 이 출력을 받고
+  //    "흐름이 1쪽밖에 없다" 로 읽을 뻔했다. 한 명은 실제로 그렇게 보고했다.
+  //    근거: memory/feedback_checkers_can_be_silently_wrong.md
+  //      *"0건, 이상 없음 금지 → 0건. 스크린샷 6장 눈으로 봤고 하나 찾음."*
+  if (rows.length <= 1) {
+    console.log('')
+    console.log('   🚨 쪽이 1개로 잡혔다 — 이건 거의 언제나 **화면이 다 안 뜬 것**이다.')
+    console.log('      quest 는 제일 짧아도 4쪽이다. 이 출력을 "흐름이 짧다" 로 읽지 마라.')
+    console.log('      dev 서버가 붐비면 이렇게 된다. 잠시 뒤 다시 돌리고, 그래도 같으면')
+    console.log('      `see-screen.mjs` 로 화면을 직접 봐라.')
+    process.exitCode = 3
+  }
   if (errs.length) console.log(`\n   🚨 페이지 에러 ${errs.length}건: ${errs[0].slice(0, 80)}`)
 } finally {
   await b.close()
