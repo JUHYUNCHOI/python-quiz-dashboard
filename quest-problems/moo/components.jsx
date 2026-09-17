@@ -715,7 +715,8 @@ const BR_LOOP_PY = (E) => [
   "for pos in range(n):",
   "    orig = s[pos]",
   "    for c in 'abcdefghijklmnopqrstuvwxyz':",
-  "        if c == orig: continue",
+  "        if c == orig:",
+  "            continue",
   "        s[pos] = c",
   t(E, "        # Re-scan the whole string every time (N cells)", "        # 매번 전체 문자열 재스캔 (N 칸)"),
   "        for k, v in count_all(s).items():",
@@ -749,7 +750,9 @@ const BR_OUTPUT_PY = [
 ];
 const BR_OUTPUT_CPP = [
   "    cout << result.size() << \"\\n\";",
-  "    for (auto& m : result) cout << m << \"\\n\";",
+  "    for (auto& m : result) {",
+  "        cout << m << \"\\n\";",
+  "    }",
   "    return 0;",
   "}",
 ];
@@ -916,7 +919,9 @@ const MOO_TRY_CPP = [
   "                if (isMoo(s[idx], s[idx+1], s[idx+2])) {",
   "                    string key = s.substr(idx, 3);",
   "                    mydict[key]++;",
-  "                    if (mydict[key] >= f) result.insert(key);",
+  "                    if (mydict[key] >= f) {",
+  "                        result.insert(key);",
+  "                    }",
   "                    mydict[key]--;",
   "                }",
   "            }",
@@ -937,7 +942,9 @@ const MOO_OUTPUT_PY = [
 ];
 const MOO_OUTPUT_CPP = [
   "    cout << result.size() << \"\\n\";",
-  "    for (auto& m : result) cout << m << \"\\n\";",
+  "    for (auto& m : result) {",
+  "        cout << m << \"\\n\";",
+  "    }",
   "    return 0;",
   "}",
 ];
@@ -1158,7 +1165,8 @@ ${codeBlock([
   "for pos in range(n):",
   "    orig = s[pos]",
   "    for c in 'abcdefghijklmnopqrstuvwxyz':",
-  "        if c == orig: continue",
+  "        if c == orig:",
+  "            continue",
   "        s[pos] = c",
   "        for k, v in count_all(s).items():",
   "            if v >= f: result.add(k)",

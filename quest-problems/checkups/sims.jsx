@@ -2075,7 +2075,8 @@ const _FC_CODE = [
   "        inside  = insideUpTo[r] - insideUpTo[l-1]",
   "        outside = matchUpTo[l-1] + (matchUpTo[N] - matchUpTo[r])",
   "        pairsWithCheckups[inside + outside] += 1",
-  "for c in pairsWithCheckups: print(c)",
+  "for c in pairsWithCheckups:",
+  "    print(c)",
 ];
 const _FC_P0 = [0, 0, 0, 0, 0];
 const _FC_P1 = [0, 0, 0, 0, 1];
