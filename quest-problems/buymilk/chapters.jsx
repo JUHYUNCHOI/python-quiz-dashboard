@@ -167,8 +167,8 @@ export function makeBuyMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Before any code: a big deal can be a bad deal. Let's find the cheapest price for each block first.",
-        "큰 거래가 오히려 손해일 수 있어요. 먼저 묶음 값부터 구해요."),
+        "If the price more than doubles, the bigger deal is the worse buy.",
+        "값이 두 배보다 더 오르면 큰 거래가 손해예요."),
       content: (<NormalizeSim E={E} />),
     },
 
@@ -274,7 +274,7 @@ function BuyMilkPlan({ E }) {
       </div>
       <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
         <Insight icon="💰" color="#d97706"
-          head={t(E, "A big deal can be a bad deal.", "큰 거래가 오히려 손해일 수 있다.")}
+          head={t(E, "If the price more than doubles, the bigger deal loses.", "값이 두 배보다 더 오르면 큰 거래가 손해다.")}
           body={t(E, <>So each block gets its own real price {codeTag("c[i]")} — the deal, or two half-blocks, whichever is cheaper.</>,
                      <>그래서 묶음마다 진짜 값 {codeTag("c[i]")} 를 따로 구해요.<br />거래 값과 반쪽 묶음 두 개 값 중 싼 쪽이에요.</>)} />
         <Insight icon="🧱" color="#0891b2"

@@ -69,8 +69,8 @@ export function NormalizeSim({ E }) {
 
   const say =
     s.k === "why" ? t(E,
-      <>Prices only go up, but block sizes <b>double</b>.<br />So a big deal might be a bad deal.<br />First, find the <b>cheapest way</b> to get each block.</>,
-      <>가격은 오르기만 하는데, 묶음은 <b>두 배씩</b> 커져요.<br />그래서 큰 거래가 오히려 손해일 수 있어요.<br />먼저 묶음마다 <b>제일 싸게 사는 값</b>을 구해요.<br /><span style={{ fontWeight: 600 }}>이 값을 알아야 x 통을 얼마에 살지 구할 수 있어요.</span></>)
+      <>Each deal gives <b>twice</b> as many buckets — and costs more.<br />If the price <b>less</b> than doubles, the bigger deal wins.<br />If it <b>more</b> than doubles, two small ones are cheaper.<br /><span style={{ fontWeight: 600 }}>Let's check the deals one at a time.</span></>,
+      <>뒤 거래일수록 통이 <b>두 배</b>가 돼요. 값도 같이 올라요.<br />값이 두 배보다 <b>덜</b> 오르면 큰 거래가 이득이에요.<br />값이 두 배보다 <b>더</b> 오르면 작은 걸 두 번 사는 게 싸요.<br /><span style={{ fontWeight: 600 }}>어느 쪽인지 거래를 하나씩 따져 볼게요.</span></>)
     : s.k === "row" ? (() => {
         const i = s.i, size = 1 << i;
         if (i === 0) return t(E,
