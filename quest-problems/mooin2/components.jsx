@@ -671,51 +671,51 @@ export function getMooin2Sections(E) {
       py: M2_S1_PY, cpp: M2_S1_CPP,
       why: [
         t(E, "Read N (length) then N integers into a.",
-            "N (길이) 읽고, N 개 정수를 a 로."),
+            "N (길이) 을 읽고, 정수 N 개를 a 에 담아요."),
       ],
       aside: <SampleInputAside E={E} sample={M2_SAMPLE} highlight={[0, 1]} note={t(E,
         "Two lines: \"6\" (N=6), then \"1 2 3 4 4 4\".",
-        "두 줄: \"6\" (N=6), 그 다음 \"1 2 3 4 4 4\".")} />,
+        "두 줄이에요. \"6\" (N=6), 그다음 \"1 2 3 4 4 4\".")} />,
     },
     {
-      label: t(E, "2️⃣ count + second-to-last position per value", "2️⃣ 값별 count + 끝에서 두 번째 위치"),
+      label: t(E, "2️⃣ count + second-to-last position per value", "2️⃣ 값마다 count 와 끝에서 두 번째 자리"),
       color: "#0891b2",
       py: M2_S2_PY(E), cpp: M2_S2_CPP(E),
       why: [
         t(E, "count[v] tells us if v can be the moo's repeated value (need ≥ 2).",
-            "count[v] 가 ≥ 2 여야 v 가 moo 반복값이 될 수 있음."),
+            "count[v] 가 2 이상이어야 v 가 moo 의 반복값이 될 수 있어요."),
         t(E, "second_last[v] = position of v's (count-1)-th occurrence — the LATEST possible j position with another v after it.",
-            "second_last[v] = v 의 (count-1) 번째 위치 — 그 뒤에 또 v 가 있는 가장 늦은 j 위치."),
+            "second_last[v] 는 v 의 (count-1) 번째 자리예요. 뒤에 또 v 가 있는 가장 늦은 j 자리죠."),
         t(E, "Update strategy: as we scan, remember last_seen[v]; when we see v again, that previous last_seen becomes the new second_last.",
-            "갱신: 훑으면서 last_seen[v] 를 기억하고, v 를 또 만나면 이전 last_seen 이 새 second_last."),
+            "훑으면서 last_seen[v] 를 기억해요. v 를 또 만나면 그전 last_seen 이 새 second_last 가 돼요."),
       ],
     },
     {
-      label: t(E, "3️⃣ Prefix distinct count", "3️⃣ prefix 서로 다른 값 수"),
+      label: t(E, "3️⃣ Prefix distinct count", "3️⃣ 앞에 나온 서로 다른 값 수"),
       color: "#16a34a",
       py: M2_S3_PY(E), cpp: M2_S3_CPP(E),
       why: [
         t(E, "D[k] = number of DISTINCT values in a[0..k-1].",
-            "D[k] = a[0..k-1] 의 서로 다른 값 수."),
+            "D[k] 는 a[0..k-1] 에 있는 서로 다른 값의 개수예요."),
         t(E, "Built in one pass: increment when we see a value for the first time.",
-            "한 번 패스: 처음 보는 값일 때만 증가."),
+            "한 번만 훑으면서 처음 보는 값일 때만 1 씩 늘려요."),
         t(E, "We'll use D[second_last[y]] = number of distinct x values that could appear before j.",
-            "D[second_last[y]] = j 앞에 나타날 수 있는 서로 다른 x 값 수.")
+            "D[second_last[y]] 는 j 앞에 올 수 있는 서로 다른 x 값의 개수예요.")
       ],
     },
     {
-      label: t(E, "4️⃣ Sum contributions — full code", "4️⃣ 기여 합산 — 전체 코드"),
+      label: t(E, "4️⃣ Sum contributions — full code", "4️⃣ 더해서 답 구하기 — 전체 코드"),
       color: "#dc2626",
       py: M2_FULL_PY(E), cpp: M2_FULL_CPP(E),
       why: [
         t(E, "For each y with count[y] ≥ 2: D[second_last[y]] gives distinct values appearing before j.",
-            "count[y] ≥ 2 인 y 마다: D[second_last[y]] 가 j 앞 서로 다른 값 수."),
+            "count[y] 가 2 이상인 y 마다, D[second_last[y]] 가 j 앞에 있는 서로 다른 값의 개수예요."),
         t(E, "x must differ from y. y itself appears before j iff count[y] ≥ 3 (then earlier copies of y are in [0, second_last[y]-1]). Subtract 1 in that case.",
-            "x 는 y 와 달라야. count[y] ≥ 3 일 때만 y 가 [0, second_last[y]-1] 에도 등장 (더 이전 복사본). 그땐 1 빼기."),
+            "x 는 y 와 달라야 해요. count[y] 가 3 이상일 때만 y 가 [0, second_last[y]-1] 에도 나와요. 그럴 땐 1 을 빼요."),
         t(E, "Total: O(N). Even at N = 10⁶ this is fast.",
-            "총: O(N). N = 10⁶ 도 빠름."),
+            "전부 합쳐 O(N) 이에요. N = 10⁶ 이어도 빨라요."),
         t(E, "C++ uses long long for ans because N(N-1) can exceed 2³¹.",
-            "C++ 는 long long — N(N-1) 이 2³¹ 초과 가능."),
+            "C++ 는 ans 에 long long 을 써요. N(N-1) 이 2³¹ 을 넘을 수 있거든요."),
       ],
     },
   ];
@@ -760,7 +760,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMooin2PDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mooin' Time II — Full Study Guide", "🐄 Mooin' Time II — 종합 풀이 노트");
@@ -785,17 +785,17 @@ export function downloadMooin2PDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO January 2025 Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 
 <h2>${t(E, "Problem", "문제")}</h2>
 <div class="why">
   <b>🐄 ${t(E, "What's a moo?", "moo 란?")}</b>
-  <p>${t(E, "A <b>moo</b> is three numbers (x, y, y): the last two are EQUAL, the first is DIFFERENT. It <b>occurs</b> in the array if you can pick those three left-to-right in order — gaps are allowed (a subsequence).", "<b>moo</b> 는 숫자 3개 (x, y, y): 뒤 둘은 같고 첫째는 다름. 그 셋을 왼→오 순서로 고를 수 있으면(사이 건너뜀 OK = 부분수열) 배열에서 <b>발생</b>.")}</p>
-  <p>${t(E, "Count the number of <b>DISTINCT</b> moos — i.e. distinct (x, y) pairs.", "<b>서로 다른</b> moo 개수 — 즉 서로 다른 (x, y) 쌍 — 를 센다.")}</p>
-  <p><b>${t(E, "Input", "입력")}:</b> ${t(E, "line 1 = N; line 2 = N integers a₁ … a_N.", "1줄 = N; 2줄 = 정수 N 개 a₁ … a_N.")}</p>
-  <p><b>${t(E, "Constraints", "제약")}:</b> 1 ≤ N ≤ 10⁶, 1 ≤ aᵢ ≤ N ${t(E, "(answer can be big — use 64-bit in C++).", "(답이 클 수 있음 — C++ 는 64-bit).")}</p>
+  <p>${t(E, "A <b>moo</b> is three numbers (x, y, y): the last two are EQUAL, the first is DIFFERENT. It <b>occurs</b> in the array if you can pick those three left-to-right in order — gaps are allowed (a subsequence).", "<b>moo</b> 는 숫자 3개 (x, y, y) 예요. 뒤 둘은 같고 첫째는 달라요. 그 셋을 왼쪽에서 오른쪽 순서로 고를 수 있으면 배열에서 <b>발생</b>한 거예요. 사이를 건너뛰어도 되고, 이런 걸 부분수열이라고 해요.")}</p>
+  <p>${t(E, "Count the number of <b>DISTINCT</b> moos — i.e. distinct (x, y) pairs.", "<b>서로 다른</b> moo 가 몇 개인지, 즉 서로 다른 (x, y) 쌍이 몇 개인지 세어요.")}</p>
+  <p><b>${t(E, "Input", "입력")}:</b> ${t(E, "line 1 = N; line 2 = N integers a₁ … a_N.", "1줄은 N, 2줄은 정수 N 개 a₁ … a_N 이에요.")}</p>
+  <p><b>${t(E, "Constraints", "제약")}:</b> 1 ≤ N ≤ 10⁶, 1 ≤ aᵢ ≤ N ${t(E, "(answer can be big — use 64-bit in C++).", "(답이 커질 수 있어서 C++ 는 64비트를 써요.)")}</p>
 </div>
 <h3>${t(E, "Sample", "샘플")}</h3>
 <pre>${t(E, "input", "입력")}:
@@ -803,19 +803,19 @@ export function downloadMooin2PDF(E, sections, lang = "py") {
 1 2 3 4 4 4
 
 ${t(E, "output", "출력")}: 3</pre>
-<div class="why">${t(E, "The 3 distinct moos are (1,4,4), (2,4,4), (3,4,4) — all use the (4,4) pair, with three different x's.", "서로 다른 moo 3개는 (1,4,4), (2,4,4), (3,4,4) — 모두 (4,4) 짝을 쓰고 x 만 셋.")}</div>
+<div class="why">${t(E, "The 3 distinct moos are (1,4,4), (2,4,4), (3,4,4) — all use the (4,4) pair, with three different x's.", "서로 다른 moo 3개는 (1,4,4), (2,4,4), (3,4,4) 예요. 모두 (4,4) 짝을 쓰고 x 만 세 가지로 달라요.")}</div>
 
 <h2>${t(E, "First idea — and why it's too slow", "첫 아이디어 — 왜 너무 느린가")}</h2>
 <div class="why">
-  <p>${t(E, "Obvious approach: try every triple i &lt; j &lt; k. If a[j] = a[k] and a[i] ≠ a[j], add (a[i], a[j]) to a set. The set's final size is the answer (the set kills duplicates).", "뻔한 방법: 모든 삼중 i &lt; j &lt; k 시도. a[j] = a[k] 이고 a[i] ≠ a[j] 면 (a[i], a[j]) 를 집합에 넣기. 집합의 최종 크기가 답 (집합이 중복 제거).")}</p>
-  <p>${t(E, "But that's ≈ N³ ÷ 6 work. N = 10⁶ → ~1.7×10¹⁷ steps → about <b>30 YEARS</b> at a billion/sec. The limit is ~2 seconds. We need O(N).", "하지만 ≈ N³ ÷ 6. N = 10⁶ → ~1.7×10¹⁷ → 초당 10억 번 해도 약 <b>30년</b>. 제한 ~2초. O(N) 이 필요.")}</p>
+  <p>${t(E, "Obvious approach: try every triple i &lt; j &lt; k. If a[j] = a[k] and a[i] ≠ a[j], add (a[i], a[j]) to a set. The set's final size is the answer (the set kills duplicates).", "뻔한 방법은 모든 삼중 i &lt; j &lt; k 를 다 해보는 거예요. a[j] = a[k] 이고 a[i] ≠ a[j] 면 (a[i], a[j]) 를 집합에 넣어요. 집합의 마지막 크기가 답이에요. 집합이 중복을 알아서 지워 주거든요.")}</p>
+  <p>${t(E, "But that's ≈ N³ ÷ 6 work. N = 10⁶ → ~1.7×10¹⁷ steps → about <b>30 YEARS</b> at a billion/sec. The limit is ~2 seconds. We need O(N).", "하지만 일의 양이 약 N³ ÷ 6 이에요. N = 10⁶ 이면 약 1.7×10¹⁷ 번이라, 초당 10억 번을 해도 <b>30년</b> 쯤 걸려요. 제한 시간은 2초니까 O(N) 이 필요해요.")}</p>
 </div>
 
 <h2>${t(E, "The fast idea — O(N)", "빠른 아이디어 — O(N)")}</h2>
 <div class="why">
-  <p>${t(E, "For each value y that appears at least twice, let <b>p = the second-to-last position of y</b> (the latest j that still has another y after it). Every DISTINCT value before p can be the x. So add <b>D[p]</b>, where D[k] = number of distinct values in a[0..k-1].", "2번 이상 나오는 각 y 에 대해 <b>p = y 의 끝에서 두 번째 위치</b> (뒤에 또 y 가 있는 가장 늦은 j). p 앞의 서로 다른 값은 모두 x 가 될 수 있음. 그래서 <b>D[p]</b> 더하기 (D[k] = a[0..k-1] 의 서로 다른 값 수).")}</p>
-  <p><b>⚠️ ${t(E, "Tricky bit", "함정")}:</b> ${t(E, "x must differ from y. y itself appears before p exactly when count[y] ≥ 3 — subtract 1 in that case.", "x 는 y 와 달라야. count[y] ≥ 3 일 때만 y 가 p 앞에 등장 — 그땐 1 빼기.")}</p>
-  <p>${t(E, "Sample trace: y = 4, p = 4, D[4] = 4 (values 1,2,3,4), count[4] = 3 → 4 − 1 = 3. Answer = 3. ✓", "샘플 추적: y = 4, p = 4, D[4] = 4 (값 1,2,3,4), count[4] = 3 → 4 − 1 = 3. 답 = 3. ✓")}</p>
+  <p>${t(E, "For each value y that appears at least twice, let <b>p = the second-to-last position of y</b> (the latest j that still has another y after it). Every DISTINCT value before p can be the x. So add <b>D[p]</b>, where D[k] = number of distinct values in a[0..k-1].", "2번 이상 나오는 y 마다 <b>p 를 y 의 끝에서 두 번째 자리</b> 로 둬요. 뒤에 또 y 가 있는 가장 늦은 j 죠. p 앞에 있는 서로 다른 값은 모두 x 가 될 수 있어요. 그래서 <b>D[p]</b> 를 더해요. D[k] 는 a[0..k-1] 에 있는 서로 다른 값의 개수예요.")}</p>
+  <p><b>⚠️ ${t(E, "Tricky bit", "함정")}:</b> ${t(E, "x must differ from y. y itself appears before p exactly when count[y] ≥ 3 — subtract 1 in that case.", "x 는 y 와 달라야 해요. count[y] 가 3 이상일 때만 y 가 p 앞에 나오니까, 그럴 땐 1 을 빼요.")}</p>
+  <p>${t(E, "Sample trace: y = 4, p = 4, D[4] = 4 (values 1,2,3,4), count[4] = 3 → 4 − 1 = 3. Answer = 3. ✓", "샘플로 따라가 볼게요. y = 4, p = 4, D[4] = 4 (값 1,2,3,4), count[4] = 3 이라 4 − 1 = 3. 답은 3 이에요. ✓")}</p>
 </div>
 
 <h2>${t(E, "Code (4 sections)", "코드 (4 섹션)")}</h2>
@@ -827,10 +827,10 @@ ${sections.map(s => `
 
 <h2>${t(E, "Self-check", "스스로 확인")}</h2>
 <div class="why">
-  <p>1. ${t(E, "a = [1, 2, 2] — how many distinct moos occur?", "a = [1, 2, 2] — 서로 다른 moo 개수는?")}</p>
-  <p>2. ${t(E, "a = [1, 1] — how many?", "a = [1, 1] — 몇 개?")}</p>
-  <p>3. ${t(E, "a = [4, 1, 4, 4] — which moo(s) occur, and why do we subtract 1?", "a = [4, 1, 4, 4] — 어떤 moo 가 발생하고, 왜 1 을 빼나?")}</p>
-  <p style="color:#9ca3af;font-size:11px;margin-top:8px;">${t(E, "Answers: 1) one — (1,2,2). 2) zero — there's no x ≠ 1 before the (1,1) pair. 3) one — (1,4,4); count[4] = 3, so a 4 sits before p and can't be its own x → subtract 1.", "답: 1) 1개 — (1,2,2). 2) 0개 — (1,1) 짝 앞에 x ≠ 1 이 없음. 3) 1개 — (1,4,4); count[4] = 3 이라 4 가 p 앞에 있고 자기 x 가 못 됨 → 1 빼기.")}</p>
+  <p>1. ${t(E, "a = [1, 2, 2] — how many distinct moos occur?", "a = [1, 2, 2] — 서로 다른 moo 가 몇 개일까요?")}</p>
+  <p>2. ${t(E, "a = [1, 1] — how many?", "a = [1, 1] — 몇 개일까요?")}</p>
+  <p>3. ${t(E, "a = [4, 1, 4, 4] — which moo(s) occur, and why do we subtract 1?", "a = [4, 1, 4, 4] — 어떤 moo 가 발생하고, 왜 1 을 뺄까요?")}</p>
+  <p style="color:#9ca3af;font-size:11px;margin-top:8px;">${t(E, "Answers: 1) one — (1,2,2). 2) zero — there's no x ≠ 1 before the (1,1) pair. 3) one — (1,4,4); count[4] = 3, so a 4 sits before p and can't be its own x → subtract 1.", "답을 볼게요. 1) 1개 — (1,2,2). 2) 0개 — (1,1) 짝 앞에 x ≠ 1 인 값이 없어요. 3) 1개 — (1,4,4). count[4] = 3 이라 4 가 p 앞에도 있는데, 자기 자신은 x 가 못 되니까 1 을 빼요.")}</p>
 </div>
 
 <div style="margin-top:30px;font-size:10px;color:#94a3b8;text-align:center;border-top:1px solid #e5e7eb;padding-top:8px;">© Coderin · 코드린</div>

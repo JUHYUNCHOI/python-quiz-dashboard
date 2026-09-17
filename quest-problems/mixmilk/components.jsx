@@ -78,19 +78,19 @@ export function getMixMilkSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 Python 에서 옮긴 거예요. 자료형과 쓰는 방식은 필요할 때 고쳐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 같은 걸 써서 알고리즘을 짧게 쓸 수 있어요."),
       ],
       cppOnly: [
         t(E, "Two parallel arrays cap[3] and milk[3] — read both values in one cin per bucket.",
-            "병렬 배열 cap[3] 와 milk[3] — 통마다 cin 한 번에 두 값 읽음."),
+            "배열 cap[3] 과 milk[3] 을 나란히 써요. 양동이마다 cin 한 번으로 두 값을 읽어요."),
         t(E, "int is plenty here — capacities fit in int, no long long needed.",
-            "int 으로 충분 — 용량이 int 범위 안, long long 불필요."),
+            "여기선 int 면 충분해요. 용량이 int 범위 안이라 long long 은 필요 없어요."),
       ],
     },
   ];
@@ -136,7 +136,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMixMilkPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "MixMilk — Full Study Guide", "MixMilk — 종합 풀이 노트");
@@ -159,7 +159,7 @@ export function downloadMixMilkPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

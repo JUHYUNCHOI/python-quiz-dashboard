@@ -115,7 +115,7 @@ export function MooinBruteRunner({ E }) {
       </div>
       <div style={{ textAlign: "center", fontSize: 11.5, color: C.dim, marginBottom: 12 }}>
         {t(E, "Pick a size, press Run. Small N finishes instantly. Big N… wait for it.",
-              "크기를 고르고 Run. 작은 N 은 순식간, 큰 N 은… 기다려 봐요.")}
+              "크기를 고르고 실행을 눌러요. 작은 N 은 순식간이지만, 큰 N 은… 기다려 봐요.")}
       </div>
 
       <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginBottom: 14 }}>
@@ -170,7 +170,7 @@ export function MooinBruteRunner({ E }) {
 
       {done && (
         <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 13px", fontSize: 12.5, color: "#92400e", lineHeight: 1.7 }}>
-          ✅ {t(E, `Finished ${ops.toLocaleString()} triples in ${ms} ms.`, `${ops.toLocaleString()}개 삼중을 ${ms} ms 에 끝냄.`)}
+          ✅ {t(E, `Finished ${ops.toLocaleString()} triples in ${ms} ms.`, `삼중 ${ops.toLocaleString()}개를 ${ms} ms 만에 다 확인했어요.`)}
           {projYears != null && (
             <div style={{ marginTop: 5, fontWeight: 700, color: "#7c2d12" }}>
               {t(E,

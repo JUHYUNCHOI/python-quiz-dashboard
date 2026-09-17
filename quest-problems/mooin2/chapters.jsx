@@ -31,7 +31,7 @@ export function makeMooin2Ch1(E) {
             </div>
             <div style={{ marginTop: 10, fontSize: 13 }}>
               {t(E, "Our job: count how many DIFFERENT moos can be heard. Let's first figure out exactly what a moo is. 👇",
-                    "우리 일: 서로 다른 moo 가 몇 개 들리는지 세기. 먼저 moo 가 정확히 뭔지부터 알아봐요. 👇")}
+                    "우리가 할 일은 서로 다른 moo 가 몇 개 들리는지 세는 거예요. 먼저 moo 가 정확히 뭔지부터 알아봐요. 👇")}
             </div>
           </div>
         </div>),
@@ -55,16 +55,16 @@ export function makeMooin2Ch1(E) {
           </div>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
             <div style={{ flex: "1 1 160px", background: "#dcfce7", border: "1.5px solid #16a34a", borderRadius: 10, padding: "10px 12px" }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>✅ {t(E, "These ARE moos", "이건 moo 맞음")}</div>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#15803d", marginBottom: 6 }}>✅ {t(E, "These ARE moos", "이건 moo 예요")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#166534", lineHeight: 1.9 }}>
                 (1, 4, 4)<br/>(3, 7, 7)<br/>(2, 5, 5)
               </div>
             </div>
             <div style={{ flex: "1 1 160px", background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px" }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: "#991b1b", marginBottom: 6 }}>❌ {t(E, "These are NOT", "이건 아님")}</div>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "#991b1b", marginBottom: 6 }}>❌ {t(E, "These are NOT", "이건 아니에요")}</div>
               <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#991b1b", lineHeight: 1.9 }}>
-                (4, 4, 4) <span style={{ fontSize: 10 }}>{t(E, "all same", "다 같음")}</span><br/>
-                (1, 4, 7) <span style={{ fontSize: 10 }}>{t(E, "last two differ", "뒤 둘 다름")}</span>
+                (4, 4, 4) <span style={{ fontSize: 10 }}>{t(E, "all same", "다 같아요")}</span><br/>
+                (1, 4, 7) <span style={{ fontSize: 10 }}>{t(E, "last two differ", "뒤 둘이 달라요")}</span>
               </div>
             </div>
           </div>
@@ -74,13 +74,13 @@ export function makeMooin2Ch1(E) {
     /* 1-3 — moo quiz. */
     {
       type: "quiz",
-      narr: t(E, "Quick check! Remember: first DIFFERENT, last two SAME.", "퀴즈! 기억해요: 첫째는 다르게, 뒤 둘은 같게."),
+      narr: t(E, "Quick check! Remember: first DIFFERENT, last two SAME.", "퀴즈예요! 첫째는 다르고 뒤 둘은 같다는 걸 기억해요."),
       question: t(E, "Which one is a valid moo?", "어떤 게 유효한 moo 일까요?"),
       options: ["(5, 5, 5)", "(2, 9, 9)", "(2, 9, 3)"],
       correct: 1,
       explain: t(E,
         "(2, 9, 9): first (2) is different, last two (9, 9) are the same. ✅  (5,5,5) is all-same; (2,9,3) has different last two.",
-        "(2, 9, 9): 첫째(2)는 다르고 뒤 둘(9, 9)은 같음. ✅  (5,5,5)는 전부 같고, (2,9,3)은 뒤 둘이 다름."),
+        "(2, 9, 9) 는 첫째(2)가 다르고 뒤 둘(9, 9)은 같아요. ✅  (5,5,5)는 전부 같고, (2,9,3)은 뒤 둘이 달라요."),
     },
 
     /* 1-4 — "occurs" = subsequence. */
@@ -127,7 +127,7 @@ export function makeMooin2Ch1(E) {
           </div>
           <div style={{ textAlign: "center", fontSize: 12, color: C.dim }}>
             {t(E, "Pick index 0 (=1), 3 (=4), 5 (=4). Skipping 2 and 3 is fine!",
-                  "인덱스 0(=1), 3(=4), 5(=4) 선택. 2, 3 건너뛰어도 괜찮아요!")}
+                  "0번, 3번, 5번 자리(값 1, 4, 4)를 골랐어요. 사이의 2, 3 은 건너뛰어도 괜찮아요!")}
           </div>
         </div>),
     },
@@ -163,7 +163,7 @@ export function makeMooin2Ch1(E) {
             📐 <b>{t(E, "Constraints", "제약")}:</b>{" "}
             <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ N ≤ 10⁶</code>,{" "}
             <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3, fontFamily: "'JetBrains Mono',monospace" }}>1 ≤ a[i] ≤ N</code>{" "}
-            {t(E, "(answer can be big — 64-bit in C++).", "(답이 클 수 있음 — C++ 는 64-bit).")}
+            {t(E, "(answer can be big — 64-bit in C++).", "(답이 커질 수 있어서 C++ 는 64비트를 써요.)")}
           </div>
         </div>),
     },
@@ -173,8 +173,8 @@ export function makeMooin2Ch1(E) {
       type: "input",
       narr: t(E,
         "Your turn! Walk through a = [1, 2, 2] by hand. Which value can be the (y, y) pair, and who can be x before it?",
-        "직접! a = [1, 2, 2] 를 손으로 따라가며 moo 를 찾아봐요."),
-      question: t(E, "How many distinct moos occur in [1, 2, 2]?", "[1, 2, 2] 의 서로 다른 moo 개수?"),
+        "이제 직접 해봐요! a = [1, 2, 2] 를 손으로 따라가며 moo 를 찾아봐요."),
+      question: t(E, "How many distinct moos occur in [1, 2, 2]?", "[1, 2, 2] 에는 서로 다른 moo 가 몇 개 있을까요?"),
       hint: t(E, "Find which value appears twice first, then look at what sits before it.",
                  "어떤 값이 두 번 나오는지부터 찾고, 그 앞에 뭐가 있는지 봐요."),
       answer: 1,
@@ -234,7 +234,7 @@ export function makeMooin2Ch2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Before any clever trick — what's the most OBVIOUS way? Just try every possible moo and collect the ones that fit.",
-        "영리한 트릭 전에 — 가장 뻔한 방법은? 가능한 moo 를 전부 시도해서 맞는 것만 모으면 돼요."),
+        "영리한 방법을 찾기 전에, 가장 뻔한 방법부터 해봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
@@ -244,13 +244,13 @@ export function makeMooin2Ch2(E, lang = "py") {
             <div style={{ marginBottom: 9 }}>
               {t(E,
                 "A moo is 3 spots: a front value (x), then the SAME value twice after it (y, y). So just try them all:",
-                "moo 는 자리 3개예요: 앞 칸 하나(x), 그 뒤에 같은 값 두 개(y, y). 그러니 그냥 다 해봐요:")}
+                "moo 는 자리 3개예요. 앞 칸 하나가 x 고, 그 뒤 같은 값 두 개가 y, y 예요. 그러니 그냥 다 해봐요:")}
             </div>
             {[
-              t(E, "Pick a front value → that's the x.", "앞 칸 하나 고르기 → 이게 x."),
-              t(E, "Pick two spots after it → the (y, y) pair.", "그 뒤에서 두 칸 고르기 → 여기가 y, y 자리."),
-              t(E, "Check: are the back two the SAME? and is the front DIFFERENT?", "확인: 뒤 두 칸이 같아? 그리고 첫 칸은 달라?"),
-              t(E, "If yes → it's a moo! Put its (x, y) into a set.", "맞으면 → moo! 그 (x, y) 를 집합에 넣기."),
+              t(E, "Pick a front value → that's the x.", "앞 칸 하나를 골라요 → 이게 x 예요."),
+              t(E, "Pick two spots after it → the (y, y) pair.", "그 뒤에서 두 칸을 골라요 → 여기가 y, y 자리예요."),
+              t(E, "Check: are the back two the SAME? and is the front DIFFERENT?", "뒤 두 칸이 같은지, 첫 칸은 다른지 확인해요."),
+              t(E, "If yes → it's a moo! Put its (x, y) into a set.", "맞으면 moo 예요! 그 (x, y) 를 집합에 넣어요."),
             ].map((line, i) => (
               <div key={i} style={{ display: "flex", gap: 8, marginBottom: 5 }}>
                 <span style={{ fontWeight: 800, color: "#0891b2", flexShrink: 0 }}>{i + 1}.</span>
@@ -269,7 +269,7 @@ export function makeMooin2Ch2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Let's write it one piece at a time. Piece 1: read N, then the N numbers into the list a.",
-        "코드를 한 조각씩 써요. 1조각: N 을 읽고, 그다음 숫자 N 개를 리스트 a 로."),
+        "코드를 한 조각씩 써요. 첫 조각은 N 을 읽고 숫자 N 개를 배열 a 에 담아요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0891b2", marginBottom: 8 }}>
@@ -278,7 +278,7 @@ export function makeMooin2Ch2(E, lang = "py") {
           <CodeBlock lines={isCpp ? bruteReadCpp : bruteReadPy} lang={isCpp ? "cpp" : "py"} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E, "Nothing clever yet — just get the numbers into a so we can look at them.",
-                  "아직 영리한 건 없어요 — 그냥 숫자를 a 에 담아 들여다볼 준비.")}
+                  "아직 영리한 건 없어요. 그냥 숫자를 a 에 담아 들여다볼 준비를 해요.")}
           </div>
         </div>),
     },
@@ -287,7 +287,7 @@ export function makeMooin2Ch2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Piece 2: a moo is 3 positions i < j < k. So loop all three — every i, every j after it, every k after that.",
-        "moo 는 자리 3개 i < j < k. 이 세 자리를 모두 돌려요."),
+        "moo 는 자리 3개 i < j < k 예요. 이 세 자리를 모두 돌려요."),
       content: (
         <div style={{ padding: 14 }}>
           <div style={{ fontSize: 12.5, fontWeight: 800, color: "#0891b2", marginBottom: 8 }}>
@@ -299,7 +299,7 @@ export function makeMooin2Ch2(E, lang = "py") {
             lang={isCpp ? "cpp" : "py"} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E, "Gray = already written; colored = the new lines. seen is a set — it auto-drops duplicates, so its size = the count of DISTINCT moos.",
-                  "회색 = 이미 짠 줄, 색 = 새로 추가한 줄. seen 은 집합 — 중복을 알아서 버려요. 그래서 크기 = 서로 다른 moo 개수.")}
+                  "회색은 이미 짠 줄이고, 색이 있는 게 새로 추가한 줄이에요. seen 은 집합이라 중복을 알아서 버려요. 그래서 크기가 곧 서로 다른 moo 개수예요.")}
           </div>
         </div>),
     },
@@ -319,7 +319,7 @@ export function makeMooin2Ch2(E, lang = "py") {
             lang={isCpp ? "cpp" : "py"} />
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, lineHeight: 1.6 }}>
             {t(E, "↑ The full brute program — all of it. Correct and easy to read — now the big question: how fast is it?",
-                  "↑ 완성된 전체 브루트 코드 (전부). 맞고 읽기 쉬운데 — 이제 큰 질문: 얼마나 빠를까요?")}
+                  "↑ 이게 브루트 코드 전부예요. 답도 맞고 읽기도 쉬운데, 이제 큰 질문이 남았어요. 얼마나 빠를까요?")}
           </div>
         </div>),
     },
@@ -381,7 +381,7 @@ export function makeMooin2Ch3(E) {
       type: "reveal",
       narr: t(E,
         "Here's the smarter method — discover it one move at a time, no code, just the picture.",
-        "더 똑똑한 방법, 여기서 한 동작씩 직접 알아봐요 — 코드 없이 그림만."),
+        "더 똑똑한 방법을 코드 없이 그림으로 한 동작씩 알아봐요."),
       content: (
         <div style={{ padding: 16 }}>
           {/* recipe 박스 전부 제거 (선생님 2026-06-18: '빠른 아이디어 볼 필요 없다 — 시뮬 각
@@ -408,18 +408,18 @@ export function makeMooin2Ch3(E) {
           </div>
           <div style={{ fontSize: 11.5, color: C.dim, textAlign: "center", marginBottom: 12, wordBreak: "keep-all" }}>
             {t(E, "(a “number” = a value in the array · a “spot” = a position: 0, 1, 2, …)",
-                  "(여기서 ‘숫자’ = 배열에 든 값 · ‘자리’ = 위치 0, 1, 2, …)")}
+                  "(여기서 ‘숫자’ 는 배열에 든 값이고, ‘자리’ 는 위치 0, 1, 2, … 예요)")}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 500, margin: "0 auto" }}>
             {[
               {
-                plain: t(E, "Each spot — how many DIFFERENT numbers (≠ this one) came before it?", "자리마다 — 그 앞에 (이 값과) 서로 다른 숫자가 몇 종류지?"),
+                plain: t(E, "Each spot — how many DIFFERENT numbers (≠ this one) came before it?", "자리마다 — 그 앞에 이 값과 다른 숫자가 몇 종류 있을까요?"),
                 why: t(E, "That count is exactly the x's we can pick for a moo ending here.", "그 종류 수가 곧 여기서 고를 수 있는 x 개수예요."),
                 code: "memo",
               },
               {
-                plain: t(E, "Each number — where's its 2nd-to-last spot?", "숫자마다 — ‘끝에서 두 번째’로 나온 자리는?"),
-                why: t(E, "A same y still sits after it, so that spot j completes the (y, y) pair — and everything before j is where x comes from.", "그 뒤에 같은 y 가 하나 더 있어 (y, y) 짝이 완성돼요 — 그리고 그 자리 앞쪽이 x 구역."),
+                plain: t(E, "Each number — where's its 2nd-to-last spot?", "숫자마다 — ‘끝에서 두 번째’ 로 나온 자리는 어디일까요?"),
+                why: t(E, "A same y still sits after it, so that spot j completes the (y, y) pair — and everything before j is where x comes from.", "그 뒤에 같은 y 가 하나 더 있어 (y, y) 짝이 완성돼요. 그리고 그 자리 앞쪽이 x 를 고르는 구역이에요."),
                 code: "second_last",
               },
             ].map((m, i) => (
@@ -458,13 +458,13 @@ export function makeMooin2Ch4(E, lang = "py") {
   const sections = getMooin2Sections(E);
   const narrs = [
     t(E, "Section 1: read the input. N first, then N numbers into the list a.",
-         "섹션 1: 입력 읽기. 먼저 N, 그다음 N 개 숫자를 리스트 a 로."),
+         "섹션 1: 입력 읽기. 먼저 N 을, 그다음 숫자 N 개를 배열 a 에 담아요."),
     t(E, "Section 2: build memo[]. At each spot i, count the distinct values before it that DIFFER from a[i] — that's how many x's could sit there. (If a[i] already appeared, don't count itself.)",
-         "섹션 2: memo[] 만들기. 각 자리 i 에서, 그 앞에 나온 서로 다른 값 중 a[i] 와 '다른' 것의 개수 = 그 자리 앞에 올 수 있는 x 후보 수. (a[i] 가 앞에 이미 있었으면 자기 자신은 빼기.)"),
+         "섹션 2: memo[] 만들기. 자리 i 마다 그 앞에 나온 값 중 a[i] 와 다른 값이 몇 종류인지 세어요. 그게 그 자리 앞에 올 수 있는 x 후보 수예요. (a[i] 가 앞에 이미 나왔다면 자기 자신은 빼요.)"),
     t(E, "Section 3: build second_last. Scan from the RIGHT; the moment a value's count hits 2, that spot j is its 2nd-to-last — a same y still sits after it, so the (j, k) pair is ready.",
-         "섹션 3: second_last 만들기. 오른쪽부터 세다가 어떤 값의 count 가 2 되는 순간 — 그 자리 j 가 '끝에서 두 번째'. 뒤에 같은 y 가 하나 더 있으니 (j, k) 짝 완성."),
+         "섹션 3: second_last 만들기. 오른쪽부터 세다가 어떤 값의 count 가 2 가 되는 순간, 그 자리 j 가 '끝에서 두 번째' 예요. 뒤에 같은 y 가 하나 더 있으니 (j, k) 짝이 완성돼요."),
     t(E, "Section 4: the payoff. For each pair's j, add memo[j] — the distinct x's that can go before it. Sum them all. The whole thing is O(N). Done!",
-         "섹션 4: 결실. 짝의 j 마다 memo[j] (그 앞에 올 수 있는 서로 다른 x 수) 를 더하기. 다 합치면 끝. 전체가 O(N)!"),
+         "섹션 4: 드디어 답. 짝의 j 마다 그 앞에 올 수 있는 x 개수인 memo[j] 를 더해요. 다 합치면 끝이고, 전체가 O(N) 이에요!"),
   ];
   return sections.map((sec, i) => ({
     type: "code-section",
