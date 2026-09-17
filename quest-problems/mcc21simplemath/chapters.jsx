@@ -201,6 +201,38 @@ export function makeMcc21SimpleMathCh1(E) {
         "4. Fix 1; the other 2 numbers are free → 2^(3-1) = 4 subsets. That's why for addition each number is added 2^(N-1) times.",
         "4 개예요. 1 을 꼭 넣으면 남은 수 2 개는 넣거나 빼거나 마음대로예요.\n그래서 2^(3-1) = 4 개가 나와요.\n같은 이유로 덧셈에서는 어떤 수든 2^(N-1) 번 더해져요."),
     },
+
+    /* 2026-09-17: 사다리가 P=1 에만 걸려 있었다 — P=2·P=3 은 코드 옆 💡 글로만 설명됐다.
+       세 연산이 이 문제의 축이니 직접 세어 보는 칸을 둘 더 놓는다. */
+    // 1-5: hand-computed input — P = 2 (multiplication)
+    {
+      type: "input",
+      narr: t(E,
+        "Now P = 2 (multiply), with just two numbers: {2, 3}.",
+        "이번엔 P = 2(곱셈)예요. 수는 {2, 3} 둘뿐이에요."),
+      question: t(E,
+        "P = 2, numbers {2, 3}. Add up the values of all 3 nonempty subsets.",
+        "P = 2 이고 수가 {2, 3} 이에요.\n비어 있지 않은 부분집합 3 개의 값을 다 더하면 얼마일까요?"),
+      hint: t(E,
+        "The subsets are {2}, {3}, {2,3} — worth 2, 3 and 2×3. Shortcut: expand (1+2)(1+3) and drop the 1 that comes from the empty set.",
+        "부분집합은 {2}, {3}, {2,3} 이고 값은 2, 3, 2×3 이에요.\n지름길로는 (1+2)(1+3) 을 펼친 뒤\n빈 집합에서 온 1 만 빼면 돼요."),
+      answer: 11,
+    },
+
+    // 1-6: hand-computed input — P = 3 (XOR)
+    {
+      type: "input",
+      narr: t(E,
+        "Same two numbers, but P = 3 (XOR) this time: {1, 2}.",
+        "이번엔 P = 3(XOR)이에요. 수는 {1, 2} 예요."),
+      question: t(E,
+        "P = 3, numbers {1, 2}. Add up the values of all 3 nonempty subsets.",
+        "P = 3 이고 수가 {1, 2} 예요.\n비어 있지 않은 부분집합 3 개의 값을 다 더하면 얼마일까요?"),
+      hint: t(E,
+        "XOR compares bit by bit: a bit is 1 when exactly one side has it. So 1 ⊕ 2 = 3. The three subsets are worth 1, 2 and 1⊕2.",
+        "XOR 는 비트끼리 견줘서 한쪽에만 있을 때 1 이 돼요.\n그래서 1 ⊕ 2 = 3 이에요.\n부분집합 3 개의 값은 1, 2, 그리고 1⊕2 예요."),
+      answer: 6,
+    },
   ];
 }
 
