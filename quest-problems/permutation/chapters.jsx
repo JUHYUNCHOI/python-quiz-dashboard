@@ -7,45 +7,10 @@ import { getPermSections, DismantleSimulator, BruteForceEnumerator } from "./com
    1..N (in lex order, via recursion). The FIRST p whose dismantle
    matches h is automatically the lex-smallest answer. -1 if none.
    ================================================================ */
-export const SOLUTION_CODE = [
-  "def dismantle(p):",
-  "    # Apply Nhoj's rule until 1 element remains; return the hint list.",
-  "    p = list(p)",
-  "    out = []",
-  "    while len(p) > 1:",
-  "        if p[0] > p[-1]:",
-  "            out.append(p[1])     # write 2nd, remove 1st (bigger end)",
-  "            p.pop(0)",
-  "        else:",
-  "            out.append(p[-2])    # write 2nd-to-last, remove last",
-  "            p.pop()",
-  "    return out",
-  "",
-  "def search(p, used, idx, N, h):",
-  "    if idx == N:",
-  "        if dismantle(p) == h:",
-  "            print(' '.join(map(str, p)))",
-  "            return True",
-  "        return False",
-  "    for v in range(1, N + 1):",
-  "        if used[v]:",
-  "            continue",
-  "        p[idx] = v",
-  "        used[v] = True",
-  "        if search(p, used, idx + 1, N, h):",
-  "            return True",
-  "        used[v] = False",
-  "    return False",
-  "",
-  "T = int(input())",
-  "for _ in range(T):",
-  "    N = int(input())",
-  "    h = list(map(int, input().split()))",
-  "    p = [0] * N",
-  "    used = [False] * (N + 1)",
-  "    if not search(p, used, 0, N, h):",
-  "        print(-1)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

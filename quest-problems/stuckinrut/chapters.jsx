@@ -4,47 +4,10 @@ import { getStuckInRutSections, StuckInRutGridSim } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "cows = []",
-  "for _ in range(N):",
-  "    d, x, y = input().split()",
-  "    cows.append((d, int(x), int(y)))",
-  "",
-  "stop_time = [None] * N   # None = still moving (Infinity)",
-  "",
-  "# Only a North cow and an East cow can ever collide.",
-  "events = []",
-  "for i in range(N):",
-  "    if cows[i][0] != 'N':",
-  "        continue",
-  "    _, nx, ny = cows[i]",
-  "    for j in range(N):",
-  "        if cows[j][0] != 'E':",
-  "            continue",
-  "        _, ex, ey = cows[j]",
-  "        if nx > ex and ey > ny:",
-  "            t_n = ey - ny   # N cow arrives at meeting cell",
-  "            t_e = nx - ex   # E cow arrives at meeting cell",
-  "            if t_n > t_e:        # N cow arrives later -> N cow stops",
-  "                events.append((t_n, i, j, t_e))",
-  "            elif t_e > t_n:      # E cow arrives later -> E cow stops",
-  "                events.append((t_e, j, i, t_n))",
-  "",
-  "events.sort()",
-  "for meet_time, victim, blocker, blocker_arrive in events:",
-  "    if stop_time[victim] is not None:",
-  "        continue",
-  "    if stop_time[blocker] is not None and stop_time[blocker] < blocker_arrive:",
-  "        continue",
-  "    stop_time[victim] = meet_time",
-  "",
-  "for s in stop_time:",
-  "    if s is None:",
-  "        print('Infinity')",
-  "    else:",
-  "        print(s)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

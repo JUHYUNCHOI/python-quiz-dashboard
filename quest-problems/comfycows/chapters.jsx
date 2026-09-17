@@ -4,37 +4,10 @@ import { getComfyCowsSections, ComfyCowsSim } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "cows = set()",
-  "comfortable = set()",
-  "dirs = [(0,1),(0,-1),(1,0),(-1,0)]",
-  "",
-  "def count_neighbors(x, y):",
-  "    return sum(1 for dx,dy in dirs if (x+dx,y+dy) in cows)",
-  "",
-  "def update_comfort(x, y):",
-  "    n = count_neighbors(x, y)",
-  "    if n == 3:",
-  "        comfortable.add((x,y))",
-  "    else:",
-  "        comfortable.discard((x,y))",
-  "",
-  "results = []",
-  "for _ in range(N):",
-  "    x, y = map(int, input().split())",
-  "    cows.add((x, y))",
-  "    # Update comfort for new cow and its neighbors",
-  "    update_comfort(x, y)",
-  "    for dx, dy in dirs:",
-  "        nx, ny = x+dx, y+dy",
-  "        if (nx, ny) in cows:",
-  "            update_comfort(nx, ny)",
-  "    results.append(len(comfortable))",
-  "",
-  "for r in results:",
-  "    print(r)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

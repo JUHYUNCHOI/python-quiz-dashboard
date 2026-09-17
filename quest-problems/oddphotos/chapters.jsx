@@ -4,34 +4,10 @@ import { getOddPhotosSections } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "ids = list(map(int, input().split()))",
-  "",
-  "even = sum(1 for x in ids if x % 2 == 0)",
-  "odd = N - even",
-  "",
-  "# Groups alternate: even-sum, odd-sum, even-sum, ...",
-  "# Even-sum group = 1 even cow OR 2 odd cows.",
-  "# Odd-sum group  = 1 odd cow.",
-  "# All cows must be used, so leftover cows pile onto the",
-  "# last group (extra evens keep parity; extra odds in pairs).",
-  "# Try every group count k, keep the largest that works.",
-  "ans = 0",
-  "for k in range(N + 1):",
-  "    even_groups = (k + 1) // 2   # positions 1,3,5... need even sum",
-  "    odd_groups = k // 2          # positions 2,4,6... need odd sum",
-  "    if odd_groups > odd:",
-  "        continue                 # not enough odds",
-  "    odds_left = odd - odd_groups",
-  "    if odds_left % 2 != 0:",
-  "        continue                 # leftover odds must pair up",
-  "    # each even group needs a filler: 1 even OR 2 leftover odds",
-  "    if even + odds_left // 2 >= even_groups:",
-  "        ans = k",
-  "",
-  "print(ans)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════

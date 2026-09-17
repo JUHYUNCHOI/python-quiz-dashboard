@@ -4,29 +4,10 @@ import { getStallingSections, StallingAssignmentSim } from "./components";
 /* ================================================================
    SOLUTION CODE
    ================================================================ */
-export const SOLUTION_CODE = [
-  "N = int(input())",
-  "cows = list(map(int, input().split()))      # heights, one line",
-  "stalls = list(map(int, input().split()))    # limits, one line",
-  "",
-  "# Process the TALLEST cow first: she has the fewest stalls that fit.",
-  "# Sort cows DESCENDING, stalls ASCENDING.",
-  "cows.sort(reverse=True)",
-  "stalls.sort()",
-  "",
-  "ans = 1",
-  "for i in range(N):",
-  "    # How many stalls have limit >= this cow's height?",
-  "    fits = sum(1 for s in stalls if s >= cows[i])",
-  "    # i taller cows already took i of those stalls.",
-  "    choices = fits - i",
-  "    if choices <= 0:",
-  "        ans = 0",
-  "        break",
-  "    ans *= choices",
-  "",
-  "print(ans)",
-];
+/* 2026-09-17: 여기 있던 SOLUTION_CODE 를 지웠다 — export 만 되고 어디서도
+   import 되지 않는 죽은 사본이었다. 학생이 보는 코드는 components.jsx 의
+   FULL_PY / FULL_CPP 다. 표본 대조에서 이 사본이 이미 **내용이 갈라져** 있는
+   quest 도 있었다 — 백업이 아니라 함정이었다. 판정: 감사·프론트 둘 다 '지운다'. */
 
 
 /* ═══════════════════════════════════════════════════════════════
