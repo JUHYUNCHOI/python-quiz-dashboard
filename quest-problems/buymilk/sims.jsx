@@ -70,33 +70,33 @@ export function NormalizeSim({ E }) {
   const say =
     s.k === "why" ? t(E,
       <>Prices only go up, but block sizes <b>double</b>.<br />So a big deal might be a bad deal.<br />First, find the <b>cheapest way</b> to get each block.</>,
-      <>가격은 오르기만 하는데 블록 크기는 <b>두 배씩</b> 커져요.<br />그래서 큰 딜이 손해일 수도 있어요.<br />먼저 블록마다 <b>가장 싸게 얻는 값</b>을 구해요.</>)
+      <>가격은 오르기만 하는데, 묶음은 <b>두 배씩</b> 커져요.<br />그래서 큰 거래가 오히려 손해일 수 있어요.<br />먼저 묶음마다 <b>제일 싸게 사는 값</b>을 구해요.<br /><span style={{ fontWeight: 600 }}>이 값을 알아야 x 통을 얼마에 살지 구할 수 있어요.</span></>)
     : s.k === "row" ? (() => {
         const i = s.i, size = 1 << i;
         if (i === 0) return t(E,
           <>The <b>1-bucket</b> block has only one way to buy it: <b>{DEALS[0]}</b>.</>,
-          <><b>1통</b> 블록은 사는 방법이 하나뿐이에요. <b>{DEALS[0]}</b> 이에요.</>);
+          <><b>1통</b> 묶음은 사는 방법이 하나뿐이에요. <b>{DEALS[0]}</b> 이에요.</>);
         const two = 2 * C[i - 1], cheaper = two < DEALS[i];
         return cheaper
           ? t(E, <>The <b>{size}-bucket</b> deal costs <b>{DEALS[i]}</b>,<br />but two {size / 2}-bucket blocks cost <b>{two}</b> — cheaper!<br />So this block is really worth <b>{C[i]}</b>.</>,
-                <><b>{size}통</b> 딜은 <b>{DEALS[i]}</b> 인데<br />{size / 2}통 블록 두 개면 <b>{two}</b> 예요. 더 싸요!<br />그래서 이 블록의 값은 <b>{C[i]}</b> 이에요.</>)
+                <><b>{size}통</b> 거래는 <b>{DEALS[i]}</b> 인데<br />{size / 2}통 묶음 두 개면 <b>{two}</b> 예요. 더 싸요!<br />그래서 이 묶음은 <b>{C[i]}</b> 에 살 수 있어요.</>)
           : t(E, <>The <b>{size}-bucket</b> deal costs <b>{DEALS[i]}</b>,<br />and two {size / 2}-bucket blocks cost <b>{two}</b>.<br />The deal wins, so it stays <b>{C[i]}</b>.</>,
-                <><b>{size}통</b> 딜은 <b>{DEALS[i]}</b> 이고<br />{size / 2}통 블록 두 개는 <b>{two}</b> 예요.<br />딜이 더 싸니 그대로 <b>{C[i]}</b> 예요.</>);
+                <><b>{size}통</b> 거래는 <b>{DEALS[i]}</b> 이고<br />{size / 2}통 묶음 두 개는 <b>{two}</b> 예요.<br />거래가 더 싸니 그대로 <b>{C[i]}</b> 예요.</>);
       })()
     : t(E,
       <>Now look at the <b>price per bucket</b>.<br />It never goes up as blocks get bigger.<br /><b>So bigger blocks are always at least as good.</b></>,
-      <>이제 <b>통당 단가</b>를 봐요.<br />블록이 커져도 단가가 올라가지 않아요.<br /><b>그래서 큰 블록이 항상 손해가 아니에요.</b></>);
+      <>이제 <b>한 통에 얼마</b>인지 봐요.<br />묶음이 커져도 이 값이 올라가지 않아요.<br /><b>그래서 큰 묶음은 손해가 아니에요.</b><br /><span style={{ fontWeight: 600 }}>다음 쪽에서 이 값으로 x 통을 사 볼 거예요.</span></>);
 
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
       <StepHeader accent={A} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, "Turn deals into block prices", "딜 값을 블록 최저가로 바꿔요")}
+        title={t(E, "Turn deals into block prices", "묶음마다 제일 싼 값을 구해요")}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
       <Carry E={E}>
         {t(E, <>A new, bigger example — <b>4 deals</b> now: a = [10, 15, 20, 45].<br />
                  (Sample 1 back on page 2 had only two: [10, 15].)</>,
-             <>더 큰 새 예제예요 — 이제 딜이 <b>4개</b>예요. a = [10, 15, 20, 45].<br />
-               (2쪽의 예제 1 은 두 개였어요. [10, 15])</>)}
+             <>새 예제예요. 이제 <b>거래가 4개</b>예요 — a = [10, 15, 20, 45]<br />
+               (2쪽 예제 1 은 두 개였어요. [10, 15])</>)}
       </Carry>
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "unit" ? "aha" : s.k === "why" ? "go" : "go"}>{say}</Say>
@@ -104,10 +104,10 @@ export function NormalizeSim({ E }) {
       <div style={{ maxWidth: 460, margin: "0 auto", display: "grid", gap: 5 }}>
         <div style={{ display: "grid", gridTemplateColumns: "70px 1fr 1fr 1fr", gap: 8,
           fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 11px" }}>
-          <span>{t(E, "block", "블록")}</span>
-          <span>{t(E, "deal a[i]", "딜 a[i]")}</span>
-          <span>{t(E, "two halves", "반쪽 두 개")}</span>
-          <span>{t(E, "cheapest c[i]", "최저가 c[i]")}</span>
+          <span>{t(E, "block", "묶음")}</span>
+          <span>{t(E, "deal a[i]", "거래값 a[i]")}</span>
+          <span>{t(E, "two halves", "절반짜리 둘")}</span>
+          <span>{t(E, "cheapest c[i]", "제일 싼 값 c[i]")}</span>
         </div>
         {DEALS.map((d, i) => {
           const shown = i < upto, size = 1 << i;
@@ -132,7 +132,7 @@ export function NormalizeSim({ E }) {
           <div style={{ marginTop: 8, padding: "10px 14px", borderRadius: 10, background: "#ecfeff",
             border: "1.5px solid #67e8f9", fontSize: 12.5, color: "#155e75", lineHeight: 1.9,
             textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
-            <div style={{ fontWeight: 800, marginBottom: 4 }}>{t(E, "price per bucket", "통당 단가")}</div>
+            <div style={{ fontWeight: 800, marginBottom: 4 }}>{t(E, "price per bucket", "한 통에 얼마")}</div>
             <div style={mono}>
               {C.map((v, i) => `${1 << i}${t(E, "", "통")} ${(v / (1 << i)).toFixed(2)}`).join("  ·  ")}
             </div>
@@ -178,16 +178,16 @@ export function GreedySim({ E, x = 5 }) {
   const say =
     s.k === "why" ? t(E,
       <>We need <b>at least {X}</b> buckets.<br />Bigger blocks are never worse, so start big.<br />At each block there are only <b>two</b> choices.</>,
-      <><b>{X}통 이상</b>이 필요해요.<br />큰 블록이 손해가 아니니 큰 것부터 봐요.<br />블록마다 고를 수 있는 건 <b>두 가지</b>뿐이에요.</>)
+      <><b>{X}통 이상</b>이 필요해요.<br />큰 묶음이 손해가 아니니 큰 것부터 봐요.<br />묶음마다 고를 수 있는 건 <b>두 가지</b>뿐이에요.</>)
     : s.k === "row" ? t(E,
       <>Block <b>{cur.size}</b>: <b>{cur.rem}</b> buckets still needed.<br />Round <b>up</b> → buy {cur.need} and stop → <b>{cur.cand}</b>.<br />Or take <b>{cur.take}</b> and carry <b>{cur.rem - cur.take * cur.size}</b> to smaller blocks.</>,
-      <><b>{cur.size}통</b> 블록이에요. 아직 <b>{cur.rem}통</b> 필요해요.<br /><b>올림</b>하면 {cur.need}개 사고 끝 → <b>{cur.cand}</b>.<br />아니면 <b>{cur.take}개</b>만 쓰고 <b>{cur.rem - cur.take * cur.size}통</b>을 작은 블록으로 넘겨요.</>)
+      <><b>{cur.size}통</b> 묶음이에요. 아직 <b>{cur.rem}통</b> 필요해요.<br /><b>올림</b>하면 {cur.need}개 사고 끝 → <b>{cur.cand}</b>.<br />아니면 <b>{cur.take}개</b>만 쓰고 <b>{cur.rem - cur.take * cur.size}통</b>을 작은 묶음으로 넘겨요.</>)
     : best < exact ? t(E,
       <>The cheapest is <b>{best}</b> — and it <b>over-buys</b>.<br />Buying exactly {X} costs <b>{exact}</b>. Rounding up wins.<br />One pass from big to small — no searching.</>,
-      <>제일 싼 게 <b>{best}</b> 인데, <b>{X}통을 넘겨 사는</b> 쪽이에요.<br />딱 {X}통만 사면 <b>{exact}</b>. 올림이 이겼어요.<br />큰 것부터 한 번만 훑었어요. 탐색이 없어요.</>)
+      <>제일 싼 게 <b>{best}</b> 인데, <b>{X}통을 넘겨 사는</b> 쪽이에요.<br />딱 {X}통만 사면 <b>{exact}</b>. 올림이 이겼어요.<br />큰 것부터 한 번만 훑었어요. 찾아 헤매지 않았어요.</>)
     : t(E,
       <>Every block checked, and the cheapest is <b>{best}</b>.<br />That is <b>one pass</b> from big to small — no searching.</>,
-      <>블록을 다 봤고 제일 싼 게 <b>{best}</b> 예요.<br />큰 것부터 <b>한 번만</b> 훑었어요. 탐색이 없어요.</>);
+      <>묶음을 다 봤고 제일 싼 게 <b>{best}</b> 예요.<br />큰 것부터 <b>한 번만</b> 훑었어요. 찾아 헤매지 않았어요.</>);
 
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
@@ -197,8 +197,8 @@ export function GreedySim({ E, x = 5 }) {
       <Carry E={E}>
         {t(E, <>Same 4 deals a = [10, 15, 20, 45].<br />
                  Block prices we just worked out: c = [{C.join(", ")}]</>,
-             <>같은 딜 4개예요. a = [10, 15, 20, 45]<br />
-               방금 구한 블록 최저가는 c = [{C.join(", ")}] 예요.</>)}
+             <>같은 거래 4개예요. a = [10, 15, 20, 45]<br />
+               방금 구한 묶음 값은 c = [{C.join(", ")}] 이에요.</>)}
       </Carry>
       <StepFade fast k={ts.safe}>
       <Say tone={s.k === "done" ? "aha" : "go"}>{say}</Say>
@@ -206,7 +206,7 @@ export function GreedySim({ E, x = 5 }) {
       <div style={{ maxWidth: 470, margin: "0 auto", display: "grid", gap: 5 }}>
         <div style={{ display: "grid", gridTemplateColumns: "62px 1fr 1fr 1fr", gap: 8,
           fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 11px" }}>
-          <span>{t(E, "block", "블록")}</span>
+          <span>{t(E, "block", "묶음")}</span>
           <span>{t(E, "still need", "남은 통")}</span>
           <span>{t(E, "round up → cost", "올림하면 값")}</span>
           <span>{t(E, "take / carry", "내림 / 넘김")}</span>

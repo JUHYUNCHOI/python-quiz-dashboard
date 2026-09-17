@@ -31,7 +31,7 @@ export function makeBuyMilkCh1(E) {
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
                 "For each query x,\noutput the minimum cost to buy at least x buckets of milk.",
-                "주어지는 x 마다 최소 x 통의 우유를 사는 최소 비용을 출력.")}
+                "x 가 하나 주어질 때마다,\nx 통 이상을 사는 가장 싼 값을 출력해요.")}
             </div>
           </div>
 
@@ -49,7 +49,7 @@ export function makeBuyMilkCh1(E) {
                   <b style={{ color: "#0891b2" }}>2^(i-1)</b>
                   {t(E, " buckets at price ", " 통을 ")}
                   <b style={{ color: "#0891b2" }}>a_i</b>
-                  {t(E, ". Prices strictly increase: a_1 < a_2 < ... < a_N.", " 무니에 팔아요. 가격은 엄격 증가: a_1 < a_2 < ... < a_N.")}
+                  {t(E, ". Prices strictly increase: a_1 < a_2 < ... < a_N.", " 무니에 팔아요.\n뒤로 갈수록 값이 꼭 더 비싸요 — a_1 < a_2 < ... < a_N 이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -62,9 +62,9 @@ export function makeBuyMilkCh1(E) {
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
-                  {t(E, "For each of the Q queries x, print the minimum cost to get ", "주어지는 x 마다 ")}
-                  <b style={{ color: "#15803d" }}>{t(E, "at least x buckets", "최소 x 통")}</b>
-                  {t(E, ".", " 을 사는 최소 비용을 출력해요.")}
+                  {t(E, "For each of the Q queries x, print the minimum cost to get ", "x 가 하나 올 때마다 ")}
+                  <b style={{ color: "#15803d" }}>{t(E, "at least x buckets", "x 통 이상")}</b>
+                  {t(E, ".", " 을 사는 가장 싼 값을 출력해요.")}
                 </div>
               </div>
             </div>
@@ -168,7 +168,7 @@ export function makeBuyMilkCh1(E) {
       type: "reveal",
       narr: t(E,
         "Before any code: a big deal can be a bad deal. Let's find the cheapest price for each block first.",
-        "코드 전에 — 큰 딜이 오히려 손해일 수 있어요. 블록마다 가장 싼 값을 먼저 구해요."),
+        "큰 거래가 오히려 손해일 수 있어요. 먼저 묶음 값부터 구해요."),
       content: (<NormalizeSim E={E} />),
     },
 
@@ -192,16 +192,16 @@ export function makeBuyMilkCh1(E) {
       correct: 0,
       explain: t(E,
         "Exactly. The minimum cost answer might over-shoot x. So at each deal, we also try 'buy one extra of this size and stop'.",
-        "맞아요. 최소 비용이 x 통을 넘겨 사는 경우일 수도 있어요.\n그래서 블록마다 '올림해서 사고 끝내기' 도 같이 따져봐요."),
+        "맞아요. 최소 비용이 x 통을 넘겨 사는 경우일 수도 있어요.\n그래서 묶음마다 '올림해서 사고 끝내기' 도 같이 따져봐요."),
     },
 
 
-    // [전] 그리디 — 핵심 ②. 큰 블록부터 올림/내림 두 갈래만 비교하면 끝
+    // [전] 그리디 — 핵심 ②. 큰 묶음부터 올림/내림 두 갈래만 비교하면 끝
     {
       type: "reveal",
       narr: t(E,
         "Now bigger blocks are never worse. So walk from the biggest block down, comparing just two choices.",
-        "이제 큰 블록이 손해가 아니에요. 그러니 큰 블록부터 훑으며 두 갈래만 비교해요."),
+        "이제 큰 묶음이 손해가 아니에요. 큰 것부터 훑으면 돼요."),
       content: (<GreedySim key="greedy5" E={E} x={5} />),
     },
 
@@ -212,7 +212,7 @@ export function makeBuyMilkCh1(E) {
       type: "reveal",
       narr: t(E,
         "Same deals, x = 7 this time. Watch the 'round up and stop' branch actually win.",
-        "같은 딜로 이번엔 x = 7 이에요.\n'올림해서 사고 끝내기' 갈래가 실제로 이기는 걸 봐요."),
+        "같은 거래로 이번엔 x = 7 이에요.\n'올림해서 사고 끝내기' 갈래가 실제로 이기는 걸 봐요."),
       content: (<GreedySim key="greedy7" E={E} x={7} />),
     },
 
@@ -223,13 +223,13 @@ export function makeBuyMilkCh1(E) {
       type: "input",
       narr: t(E,
         "Same deals, but x = 9 this time — do it yourself.",
-        "같은 딜로 x = 9 를 직접 해봐요."),
+        "같은 거래로 x = 9 를 직접 해봐요."),
       question: t(E,
         "a=[10,15,20,45], deal sizes 1,2,4,8. Min cost for x=9?",
         "a=[10,15,20,45], 거래 크기 1,2,4,8. x=9 의 최소 비용?"),
       hint: t(E,
         "Use the block prices you found: 10, 15, 20, 40.\nStart from the biggest block and compare the two choices.",
-        "아까 구한 블록 값을 써요. 10, 15, 20, 40 이에요.\n제일 큰 블록부터 두 갈래를 비교해 봐요."),
+        "아까 구한 묶음 값을 써요. 10, 15, 20, 40 이에요.\n제일 큰 묶음부터 두 갈래를 비교해 봐요."),
       answer: 50,
     },
   ];
@@ -274,30 +274,30 @@ function BuyMilkPlan({ E }) {
       </div>
       <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
         <Insight icon="💰" color="#d97706"
-          head={t(E, "A big deal can be a bad deal.", "큰 딜이 오히려 손해일 수 있다.")}
+          head={t(E, "A big deal can be a bad deal.", "큰 거래가 오히려 손해일 수 있다.")}
           body={t(E, <>So each block gets its own real price {codeTag("c[i]")} — the deal, or two half-blocks, whichever is cheaper.</>,
-                     <>그래서 블록마다 진짜 값 {codeTag("c[i]")} 를 따로 구해요.<br />딜 값과 반쪽 블록 두 개 값 중 싼 쪽이에요.</>)} />
+                     <>그래서 묶음마다 진짜 값 {codeTag("c[i]")} 를 따로 구해요.<br />거래 값과 반쪽 묶음 두 개 값 중 싼 쪽이에요.</>)} />
         <Insight icon="🧱" color="#0891b2"
-          head={t(E, "At each block there are only two choices.", "블록마다 고를 건 두 가지뿐이다.")}
+          head={t(E, "At each block there are only two choices.", "묶음마다 고를 건 두 가지뿐이다.")}
           body={t(E, <>Round up and stop, or take the floor and carry {codeTag("rem")} down to smaller blocks.</>,
-                     <>올림해서 사고 끝내거나,<br />내림만큼만 사고 남은 {codeTag("rem")} 을 작은 블록으로 넘겨요.</>)} />
+                     <>올림해서 사고 끝내거나,<br />내림만큼만 사고 남은 {codeTag("rem")} 을 작은 묶음으로 넘겨요.</>)} />
         <Insight icon="📉" color="#059669"
-          head={t(E, "One pass, big to small — no searching.", "큰 것부터 한 번만 훑으면 끝 — 탐색이 없다.")}
+          head={t(E, "One pass, big to small — no searching.", "큰 것부터 한 번만 훑으면 끝 — 찾아 헤맬 일이 없다.")}
           body={t(E, <>Every block gives one candidate; {codeTag("ans")} just keeps the smallest.</>,
-                     <>블록마다 후보가 하나씩 나와요.<br />{codeTag("ans")} 는 그중 제일 작은 값만 들고 있으면 돼요.</>)} />
+                     <>묶음마다 후보가 하나씩 나와요.<br />{codeTag("ans")} 는 그중 제일 작은 값만 들고 있으면 돼요.</>)} />
       </div>
 
       <div style={{ ...box, background: "#f8fafc", marginBottom: 10 }}>
         <div style={{ fontSize: 13, fontWeight: 800, color: "#0f172a", marginBottom: 9 }}>
           ⚙️ {t(E, "So the code does this, in order", "그래서 코드는 이 순서로 해요")}
         </div>
-        <Line n={1}>{t(E, <>Read the deal prices {codeTag("a")}.</>, <>딜 가격 {codeTag("a")} 를 읽어요.</>)}</Line>
+        <Line n={1}>{t(E, <>Read the deal prices {codeTag("a")}.</>, <>거래 가격 {codeTag("a")} 를 읽어요.</>)}</Line>
         <Line n={2}>{t(E, <>Build {codeTag("c")}: {codeTag("c[i] = min(a[i], 2*c[i-1])")} — the first sim.</>,
                          <>{codeTag("c")} 를 만들어요. {codeTag("c[i] = min(a[i], 2*c[i-1])")} — 첫 시뮬이 한 일이에요.</>)}</Line>
         <Line n={3}>{t(E, <>Per query: {codeTag("rem = x")}, {codeTag("cost = 0")}, {codeTag("ans = ∞")}.</>,
                          <>x 마다 {codeTag("rem = x")}, {codeTag("cost = 0")}, {codeTag("ans = 무한대")} 로 시작해요.</>)}</Line>
         <Line n={4}>{t(E, <>Big block → small block — this is the second sim&apos;s table.<br />“round up → cost” is the {codeTag("ans")} candidate;<br />“take / carry” updates {codeTag("cost")} and {codeTag("rem")}.</>,
-                         <>큰 블록부터 작은 블록까지 훑어요 — 두 번째 시뮬의 표예요.<br />‘올림하면 값’ 칸이 {codeTag("ans")} 후보고,<br />‘내림 / 넘김’ 칸이 {codeTag("cost")} 와 {codeTag("rem")} 이에요.</>)}</Line>
+                         <>큰 묶음부터 작은 묶음까지 훑어요 — 두 번째 시뮬의 표예요.<br />‘올림하면 값’ 칸이 {codeTag("ans")} 후보고,<br />‘내림 / 넘김’ 칸이 {codeTag("cost")} 와 {codeTag("rem")} 이에요.</>)}</Line>
         <Line n={5}>{t(E, <>Print {codeTag("ans")}.</>, <>{codeTag("ans")} 를 출력해요.</>)}</Line>
       </div>
       {/* ⚠️ 2026-09-16: 여기 있던 노란 마무리 박스를 지웠다. 같은 아이디어를 인사이트 카드 →
@@ -315,7 +315,7 @@ export function makeBuyMilkCh2(E, lang = "py") {
       label: t(E, "Plan", "계획"),
       narr: t(E,
         "Before the code: the same two ideas, written with the names the code uses.",
-        "코드 전에 — 방금 본 두 생각을 코드가 쓰는 이름으로 다시 적어봐요."),
+        "방금 본 두 생각을 코드가 쓰는 이름으로 다시 적어요."),
       content: (<BuyMilkPlan E={E} />),
     },
     /* 코드 위 '왜 이렇게?' 노트 벽 → 코드 줄에 붙는 CodeWalk 말풍선 (선생님 2026-07-27). */
@@ -326,7 +326,7 @@ export function makeBuyMilkCh2(E, lang = "py") {
         label: t(E, "Code", "코드"),
         narr: t(E,
           "No recursion — one sweep from the biggest block down.",
-          "재귀 없이 큰 블록부터 한 번만 훑어요."),
+          "재귀 없이 큰 묶음부터 한 번만 훑어요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
       };
     })(),

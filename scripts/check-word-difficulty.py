@@ -65,7 +65,9 @@ TRANSLATIONESE = [
     ("세미콜론 — 한국어엔 `;` 를 안 쓴다",
      re.compile(r";")),
     ("콜론으로 문장을 이어붙였다",
-     re.compile(r"[가-힣]\s*:\s*[가-힣]")),
+     # 콜론 뒤가 한글이 아니어도 잡는다 — "가격은 엄격 증가: a_1 < a_2" 처럼
+     # **수식이 뒤에 오는 자리**를 2026-09-17 에 놓쳤다 (선생님이 화면에서 먼저 보셨다).
+     re.compile(r"[가-힣]\s*:\s*\S")),
     ("조사를 빼고 명사만 늘어놨다",
      re.compile(r"[가-힣]{2,}\s+[가-힣]{2,}\s+(?:필요|출력|초기화|계산|저장|반복)\.")),
     ("영어를 음만 옮겼다 (쿼리·버킷…)",
@@ -80,8 +82,19 @@ KO_STR = re.compile(r'"((?:[^"\\]|\\.)*[가-힣][^"\\]*)"')
 def screen_text(path):
     """그 파일에서 **학생 화면에 나가는 한국어**만 모은다 (주석·코드 제외)."""
     out = []
+    in_block = False                       # /* ... */ 안인가
     for raw in path.read_text(encoding="utf-8", errors="replace").split("\n"):
         line = raw.strip()
+        if in_block:
+            # 여러 줄 주석의 가운데 줄은 `*` 로 시작하지 않을 때가 많다.
+            # 그래서 시작/끝을 상태로 따라가야 한다 (2026-09-17: 여기서
+            # 파일 맨 위 설계 메모가 '학생 글' 로 세어져 없는 문제가 떴다).
+            if "*/" in raw:
+                in_block = False
+            continue
+        if line.startswith("/*") and "*/" not in line:
+            in_block = True
+            continue
         if line.startswith("//") or line.startswith("*") or line.startswith("/*"):
             continue                       # 우리끼리 보는 주석은 뺀다
         for m in T_CALL.finditer(raw):

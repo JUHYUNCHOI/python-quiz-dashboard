@@ -141,30 +141,30 @@ const FULL_CPP = [
 
 // CodeWalk — 코드 위 노트 벽 대신 코드 줄에 붙는 말풍선 (선생님 규칙). 검증본 코드 그대로.
 const _BM_VARS = [
-  { v: "a", ko: "딜 가격들", en: "deal prices" },
-  { v: "c", ko: "블록 최저가", en: "cheapest per block" },
-  { v: "x", ko: "필요 버킷 수", en: "buckets needed" },
-  { v: "rem", ko: "남은 버킷", en: "buckets left" },
+  { v: "a", ko: "거래 가격들", en: "deal prices" },
+  { v: "c", ko: "묶음마다 제일 싼 값", en: "cheapest per block" },
+  { v: "x", ko: "필요한 통 수", en: "buckets needed" },
+  { v: "rem", ko: "남은 통", en: "buckets left" },
 ];
 export function getBuyMilkWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _BM_VARS, beats: [
-      { hi: [9, 14],   bubble: t(E, "Read N, Q and the prices a.\nDeal 1 in the problem is a[0] in the code.\nSo a[i] buys 1 doubled i times: 1, 2, 4, 8, ...", "N, Q 와 가격 a 를 읽어요.\n문제의 1번 딜이 코드에서는 a[0] 이에요.\n그래서 a[i] 는 1 을 i 번 두 배 한 만큼이에요 — 1, 2, 4, 8, ...") },
-      { hi: [16, 23], bubble: t(E, "Normalize the deals.\nc[i] = the cheapest way to get that block:\nbuy deal i, or buy two smaller blocks.\nThen a bigger block is never worse per bucket,\nso we go big-to-small with no recursion.", "딜을 정규화해요.\nc[i] 는 그 블록을 얻는 가장 싼 값이에요.\n딜 i 를 사거나, 작은 블록 두 개를 사요.\n그러면 큰 블록이 통당 손해가 아니에요.\n그래서 큰 것부터 훑으면 되고 재귀가 필요 없어요.") },
-      { hi: [25, 30], bubble: t(E, "Write down how many buckets each block holds.\nStart at 1 and keep doubling: 1, 2, 4, 8, ...\nx is at most 1,000,000,000, and block 30 holds 1,073,741,824 — already past it.\nSo blocks 0 through 30 are enough, which is 31 slots.\nC++ has no ** operator, so we build the list once.", "블록마다 몇 통인지 미리 적어둬요.\n1 에서 시작해서 계속 두 배예요 — 1, 2, 4, 8, ...\nx 는 많아야 10억인데 30번 블록이 1,073,741,824 라 벌써 넘어요.\n그래서 0번부터 30번까지면 충분해요 — 칸이 31개예요.\nC++ 에는 ** 가 없어서 한 번 만들어 두고 써요.") },
-      { hi: [32, 37], bubble: t(E, "Each query: need x buckets. Start ans, cost, rem.", "쿼리마다: x 버킷 필요. ans, cost, rem 초기화.") },
-      { hi: [38, 46], bubble: t(E, "i never needs to go above 30 —\nthat is exactly why the table stopped there.\n(A) Round up with this block and stop, or\n(B) take the floor and cover the rest with smaller blocks.", "i 가 30보다 커질 일이 없어요 —\n표를 30번까지만 만든 게 그 이유예요.\n(A) 이 블록으로 올림해서 끝, 또는\n(B) 내림하고 나머지는 작은 블록으로.") },
-      { hi: [48, 49], bubble: t(E, "Also the exact-cover case; print the cheapest answer.", "딱 맞춘 경우도 후보; 최저 답 출력.") },
+      { hi: [9, 14],   bubble: t(E, "Read N, Q and the prices a.\nDeal 1 in the problem is a[0] in the code.\nSo a[i] buys 1 doubled i times: 1, 2, 4, 8, ...", "N, Q 와 가격 a 를 읽어요.\n문제의 1번 거래가 코드에서는 a[0] 이에요.\n그래서 a[i] 는 1 을 i 번 두 배 한 만큼이에요 — 1, 2, 4, 8, ...") },
+      { hi: [16, 23], bubble: t(E, "Normalize the deals.\nc[i] = the cheapest way to get that block:\nbuy deal i, or buy two smaller blocks.\nThen a bigger block is never worse per bucket,\nso we go big-to-small with no recursion.", "묶음마다 제일 싼 값을 미리 구해요.\nc[i] 는 그 묶음을 사는 가장 싼 값이에요.\n거래 i 를 사거나, 절반짜리 묶음 두 개를 사요.\n이렇게 하면 큰 묶음이 손해가 아니게 돼요.\n그래서 큰 것부터 훑으면 되고 재귀가 필요 없어요.") },
+      { hi: [25, 30], bubble: t(E, "Write down how many buckets each block holds.\nStart at 1 and keep doubling: 1, 2, 4, 8, ...\nx is at most 1,000,000,000, and block 30 holds 1,073,741,824 — already past it.\nSo blocks 0 through 30 are enough, which is 31 slots.\nC++ has no ** operator, so we build the list once.", "묶음마다 몇 통인지 미리 적어둬요.\n1 에서 시작해서 계속 두 배예요 — 1, 2, 4, 8, ...\nx 는 많아야 10억인데 30번 묶음이 1,073,741,824 라 벌써 넘어요.\n그래서 0번부터 30번까지면 충분해요 — 칸이 31개예요.\nC++ 에는 ** 가 없어서 한 번 만들어 두고 써요.") },
+      { hi: [32, 37], bubble: t(E, "Each query: need x buckets. Start ans, cost, rem.", "물음이 하나 올 때마다 x 통이 필요해요.\nans · cost · rem 을 처음 값으로 놓아요.") },
+      { hi: [38, 46], bubble: t(E, "i never needs to go above 30 —\nthat is exactly why the table stopped there.\n(A) Round up with this block and stop, or\n(B) take the floor and cover the rest with smaller blocks.", "i 가 30보다 커질 일이 없어요 —\n표를 30번까지만 만든 게 그 이유예요.\n(A) 이 묶음으로 올려 사고 끝내거나,\n(B) 내려 사고 나머지는 더 작은 묶음으로 채워요.") },
+      { hi: [48, 49], bubble: t(E, "Also the exact-cover case; print the cheapest answer.", "딱 맞게 산 경우도 후보예요.\n제일 싼 값을 출력해요.") },
     ] };
   }
   return { code: FULL_PY, vars: _BM_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "Fast input.", "빠른 입력.") },
-    { hi: [3, 4],   bubble: t(E, "Read N, Q and the prices a.\nDeal 1 in the problem is a[0] in the code.\nSo a[i] buys 1 doubled i times: 1, 2, 4, 8, ...", "N, Q 와 가격 a 를 읽어요.\n문제의 1번 딜이 코드에서는 a[0] 이에요.\n그래서 a[i] 는 1 을 i 번 두 배 한 만큼이에요 — 1, 2, 4, 8, ...") },
-    { hi: [6, 13],  bubble: t(E, "Normalize the deals.\nc[i] = the cheapest way to get that block:\nbuy deal i, or buy two smaller blocks.\nThen a bigger block is never worse per bucket,\nso we go big-to-small with no recursion.", "딜을 정규화해요.\nc[i] 는 그 블록을 얻는 가장 싼 값이에요.\n딜 i 를 사거나, 작은 블록 두 개를 사요.\n그러면 큰 블록이 통당 손해가 아니에요.\n그래서 큰 것부터 훑으면 되고 재귀가 필요 없어요.") },
-    { hi: [15, 20], bubble: t(E, "Each query: need x buckets. Start ans, cost, rem.", "쿼리마다: x 버킷 필요. ans, cost, rem 초기화.") },
-    { hi: [22, 30], bubble: t(E, "x is at most 1,000,000,000.\nDoubling 30 times already passes it: 1,073,741,824.\nSo i never needs to go above 30.\n(A) Round up with this block and stop, or\n(B) take the floor and cover the rest with smaller blocks.", "x 는 많아야 10억이에요.\n2 를 30번 곱하면 벌써 넘어요 — 1,073,741,824.\n그래서 i 가 30보다 커질 일이 없어요.\n(A) 이 블록으로 올림해서 끝, 또는\n(B) 내림하고 나머지는 작은 블록으로.") },
-    { hi: [31, 32], bubble: t(E, "Also the exact-cover case; save the cheapest answer.", "딱 맞춘 경우도 후보; 최저 답 저장.") },
-    { hi: [34, 34], bubble: t(E, "Print all answers at once.", "답을 한 번에 출력.") },
+    { hi: [0, 1],   bubble: t(E, "Fast input.", "입력을 빠르게 받아요.") },
+    { hi: [3, 4],   bubble: t(E, "Read N, Q and the prices a.\nDeal 1 in the problem is a[0] in the code.\nSo a[i] buys 1 doubled i times: 1, 2, 4, 8, ...", "N, Q 와 가격 a 를 읽어요.\n문제의 1번 거래가 코드에서는 a[0] 이에요.\n그래서 a[i] 는 1 을 i 번 두 배 한 만큼이에요 — 1, 2, 4, 8, ...") },
+    { hi: [6, 13],  bubble: t(E, "Normalize the deals.\nc[i] = the cheapest way to get that block:\nbuy deal i, or buy two smaller blocks.\nThen a bigger block is never worse per bucket,\nso we go big-to-small with no recursion.", "묶음마다 제일 싼 값을 미리 구해요.\nc[i] 는 그 묶음을 사는 가장 싼 값이에요.\n거래 i 를 사거나, 절반짜리 묶음 두 개를 사요.\n이렇게 하면 큰 묶음이 손해가 아니게 돼요.\n그래서 큰 것부터 훑으면 되고 재귀가 필요 없어요.") },
+    { hi: [15, 20], bubble: t(E, "Each query: need x buckets. Start ans, cost, rem.", "물음이 하나 올 때마다 x 통이 필요해요.\nans · cost · rem 을 처음 값으로 놓아요.") },
+    { hi: [22, 30], bubble: t(E, "x is at most 1,000,000,000.\nDoubling 30 times already passes it: 1,073,741,824.\nSo i never needs to go above 30.\n(A) Round up with this block and stop, or\n(B) take the floor and cover the rest with smaller blocks.", "x 는 많아야 10억이에요.\n2 를 30번 곱하면 벌써 넘어요 — 1,073,741,824.\n그래서 i 가 30보다 커질 일이 없어요.\n(A) 이 묶음으로 올려 사고 끝내거나,\n(B) 내려 사고 나머지는 더 작은 묶음으로 채워요.") },
+    { hi: [31, 32], bubble: t(E, "Also the exact-cover case; save the cheapest answer.", "딱 맞게 산 경우도 후보예요.\n제일 싼 값을 저장해요.") },
+    { hi: [34, 34], bubble: t(E, "Print all answers at once.", "답을 한 번에 출력해요.") },
   ] };
 }
 
@@ -176,13 +176,13 @@ export function getBuyMilkSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Step 1 — normalize: c[i] = the cheapest way to get a 2^i-bucket block. Either buy deal i, or glue two of the (i-1) blocks: c[i] = min(a[i], 2*c[i-1]).",
-            "1단계 — 정규화: c[i] = '2^i 통 블록'을 얻는 가장 싼 값. 거래 i 를 사거나, (i-1) 블록 두 개를 붙이거나: c[i] = min(a[i], 2*c[i-1])."),
+            "1단계 — 묶음마다 제일 싼 값을 미리 구해요.\nc[i] 는 2^i 통짜리 묶음을 얻는 가장 싼 값이에요.\n거래 i 를 그냥 사거나, 절반짜리 묶음 두 개를 붙여요.\n그래서 c[i] = min(a[i], 2*c[i-1]) 이에요."),
         t(E, "The payoff: after normalizing, a BIGGER block is always cheaper per bucket. So we never need to 'skip' a big block for small ones — that's why no recursion is needed.",
-            "핵심: 정규화하면 '큰 블록일수록 통당 가격이 싸요'. 그래서 큰 블록을 건너뛰고 작은 것만 쓸 이유가 없어요 — 그래서 재귀가 필요 없어요."),
+            "이렇게 해 두면 큰 묶음일수록 한 통에 드는 값이 싸요.\n그래서 큰 묶음을 건너뛰고 작은 것만 쓸 이유가 없어요.\n재귀가 필요 없는 이유가 바로 이거예요."),
         t(E, "Step 2 — per query: go from the biggest block down. At each size, try (round UP here and stop = buy a bit extra), then take the floor and carry the remainder to smaller blocks. Keep the minimum. O(N) per query, no recursion.",
-            "2단계 — 쿼리마다: 큰 블록부터 내려가요. 각 크기에서 (여기서 올림하고 멈추기 = 조금 넉넉히 사기)를 후보로 넣고, 내림만큼만 쓰고 나머지는 더 작은 블록으로. 최솟값 유지. 쿼리당 O(N), 재귀 없음."),
+            "2단계 — 물음이 올 때마다 큰 묶음부터 내려가요.\n크기마다 '올려 사고 끝내기' 값을 후보로 넣어요.\n그다음 내려 산 만큼만 쓰고 나머지는 작은 묶음으로 넘겨요.\n제일 작은 값을 남겨요. 물음 하나에 O(N) 이고 재귀가 없어요."),
         t(E, "Why over-buy? One big cheap block can cover x while overshooting — sometimes cheaper than exact. That's the 'round UP and stop' option.",
-            "왜 넉넉히? 싼 큰 블록 하나가 x 를 넘겨 덮는 게 딱 맞추는 것보다 쌀 때가 있어요 — 그게 '올림하고 멈추기' 후보예요."),
+            "왜 넉넉히 사나요?\n싼 큰 묶음 하나로 x 를 넘겨 덮는 게 딱 맞추기보다 쌀 때가 있어요.\n그게 '올려 사고 끝내기' 후보예요."),
       ],
       pyOnly: [
         t(E, "Python's built-in big ints handle up to 10^9 * 10^9 safely — no overflow worries.",
