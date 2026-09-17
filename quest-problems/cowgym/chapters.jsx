@@ -128,7 +128,7 @@ export function makeCowGymCh1(E) {
       type: "reveal",
       narr: t(E,
         "There are K gymnastics sessions; in each session, N cows are ranked best to worst (a permutation of cow IDs).\nA pair of cows (i, j) is 'consistent' if one of them ranks higher than the other in EVERY single session — same direction every time.\nCount the number of consistent pairs.",
-        "K개의 체조 세션이 있고, 각 세션에서 N마리 소가 1등부터 N등까지 순위 매겨져요 (ID 의 순열).\n두 소 (i, j) 가 '일관된 쌍' 이려면 — 모든 세션에서 한쪽이 항상 다른 쪽보다 위에 있어야 해요 (방향이 매번 같아야).\n일관된 쌍의 개수를 출력해요."),
+        "소들을 K 번 줄 세웠어요.\n매번 앞뒤 순서가 같았던 소 두 마리는 몇 쌍일까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -145,7 +145,7 @@ export function makeCowGymCh1(E) {
             <div style={{ fontSize: 13, color: "#92400e", lineHeight: 1.5 }}>
               {t(E,
                 "Output the number of cow pairs (i, j) whose relative ranking is the same in every one of the K sessions.",
-                "K 개 세션 모두에서 상대 순위가 같은 소 쌍 (i, j) 의 개수를 출력.")}
+                "K 개 세션 모두에서 앞뒤 순서가 똑같은 소 쌍 (i, j) 이 몇 개인지 출력해요.")}
             </div>
           </div>
 
@@ -160,7 +160,7 @@ export function makeCowGymCh1(E) {
                   {t(E, "There are ", "")}
                   <b style={{ color: "#d97706" }}>{t(E, "K gymnastics sessions", "K개의 체조 세션")}</b>
                   {t(E, " — each session ranks all N cows from best to worst (a permutation).",
-                        " 이 있고, 각 세션은 N마리 소를 1등부터 N등까지 매겨요 (순열).")}
+                        " 이 있고, 세션마다 N 마리 소를 1등부터 N등까지 줄 세워요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -169,7 +169,7 @@ export function makeCowGymCh1(E) {
                   {t(E, "A pair ", "두 소 ")}
                   <b style={{ color: "#7c3aed" }}>{t(E, "(i, j) is 'consistent'", "(i, j) 가 '일관된 쌍'")}</b>
                   {t(E, " if one of them ranks higher than the other in EVERY session (same direction every time).",
-                        " 인 건, 모든 세션에서 한쪽이 다른 쪽보다 위 (매번 같은 방향).")}
+                        " 이 되려면, 모든 세션에서 늘 같은 쪽이 다른 쪽보다 위에 있어야 해요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
@@ -188,21 +188,21 @@ export function makeCowGymCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Here's an example with 3 cows and 2 sessions.\nThe table shows each cow's rank (position) in each session.\nLower rank = better performance!", "3마리 소와 2개 세션 예시예요. 표는 각 소의 세션별 순위(위치)를 보여줘요. 낮은 순위 = 더 좋은 성적!"),
+        "Here's an example with 3 cows and 2 sessions.\nThe table shows each cow's rank (position) in each session.\nLower rank = better performance!", "소 3 마리에 세션 2 개인 예시예요.\n표는 소마다 세션에서 몇 번째 자리였는지 보여줘요.\n숫자가 작을수록 더 잘한 거예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
-            {t(E, "Example: 3 cows, 2 sessions", "예시: 3마리 소, 2개 세션")}
+            {t(E, "Example: 3 cows, 2 sessions", "소 3 마리, 세션 2 개인 예시예요")}
           </div>
           <div style={{ marginBottom: 8, fontSize: 12, color: C.dim }}>
             {t(E,
               "Session 1 order: [1, 2, 3] → cow 1 is 1st, cow 2 is 2nd, cow 3 is 3rd",
-              "세션 1 순서: [1, 2, 3] → 소 1이 1등, 소 2가 2등, 소 3이 3등")}
+              "세션 1 의 순서는 [1, 2, 3] 이에요 → 소 1 이 1등, 소 2 가 2등, 소 3 이 3등")}
           </div>
           <div style={{ marginBottom: 8, fontSize: 12, color: C.dim }}>
             {t(E,
               "Session 2 order: [1, 3, 2] → cow 1 is 1st, cow 3 is 2nd, cow 2 is 3rd",
-              "세션 2 순서: [1, 3, 2] → 소 1이 1등, 소 3이 2등, 소 2가 3등")}
+              "세션 2 의 순서는 [1, 3, 2] 이에요 → 소 1 이 1등, 소 3 이 2등, 소 2 가 3등")}
           </div>
           {/* Rank positions (0-indexed) for each cow */}
           <RankTable
@@ -214,7 +214,7 @@ export function makeCowGymCh1(E) {
             E={E}
           />
           <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center" }}>
-            {t(E, "Rank 0 = best, higher = worse", "순위 0 = 최고, 높을수록 나쁨")}
+            {t(E, "Rank 0 = best, higher = worse", "0 이 제일 잘한 거예요. 숫자가 클수록 못한 거예요")}
           </div>
         </div>),
     },
@@ -222,7 +222,7 @@ export function makeCowGymCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "A consistent pair means the relative order NEVER changes across sessions.\nCow A always beats cow B, or cow B always beats cow A.", "일관된 쌍은 상대적 순서가 세션 간에 절대 바뀌지 않는 것. 소 A가 항상 소 B를 이기거나, 소 B가 항상 소 A를 이기거나."),
+        "A consistent pair means the relative order NEVER changes across sessions.\nCow A always beats cow B, or cow B always beats cow A.", "일관된 쌍은 세션이 바뀌어도 앞뒤 순서가 절대 안 바뀌는 쌍이에요.\n소 A 가 늘 소 B 를 이기거나, 소 B 가 늘 소 A 를 이기거나 둘 중 하나예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
@@ -239,7 +239,7 @@ export function makeCowGymCh1(E) {
                 S2: 1 {">"} 2 ✓
               </div>
               <div style={{ fontSize: 11, color: "#059669", fontWeight: 700, marginTop: 4 }}>
-                {t(E, "1 ALWAYS beats 2", "1이 항상 2를 이김")}
+                {t(E, "1 ALWAYS beats 2", "1 이 항상 2 를 이겨요")}
               </div>
             </div>
             {/* Inconsistent example */}
@@ -252,7 +252,7 @@ export function makeCowGymCh1(E) {
                 S2: 3 {">"} 2 ✗
               </div>
               <div style={{ fontSize: 11, color: "#dc2626", fontWeight: 700, marginTop: 4 }}>
-                {t(E, "Order flips!", "순서가 뒤바뀜!")}
+                {t(E, "Order flips!", "순서가 뒤바뀌었어요!")}
               </div>
             </div>
           </div>
@@ -262,28 +262,28 @@ export function makeCowGymCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "Sessions: [A>B>C] and [A>C>B].\nIs pair (A,B) consistent?\nA is above B in both sessions, so yes!", "세션: [A>B>C]과 [A>C>B]. 쌍 (A,B)는 일관된가? A가 두 세션 모두에서 B보다 위이니 맞아!"),
+        "Sessions: [A>B>C] and [A>C>B].\nIs pair (A,B) consistent?\nA is above B in both sessions, so yes!", "세션이 [A>B>C] 와 [A>C>B] 예요.\n쌍 (A,B) 는 일관된 쌍일까요?\nA 가 두 세션 모두에서 B 보다 위에 있으니 맞아요."),
       question: t(E,
         "Sessions [A>B>C] and [A>C>B]. Is (A,B) consistent?",
-        "세션 [A>B>C]과 [A>C>B]. (A,B)는 일관된 쌍?"),
+        "세션이 [A>B>C] 와 [A>C>B] 일 때, (A,B) 는 일관된 쌍일까요?"),
       options: [
-        t(E, "Yes — A always beats B", "예 — A가 항상 B를 이김"),
-        t(E, "No — order changes", "아니오 — 순서가 바뀜"),
+        t(E, "Yes — A always beats B", "네 — A 가 항상 B 를 이겨요"),
+        t(E, "No — order changes", "아니요 — 순서가 바뀌어요"),
         t(E, "Can't tell", "알 수 없음"),
       ],
       correct: 0,
       explain: t(E,
         "In S1, A is 1st, B is 2nd → A beats B. In S2, A is 1st, B is 3rd → A beats B. Consistent!",
-        "S1에서 A는 1등, B는 2등 → A가 B를 이김. S2에서 A는 1등, B는 3등 → A가 B를 이김. 일관!"),
+        "S1 에서 A 는 1등, B 는 2등이라 A 가 이겨요. S2 에서도 A 는 1등, B 는 3등이라 A 가 이겨요. 그래서 일관된 쌍이에요."),
     },
     // 1-5: Quiz — count consistent pairs
     {
       type: "quiz",
       narr: t(E,
-        "Sessions: [1,2,3] and [1,3,2].\nCheck all pairs: (1,2)✓ always 1 beats 2, (1,3)✓ always 1 beats 3, (2,3)✗ order changes.\nTotal: 2!", "세션: [1,2,3]과 [1,3,2].\n모든 쌍 확인: (1,2)✓ 항상 1이 2를 이김, (1,3)✓ 항상 1이 3을 이김, (2,3)✗ 순서 변경.\n총: 2!"),
+        "Sessions: [1,2,3] and [1,3,2].\nCheck all pairs: (1,2)✓ always 1 beats 2, (1,3)✓ always 1 beats 3, (2,3)✗ order changes.\nTotal: 2!", "세션이 [1,2,3] 과 [1,3,2] 예요.\n쌍을 모두 확인해요. (1,2) 는 항상 1 이 이기고, (1,3) 도 항상 1 이 이겨요.\n(2,3) 은 순서가 바뀌어요. 그래서 답은 2 예요."),
       question: t(E,
         "Rankings [1,2,3] and [1,3,2]. How many consistent pairs?",
-        "순위 [1,2,3]과 [1,3,2]. 일관된 쌍은 몇 개?"),
+        "순위가 [1,2,3] 과 [1,3,2] 예요. 일관된 쌍은 몇 개일까요?"),
       options: [
         t(E, "1", "1"),
         t(E, "2", "2"),
@@ -292,19 +292,19 @@ export function makeCowGymCh1(E) {
       correct: 1,
       explain: t(E,
         "Pairs (1,2) and (1,3) are consistent. Pair (2,3) is NOT because 2 beats 3 in S1 but 3 beats 2 in S2. Total: 2!",
-        "쌍 (1,2)와 (1,3)이 일관. 쌍 (2,3)은 S1에서 2가 3을 이기지만 S2에서 3이 2를 이기므로 비일관. 총: 2!"),
+        "쌍 (1,2) 와 (1,3) 은 일관돼요. 쌍 (2,3) 은 S1 에서 2 가 3 을 이기지만 S2 에서는 3 이 2 를 이겨서 비일관이에요. 그래서 답은 2 예요."),
     },
     // 1-6: Input practice
     {
       type: "input",
       narr: t(E,
-        "With N=3 cows, how many total pairs do we need to check?\nWe check every unique pair (i, j) where i < j.", "N=3마리 소가 있으면, 총 몇 개의 쌍을 확인해야 할까? i < j인 모든 유일한 쌍 (i, j)을 확인해요."),
+        "With N=3 cows, how many total pairs do we need to check?\nWe check every unique pair (i, j) where i < j.", "소가 N=3 마리면 쌍을 몇 개나 확인해야 할까요?\ni < j 인 쌍 (i, j) 을 겹치지 않게 하나씩 확인해요."),
       question: t(E,
         "N=3 cows. How many unique pairs to check?",
-        "N=3마리 소. 확인할 유일한 쌍의 수?"),
+        "소가 N=3 마리일 때 확인할 쌍은 몇 개일까요?"),
       hint: t(E,
         "Use the formula N·(N − 1) / 2 for unique unordered pairs.",
-        "유일한 순서 무관 쌍은 N·(N − 1) / 2."),
+        "겹치지 않는 쌍의 개수는 N·(N − 1) / 2 로 구해요."),
       answer: 3,
     },
   ];
@@ -320,7 +320,7 @@ export function makeCowGymCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "First key insight: the input gives ORDER (who came 1st, 2nd, ...) but we need RANK (what position was cow X?).\nWe need to convert!", "첫 번째 핵심: 입력은 순서(누가 1등, 2등...)를 주지만 우리는 순위(소 X의 위치?)가 필요해요. 변환해야 해요!"),
+        "First key insight: the input gives ORDER (who came 1st, 2nd, ...) but we need RANK (what position was cow X?).\nWe need to convert!", "여기가 첫 번째 고비예요.\n입력은 순서를 줘요 — 누가 1등이고 누가 2등인지요.\n그런데 우리가 알고 싶은 건 순위예요 — 소 X 가 몇 번째였는지요.\n그래서 바꿔 줘야 해요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 10 }}>
@@ -333,7 +333,7 @@ export function makeCowGymCh2(E) {
               </div>
               <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.8, color: C.text }}>
                 [3, 1, 2]<br />
-                {t(E, "= pos0:cow3, pos1:cow1, pos2:cow2", "= 0위:소3, 1위:소1, 2위:소2")}
+                {t(E, "= pos0:cow3, pos1:cow1, pos2:cow2", "= 0위는 소3, 1위는 소1, 2위는 소2")}
               </div>
             </div>
             <div style={{ flex: 1, background: "#dcfce7", borderRadius: 10, padding: 10, border: "1px solid #6ee7b7" }}>
@@ -347,7 +347,7 @@ export function makeCowGymCh2(E) {
             </div>
           </div>
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, fontStyle: "italic", textAlign: "center" }}>
-            {t(E, "rank[cow] = position. Lower rank = better!", "rank[소] = 위치. 낮을수록 좋아!")}
+            {t(E, "rank[cow] = position. Lower rank = better!", "rank[소] 는 그 소의 자리예요. 숫자가 낮을수록 잘한 거예요.")}
           </div>
         </div>),
     },
@@ -355,14 +355,14 @@ export function makeCowGymCh2(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Then for each pair (i, j), check ALL K sessions: is rank[s][i] < rank[s][j] for every s?\nOr the reverse?\nIf either holds, it's consistent!", "그 다음 각 쌍 (i, j)에 대해 모든 K 세션을 확인: 모든 s에서 rank[s][i] < rank[s][j]인가?\n또는 반대?\n둘 중 하나가 성립하면 일관!"),
+        "Then for each pair (i, j), check ALL K sessions: is rank[s][i] < rank[s][j] for every s?\nOr the reverse?\nIf either holds, it's consistent!", "그다음 쌍 (i, j) 마다 세션 K 개를 모두 확인해요.\n모든 s 에서 rank[s][i] < rank[s][j] 인가요?\n아니면 그 반대인가요?\n둘 중 하나가 늘 맞으면 일관된 쌍이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 8 }}>
-            {t(E, "Checking all pairs systematically", "모든 쌍을 체계적으로 확인")}
+            {t(E, "Checking all pairs systematically", "쌍을 하나씩 빠짐없이 확인하기")}
           </div>
           <div style={{ fontSize: 12, color: C.dim, marginBottom: 8 }}>
-            {t(E, "Sessions: [1,2,3] and [1,3,2]. Ranks:", "세션: [1,2,3]과 [1,3,2]. 순위:")}
+            {t(E, "Sessions: [1,2,3] and [1,3,2]. Ranks:", "세션이 [1,2,3] 과 [1,3,2] 일 때 순위는 이래요")}
           </div>
           <RankTable
             sessions={[
@@ -374,9 +374,9 @@ export function makeCowGymCh2(E) {
           />
           <div style={{ marginTop: 10 }}>
             {[
-              { pair: "(1,2)", checks: ["0<1 ✓", "0<2 ✓"], result: true, why: t(E, "1 always beats 2", "1이 항상 2를 이김") },
-              { pair: "(1,3)", checks: ["0<2 ✓", "0<1 ✓"], result: true, why: t(E, "1 always beats 3", "1이 항상 3을 이김") },
-              { pair: "(2,3)", checks: ["1<2 ✓", "2>1 ✗"], result: false, why: t(E, "order changes!", "순서가 바뀜!") },
+              { pair: "(1,2)", checks: ["0<1 ✓", "0<2 ✓"], result: true, why: t(E, "1 always beats 2", "1 이 항상 2 를 이겨요") },
+              { pair: "(1,3)", checks: ["0<2 ✓", "0<1 ✓"], result: true, why: t(E, "1 always beats 3", "1 이 항상 3 을 이겨요") },
+              { pair: "(2,3)", checks: ["1<2 ✓", "2>1 ✗"], result: false, why: t(E, "order changes!", "순서가 바뀌어요!") },
             ].map(({ pair, checks, result, why }, i) => (
               <div key={i} style={{
                 display: "flex", alignItems: "center", gap: 8,
@@ -391,7 +391,7 @@ export function makeCowGymCh2(E) {
             ))}
           </div>
           <div style={{ marginTop: 6, textAlign: "center", fontSize: 14, fontWeight: 700, color: "#d97706" }}>
-            {t(E, "Answer: 2 consistent pairs", "답: 2개의 일관된 쌍")}
+            {t(E, "Answer: 2 consistent pairs", "일관된 쌍은 2 개예요")}
           </div>
         </div>),
     },
@@ -400,17 +400,17 @@ export function makeCowGymCh2(E) {
       type: "reveal",
       narr: t(E,
         "Your turn — pick a pair, then step through every session.\nWatch the rank cells light up, see who wins each round, and only call it consistent if the same cow wins every time.",
-        "이번엔 직접 — 쌍을 고르고 세션마다 한 칸씩 넘겨봐.\nrank 셀이 켜지는 걸 보면서 매 라운드 승자를 확인하고, 매번 같은 소가 이겼을 때만 일관이라고 외쳐."),
+        "이번엔 직접 해봐요. 쌍을 고르고 세션마다 한 칸씩 넘겨 보세요.\nrank 칸이 켜지면 그 세션의 승자를 확인해요.\n매번 같은 소가 이겼을 때만 일관된 쌍이에요."),
       content: (<CowGymPairSim E={E} />),
     },
     // 2-3: Quiz
     {
       type: "quiz",
       narr: t(E,
-        "For N cows, how many unique pairs are there? This determines our algorithm's complexity!", "N마리 소에 대해 유일한 쌍은 몇 개? 이것이 알고리즘의 복잡도를 결정해요!"),
+        "For N cows, how many unique pairs are there? This determines our algorithm's complexity!", "소가 N 마리면 겹치지 않는 쌍은 몇 개일까요?\n이 수가 알고리즘이 얼마나 오래 걸리는지를 정해요."),
       question: t(E,
         "N=4 cows. How many unique pairs?",
-        "N=4마리 소. 유일한 쌍의 수?"),
+        "소가 N=4 마리일 때 쌍은 몇 개일까요?"),
       options: [
         t(E, "4", "4"),
         t(E, "6", "6"),
@@ -419,13 +419,13 @@ export function makeCowGymCh2(E) {
       correct: 1,
       explain: t(E,
         "N*(N-1)/2 = 4*3/2 = 6 pairs: (1,2), (1,3), (1,4), (2,3), (2,4), (3,4).",
-        "N*(N-1)/2 = 4*3/2 = 6쌍: (1,2), (1,3), (1,4), (2,3), (2,4), (3,4)."),
+        "N*(N-1)/2 = 4*3/2 = 6 쌍이에요. (1,2), (1,3), (1,4), (2,3), (2,4), (3,4) 이렇게요."),
     },
     // 2-4: Complexity
     {
       type: "reveal",
       narr: t(E,
-        "For each of the N*(N-1)/2 pairs, we check all K sessions.\nTotal: O(K * N^2).\nWith N<=20 and K<=10 from constraints, this is at most 10*400 = 4000 operations.\nVery fast!", "N*(N-1)/2개 쌍 각각에 대해 K개 세션을 확인.\n총: O(K * N^2).\n제약조건 N<=20, K<=10이면 최대 10*400 = 4000 연산.\n매우 빨라요!"),
+        "For each of the N*(N-1)/2 pairs, we check all K sessions.\nTotal: O(K * N^2).\nWith N<=20 and K<=10 from constraints, this is at most 10*400 = 4000 operations.\nVery fast!", "쌍 N*(N-1)/2 개마다 세션 K 개를 확인해요.\n모두 합치면 O(K * N^2) 이에요.\nN<=20, K<=10 이니까 많아야 10*400 = 4000 번 계산해요.\n아주 빨라요."),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>{"⚡"}</div>
@@ -435,8 +435,8 @@ export function makeCowGymCh2(E) {
           <div style={{ marginTop: 12, background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             <div style={{ fontFamily: "'JetBrains Mono',monospace" }}>
               {t(E, "N \u2264 20 → pairs \u2264 190", "N \u2264 20 → 쌍 \u2264 190")}<br />
-              {t(E, "K \u2264 10 → checks per pair \u2264 10", "K \u2264 10 → 쌍당 확인 \u2264 10")}<br />
-              {t(E, "Total \u2264 1,900 operations", "총 \u2264 1,900 연산")}
+              {t(E, "K \u2264 10 → checks per pair \u2264 10", "K \u2264 10 → 쌍마다 확인 \u2264 10")}<br />
+              {t(E, "Total \u2264 1,900 operations", "총 \u2264 1,900 번 계산")}
             </div>
           </div>
         </div>),
@@ -445,13 +445,13 @@ export function makeCowGymCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "With N=5 cows, how many unique pairs must we check?", "N=5마리 소에 대해 몇 개의 유일한 쌍을 확인해야 할까?"),
+        "With N=5 cows, how many unique pairs must we check?", "소가 N=5 마리면 확인할 쌍은 몇 개일까요?"),
       question: t(E,
         "N=5 cows. N*(N-1)/2 = ?",
-        "N=5마리 소. N*(N-1)/2 = ?"),
+        "소가 N=5 마리예요. N*(N-1)/2 = ?"),
       hint: t(E,
         "Apply N·(N − 1) / 2 with N = 5.",
-        "N·(N − 1) / 2 에 N = 5 대입."),
+        "N·(N − 1) / 2 에 N = 5 를 넣어 보세요."),
       answer: 10,
     },
   ];
@@ -467,11 +467,11 @@ export function makeCowGymCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 1: Read K sessions.\nFor each, convert the order list into a rank array.\nrank[s][cow] = position of cow in session s.", "1단계: K개 세션 읽기. 각각 순서 리스트를 순위 배열로 변환. rank[s][cow] = 세션 s에서 소의 위치."),
+        "Step 1: Read K sessions.\nFor each, convert the order list into a rank array.\nrank[s][cow] = position of cow in session s.", "1단계예요. 세션 K 개를 읽어요.\n세션마다 순서 목록을 순위 목록으로 바꿔요.\nrank[s][cow] 는 세션 s 에서 그 소가 있던 자리예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
-            {t(E, "Step 1: Build rank arrays", "1단계: 순위 배열 만들기")}
+            {t(E, "Step 1: Build rank arrays", "1단계: 순위 목록 만들기")}
           </div>
           <CodeSnippet
             lines={[
@@ -491,7 +491,7 @@ export function makeCowGymCh3(E, lang = "py") {
           />
           <div style={{ marginTop: 8, background: "#fffbeb", borderRadius: 8, padding: 8, border: "1.5px solid #fcd34d", fontSize: 12, lineHeight: 1.8, color: C.text }}>
             <div style={{ fontWeight: 600, color: "#d97706", marginBottom: 2 }}>
-              {t(E, "Key conversion:", "핵심 변환:")}
+              {t(E, "Key conversion:", "이렇게 바꿔요")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace" }}>
               order = [3, 1, 2]<br />
@@ -507,7 +507,7 @@ export function makeCowGymCh3(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "Step 2: Check all pairs (i, j) where i < j.\nFor each pair, verify if the relative order is consistent across all K sessions.", "2단계: i < j인 모든 쌍 (i, j) 확인. 각 쌍에 대해 상대적 순서가 모든 K세션에서 일관되는지 검증."),
+        "Step 2: Check all pairs (i, j) where i < j.\nFor each pair, verify if the relative order is consistent across all K sessions.", "2단계예요. i < j 인 쌍 (i, j) 을 모두 확인해요.\n쌍마다 앞뒤 순서가 세션 K 개에서 모두 같은지 따져 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#d97706", marginBottom: 6 }}>
@@ -526,8 +526,8 @@ export function makeCowGymCh3(E, lang = "py") {
             highlight={[1, 2, 3, 4, 5, 6]}
           />
           <div style={{ marginTop: 8, fontSize: 12, lineHeight: 1.8, color: C.text }}>
-            <div><span style={{ fontWeight: 600, color: "#d97706" }}>all()</span> = {t(E, "True only if condition holds for EVERY session", "모든 세션에서 조건이 성립할 때만 True")}</div>
-            <div><span style={{ fontWeight: 600, color: "#d97706" }}>i_wins or j_wins</span> = {t(E, "consistent in either direction", "어느 방향이든 일관")}</div>
+            <div><span style={{ fontWeight: 600, color: "#d97706" }}>all()</span> = {t(E, "True only if condition holds for EVERY session", "모든 세션에서 조건이 맞을 때만 True 예요")}</div>
+            <div><span style={{ fontWeight: 600, color: "#d97706" }}>i_wins or j_wins</span> = {t(E, "consistent in either direction", "어느 쪽이 이기든 일관된 쌍이에요")}</div>
           </div>
         </div>),
     },
@@ -535,43 +535,43 @@ export function makeCowGymCh3(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "We use all() to check every session. Why not any()? Think about what 'consistent' means!", "모든 세션을 확인하기 위해 all()을 사용해요. 왜 any()가 아닐까? '일관'의 의미를 생각해봐요!"),
+        "We use all() to check every session. Why not any()? Think about what 'consistent' means!", "모든 세션을 확인하려고 all() 을 써요.\n왜 any() 가 아닐까요?\n'일관' 이 무슨 뜻이었는지 떠올려 보세요."),
       question: t(E,
         "Why all() instead of any() for checking consistency?",
         "일관성 확인에서 왜 any()가 아니라 all()일까요?"),
       options: [
-        t(E, "any() is slower", "any()가 더 느려서"),
-        t(E, "Consistent means EVERY session, not just some", "일관은 일부가 아니라 모든 세션에서를 의미하니까"),
-        t(E, "They give the same result", "같은 결과를 줘서"),
+        t(E, "any() is slower", "any() 가 더 느려서요"),
+        t(E, "Consistent means EVERY session, not just some", "일관은 일부가 아니라 모든 세션에서 그래야 한다는 뜻이니까요"),
+        t(E, "They give the same result", "같은 결과가 나와서요"),
       ],
       correct: 1,
       explain: t(E,
         "Consistent means i beats j in ALL sessions, not just some! If even one session disagrees, the pair is inconsistent. That's why we need all()!",
-        "일관은 i가 일부가 아니라 모든 세션에서 j를 이기는 것! 한 세션이라도 다르면 비일관. 그래서 all()이 필요해요!"),
+        "일관은 i 가 몇몇 세션이 아니라 모든 세션에서 j 를 이기는 거예요. 한 세션이라도 다르면 비일관이에요. 그래서 all() 이 필요해요."),
     },
     // 3-4: Why range starts at 1
     {
       type: "quiz",
       narr: t(E,
-        "Look at the loop: range(1, N+1). Why start at 1, not 0? And why j starts at i+1?", "루프를 봐: range(1, N+1). 왜 0이 아니라 1에서 시작? j는 왜 i+1부터?"),
+        "Look at the loop: range(1, N+1). Why start at 1, not 0? And why j starts at i+1?", "반복문을 봐요. range(1, N+1) 이에요.\n왜 0 이 아니라 1 에서 시작할까요?\nj 는 왜 i+1 부터일까요?"),
       question: t(E,
         "Why does j start at i+1 (not 1)?",
-        "왜 j가 1이 아니라 i+1부터 시작할까?"),
+        "왜 j 가 1 이 아니라 i+1 부터 시작할까요?"),
       options: [
-        t(E, "To avoid checking a cow with itself", "소 자신과 비교하는 것을 피하려고"),
-        t(E, "To avoid counting (i,j) and (j,i) twice", "(i,j)와 (j,i)를 두 번 세는 것을 피하려고"),
-        t(E, "Both reasons above!", "위 두 가지 이유 모두!"),
+        t(E, "To avoid checking a cow with itself", "소 자기 자신과 비교하는 걸 피하려고요"),
+        t(E, "To avoid counting (i,j) and (j,i) twice", "(i,j) 와 (j,i) 를 두 번 세는 걸 피하려고요"),
+        t(E, "Both reasons above!", "위 두 가지 이유 모두예요"),
       ],
       correct: 2,
       explain: t(E,
         "Starting j at i+1 avoids both self-pairs (i,i) AND double-counting (1,2) vs (2,1). We only check each pair once!",
-        "j를 i+1부터 시작하면 자기 자신과의 쌍 (i,i)과 중복 (1,2) vs (2,1)을 모두 피해요. 각 쌍을 한 번만 확인!"),
+        "j 를 i+1 부터 시작하면 자기 자신과의 쌍 (i,i) 도, (1,2) 와 (2,1) 을 두 번 세는 것도 피해요. 쌍마다 딱 한 번씩만 확인해요."),
     },
     // 3-5: Complete code
     {
       type: "progressive",
       narr: t(E,
-        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드 — 부분별로 읽어봐요. 헤더에서 Python ↔ C++ 토글."),
+        "Solution code — read part by part. Toggle Python ↔ C++ in header.", "풀이 코드예요. 한 부분씩 읽어 봐요.\n위쪽에서 Python ↔ C++ 을 바꿀 수 있어요."),
       sections: getCowGymSections(E),
     },
   ];

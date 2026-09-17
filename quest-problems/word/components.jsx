@@ -233,7 +233,7 @@ export function GreedySim({ E }) {
     <div style={{ padding: "10px 2px" }}>
       {/* Header */}
       <div style={{ textAlign: "center", fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6 }}>
-        {t(E, "Each word's letter counts (dictionary)", "각 단어의 글자별 개수 (딕셔너리)")}
+        {t(E, "Each word's letter counts (dictionary)", "각 단어의 글자별 개수 (사전)")}
       </div>
 
       {/* Fixed frequency table */}

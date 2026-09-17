@@ -143,7 +143,7 @@ export function DismantleSimulator({ E }) {
         isEn={E}
         title={t(E, "Hand-simulate Nhoj on p = [3, 1, 2, 4]", "Nhoj 가 p = [3, 1, 2, 4] 를 망가뜨리는 과정")}
         subtitle={t(E, `Press ▶ to step through. (${safe + 1} / ${trace.length})`,
-                       `▶ 눌러서 한 단계씩. (${safe + 1} / ${trace.length})`)}
+                       `▶ 를 눌러 한 단계씩 따라가요. (${safe + 1} / ${trace.length})`)}
       />
 
       {/* Cells row */}
@@ -206,7 +206,7 @@ export function DismantleSimulator({ E }) {
               📦 {t(E, "Initial state", "초기 상태")}
             </div>
             <div>{t(E, `p starts as [${initial.join(", ")}]. Hint list h is empty. Press ▶ to start.`,
-                       `p 는 [${initial.join(", ")}] 로 시작. 힌트 h 는 비어 있어요. ▶ 눌러서 시작.`)}</div>
+                       `p 는 [${initial.join(", ")}] 로 시작해요. 힌트 h 는 아직 비어 있어요. ▶ 를 눌러 시작해요.`)}</div>
           </>
         )}
         {s.sub === "compare-mark" && (
@@ -218,7 +218,7 @@ export function DismantleSimulator({ E }) {
               {t(E, "last", "맨 뒤")} = <b style={{ color: "#92400e" }}>{s.compareLast}</b>
             </div>
             <div style={{ marginTop: 4, fontSize: 11, color: C.dim }}>
-              {t(E, "(▶ to compare them.)", "(▶ 눌러서 비교.)")}
+              {t(E, "(▶ to compare them.)", "(▶ 를 눌러 둘을 비교해요.)")}
             </div>
           </>
         )}
@@ -234,7 +234,7 @@ export function DismantleSimulator({ E }) {
               : t(E, "last is BIGGER (or equal)", "맨 뒤가 더 크거나 같아요")}
             </div>
             <div style={{ marginTop: 4, fontSize: 11, color: C.dim }}>
-              {t(E, "(Bigger end gets removed. ▶ to mark.)", "(큰 쪽이 빠져요. ▶ 눌러서 표시.)")}
+              {t(E, "(Bigger end gets removed. ▶ to mark.)", "(큰 쪽이 빠져요. ▶ 를 눌러 표시해요.)")}
             </div>
           </>
         )}
@@ -246,7 +246,7 @@ export function DismantleSimulator({ E }) {
             <div>{t(E, "Remove ", "")}<b style={{ color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>{s.removedVal}</b>
               {" "}({s.firstWins ? t(E, "the first", "맨 앞") : t(E, "the last", "맨 뒤")}).</div>
             <div style={{ marginTop: 4, fontSize: 11, color: C.dim }}>
-              {t(E, "(▶ to mark which value gets written.)", "(▶ 눌러서 적힐 값 표시.)")}
+              {t(E, "(▶ to mark which value gets written.)", "(▶ 를 눌러 적힐 값을 표시해요.)")}
             </div>
           </>
         )}
@@ -260,7 +260,7 @@ export function DismantleSimulator({ E }) {
               {t(E, "into h.", "을 h 에 적어요.")}
             </div>
             <div style={{ marginTop: 4, fontSize: 11, color: C.dim }}>
-              {t(E, "(▶ to actually apply: shrink p, grow h.)", "(▶ 눌러서 실제 적용: p 줄이고 h 늘리기.)")}
+              {t(E, "(▶ to actually apply: shrink p, grow h.)", "(▶ 를 눌러 실제로 적용해요. p 가 줄고 h 가 늘어나요.)")}
             </div>
           </>
         )}
@@ -272,24 +272,24 @@ export function DismantleSimulator({ E }) {
             <div>{t(E, "Removed ", "")}<b>{s.removedVal}</b>{t(E, ", wrote ", " 빼고, ")}<b>{s.lastWritten}</b>{t(E, " into h.", " 을 h 에 적었어요.")}</div>
             <div style={{ marginTop: 4, fontSize: 11, color: C.dim }}>
               {s.p.length > 1
-                ? t(E, "(▶ to mark next first/last.)", "(▶ 눌러서 다음 first/last 표시.)")
-                : t(E, "(Only 1 left → done!)", "(1 개 남음 → 종료!)")}
+                ? t(E, "(▶ to mark next first/last.)", "(▶ 를 눌러 다음 맨 앞과 맨 뒤를 표시해요.)")
+                : t(E, "(Only 1 left → done!)", "(1 개만 남았어요 → 끝!)")}
             </div>
           </>
         )}
         {s.sub === "done" && (
           <>
             <div style={{ fontWeight: 600, color: "#15803d", marginBottom: 6 }}>
-              🎉 {t(E, "Done — only 1 element left", "종료 — 1 개만 남음")}
+              🎉 {t(E, "Done — only 1 element left", "끝 — 1 개만 남았어요")}
             </div>
-            <div>{t(E, "Final hint list:", "최종 힌트:")}{" "}
+            <div>{t(E, "Final hint list:", "이렇게 힌트가 다 모였어요.")}{" "}
               <b style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, color: "#7c2d12" }}>
                 h = [{s.h.join(", ")}]
               </b>
             </div>
             <div style={{ marginTop: 4, fontSize: 11, color: C.dim }}>
               {t(E, "Same as sample case 4! Input h = [2, 1, 1] could come from p = [3, 1, 2, 4].",
-                    "샘플 케이스 4 와 일치! 입력 h = [2, 1, 1] 은 p = [3, 1, 2, 4] 에서 나온 거예요.")}
+                    "샘플 케이스 4 와 똑같아요! 입력 h = [2, 1, 1] 은 p = [3, 1, 2, 4] 에서 나온 거예요.")}
             </div>
           </>
         )}
@@ -364,7 +364,7 @@ export function PermSim({ E }) {
       {step.tried && step.tried.length > 0 && (
         <div style={{ background: step.ok ? "#f0fdf4" : "#fef2f2", border: `1.5px solid ${step.ok ? "#86efac" : "#fca5a5"}`, borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
           <div style={{ fontSize: 11, fontWeight: 600, color: step.ok ? "#16a34a" : "#dc2626", marginBottom: 6 }}>
-            {t(E, `Step ${cur}: pick perm[${step.i}]`, `${cur}단계: perm[${step.i}] 결정`)}
+            {t(E, `Step ${cur}: pick perm[${step.i}]`, `${cur}단계: perm[${step.i}] 고르기`)}
           </div>
           <div style={{ fontSize: 13, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 1.8 }}>
             <div>
@@ -380,7 +380,7 @@ export function PermSim({ E }) {
               </span>
             </div>
             <div style={{ marginTop: 4, fontWeight: 600, color: step.ok ? "#16a34a" : "#dc2626" }}>
-              → {step.ok ? `${t(E, "pick", "선택")}: ${step.picked}` : t(E, "Neither works — this start fails!", "둘 다 안 됨 — start 실패!")}
+              → {step.ok ? `${t(E, "pick", "선택")}: ${step.picked}` : t(E, "Neither works — this start fails!", "둘 다 안 돼요 — 이 시작값은 실패예요!")}
             </div>
           </div>
         </div>
@@ -398,7 +398,7 @@ export function PermSim({ E }) {
         }}>
           {success
             ? t(E, `✅ Success! perm = [${trace[trace.length-1].perm.join(", ")}]`, `✅ 성공! perm = [${trace[trace.length-1].perm.join(", ")}]`)
-            : t(E, `❌ Start = ${start} fails. Try a different start!`, `❌ 시작값 = ${start} 실패. 다른 시작값 시도!`)}
+            : t(E, `❌ Start = ${start} fails. Try a different start!`, `❌ 시작값 = ${start} 은 실패예요. 다른 시작값으로 해 봐요!`)}
         </div>
       )}
 
@@ -440,7 +440,7 @@ export function PermRunner({ E }) {
     const N = parseInt(nInput);
     const h = hInput.trim().split(/\s+/).map(Number);
     if (!N || N < 2 || N > 1000 || h.length !== N - 1 || h.some(x => isNaN(x) || x < 1 || x >= N)) {
-      setResult({ error: t(E, "Invalid input. N ≥ 2, h has N-1 values, 1 ≤ h[i] < N.", "잘못된 입력. N ≥ 2, h 는 N-1 개, 1 ≤ h[i] < N.") });
+      setResult({ error: t(E, "Invalid input. N ≥ 2, h has N-1 values, 1 ≤ h[i] < N.", "입력이 잘못됐어요. N 은 2 이상이고, h 는 N-1 개이고, 1 ≤ h[i] < N 이어야 해요.") });
       return;
     }
     setRunning(true); setResult(null);
@@ -515,8 +515,8 @@ export function PermRunner({ E }) {
       {running && (
         <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, fontFamily: "'JetBrains Mono',monospace" }}>
           <div style={{ display: "flex", justifyContent: "space-between", color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-            <span>{t(E, "trying", "시도")}: <span style={{ color: A, fontWeight: 700 }}>start = {liveStart}</span></span>
-            <span>{t(E, "filled", "채움")}: <span style={{ color: A, fontWeight: 700 }}>{liveStep}</span></span>
+            <span>{t(E, "trying", "해 보는 중")}: <span style={{ color: A, fontWeight: 700 }}>start = {liveStart}</span></span>
+            <span>{t(E, "filled", "채운 개수")}: <span style={{ color: A, fontWeight: 700 }}>{liveStep}</span></span>
           </div>
           <div style={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
             {livePerm.map((v, i) => (
@@ -547,12 +547,12 @@ export function PermRunner({ E }) {
       )}
       {result && result.found === false && !result.stopped && (
         <div style={{ background: "#fef2f2", border: "1px solid #dc2626", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 13, fontWeight: 700 }}>
-          {t(E, `❌ No valid permutation. Output: -1 (${fmtTime(result.elapsed)})`, `❌ 유효한 순열 없음. 출력: -1 (${fmtTime(result.elapsed)})`)}
+          {t(E, `❌ No valid permutation. Output: -1 (${fmtTime(result.elapsed)})`, `❌ 맞는 순열이 없어요. -1 을 출력해요. (${fmtTime(result.elapsed)})`)}
         </div>
       )}
       {result && result.stopped && (
         <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 12px", color: "#92400e", fontSize: 12, fontWeight: 700 }}>
-          {t(E, `⏹ Stopped at start = ${result.lastStart} (${fmtTime(result.elapsed)})`, `⏹ 시작값 = ${result.lastStart} 에서 중지 (${fmtTime(result.elapsed)})`)}
+          {t(E, `⏹ Stopped at start = ${result.lastStart} (${fmtTime(result.elapsed)})`, `⏹ 시작값 = ${result.lastStart} 에서 멈췄어요 (${fmtTime(result.elapsed)})`)}
         </div>
       )}
 
@@ -664,9 +664,9 @@ export function BruteForceEnumerator({ E }) {
         total={allPerms.length}
         isEn={E}
         title={t(E, "Brute force enumerator: try every permutation in lex order",
-                    "브루트포스 시뮬: 모든 순열을 사전순으로 시도")}
+                    "브루트포스 시뮬 — 모든 순열을 사전순으로 해 보기")}
         subtitle={t(E, `N=4, target h = [2, 1, 1]. Permutation ${idx + 1} of ${allPerms.length}.`,
-                       `N=4, 목표 h = [2, 1, 1]. ${allPerms.length} 개 중 ${idx + 1} 번째.`)}
+                       `N=4, 목표 h = [2, 1, 1]. ${allPerms.length} 개 중 ${idx + 1} 번째예요.`)}
       />
 
       {/* Target h */}
@@ -731,7 +731,7 @@ export function BruteForceEnumerator({ E }) {
           }}>
             🎉 {t(E,
               `First match in lex order — this IS the lex-smallest answer. Output: ${cur.join(" ")}`,
-              `사전순으로 처음 일치 — 이게 바로 사전순 최소 답. 출력: ${cur.join(" ")}`)}
+              `사전순으로 처음 맞았어요. 이게 바로 사전순 최소 답이에요. ${cur.join(" ")} 를 출력해요.`)}
           </div>
         )}
       </div>
@@ -752,7 +752,7 @@ export function BruteForceEnumerator({ E }) {
           fontWeight: 700, fontSize: 12,
           cursor: (atEnd || stoppedAtMatch) && !auto ? "default" : "pointer",
         }}>
-          {auto ? t(E, "⏹ stop", "⏹ 중지") : t(E, "▶ run to first match", "▶ 첫 매칭까지 실행")}
+          {auto ? t(E, "⏹ stop", "⏹ 멈춤") : t(E, "▶ run to first match", "▶ 처음 맞을 때까지 실행")}
         </button>
         <button onClick={stepFwd} disabled={atEnd} style={{
           padding: "5px 12px", borderRadius: 8,
@@ -771,7 +771,7 @@ export function BruteForceEnumerator({ E }) {
             padding: "5px 10px", borderRadius: 8,
             border: "1.5px solid #16a34a", background: "#dcfce7", color: "#15803d",
             fontWeight: 700, fontSize: 12, cursor: "pointer",
-          }}>⤳ {t(E, "jump to match", "매칭으로 이동")}</button>
+          }}>⤳ {t(E, "jump to match", "맞은 곳으로 가기")}</button>
         )}
       </div>
 
@@ -796,7 +796,7 @@ export function BruteForceEnumerator({ E }) {
       </div>
       <div style={{ fontSize: 10, color: C.dim, textAlign: "center", marginTop: 4, fontStyle: "italic" }}>
         {t(E, "(each square = one permutation in lex order; green = match, hover for details)",
-              "(네모 1 개 = 사전순 1 개 순열; 초록 = 일치, 마우스 올리면 상세)")}
+              "(네모 하나가 사전순 순열 하나예요. 초록은 맞은 것이고, 마우스를 올리면 자세히 보여요.)")}
       </div>
     </div>
   );
@@ -958,7 +958,7 @@ export function getPermSections(E) {
       py: PERM_INPUT_PY, cpp: PERM_INPUT_CPP,
       why: [
         t(E, "T cases. Each: read N, then N−1 hints into h.",
-              "T 케이스. 각각 N 읽고, N−1 개 힌트를 h 로."),
+              "테스트 케이스가 T 개예요. 케이스마다 N 을 읽고, 힌트 N−1 개를 h 에 담아요."),
       ],
       pyOnly: [
         t(E, "permutations() yields every permutation of 1..N in lex order.",
@@ -966,27 +966,27 @@ export function getPermSections(E) {
       ],
       cppOnly: [
         t(E, "next_permutation() (used in step 3) walks lex order — same idea.",
-              "next_permutation() (3 단계에서 사용) 이 사전순으로 돌아요 — 같은 아이디어."),
+              "3 단계에서 쓰는 next_permutation() 도 사전순으로 돌아요. 같은 생각이에요."),
       ],
     },
     {
-      label: t(E, "🔁 2. Helper — simulate Nhoj's process", "🔁 2. 헬퍼 — Nhoj 과정 시뮬레이션"),
+      label: t(E, "🔁 2. Helper — simulate Nhoj's process", "🔁 2. 도우미 함수 — Nhoj 과정 따라 하기"),
       color: "#7c3aed",
       py: PERM_DISMANTLE_PY, cpp: PERM_DISMANTLE_CPP,
       why: [
         t(E, "Given a permutation p, run Nhoj's rule until 1 element remains. Return the list of hints written.",
-              "순열 p 를 받아서, 원소 1 개 남을 때까지 Nhoj 규칙 적용. 적힌 힌트 리스트 반환."),
+              "순열 p 를 받아서 원소가 1 개 남을 때까지 Nhoj 규칙을 써요. 그동안 적은 힌트 리스트를 돌려줘요."),
       ],
     },
     {
-      label: t(E, "🎯 3. Try every permutation, print the first match", "🎯 3. 모든 순열 시도, 처음 일치하는 거 출력"),
+      label: t(E, "🎯 3. Try every permutation, print the first match", "🎯 3. 모든 순열을 해 보고 처음 맞는 것을 출력하기"),
       color: "#16a34a",
       py: PERM_TRY_PY, cpp: PERM_TRY_CPP,
       why: [
         t(E, "Lex order means the FIRST match is automatically the lex-smallest answer.",
-              "사전순으로 도니까 처음 일치하는 게 자동으로 사전순 최소."),
+              "사전순으로 도니까 처음 맞는 게 자동으로 사전순 최소예요."),
         t(E, "No match across all N! permutations → Nhoj messed up → print −1.",
-              "N! 개 다 돌려도 일치 없음 → Nhoj 가 실수 → −1 출력."),
+              "N! 개를 다 돌려도 맞는 게 없으면 Nhoj 가 실수한 거예요. 그때는 −1 을 출력해요."),
       ],
     },
   ];
@@ -1031,7 +1031,7 @@ function highlightCode(lines, lang) {
 
 export function downloadPermPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "FJ's Fav Permutation — Full Study Guide", "🔢 FJ의 좋아하는 순열 — 종합 풀이 노트");
@@ -1063,7 +1063,7 @@ export function downloadPermPDF(E, sections, lang = "py") {
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
 
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF' as the destination.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF' as the destination.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO 2024 Open Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
@@ -1071,7 +1071,7 @@ export function downloadPermPDF(E, sections, lang = "py") {
 <h2>1. ${t(E, "Problem", "문제")}</h2>
 <p>${t(E,
   "Farmer John has a permutation p of 1..N. Farmer Nhoj dismantles p step by step: while p has >1 element, if p[0] > p[-1] write p[1] and remove p[0]; otherwise write p[-2] and remove p[-1]. After N-1 steps Nhoj has written N-1 hints h. Given h, recover the lexicographically smallest p, or output -1.",
-  "Farmer John 에게 1..N 순열 p 가 있어요. Farmer Nhoj 가 p 를 한 단계씩 분해: p 에 원소 >1 인 동안, p[0] > p[-1] 이면 p[1] 적고 p[0] 제거; 아니면 p[-2] 적고 p[-1] 제거. N-1 단계 후 N-1 개 힌트 h. h 를 주면 사전순 최소 p 복원 (불가능하면 -1).")}</p>
+  "Farmer John 에게 1..N 의 순열 p 가 있어요. Farmer Nhoj 는 p 를 한 단계씩 분해해요. p 에 원소가 2 개 이상 남아 있는 동안, p[0] > p[-1] 이면 p[1] 을 적고 p[0] 을 빼요. 아니면 p[-2] 를 적고 p[-1] 을 빼요. N-1 단계가 끝나면 힌트 h 가 N-1 개 생겨요. 이 h 를 주면 사전순으로 가장 작은 p 를 되살려요. 안 되면 -1 을 출력해요.")}</p>
 
 <h3>${t(E, "Sample I/O", "예제")}</h3>
 <table>
@@ -1084,20 +1084,20 @@ export function downloadPermPDF(E, sections, lang = "py") {
 1 2 3 4</pre></td></tr>
 </table>
 
-<h2>2. ${t(E, "Approach: Brute force search", "접근: 브루트포스 탐색")}</h2>
+<h2>2. ${t(E, "Approach: Brute force search", "접근: 브루트포스로 찾기")}</h2>
 <div class="box ok">
   <b>💡 ${t(E, "Key insight", "핵심 통찰")}</b>:
   ${t(E, "Inverting Nhoj's rule directly is hard. But we can simulate it forward: try every permutation of 1..N in lex order, dismantle each, and stop at the first p whose dismantle equals h. The FIRST match in lex order is automatically the lex-smallest answer.",
-        "Nhoj 규칙을 거꾸로 푸는 건 어려움. 정방향 시뮬: 1..N 의 모든 순열을 사전순으로 시도, 각 dismantle 결과를 h 와 비교, 처음 일치하는 p 가 답. 사전순으로 가니까 자동으로 사전순 최소.")}
+        "Nhoj 규칙을 거꾸로 푸는 건 어려워요. 대신 정방향으로 따라 해 봐요. 1..N 의 모든 순열을 사전순으로 dismantle 해서 결과를 h 와 비교해요. 처음 맞는 p 가 답이에요. 사전순으로 가니까 자동으로 사전순 최소가 돼요.")}
 </div>
 
 <div class="box">
   <b>${t(E, "Time complexity", "시간복잡도")}:</b>
   ${t(E, "O(N! · N) per test case — N! permutations × O(N) per dismantle. Bronze tests typically use small N for this kind of brute force.",
-        "테스트당 O(N! · N) — N! 순열 × dismantle 당 O(N). Bronze 는 보통 작은 N 으로 brute force 가능.")}
+        "테스트 하나에 O(N! · N) 이 걸려요. 순열이 N! 개고 하나를 dismantle 하는 데 O(N) 이 들어요. Bronze 문제는 보통 N 이 작아서 브루트포스로 풀려요.")}
 </div>
 
-<h2>3. ${t(E, "Solution Code (3 sections + full)", "최적 코드 (3 섹션 + 전체)")}</h2>
+<h2>3. ${t(E, "Solution Code (3 sections + full)", "풀이 코드 (3 부분 + 전체)")}</h2>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why">

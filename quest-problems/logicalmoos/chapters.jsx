@@ -13,7 +13,7 @@ export function makeLogicalCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ has a long boolean expression — alternating true/false tokens with and/or operators. Each query asks: can we replace one slice with a single boolean so the whole thing equals the target?",
-        "FJ 의 긴 불리언 수식 — true/false 토큰과 and/or 연산자가 번갈아 나와요. 각 쿼리는 묻기: 한 구간을 하나의 불리언으로 바꿔서 전체가 target 과 같아질 수 있을까?"),
+        "참/거짓이 and·or 로 길게 이어진 수식이에요.\n한 구간만 바꿔서 원하는 답을 만들 수 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -30,18 +30,18 @@ export function makeLogicalCh1(E) {
             <div style={{ fontSize: 13, color: DARK, lineHeight: 1.5 }}>
               {t(E,
                 "For each query (l, r, target), output 'Y' if some single boolean replacement of tokens l..r makes the whole expression equal target, else 'N'.",
-                "각 쿼리 (l, r, target) 에 대해 — l..r 구간을 하나의 불리언으로 교체했을 때 전체 식이 target 이 될 수 있으면 'Y', 없으면 'N'.")}
+                "물음 (l, r, target) 마다 답해요. l..r 구간을 참/거짓 하나로 바꿔서 전체 식이 target 이 될 수 있으면 'Y', 없으면 'N' 을 적어요.")}
             </div>
           </div>
 
           <div style={{ background: TINT, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: DARK, marginBottom: 8 }}>
-              📖 {t(E, "Setup", "설정")}
+              📖 {t(E, "Setup", "문제 설명")}
             </div>
             <div style={{ fontSize: 13, color: C.text, lineHeight: 1.65, marginBottom: 10 }}>
               {t(E,
                 "A boolean statement N keywords long (N odd). Odd positions are 'true' or 'false'; even positions are 'and' or 'or'. 'and' has higher precedence than 'or' — evaluate ALL ands first, then ors. Q queries each give (l, r, target): replace tokens at positions l..r (l, r both odd) with ONE boolean — answer 'Y' if some choice makes the result equal target, else 'N'.",
-                "N 개 키워드 (N 홀수). 홀수 위치는 'true'/'false', 짝수 위치는 'and'/'or'. 'and' 가 'or' 보다 우선 — and 모두 먼저 계산 후 or. Q 개 쿼리 (l, r, target) — l..r (둘 다 홀수) 구간을 하나의 불리언으로 교체했을 때 target 이 될 수 있으면 'Y', 아니면 'N'.")}
+                "낱말 N 개로 된 수식이에요 (N 은 홀수). 홀수 번째 자리에는 'true' 나 'false' 가, 짝수 번째 자리에는 'and' 나 'or' 가 와요. 'and' 를 'or' 보다 먼저 계산해요. 'and' 를 모두 끝낸 다음에 'or' 를 계산해요. 물음은 Q 개예요. 물음마다 (l, r, target) 이 주어지고, l..r 자리(둘 다 홀수)를 참/거짓 하나로 바꿔서 target 을 만들 수 있으면 'Y', 못 만들면 'N' 을 적어요.")}
             </div>
 
             <div style={{ marginTop: 10, padding: "8px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11.5, color: "#5b21b6", lineHeight: 1.6 }}>
@@ -58,11 +58,11 @@ export function makeLogicalCh1(E) {
       type: "reveal",
       narr: t(E,
         "Sample 1: 5 tokens, 7 queries → 'NYYYNYY'. Walk through query 4 below.",
-        "샘플 1: 토큰 5 개, 쿼리 7 개 → 'NYYYNYY'. 4 번 쿼리를 아래에서 따라가요."),
+        "샘플 1 은 낱말 5 개에 물음 7 개예요.\n답은 'NYYYNYY' 예요.\n네 번째 물음을 아래에서 같이 따라가요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: ACCENT, textAlign: "center", marginBottom: 10 }}>
-            📥 {t(E, "Sample 1 — official", "샘플 1 — 공식")}
+            📥 {t(E, "Sample 1 — official", "샘플 1 — 공식 예제")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginBottom: 10 }}>
             <div style={{ background: TINT, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 10 }}>
@@ -89,17 +89,17 @@ false and true or true
 
           <div style={{ background: TINT, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 12, fontSize: 12, color: C.text, lineHeight: 1.7 }}>
             <div style={{ fontWeight: 600, color: DARK, marginBottom: 6 }}>
-              🔍 {t(E, "Walkthrough — query 4 (l=3, r=3, target=true)", "풀이 — 4 번 쿼리 (l=3, r=3, target=true)")}
+              🔍 {t(E, "Walkthrough — query 4 (l=3, r=3, target=true)", "풀이 — 네 번째 물음 (l=3, r=3, target=true)")}
             </div>
             <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11.5 }}>
               {t(E, "Replace position 3 (token 'true' with v):  false and v or true",
-                    "위치 3 ('true') 를 v 로 교체:  false and v or true")}
+                    "3 번 자리('true')를 v 로 바꿔요:  false and v or true")}
               <br/>
               {t(E, "Pick v = true:  false and true = false  →  false or true = true. ✓ matches target.",
-                    "v = true:  false and true = false  →  false or true = true. ✓ target 과 일치.")}
+                    "v 를 true 로 고르면  false and true = false  →  false or true = true. ✓ target 과 같아요.")}
             </div>
             <div style={{ marginTop: 6, color: "#15803d", fontWeight: 700 }}>
-              {t(E, "→ answer 'Y' for query 4.", "→ 4 번 쿼리 답 'Y'.")}
+              {t(E, "→ answer 'Y' for query 4.", "→ 네 번째 물음의 답은 'Y' 예요.")}
             </div>
           </div>
         </div>),
@@ -109,7 +109,7 @@ false and true or true
       type: "reveal",
       narr: t(E,
         "Try the simulator — pick a preset, then drag l/r and toggle target to see Y/N live. Same color = same AND-chain (broken by OR).",
-        "시뮬레이터 — 프리셋 고르고, l/r 끌고 target 토글하면 Y/N 실시간 확인. 같은 색 = 같은 AND-체인 (OR 가 끊음)."),
+        "예제를 하나 고르고 l 과 r 을 끌어 보세요.\ntarget 을 바꾸면 Y/N 이 바로 보여요.\n같은 색은 같은 AND 묶음이에요. OR 를 만나면 묶음이 끊겨요."),
       content: (<LogicalMoosSim E={E} />),
     },
 
@@ -117,28 +117,28 @@ false and true or true
       type: "quiz",
       narr: t(E,
         "'and' binds tighter than 'or' — evaluate ANDs first.",
-        "'and' 가 'or' 보다 우선 — AND 먼저 계산."),
+        "'and' 를 'or' 보다 먼저 계산해요."),
       question: t(E,
         "What does 'true or false and false' evaluate to?",
-        "'true or false and false' 의 결과는?"),
+        "'true or false and false' 를 계산하면 무엇이 될까요?"),
       options: ["true", "false"],
       correct: 0,
       explain: t(E,
         "'and' first: false and false = false → 'true or false' → true.",
-        "'and' 먼저: false and false = false → 'true or false' → true."),
+        "'and' 를 먼저 계산해요. false and false = false 이고, 'true or false' 는 true 예요."),
     },
 
     {
       type: "input",
       narr: t(E,
         "Per query, try replacing the slice with 'true' AND with 'false' — if either matches the target, answer Y.",
-        "쿼리마다 구간을 'true' 와 'false' 둘 다로 교체 시도 — 하나라도 target 과 같으면 Y."),
+        "물음마다 그 구간을 'true' 로도 바꿔 보고 'false' 로도 바꿔 봐요.\n하나라도 target 과 같으면 Y 예요."),
       question: t(E,
         "'false and true or true', query (l=3, r=3, target=false). Replace position 3 with 'false': 'false and false or true'. Result = ? (1 = true, 0 = false)",
-        "'false and true or true', 쿼리 (l=3, r=3, target=false). 위치 3 을 'false' 로 교체: 'false and false or true'. 결과 = ? (1 = true, 0 = false)"),
+        "'false and true or true' 에서 물음은 (l=3, r=3, target=false) 예요. 3 번 자리를 'false' 로 바꾸면 'false and false or true' 가 돼요. 결과는 무엇일까요? (1 = true, 0 = false)"),
       hint: t(E,
         "Apply 'and' first, then 'or'.  Step through the three tokens.",
-        "'and' 먼저 처리 후 'or'. 토큰 셋을 차례대로."),
+        "'and' 를 먼저 하고 그다음에 'or' 를 해요. 낱말 셋을 차례대로 보세요."),
       answer: 1,
     },
   ];
@@ -152,7 +152,7 @@ export function makeLogicalCh2(E, lang = "py") {
       narr: i === 0
         ? t(E,
             "Build evaluate(tokens) using the OR-of-(AND chains) idea, then per query try both replacement values.  Sections build it one piece at a time.",
-            "OR-of-(AND 체인) 으로 evaluate(tokens) 작성, 쿼리마다 두 교체값 시도. 아래 섹션이 한 단락씩 쌓아요.")
+            "AND 묶음을 만들고 그걸 OR 로 합치는 evaluate(tokens) 를 짜요.\n그다음 물음마다 두 가지 값으로 바꿔 봐요.\n아래에서 한 단락씩 쌓아 올려요.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),

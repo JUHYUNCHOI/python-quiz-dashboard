@@ -109,11 +109,11 @@ export function LogicalMoosSim({ E }) {
         })}
       </div>
       <div style={{ textAlign: "center", fontSize: 10, color: C.dim, marginBottom: 10 }}>
-        {t(E, "Same color = same AND-chain (broken by OR)", "같은 색 = 같은 AND-체인 (OR로 끊김)")}
+        {t(E, "Same color = same AND-chain (broken by OR)", "같은 색은 같은 AND 묶음이에요 (OR 를 만나면 끊겨요)")}
       </div>
 
       <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.7 }}>
-        {t(E, "AND-chain results:", "AND-체인 결과:")}
+        {t(E, "AND-chain results:", "AND 묶음 결과:")}
         <div style={{ marginTop: 4 }}>
           [{groups.map(g => g ? "T" : "F").join(", ")}]
         </div>
@@ -129,7 +129,7 @@ export function LogicalMoosSim({ E }) {
       {/* ────────────── Query replacement panel ────────────── */}
       <div style={{ marginTop: 16, padding: 12, background: "#fff", border: `2px dashed ${A}`, borderRadius: 12 }}>
         <div style={{ fontSize: 12, fontWeight: 700, color: A, marginBottom: 8, textAlign: "center" }}>
-          🎯 {t(E, "Now try a query — pick l, r, target → see if Y/N", "이제 쿼리 — l, r, target 선택 → Y/N 확인")}
+          🎯 {t(E, "Now try a query — pick l, r, target → see if Y/N", "이제 물음을 만들어 봐요 — l, r, target 을 고르면 Y/N 이 보여요")}
         </div>
 
         {/* l, r sliders (1-based labels for student) */}
@@ -180,7 +180,7 @@ export function LogicalMoosSim({ E }) {
           })}
         </div>
         <div style={{ textAlign: "center", fontSize: 10, color: C.dim, marginBottom: 10 }}>
-          {t(E, "Yellow = slice replaced by ONE boolean", "노랑 = 하나의 불리언으로 교체될 구간")}
+          {t(E, "Yellow = slice replaced by ONE boolean", "노란 칸은 참/거짓 하나로 바뀔 구간이에요")}
         </div>
 
         {/* Two replacement attempts side-by-side */}
@@ -215,8 +215,8 @@ export function LogicalMoosSim({ E }) {
           fontSize: 14, fontWeight: 800, letterSpacing: 1,
         }}>
           {verdict ? "Y" : "N"} — {verdict
-            ? t(E, "some replacement matches target", "교체값 중 하나가 target 과 같음")
-            : t(E, "neither replacement matches target", "두 교체값 모두 target 과 다름")}
+            ? t(E, "some replacement matches target", "교체값 하나가 target 과 같아요")
+            : t(E, "neither replacement matches target", "두 교체값 모두 target 과 달라요")}
         </div>
       </div>
     </div>
@@ -439,58 +439,58 @@ const LM_FULL_CPP = [
 export function getLogicalMoosSections(E) {
   return [
     {
-      label: t(E, "📦 1. Input + Words", "📦 1. 입력 + 토큰들"),
+      label: t(E, "📦 1. Input + Words", "📦 1. 입력 받고 낱말 모으기"),
       color: A,
       py: LM_INPUT_PY, cpp: LM_INPUT_CPP,
       why: [
         t(E, "Read N tokens — they alternate value, op, value, op, ... (so length N is odd).",
-            "N개 토큰 — 값, 연산자, 값, ... 교대 (길이 N은 홀수)."),
+            "낱말 N 개를 읽어요. 값, and/or, 값, ... 이 번갈아 나와요 (그래서 N 은 홀수예요)."),
       ],
       pyOnly: [
         t(E, "input().split() splits on whitespace into a list of strings.",
-            "input().split()이 공백으로 문자열 리스트로 분리."),
+            "input().split() 이 띄어쓰기로 잘라서 낱말 목록을 만들어요."),
       ],
       cppOnly: [
         t(E, "vector<string> reads each token with cin >> word.",
-            "vector<string>로 cin >> word로 토큰 읽기."),
+            "vector<string> 에 cin >> word 로 낱말을 하나씩 읽어요."),
       ],
     },
     {
-      label: t(E, "🧮 2. Evaluate (and binds tighter than or)", "🧮 2. 평가 (and가 or보다 우선)"),
+      label: t(E, "🧮 2. Evaluate (and binds tighter than or)", "🧮 2. 값 계산하기 (and 를 or 보다 먼저)"),
       color: "#0891b2",
       py: LM_EVAL_PY, cpp: LM_EVAL_CPP,
       why: [
         t(E, "Walk left-to-right. Keep a 'current AND-chain' value. On 'and': fold into chain. On 'or': start a new chain.",
-            "좌→우 진행. 현재 AND-체인 값 유지. 'and'면 체인에 합치고, 'or'면 새 체인 시작."),
+            "왼쪽에서 오른쪽으로 가요. 지금 AND 묶음의 값을 들고 다녀요. 'and' 를 만나면 그 묶음에 합쳐요. 'or' 를 만나면 새 묶음을 시작해요."),
         t(E, "Final answer = OR of all chains.",
-            "최종 답 = 모든 체인의 OR."),
+            "마지막 답은 모든 묶음을 OR 로 합친 값이에요."),
       ],
       pyOnly: [
         t(E, "any(groups) does the final OR-reduction over the group list.",
-            "any(groups)로 그룹 리스트 위 최종 OR."),
+            "any(groups) 가 묶음 목록을 한 번에 OR 로 합쳐 줘요."),
       ],
       cppOnly: [
         t(E, "A lambda capturing nothing is fine — pure function over its input.",
-            "캡처 없는 람다 — 입력만 사용하는 순수 함수."),
+            "밖의 값을 안 쓰는 람다예요. 받은 값만 가지고 답을 내요."),
       ],
     },
     {
-      label: t(E, "❓ 3. Per-Query Try Both Replacements", "❓ 3. 쿼리마다 두 교체 시도"),
+      label: t(E, "❓ 3. Per-Query Try Both Replacements", "❓ 3. 물음마다 두 가지로 바꿔 보기"),
       color: "#16a34a",
       py: LM_QUERY_PY, cpp: LM_QUERY_CPP,
       why: [
         t(E, "We can replace words[l..r] with a SINGLE 'true' or 'false'. Try both — if either matches the target, answer Y.",
-            "words[l..r]을 하나의 'true' 또는 'false'로 교체 가능. 두 가지 시도 — 하나라도 target과 같으면 Y."),
+            "words[l..r] 은 'true' 하나 또는 'false' 하나로 바꿀 수 있어요. 둘 다 해보고 하나라도 target 과 같으면 Y 예요."),
         t(E, "Build the new token list and re-evaluate. Total: O(Q · N).",
-            "새 토큰 리스트를 만들고 재평가. 총: O(Q · N)."),
+            "낱말 목록을 새로 만들어 다시 계산해요. 모두 합치면 O(Q · N) 이에요."),
       ],
       pyOnly: [
         t(E, "Slicing words[:l] + [rep] + words[r+1:] is the cleanest way.",
-            "슬라이싱 words[:l] + [rep] + words[r+1:]이 가장 깔끔."),
+            "words[:l] + [rep] + words[r+1:] 로 자르고 붙이는 게 가장 깔끔해요."),
       ],
       cppOnly: [
         t(E, "Build via push_back — vector::insert is also fine but slower in tight loops.",
-            "push_back으로 구성 — vector::insert도 가능하지만 반복문에선 느림."),
+            "push_back 으로 채워요. vector::insert 도 되지만 반복문 안에서는 느려요."),
       ],
     },
     {
@@ -499,9 +499,9 @@ export function getLogicalMoosSections(E) {
       py: LM_FULL_PY, cpp: LM_FULL_CPP,
       why: [
         t(E, "Read input → define evaluate → loop Q queries → print Y/N string.",
-            "입력 읽기 → evaluate 정의 → Q개 쿼리 루프 → Y/N 문자열 출력."),
+            "입력을 읽고 → evaluate 를 만들고 → 물음 Q 개를 반복하고 → Y/N 을 이어 붙여 출력해요."),
         t(E, "Brute force is enough for Bronze constraints.",
-            "Bronze 제약에는 완전탐색으로 충분."),
+            "Bronze 제약이라면 완전탐색으로 충분해요."),
       ],
     },
   ];
@@ -545,7 +545,7 @@ function highlightCode(lines, lang) {
 
 export function downloadLogicalMoosPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Logical Moos — Full Study Guide", "🧠 Logical Moos — 종합 풀이 노트");
@@ -569,9 +569,9 @@ export function downloadLogicalMoosPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO 2024 Open Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<div class="sub">USACO 2024 Open Bronze · ${t(E, "Self-contained walkthrough", "혼자 공부용")}</div>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>

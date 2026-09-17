@@ -1042,7 +1042,7 @@ export function ColumnCostAuditor({ E }) {
           border: `1.5px solid ${C.border}`, background: C.card,
           color: C.dim, cursor: activeCol >= 0 ? "not-allowed" : "pointer",
           opacity: activeCol >= 0 ? 0.5 : 1,
-        }}>🔄 {E ? "Reset audit" : "감사 초기화"}</button>
+        }}>🔄 {E ? "Reset audit" : "처음부터 다시"}</button>
       </div>
     </div>
   );

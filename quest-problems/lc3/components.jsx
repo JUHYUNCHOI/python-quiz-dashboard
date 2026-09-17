@@ -158,10 +158,10 @@ export function SlidingWindowSim({ E }) {
             {py
               ? t(E,
                   "The window is empty. left = 0, best = 0. We'll slide the right edge forward one letter at a time, and remember where we last saw each letter in last (a dictionary).",
-                  "창문(window)이 비어 있어요. left = 0, best = 0. 오른쪽 끝 right 를 한 글자씩 앞으로 밀면서, 각 글자를 마지막으로 본 위치를 last(딕셔너리)에 기억해 둬요.")
+                  "창문(window)이 비어 있어요. left = 0, best = 0 이에요. 오른쪽 끝 right 를 한 글자씩 앞으로 밀면서, 각 글자를 마지막으로 본 자리를 last 사전(딕셔너리)에 적어 둬요.")
               : t(E,
                   "The window is empty. left = 0, best = 0. We'll slide the right edge forward one letter at a time, and remember where we last saw each letter in last (a map).",
-                  "창문(window)이 비어 있어요. left = 0, best = 0. 오른쪽 끝 right 를 한 글자씩 앞으로 밀면서, 각 글자를 마지막으로 본 위치를 last(맵 map)에 기억해 둬요.")}
+                  "창문(window)이 비어 있어요. left = 0, best = 0 이에요. 오른쪽 끝 right 를 한 글자씩 앞으로 밀면서, 각 글자를 마지막으로 본 자리를 last 사전(맵 map)에 적어 둬요.")}
           </div>
         ) : (
           <div style={{ display: "grid", gap: 7 }}>
@@ -172,10 +172,10 @@ export function SlidingWindowSim({ E }) {
                    ? (py ? `'${step.ch}' not in last` : `last.count('${step.ch}') == 0`)
                    : `last['${step.ch}'] = ${step.prevIdx} ${step.prevIdx >= step.leftBefore ? "≥" : "<"} left ${step.leftBefore}`}
                  desc={step.prevIdx === null
-                   ? t(E, "brand-new letter → window stays", "처음 보는 글자 → 창문 유지")
+                   ? t(E, "brand-new letter → window stays", "처음 보는 글자 → 창문 그대로")
                    : step.jumped
-                     ? t(E, "duplicate INSIDE window!", "창문 안 중복이다!")
-                     : t(E, "seen before, but OUTSIDE window → ignore", "본 적 있지만 창문 밖 → 무시")}
+                     ? t(E, "duplicate INSIDE window!", "창문 안에서 겹쳤어요!")
+                     : t(E, "seen before, but OUTSIDE window → ignore", "본 적 있지만 창문 밖 → 넘어가요")}
                  ok={step.prevIdx === null || !step.jumped}
                  no={step.jumped} />
             <Row n="③"
@@ -183,13 +183,13 @@ export function SlidingWindowSim({ E }) {
                    ? `left = ${step.prevIdx}+1 = ${step.left}`
                    : `left = ${step.left}`}
                  desc={step.jumped
-                   ? t(E, "jump past the duplicate", "중복 글자 다음으로 점프")
-                   : t(E, "left stays put", "left 그대로")} />
+                   ? t(E, "jump past the duplicate", "겹친 글자 다음으로 점프해요")
+                   : t(E, "left stays put", "left 는 그대로예요")} />
             <Row n="④"
                  code={`window = "${step.windowStr}"  (len ${step.curLen})`}
                  desc={step.improved
-                   ? t(E, `new best → ${step.best}`, `최고 기록 갱신 → ${step.best}`)
-                   : t(E, `best stays ${step.best}`, `최고 기록 유지 ${step.best}`)}
+                   ? t(E, `new best → ${step.best}`, `최고 기록이 ${step.best} 로 늘었어요`)
+                   : t(E, `best stays ${step.best}`, `최고 기록은 ${step.best} 그대로예요`)}
                  ok={step.improved} />
           </div>
         )}
@@ -199,7 +199,7 @@ export function SlidingWindowSim({ E }) {
       <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "flex-start", marginBottom: 12 }}>
         <div style={{ flex: "1 1 240px" }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 6 }}>
-            last {t(E, "(letter → last index)", "(글자 → 마지막 위치)")}
+            last {t(E, "(letter → last index)", "(글자 → 마지막으로 본 자리)")}
           </div>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap", minHeight: 44 }}>
             {lastEntries.length === 0
@@ -227,13 +227,13 @@ export function SlidingWindowSim({ E }) {
           ◀ {t(E, "Prev", "이전")}
         </button>
         <button onClick={next} disabled={last} style={btn(last, true)}>
-          {t(E, "Next step", "다음 스텝")} ▶
+          {t(E, "Next step", "다음")} ▶
         </button>
         <button onClick={reset} style={{ ...btn(false), background: "#fff", color: "#64748b", border: "2px solid #cbd5e1" }}>
-          ↺ {t(E, "Restart", "처음으로")}
+          ↺ {t(E, "Restart", "처음부터")}
         </button>
         <span style={{ marginLeft: "auto", fontSize: 12, fontWeight: 700, color: "#94a3b8", fontFamily: "monospace" }}>
-          {step.phase === "init" ? t(E, "start", "시작") : `${t(E, "step", "스텝")} ${step.right + 1}`} / {cur.s.length}
+          {step.phase === "init" ? t(E, "start", "시작") : (E ? `step ${step.right + 1}` : `${step.right + 1}번째`)} / {cur.s.length}
         </span>
       </div>
 
@@ -249,7 +249,7 @@ export function SlidingWindowSim({ E }) {
             <div style={{ fontSize: 11.5, fontWeight: 600, color: "#15803d", marginTop: 4 }}>
               {t(E,
                 "At the last 'a' (index 3), last['a'] was 0 — but 0 was already LEFT of the window (left=2), so we did NOT pull left back. That's why we check prevIdx ≥ left.",
-                "마지막 'a'(인덱스 3)에서 last['a']는 0 이었지만, 0 은 이미 창문 왼쪽(left=2) 밖이라 left 를 되돌리지 않았어요. 그래서 prevIdx ≥ left 인지 확인하는 거예요.")}
+                "마지막 'a'(3번 자리)에서 last['a'] 는 0 이었어요. 그런데 0 은 이미 창문 왼쪽(left=2) 밖이라 left 를 되돌리지 않았어요. 그래서 prevIdx ≥ left 인지 확인하는 거예요.")}
             </div>
           )}
         </div>
@@ -321,7 +321,7 @@ export function SpeedRaceSim({ E, nMax = 50000, nStart = 200, constraintN = 5000
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 700, marginBottom: 4 }}>
         <span style={{ color: "#334155" }}>{label}</span>
         <span style={{ fontFamily: "monospace", color: slow ? NO : OK }}>
-          {fmt(ops)} {t(E, "ops", "연산")} · {human(ops)}
+          {fmt(ops)} {t(E, "ops", "번 계산")} · {human(ops)}
         </span>
       </div>
       <div style={{ position: "relative", height: 24, background: "#f1f5f9", borderRadius: 6, overflow: "hidden", border: "1px solid #e2e8f0" }}>
@@ -347,17 +347,17 @@ export function SpeedRaceSim({ E, nMax = 50000, nStart = 200, constraintN = 5000
           style={{ width: "80%", accentColor: ACC, marginTop: 6 }} />
         <div style={{ fontSize: 11, color: "#94a3b8" }}>
           {t(E, `drag · problem allows up to n = ${constraintN.toLocaleString()}`,
-               `드래그 · 문제는 최대 n = ${constraintN.toLocaleString()} 까지`)}
+               `끌어 보세요 · 문제는 최대 n = ${constraintN.toLocaleString()} 까지`)}
         </div>
       </div>
 
       <Bar label={t(E, "Brute (every start × end)", "완전탐색 (모든 시작 × 끝)")} ops={brute} color={NO} slow={over} />
-      <Bar label={t(E, "One smart pass", "똑똑한 한 번 스캔")} ops={fast} color={OK} slow={false} />
+      <Bar label={t(E, "One smart pass", "똑똑하게 한 번 훑기")} ops={fast} color={OK} slow={false} />
 
       <div style={{ marginTop: 6, fontSize: 11.5, color: "#475569", textAlign: "center", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: "7px 10px" }}>
         {t(E,
           "Bars fill toward the ~2-second budget (≈2×10⁸ ops). Drag n up: brute shoots past it while the smart pass barely moves.",
-          "막대는 약 2초 예산(≈2×10⁸ 연산)까지 차요. n 을 키워보면 — 완전탐색은 예산을 훌쩍 넘기고, 똑똑한 스캔은 거의 안 움직여요.")}
+          "막대는 약 2초 예산(≈2×10⁸ 번 계산)까지 차요. n 을 키워 보면 완전탐색은 예산을 훌쩍 넘기고, 똑똑하게 한 번 훑기는 거의 안 움직여요.")}
       </div>
     </div>
   );
@@ -371,7 +371,7 @@ export function CodeJourney({ E, sections, doneNote, fullCode }) {
   return (
     <div style={{ padding: 14 }}>
       <div style={{ fontSize: 11, color: "#94a3b8", marginBottom: 10, textAlign: "right" }}>
-        {t(E, "language: switch with 🐍 Py / 💻 C++ up top", "언어: 위쪽 🐍 Py / 💻 C++ 로 전환")}
+        {t(E, "language: switch with 🐍 Py / 💻 C++ up top", "위쪽 🐍 Py / 💻 C++ 로 언어를 바꿔요")}
       </div>
 
       {sections.map((sec, i) => {

@@ -253,26 +253,26 @@ const SECTION_OUT_CPP = [
 const _SW_VARS = [
   { v: "target", ko: "목표 문자열", en: "the target" },
   { v: "s", ko: "문자열들", en: "the strings" },
-  { v: "ops", ko: "조작 목록", en: "the operations" },
+  { v: "ops", ko: "바꾼 기록", en: "the operations" },
   { v: "k", ko: "고치는 자리", en: "position to fix" },
 ];
 export function getSwapToWinWalk(E, lang = "py") {
   if (lang === "cpp") {
     return { code: FULL_CPP, vars: _SW_VARS, beats: [
-      { hi: [5, 16],  bubble: t(E, "Each test: read N, M, the target string, and the N strings s.", "테스트마다: N, M, 목표 문자열 target, 문자열 N개 s 읽기.") },
+      { hi: [5, 16],  bubble: t(E, "Each test: read N, M, the target string, and the N strings s.", "문제마다 N 과 M, 목표 글자 줄 target, 그리고 글자 줄 N 개 s 를 읽어요.") },
       { hi: [18, 22], bubble: t(E, "Fix s[0] one position at a time, left to right. If it already matches target, skip.", "s[0] 를 왼쪽부터 한 칸씩 target 에 맞춰요. 이미 맞으면 넘어감.") },
       { hi: [24, 36], bubble: t(E, "Case 1: if target[k] sits further right in s[0], one swap fixes it (1 op).", "Case 1: target[k] 가 s[0] 뒤쪽에 있으면 → 한 번 스왑으로 해결 (1 op).") },
       { hi: [38, 57], bubble: t(E, "Case 2: not in s[0] — borrow it from another string s_y (at most 2 ops: line it up, then swap the column).", "Case 2: s[0] 에 없으면 다른 문자열 s_y 에서 빌려옴 (최대 2 op: 자리 맞추고 열 스왑).") },
-      { hi: [60, 63], bubble: t(E, "Print how many operations, then the operations.", "조작 횟수 출력 후, 조작들 출력.") },
+      { hi: [60, 63], bubble: t(E, "Print how many operations, then the operations.", "먼저 바꾼 횟수를 출력하고,\n그다음 바꾼 기록을 하나씩 출력해요.") },
     ] };
   }
   return { code: FULL_PY, vars: _SW_VARS, beats: [
     { hi: [0, 1],   bubble: t(E, "Fast input.", "빠른 입력.") },
-    { hi: [3, 9],   bubble: t(E, "Each test: read N, M, the target string, the N strings s. ops = list of moves.", "테스트마다: N, M, 목표 문자열 target, 문자열 N개 s. ops = 조작 목록.") },
+    { hi: [3, 9],   bubble: t(E, "Each test: read N, M, the target string, the N strings s. ops = list of moves.", "문제마다 N 과 M, 목표 글자 줄 target, 글자 줄 N 개 s 가 와요.\nops 에는 바꾼 기록을 모아요.") },
     { hi: [10, 13], bubble: t(E, "Fix s[0] one position at a time, left to right. If it already matches, skip.", "s[0] 를 왼쪽부터 한 칸씩 target 에 맞춰요. 이미 맞으면 넘어감.") },
     { hi: [15, 25], bubble: t(E, "Case 1: if target[k] sits further right in s[0], one swap fixes it (1 op).", "Case 1: target[k] 가 s[0] 뒤쪽에 있으면 → 한 번 스왑으로 해결 (1 op).") },
     { hi: [27, 45], bubble: t(E, "Case 2: not in s[0] — borrow it from another string s_y (at most 2 ops: line it up, then swap the column).", "Case 2: s[0] 에 없으면 다른 문자열 s_y 에서 빌려옴 (최대 2 op: 자리 맞추고 열 스왑).") },
-    { hi: [47, 48], bubble: t(E, "Print how many operations, then the operations.", "조작 횟수 출력 후, 조작들 출력.") },
+    { hi: [47, 48], bubble: t(E, "Print how many operations, then the operations.", "먼저 바꾼 횟수를 출력하고,\n그다음 바꾼 기록을 하나씩 출력해요.") },
   ] };
 }
 
@@ -329,9 +329,9 @@ export function getSwapToWinSections(E) {
       py: SECTION_OUT_PY, cpp: SECTION_OUT_CPP,
       why: [
         t(E, "Print K first, then each operation line.",
-            "먼저 K, 그 다음 연산을 줄마다 출력."),
+            "먼저 K 를 출력하고, 그다음 바꾼 기록을 한 줄씩 출력해요."),
         t(E, "Operations were collected in order; just print them as-is.",
-            "연산은 순서대로 모았으니 그대로 출력."),
+            "바꾼 기록을 순서대로 모아 뒀으니 그대로 출력하면 돼요."),
       ],
     },
   ];

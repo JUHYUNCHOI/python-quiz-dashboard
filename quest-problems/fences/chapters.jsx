@@ -27,7 +27,7 @@ export function makeFencesCh1(E) {
       type: "reveal",
       narr: t(E,
         "An N × M grid is filled with grass (.) and fences (#). FJ wants to pick ONE column and convert every cell in that column to a fence (#). Each grass-to-fence conversion costs 1.\nPrint the minimum total cost over all possible column choices.",
-        "N × M 격자가 풀 (.) 과 울타리 (#) 로 채워져 있어요. FJ 가 한 개의 열을 골라 그 열의 모든 칸을 울타리 (#) 로 바꾸려고 해요. 풀 → 울타리 한 칸당 비용 1.\n어떤 열을 골랐을 때 가장 적은 총 비용이 드는지 출력해요."),
+        "열 하나를 골라 그 열을 전부 울타리로 바꿔요.\n가장 싸게 드는 값은 얼마일까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -174,7 +174,7 @@ export function makeFencesCh1(E) {
       type: "reveal",
       narr: t(E,
         "Now — how does the data arrive?\nFirst line: N M (rows, columns). Then N lines of the grid, each a string of '.' and '#'.\nOutput: one integer — the minimum fences to build a full vertical wall.",
-        "그럼 데이터는 어떻게 들어올까?\n첫 줄에 N M (행, 열). 그 다음 N 줄에 격자가, 각 줄은 '.' 과 '#' 로 된 문자열.\n출력: 정수 하나 — 완전한 세로 울타리를 만드는 최소 비용."),
+        "그럼 자료는 어떻게 들어올까요?\n첫 줄에 행 수 N 과 열 수 M 이 와요.\n그다음 N 줄에 격자가 오는데, 한 줄은 '.' 과 '#' 로 돼 있어요.\n세로 울타리를 끝까지 만드는 가장 싼 값을 정수 하나로 출력해요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           {/* INPUT */}
@@ -228,7 +228,7 @@ export function makeFencesCh1(E) {
               숫자는 남기고 결론만 질문으로 돌린다. */}
           <div style={{ fontSize: 11.5, color: C.dim, marginTop: 8, wordBreak: "keep-all", lineHeight: 1.7 }}>
             {t(E, "Grass ('.') per column: 4, 3, 3, 2, 4. Which column is cheapest to wall off? Let's find it one step at a time.",
-                "열별 풀('.') 수: 4, 3, 3, 2, 4. 어느 열을 막는 게 제일 쌀까요? 아래에서 하나씩 확인해봐요.")}
+                "열마다 풀('.') 이 4, 3, 3, 2, 4 개씩 있어요.\n어느 열을 막는 게 제일 쌀까요? 아래에서 하나씩 확인해 봐요.")}
           </div>
         </div>),
     },
@@ -368,7 +368,7 @@ export function makeFencesCh1(E) {
                 {t(E, "↑ grass per column (= cost)", "↑ 열별 풀 수 (= 비용)")}
               </div>
               {/* Answer highlight */}
-              {/* 2026-09-09: 여기에 "4열: 풀 0개 → 비용 0 → 가장 싸! 🎯" 가 있었다.
+              {/* 2026-09-09: 여기에 "4열은 풀이 0개라 값도 0 이에요 — 제일 싸요! 🎯" 가 있었다.
                   **바로 다음 쪽 퀴즈가 같은 [3,1,2,0] 으로 "어떤 열을 골라야 해요?" 를 묻는다.**
                   결론을 지우면 이 쪽은 관찰, 다음 쪽은 퀴즈가 되어 순서가 살아난다. */}
             </div>
@@ -383,7 +383,7 @@ export function makeFencesCh1(E) {
         "Let's make sure you got it!\nIn the grid we just saw, the grass counts were [3, 1, 2, 0].\nWhich column should we pick?", "제대로 이해했는지 확인해요! 방금 본 그리드에서 풀 수가 [3, 1, 2, 0] 이었어요.\n어떤 열을 골라야 할까요?"),
       question: t(E,
         "Dot counts: 1st=3, 2nd=1, 3rd=2, 4th=0. Pick which?",
-        "풀 수: 1열=3, 2열=1, 3열=2, 4열=0. 어떤 열?"),
+        "풀은 1열에 3개, 2열에 1개, 3열에 2개, 4열에 0개예요.\n어떤 열을 고를까요?"),
       options: [
         t(E, "2nd column (1 dot = cost 1)", "2열 (풀 1개 = 비용 1)"),
         t(E, "4th column (0 dots = cost 0!)", "4열 (풀 0개 = 비용 0!)"),
@@ -431,20 +431,20 @@ export function makeFencesCh2(E) {
     {
       type: "input",
       narr: t(E,
-        "By hand! 3x4 grid — grass (.) per column: 2, 4, 1, 3. What is the minimum cost?", "손으로! 3×4 그리드 — 열별 풀(.) 수: 2, 4, 1, 3. 최소 비용은?"),
+        "By hand! 3x4 grid — grass (.) per column: 2, 4, 1, 3. What is the minimum cost?", "직접 해봐요! 3×4 격자에서 열마다 풀이 2, 4, 1, 3 개예요.\n가장 싼 값은 얼마일까요?"),
       question: t(E,
         "Grass per column: 2, 4, 1, 3\nMin cost = ?",
-        "열별 풀(.) 수: 2, 4, 1, 3\n최소 비용 = ?"),
+        "열마다 풀이 2, 4, 1, 3 개예요\n가장 싼 값은?"),
       answer: 1,
     },
     // 2-4: Hand calculation 2
     {
       type: "input",
       narr: t(E,
-        "Another one! 3×3 grid — dots (.) per column: 1, 1, 3. What's the minimum cost?", "하나 더! 3×3 그리드 — 열별 풀(.) 수: 1, 1, 3. 최소 비용은?"),
+        "Another one! 3×3 grid — dots (.) per column: 1, 1, 3. What's the minimum cost?", "하나 더! 3×3 격자에서 열마다 풀이 1, 1, 3 개예요.\n가장 싼 값은 얼마일까요?"),
       question: t(E,
         "Dots per column: 1, 1, 3\nMin cost = ?",
-        "열별 풀(.) 수: 1, 1, 3\n최소 비용 = ?"),
+        "열마다 풀이 1, 1, 3 개예요\n가장 싼 값은?"),
       answer: 1,
     },
   ];

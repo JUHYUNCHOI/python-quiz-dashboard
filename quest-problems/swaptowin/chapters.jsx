@@ -29,7 +29,7 @@ export function makeSwapToWinCh1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 , wordBreak: "keep-all", textWrap: "balance" }}>
               {t(E,
                 "Turn the first string into the target string.\nYou may use at most 2M operations.",
-                "첫 번째 문자열을 목표 문자열과 똑같이 만들어요.\n연산은 최대 2M 번까지만 쓸 수 있어요.")}
+                "첫 번째 문자열을 목표 문자열과 똑같이 만들어요.\n바꾸기는 많아야 2M 번까지만 쓸 수 있어요.")}
             </div>
           </div>
 
@@ -53,7 +53,7 @@ export function makeSwapToWinCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#059669", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  {t(E, "Two operation types:", "두 가지 연산:")}
+                  {t(E, "Two operation types:", "바꾸는 방법 두 가지:")}
                   <div style={{ marginTop: 4, padding: "4px 10px", background: "#d1fae5", borderRadius: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#065f46" }}>
                     1 x p q  → swap s_x[p] ↔ s_x[q]
                   </div>
@@ -68,7 +68,7 @@ export function makeSwapToWinCh1(E) {
                   {t(E, "Make ", "")}
                   <b style={{ color: "#059669" }}>s_1 = target</b>
                   {t(E, " using ", " 를 ")}
-                  <b style={{ color: "#059669" }}>{t(E, "at most 2M operations", "최대 2M 번의 연산")}</b>
+                  <b style={{ color: "#059669" }}>{t(E, "at most 2M operations", "최대 2M 번 바꾸기")}</b>
                   {t(E, ".", " 으로 달성.")}
                 </div>
               </div>
@@ -82,7 +82,7 @@ export function makeSwapToWinCh1(E) {
       type: "reveal",
       narr: t(E,
         "Easiest case first — already equal.",
-        "목표와 이미 같으면 연산 없이 답은 0 이에요."),
+        "목표와 이미 같으면 한 번도 안 바꾸고 답은 0 이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 8 }}>
@@ -107,7 +107,7 @@ zzzzz`}</pre>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, lineHeight: 1.5 , wordBreak: "keep-all", textWrap: "balance" }}>
             {t(E,
               "target = abcde, and s_1 = abcde already. Print 0 and we're done. (No operation lines follow.)",
-              "target = abcde, s_1 = abcde 이미 같음. 0 을 출력하고 끝. (연산 줄 없음.)")}
+              "target = abcde, s_1 = abcde 이미 같음. 0 을 출력하고 끝. (바꾸기 줄 없음.)")}
           </div>
 
           {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
@@ -127,7 +127,7 @@ zzzzz`}</pre>
       type: "reveal",
       narr: t(E,
         "Now a real one. target = banana, s_1 = nabana. Walk left-to-right and fix each position.",
-        "진짜 케이스: target = banana, s_1 = nabana. 왼쪽부터 한 칸씩 맞춰가요."),
+        "진짜 문제를 봐요. target 은 banana 이고 s_1 은 nabana 예요.\n왼쪽부터 한 칸씩 맞춰 가요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#065f46", marginBottom: 8 }}>
@@ -149,7 +149,7 @@ zzzzz`}</pre>
             <div>
               <b style={{ color: "#059669" }}>k=0:</b> {t(E, "want b, s_1[0]=n. b sits at s_2[0] already → ", "b 가 필요. s_1[0]=n. b 는 s_2[0] 에 있음 → ")}
               <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>2 1 2 1</code>
-              {t(E, " (1 op)", " (연산 1번)")}
+              {t(E, " (1 op)", " (1번 바꾸기)")}
             </div>
             <div>
               <b style={{ color: "#059669" }}>k=1:</b> {t(E, "want a, s_1[1]=a ✓ skip", "a 가 필요, s_1[1]=a ✓ 건너뜀")}
@@ -157,7 +157,7 @@ zzzzz`}</pre>
             <div>
               <b style={{ color: "#059669" }}>k=2:</b> {t(E, "want n, s_1[2]=b. n is later in s_1 at position 4 → ", "n 이 필요, s_1[2]=b. s_1 뒤쪽 4번 위치에 n 있음 → ")}
               <code style={{ background: "#d1fae5", padding: "1px 5px", borderRadius: 3 }}>1 1 3 5</code>
-              {t(E, " (1 op)", " (연산 1번)")}
+              {t(E, " (1 op)", " (1번 바꾸기)")}
             </div>
             <div>
               <b style={{ color: "#059669" }}>k=3:</b> {t(E, "want a, s_1[3]=a ✓ skip", "a 가 필요, s_1[3]=a ✓ 건너뜀")}
@@ -172,7 +172,7 @@ zzzzz`}</pre>
           </div>
 
           <div style={{ marginTop: 10, padding: 8, background: "#ecfdf5", border: "1px dashed #6ee7b7", borderRadius: 6, fontSize: 12, color: "#065f46" }}>
-            {t(E, "Total: 3 operations. Output:", "총 3 연산. 출력:")} <code>3 / 2 1 2 1 / 1 1 3 5 / 2 1 2 5</code>
+            {t(E, "Total: 3 operations. Output:", "모두 3번 바꿔요. 출력:")} <code>3 / 2 1 2 1 / 1 1 3 5 / 2 1 2 5</code>
           </div>
         </div>),
     },
@@ -182,18 +182,18 @@ zzzzz`}</pre>
       type: "quiz",
       narr: t(E,
         "Tiny case to lock the idea: target = ab, single string s_1 = ba. How many operations?",
-        "작은 예제로 감 잡기: target = ab, s_1 = ba 한 개. 몇 번의 연산?"),
+        "작은 예제로 감을 잡아요. target 은 ab 이고 s_1 은 ba 하나예요.\n몇 번 바꿔야 할까요?"),
       question: t(E,
         "target = \"ab\", s_1 = \"ba\". Minimum operations?",
-        "target = \"ab\", s_1 = \"ba\". 최소 연산 수는?"),
+        "target = \"ab\", s_1 = \"ba\". 가장 적은 바꾸기 횟수는?"),
       options: [
-        t(E, "1 (swap inside s_1)", "1 (s_1 안에서 연산 한 번)"),
+        t(E, "1 (swap inside s_1)", "1 (s_1 안에서 한 번 바꾸기)"),
         t(E, "2 (need to borrow)", "2 (다른 줄에서 빌림)"),
       ],
       correct: 0,
       explain: t(E,
         "Right — the letters we need (a and b) both already live inside s_1. One within-string swap (1 1 1 2) makes s_1 = ab.",
-        "맞아요 — 필요한 글자(a, b)가 모두 s_1 안에 있어요.\n같은 줄에서 연산 한 번 (1 1 1 2) 이면 s_1 = ab 예요.")
+        "맞아요 — 필요한 글자(a, b)가 모두 s_1 안에 있어요.\n같은 줄에서 한 번 바꾸기 (1 1 1 2) 이면 s_1 = ab 예요.")
     },
 
     // 1-5: NumInput — already matches → 0
@@ -201,7 +201,7 @@ zzzzz`}</pre>
       type: "input",
       narr: t(E,
         "target = 'aa', s_1 = 'aa'. How many operations are needed?",
-        "target = 'aa', s_1 = 'aa'. 몇 번의 연산이 필요?"),
+        "target = 'aa', s_1 = 'aa'. 몇 번 바꿔야 할까요?"),
       question: t(E,
         "target = 'aa', s_1 = 'aa'. K = ?",
         "target = 'aa', s_1 = 'aa'. K = ?"),
@@ -227,7 +227,7 @@ export function makeSwapToWinCh2(E, lang = "py") {
         label: t(E, "Code", "코드"),
         narr: t(E,
           "Position by position: 0, 1, or 2 operations.",
-          "코드가 한 자리씩 0 · 1 · 2 번 연산으로 맞춰가요."),
+          "코드가 한 자리씩 0 · 1 · 2 번 바꿔서 맞춰가요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
       };
     })(),

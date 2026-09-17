@@ -66,7 +66,7 @@ export function CowGymPairSim({ E }) {
   return (
     <div style={{ padding: 14 }}>
       <div style={{ fontSize: 13, fontWeight: 700, color: A, marginBottom: 8, textAlign: "center" }}>
-        {t(E, "🤸 Try a pair — step through every session", "🤸 쌍을 골라서 — 세션마다 한 칸씩")}
+        {t(E, "🤸 Try a pair — step through every session", "🤸 쌍을 골라 세션마다 한 칸씩 넘겨 봐요")}
       </div>
 
       {/* Case + pair pickers */}
@@ -133,7 +133,7 @@ export function CowGymPairSim({ E }) {
         {step === 0 && (
           <span style={{ color: C.dim }}>
             {t(E, `Press → to check session-by-session if cow ${ci} stays above cow ${cj}.`,
-                  `→ 를 눌러 소 ${ci} 가 소 ${cj} 위에 계속 있는지 세션마다 확인.`)}
+                  `→ 를 누르면 소 ${ci} 가 소 ${cj} 위에 계속 있는지 세션마다 확인해요.`)}
           </span>
         )}
         {visible.map((w, s) => {
@@ -153,9 +153,9 @@ export function CowGymPairSim({ E }) {
           <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #fcd34d", fontWeight: 800, color: verdict === "consistent" ? "#059669" : "#dc2626" }}>
             {verdict === "consistent"
               ? t(E, `✓ Consistent — same winner every session (ans += 1)`,
-                       `✓ 일관 — 매 세션 같은 승자 (ans += 1)`)
+                       `✓ 일관돼요 — 세션마다 승자가 같아요 (ans += 1)`)
               : t(E, `✗ Inconsistent — winner flipped, skip`,
-                       `✗ 비일관 — 승자가 바뀜, 건너뜀`)}
+                       `✗ 비일관이에요 — 승자가 바뀌어서 건너뛰어요`)}
           </div>
         )}
       </div>
@@ -262,19 +262,19 @@ export function getCowGymSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 뚜렷해요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 은 Python 코드를 자동으로 옮긴 거예요. 타입과 쓰는 방식은 필요하면 손봐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list, map, sorted 같은 게 있어서 알고리즘을 짧게 쓸 수 있어요."),
       ],
       cppOnly: [
         t(E, "Split #include into specific headers (iostream, vector).",
-            "#include 는 배운 헤더들로 (iostream, vector) 나눠 적어."),
+            "#include 는 배운 헤더로 (iostream, vector) 나눠 적어요."),
         t(E, "ans is a pair count — up to N*(N-1)/2 — use long long when N is large.",
-            "ans 는 쌍 개수 (N*(N-1)/2) — N 이 크면 long long 안전."),
+            "ans 는 쌍의 개수예요 (N*(N-1)/2). N 이 크면 long long 이 안전해요."),
       ],
     },
   ];
@@ -320,7 +320,7 @@ function highlightCode(lines, lang) {
 
 export function downloadCowGymPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "CowGym — Full Study Guide", "CowGym — 종합 풀이 노트");
@@ -343,9 +343,9 @@ export function downloadCowGymPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<div class="sub">USACO · ${t(E, "Self-contained walkthrough", "혼자 공부용")}</div>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>

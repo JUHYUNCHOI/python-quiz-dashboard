@@ -71,11 +71,11 @@ function ChipXchgSample({ E }) {
                        <>B 1개가 A 1개, 이미 2+3=5 <b style={{color:"#15803d"}}>≥ 목표 4</b> → <b style={{color:"#15803d"}}>추가 0개</b>.</>)} />
         <ChipXchgTestCard E={E} n={2} toks={test2} out="9"
           reason={t(E, <>Start empty; the worst case wastes B → need <b style={{color:"#15803d"}}>9 extra</b> <span style={{color:"#94a3b8"}}>(we'll see why!)</span></>,
-                       <>빈손 시작인데 최악의 경우 B를 낭비 → <b style={{color:"#15803d"}}>추가 9개</b> 필요 <span style={{color:"#94a3b8"}}>(왜인지 곧!)</span></>)} />
+                       <>빈손으로 시작하는데 제일 나쁜 경우엔 B 를 버리게 돼요 → <b style={{color:"#15803d"}}>추가 9개</b> 필요해요 <span style={{color:"#94a3b8"}}>(왜인지 곧 봐요!)</span></>)} />
       </div>
       {/* 출력 뜻 */}
       <div style={{ marginTop: 10, background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "9px 12px", fontSize: 12, color: C.text, lineHeight: 1.6, wordBreak: "keep-all", textWrap: "balance", textAlign: "center" }}>
-        {t(E, "Output = fewest extra chips ", "출력 = 필요한 최소 추가 칩 ")}<b>x</b>{t(E, " that reaches the goal no matter which combination comes.", " — 어떤 조합이 와도 목표 도달.")}
+        {t(E, "Output = fewest extra chips ", "출력 = 필요한 최소 추가 칩 ")}<b>x</b>{t(E, " that reaches the goal no matter which combination comes.", " 예요. 어떤 조합이 와도 목표에 닿을 수 있어요.")}
       </div>
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
         {t(E, "📌 Up to 10⁴ tests · answer can reach 10¹⁸ → use 64-bit.", "📌 테스트는 최대 10⁴ 개이고 답이 10¹⁸ 까지 커져요. 그래서 64비트 정수가 필요해요.")}
@@ -172,7 +172,7 @@ export function makeChipXchgCh1(E) {
       type: "reveal",
       label: t(E, "Tool: cA ≥ cB (swap gains) → he gives A", "도구: cA ≥ cB (바꾸면 이득) → A를 준다"),
       narr: t(E, "Opposite rate: 2 B → 3 A. Now B gives me MORE — so the worst case hands A instead.",
-                 "이번엔 반대로 B 2개 → A 3개예요. B를 받는 게 오히려 이득이라서, 최악의 경우엔 A로 줍니다."),
+                 "이번엔 반대로 B 2개 → A 3개예요.\nB 를 받는 게 오히려 이득이라서, 제일 나쁜 경우엔 A 로 줘요."),
       content: (<AllRedWorstSim E={E} />),
     },
 
@@ -223,7 +223,7 @@ export function makeChipXchgCh2(E, lang = "py") {
       label: t(E, "Code", "코드"),
       narr: t(E,
         "The formula we derived, in code — no loop, no search. One calculation per test (O(1)).",
-        "앞에서 만든 공식 그대로예요. 반복도 탐색도 없이 테스트 하나당 계산을 한 번만 해요 (O(1))."),
+        "앞에서 만든 공식 그대로예요.\n반복도 없고 하나씩 찾아보지도 않아요.\n테스트 하나당 계산을 딱 한 번만 해요 (O(1))."),
       content: (
         <CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#2563eb" />
       ),
