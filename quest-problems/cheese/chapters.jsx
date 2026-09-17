@@ -133,7 +133,7 @@ export function makeCheeseCh1(E) {
       type: "rodFitSim",
       narr: t(E,
         "We try to slide a 1×1×N rod through one row of the cube.\nClick on the 🧀 cells to remove them — when does the rod fit through?",
-        "1×1×N 막대를 큐브의 한 줄로 밀어 넣어요. 🧀 셀을 눌러서 빼봐요 — 언제 막대가 통과할까요?"),
+        "1×1×N 막대를 큐브의 한 줄로 밀어 넣어요. 🧀 칸을 눌러서 빼봐요 — 언제 막대가 통과할까요?"),
     },
     // 1-3: 막대 조건 퀴즈 — 직관적
     {
@@ -180,10 +180,10 @@ export function makeCheeseCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "In a 2×2×2 cube: each direction has rows.\nLeft→Right has 2×2=4 rows.\nSame for other 2 directions.", "2×2×2 큐브에서: 각 방향에 줄이 있어요. 왼→오는 2×2=4줄. 나머지 2방향도 마찬가지."),
+        "In a 2×2×2 cube: each direction has rows.\nLeft→Right has 2×2=4 rows.\nSame for other 2 directions.", "2×2×2 큐브는 방향마다 줄이 있어요.\n왼→오 방향은 2×2 라서 4줄이에요. 나머지 두 방향도 똑같아요."),
       question: t(E,
         "2×2×2 cube: 4 rows per direction × 3 directions = ?",
-        "2×2×2 큐브: 방향당 4줄 × 3방향 = 총 몇 줄?"),
+        "2×2×2 큐브에서 한 방향에 4줄, 방향은 3개예요.\n그럼 줄은 모두 몇 개일까요?"),
       options: ["4", "8", "12", "24"], correct: 2,
       explain: t(E,
         "12 rows total! That's every possible place a 1×1×N rod could fit.",
@@ -194,7 +194,7 @@ export function makeCheeseCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Now the actual problem format: read N (cube size) and Q (number of carve operations), then Q lines of (x, y, z).\nAfter EACH carve, output the count.", "실제 문제 형식: N (큐브 크기) 와 Q (제거 횟수) 를 읽고, Q 줄에 (x, y, z) 들어옴. 매 제거 후 답 한 줄씩 출력."),
+        "Now the actual problem format: read N (cube size) and Q (number of carve operations), then Q lines of (x, y, z).\nAfter EACH carve, output the count.", "이제 진짜 문제 모양이에요.\n큐브 크기 N 과 빼는 횟수 Q 를 읽고, 이어서 (x, y, z) 가 Q 줄 들어와요.\n한 번 뺄 때마다 답을 한 줄씩 출력해요."),
       content: (
         <div style={{ padding: 16 }}>
           {/* INPUT */}
@@ -210,7 +210,7 @@ export function makeCheeseCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
               {t(E, "After EACH carve: print the count of rows where a 1×1×N rod fits.",
-                  "각 제거 후: 막대가 들어가는 줄의 개수 출력 (한 줄씩 Q 줄).")}
+                  "한 번 뺄 때마다 막대가 들어가는 줄이 몇 개인지 출력해요.\n한 줄씩, 모두 Q 줄이에요.")}
             </div>
           </div>
           {/* 제약 */}
@@ -259,7 +259,7 @@ export function makeCheeseCh1(E) {
           </div>
           <div style={{ marginTop: 12, padding: "10px 12px", background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, fontSize: 12, color: "#92400e", lineHeight: 1.7, fontWeight: 600 }}>
             🤔 {t(E,
-              "Notice the JUMP: 0 → 0 → 1 → 2 → 5.\nWhy does the last carve add +3 at once? That's the magic we'll uncover. Hit 'Sim' next!", "주목: 0 → 0 → 1 → 2 → 5.\n왜 마지막 제거가 한꺼번에 +3 추가? 그게 우리가 풀 마법이에요. '시뮬' 탭으로!")}
+              "Notice the JUMP: 0 → 0 → 1 → 2 → 5.\nWhy does the last carve add +3 at once? That's the magic we'll uncover. Hit 'Sim' next!", "답이 0 → 0 → 1 → 2 → 5 로 뛰어요.\n왜 마지막 한 번에 3이나 늘었을까요?\n그게 우리가 풀 수수께끼예요. '시뮬' 탭으로 가요!")}
           </div>
         </div>),
     },
@@ -329,8 +329,8 @@ export function makeCheeseCh2(E) {
    1. 시뮬 결과 다시 보기 (데이터 정리)
    2. "이거 3×3×3이면 27줄인데, 매번 다 세야 해요?" → 불편함
    3. "블록 1개 빼면 영향받는 줄이 몇 개?" → 3개! (발견)
-   4. "그럼 3개만 추적하면 되겠네!" → 카운터 개념 도달
-   5. 직접 손으로 카운터 추적 (체험)
+   4. "그럼 3개만 추적하면 되겠네!" → 세는 숫자 개념 도달
+   5. 직접 손으로 세는 숫자 추적 (체험)
    ═══════════════════════════════════════════════════════════════ */
 export function makeCheeseCh3(E) {
   return [
@@ -366,12 +366,12 @@ export function makeCheeseCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "From the Brute tab you discovered: ① only 3 rows change per carve, ② row state = one number (carved count).\nNow let's verify by hand that this counter trick is exactly correct.", "브루트 탭에서 발견한 것: ① carve 마다 3 줄만 변함, ② 줄 상태 = 숫자 1 개 (빠진 개수). 이제 손으로 검증 — 카운터 트릭이 정확한지."),
+        "From the Brute tab you discovered: ① only 3 rows change per carve, ② row state = one number (carved count).\nNow let's verify by hand that this counter trick is exactly correct.", "느린 풀이에서 두 가지를 알아냈어요.\n① 블록을 하나 뺄 때 바뀌는 줄은 3개뿐이에요.\n② 줄 하나는 '몇 칸 빠졌나' 숫자 하나로 적을 수 있어요.\n이제 이 방법이 정말 맞는지 손으로 따라가 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 14, padding: 16, marginBottom: 12 }}>
             <div style={{ fontSize: 14, fontWeight: 800, color: "#92400e", marginBottom: 10, textAlign: "center" }}>
-              📏 {t(E, "Counter rule", "카운터 규칙")}
+              📏 {t(E, "Counter rule", "세는 숫자 규칙")}
             </div>
             <div style={{ display: "flex", justifyContent: "center", gap: 12, fontFamily: "'JetBrains Mono',monospace", marginBottom: 8 }}>
               {[0, 1, 2].map(v => (
@@ -385,13 +385,13 @@ export function makeCheeseCh3(E) {
               ))}
             </div>
             <div style={{ fontSize: 12, color: C.dim, textAlign: "center" }}>
-              {t(E, "N=2: counter hits 2 → row is clear → +1 to total!", "N=2: 카운터가 2 도달 → 줄 빔 → 총합 +1!")}
+              {t(E, "N=2: counter hits 2 → row is clear → +1 to total!", "N=2: 세는 숫자가 2 도달 → 줄 빔 → 총합 +1!")}
             </div>
           </div>
           <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 8, padding: 10, fontSize: 12, color: "#065f46", lineHeight: 1.7, textAlign: "center", fontWeight: 700 }}>
             {t(E,
               "Next: walk through 5 carves on N=2 by hand, watching counters reach N.",
-              "다음: N=2 에서 5 번 carve 를 손으로 따라가며 카운터가 N 도달하는 걸 봐요.")}
+              "N=2 에서 블록을 다섯 번 빼 볼 거예요.\n세는 숫자가 N 에 닿는 순간을 눈으로 따라가 봐요.")}
           </div>
         </div>),
     },
@@ -401,7 +401,7 @@ export function makeCheeseCh3(E) {
       type: "reveal",
       narr: t(E,
         "First carve: remove the block at (0,0,0). Watch the 3 counters tick up by 1 each.",
-        "첫 제거: (0,0,0) 블록을 빼요. 3개 카운터가 각각 +1 되는 걸 봐요."),
+        "먼저 (0,0,0) 블록을 빼요.\n세는 숫자 3개가 각각 1씩 올라가는 걸 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           {/* Block being removed */}
@@ -420,7 +420,7 @@ export function makeCheeseCh3(E) {
 
           {/* 3 counters animating 0 → 1 */}
           <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, textAlign: "center", marginBottom: 8, letterSpacing: 0.3 }}>
-            {t(E, "3 ROW COUNTERS UPDATE", "3 줄의 카운터가 업데이트")}
+            {t(E, "3 ROW COUNTERS UPDATE", "3 줄의 세는 숫자가 업데이트")}
           </div>
           <div style={{
             display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap", marginBottom: 14,
@@ -457,7 +457,7 @@ export function makeCheeseCh3(E) {
           }}>
             {t(E,
               "None of the counters reached N=2 yet → the rod still can't fit through any row.",
-              "어떤 카운터도 N=2 도달 안 함 → 아직 막대 통과하는 줄 없음.")}
+              "어떤 세는 숫자도 N=2 도달 안 함 → 아직 막대 통과하는 줄 없음.")}
           </div>
         </div>),
     },
@@ -466,12 +466,12 @@ export function makeCheeseCh3(E) {
       type: "input",
       narr: t(E,
         "Now you tell me: after carving (0,0,0), how many rows opened?",
-        "이제 답해봐요: (0,0,0) 빼고 나서, 뚫린 줄은 몇 개?"),
+        "(0,0,0) 을 빼고 났어요.\n뚫린 줄은 몇 개일까요?"),
       question: t(E,
         "Rows opened after carving (0,0,0)?",
         "(0,0,0) 빼고 나서 뚫린 줄?"),
       hint: t(E, "All 3 counters are at 1, but we need to reach 2 (= N) to open a row.",
-                 "카운터 3개 다 1인데, 줄이 뚫리려면 2 (= N) 에 도달해야 함."),
+                 "세는 숫자 3개 다 1인데, 줄이 뚫리려면 2 (= N) 에 도달해야 함."),
       answer: 0,
     },
 
@@ -479,16 +479,16 @@ export function makeCheeseCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "After 3 removals, some counters hit 2!\nFor example, (0,0,0) and (0,1,0) share the y-row (x=0,z=0) — that counter reached 2, so 1 row opened!", "3번 제거 후, 어떤 카운터는 2에 도달했어!\n예를 들어 (0,0,0)과 (0,1,0)은 y-줄(x=0,z=0)을 공유해 — 그 카운터가 2가 돼서 1줄 뚫렸어!"),
+        "After 3 removals, some counters hit 2!\nFor example, (0,0,0) and (0,1,0) share the y-row (x=0,z=0) — that counter reached 2, so 1 row opened!", "3번 제거 후, 어떤 세는 숫자는 2에 도달했어!\n예를 들어 (0,0,0)과 (0,1,0)은 y-줄(x=0,z=0)을 공유해 — 그 세는 숫자가 2가 돼서 1줄 뚫렸어!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 2.2 }}>
             <div style={{ color: C.dim }}>{t(E, "Removals so far:", "지금까지 제거:")} (0,0,0), (1,1,1), (0,1,0)</div>
             <div style={{ marginTop: 8, background: C.okBg, border: `1.5px solid ${C.okBd}`, borderRadius: 8, padding: "6px 12px", fontWeight: 700, color: C.ok }}>
-              {t(E, "y-row (0,_,0): counter = 2 = N → opened! 📏", "y-줄 (0,_,0): 카운터 = 2 = N → 뚫렸어! 📏")}
+              {t(E, "y-row (0,_,0): counter = 2 = N → opened! 📏", "y-줄 (0,_,0): 세는 숫자 = 2 = N → 뚫렸어! 📏")}
             </div>
             <div style={{ marginTop: 4, color: C.dim, fontSize: 11 }}>
-              {t(E, "Total open rows: 1 (after 3rd removal) → 2 (after 4th)", "뚫린 줄: 1개(3번째 후) → 2개(4번째 후)")}
+              {t(E, "Total open rows: 1 (after 3rd removal) → 2 (after 4th)", "뚫린 줄이 3번째에 1개, 4번째에 2개가 됐어요")}
             </div>
           </div>
         </div>),
@@ -499,7 +499,7 @@ export function makeCheeseCh3(E) {
       type: "reveal",
       narr: t(E,
         "Last carve: remove (1,1,0). This block's 3 counters were all at 1 already — now they all hit N=2 at the same time!",
-        "마지막 제거: (1,1,0). 이 블록의 카운터 3 개가 모두 이미 1 이었어요 — 이번에 *동시에* N=2 도달!"),
+        "마지막으로 (1,1,0) 을 빼요.\n이 블록이 걸린 숫자 3개가 이미 모두 1 이었어요.\n그래서 이번에 셋이 한꺼번에 N=2 에 닿아요!"),
       content: (
         <div style={{ padding: 16 }}>
           {/* Block */}
@@ -518,7 +518,7 @@ export function makeCheeseCh3(E) {
 
           {/* 3 counters all hitting N=2 */}
           <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, textAlign: "center", marginBottom: 8, letterSpacing: 0.3 }}>
-            {t(E, "ALL 3 COUNTERS REACH N AT ONCE!", "3 개 카운터가 동시에 N 도달!")}
+            {t(E, "ALL 3 COUNTERS REACH N AT ONCE!", "3 개 세는 숫자가 동시에 N 도달!")}
           </div>
           <div style={{
             display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap", marginBottom: 14,
@@ -567,7 +567,7 @@ export function makeCheeseCh3(E) {
         "이번 제거 직전에 2 줄 뚫려 있었어요. 이번에 +3 더. 총 몇 줄?"),
       question: t(E,
         "Previous: 2 rows open. After this carve: 2 + 3 = ?",
-        "이전: 2 줄 뚫림. 이번 제거 후: 2 + 3 = ?"),
+        "방금까지 뚫린 줄이 2개였어요.\n이번에 3개가 더 뚫리면 2 + 3 은 몇일까요?"),
       answer: 5,
     },
 
@@ -575,19 +575,19 @@ export function makeCheeseCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "That's the whole trick!\nInstead of checking millions of rows, just update 3 counters each time!", "이게 전부예요! 수백만 줄을 확인하는 대신, 매번 카운터 3개만 업데이트!"),
+        "That's the whole trick!\nInstead of checking millions of rows, just update 3 counters each time!", "이게 전부예요! 수백만 줄을 확인하는 대신, 매번 세는 숫자 3개만 업데이트!"),
       content: (
         <div style={{ background: C.card, borderRadius: 14, padding: 16, border: "2px solid #d97706", boxShadow: "0 4px 16px rgba(217,119,6,.1)" }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: "#d97706", marginBottom: 10 }}>
-            {t(E, "The Counter Trick 🎯", "카운터 트릭 🎯")}
+            {t(E, "The Counter Trick 🎯", "'줄마다 세기' 🎯")}
           </div>
           <div style={{ fontSize: 13, lineHeight: 2.2, color: C.text }}>
-            <div>① {t(E, "Each row has a counter, starting at 0", "각 줄마다 카운터, 0에서 시작")}</div>
-            <div>② {t(E, "Remove block → 3 counters go up by 1", "블록 제거 → 카운터 3개가 +1")}</div>
-            <div>③ {t(E, "Counter = N → row is clear → rod fits! 📏", "카운터 = N → 줄이 빔 → 막대 들어감! 📏")}</div>
+            <div>① {t(E, "Each row has a counter, starting at 0", "각 줄마다 세는 숫자, 0에서 시작")}</div>
+            <div>② {t(E, "Remove block → 3 counters go up by 1", "블록 제거 → 세는 숫자 3개가 +1")}</div>
+            <div>③ {t(E, "Counter = N → row is clear → rod fits! 📏", "세는 숫자 = N → 줄이 빔 → 막대 들어감! 📏")}</div>
           </div>
           <div style={{ marginTop: 10, padding: "8px 12px", background: C.okBg, borderRadius: 8, fontWeight: 800, color: C.ok, textAlign: "center", fontSize: 13 }}>
-            {t(E, "3 operations per removal — lightning fast! ⚡", "제거마다 연산 3번 — 번개처럼 빨라요! ⚡")}
+            {t(E, "3 operations per removal — lightning fast! ⚡", "한 번 뺄 때 3번만 계산해요 — 번개처럼 빨라요! ⚡")}
           </div>
         </div>),
     },
@@ -596,10 +596,10 @@ export function makeCheeseCh3(E) {
     {
       type: "quiz",
       narr: t(E,
-        "With the counter trick, each removal only needs 3 operations.\nFor 200,000 removals, how fast is it?", "카운터 트릭으로 매번 3번만 하면 돼요. 20만 번 제거하면 얼마나 빠를까?"),
+        "With the counter trick, each removal only needs 3 operations.\nFor 200,000 removals, how fast is it?", "'줄마다 세기' 를 쓰면 한 번 뺄 때 3번만 고치면 돼요.\n20만 번 빼면 얼마나 걸릴까요?"),
       question: t(E,
         "Counter trick: 3 ops per removal. Total for Q removals?",
-        "카운터 트릭: 제거당 3번. Q번이면 총?"),
+        "이 방법은 한 번 뺄 때 숫자를 3번만 고쳐요.\nQ 번 빼면 모두 얼마나 걸릴까요?"),
       options: ["O(Q)", "O(QN)", "O(QN²)", "O(QN³)"], correct: 0,
       explain: t(E,
         "O(Q)! Just 200,000 × 3 = 600,000 operations. Done in milliseconds! 🚀",
@@ -621,7 +621,7 @@ export function makeCheeseCh4(E) {
     {
       type: "cheeseRunner",
       narr: t(E,
-        "The simplest idea: after each removal, check EVERY row.\nTry N=3, then N=10, then N=20.\nFeel the difference!\n👀", "가장 단순한 방법: 블록 뺄 때마다 모든 줄을 확인하는 거예요. N=3, 그다음 N=10, N=20 해봐요. 차이를 느껴봐요! 👀"),
+        "The simplest idea: after each removal, check EVERY row.\nTry N=3, then N=10, then N=20.\nFeel the difference!\n👀", "제일 단순한 방법은 블록을 뺄 때마다 모든 줄을 다시 보는 거예요.\nN=3, 그다음 N=10, N=20 으로 해봐요.\n얼마나 달라지는지 느껴 봐요! 👀"),
     },
 
     // 4-2: 느린 이유 — 체감한 후에 설명
@@ -633,7 +633,7 @@ export function makeCheeseCh4(E) {
         "Why does the brute method get so slow as N grows?",
         "N이 커지면 왜 이렇게 느려져?"),
       options: [
-        t(E, "Checking N² rows × N cells each = N³ work per removal!", "N²줄 × N칸씩 = 제거당 N³ 연산!"),
+        t(E, "Checking N² rows × N cells each = N³ work per removal!", "N² 줄에 N 칸씩이라 한 번 뺄 때 N³ 번 계산해요!"),
         t(E, "The computer is tired", "컴퓨터가 지쳐서"),
         t(E, "It's the same speed, just feels slow", "속도는 같은데 느낌만"),
       ], correct: 0,
@@ -658,7 +658,7 @@ export function makeCheeseCh4(E) {
             <div style={{ whiteSpace: "pre-line", fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
               {t(E,
                 "Per query: 3 directions × N² rows × N cells = 3N³ ops\nTotal:     Q queries × 3N³ = 3QN³ ops\n\nMax case (N=1000, Q=200K):\n  3 × 200,000 × 1000³ = 6 × 10¹⁴ ops\n\nAt 10⁸ ops/sec (typical C++):\n  6 × 10¹⁴ / 10⁸ = 6 × 10⁶ seconds ≈ 70 days",
-                "쿼리당: 3 방향 × N² 줄 × N 칸 = 3N³ 연산\n전체:    Q 쿼리 × 3N³ = 3QN³ 연산\n\n최악 (N=1000, Q=20만):\n  3 × 200,000 × 1000³ = 6 × 10¹⁴ 연산\n\n10⁸ ops/sec 기준 (보통 C++):\n  6 × 10¹⁴ / 10⁸ = 6 × 10⁶ 초 ≈ 70 일")}
+                "한 번 뺄 때  3 방향 × N² 줄 × N 칸 = 3N³ 번 계산\n모두 합치면  Q × 3N³ = 3QN³ 번 계산\n\n제일 나쁠 때 (N=1000, Q=20만)\n  3 × 200,000 × 1000³ = 6 × 10¹⁴ 번\n\n1초에 1억 번 계산하는 컴퓨터로도\n  6 × 10¹⁴ ÷ 10⁸ = 6 × 10⁶ 초, 그러니까 약 70 일")}
             </div>
           </div>
 
@@ -666,7 +666,7 @@ export function makeCheeseCh4(E) {
           <div style={{ marginTop: 10, padding: "10px 12px", background: C.noBg, border: `1.5px solid ${C.noBd}`, borderRadius: 10, fontSize: 13, color: C.no, fontWeight: 700, lineHeight: 1.7 }}>
             ❌ {t(E,
               "USACO time limit: 2 seconds. Brute needs ~70 days → cannot fit large test cases.",
-              "USACO 시간 제한: 2 초. Brute 는 약 70 일 필요 → 큰 테스트 케이스 통과 불가.")}
+              "USACO 가 주는 시간은 2 초예요.\n이 방법은 약 70 일이 걸려서 큰 문제를 못 풀어요.")}
           </div>
 
           {/* 직접 확인 CTA */}
@@ -713,7 +713,7 @@ export function makeCheeseCh4(E) {
       ], correct: 2,
       explain: t(E,
         "EXACTLY 3 rows. So 3N² − 3 rows don't change — wasted work to re-check them. Idea: only check those 3.\n\n⚠ But scanning each of those 3 rows still takes N cells → O(QN) total. For N=1000, Q=200K: 2×10⁸ — still borderline TLE. Need ONE more idea (next question).",
-        "정확히 3 줄. 그러면 안 변한 3N² − 3 줄을 다시 검사하는 게 시간 낭비. 핵심 아이디어: 그 3 줄만 검사.\n\n⚠ 근데 그 3 줄도 N 칸씩 다 봐야 빈 거 확인 가능 → 총 O(QN). N=1000, Q=20만이면 2×10⁸ — 여전히 한계 근처라 TLE. 한 가지 더 필요 (다음 질문)."),
+        "딱 3 줄이에요.\n그러니 안 바뀐 3N² − 3 줄을 또 보는 건 시간 낭비예요.\n그 3 줄만 보면 돼요.\n\n⚠ 그런데 그 3 줄도 N 칸을 다 봐야 비었는지 알 수 있어요.\n그러면 O(QN) 이에요. N=1000, Q=20만이면 2×10⁸ 번이라\n아직도 시간이 아슬아슬해요. 한 가지가 더 필요해요."),
     },
 
     // 4-3b: 두 번째 디딤돌 — "이전 답을 어떻게 기억?"
@@ -730,19 +730,19 @@ export function makeCheeseCh4(E) {
       options: [
         t(E, "List of every carved cell", "빠진 칸 좌표 전부"),
         t(E, "True/False for each cell (N items)", "각 칸의 True/False (N 개)"),
-        t(E, "Just one number: count of carved cells in that row", "한 숫자: 그 줄에서 빠진 칸 개수"),
+        t(E, "Just one number: count of carved cells in that row", "숫자 하나면 돼요 — 그 줄에서 빠진 칸이 몇 개인지"),
         t(E, "The first empty position", "처음 비는 위치"),
       ], correct: 2,
       explain: t(E,
         "Just ONE number per row! When count = N, the whole row is empty. Increment 3 counters per carve, check if any hit N. That's it.",
-        "줄마다 숫자 1 개! count = N 이면 전체 빔. carve 마다 카운터 3 개 +1, N 도달 체크. 그게 다예요."),
+        "줄마다 숫자 1 개! count = N 이면 전체 빔. carve 마다 세는 숫자 3 개 +1, N 도달 체크. 그게 다예요."),
     },
 
     // 4-3c: 디딤돌 마무리 — "그게 카운터 트릭!"
     {
       type: "reveal",
       narr: t(E,
-        "You just designed the algorithm yourself!\nTwo insights chained: (1) only 3 rows change per carve, (2) one number per row is enough.", "방금 알고리즘을 직접 설계한 거예요! 두 통찰의 연결: (1) 한 번에 3 줄만 변함, (2) 줄마다 숫자 1 개면 충분."),
+        "You just designed the algorithm yourself!\nTwo insights chained: (1) only 3 rows change per carve, (2) one number per row is enough.", "방금 알고리즘을 직접 만든 거예요!\n알아낸 두 가지를 이은 거예요.\n(1) 한 번에 3 줄만 바뀐다 (2) 줄마다 숫자 하나면 된다."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "linear-gradient(135deg,#fef3c7,#fde68a)", border: "2px solid #f59e0b", borderRadius: 14, padding: 16, marginBottom: 12 }}>
@@ -752,14 +752,14 @@ export function makeCheeseCh4(E) {
             <div style={{ fontSize: 13, lineHeight: 2.2, color: "#78350f" }}>
               <div>① {t(E, "Brute checks 3N² rows per carve → too slow", "브루트는 carve 당 3N² 줄 검사 → 너무 느려")}</div>
               <div>② {t(E, "BUT only 3 rows actually change per carve", "근데 carve 마다 진짜 변하는 건 3 줄")}</div>
-              <div>③ {t(E, "So: track each row's state separately, only update 3", "그래서: 줄별 상태를 따로 추적, 3 개만 업데이트")}</div>
-              <div>④ {t(E, "Row state = ONE number (carved count). Done.", "줄 상태 = 숫자 1 개 (빠진 개수). 끝.")}</div>
+              <div>③ {t(E, "So: track each row's state separately, only update 3", "그래서 줄마다 따로 적어 두고, 3 개만 고쳐요")}</div>
+              <div>④ {t(E, "Row state = ONE number (carved count). Done.", "줄 하나는 숫자 하나면 돼요 — 빠진 칸 수예요")}</div>
             </div>
           </div>
           <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: 12, fontSize: 13, color: "#065f46", lineHeight: 1.7, textAlign: "center", fontWeight: 700 }}>
             ✨ {t(E,
               "This is the 'counter trick'. Next tab: see why it's exactly correct, then write the code.",
-              "이게 '카운터 트릭'. 다음 탭: 왜 정확히 맞는지 보고, 코드 작성.")}
+              "이게 '줄마다 세기' 예요.\n다음 탭에서 왜 딱 맞는지 보고, 코드를 써 봐요.")}
           </div>
         </div>),
     },
@@ -800,7 +800,7 @@ export function makeCheeseCh5(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "We need to store counters for each row.\nThink of it like a notebook — for each row, write down how many blocks are gone.", "각 줄의 카운터를 저장해야 해요. 공책이라고 생각해 — 각 줄마다 '빠진 블록 수'를 적어두는 거예요."),
+        "We need to store counters for each row.\nThink of it like a notebook — for each row, write down how many blocks are gone.", "각 줄의 세는 숫자를 저장해야 해요. 공책이라고 생각해 — 각 줄마다 '빠진 블록 수'를 적어두는 거예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 14, padding: 14 }}>
@@ -817,7 +817,7 @@ export function makeCheeseCh5(E, lang = "py") {
                 ? t(E, "C++ uses a 2D vector pre-filled with 0 — clean indexing with [x][y].",
                        "C++ 은 0 으로 미리 채운 2D vector — [x][y] 로 깔끔하게 접근.")
                 : t(E, "Python has a perfect tool: defaultdict(int) — auto-starts at 0!",
-                       "Python 에 딱 맞는 도구: defaultdict(int) — 자동으로 0 시작!")}
+                       "Python 에는 딱 맞는 도구가 있어요.\ndefaultdict(int) 는 처음 값이 저절로 0 이에요!")}
             </div>
           </div>
         </div>),
@@ -829,7 +829,7 @@ export function makeCheeseCh5(E, lang = "py") {
       narr: lang === "cpp"
         ? t(E,
             "C++ trick: pre-fill a 2D vector with 0. Then xy[x][y]++ just works — no missing key worries.",
-            "C++ 트릭: 2D vector 를 0 으로 미리 채워둠. xy[x][y]++ 그대로 통함 — 없는 키 걱정 없음.")
+            "C++ 에서는 2차원 vector 를 0 으로 미리 채워 둬요.\n그러면 xy[x][y]++ 가 그냥 되고, 없는 자리를 걱정할 일이 없어요.")
         : t(E,
             "defaultdict(int) works like magic — if you ask for a key that doesn't exist, it gives you 0!",
             "defaultdict(int) 는 마법 같아 — 없는 키를 물어보면 자동으로 0 을 줘요!"),
@@ -872,10 +872,10 @@ export function makeCheeseCh5(E, lang = "py") {
     {
       type: "quiz",
       narr: t(E,
-        "The counter goes up by 1 each removal. When does the rod fit?", "카운터가 제거마다 1씩 올라가. 막대가 들어가는 때는?"),
+        "The counter goes up by 1 each removal. When does the rod fit?", "세는 숫자가 제거마다 1씩 올라가. 막대가 들어가는 때는?"),
       question: t(E,
         "Rod fits when counter reaches…?",
-        "카운터가 몇이 되면 막대가 들어가요?"),
+        "세는 숫자가 몇이 되면 막대가 들어가요?"),
       options: ["0", "N/2", "N", "N²"], correct: 2,
       explain: t(E,
         "N! All blocks removed from that row → completely empty → rod fits!",
@@ -888,10 +888,10 @@ export function makeCheeseCh5(E, lang = "py") {
       narr: lang === "cpp"
         ? t(E,
             "Quick check before the code: xy[x][y] tracks removals for one specific row. Which direction does that row run?",
-            "코드 보기 전 짧은 확인: xy[x][y] 는 특정 줄의 제거 수를 세요. 그 줄이 뻗는 방향은?")
+            "코드를 보기 전에 하나만 확인해요.\nxy[x][y] 는 어떤 줄에서 몇 칸이 빠졌는지를 세요.\n그 줄은 어느 쪽으로 뻗어 있을까요?")
         : t(E,
             "Quick check before the code: xy[(x,y)] tracks removals for one specific row. Which direction does that row run?",
-            "코드 보기 전 짧은 확인: xy[(x,y)] 는 특정 줄의 제거 수를 세요. 그 줄이 뻗는 방향은?"),
+            "코드를 보기 전에 하나만 확인해요.\nxy[(x,y)] 는 어떤 줄에서 몇 칸이 빠졌는지를 세요.\n그 줄은 어느 쪽으로 뻗어 있을까요?"),
       question: lang === "cpp"
         ? t(E, "xy[x][y] counts removals on which row?", "xy[x][y] 는 어떤 방향의 줄?")
         : t(E, "xy[(x,y)] counts removals on which row?", "xy[(x,y)] 는 어떤 방향의 줄?"),
@@ -904,7 +904,7 @@ export function makeCheeseCh5(E, lang = "py") {
       ], correct: 0,
       explain: t(E,
         "The xy index → z-direction row! Fixing 2 axes means the row runs along the remaining one.",
-        "xy 인덱스 → z-방향 줄! 2 축이 고정되면 줄은 나머지 1 축으로 뻗어요."),
+        "xy 자리는 z-방향 줄이에요!\n축 두 개가 정해지면 줄은 남은 축 하나를 따라 뻗어요."),
     },
 
     // 5-5: 코드 — 섹션 1 개 = 페이지 1 개 (라이브 수업 흐름)
@@ -913,7 +913,7 @@ export function makeCheeseCh5(E, lang = "py") {
       narr: i === 0
         ? t(E,
             `Walk through the smart solution one part at a time (${arr.length} pages). Toggle Python ↔ C++ via the header. Save as PDF for later.`,
-            `최적 풀이를 한 부분씩 따라가요 (총 ${arr.length} 페이지). 위 헤더로 Python ↔ C++ 토글. PDF 저장 가능.`)
+            `제일 빠른 풀이를 한 부분씩 따라가요 (총 ${arr.length} 페이지). 위 헤더로 Python ↔ C++ 토글. PDF 저장 가능.`)
         : "",
       section: sec,
     })),
@@ -926,7 +926,7 @@ export function makeCheeseCh5(E, lang = "py") {
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 8, textAlign: "center" }}>
-            {t(E, "Sample: N=2, Q=5", "샘플: N=2, Q=5")}
+            {t(E, "Sample: N=2, Q=5", "예제는 N=2, Q=5 예요")}
           </div>
           <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, overflow: "hidden", fontSize: 11 }}>
             <div style={{ display: "grid", gridTemplateColumns: "30px 70px 1fr 50px 60px", padding: "6px 8px", background: "#fef3c7", borderBottom: `1.5px solid ${C.border}`, fontWeight: 800, color: "#92400e", fontFamily: "'JetBrains Mono',monospace" }}>
@@ -961,10 +961,10 @@ export function makeCheeseCh5(E, lang = "py") {
           </div>
           <div style={{ marginTop: 10, padding: "8px 10px", background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 8, fontSize: 11, color: "#9a3412", lineHeight: 1.7 }}>
             👀 {t(E,
-              "Last row: ONE block (1,1,0) made 3 different counters reach N at the same time → +3 in one go.\nThat's the 'jump' you saw in the sim.", "마지막 줄: 블록 1 개 (1,1,0) 가 3 개의 카운터를 동시에 N 으로 → 한 번에 +3.\n시뮬에서 본 '점프' 가 이거.")}
+              "Last row: ONE block (1,1,0) made 3 different counters reach N at the same time → +3 in one go.\nThat's the 'jump' you saw in the sim.", "마지막 줄을 봐요.\n블록 하나 (1,1,0) 이 세는 숫자 3개를 한꺼번에 N 으로 올려요.\n그래서 한 번에 3이 늘어요. 시뮬에서 본 그 뜀이 이거예요.")}
           </div>
           <div style={{ marginTop: 6, padding: "8px 10px", background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 8, fontSize: 11, color: "#065f46", lineHeight: 1.7, fontFamily: "'JetBrains Mono',monospace" }}>
-            ✓ {t(E, "Output column matches sample output: 0, 0, 1, 2, 5", "출력 칼럼이 샘플 출력과 일치: 0, 0, 1, 2, 5")}
+            ✓ {t(E, "Output column matches sample output: 0, 0, 1, 2, 5", "출력 칸이 예제 답과 똑같아요 — 0, 0, 1, 2, 5")}
           </div>
         </div>),
     },
@@ -973,7 +973,7 @@ export function makeCheeseCh5(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "That's it!\nThe whole insight: don't re-check everything — just track what changes.\n3 counters per removal = done!\n🎉", "이게 전부예요! 핵심: 전부 다시 확인하지 마 — 바뀌는 것만 추적해요. 제거당 카운터 3개 = 끝! 🎉"),
+        "That's it!\nThe whole insight: don't re-check everything — just track what changes.\n3 counters per removal = done!\n🎉", "이게 전부예요!\n전부 다시 보지 말고, 바뀌는 것만 따라가요.\n한 번 뺄 때 세는 숫자 3개면 끝이에요! 🎉"),
       content: (
         <div style={{ textAlign: "center", padding: 8 }}>
           <div style={{ background: "linear-gradient(135deg,#92400e,#d97706)", borderRadius: 14, padding: "20px 16px" }}>

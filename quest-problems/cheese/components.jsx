@@ -54,7 +54,7 @@ export function RodFitSim({ E }) {
       }}>
         <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, textAlign: "center", marginBottom: 10, letterSpacing: 0.3 }}>
           {t(E, "👆 Click cells to toggle 🧀 ↔ empty. Watch the rod try to pass.",
-                "👆 셀을 눌러서 🧀 ↔ 빈 칸 토글. 막대가 통과하는지 봐요.")}
+                "👆 칸을 누르면 🧀 와 빈 칸이 바뀌어요.\n막대가 지나갈 수 있는지 봐요.")}
         </div>
 
         {/* Cell row + rod (stacked) */}
@@ -465,7 +465,7 @@ export function CheeseBruteRunner({ E }) {
             </div>
             <div style={{ fontSize: 10, color: C.dim, textAlign: "right", lineHeight: 1.5, maxWidth: 180 }}>
               {t(E, "Includes 16ms/query animation. Pure brute is faster but still O(QN³).",
-                  "쿼리당 16ms 애니메이션 포함. 순수 brute 는 더 빠르지만 여전히 O(QN³).")}
+                  "한 번 물을 때마다 16ms 짜리 움직임이 들어 있어요.\n움직임을 빼면 더 빠르지만, 그래도 O(QN³) 이에요.")}
             </div>
           </div>
 
@@ -504,7 +504,7 @@ export function CheeseBruteRunner({ E }) {
             <div style={{ marginTop: 6, fontSize: 10, color: C.dim, lineHeight: 1.5 }}>
               {t(E,
                 "Estimate: 3N³ ops per query × Q / 10⁸ ops/sec (C++).",
-                "추정: 쿼리당 3N³ 연산 × Q / 1억 ops/sec (C++).")}
+                "한 번 물을 때 3N³ 번 계산하고, 그게 Q 번이에요.\n1초에 1억 번 계산하는 C++ 기준으로 어림잡은 값이에요.")}
             </div>
           </div>
 
@@ -768,16 +768,16 @@ const CB_OUTPUT_CPP = [
 export function getCheeseBruteSections(E) {
   return [
     {
-      label: t(E, "📦 1. Input + 3D Cube Init", "📦 1. 입력 + 3D 큐브 초기화"),
+      label: t(E, "📦 1. Input + 3D Cube Init", "📦 1. 입력 받고 3D 큐브 만들기"),
       color: "#94a3b8",
       py: CB_INPUT_PY(E), cpp: CB_INPUT_CPP(E),
       why: [
-        t(E, "N = cube size, Q = number of carve queries.", "N = 큐브 크기, Q = 제거 쿼리 수."),
-        t(E, "3D array of bool: cheese[x][y][z] tracks if block exists. All start True.", "3D bool 배열: cheese[x][y][z] 가 블록 존재 여부. 다 True 시작."),
+        t(E, "N = cube size, Q = number of carve queries.", "N 은 큐브 크기이고, Q 는 블록을 빼는 횟수예요."),
+        t(E, "3D array of bool: cheese[x][y][z] tracks if block exists. All start True.", "cheese[x][y][z] 는 그 자리에 블록이 있는지를 담아요.\n처음엔 모두 True 예요."),
       ],
       pyOnly: [
         t(E, "Triple list comprehension creates N×N×N array. Memory: N³ booleans.",
-            "3 중 리스트 컴프리헨션으로 N×N×N 배열. 메모리: N³ bool."),
+            "목록 만들기를 세 번 겹쳐서 N×N×N 칸을 만들어요.\n메모리는 참/거짓 N³ 개만큼 써요."),
       ],
       cppOnly: [
         t(E, "vector<vector<vector<bool>>> — packed 1 bit/bool, but 2D would be enough if we use flags differently.",
@@ -787,13 +787,13 @@ export function getCheeseBruteSections(E) {
       ],
     },
     {
-      label: t(E, "🍰 2. Per-Query: Carve One Block", "🍰 2. 매 쿼리: 블록 1 개 빼기"),
+      label: t(E, "🍰 2. Per-Query: Carve One Block", "🍰 2. 한 번 물을 때마다 블록 하나 빼기"),
       color: "#0891b2",
       py: CB_CARVE_PY(E), cpp: CB_CARVE_CPP(E),
       why: [
-        t(E, "Read (x, y, z) for the block to carve. Set cheese[x][y][z] = false.", "(x, y, z) 읽고 cheese[x][y][z] = false 로 설정."),
-        t(E, "Reset count = 0 because we're recomputing from scratch every query (the brute approach).", "count = 0 리셋 — 매 쿼리마다 전부 재계산하는 게 brute 의 핵심."),
-        t(E, "This is the WASTE — only 1 block changed, but we throw away all previous knowledge.", "이게 낭비 — 블록 1 개만 바뀌었는데 이전 정보 다 버림."),
+        t(E, "Read (x, y, z) for the block to carve. Set cheese[x][y][z] = false.", "뺄 블록의 (x, y, z) 를 읽고\ncheese[x][y][z] 를 false 로 바꿔요."),
+        t(E, "Reset count = 0 because we're recomputing from scratch every query (the brute approach).", "count 를 0 으로 되돌려요.\n물을 때마다 처음부터 다시 세는 게 이 느린 방법의 방식이에요."),
+        t(E, "This is the WASTE — only 1 block changed, but we throw away all previous knowledge.", "여기가 낭비예요.\n블록 하나만 바뀌었는데 앞에서 안 것을 다 버려요."),
       ],
     },
     {
@@ -802,15 +802,15 @@ export function getCheeseBruteSections(E) {
       py: CB_SCAN_PY(E), cpp: CB_SCAN_CPP(E),
       why: [
         t(E, "For each query, scan 3 × N² rows × N cells each → 3N³ ops per query.",
-            "쿼리마다 3 × N² 줄 × 줄당 N 칸 → 쿼리당 3N³ 연산."),
+            "한 번 물을 때 3 × N² 줄을 보고, 줄마다 N 칸을 봐요.\n그래서 한 번에 3N³ 번 계산해요."),
         t(E, "Q=200K, N=1000 → 6×10¹⁴ ops → ~70 days. Need to skip the inner-N scan.",
-            "Q=20만, N=1000 → 6×10¹⁴ 연산 → 약 70 일. 안쪽 N 스캔을 없애야 함."),
+            "Q=20만, N=1000 이면 6×10¹⁴ 번이라 약 70 일이 걸려요.\n줄 안쪽을 N 칸씩 훑는 것을 없애야 해요."),
       ],
       pyOnly: [
         t(E, "all(not cheese[...] for z_ in range(N)) — Python idiom for 'all False'.", "all(not cheese[...] for z_ in range(N)) — '모두 False' 의 Python idiom."),
       ],
       cppOnly: [
-        t(E, "Manual inner loop with early break — slightly faster than scanning all N cells if first one is non-empty.", "수동 안쪽 루프 + early break — 첫 칸이 비어있지 않으면 N 칸 다 안 봐도 됨."),
+        t(E, "Manual inner loop with early break — slightly faster than scanning all N cells if first one is non-empty.", "안쪽 반복을 손으로 쓰고 중간에 끊어요.\n첫 칸이 안 비었으면 N 칸을 다 볼 필요가 없어요."),
       ],
     },
     {
@@ -818,7 +818,7 @@ export function getCheeseBruteSections(E) {
       color: "#94a3b8",
       py: CB_OUTPUT_PY, cpp: CB_OUTPUT_CPP,
       why: [
-        t(E, "Output count after each carve — problem requires Q lines, one per query.", "각 carve 후 count 출력 — 문제는 쿼리당 한 줄, 총 Q 줄 요구."),
+        t(E, "Output count after each carve — problem requires Q lines, one per query.", "블록을 뺄 때마다 count 를 출력해요.\n문제가 한 번에 한 줄씩, 모두 Q 줄을 내라고 했어요."),
       ],
     },
   ];
@@ -945,18 +945,18 @@ export function getCheeseSections(E) {
       ],
     },
     {
-      label: t(E, "📊 2. Three Counters", "📊 2. 카운터 3 개"),
+      label: t(E, "📊 2. Three Counters", "📊 2. 세는 숫자 3 개"),
       color: "#0891b2",
       py: CHEESE_COUNTERS_PY(E), cpp: CHEESE_COUNTERS_CPP(E),
       why: [
         t(E, "One counter per row direction. xy → z-axis rows. yz → x-axis. xz → y-axis.",
-            "방향당 카운터 1 개. xy → z-축 줄. yz → x-축. xz → y-축."),
+            "방향당 세는 숫자 1 개. xy → z-축 줄. yz → x-축. xz → y-축."),
         t(E, "Why three? A block sits on exactly 3 rows (one per direction). Update = 3 increments.",
             "왜 3 개? 블록 1 개가 정확히 3 줄에 걸침 (방향당 1). 업데이트 = +1 세 번."),
       ],
       pyOnly: [
         t(E, "defaultdict(int): keys auto-init to 0 — clean syntax 'mydict[(x,y)] += 1'.",
-            "defaultdict(int): 키 자동 0 초기화 — 'mydict[(x,y)] += 1' 깔끔한 문법."),
+            "defaultdict(int) 는 없는 자리를 저절로 0 으로 만들어요.\n그래서 mydict[(x,y)] += 1 을 바로 쓸 수 있어요."),
         t(E, "Tuple keys (x,y) — Python dicts handle tuple keys natively.",
             "튜플 키 (x,y) — Python dict 가 튜플 키 native 지원."),
       ],
@@ -964,18 +964,18 @@ export function getCheeseSections(E) {
         t(E, "2D vector(N, vector<int>(N, 0)) — fixed N×N grid, faster than map<pair<int,int>>.",
             "2D vector(N, vector<int>(N, 0)) — 고정 N×N 격자, map<pair<int,int>> 보다 빠름."),
         t(E, "Memory: N=1000 → 1M ints × 3 = 12MB. Fits comfortably.",
-            "메모리: N=1000 → 100만 int × 3 = 12MB. 여유롭게 들어감."),
+            "N=1000 이면 정수 100만 개짜리 표가 3개라 12MB 예요.\n넉넉하게 들어가요."),
       ],
     },
     {
-      label: t(E, "🔄 3. Update Loop", "🔄 3. 업데이트 루프"),
+      label: t(E, "🔄 3. Update Loop", "🔄 3. 숫자를 고치는 반복"),
       color: "#16a34a",
       py: CHEESE_LOOP_PY, cpp: CHEESE_LOOP_CPP,
       why: [
         t(E, "Per query (x,y,z): bump 3 counters; if any just hit N, that row is now fully open → count += 1.",
-            "쿼리 (x,y,z) 마다: 카운터 3 개 +1; 그중 어떤 게 막 N 에 도달하면 그 줄이 뚫린 거 → count += 1."),
+            "(x,y,z) 가 올 때마다 세는 숫자 3개를 1씩 올려요.\n그중 하나가 막 N 이 됐다면 그 줄이 뚫린 거예요.\n그럴 때 count 를 1 올려요."),
         t(E, "Print count after EACH query (problem requires per-step answer). O(1) per query.",
-            "매 쿼리 후 count 출력 (문제 요구). 쿼리당 O(1)."),
+            "한 번 물을 때마다 count 를 출력해요. 문제가 그렇게 하라고 했어요.\n한 번에 O(1) 이에요."),
       ],
       pyOnly: [
         t(E, "Three explicit blocks (one per direction) — increment first, then check == N. Easy to read.",
@@ -985,7 +985,7 @@ export function getCheeseSections(E) {
         t(E, "Three explicit blocks (one per direction) — increment first, then check == N.",
             "방향당 한 블록씩 명시 — 먼저 +1, 그 다음 == N 체크."),
         t(E, "Plain int for-loop with q counter — no while(Q--) tricks needed.",
-            "평범한 int for 루프 (q 카운터 사용) — while(Q--) 같은 트릭 안 씀."),
+            "평범한 int for 반복이에요. q 로 세요.\nwhile(Q--) 같은 줄임 표현은 안 써요."),
       ],
     },
     {
@@ -995,13 +995,13 @@ export function getCheeseSections(E) {
       why: [
         t(E,
           "Per query: O(1) — three counter updates and three N-checks. Total: O(Q).",
-          "쿼리당 O(1) — 카운터 업데이트 3 번과 N 체크 3 번. 전체 O(Q)."),
+          "한 번에 O(1) 이에요 — 숫자를 3번 올리고 3번 확인해요.\n다 합쳐도 O(Q) 예요."),
         t(E,
           "Brute was O(QN³). For N=1000, Q=200,000: brute = 2×10¹⁴ ops. Smart = 6×10⁵. Speedup ~10⁹×.",
-          "브루트 O(QN³). N=1000, Q=20만: 브루트 2×10¹⁴ 연산. 스마트 6×10⁵. 약 10⁹ 배."),
+          "느린 방법은 O(QN³) 이에요.\nN=1000, Q=20만이면 느린 쪽이 2×10¹⁴ 번, 이 방법은 6×10⁵ 번이에요.\n10억 배쯤 차이가 나요."),
         t(E,
           "Insight: 'don't recompute everything — only track what changes'. The 3-counters trick.",
-          "핵심: '전부 재계산하지 마 — 바뀌는 것만 추적'. 카운터 3개 트릭."),
+          "핵심은 하나예요.\n전부 다시 세지 말고, 바뀌는 것만 따라가요.\n한 번 뺄 때 세는 숫자 3개만 고치면 돼요."),
       ],
     },
   ];
@@ -1194,8 +1194,8 @@ export function downloadCheesePDF(E, sections, lang = "py") {
   1. ${t(E, "Problem", "문제")} ·
   2. ${t(E, "Worked Example", "예제 풀이")} ·
   3. ${t(E, "Brute Force", "브루트 포스")} ·
-  4. ${t(E, "Pattern (Counter Trick)", "패턴 (카운터 트릭)")} ·
-  5. ${t(E, "Optimal Code", "최적 코드")}
+  4. ${t(E, "Pattern (Counter Trick)", "'줄마다 세기'")} ·
+  5. ${t(E, "Optimal Code", "제일 빠른 코드")}
 </div>
 
 <!-- 1. 문제 -->
@@ -1247,7 +1247,7 @@ export function downloadCheesePDF(E, sections, lang = "py") {
 <h2>3. ${t(E, "Brute Force (TLE)", "브루트 포스 (TLE)")}</h2>
 <p>${t(E,
   "Direct approach: after each removal, scan all 3N² rows and check each cell. Time complexity O(QN³).",
-  "직접 풀이: 매 제거 후 3N² 줄을 다 훑고 각 칸을 확인. 시간복잡도 O(QN³).")}</p>
+  "그대로 푸는 방법은 블록을 뺄 때마다 3N² 줄을 다 훑고 칸을 하나씩 확인해요.\n시간은 O(QN³) 이에요.")}</p>
 
 ${codeBlock(bruteCode)}
 
@@ -1255,11 +1255,11 @@ ${codeBlock(bruteCode)}
   <b>${t(E, "Why TLE?", "왜 TLE?")}</b>
   ${t(E,
     "N=1000, Q=200,000: 200,000 × 3 × 10⁶ × 10³ = 6×10¹⁴ ops. Even 1B ops/sec would take 600,000 seconds = 7 days.",
-    "N=1000, Q=20만: 20만 × 3 × 10⁶ × 10³ = 6×10¹⁴ 연산. 초당 10억 연산 컴퓨터로도 60만 초 = 7 일.")}
+    "N=1000, Q=20만이면 20만 × 3 × 10⁶ × 10³ = 6×10¹⁴ 번 계산해요.\n1초에 10억 번 계산하는 컴퓨터로도 60만 초, 그러니까 7 일이 걸려요.")}
 </div>
 
 <!-- 4. 패턴 -->
-<h2>4. ${t(E, "Pattern: The Counter Trick", "패턴: 카운터 트릭")}</h2>
+<h2>4. ${t(E, "Pattern: The Counter Trick", "'줄마다 세기' 라는 방법")}</h2>
 <h3>${t(E, "Key insight", "핵심 통찰")}</h3>
 <div class="box ok">
   ${t(E,
@@ -1267,15 +1267,15 @@ ${codeBlock(bruteCode)}
     "블록 1 개를 빼도 영향받는 줄은 최대 3 개 (방향당 1). 나머지 3N²−3 개 줄은 전혀 안 바뀜. 매번 다 훑을 필요 없음.")}
 </div>
 
-<h3>${t(E, "Solution: tally counters per row", "해결책: 줄마다 카운터")}</h3>
-<p>${t(E, "For each row, keep a counter of how many blocks have been removed.", "각 줄마다, 제거된 블록 수를 카운트.")}</p>
+<h3>${t(E, "Solution: tally counters per row", "줄마다 숫자를 하나씩 두면 돼요")}</h3>
+<p>${t(E, "For each row, keep a counter of how many blocks have been removed.", "줄마다 블록이 몇 개 빠졌는지를 세어 둬요.")}</p>
 <ul>
-  <li>${t(E, "Counter starts at 0.", "카운터 0 에서 시작.")}</li>
-  <li>${t(E, "Block removed → that row's counter += 1.", "블록 제거 → 그 줄의 카운터 += 1.")}</li>
-  <li>${t(E, "Counter == N → row fully empty → rod fits!", "카운터 == N → 줄 완전히 빔 → 막대 들어감!")}</li>
+  <li>${t(E, "Counter starts at 0.", "세는 숫자는 0 에서 시작해요.")}</li>
+  <li>${t(E, "Block removed → that row's counter += 1.", "블록을 빼면 그 줄의 세는 숫자를 1 올려요.")}</li>
+  <li>${t(E, "Counter == N → row fully empty → rod fits!", "세는 숫자가 N 이 되면 그 줄이 다 비어서 막대가 들어가요!")}</li>
 </ul>
 
-<h3>${t(E, "Why 3 counters per removal?", "왜 제거당 3 카운터?")}</h3>
+<h3>${t(E, "Why 3 counters per removal?", "왜 한 번 뺄 때 세는 숫자가 3개일까?")}</h3>
 <p>${t(E,
   "Block (x,y,z) sits on:",
   "블록 (x,y,z) 가 걸린 줄:")}</p>
@@ -1288,11 +1288,11 @@ ${codeBlock(bruteCode)}
 <div class="box">
   <b>${t(E, "Time complexity", "시간복잡도")}:</b>
   ${t(E, "O(1) per query (3 increments, 3 checks). Total O(Q). Even Q=200,000 is instant.",
-        "쿼리당 O(1) (증가 3 번, 체크 3 번). 전체 O(Q). Q=20만도 순식간.")}
+        "한 번에 O(1) 이에요. 3번 올리고 3번 확인해요.\n다 합쳐도 O(Q) 라서 Q=20만도 순식간이에요.")}
 </div>
 
-<!-- 5. 최적 코드 -->
-<h2>5. ${t(E, "Optimal Code (4 sections)", "최적 코드 (4 부분)")}</h2>
+<!-- 5. 제일 빠른 코드 -->
+<h2>5. ${t(E, "Optimal Code (4 sections)", "제일 빠른 코드 (4 부분)")}</h2>
 
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
@@ -1307,16 +1307,16 @@ ${sections.map(s => `
   <b>📝 ${t(E, "Self-check", "자가 점검")}</b>
   <ol style="margin:6px 0 0;padding-left:20px;font-size:12px;">
     <li>${t(E, "N=2, removals: (0,0,1), (1,1,1), (0,1,1), (1,0,1). What's the answer after each?",
-              "N=2, 제거 순서: (0,0,1), (1,1,1), (0,1,1), (1,0,1). 각 단계 답?")}</li>
+              "N=2 에서 (0,0,1), (1,1,1), (0,1,1), (1,0,1) 순서로 빼요.\n단계마다 답은 얼마일까요?")}</li>
     <li>${t(E, "Why use 3 counters and not just one?",
-              "왜 카운터를 3 개나 쓸까? 1 개로 안 될까?")}</li>
+              "왜 세는 숫자를 3 개나 쓸까? 1 개로 안 될까?")}</li>
     <li>${t(E, "Can a removal ever DECREASE the answer? Why or why not?",
               "제거가 답을 줄일 수 있을까? 이유는?")}</li>
   </ol>
   <div style="font-size:11px;color:#94a3b8;margin-top:6px;font-style:italic;">
     ${t(E,
       "Answers: 1) After (0,0,1): xy[0][0]=1, yz[0][1]=1, xz[0][1]=1, all <N=2 → 0. After (1,1,1): xy[1][1]=1, yz[1][1]=1, xz[1][1]=1, all <2 → 0. After (0,1,1): xy[0][1]=1, yz[1][1]=2 (HIT! +1), xz[0][1]=2 (HIT! +1) → 2. After (1,0,1): xy[1][0]=1, yz[0][1]=2 (HIT! +1), xz[1][1]=2 (HIT! +1) → 4. 2) Each block sits on 3 rows (one per direction). One counter would only track one direction. 3) No — once a row is empty it stays empty. count is monotonically non-decreasing.",
-      "답: 1) (0,0,1) 후: 모두 1 < 2 → 0. (1,1,1) 후: 모두 1 → 0. (0,1,1) 후: yz[1][1]=2 (+1), xz[0][1]=2 (+1) → 2. (1,0,1) 후: yz[0][1]=2 (+1), xz[1][1]=2 (+1) → 4. 2) 블록 1 개는 3 줄에 걸쳐서 1 개로는 한 방향만 추적 가능. 3) 못 줄임 — 한 번 뚫린 줄은 계속 뚫린 상태. count 는 단조 비감소.")}
+      "답이에요.\n1) (0,0,1) 을 빼면 셋 다 1 이라 2 보다 작아서 0 이에요.\n(1,1,1) 뒤에도 셋 다 1 이라 0 이에요.\n(0,1,1) 뒤에는 yz[1][1] 과 xz[0][1] 이 2 가 돼서 2 예요.\n(1,0,1) 뒤에는 yz[0][1] 과 xz[1][1] 이 2 가 돼서 4 예요.\n2) 블록 하나는 줄 3개에 걸쳐 있어요. 숫자가 하나면 한 방향밖에 못 봐요.\n3) 줄일 수 없어요. 한 번 뚫린 줄은 계속 뚫려 있어서 답은 줄지 않아요.")}
   </div>
 </div>
 
