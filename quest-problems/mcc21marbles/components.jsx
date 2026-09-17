@@ -43,8 +43,8 @@ export function Mcc21MarblesBoundarySim({ E }) {
         </div>
         <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.5 }}>
           {t(E,
-            "Each box's D = A − B. Walking left → right, the running total of D is the carry.\nThe carry MUST cross each boundary — that is exactly the marbles moved there.",
-            "각 상자의 D = A − B 예요.\n왼쪽부터 D 를 더해 온 값을 누적이라고 불러요 (코드에서는 carry).\n누적은 반드시 그 경계를 건너요. 그게 그 자리에서 옮기는 구슬 수예요.")}
+            "Each box's D = A − B. The running total of D is the carry.\nThe carry MUST cross each boundary — that is the marbles moved there.",
+            "각 상자의 D = A − B 예요.\nD 를 왼쪽부터 더해 온 값을 누적(carry)이라고 해요.\n누적은 반드시 그 경계를 건너요. 그게 옮기는 구슬 수예요.")}
         </div>
       </div>
 
@@ -59,13 +59,13 @@ export function Mcc21MarblesBoundarySim({ E }) {
         {START.map((v, i) => (
           <div key={i} style={{ display: "flex", alignItems: "stretch" }}>
             <div style={{
-              minWidth: "clamp(40px, 10.5vw, 60px)", padding: "8px clamp(2px, 1vw, 6px)", borderRadius: 8,
+              minWidth: "clamp(36px, 9.5vw, 60px)", padding: "8px clamp(2px, 1vw, 6px)", borderRadius: 8,
               border: `2px solid ${i <= cur ? "#dc2626" : "#e5e7eb"}`,
               background: i <= cur ? "#fef2f2" : "#fff",
               textAlign: "center",
               transition: "all .25s",
             }}>
-              <div style={{ fontSize: 9, color: C.dim }}>{t(E, "box", "상자")} {i}</div>
+              <div style={{ fontSize: "clamp(8px, 2.2vw, 9px)", color: C.dim }}>{t(E, "box", "상자")} {i}</div>
               <div style={{ fontSize: 20, fontWeight: 800, color: i <= cur ? "#dc2626" : C.text }}>{v}</div>
               <div style={{ fontSize: 10, color: "#7c3aed" }}>→ {TARGET[i]}</div>
               <div style={{ fontSize: 9, color: C.dim, marginTop: 2 }}>
@@ -74,13 +74,13 @@ export function Mcc21MarblesBoundarySim({ E }) {
             </div>
             {i < N - 1 && (
               <div style={{
-                width: "clamp(22px, 6vw, 40px)", flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                width: "clamp(28px, 7.5vw, 40px)", flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
                 color: i === cur && !done ? "#dc2626" : "#cbd5e1",
                 fontWeight: 800, fontSize: 11,
                 transform: i === cur && !done ? "scale(1.15)" : "scale(1)",
                 transition: "all .2s",
               }}>
-                <div style={{ fontSize: 9 }}>{t(E, "edge", "경계")}{i}</div>
+                <div style={{ fontSize: "clamp(7.5px, 2.2vw, 9px)" }}>{t(E, "edge", "경계")}{i}</div>
                 <div style={{ fontSize: 16 }}>{i <= cur ? (carry(i) === 0 ? "·" : (carry(i) > 0 ? "→" : "←")) : "│"}</div>
                 <div>{i <= cur ? Math.abs(carry(i)) : ""}</div>
               </div>

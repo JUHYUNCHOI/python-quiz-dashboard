@@ -310,9 +310,9 @@ export function makeBadmintonCh1(E) {
           {/* OUTPUT */}
           <div style={{ marginBottom: 12 }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
-            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
-              {t(E, "One line per game, written as A's points − B's points. Then one more line: the letter of the player who won the match.",
-                    "게임마다 한 줄씩, A 의 점수−B 의 점수 로 적어요.\n그리고 마지막 한 줄에 매치를 이긴 선수의 글자를 적어요.")}
+            <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+              {t(E, "One line per game, written as A's points − B's points.\nThen one more line with the match winner's letter.",
+                    "게임마다 한 줄씩, A 의 점수−B 의 점수 로 적어요.\n마지막 한 줄엔 매치를 이긴 선수의 글자를 적어요.")}
             </div>
           </div>
           {/* Sample */}
