@@ -88,10 +88,14 @@ export function makeHoofballCh1(E) {
         t(E, "2", "2"),
         t(E, "3", "3"),
       ],
-      correct: 1,
+      // ⚠️ 2026-09-17 고침 — 정답이 2 로, 해설이 "1 과 10 이 못 받는다" 로 돼 있었다.
+      // 🔒 검증된 풀이를 그대로 돌려 보면 넘기는 곳은 [1, 0, 1], 받은 횟수는 [1, 2, 0] 이다.
+      // 위치 1 의 소는 5 에게서 받는다. 못 받는 건 **10 하나뿐**이라 공은 1 개다.
+      // 같은 폴더 시뮬도 1 을 보여주고 있었다 — 글만 틀렸다. 담당자가 찾았다.
+      correct: 0,
       explain: t(E,
-        "Cow at 1 and cow at 10 never receive passes (they are sources). Need 2 balls!",
-        "위치 1과 10의 소는 패스를 안 받아 (소스). 공 2개 필요!"),
+        "The cow at 5 is closer to 1 than to 10, so it passes left — the cow at 1 does get a ball.\nThe cow at 10 is the only one nobody passes to.\nSo one ball is enough.",
+        "5 의 소는 10 보다 1 에 더 가까워서 왼쪽으로 넘겨요. 그래서 1 의 소는 공을 받아요.\n아무도 안 넘겨 주는 소는 10 하나뿐이에요.\n그래서 공은 한 개면 돼요."),
     },
     // 1-4: Input
     {
@@ -105,7 +109,7 @@ export function makeHoofballCh1(E) {
       hint: t(E,
         "Find each cow's pass target.  Who is no one's target?",
         "각 소가 누구에게 넘기는지 찾아 봐요. 아무도 안 가리키는 소는 누구일까요?"),
-      answer: 2,
+      answer: 1,
     },
   ];
 }

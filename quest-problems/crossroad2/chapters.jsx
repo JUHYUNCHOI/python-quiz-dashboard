@@ -83,34 +83,39 @@ export function makeCrossRd2Ch1(E) {
         </div>),
     },
     // 1-2: Quiz
+    // ⚠️ 2026-09-17 고침 — 원래 이 퀴즈는 **ABBA 가 교차한다**고 가르쳤다. 틀렸다.
+    //    A(0,3) 이 B(1,2) 를 **감싸는** 모양이고, 감싸는 건 넘어가는 게 아니다.
+    //    같은 quest 의 풀이 코드 조건(0<1<3<2)으로 검산해도 거짓이다.
+    //    실제로 교차하는 건 **번갈아 나오는 ABAB** 다. 담당자가 찾았다.
     {
       type: "quiz",
       narr: t(E,
-        "Pattern 'ABBA': A's endpoints are at positions 0 and 3, B's at 1 and 2.\nDo they cross?\nPattern 'AABB': A at 0,1 and B at 2,3.\nDo they cross?", "패턴 'ABBA': A의 끝점은 위치 0과 3, B는 1과 2. 교차해요? 패턴 'AABB': A는 0,1이고 B는 2,3. 교차해요?"),
+        "A joins to A, B joins to B.\nWhich order makes the two lines cross over each other?",
+        "A 는 A 끼리, B 는 B 끼리 줄로 이어요.\n어떤 차례일 때 두 줄이 서로 넘어갈까요?"),
       question: t(E,
-        "Which pattern has crossing paths: ABBA or AABB?",
-        "어떤 패턴이 교차하는 경로야: ABBA 아니면 AABB?"),
+        "Which one has crossing lines: AABB, ABBA, or ABAB?",
+        "AABB · ABBA · ABAB 중에 두 줄이 교차하는 건 어느 것일까요?"),
       options: [
-        t(E, "ABBA (A surrounds B, they cross)", "ABBA (A가 B를 감싸서 교차)"),
-        t(E, "AABB (separate, they cross)", "AABB (분리돼서 교차)"),
-        t(E, "Both cross", "둘 다 교차"),
+        t(E, "AABB — A finishes before B starts", "AABB — A 가 끝난 뒤에 B 가 시작해요"),
+        t(E, "ABBA — A wraps around B", "ABBA — A 가 B 를 감싸요"),
+        t(E, "ABAB — A and B take turns", "ABAB — A 와 B 가 번갈아 나와요"),
       ],
-      correct: 0,
+      correct: 2,
       explain: t(E,
-        "Correct! In ABBA, A's endpoints (0,3) surround B's (1,2), so the chords cross. In AABB, A ends before B starts, so no crossing.",
-        "맞아! ABBA에서 A의 끝점 (0,3)이 B의 (1,2)를 감싸서 현이 교차해요. AABB에서는 A가 B 시작 전에 끝나서 교차 안 해요."),
+        "In AABB the A line is done before the B line starts, so they never meet.\nIn ABBA the A line wraps around the B line — wrapping around is not crossing over.\nOnly when they take turns, ABAB, does each line have to cross the other.",
+        "AABB 는 A 줄이 끝난 뒤에 B 줄이 시작해서 둘이 만나지 않아요.\nABBA 는 A 줄이 B 줄을 감싸기만 해요 — 감싸는 건 넘어가는 게 아니에요.\nABAB 처럼 번갈아 나올 때만 두 줄이 서로를 넘어가요."),
     },
     // 1-3: Input
     {
       type: "input",
       narr: t(E,
-        "For the pattern 'ABBA', how many crossing pairs are there?", "패턴 'ABBA'에서 교차하는 쌍은 몇 개예요?"),
+        "Now count them for 'ABAB'.", "이번엔 'ABAB' 에서 세어 봐요."),
       question: t(E,
-        "Pattern 'ABBA': how many crossing pairs?",
-        "패턴 'ABBA': 교차하는 쌍 몇 개?"),
+        "Pattern 'ABAB': how many crossing pairs?",
+        "패턴 'ABAB' 에서 교차하는 쌍은 몇 개일까요?"),
       hint: t(E,
-        "Only 2 cows here (A and B). Count how many pairs cross.",
-        "소가 2마리뿐이에요 (A, B). 교차하는 쌍이 몇 개인지 세어봐요."),
+        "Only 2 cows here (A and B). Do their two lines cross over each other?",
+        "소가 A, B 두 마리뿐이에요. 두 줄이 서로 넘어가나요?"),
       answer: 1,
     },
   ];
