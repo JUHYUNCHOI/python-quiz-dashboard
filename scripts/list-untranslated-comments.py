@@ -22,10 +22,22 @@ STR = re.compile(r'"((?:[^"\\]|\\.)*)"')
 HANGUL = re.compile(r"[가-힣]")
 
 
-def comment_body(line):
+CPP_SIGN = re.compile(r"^\s*(#include|using namespace|int main|template\s*<)")
+
+
+def is_cpp(lines):
+    """이 코드 배열이 C++ 인가. localizeCode.isCpp() 와 **같은 규칙**이다.
+    ⚠️ 왜 필요한가 (2026-09-17): 파이썬의 `//` 는 나눗셈이지 주석이 아니다.
+       언어를 안 보면 `x = (a + b - 1) // c   # 올림` 의 `// c   # 올림` 을
+       주석으로 잘못 읽어 표에 못 넣을 키가 생긴다(실측 buymilk 1건)."""
+    return any(CPP_SIGN.match(l) for l in lines)
+
+
+def comment_body(line, cpp):
     """localizeCode.one() 과 **같은 규칙**으로 주석 본문을 꺼낸다.
     ⚠️ 이 둘이 어긋나면 표에 넣어도 안 맞는다 — 고칠 땐 둘 다 고쳐라."""
-    m = re.match(r"^\s*(#|//)(.*)$", line)
+    mark_re = r"^\s*(//)(.*)$" if cpp else r"^\s*(#)(.*)$"
+    m = re.match(mark_re, line)
     if m:
         body = m.group(2).strip()
         return body if HANGUL.search(body) else None
@@ -40,11 +52,45 @@ def comment_body(line):
         if c in "\"'":
             q = c
             continue
-        mark = "#" if c == "#" else ("//" if line.startswith("//", i) else None)
+        if cpp:
+            mark = "//" if line.startswith("//", i) else None
+        else:
+            mark = "#" if c == "#" else None
         if mark:
             body = line[i + len(mark):].strip()
             return body if HANGUL.search(body) else None
     return None
+
+
+# 문자열만 줄줄이 들어 있는 여러 줄 배열 = 코드 배열. 그 덩어리마다 언어를 따로 본다.
+CODE_ARRAY = re.compile(r"\[\s*\n((?:[ \t]*\"(?:[^\"\\]|\\.)*\",[ \t]*\n)+)[ \t]*\]")
+
+
+def code_blocks(src):
+    """(문자열목록, cpp여부) 를 내놓는다. 배열 밖 문자열은 파이썬으로 본다
+       (quest 코드에서 `//` 주석 한 줄만 따로 떠 있는 경우는 없다)."""
+    out, covered = [], []
+    for m in CODE_ARRAY.finditer(src):
+        vals = []
+        for sm in STR.finditer(m.group(1)):
+            try:
+                vals.append(json.loads('"%s"' % sm.group(1)))
+            except Exception:
+                pass
+        if vals:
+            out.append((vals, is_cpp(vals)))
+        covered.append((m.start(), m.end()))
+    rest = []
+    for sm in STR.finditer(src):
+        if any(a <= sm.start() < b for a, b in covered):
+            continue
+        try:
+            rest.append(json.loads('"%s"' % sm.group(1)))
+        except Exception:
+            pass
+    if rest:
+        out.append((rest, False))
+    return out
 
 
 def known_keys():
@@ -72,16 +118,13 @@ for f in sorted(glob.glob("quest-problems/*/*.jsx")):
     if want and quest != want:
         continue
     src = io.open(f, encoding="utf-8", errors="replace").read()
-    for m in STR.finditer(src):
-        try:
-            v = json.loads('"%s"' % m.group(1))
-        except Exception:
-            continue
-        body = comment_body(v)
-        if body and body not in have:
-            e = found.setdefault(body, {"n": 0, "q": set()})
-            e["n"] += 1
-            e["q"].add(quest)
+    for vals, cpp in code_blocks(src):
+        for v in vals:
+            body = comment_body(v, cpp)
+            if body and body not in have:
+                e = found.setdefault(body, {"n": 0, "q": set()})
+                e["n"] += 1
+                e["q"].add(quest)
 
 rows = sorted(found.items(), key=lambda x: (-x[1]["n"], x[0]))
 lines = sum(v["n"] for _, v in rows)

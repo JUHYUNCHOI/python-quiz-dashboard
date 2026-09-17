@@ -44,8 +44,10 @@
 //            need→buy_up · take→buy_down · N→deal_count · Q→query_count.
 //            min(...) 안에 있던 두 후보를 줄로 꺼내 이름을 줬다 — buy_the_deal · buy_two_halves.
 //            (C++ 는 같은 뜻의 camelCase: dealPrice · blockCost · buyUp · buyDown · TOO_BIG)
-//     주석 — 코드 안 주석을 한국어로 옮기고, 영어 화면용으로 FULL_PY_EN · FULL_CPP_EN 을 따로 뒀다.
-//            **코드 줄은 두 판이 글자까지 같다. 주석만 다르다** (printseq 의 _EN 패턴과 같은 모양).
+//     주석 — 코드 안 주석을 한국어로 옮겼다. 배열은 **한 벌뿐이다** —
+//            영어 화면은 `components/quest/localizeCode.ts` 가 그리는 자리에서 바꾼다.
+//            (처음엔 FULL_PY_EN 을 따로 뒀다가 지웠다. 같은 것을 두 군데 두면 어긋난다.)
+//            번역은 `components/quest/codeCommentsEn.ts` 표에 넣었다 — 없으면 줄이 비워진다.
 //     ⚠️ 화면 글도 같이 바꿨다 — 코드가 block_cost 인데 설명이 c[i] 면 학생이 딴 걸 찾는다.
 //        chapters.jsx 의 Plan 카드(인사이트 3 + 번호 5줄) · sims.jsx 표 머리 2칸 ·
 //        components.jsx 의 why 4줄. `c[i] = min(a[i], 2*c[i-1])` 뱃지는
@@ -115,55 +117,6 @@ const FULL_PY = [
   "print('\\n'.join(map(str, answers)))",
 ];
 
-const FULL_PY_EN = [
-  "import sys",
-  "input = sys.stdin.readline",
-  "",
-  "# N deals, Q questions",
-  "deal_count, query_count = map(int, input().split())",
-  "",
-  "# deal_price[i] = the price of deal i.",
-  "# Deal i gives 1 bucket doubled i times — 1, 2, 4, 8, ...",
-  "deal_price = list(map(int, input().split()))",
-  "",
-  "# block_cost[i] = the cheapest way to get a block of 2^i buckets.",
-  "# Buy that deal, or buy two half-size blocks — whichever is cheaper.",
-  "# After this a bigger block is never worse per bucket,",
-  "# so one big-to-small sweep is enough and no recursion is needed.",
-  "block_cost = [0] * deal_count",
-  "block_cost[0] = deal_price[0]",
-  "for i in range(1, deal_count):",
-  "    buy_the_deal = deal_price[i]",
-  "    buy_two_halves = 2 * block_cost[i - 1]",
-  "    block_cost[i] = min(buy_the_deal, buy_two_halves)",
-  "",
-  "answers = []",
-  "for _ in range(query_count):",
-  "    want = int(input())      # buckets we must buy this time",
-  "    best = float('inf')      # cheapest total found so far",
-  "    paid = 0                 # cost locked in so far",
-  "    left = want              # buckets still to cover",
-  "",
-  "    # want is at most 1,000,000,000. Doubling 30 times already passes it: 1,073,741,824.",
-  "    # So blocks past number 30 never need to be looked at.",
-  "    biggest = min(deal_count - 1, 30)",
-  "    for i in range(biggest, -1, -1):",
-  "        block_size = 2 ** i",
-  "",
-  "        # (A) buy enough with this block and stop",
-  "        buy_up = (left + block_size - 1) // block_size    # round up",
-  "        best = min(best, paid + buy_up * block_cost[i])",
-  "",
-  "        # (B) buy less here, leave the rest to smaller blocks",
-  "        buy_down = left // block_size",
-  "        paid += buy_down * block_cost[i]",
-  "        left -= buy_down * block_size",
-  "",
-  "    best = min(best, paid)   # covering it exactly is also a candidate",
-  "    answers.append(best)",
-  "",
-  "print('\\n'.join(map(str, answers)))",
-];
 
 const FULL_CPP = [
   "#include <iostream>",
@@ -236,76 +189,6 @@ const FULL_CPP = [
   "}",
 ];
 
-const FULL_CPP_EN = [
-  "#include <iostream>",
-  "#include <vector>",
-  "#include <algorithm>",
-  "using namespace std;",
-  "typedef long long ll;",
-  "",
-  "int main() {",
-  "    // N deals, Q questions",
-  "    int dealCount, queryCount;",
-  "    cin >> dealCount >> queryCount;",
-  "",
-  "    // dealPrice[i] = the price of deal i.",
-  "    // Deal i gives 1 bucket doubled i times — 1, 2, 4, 8, ...",
-  "    vector<ll> dealPrice(dealCount);",
-  "    for (int i = 0; i < dealCount; i++) {",
-  "        cin >> dealPrice[i];",
-  "    }",
-  "",
-  "    // blockCost[i] = the cheapest way to get a block of 2^i buckets.",
-  "    // Buy that deal, or buy two half-size blocks — whichever is cheaper.",
-  "    // After this a bigger block is never worse per bucket,",
-  "    // so one big-to-small sweep is enough and no recursion is needed.",
-  "    vector<ll> blockCost(dealCount);",
-  "    blockCost[0] = dealPrice[0];",
-  "    for (int i = 1; i < dealCount; i++) {",
-  "        ll buyTheDeal = dealPrice[i];",
-  "        ll buyTwoHalves = 2 * blockCost[i - 1];",
-  "        blockCost[i] = min(buyTheDeal, buyTwoHalves);",
-  "    }",
-  "",
-  "    // blockSize[i] = how many buckets block i holds. Start at 1 and keep doubling.",
-  "    // C++ has no ** operator, so we build the table once and reuse it.",
-  "    vector<ll> blockSize(31);",
-  "    blockSize[0] = 1;",
-  "    for (int i = 1; i <= 30; i++) {",
-  "        blockSize[i] = blockSize[i - 1] * 2;",
-  "    }",
-  "",
-  "    const ll TOO_BIG = (ll)4e18;   // means 'nothing found yet'",
-  "",
-  "    for (int q = 0; q < queryCount; q++) {",
-  "        ll want;                   // buckets we must buy this time",
-  "        cin >> want;",
-  "        ll best = TOO_BIG;         // cheapest total found so far",
-  "        ll paid = 0;               // cost locked in so far",
-  "        ll left = want;            // buckets still to cover",
-  "",
-  "        // want is at most 1,000,000,000. Doubling 30 times already passes it: 1,073,741,824.",
-  "        // So blocks past number 30 never need to be looked at.",
-  "        int biggest = min(dealCount - 1, 30);",
-  "        for (int i = biggest; i >= 0; i--) {",
-  "            ll size = blockSize[i];",
-  "",
-  "            // (A) buy enough with this block and stop",
-  "            ll buyUp = (left + size - 1) / size;   // round up",
-  "            best = min(best, paid + buyUp * blockCost[i]);",
-  "",
-  "            // (B) buy less here, leave the rest to smaller blocks",
-  "            ll buyDown = left / size;",
-  "            paid += buyDown * blockCost[i];",
-  "            left -= buyDown * size;",
-  "        }",
-  "",
-  "        best = min(best, paid);    // covering it exactly is also a candidate",
-  "        cout << best << \"\\n\";",
-  "    }",
-  "    return 0;",
-  "}",
-];
 
 // CodeWalk — 코드 위 노트 벽 대신 코드 줄에 붙는 말풍선 (선생님 규칙). 검증본 코드 그대로.
 const _BM_VARS = [
@@ -316,7 +199,7 @@ const _BM_VARS = [
 ];
 export function getBuyMilkWalk(E, lang = "py") {
   if (lang === "cpp") {
-    return { code: E ? FULL_CPP_EN : FULL_CPP, vars: _BM_VARS, beats: [
+    return { code: FULL_CPP, vars: _BM_VARS, beats: [
       { hi: [7, 16], bubble: t(E, "Read N, Q and the deal prices.\nDeal 1 in the problem is dealPrice[0] in the code.\nSo dealPrice[i] buys 1 doubled i times: 1, 2, 4, 8, ...", "거래 개수와 물음 개수, 그리고 거래 가격을 읽어요.\n문제의 1번 거래가 코드에서는 dealPrice[0] 이에요.\n그래서 dealPrice[i] 는 1 을 i 번 두 배 한 만큼이에요 — 1, 2, 4, 8, ...") },
       { hi: [18, 28], bubble: t(E, "Give every block its own real price.\nbuyTheDeal = pay for that deal directly.\nbuyTwoHalves = buy the half-size block twice.\nblockCost[i] keeps the cheaper one.\nAfter this a bigger block is never worse per bucket,\nso we sweep big-to-small with no recursion.", "묶음마다 진짜 값을 하나씩 정해요.\nbuyTheDeal 은 그 거래를 그대로 사는 값이에요.\nbuyTwoHalves 는 절반짜리 묶음을 두 번 사는 값이에요.\nblockCost[i] 는 둘 중 싼 쪽을 담아요.\n이렇게 하면 큰 묶음이 한 통당 손해일 일이 없어요.\n그래서 큰 것부터 한 번만 훑으면 되고 재귀가 필요 없어요.") },
       { hi: [30, 36], bubble: t(E, "Write down how many buckets each block holds.\nStart at 1 and keep doubling: 1, 2, 4, 8, ...\nwant is at most 1,000,000,000, and block 30 holds 1,073,741,824 — already past it.\nSo blocks 0 through 30 are enough, which is 31 slots.\nC++ has no ** operator, so we build the table once.", "묶음마다 몇 통인지 미리 적어둬요.\n1 에서 시작해서 계속 두 배예요 — 1, 2, 4, 8, ...\nwant 는 많아야 10억인데 30번 묶음이 1,073,741,824 라 벌써 넘어요.\n그래서 0번부터 30번까지면 충분해요 — 칸이 31개예요.\nC++ 에는 ** 가 없어서 표를 한 번 만들어 두고 써요.") },
@@ -325,7 +208,7 @@ export function getBuyMilkWalk(E, lang = "py") {
       { hi: [63, 64], bubble: t(E, "Covering it exactly is a candidate too. Print the cheapest.", "딱 맞게 산 경우도 후보예요.\n제일 싼 값을 출력해요.") },
     ] };
   }
-  return { code: E ? FULL_PY_EN : FULL_PY, vars: _BM_VARS, beats: [
+  return { code: FULL_PY, vars: _BM_VARS, beats: [
     { hi: [0, 1],   bubble: t(E, "Fast input.", "입력을 빠르게 받아요.") },
     { hi: [3, 8],   bubble: t(E, "Read N, Q and the deal prices.\nDeal 1 in the problem is deal_price[0] in the code.\nSo deal_price[i] buys 1 doubled i times: 1, 2, 4, 8, ...", "거래 개수와 물음 개수, 그리고 거래 가격을 읽어요.\n문제의 1번 거래가 코드에서는 deal_price[0] 이에요.\n그래서 deal_price[i] 는 1 을 i 번 두 배 한 만큼이에요 — 1, 2, 4, 8, ...") },
     { hi: [10, 19], bubble: t(E, "Give every block its own real price.\nbuy_the_deal = pay for that deal directly.\nbuy_two_halves = buy the half-size block twice.\nblock_cost[i] keeps the cheaper one.\nAfter this a bigger block is never worse per bucket,\nso we sweep big-to-small with no recursion.", "묶음마다 진짜 값을 하나씩 정해요.\nbuy_the_deal 은 그 거래를 그대로 사는 값이에요.\nbuy_two_halves 는 절반짜리 묶음을 두 번 사는 값이에요.\nblock_cost[i] 는 둘 중 싼 쪽을 담아요.\n이렇게 하면 큰 묶음이 한 통당 손해일 일이 없어요.\n그래서 큰 것부터 한 번만 훑으면 되고 재귀가 필요 없어요.") },
@@ -341,7 +224,7 @@ export function getBuyMilkSections(E) {
     {
       label: t(E, "🎯 Solution Code", "🎯 풀이 코드"),
       color: A,
-      py: E ? FULL_PY_EN : FULL_PY, cpp: E ? FULL_CPP_EN : FULL_CPP,
+      py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Step 1 — give every block its own real price. block_cost[i] is the cheapest way to get a 2^i-bucket block: buy that deal, or buy the half-size block twice. The code names those two buy_the_deal and buy_two_halves.",
             "1단계 — 묶음마다 진짜 값을 하나씩 정해요.\nblock_cost[i] 는 2^i 통짜리 묶음을 얻는 가장 싼 값이에요.\n거래를 그대로 사거나(buy_the_deal),\n절반짜리 묶음을 두 번 사거나(buy_two_halves) 중 싼 쪽이에요."),

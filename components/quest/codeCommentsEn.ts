@@ -1688,4 +1688,50 @@ export const CODE_COMMENT_EN: Record<string, string> = {
     "put the sum first - then a plain sort lines them up by the sum",
   "합이 큰 것부터":
     "biggest sum first",
+
+  /* buymilk — 2026-09-17 변수 이름·주석을 학생이 읽게 고치면서 같이 넣었다 */
+  "거래 개수 N, 물음 개수 Q":
+    "N deals, Q questions",
+  "deal_price[i] = i 번 거래의 가격.":
+    "deal_price[i] = the price of deal i.",
+  "dealPrice[i] = i 번 거래의 가격.":
+    "dealPrice[i] = the price of deal i.",
+  "i 번 거래는 1 통을 i 번 두 배 한 만큼을 준다 — 1, 2, 4, 8, ...":
+    "deal i gives 1 bucket doubled i times - 1, 2, 4, 8, ...",
+  "block_cost[i] = 2^i 통짜리 묶음을 얻는 가장 싼 값.":
+    "block_cost[i] = the cheapest way to get a block of 2^i buckets.",
+  "blockCost[i] = 2^i 통짜리 묶음을 얻는 가장 싼 값.":
+    "blockCost[i] = the cheapest way to get a block of 2^i buckets.",
+  "거래를 그대로 사거나, 절반짜리 묶음을 두 번 사거나 — 둘 중 싼 쪽이다.":
+    "buy that deal, or buy the half-size block twice - whichever is cheaper",
+  "이렇게 해 두면 큰 묶음이 한 통당 손해인 경우가 없어서":
+    "after this a bigger block is never worse per bucket,",
+  "큰 묶음부터 한 번만 훑으면 되고 재귀가 필요 없다.":
+    "so one big-to-small sweep is enough and no recursion is needed.",
+  "blockSize[i] = i 번 묶음이 몇 통인지. 1 에서 시작해 계속 두 배다.":
+    "blockSize[i] = how many buckets block i holds. Start at 1 and keep doubling.",
+  "C++ 에는 ** 가 없어서 표를 한 번 만들어 두고 쓴다.":
+    "C++ has no ** operator, so we build the table once and reuse it.",
+  "'아직 아무것도 못 찾았다' 는 표시":
+    "means 'nothing found yet'",
+  "이번 물음에서 사야 할 통 수":
+    "buckets we must buy this time",
+  "지금까지 찾은 가장 싼 값":
+    "cheapest total found so far",
+  "여기까지 확정으로 낸 값":
+    "cost locked in so far",
+  "아직 못 채운 통 수":
+    "buckets still to cover",
+  "want 는 많아야 10억이다. 2 를 30번 곱하면 1,073,741,824 라 벌써 넘는다.":
+    "want is at most 1,000,000,000. Doubling 30 times already passes it: 1,073,741,824.",
+  "그래서 30번 묶음보다 큰 것은 볼 필요가 없다.":
+    "so blocks past number 30 never need looking at",
+  "(A) 이 묶음으로 넉넉히 사고 끝내기":
+    "(A) buy enough with this block and stop",
+  "올림 나눗셈":
+    "round up",
+  "(B) 모자라게 사고, 남은 통은 더 작은 묶음에 맡기기":
+    "(B) buy less here, leave the rest to smaller blocks",
+  "딱 맞게 산 경우도 후보다":
+    "covering it exactly is also a candidate",
 };

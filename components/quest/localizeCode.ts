@@ -24,12 +24,26 @@ const HANGUL = /[가-힣]/;
 const PY_LINE = /^(\s*)#(.*)$/;
 const CPP_LINE = /^(\s*)\/\/(.*)$/;
 
+/* 이 코드가 어느 언어인가.
+   ⚠️ 왜 필요한가 (2026-09-17): 파이썬의 `//` 는 **나눗셈**이지 주석이 아니다.
+      언어를 모르고 `//` 를 주석으로 보면
+      `buy_up = (left + block_size - 1) // block_size    # 올림 나눗셈`
+      이 `buy_up = (left + block_size - 1)` 로 **잘린다** — 영어 학생에게 깨진 코드가 간다.
+      실측 7줄(buymilk 1 · explodingarrow 6)이 이 모양이었다. */
+function isCpp(lines: string[]): boolean {
+  return lines.some((l) => /^\s*(#include|using namespace|int main|template\s*<)/.test(l));
+}
+
 /** 줄 하나를 영어로. 번역이 없으면 주석 내용만 비운다(줄 수는 유지). */
-function one(line: string): string {
+function one(line: string, cpp: boolean): string {
   if (!HANGUL.test(line)) return line;
 
+  const MARKS = cpp
+    ? ([[CPP_LINE, "//"]] as const)
+    : ([[PY_LINE, "#"]] as const);
+
   /* ① 줄 전체가 주석인 경우 */
-  for (const [re, mark] of [[PY_LINE, "#"], [CPP_LINE, "//"]] as const) {
+  for (const [re, mark] of MARKS) {
     const m = line.match(re);
     if (!m) continue;
     const body = m[2].trim();
@@ -46,7 +60,10 @@ function one(line: string): string {
     const c = line[i];
     if (q) { if (c === "\\") i++; else if (c === q) q = null; continue; }
     if (c === '"' || c === "'") { q = c; continue; }
-    const mark = c === "#" ? "#" : line.startsWith("//", i) ? "//" : null;
+    /* 파이썬에서는 `#` 만, C++ 에서는 `//` 만 주석이다 — 섞어 보면 코드가 잘린다. */
+    const mark = cpp
+      ? (line.startsWith("//", i) ? "//" : null)
+      : (c === "#" ? "#" : null);
     if (!mark) continue;
     const head = line.slice(0, i);
     const body = line.slice(i + mark.length).trim();
@@ -60,5 +77,6 @@ function one(line: string): string {
 /** 코드 배열을 화면 언어에 맞춘다. 한국어 화면(E=false)은 원본 그대로. */
 export function localizeCode(lines: string[], isEn: boolean): string[] {
   if (!isEn) return lines;
-  return lines.map(one);
+  const cpp = isCpp(lines);
+  return lines.map((l) => one(l, cpp));
 }
