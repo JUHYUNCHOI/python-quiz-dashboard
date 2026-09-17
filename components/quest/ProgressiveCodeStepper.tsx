@@ -162,7 +162,14 @@ export function ProgressiveCodeStepper({
                   >
                     •
                   </span>
-                  <span>{line}</span>
+                  {/* ⚠️ 2026-09-17: 여기가 그냥 <span>{line}</span> 이었다.
+                      그래서 글쓴이가 절 단위로 넣어 둔 `\n` 이 **공백으로 뭉개졌다.**
+                      실측 quest 40개 · 문자열 160개가 `\n` 을 넣어 두고 있었고
+                      **그 줄바꿈이 하나도 화면에 안 나오고 있었다.**
+                      선생님이 두 번 말씀하신 한글 줄바꿈 규칙(keep-all + balance +
+                      절 단위 `<br />`)이 이 컴포넌트에서만 통째로 빠져 있었다.
+                      memory/feedback_korean_linebreak.md */}
+                  <span style={{ whiteSpace: "pre-line", wordBreak: "keep-all", textWrap: "balance" }}>{line}</span>
                 </div>
               ))}
             </>
