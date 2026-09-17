@@ -14,7 +14,7 @@ export function makeCheckupsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Cows stand in a row. Each cow has a species, written as a number. The vet has already decided, for each spot, which species it will treat there — and it treats the cow at that spot only when the cow's species matches. FJ flips one chunk of cows to change who gets treated.",
-        "소들이 한 줄로 서 있어요. 소마다 '종'이 있고 숫자로 적어요. 수의사는 자리마다 '여기선 몇 번 종을 치료하겠다'를 미리 정해뒀어요 — 그 자리에 선 소의 종이 정해둔 종과 같을 때만 치료해줘요. FJ 는 소 한 구간을 통째로 뒤집어서 누가 치료받는지를 바꿔요."),
+        "자리마다 치료할 종이 정해져 있어요.\nFJ 는 한 구간을 통째로 뒤집을 수 있어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 10 }}>
@@ -29,13 +29,13 @@ export function makeCheckupsCh1(E) {
           {/* 윗줄/아랫줄 설명은 시뮬이 하므로 큰 박스는 제거 — b[i]·입력형식만 한 줄로 남김 (선생님 판단 위임) */}
           <div style={{ marginTop: 2, marginBottom: 10, fontSize: 11.5, color: C.dim, textAlign: "center", lineHeight: 1.6, wordBreak: "keep-all" }}>
             📝 {t(E, "Input: N, then row a, then row b.  In code top = a, bottom = b → b[i] = the species chosen for spot i.",
-                   "입력: N → 윗줄(a) → 아랫줄(b).  코드에선 윗줄=a, 아랫줄=b → b[i] = i 번째 자리에 정해둔 종.")}
+                   "입력은 N, 윗줄(a), 아랫줄(b) 순서예요. 코드에선 윗줄이 a, 아랫줄이 b 예요. b[i] 는 i 번째 자리에 정해둔 종이에요.")}
           </div>
 
           {/* 출력이 뭔지 */}
           <div style={{ background: "#dcfce7", border: "1px solid #86efac", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: "#166534", lineHeight: 1.65, wordBreak: "keep-all" }}>
             📤 <b>{t(E, "Output", "출력")}</b> — {t(E, "Flipping can be done many ways. For each possible check-count 0, 1, …, N, print how many flips give exactly that count (one number per line).",
-                     "뒤집는 방법은 여러 가지. 검진 수가 0, 1, …, N 인 경우가 각각 몇 가지인지 한 줄씩 출력.")}
+                     "뒤집는 방법은 여러 가지예요. 검진 수가 0, 1, …, N 인 경우가 각각 몇 가지인지 한 줄씩 출력해요.")}
           </div>
 
           <div style={{ padding: "7px 10px", background: "#f5f3ff", border: "1px dashed #c4b5fd", borderRadius: 8, fontSize: 11, color: "#5b21b6", lineHeight: 1.6 }}>
@@ -50,7 +50,7 @@ export function makeCheckupsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Official sample 1: N=3 cows.  Take a look — input is 3 lines, output is 4 lines (one per checkup count 0..N).",
-        "공식 샘플 1: N=3. 입력 3 줄, 출력 4 줄 (검진 수 0..N 각각)."),
+        "공식 샘플 1 이에요. N=3 이고 입력은 3 줄, 출력은 4 줄이에요 (검진 수 0..N 각각)."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#dc2626", textAlign: "center", marginBottom: 10 }}>
@@ -81,7 +81,7 @@ export function makeCheckupsCh1(E) {
               🔍 {t(E, "6 reversals → group by how many got checked", "뒤집기 6가지 → 검진된 수별로 묶기")}
             </div>
             {[
-              { c: 0, n: 3, note: t(E, "the 3 length-1 ops (nothing flips)", "길이 1 연산 3개 (안 바뀜)") },
+              { c: 0, n: 3, note: t(E, "the 3 length-1 ops (nothing flips)", "길이 1 짜리 뒤집기 3개 (안 바뀌어요)") },
               { c: 1, n: 3, note: t(E, "the 3 real reversals", "진짜 뒤집기 3개") },
               { c: 2, n: 0, note: "" },
               { c: 3, n: 0, note: "" },
@@ -122,7 +122,7 @@ export function makeCheckupsCh1(E) {
       type: "quiz",
       narr: t(E,
         "Quick check on what a reversal does — only positions [l, r] flip, the rest stay put.",
-        "뒤집기가 뭘 바꾸는지 확인 — [l, r] 위치만 뒤집히고 나머지는 그대로."),
+        "뒤집기가 뭘 바꾸는지 확인해 봐요. [l, r] 안만 뒤집히고 나머지는 그대로예요."),
       question: t(E,
         "After reversing a[2..4] of a=[5, 1, 2, 3, 4], what is a[3]?",
         "a=[5, 1, 2, 3, 4] 의 a[2..4] 를 뒤집은 후, a[3] 의 값은?"),
@@ -130,7 +130,7 @@ export function makeCheckupsCh1(E) {
       correct: 1,
       explain: t(E,
         "Positions 2..4 hold values [1, 2, 3]. Reversed → [3, 2, 1]. So new a = [5, 3, 2, 1, 4], and a[3] = 2.",
-        "위치 2..4 의 값 [1, 2, 3] 을 뒤집으면 [3, 2, 1]. 새 a = [5, 3, 2, 1, 4], a[3] = 2."),
+        "자리 2..4 의 값은 [1, 2, 3] 이고, 뒤집으면 [3, 2, 1] 이 돼요. 그래서 새 a = [5, 3, 2, 1, 4] 이고 a[3] = 2 예요."),
     },
 
     /* 1-4 — Input quiz on a tiny example. */
@@ -138,13 +138,13 @@ export function makeCheckupsCh1(E) {
       type: "input",
       narr: t(E,
         "Your turn — count checkups on a tiny case.",
-        "직접 — 작은 케이스에서 검진 수 세 봐."),
+        "이번엔 직접 해봐요. 작은 예제에서 검진 수를 세어 봐요."),
       question: t(E,
         "Checkups after reversing a[1..2] of a=[1, 2] vs b=[2, 1]?",
-        "a=[1, 2] 의 a[1..2] 뒤집기 후 b=[2, 1] 와 비교 시 검진 수?"),
+        "a=[1, 2] 의 a[1..2] 를 뒤집은 뒤 b=[2, 1] 와 비교하면 검진 수는 몇일까요?"),
       hint: t(E,
         "Reverse a[1..2] in your head, then compare each spot to b position by position.",
-        "머릿속으로 a[1..2] 를 뒤집어 본 뒤, b 와 자리별로 하나씩 비교해 봐."),
+        "머릿속으로 a[1..2] 를 뒤집어 본 뒤, b 와 자리마다 하나씩 비교해 봐요."),
       answer: 2,
     },
   ];
@@ -176,7 +176,7 @@ export function makeCheckupsCh2(E, lang = "py") {
       type: "reveal",
       narr: i === 0
         ? t(E, "Build brute step by step (1️⃣–4️⃣). It's the literal translation of the problem statement — fine for partial credit.",
-              "brute 를 한 단락씩 (1️⃣–4️⃣). 문제 그대로 옮긴 모양 — 부분점수에 충분.")
+              "brute 를 한 단락씩 볼게요 (1️⃣–4️⃣). 문제를 그대로 옮긴 모양이라 부분점수에 충분해요.")
         : "",
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
@@ -186,7 +186,7 @@ export function makeCheckupsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Now RUN it.  Try N = 50, then 200, then 600 — watch the time jump.  Three nested loops means triple the trouble.",
-        "이제 직접 돌려봐요. N = 50 → 200 → 600 순서로 — 시간이 어떻게 뛰는지 봐요. 루프 세 겹 = 세 배의 고통."),
+        "이제 직접 돌려봐요. 50 → 200 → 600 으로 늘리면 시간이 어떻게 뛸까요?"),
       content: (<CheckupsBruteRunner E={E} />),
     },
 
@@ -198,7 +198,7 @@ export function makeCheckupsCh2(E, lang = "py") {
         "방금 느려지는 걸 봤죠. 다음으로 넘어가기 전에 패턴을 예측해 봐요."),
       question: t(E,
         "If N doubles (say 300 → 600), roughly how much MORE work does the brute force do?",
-        "N 이 두 배가 되면 (예: 300 → 600), brute 가 하는 일은 대략 몇 배로 늘까요?"),
+        "N 이 두 배가 되면 (300 → 600 처럼) brute 가 하는 일은 대략 몇 배로 늘까요?"),
       options: [
         t(E, "About 2× (twice the work)", "약 2 배"),
         t(E, "About 4× (squared)", "약 4 배 (제곱)"),
@@ -208,7 +208,7 @@ export function makeCheckupsCh2(E, lang = "py") {
       correct: 2,
       explain: t(E,
         "Three nested loops → O(N³).  Doubling N multiplies work by 2³ = 8.  That's why 600 felt so much slower than 300.",
-        "루프 세 겹 → O(N³). N 을 두 배로 하면 일은 2³ = 8 배. 그래서 600 이 300 보다 훨씬 느렸어요."),
+        "반복문 세 겹이라 O(N³) 이에요. N 을 두 배로 하면 일은 2³ = 8 배가 돼요. 그래서 600 이 300 보다 훨씬 느렸어요."),
     },
 
     /* 2-8 — [결-b 한계] why brute times out on N=7500. */
@@ -216,7 +216,7 @@ export function makeCheckupsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Submit brute — small inputs pass, big ones time out.  Here's the math behind what you just felt.",
-        "brute 제출 — 작은 입력은 통과, 큰 입력은 시간 초과. 방금 느낀 걸 숫자로 확인해 봐요."),
+        "brute 는 작은 입력만 통과하고 큰 입력은 시간 초과예요. 숫자로 확인해 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 12, padding: 16 }}>
@@ -226,7 +226,7 @@ export function makeCheckupsCh2(E, lang = "py") {
 
             <div style={{ background: "#fff", border: "1px solid #fecaca", borderRadius: 10, padding: 12, marginBottom: 12, fontSize: 13, color: C.text, lineHeight: 1.7 }}>
               <div style={{ fontWeight: 600, color: "#7f1d1d", marginBottom: 6 }}>
-                {t(E, "Per (l, r) brute does:", "(l, r) 마다 brute 는:")}
+                {t(E, "Per (l, r) brute does:", "(l, r) 마다 brute 가 하는 일")}
               </div>
               <div style={{ marginLeft: 12, fontSize: 12.5 }}>
                 · {t(E, "Up to N reversed-position lookups + N comparisons → ", "뒤집은 위치 조회 + 비교 최대 N 번 → ")}
@@ -272,7 +272,7 @@ export function makeCheckupsCh2(E, lang = "py") {
             <div style={{ background: "#fff7ed", border: "1px dashed #fdba74", borderRadius: 8, padding: "10px 12px", fontSize: 12.5, color: "#7c2d12", lineHeight: 1.6 }}>
               💡 {t(E,
                 "Constraint says N ≤ 7,500.  We need to drop one factor of N — turn O(N) per pair into O(1).  Next chapter: a key observation that lets us do exactly that.",
-                "제약: N ≤ 7,500. N 한 겹을 빼야 — 쌍당 O(N) 을 O(1) 로. 다음 챕터: 그게 가능한 핵심 관찰.")}
+                "N 은 최대 7,500 이에요. N 한 겹을 덜어내야 해요. 쌍마다 걸리던 O(N) 을 O(1) 로 줄이는 거예요. 다음 챕터에서 그게 가능한 핵심 관찰을 봐요.")}
             </div>
           </div>
         </div>),
@@ -314,7 +314,7 @@ export function makeCheckupsCh3(E, lang = "py") {
             <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px" }}>
               <div style={{ fontSize: 11.5, fontWeight: 800, color: "#991b1b", marginBottom: 5 }}>🐢 {t(E, "Brute", "브루트포스")}</div>
               <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.6, wordBreak: "keep-all" }}>
-                {t(E, "Each interval = recount all N spots", "구간마다 = N칸 다시 셈")}<br />
+                {t(E, "Each interval = recount all N spots", "구간마다 N 칸을 다시 세기")}<br />
                 <span style={{ fontSize: 10.5, opacity: 0.85 }}>{t(E, "~N² intervals × N", "구간 ~N²개 × N칸")}</span><br />
                 <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>O(N³)</code> → {t(E, "too slow", "느림")}
               </div>
@@ -322,7 +322,7 @@ export function makeCheckupsCh3(E, lang = "py") {
             <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "10px 12px" }}>
               <div style={{ fontSize: 11.5, fontWeight: 800, color: "#065f46", marginBottom: 5 }}>⚡ {t(E, "Center-expansion", "가운데 넓히기")}</div>
               <div style={{ fontSize: 12, color: "#065f46", lineHeight: 1.6, wordBreak: "keep-all" }}>
-                {t(E, "Widen from center = fix only 2 ends", "가운데서 넓히며 = 두 끝만 갱신")}<br />
+                {t(E, "Widen from center = fix only 2 ends", "가운데서 넓히면 두 끝만 고쳐요")}<br />
                 <span style={{ fontSize: 10.5, opacity: 0.85 }}>{t(E, "each widen = O(1)", "한 번 넓힐 때 O(1)")}</span><br />
                 <code style={{ background: "#fff", padding: "1px 6px", borderRadius: 4, fontWeight: 700 }}>O(N²)</code> → {t(E, "passes", "통과")}
               </div>
@@ -415,7 +415,7 @@ export function makeCheckupsCh4(E, lang = "py") {
   );
 
   const secExpand = sec(
-    t(E, "2️⃣ expand — widen from a center, fix only 2 ends", "2️⃣ expand — 가운데서 넓히며 두 끝만 갱신"), "#15803d",
+    t(E, "2️⃣ expand — widen from a center, fix only 2 ends", "2️⃣ expand — 가운데서 넓히며 두 끝만 고치기"), "#15803d",
     ["# 구간을 중심에서 양옆으로 넓히며, 새로 들어온 두 끝만 갱신",
       "def expand(cow, want, answer, matches, left, right):",
       "    N = len(cow)",
@@ -444,9 +444,9 @@ export function makeCheckupsCh4(E, lang = "py") {
       "    }",
       "}"],
     [t(E, "matches starts at baseMatches. Each widen touches only left,right: remove the old in-place match (−), add the new flipped match (+).",
-        "matches는 baseMatches에서 시작. 한 번 넓힐 때 left,right만: 원래 맞던 것 빼고(−), 뒤집혀 새로 맞으면 더함(+)."),
+        "matches 는 baseMatches 에서 시작해요. 한 번 넓힐 때 건드리는 건 left, right 두 자리뿐이에요. 원래 맞던 건 빼고(−), 뒤집혀 새로 맞으면 더해요(+)."),
      t(E, "answer[matches] += 1 records this interval's checkup count.",
-        "answer[matches] += 1 로 이 구간의 검진 수를 기록.")]
+        "answer[matches] += 1 로 이 구간의 검진 수를 기록해요.")]
   );
 
   const secMain = sec(
@@ -469,7 +469,7 @@ export function makeCheckupsCh4(E, lang = "py") {
       "",
       "for (int k = 0; k <= N; k++) cout << answer[k] << \"\\n\";"],
     [t(E, "Odd center [i,i] = one spot (no flip). Even center [i,i+1] = two spots. Both for every i → every interval exactly once.",
-        "홀수 중심 [i,i]=한 칸(안 뒤집음). 짝수 중심 [i,i+1]=두 칸. i마다 둘 다 → 모든 구간 딱 한 번씩.")]
+        "홀수 중심 [i,i] 는 한 칸이라 안 뒤집혀요. 짝수 중심 [i,i+1] 은 두 칸이에요. i 마다 둘 다 돌면 모든 구간을 딱 한 번씩 봐요.")]
   );
 
   const secFull = sec(
@@ -536,17 +536,17 @@ export function makeCheckupsCh4(E, lang = "py") {
       "",
       "    for (int k = 0; k <= N; k++) cout << answer[k] << \"\\n\";",
       "}"],
-    [t(E, "All pieces together. Each center's widen sum → O(N²) total.", "조각을 한 코드로. 중심마다 넓힌 길이 합 → O(N²).")]
+    [t(E, "All pieces together. Each center's widen sum → O(N²) total.", "조각을 한 코드로 모았어요. 중심마다 넓힌 길이를 다 더하면 O(N²) 예요.")]
   );
 
   return [
-    { type: "reveal", narr: t(E, "First — the starting count (no flip).", "먼저 — 출발점(안 뒤집은 검진 수)."),
+    { type: "reveal", narr: t(E, "First — the starting count (no flip).", "먼저 출발점부터 봐요. 안 뒤집었을 때의 검진 수예요."),
       content: (<CodeSectionView section={secBase} lang={lang} E={E} />) },
-    { type: "reveal", narr: t(E, "The heart: expand — touch only the two ends.", "핵심: expand — 두 끝만 건드림."),
+    { type: "reveal", narr: t(E, "The heart: expand — touch only the two ends.", "가장 중요한 건 expand 예요. 두 끝만 건드려요."),
       content: (<CodeSectionView section={secExpand} lang={lang} E={E} />) },
-    { type: "reveal", narr: t(E, "Run every center, then print.", "모든 중심 돌고, 출력."),
+    { type: "reveal", narr: t(E, "Run every center, then print.", "모든 중심을 돌고 나서 출력해요."),
       content: (<CodeSectionView section={secMain} lang={lang} E={E} />) },
-    { type: "reveal", narr: t(E, "All pieces in one program.", "조각들을 한 코드로."),
+    { type: "reveal", narr: t(E, "All pieces in one program.", "조각들을 한 코드로 모아 봐요."),
       content: (<CodeSectionView section={secFull} lang={lang} E={E} />) },
     /* (복잡도 퀴즈 제거 — Big-O 고르기는 중1엔 추상적. 언어노트가 구체 시간으로 대신 설명. 선생님 2026-07-02.) */
 
@@ -572,14 +572,14 @@ export function makeCheckupsCh4(E, lang = "py") {
             <div style={{ fontWeight: 800, marginBottom: 4 }}>⚠️ {t(E, "Python has a real limit here", "이 문제, Python은 한계가 있어요")}</div>
             {t(E,
               "N = 7500 means O(N²) ≈ 28 million inner-loop steps. In C++ that's ~0.05 s → passes. In Python (CPython) the same loop is ~40 s → TLE on the big cases. It's not an algorithm problem — it's language speed, and there is NO faster algorithm (O(N²) is the intended complexity).",
-              "N = 7500이면 O(N²) ≈ 안쪽 루프 2,800만 번. C++은 ~0.05초 → 통과. 근데 Python(CPython)은 같은 루프가 ~40초 → 큰 케이스에서 TLE. 알고리즘 문제가 아니라 언어 속도 문제예요. 게다가 더 빠른 알고리즘도 없어요 (O(N²)가 의도된 복잡도).")}
+              "N = 7500 이면 O(N²), 안쪽 반복이 2,800만 번이에요. C++ 은 0.05초쯤이라 통과해요. 그런데 Python(CPython)은 같은 반복이 40초쯤 걸려서 큰 입력에서 시간 초과(TLE)가 나요. 알고리즘이 문제가 아니라 언어 속도가 문제예요. 게다가 더 빠른 알고리즘도 없어요 (O(N²) 가 원래 의도된 복잡도예요).")}
           </div>
 
           <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: 10, padding: "10px 13px", fontSize: 12, color: "#1e3a8a", lineHeight: 1.7, wordBreak: "keep-all" }}>
             <div style={{ fontWeight: 800, marginBottom: 4 }}>🎯 {t(E, "So", "그래서")}</div>
             {t(E,
               "For big N with an O(N²) solution, the language matters. Here: submit in C++ (passes). Pure Python can't hit the limit; only heavy numpy vectorization has a chance. A good lesson: sometimes the right move is choosing C++.",
-              "큰 N + O(N²) 풀이에선 언어 선택이 중요해요. 이 문제는 C++로 제출 (통과). 순수 Python은 제한에 못 들고, numpy로 세게 벡터화해야 겨우 가능해요. 좋은 교훈 — 때론 'C++로 가는 것'이 정답이에요.")}
+              "N 이 크고 풀이가 O(N²) 면 어떤 언어로 쓰느냐가 중요해요. 이 문제는 C++ 로 제출하면 통과해요. 순수 Python 은 시간 안에 못 들어오고, numpy 로 한꺼번에 계산(벡터화)해야 겨우 가능해요. 좋은 교훈이에요 — 때로는 'C++ 로 가는 것' 이 정답이에요.")}
           </div>
         </div>),
     },

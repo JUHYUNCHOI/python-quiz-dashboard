@@ -231,13 +231,13 @@ export function TripletEnumSimulator({ E }) {
             padding: "9px 12px", marginBottom: 10, fontSize: 11.5, lineHeight: 1.65,
             color: "#1f2937", wordBreak: "keep-all",
           }}>
-            🐌 <b style={{ color: "#dc2626" }}>{t(E, "But on a big string?", "근데 큰 문자열이면?")}</b>{" "}
+            🐌 <b style={{ color: "#dc2626" }}>{t(E, "But on a big string?", "근데 글자 줄이 길면요?")}</b>{" "}
             {t(E,
               `"abcabbc" (N=7) already has 35 triplets. A length-N string has about N³/6 of them — so the count EXPLODES as N grows.`,
               `"abcabbc"(N=7)만 해도 (i,j,k) 조합이 35 개. 길이 N 이면 ≈ N³/6 개 — N 이 커질수록 조합 수가 폭발해요.`)}
             <div style={{ marginTop: 4, color: C.dim }}>
               {t(E, "Each bar = how many (i,j,k) triplets you'd check for that N:",
-                    "아래 막대 = 그 N 일 때 확인해야 할 (i,j,k) 조합 수:")}
+                    "아래 막대는 그 N 일 때 확인해야 할 (i,j,k) 조합 수예요.")}
             </div>
           </div>
           {[
@@ -270,7 +270,7 @@ export function TripletEnumSimulator({ E }) {
           }}>
             {t(E,
               "Rule of thumb: ~100M (1e8) ops fit in the time limit.  ✓ fine · △ risky · ✗ way too slow.  And this is PER query — with many queries, brute is hopeless → we need a faster idea.",
-              "대략 1 억(1e8) 연산까지가 제한 시간 안.  ✓ 여유 · △ 위험 · ✗ 한참 초과.  게다가 이건 쿼리 1 개당 — 쿼리가 많으면 브루트는 가망 없음 → 더 빠른 방법이 필요해요.")}
+              "대략 1 억(1e8) 번 계산까지가 제한 시간 안이에요.  ✓ 여유 · △ 위험 · ✗ 한참 초과.  게다가 이건 물음 하나당이에요.  물음이 많으면 이 방법으로는 어림없어요 → 더 빠른 방법이 필요해요.")}
           </div>
         </div>
       )}
@@ -285,7 +285,7 @@ export function TripletEnumSimulator({ E }) {
           }}>
             {t(E,
               `${validCount} valid moos in here.  Biggest score = ${best} ⭐ — the two c's picked far apart (pos 3 & 7) beat every tighter moo.  (Brute would check all ${allTrips.length} triplets.)`,
-              `여기 유효한 moo 는 ${validCount} 개.  최대 점수 = ${best} ⭐ — 멀리 떨어진 c 두 개(위치 3·7)가 더 붙은 moo 들을 다 이겨요.  (브루트는 조합 ${allTrips.length} 개를 전부 확인.)`)}
+              `여기서 규칙에 맞는 moo 는 ${validCount} 개예요.  가장 큰 점수는 ${best} ⭐ — 멀리 떨어진 c 두 개(위치 3·7)가 더 붙은 moo 들을 다 이겨요.  (하나씩 다 보려면 조합 ${allTrips.length} 개를 전부 확인해야 해요.)`)}
           </div>
         );
       })()}
@@ -688,8 +688,8 @@ export function MooTraceSimulator({ E, lang = "py" }) {
                   ? t(E, <>different! → <b>left_pointer = {s.cursor}</b> decided ✔</>, <>다르다! → <b>left_pointer = {s.cursor}</b> 확정 ✔</>)
                   : t(E, <>same! → <b>right_pointer = {s.cursor}</b> decided ✔</>, <>같다! → <b>right_pointer = {s.cursor}</b> 확정 ✔</>))
               : (s.dir === "left"
-                  ? t(E, "same — not what we want, keep going →", "같네 — 우리가 찾는 게 아니에요, 계속 →")
-                  : t(E, "different — keep going ←", "다르네 — 계속 ←"))}
+                  ? t(E, "same — not what we want, keep going →", "같네요 — 우리가 찾는 게 아니에요. 계속 →")
+                  : t(E, "different — keep going ←", "다르네요 — 계속 ←"))}
             {/* '왜 여기서 멈추나' — 결정하는 그 순간에만 한 줄.
                 선생님 2026-07-30: "왜 right이 맨 뒤에서 오면서 처음 나타나는
                 똑같은 j를 찾는거지?" — 끝에서 와서 처음 만나는 = 가장 바깥쪽이고,
@@ -998,9 +998,9 @@ export function MooTraceSimulator({ E, lang = "py" }) {
       {s.kind === "final" && (
         <div style={{ maxWidth: 500, margin: "0 auto 12px", background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "11px 14px", fontSize: 11.5, lineHeight: 1.7, color: "#1e3a8a", wordBreak: "keep-all" }}>
           <div style={{ fontWeight: 800, marginBottom: 5, color: "#1d4ed8" }}>⚡ {t(E, "Why is this faster? (the technique)", "왜 빨라졌나 — 기법")}</div>
-          <div>• {t(E, "Triple loop tries every i, j, k → N³.", "3중 for 는 i·j·k 를 다 시도 → N³.")}</div>
-          <div>• {t(E, "Fix j: the two gaps (j−i) and (k−j) are INDEPENDENT → put i as far LEFT as possible, k as far RIGHT as possible.  No middle values to try.", "j 고정: 두 거리 (j−i)·(k−j) 는 서로 독립 → i 는 최대한 왼쪽, k 는 최대한 오른쪽.  중간값은 볼 필요 없음.")}</div>
-          <div style={{ fontWeight: 700, marginTop: 2 }}>→ {t(E, "one left scan + one right scan per j → N².  Technique: fix the middle + greedy extremes.", "j 마다 왼쪽·오른쪽 한 번씩 → N².  기법: 가운데 고정 + 양 끝 그리디.")}</div>
+          <div>• {t(E, "Triple loop tries every i, j, k → N³.", "3중 for 는 i·j·k 를 다 시도해요 → N³.")}</div>
+          <div>• {t(E, "Fix j: the two gaps (j−i) and (k−j) are INDEPENDENT → put i as far LEFT as possible, k as far RIGHT as possible.  No middle values to try.", "j 를 고정하면 두 거리 (j−i) 와 (k−j) 가 서로 상관없어져요.  그래서 i 는 최대한 왼쪽, k 는 최대한 오른쪽에 두면 돼요.  중간값은 볼 필요가 없어요.")}</div>
+          <div style={{ fontWeight: 700, marginTop: 2 }}>→ {t(E, "one left scan + one right scan per j → N².  Technique: fix the middle + greedy extremes.", "j 마다 왼쪽 한 번, 오른쪽 한 번만 보면 돼요 → N².  가운데를 고정하고 양 끝을 최대한 벌리는 방법이에요.")}</div>
         </div>
       )}
 
@@ -1217,7 +1217,7 @@ export function Mooin3FastSim({ E }) {
         <div style={{ textAlign: "center", fontSize: 10.5, color: "#6b21a8", marginBottom: 10, fontWeight: 700, wordBreak: "keep-all" }}>
           {t(E,
             "Why here: push the ends far apart (i leftmost · k rightmost), j in the middle → (j−i)×(k−j) is biggest.",
-            "왜 이 자리냐: 양 끝을 최대한 벌리고 (i 왼쪽 끝 · k 오른쪽 끝) j 는 가운데 → (j−i)×(k−j) 가 최대.")}
+            "왜 이 자리일까요? 양 끝을 최대한 벌리고 (i 는 왼쪽 끝 · k 는 오른쪽 끝) j 를 가운데에 두면 (j−i)×(k−j) 가 가장 커져요.")}
         </div>
       )}
 
@@ -1268,7 +1268,7 @@ export function Mooin3FastSim({ E }) {
         <div style={{ maxWidth: 540, margin: "0 auto 12px", background: "#faf5ff", border: `1.5px solid ${FA}`, borderRadius: 10, padding: "12px 15px", fontSize: 12, lineHeight: 1.7, color: "#5b21b6", wordBreak: "keep-all" }}>
           <div style={{ fontWeight: 800, marginBottom: 4, color: FA }}>⚡ {t(E, "Why it's fast", "왜 빠른가")}</div>
           <div>{t(E, "i, k, j all come from 3 tables you build once — each lookup is instant.", "i, k, j 를 미리 만든 표 3개에서 즉시 찾아요.")}</div>
-          <div style={{ fontWeight: 700, marginTop: 3 }}>→ {t(E, "Only 26 letters per query → passes N = 100,000.", "쿼리당 글자 26개뿐 → N = 100,000 도 통과.")}</div>
+          <div style={{ fontWeight: 700, marginTop: 3 }}>→ {t(E, "Only 26 letters per query → passes N = 100,000.", "물음마다 글자 26 개만 보면 돼요 → N = 100,000 도 통과해요.")}</div>
         </div>
       )}
 
@@ -1936,7 +1936,7 @@ const M3_FAST_CPP = (E) => [
 // 검증본 코드(M3_FULL_*, M3_FAST_*)는 그대로 두고 표시 방식만 CodeWalk 로.
 // fix-j (브루트) 코드가 쓰는 변수
 const _M3_VARS = [
-  { v: "s", ko: "문자열", en: "the string" },
+  { v: "s", ko: "글자 줄", en: "the string" },
   { v: "j", ko: "가운데 자리", en: "middle spot" },
   { v: "left_pointer", ko: "왼쪽 '다른 글자'", en: "left different" },
   { v: "right_pointer", ko: "오른쪽 '같은 글자'", en: "right same" },
@@ -1944,7 +1944,7 @@ const _M3_VARS = [
 // 빠른 풀이는 변수가 완전히 다르다 (표 3 개). 예전엔 여기서도 _M3_VARS 를 써서
 // 코드에 없는 j / left / right 를 범례로 보여줬다. (2026-07-30 페이지 훑다 발견)
 const _M3_FAST_VARS = [
-  { v: "s", ko: "문자열", en: "the string" },
+  { v: "s", ko: "글자 줄", en: "the string" },
   { v: "latest_same", ko: "왼쪽으로 가장 가까운 같은 글자", en: "nearest same on the left" },
   { v: "earliest_same", ko: "오른쪽으로 가장 가까운 같은 글자", en: "nearest same on the right" },
   { v: "nearest_diff", ko: "오른쪽으로 가장 가까운 다른 글자", en: "nearest different on the right" },
@@ -2247,7 +2247,7 @@ export function Mooin3TableSim({ E, lang = "py" }) {
                       <>'{CH}' 발견! → 지금까지 가장 오른쪽 '{CH}' = <b>{s.i}</b>번</>)
                 : (s.last < 0
                     ? t(E, <>not '{CH}' → no '{CH}' seen yet → <b>−1</b></>,
-                          <>'{CH}' 아님 → 아직 '{CH}' 못 봤음 → <b>−1</b></>)
+                          <>'{CH}' 아님 → 아직 '{CH}' 를 못 봤어요 → <b>−1</b></>)
                     : t(E, <>not '{CH}' → rightmost '{CH}' still <b>{s.last}</b></>,
                           <>'{CH}' 아님 → 가장 오른쪽 '{CH}'는 아직 <b>{s.last}</b>번</>))}
               {" · "}
@@ -2274,7 +2274,7 @@ export function Mooin3TableSim({ E, lang = "py" }) {
           {s.kind === "final" && (
             <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#fffbeb" bd="#fcd34d" fg="#92400e">
               {t(E, <>Done! We <b>never rebuild it</b> — no matter how many queries come, they just <b>look it up</b>.</>,
-                    <>완성! 이제 <b>다시 안 만들어요</b> — 쿼리가 아무리 많아도 이 표를 <b>그냥 찾아보기만</b> 해요.</>)}
+                    <>완성! 이제 <b>다시 안 만들어요</b> — 물음이 아무리 많아도 이 표를 <b>찾아보기만</b> 하면 돼요.</>)}
             </SimBubble>
           )}
           {s.kind === "use" && (
@@ -2282,20 +2282,20 @@ export function Mooin3TableSim({ E, lang = "py" }) {
               cx={s.phase === "k" ? simCellCx(s.uk) : s.phase === "i" ? simCellCx(s.ui) : (s.phase === "jpick" && s.uj >= 0) ? simCellCx(s.uj) : ROW_W / 2}
               rowW={ROW_W} bg="#faf5ff" bd="#c4b5fd" fg="#5b21b6">
               {s.phase === "q" && t(E, <>Table done! Now use it to solve query [{s.uL + 1}, {s.uR + 1}] for a '{CH}'-moo.</>,
-                    <>표 완성! 이제 이 표로 쿼리 [{s.uL + 1}, {s.uR + 1}] 에서 '{CH}' moo 를 풀어봐요.</>)}
+                    <>표 완성! 이제 이 표로 물음 [{s.uL + 1}, {s.uR + 1}] 에서 '{CH}' moo 를 풀어 봐요.</>)}
               {s.phase === "k" && t(E, <>right end <b>k = latest_same[{CH}][{s.uR}] = {s.uk}</b> — straight from the table!</>,
-                    <>오른쪽 끝 <b>k = latest_same[{CH}][{s.uR}] = {s.uk}</b> — 표에서 바로 꺼냄!</>)}
+                    <>오른쪽 끝 <b>k = latest_same[{CH}][{s.uR}] = {s.uk}</b> — 표에서 바로 꺼냈어요!</>)}
               {s.phase === "i" && t(E, <>left end <b>i = nearest_diff[{CH}][{s.uL}] = {s.ui}</b> — leftmost non-'{CH}'.</>,
-                    <>왼쪽 끝 <b>i = nearest_diff[{CH}][{s.uL}] = {s.ui}</b> — '{CH}' 아닌 가장 왼쪽.</>)}
+                    <>왼쪽 끝 <b>i = nearest_diff[{CH}][{s.uL}] = {s.ui}</b> — '{CH}' 가 아닌 가장 왼쪽 자리예요.</>)}
               {s.phase === "jm" && t(E,
                     <>Middle j = a '{CH}' near the center m={s.um}. Two candidates: <b>latest_same[{CH}][{s.um}]={s.cand1 < 0 ? "—" : s.cand1}</b> (left of m) & <b>earliest_same[{CH}][{s.um}]={s.cand2 >= N ? "—" : s.cand2}</b> (right of m). ← that's what earliest_same is for!</>,
-                    <>가운데 j 는 한가운데 m={s.um} 근처의 '{CH}'. 후보 둘: <b>latest_same[{CH}][{s.um}]={s.cand1 < 0 ? "—" : s.cand1}</b> (m 왼쪽) · <b>earliest_same[{CH}][{s.um}]={s.cand2 >= N ? "—" : s.cand2}</b> (m 오른쪽). ← earliest_same 이 여기 쓰여요!</>)}
+                    <>가운데 j 는 한가운데 m={s.um} 근처의 '{CH}' 예요. 후보는 둘이에요 — <b>latest_same[{CH}][{s.um}]={s.cand1 < 0 ? "—" : s.cand1}</b> (m 왼쪽) · <b>earliest_same[{CH}][{s.um}]={s.cand2 >= N ? "—" : s.cand2}</b> (m 오른쪽). ← earliest_same 이 여기 쓰여요!</>)}
               {s.phase === "jpick" && (s.uj >= 0
                     ? t(E, <>pick the bigger score → <b>j = {s.uj}</b>. score = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b></>,
-                          <>점수 큰 걸 골라 <b>j = {s.uj}</b>. 점수 = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b></>)
-                    : t(E, <>no '{CH}' between i and k → no '{CH}'-moo</>, <>i·k 사이에 '{CH}' 없음 → '{CH}' moo 없음</>))}
+                          <>점수가 더 큰 쪽을 골라 <b>j = {s.uj}</b>. 점수 = ({s.uj}−{s.ui})×({s.uk}−{s.uj}) = <b>{s.uscore}</b></>)
+                    : t(E, <>no '{CH}' between i and k → no '{CH}'-moo</>, <>i 와 k 사이에 '{CH}' 가 없어요 → '{CH}' moo 는 못 만들어요</>))}
               {s.phase === "done" && t(E, <>Best '{CH}'-moo = <b>{s.uscore}</b>. Do the same for every letter → the biggest wins (here 'c' gives 8).</>,
-                    <>'{CH}' 로 만든 최고 moo = <b>{s.uscore}</b>. 다른 글자도 표로 똑같이 → 그 중 최댓값이 답 (여기선 'c' 로 8).</>)}
+                    <>'{CH}' 로 만든 최고 moo 는 <b>{s.uscore}</b> 예요. 다른 글자도 표로 똑같이 해요 → 그중 가장 큰 값이 답이에요 (여기선 'c' 로 8).</>)}
             </SimBubble>
           )}
         </div>
@@ -2319,7 +2319,7 @@ export function Mooin3TableSim({ E, lang = "py" }) {
       <div style={{ height: 16, textAlign: "center", fontSize: 10, fontWeight: 700, color: C.dim, marginBottom: 8 }}>
         {s.kind === "L" ? t(E, "pass 1 — left → right", "1 번째 훑기 — 왼쪽 → 오른쪽 →")
           : s.kind === "R" ? t(E, "pass 2 — right → left", "← 2 번째 훑기 — 오른쪽 → 왼쪽")
-          : s.kind === "use" ? t(E, "▶ now SOLVE a query with the table", "▶ 이제 이 표로 쿼리 풀기")
+          : s.kind === "use" ? t(E, "▶ now SOLVE a query with the table", "▶ 이제 이 표로 물음을 풀어요")
           : " "}
       </div>
 
@@ -2512,7 +2512,7 @@ export function Mooin3MapSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <StepHeader accent={MA} idx={ts.safe} total={steps.length} isEn={E}
-        title={t(E, `Another way (map): letter → its spots`, `다른 방법 (map): 글자 → 위치 리스트`)}
+        title={t(E, `Another way (map): letter → its spots`, `다른 방법 (map) — 글자 → 위치 목록`)}
         subtitle={`(${ts.safe + 1} / ${steps.length})`} />
 
       {/* 말풍선 무대 */}
@@ -2521,20 +2521,20 @@ export function Mooin3MapSim({ E }) {
           {s.kind === "intro" && (
             <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={330}>
               {t(E, <>Instead of 3 tables — keep <b>one list of spots per letter</b>. (a map / dict.)</>,
-                    <>표 3개 대신 — <b>글자마다 '나온 위치 리스트' 하나</b>만 만들어요. (map / dict.)</>)}
+                    <>표 3개 대신 — <b>글자마다 '나온 위치 목록' 하나</b>만 만들어요. (map / dict.)</>)}
             </SimBubble>
           )}
           {s.kind === "buildPos" && (
             <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59">
               <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>s[{s.i}] = '{s.ch}'</span>
               {" → "}
-              {t(E, <>add <b>{s.i}</b> to '{s.ch}' list.</>, <>'{s.ch}' 리스트에 <b>{s.i}</b> 추가.</>)}
+              {t(E, <>add <b>{s.i}</b> to '{s.ch}' list.</>, <>'{s.ch}' 목록에 <b>{s.i}</b> 를 넣어요.</>)}
             </SimBubble>
           )}
           {s.kind === "builtPos" && (
             <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#fff7ed" bd="#f97316" fg="#9a3412" width={350}>
               {t(E, <>Lists done. But <b>i</b> (leftmost DIFFERENT letter) isn't in these lists → we also prebuild <b>nextDiff</b>.</>,
-                    <>리스트 완성. 그런데 <b>i</b>(다른 글자 왼쪽 끝)는 이 리스트론 못 찾아요 → <b>nextDiff</b> 도 미리 하나 만들어요.</>)}
+                    <>목록 완성. 그런데 <b>i</b>(다른 글자 왼쪽 끝)는 이 목록으로 못 찾아요 → <b>nextDiff</b> 도 미리 하나 만들어요.</>)}
             </SimBubble>
           )}
           {s.kind === "buildND" && s.same === null && (
@@ -2547,7 +2547,7 @@ export function Mooin3MapSim({ E }) {
             <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fff7ed" bd="#f97316" fg="#9a3412" width={340}>
               <span style={{ fontFamily: "'JetBrains Mono',monospace" }}>s[{s.i}]='{str[s.i]}' = s[{s.i + 1}]='{str[s.i + 1]}'</span>{" "}
               {t(E, <>same → copy the next value: nextDiff[{s.i}] = <b>{s.nd[s.i]}</b>.</>,
-                    <>같음 → 뒤 값 이어받기: nextDiff[{s.i}] = <b>{s.nd[s.i]}</b>.</>)}
+                    <>같으니까 뒤 값을 그대로 이어받아요. nextDiff[{s.i}] = <b>{s.nd[s.i]}</b>.</>)}
             </SimBubble>
           )}
           {s.kind === "buildND" && s.same === false && (
@@ -2560,34 +2560,34 @@ export function Mooin3MapSim({ E }) {
           {s.kind === "builtND" && (
             <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={340}>
               {t(E, <>Now both are ready — <b>lists</b> (for k, j) and <b>nextDiff</b> (for i). Let's solve a query.</>,
-                    <>이제 둘 다 준비 — <b>리스트</b>(k·j 용)와 <b>nextDiff</b>(i 용). 쿼리를 풀어봐요.</>)}
+                    <>이제 둘 다 준비됐어요 — <b>목록</b>(k·j 용)과 <b>nextDiff</b>(i 용). 물음을 풀어 봐요.</>)}
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "q" && (
             <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={320}>
               {t(E, <>Query <b>[{s.uL}, {s.uR}]</b> — a middle window; the two ends sit outside the lines. Letter <b>'{CH}'</b>.</>,
-                    <>쿼리 <b>[{s.uL}, {s.uR}]</b> — 가운데 구간 (양 끝 한 칸씩은 선 밖). 글자 <b>'{CH}'</b>.</>)}
+                    <>물음 <b>[{s.uL}, {s.uR}]</b> — 가운데 구간이에요 (양 끝 한 칸씩은 선 밖). 글자는 <b>'{CH}'</b> 예요.</>)}
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "k" && (
             <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#dcfce7" bd="#16a34a" fg="#15803d" width={320}>
               {t(E, <><b>k</b> = rightmost '{CH}' ≤ {s.uR} → binary-search the list → <b>{s.uk}</b>.</>,
-                    <><b>k</b> = {s.uR} 이하 '{CH}' 중 가장 오른쪽 → 리스트 이분탐색 → <b>{s.uk}</b>.</>)}
+                    <><b>k</b> 는 {s.uR} 보다 크지 않은 '{CH}' 중 가장 오른쪽이에요 → 목록에서 이분탐색 → <b>{s.uk}</b>.</>)}
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "i" && (
             <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fee2e2" bd="#dc2626" fg="#7f1d1d" width={350}>
               {t(E, <>s[{s.uL}]='{CH}' — same as '{CH}'! So i isn't L; jump via <b>nextDiff[{s.uL}]</b> = <b>{s.ui}</b> ('{str[s.ui]}'). O(1)!</>,
-                    <>s[{s.uL}]='{CH}' — 글자 '{CH}' 랑 같죠! 그래서 i 는 L 이 아니라 <b>nextDiff[{s.uL}]</b> = <b>{s.ui}</b> ('{str[s.ui]}') 로 점프. O(1)!</>)}
+                    <>s[{s.uL}]='{CH}' — 글자 '{CH}' 와 같죠! 그래서 i 는 L 이 아니라 <b>nextDiff[{s.uL}]</b> = <b>{s.ui}</b> ('{str[s.ui]}') 로 건너뛰어요. O(1) 이에요!</>)}
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "jm" && (
             <SimBubble cx={bubbleCx} rowW={ROW_W} bg="#fefce8" bd="#f59e0b" fg="#92400e" width={360}>
               {s.below === s.above
                 ? t(E, <>Middle m = {s.um}. The sorted '{CH}' list → <b>binary-search to it</b> (no scanning). One sits right at m → <b>{s.below}</b>.</>,
-                      <>가운데 m = {s.um}. 정렬된 '{CH}' 리스트라 <b>이분탐색으로 콕</b> (사이를 다 안 돌아요). m 자리가 바로 '{CH}' → <b>{s.below}</b>.</>)
+                      <>가운데 m = {s.um}. '{CH}' 목록이 순서대로라 <b>이분탐색으로 콕</b> 집어요 (사이를 다 안 돌아요). m 자리가 바로 '{CH}' → <b>{s.below}</b>.</>)
                 : t(E, <>Middle m = {s.um}. The sorted '{CH}' list → <b>binary-search to it</b> (no scanning). The two around m → <b>{s.below}</b>, <b>{s.above}</b>.</>,
-                      <>가운데 m = {s.um}. 정렬된 '{CH}' 리스트라 <b>이분탐색으로 콕</b> (사이를 다 안 돌아요). m 양옆 → <b>{s.below}</b>, <b>{s.above}</b>.</>)}
+                      <>가운데 m = {s.um}. '{CH}' 목록이 순서대로라 <b>이분탐색으로 콕</b> 집어요 (사이를 다 안 돌아요). m 양옆 → <b>{s.below}</b>, <b>{s.above}</b>.</>)}
             </SimBubble>
           )}
           {s.kind === "use" && s.phase === "jpick" && (
@@ -2611,7 +2611,7 @@ export function Mooin3MapSim({ E }) {
           {s.kind === "use" && s.phase === "done" && (
             <SimBubble cx={ROW_W / 2} rowW={ROW_W} bg="#f0fdfa" bd="#5eead4" fg="#115e59" width={360}>
               {t(E, <>Do this for <b>every letter</b> and take the biggest score — that's the answer. No tables, just lists + <b>binary search</b>.</>,
-                    <>글자마다 이렇게 해서 (되는 것 중) <b>가장 큰 점수</b>가 답이에요. 표 없이 리스트 + <b>이분탐색</b>만.</>)}
+                    <>글자마다 이렇게 해서 (되는 것 중) <b>가장 큰 점수</b>가 답이에요. 표 없이 목록과 <b>이분탐색</b>만 있으면 돼요.</>)}
             </SimBubble>
           )}
         </div>
@@ -2696,22 +2696,22 @@ export function Mooin3Compare({ E }) {
   const rows = [
     { k: t(E, "Data structure", "자료구조"),
       a: t(E, "3 tables (26 × N)", "표 3개 (26 × N)"),
-      b: t(E, "letter → list of spots (map)", "글자 → 위치 리스트 (map)") },
+      b: t(E, "letter → list of spots (map)", "글자 → 위치 목록 (map)") },
     { k: t(E, "Precompute", "전처리"),
-      a: t(E, "two scans fill the tables", "두 번 훑어 표 채움"),
-      b: t(E, "one scan fills the lists", "한 번 훑어 리스트 채움") },
-    { k: t(E, "Look-up in a query", "쿼리에서 조회"),
+      a: t(E, "two scans fill the tables", "두 번 훑어서 표를 채워요"),
+      b: t(E, "one scan fills the lists", "한 번 훑어서 목록을 채워요") },
+    { k: t(E, "Look-up in a query", "물음에서 찾아보기"),
       a: t(E, "read the table — O(1)", "표에서 바로 — O(1)"),
-      b: t(E, "binary-search the list — O(log N)", "리스트 이분탐색 — O(log N)") },
-    { k: t(E, "Time / query", "쿼리당 시간"),
+      b: t(E, "binary-search the list — O(log N)", "목록에서 이분탐색 — O(log N)") },
+    { k: t(E, "Time / query", "물음 하나당 시간"),
       a: "O(26)",
       b: "O(26 · log N)" },
     { k: t(E, "Memory", "메모리"),
       a: t(E, "26 × N ints × 3 (large)", "26 × N 정수 × 3 (큼)"),
       b: t(E, "N spots total (small)", "위치 N개 (작음)") },
     { k: t(E, "Feel", "느낌"),
-      a: t(E, "compute everything up front", "미리 다 계산해 둠"),
-      b: t(E, "look it up when needed", "필요할 때 찾음") },
+      a: t(E, "compute everything up front", "미리 다 계산해 둬요"),
+      b: t(E, "look it up when needed", "필요할 때 찾아요") },
   ];
   return (
     <div style={{ padding: 16, maxWidth: 640, margin: "0 auto" }}>
@@ -2753,55 +2753,55 @@ export function getMooin3Walk(E, lang = "py", mode = "brute") {
   if (mode === "brute") {
     if (lang === "cpp") {
       return { code: M3_FULL_CPP, vars: _M3_VARS, beats: [
-        { hi: [4, 8],   bubble: t(E, "Input first — read N, Q, then the string s.", "입력부터 — N, Q 읽고 문자열 s.") },
-        { hi: [10, 15], bubble: t(E, "Each query: read l, r → 0-based (l--, r--). best = -1 (long long, the product gets big).", "쿼리마다 l, r 읽고 0-based (l--, r--). best = -1 (곱이 커서 long long).") },
-        { hi: [16, 16], bubble: t(E, "Pin the middle spot j — for each j we look both ways once.", "가운데 자리 j 를 하나씩 박아요 — j 마다 양쪽을 한 번씩.") },
-        { hi: [17, 23], bubble: t(E, "Left: first spot with a DIFFERENT letter than s[j] = left_pointer (smaller i → bigger j−i).", "왼쪽: s[j] 와 '다른' 글자가 처음 나오는 자리 = left_pointer (i 작을수록 j−i 큼).") },
-        { hi: [24, 30], bubble: t(E, "Right: last spot with the SAME letter as s[j] = right_pointer (bigger k → bigger k−j).", "오른쪽: s[j] 와 '같은' 글자가 마지막 자리 = right_pointer (k 클수록 k−j 큼).") },
-        { hi: [31, 36], bubble: t(E, "If both exist, (j−left_pointer)×(right_pointer−j) — keep the max. Cast to long long so it doesn't overflow.", "둘 다 있으면 (j−left_pointer)×(right_pointer−j) — 최댓값 유지. long long 캐스팅으로 오버플로 방지.") },
-        { hi: [38, 38], bubble: t(E, "Print this query's answer.", "이 쿼리의 답 출력.") },
+        { hi: [4, 8],   bubble: t(E, "Input first — read N, Q, then the string s.", "먼저 입력이에요. N 과 Q 를 읽고, 이어서 글자 줄 s 를 읽어요.") },
+        { hi: [10, 15], bubble: t(E, "Each query: read l, r → 0-based (l--, r--). best = -1 (long long, the product gets big).", "물음마다 l 과 r 을 읽어서 0 부터로 바꿔요 (l--, r--). best 는 -1 로 시작하고, 곱이 커질 수 있어서 long long 이에요.") },
+        { hi: [16, 16], bubble: t(E, "Pin the middle spot j — for each j we look both ways once.", "가운데 자리 j 를 하나씩 고정해요. j 마다 양쪽을 한 번씩만 봐요.") },
+        { hi: [17, 23], bubble: t(E, "Left: first spot with a DIFFERENT letter than s[j] = left_pointer (smaller i → bigger j−i).", "왼쪽에서는 s[j] 와 다른 글자가 처음 나오는 자리를 찾아 left_pointer 에 담아요. i 가 작을수록 j−i 가 커져요.") },
+        { hi: [24, 30], bubble: t(E, "Right: last spot with the SAME letter as s[j] = right_pointer (bigger k → bigger k−j).", "오른쪽에서는 s[j] 와 같은 글자가 마지막으로 있는 자리를 찾아 right_pointer 에 담아요. k 가 클수록 k−j 가 커져요.") },
+        { hi: [31, 36], bubble: t(E, "If both exist, (j−left_pointer)×(right_pointer−j) — keep the max. Cast to long long so it doesn't overflow.", "둘 다 있으면 (j−left_pointer)×(right_pointer−j) 를 계산해서, 더 크면 최댓값을 바꿔요. long long 으로 바꿔 곱해야 값이 넘치지 않아요.") },
+        { hi: [38, 38], bubble: t(E, "Print this query's answer.", "이 물음의 답을 출력해요.") },
       ] };
     }
     return { code: M3_FULL_PY(E), vars: _M3_VARS, beats: [
-      { hi: [0, 1],   bubble: t(E, "Input first — read N, Q, then the string s.", "입력부터 — N, Q 읽고 문자열 s.") },
-      { hi: [3, 7],   bubble: t(E, "Each query: read l, r → 0-based (l−=1, r−=1). Start best = -1.", "쿼리마다 l, r 읽고 0-based (l−=1, r−=1). best = -1 로 시작.") },
-      { hi: [8, 9],   bubble: t(E, "Pin the middle spot j — for each j we look both ways once.", "가운데 자리 j 를 하나씩 박아요 — j 마다 양쪽을 한 번씩.") },
-      { hi: [10, 15], bubble: t(E, "Left: first spot with a DIFFERENT letter than s[j] = left_pointer (smaller i → bigger j−i).", "왼쪽: s[j] 와 '다른' 글자가 처음 나오는 자리 = left_pointer (i 작을수록 j−i 큼).") },
-      { hi: [16, 21], bubble: t(E, "Right: last spot with the SAME letter as s[j] = right_pointer (bigger k → bigger k−j).", "오른쪽: s[j] 와 '같은' 글자가 마지막 자리 = right_pointer (k 클수록 k−j 큼).") },
-      { hi: [22, 25], bubble: t(E, "If both exist, (j−left_pointer)×(right_pointer−j) — keep the max.", "둘 다 있으면 (j−left_pointer)×(right_pointer−j) — 최댓값 유지.") },
-      { hi: [26, 26], bubble: t(E, "Print this query's answer.", "이 쿼리의 답 출력.") },
+      { hi: [0, 1],   bubble: t(E, "Input first — read N, Q, then the string s.", "먼저 입력이에요. N 과 Q 를 읽고, 이어서 글자 줄 s 를 읽어요.") },
+      { hi: [3, 7],   bubble: t(E, "Each query: read l, r → 0-based (l−=1, r−=1). Start best = -1.", "물음마다 l 과 r 을 읽어서 0 부터로 바꿔요 (l−=1, r−=1). best 는 -1 로 시작해요.") },
+      { hi: [8, 9],   bubble: t(E, "Pin the middle spot j — for each j we look both ways once.", "가운데 자리 j 를 하나씩 고정해요. j 마다 양쪽을 한 번씩만 봐요.") },
+      { hi: [10, 15], bubble: t(E, "Left: first spot with a DIFFERENT letter than s[j] = left_pointer (smaller i → bigger j−i).", "왼쪽에서는 s[j] 와 다른 글자가 처음 나오는 자리를 찾아 left_pointer 에 담아요. i 가 작을수록 j−i 가 커져요.") },
+      { hi: [16, 21], bubble: t(E, "Right: last spot with the SAME letter as s[j] = right_pointer (bigger k → bigger k−j).", "오른쪽에서는 s[j] 와 같은 글자가 마지막으로 있는 자리를 찾아 right_pointer 에 담아요. k 가 클수록 k−j 가 커져요.") },
+      { hi: [22, 25], bubble: t(E, "If both exist, (j−left_pointer)×(right_pointer−j) — keep the max.", "둘 다 있으면 (j−left_pointer)×(right_pointer−j) 를 계산해서, 더 크면 최댓값을 바꿔요.") },
+      { hi: [26, 26], bubble: t(E, "Print this query's answer.", "이 물음의 답을 출력해요.") },
     ] };
   }
   // mode === "fast" — O(26) per query: 3 lookup tables + parabola vertex
   if (lang === "cpp") {
     return { code: M3_FAST_CPP(E), vars: _M3_FAST_VARS, beats: [
-      { hi: [5, 9],   bubble: t(E, "Read N, Q, and the string s.", "N, Q, 문자열 s 읽기.") },
-      { hi: [15, 18], bubble: t(E, "Make the 3 tables (26 × N). Empty for now (-1 / INF).", "표 3개 만들기 (글자 26 × 자리 N). 처음엔 -1 / INF.") },
-      { hi: [19, 21], bubble: t(E, "For each letter c: ch = the letter, last = none yet (-1).", "글자 c 마다: ch = 그 글자, last = 아직 없음 (-1).") },
-      { hi: [22, 25], bubble: t(E, "Pass 1 (left→right): fill latest_same — last c seen so far.", "1차 왼→오: latest_same 채우기 — 지금까지 본 마지막 c.") },
-      { hi: [26, 32], bubble: t(E, "Pass 2 (right→left): fill earliest_same (nearest c right) & nearest_diff (nearest non-c right).", "2차 오→왼: earliest_same(오른쪽 가장 가까운 c)·nearest_diff(오른쪽 가장 가까운 다른 글자) 채우기.") },
-      { hi: [35, 40], bubble: t(E, "Each query: read l, r → 0-based, best = -1.", "쿼리마다: l, r 읽고 0-based, best = -1.") },
-      { hi: [41, 43], bubble: t(E, "Loop 26 letters. Left end i = nearest_diff[c][l]. Skip if out of range.", "글자 26개 루프. 왼쪽 끝 i = nearest_diff[c][l]. 범위 밖이면 건너뜀.") },
-      { hi: [44, 46], bubble: t(E, "Right end k = latest_same[c][r]. Middle m = (i+k)/2.", "오른쪽 끝 k = latest_same[c][r]. 가운데 m = (i+k)/2.") },
-      { hi: [47, 48], bubble: t(E, "Two candidates: latest_same[c][m], earliest_same[c][m].", "후보 둘: latest_same[c][m], earliest_same[c][m].") },
-      { hi: [49, 55], bubble: t(E, "For each candidate j with i<j<k, score = (j-i)(k-j) — keep the max.", "후보 j 가 i<j<k 면 점수 = (j-i)(k-j) — 최댓값 유지.") },
-      { hi: [57, 57], bubble: t(E, "Print the answer.", "답 출력.") },
+      { hi: [5, 9],   bubble: t(E, "Read N, Q, and the string s.", "N 과 Q 를 읽고, 이어서 글자 줄 s 를 읽어요.") },
+      { hi: [15, 18], bubble: t(E, "Make the 3 tables (26 × N). Empty for now (-1 / INF).", "표 3 개를 만들어요 (글자 26 × 자리 N). 처음에는 -1 과 INF 로 채워 둬요.") },
+      { hi: [19, 21], bubble: t(E, "For each letter c: ch = the letter, last = none yet (-1).", "글자 c 마다 ch 에 그 글자를 넣고, last 는 아직 없다는 뜻으로 -1 로 둬요.") },
+      { hi: [22, 25], bubble: t(E, "Pass 1 (left→right): fill latest_same — last c seen so far.", "첫 번째로 왼쪽에서 오른쪽으로 훑으며 latest_same 을 채워요. 지금까지 본 마지막 c 의 자리예요.") },
+      { hi: [26, 32], bubble: t(E, "Pass 2 (right→left): fill earliest_same (nearest c right) & nearest_diff (nearest non-c right).", "두 번째로 오른쪽에서 왼쪽으로 훑으며 earliest_same 과 nearest_diff 를 채워요. 각각 오른쪽으로 가장 가까운 c 와, 오른쪽으로 가장 가까운 다른 글자예요.") },
+      { hi: [35, 40], bubble: t(E, "Each query: read l, r → 0-based, best = -1.", "물음마다 l 과 r 을 읽어서 0 부터로 바꾸고, best 는 -1 로 시작해요.") },
+      { hi: [41, 43], bubble: t(E, "Loop 26 letters. Left end i = nearest_diff[c][l]. Skip if out of range.", "글자 26 개를 차례로 돌아요. 왼쪽 끝 i 는 nearest_diff[c][l] 이에요. 범위 밖이면 건너뛰어요.") },
+      { hi: [44, 46], bubble: t(E, "Right end k = latest_same[c][r]. Middle m = (i+k)/2.", "오른쪽 끝 k 는 latest_same[c][r] 이고, 가운데 m 은 (i+k)/2 예요.") },
+      { hi: [47, 48], bubble: t(E, "Two candidates: latest_same[c][m], earliest_same[c][m].", "후보는 둘이에요. latest_same[c][m] 과 earliest_same[c][m] 이에요.") },
+      { hi: [49, 55], bubble: t(E, "For each candidate j with i<j<k, score = (j-i)(k-j) — keep the max.", "후보 j 가 i<j<k 이면 점수는 (j-i)(k-j) 예요. 더 크면 최댓값을 바꿔요.") },
+      { hi: [57, 57], bubble: t(E, "Print the answer.", "답을 출력해요.") },
     ] };
   }
   return { code: M3_FAST_PY(E), vars: _M3_FAST_VARS, beats: [
-    { hi: [0, 1],   bubble: t(E, "Fast input (needed for 30,000 queries).", "빠른 입력 준비 (쿼리 3만 개라 필요).") },
-    { hi: [3, 4],   bubble: t(E, "Read N, Q, and the string s.", "N, Q, 문자열 s 읽기.") },
-    { hi: [10, 13], bubble: t(E, "Make the 3 tables (26 letters × N spots). Empty for now (-1 / INF).", "표 3개 만들기 (글자 26 × 자리 N). 처음엔 비어있음 (-1 / INF).") },
-    { hi: [14, 17], bubble: t(E, "For each letter c: ch = the letter, last = none yet (-1).", "글자 c 마다: ch = 그 글자, last = 아직 없음 (-1).") },
-    { hi: [18, 21], bubble: t(E, "Pass 1 (left→right): fill latest_same — each spot keeps the last c seen so far.", "1차 왼→오: latest_same 채우기 — 각 자리에 '지금까지 본 마지막 c'.") },
-    { hi: [22, 25], bubble: t(E, "Set up for the right side: nxt_same, nxt_diff = none yet (INF).", "오른쪽 정보 준비: nxt_same, nxt_diff = 아직 없음 (INF).") },
-    { hi: [26, 32], bubble: t(E, "Pass 2 (right→left): fill earliest_same (nearest c on the right) & nearest_diff (nearest non-c on the right).", "2차 오→왼: earliest_same(오른쪽 가장 가까운 c)·nearest_diff(오른쪽 가장 가까운 다른 글자) 채우기.") },
-    { hi: [34, 39], bubble: t(E, "Each query: read l, r → 0-based, best = -1.", "쿼리마다: l, r 읽고 0-based, best = -1.") },
-    { hi: [40, 43], bubble: t(E, "Loop 26 letters. Left end i = nearest_diff[c][l] (from the table). Skip if out of range.", "글자 26개 루프. 왼쪽 끝 i = nearest_diff[c][l] (표에서 바로). 범위 밖이면 건너뜀.") },
-    { hi: [44, 46], bubble: t(E, "Right end k = latest_same[c][r]. Skip if k ≤ i.", "오른쪽 끝 k = latest_same[c][r]. k ≤ i 면 건너뜀.") },
-    { hi: [47, 50], bubble: t(E, "Middle m = (i+k)//2. Two candidates: latest_same[c][m], earliest_same[c][m].", "가운데 m = (i+k)//2. 후보 둘: latest_same[c][m], earliest_same[c][m].") },
-    { hi: [51, 54], bubble: t(E, "If i < j < k, score = (j-i)(k-j) — keep the max.", "i < j < k 면 점수 = (j-i)(k-j) — 최댓값 유지.") },
-    { hi: [55, 57], bubble: t(E, "Collect answers, print all at once.", "답 모아서 한 번에 출력.") },
+    { hi: [0, 1],   bubble: t(E, "Fast input (needed for 30,000 queries).", "입력을 빠르게 읽을 준비를 해요 (물음이 3 만 개라 필요해요).") },
+    { hi: [3, 4],   bubble: t(E, "Read N, Q, and the string s.", "N 과 Q 를 읽고, 이어서 글자 줄 s 를 읽어요.") },
+    { hi: [10, 13], bubble: t(E, "Make the 3 tables (26 letters × N spots). Empty for now (-1 / INF).", "표 3 개를 만들어요 (글자 26 × 자리 N). 처음에는 비어 있어요 (-1 / INF).") },
+    { hi: [14, 17], bubble: t(E, "For each letter c: ch = the letter, last = none yet (-1).", "글자 c 마다 ch 에 그 글자를 넣고, last 는 아직 없다는 뜻으로 -1 로 둬요.") },
+    { hi: [18, 21], bubble: t(E, "Pass 1 (left→right): fill latest_same — each spot keeps the last c seen so far.", "첫 번째로 왼쪽에서 오른쪽으로 훑으며 latest_same 을 채워요. 각 자리에 지금까지 본 마지막 c 를 적어요.") },
+    { hi: [22, 25], bubble: t(E, "Set up for the right side: nxt_same, nxt_diff = none yet (INF).", "오른쪽 정보를 담을 nxt_same 과 nxt_diff 를 아직 없다는 뜻인 INF 로 둬요.") },
+    { hi: [26, 32], bubble: t(E, "Pass 2 (right→left): fill earliest_same (nearest c on the right) & nearest_diff (nearest non-c on the right).", "두 번째로 오른쪽에서 왼쪽으로 훑으며 earliest_same 과 nearest_diff 를 채워요. 각각 오른쪽으로 가장 가까운 c 와, 오른쪽으로 가장 가까운 다른 글자예요.") },
+    { hi: [34, 39], bubble: t(E, "Each query: read l, r → 0-based, best = -1.", "물음마다 l 과 r 을 읽어서 0 부터로 바꾸고, best 는 -1 로 시작해요.") },
+    { hi: [40, 43], bubble: t(E, "Loop 26 letters. Left end i = nearest_diff[c][l] (from the table). Skip if out of range.", "글자 26 개를 차례로 돌아요. 왼쪽 끝 i 는 표에서 바로 꺼낸 nearest_diff[c][l] 이에요. 범위 밖이면 건너뛰어요.") },
+    { hi: [44, 46], bubble: t(E, "Right end k = latest_same[c][r]. Skip if k ≤ i.", "오른쪽 끝 k 는 latest_same[c][r] 이에요. k ≤ i 이면 건너뛰어요.") },
+    { hi: [47, 50], bubble: t(E, "Middle m = (i+k)//2. Two candidates: latest_same[c][m], earliest_same[c][m].", "가운데 m 은 (i+k)//2 예요. 후보는 latest_same[c][m] 과 earliest_same[c][m] 둘이에요.") },
+    { hi: [51, 54], bubble: t(E, "If i < j < k, score = (j-i)(k-j) — keep the max.", "i < j < k 이면 점수는 (j-i)(k-j) 예요. 더 크면 최댓값을 바꿔요.") },
+    { hi: [55, 57], bubble: t(E, "Collect answers, print all at once.", "답을 모아서 한 번에 출력해요.") },
   ] };
 }
 
@@ -2817,14 +2817,14 @@ export function getMooin3MapWalk(E, lang = "py") {
         { v: "j", ko: "가운데 근처 같은 글자", en: "middle same-letter spot" },
       ],
       beats: [
-        { hi: [16, 19], bubble: t(E, "Read N, Q, and the string s.", "N, Q, 문자열 s 읽기.") },
-        { hi: [22, 24], bubble: t(E, "Build posOf = letter → its positions.  ONCE, before any query — this is what makes it fast.", "posOf = 글자 → 위치 목록.  쿼리 전에 딱 한 번 — 이게 빠름의 핵심.") },
-        { hi: [27, 30], bubble: t(E, "Precompute nextDiff: the first spot where the letter changes (used to find i in O(1)).", "nextDiff 미리 계산: 글자가 처음 바뀌는 자리 (i 를 O(1) 로 찾는 데 씀).") },
-        { hi: [33, 38], bubble: t(E, "Each query: read L, R → 0-based, best = -1.", "쿼리마다: L, R 읽고 0-based, best = -1.") },
-        { hi: [40, 45], bubble: t(E, "Try every letter c. k = rightmost c ≤ R, found by binary search (no scanning).", "모든 글자 c 시도. k = R 이하 가장 오른쪽 c — 이분탐색으로 (훑지 않음).") },
-        { hi: [47, 49], bubble: t(E, "i = leftmost letter different from c — O(1): L itself, or nextDiff[L] if s[L] is c.", "i = c 와 다른 가장 왼쪽 글자 — O(1): L 이거나, s[L]=c 면 nextDiff[L].") },
-        { hi: [51, 55], bubble: t(E, "j = a c near the midpoint m (binary search) — check the two around m, score = (j-i)(k-j), keep the max.", "j = 가운데 m 근처 c (이분탐색) — m 양옆 둘 확인, 점수 = (j-i)(k-j), 최댓값 유지.") },
-        { hi: [57, 61], bubble: t(E, "Collect the answer and print all at once.", "답 모아서 한 번에 출력.") },
+        { hi: [16, 19], bubble: t(E, "Read N, Q, and the string s.", "N 과 Q 를 읽고, 이어서 글자 줄 s 를 읽어요.") },
+        { hi: [22, 24], bubble: t(E, "Build posOf = letter → its positions.  ONCE, before any query — this is what makes it fast.", "posOf 는 글자마다 그 글자가 나온 위치 목록이에요.  물음을 받기 전에 딱 한 번만 만들어요 — 이게 빨라지는 핵심이에요.") },
+        { hi: [27, 30], bubble: t(E, "Precompute nextDiff: the first spot where the letter changes (used to find i in O(1)).", "nextDiff 를 미리 계산해 둬요.  글자가 처음 바뀌는 자리인데, i 를 O(1) 로 찾을 때 써요.") },
+        { hi: [33, 38], bubble: t(E, "Each query: read L, R → 0-based, best = -1.", "물음마다 L 과 R 을 읽어서 0 부터로 바꾸고, best 는 -1 로 시작해요.") },
+        { hi: [40, 45], bubble: t(E, "Try every letter c. k = rightmost c ≤ R, found by binary search (no scanning).", "글자 c 를 모두 해 봐요.  k 는 R 보다 크지 않은 것 중 가장 오른쪽 c 인데, 훑지 않고 이분탐색으로 찾아요.") },
+        { hi: [47, 49], bubble: t(E, "i = leftmost letter different from c — O(1): L itself, or nextDiff[L] if s[L] is c.", "i 는 c 와 다른 가장 왼쪽 글자예요.  L 자체이거나, s[L] 이 c 이면 nextDiff[L] 이에요.  둘 다 O(1) 이에요.") },
+        { hi: [51, 55], bubble: t(E, "j = a c near the midpoint m (binary search) — check the two around m, score = (j-i)(k-j), keep the max.", "j 는 가운데 m 근처의 c 예요.  이분탐색으로 m 양옆 둘만 확인하고, 점수 (j-i)(k-j) 가 더 크면 최댓값을 바꿔요.") },
+        { hi: [57, 61], bubble: t(E, "Collect the answer and print all at once.", "답을 모아서 한 번에 출력해요.") },
       ],
     };
   }
@@ -2837,14 +2837,14 @@ export function getMooin3MapWalk(E, lang = "py") {
       { v: "j", ko: "가운데 근처 같은 글자", en: "middle same-letter spot" },
     ],
     beats: [
-      { hi: [3, 6],   bubble: t(E, "Read N, Q, and the string s (fast buffered input).", "N, Q, 문자열 s 읽기 (빠른 버퍼 입력).") },
-      { hi: [8, 11],  bubble: t(E, "Build pos_of = letter → its positions.  ONCE, before any query — this is what makes it fast.", "pos_of = 글자 → 위치 목록.  쿼리 전에 딱 한 번 — 이게 빠름의 핵심.") },
-      { hi: [13, 16], bubble: t(E, "Precompute next_diff: the first spot where the letter changes (used to find i in O(1)).", "next_diff 미리 계산: 글자가 처음 바뀌는 자리 (i 를 O(1) 로 찾는 데 씀).") },
-      { hi: [20, 22], bubble: t(E, "Each query: read L, R → 0-based, best = -1.", "쿼리마다: L, R 읽고 0-based, best = -1.") },
-      { hi: [23, 30], bubble: t(E, "Try every letter c. k = rightmost c ≤ R, found by binary search (no scanning).", "모든 글자 c 시도. k = R 이하 가장 오른쪽 c — 이분탐색으로 (훑지 않음).") },
-      { hi: [31, 34], bubble: t(E, "i = leftmost letter different from c — O(1): L itself, or next_diff[L] if s[L] is c.", "i = c 와 다른 가장 왼쪽 글자 — O(1): L 이거나, s[L]=c 면 next_diff[L].") },
-      { hi: [35, 47], bubble: t(E, "j = a c near the midpoint m (binary search) — check the two around m, score = (j-i)(k-j), keep the max.", "j = 가운데 m 근처 c (이분탐색) — m 양옆 둘 확인, 점수 = (j-i)(k-j), 최댓값 유지.") },
-      { hi: [48, 50], bubble: t(E, "Collect answers and print all at once.", "답 모아서 한 번에 출력.") },
+      { hi: [3, 6],   bubble: t(E, "Read N, Q, and the string s (fast buffered input).", "N 과 Q 를 읽고, 이어서 글자 줄 s 를 읽어요 (빠른 입력).") },
+      { hi: [8, 11],  bubble: t(E, "Build pos_of = letter → its positions.  ONCE, before any query — this is what makes it fast.", "pos_of 는 글자마다 그 글자가 나온 위치 목록이에요.  물음을 받기 전에 딱 한 번만 만들어요 — 이게 빨라지는 핵심이에요.") },
+      { hi: [13, 16], bubble: t(E, "Precompute next_diff: the first spot where the letter changes (used to find i in O(1)).", "next_diff 를 미리 계산해 둬요.  글자가 처음 바뀌는 자리인데, i 를 O(1) 로 찾을 때 써요.") },
+      { hi: [20, 22], bubble: t(E, "Each query: read L, R → 0-based, best = -1.", "물음마다 L 과 R 을 읽어서 0 부터로 바꾸고, best 는 -1 로 시작해요.") },
+      { hi: [23, 30], bubble: t(E, "Try every letter c. k = rightmost c ≤ R, found by binary search (no scanning).", "글자 c 를 모두 해 봐요.  k 는 R 보다 크지 않은 것 중 가장 오른쪽 c 인데, 훑지 않고 이분탐색으로 찾아요.") },
+      { hi: [31, 34], bubble: t(E, "i = leftmost letter different from c — O(1): L itself, or next_diff[L] if s[L] is c.", "i 는 c 와 다른 가장 왼쪽 글자예요.  L 자체이거나, s[L] 이 c 이면 next_diff[L] 이에요.  둘 다 O(1) 이에요.") },
+      { hi: [35, 47], bubble: t(E, "j = a c near the midpoint m (binary search) — check the two around m, score = (j-i)(k-j), keep the max.", "j 는 가운데 m 근처의 c 예요.  이분탐색으로 m 양옆 둘만 확인하고, 점수 (j-i)(k-j) 가 더 크면 최댓값을 바꿔요.") },
+      { hi: [48, 50], bubble: t(E, "Collect answers and print all at once.", "답을 모아서 한 번에 출력해요.") },
     ],
   };
 }
@@ -2852,61 +2852,61 @@ export function getMooin3MapWalk(E, lang = "py") {
 export function getMooin3Sections(E) {
   return [
     {
-      label: t(E, "📦 1. Input + String", "📦 1. 입력 + 문자열"),
+      label: t(E, "📦 1. Input + String", "📦 1. 입력 + 글자 줄"),
       color: A,
       py: M3_INPUT_PY, cpp: M3_INPUT_CPP,
       why: [
         t(E, "Read N, Q, then the whole string s.",
-            "N, Q 와 문자열 s 읽기."),
+            "N 과 Q 를 읽고, 이어서 글자 줄 s 를 읽어요."),
         t(E, "Each query line: l r — both 1-INDEXED. The code converts to 0-indexed (l--, r--) before processing.",
-            "각 쿼리 줄: l r — 둘 다 1-INDEXED. 코드에서 0-indexed (l--, r--) 로 변환."),
+            "물음 한 줄은 l r 이에요. 둘 다 1 부터 세는 번호라, 코드에서 0 부터로 바꿔요 (l--, r--)."),
       ],
       pyOnly: [
         t(E, "input().strip() removes any trailing newline.",
-            "input().strip() 으로 줄바꿈 제거."),
+            "input().strip() 으로 줄바꿈을 지워요."),
       ],
       cppOnly: [
         t(E, "cin >> string reads a whitespace-delimited token (cpp-11 string).",
-            "cin >> string 으로 공백 구분 토큰 (cpp-11 string)."),
+            "cin >> string 은 공백 앞까지 한 덩이를 읽어요 (cpp-11 string)."),
       ],
       aside: <SampleInputAside E={E} sample={M3_SAMPLE} highlight={[0, 1]} note={t(E,
         "First two lines: \"12 5\" → N=12, Q=5. Then the string.",
-        "처음 두 줄: \"12 5\" → N=12, Q=5. 그 다음 문자열.")} />,
+        "처음 두 줄이에요. \"12 5\" 는 N=12, Q=5 이고, 그 다음 줄이 글자 줄이에요.")} />,
     },
     {
-      label: t(E, "🔍 2. Fix the Middle j", "🔍 2. 중간 j 고정"),
+      label: t(E, "🔍 2. Fix the Middle j", "🔍 2. 가운데 j 고정"),
       color: "#0891b2",
       py: M3_LOOP_PY(E), cpp: M3_LOOP_CPP(E),
       why: [
         t(E, "For each middle j in [l+1, r−1], we want the BEST i to its left and BEST k to its right.",
-            "각 중간 j ∈ [l+1, r−1] 에 대해, 왼쪽 최선 i 와 오른쪽 최선 k 찾기."),
+            "가운데 j 를 [l+1, r−1] 에서 하나씩 잡고, 왼쪽에서 가장 좋은 i 와 오른쪽에서 가장 좋은 k 를 찾아요."),
         t(E, "Best i = SMALLEST index with s[i] ≠ s[j] (smaller i → bigger j−i).",
-            "최선 i = s[i] ≠ s[j] 인 가장 작은 인덱스 (i 작을수록 j−i 커짐)."),
+            "가장 좋은 i 는 s[i] ≠ s[j] 인 가장 작은 자리예요. i 가 작을수록 j−i 가 커져요."),
         t(E, "Best k = LARGEST index with s[k] == s[j] (bigger k → bigger k−j).",
-            "최선 k = s[k] == s[j] 인 가장 큰 인덱스 (k 클수록 k−j 커짐)."),
+            "가장 좋은 k 는 s[k] == s[j] 인 가장 큰 자리예요. k 가 클수록 k−j 가 커져요."),
       ],
       pyOnly: [
         t(E, "Plain for-loop with break gives the first match — uses only Python lesson 13/14 syntax.",
-            "for + break 로 첫 매칭 — Python 레슨 13/14 문법만 사용."),
+            "for 와 break 로 처음 맞는 자리를 찾아요 — Python 레슨 13·14 문법만 써요."),
       ],
       cppOnly: [
         t(E, "Inner loop with break — uses only cpp-7 (loops) + cpp-11 (string indexing).",
-            "for + break 내부 루프 — cpp-7 (루프) + cpp-11 (문자열 인덱싱) 만 사용."),
+            "안쪽 반복문에서 for 와 break 만 써요 — cpp-7 (반복문) 과 cpp-11 (글자 줄에서 한 글자 꺼내기) 만 필요해요."),
       ],
     },
     {
-      label: t(E, "🏆 3. Update Best Product", "🏆 3. 최댓값 갱신"),
+      label: t(E, "🏆 3. Update Best Product", "🏆 3. 최댓값 바꾸기"),
       color: "#16a34a",
       py: M3_UPDATE_PY, cpp: M3_UPDATE_CPP,
       why: [
         t(E, "If both i and k exist, compute (j − i) × (k − j) and keep the maximum.",
-            "i 와 k 둘 다 존재하면 (j − i) × (k − j) 계산해 최댓값 갱신."),
+            "i 와 k 가 둘 다 있으면 (j − i) × (k − j) 를 계산해서, 더 크면 최댓값을 바꿔요."),
         t(E, "If no valid triplet in the range, best stays −1 → print −1.",
-            "범위에 유효 triplet 없으면 best 는 −1 → −1 출력."),
+            "범위 안에 규칙에 맞는 세 글자가 없으면 best 가 −1 그대로라서 −1 을 출력해요."),
       ],
       cppOnly: [
         t(E, "Why long long? With N up to 10⁵, (j−i) and (k−j) can each be up to 10⁵ → product up to 10¹⁰, larger than int's max (~2·10⁹). Casting one operand to long long forces the multiplication to use long long.",
-            "왜 long long? N 최대 10⁵, (j−i) 와 (k−j) 각각 최대 10⁵ → 곱 최대 10¹⁰, int 최대값 (~2·10⁹) 초과. 한 쪽을 long long 캐스팅하면 곱이 long long 으로 계산됨."),
+            "왜 long long 일까요? N 이 최대 10⁵ 라서 (j−i) 와 (k−j) 도 각각 최대 10⁵ 예요. 그러면 곱이 최대 10¹⁰ 이라, int 가 담을 수 있는 가장 큰 값(~2·10⁹)을 넘어요. 한쪽을 long long 으로 바꿔 주면 곱도 long long 으로 계산돼요."),
       ],
     },
     {
@@ -2915,9 +2915,9 @@ export function getMooin3Sections(E) {
       py: M3_FULL_PY(E), cpp: M3_FULL_CPP,
       why: [
         t(E, "All four parts wired together. Reads input, walks every j, tracks the best product.",
-            "네 조각이 합쳐진 모습. 입력 읽고, 모든 j 훑고, 최고 곱 추적."),
+            "네 조각을 합친 모습이에요. 입력을 읽고, 모든 j 를 훑고, 가장 큰 곱을 기억해요."),
         t(E, "Try it on the official sample first — small N, instant. Then think about big inputs.",
-            "공식 샘플 먼저 시도 — N 작아서 즉시. 그 다음 큰 입력 생각."),
+            "공식 예시부터 돌려 봐요. N 이 작아서 바로 끝나요. 그 다음에 큰 입력을 생각해요."),
       ],
     },
     /* ── 5–8: appears AFTER the brute is written. Now we ask: what about big N? ── */
@@ -2928,13 +2928,13 @@ export function getMooin3Sections(E) {
       py: M3_FULL_PY(E), cpp: M3_FULL_CPP,
       why: [
         t(E, "The inner two scans (left for i, right for k) walk the array — O(N) each, so per-j work is O(N).",
-            "안쪽 두 스캔 (왼쪽으로 i, 오른쪽으로 k) 가 배열을 훑어요 — 각 O(N), j 마다 O(N) 일."),
+            "안쪽에서 두 번 훑어요 (왼쪽으로 i, 오른쪽으로 k).  각각 O(N) 이라 j 하나마다 O(N) 만큼 일해요."),
         t(E, "Outer j loop runs O(N) times per query → O(N²) per query.",
-            "바깥 j 루프가 쿼리당 O(N) 번 → 쿼리당 O(N²)."),
+            "바깥 j 반복이 물음마다 O(N) 번 돌아요 → 물음 하나당 O(N²) 이에요."),
         t(E, "Q queries → total O(Q · N²). At N = 10⁵ and Q = 3·10⁴ that's ~3·10¹⁴ — way too slow.",
-            "Q 쿼리 → 총 O(Q · N²). N = 10⁵, Q = 3·10⁴ 면 ~3·10¹⁴ — 너무 느려요."),
+            "물음이 Q 개면 전부 합쳐 O(Q · N²) 이에요.  N = 10⁵, Q = 3·10⁴ 이면 ~3·10¹⁴ 이라 너무 느려요."),
         t(E, "So small-N test cases pass, but large-N cases TLE.  The next steps (6-8) turn this into a truly fast O(26 · (N + Q)) solution.",
-            "그래서 N 작은 테스트는 통과, N 큰 테스트는 TLE.  다음 단계 (6-8) 에서 진짜 빠른 O(26 · (N + Q)) 풀이로 바꿔요."),
+            "그래서 N 이 작은 테스트는 통과하지만 N 이 큰 테스트는 시간 초과가 나요.  다음 단계 (6-8) 에서 진짜 빠른 O(26 · (N + Q)) 풀이로 바꿔요."),
       ],
     },
     /* ── 6️⃣ Stage A: 외곽 루프를 j → c (26 개) 로 ── */
@@ -2945,27 +2945,27 @@ export function getMooin3Sections(E) {
       py: M3_STAGE_A_PY, cpp: M3_STAGE_A_CPP,
       why: [
         t(E, "Key observation: every j with s[j] = c asks the SAME left/right scan question (find leftmost i with s[i] ≠ c, rightmost k with s[k] = c).",
-            "핵심 관찰: s[j] = c 인 모든 j 가 같은 좌/우 스캔 질문을 함 (s[i] ≠ c 인 가장 왼쪽 i, s[k] = c 인 가장 오른쪽 k)."),
+            "여기서 중요한 걸 하나 발견해요.  s[j] = c 인 j 들은 왼쪽·오른쪽에 똑같은 질문을 해요.  s[i] ≠ c 인 가장 왼쪽 i 와, s[k] = c 인 가장 오른쪽 k 를 찾는 거예요."),
         t(E, "So loop the OUTER over c (just 26 letters) instead of j (N positions).  Inside each c, iterate positions_of[c] to find the best j.",
-            "외곽 루프를 c (26 글자) 로 — j (N 개) 대신. c 안에서 positions_of[c] 를 돌며 best j 를 찾음."),
+            "그래서 바깥 반복을 j (N 개) 대신 c (글자 26 개) 로 바꿔요.  글자 c 마다 positions_of[c] 를 돌면서 가장 좋은 j 를 찾아요."),
         t(E, "Per query still O(26·N) because we scan to find left_pointer / right_pointer each time. Conceptual win, not yet a speed win — but the next step plugs that hole.",
-            "쿼리당 아직 O(26·N) — 매번 left_pointer / right_pointer 를 스캔해서. 개념 압축은 끝, 속도 압축은 다음 단계."),
+            "아직 물음마다 O(26·N) 이에요.  매번 left_pointer 와 right_pointer 를 훑어서 찾기 때문이에요.  생각은 줄였으니 속도는 다음 단계에서 줄여요."),
       ],
     },
 
     /* ── 7️⃣ Stage B: lookup 표 미리 만들기 ── */
     {
       label: t(E, "7️⃣ Precompute i, k tables — O(1) lookup per query",
-                  "7️⃣ i, k lookup 표 미리 만들기 — 쿼리당 O(1) 조회"),
+                  "7️⃣ i 와 k 를 찾아 줄 표 미리 만들기 — 물음마다 O(1) 로 찾기"),
       color: "#7c3aed",
       py: M3_STAGE_B_PY, cpp: M3_STAGE_B_CPP,
       why: [
         t(E, "Build two tables ONCE before any query: nearest_diff[c][i] (smallest idx ≥ i with s[idx] ≠ c) and latest_same[c][i] (largest idx ≤ i with s[idx] = c).",
-            "쿼리 전에 한 번만: nearest_diff[c][i] (idx ≥ i 중 s[idx] ≠ c 인 가장 작은 idx) 와 latest_same[c][i] (idx ≤ i 중 s[idx] = c 인 가장 큰 idx) 표 작성."),
+            "물음을 받기 전에 표 두 개를 한 번만 만들어요.  nearest_diff[c][i] 는 idx ≥ i 중 s[idx] ≠ c 인 가장 작은 idx 이고, latest_same[c][i] 는 idx ≤ i 중 s[idx] = c 인 가장 큰 idx 예요."),
         t(E, "Precompute is O(26·N).  Per query, getting (left_pointer, right_pointer) for each c is now a single table lookup — no scan.",
-            "Precompute O(26·N). 쿼리에선 c 마다 (left_pointer, right_pointer) 가 표 한 번 조회로 끝 — 스캔 없음."),
+            "표를 만드는 데 O(26·N) 이 들어요.  물음에서는 글자 c 마다 (left_pointer, right_pointer) 를 표에서 한 번 꺼내면 끝이라, 훑지 않아도 돼요."),
         t(E, "But we still iterate every position in positions_of[c] to find best j — per query O(N) total. One more leap to go.",
-            "그래도 best j 를 찾으려고 positions_of[c] 를 다 도는 건 그대로 — 쿼리당 O(N). 마지막 한 걸음 남음."),
+            "그래도 가장 좋은 j 를 찾으려고 positions_of[c] 를 다 도는 건 그대로예요.  물음마다 O(N) 이라 한 걸음이 더 남았어요."),
       ],
       aside: <M3InsightAside E={E} />,
     },
@@ -2973,24 +2973,24 @@ export function getMooin3Sections(E) {
     /* ── 8️⃣ Stage C: 포물선 꼭짓점 + lookup 표 (이분 탐색 없음) → 최종 ── */
     {
       label: t(E, "8️⃣ Parabola vertex + lookup tables — only 2 j candidates per c",
-                  "8️⃣ 포물선 꼭짓점 + lookup 표 — c 마다 후보 j 2 개만 (이분 탐색 없음)"),
+                  "8️⃣ 포물선 꼭짓점 + 표 — 글자마다 후보 j 는 2 개뿐 (이분탐색 없이)"),
       color: "#15803d",
       py: M3_FAST_PY(E), cpp: M3_FAST_CPP(E),
       why: [
         t(E, "With c fixed, i = leftmost different char and k = rightmost c are fixed too.  f(j) = (j − i)·(k − j) is an upward-convex (∩) parabola, biggest at the vertex (i + k) / 2.",
-            "c 가 정해지면 i = 가장 왼쪽 다른 글자, k = 가장 오른쪽 c 도 정해짐. f(j) = (j − i)·(k − j) 는 위로 볼록(∩) 포물선 → 꼭짓점 (i + k) / 2 에서 최대."),
+            "c 가 정해지면 i (가장 왼쪽 다른 글자) 와 k (가장 오른쪽 c) 도 정해져요.  f(j) = (j − i)·(k − j) 는 위로 볼록한(∩) 포물선이라, 꼭짓점 (i + k) / 2 에서 가장 커요."),
         t(E, "So the best j is the c nearest the vertex.  The 2 nearest c (one on each side) come STRAIGHT from the tables — latest_same[c][m] and earliest_same[c][m] — O(1), no binary search.",
-            "그래서 best j 는 꼭짓점에 가장 가까운 c. 꼭짓점 양옆의 c 2 개는 표에서 바로 나와요 — latest_same[c][m] 와 earliest_same[c][m] — O(1), 이분 탐색 불필요."),
+            "그래서 가장 좋은 j 는 꼭짓점에 가장 가까운 c 예요.  꼭짓점 양옆의 c 두 개는 표에서 바로 나와요 — latest_same[c][m] 과 earliest_same[c][m] 이에요.  O(1) 이라 이분탐색이 필요 없어요."),
         t(E, "Per query: 26 chars × O(1) ≈ 52 ops.  Build 26·N + queries → total O(26 · (N + Q)).  Same as the official table solution (no bisect).",
-            "쿼리당: 26 문자 × O(1) ≈ 52 연산. 표 만들기 26·N + 쿼리 → 총 O(26 · (N + Q)). 공식 표 solution 과 동일 (bisect 없음)."),
+            "물음 하나당 글자 26 개 × O(1) 이라 계산이 52 번쯤이에요.  표 만들기 26·N 에 물음까지 더하면 전부 O(26 · (N + Q)) 예요.  공식 표 풀이와 같아요 (bisect 없이)."),
       ],
       pyOnly: [
         t(E, "The only new table vs Step 7 is earliest_same (leftmost c at/after i) — built in the same right-to-left pass.  No bisect, no positions_of list.",
-            "Step 7 대비 새로 생긴 표는 earliest_same (i 이후 c 의 가장 왼쪽) 하나뿐 — 같은 오→왼 패스에서 함께 만듦. bisect 도, positions_of 리스트도 없음."),
+            "7 단계에 비해 새로 생긴 표는 earliest_same (i 다음에 오는 c 중 가장 왼쪽) 하나뿐이에요.  오른쪽에서 왼쪽으로 훑는 같은 차례에 함께 만들어요.  bisect 도, positions_of 목록도 없어요."),
       ],
       cppOnly: [
         t(E, "Only <iostream> / <vector> / <string> — no <bits/stdc++.h>, no binary search, no STL algorithm.  Just three tables and O(1) lookups.",
-            "<iostream> / <vector> / <string> 만 — <bits/stdc++.h> 도, 이분 탐색도, STL algorithm 도 안 씀. 표 세 개와 O(1) 조회뿐."),
+            "<iostream> / <vector> / <string> 만 써요.  <bits/stdc++.h> 도, 이분탐색도, STL algorithm 도 안 써요.  표 세 개와 O(1) 로 꺼내기가 전부예요."),
       ],
       aside: <M3PerfFastAside E={E} />,
     },
@@ -3004,15 +3004,15 @@ const M3PerfAside = ({ E }) => (
     padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#7f1d1d",
   }}>
     <div style={{ fontSize: 10.5, fontWeight: 600, color: "#991b1b", marginBottom: 6 }}>
-      🐌 {t(E, "Operation count (brute O(Q · N²))", "연산량 (brute O(Q · N²))")}
+      🐌 {t(E, "Operation count (brute O(Q · N²))", "계산 횟수 (brute O(Q · N²))")}
     </div>
     <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 8px" }}>
       <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>N, Q ≤ 50</code>
       <div>{t(E, "1.25·10⁵ — instant ✓", "1.25·10⁵ — 즉시 ✓")}</div>
       <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>Q=1, N=10⁵</code>
-      <div>{t(E, "10¹⁰ — TLE 🚫", "10¹⁰ — TLE 🚫")}</div>
+      <div>{t(E, "10¹⁰ — TLE 🚫", "10¹⁰ — 시간 초과 🚫")}</div>
       <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>full N, Q</code>
-      <div>{t(E, "3·10¹⁴ — TLE 🚫", "3·10¹⁴ — TLE 🚫")}</div>
+      <div>{t(E, "3·10¹⁴ — TLE 🚫", "3·10¹⁴ — 시간 초과 🚫")}</div>
     </div>
     {/* 실제 검증된 USACO 제출 결과 */}
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fca5a5", fontSize: 11 }}>
@@ -3029,12 +3029,12 @@ const M3PerfFastAside = ({ E }) => (
     padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#14532d",
   }}>
     <div style={{ fontSize: 10.5, fontWeight: 600, color: "#15803d", marginBottom: 6 }}>
-      ⚡ {t(E, "Operation count (smart)", "연산량 (smart)")}
+      ⚡ {t(E, "Operation count (smart)", "계산 횟수 (빠른 풀이)")}
     </div>
     <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 8px" }}>
       <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>{t(E, "precompute", "표 만들기")}</code>
       <div>{t(E, "26·N ≈ 2.6·10⁶ — fast ✓", "26·N ≈ 2.6·10⁶ — 빠름 ✓")}</div>
-      <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>{t(E, "per query", "쿼리당")}</code>
+      <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>{t(E, "per query", "물음 하나당")}</code>
       <div>{t(E, "26 × O(1) ≈ 52 — instant ✓", "26 × O(1) ≈ 52 — 즉시 ✓")}</div>
       <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>{t(E, "total", "총합")}</code>
       <div>{t(E, "O(26·(N+Q)) — fits ✓", "O(26·(N+Q)) — 통과 ✓")}</div>
@@ -3048,15 +3048,15 @@ const M3InsightAside = ({ E }) => (
     padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#065f46",
   }}>
     <div style={{ fontSize: 10.5, fontWeight: 600, color: "#065f46", marginBottom: 6 }}>
-      💡 {t(E, "Same character → same answer", "같은 문자 → 같은 답")}
+      💡 {t(E, "Same character → same answer", "같은 글자 → 같은 답")}
     </div>
     <div>
       {t(E,
         "If s[j] = 'b' for many j, all those j's ask the SAME left/right scan question. Compute once per character.",
-        "여러 j 에서 s[j] = 'b' 이면, 그 j 들이 같은 왼/오 스캔 질문을 함. 문자마다 한 번만.")}
+        "여러 j 에서 s[j] = 'b' 이면, 그 j 들이 왼쪽·오른쪽에 똑같은 질문을 해요. 글자마다 한 번만 계산하면 돼요.")}
     </div>
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #6ee7b7", fontSize: 11 }}>
-      {t(E, "Per query work: O(N²) → O(N).", "쿼리당 일: O(N²) → O(N).")}
+      {t(E, "Per query work: O(N²) → O(N).", "물음 하나당 하는 일이 O(N²) 에서 O(N) 으로 줄어요.")}
     </div>
   </div>
 );
@@ -3076,12 +3076,12 @@ const M3PeakAside = ({ E }) => (
     <div style={{ marginBottom: 6 }}>
       {t(E,
         "Coefficient of j² is −1 → opens DOWN. Maximum at the vertex j = (i + k)/2.",
-        "j² 계수 −1 → 위로 볼록(∩). 꼭대기(최댓값) j = (i + k)/2.")}
+        "j² 앞의 수가 −1 이라 위로 볼록해요(∩). 그래서 꼭대기는 j = (i + k)/2 예요.")}
     </div>
     <div style={{ paddingTop: 6, borderTop: "1px dashed #fbbf24", fontSize: 11 }}>
       {t(E,
         "Constraint: s[j] = c.  The two c nearest the vertex come straight from the tables — latest_same[c][m] (left side) and earliest_same[c][m] (right side).  Just two candidates, O(1).",
-        "조건: s[j] = c. 꼭짓점 양옆에서 가장 가까운 c 2 개는 표에서 바로 — latest_same[c][m] (왼쪽) 와 earliest_same[c][m] (오른쪽). 후보 2 개, O(1).")}
+        "조건은 s[j] = c 예요.  꼭짓점 양옆에서 가장 가까운 c 두 개는 표에서 바로 나와요 — latest_same[c][m] (왼쪽) 과 earliest_same[c][m] (오른쪽).  후보가 둘뿐이라 O(1) 이에요.")}
     </div>
   </div>
 );
@@ -3097,21 +3097,21 @@ const M3FastAside = ({ E }) => (
     <div style={{ marginBottom: 4 }}>
       <b>nearest_diff / latest_same</b>{" "}
       {t(E, "→ give i (leftmost different) and k (rightmost c) in O(1) per (c, l, r).",
-            "→ (c, l, r) 마다 i (가장 왼쪽 다른 글자) 와 k (가장 오른쪽 c) 를 O(1).")}
+            "→ (c, l, r) 마다 i (가장 왼쪽 다른 글자) 와 k (가장 오른쪽 c) 를 O(1) 로 알려줘요.")}
     </div>
     <div style={{ marginBottom: 4 }}>
       <b>latest_same / earliest_same</b>{" "}
       {t(E, "→ at the vertex m = (i+k)/2, give the 2 nearest c directly — O(1), no binary search.",
-            "→ 꼭짓점 m = (i+k)/2 에서 가장 가까운 c 2 개를 바로 — O(1), 이분 탐색 없음.")}
+            "→ 꼭짓점 m = (i+k)/2 에서 가장 가까운 c 두 개를 바로 알려줘요 — O(1) 이라 이분탐색이 없어요.")}
     </div>
     <div>
       <b>{t(E, "parabola", "포물선")}</b>{" "}
       {t(E, "→ f(j)=(j−i)(k−j) is ∩-shaped, so those 2 candidates are all we need to check.",
-            "→ f(j)=(j−i)(k−j) 는 ∩ 모양이라 그 후보 2 개만 확인하면 끝.")}
+            "→ f(j)=(j−i)(k−j) 가 ∩ 모양이라, 그 후보 두 개만 확인하면 끝이에요.")}
     </div>
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #93c5fd", fontSize: 11 }}>
       {t(E, "Total: O(26·N) build + O(Q · 26) queries = O(26·(N+Q)). Both Python and C++ comfortable.",
-            "총: O(26·N) 만들기 + O(Q · 26) 쿼리 = O(26·(N+Q)). Python 도 C++ 도 여유.")}
+            "모두 합치면 표 만들기 O(26·N) 에 물음 O(Q · 26) 이라 O(26·(N+Q)) 예요.  Python 도 C++ 도 여유로워요.")}
     </div>
   </div>
 );
@@ -3154,7 +3154,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMooin3PDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mooin' Time III — Full Study Guide", "🐄 Mooin' Time III — 종합 풀이 노트");

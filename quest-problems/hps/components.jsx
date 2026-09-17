@@ -104,7 +104,7 @@ export function AlgorithmReasoningTour({ E }) {
               <div>• {t(E, "Line 1: two numbers — ", "1 줄: 숫자 두 개 — ")}<Hi>N</Hi>{t(E, " (card types) and ", " (카드 종류 수), ")}<Hi>M</Hi>{t(E, " (Elsie's hands).", " (Elsie 패 개수).")}</div>
               <div>• {t(E, "Next ", "다음 ")}<Hi>N</Hi>{t(E, " lines: the W/L/D triangle (line ", " 줄: W/L/D 차트 (")}<Hi>i</Hi>{t(E, " has ", " 번째 줄은 ")}<Hi>i</Hi>{t(E, " characters).", " 글자).")}</div>
               <div>• {t(E, "Last ", "마지막 ")}<Hi>M</Hi>{t(E, " lines: two numbers per line — Elsie's hand for that game.",
-                                                                      " 줄: 숫자 두 개씩 — 그 게임에서 Elsie 의 패.")}</div>
+                                                                      " 줄에는 숫자가 두 개씩 있어요 — 그 게임에서 Elsie 가 낸 패예요.")}</div>
             </div>
           </QA>
         )}
@@ -115,9 +115,9 @@ export function AlgorithmReasoningTour({ E }) {
                   "차트가 W/L/D 로 적혀 있음. 이걸 한 번만 '누가 누구 이김' 표로 옮겨두면 그 다음부턴 빠르게 답 가능.")}
             <div style={{ marginTop: 8, fontSize: 12.5, lineHeight: 1.85, paddingLeft: 6 }}>
               <div>• {t(E, "If the chart says ", "차트에 ")}<Hi>W</Hi>{t(E, " at row a, col b → write 'a beats b'.",
-                                                                            " (a 행, b 열): '카드 a 가 카드 b 이김' 으로 적기.")}</div>
+                                                                            " 이 (a 행, b 열) 에 있으면 '카드 a 가 카드 b 를 이김' 으로 적어요.")}</div>
               <div>• {t(E, "If ", "")}<Hi color="#dc2626">L</Hi>{t(E, " → flip it: 'b beats a'.",
-                                                                          " 면 거꾸로: '카드 b 가 카드 a 이김' 으로 적기.")}</div>
+                                                                          " 이면 거꾸로 '카드 b 가 카드 a 를 이김' 으로 적어요.")}</div>
               <div>• <Hi color="#9ca3af">D</Hi>{t(E, " → nobody wins (skip).", " 면 아무도 안 이김 (그냥 넘김).")}</div>
             </div>
             <div style={{ marginTop: 6, fontSize: 12, color: "#5b21b6" }}>
@@ -135,7 +135,7 @@ export function AlgorithmReasoningTour({ E }) {
               <div>• {t(E, "Loop over every (a, b) — Bessie's first card and second card.",
                           "(a, b) 모든 짝 반복 — Bessie 첫째 카드, 둘째 카드.")}</div>
               <div>• {t(E, "Check the table: does a beat both of Elsie's cards? Does b? If either one does → this hand always wins.",
-                          "표 확인: a 가 Elsie 두 카드 다 이기나? b 는? 둘 중 하나라도 그러면 → 무조건 이김.")}</div>
+                          "표를 봐요. a 가 Elsie 의 두 카드를 다 이기나요? b 는요?\n둘 중 하나라도 그러면 무조건 이겨요.")}</div>
               <div>• {t(E, "Count those hands. Print the count for that Elsie hand. Move to the next.",
                           "그런 패 의 개수 세기. 출력. 다음 Elsie 패 로.")}</div>
             </div>
@@ -715,7 +715,7 @@ export function HpsCaseSimulator({ E }) {
         total={ts.total}
         isEn={E}
         title={t(E, "Walk all 3 sample queries — step by step",
-                    "샘플 3 개 쿼리 한 번씩 따라가기")}
+                    "예제에 나온 물음 3 개를 하나씩 따라가 봐요")}
       />
 
       {/* Persistent "current game" banner — visible in all query steps so the
@@ -752,7 +752,7 @@ export function HpsCaseSimulator({ E }) {
           <>
             <div style={{ marginBottom: 8, color: "#5b21b6", fontWeight: 700, fontSize: 13.5 }}>
               {t(E, "→ Bessie wins NO MATTER what Elsie plays iff she has ONE card that beats BOTH of Elsie's cards.",
-                    "→ 핵심: Elsie 가 무엇을 내도 Bessie 가 이기려면 — Bessie 패에 Elsie 두 카드를 모두 이기는 카드가 한 장이라도 있으면 됨.")}
+                    "Elsie 가 무엇을 내도 Bessie 가 이기려면요,\nBessie 패에 Elsie 의 두 카드를 모두 이기는 카드가\n한 장이라도 있으면 돼요.")}
             </div>
             <div style={{ fontSize: 12, color: "#1f2937", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: "8px 10px", lineHeight: 1.6, wordBreak: "keep-all" }}>
               {t(E, "Games 1 (1, 2) and 2 (2, 3): no card beats both → answer 0.  Below we walk just Game 3 (1, 1) → 5 in detail.",
@@ -777,7 +777,7 @@ export function HpsCaseSimulator({ E }) {
               </div>
               <div style={{ marginTop: 6, fontSize: 12, textAlign: "center", color: "#5b21b6", fontWeight: 700 }}>
                 {t(E, "Question: which of Bessie's cards (1, 2, or 3) can beat BOTH?",
-                      "질문: Bessie 카드 (1, 2, 3) 중 두 카드 다 이기는 게 있을까?")}
+                      "Bessie 카드 1, 2, 3 중에 두 카드를 다 이기는 게 있을까요?")}
               </div>
             </>
           );
@@ -789,7 +789,7 @@ export function HpsCaseSimulator({ E }) {
             <>
               <div style={{ fontWeight: 600, color: "#7c3aed", marginBottom: 8, fontSize: 14 }}>
                 🔍 {t(E, "Try every card: does it beat BOTH of Elsie's?",
-                          "카드 하나씩 시험: Elsie 두 카드 다 이기는지?")}
+                          "카드를 하나씩 넣어 봐요. Elsie 의 두 카드를 다 이기나요?")}
               </div>
               <div style={{ display: "flex", flexDirection: "row", gap: 8, alignItems: "stretch" }}>
                 {curEval.map((r) => (
@@ -835,7 +835,7 @@ export function HpsCaseSimulator({ E }) {
               </div>
               <div style={{ marginBottom: 8, fontSize: 12.5 }}>
                 {t(E, "All 9 hands (a, b) — green = contains a winning card. Count the green ones.",
-                      "9 가지 패 (a, b) 모두 — 초록 = 이기는 카드 포함. 초록 셀 세기.")}
+                      "9 가지 패 (a, b) 를 다 놓았어요.\n초록은 이기는 카드가 들어 있다는 뜻이에요. 초록 칸을 세어 봐요.")}
               </div>
               <HandGrid winningCards={winningCards} />
               <div style={{ marginTop: 8, textAlign: "center", fontSize: 18, fontWeight: 700, color: "#15803d" }}>
@@ -848,7 +848,7 @@ export function HpsCaseSimulator({ E }) {
         {s.kind === "summary" && (
           <>
             <div style={{ fontWeight: 600, color: A, marginBottom: 8, fontSize: 14 }}>
-              📊 {t(E, "All 3 queries — final answers", "샘플 3 쿼리 — 최종 답")}
+              📊 {t(E, "All 3 queries — final answers", "예제 물음 3 개 — 마지막 답")}
             </div>
             <div style={{ fontSize: 12.5, lineHeight: 1.85, fontFamily: "'JetBrains Mono',monospace" }}>
               <div>• {t(E, "Elsie (1, 2) → no card beats both → ", "Elsie (1, 2) → 둘 다 이기는 카드 없음 → ")}<b style={{ color: "#dc2626", fontSize: 14 }}>0</b></div>
@@ -947,7 +947,7 @@ export function HpsSim({ E }) {
     <div style={{ padding: 14 }}>
       <div style={{ background: "#f8fafc", borderRadius: 10, padding: "8px 12px", marginBottom: 12, fontSize: 11, color: C.dim, textAlign: "center" }}>
         {t(E, "Beats: card 2 → card 1, card 1 → card 3, card 3 → card 2 (cycle from sample matrix)",
-              "승패: 카드 2 → 카드 1, 카드 1 → 카드 3, 카드 3 → 카드 2 (샘플 행렬의 순환)")}
+              "누가 이기는지 보면 카드 2 가 1 을, 1 이 3 을, 3 이 2 를 이겨요.\n예제 표가 이렇게 빙 돌아요.")}
       </div>
 
       <div style={{ marginBottom: 10 }}>
@@ -1365,7 +1365,7 @@ export function BitmaskColSim({ E }) {
       padding: "10px 12px",
     }}>
       <div style={{ fontSize: 11, fontWeight: 600, color: "#475569", marginBottom: 8, textAlign: "center" }}>
-        🧪 {t(E, "Sim: col[ ] + query", "시뮬: col[ ] 만들기 + 쿼리")}
+        🧪 {t(E, "Sim: col[ ] + query", "시뮬 — col[ ] 만들고 물어보기")}
       </div>
 
       {/* The col table — fixed for sample */}
@@ -1620,7 +1620,7 @@ export function getHpsSections(E) {
       py: STEP1_PY, cpp: STEP1_CPP,
       why: [
         t(E, "First line of input: number of card types and number of Elsie's hands. Two integers — read them and we're done with line 1.",
-            "입력 첫 줄: 카드 종류 수, Elsie 패 개수. 정수 두 개 — 읽으면 끝."),
+            "입력 첫 줄에는 카드 종류 수와 Elsie 의 패 개수가 있어요.\n정수 두 개라 읽으면 끝이에요."),
       ],
       aside: <InputAside E={E} highlight={[0]} note={t(E, "First line: N=3, M=3.", "첫 줄: N=3, M=3.")} />,
     },
@@ -1630,11 +1630,11 @@ export function getHpsSections(E) {
       py: STEP2_PY, cpp: STEP2_CPP,
       why: [
         t(E, "Before reading the chart, decide HOW to store it. We'll use an N×N table — beats[a][b] = True means card a beats card b.",
-            "차트 읽기 전에, 어떻게 저장할지 정해요. N×N 표 — beats[a][b] = True 면 카드 a 가 카드 b 이김."),
+            "차트를 읽기 전에 어디에 적어 둘지 정해요.\nN×N 짜리 표를 쓰고, beats[a][b] 가 True 면 카드 a 가 카드 b 를 이겨요."),
         t(E, "Start every cell False (nobody beats anybody yet). We'll fill it in next.",
-            "모든 칸 False 로 시작 (아직 아무도 안 이김). 다음 단계에서 채움."),
+            "모든 칸을 False 로 두고 시작해요. 아직 아무도 안 이겼으니까요.\n다음 단계에서 채울 거예요."),
       ],
-      aside: <InputAside E={E} note={t(E, "No input read here — we're just preparing storage.", "아직 입력 안 읽음 — 저장할 자리만 준비.")} />,
+      aside: <InputAside E={E} note={t(E, "No input read here — we're just preparing storage.", "아직 입력은 안 읽었어요 — 적어 둘 자리만 만들어요.")} />,
     },
     {
       label: t(E, "3️⃣ Read each chart row", "3️⃣ 차트 한 줄씩 읽기"),
@@ -1654,11 +1654,11 @@ export function getHpsSections(E) {
       py: STEP4_PY, cpp: STEP4_CPP,
       why: [
         t(E, "Row i has i+1 characters. Walk char by char.",
-            "i 행은 i+1 글자. 글자 하나씩 보면서 저장."),
+            "i 번째 줄에는 글자가 i+1 개 있어요.\n글자를 하나씩 보면서 표에 적어요."),
         t(E, "'W' → row card beats column card · 'L' → flip: column card beats row card · 'D' → nobody wins (skip).",
-            "'W' → 행 카드가 열 카드 이김 · 'L' → 거꾸로: 열 카드가 행 카드 이김 · 'D' → 아무도 안 이김 (skip)."),
+            "'W' 면 행 카드가 열 카드를 이겨요.\n'L' 이면 거꾸로 열 카드가 행 카드를 이겨요.\n'D' 면 아무도 안 이기니 그냥 넘어가요."),
       ],
-      aside: <InputAside E={E} highlight={[1, 2, 3]} note={t(E, "Same lines — but now we DECODE each character.", "같은 줄 — 이번엔 글자 하나씩 풀어서 표에 저장.")} />,
+      aside: <InputAside E={E} highlight={[1, 2, 3]} note={t(E, "Same lines — but now we DECODE each character.", "같은 줄이에요. 이번엔 글자를 하나씩 풀어서 표에 적어요.")} />,
     },
     {
       label: t(E, "5️⃣ Read each Elsie hand", "5️⃣ Elsie 패 한 개씩 읽기"),
@@ -1666,9 +1666,9 @@ export function getHpsSections(E) {
       py: STEP5_PY, cpp: STEP5_CPP,
       why: [
         t(E, "M more lines, each is one Elsie hand. Loop M times — read 2 numbers per line, convert to 0-indexed (so we can use them as table positions).",
-            "남은 M 줄, 각 줄이 Elsie 패 1 개. M 번 반복하면서 2 개 숫자 읽고, 0-based 로 변환 (표 인덱스 로 쓰려고)."),
+            "남은 M 줄은 한 줄이 Elsie 의 패 하나예요.\nM 번 돌면서 숫자 두 개를 읽어요.\n표에서 찾을 자리로 쓰려고 0 부터 세도록 1 을 빼요."),
       ],
-      aside: <InputAside E={E} highlight={[4, 5, 6]} note={t(E, "Last M lines: Elsie's hands. Read 2 numbers per line.", "마지막 M 줄: Elsie 패. 한 줄당 숫자 2 개씩.")} />,
+      aside: <InputAside E={E} highlight={[4, 5, 6]} note={t(E, "Last M lines: Elsie's hands. Read 2 numbers per line.", "마지막 M 줄은 Elsie 의 패예요. 한 줄에 숫자가 두 개씩 있어요.")} />,
     },
     {
       label: t(E, "6️⃣ Brute force: try every (a, b) Bessie hand", "6️⃣ Brute force: 모든 (a, b) Bessie 패 시도"),
@@ -1676,7 +1676,7 @@ export function getHpsSections(E) {
       py: STEP6_PY, cpp: STEP6_CPP,
       why: [
         t(E, "Most natural first try: loop over every (a, b) and check if it always wins. Simple to write, easy to verify on the sample.",
-            "가장 자연스러운 첫 시도: 모든 (a, b) 짝을 시험해서 무조건 이기는지 확인. 코드 쓰기 쉽고 샘플로 검증 쉬움."),
+            "제일 먼저 떠오르는 방법이에요.\n모든 (a, b) 짝을 넣어 보고 무조건 이기는지 확인해요.\n코드가 쉽고 예제로 맞는지 보기도 쉬워요."),
         t(E, "We'll check this passes the sample → submit → see what happens.",
             "샘플 통과 확인 후 → 제출 → 어떻게 되는지 봐요."),
       ],
@@ -1690,11 +1690,11 @@ export function getHpsSections(E) {
         t(E, "Trying every (a, b) pair is wasteful. We don't actually need to look at pairs.",
             "(a, b) 모든 짝 다 시도하는 건 낭비. 사실 짝을 안 봐도 돼요."),
         t(E, "All we need is: how many cards beat BOTH Elsie cards? Call that count 'dom' (short for 'dominates'). Then we can compute the answer with a formula.",
-            "필요한 건 단 하나: Elsie 두 카드 다 이기는 카드가 몇 개? 이 개수를 'dom' 이라고 부를게요. 이거만 알면 답이 공식으로 나옴."),
+            "필요한 건 딱 하나예요.\nElsie 의 두 카드를 다 이기는 카드가 몇 개인가요?\n이 개수를 'dom' 이라고 부를게요. 이것만 알면 답이 식으로 나와요."),
         t(E, "If dom cards each work on their own, then any Bessie hand with at least one of them wins. Total hands = N², hands with NONE of those cards = (N − dom)². So winning hands = N² − (N − dom)².",
             "이런 카드를 한 장이라도 들면 Bessie 가 이김. 전체 패 = N², 그런 카드가 하나도 없는 패 = (N − dom)². 이기는 패 = N² − (N − dom)²."),
         t(E, "Per query: nested for (N²) → single for over cards (N). Big speedup.",
-            "쿼리당: 이중 for (N²) → 카드만 한 번 for (N). 훨씬 빠름."),
+            "물음 하나에 두 겹 for (N²) 를 돌던 걸\n카드만 한 번 도는 for (N) 로 바꿨어요. 훨씬 빨라요."),
       ],
     },
     {
@@ -1703,7 +1703,7 @@ export function getHpsSections(E) {
       py: HP_FULL_PY, cpp: HP_FULL_CPP,
       why: [
         t(E, "Same input + table code as before; only the per-query inner loop changed (nested → single). Total work: O(M · N) instead of O(M · N²).",
-            "입력 + 표 만들기는 그대로; 쿼리당 안쪽 루프만 바뀜 (이중 → 단일). 총 작업 O(M · N²) → O(M · N)."),
+            "입력 받기와 표 만들기는 그대로예요.\n물음 하나의 안쪽 반복만 두 겹에서 한 겹으로 바뀌어요.\n다 합치면 O(M · N²) 에서 O(M · N) 이 돼요."),
       ],
     },
     {
@@ -1714,7 +1714,7 @@ export function getHpsSections(E) {
         t(E, "Each card column becomes one Python integer (bit i = 'card i beats this column'). dom = popcount(col[s1] AND col[s2]).",
             "각 카드 column 을 Python 정수 1 개로 (i 번째 비트 = 카드 i 가 이 column 의 카드 이김). dom = popcount(col[s1] AND col[s2])."),
         t(E, "Python's built-in bigint AND processes 64 bits at once → per-query work becomes O(N/64) ≈ instant. ~60× faster than the plain O(N) Python.",
-            "Python 내장 bigint AND 가 64 비트씩 한 번에 처리 → 쿼리당 작업 O(N/64) ≈ 즉시. 단순 O(N) Python 보다 ~60× 빠름."),
+            "Python 의 큰 정수 AND 는 64 비트를 한 번에 처리해요.\n그래서 물음 하나가 O(N/64) 이라 거의 바로 끝나요.\n그냥 O(N) 으로 짠 Python 보다 60 배쯤 빨라요."),
       ],
     },
   ];
@@ -1754,7 +1754,7 @@ export function HpsSampleIOSim({ E }) {
     s.kind === "intro"
       ? t(E, "The input gives Elsie 3 hands → the output has 3 lines.\nLet's watch each hand turn into its number 👇", "입력엔 Elsie 패가 3 개 → 출력도 3 줄.\n각 패가 어떻게 그 숫자가 되는지 봐요 👇")
       : s.kind === "summary"
-        ? t(E, "That's the whole input → output: 0, 0, 5.\nTwo DIFFERENT cards → no card beats both → 0.  SAME card → the interesting case.", "이게 입력 → 출력 전부: 0, 0, 5.\n서로 다른 두 카드 → 둘 다 이기는 카드 없음 → 0.  같은 카드 → 유일한 재밌는 경우.")
+        ? t(E, "That's the whole input → output: 0, 0, 5.\nTwo DIFFERENT cards → no card beats both → 0.  SAME card → the interesting case.", "이게 입력부터 출력까지 전부예요 — 0, 0, 5.\n서로 다른 두 카드는 둘 다 이기는 카드가 없어서 0 이에요.\n같은 카드일 때가 재미있는 경우예요.")
         : t(E, `Hand ${s.qi + 1}: Elsie plays (${queries[s.qi].e[0]}, ${queries[s.qi].e[1]}).  Which Bessie cards beat BOTH of them?`,
               `${s.qi + 1} 번째 패: Elsie 가 (${queries[s.qi].e[0]}, ${queries[s.qi].e[1]}) 를 냈어요.  이 둘을 '모두' 이기는 Bessie 카드는?`);
 

@@ -77,7 +77,7 @@ function NSpeedSim({ E }) {
     }}>
       <div style={{ fontSize: 12, fontWeight: 800, color: accent, marginBottom: 4 }}>{title}</div>
       <div style={{ fontSize: 11, color: C.dim, marginBottom: 8 }}>
-        {t(E, "ops", "연산")}:{" "}
+        {t(E, "ops", "계산")}:{" "}
         <span style={{ fontFamily: "'JetBrains Mono',monospace", color: C.text, fontWeight: 700 }}>{fmtOps(ops)}</span>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -304,7 +304,7 @@ LWD
                   {/* 왜 대각선=D, 왜 삼각형인지 — 학생이 '두 번째 줄은 왜 다르지?' 물음 (선생님 2026-07-14) */}
                   <div style={{ marginTop: 7, paddingTop: 6, borderTop: "1px dashed #e2e8f0", fontSize: 10.5, color: C.dim, lineHeight: 1.65, wordBreak: "keep-all" }}>
                     <div>• {t(E, "The diagonal (card vs itself) is always ", "대각선(카드 vs 자기 자신)은 항상 ")}<b style={{ color: "#6b7280" }}>D</b>{t(E, " — you can't beat yourself. So each row ends in D.", " — 자기랑은 못 이겨요. 그래서 줄 끝은 항상 D.")}</div>
-                    <div style={{ marginTop: 3 }}>• {t(E, "Triangle only: card 2 vs card 3 is just card 3 vs card 2 flipped — so each pair is listed once (the lower half).", "삼각형인 이유: 카드 2 vs 카드 3 은 카드 3 vs 카드 2 를 뒤집은 것 → 짝마다 한 번씩만 (아래쪽 절반).")}</div>
+                    <div style={{ marginTop: 3 }}>• {t(E, "Triangle only: card 2 vs card 3 is just card 3 vs card 2 flipped — so each pair is listed once (the lower half).", "왜 삼각형일까요?\n카드 2 대 카드 3 은 카드 3 대 카드 2 를 뒤집은 것과 같아요.\n그래서 짝마다 한 번씩만 적어요 — 아래쪽 절반이에요.")}</div>
                   </div>
                 </div>
                 <span style={{ color: "#5b21b6", fontSize: 12 }}>
@@ -514,14 +514,14 @@ export function makeHpsCh2(E, lang = "py") {
               padding: "10px 14px", fontSize: 12.5, color: "#1f2937", lineHeight: 1.7,
             }}>
               <div style={{ fontWeight: 700, color: "#991b1b", marginBottom: 6 }}>
-                🧮 {t(E, "Operation count", "연산 횟수")}
+                🧮 {t(E, "Operation count", "계산 횟수")}
               </div>
               <div style={{ paddingLeft: 4 }}>
-                • {t(E, "Inner double loop (per query): ", "안쪽 두 겹 루프 (쿼리당): ")}
+                • {t(E, "Inner double loop (per query): ", "물음 하나마다 도는 안쪽 두 겹 반복 ")}
                 <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>N × N = N²</b>
               </div>
               <div style={{ paddingLeft: 4 }}>
-                • {t(E, "Outer loop runs M times: ", "바깥 루프는 M 번: ")}
+                • {t(E, "Outer loop runs M times: ", "바깥 반복은 M 번 돌아요 ")}
                 <b style={{ fontFamily: "'JetBrains Mono',monospace" }}>M × N²</b>
               </div>
               <div style={{ paddingLeft: 4 }}>
@@ -533,14 +533,14 @@ export function makeHpsCh2(E, lang = "py") {
               <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #fca5a5", fontSize: 11.5, color: "#7f1d1d" }}>
                 {t(E,
                   "Time limit ~2 sec; ~10⁸ ops fit comfortably.  10¹⁰ is 100× too slow → TLE 🚫",
-                  "제한 ~2 초; ~10⁸ 연산이 적당. 10¹⁰ 은 100 배 초과 → 시간 초과 🚫")}
+                  "주어진 시간은 2 초쯤이고, 계산 10⁸ 번이 알맞아요.\n10¹⁰ 번은 100 배나 넘어서 시간이 모자라요 🚫")}
               </div>
             </div>
 
             <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", fontStyle: "italic" }}>
               {t(E,
                 "Next: kill the inner N² loop with a formula.",
-                "다음 페이지: 안쪽 N² 루프를 공식 한 줄로 없애요.")}
+                "다음 쪽에서 안쪽 N² 반복을 식 한 줄로 없애 볼 거예요.")}
             </div>
           </div>
         );
@@ -631,7 +631,7 @@ export function makeHpsCh2(E, lang = "py") {
             <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #7dd3fc", fontSize: 12 }}>
               {t(E,
                 "If you've never used bit operators, the next 3 pages teach them from scratch, then we apply.  Otherwise, jump straight to the bitmask code.",
-                "비트 연산이 처음이면 다음 3 페이지가 기초부터. 이미 익숙하면 바로 비트마스크 코드로 점프.")}
+                "비트 계산이 처음이면 다음 3 쪽이 기초부터 알려줘요.\n이미 알면 건너뛰어도 돼요.")}
             </div>
             <div style={{ marginTop: 8, fontSize: 11.5, color: C.dim, fontStyle: "italic" }}>
               {t(E,
@@ -647,7 +647,7 @@ export function makeHpsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Step 1: bits. Every number has a binary form — a row of 0s and 1s.",
-        "1 단계: 비트 (bit). 모든 숫자는 2진수 — 0 과 1 의 줄."),
+        "1 단계 — 비트(bit) 예요.\n모든 숫자는 2진수, 그러니까 0 과 1 이 늘어선 줄이에요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
@@ -692,7 +692,7 @@ export function makeHpsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Step 2: three operators we need — AND (&), OR (|), and popcount.",
-        "2 단계: 비트 연산자 3 개 — AND (&), OR (|), popcount."),
+        "2 단계 — 비트로 하는 계산 세 가지예요.\nAND (&), OR (|), 그리고 popcount 예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
@@ -749,7 +749,7 @@ export function makeHpsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "Step 3: apply bits to this problem. One column per Elsie card; bit i means 'card i beats this column'.",
-        "3 단계: 비트를 이 문제에 적용해 봐요."),
+        "3 단계 — 이제 비트를 이 문제에 써 봐요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#0891b2", textAlign: "center", marginBottom: 10 }}>
@@ -758,7 +758,7 @@ export function makeHpsCh2(E, lang = "py") {
 
           <div style={{ background: "#f0f9ff", border: "1.5px solid #7dd3fc", borderRadius: 10, padding: "12px 14px", fontSize: 12.5, color: "#075985", lineHeight: 1.75, marginBottom: 10 }}>
             <div style={{ fontWeight: 600, color: "#0c4a6e", marginBottom: 4 }}>
-              {t(E, "Idea: pack 'who beats this card' into one number.", "아이디어: '이 카드를 이기는 카드들' 을 숫자 하나에 담기.")}
+              {t(E, "Idea: pack 'who beats this card' into one number.", "'이 카드를 이기는 카드들' 을 숫자 하나에 담아 봐요.")}
             </div>
             <div>
               {t(E, "For each card c, store ", "카드 c 마다 ")}
@@ -781,7 +781,7 @@ export function makeHpsCh2(E, lang = "py") {
 
           <div style={{ background: "#dcfce7", border: "1px solid #86efac", borderRadius: 10, padding: "12px 14px", fontSize: 12.5, color: "#15803d", lineHeight: 1.75 }}>
             <div style={{ fontWeight: 600, marginBottom: 4 }}>
-              {t(E, "Now a query is just AND + popcount:", "쿼리는 AND + popcount 한 번씩:")}
+              {t(E, "Now a query is just AND + popcount:", "이제 물음 하나는 AND 한 번과 popcount 한 번이면 끝이에요")}
             </div>
             <div style={{ paddingLeft: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, lineHeight: 1.85 }}>
               <div>col[s1] & col[s2] {t(E, "= bits ON only where the SAME card beats BOTH", "= '같은 카드가 두 컬럼 다 이김' 인 비트만 1")}</div>

@@ -10,7 +10,7 @@ export function makeCowPhotosCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ wants a row of cows for a photo where the heights go UP then DOWN, mirror around the middle, and no two neighbors share the same height.\nPick as many cows as possible!",
-        "FJ가 사진을 찍어요 — 소들의 키가 가운데까지 올라갔다 내려오고, 좌우 대칭이며, 이웃끼리 같은 키가 없어야 해요.\n최대한 많은 소를 사진에 넣어요!"),
+        "가운데까지 올라갔다 내려오는 사진을 찍어요.\n최대한 많은 소를 넣어 봐요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -214,7 +214,7 @@ export function makeCowPhotosCh1(E) {
             <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fcd34d", fontSize: 11.5, color: "#7c2d12" }}>
               {t(E,
                 "Here: 1 peak + 1 ring × 2 cows = 3 cows. ✓",
-                "여기선: peak 1 + ring 1 개 × 2 마리 = 3 마리. ✓")}
+                "여기서는 peak 1 마리에 ring 1 짝(2 마리) 이라 모두 3 마리예요. ✓")}
             </div>
           </div>
         </div>),
@@ -230,13 +230,13 @@ export function makeCowPhotosCh1(E) {
       type: "input",
       narr: t(E,
         "Bigger input.  Try building it on paper — what's the longest valid arrangement?",
-        "이번엔 더 큰 입력. 직접 종이에 짜 봐 — 가장 긴 배열은 몇 마리?"),
+        "이번엔 입력이 더 커요.\n종이에 직접 놓아 봐요 — 제일 길게 세우면 몇 마리일까요?"),
       question: t(E,
         "Heights = [1, 1, 2, 3, 3, 3, 4].  How long can you make the photo?",
         "키 [1, 1, 2, 3, 3, 3, 4]. 사진 길이를 최대 몇 마리까지?"),
       hint: t(E,
         "Try arranging: peak in the middle, mirror on both sides, no neighbor duplicates.  E.g. [1, 3, 4, 3, 1] works — verify the rules.",
-        "직접 배열해 봐: 가운데 peak, 양옆 거울, 이웃 다름. 예: [1, 3, 4, 3, 1] 시도 — 세 규칙 만족하는지 확인."),
+        "직접 늘어놓아 봐요.\n가운데가 peak 이고, 양옆은 거울처럼 같고, 옆끼리는 달라야 해요.\n[1, 3, 4, 3, 1] 로 해보고 규칙 세 개를 지키는지 확인해요."),
       answer: 5,
     },
 
@@ -340,7 +340,7 @@ export function makeCowPhotosCh1(E) {
             }}>
               {t(E,
                 "What changed: rings have to be SHORTER than the peak.  Heights equal to the peak can't go on the sides.",
-                "바뀐 부분: ring 은 peak 보다 작아야 함. peak 와 같은 키는 양옆에 못 들어감.")}
+                "달라진 게 있어요.\nring 은 peak 보다 작아야 해요.\npeak 와 키가 같은 소는 양옆에 못 들어가요.")}
             </div>
           </div>
 
@@ -412,7 +412,7 @@ export function makeCowPhotosCh1(E) {
         "Max photo length for heights [4, 4, 3, 3, 2]?",
         "키 [4, 4, 3, 3, 2] 의 최대 사진 길이?"),
       hint: t(E, "M = 4. Rings need v < 4 AND freq ≥ 2. Only 3 qualifies. rings = 1, answer = 2·1+1 = 3. Arrangement: [3, 4, 3].",
-                "M = 4. ring 후보는 v < 4 이고 freq ≥ 2. 3 만 해당. rings = 1, 답 = 2·1+1 = 3. 배열: [3, 4, 3]."),
+                "M = 4 예요. ring 이 되려면 v 가 4 보다 작고 두 번 이상 나와야 해요.\n3 만 그래요. 그래서 ring 이 1 개, 답은 2·1+1 = 3 이에요.\n[3, 4, 3] 으로 세우면 돼요."),
       answer: 3,
     },
 
@@ -422,7 +422,7 @@ export function makeCowPhotosCh1(E) {
       type: "sim",
       narr: t(E,
         "Free play: try your own heights. Compare your hand-prediction with the formula's output.",
-        "자유 입력: 직접 키 시도. 손으로 예측 vs 공식 결과 비교."),
+        "키를 직접 넣어 봐요.\n손으로 짐작한 값과 식이 낸 값을 견줘 봐요."),
     },
   ];
 }
@@ -462,9 +462,9 @@ export function makeCowPhotosCh2(E, lang = "py") {
             </div>
           </div>
           <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#1f2937", lineHeight: 1.75, wordBreak: "keep-all" }}>
-            <div>• {t(E, "h.count(v) re-scans ALL heights → O(N), for each distinct value.", "h.count(v) 는 매번 키 전체를 다시 훑음 → 값마다 O(N).")}</div>
-            <div>• {t(E, "Up to N distinct values → N × N = ", "distinct 값이 최대 N 개 → N × N = ")}<b style={{ color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>N²</b></div>
-            <div>• {t(E, "N up to 100,000 → 10 billion ops → too slow.", "N 이 10 만까지 → 100 억 연산 → 너무 느림.")}</div>
+            <div>• {t(E, "h.count(v) re-scans ALL heights → O(N), for each distinct value.", "h.count(v) 는 매번 키 전체를 다시 훑어요 → 값마다 O(N) 이에요.")}</div>
+            <div>• {t(E, "Up to N distinct values → N × N = ", "서로 다른 값이 많으면 N 개까지 가요 → N × N = ")}<b style={{ color: "#dc2626", fontFamily: "'JetBrains Mono',monospace" }}>N²</b></div>
+            <div>• {t(E, "N up to 100,000 → 10 billion ops → too slow.", "N 이 10 만까지 가니 100 억 번 계산이라 너무 느려요.")}</div>
           </div>
           <div style={{ marginTop: 10, textAlign: "center", fontSize: 12, color: "#15803d", fontWeight: 700, wordBreak: "keep-all" }}>
             ✅ {t(E, "Counter(h) counts every frequency in ONE pass → O(N).  That's why we used it above.", "Counter(h) 는 빈도를 한 번에 다 세요 → O(N). 그래서 위에서 Counter 를 쓴 거예요.")}

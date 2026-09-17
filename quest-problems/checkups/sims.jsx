@@ -252,7 +252,7 @@ export function CheckupsBruteRunner({ E }) {
       </div>
       <div style={{ textAlign: "center", fontSize: 11.5, color: C.dim, marginBottom: 12 }}>
         {t(E, "Pick a size, press Run. Small N finishes instantly. Big N… wait for it.",
-              "크기를 고르고 Run. 작은 N 은 순식간, 큰 N 은… 기다려 봐요.")}
+              "크기를 고르고 실행을 눌러요. 작은 N 은 순식간이고, 큰 N 은… 기다려 봐요.")}
       </div>
 
       <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", marginBottom: 14 }}>
@@ -303,13 +303,13 @@ export function CheckupsBruteRunner({ E }) {
           padding: "8px 16px", borderRadius: 8, fontSize: 13, fontWeight: 700,
           border: `1.5px solid ${C.border}`, background: "#fff", color: C.text,
           cursor: running ? "not-allowed" : "pointer", opacity: running ? 0.5 : 1,
-        }}>↺ {t(E, "Reset", "초기화")}</button>
+        }}>↺ {t(E, "Reset", "처음부터")}</button>
       </div>
 
       {done && (
         <div style={{ background: "#fff7ed", border: "1.5px solid #fdba74", borderRadius: 10, padding: "10px 13px", fontSize: 12.5, color: "#7c2d12", lineHeight: 1.7 }}>
           ✅ {t(E, `Checked all ${pairs.toLocaleString()} pairs (${cmp.toLocaleString()} comparisons) in ${ms} ms.`,
-                  `${pairs.toLocaleString()} 개 쌍 (${cmp.toLocaleString()} 번 비교) 을 ${ms} ms 에 다 확인.`)}
+                  `쌍 ${pairs.toLocaleString()} 개 (비교 ${cmp.toLocaleString()} 번) 를 ${ms} ms 에 다 확인했어요.`)}
           {projText && (
             <div style={{ marginTop: 5, fontWeight: 700, color: "#991b1b" }}>
               {t(E,
@@ -393,15 +393,15 @@ function _buildIntroSteps(E) {
                  "윗줄 = 각 소가 가진 종, 아랫줄 = 이 자리에서 수의사가 원하는 종. 자리마다 비교해봐요!") });
   for (let s = 0; s < _N6; s++) steps.push({ perm: perms[0], arr: A0, focus: s, revealed: s, swap: null, box: null, bubble: ck(A0, s) });
   steps.push({ perm: perms[0], arr: A0, focus: -1, revealed: _N6 - 1, swap: null, box: null,
-    bubble: t(E, "4 cows treated — spots 1, 2, 4, 6.", "4 마리 치료 — 1·2·4·6 번 자리.") });
+    bubble: t(E, "4 cows treated — spots 1, 2, 4, 6.", "4 마리가 치료받았어요. 1·2·4·6 번 자리예요.") });
   // 2) 뒤집을 구간을 네모로 먼저 표시 (아직 안 뒤집음 — 선생님 요청)
   steps.push({ perm: perms[0], arr: A0, focus: -1, revealed: -1, swap: null, box: [_L, _R],
     bubble: t(E, "This time we reverse only spots 2–5 (red box). Spots 1 & 6 are outside — they stay put!",
                  "이번엔 2~5 번 자리(빨간 네모)만 뒤집을 거예요. 1번·6번은 네모 밖이라 그대로!") });
   // 3) 네모 안에서 양끝부터 한 쌍씩 swap
   const swapBubble = [
-    t(E, "Box ends: spot 2 ↔ spot 5 swap places.", "네모 양끝: 2번 자리 ↔ 5번 자리 바꿈."),
-    t(E, "Box middle: spot 3 ↔ spot 4. Done — spots 2–5 are reversed!", "네모 안쪽: 3번 ↔ 4번. 끝 — 2~5번이 거꾸로 됐어요!"),
+    t(E, "Box ends: spot 2 ↔ spot 5 swap places.", "네모 양끝이에요. 2번 자리와 5번 자리를 바꿔요."),
+    t(E, "Box middle: spot 3 ↔ spot 4. Done — spots 2–5 are reversed!", "이제 네모 안쪽이에요. 3번과 4번을 바꾸면 끝, 2~5번이 거꾸로 됐어요!"),
   ];
   for (let k = 0; k < _SWAPS.length; k++) {
     const p = perms[k + 1];
@@ -412,7 +412,7 @@ function _buildIntroSteps(E) {
   for (let s = 0; s < _N6; s++) steps.push({ perm: finalP, arr: AF, focus: s, revealed: s, swap: null, box: [_L, _R], bubble: ck(AF, s) });
   steps.push({ perm: finalP, arr: AF, focus: -1, revealed: _N6 - 1, swap: null, box: [_L, _R],
     bubble: t(E, "Again 4 treated — spots 1 & 6 stayed (outside the box), but inside, 2 & 4 → 3 & 5! Reversing a range changes WHO gets treated.",
-                 "또 4 마리 — 1·6번은 그대로(네모 밖), 네모 안은 2·4번 → 3·5번! 구간을 뒤집으면 치료받는 소가 바뀌어요.") });
+                 "이번에도 4 마리예요. 1·6번은 네모 밖이라 그대로지만, 네모 안은 2·4번에서 3·5번으로 바뀌었어요! 구간을 뒤집으면 치료받는 소가 달라져요.") });
   return steps;
 }
 
@@ -556,19 +556,19 @@ function _buildFastSteps(E) {
     { zone: null, flip: false, reveal: "none", tally: {},
       bubble: t(E,
         `One window, spots ${_FL + 1}–${_FR + 1}. We know checkups = OUTSIDE + INSIDE — let's add the two parts.`,
-        `윈도우 하나, 자리 ${_FL + 1}~${_FR + 1}. 검진 = 바깥 + 안쪽 인 거 알죠 — 두 조각을 더해봐요.`) },
+        `창 하나를 볼게요. 자리 ${_FL + 1}~${_FR + 1} 이에요. 검진 = 창 밖 + 창 안 인 거 알죠? 두 조각을 더해 봐요.`) },
     { zone: "outside", flip: false, reveal: "outside", tally: { out: outCount },
       bubble: t(E,
         `Outside (spots 1, 6) doesn't flip — counted once up front. Outside matches = ${outCount}.`,
-        `바깥(자리 1·6)은 안 뒤집혀요 — 미리 세둔 것. 바깥 일치 = ${outCount}개.`) },
+        `창 밖(자리 1·6)은 안 뒤집혀요. 미리 세둔 값이에요. 창 밖에서 맞는 수 = ${outCount}개.`) },
     { zone: "inside", flip: true, reveal: "all", tally: { out: outCount, inn: inCount },
       bubble: t(E,
         `Inside flips. We already counted it once for this s — inside matches = ${inCount} (spots ${inMatchSpots.join(", ")}).`,
-        `안쪽은 뒤집혀요. 이 s 에서 한 번 세둔 것 — 안쪽 일치 = ${inCount}개 (자리 ${inMatchSpots.join("·")}).`) },
+        `창 안은 뒤집혀요. 이 s 에서 한 번 세둔 값이에요. 창 안에서 맞는 수 = ${inCount}개 (자리 ${inMatchSpots.join("·")}).`) },
     { zone: null, flip: true, reveal: "all", tally: { out: outCount, inn: inCount, total: outCount + inCount },
       bubble: t(E,
         `Checkups = outside ${outCount} + inside ${inCount} = ${outCount + inCount}. Same answer as brute — but just an add, O(1)!`,
-        `검진 수 = 바깥 ${outCount} + 안쪽 ${inCount} = ${outCount + inCount}. brute 와 같은 답 — 근데 더하기 한 번, O(1)!`) },
+        `검진 수 = 창 밖 ${outCount} + 창 안 ${inCount} = ${outCount + inCount} 이에요. brute 와 답이 같은데 더하기 한 번이면 끝이에요. O(1)!`) },
   ];
 }
 
@@ -606,7 +606,7 @@ export function CheckupsFastSim({ E }) {
   return (
     <div style={{ padding: 16 }}>
       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 800, color: A, marginBottom: 10 }}>
-        🎯 {t(E, "Count ONE window — all in one place", "한 윈도우를 한 자리에서 세보기")}
+        🎯 {t(E, "Count ONE window — all in one place", "창 하나를 한자리에서 세보기")}
       </div>
 
       {/* 말풍선 */}
@@ -984,7 +984,7 @@ export function CheckupsGrowSim({ E }) {
         <div style={{ maxWidth: 470, margin: "0 auto 12px", background: "#ecfeff", border: "1px dashed #67e8f9", borderRadius: 10, padding: "9px 12px", fontSize: 11.5, color: "#155e75", lineHeight: 1.6, textAlign: "center", wordBreak: "keep-all" }}>
           {t(E,
             "Heads-up: this is the s=7 family (we widen evenly on BOTH sides, keeping s). A one-side widen like [3,5] is s=8 — a different family, grown from its own center [4,4]. Each s grows this way, covering every window once.",
-            "잠깐: 이건 s=7 가족이에요 (양쪽으로 똑같이 넓혀 s 유지). [3,5]처럼 한쪽만 넓힌 건 s=8 — 가운데가 [4,4]인 다른 가족이죠. s 마다 이렇게 키워서 모든 구간을 한 번씩 다 세요.")}
+            "잠깐, 이건 s=7 가족이에요. 양쪽으로 똑같이 넓혀서 s 가 그대로예요. [3,5] 처럼 한쪽만 넓힌 건 s=8 이라, 가운데가 [4,4] 인 다른 가족이에요. s 마다 이렇게 키우면 모든 구간을 한 번씩 다 세게 돼요.")}
         </div>
       )}
 
@@ -1341,24 +1341,24 @@ function _buildExpandSteps(E) {
     /* ── 0. Setup (2 steps) ── */
     { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Two rows to know: 🐮 cow (top) and 📋 want (bottom). A spot is a checkup (green) when they already match.",
-                   "두 줄만 알면 돼요: 🐮 소 (위)와 📋 want (아래). 두 값이 같은 자리 = 검진(초록).") },
+                   "두 줄만 알면 돼요. 위는 🐮 소, 아래는 📋 want 예요. 두 값이 같은 자리가 검진(초록)이에요.") },
     { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "No flip yet. Only spot 4 matches (5=5) → matches = 1. This is our starting point.",
-                   "아직 아무것도 안 뒤집음. 자리 4만 맞아요 (5=5) → matches = 1. 여기서 출발.") },
+                   "아직 아무것도 안 뒤집었어요. 자리 4만 맞아요 (5=5). 그래서 matches = 1, 여기서 출발해요.") },
 
     /* ── 1. Flip [2,3] (5 steps) ── */
     { rev: [1, 2, 3, 4, 5, 6], win: [2, 3], changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Let's pick a tiny interval: spots 2 and 3. See the bracket above — that's our flip zone.",
-                   "작은 구간 골라요: 자리 2와 3. 위에 브래킷 보이죠 — 뒤집을 구간이에요.") },
+                   "작은 구간을 골라 봐요. 자리 2 와 3 이에요. 위에 표시된 꺾쇠가 뒤집을 구간이에요.") },
     { rev: [1, 2, 3, 4, 5, 6], win: [2, 3], changed: [], pending: [2, 3], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "The two ends (spots 2 and 3) are about to swap cows. cow[2]=3 ↔ cow[3]=4.",
                    "양 끝(자리 2, 3)이 곧 소를 바꿔요. cow[2]=3 ↔ cow[3]=4.") },
     { rev: [1, 2, 4, 3, 5, 6], win: [2, 3], changed: [2, 3], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Swapped! Flipped cows are now 1 2 4 3 5 6.",
-                   "바뀌었어요! 뒤집힌 소 = 1 2 4 3 5 6.") },
+                   "바뀌었어요! 뒤집고 나면 소는 1 2 4 3 5 6 이에요.") },
     { rev: [1, 2, 4, 3, 5, 6], win: [2, 3], changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Count green (= matches with want): spot 3 (4=4), spot 4 (3=3), spot 5 (5=5). Three greens.",
-                   "초록 세기 (= want랑 같은 자리): 자리 3 (4=4), 자리 4 (3=3), 자리 5 (5=5). 초록 3개.") },
+                   "초록을 세어 봐요. want 와 같은 자리예요. 자리 3 (4=4), 자리 4 (3=3), 자리 5 (5=5) 니까 초록 3 개예요.") },
     { rev: [1, 2, 4, 3, 5, 6], win: [2, 3], changed: [], pending: [], same: [], focus: null, delta: {}, tally: 3, done: false, payoff: false,
       bubble: t(E, "matches = 3 → answer[3] += 1.",
                    "matches = 3 → answer[3] += 1.") },
@@ -1366,28 +1366,28 @@ function _buildExpandSteps(E) {
     /* ── 2. Widen [1,4] — KEY insight, deep breakdown (9 steps) ── */
     { rev: [1, 2, 4, 3, 5, 6], win: [1, 4], changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Now widen the window ONE step: [2,3] → [1,4]. Same center, +1 on each side.",
-                   "이제 창을 한 칸 넓힘: [2,3] → [1,4]. 중심 그대로, 양옆 +1.") },
+                   "이제 창을 한 칸 넓혀요. [2,3] 이 [1,4] 가 돼요. 가운데는 그대로고 양옆만 +1 이에요.") },
     { rev: [1, 2, 4, 3, 5, 6], win: [1, 4], changed: [], pending: [], same: [2, 3], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Watch the middle (spots 2, 3): still 4, 3. Reversing is symmetric — growing both sides keeps the inside put!",
-                   "가운데(자리 2, 3) 봐요: 여전히 4, 3. 뒤집기가 대칭이라 양옆을 넓혀도 안쪽은 그대로!") },
+                   "가운데(자리 2, 3)를 봐요. 여전히 4, 3 이에요. 뒤집기가 대칭이라 양옆을 넓혀도 안쪽은 그대로예요!") },
     { rev: [1, 2, 4, 3, 5, 6], win: [1, 4], changed: [], pending: [1, 4], same: [2, 3], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "So only the 2 NEW ends (spots 1 and 4) need checking. Middle already counted → skip.",
-                   "그러니 새 양 끝(자리 1, 4)만 확인하면 돼요. 가운데는 이미 셌으니 건너뜀.") },
+                   "그러니 새로 들어온 양 끝(자리 1, 4)만 확인하면 돼요. 가운데는 이미 셌으니 건너뛰어요.") },
     { rev: [1, 2, 4, 3, 5, 6], win: [1, 4], changed: [], pending: [4], same: [2, 3], focus: 1, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Spot 1 first. Before: cow was 2, want is 5 → 2 ≠ 5, not green.",
-                   "먼저 자리 1. 전에는: 소 2, want 5 → 2 ≠ 5, 초록 아님.") },
+                   "먼저 자리 1 이에요. 전에는 소 2, want 5 라서 2 ≠ 5, 초록이 아니었어요.") },
     { rev: [1, 5, 4, 3, 5, 6], win: [1, 4], changed: [1], pending: [4], same: [2, 3], focus: 1, delta: { 1: "+1" }, tally: null, done: false, payoff: false,
       bubble: t(E, "cow[4]=5 slides in to spot 1 → 5 = want 5 → GREEN! +1. matches = 3+1 = 4.",
-                   "cow[4]=5 가 자리 1로 들어옴 → 5 = want 5 → 초록! +1. matches = 3+1 = 4.") },
+                   "cow[4]=5 가 자리 1 로 들어와요. 5 = want 5 니까 초록이에요! +1 해서 matches = 3+1 = 4.") },
     { rev: [1, 5, 4, 3, 5, 6], win: [1, 4], changed: [], pending: [], same: [2, 3], focus: 4, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Now spot 4. Before: cow was 5, want is 5 → matched, was green.",
-                   "이제 자리 4. 전에는: 소 5, want 5 → 맞았음, 초록이었죠.") },
+                   "이제 자리 4 예요. 전에는 소 5, want 5 라서 맞았고 초록이었죠.") },
     { rev: [1, 5, 4, 3, 2, 6], win: [1, 4], changed: [4], pending: [], same: [2, 3], focus: 4, delta: { 4: "−1" }, tally: null, done: false, payoff: false,
       bubble: t(E, "cow[1]=2 slides in to spot 4 → 2 ≠ want 5 → not green anymore. −1. matches = 4−1 = 3.",
-                   "cow[1]=2 가 자리 4로 들어옴 → 2 ≠ want 5 → 초록 아니게 됨. −1. matches = 4−1 = 3.") },
+                   "cow[1]=2 가 자리 4 로 들어와요. 2 ≠ want 5 라서 초록이 아니게 돼요. −1 해서 matches = 4−1 = 3.") },
     { rev: [1, 5, 4, 3, 2, 6], win: [1, 4], changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Only 2 spots touched (the ends), the middle was never recounted. THAT'S the trick.",
-                   "딱 2 칸(양 끝)만 건드렸어요, 가운데는 다시 안 셌어요. 이게 요령.") },
+                   "딱 2 칸(양 끝)만 건드렸고 가운데는 다시 안 셌어요. 이게 요령이에요.") },
     { rev: [1, 5, 4, 3, 2, 6], win: [1, 4], changed: [], pending: [], same: [], focus: null, delta: {}, tally: 3, done: false, payoff: false,
       bubble: t(E, "matches = 3 → answer[3] += 1.",
                    "matches = 3 → answer[3] += 1.") },
@@ -1395,41 +1395,41 @@ function _buildExpandSteps(E) {
     /* ── 3. Widen [0,5] — reinforce, same granularity (8 steps) ── */
     { rev: [1, 5, 4, 3, 2, 6], win: [0, 5], changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Widen ONE more step: [1,4] → [0,5]. Same move.",
-                   "또 한 칸 넓힘: [1,4] → [0,5]. 같은 동작.") },
+                   "또 한 칸 넓혀요. [1,4] 가 [0,5] 가 돼요. 같은 방법이에요.") },
     { rev: [1, 5, 4, 3, 2, 6], win: [0, 5], changed: [], pending: [], same: [1, 2, 3, 4], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Middle (spots 1–4) still exactly the same values. Symmetry again.",
-                   "가운데(자리 1~4)도 그대로. 또 같은 대칭.") },
+                   "가운데(자리 1~4)도 값이 그대로예요. 또 같은 대칭이에요.") },
     { rev: [1, 5, 4, 3, 2, 6], win: [0, 5], changed: [], pending: [0, 5], same: [1, 2, 3, 4], focus: null, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Just 2 new ends: spots 0 and 5.",
-                   "새로 확인할 곳: 자리 0과 5 두 개만.") },
+                   "새로 확인할 곳은 자리 0 과 5, 두 개뿐이에요.") },
     { rev: [1, 5, 4, 3, 2, 6], win: [0, 5], changed: [], pending: [5], same: [1, 2, 3, 4], focus: 0, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Spot 0. Before: cow was 1, want is 6 → 1 ≠ 6, not green.",
-                   "자리 0. 전에는: 소 1, want 6 → 1 ≠ 6, 초록 아님.") },
+                   "자리 0 이에요. 전에는 소 1, want 6 이라 1 ≠ 6, 초록이 아니었어요.") },
     { rev: [6, 5, 4, 3, 2, 6], win: [0, 5], changed: [0], pending: [5], same: [1, 2, 3, 4], focus: 0, delta: { 0: "+1" }, tally: null, done: false, payoff: false,
       bubble: t(E, "cow[5]=6 slides in → 6 = want 6 → GREEN! +1. matches = 3+1 = 4.",
-                   "cow[5]=6 들어옴 → 6 = want 6 → 초록! +1. matches = 3+1 = 4.") },
+                   "cow[5]=6 이 들어와요. 6 = want 6 이라 초록이에요! +1 해서 matches = 3+1 = 4.") },
     { rev: [6, 5, 4, 3, 2, 6], win: [0, 5], changed: [], pending: [], same: [1, 2, 3, 4], focus: 5, delta: {}, tally: null, done: false, payoff: false,
       bubble: t(E, "Spot 5. Before: cow was 6, want is 1 → 6 ≠ 1, not green.",
-                   "자리 5. 전에는: 소 6, want 1 → 6 ≠ 1, 초록 아님.") },
+                   "자리 5 예요. 전에는 소 6, want 1 이라 6 ≠ 1, 초록이 아니었어요.") },
     { rev: [6, 5, 4, 3, 2, 1], win: [0, 5], changed: [5], pending: [], same: [1, 2, 3, 4], focus: 5, delta: { 5: "+1" }, tally: null, done: false, payoff: false,
       bubble: t(E, "cow[0]=1 slides in → 1 = want 1 → GREEN! +1. matches = 4+1 = 5.",
-                   "cow[0]=1 들어옴 → 1 = want 1 → 초록! +1. matches = 4+1 = 5.") },
+                   "cow[0]=1 이 들어와요. 1 = want 1 이라 초록이에요! +1 해서 matches = 4+1 = 5.") },
     { rev: [6, 5, 4, 3, 2, 1], win: [0, 5], changed: [], pending: [], same: [], focus: null, delta: {}, tally: 5, done: false, payoff: false,
       bubble: t(E, "matches = 5 → answer[5] += 1. Two widens, 2 spots each — the middle was NEVER recounted.",
-                   "matches = 5 → answer[5] += 1. 두 번 넓히는 동안 매번 2칸만 — 가운데는 한 번도 다시 안 셌어요.") },
+                   "matches = 5 니까 answer[5] += 1 이에요. 두 번 넓히는 동안 매번 2 칸만 봤고, 가운데는 한 번도 다시 안 셌어요.") },
 
     /* ── 4. Payoff (1 step) ── */
     { rev: [6, 5, 4, 3, 2, 1], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: true,
       bubble: t(E, "The rule: each widen = O(1) work (only 2 ends). No matter how big the interval, we always fix only 2 spots per step.",
-                   "규칙: 한 번 넓힘 = O(1) 일 (양 끝 2칸). 구간이 아무리 커져도 매번 딱 2칸만.") },
+                   "규칙은 이래요. 한 번 넓히는 일은 O(1) 이에요 (양 끝 2 칸). 구간이 아무리 커져도 매번 딱 2 칸만 봐요.") },
 
     /* ── 5. All centers (2 steps) ── */
     { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: false, payoff: false, centers: true,
       bubble: t(E, "Two center kinds: odd ([i,i] = one spot, no flip) and even ([i,i+1] = two spots). Every interval belongs to exactly one center.",
-                   "중심 두 종류: 홀수([i,i]=한 칸, 안 뒤집음)와 짝수([i,i+1]=두 칸). 모든 구간은 정확히 한 중심에 속함.") },
+                   "중심은 두 종류예요. 홀수 중심 [i,i] 는 한 칸이라 안 뒤집히고, 짝수 중심 [i,i+1] 은 두 칸이에요. 모든 구간은 딱 한 중심에만 속해요.") },
     { rev: [1, 2, 3, 4, 5, 6], win: null, changed: [], pending: [], same: [], focus: null, delta: {}, tally: null, done: true, payoff: true,
       bubble: t(E, "Every center → widen till it hits a wall, 2 ends per step. Total O(N²). (Full run in the code next!) 🚀",
-                   "모든 중심 → 벽에 닿을 때까지 넓히며, 매 칸 2 끝. 합쳐서 O(N²). (전부 돌려보는 건 다음 코드에서!) 🚀") },
+                   "중심마다 벽에 닿을 때까지 넓히고, 한 걸음에 두 끝만 봐요. 다 합치면 O(N²) 예요. (전부 돌려보는 건 다음 코드에서!) 🚀") },
   ];
 }
 
@@ -1678,10 +1678,10 @@ export function CheckupsWindowRecapSim({ E }) {
   const steps = [
     { rev: 0, payoff: false,
       bubble: t(E, "Quick recap — FJ picks one stretch of the row, e.g. [2~5]. That stretch is the FLIP WINDOW.",
-                   "30초 복습 — FJ는 줄에서 구간 하나를 골라요. 예: [2~5]. 이 구간이 '뒤집는 창'이에요.") },
+                   "30초 복습이에요. FJ 는 줄에서 구간 하나를 골라요. [2~5] 처럼요. 이 구간이 '뒤집는 창' 이에요.") },
     { rev: 2, payoff: false,
       bubble: t(E, "INSIDE the window = the part that gets reversed. The cows' order flips end-to-end.",
-                   "창 안 = 뒤집히는 부분. 안의 소들이 통째로 순서가 반대가 돼요.") },
+                   "창 안이 뒤집히는 부분이에요. 안에 있는 소들의 순서가 통째로 반대가 돼요.") },
     { rev: 2, payoff: true,
       bubble: t(E, "Outside the window (spots 1·6) nothing moves. That's why we count ✓ as 'outside + inside'.",
                    "창 밖(자리 1·6)은 그대로예요. 그래서 검진을 '창 밖 + 창 안'으로 나눠 세는 거예요.") },
@@ -2102,7 +2102,7 @@ function _buildFinalSteps(E) {
   };
 
   add(0, "Make matchUpTo (all 0). It counts matches WITHOUT flipping.",
-        "matchUpTo 만들기 (전부 0). 안 뒤집은 채 맞는 칸을 셀 표예요.");
+        "matchUpTo 를 만들어요 (전부 0). 안 뒤집었을 때 맞는 칸을 세는 표예요.");
   for (let i = 1; i <= N; i++) {
     sc = { i };
     const m = cow[i] === want[i];
@@ -2113,16 +2113,16 @@ function _buildFinalSteps(E) {
   }
   sc = {};
   add(6, "Make the result box (all 0): how many windows give each checkup count.",
-        "결과 통 만들기 (전부 0): 검진 수별로 구간이 몇 개인지 셀 통.");
+        "결과 통을 만들어요 (전부 0). 검진 수마다 구간이 몇 개인지 담는 통이에요.");
 
   // s 한 값을 코드 줄 그대로 끝까지 밟는다 (s=2, s=3 둘 다 이 헬퍼로 자세히)
   const traceS = (s, introEn, introKo) => {
     sc = { s: s };
     add(7, introEn, introKo);
     iut = [0, null, null, null, null];
-    add(8, "Make a fresh insideUpTo (all 0), just for this s. Cells = spot k (1~N), so N+2 cells — not 8 (=2N).", "이 s 전용 insideUpTo 새로 만듦 (전부 0). 칸 = 자리 k(1~N)라 N+여유 칸이에요 — 8칸(=2N) 아님.");
+    add(8, "Make a fresh insideUpTo (all 0), just for this s. Cells = spot k (1~N), so N+2 cells — not 8 (=2N).", "이 s 전용으로 insideUpTo 를 새로 만들어요 (전부 0). 칸은 자리 k(1~N) 라서 N 에 여유를 더한 만큼이에요. 8 칸(=2N) 이 아니에요.");
     add(11, "Why cow[s-k]? For this s, flipping a window puts cow[s-k] at spot k. So here we count spots where cow[s-k] matches want[k].",
-            "왜 cow[s-k] 랑 비교해요? s가 같은 창은 뒤집으면 k자리에 늘 cow[s-k]가 와요. 그래서 이 s에선 cow[s-k]==want[k] 인 칸을 세는 거예요.");
+            "왜 cow[s-k] 랑 비교해요? s 가 같은 창은 뒤집으면 k 자리에 늘 cow[s-k] 가 와요. 그래서 이 s 에서는 cow[s-k]==want[k] 인 칸을 세는 거예요.");
     for (let k = 1; k <= N; k++) {
       const j = s - k;
       sc = { s: s, k: k, j: j };
@@ -2139,7 +2139,7 @@ function _buildFinalSteps(E) {
     sc = { s: s };
     const lmin = Math.max(1, s - N), lmax = Math.floor(s / 2);
     add([15, 16, 17], "Why this range? Window [l,r] has l+r=s. (1) l>=1 (board start). (2) r=s-l can't pass N, so l>=s-N. (3) l is the LEFT end, l<=r, so l<=s//2. -> l: max(1," + s + "-" + N + ")=" + lmin + " .. " + s + "//2=" + lmax + ".",
-                      "왜 이 범위? 구간 [l,r]은 l+r=s. ① l≥1 (줄 시작) ② r=s-l이 N 넘으면 안 됨 → l≥s-N ③ l은 왼쪽 끝이라 l≤r → l≤s//2. 그래서 l: max(1," + s + "-" + N + ")=" + lmin + " ~ " + s + "//2=" + lmax + ".");
+                      "왜 이 범위일까요? 구간 [l,r] 은 l+r=s 예요. ① l≥1 이에요 (줄 시작) ② r=s-l 이 N 을 넘으면 안 되니 l≥s-N ③ l 은 왼쪽 끝이라 l≤r, 그래서 l≤s//2 예요. 그래서 l 은 max(1," + s + "-" + N + ")=" + lmin + " ~ " + s + "//2=" + lmax + " 예요.");
     for (let l = lmin; l <= lmax; l++) {
       const r = s - l;
       sc = { s: s, l: l, r: r };
@@ -2160,15 +2160,15 @@ function _buildFinalSteps(E) {
   };
 
   traceS(2, "for s = l+r: s starts at 2 (smallest: l=1,r=1). One window [1,1].",
-            "for s = l+r: s는 2부터 (가장 작음: l=1,r=1). 구간 [1,1] 하나뿐.");
+            "for s = l+r 줄이에요. s 는 2 부터 시작해요 (제일 작은 건 l=1, r=1). 구간은 [1,1] 하나뿐이에요.");
   traceS(3, "for s: now s=3 (l can be 1). Same steps again.",
-            "for s: 이제 s=3 (l이 1까지). 똑같은 단계 다시.");
+            "for s 줄이에요. 이제 s=3 이에요 (l 이 1 까지 가요). 똑같은 단계를 다시 해요.");
   for (let ss = 4; ss <= 2 * N; ss++) runS(ss);
   iut = null;
   add(7, "s=4,5,...,8 run the very same way (new insideUpTo, then subtract). The result box fills in.",
-        "s=4,5,...,8 도 똑같이 (insideUpTo 새로, 빼기). 결과 통이 채워져요.");
+        "s=4,5,...,8 도 똑같이 해요 (insideUpTo 를 새로 만들고 빼기). 결과 통이 채워져요.");
   add(22, "Print result[0..N]. Done - two prefix tables + subtractions = O(N^2), so it passes!",
-        "result[0..N] 출력. 끝 - 누적 표 2개 + 빼기 = O(N^2), 그래서 통과! 🚀", true);
+        "result[0..N] 을 출력해요. 끝이에요! 쌓아 온 표 2 개랑 빼기로 O(N^2), 그래서 통과! 🚀", true);
   return out;
 }
 

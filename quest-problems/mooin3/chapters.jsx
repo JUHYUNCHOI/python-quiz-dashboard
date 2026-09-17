@@ -33,7 +33,7 @@ export function makeMooin3Ch1(E) {
       label: t(E, "Problem (intro)", "문제 (도입)"),
       narr: t(E,
         "Bessie's looking at a string of letters.  She wants to pick out a special 3-letter pattern called a 'moo'.",
-        "Bessie 가 글자로 된 줄을 보고 있어. 'moo' 라는 특별한 3 글자 패턴을 골라 점수를 매길 거야."),
+        "Bessie 가 글자 줄을 보고 있어요. 여기서 'moo' 라는 특별한 세 글자를 골라낼 거예요."),
       content: (
         <div style={{ padding: 20 }}>
           <div style={{
@@ -52,7 +52,7 @@ export function makeMooin3Ch1(E) {
               </div>
               {t(E,
                 "Given a string of letters and several query windows.  For each window, find the highest-scoring 'moo' inside (or print -1).",
-                "글자 줄과 여러 쿼리 윈도우가 주어져요. 각 윈도우 안에서 점수가 가장 큰 'moo' 의 점수를 출력 (없으면 -1).")}
+                "글자 줄 하나와 물음 여러 개가 주어져요.\n물음마다 찾을 범위가 하나씩 있어요.\n그 범위 안에서 점수가 가장 큰 'moo' 를 찾아 점수를 출력해요.\n없으면 -1 을 출력해요.")}
             </div>
 
             {/* Rule — what makes 3 letters a moo.  Cards adjacent so the
@@ -62,7 +62,7 @@ export function makeMooin3Ch1(E) {
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontSize: 11.5, fontWeight: 600, color: "#5b21b6", textAlign: "center", marginBottom: 8 }}>
                 {t(E, "What's a 'moo'?  Three letters with this rule:",
-                      "'moo' = 3 글자, 규칙은:")}
+                      "'moo' 는 세 글자예요. 규칙은 이래요.")}
               </div>
               <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 6 }}>
                 {[
@@ -160,7 +160,7 @@ export function makeMooin3Ch1(E) {
               </div>
               <div style={{ fontSize: 11, color: "#15803d", textAlign: "center", marginTop: 6, wordBreak: "keep-all" }}>
                 {t(E, "Adjacent picks → tiny (1×1=1).  Farther apart → bigger.  Mission: find the BIGGEST score in the window.",
-                      "붙어있으면 작은 점수 (1×1=1), 멀리 떨어질수록 큰 점수.  미션: 윈도우 안에서 최대 점수 찾기.")}
+                      "붙어 있으면 점수가 작아요 (1×1=1).\n멀리 떨어질수록 점수가 커져요.\n우리가 할 일은 범위 안에서 가장 큰 점수를 찾는 거예요.")}
               </div>
             </div>
 
@@ -168,7 +168,7 @@ export function makeMooin3Ch1(E) {
               marginTop: 10, fontSize: 11.5, color: C.dim, textAlign: "center", fontStyle: "italic",
             }}>
               {t(E, "Sample input + worked example on the next pages.",
-                    "샘플 입력 + 풀이 예제는 다음 페이지에서.")}
+                    "예시 입력과 풀이 예제는 다음 쪽에 나와요.")}
             </div>
           </div>
         </div>),
@@ -177,10 +177,10 @@ export function makeMooin3Ch1(E) {
     /* [승] — Sample I/O.  Same as before. */
     {
       type: "reveal",
-      label: t(E, "Sample I/O", "샘플 입출력"),
+      label: t(E, "Sample I/O", "예시 입출력"),
       narr: t(E,
         "Sample input — 12-character string with 5 query windows.  Output is 5 lines: the highest moo score in each window.",
-        "샘플 입력 — 12 자 문자열 + 쿼리 윈도우 5 개. 출력 5 줄 = 각 윈도우의 점수 최대 moo 점수."),
+        "예시 입력은 12 글자 줄과 물음 5 개예요. 출력은 5 줄, 물음마다 가장 큰 moo 점수예요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: "#7c5cfc", textAlign: "center", marginBottom: 10 }}>
@@ -214,18 +214,18 @@ abcabbacabac
             <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
               🔍 {t(E, "Line by line", "한 줄씩")}
             </div>
-            <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>12 5</code> — {t(E, "N = 12 (string length), Q = 5 (queries)", "N = 12 (문자열 길이), Q = 5 (쿼리 개수)")}</div>
+            <div><code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>12 5</code> — {t(E, "N = 12 (string length), Q = 5 (queries)", "N = 12 (글자 줄의 길이), Q = 5 (물음 개수)")}</div>
             <div style={{ marginTop: 6 }}>
-              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>abcabbacabac</code> — {t(E, "the string s", "문자열 s")}
+              <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>abcabbacabac</code> — {t(E, "the string s", "글자 줄 s")}
             </div>
             <div style={{ marginTop: 6 }}>
-              {t(E, "Then 5 query lines, each: ", "그 다음 쿼리 5 줄, 각각: ")}
+              {t(E, "Then 5 query lines, each: ", "그 다음 물음이 5 줄 나와요. 한 줄에 ")}
               <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>l r</code>
               {" — "}
-              <b style={{ color: "#5b21b6" }}>{t(E, "the WINDOW", "윈도우 범위")}</b>
-              {t(E, " (positions ", " (위치 ")}
+              <b style={{ color: "#5b21b6" }}>{t(E, "the WINDOW", "찾을 범위")}</b>
+              {t(E, " (positions ", " 가 적혀 있어요 (위치 ")}
               <code style={{ background: "#fff", padding: "1px 4px", borderRadius: 3 }}>l..r</code>
-              {t(E, " only).  NOT distances!", " 만 사용). 거리 X!")}
+              {t(E, " only).  NOT distances!", " 만 써요). 거리가 아니에요!")}
             </div>
           </div>
 
@@ -237,7 +237,7 @@ abcabbacabac
           }}>
             <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 6 }}>
               {t(E, "Example: query \"2 7\" means this window:",
-                    "예시: 쿼리 \"2 7\" 은 이 윈도우:")}
+                    "물음 \"2 7\" 은 이런 범위예요.")}
             </div>
             <div style={{ display: "flex", justifyContent: "center" }}>
               <div>
@@ -275,13 +275,13 @@ abcabbacabac
             <div style={{ marginTop: 8, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.55 }}>
               {t(E,
                 "Find the highest-score moo using ONLY positions 2..7 (yellow).  Answer for this window = 6.",
-                "노란 자리 (2..7) 안에서만 moo 골라 점수 최대 찾기. 이 윈도우 답 = 6.")}
+                "노란 자리(2~7) 안에서만 moo 를 골라 가장 큰 점수를 찾아요.\n이 범위의 답은 6 이에요.")}
             </div>
           </div>
 
           <div style={{ marginTop: 8, fontSize: 11, color: C.dim, fontStyle: "italic", textAlign: "center" }}>
             {t(E, "📌 Indexing: input is 1-based.  Next: a worked example walking every triplet on a tiny string.",
-                  "📌 인덱싱: 입력은 1-based. 다음 페이지: 작은 문자열에서 모든 triplet 직접 따라가는 풀이 예제.")}
+                  "📌 자리 번호는 1 부터 세요. 다음 쪽에서는 짧은 글자 줄로 세 글자 조합을 하나씩 따라가 봐요.")}
           </div>
         </div>),
     },
@@ -295,7 +295,7 @@ abcabbacabac
       label: t(E, "Worked example", "풀이 예제"),
       narr: t(E,
         "Try the rule on \"abcabbc\", in order — (1,2,3), (1,2,4), (1,2,5)… sliding k right.  A moo scores more as k moves farther.  (All 35 triplets are summed up below.)",
-        "\"abcabbc\" 로 차례대로 — (1,2,3), (1,2,4), (1,2,5)… k 를 오른쪽으로 밀며 확인.  moo 면 k 가 멀수록 점수 큼.  (전체 35 개 결과는 아래에.)"),
+        "\"abcabbc\" 를 (1,2,3), (1,2,4), (1,2,5)… 순서로 봐요. k 를 오른쪽으로 밀수록 moo 점수가 커져요. 35 개 전체 결과는 아래에 있어요."),
       content: (<TripletEnumSimulator E={E} />),
     },
 
@@ -318,10 +318,10 @@ export function makeMooin3Ch2(E, lang = "py") {
        "페이지 1에서 이미 브루트 설명했잖아 — 뒤에서 또 나오지"). */
     {
       type: "reveal",
-      label: t(E, "Idea: fix the middle j", "아이디어: 중간 j 고정"),
+      label: t(E, "Idea: fix the middle j", "아이디어 — 가운데 j 고정"),
       narr: t(E,
         "We already saw brute (every i, j, k) is N³ per query — too slow.  The fix: pin the middle j, then search once for the best i and once for the best k.  Drag j around and see.",
-        "브루트(모든 i, j, k)가 쿼리당 N³ 이라 느린 건 이미 봤죠.  개선은 — 가운데 j 를 고정하고, 최고의 i·k 를 한 번씩만 찾기.  j 드래그하면서 봐요."),
+        "모든 i, j, k 를 다 보면 물음마다 N³ 이라 느린 건 이미 봤죠. 이번엔 가운데 j 를 고정하고, 가장 좋은 i 와 k 를 한 번씩만 찾아요. j 를 끌어 보면서 확인해요."),
       content: (<MooTraceSimulator E={E} lang={lang} />),
     },
 
@@ -331,10 +331,10 @@ export function makeMooin3Ch2(E, lang = "py") {
       const w = getMooin3Walk(E, lang, "brute");
       return {
         type: "reveal",
-        label: t(E, "Code: fix-j", "코드: j 고정"),
+        label: t(E, "Code: fix-j", "코드 — j 고정"),
         narr: t(E,
           "Same fix-j idea as the simulator — now in code.  Each part lights up with a bubble; read them in order.",
-          "방금 시뮬의 j 고정 아이디어 그대로 — 이번엔 코드로.  각 부분이 밝아지며 말풍선이 떠요, 순서대로 봐요."),
+          "방금 시뮬에서 본 j 고정 생각을 이번엔 코드로 봐요. 각 부분이 밝아지면서 말풍선이 떠요. 순서대로 읽어요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0891b2" />),
       };
     })(),
@@ -346,7 +346,7 @@ export function makeMooin3Ch2(E, lang = "py") {
       preview: Array.isArray(sec.why) ? sec.why[0] : undefined,
       narr: t(E,
         "The fix-j version solves it correctly — but how big can N get?  Let's count operations.",
-        "j 고정 버전은 문제를 *정확히* 풀어요 — 근데 N 이 얼마나 커질 수 있지? 연산량을 세어 봐요."),
+        "j 고정 코드는 답을 정확히 맞혀요. 그런데 N 이 얼마나 커질 수 있을까요? 계산 횟수를 세어 봐요."),
       content: (<CodeSectionView section={sec} lang={lang} E={E} />),
     })),
 
@@ -354,7 +354,7 @@ export function makeMooin3Ch2(E, lang = "py") {
        "쉽고 시뮬로 이해가 다 되고 모든 테스트 통과"). fix-j 와 같은 예제로 답 8 재확인. */
     {
       type: "reveal",
-      label: t(E, "Idea: check by letter", "아이디어: 글자로 확인"),
+      label: t(E, "Idea: check by letter", "아이디어 — 글자로 확인"),
       narr: t(E,
         "The fast solution turns on one idea: go letter by letter instead of spot by spot. Walk through it here first — then the code will read easily.",
         "빠른 풀이는 생각 하나만 바꾸면 돼요. 자리 하나씩이 아니라 글자 하나씩 보는 거예요. 여기서 먼저 천천히 따라가 보면, 코드가 훨씬 쉽게 읽혀요."),
@@ -368,7 +368,7 @@ export function makeMooin3Ch2(E, lang = "py") {
       label: t(E, "Building the table", "표 만들기"),
       narr: t(E,
         "Grouping by letter alone is still O(26·N) per query — we still scan.  The speed comes from building three small tables ONCE, before any query.  Here is how they fill up.",
-        "글자로 묶어도 쿼리마다 훑으면 아직 O(26·N) 이에요.  속도는 쿼리 전에 표 3 개를 *한 번만* 만들어 두는 데서 나와요.  그 표가 어떻게 채워지는지 봐요."),
+        "글자로 묶어도 물음마다 훑으면 아직 O(26·N) 이에요. 빨라지는 비결은 물음을 받기 전에 표 3 개를 한 번만 만들어 두는 거예요. 그 표가 어떻게 채워지는지 봐요."),
       content: (<Mooin3TableSim E={E} lang={lang} />),
     },
 
@@ -378,10 +378,10 @@ export function makeMooin3Ch2(E, lang = "py") {
       const w = getMooin3Walk(E, lang, "fast");
       return {
         type: "reveal",
-        label: t(E, "Code: fast (O(26)/query)", "코드: 빠른 풀이 (쿼리당 O(26))"),
+        label: t(E, "Code: fast (O(26)/query)", "코드 — 빠른 풀이 (물음당 O(26))"),
         narr: t(E,
           "Three leaps make it fast: precompute tables once, loop over the 26 letters (not j), and use the ∩-parabola vertex.  Watch each part light up.",
-          "세 번의 도약으로 빨라져요: 표를 한 번만 만들기 · j 대신 글자 26개로 · ∩ 포물선 꼭짓점 이용.  각 부분이 밝아질 때 봐요."),
+          "세 번 도약하면 빨라져요. 표를 한 번만 만들고, j 대신 글자 26 개를 돌고, ∩ 포물선 꼭짓점을 써요. 각 부분이 밝아질 때 봐요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#7c3aed" />),
       };
     })(),
@@ -390,10 +390,10 @@ export function makeMooin3Ch2(E, lang = "py") {
     /* [부록 ①] map 시뮬 — 리스트 만들고 이분탐색으로 푸는 걸 눈으로 */
     {
       type: "reveal",
-      label: t(E, "Bonus ① Another way: map", "부록 ① 다른 방법: map"),
+      label: t(E, "Bonus ① Another way: map", "부록 ① 다른 방법 — map"),
       narr: t(E,
         "A different tool for the same problem: instead of 3 tables, keep one 'letter → its spots' list and binary-search it.  Watch it build, then solve a query.",
-        "같은 문제를 다른 도구로: 표 3개 대신 '글자 → 위치 리스트' 하나를 만들고 이분탐색으로 풀어요.  만들어지는 것과 쿼리 푸는 걸 눈으로 봐요."),
+        "같은 문제를 다른 도구로 풀어요. 표 3 개 대신 '글자 → 위치 목록' 하나를 만들고 이분탐색으로 찾아요. 목록이 만들어지는 것과 물음 푸는 것을 눈으로 봐요."),
       content: (<Mooin3MapSim E={E} />),
     },
     /* [부록 ②] map 코드 */
@@ -404,7 +404,7 @@ export function makeMooin3Ch2(E, lang = "py") {
         label: t(E, "Bonus ② The map code", "부록 ② map 코드"),
         narr: t(E,
           "The same idea as the tables, in code: nextDiff = nearest_diff, and the binary search plays the role of latest/earliest_same.  This one passed the real USACO judge too.",
-          "표 방식과 같은 아이디어를 코드로: nextDiff = nearest_diff, 이분탐색이 latest/earliest_same 역할.  이 코드도 실제 USACO 채점기 통과."),
+          "표 방식과 같은 생각을 코드로 옮겼어요. nextDiff 가 nearest_diff 이고, 이분탐색이 latest·earliest_same 역할을 해요. 이 코드도 실제 USACO 채점기를 통과했어요."),
         content: (<CodeWalk E={E} lang={lang} code={w.code} vars={w.vars} beats={w.beats} accent="#0d9488"
           badge={{ ko: "부록 · map 으로 같은 풀이 (안 봐도 돼요)", en: "Bonus · same solution with a map (optional)", color: "#0d9488" }} />),
       };

@@ -60,7 +60,7 @@ export function HandDrawSimulator({ E }) {
     { kind: "try", arr: [1, 2, 1], ok: true,  note: t(E, "1 < 2 > 1: also valid! length 3.",
                                                             "1 < 2 > 1: 이것도 됨! 길이 3.") },
     { kind: "try", arr: [3, 1, 3], ok: false, note: t(E, "TWO problems: (a) input has only one 3, can't use two. (b) Even if we could, 3 > 1 < 3 is V-shape (DOWN-UP), not mountain.",
-                                                            "두 가지 문제: (a) 입력에 3 이 한 마리뿐 — 두 마리 못 씀. (b) 가능하다 해도 3 > 1 < 3 은 V 모양 (내려갔다 올라옴), mountain 아님.") },
+                                                            "두 가지가 걸려요.\n(a) 입력에 키 3 인 소가 한 마리뿐이라 두 마리를 못 써요.\n(b) 된다 해도 3 > 1 < 3 은 내려갔다 올라오는 V 모양이라 산이 아니에요.") },
     { kind: "observation" },
   ];
   const ts = useTraceStep(trace);
@@ -75,7 +75,7 @@ export function HandDrawSimulator({ E }) {
         total={trace.length}
         isEn={E}
         title={t(E, "Hand-draw: heights = [1, 1, 2, 3]. Try arrangements one by one.",
-                    "손으로 그려보기: 키 = [1, 1, 2, 3]. 배열을 하나씩 시도.")}
+                    "손으로 그려 봐요. 키는 [1, 1, 2, 3] 이에요.\n늘어놓는 방법을 하나씩 해봐요.")}
         subtitle={t(E, `(${safe + 1} / ${trace.length}) — ▶ to step`,
                        `(${safe + 1} / ${trace.length}) — ▶ 눌러서 진행`)}
       />
@@ -92,14 +92,14 @@ export function HandDrawSimulator({ E }) {
         {s.kind === "setup" && (
           <>
             <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 4 }}>
-              📋 {t(E, "Goal: pick a subset, arrange in mountain palindrome", "목표: 일부 골라서 mountain palindrome 으로 배열")}
+              📋 {t(E, "Goal: pick a subset, arrange in mountain palindrome", "몇 마리를 골라 산 모양으로 늘어놓는 게 목표예요")}
             </div>
             <div>
               {t(E, "Mountain shape: heights go UP to a peak, then DOWN. Symmetric (palindrome). No two neighbors equal.",
-                    "mountain 모양: 키가 peak 까지 올라갔다 내려옴. 대칭 (palindrome). 이웃끼리 같은 키 X.")}
+                    "산 모양은 이래요.\n키가 peak 까지 올라갔다가 내려와요. 좌우가 거울처럼 같아요.\n옆에 붙은 둘은 키가 같으면 안 돼요.")}
             </div>
             <div style={{ marginTop: 6, fontSize: 12, color: C.dim }}>
-              {t(E, "Q: Can we use ALL 4 cows? Press ▶.", "질문: 4 마리 다 쓸 수 있을까? ▶ 눌러서 확인.")}
+              {t(E, "Q: Can we use ALL 4 cows? Press ▶.", "4 마리를 다 쓸 수 있을까요? ▶ 를 눌러서 확인해요.")}
             </div>
           </>
         )}
@@ -142,11 +142,11 @@ export function HandDrawSimulator({ E }) {
             </div>
             <div style={{ fontSize: 12.5, lineHeight: 1.7 }}>
               <div>• {t(E, "Best for [1,1,2,3]: length 3, e.g. [1, 3, 1] — used 3 of 4 cows.",
-                          "[1,1,2,3] 최선: 길이 3, 예: [1, 3, 1] — 4 중 3 마리 사용.")}</div>
+                          "[1,1,2,3] 은 길이 3 이 가장 좋아요.\n[1, 3, 1] 처럼 4 마리 중 3 마리를 써요.")}</div>
               <div>• {t(E, "Even-length palindromes always fail (adjacent dup).",
                           "짝수 길이 palindrome 은 항상 망함 (인접 중복).")}</div>
               <div>• {t(E, "Mountain rule: peak in the MIDDLE is the highest. Going DOWN-UP is V-shape (not allowed).",
-                          "mountain 규칙: 가운데 peak 가 최고점. 내려갔다 올라오는 V 모양은 안 됨.")}</div>
+                          "산 모양 규칙이에요.\n가운데 peak 가 가장 높아요. 내려갔다 올라오는 V 모양은 안 돼요.")}</div>
               <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px dashed #c4b5fd" }}>
                 <b>{t(E, "Pattern in [1, 3, 1]: ", "[1, 3, 1] 의 패턴: ")}</b>
                 {t(E, "value 1 is a RING (appears 2× — left + right mirror). Value 3 is the PEAK (appears 1× in middle). So length = 2 × (1 ring) + 1 (peak) = 3. Generally: length = 2·rings + 1.",
@@ -217,10 +217,10 @@ export function TrickySimulator({ E }) {
         {s.kind === "setup" && (
           <>
             <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 4 }}>
-              🔢 {t(E, "Frequency: 3 appears 2×, 2 appears 1×, 1 appears 1×", "빈도: 3 이 2번, 2 가 1번, 1 이 1번")}
+              🔢 {t(E, "Frequency: 3 appears 2×, 2 appears 1×, 1 appears 1×", "몇 번 나오는지 세면 3 이 두 번, 2 가 한 번, 1 이 한 번이에요")}
             </div>
             <div>
-              {t(E, "Apply our formula: rings = (values with freq ≥ 2) = {3} → 1 ring. So length = 2·1 + 1 = ", "공식 적용: rings = (freq ≥ 2 인 값) = {3} → 1 개. 길이 = 2·1 + 1 = ")}
+              {t(E, "Apply our formula: rings = (values with freq ≥ 2) = {3} → 1 ring. So length = 2·1 + 1 = ", "식에 넣어 봐요. 두 번 이상 나온 값은 {3} 하나뿐이라 ring 이 1 개예요. 길이는 2·1 + 1 = ")}
               <b style={{ color: "#16a34a", fontSize: 16 }}>3</b>
               {t(E, ".", ".")}
             </div>
@@ -230,7 +230,7 @@ export function TrickySimulator({ E }) {
           <>
             <div style={{ fontWeight: 600, color: "#5b21b6", marginBottom: 4 }}>
               ✏️ {t(E, "Formula says length 3. Let's actually BUILD it.",
-                          "공식 답: 길이 3. 실제로 만들어보자.")}
+                          "식이 낸 답은 길이 3 이에요. 진짜 그런지 만들어 봐요.")}
             </div>
             <div>
               {t(E, "Length-3 mountain palindromes look like [a, peak, a] with peak > a. From {1, 2, 3}, the 5 candidates are:",
@@ -290,7 +290,7 @@ export function TrickySimulator({ E }) {
               </div>
               <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fbbf24", fontWeight: 600, color: "#92400e" }}>
                 {t(E, "Fix: peak = M (max). Rings = (v < M with freq[v] ≥ 2). Length = 2·rings + 1.",
-                      "고침: peak = M (최댓값). Rings = (v < M, freq[v] ≥ 2). 길이 = 2·rings + 1.")}
+                      "이렇게 고쳐요.\npeak 는 가장 큰 키 M 이에요.\nring 은 M 보다 작으면서 두 번 이상 나온 키예요.\n길이는 2·ring 수 + 1 이에요.")}
               </div>
             </div>
           </>
@@ -404,7 +404,7 @@ export function CowPhotosSim({ E }) {
       {cur === 2 && (
         <div>
           <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 6, fontWeight: 700 }}>
-            {t(E, "Palindrome arrangement:", "팰린드롬 배열:")}
+            {t(E, "Palindrome arrangement:", "거울처럼 놓기")}
           </div>
           <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
             {arr.map((v, i) => {
@@ -721,20 +721,20 @@ const CpPerfAside = ({ E }) => (
     padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#7f1d1d",
   }}>
     <div style={{ fontSize: 10.5, fontWeight: 600, color: "#991b1b", marginBottom: 6, letterSpacing: 0.3 }}>
-      🐌 {t(E, "Operation count", "연산량")}
+      🐌 {t(E, "Operation count", "계산량")}
     </div>
     <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 8px" }}>
       <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>N = 10</code>
-      <div>{t(E, "tiny — 100 ops, instant", "작음 — 100 연산, 즉시")}</div>
+      <div>{t(E, "tiny — 100 ops, instant", "적어요 — 100 번, 바로 끝나요")}</div>
       <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>N = 1,000</code>
-      <div>{t(E, "1 million ops — still fast", "백만 연산 — 아직 빠름")}</div>
+      <div>{t(E, "1 million ops — still fast", "백만 번 — 아직 빨라요")}</div>
       <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>N = 100,000</code>
-      <div>{t(E, "10 BILLION ops — TLE 🚫", "100 억 연산 — TLE 🚫")}</div>
+      <div>{t(E, "10 BILLION ops — TLE 🚫", "100 억 번 — 시간 초과 🚫")}</div>
     </div>
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fca5a5", fontSize: 11 }}>
       {t(E,
         "Why? `h.count(v)` walks the whole array. Doing that once per distinct v ⇒ up to N · N work per case.",
-        "왜? `h.count(v)` 가 매번 배열 전체를 훑어요. distinct v 마다 그렇게 하면 케이스당 최대 N · N 일.")}
+        "왜 그럴까요?\n`h.count(v)` 가 매번 키 전체를 훑어요.\n서로 다른 값마다 그렇게 하면 한 문제에 최대 N · N 번이에요.")}
     </div>
   </div>
 );
@@ -779,7 +779,7 @@ const CpFastAside = ({ E }) => (
     <div>
       <b>C++:</b> <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>vector&lt;int&gt; freq(N+2)</code>
       {" "}{t(E, "→ heights are 1..N, so use the value as the index directly. Cache-friendly, instant lookup.",
-                "→ 키가 1..N 이라 값 자체를 인덱스로. 캐시 친화 + 즉시 lookup.")}
+                "키가 1 부터 N 까지라 값을 그대로 자리 번호로 써요.\n메모리에 붙어 있어 빠르고, 바로 꺼내 볼 수 있어요.")}
     </div>
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #93c5fd", fontSize: 11 }}>
       {t(E, "Sum of N across all cases ≤ 10⁶ → both versions pass comfortably.",
@@ -856,7 +856,7 @@ export function getCowPhotosSections(E) {
       py: cx(E, CP_STEP1_PY), cpp: cx(E, CP_STEP1_CPP),
       why: [
         t(E, "T independent test cases. For each: read N, then N heights as a list.",
-            "독립 테스트 T 개. 각 케이스: N 읽고, 그 다음 줄에서 키 N 개를 list 로."),
+            "따로따로인 문제가 T 개 와요.\n하나마다 N 을 읽고, 다음 줄에서 키 N 개를 목록으로 받아요."),
       ],
       aside: <CpAside E={E} highlight={[0, 1, 2]} note={t(E, "First case (after T): N = 4, heights = [1, 1, 2, 3].", "첫 케이스 (T 다음): N = 4, 키 = [1, 1, 2, 3].")} />,
     },
@@ -881,7 +881,7 @@ export function getCowPhotosSections(E) {
         t(E, "This is the constraint the naive '2·pairs+1' formula MISSED — it's why [3,3,2,1] gives 1, not 3.",
             "단순 '2·페어+1' 공식이 놓친 제약 — [3,3,2,1] 의 답이 3 이 아니라 1 인 이유."),
         t(E, "⚠️ Count frequencies ONCE (Counter / freq array) → O(N). Using h.count(v) inside the loop re-scans everything → O(N²) → TLE at N = 100,000.",
-            "⚠️ 빈도는 한 번에 세기 (Counter / freq 배열) → O(N). 루프 안에서 h.count(v) 를 쓰면 매번 전체를 다시 훑음 → O(N²) → N = 10만 에서 TLE."),
+            "⚠️ 몇 번 나오는지는 한 번에 세요. Counter 나 freq 배열을 쓰면 O(N) 이에요.\n반복 안에서 h.count(v) 를 쓰면 매번 전체를 다시 훑어 O(N²) 가 돼요.\nN = 10만이면 시간 초과예요."),
       ],
     },
     {
@@ -915,8 +915,8 @@ export function getCowPhotosWalk(E, lang = "py", mode = "fast") {
       vars,
       beats: [
         { hi: [4, 9], bubble: t(E, "Input first — read T, then per case read N.", "입력부터 — T 읽고, 케이스마다 N.") },
-        { hi: [10, 19], bubble: t(E, "The key idea: a freq array indexed by the height itself (heights are 1..N). While reading input, tally freq[h] and track the peak M — all in one pass, O(N).  ⚠️ Re-counting each value by scanning h instead would be O(N²) → TLE.", "핵심: 키 값을 인덱스로 쓰는 freq 배열 (키가 1..N). 입력 받으면서 freq[h] 누적 + peak(M) 갱신 — 한 번 훑기로 끝, O(N).  ⚠️ 값마다 h 를 다시 훑어 세면 O(N²) → TLE.") },
-        { hi: [20, 25], bubble: t(E, "Count rings: for each value below M, freq[v] ≥ 2 is an instant lookup (no re-scan).", "ring 세기: M 보다 작은 값마다 freq[v] ≥ 2 만 즉시 확인 (다시 안 훑음).") },
+        { hi: [10, 19], bubble: t(E, "The key idea: a freq array indexed by the height itself (heights are 1..N). While reading input, tally freq[h] and track the peak M — all in one pass, O(N).  ⚠️ Re-counting each value by scanning h instead would be O(N²) → TLE.", "키 값을 그대로 자리 번호로 쓰는 freq 배열이 핵심이에요. 키가 1 부터 N 까지니까요.\n입력을 받으면서 freq[h] 를 올리고 가장 큰 키 M 도 같이 갱신해요.\n한 번만 훑으면 끝이라 O(N) 이에요.\n⚠️ 값마다 h 를 다시 훑어 세면 O(N²) 이라 시간 초과예요.") },
+        { hi: [20, 25], bubble: t(E, "Count rings: for each value below M, freq[v] ≥ 2 is an instant lookup (no re-scan).", "ring 을 셀 때는 M 보다 작은 값마다 freq[v] 가 2 이상인지만 바로 봐요.\n다시 훑지 않아요.") },
         { hi: [26, 26], bubble: t(E, "Answer = 2·rings + 1. Print it.", "답 = 2·rings + 1. 출력!") },
       ],
     };
@@ -927,8 +927,8 @@ export function getCowPhotosWalk(E, lang = "py", mode = "fast") {
     beats: [
       { hi: [0, 0], bubble: t(E, "We'll use Counter — it counts frequencies in one line.", "Counter 를 씀 — 빈도를 한 줄로 세요.") },
       { hi: [2, 6], bubble: t(E, "Input first — read T, then per case read N and the heights, and take the peak M = max(h).", "입력부터 — T 읽고, 케이스마다 N 과 키를 읽고, peak M = max(h).") },
-      { hi: [8, 8], bubble: t(E, "The key line: Counter(h) builds the WHOLE frequency table in one pass → O(N).  ⚠️ If you wrote h.count(v) instead, it re-scans all of h every time → O(N²) → TLE on big N.", "핵심 줄: Counter(h) 한 줄로 빈도표를 한 번에 완성 → O(N).  ⚠️ 여기서 h.count(v) 를 쓰면 매번 h 전체를 훑어 O(N²) → 큰 N 에서 TLE.") },
-      { hi: [9, 12], bubble: t(E, "Count rings: v is a ring key if v < M and cnt[v] ≥ 2 — an instant O(1) lookup.", "ring 세기: v < M 이고 cnt[v] ≥ 2 면 ring 키 — 즉시 O(1) 조회.") },
+      { hi: [8, 8], bubble: t(E, "The key line: Counter(h) builds the WHOLE frequency table in one pass → O(N).  ⚠️ If you wrote h.count(v) instead, it re-scans all of h every time → O(N²) → TLE on big N.", "Counter(h) 한 줄이면 몇 번 나오는지 표가 한 번에 만들어져요. O(N) 이에요.\n⚠️ 여기서 h.count(v) 를 쓰면 매번 h 전체를 훑어 O(N²) 가 돼요.\nN 이 크면 시간 초과예요.") },
+      { hi: [9, 12], bubble: t(E, "Count rings: v is a ring key if v < M and cnt[v] ≥ 2 — an instant O(1) lookup.", "ring 을 셀 때는 v 가 M 보다 작고 cnt[v] 가 2 이상이면 ring 키예요.\n바로 꺼내 보니 O(1) 이에요.") },
       { hi: [14, 14], bubble: t(E, "Answer = 1 peak + 2 per ring = 2·rings + 1. Print it.", "답 = peak 1 마리 + ring 마다 2 마리 = 2·rings + 1. 출력!") },
     ],
   };

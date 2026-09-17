@@ -718,7 +718,7 @@ const CkPerfAside = ({ E }) => (
     padding: "8px 10px", fontSize: 11.5, lineHeight: 1.55, color: "#7f1d1d",
   }}>
     <div style={{ fontSize: 10.5, fontWeight: 600, color: "#991b1b", marginBottom: 6 }}>
-      🐌 {t(E, "Operation count (brute O(N³))", "연산량 (brute O(N³))")}
+      🐌 {t(E, "Operation count (brute O(N³))", "계산량 (brute O(N³))")}
     </div>
     <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 8px" }}>
       <code style={{ background: "#fff", padding: "1px 5px", borderRadius: 3 }}>N = 100</code>
@@ -731,7 +731,7 @@ const CkPerfAside = ({ E }) => (
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #fca5a5", fontSize: 11 }}>
       {t(E,
         "Inner loop walks the whole array for every (l, r) pair. N² pairs × N work each.",
-        "안쪽 루프가 (l, r) 마다 전체 배열 훑음. N² 쌍 × N 일.")}
+        "(l, r) 쌍마다 안쪽 반복이 줄 전체를 훑어요. 쌍이 N² 개, 쌍마다 N 칸이에요.")}
     </div>
   </div>
 );
@@ -747,11 +747,11 @@ const CkInsightAside = ({ E }) => (
     <div>
       {t(E,
         "After reverse, position i holds cow[l+r−i]. Two pairs (l₁, r₁) and (l₂, r₂) with l₁+r₁ = l₂+r₂ ask the SAME match question per i. Compute it once.",
-        "뒤집은 후 위치 i 에는 cow[l+r−i] 가 옴. l+r 가 같은 두 쌍은 i 마다 같은 매칭 질문을 함. 한 번만 계산.")}
+        "뒤집고 나면 자리 i 에는 cow[l+r−i] 가 와요. l+r 가 같은 두 쌍은 자리마다 똑같은 것을 물어봐요. 그러니 한 번만 계산하면 돼요.")}
     </div>
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #6ee7b7", fontSize: 11 }}>
-      <div>{t(E, "Per value of s: O(N) to build Q.", "s 같은 구간마다: Q 만들기 O(N).")}</div>
-      <div>{t(E, "Total: 2N − 1 values of s × O(N) = ", "총: s 값 2N − 1 개 × O(N) = ")}<b>O(N²)</b></div>
+      <div>{t(E, "Per value of s: O(N) to build Q.", "s 가 같은 구간마다 Q 만들기 O(N).")}</div>
+      <div>{t(E, "Total: 2N − 1 values of s × O(N) = ", "다 합치면 s 값 2N − 1 개 × O(N) = ")}<b>O(N²)</b></div>
     </div>
   </div>
 );
@@ -766,15 +766,15 @@ const CkSmartAside = ({ E }) => (
     </div>
     <div style={{ marginBottom: 6 }}>
       <b>matchUpTo</b> {t(E, "(built once): outside-window matches stay constant.",
-                          "(한 번): 윈도우 바깥 일치는 그대로.")}
+                          "는 한 번만 만들어요. 창 밖에서 맞는 수는 변하지 않아요.")}
     </div>
     <div>
       <b>insideUpTo</b> {t(E, "(rebuilt per same-s window): inside-window matches in O(1) per (l, r).",
-                       "(s 같은 구간마다): 안쪽 일치를 (l, r) 마다 O(1).")}
+                       "는 s 가 같은 구간마다 다시 만들어요. 창 안에서 맞는 수를 (l, r) 마다 O(1) 로 구해요.")}
     </div>
     <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed #93c5fd", fontSize: 11 }}>
       {t(E, "Total work ~ N² (was N³).  N=7500 → about 5·10⁷ checks — fast enough.",
-            "전체 일은 ~ N² (원래 N³). N=7500 이면 약 5·10⁷ 회 — 충분히 빠름.")}
+            "전체 일이 ~N² 로 줄어요 (원래 N³). N=7500 이면 약 5·10⁷ 번이라 충분히 빨라요.")}
     </div>
   </div>
 );
@@ -958,10 +958,10 @@ export function DiagonalSim({ E }) {
           {sameDiagonal
             ? <>🟢 {t(E,
                 `Same s = ${sX}. Inside both windows, position i lands on cow[s − i] — identical comparisons. Precompute once for s = ${sX}.`,
-                `같은 s = ${sX}. 두 윈도우 안쪽에서 i 자리에 cow[s − i] 가 들어옴 — 완전히 같은 비교. s = ${sX} 에 대해 한 번만 계산.`)}</>
+                `s 가 ${sX} 로 같아요. 두 창 모두 안쪽 i 자리에 cow[s − i] 가 들어와서 완전히 같은 비교예요. 그래서 s = ${sX} 는 한 번만 계산해요.`)}</>
             : <>⚪ {t(E,
                 `Different s (X: ${sX}, Y: ${sY}). Drag sliders so l + r matches in both panels — watch the inside cells turn the same colour.`,
-                `다른 s (X: ${sX}, Y: ${sY}). l + r 이 같아지도록 슬라이더 조정 — 안쪽 셀이 같은 색이 되는 걸 확인.`)}</>}
+                `s 가 달라요 (X 는 ${sX}, Y 는 ${sY}). l + r 이 같아지도록 슬라이더를 움직여 보면 안쪽 칸이 같은 색이 돼요.`)}</>}
         </div>
 
         <div style={{
@@ -970,7 +970,7 @@ export function DiagonalSim({ E }) {
         }}>
           {t(E,
             "Same s = l + r → same cow-value at each position i. Precompute once per value of s.",
-            "같은 s = l + r → 자리 i 마다 같은 cow 값. s 같은 구간마다 한 번만 미리 계산.")}
+            "s = l + r 가 같으면 자리 i 에 오는 소도 같아요. 그래서 s 가 같은 구간마다 한 번만 미리 계산해요.")}
         </div>
       </div>
     </div>
@@ -1072,7 +1072,7 @@ export function MatchUpToSim({ E }) {
         }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: RED, marginBottom: 8 }}>
             {t(E, "Build matchUpTo once: count matches as you sweep left to right.",
-                  "matchUpTo 한 번 만들기: 왼쪽부터 일치 개수를 누적.")}
+                  "matchUpTo 를 한 번 만들어요. 왼쪽부터 맞는 개수를 쌓아 가요.")}
           </div>
 
           {posStrip}
@@ -1131,7 +1131,7 @@ export function MatchUpToSim({ E }) {
 
           <div style={{ marginTop: 8, fontSize: 10.5, color: C.dim, fontStyle: "italic" }}>
             {t(E, "matchUpTo[0] = 0; each step, +1 if ✓, else carry over.",
-                  "matchUpTo[0] = 0; 한 칸 갈 때 ✓ 면 +1, 아니면 그대로.")}
+                  "matchUpTo[0] = 0 에서 시작해요. 한 칸 갈 때 ✓ 면 +1, 아니면 그대로예요.")}
           </div>
         </div>
 
@@ -1142,7 +1142,7 @@ export function MatchUpToSim({ E }) {
         }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: "#991b1b", marginBottom: 6 }}>
             {t(E, "Pick (l, r) — outside the window, matches stay constant.",
-                  "(l, r) 골라 — 윈도우 바깥 일치 수는 그대로.")}
+                  "(l, r) 을 골라 봐요. 창 밖에서 맞는 수는 그대로예요.")}
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 10 }}>
@@ -1161,7 +1161,7 @@ export function MatchUpToSim({ E }) {
               padding: "8px 10px", textAlign: "center",
             }}>
               <div style={{ fontSize: 10.5, color: "#7f1d1d", fontWeight: 600 }}>
-                {t(E, "before window", "윈도우 앞")}
+                {t(E, "before window", "창 앞")}
               </div>
               <div style={{
                 fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: "#1f2937",
@@ -1179,7 +1179,7 @@ export function MatchUpToSim({ E }) {
               padding: "8px 10px", textAlign: "center",
             }}>
               <div style={{ fontSize: 10.5, color: "#475569", fontWeight: 600 }}>
-                {t(E, "window [l, r]", "윈도우 [l, r]")}
+                {t(E, "window [l, r]", "창 [l, r]")}
               </div>
               <div style={{
                 fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: "#475569",
@@ -1197,7 +1197,7 @@ export function MatchUpToSim({ E }) {
               padding: "8px 10px", textAlign: "center",
             }}>
               <div style={{ fontSize: 10.5, color: "#7f1d1d", fontWeight: 600 }}>
-                {t(E, "after window", "윈도우 뒤")}
+                {t(E, "after window", "창 뒤")}
               </div>
               <div style={{
                 fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: "#1f2937",
@@ -1217,7 +1217,7 @@ export function MatchUpToSim({ E }) {
             padding: "10px 12px", textAlign: "center",
           }}>
             <div style={{ fontSize: 11, color: "#7f1d1d", fontWeight: 600, marginBottom: 4 }}>
-              {t(E, "outside-window matches", "윈도우 바깥 일치")}
+              {t(E, "outside-window matches", "창 밖에서 맞는 수")}
             </div>
             <div style={{
               fontFamily: "'JetBrains Mono',monospace", fontSize: 13, color: "#1f2937",
@@ -1239,7 +1239,7 @@ export function MatchUpToSim({ E }) {
         }}>
           {t(E,
             "Outside-window matches = matchUpTo[l−1] + (matchUpTo[N] − matchUpTo[r]). One prefix array, O(1) lookup.",
-            "윈도우 바깥 일치 = matchUpTo[l−1] + (matchUpTo[N] − matchUpTo[r]). prefix 배열 한 개로 O(1) 조회.")}
+            "창 밖에서 맞는 수 = matchUpTo[l−1] + (matchUpTo[N] − matchUpTo[r]) 예요. prefix 배열 하나로 한 번에 구해요 (O(1)).")}
         </div>
       </div>
     </div>
@@ -1416,13 +1416,13 @@ export function DiagPrefixSim({ E }) {
           <div style={{ fontSize: 12, fontWeight: 700, color: A, marginBottom: 8 }}>
             {t(E,
               `Any window (l, r) with l + r = ${s}`,
-              `l + r = ${s} 인 모든 윈도우 (l, r)`)}
+              `l + r = ${s} 인 모든 창 (l, r)`)}
           </div>
           {lMax < lMin ? (
             <div style={{ fontSize: 11.5, color: C.dim, fontStyle: "italic" }}>
               {t(E,
                 `No valid (l, r) with l ≤ r and l + r = ${s} on N = ${N}.`,
-                `N = ${N} 에서 l ≤ r, l + r = ${s} 인 (l, r) 없음.`)}
+                `N = ${N} 에서는 l ≤ r 이면서 l + r = ${s} 인 (l, r) 이 없어요.`)}
             </div>
           ) : (
             <>
@@ -1496,7 +1496,7 @@ export function DiagPrefixSim({ E }) {
         }}>
           {t(E,
             "All windows on the same-s window share the same internal matches. Precompute one number per value of s.",
-            "같은 s 구간의 모든 윈도우는 내부 일치 수가 같음. s 같은 구간마다 한 숫자씩 미리 계산.")}
+            "s 가 같은 창은 창 안에서 맞는 수가 모두 같아요. 그래서 s 마다 숫자 하나씩만 미리 계산해요.")}
         </div>
       </div>
     </div>
@@ -1556,20 +1556,20 @@ const CkDiagonalAside = ({ E }) => {
     }}>
       <div style={{ fontSize: 10.5, fontWeight: 700, color: "#1e40af", marginBottom: 6 }}>
         🔍 {t(E, "Why same-s? — two reversals, same values land at same spots",
-                  "왜 s 같은 구간끼리 같나? — 두 뒤집기, 같은 자리에 같은 값이 들어옴")}
+                  "왜 s 가 같으면 똑같을까요? 두 뒤집기 모두 같은 자리에 같은 값이 와요")}
       </div>
 
       <div style={{ marginBottom: 8, fontSize: 11.2, lineHeight: 1.55 }}>
         {t(E,
           "After reversing cow[l..r], position i holds whatever was at cow[l+r−i].  So if you fix s = l+r, position i ALWAYS gets cow[s−i] — no matter how you split l and r.",
-          "cow[l..r] 를 뒤집으면 i 자리 값은 cow[l+r−i].  s = l+r 만 고정하면 i 자리는 *항상* cow[s−i] — l, r 을 어떻게 나눠도.")}
+          "cow[l..r] 를 뒤집으면 i 자리 값은 cow[l+r−i] 예요. s = l+r 만 같으면 i 자리에는 *항상* cow[s−i] 가 와요. l 과 r 을 어떻게 나누든 상관없어요.")}
       </div>
 
       {/* Original a row */}
       <div style={{ background: "#fff", borderRadius: 6, padding: "8px 10px", border: "1px dashed #93c5fd", marginBottom: 8 }}>
         <div style={{ fontSize: 10, color: "#475569", marginBottom: 4, fontWeight: 600 }}>
           {t(E, "Original cow = [4, 1, 3, 2, 5]   (positions 1..5)",
-                "원본 cow = [4, 1, 3, 2, 5]   (위치 1..5)")}
+                "처음 cow = [4, 1, 3, 2, 5]   (자리 1..5)")}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
           <div style={{ width: 78, textAlign: "right", fontSize: 10, color: "#64748b" }}>pos →</div>
@@ -1621,7 +1621,7 @@ const CkDiagonalAside = ({ E }) => {
       }}>
         🟨 {t(E,
           "Look at positions 2 and 3 (yellow): BOTH pairs land on values 3 and 1.  That's the same-s trick — comparison work at any position i depends only on s = l+r, not on l and r individually.  Compute it once per s.",
-          "2, 3 자리 (노랑) 봐: 쌍 X와 Y 모두 값 3, 1 이 들어옴. 그게 s 같은 구간 — i 자리 비교는 s = l+r 에만 의존, l/r 개별 값과 무관. s 마다 한 번만 계산.")}
+          "2, 3 자리(노랑)를 봐요. 쌍 X 와 Y 모두 값 3, 1 이 들어와요. 이게 s 가 같은 구간이에요. 자리 i 의 비교는 s = l+r 로만 정해지고, l 과 r 이 각각 뭔지는 상관없어요. 그래서 s 마다 한 번만 계산해요.")}
       </div>
     </div>
   );
@@ -1635,13 +1635,13 @@ export function getCheckupsSections(E) {
       py: CK_BRUTE_S1_PY, cpp: CK_BRUTE_S1_CPP,
       why: [
         t(E, "Read N, then arrays cow and want. Initialize counts[0..N] = 0.",
-            "N 읽고, cow 와 want 읽기. counts[0..N] = 0 으로 초기화."),
+            "N 을 읽고 cow 와 want 를 읽어요. counts[0..N] 은 전부 0 으로 채워요."),
         t(E, "counts[checks] will hold the number of (l, r) pairs that result in exactly checks checkups.",
-            "counts[checks] 는 검진 수가 정확히 checks 인 (l, r) 쌍 개수."),
+            "counts[checks] 에는 검진 수가 딱 checks 인 (l, r) 쌍이 몇 개인지 담겨요."),
       ],
       aside: <SampleInputAside E={E} sample={CK_SAMPLE} highlight={[0, 1, 2]} note={t(E,
         "N=3, cow=[1, 3, 2], want=[3, 2, 1]. Three input lines.",
-        "N=3, cow=[1, 3, 2], want=[3, 2, 1]. 입력 3 줄.")} />,
+        "N=3, cow=[1, 3, 2], want=[3, 2, 1] 이에요. 입력은 3 줄이에요.")} />,
     },
     {
       label: t(E, "2️⃣ Outer pair (l, r)", "2️⃣ 바깥 쌍 (l, r)"),
@@ -1649,9 +1649,9 @@ export function getCheckupsSections(E) {
       py: CK_BRUTE_S2_PY, cpp: CK_BRUTE_S2_CPP,
       why: [
         t(E, "Two nested loops over l ≤ r enumerate all N(N+1)/2 distinct operations.",
-            "l ≤ r 두 겹 루프로 서로 다른 연산 N(N+1)/2 개 모두 시도."),
+            "l ≤ r 인 반복문 두 겹으로 서로 다른 뒤집기 N(N+1)/2 개를 다 해봐요."),
         t(E, "We'll fill the inner body next — for now just see the shape.",
-            "안쪽은 다음 단계에서 채움 — 지금은 모양만."),
+            "안쪽은 다음 단계에서 채울 거예요. 지금은 모양만 봐요."),
       ],
     },
     {
@@ -1660,11 +1660,11 @@ export function getCheckupsSections(E) {
       py: CK_BRUTE_S3_PY, cpp: CK_BRUTE_S3_CPP,
       why: [
         t(E, "After reversing [l, r], position i holds the value that was at l + r − i (still cow's value, just relocated).",
-            "[l, r] 뒤집은 후 위치 i 에는 원래 l + r − i 자리에 있던 값 (여전히 cow 의 값, 자리만 바뀜)."),
+            "[l, r] 을 뒤집으면 자리 i 에는 원래 l + r − i 자리에 있던 값이 와요 (소는 그대로고 자리만 바뀌어요)."),
         t(E, "Outside [l, r], positions are unchanged — keep using cow[i].",
-            "[l, r] 바깥은 그대로 — cow[i] 그대로."),
+            "[l, r] 바깥은 그대로라서 cow[i] 를 그대로 써요."),
         t(E, "Compare to want[i]; tally if equal.",
-            "want[i] 와 비교, 같으면 checks 증가."),
+            "want[i] 와 비교해서 같으면 checks 를 하나 올려요."),
       ],
     },
     {
@@ -1673,11 +1673,11 @@ export function getCheckupsSections(E) {
       py: CK_BRUTE_FULL_PY, cpp: CK_BRUTE_FULL_CPP,
       why: [
         t(E, "After every (l, r) pair, counts[checks] += 1 records this operation.",
-            "(l, r) 쌍마다 counts[checks] += 1 로 이 연산을 기록."),
+            "(l, r) 쌍마다 counts[checks] += 1 로 이번 뒤집기를 기록해요."),
         t(E, "Output N + 1 lines: counts[0], counts[1], …, counts[N].",
-            "N + 1 줄 출력: counts[0], counts[1], …, counts[N]."),
+            "counts[0], counts[1], …, counts[N] 을 N + 1 줄로 출력해요."),
         t(E, "Submit this — passes small tests, times out around N ≈ 1000.  Pages 5–8 below build a faster O(N²) version, one idea at a time.",
-            "이 코드 제출 — 작은 테스트 통과, N ≈ 1000 부터 시간 초과. 5–8 페이지에서 더 빠른 O(N²) 풀이를 한 단계씩."),
+            "이 코드를 제출하면 작은 테스트는 통과하지만 N ≈ 1000 부터 시간 초과예요. 5–8 페이지에서 더 빠른 O(N²) 풀이를 한 단계씩 만들어요."),
       ],
     },
     {
@@ -1686,11 +1686,11 @@ export function getCheckupsSections(E) {
       py: CK_SMART_S5_PY, cpp: CK_SMART_S5_CPP,
       why: [
         t(E, "Reversing an interval is symmetric about its center. Widen both sides equally and the middle cows keep their spots — only the two new ends swap in.",
-            "구간 뒤집기는 가운데 기준 대칭. 양쪽을 똑같이 넓혀도 가운데 소는 자리 그대로 — 새 두 끝만 서로 바뀜."),
+            "구간 뒤집기는 가운데를 기준으로 대칭이에요. 양쪽을 똑같이 넓혀도 가운데 소는 자리가 그대로고, 새로 들어온 두 끝만 서로 바뀌어요."),
         t(E, "So a bigger interval's checkup count = the smaller one's, adjusted by only the two new ends.",
-            "그래서 큰 구간의 검진 수 = 작은 구간의 검진 수에서 두 끝만 고친 값."),
+            "그래서 큰 구간의 검진 수는 작은 구간의 검진 수에서 두 끝만 고치면 나와요."),
         t(E, "Plan: from each center, widen one step at a time, updating in O(1) → total O(N²).",
-            "작전: 각 중심에서 한 칸씩 넓히며 O(1) 로 갱신 → 합계 O(N²)."),
+            "그래서 작전은 이래요. 중심마다 한 칸씩 넓히면서 O(1) 로 고쳐 나가면 다 합쳐 O(N²) 예요."),
       ],
     },
     {
@@ -1699,9 +1699,9 @@ export function getCheckupsSections(E) {
       py: CK_SMART_S6_PY, cpp: CK_SMART_S6_CPP,
       why: [
         t(E, "baseMatches = number of spots where cow[i] == want[i] (no reversal).",
-            "baseMatches = cow[i] == want[i] 인 자리 수 (안 뒤집었을 때)."),
+            "baseMatches 는 안 뒤집었을 때 cow[i] == want[i] 인 자리 수예요."),
         t(E, "Every interval's checkup count starts from this, then gets adjusted as we widen.",
-            "모든 구간의 검진 수는 여기서 출발해, 넓히며 갱신돼요."),
+            "모든 구간의 검진 수가 여기서 출발해서, 넓힐 때마다 조금씩 고쳐져요."),
       ],
     },
     {
@@ -1710,9 +1710,9 @@ export function getCheckupsSections(E) {
       py: CK_SMART_S7_PY, cpp: CK_SMART_S7_CPP,
       why: [
         t(E, "matches starts at baseMatches. Each widen touches only left,right: remove the old in-place match (−), add the new flipped match (+).",
-            "matches는 baseMatches에서 시작. 한 번 넓힐 때 left,right만: 원래 맞던 것 빼고(−), 뒤집혀 새로 맞으면 더함(+)."),
+            "matches 는 baseMatches 에서 시작해요. 한 번 넓힐 때 건드리는 건 left, right 두 자리뿐이에요. 원래 맞던 건 빼고(−), 뒤집혀 새로 맞으면 더해요(+)."),
         t(E, "answer[matches] += 1 records this interval's checkup count. Each step is O(1).",
-            "answer[matches] += 1 로 이 구간 검진 수를 기록. 한 스텝은 O(1)."),
+            "answer[matches] += 1 로 이 구간의 검진 수를 기록해요. 한 걸음은 O(1) 이에요."),
       ],
     },
     {
@@ -1721,9 +1721,9 @@ export function getCheckupsSections(E) {
       py: CK_SMART_S8_PY, cpp: CK_SMART_S8_CPP,
       why: [
         t(E, "Odd center [i,i] = one spot (no flip). Even center [i,i+1] = two spots. Both for every i → every interval exactly once.",
-            "홀수 중심 [i,i]=한 칸(안 뒤집음). 짝수 중심 [i,i+1]=두 칸. i마다 둘 다 → 모든 구간 딱 한 번씩."),
+            "홀수 중심 [i,i] 는 한 칸이라 안 뒤집혀요. 짝수 중심 [i,i+1] 은 두 칸이에요. i 마다 둘 다 돌면 모든 구간을 딱 한 번씩 봐요."),
         t(E, "Finally print answer[0..N], one per line.",
-            "마지막에 answer[0..N] 한 줄씩 출력."),
+            "마지막으로 answer[0..N] 을 한 줄씩 출력해요."),
       ],
     },
     /* ── 9️⃣ Full center-expansion code — every piece together. ── */
@@ -1733,9 +1733,9 @@ export function getCheckupsSections(E) {
       py: CK_SMART_FULL_PY, cpp: CK_SMART_FULL_CPP,
       why: [
         t(E, "All pieces: input → baseMatches → expand (widen from centers, fix 2 ends) → answer → print.",
-            "조각 전부: 입력 → baseMatches → expand(중심서 넓히며 두 끝 고침) → answer → 출력."),
+            "조각을 다 모으면 입력 → baseMatches → expand(중심에서 넓히며 두 끝 고치기) → answer → 출력이에요."),
         t(E, "Total O(N²): each center widens up to N/2 times, and there are ~N centers.",
-            "총 O(N²): 중심마다 최대 N/2 번, 중심 ~N개."),
+            "중심마다 최대 N/2 번 넓히고 중심이 ~N 개니까 다 합쳐 O(N²) 예요."),
       ],
     },
   ];
@@ -1808,19 +1808,19 @@ export function downloadCheckupsPDF(E, sections, lang = "py") {
   .box { background: #fee2e2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 10px 12px; margin: 8px 0; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO January 2025 Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 <h2>1. ${t(E, "Problem", "문제")}</h2>
 <p>${t(E,
   "FJ has N cows with species cow[i]. The vet checks cow i if cow[i] == want[i]. FJ performs ONE operation: reverse a subarray [l, r]. For each c = 0..N, count operations leaving exactly c cows checked.",
-  "FJ 에 N 마리 소, 종 cow[i]. 수의사는 cow[i] == want[i] 일 때만 i 검진. FJ 가 한 번 [l, r] 뒤집기. c = 0..N 각각에 대해 정확히 c 마리 검진되는 연산 개수.")}</p>
-<h2>2. ${t(E, "Insight: reversing is symmetric", "통찰: 뒤집기는 대칭")}</h2>
+  "FJ 에게 소 N 마리가 있고, i 번 자리 소의 종은 cow[i] 예요. 수의사는 cow[i] == want[i] 일 때만 그 소를 검진해요. FJ 는 구간 [l, r] 을 딱 한 번 뒤집어요. c = 0..N 마다 정확히 c 마리가 검진되는 뒤집기가 몇 개인지 세는 문제예요.")}</p>
+<h2>2. ${t(E, "Insight: reversing is symmetric", "핵심 — 뒤집기는 대칭이에요")}</h2>
 <div class="box">
   <b>💡 ${t(E, "Why only two ends change", "왜 두 끝만 바뀌나")}</b>
   ${t(E,
     "Reversing an interval is symmetric about its center. Widen both sides equally and the middle cows keep their spots — only the two new ends swap in. So a bigger interval's checkup count = the smaller one's, fixed at just the two ends (O(1)). Sweep every center → O(N²).",
-    "구간 뒤집기는 가운데 기준 대칭. 양쪽을 똑같이 넓혀도 가운데 소는 자리 그대로 — 새 두 끝만 서로 바뀜. 그래서 큰 구간의 검진 수 = 작은 구간에서 두 끝만 고친 값 (O(1)). 모든 중심을 훑으면 O(N²).")}
+    "구간 뒤집기는 가운데를 기준으로 대칭이에요. 양쪽을 똑같이 넓혀도 가운데 소는 자리가 그대로고, 새로 들어온 두 끝만 서로 바뀌어요. 그래서 큰 구간의 검진 수는 작은 구간에서 두 끝만 고치면 나와요 (O(1)). 모든 중심을 훑으면 O(N²) 예요.")}
 </div>
 <h2>3. ${t(E, "Code", "코드")}</h2>
 ${sections.map(s => `

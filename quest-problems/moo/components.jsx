@@ -369,7 +369,7 @@ export function MooBruteRunner({ E }) {
               </tbody>
             </table>
             <div style={{ marginTop: 6, fontSize: 10, color: C.dim, lineHeight: 1.5 }}>
-              {t(E, "Estimate: 26 × N² ops / 10⁸ ops/sec (C++).", "추정: 26 × N² 연산 / 1억 ops/sec (C++).")}
+              {t(E, "Estimate: 26 × N² ops / 10⁸ ops/sec (C++).", "26 × N² 번 계산을 1초에 1억 번 속도(C++)로 했을 때 어림한 값이에요.")}
             </div>
           </div>
         </div>
@@ -643,7 +643,7 @@ export function MooRTRSim({ E }) {
 
       <div style={{ marginTop: 10, fontSize: 11, color: C.dim, textAlign: "center", lineHeight: 1.6 }}>
         {t(E, "Notice: outside the affected windows, mydict never moves.\nThat's why this is O(78N), not O(26N²).",
-            "관찰: 영향받는 윈도우 밖에서는 mydict 가 움직이지 않아요.\n그래서 O(26N²) 가 아니라 O(78N).")}
+            "영향받는 윈도우 밖에서는 mydict 가 움직이지 않아요.\n그래서 O(26N²) 가 아니라 O(78N) 이에요.")}
       </div>
     </div>
   );
@@ -765,11 +765,11 @@ export function getMooBruteSections(E) {
       py: BR_INPUT_PY, cpp: BR_INPUT_CPP,
       why: [
         t(E, "Read n, f, the string, and start an empty set for distinct moos.",
-            "n, f, 문자열 받고 distinct moo 모을 빈 set 시작."),
+            "n, f, 문자열을 읽고, 서로 다른 moo 를 모을 빈 set 을 만들어요."),
       ],
       pyOnly: [
         t(E, "list() so we can swap letters later (strings are immutable).",
-            "list() 로 받아야 나중에 글자 바꿀 수 있음 (문자열은 변경 불가)."),
+            "list() 로 받아야 나중에 글자를 바꿀 수 있어요 (문자열은 못 바꿔요)."),
       ],
       cppOnly: [],
     },
@@ -779,22 +779,22 @@ export function getMooBruteSections(E) {
       py: BR_HELPERS_PY, cpp: BR_HELPERS_CPP,
       why: [
         t(E, "Two helpers: is_moo (1st ≠ 2nd, 2nd = 3rd) and count_all (scan once, return {moo: count}).",
-            "헬퍼 둘: is_moo (1번째 ≠ 2번째, 2번째 = 3번째) 와 count_all (한 번 훑어서 {moo: 개수} 반환)."),
+            "도우미 함수가 둘이에요.\nis_moo 는 1번째 ≠ 2번째, 2번째 = 3번째 인지 봐요.\ncount_all 은 한 번 훑어서 {moo: 개수} 를 돌려줘요."),
         t(E, "count_all costs O(N) per call — that's what next section will call 26N times. The bottleneck.",
-            "count_all 은 호출당 O(N) — 다음 섹션이 이걸 26N 번 호출. 그게 병목."),
+            "count_all 은 한 번 부를 때마다 O(N) 이에요.\n다음 섹션이 이걸 26N 번이나 불러요. 그게 병목이에요."),
       ],
       pyOnly: [],
       cppOnly: [],
     },
     {
-      label: t(E, "🐌 3. Trial Loop (THE TLE)", "🐌 3. 시도 루프 (TLE 원인!)"),
+      label: t(E, "🐌 3. Trial Loop (THE TLE)", "🐌 3. 시도 반복 (TLE 원인!)"),
       color: "#dc2626",
       py: BR_LOOP_PY(E), cpp: BR_LOOP_CPP(E),
       why: [
         t(E, "For every position × every letter: swap, re-scan the whole string, restore.",
-            "모든 위치 × 모든 글자: 글자 바꾸고, 문자열 전체 다시 훑고, 원래대로 복원."),
+            "모든 위치와 모든 글자에 대해 글자를 바꾸고, 문자열 전체를 다시 훑고, 원래대로 되돌려요."),
         t(E, "26N trials × O(N) scan = O(26N²). At N=20,000 → ~10¹⁰ ops → TLE.",
-            "26N 시도 × O(N) 스캔 = O(26N²). N=20,000 → ~10¹⁰ 연산 → TLE."),
+            "26N 번 시도 × O(N) 훑기 = O(26N²) 예요.\nN=20,000 이면 약 10¹⁰ 번 계산이라 TLE 예요."),
       ],
       pyOnly: [],
       cppOnly: [],
@@ -805,11 +805,11 @@ export function getMooBruteSections(E) {
       py: BR_OUTPUT_PY, cpp: BR_OUTPUT_CPP,
       why: [
         t(E, "Print K, then the K moos in alphabetical order.",
-            "K 출력 → K 개 moo 를 알파벳순으로 출력."),
+            "K 를 출력하고, 그다음 K 개 moo 를 알파벳순으로 출력해요."),
       ],
       pyOnly: [
         t(E, "sorted() the set once at the end.",
-            "마지막에 set 한 번 sorted()."),
+            "마지막에 set 을 한 번 sorted() 해요."),
       ],
       cppOnly: [],
     },
@@ -969,11 +969,11 @@ export function getMooSections(E) {
       color: A,
       py: MOO_INPUT_PY, cpp: MOO_INPUT_CPP,
       why: [
-        t(E, "Read n, f, then the string.", "n, f 받고 문자열도 받기."),
+        t(E, "Read n, f, then the string.", "n 과 f 를 읽고, 그다음 문자열도 읽어요."),
       ],
       pyOnly: [
         t(E, "list() so we can swap letters later (strings are immutable).",
-            "list() 로 받아야 나중에 글자 바꿀 수 있음 (문자열은 변경 불가)."),
+            "list() 로 받아야 나중에 글자를 바꿀 수 있어요 (문자열은 못 바꿔요)."),
       ],
       cppOnly: [],
     },
@@ -983,15 +983,15 @@ export function getMooSections(E) {
       py: MOO_PRECOUNT_PY, cpp: MOO_PRECOUNT_CPP,
       why: [
         t(E, "Scan the string once and count every moo into a dictionary — so the trial loop later only updates what changed.",
-            "문자열 한 번 훑어서 모든 moo 를 dictionary 에 세 놓기 — 나중에 시도 루프는 *바뀌는 부분만* 고침."),
+            "문자열을 한 번 훑어서 모든 moo 를 dict 에 세어 둬요 — 그러면 나중에 시도 반복은 *바뀌는 부분만* 고쳐요."),
       ],
       pyOnly: [
         t(E, "defaultdict(int) auto-starts new keys at 0 — no `if key in dict` check.",
-            "defaultdict(int) 는 새 키를 자동 0 으로 시작 — `if key in dict` 검사 불필요."),
+            "defaultdict(int) 는 새 키를 자동으로 0 에서 시작해요 — `if key in dict` 로 검사하지 않아도 돼요."),
       ],
       cppOnly: [
         t(E, "map<string,int> auto-inits to 0 on first []; bonus: iterates keys in sorted order.",
-            "map<string,int> 도 `[]` 첫 접근 시 자동 0; 보너스: 키를 정렬 순서로 순회."),
+            "map<string,int> 도 `[]` 로 처음 건드리면 자동으로 0 이 돼요.\n덤으로 키를 정렬된 순서대로 하나씩 꺼내 줘요."),
       ],
     },
     {
@@ -1000,17 +1000,17 @@ export function getMooSections(E) {
       py: MOO_TRY_PY(E), cpp: MOO_TRY_CPP,
       why: [
         t(E, "For each position: subtract its 3 windows, try 26 letters, restore. (We already played this in Ch4's simulator.)",
-            "각 위치마다: 그 위치의 3 윈도우를 빼고, 26 글자 시도, 복원. (Ch4 시뮬에서 해 본 그 동작.)"),
+            "각 위치에서 그 위치의 3 윈도우를 빼고, 26 글자를 넣어 보고, 다시 복원해요. (Ch4 시뮬에서 해 본 그 동작이에요.)"),
         t(E, "+1 → check → -1 between trials is required — without -1, counts leak into the next letter.",
-            "시도마다 +1 → 확인 → -1 필수 — -1 빼먹으면 카운트가 다음 글자로 샘."),
+            "시도마다 +1 → 확인 → -1 을 꼭 해야 해요 — -1 을 빼먹으면 개수가 다음 글자로 새어 나가요."),
       ],
       pyOnly: [
         t(E, "Copy the window into a fresh list before swapping, so other windows still see the original.",
-            "swap 전에 윈도우를 새 list 로 복사 — 다른 윈도우는 원본 그대로 봄."),
+            "글자를 바꾸기 전에 윈도우를 새 list 로 복사해요 — 다른 윈도우는 원본을 그대로 봐요."),
       ],
       cppOnly: [
         t(E, "Swap s[pos] in place then restore — faster than copying the window.",
-            "s[pos] in-place 로 바꿨다 복원 — 윈도우 복사보다 빠름."),
+            "s[pos] 를 제자리에서 바꿨다가 되돌려요 — 윈도우를 복사하는 것보다 빨라요."),
       ],
     },
     {
@@ -1019,11 +1019,11 @@ export function getMooSections(E) {
       py: MOO_FULL_PY(E), cpp: MOO_FULL_CPP,
       why: [
         t(E, "Print the count K, then the K moos in alphabetical order.",
-            "개수 K 출력 → K 개 moo 를 알파벳순으로 출력."),
+            "개수 K 를 출력하고, 그다음 K 개 moo 를 알파벳순으로 출력해요."),
       ],
       pyOnly: [
         t(E, "sorted() the set once at the end — sets have no order.",
-            "마지막에 set 한 번 sorted() — set 은 순서 없음."),
+            "마지막에 set 을 한 번 sorted() 해요 — set 은 순서가 없거든요."),
       ],
       cppOnly: [],
     },
@@ -1112,7 +1112,7 @@ export function downloadMooPDF(E, sections, lang = "py") {
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
 
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF' as the destination.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF' as the destination.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO 2024 December Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
@@ -1120,14 +1120,14 @@ export function downloadMooPDF(E, sections, lang = "py") {
 <h2>1. ${t(E, "Problem", "문제")}</h2>
 <p>${t(E,
   "A length-N string of lowercase letters contains 'moo'-like patterns: 3-letter ABB where A≠B (e.g., 'moo', 'baa', 'tee'). Bessie says the recording may have AT MOST 1 typo. Find all moo patterns that appear ≥ F times — either in the original string OR after changing exactly one letter somewhere.",
-  "길이 N 의 소문자 문자열에 'moo' 같은 패턴: ABB (A≠B) 형태 3 글자 (예: 'moo', 'baa', 'tee'). Bessie 가 녹음에 최대 1 글자 오타 가능하다고 함. F 번 이상 나오는 모든 moo 패턴 찾기 — 원본 그대로 OR 정확히 1 글자 바꾼 후.")}</p>
+  "길이 N 인 소문자 문자열 안에서 'moo' 같은 패턴을 찾아요. 패턴은 ABB (A≠B) 모양의 3 글자예요 (예를 들어 'moo', 'baa', 'tee'). Bessie 는 녹음에 오타가 많아야 1 글자 있을 수 있대요. 원래 문자열 그대로이거나 딱 1 글자를 바꾼 뒤에 F 번 이상 나오는 moo 패턴을 모두 찾으면 돼요.")}</p>
 
 <h3>${t(E, "Input / Output", "입출력")}</h3>
 <table>
   <tr><th>${t(E, "Input", "입력")}</th><th>${t(E, "Output", "출력")}</th></tr>
-  <tr><td>N F (first line)<br>S (lowercase string)</td><td>K (count of distinct qualifying moos)<br>${t(E, "Then K moos sorted alphabetically", "그 다음 정렬된 moo K 개")}</td></tr>
+  <tr><td>N F (first line)<br>S (lowercase string)</td><td>K (count of distinct qualifying moos)<br>${t(E, "Then K moos sorted alphabetically", "그다음 알파벳순으로 정렬한 moo K 개")}</td></tr>
 </table>
-<p>${t(E, "Constraints: 3 ≤ N ≤ 20,000.", "제약: 3 ≤ N ≤ 20,000.")}</p>
+<p>${t(E, "Constraints: 3 ≤ N ≤ 20,000.", "제약은 3 ≤ N ≤ 20,000 이에요.")}</p>
 
 <h3>${t(E, "Sample I/O", "예제 입출력")}</h3>
 <table>
@@ -1136,10 +1136,10 @@ export function downloadMooPDF(E, sections, lang = "py") {
 zzmoozzmoo</pre></td><td><pre style="margin:0;background:#0f172a;color:#f8fafc;font-size:11px;">1
 moo</pre></td></tr>
 </table>
-<p>${t(E, "'moo' appears twice (≥ F=2). Even with 1 letter change, no other pattern reaches 2.", "'moo' 가 2 번 (≥ F=2). 1 글자 바꿔도 새로 2 번 도달 패턴 없음.")}</p>
+<p>${t(E, "'moo' appears twice (≥ F=2). Even with 1 letter change, no other pattern reaches 2.", "'moo' 가 2 번 나와요 (≥ F=2). 1 글자를 바꿔도 새로 2 번에 도달하는 패턴은 없어요.")}</p>
 
 <h2>2. ${t(E, "Brute Force (TLE)", "브루트 포스 (TLE)")}</h2>
-<p>${t(E, "Direct: for each of N positions, try all 26 letters, then re-scan the entire string for moos. O(26N²).", "직접: N 위치마다 26 글자 시도, 매번 전체 재스캔. O(26N²).")}</p>
+<p>${t(E, "Direct: for each of N positions, try all 26 letters, then re-scan the entire string for moos. O(26N²).", "가장 곧이곧대로 하면 N 개 위치마다 26 글자를 넣어 보고, 그때마다 전체를 다시 훑어요. O(26N²) 예요.")}</p>
 
 ${codeBlock([
   "import sys",
@@ -1175,38 +1175,38 @@ ${codeBlock([
 
 <div class="box no">
   <b>${t(E, "Why TLE?", "왜 TLE?")}</b>
-  ${t(E, "N=20,000: 26 × 4×10⁸ = ~10¹⁰ ops. At 10⁸ ops/sec → ~100 sec. TLE.", "N=20,000: 26 × 4×10⁸ = ~10¹⁰ 연산. 1억 ops/sec → ~100 초. TLE.")}
+  ${t(E, "N=20,000: 26 × 4×10⁸ = ~10¹⁰ ops. At 10⁸ ops/sec → ~100 sec. TLE.", "N=20,000 이면 26 × 4×10⁸ = 약 10¹⁰ 번 계산이에요. 1초에 1억 번이면 약 100 초라 TLE 예요.")}
 </div>
 
-<h2>3. ${t(E, "Pattern: Remove → Try → Restore", "패턴: 빼기 → 시도 → 복원")}</h2>
+<h2>3. ${t(E, "Pattern: Remove → Try → Restore", "빼기 → 시도 → 복원 패턴")}</h2>
 
 <div class="box ok">
   <b>💡 ${t(E, "Key insight", "핵심 통찰")}</b>:
-  ${t(E, "Changing 1 letter at position pos affects ONLY 3 windows (those containing pos). The other N-3 windows don't change.", "위치 pos 의 1 글자를 바꾸면 영향받는 윈도우는 정확히 3 개 (pos 포함). 나머지 N-3 윈도우는 안 변함.")}
+  ${t(E, "Changing 1 letter at position pos affects ONLY 3 windows (those containing pos). The other N-3 windows don't change.", "위치 pos 의 1 글자를 바꾸면 영향받는 윈도우는 정확히 3 개예요 (pos 가 들어 있는 것). 나머지 N-3 윈도우는 안 변해요.")}
 </div>
 
-<h3>${t(E, "Why exactly 3?", "왜 정확히 3?")}</h3>
-<p>${t(E, "Position pos can be the 1st, 2nd, or 3rd letter of a 3-letter window. So 3 windows include pos: starting at idx = pos-2, pos-1, pos.", "위치 pos 는 윈도우의 1번째, 2번째, 3번째 글자가 될 수 있음. 그래서 idx = pos-2, pos-1, pos 에서 시작하는 3 윈도우.")}</p>
+<h3>${t(E, "Why exactly 3?", "왜 정확히 3 개일까요?")}</h3>
+<p>${t(E, "Position pos can be the 1st, 2nd, or 3rd letter of a 3-letter window. So 3 windows include pos: starting at idx = pos-2, pos-1, pos.", "위치 pos 는 윈도우의 1번째, 2번째, 3번째 글자가 될 수 있어요. 그래서 idx = pos-2, pos-1, pos 에서 시작하는 윈도우 3 개예요.")}</p>
 
 <h3>${t(E, "Strategy", "전략")}</h3>
 <ol>
-  <li><b>${t(E, "Pre-count", "미리 세기")}</b>: ${t(E, "scan original ONCE, store moo counts in dict.", "원본 한 번 스캔, dict 에 카운트 저장.")}</li>
-  <li><b>${t(E, "For each pos:", "각 pos 마다:")}</b>
+  <li><b>${t(E, "Pre-count", "미리 세기")}</b>: ${t(E, "scan original ONCE, store moo counts in dict.", "원본을 한 번 훑어서 dict 에 개수를 저장해요.")}</li>
+  <li><b>${t(E, "For each pos:", "각 pos 에서")}</b>
     <ul>
-      <li>🔴 ${t(E, "REMOVE: subtract 3 windows", "빼기: 3 윈도우 빼기")}</li>
-      <li>🟡 ${t(E, "TRY 26 letters: temp add, check ≥ f, immediately undo", "26 글자: 임시 더하고 체크, 즉시 되돌리기")}</li>
-      <li>🟢 ${t(E, "RESTORE: add back 3 windows", "복원: 3 윈도우 다시 더하기")}</li>
+      <li>🔴 ${t(E, "REMOVE: subtract 3 windows", "빼기 — 3 윈도우 빼기")}</li>
+      <li>🟡 ${t(E, "TRY 26 letters: temp add, check ≥ f, immediately undo", "26 글자 — 임시로 더하고 확인한 뒤 바로 되돌리기")}</li>
+      <li>🟢 ${t(E, "RESTORE: add back 3 windows", "복원 — 3 윈도우 다시 더하기")}</li>
     </ul>
   </li>
 </ol>
 
 <div class="box">
   <b>${t(E, "Time complexity", "시간복잡도")}:</b>
-  ${t(E, "N positions × 26 letters × 3 windows = 78N. For N=20,000 → 1.56M ops. Instant.", "N × 26 × 3 = 78N. N=20,000 → 156만 연산. 즉시.")}
-  <br>${t(E, "Speedup: 26N² / 78N = N/3 ≈ 6,667× faster.", "속도: 26N² / 78N = N/3 ≈ 6,667 배.")}
+  ${t(E, "N positions × 26 letters × 3 windows = 78N. For N=20,000 → 1.56M ops. Instant.", "N × 26 × 3 = 78N 이에요. N=20,000 이면 156만 번 계산이라 순식간이에요.")}
+  <br>${t(E, "Speedup: 26N² / 78N = N/3 ≈ 6,667× faster.", "26N² / 78N = N/3 이니까 약 6,667 배 빨라요.")}
 </div>
 
-<h2>4. ${t(E, "Optimal Code (4 sections)", "최적 코드 (4 부분)")}</h2>
+<h2>4. ${t(E, "Optimal Code (4 sections)", "제일 좋은 코드 (4 부분)")}</h2>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why">
