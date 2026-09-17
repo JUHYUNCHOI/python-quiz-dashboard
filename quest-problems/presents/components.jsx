@@ -165,7 +165,7 @@ export function PresentsRunner({ E }) {
 /* Section 1: Input */
 const PR_INPUT_PY = [
   "N, Q = map(int, input().split())",
-  "stack = list(map(int, input().split()))  # index 0 = top",
+  "stack = list(map(int, input().split()))  # 0번 자리가 맨 위",
 ];
 const PR_INPUT_CPP = [
   "#include <iostream>",
@@ -185,8 +185,8 @@ const PR_INPUT_CPP = [
 const PR_FIND_PY = [
   "for _ in range(Q):",
   "    target = int(input())",
-  "    pos = stack.index(target)   # 0-based position from top",
-  "    print(pos)                  # presents above = pos",
+  "    pos = stack.index(target)   # 맨 위부터 0 부터 센 위치",
+  "    print(pos)                  # 위에 있는 선물 수 = pos",
 ];
 const PR_FIND_CPP = [
   "    for (int q = 0; q < Q; q++) {",
@@ -194,7 +194,7 @@ const PR_FIND_CPP = [
   "        cin >> target;",
   "",
   "        int pos = 0;",
-  "        while (stack[pos] != target) {        // linear scan from top",
+  "        while (stack[pos] != target) {        // 맨 위부터 하나씩 훑어요",
   "            pos++;",
   "        }",
   "        cout << pos << endl;",
@@ -202,10 +202,10 @@ const PR_FIND_CPP = [
 
 /* Section 3: Remove target */
 const PR_POP_PY = [
-  "    del stack[:pos + 1]        # target + everything above: gone forever",
+  "    del stack[:pos + 1]        # target 과 그 위 모두 영영 사라져요",
 ];
 const PR_POP_CPP = [
-  "        stack.erase(stack.begin(), stack.begin() + pos + 1);  // target + above gone",
+  "        stack.erase(stack.begin(), stack.begin() + pos + 1);  // target 과 그 위가 사라져요",
   "    }",
   "    return 0;",
   "}",
@@ -220,7 +220,7 @@ const PR_FULL_PY = [
   "    target = int(input())",
   "    pos = stack.index(target)",
   "    print(pos)",
-  "    del stack[:pos + 1]  # target + everything above it: gone forever",
+  "    del stack[:pos + 1]  # target 과 그 위에 있는 것 모두 영영 사라져요",
 ];
 const PR_FULL_CPP = [
   "#include <iostream>",

@@ -337,9 +337,9 @@ const BAL_PY = [
   "T = int(input())",
   "for _ in range(T):",
   "    N, M = map(int, input().split())",
-  "    # Insight: string is N '(' followed by M ')' — order is fixed.",
-  "    # Each '(' must pair with a ')' AFTER it.",
-  "    # Maximum pairs = min(N, M). Each pair = 2 chars.",
+  "    # 문자열은 '(' N개 다음 ')' M개, 순서가 고정이에요",
+  "    # '(' 마다 뒤에 있는 ')' 와 짝을 지어요",
+  "    # 최대 짝 수는 min(N, M), 한 쌍은 2 글자예요",
   "    print(2 * min(N, M))",
 ];
 const BAL_CPP = [
@@ -353,7 +353,7 @@ const BAL_CPP = [
   "    for (int tc = 0; tc < T; tc++) {",
   "        long long N, M;",
   "        cin >> N >> M;",
-  "        // Maximum balanced pairs = min(N, M); each pair = 2 chars",
+  "        // 최대 짝 수는 min(N, M), 한 쌍은 2 글자예요",
   "        cout << 2 * min(N, M) << endl;",
   "    }",
   "    return 0;",

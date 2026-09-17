@@ -25,6 +25,32 @@ STR = re.compile(r'"((?:[^"\\]|\\.)*)"')
 CODE_ARRAY = re.compile(r"\[\s*\n((?:[ \t]*\"(?:[^\"\\]|\\.)*\",[ \t]*\n)+)[ \t]*\]")
 CPP_SIGN = re.compile(r"^\s*(#include|using namespace|int main|template\s*<)")
 
+# ⚠️ 2026-09-17: `#include` 로만 C++ 을 알아보면 **조각 배열**에서 틀린다.
+#    `CPP_S1` 처럼 main 중간부터 시작하는 배열에는 `#include` 가 없다.
+#    그러면 파이썬으로 보고 `//` 를 주석이 아니라고 판단해, 순수 주석 줄을
+#    "코드가 바뀌었다" 고 잘못 신고했다(mcc22lamp·lc3 에서 실제로 났다).
+#    그래서 **표를 세서** 정한다. 두 언어의 표가 하나도 없으면 파이썬으로 본다.
+_CPP_STRONG = re.compile(r"^\s*(#include|using namespace|int main|template\s*<)")
+# ⚠️ `->` 와 `::` 는 빼라. 파이썬 **주석 안**에도 흔히 나온다 —
+#    `dq.pop()   # 3rd most expensive -> FREE` 를 C++ 로 오해해 순수 주석 줄을
+#    "코드가 바뀌었다" 고 신고했다. 표는 **코드에만 나오는 모양**이어야 한다.
+_CPP_HINT = re.compile(
+    r"^\s*//|;\s*$|^\s*(int|long|double|bool|char|void|auto|vector<|string |const )\b"
+    r"|\bcout\s*<<|\bcin\s*>>|\bnullptr\b")
+_PY_HINT = re.compile(
+    r"^\s*#(?!include)|^\s*(def|class|elif|import|from|print\()\b|:\s*(#.*)?$"
+    r"|\bTrue\b|\bFalse\b|\bNone\b|\belif\b|\brange\(")
+
+
+def is_cpp_lines(lines):
+    """이 코드 배열이 C++ 인가. 조각 배열(#include 없음)도 맞힌다."""
+    if any(_CPP_STRONG.match(l) for l in lines):
+        return True
+    c = sum(1 for l in lines if _CPP_HINT.search(l))
+    p = sum(1 for l in lines if _PY_HINT.search(l))
+    return c > p
+
+
 
 def arrays(src):
     """[(배열 시작 오프셋, [줄들])] — 코드 배열만."""
@@ -127,7 +153,7 @@ def main():
                              "그래도 **주석만 고치는 작업이 아니다**")
                 bad.append((path, f"{idx + 1}번째 배열의 줄 수가 {len(o)} → {len(n)} {tail}"))
                 continue
-            cpp = any(CPP_SIGN.match(x) for x in n)
+            cpp = is_cpp_lines(n)
             for ln, (a, b) in enumerate(zip(o, n), 1):
                 ca, cb = code_part(a, cpp), code_part(b, cpp)
                 if ca != cb:

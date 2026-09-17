@@ -214,7 +214,7 @@ export function ClockFenceDeepAuditSim({ E }) {
 const FULL_PY = [
   "s = input().strip()",
   "",
-  "# Direction mapping: N=0, E=1, S=2, W=3",
+  "# 방향 번호: N=0, E=1, S=2, W=3",
   "dir_map = {'N': 0, 'E': 1, 'S': 2, 'W': 3}",
   "",
   "right_turns = 0",
@@ -228,7 +228,7 @@ const FULL_PY = [
   "        right_turns += 1",
   "    elif diff == 3:",
   "        left_turns += 1",
-  "    # diff == 2 means U-turn, diff == 0 means straight",
+  "    # diff == 2 면 U턴, diff == 0 이면 직진이에요",
   "",
   "if right_turns > left_turns:",
   "    print('CW')",

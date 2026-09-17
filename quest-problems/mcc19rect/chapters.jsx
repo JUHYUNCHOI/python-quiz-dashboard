@@ -9,7 +9,7 @@ export const SOLUTION_CODE = [
   "N = int(input())",
   "a = list(map(int, input().split()))",
   "",
-  "# List is already sorted (non-decreasing)",
+  "# 리스트는 이미 정렬돼 있어요 (오름차순)",
   "min_diff = float('inf')",
   "for i in range(N - 1):",
   "    diff = a[i + 1] - a[i]",

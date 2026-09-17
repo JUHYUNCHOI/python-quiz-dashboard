@@ -1734,4 +1734,399 @@ export const CODE_COMMENT_EN: Record<string, string> = {
     "(B) buy less here, leave the rest to smaller blocks",
   "딱 맞게 산 경우도 후보다":
     "covering it exactly is also a candidate",
+
+  /* 2026-09-17 — 코드 주석을 한국어로 옮기면서 생긴 짝.
+     ⚠️ 영어 쪽은 **옛 판의 원문 그대로**다. 지어낸 번역이 아니라 git 에서 꺼냈다. */
+  "'(' 가 모두 ')' 보다 앞에 있어서":
+    "Since all '(' come before all ')',",
+  "'(' 마다 뒤에 있는 ')' 와 짝을 지어요":
+    "Each '(' must pair with a ')' AFTER it.",
+  "'X는 Y의 직전/직후 <동물> 해에 태어났다' 형식이에요":
+    "'born in <prev/next> <Animal> year from <name>'",
+  "(c+1)/2 는 ceil(c/2) 예요":
+    "(c+1)/2 = ceil(c/2)",
+  "(perm 을 처음 배열이 될 때까지 적용해요)":
+    "(apply perm until we get identity)",
+  "0,0 쌍":
+    "pair 0,0",
+  "0,1 / 1,0 쌍":
+    "pair 0,1 / 1,0",
+  "0~L 중 F + s*d 가 k 이상인 정수 d 는 몇 개?":
+    "how many integers d in 0..L have F + s*d >= k?",
+  "0번 자리가 맨 위":
+    "index 0 = top",
+  "0부터 시작하는 인덱스로 바꿔요":
+    "0-indexed",
+  "1,1 쌍":
+    "pair 1,1",
+  "1. 누적합 리스트":
+    "1. prefix-sum list",
+  "1부터 시작하는 인덱스로 출력해요":
+    "Output 1-indexed",
+  "2 번째로 비싼 것":
+    "2nd most expensive",
+  "2 번째로 비싼 것 -> 지불":
+    "2nd most expensive -> pay",
+  "2. 차이가 k 인 쌍 세기":
+    "2. count pairs that differ by k",
+  "2^k (k 가 1e18 까지!)":
+    "2^k  (k up to 1e18!)",
+  "2^k (k 가 1e18 까지)":
+    "2^k  (k up to 1e18)",
+  "3 번째로 비싼 것 -> 무료":
+    "3rd most expensive -> FREE",
+  "A/B 는 오른쪽으로 자라요 → 가로가 두 배":
+    "A / B grow RIGHT -> width doubles",
+  "A[i] != B[i] 인 연속 구간 개수를 세요":
+    "Count contiguous blocks where A[i] != B[i]",
+  "A[i] 보다 작은 값들의 L_(k-1) 합":
+    "sum of L_{k-1} over < A[i]",
+  "A[i] 보다 큰 값들의 합":
+    "sum over > A[i]",
+  "A[i] 앞 작은 값 (L) / 뒤 큰 값 (R)":
+    "< A[i] before i (L) / > after (R)",
+  "B 가 이 복사본을 좌우로 뒤집었어요":
+    "B flipped this copy horizontally",
+  "Bessie 의 출생 연도 (상대값)":
+    "Bessie's birth year (relative)",
+  "C 가 이 복사본을 위아래로 뒤집었어요":
+    "C flipped this copy vertically",
+  "C 는 아래로 자라요 → 세로가 두 배":
+    "C grows DOWN -> height doubles",
+  "C는 (A+B+C) - A - B 로 구해요":
+    "C = (A+B+C) - A - B",
+  "K mod 순환 길이가 실제 라운드 수예요":
+    "K mod cycle gives effective rounds",
+  "K 를 0부터 T까지 다 시도해요":
+    "Try each K from 0 to T",
+  "K 제약을 더한 다익스트라":
+    "Dijkstra with K constraint",
+  "L_k: 왼쪽 체인을 한 칸 늘려요, 더 작은 값, 더 앞 인덱스":
+    "L_k: extend left chains by one, smaller value, earlier index",
+  "L_k[i] = 길이 k 증가 부분수열의 개수":
+    "L_k[i] = # incr subseqs of length k",
+  "N 글자, S 두루마리, Q 친구":
+    "N letters, S scrolls, Q friends",
+  "N 단계마다 격자 가로/세로 (두 배씩, 한계값에서 멈춤)":
+    "grid width / height after each of the N steps (doubling, but capped)",
+  "N개의 여는 괄호, M개의 닫는 괄호예요":
+    "N opening brackets, M closing brackets",
+  "R 은 건강한 소와 가장 가까운 아픈 소 사이 거리보다 작아야 해요":
+    "R must be < min distance from any healthy to nearest sick",
+  "R_k: 오른쪽에서 같은 방식, 더 큰 값, 더 뒤 인덱스":
+    "R_k: same idea from the right, larger value, later index",
+  "a 를 두 번 붙여요":
+    "a + a",
+  "a+b 가 큰 쌍부터 오도록 정렬해요":
+    "sort so the biggest a+b pairs come first",
+  "adj[x] = x 다음에 올 수 있는 단어들이에요.":
+    "adj[x] = the words allowed right after x.",
+  "b 가 a 를 돌린 것인지 확인해요":
+    "Check if b is a rotation of a",
+  "b 는 a 를 돌린 것이에요":
+    "b appears as a subarray in a + a",
+  "best 가 답이에요":
+    "best is the answer",
+  "ceil(c/2) 자리로 0 을 채우고 앞자리부터 오게 뒤집어요":
+    "left-pad to ceil(c/2) digits, then most-significant first",
+  "count 가 정답이에요":
+    "count is the answer",
+  "diff == 2 면 U턴, diff == 0 이면 직진이에요":
+    "diff == 2 means U-turn, diff == 0 means straight",
+  "i 번째 창문이 b 와 같은지":
+    "does the window at i match b?",
+  "i 부터 쓴 글자들":
+    "letters used from i",
+  "k번 변신한 뒤 이웃 쌍의 beauty 는":
+    "after k transforms, one adjacent pair's beauty depends",
+  "obj.sumRange(0, 2)  →  1   (O(1) 로 바로 찾아요!)":
+    "obj.sumRange(0, 2)  →  1   (O(1) lookup!)",
+  "perm[l..r] 을 뒤집어요":
+    "Reverse perm[l..r]",
+  "prefix[i] 는 nums[0..i-1] 의 합이에요":
+    "prefix[i] = sum(nums[0..i-1])",
+  "r 을 K 진법으로 적어요 -> 앞 절반 (아래 자리부터)":
+    "write r in base K -> the front half (least digit first)",
+  "r 을 k 진법으로 적어요 -> 앞 절반 (아래 자리부터)":
+    "write r in base k -> the front half (least digit first)",
+  "suffix_max: i 일부터 끝까지 중 가장 비싼 가격":
+    "Suffix maximum: best future price from day i onward",
+  "target 과 그 위 모두 영영 사라져요":
+    "target + everything above: gone forever",
+  "target 과 그 위가 사라져요":
+    "target + above gone",
+  "target 과 그 위에 있는 것 모두 영영 사라져요":
+    "target + everything above it: gone forever",
+  "target 을 스택에서 치워요 (꺼낸 거예요)":
+    "Remove target from stack (it's taken out)",
+  "target 의 스택 안 위치를 찾아요":
+    "Find position of target in stack",
+  "turn 0,2,4,... 는 Evirir (+a) / turn 1,3,5,... 는 Rhae (-b)":
+    "turn 0,2,4,... = Evirir (+a) / turn 1,3,5,... = Rhae (-b)",
+  "{누적합 값 : 몇 번}":
+    "{prefix value: how many times}",
+  "가로 방향 이웃 (같은 y, 다른 x)":
+    "horizontal neighbors (same y, different x)",
+  "가장 긴 균형 부분수열을 구해요":
+    "the string '(' * N + ')' * M",
+  "가장 작은 값이 A, 두 번째로 작은 값이 B, 가장 큰 값이 A+B+C예요":
+    "smallest is A, second smallest is B, largest is A+B+C",
+  "가장 작은 수가 A예요 (A <= B <= C 라서)":
+    "The smallest number is A (since A <= B <= C)",
+  "가장 큰 번호보다 조금 큰 한계값":
+    "just above the biggest index",
+  "가장 큰 수가 A+B+C예요":
+    "The largest number is A+B+C",
+  "각 점을 직각 꼭짓점으로 두고 봐요":
+    "For each point as the right-angle vertex",
+  "각 주장을 필요한 타입으로 바꿔요":
+    "decode each claim to the type it DEMANDS,",
+  "간격이 max_R 보다 큰 곳마다 클러스터를 세요":
+    "Count clusters of sick cows with gaps > max_R",
+  "값은 'previous' 또는 'next'":
+    "'previous' or 'next'",
+  "값을 1..m 등수로 눌러 담아요":
+    "compress values to ranks 1..m",
+  "값을 1..m 등수로 눌러 담아요 (A_i 는 최대 1e9)":
+    "compress values to ranks 1..m (A_i up to 1e9)",
+  "같은 구간 안에서 +D 씩 계속 옮겨요":
+    "then keep stepping +D inside the same interval",
+  "거짓말쟁이는 뒤집어요":
+    "liar: flip the claim",
+  "건강한 소들로부터 가장 큰 R 을 구해요":
+    "Find max R from healthy cows",
+  "검사 ①: 모든 단어가 5개 중 하나여야 해요":
+    "check ①: every word must be one of the 5 valid words",
+  "검사 ②: 이웃한 쌍마다 화살표가 있어야 해요":
+    "check ②: every consecutive pair must have an arrow",
+  "겹치면 → 멈춤":
+    "repeat → stop",
+  "균형 부분수열 = min(N, M) 쌍":
+    "Balanced = min(N, M) pairs = 2 * min(N, M)",
+  "그 위에 있는 선물을 모두 치워야 해요":
+    "Must remove all presents above it",
+  "그리디: 각 구간에서 last+D 자리(또는 구간 시작)에 놓고,":
+    "greedy: in each interval, place at last+D (or interval start),",
+  "글자 -> 마지막으로 본 자리":
+    "letter -> last index",
+  "길이 c 안에서 0 부터 센 순위 r 을 구해요":
+    "find the 0-indexed rank r inside length c",
+  "길이 l 짜리 회문 개수는 K^ceil(l/2) 예요":
+    "count of length-l palindromes = K^ceil(l/2)",
+  "길이 l 짜리 회문 개수는 k ** ceil(l/2) 예요":
+    "count of length-l palindromes = k ** ceil(l/2)",
+  "길이를 늘리며 개수를 더해 N 에 닿을 때까지 가요":
+    "walk lengths, adding counts, until we reach N",
+  "길이를 늘리며 개수를 더해 n 에 닿을 때까지 가요":
+    "walk lengths, adding counts, until we reach n",
+  "꺾이는 점들을 훑으며 기울기 s 와 밝기 F 를 갱신해요":
+    "sweep the breakpoints, tracking slope s and brightness F",
+  "남은 것 중 제일 싼 것":
+    "cheapest remaining",
+  "남은 것 중 제일 싼 것 -> 지불":
+    "cheapest remaining -> pay",
+  "내림세: d <= floor((k-F)/s) 필요":
+    "falling: need d <= floor((k-F)/s)",
+  "내림세: d <= floor(num/s)":
+    "falling: d <= floor(num/s)",
+  "누적":
+    "accumulate",
+  "눌러 담은 값 위에 펜윅 트리(BIT) 를 만들어요":
+    "Fenwick (BIT) over compressed values",
+  "단계마다 격자 가로/세로 (두 배씩, 한계값에서 멈춤)":
+    "grid width / height after each step (doubling, but capped)",
+  "답 D 를 이분 탐색해요":
+    "binary search the answer D",
+  "두 번째로 작은 수가 B예요":
+    "The second smallest is B",
+  "두루마리를 거꾸로 따라가요":
+    "walk the scroll BACKWARD",
+  "램프 하나는 텐트: p-b 에서 +1, 꼭짓점 p 에서 -2, p+b 에서 +1":
+    "each lamp is a tent: +1 at p-b, -2 at the peak p, +1 at p+b",
+  "램프 하나는 텐트: p-b 에서 기울기 +1, 꼭짓점 p 에서 -2, p+b 에서 +1":
+    "each lamp is a tent: slope +1 at p-b, -2 at the peak p, +1 at p+b",
+  "레벨 0: 원소 하나하나가 길이 1 부분수열이에요":
+    "level 0: every element is its own length-1 subseq",
+  "리스트는 이미 정렬돼 있어요 (오름차순)":
+    "List is already sorted (non-decreasing)",
+  "마지막 감염 상태":
+    "final infected",
+  "매일 코인 1 개씩 벌어요":
+    "earn 1 coin per day",
+  "맨 위부터 0 부터 센 위치":
+    "0-based position from top",
+  "맨 위부터 하나씩 훑어요":
+    "linear scan from top",
+  "모든 왕복 결과를 모아 큰 것부터 K개를 더해요":
+    "Build the list of all possible per-trip yields, then take the K largest.",
+  "묶음마다":
+    "each stack →",
+  "문법은 고정이에요 — 문제에 주어지고 입력으로 읽지 않아요.":
+    "The grammar is FIXED — given in the problem, not read from input.",
+  "문자열 '(' * N + ')' * M 에서":
+    "But we need longest balanced subsequence of",
+  "문자열은 '(' N개 다음 ')' M개, 순서가 고정이에요":
+    "Insight: string is N '(' followed by M ')' — order is fixed.",
+  "반복 적용으로 순환 길이를 찾아요":
+    "Find cycle length by repeated application",
+  "방향 번호: N=0, E=1, S=2, W=3":
+    "Direction mapping: N=0, E=1, S=2, W=3",
+  "번호 → (행, 열)":
+    "1-D number -> (row, col)",
+  "빈 누계의 나머지는 0":
+    "empty prefix has remainder 0",
+  "빈 누적합":
+    "empty prefix",
+  "세로 방향 이웃 (같은 x, 다른 y)":
+    "vertical neighbors (same x, different y)",
+  "소 N 마리를 이웃 간격 D 이상으로 다 놓을 수 있나?":
+    "can we place all N cows so neighbors are >= D apart?",
+  "소마다 환자 제로로 놓고 시도해요":
+    "Try each cow as patient zero",
+  "십이지 동물 순서 (12년 주기)":
+    "Zodiac animals in order (12-year cycle)",
+  "쌍의 종류만으로 정해져요 — 큰 문자열을 만들 필요가 없어요":
+    "ONLY on the pair type — no need to build the huge string",
+  "아래쪽 복사본 쪽인가?":
+    "in the copied BOTTOM half?",
+  "앞 절반을 거울 대칭해 회문 문자열을 완성해요":
+    "mirror the front half to build the palindrome string",
+  "없는 키 → 0":
+    "missing key → 0",
+  "예시:":
+    "Example:",
+  "옛 글자 다음으로 점프":
+    "jump past old copy",
+  "오늘이 최고가면 코인을 전부 팔아요":
+    "Sell all coins if today's price >= all future prices",
+  "오른쪽 복사본 쪽인가?":
+    "in the copied RIGHT half?",
+  "오름세: d >= ceil((k-F)/s) 필요":
+    "rising: need d >= ceil((k-F)/s)",
+  "오름세: d >= ceil(num/s)":
+    "rising: d >= ceil(num/s)",
+  "오름차순":
+    "ascending",
+  "옮긴 횟수":
+    "handshakes used",
+  "요청마다 찾을 선물을 정해요":
+    "For each query: which present to find",
+  "위에 있는 선물 pos 개를 치워야 해요 (0부터 pos-1 까지)":
+    "Must remove pos presents above it (0-indexed: remove 0..pos-1)",
+  "위에 있는 선물 수 = pos":
+    "presents above = pos",
+  "위에서 아래 순서":
+    "top to bottom",
+  "위치 i, i+1 사이 쌍은 부분문자열 i*(n-i) 개에 들어가요":
+    "the pair joining positions i, i+1 sits inside i*(n-i) substrings",
+  "입력 예: \"Mildred born in previous Cow year from Bessie\"":
+    "\"Mildred born in previous Cow year from Bessie\"",
+  "작은 것 -> 큰 것 순서라 back() 이 제일 비싸고 front() 가 제일 싸요":
+    "small -> big, so back() is most expensive, front() is cheapest",
+  "잘 알려진 방법: b 가 a+a 안에 있으면":
+    "Classic trick: b is rotation of a iff",
+  "점들을 x좌표와 y좌표로 묶어요":
+    "Group points by x-coordinate and y-coordinate",
+  "제일 비싼 것":
+    "most expensive",
+  "제일 비싼 것 -> 지불":
+    "most expensive  -> pay",
+  "지금 연도의 동물이에요":
+    "current animal at year",
+  "진실쟁이는 그대로":
+    "truth-teller: claim as-is",
+  "짝수 묶음은 자유롭게 뒤집을 수 있어요 → |D| 를 가져가요":
+    "even stacks can flip freely → take |D|",
+  "창문 끝":
+    "window end",
+  "창문 시작":
+    "window start",
+  "최대 짝 수는 min(N, M), 한 쌍은 2 글자예요":
+    "Maximum balanced pairs = min(N, M); each pair = 2 chars",
+  "최댓값은 2 * min(N, M) 이에요":
+    "max balanced = 2 * min(N, M)",
+  "출력":
+    "Output",
+  "토막 끝":
+    "subarray end",
+  "토막 시작":
+    "subarray start",
+  "토큰: 이름 \"born\" \"in\" 방향 동물 \"year\" \"from\" 다른이름":
+    "Tokens: name \"born\" \"in\" direction Animal \"year\" \"from\" otherName",
+  "파이썬 // 처럼 음의 무한대 방향으로 내려 잡는 나눗셈":
+    "floor division rounding toward -infinity (like Python //)",
+  "평평함: 모든 칸이 F":
+    "flat: every point equals F",
+  "필요한 T 와 있는 T 를 비교해요":
+    "then compare demand for T with supply of T",
+  "한 라운드의 순열을 만들어요":
+    "Build permutation for one round",
+  "한 번 왕복마다 M 과 벌집에 남은 꿀 중 작은 값을 가져와요":
+    "Each trip to a hive collects min(M, remaining honey).",
+  "한 줄을 읽어 숫자로 나눠요":
+    "Read one line and split it into integers",
+  "홀수 묶음은 부호가 번갈아요 → 정렬해서 위쪽 절반에 +":
+    "odd stacks alternate sign → sort, + to the top half",
+  "홀수 묶음이 없으면 → 부호가 정해져요, D 를 그대로 더해요":
+    "no odd stack → signs forced, sum D directly",
+
+  /* 2026-09-17 (2) — 표에 없던 한국어 주석을 마저 채웠다. 없으면 영어 화면에서 그 줄이 빈다. */
+  "560 과 가장 다른 점이에요. 목표값이 하나로 정해진 게 아니라 k 의 배수면 모두 해당돼요. 그래서 '이 값을 본 적 있나' 하고 하나만 찾아볼 수가 없어요. 새로운 생각이 필요해요.":
+    "the big difference from 560: the target is not one number - any multiple of k counts. So you cannot look up a single value. A new idea is needed.",
+  "560 과 구조가 같고 prefix % k 를 찾아보는 것만 달라요.":
+    "same shape as 560, except we look up prefix % k instead.",
+  "include <algorithm> 이 있어야 해요.":
+    "you need include <algorithm> here.",
+  "include 는 배운 것들로 (iostream, vector, string) 나눠 적어요.":
+    "include the ones we have learned, one per line: iostream, vector, string.",
+  "include 는 배운 것들로 (iostream, vector, string, set) 나눠 적어요.":
+    "include the ones we have learned, one per line: iostream, vector, string, set.",
+  "include 는 배운 것만 써요 (iostream, string). bits/stdc++.h 는 안 써요.":
+    "include only what we have learned: iostream, string. We do not use bits/stdc++.h.",
+  "include 는 배운 헤더 (iostream, vector, algorithm) 로 나눠 적어요.":
+    "include the headers we have learned, one per line: iostream, vector, algorithm.",
+  "include 는 배운 헤더(iostream, string)를 하나씩 나눠 적어요.":
+    "include the headers we have learned, one per line: iostream, string.",
+  "include 는 배운 헤더(iostream, vector, algorithm)를 하나씩 나눠 적어요.":
+    "include the headers we have learned, one per line: iostream, vector, algorithm.",
+  "include 는 배운 헤더(iostream, vector, string)만 하나씩 나눠 적어요.":
+    "include only the headers we have learned, one per line: iostream, vector, string.",
+  "include 는 배운 헤더(iostream, vector, string, map)만 하나씩 나눠 적어요.":
+    "include only the headers we have learned, one per line: iostream, vector, string, map.",
+  "include 는 배운 헤더(iostream, vector, string, set)를 하나씩 나눠 적어요.":
+    "include the headers we have learned, one per line: iostream, vector, string, set.",
+  "include 는 배운 헤더들로 (iostream, vector) 나눠 적어요.":
+    "include the headers we have learned, one per line: iostream, vector.",
+  "include 는 배운 헤더로 (iostream, string, map, algorithm) 나눠 적어요.":
+    "include the headers we have learned, one per line: iostream, string, map, algorithm.",
+  "include 는 배운 헤더로 (iostream, vector) 나눠 적어요.":
+    "include the headers we have learned, one per line: iostream, vector.",
+  "include 는 배운 헤더로 하나씩 나눠 적어요 (iostream, vector, algorithm).":
+    "include the headers we have learned, one per line: iostream, vector, algorithm.",
+  "include 는 배운 헤더를 한 줄에 하나씩 적어요 — iostream, vector, algorithm.":
+    "include the headers we have learned, one per line - iostream, vector, algorithm.",
+  "include 는 배운 헤더만 (iostream, vector, set, algorithm) 하나씩 적어요.":
+    "include only the headers we have learned, one per line: iostream, vector, set, algorithm.",
+  "include 는 이 코드에 필요한 헤더(iostream, vector, queue, tuple)를 하나씩 나눠 적어요.":
+    "include the headers this code needs, one per line: iostream, vector, queue, tuple.",
+  "j 를 혼자 없앨 최소 X":
+    "smallest X that clears j on its own",
+  "그 자리의 값 — 1, 2, 4, 8, ...":
+    "the value of that place - 1, 2, 4, 8, ...",
+  "길이가 짝수일 때":
+    "when the length is even",
+  "묶음이 n = 4 개":
+    "n = 4 piles",
+  "이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (예제 1)":
+    "this contest has no line-by-line input format - it hands you the values (sample 1)",
+  "지금 따라가는 열":
+    "the column we are following",
+  "지금 따라가는 행":
+    "the row we are following",
+  "짝수 바구니 개수":
+    "how many baskets hold an even count",
+  "홀수 — 가운데는 건너뛰기":
+    "odd length - skip the middle one",
+  "홀수 바구니 개수":
+    "how many baskets hold an odd count",
 };

@@ -10,7 +10,7 @@ const PR_WALK_PY = [
   "    target = int(input())",
   "    pos = stack.index(target)",
   "    print(pos)",
-  "    del stack[:pos + 1]  # target + everything above it: gone forever",
+  "    del stack[:pos + 1]  # target 과 그 위에 있는 것 모두 영영 사라져요",
 ];
 const PR_WALK_CPP = [
   "#include <iostream>",
@@ -58,18 +58,18 @@ function getPresentsWalk(E, lang) {
 
 export const SOLUTION_CODE = [
   "N, Q = map(int, input().split())",
-  "stack = list(map(int, input().split()))  # top to bottom",
+  "stack = list(map(int, input().split()))  # 위에서 아래 순서",
   "",
-  "# For each query: which present to find",
-  "# Must remove all presents above it",
+  "# 요청마다 찾을 선물을 정해요",
+  "# 그 위에 있는 선물을 모두 치워야 해요",
   "for _ in range(Q):",
   "    target = int(input())",
-  "    # Find position of target in stack",
+  "    # target 의 스택 안 위치를 찾아요",
   "    pos = stack.index(target)",
-  "    # Must remove pos presents above it (0-indexed: remove 0..pos-1)",
+  "    # 위에 있는 선물 pos 개를 치워야 해요 (0부터 pos-1 까지)",
   "    print(pos)",
-  "    # Remove target from stack (it's taken out)",
-  "    del stack[:pos + 1]  # target + everything above it: gone forever",
+  "    # target 을 스택에서 치워요 (꺼낸 거예요)",
+  "    del stack[:pos + 1]  # target 과 그 위에 있는 것 모두 영영 사라져요",
 ];
 
 export function makePresentsCh1(E) {

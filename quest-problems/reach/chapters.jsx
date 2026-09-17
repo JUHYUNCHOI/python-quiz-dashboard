@@ -28,7 +28,7 @@ export const SOLUTION_CODE = [
   "for _ in range(Q):",
   "    queries.append(int(input()))",
   "",
-  "# Dijkstra with K constraint",
+  "# K 제약을 더한 다익스트라",
   "def solve(K):",
   "    dist = [float('inf')]*(N+1)",
   "    dist[1] = 0",

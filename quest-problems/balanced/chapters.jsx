@@ -49,12 +49,12 @@ export const SOLUTION_CODE = [
   "T = int(input())",
   "for _ in range(T):",
   "    N, M = map(int, input().split())",
-  "    # N opening brackets, M closing brackets",
-  "    # Balanced = min(N, M) pairs = 2 * min(N, M)",
-  "    # But we need longest balanced subsequence of",
-  "    # the string '(' * N + ')' * M",
-  "    # Since all '(' come before all ')',",
-  "    # max balanced = 2 * min(N, M)",
+  "    # N개의 여는 괄호, M개의 닫는 괄호예요",
+  "    # 균형 부분수열 = min(N, M) 쌍",
+  "    # 문자열 '(' * N + ')' * M 에서",
+  "    # 가장 긴 균형 부분수열을 구해요",
+  "    # '(' 가 모두 ')' 보다 앞에 있어서",
+  "    # 최댓값은 2 * min(N, M) 이에요",
   "    print(2 * min(N, M))",
 ];
 

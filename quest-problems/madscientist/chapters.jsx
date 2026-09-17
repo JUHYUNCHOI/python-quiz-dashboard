@@ -12,7 +12,7 @@ export const SOLUTION_CODE = [
   "A = input().strip()",
   "B = input().strip()",
   "",
-  "# Count contiguous blocks where A[i] != B[i]",
+  "# A[i] != B[i] 인 연속 구간 개수를 세요",
   "flips = 0",
   "in_diff = False",
   "for i in range(N):",

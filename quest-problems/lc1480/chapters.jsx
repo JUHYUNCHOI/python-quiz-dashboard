@@ -153,7 +153,7 @@ export function makeChapters(E) {
       code: [
         "def runningSum(nums: list[int]) -> list[int]:",
         "    for i in range(1, len(nums)):",
-        "        nums[i] += nums[i - 1]  # accumulate",
+        "        nums[i] += nums[i - 1]  # 누적",
         "    return nums",
         "",
         "# runningSum([1, 2, 3, 4])  →  [1, 3, 6, 10]",

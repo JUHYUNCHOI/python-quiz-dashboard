@@ -189,7 +189,7 @@ export function makeChapters(E) {
         "def subarraysDivByK(nums: list[int], k: int) -> int:",
         "    count = 0",
         "    prefix_mod = 0",
-        "    remainders = {0: 1}   # empty prefix has remainder 0",
+        "    remainders = {0: 1}   # 빈 누계의 나머지는 0",
         "",
         "    for n in nums:",
         "        prefix_mod = (prefix_mod + n) % k",

@@ -9,8 +9,11 @@ const KA = { wordBreak: "keep-all" };
 /* ── full programs (used for the PDF export & as the canonical reference) ── */
 const FULL_PY = [
   "MOD = 10**9 + 7",
-  "N, P = map(int, input().split())",
-  "a = list(map(int, input().split()))",
+  "",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (예제 1)",
+  "N = 3",
+  "P = 1",
+  "a = [1, 2, 3]",
   "",
   "if P == 1:                       # ➕ 더하기",
   "    # 각 수는 2^(N-1) 개의 부분집합에 등장한다",
@@ -58,12 +61,10 @@ const FULL_CPP = [
   "}",
   "",
   "int main() {",
-  "    int N, P;",
-  "    cin >> N >> P;",
-  "    vector<long long> a(N);",
-  "    for (int i = 0; i < N; i++) {",
-  "        cin >> a[i];",
-  "    }",
+  "    // 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (예제 1)",
+  "    int N = 3;",
+  "    int P = 1;",
+  "    vector<long long> a = {1, 2, 3};",
   "",
   "    long long ans = 0;",
   "    if (P == 1) {                       // ➕ 더하기",
@@ -102,8 +103,11 @@ const FULL_CPP = [
 /* ── per-section fragments for the progressive stepper ── */
 const PY_SETUP = [
   "MOD = 10**9 + 7",
-  "N, P = map(int, input().split())",
-  "a = list(map(int, input().split()))",
+  "",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (예제 1)",
+  "N = 3",
+  "P = 1",
+  "a = [1, 2, 3]",
 ];
 const CPP_SETUP = [
   "#include <iostream>",

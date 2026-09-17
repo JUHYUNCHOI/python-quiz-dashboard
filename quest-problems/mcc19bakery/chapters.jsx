@@ -226,10 +226,10 @@ export const SOLUTION_CODE = [
   "dq = collections.deque(prices)",
   "pay = 0",
   "while dq:",
-  "    pay += dq.pop()      # most expensive",
-  "    pay += dq.pop()      # 2nd most expensive",
-  "    dq.pop()             # 3rd most expensive -> FREE",
-  "    pay += dq.popleft()  # cheapest remaining",
+  "    pay += dq.pop()      # 제일 비싼 것",
+  "    pay += dq.pop()      # 2 번째로 비싼 것",
+  "    dq.pop()             # 3 번째로 비싼 것 -> 무료",
+  "    pay += dq.popleft()  # 남은 것 중 제일 싼 것",
   "print(pay)",
 ];
 

@@ -9,8 +9,11 @@ const KA = { wordBreak: "keep-all" };
    ================================================================ */
 export const SOLUTION_CODE = [
   "MOD = 10**9 + 7",
-  "N, P = map(int, input().split())",
-  "a = list(map(int, input().split()))",
+  "",
+  "# 이 대회는 입력 형식이 따로 없어요. 값을 이렇게 줘요 (예제 1)",
+  "N = 3",
+  "P = 1",
+  "a = [1, 2, 3]",
   "",
   "if P == 1:                       # ➕ 더하기",
   "    ans = pow(2, N - 1, MOD) * (sum(a) % MOD) % MOD",
@@ -155,11 +158,24 @@ export function makeMcc21SimpleMathCh1(E) {
         <div style={{ padding: 16 }}>
           <div style={{ background: "#f0fdf4", border: "1px solid #86efac", borderRadius: 12, padding: 14, marginBottom: 12, ...KA }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#065f46", marginBottom: 8 }}>
-              📥 {t(E, "Input", "입력")}
+              📥 {t(E, "How this contest gives you the values", "이 대회가 값을 주는 방법")}
             </div>
+            {/* ⚠️ 2026-09-17 — 여기 "첫째 줄: N P / 둘째 줄: 수 N 개" 라고 적혀 있었다.
+                **원문에는 그런 형식이 없다.** 원문은 "The input consists of the integers N and P
+                and the array A" 한 줄이고, 예제도 `N = 3 / P = 1 / A = [1, 2, 3]` 로 준다.
+                우리가 지어낸 형식이었다 (선생님: "문제에 나온 인풋이랑 다르게 코드가 있는데?").
+                교육 담당과 학생이 서로 안 보고 둘 다 "원문대로 변수형" 을 골랐다.
+                학생만 말한 걱정 — "그럼 input() 은 언제 배워요?" — 때문에 아래 다리 한 줄이 붙었다. */}
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              <div>• {t(E, "Line 1: ", "첫째 줄: ")}<b>N</b> <b>P</b> {t(E, "(count, then operator selector)", "(수의 개수, 그다음 어떤 연산자를 쓸지)")}</div>
-              <div>• {t(E, "Line 2: ", "둘째 줄: ")}<b>{t(E, "the N numbers", "수 N 개")}</b> A₁ … Aₙ</div>
+              <div>• {t(E, "This contest has no line-by-line input format. It hands you the values directly:",
+                             "이 대회는 줄 단위 입력 형식이 없어요. 값을 그대로 줘요.")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: "#065f46", marginTop: 6, marginLeft: 10 }}>
+                N = 3<br />P = 1<br />A = [1, 2, 3]
+              </div>
+              <div style={{ marginTop: 8, fontSize: 11.5, color: C.dim }}>
+                {t(E, "Reading values line by line with input() shows up in the 2022 problems.",
+                      "input() 으로 줄을 읽어 오는 법은 2022년 문제에서 만나요.")}
+              </div>
             </div>
           </div>
 
