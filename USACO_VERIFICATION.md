@@ -1,6 +1,6 @@
 # USACO Quest 채점 검증 결과
 
-마지막 업데이트: 2026-06-16
+마지막 업데이트: 2026-09-17
 
 **2026-06-16 re-submitted via logged-in browser: 22/22 AC — all pass (3 fixed + re-verified same day)** — C++17, all test cases. AC: sleepclass(11/11 cpid=1203), herdle(11/11 cpid=1179), comfycows(12/12 cpid=1108), photoshoot2(14/14 cpid=1204), moolang(16/16 cpid=1324), feedcows(12/12 cpid=1252), oddphotos(11/11 cpid=1084), photoshoot(11/11 cpid=1227), blocks(20/20 cpid=1205), alchemy(11/11 cpid=1229), reverseeng(12/12 cpid=1253), acowdemia2(10/10 cpid=1132), lonelyphoto(11/11 cpid=1155), stalling(12/12 cpid=1085), drought(15/15 cpid=1181), acowdemia3(12/12 cpid=1133), walkhome(10/10 cpid=1157), aircond(11/11 cpid=1276), stuckinrut(10/10 cpid=1061). FIXED + RE-VERIFIED same day (all AC now): aircond1(10/10 cpid=1156, was missing trailing 0-pad), exchange(16/16 cpid=1396, rewrote O(N) monotonic-chain — was brute O(N·M) TLE), nontrans(11/11 cpid=1180, was missing the second cycle direction).
 
@@ -30,7 +30,7 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `swaptowin` | Swap to Win | Feb 2026 Bronze #3 | ❌ 0/1 (WA: print empty join produces extra newline) | ✅ 12/12 PASS |
 | `strangefn` | Strange Function | Feb 2026 Bronze #2 | ✅ 12/12 PASS | ✅ 12/12 PASS |
 | `makedistinct` | Make All Distinct | Feb 2026 Bronze #1 | ✅ 13/13 PASS | ✅ 13/13 PASS |
-| `buymilk` | Purchasing Milk | Jan 2026 Bronze #3 | ⏳ 재제출 대기 — 2026-07-17 재설계로 TLE 해결 (구 재귀는 5/14). 정규화 c[i]=min(a[i],2c[i-1]) + O(N) 그리디. **⚠️ 2026-09-15: 그 재설계에 버그가 있었다** — `1 << i` 가 큰 i 에서 3만 자리 정수를 만들어 **N=100,000·Q=100 에 164초**였다. 루프를 `min(N-1, 30)` 에서 시작하게 고쳤다(x ≤ 10^9 < 2^30). **고친 뒤 N=100,000·Q=10,000 실측 0.18초.** 브루트포스 300케이스(1800쿼리) 불일치 0, 공식 샘플 일치, 옛 코드가 맞던 N≤63 구간 200케이스 답 동일. | ⏳ 재제출 대기 — 같은 재설계 (구 브루트는 8/9+ TLE). **⚠️ 2026-09-15: `1LL << i` 가 i=N-1 까지 돌아 N≥64 에서 UB — N=64 에 답 0, 무작위 200건 중 142건 오답이었다.** 같은 방식으로 고쳤고 실측 0.15초. PY==CPP 교차 확인(N=30~200). **원인은 로컬 검증이 N≤14 까지만 돌았던 것** — 화면 제약은 N ≤ 100,000 이다. |
+| `buymilk` | Purchasing Milk | Jan 2026 Bronze #3 | ✅ **PASS — 선생님이 2026-09-17 제출해 통과 확인.** (아래는 경위) 2026-07-17 재설계로 TLE 해결 — 2026-07-17 재설계로 TLE 해결 (구 재귀는 5/14). 정규화 c[i]=min(a[i],2c[i-1]) + O(N) 그리디. **⚠️ 2026-09-15: 그 재설계에 버그가 있었다** — `1 << i` 가 큰 i 에서 3만 자리 정수를 만들어 **N=100,000·Q=100 에 164초**였다. 루프를 `min(N-1, 30)` 에서 시작하게 고쳤다(x ≤ 10^9 < 2^30). **고친 뒤 N=100,000·Q=10,000 실측 0.18초.** 브루트포스 300케이스(1800쿼리) 불일치 0, 공식 샘플 일치, 옛 코드가 맞던 N≤63 구간 200케이스 답 동일. | ✅ **PASS — 2026-09-17 통과 확인.** 같은 재설계 (구 브루트는 8/9+ TLE). **⚠️ 2026-09-15: `1LL << i` 가 i=N-1 까지 돌아 N≥64 에서 UB — N=64 에 답 0, 무작위 200건 중 142건 오답이었다.** 같은 방식으로 고쳤고 실측 0.15초. PY==CPP 교차 확인(N=30~200). **원인은 로컬 검증이 N≤14 까지만 돌았던 것** — 화면 제약은 N ≤ 100,000 이다. |
 | `moohunt` | Moo Hunt | Jan 2026 Bronze #2 | 🟡 파이썬은 이 문제에서 만점 불가 — 최대 입력 67~101초(제한 4초). 근본 연산량이 보드 2²⁰ × 평균 428조합 ≈ 4.5억 번이라 어떻게 짜도 45초 밑으로 안 내려간다. **공식 답안도 셋 다 C++ 이고 파이썬 만점 풀이가 없다.** 화면에 정직 배너 있음. | ✅ **PASS — 선생님이 2026-09-11 제출해 통과 확인.** 비트 연산자를 쓰지 않는 판본이다 (보드를 리스트로 두고 1 을 더하듯 다음 보드로). 실측 최대 입력 **1.43~1.44초**(제한 2초), 비트 판본 1.50~1.53초보다 오히려 빠르다 — 시간은 안쪽 3중 반복이 먹지 보드 만드는 방식이 아니다. 로컬: 공식 샘플 둘 + 랜덤 400건에서 공식 답안 3개와 전부 일치. ✅ **2026-09-13 재제출해 다시 통과.** C++ 표를 **3차원 배열 → 2차원 배열**로 바꾼 판본이다(`count[x][min*N+max]`). 이유: **3차원 배열을 가르치는 레슨이 0개**인데 2차원은 cpp-21 에서 가르친다. 선생님 지시("2차배열로 바꿔줘") → 선생님이 제출해 통과 확인. **지금 화면 코드 = 제출해 통과한 코드**다 — 제출본 `docs/usaco-submit/moohunt-2d.cpp`. (3차원 판본 `moohunt-nobit.cpp` 도 9/11 통과했고 기록으로 남겨둔다. 두 판본은 무작위 400건 완전 일치.) 실측 2차원 1.45~1.47초 · 3차원 1.46초 — 같다(제한 2초). map 은 못 쓴다: unordered_map 5.35초 · map 16.57초. 표를 찾는 횟수가 4.5억 번이라 한 번의 비용(배열 3.2ns · unordered_map 11.9ns · map 37ns)이 그대로 총 시간이 된다. |
 | `mooin4` | It's Mooin' Time IV | Jan 2026 Bronze #1 | ✅ 16/16 PASS | ✅ 16/16 PASS |
 | `photoshoot25` | Photoshoot | Dec 2025 Bronze #3 | 🟡 12/18 (TLE 13-18, Python too slow) | ✅ 18/18 PASS |
@@ -41,7 +41,7 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `hps` | HPS Minus One | Open 2025 Bronze #1 | ✅ 12/12 PASS | ✅ 12/12 PASS |
 | `printseq` | Printing Sequences | Feb 2025 Bronze #3 | ✅ 13/13 PASS | ✅ 13/13 PASS (after dev fix) |
 | `mexes` | Making Mexes | Feb 2025 Bronze #2 | ✅ 11/11 PASS | ✅ 11/11 PASS |
-| `reflection` | Reflection | Feb 2025 Bronze #1 | ⏳ 재제출 대기 — 2026-09-11 선생님 지시로 풀이 모양 교체(묶음 개수표 제거 → 거울짝 3칸 직접 비교). 처음 훑기 N² → (N/2)². N=2000·U=10만 1.08s → **0.62s**. 구 버전은 3/16 TLE. 로컬: usaco.org 공식 만점 C++ 과 랜덤 500건 + 큰 입력 10만 줄 전부 일치. | ⏳ 재제출 대기 — 같은 교체 (구 버전은 15/15 PASS). 공식 답안과 일치 확인. |
+| `reflection` | Reflection | Feb 2025 Bronze #1 | ✅ **PASS — 선생님이 2026-09-17 제출해 통과 확인.** (아래는 경위) — 2026-09-11 선생님 지시로 풀이 모양 교체(묶음 개수표 제거 → 거울짝 3칸 직접 비교). 처음 훑기 N² → (N/2)². N=2000·U=10만 1.08s → **0.62s**. 구 버전은 3/16 TLE. 로컬: usaco.org 공식 만점 C++ 과 랜덤 500건 + 큰 입력 10만 줄 전부 일치. | ✅ **PASS — 2026-09-17 통과 확인.** 같은 교체 (구 버전은 15/15 PASS). 공식 답안과 일치 확인. |
 | `checkups` | Cow Checkups | Jan 2025 Bronze #3 | 🟡 6/13 (TLE 7-13, Python expected slow) | 6/13 (intended O(N^3)) |
 | `mooin2` | It's Mooin' Time II | Jan 2025 Bronze #2 | ✅ 11/11 PASS | ✅ 11/11 PASS |
 | `astral` | Astral Superposition | Jan 2025 Bronze #1 | ✅ 12/12 PASS | ✅ 12/12 PASS |
@@ -70,7 +70,7 @@ USACO는 Dec 2020 (cpid 1059+) 부터 stdin/stdout으로 전환. 그 이전 cont
 | `stampgrid` | Stamp Grid | Feb 2023 Bronze #2 | ✅ 14/14 PASS | ✅ 14/14 PASS |
 | `hungrycow` | Hungry Cow | Feb 2023 Bronze #1 | ✅ 13/13 PASS | ✅ 13/13 PASS |
 | `mooops` | Moo Operations | Jan 2023 Bronze #3 | ✅ 11/11 PASS | ✅ 11/11 PASS |
-| `aircond` | Air Cownditioning II | Jan 2023 Bronze #2 | ⏳ **재제출 대기** — 11/11 은 **옛 코드** 기준. 2026-09-16 에 학생이 못 읽는 비트 연산을 걷어냈다(`1<<M`→`2**M`, `mask&(1<<j)`→`% 2`·`//= 2`). 알고리즘 그대로, 문법만. 무작위 400케이스에서 **옛 코드와 답 불일치 0**. | ⏳ **재제출 대기** — 같은 이유. 옛 기록: ✅ 11/11 PASS (2026-06-16 C++17, cpid=1276). 새 판본도 400케이스 옛 코드와 일치. |
+| `aircond` | Air Cownditioning II | Jan 2023 Bronze #2 | ✅ **PASS — 선생님이 2026-09-17 제출해 통과 확인.** (아래는 경위) — 11/11 은 **옛 코드** 기준. 2026-09-16 에 학생이 못 읽는 비트 연산을 걷어냈다(`1<<M`→`2**M`, `mask&(1<<j)`→`% 2`·`//= 2`). 알고리즘 그대로, 문법만. 무작위 400케이스에서 **옛 코드와 답 불일치 0**. | ✅ **PASS — 2026-09-17 통과 확인.** 같은 이유. 옛 기록: ✅ 11/11 PASS (2026-06-16 C++17, cpid=1276). 새 판본도 400케이스 옛 코드와 일치. |
 | `leaders` | Leaders | Jan 2023 Bronze #1 | ✅ 17/17 PASS | ✅ 17/17 PASS |
 | `reverseeng` | Reverse Engineering | Dec 2022 Bronze #3 | 🟡 **문서가 낡았던 자리.** 이 ❌ 는 **2026-06-15 에 고쳐진 코드 이전**의 기록이다. 지금 코드는 돈다 — 2026-09-14 확인: `quest-meta.ts` 의 공식 샘플 **2/2 통과**(메인 세션이 직접 돌림). **다만 채점기에 재제출한 적이 없다** — 로컬 통과이지 PASS 가 아니다. | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1253) |
 | `feedcows` | Feeding the Cows | Dec 2022 Bronze #2 | ❌ 0/1 (RTE - wrong input parsing (missing T)) | ✅ 12/12 PASS (re-submitted 2026-06-16 C++17, cpid=1252) |
