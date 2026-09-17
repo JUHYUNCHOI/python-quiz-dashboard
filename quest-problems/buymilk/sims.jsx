@@ -84,8 +84,8 @@ export function NormalizeSim({ E }) {
                 <>{size / 2}통 묶음을 <b>두 번</b> 사면 {size}통이 되는데 <b>{two}</b> 이에요.<br />{size}통 묶음을 한 번에 사면 <b>{DEALS[i]}</b> 이에요.<br />이번엔 한 번에 사는 쪽이 싸요. 그대로 <b>{C[i]}</b> 예요.</>);
       })()
     : t(E,
-      <>Now look at the <b>price per bucket</b>.<br />It never goes up as blocks get bigger.<br /><b>So bigger blocks are always at least as good.</b></>,
-      <>이제 <b>한 통에 얼마</b>인지 봐요.<br />묶음이 커져도 이 값이 올라가지 않아요.<br /><b>그래서 큰 묶음은 손해가 아니에요.</b><br /><span style={{ fontWeight: 600 }}>다음 쪽에서 이 값으로 x 통을 사 볼 거예요.</span></>);
+      <>Divide each cheapest price by its bucket count — the <b>price per bucket</b>.<br />10 → 7.5 → 5 → 5. It only goes down, never back up.<br /><b>So you can safely take the biggest blocks first.</b></>,
+      <>제일 싼 값을 통 수로 나눠 봐요 — <b>한 통에 얼마</b>인지요.<br />10 → 7.5 → 5 → 5. 묶음이 커질수록 싸지고, 다시 비싸지지 않아요.<br /><b>그래서 큰 묶음부터 사도 손해 볼 일이 없어요.</b><br /><span style={{ fontWeight: 600 }}>다음 쪽에서 이 값으로 x 통을 사 볼 거예요.</span></>);
 
   return (
     <div style={{ padding: 16, paddingBottom: 110 }}>
@@ -134,7 +134,7 @@ export function NormalizeSim({ E }) {
             textAlign: "center", wordBreak: "keep-all", textWrap: "balance" }}>
             <div style={{ fontWeight: 800, marginBottom: 4 }}>{t(E, "price per bucket", "한 통에 얼마")}</div>
             <div style={mono}>
-              {C.map((v, i) => `${1 << i}${t(E, "", "통")} ${(v / (1 << i)).toFixed(2)}`).join("  ·  ")}
+              {C.map((v, i) => `${v} \u00f7 ${1 << i}${t(E, "", "통")} = ${(v / (1 << i)).toFixed(2)}`).join("   ·   ")}
             </div>
           </div>
         )}
