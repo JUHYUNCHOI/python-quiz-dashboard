@@ -277,7 +277,7 @@ export function makeMcc15BahasaCh1(E) {
               📥 {t(E, "Input / Output", "입력 / 출력")}
             </div>
             <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7 }}>
-              <div>• {t(E, "One sentence, at most 5,000 characters — slashes and spaces included.", "문장이 한 줄 들어와요. 길이는 최대 5,000 이고 슬래시와 공백도 들어가요.")}</div>
+              <div>• {t(E, "One sentence, at most 5,000 characters — slashes and spaces included.", "문장이 한 줄 들어와요. 길이는 최대 5,000 글자이고, 슬래시와 공백도 그 길이에 들어가요.")}</div>
               <div>• {t(E, "No dots or other special characters. All letters lowercase.", "마침표나 특수한 기호는 없어요. 글자는 전부 소문자예요.")}</div>
               <div>• {t(E, "Output: the Bahasa F sentence, WITHOUT slashes, lowercase.", "출력은 Bahasa F 문장이에요. 슬래시 없이 소문자로 써요.")}</div>
             </div>

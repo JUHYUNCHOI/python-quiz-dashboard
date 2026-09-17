@@ -98,9 +98,10 @@ export function makeMcc22LampCh1(E) {
               🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
+              {/* 2026-09-17: k 가 무엇인지 한 번도 안 밝히고 미션에 썼다. 입력이 준다는 것부터. */}
               {t(E,
-                "Count the integer positions where the lamps' total brightness is at least k.",
-                "램프들의 총 밝기가 k 이상인 정수 위치의 개수를 세요.")}
+                "The input gives you a threshold k. Count the integer positions where the lamps' total brightness reaches k.",
+                "입력이 기준값 k 를 줘요. 램프들의 총 밝기가 k 이상인 정수 위치가 몇 개인지 세요.")}
             </div>
           </div>
 
@@ -113,13 +114,16 @@ export function makeMcc22LampCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
+                  {/* 2026-09-17: 괄호가 읽는 순서를 끊고 있었다 ("램프(밝기 b)는").
+                      그리고 한 칸 멀어질 때마다 1 씩 줄어든다는 말이 빠져서,
+                      학생이 |p − x| 를 혼자 해석해야 했다. */}
                   {t(E, "A lamp at position ", "위치 ")}
                   <b style={{ color: "#8b5cf6" }}>p</b>
-                  {t(E, " with brightness ", " 의 램프(밝기 ")}
+                  {t(E, " has brightness ", " 에 밝기 ")}
                   <b style={{ color: "#7c3aed" }}>b</b>
-                  {t(E, " shines ", ")는 위치 x 에서 ")}
+                  {t(E, ". It is brightest right under itself and fades by 1 every step away, so at position x it shines ", " 인 램프가 있어요. 바로 아래가 제일 밝고 한 칸 멀어질 때마다 1 씩 약해져요. 그래서 위치 x 에서는 ")}
                   <b style={{ color: "#7c3aed" }}>max(0, b − |p − x|)</b>
-                  {t(E, " at position x — a triangular \"tent\".", " 만큼 밝아요 — 삼각형 \"텐트\" 예요.")}
+                  {t(E, " — a triangular \"tent\".", " 만큼 밝아요 — 삼각형 \"텐트\" 모양이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>

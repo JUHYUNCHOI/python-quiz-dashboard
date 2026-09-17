@@ -209,6 +209,16 @@ export function makeMcc22MazeCh2(E, lang = "py") {
               </div>
             </div>
           </div>
+          {/* 2026-09-17: 여기서 곧장 "유니온-파인드" 코드로 넘어갔다. 학생이 그 자리에서
+              막혔다 — 이름과 코드가 동시에 나오고, 왜 그게 필요한지는 아무도 안 말했다.
+              세 질문이 전부 같은 확인을 필요로 한다는 다리를 여기서 놓는다. */}
+          <div style={{ marginTop: 10, background: "#f8fafc", border: "1px dashed #cbd5e1", borderRadius: 10, padding: "10px 14px", ...KA }}>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>
+              {t(E,
+                "Look at all three questions: each one asks the same thing —\n\"are S and G linked right now?\"\nSo the first thing we build is a tool that answers exactly that, fast.",
+                "세 질문을 다시 보면 묻는 것이 전부 같아요 —\n\"지금 S 와 G 가 이어졌나?\"\n그래서 제일 먼저 만들 것은 그 하나를 빠르게 답해 주는 도구예요.")}
+            </div>
+          </div>
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>
             {t(E, "↓ Next page: the fast code, section by section.", "↓ 다음 쪽에서 빠른 코드를 한 단락씩 봐요.")}
           </div>

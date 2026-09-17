@@ -60,8 +60,8 @@ export function HoneySim({ E }) {
     <div style={{ padding: 14 }}>
       <div style={{ background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: 12, padding: 14, marginBottom: 12 }}>
         <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", marginBottom: 8, textAlign: "center" }}>
-          {t(E, "🍯 Trip Yields — drag K to pick the best trips",
-                "🍯 왕복 수확량 — K 를 움직여 가장 좋은 왕복을 골라 봐요")}
+          {t(E, "🍯 What each trip carries — drag K",
+                "🍯 왕복마다 담는 양 — K 를 움직여 봐요")}
         </div>
 
         {/* Per-hive rows: each hive shows its trip-blocks */}
@@ -159,9 +159,14 @@ export function HoneySim({ E }) {
           ? t(E,
               `M=${_SIM_M}. The blocks that light up are always the biggest ones left — which hive they came from never mattered.`,
               `M=${_SIM_M}. 불이 켜지는 조각은 늘 남은 것 중 가장 큰 조각이에요.\n어느 벌집에서 나온 조각인지는 한 번도 따지지 않았어요.`)
-          : t(E,
-              `M=${_SIM_M}. Each hive is cut into blocks of at most ${_SIM_M}. Drag K — which blocks light up first?`,
-              `M=${_SIM_M}. 각 벌집을 ${_SIM_M} 이하의 조각으로 쪼갰어요.\nK 를 움직여 봐요 — 어떤 조각부터 불이 켜질까요?`)}
+          : /* 2026-09-17: 여기가 벌집이 **왜** 쪼개져 있는지를 한 번도 안 말했다.
+               "쪼갰어요" 는 한 일이지 이유가 아니다. 이유(한 번에 M 까지만 담긴다)는
+               맨 마지막 코드 쪽 why 에나 있었다 — 답을 본 뒤에 이유가 나온 셈이다.
+               그리고 앞 쪽이 "왜 38 일까 — 다음 쪽 시뮬에서" 라고 보냈는데
+               이 쪽은 그게 같은 벌집이라는 말을 안 했다. 둘 다 여기서 닫는다. */
+            t(E,
+              `Same hives as the sample: 25 · 12 · 8. One trip carries at most ${_SIM_M}. So hive 1 (25 honey) is really three trips: 10 · 10 · 5. Drag K — which blocks light up first?`,
+              `샘플과 같은 벌집 25 · 12 · 8 이에요.\n한 번 다녀오면 ${_SIM_M} 까지만 담을 수 있어요.\n그래서 꿀 25 인 벌집 1 은 10 · 10 · 5 세 번에 나눠 담아요.\nK 를 움직여 봐요 — 어떤 조각부터 불이 켜질까요?`)}
       </div>
     </div>
   );
@@ -238,15 +243,20 @@ export function getHoneySections(E) {
         t(E, "Sorting puts every full-M block ahead of every leftover block, so a leftover is never taken before the full trips that come before it.",
             "정렬하면 M 을 꽉 채운 조각이 자투리 조각보다 늘 앞에 서요.\n그래서 자투리가 그 앞의 꽉 찬 왕복보다 먼저 뽑히는 일은 없어요."),
       ],
+      /* 2026-09-17: 아래 셋이 **화면의 코드와 다른 것**을 가리키고 있었다.
+         · py 는 sorted 를 말했는데 코드는 yields.sort(reverse=True) 다.
+         · cpp 는 string 헤더를 말했는데 코드가 넣는 건 algorithm 이다.
+         · "합계는 2×10^9 을 넘을 수 있어요" 는 지어낸 수다 — 바로 앞 제약 카드가
+           "원문 상한을 확인하지 못했어요" 라고 적어 놓고 여기서만 상한을 안다고 말한다. */
       pyOnly: [
-        t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python 은 list, map, sorted 가 있어서 코드가 짧아져요."),
+        t(E, "Python's high-level constructs (list, map, sort) make algorithms concise.",
+            "Python 은 list · map · sort 가 있어서 코드가 짧아져요."),
       ],
       cppOnly: [
-        t(E, "Split #include into specific headers you've learned (iostream, vector, string).",
-            "#include 는 배운 헤더로 (iostream, vector, string) 나눠 적어요."),
-        t(E, "Each yield fits in int, but the running total can exceed 2×10^9 — keep total as long long.",
-            "수확량 하나하나는 int 로 돼요.\n하지만 합계는 2×10^9 을 넘을 수 있어서 total 만 long long 으로 둬요."),
+        t(E, "Include only the headers you've learned, one per line — iostream, vector, algorithm.",
+            "#include 는 배운 헤더를 한 줄에 하나씩 적어요 — iostream, vector, algorithm."),
+        t(E, "One trip's amount fits in int, but adding them all up can overflow int — so keep total as long long.",
+            "한 번에 담는 양은 int 로 돼요.\n하지만 그걸 다 더한 값은 int 가 담는 범위를 넘을 수 있어요.\n그래서 total 만 long long 으로 둬요."),
       ],
     },
   ];

@@ -35,12 +35,17 @@ function SecretDeepAuditSim({ E }) {
     <div style={{ padding: 16 }}>
       <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 12, padding: 14, marginBottom: 10 }}>
         <div style={{ fontSize: 13, fontWeight: 600, color: "#5b21b6", marginBottom: 8 }}>
-          🔬 {t(E, "Deep-Audit: slide the window over a+a", "자세히 보기 — a+a 위에서 창문 밀기")}
+          🔬 {t(E, "Deep-Audit: slide the window over a written twice", "자세히 보기 — a 를 두 번 이어 붙인 띠 위에서 창문 밀기")}
         </div>
-        <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
+        {/* 2026-09-17: 첫 말풍선이 "창문 안이 b 와 같으면 b 는 a 를 돌린 것" 이라고
+            **결론을 먼저** 말하고 있었다. 만지기 전에 답을 준 것이고, 바로 다음 쪽
+            퀴즈의 정답 보기와도 같은 문장이었다. 게다가 a+a 가 무엇인지·왜 두 번
+            이어 붙였는지는 한 번도 안 말했다. 여기선 "무엇을 할지" 만 말하고,
+            결론은 아래 판정 칸이 낸다. */}
+        <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 12, wordBreak: "keep-all", whiteSpace: "pre-line" }}>
           {t(E,
-            "Pick a candidate b. Slide a length-N window across a+a. If the window equals b at any offset, b is a rotation of a.",
-            "후보 b 를 골라 봐요. a+a 위에서 길이 N 짜리 창문을 오른쪽으로 밀어요.\n어느 자리에서든 창문 안이 b 와 같으면, b 는 a 를 돌린 것이에요.")}
+            "The strip below is a, written out twice in a row.\nPick a candidate b, then slide the 5-wide window one step at a time.\nLook for a spot where the window and b are the same.",
+            "아래 띠는 a 를 두 번 이어 적어 놓은 것이에요.\n후보 b 를 하나 고르고, 다섯 칸짜리 창문을 한 칸씩 밀어 보세요.\n창문 안과 b 가 같아지는 자리가 있는지 찾아요.")}
         </div>
 
         {/* b preset selector */}
@@ -64,7 +69,7 @@ function SecretDeepAuditSim({ E }) {
         {/* a + a doubled strip */}
         <div style={{ marginBottom: 6 }}>
           <div style={{ fontSize: 11, color: "#5b21b6", fontWeight: 600, marginBottom: 4 }}>
-            {t(E, "a + a (doubled)", "a + a (두 배)")}
+            {t(E, "a + a — a written twice", "a + a — a 를 두 번 이어 붙인 띠")}
           </div>
           <div style={{ overflowX: "auto", whiteSpace: "nowrap", paddingBottom: 4 }}>
             {SIM_DOUBLED.map((v, i) => {
@@ -81,8 +86,10 @@ function SecretDeepAuditSim({ E }) {
             })}
           </div>
           <div style={{ fontSize: 10, color: C.dim, marginTop: 2 }}>
-            {t(E, `offset i = ${offset} → window = doubled[${offset}:${offset + N}]`,
-                  `${offset} 칸 밀었어요 → 창문 = doubled[${offset}:${offset + N}]`)}
+            {/* 2026-09-17: `doubled[0:5]` 는 챕터 2 에서야 나오는 변수명·코드 표기다.
+                이 쪽 학생은 그 이름을 아직 본 적이 없다. 화면이 하는 말로 바꾼다. */}
+            {t(E, `slid ${offset} steps → the window covers ${N} cells starting at cell ${offset}`,
+                  `${offset} 칸 밀었어요 → 창문은 ${offset} 번 칸부터 ${N} 칸이에요`)}
           </div>
         </div>
 
@@ -146,8 +153,8 @@ function SecretDeepAuditSim({ E }) {
           {isMatch
             ? t(E, `✅ Match at offset ${offset} → b IS a rotation of a → print YES`,
                   `✅ ${offset} 칸 민 자리에서 같아요 → b 는 a 를 돌린 것이에요 → YES`)
-            : t(E, `❌ No match at offset ${offset} — slide further (or all N offsets fail → NO)`,
-                  `❌ ${offset} 칸 민 자리에서는 달라요. 더 밀어 봐요. N 자리가 다 다르면 NO 예요.`)}
+            : t(E, `❌ No match after ${offset} steps — slide further. If all ${N} spots differ → NO`,
+                  `❌ ${offset} 칸 민 자리에서는 달라요. 더 밀어 봐요. ${N} 자리가 다 다르면 NO 예요.`)}
         </div>
       </div>
     </div>
@@ -190,8 +197,8 @@ export function makeSecretCh1(E) {
       /* 2026-09-17: narr 이 3 문장 86 자였고, 바로 아래 미션 박스와 같은 말이었다.
          파란 바는 한 문장 55 자 이하. 나머지는 미션 박스가 이미 하고 있다. */
       narr: t(E,
-        "Can A be turned into B just by rotating it?",
-        "A 를 돌려서 B 가 되는지 가려내요."),
+        "Can a be turned into b just by rotating it?",
+        "a 를 돌려서 b 가 되는지 가려내요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -206,7 +213,7 @@ export function makeSecretCh1(E) {
               🎯 {t(E, "Mission", "미션")}
             </div>
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
-              {t(E, "Decide if string B is a circular rotation of string A — print YES or NO.", "A 를 돌려서 B 가 되는지 가려내고, YES 또는 NO 를 출력해요.")}
+              {t(E, "Decide if b is a rotation of a — print YES or NO.", "a 를 돌려서 b 가 되는지 가려내고, YES 또는 NO 를 출력해요.")}
             </div>
           </div>
 
@@ -218,15 +225,28 @@ export function makeSecretCh1(E) {
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
-                  <b style={{ color: "#8b5cf6" }}>{t(E, "Two strings A and B of equal length", "같은 길이의 두 문자열 A 와 B")}</b>
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "Two lines of N numbers, a and b", "숫자가 N 개씩 든 두 줄 a 와 b")}</b>
                   {t(E, ".", " 가 주어져요.")}
+                </div>
+              </div>
+              {/* 2026-09-17: 미션과 👉 가 "돌린다" 에 기대는데 그 말을 quest 안에서
+                  한 번도 정의하지 않았다. 정의는 챕터 2 코드 설명에만 있었다 —
+                  학생은 문제를 읽는 시점에 그 말을 모른다. 여기서 먼저 말한다.
+                  예시 숫자는 다음 쪽 샘플(1 2 3 4 5)·1-5 문제(1 2 3)와 겹치지
+                  않게 골랐다. 답을 미리 주면 안 되니까. */}
+              <div style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
+                <div>
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "Rotate", "돌린다")}</b>
+                  {t(E, " — take some numbers off the front and put them on the back, keeping their order. Rotating 7 8 9 by one step gives 8 9 7.",
+                        " — 앞쪽 몇 개를 떼어 순서 그대로 뒤에 붙이는 거예요. 7 8 9 를 한 칸 돌리면 8 9 7 이 돼요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "YES if B is a circular rotation of A, else NO", "A 를 몇 칸 돌려 B 가 되면 YES, 안 되면 NO 를 출력해요")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "YES if b is a rotation of a, else NO", "a 를 몇 칸 돌려 b 가 되면 YES, 안 되면 NO 를 출력해요")}</b>
                   {t(E, ".", ".")}
                 </div>
               </div>
@@ -287,8 +307,10 @@ export function makeSecretCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontSize: 12, lineHeight: 1.7, whiteSpace: "pre-line" }}>
               {/* 2026-09-17: 원문 N 상한을 못 찾았다. 지어내지 않고 이 방법이 감당하는 크기를 적는다. */}
+              {/* 2026-09-17 2차: N 상한은 원문 PDF 가 없어 그대로 둔다(지어내지 않는다).
+                  낱말만 손본다 — 여기만 "창" 이고 시뮬·코드 설명은 "창문" 이었다. */}
               {t(E, "a and b always have the same length N. We could not find the original limit on N. What we can say: this method compares N windows of N numbers, so N up to a few thousand is fine.",
-                    "a 와 b 는 길이가 N 으로 같아요.\n원문의 N 상한은 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — 길이 N 짜리 창을 N 번 견주니까\nN 이 수천 정도까지는 괜찮아요.")}
+                    "a 와 b 는 길이가 N 으로 같아요.\n원문의 N 상한은 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — N 칸짜리 창문을 N 번 견주니까\nN 이 수천 정도까지는 괜찮아요.")}
             </div>
           </div>
         </div>),
@@ -325,8 +347,11 @@ export function makeSecretCh1(E) {
     // 1-5: Input
     {
       type: "input",
+      /* 2026-09-17 2차: narr 이 바로 아래 질문을 그대로 한 번 더 말하고 있었다.
+         narr 은 "지금 뭘 할 차례" 만. 문제는 아래 칸이 이미 하고 있다. */
       narr: t(E,
-        "[1,2,3] and [2,3,1] - is [2,3,1] a rotation of [1,2,3]? Answer 1 for Yes, 0 for No.", "[1,2,3] 을 돌려서 [2,3,1] 을 만들 수 있을까요? 되면 1, 안 되면 0 을 넣어요."),
+        "Now rotate one yourself and type the answer.",
+        "이제 직접 돌려 보고 답을 넣을 차례예요."),
       question: t(E,
         "[1,2,3] and [2,3,1]: same rotation? (1=Yes, 0=No)",
         "[1,2,3] 을 돌리면 [2,3,1] 이 나올까요? (1=예, 0=아니오)"),
@@ -352,8 +377,8 @@ export function makeSecretCh2(E, lang = "py") {
          **리스트**에서 `in` 은 부분수열 검사를 못 한다 — 실행되지 않는 코드를
          암시하고 있었다. 실제 코드가 하는 일로 바꾼다. */
       narr: t(E,
-        "Slide a length-N window across a+a and look for b.",
-        "a+a 위에서 길이 N 짜리 창을 밀며 b 와 같은 자리를 찾아요."),
+        "Slide an N-wide window across a+a and look for b.",
+        "a+a 위에서 N 칸짜리 창문을 밀며 b 와 같은 자리를 찾아요."),
       sections: getSecretSections(E),
     },
   ];

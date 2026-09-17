@@ -70,7 +70,7 @@ function IsthmusPeakSim({ E }) {
     }}>
       {c.missing
         ? t(E, "no land ✗", "땅 없음 ✗")
-        : `${H[c.a]} ${c.ok ? ">" : "≯"} ${H[c.b]} ${c.ok ? "✓" : "✗"}`}
+        : `${H[c.a]} > ${H[c.b]} ${c.ok ? "✓" : "✗"}`}
     </span>
   );
   const stepChipUp = (c, k) => (
@@ -84,7 +84,7 @@ function IsthmusPeakSim({ E }) {
     }}>
       {c.missing
         ? t(E, "no land ✗", "땅 없음 ✗")
-        : `${H[c.a]} ${c.ok ? "<" : "≮"} ${H[c.b]} ${c.ok ? "✓" : "✗"}`}
+        : `${H[c.a]} < ${H[c.b]} ${c.ok ? "✓" : "✗"}`}
     </span>
   );
 
@@ -260,7 +260,7 @@ export function makeMcc15IsthmusCh1(E) {
       type: "reveal",
       narr: t(E,
         "An isthmus is split into N pieces of land, each with a height. An order-K peak is a piece from which you always go strictly downwards walking K steps to the left and K steps to the right; an order-K valley is the same with upwards.\nCount how many pieces are order-K peaks or order-K valleys.",
-        "order-K 봉우리와 골짜기가 몇 개인지 세요."),
+        "양옆으로 K칸 계속 내려가는 땅과 계속 올라가는 땅을 세요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -277,7 +277,7 @@ export function makeMcc15IsthmusCh1(E) {
             <div style={{ fontSize: 13, color: "#1e3a8a", lineHeight: 1.5 }}>
               {t(E,
                 "The tribe built a settlement on every order-K peak and every order-K valley. Count the settlements.",
-                "부족은 모든 order-K 봉우리와 모든 order-K 골짜기에 마을을 지었어요. 마을 수를 세요.")}
+                "양옆으로 K칸 계속 내려가는 땅을 order-K 봉우리, 계속 올라가는 땅을 order-K 골짜기라고 불러요. 부족은 그런 땅마다 마을을 지었어요. 마을 수를 세요.")}
             </div>
           </div>
 
@@ -303,7 +303,7 @@ export function makeMcc15IsthmusCh1(E) {
                   <b style={{ color: "#7c3aed" }}>{t(E, "order-K peak", "order-K 봉우리")}</b>
                   {t(E,
                     ": walking from i to i+K and from i to i−K, you are always going strictly downwards.",
-                    ": i 에서 i+K 로, 그리고 i 에서 i−K 로 걸어갈 때 항상 엄격하게 내려가는 땅이에요.")}
+                    ": i 에서 i+K 로, 그리고 i 에서 i−K 로 걸어갈 때 계속 내려가기만 하는 땅이에요. 중간에 같은 높이가 한 번이라도 나오면 안 돼요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -312,7 +312,7 @@ export function makeMcc15IsthmusCh1(E) {
                   <b style={{ color: "#0891b2" }}>{t(E, "order-K valley", "order-K 골짜기")}</b>
                   {t(E,
                     ": the same, but always going strictly upwards.",
-                    ": 같은데, 항상 엄격하게 올라가는 땅이에요.")}
+                    ": 같은데, 계속 올라가기만 하는 땅이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -436,7 +436,7 @@ export function makeMcc15IsthmusCh2(E, lang = "py") {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
                 {t(E,
                   "For each of the N pieces, walk K steps left and K steps right. That is N × K work. With N = 1,000,000 and K almost as large, that is up to about 10^12 operations — time limit exceeded.",
-                  "N개의 땅마다 왼쪽 K칸, 오른쪽 K칸을 걸어가요. 그러면 N × K 번 계산해요. N = 1,000,000 이고 K도 그만큼 크면 약 10^12 번이에요. 시간 초과가 나요.")}
+                  "N개의 땅마다 왼쪽 K칸, 오른쪽 K칸을 걸어가요. 그러면 N × K 번 계산해요. N 이 1,000,000 이고 K 도 그만큼 크면 계산이 1 조 번쯤 돼요. 시간 초과가 나요.")}
               </div>
             </div>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>

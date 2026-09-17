@@ -96,15 +96,20 @@ function BakeryGreedySim({ E }) {
             여기선 "3번째로 비싼 것" 이라고 한다. 4개 묶음에선 같은 자리인데
             (메인이 2000개 묶음으로 검산 — 전부 일치) 화면이 그 말을 한 번도 안 했다.
             학생 눈엔 "2번째로 싼 거라며, 왜 3번째로 비싼 거지?" 가 된다. */}
-        <div style={{
-          fontSize: 11.5, color: "#92400e", lineHeight: 1.65, marginBottom: 12,
-          background: "#fff", border: "1px dashed #fcd34d", borderRadius: 8,
-          padding: "7px 10px", textWrap: "balance", whiteSpace: "pre-line", ...KA,
-        }}>
-          {t(E,
-            "In a batch of 4, the 3rd-most-expensive IS the 2nd-cheapest — the same slot, counted from the other end.",
-            "4 개 묶음에서 '3 번째로 비싼 것' 은 '2 번째로 싼 것' 과 같은 자리예요.\n반대쪽에서 셌을 뿐이에요.")}
-        </div>
+        {/* 2026-09-17: 이 쪽지가 step 0 에도 떴다. 그때는 화면에 '3 번째로 비싼 것' 이라는
+            말이 아직 한 번도 안 나왔다 — 없는 말을 풀어주고 있었다.
+            한 묶음을 눌러 그 말이 화면에 생긴 뒤에만 띄운다. */}
+        {step > 0 && (
+          <div style={{
+            fontSize: 11.5, color: "#92400e", lineHeight: 1.65, marginBottom: 12,
+            background: "#fff", border: "1px dashed #fcd34d", borderRadius: 8,
+            padding: "7px 10px", textWrap: "balance", whiteSpace: "pre-line", ...KA,
+          }}>
+            {t(E,
+              "In a batch of 4, the 3rd-most-expensive IS the 2nd-cheapest — the same slot, counted from the other end.",
+              "4 개 묶음에서 '3 번째로 비싼 것' 은 '2 번째로 싼 것' 과 같은 자리예요.\n반대쪽에서 셌을 뿐이에요.")}
+          </div>
+        )}
 
         {/* sorted strip */}
         <div style={{ fontSize: 11, color: "#92400e", fontWeight: 700, marginBottom: 4 }}>
@@ -189,12 +194,12 @@ function BakeryGreedySim({ E }) {
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
               {t(E,
                 "(A) blocks [10,9,8,7] and [6,3,2,1] free 8 and 2 → saves 10 → pay 36.",
-                "(A) [10,9,8,7] 과 [6,3,2,1] 로 자르면 8 과 2 가 무료 → 10 절약 → 36 지불.")}
+                "(A) [10,9,8,7] 과 [6,3,2,1] 로 자르면 각 묶음의 2 번째로 싼 8 과 2 가 무료예요. 가격을 다 더하면 46 이고, 거기서 8 + 2 = 10 을 빼면 36 을 내요.")}
             </div>
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginTop: 6, whiteSpace: "pre-line" }}>
               {t(E,
                 "(B) pairs the cheap 1 and 2 with expensive items, so it frees 8 and 3 → saves 11 → pay 35.\nA cheap bread is worth little as the free one — better to let it be one you pay for.",
-                "(B) 는 싼 1 과 2 를 비싼 것들과 짝지어 8 과 3 을 무료로 만들어요 → 11 절약 → 35 지불.\n싼 빵을 공짜로 받으면 얼마 못 아껴요. 공짜 자리는 비싼 빵에 주는 게 이득이에요.")}
+                "(B) 는 싼 1 과 2 를 비싼 것들과 한 묶음에 넣어서, 8 과 3 이 무료가 돼요.\n같은 46 에서 8 + 3 = 11 을 빼면 35 를 내요.\n싼 빵을 공짜로 받으면 얼마 못 아껴요. 공짜 자리는 비싼 빵에 주는 게 이득이에요.")}
             </div>
           </div>
         )}
@@ -419,10 +424,10 @@ export function makeMcc19BakeryCh2(E, lang = "py") {
             </div>
             <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "10px 14px" }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: "#065f46", marginBottom: 4 }}>
-                🚀 {t(E, "Fast: sort, then greedy with a deque", "빠른 방법 — 정렬한 뒤 덱으로 그리디")}
+                🚀 {t(E, "Fast: sort, then greedy with a deque", "빠른 방법 — 정렬한 뒤 양끝에서 하나씩 꺼내기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Sort once (N log N), then each round takes O(1) from both ends. Free the 3rd-most-expensive, pair the cheapest as a pay-slot.", "한 번만 정렬하면 (N log N) 묶음마다 양끝에서 O(1) 로 꺼내요. 세 번째로 비싼 것을 무료로, 제일 싼 것을 지불 자리로 짝지어요.")}
+                {t(E, "Sort once (N log N), then each round takes O(1) from both ends. Free the 3rd-most-expensive, pair the cheapest as a pay-slot.", "정렬은 한 번만 하면 돼요. 그다음엔 묶음마다 양끝에서 하나씩 바로 꺼내요. 세 번째로 비싼 것을 무료로 받고, 제일 싼 것을 지불 자리로 짝지어요. 이렇게 양끝에서 꺼낼 수 있는 그릇을 '덱' 이라고 불러요.")}
               </div>
             </div>
           </div>

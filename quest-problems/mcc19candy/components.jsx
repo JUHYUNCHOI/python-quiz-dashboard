@@ -91,8 +91,8 @@ export function Mcc19CandyShoutSim({ E }) {
         </div>
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12, whiteSpace: "pre-line" }}>
           {t(E,
-            "\"odd\" removes the odd positions, \"even\" removes the even ones.\nSurvivors renumber from 1. Which STARTING number is the last one left (in red)?",
-            "\"odd\" 는 홀수 자리를, \"even\" 은 짝수 자리를 없애요.\n살아남은 사람은 1 부터 다시 번호를 매겨요.\n마지막까지 남는 시작 번호(빨간색)는 어느 것일까요?")}
+            "\"odd\" removes the odd positions, \"even\" removes the even ones.\nSurvivors renumber from 1.\nThe line holds exactly as many people as it takes to leave one standing — each round halves it, so 3 rounds means 8 people.\nWhich STARTING number is the last one left (in red)?",
+            "\"odd\" 는 홀수 자리를, \"even\" 은 짝수 자리를 없애요.\n살아남은 사람은 1 부터 다시 번호를 매겨요.\n줄에는 딱 한 명만 남도록 꼭 맞는 인원을 세워뒀어요. 라운드마다 절반이 되니까 라운드가 3 번이면 8 명이에요.\n마지막까지 남는 시작 번호(빨간색)는 어느 것일까요?")}
         </div>
 
         {/* round shout toggles */}
@@ -106,7 +106,9 @@ export function Mcc19CandyShoutSim({ E }) {
               background: s === "odd" ? "#dc2626" : "#7c3aed", color: "#fff",
               fontFamily: "'JetBrains Mono',monospace", fontWeight: 800, fontSize: 12.5,
             }}>
-              <span style={{ fontSize: 9, opacity: 0.85, fontWeight: 700 }}>{t(E, `round ${i}`, `라운드 ${i}`)}</span>
+              {/* 2026-09-17: 여기만 0 부터 셌다. 바로 아래 탈락 목록과 되돌리기 칸은
+                  1 부터 센다 — 같은 라운드를 화면 두 곳이 다른 번호로 불렀다. 1 로 맞춘다. */}
+              <span style={{ fontSize: 9, opacity: 0.85, fontWeight: 700 }}>{t(E, `round ${i + 1}`, `라운드 ${i + 1}`)}</span>
               {s}
             </button>
           ))}
@@ -298,7 +300,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc19CandyPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc19Candy — Full Study Guide", "Mcc19Candy — 종합 풀이 노트");

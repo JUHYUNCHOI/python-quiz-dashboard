@@ -170,26 +170,36 @@ const FULL_CPP = [...CPP_S1, "", ...CPP_S2, "", ...CPP_S3];
 export function getMcc22LampSections(E) {
   return [
     {
-      label: t(E, "1️⃣ Count on one straight segment", "1️⃣ 한 직선 구간에서 세기"),
+      /* 2026-09-17: 학생이 이 쪽에서 그만뒀다. ceil·floor·-(-num // s) 가 설명 없이
+         나왔고, **왜 이게 필요한지(텐트 → 꺾인점 → 곧은 구간)는 ② 에서야** 나왔다.
+         코드 배열은 🔒 이라 순서를 못 바꾼다 — 대신 ① 의 why 가 전체 계획을 먼저 말하고,
+         F·s·L·k 가 각각 무엇인지 밝히고, 올림·내림을 말로 풀어 준다. */
+      label: t(E, "1️⃣ Count inside one straight stretch", "1️⃣ 곧은 구간 하나에서 세기"),
       color: A,
       py: PY_S1, cpp: CPP_S1,
       why: [
         t(E,
-          "Between two breakpoints the brightness is a straight line: F, F+s, F+2s, … So counting positions with brightness ≥ k is just: how many steps d keep F + s·d above k?",
-          "두 꺾인점 사이에서 밝기는 F, F+s, F+2s, … 처럼 한 걸음에 s 씩 일정하게 바뀌어요. 그래서 밝기 ≥ k 인 위치를 세는 건 'F + s·d 가 k 이상인 걸음 d 가 몇 개?' 를 묻는 것과 같아요."),
+          "The plan first. Each lamp is a triangular tent, so the summed brightness only changes direction at a few spots — between them it runs perfectly straight. So instead of visiting every x, we handle one straight stretch at a time. Part 2️⃣ cuts the line into those stretches; part 1️⃣ here builds the helper that counts inside one of them.",
+          "먼저 전체 계획이에요. 램프 하나는 삼각형 텐트라서, 텐트를 다 더한 밝기는 몇 군데에서만 방향이 꺾여요. 꺾이는 곳 사이는 완전히 곧아요. 그래서 x 를 하나씩 도는 대신 곧은 구간을 하나씩 처리해요. 구간을 잘라 내는 일은 2️⃣ 가 하고, 여기 1️⃣ 은 구간 하나를 세는 도우미를 먼저 만들어요."),
         t(E,
-          "Rising line (s>0): solve d ≥ ceil((k−F)/s). Falling line (s<0): solve d ≤ floor((k−F)/s). We use exact integer ceil/floor because k can be up to 10^18 — floats would lose precision.",
-          "올라가는 직선(s>0)이면 d ≥ ceil((k−F)/s) 이고, 내려가는 직선(s<0)이면 d ≤ floor((k−F)/s) 예요. k 가 최대 10^18 이라 실수(float)로 하면 오차가 나요. 그래서 정수 올림·내림으로 정확히 계산해요."),
+          "Here is what the helper's four numbers mean. F is the brightness at the first spot of the stretch. s is how much the brightness changes with each step to the right. L is how many more spots the stretch has. k is the line we have to reach. So the brightnesses run F, F+s, F+2s, … and we are asking how many of them reach k.",
+          "도우미가 받는 네 수의 뜻이에요. F 는 그 구간 첫 칸의 밝기예요. s 는 오른쪽으로 한 칸 갈 때마다 밝기가 변하는 양이에요. L 은 그 구간에 남은 칸 수예요. k 는 우리가 닿아야 할 기준이에요. 그러니 밝기는 F, F+s, F+2s, … 로 이어지고, 우리는 그중 몇 개가 k 에 닿는지를 묻고 있어요."),
+        t(E,
+          "On a rising stretch (s > 0) we only need the FIRST step that reaches k — every step after it reaches k too. We divide (k−F) by s to see how many steps that takes, and if it does not divide evenly we take one step more, because a part of a step is not enough. A falling stretch (s < 0) is the mirror image: we find the LAST step that still holds, so there we cut the leftover off instead.",
+          "밝기가 올라가는 구간(s > 0)에서는 k 에 처음 닿는 걸음만 찾으면 돼요. 그 뒤 걸음은 전부 k 에 닿거든요. (k−F) 를 s 로 나눠 몇 걸음인지 보는데, 딱 나누어떨어지지 않으면 한 걸음을 더 가요. 걸음을 반쯤 갈 수는 없으니까요. 내려가는 구간(s < 0)은 거꾸로예요. k 를 지키는 마지막 걸음을 찾으니까 남는 부분은 버려요."),
+        t(E,
+          "All of this is done with whole numbers on purpose. k goes up to 10^18, and a decimal would blur the last digits — one digit off changes the count.",
+          "이 계산은 일부러 정수로만 해요. k 가 10^18 까지 커서 소수로 하면 끝자리가 뭉개지는데, 한 자리만 틀려도 개수가 어긋나요."),
       ],
       pyOnly: [
         t(E,
-          "-(-num // s) is Python's trick for ceil division of positive integers; num // s already floors toward −∞.",
-          "-(-num // s) 는 양수를 올림해서 나누는 파이썬 손버릇이에요. num // s 는 이미 −∞ 쪽으로 내림하거든요."),
+          "-(-num // s) is how Python rounds a division UP. Python's // always rounds down, so we flip the sign, round down, and flip back.",
+          "-(-num // s) 는 파이썬에서 나눗셈을 올려 잡는 방법이에요. 파이썬의 // 는 늘 아래로 내려 잡으니까, 부호를 뒤집어 내려 잡은 뒤 다시 뒤집으면 올려 잡은 값이 돼요."),
       ],
       cppOnly: [
         t(E,
-          "C++ integer / truncates toward zero, so we add a floordiv helper to match Python's floor behavior for negatives.",
-          "C++ 의 정수 나눗셈은 0 쪽으로 잘라요. 그래서 음수에서 파이썬 내림과 맞추려고 floordiv 도우미를 따로 둬요."),
+          "C++ integer division cuts toward zero, so for negative numbers it does not round down the way Python does. The floordiv helper makes the two match.",
+          "C++ 의 정수 나눗셈은 0 쪽으로 잘라내요. 그래서 음수일 때는 파이썬처럼 아래로 내려 잡지 않아요. floordiv 도우미가 둘을 맞춰 줘요."),
       ],
     },
     {
@@ -216,13 +226,13 @@ export function getMcc22LampSections(E) {
       ],
       pyOnly: [
         t(E,
-          "Python ints are unbounded, so brightness sums (up to ~10^18) never overflow.",
-          "파이썬 정수는 한계가 없어서 밝기 합(최대 ~10^18)이 넘칠 일이 없어요."),
+          "Python ints grow as large as they need to, so brightness sums (around 10^18) can just be added up.",
+          "파이썬 정수는 아무리 커져도 괜찮아서, 밝기 합(10^18 쯤)을 그냥 더하면 돼요."),
       ],
       cppOnly: [
         t(E,
-          "Use long long (typedef ll) everywhere — positions, brightness, and k all exceed 32-bit range.",
-          "위치·밝기·k 모두 32비트를 넘으니 어디서나 long long(ll)을 써요."),
+          "Use long long (typedef ll) everywhere — positions, brightness, and k are all too big for a plain int.",
+          "위치·밝기·k 가 보통 정수(int)에 안 들어갈 만큼 커요. 그래서 어디서나 long long(ll)을 써요."),
       ],
     },
   ];
@@ -253,8 +263,18 @@ const _INIT_K = 4;
 export function Mcc22LampDeepAuditSim({ E }) {
   const [lamps, setLamps] = useState(_INIT_LAMPS);
   const [k, setK] = useState(_INIT_K);
+  /* 2026-09-17: 이 시뮬은 **만지기 전부터** 답을 다 말하고 있었다 — 보라색 눈금이
+     p−b·p·p+b 에 미리 찍혀 있었고, 아래 글이 "언덕은 여기서만 꺾여요" 라고
+     결론까지 적어 놨다. 학생이 찾을 것이 남지 않았다.
+     한 번이라도 만진 뒤에 눈금과 결론이 나온다. (mcc20cipher·mcc21carrots 와 같은 수법) */
+  const [touched, setTouched] = useState(false);
 
+  const bumpK = (d) => {
+    setTouched(true);
+    setK((prev) => Math.max(1, Math.min(10, prev + d)));
+  };
   const bump = (i, d) => {
+    setTouched(true);
     setLamps((prev) => prev.map((l, j) => (j === i ? { ...l, b: Math.max(1, Math.min(9, l.b + d)) } : l)));
   };
   const reset = () => { setLamps(_INIT_LAMPS); setK(_INIT_K); };
@@ -285,19 +305,19 @@ export function Mcc22LampDeepAuditSim({ E }) {
         <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6", marginBottom: 6 }}>
           🏕️ {t(E, "Each lamp is a tent of brightness", "램프 하나 = 밝기 텐트")}
         </div>
-        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65 }}>
+        <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, whiteSpace: "pre-line" }}>
           {t(E,
-            "Lamp i shines max(0, b − |p − x|) at position x: brightest right under it, fading 1 per step. Overlapping tents add up into a bumpy hill. We only care where the total reaches k. Where does that hill bend?",
-            "램프 i 는 위치 x 에서 max(0, b − |p − x|) 만큼 밝아요. 바로 아래가 제일 밝고 한 칸 멀어질 때마다 1씩 약해져요. 텐트가 겹치면 울퉁불퉁한 언덕이 돼요. 우리는 합이 k 에 닿는 곳만 궁금해요. 그 언덕은 어디에서 꺾일까요?")}
+            "A lamp is brightest right under it and fades by 1 per step away — a triangular tent.\nOverlapping tents add up into a bumpy hill, and we want the spots where the total reaches k.\nChange each lamp's b and the threshold k, and look for where the hill changes direction.",
+            "램프는 바로 아래가 제일 밝고, 한 칸 멀어질 때마다 1 씩 약해져요 — 삼각형 텐트 모양이에요.\n텐트가 겹치면 울퉁불퉁한 언덕이 되고, 우리가 찾는 건 합이 k 에 닿는 자리예요.\n램프 밝기 b 와 기준 k 를 바꿔 가며 언덕이 어디에서 방향을 바꾸는지 찾아보세요.")}
         </div>
       </div>
 
       {/* k control */}
       <div style={{ display: "flex", gap: 10, alignItems: "center", justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
         <span style={{ fontSize: 12.5, fontWeight: 700, color: "#5b21b6" }}>{t(E, "threshold k =", "기준 k =")}</span>
-        <button onClick={() => setK(Math.max(1, k - 1))} style={ctrlBtn}>−</button>
+        <button onClick={() => bumpK(-1)} style={ctrlBtn}>−</button>
         <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 800, color: A, minWidth: 22, textAlign: "center" }}>{k}</span>
-        <button onClick={() => setK(Math.min(10, k + 1))} style={ctrlBtn}>+</button>
+        <button onClick={() => bumpK(1)} style={ctrlBtn}>+</button>
         <button onClick={reset} style={{ ...ctrlBtn, width: "auto", padding: "0 10px", fontSize: 12, fontWeight: 700 }}>
           {t(E, "↺ Reset", "↺ 다시 처음부터")}
         </button>
@@ -348,7 +368,7 @@ export function Mcc22LampDeepAuditSim({ E }) {
           {/* x labels */}
           <div style={{ display: "flex", gap: 3, marginTop: 3 }}>
             {xs.map((x) => {
-              const isBreak = breaks.has(x);
+              const isBreak = touched && breaks.has(x);
               return (
                 <div key={x} style={{
                   width: COL_W, textAlign: "center",
@@ -364,9 +384,13 @@ export function Mcc22LampDeepAuditSim({ E }) {
       </div>
 
       <div style={{ textAlign: "center", fontSize: 10.5, color: C.dim, marginTop: 6, ...KA }}>
-        {t(E,
-          "Amber bars ≥ k. Purple ticks below = breakpoints (p−b, p, p+b) — the only x where the hill bends.",
-          "노란 막대는 k 이상이에요. 아래 보라색 눈금은 꺾인점(p−b, p, p+b)이고, 언덕은 여기서만 꺾여요.")}
+        {touched
+          ? t(E,
+              "Amber bars ≥ k. Purple ticks below = p−b, p, p+b for each lamp — the only x where the hill changes direction.",
+              "노란 막대는 총 밝기가 k 이상인 곳이에요. 아래 보라색 눈금은 램프마다의 p−b, p, p+b 이고, 언덕은 그 자리에서만 방향이 바뀌어요.")
+          : t(E,
+              "Amber bars are the spots where the total reaches k.",
+              "노란 막대는 총 밝기가 k 이상인 곳이에요.")}
       </div>
 
       {/* lamp controls */}
@@ -455,7 +479,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc22LampPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc22Lamp — Full Study Guide", "Mcc22Lamp — 종합 풀이 노트");

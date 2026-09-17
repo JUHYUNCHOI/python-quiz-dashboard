@@ -119,25 +119,27 @@ export function getSecretSections(E) {
       why: [
         t(E, "Rotating a means cutting it somewhere and swapping the two pieces. Write a twice in a row and every one of those cuts is already sitting there, side by side.",
             "a 를 돌린다는 건 어딘가에서 잘라 앞뒤를 바꾼다는 뜻이에요.\na 를 두 번 이어 적어 두면, 그 잘린 모양들이 이미 나란히 놓여 있어요."),
-        t(E, "If the lengths differ there is nothing to rotate into — answer NO right away.",
-            "길이가 다르면 아무리 돌려도 같아질 수 없어요. 바로 NO 예요."),
+        /* 2026-09-17 2차: 문제는 "a 와 b 는 길이가 같다" 고 했는데 코드는 길이를 비교한다.
+           학생이 "같은 길이라면서요?" 에서 멈춘다. 왜 그래도 확인하는지를 먼저 말한다. */
+        t(E, "The problem says a and b are the same length, but the code checks anyway — it costs one line. If the lengths ever differed, no amount of rotating could make them match, so the answer would be NO right away.",
+            "문제는 a 와 b 의 길이가 같다고 했지만, 코드는 한 줄로 확인하고 넘어가요.\n혹시 길이가 다르면 아무리 돌려도 같아질 수 없으니 바로 NO 예요."),
       ],
     },
     {
-      label: t(E, "③ Slide the window, then answer", "③ 창을 밀며 찾고 답 내기"),
+      label: t(E, "③ Slide the window, then answer", "③ 창문을 밀며 찾고 답 내기"),
       color: A,
       py: FULL_PY.slice(13, 21), cpp: FULL_CPP.slice(38, 59),
       why: [
         t(E, "Take a window of length N on a+a and compare it with b. Slide it one step at a time.",
-            "a+a 위에 길이 N 짜리 창을 놓고 b 와 견줘요. 한 칸씩 밀어요."),
+            "a+a 위에 N 칸짜리 창문을 놓고 b 와 견줘요. 한 칸씩 밀어요."),
         t(E, "N slides is enough. Sliding N steps brings the window back to where it started, so anything further only repeats.",
-            "N 번만 밀면 충분해요.\nN 칸을 밀면 창이 처음 자리로 돌아오니, 더 밀어 봐야 같은 것만 또 나와요."),
+            "N 번만 밀면 충분해요.\nN 칸을 밀면 창문이 처음 자리로 돌아오니, 더 밀어 봐야 같은 것만 또 나와요."),
         t(E, "The moment one window matches, we are done — break out and print YES. If none of them match, print NO.",
             "한 자리에서 같아지는 순간 끝이에요. 빠져나와서 YES 를 적어요.\n끝까지 한 자리도 안 같으면 NO 예요."),
       ],
       pyOnly: [
         t(E, "doubled[i:i+N] cuts out the window, and == compares the whole list at once.",
-            "doubled[i:i+N] 이 창을 잘라 내고, == 가 목록 전체를 한 번에 견줘요."),
+            "doubled[i:i+N] 이 창문을 잘라 내고, == 가 목록 전체를 한 번에 견줘요."),
       ],
       cppOnly: [
         t(E, "C++ has no list-to-list ==, so the inner loop compares the numbers one by one and gives up early on the first mismatch.",
@@ -187,7 +189,7 @@ function highlightCode(lines, lang) {
 
 export function downloadSecretPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Secret — Full Study Guide", "Secret — 종합 풀이 노트");

@@ -74,7 +74,7 @@ export function getMcc15EqSections(E) {
         t(E, "One check function handles all four operators, and the same function is reused for both places the '=' can go: check(a, op, b, c) tests a op b = c, and check(b, op, c, a) tests a = b op c.",
             "check 함수 하나로 네 가지 기호를 다 처리하고, 같은 함수를 '=' 자리 두 가지에 다시 써요. check(a, op, b, c) 는 a op b = c 를, check(b, op, c, a) 는 a = b op c 를 확인해요."),
         t(E, "Division is turned into multiplication: x / y == z is rewritten as x == y * z. '/' is real division here, so comparing decimals could be off by a tiny amount — this way the whole check stays between whole numbers.",
-            "나눗셈은 곱셈으로 뒤집어요. x / y == z 를 x == y * z 로 바꾸는 거예요. '/' 는 실수 나눗셈이라 소수로 비교하면 아주 작은 오차가 날 수 있는데, 이렇게 하면 확인이 전부 정수끼리 이뤄져요."),
+            "나눗셈은 곱셈으로 뒤집어요. x / y == z 를 x == y * z 로 바꾸는 거예요. '/' 는 소수까지 그대로 계산해서, 소수로 비교하면 아주 작은 오차가 날 수 있어요. 이렇게 하면 확인이 전부 정수끼리 이뤄져요."),
         t(E, "That same rule explains why 3/2=1 is not a valid equation: 3/2 is 1.5, and 1.5 is not 1.",
             "3/2=1 이 올바른 등식이 아닌 이유도 똑같아요. 3/2 는 1.5 이고, 1.5 는 1 이 아니니까요."),
       ],
@@ -86,7 +86,7 @@ export function getMcc15EqSections(E) {
       ],
       cppOnly: [
         t(E, "Values go up to 1,000,000, so x * y can reach 10^12 — too big for int. Use long long.",
-            "값이 10^6 까지라 x * y 가 10^12 → int 로는 넘쳐요. long long 을 써요."),
+            "값이 1,000,000 까지 커질 수 있어서 x * y 가 1 조까지 가요. int 에는 담기지 않으니 더 큰 정수인 long long 을 써요."),
         t(E, "cout << a << op << b << \"=\" << c prints the pieces back to back, so no spaces sneak in.",
             "cout << a << op << b << \"=\" << c 는 조각들을 연달아 출력해서 공백이 끼지 않아요."),
       ],
@@ -133,7 +133,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc15EqPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc15Eq — Full Study Guide", "Mcc15Eq — 종합 풀이 노트");

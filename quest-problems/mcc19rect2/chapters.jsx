@@ -57,7 +57,7 @@ export function makeMcc19Rect2Ch1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
                 "Given 3 corners of an axis-aligned rectangle, print the 4th (missing) corner.",
-                "축에 평행한 직사각형의 꼭짓점 3 개가 주어졌을 때, 4 번째 (누락) 꼭짓점을 출력.")}
+                "기울어지지 않은 직사각형의 꼭짓점 3 개를 받아서, 빠진 4 번째 꼭짓점을 출력해요.")}
             </div>
           </div>
 
@@ -72,7 +72,7 @@ export function makeMcc19Rect2Ch1(E) {
                   {t(E, "Given ", "")}
                   <b style={{ color: "#059669" }}>{t(E, "3 corners of an axis-aligned rectangle", "축에 평행한 직사각형의 꼭짓점 3 개")}</b>
                   {t(E, " (sides parallel to the x and y axes).",
-                        " 가 주어져요 (변이 x, y 축에 평행).")}
+                        " 가 주어져요. 변이 위아래·좌우로 곧게 뻗어 있고, 기울어져 있지 않다는 뜻이에요.")}
                 </div>
               </div>
               {/* 2026-09-09: 여기 불릿이 "각 x 좌표는 4 꼭짓점 중 정확히 2 번 나온다" 는
@@ -96,7 +96,7 @@ export function makeMcc19Rect2Ch1(E) {
       type: "reveal",
       narr: t(E,
         "How does the data arrive? 3 lines of (x y) coordinates. Print the 4th corner as x y.",
-        "데이터는 어떻게 들어올까? (x y) 좌표 3 줄. 4 번째 꼭짓점을 x y 로 출력."),
+        "좌표가 세 줄 들어오고, 4 번째 꼭짓점을 한 줄로 내보내요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           {/* INPUT */}
@@ -142,8 +142,8 @@ export function makeMcc19Rect2Ch1(E) {
           <div>
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
-              <div>0 ≤ x, y ≤ 10⁹</div>
-              <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "The 3 corners uniquely determine a rectangle with sides parallel to axes.", "3 꼭짓점은 축에 평행한 직사각형을 유일하게 결정.")}</div>
+              <div>0 ≤ x, y ≤ 1,000,000,000</div>
+              <div style={{ color: C.dim, fontSize: 11, marginTop: 2, fontFamily: "inherit", wordBreak: "keep-all" }}>{t(E, "The 3 corners uniquely determine a rectangle with sides parallel to axes.", "꼭짓점 3 개만 있으면 기울어지지 않은 직사각형이 딱 하나로 정해져요.")}</div>
             </div>
           </div>
         </div>),

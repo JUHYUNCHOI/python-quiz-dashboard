@@ -101,8 +101,8 @@ export function makeMcc19CandyCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Read the input format and the official example. The shouts arrive in order: round 0 first, round R−1 last.",
-        "외침은 순서대로 들어와요.\n라운드 0 이 먼저고, 라운드 R−1 이 마지막이에요."),
+        "Read the input format and the official example. The shouts arrive in order: the first round comes first, the last round comes last.",
+        "외침은 순서대로 들어와요.\n첫 라운드가 맨 앞이고, 마지막 라운드가 맨 뒤예요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
           {/* INPUT */}
@@ -157,8 +157,8 @@ even even odd`}
                   크기를 정직하게 적는다 — Ch2 의 "R 이 커지면" 이 여기에 기댄다. */}
               <div style={{ color: C.dim, fontSize: 11, marginTop: 2, fontFamily: "inherit", ...KA, whiteSpace: "pre-line" }}>
                 {t(E,
-                  "The original statement gives no exact upper bound for R.\nBut one round halves the line, so for one person to be left the line needs about 2^R people. R = 40 already means over a trillion.",
-                  "원문에 R 이 얼마까지 커지는지는 적혀 있지 않아요.\n다만 한 라운드마다 줄이 절반이 되니, 한 명만 남으려면\n줄에 2^R 명쯤 서 있어야 해요. R 이 40 이면 벌써 1 조가 넘어요.")}
+                  "The original statement gives no exact upper bound for R.\nBut one round halves the line, so for one person to be left the line needs about 2^R people — that is 2 multiplied by itself R times. R = 40 already means over a trillion.",
+                  "원문에 R 이 얼마까지 커지는지는 적혀 있지 않아요.\n다만 한 라운드마다 줄이 절반이 되니, 한 명만 남으려면\n줄에 2^R 명쯤 서 있어야 해요. 2 를 R 번 곱한 수예요.\nR 이 40 이면 벌써 1 조가 넘어요.")}
               </div>
             </div>
           </div>

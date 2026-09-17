@@ -138,8 +138,8 @@ export function makeMcc19DitcoinCh1(E) {
           <div>
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
-              <div>1 ≤ D ≤ 10⁵</div>
-              <div>1 ≤ p[i] ≤ 10⁹</div>
+              <div>1 ≤ D ≤ 100,000</div>
+              <div>1 ≤ p[i] ≤ 1,000,000,000</div>
               <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "You always earn exactly 1 coin per day (never more, never less).", "매일 정확히 코인 1 개씩 벌어요 (더 많지도 적지도 않음).")}</div>
             </div>
           </div>

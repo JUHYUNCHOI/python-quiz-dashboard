@@ -42,7 +42,7 @@ function WhyAdjacentSim({ E }) {
 
   const SAY = [
     t(E, "Any two numbers — that is 10 different pairs here. Do we really have to check them all?",
-        "아무 두 수라면 여기선 짝이 10가지예요.\n정말 다 확인해봐야 할까요?"),
+        "아무 두 수라면, 수가 5 개니까 짝이 10 가지 나와요.\n정말 다 확인해봐야 할까요?"),
     t(E, "Take a far-apart pair: 1 and 10. Their difference is 9.",
         "멀리 떨어진 짝을 하나 봐요. 1 과 10.\n차이는 9 예요."),
     t(E, "Now look at the steps between them: 4, then 2, then 3. Add them: 4 + 2 + 3 = 9. The same 9.",

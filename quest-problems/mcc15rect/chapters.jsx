@@ -239,7 +239,7 @@ export function makeMcc15RectCh1(E) {
             <div style={{ fontSize: 13, color: "#065f46", lineHeight: 1.5 }}>
               {t(E,
                 "Given 3 corners of an axis-parallel rectangle, print the 4th corner.",
-                "축에 평행한 직사각형의 꼭짓점 3개를 받아서, 4번째 꼭짓점을 출력해요.")}
+                "기울어지지 않은 직사각형의 꼭짓점 3개를 받아서, 4번째 꼭짓점을 출력해요.")}
             </div>
           </div>
 
@@ -254,7 +254,7 @@ export function makeMcc15RectCh1(E) {
                 <div>
                   {t(E, "Kumar chooses four points that form a ", "Kumar 가 네 점을 골라 ")}
                   <b style={{ color: A }}>{t(E, "rectangle with sides parallel to the axes", "변이 축에 평행한 직사각형")}</b>
-                  {t(E, ".", " 을 만들어요.")}
+                  {t(E, ".", " 을 만들어요. 변이 위아래·좌우로 곧게 뻗어 있고, 기울어져 있지 않다는 뜻이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>

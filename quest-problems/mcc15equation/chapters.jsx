@@ -290,8 +290,8 @@ export function makeMcc15EqCh1(E) {
                 <span style={{ color: A, fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "The division symbol / means ", "나눗셈 기호 / 는 ")}
-                  <b style={{ color: "#dc2626" }}>{t(E, "real number division", "실수 나눗셈")}</b>
-                  {t(E, ". So 3/2=1 is not valid, but 3-2=1 and 3=2+1 are.", " 을 뜻해요. 그래서 3/2=1 은 올바르지 않고, 3-2=1 과 3=2+1 은 올바른 등식이에요.")}
+                  <b style={{ color: "#dc2626" }}>{t(E, "real number division", "소수까지 그대로 계산해요")}</b>
+                  {t(E, ". So 3/2=1 is not valid, but 3-2=1 and 3=2+1 are.", ". 그래서 3/2 은 1.5 라서 3/2=1 은 올바르지 않고, 3-2=1 과 3=2+1 은 올바른 등식이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
@@ -418,7 +418,7 @@ export function makeMcc15EqCh2(E, lang = "py") {
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E,
                   "'/' is real division, so a / b comes out as a decimal like 6.5 and comparing decimals can go wrong by a tiny amount. Flip it instead: a / b == c is the same as a == b * c, and that is a comparison between whole numbers.",
-                  "'/' 는 실수 나눗셈이라 a / b 가 6.5 같은 소수로 나오고, 소수끼리 비교하면 아주 작은 오차가 생길 수 있어요. 그래서 식을 뒤집어요. a / b == c 는 a == b * c 와 같은 말이고, 이건 정수끼리 비교하는 거예요.")}
+                  "'/' 는 소수까지 그대로 계산해서 a / b 가 6.5 같은 소수로 나와요. 소수끼리 비교하면 아주 작은 오차가 생길 수 있어요. 그래서 식을 뒤집어요. a / b == c 는 a == b * c 와 같은 말이고, 이건 정수끼리 비교하는 거예요.")}
               </div>
             </div>
           </div>

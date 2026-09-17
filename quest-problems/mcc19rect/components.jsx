@@ -58,6 +58,12 @@ export function ConsecutiveDiffScanSim({ E }) {
       <div style={{ fontSize: 12, fontWeight: 700, color: "#065f46", marginBottom: 10, letterSpacing: 0.3 }}>
         🔎 {t(E, "Walk the row, one neighbour at a time", "이웃끼리 한 칸씩 훑어보기")}
       </div>
+      {/* 2026-09-17: 무엇을 하는 화면인지가 없었다. 훑으면서 무엇을 기억하는지 먼저 말한다. */}
+      <div style={{ fontSize: 11.5, color: C.text, lineHeight: 1.6, marginBottom: 10, wordBreak: "keep-all" }}>
+        {t(E,
+          "Take each neighbour pair's difference as you go, and remember the smallest one you have seen.",
+          "이웃한 두 수의 차이를 하나씩 구하면서, 그중 가장 작았던 값을 기억해 둬요.")}
+      </div>
 
       {/* Array cells */}
       <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 6, flexWrap: "wrap" }}>
@@ -93,7 +99,7 @@ export function ConsecutiveDiffScanSim({ E }) {
         </div>
         <div>
           <span style={{ color: C.dim }}>{t(E, "min_diff so far = ", "지금까지 최솟값 = ")}</span>
-          <b style={{ color: "#15803d" }}>{minSoFar == null ? "∞" : minSoFar}</b>
+          <b style={{ color: "#15803d" }}>{minSoFar == null ? t(E, "none yet", "아직 없음") : minSoFar}</b>
           {i >= N - 2 && minSoFar != null && (
             <span style={{ marginLeft: 10, color: A, fontWeight: 800 }}>
               ✓ {t(E, "done", "완료")}
@@ -240,7 +246,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc19RectPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc19Rect — Full Study Guide", "Mcc19Rect — 종합 풀이 노트");

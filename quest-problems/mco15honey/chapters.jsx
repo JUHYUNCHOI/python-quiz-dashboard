@@ -63,8 +63,8 @@ export function makeHoneyCh1(E) {
                   {t(E, "A squirrel has a ", "다람쥐가 ")}
                   <b style={{ color: "#d97706" }}>{t(E, "pot of capacity M ml", "용량이 M ml 인 항아리")}</b>
                   {t(E, " and faces ", " 를 들고 ")}
-                  <b style={{ color: "#7c3aed" }}>{t(E, "N beehives with honey h[1..N]", "꿀 양 h[1..N] 을 가진 N 개의 벌집")}</b>
-                  {t(E, ".", " 을 만나요.")}
+                  <b style={{ color: "#7c3aed" }}>{t(E, "N beehives, each holding some honey", "꿀이 들어 있는 벌집 N 개")}</b>
+                  {t(E, ".", " 를 만나요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -72,15 +72,15 @@ export function makeHoneyCh1(E) {
                 <div>
                   {t(E, "She can make at most ", "최대 ")}
                   <b style={{ color: "#0891b2" }}>{t(E, "K trips", "K 번 왕복(한 번 가서 가져오기)")}</b>
-                  {t(E, "; each trip visits ONE hive and takes min (remaining honey there, M).",
-                        " 까지 할 수 있어요. 한 번 갈 때마다 벌집 하나에 들러서\nmin (그 벌집에 남은 꿀, M) 만큼 가져와요.")}
+                  {t(E, "; each trip visits ONE hive and carries up to M — or whatever is left there, if less.",
+                        " 까지 할 수 있어요. 한 번 갈 때마다 벌집 하나에 들러서\n그 벌집에 남은 꿀을 최대 M 만큼 담아 와요.\nM 보다 적게 남았으면 남은 것만 담아요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #fcd34d" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "Print the ", "")}
-                  <b style={{ color: "#15803d" }}>{t(E, "MAXIMUM total honey collected", "수집한 꿀의 총량 최댓값")}</b>
+                  <b style={{ color: "#15803d" }}>{t(E, "MAXIMUM total honey collected", "가장 많이 모을 수 있는 꿀의 양")}</b>
                   {t(E, ".", "을 출력해요.")}
                 </div>
               </div>
@@ -113,7 +113,7 @@ export function makeHoneyCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
               {t(E, "One line: the largest total honey you can carry home.",
-                    "한 줄에 집으로 가져올 수 있는 꿀의 총량 최댓값을 적어요.")}
+                    "한 줄에, 집으로 가장 많이 가져올 수 있는 꿀의 양을 적어요.")}
             </div>
           </div>
           {/* Sample */}
@@ -143,9 +143,13 @@ export function makeHoneyCh1(E) {
           <div>
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
             <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontSize: 12, lineHeight: 1.7, whiteSpace: "pre-line" }}>
-              {/* 2026-09-17: 원문 상한을 못 찾았다. 지어내지 않고, 이 방법이 감당하는 크기를 적는다. */}
-              {t(E, "We could not find the original limits on N, M, K. What we can say: this method turns every hive into pieces of at most M, then sorts them. Up to a few hundred thousand pieces is comfortable.",
-                    "원문의 N · M · K 상한은 확인하지 못했어요.\n대신 이 방법이 감당하는 크기를 적어요 — 벌집을 M 짜리 조각으로 쪼갠 뒤 정렬해요.\n조각이 수십만 개까지는 넉넉해요.")}
+              {/* 2026-09-17: 원문 상한을 못 찾았다. 지어내지 않고, 이 방법이 감당하는 크기를 적는다.
+                  같은 날 2차: 그 크기를 "벌집을 M 짜리 조각으로 쪼갠 뒤 정렬해요" 라고 적고 있었다.
+                  이건 풀이 전체다. 바로 세 줄 위에서 "왜 38 일까? — 다음 쪽 시뮬에서" 라고
+                  물어 놓고, 답을 여기서 먼저 말해 버린 셈이다. 조각 = 왕복 한 번이므로,
+                  뜻은 그대로 두고 **학생이 이미 아는 말(왕복)** 로 바꿔 적는다. */}
+              {t(E, "We could not find the original limits on N, M, K. What we can say is how big this quest's solution can go: a few hundred thousand trips in total — counting every trip it would take to empty all the hives — is comfortable.",
+                    "원문의 N · M · K 상한은 확인하지 못했어요.\n대신 이 quest 의 풀이가 감당하는 크기를 적어요.\n모든 벌집을 다 비우는 데 드는 왕복이 수십만 번까지는 넉넉해요.")}
             </div>
           </div>
         </div>),
@@ -174,16 +178,19 @@ export function makeHoneyCh1(E) {
       question: t(E,
         "Two hives with 15 each, M=10, K=2. Which way collects more?",
         "벌집 두 개에 꿀이 15 씩, M=10, K=2 예요. 어느 쪽이 더 많이 모을까요?"),
+      /* 2026-09-17 2차: 보기 둘이 각자 합계(20 · 15)를 적고 있었다.
+         질문이 "어느 쪽이 더 많이 모을까요?" 인데 보기가 답을 다 적어 줘서,
+         학생은 20 > 15 만 보고 찍으면 끝이었다. 합계는 explain 으로 내린다. */
       options: [
-        t(E, "10 from one hive, 10 from the other — 20 total",
-            "한 벌집에서 10, 다른 벌집에서 10 — 모두 20"),
-        t(E, "Empty one hive first: 10 then 5 — 15 total",
-            "한 벌집을 끝까지 비우기: 10 다음 5 — 모두 15"),
+        t(E, "10 from one hive, 10 from the other",
+            "벌집 하나에서 10, 다른 벌집에서 10"),
+        t(E, "Empty one hive first — 10, then the leftover 5",
+            "한 벌집을 끝까지 비우기 — 10, 그다음 남은 5"),
       ],
       correct: 0,
       explain: t(E,
-        "Right. A hive's leftover 5 is a small trip. Each trip should carry the biggest block still available — across all hives, not one hive at a time.",
-        "맞아요. 한 벌집을 끝까지 비우면 마지막 왕복은 5 밖에 못 담아요.\n왕복마다 남은 조각 중 가장 큰 것을 담아야 해요.\n벌집 하나씩이 아니라, 모든 벌집의 조각을 한데 놓고 고르는 거예요."),
+        "Right. 10 + 10 = 20, while 10 + 5 = 15. A hive's leftover 5 is a small trip. Each trip should carry the biggest block still available — across all hives, not one hive at a time.",
+        "맞아요. 10 + 10 = 20 이고, 10 + 5 = 15 예요.\n한 벌집을 끝까지 비우면 마지막 왕복은 5 밖에 못 담아요.\n왕복마다 남은 조각 중 가장 큰 것을 담아야 해요.\n벌집 하나씩이 아니라, 모든 벌집의 조각을 한데 놓고 고르는 거예요."),
     },
     // 1-5: Input
     {

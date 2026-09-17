@@ -87,8 +87,8 @@ function ElimWindowSim({ E }) {
           padding: "7px 10px", whiteSpace: "pre-line", ...KA,
         }}>
           {t(E,
-            "The window's left edge is called left, its right edge right — the same names the code uses.",
-            "창의 왼쪽 끝을 left, 오른쪽 끝을 right 라고 불러요.\n코드에서도 똑같은 이름을 써요.")}
+            "The stretch you pick is called the window. Its left edge is called left, its right edge right — the same names the code uses.",
+            "고른 구간을 '창' 이라고 불러요.\n창의 왼쪽 끝을 left, 오른쪽 끝을 right 라고 해요.\n코드에서도 똑같은 이름을 써요.")}
         </div>
 
         {/* the string with the window */}
@@ -324,7 +324,7 @@ export function makeMcc19ElimCh1(E) {
               <div style={{ color: C.dim, fontSize: 11, marginTop: 2, fontFamily: "inherit", ...KA, whiteSpace: "pre-line" }}>
                 {t(E,
                   "The original statement gives no exact upper bound for N.\nThink of N in the hundreds of thousands: one pass over the string is fine, but checking every stretch (about N × N of them) is not.",
-                  "원문에 N 이 얼마까지 커지는지는 적혀 있지 않아요.\nN 이 수십만이라고 생각해봐요. 한 번 훑는 건 괜찮지만,\n구간을 전부 보는 건 (약 N × N 개) 안 돼요.")}
+                  "원문에 N 이 얼마까지 커지는지는 적혀 있지 않아요.\nN 이 수십만이라고 생각해봐요. 한 번 훑는 건 괜찮아요.\n그런데 구간을 전부 보면 N 을 두 번 곱한 만큼이라 안 돼요.")}
               </div>
             </div>
           </div>
@@ -389,7 +389,7 @@ export function makeMcc19ElimCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: check every window and recount", "느림: 모든 구간을 골라 매번 다시 세기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Every start × every end ≈ N² pairs, and each recounts its zeros and ones. Times out when N is large.", "시작과 끝을 다 고르면 약 N² 쌍이고, 쌍마다 0 과 1 을 다시 세요.\nN 이 크면 시간 초과예요.")}
+                {t(E, "Every start × every end ≈ N² pairs, and each recounts its zeros and ones. Times out when N is large.", "시작과 끝을 다 고르면 구간이 N 을 두 번 곱한 만큼 나와요.\n구간마다 0 과 1 을 다시 세니, N 이 크면 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>

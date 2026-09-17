@@ -129,6 +129,12 @@ export function Mcc19PalSim({ E }) {
         <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 6, textAlign: "center", letterSpacing: 0.5 }}>
           {t(E, "HOW MANY PER LENGTH", "길이별 개수")}
         </div>
+        {/* 2026-09-17: 표만 있고 왜 채우는지가 없었다. 표를 보는 이유를 먼저 말한다. */}
+        <div style={{ fontSize: 11, color: C.dim, marginBottom: 8, textAlign: "center", lineHeight: 1.55, ...KA }}>
+          {t(E,
+            "N-th entry — but which length is it in? Count how many each length holds, and add them up until N fits.",
+            "N 번째가 어느 길이에 있는지 알아야 해요. 그래서 길이마다 몇 개인지 세고, N 이 들어갈 때까지 더해 가요.")}
+        </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           {rows.map((r, i) => {
             const isHit = i === rows.length - 1;
@@ -143,11 +149,15 @@ export function Mcc19PalSim({ E }) {
                 <span style={{ width: 62, color: C.text, fontWeight: 700 }}>
                   L = {r.length}
                 </span>
-                <span style={{ flex: 1, color: C.dim }}>
-                  K^⌈{r.length}/2⌉ = K^{r.half} = <b style={{ color: isHit ? A : C.text }}>{r.count}</b>
+                {/* 2026-09-17: 여기가 "K^⌈L/2⌉ = K^2 = 4" 와 "Σ = 6" 이었다.
+                    ⌈⌉ 도 Σ 도 화면 어디에서도 설명한 적이 없는 기호다. 말로 바꾼다. */}
+                <span style={{ flex: 1, color: C.dim, ...KA }}>
+                  {t(E, `front half ${r.half} digits → `, `앞 절반 ${r.half} 자리 → `)}
+                  <b style={{ color: isHit ? A : C.text }}>{r.count}</b>
+                  {t(E, "", " 개")}
                 </span>
-                <span style={{ color: isHit ? A : C.dim, fontWeight: isHit ? 800 : 500 }}>
-                  Σ = {r.cumulative}
+                <span style={{ color: isHit ? A : C.dim, fontWeight: isHit ? 800 : 500, ...NW }}>
+                  {t(E, `${r.cumulative} so far`, `여기까지 ${r.cumulative} 개`)}
                 </span>
               </div>
             );
@@ -169,7 +179,7 @@ export function Mcc19PalSim({ E }) {
           <b style={{ color: A }}>{localRank}</b>
         </div>
         <div style={{ fontSize: 12, color: "#5b21b6", marginBottom: 6, fontFamily: "'JetBrains Mono',monospace" }}>
-          {t(E, "front half (choose freely): ", "앞 절반 (자유롭게 고름): ")}
+          {t(E, "front half (this is the only part you pick): ", "앞 절반 (여기만 고르면 돼요): ")}
           <b style={{ color: A }}>{frontHalf}</b>
           {t(E, "  →  mirror  →  ", "  →  거울 대칭  →  ")}
           <b style={{ color: A }}>{answer}</b>
@@ -182,7 +192,7 @@ export function Mcc19PalSim({ E }) {
       <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.5, ...KA }}>
         {t(E,
           "Subtract counts length-by-length until N fits → write the local rank in base K as the front half → mirror it to get the palindrome string.",
-          "길이별 개수를 빼가며 N 이 들어가는 길이를 찾고 → 그 안 순위를 K 진법으로 적어 앞 절반을 만들고 → 거울 대칭으로 회문 문자열을 완성해요.")}
+          "길이별 개수를 빼 가며 N 이 들어가는 길이를 찾아요. 그 안에서의 순위를 K 진법으로 적으면 앞 절반이 되고, 거울 대칭으로 붙이면 회문 문자열이 완성돼요.")}
       </div>
     </div>
   );
@@ -304,9 +314,9 @@ export function getMcc19PalSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Length L holds exactly K^⌈L/2⌉ palindromes — the front ⌈L/2⌉ digits are chosen freely, and the rest is their mirror. Add these counts length by length until you pass N; that tells you the answer's length c.",
-            "길이 L 은 정확히 K^⌈L/2⌉ 개예요 — 앞 ⌈L/2⌉ 자리는 자유롭게 고르고, 나머지는 그 거울이에요. 이 개수를 길이별로 더해 N 을 넘기면, 그게 답의 길이 c 예요."),
+            "길이 L 짜리 회문은 앞 절반만 고르면 뒤는 그 거울이에요. 그래서 개수는 앞 절반의 자리 수만큼 K 를 곱한 값이에요. 이 개수를 길이별로 더해 N 을 넘기면, 그게 답의 길이 c 예요."),
         t(E, "Within length c, the 0-indexed rank r written in base K IS the front half. Left-pad it to ⌈c/2⌉ digits, then mirror to get the answer string — no need to list every palindrome.",
-            "길이 c 안에서 0 부터 센 순위 r 을 K 진법으로 적으면 그게 바로 앞 절반이에요. ⌈c/2⌉ 자리가 되게 앞을 0 으로 채운 뒤 거울 대칭하면 정답이 나와요. 모든 회문을 나열할 필요가 없어요."),
+            "길이 c 안에서 0 부터 센 순위 r 을 K 진법으로 적으면 그게 바로 앞 절반이에요. 앞 절반의 자리 수가 채워지도록 앞을 0 으로 메운 뒤 거울 대칭하면 정답이 나와요. 모든 회문을 나열할 필요가 없어요."),
       ],
       pyOnly: [
         t(E, "half[::-1] reverses the front half; half[-2::-1] mirrors it while skipping the shared middle digit (for odd lengths).",
@@ -364,7 +374,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc19PalPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc19Pal — Full Study Guide", "Mcc19Pal — 종합 풀이 노트");

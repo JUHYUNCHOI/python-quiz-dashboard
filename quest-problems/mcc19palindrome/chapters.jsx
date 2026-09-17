@@ -283,7 +283,7 @@ export function makeMcc19PalCh2(E, lang = "py") {
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
                 {t(E, "Length L holds k^⌈L/2⌉ strings (pick the front half freely, mirror it). Subtract counts length by length to land on the right length, then write the rank in base k and mirror.",
-                      "길이 L 짜리는 k^⌈L/2⌉ 개예요. 앞 절반만 고르면 뒤는 거울처럼 따라오니까요. 길이별 개수를 빼 가며 맞는 길이를 찾고, 그 안에서의 순위를 k 진법으로 적어 거울 대칭으로 완성해요.")}
+                      "길이 L 짜리 회문은 앞 절반만 고르면 뒤는 거울처럼 따라와요. 그래서 그 길이의 개수는 앞 절반의 자리 수만큼 k 를 곱한 값이에요. 길이별 개수를 빼 가며 맞는 길이를 찾고, 그 안에서의 순위를 k 진법으로 적어 거울 대칭으로 완성해요.")}
               </div>
             </div>
           </div>

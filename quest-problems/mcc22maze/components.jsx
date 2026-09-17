@@ -106,7 +106,9 @@ export function Mcc22MazeConnectSim({ E }) {
     <div style={{ padding: 16 }}>
       <div style={{ background: "#fef2f2", border: `1.5px solid ${A}`, borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center", ...KA }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: "#7f1d1d", letterSpacing: 0.5, marginBottom: 4 }}>
-          🧨 {t(E, "Clear a Row or Column", "행/열 부수기 놀이터")}
+          {/* 2026-09-17: "놀이터" 라고 이름 붙여 두니 학생에게 이 쪽이 왜 있는지가
+              안 보였다. 제목이 이 쪽에서 알아낼 것을 말하게 바꾼다. */}
+          🧨 {t(E, "How few clears link S and G?", "최소 몇 번 부수면 S 와 G 가 이어질까?")}
         </div>
         <div style={{ fontSize: 12.5, color: "#7f1d1d", lineHeight: 1.55 }}>
           {t(E,
@@ -452,14 +454,19 @@ const S4_CPP = [
 export function getMcc22MazeSections(E) {
   return [
     {
-      label: t(E, "① Union-Find (with rollback)", "① 유니온-파인드 (되돌리기)"),
+      /* 2026-09-17: 라벨이 "유니온-파인드" 라는 **이름**이었고 코드가 바로 아래 나왔다.
+         학생이 여기서 그만뒀다 — 이름도 코드도 처음 보는데 왜 필요한지가 없었다.
+         라벨은 이 도구가 **하는 일**로, why 는 ①무엇을 하려는지 → ②어떻게 → ③이름 순서로. */
+      label: t(E, "① A tool for \"are these two linked?\"", "① \"이 둘이 이어졌나?\" 를 묻는 도구"),
       color: A,
       py: S1_PY, cpp: S1_CPP,
       why: [
-        t(E, "The problem asks 'can the two corners be connected?' — that's a CONNECTIVITY question, not a shortest-path one. Union-Find joins cells into groups; two corners in the same group means 'linked'.",
-            "이 문제는 '두 모서리가 이어지나?' 를 물어요 — 최단 거리가 아니라 '연결' 문제예요. 유니온-파인드는 칸들을 묶음으로 합쳐요. 두 모서리가 같은 묶음이면 이어진 거예요."),
-        t(E, "We keep a history of every merge, so after test-clearing one row we can rollback_to and undo it — instead of rebuilding the whole structure for every row and column.",
-            "합칠 때마다 기록을 남겨서, 한 행을 시험 삼아 부순 뒤 rollback_to 로 되돌릴 수 있어요 — 행·열마다 처음부터 다시 만들 필요가 없어요."),
+        t(E, "All three questions need the same check: are S and G linked right now? We will ask it once for the original maze, then once more for every row and every column we test-clear. So we need an answer that comes back fast.",
+            "세 질문이 전부 같은 확인을 필요로 해요 — 지금 S 와 G 가 이어졌나? 원래 미로에 한 번 묻고, 시험 삼아 부수는 행마다·열마다 또 물어요. 그러니 빨리 답이 나와야 해요."),
+        t(E, "The trick is to keep cells in groups. Whenever two open cells touch, we merge their groups into one. At the end, S and G are linked exactly when they sit in the same group. That is the tool in this code — its name is union-find (DSU in the code).",
+            "방법은 칸들을 묶음으로 관리하는 거예요. 붙어 있는 통로 두 칸을 만나면 두 묶음을 하나로 합쳐요. 그러면 S 와 G 가 같은 묶음일 때가 바로 이어진 때예요. 이 도구의 이름이 유니온-파인드(코드에서는 DSU) 예요."),
+        t(E, "One more thing we need: we clear a row only to TRY it, so we must be able to put the maze back. That is why every merge is written down in history — undoing means walking that list backwards. Without it we would have to rebuild everything for each row and column.",
+            "한 가지가 더 필요해요. 행을 부수는 건 시험 삼아 해 보는 거라서 다시 원래대로 되돌려 놓아야 해요. 그래서 합칠 때마다 history 에 적어 둬요 — 되돌리기는 그 목록을 거꾸로 되짚는 일이에요. 이게 없으면 행·열마다 처음부터 다시 만들어야 해요."),
       ],
     },
     {
@@ -546,7 +553,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc22MazePDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 차단됐어요.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc22Maze — Full Study Guide", "Mcc22Maze — 종합 풀이 노트");
