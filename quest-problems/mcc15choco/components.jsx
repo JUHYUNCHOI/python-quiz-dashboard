@@ -14,7 +14,7 @@ const SIM_BARS = [3, 4, 4, 5, 9, 9, 5, 2];
 const SIM_FRAMES = [
   { idx: -1, stack: [], total: 0, removed: [],
     actionEN: "Start: the stack is empty and nothing has been taken yet.",
-    actionKO: "시작: 스택은 비었고, 아직 가져간 초콜릿은 없어요." },
+    actionKO: "처음엔 스택이 비어 있고, 가져간 초콜릿도 없어요." },
   { idx: 0, stack: [3], total: 0, removed: [],
     actionEN: "Bar 3: nothing to compare with → keep it on the stack.",
     actionKO: "바 3: 비교할 게 없어요 → 스택에 올려둬요." },
@@ -90,7 +90,7 @@ export function Mcc15ChocoStackSim({ E }) {
         alignItems: "center", gap: 4,
       }}>
         <div style={{ fontSize: 10, color: "#5b21b6", fontWeight: 700, letterSpacing: 0.5, marginTop: 4 }}>
-          {t(E, "STACK (bottom → top)", "스택 (바닥 → top)")}
+          {t(E, "STACK (bottom → top)", "스택 (바닥 → 맨 위)")}
         </div>
         {frame.stack.length === 0 && (
           <div style={{ fontSize: 11, color: C.dim, fontStyle: "italic", padding: "10px 0" }}>
@@ -223,7 +223,7 @@ export function getMcc15ChocoSections(E) {
       ],
       cppOnly: [
         t(E, "vector works as a stack: push_back / pop_back / back(). std::stack would work too.",
-            "vector 를 스택처럼 써요: push_back / pop_back / back(). std::stack 을 써도 돼요."),
+            "vector 를 스택처럼 써요.\npush_back 으로 올리고, pop_back 으로 빼고, back() 으로 맨 위를 봐요.\nstd::stack 을 써도 돼요."),
         t(E, "The total needs long long: 1,000,000 bars of length 1,000,000 would overflow int.",
             "총합은 long long 이어야 해요. 길이 1,000,000 짜리 바가 1,000,000 개면 int 로는 넘쳐요."),
       ],

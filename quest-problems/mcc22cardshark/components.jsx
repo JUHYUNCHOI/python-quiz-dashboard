@@ -119,35 +119,35 @@ const SEC2_CPP = [
 export function getMcc22CardSharkSections(E) {
   return [
     {
-      label: t(E, "① Collapse each stack to D", "① 각 스택을 D 로 줄이기"),
+      label: t(E, "① Collapse each stack to D", "① 각 묶음을 D 로 줄이기"),
       color: A,
       py: SEC1_PY, cpp: SEC1_CPP,
       why: [
         t(E, "A whole stack keeps its internal order, so its effect on score1 − score2 is fixed up to a sign: the alternating sum D = c1 − c2 + c3 − … (cards top → bottom).",
-            "스택은 내부 순서가 그대로라, score1 − score2 에 주는 효과는 부호만 빼면 정해져 있어요: 교대 합 D = c1 − c2 + c3 − … (카드는 위 → 아래)."),
+            "묶음은 안의 카드 순서가 그대로예요. 그래서 score1 − score2 에 주는 효과도 부호만 빼면 이미 정해져 있어요. 그 값이 교대 합 D = c1 − c2 + c3 − … 예요 (카드는 위 → 아래)."),
         t(E, "Split stacks by length parity: even-length and odd-length behave differently, because odd-length stacks FLIP the position parity of everything placed after them.",
-            "길이의 홀짝으로 스택을 나눠요: 홀수 길이 스택은 뒤에 오는 모든 카드의 위치 홀짝을 뒤집기 때문에, 짝수 길이와 다르게 다뤄야 해요."),
+            "묶음을 길이의 홀짝으로 나눠요. 길이가 홀수인 묶음은 뒤에 오는 모든 카드의 위치 홀짝을 뒤집어요. 그래서 길이가 짝수인 묶음과 다르게 다뤄야 해요."),
       ],
       pyOnly: [
         t(E, "(even_D if m % 2 == 0 else odd_D).append(D) picks the right bucket in one line.",
-            "(even_D if m % 2 == 0 else odd_D).append(D) 로 한 줄에 알맞은 통에 넣어요."),
+            "(even_D if m % 2 == 0 else odd_D).append(D) 라고 쓰면 한 줄로 알맞은 통에 넣을 수 있어요."),
       ],
       cppOnly: [
         t(E, "Cards can be ±10^9 and there can be 2·10^5 of them — keep D and the answer in long long.",
-            "카드가 ±10^9, 개수가 2·10^5 까지라 D 와 정답은 long long 으로 둬요."),
+            "카드 값이 ±10^9 까지 가고 카드 수도 2·10^5 까지라서, D 와 정답은 long long 에 담아요."),
       ],
     },
     {
-      label: t(E, "② Pick signs & output", "② 부호 정하고 출력"),
+      label: t(E, "② Pick signs & output", "② 부호 정하고 출력하기"),
       color: A,
       py: SEC2_PY, cpp: SEC2_CPP,
       why: [
         t(E, "Each stack contributes +D (if it starts on an odd, P1 position) or −D (even, P2). If any odd-length stack exists, both parities are reachable, so every EVEN stack can grab +|D|.",
-            "각 스택은 +D (홀수·P1 위치에서 시작) 또는 −D (짝수·P2) 를 기여해요. 홀수 길이 스택이 하나라도 있으면 두 홀짝을 다 만들 수 있어, 모든 짝수 스택은 +|D| 를 챙길 수 있어요."),
+            "각 묶음은 홀수 위치(P1)에서 시작하면 +D 를, 짝수 위치(P2)에서 시작하면 −D 를 더해요. 길이가 홀수인 묶음이 하나라도 있으면 두 홀짝을 다 만들 수 있어요. 그래서 길이가 짝수인 묶음은 모두 +|D| 를 챙길 수 있어요."),
         t(E, "Odd-length stacks flip the parity, so along the order their signs alternate +, −, +, … — exactly ceil(k/2) get +. Sort their D descending and give + to the top half to maximize.",
-            "홀수 길이 스택은 홀짝을 뒤집어서 순서를 따라 부호가 +, −, +, … 로 번갈아요 — 정확히 ceil(k/2) 개가 +. D 를 내림차순 정렬해 위쪽 절반에 + 를 줘 최댓값을 만들어요."),
+            "길이가 홀수인 묶음은 홀짝을 뒤집어요. 그래서 늘어놓은 순서를 따라 부호가 +, −, +, … 로 번갈아요. k 개 중에서 정확히 ceil(k/2) 개가 + 를 받아요. D 를 큰 것부터 정렬해 위쪽 절반에 + 를 주면 최댓값이 돼요."),
         t(E, "Edge case: if NO stack is odd-length, every stack is forced to start on an odd position → all contribute +D, so just sum the D's.",
-            "예외: 홀수 길이 스택이 하나도 없으면 모든 스택이 홀수 위치에서 시작하도록 강제돼요 → 전부 +D, 그래서 D 를 그냥 다 더해요."),
+            "길이가 홀수인 묶음이 하나도 없을 때가 예외예요. 이때는 모든 묶음이 홀수 위치에서 시작할 수밖에 없어요. 그래서 전부 +D 가 되고, D 를 그냥 다 더하면 돼요."),
       ],
       pyOnly: [
         t(E, "sum('\\n'.join(out)) once at the end is faster than printing inside the loop.",
@@ -201,7 +201,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc22CardSharkPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc22CardShark — Full Study Guide", "Mcc22CardShark — 종합 풀이 노트");
@@ -224,7 +224,7 @@ export function downloadMcc22CardSharkPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

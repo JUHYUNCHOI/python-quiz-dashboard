@@ -134,7 +134,7 @@ export function makeReachCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Reachability Queries!\nA dragon starts in city 1.\nSome roads are weak — they all collapse at minute K.\nFor each K, how many cities can the dragon reach?\n🐉", "도달할 수 있는지 묻는 문제! 용이 도시 1에서 출발해요. 일부 다리는 약해서 K분에 전부 무너져요. 각 K마다 용이 갈 수 있는 도시는 몇 개일까요? 🐉"),
+        "Reachability Queries!\nA dragon starts in city 1.\nSome roads are weak — they all collapse at minute K.\nFor each K, how many cities can the dragon reach?\n🐉", "어디까지 갈 수 있는지 묻는 문제!\n용이 도시 1 에서 출발해요.\n약한 다리는 K분에 전부 무너져요.\nK 마다 용이 갈 수 있는 도시는 몇 개일까요?\n🐉"),
       content: (
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 4 }}>🐉</div>
@@ -149,7 +149,7 @@ export function makeReachCh1(E) {
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
                 "Some roads are weak — they all collapse at minute K. For each query K, output how many cities the dragon can reach from city 1.",
-                "일부 다리는 약해서 K분에 전부 무너져요. 쿼리 K 마다 — 용이 도시 1 에서 갈 수 있는 도시가 몇 개인지 출력.")}
+                "일부 다리는 약해서 K분에 전부 무너져요. 질문마다 K 가 하나씩 주어져요. 그때 용이 도시 1 에서 갈 수 있는 도시가 몇 개인지 출력해요.")}
             </div>
           </div>
 
@@ -159,7 +159,7 @@ export function makeReachCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The rules: weak roads all collapse at minute K.\nYou can't start one at K or later, and you must finish crossing by K — arriving exactly at K is fine.", "규칙을 알아보자! 약한 다리는 K분에 전부 무너져요. K 이후엔 출발 못 하고, K 안에 다 건너야 해요 — 딱 K에 도착하는 건 괜찮아!"),
+        "The rules: weak roads all collapse at minute K.\nYou can't start one at K or later, and you must finish crossing by K — arriving exactly at K is fine.", "규칙을 알아봐요!\n약한 다리는 K분에 전부 무너져요.\nK 가 되면 출발할 수 없고, K 안에 다 건너야 해요.\n딱 K 에 도착하는 건 괜찮아요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
@@ -171,13 +171,13 @@ export function makeReachCh1(E) {
           }}>
             <div>🟢 {t(E,
               "Safe roads: never collapse — usable anytime",
-              "안전한 다리: 안 무너져요 — 언제든 사용 가능")}</div>
+              "안전한 다리는 안 무너져요 — 언제든 건널 수 있어요")}</div>
             <div>🔴 {t(E,
               "Weak roads: usable now, but ALL collapse at minute K — start before K AND finish by K",
-              "약한 다리: 지금은 OK, 하지만 K분에 전부 무너짐 — 출발은 K 전, 도착은 K 이하일 때만")}</div>
+              "약한 다리는 지금은 괜찮지만 K분에 전부 무너져요 — 출발은 K 전, 도착은 K 를 넘지 않을 때만")}</div>
             <div>❌ {t(E,
               "From minute K on, weak roads are gone",
-              "K분부터 약한 다리는 사라진 상태")}</div>
+              "K분부터 약한 다리는 사라지고 없어요")}</div>
           </div>
           {/* 왜 도착=K 는 되고 출발=K 는 안 되나 — 이 비대칭이 이 문제의 핵심 함정 */}
           <div style={{
@@ -187,7 +187,7 @@ export function makeReachCh1(E) {
           }}>
             🤔 {t(E,
               "Why is arrive = K okay, but start = K not?  Arriving exactly at K means you finished crossing the instant it collapses → safe.  Starting at K means the road is already collapsing → you can't get on.",
-              "왜 도착 = K 는 되고 출발 = K 는 안 될까?  딱 K 에 도착 = 무너지는 바로 그 순간 다 건넜다 → 세이프.  K 에 출발 = 다리가 이미 무너지는 중 → 올라탈 수 없어.")}
+              "왜 도착 = K 는 되고 출발 = K 는 안 될까요?  딱 K 에 도착했다면 무너지는 바로 그 순간에 다 건넌 거예요 → 안전!  K 에 출발하면 다리가 이미 무너지는 중이에요 → 올라탈 수 없어요.")}
           </div>
         </div>),
     },
@@ -198,7 +198,7 @@ export function makeReachCh1(E) {
       type: "reveal",
       narr: t(E,
         "So how does the data arrive?\nThe graph, then which roads are weak, then the K queries. Start is always city 1.",
-        "그럼 데이터는 어떻게 들어올까?\n그래프 → 어떤 다리가 약한지 → K 쿼리 순서. 출발은 언제나 도시 1이에요."),
+        "그럼 데이터는 어떻게 들어올까요?\n그래프 → 어떤 다리가 약한지 → K 질문 순서예요.\n출발은 언제나 도시 1 이에요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           {/* INPUT */}
@@ -208,15 +208,15 @@ export function makeReachCh1(E) {
               <div><span style={{ color: "#92400e", fontWeight: 800 }}>N M</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(first line) — cities, roads", "(첫 줄) — 도시 수, 도로 수")}</span></div>
               <div style={{ marginTop: 6, paddingLeft: 10, borderLeft: `2px solid #fde68a` }}>
                 <div><span style={{ color: "#92400e", fontWeight: 800 }}>x y w</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— road: city x ↔ y, length w", "— 도로: 도시 x ↔ y, 길이 w")}</span></div>
-                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats M times (road i = i-th line)", "↑ 이 줄이 M 번 반복 (i번째 줄 = i번 도로)")}</div>
+                <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ this line repeats M times (road i = i-th line)", "↑ 이 줄이 M 번 반복돼요 (i번째 줄 = i번 도로)")}</div>
               </div>
               <div style={{ marginTop: 6 }}><span style={{ color: "#92400e", fontWeight: 800 }}>S</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of weak roads", "— 약한 다리 개수")}</span></div>
               <div style={{ paddingLeft: 10, borderLeft: `2px solid #fde68a` }}>
                 <div><span style={{ color: "#92400e", fontWeight: 800 }}>d<sub>1</sub> … d<sub>S</sub></span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— numbers of the weak roads", "— 약한 다리의 번호들")}</span></div>
               </div>
-              <div style={{ marginTop: 6 }}><span style={{ color: "#92400e", fontWeight: 800 }}>Q</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of queries", "— 쿼리 개수")}</span></div>
+              <div style={{ marginTop: 6 }}><span style={{ color: "#92400e", fontWeight: 800 }}>Q</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— number of queries", "— 질문 개수")}</span></div>
               <div style={{ paddingLeft: 10, borderLeft: `2px solid #fde68a` }}>
-                <div><span style={{ color: "#92400e", fontWeight: 800 }}>K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the time the roads break, for this query", "— 이 쿼리에서 도로가 부서지는 시각")}</span></div>
+                <div><span style={{ color: "#92400e", fontWeight: 800 }}>K</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "— the time the roads break, for this query", "— 이 질문에서 도로가 무너지는 시각")}</span></div>
                 <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "↑ one K per line, Q times", "↑ 한 줄에 K 하나씩, Q 번 반복")}</div>
               </div>
             </div>
@@ -226,7 +226,7 @@ export function makeReachCh1(E) {
             <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
             <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
               {t(E, "Q lines — for query i, how many cities are reachable from city 1.",
-                  "Q 줄 — 각 쿼리마다 도시 1에서 도달 가능한 도시 개수.")}
+                  "Q 줄 — 질문마다 도시 1 에서 갈 수 있는 도시 개수.")}
             </div>
           </div>
           {/* 제약 */}
@@ -243,7 +243,7 @@ export function makeReachCh1(E) {
           </div>
           <div style={{ fontSize: 11.5, color: C.dim, textAlign: "center", wordBreak: "keep-all" }}>
             {t(E, "Next: watch the real sample input turn into a graph, line by line 👉",
-                "다음: 실제 샘플 입력이 한 줄씩 그래프로 변하는 걸 봐요 👉")}
+                "다음은 실제 예제 입력이 한 줄씩 그래프로 변하는 걸 봐요 👉")}
           </div>
         </div>),
     },
@@ -252,14 +252,14 @@ export function makeReachCh1(E) {
       type: "graphBuild",
       narr: t(E,
         "Now read the REAL sample input, line by line, and watch the graph appear: 5 cities → each road → which are weak → the K queries.",
-        "이제 실제 샘플 입력을 한 줄씩 읽으면서 그래프가 만들어지는 걸 봐요: 도시 5개 → 도로 하나씩 → 어떤 다리가 약한지 → K 쿼리."),
+        "이제 실제 예제 입력을 한 줄씩 읽어요.\n그래프가 만들어지는 걸 봐요 — 도시 5개 → 도로 하나씩 →\n어떤 다리가 약한지 → K 질문."),
     },
     // 1-5: Step-sim — pick K, watch each city get reached (or blocked) one by one.
     {
       type: "reachSpread",
       narr: t(E,
         "Play out each query: pick K = 6, 11, or 12, then ▶ to watch each city get reached — or blocked — and see the answers land on 2, 4, 5.",
-        "쿼리를 직접 돌려봐요: K = 6, 11, 12 중 골라 ▶ 를 누르면 도시가 하나씩 도달(또는 차단)돼요. 답이 2, 4, 5 로 떨어지는 걸 확인!"),
+        "질문을 직접 돌려봐요.\nK = 6, 11, 12 중 골라 ▶ 를 누르면\n도시가 하나씩 열리거나 막혀요.\n답이 2, 4, 5 로 떨어지는 걸 확인해요!"),
     },
   ];
 }
@@ -284,14 +284,14 @@ export function makeReachCh2(E) {
       type: "fastestWay",
       narr: t(E,
         "So how do we solve it? Look at city 3: two ways to get there — but we only ever need the FASTEST one.",
-        "그럼 어떻게 해결하면 될까? 도시 3을 봐요: 가는 길이 두 개인데 — 우리한테 필요한 건 '가장 빠른 길' 하나뿐이에요."),
+        "그럼 어떻게 해결하면 될까요?\n도시 3 을 봐요. 가는 길이 두 개예요.\n하지만 우리한테 필요한 건 '가장 빠른 길' 하나뿐이에요."),
     },
     // 2-3: 새 생각법 — 확실한 것부터 확정 (실제 숫자로)
     {
       type: "reveal",
       narr: t(E,
         "Idea: start from what's 100% CERTAIN, and lock in one city at a time.",
-        "아이디어: 100% 확실한 것부터, 도시를 하나씩 '확정'해 나가요."),
+        "100% 확실한 것부터 시작해요.\n도시를 하나씩 '확정'해 나가는 거예요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
@@ -305,7 +305,7 @@ export function makeReachCh2(E) {
           {/* 단계 2: 후보 */}
           <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "9px 12px", fontSize: 12.5, lineHeight: 1.7, color: C.text, marginBottom: 8 }}>
             ② {t(E, <>From city 1, two candidates open up:  city 2 = <b style={{ fontFamily: mono }}>7 min</b>,  city 5 = <b style={{ fontFamily: mono }}>18 min</b>.  Candidates — not certain yet.</>,
-                   <>도시 1에서 후보 두 개가 생겨요:  도시 2 = <b style={{ fontFamily: mono }}>7분</b>,  도시 5 = <b style={{ fontFamily: mono }}>18분</b>.  아직 '후보'일 뿐, 확정은 아님.</>)}
+                   <>도시 1 에서 후보가 두 개 생겨요.  도시 2 = <b style={{ fontFamily: mono }}>7분</b>,  도시 5 = <b style={{ fontFamily: mono }}>18분</b>.  아직 '후보'일 뿐이라 확정은 아니에요.</>)}
           </div>
           {/* 단계 3: 제일 이른 후보 확정 + why */}
           <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "9px 12px", fontSize: 12.5, lineHeight: 1.7, color: "#14532d", marginBottom: 8 }}>
@@ -315,13 +315,13 @@ export function makeReachCh2(E) {
               🤔 <b>{t(E, "Why is 7 certain?", "왜 7분이 확실하지?")}</b>{" "}
               {t(E,
                 "Any other route to city 2 must START with some other road — and every other road out of city 1 already takes longer than 7. It can't beat 7.",
-                "도시 2로 가는 다른 길은 어차피 다른 다리로 시작해야 하는데, 도시 1에서 나가는 다른 다리(18분…)는 시작부터 이미 7분보다 늦어요. 7분을 이길 수 없어요.")}
+                "도시 2 로 가는 다른 길은 어차피 다른 다리로 시작해야 해요. 그런데 도시 1 에서 나가는 다른 다리(18분…)는 시작부터 이미 7분보다 늦어요. 그래서 7분을 이길 수 없어요.")}
             </div>
           </div>
           {/* 단계 4: 반복 */}
           <div style={{ background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "8px 12px", fontSize: 12.5, lineHeight: 1.7, color: "#92400e" }}>
             ④ {t(E, <>City 2 (7 min) locked → new candidates through it:  city 3 = 7+10 = <b style={{ fontFamily: mono }}>17</b>,  city 4 = 7+5 = <b style={{ fontFamily: mono }}>12</b>.  Repeat: “lock the earliest candidate” until every city is done!</>,
-                   <>도시 2(7분) 확정 → 2를 거치는 새 후보:  도시 3 = 7+10 = <b style={{ fontFamily: mono }}>17분</b>,  도시 4 = 7+5 = <b style={{ fontFamily: mono }}>12분</b>.  이제 “제일 이른 후보 확정”을 모든 도시가 끝날 때까지 반복!</>)}
+                   <>도시 2(7분) 확정 → 2 를 거치는 새 후보가 생겨요.  도시 3 = 7+10 = <b style={{ fontFamily: mono }}>17분</b>,  도시 4 = 7+5 = <b style={{ fontFamily: mono }}>12분</b>.  이제 “제일 이른 후보 확정”을 모든 도시가 끝날 때까지 반복해요!</>)}
           </div>
           <div style={{ marginTop: 8, fontSize: 11.5, color: C.dim, textAlign: "center" }}>
             {t(E, "Watch it run to the end on our sample 👇", "예제에서 끝까지 돌아가는 걸 봐요 👇")}
@@ -333,14 +333,14 @@ export function makeReachCh2(E) {
       type: "dijkstraTrace",
       narr: t(E,
         "Run 'lock the earliest candidate' to the end on our graph (all roads usable for now). ▶ each step: which city gets locked, which candidates update.",
-        "'제일 이른 후보 확정'을 예제 그래프에서 끝까지 돌려봐요 (일단 모든 다리 사용 가능). ▶ 마다: 어느 도시가 확정되고, 어떤 후보가 갱신되는지."),
+        "'제일 이른 후보 확정'을 예제 그래프에서 끝까지 돌려봐요.\n(일단 모든 다리를 쓸 수 있다고 쳐요)\n▶ 를 누를 때마다 어느 도시가 확정되고\n어떤 후보가 바뀌는지 봐요."),
     },
     // 2-5: 이름 공개 — 다익스트라 + 왜 BFS 는 안 되나
     {
       type: "reveal",
       narr: t(E,
         "This method has a name: Dijkstra's algorithm — THE standard tool for shortest times on weighted graphs.",
-        "방금 그 방법의 이름 = 다익스트라(Dijkstra) 알고리즘. 시간이 각각 다른 그래프에서 최단 시간을 구하는 표준 도구예요."),
+        "방금 그 방법에는 이름이 있어요 — 다익스트라(Dijkstra) 알고리즘.\n다리마다 걸리는 시간이 다른 그래프에서\n가장 빠른 시간을 구하는 대표 도구예요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           <div style={{ textAlign: "center", marginBottom: 10 }}>
@@ -357,18 +357,18 @@ export function makeReachCh2(E) {
             <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "8px 10px", fontSize: 12, lineHeight: 1.6, color: "#7f1d1d" }}>
               <div style={{ fontWeight: 800, marginBottom: 2 }}>❌ BFS</div>
               {t(E, "Counts roads (1 hop each), ignores times. 1→2 direct (7 min) and 1→5 direct (18 min) look the same: “1 road”. Wrong tool here.",
-                    "다리 '개수'만 세요. 1→2 (7분)도 1→5 (18분)도 똑같이 “다리 1개”로 보여요. 시간이 다른 이 문제엔 안 맞아요.")}
+                    "다리 '개수'만 세요. 1→2 (7분)도 1→5 (18분)도 똑같이 “다리 1개”로 보여요. 시간이 다른 이 문제에는 안 맞아요.")}
             </div>
             <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "8px 10px", fontSize: 12, lineHeight: 1.6, color: "#14532d" }}>
               <div style={{ fontWeight: 800, marginBottom: 2 }}>✅ {t(E, "Dijkstra", "다익스트라")}</div>
               {t(E, "Uses real times → the earliest arrival to every city. Exactly the number we need.",
-                    "실제 시간을 써요 → 각 도시의 '가장 빠른 도착 시각'. 우리가 필요한 바로 그 숫자.")}
+                    "실제 시간을 써요 → 도시마다 '가장 빠른 도착 시각'이 나와요. 우리한테 필요한 바로 그 숫자예요.")}
             </div>
           </div>
           <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#1e3a8a", lineHeight: 1.65 }}>
             📌 {t(E,
               <><b>When to reach for Dijkstra:</b> roads (edges) have different costs/times, and the question is “fastest / shortest / cheapest way from a start”.</>,
-              <><b>다익스트라를 꺼내는 순간:</b> 다리(간선)마다 시간/비용이 다르고, “출발점에서 가장 빨리/짧게/싸게”를 물을 때.</>)}
+              <><b>다익스트라는 언제 꺼낼까요?</b> 다리(간선)마다 걸리는 시간이나 비용이 다르고, “출발점에서 가장 빨리·짧게·싸게”를 물을 때예요.</>)}
           </div>
         </div>),
     },
@@ -377,7 +377,7 @@ export function makeReachCh2(E) {
       type: "reveal",
       narr: t(E,
         "Back to OUR problem: plain Dijkstra + ONE extra check on red roads. That's the whole solution.",
-        "이제 우리 문제로: 그냥 다익스트라에 빨간 다리 검사 딱 하나만 추가하면 — 그게 풀이 전부예요."),
+        "이제 우리 문제로 돌아와요.\n그냥 다익스트라에 빨간 다리 검사 딱 하나만 더하면 돼요.\n그게 풀이의 전부예요."),
       content: (
         <div style={{ padding: 16, wordBreak: "keep-all" }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
@@ -386,19 +386,19 @@ export function makeReachCh2(E) {
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 10, padding: "9px 12px", fontSize: 12.5, lineHeight: 1.7, color: "#14532d" }}>
               🟢 {t(E, <>Green road → use it exactly like normal Dijkstra. No change.</>,
-                     <>초록 다리 → 그냥 평소 다익스트라처럼 사용. 바꿀 것 없음.</>)}
+                     <>초록 다리 → 평소 다익스트라처럼 그냥 써요. 바꿀 것이 없어요.</>)}
             </div>
             <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "9px 12px", fontSize: 12.5, lineHeight: 1.7, color: "#7f1d1d" }}>
               🔴 {t(E, <>Red road → allowed only if you <b>start before K</b> and <b>finish by K</b> (finish time = current clock + road time). Otherwise skip that road.</>,
-                     <>빨간 다리 → <b>출발이 K 전</b>이고 <b>다 건넌 시각 ≤ K</b> 일 때만 사용 (건넌 시각 = 지금 시계 + 다리 시간). 아니면 그 다리는 건너뛰기.</>)}
+                     <>빨간 다리 → <b>출발이 K 전</b>이고 <b>다 건넌 시각 ≤ K</b> 일 때만 써요 (다 건넌 시각 = 지금 시계 + 다리 시간). 아니면 그 다리는 건너뛰어요.</>)}
             </div>
             <div style={{ background: "#f5f3ff", border: "1px solid #c4b5fd", borderRadius: 10, padding: "9px 12px", fontSize: 12.5, lineHeight: 1.7, color: C.text }}>
               🔁 {t(E, <>Each query K = run this once and count the cities that got a time (not ∞). Q queries → Q runs.</>,
-                     <>쿼리 K 하나 = 이걸 한 번 돌리고, 시각이 매겨진(∞ 아닌) 도시 수를 세면 답. 쿼리 Q개 → Q번 실행.</>)}
+                     <>질문 K 하나 = 이걸 한 번 돌리고, 시각이 매겨진(∞ 아닌) 도시 수를 세면 답이에요. 질문 Q개 → Q번 돌려요.</>)}
             </div>
           </div>
           <div style={{ marginTop: 10, background: "#fffbeb", border: "1.5px solid #fbbf24", borderRadius: 8, padding: "7px 12px", fontSize: 12, fontWeight: 700, color: "#92400e", textAlign: "center" }}>
-            {t(E, "Next chapter: this exact plan, as code 👉", "다음 챕터: 이 계획 그대로 코드로 👉")}
+            {t(E, "Next chapter: this exact plan, as code 👉", "다음 챕터에서는 이 계획을 그대로 코드로 옮겨요 👉")}
           </div>
         </div>),
     },
@@ -416,7 +416,7 @@ export function makeReachCh3(E) {
       type: "reveal",
       narr: t(E,
         "Time to turn the plan into code — exactly the 3 pieces from last chapter: read input → Dijkstra with the red-road check → count per query.\nFirst: read the input.",
-        "앞 챕터 계획을 그대로 코드로 옮겨요 — 입력 읽기 → 빨간 다리 검사 붙인 다익스트라 → 쿼리마다 세기, 딱 3조각.\n먼저: 입력 읽기."),
+        "앞 챕터에서 세운 계획을 그대로 코드로 옮겨요.\n입력 읽기 → 빨간 다리 검사를 붙인 다익스트라 →\n질문마다 세기. 딱 세 조각이에요.\n먼저 입력부터 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 6 }}>
@@ -442,7 +442,7 @@ export function makeReachCh3(E) {
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, textAlign: "center" }}>
             {t(E,
               "Adjacency list: for each city, store (neighbor, weight, edge_index)",
-              "인접 리스트: 각 도시마다 (이웃, 거리, 도로번호) 저장")}
+              "인접 목록이에요. 도시마다 (이웃, 거리, 도로번호) 를 저장해요")}
           </div>
         </div>),
     },
@@ -450,11 +450,11 @@ export function makeReachCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Next, read which roads are weak (the damaged set) and the Q queries (values of K).", "다음으로 약한 다리 목록(damaged)과 쿼리(K 값들)를 읽어."),
+        "Next, read which roads are weak (the damaged set) and the Q queries (values of K).", "다음으로 약한 다리 목록(damaged)을 읽어요.\n그리고 질문으로 들어오는 K 값들도 읽어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 6 }}>
-            {t(E, "Step 2: Weak roads & queries", "2단계: 약한 다리 & 쿼리")}
+            {t(E, "Step 2: Weak roads & queries", "2단계: 약한 다리와 질문")}
           </div>
           <CodeSnippet
             lines={[
@@ -478,7 +478,7 @@ export function makeReachCh3(E) {
           }}>
             💡 {t(E,
               "Store edge indices as 0-indexed (subtract 1)!",
-              "도로 번호는 0부터 시작하게 -1 해서 저장!")}
+              "도로 번호는 0부터 시작하게 -1 해서 저장해요!")}
           </div>
         </div>),
     },
@@ -486,7 +486,7 @@ export function makeReachCh3(E) {
     {
       type: "reveal",
       narr: t(E,
-        "The core: Dijkstra with the weak-road check.\nSafe roads always usable.\nWeak roads only if start_time < K and arrive_time ≤ K.", "핵심 부분! 다익스트라인데, 약한 다리에 검사를 하나 걸어요. 안전한 다리는 항상 OK, 약한 다리는 출발 < K, 도착 ≤ K 일 때만!"),
+        "The core: Dijkstra with the weak-road check.\nSafe roads always usable.\nWeak roads only if start_time < K and arrive_time ≤ K.", "여기가 핵심이에요!\n다익스트라에 약한 다리 검사를 하나 걸어요.\n안전한 다리는 언제나 쓸 수 있어요.\n약한 다리는 출발 < K, 도착 ≤ K 일 때만 쓸 수 있어요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 6 }}>
@@ -517,7 +517,7 @@ export function makeReachCh3(E) {
           <div style={{ marginTop: 8, fontSize: 12, color: C.dim, textAlign: "center" }}>
             {t(E,
               "Key: weak-road check at lines 10-12",
-              "핵심: 10-12번 줄의 약한 다리 검사")}
+              "10-12번 줄의 약한 다리 검사가 핵심이에요")}
           </div>
         </div>),
     },
@@ -526,13 +526,13 @@ export function makeReachCh3(E) {
       type: "dijkstraKAudit",
       narr: t(E,
         "Deep audit time! Pick K=6, 11, or 12, then click Next to walk through every edge the algorithm checks.\nWatch which damaged edges get blocked by `not(d < K and arrive <= K)` and which slip through.\nThis is exactly what the inner loop does — line by line.",
-        "심층 점검 시간! K = 6, 11, 12 중 골라요. 다음 버튼을 누를 때마다 알고리즘이 검사하는 도로 하나씩 따라가. 약한 다리 중 어떤 것이 `not(d < K and arrive <= K)` 검사에 걸려 차단되고 어떤 것이 통과하는지 봐. 코드의 안쪽 루프가 그대로 한 줄씩 펼쳐지는 거야!"),
+        "꼼꼼히 들여다볼 시간이에요!\nK = 6, 11, 12 중 하나를 골라요.\n다음 버튼을 누를 때마다 알고리즘이 검사하는 도로를 하나씩 따라가요.\n약한 다리 중 어떤 것이 `not(d < K and arrive <= K)` 에 걸려 막히고\n어떤 것이 통과하는지 봐요.\n코드 안쪽 반복문이 그대로 한 줄씩 펼쳐지는 거예요!"),
     },
     // 3-4: Why it works
     {
       type: "reveal",
       narr: t(E,
-        "Why does this work?\nDijkstra always locks in the earliest city first.\nSo when a city gets its time, it IS the fastest arrival.\nFor weak roads, we just add the K check.", "왜 이게 맞을까? 다익스트라는 항상 제일 이른 도시부터 확정해요. 그래서 시각이 매겨지면 그게 가장 빠른 도착이에요. 약한 다리는 K 검사만 추가하면 끝!"),
+        "Why does this work?\nDijkstra always locks in the earliest city first.\nSo when a city gets its time, it IS the fastest arrival.\nFor weak roads, we just add the K check.", "왜 이게 맞을까요?\n다익스트라는 항상 제일 이른 도시부터 확정해요.\n그래서 시각이 매겨지면 그게 가장 빠른 도착이에요.\n약한 다리는 K 검사만 더하면 끝이에요!"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: A, marginBottom: 8, textAlign: "center" }}>
@@ -544,13 +544,13 @@ export function makeReachCh3(E) {
           }}>
             <div>✅ {t(E,
               "Dijkstra finds shortest paths = earliest arrival times",
-              "다익스트라 = 최단 거리 = 가장 빠른 도착 시각")}</div>
+              "다익스트라가 구하는 최단 거리 = 가장 빠른 도착 시각")}</div>
             <div>✅ {t(E,
               "Damaged road constraint: just skip if time doesn't allow",
-              "약한 다리 검사: 시간이 안 맞으면 그냥 건너뛰기")}</div>
+              "약한 다리는 시간이 안 맞으면 그냥 건너뛰어요")}</div>
             <div>✅ {t(E,
               "Monotonic: larger K → more roads usable → more cities",
-              "단조 증가: K가 클수록 도로를 더 쓸 수 있어 → 도시 더 많이 도달")}</div>
+              "K 가 클수록 쓸 수 있는 도로가 많아져요 → 갈 수 있는 도시도 늘어나요")}</div>
           </div>
           <div style={{
             marginTop: 10, background: "#fff7ed", borderRadius: 8, padding: "8px 12px",
@@ -559,11 +559,11 @@ export function makeReachCh3(E) {
           }}>
             ⚠️ {t(E,
               "Heads up: this runs a full Dijkstra PER query = O(Q · M log N).  Clear to read, but too slow for the biggest inputs (Q, M up to hundreds of thousands) — it would TLE.",
-              "짚고 가기: 이 코드는 쿼리마다 다익스트라를 처음부터 = O(Q · M log N).  읽기엔 명확하지만 큰 입력(Q, M 수십만)엔 너무 느려요 — 시간초과(TLE).")}
+              "짚고 갈 것이 있어요. 이 코드는 질문마다 다익스트라를 처음부터 다시 돌려요 = O(Q · M log N).  읽기엔 명확하지만 큰 입력(Q, M 수십만)에는 너무 느려요 — 시간 초과예요.")}
             <div style={{ marginTop: 4, fontWeight: 700 }}>
               💡 {t(E,
                 "Full score: sort queries by K and add roads incrementally (offline), so you don't recompute from scratch each time.",
-                "만점 풀이: 쿼리를 K 로 정렬해 도로를 점점 추가(오프라인)하면 매번 처음부터 다시 계산 안 해도 돼요.")}
+                "만점 풀이는 이래요. 질문을 K 순서로 줄 세워 놓고 도로를 조금씩 늘려 가면 매번 처음부터 다시 계산하지 않아도 돼요.")}
             </div>
           </div>
         </div>),
@@ -573,9 +573,9 @@ export function makeReachCh3(E) {
       type: "code",
       narr: t(E,
         "The clear, understand-first version: read → Dijkstra per query → count reachable.  It's correct; for full score on the biggest inputs, use the sort-by-K offline trick from the last slide. 🐉",
-        "이해 우선의 명확한 버전이에요: 입력 읽기 → 쿼리마다 다익스트라 → 도달 가능 수 세기.  정답은 맞고, 큰 입력 만점은 앞 슬라이드의 'K 정렬 오프라인' 방법으로. 🐉"),
+        "먼저 이해하기 좋은, 명확한 코드예요.\n입력 읽기 → 질문마다 다익스트라 → 갈 수 있는 도시 세기.\n답은 맞아요. 큰 입력에서 만점을 받으려면\n앞 쪽의 'K 순서로 줄 세우기' 방법을 쓰면 돼요. 🐉"),
       code: SOLUTION_CODE,
-      label: t(E, "Show the clear version", "명확한 버전 코드 보기"),
+      label: t(E, "Show the clear version", "명확한 코드 보기"),
     },
   ];
 }

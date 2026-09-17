@@ -41,18 +41,18 @@ const PR_WALK_CPP = [
 function getPresentsWalk(E, lang) {
   if (lang === "cpp") {
     return { code: PR_WALK_CPP, beats: [
-      { hi: [5, 10],  bubble: t(E, "Read N presents and Q queries, then the stack (top → bottom).", "선물 N개·쿼리 Q개 읽고, stack(위→아래)에 선물 담기.") },
-      { hi: [12, 14], bubble: t(E, "For each query, read which present (target) to grab.", "쿼리마다 찾을 선물 target 읽기.") },
-      { hi: [15, 18], bubble: t(E, "Count from the top until target — pos = how many presents sit above it.", "위에서부터 세서 target 위치 pos = 위에 쌓인 선물 수.") },
-      { hi: [19, 19], bubble: t(E, "Print pos — you must lift off that many to reach it.", "pos 출력 — 그 만큼 위 선물을 치워야 꺼낼 수 있으니까.") },
-      { hi: [20, 20], bubble: t(E, "Take the target out of the stack.", "그 선물을 stack 에서 꺼냄(제거).") },
+      { hi: [5, 10],  bubble: t(E, "Read N presents and Q queries, then the stack (top → bottom).", "선물 N개와 요청 Q개를 읽고, stack 에 위→아래 순서로 담아요.") },
+      { hi: [12, 14], bubble: t(E, "For each query, read which present (target) to grab.", "요청마다 찾을 선물 target 을 읽어요.") },
+      { hi: [15, 18], bubble: t(E, "Count from the top until target — pos = how many presents sit above it.", "맨 위부터 세어요. pos 는 target 위에 쌓인 선물 수예요.") },
+      { hi: [19, 19], bubble: t(E, "Print pos — you must lift off that many to reach it.", "pos 를 출력해요. 그만큼 치워야 target 을 꺼낼 수 있으니까요.") },
+      { hi: [20, 20], bubble: t(E, "Take the target out of the stack.", "그 선물을 stack 에서 빼내요.") },
     ] };
   }
   return { code: PR_WALK_PY, beats: [
-    { hi: [0, 1], bubble: t(E, "Read N presents & Q queries; stack is listed top → bottom.", "선물 N개·쿼리 Q개; stack 은 위→아래 순서.") },
-    { hi: [3, 4], bubble: t(E, "For each query, read which present (target) to grab.", "쿼리마다 찾을 선물 target 읽기.") },
-    { hi: [5, 6], bubble: t(E, "pos = target's index = how many presents sit above it → print it.", "pos = target 의 위치 = 위에 쌓인 선물 수 → 출력.") },
-    { hi: [7, 7], bubble: t(E, "Take the target out of the stack.", "그 선물을 stack 에서 꺼냄(제거).") },
+    { hi: [0, 1], bubble: t(E, "Read N presents & Q queries; stack is listed top → bottom.", "선물 N개와 요청 Q개를 읽어요. stack 은 위→아래 순서예요.") },
+    { hi: [3, 4], bubble: t(E, "For each query, read which present (target) to grab.", "요청마다 찾을 선물 target 을 읽어요.") },
+    { hi: [5, 6], bubble: t(E, "pos = target's index = how many presents sit above it → print it.", "pos 는 target 의 위치예요.\n위에 쌓인 선물 수라서 그대로 출력해요.") },
+    { hi: [7, 7], bubble: t(E, "Take the target out of the stack.", "그 선물을 stack 에서 빼내요.") },
   ] };
 }
 
@@ -78,7 +78,7 @@ export function makePresentsCh1(E) {
       type: "reveal",
       narr: t(E,
         "FJ stacked N presents. People ask for specific presents — count how many sit on top of each one before pulling it out.",
-        "FJ가 N개의 선물을 쌓아 놓았어요. 사람들이 특정 선물을 요청해요 — 그 선물 위에 쌓인 개수를 세고 빼내요."),
+        "FJ가 선물 N개를 쌓아 놨어요.\n요청받은 선물 위에 몇 개가 있을까요?"),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 8 }}>
@@ -95,7 +95,7 @@ export function makePresentsCh1(E) {
             <div style={{ fontSize: 13, color: "#5b21b6", lineHeight: 1.5 }}>
               {t(E,
                 "For each query, print how many presents had to be removed before reaching the target.",
-                "쿼리마다 타깃에 도달하기 전 빼내야 했던 선물의 개수를 출력.")}
+                "요청마다, 그 선물을 꺼내기 전에 치운 선물이 몇 개인지 출력해요.")}
             </div>
           </div>
 
@@ -108,16 +108,16 @@ export function makePresentsCh1(E) {
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "FJ has a ", "FJ에게 ")}
-                  <b style={{ color: "#8b5cf6" }}>{t(E, "vertical stack of N presents", "수직으로 쌓인 N개의 선물 더미")}</b>
+                  <b style={{ color: "#8b5cf6" }}>{t(E, "vertical stack of N presents", "세로로 쌓인 선물 N개 더미")}</b>
                   {t(E, ", numbered 1..N. The top of the stack is index 0.",
-                        "이 있어요. 1..N 번호를 가지고 있어요. 더미 맨 위가 인덱스 0.")}
+                        "가 있어요. 선물마다 1번부터 N번까지 번호가 붙어 있어요. 맨 위 선물의 자리는 0번이에요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
                 <span style={{ color: "#8b5cf6", fontWeight: 600, flexShrink: 0 }}>•</span>
                 <div>
                   {t(E, "Q queries arrive — each names ONE present FJ should fetch.",
-                        "Q개의 요청이 와요 — 각 요청은 FJ가 꺼내야 할 선물 1개를 지정해요.")}
+                        "요청이 Q개 와요. 요청마다 FJ가 꺼낼 선물 하나를 말해 줘요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
@@ -126,14 +126,14 @@ export function makePresentsCh1(E) {
                   {t(E, "FJ must remove all presents ", "FJ는 그 선물 ")}
                   <b style={{ color: "#dc2626" }}>{t(E, "above", "위에")}</b>
                   {t(E, " the target first, then take the target itself out (gone forever).",
-                        " 있는 선물을 모두 빼내고, 타깃도 꺼내요 (영구 제거).")}
+                        " 있는 선물을 먼저 모두 치워요. 그다음 그 선물도 꺼내요. 꺼낸 선물은 다시 안 돌아와요.")}
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: 4, paddingTop: 8, borderTop: "1px dashed #c4b5fd" }}>
                 <span style={{ color: "#15803d", fontWeight: 600, flexShrink: 0 }}>👉</span>
                 <div>
                   {t(E, "For each query, print how many presents had to be removed first.",
-                        "각 요청마다, 먼저 빼낸 선물 개수를 출력해요.")}
+                        "요청마다, 먼저 치운 선물이 몇 개인지 출력해요.")}
                 </div>
               </div>
             </div>
@@ -144,7 +144,7 @@ export function makePresentsCh1(E) {
       type: "reveal",
       narr: t(E,
         "Query: find 4.\nThe 2 presents above 4 must be removed.\nThen 4 is taken out — gone forever.",
-        "쿼리: 4 찾기.\n4 위에 있는 2개를 먼저 제거.\n그 다음 4도 꺼내짐 — 영구 제거."),
+        "이번 요청은 4 찾기예요.\n4 위에 있는 2개를 먼저 치워요.\n그다음 4도 꺼내면 다시 안 돌아와요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 30px 1fr", gap: 6, alignItems: "center" }}>
@@ -195,29 +195,29 @@ export function makePresentsCh1(E) {
     {
       type: "quiz",
       narr: t(E,
-        "After removing a present, it's gone from the stack forever.\nThe remaining presents stay in their original order.", "선물을 꺼내면 스택에서 영구히 사라져. 나머지 선물은 원래 순서 유지."),
+        "After removing a present, it's gone from the stack forever.\nThe remaining presents stay in their original order.", "꺼낸 선물은 스택에서 영영 사라져요.\n남은 선물은 순서가 그대로예요."),
       question: t(E,
         "Stack = [5,3,1,4,2]. Find present 1. How many presents above it?",
-        "스택 = [5,3,1,4,2]. 선물 1을 찾기. 위에 몇 개?"),
+        "스택 = [5,3,1,4,2] 예요. 선물 1 위에는 몇 개가 있을까요?"),
       options: ["1", "2", "3", "4"],
       correct: 1,
-      explain: t(E, "5 and 3 are above 1 → 2 presents to remove!", "5와 3이 1 위에 있어 → 2개 제거!"),
+      explain: t(E, "5 and 3 are above 1 → 2 presents to remove!", "1 위에 5와 3이 있어요 → 2개를 치워요!"),
     },
     {
       type: "reveal",
       narr: t(E,
         "Watch what happens after the first query — 5, 3, and 1 itself are all gone. Only [4, 2] remain.",
-        "첫 쿼리 후를 봐 — 5, 3, 그리고 1 자신까지 사라져. [4, 2]만 남아."),
+        "첫 요청이 끝나면 5, 3, 1 이 사라지고 [4, 2] 만 남아요."),
       content: (
         <div style={{ padding: 16 }}>
           <div style={{ textAlign: "center", marginBottom: 10, fontSize: 12, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
-            {t(E, "Stack starts [5,3,1,4,2] — Query 1: find 1", "스택 [5,3,1,4,2] — 쿼리 1: 1 찾기")}
+            {t(E, "Stack starts [5,3,1,4,2] — Query 1: find 1", "스택 [5,3,1,4,2] — 첫 요청은 1 찾기")}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 24px 1fr", gap: 6, alignItems: "center" }}>
             {/* BEFORE Q1 */}
             <div>
               <div style={{ fontSize: 10, fontWeight: 600, color: "#8b5cf6", textAlign: "center", marginBottom: 6 }}>
-                {t(E, "BEFORE Q1", "쿼리 1 전")}
+                {t(E, "BEFORE Q1", "요청 1 전")}
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
                 {[5,3,1,4,2].map((v, i) => {
@@ -239,7 +239,7 @@ export function makePresentsCh1(E) {
             {/* AFTER Q1 */}
             <div>
               <div style={{ fontSize: 10, fontWeight: 600, color: "#8b5cf6", textAlign: "center", marginBottom: 6 }}>
-                {t(E, "AFTER Q1 (now ask Q2)", "쿼리 1 후 (이제 쿼리 2)")}
+                {t(E, "AFTER Q1 (now ask Q2)", "요청 1 후 (이제 요청 2)")}
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
                 {[4,2].map((v, i) => (
@@ -253,13 +253,13 @@ export function makePresentsCh1(E) {
             </div>
           </div>
           <div style={{ marginTop: 10, background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#92400e", lineHeight: 1.5 }}>
-            <b>{t(E, "Output for Q1: ", "쿼리 1 출력: ")}</b>
+            <b>{t(E, "Output for Q1: ", "요청 1 출력: ")}</b>
             {t(E, "2 (presents 5 and 3 above 1).  Then 1 itself is removed too.",
-                  "2 (1 위에 5와 3).  그 다음 1 자신도 제거.")}
+                  "2 예요 (1 위에 5와 3).  그다음 1 도 함께 사라져요.")}
           </div>
           <div style={{ marginTop: 6, background: "#ede9fe", border: "1.5px solid #c4b5fd", borderRadius: 8, padding: "8px 10px", fontSize: 12, color: "#5b21b6", lineHeight: 1.5, textAlign: "center" }}>
             {t(E, "👉 Next step asks: in the right stack [4, 2], how many are above 2?",
-                  "👉 다음 스텝 질문: 오른쪽 스택 [4, 2]에서, 2 위에 몇 개?")}
+                  "👉 다음 질문이에요. 오른쪽 스택 [4, 2] 에서 2 위에는 몇 개일까요?")}
           </div>
         </div>),
     },
@@ -267,19 +267,19 @@ export function makePresentsCh1(E) {
       type: "input",
       narr: t(E,
         "Two queries in a row — keep track of what's left in the stack after the first one.",
-        "쿼리 두 번 연속 — 첫 번째 후 스택에 뭐가 남는지 챙기면서 풀어 봐."),
+        "요청이 두 번 이어져요.\n첫 요청 뒤에 스택에 뭐가 남는지 보세요."),
       question: t(E,
         "Stack starts [5,3,1,4,2]. Query 1 = find 1, then query 2 = find 2. Presents above for query 2?",
-        "스택 [5,3,1,4,2]. 쿼리 1 = 1 찾기, 쿼리 2 = 2 찾기. 쿼리 2 의 위 개수?"),
+        "스택 [5,3,1,4,2]. 첫 요청은 1 찾기, 두 번째 요청은 2 찾기예요. 2 위에는 몇 개일까요?"),
       hint: t(E,
         "After query 1 some presents are gone. Recount from the new stack.",
-        "쿼리 1 후 몇 개가 사라졌어. 새 스택에서 다시 세어 봐."),
+        "첫 요청 뒤에 몇 개가 사라졌어요.\n남은 스택에서 다시 세어 보세요."),
       answer: 1,
     },
     {
       type: "sim",
       narr: t(E,
-        "Step through find + pop for each query. Yellow = above target, green = target.", "쿼리마다 찾기 + 제거 단계. 노랑 = 타겟 위, 초록 = 타겟."),
+        "Step through find + pop for each query. Yellow = above target, green = target.", "요청마다 찾기 → 치우기를 한 걸음씩 봐요.\n노랑은 치울 선물, 초록은 찾는 선물이에요."),
     },
   ];
 }
@@ -290,7 +290,7 @@ export function makePresentsCh2(E, lang = "py") {
       type: "reveal",
       narr: t(E,
         "For each query: find target's position, print it, then remove — each line lights up with a note above it.",
-        "쿼리마다 타깃 위치 찾기 → 출력 → 제거. 각 줄이 밝아지며 위에 설명 말풍선이 떠요."),
+        "요청마다 위치 찾기 → 출력 → 치우기.\n밝아진 줄 위에 설명 말풍선이 떠요."),
       content: (() => {
         const w = getPresentsWalk(E, lang);
         return <CodeWalk E={E} lang={lang} code={w.code} beats={w.beats} accent="#f97316" />;
@@ -300,7 +300,7 @@ export function makePresentsCh2(E, lang = "py") {
       type: "runner",
       narr: t(E,
         "Try your own stack and queries.",
-        "직접 스택과 쿼리 시도."),
+        "스택과 요청을 직접 넣어 보세요."),
     },
   ];
 }

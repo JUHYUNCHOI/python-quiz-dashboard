@@ -50,7 +50,7 @@ export function PresentsSim({ E }) {
       </div>
 
       <div style={{ background: "#f8fafc", borderRadius: 10, padding: "8px 12px", marginBottom: 10, fontSize: 11, color: C.dim, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
-        {t(E, `Query ${qIdx + 1}/${preset.queries.length}: find ${target}`, `쿼리 ${qIdx + 1}/${preset.queries.length}: ${target} 찾기`)}
+        {t(E, `Query ${qIdx + 1}/${preset.queries.length}: find ${target}`, `요청 ${qIdx + 1}/${preset.queries.length}: ${target} 찾기`)}
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center", marginBottom: 12 }}>
@@ -113,7 +113,7 @@ export function PresentsRunner({ E }) {
     const stack = stackIn.trim().split(/\s+/).map(Number);
     const queries = queriesIn.trim().split(/\s+/).map(Number);
     if (stack.some(isNaN) || queries.some(isNaN)) {
-      setResults([{ error: t(E, "Invalid input.", "잘못된 입력.") }]);
+      setResults([{ error: t(E, "Invalid input.", "입력이 올바르지 않아요.") }]);
       return;
     }
     setRunning(true); setResults([]);
@@ -252,60 +252,60 @@ const PR_FULL_CPP = [
 export function getPresentsSections(E) {
   return [
     {
-      label: t(E, "📦 1. Input + Stack Setup", "📦 1. 입력 + 스택 셋업"),
+      label: t(E, "📦 1. Input + Stack Setup", "📦 1. 입력 받고 스택 만들기"),
       color: A,
       py: PR_INPUT_PY, cpp: PR_INPUT_CPP,
       why: [
         t(E, "Store the stack as an array. Index 0 is the top of the pile.",
-            "스택을 배열로 저장. 인덱스 0이 더미 맨 위."),
+            "스택을 리스트 하나에 담아요. 0번 자리가 더미 맨 위예요."),
         t(E, "N, Q ≤ a few thousand → simple array works in time.",
-            "N, Q가 수천 정도라 단순 배열로 시간 통과."),
+            "N 과 Q 가 수천 정도예요. 단순한 리스트로도 시간 안에 끝나요."),
       ],
       pyOnly: [
         t(E, "list(map(int, input().split())) reads a row of integers cleanly.",
-            "list(map(int, input().split()))로 정수 한 줄 깔끔하게 읽기."),
+            "list(map(int, input().split())) 로 정수 한 줄을 깔끔하게 읽어요."),
       ],
       cppOnly: [
         t(E, "vector<int> supports both indexed access and element removal.",
-            "vector<int>는 인덱스 접근과 원소 제거 모두 지원."),
+            "vector<int> 는 자리로 꺼내기와 원소 지우기를 둘 다 해 줘요."),
       ],
     },
     {
-      label: t(E, "🔎 2. Find Target's Position", "🔎 2. 타깃 위치 찾기"),
+      label: t(E, "🔎 2. Find Target's Position", "🔎 2. 찾는 선물의 위치 구하기"),
       color: "#0891b2",
       py: PR_FIND_PY, cpp: PR_FIND_CPP,
       why: [
         t(E, "Scan from the top. The first index where stack[i] == target tells us how many presents are above.",
-            "맨 위부터 스캔. stack[i] == target인 첫 인덱스가 위에 있는 개수."),
+            "맨 위부터 하나씩 봐요. stack[i] == target 이 되는 첫 자리 번호가 위에 쌓인 선물 수예요."),
         t(E, "Print pos directly — it equals the number of presents that must be removed.",
-            "pos를 그대로 출력 — 제거해야 할 선물 수와 동일."),
+            "pos 를 그대로 출력해요. 치워야 할 선물 수와 같으니까요."),
       ],
       pyOnly: [
         t(E, "list.index(value) returns the first matching index — perfect for this.",
-            "list.index(value)가 첫 매칭 인덱스 반환 — 딱 맞음."),
+            "list.index(value) 는 처음 만난 자리 번호를 돌려줘요. 딱 맞아요."),
       ],
       cppOnly: [
         t(E, "Manual while loop is fine. find() with iterators also works.",
-            "수동 while 루프로 충분. 반복자 + find()도 가능."),
+            "while 반복으로 직접 세도 충분해요. 반복자와 find() 를 써도 돼요."),
       ],
     },
     {
-      label: t(E, "🗑️ 3. Remove Target", "🗑️ 3. 타깃 제거"),
+      label: t(E, "🗑️ 3. Remove Target", "🗑️ 3. 찾은 선물 치우기"),
       color: "#16a34a",
       py: PR_POP_PY, cpp: PR_POP_CPP,
       why: [
         t(E, "Once handed over, the present is gone. Remaining presents keep their original order.",
-            "건네주면 선물은 사라짐. 나머지는 원래 순서 유지."),
+            "건네준 선물은 사라져요. 남은 선물은 순서가 그대로예요."),
         t(E, "Total work is O(N·Q) — fine within Bronze constraints.",
-            "총 작업은 O(N·Q) — Bronze 제약 안에서 충분."),
+            "전체 계산량은 O(N·Q) 예요. Bronze 조건 안에서는 넉넉해요."),
       ],
       pyOnly: [
         t(E, "list.pop(i) removes and returns element at i, shifting the rest.",
-            "list.pop(i)는 i번째 원소 제거 후 반환, 뒤쪽 원소를 당김."),
+            "list.pop(i) 는 i 번째 원소를 빼서 돌려주고, 뒤쪽을 앞으로 당겨요."),
       ],
       cppOnly: [
         t(E, "vector::erase(begin + pos) shifts elements left — same idea as Python pop.",
-            "vector::erase(begin + pos)이 원소를 왼쪽으로 당김 — Python pop과 동일."),
+            "vector::erase(begin + pos) 도 Python 의 pop 처럼 원소를 왼쪽으로 당겨요."),
       ],
     },
     {
@@ -314,17 +314,17 @@ export function getPresentsSections(E) {
       py: PR_FULL_PY, cpp: PR_FULL_CPP,
       why: [
         t(E, "Loop Q times. Each iteration: read target → find pos → print → remove.",
-            "Q번 반복. 매 반복: target 읽기 → pos 찾기 → 출력 → 제거."),
+            "Q 번 반복해요. 한 번마다 target 을 읽고, pos 를 찾고, 출력하고, 치워요."),
         t(E, "Direct simulation — easy to write and debug.",
-            "직접 시뮬레이션 — 작성과 디버깅이 쉬움."),
+            "문제 그대로 따라 하는 방법이라 짜기도 고치기도 쉬워요."),
       ],
       pyOnly: [
         t(E, "Python lists are fast enough; .index + .pop is the most readable approach.",
-            "Python 리스트는 충분히 빠름; .index + .pop이 가장 읽기 좋음."),
+            "Python 리스트는 충분히 빨라요. .index 와 .pop 이 가장 읽기 좋아요."),
       ],
       cppOnly: [
         t(E, "Plain cin/cout — N, Q ≤ a few thousand so no fast I/O needed.",
-            "N, Q가 수천 정도라 빠른 I/O 없이 cin/cout 그대로 충분."),
+            "N 과 Q 가 수천 정도예요. 빠른 입출력 없이 cin/cout 으로 충분해요."),
       ],
     },
   ];
@@ -368,7 +368,7 @@ function highlightCode(lines, lang) {
 
 export function downloadPresentsPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Stack of Presents — Full Study Guide", "🎁 Stack of Presents — 종합 풀이 노트");
@@ -392,9 +392,9 @@ export function downloadPresentsPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
-<div class="sub">USACO 2025 Feb Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+<div class="sub">USACO 2025 Feb Bronze · ${t(E, "Self-contained walkthrough", "혼자 공부할 수 있는 풀이")}</div>
 ${sections.map(s => `
   <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
   <div class="why"><b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b><ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>

@@ -64,7 +64,7 @@ export function CowSignalScaleSim({ E }) {
       }}>
         🧪 {t(E,
           "Click a cell to flip X ↔ . — drag the K slider — see the live K×K expansion!",
-          "셀을 눌러서 X ↔ . 바꿔봐요 — K 슬라이더를 옮기면서 — 실시간 K×K 확대를 확인!")}
+          "칸을 누르면 X 와 . 가 바뀌어요. K 슬라이더를 움직이면 K×K 확대가 바로 보여요!")}
       </div>
 
       {/* K slider */}
@@ -89,7 +89,7 @@ export function CowSignalScaleSim({ E }) {
         {/* Original (editable) */}
         <div style={{ textAlign: "center" }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: "#8b5cf6", marginBottom: 6 }}>
-            {t(E, `Original (${M}×${N}) — click to flip`, `원본 (${M}×${N}) — 클릭으로 변경`)}
+            {t(E, `Original (${M}×${N}) — click to flip`, `원본 (${M}×${N}) — 눌러서 바꾸기`)}
           </div>
           <div style={{ display: "inline-flex", flexDirection: "column", gap: 3 }}>
             {grid.map((row, r) => (
@@ -109,7 +109,7 @@ export function CowSignalScaleSim({ E }) {
             ))}
           </div>
           <div style={{ fontSize: 10, color: C.dim, marginTop: 6 }}>
-            {t(E, "↑ source cell highlighted", "↑ 원본 칸 강조")}
+            {t(E, "↑ source cell highlighted", "↑ 고른 원본 칸이에요")}
           </div>
         </div>
 
@@ -142,7 +142,7 @@ export function CowSignalScaleSim({ E }) {
             ))}
           </div>
           <div style={{ fontSize: 10, color: "#16a34a", marginTop: 6, fontWeight: 700 }}>
-            {t(E, `↑ K×K block (${K}×${K}) for hovered cell`, `↑ 호버한 칸의 K×K 블록 (${K}×${K})`)}
+            {t(E, `↑ K×K block (${K}×${K}) for hovered cell`, `↑ 마우스를 올린 칸이 만든 K×K 블록 (${K}×${K})`)}
           </div>
         </div>
       </div>
@@ -150,7 +150,7 @@ export function CowSignalScaleSim({ E }) {
       <div style={{ marginTop: 12, padding: "8px 12px", background: "#f5f3ff", borderRadius: 8, fontSize: 11, color: "#5b21b6", textAlign: "center" }}>
         {t(E,
           `One source cell → ${K}×${K} = ${K*K} copies. Total: ${M*N} cells → ${M*K*N*K} cells.`,
-          `원본 한 칸 → ${K}×${K} = ${K*K}개 복사. 총: ${M*N}칸 → ${M*K*N*K}칸.`)}
+          `원본 한 칸이 ${K}×${K} = ${K*K}개로 늘어나요. 모두 ${M*N}칸에서 ${M*K*N*K}칸이 돼요.`)}
       </div>
     </div>
   );
@@ -217,19 +217,19 @@ export function getCowSignalSections(E) {
       py: FULL_PY, cpp: FULL_CPP,
       why: [
         t(E, "Read the code section by section. Each line has a clear purpose.",
-            "코드를 한 부분씩 읽어봐. 각 줄이 명확한 역할이 있어."),
+            "코드를 한 부분씩 읽어 봐요. 줄마다 하는 일이 따로 있어요."),
         t(E, "C++ version is auto-translated from Python — adjust types and idioms as needed.",
-            "C++ 버전은 Python에서 자동 변환 — 타입과 관용구는 필요시 조정."),
+            "C++ 코드는 Python 코드를 옮긴 거예요. 타입과 표현은 필요하면 고쳐요."),
       ],
       pyOnly: [
         t(E, "Python's high-level constructs (list, map, sorted) make algorithms concise.",
-            "Python의 고수준 구문 (list, map, sorted)으로 알고리즘이 간결."),
+            "Python 은 list · map · sorted 를 바로 쓸 수 있어서 코드가 짧아져요."),
       ],
       cppOnly: [
         t(E, "vector<string> stores each row of the input grid.",
-            "vector<string>로 입력 격자의 각 행을 저장."),
+            "vector<string> 에 입력 격자의 각 행을 담아요."),
         t(E, "Nested for-loops repeat each cell K times in both directions.",
-            "이중 for문으로 각 칸을 가로/세로 K번 반복 출력."),
+            "for 문을 겹쳐서 각 칸을 가로로 K번, 세로로 K번 출력해요."),
       ],
     },
   ];
@@ -275,7 +275,7 @@ function highlightCode(lines, lang) {
 
 export function downloadCowSignalPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "CowSignal — Full Study Guide", "CowSignal — 종합 풀이 노트");
@@ -298,7 +298,7 @@ export function downloadCowSignalPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 골라요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">USACO · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

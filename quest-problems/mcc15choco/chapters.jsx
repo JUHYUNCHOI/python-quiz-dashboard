@@ -106,7 +106,7 @@ export function makeMcc15ChocoCh1(E) {
             </div>
             <div style={{ fontSize: 12.5, color: C.dim, marginTop: 8 }}>
               {t(E, "Limits: 1 ≤ N ≤ 1,000,000 · 1 ≤ Lᵢ ≤ 1,000,000. (About 50% of the points use N ≤ 10,000.)",
-                    "제약: 1 ≤ N ≤ 1,000,000 · 1 ≤ Lᵢ ≤ 1,000,000. (배점의 약 50% 는 N ≤ 10,000.)")}
+                    "조건은 1 ≤ N ≤ 1,000,000 이고 1 ≤ Lᵢ ≤ 1,000,000 이에요.\n점수의 절반쯤은 N 이 10,000 이하인 문제예요.")}
             </div>
           </div>
 
@@ -180,7 +180,7 @@ export function makeMcc15ChocoCh1(E) {
         "바 [3,4,4,5,9,9,5,2]. 가져간 총 길이 = ?"),
       hint: t(E,
         "Three pairs are taken: (4,4), (9,9), (5,5). Each pair is worth 2 × its length.",
-        "짝을 세 번 가져가요: (4,4), (9,9), (5,5). 각 짝은 2 × 길이만큼이에요."),
+        "짝을 세 번 가져가요 — (4,4), (9,9), (5,5) 예요.\n짝 하나는 길이의 2 배만큼이에요."),
       answer: 36,
     },
   ];
@@ -223,7 +223,7 @@ export function makeMcc15ChocoCh2(E, lang = "py") {
 
           <div style={{ marginTop: 10, background: "#fff", border: "1px dashed #c4b5fd", borderRadius: 10, padding: "10px 12px", fontSize: 11.5, color: C.text, lineHeight: 1.6 }}>
             {t(E, "One thing worth asking: the problem wants the MAXIMUM, so is grabbing every pair as soon as we see it really safe? Taking a pair never destroys another pair — it only closes a gap, which can create more. Checking every possible removal order by brute force on small rows gives the same answer as this greedy scan.",
-                  "한 가지 짚고 갈 것: 문제는 '최대' 를 물어요. 보이는 짝을 바로 가져가도 정말 괜찮을까요? 짝을 가져가면 다른 짝이 사라지지 않아요 — 빈틈만 메워지고, 오히려 새 짝이 생겨요. 작은 줄에 대해 가능한 모든 제거 순서를 전부 시도해 봐도, 이 방법과 답이 같아요.")}
+                  "한 가지만 짚고 갈게요.\n문제는 '가장 많이' 를 물어요. 보이는 짝을 바로 가져가도 괜찮을까요?\n짝을 가져간다고 다른 짝이 사라지지는 않아요.\n빈틈이 메워지면서 오히려 새 짝이 생겨요.\n짧은 줄로 모든 순서를 다 해봐도 이 방법과 답이 같아요.")}
           </div>
 
           <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center" }}>

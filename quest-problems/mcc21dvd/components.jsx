@@ -92,7 +92,7 @@ export function Mcc21DvdBounceSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 12 }}>
           {t(E,
             "Each second the logo moves one row up and one column right, turning back at the walls. The row (height H) and the column (width W) never affect each other — each is just a dot bouncing 1→N→1→N on its own line.",
-            "매 초 로고는 한 행 위로, 한 열 오른쪽으로 움직이고 벽에서 되돌아와요. 행(높이 H)과 열(너비 W)은 서로 전혀 간섭하지 않아요 — 각각 자기 선 위에서 1→N→1→N 으로 튕기는 점 하나일 뿐이에요.")}
+            "로고는 매 초 한 행 위로, 한 열 오른쪽으로 움직이다가 벽에서 되돌아와요. 행(높이 H)과 열(너비 W)은 서로 전혀 영향을 주지 않아요. 각각 자기 선 위에서 1→N→1→N 으로 튕기는 점 하나일 뿐이에요.")}
         </div>
 
         {/* T stepper */}
@@ -145,7 +145,7 @@ export function Mcc21DvdBounceSim({ E }) {
         <div style={{ marginTop: 10, fontSize: 11.5, color: C.dim, lineHeight: 1.6, ...KA }}>
           {t(E,
             "The row repeats every 2(H−1) = 4 seconds and the column every 2(W−1) = 8 seconds. So even T = 10^16 needs no stepping — one modulo folds T back into the first cycle and the formula gives the answer instantly.",
-            "행은 2(H−1) = 4 초마다, 열은 2(W−1) = 8 초마다 똑같이 반복돼요. 그래서 T = 10^16 이라도 한 칸씩 셀 필요가 없어요 — 나머지 연산 한 번이면 T 를 첫 주기로 접어 넣고, 공식이 곧바로 답을 줘요.")}
+            "행은 2(H−1) = 4 초마다, 열은 2(W−1) = 8 초마다 똑같이 되풀이돼요. 그래서 T = 10^16 이라도 한 칸씩 세지 않아도 돼요. 나머지 계산 한 번이면 T 가 첫 주기 안으로 접혀 들어가고, 공식이 곧바로 답을 줘요.")}
         </div>
       </div>
     </div>
@@ -224,18 +224,18 @@ export { FULL_PY, FULL_CPP };
 export function getMcc21DvdSections(E) {
   return [
     {
-      label: t(E, "① Read the queries", "① 쿼리 읽기"),
+      label: t(E, "① Read the queries", "① 물음 읽기"),
       color: A,
       py: READ_PY, cpp: READ_CPP,
       why: [
         t(E, "There are Q independent test cases. Read H, W, T as three arrays — H[i], W[i], T[i] describe query i.",
-            "독립적인 쿼리가 Q 개예요. H, W, T 를 배열 세 개로 읽어요 — H[i], W[i], T[i] 가 i 번째 쿼리를 이뤄요."),
+            "서로 상관없는 물음이 Q 개 있어요. H, W, T 를 배열 세 개로 읽으면 i 번째 물음이 H[i], W[i], T[i] 가 돼요."),
         t(E, "Q ≤ 1000, so reading and answering each query in O(1) is plenty fast.",
-            "Q ≤ 1000 이라, 쿼리마다 O(1) 로 답하면 충분히 빨라요."),
+            "Q ≤ 1000 이라서 물음 하나를 O(1) 에 답하면 충분히 빨라요."),
       ],
       cppOnly: [
         t(E, "H, W ≤ 10^12 and T ≤ 10^16 overflow int — use long long.",
-            "H, W ≤ 10^12, T ≤ 10^16 은 int 를 넘쳐요 — long long 을 써요."),
+            "H, W ≤ 10^12 와 T ≤ 10^16 은 int 로는 넘쳐요. long long 을 써요."),
       ],
     },
     {
@@ -244,26 +244,26 @@ export function getMcc21DvdSections(E) {
       py: ONE_PY, cpp: ONE_CPP,
       why: [
         t(E, "Key idea: the row and the column move independently. Each is a dot bouncing 1→N→1 on a line of length N.",
-            "핵심: 행과 열은 서로 독립적으로 움직여요. 각각은 길이 N 인 선 위에서 1→N→1 로 튕기는 점 하나예요."),
+            "여기가 핵심이에요. 행과 열은 서로 상관없이 움직여요. 각각은 길이가 N 인 선 위에서 1→N→1 로 튕기는 점 하나예요."),
         t(E, "That bounce repeats every 2(N−1) seconds, so t mod 2(N−1) folds any time into the first cycle. Then N − |(N−1) − p| reads off the position — no stepping.",
-            "그 튕김은 2(N−1) 초마다 반복돼요. 그래서 t mod 2(N−1) 로 어떤 시각이든 첫 주기로 접어 넣고, N − |(N−1) − p| 로 위치를 바로 읽어요 — 한 칸씩 세지 않아요."),
+            "이렇게 1→N→1 로 오르내리는 모양을 삼각파라고 불러요. 삼각파는 2(N−1) 초마다 똑같이 되풀이돼요. 그래서 t mod 2(N−1) 로 어떤 시각이든 첫 주기 안으로 접어 넣은 다음, N − |(N−1) − p| 로 위치를 바로 읽어요. 한 칸씩 세지 않아도 돼요."),
         t(E, "Why we can't just step T: T ≤ 10^16 and Q ≤ 1000 means up to 10^19 steps. The formula answers each query in O(1).",
-            "T 를 한 칸씩 셀 수 없는 이유: T ≤ 10^16, Q ≤ 1000 이면 최대 10^19 스텝이에요. 공식은 쿼리당 O(1) 로 끝나요."),
+            "T 를 한 초씩 세면 왜 안 될까요. T ≤ 10^16 에 Q ≤ 1000 이면 많게는 10^19 번을 세야 해요. 공식은 물음 하나를 O(1) 에 끝내요."),
       ],
       cppOnly: [
         t(E, "abs on long long: subtract and flip the sign by hand (or use llabs / <cstdlib>).",
-            "long long 절댓값: 빼고 부호를 직접 뒤집거나 llabs (<cstdlib>) 를 써요."),
+            "long long 의 절댓값은 이렇게 구해요. 빼고 나서 부호를 직접 뒤집거나 llabs (<cstdlib>) 를 써요."),
       ],
     },
     {
-      label: t(E, "③ Answer each query", "③ 각 쿼리 답 출력"),
+      label: t(E, "③ Answer each query", "③ 물음마다 답 출력"),
       color: "#7c3aed",
       py: LOOP_PY, cpp: LOOP_CPP,
       why: [
         t(E, "For each query, apply the same one() twice: once to H for the row, once to W for the column — using the same T[i].",
-            "각 쿼리마다 같은 one() 을 두 번 써요: 행은 H 에, 열은 W 에 — 둘 다 같은 T[i] 로."),
+            "물음마다 같은 one() 을 두 번 불러요. 행은 H 로, 열은 W 로 구하고 T[i] 는 둘 다 똑같이 넣어요."),
         t(E, "Print 'r c' on its own line, in the original query order.",
-            "'r c' 를 쿼리 순서대로 한 줄씩 출력해요."),
+            "'r c' 를 물음이 들어온 순서 그대로 한 줄씩 출력해요."),
       ],
       pyOnly: [
         t(E, "print(a, b) already puts one space between the two numbers.",
@@ -313,7 +313,7 @@ function highlightCode(lines, lang) {
 
 export function downloadMcc21DvdPDF(E, sections, lang = "py") {
   const win = window.open("", "_blank");
-  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  if (!win) { alert(t(E, "Pop-up blocked.", "새 창이 막혔어요.")); return; }
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   const fileTitle = t(E, "Mcc21Dvd — Full Study Guide", "Mcc21Dvd — 종합 풀이 노트");
@@ -336,7 +336,7 @@ export function downloadMcc21DvdPDF(E, sections, lang = "py") {
   .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
   @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
 </style></head><body>
-<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF'.", "인쇄 창에서 'PDF로 저장' 을 고르세요.")}</div>
 <h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
 <div class="sub">MCC · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
 ${sections.map(s => `

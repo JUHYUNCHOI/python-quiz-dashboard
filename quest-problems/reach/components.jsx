@@ -157,7 +157,7 @@ export function GraphViz({ E }) {
       {/* Legend */}
       <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 6, fontSize: 11, fontWeight: 700 }}>
         <span style={{ color: "#059669" }}>━━ {t(E, "safe road", "안전한 도로")}</span>
-        <span style={{ color: "#ef4444" }}>╌╌ {t(E, "damaged road", "손상된 도로")}</span>
+        <span style={{ color: "#ef4444" }}>╌╌ {t(E, "damaged road", "약한 도로")}</span>
       </div>
     </div>
   );
@@ -276,7 +276,7 @@ export function ReachSim({ E }) {
         color: "#e2e8f0", textAlign: "center",
       }}>
         K={K}: <span style={{ color: "#fbbf24", fontWeight: 700, fontSize: 16 }}>{count}</span>
-        {t(E, " cities reachable", "개 도시 도달 가능")}
+        {t(E, " cities reachable", "개 도시에 갈 수 있어요")}
       </div>
     </div>
   );
@@ -302,7 +302,7 @@ export function DijkstraKAudit({ E }) {
     const visited = new Set();
     const trace = [{
       kind: "init", visited: new Set(), dist: { ...dist }, edge: null,
-      msg: t(E, `Init: dist[1]=0, K=${K}`, `초기화: dist[1]=0, K=${K}`),
+      msg: t(E, `Init: dist[1]=0, K=${K}`, `처음 값을 놓아요. dist[1]=0, K=${K}`),
     }];
 
     for (let i = 0; i < NODES.length; i++) {
@@ -314,7 +314,7 @@ export function DijkstraKAudit({ E }) {
         kind: "pop", visited: new Set(visited), dist: { ...dist }, node: u, edge: null,
         msg: t(E,
           `Pop city ${u} (d=${dist[u]}). Scan its edges...`,
-          `도시 ${u} 꺼내기 (d=${dist[u]}). 이 도시의 도로들 검사...`),
+          `도시 ${u} 를 꺼내요 (d=${dist[u]}). 여기 붙은 도로를 하나씩 봐요...`),
       });
 
       for (const e of EDGES) {
@@ -328,18 +328,18 @@ export function DijkstraKAudit({ E }) {
           status = "blocked";
           msg = t(E,
             `Edge ${u}↔${other} (damaged, w=${e.w}): start=${dist[u]}, arrive=${arrive}. Need start<${K} AND arrive<=${K}. BLOCKED.`,
-            `도로 ${u}↔${other} (손상, w=${e.w}): 출발=${dist[u]}, 도착=${arrive}. 조건 출발<${K} AND 도착<=${K} 필요. 차단.`);
+            `도로 ${u}↔${other} (약함, w=${e.w}). 출발=${dist[u]}, 도착=${arrive}. 출발<${K} 이고 도착<=${K} 여야 하는데 아니에요 → 막힘.`);
         } else if (arrive < dist[other]) {
           dist[other] = arrive;
           status = "relax";
           msg = t(E,
             `Edge ${u}↔${other} ${dmg ? "(damaged, OK: " + dist[u] + "<" + K + " AND " + arrive + "<=" + K + ")" : "(safe)"}: dist[${other}] = ${arrive}.`,
-            `도로 ${u}↔${other} ${dmg ? "(손상, 통과: " + dist[u] + "<" + K + " AND " + arrive + "<=" + K + ")" : "(안전)"}: dist[${other}] = ${arrive}.`);
+            `도로 ${u}↔${other} ${dmg ? "(약함, 통과 — " + dist[u] + "<" + K + " 이고 " + arrive + "<=" + K + ")" : "(안전)"} → dist[${other}] 를 ${arrive} 로 바꿔요.`);
         } else {
           status = "skip";
           msg = t(E,
             `Edge ${u}↔${other} ${dmg ? "(damaged, OK)" : "(safe)"}: arrive=${arrive} >= dist[${other}]=${dist[other] === Infinity ? "∞" : dist[other]}. No update.`,
-            `도로 ${u}↔${other} ${dmg ? "(손상, 통과)" : "(안전)"}: 도착=${arrive} >= dist[${other}]=${dist[other] === Infinity ? "∞" : dist[other]}. 갱신 없음.`);
+            `도로 ${u}↔${other} ${dmg ? "(약함, 통과)" : "(안전)"} → 도착=${arrive} >= dist[${other}]=${dist[other] === Infinity ? "∞" : dist[other]} 이라 그대로 둬요.`);
         }
         trace.push({
           kind: "edge", visited: new Set(visited), dist: { ...dist },
@@ -353,7 +353,7 @@ export function DijkstraKAudit({ E }) {
       kind: "done", visited: new Set(visited), dist: { ...dist }, edge: null,
       msg: t(E,
         `Done. Reachable cities: ${reach}.`,
-        `종료. 도달 가능 도시: ${reach}개.`),
+        `끝났어요. 갈 수 있는 도시는 ${reach}개예요.`),
     });
     return trace;
   })();
@@ -376,7 +376,7 @@ export function DijkstraKAudit({ E }) {
       {/* K preset buttons */}
       <div style={{ textAlign: "center", marginBottom: 8 }}>
         <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-          {t(E, "Pick K and audit each edge", "K 고르고 도로별로 점검")}
+          {t(E, "Pick K and audit each edge", "K 를 고르고 도로를 하나씩 살펴봐요")}
         </div>
         <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
           {K_PRESETS.map(kv => (
@@ -481,9 +481,9 @@ export function DijkstraKAudit({ E }) {
       {/* Status legend (only for edge events) */}
       {cur.kind === "edge" && (
         <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 6, fontSize: 10, fontWeight: 700 }}>
-          <span style={{ color: "#059669" }}>✓ {t(E, "relax", "갱신")}</span>
-          <span style={{ color: "#dc2626" }}>✗ {t(E, "blocked (K)", "차단(K)")}</span>
-          <span style={{ color: "#94a3b8" }}>– {t(E, "no update", "갱신 없음")}</span>
+          <span style={{ color: "#059669" }}>✓ {t(E, "relax", "시간 줄임")}</span>
+          <span style={{ color: "#dc2626" }}>✗ {t(E, "blocked (K)", "막힘(K)")}</span>
+          <span style={{ color: "#94a3b8" }}>– {t(E, "no update", "그대로")}</span>
         </div>
       )}
 
@@ -532,7 +532,7 @@ export function DijkstraTrace({ E }) {
     NODES.forEach(n => dist[n.id] = Infinity);
     dist[1] = 0;
     const visited = new Set();
-    const trace = [{ visited: new Set(), dist: { ...dist }, msg: t(E, "Certain: city 1 = 0 min. Everything else unknown (∞).", "확실한 것: 도시 1 = 0분. 나머지는 아직 모름(∞).") }];
+    const trace = [{ visited: new Set(), dist: { ...dist }, msg: t(E, "Certain: city 1 = 0 min. Everything else unknown (∞).", "확실한 건 도시 1 = 0분 하나뿐이에요. 나머지는 아직 몰라요(∞).") }];
 
     for (let i = 0; i < NODES.length; i++) {
       let u = -1;
@@ -555,7 +555,7 @@ export function DijkstraTrace({ E }) {
         node: u,
         msg: t(E,
           `LOCK city ${u} — earliest candidate (${dist[u]} min). ${updates.length ? "New candidates: " + updates.join(", ") : "No new candidates."}`,
-          `도시 ${u} 확정 — 제일 이른 후보 (${dist[u]}분). ${updates.length ? "새 후보: " + updates.join(", ") : "새 후보 없음."}`),
+          `도시 ${u} 를 확정해요 — 제일 이른 후보였어요 (${dist[u]}분). ${updates.length ? "새 후보가 생겼어요 → " + updates.join(", ") : "새 후보는 없어요."}`),
       });
     }
     return trace;
@@ -667,7 +667,7 @@ export function ReachSpreadSim({ E }) {
     const tr = [{
       city: 1, status: "start", path: [1], reached: new Set([1]), walk: null,
       msg: t(E, `Start at city 1 (0 min). The weak (red) roads collapse at minute K = ${K}.`,
-               `도시 1 출발 (0분). 약한(빨간) 도로는 K = ${K} 분에 무너져요.`),
+               `도시 1 에서 출발해요 (0분). 약한(빨간) 도로는 K = ${K} 분에 무너져요.`),
     }];
     for (const s of SPREAD_ORDER.slice(1)) {
       const walk = walkPath(s.segs);
@@ -678,23 +678,23 @@ export function ReachSpreadSim({ E }) {
       if (walk.gate === null) {
         msg = ok && t(E,
           `City ${s.city}: all-green path. No weak road → K doesn't matter. Total ${walk.total} min, still reachable ✓`,
-          `도시 ${s.city}: 초록 다리뿐인 길. 약한 다리가 없으니 K 와 무관 — 총 ${walk.total}분 걸려도 도달 ✓`);
+          `도시 ${s.city} 까지 가는 길은 초록 다리뿐이에요. 약한 다리가 없어서 K 와 상관없어요 — ${walk.total}분 걸려도 갈 수 있어요 ✓`);
       } else if (ok) {
         const exact = walk.gate === K;
         msg = t(E,
           `City ${s.city}: last weak road crossed at min ${walk.gate} ≤ K(${K})${exact ? " — right on time!" : ""} ✓  (green part after has no limit → arrive at ${walk.total})`,
-          `도시 ${s.city}: 약한 다리를 ${walk.gate}분에 다 건넘 ≤ K(${K})${exact ? " — 딱 맞춰!" : ""} ✓  (그 뒤 초록 구간은 제한 없음 → 총 ${walk.total}분 도착)`);
+          `도시 ${s.city} 까지 — 약한 다리를 ${walk.gate}분에 다 건너요. ${walk.gate} ≤ K(${K})${exact ? " — 딱 맞췄어요!" : ""} ✓  (그 뒤 초록 구간은 시간 제한이 없어서 ${walk.total}분에 도착해요)`);
       } else {
         msg = t(E,
           `City ${s.city}: needs a weak road crossed by min ${walk.gate}, but they collapse at K(${K}). ${walk.gate} > ${K} ✗ → blocked`,
-          `도시 ${s.city}: 약한 다리를 ${walk.gate}분에야 다 건너는데, K(${K})분에 무너져요. ${walk.gate} > ${K} ✗ → 못 감`);
+          `도시 ${s.city} 까지 — 약한 다리를 ${walk.gate}분에야 다 건너는데 K(${K})분에 무너져요. ${walk.gate} > ${K} ✗ → 못 가요`);
       }
       tr.push({ city: s.city, status: ok ? "reach" : "block", path: s.path, reached: new Set(reached), walk, msg });
     }
     tr.push({
       city: null, status: "done", path: [], reached: new Set(reached), walk: null,
       msg: t(E, `Answer for K = ${K}: ${reached.size} cities reachable.`,
-               `K = ${K} 의 답: 갈 수 있는 도시 ${reached.size}개.`),
+               `K = ${K} 일 때 갈 수 있는 도시는 ${reached.size}개예요.`),
     });
     return tr;
   })();
@@ -718,7 +718,7 @@ export function ReachSpreadSim({ E }) {
       {/* K preset buttons */}
       <div style={{ textAlign: "center", marginBottom: 8 }}>
         <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
-          {t(E, "Pick K, then step ▶ through the cities", "K 고르고 ▶ 로 도시 하나씩")}
+          {t(E, "Pick K, then step ▶ through the cities", "K 를 고르고 ▶ 로 도시를 하나씩 봐요")}
         </div>
         <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
           {K_PRESETS.map(kv => (
@@ -742,15 +742,15 @@ export function ReachSpreadSim({ E }) {
       }}>
         <div>🧨 {t(E,
           <><b style={{ color: "#dc2626" }}>Red (weak) roads collapse at minute K.</b>  Cross one only if your clock is ≤ K when you finish — the number on it is the crossing time.</>,
-          <><b style={{ color: "#dc2626" }}>빨간(약한) 다리는 K분에 무너져요.</b>  다 건넌 순간 시계가 K 이하일 때만 건널 수 있어요 — 다리 위 숫자 = 건너는 시간.</>)}</div>
+          <><b style={{ color: "#dc2626" }}>빨간(약한) 다리는 K분에 무너져요.</b>  다 건넌 순간 시계가 K 를 넘지 않을 때만 건널 수 있어요 — 다리 위 숫자 = 건너는 시간.</>)}</div>
         <div style={{ marginTop: 2 }}>🟢 {t(E,
           <><b style={{ color: "#059669" }}>Green (safe) roads never collapse</b> — no time limit, cross anytime.</>,
-          <><b style={{ color: "#059669" }}>초록(안전) 다리는 안 무너져요</b> — 시간 제한 없이 아무 때나.</>)}</div>
+          <><b style={{ color: "#059669" }}>초록(안전) 다리는 안 무너져요</b> — 시간 제한 없이 아무 때나 건너요.</>)}</div>
       </div>
 
       {/* Reached counter */}
       <div style={{ textAlign: "center", marginBottom: 6, fontSize: 12, fontWeight: 700, color: "#059669" }}>
-        {t(E, "Reached", "도달")}: <span style={{ fontSize: 16 }}>{cur.reached.size}</span>
+        {t(E, "Reached", "지금까지 간 도시")}: <span style={{ fontSize: 16 }}>{cur.reached.size}</span>
       </div>
 
       {/* Graph */}
@@ -835,12 +835,12 @@ export function ReachSpreadSim({ E }) {
                         color: cur.status === "block" ? "#dc2626" : "#059669" }}>
             {cur.walk.gate === null
               ? t(E, <>no red road → K irrelevant → ✓</>,
-                    <>빨간 다리 없음 → K 와 무관 → ✓</>)
+                    <>빨간 다리가 없어요 → K 와 상관없어요 → ✓</>)
               : (cur.status === "reach"
                 ? t(E, <>red part done at <b>{cur.walk.gate}m</b> ≤ K({K}) ✓ — green part free, arrive {cur.walk.total}m</>,
-                      <>빨간 다리 통과 <b>{cur.walk.gate}분</b> ≤ K({K}) ✓ — 초록 구간은 자유, 총 {cur.walk.total}분 도착</>)
+                      <>빨간 다리를 <b>{cur.walk.gate}분</b>에 다 건너요 ≤ K({K}) ✓ — 그 뒤 초록 구간은 자유, {cur.walk.total}분에 도착</>)
                 : t(E, <>red part needs <b>{cur.walk.gate}m</b> &gt; K({K}) ✗ — collapses first</>,
-                      <>빨간 다리 통과에 <b>{cur.walk.gate}분</b> 필요 &gt; K({K}) ✗ — 먼저 무너져요</>))}
+                      <>빨간 다리를 다 건너려면 <b>{cur.walk.gate}분</b> &gt; K({K}) ✗ — 그 전에 무너져요</>))}
           </div>
         </div>
       )}
@@ -921,7 +921,7 @@ export function GraphBuildSim({ E }) {
       ko: "「4」 = 약한 도로 4개. 번호는 「1 3 4 6」. 지금은 쓸 수 있지만 K분에 무너질 도로예요. 어느 도로인지 하나씩 표시할게요 →",
       en: "“4” = 4 weak roads, numbered “1 3 4 6”. They still work now, but will collapse at minute K. Let's mark which roads they are, one at a time →" },
     { line: "damaged 1  →  road ① (1↔2)", upto: 6, damaged: [1], hi: 1, q: false,
-      ko: "번호 1 → 도로 ① = 도시 1 ↔ 2 (7). 이게 그 약한 도로예요 🔴 (K분에 무너짐, 지금은 OK).",
+      ko: "번호 1 → 도로 ① = 도시 1 ↔ 2 (7). 이게 그 약한 도로예요 🔴 (K분에 무너져요. 지금은 괜찮아요).",
       en: "Number 1 → road ① = city 1 ↔ 2 (7). This is one of the weak roads 🔴 (collapses at K, fine for now)." },
     { line: "damaged 3  →  road ③ (4↔3)", upto: 6, damaged: [1, 3], hi: 3, q: false,
       ko: "번호 3 → 도로 ③ = 도시 4 ↔ 3 (8). 약한 도로 🔴",
@@ -930,10 +930,10 @@ export function GraphBuildSim({ E }) {
       ko: "번호 4 → 도로 ④ = 도시 4 ↔ 2 (5). 약한 도로 🔴",
       en: "Number 4 → road ④ = city 4 ↔ 2 (5). Weak road 🔴" },
     { line: "damaged 6  →  road ⑥ (3↔5)", upto: 6, damaged: [1, 3, 4, 6], hi: 6, q: false,
-      ko: "번호 6 → 도로 ⑥ = 도시 3 ↔ 5 (20). 약한 도로 🔴  이제 약한 도로 4개(①③④⑥) 완성. 나머지 ②⑤ 는 튼튼(안 무너짐).",
+      ko: "번호 6 → 도로 ⑥ = 도시 3 ↔ 5 (20). 약한 도로 🔴  이제 약한 도로 4개(①③④⑥)가 다 모였어요. 나머지 ②⑤ 는 튼튼해서 안 무너져요.",
       en: "Number 6 → road ⑥ = city 3 ↔ 5 (20). Weak road 🔴  All 4 weak roads (①③④⑥) marked; ②⑤ are sturdy (never collapse)." },
     { line: "3  →  6 · 11 · 12", upto: 6, damaged: [1, 3, 4, 6], hi: null, q: true,
-      ko: "「3」 그리고 「6 · 11 · 12」 → 쿼리 3개. K 마다 도달 도시 수를 물어요. (답은 다음 시뮬에서!)",
+      ko: "「3」 그리고 「6 · 11 · 12」 → 질문 3개예요. K 마다 갈 수 있는 도시가 몇 개인지 물어요. (답은 다음 시뮬에서!)",
       en: "“3” then “6 · 11 · 12” → 3 queries. For each K, how many cities are reachable? (answer in the next sim!)" },
   ];
   const [step, setStep] = useState(0);
@@ -1045,7 +1045,7 @@ export function GraphBuildSim({ E }) {
                   <>각 K = “약한 도로가 K분에 무너지면?” 하는 질문.  6, 11, 12 는 그 시각 3개 — 하나 눌러봐요 👆</>)
               : t(E,
                   <>At minute <b>{qK}</b> the weak roads ①③④⑥ <b>collapse and vanish</b> — only green roads ②⑤ stay.  Bigger K = later collapse = usable longer.  (How far you get before then → next sim!)</>,
-                  <><b>{qK}분</b>이 되면 약한 도로 ①③④⑥ 가 <b>무너져 사라져요</b> — 초록 도로 ②⑤ 만 남아요.  K 클수록 늦게 무너져 더 오래 씀.  (그 전에 몇 곳 가는지는 다음 시뮬!)</>)}
+                  <><b>{qK}분</b>이 되면 약한 도로 ①③④⑥ 가 <b>무너져 사라져요</b> — 초록 도로 ②⑤ 만 남아요.  K 가 클수록 늦게 무너져서 더 오래 쓸 수 있어요.  (그 전에 몇 곳 가는지는 다음 시뮬에서!)</>)}
           </div>
         </div>
       )}
@@ -1062,7 +1062,7 @@ export function GraphBuildSim({ E }) {
       {/* legend */}
       <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginTop: 6, fontSize: 10.5, fontWeight: 700 }}>
         <span style={{ color: "#059669" }}>━━ {t(E, "road", "도로")}</span>
-        <span style={{ color: "#ef4444" }}>╌╌ {t(E, "weak (collapses at K)", "약한 도로(K분에 무너짐)")}</span>
+        <span style={{ color: "#ef4444" }}>╌╌ {t(E, "weak (collapses at K)", "약한 도로(K분에 무너져요)")}</span>
         <span style={{ color: "#8b5cf6" }}>{t(E, "①–⑥ = road number", "①–⑥ = 도로 번호")}</span>
       </div>
 
@@ -1116,7 +1116,7 @@ export function FastestWayViz({ E }) {
   return (
     <div style={{ padding: "10px 6px" }}>
       <div style={{ fontSize: 12.5, fontWeight: 700, color: AC, textAlign: "center", marginBottom: 4, wordBreak: "keep-all" }}>
-        {t(E, "Many ways to city 3 — which do we care about?", "도시 3까지 가는 길은 여러 개 — 뭘 봐야 할까?")}
+        {t(E, "Many ways to city 3 — which do we care about?", "도시 3 까지 가는 길은 여러 개 — 뭘 봐야 할까요?")}
       </div>
       <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: "block", margin: "0 auto" }}>
         {EDGES.map(e => {
@@ -1165,7 +1165,7 @@ export function FastestWayViz({ E }) {
         <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#f8fafc", border: "1.5px solid #cbd5e1", borderRadius: 10, padding: "7px 12px", opacity: 0.8 }}>
           <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, fontWeight: 800, color: "#64748b" }}>1→5→3</span>
           <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, color: "#64748b" }}>18+20 = <b>38{t(E, "m", "분")}</b></span>
-          <span style={{ marginLeft: "auto", fontSize: 11.5, fontWeight: 700, color: "#94a3b8" }}>{t(E, "ignore", "볼 필요 ✗")}</span>
+          <span style={{ marginLeft: "auto", fontSize: 11.5, fontWeight: 700, color: "#94a3b8" }}>{t(E, "ignore", "안 봐도 돼요 ✗")}</span>
         </div>
       </div>
 
@@ -1175,7 +1175,7 @@ export function FastestWayViz({ E }) {
               "도시마다 '가장 빠른 길' 하나만 보면 돼요. 그것마저 안 되면 → 그 도시는 못 가요.")}
       </div>
       <div style={{ textAlign: "center", marginTop: 6, fontSize: 11.5, color: C.dim, wordBreak: "keep-all" }}>
-        {t(E, "So: find the fastest way to EVERY city. How? 👉", "그래서: 모든 도시까지 가장 빠른 길 찾기. 어떻게? 👉")}
+        {t(E, "So: find the fastest way to EVERY city. How? 👉", "그러니까 모든 도시까지 가장 빠른 길을 찾으면 돼요. 어떻게 찾을까요? 👉")}
       </div>
     </div>
   );
