@@ -105,9 +105,9 @@ export function NormalizeSim({ E }) {
         <div style={{ display: "grid", gridTemplateColumns: "70px 1fr 1fr 1fr", gap: 8,
           fontSize: 10.5, fontWeight: 800, color: "#94a3b8", padding: "0 11px" }}>
           <span>{t(E, "block", "묶음")}</span>
-          <span>{t(E, "deal a[i]", "거래값 a[i]")}</span>
+          <span>{t(E, "deal price", "거래값 deal_price")}</span>
           <span>{t(E, "two halves", "작은 묶음 두 번")}</span>
-          <span>{t(E, "cheapest c[i]", "제일 싼 값 c[i]")}</span>
+          <span>{t(E, "cheapest block_cost", "제일 싼 값 block_cost")}</span>
         </div>
         {DEALS.map((d, i) => {
           const shown = i < upto, size = 1 << i;

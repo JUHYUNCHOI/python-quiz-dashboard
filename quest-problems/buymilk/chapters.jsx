@@ -281,30 +281,30 @@ function BuyMilkPlan({ E }) {
       <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
         <Insight icon="💰" color="#d97706"
           head={t(E, "Two half-blocks can beat the deal.", "4통 두 개(40)가 8통 묶음(45)보다 싸다.")}
-          body={t(E, <>So each block gets its own real price {codeTag("c[i]")} — the deal, or two half-blocks, whichever is cheaper.</>,
-                     <>그래서 묶음마다 진짜 값 {codeTag("c[i]")} 를 따로 구해요.<br />거래를 그대로 사는 값과, 작은 묶음을 두 번 사는 값 중 싼 쪽이에요.</>)} />
+          body={t(E, <>So each block gets its own real price {codeTag("block_cost[i]")} — the deal, or two half-blocks, whichever is cheaper.</>,
+                     <>그래서 묶음마다 진짜 값 {codeTag("block_cost[i]")} 를 따로 구해요.<br />거래를 그대로 사는 값과, 작은 묶음을 두 번 사는 값 중 싼 쪽이에요.</>)} />
         <Insight icon="🧱" color="#0891b2"
           head={t(E, "At each block there are only two choices.", "묶음마다 고를 건 두 가지뿐이다.")}
-          body={t(E, <>Round up and stop, or take the floor and carry {codeTag("rem")} down to smaller blocks.</>,
-                     <>넉넉히 사고 끝내거나,<br />모자라게 사고 남은 {codeTag("rem")} 을 작은 묶음으로 넘겨요.</>)} />
+          body={t(E, <>Round up and stop, or buy less and carry {codeTag("left")} down to smaller blocks.</>,
+                     <>넉넉히 사고 끝내거나,<br />모자라게 사고 남은 통 {codeTag("left")} 를 작은 묶음으로 넘겨요.</>)} />
         <Insight icon="📉" color="#059669"
           head={t(E, "One pass, big to small — no searching.", "큰 것부터 한 번만 훑으면 끝 — 찾아 헤맬 일이 없다.")}
-          body={t(E, <>Every block gives one candidate; {codeTag("ans")} just keeps the smallest.</>,
-                     <>묶음마다 후보가 하나씩 나와요.<br />{codeTag("ans")} 는 그중 제일 작은 값만 들고 있으면 돼요.</>)} />
+          body={t(E, <>Every block gives one candidate; {codeTag("best")} just keeps the smallest.</>,
+                     <>묶음마다 후보가 하나씩 나와요.<br />{codeTag("best")} 는 그중 제일 작은 값만 들고 있으면 돼요.</>)} />
       </div>
 
       <div style={{ ...box, background: "#f8fafc", marginBottom: 10 }}>
         <div style={{ fontSize: 13, fontWeight: 800, color: "#0f172a", marginBottom: 9 }}>
           ⚙️ {t(E, "So the code does this, in order", "그래서 코드는 이 순서로 해요")}
         </div>
-        <Line n={1}>{t(E, <>Read the deal prices {codeTag("a")}.</>, <>거래 가격 {codeTag("a")} 를 읽어요.</>)}</Line>
-        <Line n={2}>{t(E, <>Build {codeTag("c")}: {codeTag("c[i] = min(a[i], 2*c[i-1])")} — the first sim.</>,
-                         <>{codeTag("c")} 를 만들어요. {codeTag("c[i] = min(a[i], 2*c[i-1])")} — 첫 시뮬이 한 일이에요.</>)}</Line>
-        <Line n={3}>{t(E, <>Per query: {codeTag("rem = x")}, {codeTag("cost = 0")}, {codeTag("ans = ∞")}.</>,
-                         <>x 마다 {codeTag("rem = x")}, {codeTag("cost = 0")}, {codeTag("ans = 무한대")} 로 시작해요.</>)}</Line>
-        <Line n={4}>{t(E, <>Big block → small block — this is the second sim&apos;s table.<br />“round up → cost” is the {codeTag("ans")} candidate;<br />“take / carry” updates {codeTag("cost")} and {codeTag("rem")}.</>,
-                         <>큰 묶음부터 작은 묶음까지 훑어요 — 두 번째 시뮬의 표예요.<br />‘넉넉히 사면’ 칸이 {codeTag("ans")} 후보고,<br />‘모자라게 사고 남은 통’ 칸이 {codeTag("cost")} 와 {codeTag("rem")} 이에요.</>)}</Line>
-        <Line n={5}>{t(E, <>Print {codeTag("ans")}.</>, <>{codeTag("ans")} 를 출력해요.</>)}</Line>
+        <Line n={1}>{t(E, <>Read the deal prices {codeTag("deal_price")}.</>, <>거래 가격 {codeTag("deal_price")} 를 읽어요.</>)}</Line>
+        <Line n={2}>{t(E, <>Build {codeTag("block_cost")}: {codeTag("min(buy_the_deal, buy_two_halves)")} — the first sim.</>,
+                         <>{codeTag("block_cost")} 를 만들어요. {codeTag("min(buy_the_deal, buy_two_halves)")} — 첫 시뮬이 한 일이에요.</>)}</Line>
+        <Line n={3}>{t(E, <>Per query: {codeTag("left = want")}, {codeTag("paid = 0")}, {codeTag("best = ∞")}.</>,
+                         <>물음마다 {codeTag("left = want")}, {codeTag("paid = 0")}, {codeTag("best = 무한대")} 로 시작해요.</>)}</Line>
+        <Line n={4}>{t(E, <>Big block → small block — this is the second sim&apos;s table.<br />“round up → cost” is the {codeTag("best")} candidate;<br />“buy less / carry” updates {codeTag("paid")} and {codeTag("left")}.</>,
+                         <>큰 묶음부터 작은 묶음까지 훑어요 — 두 번째 시뮬의 표예요.<br />‘넉넉히 사면’ 칸이 {codeTag("best")} 후보고,<br />‘모자라게 사고 남은 통’ 칸이 {codeTag("paid")} 와 {codeTag("left")} 이에요.</>)}</Line>
+        <Line n={5}>{t(E, <>Print {codeTag("best")}.</>, <>{codeTag("best")} 를 출력해요.</>)}</Line>
       </div>
       {/* ⚠️ 2026-09-16: 여기 있던 노란 마무리 박스를 지웠다. 같은 아이디어를 인사이트 카드 →
           번호 목록 → 마무리 박스로 **세 번** 말하고 있었고, 이 쪽이 10쪽 중 제일 무거웠다
