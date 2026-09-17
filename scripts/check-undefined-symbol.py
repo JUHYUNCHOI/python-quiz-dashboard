@@ -65,8 +65,8 @@ RULES = [
      "10⁹ 처럼 작게 올려 쓴 숫자. 몇인지 말로 같이 써라 — '10억'"),
     ("거듭제곱 ^", re.compile(r"(?<![\w])[0-9A-Za-z][\^][0-9A-Za-z]"),
      "2^R · 10^12. `^` 가 무엇인지 화면에 없으면 학생은 못 읽는다"),
-    ("제곱 기호", re.compile(r"[A-Za-z][²³]"),
-     "N² . '두 번 겹쳐 세면' 처럼 말로 풀 수 있나"),
+    # ("제곱 기호", [A-Za-z][²³]) 규칙은 지웠다 — 위 "윗첨자" 가 ² ³ 를 이미 잡는다.
+    #  둘 다 두면 **같은 자리를 두 번 센다**(mcc21glass 가 그래서 부풀었다).
     ("올림·내림 괄호", re.compile(r"[⌈⌉⌊⌋]"),
      "⌈L/2⌉ . 배운 적 없는 기호다"),
     ("시그마", re.compile(r"Σ"),
@@ -220,14 +220,33 @@ def main():
                     frag = re.sub(r"\s+", " ", frag)
                     # 바로 옆에 **풀어 쓴 숫자**가 있으면 이미 밝힌 것이다.
                     # 예: "1 ≤ N ≤ 200,000 (= 2 × 10⁵)" · "10^9 (10억)"
+                    # ⚠️ 2026-09-17 mcc21glass 담당이 잡았다 — 이 규칙이
+                    #    **한국어 쪽만** 봐 줬다. "10억×10억" 은 넘어가는데
+                    #    같은 뜻의 영어 "a billion times a billion" 은 계속 걸렸다.
+                    #    **뜻을 밝혔는데도 걸리면 담당이 검사기를 못 믿게 된다.**
                     if name in ("윗첨자", "거듭제곱 ^") and (
                         re.search(r"\d{1,3}(,\d{3})+", frag)
                         or re.search(r"[0-9]\s*(억|만|조|천)", frag)
+                        or re.search(r"\b(billion|million|trillion|thousand)\b", frag, re.I)
+                        or re.search(r"(multiplied by itself|두 번 곱|번 곱한 수|자기 자신을)", frag)
                     ):
                         continue
                     # 같은 줄·같은 기호는 한 번만 — `N³` 은 윗첨자와 제곱 둘 다에 걸린다
                     key = (os.path.basename(f), line_of(src, pos), name)
                     hits.setdefault(quest, {}).setdefault(key, frag)
+
+    # ⚠️ `O(...)` 는 따로 센다. 이건 "지워라" 가 아니라 **옆에 평이한 말이 붙었나** 를
+    #    사람이 봐야 하는 자리인데, 검사기는 그걸 못 본다. 같이 세면 진짜 건이 묻힌다
+    #    (mcc21glass 가 61건이었는데 그중 대부분이 이것이었다).
+    def is_big_o(k):
+        return k[2] == "복잡도 O(...)"
+    for q in list(hits):
+        hits[q] = dict(hits[q])
+    big_o = {q: {k: v for k, v in d.items() if is_big_o(k)} for q, d in hits.items()}
+    hits = {q: {k: v for k, v in d.items() if not is_big_o(k)} for q, d in hits.items()}
+    hits = {q: d for q, d in hits.items() if d}
+    n_big_o = sum(len(d) for d in big_o.values())
+    q_big_o = len([q for q, d in big_o.items() if d])
 
     total = sum(len(v) for v in hits.values())
     scope = f" (quest={', '.join(sorted(want))})" if want else ""
@@ -242,6 +261,12 @@ def main():
         if not (show_all or want) and len(rows) > 6:
             print(f"      … {len(rows) - 6}건 더 (--all 또는 quest 이름을 주면 전부)")
         print()
+
+    if n_big_o:
+        print(f"  ── 따로: 복잡도 표기 `O(...)` {n_big_o}건 · quest {q_big_o}개")
+        print("     이건 지우라는 뜻이 아니다. **옆에 평이한 말이 붙었나**를 사람이 봐라 —")
+        print("     \"한 번만 훑어요\" 같은 말이 같이 있으면 그대로 둬도 된다.")
+        print("     복잡도를 **가르치는 중인 quest** 면 표기 그대로가 맞다.\n")
 
     if not want:
         print("  왜 걸리나:")
