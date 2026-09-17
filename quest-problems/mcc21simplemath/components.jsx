@@ -236,7 +236,7 @@ const BRUTE_COMBINE_PY = [
   "    total = total + value",
 ];
 const BRUTE_OUT_PY = [
-  "# MOD 는 0 번 걸음에서 정해 둔 10**9 + 7 이에요",
+  "# MOD 는 1 번 걸음에서 정해 둔 10**9 + 7 이에요",
   "print(total % MOD)",
 ];
 
@@ -249,7 +249,7 @@ export function getMcc21SimpleMathBruteSections(E) {
        바로 뒤 빠른 코드 스테퍼는 이미 PY_SETUP 으로 이 걸음을 갖고 있었는데
        새로 만든 쪽만 빠뜨렸다. memory/feedback_screen_must_not_rely_on_memory.md */
     {
-      label: t(E, "\u{1F4E5} 0. The values we are given", "\u{1F4E5} 0. 주어진 값"),
+      label: t(E, "\u{1F4E5} 1. The values we are given", "\u{1F4E5} 1. 주어진 값"),
       color: A,
       py: PY_SETUP, cpp: PY_SETUP,
       why: [
@@ -259,7 +259,7 @@ export function getMcc21SimpleMathBruteSections(E) {
       ],
     },
     {
-      label: t(E, "\u{1F422} 1. Make every subset", "\u{1F422} 1. 부분집합을 전부 만들기"),
+      label: t(E, "\u{1F422} 2. Make every subset", "\u{1F422} 2. 부분집합을 전부 만들기"),
       color: A,
       py: BRUTE_MAKE_PY, cpp: BRUTE_MAKE_PY,
       why: [
@@ -269,7 +269,7 @@ export function getMcc21SimpleMathBruteSections(E) {
       ],
     },
     {
-      label: t(E, "\u{1F422} 2. Combine each subset", "\u{1F422} 2. 부분집합마다 합치기"),
+      label: t(E, "\u{1F422} 3. Combine each subset", "\u{1F422} 3. 부분집합마다 합치기"),
       color: A,
       py: BRUTE_COMBINE_PY, cpp: BRUTE_COMBINE_PY,
       why: [
@@ -279,7 +279,7 @@ export function getMcc21SimpleMathBruteSections(E) {
       ],
     },
     {
-      label: t(E, "\u{1F422} 3. Print", "\u{1F422} 3. 출력"),
+      label: t(E, "\u{1F422} 4. Print", "\u{1F422} 4. 출력"),
       color: A,
       py: BRUTE_OUT_PY, cpp: BRUTE_OUT_PY,
       why: [

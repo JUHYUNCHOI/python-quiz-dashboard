@@ -78,6 +78,7 @@ node scripts/see-flow.mjs http://localhost:3000/quest/<id>   # 쪽과 쪽 사이
 python3 scripts/check-word-difficulty.py <id>                # 어려운 말 · 같은 것 다른 이름 · 번역 티
 python3 scripts/check-code-one-statement.py <id>             # 한 줄에 문장 여러 개
 python3 scripts/check-undefined-symbol.py <id>               # 뜻 안 밝힌 기호 (10⁹ · N² · ⌈⌉ · Σ · O(N))
+python3 scripts/check-stepper-first-step.py <id>             # 코드 스테퍼 **첫 걸음**이 화면 밖 이름을 쓰나
 node scripts/see-screen.mjs http://localhost:3000/quest/<id> # 가려짐 · 55자 초과
 ```
 
@@ -86,6 +87,15 @@ node scripts/see-screen.mjs http://localhost:3000/quest/<id> # 가려짐 · 55�
 > 뜻을 밝힌 적 없이 시뮬 표에 박혀 있었다. 그런데 `check-word-difficulty` 는
 > **12개 전부 0건**이었다. 기호는 한글도 아니고 어려운 낱말도 아니라서
 > **어느 그물에도 안 걸렸다.** 선생님이 매번 먼저 찾으신 이유가 이것이다.
+> 🆕 **`check-stepper-first-step.py` 가 2026-09-17 에 생긴 이유:** MCC 마무리로
+> `mcc21simplemath` 에 브루트 코드 쪽을 새로 만들었는데, **첫 걸음이 `for x in a:` 로 시작했다.**
+> `a` 도 `P` 도 `MOD` 도 그 화면에 없었다 — `ProgressiveCodeStepper` 는 **그 걸음의 코드만**
+> 보여준다. 파일에서 읽으면 네 조각이 이어져 보여서 **내 눈에는 안 보였다.**
+> project-lead 가 브라우저로 걸음을 하나씩 눌러 보고 잡았다.
+> **구멍을 하나 메우면서 다른 구멍을 판 것**이다 — `feedback_new_text_needs_a_reader.md`.
+> 저장소 전체 159개 스테퍼를 본다. 걸음 번호가 0 부터 시작하는 라벨도 같이 센다
+> (점은 1 부터 매긴다).
+
 > ⚠️ 이 검사기는 **영어 쪽도 같이 본다** — 실제로 훑기 담당이 한국어만 고치고
 > 영어에 `⌈L/2⌉` 를 그대로 둔 자리를 9곳 잡았다.
 

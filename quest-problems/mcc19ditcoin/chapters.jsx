@@ -249,6 +249,53 @@ export function makeMcc19DitcoinCh1(E) {
    ═══════════════════════════════════════════════════════════════ */
 export function makeMcc19DitcoinCh2(E, lang = "py") {
   return [
+    /* 2-0: 한계 (2026-09-17 신설)
+       왜 생겼나 — pedagogy-reviewer 판정: 기승전결에서 **'한계' 쪽이 없었다.**
+       규칙을 찾자마자 `suffix_max` 코드로 넘어가서,
+       **왜 매번 다시 찾으면 안 되는지**를 말하는 화면이 하나도 없었다.
+       원문 풀이도 2단계다 — naive 는 날마다 끝까지 다시 훑어 O(N²), 최적은 뒤에서 한 번.
+       숫자는 화면에 이미 있는 제약(1-2 카드의 D ≤ 100,000)에서 **직접 계산한 것**이다.
+       ⚠️ 한 화면이면 충분하다. 느림을 체감시키는 데 분량을 쓰지 않는다
+          (memory/feedback_why_and_how_over_slowness.md). */
+    {
+      type: "reveal",
+      narr: t(E,
+        "Why not just look ahead again on every day?",
+        "날마다 앞을 다시 보면 안 될까요?"),
+      content: (
+        <div style={{ padding: 16, maxWidth: 620, margin: "0 auto", wordBreak: "keep-all" }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fca5a5", borderRadius: 10, padding: "12px 14px", marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#b91c1c", marginBottom: 6 }}>
+              🐢 {t(E, "Look ahead again every day", "날마다 앞을 다시 보기")}
+            </div>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7, whiteSpace: "pre-line", textWrap: "balance" }}>
+              {t(E,
+                "For each day, scan from that day to the last one to find the best price.\nThat is the straightforward way, and it is correct.",
+                "날마다 그날부터 마지막 날까지 훑어서 제일 비싼 값을 찾아요.\n제일 먼저 떠오르는 방법이고, 답도 맞아요.")}
+            </div>
+            <div style={{ marginTop: 8, fontFamily: "'JetBrains Mono',monospace", fontSize: 12.5, color: "#9a3412", lineHeight: 1.9 }}>
+              <div>D = 100,000 {t(E, "days", "일")}</div>
+              <div>100,000 × 100,000 = 10,000,000,000</div>
+            </div>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7, marginTop: 8, whiteSpace: "pre-line", textWrap: "balance" }}>
+              {t(E,
+                "Ten billion steps. The grader stops long before that.",
+                "100 억 번이에요. 채점기는 그 전에 멈춰 버려요.")}
+            </div>
+          </div>
+
+          <div style={{ background: "#ecfdf5", border: "1px solid #6ee7b7", borderRadius: 10, padding: "12px 14px" }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065f46", marginBottom: 6 }}>
+              🚀 {t(E, "Walk backwards once and remember", "뒤에서 한 번 훑으며 기억하기")}
+            </div>
+            <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.7, whiteSpace: "pre-line", textWrap: "balance" }}>
+              {t(E,
+                "Day i and day i+1 share almost the whole stretch. Looking again throws that away.\nSo walk from the last day backwards and keep the best price seen so far.\nEach day then costs one comparison — 100,000 steps instead of ten billion.\nThe next page builds exactly that list.",
+                "i 일과 i+1 일이 보는 구간은 거의 같아요. 다시 찾으면 그걸 버리는 거예요.\n그래서 마지막 날부터 거꾸로 걸으며 '지금까지 본 것 중 제일 비싼 값' 을 들고 가요.\n그러면 하루에 비교 한 번이면 끝이에요 — 100 억 대신 100,000 번이에요.\n다음 쪽이 바로 그 목록을 만들어요.")}
+            </div>
+          </div>
+        </div>),
+    },
     // 2-1: Code
     {
       type: "progressive",
