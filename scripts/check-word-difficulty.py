@@ -44,6 +44,41 @@ SYNONYMS = [
     ("칸",     ["셀", "열"]),
 ]
 
+# ⚠️ **한국어는 짧은 낱말이 긴 낱말 안에 숨는다.** 그냥 세면 거짓말을 한다.
+#    2026-09-17 실측(mooin3): "글 138번" 인데 그중 136번이 **글자** 안이었다.
+#    진짜 '글' 은 2번이다. 그런데 검사기는 "글 80번 vs 문자열 17번 — 이름이 섞였다"
+#    라고 보고했다. 그 숫자를 믿고 quest 25개를 일괄 수정할 뻔했다.
+#    그래서 **긴 낱말 안에 든 것은 빼고 센다.**
+INSIDE = {
+    "글":   ["글자", "한글", "글씨", "글쓰기"],
+    "문자": ["문자열"],
+    "열":   ["문자열", "배열", "나열", "열다", "열어", "열고", "열린", "열리", "열기", "열쇠",
+             "열심", "계열", "서열", "열째", "열번", "열혈"],
+    "줄":   ["줄이", "줄어", "줄기", "줄자"],
+    "행":   ["행동", "행복", "실행", "진행", "은행", "여행", "수행", "시행", "행렬",
+             "행운", "행사", "행성", "비행", "행위"],
+    "통":   ["통과", "보통", "통째", "통계", "전통", "소통", "통해", "통로", "교통",
+             "통틀", "통신", "통일", "공통", "통상", "통당"],
+    "표":   ["표시", "발표", "목표", "표준", "대표", "투표", "표현", "표정", "좌표",
+             "표기", "표면"],
+    "칸":   ["칸막"],
+    "맵":   ["맵다", "맵게", "매맵"],
+    "딜":   ["딜러", "딜리", "딜레"],
+    "행렬": [],
+    "자리": ["자리수"],
+    "셀":   ["셀프", "셀까", "셀 수", "세셀"],
+    "반복": [],
+}
+
+
+def count_word(word, text):
+    """긴 낱말 안에 든 것은 빼고 센다. '글' 은 '글자' 안의 것을 세지 않는다."""
+    n = len(re.findall(re.escape(word), text))
+    for longer in INSIDE.get(word, []):
+        n -= len(re.findall(re.escape(longer), text))
+    return max(n, 0)
+
+
 # ── ② 초6 에게 어려운 말 → 쉬운 말. 근거: memory/feedback_no_invented_terms.md
 HARD = {
     "최저가": "제일 싼 값", "최소값": "제일 작은 값", "최대값": "제일 큰 값",
@@ -115,7 +150,7 @@ def scan(quest_dir):
     for easy, others in SYNONYMS:
         used = {}
         for name in [easy] + others:
-            n = len(re.findall(re.escape(name), allwords))
+            n = count_word(name, allwords)
             if n:
                 used[name] = n
         if len(used) >= 2:
@@ -124,7 +159,7 @@ def scan(quest_dir):
     # 어려운 말
     hard = {}
     for word, easy in HARD.items():
-        n = len(re.findall(re.escape(word), allwords))
+        n = count_word(word, allwords)
         if n:
             hard[word] = (n, easy)
 
