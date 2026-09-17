@@ -69,8 +69,8 @@ export function NormalizeSim({ E }) {
 
   const say =
     s.k === "why" ? t(E,
-      <>Each deal gives <b>twice</b> as many buckets — and costs more.<br />If the price <b>less</b> than doubles, the bigger deal wins.<br />If it <b>more</b> than doubles, two small ones are cheaper.<br /><span style={{ fontWeight: 600 }}>Let's check the deals one at a time.</span></>,
-      <>뒤 거래일수록 통이 <b>두 배</b>가 돼요. 값도 같이 올라요.<br />값이 두 배보다 <b>덜</b> 오르면 큰 거래가 이득이에요.<br />값이 두 배보다 <b>더</b> 오르면 작은 걸 두 번 사는 게 싸요.<br /><span style={{ fontWeight: 600 }}>어느 쪽인지 거래를 하나씩 따져 볼게요.</span></>)
+      <>There are <b>two ways</b> to get a block.<br />Buy that deal — or buy <b>two half-blocks</b>.<br /><span style={{ fontWeight: 600 }}>The cheaper one is what the block really costs.</span></>,
+      <>한 묶음을 사는 방법은 <b>두 가지</b>예요.<br />그 거래를 사거나, <b>절반짜리 묶음을 두 번</b> 사거나.<br /><span style={{ fontWeight: 600 }}>둘 중 싼 쪽이 이 묶음의 진짜 값이에요.</span></>)
     : s.k === "row" ? (() => {
         const i = s.i, size = 1 << i;
         if (i === 0) return t(E,
