@@ -69,8 +69,8 @@ export function NormalizeSim({ E }) {
 
   const say =
     s.k === "why" ? t(E,
-      <>We need <b>7 buckets</b>. Blocks come in 1, 2, 4 and 8 only — there is no 3.<br />Buying more than you need is fine, so 8 works too.<br />And there are <b>two ways</b> to get 8 — buy the 8-block, or buy the 4-block twice.<br /><span style={{ fontWeight: 600 }}>The table below works out which one is cheaper.</span></>,
-      <><b>7통</b>이 필요해요. 묶음은 1통·2통·4통·8통짜리뿐이에요. 3통짜리는 없어요.<br />모자라지만 않으면 되니까 8통을 사도 돼요.<br />그런데 8통을 얻는 길이 <b>둘</b>이에요 — 8통 묶음을 사거나, 4통 묶음을 두 번 사거나.<br /><span style={{ fontWeight: 600 }}>어느 쪽이 싼지 아래 표에서 구해요.</span></>)
+      <>There can be more than one way to buy a block.<br /><span style={{ fontWeight: 600 }}>Let's walk them, starting from 1 bucket.</span></>,
+      <>묶음 하나를 사는 방법은 여러 가지예요.<br /><span style={{ fontWeight: 600 }}>1통부터 하나씩 해볼게요.</span></>)
     : s.k === "row" ? (() => {
         const i = s.i, size = 1 << i;
         if (i === 0) return t(E,
@@ -79,9 +79,9 @@ export function NormalizeSim({ E }) {
         const two = 2 * C[i - 1], cheaper = two < DEALS[i];
         return cheaper
           ? t(E, <>The <b>{size}-bucket</b> deal costs <b>{DEALS[i]}</b>,<br />but two {size / 2}-bucket blocks cost <b>{two}</b> — cheaper!<br />So this block is really worth <b>{C[i]}</b>.</>,
-                <><b>{size}통</b> 거래는 <b>{DEALS[i]}</b> 인데<br />{size / 2}통 묶음을 두 번 사면 <b>{two}</b> 예요. 더 싸요!<br />그래서 이 묶음은 <b>{C[i]}</b> 에 살 수 있어요.</>)
+                <>{size / 2}통 묶음을 <b>두 번</b> 사면 {size}통이 돼요.<br />{size}통 묶음을 한 번에 살 수도 있어요 — 거래값 <b>{DEALS[i]}</b>.<br />그런데 두 번 사면 <b>{two}</b> 이라 더 싸요!<br />그래서 {size}통은 <b>{C[i]}</b> 에 살 수 있어요.</>)
           : t(E, <>The <b>{size}-bucket</b> deal costs <b>{DEALS[i]}</b>,<br />and two {size / 2}-bucket blocks cost <b>{two}</b>.<br />The deal wins, so it stays <b>{C[i]}</b>.</>,
-                <><b>{size}통</b> 거래는 <b>{DEALS[i]}</b> 이고<br />{size / 2}통 묶음 두 개는 <b>{two}</b> 예요.<br />거래가 더 싸니 그대로 <b>{C[i]}</b> 예요.</>);
+                <>{size / 2}통 묶음을 <b>두 번</b> 사면 {size}통이 되는데 <b>{two}</b> 이에요.<br />{size}통 묶음을 한 번에 사면 <b>{DEALS[i]}</b> 이에요.<br />이번엔 한 번에 사는 쪽이 싸요. 그대로 <b>{C[i]}</b> 예요.</>);
       })()
     : t(E,
       <>Now look at the <b>price per bucket</b>.<br />It never goes up as blocks get bigger.<br /><b>So bigger blocks are always at least as good.</b></>,

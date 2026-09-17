@@ -173,8 +173,8 @@ export function makeBuyMilkCh1(E) {
     {
       type: "reveal",
       narr: t(E,
-        "Blocks come in 1, 2, 4, 8 only — and there are two ways to get 8.",
-        "묶음은 1·2·4·8통짜리뿐이에요. 같은 8통도 사는 길이 둘이에요."),
+        "7 buckets needed — but buying 8 is allowed, and may be cheaper.",
+        "7통이 필요한데 8통을 사도 돼요. 모자라지만 않으면 되니까요."),
       content: (<NormalizeSim E={E} />),
     },
 
