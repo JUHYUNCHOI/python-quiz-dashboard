@@ -113,8 +113,14 @@ export function makeBuyMilkCh1(E) {
                 → **결론 문장이 아니라 계산 자체가 스포일러였다.** 45 와 60 을 나란히 놓으면
                    문장을 지워도 답이 보인다. 그래서 비교를 통째로 뺐다.
                 이 쪽이 할 일은 **입출력을 읽는 법**이고, 값 비교는 3쪽 퀴즈 몫이다. */}
-            {t(E, "The third output line is 45 — that is the answer for x=6.\nHow would you buy 6 buckets for exactly 45?",
-                 "출력 셋째 줄 45 가 x=6 의 답이에요.\n6통을 어떻게 사면 딱 45 가 될까요?")}
+            {/* ⚠️ 2026-09-17 세 번째 고침 — 선생님: *"마지막에 7통을 사야하는건데
+                그게 왜 55가 나왔는지 모르겠어."*
+                출력에 숫자가 넷인데 화면이 **하나도 설명하지 않고** 있었다.
+                앞 두 번은 "45 를 어떻게 만드나" 를 **물어보기만** 했다 — 답은 어디에도 없었다.
+                입출력 형식 쪽이 할 일은 **출력을 읽는 법을 알려주는 것**이다.
+                ⚠️ 45 와 60 을 나란히 놓는 비교는 넣지 마라 — 3쪽 퀴즈를 죽인다(2026-09-16). */}
+            {t(E, "Outputs come in query order: x = 1, 2, 6, 7 → 10, 15, 45, 55.\nTake the last one: 7 buckets. Buy deal 2 three times (6 buckets, 45), then deal 1 once (1 bucket, 10). That is 55.\nYou may mix deals, and buy the same deal many times.",
+                 "출력은 물음 순서대로예요 — x = 1, 2, 6, 7 의 답이 10, 15, 45, 55 예요.\n마지막 55 를 봐요. 7통이에요.\n거래 2 를 세 번 사면 6통에 45, 여기에 거래 1 을 하나 더해 7통에 55 예요.\n거래를 섞어 사도 되고, 같은 거래를 여러 번 사도 돼요.")}
           </div>
 
           {/* 제약 (USACO 원문) — 선생님 2026-07-27 시즌 표준화 */}
