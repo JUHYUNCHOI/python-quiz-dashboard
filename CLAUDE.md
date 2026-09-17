@@ -77,8 +77,17 @@ python3 scripts/check-code-one-statement.py  # 한 줄에 문장이 여러 개�
 node scripts/see-flow.mjs http://localhost:3000/quest/<id>   # 쪽과 쪽 사이
 python3 scripts/check-word-difficulty.py <id>                # 어려운 말 · 같은 것 다른 이름 · 번역 티
 python3 scripts/check-code-one-statement.py <id>             # 한 줄에 문장 여러 개
+python3 scripts/check-undefined-symbol.py <id>               # 뜻 안 밝힌 기호 (10⁹ · N² · ⌈⌉ · Σ · O(N))
 node scripts/see-screen.mjs http://localhost:3000/quest/<id> # 가려짐 · 55자 초과
 ```
+
+> 🆕 **`check-undefined-symbol.py` 가 2026-09-17 에 생긴 이유:** MCC 12개를 훑었더니
+> **12개 중 11개**가 같은 구멍이었다 — `10⁹ · 2^R · N² · ⌈L/2⌉ · Σ · ∞ · ≯` 가
+> 뜻을 밝힌 적 없이 시뮬 표에 박혀 있었다. 그런데 `check-word-difficulty` 는
+> **12개 전부 0건**이었다. 기호는 한글도 아니고 어려운 낱말도 아니라서
+> **어느 그물에도 안 걸렸다.** 선생님이 매번 먼저 찾으신 이유가 이것이다.
+> ⚠️ 이 검사기는 **영어 쪽도 같이 본다** — 실제로 훑기 담당이 한국어만 고치고
+> 영어에 `⌈L/2⌉` 를 그대로 둔 자리를 9곳 잡았다.
 
 ⚠️ **검사기 넷을 돌린 뒤, 고친 글을 눈으로 읽어라.** 낱말이 깨끗해도 **문장이 안 이어질 수 있다** —
    "그래서" 앞뒤가 이어지나 · "~일 수 있다" 면 언제 그런지 말했나 · 글이 옆의 표와 같은 걸 말하나.

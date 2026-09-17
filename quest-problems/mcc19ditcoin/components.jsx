@@ -92,9 +92,9 @@ export function Mcc19DitcoinDeepAuditSim({ E }) {
         ))}
       </div>
 
-      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10 }}>
-        {t(E, "Tap a day to toggle SELL. Coins accumulate +1 per day; on a SELL-day, profit += coins × price and coins reset to 0.",
-              "날짜를 눌러 파는 날을 켰다 껐다 해봐요. 코인은 매일 1 개씩 늘어요. 파는 날에는 그때까지 모은 코인 수에 그날 가격을 곱한 만큼 벌고, 코인은 0 이 돼요.")}
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 10, lineHeight: 1.6, whiteSpace: "pre-line", wordBreak: "keep-all" }}>
+        {t(E, "Tap a day to toggle SELL. Coins go up by 1 every day.\nOn a sell day you earn the coins you hold times that day's price,\nand your coins go back to 0.",
+              "날짜를 눌러 파는 날을 켰다 껐다 해봐요.\n코인은 매일 1 개씩 늘어요.\n파는 날에는 그때까지 모은 코인 수에 그날 가격을 곱한 만큼 벌고,\n코인은 0 이 돼요.")}
       </div>
 
       {/* timeline grid */}
@@ -308,7 +308,7 @@ export function getMcc19DitcoinSections(E) {
            (Mcc19DitcoinApp.jsx:23 `codeLang = "py"`). 학생이 걸렸다: "다른 버전은 안 보였다."
            그리고 suffix_max 가 코드 쪽에서 처음 영어 이름으로만 나와서, 4쪽 힌트의
            풀어쓴 말과 연결이 안 됐다. 두 가지를 같이 고친다. */
-        t(E, "suffix_max is a table of \"the best price from today to the end\". Build it once, then walk the days once — O(D).",
+        t(E, "suffix_max is a table of \"the best price from today to the end\". Build it once, then walk the days once.",
             "suffix_max 는 \"오늘부터 마지막 날까지 중 가장 비싼 가격\" 을 미리 적어둔 표예요. 한 번 만들어 두고 날짜를 한 번만 훑으면 끝이라, 날이 며칠이든 그만큼만 일해요."),
       ],
       pyOnly: [

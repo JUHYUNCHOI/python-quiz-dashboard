@@ -76,7 +76,7 @@ function ElimWindowSim({ E }) {
         <div style={{ fontSize: 12.5, color: C.text, lineHeight: 1.6, marginBottom: 8, whiteSpace: "pre-line" }}>
           {t(E,
             "Pick a stretch of the string. The zeros inside (up to K) get deleted, so the 1s squeeze together. What is left?",
-            "문자열에서 한 구간을 골라요. 안의 0 은 (K 개까지) 지워지고, 1 들이 서로 붙어요.\n무엇이 남을까요?")}
+            "문자열에서 한 구간을 골라요.\n그 안의 0 은 K 개까지 지울 수 있고, 지우면 1 들이 서로 붙어요.\n무엇이 남을까요?")}
         </div>
         {/* 2026-09-17: 시뮬은 "시작/끝", 코드는 left/right 라 이름이 달랐다.
             같은 것을 두 이름으로 부르면 학생이 혼자 이어 붙여야 한다.
@@ -123,7 +123,10 @@ function ElimWindowSim({ E }) {
           {[
             { lbl: t(E, "window length", "창 길이"), val: winLen, color: "#94a3b8" },
             { lbl: t(E, "zeros deleted", "지운 0"), val: zeros, color: valid ? "#0f766e" : "#dc2626" },
-            { lbl: t(E, "1s left = answer", "남은 1 = 답"), val: ones, color: "#2563eb" },
+            /* 2026-09-17: 이 칸 이름이 "= 답" 이라 바로 위 내레이션("무엇이 남을까요?")의
+               답을 스스로 말하고 있었다. 이 파일은 같은 이유로 판정 박스의 결론을
+               이미 두 번 걷어냈다 — 이름표만 남아 있었다. 셋을 나란히 두고 학생이 본다. */
+            { lbl: t(E, "1s left", "남은 1"), val: ones, color: "#2563eb" },
           ].map((s, i) => (
             <div key={i} style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "8px 6px", textAlign: "center" }}>
               <div style={{ fontSize: 9.5, color: C.dim, fontWeight: 800, letterSpacing: 0.3, ...KA }}>{s.lbl}</div>
@@ -379,7 +382,7 @@ export function makeMcc19ElimCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way tries every possible window and recounts each one: about N² work — too slow for a long string. The fast way slides one window across in a single pass, keeping the zero and one counts as it goes: N work.",
+        "The slow way tries every possible window and recounts each one: it does about N-times-N work — too slow for a long string. The fast way slides one window across in a single pass, keeping the zero and one counts as it goes: N work.",
         "느린 방법은 구간마다 다시 세고, 빠른 방법은 한 번만 훑어요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
@@ -389,7 +392,7 @@ export function makeMcc19ElimCh2(E, lang = "py") {
                 🐢 {t(E, "Slow: check every window and recount", "느림: 모든 구간을 골라 매번 다시 세기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Every start × every end ≈ N² pairs, and each recounts its zeros and ones. Times out when N is large.", "시작과 끝을 다 고르면 구간이 N 을 두 번 곱한 만큼 나와요.\n구간마다 0 과 1 을 다시 세니, N 이 크면 시간 초과예요.")}
+                {t(E, "Picking every start and every end gives you N-times-N windows, and each one recounts its zeros and ones. Times out when N is large.", "시작과 끝을 다 고르면 구간이 N 을 두 번 곱한 만큼 나와요.\n구간마다 0 과 1 을 다시 세니, N 이 크면 시간 초과예요.")}
               </div>
             </div>
             <div style={{ background: "#eff6ff", border: "1px solid #93c5fd", borderRadius: 10, padding: "10px 14px" }}>

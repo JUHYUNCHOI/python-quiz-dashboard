@@ -191,10 +191,10 @@ function BakeryGreedySim({ E }) {
             <div style={{ fontSize: 12, fontWeight: 800, color: "#b91c1c", marginBottom: 6 }}>
               🤔 {t(E, "Why not just chop into blocks of 4?", "왜 그냥 4개씩 잘라 묶으면 안 될까?")}
             </div>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6 }}>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, whiteSpace: "pre-line" }}>
               {t(E,
-                "(A) blocks [10,9,8,7] and [6,3,2,1] free 8 and 2 → saves 10 → pay 36.",
-                "(A) [10,9,8,7] 과 [6,3,2,1] 로 자르면 각 묶음의 2 번째로 싼 8 과 2 가 무료예요. 가격을 다 더하면 46 이고, 거기서 8 + 2 = 10 을 빼면 36 을 내요.")}
+                "(A) blocks [10,9,8,7] and [6,3,2,1] free the 2nd-cheapest of each — 8 and 2.\nAll the prices add up to 46, so 46 − (8 + 2) = 36.",
+                "(A) [10,9,8,7] 과 [6,3,2,1] 로 자르면\n각 묶음의 2 번째로 싼 8 과 2 가 무료예요.\n가격을 다 더하면 46 이고, 8 + 2 = 10 을 빼면 36 을 내요.")}
             </div>
             <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginTop: 6, whiteSpace: "pre-line" }}>
               {t(E,
@@ -427,7 +427,7 @@ export function makeMcc19BakeryCh2(E, lang = "py") {
                 🚀 {t(E, "Fast: sort, then greedy with a deque", "빠른 방법 — 정렬한 뒤 양끝에서 하나씩 꺼내기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Sort once (N log N), then each round takes O(1) from both ends. Free the 3rd-most-expensive, pair the cheapest as a pay-slot.", "정렬은 한 번만 하면 돼요. 그다음엔 묶음마다 양끝에서 하나씩 바로 꺼내요. 세 번째로 비싼 것을 무료로 받고, 제일 싼 것을 지불 자리로 짝지어요. 이렇게 양끝에서 꺼낼 수 있는 그릇을 '덱' 이라고 불러요.")}
+                {t(E, "Sort once (N log N), then each round just takes from the two ends. Free the 3rd-most-expensive, pair the cheapest as a pay-slot.", "정렬은 한 번만 하면 돼요. 그다음엔 묶음마다 양끝에서 하나씩 바로 꺼내요. 세 번째로 비싼 것을 무료로 받고, 제일 싼 것을 지불 자리로 짝지어요. 이렇게 양끝에서 꺼낼 수 있는 그릇을 '덱' 이라고 불러요.")}
               </div>
             </div>
           </div>

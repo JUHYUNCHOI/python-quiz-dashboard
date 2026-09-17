@@ -130,10 +130,10 @@ export function Mcc19PalSim({ E }) {
           {t(E, "HOW MANY PER LENGTH", "길이별 개수")}
         </div>
         {/* 2026-09-17: 표만 있고 왜 채우는지가 없었다. 표를 보는 이유를 먼저 말한다. */}
-        <div style={{ fontSize: 11, color: C.dim, marginBottom: 8, textAlign: "center", lineHeight: 1.55, ...KA }}>
+        <div style={{ fontSize: 11, color: C.dim, marginBottom: 8, textAlign: "center", lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
           {t(E,
-            "N-th entry — but which length is it in? Count how many each length holds, and add them up until N fits.",
-            "N 번째가 어느 길이에 있는지 알아야 해요. 그래서 길이마다 몇 개인지 세고, N 이 들어갈 때까지 더해 가요.")}
+            "N-th entry — but which length is it in?\nCount how many each length holds, and add them up until N fits.",
+            "N 번째가 어느 길이에 있는지부터 찾아요.\n길이마다 몇 개인지 세서 더해 가요.")}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           {rows.map((r, i) => {
@@ -189,10 +189,10 @@ export function Mcc19PalSim({ E }) {
         </div>
       </div>
 
-      <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.5, ...KA }}>
+      <div style={{ marginTop: 10, fontSize: 12, color: C.dim, textAlign: "center", lineHeight: 1.55, whiteSpace: "pre-line", ...KA }}>
         {t(E,
-          "Subtract counts length-by-length until N fits → write the local rank in base K as the front half → mirror it to get the palindrome string.",
-          "길이별 개수를 빼 가며 N 이 들어가는 길이를 찾아요. 그 안에서의 순위를 K 진법으로 적으면 앞 절반이 되고, 거울 대칭으로 붙이면 회문 문자열이 완성돼요.")}
+          "Subtract counts length-by-length until N fits.\nWrite the rank inside that length in base K — that is the front half.\nMirror it and the palindrome string is done.",
+          "길이별 개수를 빼 가며 N 이 들어가는 길이를 찾아요.\n그 안에서의 순위를 K 진법으로 적으면 앞 절반이 돼요.\n거울 대칭으로 붙이면 회문 문자열이 완성돼요.")}
       </div>
     </div>
   );
@@ -313,9 +313,9 @@ export function getMcc19PalSections(E) {
       color: A,
       py: FULL_PY, cpp: FULL_CPP,
       why: [
-        t(E, "Length L holds exactly K^⌈L/2⌉ palindromes — the front ⌈L/2⌉ digits are chosen freely, and the rest is their mirror. Add these counts length by length until you pass N; that tells you the answer's length c.",
+        t(E, "Length L holds exactly one palindrome per way of filling its front half — the front half's digits are chosen freely, and the rest is their mirror. Add these counts length by length until you pass N; that tells you the answer's length c.",
             "길이 L 짜리 회문은 앞 절반만 고르면 뒤는 그 거울이에요. 그래서 개수는 앞 절반의 자리 수만큼 K 를 곱한 값이에요. 이 개수를 길이별로 더해 N 을 넘기면, 그게 답의 길이 c 예요."),
-        t(E, "Within length c, the 0-indexed rank r written in base K IS the front half. Left-pad it to ⌈c/2⌉ digits, then mirror to get the answer string — no need to list every palindrome.",
+        t(E, "Within length c, the 0-indexed rank r written in base K IS the front half. Left-pad it to the front half's length, then mirror to get the answer string — no need to list every palindrome.",
             "길이 c 안에서 0 부터 센 순위 r 을 K 진법으로 적으면 그게 바로 앞 절반이에요. 앞 절반의 자리 수가 채워지도록 앞을 0 으로 메운 뒤 거울 대칭하면 정답이 나와요. 모든 회문을 나열할 필요가 없어요."),
       ],
       pyOnly: [

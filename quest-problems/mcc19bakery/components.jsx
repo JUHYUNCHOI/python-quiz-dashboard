@@ -70,11 +70,11 @@ export function getMcc19BakerySections(E) {
             "왜 싼 것을 비싼 것과 짝지을까요? 묶음에서 무료가 되는 건 2 번째로 싼 것뿐이에요. 그래서 싼 빵을 지불 자리로 쓰면 무료 자리가 더 비싼 빵에 떨어져요. 그냥 '4 개씩 자르기' 는 무료 자리를 싼 빵에 써 버려서 예제에서 35 대신 36 을 지불해요."),
       ],
       pyOnly: [
-        t(E, "collections.deque gives O(1) pop() from the right and popleft() from the left.",
+        t(E, "collections.deque lets you take from the right cheaply and popleft() from the left.",
             "collections.deque 는 오른쪽 pop() 과 왼쪽 popleft() 로 양끝을 바로 꺼내요. 안에 몇 개가 들어 있든 한 번에 꺼내져요."),
       ],
       cppOnly: [
-        t(E, "std::deque supports back()/pop_back() and front()/pop_front() in O(1) each.",
+        t(E, "std::deque lets you look at and remove from both ends cheaply - back()/pop_back() and front()/pop_front().",
             "std::deque 는 back()/pop_back() 과 front()/pop_front() 로 양끝을 바로 꺼내요. 안에 몇 개가 들어 있든 한 번에 꺼내져요."),
         t(E, "Use long long for pay — many breads with large prices can exceed the int range.",
             "합계 pay 는 long long 으로 둬요. 빵이 많고 가격이 크면 int 범위를 넘을 수 있어요."),

@@ -263,7 +263,7 @@ export function makeMcc19PalCh2(E, lang = "py") {
     {
       type: "reveal",
       narr: t(E,
-        "The slow way generates every palindrome one by one until the N-th — if N is huge, that's far too many. The fast way COUNTS how many strings each length holds (k^⌈L/2⌉), skips whole lengths at once, then builds just the one answer directly.",
+        "The slow way generates every palindrome one by one until the N-th — if N is huge, that's far too many. The fast way COUNTS how many strings each length holds (choose the front half, mirror it), skips whole lengths at once, then builds just the one answer directly.",
         "회문을 다 만들지 말고 길이별 개수로 건너뛰어 봐요."),
       content: (
         <div style={{ padding: 16, ...KA }}>
@@ -282,7 +282,7 @@ export function makeMcc19PalCh2(E, lang = "py") {
                 🚀 {t(E, "Fast: count per length, jump, then build one answer", "빠른 방법 — 길이별 개수로 건너뛰고 답 하나만 만들기")}
               </div>
               <div style={{ fontSize: 12, color: C.text, lineHeight: 1.55 }}>
-                {t(E, "Length L holds k^⌈L/2⌉ strings (pick the front half freely, mirror it). Subtract counts length by length to land on the right length, then write the rank in base k and mirror.",
+                {t(E, "Length L holds one string for every way to fill its front half (pick the front half freely, mirror it). Subtract counts length by length to land on the right length, then write the rank in base k and mirror.",
                       "길이 L 짜리 회문은 앞 절반만 고르면 뒤는 거울처럼 따라와요. 그래서 그 길이의 개수는 앞 절반의 자리 수만큼 k 를 곱한 값이에요. 길이별 개수를 빼 가며 맞는 길이를 찾고, 그 안에서의 순위를 k 진법으로 적어 거울 대칭으로 완성해요.")}
               </div>
             </div>
